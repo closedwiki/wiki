@@ -94,20 +94,26 @@ sub edit {
         return;
     }
 
+    my $wikiUserName = TWiki::User::userToWikiName( $userName );
+
     if( $topicExists ) {
         ( $meta, $text ) =
           TWiki::Store::readTopic( $webName, $topic, undef, 1 );
     }
 
-    my $wikiUserName = &TWiki::User::userToWikiName( $userName );
-    return unless TWiki::UI::isAccessPermitted( $webName, $topic,
-                                            "change", $wikiUserName );
+    # If you want to edit, you have to be able to view and change.
+    return unless( TWiki::UI::isAccessPermitted( $webName, $topic,
+                                                 "view", $wikiUserName )
+                   &&
+                   TWiki::UI::isAccessPermitted( $webName, $topic,
+                                                 "change", $wikiUserName );
 
-    # Special save command
+    # Special save command, restricted to admin use
     return if( $saveCmd && ! TWiki::UI::userIsAdmin( $webName, $topic, $wikiUserName ));
 
     # Check for locks
-    my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $webName, $topic );
+    my( $lockUser, $lockTime ) =
+                   TWiki::Store::topicIsLockedBy( $webName, $topic );
     if( ( ! $breakLock ) && ( $lockUser ) ) {
         # warn user that other person is editing this topic
         $lockUser = &TWiki::User::userToWikiName( $lockUser );
