@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "11 Nov 2003";
+$wikiversion      = "22 Nov 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -291,16 +291,6 @@ sub initialize
     &TWiki::Access::initializeAccess();
     $readTopicPermissionFailed = ""; # Will be set to name(s) of topic(s) that can't be read
 
-    # initialize user name and user to WikiName list
-    userToWikiListInit();
-    if( !$disableAllPlugins ) {
-            # Early plugin initialization, allow plugins like SessionPlugin to set the user
-            # This must be done before preferences are set, as we need to get user preferences
-            $userName = &TWiki::Plugins::initialize1( $topicName, $webName, $theRemoteUser, $theUrl, $thePathInfo );
-    }
-    $wikiName     = userToWikiName( $userName, 1 );      # i.e. "JonDoe"
-    $wikiUserName = userToWikiName( $userName );         # i.e. "Main.JonDoe"
-
     # initialize $webName and $topicName
     $topicName = "";
     $webName   = "";
@@ -396,8 +386,21 @@ sub initialize
     # PTh 15 Jul 2001: Removed init of $scriptUrlPath based on $theUrl because
     # $theUrl has incorrect URI after failed authentication
 
-    # initialize preferences
-    &TWiki::Prefs::initializePrefs( $wikiUserName, $webName );
+    # initialize preferences, first part for site and web level
+    &TWiki::Prefs::initializePrefs( $webName );
+
+    # initialize user name and user to WikiName list
+    userToWikiListInit();
+    if( !$disableAllPlugins ) {
+            # Early plugin initialization, allow plugins like SessionPlugin to set the user
+            # This must be done before preferences are set, as we need to get user preferences
+            $userName = &TWiki::Plugins::initialize1( $topicName, $webName, $theRemoteUser, $theUrl, $thePathInfo );
+    }
+    $wikiName     = userToWikiName( $userName, 1 );      # i.e. "JonDoe"
+    $wikiUserName = userToWikiName( $userName );         # i.e. "Main.JonDoe"
+
+    # initialize preferences, second part for user level
+    &TWiki::Prefs::initializePrefs( $wikiUserName );
 
     # some remaining init
     $viewScript = "view";
@@ -1518,6 +1521,7 @@ sub handleIncludeFile
         # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
         $text =~ s/.*?%STARTINCLUDE%//s;
         $text =~ s/%STOPINCLUDE%.*//s;
+
     } # else is a file with relative path, e.g. $dataDir/../../path/to/non-twiki/file.ext
 
     if( $pattern ) {

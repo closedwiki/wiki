@@ -38,7 +38,7 @@ $finalPrefsName = "FINALPREFERENCES";
 # =========================
 sub initializePrefs
 {
-    my( $theWikiUserName, $theWebName ) = @_;
+    my( $theWebName ) = @_;
 
     # (Note: Do not use a %hash, because order is significant)
     @prefsKeys = ();
@@ -51,6 +51,16 @@ sub initializePrefs
     getPrefsFromTopic( $TWiki::twikiWebname, $TWiki::wikiPrefsTopicname ); # site-level
     getPrefsFromTopic( $TWiki::mainWebname,  $TWiki::wikiPrefsTopicname ); # alternate site-level
     getPrefsFromTopic( $theWebName, $TWiki::webPrefsTopicname );           # web-level
+
+    return;
+}
+
+# =========================
+# late init after user is known, potentially by Plugin
+sub initializeUserPrefs
+{
+    my( $theWikiUserName ) = @_;
+
     if( $theWikiUserName =~ /^(.*)\.(.*)$/ ) {
         getPrefsFromTopic( $1, $2 );                                       # user-level
     }
