@@ -1,51 +1,58 @@
-*Get-A-Web version 0.6*
-	* avoids *.lock files
-	* usable as a link
-	* you can download last version of topics
+%META:TOPICINFO{author="guest" date="1103336402" format="1.0" version="1.1"}%
+---+!! <nop>GetAWebAddOn version 0.97
 
-Here you can download a zipped copy of the web of your choice.
+%TOC%
 
-The .haccess and .htpasswd files are excluded for security reasons.
-(the access rights can be checked by apache <Location> directives ...).
+---++ Background
 
-%INCLUDE{"getweb-list"}%
+Sometime I find useful to make a zipped copy of a whole Web
+from remote (for backup or offline reading).
 
-Here you can easily download all TWiki.tgz topics.
-(the link works if you install also the following rules in wikicfg.pl)
+Here I enclose a small package for zipping a whole Web.
 
-   * Add the rendering rule
-<PRE>
-#AS
-    # Automatically gets a web content
-    s#(^|\s)(([A-Z][a-zA-Z0-9]*[\.\/])*([A-Z][a-zA-Z0-9]*))\.((zip)|(tgz)|(tar\.gz)|(tar\.bz2))(\s|$)#"$1".&handleGetAWeb("$2","$4","$5","yes")."$10"#geo;
-#AS
-</PRE>
+=get-a-web= can be used as a link, as it gets the compression type from the URI itself
 
-   * And add the sub
-<PRE>
-#AS
-# =========================
-sub handleGetAWeb
-{
-    # we substitute the web with a get-a-web link
-    my ($web, $name, $zip, $lastOnly) = @_ ;
+---++ Supported File Formats
 
-    $web =~ s/\./\//go ;
+The script produces files in the formats:
+	* =.tar=
 
-    if (webExists($web)) {
-	return "<b><A href=\"$scriptUrlPath/get-a-web$scriptSuffix/$web.$zip?lastOnly=$lastOnly\">$name.$zip</A></b>";
+---++ Usage
 
-    }
-    return "$name.$zip";
-}
-#AS
-</PRE>
+| Web | Format | Versions | URI |
+| Webname | tar | all | =%<nop>SCRIPTURL%/get-a-web%<nop>SCRIPTSUFFIX%/Webname/Webname.tar= |
 
--- %MAINWEB%.AndreaSterbini 25 Aug 2000 <br><!--TWikiCat--> <h4> TWikiCategory </h4>
-<table border="2" cellspacing="1" cellpadding="1">
-<tr>
-<td valign="top" align="right"> TopicClassification:  <br></td><td>  Enhancement </td>
-</tr><tr>
-<td valign="top" align="right"> TopicStatus:  <br></td><td>  Test </td>
-</tr>
-</table><!--TWikiCat-->
+---++ Security
+	* All the data/pub/template files of the chosen web are zipped, except for the .htaccess and .htpasswd and the *.lock files.
+	* User authentication can be handled with apache &lt;Location&gt; directive.
+
+---++ Demo
+
+%WEBLIST{ format="	* %SCRIPTURL%/get-a-web%SCRIPTSUFFIX%/$name/$name.wiki.tar" }%
+
+---++ Installation
+	* usual Add-On installation (unzip in twiki root directory)
+
+---++ Add-On Info
+
+|  Add-on Author: | TWiki:Main.AndreaSterbini, TWiki:Main.WillNorris |
+|  Add-on Version: | 08 Dec 2004 (v0.96) |
+|						| 02 Dec 2004 (v0.95) |
+|						| 12 Oct 2004 (v0.9) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|	8 Dec 2004: | 0.96 added more error checking, redirects errors to browser for easier debugging |
+|	2 Dec 2004: | 0.95 updated to use Archive::Tar instead of system calls (only tar is available atm); also now works correctly and automatically regardless of whether your pub, templates, and data directories all share the same parent directory, or are spread out |
+|  12 Oct 2004: | 0.9 for TWiki:Codev/TWikiRelease01Sep2004 |
+|  17 Sep 2000: | Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | zip or tar + gzip or bzip2 |
+|  Perl Version: | 5.005 |
+|  License: | GPL |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+
+-- TWiki:Main.AndreaSterbini - 17 Sep 2000 %BR%
+-- TWiki:Main.WillNorris - 12 Oct 2004, 02 Dec 2004, 08 Dec 2004
+
