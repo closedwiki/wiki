@@ -241,7 +241,7 @@ sub initialize
     }
 
     # Add background color and font color (AlWilliams - 18 Sep 2000)
-    # PTh: Moved from interalLink to initialize ('cause of performance)
+    # PTh: Moved from internalLink to initialize ('cause of performance)
     $newTopicBgColor = &TWiki::Prefs::getPreferencesValue("NEWTOPICBGCOLOR");
     if ($newTopicBgColor eq "") { $newTopicBgColor="#FFFFCE"; }
     $newTopicFontColor = &TWiki::Prefs::getPreferencesValue("NEWTOPICFONTCOLOR");
@@ -1168,6 +1168,7 @@ sub showError
 
 #AS
 # =========================
+# Create markup for %TOC%
 sub handleToc
 {
     # Andrea Sterbini 22-08-00 / PTh 28 Feb 2001
@@ -1215,36 +1216,36 @@ sub handleToc
             &TWiki::Store::readWebTopic( $web, $topicname ), $topicname, $web ) );
     }
 
-    @list = grep { /(<\/?[pP][rR][eE]>)|($headerPatternDa)|($headerPatternSp)|($headerPatternHt)/ } @list;
+    @list = grep { /(<\/?pre>)|($headerPatternDa)|($headerPatternSp)|($headerPatternHt)/i } @list;
     my $insidePre = 0;
     my $i = 0;
     my $tabs = "";
     my $anchor = "";
     my $highest = 99;
     foreach $line ( @list ) {
-        if( $line =~ /^.*<[pP][rR][eE]>.*$/ ) {
+        if( $line =~ /^.*<pre>.*$/io ) {
             $insidePre = 1;
             $line = "";
         }
-        if( $line =~ /^.*<\/[pP][rR][eE]>.*$/ ) {
+        if( $line =~ /^.*<\/pre>.*$/io ) {
             $insidePre = 0;
             $line = "";
         }
         if (!$insidePre) {
             $level = $line ;
-            if ( $line =~  /$headerPatternDa/ ) {
+            if ( $line =~  /$headerPatternDa/o ) {
                 $level =~ s/$headerPatternDa/$1/go ;
                 $level = length $level;
                 $line  =~ s/$headerPatternDa/$2/go ;
                 $anchor = makeAnchorName( $line );
             } elsif
-               ( $line =~  /$headerPatternSp/ ) {
+               ( $line =~  /$headerPatternSp/o ) {
                 $level =~ s/$headerPatternSp/$1/go ;
                 $level = length $level;
                 $line  =~ s/$headerPatternSp/$2/go ;
                 $anchor = makeAnchorName( $line );
             } elsif
-               ( $line =~  /$headerPatternHt/ ) {
+               ( $line =~  /$headerPatternHt/o ) {
                 $level =~ s/$headerPatternHt/$1/go ;
                 $line  =~ s/$headerPatternHt/$2/go ;
                 $anchor = makeAnchorName( $line );
@@ -1403,7 +1404,7 @@ sub handleInternalTags
     # $_[2] is web
 
     # Make Edit URL unique for every edit - fix for RefreshEditPage
-    $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?t=".time()!geo;
+    $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit$scriptSuffix/%WEB%/%TOPIC%\?t=".time()!geo;
 
     $_[0] =~ s/%NOP%/<nop>/go;
     $_[0] =~ s/%TMPL\:P{(.*?)}%/&handleTmplP($1)/geo;
@@ -1430,7 +1431,7 @@ sub handleInternalTags
     $_[0] =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$_[2]\/$_[1]/go;
     $_[0] =~ s/%ATTACHURLPATH%/$pubUrlPath\/$_[2]\/$_[1]/go;
     $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/geo;
-    $_[0] =~ s/%DATE%/&getGmDate()/geo; # deprecated
+    $_[0] =~ s/%DATE%/&getGmDate()/geo; # deprecated, but used in signatures
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/geo;
     $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/geo;
     $_[0] =~ s/%SERVERTIME%/&handleTime("","servertime")/geo;
@@ -1863,7 +1864,7 @@ sub makeAnchorHeading
     #   type markup.
     # - Initial '<nop>' is needed to prevent subsequent matches.
     # - Need to make sure that <a> tags are not nested, i.e. in
-    #   case heading has a WikiName that gets linked
+    #   case heading has a WikiName or ABBREV that gets linked
 
     my $text = $theText;
     my $anchorName = &makeAnchorName( $text );
@@ -1905,8 +1906,8 @@ sub makeAnchorName
 sub internalLink
 {
     my( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink ) = @_;
-    # $thePreamble is heading space
-    # $doLink is boolean, false suppress link for non-existing pages
+    # $thePreamble is text used before the TWiki link syntax
+    # $doLink is boolean: false means suppress link for non-existing pages
 
     # kill spaces and Wikify page name (ManpreetSingh - 15 Sep 2000)
     $theTopic =~ s/^\s*//;
@@ -1967,7 +1968,10 @@ sub specificLink
     $theLink =~ s/\s*$//o;
 
     if( $theLink =~ /^$linkProtocolPattern\:/ ) {
-        # found external link
+        # Found external link, add <nop> before WikiWord and ABBREV 
+	# inside link text, to prevent double links
+	$theText =~ s/([\s\(])([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
+	$theText =~ s/([\s\(])([A-Z]{3,})/$1<nop>$2/go;
         return "$thePreamble<a href=\"$theLink\" target=\"_top\">$theText</a>";
     }
 
@@ -2225,6 +2229,8 @@ sub getRenderedVersion
                 s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\#[a-zA-Z0-9_]*)/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/geo;
                 # 'TopicName' link:
                 s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&internalLink($1,$theWeb,$2,$2,"",1)/geo;
+
+		# Handle acronyms/abbreviations of three or more letters
                 # 'Web.ABBREV' link:
                 s/([\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]{3,})/&internalLink($1,$2,$3,$3,"",0)/geo;
                 # 'ABBREV' link:
