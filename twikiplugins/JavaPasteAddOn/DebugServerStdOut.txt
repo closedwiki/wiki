@@ -1,0 +1,50 @@
+POST /twiki/bin/upload.pl/Main/CatherineMacleod HTTP/1.1
+Connection: Keep-Alive
+Accept-Charset: iso-8859-1,*,utf-8
+Accept-Language: en
+Content-type: multipart/form-data; boundary=7d1fbfe5050c
+User-Agent: Mozilla/4.0 (Windows 2000 5.0)
+Host: localhost:8123
+Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+Content-length: 267
+
+
+--7d1fbfe5050c
+Content-Disposition: form-data; name="filepath"; filename="testsequence.txt"
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+
+line break
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+
+another line break
+31
+32
+33
+34
+35
+36
+--7d1fbfe5050c--
