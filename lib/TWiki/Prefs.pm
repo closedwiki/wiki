@@ -639,7 +639,7 @@ sub updateSetFromForm
                 my $attributes = $field->{"attributes"};
                 if( $attributes && $attributes =~ /[S]/o ) {
                     $value =~ s/\n/\\\n/o;
-                    TWiki::writeDebug( "updateSetFromForm: \"$key\"=\"$value\"" );
+                    ##TWiki::writeDebug( "updateSetFromForm: \"$key\"=\"$value\"" );
                     # Worry about verbatim?  Multi-lines
                     if ( $line =~ s/^(\t+\*\sSet\s$key\s\=\s*).*$/$1$value/g ) {
                         last;
