@@ -72,7 +72,7 @@ Alias /twiki/pub/ /home/twiki/pub/
 </verbatim>
 Restart the Apache server.
 
-To configure the plugin, set the =%<nop>TOPIC%_LOCK_DB%= variable below. Build your initial lock database by running the =dav_recache= script, which should have been installed in your twiki bin directory. This should build a lock database in the directory pointed at by =%TOPIC%_LOCK_DB<nop>%=. Dump the content of this database using the =lib/TWiki/Plugins/Web<nop>DAVPlugin/dumpLockDB.pl= script. In a normal TWiki installation this database will _not_ be empty. The database must be readable/writable by the apache user.
+To configure the plugin, set the =%<nop>LOCK_DB%= variable below. Build your initial lock database by running the =dav_recache= script, which should have been installed in your twiki bin directory. This should build a lock database in the directory pointed at by =%<nop>LOCK_DB%=. Dump the content of this database using the =lib/TWiki/Plugins/Web<nop>DAVPlugin/dumpLockDB.pl= script. In a normal TWiki installation this database will _not_ be empty. The database must be readable/writable by the apache user.
 
 To test the plugin, edit a topic in TWiki that should be controlled and put an access restriction in - for example, edit Sandbox.%TOPIC%Test and put in the lines:
 <pre>

@@ -12,7 +12,7 @@ sub new {
   return $self;
 }
 
-my $tmpdir;
+use vars qw( $tmpdir );
 
 # Set up the test fixture
 sub set_up {
@@ -20,6 +20,12 @@ sub set_up {
   $this->SUPER::set_up();
   $tmpdir = "$BaseFixture::testDir/$$";
   mkdir($tmpdir);
+}
+
+sub tear_down {
+  my $this = shift;
+  $this->SUPER::tear_down();
+  `rm -rf $tmpdir`;
 }
 
 my $dv = "   IdiotChild";
@@ -34,13 +40,12 @@ my $dbdump = 0;
 
 sub check {
   my ( $this, $check, $exp ) = @_;
-
-  my $status = `./accesscheck $check $tmpdir/junk $dbdump`;
+  my $status = `./accesscheck $check $tmpdir/TWiki $dbdump`;
   if ($status !~ /$exp\s*$/) {
-	print STDERR "WHOOOOPS: $status\n";
+	chop($status);
+	$this->assert(0, "Access '$check' is $status; should be $exp; called from ".
+				  join(":",caller));
   }
-
-  $this->assert_matches(qr/$exp\s*$/, $status, $check." ".join(":",caller));
 }
 
 sub dumpdb {
