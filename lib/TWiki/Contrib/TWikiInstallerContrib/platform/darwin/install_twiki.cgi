@@ -66,7 +66,9 @@ my $cpan        = "$lib/CPAN";
 ################################################################################
 # check prerequisites
 
-print header(), start_html( -title => "TWiki Installation (Step 2/3)" );
+my $title = "TWiki Installation (Step 2/3)";
+print header(), start_html( -title => $title );
+print qq{<h1>$title</h1>\n};
 
 unless (-e $tar) {
     print "File not found: $tar";
@@ -90,6 +92,7 @@ execute("cp -r $tmp/twiki/lib/* $lib");  execute("chmod -R 777 $lib");
 ################################################################################
 # update TWiki.cfg for SourceForge specifics
 
+print qq{<h2>TWiki.cfg</h2>\n};
 my $file = "$lib/TWiki.cfg";
 open(FH, "<$file") or die "Can't open $file: $!";
 my $config = join( "", <FH> );
@@ -121,7 +124,7 @@ close(FH) || die "Can't write to $file: $!";
 
 ################################################################################
 
-print "<h1>enabling public authentication scheme</h1>\n";
+print "<h2>Authentication</h2>\n";
 
 execute( "mv $bin/.htaccess.txt $bin/.htaccess" );
 
@@ -155,7 +158,7 @@ eraseBundledPlugins();
 # install contrib
 # TODO: automatically download from http://twiki.org/cgi-bin/view/Plugins/ContributedCode
 # (%SEARCH{"Contrib$" type="regex" nosearch="on" scope="topic" noheader="on" nototal="on"}% -ish)
-print "<h1>Contrib</h1>\n";
+print "<h2>Contrib</h2>\n";
 my @contribs = qw(
 		  AttrsContrib
 		  DBCacheContrib
@@ -339,7 +342,7 @@ my @availPlugins = (
 
 ################################################################################
 
-print "<h1>Plugins</h1>\n";
+print "<h2>Plugins</h2>\n";
 foreach my $plugin ( @availPlugins )
 {
     next if $plugin =~ /^#/;	# skip commented out plugins
@@ -388,11 +391,12 @@ my @patches = (
 	       'AttachmentVersionsBrokenOnlyShowsLast',	# view attachment v1.1 fix
 	       );
 
+print qq{<h2>Patches</h2>\n};
 #chdir "/Users/$account/Sites";
 foreach my $patch ( @patches )
 {
-    print STDERR qq{applying patch "$patch"\n};
-    execute( "patch -p2 <tmp/install/downloads/patches/local/${patch}.patch" ) or warn $!;
+    print qq{<h3>Applying patch "$patch"</h3>\n};
+#    execute( "patch -p2 <tmp/install/downloads/patches/local/${patch}.patch" ) or warn $!;
 }
 #chdir $install;
 
@@ -432,11 +436,12 @@ chdir '../..';
 ################################################################################
 # install local webs
 
+print qq{<h2>Installing local webs</h2>\n};
 chdir( "tmp/install" ) or warn $!;
 my @webs = ( 'HowToThinkLikeAComputerScientistUsingPython' );
 if ( opendir( WIKIS, "webs/local" ) )
 {
-    @webs = grep { /\.wiki\.tar\.gz$/ } readdir( WIKIS ) or warn $!; 
+    @webs = grep { /\.wiki\.tar\.gz$/ } readdir( WIKIS );  #or warn $!; 
     closedir( WIKIS ) or warn $!;
 }
 foreach my $web ( @webs )
@@ -462,7 +467,6 @@ execute("chmod -R 777 $lib");
 execute("chmod -R 777 $tmp");
 
 # a handy link to the place to go *after* the next step
-#print qq{do a <tt>post-wiki.sh</tt> and then <br/><a href="http://$project.sourceforge.net/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
 print qq{do a <tt>post-wiki.sh</tt> and then <br/><a href="http://localhost/~twiki/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
 
 print end_html();
@@ -488,17 +492,55 @@ sub checkdir {
 	}
 }
 
+{
+    my $nCmd = 0;
+
 sub execute {
-	my ($cmd) = @_;
 
-	chomp( my $output = `$cmd` );
-	my ( $clrCommand, $clrError ) = ( ( my $error = $? ) ? qw( black red ) : qw( gray gray ) );
+    if ( $nCmd++ == 0 )
+    {
+	print <<'__HTML__';
+	<script type="text/javascript">
+	function toggleDisplay( id )
+	{
+	    var e = document.getElementById( id );
+	    //	alert(e);
+	    var style = e.style;
+	    //	alert(e + 'style: ' + style.display);
+	    style.display = style.display ? "" : "none";
+	    return style.display;
+	}
+	function setClassname( e, c )
+	{
+	    //	alert( e + ': was: ' + e.className + ', now: ' + c );
+	    e.className = c;
+	}
+	</script>
+__HTML__
+    }
 
-	print "<font color=gray>\n";
-	print "Executing [<font color=$clrError>$error</font>]\n";
-	print "<font color=$clrCommand>", pre($cmd), "</font>\n";
-	print pre( $output ) . "\n";
-	print "</font>\n\n";
+    my ($cmd) = @_;
+
+    chomp( my $output = `$cmd` );
+    my ( $clrCommand, $clrError ) = ( ( my $error = $? ) ? qw( black red ) : qw( gray gray ) );
+
+#    print "<font color=gray>\n";
+
+    print qq{<a href="#" onclick="toggleDisplay('cmd$nCmd')" >cmd</a> };
+
+    my $display = $error ? "" : "none";
+    print qq{<div style="display:$display" id="cmd$nCmd" >\n};
+
+    print "[<font color=$clrError>$error</font>]: ";
+    print "<font color=$clrCommand>", pre($cmd), "</font>\n";
+
+    print "<pre>$output</pre>\n";
+
+    print "</div>\n";
+
+#    print "</font>\n\n";
+}
+
 }
 
 #--------------------------------------------------------------------------------
@@ -522,10 +564,9 @@ sub erasePlugin
     # when TWiki:Codev.AutomatedBuild is done, this won't be necessary 
     # (because specific distribution/release files will be able to be generated?)
     execute( "rm lib/TWiki/Plugins/${plugin}.pm" );
-#    rm -r twiki/lib/Twiki/Plugins/${plugin}
-#    rm twiki/data/TWiki/${plugin}.txt*
-#    rm -r twiki/pub/TWiki/${plugin}
-
+    execute( "rm -r lib/TWiki/Plugins/${plugin}" );
+    execute( "rm tmp/twiki/data/TWiki/${plugin}.txt*" );
+    execute( "rm -r tmp/twiki/pub/TWiki/${plugin}" );
 }
 
 __END__
