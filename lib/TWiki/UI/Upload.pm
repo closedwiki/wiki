@@ -221,7 +221,7 @@ sub upload {
                                         "Save error $error" );
     }
 
-    $session->redirect( $session->getViewUrl( $webName, $topic ) );
+    $session->redirect( $session->getScriptUrl( $webName, $topic, "view" ) );
     my $message = ( $doPropsOnly ) ?
       "properties changed" : "$fileName uploaded";
 

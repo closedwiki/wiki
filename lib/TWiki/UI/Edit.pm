@@ -95,7 +95,7 @@ sub edit {
         && ( ! TWiki::isValidTopicName( $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         # SMELL: this should be an oops, shouldn't it?
-        $session->redirect( $session->getViewUrl( $webName, $topic ));
+        $session->redirect( $session->getScriptUrl( $webName, $topic, "view" ));
         return;
     }
 

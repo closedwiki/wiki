@@ -54,6 +54,9 @@ sub new {
     $this->{CACHED} = 0;
 
 	eval "use $this->{IMPL}";
+    if( $@ ) {
+        die "$this->{IMPL} compile failed: $@";
+    }
 
     return $this;
 }

@@ -407,7 +407,7 @@ sub rename {
     } elsif ( "$newWeb" eq "Trash" && "$oldWeb" ne "Trash" ) {
         if( $theAttachment ) {
             # go back to old topic after deleting an attachment
-            $new_url = $session->getViewUrl( $oldWeb, $oldTopic );
+            $new_url = $session->getScriptUrl( $oldWeb, $oldTopic, "view" );
         } else {
             # redirect to parent: ending in Trash is not the expected way
             my $meta = "";
@@ -419,18 +419,18 @@ sub rename {
             if( %parent && $parent{"name"} &&
                 $parent{"name"} ne $oldTopic ) {
                 if ( $parent{"name"} =~ /([^.]+)[.]([^.]+)/ ) {
-                    $new_url = $session->getViewUrl( $1, $2 );
+                    $new_url = $session->getScriptUrl( $1, $2, "view" );
                 } else {
                     $new_url =
-                      $session->getViewUrl( $oldWeb, $parent{"name"} );
+                      $session->getScriptUrl( $oldWeb, $parent{"name"}, "view" );
                 }
             } else {
-                $new_url = $session->getViewUrl( $oldWeb, $TWiki::mainTopicname );
+                $new_url = $session->getScriptUrl( $oldWeb, $TWiki::mainTopicname, "view" );
             }
         }
     } else {
         #redirect to new topic
-        $new_url = $session->getViewUrl( $newWeb, $newTopic );
+        $new_url = $session->getScriptUrl( $newWeb, $newTopic, "view" );
     }
 
     $session->redirect( $new_url );

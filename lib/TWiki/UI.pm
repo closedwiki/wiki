@@ -102,10 +102,10 @@ sub run {
             if( $bm ) {
                 open(IF, "<$bm") || die "Benchmark query $bm retrieve failed";
                 undef $/;
-                my $blah = <IF>;
+                my $dump = <IF>;
                 close(IF);
                 my ( $VAR1, $VAR2, $VAR3, $VAR4 );
-                eval $blah;
+                eval $dump;
                 ( $query, $pathInfo, $user, $url ) =
                   ( $$VAR1, $VAR2, $VAR3, $VAR4 );
             }
@@ -116,34 +116,27 @@ sub run {
                              $query, $scripted );
 
     $Error::Debug = 1 if DEBUG; # comment out in production
-    if( $query->param( 'compile_debug' )) {
+
+    try {
         eval "use $class";
+        if( $@ ) {
+            die "$class compile failed: $@";
+        }
         my $m = "$class"."::$method";
         no strict 'refs';
         &$m( $session );
         use strict 'refs';
-    } else {
-        try {
-            eval "use $class";
-            my $m = "$class"."::$method";
-            no strict 'refs';
-            &$m( $session );
-            use strict 'refs';
-        } catch TWiki::UI::OopsException with {
-            my $e = shift;
-            my $url = $session->getOopsUrl( $e->{-web},
-                                            $e->{-topic},
-                                            "oops$e->{-template}",
-                                            $e->{-param1},
-                                            $e->{-param2},
-                                            $e->{-param3},
-                                            $e->{-param4} );
-            $session->redirect( $url );
-        } catch Error::Simple with {
-            my $e = shift;
-            print "Content-type: text/plain\n\n";
-            print $e->stringify();
-        }
+    } catch TWiki::UI::OopsException with {
+        my $e = shift;
+        my $url = $session->getOopsUrl( $e->{-web},
+                                        $e->{-topic},
+                                        "oops$e->{-template}",
+                                        @{$e->{-params}} );
+        $session->redirect( $url );
+    } catch Error::Simple with {
+        my $e = shift;
+        print "Content-type: text/plain\n\n";
+        print $e->stringify();
     }
 }
 

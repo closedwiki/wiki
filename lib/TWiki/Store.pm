@@ -72,6 +72,9 @@ sub new {
 
     $this->{IMPL} = "TWiki::Store::$impl";
     eval "use $this->{IMPL}";
+    if( $@ ) {
+        die "$this->{IMPL} compile failed $@";
+    }
     $this->{ACCESSFAILED} = "";
     $this->{STORESETTINGS} = $storeSettings;
 

@@ -188,6 +188,7 @@ sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
     #throw Error::Simple( "initPlugin called twice" ) if $called{initPlugin};
+
     undef %called;
     $called{initPlugin} = 1;
 

@@ -242,19 +242,21 @@ sub view {
     $tmpl =~ s/%REVISIONS%/$revisions/go;
 
     $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;
-    $tmpl = $session->handleCommonTags( $tmpl, $topicName );
+
+    $tmpl = $session->handleCommonTags( $tmpl, $topicName, $webName );
 
     if( $viewRaw ) {
         $tmpl =~ s/%META{[^}]*}%//go;
     } else {
         $tmpl = $session->{renderer}->renderMetaTags( $webName, $topicName, $tmpl, $meta, ( $rev == $maxrev ) );
     }
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, "", $meta ); ## better to use meta rendering?
+
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, "", $meta );
 
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/%MAXREV%/$maxrev/go;
     $tmpl =~ s/%CURRREV%/$rev/go;
-    $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> tags (PTh 06 Nov 2000)
+    $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
     # Check if some part of the sequence of Store accesses failed
     if( $session->{store}->accessFailed() ) {

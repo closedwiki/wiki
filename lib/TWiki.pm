@@ -2,6 +2,9 @@
 #
 # Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
 #
+# Based on parts of Ward Cunninghams original Wiki and JosWiki.
+# Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
+# Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -15,11 +18,16 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-=begin twiki
 
----+ TWiki Package
-This package stores all TWiki subroutines that haven't been modularized
-into any of the others.
+=pod
+
+---+ package TWiki
+
+TWiki operates by creating a singleton object (known as the Session
+object) that acts as a point of reference for all the different
+modules in the system. This package is the class for this singleton,
+and also contains the vast bulk of the basic constants and the per-
+site configuration mechanisms.
 
 =cut
 
@@ -30,7 +38,8 @@ use Assert;
 
 require 5.005;		# For regex objects and internationalisation
 
-# TWiki config variables from TWiki.cfg. These should be regarded as constants.
+# TWiki config variables from TWiki.cfg. These should be regarded as
+# as CONSTANTS.
 use vars qw(
             $defaultUserName $defaultWikiName
             $wikiHomeUrl $defaultUrlHost
@@ -432,12 +441,11 @@ sub writeDebug {
 ---++ initialize( $pathInfo, $remoteUser, $topic, $url, $query )
 Return value: ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir )
 
-STATIC Constructs a new singleton session instance.
+Static method to construct a new singleton session instance.
+It creates a new TWiki and sets the Plugins $SESSION variable to
+point to it, so that TWiki::Func methods will work.
 
-DEPRECATED maintained for script compatibility. Note that if a plugin
-uses this method and then calls a Func method, the Func method will use
-the session object in place when the plugin handler was invoked, and
-_will not_ re-initialise twiki.
+This method is *DEPRECATED* but is maintained for script compatibility.
 
 =cut
 
@@ -546,6 +554,7 @@ sub _convertUtf8URLtoSiteCharset {
 ---++ writeCompletePage( $text )
 
 Write a complete HTML page with basic header to the browser.
+$text is the HTML of the page body (&lt;html&gt; to &lt;/html&gt;)
 
 =cut
 
@@ -645,10 +654,8 @@ sub writePageHeader {
 
 ---++ redirect( $url, ... )
 
-$url is required.
-
-Generate a CGI redirect unless (1) $session->{cgiQuery} is undef or
-(2) $query->param('noredirect') is set to any value. Thus a redirect is
+Generate a CGI redirect to $url unless (1) $session->{cgiQuery} is undef or
+(2) $query->param('noredirect') is set to a true value. Thus a redirect is
 only generated when in a CGI context.
 
 The ... parameters are concatenated to the message written when printing
@@ -679,7 +686,8 @@ sub redirect {
 
 =pod
 
----++ isValidWikiWord (  $name  )
+---++ isValidWikiWord (  $name  ) -> boolean
+
 Check for a valid WikiWord or WikiName
 
 =cut
@@ -691,7 +699,8 @@ sub isValidWikiWord {
 
 =pod
 
----++ isValidTopicName (  $name  )
+---++ isValidTopicName (  $name  ) -> boolean
+
 Check for a valid topic name
 
 =cut
@@ -704,7 +713,8 @@ sub isValidTopicName {
 
 =pod
 
----++ isValidAbbrev (  $name  )
+---++ isValidAbbrev (  $name  ) -> boolean
+
 Check for a valid ABBREV (acronym)
 
 =cut
@@ -737,6 +747,7 @@ sub isValidWebName {
 
 If this is a mirrored web, return information about the mirror. The info
 is returned in a quadruple:
+
 | site name | URL | link | note |
 
 =cut
@@ -772,9 +783,9 @@ sub readOnlyMirrorWeb {
 
 ---++ getTWikiLibDir()
 
-If necessary, finds the full path of the directory containing TWiki.pm,
-and sets the variable $twikiLibDir so that this process is only performed
-once per invocation.  (mod_perl safe: lib dir doesn't change.)
+STATIC method.
+
+Returns the full path of the directory containing TWiki.pm
 
 =cut
 
@@ -841,31 +852,9 @@ sub getSkin {
 
 =pod
 
----++ getViewUrl (  $web, $topic  )
+---++ getScriptURL( $web, $topic, $script ) -> $absoluteScriptURL
 
-Returns a fully-qualified URL to the specified topic.
-#SMELL - how is this diferent from getScriptUrl ?
-
-=cut
-
-sub getViewUrl {
-    my( $this, $theWeb, $theTopic ) = @_;
-
-    ASSERT(ref($this) eq "TWiki") if DEBUG;
-
-    $theWeb = $this->{webName} unless $theWeb;
-
-    $theTopic =~ s/\s*//gs; # Illegal URL, remove space
-
-    return $this->{urlHost}."$dispScriptUrlPath/view$scriptSuffix/$theWeb/$theTopic";
-}
-
-=pod
-
----++ getScriptURL( $web, $topic, $script )
-Return value: $absoluteScriptURL
-
-Returns the absolute URL to a TWiki script, providing the wub and topic as
+Returns the absolute URL to a TWiki script, providing the web and topic as
 "path info" parameters.  The result looks something like this:
 "http://host/twiki/bin/$script/$web/$topic"
 
@@ -876,6 +865,9 @@ sub getScriptUrl {
 
     ASSERT(ref($this) eq "TWiki") if DEBUG;
 
+    # SMELL: topics and webs that contain spaces?
+
+    # $this->{urlHost} is needed, see Codev.PageRedirectionNotWorking
     my $url = "$this->{urlHost}$dispScriptUrlPath/$theScript$scriptSuffix/$theWeb/$theTopic";
     # FIXME consider a plugin call here - useful for certificated logon environment
     return $url;
@@ -883,35 +875,33 @@ sub getScriptUrl {
 
 =pod
 
----++ getOopsUrl( $web, $topic, $template, @scriptParams )
-Return Value: $absoluteOopsURL
+---++ getOopsUrl( $web, $topic, $template, @scriptParams ) -> $absoluteOopsURL
 
 Composes a URL for an "oops" error page.  The last parameters depend on the
-specific oops template in use, and are passed in the URL as 'param1..paramN'.
+specific oops template in use, and are passed in the URL as '&param1=' etc.
 
-The returned URL ends up looking something like:
+The returned URL ends up looking something like this:
 "http://host/twiki/bin/oops/$web/$topic?template=$template&param1=$scriptParams[0]..."
 
 =cut
 
 sub getOopsUrl {
-    my( $this, $theWeb, $theTopic, $theTemplate,
-        $theParam1, $theParam2, $theParam3, $theParam4 ) = @_;
+    my $this = shift;
+    my $web = shift || $this->{webName};
+    my $topic = shift;
+    my $template = shift;
 
     ASSERT(ref($this) eq "TWiki") if DEBUG;
 
-    my $web = $this->{webName};  # current web
-    if( $theWeb ) {
-        $web = $theWeb;
+    my $url = $this->getScriptUrl( $web, $topic, "oops" ) .
+      "?template=" . urlEncode( $template );
+
+    my $n = 1;
+    my $p;
+    while( $p = shift ) {
+        $url .= "&param$n=" . urlEncode( $p );
+        $n++;
     }
-    my $url = "";
-    # $this->{urlHost} is needed, see Codev.PageRedirectionNotWorking
-    $url = $this->getScriptUrl( $web, $theTopic, "oops" );
-    $url .= "\?template=$theTemplate";
-    $url .= "\&amp;param1=" . _urlEncode( $theParam1 ) if ( $theParam1 );
-    $url .= "\&amp;param2=" . _urlEncode( $theParam2 ) if ( $theParam2 );
-    $url .= "\&amp;param3=" . _urlEncode( $theParam3 ) if ( $theParam3 );
-    $url .= "\&amp;param4=" . _urlEncode( $theParam4 ) if ( $theParam4 );
 
     return $url;
 }
@@ -932,6 +922,9 @@ Input:                      Return:
 </pre>
 Note: Function renamed from getWebTopic
 
+SMELL: WARNING: this function defaults the web and topic names.
+Be very careful where you use it!
+
 =cut
 
 sub normalizeWebTopicName {
@@ -951,7 +944,7 @@ sub normalizeWebTopicName {
 
 =pod
 
----++ extractParameters (  $str )
+---++ extractParameters( $str ) -> $hashref
 
 Extracts parameters from a variable string and returns a hash with all parameters.
 The nameless parameter key is _DEFAULT.
@@ -959,45 +952,46 @@ The nameless parameter key is _DEFAULT.
    * Example variable: %TEST{ "nameless" name1="val1" name2="val2" }%
    * First extract text between {...} to get: "nameless" name1="val1" name2="val2"
    * Then call this on the text:
-   * =my %params = TWiki::Func::extractParameters( $text );=
-   * The hash contains now: <br />
-     _DEFAULT => "nameless" <br />
-     name1 => "val1" <br />
-     name2 => "val2"
-
-SMELL: shouldn't this return a Hash reference? (had to make makeHashRefFromHash for 
-		 expandVariablesOnTopicCreation) 
+   * =my $params = $session->extractParameters( $text );
+   * The $params hash contains: <br />
+     $params->{_DEFAULT} is "nameless" <br />
+     $params->{name1} is "val1" <br />
+     $params->{name2} is "val2"
 
 =cut
 
 sub extractParameters {
     my( $str ) = @_;
 
-    my %params = ();
-    return %params unless defined $str;
+    my $params = {};
+    return $params unless defined $str;
     $str =~ s/\\\"/\\$TranslationToken/g;  # escape \"
 
     if( $str =~ s/^\s*\"(.*?)\"\s*(\w+\s*=\s*\"|$)/$2/ ) {
         # is: %VAR{ "value" }%
         # or: %VAR{ "value" param="etc" ... }%
         # Note: "value" may contain embedded double quotes
-        $params{"_DEFAULT"} = $1 if defined $1;  # distinguish between "" and "0";
+        # distinguish between "" and "0";
+        $params->{_DEFAULT} = $1 if defined $1;
         if( $2 ) {
             while( $str =~ s/^\s*(\w+)\s*=\s*\"([^\"]*)\"// ) {
-                $params{"$1"} = $2 if defined $2;
+                $params->{$1} = $2 if defined $2;
             }
         }
     } elsif( ( $str =~ s/^\s*(\w+)\s*=\s*\"([^\"]*)\"// ) && ( $1 ) ) {
         # is: %VAR{ name = "value" }%
-        $params{"$1"} = $2 if defined $2;
+        $params->{$1} = $2 if defined $2;
         while( $str =~ s/^\s*(\w+)\s*=\s*\"([^\"]*)\"// ) {
-            $params{"$1"} = $2 if defined $2;
+            $params->{$1} = $2 if defined $2;
         }
     } elsif( $str =~ s/^\s*(.*?)\s*$// ) {
         # is: %VAR{ value }%
-        $params{"_DEFAULT"} = $1 unless $1 eq "";
+        $params->{_DEFAULT} = $1 unless $1 eq "";
     }
-    return map{ s/\\$TranslationToken/\"/go; $_ } %params;
+    foreach my $k ( keys %$params ) {
+        $params->{$k} =~ s/\\$TranslationToken/\"/go;
+    }
+    return $params;
 }
 
 =pod
@@ -1291,7 +1285,12 @@ sub _handleINCLUDE {
     if( grep( /^$path$/, @{$this->{includeStack}} )) {
         $warn = $this->{prefs}->getPreferencesValue( "INCLUDEWARNING" ) unless( $warn );
         if( $warn && $warn !~ /^(off|no)$/i ) {
-	    return _inlineError( "Warning: Can't INCLUDE $incweb.<nop>$inctopic twice, topic is already included; ".join(":", @{$this->{includeStack}} ));
+            my $mess = "Warning: Can't INCLUDE $incweb.<nop>$inctopic twice, topic is already included";
+            if( $#{$this->{includeStack}} ) {
+                $mess .= "; include path is " .
+                  join("/", @{$this->{includeStack}});
+            }
+            return _inlineError( $mess );
         } # else fail silently
 	return "";
     }
@@ -1488,27 +1487,28 @@ sub formatTime  {
 sub _TOC {
     my ( $this, $text, $defaultTopic, $defaultWeb, $args ) = @_;
 
-    my %params = extractParameters( $args );
+    my $params = extractParameters( $args );
 
     # get the topic name attribute
-    my $topicname = $params{_DEFAULT} || $defaultTopic;
+    my $topicname = $params->{_DEFAULT} || $defaultTopic;
 
     # get the web name attribute
-    my $web = $params{web} || $defaultWeb;
+    my $web = $params->{web} || $defaultWeb;
     $web =~ s/\//\./g;
     my $webPath = $web;
     $webPath =~ s/\./\//g;
 
     # get the depth limit attribute
-    my $depth = $params{depth} || 6;
+    my $depth = $params->{depth} || 6;
 
     # get the title attribute
-    my $title = $params{title} || "";
+    my $title = $params->{title} || "";
     $title = "\n<span class=\"twikiTocTitle\">$title</span>" if( $title );
 
     my $result  = "";
     my $line  = "";
     my $level = "";
+
     if( "$web.$topicname" ne "$defaultWeb.$defaultTopic" ) {
         my %p = ( _DEFAULT => "$web.$topicname" );
         $text = $this->_handleINCLUDE( \%p, $defaultWeb, $defaultTopic );
@@ -1642,7 +1642,7 @@ sub _handleENCODE {
     if ( $type && $type =~ /^entit(y|ies)$/i ) {
         return entityEncode( $text );
     } else {
-        return _urlEncode( $text );
+        return urlEncode( $text );
     }
 }
 
@@ -1723,7 +1723,7 @@ sub expandVariablesOnTopicCreation {
     $theText =~ s/%USERNAME%/$theUser/go;               # "jdoe"
     $theText =~ s/%WIKINAME%/$theWikiName/go;           # "JonDoe"
     $theText =~ s/%WIKIUSERNAME%/$theWikiUserName/go; # "Main.JonDoe"
-    $theText =~ s/%URLPARAM{(.*?)}%/$this->_handleURLPARAM(makeHashRefFromHash(extractParameters($1)))/geo;
+    $theText =~ s/%URLPARAM{(.*?)}%/$this->_handleURLPARAM(extractParameters($1))/geo;
 
     # Remove filler: Use it to remove access control at time of
     # topic instantiation or to prevent search from hitting a template
@@ -1733,19 +1733,6 @@ sub expandVariablesOnTopicCreation {
     $theText =~ s/%NOP%//go;
 
     return $theText;
-}
-
-=pod
-
----++ makeHashRefFromHash
-implemented just to convert the Hash returned by extractParameters into the HashRef expected by _handleURLPARAM
-
-=cut
-
-sub makeHashRefFromHash
-{
-my %param = @_;
-return \%param;
 }
 
 sub _handleWEBLIST {
@@ -1841,7 +1828,7 @@ sub _handleURLPARAM {
         if ( $encode =~ /^entit(y|ies)$/ ) {
         	$value = entityEncode( $value );
     	} else {
-        	$value = _urlEncode( $value );
+        	$value = urlEncode( $value );
     	}
     }
     unless( $value ) {
@@ -1874,12 +1861,19 @@ sub _hexchar {
     return sprintf( "%0${w}x", ord( $n ));
 }
 
-# Encode to URL parameter
-# TODO: For non-ISO-8859-1 $siteCharset, need to convert to
-# UTF-8 before URL encoding.
-# | =$text= | Text to encode |
+=pod
+
+---++ urlEncode( $string ) -> $encodedString
+Encode by converting characters that are illegal in URLs to
+their %NN equivalents.
+
+TODO: For non-ISO-8859-1 $siteCharset, need to convert to
+UTF-8 before URL encoding.
+
+=cut
+
 # SMELL: what is the relationship to nativeUrlEncode??
-sub _urlEncode {
+sub urlEncode {
     my $text = shift;
 
     # URL encoding
@@ -1902,8 +1896,6 @@ with non-UTF-8 (Native) character sets.  Aim is to prevent UTF-8 URL
 encoding.  For mainframes, we assume that UTF-8 URLs will be translated
 by the web server to an EBCDIC character set.
 
-SMELL: why is this different to _urlEncode?
-
 =cut
 
 sub nativeUrlEncode {
@@ -1917,7 +1909,7 @@ sub nativeUrlEncode {
         $theStr =~ s/^"(.*)"$/$1/;	
         return $theStr;
     } else {
-        return _urlEncode( $theStr );
+        return urlEncode( $theStr );
     }
 }
 
@@ -1934,7 +1926,7 @@ sub _handleINTURLENCODE {
 
 =pod
 
----++ sub encodeSpecialChars (  $text  )
+---++ encodeSpecialChars (  $text  )
 
 Escape out the chars &, ", >, <, \r and \n with replaceable tokens.
 This is used to protect hidden fields from the browser.
@@ -1958,7 +1950,7 @@ sub encodeSpecialChars {
 
 =pod
 
----++ sub decodeSpecialChars (  $text  )
+---++ decodeSpecialChars (  $text  )
 
 Reverse the encoding of encodeSpecialChars.
 
@@ -1979,7 +1971,7 @@ sub decodeSpecialChars {
 
 =pod
 
----++ sub searchableTopic (  $topic  )
+---++ searchableTopic (  $topic  )
 
 Space out the topic name for a search, by inserting " *" at
 the start of each component word.
@@ -1995,7 +1987,7 @@ sub searchableTopic {
 
 sub _handleSPACEDTOPIC {
     my ( $this, $params, $theTopic ) = @_;
-    return _urlEncode( searchableTopic( $theTopic ));
+    return urlEncode( searchableTopic( $theTopic ));
 }
 
 sub _handleICON {
@@ -2192,9 +2184,8 @@ sub _expandTag {
     } elsif ( defined( $staticInternalTags{$tag} )) {
         $res = $staticInternalTags{$tag};
     } elsif ( defined( $dynamicInternalTags{$tag} )) {
-        my %params = extractParameters( $args );
-
-        $res = &{$dynamicInternalTags{$tag}}( $this, \%params, @_ );
+        my $params = extractParameters( $args );
+        $res = &{$dynamicInternalTags{$tag}}( $this, $params, @_ );
     }
 
     return ( defined( $res ), $res );
@@ -2441,7 +2432,11 @@ sub new {
     $this->{wikiUserName} = $this->{users}->userToWikiName( $user );
 
     # Static session variables that can be expanded in topics when they
-    # are enclosed int % signs
+    # are enclosed in % signs
+    # SMELL: should collapse these into one. The duplication is pretty
+    # pointless. Could get rid of the SESSION_TAGS hash, might be
+    # the easiest thing to do, but then that would allow other
+    # upper-case named fields in the object to be accessed as well...
     $this->{SESSION_TAGS}{USERNAME}       = $this->{userName};
     $this->{SESSION_TAGS}{WIKINAME}       =
       $this->{users}->userToWikiName( $this->{userName}, 1 );  # i.e. "JonDoe";

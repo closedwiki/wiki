@@ -95,16 +95,16 @@ sub plugins { my $this = shift; return $this->{session}->{plugins}; }
 sub _renderParent {
     my( $this, $web, $topic, $meta, $args ) = @_;
 
-    my %ah;
+    my $ah;
 
     if( $args ) {
-        %ah = TWiki::extractParameters( $args );
+        $ah = TWiki::extractParameters( $args );
     }
-    my $dontRecurse = $ah{dontrecurse} || 0;
-    my $noWebHome =   $ah{nowebhome} || 0;
-    my $prefix =      $ah{prefix} || "";
-    my $suffix =      $ah{suffix} || "";
-    my $usesep =      $ah{separator} || " &gt; ";
+    my $dontRecurse = $ah->{dontrecurse} || 0;
+    my $noWebHome =   $ah->{nowebhome} || 0;
+    my $prefix =      $ah->{prefix} || "";
+    my $suffix =      $ah->{suffix} || "";
+    my $usesep =      $ah->{separator} || " &gt; ";
 
     my %visited;
     $visited{"$web.$topic"} = 1;
@@ -264,7 +264,7 @@ sub _emitTR {
 
     foreach( split( /\|/, $theRow ) ) {
         $attr = "";
-        #AS 25-5-01 Fix to avoid matching also single columns
+        # Avoid matching single columns
         if ( s/$TWiki::TranslationToken([0-9]+)//o ) { 
             $attr = " colspan=\"$1\"" ;
         }

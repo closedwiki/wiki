@@ -168,8 +168,8 @@ sub getScriptUrlPath
 # -------------------------
 sub getViewUrl
 {
-#   my( $web, $topic ) = @_;
-    return $TWiki::Plugins::SESSION->getViewUrl( @_ );
+    my( $web, $topic ) = @_;
+    return $TWiki::Plugins::SESSION->getScriptUrl( $web, $topic, "view" );
 }
 
 # =========================
@@ -181,7 +181,7 @@ sub getViewUrl
 | Parameter: =$web=                  | Web name, e.g. ="Main"=. The current web is taken if empty |
 | Parameter: =$topic=                | Topic name, e.g. ="WebNotify"= |
 | Parameter: =$template=             | Oops template name, e.g. ="oopslocked"= |
-| Parameter: =$param1= ... =$param4= | Parameter values for %<nop>PARAM1% ... %<nop>PARAM4% variables in template, optional |
+| Parameter: =$param1= ... =$param4= | Parameter values for %<nop>PARAM1% ... %<nop>PARAMn% variables in template, optional |
 | Return: =$url=                     | URL, e.g. ="http://example.com:80/cgi-bin/oops.pl/ Main/WebNotify?template=oopslocked&amp;param1=joe"= |
 | Since:                             | TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
@@ -190,7 +190,6 @@ sub getViewUrl
 sub getOopsUrl
 {
 #   my( $web, $topic, $template, @params ) = @_;
-    # up to 4 parameters in @theParams
     return $TWiki::Plugins::SESSION->getOopsUrl( @_ );
 }
 
@@ -291,7 +290,8 @@ sub redirectCgiQuery
 sub extractParameters
 {
 #   my( $theAttr ) = @_;
-    return &TWiki::extractParameters( @_ );
+    my $params = TWiki::extractParameters( @_ );
+    return %$params;
 }
 
 # =========================

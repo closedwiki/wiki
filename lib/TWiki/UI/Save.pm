@@ -57,7 +57,7 @@ sub save {
     my $topic = $session->{topicName};
 
     if ( _save( $session )) {
-        $session->redirect( $session->getViewUrl( $session->normalizeWebTopicName($webName, $topic)) );
+        $session->redirect( $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic)), "view" );
     }
 }
 
@@ -110,7 +110,7 @@ sub _save {
         && ( ! TWiki::isValidTopicName( $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         # SMELL: this should be an oops, shouldn't it?
-        $session->redirect( $session->getViewUrl( $webName, $topic ) );
+        $session->redirect( $session->getScriptUrl( $webName, $topic, "view" ) );
         return 0;
     }
 
@@ -196,7 +196,7 @@ sub savemulti {
     my $topic = $session->{topicName};
     my $userName = $session->{userName};
 
-    my $redirecturl = $session->getViewUrl( $session->normalizeWebTopicName($webName, $topic));
+    my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), "view" );
 
     my $saveaction = lc($query->param( 'action' ));
     if ( $saveaction eq "checkpoint" ) {

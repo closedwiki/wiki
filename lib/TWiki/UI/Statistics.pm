@@ -167,7 +167,7 @@ sub statistics {
 
     if( !$session->{scripted} ) {
         $tmp = $TWiki::statisticsTopicname;
-        my $url = $session->getViewUrl( $destWeb, $tmp );
+        my $url = $session->getScriptUrl( $destWeb, $tmp, "view" );
         _printMsg( "* Go back to <a href=\"$url\">$tmp</a> topic", $session );
     }
     _printMsg( "End creating usage statistics", $session );
