@@ -57,7 +57,7 @@ sub register_cgi {
 
     # Register -> Verify -> Approve -> Finish
 
-    # NB. bulkRegister is in ManageCgiScript.
+    # NB. bulkRegister invoked from ManageCgiScript.
 
     my $action = $session->{cgiQuery}->param('action');
 
@@ -136,8 +136,6 @@ sub passwd_cgi {
 
 # TODO: S&R {form} with {ordered}
 # TODO: S&R row, data => user
-# TODO: Use Oops.pm instead of TWiki::Oops
-# TODO: Try/catch
 # TODO: Move parts to User.pm
 # TODO: Replace LoginName with UserName (NB. templates/topics)
 # TODO: During normal registration, a Plugin callback to set cookies,
@@ -147,9 +145,10 @@ sub passwd_cgi {
 #       In fact, isn't my bulkregistration handler just a reg handler?
 # TODO: registernotifybulk.tmpl 
 # CAVEAT: you must not delete a requiredField - there is no check for this but it will break things like TWikiUsers
-#     * TODO: make it copy the fields it wants before handing off to the RegsitrationPlugin - that way it won't matter if
-#             that deletes such keys.
-# ISSUE: TWiki::User::addUserToTWikiUsersTopic does not replace the line if you now supply a login name when one was not needed before.
+# TODO: make it copy the fields it wants before handing off to the RegsitrationPlugin - that way it won't matter if
+#       that deletes such keys.
+# ISSUE: TWiki::User::addUserToTWikiUsersTopic does not replace the line if you now supply a login name when one 
+#       was not needed before.
 # TODO: write a plugin that intercepts the change of metadata on a topic and invokes functionality as described on 
 #       RegistrationAsPlugin.
 # TODO: more work to align the checks made by the two register/bulkRegister systems 
@@ -194,6 +193,7 @@ sub bulkRegister {
 
     #-- Read the topic containing a table of people to be registered
 
+    # die "$web.$topic - settings: ".Dumper(\%settings);
 
     my ($meta, $text) = $session->{store}->readTopic($session->{wikiUserName},
                                                      $web, $topic, undef, 1);
@@ -221,12 +221,11 @@ sub bulkRegister {
     my $logTopic =  $query->param('LogTopic') || $topic."Result"; # get preference 
     $logTopic =~ s/(.*)\.(.*)/$2/ ; # ignore the web as TWiki is too stupid to let $topic specify web.topic in save's $topic. SMELL SMELL SMELL. 
 
-
     #-- Save the LogFile as designated, link back to the source topic 
 
     $meta->put( "TOPICPARENT", ( "name" => $topic ) );
 
-    my $err = $session->{store}->saveTopic($web, $logTopic, $log, $meta );
+    my $err = $session->{store}->saveTopic($remoteUser, $web, $logTopic, $log, $meta );
 
     $session->redirect($session->getScriptUrl($web, $logTopic, "view"));
 }
@@ -250,6 +249,7 @@ sub bulkRegister {
 sub _registerSingleBulkUser {
     my ($session, $row, %settings) = @_;
 
+    $row || throw Error::Simple("row not set");
     my @fieldNames = @{$settings{fieldNames} || throw Error::Simple( "No fieldNames" )};
     my $doUseHtPasswd = defined $settings{doUseHtPasswd} || throw Error::Simple( "No doHtPasswd" );
     my $doOverwriteTopics = defined $settings{doOverwriteTopics} || throw Error::Simple( "No doOverwriteTopics" );
@@ -462,13 +462,13 @@ sub resetUserPassword {
                                         "Can't get an email address for $wikiName, LoginName = $loginName" );
     }
 
-    my $message = "";
+    my $message = $email;
     if ($session->{users}->userPasswordExists($loginName)) {
         $session->{users}->removeUser($loginName);
     } else {
         # Assume the htpasswd file is out of sync with TWikiUsers, and generate a new one.
         # We could do with an integrity checker for loginname <-> twikiusers <-> home topics <-> .htpasswd
-        $message = "ResetPassword created new htpasswd entry for ".$loginName." as it was missing in .htpasswd";
+        $message .= " (ResetPassword created new htpasswd entry for ".$loginName." as it was missing in .htpasswd)";
     }
 
     my $password = _randomPassword();
@@ -476,10 +476,9 @@ sub resetUserPassword {
     my $res = $session->{users}->addUserPassword( $loginName, $password );
     $session->writeLog("resetpasswd", $loginName, $wikiName, $email, $res);
 
-    if ($res == 1) {
-      $message = "$email";
-    } else {
+    if ($res != 1) {
       $message = "Unknown error resetting password: $res - please contact site administrator";
+      $session->writeWarning("addUserPassword returned $res when trying to add new password for $loginName");
     }
 
     _sendEmail( session=>$session,

@@ -156,7 +156,7 @@ sub addUserPassword {
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 
 =cut
-
+# SMELL - should this not also delete the user topic?
 sub removeUser {
     my ( $this, $user ) = @_;
 
