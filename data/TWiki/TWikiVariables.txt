@@ -120,6 +120,14 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> __WL__ </td>
   <td> Exclude web from a =web="all"= search (set variable to =on= for hidden webs) </td>
 </tr><tr>
+  <td> =%<nop>NEWTOPICBGCOLOR%= </td>
+  <td> __SL__ , _UL_ </td>
+  <td> Background color of non existing topic. ( __UL__ needs authentication for topic views ) </td>
+</tr><tr>
+  <td> =%<nop>NEWTOPICFONTCOLOR%= </td>
+  <td> __SL__ , _UL_ </td>
+  <td> Font color of non existing topic. ( __UL__ needs authentication for topic views ) </td>
+</tr><tr>
   <td> =%<nop>EDITBOXWIDTH%= </td>
   <td> __SL__ , __UL__ </td>
   <td> Horizontal size of edit box, is <b> =%EDITBOXWIDTH%= </b> </td>
@@ -138,7 +146,7 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
 </tr><tr>
   <td> =%<nop>HTTP_EQUIV_ON_EDIT%= </td>
   <td> __SL__ , __UL__ </td>
-  <td> http-equiv meta tags for edit script. </tr><tr>
+  <td> http-equiv meta tags for edit script. </td>
 </tr><tr>
   <td> =%<nop>HTTP_EQUIV_ON_PREVIEW%= </td>
   <td> __SL__ , __UL__ </td>
