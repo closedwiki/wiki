@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#! /home/wikihosting/packages/perl5.8.4/bin/perl -w
 # $Id$
 #  Stages 2-3/4 of an automatic twiki install on macosx darwin
 # Copyright 2004 Will Norris.  All Rights Reserved.
@@ -32,31 +32,44 @@
 #    * run rcslock
 ################################################################################
 
-use Error qw( :try );
-
 my ( $hostname, $account );
 my ( $cgibin, $home );
 my $localDirConfig;
 
 BEGIN {
-    use Cwd qw( cwd getcwd );
+    use FindBin;
     use Config;
-    $account = [ split( '/', getcwd() ) ]->[-3]   # format: /Users/(account)/Sites/cgi-bin/...
+    $account = 
+	# format: /Users/(account)/Sites/cgi-bin/...
+	# format: /home/(drive)/(account)/account.wikihosting.com/cgi-bin/...
+	[ split( '/', $FindBin::Bin ) ]->[-3]
 	or die "no account?";
-    my $localLibBase = getcwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
-    unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
-    # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
+    print STDERR "account=[$account]\n";
 
-    $cgibin = "/Users/$account/Sites/cgi-bin";
-    $home = "/Users/$account/Sites";
-    chomp( $hostname = $ENV{SERVER_NAME} || `hostname` || 'localhost' );
+#    my $localLibBase = "$cpan/lib/" . $Config{version};
+#    my $localLibBase = $FindBin::Bin . "/lib/CPAN/lib/site_perl/" . $Config{version};
+    my $localLibBase = $FindBin::Bin . "/lib/CPAN/lib";
+    my @localLibs = ( $localLibBase, "$localLibBase/$Config{archname}" );
+    print STDERR "@localLibs\n";
+    unshift @INC, @localLibs;
+    $ENV{PERL5LIB} = join( ':', @localLibs );
 
+    # dreamhost
+    $home = "/home/$account/wbniv.wikihosting.com";
+
+    # darwin
+#    $home = "/Users/$account/Sites";
+
+    $cgibin = "$home/cgi-bin";
+    $ENV{SERVER_NAME} = "$account.wikihosting.com";
+    chomp( $hostname = $ENV{SERVER_NAME} || `hostname --long` || 'localhost' );
     die "hostname?" unless $hostname;
 
     $localDirConfig = qq{
 \$cfg{DefaultUrlHost}   = "http://$hostname";
-\$cfg{ScriptUrlPath}    = "/~$account/cgi-bin/twiki";
-\$cfg{PubUrlPath}       = "/~$account/htdocs/twiki";
+\$cfg{ScriptUrlPath}    = "/cgi-bin/twiki";
+\$cfg{ScriptSuffix}     = ".cgi";
+\$cfg{PubUrlPath}       = "/htdocs/twiki";
 \$cfg{PubDir}           = "$home/htdocs/twiki"; 
 \$cfg{TemplateDir}      = "$home/twiki/templates"; 
 \$cfg{DataDir}          = "$home/twiki/data"; 
@@ -69,13 +82,10 @@ BEGIN {
 \$cfg{HtpasswdFileName}   = "\$cfg{DataDir}/.htpasswd";
 \$cfg{RemoteUserFileName} = "\$cfg{DataDir}/remoteusers.txt";
 \$cfg{MimeTypesFileName}  = "\$cfg{DataDir}/mime.types";
-
-# Mac-specific
-\$cfg{EgrepCmd}         = '/usr/bin/egrep';
-\$cfg{FgrepCmd}         = '/usr/bin/fgrep';
 };
 }
 use strict;
+use Error qw( :try );
 ++$|;
 #open(STDERR,'>&STDOUT'); # redirect error to browser
 
@@ -84,7 +94,7 @@ use CGI::Carp qw( fatalsToBrowser );
 use File::Copy qw( cp mv );
 use File::Path qw( rmtree );
 use File::Basename qw( basename );
-use Cwd qw( cwd getcwd );
+use FindBin;
 use Data::Dumper qw( Dumper );
 use XML::Simple;
 use CPAN;
@@ -239,6 +249,13 @@ checkdir( $cpan );
 
 # TODO: change this to require a kernel parameter? (probably, but need to deal with creating the error "screens")
 my $tar = $q->param( 'kernel' ) || "TWiki20040902.tar.gz";
+# SMELL: not a proper choosing of the latest version
+if ( $tar =~ /^LATEST$/i ) { 
+    $tar = ( reverse sort { ( $a =~ /.+?(\d+)/ )[0] <=> ( $b =~ /.+?(\d+)/ )[0] } <downloads/releases/TWikiKernel-*> )[0];
+print STDERR "using LATEST: $tar\n";
+}
+$tar ||= "TWiki20040902.tar.gz";
+
 installTWikiExtension({ file => $tar, name => 'TWiki', dir => "downloads/releases", cdinto => 'twiki' });
 
 ################################################################################
@@ -262,17 +279,23 @@ print "<h2>Authentication</h2>\n";
 execute( "mv $bin/.htaccess.txt $bin/.htaccess" );
 
 $file = "$bin/.htaccess";
-open(FH, "<$file") or die "Can't open $file: $!";
-my $htaccess = join( "", <FH> );
-close(FH) or warn "Can't close $file: $!";
-
-$htaccess =~ s|!FILE_path_to_TWiki!/data|$home/twiki/data|g;	# code smell: duplicated data from config file above
-$htaccess =~ s|!URL_path_to_TWiki!/bin|/cgi-bin/twiki|g;	# ditto
+if ( open(FH, "<$file") )
+{
+    my $htaccess = join( "", <FH> );
+    close(FH) or warn "Can't close $file: $!";
+    
+    $htaccess =~ s|!FILE_path_to_TWiki!/data|$home/twiki/data|g;	# code smell: duplicated data from config file above
+    $htaccess =~ s|!URL_path_to_TWiki!/bin|/cgi-bin/twiki|g;	# ditto
 # TODO: fix ErrorDocument 401 (what should it be set to?)
 
-open( FH, ">$file" ) or die $!;
-print FH $htaccess;
-close( FH ) or die $!;
+    open( FH, ">$file" ) or die $!;
+    print FH $htaccess;
+    close( FH ) or die $!;
+}
+else
+{
+    warn ".htaccess !!!";
+}
 
 execute( "rm $dest/data/TWiki/TWikiRegistration.txt" ) or warn $!;
 my $reg = "$dest/data/TWiki/TWikiRegistration.txt,v";
@@ -332,8 +355,8 @@ checkdir( $tmp, $dest, $bin, $lib, $cpan );
 
 # a handy link to the place to go *after* the next step
 print qq{<hr><hr>\n};
-print qq{do a <tt>./post-wiki.sh</tt> and then <a target="details" href="http://$hostname/~$account/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
-print qq{run <a target="details" href="http://$hostname/~$account/cgi-bin/twiki/testenv/foo/bar" >testenv</a><br/>\n};
+print qq{do a <tt>./post-wiki.sh</tt> and then <a target="details" href="http://$hostname/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
+print qq{run <a target="details" href="http://$hostname/cgi-bin/twiki/testenv/foo/bar" >testenv</a><br/>\n};
 print qq{<br/><br/>};
 print "you can perform this installation again using the following URL: <br/>";
 ( my $urlInstall = $q->self_url ) =~ s/install=install//;
@@ -478,7 +501,7 @@ sub catalogue
 		target => 'details',
 		title => $extInstall->{description},
 	    };
-	    $aAttr->{href} = "$extInstall->{homepage}?skin=plain" if $extInstall->{homepage};
+	    $aAttr->{href} = "$extInstall->{homepage}?skin=print.pattern" if $extInstall->{homepage};
 
 	    # CODE SMELL: blech, assumes .tar.gz extension is the right thing to add, should be generated by download-twiki-extensions.pl (probably, i guess)
 	    $extInstall->{file} ||= "$p->{dir}/$extInstall->{name}.tar.gz";
@@ -524,7 +547,7 @@ sub installTWikiExtension
 	}
     }
 
-    my $pushd = getcwd();
+    my $pushd = $FindBin::Bin;
     chdir( "tmp/install" ) or warn $!;
     ( $tarPackage ) =~ s|^tmp/install/||;
     execute("tar xzvf $tarPackage") or warn $!;
@@ -539,14 +562,14 @@ sub installTWikiExtension
 
     # TODO: find perl move directory tree code
     # TODO: filter out ,v files (right???)
-    if ( -d 'data/Plugins' ) { execute( "cp -rv data/Plugins/ $dest/data/TWiki" ); execute( "rm -rf data/Plugins" ); }
+    if ( -d 'data/Plugins' ) { execute( "cp -rv data/Plugins/* $dest/data/TWiki" ); execute( "rm -rf data/Plugins" ); }
     if ( -d 'data' ) { execute( "cp -rv data $dest" ); execute( "rm -rf data" ); }
-    if ( -d 'lib' ) { execute( "cp -rv lib/ $lib" ); execute( "rm -rf lib" ); }
+    if ( -d 'lib' ) { execute( "cp -rv lib/* $lib" ); execute( "rm -rf lib" ); }
 #    if ( -d 'bin' ) { execute( "chmod +x bin/*" ); execute( "cp -rv bin/ $bin" ); execute( "rm -rf bin" ); }
-    if ( -d 'bin' ) { execute( "cp -rv bin/ $bin" ); execute( "rm -rf bin" ); }
-    if ( -d 'pub/Plugins' ) { execute( "cp -rv pub/Plugins/ $tmp/twiki/TWiki" ); execute( "rm -rf pub/Plugins" ); }
+    if ( -d 'bin' ) { execute( "cp -rv bin/* $bin" ); execute( "rm -rf bin" ); }
+    if ( -d 'pub/Plugins' ) { execute( "cp -rv pub/Plugins/* $tmp/twiki/TWiki" ); execute( "rm -rf pub/Plugins" ); }
     if ( -d 'pub' ) { execute( "cp -rv pub $tmp/twiki" ); execute( "rm -rf pub" ); }
-    if ( -d 'templates' ) { execute( "cp -rv templates/ $tmp/twiki/templates" ); execute( "rm -rf templates" ); }
+    if ( -d 'templates' ) { execute( "cp -rv templates/* $tmp/twiki/templates" ); execute( "rm -rf templates" ); }
 
     # TODO: assert( isDirectoryEmpty() );
 
@@ -629,7 +652,7 @@ __HTML__
     $cmd =~ s/&/&amp;/g;  $cmd =~ s/</&lt;/g;  $cmd =~ s/>/&gt;/g;
     print qq{<font color="$clrCommand"><tt>$cmd</tt></font><br/>\n};
 
-    print join( '<br/>', @output );
+#    print join( '<br/>', @output );
 
     print "<br/></span>\n";
 }
