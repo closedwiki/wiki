@@ -563,7 +563,8 @@ sub getRevisionInfo
     if( ! $theWebName ) {
         $theWebName = $TWiki::webName;
     }
-    
+
+    $theRev = "" unless( $theRev );
     $theRev =~ s/^1\.//o;
 
     $topicHandler = _getTopicHandler( $theWebName, $theTopic, $attachment ) if( ! $topicHandler );
