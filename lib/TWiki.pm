@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "10 Aug 2003";
+$wikiversion      = "11 Aug 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1332,7 +1332,6 @@ sub handleIncludeFile
     my( $theAttributes, $theTopic, $theWeb, $verbatim, @theProcessedTopics ) = @_;
     my $incfile = extractNameValuePair( $theAttributes );
     my $pattern = extractNameValuePair( $theAttributes, "pattern" );
-    my $section = extractNameValuePair( $theAttributes, "section" );
     my $rev = extractNameValuePair( $theAttributes, "rev" );
 
     if( $incfile =~ /^http\:/ ) {
@@ -1404,21 +1403,9 @@ sub handleIncludeFile
         } else {
             ( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
         }
-        if( $section ) {
-            # This is where we handle sections
-            if ($text =~ /%SECTION{\s*\"?$section\"?\s*}%/) {
-                # Remove text preceding the section marker
-                $text =~ s/.*?%SECTION{\s*\"?$section\"?\s*}%//s;
-                # Remove text following the section marker
-                $text =~ s/%ENDSECTION%.*//s;
-            } else {
-                $text = ""; # Section doesn't exist - include no text
-            }
-        } else {
-            # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
-            $text =~ s/.*?%STARTINCLUDE%//s;
-            $text =~ s/%STOPINCLUDE%.*//s;
-        }
+        # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
+        $text =~ s/.*?%STARTINCLUDE%//s;
+        $text =~ s/%STOPINCLUDE%.*//s;
     } # else is a file with relative path, e.g. $dataDir/../../path/to/non-twiki/file.ext
 
     if( $pattern ) {
