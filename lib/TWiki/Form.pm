@@ -452,7 +452,7 @@ sub upgradeCategoryItem
 # load old style category table
 sub upgradeCategoryTable
 {
-    my( $web, $meta, $text ) = @_;
+    my( $web, $topic, $meta, $text ) = @_;
     
     my $icat = &TWiki::Store::readTemplate( "twikicatitems" );
     
@@ -471,7 +471,7 @@ sub upgradeCategoryTable
         my $ttext = "";
         foreach( split( /\n/, $icat ) ) {
             my( $catname, $catmod, $catvalue ) = upgradeCategoryItem( $_, $ctext );
-            TWiki::writeDebug( "Classification: name, mod, value: $catname, $catmod, $catvalue" );
+            #TWiki::writeDebug( "Form: name, mod, value: $catname, $catmod, $catvalue" );
             if( $catname && $catname ne "UseCategory" ) {
                 push @items, ( [$catname, $catmod, $catvalue] );
             }
@@ -479,6 +479,17 @@ sub upgradeCategoryTable
         
         my @formTemplates = split( /,\s*/, TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) );
         # FIXME - deal with none
+        
+        if( ! @formTemplates ) {
+            if( $TWiki::cgiQuery ) {
+                my $url = &TWiki::getOopsUrl( $web, $topic, "oopsnoformdef" );
+                TWiki::redirect( $TWiki::cgiQuery, $url );
+            }
+            &TWiki::writeWarning( "Form: can't get form definition to convert category table " .
+                                  " for topic $web.$topic" );
+            return;
+        }
+        
         my $defaultFormTemplate = $formTemplates[0];
         my @fieldsInfo = getFormDef( $web, $defaultFormTemplate );
         $meta->put( "FORM", ( name => $defaultFormTemplate ) );
