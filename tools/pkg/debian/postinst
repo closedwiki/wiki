@@ -92,7 +92,7 @@ case "$1" in
 		if [ -e /etc/$server/conf.d ]; then
 			includefile=/etc/twiki/apache.conf
 			if [ -e /etc/$server/conf.d/twiki.conf ]; then
-				rm /etc/$server/conf.d/twiki.conf
+				mv /etc/$server/conf.d/twiki.conf /etc/$server/conf.d/twiki.conf_old
 			fi
 			ln -s $includefile /etc/$server/conf.d/twiki.conf 
 		fi

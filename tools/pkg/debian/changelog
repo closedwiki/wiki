@@ -1,5 +1,6 @@
 twiki (20040902-1) unstable; urgency=high
-  * upgraded to 02-Sept-2004 release (Cairo) (Closes :#270143, #283517)
+  * upgraded to 02-Sept-2004 release (Cairo) 
+    (Closes :#270143, #283517, #281597)
   * don't allow view on topics with empty ALLOW pref (Closes: #281624)
   * applied ViewAfterSaveCachesOldPage-ugly-fix.patch (Closes: #218922)
     - maybe!! (I could never re-produce it)
