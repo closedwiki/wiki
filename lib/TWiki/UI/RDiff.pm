@@ -222,11 +222,11 @@ sub _renderSequential
   } elsif ( $diffType eq "c") {
     $result .= qq(<tr><td bgcolor="#D0FFD0" class="TWikiDiffChangedHeader" colspan ="9"><b> Changed: </b></td></tr>\n);
     $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top" width="1%">&lt;<br />&lt;</td>\n);
-    $result .= qq(<td class="TWikiDiffAddedText">\n);
+    $result .= qq(<td class="TWikiDiffDeletedText">\n);
     $result .= _renderCellData( $left, $topic );
     $result .= qq(\n</td></tr>\n);
     $result .= qq(<tr><td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top" width="1%">&gt;<br />&gt;</td>\n);
-    $result .= qq(<td class="TWikiDiffDeletedText">\n);
+    $result .= qq(<td class="TWikiDiffAddedText">\n);
     $result .= _renderCellData( $right, $topic );
     $result .= qq(\n</td></tr>\n);
   } elsif ( $diffType eq "l") {
