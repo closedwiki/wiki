@@ -1,3 +1,4 @@
+
 #
 # TWiki WikiClone ($wikiversion has version info)
 #
@@ -61,7 +62,7 @@ use strict;
 # TWiki config variables:
 use vars qw(
         $webName $topicName $includingWebName $includingTopicName
-        $defaultUserName $userName $wikiUserName 
+        $defaultUserName $userName $wikiName $wikiUserName
         $wikiHomeUrl $defaultUrlHost $urlHost
         $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir
         $siteWebTopicName $wikiToolName $securityFilter $uploadFilter
@@ -172,9 +173,10 @@ sub initialize
     &TWiki::Access::initializeAccess();
 
     # initialize user name and user to WikiName list
-    $userName = initializeRemoteUser( $theRemoteUser );
+    $userName = initializeRemoteUser( $theRemoteUser );  # i.e. "jdoe"
     userToWikiListInit();
-    $wikiUserName = userToWikiName( $userName );
+    $wikiName     = userToWikiName( $userName, 1 );      # i.e. "JonDoe"
+    $wikiUserName = userToWikiName( $userName );         # i.e. "Main.JonDoe"
 
     # initialize $webName and $topicName
     $topicName = "";
@@ -411,25 +413,18 @@ sub userToWikiListInit
 # =========================
 sub userToWikiName
 {
-    my( $loginUser, $onlyTranslate ) = @_;
+    my( $loginUser, $dontAddWeb ) = @_;
     
     if( !$loginUser ) {
         return "";
     }
 
     $loginUser =~ s/$securityFilter//go;
-    my $wUser = $userToWikiList{ $loginUser };
-    if( $wUser && $onlyTranslate ) {
-        return "$wUser";
+    my $wUser = $userToWikiList{ $loginUser } || $loginUser;
+    if( $dontAddWeb ) {
+        return $wUser;
     }
-    if( $wUser ) {
-        return "$mainWebname.$wUser";
-    }
-    if( $onlyTranslate ) {
-       return "";
-    } else {
-       return "$mainWebname.$loginUser";
-    }
+    return "$mainWebname.$wUser";
 }
 
 # =========================
@@ -1218,6 +1213,7 @@ sub handleInternalTags
     $_[0] =~ s/%SERVERTIME{(.*?)}%/&handleTime($1,"servertime")/geo;
     $_[0] =~ s/%WIKIVERSION%/$wikiversion/go;
     $_[0] =~ s/%USERNAME%/$userName/go;
+    $_[0] =~ s/%WIKINAME%/$wikiName/go;
     $_[0] =~ s/%WIKIUSERNAME%/$wikiUserName/go;
     $_[0] =~ s/%WIKITOOLNAME%/$wikiToolName/go;
     $_[0] =~ s/%MAINWEB%/$mainWebname/go;
