@@ -10,6 +10,16 @@
       * <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;web=all;&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Find topics</a>
         in __all public webs__ that link to <nop>%TOPIC%.
 
+<form name="main" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+   * *Parent of <nop>%TOPIC%:*
+      * Set topic parent to
+        <select name="topicparent"><option value="">Select...</option>
+        %TOPICLIST{"<option value=$qname>$name</option>" separator=" "}%
+        </select>,
+        then <input type="submit" value="Edit" /> and save the topic
+        to activate the new parent.
+</form>
+
    * *Rename or move:*
       * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a> <nop>%TOPIC%
 
