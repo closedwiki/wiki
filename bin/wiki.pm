@@ -42,7 +42,7 @@ use vars qw(
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "01 Jul 1999";
+$wikiversion      = "06 Jul 1999";
 
 # variables that need to be changed when installing on new server:
 $wikiHomeUrl      = $wikicfg::wikiHomeUrl;

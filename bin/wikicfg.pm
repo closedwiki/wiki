@@ -62,20 +62,22 @@ $wikiwebmaster    = "yourname\@your.domain.com";
 $logDateCmd       = "date '+%Y%m'";
 #                   mail program :
 $mailProgram      = "/usr/sbin/sendmail -t -oi -oeq";
+#                   RCS directory (find out by 'which rcs') :
+$rcsDir           = "/usr/bin";
 #                   RCS check in command :
-$revCiCmd         = "ci -l -q -mnone -t-none -w'%USERNAME%' %FILENAME%";
+$revCiCmd         = "$rcsDir/ci -l -q -mnone -t-none -w'%USERNAME%' %FILENAME%";
 #                   RCS check in command with date :
-$revCiDateCmd     = "ci -l -q -mnone -t-none -d'%DATE%' -w'%USERNAME%' %FILENAME%";
+$revCiDateCmd     = "$rcsDir/ci -l -q -mnone -t-none -d'%DATE%' -w'%USERNAME%' %FILENAME%";
 #                   RCS check out command :
-$revCoCmd         = "co -q -p%REVISION% %FILENAME%";
+$revCoCmd         = "$rcsDir/co -q -p%REVISION% %FILENAME%";
 #                   RCS history command :
-$revHistCmd       = "rlog -h %FILENAME%";
+$revHistCmd       = "$rcsDir/rlog -h %FILENAME%";
 #                   RCS history on revision command :
-$revInfoCmd       = "rlog -r%REVISION% %FILENAME%";
+$revInfoCmd       = "$rcsDir/rlog -r%REVISION% %FILENAME%";
 #                   RCS revision diff command :
-$revDiffCmd       = "rcsdiff -w -B -r%REVISION1% -r%REVISION2% %FILENAME%";
+$revDiffCmd       = "$rcsDir/rcsdiff -w -B -r%REVISION1% -r%REVISION2% %FILENAME%";
 #                   RCS delete revision command :
-$revDelRevCmd     = "rcs -u %FILENAME%; rcs -o%REVISION% %FILENAME%; rcs -l %FILENAME%";
+$revDelRevCmd     = "$rcsDir/rcs -u %FILENAME%; rcs -o%REVISION% %FILENAME%; rcs -l %FILENAME%";
 #                   Delete RCS repository file command :
 $revDelRepCmd     = "rm -f %FILENAME%,v";
 #                   Print head of files command :
@@ -86,7 +88,7 @@ $rmFileCmd        = "rm -f %FILENAME%";
 # variables that probably do not change:
 # ==================================================================
 #                   %WIKITOOLNAME% : TWiki tool name :
-$wikiToolName     = "TWiki";
+$wikiToolName     = "betaTWiki";
 #                   Template directory :
 $templateDir      = "$wikiDir/bin/templates";
 #                   Data (topic files) root directory :
