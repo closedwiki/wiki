@@ -1081,8 +1081,6 @@ sub topicExists {
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
     ASSERT(defined($theTopic)) if DEBUG;
 
-    ( $theWeb, $theTopic ) =
-      $this->{session}->normalizeWebTopicName( $theWeb, $theTopic );
     return -e "$TWiki::dataDir/$theWeb/$theTopic.txt";
 }
 
