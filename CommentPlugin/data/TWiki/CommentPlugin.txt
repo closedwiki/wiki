@@ -1,6 +1,6 @@
 ---+!! Comment Plugin
 
-This plugin allows users to quickly post comments to a page without edit/preview/save cycle. 
+This plugin allows users to quickly post comments to a page without an edit/preview/save cycle. 
 
 _( Discussion in TWiki:Plugins/CommentPluginDev )_
 
@@ -62,8 +62,6 @@ Note that these position tags are obviously mutually exclusive. If you define mo
 
 Note that TWiki variables in the OUTPUT definition get expanded when the comment is inserted in the text; so time, date and username will refer to the time and date the comment was made and the user who made it.
 
-*Warning* to template authors. When you write templates, always ensure that the expansion of URLs cannot result in TWiki content (such as Set statements) that could compromise the security of your site. The default templates are written so that it's impossible to embed Set statements using them.
-
 #HandlingPageLock
 ---+ Important Note regarding Locks
 
@@ -74,6 +72,11 @@ Note that if the page was read long time ago, it's possible that page was locked
 	* *Back* - *WARNING* some browsers might requery the page and *lose* your comments - so test how your browser behaves before using the Back button.
 
 To help avoid edit conflict, a reminder to refresh the page before entering comments is the default text for a =%COMMENT=
+
+---+ TWO WARNINGS
+
+	* *WARNING 1*: Anyone can refactor text added via comments, just like any other page.  CommentPlugin knows nothing about what you've done once you have posted your comments.
+	* *WARNING 2*: to template authors. When you write templates, always ensure that the expansion of URLs cannot result in TWiki content (such as Set statements) that could compromise the security of your site. The default templates are written so that it's impossible to embed Set statements using them.
 
 ---+ Settings
 
@@ -87,11 +90,6 @@ To help avoid edit conflict, a reminder to refresh the page before entering comm
 		* Set DEFAULT_TYPE = below
 		
 ---+ Plugin Installation Instructions
-
-*TWO WARNINGS*
-
-	* *WARNING 1*: Anyone can refactor text added via comments, just like any other page.  CommentPlugin knows nothing about what you've done once you have posted your comments.
-	* *WARNING 2 (Installation warning)*: Because the Plugins API cannot handle form processing, the plugin requires a =savecomment= script in the bin directory. Be careful to make sure =.htaccess= to this script is set up correctly.
 
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
