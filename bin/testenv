@@ -99,8 +99,8 @@ print "<tr><th align=\"right\">\$pubUrlPath:</th><td>$pubUrlPath</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This must be the URI of the public directory.";
 print "This is not set correctly if below ";
-print "$pubUrlPath/wikiHome.gif image is broken:<br>";
-print "<img src=\"$pubUrlPath/wikiHome.gif\">";
+print "$pubUrlPath/wikiHome.gif image is broken:<br />";
+print "<img src=\"$pubUrlPath/wikiHome.gif\" />";
 print "</td></tr>\n";
 
 print "<tr><th align=\"right\">\$pubDir:</th><td>$pubDir</td></tr>\n";

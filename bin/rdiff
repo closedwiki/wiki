@@ -67,9 +67,9 @@ sub renderRevisionDiff
             $data = renderCellData( $data, $topic );
             $result .= $data;
             $data = "";
-            s/^([0-9\,]+)d([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#FFD7D7" colspan ="2"><b> Deleted: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br>&lt;<\/td><td>/go;
-            s/^([0-9\,]+)a([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Added:   <\/b><\/td><\/tr>\n<tr><td bgcolor="#40FF40" valign="top" width="1%">&gt;<br>&gt;<\/td><td>/go;
-            s/^([0-9\,]+)c([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Changed: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br>&lt;<\/td><td>/go;
+            s/^([0-9\,]+)d([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#FFD7D7" colspan ="2"><b> Deleted: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br />&lt;<\/td><td>/go;
+            s/^([0-9\,]+)a([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Added:   <\/b><\/td><\/tr>\n<tr><td bgcolor="#40FF40" valign="top" width="1%">&gt;<br />&gt;<\/td><td>/go;
+            s/^([0-9\,]+)c([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Changed: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br />&lt;<\/td><td>/go;
             $result .= $_;
 
         } elsif( /^[<>]/ ) {
@@ -80,7 +80,7 @@ sub renderRevisionDiff
             $data = renderCellData( $data, $topic );
             $result .= $data;
             $data = "";
-            $result .= "\n</td></tr><tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br>&gt;</td><td>\n";
+            $result .= "\n</td></tr><tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br />&gt;</td><td>\n";
         }
     }
     $data = renderCellData( $data, $topic );
@@ -221,10 +221,10 @@ sub main
     }
 
     while( $i > 0 ) {
-        $revisions .= " | <A href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
+        $revisions .= " | <a href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</a>";
         if( $i != 1 ) {
             if( $i == $breakRev ) {
-                $revisions = "$revisions | <A href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=1.$maxrev\">&gt;...</A>";
+                $revisions = "$revisions | <a href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=1.$maxrev\">&gt;...</a>";
                 $i = 1;
 
             } else {
@@ -232,7 +232,7 @@ sub main
                     $revisions .= " | &gt;";
                 } else {
                     $j = $i - 1;
-                    $revisions .= " | <A href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&amp;rev2=1.$j\">&gt;</A>";
+                    $revisions .= " | <a href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&amp;rev2=1.$j\">&gt;</a>";
                 }
             }
         }

@@ -13,7 +13,7 @@
 %TMPL:P{"standardheader"}%
 </form>
 %SPLIT%Search: <b> %SEARCHSTRING% </b>
-<p>
+<p />
 
 <form>
 
@@ -33,8 +33,8 @@
 %REPEAT%<table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>
   <td width="10%">
-    %SELECTION%<input type="checkbox" name="RENAME%LABEL%%TOPIC_NUMBER%" checked="checked">
-    <input type="hidden" name="TOPIC%LABEL%%TOPIC_NUMBER%"value="%WEB%.%TOPICNAME%">%SELECTION%
+    %SELECTION%<input type="checkbox" name="RENAME%LABEL%%TOPIC_NUMBER%" checked="checked" />
+    <input type="hidden" name="TOPIC%LABEL%%TOPIC_NUMBER%"value="%WEB%.%TOPICNAME%" />%SELECTION%
   </td><td width="45%">
     <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a> %LOCKED%
   </td><td width="25%">
@@ -52,8 +52,8 @@
   </td>
 </tr></table>
 %REPEAT%<br clear="all" />
-<p>%SPLIT%Number of topics: <b>%NTOPICS%</b>
-<p>%SPLIT%
+<p />%SPLIT%Number of topics: <b>%NTOPICS%</b>
+<p />%SPLIT%
 
 </form>
 

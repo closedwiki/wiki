@@ -82,7 +82,7 @@ sub main
         print "<html><body>\n"
             . "<h1>TWiki Installation Error</h1>\n"
             . "Template file view.tmpl not found or template directory \n"
-            . "$TWiki::templateDir not found.<p>\n"
+            . "$TWiki::templateDir not found.<p />\n"
             . "Check the \$templateDir variable in TWiki.cfg.\n"
             . "</body></html>\n";
         return;
@@ -198,7 +198,7 @@ sub main
         $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/oi;
         if( $topicExists ) {
             # remove the NOINDEX meta tag
-            $tmpl =~ s/<META NAME="ROBOTS"[^>]*>//goi;
+            $tmpl =~ s/<meta name="robots"[^>]*>//goi;
         } else {
             $text = "";
         }
@@ -214,7 +214,7 @@ sub main
         if( $topicExists ) {
             $tmpl =~ s/%EDITTOPIC%/<a href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><b>Edit<\/b><\/a>/go;
             # remove the NOINDEX meta tag
-            $tmpl =~ s/<META NAME="ROBOTS"[^>]*>//goi;
+            $tmpl =~ s/<meta name="robots"[^>]*>//goi;
         } else {
             $tmpl =~ s/%EDITTOPIC%/<a href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><b>Create<\/b><\/a>/go;
 

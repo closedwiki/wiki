@@ -21,9 +21,9 @@ function launchWindow( theWeb, theTopic ) {
 %TMPL:DEF{"titleaction"}%(preview)%TMPL:END%
 %TMPL:DEF{"headerhelp"}% <font size="-2">
   <ul>
-  <li> To <B>save</B> changes: Press the [Save Changes] button.
-  <li> To make <B>more changes</B>: Go back in your browser.
-  <li> To <B>cancel</B>: Go back twice.
+  <li> To <b>save</b> changes: Press the [Save Changes] button.
+  <li> To make <b>more changes</b>: Go back in your browser.
+  <li> To <b>cancel</b>: Go back twice.
   </ul>
   </font> %TMPL:END%
 %TMPL:DEF{"webaction"}%
@@ -35,7 +35,7 @@ Parent: %META{"parent"}%
 %TEXT%
 %META{"form"}%
 %META{"attachments"}%
-<br clear=all>
+<br clear="all" />
 <form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <input type="hidden" name="text" value="%HIDDENTEXT%" />
 <input type="hidden" name="cmd" value="%CMD%" />

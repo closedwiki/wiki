@@ -21,12 +21,12 @@
 #
 #I n s t a l l
 #
-#</FORM>
-#<FORM name="passwd" action="/%SCRIPTURLPATH%/passwd%SCRIPTSUFFIX%/%WEB%/">
-#Username:EncryptedPW <input type="text" name="encryptedpassword" value="" size="16"> <br>
-#<input type="submit" name="passwd">
-#<input type="hidden" name="install" value="on">
-#</FORM>
+#</form>
+#<form name="passwd" action="/%SCRIPTURLPATH%/passwd%SCRIPTSUFFIX%/%WEB%/">
+#Username:EncryptedPW <input type="text" name="encryptedpassword" value="" size="16" /> <br />
+#<input type="submit" name="passwd" />
+#<input type="hidden" name="install" value="on" />
+#</form>
  
 
 use CGI::Carp qw(fatalsToBrowser);

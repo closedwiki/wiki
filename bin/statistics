@@ -176,11 +176,11 @@ sub processWeb
     my $statTopContributors = "";
     if( @topViews ) {
         printMsg( "  - top view: $topViews[0]" );
-        $statTopViews = join( "<br> ", @topViews );
+        $statTopViews = join( "<br /> ", @topViews );
     }
     if( @topContrib ) {
         printMsg( "  - top contributor: $topContrib[0]" );
-        $statTopContributors = join( "<br> ", @topContrib );
+        $statTopContributors = join( "<br /> ", @topContrib );
     }
 
     my $statsFile = $TWiki::statisticsTopicname;
@@ -285,7 +285,7 @@ sub printMsg
         $htmlMsg =~ s/(\*\*\*.*)/<font color=\"FF0000\">$1<\/font>/go;
         $htmlMsg =~ s/^\s\s/&nbsp;&nbsp;/go;
         $htmlMsg =~ s/^\s/&nbsp;/go;
-        $htmlMsg .= "<br>";
+        $htmlMsg .= "<br />";
     }
     $htmlMsg =~ s/==([A-Z]*)==/<font color=\"FF0000\">==$1==<\/font>/go;
 

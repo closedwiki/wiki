@@ -337,12 +337,12 @@ sub getLocks
        my $tmpl = &TWiki::Store::readTemplate( "oopslockedrename" );
        my $editLock = $TWiki::editLockTime / 60;
        if( $oldLockUser ) {
-           $tmpl =~ s/%OLD_LOCK%/Source topic $oldWeb.$oldTopic is locked by $oldLockUser, lock expires in $oldLockTime minutes.<BR>/go;
+           $tmpl =~ s/%OLD_LOCK%/Source topic $oldWeb.$oldTopic is locked by $oldLockUser, lock expires in $oldLockTime minutes.<br />/go;
        } else {
            $tmpl =~ s/%OLD_LOCK%//go;
        }
        if( $newLockUser ) {
-           $tmpl =~ s/%NEW_LOCK%/Destination topic $newWeb.$newTopic is locked by $newLockUser, lock expires in $newLockTime minutes.<BR>/go;
+           $tmpl =~ s/%NEW_LOCK%/Destination topic $newWeb.$newTopic is locked by $newLockUser, lock expires in $newLockTime minutes.<br />/go;
        } else {
            $tmpl =~ s/%NEW_LOCK%//go;
        }

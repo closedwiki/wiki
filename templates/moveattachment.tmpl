@@ -16,8 +16,8 @@
 | |  *Web:* | *&nbsp;Topic:* |
 |  *From:* |    %WEB%. | &nbsp;%TOPIC% |
 |  *To:* |  <select name="newweb"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}% </select>. | &nbsp;<input name="newtopic" value="%TOPIC%" /> |
-<input type="hidden" name="attachment" value="%FILENAME%">
-<input type="hidden" name="changeRefs" value="0">
+<input type="hidden" name="attachment" value="%FILENAME%" />
+<input type="hidden" name="changeRefs" value="0" />
 
 __Note:__
 
@@ -27,7 +27,7 @@ __Note:__
    * Note that any URLs that refer to the attachment will be broken after this move.
 
 %TMPL:DEF{"topicaction"}%
- <input type="submit" value=" Move ">
+ <input type="submit" value=" Move " />
  %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
 %TMPL:P{"standardfooter"}%
 </form>
