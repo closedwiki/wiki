@@ -89,8 +89,8 @@ sub processWeb
     foreach( reverse split( /\n/, $changes ) ) {
 	@bar = split( /\t/);
 	$foo = $text;
-	if( ( !defined( %exclude) ) || ( !$exclude{ $bar[0] } ) ) {
-	    if( !$currLastmodify ) {
+	if( ( ! %exclude ) || ( ! $exclude{ $bar[0] } ) ) {
+	    if( ! $currLastmodify ) {
 	        # newest entry
 	        $time = &TWiki::formatGmTime( $prevLastmodify );
 	        if( $prevLastmodify eq $bar[2] ) {
