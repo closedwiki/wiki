@@ -1,55 +1,152 @@
-%META:TOPICINFO{author="MikeMannix" date="999162452" format="1.0" version="1.4"}%
----++ Dev Reorg Note:
-
-The latest version of <nop>FileAttachments includes attachments under revision control. It's in the 01 Sep 2001 TWiki release.
-
-	* Current Dev topic: Codev.AttachmentsUnderRevisionControl 
-
------
+%META:TOPICINFO{author="PeterThoeny" date="999828345" format="1.0" version="1.5"}%
+%TOC%
+%STARTINCLUDE%
+---## File Attachments
 
 Each topic can have files attached to it. This is similar to an e-mail attachment. Just use your browser to upload or download a file.
-	* To upload: Click on the Attach link at the bottom of each page. A form is shown where you can browse for a file and upload it. The uploaded file will show up in the <nop>FileAttachment table.
-	* To download: Click on the file in the <nop>FileAttachment table.
+Attachments are stored under revision control - no upload is lost.
 
-*FileAttachment table*
+---+++ What Are Attachments Good For?
+
+---++++ Document Management System
+
+	* __document management system: distribution, revision__
+
+---++++ File Sharing
+
+	* __share files: applications, data files; recommended for light use__
+
+---++++ Page Content
+
+	* __on-site use: linking to graphics, docs__
+
+---+++ Uploading Files
+
+	* To upload: Click on the Attach link at the bottom of each page. A form is shown where you can browse for a file and upload it. The uploaded file will show up in the [[#FileAttachmentTable][File Attachment table]].
+	* Files of any type can be uploaded. Some files that might impose a security risk are renamed, i.e. =*.php= files are renamed to =*.php.txt=.
+	* Currently there is no file size limit besides the disk space on the server.
+	* The previous upload path is retained for convenience. In case you make some changes to the local file and want to upload it again you can copy the previous upload path into the Local file field.
+
+---+++ Downloading Files
+
+	* To download: Click on the file in the [[#FileAttachmentTable][File Attachment table]].
+	* There is no access control on individual attachments. If you need to have this type of control create separate topics and define access restrictions on the topics.
+
+---+++ Moving Attachment Files
+
+An attachement can be moved between topics.  To do this click _action_ on the attachment to be moved.  On the subsequent page select the new Web and Topic, the click _Move_.  The attachment and its version history is moved. The original location is stored in the [[TWikiDocumentation#Meta_Data_Definition][topic meta data]].
+
+---+++ Deleting Attachments
+
+It is not possible to delete attached files with the current TWiki implementation.  However, they can be moved to another topic.  You may care to have a topic *Trash.TrashAttachments* - move attachments that are no longer wanted here.
+
+---+++ Linking to Attached Files
+
+	* Once a file is attached it can be referenced in the topic. Example:
+		* Attach file: =Sample.txt=
+		* Edit topic and write text: =%<nop>ATTACHURL%/Sample.txt=
+		* Text is shown as: %PUBURL%/%WEB%/%TOPIC%/Sample.txt, ex: it is a link.
+		* To reference an attachment located in another topic write text:
+			* =%<nop>PUBURL%/%<nop>WEB%/OtherTopic/Sample.txt= (for same web)
+			* =%<nop>PUBURL%/Otherweb/OtherTopic/Sample.txt= (for different web)
+
+	* Attached HTML files and text files can be inlined in a topic. Example:
+		* Attach file: =Sample.txt=
+		* Edit topic and write text: =%<nop>INCLUDE{"%<nop>ATTACHURL%/Sample.txt"}%=
+		* Content of attached file is shown inlined.
+		* Read more in IncludeTopicsAndWebPages.
+
+	* GIF, JPG and PNG images can be attached and shown embedded in a topic. Example:
+		* Attach file: =Smile.gif=
+		* Edit topic and write text: =%<nop>ATTACHURL%/Smile.gif=
+		* Text is shown as: %PUBURL%/%WEB%/%TOPIC%/Smile.gif , it shows up as an image.
+
+#FileAttachmentTable
+---+++ File Attachment Contents Table
 
 Is a table that looks like this:
 
-<table cellpadding=0 border=0 cellspacing=4>
-<tr bgcolor="#99CCCC">
-  <th>FileAttachment:
-  </th><th> Action:
-  </th><th> Size:
-  </th><th> Date:
-  </th><th> Who:
-  </th><th> Comment:
-  </th>
-</tr>
-<tr>
-  <td> (attached file)
-  </td><td> 
-	(view, update, add)
-  </td><td> (file size)
-  </td><td> (upload date)
-  </td><td> (uploaded by)
-  </td><td> (file comment)
-  </td>
-</tr>
+<table border="1" cellspacing="0" cellpadding="20"><tr><td>
+<table border="1" cellspacing="0" cellpadding="1"> <tr><th align="center" bgcolor="#99CCCC"> <strong><a href="FileAttachment">Attachment</a>:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Action:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Size:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Date:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Who:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Comment:</strong> </th></tr>
+<tr><td>  <img src="%PUBURLPATH%/icn/txt.gif" width="16" height="16" align="top" /> <a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/TWiki/FileAttachment?rev=&amp;filename=Sample.txt">Sample.txt</a>	  </td><td>  <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/TWiki/FileAttachment?filename=Sample.txt&amp;revInfo=1">action</a>	  </td><td>  30  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="PeterThoeny">PeterThoeny</a>  </td><td>  Just a sample  </td></tr>
+<tr><td>  <img src="%PUBURLPATH%/icn/bmp.gif" width="16" hight="16" align="top" /> <a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/TWiki/FileAttachment?rev=&amp;filename=Smile.gif">Smile.gif</a>	  </td><td>  <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/TWiki/FileAttachment?filename=Smile.gif&amp;revInfo=1">action</a>	  </td><td>  94  </td><td>  22 Jul 2000 - 19:38  </td><td>  <a href="PeterThoeny">PeterThoeny</a>  </td><td>  Smiley face  </td></tr>
+</table>
+</td></tr></table>
+
+---+++ File Attachment Control Page
+
+Clicking on an action link takes you to a new page that looks like this:
+
+<form>
+<table border="1" cellspacing="0" cellpadding="20"><tr><td>
+<table border="1" cellspacing="0" cellpadding="1"> <tr><th align="center" bgcolor="#99CCCC"> <strong><a href="FileAttachment">Attachment</a>:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Action:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Size:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Date:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Who:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Comment:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong><a href="FileAttribute">Attribute</a>:</strong> </th></tr>
+<tr><td>  <img src="%PUBURLPATH%/icn/txt.gif" width="16" height="16" align="top" /> <a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/TWiki/FileAttachment?rev=&amp;filename=Sample.txt">Sample.txt</a> </td><td>  <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/TWiki/FileAttachment?filename=Sample.txt&amp;revInfo=1">action</a> </td><td>  30  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="PeterThoeny">PeterThoeny</a>  </td><td>  Just a sample  </td><td align="center">	&nbsp;	</td></tr>
+<tr><td>  <img src="%PUBURLPATH%/icn/bmp.gif" width="16" height="16" align="top" /> <a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/TWiki/FileAttachment?rev=&amp;filename=Smile.gif">Smile.gif</a>	  </td><td>  <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/TWiki/FileAttachment?filename=Smile.gif&amp;revInfo=1">action</a>	  </td><td>  94  </td><td>  22 Jul 2000 - 19:38  </td><td>  <a href="PeterThoeny">PeterThoeny</a>  </td><td>  Smiley face  </td><td align="center">	&nbsp;	</td></tr>
 </table>
 
-*Action* is:
-	* *view:* View file. This is the same as clicking on the filename.
-	* *update:* Update file that is already attached.
-	* *add:* Add a new attachment.
+<nop><h2>Update attachment <code>Sample.txt</code></h2>
 
-*Remarks*
-	* Once a file is attached it can be referenced in the topic by =%<nop>ATTACHURL%/{filename}= . Example:
-		* Attach file: =Sample.txt=
-		* Text is shown as: %PUBURL%/%WEB%/%TOPIC%/Sample.txt , i.e. it is a link.
-	* GIF and JPG images can be attached and shown in the text like this:
-		* Attach file: =Smile.gif=
-		* Edit topic and write text: =%<nop>ATTACHURL%/Smile.gif=
-		* Text is shown as: %PUBURL%/%WEB%/%TOPIC%/Smile.gif , i.e. it shows up as an image.
-	* It is not possible to delete attached files with the current TWiki implementation. Contact %WIKIWEBMASTER% if you need to delete files.
+<table border="1" cellspacing="0" cellpadding="1"> <tr><th align="center" bgcolor="#99CCCC"> <strong>Version:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Action:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Date:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Who:</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Comment:</strong> </th></tr>
+<tr><td>  1.1	</td><td>  <a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/TWiki/FileAttachment?rev=1.1&amp;filename=Sample.txt">view</a>  </td><td>  2001.08.30.09.28.56  </td><td>  <a href="PeterThoeny">PeterThoeny</a>  </td><td>  &nbsp;  </td></tr>
+</table>
+<p />
+<table width="100%">
+	  <tr>
+  <td align="right">
+	Previous <br /> upload:
+  </td><td>
+	<code>C:\DATA\Sample.txt</code> (<a href="PeterThoeny">PeterThoeny</a>)
+  </td>
+ </tr>
+ <tr>
+  <td align="right">
+	Local file:
+  </td><td>
+	<input type="hidden" name="filename" value="Sample.txt" />
+	<input type="file" name="filepath" value="C:\DATA\Sample.txt" size="50" />
+  </td>
+ </tr>
+ <tr>
+  <td align="right">
+	Comment:
+  </td><td>
+	<input type="text" name="filecomment" value="Just a sample" maxlength="50" size="50" />
+  </td>
+ </tr>
+ <tr>
+  <td align="right">
+	Link:
+  </td><td>
+	<input type="checkbox" name="createlink"  /> Create a link to the attached file at the end of the topic.
+  </td>
+ </tr>
+ <tr>
+  <td align="right">
+	Hide file:
+  </td><td>
+	<input type="checkbox" name="hidefile"  /> Hide attachment in normal topic view.
+  </td>
+ </tr>
+</table>
+_Help text ..._
+
+	Topic <b>FileAttachment</b> . {	 <input type="submit" value=" &nbsp; Upload file &nbsp; " />  | 
+	<input type="submit" name="changeproperties" value="Change properties" />	| 
+	<a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/TWiki/FileAttachment?attachment=Sample.txt">Move attachment</a>  | 
+	<a href="FileAttachment">Cancel</a> }
+</td></tr></table>
+</form>
+
+The first table is a list of all attachments, including their _attributes_.  A =h= means the attachment is hidden i.e. isn't listed when viewing a topic.
+
+The second table is all the versions of the attachment.  Click on =view= to see that version, if it is the most recent version you'll be taken to a URL that always displays the latest version, which is usually what you want to email out.
+
+If you just want to change the comment on an attachment - enter a new comment and then press _Change properties_.  Note that the comment listed against the specific version will not change, however the comment displayed when viewing the topic does change.  
+
+Similarly to hide/unhide an attachment click in the _Hide file_ checkbox are press _Change properties_.
+
+---+++ Known Issues
+
+	* You can't lock an attachment for editing.  However, you may want to change the comment to indicate you are doing that - the comment on the specific version isn't lost, you can see it when listing all the versions of an attachments.
 %META:FILEATTACHMENT{name="Sample.txt" attr="" comment="Just a sample" date="964294620" path="C:\DATA\Sample.txt" size="30" user="thoeny" version=""}%
 %META:FILEATTACHMENT{name="Smile.gif" attr="" comment="Smiley face" date="964294680" path="C:\DATA\Smile.gif" size="94" user="thoeny" version=""}%
