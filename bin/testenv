@@ -25,7 +25,7 @@ use lib ( '../lib' );
 
 use Config; 		# Perl's configuration details
 
-# use strict;		# Recommended for mod_perl, enable for Perl 5.6.1
+# use strict;		# Recommended for mod_perl, enable for Perl 5.6.1 only
 # use diagnostics;	# Debug only
 
 package TWiki;
@@ -355,7 +355,6 @@ if( ! ( -e $val ) ) {
     print "</td></tr>\n";
 }
 
-my $rcsDir = $TWiki::rcsDir;	# Not clear why 'use strict' requires this.
 print "<tr><th align=\"right\">\$rcsDir:</th><td>$rcsDir</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is the directory where RCS is located.";
