@@ -52,6 +52,8 @@ will place comments above the first occurence of the string =Flights of Fancy= i
 
 *Warning* of course, if a user's comment contains the string "Flights of Fancy" they may and up _changing the location_ for the next comment! Also, if you use a tag in the location, then you've just inserted another tag in the page that contains the =%COMMENT=! So be very careful how you specify the RE for =location=. Note that the RE is matched using perl "multiple line" mode, so ^ and $ match the start of a line and the end of a line respectively.
 
+I look forward to someone leveraging this feature to create - for example - threaded conversations using =%COMMENT=.
+
 If you specify an anchor _and_ a =location=, the anchor will be ignored.
 
 ---++ Default templates

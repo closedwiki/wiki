@@ -142,31 +142,31 @@ use TWiki::Contrib::Attrs;
       my $n = $$pidx + 0;
 	
       $input = "<form name=\"${disable}$type$n\" " .
-	"action=\"$disable$url\" method=\"${disable}post\">\n$input";
+	"action=\"$disable$url\" method=\"${disable}post\">$input";
       if ( $disable eq "" ) {
 	$input .= "<input name=\"comment_action\" " .
-	"type=\"hidden\" value=\"save\" />\n";
+	"type=\"hidden\" value=\"save\" />";
 	$input .= "<input name=\"comment_type\" " .
-	  "type=\"hidden\" value=\"$type\" />\n";
+	  "type=\"hidden\" value=\"$type\" />";
 	# remember to unlock the page
 	$input .= "<input name=\"unlock\" " .
-	"type=\"hidden\" value=\"1\" />\n";
+	"type=\"hidden\" value=\"1\" />";
 	if( defined( $silent )) {
 	  $input .= "<input name=\"comment_quietly\" " .
-	    "type=\"hidden\" value=\"1\" />\n";
+	    "type=\"hidden\" value=\"1\" />";
 	}
 	if ( $location ) {
 	  $input .= "<input name=\"comment_location\" " .
-	    "type=\"hidden\" value=\"$location\" />\n";
+	    "type=\"hidden\" value=\"$location\" />";
 	} elsif ( $anchor ) {
 	  $input .= "<input name=\"comment_anchor\" " .
-	    "type=\"hidden\" value=\"$anchor\" />\n";
+	    "type=\"hidden\" value=\"$anchor\" />";
 	} else {
 	  $input .= "<input name=\"comment_index\" " .
-	    "type=\"hidden\" value=\"$$pidx\" />\n";
+	    "type=\"hidden\" value=\"$$pidx\" />";
 	}
       }
-      $input .= "</form>\n";
+      $input .= "</form>";
     }
     $$pidx++;
     return $input;
