@@ -3,13 +3,12 @@ PLATFORM ?= sourceforge
 
 TAR_EXCLUDE = --exclude CVS --exclude *~ --exclude bak
 
-sfwiki.tar.bz2 :
-	tar -c $(TAR_EXCLUDE) --no-recursion -f sfwiki.tar --directory platform/$(PLATFORM) `cd platform/$(PLATFORM); ls` 
-	tar -r $(TAR_EXCLUDE) --exclude "downloads/*/*.zip" -f sfwiki.tar bin/* cpan/*.pl cpan/MIRROR/TWIKI downloads 
-#	tar -r $(TAR_EXCLUDE) --exclude downloads/webs --exclude "downloads/*/*.zip" -f sfwiki.tar bin/* cpan/*.pl cpan/MIRROR/TWIKI downloads 
-	bzip2 sfwiki.tar
+twiki-$(PLATFORM).tar.bz2 :
+	tar -c $(TAR_EXCLUDE) --no-recursion -f twiki-$(PLATFORM).tar --directory platform/$(PLATFORM) `cd platform/$(PLATFORM); ls` 
+	tar -r $(TAR_EXCLUDE) --exclude "downloads/*/*.zip" -f twiki-$(PLATFORM).tar bin/* cpan/*.pl cpan/MIRROR/TWIKI downloads 
+	bzip2 twiki-$(PLATFORM).tar
 
-distro : sfwiki.tar.bz2 cpan release plugins contrib addons
+distro : cpan release plugins contrib addons twiki-$(PLATFORM).tar.bz2 
 
 cpan :
 	cd cpan ; ./mirror-cpan.pl `./calc-twiki-deps.pl`
