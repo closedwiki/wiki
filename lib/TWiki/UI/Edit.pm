@@ -125,9 +125,9 @@ sub edit {
         $templateWeb   = $1;
         $templateTopic = $2;
       }
+
       ( $meta, $text ) = &TWiki::Store::readTopic( $templateWeb, $templateTopic );
-    }
-    if( ! $text ) {
+    } elsif( ! $text ) {
       ( $meta, $text ) = &TWiki::Store::readTemplateTopic( "WebTopicEditTemplate" );
     }
     $extra = "(not exist)";
