@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="guest" date="1100205713" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
+</form>
+<form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%" >
+Create New<br/>
+<input value="TestCase" name="topic" type="text" size="10" />
+<input type="hidden" name="templatetopic" value="TestCaseTemplate" />
+<input type="hidden" name="topicparent" value="%HOMETOPIC%" />
+<input type="hidden" name="onlynewtopic" value="1" />
+</form>
+
