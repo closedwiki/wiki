@@ -19,7 +19,7 @@ sub new {
     return $self;
 }
 
-use vars qw( $m1 %args %args1 %args2 $web $topic );
+use vars qw( $m1 %args %args1 %args2 $web $topic $session );
 
 %args = ( "name" => "a",
           "value"  => "1",
@@ -34,10 +34,11 @@ use vars qw( $m1 %args %args1 %args2 $web $topic );
            "value" => "3" );
 $web= "ZoopyDoopy";
 $topic = "NoTopic";
+%{$session} = ();
 
 sub set_up
 {
-    $m1 = TWiki::Meta->new($web, $topic);
+    $m1 = TWiki::Meta->new($session, $web, $topic);
     $m1->put( "TOPICINFO", %args );
     $m1->put( "FIELD", %args );
     $m1->put( "FIELD", %args2 );
@@ -47,7 +48,7 @@ sub set_up
 sub test_single
 {
     my $this = shift;
-    my $meta = TWiki::Meta->new($web, $topic);
+    my $meta = TWiki::Meta->new($session, $web, $topic);
     
     $meta->put( "TOPICINFO", %args );
     my %vals = $meta->findOne( "TOPICINFO" );
@@ -65,7 +66,7 @@ sub test_single
 sub test_multiple
 {
     my $this = shift;
-    my $meta = TWiki::Meta->new($web, $topic);
+    my $meta = TWiki::Meta->new($session, $web, $topic);
     
     $meta->put( "FIELD", %args );
     my %vals = $meta->findOne( "FIELD", "a" );
@@ -89,7 +90,7 @@ sub test_multiple
 sub test_removeSingle
 {
     my $this = shift;
-    my $meta = TWiki::Meta->new($web, $topic);
+    my $meta = TWiki::Meta->new($session, $web, $topic);
     
     $meta->put( "TOPICINFO", %args );
     $this->assert( $meta->count( "TOPICINFO" ) == 1, "Should be one item" );
@@ -100,7 +101,7 @@ sub test_removeSingle
 sub test_removeMultiple
 {
     my $this = shift;
-    my $meta = TWiki::Meta->new($web, $topic);
+    my $meta = TWiki::Meta->new($session, $web, $topic);
     
     $meta->put( "FIELD", %args );
     $meta->put( "FIELD", %args2 );

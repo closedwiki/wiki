@@ -72,7 +72,7 @@ sub saveTopic1 {
    my $doUnlock = 1;
 
    $TWiki::T->{userName} = $user;
-   $meta = new TWiki::Meta($web, $topic) unless $meta;
+   $meta = new TWiki::Meta($TWiki::T, $web, $topic) unless $meta;
    my $error = $TWiki::T->{store}->saveTopic( $user, $web, $topic, $text,
                                         $meta, $saveCmd,
                                         $doNotLogChanges, $doUnlock );
@@ -101,7 +101,7 @@ sub test_checkin
     # Check revision number from meta data
     my( $dateMeta, $authorMeta, $revMeta ) = $meta->getRevisionInfo( $web, $topic );
     $this->assert_num_equals( 1, $revMeta, "Rev from meta data should be 1 when first created" );
-    $meta = new TWiki::Meta($web, $topic);
+    $meta = new TWiki::Meta($TWiki::T, $web, $topic);
     my( $dateMeta0, $authorMeta0, $revMeta0 ) =
       $meta->getRevisionInfo( $web, $topic );
     $this->assert_num_equals( $revMeta0, $revMeta );
