@@ -32,7 +32,7 @@
 %META{"form"}%
 %META{"attachments"}%
 <!-- This search for children is relatively expensive, you may wish to remove-->
-%METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" title="Children: "}%
+<!--%<nop>METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" title="Children: "}% -->
 
 <br clear="all"><p>
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -44,6 +44,7 @@
    | <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a>
    | <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=text&web=all&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Ref-By</a>
    | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print">Printable</a>
+   | <a title="View the raw text i.e. as you would see text when editing, plus meta variables" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on">Raw text</a>
    | <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a>
    %REVISIONS% }
   </td>
