@@ -78,45 +78,51 @@ sub _searchTopicsInWeb
     } else {
         @topicList = _getTopicList( $theWeb );                     # get all topics in web
     }
-    return @topicList unless( @topicList );                        # bail out if no topics
 
-    if( $theScope eq "topic" ) {                                   # Perl search on topic name,
-        if( $caseSensitive ) {                                     # fix for Codev.SearchWithNoPipe
-            foreach my $token ( @theTokens ) {
-                $token = quotemeta( $token ) unless( $theRegex );  # FIXME I18N
-                @topicList = grep( /$token/, @topicList );         # search for token
-                last unless( @topicList );
-            }
-        } else {
-            foreach my $token ( @theTokens ) {
-                $token = quotemeta( $token ) unless( $theRegex );  # FIXME I18N
-                @topicList = grep( /$token/i, @topicList );
-                last unless( @topicList );
+    my $sDir = "$TWiki::dataDir/$theWeb";
+    $theScope = "text" unless( $theScope =~ /^(topic|all)$/ );     # default scope is "text"
+
+    foreach my $token ( @theTokens ) {                             # search each token
+        my $invertSearch = ( $token =~ s/^\!//o );                 # flag for AND NOT search
+        my @scopeTextList = ();
+        my @scopeTopicList = ();
+        return @topicList unless( @topicList );                    # bail out if no topics left
+
+        # scope can be "topic" (default), "text" or "all"
+        # scope="text", e.g. Perl search on topic name:
+        unless( $theScope eq "text" ) {
+            my $qtoken = $token;
+            $qtoken = quotemeta( $qtoken ) unless( $theRegex );    # FIXME I18N
+            if( $caseSensitive ) {                                 # fix for Codev.SearchWithNoPipe
+                @scopeTopicList = grep( /$qtoken/, @topicList );
+            } else {
+                @scopeTopicList = grep( /$qtoken/i, @topicList );
             }
         }
 
-    } else {                                                       # grep search on topics
+        # scope="text", e.g. grep search on topic text:
+        unless( $theScope eq "topic" ) {
+            # Construct command line with 'grep'.  I18N: 'grep' must use locales if needed,
+            # for case-insensitive searching.  See TWiki::setupLocale.
+            my $cmd = "";
+            $cmd .= $TWiki::egrepCmd if( $theRegex );
+            $cmd .= $TWiki::fgrepCmd unless( $theRegex );
+            $cmd .= " -i" unless( $caseSensitive );
+            $cmd .= " -l -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote %FILES%";
 
-        # Construct command line with 'grep'.  I18N: 'grep' must use locales if needed,
-        # for case-insensitive searching.  See TWiki::setupLocale.
-        my $cmd = "";
-        $cmd .= $TWiki::egrepCmd if( $theRegex );
-        $cmd .= $TWiki::fgrepCmd unless( $theRegex );
-        $cmd .= " -i" unless( $caseSensitive );
-        $cmd .= " -l -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote %FILES%";
+            my $result = "";
+            if( $sDir ) {
+                chdir( "$sDir" );
+                _traceExec( "chdir to $sDir", "" );
+                $sDir = "";  # chdir only once
+            }
 
-        my $result = "";
-        my $sDir = "$TWiki::dataDir/$theWeb";
-        chdir( "$sDir" );
-        _traceExec( "chdir to $sDir", "" );
-
-        # process topics in sets,  fix for Codev.ArgumentListIsTooLongForSearch
-        my $maxTopicsInSet = 512;                                  # max number of topics for a grep call
-        my @set = splice( @topicList, 0, $maxTopicsInSet );
-        my @found = ();
-        while( @set ) {
-            @set = map { "$_.txt" } @set;                          # add ".txt" extension to topic names
-            foreach my $token ( @theTokens ) {
+            # process topics in sets,  fix for Codev.ArgumentListIsTooLongForSearch
+            my $maxTopicsInSet = 512;                              # max number of topics for a grep call
+            my @take = @topicList;
+            my @set = splice( @take, 0, $maxTopicsInSet );
+            while( @set ) {
+                @set = map { "$_.txt" } @set;                      # add ".txt" extension to topic names
                 my $acmd = $cmd;
                 $acmd =~ s/%TOKEN%/$token/o;
                 $acmd =~ s/%FILES%/@set/o;
@@ -125,17 +131,35 @@ sub _searchTopicsInWeb
                 $result = `$acmd`;
                 _traceExec( $acmd, $result );
                 @set = split( /\n/, $result );
-                last if( ! @set );
+                @set = map { /(.*)\.txt$/; $_ = $1; } @set;        # cut ".txt" extension
+                my %seen = ();
+                foreach my $topic ( @set ) {
+                    $seen{$topic}++;                               # make topics unique
+                }
+                push( @scopeTextList, sort keys %seen );           # add hits to found list
+                @set = splice( @take, 0, $maxTopicsInSet );
             }
-            @set = map { /(.*)\.txt$/; $_ = $1; } @set;            # cut ".txt" extension
-            my %seen = ();
-            foreach my $topic ( @set ) {
-                $seen{$topic}++;                                   # make topic unique
-            }
-            push( @found, sort keys %seen );                       # add hits to found list
-            @set = splice( @topicList, 0, $maxTopicsInSet );
         }
-        @topicList = @found;
+
+        if( @scopeTextList && @scopeTopicList ) {
+            push( @scopeTextList, @scopeTopicList );               # join "topic" and "text" lists
+            my %seen = ();
+            @scopeTextList = sort grep { ! $seen{$_} ++ } @scopeTextList;  # make topics unique
+        } elsif( @scopeTopicList ) {
+            @scopeTextList =  @scopeTopicList;
+        }
+
+        if( $invertSearch ) {                                      # do AND NOT search
+            my %seen = ();
+            foreach my $topic ( @scopeTextList ) {
+                $seen{$topic} = 1;
+            }
+            @scopeTextList = ();
+            foreach my $topic ( @topicList ) {
+                push( @scopeTextList, $topic ) unless( $seen{$topic} );
+            }
+        }
+        @topicList = @scopeTextList;                               # reduced topic list for next token
     }
     return @topicList;
 }
