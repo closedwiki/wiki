@@ -1,7 +1,6 @@
 package com.mrjc.twiki.addons;
 import java.applet.Applet;
 import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -24,7 +23,6 @@ import java.net.URL;
 //import java.util.Hashtable;
 import java.util.AbstractList;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 
