@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018175400" format="1.0" version="1.51"}%
+%META:TOPICINFO{author="MikeMannix" date="1021201634" format="1.0" version="1.52"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -172,7 +172,7 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
   <td> =%<nop>INCLUDE{"page" ...}%= </td>
   <td> Server side include to IncludeTopicsAndWebPages. Parameters are page name, and an optional =pattern="(reg-exp)"=. The page name is:
 	| ="SomeTopic"= | The name of a topic located in the current web, i.e. =%<nop>INCLUDE{"WebNotify"}%= |
-	| ="Web.Topic"= | A topic in another web, i.e. =%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%= |
+	| ="Web.Topic"= | A topic in another web, i.e. =%<nop>INCLUDE{"%TWIKIWEB%.TWikiSiteMap"}%= |
 	| ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org/"}%= |
   </td>
 </tr><tr>
@@ -196,7 +196,7 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
   <td> =%<nop>SEARCH{"text" ...}%= </td>
   <td> Inline search, shows a search result embedded in a topic. Parameters are the search term, web, scope, order and many more: [1]
 | *Parameter:* | *Description:* | *Default:* |
-| ="text"= | Search term. (Is a regular expression or literal, depending on the =regex= parameter) | required |
+| ="text"= | Search term. (Is a regular expression or literal, depending on the =regex= parameter) [TWikiAlphaRelease - for regular expressions ";" can be used to mean _and_ e.g. "search;agrep" will find all topic containing search _and_ agrep ] | required |
 | =search="text"= | (Alternative to above) | N/A |
 | =web="Name"= <br /> =web="%MAINWEB% Know"= <br /> =web="all"= | Wiki web to search: A web, a list of webs separated by whitespace, or =all= webs. [2] | Current web |
 | =scope="topic"= <br /> =scope="text"= | Search topic name (title) or in the text (body) of the topic | Topic text (body) |
@@ -225,7 +225,7 @@ Formatted example: ==%<nop>SEARCH{"FAQ" scope="topic" nosearch="on" nototal="on"
 								children | required |
 | =web="%<nop>WEB%"= | Wiki web to search: A web, a list of webs separated by whitespace, or =all= webs. | required |
 | =topic="%<nop>TOPIC%"= | The topic the search relates to | required |
-| =title="Title"= | Text the is prepended to any search results | required |
+| =title="Title"= | Text that is prepended to any search results | required |
 Example: ==%<nop>METASEARCH{type="topicmoved" web="%<nop>WEB%" topic="%<nop>TOPIC%" title="This topic used to exist and was moved to: "}%==, you may want to use this in WebTopicViewTemplate and WebTopicNonWikiTemplate<br />
 ==%<nop>METASEARCH{type="parent" web="%<nop>WEB%" topic="%<nop>TOPIC%" title="Children: "}%== 
 </tr><tr>
@@ -348,22 +348,22 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> __SL__ , __WL__ </td>
   <td> List of preferences that are not allowed to be overridden by next level preferences</td>
 </tr></table>
-
+#SettingPrefs
 ---++ Setting Preferences
 
-	* The syntax for Preferences variables is the same anywhere in TWiki (on its own TWiki bullet line, including nested bullets): <br />[3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]<br /> __Examples:__ 
+	* The syntax for Preferences Bariables is the same anywhere in TWiki (on its own TWiki bullet line, including nested bullets): <br />[3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]<br /> __Examples:__ 
 	* ==<nop>Set VARIABLENAME = =value===
 		* ==<nop>Set VARIABLENAME = =value===
 
 ---++ Creating Custom Variables
 
-	* You can add your own preference variables for an entire site, a single web, or a single topic, using the standard syntax. Whatever you include in your variable will be expanded on display, and treated exactly as if it had been written out. So you can place formatted text, page links, image paths.
+	* You can add your own Preference Variables for us across an entire site or a single web, using the standard [[#SettingPrefs][Preferences syntax]]. Whatever you include in your Variable will be expanded on display, exactly as if it had been entered directly. You can place formatted text, page links, image paths.
 
-<blockquote style="background-color:#f5f5f5">
-*Example: Create a custom logo variable* <br />
-	* To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, simply define the variable on the web's WebPreferences page. You also have to upload =logo.gif= - this can be done by [[FileAttachment][attaching a file]] to =LogoTopic= (any topic name you choose):
-		* ==<nop>Set MYLOGO = %<nop>PUBURL%/%<nop>MAINWEB%/LogoTopic/logo.gif== 
+<blockquote style="background-color:#ffffff">
+*Example: Create a custom logo variable the %WEB% web* <br />
+	* To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, define the Variable on the web's WebPreferences page, and upload a logo file, ex: =mylogo.gif=. You can upload by [[FileAttachment][attaching the file]] to WebPreferences, or, to avoid clutter, to any other topic in the same web, ex: =LogoTopic=:
+		* ==<nop>Set MYLOGO = %<nop>PUBURL%/<nop>TWiki/LogoTopic/mylogo.gif== 
 </blockquote>
 
 -- PeterThoeny - 13 Sep 2001 <br />
--- Main.MikeMannix - 07 Mar 2002
+-- Main.MikeMannix - 12 May 2002
