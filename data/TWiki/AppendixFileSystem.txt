@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092467937" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092532242" format="1.0" version="1.14"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -200,8 +200,8 @@ Templates and skins used to control appearance of topics rendered as Web pages. 
 | =mailnotify.tmpl= | Email notification |
 | =moveattachment.tmpl= | Move attachment control screen |
 | =oopsaccesschange.tmpl= | Error message |
-| =oopsaccesscreateweb.tmpl= | Error message |
 | =oopsaccessgroup.tmpl= | Error message |
+| =oopsaccessmanage.tmpl= | Error message |
 | =oopsaccessrename.tmpl= | Error message |
 | =oopsaccessview.tmpl= | Error message |
 | =oopsattachnotopic.tmpl= | Error message |
@@ -263,7 +263,7 @@ Templates and skins used to control appearance of topics rendered as Web pages. 
 ---++ TWiki File System Snapshot
 
 The following partial directory listings from a Linux installation show typical file permissions and ownership. This is provided for general debugging use only and isn't an exact representation of the current distribution. 
-	* %T% __On an ISP installation...__ The user and group - =twiki twiki= - will probably be your domain or login name, eg: =yourdomain yourdomain= and can't be changed; same for =nobody nobody= files further down. Also, in the ==bin== directory, scripts might need a ==.cgi== (sometimes ==.pl==) extension._
+	* %T% __On an ISP installation...__ The user and group - =twiki twiki= - will probably be your domain or login name, eg: =yourdomain yourdomain= and can't be changed; same for =nobody nobody= files further down. Also, in the ==bin== directory, scripts might need a ==.cgi== (sometimes ==.pl==) extension.
 
 Directory =twiki/bin=:
 
@@ -327,7 +327,6 @@ drwxrwxr-x	 4 twiki	twiki		  4096 Aug  7 21:13 ..
 -rw-rw-r--	 1 twiki	twiki		  1968 Aug  7 17:48 moveattachment.pattern.tmpl
 -rw-rw-r--	 1 twiki	twiki		  1342 Jul 28 19:52 moveattachment.tmpl
 -rw-rw-r--	 1 twiki	twiki			571 May 28 23:51 oopsaccesschange.tmpl
--rw-rw-r--	 1 twiki	twiki			597 May 28 23:51 oopsaccesscreateweb.tmpl
 -rw-rw-r--	 1 twiki	twiki			587 May 28 23:51 oopsaccessgroup.tmpl
 -rw-rw-r--	 1 twiki	twiki			597 Aug  2 11:10 oopsaccessmanage.tmpl
 -rw-rw-r--	 1 twiki	twiki			572 May 28 23:51 oopsaccessrename.tmpl
