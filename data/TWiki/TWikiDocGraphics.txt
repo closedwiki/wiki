@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1080095094" format="1.0" version="1.26"}%
+%META:TOPICINFO{author="PeterThoeny" date="1080346431" format="1.0" version="1.27"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -34,7 +34,12 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/hourglass.gif" alt="hourglass.gif"  width="16" height="16"  />  | =hourglass.gif= | Hour glass |
 |  <img src="%ATTACHURLPATH%/watch.gif" alt="watch.gif"  width="16" height="16"  />  | =watch.gif= | Watch |
 |  <img src="%ATTACHURLPATH%/globe.gif" alt="globe.gif"  width="16" height="16"  />  | =globe.gif= | Globe |
+|  <img src="%ATTACHURLPATH%/lock.gif" alt="lock.gif"  width="16" height="16"  />  | =lock.gif= | Lock |
 |  <img src="%ATTACHURLPATH%/folder.gif" alt="folder.gif"  width="16" height="16"  />  | =folder.gif= | Folder |
+|  <img src="%ATTACHURLPATH%/lockfolder.gif" alt="lockfolder.gif"  width="16" height="16"  />  | =lockfolder.gif= | Locked folder |
+|  <img src="%ATTACHURLPATH%/lockfoldergray.gif" alt="lockfoldergray.gif"  width="16" height="16"  />  | =lockfoldergray.gif= | Locked folder, gray |
+|  <img src="%ATTACHURLPATH%/locktopic.gif" alt="locktopic.gif"  width="16" height="16"  />  | =locktopic.gif= | Locked topic |
+|  <img src="%ATTACHURLPATH%/locktopicgray.gif" alt="locktopicgray.gif"  width="16" height="16"  />  | =locktopicgray.gif= | Locked topic, gray |
 |  <img src="%ATTACHURLPATH%/viewtopic.gif" alt="viewtopic.gif"  width="16" height="16"  />  | =viewtopic.gif= | View topic |
 |  <img src="%ATTACHURLPATH%/edittopic.gif" alt="edittopic.gif"  width="16" height="16"  />  | =edittopic.gif= | Edit topic |
 |  <img src="%ATTACHURLPATH%/topicdiffs.gif" alt="topicdiffs.gif"  width="16" height="16"  />  | =topicdiffs.gif= | Topic difference |
@@ -134,3 +139,8 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="target.gif" attr="" comment="Blue Target" date="1077756487" path="target.gif" size="199" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="note.gif" attr="" comment="Note" date="1080094701" path="note.gif" size="911" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="recentchanges.gif" attr="" comment="Recent Changes" date="1080094783" path="recentchanges.gif" size="945" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="lock.gif" attr="" comment="Lock" date="1080345940" path="lock.gif" size="896" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="lockfolder.gif" attr="" comment="Locked folder" date="1080346019" path="lockfolder.gif" size="923" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="lockfoldergray.gif" attr="" comment="Locked folder, gray" date="1080345919" path="lockfoldergray.gif" size="923" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="locktopic.gif" attr="" comment="Locked topic" date="1080346227" path="locktopic.gif" size="926" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="locktopicgray.gif" attr="" comment="Locked topic, gray" date="1080346376" path="locktopicgray.gif" size="926" user="PeterThoeny" version="1.1"}%
