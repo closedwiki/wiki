@@ -57,10 +57,12 @@
 	* Main.PeterThoeny - 25 Feb 2000: New preference variables =%<nop>EDITBOXWIDTH%= and =%<nop>EDITBOXHEIGHT%= to specify the edit box size.
 	* Main.PeterThoeny - 11 Mar 2000: Better security with taint checking ( =Perl -T= option )
 	* Main.PeterThoeny - 20 Mar 2000: Uploading a file (topic file attachment) will optionally create a link to the uploaded file at the end of the topic. The preference variable =%<nop>ATTACHLINKBOX%= controls the default state of the __link__ check box in the attach file page.
+	* Main.JohnAltstadt, Main.PeterThoeny - 21 Apr 2000: TWikiRegistration is done separately for Intranet use (depends on remote_user) or Internet use (depends on .htpasswd file).
+	* Main.PeterThoeny - 21 Apr 2000: New TWikiVariables =%<nop>HTTP_HOST%= , =%<nop>REMOTE_ADDR%= , =%<nop>REMOTE_PORT%= and =%<nop>REMOTE_USER%= .
 
 *Related Topics*
 	* TWikiDocumentation has implementation details.
 	* TWikiPlannedFeatures has a list of planned features. 
 	* TWikiEnhancementRequests is the place where you can add your enhancement requests. 
 
--- Main.PeterThoeny - 20 Mar 2000 <br>
+-- Main.PeterThoeny - 21 Apr 2000 <br>
