@@ -265,8 +265,8 @@ sub redirectCgiQuery
       * First extract text between ={...}= to get: ="nameless" name1="val1" name2="val2"=
       * Then call this on the text: <br />
         =my $noname = TWiki::Func::extractNameValuePair( $text );= <br />
-        =my $name1  = TWiki::Func::extractNameValuePair( $text, "name1" );= <br />
-        =my $name2  = TWiki::Func::extractNameValuePair( $text, "name2" );=
+        =my $val1  = TWiki::Func::extractNameValuePair( $text, "name1" );= <br />
+        =my $val2  = TWiki::Func::extractNameValuePair( $text, "name2" );=
 
 =cut
 # -------------------------
