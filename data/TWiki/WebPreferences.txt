@@ -22,6 +22,16 @@ __Preferences:__
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs)
 		* Set NOSEARCHALL =
 
+	* Users or groups who __are not__ / __are__ allowed to change topics in the %WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
+		* Set DENYWEBCHANGE = Main.TWikiGuest
+		* Set ALLOWWEBCHANGE = 
+
+	* Users or groups allowed to change this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
+		* Set ALLOWTOPICCHANGE = 
+
+	* Web preferences that are *not* allowed to be overridden by user preferences:
+		* Set FINALPREFERENCES = WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE
+
 __Notes:__
 	* A preference is defined as: <br> =6 spaces * Set NAME = value= <br> Example:
 		* S<nop>et WEBBGCOLOR = #FFFFC0
@@ -34,3 +44,4 @@ __Related Topics:__
 	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences.
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
 	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%= .
+	* %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
