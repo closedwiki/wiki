@@ -159,7 +159,7 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $scriptUrl, $userName ) = 
+    ( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $saveCmd = $query->param('cmd');
@@ -169,6 +169,7 @@ sub main
     my $before="", $atext="", $ctext="", $after="";
     my $catname="", $catmod="", $catvalue="";
     my $extra = "";
+    my $scriptSuffix = $wiki::scriptSuffix;
 
     if( ! &wiki::webExists($webName))
     {
@@ -182,7 +183,7 @@ sub main
     if( ( $onlyWikiName ) && ( ! &wiki::isWikiName( $topic ) ) && ( ! &wiki::topicExists( $webName, $topic ) ) )
     {
         # do not allow non-wikinames, redirect to view topic
-        print $query->redirect( "$scriptUrl/view/$webName/$topic" );
+        print $query->redirect( "$scriptUrlPath/view$scriptSuffix/$webName/$topic" );
 	return;
     }
 
@@ -191,7 +192,7 @@ sub main
     {
         # warn user that other person is editing this topic
         $lockUser = &wiki::userToWikiName( $lockUser );
-        print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopslocked&param1=$lockUser" );
+        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopslocked&param1=$lockUser" );
 	return;
     }
     &wiki::lockTopic( $topic );

@@ -31,7 +31,7 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $scriptUrl ) = 
+    ( $topic, $webName, $scriptUrlPath ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     if( ! &wiki::webExists($webName))
@@ -42,5 +42,6 @@ sub main
 	return;
     }
 
-    print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopsdel" );
+    my $scriptSuffix = $wiki::scriptSuffix;
+    print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsdel" );
 }

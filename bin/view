@@ -38,7 +38,7 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $tmp, $userName ) = 
+    ( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     $tmp = "";  # set to suppress warning
@@ -109,13 +109,13 @@ sub main
     {
         if( $topicExists )
         {
-            $tmpl =~ s/%EDITTOPIC%/<A href=\"%SCRIPTURL%\/edit\/%WEB%\/%TOPIC%\"><B>Edit<\/B><\/A>/go; 
+            $tmpl =~ s/%EDITTOPIC%/<A href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><B>Edit<\/B><\/A>/go; 
             # remove the NOINDEX meta tag
             $tmpl =~ s/<META NAME="ROBOTS"[^>]*>//goi;
         }
         else
         {
-            $tmpl =~ s/%EDITTOPIC%/<A href=\"%SCRIPTURL%\/edit\/%WEB%\/%TOPIC%\"><B>Create<\/B><\/A>/go; 
+            $tmpl =~ s/%EDITTOPIC%/<A href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><B>Create<\/B><\/A>/go; 
         }
         $tmpl =~ s/%REVTITLE%//go;
     }
@@ -136,19 +136,19 @@ sub main
         }
         else
         {
-            $revisions = "$revisions | <A href=\"../../view/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
+            $revisions = "$revisions | <A href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
         }
         if( $i != 1 )
         {
             if( $i == $breakRev )
             {
-                $revisions = "$revisions | <A href=\"../../oops/%WEB%/%TOPIC%?template=oopsrev&param1=1.$maxrev\">&gt;...</A>";
+                $revisions = "$revisions | <A href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&param1=1.$maxrev\">&gt;...</A>";
                 $i = 1;
             }
             else
             {
                 $j = $i - 1;
-                $revisions = "$revisions | <A href=\"../../rdiff/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
+                $revisions = "$revisions | <A href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
             }
         }
         $i = $i - 1;

@@ -4,11 +4,11 @@
     <META NAME="ROBOTS" CONTENT="NOINDEX">
 </HEAD>
 <BODY bgcolor="#ffffff">
-<BASE href="%SCRIPTURL%/preview/%WEB%/%TOPIC%">
+<BASE href="%SCRIPTURL%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR>
-    <TD BGCOLOR="%INCLUDE:"webcolor.inc"%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%/"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
+    <TD BGCOLOR="%INCLUDE{"webcolor.inc"}%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
     </TD>
     <TD>
       <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (preview)</FONT>
@@ -22,7 +22,7 @@
       </FONT>
     </TD>
   </TR>
-  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
     <TD colspan="2">
       <B><FONT COLOR="#FF0000"> Note: </FONT></B>
       This is a preview. <B><FONT COLOR="#FF0000"> Do not forget </FONT></B> to save your changes.
@@ -33,8 +33,8 @@
 %TEXT%
 <BR clear=all>
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-<FORM name="main" action="%SCRIPTURL%/save/%WEB%/%TOPIC%" method="post">
-  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+<FORM name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
     <TD valign="top">
       Topic <B>%TOPIC%</B> . {
       <INPUT type="hidden" name="text" value="%HIDDENTEXT%">
@@ -45,5 +45,5 @@
   </TR>
 </FORM>
 </TABLE>
-%INCLUDE:"webcopyright.inc"%
+%INCLUDE{"webcopyright.inc"}%
 </BODY></HTML>

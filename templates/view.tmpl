@@ -4,22 +4,22 @@
     <META NAME="ROBOTS" CONTENT="NOINDEX">
 </HEAD>
 <BODY bgcolor="#ffffff">
-<BASE href="%SCRIPTURL%/view/%WEB%/%TOPIC%">
+<BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-<FORM name="main" action="%SCRIPTURL%/view/%WEB%/">
+<FORM name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/">
   <TR>
-    <TD BGCOLOR="%INCLUDE:"webcolor.inc"%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%/"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
+    <TD BGCOLOR="%INCLUDE{"webcolor.inc"}%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
     </TD>
     <TD>
       <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> %REVTITLE%</FONT>
     </TD><TD ALIGN="right">
-      %INCLUDE:"wikiwebs.inc"%
+      %INCLUDE{"wikiwebs.inc"}%
     </TD>
   </TR>
-  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
     <TD COLSPAN="2">
-      %INCLUDE:"weblist.inc"%
+      %INCLUDE{"weblist.inc"}%
     </TD>
   </TR>
 </FORM>
@@ -28,13 +28,13 @@
 %TEXT%
 <BR clear=all><P>
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
     <TD valign="top">
       Topic <B>%TOPIC%</B> . {
         %EDITTOPIC%
-      | <A href="%SCRIPTURL%/search/%WEB%/?scope=text&regex=on&search=%TOPIC%%5B%5EA-Za-z%5D">Ref-By</A>
-      | <A href="%SCRIPTURL%/attach/%WEB%/%TOPIC%">Attach</A>
-      | <A href="%SCRIPTURL%/rdiff/%WEB%/%TOPIC%">Diffs</A>
+      | <A href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=text&regex=on&search=%TOPIC%%5B%5EA-Za-z%5D">Ref-By</A>
+      | <A href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach</A>
+      | <A href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</A>
         %REVISIONS% }
     </TD>
   </TR>
@@ -45,7 +45,7 @@
       Revision %REVINFO%
     </TD>
     <TD width="50%" valign="top">
-      %INCLUDE:"webcopyright.inc"%
+      %INCLUDE{"webcopyright.inc"}%
     </TD>
   </TR>
 </TABLE>

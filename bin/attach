@@ -64,8 +64,9 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $scriptUrl, $userName ) = 
+    ( $topic, $webName, $dummy, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+    $dummy = "";  # to suppress warning
 
     my $tmpl="", $text="", $atext="", $fileName="";
 

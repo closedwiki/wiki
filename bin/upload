@@ -63,7 +63,6 @@ sub updateAttachment
 
     my $result = $atTableBefore;
     my $found = 0;
-#print "<br> ===== lcFileName : $lcFileName <br>";
 
     foreach( split( /<TwkNextItem>/, $atext ) )
     {
@@ -133,7 +132,7 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $scriptUrl, $userName ) = 
+    ( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $filePath = $query->param('filepath');
@@ -144,7 +143,8 @@ sub main
     # check if file exists and has non zero size
     if( ! -s "$tmpFilename" )
     {
-        print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopsupload&param1=$fileName" );
+        my $scriptSuffix = $wiki::scriptSuffix;
+        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsupload&param1=$fileName" );
         return;
     }
 

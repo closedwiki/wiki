@@ -142,8 +142,9 @@ sub processWeb
     my( $thePathInfo, $theRemoteUser, $theTopic, $theLogMonthYear, @theLogList ) = @_;
 
     # initialize wiki
-    my ( $topic, $webName, $scriptUrl, $userName, $dataDir ) = 
+    my ( $topic, $webName, $dummy, $userName, $dataDir ) = 
         &wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic );
+    $dummy = "";  # to suppress warning
 
     printMsg( "* Checking TWiki.$webName web" );
 

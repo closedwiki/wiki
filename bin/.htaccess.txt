@@ -17,6 +17,10 @@ ErrorDocument 401 /urlpath/to/TWiki/bin/view/Main/TWikiRegistration
        require valid-user
 </Files>
 
+<Files "preview">
+       require valid-user
+</Files>
+
 <Files "save">
        require valid-user
 </Files>

@@ -32,7 +32,7 @@ use strict;
 
 use vars qw(
 	$webName $topicName $defaultUserName $userName 
-	$wikiToolName $wikiHomeUrl $defaultScriptUrl $pubUrl $templateDir 
+	$wikiToolName $wikiHomeUrl $pubUrl $templateDir 
 	$dataDir $pubDir $debugFilename $logDateCmd $htpasswdFilename 
 	$logFilename $userListFilename 
 	$mainWebname $mainTopicname $notifyTopicname
@@ -44,12 +44,13 @@ use vars qw(
 	$doLogTopicView $doLogTopicEdit $doLogTopicSave
 	$doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
 	$doLogTopicChanges $doLogTopicSearch $doLogRegistration
-	@isoMonth $TranslationToken $code @code $depth $scriptUrl );
+	@isoMonth $TranslationToken $code @code $depth
+	$defaultScriptUrl $scriptUrl $scriptUrlPath $scriptSuffix );
 
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "07 Feb 2000";
+$wikiversion      = "11 Feb 2000";
 
 @isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 
@@ -116,10 +117,13 @@ sub initialize
         $scriptUrl = $defaultScriptUrl;
     }
 
+    $scriptUrlPath = $scriptUrl;
+    $scriptUrlPath =~ s/.*\:\/\/[^\/]*(.*)/$1/go;
+
     $TranslationToken= "\263";
     $code="";
     @code= ();
-    return ( $topicName, $webName, $scriptUrl, $userName, $dataDir );
+    return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
 }
 
 # =========================
@@ -380,7 +384,7 @@ sub readWebTopic
 sub viewUrl
 {
     my( $topic ) = @_;
-    return "$scriptUrl/view/$webName/$topic";
+    return "$scriptUrlPath/view$scriptSuffix/$webName/$topic";
 }
 
 # =========================
@@ -716,6 +720,8 @@ sub handleCommonTags
     $text=~ s/%WEB%/$webName/go;
     $text=~ s/%WIKIHOMEURL%/$wikiHomeUrl/go;
     $text=~ s/%SCRIPTURL%/$scriptUrl/go;
+    $text=~ s/%SCRIPTURLPATH%/$scriptUrlPath/go;
+    $text=~ s/%SCRIPTSUFFIX%/$scriptSuffix/go;
     $text=~ s/%PUBURL%/$pubUrl/go;
     $text=~ s/%ATTACHURL%/$pubUrl\/$webName\/$topic/go;
     $text=~ s/%DATE%/&getLocaldate()/geo;
@@ -792,8 +798,8 @@ sub internalLink
     }
 
     topicExists( $web, $page) ?
-        "$bar<A href=\"$scriptUrl/view/$web/$page\">$text<\/A>"
-        : $foo?"$bar$text<A href=\"$scriptUrl/edit/$web/$page\">?</A>"
+        "$bar<A href=\"$scriptUrlPath/view$scriptSuffix/$web/$page\">$text<\/A>"
+        : $foo?"$bar$text<A href=\"$scriptUrlPath/edit$scriptSuffix/$web/$page\">?</A>"
             : "$bar$text";
 }
 

@@ -134,8 +134,7 @@ sub main
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
-
-    ( $topic, $webName) = 
+    ( $topic, $webName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $tmpl = "", $atext = "", $text = "", $ptext = "", $tcat = "", $icat = "";
@@ -227,7 +226,7 @@ sub main
     $ptext = &wiki::getRenderedVersion( $ptext );
 
     # do not allow click on link before save:
-    $ptext =~ s@(href=".*?")@href="%SCRIPTURL%/oops/%WEB%/%TOPIC%\?template=oops"@goi;
+    $ptext =~ s@(href=".*?")@href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?template=oops"@goi;
 
     $tmpl =~ s/%TEXT%/$ptext/go;
     $tmpl = &wiki::handleCommonTags( $tmpl, $topic );

@@ -45,8 +45,9 @@ sub processWeb
 {
     my( $web) = @_;
 
-    my ( $topic, $webName, $scriptUrl, $userName, $dataDir) = 
+    my ( $topic, $webName, $dummy, $userName, $dataDir) = 
 	&wiki::initialize( "/$web", "nobody" );
+    $dummy = "";  # to suppress warning
 
     print "Checking TWiki.$webName\n";
 
@@ -79,8 +80,8 @@ sub processWeb
 
     my $prevLastmodify = &wiki::readFile( "$dataDir/$webName/.mailnotify");
     my $currLastmodify = "";
-
-    #print "Date: prevLastmodify ($prevLastmodify)\n";
+    my $scriptSuffix = $wiki::scriptSuffix;
+    my $scriptUrl = $wiki::scriptUrl;
 
     foreach( reverse split( /\n/, $changes))
     {
@@ -137,7 +138,7 @@ sub processWeb
 	    print "$bar[0] ";
 
 	    #add new item to topic list in email body
-	    $foo = "- $bar[0]  ($wikiuser)\n  $scriptUrl/view/$webName/$bar[0]\n";
+	    $foo = "- $bar[0]  ($wikiuser)\n  $scriptUrl/view$scriptSuffix/$webName/$bar[0]\n";
             $foo =~ s/Main\.//go;
 	    $topiclist = "$topiclist$foo";
 	}

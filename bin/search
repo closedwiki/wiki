@@ -31,8 +31,9 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $scriptUrl, $userName, $dataDir ) = 
+    ( $topic, $webName, $dummy, $userName, $dataDir ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+    $dummy = "";  # to suppress warning
 
     if( ! &wiki::webExists($webName))
     {

@@ -3,30 +3,30 @@
     <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (revision)</TITLE>
 </HEAD>
 <BODY bgcolor="#ffffff">
-<BASE href="%SCRIPTURL%/view/%WEB%/%TOPIC%">
+<BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR>
-    <TD BGCOLOR="%INCLUDE:"webcolor.inc"%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%/"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
+    <TD BGCOLOR="%INCLUDE{"webcolor.inc"}%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
     </TD>
     <TD>
       <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (revision)</FONT>
     </TD>
   </TR>
-  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
     <TD COLSPAN="2">
       Select revision
     </TD>
   </TR>
 </TABLE>
 <H2>View Previous Topic Revision</H2>
-<FORM name="main" action="../../view/%WEB%/%TOPIC%">
+<FORM name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 <UL>
 <LI> Revision: <INPUT type="text" name="rev" size="6" value="%PARAM1%"> <INPUT type="submit" value="View revision"> ( 1.1 ... %PARAM1% )
 </UL>
 </FORM>
 <H2>Compare Revisions</H2>
-<FORM name="main" action="../../rdiff/%WEB%/%TOPIC%">
+<FORM name="main" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 <TABLE>
 <TR>
 <TD>
@@ -45,10 +45,10 @@
 </TABLE>
 </FORM>
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
     <TD valign="top">
       Topic <B>%TOPIC%</B> . {
-        <A href="%SCRIPTURL%/view/%WEB%/%TOPIC%">Cancel</A>
+        <A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Cancel</A>
       }
     </TD>
   </TR>

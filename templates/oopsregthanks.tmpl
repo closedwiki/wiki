@@ -3,17 +3,17 @@
     <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (note)</TITLE>
 </HEAD>
 <BODY bgcolor="#ffffff">
-<BASE href="%SCRIPTURL%/view/%WEB%/%TOPIC%">
+<BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR>
-    <TD BGCOLOR="%INCLUDE:"webcolor.inc"%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%/"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
+    <TD BGCOLOR="%INCLUDE{"webcolor.inc"}%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
     </TD>
     <TD>
       <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (note)</FONT>
     </TD>
   </TR>
-  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
     <TD COLSPAN="2">
       Note
     </TD>
@@ -25,9 +25,9 @@
 <LI>You are also listed up in the TWikiUsers topic
 <LI>An confirmation has been sent to %PARAM1%
 </UL>
-<FORM action="%SCRIPTURL%/view/%WEB%/%TOPIC%">
+<FORM action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
     <TD valign="top">
       Topic <B>%TOPIC%</B> . {
         <INPUT type="submit" value=" &nbsp; OK &nbsp; ">

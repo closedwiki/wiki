@@ -44,34 +44,35 @@ sub main
 
     my $thePathInfo = $query->path_info(); 
     my $theUrl = $query->url;
-    ( $topic, $webName, $scriptUrl, $userName ) = 
+    ( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&wiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl );
 
     my $text = "";
+    my $scriptSuffix = $wiki::scriptSuffix;
 
     # check if required fields are filled in
     if( ( ! $firstLastName ) || ( ! $emailAddress ) || ( ! $wikiName ) || 
         ( ! $passwordA ) || ( ! $passwordB ) || ( $countryName eq "SelectCountry" ) )
     {
-        print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopsregrequ" );
+        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregrequ" );
         return;
     }
 
     # check if wikiName is a WikiName
     if( ! &wiki::isWikiName( $wikiName ) ) {
-        print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopsregwiki" );
+        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregwiki" );
         return;
     }
 
     # check if passwords are identical
     if( $passwordA ne $passwordB ) {
-        print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopsregpasswd" );
+        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregpasswd" );
         return;
     }
 
     # check if user entry already exists
     if( htpasswdExistUser( $wikiName ) ) {
-        print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopsregexist&param1=$wikiName" );
+        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregexist&param1=$wikiName" );
         return;
     }
     # everything OK
@@ -121,7 +122,7 @@ sub main
     }
 
     # and finally display thank you page
-    print $query->redirect( "$scriptUrl/oops/$webName/$wikiName?template=oopsregthanks&param1=$emailAddress" );
+    print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$wikiName?template=oopsregthanks&param1=$emailAddress" );
 }
 
 sub htpasswdGeneratePasswd

@@ -30,6 +30,8 @@
 #       %WEB%            name of current web
 #       %WIKIHOMEURL%    link of top left icon
 #       %SCRIPTURL%      base TWiki script URL (place of view, edit...)
+#       %SCRIPTURLPATH%  like %SCRIPTURL%, but path only (cut protocol and domain)
+#       %SCRIPTSUFFIX%   script suffix (empty by default, ".pl" if required)
 #       %PUBURL%         public URL (root of attachment URL)
 #       %ATTACHURL%      attachment URL of current topic
 #       %DATE%           today's date
@@ -38,16 +40,22 @@
 #       %USERNAME%       login user name
 #       %WIKIUSERNAME%   wiki user name
 #       %WIKITOOLNAME%   tool name
+#       %MAINWEB%        main web name (Main)
+#       %HOMETOPIC%      home topic name (WebHome)
+#       %NOTIFYTOPIC%    notify topic name (WebNotify)
+#       %STATISTICSTOPIC statistics topic name (WebStatistics)
+#       %INCLUDE{...}%   server side include
+#       %SEARCH{...}%    inline search
 
 
 # variables that need to be changed when installing on a new server:
 # ==================================================================
 #                   %WIKIHOMEURL% : link of TWiki icon in upper left corner :
-$wikiHomeUrl      = "http://your.domain.com/twiki";
+$wikiHomeUrl      = "http://your.domain.com/twiki/";
 #                   %SCRIPTURL% : cgi-bin URL of TWiki :
 $defaultScriptUrl = "http://your.domain.com/twiki/bin";
-#                   %PUBURL% : public data URL (root of attachments) :
-$pubUrl           = "http://your.domain.com/twiki/pub";
+#                   %PUBURL% : path of public data URL (root of attachments) :
+$pubUrl           = "/crew/scharf/TWiki/distrib/pub";
 #                   Public data directory (root of attachments), must match $pubUrl :
 $pubDir           = "/home/httpd/twiki/pub";
 #                   Template directory :
@@ -59,6 +67,8 @@ $wikiwebmaster    = "yourname\@your.domain.com";
 
 # variables that might need to be changed:
 # ==================================================================
+#                   %SCRIPTSUFFIX% : Suffix of TWiki Perl scripts (i.e. ".pl") :
+$scriptSuffix     = "";
 #                   shell command to get date for $logFilename :
 $logDateCmd       = "date '+%Y%m'";
 #                   mail program :

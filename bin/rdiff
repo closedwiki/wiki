@@ -117,7 +117,7 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $scriptUrl, $userName ) = 
+    ( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $tmpl = "", $text = "", $diff = "";
@@ -229,12 +229,12 @@ sub main
 
     while( $i > 0 )
     {
-        $revisions .= " | <A href=\"../../view/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
+        $revisions .= " | <A href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
         if( $i != 1 )
         {
             if( $i == $breakRev )
             {
-                $revisions = "$revisions | <A href=\"../../oops/%WEB%/%TOPIC%?template=oopsrev&param1=1.$maxrev\">&gt;...</A>";
+                $revisions = "$revisions | <A href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&param1=1.$maxrev\">&gt;...</A>";
                 $i = 1;
             }
             else
@@ -246,7 +246,7 @@ sub main
                 else
                 {
                     $j = $i - 1;
-                    $revisions .= " | <A href=\"../../rdiff/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
+                    $revisions .= " | <A href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
                 }
             }
         }

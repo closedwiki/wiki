@@ -30,18 +30,18 @@ function checkAll( theButton, theButtonOffset, theNum, theCheck )
 </SCRIPT>
 </HEAD>
 <BODY bgcolor="#ffffff"  onLoad="initForm()" >
-<BASE href="%SCRIPTURL%/edit/%WEB%/%TOPIC%">
-<FORM name="main" action="%SCRIPTURL%/preview/%WEB%/%TOPIC%" method="post">
+<BASE href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<FORM name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR>
-    <TD BGCOLOR="%INCLUDE:"webcolor.inc"%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%/"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
+    <TD BGCOLOR="%INCLUDE{"webcolor.inc"}%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
     </TD>
     <TD>
       <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (edit)</FONT>
     </TD>
   </TR>
-  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
     <TD>
       Change topic
     </TD>
@@ -51,12 +51,12 @@ function checkAll( theButton, theButtonOffset, theNum, theCheck )
 <INPUT TYPE="hidden" NAME="TWikiAttachment" value="%TWIKIATTACHMENT%">
 <BR>
 Don't forget - if you change something, do it in 
-<A href="%SCRIPTURL%/view/Main/GoodStyle">GoodStyle</A> and follow the
-<A href="%SCRIPTURL%/view/Main/TextFormattingRules">TextFormattingRules</A>.
+<A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Main/GoodStyle">GoodStyle</A> and follow the
+<A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Main/TextFormattingRules">TextFormattingRules</A>.
 <BR> <b>-- %WIKIUSERNAME% - %DATE% &lt;br&gt;</b> &nbsp;&nbsp;<code>&lt;==</code> This is your signature for easy copy & paste operation
 %TWIKICAT%
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
     <TD valign="top">
       Topic <B>%TOPIC%</B> . {
       <INPUT type="submit" value=" &nbsp; Preview Changes &nbsp; "> <INPUT type="hidden" name="cmd" value="%CMD%">
@@ -64,6 +64,6 @@ Don't forget - if you change something, do it in
     </TD>
   </TR>
 </TABLE>
-%INCLUDE:"webcopyright.inc"%
+%INCLUDE{"webcopyright.inc"}%
 </FORM>
 </BODY></HTML>
