@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043912580" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1082851827" format="1.0" version="1.8"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Site Tools
@@ -44,17 +44,16 @@ You can use an external mail program, like ==sendmail==, if the =Net::SMTP= modu
 *For Unix platforms:* Edit the =cron= table so that =mailnotify= is called in an interval of your choice. Please consult =man crontab= of how to modify the table that schedules program execution at certain intervals. Example:
 <pre>
 % crontab -e
-15,45 * * * * (cd ~twiki/public_html/bin; ./mailnotify -q)
+0 2 * * * (cd /path/to/twiki/bin; ./mailnotify -q)
 </pre>
-The above line will call mailnotify at 15 minutes and 45 minutes past every hour. The =-q= switch suppresses all normal output.
+The above line will run mailnotify nightly at 02:00. The =-q= switch suppresses all normal output.
 
 *For ISP installations:* Many ISPs don't allow hosted accounts direct cron access, as it's often used for things that can heavily load the server. Workaround scripts are available.
 
 *On Windows NT/2000:* You can use a scheduled task if you have administrative privileges.
 __Note:__ AT on an NT machine is pretty limited.
 Microsoft lists several third-party
-[[http://www.microsoft.com/ntserver/partners/findoffering/serversolutions/Maintnce.asp#cron][replacements]]
-(as of 2001-11-20, none of them free).
+[[http://www.microsoft.com/ntserver/partners/findoffering/serversolutions/Maintnce.asp#cron][replacements]]. TWiki:Codev/CronTabWin is a free scheduler for Windows.
 
 ---++ <nop>WebStatistics Site Usage Log
 
@@ -65,10 +64,10 @@ You can generate a listing manually, or on an automated schedule, of visits to i
 ---+++ Configuring for Automatic Operation
 
 	* You can automatically generate usage statistics for all webs. To enable this:
-		* Make sure variable =$doLogTopicView, $doLogTopicSave and $doLogTopicUpload= in =TWiki.cfg= are set. This will generate log entries in file =twiki/data/log&lt;date&gt;.txt= .
+		* Make sure variable =$doLogTopicView, $doLogTopicSave and $doLogTopicUpload= in =TWiki.cfg= are set. This will generate log file entries (see below).
 		* The WebStatistics topic must be present in all webs where you want to have statistics. You can use the topic in the Main web as a template.
 		* Call the =twiki/bin/statistics= script from a cron job, once a day is recommended. This will update the WebStatistics topics in all webs.
-		* __Attention:__ The script must run as the same user as the CGI scripts are running, which is user =nobody= on most systems. Example crontab entry: <br> =0 0 * * * (cd /path/to/TWiki/bin; ./statistics &gt;/dev/null 2&gt;&amp;1)=
+		* __Attention:__ The script must run as the same user as the CGI scripts are running, which is user =nobody= on many systems. Example crontab entry: <br> =0 0 * * * (cd /path/to/TWiki/bin; ./statistics &gt;/dev/null 2&gt;&amp;1)=
 		* There is a workaround in case you can't run the script as user =nobody= : Run the utility =twiki/bin/geturl= in your cron job and specify the URL of the =twiki/bin/statistics= script as a parameter. Example: <br> =0 0 * * * (cd /path/to/TWiki/bin; ./geturl mydomain.com /urlpath/to/TWiki/bin/statistics &gt;/dev/null 2&gt;&amp;1)=
 
 ---+++ Generating Statistics Manually by URL
@@ -77,6 +76,32 @@ You can generate a listing manually, or on an automated schedule, of visits to i
 		* Update current month for all webs: <br> =http://mydomain.com/twiki/bin/statistics=
 		* Update current month for Main web only: <br> =http://mydomain.com/twiki/bin/statistics/Main=
 		* Update January 2000 for Main web: <br> =http://mydomain.com/twiki/bin/statistics/Main?logdate=200001=
+
+---+++ Log File Details
+
+TWiki generates monthly log files which are used by the statistics
+	* The log directory is defined by the =$logDir= variable in TWiki.cfg
+	* The file name is =log&lt;year&gt;&lt;month&gt;.txt=
+	* Example path name: =twiki/data/log%SERVERTIME{$year$mo}%.txt=
+	* Each access gets logged as: %BR%
+	  =| &lt;time&gt; | &lt;wikiusername&gt; | &lt;action&gt; | &lt;web&gt;.&lt;topic&gt; | &lt;extra info&gt; | &lt;IP address&gt; |=
+	* Example log entry: %BR%
+	  =| %SERVERTIME{$day $mon $year - $hour:$min}% | !Main.TWikiGuest | view | !TWiki.WebRss |  | 66.124.232.02 |=
+	* Actions are logged if enabled in TWiki.cfg by the =$doLogTopic&lt;action&gt;= flags
+	* Logged actions:
+	  | *Script* | *Action name* | *Extra info* |
+	  | attach | =attach= | when viewing attach screen of previous uploaded attachment: =filename= |
+	  | changes | =changes= |  |
+	  | edit | =edit= | when editing non-existing topic: =(not exist)= |
+	  | register | =register= | E-mail address |
+	  | save | =save= | when replacing existing revision: =repRev 1.3= %BR% when user checks the minor changes box: =dontNotify= |
+	  | search | =search= | search string |
+	  | rdiff | =rdiff= | =1.4 1.3= |
+	  | rename | =rename= | when moving topic: =moved to !Newweb.NewTopic= |
+	  | rename | =move= | when moving attachment: =Attachment filename moved to !Newweb.NewTopic= |
+	  | upload | =upload= | filename |
+	  | view | =view= | when viewing non-existing topic: =(not exist)= %BR% when viewing previous topic revision: =r1.3= |
+
 
 ---++ <nop>WebSearch
 
@@ -109,5 +134,6 @@ WebIndex lists all web topics in alphabetical order, with the first couple of li
 </pre>
 </blockquote>
 
--- Main.MikeMannix - 01 Dec 2001 %BR%
--- Main.PeterThoeny - 30 Jan 2003
+-- TWiki:Main.MikeMannix - 01 Dec 2001 %BR%
+-- TWiki:Main.PeterThoeny - 24 Apr 2004
+
