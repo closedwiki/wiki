@@ -1,5 +1,5 @@
 <table><tr><td>
-Welcome to the home of %WIKITOOLNAME%.%WEB%. This is a web based collaboration area to get to know the %WIKITOOLNAME% tool.
+Welcome to %WIKITOOLNAME%, a web based collaboration tool, document management tool and knowledge base tool.
 </td><td>
 <a href="http://TWiki.SourceForge.net/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
 </td><td>
@@ -7,15 +7,11 @@ Welcome to the home of %WIKITOOLNAME%.%WEB%. This is a web based collaboration a
 </td></tr>
 </table>
 
-Good *starting points* at the %WIKITOOLNAME%.%WEB% web are listed below:
-	* WelcomeGuest: Look here first to get you rolling on %WIKITOOLNAME%.
-	* TWikiWeb: Explains what a %WIKITOOLNAME% web is.
-	* <b> TWikiUsers: </b> List of visitors to this %WIKITOOLNAME% web.
+%INCLUDE{"TWiki.TWikiWebsTable"}%
 
-	* GoodStyle: Things to consider when changing text.
-	* TextFormattingRules: Easy to learn rules when editing text.
-	* TextFormattingFAQ: Answers to frequently asked questions about text formatting.
-	* TestArea: The place to get your virtual %WIKITOOLNAME% hands dirty!
+*%WIKITOOLNAME%.%WEB% Web:*
+	* <b> TWikiUsers: </b> List of users of this %WIKITOOLNAME% web.
+	* OfficeLocations: Corporate offices.
 
 <FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
 	* <A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=.*">Topic index</A>: List up all %WIKITOOLNAME%.%WEB% topics in alphabetical order.
@@ -25,12 +21,14 @@ Good *starting points* at the %WIKITOOLNAME%.%WEB% web are listed below:
 	* %NOTIFYTOPIC%: Subscribe to be automatically notified when something changes in the %WIKITOOLNAME%.%WEB% web.
 	* %STATISTICSTOPIC%: View access statistics of the %WIKITOOLNAME%.%WEB% web.
 	* %WEBPREFSTOPIC%: Preferences of the %WIKITOOLNAME%.%WEB% web.
-	* %MAINWEB%.%WIKIPREFSTOPIC%: %WIKITOOLNAME% site-level preferences .
+.
+
+*%WIKITOOLNAME%.%TWIKIWEB% Web:*
+	* %TWIKIWEB%.WelcomeGuest: Look here first to get you rolling on %WIKITOOLNAME%.
+	* %TWIKIWEB%.TWikiWeb: Explains what a %WIKITOOLNAME% web is.
+	* %TWIKIWEB%.TWikiRegistration: Create your account in order to edit topics.
+	* %TWIKIWEB%.%WIKIPREFSTOPIC%: %WIKITOOLNAME% site-level preferences 
 </FORM>
 
 *Notes:*
 	* You are currently in the %WIKITOOLNAME%.%WEB% web. The color code for this web is a light yellow background, so you know where you are.
-
-----
-
-%INCLUDE{"Main/TWikiWebsTable.txt"}%
