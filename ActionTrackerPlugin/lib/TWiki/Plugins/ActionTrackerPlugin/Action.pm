@@ -468,22 +468,32 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     return ( $this->secsToGo() <= $val * 60 * 60 * 24 );
   }
 
-  # PRIVATE match the passed value against the corresponding field
+  # PRIVATE match boolean attribute "closed"
   sub _matchField_closed {
     my $this = shift;
     return ( $this->{state} eq "closed" );
   }
 
-  # PRIVATE match the passed value against the corresponding field
+  # PRIVATE match boolean attribute "open"
   sub _matchField_open {
     my $this = shift;
     return ( $this->{state} ne "closed" );
   }
 
-  # PRIVATE match the passed value against the corresponding field
+  # PRIVATE match boolean attribute "late"
   sub _matchField_late {
     my $this = shift;
     return ( $this->secsToGo() < 0 && $this->{state} ne "closed" ) ? 1 : 0;
+  }
+
+  # PRIVATE trap for state so we can put state="late" into attributes
+  sub _matchField_state {
+    my ( $this, $val ) = @_;
+    if ( $val eq "late" ) {
+      return ( $this->secsToGo() < 0 && $this->{state} ne "closed" ) ? 1 : 0;
+    } else {
+      return ( $this->{state} eq $val );
+    }
   }
 
   # PUBLIC true if the action matches the search attributes

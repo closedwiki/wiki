@@ -98,6 +98,16 @@ use TWiki::Func;
     my $chosen = $actions->search($attrs);
     my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
+    Assert::assert($text =~ /Test_Main_A_open_late/);
+    Assert::assert($text !~ /ontime/o);
+  }
+
+  sub testSearchLate2 {
+    my $attrs = new ActionTrackerPlugin::Attrs("state=\"late\"");
+    my $chosen = $actions->search($attrs);
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+    my $text = $chosen->formatAsString($fmt);
+    Assert::assert($text =~ /Test_Main_A_open_late/);
     Assert::assert($text !~ /ontime/o);
   }
 
