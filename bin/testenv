@@ -277,13 +277,17 @@ my $theTopic = $query->param( 'topic' );
 my $theUrl = $query->url;
 
 # Detect whether mod_perl was loaded into Apache
-my $LOAD_MOD_PERL = ( exists $ENV{'SERVER_SOFTWARE'} && 
+my $modPerlLoaded = ( exists $ENV{'SERVER_SOFTWARE'} && 
 			  ( $ENV{'SERVER_SOFTWARE'} =~ /mod_perl/ )) && 
 					"loaded" || "not loaded";
 
 # Detect whether we are actually running under mod_perl
 # - test for MOD_PERL alone, which is enough.
-my $USE_MOD_PERL = ( exists $ENV{'MOD_PERL'} ) && "Used" || "Not used";
+my $usingModPerl = ( exists $ENV{'MOD_PERL'} ) && "Used" || "Not used";
+
+# Get the version of mod_perl if it's being used
+my $modPerlVersion = eval 'use mod_perl; return $mod_perl::VERSION' 
+    if $usingModPerl;
 
 
 # OS
@@ -398,6 +402,7 @@ foreach $mod (@optionalMods) {
 import CGI::Carp qw( fatalsToBrowser );
 
 
+# PATH_INFO 
 print "<tr><th align=\"right\">PATH_INFO:<a name=\"PATH_INFO\"></th><td>$thePathInfo</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
 print "For a URL such as <b>$theUrl/foo/bar</b>, \n";
@@ -406,7 +411,13 @@ print "components. <a href=\"$theUrl/foo/bar#PATH_INFO\"><b>Test this now</b></a
 print "- particularly if you are using Apache or IIS, or are using a web hosting provider.\n";
 print "The page resulting from the test link should have a PATH_INFO of <b>/foo/bar</b>.\n";
 print "</td></tr>\n";
-print "<tr><th align=\"right\">mod_perl:</th><td>$USE_MOD_PERL for this script (mod_perl $LOAD_MOD_PERL)</td></tr>\n";
+
+# mod_perl 
+print "<tr><th align=\"right\">mod_perl:</th><td>$usingModPerl for this script (mod_perl $modPerlLoaded)\n";
+if ( $modPerlVersion ) {
+    print "- <b>mod_perl</b> version $modPerlVersion\n";
+}
+print "</td></tr>\n";
 
 
 # Get web server's user and group info
