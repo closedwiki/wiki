@@ -31,132 +31,6 @@ $query = new CGI;
 
 &main();
 
-# =========================
-sub filenameToIcon
-{
-    my( $fileName ) = @_;
-
-    my @bits = ( split( /\./, $fileName ) );
-    my $fileExt = lc $bits[$#bits];
-
-    my $tmp = &TWiki::getPubDir();
-    my $iconDir = "$tmp/icn";
-    my $iconUrl = "%PUBURLPATH%/icn";
-    my $iconList = &TWiki::Store::readFile( "$iconDir/_filetypes.txt" );
-    foreach( split( /\n/, $iconList ) ) {
-        @bits = ( split( / / ) );
-	if( $bits[0] eq $fileExt ) {
-            return "<IMG src=\"$iconUrl/$bits[1].gif\" width=\"16\" hight=\"16\" align=\"top\">";
-        }
-    }
-    return "<IMG src=\"$iconUrl/else.gif\" width=\"16\" hight=\"16\" align=\"top\">";
-}
-
-
-# =========================
-sub updateAttachment
-{
-   my ( $atext, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $hideFile ) = @_;
-
-   my $tmpVersion = "-";
-   my $tmpAttr = "";
-   if ( $hideFile ) {
-      $tmpAttr .= "h";
-   }
-
-   my $attachMacro = TWiki::Attach::formFileAttachmentMacro(
-          $fileName, $tmpVersion, $filePath, $fileSize, $fileDate, $fileUser, 
-          $fileComment, $tmpAttr );
-          
-   my $endMacro = TWiki::Attach::endMacro();
-
-   if ( ! $atext ) {
-      $atext = "\n" . &TWiki::Attach::startMacro();
-      # FIXME
-      $atext .= "$attachMacro\n";
-      $atext .= $endMacro;
-   } else {
-      # Is there already an entry for this file replace, otherwise, add to end
-      if ( ! ( $atext =~ s/%FILEATTACHMENT{[\s]*\"$fileName\"[^}]*}%/$attachMacro/ ) ) {
-          $atext =~ s/(\Q$endMacro\E)/$attachMacro\n$1/;
-      }
-   }
-   return $atext;
-}
-
-
-
-# =========================
-sub updateAttachmentOld
-{
-    my ( $atext, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) = @_;
-    my $atTable = &TWiki::Store::readTemplate( "attachtable" );
-    my ( $atTableBefore, $atTableFile, $atTableAfter ) = split( /%REPEAT%/, $atTable );
-
-    my $before="", $item="", $lcItem="", $after="", $set="", $ins="", $comp="";
-    my $lcFileName = lc $fileName;
-    my $fileIcon = filenameToIcon( $fileName );
-
-    # prevent links for $filePath, i.e. "\some\File with WikiName.txt"
-    $filePath =~ s/([\(\-\*\s]+)([A-Z]+)/$1\%NOP\%$2/go;
-
-    my $result = $atTableBefore;
-    my $found = 0;
-
-    foreach( split( /<TwkNextItem>/, $atext ) ) {
-        $set = $_;
-        ( $before, $item, $after ) = split( /<(?:\/)*TwkFileName>/, $set );
-        if( $item ) {
-            $set = "<TwkNextItem>$set";
-            $lcItem = lc $item;
-            $comp = ( $lcItem cmp $lcFileName );
-            if( $comp == 0 ) {
-                # identical, so replace entry
-                $found = 1;
-                $set = $atTableFile;
-                $set =~ s/%FILEICON%/$fileIcon/go;
-                $set =~ s/%FILENAME%/$fileName/go;
-                $set =~ s/%FILEPATH%/$filePath/go;
-                $set =~ s/%FILESIZE%/$fileSize/go;
-                $set =~ s/%FILEDATE%/$fileDate/go;
-                $set =~ s/%FILEUSER%/$fileUser/go;
-                $set =~ s/%FILECOMMENT%/$fileComment/go;
-            } elsif( ( $comp > 0 ) && ( ! $found ) ) {
-                # insert in alphabetical order
-                $found = 1;
-                $ins = $atTableFile;
-                $ins =~ s/%FILEICON%/$fileIcon/go;
-                $ins =~ s/%FILENAME%/$fileName/go;
-                $ins =~ s/%FILEPATH%/$filePath/go;
-                $ins =~ s/%FILESIZE%/$fileSize/go;
-                $ins =~ s/%FILEDATE%/$fileDate/go;
-                $ins =~ s/%FILEUSER%/$fileUser/go;
-                $ins =~ s/%FILECOMMENT%/$fileComment/go;
-                $result = "$result$ins";
-            }
-
-            # copy existing entry
-            $result = "$result$set";
-        }
-    }
-
-    if( ! $found ) {
-        # add entry
-        $ins = $atTableFile;
-        $ins =~ s/%FILEICON%/$fileIcon/go;
-        $ins =~ s/%FILENAME%/$fileName/go;
-        $ins =~ s/%FILEPATH%/$filePath/go;
-        $ins =~ s/%FILESIZE%/$fileSize/go;
-        $ins =~ s/%FILEDATE%/$fileDate/go;
-        $ins =~ s/%FILEUSER%/$fileUser/go;
-        $ins =~ s/%FILECOMMENT%/$fileComment/go;
-        $result = "$result$ins";
-    }
-
-    $result = "$result$atTableAfter";
-    return $result;
-}
-
 
 # =========================
 # code fragment to extract pixel size from images
@@ -390,6 +264,8 @@ sub addLinkToEndOfTopic
 }
 
 
+# FIXME rename upload to attachchange, not issue with view of attach table at present
+# also attach change to attachview
 # =========================
 sub main
 {
@@ -397,6 +273,7 @@ sub main
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
+    my $theUploadButton = $query->param( 'uploadButton' );
 
     ( $topic, $webName, $dummy, $userName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
@@ -425,65 +302,81 @@ sub main
     my $fileComment = $query->param( 'filecomment' ) || "";
     my $createLink = $query->param( 'createlink' ) || "";
     my $hideFile = $query->param( 'hidefile' ) || "";
+    
+    # FIXME fileName doesn't seem to be defined when does update without upload
+    TWiki::writeDebug( "upload: fileName=$fileName" );
+
+    my $doUpload = "";
+    if( $theUploadButton ) { $doUpload = 1 };
+    TWiki::writeDebug( "upload: theUploadButton=$theUploadButton, doUpload=$doUpload" );
 
     # JET need to change windows path to unix path
     $tmpFilename =~ s@\\@/@go;
     $tmpFilename =~ /(.*)/;
     $tmpFilename = $1;
-    &TWiki::writeDebug( "tmpFilename $tmpFilename" );
+    #&TWiki::writeDebug( "tmpFilename $tmpFilename" );
+    
+    my( $fileSize, $fileUser, $fileDate ) = "";
 
-    # check if file exists and has non zero size
-    my $size = -s $tmpFilename;
-    ##&TWiki::writeDebug( "size $size" );
-    if( ! -e $tmpFilename ) {
-        &TWiki::writeDebug( "no file" );
-        # PTh 20 Jun 2000: changed to getOopsUrl
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsupload", $fileName );
-        print $query->redirect( $url );
-        return;
+    if( $doUpload ) {
+	# check if file exists and has non zero size
+	my $size = -s $tmpFilename;
+	#&TWiki::writeDebug( "size $size" );
+	if( ! -e $tmpFilename ) {
+	    #&TWiki::writeDebug( "upload: no file" );
+	    # PTh 20 Jun 2000: changed to getOopsUrl
+	    my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsupload", $fileName );
+	    print $query->redirect( $url );
+	    return;
+	}
+
+	# cut path from filepath name (Windows "\" and Unix "/" format)
+	my @pathz = ( split( /\\/, $filePath ) );
+	my $filetemp = $pathz[$#pathz];
+	my @pathza = ( split( '/', $filetemp ) );
+	$fileName = $pathza[$#pathza];
+	$fileName =~ s/[^A-Za-z0-9_\.\-]//go;  # delete special characters
+$fileName =~ s/$TWiki::uploadFilter/$1\.txt/goi;  # apply security filter
+
+	# Update RCS if required
+	# FIXME make optional
+    	my $text1 = "";
+	my $saveCmd = "";
+	my $doNotLogChanges = 1;
+	my $doUnlock = 1;
+	my $dontNotify = "";
+	my $error = &TWiki::Store::saveAttachment( $webName, $topic, $text1, $saveCmd, $fileName, $doNotLogChanges, $doUnlock, 
+						   $dontNotify, $fileComment, $tmpFilename );
+
+	if ( $error ) {
+	    # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
+	    my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
+	    print $query->redirect( $url );
+	} else {
+	    # and finally display topic
+	    print $query->redirect( &TWiki::getViewUrl( "", $topic ) );
+	}
+
+	# get user name
+	$fileUser = &TWiki::userToWikiName( $userName );
+
+	# get time stamp and file size of uploaded file:
+	my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp9,
+	    $mtime,$tmp11,$tmp12,$tmp13 ) = "";
+	( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$fileSize,$tmp9,
+	  $mtime,$tmp11,$tmp12,$tmp13 ) = stat $tmpFilename;
+	$fileDate = &TWiki::formatGmTime( $mtime );
+
+	if( $TWiki::doLogTopicUpload ) {
+	    # write log entry
+	    &TWiki::Store::writeLog( "upload", "$webName.$topic", $fileName );
+	}
     }
-
-    # cut path from filepath name (Windows "\" and Unix "/" format)
-    my @pathz = ( split( /\\/, $filePath ) );
-    my $filetemp = $pathz[$#pathz];
-    my @pathza = ( split( '/', $filetemp ) );
-    $fileName = $pathza[$#pathza];
-    $fileName =~ s/[^A-Za-z0-9_\.\-]//go;             # delete special characters
-    $fileName =~ s/$TWiki::uploadFilter/$1\.txt/goi;  # apply security filter
-
-    # Update RCS if required
-    # FIXME make optional
-    my $text1 = "";
-    my $saveCmd = "";
-    my $doNotLogChanges = 1;
-    my $doUnlock = 1;
-    my $dontNotify = "";
-    my $error = &TWiki::Store::saveAttachment( $webName, $topic, $text1, $saveCmd, $fileName, $doNotLogChanges, $doUnlock, 
-                                               $dontNotify, $fileComment, $tmpFilename );
-
-    if ( $error ) {
-        # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
-        print $query->redirect( $url );
-    } else {
-        # and finally display topic
-        print $query->redirect( &TWiki::getViewUrl( "", $topic ) );
-    }
-
-    # get user name
-    my $fileUser = &TWiki::userToWikiName( $userName );
-
-    # get time stamp and file size of uploaded file:
-    my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$fileSize,$tmp9,
-        $mtime,$tmp11,$tmp12,$tmp13 ) = "";
-    ( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$fileSize,$tmp9,
-      $mtime,$tmp11,$tmp12,$tmp13 ) = stat $tmpFilename;
-    my $fileDate = &TWiki::formatGmTime( $mtime );
-
-    if( $TWiki::doLogTopicUpload ) {
-        # write log entry
-        &TWiki::Store::writeLog( "upload", "$webName.$topic", $fileName );
-    }
+    
+    # FIXME don't do if no RCS for attachments
+    my $fileVersion = TWiki::Store::getRevisionNumberNew( $webName, $topic, $fileName );
+    
+    # FIXME more code probably that shouldn't run if no new attachment
 
     # update topic
     $fileDate =~ s/ /&nbsp;/go;
@@ -499,8 +392,9 @@ sub main
         $atext = TWiki::Attach::migrateToFileAttachmentMacro( $atext );
     }
 
-    $atext = updateAttachment( $atext, $fileName, $filePath, $fileSize,
-                               $fileDate, $fileUser, $fileComment, $hideFile );
+    $atext = TWiki::Attach::updateAttachment( 
+                $atext, $fileVersion, $fileName, $filePath, $fileSize,
+                $fileDate, $fileUser, $fileComment, $hideFile );
     if( $createLink ) {
         $before = addLinkToEndOfTopic( $before, $newFile, $fileName, $fileComment );
     }
