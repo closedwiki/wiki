@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079507030" format="1.0" version="1.42"}%
+%META:TOPICINFO{author="PeterThoeny" date="1080625187" format="1.0" version="1.43"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---# TWiki Text Formatting
@@ -183,7 +183,7 @@ class CatAnimal {
 <tr bgcolor="#ffffff">
 <td valign="top">
  *List Item:* %BR%
- Three spaces and an asterisk.
+ Three spaces, an asterisk, and another space.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -197,7 +197,7 @@ class CatAnimal {
 <tr bgcolor="#ffffff">
 <td valign="top">
  *Nested List Item:* %BR%
- Six, nine, ... spaces and an asterisk.
+ Six, nine, ... spaces, an asterisk, and another space.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -213,7 +213,7 @@ class CatAnimal {
 <tr bgcolor="#ffffff">
 <td valign="top">
  *Ordered List:* %BR%
- Three spaces and a number.
+ Three spaces, a number, and another space.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -251,7 +251,7 @@ class CatAnimal {
  =|	center-spaced	|= cells are displayed center aligned.%BB%
  =|	  right-spaced |= cells are displayed right aligned.%BB%
  =| 2 colspan ||= cells are displayed as multi-span columns (i.e., a cell with no text spans a column).%BB%
- =|^|= cells with a caret indicate follow-up rows of multi-span rows.%BB%
+ =|^|= cells with a caret indicate follow-up rows of multi-span rows (this functionality is provided by TablePlugin).%BB%
  If a row contains a large amount of text, and you want it to be more readable while editing the table, split the row into multiple text lines by ending each line with a backslash character ='\'=.%BB%
  Table cells wrap automatically as determined by the browser.
 </td><td valign="top">
@@ -303,7 +303,7 @@ Know.ReadmeFirst
  *Forced Links:* %BR%
  You can create a forced internal link by enclosing words in double square brackets.
  %BR% __Note:__ Text within the brackets may contain optional spaces; the topic name is formed by capitalizing the initial letter and by removing the spaces; for example, =[<nop>[text formatting FAQ]]= links to topic TextFormattingFAQ.  You can also refer to a different web and use anchors.
- %BR% __Note:__ To "escape" double square brackets that would otherwise be a correct link, use =&lt;nop&gt;= between the leading left square brackets, that is, begin with =[&lt;nop&gt;[....=
+ %BR% __Note:__ To "escape" double square brackets that would otherwise be a correct link, prefix the leading left square brackets with an exclamation point, that is, begin with =![<nop>[....=
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -368,15 +368,15 @@ Know.ReadmeFirst
 <tr bgcolor="#ffffff">
 <td valign="top">
  *Prevent a Link:* %BR%
- Prevent a WikiWord from being linked by prepending it with the =&lt;nop&gt;= tag.
+ Prevent a WikiWord from being linked by prepending it with an exclamation point.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
-&lt;nop&gt;SunOS
+!SunOS
 </pre>
 </font></span>
 </td><td valign="top">
-<nop>SunOS
+!SunOS
 </td>
 </tr>
 <tr bgcolor="#ffffff">
@@ -438,6 +438,17 @@ You can use just about any HTML tag without a problem - however, there are a few
 		* This feature allows you to enter an unclosed angle bracket - as a greater than or less than symbol - and have it automatically rendered as if you had entered its HTML character, =&amp;lt;=, ex: ==a < b==
 		* %T% If you're pasting in preformatted HTML text and notice problems, check the file in a text processor with no text wrap. Also, save without hard line breaks on text wrap, in your HTML editing program. 
 
+---+++ TWiki and <nop>JavaScript
+
+You can use <nop>JavaScript for your TWiki applications. Sice TWiki rendering might interfere with <nop>JavaScript code you need to escape it with HTML comments and =&lt;pre&gt;= tags:
+<verbatim>
+<script language="JavaScript">
+<!-- Hide JavaScript and <pre> escape TWiki rendering
+... put your JavaScript code here...
+// Stop hiding and stop </pre> escaping TWiki rendering -->
+</script>
+</verbatim>
+
 ---++ Hyperlinks
 
 Being able to create links without any formatting required is a core TWiki feature, made possible with WikiWords. New TWiki linking rules are a simple extension of the syntax that provide a new set of flexible options. 
@@ -482,7 +493,7 @@ Variables are names that are enclosed in percent signs =%= that are expanded on 
 
 	* There are many more variables, see *[[TWikiVariables]]*.
 
-	* To "escape" a percent sign that would otherwise be interpreted as a variable, add =&lt;nop&gt;= after the first percent sign. Write: =<span style='background : #FFFFCC;'><font color="#990000"> %&lt;nop&gt;SOMEVARIABLE% </font></span>= to get: %<nop>SOMEVARIABLE%.
+	* To "escape" a variable, prefix it with an exclamation point. Write: =<span style='background : #FFFFCC;'><font color="#990000"> !%<nop>SOMEVARIABLE% </font></span>= to get: !%SOMEVARIABLE%.
 
 ---++ <nop>TWikiPlugin Formatting Extensions
 
@@ -506,4 +517,5 @@ TWiki formatting rules are fairly simple to use and quick to type. However, ther
 		* *A:* The ='&'= character has a special meaning in HTML, it starts a so called character entity, i.e. ='&amp;copy;'= is the =&copy;= copyright character. You need to escape ='&amp;'= to see it as it is, so write ='&amp;amp;'= instead of ='&amp;'=. <br /> Example: Type ='This &amp;amp; that'= to get ='This &amp; that'=.
 
 -- TWiki:Main.MikeMannix - 02 Dec 2001 <br />
--- TWiki:Main.PeterThoeny - 16 Mar 2004
+-- TWiki:Main.PeterThoeny - 29 Mar 2004
+
