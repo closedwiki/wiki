@@ -310,7 +310,10 @@ function writeJavaScriptNote()
 </head>
 <body bgcolor="#ffffff" onLoad="initForm()">
 <form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%HEADER{action="(edit)" description="Change topic"}%
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%(edit)%TMPL:END%
+%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+%TMPL:P{"standardheader"}%
 <script language="JavaScript">
 <!--HIDE
 writeToolbar();
@@ -342,10 +345,11 @@ writeJavaScriptNote();
 </noscript>
 <br />
 %FORMFIELDS%
-%FOOTER{%
+%TMPL:DEF{"topicaction"}%
       <INPUT type="submit" name="submitEdit" value=" &nbsp; Preview Changes &nbsp; "> <INPUT type="hidden" name="cmd" value="%CMD%">
       %SEP%
       <a CLASS="footerlink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit
-%}FOOTER%
+%TMPL:END%
+%TMPL:P{"standardfooter"}%
 </form>
 </body></html>

@@ -1,3 +1,9 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}% (change form) %TMPL:END%
+%TMPL:DEF{"webaction"}%  %TMPL:END%
+%TMPL:DEF{"topicaction"}% <INPUT type="submit" name="submit" value=" &nbsp; Change form &nbsp; ">
+      %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> change form FIXME %TMPL:END%
+
 <HTML>
 <HEAD>
   <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (edit)</TITLE>
@@ -5,29 +11,30 @@
 </HEAD>
 <BODY bgcolor="#ffffff">
 
-<FORM name="main" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 
-%HEADER{action="(change form)" description="Change form template - use with CARE"}%
+%TMPL:P{"standardheader"}%
 
-Choose a new form template.  Notes:
-<UL>
-	<li><font color="red">Existing form data is lost! (still available in old version)</font>
-	<li>Any change you made to topic before coming to this page are preserved.
-</UL>
+---++ Choose a new form template
+
+Notes:
+   * <font color="red">Existing form data is lost! (still available in old version)</font>
+   * Any change you made to topic before coming to this page are preserved.
 <br>
 
+<FORM name="main" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <table border="0" cellspacing="0" cellpadding="0">
    <tr><th>Possible form templates:</th><td></td></tr>
-   <tr><td></td><td>%FORMLIST%</td></tr>
+   <tr><td></td><td>
+   %FORMLIST%
+   </td></tr>
 </table>
 
 <input type="hidden" name="text" value="%TEXT%">
 <input type="hidden" name="parent" value="%PARENT%">
 
-%FOOTER{%
-      <INPUT type="submit" name="submit" value=" &nbsp; Change form &nbsp; ">
-      %SEP%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> change form FIXME
-%}FOOTER%
+
+%TMPL:P{"standardfooter"}%
 
 </FORM>
+
 </BODY></HTML>

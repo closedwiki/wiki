@@ -6,20 +6,10 @@
 <FORM name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%OLD_WEB%/%OLD_TOPIC%/">
 <input type="hidden" name="oldWeb" value="%OLD_WEB%">
 <input type="hidden" name="oldTopic" value="%OLD_TOPIC%">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
-    </TD>
-    <TD>
-      <B>%OLD_WEB% . </B><FONT size="+2"><B>%OLD_TOPIC%.%FILENAME%</B> (move)</FONT>
-    </TD>
-  </TR>
-    <TR BGCOLOR="%WEBBGCOLOR%">
-      <TD colspan="2">&nbsp;
-      </TD>
-  </TR>
-</TABLE>
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}% <b>%OLD_TOPIC% . %FILENAME%</b> (move)%TMPL:END%
+%TMPL:DEF{"webaction"}%%TMPL:END%
+%TMPL:P{"standardheader"}%
 <BR>
 <TABLE border="1" cellpadding="1" cellspacing="0">
 <TR>
@@ -44,12 +34,9 @@ The attachment and any history will be moved to the new topic.  An error page wi
 locked by another user.  The new topic chosen must already exist.  Note that any URLs that refer to the attachment will be broken after this move.
 
 <br>
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD bgcolor="%WEBBGCOLOR%" align="center">
-       <input type="submit" value="Rename/Move">
-    </TD>
-  </TR>
-</TABLE>
+%TMPL:DEF{"topicaction"}%
+<input type="submit" value="Rename/Move">
+%TMPL:END%
+%TMPL:P{"standardfooter"}%
 </FORM>
 </BODY>

@@ -40,21 +40,10 @@ function launchWindow( theWeb, theTopic ) {
 </head>
 <body bgcolor="#ffffff" onLoad="initForm()">
 <form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
-  <tr>
-    <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <a target="TWikiHome" href="%WIKIHOMEURL%"><img src="%PUBURLPATH%/wikiHome.gif" border="0" /></a>
-    </td>
-    <td>
-      <b>%WIKITOOLNAME% . %WEB% . </b><font size="+2"><b>%TOPIC%</b> (edit)</font>
-    </td>
-  </tr>
-  <tr bgcolor="%WEBBGCOLOR%">
-    <td>
-      Change topic
-    </td>
-  </tr>
-</table>
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}% (edit)%TMPL:END%
+%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+%TMPL:P{"standardheader"}%
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%">%TEXT%</textarea>
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="parent" value="%TOPICPARENT%" />
@@ -67,16 +56,9 @@ and follow the
 This is your signature for easy copy & paste operation
 <br />
 %FORMFIELDS%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
-  <tr bgcolor="%WEBBGCOLOR%">
-    <td valign="top">
-      Topic <b>%TOPIC%</b> . {
-      <input type="submit" value=" &nbsp; Preview Changes &nbsp; " /> <input type="hidden" name="cmd" value="%CMD%" />     
-      &nbsp; | &nbsp; <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit
-      }
-    </td>
-  </tr>
-</table>
+%TMPL:DEF{"topicaction"}% <input type="submit" value=" &nbsp; Preview Changes &nbsp; " /> <input type="hidden" name="cmd" value="%CMD%" />     
+      &nbsp; | &nbsp; <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
+%TMPL:P{"standardfooter"}%
 %WEBCOPYRIGHT%
 </form>
 </body></html>
