@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="PeterThoeny" date="996218983" format="1.0beta2" version="1.12"}%
 The %WIKITOOLNAME% web is a web-based collaboration tool. 
 	* WelcomeGuest tells you more about how to use it.
 	* TWiki's home is at http://TWiki.org/
@@ -12,7 +13,7 @@ What does the name TWiki stand for?
 	* _Wiki wiki_ means quick in Hawai'ian. They call the shuttle at the Honolulu airport the <A HREF="http://www.quickaid.com/airports/hnl/company/trans_tm.html"> wiki wiki bus</A>. 
 	* _TWiki_ is the short form of _TakeFive Wiki_ . (Later on I found out that _Twiki_ is the name of a robot in a <a href="http://www.buck-rogers.com/">Buck Rogers</a> TV show in 1979)
 
-%WIKITOOLNAME% is one of many WikiWikiClones; the first one was built by Ward Cummingham, http://c2.com/
+%WIKITOOLNAME% is one of many WikiWikiClones; the first one was built by Wiki:WardCummingham, http://c2.com/
 
 Topics of interest:
 	* TWikiEnhancementRequests is the place where you can add your enhancement requests.
@@ -21,6 +22,7 @@ Topics of interest:
 	* TWikiDocumentation is the implementation documentation.
 	* TWikiAdministration tells you how to do administrative stuff, like renaming or deleting a topic.
 	* WikiCulture talks about the unique type of collaboration Wiki systems offer.
+	* WikiReferences has links to articles and books around collaboration and the Wiki technology in particular.
 
 *Note:*
 	* %WIKITOOLNAME% automatically signs new pages with your WikiName in case %WIKITOOLNAME% is running on an Intranet where you log in. In case your %WIKITOOLNAME% installation does not authenticate users, %WIKITOOLNAME% does not know about user names, all contributors have the user name Main.TWikiGuest.
