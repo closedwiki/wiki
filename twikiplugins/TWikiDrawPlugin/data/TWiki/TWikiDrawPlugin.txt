@@ -2,7 +2,7 @@
 
 %TOC%
 
-This plugin encapsulates the <nop>TWikiDraw Java Applet first developed by Main.PeterThoeny from the original <nop>JHotDraw.
+This plugin encapsulates the <nop>TWikiDraw Java Applet first developed by TWiki:Main/PeterThoeny from the original <nop>JHotDraw.
 
 <nop>JHotDraw is a simple drawing editor that supports drawing in a style similar to that found in MS Powerpoint and MS Word. Various shaped figures can be placed in the drawing and text annotations joined to them.
 
@@ -60,61 +60,12 @@ Extra colors to be added to the menu of colors in the applet, as a comma-separat
 	* Set EXTRA_COLORS = Aquamarine=#70DB93,New Tan=EBC79E,Sea Green=238E68,Motorola Blue=#3ff
 Set to 1 if an "Edit" button is to be generated attached to the image. You will still be able to edit it by clicking on the boundary of the image.
 	* Set EDIT_BUTTON = 1
-	* Set DEBUG = 0
 
 ---+++ Plugin Installation Instructions
 
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
-	| ==data/TWiki/TWikiDrawPlugin.txt== | Plugin topic |
-	| ==templates/twikidraw.tmpl== | Applet page template |
-	| ==pub/TWiki/TWikiDrawPlugin/twikidraw.jar== | JAR file |
-	| ==lib/TWiki/Plugins/TWikiDrawPlugin.pm== | Plugin Perl module |
-	| ==lib/TWiki/Plugins/TWikiDrawPlugin/source.zip== | Java sources |
-	| ==lib/TWiki/Plugins/TWikiDrawPlugin/TWikiDrawPlugin.xml== | Ant build file |
-	| ==pub/TWiki/TWikiDrawPlugin/twikidraw.jar== | JAR file |
-	| ==pub/TWiki/TWikiDrawPlugin/example.gif== | Example file |
-	| ==pub/TWiki/TWikiDrawPlugin/example.draw== | Example file |
-	| ==pub/TWiki/TWikiDrawPlugin/ATEXT1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/ATEXT2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/ATEXT3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/BORDDEC1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/BORDDEC2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/BORDDEC3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/CONN1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/CONN2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/CONN3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/ELLIPSE1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/ELLIPSE2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/ELLIPSE3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/LINE1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/LINE2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/LINE3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/OCONN1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/OCONN2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/OCONN3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/POLYGON1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/POLYGON2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/POLYGON3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/RECT1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/RECT2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/RECT3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/RRECT1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/RRECT2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/RRECT3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/SCRIBBL1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/SCRIBBL2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/SCRIBBL3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/SEL1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/SEL2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/SEL3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/TEXT1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/TEXT2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/TEXT3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/URL1.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/URL2.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/URL3.gif== | Button image |
-	| ==pub/TWiki/TWikiDrawPlugin/applettest.html== | Test |
+%$MANIFEST%
 	* Unzip ==TWikiDrawPlugin.zip== in your twiki installation directory.
 	* Add ==Plugins.TWikiDrawPlugin== to the ==INSTALLEDPLUGINS== variable in %TWIKIWEB%.TWikiPreferences (or any WebPreferences topic).
 	* To test if the plugin is correctly installed, view this topic in the installation and you should see a placeholder box below. Click on it.<br />
@@ -126,38 +77,37 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 ---+++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
-|  Plugin Version: | 23 Sep 2001 |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | |
+| | 16 Aug 2004: Map support finally released |
 | | 17 Feb 2003: Bug fixes; incoporated BertrandDelacretaz's fix for too many colours in GIF. |
 | | 30 Sep 2002: Add support for URLs, EXTRA_COLORS, fixed a number of outstanding bugs |
-| | 20 Feb 2002: Merged Main.RobWalker's fixes for text attached to figures |
+| | 20 Feb 2002: Merged TWiki:Main/RobWalker's fixes for text attached to figures |
 | | 1 Oct 2001: Updated this text |
 | | 23 Sep 2001: Initial version |
-|  CPAN Dependencies: | None |
-|  Other Dependencies: | Java 1.1 enabled browser |
-|  Perl Version: | 5.0 |
-|  Java Version: | 1.1 |
+|  Dependencies: | Java 1.1 enabled browser<br />%$DEPENDENCIES% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/TWikiDrawPlugin |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/TWikiDrawPluginDev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 	* TWikiDraw is based on Erich Gamma's <nop>JHotDraw 5.1. (<nop>JHotDraw is copyright 1996, 1997 by <a href="http://www.ifa.ch/">IFA Informatik</a> and Erich Gamma, erich_gamma@acm.org . _It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies._ )
-	* TWikiDraw uses <a href="http://www.acme.com/java/">ACME Labs</a>' <nop>GifEncoder to convert a drawing into a GIF file format. (<nop>GifEncoder is Copyright (C)1996,1998 by Jef Poskanzer, jef@acme.com . All rights reserved. _<font size="-6"> THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. )</font>_
+	* TWikiDraw uses <a href="http://www.acme.com/java/">ACME Labs</a>' <nop>GifEncoder to convert a drawing into a GIF file format. (<nop>GifEncoder is Copyright &copy;1996,1998 by Jef Poskanzer, jef@acme.com . All rights reserved. _<font size="-6"> THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. )</font>_
 	* TWikiDraw uses some ideas of <a href="http://www.eng.untech.com/serg/bin/KmWiki?Load=FrontPage">KmWiki</a> drawing applet.
 	* TWikiDraw: Copyright 2000 by Peter Thoeny, Peter@Thoeny.com. It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies.
-	* Main.PeterThoeny created <nop>TWikiDraw based on above software:
+	* TWiki:Main/PeterThoeny created <nop>TWikiDraw based on above software:
 		* <nop>TWikiDraw applet that allows you to save a drawing as a =.draw= and a =.gif= file. (Save calls the TWiki =upload= script)
 		* New =%<nop>DRAWING%= variable to insert a drawing into any TWiki topic. (defined in =wikicfg.pm= )
 		* New =oopstwikidraw.tmpl= template that contains the <nop>TWikiDraw applet.
-	* Modifications Copyright (C) 2001 Motorola. All Rights Reserved.
-	* Main.CrawfordCurrie made a number of improvements, including porting to the 2001 release.
-	* Modifications Copyright (C) 2003-2004
-	* Main.RobWalker fixed a couple of related bugs noted below. The approach to these seems correct, although the fix implementation could possibly be done better
+	* Modifications Copyright &copy; 2001 Motorola. All Rights Reserved.
+	* TWiki:Main/CrawfordCurrie made a number of improvements, including porting to the 2001 release.
+	* Modifications Copyright Crawford Currie &copy; 2003-2004
+	* TWiki:Main/RobWalker fixed a couple of related bugs noted below. The approach to these seems correct, although the fix implementation could possibly be done better
 	   * if a connected text figure were added to a shape figure, and the pair were then duplicated, the text figure in the copy did not appear in same relative location as the original
 	   * if a selection of figures included both the shape and it's connected text, moving by cursor key or drag cause the relative text location to change incorrectly
 	   * if a composite figure included a shape and it's connected text, moving the composite figure cause the relative text location to move incorrectly
        * also added a "clean" and "run" step to the Ant build to aid in development
-       * Main.BertrandDelacretaz had problems when saving images from macosx / JDK 1.3.1 and modified the applet to reduce the number of colors before converting to GIF, if needed. Without this he would sometimes get the "too many colors for a GIF" error when saving drawings.
-       * Main.CrawfordCurrie corrected behaviour in Konqueror
+       * TWiki:Main/BertrandDelacretaz had problems when saving images from macosx / JDK 1.3.1 and modified the applet to reduce the number of colors before converting to GIF, if needed. Without this he would sometimes get the "too many colors for a GIF" error when saving drawings.
+       * TWiki:Main/CrawfordCurrie corrected behaviour in Konqueror
  
+-- TWiki:Main/CrawfordCurrie - %$DATE%

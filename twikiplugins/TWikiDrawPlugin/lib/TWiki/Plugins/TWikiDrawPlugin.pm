@@ -6,10 +6,10 @@
 package TWiki::Plugins::TWikiDrawPlugin;
 
 use vars qw(
-        $web $topic $user $installWeb $VERSION $debug $editButton
+        $web $topic $user $installWeb $VERSION $editButton
     );
 
-$VERSION = '1.010';
+$VERSION = '1.100';
 
 sub initPlugin {
   ( $topic, $web, $user, $installWeb ) = @_;
@@ -21,7 +21,6 @@ sub initPlugin {
   }
 
   # Get plugin debug flag
-  $debug = TWiki::Func::getPreferencesFlag( "TWIKIDRAWPLUGIN_DEBUG" );
   $editButton = TWiki::Func::getPreferencesValue( "TWIKIDRAWPLUGIN_EDIT_BUTTON" );
 
   return 1;
