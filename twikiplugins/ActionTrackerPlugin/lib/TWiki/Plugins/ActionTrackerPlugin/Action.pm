@@ -282,7 +282,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # closed a long while ago, but that's life.
   sub populateMissingFields {
     my $this = shift;
-    my $me = _canonicalName( TWiki::Func::getWikiName() );
+    my $me = _canonicalName( "me" );
 
     if ( !defined( $this->{uid} )) {
       $this->{uid} = $this->_getNewUID();
