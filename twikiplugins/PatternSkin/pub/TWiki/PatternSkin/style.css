@@ -33,11 +33,11 @@ body, p, li, ul, ol, dl, dt, dd, acronym, h1, h2, h3, h4, h5, h6 {
 p {
 	margin:1em 0 0 0;
 }
-table, caption, colgroup, col, tr, th, td {
-	border-collapse:collapse;
-}
 table {
 	border-collapse:separate;
+}
+th {
+	border:0px none;
 }
 strong, b {
 	font-weight:bold;
@@ -1078,9 +1078,11 @@ html>body .twikiToc li a {
 .twikiAttachPage .twikiVersatileTable td.twikiHelpCol {
 	width:17em;
 }
+.twikiAttachPage .twikiTopicAction {
+	margin:2em 0 1em 0;
+}
 .twikiAttachPage .twikiHelp {
-	margin-top:1.5em;
-	font-size:95%;
+	margin:2em 0 3em 0;
 }
 .twikiAttachPage .twikiHelp ul {
 	padding:0;

@@ -68,22 +68,17 @@
 	-----------------------------------------------------------	*/
 	
 .twikiNoViewPage .twikiMain {
+	margin-left:8em;
+	margin-right:8em;
+	/* padding in style.css */
+}
+.twikiEditPage .twikiMain {
 	margin-left:6em;
 	margin-right:6em;
-	/* padding in style.css */
 }
 
 /* Print */
-/*
-.twikiPrintPage .twikiMain {
-	margin-left:0;
-	margin-right:14em;
-}
-.twikiPrintPage .twikiBottomBar {
-	margin-left:3em;
-	margin-right:14em;
-}
-*/
+
 .twikiPrintPage .twikiMain {
 	margin-left:0;
 	margin-right:0;
