@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000023792" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000795143" format="1.0" version="1.8"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ %WIKITOOLNAME%.%WEB% Web Preferences
 
@@ -19,7 +19,7 @@ __Preferences:__
 	* Default template for new topics and form(s) for this web:
 		* WebTopicEditTemplate: Default template for new topics in this web. (Site-level is used if topic does not exist)
 		* [[%TWIKIWEB%.WebTopicEditTemplate]]: Site-level default template
-		* %TWIKIWEB%.TWikiFormTemplate: How to enable form(s)
+		* %TWIKIWEB%.TWikiForms: How to enable form(s)
 		* Set WEBFORMS = 
 
 	* Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the %WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
