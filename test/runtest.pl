@@ -18,6 +18,10 @@ if  ( @ARGV ) {
     exit(1);
 }
 
+my $outputUrl = $outputDir;
+
+$outputUrl =~ s|(.*)(/pub/.*)|http://ntwiki.ethermage.net/~develop$2|;
+
 my $args = join(" ", @ARGV);
 
 my $now = `date +'%Y%m%d.%H%M%S'`;
@@ -33,9 +37,8 @@ unless( $args =~ /\bnoupdate\n/ ) {
 }
 
 unless( $args =~ /\bnodocs\b/ ) {
-    print "<h1>Update docs</h1><pre>";
+    print "<h1>Update docs</h1>";
     print `cd ../tools && perl gendocs.pl`;
-    print "</pre>\n";
 }
 
 unless( $args =~ /\bnocompile\b/ ) {
@@ -62,7 +65,7 @@ unless( $args =~ /\bnocompile\b/ ) {
 
 unless( $args =~ /\bnounit\b/ ) {
     print "<h1>Unit Tests</h1>\n";
-    print "Errors will be in $outputDir/unit$now\n<pre>\n";
+    print "Errors will be in <a href=\"$outputUrl\">$outputDir/unit$now</a>\n<pre>\n";
     execute ( "cd unit ; perl ../bin/TestRunner.pl TWikiUnitTestSuite.pm > $outputDir/unit$now ; cd ..") or die $!;
     print "</pre>\n";
 }
