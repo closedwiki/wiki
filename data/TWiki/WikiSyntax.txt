@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1019368012" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="PeterThoeny" date="1041715740" format="1.0" version="1.14"}%
 ---# <nop>TWikiShorthand Basics
 
 If you can enter text, you're ready for TWiki. With a few simple, intuitive TWikiShorthand rules, you'll be able to use plain text to create well-styled postings, instantly. Here's a fast-track guide to shorthand basics...
@@ -15,9 +15,9 @@ If you can enter text, you're ready for TWiki. With a few simple, intuitive TWik
 
 	* If you enter a WikiWord for a topic that doesn't exist, it'll appear highlighted, with question mark at the end, prompting you (or someone else) to start off the new topic by clicking the *?* - NewTopic (click the *?*, but don't save, to preserve the example!).
 	
-	* When entering <nop>WikiName signatures - like, <nop>%USERNAME% - include the %MAINWEB% as a prefix, since all TWiki member pages are in the %MAINWEB% web: =Main.YourName=.
+	* When entering <nop>WikiName signatures - like, <nop>%USERNAME% - include "%MAINWEB%." as a prefix, since all TWiki member pages are in the %MAINWEB% web: =%MAINWEB%.YourName=.
 
-	* For an external link, type the full URL: =http://twiki.org=.
+	* For an external link, type the full URL: =http://twiki.org/=.
 
 	* To prevent a <nop>WikiWord from becoming a link, type =&lt;nop&gt;= first, ==&lt;nop&gt;NoLinkPlease==.
 
@@ -26,23 +26,24 @@ If you can enter text, you're ready for TWiki. With a few simple, intuitive TWik
 			* That's 3-6-9-...
 	1 Start items in a *numbered list* with =[space][space][space][1][space]=.
 	1 The "1" (or *any number*) will be replaced by the correct number, in order.
+	1 To add a new paragraph without restarting list numbering, use the %<nop>BR% variable, like below:%BR% Text added (in new paragraph)
+	1 and list numbering continues.
 
-	* Start *counting spaces* for bullets from the beginning of a new line.
+	* Always start *counting* spaces for bullets and such from the beginning of a new line.
 
-	* To include an image, type its URL. You also can Attach an image to the page and display it with text <br />=%<nop>ATTACHURL%/yourimagefilename.jpg=.
+	* To include an image, type its URL. You also can Attach an image to the page and display it with text <br /> =%<nop>ATTACHURL%/yourimagefilename.jpg= .
 
 	* To display a word or phrase in =MONOSPACED TYPE=, put it in equal signs: =<nop>=like this==. <br />Use =<nop>=<nop>=two=== for bold: ==bold mono==.
 
-	* Use ==&lt;pre&gt;== to enclose code excerpts, filenames, and other unformatted text, with the opening and closing tags on their own separate lines:
+	* Use ==&lt;verbatim&gt;== to enclose code excerpts, filenames, and other unformatted text, with the opening and closing tags on their own separate lines:
 <blockquote style="background-color:#f5f5f5">
 <pre>
-<b>&lt;pre&gt;</b>
+<b>&lt;verbatim&gt;</b>
 unformatted text!
-<b>&lt;/pre&gt;</b>
+<b>&lt;/verbatim&gt;</b>
 </pre>
 </blockquote>
 
-	* Three (or more) consecutive *hyphens* expand into a horizontal rule: =---=
----
+	* Three (or more) consecutive *hyphens* expand into a horizontal rule:%BR% =---=
 
 	* See TWikiShorthand for the complete set of formatting rules.
