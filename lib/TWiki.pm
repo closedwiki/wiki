@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = '25 Sep 2004 $Rev$';
+$wikiversion      = '28 Sep 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1644,7 +1644,7 @@ sub makeTopicSummary
         # skip headings on top
         while( $htext =~ s/^\s*\-\-\-+\+[^\n\r]+// ) {}; # remove heading
     }
-    if( $theFlags =~ /novar/ ) {
+    unless( $theFlags =~ /showvar/ ) {
         # remove variables
         $htext =~ s/%[A-Z_]+%//g;     # remove %VARS%
         $htext =~ s/%[A-Z_]+{.*?}%//g;# remove %VARS{}%
