@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018775280" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="PeterThoeny" date="1041735052" format="1.0" version="1.20"}%
 %TOC%
 %STARTINCLUDE%
 ---# Managing Webs
@@ -12,7 +12,7 @@ A TWikiSite is divided into webs; each one represents one subject, one area of c
 #CreateNewWeb
 ---++ Adding a New Web
 
-<form name="admin" action="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form name="admin" action="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEBURLENDODED%/%TOPICURLENDODED%" method="post">
 Create a new web by filling out this form. __Note:__ It is not recommended to create a new web for each little project. You can organize content within a web using TWikiForms and FormattedSearch. Cross-linking topics and search is easier if there are only a few larger webs.
 |  *Name of new web:* | <input name="newweb" type="text" value="%URLPARAM{"newweb"}%" size="16" /> | Enter a short name of up to 10 characters. The name must start with one or more upper case letters, followed by optional lower case letters or numbers; it cannot be a %TWIKIWEB%.WikiWord |
 |  *Based on web:* | <select name="baseweb"> %WEBLIST{ "<option>$name</option>" webs="webtemplate,public" selection="_default" separator=" "}% </select> | Select a template web (starting with an underscore) or an existing web as a template for the new web. All topics are copied over from a template web; only topics that start with *Web...* (like "%HOMETOPIC%", "%NOTIFYTOPIC%") are copied from other webs |
