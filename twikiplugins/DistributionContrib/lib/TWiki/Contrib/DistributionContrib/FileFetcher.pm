@@ -3,7 +3,9 @@ use strict;
 use diagnostics;
 
 package TWiki::Contrib::DistributionContrib::FileFetcher;
-use TWiki::Contrib::DistributionContrib::Config;
+use TWiki::Contrib::DistributionContrib::Config qw(%config);
+my %config = %TWiki::Contrib::DistributionContrib::Config::config;
+
 use LWP::Simple;
 
 =pod
@@ -24,9 +26,9 @@ Out:
 sub fetchDistributionFile {
 	my ( $file, $distribution ) = @_;
 	$file =~ s!^twiki/!!;
-	my $fileUrl = $serverUrl=. "/" . $distribution . "/" . $file;
-	$ans = $saveFilename;
-	unless (mirror($fileUrl, $saveFilename)) {
+	my $fileUrl = $config{'serverUrl'}. "/" . $distribution . "/" . $file;
+	my $ans = $config{'saveFilename'};
+	unless (mirror($fileUrl, $config{'saveFilename'})) {
 		TWiki::Func::writeWarning("Couldn't get $distribution:$file\n");
 		$ans = "Couldn't download";
 	}
