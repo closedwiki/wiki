@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1021820542" format="1.0" version="1.14"}%
+%META:TOPICINFO{author="PeterThoeny" date="1041127470" format="1.0" version="1.15"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki User Authentication
@@ -44,7 +44,7 @@ This section applies only if your TWiki site is installed on a server that is bo
 
 TWiki can automatically map an Intranet (Login) Username to a TWiki Username, provided that the username pair exists in the %MAINWEB%.%WIKIUSERSTOPIC% topic. This is also handled automatically when you register.
 
-	* %X% In the original TWiki distribution, in ==twiki/data==, there are two registration form topics, TWikiRegistration and TWikiRegistrationPub. The original form includes an intranet Login Username field. For Basic Authentication, the original form is replaced by the Pub version. If you started using TWiki on Basic Authentication and want to change, you have to switch back forms for future use, and manually correct the existing entries, by editing TWikiUsers, adding the Login Username for each member - =PeterThoeny - pthoeny - 01 Jan 1999= -  and also in the ==.htpasswd== file, where you can either replace the WikiNames or duplicate the entries and have both, so both usernames will work. __verification and clearer rewrite to follow in a bit. also link to original installation mention.__
+	* %X% In the original TWiki distribution, in ==twiki/data==, there are two registration form topics, TWikiRegistration and TWikiRegistrationPub. The original form includes an intranet Login Username field. For Basic Authentication, the original form is replaced by the Pub version. If you started using TWiki on Basic Authentication and want to change, you have to switch back forms for future use, and manually correct the existing entries, by editing %MAINWEB%.%WIKIUSERSTOPIC%, adding the Login Username for each member - =PeterThoeny - pthoeny - 01 Jan 1999= -  and also in the ==.htpasswd== file, where you can either replace the WikiNames or duplicate the entries and have both, so both usernames will work. __verification and clearer rewrite to follow in a bit. also link to original installation mention.__
 
 <blockquote>
 __NOTE:__ *To correctly enter a WikiName* - your own or someone else's - be sure to include the %MAINWEB% web name in front of the Wiki username, followed by a period, and no spaces. Ex:
