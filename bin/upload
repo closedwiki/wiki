@@ -328,7 +328,12 @@ sub main
 
     # check access permission
     if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
-        handleError( $noredirect, "No change permission", $query, $webName, $topic, "oopsaccesschange" );
+        handleError( $noredirect, "Missing topic", $query, $webName, $topic, "oopsaccesschange" );
+        return;
+    }
+
+    unless( &TWiki::Store::topicExists( $webName, $topic ) ) {
+        handleError( $noredirect, "No change permission", $query, $webName, $topic, "oopsattachnotopic" );
         return;
     }
 

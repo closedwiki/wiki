@@ -106,10 +106,12 @@ sub main
 
     $fileName = $query->param( 'filename' ) || "";
 
-    if( &TWiki::Store::topicExists( $webName, $topic ) ) {
-        ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+    unless( &TWiki::Store::topicExists( $webName, $topic ) ) {
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsattachnotopic" );
+        TWiki::redirect( $query, $url );
+        return;
     }
-    
+    ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
     my %args = $meta->findOne( "FILEATTACHMENT", $fileName );
     %args = ( "attr" => "", "path" => "", "comment" => "" ) if( ! % args );
 
