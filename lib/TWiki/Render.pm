@@ -38,6 +38,18 @@ use strict;
 
 use TWiki qw(:renderflags %regex $TranslationToken);
 
+# ===========================
+# Read the configuration file at compile time in order to set locale
+BEGIN {
+    do "TWiki.cfg";
+
+    # Do a dynamic 'use locale' for this module
+    if( $useLocale ) {
+        require locale;
+        import locale ();
+    }
+}
+
 # Globals used in rendering
 use vars qw(
 	$isList @listTypes @listElements
