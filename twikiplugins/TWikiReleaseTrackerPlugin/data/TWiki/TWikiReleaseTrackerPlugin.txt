@@ -2,7 +2,10 @@
 %META:TOPICPARENT{name="Main.MartinCleaver"}%
 ---+!! TWiki Release Tracker Plugin
 
-This plugin tells you how similar your install is to past releases of TWiki.
+This plugin tells you exactly how your install differs from every production and beta release of TWiki.
+
+If you find it useful, please send me (Martin AT Cleaver.org) a note of thanks. 
+Donations towards the beer fund can be sent to the same paypal address.
 
 %TOC%
 
@@ -17,8 +20,8 @@ See the Parameters section for descriptions of the rest of these:
 
 ---+++ Checking against particular versions
 
-The TRT is shipped with data about many versions of TWiki. As TWiki does not provide programmatic access to the CVS identifier, you'll have to assign the right starting point yourself. Compare %WIKIVERSION% to TWiki:Codev.TWikiReleases 
-
+The TRT is shipped with data about many versions of TWiki. By default it compares that specified by 
+the WIKIVERSION variable against your local installation but it can also do a multi-dimensional comparison
 
 ---++ Features and Benefits
 	* By generating a content identifier for every file in all TWiki distributions (core beta and release versions, plus all the plugins), the system advises where every file in your install has come from.
@@ -29,23 +32,17 @@ The TRT centres on the concept of a unique CONTENT identifier - instead of ident
 
 
 The system is comprised of two parts:
-	1 a command line indexer that builds and saves indexes
-	2 a twiki plugin that provides a web interface to the API of the comparator.
+	1 a twiki plugin that provides a web interface to the API of the comparator.
+		Unlike previoius versions, this one includes in situ building of indexes for the local machine using the web interface.
+	1 a command line indexer that builds and saves indexes. This is used to generate the md5 files included in pub/TWiki/TWikiReleaseTrackerPlugin
 
 ---++ Set up
-	* The TRT needs to make an index of your local installation (the localInstallation.md5 file below)It is shipped empty and without them the plugin will give no results.
 	* %SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?mode=indexLocalInstallation
 
 ---++ Testing
-	1 The TRTTestSuite holds a sample testsuite. This showcases functionality and confirms that it still works.
-<pre>
-cd lib/TWiki/Plugins/TWikiReleaseTrackerPlugin
-perl build.pl 
-</pre>
-
-	2 Even before you have built the index for your own installation, you can use the TRT to determine what changes were made between versions: %SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?from=TWiki19990901&to=TWiki20000501&statusFilter=all <!-- N.B. use of TWiki/ not TWiki. because athens did not support its use -->
-	3 Ensure you have built your index (see above)
-	4 Run %SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?from=localInstallation&statusFilter=FSCD ; pick the appropriate 'to' parameter 
+	1 Even before you have built the index for your own installation, you can use the TRT to determine what changes were made between versions: %SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?from=TWiki19990901&to=TWiki20000501&statusFilter=all <!-- N.B. use of TWiki/ not TWiki. because athens did not support its use -->
+	2 Ensure you have built your index (see above)
+	3 Run %SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?from=localInstallation&statusFilter=FSCD ; pick the appropriate 'to' parameter 
 
 
 ---++ Parameters
@@ -63,6 +60,7 @@ All parameters can be sourced from one of three places:
 | *Mode = listing* | listing, file | listing |
 | fscsFormat | string to show when file is FSCS | &pipe; $relativeFile &pipe; FSCS &pipe; $locations &pipe; |
 | fscdFormat | string to show when file is FSCS | &pipe; $relativeFile &pipe; FSCDCALLBACK &pipe; FSCDDIST &pipe; |
+| - | FSCDDIST, FSCDCALLBACK and FDCSDIFF have interesting effects in this setting |
 | fdcsFormat | | &pipe; $relativeFile &pipe; FDCS &pipe; $locations &pipe; |
 | fdcdFormat | | &pipe; ($relativeFile name not recognised, and no content match)  &pipe; FDCD &pipe; &pipe; |
 | fdcmFormat | | &pipe; $relativeFile &pipe; FSCM &pipe; $locations &pipe; |
@@ -91,6 +89,7 @@ All parameters can be sourced from one of three places:
 	* Make the TRT detect inconsistent indexes and offer to regenerate the localInstallation md5 file if necessary
 	* Make test suite TWiki:Plugins.BuildContrib <nop>TestRunner compatible
 	* Make use of TWiki:Plugins.AttrsContrib
+	* 
 
 ---++ Manifest
 %$MANIFEST%
@@ -100,6 +99,7 @@ All parameters can be sourced from one of three places:
 |  Plugin Author: | TWiki:Main.MartinCleaver |
 |  Plugin Version: | %$DATE% (%$VERSION%) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  23 Aug 2004: | First standalone version, this no longer requires download of zips to do comparisons against |
 |  01 Aug 2004: | Initial version |
 |  TWiki Dependency: | %$DEPENDENCIES% |
 |  CPAN Dependencies: | none |
