@@ -74,7 +74,7 @@ GetAWeb({ %$Config, web => $Config->{testweb} });
 # delete first install
 UninstallTWiki({ %$Config });
 # reinstall new version to be tested (with newly-saved test web)
-PushRemoteTWikiInstall({ %$Config, kernel => $newDistro, testweb => "$Config->{testweb}.wiki.tar.gz", kernel => 'TWiki20040901.tar.gz' });
+PushRemoteTWikiInstall({ %$Config, kernel => $newDistro, testweb => "$Config->{testweb}.wiki.tar.gz" });
 # compare rendered html
 my $comparisonResults = RunComparisonTests({ %$Config });
 print Dumper( $comparisonResults ) if $Config->{debug};
@@ -156,9 +156,9 @@ sub RunComparisonTests
 		my $testTopic = "$iWeb.$topic";
 		my $text = $mech->view( $testTopic, { skin => 'text', test => 'compare' } )->content();
 		my $passOrFail = 
-			$text =~ /TESTS FAILED/ && 'failed' ||
-			$text =~ /TESTS PASSED/ && 'passed' ||
-			'unknown';
+			$text =~ /TESTS FAILED/ && 'Failed' ||
+			$text =~ /TESTS PASSED/ && 'Passed' ||
+			'Unknown';
 		push @{$results->{$passOrFail}}, {
 			topic => $testTopic,
 			};
