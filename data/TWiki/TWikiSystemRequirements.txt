@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043917178" format="1.0" version="1.27"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044149189" format="1.0" version="1.28"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki System Requirements
 
-_Server and client requirements for TWiki 01-Feb-2003 (pending release)_
+_Server and client requirements for TWiki 01-Feb-2003_
 
 Low client and server requirements are core features that keep TWiki widely deployable, particularly across a range of browser platforms and versions.
 

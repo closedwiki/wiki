@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044102019" format="1.0" version="1.52"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044149369" format="1.0" version="1.53"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
 
-_Installation instructions for the TWiki 01-Dec-2001 production release. Update notes for the new RCS configuration are marked_ __Dataframework__.
+_Installation instructions for the TWiki 01-Feb-2003 production release. Update notes for the new RCS configuration are marked_ __Dataframework__.
 
 These installation steps are based on the *Apache* web server on *Linux*. TWiki runs on other web servers and Unix systems, and should be fine with any web server and OS that meet the [[TWikiSystemRequirements][system requirements]]. Documentation for other platforms is somewhat limited:
 
@@ -16,7 +16,7 @@ These installation steps are based on the *Apache* web server on *Linux*. TWiki 
 #StandardInstallation
 ---++ Standard Installation
 
-Request and download the TWiki 01-Dec-2001 distribution in Unix ZIP format from http://TWiki.org/download.html. Please review the AdminSkillsAssumptions before you install TWiki.
+Request and download the TWiki 01-Feb-2003 distribution in Unix ZIP format from http://TWiki.org/download.html. Please review the AdminSkillsAssumptions before you install TWiki.
 
 ---+++ Step 1: Create &amp; Configure the Directories
 

@@ -1,8 +1,9 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043306629" format="1.0" version="1.60"}%
----# Appendix B: TWiki Development Timeline
+%META:TOPICINFO{author="PeterThoeny" date="1044149460" format="1.0" version="1.61"}%
 %TOC%
+%STARTINCLUDE%
+---# Appendix B: TWiki Development Timeline
 
----++ 01-Feb-2003 Release (Beijing, yet to be released)
+---++ 01-Feb-2003 Release (Beijing)
 
 	* *18 Jan 2003* - PeterThoeny
 		* Support for =/bin/view/Web.TopicName= topic view URL (besides the default =/bin/view/Web/TopicName= URL); useful for InterwikiPlugin links like TWiki:Codev.ReadmeFirst
