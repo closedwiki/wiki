@@ -1,11 +1,10 @@
-%META:TOPICINFO{author="PeterThoeny" date="1090801519" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1091167417" format="1.0" version="1.2"}%
 %META:TOPICPARENT{name="TWikiSkins"}%
 ---+ TWiki Skin Browser
 
 You can try out the TWikiSkins currently installed on this system:
 
-| *Try* | *Skin: Description* | *Screenshot* |
-%SEARCH{ "Skin$" scope="topic" regex="on" nosearch="on" nototal="on" expandvariables="on" format="| [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=$pattern(.*\| *Base Name\:[^\|]*\| *(\w*).*)][try]] | *[[$topic]]*: $pattern(.*\| *Description\:[^\|]*\|([^\|]*).*) | $pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*) |" }%
+%SEARCH{ "Skin$" scope="topic" regex="on" nosearch="on" nototal="on" expandvariables="on" format="| $pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*) | *[[$topic]]*: $pattern(.*\| *Description\:[^\|]*\|([^\|]*).*)<br><br>[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=$pattern(.*\| *Base Name\:[^\|]*\| *(\w*).*)][preview with this topic]] |" }%
 
 __Note:__ TWikiSkins describes how to install and activate a skin
 
