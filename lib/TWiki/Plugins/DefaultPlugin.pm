@@ -41,7 +41,7 @@
 # initPlugin is required, all other are optional. 
 # For increased performance, unused handlers are disabled. To
 # enable a handler remove the leading DISABLE_ from the function
-# name.
+# name. Remove disabled handlers you do not need.
 #
 # NOTE: To interact with TWiki use the official TWiki functions 
 # in the TWiki::Func module. Do not reference any functions or
@@ -128,7 +128,8 @@ sub commonTagsHandler
     }
 
     # do custom extension rule, like for example:
-    # $_[0] =~ s/%WIKIWEB%/$TWiki::wikiToolName.$web/go;
+    # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
+    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
 }
 
 # =========================

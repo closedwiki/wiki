@@ -41,7 +41,7 @@
 # initPlugin is required, all other are optional. 
 # For increased performance, all handlers except initPlugin are
 # disabled. To enable a handler remove the leading DISABLE_ from
-# the function name.
+# the function name. Remove disabled handlers you do not need.
 #
 # NOTE: To interact with TWiki use the official TWiki functions 
 # in the TWiki::Func module. Do not reference any functions or
