@@ -592,9 +592,15 @@ sub writeHeaderFull
 # Set page mode:
 #   - 'rss' - encode 8-bit characters as XML entities
 #   - 'html' - no encoding of 8-bit characters
-sub pageMode
+sub setPageMode
 {
     $pageMode = shift;
+}
+
+# =========================
+sub getPageMode
+{
+    return $pageMode;
 }
 
 # =========================

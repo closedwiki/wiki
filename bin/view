@@ -78,7 +78,7 @@ sub main
 
     # Set page generation mode to RSS if using an RSS skin
     if( $skin =~ /^rss/ ) {
-	TWiki::pageMode( 'rss' );
+	TWiki::setPageMode( 'rss' );
     }
 
     # get view template, standard view or a view with a different skin
