@@ -140,8 +140,12 @@ sub main
     $ptext = &TWiki::handleCommonTags( $ptext, $topic );
     $ptext = &TWiki::getRenderedVersion( $ptext );
 
-    # do not allow click on link before save:
-    $ptext =~ s@(href=".*?")@href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?template=oopspreview"@goi;
+    # do not allow click on link before save: (mods by TedPavlic)
+    my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
+    $ptext =~ s@(?<=<a\s)([^>]*)(href=(?:".*?"|[^"].*?(?=[\s>])))@$1href="$oopsUrl?template=oopspreview"@goi;
+    $ptext =~ s@<form(?:|\s.*?)>@<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">@goi;
+    $ptext =~ s@(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))@$1onclick="location.href='$oopsUrl\?template=oopspreview'"@goi;
+
     $ptext = &TWiki::handleCommonTags( $ptext, $topic );
     $ptext = &TWiki::putBackVerbatim( $ptext, "pre", @verbatim );
 
