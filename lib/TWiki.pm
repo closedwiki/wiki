@@ -107,7 +107,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "25 Mar 2001";
+$wikiversion      = "27 Mar 2001";
 
 # ===========================
 # read the configuration part
@@ -984,15 +984,43 @@ sub emitCode {
 
 # =========================
 sub emitTR {
-    my ( $pre, $cells, $insideTABLE ) = @_;
+    my ( $thePre, $theRow, $insideTABLE ) = @_;
+
+    my $text = "";
+    my $attr = "";
+    my $l1 = 0;
+    my $l2 = 0;
     if( $insideTABLE ) {
-        $cells = "$pre<TR><TD> $cells";
+        $text = "$thePre<tr>";
     } else {
-        $cells = "$pre<TABLE border=\"1\"><TR><TD> $cells";
+        $text = "$thePre<table border=\"1\" cellspacing=\"0\" cellpadding=\"1\"> <tr>";
     }
-    $cells =~ s@\|\s*$@ </TD></TR>@go;
-    $cells =~ s@\|@ </TD><TD> @go;
-    return $cells;
+    $theRow =~ s/\t/   /go;  # change tabs to space
+    $theRow =~ s/\s*$//o;    # remove trailing spaces
+    $theRow =~ s/(\|\|+)/$TranslationToken . length($1) . "\|"/geo;  # calc COLSPAN
+    foreach( split( /\|/, $theRow ) ) {
+        $attr = "";
+        s/$TranslationToken([0-9]+)//o;
+        $attr = " colspan=\"$1\"" if $1 && $1 > 0;
+        s/^\s$/ &nbsp; /o;
+        /^(\s*).*?(\s*)$/;
+        $l1 = length( $1 || "" );
+        $l2 = length( $2 || "" );
+        if( $l1 >= 2 ) {
+            if( $l2 <= 1 ) {
+                $attr .= ' align="right"';
+            } else {
+                $attr .= ' align="center"';
+            }
+        }
+        if( /^\s*(\*.*\*)\s*$/ ) {
+            $text .= "<th$attr bgcolor=\"#99CCCC\"> $1 </th>";
+        } else {
+            $text .= "<td$attr> $_ </td>";
+        }
+    }
+    $text .= "</tr>";
+    return $text;
 }
 
 # =========================
@@ -1238,10 +1266,10 @@ sub getRenderedVersion
 # Table of format: | cell | cell |
             # PTh 25 Jan 2001: Forgiving syntax, allow trailing white space
             if( $_ =~ /^(\s*)\|.*\|\s*$/ ) {
-                s/^(\s*)\|(\s*)(.*)/&emitTR($1,$3,$insideTABLE)/eo;
+                s/^(\s*)\|(.*)/&emitTR($1,$2,$insideTABLE)/eo;
                 $insideTABLE = 1;
             } elsif( $insideTABLE ) {
-                $result .= "</TABLE>\n";
+                $result .= "</table>\n";
                 $insideTABLE = 0;
             }
 
@@ -1304,7 +1332,7 @@ sub getRenderedVersion
         $result .= $_;
     }
     if( $insideTABLE ) {
-        $result .= "</TABLE>\n";
+        $result .= "</table>\n";
     }
     $result .= &emitCode( "", 0 );
     if( $insidePRE || $insideVERBATIM ) {
