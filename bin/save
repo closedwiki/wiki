@@ -115,13 +115,15 @@ sub main
         # normal case: Get latest attachment from file for preview
         my $tmp;
         ( $meta, $tmp ) = &TWiki::Store::readTopic( $webName, $topic );
-        
+
 	# parent setting
 	my $theParent = $query->param( 'topicparent' ) || "";
-	if( $theParent ) {
-	    $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
-	}
-        
+        if( $theParent eq "none" ) {
+            $meta->remove( "TOPICPARENT" );
+        } elsif( $theParent ) {
+            $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+        }
+
 	my $formTemplate = $query->param( "formtemplate" );
 	if( $formTemplate ) {
 	   $meta->remove( "FORM" );

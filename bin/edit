@@ -176,10 +176,12 @@ sub main
         $text =~ s/%NOP{.*?}%//gos;  # Remove filler: Use it to remove access control at time of
         $text =~ s/%NOP%//go;        # topic instantiation or to prevent search from hitting a template
     }
-    
+
     # parent setting
     my $theParent = $query->param( 'topicparent' ) || "";
-    if( $theParent ) {
+    if( $theParent eq "none" ) {
+        $meta->remove( "TOPICPARENT" );
+    } elsif( $theParent ) {
         if( $theParent =~ /^([^.]+)\.([^.]+)$/ ) {
             my $parentWeb = $1;
             if( $1 eq $webName ) {

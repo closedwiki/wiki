@@ -98,14 +98,15 @@ sub main
     if( $saveCmd ne "repRev" ) {
         my $dummy = "";
         ( $meta, $dummy ) = &TWiki::Store::readTopic( $webName, $topic );
-        
+
 	# parent setting
 	my $theParent = $query->param( 'topicparent' ) || "";
-	if( $theParent ) {
-	    $tmpl =~ s/%TOPICPARENT%/$theParent/go;
-	    $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
-	}
-	$tmpl =~ s/%TOPICPARENT%/$theParent/;
+        if( $theParent eq "none" ) {
+            $meta->remove( "TOPICPARENT" );
+        } elsif( $theParent ) {
+            $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+        }
+	$tmpl =~ s/%TOPICPARENT%/$theParent/go;
 
 	my $formTemplate = $query->param( "formtemplate" );
 	if( $formTemplate ) {
