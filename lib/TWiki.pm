@@ -98,7 +98,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "16 Feb 2001";
+$wikiversion      = "24 Feb 2001";
 
 # ===========================
 # read the configuration part
@@ -449,9 +449,9 @@ sub makeTopicSummary
 
     # inline search renders text, 
     # so prevent linking of external and internal links:
-    $htext =~ s/([\-\*\s])((http|ftp|gopher|news|https)\:)/$1<nop>$2/go;
-    $htext =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*\.[A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/$1<nop>$2/go;
-    $htext =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/$1<nop>$2/go;
+    $htext =~ s/([\-\*\s])((http|ftp|gopher|news|file|https)\:)/$1<nop>$2/go;
+    $htext =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*\.[A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
+    $htext =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
     $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/go;
 
     # limit to 162 chars
@@ -771,36 +771,104 @@ sub fixedFontText
 }
 
 # =========================
+sub makeAnchorName
+{
+    my( $theName ) = @_;
+    my $anchorName = $theName;
+
+    $anchorName =~ s/^\s*\@?//o;
+    $anchorName =~ s/\s*$//o;
+    $anchorName =~ s/[^a-zA-Z0-9]/_/go;
+    return $anchorName;
+}
+
+# =========================
 sub internalLink
 {
-    my( $web, $page, $text, $bar, $foo ) = @_;
-    # bar is heading space
-    # foo is boolean, false suppress link for non-existing pages
+    my( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink ) = @_;
+    # $thePreamble is heading space
+    # $doLink is boolean, false suppress link for non-existing pages
 
     # kill spaces and Wikify page name (ManpreetSingh - 15 Sep 2000)
-    $page =~ s/^\s*//;
-    $page =~ s/\s*$//;
-    $page =~ s/^(.)/\U$1/;
-    $page =~ s/\s([a-zA-Z0-9])/\U$1/g;
+    $theTopic =~ s/^\s*//;
+    $theTopic =~ s/\s*$//;
+    $theTopic =~ s/^(.)/\U$1/;
+    $theTopic =~ s/\s([a-zA-Z0-9])/\U$1/g;
     # Add <nop> before WikiWord inside text to prevent double links
-    $text =~ s/(\s)([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
+    $theLinkText =~ s/(\s)([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
 
-    if( $doPluralToSingular && $page =~ /s$/ && ! &TWiki::Store::topicExists( $web, $page) ) {
+    my $exist = &TWiki::Store::topicExists( $theWeb, $theTopic );
+    if(  ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) && ! ( $exist ) ) {
         # page is a non-existing plural
-        my $tmp = $page;
+        my $tmp = $theTopic;
         $tmp =~ s/ies$/y/;      # plurals like policy / policies
         $tmp =~ s/sses$/ss/;    # plurals like address / addresses
         $tmp =~ s/xes$/x/;      # plurals like box / boxes
         $tmp =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
-        if( &TWiki::Store::topicExists( $web, $tmp ) ) {
-            $page = $tmp;
+        if( &TWiki::Store::topicExists( $theWeb, $tmp ) ) {
+            $theTopic = $tmp;
+            $exist = 1;
         }
     }
 
-    &TWiki::Store::topicExists( $web, $page) ?
-        "$bar<A href=\"$scriptUrlPath/view$scriptSuffix/$web/$page\">$text<\/A>"
-        : $foo?"$bar<SPAN STYLE='background : $newTopicBgColor;'><font color=\"$newTopicFontColor\">$text</font></SPAN><A href=\"$scriptUrlPath/edit$scriptSuffix/$web/$page\">?</A>"
-            : "$bar$text";
+    my $text = $thePreamble;
+
+    if( $exist) {
+        if( $theAnchor ) {
+            my $anchor = makeAnchorName( $theAnchor );
+            $text .= "<a href=\"$scriptUrlPath/view$scriptSuffix/"
+                  .  "$theWeb/$theTopic\#$anchor\">$theLinkText<\/a>";
+            return $text;
+        } else {
+            $text .= "<a href=\"$scriptUrlPath/view$scriptSuffix/"
+                  .  "$theWeb/$theTopic\">$theLinkText<\/a>";
+            return $text;
+        }
+
+    } elsif( $doLink ) {
+        $text .= "<span style='background : $newTopicBgColor;'>"
+              .  "<font color=\"$newTopicFontColor\">$theLinkText</font></span>"
+              .  "<a href=\"$scriptUrlPath/edit$scriptSuffix/$theWeb/$theTopic\">?</a>";
+        return $text;
+
+    } else {
+        $text .= $theLinkText;
+        return $text;
+    }
+}
+
+# =========================
+sub specificLink
+{
+    my( $thePreamble, $theWeb, $theText, $theLink ) = @_;
+
+    # format: $thePreamble[[$theText]]
+    # format: $thePreamble[[$theText][$theLink]]
+
+    $theLink =~ s/^\s*//o;
+    $theLink =~ s/\s*$//o;
+
+    if( $theLink =~ /^(http|ftp|gopher|news|file|https)\:/ ) {
+        # found external link
+        return "$thePreamble<a href=\"$theLink\" target=\"_top\">$theText</a>";
+    }
+
+    $theLink =~ s/^([A-Z]+[a-z]*)\.//o;
+
+    my $web = $1 || $theWeb;            # extract 'Web.'
+    (my $baz = "foo") =~ s/foo//;       # reset $1, defensive coding
+    $theLink =~ s/(\@[a-zA-Z_0-9\-]*$)//o;
+    my $anchor = $1 || "";              # extract '@anchor'
+    my $topic = $theLink || $topicName; # remaining is topic
+    # above line fails in %INCLUDE% and %SEARCH% !!!
+    # ToDo: get topic name from parameter, not $topicName
+    $topic =~ s/$securityFilter//go;    # filter out suspicious chars
+    $topic =~ s/[\\\/\#]//go;           #   and '\', '/', '#'
+    if( ! $topic ) {
+        return "$thePreamble$theText"; # no link if no topic
+    }
+
+    return internalLink( $thePreamble, $web, $topic, $theText, $anchor, 1 );
 }
 
 # =========================
@@ -820,7 +888,7 @@ sub externalLink
 sub isWikiName
 {
     my( $name ) = @_;
-    if ( $name =~ /^[A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*)$/ ) {
+    if ( $name =~ /^[A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*$/ ) {
         return "1";
     }
     return "";
@@ -907,7 +975,8 @@ sub getRenderedVersion
             s/&(\#[0-9]+)\;/$TranslationToken$1\;/go;  # "&#123;"
             s/&/&amp;/go;                              # escape standalone "&"
             s/$TranslationToken/&/go;
-            
+
+# Horizontal rule
             s/^----*/<HR>/o;
             s@^([a-zA-Z0-9]+)----*@<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><HR></td></tr></table>@o;
 
@@ -932,7 +1001,11 @@ sub getRenderedVersion
                 $code = "";
             }
 
-            s/(.*)/\n$1\n/o;
+# '@WikiName' anchors
+            s/^(\@)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ '<a name="' . &makeAnchorName( $2 ) . '"><\/a>'/geo;
+
+# enclose in white space for the regex that follow
+             s/(.*)/\n$1\n/o;
 
 # Emphasizing
             # PTh 25 Sep 2000: More relaxing rules, allow leading '(' and trailing ',.;:!?)'
@@ -943,26 +1016,31 @@ sub getRenderedVersion
             s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText( $2, 0 ) . $3/geo;
 
 # Mailto
-            s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+)(?=[\s\)]|$)#$1<A href=\"mailto\:$2">$2</A>#go;
+            s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_\.]*[a-zA-Z0-9\-\_])(?=[\s\.\,\;\:\!\?\)])#$1<a href=\"mailto\:$2">$2</a>#go;
 
 # Make internal links
-            # allow [[Odd Wiki Word]] links and [[Web.Odd Wiki Name]]
-            s/([\*\s][\(\-\*\s]*)\[\[([A-Z]+[a-z]*)\.([\w\s]+)\]\]/&internalLink($2,$3,"$TranslationToken$3$TranslationToken",$1,1)/geo;
-            s/([\*\s][\(\-\*\s]*)\[\[([\w\s]+)\]\]/&internalLink($webName,$2,$2,$1,1)/geo;
-            if( $noAutoLink ) {
-                # no WikiWord links except [[forced links]]
+            # '[[display text][Web.odd wiki word@anchor]]' link:
+            s/([\*\s][\(\-\*\s]*)\[\[(.*?)\]\[(.*?)\]\]/&specificLink($1,$theWeb,$2,$3)/geo;
+            # '[[Web.odd wiki word@anchor]]' link:
+            s/([\*\s][\(\-\*\s]*)\[\[(.*?)\]\]/&specificLink($1,$theWeb,$2,$2)/geo;
+
+            # do normal WikiWord link if not disabled by <noautolink>
+            if( ! ( $noAutoLink ) ) {
+
+                # 'Web.TopicName@anchor' link:
+                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\@[a-zA-Z0-9_]*)/&internalLink($1,$2,$3,"$TranslationToken$3$4$TranslationToken",$4,1)/geo;
+                # 'Web.TopicName' link:
+                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&internalLink($1,$2,$3,"$TranslationToken$3$TranslationToken","",1)/geo;
+                # 'TopicName@anchor' link:
+                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\@[a-zA-Z0-9_]*)/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/geo;
+                # 'TopicName' link:
+                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&internalLink($1,$theWeb,$2,$2,"",1)/geo;
+                # 'TLA' link if exist:
+                s/([\*\s][\-\*\s]*)([A-Z]{3,})/&internalLink($1,$theWeb,$2,$2,"",0)/geo;
+                # depreciated link:
+                s/<link>(.*?)<\/link>/&internalLink("",$theWeb,$1,$1,"",1)/geo;
+
                 s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
-
-            } else {
-
-                ## add Web.TopicName internal link -- PeterThoeny:
-                ## allow 'AaA1' type format, but not 'Aa1' type -- PeterThoeny:
-                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($2,$3,"$TranslationToken$3$TranslationToken",$1,1)/geo;
-                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($theWeb,$2,$2,$1,1)/geo;
-                s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
-
-                s/([\*\s][\-\*\s]*)([A-Z]{3,})/&internalLink($theWeb,$2,$2,$1,0)/geo;
-                s/<link>(.*?)<\/link>/&internalLink($theWeb,$1,$1,"",1)/geo;
             }
 
             s/^\n//o;
