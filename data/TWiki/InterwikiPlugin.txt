@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1078899604" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093419603" format="1.0" version="1.8"}%
 ---+!! Interwiki Plugin
 
 The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on aliases defined in the %TWIKIWEB%.InterWikis topic. This plugin is inspired by <nop>UseMod Wiki's inter-wiki links, http://www.usemod.com/cgi-bin/wiki.pl?InterWiki.
@@ -45,8 +45,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
-|  Plugin Version: | 09 Mar 2004, 1.005 |
+|  Plugin Version: | 25 Aug 2004, 1.005 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  25 Aug 2004: | Updated InterWikis link rules (no code change) |
 |  09 Mar 2004: | Internal changes: Use only official TWiki::Func Plugin API; for increased speed, moved Interwiki link handling from outsidePREHandler to startRenderingHandler |
 |  16 Feb 2004: | Support =[<nop>[Site:Page][label]]= Interwiki links (PTh); use TWiki::Func interface for I18N regular expressions (Walter Mundt) |
 |  18 Jan 2003: | Allow number sign =#= in Page name (PTh) |
@@ -67,5 +68,6 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 __Related Topics:__ %TWIKIWEB%.InterWikis, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main.AndreaSterbini - 20 Oct 2000 <br />
--- TWiki:Main.PeterThoeny - 09 Mar 2004 <br />
 -- TWiki:Main.MikeMannix - 01 Oct 2001 <br />	
+-- TWiki:Main.PeterThoeny - 25 Aug 2004 <br />
+
