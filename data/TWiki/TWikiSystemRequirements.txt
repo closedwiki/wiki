@@ -1,31 +1,45 @@
-%META:TOPICINFO{author="JohnTalintyre" date="998986839" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="MikeMannix" date="999047223" format="1.0" version="1.8"}%
+%TOC%
+%STARTINCLUDE%
 ---## TWiki Implementation Notes
 
----+++ Platform
+---+++ Platforms and System Requirements 
 
-TWiki is written in Perl 5 and also uses some shell commands. The current implementation runs best on a Unix machine, but it is also possible on Microsoft Windows. RCS (for revision control) must be installed on the system.
+TWiki is written in *Perl 5* and also uses some *shell commands*. The current implementation runs best on a Unix machine, but it is also possible on Microsoft Windows. *RCS* (for revision control) must be installed on the system. [ __MM: Locate elsewhere and/or include one-liner and link for RCS...__ ]
 
 | *Required Environment by Platform* |||
-| *Package(s):* | *Unix:* | *Windows:* |
+| *Packages:* | *Linux/Unix:* | *Windows:* |
 | Perl		 |	5.x	|	5.x  |
 | Non-standard Perl modules | | =MIME::Base64=, Digest::SHA1 (for password generation) |
-| Optional Perl modules | =Net::SMTP= (or sendmail) | =Net::SMTP= | 
+| Optional Perl modules | =Net::SMTP= (or sendmail) |  =Net::SMTP=  | 
 | RCS		  |	5.7	|	5.7 (including =diff=  |
 | Other external programs |	=ls=, =fgrep=, =egrep=  |  =ls=, =fgrep=, =egrep=  |
 | Web server  |	Apache  |	Apache, IIS	|
+| _OS versions_ |  __Linux, Unix...__  |  __every last Win?!__  |
 
 ---+++ Directory Structure
 
-| *Directory:*		  | *Used for:* |
-| ==twiki/bin==		 | TWiki Perl scripts |
-| ==twiki/lib/TWiki== | TWiki Perl modules |
-| ==twiki/lib/TWiki/Plugins== | Plugins modules |
-| ==twiki/pub==		 | Public files (FileAttachments, images), plus RCS histories |
-| ==twiki/data==		| source (topic) text, including RCS histories |
-| ==twiki/templates== | HTML templates, used by TWiki scripts |
+You can easily rename the root TWiki directory - ==twiki== - to whatever you like by changing a configuration file value. For the simplest installation and future upgrades, you should leave the subdirectory structure exactly as is:
 
+| *Directory:*		  | *Files:*		 | *Used for:* |
+| ==twiki==			  |  [[#TWikiFiles][list]]  | Start-up info |
+| ==twiki/bin==		 |  [[#BinFiles][list]]  | Perl scripts  |
+| ==twiki/lib==		 |  [[#LibFiles][list]]  | Configuration file &amp; main library |
+| ==twiki/lib/TWiki== |  [[#LibTWiki][list]]  | Perl modules |
+| ==twiki/lib/TWiki/Plugins== |  [[#libtwikiplugins][list]]  | TWikiPlugins Perl modules |
+| ==twiki/pub==		 |  [[#PubFiles][list]]  | Public support files (ex: FileAttachments, images) and RCS histories) |
+| ==twiki/data==		|  [[#DataFiles][list]]  | Topic text (page content) and RCS histories; |
+| ==twiki/templates== |  [[#TemplatesFiles][list]]  | HTML templates, used by TWiki scripts |
 
----++++ Files in twiki/bin
+__Note: about the additional directories in data, elsewhere__
+
+#TWikiFiles
+---++++ Files in <code>twiki</code>
+
+__to follow__
+
+#BinFiles
+---++++ Files in <code>twiki/bin</code>
 
 | *File:*		 | *Used for:* |
 | ==.htaccess.txt== | Authentication. Rename to .htaccess and customize if used |
@@ -47,13 +61,15 @@ TWiki is written in Perl 5 and also uses some shell commands. The current implem
 | ==view==			 | Script to view a topic ( *the* script ) |
 | ==viewfile==		| Script to view an file attachment |
 
----++++ Files in twiki/lib
+#LibFiles
+---++++ Files in <code>twiki/lib</code>
 
 | *File:*			  | *Used for:* |
 | ==TWiki.pm==		| Main TWiki library |
-| ==TWiki.cfg==	  | For initialization and configuration, used by ==TWiki.pm== |
+| ==TWiki.cfg==	  | For configuration, used by ==TWiki.pm== |
 
----++++ Files in twiki/lib/TWiki
+#LibTWiki
+---++++ Files in <code>twiki/lib/TWiki</code>
 
 | *File:*			| *Used for:* |
 | ==Access.pm==	| Access control |
@@ -65,11 +81,27 @@ TWiki is written in Perl 5 and also uses some shell commands. The current implem
 | ==Search.pm==	| Search engine, used by wiki.pm |
 | ==Store.pm==	 | Back-end storage, =*.txt= text file and =*.txt,v= RCS repository file handling |
 
----++++ Files in twiki/lib/TWiki/Plugins
+#LibTWikiPlugins
+---++++ Files in <code>twiki/lib/TWiki/Plugins</code>
 
 | *File:*				  | *Used for:* |
 | ==DefaultPlugin.pm== | Default plugin |
 | ==EmptyPlugin.pm==	| Empty plugin, use to create your own |
 | ==InterwikiPlugin.pm== | Refer to external Wikis and other Web sites |
 
--- Main.MikeMannix - 26 Aug 2001 
+#PubFiles
+---++++ Files in <code>twiki/pub</code>
+
+__to follow__
+
+#DataFiles
+---++++ Files in <code>twiki/data</code>
+
+__to follow__
+
+#TemplatesFiles
+---++++ Files in <code>twiki/templates</code>
+
+__to follow__
+
+-- MikeMannix - 28 Aug 2001 
