@@ -169,10 +169,8 @@ sub _save {
     # assumes rev numbers start at 1
     if ( $originalrev ) {
         my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
-        # temporary to find problem
-        print STDERR "Merge ", $user->stringify(),
-          $author->stringify(), " $originalrev, $rev\n";
-        if ( $rev ne $originalrev ) {
+        # If the last save was by me, don't merge
+        if ( $rev ne $originalrev && !$author->equals( $user )) {
             $newText = TWiki::Merge::merge( $currText, $newText, "\\r?\\n" );
             $newMeta->merge( $currMeta );
         }
