@@ -1,7 +1,9 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044093695" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="PeterThoeny" date="1062650611" format="1.0" version="1.16"}%
 ---# TWiki Shorthand Basics
 
 If you can enter text, you're ready for TWiki. With a few simple, intuitive TextFormattingRules, you'll be able to use plain text to create well-styled postings, instantly. Here's a fast-track guide to shorthand basics...
+
+%STARTINCLUDE%
 
 	* Separate each *paragraph* with a blank line.
 
