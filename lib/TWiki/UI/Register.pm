@@ -447,11 +447,13 @@ sub resetPassword {
 
     my $action = '';
     # Redirect to a page that tells what happened
-    $message =~ s/\n/CGI::br()/g;
+    my $br = CGI::br();
+    $message =~ s/\n/$br/g;
+    # Don't offer the 
     if( scalar( @userNames ) == 1 ) {
         # one user; refine the change password link to include their
-        # username
-        $action = '?username='. $user->login();
+        # username (can't use logged in user - by definition this won't be them!)
+        $action = '?username='. $userNames[0];
     }
     throw TWiki::UI::OopsException
       ( undef, $user->wikiName(), 'resetpasswd', $message, $action );
