@@ -467,6 +467,7 @@ execute("chmod -R 777 $lib");
 execute("chmod -R 777 $tmp");
 
 # a handy link to the place to go *after* the next step
+print qq{<hr><hr>\n};
 print qq{do a <tt>post-wiki.sh</tt> and then <br/><a href="http://localhost/~twiki/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
 
 print end_html();
