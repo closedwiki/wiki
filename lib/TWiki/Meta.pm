@@ -336,7 +336,9 @@ sub write
     
     my $start = $self->writeStart();
     my $end = $self->writeEnd();
-    $text = $start . "$text" . $end;
+    $text = $start . "$text";
+    $text =~ s/([^\n\r])$/$1\n/;     # new line is required at end
+    $text .= $end;
     
     return $text;
 }
