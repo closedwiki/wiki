@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wT -I.
+#!/usr/bin/perl -wTI.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -58,25 +58,32 @@ sub main
         return;
     }
 
+    # get text and other parameters
+    $text = $query->param( "text" );
     my $unlock = $query->param( "unlock" ) || "";
     my $saveCmd = $query->param( "cmd" ) || "";
-    if( $saveCmd ne "repRev" ) {
+
+    # PTh 06 Nov 2000: check if proper use of save script
+    if( ! ( defined $text ) ) {
+        my $url = &wiki::getOopsUrl( $webName, $topic, "oopssave" );
+        print $query->redirect( $url );
+        return;
+    }
+
+    if( $saveCmd eq "repRev" ) {
+        # for debug: Use $text as is, it possibly contains an attachment table
+    } else {
         # normal case: Get latest attachment from file for preview
-        $text= &wiki::readTopic( $topic );
-        ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
-        # get the edited text and combine text and attachment
-        $text = $query->param( "text" );
-        ( $before, $tmp, $after) = split( /<!--TWikiAttachment-->/, $text);
+        my $tmp = &wiki::readTopic( $topic );
+        my ( $tmp1, $atext, $tmp2 ) = split( /<!--TWikiAttachment-->/, $tmp );
+        # combine text and attachment
+        ( $before, $tmp, $after ) = split( /<!--TWikiAttachment-->/, $text );
         if( ! $after ) { $after = ""; }
         if( ! $atext ) {
             $text = "$before$after";
         } else {
             $text = "$before$after<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
         }
-
-    } else {
-        # for debug: Use edited text that possibly contains attachment
-        $text = $query->param( "text" );
     }
 
     # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
