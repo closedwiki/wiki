@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007113980" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="MikeMannix" date="1007201024" format="1.0" version="1.3"}%
 %TOC%
 %STARTINCLUDE%
 ---# <nop>TWikiSiteTools
@@ -11,11 +11,7 @@ TWikiSiteTools include utilities for navigating, searching and keeping up with s
 
 ---++ <nop>WebNotify Recent Changes Alert
 
-Each TWiki web has an automatic email alert service that sends a list of recent changes on a preset schedule, like once a day. Users can subscribe and unsubscribe using %NOTIFYTOPIC% in each web.
-
----+++ How It Works
-
-The Perl script =mailnotify= is called by a deamon in regular intervals. The script sends an automated email to subscribed users if topics were changed in a web within last interval.
+Each TWiki web has an automatic email alert service that sends a list of recent changes on a preset schedule, like once a day. Users can subscribe and unsubscribe using %NOTIFYTOPIC% in each web. The Perl script =mailnotify= is called by a deamon in regular intervals. The script sends an automated email to subscribed users if topics were changed in a web within last interval.
 
 ---+++ Configuring Outgoing Mail
 
