@@ -84,7 +84,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "01 May 2000";
+$wikiversion      = "24 May 2000";
 
 # ===========================
 # read the configuration part
@@ -540,7 +540,8 @@ sub readWebTopic
 sub viewUrl
 {
     my( $topic ) = @_;
-    return "$scriptUrlPath/view$scriptSuffix/$webName/$topic";
+    # PTh 24 May 2000: added $urlHost, needed for some environments
+    return "$urlHost$scriptUrlPath/view$scriptSuffix/$webName/$topic";
 }
 
 # =========================
