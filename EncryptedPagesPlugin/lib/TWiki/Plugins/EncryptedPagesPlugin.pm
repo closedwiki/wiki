@@ -70,7 +70,7 @@ sub initPlugin
 
     $prefixPattern  = '%ENCRYPTEDPAGE{';
     $postfixPattern = '}%';
-    $replacementText = "BAR"; &TWiki::Func::getPreferencesValue("ENCRYPTEDPAGESPLUGIN_APPLET_INVOCATION");
+    $replacementText = &TWiki::Func::getPreferencesValue("ENCRYPTEDPAGESPLUGIN_APPLET_INVOCATION");
 
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::EncryptedPagesPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
