@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071561315" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1072855913" format="1.0" version="1.8"}%
 ---+ <nop>GoodStyle Collaboration Tips
 
 	* TWiki has a very simple *[[TWikiShorthand][text formatting shorthand]]*. In any case, you won't go wrong if you simply:
@@ -27,7 +27,7 @@
 		* if you merge or delete comments, group credit =Contributors:= at the end of the page
 		* _This is how Wiki content matures and grows in value over time._
 
-	* For *external site links*, you can type URLs directly into the text - =http://etcete.ra/...= - it'll clear to anyone where they're headed on click. 
+	* For *external site links*, you can type URLs directly into the text - =http://etcete.ra/...= - it'll be clear to anyone where they're headed on click. 
 
 	* TWiki is intended for world-wide use, and an internationally understood date format like ==01 Sep 2003== or ==2003/09/01== is preferred. It's clearer than the xx/xx/xx format, where a date like 9/1/01 can mean either Jan or Sep, depending on the local conventions of the readers. For months, use the first three letters: Jan, Feb, Mar, Apr,...
 
