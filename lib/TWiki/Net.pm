@@ -28,16 +28,12 @@ package TWiki::Net;
 
 use strict;
 
-# RNF 22 Jan 2002 For basic HTTP authentication.
-use MIME::Base64;
-
 use vars qw(
-        $useSocket $useNetSmtp
+        $useNetSmtp
         $mailInitialized $mailHost $helloHost
     );
 
 BEGIN {
-    $useSocket = 0;
     $useNetSmtp = 0;
     $mailInitialized = 0;
 }
@@ -47,10 +43,10 @@ sub getUrl
 {
     my ( $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader ) = @_;
 
-    if( ! $useSocket ) {
-        use Socket;
-        $useSocket = 1;
-    }
+    # Run-time use of Socket module when needed
+    require Socket;
+    import Socket qw(:all);
+
     if( $thePort < 1 ) {
         $thePort = 80;
     }
@@ -61,6 +57,10 @@ sub getUrl
     # RNF 22 Jan 2002 Support for vhosts and user authentication.
     $req .= "Host: $theHost\r\n";
     if( $theUser && $thePass ) {
+	# Use MIME::Base64 at run-time if using outbound proxy with 
+	# authentication
+	require MIME::Base64;
+	import MIME::Base64 ();
         $base64 = encode_base64( "$theUser:$thePass", "\r\n" );
         $req .= "Authorization: Basic $base64";
     }
@@ -80,11 +80,11 @@ sub getUrl
     $iaddr   = inet_aton( $theHost );
     $paddr   = sockaddr_in( $thePort, $iaddr );
     $proto   = getprotobyname( 'tcp' );
-    unless( socket( SOCK, PF_INET, SOCK_STREAM, $proto ) ) {
+    unless( socket( *SOCK, &PF_INET, &SOCK_STREAM, $proto ) ) {
         &TWiki::writeWarning( "TWiki::Net::getUrl socket: $!" );
         return "content-type: text/plain\n\nERROR: TWiki::Net::getUrl socket: $!.";
     }
-    unless( connect( SOCK, $paddr ) ) {
+    unless( connect( *SOCK, $paddr ) ) {
         &TWiki::writeWarning( "TWiki::Net::getUrl connect: $!" );
         return "content-type: text/plain\n\nERROR: TWiki::Net::getUrl connect: $!. \n$req";
     }
@@ -114,9 +114,7 @@ sub sendEmail
         $mailHost  = &TWiki::Prefs::getPreferencesValue( "SMTPMAILHOST" );
         $helloHost = &TWiki::Prefs::getPreferencesValue( "SMTPSENDERHOST" );
         if( $mailHost ) {
-            eval {
-               $useNetSmtp = require Net::SMTP;
-            }
+	   $useNetSmtp = require Net::SMTP;
         }
     }
 
