@@ -1,0 +1,36 @@
+%META:TOPICINFO{author="guest" date="1101223306" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+!! %TOPIC%
+
+Description: Tags composed from the expansion of other tagsç. Example: is * Set A=Some and * Set B=Tag, then <nop>%%A<nop>%<nop>%B<nop>%% must expand to whatever is the expansion of %SomeTag%
+
+
+In the following, all the combinations shoud yield %WIKIUSERNAME%
+
+---
+	* A: = %A%
+	* B: = %B%
+	* <nop>%<nop>%A<nop>%<nop>%B<nop>%<nop>% : %%A%%B%%
+
+	* C: =  %C%
+	* D: =  %D%
+	* <nop>%C<nop>%<nop>%D<nop>% : %C%%D%
+
+	* E: =  %E%
+	* F: =  %F%
+	* <nop>%E<nop>%<nop>%F<nop>% : %E%%F%
+
+
+---
+
+Needed Preferences:
+	* Set A = WIKI
+	* Set B = USERNAME
+
+	* Set C = %%A%
+	* Set D = %B%%
+
+	* Set E = %WIKI
+	* Set F = USERNAME%
+
+
