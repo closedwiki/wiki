@@ -2,10 +2,10 @@
 use strict;
 package TWiki::Contrib::Config;
 
-use vars qw($server);
+use vars qw($serverUrl);
 
 
-my $server = "http://twikitreleasetracker.mrjc.com";
+my $serverUrl = "http://twikitreleasetracker.mrjc.com";
 
 1;
 
