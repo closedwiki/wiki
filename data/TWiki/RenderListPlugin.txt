@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071620220" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1072729980" format="1.0" version="1.5"}%
 ---+ Render List Plugin 
 
 Render bullet lists in a variety of formats
@@ -38,7 +38,7 @@ Render bullet lists in a variety of formats
 	  =Align continuation lines with leading spaces linke this=
 	* You can specify an icon for a bullet of render type *tree* or *icon*:
 		* Attach the icon to this Plugin topic, e.g. =myicon.gif=, or
-		* Use one of the existing icons: %ATTACHURL%/home.gif =home.gif=, %ATTACHURL%/group.gif =group.gif=, %ATTACHURL%/persons.gif =persons.gif=, %ATTACHURL%/person.gif =person.gif=, %ATTACHURL%/email.gif =email.gif=
+		* Use one of the existing icons: %ATTACHURL%/home.gif =home.gif=, %ATTACHURL%/virtualhome.gif =virtualhome.gif=, %ATTACHURL%/group.gif =group.gif=, %ATTACHURL%/persons.gif =persons.gif=, %ATTACHURL%/virtualpersons.gif =virtualpersons.gif=, %ATTACHURL%/person.gif =person.gif=, %ATTACHURL%/virtualperson.gif =virtualperson.gif=, %ATTACHURL%/email.gif =email.gif=, %ATTACHURL%/trend.gif =trend.gif=
 		* Refer to an attached icon at the beginning of the bullet with:
 			* =icon:myicon Followed by normal bullet text=
 
@@ -333,6 +333,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 		* Set ORG_THEME = icon, 0, 16, 16, %ATTACHURL%/empty.gif, %ATTACHURL%/dot_udr.gif, %ATTACHURL%/dot_ud.gif, %ATTACHURL%/dot_ur.gif, %ATTACHURL%/home.gif
 		* Set GROUP_THEME = icon, 0, 16, 16, %ATTACHURL%/empty.gif, %ATTACHURL%/dot_udr.gif, %ATTACHURL%/dot_ud.gif, %ATTACHURL%/dot_ur.gif, %ATTACHURL%/group.gif
 		* Set EMAIL_THEME = icon, 0, 16, 16, %ATTACHURL%/empty.gif, %ATTACHURL%/dot_udr.gif, %ATTACHURL%/dot_ud.gif, %ATTACHURL%/dot_ur.gif, %ATTACHURL%/email.gif
+		* Set TREND_THEME = icon, 0, 16, 16, %ATTACHURL%/empty.gif, %ATTACHURL%/dot_udr.gif, %ATTACHURL%/dot_ud.gif, %ATTACHURL%/dot_ur.gif, %ATTACHURL%/trend.gif
 
 ---++ Plugin Installation Instructions
 
@@ -351,11 +352,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 16 Dec 2003 (V1.030) |
+|  Plugin Version: | 29 Dec 2003 (V1.030) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  29 Dec 2003: | Fixed rendering issue if focus bullet contains =icon:name=; added TREND_THEME |
 |  16 Dec 2003: | Specify icons with =icon:name= syntax |
 |  11 Dec 2003: | Added =focus= and =depth= parameters |
-|  05 Dec 2003: | Fixed rendering issue with IE, added EMAIL_THEME |
+|  05 Dec 2003: | Fixed rendering issue with IE; added EMAIL_THEME |
 |  02 Dec 2003: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
@@ -365,7 +367,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, TWiki:Plugins/TreePlugin
 
--- TWiki:Main/PeterThoeny - 16 Dec 2003
+-- TWiki:Main/PeterThoeny - 29 Dec 2003
 %META:FILEATTACHMENT{name="empty.gif" attr="h" comment="Empty 16x16 spacer" date="1070519327" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\empty.gif" size="100" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="dot_udr.gif" attr="h" comment="Dot T-graph 16x16" date="1070519374" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\dot_udr.gif" size="109" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="dot_ud.gif" attr="h" comment="Dot I-graph 16x16" date="1070519385" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\dot_ud.gif" size="108" user="PeterThoeny" version="1.1"}%
@@ -375,3 +377,7 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, TWiki:
 %META:FILEATTACHMENT{name="email.gif" attr="h" comment="E-mail icon 16x16" date="1070659089" path="email.gif" size="183" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="person.gif" attr="h" comment="Person icon 16x16" date="1071619819" path="person.gif" size="153" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="persons.gif" attr="h" comment="Two persons icon 16x16" date="1071619835" path="persons.gif" size="164" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="trend.gif" attr="h" comment="Trend icon 16x16" date="1072729767" path="trend.gif" size="149" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="virtualhome.gif" attr="h" comment="Virtual home icon 16x16" date="1072729802" path="virtualhome.gif" size="162" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="virtualperson.gif" attr="h" comment="Virtual person icon 16x16" date="1072729816" path="virtualperson.gif" size="149" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="virtualpersons.gif" attr="h" comment="Virtual persons icon 16x16" date="1072729828" path="virtualpersons.gif" size="160" user="PeterThoeny" version="1.1"}%
