@@ -98,6 +98,7 @@ my $perlverRequired = 5.00503;		# Oldest supported version of Perl
 my $perlverRequiredString = '5.005_03';
 my $perlverRecommended = '5.6.1';
 my $ActivePerlRecommendedBuild = 631;	# Fixes PERL5SHELL bugs
+my $cgiModVerRecommended = 2.93;	# CGI.pm version, on some platforms
 
 my $rcsverRequired = 5.7;
 
@@ -192,6 +193,7 @@ if ( !defined $detailedOS ) {
 # Detect Perl flavour on Windows, and Cygwin Perl/RCS package versions
 my $perltype;
 my $cygwinRcsVerNum;
+$perlverMsg = $perlver;		# Default version message
 if ($detailedOS eq 'cygwin') {
     $perltype = 'Cygwin';				# Cygwin Perl only
     my ($pkg, $pkgName);
@@ -201,10 +203,10 @@ if ($detailedOS eq 'cygwin') {
     $pkg = `/bin/cygcheck -c $pkgName | /bin/grep $pkgName 2>/dev/null`; 
     if ($?) { 
         $pkg = " [Can't identify package - cygcheck or grep not installed]";
-	$perlver .= $pkg
+	$perlverMsg = $perlver . $pkg
     } else {
 	$pkg = (split ' ', $pkg)[1];	# Package version
-	$perlver = $pkg;
+	$perlverMsg = $pkg;
     }
 	
     # Get Cygwin RCS's package version number
@@ -212,7 +214,7 @@ if ($detailedOS eq 'cygwin') {
     $pkg = `/bin/cygcheck -c $pkgName | /bin/grep $pkgName 2>/dev/null`; 
     if ($?) { 
         $pkg = " [Can't identify package - cygcheck or grep not installed]";
-	$perlver .= $pkg
+	$cygwinRcsVerNum = $pkg;	
     } else {
 	$pkg = (split ' ', $pkg)[1];	# Package version
 	$cygwinRcsVerNum = $pkg;	
@@ -223,7 +225,7 @@ if ($detailedOS eq 'cygwin') {
     my $isActivePerl= eval 'Win32::BuildNumber !~ /Win32/';
     if( $isActivePerl ) {
 	$perltype = 'ActiveState';
-        $perlver .= ", build " . Win32::BuildNumber();
+        $perlverMsg = $perlver . ", build " . Win32::BuildNumber();
     } else {
 	# Could be SiePerl or some other Win32 port of Perl
 	$perltype = 'SiePerl/Other Win32 Perl';
@@ -260,7 +262,7 @@ print " ($detailedOS)" if ( $detailedOS ne '' );
 print "</td></tr>\n";
 
 # Perl version and type
-print "<tr><th align=\"right\">Perl version:</th><td>$perlver";
+print "<tr><th align=\"right\">Perl version:</th><td>$perlverMsg";
 print " ($perltype)" if $perltype ne 'generic';
 print "</td></tr>\n";
 if ( $perlvernum < $perlverRequired ) {
@@ -333,6 +335,12 @@ foreach $mod (@requiredMods) {
 	my $mod_version;
 	$mod_version = ${"${mod}::VERSION"};
         print "$mod ($mod_version)";
+	# Recommend CGI.pm upgrade on Cygwin Perl 5.8.0 only
+	if( $mod eq 'CGI' and $mod_version < $cgiModVerRecommended and
+		$perltype eq 'Cygwin' and $perlver eq '5.8.0' ) {
+	    print "<br /><b><font color=\"red\">Warning:</font></b> ";
+	    print "CGI.pm version $cgiModVerRecommended or higher is recommended to avoid problems with attachment uploads on Perl $perlver.\n";
+	}
 	print "</td></tr>\n";
     }
     print "</td></tr>\n";
