@@ -12,7 +12,7 @@
 %TMPL:DEF{"titleaction"}%(move attachment)%TMPL:END%
 %TMPL:DEF{"webaction"}% *Move file attachment* %TMPL:END%
 %TMPL:P{"simpleheader"}%
----+ Move file <code>%FILENAME%</code>
+---+ Move or Delete File <code>%FILENAME%</code>
 
 | |  *Web:* | *&nbsp;Topic:* |
 |  *From:* |    %WEB%. | &nbsp;%TOPIC% |
@@ -22,6 +22,7 @@
 
 __Note:__
 
+   * To delete an attachment move it to web *Trash*, topic *TrashAttachment*.
    * The attachment and any history will be moved to the new topic.
    * An error page will be shown if either of the topics are locked by another user.
    * The new topic chosen must already exist.
