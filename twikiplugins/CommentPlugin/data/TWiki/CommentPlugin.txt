@@ -128,18 +128,19 @@ To help avoid edit conflict, a reminder to refresh the page before entering comm
 ---+ Settings
 	* Description:
 		* Set SHORTDESCRIPTION = Allows users to quickly post comments to a page without an edit/preview/save cycle.
-	* templates; includes user templates from TWiki.CommentsTmpl
+	* Name of file in the 'templates' directory that contains the comment templates. The default 'comments.tmpl' automatically includes user templates from TWiki.CommentsTmpl
 		* Set TEMPLATES = comments
 	* default template type (if not present, defaults to "below")
 		* Set DEFAULT_TYPE = below
 		
 ---+ Plugin Installation Instructions
-	* Make sure all the required dependencies listed in the table below are resolved:
-	%$DEPENDENCIES%
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	| *File:* | *Description:* |
 %$MANIFEST%
+	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
+	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
+	%$DEPENDENCIES%
 	* The Plugin depends on the =viewauth= script to authenticate the user. As described in %TWIKIWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file.
 
 If installed correctly, you should see a =%COMMENT= edit box below here.
