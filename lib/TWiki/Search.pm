@@ -629,13 +629,11 @@ sub searchWeb {
         my @topicList = $this->_searchTopicsInWeb( $web, $theTopic, $theScope, $theType, $caseSensitive, @tokens );
 
         # exclude topics, Codev.ExcludeWebTopicsFromSearch
-print STDERR "Filter ",join(",",@topicList)," with $theExclude\n" if $theExclude;
         if( $caseSensitive ) {
             @topicList = grep( !/$theExclude/, @topicList ) if( $theExclude );
         } else {
             @topicList = grep( !/$theExclude/i, @topicList ) if( $theExclude );
         }
-print STDERR "Filtered ",join(",",@topicList)," with $theExclude\n" if $theExclude;
         next if( $noEmpty && ! @topicList ); # Nothing to show for this web
 
         my $topicInfo = {};

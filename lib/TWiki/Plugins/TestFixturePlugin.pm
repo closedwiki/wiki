@@ -126,8 +126,6 @@ sub _compareExpectedWithActual {
 
 sub _tidy {
     my $a = shift;
-    $a =~ s/^\s+//;
-    $a =~ s/\s+$//s;
     $a =~ s/&/&amp;/g;
     $a =~ s/</&lt;/g;
     $a =~ s/>/&gt;/g;
@@ -144,11 +142,18 @@ sub _compareResults {
 
     foreach my $diff ( @$diffs ) {
         my $a = $diff->[1];
+        $a =~ s/^\s+//;
+        $a =~ s/\s+$//s;
         my $b = $diff->[2];
+        $b =~ s/^\s+//;
+        $b =~ s/\s+$//s;
         my $ok = 0;
 
         if ( $diff->[0] eq 'u' || $a eq $b || $rex && _rexeq( $a, $b )) {
             $ok = 1;
+        }
+        if ($a =~ /Sushi/) {
+            print STDERR "X${a}X${b}X\n";
         }
         $a = _tidy( $a );
         $b = _tidy( $b );
