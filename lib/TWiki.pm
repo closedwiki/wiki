@@ -2337,7 +2337,7 @@ Not yet documented.
 sub showError
 {
     my( $errormessage ) = @_;
-    return "<font size=\"-1\" color=\"#FF0000\">$errormessage</font>" ;
+    return "<font size=\"-1\" class=\"twikiAlert\" color=\"#FF0000\">$errormessage</font>" ;
 }
 
 =pod
