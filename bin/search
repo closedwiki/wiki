@@ -96,6 +96,6 @@ sub main
         $websStr, $search, $scope, $order, $regex,
         $limit, $revSort, $caseSensitive, $nosummary,
         $nosearch, $noheader, $nototal, $bookView, $renameView,
-        $showlock, $noempty
+        $showlock, $noempty, ""
     );
 }
