@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "11 Aug 2003";
+$wikiversion      = "20 Aug 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1766,13 +1766,15 @@ sub handleWebAndTopicList
 # =========================
 sub handleUrlParam
 {
-    my( $theParam ) = @_;
+    my( $theArgs ) = @_;
 
-    $theParam = extractNameValuePair( $theParam );
+    my $param   = extractNameValuePair( $theArgs );
+    my $newLine = extractNameValuePair( $theArgs, "newline" ) || "";
     my $value = "";
     if( $cgiQuery ) {
-        $value = $cgiQuery->param( $theParam );
+        $value = $cgiQuery->param( $param );
         $value = "" unless( defined $value );
+        $value =~ s/\r?\n/$newLine/go if( $newLine );
     }
 
     return $value;
