@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111927493" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1112002813" format="1.0" version="$Rev$"}%
+
 
 <channel rdf:about="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%">
   <title>%WIKITOOLNAME%'s <nop>%WEB% web</title>
