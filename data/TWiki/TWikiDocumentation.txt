@@ -1,10 +1,21 @@
-*Documentation of the TWiki Implementation (version %WIKIVERSION%)*
+%META:TOPICINFO{author="MikeMannix" date="999092803" format="1.0" version="1.21"}%
+<script language="JavaScript1.2" type="text/javascript">
+function dblclick() { window.scrollTo(0,0) }
+if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
+document.ondblclick=dblclick;
+//--> </script>
+
+---+ TWiki Webmaster Documentation (ver. 01 Sep 2001)
+
+All support topics are loaded here to create one long and complete documentation page. Use the extended menu below to jump directly to sections. _Doubleclick anywhere on-screen to return to the top of the page._
+
+(You can browse the TWiki guide by individual page from the [[TWiki.WebHome][full topics menu]].)
 
 %TOC{depth="3"}%
 
 __Note:__ Read the most up to date version of this document at http://TWiki.org/cgi-bin/view/TWiki/TWikiDocumentation
 
-__Related Topics:__ TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests.
+__Related Topics:__ TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests
 
 -----
 %INCLUDE{"TWikiImplementationNotes"}%
