@@ -22,6 +22,8 @@ sub check
 {
    my( $condition, $message, $extra ) = @_;
    
+   my $okay = 1;
+   
    if( $extra ) {
       $message .= "; $extra";
    }
@@ -32,6 +34,8 @@ sub check
    } else {
       trace( "$message" );
    }
+   
+   return $okay;
 }
 
 sub checkNot
@@ -51,7 +55,7 @@ sub check_match
    my( $text, $pattern, $extra ) = @_;
 
    my $match = $text =~ /$pattern/;
-   check( $match, "$text match $pattern", $extra );
+   return check( $match, "$text match $pattern", $extra );
 }
 
 sub check_matchs
@@ -59,7 +63,7 @@ sub check_matchs
    my( $text, $pattern, $extra ) = @_;
 
    my $match = $text =~ /$pattern/s;
-   check( $match, "$text should match $pattern (s option)", $extra );
+   return check( $match, "$text should match $pattern (s option)", $extra );
 }
 
 
@@ -67,7 +71,7 @@ sub check_equal
 {
    my( $result, $expected, $extra ) = @_;
 
-   check( $result eq $expected, "\"$result\" should be \"$expected\"", $extra );
+   return check( $result eq $expected, "\"$result\" should be \"$expected\"", $extra );
 }
 
 
