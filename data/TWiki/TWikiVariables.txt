@@ -43,7 +43,10 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> The current topic name, is <b>%TOPIC%</b> </td>
 </tr><tr>
   <td> =%<nop>DATE%= </td>
-  <td> Todays date, is <b>%DATE%</b> </td>
+  <td> Todays date (local server time), is <b>%DATE%</b> </td>
+</tr><tr>
+  <td> =%<nop>GMTIME%= </td>
+  <td> Todays date (GM time), is <b>%GMTIME%</b> </td>
 </tr><tr>
   <td> =%<nop>HTTP_HOST%= </td>
   <td> HTTP_HOST environment variable, is <b>%HTTP_HOST%</b> </td>
@@ -111,4 +114,4 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> Default state of the link check box in the attach file page. Check box is initially checked if value is set to =CHECKED= , unchecked if empty. If checked, a link is created to the attached file at the end of the topic. Value is: <b><code>%ATTACHLINKBOX%</code></b> </td>
 </tr></table>
 
--- Main.PeterThoeny - 21 Apr 2000 <br>
+-- Main.PeterThoeny - 29 May 2000 <br>
