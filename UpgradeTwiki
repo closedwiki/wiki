@@ -296,7 +296,7 @@ Now: you need to
 
       $TWikiCfg::defaultUrlHost$TWikiCfg::scriptUrlPath/testenv$TWikiCfg::scriptSuffix
 
-   make sure there are no unwarranted warnings, and press the 'relockrcs' button if advised to do so,
+   make sure there are no unwarranted warnings, 
 
    and finally: visit TWikiPreferences, which I'm guessing is at:
 
