@@ -35,11 +35,14 @@ use Time::Local;
 use TWiki;
 
 # Constants
-use vars qw( @ISOMONTH @WEEKDAY %MON2NUM );
+use vars qw( @ISOMONTH @WEEKDAY @MONTHLENS %MON2NUM );
 
 @ISOMONTH =
   ( 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' );
+
+# SMELL: does not account for leap years
+@MONTHLENS = ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
 
 @WEEKDAY =
   ( 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' );
@@ -272,17 +275,16 @@ TODO: timezone
 sub parseInterval{
     my ($theInterval) = @_;
 
-    use HTTP::Date;
     my @lt = localtime();
-    my $today = sprintf("%04d-%02d-%02d",$lt[5]+1900, $lt[4]+1, $lt[3]);
-    my $now = $today . sprintf("T%02d:%02d:02d",$lt[2], $lt[1], $lt[0]);
+    my $today = sprintf('%04d-%02d-%02d',$lt[5]+1900, $lt[4]+1, $lt[3]);
+    my $now = $today . sprintf('T%02d:%02d:02d',$lt[2], $lt[1], $lt[0]);
 
     # replace $now and $today shortcuts
     $theInterval =~ s/\$today/$today/g;
     $theInterval =~ s/\$now/$now/g;
 
     # if $theDate does not contain a '/': force it to do so.
-    $theInterval = $theInterval."/".$theInterval unless ($theInterval =~ /\// );
+    $theInterval = $theInterval.'/'.$theInterval unless ($theInterval =~ /\// );
 
     my @ends = split(/\//, $theInterval);
 
@@ -291,7 +293,7 @@ sub parseInterval{
 
     foreach my $i (0,1) {
         #   if not a period of time:
-        next if ($ends[$i] =~ "^P");
+        next if ($ends[$i] =~ /^P/);
 
         #   TODO assert(must include the year)
         if($i) {
@@ -301,8 +303,7 @@ sub parseInterval{
             # TODO: do we do leap years?
             if (length($ends[$i]) == 7){
                 my $month = substr($ends[$i],5);
-                my @monthLens = (31,28,31,30,31,30,31,31,30,31,30,31);
-                $ends[$i] .= @monthLens[$month-1];
+                $ends[$i] .= $MONTHLENS[$month-1];
             }
             $ends[$i] .= substr("0000-12-31T23:59:59",length($ends[$i]));
         } else {
@@ -314,7 +315,9 @@ sub parseInterval{
         #     convert the string into integer amount of seconds
         #     from 1970-01-01T00:00:00.00 UTC
 
-        $ends[$i] = &HTTP::Date::str2time($ends[$i]);
+        require HTTP::Date;
+        die "Cannot find HTTP::Date: $@" if $@;
+        $ends[$i] = HTTP::Date::str2time($ends[$i]);
     }
 
     # now we're ready to translate interval durations...
@@ -345,9 +348,9 @@ sub parseInterval{
         #   point, it must be added to the previously computed
         #   starting point.
         $ends[$i] = eval($ends[1-$i].$oper[$i].$ends[$i]);
-        #   in case the user specified both start and end as a
-        #   time duration, some kind of error must be reported.
-    }    
+        # SMELL: if the user specified both start and end as a
+        # time duration, some kind of error must be reported.
+    }
     return @ends;
 }
 

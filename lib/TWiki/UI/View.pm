@@ -190,7 +190,7 @@ sub view {
         # disable edit and attach
         # FIXME: won't work with non-default skins, see %EDITURL%
         $tmpl =~ s/%EDITTOPIC%/$mirrorLink.' | '.CGI::strike('Edit')/ge;
-        $tmpl =~ s/<a [^>]*?>Attach<\/a>/CGI::strike('Attach')/gei;
+        $tmpl =~ s/<a [^>]*?>(Attach)<\/a>/CGI::strike($1)/gei;
         if( $topicExists ) {
             # allow view to be indexed
             $indexableView = 1;
@@ -203,8 +203,8 @@ sub view {
         # to use two templates
         # SMELL: won't work with non-default skins, see %EDITURL%
         $tmpl =~ s/%EDITTOPIC%/CGI::strike('Edit')/ge;
-        $tmpl =~ s/<a [^>]*?>(Attach)<\/a>/CGI::strike($1)/gei;
-        $tmpl =~ s!<a [^>]*?>(Rename\/move)</a>!CGI::strike($1)!gei;
+print STDERR $tmpl;
+        $tmpl =~ s/<a\s[^>]*href="[^"]*\/(attach|rename)\b[^>]*>(.*?)<\/a>/CGI::strike($2)/gei;
         $tmpl =~ s/%REVTITLE%/(r$rev)/go;
         $tmpl =~ s/%REVARG%/&rev=$rev/go;
     } else {
