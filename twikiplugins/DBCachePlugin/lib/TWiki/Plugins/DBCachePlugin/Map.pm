@@ -1,20 +1,34 @@
 #
 # Copyright (C) Motorola 2003 - All rights reserved
+# Copyright (C) Crawford Currie 2004
 #
 use strict;
 
 use TWiki::Plugins::DBCachePlugin::Array;
 
+=begin text
+
+---++ class Map
 # Generic map object for mapping names to things. A name is defined as
-# name = \w+ | \w+ "." name
-# The . indicates a field reference in a sub-map.
-# Objects in the map are either strings, or other objects that must also
-# support tostring.
+name = \w+ | \w+ "." name
+The . indicates a field reference in a sub-map.
+Objects in the map are either strings, or other objects that must
+support toString.
+
+=cut
+
 { package DBCachePlugin::Map;
 
-  # Constructor. Optionally parse a standard attribute
-  # string containing name=value pairs. The
-  # value may be a word or a quoted string (no escapes!)
+=begin text
+
+---+++ =new($string)=
+   * $string - optional attribute string in standard TWiki syntax
+Create a new, empty array object. Optionally parse a standard attribute
+string containing name=value pairs. The
+value may be a word or a quoted string (no escapes!)
+
+=cut
+
   sub new {
     my ( $class, $string ) = @_;
     my $this = bless( {}, $class );
@@ -37,7 +51,7 @@ use TWiki::Plugins::DBCachePlugin::Array;
 	  # skip bad char or comma
 	} else {
 	  # some other problem
-	  die "FORMQUERYPLUGIN: Badly formatted attribute string at '$string' in '$orig'";
+	  die "DBCachePlugin: Badly formatted attribute string at '$string' in '$orig'";
 	}
       }
     }
@@ -52,15 +66,33 @@ use TWiki::Plugins::DBCachePlugin::Array;
     # should be enough; nothing else should be pointing to the keys
   }
 
-  # PUBLIC Get an attr value, but without any special interpretation
-  # such as field expansion
+=begin text
+
+---+++ =get($k)=
+   * =$k= - key
+Get the value for a key, but without any subfield field expansion
+
+=cut
+
   sub fastget {
     my ( $this, $attr ) = @_;
     return $this->{keys}{$attr};
   }
 
-  # PUBLIC Get an attr value; return undef if not set.
-  # Supports subfields.
+=begin text
+
+---+++ =get($k)=
+   * =$k= - key
+Get the value corresponding to this key; return undef if not set.
+If =$k= is a string of the form =X.Y= then the result will be the
+result of calling =get("Y")= on the object in this map that matches =X=.
+
+Note that if X is a DBCachePlugin::Array, Y may be an integer index, or the name of a field
+in the class of the objects stored by X. In the latter case, =get= will return the result
+of calling =X->sum("Y")=.
+
+=cut
+
   sub get {
     my ( $this, $attr ) = @_;
     if ( index( $attr, "." ) > 0 && $attr =~ m/^(\w+)\.(\w+.*)$/o ) {
@@ -76,8 +108,16 @@ use TWiki::Plugins::DBCachePlugin::Array;
     }
   }
 
-  # PUBLIC Get an attr value; return undef if not set
-  sub set {
+=begin text
+
+---+++ =set($k, $v)=
+   * =$k= - key
+   * =$v= - value
+Set the given key, value pair in the map.
+
+=cut
+
+ sub set {
     my ( $this, $attr, $val ) = @_;
     if ( $attr =~ m/^(\w+)\.(.*)$/o ) {
       $attr = $1;
@@ -91,14 +131,27 @@ use TWiki::Plugins::DBCachePlugin::Array;
     }
   }
 
-  # PUBLIC return the size of this map, which is the number of keys
+=begin text
+
+---+++ =size()=
+Get the size of the map
+
+=cut
+
   sub size {
     my $this = shift;
 
     return scalar( keys( %{$this->{keys}} ));
   }
 
-  # PUBLIC remove an attr value, return old value
+=begin text
+
+---+++ =remove($index) -> old value
+   * =$index= - integer index
+Remove an entry at an index from the array. Return the old value.
+
+=cut
+
   sub remove {
     my ( $this, $attr ) = @_;
 
@@ -113,37 +166,65 @@ use TWiki::Plugins::DBCachePlugin::Array;
     }
   }
 
-  # PUBLIC get a list of keys in the map
+=begin text
+
+---+++ =getKeys()=
+
+Get a "perl" array of the keys in the map, suitable for use with =foreach=
+
+=cut
+
   sub getKeys {
     my $this = shift;
 
     return keys( %{$this->{keys}} );
   }
 
-  # PUBLIC get a list of values in the map
+=begin text
+
+---+++ =getValues()=
+
+Get a "perl" array of the values in the Map, suitable for use with =foreach=
+
+=cut
+
   sub getValues {
     my $this = shift;
 
     return values( %{$this->{keys}} );
   }
 
-  # PUBLIC search the map for matches with the given field
-  # values. Return a list of matched topics. The search object
-  # must implement "matches".
+=begin text
+
+---+++ =search($search)= -> search result
+   * =$search* =DBCachePlugin::Search object to use in the search
+Search the map for keys that match with the given object.
+values. Return a =DBCachePlugin::Array= of matching keys.
+
+=cut
+
   sub search {
     my ( $this, $search ) = @_;
     my $result = new DBCachePlugin::Array();
 
     foreach my $meta ( values( %{$this->{keys}} )) {
       if ( $search->matches( $meta )) {
-	$result->add( $meta );
+		$result->add( $meta );
       }
     }
- 
+
     return $result;
   }
 
-  # PUBLIC debug print
+=begin text
+
+---+++ =toString($limit, $level, $strung)= -> string
+   * =$limit= - recursion limit for expansion of elements
+   * =$level= - currentl recursion level
+Generates an HTML string representation of the object.
+
+=cut
+
   sub toString {
     my ( $this, $limit, $level, $strung ) = @_;
     if ( !defined( $strung )) {
@@ -174,6 +255,15 @@ use TWiki::Plugins::DBCachePlugin::Array;
     return "$ss</ul>";
   }
 
+=begin text
+
+---+++ write($archive)
+   * =$archive= - the DBCachePlugin::Archive being written to
+Writes this object to the archive. Archives are used only if Storable is not available. This
+method must be overridden by subclasses is serialisation of their data fields is required.
+
+=cut
+
   sub write {
     my ( $this, $archive ) = @_;
 
@@ -183,6 +273,15 @@ use TWiki::Plugins::DBCachePlugin::Array;
       $archive->writeObject( $this->{keys}{$key} );
     }
   }
+
+=begin text
+
+---+++ read($archive)
+   * =$archive= - the DBCachePlugin::Archive being read from
+Reads this object from the archive. Archives are used only if Storable is not available. This
+method must be overridden by subclasses is serialisation of their data fields is required.
+
+=cut
 
   sub read {
     my ( $this, $archive ) = @_;

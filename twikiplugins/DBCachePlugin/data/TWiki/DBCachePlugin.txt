@@ -2,13 +2,15 @@
 
 This plugin supports structured queries over a database built on the fly from the forms in TWiki topics. It does not support any tags, as it is provided as a service for other plugins that want to treat a TWiki web as a simple database; for example, the TWiki:Plugins/FormQueryPlugin, which supports the display of query results.
 
-The plugin encapsulates code that was formerly in the "engine room" of the FormQueryPlugin. It has been abstracted out in the belief that it will be useful to anyone who wants to do simple database operations.
+The plugin encapsulates code that was formerly in the "engine room" of the FormQueryPlugin. It has been abstracted out in the belief that it will be useful to anyone who wants to do simple search operations from a plugin.
 
----++ Features
+%TOC%
+
+---+ Features
 	* Perform complex queries on the TWiki database
 	* Cache TWiki topics for rapid queries
 
----+++ How the database gets built
+---++ How the database gets built
 You can think of the database as an array of all the topics in a web. Each array entry is a map (or hash in perl terms) that maps a set of field names to values.
 
 Each topic in the web automatically gets a number of standard fields:
@@ -25,42 +27,15 @@ Each field in the form in the topic appears as an entry as well. So a field name
 	* They must be unique *after* all the non-alphanumeric characters have been removed
 	* They *must not* conflict with any of the auto-generated relation names.
 You have been warned! Stick to alphanumeric characters for field names.
----+++ The cache
+---++ The cache
 To achieve best perfomance the plugin caches the database read from the TWiki topics. It creates this cache in a file in the web, <code>_DB<nop>Cache</code>. If any topic changes in the web this cache is automatically rebuilt. The cache file can be deleted at any point with no ill effects.
 #SettingsAnchor
 ---+ Code interface
 Clients use the DBCache by defining a subclass of the =DBCachePlugin::DBCache= class=. The following POD documentation describes the methods of this class and the various other classes provided by the plugin..
 %$POD%
----+ Search Operators
-#SearchOperators
----++ Search operators
-Search operators work on the fields of each map. The fields are given by name, and the values by strings. Strings should always be surrounded by 'single-quotes'. String which are regular expressions use 'perl' re syntax (see =man perlre= for help)
-
-*Warning* single and double quotes are not allowed in values!
-
-The following operators are available:
-
-| *Operator* | *LHS* | *RHS* | *Meaning* |
-| <code>=</code> | field name | regular expression | Value exactly matches this regular expression. The expression must match the whole string. |
-| <code>!=</code> | field name | regular expression | Field is not this RE. Inverse of = |
-| <code>=~</code> | field name | regular expression | Value contains this regular expression i.e. the RE is found somewhere in the field value. |
-| <code>&lt;</code> | field name | integer (string containing an integer e.g '4') | Number is < |
-| <code>&gt;</code> | field name | integer | Number is > |
-| <code>&gt;=</code> | field name | integer | Number is >= |
-| <code>&lt;=</code> | field name | integer | Number is <= |
-| <code>EARLIER_THAN</code> | field name | date (string containing a date e.g. '1 Apr 2003' | Date is earlier than the given date |
-| <code>LATER_THAN</code> | field name | date | Date is later than the given date |
-| <code>WITHIN_DAYS</code> | field name | integer | Date (which must be in the future) is within n _working_ days of todays date |
-| <code>!</code> | none | expr | Boolean NOT |
-| <code>AND</code> | expr | expr | Boolean AND |
-| <code>OR</code> | expr | expr | Boolean OR |
-| <code>()</code> | N/A | N/A | Bracketed subexpression |
-
-Dates for =EARLIER_THAN=, =LATER_THAN= and =WITHIN_DAYS= must be dates in the format expected by =Time::ParseDate= (like the ActionTrackerPlugin). =WITHIN_DAYS= works out the number of _working_ days (i.e. excluding Saturday and Sunday). Apologies in advance if your weekend is offset &plusmn; a day!
-
----++ <nop>%TOPIC% Settings
+---+ <nop>%TOPIC% Settings
 None
----++ Plugin Installation Instructions
+---+ Plugin Installation Instructions
 __Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required.
 	* Make sure you have the perl module =Time::ParseDate= installed in your perl include path. To check this you can add the following line:<br><code>'Time::ParseDate'</code><br>to the testenv script in twiki/bin, in the @requiredMods list. The plugin will be significantly faster if you also have the =Storable= module installed. Both of these modules are available from www.cpan.org
 	* Download the ZIP file from the Plugin web (see below). Contents:
@@ -69,7 +44,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. If you are short of disc space you can delete all the files under lib/TWiki/Plugins/FormQueryPlugin/test without breaking the plugin.
 
 ---
----++ Plugin Info
+---+ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
 |  Plugin Version: | 1.000 |
@@ -80,18 +55,18 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Demo URL: | http://www.owiki.org/FQP/ |
 
----+++ Copyright
+---++ Copyright
 
 This code is based on an original development of Motorola Inc. and is protected by the following copyrights:
 	* Copyright (C) 2002-2003 Motorola. All Rights Reserved.
 	* Portions copyright (C) 2004. Crawford Currie.
 
----+++ Extending or customising
+---++ Extending or customising
 Extension or customisation is welcome, as long as all extensions are described and code provided back to the author.
 
 The module is shipped with a perl build file, which should be used for installation and testing. Testing is done using Test::Unit, and is invoked using the 'test' build target. Writing tests is a useful way of feeding back bugs as well. I can't encourage you enough to maintain and extend the tests!
 
----+++ License
+---++ License
 
 As required for the publication of all extensions to TWiki, this
 software is published under the terms of the GNU General Public

@@ -4,27 +4,39 @@
 use strict;
 use FileHandle;
 
-#
-# Simple file archive storer and restorer. Handles serialising objects
-# using their "write" and "read" methods. Serialisable objects must
-# have a no-parameters constructor.
-#
-# This module is only used if Storable isn't available. Storable is
-# much faster, because it is implemented in C.
-#
+=begin text
+
+---++ class Archive
+Simple file archive storer and restorer. Handles serialising objects
+using their "write" and "read" methods. Serialisable objects must
+have a no-parameters constructor.
+
+This module is only used if Storable isn't available. Storable is
+much faster, because it is implemented in C.
+
+=cut
+
 { package DBCachePlugin::Archive;
 
   # Must be first in an archive, or it isn't an archive
   my $ARCHIVE_ID = 0x76549876;
 
-  # PUBLIC create a new archive, using filename $file and
-  # mode $rw which must be "r" or "w". The archive will remain
-  # in existence (and the file remain open) until "close" is
-  # called. An exclusive lock is taken for write as long as the file
-  # is open. Throws an exception if the archive cannot be opened.
+=begin text
+
+---+++ =new($file, $rw)=
+   * =$file= - archive file path
+   * =$rw* - mode "r" or "w"
+Create a new archive, using filename $file and
+mode $rw which must be "r" or "w". The archive will remain
+in existence (and the file remain open) until "close" is
+called. An exclusive lock is taken for write as long as the file
+is open. Throws an exception if the archive cannot be opened.
+
+=cut
+
   sub new {
     my ( $class, $file, $rw ) = @_;
-    
+
     my $this = bless( {}, $class );
     my $fh = new FileHandle( $file, "r" );
     $this->{FH} = $fh;
@@ -67,8 +79,14 @@ use FileHandle;
     $this->close();
   }
 
-  # PUBLIC close this archive. MUST be called to
-  # close the file.
+=begin text
+
+---+++ =close()=
+Close this archive. MUST be called to
+close the file.
+
+=cut
+
   sub close {
     my $this = shift;
     if ( defined( $this->{FH} )) {
@@ -79,31 +97,58 @@ use FileHandle;
     }
   }
 
-  # PUBLIC write a byte to the archive
+=begin text
+
+---+++ =writeByte($b)=
+   * =$b= - byte to write
+Write a byte to the archive
+
+=cut
+
   sub writeByte {
     my ( $this, $b ) = @_;
     syswrite( $this->{FH}, $b, 1 );
   }
 
-  # PUBLIC write a string to the archive
+=begin text
+
+---+++ =writeString($s)=
+   * =$s= - string to write
+Write a string to the archive
+
+=cut
+
   sub writeString {
     my ( $this, $s ) = @_;
     my $l = length( $s );
     syswrite( $this->{FH}, pack( "S", $l ).$s, 2 + $l );
   }
   
-  # PUBLIC write a 32-bit integer to the archive
+=begin text
+
+---+++ =writeInt($i)=
+   * =$i= integer to write
+Write a 32-bit integer to the archive
+
+=cut
+
   sub writeInt {
     my ( $this, $i ) = @_;
     syswrite( $this->{FH}, pack( "i", $i ), 4 );
   }
-  
-  # PUBLIC write an object to the archive. An object must implement
-  # read() and write(), or may be undef or a string. No other types
-  # are supported.
+
+=begin text
+
+---+++ =writeObject()=
+Write an object to the archive. An object must implement
+=read($archive)= and =write($archive)=, or may be undef or a string. No other types
+are supported.
+
+=cut
+
   sub writeObject {
     my ( $this, $o ) = @_;
-    
+
     if ( !defined( $o )) {
       syswrite( $this->{FH}, 'U', 1 );
     } elsif ( defined( $this->{refs}{$o} )) {
@@ -126,7 +171,13 @@ use FileHandle;
     }
   }
 
-  # PUBLIC read a byte from the archive
+=begin text
+
+---+++ =readByte()= -> byte
+Read a byte from the archive
+
+=cut
+
   sub readByte {
     my $this = shift;
 
@@ -134,7 +185,13 @@ use FileHandle;
     return $b;
   }
 
-  # PUBLIC read a UTF8 string from the archive
+=begin text
+
+---+++ =readString()= -> string
+Read a UTF8 string from the archive
+
+=cut
+
   sub readString {
     my $this = shift;
     
@@ -144,7 +201,13 @@ use FileHandle;
     return $o;
   }
   
-  # PUBLIC read a 32-bit integer from the archive
+=begin text
+
+---+++ =readInt()= -> integer
+Read a 32-bit integer from the archive
+
+=cut
+
   sub readInt {
     my $this = shift;
     
@@ -152,7 +215,13 @@ use FileHandle;
     return unpack( "i", $o );
   }
   
-  # PUBLIC read an object from the archive
+=begin text
+
+---+++ =readObject()=
+Read an object from the archive
+
+=cut
+
   sub readObject {
     my $this = shift;
     

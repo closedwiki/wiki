@@ -12,8 +12,35 @@ use TWiki::Plugins::DBCachePlugin::FileTime;
 use TWiki::Plugins::DBCachePlugin::Map;
 use TWiki::Plugins::DBCachePlugin::TableDef;
 
-# General purpose cache that treats TWiki topics as hashes. Useful for
-# rapid read and search of the database. Only works on one web.
+=begin text
+
+---++ class DBCache
+
+General purpose cache that treats TWiki topics as hashes. Useful for
+rapid read and search of the database. Only works on one web.
+
+Typical usage:
+<verbatim>
+  use TWiki::Plugins::DBCachePlugin::DBCache;
+
+  $db = new DBCachePlugin::DBCache( $web ); # always done
+  $db->load(); # may be always done, or only on demand when a tag is parsed that needs it
+
+  # the DB is a hash of topics keyed on their name
+  foreach my $topic ($db->getKeys()) {
+     my $attachments = $topic->get("attachments");
+     # attachments is an array, like all tables read from topics
+     foreach my $val ($attachments->getValues()) {
+       my $aname = $attachments->get("name");
+       my $acomment = $attachments->get("comment");
+       my $adate = $attachments->get("date");
+       ...
+     }
+  }
+</verbatim>
+
+=cut
+
 { package DBCachePlugin::DBCache;
 
   # A DB is a hash keyed on topic name
@@ -26,7 +53,15 @@ use TWiki::Plugins::DBCachePlugin::TableDef;
     $cacheMonitor = 0; # set 1 to get cache handling stats printed to stderr
   }
 
-  # PUBLIC
+=begin text
+
+---+++ =new($dataDir, $web)=
+   * =$dataDir= location of cache file
+   * =$web= name of web to create the object for.
+Construct a new DBCache object.
+
+=cut
+
   sub new {
     my ( $class, $dataDir, $web ) = @_;
     my $this = bless( $class->SUPER::new(), $class );
@@ -84,7 +119,7 @@ use TWiki::Plugins::DBCachePlugin::TableDef;
 		  $atts->add( $att );
 		}
       } else {
-		$text .= $this->readTopicLine( $topic, $line, $fh );
+		$text .= $this->readTopicLine( $topic, $meta, $line, $fh );
 	  }
     }
     close( $fh );
@@ -92,7 +127,21 @@ use TWiki::Plugins::DBCachePlugin::TableDef;
     $this->set( $topic, $meta );
   }
 
-  # Designed to be overridden by subclasses
+=begin text
+
+---+++ readTopicLine($topic, $meta, $line, $fh) --> text
+   * $topic - name of the topic being read
+   * $meta - reference to the hash object for this topic
+   * line - the line being read
+   * $fh - the file handle of the file
+   * __return__ text to insert in place of _line_ in the text field of the topic
+Called when reading a topic that is being cached, this method is invoked on each line
+in the topic. It is designed to be overridden by subclasses; the default implementation
+does nothing. The sort of expected activities will be (for example) reading tables and
+adding them to the hash for the topic.
+
+=cut
+
   sub readTopicLine {
     #my ( $this, $topic, $line, $fh ) = @_;
   }
@@ -105,18 +154,31 @@ use TWiki::Plugins::DBCachePlugin::TableDef;
     return $timenow;
   }
 
-  # PROTECTED Designed to be overridden by subclasses. Called when
-  # one or more topics had to be read from disc rather than from the
-  # cache. Passed a list of topic names that have been read.
+=begin text
+
+---+++ onReload($topics)
+   * =$topics= - perl array of topic names that have just been loaded (or reloaded)
+Designed to be overridden by subclasses. Called when one or more topics had to be
+read from disc rather than from the cache. Passed a list of topic names that have been read.
+
+=cut
+
   sub onReload {
 	#my ( $this, $@topics) = @_;
   }
 
-  # PUBLIC load the web into the database on demand
-  # Return pair representing number of topics loaded from file
-  # and number of topics loaded from cache
-  # Return value is used in testing.
-  sub _load {
+=begin text
+
+---+++ load()
+
+Load the web into the database.
+Returns a string containing 3 numbers that give the number of topics
+read from the cache, the number read from file, and the number of previously
+cached topics that have been removed.
+
+=cut
+
+  sub load {
     my $this = shift;
 
     return "0 0 0" if ( $this->{loaded} );
@@ -231,11 +293,29 @@ use TWiki::Plugins::DBCachePlugin::TableDef;
     return ( $readFromCache, $readFromFile, $removed );
   }
 
+=begin text
+
+---+++ write($archive)
+   * =$archive= - the DBCachePlugin::Archive being written to
+Writes this object to the archive. Archives are used only if Storable is not available. This
+method must be overridden by subclasses is serialisation of their data fields is required.
+
+=cut
+
   sub write {
     my ( $this, $archive ) = @_;
     $archive->writeString( $this->{_web} );
     $this->SUPER::write( $archive );
   }
+
+=begin text
+
+---+++ read($archive)
+   * =$archive= - the DBCachePlugin::Archive being read from
+Reads this object from the archive. Archives are used only if Storable is not available. This
+method must be overridden by subclasses is serialisation of their data fields is required.
+
+=cut
 
   sub read {
     my ( $this, $archive ) = @_;

@@ -1,5 +1,6 @@
 #
 # Copyright (C) Motorola 2003 - All rights reserved
+# Copyright (C) Crawford Currie 2004
 #
 use strict;
 
@@ -7,7 +8,14 @@ use strict;
 # DBCachePlugin::Archive. Only works on .txt files.
 { package DBCachePlugin::FileTime;
 
-  # PUBLIC construct from a file name
+=begin text
+
+---+++ =new($file)=
+   * =$file= - filename
+Construct from a file name
+
+=cut
+
   sub new {
     my ( $class, $file ) = @_;
     my $this = bless( {}, $class );
@@ -18,8 +26,13 @@ use strict;
     return $this;
   }
 
-  # PUBLIC check the file time against what is seen on disc.
-  # Return 1 if consistent, 0 if inconsistent.
+=begin text
+
+---+++ =uptodate()=
+Check the file time against what is seen on disc. Return 1 if consistent, 0 if inconsistent.
+
+=cut
+
   sub uptodate {
     my $this = shift;
     my $file = $this->{file};
@@ -33,13 +46,25 @@ use strict;
     return 0;
   }
 
+=begin text
+
+---+++ =toString()= -> string
+Generates a string representation of the object.
+
+=cut
   sub toString {
     my $this = shift;
     my $stime = localtime( $this->{time} );
     return $this->{file} . ":$stime"
   }
 
-  # PUBLIC DBCachePlugin::Archive hook
+=begin text
+
+---+++ =write()=
+DBCachePlugin::Archive hook
+
+=cut
+
   sub write {
     my ( $this, $archive ) = @_;
 
@@ -47,7 +72,13 @@ use strict;
     $archive->writeInt( $this->{time} );
   }
 
-  # PUBLIC DBCachePlugin::Archive hook
+=begin text
+
+---+++ =read()=
+DBCachePlugin::Archive hook
+
+=cut
+
   sub read {
     my ( $this, $archive ) = @_;
 
