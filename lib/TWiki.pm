@@ -432,6 +432,12 @@ sub wikiToUserName
 }
 
 # =========================
+sub isGuest
+{
+   return ( $userName eq $defaultUserName );
+}
+
+# =========================
 sub getWikiUserTopic
 {
     # Topic without Web name
