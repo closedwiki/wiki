@@ -169,7 +169,8 @@ sub getFormDef
    
     # Read topic that defines the form
     if( &TWiki::Store::topicExists( $webName, $form ) ) {
-        my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $form );
+        my( $meta, $text ) =
+          TWiki::Store::readTopic( $webName, $form, undef, 0 );
         @fieldDefs = _parseFormDefinition( $text );
     } else {
         # FIXME - do what if there is an error?
@@ -187,7 +188,8 @@ sub getFormDef
         }
 
         if( ( ! @posValues ) && &TWiki::Store::topicExists( $webName, $name ) ) {
-            my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $name );
+            my( $meta, $text ) =
+              TWiki::Store::readTopic( $webName, $name, undef, 0 );
             @posValues = getPossibleFieldValues( $text );
             if( ! $type ) {
                 $type = "select";  #FIXME keep?
@@ -562,7 +564,8 @@ sub changeForm
     $listForms =~ s/\s*$//go;
     my @forms = split( /\s*,\s*/, $listForms );
     unshift @forms, "";
-    my( $metat, $tmp ) = TWiki::Store::readTopic( $theWeb, $theTopic );
+    my( $metat, $tmp ) =
+      TWiki::Store::readTopic( $theWeb, $theTopic, undef, 0 );
     my $formName = $theQuery->param( 'formtemplate' ) || "";
     if( ! $formName ) {
         my %form = $metat->findOne( "FORM" );

@@ -605,7 +605,7 @@ sub searchWeb
             foreach( @topicList ) {
                 $tempVal = $_;
                 # Permission check done below, so force this read to succeed with "internal" parameter
-                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal, "", "internal" );
+                my( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $tempVal, undef, 1 );
                 my ( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo( $thisWebName, $tempVal );
                 $topicRevUser{ $tempVal }   = TWiki::User::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal }   = $revdate;  # keep epoc sec for sorting
@@ -636,7 +636,7 @@ sub searchWeb
             foreach( @topicList ) {
                 $tempVal = $_;
                 # Permission check done below, so force this read to succeed with "internal" parameter
-                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal, "", "internal" );
+                my( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $tempVal, undef, 1 );
                 my( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo( $thisWebName, $tempVal );
                 $topicRevUser{ $tempVal }   = TWiki::User::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal }   = &TWiki::formatTime( $revdate );
@@ -667,7 +667,7 @@ sub searchWeb
             foreach( @topicList ) {
                 $tempVal = $_;
                 # Permission check done below, so force this read to succeed with "internal" parameter
-                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal, "", "internal" );
+                my( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $tempVal, undef, 1 );
                 my( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo( $thisWebName, $tempVal );
                 $topicRevUser{ $tempVal }   = TWiki::User::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal }   = &TWiki::formatTime( $revdate );
@@ -697,7 +697,7 @@ sub searchWeb
             foreach( @topicList ) {
                 $tempVal = $_;
                 # Permission check done below, so force this read to succeed with "internal" parameter
-                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal, "", "internal" );
+                my( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $tempVal, undef, 1 );
                 my( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo( $thisWebName, $tempVal );
                 $topicRevUser{ $tempVal }   = TWiki::User::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal }   = &TWiki::formatTime( $revdate );
@@ -771,7 +771,8 @@ sub searchWeb
               $allowView = $topicAllowView{$topic};
           } else {
               # lazy query, need to do it at last
-              ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
+              ( $meta, $text ) =
+                TWiki::Store::readTopic( $thisWebName, $topic, undef, 1 );
               $text =~ s/%WEB%/$thisWebName/gos;
               $text =~ s/%TOPIC%/$topic/gos;
               $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $topic, $thisWebName );
@@ -799,7 +800,7 @@ sub searchWeb
           # Special handling for format="..."
           if( $theFormat ) {
               unless( $text ) {
-                  ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
+                  ( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $topic, undef, 1 );
                   $text =~ s/%WEB%/$thisWebName/gos;
                   $text =~ s/%TOPIC%/$topic/gos;
               }
@@ -816,7 +817,7 @@ sub searchWeb
           if( $doMultiple ) {
               my $pattern = $tokens[$#tokens]; # last token in an AND search
               $pattern = quotemeta( $pattern ) if( $theType ne "regex" );
-              ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic ) unless $text;
+              ( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $topic, undef, 1 ) unless $text;
               if( $caseSensitive ) {
                   @multipleHitLines = reverse grep { /$pattern/ } split( /[\n\r]+/, $text );
               } else {
@@ -846,7 +847,7 @@ sub searchWeb
                 $tempVal =~ s/\$createwikiusername/_getRev1Info( $thisWebName, $topic, "wikiusername" )/geos;
                 if( $tempVal =~ m/\$text/ ) {
                     # expand topic text
-                    ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic ) unless $text;
+                    ( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $topic, undef, 1 ) unless $text;
                     if( $topic eq $TWiki::topicName ) {
                         # defuse SEARCH in current topic to prevent loop
                         $text =~ s/%SEARCH{.*?}%/SEARCH{...}/go;
@@ -880,7 +881,7 @@ sub searchWeb
 
             if( $doRenameView ) { # added JET 19 Feb 2000
                 # Permission check done below, so force this read to succeed with "internal" parameter
-                my $rawText = &TWiki::Store::readTopicRaw( $thisWebName, $topic, "", "internal" );
+                my $rawText = TWiki::Store::readTopicRaw( $thisWebName, $topic, undef, 1 );
                 my $changeable = "";
                 my $changeAccessOK = &TWiki::Access::checkAccessPermission( "change", $TWiki::wikiUserName, $text, $topic, $thisWebName );
                 if( ! $changeAccessOK ) {
@@ -941,7 +942,8 @@ sub searchWeb
             } elsif( $doBookView ) {
                 # BookView, added PTh 20 Jul 2000
                 if( ! $text ) {
-                    ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
+                    ( $meta, $text ) =
+                      TWiki::Store::readTopic( $thisWebName, $topic, undef, 1 );
                 }
                 if( "$thisWebName.$topic" eq "$baseWeb.$baseTopic" ) {
                     # primitive way to prevent recursion

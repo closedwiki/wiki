@@ -34,7 +34,7 @@ use vars qw(
 			$VERSION $initialisationErrors
     );
 
-$VERSION = '1.025'; # TWiki production release 01 Aug 2004
+$VERSION = '1.026';
 
 $initialisationErrors = "";
 

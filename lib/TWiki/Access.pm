@@ -112,7 +112,7 @@ sub checkAccessPermission
     }
     if( ! $theTopicText ) {
         # text not supplied as parameter, so read topic
-        $theTopicText = TWiki::Store::readWebTopic( $theWebName, $theTopicName );
+        $theTopicText = TWiki::Store::readTopicRaw( $theWebName, $theTopicName, undef, 1 );
     }
 
     # extract the " * Set (ALLOWTOPIC|DENYTOPIC)$theAccessType = " in body text
@@ -289,8 +289,7 @@ sub getUsersOfGroup
     }
     $processedGroups->{"$web.$topic"} = 1;
 
-    # read topic
-    my $text = TWiki::Store::readWebTopic( $web, $topic );
+    my $text = TWiki::Store::readTopicRaw( $web, $topic, undef, 1 );
 
     # SMELL: what the blazes is this? Comment it out, and
     # see what breaks.... DFP rules.

@@ -65,7 +65,8 @@ sub readPrefs {
 
     $self->{prefs} = {};
 
-    my( $meta, $text ) = TWiki::Store::readTopic( $theWeb, $theTopic, 1 );
+    my( $meta, $text ) =
+      TWiki::Store::readTopic( $theWeb, $theTopic, undef, 1 );
 
     my $parser = new TWiki::Prefs::Parser();
     $parser->parseText( $text, $self );

@@ -100,50 +100,32 @@ sub _renderParent
     $visited{"$web.$topic"} = 1;
 
     my $sep = "";
-    my $cWeb = $web;
+    my $pWeb = $web;
     my $text = "";
+    my %parentMeta = $meta->findOne( "TOPICPARENT" );
+    my $parent;
+    $parent = $parentMeta{name} if %parentMeta;
+    my @stack;
 
-    while( 1 ) {
-        my %parent = $meta->findOne( "TOPICPARENT" );
-        if( %parent ) {
-            my $name = $parent{"name"};
-            my $pWeb = $cWeb;
-            my $pTopic = $name;
-            if( $name =~ /^(.*)\.(.*)$/ ) {
-               $pWeb = $1;
-               $pTopic = $2;
-            }
-            if( $noWebHome && ( $pTopic eq $TWiki::mainTopicname ) ) {
-               last;  # exclude "WebHome"
-            }
-            $text = "[[$pWeb.$pTopic][$pTopic]]$sep$text";
-            $sep = $usesep;
-            if( $dontRecurse || ! $name ) {
-               last;
-            } else {
-               if( $visited{"$pWeb.$pTopic"} ) {
-                  last;
-               } else {
-                  $visited{"$pWeb.$pTopic"} = 1;
-               }
-               if( TWiki::Store::topicExists( $pWeb, $pTopic ) ) {
-                   $meta = TWiki::Store::getMinimalMeta( $pWeb, $pTopic );
-               } else {
-                   last;
-               }
-               $cWeb = $pWeb;
-            }
-        } else {
-            last;
+    while( $parent ) {
+        my $pTopic = $parent;
+        if( $parent =~ /^(.*)\.(.*)$/ ) {
+            $pWeb = $1;
+            $pTopic = $2;
         }
+        $parent = "$pWeb.$pTopic";
+        last if( $noWebHome && ( $pTopic eq $TWiki::mainTopicname ) ||
+                 $dontRecurse ||
+                 $visited{$parent} );
+        $visited{$parent} = 1;
+        unshift( @stack, "[[$parent][$pTopic]]" );
+        $parent = TWiki::Store::getTopicParent( $pWeb, $pTopic );
     }
+    $text = join( $usesep, @stack );
 
-    if( $text && $prefix ) {
-       $text = "$prefix$text";
-    }
-
-    if( $text && $suffix ) {
-       $text .= $suffix;
+    if( $text) {
+        $text = "$prefix$text" if ( $prefix );
+        $text .= $suffix if ( $suffix );
     }
 
     return $text;
@@ -733,7 +715,7 @@ sub renderFormField
     unless ( $meta ) {
         my $dummyText;
         ( $meta, $dummyText ) =
-          TWiki::Store::readTopic( $formWeb, $formTopic );
+          TWiki::Store::readTopic( $formWeb, $formTopic, undef, 0 );
         $ffCache{"$formWeb.$formTopic"} = $meta;
     }
 

@@ -739,7 +739,12 @@ sub readTopicText
 {
     my( $web, $topic, $rev, $ignorePermissions ) = @_;
 
-    my $text = TWiki::Store::readTopicRaw( $web, $topic, $rev, $ignorePermissions );
+    $ignorePermissions = 0 unless defined( $ignorePermissions );
+
+    my $text =
+      TWiki::Store::readTopicRaw( $web, $topic, $rev,
+                                  $ignorePermissions );
+
     # FIXME: The following breaks if spec of readTopicRaw() changes
     if( $text =~ /^No permission to read topic/ ) {
         $text = TWiki::getOopsUrl( $web, $topic, "oopsaccessview" );
@@ -804,9 +809,9 @@ sub saveTopicText
     return TWiki::getOopsUrl( $web, $topic, "oopsempty" ) unless( $text ); # empty topic not allowed
 
     # extract meta data and merge old attachment meta data
-    my $meta = "";
-    ( $meta, $text ) = TWiki::Store::_extractMetaData( $web, $topic, $text );
-    my( $oldMeta, $oldText ) = TWiki::Store::readTopic( $web, $topic );
+    my $meta = TWiki::Store::extractMetaData( $web, $topic, \$text );
+    my( $oldMeta, $oldText ) =
+      TWiki::Store::readTopic( $web, $topic, undef, 1 );
     $meta->copyFrom( $oldMeta, "FILEATTACHMENT" );
 
     # save topic
@@ -1044,12 +1049,9 @@ sub getPubDir
 # -------------------------
 sub readTopic
 {
-#   my( $web, $topic ) = @_;
+    my( $web, $topic ) = @_;
 
-    # FIXME: Write warning based on flag (disabled for now); indicate who is calling this function
-    ## writeWarning( "deprecated use of Func::readTopic" );
-
-    return &TWiki::Store::readTopic( @_ );
+    return TWiki::Store::readTopic( $web, $topic, undef, 0 );
 }
 
 # =========================

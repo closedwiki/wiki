@@ -274,7 +274,8 @@ sub _readTemplateFile
     if ( TWiki::Store::topicExists( $theWeb, $theTopic ) &&
          TWiki::Access::checkAccessPermission( "view",
                                                $TWiki::wikiUserName, "", $theTopic, $theWeb )) {
-        my ( $meta, $text ) = TWiki::Store::readTopic( $theWeb, $theTopic, 1 );
+        my ( $meta, $text ) =
+          TWiki::Store::readTopic( $theWeb, $theTopic, undef, 1 );
         return $text;
     }
 

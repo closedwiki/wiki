@@ -186,7 +186,7 @@ sub readTemplateTopic
     if( TWiki::Store::topicExists( $TWiki::webName, $theTopicName ) ) {
         $web = $TWiki::webName;
     }
-    return TWiki::Store::readTopic( $web, $theTopicName );
+    return TWiki::Store::readTopic( $web, $theTopicName, undef, 0 );
 }
 
 1;

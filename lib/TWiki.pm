@@ -1499,12 +1499,8 @@ sub _handleINCLUDE {
         $theTopic = $2;
         $isTopic = 1;
 
-        if( $rev ) {
-            $rev = "1.$rev" unless( $rev =~ /^1\./ );
-            ( $meta, $text ) = TWiki::Store::readTopicVersion( $theWeb, $theTopic, $rev );
-        } else {
-            ( $meta, $text ) = TWiki::Store::readTopic( $theWeb, $theTopic );
-        }
+        ( $meta, $text ) =
+          TWiki::Store::readTopic( $theWeb, $theTopic, $rev, 0 );
         # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
         $text =~ s/.*?%STARTINCLUDE%//s;
         $text =~ s/%STOPINCLUDE%.*//s;
@@ -2341,7 +2337,6 @@ sub _processTags {
     # Run out of input. Gather up everything in the stack.
     while ( $#stack ) {
         my $expr = pop( @stack );
-        writeWarning( "Unclosed tag $expr...");
         $stack[$#stack] .= $expr;
     }
 

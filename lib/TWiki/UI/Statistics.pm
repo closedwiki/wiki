@@ -416,7 +416,8 @@ sub _processWeb
     # DEBUG
     # $statsTopic = "TestStatistics";		# Create this by hand
     if( &TWiki::Store::topicExists( $webName, $statsTopic ) ) {
-	my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $statsTopic, 1 );
+	my( $meta, $text ) =
+      TWiki::Store::readTopic( $webName, $statsTopic, undef, 1 );
 	my @lines = split( /\n/, $text );
 	my $statLine;
 	my $idxStat = -1;

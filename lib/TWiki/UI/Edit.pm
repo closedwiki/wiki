@@ -94,9 +94,9 @@ sub edit {
         return;
     }
 
-    # Read topic 
     if( $topicExists ) {
-        ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+        ( $meta, $text ) =
+          TWiki::Store::readTopic( $webName, $topic, undef, 1 );
     }
 
     my $wikiUserName = &TWiki::User::userToWikiName( $userName );
@@ -127,12 +127,14 @@ sub edit {
     unless( $topicExists ) {
         if( $templateTopic ) {
             if( $templateTopic =~ /^(.+)\.(.+)$/ ) {
+                # SMELL: this is pointless, according to the spec of readTopic
                 # is "Webname.SomeTopic"
                 $templateWeb   = $1;
                 $templateTopic = $2;
             }
 
-            ( $meta, $text ) = TWiki::Store::readTopic( $templateWeb, $templateTopic );
+            ( $meta, $text ) =
+              TWiki::Store::readTopic( $templateWeb, $templateTopic, undef, 0 );
         }
         unless( $text ) {
             ( $meta, $text ) = TWiki::UI::readTemplateTopic( "WebTopicEditTemplate" );
@@ -181,7 +183,7 @@ sub edit {
     }
 
     if( $saveCmd eq "repRev" ) {
-        $text = TWiki::Store::readTopicRaw( $webName, $topic );
+        $text = TWiki::Store::readTopicRaw( $webName, $topic, undef, 0 );
     }
 
     $text =~ s/&/&amp\;/go;

@@ -203,7 +203,8 @@ sub addUserToTWikiUsersTopic {
     my ( $wikiName, $remoteUser ) = @_;
     my $today = &TWiki::formatTime(time(), "\$day \$mon \$year", "gmtime");
     my $topicName = $TWiki::wikiUsersTopicname;
-    my( $meta, $text )  = &TWiki::Store::readTopic( $TWiki::mainWebname, $topicName );
+    my( $meta, $text ) =
+      TWiki::Store::readTopic( $TWiki::mainWebname, $topicName, undef, 0 );
     my $result = "";
     my $status = "0";
     my $line = "";

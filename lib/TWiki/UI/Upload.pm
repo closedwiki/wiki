@@ -58,7 +58,8 @@ sub attach {
 
   return unless TWiki::UI::topicExists( $webName, $topic, "attach" );
 
-  ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+  ( $meta, $text ) =
+    TWiki::Store::readTopic( $webName, $topic, undef, 0 );
   my %args = $meta->findOne( "FILEATTACHMENT", $fileName );
   %args = (
            name => $fileName,

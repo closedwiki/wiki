@@ -64,7 +64,7 @@ sub preview {
 
   if( $saveCmd ne "repRev" ) {
     my $dummy = "";
-    ( $meta, $dummy ) = &TWiki::Store::readTopic( $webName, $topic );
+    ( $meta, $dummy ) = TWiki::Store::readTopic( $webName, $topic, undef, 0 );
 
     # parent setting
     if( $theParent eq "none" ) {
@@ -100,7 +100,9 @@ sub preview {
   } else {
     # undocumented "repRev" mode
     $text = $textparam; # text to save
-    ( $meta, $ptext ) = &TWiki::Store::_extractMetaData( $webName, $topic, $text );
+    $ptext = $text;
+    $meta = TWiki::Store::extractMetaData( $webName, $topic, \$ptext );
+    # SMELL: what the heck is this supposed to do?????
     $text =~ s/%_(.)_%/%__$1__%/go;
   }
 

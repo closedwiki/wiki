@@ -85,6 +85,97 @@ sub _getTopicHandler
 
 =pod
 
+---++ readTopic( $web, $topic, $version, $internal )
+Return value: ( $metaObject, $topicText )
+
+Reads the given version of a topic and it's meta-data. If the version
+is undef, then read the most recent version. The version number may be
+an ordinal or a "1.x" style decimal.
+
+If $internal is false, view permission will be required for the topic
+read to be successful.  A failed topic read is indicated by setting
+$TWiki::readTopicPermissionFailed.
+
+If the topic contains a web specification (is of the form Web.Topic) the
+web specification will override whatever is passed in $theWeb.
+
+The metadata and topic text are returned separately, with the metadata in a
+TWiki::Meta object.  (The topic text is, as usual, just a string.)
+
+=cut
+
+sub readTopic
+{
+    my( $theWeb, $theTopic, $version, $internal ) = @_;
+
+    die "Insufficient parameters ",caller unless defined( $internal );
+
+    my $text = readTopicRaw( $theWeb, $theTopic, $version, $internal );
+    my $meta = extractMetaData( $theWeb, $theTopic, \$text );
+    die "Internal error |$theWeb|$theTopic|" unless $meta;
+    return( $meta, $text );
+}
+
+=pod
+
+---++ readTopicRaw( $web, $topic, $version, $internal )
+Return value: $topicText
+
+Reads the given version of a topic, without separating out any embedded
+meta-data. If the version is undef, then
+read the most recent version. The version number may be an ordinal
+or a "1.x" style decimal.
+
+If $internal is false, view access permission will be checked.  If permission
+is not granted, then an error message will be returned in $text, and set in
+$TWiki::readTopicPermissionFailed.
+
+If the topic contains a web specification (is of the form Web.Topic) the
+web specification will override whatever is passed in $theWeb.
+
+SMELL: breaks encapsulation of the store, as it assumes meta is stored embedded in the text, and clients use this. Other implementors of store will be forced to insert meta-data to ensure correct operation of View raw=debug and the "repRev" mode of Edit.
+
+=cut
+
+sub readTopicRaw
+{
+    my( $theWeb, $theTopic, $version, $internal ) = @_;
+
+    die "Insufficient parameters ",caller unless defined( $internal );
+
+    # test if theTopic contains a webName to override $theWeb
+    ( $theWeb, $theTopic ) =
+      TWiki::normalizeWebTopicName( $theWeb, $theTopic );
+
+    my $text;
+
+    unless ( defined( $version )) {
+        $text = readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt" );
+    } else {
+        $version =~ s/^1\.//o;
+        my $topicHandler = _getTopicHandler( $theWeb, $theTopic, undef );
+        $text = $topicHandler->getRevision( $version );
+    }
+
+    my $viewAccessOK = 1;
+    unless( $internal ) {
+        $viewAccessOK =
+          TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName,
+                                                $text, $theTopic, $theWeb );
+    }
+
+    unless( $viewAccessOK ) {
+        # SMELL: TWiki::Func::readTopicText will break if the following text changes
+        # SMELL: Use exceptions.
+        $text = "No permission to read topic $theWeb.$theTopic  - perhaps you need to log in?\n";
+        $TWiki::readTopicPermissionFailed = "$TWiki::readTopicPermissionFailed $theWeb.$theTopic";
+    }
+
+    return $text;
+}
+
+=pod
+
 ---++ sub moveAttachment (  $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $user  )
 
 Move an attachment from one topic to another.
@@ -105,7 +196,7 @@ sub moveAttachment
 
     return $error if( $error );
 
-    my( $meta, $text ) = readTopic( $oldWeb, $oldTopic );
+    my( $meta, $text ) = readTopic( $oldWeb, $oldTopic, 1 );
     my %fileAttachment =
       $meta->findOne( "FILEATTACHMENT", $theAttachment );
     $meta->remove( "FILEATTACHMENT", $theAttachment );
@@ -119,7 +210,7 @@ sub moveAttachment
     return $error if( $error );
 
     # Add file attachment to new topic
-    ( $meta, $text ) = readTopic( $newWeb, $newTopic );
+    ( $meta, $text ) = readTopic( $newWeb, $newTopic, 1 );
     $fileAttachment{"movefrom"} = "$oldWeb.$oldTopic";
     $fileAttachment{"moveby"}   = $user;
     $fileAttachment{"movedto"}  = "$newWeb.$newTopic";
@@ -143,7 +234,7 @@ sub moveAttachment
 
 =pod
 
----++ sub getAttachmentStream( $web, $topic, $attName )
+---++ sub getAttachmentStream( $web, $topic, $attName ) -> stream
 | =$web= | The web |
 | =$topic= | The topic |
 | =$attName= | Name of the attachment |
@@ -250,7 +341,7 @@ sub _changeRefTo
 
 =pod
 
----++ sub renameTopic (  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  )
+---++ sub renameTopic (  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  ) -> error string or undef
 
 Rename a topic, allowing for transfer between Webs. This method will change
 all references _from_ this topic to other topics _within the old web_
@@ -276,11 +367,11 @@ sub renameTopic
          "to"   => "$newWeb.$newTopic",
          "date" => "$time",
          "by"   => "$user" );
-      my $text = readTopicRaw( $newWeb, $newTopic );
+      my $text = readTopicRaw( $newWeb, $newTopic, undef, 1 );
       if( ( $oldWeb ne $newWeb ) && $doChangeRefTo ) {
          $text = _changeRefTo( $text, $oldWeb, $oldTopic );
       }
-      my $meta = _extractMetaData( $newWeb, $newTopic, $text );
+      my $meta = extractMetaData( $newWeb, $newTopic, \$text );
       $meta->put( "TOPICMOVED", @args );
       noHandlersSave( $newWeb, $newTopic, $text, $meta, "", "", "", "unlock" );
    }
@@ -299,7 +390,7 @@ sub renameTopic
 
 =pod
 
----++ sub updateReferringPages (  $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs  )
+---++ sub updateReferringPages (  $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs  ) -> ( count of lock failures, result text)
 
 Update pages that refer to a page that is being renamed/moved.
 
@@ -317,97 +408,71 @@ sub updateReferringPages
     my $spacedTopic = TWiki::searchableTopic( $oldTopic );
 
     while ( @refs ) {
-       my $type = shift @refs;
-       my $item = shift @refs;
-       my( $itemWeb, $itemTopic ) = TWiki::normalizeWebTopicName( "", $item );
-       if ( TWiki::Store::topicIsLockedBy( $itemWeb, $itemTopic ) ) {
-          $lockFailure = 1;
-       } else {
-          my $resultText = "";
-          $result .= ":$item: , "; 
-          #open each file, replace $topic with $newTopic
-          if ( TWiki::Store::topicExists($itemWeb, $itemTopic) ) { 
-             my $scantext = TWiki::Store::readTopicRaw($itemWeb, $itemTopic);
-             if( ! TWiki::Access::checkAccessPermission( "change", $wikiUserName, $scantext,
-                    $itemWeb, $itemTopic ) ) {
-                 # This shouldn't happen, as search will not return, but check to be on the safe side
-                 TWiki::writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
-                 next;
-             }
-	     my $insidePRE = 0;
-	     my $insideVERBATIM = 0;
-             my $noAutoLink = 0;
-	     foreach( split( /\n/, $scantext ) ) {
-	        if( /^%META:TOPIC(INFO|MOVED)/ ) {
-	            $resultText .= "$_\n";
-	            next;
-	        }
-		# FIXME This code is in far too many places - also in Search.pm and Store.pm
-		m|<pre>|i  && ( $insidePRE = 1 );
-		m|</pre>|i && ( $insidePRE = 0 );
-		if( m|<verbatim>|i ) {
-		    $insideVERBATIM = 1;
-		}
-		if( m|</verbatim>|i ) {
-		    $insideVERBATIM = 0;
-		}
-		m|<noautolink>|i   && ( $noAutoLink = 1 );
-		m|</noautolink>|i  && ( $noAutoLink = 0 );
+        my $type = shift @refs;
+        my $item = shift @refs;
+        my( $itemWeb, $itemTopic ) = TWiki::normalizeWebTopicName( "", $item );
+        if ( TWiki::Store::topicIsLockedBy( $itemWeb, $itemTopic ) ) {
+            $lockFailure = 1;
+        } else {
+            my $resultText = "";
+            $result .= ":$item: , "; 
+            #open each file, replace $topic with $newTopic
+            if ( TWiki::Store::topicExists($itemWeb, $itemTopic) ) { 
+                my $scantext =
+                  TWiki::Store::readTopicRaw( $itemWeb, $itemTopic, undef, 0 );
+                if( ! TWiki::Access::checkAccessPermission( "change", $wikiUserName, $scantext,
+                                                            $itemWeb, $itemTopic ) ) {
+                    # This shouldn't happen, as search will not return, but check to be on the safe side
+                    TWiki::writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
+                    next;
+                }
+                my $insidePRE = 0;
+                my $insideVERBATIM = 0;
+                my $noAutoLink = 0;
+                foreach( split( /\n/, $scantext ) ) {
+                    if( /^%META:TOPIC(INFO|MOVED)/ ) {
+                        $resultText .= "$_\n";
+                        next;
+                    }
+                    # FIXME This code is in far too many places - also in Search.pm and Store.pm
+                    m|<pre>|i  && ( $insidePRE = 1 );
+                    m|</pre>|i && ( $insidePRE = 0 );
+                    if( m|<verbatim>|i ) {
+                        $insideVERBATIM = 1;
+                    }
+                    if( m|</verbatim>|i ) {
+                        $insideVERBATIM = 0;
+                    }
+                    m|<noautolink>|i   && ( $noAutoLink = 1 );
+                    m|</noautolink>|i  && ( $noAutoLink = 0 );
 
-		if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
-		    if( $type eq "global" ) {
-			my $insertWeb = ($itemWeb eq $newWeb) ? "" : "$newWeb.";
-			s/($preTopic)\Q$oldWeb.$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
-		    } else {
-			# Only replace bare topic (i.e. not preceeded by web) if web of referring
-			# topic is in original Web of topic that's being moved
-			if( $oldWeb eq $itemWeb ) {
-			    my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
-			    s/($preTopic)\Q$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
-			    s/\[\[($spacedTopic)\]\]/[[$newTopic][$1]]/gi;
-			}
-		    }
-		}
-	        $resultText .= "$_\n";
-	     }
-	     my $meta = _extractMetaData( $itemWeb, $itemTopic, $resultText );
-         saveTopic( $itemWeb, $itemTopic, $resultText, $meta, "", "unlock", "dontNotify", "" );
-          } else {
-	    $result .= ";$item does not exist;";
-          }
-       }
+                    if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
+                        if( $type eq "global" ) {
+                            my $insertWeb = ($itemWeb eq $newWeb) ? "" : "$newWeb.";
+                            s/($preTopic)\Q$oldWeb.$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
+                        } else {
+                            # Only replace bare topic (i.e. not preceeded by web) if web of referring
+                            # topic is in original Web of topic that's being moved
+                            if( $oldWeb eq $itemWeb ) {
+                                my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
+                                s/($preTopic)\Q$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
+                                s/\[\[($spacedTopic)\]\]/[[$newTopic][$1]]/gi;
+                            }
+                        }
+                    }
+                    $resultText .= "$_\n";
+                }
+                my $meta = extractMetaData( $itemWeb, $itemTopic, \$resultText );
+                saveTopic( $itemWeb, $itemTopic, $resultText, $meta,
+                           "", "unlock", "dontNotify", "" );
+            } else {
+                $result .= ";$item does not exist;";
+            }
+        }
     }
     return ( $lockFailure, $result );
 }
 
-
-=pod
-
----++ sub readTopicVersion (  $theWeb, $theTopic, $theRev  )
-
-Read a specific version of a topic
-<pre>view:     $text= TWiki::Store::readTopicVersion( $topic, "1.$rev" );</pre>
-
-=cut
-
-sub readTopicVersion
-{
-    my( $theWeb, $theTopic, $theRev ) = @_;
-    my $text = _readVersionNoMeta( $theWeb, $theTopic, $theRev );
-    my $meta = _extractMetaData( $theWeb, $theTopic, $text );
-    return( $meta, $text );
-}
-
-# Read a specific version of a topic
-
-sub _readVersionNoMeta
-{
-    my( $theWeb, $theTopic, $theRev ) = @_;
-    my $topicHandler = _getTopicHandler( $theWeb, $theTopic );
-    
-    $theRev =~ s/^1\.//o;
-    return $topicHandler->getRevision( $theRev );
-}
 
 =pod
 
@@ -633,8 +698,7 @@ sub saveTopic
     $text = _writeMeta( $meta, $text );  # add meta data for Plugin callback
     TWiki::Plugins::beforeSaveHandler( $text, $topic, $web );
     # remove meta data again!
-    $meta = _extractMetaData( $web, $topic, $text );
-
+    $meta = extractMetaData( $web, $topic, \$text );
     my $error = noHandlersSave( $web, $topic, $text, $meta, $saveCmd,
                                 $attachment, $dontLogSave, $doUnlock,
                                 $dontNotify, $comment, $forceDate );
@@ -673,7 +737,7 @@ sub saveAttachment
     lockTopic( $web, $topic, 0 );
 
     # update topic
-    my( $meta, $text ) = TWiki::Store::readTopic( $web, $topic );
+    my( $meta, $text ) = TWiki::Store::readTopic( $web, $topic, undef, 1 );
 
     if ( $opts->{file} ) {
         my $fileVersion = TWiki::Store::getRevisionNumber( $web, $topic,
@@ -1040,36 +1104,40 @@ sub _addMetaDatum {
 # Expect meta data at top of file, but willing to accept it anywhere.
 # If we have an old file format without meta data, then convert.
 #
-# *WARNING: SIDE-EFFECTING FUNCTION* meta-data is stripped from the $text
-sub _extractMetaData
+# SMELL: SIDE-EFFECTING FUNCTION meta-data is stripped from the $rtext
+#
+# SMELL: Calls to this method from outside of Store
+# should be avoided at all costs, as it exports the assumption that
+# meta-data is embedded in text.
+#
+sub extractMetaData
 {
-    #my( $web, $topic, $text ) = @_;
+    my( $web, $topic, $rtext ) = @_;
 
-    my $meta = TWiki::Meta->new( $_[0], $_[1] );
-    $_[2] =~ s/^%META:([^{]+){(.*)}%\r?\n/&_addMetaDatum($meta,$1,$2)/gem;
+    my $meta = TWiki::Meta->new( $web, $topic );
+    $$rtext =~ s/^%META:([^{]+){(.*)}%\r?\n/&_addMetaDatum($meta,$1,$2)/gem;
 
     # If there is no meta data then convert from old format
     if( ! $meta->count( "TOPICINFO" ) ) {
-        if ( $_[2] =~ /<!--TWikiAttachment-->/ ) {
-            $_[2] = TWiki::Attach::migrateToFileAttachmentMacro( $meta,
-                                                                 $_[2] );
+        if ( $$rtext =~ /<!--TWikiAttachment-->/ ) {
+            $$rtext = TWiki::Attach::migrateToFileAttachmentMacro( $meta,
+                                                                   $$rtext );
         }
 
-        if ( $_[2] =~ /<!--TWikiCat-->/ ) {
+        if ( $$rtext =~ /<!--TWikiCat-->/ ) {
             eval 'use TWiki::Form;';
-            $_[2] = TWiki::Form::upgradeCategoryTable( $_[0], $_[1],
-                                                       $meta, $_[2] );
+            $$rtext = TWiki::Form::upgradeCategoryTable( $web, $topic,
+                                                         $meta, $$rtext );
         }
     } else {
         my %topicinfo = $meta->findOne( "TOPICINFO" );
         if( $topicinfo{"format"} eq "1.0beta" ) {
             # This format used live at DrKW for a few months
-            if( $_[2] =~ /<!--TWikiCat-->/ ) {
+            if( $$rtext =~ /<!--TWikiCat-->/ ) {
                 eval 'use TWiki::Form;';
-                $_[2] = TWiki::Form::upgradeCategoryTable( $_[0],
-                                                           $_[1],
-                                                           $meta,
-                                                           $_[2] );
+                $$rtext = TWiki::Form::upgradeCategoryTable( $web, $topic,
+                                                             $meta,
+                                                             $$rtext );
             }
             TWiki::Attach::upgradeFrom1v0beta( $meta );
             if( $meta->count( "TOPICMOVED" ) ) {
@@ -1085,18 +1153,17 @@ sub _extractMetaData
 
 =pod
 
----++ sub getMinimalMeta (  $theWeb, $theTopic  ) -> $meta
+---++ sub getTopicParent (  $theWeb, $theTopic  ) -> $meta
 
-Get the minimum amount of meta-data necessary to find the
-topic parent.
-Generalised for Codev.DataFramework. Needs to be fast because
+Get the name of the topic parent. Needs to be fast because
 of use by Render.pm.
 
 =cut
 
-sub getMinimalMeta
-{
+sub getTopicParent {
     my( $theWeb, $theTopic ) = @_;
+
+    return undef unless topicExists( $theWeb, $theTopic );
 
     my $topicHandler = _getTopicHandler( $theWeb, $theTopic );
     my $filename = $topicHandler->{file};
@@ -1114,95 +1181,11 @@ sub getMinimalMeta
     }
     close( IN_FILE );
 
-    return _extractMetaData( $theWeb, $theTopic, $data );
+    my $meta = extractMetaData( $theWeb, $theTopic, \$data );
+    my %parentMeta = $meta->findOne( "TOPICPARENT" );
+    return $parentMeta{name} if %parentMeta;
+    return undef;
 }
-
-=pod
-
----++ readTopic( $web, $topic, $internal )
-Return value: ( $metaObject, $topicText )
-
-Reads the most recent version of a topic.  If $internal is false, view
-permission will be required for the topic read to be successful.  A failed
-topic read is indicated by setting $TWiki::readTopicPermissionFailed.
-
-The metadata and topic text are returned separately, with the metadata in a
-TWiki::Meta object.  (The topic text is, as usual, just a string.)
-
-=cut
-
-sub readTopic
-{
-    my( $theWeb, $theTopic, $internal ) = @_;
-
-    my $text = readTopicRaw( $theWeb, $theTopic, "", $internal );
-    my $meta = _extractMetaData( $theWeb, $theTopic, $text );
-    die "Internal error |$theWeb|$theTopic|" unless $meta;
-    return( $meta, $text );
-}
-
-=pod
-
----++ sub readWebTopic (  $theWeb, $theName  )
-
-Reads and returns the raw text of a topic.
-
-SMELL: since the text returned contains META this method breaks the encapsulation of the Store. The only argument for this method is that it skips the extraction of meta-data from topics, which may be fractionally faster. I _believe_ it can be safely implemented to just return the topic text with no META.
-
-=cut
-
-sub readWebTopic
-{
-    my( $theWeb, $theName ) = @_;
-    my $text = readFile( "$TWiki::dataDir/$theWeb/$theName.txt" );
-    
-    return $text;
-}
-
-=pod
-
----++ readTopicRaw( $web, $topic, $version, $internal )
-Return value: $topicText
-
-Reads a topic; the most recent version is used unless $version is specified.
-If $internal is false, view access permission will be checked.  If permission
-is not granted, then an error message will be returned in $text, and set in
-$TWiki::readTopicPermissionFailed.
-
-SMELL: breaks encapsulation of the store, as it assumes meta is stored embedded in the text, and clients use this. Other implementors of store will be forced to insert meta-data to ensure correct operation of View raw=debug and the "repRev" mode of Edit.
-
-=cut
-
-sub readTopicRaw
-{
-    my( $theWeb, $theTopic, $theVersion, $internal ) = @_;
-
-    #SVEN - test if theTopic contains a webName to override $theWeb
-    ( $theWeb, $theTopic ) = TWiki::normalizeWebTopicName( $theWeb, $theTopic );
-
-    my $text = "";
-    if( ! $theVersion ) {
-        $text = readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt" );
-    } else {
-        $text = _readVersionNoMeta( $theWeb, $theTopic, $theVersion);
-    }
-
-    my $viewAccessOK = 1;
-    unless( $internal ) {
-        $viewAccessOK = TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $theTopic, $theWeb );
-        # TWiki::writeDebug( "readTopicRaw $viewAccessOK $TWiki::wikiUserName $theWeb $theTopic" );
-    }
-    
-    unless( $viewAccessOK ) {
-        # FIXME: TWiki::Func::readTopicText will break if the following text changes
-        $text = "No permission to read topic $theWeb.$theTopic  - perhaps you need to log in?\n";
-        # Could note inability to read so can divert to viewauth or similar
-        $TWiki::readTopicPermissionFailed = "$TWiki::readTopicPermissionFailed $theWeb.$theTopic";
-    }
-
-    return $text;
-}
-
 
 =pod
 

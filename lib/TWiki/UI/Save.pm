@@ -68,7 +68,8 @@ sub _save {
   # template using our CGI record
   my $templatetopic = $query->param( "templatetopic");
   if ($templatetopic) {
-    ($meta, $text) = &TWiki::Store::readTopic( $webName, $templatetopic );
+    ($meta, $text) =
+      TWiki::Store::readTopic( $webName, $templatetopic, undef, 0 );
     $text = TWiki::expandVariablesOnTopicCreation( $text );
   }
 	
@@ -131,12 +132,13 @@ sub _save {
 
   if( $saveCmd eq "repRev" ) {
     $text =~ s/%__(.)__%/%_$1_%/go;
-    ( $meta, $text ) = TWiki::Store::_extractMetaData( $webName, $topic, $text );
+    $meta = TWiki::Store::extractMetaData( $webName, $topic, \$text );
   } else {
     # normal case: Get latest attachment from file for preview
     my $tmp;
 	# read meta (if not already read when reading template)
-    ( $meta, $tmp ) = TWiki::Store::readTopic( $webName, $topic ) unless $meta;
+    ( $meta, $tmp ) =
+      TWiki::Store::readTopic( $webName, $topic, undef, 0 ) unless $meta;
 
     # parent setting
     if( $theParent eq "none" ) {

@@ -78,7 +78,8 @@ sub view {
 
     my $topicExists = TWiki::Store::topicExists( $webName, $topic );
     if( $topicExists ) {
-        ( $meta, $text ) = TWiki::Store::readTopic( $webName, $topic );
+        ( $meta, $text ) = TWiki::Store::readTopic( $webName, $topic,
+                                                    undef, 1 );
         ( $revdate, $revuser, $maxrev ) =
           $meta->getRevisionInfo( $webName, $topic );
 
@@ -96,10 +97,10 @@ sub view {
             # Most recent topic read in even if earlier topic requested - makes
             # code simpler and performance impact should be minimal
             ( $meta, $text ) =
-              TWiki::Store::readTopicVersion( $webName, $topic, "1.$rev" );
+              TWiki::Store::readTopic( $webName, $topic, $rev, 0 );
 
             ( $revdate, $revuser ) =
-              TWiki::Store::getRevisionInfo( $webName, $topic, "1.$rev");
+              TWiki::Store::getRevisionInfo( $webName, $topic, $rev );
             $revdate = TWiki::formatTime( $revdate );
             $extra .= "r1.$rev";
         }

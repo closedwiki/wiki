@@ -529,7 +529,7 @@ sub migrateFormatForTopic
 {
    my ( $theWeb, $theTopic, $doLogToStdOut ) = @_;
    
-   my $text = TWiki::Store::readWebTopic( $theWeb, $theTopic );
+   my $text = TWiki::Store::readTopicRaw( $theWeb, $theTopic, undef, 0 );
    my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
    if( ! $before ) { $before = ""; }
    if( ! $atext  ) { $atext  = ""; }

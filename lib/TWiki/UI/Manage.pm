@@ -110,7 +110,6 @@ sub changePassword {
   my $wikiName = $query->param( 'username' );
   my $passwordA = $query->param( 'password' );
   my $passwordB = $query->param( 'passwordA' );
-  my $topicName = $query->param( 'TopicName' );
 
   # check if required fields are filled in
   if( ! $wikiName || ! $passwordA ) {
@@ -346,7 +345,7 @@ sub _patchWebPreferences
 {
     my ( $theWeb, $theTopic, $theWebBgColor, $theSiteMapWhat, $theSiteMapUseTo, $doNoSearchAll ) = @_;
 
-    my( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
+    my( $meta, $text ) = TWiki::Store::readTopic( $theWeb, $theTopic, undef, 1 );
 
     my $siteMapList = "";
     $siteMapList = "on" if( $theSiteMapWhat );
@@ -356,7 +355,7 @@ sub _patchWebPreferences
     $text =~ s/(\s\* Set SITEMAPUSETO =)[^\n\r]*/$1 $theSiteMapUseTo/os;
     $text =~ s/(\s\* Set NOSEARCHALL =)[^\n\r]*/$1 $doNoSearchAll/os;
 
-    my $err = &TWiki::Store::saveTopic( $theWeb, $theTopic, $text, $meta );
+    my $err = TWiki::Store::saveTopic( $theWeb, $theTopic, $text, $meta );
 
     return $err;
 }
@@ -406,14 +405,15 @@ sub rename {
   # justChangeRefs will be true when some topics that had links to $oldTopic
   # still need updating, previous update being prevented by a lock.
 
-  if( ! $justChangeRefs ) {
-    if( _checkExist( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment )) {
+  unless ( $justChangeRefs ||
+           _checkExist( $oldWeb, $oldTopic, $newWeb, $newTopic,
+                        $theAttachment ) &&
+           TWiki::UI::isAccessPermitted( $oldWeb, $oldTopic,
+                                         "change", $wikiUserName ) &&
+           TWiki::UI::isAccessPermitted( $oldWeb, $oldTopic,
+                                         "rename", $wikiUserName )
+         ) {
       return;
-    }
-
-    if( ! _checkPermissions( $oldWeb, $oldTopic, $wikiUserName ) ) {
-      return;
-    }
   }
 
   # Has user selected new name yet?
@@ -459,7 +459,7 @@ sub rename {
 
   # Update references in referring pages - not applicable to attachments.
   if( ! $theAttachment ) {
-    my @refs = _getReferingTopicsListFromURL( $oldWeb, $oldTopic, $newWeb, $newTopic );
+    my @refs = _getReferringTopicsListFromURL( $oldWeb, $oldTopic, $newWeb, $newTopic );
 
     my $problems;
     ( $lockFailure, $problems ) = 
@@ -477,7 +477,7 @@ sub rename {
     } else {
       #redirect to parent: ending in Trash is not the expected way (ColasNahaboo - 31 Mar 2003)
       my $meta = ""; my $text = "";
-      ( $meta, $text ) = &TWiki::Store::readTopic( $newWeb, $newTopic, 1 );
+      ( $meta, $text ) = TWiki::Store::readTopic( $newWeb, $newTopic, undef, 1 );
       my %parent = $meta->findOne( "TOPICPARENT" );
       if( %parent && $parent{"name"} && $parent{"name"} ne $oldTopic ) {
         if ( $parent{"name"} =~ /([^.]+)[.]([^.]+)/ ) {
@@ -499,63 +499,9 @@ sub rename {
   return;
 }
 
-#=========================
-
 =pod
 
----++ _relockRcsFiles ( )
-| Description:           | relocks all the rcs files using the configured apache user (called from testenv)) |
-
-=cut
-
-sub relockRcsFiles {
-print "Content-type: text/html\n\n";
-print "<html><head></head><body>\n";
-print "Preparing to change all RCS locks to match current webserver user.\n";
-print "Please wait for this page to tell you it is finished.\n";
-print "This could take awhile, depending on the number of topics to process\n";
-print "(about 10 seconds for a standard twiki beta release - 615 topics -\n";
-print "on a Win2k+cygwin+apache2 machine running @ 1100MHz with 512MB ram).";
-  
-$ENV{PATH} = '';
-  
-opendir(DATA, $TWiki::dataDir) or
-  die "Open $TWiki::dataDir failed";
-foreach my $web ( grep /^\w+$/, readdir DATA ) {
-  $web =~ /(.*)/;     # untaint
-  $web = $1;
-  print "<h1>Unlocking $web</h1>\n";
-  if ( -d "$TWiki::dataDir/$web" ) {
-	opendir(WEB, "$TWiki::dataDir/$web") or
-	  die "Open $TWiki::dataDir/$web failed";;
-	foreach my $topic ( grep /.txt$/, readdir WEB ) {
-      $topic =~ /(.*)/;     # untaint
-      $topic = $1;
-	  print "<code>$topic</code> ";
-	  
-#TODO replace with TWiki::Store::breakLockTopic( $web, $topic );	  
-	  print `$TWiki::rcsDir/rcs -q -u -M $TWiki::dataDir/$web/$topic`;
-#TODO replace with TWiki::Store::reLockTopic( $web, $topic );	  
-	  print `$TWiki::rcsDir/rcs -q -l $TWiki::dataDir/$web/$topic`;
-#TODO replace with TWiki::Store::checkIn (or something)
-          print `$TWiki::rcsDir/ci -mtestenv -t-missing_v $TWiki::dataDir/$web/$topic`;
-          print `$TWiki::rcsDir/co -q -l -M $TWiki::dataDir/$web/$topic`;
-	  print "<br />\n";
-	}
-	closedir(WEB);
-  }
-}
-closedir(DATA);
-print "<h2>Re-locking finished</h2>\n";
-print "It is now safe to reload <a href=\"$TWiki::defaultUrlHost$TWiki::scriptUrlPath/testenv\">testenv</a> \n";
-print "</body></html>";
-}
-
-#=========================
-
-=pod
-
----++ _getReferingTopicsListFromURL ( $oldWeb, $oldTopic, $newWeb, $newTopic ) ==> @refs
+---++ _getReferringTopicsListFromURL ( $oldWeb, $oldTopic, $newWeb, $newTopic ) ==> @refs
 | Description:           | returns the list of topics that have been found that refer to the renamed topic |
 | Parameter: =$oldWeb=   |   |
 | Parameter: =$oldTopic= |   |
@@ -566,7 +512,7 @@ print "</body></html>";
 
 =cut
 
-sub _getReferingTopicsListFromURL {
+sub _getReferringTopicsListFromURL {
   my $query = TWiki::getCgiQuery();
   my ( $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
 
@@ -591,22 +537,6 @@ sub _getReferingTopicsListFromURL {
   }
   return @result;
 }
-
-#=============================
-# return "" if problem, otherwise return text of oldTopic
-sub _checkPermissions {
-  my( $oldWeb, $oldTopic, $wikiUserName ) = @_;
-
-  return "" unless TWiki::UI::isAccessPermitted( $oldWeb, $oldTopic, "change", $wikiUserName );
-  return "" unless TWiki::UI::isAccessPermitted( $oldWeb, $oldTopic, "rename", $wikiUserName );
-
-  my $ret = "";
-  if( &TWiki::Store::topicExists( $oldWeb, $oldTopic ) ) {
-    $ret = &TWiki::Store::readWebTopic( $oldWeb, $oldTopic );
-  }
-  return $ret;
-}
-
 
 #==========================================
 # Check that various webs and topics exist or don't exist as required
