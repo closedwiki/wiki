@@ -140,6 +140,11 @@ sub processWeb
 	}
     }
 
+    if( $topiclist eq "" )
+    {
+	print "- Note: Topic list is empty\n";
+	return;
+    }
     print "\n";
 
     &wiki::saveFile( "$dataDir/$webName/.mailnotify", $currLastmodify);

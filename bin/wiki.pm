@@ -42,7 +42,7 @@ use vars qw(
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "06 Jul 1999";
+$wikiversion      = "07 Jul 1999";
 
 # variables that need to be changed when installing on new server:
 $wikiHomeUrl      = $wikicfg::wikiHomeUrl;
@@ -174,19 +174,23 @@ sub sendEmail
 # =========================
 sub getEmailNotifyList
 {
-    my( $web) = @_;
+    my( $web ) = @_;
 
-    my $result = `grep '\* *.*[-:<].* *\@' $dataDir/$web/$notifyTopicname.txt`;
     my $list = "";
     my $line = "";
-    foreach $line ( split( /\n/, $result))
+    my $fileName = "$dataDir/$web/$notifyTopicname.txt";
+    if ( -e $fileName )
     {
-        $line =~ s/\s/ /go;
-        $line =~ s/(^.*[- :<])([-_A-Za-z0-9\.]*\@[-_A-Za-z0-9\.]*)(.*)/$2/go;
-        $list = "$list $line";
+        my $result = `grep '\* *.*[-:<].* *\@' $dataDir/$web/$notifyTopicname.txt`;
+        foreach $line ( split( /\n/, $result))
+        {
+            $line =~ s/\s/ /go;
+            $line =~ s/(^.*[- :<])([-_A-Za-z0-9\.]*\@[-_A-Za-z0-9\.]*)(.*)/$2/go;
+            $list = "$list $line";
+        }
+        $list =~ s/^ *//go;
+        $list =~ s/ *$//go;
     }
-    $list =~ s/^ *//go;
-    $list =~ s/ *$//go;
     return $list;
 }
 
@@ -245,7 +249,7 @@ sub getLocaldate
     {
         $year = sprintf("19%.2u", $year);
     }
-    my( $tmon) = ("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")[$mon];
+    my( $tmon) = $isoMonth[$mon];
     my $date = sprintf("%.2u ${tmon} %.2u", $mday, $year);
     return $date;
 }
@@ -262,7 +266,7 @@ sub formatGmTime
     }
 
     my ( $sec, $min, $hour, $mday, $mon, $year) = gmtime($time);
-    my( $tmon) = ("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")[$mon];
+    my( $tmon) = $isoMonth[$mon];
     if( $year < 50)
     {
         $year = sprintf("20%.2u", $year);
@@ -487,7 +491,7 @@ sub getRevisionInfo
         $tmp =~ /(.*?)\/(.*?)\/(.*?) (.*?):[0-9][0-9]$/;
         if( $4 ne "")
         {
-           $date = "$3 @isoMonth[$2-1] $1 - $4";
+           $date = "$3 $isoMonth[$2-1] $1 - $4";
         }
     }
     return ( $date, $user );
@@ -616,7 +620,7 @@ sub saveTopic
         `$tmp`;
 
         # restore last topic from repository
-        my $rev = getRevisionNumber( $topic );
+        $rev = getRevisionNumber( $topic );
         $tmp = readVersion( $topic, $rev );
         saveFile( $name, $tmp );
         lockTopic( $topic );
@@ -690,10 +694,22 @@ sub emitCode {
 sub internalLink
 {
     my( $web, $page, $text, $bar, $foo) = @_;
+    # bar is heading space
+    # foo is boolean, false suppress link for non-existing pages
+
     $page =~ s/\s/_/;
 
+    if( $page =~ /s$/ && ! topicExists( $web, $page) )
+    {
+        # page is a non-existing plural
+	$page =~ s/ies$/y/;	# plurals like policy / policies
+	$page =~ s/sses$/ss/;	# plurals like address / addresses
+	$page =~ s/xes$/x/;	# plurals like box / boxes
+	$page =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
+    }
+
     topicExists( $web, $page) ?
-    "$bar<A href=\"$scriptUrl/view/$web/$page\">$text<\/A>"
+        "$bar<A href=\"$scriptUrl/view/$web/$page\">$text<\/A>"
         : $foo?"$bar$text<A href=\"$scriptUrl/edit/$web/$page\">?</A>"
             : "$bar$text";
 }
