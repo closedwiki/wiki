@@ -169,7 +169,7 @@ sub edit {
     $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
     if( defined $ptext ) {
       $text = $ptext;
-      $text = &TWiki::decodeSpecialChars( $text );
+      $text = &TWiki::Render::decodeSpecialChars( $text );
     }
   }
 

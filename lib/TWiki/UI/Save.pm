@@ -85,7 +85,7 @@ sub save {
     return;
   }
 
-  $text = &TWiki::decodeSpecialChars( $text );
+  $text = &TWiki::Render::decodeSpecialChars( $text );
   $text =~ s/ {3}/\t/go;
 
   my $meta = "";

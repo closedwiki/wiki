@@ -579,7 +579,7 @@ sub changeForm
     $tmpl = &TWiki::handleCommonTags( $tmpl, $theTopic );
     $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
     my $text = $theQuery->param( 'text' );
-    $text = &TWiki::encodeSpecialChars( $text );
+    $text = &TWiki::Render::encodeSpecialChars( $text );
     $tmpl =~ s/%TEXT%/$text/go;
 
     my $listForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$theWeb" );
