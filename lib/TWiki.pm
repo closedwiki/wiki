@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = '01 Sep 2004 $Rev$';
+$wikiversion      = '04 Sep 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -738,7 +738,7 @@ sub convertUtf8URLtoSiteCharset {
 		    $fullTopicName = Encode::decode("utf8", $fullTopicName);	
 		    # - then convert into site charset from internal UTF-8,
 		    # inserting \x{NNNN} for characters that can't be converted
-                    $fullTopicName = Encode::encode( $charEncoding, $fullTopicName, &FB_PERLQQ );
+                    $fullTopicName = Encode::encode( $charEncoding, $fullTopicName, &FB_PERLQQ() );
 		    ##writeDebug "Encode result is $fullTopicName";
 		}
 
