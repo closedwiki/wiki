@@ -1061,7 +1061,6 @@ sub makeTopicSummary
     $htext =~ s/<\!\-\-.*$//s;        # cut HTML comment
     $htext =~ s/<[^>]*>//g;           # remove all HTML tags
     $htext =~ s/\&[a-z]+;/ /g;        # remove entities
-    # FIXME: May need to use %WEBURLENCODED% and %TOPICURLENCODED% etc
     $htext =~ s/%WEB%/$theWeb/g;      # resolve web
     $htext =~ s/%TOPIC%/$theTopic/g;  # resolve topic
     $htext =~ s/%WIKITOOLNAME%/$wikiToolName/g; # resolve TWiki tool name
@@ -1732,10 +1731,12 @@ sub handleInternalTags
     $_[0] =~ s/%BASEWEB%/$webName/g;
     $_[0] =~ s/%INCLUDINGWEB%/$includingWebName/g;
 
-    # URL encoding for use in POST URLs with topics/webs that have 8-bit
-    # characters in name
-    $_[0] =~ s/%TOPICURLENCODED%/&urlEncode($_[1])/ge; 	# URL-encoded topic name 
-    $_[0] =~ s/%WEBURLENCODED%/&urlEncode($_[2])/ge; 	# URL-encoded web name 
+    # URL encoding for use in form submission URLs with topics/webs that
+    # have 8-bit characters in name.
+    $_[0] =~ s/%TOPICURLENCODED%/&urlEncode($_[1])/ge;
+    $_[0] =~ s/%WEBURLENCODED%/&urlEncode($_[2])/ge; 
+    $_[0] =~ s/%BASEWEBURLENCODED%/&urlEncode($webName)/ge;
+    $_[0] =~ s/%INCLUDINGWEBURLENCODED%/&urlEncode($includingWebName)/ge;
 
     $_[0] =~ s/%TOPICLIST{(.*?)}%/&handleWebAndTopicList($1,'0')/ge;
     $_[0] =~ s/%WEBLIST{(.*?)}%/&handleWebAndTopicList($1,'1')/ge;
@@ -1770,7 +1771,7 @@ sub handleInternalTags
     $_[0] =~ s/%STARTINCLUDE%//g;
     $_[0] =~ s/%STOPINCLUDE%//g;
     $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/ge; # can be nested
-    $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo if( $_[0] =~ /%SEARCH/o );
+    $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/ge if( $_[0] =~ /%SEARCH/o );
     $_[0] =~ s/%METASEARCH{(.*?)}%/&handleMetaSearch($1)/ge;
 
 }
