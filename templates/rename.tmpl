@@ -1,74 +1,9 @@
-<HEAD>
-  <TITLE> %WIKITOOLNAME% Rename/move %OLD_WEB%.%OLD_TOPIC% </TITLE>
-  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/WebHome"> <META NAME="ROBOTS" CONTENT="NOINDEX">
-<SCRIPT LANGUAGE="JavaScript">
-<!--HIDE
-  function launchWindow( theWeb, theTopic ) {
-    win = open("%SCRIPTURLPATH%/view/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-    if( win ) {
-      win.focus();
-    }
-    return false;
-}
-//STOP HIDING-->
-</SCRIPT>
-</HEAD>
-<BODY bgcolor="#ffffff">
-<FORM method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%OLD_WEB%/%OLD_TOPIC%/">
-<input type="hidden" name="oldWeb" value="%OLD_WEB%">
-<input type="hidden" name="oldTopic" value="%OLD_TOPIC%">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
-    </TD>
-    <TD>
-      <B>%OLD_WEB% . </B><FONT size="+2"><B>%OLD_TOPIC%</B> (rename/move)</FONT>
-    </TD>
-  </TR>
-    <TR BGCOLOR="%WEBBGCOLOR%">
-      <TD colspan="2">&nbsp;
-      </TD>
-  </TR>
-</TABLE>
-<BR>
-<TABLE border="1" cellpadding="1" cellspacing="0">
-<TR>
-  <TH></TH><TH bgcolor=#00FFFF>Currently</TH><TH bgcolor=#FFFFC0>Change to</TH>
-</TR>
-<TR>
-  <TH>Web</TH><TD  bgcolor=#00FFFF>&nbsp;%OLD_WEB%&nbsp;</TD>
-  <TD bgcolor=#FFFFC0>&nbsp;%WEB_SELECTION%&nbsp;</TD>
-<TR>
-<TR>
-  <TH>Topic</TH><TD bgcolor=#00FFFF>&nbsp;%OLD_TOPIC%&nbsp;</TD>
-  <TD bgcolor=#FFFFC0>
-  <input type="hidden" name="newWeb" value="%NEW_WEB%">
-  &nbsp;%NEW_TOPIC%&nbsp;
-  </TD>
-</TR>
-</TABLE>
-<input type="hidden" name="changeRefs" value="%CHANGE_REFS%">
-<br>
-See <A target="RenameTopic" onClick="return launchWindow('%TWIKIWEB%','RenameTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/RenameTopic">RenameTopic</A>.
-Select Trash Web to delete.
-<BR>
-<hr>
-<br>
-<B>Change references in referring pages</B> - the ticked pages will be updated (if not locked, in which case you'll be able to re-submit.)
-<P>
-<BR>
-%SEARCH{ "(^|[_\*\> \t])((%OLD_TOPIC%))([^A-Za-z0-9_]|$)" web="%TOPIC%" noempty="on" showlock="on" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
-%SEARCH{ "(^|[_\*\> \t])((%OLD_WEB%\.)%OLD_TOPIC%)([^A-Za-z0-9_]|$)" web="all" noempty="on" showlock="on" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
-
-
-<hr>
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD bgcolor="%WEBBGCOLOR%" align="center">
-       <input type="submit" value="Rename/Move">
-    </TD>
-  </TR>
-</TABLE>
-</FORM>
-</BODY>
+%TMPL:INCLUDE{"renamebase"}%
+%TMPL:DEF{"topicaction"}% <input type="submit" value="Rename/Move"> %TMPL:END%
+%TMPL:DEF{"titleaction"}% (rename - choose params) %TMPL:END%
+%TMPL:DEF{"newtopic"}% <input name="newtopic" value="%TOPIC%"> %TMPL:END%
+%TMPL:DEF{"newweb"}% 
+   <select name="newweb">
+   %WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%WEB%"}%
+   </select> %TMPL:END%
+%TMPL:P{"rename"}%
