@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044149189" format="1.0" version="1.28"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071563928" format="1.0" version="1.29"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki System Requirements
@@ -11,15 +11,14 @@ Low client and server requirements are core features that keep TWiki widely depl
 
 TWiki is written in Perl 5, uses a number of shell commands, and requires [[http://www.gnu.org/software/rcs/rcs.html][RCS (Revision Control System)]], a GNU Free Software package. TWiki is developed in a basic Linux/Apache environment. It also works with Microsoft Windows, and should have no problem on any other platform that meets the requirements.
 
-| *Required Server Environment* |||
-| *Resource* | *Unix* | *Windows** |
-| Perl |  5.005_03 or higher (5.6.1 recommended, <br /> 5.8.0 *not* recommended yet, see TWiki:Codev.UsingPerl58OnRedHat8)  ||
-| Non-standard Perl modules |  =Net::SMTP= (or =sendmail=)  |  =Net::SMTP=, =MIME::Base64=, =Digest::SHA1=  |
-| RCS |  5.7 or higher (including GNU =diff=) %BR% Optional, but the all-Perl RCS replacement is not currently recommended for live sites - see TWiki:Codev.RcsLite.  ||
-| GNU =diff= |  GNU =diff= 2.7 or higher is required when not using the all-Perl <nop>RcsLite.  %BR% Install on PATH if not included with RCS (check version with =diff -v=)  ||
-| Other external programs |  =ls, fgrep, egrep=  ||
-| Cron/scheduler |  =cron=  | =cron= equivalents |
-| Web server |  Apache 1.3 is well supported; Apache 2.0 is *not* recommended yet (see TWiki:Support.FailedAuthenticationWithApache2OnWinNT). %BR% For other servers, CGI support, authentication, extended path required  ||
+| *Resource* | *Required Server Environment *<nop>* |
+| Perl | 5.005_03 or higher (5.6.1 recommended, 5.8.0 *not* recommended yet, see TWiki:Codev.IssuesWithPerl5dot8) |
+| Non-standard Perl modules | %BULLET% Unix: =Net::SMTP= (or =sendmail=) %BB% Windows: =Net::SMTP=, =MIME::Base64=, =Digest::SHA1= |
+| RCS | 5.7 or higher (including GNU =diff=) %BR% Optional, but the all-Perl RCS replacement is not currently recommended for live sites - see TWiki:Codev.RcsLite |
+| GNU =diff= | GNU =diff= 2.7 or higher is required when not using the all-Perl <nop>RcsLite.  %BR% Install on PATH if not included with RCS (check version with =diff -v=)  %BR% Must be the version used by RCS, to avoid problems with binary attachments - RCS may have hard-coded path to =diff= |
+| Other external programs | =fgrep, egrep= |
+| Cron/scheduler | %BULLET% Unix: =cron= %BB% Windows: =cron= equivalents |
+| Web server | Apache 1.3 is well supported; Apache 2.0 is *not* recommended yet (see TWiki:Codev.IssuesWithApache2dot0). %BR% For other servers, CGI support, authentication, extended path info required; also, the =register= script is likely to need significant changes |
 
 %X% *** _Current documentation mainly covers Linux and Apache installations. See WindowsInstallCookbook for a Windows installation guide.  See TWiki:Codev.TWikiOn for help with installation on various platforms including Unix, <nop>MacOS X, Apache =mod_perl=, web hosts, etc._
 
@@ -40,6 +39,7 @@ You can easily add functionality, by customizing TWikiTemplates, for one, while 
 
 	* The TWikiPlugins feature currently does not have compatibility guidelines for developers. Plugins can require just about anything -  browser-specific functions, stylesheets (CSS), Java applets, cookies, specific Perl modules,... - check the individual Plugin specs.
 		* %H% Plugins included in the TWiki distribution do not add requirements.
- 
--- MikeMannix - 12 Jan 2002
+
+-- TWiki:Main.MikeMannix - 12 Jan 2002 %BR%
+-- TWiki:Main.PeterThoeny - 16 Dec 2003
 %META:TOPICMOVED{by="PeterThoeny" date="1042701667" from="TWiki.TWikiImplementationNotes" to="TWiki.TWikiSystemRequirements"}%
