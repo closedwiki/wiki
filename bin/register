@@ -144,8 +144,7 @@ sub main
     $text = "$before$after";
     $text = &TWiki::handleCommonTags( $text, $wikiName );
 
-    &TWiki::Net::sendEmail( &TWiki::Prefs::getPreferencesValue( "WIKIWEBMASTER" ), 
-			    $emailAddress, $text );
+    my $senderr = &TWiki::Net::sendEmail( $text );
 
     # create user topic if not exist
     if( ! &TWiki::Store::topicExists( $TWiki::mainWebname, $wikiName ) ) {
@@ -172,6 +171,11 @@ sub main
     # write log entry
     if( $TWiki::doLogRegistration ) {
         &TWiki::Store::writeLog( "register", "$webName.$userTopic", $emailAddress, $wikiName );
+    }
+
+    if( $senderr ) {
+        my $url = &TWiki::getOopsUrl( $webName, $wikiName, "oopssendmailerr", $senderr );
+        print $query->redirect( $url );
     }
 
     # and finally display thank you page

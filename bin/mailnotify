@@ -55,12 +55,12 @@ sub processWeb
     $debug && print "Checking TWiki.$webName\n";
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-	print STDERR "* Error: TWiki mailnotify does not find web $webName\n";
+	print STDERR "* ERROR: TWiki mailnotify does not find web $webName\n";
 	return;
     }
 
     my @notifylist = &TWiki::getEmailNotifyList($webName);
-    unless (  scalar @notifylist ) {
+    unless ( scalar @notifylist ) {
 	$debug && print "- Note: Notification list is empty\n";
 	return;
     }
@@ -147,8 +147,6 @@ sub processWeb
     }
     $debug && print "\n";
 
-    &TWiki::Store::saveFile( "$dataDir/$webName/.mailnotify", $currLastmodify );
-
     $emailbody = "$emailbody$after";
 
     my $from = &TWiki::Prefs::getPreferencesValue("WIKIWEBMASTER");
@@ -169,10 +167,14 @@ sub processWeb
 
     $debug && print "- Sending mail notification to: $notifylist\n";
 
-    if( ! &TWiki::Net::sendEmail( $from, \@notifylist, $text ) ) {
-	print STDERR "- ERROR: TWiki mailnotify can't send mail\n";
+    my $error = &TWiki::Net::sendEmail( $text );
+    if( $error ) {
+	print STDERR "* $error\n";
         $debug && print "- End Twiki.$webName\n";
+
     } else {
+        &TWiki::Store::saveFile( "$dataDir/$webName/.mailnotify", $currLastmodify );
+
 	$debug && print "- End Twiki.$webName, mail notification sent\n";
     }
 }

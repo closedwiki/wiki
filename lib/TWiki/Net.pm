@@ -28,46 +28,122 @@ package TWiki::Net;
 
 use strict;
 
-##use TWiki::Prefs;
-use Net::SMTP;
+use vars qw(
+        $useNetSmtp
+    );
 
+BEGIN {
+    eval {
+       $useNetSmtp = require Net::SMTP;
+    }
+}
+
+# =========================
 sub sendEmail
 {
-    # Format: "From: ...\nTo: ...\nSubject: ...\n\nMailBody..."
+    # $theText Format: "From: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody..."
 
-    my( $from, $toref, $data) = @_;
+    my( $theText ) = @_;
+
+    my $error = "";
+    if( $useNetSmtp ) {
+        my ( $header, $body ) = split( "\n\n", $theText, 2 );
+        my @headerlines = split( /\n/, $header );
+        $header =~ s/\nBCC\:[^\n]*//os;  #remove BCC line from header
+        $theText = "$header\n\n$body";   # rebuild message
+
+        # extract 'From:'
+        my $from = "";
+        my @arr = grep( /^From: /i, @headerlines );
+        if( scalar( @arr ) ) {
+            $from = $arr[0];
+            $from =~ s/^From:\s*//io;
+        }
+        if( ! ( $from ) ) {
+            return "ERROR: Can't send mail, missing 'From:'";
+        }
+
+        # extract @to from 'To:', 'CC:', 'BCC:'
+        my @to = ();
+        @arr = grep( /^To: /i, @headerlines );
+        my $tmp = "";
+        if( scalar( @arr ) ) {
+            $tmp = $arr[0];
+            $tmp =~ s/^To:\s*//io;
+            @arr = split( /[,\s]+/, $tmp );
+            push( @to, @arr );
+        }
+        @arr = grep( /^CC: /i, @headerlines );
+        if( scalar( @arr ) ) {
+            $tmp = $arr[0];
+            $tmp =~ s/^CC:\s*//io;
+            @arr = split( /[,\s]+/, $tmp );
+            push( @to, @arr );
+        }
+        @arr = grep( /^BCC: /i, @headerlines );
+        if( scalar( @arr ) ) {
+            $tmp = $arr[0];
+            $tmp =~ s/^BCC:\s*//io;
+            @arr = split( /[,\s]+/, $tmp );
+            push( @to, @arr );
+        }
+
+        if( ! ( scalar( @to ) ) ) {
+            return "ERROR: Can't send mail, missing receipient";
+        }
+
+        $error = _sendEmailByNetSMTP( $from, \@to, $theText );
+
+    } else {
+        $error = _sendEmailBySendmail( $theText );
+    }
+    return $error;
+}
+
+# =========================
+sub _sendEmailBySendmail
+{
+
+    my( $theText ) = @_;
+
+    if( open( MAIL, "|-" ) || exec "$TWiki::mailProgram" ) {
+        print MAIL $theText;
+        close( MAIL );
+        return "";
+    }
+    return "ERROR: Can't send mail using TWiki::mailProgram";
+}
+
+# =========================
+sub _sendEmailByNetSMTP
+{
+    my( $from, $toref, $data ) = @_;
 
     my @to;
     # $to is not a reference then it must be a single email address
-    @to = ($toref) unless ref ($toref); 
-    if ( ref($toref) =~ /ARRAY/ ) {
+    @to = ($toref) unless ref( $toref ); 
+    if ( ref( $toref ) =~ /ARRAY/ ) {
 	@to = @{$toref};
     }
-    return undef unless (scalar @to);
-    my $mailhost = &TWiki::Prefs::getPreferencesValue("MAILHOST") || "mail";
+    return undef unless( scalar @to );
+    my $mailhost = &TWiki::Prefs::getPreferencesValue( "MAILHOST" ) || "mail";
     
-    # ToDo For later:
-    # Make it the fail back option dependant on if MAILHOST is non-"" 
-    # and Net::Smtp exists.  Rather than creating a new flag in Cfg.
-
     my $smtp = Net::SMTP->new( $mailhost );
-    $smtp->mail($from);
-    $smtp->to(@to, { SkipBad => 1 });
-    $smtp->data($data);
+    $smtp->mail( $from );
+    $smtp->to( @to, { SkipBad => 1 } );
+    $smtp->data( $data );
     $smtp->dataend();
     
     # I think this has to occur before the $smtp->quit, 
     # otherwise we'll miss the status message for the sending of the mail.
-    my $status = ($smtp->ok() ? "OK": undef);
+    my $status = ($smtp->ok() ? "" : "ERROR: Can't send mail using Net::SMTP" );
 
     $smtp->quit();
     return $status;    
-
 }
 
 # =========================
 
 1;
 
-
-
+# EOF
