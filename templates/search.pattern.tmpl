@@ -19,26 +19,29 @@
 
 
 
-%TMPL:DEF{"bodystart"}%
-<body class="twikiSearchResultsPage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
-
-
 
 %TMPL:DEF{"content"}%
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 %TMPL:P{"standardheader"}%
 </form>
 %SPLIT%
-Searched: <b><nop>%SEARCHSTRING%</b>
+Search:
+---++ <nop>%SEARCHSTRING%
 <br />
 %SPLIT%
-<div class="twikiSearchResults"><div class="twikiSearchResultsHeader" style="background-color:%WEBBGCOLOR%">Results from %WEB% web</div>
-%REPEAT% <div class="twikiSearchResultItem">
+<div class="twikiSearchResults"><div class="twikiSearchResultsHeader" style="background-color:%WEBBGCOLOR%">Results from %WEB% Web</div>
+%REPEAT%
+<div class="twikiSearchResultItem">
+<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a>
+
+</div>
+
+
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>
   <td width="50%">
     <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a>
-    <span class="twikiAlert"> %LOCKED% </span>
+    <b><font color="red">%LOCKED%</font></b>
   </td><td width="30%">
     <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TIME%</a> - %REVISION%
   </td><td width="20%">
@@ -46,11 +49,15 @@ Searched: <b><nop>%SEARCHSTRING%</b>
   </td>
 </tr>
 <tr>
-  <td colspan="2" class="twikiSummary twikiGrayText">%TEXTHEAD%</td>
-  <td>
+  <td colspan="2">
+    %TEXTHEAD%
+  </td><td width="20%">
     &nbsp;
   </td>
-</tr></table></div>%REPEAT%</div>%SPLIT%<div class="twikiSearchResultCount">Number of topics: <b>%NTOPICS%</b></div>%SPLIT%
+</tr></table>
+%REPEAT%</div><br clear="all" />
+<p />%SPLIT%Number of topics: <b>%NTOPICS%</b>
+<p />%SPLIT%
 %TMPL:P{"standardfooter"}%
 %TMPL:END%
 
