@@ -1,0 +1,85 @@
+
+/*	-----------------------------------------------------------
+	LAYOUT
+	positioning of page elements
+	-----------------------------------------------------------	*/
+
+.twikiLeft {
+	float:left;
+	position:relative;
+}
+.twikiRight {
+	position:relative;
+	float:right;
+	display:inline;
+	margin:0;
+	text-align:right;
+}
+.twikiClear {
+	/* to clean up floats */
+	margin:0;
+	padding:0;
+	height:1px;
+	line-height:1%;
+	clear:both;
+	display:block;
+}
+.twikiHidden {
+	display:none;
+}
+
+/*	-----------------------------------------------------------
+	Positioning of layout blocks
+	-----------------------------------------------------------	*/
+
+.twikiMiddleContainer {}
+.twikiLeftBar {
+	position:absolute;
+	left:0;
+	margin:0;
+	padding:0;
+}
+
+/* setting the height of the top bar */
+
+.twikiMiddleContainer {}
+.twikiLeftBar {
+	top:60px;
+}
+.twikiTopBar {
+	height:60px;
+}
+
+/* positioning the left bar (width:14em) */
+
+.twikiLeftBar,
+.twikiLeftBarContents /* needed for Explorer 5.0 */ {
+	width:14em;
+}
+.twikiMain {
+	margin-left:14em;
+}
+.twikiBottomBar {
+	margin:0 0 0 14.5em; /* add small margin for content offset */
+}
+
+/*	-----------------------------------------------------------
+	Pages that are not view
+	-----------------------------------------------------------	*/
+	
+.twikiNoViewPage .twikiMain {
+	margin-left:10%;
+	margin-right:10%;
+	/* padding in style.css */
+}
+
+/* Print */
+	
+.twikiPrintPage .twikiMain {
+	margin-left:0;
+	margin-right:14em;
+}
+.twikiPrintPage .twikiBottomBar {
+	margin-left:3em;
+	margin-right:14em;
+}
