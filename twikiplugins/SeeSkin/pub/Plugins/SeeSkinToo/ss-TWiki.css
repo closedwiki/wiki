@@ -11,9 +11,11 @@
 #menu { background:rgb(255, 224, 176); 
    border-bottom:1px solid rgb(70,70,90);}
 #menu ul li a { border: 1px solid rgb(255, 224, 176); }
+#menu ul li a:link{ }
+#menu ul li a:visited { font-style: normal; }
 #menu ul li a:hover{
 /*   color: rgb(255, 224, 176);*/
-   color: rgb(150, 70, 0);
+   color: maroon;
    background-color: rgb(255, 224, 176);
 /*   background-color: rgb(204, 102, 0);*/
    border-top: rgb(240,240,220) 1px solid;
@@ -24,15 +26,15 @@
    /* rounded corners for mozilla */
    -moz-border-radius:0.6ex;
 }
-#diffs{ border:1px dotted rgb(180,180,180); }
+#diffs{ border:1px dotted rgb(180,180,180); color: rgb(75, 75, 75);}
 #standardfooter a { background-color: ButtonFace; border: 2px outset; color: black; }
 #standardfooter input {	background-color: ButtonFace; border: 2px outset; }
 
 /* keep the "a" rules in this order, else you might not get what you expect */
-a{ color: rgb(150, 70, 0); text-decoration:none; font-weight: bold;}
+a{ color: maroon; text-decoration:none; font-weight: bold;}
 a:link{ }
-a:visited{ }
+a:visited{ font-style: italic;}
 a:active{ }
-a:hover{ color: rgb(150, 70, 0);background-color: rgb(255, 224, 176); }
+a:hover{ color: maroon;background-color: rgb(255, 224, 176); }
 
 body { color: black; background-color: white; }

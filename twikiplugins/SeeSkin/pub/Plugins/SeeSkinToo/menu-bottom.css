@@ -1,9 +1,10 @@
-/* SeeSkin styles,2003-February,MattWilkie */
+/* SeeSkin styles,2003-March,MattWilkie */
 /* adapted from AListApart: Flexible Layouts with CSS */
-/* put menu at top of browser viewport */
+/* put menu at bottom of browser viewport */
+/* Note: only works in browsers which support "position: fixed" */
 
 /* ============ top section ============== */
-#topsection { position: relative; top: 3em; left:0; }
+#topsection { position: relative; top: 0em; left:0; }
 #title { position: relative;float: left; }
 #topsection h1 { display:inline; font-weight: bold; font-size: 1.3em}
 #topsection h1 a {  }
@@ -14,7 +15,7 @@
 #search input:hover {  }
 
 /* =========== mid section ============ */
-#midsection{ position: relative; top:3em; left:0; }
+#midsection{ position: relative; top:0em; left:0; }
 /* ------- content -------- */
 * html #content { margin-top: 0em; padding-top: 0em;}
 #content{
@@ -50,7 +51,7 @@
 #navigation hr { display: none; /* recover from no-css menu top/bottom borders */ }
 
 /* ========== bottom section ============ */
-#bottsection { position: relative; top: 3em;; left: 0;
+#bottsection { position: relative; top: 0em;; left: 0;
    padding-top: 2em; 
    margin-top: 2em;
    margin-left: 2.5em;
@@ -69,7 +70,7 @@
    width:100%;
    height: auto;
    position:fixed;
-   top:0;
+   bottom:0;
    left:0;
    border-bottom: 1px solid rgb(220, 220, 220);
 }
@@ -88,7 +89,7 @@
    -moz-border-radius:1ex;
 }
 #diffs ul, #diffs li {font-size:0.8em;padding-left: 0; padding-right: 1ex; }
-#menu #editmore { /*position: absolute; right: 1ex; top:1ex; */font-style: italic;}
+#menu #editmore { /*position: absolute; right: 1ex; top:1ex; */}
 * html #diffs {padding:0;/* for IE5.5/win */}
 
 /* ---- standardfooter is where the %TOPICACTION% (upload, cancel, etc.) occurs ------- */
