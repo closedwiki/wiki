@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999408728" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="MikeMannix" date="999502042" format="1.0" version="1.6"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki User Authentication
@@ -42,6 +42,10 @@ This section applies only if your %WIKITOOLNAME% is installed on a server that i
 <div align="center"> ==%MAINWEB%.<nop>WikiUsername== or ==%<nop>MAINWEB%.<nop>WikiUsername== </div>
 This points ==<nop>WikiUser== to the %WIKITOOLNAME%.%MAINWEB% web, where user registration pages are stored, no matter which web it's entered in. Without the web prefix, the name appears as a NewTopic everywhere but in the %MAINWEB% web.
 </blockquote>
+
+---+++ Changing Passwords
+
+%INCLUDE{"ChangingPasswords"}%
 
 -- PeterThoeny - 16 Mar 2001 <br>
 -- MikeMannix - 29 Aug 2001 
