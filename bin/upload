@@ -268,7 +268,7 @@ sub addLinkToEndOfTopic
 }
 
 # =========================
-sub error
+sub handleError
 {
     my( $noredirect, $message, $query, $theWeb, $theTopic, 
         $theOopsTemplate, $oopsArg1, $oopsArg2 ) = @_;
@@ -303,20 +303,20 @@ sub main
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-        error( $noredirect, "Missing Web", $query, $webName, $topic, "oopsnoweb" );
+        handleError( $noredirect, "Missing Web", $query, $webName, $topic, "oopsnoweb" );
         return;
     }
 
     my( $mirrorSiteName, $mirrorViewURL ) = &TWiki::readOnlyMirrorWeb( $webName );
     if( $mirrorSiteName ) {
-        error( $noredirect, "This is a readonly mirror", 
+        handleError( $noredirect, "This is a readonly mirror", 
                $query, $webName, $topic, "oopsmirror", $mirrorSiteName, $mirrorViewURL );
         return;
     }
 
     # check access permission
     if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
-        error( $noredirect, "No change permission", $query, $webName, $topic, "oopsaccesschange" );
+        handleError( $noredirect, "No change permission", $query, $webName, $topic, "oopsaccesschange" );
         return;
     }
 
@@ -342,7 +342,7 @@ sub main
 	# check if file exists and has non zero size
 	my $size = -s $tmpFilename;
 	if( ! -e $tmpFilename || ! $size ) {
-	    error( $noredirect, "File missing or zero size", 
+	    handleError( $noredirect, "File missing or zero size", 
 	           $query, $webName, $topic, "oopsupload", $fileName );
 	    return;
 	}
@@ -361,12 +361,13 @@ sub main
 	my $doNotLogChanges = 1;
 	my $doUnlock = 1;
 	my $dontNotify = "";
-	my $error = &TWiki::Store::saveAttachment( $webName, $topic, $text1, $saveCmd, $fileName, $doNotLogChanges, $doUnlock, 
+	my $error = &TWiki::Store::saveAttachment( $webName, $topic, $text1, $saveCmd,
+                                                   $fileName, $doNotLogChanges, $doUnlock, 
 						   $dontNotify, $fileComment, $tmpFilename );
 
 	if ( $error ) {
-	    error( $noredirect, "Save attachment error", $query, $webName, $topic,
-	           "oopssaveerrr", $error );
+	    handleError( $noredirect, "Save attachment error", $query, $webName, $topic,
+	           "oopssaveerr", $error );
 	    return;
 	}
 
@@ -408,8 +409,8 @@ sub main
 
     my $error = &TWiki::Store::saveTopic( $webName, $topic, $text, $meta );
     if( $error ) {
-    	error( $noredirect, "Save topic error", $query, $webName, $topic,
-    	       "oopssaveerrr", $error );
+    	handleError( $noredirect, "Save topic error", $query, $webName, $topic,
+    	       "oopssaveerr", $error );
     } else {
         # and finally display topic
         if( $noredirect ) {
