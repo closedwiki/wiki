@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1015541700" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1015987140" format="1.0" version="1.11"}%
 ---+ Table Plugin
 
 Gives extra control of table display:
@@ -89,7 +89,7 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="1" cellsp
 | 12 | C | Spec error handling | Jack | 1-Dec-02 | |
 | 5 |	| Abc | John | | |
 
----+++ Plugin Installation Instructions
+---++ Plugin Installation Instructions
 
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -104,11 +104,11 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="1" cellsp
 		* Check above example if the table renders as expected
 		* Try click on heading to sort.  Other tables should also be sortable
 
----+++ Plugin Info
+---++ Plugin Info
 
-|  Plugin Author: | %TWIKIWEB%.JohnTalintyre |
-|  Plugin Version: | 07 Mar 2002 |
-|  Change History: | 07 Mar 2002 PTh: Added valign, headeralign and dataalign; fixed swapped cellpadding/cellspacing bug <br /> 05 Jan 2002 PTh: Fixed sorting bug of cells with leading white space <br /> 06 Dec 2001 PTh: Fixed date sorting bug <br /> 03 Dec 2001 PTh: Fixed sort="off" bug and more <br /> 29 Nov 2001: PTh fixed Perl warnings <br /> 16 Nov 2001: PTh added table border, cell spacing, cell padding, gif files <br /> 07 Oct 2001: Initial version |
+|  Plugin Author: | %TWIKIWEB%.JohnTalintyre, %TWIKIWEB%.PeterThoeny |
+|  Plugin Version: | 12 Mar 2002 |
+|  Change History: | 12 Mar 2002 PTh: Added valign, headeralign and dataalign; fixed bug of swapped cellpadding/cellspacing; fixed warning of uninitialized value <br /> 05 Jan 2002 PTh: Fixed sorting bug of cells with leading white space <br /> 06 Dec 2001 PTh: Fixed date sorting bug <br /> 03 Dec 2001 PTh: Fixed sort="off" bug and more <br /> 29 Nov 2001: PTh fixed Perl warnings <br /> 16 Nov 2001: PTh added table border, cell spacing, cell padding, gif files <br /> 07 Oct 2001: Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
@@ -118,7 +118,7 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="1" cellsp
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- %TWIKIWEB%.JohnTalintyre - 07 Oct 2001 <br />
--- %TWIKIWEB%.PeterThoeny - 07 Mar 2002 <br />
+-- %TWIKIWEB%.PeterThoeny - 12 Mar 2002 <br />
 %META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1005707580" path="C:\Data\Temp\up.gif" size="876" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1005707591" path="C:\Data\Temp\down.gif" size="869" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1005707607" path="C:\Data\Temp\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
