@@ -649,8 +649,8 @@ matched within a multi-byte character cannot be used for TWiki.
 =cut
 
 sub invalidSiteCharset {
-    # FIXME: match other problematic multi-byte character sets - Shift-JIS?
-    return ( $siteCharset =~ /^(?:iso-2022-?|hz-?|.*big5)/i );
+    # FIXME: match other problematic multi-byte character sets 
+    return ( $siteCharset =~ /^(?:iso-2022-?|hz-?|.*big5|.*shift_?jis|ms.kanji)/i );
 }
 
 
@@ -691,7 +691,7 @@ sub convertUtf8URLtoSiteCharset {
 		require Encode;			# Perl 5.8 or higher only
 		$fullTopicName = Encode::decode("utf8", $fullTopicName);	# 'decode' into UTF-8
 	    } else {
-		writeWarning "UTF-8 not supported on Perl $] - use Perl 5.8 instead.";
+		writeWarning "UTF-8 not supported on Perl $] - use Perl 5.8 or higher.";
 	    }
 	    writeWarning "UTF-8 not yet supported as site charset - TWiki is likely to have problems";
 	} else {
