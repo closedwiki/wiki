@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092611940" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092632647" format="1.0" version="1.6"}%
 %TOC%
 %STARTINCLUDE%
 ---# Windows Install Cookbook 
@@ -14,7 +14,7 @@ This cookbook is intended to get you up and running with TWiki on Windows quickl
 
 ---++ Summary
 
-%N% - See WindowsInstallSummary for a concise summary of the whole cookbook.
+%N% - See *[[WindowsInstallSummary]]* for a concise summary of the whole cookbook.
 
 ---++ Recent updates
 
@@ -29,7 +29,7 @@ This cookbook is intended to get you up and running with TWiki on Windows quickl
 
 ---++ Scope
 
-This document covers installation of the TWiki *01-Feb-2003* production release (TWiki:Codev/TWikiRelease01Feb2003) in the following environment - if you want to use a different environment, feel free to use this as a guideline only.  (It has been mainly tested with the TWiki *01-Dec-2001* release but should work fine with Feb 2003.)
+This document covers installation of the TWiki *01-Sep-2004* production release (TWiki:Codev/TWikiRelease01Sep2004) in the following environment - if you want to use a different environment, feel free to use this as a guideline only.
 
 | *Component* | *Name, version* | *Comment* |
 | Operating System | Windows 2000 | Should also work for Windows NT |
