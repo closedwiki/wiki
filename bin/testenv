@@ -466,13 +466,13 @@ if ( $modPerlVersion ) {
 }
 print "</td></tr>\n";
 
-# Check for old mod_perl 2.0 version
+# Check for a broken version of mod_perl 2.0
 if ( $usingModPerl and $modPerlVersion >= 1.99 
-        and $modPerlVersion < $modPerlVersionRecommended ) {
+        and $modPerlVersion eq '1.99_11' ) {
     # Recommend mod_perl upgrade if using a mod_perl 2.0 version
     # with PATH_INFO bug (see Support.RegistryCookerBadFileDescriptor)
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "mod_perl version $modPerlVersionRecommended or higher is strongly recommended to avoid 'internal system error' bugs with PATH_INFO when using mod_perl 2.0 and Apache 2.0 or higher.\n";
+    print "mod_perl version $modPerlVersionRecommended or higher is strongly recommended to avoid 'internal system error' bugs with PATH_INFO when using mod_perl $modPerlVersion and Apache 2.0 or higher.\n";
     print "</td></tr>\n";
 }
 
