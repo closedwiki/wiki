@@ -1471,7 +1471,7 @@ sub _TOC {
             $highest--;
             $result =~ s/^\t{$highest}//gm;
         }
-        return CGI::div( { -class=>'twikiToc' }, $title.$result );
+        return CGI::div( { -class=>'twikiToc' }, "$title$result\n" );
     } else {
         return '';
     }
