@@ -124,6 +124,7 @@ sub main
     } else {
         $text = $query->param( "text" ); # text to save
         ( $meta, $ptext ) = &TWiki::Store::_extractMetaData( $webName, $topic, $text );
+        $text =~ s/%_(.)_%/%__$1__%/go;
     }
 
     $ptext =~ s/ {3}/\t/go;

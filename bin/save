@@ -100,6 +100,7 @@ sub main
 
     my $meta = "";
     if( $saveCmd eq "repRev" ) {
+        $text =~ s/%__(.)__%/%_$1_%/go;
 	( $meta, $text ) = &TWiki::Store::_extractMetaData( $webName, $topic, $text );
     } else {
         # normal case: Get latest attachment from file for preview
