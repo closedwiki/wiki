@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1010218620" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="PeterThoeny" date="1015541700" format="1.0" version="1.10"}%
 ---+ Table Plugin
 
 Gives extra control of table display:
@@ -28,6 +28,15 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 
 	* Table cell spacing.  Default: 1
 		* Set CELLSPACING = 1
+
+	* Vertical alignment of cells. Set to: =top=, =middle=, =bottom= or =baseline=; default: (empty)
+		* Set VALIGN = 
+
+	* Table header cell alignment. Set to: =left=, =center=, =right= or =justify=; default: (empty)
+		* Set HEADERALIGN = 
+
+	* Table data cell alignment. Set to: =left=, =center=, =right= or =justify=; default: (empty)
+		* Set DATAALIGN = 
 
 	* Color for header cells ('*'s around text).  Default: <span style="background : #99CCCC;">#99CCCC</span>
 		* #Set HEADER_BG = red
@@ -62,14 +71,17 @@ On line before the table use =%<nop>TABLE{...}%=:
 | =tableborder= | Table border width (pixels) | =tableborder="2"= |
 | =cellpadding= | Cell padding (pixels) | =cellpadding="0"= |
 | =cellspacing= | Cell spacing (pixels) | =cellspacing="3"= |
+| =valign= | Vertical alignment of cells, set to =top=, =middle=, =bottom= or =baseline= | =valign="top"= |
+| =headeralign= | Header cell alignment, set to =left=, =center=, =right= or =justify=. Overrides individual cell settings | =headeralign="left"= |
+| =dataalign= | Data cell alignment, set to =left=, =center=, =right= or =justify=. Overrides individual cell settings | =dataalign="center"= |
 
 All default to the global setting
 
 ---++ Examples
 
-Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="3" cellspacing="1" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%=
+Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%=
 
-%TABLE{sort="on" tableborder="0" cellpadding="3" cellspacing="1" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%
+%TABLE{sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%
 | *Num* | *Status* | *Action* | *Who* | *When* | *Progress* |
 | 1 | C | Chose new colours | John | 1-Dec-02 | |
 | 2 | X | Release | John | 1-Apr-02 | |
@@ -95,8 +107,8 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="3" cellsp
 ---+++ Plugin Info
 
 |  Plugin Author: | %TWIKIWEB%.JohnTalintyre |
-|  Plugin Version: | 05 Jan 2002 |
-|  Change History: | 05 Jan 2002 PTh: Fixed sorting bug of cells with leading white space <br /> 06 Dec 2001 PTh: Fixed date sorting bug <br /> 03 Dec 2001 PTh: Fixed sort="off" bug and more <br /> 29 Nov 2001: PTh fixed Perl warnings <br /> 16 Nov 2001: PTh added table border, cell spacing, cell padding, gif files <br /> 07 Oct 2001: Initial version |
+|  Plugin Version: | 07 Mar 2002 |
+|  Change History: | 07 Mar 2002 PTh: Added valign, headeralign and dataalign; fixed swapped cellpadding/cellspacing bug <br /> 05 Jan 2002 PTh: Fixed sorting bug of cells with leading white space <br /> 06 Dec 2001 PTh: Fixed date sorting bug <br /> 03 Dec 2001 PTh: Fixed sort="off" bug and more <br /> 29 Nov 2001: PTh fixed Perl warnings <br /> 16 Nov 2001: PTh added table border, cell spacing, cell padding, gif files <br /> 07 Oct 2001: Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
@@ -106,7 +118,7 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="3" cellsp
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- %TWIKIWEB%.JohnTalintyre - 07 Oct 2001 <br />
--- %TWIKIWEB%.PeterThoeny - 05 Jan 2002 <br />
+-- %TWIKIWEB%.PeterThoeny - 07 Mar 2002 <br />
 %META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1005707580" path="C:\Data\Temp\up.gif" size="876" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1005707591" path="C:\Data\Temp\down.gif" size="869" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1005707607" path="C:\Data\Temp\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
