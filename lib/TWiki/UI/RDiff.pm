@@ -310,7 +310,7 @@ sub diff {
 
     $renderStyle = "sequential" if ( ! $renderStyle );
     $diffType = "history" if ( ! $diffType );
-    $contextLines = 3 if ( ! $contextLines );
+    $contextLines = 3 unless ( defined $contextLines );
 
     TWiki::UI::checkWebExists( $session, $webName, $topic );
 
