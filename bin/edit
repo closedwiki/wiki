@@ -48,5 +48,5 @@ my $theTopic = $query->param( 'topic' ) || "";
 
 TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
-TWiki::UI::Edit::edit( $TWiki::t );
+TWiki::UI::Edit::edit( $TWiki::T );
 

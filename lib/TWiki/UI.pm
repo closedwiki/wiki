@@ -41,7 +41,7 @@ sub oops {
 =pod twiki
 
 ---+++ redirect( $url, ... )
-Generate a CGI redirect unless (1) $TWiki::T->{cgiQuery} is undef or
+Generate a CGI redirect unless (1) $session->{cgiQuery} is undef or
 (2) $query->param('noredirect') is set to any value. Thus a redirect is
 only generated when in a CGI context. The ... parameters are
 concatenated to the message written when printing to STDOUT, and are
@@ -76,7 +76,7 @@ sub webExists {
 
   return 1 if( $session->{store}->webExists( $webName ) );
 
-  oops( $webName, $topic, "noweb", "ERROR $webName.$topic Missing Web" );
+  oops( $session, $webName, $topic, "noweb", "ERROR $webName.$topic Missing Web" );
 
   return 0;
 }
@@ -92,11 +92,11 @@ the oops template name thus: oops${fn}notopic
 =cut
 
 sub topicExists {
-  my ( $webName, $topic, $fn ) = @_;
+  my ( $session, $webName, $topic, $fn ) = @_;
 
   return 1 if $session->{store}->topicExists( $webName, $topic );
 
-  oops( $webName, $topic, "${fn}notopic", "ERROR $webName.$topic Missing topic" );
+  oops( $session, $webName, $topic, "${fn}notopic", "ERROR $webName.$topic Missing topic" );
 
   return 0;
 }
@@ -110,7 +110,7 @@ calling TWiki::UI::oops and returning 1 if it doesn't.
 =cut
 
 sub isMirror {
-  my ( $webName, $topic ) = @_;
+  my ( $session, $webName, $topic ) = @_;
 
   my( $mirrorSiteName, $mirrorViewURL ) = $session->readOnlyMirrorWeb( $webName );
 
@@ -140,7 +140,7 @@ sub isAccessPermitted {
 
    return 1 if $session->{security}->checkAccessPermission( $mode, $user, "",
                                                         $topic, $web );
-   oops( $web, $topic, "access$mode" );
+   oops( $session, $web, $topic, "access$mode" );
 
    return 0;
 }
@@ -154,11 +154,11 @@ oops and return 0.
 =cut
 
 sub userIsAdmin {
-  my ( $webName, $topic, $user ) = @_;
+  my ( $session, $webName, $topic, $user ) = @_;
 
   return 1 if $session->{security}->userIsInGroup( $user, $TWiki::superAdminGroup );
 
-  oops( $webName, $topic, "accessgroup",
+  oops( $session, $webName, $topic, "accessgroup",
         "$TWiki::mainWebname.$TWiki::superAdminGroup" );
 
   return 0;
@@ -175,17 +175,17 @@ web.
 
 sub readTemplateTopic
 {
-    my( $theTopicName ) = @_;
+    my( $session, $theTopicName ) = @_;
 
     $theTopicName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
 
     # try to read in current web, if not read from TWiki web
 
     my $web = $TWiki::twikiWebname;
-    if( $TWiki::T->{store}->topicExists( $TWiki::T->{webName}, $theTopicName ) ) {
-        $web = $TWiki::T->{webName};
+    if( $session->{store}->topicExists( $session->{webName}, $theTopicName ) ) {
+        $web = $session->{webName};
     }
-    return $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $web, $theTopicName, undef, 0 );
+    return $session->{store}->readTopic( $session->{wikiUserName}, $web, $theTopicName, undef, 0 );
 }
 
 1;

@@ -51,9 +51,13 @@ duties.
 
 sub save {
     my $session = shift;
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
 
     if ( _save( $session )) {
-        $session->redirect( $query, $session->getViewUrl( $session->normalizeWebTopicName($webName, $topic)) );
+        $session->redirect( $query,
+                            $session->getViewUrl( $session->normalizeWebTopicName($webName, $topic)) );
     }
 }
 

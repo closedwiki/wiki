@@ -29,7 +29,7 @@ BEGIN {
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use TWiki;
-use TWiki::UI::Viewfile;
+use TWiki::UI::View;
 
 my $query = new CGI;
 my $thePathInfo = $query->path_info(); 
@@ -40,5 +40,5 @@ my $theTopic = $query->param( 'topic' );
 TWiki::initialize( $thePathInfo, $theRemoteUser,
                    $theTopic, $theUrl, $query );
 
-TWiki::UI::View::viewfile( $webName, $topic, $query );
+TWiki::UI::View::viewfile( $TWiki::T );
 
