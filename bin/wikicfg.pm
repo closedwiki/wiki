@@ -101,8 +101,6 @@ $revUnlockCmd     = "$rcsDir/rcs -q -u %FILENAME%";
 $revLockCmd       = "$rcsDir/rcs -q -l %FILENAME%";
 #                   Unix ls command :
 $lsCmd            = "/bin/ls";
-#                   Unix cp command :
-$cpCmd            = "/bin/cp";
 #                   Unix egrep command :
 $egrepCmd         = "/bin/egrep";
 #                   Unix fgrep command :
