@@ -1066,6 +1066,9 @@ html>body .twikiToc li a {
 .twikiEditPage .twikiEditFormTextField {
 	width:auto;
 }
+.twikiEditPage .twikiEditFormTextAreaField {
+	width:auto;
+}
 .twikiEditPage .twikiSig {
 	margin:0.5em 0;
 }
