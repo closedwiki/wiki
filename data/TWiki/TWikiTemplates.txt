@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1041735205" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="PeterThoeny" date="1041742924" format="1.0" version="1.16"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -92,7 +92,7 @@ All template topics are located in the %TWIKIWEB% web. The WebTopicEditTemplate 
 
 Here is an example for creating new topics based on a specific template topic:
 
-<form name="new" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEBURLENCODED%/">
+<form name="new" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%URLENCODE{"%WEB%"}%/">
 	* New example topic: 
 	  <input type="text" name="topic" value="ExampleTopic%SERVERTIME{$yearx$mox$day}%" size="23" />
 	  <input type="hidden" name="templatetopic" value="ExampleTopicTemplate" />
@@ -103,7 +103,7 @@ Here is an example for creating new topics based on a specific template topic:
 The above form asks for a topic name. A hidden input tag named ==templatetopic== specifies ExampleTopicTemplate as the template topic to use. Here is the HTML source of the form:
 
 <pre>
-&lt;form name="new" action="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEBURLENCODED%/"&gt;
+&lt;form name="new" action="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>URLENCODE{"%<nop>WEB%"}%/"&gt;
 	* New example topic: 
 	  &lt;input type="text" name="topic" value="ExampleTopic%<nop>SERVERTIME{$yearx$mox$day}%" size="23" /&gt;
 	  &lt;input type="hidden" name="templatetopic" value="ExampleTopicTemplate" /&gt;

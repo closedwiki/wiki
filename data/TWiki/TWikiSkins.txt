@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1041669480" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="PeterThoeny" date="1041742761" format="1.0" version="1.10"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Skins
@@ -27,10 +27,8 @@ You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVaria
 | =%<nop>WIKITOOLNAME%= | The name of your TWiki site |
 | =%<nop>SCRIPTURL%= | The script URL of TWiki |
 | =%<nop>SCRIPTSUFFIX%= | The script suffix, ex: =.pl=, =.cgi= |
-| =%<nop>WEB%= | The name of the current web |
-| =%<nop>WEBURLENCODED%= | The name of the current web, URL encoded (for form action) |
-| =%<nop>TOPIC%= | The name of the current topic |
-| =%<nop>TOPICURLENCODED%= | The name of the current topic, URL encoded (for form action) |
+| =%<nop>WEB%= | The name of the current web. __Note:__ It is recommended to URL-encode the variable in form actions with =%<nop>URLENCODE{"%<nop>WEB%"}%= for proper handling in an internationalized environment |
+| =%<nop>TOPIC%= | The name of the current topic. __Note:__ It is recommended to URL-encode the variable in form actions with =%<nop>URLENCODE{"%<nop>TOPIC%"}%= for proper handling in an internationalized environment |
 | =%<nop>WEBTOPICLIST%= | Common links of current web, defined in the WebPreferences. It includes a [[#GoBox]] |
 | =%<nop>TEXT%= | The topic text, e.g. the content that can be edited |
 | =%<nop>META{"form"}%= | [[TWikiForms][TWikiForm]], if any |
@@ -48,7 +46,7 @@ The =%<nop>WEBTOPICLIST%= includes a "Go" box to jump to a topic. The box also u
 
 Here is an example form that has a select box and the "Go" box for illustration purposes. You need to have <nop>JavaScript enabled for this to work:
 
-<form name="sample" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEBURLENCODED%/%TOPICURLENCODED%">
+<form name="sample" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%URLENCODE{"%WEB%/%TOPIC%"}%">
 <table border="3"><tr><td>
 <select name="sel" onchange="this.form.topic.value=this.options[this.selectedIndex].value; this.form.submit()">
  <option selected="selected" value="">Navigate...</option>
@@ -82,4 +80,4 @@ A skin can be activated in two ways:
 
 The ==?skin=name== URL parameter overrides the SKIN Preference value.
 
--- PeterThoeny - 03 Jan 2003
+-- PeterThoeny - 05 Jan 2003
