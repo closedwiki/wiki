@@ -27,15 +27,14 @@
 #standardfooter input {	background-color: ButtonFace; border: 2px outset; }
 
 /* keep the "a" rules in this order, else you might not get what you expect */
-a{
+a:link {
    color: rgb(70,70,70);
    text-decoration: none;
    font-weight: bold;
    border-bottom: 1px dotted rgb(80,80,80);
 }
-a:link{ }
-a:visited{ }
-a:active{ }
+a:visited{font-weight: normal; text-decoration: none; }
+a:active{font-weight: bold;}
 a:hover{ color: rgb(0,0,0);background-color: rgb(208, 208, 208); }
 
 /* grrr this doesn't turn off a_href borders under images. (IE5.5/Win,Moz1.3) why not? */
