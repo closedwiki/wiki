@@ -84,18 +84,12 @@ sub set_up {
     $this->{TWIKIPREFSBACKUP} = "$prefs.bak";
     copy($this->{TWIKIPREFS}, $this->{TWIKIPREFSBACKUP});
 
-    `rm -rf $TWiki::cfg{DataDir}/$web`;
-    die "Cannot create $TWiki::cfg{DataDir}/$web: $@" if $@;
-    `mkdir $TWiki::cfg{DataDir}/$web`;
-    die "Cannot create $TWiki::cfg{DataDir}/$web: $@" if $@;
+    mkdir "$TWiki::cfg{DataDir}/$web";
     `cp $TWiki::cfg{DataDir}/_default/*.txt* $TWiki::cfg{DataDir}/$web`;
-    die "Cannot create $TWiki::cfg{DataDir}/$web: $@" if $@;
 
-    mkdir "$TWiki::cfg{PubDir}/$web" ||
-      die "Cannot create $TWiki::cfg{PubDir}/$web";
-    chmod 0777, "$TWiki::cfg{PubDir}/$web" ||
-      die "Cannot chmod $TWiki::cfg{PubDir}/$web";
-
+    mkdir "$TWiki::cfg{PubDir}/$web";
+    chmod 0777, "$TWiki::cfg{DataDir}/$web";
+    chmod 0777, "$TWiki::cfg{PubDir}/$web";
     open(F, ">$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/TestUser1.txt") ||
       die "Cant create user";
     print F "silly user page!!!";
