@@ -10,7 +10,6 @@ package IndexDistributions;
 
 sub indexDistribution {
  use Cwd;
- my $runDir = cwd();
 
  my ( $distribution, $distributionLocation, $excludeFilePattern, $pathPrefix ) =
    @_;
@@ -27,7 +26,7 @@ sub indexDistribution {
   Common::debug "$pathname\n";
   my $relativePath =
     Common::relativeFromPathname( $pathname, $distributionLocation );
-  return unless includeInResults($relativePath);
+#  return unless includeInResults($relativePath);
   return unless -f $pathname;
   return if -z $pathname;
   Common::debug "$pathname\n";
@@ -38,11 +37,13 @@ sub indexDistribution {
   {
    wanted     => $findCallback,
    preprocess => $preprocessCallback,
-   follow     => 0
+   follow     => 0,
+   untaint => 1,
+   untaint_skip => 1, 
+   no_chdir => 1
   },
   $distributionLocation
  );
- chdir($runDir);
 }
 
 sub indexFile {
@@ -103,8 +104,9 @@ sub indexLocalInstallation {
  ensureInstallationDir();
  FileDigest::emptyIndexes();
  $ans .=  "Indexing localInstallation\n";
- IndexDistributions::indexDistribution( "localInstallation",
-  $Common::installationDir, $Common::excludeFilePattern );
+ IndexDistributions::indexDistribution( "localInstallation", "/home/mrjc/beijingtwiki.mrjc.com/", "");
+#					$Common::excludeFilePattern );
+#  $Common::installationDir, 
  $ans .= saveIndex("localInstallation.md5");
 
  #	print FileDigest::dataOutline();
