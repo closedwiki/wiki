@@ -432,10 +432,15 @@ sub writeDebugTimes
 # =========================
 # Get email list from WebNotify page - this now handles entries of the form:
 #    * Main.UserName 
+#    * UserName 
 #    * Main.GroupName
-# The 'UserName' format (i.e. no Main webname) is not allowed, but
-# %MAINWEB% is OK instead of 'Main'.  The user's email address(es) are
-# fetched from their user topic (home page).  Nested groups are supported.
+#    * GroupName
+# The 'UserName' format (i.e. no Main webname) is supported in any web, but
+# is not recommended since this may make future data conversions more
+# complicated, especially if used outside the Main web.  %MAINWEB% is OK
+# instead of 'Main'.  The user's email address(es) are fetched from their
+# user topic (home page) as long as they are listed in the '* Email:
+# fred@example.com' format.  Nested groups are supported.
 sub getEmailNotifyList
 {
     my( $web, $topicname ) = @_;
@@ -448,32 +453,29 @@ sub getEmailNotifyList
     my $mainWebPattern = "(?:$TWiki::mainWebname|%MAINWEB%)";	
 
     my @list = ();
-    foreach ( split ( /\n/, &TWiki::Store::readWebTopic( $web, $topicname ) ) ) {
+    my %seen;			# Incremented when email address is seen
+    foreach ( split ( /\n/, TWiki::Store::readWebTopic( $web, $topicname ) ) ) {
         if (/^\s\*\s[A-Za-z0-9\.]+\s+\-\s+/) {
             # full form:   * Main.WikiName - email@domain
-            if ( !/^\s\*\s$mainWebPattern[.]TWikiGuest\s/ ) {
-		# Add email address to list 
+	    # (the 'Main.' part is optional, non-capturing)
+            if ( !/^\s\*\s(?:$mainWebPattern\.)?TWikiGuest\s/ ) {
+		# Add email address to list if it's not a duplicate
                 if ( /([\w\-\.\+]+\@[\w\-\.\+]+)/ ) {
-		    push @list, $1;
+		    push (@list, $1) unless $seen{$1}++;
 		}
             }
-        } elsif (/^\s\*\s$mainWebPattern\.([A-Z][A-Za-z0-9]+)/ ) {   
+        } elsif (/^\s\*\s(?:$mainWebPattern\.)?([A-Z][A-Za-z0-9]+)/ ) {   
 	    # short form:   * Main.WikiName
+	    # (the 'Main.' part is optional, non-capturing)
             my $userWikiName = $1;
             foreach ( getEmailOfUser($userWikiName) ) {
-                push @list, $_;
+		# Add email address to list if it's not a duplicate
+                push (@list, $_) unless $seen{$_}++;
             }
         }
     }
-
-    # Avoid duplicate email addresses
-    my %seen = ();
-    my @uniq = ();
-    foreach my $item (@list) {
-        push ( @uniq, $item ) unless $seen{$item}++;
-    }
-    ##writeDebug "list of emails: @uniq";
-    return( @uniq );
+    ##writeDebug "list of emails: @list";
+    return( @list);
 }
 
 # Get email address for a given WikiName or group, from the user's home page
@@ -482,10 +484,9 @@ sub getEmailOfUser
     my ($wikiName) = @_;		# WikiName without web prefix
 
     my @list = ();
-    my $mainWeb = $TWiki::mainWebname;
-    # Ignore guest and non-existent pages
+    # Ignore guest entry and non-existent pages
     if ( $wikiName ne "TWikiGuest" && 
-		&TWiki::Store::topicExists( $mainWebname, $wikiName ) ) {
+		TWiki::Store::topicExists( $mainWebname, $wikiName ) ) {
         if ( $wikiName =~ /Group$/ ) {
             # Page is for a group, get all users in group
 	    ## writeDebug "using group: $mainWebname . $wikiName";
@@ -502,7 +503,7 @@ sub getEmailOfUser
             foreach ( split ( /\n/, &TWiki::Store::readWebTopic( 
 					    $mainWebname, $wikiName ) ) ) {
                 if (/^\s\*\sEmail:\s+([\w\-\.\+]+\@[\w\-\.\+]+)/) {   
-		    # Add email to list
+		    # Add email address to list
                     push @list, $1;
                 }
             }
