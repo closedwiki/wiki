@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000535605" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="MikeMannix" date="1000549064" format="1.0" version="1.7"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -153,7 +153,7 @@ Templates used to control appearance of all rendered pages. _Full file list:_
 | =attachnew.tmpl= | Control screen |
 | =changeform.tmpl= | Control screen |
 | =changes.tmpl= | Displays WebChanges list of recently changed topics |
-| =edit.iejs.tmpl= | Edit window with IE specific JavaScript |
+| =edit.iejs.tmpl= | Edit window with IE specific <nop>JavaScript |
 | =edit.tmpl= | Main edit window |
 | =mailnotify.tmpl= | Email notification |
 | =moveattachment.tmpl= | Control screen |
