@@ -92,6 +92,7 @@ use vars qw(
 
 # TWiki::Store config:
 use vars qw(
+        $useRcsDir
         $revInitBinaryCmd $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd
         $revInfoCmd $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd $nullDev
     );
@@ -139,9 +140,9 @@ $debugSystemTime = 0;
 # =========================
 sub initialize
 {
-    my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl ) = @_;
-
-    writeDebug( "\n---------------------------------" );
+    my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query ) = @_;
+    
+    ##writeDebug( "\n---------------------------------" );
     
     $TWiki::Attach::noFooter = 0;
     $TWiki::Attach::showAttr = 0;
@@ -222,6 +223,22 @@ sub initialize
 #/AS
 
     return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
+}
+
+# =========================
+# Can save cookies if required
+sub writeHeader
+{
+    my( $query ) = @_;
+    print $query->header();
+    # Can change to save cookie if required
+}
+
+sub redirect
+{
+    my( $query, $url ) = @_;
+    print $query->redirect( $url );
+    # Can change to save cookie if required
 }
 
 # =========================
@@ -343,6 +360,10 @@ sub userToWikiListInit
 sub userToWikiName
 {
     my( $loginUser ) = @_;
+    
+    if( !$loginUser ) {
+        return "";
+    }
 
     $loginUser =~ s/$securityFilter//go;
     my $wUser = $userToWikiList{ $loginUser };
@@ -575,8 +596,8 @@ sub handleIncludeFile
         push( @theProcessedTopics, $fileName );
     }
 
-    # finally include file
-    my $text = &TWiki::Store::readFile( $fileName );
+    my $text = "";
+    my @meta = ();
 
     # set include web/filenames and current web/filenames
     $includingWebName = $theWeb;
@@ -588,14 +609,19 @@ sub handleIncludeFile
         $theWeb = $1;
         $theTopic = $2;
 
+        ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $theWeb, $theTopic );
         # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
         $text =~ s/.*?%STARTINCLUDE%//os;
         $text =~ s/%STOPINCLUDE%.*//os;
-    }
+    } # FIXME what if it's not a topic, is this possible given only dataDir above?
 
     # handle all preferences and internal tags (for speed: call by reference)
     &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
+    
+    # FIXME ??? Should attachments and other meta data be included?
+    my $metaText = renderMetaData( $theWeb, $theTopic, \@meta, "noMove" );
+    $text .= $metaText;
 
     # recursively process multiple embeded %INCLUDE% statements and prefs
     $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $theTopic, $theWeb, @theProcessedTopics )/geo;
@@ -932,16 +958,19 @@ sub renderMoved
 # =========================
 sub renderMetaData
 {
-    my( $web, $topic, $meta ) = @_;
+    my( $web, $topic, $meta, $dontRenderMoved ) = @_;
 
     my $attachmentText = TWiki::Attach::renderMetaData( $web, $topic, $meta );
     
-    my $movedText = renderMoved( $web, $topic, $meta );
+    my $movedText = "";
+    if( ! $dontRenderMoved ) {
+        $movedText = renderMoved( $web, $topic, $meta );
+    }
     
     my $text = "$attachmentText\n$movedText";
     
-    $text = getRenderedVersion( $text, $web );
     $text = handleCommonTags( $text, $topic, $web );
+    $text = getRenderedVersion( $text, $web );
     
     return $text;
 }
@@ -1055,9 +1084,9 @@ sub internalLink
     if(  ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) && ! ( $exist ) ) {
         # page is a non-existing plural
         my $tmp = $theTopic;
-        $tmp =~ s/ies$/y/;      # plurals like policy / policies
-        $tmp =~ s/sses$/ss/;    # plurals like address / addresses
-        $tmp =~ s/xes$/x/;      # plurals like box / boxes
+        $tmp =~ s/ies$/y/;       # plurals like policy / policies
+        $tmp =~ s/sses$/ss/;     # plurals like address / addresses
+        $tmp =~ s/([Xx])es$/$1/; # plurals like box / boxes
         $tmp =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
         if( &TWiki::Store::topicExists( $theWeb, $tmp ) ) {
             $theTopic = $tmp;
@@ -1225,7 +1254,7 @@ sub getRenderedVersion
             s/$TranslationToken(\!\-\-)/\<$1/go;
 
 # Handle embedded URLs
-            s@(^|[\-\*\s])((http|ftp|gopher|news|https)\:(\S+[^\s\.,!\?;:]))@&externalLink($1,$2)@geo;
+            s@(^|[\-\*\s])((http|ftp|gopher|news|file|https)\:(\S+[^\s\.,!\?;:]))@&externalLink($1,$2)@geo;
 
 # Entities
             s/&(\w+?)\;/$TranslationToken$1\;/go;      # "&abc;"
@@ -1301,7 +1330,9 @@ sub getRenderedVersion
                 s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\#[a-zA-Z0-9_]*)/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/geo;
                 # 'TopicName' link:
                 s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&internalLink($1,$theWeb,$2,$2,"",1)/geo;
-                # 'TLA' link if exist:
+                # 'Web.ABBREV' link:
+                s/([\*\s][\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]{3,})/&internalLink($1,$2,$3,$3,"",0)/geo;
+                # 'ABBREV' link:
                 s/([\*\s][\-\*\s]*)([A-Z]{3,})/&internalLink($1,$theWeb,$2,$2,"",0)/geo;
                 # depreciated link:
                 s/<link>(.*?)<\/link>/&internalLink("",$theWeb,$1,$1,"",1)/geo;
