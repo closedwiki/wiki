@@ -55,7 +55,7 @@ Get a list of attachments that have a date earlier than 1st January 2000
 
 =cut
 
-{ package DBCachePlugin::Search;
+{ package TWiki::Plugins::DBCachePlugin::Search;
 
   # Operator precedences
   my %prec =
@@ -102,7 +102,7 @@ Construct a new search node by parsing the passed expression.
     my $this;
     if ( defined( $string )) {
       if ( $string =~ m/^\s*$/o ) {
-		return new DBCachePlugin::Search( undef, undef, "TRUE", undef );
+		return new TWiki::Plugins::DBCachePlugin::Search( undef, undef, "TRUE", undef );
       } else {
 		my $rest;
 		( $this, $rest ) = _parse( $string );
@@ -129,7 +129,7 @@ Construct a new search node by parsing the passed expression.
       $l = pop( @$opands );
       die "Bad search" unless defined( $l );
     }
-    my $n = new DBCachePlugin::Search( undef, $l, $o, $r );
+    my $n = new TWiki::Plugins::DBCachePlugin::Search( undef, $l, $o, $r );
     push( @$opands, $n);
   }
 
@@ -202,6 +202,11 @@ the method "get" that returns a value given a string key.
     return 0 unless ( defined( $map ));
 
     my $val = $map->get( $l );
+    # Compatibility: values have now moved down into the form for topics,
+    # but we need this just in case the search specifier is "old style"
+    unless ($val) {
+      $val = $map->get($map->get("form"))->get( $l );
+    }
     return 0 unless ( defined( $val ));
 
     if ( $op eq "=" )  { return ( $val =~ m/^$r$/ ) };

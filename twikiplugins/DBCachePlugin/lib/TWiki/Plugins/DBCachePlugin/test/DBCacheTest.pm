@@ -41,7 +41,7 @@ sub set_up {
 
 sub test_loadSimple {
   my $this = shift;
-  my $db = new DBCachePlugin::DBCache("Test");
+  my $db = new TWiki::Plugins::DBCachePlugin::DBCache("Test");
   $this->assert_str_equals("0 2 0", $db->load());
   my $topic = $db->get("WebHome");
   $this->assert($topic);
@@ -124,7 +124,7 @@ sub test_loadSimple {
 
 sub test_cache {
   my $this = shift;
-  my $db = new DBCachePlugin::DBCache("Test");
+  my $db = new TWiki::Plugins::DBCachePlugin::DBCache("Test");
   $this->assert_str_equals("Test", $db->{_web});
   $this->assert_equals(0, $db->{loaded});
 
@@ -134,7 +134,7 @@ sub test_cache {
   $this->assert_str_equals("0 0 0", $db->load());
   my $initial = $db;
   # There's a cache there now
-  $db = new DBCachePlugin::DBCache("Test");
+  $db = new TWiki::Plugins::DBCachePlugin::DBCache("Test");
   $this->assert_equals(0, $db->{loaded});
   $this->assert_str_equals("2 0 0", $db->load());
   $this->assert_equals(1, $db->{loaded});
@@ -144,24 +144,24 @@ sub test_cache {
   sleep(1);# wait for clock tick
   BaseFixture::writeTopic("Test", "FormTest", $formTest."\nBlah");
   # One file in the cache has been touched
-  $db = new DBCachePlugin::DBCache("Test");
+  $db = new TWiki::Plugins::DBCachePlugin::DBCache("Test");
   $this->assert_str_equals("1 1 0", $db->load());
-  $db = new DBCachePlugin::DBCache("Test");
+  $db = new TWiki::Plugins::DBCachePlugin::DBCache("Test");
   $this->assert_str_equals("2 0 0", $db->load());
 
   # A new file has been created
   BaseFixture::writeTopic("Test", "NewFile", "Blah");
-  $db = new DBCachePlugin::DBCache("Test");
+  $db = new TWiki::Plugins::DBCachePlugin::DBCache("Test");
   $this->assert_str_equals("2 1 0", $db->load());
 
   # One file in the cache has been deleted
   BaseFixture::deleteTopic("Test", "FormTest");
-  $db = new DBCachePlugin::DBCache("Test");
+  $db = new TWiki::Plugins::DBCachePlugin::DBCache("Test");
   $this->assert_str_equals("2 0 1", $db->load());
 
   BaseFixture::deleteTopic("Test", "NewFile");
   BaseFixture::writeTopic("Test", "FormTest", $formTest);
-  $db = new DBCachePlugin::DBCache("Test");
+  $db = new TWiki::Plugins::DBCachePlugin::DBCache("Test");
   $this->assert_str_equals("1 1 1", $db->load());
 
   $this->checkSameAs($initial, $db);

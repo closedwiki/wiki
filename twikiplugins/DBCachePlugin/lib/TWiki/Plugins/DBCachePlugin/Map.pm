@@ -17,7 +17,7 @@ support toString.
 
 =cut
 
-{ package DBCachePlugin::Map;
+{ package TWiki::Plugins::DBCachePlugin::Map;
 
 =begin text
 
@@ -115,7 +115,7 @@ See also =DBCachePlugin::Array= for syntax that applies to arrays.
     } elsif ( $key =~ m/^\.(.*)$/o ) {
 	  return $this->get( $1, $root );
     } elsif ( $key =~ m/^\[(.*)$/o ) {
-	  my ( $one, $two ) = DBCachePlugin::Array::mbrf( "[", "]", $1 );
+	  my ( $one, $two ) = TWiki::Plugins::DBCachePlugin::Array::mbrf( "[", "]", $1 );
 	  my $field = $this->get( $one, $root );
 	  return $field->get( $two, $root ) if ( $two  && ref( $field ));
 	  return $field;
@@ -141,7 +141,7 @@ Set the given key, value pair in the map.
       $attr = $1;
       my $field = $2;
       if ( !defined( $this->{keys}{$attr} )) {
-	$this->{keys}{$attr} = new DBCachePlugin::Map();
+	$this->{keys}{$attr} = new TWiki::Plugins::DBCachePlugin::Map();
       }
       $this->{keys}{$attr}->set( $field, $val );
     } else {
@@ -223,7 +223,7 @@ values. Return a =DBCachePlugin::Array= of matching keys.
 
   sub search {
     my ( $this, $search ) = @_;
-    my $result = new DBCachePlugin::Array();
+    my $result = new TWiki::Plugins::DBCachePlugin::Array();
 
     foreach my $meta ( values( %{$this->{keys}} )) {
       if ( $search->matches( $meta )) {

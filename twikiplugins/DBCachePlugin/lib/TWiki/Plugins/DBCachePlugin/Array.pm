@@ -15,7 +15,7 @@ special cases of the different perl data structures, we use this array object in
 =cut
 use TWiki::Plugins::DBCachePlugin::Search;
 
-{ package DBCachePlugin::Array;
+{ package TWiki::Plugins::DBCachePlugin::Array;
 
 =begin text
 
@@ -124,12 +124,12 @@ See also =DBCachePlugin::Map= for syntax that applies to maps.
       return $this->sum( $key );
 	} elsif ( $key =~ m/^\[\?(.+)$/o ) {
 	  my ( $one, $two ) = mbrf( "[", "]", $1);
-      my $res = $this->search( new DBCachePlugin::Search( $one ) );
+      my $res = $this->search( new TWiki::Plugins::DBCachePlugin::Search( $one ) );
 	  return $res->get( $two ) if ( $two && ref( $res ));
 	  return $res;
 	} elsif ( $key =~ m/^\[\*(.+)$/o ) {
 	  my ( $one, $two ) = mbrf( "[", "]", $1);
-      my $res = new DBCachePlugin::Array();
+      my $res = new TWiki::Plugins::DBCachePlugin::Array();
 
 	  foreach my $meta ( @{$this->{values}} ) {
 		if ( ref( $meta )) {
@@ -217,7 +217,7 @@ values. Return a =DBCachePlugin::Array= of matching entries.
 
   sub search {
     my ( $this, $search ) = @_;
-    my $result = new DBCachePlugin::Array();
+    my $result = new TWiki::Plugins::DBCachePlugin::Array();
 
     return $result unless ( $this->size() > 0 );
 
