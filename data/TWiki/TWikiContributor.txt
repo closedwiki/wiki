@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1070003448" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="PeterThoeny" date="1070384864" format="1.0" version="1.9"}%
 ---+ TWiki Contributor
 
 A TWiki contributor is a person devoting his/her time to contribute on the development of the Open Source project TWiki, hosted at http://TWiki.org/ . It is defined as a person who:
@@ -6,7 +6,7 @@ A TWiki contributor is a person devoting his/her time to contribute on the devel
 	* has contributed code that was accepted into the TWiki distribution, or
 	* has considerably contributed to the TWiki documentation.
 
-I would like to take this opportunity to express my appreciation to all who contributed ideas, code, fixes and documentation.
+I would like to take this opportunity to express my sincere appreciation and thanks to all who contributed ideas, code, fixes and documentation to the TWiki project :-)
 
 ---++ List of Contributors
 
@@ -28,7 +28,7 @@ I would like to take this opportunity to express my appreciation to all who cont
 | Manpreet Singh | TWiki:Main/ManpreetSingh | |
 | Martin Cleaver | TWiki:Main/MartinCleaver | |
 | Martin Raabe | TWiki:Main/MartinRaabe | |
-| Michael Sparks | TWiki:Main/MichaelSparks | |
+| MS | TWiki:Main/MichaelSparks | |
 | Mike Mannix | TWiki:Main/MikeMannix | TWiki:Codev/CoreTeamHallOfFame member |
 | Nicholas Lee | TWiki:Main/NicholasLee | TWiki:Codev/CoreTeam member |
 | Peter Fokkinga | TWiki:Main/PeterFokkinga | |
@@ -45,9 +45,11 @@ I would like to take this opportunity to express my appreciation to all who cont
 
 __Note:__ Please contact a TWiki:Codev/CoreTeam member in case you contributed to TWiki and your name is not on this list!
 
+__Disclaimer:__ TWiki gets installed on thousands of public web sites. The contributors are not affiliated in any way with those sites.
+
 ---++ List of Contributions
 
 	* See %TWIKIWEB%.TWikiHistory
 	* See also List of Production Releases in TWiki:Codev/TWikiReleases
 
--- TWiki:Main/PeterThoeny - 02 Nov 2003
+-- TWiki:Main/PeterThoeny - 02 Dec 2003
