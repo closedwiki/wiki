@@ -3,5 +3,5 @@
 ---+ Webs
 -->
 	* *Webs*
-%WEBLIST{"<span style="background-color: %$markerVAR{\"WEBBGCOLOR\" web=$qname}$marker%\">  </span> <b><a href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$name/%HOMETOPIC%\">$name</a></b><br/>"}%
+%WEBLIST{"<span style=\"background-color: %$markerVAR{\"WEBBGCOLOR\" web=$qname}$marker%\">  </span> <b><a href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$name/%HOMETOPIC%\">$name</a></b><br/>"}%
 
