@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1033867260" format="1.0" version="1.58"}%
+%META:TOPICINFO{author="PeterThoeny" date="1038026520" format="1.0" version="1.59"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -199,13 +199,13 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
   <td> =%<nop>SEARCH{"text" ...}%= </td>
   <td> Inline search, shows a search result embedded in a topic. Parameters are the search term, web, scope, order and many more: [1]
 | *Parameter:* | *Description:* | *Default:* |
-| ="text"= | Search term. (Is a regular expression or literal, depending on the =regex= parameter) [TWikiAlphaRelease - for regular expressions ";" can be used to mean _and_ e.g. "search;agrep" will find all topic containing search _and_ agrep ] | required |
+| ="text"= | Search term. Is a regular expression or literal, depending on the =regex= parameter. For regular expressions ";" is used to mean _and_ e.g. "search;agrep" will find all topic containing search _and_ agrep. | required |
 | =search="text"= | (Alternative to above) | N/A |
 | =web="Name"= <br /> =web="%MAINWEB% Know"= <br /> =web="all"= | Wiki web to search: A web, a list of webs separated by whitespace, or =all= webs. [2] | Current web |
 | =scope="topic"= <br /> =scope="text"= | Search topic name (title) or in the text (body) of the topic | Topic text (body) |
 | =order="topic"= <br /> =order="modified"= <br /> =order="editby"= <br /> =order=<br />&nbsp;"formfield(name)"= | Sort the results of search by the topic names, last modified time, last editor, or named field of TWikiForms | Sort by topic name |
 | =limit="all"= <br /> =limit="16"= | Limit the number of results returned | All results |
-| =regex="on"= | RegularExpression search | Literal search |
+| =regex="on"= | RegularExpression search; also enables ";" as _and_ | Literal search |
 | =reverse="on"= | Reverse the direction of the search | Ascending search |
 | =casesensitive="on"= | Case sensitive search | Ignore case |
 | =nosummary="on"= | Show topic title only | Show topic summary |
