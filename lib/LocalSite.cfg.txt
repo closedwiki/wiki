@@ -1,0 +1,70 @@
+# Example site-specific configuration file for TWiki, held in 'lib' directory. 
+#
+# This is distributed as LocalSite.cfg.txt - copy this file to LocalSite.cfg
+# And edit your LocalSite.cfg  instead of changing TWiki.cfg.
+#
+# This file overrides TWiki.cfg so there is no risk of your settings 
+# being overwritten when you upgrade.
+#
+# Only the most commonly used settings are listed in LocalSite.cfg.txt
+# See TWiki.cfg to copy across the other (seldom changed) settings 
+#
+# See 'setlib.cfg' in 'bin' directory to configure non-standard location
+# for 'lib' directory or Perl modules.
+#
+
+######## General path settings #######################################
+# NOTE: If your server is running Microsoft Windows, paths should
+# normally be written as "c:/foo" not "c:\foo" (which doesn't do what
+# you may think it does). You can use '\' without problems inside
+# single quotes, e.g. 'c:\foo'.
+
+# URL for TWiki host e.g. http://myhost.com:123
+$cfg{DefaultUrlHost} = 'http://your.domain.com';
+
+# cgi-bin URL path for TWiki e.g. /twiki/bin
+$cfg{ScriptUrlPath} = '/twiki/bin';
+
+# Attachments URL path e.g. /twiki/pub
+$cfg{PubUrlPath} = '/twiki/pub';
+
+# Attachments store file path (not URL), must match /twiki/pub e.g.
+# /usr/local/twiki/pub
+$cfg{PubDir} = '/home/httpd/twiki/pub';
+
+# Template directory e.g. /usr/local/twiki/templates
+$cfg{TemplateDir} = '/home/httpd/twiki/templates';
+
+# Topic files store (file path not URL) e.g. /usr/local/twiki/data
+$cfg{DataDir} = '/home/httpd/twiki/data';
+
+# Directory must be writable by the CGI user (Note: this variable is
+# local to this file; it is not used in the code).
+# ## THIS IS A PLACEHOLDER - See Codev.LogDirectory for my Q as to its removal.
+my $logDir = $cfg{DataDir};
+
+# URL path to scripts used to render links. Defaults to the same as
+# $cfg{ScriptUrlPath}. Set if using redirection to shorten URLs.
+$cfg{DispScriptUrlPath} = undef;
+
+# Suffix of TWiki Perl scripts (e.g. .pl)
+$cfg{ScriptSuffix} = '';
+
+######## Security setup ##############################################
+
+# Added to email addresses to Prevent spambots from grabbing
+# addresses e.g. set to 'NOSPAM' to get user.com
+# rendered as user.com. Usually only required
+# for public websites.
+$cfg{NoSpamPadding} = '';
+
+
+# Default store implementation
+# RcsWrap - use RCS executables
+# RcsLite - use a 100% Perl simplified implementation of Perl
+# RcsLite is useful if you don't have, and can't install, RCS - for
+# example, on a hosted platform. It will work, and is compatible with
+# RCS, but is not quite as fast.
+$cfg{StoreImpl} = 'RcsWrap';
+
+1;
