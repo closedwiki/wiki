@@ -164,11 +164,15 @@ sub new {
   }
   close(PF);
   my $deptable = "";
+  my $a = " align=\"left\"";
   foreach my $dep (@{$this->{dependencies}}) {
-	$deptable .= " ==" . $dep->{name} . "== (" . $dep->{type} . " " .
-	  $dep->{description} . ")";
+	$deptable .= "<tr><td$a>" . $dep->{name} . "</td><td$a>" .
+	  $dep->{type} . "</td><td$a>" . $dep->{description} . "</td></tr>";
   }
-  $this->{DEPENDENCIES} = $deptable;
+  $this->{DEPENDENCIES} = "None";
+  if ($deptable ne "") {
+	$this->{DEPENDENCIES} = "<table border=1><tr><th$a>Name</th><th$a>Type</th><th$a>Description</th></tr>$deptable</table>";
+  }
 
   my $version = "Unknown";
   if (open(IF, $this->{plugin_pm})) {
@@ -182,7 +186,7 @@ sub new {
   }
   $this->{VERSION} = $version;
 
-  $this->{DATE} = POSIX::strftime("%d %B %Y", localtime);
+  $this->{DATE} = POSIX::strftime("%T %d %B %Y", localtime);
 
   return bless( $this, $class );
 }
@@ -364,6 +368,7 @@ sub filter {
 	print OF $line unless ($this->{-n});
   }
   close(IF);
+  print OF "<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->\n";
   close(OF) unless ($this->{-n});
 }
 
@@ -514,10 +519,38 @@ sub target_upload {
   chop($pass);
   my $curl = "curl -s -S -u $user:$pass";
   my $to = $this->{project};
-  print `$curl -F text=\\<$basedir/$to.txt http://TWiki.org/cgi-bin/save/Plugins/$to`;
+  # Get the old form data and attach it to the update
+  my $oldform = `$curl http://TWiki.org/cgi-bin/view/Plugins/$to`;
+  my $opts = "";
+  foreach my $line ( split(/\n/, $oldform)) {
+	if ( $line =~ m/(TopicClassification|CVSModificationPolicy|DeveloperVersionInCVS|InstalledOnTWikiOrg|DemoUrl).*?<\/td><td.*?>(.*)<\/td>/o ) {
+	  my $val = _unhtml($2);
+	  if ($val && $val ne "") {
+		$opts .= " -F $1=$val";
+	  }
+	} elsif ( $line =~ m/(TestedOnTWiki|TestedOnOS|ShouldRunOnOS).*?<\/td><td.*?>(.*?)<\/td>/o ) {
+	  my $func = $1;
+	  foreach my $plaf ( split( /,/, _unhtml($2))) {
+		if ($plaf ne "") {
+		  $opts .= " -F $func$plaf=Yes";
+		}
+	  }
+	}
+  }
+  print `$curl -F text=\\<$basedir/$to.txt $opts http://TWiki.org/cgi-bin/save/Plugins/$to`;
   die "Update of topic failed: $?" if ( $?);
   print `$curl -F filepath=\\\@$basedir/$to.zip -F filename=$to.zip http://TWiki.org/cgi-bin/upload/Plugins/$to`;
   die "Update of zip failed: $?" if ( $?);
+}
+
+sub _unhtml {
+  my $html = shift;
+
+  $html =~ s/<[^<>]*>//og;
+  $html =~ s/&\w+;//go;
+  $html =~ s/\s//go;
+
+  return $html;
 }
 
 =begin text

@@ -1,4 +1,5 @@
 data/TWiki/SharedCode.txt
+lib/TWiki/Plugins/SharedCode.pm
 lib/TWiki/Plugins/SharedCode/Attrs.pm
 lib/TWiki/Plugins/Build.pm
 lib/TWiki/Plugins/CairoCompatibilityModule.pm

@@ -36,13 +36,19 @@ values, spaces around the =, and commas as well as spaces separating values.
 
 package TWiki::Attrs;
 
+my $ERRORKEY = "__error__";
+my $DEFAULTKEY = "__default__";
+
 =begin text
 
 ---++ new ($string) => Attrs object ref
 | $string | String containing attribute specification |
 Parse a standard attribute string containing name=value pairs and create a new
-attributes object. The value may be a word or a quoted string. Will throw
-an exception (by dieing) if there is a problem. Example:
+attributes object. The value may be a word or a quoted string. If there is an
+error during parsing, the parse will complete but $this->{__error__} will be
+set in the new object.
+
+Example:
 <verbatim>
 use TWiki::Plugins::SharedCode;
 my $attrs = new TWiki::Attrs('the="time has come", "the walrus" said to=speak of='many things');
@@ -75,19 +81,22 @@ sub new {
 	  elsif ( $string =~ s/^[\s,]*([a-z]\w*)\s*=\s*([^\s,\}\'\"]*)//io ) {
 		$this->{$1} = $2;
 	  }
-	  # simple quoted value with no name, sets the key "__default__"
+	  # simple double-quoted value with no name, sets the key __default__
 	  elsif ( $string =~ s/^[\s,]*\"(.*?)\"//o ) {
-		$this->{"__default__"} = $1;
+		$this->{$DEFAULTKEY} = $1;
 	  }
-	  # simple quoted value with no name, sets the key "__default__"
+	  # simple single-quoted value with no name, sets the key __default__
 	  elsif ( $string =~ s/^[\s,]*'(.*?)'//o ) {
-		$this->{"__default__"} = $1;
+		$this->{$DEFAULTKEY} = $1;
 	  }
 	  # simple name with no value (boolean)
 	  elsif ( $string =~ s/^[\s,]*([a-z]\w*)\b//o ) {
 		$this->{$1} = "1";
+	  # try and clean up
 	  } else {
-		die "Bad attribute list at '$string' in '$orig'";
+		$this->{$ERRORKEY} = "Bad attribute list at '$string' in '$orig'"
+		  unless ( $this->{$ERRORKEY} );
+		$string =~ s/^.//o;
 	  }
 	}
   }
@@ -149,12 +158,14 @@ sub toString {
   my $key;
   my @ss;
   foreach $key ( keys %$this ) {
-	my $es = ( $key eq "__default__" ) ? "" : "$key=";
-	my $val = $this->{$key};
-	if ( $val =~ m/\"/o ) {
-	  push( @ss, "$es'$val'" );
-	} else {
-	  push( @ss, "$es\"$val\"" );
+	if ( $key ne $ERRORKEY ) {
+	  my $es = ( $key eq $DEFAULTKEY ) ? "" : "$key=";
+	  my $val = $this->{$key};
+	  if ( $val =~ m/\"/o ) {
+		push( @ss, "$es'$val'" );
+	  } else {
+		push( @ss, "$es\"$val\"" );
+	  }
 	}
   }
   return join( " ", @ss );

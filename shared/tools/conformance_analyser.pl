@@ -16,8 +16,35 @@ use Time::ParseDate;
 # Constants for URL fragments
 my $TWikiOrg = "http://twiki.org";
 my $View = "/cgi-bin/view";
+
+# Other constants
 my $red = "#FF9999";
 my $green = "#99FF66";
+my @handlers = (
+				"earlyInitPlugin",
+				"initPlugin",
+				"initializeUserHandler",
+				"registrationHandler",
+				"commonTagsHandler",
+				"startRenderingHandler",
+				"outsidePREHandler",
+				"insidePREHandler",
+				"endRenderingHandler",
+				"beforeEditHandler",
+				"afterEditHandler",
+				"beforeSaveHandler",
+				"afterSaveHandler",
+				"beforeAttachmentSaveHandler",
+				"afterAttachmentSaveHandler",
+				"writeHeaderHandler",
+				"redirectCgiQueryHandler",
+				"getSessionValueHandler",
+				"setSessionValueHandler",
+				"renderFormFieldForEditHandler",
+				"renderWikiWordHandler"
+			   );
+
+# Options
 my $update = 1;
 my $interactivePick = 1;
 my $debug = 0;
@@ -25,10 +52,10 @@ my $debug = 0;
 # Analyse options
 foreach my $parm (@ARGV) {
   if ($parm =~ m/^-nod/o) {
-    # If chosen, will not download unles absolutely necessary
+    # If -nod is chosen, will not download unles absolutely necessary
     $update = 0;
   } elsif ($parm =~ /^-used/o) {
-    # If chosen, will assume that default pick for download module from
+    # If -used chosen, will assume that default pick for download module from
     # last time still holds
     $interactivePick = 0;
   } elsif ($parm =~ /^-d/o) {
@@ -36,7 +63,7 @@ foreach my $parm (@ARGV) {
   }
 }
 
-# Download list of modules
+# Download list of modules from TWiki.org
 my @modules;
 getPackageList("PluginPackage", \@modules);
 getPackageList("SkinPackage", \@modules);
@@ -50,6 +77,7 @@ getPackageList("AddOnPackage", \@modules);
 # illtok - {illegal token}{module} - illegal token context
 # funcsyms - {TWiki::Func symbol} - symbols in Func
 # suspect - {module}{file}{code fragment} - suspect code
+# handlers - {token}{module} handler defined by module
 my %data;
 
 # Download list of functions in Func.pm
@@ -60,9 +88,11 @@ foreach my $line (split(/\n/, $text)) {
   }
 }
 
+# repository contains CVS, download contains expanded zips
 mkdir("repository") unless (-d "repository");
 mkdir("download") unless (-d "download");
 
+# The workhouse - download and analyse
 my $module;
 foreach $module (sort @modules) {
   print STDERR "--- Updating $module\n";
@@ -78,6 +108,11 @@ foreach $module (sort @modules) {
 
   analyseCode($module, \%data);
 }
+
+# print results
+print "---+ Report on the current status of packages in the Plugins web\n";
+print RED("This report was script-generated on ".`date`."<p>");
+print "The goal of the analysis is to determine conformance to standards.\n";
 
 my $cvsReport = "";
 foreach $module (sort keys %{$data{cvs}}) {
@@ -112,9 +147,8 @@ foreach $module (sort keys %{$data{cvs}}) {
 }
 
 if ($cvsReport ne "") {
-  TOC(\%data, "CVS", "Modules with questionable CVS status",
-      THR("Module","File","Zip Time","CVS Time"),
-      $cvsReport);
+  print "---++ Modules with questionable CVS status\n";
+  print TABLE(THR("Module","File","Zip Time","CVS Time"), $cvsReport);
 }
 
 my $funcUsageReport = "";
@@ -123,9 +157,20 @@ foreach my $key (sort {$data{funcsyms}{$a} <=> $data{funcsyms}{$b}} keys %{$data
 }
 
 if ($funcUsageReport ne "") {
-  TOC(\%data, "FuncUsage", "Usage of functions in Func",
-      THR("Function","Calls"),
-      $funcUsageReport);
+  print "---++ Usage of functions in Func\n";
+  print TABLE(THR("Function","Calls"), $funcUsageReport);
+}
+
+my $handlerReport = "";
+foreach my $h (@handlers) {
+  if ($data{handlers}{$h}) {
+	$handlerReport .= TR(TD($h),TD(join(", ", @{$data{handlers}{$h}})));
+  }
+}
+
+if ($handlerReport ne "") {
+  print "---++ Handlers defined by modules\n";
+  print TABLE(THR("Handler","Modules"), $handlerReport);
 }
 
 my $illegalCallsReport = "";
@@ -138,10 +183,8 @@ foreach my $token (@badtoks) {
 }
 
 if ($illegalCallsReport ne "") {
-  TOC(\%data, "IllCalls",
-      "Calls to TWiki symbols not published through TWiki::Func",
-      THR("Symbol","Calls","Callers"),
-      $illegalCallsReport);
+  print "---++ Calls to TWiki symbols not published through TWiki::Func\n";
+  print TABLE(THR("Symbol","Calls","Callers"), $illegalCallsReport);
 }
 
 # Table of each module, each token it calls, and what files call them
@@ -163,10 +206,8 @@ foreach $module (@badmods) {
 }
 
 if ($badModsReport ne "" ) {
-  TOC(\%data, "IllAnal",
-      "Analysis of illegal calls made by modules",
-      THR("Module","Symbol","File (calls)"),
-      $badModsReport);
+  print "---++ Analysis of illegal calls made by modules\n";
+  print TABLE(THR("Module","Symbol","File (calls)"), $badModsReport);
 }
 
 # Table of each module and each file with questionable code
@@ -186,9 +227,10 @@ foreach $module (sort keys %{$data{suspect}}) {
 }
 
 if ($questionableCodeReport ne "" ) {
-  TOC(\%data, "Quest", "Other questionable code in modules",
-      THR("Module","File","Code Fragment"),
-      $questionableCodeReport);
+  print "---++ Other questionable code in modules\n";
+  print "\nQuestionable code is code that appears to read or write topics ";
+  print "or webs directly.\n\n";
+  print TABLE(THR("Module","File","Code Fragment"), $questionableCodeReport);
 }
 
 my $conformanceReport = "";
@@ -201,9 +243,10 @@ foreach $module (@sm) {
 }
 
 if ($conformanceReport ne "") {
-  TOC(\%data, "Conform", "Estimated module conformance",
-      THR("Module","Conformance rating"),
-      $conformanceReport);
+  print "---++ Estimated module conformance\n";
+  print "Conformance is degree to which module conforms with published ";
+  print "interfaces. Low number *good*, high number *bad*\n";
+  print TABLE(THR("Module","Conformance rating"), $conformanceReport);
 }
 
 my $directivesReport = "";
@@ -213,19 +256,9 @@ foreach my $find (sort keys(%{$data{directives}})) {
 }
 
 if ($directivesReport ne "") {
-  TOC(\%data, "Directives", "Directives expanded by modules",
-      THR("Directive", "Module(s)"),
-      $directivesReport);
+  print "---++ Directives apparently expanded by modules\n";
+  print TABLE(THR("Directive", "Module(s)"), $directivesReport);
 }
-
-print "---+ Report on the current status of packages in the Plugins web\n";
-print RED("This report was script-generated on ".`date`."<p>");
-print "The goal of the analysis is to determine conformance to standards.\n";
-print "\nQuestionable code is code that appears to read or write topics ";
-print "or webs directly.\n\n";
-print "Conformance is degree to which module conforms with published ";
-print "interfaces. Low number *good*, high number *bad*\n";
-print $data{body};
 
 # Find occurences of TWiki functions not from TWiki::Func in the module.
 # Also analyse module for questionable code use.
@@ -269,7 +302,16 @@ sub analyseCode {
 			}
 		  }
 		}
-      }
+	  }
+
+	  # search for handler definitions
+	  foreach my $h (@handlers) {
+		`egrep -s -e "sub[ \t]*$h" $r`;
+		if (!$?) {
+		  push(@{$data->{handlers}{$h}}, $module);
+		}
+	  }
+
 
       # search for probable directives %DIRECTIVE
       my @finds = split(/\n/, `egrep '^.*s/%[^\/]*%' $r`);
@@ -615,13 +657,6 @@ sub TR_SHADE {
 sub TABLE {
   my $s = join("", @_);
   return "<table width=\"100%\" border=\"1\">$s</table>\n";
-}
-
-sub TOC {
-  my ($data, $anchor, $title, $heads, $report) = @_;
-
-  $data->{body} .= "---++ $title\n";
-  $data->{body} .= TABLE($heads,$report);
 }
 
 1;
