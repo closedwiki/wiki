@@ -291,18 +291,22 @@ sub count {
 
 =pod
 
----++ sub addTOPICINFO (  $web, $topic, $rev, $meta, $forceDate, $forceUser  )
+---++ sub addTOPICINFO (  $web, $topic, $rev, $meta, $options )
 
 Add TOPICINFO type data to the object, as specified by the parameters.
+
+$options is a hashref containing the following options:
+| =forcedate= | epoch secs; default current date |
+| =forceuser= | make the user this; default current username |
 
 =cut
 
 sub addTOPICINFO {
-    my( $self, $web, $topic, $rev, $forceDate, $forceUser ) = @_;
+    my( $self, $web, $topic, $rev, $options ) = @_;
     ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
 
-    my $time = $forceDate || time();
-    my $user = $forceUser || $self->{_session}->{userName};
+    my $time = $options->{forcedate} || time();
+    my $user = $options->{forceuser} || $self->{_session}->{userName};
 
     $rev = 1 unless $rev;
 

@@ -481,7 +481,7 @@ sub _saveAttachment
 sub _saveFile
 {
     my( $self, $name, $text ) = @_;
-    
+
     umask( 002 );
     unless ( open( FILE, ">$name" ) )  {
         warn "Can't create file $name - $!\n";

@@ -465,7 +465,12 @@ sub _processWeb {
         $text = join( "\n", @lines );
         $text .= "\n";
 
-        $session->{store}->saveTopic( $userName, $webName, $statsTopic, $text, $meta, "", 1, 1, 1 );
+        $session->{store}->saveTopic( $userName, $webName, $statsTopic,
+                                      $text, $meta,
+                                      { unlock => 1,
+                                        dontnotify => 1,
+                                        dontlog => 1 } );
+
         _printMsg( "  - Topic $statsTopic updated", $session );
 
     } else {

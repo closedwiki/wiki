@@ -226,7 +226,8 @@ sub bulkRegister {
 
     $meta->put( "TOPICPARENT", ( "name" => $topic ) );
 
-    my $err = $session->{store}->saveTopic($web, $logTopic, $log, $meta, "",  1 );
+    my $err = $session->{store}->saveTopic($web, $logTopic, $log, $meta,
+                                           { unlock => 1} );
 
     $session->redirect($session->getScriptUrl($web, $logTopic, "view"));
 }
@@ -762,7 +763,7 @@ sub _writeRegistrationDetailsToTopic {
 
     $meta->put( "TOPICPARENT", ( "name" => $TWiki::wikiUsersTopicname ) );
 
-    $session->{store}->saveTopic( $data{webName}, $data{WikiName}, $text, $meta, "",  1 );
+    $session->{store}->saveTopic( $data{webName}, $data{WikiName}, $text, $meta, { unlock => 1 } );
     return $log;
 }
 
@@ -1377,7 +1378,8 @@ sub addPhotoToTopic {
 
         $meta->put( "FILEATTACHMENT", %attrs );
     }
-    #     $session->{store}->saveTopic($p{web}, $p{user}, $text, $meta, "",  1 );
+    # $session->{store}->saveTopic($p{web}, $p{user}, $text, $meta,
+    # { unlock => 1} );
     return $meta;
 }
 

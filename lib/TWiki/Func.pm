@@ -817,7 +817,9 @@ sub saveTopicText
 
     # save topic
     my $error =
-      $TWiki::Plugins::SESSION->{store}->saveTopic( $TWiki::Plugins::SESSION->{userName}, $web, $topic, $text, $meta, "", 0, $dontNotify );
+      $TWiki::Plugins::SESSION->{store}->saveTopic
+        ( $TWiki::Plugins::SESSION->{userName}, $web, $topic, $text, $meta,
+          { notify => $dontNotify } );
     return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, "oopssaveerr", $error ) if( $error );
     return "";
 }

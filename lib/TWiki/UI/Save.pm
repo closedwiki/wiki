@@ -35,76 +35,30 @@ use TWiki::UI::Preview;
 use Error qw( :try );
 use TWiki::UI::OopsException;
 
-=pod
-
----++ save( )
-Command handler for save command. Some parameters are passed in CGI:
-| =cmd= | |
-| =text= | target text for the topic |
-| =unlock= | if defined, unlock the written topic |
-| =dontnotify= | if defined, suppress change notification |
-| =submitChangeForm= | |
-| =topicparent= | |
-| =formtemplate= | if define, use the named template for the form |
-Note that this function is rundundant once savemulti takes over all saving
-duties.
-
-=cut
-
-sub save {
-    my $session = shift;
-    my $webName = $session->{webName};
-    my $topic = $session->{topicName};
-
-    if ( _save( $session )) {
-        $session->redirect( $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic)), "view" );
-    }
-}
-
 # Private - do not call outside this module!
+# Returns 1 if caller should redirect to view when done
+# 0 otherwise (redirect has already been handled)
 sub _save {
     my $session = shift;
 
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
-    my $userName = $session->{userName};
-
-    my $saveCmd = $query->param( "cmd" ) || "";
-    my $text = $query->param( "text" );
-    my $meta = "";
-    my $wikiUserName = $session->{wikiUserName};
-
-    # A template was requested; read it, and expand URLPARAMs within the
-    # template using our CGI record
-    my $templatetopic = $query->param( "templatetopic");
-    if ($templatetopic) {
-        ($meta, $text) =
-          $session->{store}->readTopic( $wikiUserName, $webName,
-                                        $templatetopic, undef, 0 );
-        $text = $session->expandVariablesOnTopicCreation( $text );
-    }
-	
-    my $unlock = $query->param( "unlock" ) || "";
-    my $dontNotify = $query->param( "dontnotify" ) || "";
-    my $changeform = $query->param( 'submitChangeForm' ) || "";
-    my $theParent = $query->param( 'topicparent' ) || "";
-    my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
-    my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
-    my $formTemplate = $query->param( "formtemplate" );
-
-    my $topicExists  = $session->{store}->topicExists( $webName, $topic );
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
     TWiki::UI::checkWebExists( $session, $webName, $topic );
 
+    my $topicExists  = $session->{store}->topicExists( $webName, $topic );
+
     # Prevent saving existing topic?
+    my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
     if( $onlyNewTopic && $topicExists ) {
         # Topic exists and user requested oops if it exists
         throw TWiki::UI::OopsException( $webName, $topic, "createnewtopic" );
     }
 
     # prevent non-Wiki names?
+    my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
     if( ( $onlyWikiName )
         && ( ! $topicExists )
         && ( ! TWiki::isValidTopicName( $topic ) ) ) {
@@ -114,14 +68,50 @@ sub _save {
         return 0;
     }
 
+    my $userName = $session->{userName};
+    my $wikiUserName = $session->{wikiUserName};
+
     TWiki::UI::checkAccess( $session, $webName, $topic,
                             "change", $wikiUserName );
 
+    my $saveCmd = $query->param( "cmd" );
     if ( $saveCmd ) {
          # check permission for undocumented cmd=... parameter
         TWiki::UI::checkAdmin( $session, $webName, $topic, $wikiUserName );
     }
 
+    if( $saveCmd eq "delRev" ) {
+        # delete top revision
+        my $error =
+          $session->{store}->delRev( $userName, $webName, $topic );
+        if( $error ) {
+            throw TWiki::UI::OopsException( $webName, $topic,
+                                            "saveerr", $error );
+        }
+
+        return 1;
+    }
+
+    if( $query->param( 'submitchangeform' )) {
+        $session->{form}->changeForm( $webName, $topic );
+        # return 0 to prevent extra redirect
+        return 0;
+    }
+
+    my( $meta, $text );
+
+    # A template was requested; read it, and expand URLPARAMs within the
+    # template using our CGI record
+    my $templatetopic = $query->param( "templatetopic");
+    if ($templatetopic) {
+        ($meta, $text) =
+          $session->{store}->readTopic( $wikiUserName, $webName,
+                                        $templatetopic, undef, 0 );
+        $text = $session->expandVariablesOnTopicCreation( $text );
+    } else {
+        $text = $query->param( "text" );
+    }
+	
     if( ! ( defined $text ) ) {
         throw TWiki::UI::OopsException( $webName, $topic, "save" );
     } elsif( ! $text ) {
@@ -129,43 +119,57 @@ sub _save {
         throw TWiki::UI::OopsException( $webName, $topic, "empty" );
     }
 
-    if( $changeform ) {
-        $session->{form}->changeForm( $webName, $topic );
-        return 0;
-    }
-
     $text = TWiki::decodeSpecialChars( $text );
     $text =~ s/ {3}/\t/go;
+
+    my $saveOpts = {};
+    $saveOpts->{unlock} = 1 if $query->param( "unlock" );
+    $saveOpts->{dontnotify} = 1 if $query->param( "dontnotify" );
+    $saveOpts->{forcenewrevision} = 1 if $query->param( "forcenewrevision" );
 
     if( $saveCmd eq "repRev" ) {
         $text =~ s/%__(.)__%/%_$1_%/go;
         $meta = $session->{store}->extractMetaData( $webName, $topic, \$text );
-    } else {
-        # normal case: Get latest attachment from file for preview
-        my $tmp;
-        # read meta (if not already read when reading template)
-        ( $meta, $tmp ) =
-          $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 ) unless $meta;
-
-        # parent setting
-        if( $theParent eq "none" ) {
-            $meta->remove( "TOPICPARENT" );
-        } elsif( $theParent ) {
-            $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+        # replace top revision with this text
+        my $error =
+          $session->{store}->repRev( $userName, $webName, $topic,
+                                     $text, $meta, $saveOpts );
+        if( $error ) {
+            throw TWiki::UI::OopsException( $webName, $topic,
+                                            "saveerr", $error );
         }
 
-        if( $formTemplate ) {
-            $meta->remove( "FORM" );
-            $meta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
-        }
-
-        use TWiki::Form;
-        # Expand field variables, unless this new page is templated
-        $session->{form}->fieldVars2Meta( $webName, $query, $meta ) unless $templatetopic;
-        $meta->updateSets( \$text );
+        return 1;
     }
 
-    my $error = $session->{store}->saveTopic( $userName, $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
+    my $tmp;
+    # read meta (if not already read when reading template)
+    ( $meta, $tmp ) =
+      $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 ) unless $meta;
+
+    my $theParent = $query->param( 'topicparent' ) || "";
+
+    # parent setting
+    if( $theParent eq "none" ) {
+        $meta->remove( "TOPICPARENT" );
+    } elsif( $theParent ) {
+        $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+    }
+
+    my $formTemplate = $query->param( "formtemplate" );
+    if( $formTemplate ) {
+        $meta->remove( "FORM" );
+        $meta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
+    }
+
+    # Expand field variables, unless this new page is templated
+    $session->{form}->fieldVars2Meta( $webName, $query, $meta ) unless $templatetopic;
+    $meta->updateSets( \$text );
+
+    my $error =
+      $session->{store}->saveTopic( $userName, $webName, $topic,
+                                    $text, $meta, $saveOpts );
+
     if( $error ) {
         throw TWiki::UI::OopsException( $webName, $topic, "saveerr", $error );
     }
@@ -175,8 +179,8 @@ sub _save {
 
 =pod
 
----++ savemulti( )
-Command handler for savemulti command. Some parameters are passed in CGI:
+---++ save( )
+Command handler for save command. Some parameters are passed in CGI:
 | =action= | savemulti overrides, everything else is passed on the normal =save= |
 action values are:
 | =save= | save, unlock topic, return to view, dontnotify is OFF |
@@ -188,7 +192,7 @@ This function can replace "save" eventually.
 
 =cut
 
-sub savemulti {
+sub save {
     my $session = shift;
 
     my $query = $session->{cgiQuery};

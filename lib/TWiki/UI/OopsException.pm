@@ -36,20 +36,15 @@ use Error;
 @TWiki::UI::OopsException::ISA = qw(Error);
 
 sub new {
-    my ( $self, $web, $topic, $template, $p1, $p2, $p3, $p4 ) = @_;
-    $p1 = "" unless $p1;
-    $p2 = "" unless $p2;
-    $p3 = "" unless $p3;
-    $p4 = "" unless $p4;
-    $self->SUPER::new( -web=>$web,
-                       -topic=>$topic,
-                       -template=>$template,
-                       -text=>
-                       "OopsException($web,$topic,$template,$p1,$p2,$p3,$p4",
-                       -param1=>$p1,
-                       -param2=>$p2,
-                       -param3=>$p3,
-                       -param4=>$p4 );
+    my $class = shift;
+    my @params;
+    push( @params, -web => shift );
+    push( @params, -topic => shift );
+    push( @params, -template => shift );
+    push( @params, -text => "OopsException(" . join(",", @_) .")" );
+    push( @params, -params => [ @_ ] );
+
+    $class->SUPER::new( @params );
 }
 
 sub stringify {

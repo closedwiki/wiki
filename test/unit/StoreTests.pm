@@ -75,9 +75,12 @@ sub saveTopic1 {
 
    $twiki->{userName} = $user;
    $meta = new TWiki::Meta($twiki, $web, $topic) unless $meta;
-   my $error = $twiki->{store}->saveTopic( $user, $web, $topic, $text,
-                                        $meta, $saveCmd,
-                                        $doNotLogChanges, $doUnlock );
+   my $error =
+     $twiki->{store}->saveTopic( $user, $web, $topic, $text,
+                                 $meta,
+                                 { savecmd => $saveCmd,
+                                   dontlog => $doNotLogChanges,
+                                   unlock => $doUnlock } );
 
    die $error if $error;
 }

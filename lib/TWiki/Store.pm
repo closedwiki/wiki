@@ -21,11 +21,6 @@
 # - Optionally change TWiki.pm for custom extensions of rendering rules.
 # - Upgrading TWiki is easy as long as you do not customize TWiki.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
-#
-# 20000917 - NicholasLee : Split file/storage related functions from wiki.pm
-# 200105   - JohnTalintyre : AttachmentsUnderRevisionControl & meta data in topics
-# 200106   - JohnTalintyre : Added Form capability (replaces Category tables)
-# 200401   - RafaelAlvarez : Added a new Plugin callback (afterSaveHandler)
 =begin twiki
 
 ---+ TWiki::Store Module
@@ -237,8 +232,9 @@ sub moveAttachment {
     my %fileAttachment =
       $meta->findOne( "FILEATTACHMENT", $theAttachment );
     $meta->remove( "FILEATTACHMENT", $theAttachment );
-    $error .= $this->_noHandlersSave( undef, $user, $oldWeb, $oldTopic, $text, $meta,
-                               0, 1, 1, 0, "none" );
+    $error .= $this->_noHandlersSave( $user, $oldWeb, $oldTopic,
+                                      $text, $meta,
+                                      { notify => 0 } );
     # Remove lock
     $this->lockTopic( $oldWeb, $oldTopic, 1 );
 
@@ -252,8 +248,10 @@ sub moveAttachment {
     $fileAttachment{"movedwhen"} = time();
     $meta->put( "FILEATTACHMENT", %fileAttachment );
 
-    $error .= $this->_noHandlersSave( undef, $user, $newWeb, $newTopic, $text, $meta,
-                               0, 1, 1, 0, "none" );
+    $error .= $this->_noHandlersSave( $user, $newWeb, $newTopic, $text,
+                                      $meta, { notify => 0,
+                                               comment => "moved" } );
+
     # Remove lock file.
     $this->lockTopic( $newWeb, $newTopic, 1 );
 
@@ -414,8 +412,8 @@ sub renameTopic {
         my $meta = $this->extractMetaData( $newWeb, $newTopic, \$text );
         $meta->put( "TOPICMOVED", @args );
 
-        $this->_noHandlersSave( undef, $user, $newWeb, $newTopic, $text, $meta,
-                                0, 1, 0, 0, "none");
+        $this->_noHandlersSave( $user, $newWeb, $newTopic, $text, $meta,
+                                { comment => "renamed" } );
     }
 
     # Log rename
@@ -515,7 +513,7 @@ sub updateReferringPages {
                                                    \$resultText );
                 $this->saveTopic( $user, $itemWeb, $itemTopic,
                                   $resultText, $meta,
-                                  "", 1, 1, 0, 0 );
+                                  { unlock => 1, dontnotify => 1 } );
             } else {
                 $result .= ";$item does not exist;";
             }
@@ -682,26 +680,32 @@ sub _readKeyValue
 
 =pod
 
----++ sub saveTopic (  $user, $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave, $forceDate  )
-| =$user= | Users login name |
-| =$web= | |
-| =$topic= | |
-| =$text= | |
-| =$meta= | |
-| =$saveCmd= | |
-| =$doUnlock= | |
-| =$dontNotify= | |
-| =$dontLogSave= | |
-| =$forceDate= | |
+---++ sub saveTopic (  $user, $web, $topic, $text, $meta, $options  )
+| =$user= | login name of user doing the saving |
+| =$web= | web for topic |
+| =$topic= | topic to atach to |
+| =$text= | topic text |
+| =$meta= | topic meta-data |
+| =$options= | Ref to hash of options |
+=$options= may include:
+| =dontlog= | don't log this change in twiki log |
+| =dontnotify= | don't log this change in .changes |
+| =hide= | if the attachment is to be hidden in normal topic view |
+| =comment= | comment for save |
+| =file= | Temporary file name to upload |
+| =savecmd= | Save command |
+| =forcedate= | grr |
+| =unlock= | |
 
 Save a new revision of the topic, calling plugins handlers as appropriate.
 
 =cut
 
 sub saveTopic {
-    my( $this, $user, $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave, $forceDate ) = @_;
+    my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-    ASSERT(defined($forceDate)) if DEBUG;
+
+    $options = {} unless defined( $options );
 
     # SMELL: Staggeringly inefficient code that adds meta-data for
     # Plugin callback. Why not simply pass the meta in? It would be far
@@ -711,9 +715,8 @@ sub saveTopic {
     # remove meta data again!
     $meta = $this->extractMetaData( $web, $topic, \$text );
     my $error =
-      $this->_noHandlersSave( $saveCmd, $user, $web, $topic, $text, $meta,
-                              $dontLogSave, $doUnlock,
-                              $dontNotify, $forceDate, "none" );
+      $this->_noHandlersSave( $user, $web, $topic, $text, $meta,
+                              $options );
     $text = _writeMeta( $meta, $text );  # add meta data for Plugin callback
     $this->{session}->{plugins}->afterSaveHandler( $text, $topic, $web, $error );
     return $error;
@@ -798,7 +801,7 @@ sub saveAttachment {
     }
 
     my $error = $this->saveTopic( $user, $web, $topic, $text,
-                                  $meta, "", 1 );
+                                  $meta, { unlock => 1 } );
 
     $this->lockTopic( $web, $topic, 1 );
     unless( $error || $opts->{dontlog} ) {
@@ -808,46 +811,19 @@ sub saveAttachment {
     return $error;
 }
 
-# Add meta data to the topic.
-sub _addMeta {
-    my( $web, $topic, $text, $nextRev, $meta, $forceDate, $forceUser ) = @_;
-
-    $meta->addTOPICINFO(  $web, $topic, $nextRev, $forceDate, $forceUser );
-    return _writeMeta( $meta, $text );
-}
-
-# _noHandlersSave
 # Save a topic or attachment _without_ invoking plugin handlers.
 # Return non-null string if there is an error.
-sub _noHandlersSave {
-    my $this = shift;
-    my $saveCmd = shift;
-
-    if ( !$saveCmd ) {
-        return $this->_normalSave( @_ );
-    }
-    elsif ( $saveCmd eq "delRev" ) {
-        return $this->_delRev( @_ );
-    }
-    elsif ( $saveCmd eq "repRev" ) {
-        return $this, _repRev( @_ );
-    } else {
-        throw Error::Simple( "Illegal use of cmd=$saveCmd parameter" );
-    }
-}
-
-# nothing-special save
 # FIXME: does rev info from meta work if user saves a topic with no change?
-sub _normalSave {
-    my( $this, $userName, $web, $topic, $text, $meta,
-        $dontLogSave, $doUnlock, $dontNotify, $forceDate, $theComment ) = @_;
+sub _noHandlersSave {
+    my( $this, $userName, $web, $topic, $text, $meta, $options ) = @_;
 
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
     my $currentRev = $topicHandler->numRevisions() || 0;
 
     my $nextRev = $currentRev + 1;
 
-    if( $TWiki::doKeepRevIfEditLock && $currentRev ) {
+    if( $TWiki::doKeepRevIfEditLock && $currentRev &&
+        !$options->{forcenewrevision} ) {
         # See if we want to replace the existing top revision
         my $mtime1 = $topicHandler->getTimestamp();
         my $mtime2 = time();
@@ -858,23 +834,24 @@ sub _normalSave {
                                undef, $topicHandler );
             # same user?
             if(  $user eq $userName ) {
-                return _repRev( @_ );
+                return repRev( @_ );
             }
         }
     }
 
-    $text = _addMeta( $web, $topic, $text, $nextRev, $meta, $forceDate );
+    $meta->addTOPICINFO( $web, $topic, $nextRev, {} );
+    $text = _writeMeta( $meta, $text );
 
     # RCS requires a newline for the last line,
     $text =~ s/([^\n\r])$/$1\n/os;
 
     my $dataError =
-      $topicHandler->addRevision( $text, $theComment, $userName );
+      $topicHandler->addRevision( $text, $options->{comment}, $userName );
     return $dataError if( $dataError );
 
-    $topicHandler->setLock( ! $doUnlock );
+    $topicHandler->setLock( ! $options->{unlock} );
 
-    if( ! $dontNotify ) {
+    if( ! $options->{dontnotify} ) {
         # update .changes
         my( $fdate, $fuser, $frev ) =
           $this->getRevisionInfo( $web, $topic, "", undef, $topicHandler );
@@ -890,21 +867,34 @@ sub _normalSave {
         close(FILE);
     }
 
-    if( ( $TWiki::doLogTopicSave ) && ! ( $dontLogSave ) ) {
+    if( ( $TWiki::doLogTopicSave ) && ! ( $options->{dontlog} ) ) {
         # write log entry
         my $extra = "";
-        $extra   .= "dontNotify" if( $dontNotify );
+        $extra   .= "dontNotify" if( $options->{dontnotify} );
         $this->{session}->writeLog( "save", "$web.$topic", $extra );
     }
 
     return "";
 }
 
-# fix topic by replacing last revision, but do not update .changes
-# save topic with same userName and date
-sub _repRev {
-    my( $this, $userName, $web, $topic, $text, $meta,
-        $dontLogSave, $doUnlock, $dontNotify, $forceDate, $theComment ) = @_;
+=pod
+
+---++ repRev( $user, $web, $topic, $text, $meta, $options )
+
+Parameters and return value as saveTopic.
+
+Provided as a means for administrators to rewrite history.
+
+Replace last revision, but do not update .changes.
+Save topic with same userName and date.
+
+It is up to the store implementation if this is different
+to a normal save or not.
+
+=cut
+
+sub repRev {
+    my( $this, $userName, $web, $topic, $text, $meta, $options ) = @_;
 
     # FIXME why should date be the same if same user replacing with
     # editLockTime?
@@ -919,28 +909,46 @@ sub _repRev {
     # TODO: this seems wrong. if editLockTime == 3600, and i edit, 30 mins
     # later... why would the recorded date be 29 mins too early?
     my $epochSec = $date + 60;
-    $text = _addMeta( $web, $topic, $text, $rev, $meta, $epochSec, $user );
+    $meta->addTOPICINFO( $web, $topic, $rev,
+                         { forcedate => $epochSec, forceuser => $user } );
+    $text = _writeMeta( $meta, $text );
 
     my $dataError =
-      $topicHandler->replaceRevision( $text, $theComment, $user, $epochSec );
+      $topicHandler->replaceRevision( $text, $options->{comment},
+                                      $user, $epochSec );
     return $dataError if( $dataError );
-    $topicHandler->setLock( ! $doUnlock );
+    $topicHandler->setLock( ! $options->{unlock} );
 
-    if( ( $TWiki::doLogTopicSave ) && ! ( $dontLogSave ) ) {
+    if( ( $TWiki::doLogTopicSave ) && ! ( $options->{dontlog} ) ) {
         # write log entry
         my $extra = "repRev by $userName: $rev " .
           $this->users()->userToWikiName( $user ) .
               " ". TWiki::formatTime( $epochSec, "rcs", "gmtime" );
-        $extra   .= " dontNotify" if( $dontNotify );
+        $extra   .= " dontNotify" if( $options->{dontnotify} );
         $this->{session}->writeLog( "save", "$web.$topic", $extra );
     }
     return "";
 }
 
-# delete last entry in repository
-sub _delRev {
-    my( $this, $userName, $web, $topic, $text, $meta,
-        $dontLogSave, $doUnlock, $dontNotify, $forceDate, $theComment ) = @_;
+=pod
+
+---++ delRev( $user, $web, $topic, $text, $meta, $options )
+
+Parameters and return value as saveTopic.
+
+Provided as a means for administrators to rewrite history.
+
+Delete last entry in repository, restoring the previous
+revision.
+
+It is up to the store implementation whether this actually
+does delete a revision or not; some implementations will
+simply promote the previous revision up to the head.
+
+=cut
+
+sub delRev {
+    my( $this, $userName, $web, $topic ) = @_;
 
     my $rev = $this->getRevisionNumber( $web, $topic );
     if( $rev <= 1 ) {
@@ -952,14 +960,12 @@ sub _delRev {
 
     # restore last topic from repository
     $topicHandler->restoreLatestRevision();
-    $topicHandler->setLock( ! $doUnlock );
+    $topicHandler->setLock( 0 );
 
     # TODO: delete entry in .changes
 
-    if( $TWiki::doLogTopicSave ) {
-        # write log entry
-        $this->{session}->writeLog( "cmd", "$web.$topic", "delRev by $userName: $rev" );
-    }
+    # write log entry
+    $this->{session}->writeLog( "cmd", "$web.$topic", "delRev by $userName: $rev" );
 
     return "";
 }
