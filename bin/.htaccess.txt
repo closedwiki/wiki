@@ -10,7 +10,8 @@
 #    part should match the $dataDir setting in TWiki.cfg
 # !URL_path_to_TWiki!
 #    This is the URL path you put into the webserver for users to use to
-#    access TWiki.
+#    access TWiki. Excludes the http://.../ portion.
+#       e.g. /twiki
 #
 
 # Use CGI & Perl to handle all files in 'bin' directory, i.e. run as scripts
