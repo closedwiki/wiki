@@ -2069,6 +2069,7 @@ sub handleIncludeFile
     if( ( $isTopic ) && ( $theWeb ne $webName ) ) {
         # "TopicName" to "Web.TopicName"
         $text =~ s/(^|[\s\(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1$TranslationToken$2/go;
+        $text =~ s/(^|[\s\(])($regex{wikiWordRegex})/$1$theWeb\.$2/go;
         $text =~ s/(^|[\s\(])$TranslationToken/$1/go;
         # "[[TopicName]]" to "[[Web.TopicName][TopicName]]"
         $text =~ s/\[\[([^\]]+)\]\]/fixIncludeLink( $theWeb, $1 )/geo;
