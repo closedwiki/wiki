@@ -407,8 +407,9 @@ sub getPreferencesFlag
 sub getPluginPreferencesFlag
 {
     my( $theKey ) = @_;
-    my $value = getPluginPreferencesValue( $theKey );
-    return TWiki::Prefs::formatAsFlag($value);
+    my $package = caller;
+    $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
+    return TWiki::Prefs::getPreferencesFlag( "\U$package\E_$theKey" );
 }
 
 # =========================
