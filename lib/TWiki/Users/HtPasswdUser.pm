@@ -53,6 +53,10 @@ BEGIN {
         require locale;
 	import locale ();
     }
+    srand( time() ^ ($$ + ($$ << 15)) );	# no point calling rand() without this 
+    # See Camel-3 pp 800.  "Don not call =srand()= multiple times in your program ...
+    # just do it once at the top of your program or you won't get random numbers out of =rand()=
+
 }
 
 sub new {
@@ -91,7 +95,9 @@ sub htpasswdGeneratePasswd
 		    my $currentEncryptedPasswordEntry = $this->htpasswdReadPasswd( $user );
 	        $salt = substr( $currentEncryptedPasswordEntry, 0, 2 );
 		} else {
-		    srand( $$|time );
+		    # srand( $$|time );
+		    # srand should be called one and once only, in BEGIN
+                    #
 		    my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
 		    $salt = $saltchars[ int( rand( $#saltchars+1 ) ) ];
 		    $salt .= $saltchars[ int( rand( $#saltchars+1 ) ) ];
