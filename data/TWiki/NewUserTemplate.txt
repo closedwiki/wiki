@@ -1,6 +1,10 @@
-%META:TOPICINFO{author="PeterThoeny" date="1023262489" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1048616740" format="1.0" version="1.4"}%
 %SPLIT%
 	* %KEY%: %VALUE%%SPLIT%
+
+__My Links__
+	* Sandbox.WebHome web to try out TWiki
+	* 
 
 __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
 	* Horizontal size of text edit box:
