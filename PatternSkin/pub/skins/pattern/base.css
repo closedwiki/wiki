@@ -443,17 +443,18 @@ html>body .TWikiLeftBarContents li a {
 	color: #2c57c2;
 }
 
-#TWikiTopic table {
+#TWikiTopic table,
+#TWikiTopic th,
+#TWikiTopic td {
 	border: 1px solid #97A2B1;
 }
-#TWikiTopic td,
-#TWikiTopic th {
+#TWikiTopic th,
+#TWikiTopic td {
 	margin: 0px;
-	padding: 3px;
-	border-left: 1px solid white;
+	padding: 2px 4px 2px 4px;
 }
-#TWikiTopic td.first,
-#TWikiTopic th.first {
+#TWikiTopic th.first,
+#TWikiTopic td.first {
 	border-left: 0px;
 }
 
