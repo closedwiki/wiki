@@ -1450,24 +1450,21 @@ sub revDate2EpSecs
     
     # FIXME - why aren't ifs around pattern match rather than $5 etc
     # try "31 Dec 2001 - 23:59"  (TWiki date)
-    $date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)[\s\-]+([0-9]+)\:([0-9]+)/;
-    if( $5 ) {
+    if ($date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)[\s\-]+([0-9]+)\:([0-9]+)/) {
         my $year = $3;
         $year -= 1900 if( $year > 1900 );
         return timegm( 0, $5, $4, $1, $mon2num{$2}, $year );
     }
 
     # try "2001/12/31 23:59:59" or "2001.12.31.23.59.59" (RCS date)
-    $date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)[\.\:]([0-9]+)/;
-    if( $6 ) {
+    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)[\.\:]([0-9]+)/) {
         my $year = $1;
         $year -= 1900 if( $year > 1900 );
         return timegm( $6, $5, $4, $3, $2-1, $year );
     }
 
     # try "2001/12/31 23:59" or "2001.12.31.23.59" (RCS short date)
-    $date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)/;
-    if( $5 ) {
+    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)/) {
         my $year = $1;
         $year -= 1900 if( $year > 1900 );
         return timegm( 0, $5, $4, $3, $2-1, $year );
@@ -1475,8 +1472,7 @@ sub revDate2EpSecs
 
     # try "2001-12-31T23:59:59Z" or "2001-12-31T23:59:59+01:00" (ISO date)
     # FIXME: Calc local to zulu time "2001-12-31T23:59:59+01:00"
-    $date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)\:([0-9]+)/;
-    if( $6 ) {
+    if ($date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)\:([0-9]+)/ ) {
         my $year = $1;
         $year -= 1900 if( $year > 1900 );
         return timegm( $6, $5, $4, $3, $2-1, $year );
@@ -1484,8 +1480,7 @@ sub revDate2EpSecs
 
     # try "2001-12-31T23:59Z" or "2001-12-31T23:59+01:00" (ISO short date)
     # FIXME: Calc local to zulu time "2001-12-31T23:59+01:00"
-    $date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)/;
-    if( $5 ) {
+    if ($date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)/ ) {
         my $year = $1;
         $year -= 1900 if( $year > 1900 );
         return timegm( 0, $5, $4, $3, $2-1, $year );
@@ -2953,6 +2948,8 @@ sub handleCommonTags
 
     $text =~ s/%TOC{([^}]*)}%/&handleToc($text,$theTopic,$theWeb,$1)/ge;
     $text =~ s/%TOC%/&handleToc($text,$theTopic,$theWeb,"")/ge;
+#SVEN
+    $text =~ s/%GROUPS%/join( ", ", &TWiki::Access::getListOfGroups() )/ge;
     
     # Ideally would put back in getRenderedVersion rather than here which would save removing
     # it again!  But this would mean altering many scripts to pass back verbatim
