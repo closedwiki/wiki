@@ -42,6 +42,11 @@ This module implements all the search functionality.
 package TWiki::Search;
 use strict;
 
+use vars qw(
+    $cacheRev1webTopic $cacheRev1date $cacheRev1user
+);
+
+
 # 'Use locale' for internationalisation of Perl sorting and searching - 
 # main locale settings are done in TWiki::setupLocale
 BEGIN {
@@ -50,6 +55,7 @@ BEGIN {
         require locale;
 	import locale ();
     }
+    $cacheRev1webTopic = "";
 }
 
 # ===========================
@@ -498,7 +504,7 @@ sub searchWeb
         # PTh 17 May 2000: reverted to old behaviour,
         #     e.g. do not log inline search
         # PTh 03 Nov 2000: Moved out of the 'foreach $thisWebName' loop
-        my $tempVal = join( ' ', @webList );
+        $tempVal = join( ' ', @webList );
         &TWiki::Store::writeLog( "search", $tempVal, $theSearchVal );
     }
 
@@ -577,27 +583,60 @@ sub searchWeb
 
             # build the hashes for date and author
             foreach( @topicList ) {
-                my $tempVal = $_;
+                $tempVal = $_;
                 # Permission check done below, so force this read to succeed with "internal" parameter
                 my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal, "", "internal" );
                 my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta );
-                $revdate = TWiki::formatTime( $revdate );
-                $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
-                $topicRevDate{ $tempVal } = $revdate;
-                $topicRevNum{ $tempVal } = $revnum;
-                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $tempVal, $thisWebName );
+                $topicRevUser{ $tempVal }   = &TWiki::userToWikiName( $revuser );
+                $topicRevDate{ $tempVal }   = $revdate;  # keep epoc sec for sorting
+                $topicRevNum{ $tempVal }    = $revnum;
+                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName,
+                                                  $text, $tempVal, $thisWebName );
             }
 
             # sort by date (second time if exercise), Schwartzian Transform
+            my $dt = "";
             if( $revSort ) {
                 @topicList = map { $_->[1] }
                              sort {$b->[0] <=> $a->[0] }
-                             map { [ &TWiki::revDate2EpSecs( $topicRevDate{$_} ), $_ ] }
+                             map { $dt = $topicRevDate{$_}; $topicRevDate{$_} = TWiki::formatTime( $dt ); [ $dt, $_ ] }
                              @topicList;
             } else {
                 @topicList = map { $_->[1] }
                              sort {$a->[0] <=> $b->[0] }
-                             map { [ &TWiki::revDate2EpSecs( $topicRevDate{$_} ), $_ ] }
+                             map { $dt = $topicRevDate{$_}; $topicRevDate{$_} = TWiki::formatTime( $dt ); [ $dt, $_ ] }
+                             @topicList;
+            }
+
+        } elsif( $theOrder =~ /^creat/ ) {
+            # sort by topic creation time
+
+            # first we need to build the hashes for modified date, author, creation time
+            my %topicCreated = (); # keep only temporarily for sort
+            foreach( @topicList ) {
+                $tempVal = $_;
+                # Permission check done below, so force this read to succeed with "internal" parameter
+                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal, "", "internal" );
+                my( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta );
+                $topicRevUser{ $tempVal }   = &TWiki::userToWikiName( $revuser );
+                $topicRevDate{ $tempVal }   = &TWiki::formatTime( $revdate );
+                $topicRevNum{ $tempVal }    = $revnum;
+                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName,
+                                                  $text, $tempVal, $thisWebName );
+                my ( $createdate ) = &TWiki::Store::getRevisionInfo( $thisWebName, $tempVal, "1.1" );
+                $topicCreated{ $tempVal } = $createdate;  # Sortable epoc second format
+            }
+
+            # sort by creation time, Schwartzian Transform
+            if( $revSort ) {
+                @topicList = map { $_->[1] }
+                             sort {$b->[0] <=> $a->[0] }
+                             map { [ $topicCreated{$_}, $_ ] }
+                             @topicList;
+            } else {
+                @topicList = map { $_->[1] }
+                             sort {$a->[0] <=> $b->[0] }
+                             map { [ $topicCreated{$_}, $_ ] }
                              @topicList;
             }
 
@@ -607,13 +646,14 @@ sub searchWeb
             # first we need to build the hashes for date and author
             foreach( @topicList ) {
                 $tempVal = $_;
-                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal );
-                my( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta);
-                $revdate = TWiki::formatTime( $revdate );
-                $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
-                $topicRevDate{ $tempVal } = $revdate;
-                $topicRevNum{ $tempVal } = $revnum;
-                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $tempVal, $thisWebName );
+                # Permission check done below, so force this read to succeed with "internal" parameter
+                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal, "", "internal" );
+                my( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta );
+                $topicRevUser{ $tempVal }   = &TWiki::userToWikiName( $revuser );
+                $topicRevDate{ $tempVal }   = &TWiki::formatTime( $revdate );
+                $topicRevNum{ $tempVal }    = $revnum;
+                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName,
+                                                  $text, $tempVal, $thisWebName );
             }
 
             # sort by author, Schwartzian Transform
@@ -636,13 +676,14 @@ sub searchWeb
             # first we need to build the hashes for fields
             foreach( @topicList ) {
                 $tempVal = $_;
-                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal );
+                # Permission check done below, so force this read to succeed with "internal" parameter
+                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal, "", "internal" );
                 my( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta );
-                $revdate = TWiki::formatTime( $revdate );
-                $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
-                $topicRevDate{ $tempVal } = $revdate;
-                $topicRevNum{ $tempVal } = $revnum;
-                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $tempVal, $thisWebName );
+                $topicRevUser{ $tempVal }   = &TWiki::userToWikiName( $revuser );
+                $topicRevDate{ $tempVal }   = &TWiki::formatTime( $revdate );
+                $topicRevNum{ $tempVal }    = $revnum;
+                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName,
+                                                  $text, $tempVal, $thisWebName );
                 $fieldVals{ $tempVal } = getMetaFormField( $meta, $sortfield );
             }
  
@@ -697,8 +738,6 @@ sub searchWeb
         my $revNumText = "";
         my $allowView = "";
         my $locked = "";
-        my $createDate = "";
-        my $createAuthor = "";
         foreach( @topicList ) {
           $topic = $_;
 
@@ -719,13 +758,9 @@ sub searchWeb
               $text =~ s/%TOPIC%/$topic/gos;
               $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $topic, $thisWebName );
               ( $revDate, $revUser, $revNum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta );
-              $revDate = TWiki::formatTime( $revDate );
+              $revDate = &TWiki::formatTime( $revDate );
               $revUser = &TWiki::userToWikiName( $revUser );
           }
-          
-          ( $createDate, $createAuthor ) = &TWiki::Store::getRevisionInfo( $thisWebName, $topic, "1.1");
-          $createDate = TWiki::formatTime( $createDate );
-          $createAuthor = &TWiki::userToWikiName( $createAuthor );
 
           $locked = "";
           if( $doShowLock ) {
@@ -780,8 +815,10 @@ sub searchWeb
                 $tempVal =~ s/\$wikiusername/$revUser/gos;
                 $tempVal =~ s/\$wikiname/wikiName($revUser)/geos;
                 $tempVal =~ s/\$username/&TWiki::wikiToUserName($revUser)/geos;
-                $tempVal =~ s/\$createdate/$createDate/gos;
-                $tempVal =~ s/\$createauthor/$createAuthor/gos;
+                $tempVal =~ s/\$createdate/_getRev1Info( $thisWebName, $topic, "date" )/geos;
+                $tempVal =~ s/\$createusername/_getRev1Info( $thisWebName, $topic, "username" )/geos;
+                $tempVal =~ s/\$createwikiname/_getRev1Info( $thisWebName, $topic, "wikiname" )/geos;
+                $tempVal =~ s/\$createwikiusername/_getRev1Info( $thisWebName, $topic, "wikiusername" )/geos;
                 if( $tempVal =~ m/\$text/ ) {
                     # expand topic text
                     ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic ) unless $text;
@@ -894,7 +931,10 @@ sub searchWeb
                     $text =~ s/%TOPIC%/$topic/gos;
                 }
                 if( $doExpandVars ) {
-                    $text =~ s/%SEARCH/%<nop>SEARCH/g;  # primitive way to prevent recursion
+                    if( $topic eq $TWiki::topicName ) {
+                        # primitive way to prevent recursion
+                        $text =~ s/%SEARCH/%<nop>SEARCH/g;
+                    }
                     $text = &TWiki::handleCommonTags( $text, $topic, $thisWebName );
                 }
                 $tempVal =~ s/\$summary/&TWiki::makeTopicSummary( $text, $topic, $thisWebName )/geos;
@@ -1008,6 +1048,41 @@ sub searchWeb
         print $tmplTail;
     }
     return $searchResult;
+}
+
+#=========================
+=pod
+
+---++ sub _getRev1Info( $theWeb, $theTopic, $theAttr )
+
+Returns the topic revision info of version 1.1, attributes are "date", "username", "wikiname",
+"wikiusername". Revision info is cached for speed
+
+=cut
+
+sub _getRev1Info
+{
+    my( $theWeb, $theTopic, $theAttr ) = @_;
+
+    unless( $cacheRev1webTopic eq "$theWeb.$theTopic" ) {
+        # refresh cache
+        $cacheRev1webTopic = "$theWeb.$theTopic";
+        ( $cacheRev1date, $cacheRev1user ) = &TWiki::Store::getRevisionInfo( $theWeb, $theTopic, "1.1" );
+    }
+    if( $theAttr eq "username" ) {
+        return $cacheRev1user;
+    }
+    if( $theAttr eq "wikiname" ) {
+        return &TWiki::userToWikiName( $cacheRev1user, 1 );
+    }
+    if( $theAttr eq "wikiusername" ) {
+        return &TWiki::userToWikiName( $cacheRev1user );
+    }
+    if( $theAttr eq "date" ) {
+        return &TWiki::formatTime( $cacheRev1date );
+    }
+    # else assume attr "key"
+    return "1.1";
 }
 
 #=========================
