@@ -43,6 +43,7 @@
 #       %WIKIUSERNAME%   wiki user name
 #       %WIKITOOLNAME%   tool name (TWiki)
 #       %MAINWEB%        main web name (Main)
+#       %TWIKIWEB%       TWiki system web name (TWiki)
 #       %HOMETOPIC%      home topic name (WebHome)
 #       %NOTIFYTOPIC%    notify topic name (WebNotify)
 #       %WIKIUSERSTOPIC% user list topic name (TWikiUsers)
@@ -117,6 +118,8 @@ $securityFilter     = "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\x00-\x1F]";
 $defaultUserName    = "guest";
 #                   %MAINWEB% : Name of Main web, default "Main" :
 $mainWebname        = "Main";
+#                   %TWIKIWEB% : Name of TWiki system web, default "TWiki" :
+$twikiWebname       = "TWiki";
 #                   Pathname of debug file :
 $debugFilename      = "$dataDir/debug.txt";
 #                   Pathname of user name/password file for authentication :

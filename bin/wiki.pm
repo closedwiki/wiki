@@ -66,7 +66,7 @@ use vars qw(
         $wikiToolName $securityFilter
         $debugFilename $htpasswdFilename 
         $logFilename $wikiUsersTopicname $userListFilename %userToWikiList
-        $mainWebname $mainTopicname $notifyTopicname
+        $twikiWebname $mainWebname $mainTopicname $notifyTopicname
         $wikiPrefsTopicname $webPrefsTopicname @prefsKeys @prefsValues
         $statisticsTopicname $statsTopViews $statsTopContrib
 	$editLockTime 
@@ -164,7 +164,7 @@ sub initialize
     # (Note: Do not use a %hash, because order is significant)
     @prefsKeys = ();
     @prefsValues = ();
-    getPrefsList( "$mainWebname\.$wikiPrefsTopicname" ); # site-level
+    getPrefsList( "$twikiWebname\.$wikiPrefsTopicname" ); # site-level
     getPrefsList( "$webName\.$webPrefsTopicname" );      # web-level
     getPrefsList( $wikiUserName );                       # user-level
 
@@ -1003,6 +1003,7 @@ sub handleCommonTags
     $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
     $text =~ s/%WIKITOOLNAME%/$wikiToolName/go;
     $text =~ s/%MAINWEB%/$mainWebname/go;
+    $text =~ s/%TWIKIWEB%/$twikiWebname/go;
     $text =~ s/%HOMETOPIC%/$mainTopicname/go;
     $text =~ s/%WIKIUSERSTOPIC%/$wikiUsersTopicname/go;
     $text =~ s/%WIKIPREFSTOPIC%/$wikiPrefsTopicname/go;
@@ -1162,11 +1163,11 @@ sub getRenderedVersion
             s/(.*)/\n$1\n/o;
 
 # Emphasizing
-            s/(\s)__([^\s].*?[^\s])__(\s)/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
-            s/(\s)\*_([^\s].*?[^\s])_\*(\s)/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
-            s/(\s)\*([^\s].*?[^\s])\*(\s)/$1<STRONG>$2<\/STRONG>$3/go;
-            s/(\s)=([^\s].*?[^\s])=(\s)/$1<CODE>$2<\/CODE>$3/go;
-            s/(\s)_([^\s].*?[^\s])_(\s)/$1<EM>$2<\/EM>$3/go;
+            # PTh 20 Jul 2000: More relaxing rules, allow trailing ,.;:!?
+            s/(\s)__([^\s].*?[^\s])__([\s\,\.\;\:\!\?])/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
+            s/(\s)\*([^\s].*?[^\s])\*([\s\,\.\;\:\!\?])/$1<STRONG>$2<\/STRONG>$3/go;
+            s/(\s)=([^\s].*?[^\s])=([\s\,\.\;\:\!\?])/$1<CODE>$2<\/CODE>$3/go;
+            s/(\s)_([^\s].*?[^\s])_([\s\,\.\;\:\!\?])/$1<EM>$2<\/EM>$3/go;
 
 # Mailto
             s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+)(?=[\s\)]|$)#$1<A href=\"mailto\:$2">$2</A>#go;
