@@ -1,4 +1,15 @@
+TWiki Distribution
+------------------
+
+Version: 23 Jun 1999
+Release type: Beta release
+
+Installation instructions in TWikiDocumentation.html or
+http://starship.python.net/crew/scharf/TWiki/bin/view/Main/TWikiDocumentation
+
+History of implementation in TWikiHistory.html or
+http://starship.python.net/crew/scharf/TWiki/bin/view/Main/TWikiHistory
+
 For more details see http://www.mindspring.com/~peterthoeny/twiki/ .
 
-Installation instructions in bin/data/Main/TWikiDocumentation.txt or
-http://starship.python.net/crew/scharf/TWiki/bin/view/Main/TWikiDocumentation
+-- Peter Thoeny

@@ -20,9 +20,15 @@
 #
 # Notes:
 # - Latest version at http://www.mindspring.net/~peterthoeny/twiki/index.html
+# - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
+# - Customize variables in wikicfg.pm when installing TWiki.
+# - Use package wikicfg.pm for custom extensions of rendering rules.
+# - Upgrading TWiki is easy as long as you do not customize wiki.pm.
+
 
 package wiki;
 use strict;
+use wikicfg;
 
 use vars qw(
 	$webName $topicName $defaultUserName $userName 
@@ -36,41 +42,41 @@ use vars qw(
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "14 Jun 1999";
+$wikiversion      = "23 Jun 1999";
 
 # variables that need to be changed when installing on new server:
-$wikiHomeUrl      = "http://your.domain.com/twiki";
-$defaultRootUrl   = "http://your.domain.com/twiki/bin";
-$pubUrl           = "http://your.domain.com/twiki/pub";   # must match $pubDir
-$wikiDir          = "/home/httpd/twiki";
-$wikiwebmaster    = "yourname\@your.domain.com";
+$wikiHomeUrl      = $wikicfg::wikiHomeUrl;
+$defaultRootUrl   = $wikicfg::defaultRootUrl;
+$pubUrl           = $wikicfg::pubUrl;
+$wikiDir          = $wikicfg::wikiDir;
+$wikiwebmaster    = $wikicfg::wikiwebmaster;
 
 # variables that might need to be changed:
-$logDateCmd       = "date '+%Y%m'";
-$mailProgram      = "/usr/sbin/sendmail -t -oi -oeq";
-$revCiCmd         = "ci -l -q -mnone -t-none -w'%USERNAME%' %FILENAME%";
-$revCiDateCmd     = "ci -l -q -mnone -t-none -d'%DATE%' -w'%USERNAME%' %FILENAME%";
-$revCoCmd         = "co -q -p%REVISION% %FILENAME%";
-$revHistCmd       = "rlog -h %FILENAME%";
-$revInfoCmd       = "rlog -r%REVISION% %FILENAME%";
-$revDiffCmd       = "rcsdiff -w -B -r%REVISION1% -r%REVISION2% %FILENAME%";
-$revDelRevCmd     = "rcs -u %FILENAME%; rcs -o%REVISION% %FILENAME%; rcs -l %FILENAME%";
-$revDelRepCmd     = "rm -f %FILENAME%,v";
-$headCmd          = "head -%LINES% %FILENAME%";
-$rmFileCmd        = "rm -f %FILENAME%";
+$logDateCmd       = $wikicfg::logDateCmd;
+$mailProgram      = $wikicfg::mailProgram;
+$revCiCmd         = $wikicfg::revCiCmd;
+$revCiDateCmd     = $wikicfg::revCiDateCmd;
+$revCoCmd         = $wikicfg::revCoCmd;
+$revHistCmd       = $wikicfg::revHistCmd;
+$revInfoCmd       = $wikicfg::revInfoCmd;
+$revDiffCmd       = $wikicfg::revDiffCmd;
+$revDelRevCmd     = $wikicfg::revDelRevCmd;
+$revDelRepCmd     = $wikicfg::revDelRepCmd;
+$headCmd          = $wikicfg::headCmd;
+$rmFileCmd        = $wikicfg::rmFileCmd;
 
-# variables that do not change:
-$wikiToolName     = "betaTWiki";
-$templateDir      = "$wikiDir/bin/templates";
-$dataDir          = "$wikiDir/bin/data";
-$pubDir           = "$wikiDir/pub";
-$debugFilename    = "$wikiDir/bin/debug.txt";
-$logFilename      = "$dataDir/log%DATE%.txt";
-$userListFilename = "$dataDir/Main/TWikiUsers.txt";
-$defaultUserName  = "guest";
-$mainWebname      = "Main";
-$mainTopicname    = "WebHome";
-$notifyTopicname  = "WebNotify";
+# variables that probably do not change:
+$wikiToolName     = $wikicfg::wikiToolName;
+$templateDir      = $wikicfg::templateDir;
+$dataDir          = $wikicfg::dataDir;
+$pubDir           = $wikicfg::pubDir;
+$debugFilename    = $wikicfg::debugFilename;
+$logFilename      = $wikicfg::logFilename;
+$userListFilename = $wikicfg::userListFilename;
+$defaultUserName  = $wikicfg::defaultUserName;
+$mainWebname      = $wikicfg::mainWebname;
+$mainTopicname    = $wikicfg::mainTopicname;
+$notifyTopicname  = $wikicfg::notifyTopicname;
 @isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 
 
@@ -635,9 +641,13 @@ sub webExists
 # =========================
 sub handleCommonTags
 {
-    my( $text, $topic)= @_;
+    my( $text, $topic ) = @_;
     $text=~ s/%INCLUDE:"(.*?)"%/&readIncludeFile($1)/geo;
     $text=~ s/%INCLUDE:"(.*?)"%/&readIncludeFile($1)/geo;  # allow two level includes
+
+    # Wiki extended rules
+    $text = wikicfg::extendHandleCommonTags( $text, $topic );
+
     $text=~ s/%TOPIC%/$topic/go;
     $text=~ s/%WEB%/$webName/go;
     $text=~ s/%WIKIHOMEURL%/$wikiHomeUrl/go;
@@ -715,36 +725,7 @@ sub isWikiName
 sub getRenderedVersion
 {
     my( $text ) = @_;
-    my( $result, $insidePRE, $blockquote, $index);
-    $index = <<EOINDEX
-<A href="#A">A</A> |
-<A href="#B">B</A> |
-<A href="#C">C</A> |
-<A href="#D">D</A> |
-<A href="#E">E</A> |
-<A href="#F">F</A> |
-<A href="#G">G</A> |
-<A href="#H">H</A> |
-<A href="#I">I</A> |
-<A href="#J">J</A> |
-<A href="#K">K</A> |
-<A href="#L">L</A> |
-<A href="#M">M</A> |
-<A href="#N">N</A> |
-<A href="#O">O</A> |
-<A href="#P">P</A> |
-<A href="#Q">Q</A> |
-<A href="#R">R</A> |
-<A href="#S">S</A> |
-<A href="#T">T</A> |
-<A href="#U">U</A> |
-<A href="#V">V</A> |
-<A href="#W">W</A> |
-<A href="#X">X</A> |
-<A href="#Y">Y</A> |
-<A href="#Z">Z</A>
-EOINDEX
-;
+    my( $result, $insidePRE, $blockquote );
 
     $result = "";
     $insidePRE= 0;
@@ -759,6 +740,9 @@ EOINDEX
 
 	if( $insidePRE==0)
         {
+
+# Wiki extended rules
+	    $_ = wikicfg::extendGetRenderedVersionOutsidePRE( $_ );
 
 #Blockquote
 	    s/^>(.*?)$/> <cite> $1 <\/cite><BR>/go;
@@ -782,7 +766,7 @@ EOINDEX
 # Lists etc.
 	    s/^\s*$/<p> /o                   && ($code= 0);
 	    m/^(\S+?)/o                      && ($code= 0);
-	    s/^(\t+)(\S+?):\s/<DT>$2<DD> /o  && ($result= $result . &emitCode( "DL", length $1));
+	    s/^(\t+)(\S+?):\s/<DT> $2<DD> /o && ($result= $result . &emitCode( "DL", length $1));
 	    s/^(\t+)\* /<LI> /o              && ($result= $result . &emitCode( "UL", length $1));
 	    s/^(\t+)\d+\.?/<LI> /o           && ($result= $result . &emitCode( "OL", length $1));
 	    if( !$code )
@@ -794,12 +778,11 @@ EOINDEX
 	    s/(.*)/\n$1\n/o;
 
 # Emphasizing
+	    s/(\s)__([^\s].*?[^\s])__(\s)/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
 	    s/(\s)\*_([^\s].*?[^\s])_\*(\s)/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
 	    s/(\s)\*([^\s].*?[^\s])\*(\s)/$1<STRONG>$2<\/STRONG>$3/go;
 	    s/(\s)=([^\s].*?[^\s])=(\s)/$1<CODE>$2<\/CODE>$3/go;
 	    s/(\s)_([^\s].*?[^\s])_(\s)/$1<EM>$2<\/EM>$3/go;
-
-	    s/<INSERTINDEX>/$index/go;
 
 # Make internal links
 	    ## add Web.TopicName internal link -- PeterThoeny:
@@ -816,17 +799,18 @@ EOINDEX
 	    ##s/(\s)\%(.*?):(.*?)\%/&internalLink($2,$3,"$2:$3",$1,1)/geo;
 	    ##s/(\s)\%(.*?)\%/&internalLink($webName,$2,$2,$1,1)/geo;
 
-# Handle TakeFive specific URL for ClearDDTS
-	    s@([\(\*\s])(TKFat[0-9]*)@$1<A HREF="https://owl.takefive.co.at/ddts/dumpbug_ddts.sh?bug_id=$2">$2</A>@go;
-
 # Mailto
 	    s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+)(?=[\s\)]|$)#$1<A href=\"mailto\:$2">$2</A>#go;
-	    
+
 	    s/^\n//o;
 	}
         else
         {
             # inside <PRE>
+
+# Wiki extended rules
+	    $_ = wikicfg::extendGetRenderedVersionInsidePRE( $_ );
+
      	    s/(.*)/$1\n/o;
         }
 	s/\t/   /go;
