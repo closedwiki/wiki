@@ -102,19 +102,19 @@ sub xpShowProjectCompletitionByStories {
     # Show the list
     my $list = "<h3>" . $project ." Project stories status</h3>\n\n";
 
-    $list .= "| *Iteration* | *Total Stories* | *Not Started* | *In Progress* | *Completed* | *Accepted* | *Percent accepted* |\n";
+    $list .= "| *Iteration* | *Total Stories* | *Not Started* | *In Progress* | *Completed* | *Acceptance* | *Percent completed* |\n";
 
     # OK, display them
     foreach my $iteration (sort { $iterKeys{$b} <=> $iterKeys{$a} } keys %master) {
 	    my $pctAccepted = 0;
 	    if ($accepted{$iteration} > 0) {
-	        $pctAccepted = sprintf("%u",($accepted{$iteration}/$master{$iteration})*100);
+	        $pctAccepted = sprintf("%u",($complete{$iteration}/$master{$iteration})*100);
 	    }
     	$list .= "| ".$iteration."  |  ".$master{$iteration}."  |  ".$unstarted{$iteration}."  |  ".$progress{$iteration}."  |  ".$complete{$iteration}."  |  ".$accepted{$iteration}."  |  ".$pctAccepted."\%  | \n";
     }
     my $pctAccepted = 0;
     if ($accepted > 0) {
-    	$pctAccepted = sprintf("%u",($accepted/$total)*100);
+    	$pctAccepted = sprintf("%u",($complete/$total)*100);
     }
     $list .= "| *Totals*  |  *".$total."*  |  *".$unstarted."*  |  *".$progress."*  |  *".$complete."*  |  *".$accepted."*  |  *".$pctAccepted."%*  |\n";
 
