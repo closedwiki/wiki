@@ -448,7 +448,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     foreach my $name ( split( /\s*,\s*/, $val )) {
       my $who = _canonicalName( $name );
       $who =~ s/\./\\./go;
-      if ( $this->{$vbl} =~ /$who/ ) {
+      if ( $this->{$vbl} =~ m/$who,/ || $this->{$vbl} =~ m/$who$/) {
 	return 1;
       }
     }

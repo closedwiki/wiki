@@ -249,7 +249,8 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
   # PUBLIC STATIC get all actions in topics in the given web that
   # match the search expression
   sub allActionsInWeb {
-    my ( $web, $attrs ) = @_;
+    my ( $web, $attrs, $internal ) = @_;
+    $internal = 0 unless defined ( $internal );
     my $actions = new ActionTrackerPlugin::ActionSet();
     my $dd = TWiki::Func::getDataDir() || "../data";
     # "../data" because this is a cgi script executed in bin
@@ -270,7 +271,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
       if ( $line =~ m/^.*\/([^\/\.\r\n]+)\.txt:/o ) {
 	my $topic = $1;
 	if ( !$processed{$topic} && ( !$topics || $topic =~ m/^$topics$/ )) {
-	  my $text = TWiki::Func::readTopicText( $web, $topic );
+	  my $text = TWiki::Func::readTopicText( $web, $topic, undef, $internal );
 	  my $tacts = ActionTrackerPlugin::ActionSet::load( $web, $topic, $text );
 	  $tacts = $tacts->search( $attrs );
 	  $actions->concat( $tacts );
@@ -285,7 +286,8 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
   # PUBLIC STATIC get all actions in all webs that
   # match the search in $attrs
   sub allActionsInWebs {
-    my ( $theweb, $attrs ) = @_;
+    my ( $theweb, $attrs, $internal ) = @_;
+    $internal = 0 unless defined ( $internal );
     my $webs = $attrs->get( "web" ) || $theweb;
     my $actions = new ActionTrackerPlugin::ActionSet();
     my $dataDir = TWiki::Func::getDataDir();
@@ -308,7 +310,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
         my $thisWebNoSearchAll =
 	  TWiki::Func::getPreferencesValue( "NOSEARCHALL", $web );
 	next if ( $thisWebNoSearchAll =~ /on/i && ( $web ne $theweb ) );
-	my $subacts = allActionsInWeb( $web, $attrs );
+	my $subacts = allActionsInWeb( $web, $attrs, $internal);
 	$actions->concat( $subacts );
       }
     }
