@@ -127,6 +127,9 @@ sub handleDiffWiki {
 	elsif ( $modeParam eq 'dumpIndex' ) {
 		$ans .= dumpIndex();
 	}
+	elseif ($modeParam eq 'indexLocalInstallation' ) {
+	    $ans = "<pre>".IndexDistributions::indexLocalInstallation()."</pre>;
+	}
 	else {
 		$ans .=
 		  compareFile( $fileParam, $modeParam, $compareFromDistribution,
