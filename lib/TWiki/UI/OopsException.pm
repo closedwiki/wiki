@@ -41,7 +41,8 @@ sub new {
     push( @params, -web => shift );
     push( @params, -topic => shift );
     push( @params, -template => shift );
-    push( @params, -text => "OopsException(" . join(",", @_) .")" );
+    push( @params, -text => "OopsException(" . join(",", @_) .")");
+#.join(",", caller(1)) );
     push( @params, -params => [ @_ ] );
 
     $class->SUPER::new( @params );

@@ -385,7 +385,6 @@ sub try (&;$) {
 	    }
 	    1;
 	};
-
 	$err = defined($Error::THROWN) ? $Error::THROWN : $@
 	    unless $ok;
     };

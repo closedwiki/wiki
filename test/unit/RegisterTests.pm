@@ -23,12 +23,13 @@ use FileHandle;
 use CGI;
 use Error qw( :try );
 use File::Copy;
+use Carp;
 
 my $scriptUrl = "http://registertesttwiki.mrjc.com/twiki/bin";
 
 my $testUserWikiName = 'TestUser';
 my $testUserLoginName = 'testuser';
-my $testUserEmail = 'martin.cleaver@BCS.org.uk';
+my $testUserEmail = 'martian.cleaver@BCS.org.uk';
 
 my $adminLoginName = 'mrjcleaver';
 my $guestLoginName = 'guest';
@@ -36,13 +37,12 @@ my $guestLoginName = 'guest';
 my $temporaryWeb = "Temporary";
 my $peopleWeb = "Main";
 my $mainweb = "$peopleWeb";
-my $tempUserDir = "/tmp";
-my $saveHtpasswd = $tempUserDir.'/rcsr$$'; # not saved as '.htpasswd' to minimise onlookers interest.
-my $twikiUsersFile = "$TWiki::dataDir/Main/TWikiUsers.txt";
-my $saveTWikiUsers = $tempUserDir.'/rcsrUsers$$';
+my $tempUserDir;
+my $saveHtpasswd;
+my $twikiUsersFile;
+my $saveTWikiUsers;
 
-$TWiki::UI::Register::password = "foo";
-
+$TWiki::User::password = "foo";
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -50,46 +50,67 @@ sub new {
     return $self;
 }
 
+my $dataDir;
+my $pubDir;
+
 sub set_up {
     my $self = shift;
-    mkdir "$TWiki::dataDir/$temporaryWeb";
-    chmod 0777, "$TWiki::dataDir/$temporaryWeb";
+    my $here = `pwd`;
+    $here =~ s/\s//g;;
+    $dataDir = "$here/tmpRegisterTestData";
+    $pubDir =  "$here/tmpRegisterTestPub";
+
+    $TWiki::dataDir = $dataDir;
+    $TWiki::pubDir = $pubDir;
+    $TWiki::htpasswdFilename = "$dataDir/htpasswd";
+    # grr bloody TWiki.cfg mess....
+    foreach my $grr ( 0..$#TWiki::storeSettings ) {
+        if( $TWiki::storeSettings[$grr] eq "dataDir" ){
+            $TWiki::storeSettings[$grr+1] = $TWiki::dataDir;
+        }
+        elsif( $TWiki::storeSettings[$grr] eq "pubDir" ){
+            $TWiki::storeSettings[$grr+1] = $TWiki::pubDir;
+        }
+    }
+    $TWiki::storeSettings{pubDir} = $TWiki::pubDir;
+
+    $tempUserDir = "$TWiki::dataDir";
+    $saveHtpasswd = $tempUserDir.'/rcsr$$'; # not saved as '.htpasswd' to minimise onlookers interest.
+    $saveTWikiUsers = $tempUserDir.'/rcsrUsers$$';
+
+    $SIG{__DIE__} = sub { confess $_[0] };
+
+    mkdir $dataDir;
+    chmod 0777, $dataDir;
+
+    mkdir "$dataDir/$temporaryWeb";
+    chmod 0777, "$dataDir/$temporaryWeb";
+
+    mkdir "$dataDir/$TWiki::mainWebname";
+    chmod 0777, "$dataDir/$TWiki::mainWebname";
+
+    mkdir $pubDir;
+    chmod 0777, $pubDir;
+
     mkdir "$TWiki::pubDir/$temporaryWeb";
-    chmod 0777, "$TWiki::pubDir/$temporaryWeb";
+    chmod 0777, "$pubDir/$temporaryWeb";
+
     $Error::Debug = 1;
     $TWiki::UI::Register::unitTestMode = 1;
     setupUnregistered();
-    copy ($TWiki::htpasswdFilename, $saveHtpasswd) || die "Can't backup $TWiki::htpasswdFilename to $saveHtpasswd";
-    copy ($twikiUsersFile, $saveTWikiUsers) || die "Can't backup $twikiUsersFile to $saveTWikiUsers";
 
-    #print "--------------- ".$self->name()." ----------------------\n";
-    # provide fixture
+    $twikiUsersFile = "$TWiki::dataDir/Main/TWikiUsers.txt";
+}
+
+sub tear_down {
+    # clean up after test
+    `rm -rf $dataDir $pubDir`;
 }
 
 sub initialise {
     my ( $query, $remoteUser ) = @_;
     my $topic = $query->param( 'topic' ) || $query->param( 'TopicName' ); # SMELL - why both? what order?
     return new TWiki("Main", $remoteUser, $topic, $query->url, $query);
-}
-
-sub tear_down {
-    # clean up after test
-    my $file = "$TWiki::dataDir/$peopleWeb/$testUserWikiName.txt";
-    unlink $file;
-
-    copy ($saveHtpasswd, $TWiki::htpasswdFilename) || die "Can't restore $TWiki::htpasswdFilename from $saveHtpasswd";
-    unlink $saveHtpasswd || die "Can't remove backup of $TWiki::htpasswdFilename saved as $saveHtpasswd";
-
-    copy ($saveTWikiUsers, $twikiUsersFile) || die "Can't restore $twikiUsersFile from $saveTWikiUsers";
-    unlink $saveTWikiUsers || die "Can't remove backup of $twikiUsersFile saved as $saveTWikiUsers";
-
-    system "rm -rf $TWiki::dataDir/$temporaryWeb"; # smell - deleteweb
-    system "rm -rf $TWiki::pubDir/$temporaryWeb"; 
-
-    deleteUsers('TestBulkUser1', 'TestBulkUser2', 'TestBulkUser3'); # should be in test_bulkRegister SMELL
-
-    #  system ("ls -la ".$file);
-    # print "\n== done ==\n";
 }
 
 sub register {
@@ -125,9 +146,7 @@ sub register {
                                       ]
                          });
     my $session = initialise($query, $TWiki::defaultUserName);
-    TWiki::UI::Register::register(session=>$session,
-                                      sendActivationCode=>1,
-                                      tempUserDir=>$tempUserDir);
+    TWiki::UI::Register::register($session, 1, $tempUserDir);
 }
 
 sub j {
@@ -153,12 +172,7 @@ sub verify {
 
     my $session = initialise($query, $TWiki::defaultUserName);
 
-    TWiki::UI::Register::verifyEmailAddress(
-                                            session => $session,
-                                            'code' => $code,
-                                            'needApproval' => 1,
-                                            'tempUserDir' => $tempUserDir,
-                                           );
+    TWiki::UI::Register::verifyEmailAddress($session,$tempUserDir,1);
 }
 
 =pod
@@ -181,17 +195,14 @@ sub finish {
                         });
     my $session = initialise($query, $TWiki::defaultUserName);
     try {
-        TWiki::UI::Register::finish (
-                                     session => $session,
-                                     'code' => $code,
-                                     'needApproval' => 1,
-                                     'tempUserDir' => $tempUserDir,
-                                     'query' => $query
-                                    );
+        TWiki::UI::Register::finish ( $session, $tempUserDir, 1 );
     } catch TWiki::UI::OopsException with {
         my $e = shift;
         $self->assert_matches(qr/$testUserEmail/, $e->{-text});
         $self->assert_str_equals("regthanks", $e->{-template});
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $self->assert(0, $e->stringify);
     } catch Error::Simple with {
         my $e = shift;
         $self->assert(0, $e->stringify);
@@ -219,14 +230,21 @@ sub test_registerVerifyOk {
         $self->register();
     } catch TWiki::UI::OopsException with {
         my $e = shift;
-        $self->assert_matches(qr/$testUserEmail/, $e->{-text});
         $self->assert_str_equals("regconfirm", $e->{-template});
+        $self->assert_matches(qr/$testUserEmail/, $e->{-text});
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $self->assert(0, $e->stringify);
     } otherwise {
         $self->assert(0, "expected an oops redirect");
     };
 
     try {
         $self->verify();
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $self->assert(0, $e->stringify);
+
     } catch TWiki::UI::OopsException with {
         my $e = shift;
         $self->assert(0, $e->stringify );
@@ -248,11 +266,19 @@ sub test_registerBadVerify {
         my $e = shift;
         $self->assert_matches(qr/$testUserEmail/, $e->{-text});
         $self->assert_str_equals("regconfirm", $e->{-template});
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $self->assert(0, $e->stringify);
+
     } otherwise {
         $self->assert(0, "expected an oops redirect");
     }
     try {
         $self->verify($testUserWikiName.'.bad');
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $self->assert(0, $e->stringify);
+
     } catch TWiki::UI::OopsException with {
     } otherwise {
         $self->assert(0, "Expected a redirect" );
@@ -274,7 +300,7 @@ sub test_resetPasswordOkay {
                          {
                           '.path_info' => '/'.$peopleWeb.'/WebHome',
                           'LoginName' => [
-                                          $testUserWikiName
+                                          "testuser"
                                          ],
                           'TopicName' => [
                                           'ResetPassword'
@@ -287,9 +313,12 @@ sub test_resetPasswordOkay {
     my $session = initialise($query, $guestLoginName);
     try {
         TWiki::UI::Register::resetPassword($session);
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $self->assert(0, $e->stringify);
+
     } catch TWiki::UI::OopsException with {
         my $e = shift;
-        $self->assert_matches(qr/$testUserEmail/, $e->{-text});
         $self->assert_str_equals("resetpasswd", $e->{-template});
     } otherwise {
         $self->assert(0, "expected an oops redirect");
@@ -317,6 +346,10 @@ sub test_resetPasswordNoSuchUser {
     my $session = initialise($query, $guestLoginName);
     try {
         TWiki::UI::Register::resetPassword($session);
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $self->assert(0, $e->stringify);
+
     } catch TWiki::UI::OopsException with {
         my $e = shift;
         $self->assert_str_equals("notwikiuser", $e->{-template});
@@ -348,6 +381,10 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
     my $session = initialise($query, $guestLoginName);
     try {
         TWiki::UI::Register::resetPassword($session);
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $self->assert(0, $e->stringify);
+
     } catch TWiki::UI::OopsException with {
         my $e = shift;
         $self->assert_matches(qr/Main\.TWikiAdminGroup/, $e->{-text});
@@ -378,15 +415,18 @@ sub test_resetPasswordNoPassword {
                                       ]
                          });
 
-    # Now restore the .htpasswd file from before the registration
-    copy ($saveHtpasswd, $TWiki::htpasswdFilename) || die "Can't restore $TWiki::htpasswdFilename from $saveHtpasswd";
+    unlink $TWiki::htpasswdFilename;
 
     my $session = initialise($query, $guestLoginName);
     try {
         TWiki::UI::Register::resetPassword($session);
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $self->assert(0, $e->stringify);
+
     } catch TWiki::UI::OopsException with {
         my $e = shift;
-        $self->assert_matches(qr/$testUserEmail/, $e->{-text});
+        $self->assert_str_equals("notwikiuser", $e->{-template});
     } otherwise {
         $self->assert(0, "expected an oops redirect");
     }
@@ -401,7 +441,7 @@ my $dir;
 my %regSave;
 
 sub setupUnregistered {
-    $name = "MartinCleaver";
+    $name = "MartianCleaver";
     $code = "$name.ba";
     $dir = $tempUserDir;
 
@@ -429,7 +469,7 @@ sub test_UnregisteredUser {
 }
 
 sub test_missingElements {
-    my ($self) = shift;
+    my $self = shift;
     my @present = ("one","two","three");
     my @required = ("one","two","six");
 
@@ -438,61 +478,14 @@ sub test_missingElements {
     $self->assert_deep_equals( [TWiki::UI::Register::_missingElements(\@present, \@present)], []);
 }
 
-
-
-
-# I added a behaviour but don't want to break the old behaviour.
-
-sub test_userToWikiName {
-    my $self = shift;
-    my $query = new CGI();
-    my $session = initialise($query, $guestLoginName);
-    $self->assert_equals(
-                         $session->{users}->userToWikiName("NoSuchUser")
-                         ,$mainweb.".NoSuchUser");
-    $self->assert_equals(
-                         $session->{users}->userToWikiName("NoSuchUser",1)
-                         ,"NoSuchUser");
-    $self->assert_null(
-                       $session->{users}->userToWikiName("NoSuchUser",2)
-                      );
-}
-
-sub test_getUserByEitherLoginOrWikiName {
-    my $self = shift;
-    my $query = new CGI();
-    my $session = initialise($query, $guestLoginName);
-
-    {
-        my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, $TWiki::defaultUserName);
-        $self->assert_equals($w, $TWiki::defaultWikiName);
-        $self->assert_equals($l, $TWiki::defaultUserName);
-    }
-    {
-        my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, $TWiki::defaultWikiName);
-        $self->assert_equals($w, $TWiki::defaultWikiName);
-        $self->assert_equals($l, $TWiki::defaultUserName);
-    }
-    {
-        my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, "notfound");
-        $self->assert_null($w);
-        $self->assert_null($l);
-    }
-    {
-        my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, "NoSuchUser");
-        $self->assert_null($w);
-        $self->assert_null($l);
-    }
-}
-
 sub test_bulkRegister {
     my $self = shift;
 
     my $testReg = <<'EOM';
 | FirstName | LastName | Email | WikiName | LoginName | CustomFieldThis | SomeOtherRandomField | WhateverYouLike |
-| Test | User | Martin.Cleaver@BCS.org.uk |  TestBulkUser1 | a | A | B | C |
-| Test | User2 | Martin.Cleaver@BCS.org.uk | TestBulkUser2 | b | A | B | C |
-| Test | User3 | Martin.Cleaver@BCS.org.uk | TestBulkUser3 | c | A | B | C |
+| Test | User | Martian.Cleaver@BCS.org.uk |  TestBulkUser1 | a | A | B | C |
+| Test | User2 | Martian.Cleaver@BCS.org.uk | TestBulkUser2 | b | A | B | C |
+| Test | User3 | Martian.Cleaver@BCS.org.uk | TestBulkUser3 | c | A | B | C |
 EOM
     
     my $regTopic = 'UnprocessedRegistrations2';
@@ -501,7 +494,7 @@ EOM
     my $file = $TWiki::dataDir.'/'.$temporaryWeb.'/'.$regTopic.'.txt';
     my $fh = new FileHandle;
     
-    die "Can't write $file" unless ($fh->open(">".$file));
+    die "Can't write $file" unless ($fh->open(">$file"));
     print $fh $testReg;
     $fh->close;
 
@@ -523,7 +516,6 @@ EOM
     my $session = initialise($query, $adminLoginName);
     $session->{topicName} = $regTopic;
     $session->{webName} = $temporaryWeb;
-    
     try {
         TWiki::UI::Register::bulkRegister($session)
 
@@ -534,20 +526,14 @@ EOM
     } catch Error::Simple with {
         my $e = shift;
         $self->assert(0, $e->stringify);
+
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $self->assert(0, $e->stringify);
+
     } otherwise {
         $self->assert(0, "expected an oops redirect");
-    }
-
-}
-
-sub deleteUsers {
-  my (@users) = @_;
-#  print "Cleaning up: ".join(", ", @users);
-  foreach my $user (@users) {
-    my $file = $TWiki::dataDir.'/'.$peopleWeb.'/'.$user.'.txt';
-#    print "deleting '$file'\n";
-    unlink $file || die "Can't delete $file";
-  }
+    };
 }
 
 sub test_buildRegistrationEmail {

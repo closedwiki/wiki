@@ -74,7 +74,9 @@ sub saveTopic1 {
    my $doNotLogChanges = 0;
    my $doUnlock = 1;
 
-   $twiki->{userName} = $user;
+   $user = $twiki->{user} = $twiki->{users}->findUser($user)
+     unless (ref($user) eq "TWiki::User");
+;
    $meta = new TWiki::Meta($twiki, $web, $topic) unless $meta;
    my $error =
      $twiki->{store}->saveTopic( $user, $web, $topic, $text,
@@ -92,7 +94,7 @@ sub test_checkin
     my $topic = "UnitTest1";
     my $text = "hi";
     my $web = $zanyweb;
-    my $user = "TestUser1";
+    my $user = $twiki->{users}->findUser("TestUser1");
 
     saveTopic1( $web, $topic, $text, $user );
 
@@ -112,7 +114,7 @@ sub test_checkin
       $meta->getRevisionInfo( $web, $topic );
     $this->assert_num_equals( $revMeta0, $revMeta );
     # Check-in with different text, under different user (to force change)
-    $user = "TestUser2";
+    $user = $twiki->{users}->findUser("TestUser2");
     $text = "bye";
 
     saveTopic1($web, $topic, $text, $user, $meta );
@@ -132,7 +134,7 @@ sub test_checkin_attachment {
     my $topic = "UnitTest2";
     my $text = "hi";
     my $web = $zanyweb;
-    my $user = "TestUser1";
+    my $user = $twiki->{users}->findUser("TestUser1");
 
     saveTopic1($web, $topic, $text, $user );
 
@@ -179,14 +181,14 @@ sub test_rename() {
     my $oldTopic = "UnitTest2";
     my $newWeb = $oldWeb;
     my $newTopic = "UnitTest2Moved";
-    my $user = "TestUser1";
+    my $user = $twiki->{users}->findUser("TestUser1");
 
     saveTopic1($oldWeb, $oldTopic, "Elucidate the goose", $user );
     my $attachment = "afile.txt";
     open( FILE, ">/tmp/$attachment" );
     print FILE "Test her attachment to me\n";
     close(FILE);
-    $user = "TestUser2";
+    $user = $twiki->{users}->findUser( "TestUser2" );
     $twiki->{userName} = $user;
     $twiki->{store}->saveAttachment($oldWeb, $oldTopic, $attachment, $user,
                                 { file => "/tmp/$attachment" } );
@@ -196,7 +198,7 @@ sub test_rename() {
     my $oldRevTop =
       $twiki->{store}->getRevisionNumber( $oldWeb, $oldTopic );
 
-    $user = "TestUser1";
+    $user =$twiki->{users}->findUser( "TestUser1" );
     $twiki->{userName} = $user;
 
     #$TWiki::Sandbox::_trace = 1;

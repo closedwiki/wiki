@@ -318,11 +318,10 @@ sub _readTemplateFile {
 
     if ( $this->store()->topicExists( $theWeb, $theTopic ) &&
          $this->security()->checkAccessPermission( "view",
-                                                  $this->{session}->{wikiUserName}, "",
+                                                  $this->{session}->{user}, "",
                                                   $theTopic, $theWeb )) {
         my ( $meta, $text ) =
-          $this->store()->readTopic( $this->{session}->{wikiUserName},
-                                     $theWeb, $theTopic, undef, 1 );
+          $this->store()->readTopic( undef, $theWeb, $theTopic, undef );
         return $text;
     }
 

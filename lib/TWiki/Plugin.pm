@@ -165,7 +165,7 @@ sub registerHandlers {
     no strict 'refs';
     my $status = &$sub( $TWiki::Plugins::SESSION->{topicName},
                         $TWiki::Plugins::SESSION->{webName},
-                        $TWiki::Plugins::SESSION->{userName},
+                        $TWiki::Plugins::SESSION->{user}->login(),
                         $this->{web} );
     use strict 'refs';
 

@@ -42,7 +42,6 @@ sub oops_cgi {
     my $session = shift;
     my $topic = $session->{topicName};
     my $web = $session->{webName};
-    my $user = $session->{userName};
     my $query = $session->{cgiQuery};
 
     my $tmplName = $query->param( 'template' ) || "oops";

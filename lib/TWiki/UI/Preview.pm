@@ -28,7 +28,7 @@ sub preview {
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
-    my $userName = $session->{userName};
+    my $user = $session->{user};
 
     my $skin = $session->getSkin();
     my $changeform = $query->param( 'submitChangeForm' ) || "";
@@ -45,7 +45,6 @@ sub preview {
     my $ptext = "";
     my $meta = "";
     my $formFields = "";
-    my $wikiUserName = $session->{wikiUserName};
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
 
@@ -60,7 +59,10 @@ sub preview {
     $tmpl = $session->{templates}->readTemplate( "preview", $skin );
     $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
     if( $saveCmd ) {
-        TWiki::UI::checkAdmin( $session, $webName, $topic, $wikiUserName );
+        unless( $user->isAdmin()) {
+            throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
+                                        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
+        }
         $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
@@ -68,7 +70,7 @@ sub preview {
     if( $saveCmd ne "repRev" ) {
         my $dummy = "";
         ( $meta, $dummy ) =
-          $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 );
+          $session->{store}->readTopic( $user, $webName, $topic, undef );
 
         # parent setting
         if( $theParent eq "none" ) {

@@ -35,7 +35,6 @@ sub changes {
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
-    my $userName = $session->{userName};
 
     TWiki::UI::checkWebExists( $session, $webName, $topic );
 
@@ -69,10 +68,11 @@ sub changes {
             next unless $session->{store}->topicExists( $webName, $bar[0] );
             $foo = $text;
             $foo =~ s/%TOPICNAME%/$bar[0]/go;
-            my $wikiuser = $session->{users}->userToWikiName( $bar[1] );
+            my $wikiuser = "";
+            my $u = $session->{users}->findUser( $bar[1] );
+            $wikiuser = $u->webDotWikiName() if $u;
             $foo =~ s/%AUTHOR%/$wikiuser/go;
-            $foo =~ s/%LOCKED%//go;
-            $time = &TWiki::formatTime( $bar[2] );
+            $time = TWiki::formatTime( $bar[2] );
             $frev = "";
             if( $bar[3] ) {
                 if( $bar[3] > 1 ) {
@@ -86,11 +86,10 @@ sub changes {
             $foo = $session->{renderer}->getRenderedVersion( $foo );
 
             $summary =
-              $session->{store}->readTopicRaw($session->{wikiUserName},
-                                              $webName,
-                                              $bar[0],
-                                              undef,
-                                              1
+              $session->{store}->readTopicRaw( undef,
+                                               $webName,
+                                               $bar[0],
+                                               undef
                                              );
             $summary = $session->{renderer}->makeTopicSummary( $summary,
                                                                $bar[0],

@@ -37,7 +37,9 @@ package TWiki::Store;
 use File::Copy;
 use Time::Local;
 use TWiki::Meta;
+use TWiki::AccessControlException;
 use Assert;
+use Error qw( :try );
 
 use strict;
 
@@ -70,7 +72,6 @@ sub new {
     if( $@ ) {
         die "$this->{IMPL} compile failed $@";
     }
-    $this->{ACCESSFAILED} = "";
     $this->{STORESETTINGS} = $storeSettings;
 
     return $this;
@@ -99,16 +100,16 @@ sub _getTopicHandler {
 
 =pod
 
----++ readTopic($user, $web, $topic, $version, $internal) -> ($meta, $text)
+---++ readTopic($user, $web, $topic, $version) -> ($meta, $text)
 
 Reads the given version of a topic and it's meta-data. If the version
 is undef, then read the most recent version. The version number must be
 an integer, or undef for the latest version.
 
-If $internal is false, view permission will be required for the topic
-read to be successful.  A failed topic read is indicated by setting
-the status returned by accessFailed(). Permissions are checked for
-TWiki::wikiUserName, there is no way to override this.
+If $user is defined, view permission will be required for the topic
+read to be successful.  Access control violations are flagged by a
+TWiki::AccessControlException. Permissions are checked for the user
+name passed in.
 
 If the topic contains a web specification (is of the form Web.Topic) the
 web specification will override whatever is passed in $theWeb.
@@ -119,28 +120,27 @@ TWiki::Meta object.  (The topic text is, as usual, just a string.)
 =cut
 
 sub readTopic {
-    my( $this, $user, $theWeb, $theTopic, $version, $internal ) = @_;
+    my( $this, $user, $theWeb, $theTopic, $version ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-    ASSERT(defined($internal)) if DEBUG;
 
-    my $text = $this->readTopicRaw( $user, $theWeb, $theTopic, $version, $internal );
+    my $text = $this->readTopicRaw( $user, $theWeb, $theTopic, $version );
     my $meta = $this->extractMetaData( $theWeb, $theTopic, \$text );
     return( $meta, $text );
 }
 
 =pod
 
----++ readTopicRaw( $user, $web, $topic, $version, $internal )
+---++ readTopicRaw( $user, $web, $topic, $version )
 Return value: $topicText
 
 Reads the given version of a topic, without separating out any embedded
 meta-data. If the version is undef, then read the most recent version.
 The version number must be an integer or undef.
 
-If $internal is false, view access permission will be checked.  If permission
-is not granted, then an error message will be returned in $text, and set
-as the return value of accessFailed. Permissions are checked for
-TWiki::wikiUserName, there is no way to overrides this.
+If $user is defined, view permission will be required for the topic
+read to be successful.  Access control violations are flagged by a
+TWiki::AccessControlException. Permissions are checked for the user
+name passed in.
 
 If the topic contains a web specification (is of the form Web.Topic) the
 web specification will override whatever is passed in $theWeb.
@@ -153,9 +153,8 @@ correct operation of View raw=debug and the "repRev" mode of Edit.
 =cut
 
 sub readTopicRaw {
-    my( $this, $user, $theWeb, $theTopic, $version, $internal ) = @_;
+    my( $this, $user, $theWeb, $theTopic, $version ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-    ASSERT(defined($internal)) if DEBUG;
 
     # test if theTopic contains a webName to override $theWeb
     ( $theWeb, $theTopic ) =
@@ -170,35 +169,14 @@ sub readTopicRaw {
         $text = $topicHandler->getRevision( $version );
     }
 
-    my $viewAccessOK = 1;
-    unless( $internal ) {
-        $viewAccessOK =
-          $this->security()->checkAccessPermission( "view", $user,
-                                                    $text, $theTopic, $theWeb );
-    }
-
-    unless( $viewAccessOK ) {
-        # SMELL: TWiki::Func::readTopicText will break if the following
-        # text changes
-        $text = "No permission to read topic $theWeb.$theTopic  - perhaps you need to log in?\n";
-        $this->{ACCESSFAILED} .= " $theWeb.$theTopic";
+    if( $user &&
+        !$this->security()->checkAccessPermission
+        ( "view", $user, $text, $theTopic, $theWeb )) {
+        throw TWiki::AccessControlException( "VIEW", $user,
+                                             $theWeb, $theTopic );
     }
 
     return $text;
-}
-
-=pod
-
----++ sub accessFailed ()
-Returns a string containing the names of all topics that have have had access
-failures since this Store was created.
-
-=cut
-sub accessFailed {
-    my $this = shift;
-    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-
-    return $this->{ACCESSFAILED};
 }
 
 =pod
@@ -219,13 +197,29 @@ sub moveAttachment {
     my( $this, $oldWeb, $oldTopic, $newWeb, $newTopic,
         $theAttachment, $user ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-    ASSERT(defined($user)) if DEBUG;
+    ASSERT(ref($user) eq "TWiki::User") if DEBUG;
 
     $this->lockTopic( $user, $oldWeb, $oldTopic );
 
-    my $wName = $this->users()->userToWikiName( $user );
+    my( $ometa, $otext ) = $this->readTopic( undef, $oldWeb, $oldTopic );
+    if( $user &&
+        !$this->security()->checkAccessPermission
+        ( "change", $user, $otext, $oldTopic, $oldWeb )) {
+        throw TWiki::AccessControlException( "CHANGE", $user,
+                                             $oldWeb, $oldTopic );
+    }
+
+    my ( $nmeta, $ntext ) = $this->readTopic( undef, $newWeb, $newTopic );
+    if( $user &&
+        !$this->security()->checkAccessPermission
+        ( "change", $user, $ntext, $newTopic, $newWeb )) {
+        throw TWiki::AccessControlException( "CHANGE", $user,
+                                             $newWeb, $newTopic );
+    }
+
     # Remove file attachment from old topic
-    my $topicHandler = $this->_getTopicHandler( $oldWeb, $oldTopic, $theAttachment );
+    my $topicHandler =
+      $this->_getTopicHandler( $oldWeb, $oldTopic, $theAttachment );
     my $error = $topicHandler->moveMe( $newWeb, $newTopic );
 
     if( $error ) {
@@ -234,12 +228,11 @@ sub moveAttachment {
         return $error;
     }
 
-    my( $meta, $text ) = $this->readTopic( $wName, $oldWeb, $oldTopic, 1 );
     my %fileAttachment =
-      $meta->findOne( "FILEATTACHMENT", $theAttachment );
-    $meta->remove( "FILEATTACHMENT", $theAttachment );
+      $ometa->findOne( "FILEATTACHMENT", $theAttachment );
+    $ometa->remove( "FILEATTACHMENT", $theAttachment );
     $error = $this->_noHandlersSave( $user, $oldWeb, $oldTopic,
-                                     $text, $meta,
+                                     $otext, $ometa,
                                      { notify => 0 } );
 
     $this->unlockTopic( $user, $oldWeb, $oldTopic );
@@ -249,15 +242,14 @@ sub moveAttachment {
     }
 
     # Add file attachment to new topic
-    ( $meta, $text ) = $this->readTopic( $wName, $newWeb, $newTopic, 1 );
     $fileAttachment{"movefrom"} = "$oldWeb.$oldTopic";
     $fileAttachment{"moveby"}   = $user;
     $fileAttachment{"movedto"}  = "$newWeb.$newTopic";
     $fileAttachment{"movedwhen"} = time();
-    $meta->put( "FILEATTACHMENT", %fileAttachment );
+    $nmeta->put( "FILEATTACHMENT", %fileAttachment );
 
-    $error = $this->_noHandlersSave( $user, $newWeb, $newTopic, $text,
-                                      $meta, { notify => 0,
+    $error = $this->_noHandlersSave( $user, $newWeb, $newTopic, $ntext,
+                                      $nmeta, { notify => 0,
                                                comment => "moved" } );
 
     $this->unlockTopic( $user, $newWeb, $newTopic );
@@ -273,21 +265,33 @@ sub moveAttachment {
 
 =pod
 
----++ sub getAttachmentStream( $web, $topic, $attName ) -> stream
+---++ sub getAttachmentStream( $user, $web, $topic, $attName ) -> stream
+| =$user= | the user doing the reading, or undef if no access checks |
 | =$web= | The web |
 | =$topic= | The topic |
 | =$attName= | Name of the attachment |
+
 Open a standard input stream from an attachment. Will return undef
 if the stream could not be opened (permissions, or nonexistant etc)
+
+If $user is defined, view permission will be required for the topic
+read to be successful.  Access control violations are flagged by a
+TWiki::AccessControlException. Permissions are checked for the user
+name passed in.
 
 =cut
 
 sub getAttachmentStream {
-    my $this = shift;
-    #my ( $web, $topic, $att ) = @_;
+    my ( $this, $user, $web, $topic, $att ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
-    my $topicHandler = $this->_getTopicHandler( @_ );
+    if( $user &&
+        !$this->security()->checkAccessPermission
+        ( "view", $user, undef, $topic, $web )) {
+        throw TWiki::AccessControlException( "VIEW", $user, $web, $topic );
+    }
+
+    my $topicHandler = $this->_getTopicHandler( $web, $topic, $att );
     my $strm;
     my $fp = $topicHandler->{file};
     if ( $fp ) {
@@ -381,7 +385,6 @@ sub _changeRefTo {
    return $out;
 }
 
-
 =pod
 
 ---++ sub renameTopic(  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  $user ) -> error string or undef
@@ -405,9 +408,24 @@ sub renameTopic {
     # will block
     $this->lockTopic( $user, $oldWeb, $oldTopic );
 
+    my $otext = $this->readTopicRaw( undef, $oldWeb, $oldTopic );
+    if( $user &&
+        !$this->security()->checkAccessPermission
+        ( "change", $user, $otext, $oldTopic, $oldWeb )) {
+        throw TWiki::AccessControlException( "CHANGE", $user,
+                                             $oldWeb, $oldTopic );
+    }
+
+    my ( $nmeta, $ntext ) = $this->readTopic( undef, $newWeb, $newTopic );
+    if( $user &&
+        !$this->security()->checkAccessPermission
+        ( "change", $user, $ntext, $newTopic, $newWeb )) {
+        throw TWiki::AccessControlException( "CHANGE", $user,
+                                             $newWeb, $newTopic );
+    }
+
     my $topicHandler = $this->_getTopicHandler( $oldWeb, $oldTopic, "" );
     my $error = $topicHandler->moveMe( $newWeb, $newTopic );
-    my $wName = $this->users()->userToWikiName( $user );
 
     if( ! $error ) {
         my $time = time();
@@ -416,7 +434,7 @@ sub renameTopic {
                     "to"   => "$newWeb.$newTopic",
                     "date" => "$time",
                     "by"   => "$user" );
-        my $text = $this->readTopicRaw( $wName, $newWeb, $newTopic, undef, 1 );
+        my $text = $this->readTopicRaw( undef, $newWeb, $newTopic, undef );
         if( ( $oldWeb ne $newWeb ) && $doChangeRefTo ) {
             $text = $this->_changeRefTo( $text, $oldWeb, $oldTopic );
         }
@@ -439,7 +457,7 @@ sub renameTopic {
 
 =pod
 
----++ sub updateReferringPages (  $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs  ) -> ( count of lock failures, result text)
+---++ sub updateReferringPages( $oldWeb, $oldTopic, $user, $newWeb, $newTopic, @refs  ) -> ( count of lock failures, result text)
 
 Update pages that refer to a page that is being renamed/moved. Return the
 number of updates that failed due to active locks and a message.
@@ -454,12 +472,12 @@ handler for TWiki links) provided to change the link name.
 sub updateReferringPages {
     my ( $this, $oldWeb, $oldTopic, $user, $newWeb, $newTopic, @refs ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($user) eq "TWiki::User") if DEBUG;
 
     my $result = "";
     my $preTopic = '^|\W';		# Start of line or non-alphanumeric
     my $postTopic = '$|\W';	# End of line or non-alphanumeric
     my $spacedTopic = TWiki::searchableTopic( $oldTopic );
-    my $wikiUserName = $this->users()->userToWikiName( $user );
     my $lockFailures = 0;
 
     while ( @refs ) {
@@ -472,13 +490,12 @@ sub updateReferringPages {
         if ( $this->topicExists($itemWeb, $itemTopic) ) {
             $this->lockTopic( $user, $itemWeb, $itemTopic );
             my $scantext =
-              $this->readTopicRaw( $wikiUserName, $itemWeb, $itemTopic,
-                                   undef, 0 );
-            if( ! $this->security()->checkAccessPermission( "change",
-                                                            $wikiUserName,
-                                                            $scantext,
-                                                            $itemWeb,
-                                                            $itemTopic ) ) {
+              $this->readTopicRaw( undef, $itemWeb, $itemTopic, undef );
+            if( $user && !$this->security()->checkAccessPermission( "change",
+                                                                    $user,
+                                                                    $scantext,
+                                                                    $itemWeb,
+                                                                    $itemTopic ) ) {
                 # This shouldn't happen, as search will not return, but
                 # check to be on the safe side
                 $this->{session}->writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
@@ -536,18 +553,30 @@ sub updateReferringPages {
 
 =pod
 
----++ sub readAttachmentVersion (  $theWeb, $theTopic, $theAttachment, $theRev  )
+---++ sub readAttachment( $user, $theWeb, $theTopic, $theAttachment, $theRev  )
 
 Read the given version of an attachment, returning the content.
 
+View permission on the topic is required for the
+read to be successful.  Access control violations are flagged by a
+TWiki::AccessControlException. Permissions are checked for the user
+name passed in.
+
 =cut
 
-sub readAttachmentVersion {
-   my ( $this, $theWeb, $theTopic, $theAttachment, $theRev ) = @_;
+sub readAttachment {
+    my ( $this, $user, $theWeb, $theTopic, $theAttachment, $theRev ) = @_;
+
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
-   my $topicHandler = $this->_getTopicHandler( $theWeb, $theTopic, $theAttachment );
-   return $topicHandler->getRevision( $theRev );
+    if( $user &&
+        !$this->security()->checkAccessPermission
+        ( "change", $user, undef, $theTopic, $theWeb )) {
+        throw TWiki::AccessControlException( "CHANGE", $user, $theWeb, $theTopic );
+    }
+
+    my $topicHandler = $this->_getTopicHandler( $theWeb, $theTopic, $theAttachment );
+    return $topicHandler->getRevision( $theRev );
 }
 
 =pod
@@ -627,6 +656,8 @@ sub getRevisionInfo {
     my( $rcsOut, $rev, $date, $user, $comment ) =
       $topicHandler->getRevisionInfo( $theRev );
 
+    $user = $this->users()->findUser( $user ) if $user;
+
     return ( $date, $user, $rev, $comment );
 }
 
@@ -677,9 +708,17 @@ Save a new revision of the topic, calling plugins handlers as appropriate.
 sub saveTopic {
     my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($user) eq "TWiki::User") if DEBUG;
     ASSERT(ref($meta) eq "TWiki::Meta") if DEBUG;
 
     $options = {} unless defined( $options );
+
+    if( $user &&
+        !$this->security()->checkAccessPermission
+        ( "change", $user, undef, $topic, $web )) {
+
+        throw TWiki::AccessControlException( "CHANGE", $user, $web, $topic );
+    }
 
     # SMELL: Staggeringly inefficient code that adds meta-data for
     # Plugin callback. Why not simply pass the meta in? It would be far
@@ -688,10 +727,10 @@ sub saveTopic {
     $this->{session}->{plugins}->beforeSaveHandler( $text, $topic, $web );
     # remove meta data again!
     $meta = $this->extractMetaData( $web, $topic, \$text );
+
     my $error =
       $this->_noHandlersSave( $user, $web, $topic, $text, $meta,
                               $options );
-    $text = _writeMeta( $meta, $text );  # add meta data for Plugin callback
     $this->{session}->{plugins}->afterSaveHandler( $text, $topic, $web, $error );
     return $error;
 }
@@ -721,13 +760,21 @@ If file is not set, this is a properties-only save.
 sub saveAttachment {
     my( $this, $web, $topic, $attachment, $user, $opts ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($user) eq "TWiki::User") if DEBUG;
     ASSERT(defined($opts)) if DEBUG;
     my $action;
 
     $this->lockTopic( $user, $web, $topic );
 
     # update topic
-    my( $meta, $text ) = $this->readTopic( $user, $web, $topic, undef, 1 );
+    my( $meta, $text ) = $this->readTopic( undef, $web, $topic, undef );
+
+    if( $user &&
+        !$this->security()->checkAccessPermission
+        ( "change", $user, $text, $topic, $web )) {
+
+        throw TWiki::AccessControlException( "CHANGE", $user, $web, $topic );
+    }
 
     if ( $opts->{file} ) {
         my $fileVersion = $this->getRevisionNumber( $web, $topic,
@@ -747,7 +794,7 @@ sub saveAttachment {
                                                      $topic, $web );
         my $error = $topicHandler->addRevision( $opts->{file},
                                                 $opts->{comment},
-                                                $user );
+                                                $user->wikiName() );
 
         $this->{session}->{plugins}->afterAttachmentSaveHandler( \%attrs,
                                                     $topic, $web, $error );
@@ -770,7 +817,7 @@ sub saveAttachment {
     }
 
     if( $opts->{createlink} ) {
-        $text .= $this->attach()->getAttachmentLink( $web, $topic,
+        $text .= $this->attach()->getAttachmentLink( $user, $web, $topic,
                                                    $attachment, $meta );
     }
 
@@ -790,7 +837,9 @@ sub saveAttachment {
 # Return non-null string if there is an error.
 # FIXME: does rev info from meta work if user saves a topic with no change?
 sub _noHandlersSave {
-    my( $this, $userName, $web, $topic, $text, $meta, $options ) = @_;
+    my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
+
+    ASSERT(ref($user) eq "TWiki::User") if DEBUG;
 
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
     my $currentRev = $topicHandler->numRevisions() || 0;
@@ -803,11 +852,11 @@ sub _noHandlersSave {
         my $mtime2 = time();
 
         if( abs( $mtime2 - $mtime1 ) < $TWiki::editLockTime ) {
-            my( $date, $user ) =
+            my( $date, $revuser ) =
               $this->getRevisionInfo( $web, $topic, $currentRev,
                                undef, $topicHandler );
             # same user?
-            if(  $user eq $userName ) {
+            if(  $revuser->equals( $user )) {
                 return repRev( @_ );
             }
         }
@@ -820,27 +869,24 @@ sub _noHandlersSave {
     $text =~ s/([^\n\r])$/$1\n/os;
 
     # will block
-    $this->lockTopic( $userName, $web, $topic );
-
+    $this->lockTopic( $user, $web, $topic );
     my $error =
-      $topicHandler->addRevision( $text, $options->{comment}, $userName );
+      $topicHandler->addRevision( $text, $options->{comment},
+                                  $user->wikiName() );
 
-    $this->unlockTopic( $userName, $web, $topic );
+    $this->unlockTopic( $user, $web, $topic );
 
     return $error if( $error );
 
     if( ! $options->{dontnotify} ) {
         # update .changes
-        my( $fdate, $fuser, $frev ) =
-          $this->getRevisionInfo( $web, $topic, "", undef, $topicHandler );
-        $fdate = ""; # suppress warning
-        $fuser = ""; # suppress warning
+        my @revi = $this->getRevisionInfo( $web, $topic, "", undef, $topicHandler );
 
         my @foo = split( /\n/, $this->readMetaData( $web, "changes" ));
         if( $#foo > 100 ) {
             shift( @foo);
         }
-        push( @foo, "$topic\t$userName\t".time()."\t$frev" );
+        push( @foo, "$topic\t".$user->login()."\t".time()."\t$revi[2]" );
         $this->saveMetaData( $web, "changes", join( "\n", @foo ));
         close(FILE);
     }
@@ -864,7 +910,7 @@ Parameters and return value as saveTopic.
 Provided as a means for administrators to rewrite history.
 
 Replace last revision, but do not update .changes.
-Save topic with same userName and date.
+Save topic with same user and date.
 
 It is up to the store implementation if this is different
 to a normal save or not.
@@ -872,14 +918,14 @@ to a normal save or not.
 =cut
 
 sub repRev {
-    my( $this, $userName, $web, $topic, $text, $meta, $options ) = @_;
+    my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
 
-    $this->lockTopic( $userName, $web, $topic );
+    $this->lockTopic( $user, $web, $topic );
 
     # FIXME why should date be the same if same user replacing with
     # editLockTime?
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
-    my( $date, $user, $rev ) =
+    my( $date, $revuser, $rev ) =
       $this->getRevisionInfo( $web, $topic, "", undef, $topicHandler );
 
     # RCS requires a newline for the last line,
@@ -895,16 +941,16 @@ sub repRev {
 
     my $error =
       $topicHandler->replaceRevision( $text, $options->{comment},
-                                      $user, $epochSec );
+                                      $user->wikiName(), $epochSec );
     return $error if( $error );
 
-    $this->unlockTopic( $userName, $web, $topic );
+    $this->unlockTopic( $user, $web, $topic );
 
     if( ( $TWiki::doLogTopicSave ) && ! ( $options->{dontlog} ) ) {
         # write log entry
-        my $extra = "repRev by $userName: $rev " .
-          $this->users()->userToWikiName( $user ) .
-              " ". TWiki::formatTime( $epochSec, "rcs", "gmtime" );
+        my $extra = "repRev by ".$user->login().": $rev " .
+          $revuser->login().
+            " ". TWiki::formatTime( $epochSec, "rcs", "gmtime" );
         $extra   .= " dontNotify" if( $options->{dontnotify} );
         $this->{session}->writeLog( "save", "$web.$topic", $extra );
     }
@@ -929,9 +975,9 @@ simply promote the previous revision up to the head.
 =cut
 
 sub delRev {
-    my( $this, $userName, $web, $topic ) = @_;
+    my( $this, $user, $web, $topic ) = @_;
 
-    $this->lockTopic( $userName, $web, $topic );
+    $this->lockTopic( $user, $web, $topic );
 
     my $rev = $this->getRevisionNumber( $web, $topic );
     if( $rev <= 1 ) {
@@ -944,12 +990,13 @@ sub delRev {
     # restore last topic from repository
     $topicHandler->restoreLatestRevision();
 
-    $this->unlockTopic( $userName, $web, $topic );
+    $this->unlockTopic( $user, $web, $topic );
 
     # TODO: delete entry in .changes
 
     # write log entry
-    $this->{session}->writeLog( "cmd", "$web.$topic", "delRev by $userName: $rev" );
+    $this->{session}->writeLog( "cmd", "$web.$topic", "delRev by ".
+                                $user->login().": $rev" );
 
     return "";
 }
@@ -999,20 +1046,22 @@ be done by calling unlockTopic.
 sub lockTopic {
     my ( $this, $locker, $web, $topic ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-    ASSERT($locker && $web && $topic) if DEBUG;
+    ASSERT(ref($locker) eq "TWiki::User") if DEBUG;
+    ASSERT($web && $topic) if DEBUG;
 
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
 
     while ( 1 ) {
         my ( $user, $time ) = $topicHandler->isLocked();
-        last if ( !$user || $user eq $locker );
-        TWiki::writeWarning( "Lock on $web.$topic for $locker denied" );
+        last if ( !$user || $locker->wikiName() eq $user );
+        TWiki::writeWarning( "Lock on $web.$topic for ".$locker->wikiName().
+                             " denied by $user" );
         # see how old the lock is. If it's older than 2 minutes,
         # break it anyway. Locks are atomic, and should never be
         # held that long, by _any_ process.
         if ( time() - $time > 2 * 60 ) {
             $this->{session}->writeWarning
-              ( "$locker broke $user's lock on $web.$topic" );
+              ( $locker->wikiName()." broke ".$user->login()."'s lock on $web.$topic" );
             $topicHandler->setLock( 0 );
             last;
         }
@@ -1020,7 +1069,7 @@ sub lockTopic {
         sleep(2);
     }
 
-    $topicHandler->setLock( 1, $locker );
+    $topicHandler->setLock( 1, $locker->wikiName() );
 }
 
 =pod
@@ -1034,9 +1083,11 @@ release a topic lock after a guard section is complete.
 
 sub unlockTopic {
     my ( $this, $user, $web, $topic ) = @_;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($user) eq "TWiki::User") if DEBUG;
 
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
-    $topicHandler->setLock( 0, $user );
+    $topicHandler->setLock( 0, $user->wikiName() );
 }
 
 =pod
@@ -1122,7 +1173,8 @@ sub extractMetaData {
             $this->attach()->upgradeFrom1v0beta( $meta );
             if( $meta->count( "TOPICMOVED" ) ) {
                  my %moved = $meta->findOne( "TOPICMOVED" );
-                 $moved{"by"} = $this->users()->wikiToUserName( $moved{"by"} );
+                 my $u = $this->users()->findUser( $moved{"by"} );
+                 $moved{"by"} = $u->login() if $u;
                  $meta->put( "TOPICMOVED", %moved );
             }
         }
@@ -1137,6 +1189,8 @@ sub extractMetaData {
 
 Get the name of the topic parent. Needs to be fast because
 of use by Render.pm.
+
+SMELL: does not honour access controls
 
 =cut
 
@@ -1217,6 +1271,7 @@ sub readFile {
 =pod
 
 ---++ sub readMetaData( $web, $name ) -> $text
+
 Read a named meta-data string. If web is given the meta-data
 is stored alongside a web. If the web is not
 given, the meta-data is assumed to be globally unique.
@@ -1237,6 +1292,7 @@ sub readMetaData {
 =pod
 
 ---++ sub saveMetaData( $web, $name ) -> $text
+
 Write a named meta-data string. If web is given the meta-data
 is stored alongside a web. If the web is not
 given, the meta-data is assumed to be globally unique.
@@ -1503,6 +1559,7 @@ sub cleanUpRevID {
 =pod
 
 ---++ sub copyTopicBetweenWebs($fromWeb, $topic, $toWeb)
+
 Copy a topic and all it's attendant data from one web to another.
 Returns an error string if it fails.
 

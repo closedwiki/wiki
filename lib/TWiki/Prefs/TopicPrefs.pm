@@ -76,9 +76,9 @@ sub readPrefs {
     return unless $self->store()->topicExists( $theWeb, $theTopic );
 
     my( $meta, $text ) =
-      $self->store()->readTopic( $self->{session}->{wikiUserName},
+      $self->store()->readTopic( undef,
                                  $theWeb, $theTopic,
-                                 undef, 1 );
+                                 undef );
 
     my $parser = new TWiki::Prefs::Parser();
     $parser->parseText( $text, $self );

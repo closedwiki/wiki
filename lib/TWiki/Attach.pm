@@ -144,14 +144,14 @@ sub formatVersions {
     my $rows ="";
 
     for( my $rev = $latestRev; $rev >= 1; $rev-- ) {
-        my( $date, $userName, $minorRev, $comment ) =
+        my( $date, $user, $minorRev, $comment ) =
           $this->store()->getRevisionInfo( $web, $topic, $rev, $attrs{name} );
         $rows .= $this->_formatRow( $web, $topic,
                              {
                               name    => $attrs{name},
                               version => $rev,
                               date    => $date,
-                              user    => $userName,
+                              user    => $user->login(),
                               comment => $comment,
                               attr    => $attrs{attr},
                               size    => $attrs{size}
@@ -238,7 +238,10 @@ sub _expandAttrs {
         return TWiki::formatTime( $info->{date} );
     }
     elsif ( $attr eq "USER" ) {
-        return $this->users()->userToWikiName( $info->{user} );
+        my $s = $info->{user};
+        my $u = $this->users()->findUser( $s );
+        $s = $u->webDotWikiName() if $u;
+        return $s
     }
     else {
         return "\0A_$attr\0";
@@ -247,7 +250,8 @@ sub _expandAttrs {
 
 =pod
 
----++ sub getAttachmentLink( $web, $topic, $name, $meta )
+---++ sub getAttachmentLink( $user, $web, $topic, $name, $meta )
+| =$user= | User doing the reading |
 | =$web= | Name of the web |
 | =$topic= | Name of the topic |
 | =$name= | Name of the attachment |
@@ -257,7 +261,7 @@ Build a link to the attachment, suitable for insertion in the topic.
 =cut
 
 sub getAttachmentLink {
-    my ( $this, $web, $topic, $attName, $meta ) = @_;
+    my ( $this, $user, $web, $topic, $attName, $meta ) = @_;
     ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
 
     my %att = $meta->findOne( "FILEATTACHMENT", $attName );
@@ -276,7 +280,7 @@ sub getAttachmentLink {
         # downloaded. When you upload an image to TWiki and checkmark
         # the link checkbox, TWiki will generate the width and height
         # img parameters, speeding up the page rendering.
-        my $stream =  $this->store()->getAttachmentStream( $web, $topic, $attName );
+        my $stream =  $this->store()->getAttachmentStream( $user, $web, $topic, $attName );
         my( $nx, $ny ) = &_imgsize( $stream, $attName );
 
         if( ( $nx > 0 ) && ( $ny > 0 ) ) {
@@ -561,7 +565,8 @@ sub _getOldAttachAttr
 	if( ! $fileUser ) { 
             $fileUser = ""; 
         } else {
-            $fileUser = $this->users()->wikiToUserName( $fileUser );
+            my $u = $this->users()->findUser( $fileUser );
+            $fileUser = $u->login() if $u;
         }
 	$fileUser =~ s/ //go;
 	( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $atext );
@@ -667,7 +672,8 @@ sub upgradeFrom1v0beta {
             $date = TWiki::Store::RcsFile::revDate2EpSecs( $date );
         }
         $att->{"date"} = $date;
-        $att->{"user"} = $this->users()->wikiToUserName( $att->{"user"} );
+        my $u = $this->users()->findUser( $att->{user} );
+        $att->{user} = $u->login() if $u;
     }
 }
 

@@ -771,9 +771,9 @@ sub searchWeb {
                     $out =~ s/\$date/$revDate/gos;
                     $out =~ s/\$isodate/&revDate2ISO($revDate)/geos;
                     $out =~ s/\$rev/$revNum/gos;
-                    $out =~ s/\$wikiusername/$revUser/gos;
-                    $out =~ s/\$wikiname/wikiName($revUser)/geos;
-                    $out =~ s/\$username/$this->users()->wikiToUserName($revUser)/geos;
+                    $out =~ s/\$wikiusername/$revUser->webDotWikiName()/geos;
+                    $out =~ s/\$wikiname/$revUser->wikiName()/geos;
+                    $out =~ s/\$username/$revUser->login()/geos;
                     my $r1info = {};
                     $out =~ s/\$createdate/$this->_getRev1Info( $web, $topic, "date", $r1info )/geos;
                     $out =~ s/\$createusername/$this->_getRev1Info( $web, $topic, "username", $r1info )/geos;
@@ -793,7 +793,6 @@ sub searchWeb {
                 }
                 $out =~ s/%WEB%/$web/go;
                 $out =~ s/%TOPICNAME%/$topic/go;
-                $out =~ s/%LOCKED%//o;
                 $out =~ s/%TIME%/$revDate/o;
                 my $revNumText;
                 if( $revNum > 1 ) {
@@ -815,11 +814,12 @@ sub searchWeb {
 
                 if( $doRenameView ) {
                     # Permission check done below, so force this read to succeed with "internal" parameter
-                    my $rawText = $this->store()->readTopicRaw( $this->{session}->{wikiUserName}, $web, $topic, undef, 1 );
+                    my $rawText = $this->store()->readTopicRaw
+                      ( undef, $web, $topic, undef );
                     my $changeable = "";
                     my $changeAccessOK =
                       $this->security()->checkAccessPermission( "change",
-                                                                $this->{session}->{wikiUserName},
+                                                                $this->{session}->{user},
                                                                 $text, $topic,
                                                                 $web );
                     if( ! $changeAccessOK ) {
@@ -1060,15 +1060,16 @@ sub _extractTopicInfo {
     $info->{text} = $text;
     $info->{meta} = $meta;
 
-    my ( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo( $web, $topic );
-    $info->{editby}     = $this->users()->userToWikiName( $revuser );
+    my ( $revdate, $revuser, $revnum ) =
+      $meta->getRevisionInfo( $web, $topic );
+    $info->{editby}     = $revuser ? $revuser->wikiName() : "";
     $info->{modified}   = $revdate;
     $info->{revNum}     = $revnum;
 
     $info->{allowView} =
       $this->security()->
         checkAccessPermission( "view",
-                               $this->{session}->{wikiUserName},
+                               $this->{session}->{user},
                                $text, $topic,
                                $web );
 
@@ -1094,7 +1095,7 @@ sub _getTextAndMeta {
 
     unless( defined $text ) {
         ( $meta, $text ) =
-          $this->store()->readTopic( $this->{session}->{wikiUserName}, $web, $topic, undef, 1 );
+          $this->store()->readTopic( undef, $web, $topic, undef );
         $text =~ s/%WEB%/$web/gos;
         $text =~ s/%TOPIC%/$topic/gos;
     }
@@ -1123,13 +1124,13 @@ sub _getRev1Info {
         $info->{user} = $u;
     }
     if( $theAttr eq "username" ) {
-        return $info->{user};
+        return $info->{user}->login();
     }
     if( $theAttr eq "wikiname" ) {
-        return $this->users()->userToWikiName( $info->{user}, 1 );
+        return $info->{user}->wikiName();
     }
     if( $theAttr eq "wikiusername" ) {
-        return $this->users()->userToWikiName( $info->{user} );
+        return $info->{user}->webDotWikiName();
     }
     if( $theAttr eq "date" ) {
         return &TWiki::formatTime( $info->{date} );
@@ -1208,22 +1209,6 @@ sub _getMetaFormName
         return $aForm{"name"};
     }
     return "";
-}
-
-=pod
-
----++ sub wikiName (  $theWikiUserName  )
-
-Not yet documented.
-
-=cut
-
-sub wikiName
-{
-    my( $theWikiUserName ) = @_;
-
-    $theWikiUserName =~ s/^.*\.//o;
-    return $theWikiUserName;
 }
 
 =pod

@@ -25,7 +25,7 @@
 
 =begin twiki
 
----+ TWiki::User::NoPasswdUser Package
+---+ TWiki::Users::NoPasswdUser Package
 
 The NoPasswdUser module is an implementation of the User Authentication code that has no passwords / users
 
@@ -36,7 +36,7 @@ __Note:___ this _is_ untested
 
 =cut
 
-package TWiki::User::NoPasswdUser;
+package TWiki::Users::NoPasswdUser;
 
 use strict;
 

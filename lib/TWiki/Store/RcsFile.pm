@@ -119,7 +119,7 @@ sub _getRevisionInfoDefault
 {
     my( $self ) = @_;
     my $fileDate = $self->getTimestamp();
-    return ( "", 1, $fileDate, $TWiki::defaultUserName, "Default revision information - no revision file" );
+    return ( "", 1, $fileDate, $TWiki::defaultUser, "Default revision information - no revision file" );
 }
 
 # ======================
@@ -428,22 +428,23 @@ sub _warn
 # ======================
 =pod
 
----++ sub setLock (  $self, $lock, $userName  )
+---++ sub setLock (  $self, $lock, $user  )
 
-Set a twiki lock on the topic
+Set a twiki lock on the topic, if $lock, otherwise clear it.
+$user is a wikiname.
 
 =cut to implementation
 
 sub setLock
 {
-    my( $self, $lock, $userName ) = @_;
+    my( $self, $lock, $user ) = @_;
 
-    $userName = $self->{session}->{userName} if( ! $userName );
+    $user = $self->{session}->{user} unless $user;
 
     my $lockFilename = $self->_makeFileName( ".lock" );
     if( $lock ) {
         my $lockTime = time();
-        $self->_saveFile( $lockFilename, "$userName\n$lockTime" );
+        $self->_saveFile( $lockFilename, "$user\n$lockTime" );
     } else {
         unlink "$lockFilename";
     }

@@ -35,6 +35,7 @@ use TWiki::UI::Preview;
 use Error qw( :try );
 use TWiki::UI::OopsException;
 use TWiki::Merge;
+use Assert;
 
 # Private - do not call outside this module!
 # Returns 1 if caller should redirect to view when done
@@ -68,22 +69,20 @@ sub _save {
         return 0;
     }
 
-    my $userName = $session->{userName};
-    my $wikiUserName = $session->{wikiUserName};
-
+    my $user = $session->{user};
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            "change", $wikiUserName );
+                            "change", $user );
 
     my $saveCmd = $query->param( "cmd" ) || 0;
-    if ( $saveCmd ) {
-         # check permission for undocumented cmd=... parameter
-        TWiki::UI::checkAdmin( $session, $webName, $topic, $wikiUserName );
+    if ( $saveCmd && ! $session->{user}->isAdmin()) {
+        throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
+                                        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
     }
 
     if( $saveCmd eq "delRev" ) {
         # delete top revision
         my $error =
-          $session->{store}->delRev( $userName, $webName, $topic );
+          $session->{store}->delRev( $user, $webName, $topic );
         if( $error ) {
             throw TWiki::UI::OopsException( $webName, $topic,
                                             "saveerr", $error );
@@ -107,8 +106,8 @@ sub _save {
     my $templatetopic = $query->param( "templatetopic");
     if ($templatetopic) {
         ( $newMeta, $newText ) =
-          $session->{store}->readTopic( $wikiUserName, $webName,
-                                        $templatetopic, undef, 0 );
+          $session->{store}->readTopic( $session->{user}, $webName,
+                                        $templatetopic, undef );
         $newText = $session->expandVariablesOnTopicCreation( $newText );
         # topic creation, make sure there is no original rev
         $originalrev = 0;
@@ -136,7 +135,7 @@ sub _save {
         $newMeta = $session->{store}->extractMetaData( $webName, $topic, \$newText );
         # replace top revision with this text
         my $error =
-          $session->{store}->repRev( $userName, $webName, $topic,
+          $session->{store}->repRev( $user, $webName, $topic,
                                      $newText, $newMeta, $saveOpts );
         if( $error ) {
             throw TWiki::UI::OopsException( $webName, $topic,
@@ -148,7 +147,7 @@ sub _save {
 
     if ( ! $templatetopic ) {
         ( $currMeta, $currText ) =
-          $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 1 );
+          $session->{store}->readTopic( undef, $webName, $topic, undef );
         $newMeta = new TWiki::Meta( $session, $webName, $topic );
     }
 
@@ -182,7 +181,7 @@ sub _save {
     }
 
     my $error =
-      $session->{store}->saveTopic( $userName, $webName, $topic,
+      $session->{store}->saveTopic( $user, $webName, $topic,
                                     $newText, $newMeta, $saveOpts );
 
     if( $error ) {
@@ -220,7 +219,6 @@ sub save {
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
-    my $userName = $session->{userName};
 
     my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), "view" );
 
@@ -237,7 +235,7 @@ sub save {
         $session->redirect( $viewURL );
         return;
     } elsif( $saveaction eq "preview" ) {
-        TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );
+        TWiki::UI::Preview::preview( $session );
         return;
     } elsif( $saveaction =~ /^(del|rep)Rev$/ ) {
         $query->param( -name => "cmd", -value => $saveaction );

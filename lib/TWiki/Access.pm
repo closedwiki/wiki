@@ -92,35 +92,35 @@ sub permissionsSet {
 ---++ checkAccessPermission( $action, $user, $text, $topic, $web ) ==> $ok
 | Description:          | Check if user is allowed to access topic |
 | Parameter: =$action=  | "VIEW", "CHANGE", "CREATE", etc. |
-| Parameter: =$user=    | Remote WikiName, e.g. "Main.PeterThoeny" |
+| Parameter: =$user=    | User object |
 | Parameter: =$text=    | If empty: Read "$theWebName.$theTopicName" to check permissions |
 | Parameter: =$topic=   | Topic name to check, e.g. "SomeTopic" |
 | Parameter: =$web=     | Web, e.g. "Know" |
-| Return:    =$ok=      | 1 if OK to access, 0 if no permission |
+| Return:    1 if access is OK  |
 
 =cut
 
 sub checkAccessPermission {
-    my( $this, $theAccessType, $theUserName,
+    my( $this, $theAccessType, $user,
         $theTopicText, $theTopicName, $theWebName ) = @_;
     ASSERT(ref($this) eq "TWiki::Access") if DEBUG;
+    ASSERT(ref($user) eq "TWiki::User") if DEBUG;
 
     # super admin is always allowed
-    if ( $TWiki::doSuperAdminGroup && $TWiki::superAdminGroup ) {
-        if ( $this->userIsInGroup( $theUserName, $TWiki::superAdminGroup )) {
-            return 1;
-        }
-    }
+    return 1 if $user->isAdmin();
 
     $theAccessType = uc( $theAccessType );  # upper case
     if( ! $theWebName ) {
         $theWebName = $this->{session}->{webName};
     }
+
     if( ! $theTopicText ) {
         # text not supplied as parameter, so read topic. The
         # read is "Raw" just to hint to store that we want the
         # data _fast_.
-        $theTopicText = $this->store()->readTopicRaw( $this->{session}->{wikiUserName}, $theWebName, $theTopicName, undef, 1 );
+        $theTopicText = $this->store()->readTopicRaw( undef, $theWebName,
+                                                      $theTopicName,
+                                                      undef );
     }
 
     my $allowText;
@@ -142,21 +142,19 @@ sub checkAccessPermission {
         }
     }
 
+    my $check;
     # DENYTOPIC overrides DENYWEB, even if it is empty
     unless( defined( $denyText )) {
         $denyText =
-          $this->prefs()->getPreferencesValue( "DENYWEB$theAccessType",
-                                             $theWebName );
+          $this->prefs()->getPreferencesValue( "DENYWEB$theAccessType", $theWebName );
     }
 
     if( defined( $denyText )) {
-        my %deny = $this->_parseUserList( $denyText, 1 );
-        return 0 if $deny{$theUserName};
+        return 0 if( $user->isInList( $denyText ));
     }
 
     if( defined( $allowText )) {
-    	my %allow = $this->_parseUserList( $allowText, 1 );
-        return 0 unless $allow{$theUserName};
+        return 0 unless( $user->isInList( $allowText ));
     } else {
         # ALLOWTOPIC overrides ALLOWWEB, even if it is empty
         $allowText =
@@ -164,174 +162,11 @@ sub checkAccessPermission {
                                              $theWebName );
 
         if( defined( $allowText ) && $allowText =~ /\S/ ) {
-            my %allow = $this->_parseUserList( $allowText, 1 );
-            return 0 unless $allow{$theUserName};
+            return 0 unless $user->isInList( $allowText );
         }
     }
 
     return 1;
-}
-
-# get a list of groups defined in this TWiki 
-sub _getListOfGroups {
-    my $this = shift;
-
-    my @list;
-    $this->search()->searchWeb
-      (
-       _callback     => \&_collateGroups,
-       _cbdata       => \@list,
-       inline        => 1,
-       search        => "Set GROUP =",
-       web           => "all",
-       topic         => "*Group",
-       type          => "regex",
-       nosummary     => "on",
-       nosearch      => "on",
-       noheader      => "on",
-       nototal       => "on",
-       noempty       => "on",
-       format	     => "\$web.\$topic",
-       separator     => "",
-      );
-
-    return @list;
-}
-
-# callback for search function to collate results
-sub _collateGroups {
-    my $ref = shift;
-    my $group = shift;
-    push( @$ref, $group ) if $group;
-}
-
-# =========================
-=pod
-
----++ getGroupsUserIsIn( $user ) ==> @listOfGroups
-| Description:        | get a list of groups a user is in |
-| Parameter: =$user=  | Remote WikiName, e.g. "Main.PeterThoeny" |
-| Return:    =@listOfGroups=    | list os all the WikiNames for a group |
-
-=cut
-
-sub getGroupsUserIsIn {
-    my( $this, $theUserName ) = @_;
-    ASSERT(ref($this) eq "TWiki::Access") if DEBUG;
-
-    my $userTopic = _getWebTopicName( $TWiki::mainWebname, $theUserName );
-
-    my @grpMembers = ();
-    foreach my $group ( $this->_getListOfGroups() ) {
-        if ( $this->userIsInGroup( $userTopic, $group )) {
-	    	push ( @grpMembers, $group );
-		}
-    }
-
-    return @grpMembers;
-}
-
-# =========================
-=pod
-
----++ userIsInGroup( $user, $group ) ==> $ok
-Check if user is a member of a group. If a topic which is
-not a group is specified, checks if it is the users topic.
-| Parameter: =$user=  | Remote WikiName, e.g. "Main.PeterThoeny" |
-| Parameter: =$group= | Group name, e.g. "Main.EngineeringGroup" |
-| Return:    =$ok=    | 1 user is in group, 0 if not |
-
-=cut
-
-sub userIsInGroup {
-    my( $this, $theUserName, $theGroupTopicName ) = @_;
-    ASSERT(ref($this) eq "TWiki::Access") if DEBUG;
-
-    my $usrTopic = _getWebTopicName( $TWiki::mainWebname, $theUserName );
-    my $grpTopic = _getWebTopicName( $TWiki::mainWebname, $theGroupTopicName );
-
-    if( $grpTopic !~ /.*Group$/ ) {
-        # not a group, so compare user to user
-        return ( $grpTopic eq $usrTopic );
-    }
-    unless( $this->{GROUPS}{$grpTopic} ) {
-        $this->_getUsersOfGroup( $grpTopic );
-    }
-
-    return $this->{GROUPS}{$grpTopic}{$usrTopic};
-}
-
-# Expand groups recursively, returning a list of the leaf-level
-# members of the group
-# | =$group=  | Group topic name, e.g. "Main.EngineeringGroup" |
-sub _getUsersOfGroup {
-    my( $this, $theGroupTopicName, $processedGroups ) = @_;
-
-    # extract web and topic name
-    my $topic = $theGroupTopicName;
-    my $web = $TWiki::mainWebname;
-    $topic =~ /^([^\.]*)\.(.*)$/;
-    if( $2 ) {
-        $web = $1;
-        $topic = $2;
-    }
-    my $grpTopic = "$web.$topic";
-
-    if( $topic !~ /.*Group$/ ) {
-        # return user, is not a group
-        return ( $grpTopic );
-    }
-
-    unless( defined( $this->{GROUPS}{$grpTopic} )) {
-        my $text = $this->store()->readTopicRaw( $this->{session}->{wikiUserName},
-                                                 $web, $topic, undef, 1 );
-
-        foreach( split( /\n/, $text ) ) {
-            if( /^\s+\*\sSet\sGROUP\s*\=\s*(.+)$/ ) {
-                # Note: if there are multiple GROUP assignments in the
-                # topic, the last will be taken.
-                %{$this->{GROUPS}{$grpTopic}} = $this->_parseUserList( $1, 1 );
-            }
-        }
-    }
-
-    return keys %{$this->{GROUPS}{$grpTopic}};
-}
-
-# Build a Web.Topic name,
-# SMELL: this is a hack, isn't it? What should really be going on here?
-sub _getWebTopicName {
-    my( $theWebName, $theTopicName ) = @_;
-    $theTopicName =~ s/%MAINWEB%/$theWebName/go;
-    $theTopicName =~ s/%TWIKIWEB%/$theWebName/go;
-    $theWebName = $TWiki::mainWebname unless $theWebName;
-    if( $theTopicName !~ /[\.]/ ) {
-        $theTopicName = "$theWebName\.$theTopicName";
-    }
-    return $theTopicName;
-}
-
-# Get a hash indexed by the users in a list. If expand is
-# true, recursively expand groups defined in the list to create
-# a flat has of users.
-sub _parseUserList {
-    my( $this, $theItems, $expand ) = @_;
-
-    # comma delimited list of users or groups
-    # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
-    $theItems =~ s/(<[^>]*>)//go;     # Remove HTML tags
-    # TODO: i18n fix for user name
-    $theItems =~ s/\s*([a-zA-Z0-9_\.\,\s\%]*)\s*(.*)/$1/go; # Limit list
-    my %list;
-    foreach( split( /[\,\s]+/, $theItems )) {
-        my $e = _getWebTopicName( $TWiki::mainWebname, $_ );
-        if ( $expand ) {
-            map { $list{$_} = 1; } $this->_getUsersOfGroup( $e );
-        } else {
-            $list{$e} = 1;
-        }
-    }
-    return %list;
 }
 
 1;

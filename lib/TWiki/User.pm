@@ -1,7 +1,5 @@
 # Module of TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
-#
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,310 +13,327 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 
-=begin twiki
-
----+ TWiki::User Package
-Singleton object that handles mapping of users to wikinames and
-vice versa, and user authentication checking.
-
-=cut
-
 package TWiki::User;
 
 use strict;
 use Assert;
+use TWiki;
 
-# 'Use locale' for internationalisation of Perl sorting in getTopicNames
-# and other routines - main locale settings are done in TWiki::setupLocale
-BEGIN {
-    # Do a dynamic 'use locale' for this module
-    if( $TWiki::useLocale ) {
-        eval 'require locale; import locale ();';
-    }
+=pod
+
+---+ TWiki::User package
+
+A User object is an internal representation of a user in the real world.
+The object knows about users having login names, wiki names, personal
+topics, and email addresses.
+
+Groups are also handled here. A group is really a subclass of a user,
+in that it is a user with a set of users within it.
+
+The User package also provides methods for managing the passwords of the
+user.
+
+=cut
+
+# global used by test harness to give predictable results
+use vars qw( $password );
+
+=pod
+
+STATIC function that returns a random password
+
+=cut
+
+sub randomPassword {
+    return $password || int( rand(9999) );
 }
 
 =pod
 
----+++ initialize ()
-Construct the user management object
+---++ new( $users, $name, $wikiname )
+
+Construct a new user object for the given login name, wiki name.
+
+The wiki name can either be a wiki word or it can be a web-
+qualified wiki word. If the wiki name is not web qualified, the
+user is assumed to have their home topic in the
+$TWiki::mainWebname web.
 
 =cut
 
 sub new {
-    my ( $class, $session, $impl ) = @_;
+    my( $class, $session, $name, $wikiname ) = @_;
     ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT($name) if DEBUG;
+    ASSERT($wikiname) if DEBUG;
+
     my $this = bless( {}, $class );
     $this->{session} = $session;
 
-    $this->{IMPL} = "TWiki::User::$impl";
-    $this->{CACHED} = 0;
-
-	eval "use $this->{IMPL}";
-    if( $@ ) {
-        die "$this->{IMPL} compile failed: $@";
+    $this->{login} = $name;
+    my $web = $TWiki::mainWebname;
+    if(  $wikiname =~ /^(.*)\.(.*)$/ ) {
+        $web = $1;
+        $wikiname = $2;
     }
+    $this->{web} = $web;
+    $this->{wikiname} = $wikiname;
 
     return $this;
 }
 
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
 sub store { my $this = shift; return $this->{session}->{store}; }
-sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
-sub security { my $this = shift; return $this->{session}->{security}; }
-sub templates { my $this = shift; return $this->{session}->{templates}; }
-sub renderer { my $this = shift; return $this->{session}->{renderer}; }
+sub users { my $this = shift; return $this->{session}->{users}; }
 
-# Get the password implementation
-sub _getPasswordHandler {
-    my( $this, $web, $topic, $attachment ) = @_;
+=pod
 
-    $attachment = "" if( ! $attachment );
+---++ wikiName()
 
-    my $passwordHandler = $this->{IMPL}->new( $this->{session} );
+Return the wikiname of the user (without the web!)
 
-    return $passwordHandler;
+=cut
+
+sub wikiName {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    return $this->{wikiname};
 }
 
 =pod
 
----++ userPasswordExists( $user ) ==> $passwordExists
-| Description: | checks to see if there is a $user in the password system |
-| Parameter: =$user= | the username we are looking for  |
-| Return: =$passwordExists= | "1" if true, "" if not |
-| TODO: | what if the login name is not the same as the twikiname?? (I think we dont have TWikiName to username mapping fully worked out|
+---++ webDotWikiName()
+
+Return the fully qualified wikiname of the user
 
 =cut
 
-sub userPasswordExists {
-    my ( $this, $user ) = @_;
+sub webDotWikiName {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    return "$this->{web}.$this->{wikiname}";
+}
+
+=pod
+
+---++ login()
+
+Return the login name of the user
+
+=cut
+
+sub login {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    return $this->{login};
+}
+
+=pod
+
+---++ web()
+
+Return the registration web of the user
+
+=cut
+
+sub web {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    return $this->{web};
+}
+
+=pod
+
+---++ equals()
+
+Test is this is the same user as another user object
+
+=cut
+
+sub equals {
+    my( $this, $other ) = @_;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($other) eq "TWiki::User") if DEBUG;
+
+    return ( $this->{login} eq $other->{login} );
+}
+
+=pod
+
+---++ toString()
+
+Generate a string representation of this object, suitable for debugging
+
+=cut
+
+sub toString {
+    my $this = shift;
     ASSERT(ref($this) eq "TWiki::User") if DEBUG;
 
-    my $passwordHandler = $this->_getPasswordHandler();
-
-    return $passwordHandler->UserPasswordExists($user);
+    return "$this->{login}/$this->{web}.$this->{wikiname}";
 }
 
 =pod
 
----++ updateUserPassword( $user, $oldUserPassword, $newUserPassword ) ==> $success
-| Description: | used to change the user's password |
-| Parameter: =$user= | the username we are replacing  |
-| Parameter: =$oldUserPassword= | unencrypted password |
-| Parameter: =$newUserPassword= | unencrypted password |
-| Return: =$success= | "1" if success |
-| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
-| Notes: | always return failure if the $user is AnonymousContributor |
-| | this is to stop hyjacking of DeletedUser's content |
+---++ passwordExists( ) ==> $passwordExists
+
+Checks to see if there is an entry in the password system
+Return "1" if true, "" if not
 
 =cut
 
-sub updateUserPassword {
-    my ( $this, $user, $oldUserPassword, $newUserPassword ) = @_;
+sub passwordExists {
+    my $this  = shift;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
 
-	if ( $user =~ /AnonymousContributor/ ) {
-		return;
-	}
-
-    my $passwordHandler = $this->_getPasswordHandler();
-    return $passwordHandler->UpdateUserPassword($user, $oldUserPassword, $newUserPassword);
+    my $passwordHandler = $this->users()->_getPasswordHandler();
+    return $passwordHandler->UserPasswordExists($this->{login});
 }
 
 =pod
 
----++ addUserPassword( $user, $newUserPassword ) ==> $success
-| Description: | creates a new user & password entry |
-| Parameter: =$user= | the username we are replacing  |
-| Parameter: =$newUserPassword= | unencrypted password |
-| Return: =$success= | "1" if success |
-| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
-| Notes: | always return failure if the $user is AnonymousContributor |
-| | this is to stop hyjacking of DeletedUser's content |
+---++ checkPassword( $password ) ==> $success
+
+used to check the user's password
+=$password= unencrypted password
+=$success= "1" if success
+
+TODO: need to improve the error mechanism so TWikiAdmins know what failed
 
 =cut
 
-sub addUserPassword {
-    my ( $this, $user, $newUserPassword ) = @_;
+sub checkPassword {
+    my ( $this, $password ) = @_;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
 
-	if ( $user =~ /AnonymousContributor/ ) {
-		return;
-	}
-
-    my $passwordHandler = $this->_getPasswordHandler();
-    return $passwordHandler->AddUserPassword($user, $newUserPassword);
+    my $passwordHandler = $this->users()->_getPasswordHandler();
+    return $passwordHandler->CheckUserPasswd($this->{login}, $password);
 }
 
 =pod
 
----++ removeUser( $user ) ==> $success
-| Description: | used to remove the user from the password system |
-| Parameter: =$user= | the username we are replacing  |
-| Return: =$success= | "1" if success |
-| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
+---++ removePassword() ==> $success
+used to remove the user and password from the password system.
+"1" if success
+
+TODO: need to improve the error mechanism so TWikiAdmins know what failed |
 
 =cut
+
 # SMELL - should this not also delete the user topic?
-sub removeUser {
-    my ( $this, $user ) = @_;
 
-    my $passwordHandler = $this->_getPasswordHandler();
-    return $passwordHandler->RemoveUser($user);
+sub removePassword {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+
+    my $passwordHandler = $this->users()->_getPasswordHandler();
+    return $passwordHandler->RemoveUser($this->{login});
 }
 
 =pod
 
----++ checkUserPasswd( $user, $password ) ==> $success
-| Description: | used to check the user's password |
-| Parameter: =$user= | the username we are replacing  |
-| Parameter: =$password= | unencrypted password |
-| Return: =$success= | "1" if success |
+---++ changePassword( $user, $oldUserPassword, $newUserPassword ) ==> $success
+used to change the user's password
+=$oldUserPassword= unencrypted password
+=$newUserPassword= unencrypted password
+"1" if success
+
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 
 =cut
 
-sub checkUserPasswd {
-    my ( $this, $user, $password ) = @_;
+sub changePassword {
+    my ( $this, $oldUserPassword, $newUserPassword ) = @_;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
 
-    my $passwordHandler = $this->_getPasswordHandler();
-    return $passwordHandler->CheckUserPasswd($user, $password);
+    my $passwordHandler = $this->users()->_getPasswordHandler();
+    return $passwordHandler->UpdateUserPassword($this->{login}, $oldUserPassword, $newUserPassword);
 }
 
 =pod
 
----++ addUserToTWikiUsersTopic( $wikiName, $remoteUser ) ==> $topicName
-| Description: | create the Users TWikiTopic |
-| Parameter: =$wikiName= | the users TWikiName |
-| Parameter: =$remoteUser= | the remote username (is this used in the password file at any time?) |
-| Return: =$topicName= | the name of the TWikiTopic created |
-| TODO: | does this really belong here? |
+---++ addPassword( $newPassword ) ==> $success
+creates a password entry
+=$newUserPassword= unencrypted password
+"1" if success
+| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 
 =cut
 
-sub addUserToTWikiUsersTopic {
-    my ( $this, $wikiName, $remoteUser ) = @_;
-    my $today = &TWiki::formatTime(time(), "\$day \$mon \$year", "gmtime");
-    my $topicName = $TWiki::wikiUsersTopicname;
-    my( $meta, $text ) =
-      $this->store()->readTopic( $remoteUser, $TWiki::mainWebname, $topicName, undef, 0 );
-    my $result = "";
-    my $status = "0";
-    my $line = "";
-    my $name = "";
-    my $isList = "";
-    # add name alphabetically to list
-    foreach( split( /\n/, $text) ) {
-        $line = $_;
-        # TODO: I18N fix here once basic auth problem with 8-bit user names is
-        # solved
-        $isList = ( $line =~ /^\t\*\s[A-Z][a-zA-Z0-9]*\s\-/go );
-        if( ( $status == "0" ) && ( $isList ) ) {
-            $status = "1";
-        }
-        if( $status == "1" ) {
-            if( $isList ) {
-                $name = $line;
-                $name =~ s/(\t\*\s)([A-Z][a-zA-Z0-9]*)\s\-.*/$2/go;
-                if( $wikiName eq $name ) {
-                    # name is already there, do nothing
-                    return $topicName;
-                } elsif( $wikiName lt $name ) {
-                    # found alphabetical position
-                    if( $remoteUser ) {
-                        $result .= "\t* $wikiName - $remoteUser - $today\n";
-                    } else {
-                        $result .= "\t* $wikiName - $today\n";
-                    }
-                    $status = "2";
-                }
-            } else {
-                # is last entry
-                if( $remoteUser ) {
-                    $result .= "\t* $wikiName - $remoteUser - $today\n";
-                } else {
-                    $result .= "\t* $wikiName - $today\n";
-                }
-                $status = "2";
-            }
-        }
+sub addPassword {
+    my ( $this, $newUserPassword ) = @_;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
 
-        $result .= "$line\n";
-    }
-    $this->store()->saveTopic( $remoteUser, $TWiki::mainWebname, $topicName,
-                               $result, $meta );
-    return $topicName;
+    my $passwordHandler = $this->users()->_getPasswordHandler();
+    return $passwordHandler->AddUserPassword($this->{login}, $newUserPassword);
 }
 
 =pod
 
----++ getEmail( $wikiName ) ==> $emailAddress
-| Description: | get the Users EmailAddress |
-| Parameter: =$wikiName= | the users TWikiName |
-| Return: =$topicName= | the email address corresponding to  the wikiName |
+---+ resetPassword()
+
+Reset the users password, returning the new generated password.
 
 =cut
 
-sub getEmail {
-    my ($this, $wikiName) = @_;
-    my $mainWebname = $TWiki::mainWebname;
+sub resetPassword {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
 
-    # Ignore guest entry and non-existent pages
-    unless ($this->store()->topicExists( $mainWebname, $wikiName )) {
-        return;
+    my $password = randomPassword();
+
+    if( $this->passwordExists() ) {
+        $this->removePassword();
     }
 
-    if ($wikiName eq $TWiki::defaultWikiName) {
-        return;
-    }
+    $this->addPassword( $password );
 
-    my @list = ();
+    return $password;
+}
 
-    if ( $wikiName =~ /Group$/ ) {
-        # Page is for a group, get all users in group
-        ##writeDebug "using group: $mainWebname . $wikiName";
-        my @userList = TWiki::Access::getUsersOfGroup( $wikiName );
-        foreach my $user ( @userList ) {
-            $user =~ s/^.*\.//;# Get rid of 'Main.' part.
-            foreach my $email ( TWiki::getEmail($user) ) {
-                push @list, $email;
+sub isDefaultUser {
+# email must be empty string
+}
+
+=pod
+
+---++ emails() ==> list of $emailAddress
+
+If this is a user, return their email addresses. If it is a group,
+return the addresses of everyone in the group.
+
+=cut
+
+sub emails {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+
+    unless( defined $this->{emails} ) {
+        if ( $this->isGroup() ) {
+            foreach my $member ( @{$this->groupMembers()} ) {
+                push( @{$this->{emails}}, $member->emails() );
             }
+        } else {
+            @{$this->{emails}} =
+              $this->_getEmailsFromUserTopic();
         }
-    } else {
-        # Page is for a user
-        ##writeDebug "reading home page: $mainWebname . $wikiName";
-        push @list, $this->_getEmailAddressesFromPage($mainWebname, $wikiName);
     }
-    use Data::Dumper;
-    return (@list);
+
+    return @{$this->{emails}};
 }
 
-# Returns array of email addresses referenced in 
-# the bulletfield / metafield on the page.
-sub _getEmailAddressesFromPage {
-    my ($this, $mainWebname, $wikiName) = @_;
+sub _getEmailsFromUserTopic {
+    my $this = shift;
 
-    return $this->_getField($mainWebname, $wikiName, "Email");
-}
-
-# SMELL - this is no longer specific to users - surely any topic has fields
-# SMELL - returns singular if refering to a field in meta, but multiple if values are defined that way in topic content
-sub _getField {
-    my ($this, $web, $topic, $fieldName) = @_;
     my ($meta, $text) =
-      $this->store()->readTopic(
-                                $this->{session}->{wikiUserName},
-                               $web,
-                               $topic,
-                               undef,
-                               1   # SMELL Should this really be internal?
-                              );
+      $this->store()->readTopic( undef,
+                                 $this->{web}, $this->{wikiname}, undef );
     my @fieldValues;
-    my %entry = $meta->findOne("FIELD", $fieldName); # SMELL - do we always want a singular entry?
+    my %entry = $meta->findOne("FIELD", "Email");
     if (keys %entry) {
-        return ($entry{value});
+        push(@fieldValues, $entry{value});
     } else {
-
         foreach my $l (split ( /\r?\n/, $text  )) {
-            # REFACTOR UserData::BulletFieldsImpl
-            if ($l =~ /^\s\*\s$fieldName:\s+([\w\-\.\+]+\@[\w\-\.\+]+)/) { # SMELL - is this only suited to email?
+            if ($l =~ /^\s+\*\s+E-?mail:\s+([\w\-\.\+]+\@[\w\-\.\+]+)/i) {
                 push @fieldValues, $1;
             }
         }
@@ -328,202 +343,113 @@ sub _getField {
 
 =pod
 
----++ initializeRemoteUser( $remoteUser )
-Return value: $remoteUser
+---++ isAdmin()
 
-Acts as a filter for $remoteUser.  If set, $remoteUser is filtered for
-insecure characters and untainted.
-
-If $doRememberRemoteUser and $remoteUser are both set in TWiki.cfg, it
-also caches $remoteUser as belonging to the IP address of the current request.
-
-If $doRememberRemoteUser is set and $remoteUser is not, then it sets
-$remoteUser to the last authenticated user to make a request with the
-current request's IP address, or $defaultUserName if no cached name
-is available.
-
-If neither are set, then it sets $remoteUser to $defaultUserName.
-
-SMELL: the association of a user with an IP address is a high
-risk strategy that can fail in the following environments:
-   1 Multiple users at the same IP address
-   1 Short-lease DHCP environments
-This is documented sufficiently for a risk assessment to be made
-by the installer. However it would be much safer (and more user
-friendly) to use cookies.
-
-SMELL: this should be done in User.pm
+True if the user is an admin (is a member of the $TWiki::superAdminGroup)
 
 =cut
 
-sub initializeRemoteUser {
-    my( $this, $theRemoteUser ) = @_;
-
-    my $remoteUser = $theRemoteUser || $TWiki::defaultUserName;
-    $remoteUser =~ s/$TWiki::securityFilter//go;
-    $remoteUser = TWiki::Sandbox::untaintUnchecked( $remoteUser );
-
-    my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
-
-    if( $ENV{'REDIRECT_STATUS'} && $ENV{'REDIRECT_STATUS'} eq '401' ) {
-        # bail out if authentication failed
-        $remoteAddr = "";
-    }
-
-    if( ( ! $TWiki::doRememberRemoteUser ) || ( ! $remoteAddr ) ) {
-        # do not remember IP address
-        return $remoteUser;
-    }
-
-    my $text = $this->store()->readFile( $TWiki::remoteUserFilename );
-    # Assume no I18N characters in userids, as for email addresses
-    # FIXME: Needs fixing for IPv6?
-    my %AddrToName = map { split( /\|/, $_ ) }
-      grep { /^[0-9\.]+\|[A-Za-z0-9]+\|$/ }
-        split( /\n/, $text );
-
-    my $rememberedUser = "";
-    if( exists( $AddrToName{ $remoteAddr } ) ) {
-        $rememberedUser = $AddrToName{ $remoteAddr };
-    }
-
-    if( $theRemoteUser ) {
-        if( $theRemoteUser ne $rememberedUser ) {
-            $AddrToName{ $remoteAddr } = $theRemoteUser;
-            # create file as "$remoteAddr|$theRemoteUser|" lines
-            $text = "# This is a generated file, do not modify.\n";
-            foreach my $usrAddr ( sort keys %AddrToName ) {
-                my $usrName = $AddrToName{ $usrAddr };
-                # keep $userName unique
-                if(  ( $usrName ne $theRemoteUser )
-                     || ( $usrAddr eq $remoteAddr ) ) {
-                    $text .= "$usrAddr|$usrName|\n";
-                }
-            }
-            $this->store()->saveFile( $TWiki::remoteUserFilename, $text );
-        }
-    } else {
-        # get user name from AddrToName table
-        $remoteUser = $rememberedUser || $TWiki::defaultUserName;
-    }
-
-    return $remoteUser;
-}
-
-=pod
-
----++ _cacheUserToWikiTranslations()
-Build hashes to translate in both directions between username (e.g. jsmith) 
-and WikiName (e.g. JaneSmith).  Only used for sites where authentication is
-managed by external Apache configuration, instead of via TWiki's .htpasswd
-mechanism.
-
-Should only be called once per request.
-
-SMELL: this should be done in User.pm
-
-=cut
-
-sub _cacheUserToWikiTranslations {
+sub isAdmin {
     my $this = shift;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
 
-    return if $this->{CACHED};
-    $this->{CACHED} = 1;
+    my $sag = $this->users()->findUser( $TWiki::superAdminGroup );
+    return $this->isInList( $sag->groupMembers());
+}
 
-    %{$this->{U2W}} = ();
-    %{$this->{W2U}} = ();
-    my @list = ();
-    if( $TWiki::doMapUserToWikiName ) {
-        @list = split( /\n/, $this->store()->readFile( $TWiki::userListFilename ) );
-    } else {
-        # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
-        # for .htpasswd authenticated sites ignore user list, but map only guest to TWikiGuest
-        @list = ( "\t* $TWiki::defaultWikiName - $TWiki::defaultUserName - " ); # CODE_SMELL on localization
+=pod
+
+---++ getGroups( ) ==> @listOfGroups
+
+Get a list of user objects for the groups a user is in
+
+=cut
+
+sub getGroups {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+
+    return @{$this->{groups}};
+}
+
+=pod
+
+---++ isInList( @list )
+
+Return true we are in the list of user objects passed.
+
+=cut
+
+sub isInList {
+    my( $this, $userlist ) = @_;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+
+    unless( ref( $userlist )) {
+        # string parameter
+        $userlist = $this->users()->expandUserList( $userlist );
     }
-
-    # Get all entries with two '-' characters on same line, i.e.
-    # 'WikiName - userid - date created'
-    @list = grep { /^\s*\* $TWiki::regex{wikiWordRegex}\s*-\s*[^\-]*-/o } @list;
-    my $wUser;
-    my $lUser;
-    foreach( @list ) {
-	# Get the WikiName and userid, and build hashes in both directions
-        if(  ( /^\s*\* ($TWiki::regex{wikiWordRegex})\s*\-\s*([^\s]*).*/o ) && $2 ) {
-            $wUser = $1;	# WikiName
-            $lUser = $2;	# userid
-            $lUser =~ s/$TWiki::securityFilter//go;	# FIXME: Should filter in for security...
-            $this->{U2W}{ $lUser } = $wUser;
-            $this->{W2U}{ $wUser } = $lUser;
+    my $user;
+    foreach $user ( @$userlist ) {
+        if( !$user->isGroup() ) {
+            return 1 if $this->equals( $user );
         }
     }
+    foreach $user ( @$userlist ) {
+        if( $user->isGroup() ) {
+            return 1 if $this->isInList( $user->groupMembers() );
+        }
+    }
+    return 0;
 }
 
 =pod
 
----++ userToWikiName( $loginUser, $dontAddWeb ) --> $wikiName
+---++ isGroup()
 
-Translates intranet username (e.g. jsmith) to WikiName (e.g. JaneSmith)
-userToWikiListInit must be called before this function is used.
-
-Unless $flag is set, "Main." is prepended to the returned WikiName.
-
-if you give an invalid username, we just return that (no appending Main. blindy),
-unless flag is set to 2, in which case it returns undef.
-
-SMELL: the userToWikiList cache should really contain the WebName so its possible 
-		to have userTopics in more than just the MainWeb (what if you move a user topic?)
+Test if this is a group user or not
 
 =cut
 
-sub userToWikiName {
-    my( $this, $loginUser, $flag ) = @_;
+sub isGroup {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
 
-    if( !$loginUser ) {
-        return "";
-    }
-
-    $this->_cacheUserToWikiTranslations();
-
-    $loginUser =~ s/$TWiki::securityFilter//go;
-    my $wUser = $this->{U2W}{ $loginUser };
-
-    # New behaviour for RegisterCgiScriptRewrite
-    if ($flag && ($flag == 2)) {
-        # return the real mapping, even if it is undef
-        return $wUser;
-    }
-
-    # Original behaviour - map existing entries
-    unless ($wUser) {
-        $wUser = $loginUser;
-    }
-
-    # return with webName
-    unless ($flag) {
-        return "$TWiki::mainWebname.$wUser";
-    }
-
-    # v2 - blindy return loginName if mapping not present.
-    return $wUser;
-
-
+    return $this->wikiName() =~ /Group$/;
 }
 
 =pod
 
----++ wikiToUserName( $wikiName ) --> $loginUser
+---++ groupMembers()
 
-Translates WikiName (e.g. JaneSmith) to an intranet username (e.g. jsmith)
-If there is no mapping, returns the WikiName.
+Return a list of members of this group. Should only be
+called on groups.
 
 =cut
 
-sub wikiToUserName {
-    my( $this, $wikiUser ) = @_;
-    $wikiUser =~ s/^.*\.//g;
-    $this->_cacheUserToWikiTranslations();
-    my $userName =  $this->{W2U}{$wikiUser} || $wikiUser;
-    return $userName;
+sub groupMembers {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT( $this->isGroup()) if DEBUG;
+
+    unless( defined $this->{members} ) {
+        my $text =
+          $this->store()->readTopicRaw( undef,
+                                        $this->{web}, $this->{wikiname},
+                                        undef );
+        foreach( split( /\n/, $text ) ) {
+            if( /^\s+\*\sSet\sGROUP\s*\=\s*(.+)$/ ) {
+                # Note: if there are multiple GROUP assignments in the
+                # topic, the last will be taken.
+                $this->{members} = $this->users()->expandUserList( $1 );
+            }
+        }
+        # backlink the user to the group
+        foreach my $user ( @{$this->{members}} ) {
+            push( @{$user->{groups}}, $this );
+        }
+    }
+
+    return $this->{members};
 }
 
 1;

@@ -317,7 +317,7 @@ sub _renderRevisionDiff
 | Parameter: =$rev= | revision number of the topic |
 | Parameter: =$topic= | topic name |
 | Parameter: =$short= | use a shortened version of the date string |
-| Return: =$text= | date - wikiusername |
+| Return: =$text= | date - user |
 | TODO: | move to Render.pm |
 
 =cut
@@ -327,7 +327,8 @@ sub getRevInfo
     my( $session, $web, $rev, $topic, $short ) = @_;
 
     my( $date, $user ) = $session->{store}->getRevisionInfo( $web, $topic, $rev);
-    $user = $session->{renderer}->getRenderedVersion( $session->{users}->userToWikiName( $user ) );
+    my $wikiname =
+      $session->{renderer}->getRenderedVersion( $user->wikiName() );
 	
     if ( $short ) {
 	    $date = TWiki::formatTime( $date, "\$day \$month \$year" );
@@ -337,7 +338,7 @@ sub getRevInfo
         $date = TWiki::formatTime( $date );
 	}
 
-    my $revInfo = "$date - $user";
+    my $revInfo = "$date - $wikiname";
     $revInfo =~ s/[\n\r]*//go;
     return $revInfo;
 }
@@ -369,8 +370,6 @@ sub diff {
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
-    my $userName = $session->{userName};
-    my $wikiUserName = $session->{wikiUserName};
 
     my $renderStyle = $query->param('render');
     $renderStyle = $session->{prefs}->getPreferencesValue( "DIFFRENDERSTYLE" ) unless ( $renderStyle );
@@ -386,7 +385,7 @@ sub diff {
     $contextLines = 3 if ( ! $contextLines );
 
     TWiki::UI::checkWebExists( $session, $webName, $topic );
-    
+
     my $tmpl = "";
     my $diff = "";
     my $maxrev= 1;
@@ -398,21 +397,23 @@ sub diff {
     my $revInfo2 = "";
     my $isMultipleDiff = 0;
     my $scriptUrlPath = $session->{scriptUrlPath};
+    my( $before, $difftmpl, $after);
+    my $topicExists;
 
     $tmpl = $session->{templates}->readTemplate( "rdiff", $skin );
     $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
-    my( $before, $difftmpl, $after) = split( /%REPEAT%/, $tmpl);
+    ( $before, $difftmpl, $after) = split( /%REPEAT%/, $tmpl);
 
-    my $topicExists = $session->{store}->topicExists( $webName, $topic );
+    $topicExists = $session->{store}->topicExists( $webName, $topic );
     if( $topicExists ) {
         $maxrev = $session->{store}->getRevisionNumber( $webName, $topic );
         $maxrev =~ s/r?1\.//go;  # cut 'r' and major
-        
+
         $rev1 = $session->{store}->cleanUpRevID( $rev1 );
         if( $rev1 < 1 )       { $rev1 = $maxrev; }
         if( $rev1 > $maxrev ) { $rev1 = $maxrev; }
-        
+
         $rev2 = $session->{store}->cleanUpRevID( $rev2 );
         if( $rev2 < 1 )       { $rev2 = 1; }
         if( $rev2 > $maxrev ) { $rev2 = $maxrev; }
@@ -431,34 +432,6 @@ sub diff {
         $rev2 = 1;
     }
 
-    # check access permission
-    my $viewAccessOK =
-      $session->{security}->checkAccessPermission( "view", $wikiUserName,
-                                                   "", $topic, $webName );
-    if( $session->{store}->accessFailed() ) {
-        # Can't read requested topic and/or included (or other accessed topics)
-        # user could not be authenticated, may be not logged in yet?
-        my $rdiffauthFile = $ENV{'SCRIPT_FILENAME'};
-        $rdiffauthFile =~ s|/rdiff|/rdiffauth|o;
-        if( ( ! $query->remote_user() ) && (-e $rdiffauthFile ) ) {
-            # try again with authenticated rdiffauth script
-            # instead of non authenticated rdiff script
-            my $url = $ENV{"REQUEST_URI"};
-            if( $url ) {
-                # $url i.e. is "twiki/bin/rdiff.cgi/Web/Topic?cms1=val1&cmd2=val2"
-                $url =~ s|/rdiff|/rdiffauth|o;
-                $url = $session->{urlHost}.$url;
-            } else {
-                $url = $session->{urlHost}."$scriptUrlPath/$rdiffauthFile/$webName/$topic";
-            }
-            $session->redirect( $url );
-            return;
-        }
-    }
-    if( ! $viewAccessOK ) {
-        throw TWiki::UI::OopsException( $webName, $topic, "accessview" );
-    }
-    
     # format "before" part
     $before =~ s/%REVTITLE1%/$revTitle1/go;
     $before =~ s/%REVTITLE2%/$revTitle2/go;
@@ -466,7 +439,7 @@ sub diff {
     $before = $session->{renderer}->getRenderedVersion( $before );
     $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
     my $page = $before;
-    
+
     # do one or more diffs
     $difftmpl = $session->handleCommonTags( $difftmpl, $topic );
     if( $topicExists ) {

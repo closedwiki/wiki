@@ -349,7 +349,7 @@ use TWiki::Access;    # access control
 use TWiki::Form;      # forms
 use TWiki::Search;    # search engine
 use TWiki::Plugins;   # plugins handler
-use TWiki::User;
+use TWiki::Users;     # user handler
 use TWiki::Render;    # HTML generation
 use TWiki::Templates; # TWiki template language
 use TWiki::Net;       # SMTP, get URL
@@ -395,12 +395,14 @@ sub writeLog {
     my $action = shift || "";
     my $webTopic = shift || "";
     my $extra = shift || "";
-    my $user = shift || "";
+    my $user = shift;
 
-    my $wuserName = $user || $this->{userName};
-    $wuserName = $this->{users}->userToWikiName( $wuserName );
+    $user = $this->{user} unless $user;
+    if(ref($user) eq "TWiki::User") {
+        $user = $user->wikiName();
+    }
     my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
-    my $text = "$wuserName | $action | $webTopic | $extra | $remoteAddr |";
+    my $text = "| $user | $action | $webTopic | $extra | $remoteAddr |";
 
     $this->_writeReport( $logFilename, $text );
 }
@@ -764,11 +766,11 @@ sub readOnlyMirrorWeb {
         if( $mirrorSiteName && $mirrorSiteName ne $siteWebTopicName ) {
             my $mirrorViewURL  =
               $this->{prefs}->getPreferencesValue( "MIRRORVIEWURL", $theWeb );
-            my $mirrorLink = TWiki::Store::readTemplate( "mirrorlink" );
+            my $mirrorLink = $this->{templates}->readTemplate( "mirrorlink" );
             $mirrorLink =~ s/%MIRRORSITENAME%/$mirrorSiteName/g;
             $mirrorLink =~ s/%MIRRORVIEWURL%/$mirrorViewURL/g;
             $mirrorLink =~ s/\s*$//g;
-            my $mirrorNote = TWiki::Store::readTemplate( "mirrornote" );
+            my $mirrorNote = $this->{templates}->readTemplate( "mirrornote" );
             $mirrorNote =~ s/%MIRRORSITENAME%/$mirrorSiteName/g;
             $mirrorNote =~ s/%MIRRORVIEWURL%/$mirrorViewURL/g;
             $mirrorNote = $this->{renderer}->getRenderedVersion( $mirrorNote, $theWeb );
@@ -931,6 +933,8 @@ sub normalizeWebTopicName {
     my( $this, $theWeb, $theTopic ) = @_;
 
     ASSERT(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(defined $theWeb) if DEBUG;
+    ASSERT(defined $theTopic) if DEBUG;
 
     if( $theTopic =~ m|^([^.]+)[\.\/](.*)$| ) {
         $theWeb = $1;
@@ -1164,8 +1168,8 @@ sub _includeUrl {
             }
             if( "$web.$topic" ne "$theWeb.$theTopic" ) {
                 # CODE_SMELL: Does not account for not yet authenticated user
-                unless( $this->{security}->checkAccessPermission( "VIEW",
-                                                                 $this->{wikiUserName},
+                unless( $this->{security}->checkAccessPermission( "view",
+                                                                 $this->{user},
                                                                  "", $topic,
                                                                  $web ) ) {
                     return _inlineError( "Error: No permission to view files attached to $web.$topic" );
@@ -1307,8 +1311,8 @@ sub _handleINCLUDE {
     $theWeb = $incweb;
 
     ( $meta, $text ) =
-      $this->{store}->readTopic( $this->{wikiUserName}, $theWeb, $theTopic,
-                                 $rev, 0 );
+      $this->{store}->readTopic( $this->{user}, $theWeb, $theTopic,
+                                 $rev );
 
     # remove everything before %STARTINCLUDE% and
     # after %STOPINCLUDE%
@@ -1623,20 +1627,30 @@ sub _handleREVINFO {
     my $revnum = $cgiRev || $params->{rev} || "";
     $revnum = $this->{store}->cleanUpRevID( $revnum );
 
+    my $value = $format;
+
+    # SMELL: if there is no RCS topic, this will be blank.
+    # should get this from meta. Oh, for a topic object!!
     my( $date, $user, $rev, $comment ) =
       $this->{store}->getRevisionInfo( $web, $topic, $revnum );
-    my $wikiName     = $this->{users}->userToWikiName( $user, 1 );
-    my $wikiUserName = $this->{users}->userToWikiName( $user );
 
-    my $value = $format;
+    my $wun = "";
+    my $wn = "";
+    my $un = "";
+    if( $user ) {
+        $wun = $user->webDotWikiName();
+        $wn = $user->wikiName();
+        $un = $user->login();
+    }
+
     $value =~ s/\$web/$web/goi;
     $value =~ s/\$topic/$topic/goi;
     $value =~ s/\$rev/r$rev/goi;
     $value =~ s/\$date/&formatTime($date)/geoi;
     $value =~ s/\$comment/$comment/goi;
-    $value =~ s/\$username/$user/goi;
-    $value =~ s/\$wikiname/$wikiName/goi;
-    $value =~ s/\$wikiusername/$wikiUserName/goi;
+    $value =~ s/\$username/$un/geoi;
+    $value =~ s/\$wikiname/$wn/geoi;
+    $value =~ s/\$wikiusername/$wun/geoi;
 
     return $value;
 }
@@ -1700,7 +1714,7 @@ sub getPublicWebList {
 
 =pod
 
----++ expandVariablesOnTopicCreation ( $theText, $theUser, $theWikiName, $theWikiUserName )
+---++ expandVariablesOnTopicCreation ( $theText, $user )
 Expand limited set of variables during topic creation. These are variables
 expected in templates that must be statically expanded in new content.
 
@@ -1715,30 +1729,25 @@ The expanded variables are:
 =cut
 
 sub expandVariablesOnTopicCreation {
-    my ( $this, $theText, $theUser, $theWikiName, $theWikiUserName ) = @_;
+    my ( $this, $text, $user ) = @_;
 
     ASSERT(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($user) eq "TWiki::User") if DEBUG;
 
-    $theUser = $this->{userName} unless $theUser;
-    $theWikiName = $this->{users}->userToWikiName( $theUser, 1 )
-      unless $theWikiName;
-    $theWikiUserName = $this->{users}->userToWikiName( $theUser )
-      unless $theWikiUserName;
-
-    $theText =~ s/%DATE%/$this->_handleDATE()/ge;
-    $theText =~ s/%USERNAME%/$theUser/go;               # "jdoe"
-    $theText =~ s/%WIKINAME%/$theWikiName/go;           # "JonDoe"
-    $theText =~ s/%WIKIUSERNAME%/$theWikiUserName/go; # "Main.JonDoe"
-    $theText =~ s/%URLPARAM{(.*?)}%/$this->_handleURLPARAM(extractParameters($1))/geo;
+    $text =~ s/%DATE%/$this->_handleDATE()/ge;
+    $text =~ s/%USERNAME%/$user->login()/geo;               # "jdoe"
+    $text =~ s/%WIKINAME%/$user->wikiName()/geo;            # "JonDoe"
+    $text =~ s/%WIKIUSERNAME%/$user->webDotWikiName()/geo;# Main.JonDoe
+    $text =~ s/%URLPARAM{(.*?)}%/$this->_handleURLPARAM(extractParameters($1))/geo;
 
     # Remove filler: Use it to remove access control at time of
     # topic instantiation or to prevent search from hitting a template
     # SMELL: this expansion of %NOP{}% is different to the default
     # which retains content.....
-    $theText =~ s/%NOP{.*?}%//gos;
-    $theText =~ s/%NOP%//go;
+    $text =~ s/%NOP{.*?}%//gos;
+    $text =~ s/%NOP%//go;
 
-    return $theText;
+    return $text;
 }
 
 sub _handleWEBLIST {
@@ -2322,11 +2331,11 @@ sub new {
 
 	if ( # (-e $TWiki::htpasswdFilename ) && #<<< maybe
 		( $TWiki::htpasswdFormatFamily eq "htpasswd" ) ) {
-        $this->{users} = new TWiki::User( $this, "HtPasswdUser" );
+        $this->{users} = new TWiki::Users( $this, "HtPasswdUser" );
 #	} elseif ($TWiki::htpasswdFormatFamily eq "something?") {
-#        $this->{users} = new TWiki::User( $this, "SomethingUser" );
+#        $this->{users} = new TWiki::Users( $this, "SomethingUser" );
 	} else {
-        $this->{users} = new TWiki::User( $this, "NoPasswdUser" );
+        $this->{users} = new TWiki::Users( $this, "NoPasswdUser" );
 	}
 
     # Make %ENV safer, preventing hijack of the search path
@@ -2427,15 +2436,14 @@ sub new {
     # initialize preferences, first part for site and web level
     $this->{prefs} = new TWiki::Prefs( $this );
 
-    my $user = $this->{plugins}->load( $disableAllPlugins );
-    unless( $user ) {
-        $user = $this->{users}->initializeRemoteUser( $remoteUser );
+    # SMELL: there should be a way for the plugin to specify
+    # the WikiName of the user as well as the login.
+    my $login = $this->{plugins}->load( $disableAllPlugins );
+    unless( $login ) {
+        $login = $this->{users}->initializeRemoteUser( $remoteUser );
     }
-
-    # cache user information in the session object
-    $this->{userName} = $user;
-    # i.e. "Main.JonDoa"
-    $this->{wikiUserName} = $this->{users}->userToWikiName( $user );
+    my $user = $this->{users}->findUser( $login );
+    $this->{user} = $user;
 
     # Static session variables that can be expanded in topics when they
     # are enclosed in % signs
@@ -2443,10 +2451,9 @@ sub new {
     # pointless. Could get rid of the SESSION_TAGS hash, might be
     # the easiest thing to do, but then that would allow other
     # upper-case named fields in the object to be accessed as well...
-    $this->{SESSION_TAGS}{USERNAME}       = $this->{userName};
-    $this->{SESSION_TAGS}{WIKINAME}       =
-      $this->{users}->userToWikiName( $this->{userName}, 1 );  # i.e. "JonDoe";
-    $this->{SESSION_TAGS}{WIKIUSERNAME}   = $this->{wikiUserName};
+    $this->{SESSION_TAGS}{USERNAME}       = $user->login();
+    $this->{SESSION_TAGS}{WIKINAME}       = $user->wikiName();
+    $this->{SESSION_TAGS}{WIKIUSERNAME}   = $user->webDotWikiName();
     $this->{SESSION_TAGS}{BASEWEB}        = $this->{webName};
     $this->{SESSION_TAGS}{BASETOPIC}      = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $this->{topicName};
@@ -2456,7 +2463,7 @@ sub new {
     $this->{SESSION_TAGS}{SCRIPTURL}      = $this->{urlHost}.$dispScriptUrlPath;
 
     # initialize user preferences
-    $this->{prefs}->initializeUser( $this->{wikiUserName}, $this->{topicName} );
+    $this->{prefs}->initializeUser( $user, $this->{topicName} );
 
     $this->{renderer} = new TWiki::Render( $this );
 

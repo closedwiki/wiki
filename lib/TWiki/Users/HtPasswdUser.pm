@@ -25,7 +25,7 @@
 
 =begin twiki
 
----+ TWiki::User::HtPasswdUser Package
+---+ TWiki::Users::HtPasswdUser Package
 
 The HtPasswdUser module seperates out the User Authentication code that is htpasswd and htdigest
 specific. 
@@ -34,7 +34,7 @@ TODO: User.pm and the impls propbably shouldn't use Store.pm - they are not TWik
 
 =cut
 
-package TWiki::User::HtPasswdUser;
+package TWiki::Users::HtPasswdUser;
 
 if( 'md5' eq $TWiki::htpasswdEncoding ) {
 	require Digest::MD5;
@@ -92,10 +92,7 @@ sub htpasswdGeneratePasswd
 {
     my ( $this, $user, $passwd , $useOldSalt ) = @_;
 
-    my $encodedPassword = '';
-    $useOldSalt = 0 unless $useOldSalt;
-    ASSERT(defined($user)) if DEBUG; #SMELL - effective?
-    ASSERT(defined($passwd)) if DEBUG;
+	my $encodedPassword = '';
 
     if( 'sha1' eq $TWiki::htpasswdEncoding ) {
 
@@ -107,7 +104,8 @@ sub htpasswdGeneratePasswd
 	    # found at http://world.inch.com/Scripts/htpasswd.pl.html
 
 		my $salt;
-		if ( $useOldSalt eq 1) {
+
+		if ( $useOldSalt ) {
 		    my $currentEncryptedPasswordEntry = $this->htpasswdReadPasswd( $user );
 	        $salt = substr( $currentEncryptedPasswordEntry, 0, 2 );
 		} else {
@@ -178,9 +176,9 @@ sub UserPasswordExists
 
     my $text = $self->store()->readFile( $TWiki::htpasswdFilename );
     if( $text =~ /^${user}:/gm ) {	# mod_perl: don't use /o
-        return "1";
+        return 1;
     }
-    return "";
+    return 0;
 }
  
 #========================= 

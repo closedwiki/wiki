@@ -77,7 +77,6 @@ sub new {
     # fields will be assumed to be meta-data.
     $self->{_session} = $session;
 
-#$ENV{'TWIKI_ASSERTS'} = 1;
     throw Error::Simple("ASSERT: no web") unless $web;
     throw Error::Simple("ASSERT: no topic") unless $topic;
 
@@ -88,6 +87,7 @@ sub new {
 }
 
 sub store { my $this = shift; return $this->{_session}->{store}; }
+sub users { my $this = shift; return $this->{_session}->{users}; }
 
 =pod
 
@@ -308,7 +308,7 @@ sub addTOPICINFO {
     ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
 
     my $time = $options->{forcedate} || time();
-    my $user = $options->{forceuser} || $self->{_session}->{userName};
+    my $user = $options->{forceuser} || $self->{_session}->{user};
 
     $rev = 1 unless $rev;
 
@@ -318,7 +318,7 @@ sub addTOPICINFO {
        # save with them so old code can read these topics
        version => "1.$rev",
        date    => $time,
-       author  => $user,
+       author  => $user->wikiName(),
        format  => $formatVersion
       );
     $self->put( "TOPICINFO", @args );
@@ -346,7 +346,7 @@ sub getRevisionInfo {
     my( $date, $author, $rev, $comment );
     if( %topicinfo ) {
        $date = $topicinfo{"date"} ;
-       $author = $topicinfo{"author"};
+       $author = $self->users()->findUser($topicinfo{"author"});
        $rev = $topicinfo{"version"};
        $rev =~ s/^\d+\.//;
        $comment = "";

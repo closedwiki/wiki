@@ -101,18 +101,18 @@ sub _binaryChange
 # ======================
 =pod
 
----++ sub addRevision (  $self, $text, $comment, $userName  )
+---++ sub addRevision (  $self, $text, $comment, $user )
 
-Add new revision. Replace file (if exists) with text
+Add new revision. Replace file (if exists) with text.
+$user is a wikiname.
 
 =cut
 
 sub addRevision
 {
-    my( $self, $text, $comment, $userName ) = @_;
-    
+    my( $self, $text, $comment, $user ) = @_;
     $self->_save( $self->{file}, \$text );
-    return $self->_ci( $self->{file}, $comment, $userName );
+    return $self->_ci( $self->{file}, $comment, $user );
 }
 
 # ======================
@@ -120,9 +120,10 @@ sub addRevision
 
 ---++ sub replaceRevision (  $self, $text, $comment, $user, $date  )
 
-Replace the top revision
-Return non empty string with error message if there is a problem
-| $date | is on epoch seconds |
+Replace the top revision.
+Return non empty string with error message if there is a problem.
+$date is in epoch seconds.
+$user is a wikiname.
 
 =cut
 
@@ -292,6 +293,7 @@ A version number of 0 or undef will return info on the _latest_ revision.
 If revision file is missing, information based on actual file is returned.
 
 Date return in epoch seconds. Revision returned as a number.
+User returned as a wikiname.
 
 =cut
 
@@ -438,7 +440,7 @@ sub parseRevisionDiff
 
 # ======================
 sub _ci {
-    my( $self, $file, $comment, $userName ) = @_;
+    my( $self, $file, $comment, $user ) = @_;
 
     # Check that we can write the file being checked in. This won't check
     # that $file,v is writable, but it _will_ trap 99% of all common
@@ -449,7 +451,7 @@ sub _ci {
 
     my ($rcsOutput, $exit) = $self->{session}->{sandbox}->readFromProcess
       ( $self->{ciCmd},
-        USERNAME => $userName,
+        USERNAME => $user,
         FILENAME => $file,
         COMMENT => $comment );
     if( $exit && $rcsOutput =~ /no lock set by/ ) {
@@ -461,7 +463,7 @@ sub _ci {
         # re-do the ci command
         ( $rcsOutput, $exit ) =
           $self->{session}->{sandbox}->readFromProcess( $self->{ciCmd},
-                                  USERNAME => $userName,
+                                  USERNAME => $user,
                                   FILENAME => $file,
                                   COMMENT => $comment );
     }

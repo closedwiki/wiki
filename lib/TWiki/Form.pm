@@ -185,7 +185,7 @@ sub getFormDef {
     # Read topic that defines the form
     if( $this->store()->topicExists( $webName, $form ) ) {
         my( $meta, $text ) =
-          $this->store()->readTopic( $this->{session}->{wikiUserName}, $webName, $form, undef, 0 );
+          $this->store()->readTopic( $this->{session}->{user}, $webName, $form, undef );
         @fieldDefs = $this->_parseFormDefinition( $text );
     } else {
         # FIXME - do what if there is an error?
@@ -204,7 +204,7 @@ sub getFormDef {
 
         if( ( ! @posValues ) && $this->store()->topicExists( $webName, $name ) ) {
             my( $meta, $text ) =
-              $this->store()->readTopic( $this->{session}->{wikiUserName}, $webName, $name, undef, 0 );
+              $this->store()->readTopic( $this->{session}->{user}, $webName, $name, undef );
             @posValues = getPossibleFieldValues( $text );
             if( ! $type ) {
                 $type = "select";  #FIXME keep?
@@ -570,7 +570,7 @@ sub changeForm {
     my @forms = split( /\s*,\s*/, $listForms );
     unshift @forms, "";
     my( $metat, $tmp ) =
-      $this->store()->readTopic( $this->{session}->{wikiUserName}, $theWeb, $theTopic, undef, 0 );
+      $this->store()->readTopic( $this->{session}->{user}, $theWeb, $theTopic, undef );
     my $formName = $q->param( 'formtemplate' ) || "";
     if( ! $formName ) {
         my %form = $metat->findOne( "FORM" );

@@ -43,6 +43,7 @@ another TWiki module unless the session object is defined first.
 package TWiki::Func;
 
 use strict;
+use Error qw( :try );
 
 # =========================
 =pod
@@ -467,7 +468,7 @@ sub getTwikiWebname
 
 ---+++ getDefaultUserName( ) ==> $loginName
 
-| Description:         | Get default user name as defined in TWiki.cfg's =$defaultUserName= |
+| Description:         | Get default user name as defined in TWiki.cfg =$defaultUserName= |
 | Return: =$loginName= | Default user name, e.g. ="guest"= |
 | Since:               | TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
@@ -491,7 +492,7 @@ sub getDefaultUserName
 # -------------------------
 sub getWikiName
 {
-    return $TWiki::Plugins::SESSION->{users}->userToWikiName( $TWiki::Plugins::SESSION->{userName}, 1 );
+    return $TWiki::Plugins::SESSION->{user}->wikiName();
 }
 
 # =========================
@@ -507,7 +508,7 @@ sub getWikiName
 # -------------------------
 sub getWikiUserName
 {
-    return $TWiki::Plugins::SESSION->{users}->userToWikiName( $TWiki::Plugins::SESSION->{userName} );
+    return $TWiki::Plugins::SESSION->{user}->webDotWikiName();
 }
 
 # =========================
@@ -524,8 +525,10 @@ sub getWikiUserName
 # -------------------------
 sub wikiToUserName
 {
-#   my( $wiki ) = @_;
-    return $TWiki::Plugins::SESSION->{users}->wikiToUserName( @_ );
+    my( $wiki ) = @_;
+    my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki );
+    return $wiki unless $user;
+    return $user->login();
 }
 
 # =========================
@@ -543,8 +546,11 @@ sub wikiToUserName
 # -------------------------
 sub userToWikiName
 {
-#   my( $loginName, $dontAddWeb ) = @_;
-    return $TWiki::Plugins::SESSION->{users}->userToWikiName( @_ );
+    my( $login, $dontAddWeb ) = @_;
+    my $user = $TWiki::Plugins::SESSION->{users}->findUser( $login );
+    return "" unless $user;
+    return $user->wikiName() if $dontAddWeb;
+    return $user->webDotWikiName();
 }
 
 # =========================
@@ -560,7 +566,7 @@ sub userToWikiName
 # -------------------------
 sub isGuest
 {
-    return ( $TWiki::Plugins::SESSION->{userName} eq $TWiki::defaultUserName );
+    return $TWiki::Plugins::SESSION->{user}->isDefaultUser();
 }
 
 # =========================
@@ -714,15 +720,17 @@ sub readTopicText
 {
     my( $web, $topic, $rev, $ignorePermissions ) = @_;
 
-    $ignorePermissions = 0 unless defined( $ignorePermissions );
+    my $user;
+    $user = $TWiki::Plugins::SESSION->{user}
+      unless defined( $ignorePermissions );
 
-    my $text =
-      $TWiki::Plugins::SESSION->{store}->readTopicRaw( $TWiki::Plugins::SESSION->{wikiUserName}, $web, $topic, $rev,
-                                  $ignorePermissions );
-
-    # FIXME: The following breaks if spec of readTopicRaw() changes
-    if( $text =~ /^No permission to read topic/ ) {
-        $text = $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, "oopsaccessview" );
+    try {
+        my $text =
+          $TWiki::Plugins::SESSION->{store}->readTopicRaw
+            ( $user, $web, $topic, $rev );
+    } catch TWiki::AccessControlException with {
+        $text = $TWiki::Plugins::SESSION->getOopsUrl
+          ($web, $topic, "oopsaccessdenied" );
     }
     return $text;
 }
@@ -767,7 +775,7 @@ sub saveTopicText
     # check access permission
     unless( $ignorePermissions ||
             $TWiki::Plugins::SESSION->{security}->checkAccessPermission( "change",
-                                                     $TWiki::Plugins::SESSION->{wikiUserName}, "",
+                                                     $TWiki::Plugins::SESSION->{user}, "",
                                                      $topic, $web )
           ) {
         return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, "oopsaccesschange" );
@@ -779,13 +787,13 @@ sub saveTopicText
     # extract meta data and merge old attachment meta data
     my $meta = $TWiki::Plugins::SESSION->{store}->extractMetaData( $web, $topic, \$text );
     my( $oldMeta, $oldText ) =
-      $TWiki::Plugins::SESSION->{store}->readTopic( $TWiki::Plugins::SESSION->{wikiUserName}, $web, $topic, undef, 1 );
+      $TWiki::Plugins::SESSION->{store}->readTopic( undef, $web, $topic, undef );
     $meta->copyFrom( $oldMeta, "FILEATTACHMENT" );
 
     # save topic
     my $error =
       $TWiki::Plugins::SESSION->{store}->saveTopic
-        ( $TWiki::Plugins::SESSION->{userName}, $web, $topic, $text, $meta,
+        ( $TWiki::Plugins::SESSION->{user}, $web, $topic, $text, $meta,
           { notify => $dontNotify } );
     return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, "oopssaveerr", $error ) if( $error );
     return "";
@@ -1004,7 +1012,7 @@ sub readTopic
 {
     my( $web, $topic ) = @_;
 
-    return $TWiki::Plugins::SESSION->{store}->readTopic( $TWiki::Plugins::SESSION->{wikiUserName}, $web, $topic, undef, 0 );
+    return $TWiki::Plugins::SESSION->{store}->readTopic( $TWiki::Plugins::SESSION->{user}, $web, $topic, undef, 0 );
 }
 
 # =========================

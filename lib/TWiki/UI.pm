@@ -115,18 +115,64 @@ sub run {
     my $session = new TWiki( $pathInfo, $user, $topic, $url,
                              $query, $scripted );
 
-    $Error::Debug = 1 if DEBUG; # comment out in production
+    # comment out in production version
+    $Error::Debug = 1;
+    local $SIG{__DIE__} = sub { Carp::confess $_[0] };
+    # end of comment out in production version
 
-    eval "use $class";
-    if( $@ ) {
-        die "$class compile failed: $@";
-    }
     my $m = "$class"."::$method";
-    try
-    {
+    try {
+        eval "use $class";
+        if( $@ ) {
+            die "$class compile failed: $@";
+        }
         no strict 'refs';
         &$m( $session );
         use strict 'refs';
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        # Had an access control violation. See if there is an "auth" version
+        # of this script, may be a result of not being logged in.
+        my $url;
+        my $script = $ENV{'SCRIPT_FILENAME'};
+        $script =~ s/^(.*\/)([^\/]+)($TWiki::scriptSuffix)?$/$1/;
+        my $scriptPath = $1;
+        my $scriptName = $2;
+        $script .= "$scriptPath${scriptName}auth$TWiki::scriptSuffix";
+        if( ! $query->remote_user() && -e $script ) {
+            $url = $ENV{"REQUEST_URI"};
+            if( $url && $url =~ s/\/$scriptName/\/${scriptName}auth/ ) {
+                # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
+                $url = "$session->{urlHost}$url";
+            } else {
+                # If REQUEST_URI is rewritten and does not contain the script
+                # name, try looking at the CGI environment variable
+                # SCRIPT_NAME.
+                #
+                # Assemble the new URL using the host, the changed script name,
+                # the path info, and the query string.  All three query
+                # variables are in the list of the canonical request meta
+                # variables in CGI 1.1.
+                $scriptPath      = $ENV{'SCRIPT_NAME'};
+                my $pathInfo    = $ENV{'PATH_INFO'};
+                my $queryString = $ENV{'QUERY_STRING'};
+                $pathInfo    = '/' . $pathInfo    if ($pathInfo);
+                $queryString = '?' . $queryString if ($queryString);
+                if( $scriptPath && $scriptPath =~ s/\/$scriptName/\/${scriptName}auth/ ) {
+                    $url = "$session->{urlHost}$scriptPath$pathInfo$queryString";
+                } else {
+                    # If SCRIPT_NAME does not contain the script name
+                    # the last hope is to try building up the URL using
+                    # the SCRIPT_FILENAME.
+                    $url = "$session->{urlhost}$session->{scriptUrlPath}/${scriptName}$TWiki::scriptSuffix$pathInfo$queryString";
+                }
+            }
+            $session->redirect( $url );
+        } else {
+            $url = $session->getOopsUrl( $e->{-web}, $e->{-topic},
+                                         "oopsaccessdenied" );
+        }
+        $session->redirect( $url );
     } catch TWiki::UI::OopsException with {
         my $e = shift;
         my $url = $session->getOopsUrl( $e->{-web},
@@ -222,25 +268,6 @@ sub checkAccess {
     }
 }
 
-=pod twiki
-
----+++ checkAdmin( $web, $topic, $user ) => boolean
-Check if the user is an admin. If they are not, throw an
-OopsException.
-
-=cut
-
-sub checkAdmin {
-    my ( $session, $webName, $topic, $user ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
-
-    unless( $session->{security}->userIsInGroup( $user,
-                                                 $TWiki::superAdminGroup )) {
-        throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
-                                        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
-    }
-}
-
 =pod
 
 ---++ sub readTemplateTopic (  $theTopicName  )
@@ -262,7 +289,7 @@ sub readTemplateTopic {
     if( $session->{store}->topicExists( $session->{webName}, $theTopicName ) ) {
         $web = $session->{webName};
     }
-    return $session->{store}->readTopic( $session->{wikiUserName}, $web, $theTopicName, undef, 0 );
+    return $session->{store}->readTopic( $session->{user}, $web, $theTopicName, undef );
 }
 
 1;

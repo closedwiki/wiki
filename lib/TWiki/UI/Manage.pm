@@ -76,30 +76,28 @@ sub removeUser {
 
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
-    my $wikiName = $session->{userName};
     my $query = $session->{cgiQuery};
+    my $user = $session->{user};
 
     my $password = $query->param( 'password' );
 
     # check if user entry exists
     #TODO: need to handle the NoPasswdUser case (userPasswordExists will retun false here)
-    if( $wikiName && !$session->{users}->userPasswordExists( $wikiName )) {
+    if( $user && !$user->passwordExists()) {
         throw TWiki::UI::OopsException( $webName, $topic,
-                                        "notwikiuser", $wikiName );
+                                        "notwikiuser", $user->toString() );
     }
 
     #check to see it the user we are trying to remove is a memebr of a group.
     #initially we refuse to delete the user
     #in a later implementation we will remove the from the group (if Access.pm implements it..)
-    my @groups = $session->{security}->getGroupsUserIsIn( $wikiName );
+    my @groups = $user->getGroups();
     my $numberOfGroups =  $#groups;
     if ( $numberOfGroups > -1 ) { 
         throw TWiki::UI::OopsException( $webName, $topic, "genericerror");
     }
 
-    my $pw = $session->{users}->checkUserPasswd( $wikiName, $password );
-    if( ! $pw ) {
-        # NO - wrong old password
+    unless( $user->checkPasswd( $password ) ) {
         throw TWiki::UI::OopsException( $webName, $topic, "wrongpassword");
     }
 
@@ -118,12 +116,12 @@ sub removeUser {
     #    my @refs = $session->{store}->findReferringPages( $oldWeb, $oldTopic );
     #    my $problems;
     #    ( $lockFailure, $problems ) = 
-    #       $session->{store}->updateReferringPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
+    #       $session->{store}->updateReferringPages( $oldWeb, $oldTopic, $user, $newWeb, $newTopic, @refs );
 
-    $session->{users}->removeUser($wikiName);
+    $user->remove();
 
     throw TWiki::UI::OopsException( $webName, $topic, "removeuserdone",
-                                    $wikiName);
+                                    $user->toString() );
 }
 
 #changePassword is now in register (belongs in User.pm though)
@@ -146,7 +144,6 @@ sub createWeb {
 
     my $topicName = $session->{topicName};
     my $webName = $session->{webName};
-    my $userName = $session->{userName};
     my $query = $session->{cgiQuery};
 
     my $newWeb = $query->param( 'newweb' ) || "";
@@ -160,9 +157,8 @@ sub createWeb {
     my $oopsTmpl = "mngcreateweb";
 
     # check permission, user authorized to create webs?
-    my $wikiUserName = $session->{wikiUserName};
     TWiki::UI::checkAccess( $session, $webName, $topicName,
-                            "manage", $wikiUserName );
+                            "manage", $session->{user} );
 
     unless( $newWeb ) {
         throw TWiki::UI::OopsException
@@ -246,8 +242,7 @@ sub _patchWebPreferences {
     my ( $session, $theWeb, $theTopic, $theWebBgColor, $theSiteMapWhat, $theSiteMapUseTo, $doNoSearchAll ) = @_;
 
     my( $meta, $text ) =
-      $session->{store}->readTopic( $session->{wikiUserName},
-                                    $theWeb, $theTopic, undef, 1 );
+      $session->{store}->readTopic( undef, $theWeb, $theTopic, undef );
 
     my $siteMapList = "";
     $siteMapList = "on" if( $theSiteMapWhat );
@@ -284,7 +279,6 @@ sub rename {
 
     my $oldTopic = $session->{topicName};
     my $oldWeb = $session->{webName};
-    my $userName = $session->{userName};
     my $query = $session->{cgiQuery};
 
     my $newWeb = $query->param( 'newweb' ) || "";
@@ -306,8 +300,6 @@ sub rename {
     if( ! $theAttachment ) {
         $theAttachment = "";
     }
-
-    my $wikiUserName = $session->{wikiUserName};
 
     # justChangeRefs will be true when some topics that had links to $oldTopic
     # still need updating, previous update being prevented by a lock.
@@ -341,9 +333,9 @@ sub rename {
         }
 
         TWiki::UI::checkAccess( $session, $oldWeb, $oldTopic,
-                                "change", $wikiUserName );
+                                "change", $session->{user} );
         TWiki::UI::checkAccess( $session, $oldWeb, $oldTopic,
-                                "rename", $wikiUserName );
+                                "rename", $session->{user} );
     }
 
     # Has user selected new name yet?
@@ -357,9 +349,9 @@ sub rename {
         if( $theAttachment ) {
             my $moveError = 
               $session->{store}->moveAttachment( $oldWeb, $oldTopic,
-                                             $newWeb, $newTopic,
-                                             $theAttachment,
-                                             $userName );
+                                                 $newWeb, $newTopic,
+                                                 $theAttachment,
+                                                 $session->{user} );
 
             if( $moveError ) {
                 throw TWiki::UI::OopsException( $newWeb, $newTopic,
@@ -376,7 +368,7 @@ sub rename {
 
             my $renameError =
               $session->{store}->renameTopic( $oldWeb, $oldTopic, $newWeb,
-                                          $newTopic, 1, $userName );
+                                          $newTopic, 1, $session->{user} );
             if( $renameError ) {
                 throw TWiki::UI::OopsException( $oldWeb, $oldTopic,
                                                 "renameerr",
@@ -391,7 +383,9 @@ sub rename {
         my @refs = _getReferringTopicsListFromURL( $session, $oldWeb, $oldTopic, $newWeb, $newTopic );
 
         my $problems =
-          $session->{store}->updateReferringPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
+          $session->{store}->updateReferringPages( $oldWeb, $oldTopic,
+                                                   $session->{user},
+                                                   $newWeb, $newTopic, @refs );
     }
     my $new_url = "";
     if ( $newWeb eq "Trash" && $oldWeb ne "Trash" ) {
@@ -403,8 +397,7 @@ sub rename {
             my $meta = "";
             my $text = "";
             ( $meta, $text ) =
-              $session->{store}->readTopic( $wikiUserName, $newWeb, $newTopic,
-                                        undef, 1 );
+              $session->{store}->readTopic( undef, $newWeb, $newTopic, undef );
             my %parent = $meta->findOne( "TOPICPARENT" );
             if( %parent && $parent{"name"} &&
                 $parent{"name"} ne $oldTopic ) {

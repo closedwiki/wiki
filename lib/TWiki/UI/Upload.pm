@@ -30,7 +30,7 @@ use TWiki::UI::OopsException;
 
 =pod
 
----++ attach( $web, $topic, $query )
+---++ attach( $session )
 Perform the functions of an 'attach' URL. CGI parameters are:
 | =filename= | Name of attachment |
 | =skin= | Skin to use in presenting pages |
@@ -42,7 +42,6 @@ sub attach {
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
-    my $userName = $session->{userName};
 
     my $fileName = $query->param( 'filename' ) || "";
     my $skin = $session->getSkin();
@@ -58,15 +57,13 @@ sub attach {
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
 
-    my $wikiUserName = $session->{wikiUserName};
-
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            "change", $wikiUserName );
+                            "change", $session->{user} );
     TWiki::UI::checkTopicExists( $session, $webName, $topic,
                                  "upload files to" );
 
     ( $meta, $text ) =
-      $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 );
+      $session->{store}->readTopic( $session->{user}, $webName, $topic, undef );
     my %args = $meta->findOne( "FILEATTACHMENT", $fileName );
     %args = (
              name => $fileName,
@@ -90,7 +87,8 @@ sub attach {
     my $fileWikiUser = "";
     if( $fileName && %args ) {
         $tmpl = $session->{templates}->readTemplate( "attachagain", $skin );
-        $fileWikiUser = $session->{users}->userToWikiName( $args{"user"} );
+        my $u = $session->{users}->findUser( $args{"user"} );
+        $fileWikiUser = $u->webDotWikiName() if $u;
     } else {
         $tmpl = $session->{templates}->readTemplate( "attachnew", $skin );
     }
@@ -116,7 +114,7 @@ sub attach {
 
 =pod
 
----++ upload( $web, $topic, $userName, $query)
+---++ upload( $session )
 Perform the functions of an 'upload' url.
 CGI parameters, passed in $query:
 | =hidefile= | if defined, will not show file in attachment table |
@@ -133,8 +131,7 @@ sub upload {
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
-    my $userName = $session->{userName};
-    my $wikiUserName = $session->{wikiUserName};
+    my $user = $session->{user};
 
     my $hideFile = $query->param( 'hidefile' ) || "";
     my $fileComment = $query->param( 'filecomment' ) || "";
@@ -159,7 +156,7 @@ sub upload {
     TWiki::UI::checkWebExists( $session, $webName, $topic );
     TWiki::UI::checkMirror( $session, $webName, $topic );
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            "change", $wikiUserName );
+                            "change", $user );
     TWiki::UI::checkTopicExists( $session, $webName, $topic,
                                  "attach files to" );
 
@@ -204,7 +201,7 @@ sub upload {
     }
 
     my $error =
-      $session->{store}->saveAttachment( $webName, $topic, $fileName, $userName,
+      $session->{store}->saveAttachment( $webName, $topic, $fileName, $user,
                                     { dontlog => !$TWiki::doLogTopicUpload,
                                       comment => $fileComment,
                                       hide => $hideFile,

@@ -62,34 +62,19 @@ sub register_cgi {
     my $action = $session->{cgiQuery}->param('action');
 
     if ($action eq 'register') {
-        register(
-                 session=>$session,
-                 sendActivationCode => $sendActivationCode,
-                 tempUserDir => $tempUserDir
-                );
+        register( $session, $sendActivationCode, $tempUserDir );
         if (!$sendActivationCode) {
             throw Error::Simple("Need to call verify automatically");
         }
     } elsif ($action eq 'approve') {
-        finish(
-               session=>$session,
-               tempUserDir=>$tempUserDir
-              );
+        finish($session, $tempUserDir, 0 );
     }
     elsif ($action eq 'verify') {
-        verifyEmailAddress(
-                           session=>$session,
-                           tempUserDir=>$tempUserDir,
-                           needApproval=>$needApproval
-                          );
+        verifyEmailAddress( $session, $tempUserDir, $needApproval );
         #	if (! $needApproval) {
         #	    throw Error::Simple("Need to call approve automatically");
         #	}
-        finish(
-               session=>$session,
-               tempUserDir=>$tempUserDir,
-               approve=>$session->{cgiQuery}->param('code')
-              );
+        finish( $session, $tempUserDir, $session->{cgiQuery}->param('code'));
 
     } elsif ($action eq 'resetPassword') { #TODO
         resetPassword( $session );
@@ -174,7 +159,7 @@ my $indent = "\t"; # SMELL indent legacy
 sub bulkRegister {
     my $session = shift;
 
-    my $remoteUser = $session->{userName};
+    my $user = $session->{user};
     my $topic = $session->{topicName};
     my $web = $session->{webName};
     my $userweb = $TWiki::mainWebname;
@@ -185,18 +170,15 @@ sub bulkRegister {
     $settings{doUseHtPasswd} = $TWiki::htpasswdFormatFamily eq "htpasswd";
     $settings{doEmailUserDetails} = $query->param('EmailUsersWithDetails') || 0;
 
-    my ($wikiName, $loginName) = _getUserByEitherLoginOrWikiName( $session, $remoteUser );
-
-    unless( $unitTestMode ) {
-        TWiki::UI::checkAdmin( $session, $web, $topic, $wikiName );
+    unless( $unitTestMode || $session->{user}->isAdmin() ) {
+        throw TWiki::UI::OopsException( $web, $topic, "accessgroup",
+                                        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
     }
 
     #-- Read the topic containing a table of people to be registered
 
-    # die "$web.$topic - settings: ".Dumper(\%settings);
-
-    my ($meta, $text) = $session->{store}->readTopic($session->{wikiUserName},
-                                                     $web, $topic, undef, 1);
+    my ($meta, $text) = $session->{store}->readTopic( undef,
+                                                     $web, $topic, undef );
     my %data;
     ( $settings{fieldNames}, %data) =
       TWiki::Data::DelimitedFile::read(content => $text, delimiter => "|" );
@@ -215,6 +197,7 @@ sub bulkRegister {
         $log .= "$b Added to users' topic ".$userTopic.":\n".join("\n$indent",split /\n/, "$uLog")."\n";	
         $registrationsMade++; # SMELL - no detection for failure
     }
+
     $log .= "----\n";
     $log .= "registrationsMade: $registrationsMade";
 
@@ -225,7 +208,7 @@ sub bulkRegister {
 
     $meta->put( "TOPICPARENT", ( "name" => $topic ) );
 
-    my $err = $session->{store}->saveTopic($remoteUser, $web, $logTopic, $log, $meta );
+    my $err = $session->{store}->saveTopic($user, $web, $logTopic, $log, $meta );
 
     $session->redirect($session->getScriptUrl($web, $logTopic, "view"));
 }
@@ -248,7 +231,6 @@ sub bulkRegister {
 # are quite expensive when doing 300 in succession!
 sub _registerSingleBulkUser {
     my ($session, $row, %settings) = @_;
-
     $row || throw Error::Simple("row not set");
     my @fieldNames = @{$settings{fieldNames} || throw Error::Simple( "No fieldNames" )};
     my $doUseHtPasswd = defined $settings{doUseHtPasswd} || throw Error::Simple( "No doHtPasswd" );
@@ -256,9 +238,7 @@ sub _registerSingleBulkUser {
     my $log;
     #-- call to the registrationHandler (to amend fields) should really happen in here.
 
-
     #-- TWiki:Codev.LoginNamesShouldNotBeWikiNames - but use it if not supplied
-
     unless ($row->{LoginName}) {
         $row->{LoginName} = $row->{WikiName};
         $log = "\t* No TWiki.LoginName specified - setting to $row->{LoginName}\n";
@@ -293,7 +273,12 @@ sub _registerSingleBulkUser {
         $log .= "$b Not writing topic ".$row->{WikiName}."\n";
 	}
 
-    my $userTopic = $session->{users}->addUserToTWikiUsersTopic( $row->{WikiName}, $row->{LoginName} );
+    my $user = $session->{users}->findUser( $row->{LoginName},
+                                            $row->{WikiName} );
+
+    my $userTopic =
+      $session->{users}->addUserToTWikiUsersTopic( $user,
+                                                   $session->{user} );
 
     if ($TWiki::doEmailUserDetails) {
         # _sendEmail(session=>$session, \%data, template => "registernotifybulk"); # If you want it, write it.
@@ -356,12 +341,9 @@ This is called through: TWikiRegistration -> RegisterCgiScript -> here
 =cut
 
 sub register {
-    my %params = @_;
-    %params or throw Error::Simple( "No parameters" );
+    my( $session, $sendActivationCode, $tmpUserDir ) = @_;
 
-    my $session = $params{session};
-    my ( $query, $sendActivationCode, $tmpuserDir ) =
-      ( $session->{cgiQuery}, $params{sendActivationCode}, $params{tempUserDir} );
+    my $query = $session->{cgiQuery};
 
     my %data;    # this is persisted in the storable.
 
@@ -377,9 +359,10 @@ sub register {
 
     _validateRegistration( $session, \%data, $query, $topic );
 
-    $data{VerificationCode} = "$data{WikiName}." . _randomPassword();
-    UnregisteredUser::setDir($tmpuserDir);
-    UnregisteredUser::putRegDetailsByCode(  \%data );
+    $data{VerificationCode} =
+      "$data{WikiName}." . TWiki::User::randomPassword();
+    UnregisteredUser::setDir($tmpUserDir);
+    UnregisteredUser::putRegDetailsByCode( \%data );
 
     $session->writeLog( "regstart", "$data{webName}.$data{WikiName}",
 			$data{Email}, $data{WikiName} );
@@ -412,118 +395,69 @@ sub resetPassword {
     my $action = $query->param('action');
     my $topic = $session->{topicName};
     my $web = $session->{webName};
-    my $remoteUser = $session->{userName};
 
     my $introduction = $query->{Introduction}[0];
     my @userNames = @{$query->{LoginName}};
     my @wikiNames = ();
 
-#    die Dumper($session);
-
-    # Only admin is able to reset more than one password.
     if ($#userNames > 0) {
-        TWiki::UI::checkAdmin( $session, $web, $topic, $session->{wikiUserName} );
-        foreach my $userName (@userNames) {
-            resetUserPassword($session, $userName, $introduction);
+        # Only admin is able to reset more than one password.
+        unless( $session->{user}->isAdmin()) {
+            throw TWiki::UI::OopsException( $web, $topic, "accessgroup",
+                                        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
         }
     } else {
-      # Anyone can reset a single password - important because by definition the user cannot authenticate
-      # Note that the variables in this block are unrelated to the authenticated user
-        my( $p, $m ) = resetUserPassword($session, $userNames[0], $introduction);
-
-      # Inefficient, as resetUserPassword fetched wikiName, but no harm...
-	my ($wikiName, $loginName) =
-	  _getUserByEitherLoginOrWikiName( $session, $userNames[0]);
-        throw TWiki::UI::OopsException( undef, $wikiName, "resetpasswd",
-                                        $m, $loginName ); # do not pass $p - they have to get this from their email!
+        # Anyone can reset a single password - important because by definition
+        # the user cannot authenticate
+    }
+    my $message;
+    foreach my $userName (@userNames) {
+        $message = _resetUsersPassword( $session, $userName, $introduction);
+    }
+    unless( $#userNames ) {
+        my $user = $session->{users}->findUser( $userNames[0] );
+        throw TWiki::UI::OopsException( undef, $user->wikiName(),
+                                        "resetpasswd",
+                                        $message, $user->login() );
     }
 }
 
-=pod
+sub _resetUsersPassword {
+    my( $session, $userName, $introduction ) = @_;
 
-This should be in User
-
-=cut
-
-sub resetUserPassword {
-    my ($session, $userName, $introduction) = @_;
-    my ($wikiName, $loginName) =
-      _getUserByEitherLoginOrWikiName( $session, $userName);
-
-    unless ($wikiName) {
-        # couldn't work out who they are, its neither loginName nor wikiName
-        # They have the wrong LoginName
-        throw TWiki::UI::OopsException( undef, $wikiName, "notwikiuser" );
+    my $user = $session->{users}->findUser( $userName, undef, 1 );
+    unless( $user ) {
+        # couldn't work out who they are, its neither loginName nor
+        # wikiName.
+        throw TWiki::UI::OopsException( undef, undef, "notwikiuser" );
     }
-
-    my $email = ($session->{users}->getEmail($wikiName))[0];
+    my @em = $user->emails();
+    my $email = $em[0];
     unless ($email) {
-        throw TWiki::UI::OopsException( undef, $wikiName, "regemail",
-                                        "Can't get an email address for $wikiName, LoginName = $loginName" );
+        throw TWiki::UI::OopsException
+          ( undef, $user->wikiName(), "regemail",
+            "Can't get an email address for " . $user->toString());
     }
 
-    my $message = $email;
-    if ($session->{users}->userPasswordExists($loginName)) {
-        $session->{users}->removeUser($loginName);
-    } else {
-        # Assume the htpasswd file is out of sync with TWikiUsers, and generate a new one.
-        # We could do with an integrity checker for loginname <-> twikiusers <-> home topics <-> .htpasswd
-        $message .= " (ResetPassword created new htpasswd entry for ".$loginName." as it was missing in .htpasswd)";
+    my $message = "";
+    unless( $user->passwordExists() ) {
+        $email = "ResetPassword created new htpasswd entry for ".
+          $user->toString()." as it was missing in .htpasswd";
     }
 
-    my $password = _randomPassword();
-
-    my $res = $session->{users}->addUserPassword( $loginName, $password );
-    $session->writeLog("resetpasswd", $loginName, $wikiName, $email, $res);
-
-    if ($res != 1) {
-      $message = "Unknown error resetting password: $res - please contact site administrator";
-      $session->writeWarning("addUserPassword returned $res when trying to add new password for $loginName");
-    }
+    my $password = $user->resetPassword();
 
     _sendEmail( session=>$session,
-                LoginName => $loginName,
-                WikiName => $wikiName,
+                LoginName => $user->login(),
+                WikiName => $user->wikiName(),
                 Email => $email,
                 PasswordA => $password,
                 Introduction => $introduction,
                 template => "mailresetpassword"
               );
 
-    return ( $password, $message );
-}
-
-=pod
-
----++ _getUserByEitherLoginOrWikiName
-tries to get a mapping from either WikiName or LoginName: 
-first against LoginName then WikiName
-(but does not match against email address because there is no cache of these)
-
-=cut
-
-sub _getUserByEitherLoginOrWikiName {
-    my ($session, $eitherLoginOrWikiName) = @_;
-    return (undef, undef) unless $eitherLoginOrWikiName;
-
-    my $loginName = $eitherLoginOrWikiName;
-    my $wikiName = $session->{users}->userToWikiName($eitherLoginOrWikiName, 2);
-    # YUCK SMELL: 1 = Don't add web name. Very unintuitive.
-    unless ($wikiName) {
-        # Did they use their WikiName instead of LoginName?
-
-        # So do it using the inverse function
-        my $probablyWikiName = $eitherLoginOrWikiName;
-        $loginName = $session->{users}->wikiToUserName($probablyWikiName);
-        if ($loginName eq $probablyWikiName) {
-            # the function didn't map: returning the same means lookup failure
-            return (undef, undef);
-        } else {
-            # They just used the wrong one, so map it back to get the login name
-            $wikiName = $probablyWikiName;
-        }
-    }
-    return ($wikiName, $loginName);
+    $session->writeLog("resetpasswd", $user->login(), $user->wikiName(), $email);
+    return $message;
 }
 
 =pod
@@ -559,12 +493,11 @@ sub changePassword {
         throw TWiki::UI::OopsException( $webName, $topic, "regrequ" );
     }
 
-    my ($wikiName, $loginName) = _getUserByEitherLoginOrWikiName( $session, $username);
-    # check if user entry exists
+    my $user = $session->{users}->findUser( $username );
 
-    unless ($wikiName) {
+    unless ($user) {
         throw TWiki::UI::OopsException( $webName, $topic, "notwikiuser",
-                                        $loginName );
+                                        $username );
     }
 
     # check if passwords are identical
@@ -574,22 +507,21 @@ sub changePassword {
 
     # c h a n g e
     my $oldpassword = $query->param( 'oldpassword' );
-    
+
     # check if required fields are filled in
     if( ! $oldpassword ) {
         throw TWiki::UI::OopsException( $webName, $topic, "regrequ" );
     }
 
-    my $pw = $session->{users}->checkUserPasswd( $loginName, $oldpassword );
-    if( ! $pw ) {
-        # NO - wrong old password
+    unless( $user->checkPassword( $oldpassword )) {
         throw TWiki::UI::OopsException( $webName, $topic, "wrongpassword");
     }
 
     # OK - password may be changed
-    $session->{users}->updateUserPassword($loginName,  $oldpassword, $passwordA );
+    $user->changePassword( $passwordA );
 
-    $session->writeLog("changepasswd", $loginName, $wikiName); #recording the email would be nice
+    $session->writeLog("changepasswd", $user->toString());
+    #recording the email would be nice
 
     # OK - password changed
     throw TWiki::UI::OopsException( $webName, $topic, "changepasswd" );
@@ -607,12 +539,11 @@ This is called: on receipt of the activation password -> RegisterCgiScript -> he
 =cut
 
 sub verifyEmailAddress {
-    my %params = @_;
-    my $session = $params{session};
+    my( $session, $tempUserDir, $needApproval ) = @_;
 
     my $code = $session->{cgiQuery}->param('code');
-    UnregisteredUser::setDir($params{tempUserDir});
-    my %data = UnregisteredUser::reloadUserContext($code );
+    UnregisteredUser::setDir($tempUserDir);
+    my %data = UnregisteredUser::reloadUserContext( $code );
 
     # TODO: refactor with BlockB 
     if (! exists $data{WikiName}) {
@@ -648,24 +579,21 @@ Presently this is called in RegisterCgiScript directly after a call to verify. T
    7 writes the logEntry (if wanted :/)
    8 redirects browser to "oopsregthanks"
 
-
 reloads the context by code
 these two are separate in here to ease the implementation of administrator approval 
 
 =cut
 
 sub finish {
-    my %params = @_;
+    my( $session, $tempUserDir, $approve ) = @_;
     my %data;
     my $dataRef;
-    my $session = $params{session};
 
     my $topic = $session->{topicName};
     my $web = $session->{webName};
 
-    #    unless (%data) { #### SMELL HACK
     my $code = $session->{cgiQuery}->param('code');
-    UnregisteredUser::setDir($params{tempUserDir});
+    UnregisteredUser::setDir($tempUserDir);
     %data = UnregisteredUser::reloadUserContext($code);
     UnregisteredUser::deleteUserContext($code);
 
@@ -698,14 +626,17 @@ sub finish {
     }
 
     # Plugin callback to set cookies.
-    $session->{plugins}->registrationHandler( $data{webName},
+    $session->{plugins}->registrationHandler( $data{WebName},
                                               $data{WikiName},
-                                              $data{remoteUser} );
-    
+                                              $data{LoginName} );
+
     # add user to TWikiUsers topic
+    my $user = $session->{users}->findUser( $data{LoginName},
+                                            $data{WikiName} );
     my $userTopic =
-      $session->{users}->addUserToTWikiUsersTopic( $data{WikiName}, $data{LoginName} );
-    
+      $session->{users}->addUserToTWikiUsersTopic( $user,
+                                                   $session->{user} );
+
     # write log entry
     if ($TWiki::doLogRegistration) {
         $session->writeLog( "register", "$data{webName}.$data{WikiName}",
@@ -777,13 +708,14 @@ sub _writeRegistrationDetailsToTopic {
     $text = $before . $addText . $after;
 
     my $userName = $data{remoteUser} || $data{WikiName};
+    my $user = $session->{users}->findUser( $userName );
     $text =
-      $session->expandVariablesOnTopicCreation( $text, $userName, $data{WikiName},
+      $session->expandVariablesOnTopicCreation( $text, $user, $data{WikiName},
                                              "$data{webName}.$data{WikiName}" );
 
     $meta->put( "TOPICPARENT", ( "name" => $TWiki::wikiUsersTopicname ) );
 
-    $session->{store}->saveTopic($userName, $data{webName}, $data{WikiName}, $text, $meta );
+    $session->{store}->saveTopic($user, $data{webName}, $data{WikiName}, $text, $meta );
     return $log;
 }
 
@@ -972,7 +904,8 @@ sub _validateRegistration {
                                         "regexist", $data{WikiName} );
     }
 
-    if ($session->{users}->userPasswordExists( $data{LoginName} ) ) {
+    my $user = $session->{users}->findUser( $data{LoginName}, undef, 1 );
+    if ( $user && $user->passwordExists() ) {
         throw TWiki::UI::OopsException( $data{webName}, $topic,
                                         "regexist", $data{LoginName} );
     }
@@ -1007,10 +940,6 @@ sub _validateRegistration {
     }
 }
 
-sub _randomPassword {
-    return $TWiki::UI::Register::password || int( rand(9999) ); # global is used by test harness to give predictable results
-}
-
 =pod
 
  generate user entry
@@ -1024,8 +953,9 @@ sub _addUserToPasswordSystem {
     my %p = @_;
     my $session = $p{session};
 
-    if ($session->{users}->userPasswordExists($p{LoginName})) {
-        $session->{users}->removeUser($p{LoginName});
+    my $user = $session->{users}->findUser($p{LoginName}, $p{WikiName});
+    if ($user && $user->passwordExists()) {
+        $user->removePassword();
     }
 
     my $success;
@@ -1036,10 +966,10 @@ sub _addUserToPasswordSystem {
     } else {
         my $password = $p{Password};
         unless ($password) {
-            $password = _randomPassword(); 
+            $password = TWiki::User::randomPassword();
             $session->writeWarning("No password specified for ".$p{LoginName}." - using random=".$password);
         }
-        $success = $session->{users}->addUserPassword( $p{LoginName}, $password );
+        $success = $user->addPassword( $password );
     }
     return $success;
 }
@@ -1060,9 +990,9 @@ sub _sendEmail {
 
     $p{Introduction} = '' unless $p{Introduction}; # ugly? See Footnote [1]
 
-    $text =~ s/%LOGINNAME%/$p{LoginName}/go;
+    $text =~ s/%LOGINNAME%/$p{LoginName}/geo;
     $text =~ s/%FIRSTLASTNAME%/$p{Name}/go;
-    $text =~ s/%WIKINAME%/$p{WikiName}/go;
+    $text =~ s/%WIKINAME%/$p{WikiName}/geo;
     $text =~ s/%EMAILADDRESS%/$p{Email}/go;
     $text =~ s/%INTRODUCTION%/$p{Introduction}/go;
     $text =~ s/%VERIFICATIONCODE%/$p{VerificationCode}/go;
@@ -1128,7 +1058,7 @@ Get the last error that occured after reloadUserContext
 =cut
 
 sub getLastError {
-  return $error;
+    return $error;
 }
 
 =pod
@@ -1144,14 +1074,11 @@ dies if fails to store
 sub putRegDetailsByCode {
     my ($dataRef) = @_;
 
-    #    ::dumpIfDebug($dataRef, "putRegDetailsByCode");
-
     my %data = %$dataRef;
 
     # write tmpuser file
     my $file = _verificationCodeFilename($data{VerificationCode} );
 
-    #    ::dumpIfDebug($dataRef, "putRegDetailsByCode: ".$file);
     store( $dataRef, $file ) or throw Error::Simple( $! );
 }
 
@@ -1204,7 +1131,7 @@ sub reloadUserContext {
 
 
     unless (-f _verificationCodeFilename($code)){
-        $error = "oopsregcode"; 
+        $error = "oopsregcode";
         return ();
     }
 

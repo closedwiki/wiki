@@ -63,27 +63,22 @@ sub new {
 
 =pod
 
----+++ sub initializeUser( $wikiname, $usertopic )
+---+++ sub initializeUser( $user, $usertopic )
 
-STATIC Reads preferences from the user's personal topic.  The parameter
-is the topic to read user-level preferences from (Generally
-"Main.CurrentUserName").
+STATIC Reads preferences from the user's personal topic.
 
 =cut
 
 sub initializeUser {
-    my( $this, $wikiname, $topic ) = @_;
+    my( $this, $user, $topic ) = @_;
     ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($user) eq "TWiki::User") if DEBUG;
 
-    $wikiname = "$TWiki::mainWebname.$TWiki::defaultWikiName" unless $wikiname;
-
-    if( $wikiname =~ /^(.*)\.(.*)$/ ) {
-        my $webPrefs = $this->{WEBS}{$this->{WEBNAME}};
-        $this->{REQUEST} =
-          new TWiki::Prefs::PrefsCache($this->{session},
-                                       "request", $webPrefs,
-                                       $topic, $2);
-    }
+    my $webPrefs = $this->{WEBS}{$this->{WEBNAME}};
+    $this->{REQUEST} =
+      new TWiki::Prefs::PrefsCache($this->{session},
+                                   "request", $webPrefs,
+                                   $topic, $user);
 }
 
 =pod

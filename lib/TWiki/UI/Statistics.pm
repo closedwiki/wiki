@@ -367,17 +367,14 @@ sub _processWeb {
 
     # We create a new session object to parse the path info
     $session =
-      new TWiki( $thePathInfo, $session->{userName},
+      new TWiki( $thePathInfo, $session->{user}->login(),
                  $session->{topicName}, "", $session->{cgiQuery} );
 
-    my ( $topic, $webName, $dummy, $userName ) =
-      ( $session->{topicName}, $session->{webName}, $session->{scriptUrlPath},
-        $session->{userName} );
-
-    my $wikiUserName = $session->{users}->userToWikiName( $userName );
+    my ( $topic, $webName, $user ) =
+      ( $session->{topicName}, $session->{webName}, $session->{user} );
 
     if( $isFirstTime ) {
-        my $tmp = $wikiUserName;
+        my $tmp = $user->wikiName();
         $tmp .= " as shell script" unless( $session );
         _printMsg( "* Executed by $tmp", $session );
     }
@@ -424,8 +421,7 @@ sub _processWeb {
     # $statsTopic = "TestStatistics";		# Create this by hand
     if( $session->{store}->topicExists( $webName, $statsTopic ) ) {
         my( $meta, $text ) =
-          $session->{store}->readTopic( $wikiUserName, $webName, $statsTopic,
-                                        undef, 1 );
+          $session->{store}->readTopic( undef, $webName, $statsTopic, undef );
         my @lines = split( /\n/, $text );
         my $statLine;
         my $idxStat = -1;
@@ -465,7 +461,7 @@ sub _processWeb {
         $text = join( "\n", @lines );
         $text .= "\n";
 
-        $session->{store}->saveTopic( $userName, $webName, $statsTopic,
+        $session->{store}->saveTopic( $user, $webName, $statsTopic,
                                       $text, $meta,
                                       { dontnotify => 1,
                                         dontlog => 1 } );

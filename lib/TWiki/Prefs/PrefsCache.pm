@@ -45,14 +45,20 @@ web, to topic/user.
 | Parameter: =$parent= | Prefs object from which to inherit higher-level settings. |
 | Parameter: =@target= | What this object stores preferences for, see notes. |
 
-*Notes:* =$type= should be one of "global", "web", "request", or "copy". If the
-type is "global", no parent or target should be specified; the object will
-cache sitewide preferences.  If the type is "web", =$parent= should hold global
-preferences, and @target should contain only the web's name.  If the type is
-"request", then $parent should be a "web" preferences object for the current
-web, and =@target= should be( $topicName, $userName ).  $userName should be
-just the WikiName, with no web specifier.  If the type is "copy", the result is
-a simple copy of =$parent=; no =@target= is needed.
+*Notes:* =$type= should be one of "global", "web", "request", or "copy".
+
+If the type is "global", no parent or target should be specified; the
+object will cache sitewide preferences.
+
+If the type is "web", =$parent= should hold global
+preferences, and @target should contain only the web's name.
+
+If the type is "request", then $parent should be a "web" preferences object
+for the current web, and =@target= should be( $topicName, $user ).
+$user should be the user object.
+
+If the type is "copy", the result is a simple copy of =$parent=; no
+=@target= is needed.
 
 Call like this: =$mainWebPrefs = Prefs->new("web", "Main");=
 
@@ -82,6 +88,7 @@ sub new {
         if( $theType eq "request" ) {
             $self->{topic} = $theTarget[0];
             $self->{user} = $theTarget[1];
+            ASSERT(ref($self->{user}) eq "TWiki::User") if DEBUG;
         }
 
         $self->loadPrefs( 1 );
@@ -141,7 +148,7 @@ sub loadPrefs {
                                        "", $allowCache);
         }
         $self->loadPrefsFromTopic( $TWiki::mainWebname,
-                                   $self->{user},
+                                   $self->{user}->wikiName(),
                                    "", $allowCache );
         if( $topicPrefsSetting && $topicPrefsOverride ) {
             # topic prefs override user prefs

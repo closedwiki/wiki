@@ -37,7 +37,7 @@ use TWiki::UI::OopsException;
 
 =pod
 
----++ edit( $webName, $topic, $userName, $query )
+---++ edit( $session )
 Edit handler. Most parameters are in the CGI query:
 | =cmd= | Undocumented save command, passed on to save script |
 | =onlywikiname= | if defined, requires a wiki name for the topic name if this is a new topic |
@@ -56,7 +56,7 @@ sub edit {
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
-    my $userName = $session->{userName};
+    my $user = $session->{user};
 
     my $saveCmd = $query->param( 'cmd' );
     my $breakLock = $query->param( 'breaklock' ) || "";
@@ -98,22 +98,21 @@ sub edit {
         return;
     }
 
-    my $wikiUserName = $session->{wikiUserName};
-
     if( $topicExists ) {
         ( $meta, $text ) =
-          $session->{store}->readTopic( $wikiUserName, $webName,
-                                    $topic, undef, 1 );
+          $session->{store}->readTopic( undef, $webName,
+                                    $topic, undef );
     }
 
     # If you want to edit, you have to be able to view and change.
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            "view", $wikiUserName );
+                            "view", $session->{user} );
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            "change", $wikiUserName );
+                            "change", $session->{user} );
 
-    if( $saveCmd ) {
-        TWiki::UI::checkAdmin( $session, $webName, $topic, $wikiUserName );
+    if( $saveCmd && ! $session->{user}->isAdmin()) {
+        throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
+                                        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
     }
 
     my $templateWeb = $webName;
@@ -130,8 +129,8 @@ sub edit {
             }
 
             ( $meta, $text ) =
-              $session->{store}->readTopic( $wikiUserName, $templateWeb,
-                                        $templateTopic, undef, 0 );
+              $session->{store}->readTopic( $session->{user}, $templateWeb,
+                                        $templateTopic, undef );
         }
         unless( $text ) {
             ( $meta, $text ) = TWiki::UI::readTemplateTopic( $session, "WebTopicEditTemplate" );
@@ -144,7 +143,7 @@ sub edit {
             $formTemplate = $args{"name"};
         }
 
-        $text = $session->expandVariablesOnTopicCreation( $text, $userName );
+        $text = $session->expandVariablesOnTopicCreation( $text, $user );
     }
 
     # Insert the rev number we are editing. This will be boolean false if
@@ -188,8 +187,8 @@ sub edit {
     }
 
     if( $saveCmd ) {
-        $text = $session->{store}->readTopicRaw( $wikiUserName, $webName, $topic,
-                                             undef, 0 );
+        $text = $session->{store}->readTopicRaw( $session->{user}, $webName,
+                                                 $topic, undef );
     }
 
     $text =~ s/&/&amp\;/go;

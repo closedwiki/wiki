@@ -31,7 +31,6 @@ use strict;
 use TWiki;
 use TWiki::User;
 use TWiki::UI;
-use TWiki::UI::OopsException;
 
 =pod
 
@@ -39,7 +38,7 @@ use TWiki::UI::OopsException;
 Generate a complete HTML page that represents the viewed topics.
 The view is controlled by CGI parameters as follows:
 | =rev= | topic revision to view |
-| =raw= | don't format body text if set |
+| =raw= | no format body text if set |
 | =skin= | name of skin to use |
 | =contenttype= | |
 
@@ -54,8 +53,6 @@ sub view {
     my $viewRaw = $query->param( "raw" ) || "";
     my $contentType = $query->param( "contenttype" );
 
-    my $text = "";
-    my $meta = "";
     my $maxrev = 1;
     my $extra = "";
     my $revdate = "";
@@ -71,13 +68,18 @@ sub view {
     }
 
     my $rev = $session->{store}->cleanUpRevID( $query->param( "rev" ));
-    my $topicExists = $session->{store}->topicExists( $webName, $topicName );
+
+    my $topicExists =
+      $session->{store}->topicExists( $webName, $topicName );
+    # text and meta of the _latest_ rev of the topic
+    my( $currText, $currMeta );
+    # text and meta of the chosen rev of the topic
+    my( $meta, $text );
     if( $topicExists ) {
-        ( $meta, $text ) = $session->{store}->readTopic
-          ( $session->{wikiUserName},
-            $webName, $topicName, undef, 1 );
+        ( $currMeta, $currText ) = $session->{store}->readTopic
+          ( undef, $webName, $topicName, undef );
         ( $revdate, $revuser, $maxrev ) =
-          $meta->getRevisionInfo( $webName, $topicName );
+          $currMeta->getRevisionInfo( $webName, $topicName );
 
         $revdate = TWiki::formatTime( $revdate );
 
@@ -88,36 +90,31 @@ sub view {
         }
 
         if( $rev < $maxrev ) {
-            # Most recent topic read in even if earlier topic requested - makes
-            # code simpler and performance impact should be minimal
-            ( $meta, $text ) =
-              $session->{store}->readTopic( $session->{wikiUserName},
-                                        $webName, $topicName, $rev, 0 );
+            # Note: the most recent topic read in even if earlier rev
+            # requested. The most recent rev is required for access
+            # control checking.
+            ( $meta, $text ) = $session->{store}->readTopic
+              ( $session->{user}, $webName, $topicName, $rev );
 
-            # SMELL: why doesn't this use $meta?
-            ( $revdate, $revuser ) =
-              $session->{store}->getRevisionInfo( $webName, $topicName, $rev );
+            ( $revdate, $revuser ) = $meta->getRevisionInfo();
             $revdate = TWiki::formatTime( $revdate );
             $extra .= "r$rev";
+        } else {
+            # viewing the most recent rev
+            ( $text, $meta ) = ( $currText, $currMeta );
         }
     } else { # Topic does not exist yet
         $rev = 1;
         if( TWiki::isValidTopicName( $topicName )) {
-            ( $meta, $text ) =
+            ( $currMeta, $currText ) =
               TWiki::UI::readTemplateTopic( $session, "WebTopicViewTemplate" );
         } else {
-            ( $meta, $text ) =
+            ( $currMeta, $currText ) =
               TWiki::UI::readTemplateTopic( $session, "WebTopicNonWikiTemplate" );
         }
+        ( $text, $meta ) = ( $currText, $currMeta );
         $extra .= " (not exist)";
     }
-
-    # This has to be done before $text is rendered!!
-    my $viewAccessOK =
-      $session->{security}->checkAccessPermission
-        ( "view",
-          $session->{wikiUserName}, $text, $topicName, $webName );
-    # SMELL: why wait so long before processing this if the read access failed?
 
     if( $viewRaw ) {
         $extra .= " raw=$viewRaw";
@@ -193,14 +190,15 @@ sub view {
         # Create pages
         $tmpl =~ s/<meta name="robots"[^>]*>//goi;
         my $editAction = $topicExists ? 'Edit' : 'Create';
-
-        # Special case for 'view' to handle %EDITTOPIC% and Edit vs. Create.
-        # New %EDITURL% variable is implemented by handleCommonTags, suffixes
-        # '?t=NNNN' to ensure that every Edit link is unique, fixing
+        # Special case for 'view' to handle %EDITTOPIC% and Edit vs.
+        # Create.
+        # New %EDITURL% variable is implemented by handleCommonTags,
+        # suffixes '?t=NNNN' to ensure that every Edit link is unique,
+        # fixing
         # Codev.RefreshEditPage bug relating to caching of Edit page.
         $tmpl =~ s!%EDITTOPIC%!<a href=\"%EDITURL%\"><b>$editAction</b></a>!go;
 
-        # FIXME: Implement ColasNahaboo's suggested %EDITLINK% along the 
+        # FIXME: Implement ColasNahaboo's suggested %EDITLINK% along
         # same lines, within handleCommonTags
         $tmpl =~ s/%REVTITLE%//go;
         $tmpl =~ s/%REVARG%//go;
@@ -251,53 +249,6 @@ sub view {
     $tmpl =~ s/%CURRREV%/$rev/go;
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
-    # Check if some part of the sequence of Store accesses failed
-    if( $session->{store}->accessFailed() ) {
-        # Can't read requested topic and/or included (or other accessed topics
-        # user could not be authenticated, may be not logged in yet?
-        my $viewauthFile = $ENV{'SCRIPT_FILENAME'};
-        # SMELL: depends on view script being called view. And what if this
-        # script is _already_ viewauth? Could use \b, but still depends on
-        # the name.
-        $viewauthFile =~ s|/view|/viewauth|o;
-        if( ( ! $query->remote_user() ) && (-e $viewauthFile ) ) {
-            # try again with authenticated viewauth script
-            # instead of non authenticated view script
-            my $url = $ENV{"REQUEST_URI"};
-            if( $url && $url =~ m|/view| ) {
-                # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
-                $url =~ s|/view|/viewauth|o;
-                $url = "$session->{urlHost}$url";
-            } else {
-                # If REQUEST_URI is rewritten and does not contain the name "view"
-                # try looking at the CGI environment variable SCRIPT_NAME.
-                #
-                # Assemble the new URL using the host, the changed script name,
-                # the path info, and the query string.  All three query variables
-                # are in the list of the canonical request meta variables in CGI 1.1.
-                my $script      = $ENV{'SCRIPT_NAME'};
-                my $pathInfo    = $ENV{'PATH_INFO'};
-                my $queryString = $ENV{'QUERY_STRING'};
-                $pathInfo    = '/' . $pathInfo    if ($pathInfo);
-                $queryString = '?' . $queryString if ($queryString);
-                if ($script && $script =~ m|/view| ) {
-                    $script =~ s|/view|/viewauth|o;
-                    $url = "$session->{urlHost}$script$pathInfo$queryString";
-                } else {
-                    # If SCRIPT_NAME does not contain the name "view"
-                    # the last hope is to try the SCRIPT_FILENAME ...
-                    $viewauthFile =~ s|^.*/viewauth|/viewauth|o;  # strip off $Twiki::scriptUrlPath
-                    $url = $session->{urlhost}.$session->{scriptUrlPath}."/$viewauthFile$pathInfo$queryString";
-                }
-            }
-            $session->redirect( $url );
-	    return;
-        }
-    }
-    if( $topicExists && ! $viewAccessOK ) {
-        throw TWiki::UI::OopsException( $webName, $topicName, "accessview" );
-    }
-
     # Write header based on "contenttype" parameter, used to produce
     # MIME types like text/plain or text/xml, e.g. for RSS feeds.
     if( $contentType ) {
@@ -314,7 +265,6 @@ sub view {
     } else {
         $contentType = 'text/html'
     }
-
     $session->writeCompletePage( $tmpl );
 }
 
@@ -345,8 +295,8 @@ sub viewfile {
 
     if( ( $rev ) && ( $rev ne $topRev ) ) {
         my $fileContent =
-          $session->{store}->readAttachmentVersion( $webName, $topic,
-                                                     $fileName, $rev ); 
+          $session->{store}->readAttachment( $session->{user}, $webName, $topic,
+                                             $fileName, $rev );
         if( $fileContent ) {
             my $mimeType = _suffixToMimeType( $session, $fileName );
             print $query->header( -type => $mimeType,

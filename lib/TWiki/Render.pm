@@ -156,7 +156,8 @@ sub _renderMoved {
         my $toWeb = $1;
         my $toTopic = $2;
         my $by   = $moved{"by"};
-        $by = $this->users()->userToWikiName( $by );
+        my $u = $this->users()->findUser( $by );
+        $by = $u->webDotWikiName() if $u;
         my $date = $moved{"date"};
         $date = TWiki::formatTime( $date, "", "gmtime" );
 
@@ -387,11 +388,11 @@ sub _linkToolTipInfo {
     $text =~ s/\$rev/1.$rev/g;
     $text =~ s/\$date/TWiki::formatTime( $date )/ge;
     $text =~ s/\$username/<nop>$user/g;                                     # "jsmith"
-    $text =~ s/\$wikiname/"<nop>" . $this->users()->userToWikiName( $user, 1 )/ge;  # "JohnSmith"
-    $text =~ s/\$wikiusername/"<nop>" . $this->users()->userToWikiName( $user )/ge; # "Main.JohnSmith"
+    $text =~ s/\$wikiname/"<nop>" . $user->wikiName()/ge;  # "JohnSmith"
+    $text =~ s/\$wikiusername/"<nop>" . $user->webDotWikiName()/ge; # "Main.JohnSmith"
     if( $text =~ /\$summary/ ) {
         my $summary = $this->store()->readTopicRaw
-          ( $this->{session}->{wikiUserName}, $theWeb, $theTopic, undef, 1 );
+          ( undef, $theWeb, $theTopic, undef );
         $summary = $this->makeTopicSummary( $summary, $theTopic, $theWeb );
         $summary =~ s/[\"\']/<nop>/g;       # remove quotes (not allowed in title attribute)
         $text =~ s/\$summary/$summary/g;
@@ -660,7 +661,7 @@ sub renderFormField {
     unless ( $meta ) {
         my $dummyText;
         ( $meta, $dummyText ) =
-          $this->store()->readTopic( $this->{session}->{wikiUserName}, $formWeb, $formTopic, undef, 0 );
+          $this->store()->readTopic( $this->{session}->{user}, $formWeb, $formTopic, undef );
         $this->{ffCache}{"$formWeb.$formTopic"} = $meta;
     }
 
