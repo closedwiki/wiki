@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999839103" format="1.0" version="1.26"}%
+%META:TOPICINFO{author="MikeMannix" date="1000771966" format="1.0" version="1.27"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---+ TWiki Text Formatting
@@ -289,7 +289,8 @@ Know.ReadmeFirst
 </td>
 </tr>
 <tr bgcolor="#ffffff">
-<td valign="top">#SquareBrackets
+<td valign="top">
+#SquareBrackets
  *Forced Links:* <br>
  You can create a forced internal link by enclosing words in double square brackets. <br> __Note:__ Text within the brackets may contain optional spaces; the topic name is formed by capitalizing the initial letter and by removing the spaces; i.e. =[<nop>[text formatting FAQ]]= links to topic TextFormattingFAQ.  You can also refer to a different web and use anchors.
 </td><td valign="top">
