@@ -3,6 +3,7 @@ twiki (20040902-1) unstable; urgency=high
   * don't allow view on topics with empty ALLOW pref (Closes: #281624)
   * applied ViewAfterSaveCachesOldPage-ugly-fix.patch (Closes: #218922)
     - maybe!! (I could never re-produce it)
+  * corrected the permssions of log and .htpasswd (Closes: #281761)
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 16 Nov 2005 00:00:01 -1000
 

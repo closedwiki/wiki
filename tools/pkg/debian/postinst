@@ -110,7 +110,7 @@ case "$1" in
 			    touch /var/lib/twiki/data/.htpasswd
 		       	    $HTPASSWDCMD -b /var/lib/twiki/data/.htpasswd TWikiGuest guest
 			    chown $TWIKI_OWNER.www-data /var/lib/twiki/data/.htpasswd
-			    chmod og=rw /var/lib/twiki/data/.htpasswd
+			    chmod 664 /var/lib/twiki/data/.htpasswd
 			fi
 		fi
 	fi
@@ -144,7 +144,7 @@ case "$1" in
 	fi
 	
 	chown -R $TWIKI_OWNER.www-data /var/log/twiki
-	chmod -R og=rw /var/log/twiki
+	chmod -R 755 /var/log/twiki
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
