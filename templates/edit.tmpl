@@ -51,8 +51,11 @@ function checkAll( theButton, theButtonOffset, theNum, theCheck )
     document.main.elements[i].checked = theCheck;
   }
 }
-function launchWindow( theWeb, theTopic ) {
-  win = open( "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain",
+function launchWindow( theWeb, theTopic, theAnchor ) {
+  if( ! theAnchor ) {
+    theAnchor = "";
+  }
+  win = open( "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain" + theAnchor,
               theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
   if( win ) {
     win.focus();
@@ -78,12 +81,11 @@ See below for help in editing this page.
 <table border="0" cellpadding="2" cellspacing="0">
  <tr>
   <td><b>-- <nop>%WIKIUSERNAME% - %DATE%</b></td>
-  <td> &nbsp;&nbsp; <code>&lt;==</code> Your signature for easy copy and paste (triple click to select in most browsers)</td>
+  <td> &nbsp;&nbsp; <code>&lt;==</code> Your signature for easy copy and paste (triple click to select)</td>
  </tr><tr>
   <td><b>-- %INITIALS%</b></td>
-  <td> &nbsp;&nbsp; <code>&lt;==</code> Your initials, for signing small comments.</td>
- </tr><tr>
-  <td><font size=-1>(If you'd like to use different initials, just add a line like "Initials: ZXQ" to your [[%WIKIUSERNAME%][user topic]].)</td>
+  <td> &nbsp;&nbsp; <code>&lt;==</code> Your initials, for signing small comments
+  (<a target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle','#SignAndDate')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle#SignAndDate">help</a>)</td>
  </tr>
 </table>
 %FORMFIELDS%
