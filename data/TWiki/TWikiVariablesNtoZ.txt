@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MarioFrasca" date="1110648897" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="0" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 __Note:__ This topic is included by TWikiVariables
 
@@ -12,7 +12,7 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarPLUGINVERSION
 ---+++ PLUGINVERSION -- the version of the TWiki Plugin API
-	* This is the =$TWiki::Plugins::VERSION= number, also indicating the version of the TWikiFuncModule
+	* This is the =$TWiki::Plugins::VERSION= number, also indicating the version of the Func module
 	* Syntax: =%<nop>PLUGINVERSION{}%=
 	* Expands to: =%PLUGINVERSION{}%=
 	* Related: [[#VarPLUGINVERSION2][PLUGINVERSION{"name"}]], [[#VarWIKIVERSION][WIKIVERSION]]
