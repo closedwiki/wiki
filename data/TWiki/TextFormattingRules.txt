@@ -233,17 +233,24 @@ __Note:__ Terms with spaces are not supported. In case you do have a term with m
 <tr>
 <td valign="top">
  *Table:* <br>
- Optional spaces followed by the cells enclosed in vertical bars.
+ Optional spaces followed by the cells enclosed in vertical bars. <br>
+__Note:__ In case you have a long row and you want it to be more readable when you edit the table you can split the row into lines that end with a ='\'= backslash character.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
 | A1 | B1 | C1 |
 | A2 | B2 | C2 |
+| A3 \<nop>
+  | next \<nop>
+  | next |
 </pre>
 </font></span>
 </td><td valign="top">
 | A1 | B1 | C1 |
 | A2 | B2 | C2 |
+| A3 \
+  | next \
+  | next |
 </td>
 </tr>
 <tr>
@@ -290,26 +297,6 @@ __Note:__ Terms with spaces are not supported. In case you do have a term with m
 </font></span>
 </td><td valign="top">
  <nop>SunOS
-</td>
-</tr>
-<tr>
-<td valign="top">
- *Disable Links:* <br>
- You can disable automatic linking of WikiWords by surround text with =&lt;noautolink&gt;= and =&lt;/noautolink&gt;= tags. <br> __Note:__ Each tag must be on a line by itself.
-</td><td valign="top">
-<span style='background : #FFFFCC;'><font color="#990000">
-<verbatim>
- <noautolink>
- RedHat &
- SuSE
- </noautolink>
-</verbatim>
-</font></span>
-</td><td valign="top">
- <noautolink>
- RedHat &
- SuSE
- </noautolink>
 </td>
 </tr>
 </table>
