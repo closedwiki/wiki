@@ -89,11 +89,10 @@ sub main
 
     if ( $action eq "on" ) {
         installEncryptedPasswd ($webName, $topic, $userName);
-    } 
-   if ( $action eq "requestReset" ) {
+    } elsif ( $action eq "requestReset" ) {
         showEncryptedPasswd ($webName, $topic);
     } else {
-       $url = &TWiki::getOopsUrl( $webName, $topic, "oopswrongpassword");
+       $url = &TWiki::getOopsUrl( $webName, $topic, "oopsmanage");
        TWiki::redirect( $query, $url );
     }
 }
