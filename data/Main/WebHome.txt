@@ -1,0 +1,28 @@
+Welcome to the home of TWiki.%WEB%. This is a web based collaboration area to get to know the TWiki tool.
+
+<B> The TWiki home is at http://www.mindspring.net/~peterthoeny/twiki/index.html </B>
+
+Good *starting points* at the TWiki.Main web are:
+	* WelcomeGuest: Look here first to get you rolling on TWiki.
+	* TWikiWeb: Explains what a TWiki web is.
+	* <b> TWikiUsers: </b> List of visitors to this TWiki web.
+
+	* GoodStyle: Things to consider when changing text.
+	* TextFormattingRules: Easy to learn rules when editing text.
+	* TextFormattingFAQ: Answers to frequently asked questions about text formatting.
+	* TestArea: The place to get your virtual TWiki hands dirty!
+
+<FORM name="main" action="../../search/%WEB%/">
+	* <A HREF="../../search/%WEB%/?scope=topic&regex=on&search=.*">Topic index</A>: List up all TWiki.%WEB% topics in alphabetical order.
+	* <A HREF="../../view/%WEB%/WebSearch">Search</A>: Full text search of TWiki.%WEB%.
+	* <INPUT type="text" name="search" size="32"> <INPUT type="submit" value="Search"> <INPUT type="hidden" name="scope" value="text"> <INPUT type="hidden" name="ignorecase" value="on"> &nbsp;&nbsp; (More options in WebSearch)
+	* <A HREF="../../changes/%WEB%">Changes</A>: Find out recent changes of the %WEB% web.
+	* WebNotify: Subscribe to be automatically notified when something changes in TWiki.%WEB%.
+</FORM>
+
+*Notes:*
+	* You are currently in the TWiki.%WEB% web. The color code for this web is a light yellow background, so you know where you are.
+
+----
+
+%INCLUDE:"wikiwebtable.inc"%
