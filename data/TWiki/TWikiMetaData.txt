@@ -1,15 +1,15 @@
-%META:TOPICINFO{author="MikeMannix" date="1002008290" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="MikeMannix" date="1007383980" format="1.0" version="1.9"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
 #MetaDataDefinition
----# Appendix B: TWiki Meta Data
+---# TWiki Meta Data
 
-_Additional topic data, not editable from main freeform text box, stored in =META= variable name/value pairs_
+_Additional topic data, program-generated or from TWikiForms, is stored in =META= variable name/value pairs_
 
 ---++ Overview
 
-<nop>TWikiMetaData uses =META= variables to store topic data that's separate from the main free-form content. This includes program-generated info like FileAttachment data, and user-defined TWikiForms info.
+TWikiMetaData uses =META= variables to store topic data that's separate from the main free-form content. This includes program-generated info like FileAttachment and topic movement data, and user-defined TWikiForms info. Use =META= variables to format and display Meta Data.  
 
 ---++ Meta Data Syntax
 
@@ -151,4 +151,4 @@ Current support covers:
 At present, there is no Meta Data support for Plugins. However, the format is readily extendable and the =Meta.pm= code that supports the format needs only minor alteration.
 
 -- JohnTalintyre - 29 Aug 2001 <br />
--- MikeMannix - 02 Oct 2001 <br />
+-- MikeMannix - 03 Dec 2001	
