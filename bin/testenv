@@ -294,7 +294,9 @@ if ($detailedOS eq 'cygwin') {
 # indicates they should.
 my $exeSuffix='';
 if ( $Config::Config{'_exe'} and ($OS eq 'WINDOWS' and $perltype ne 'Cygwin') ) { 
-    $exeSuffix = $Config::Config{'_exe'};
+    if ( ! $ENV{'INTERIX_ROOT'} ) { #this is set is we are using UnixServicesForWindows (or INTERIX funnily enough) and they don't use .exe either
+        $exeSuffix = $Config::Config{'_exe'};
+    }
 }
 
 
