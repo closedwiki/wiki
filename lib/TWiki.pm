@@ -72,6 +72,7 @@ use vars qw(
         $wikiPrefsTopicname $webPrefsTopicname
         $statisticsTopicname $statsTopViews $statsTopContrib
         $numberOfRevisions $editLockTime
+        $attachAsciiPath
         $scriptSuffix $safeEnvPath $mailProgram $wikiversion 
         $doKeepRevIfEditLock $doRemovePortNumber
         $doRememberRemoteUser $doPluralToSingular
@@ -87,10 +88,6 @@ use vars qw(
         $viewableAttachmentCount $noviewableAttachmentCount
     );
 
-# FIXME: Move attachment table rendering elsewhere (TWiki::Attach ? )
-use vars qw(
-        $showAttr $viewableAttachmentCount $noviewableAttachmentCount
-    );
 
 # TWiki::Store config:
 use vars qw(
