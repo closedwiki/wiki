@@ -319,7 +319,9 @@ sub view {
         $contentType = 'text/html'
     }
 
-    $session->writeHeaderFull( $query, 'basic', $contentType, length( $tmpl ));
+    $tmpl .= "\n";
+    # was length( $tmpl )
+    $session->writeHeaderFull( $query, 'basic', $contentType, 0);
     print $tmpl;
 }
 
