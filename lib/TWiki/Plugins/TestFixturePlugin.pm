@@ -147,6 +147,7 @@ sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
     die "initPlugin called twice" if $called{initPlugin};
+    undef %called;
     $called{initPlugin} = 1;
 
     return 1;
@@ -194,20 +195,24 @@ sub DISABLE_afterCommonTagsHandler {
     $_[0] =~ s/afterCommonTagsHandler/ACT1\nACT2 $_[2].$_[1]\nACT3\n/g;
 }
 
-sub DISABLE_outsidePREHandler {
-    # Replace the text "outsidePREHandler" with some
+sub outsidePREHandler {
+    # Replace the text "%outsidePREHandler%" with some
     # recognisable text.
-    $_[0] =~ s/outsidePreHandler/OP1\nOP2\nOP3\n/g;
+    my $n = ++$called{outsidePreHandler};
+    $_[0] =~ s/%outsidePreHandler%/OPH${n}_line1\nOPH${n}_line2\nOPH${n}_line3\n/g;
 }
 
-sub DISABLE_insidePREHandler {
-    # Replace the text "insidePREHandler" with some
+sub insidePREHandler {
+    # Replace the text "%insidePREHandler%" with some
     # recognisable text.
-    $_[0] =~ s/insidePreHandler/IP1\nIP2\nIP3\n/g;
+    my $n = ++$called{insidePreHandler};
+    $_[0] =~ s/%insidePreHandler%/IPH${n}_line1\nIPH${n}_line2\nIPH${n}_line3\n/g;
 }
 
-sub DISABLE_startRenderingHandler {
+sub startRenderingHandler {
     $called{startRenderingHandler} = join(",", @_);
+    $called{insidePreHandler} = 0;
+    $called{outsidePreHandler} = 0;
 }
 
 sub endRenderingHandler {
