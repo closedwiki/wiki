@@ -373,7 +373,7 @@ if ($@) {
     print "</td></tr>\n";
 } else {
     $twikiFound = 1;
-    my $mod_version = eval '$TWiki::wikiversion';
+    my $mod_version = eval '$TWiki::VERSION';
     $mod_version ||= 'unknown';
     print "OK, $mod.pm found (TWiki version: <b>$mod_version</b>)";
     print "</td></tr>\n";
