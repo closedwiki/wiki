@@ -58,6 +58,8 @@ sub preview {
     # get view template, standard view or a view with a different skin
     $tmpl = $session->{templates}->readTemplate( "preview", $skin );
     $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
+    my $forceNewRevision = $query->param( "forcenewrevision" ) && 'checked="checked"' || '';
+    $tmpl =~ s/%FORCENEWREVISIONCHECKBOX%/$forceNewRevision/go;
     if( $saveCmd ) {
         unless( $user->isAdmin()) {
             throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
