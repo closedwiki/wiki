@@ -93,11 +93,11 @@ If an attribute is given to the =%COMMENT= tag that is not one of the [[#Standar
 </pre>
 and the %COMMENT tag is:
 <pre>
-%<nop>COMMENT{type="example" rows="5" cols="20"}%
+%<nop>COMMENT{type="example" cols="75"}%
 </pre>
 then the template will be expanded as
 <pre>
-&lt;textarea rows=5 cols="20" value="Rubbish">
+&lt;textarea rows="3" cols="75" value="Rubbish">
 </pre>
 
 As well as support for all the usual TWiki variables in templates, the following special variables are supported in the =PROMPT= definition:
@@ -153,19 +153,21 @@ If installed correctly, you should see a =%COMMENT= edit box below here.
 
 |  Plugin Author: | v1.0 TWiki:Main/DavidWeller v2.0 TWiki:Main/PeterMasiar v3.0 TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
-|  Change History: | <!-- Most recent first --> |
-| | 16 Aug 2004: Cairo readiness; dependency checking; added =threadmode= template. |
-| | 11 Apr 2004: Minor line termination problem fixed, and "security" hyphen on standard comment removed and replaced with a bulleted list. |
-| | 6 April 2004: Applied patches (thanks Peter Thoeny) for multiple comment adding, BOTTOM and TOP inside meta-data, and moved example to Sandbox. |
-| | 13 March 2004: Modified to use viewauth save technique (safer), add nonotify parameter, move templates fully into topics, with a hook for site-specifics, support %<nop>COMMENT%, internationalisation fixes |
-| | 18 Feb 2004: TWiki:Main/CrawfordCurrie rewrote for standard templates and other user requests. Recognition to Patrice Fournier and Sam Abrams for terrific testing and patch support. |
-| | 7 Feb 2004: TWiki:Main/CrawfordCurrie rewrote this page and CommentTemplates in an effort to make the plugin more user friendly. Added {TIME} variable. Also updated CVS. |
-| | 23 Sep 2003 TWiki:Main/PeterMasiar: 80% rewrite/refactor, adding templates |
-| | 15 July 2003: TWiki:Main/PeterMasiar added "reminder" parameter and feature to pass comments to oopslockedcomments.tmpl template to copy-paste later |
-| | 5 March 2002  Bug fixes, TWiki:Main/JonLambert created oopslockedcomments.tmpl template |
-| | 24 Feb 2002 added a few more user requests, made "English" text configurable |
-| | 4 Dec 2001: 1.01 release, changed name to CommentPlugin, added $button var, changed textarea WRAP setting to "soft" |
-| | 30 Nov 2001: Initial version |
+| Change History: <!-- Most recent first --> ||
+| 12 Oct 2004 | 3.007 Disabled comment boxes in rdiff pane. |
+| 6 Oct 2004 | 3.006 Fixed action template, which was expanded incorrectly. Upped default comment box to 70 chars default width. |
+| 16 Aug 2004 | 3.005 Cairo readiness; dependency checking; added =threadmode= template. |
+| 11 Apr 2004 | 3.004 Minor line termination problem fixed, and "security" hyphen on standard comment removed and replaced with a bulleted list. |
+| 6 April 2004 | 3.003 Applied patches (thanks Peter Thoeny) for multiple comment adding, BOTTOM and TOP inside meta-data, and moved example to Sandbox. |
+| 13 March 2004 | 3.002 Modified to use viewauth save technique (safer), add nonotify parameter, move templates fully into topics, with a hook for site-specifics, support %<nop>COMMENT%, internationalisation fixes |
+| 18 Feb 2004 | 3.001 TWiki:Main/CrawfordCurrie rewrote for standard templates and other user requests. Recognition to Patrice Fournier and Sam Abrams for terrific testing and patch support. |
+| 7 Feb 2004 | TWiki:Main/CrawfordCurrie rewrote this page and CommentTemplates in an effort to make the plugin more user friendly. Added {TIME} variable. Also updated CVS. |
+| 23 Sep 2003 | 2.000 TWiki:Main/PeterMasiar: 80% rewrite/refactor, adding templates |
+| 15 July 2003 | TWiki:Main/PeterMasiar added "reminder" parameter and feature to pass comments to oopslockedcomments.tmpl template to copy-paste later |
+| 5 March 2002 | Bug fixes, TWiki:Main/JonLambert created oopslockedcomments.tmpl template |
+| 24 Feb 2002 | added a few more user requests, made "English" text configurable |
+| 4 Dec 2001 | 1.010 release, changed name to CommentPlugin, added $button var, changed textarea WRAP setting to "soft" |
+| 30 Nov 2001 | 1.000 Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |

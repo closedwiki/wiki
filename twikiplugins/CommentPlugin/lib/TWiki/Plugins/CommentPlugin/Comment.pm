@@ -8,15 +8,15 @@ use strict;
 
 use TWiki::Contrib::Attrs;
 
-{ package TWiki::Plugins::CommentPlugin::Comment;
+package TWiki::Plugins::CommentPlugin::Comment;
 
-  use vars qw( $inSave ); # recursion block
+use vars qw( $inSave ); # recursion block
 
-  # PUBLIC save the given comment. Note that this method is protected against
-  # recursion. This is because the expansion of variables in the template
-  # will invoke the commonTagsHandler in the plugin and therefore
-  # this method.
-  sub save {
+# PUBLIC save the given comment. Note that this method is protected against
+# recursion. This is because the expansion of variables in the template
+# will invoke the commonTagsHandler in the plugin and therefore
+# this method.
+sub save {
     my ( $web, $topic, $query ) = @_;
 
     return if ( $inSave );
@@ -26,59 +26,58 @@ use TWiki::Contrib::Attrs;
     my $wikiUserName = &TWiki::Func::getWikiUserName();
     if( ! TWiki::Func::checkAccessPermission( "change", $wikiUserName, "",
 											  $topic, $web ) ) {
-      # user has no permission to change the topic
-      $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsaccesschange" );
+        # user has no permission to change the topic
+        $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsaccesschange" );
     } else {
-      my( $oopsUrl, $lockUser ) =
-		TWiki::Func::checkTopicEditLock( $web, $topic );
-      if( $lockUser ) {
-		$url = $oopsUrl;
-      } else {
-		TWiki::Func::setTopicEditLock( $web, $topic, 1 );
-		
-		$inSave = 1;
-		my $error = _buildNewTopic( $web, $topic, $query );
-		$inSave = 0;
+        my( $oopsUrl, $lockUser ) =
+          TWiki::Func::checkTopicEditLock( $web, $topic );
+        if( $lockUser ) {
+            $url = $oopsUrl;
+        } else {
+            TWiki::Func::setTopicEditLock( $web, $topic, 1 );
+            $inSave = 1;
+            my $error = _buildNewTopic( $web, $topic, $query );
+            $inSave = 0;
 
-		TWiki::Func::setTopicEditLock( $web, $topic, 0 );
-		if( $error ) {
-		  $url = $error;
-		} else {
-		  $url = TWiki::Func::getViewUrl( $web, $topic );
-		}
-      }
+            TWiki::Func::setTopicEditLock( $web, $topic, 0 );
+            if( $error ) {
+                $url = $error;
+            } else {
+                $url = TWiki::Func::getViewUrl( $web, $topic );
+            }
+        }
     }
 
     # shouldn't need this, but seem to.
     $query->param( -name=>'comment_action', -value=>'none' );
     TWiki::Func::redirectCgiQuery( $query, $url );
-  }
+}
 
-  # PUBLIC STATIC convert COMMENT statements to form prompts
-  sub prompt {
+# PUBLIC STATIC convert COMMENT statements to form prompts
+sub prompt {
     #my ( $previewing, $text, $topic, $web ) = @_;
 
     my $defaultType = 
       TWiki::Func::getPreferencesValue("COMMENTPLUGIN_DEFAULT_TYPE") ||
-	  "below";
+          "below";
 
     my $message = "";
     # Is commenting disabled?
     my $disable = "";
     if ( $_[0] ) {
-      # We are in Preview mode
-      $message  = "(Edit - Preview)";
-      $disable = "disabled";
+        # We are in Preview mode
+        $message  = "(Edit - Preview)";
+        $disable = "disabled";
     }
 
     my $idx = 0;
     $_[1] =~ s/%COMMENT({.*?})?%/&_handleInput($1,$_[2],$_[3],\$idx,$message,$disable,$defaultType)/ego;
-  }
+}
 
-  # PRIVATE generate an input form for a %COMMENT tag
-  sub _handleInput {
+# PRIVATE generate an input form for a %COMMENT tag
+sub _handleInput {
     my ( $attributes, $topic, $web, $pidx, $message,
-	 $disable, $defaultType ) = @_;
+         $disable, $defaultType ) = @_;
 
     $attributes =~ s/^{(.*)}$/$1/o if ( $attributes );
     my $attrs = new TWiki::Contrib::Attrs( $attributes );
@@ -106,113 +105,118 @@ use TWiki::Contrib::Attrs;
     my $anchor = undef;
     my $target = $attrs->remove( "target" );
     if ( $target ) {
-      # extract web and anchor
-      if ( $target =~ s/^(\w+)\.//o ) {
-	$web = $1;
-      }
-      if ( $target =~ s/(#\w+)$//o ) {
-	$anchor = $1;
-      }
-      if ( $target ne "" ) {
-	$topic = $target;
-      }
+        # extract web and anchor
+        if ( $target =~ s/^(\w+)\.//o ) {
+            $web = $1;
+        }
+        if ( $target =~ s/(#\w+)$//o ) {
+            $anchor = $1;
+        }
+        if ( $target ne "" ) {
+            $topic = $target;
+        }
     }
 
     my $url = "";
     if ( $disable eq "" ) {
-	  # invoke viewauth so we get authentication. When viewauth is run,
-	  # the 'save' method in here will be invoked as the commenTagsHandler
-	  # is run as flagged by the "comment_action" parameter.
-      $url = TWiki::Func::getScriptUrl( "%INTURLENCODE{$web}%",
-					"%INTURLENCODE{$topic}%",
-					"viewauth" );
+        # invoke viewauth so we get authentication. When viewauth is run,
+        # the 'save' method in here will be invoked as the commenTagsHandler
+        # is run as flagged by the "comment_action" parameter.
+        $url = TWiki::Func::getScriptUrl( "%INTURLENCODE{$web}%",
+                                          "%INTURLENCODE{$topic}%",
+                                          "viewauth" );
 
-      my ( $oopsUrl, $lockUser, $lockTime ) =
-	TWiki::Func::checkTopicEditLock( $web, $topic );
+        my ( $oopsUrl, $lockUser, $lockTime ) =
+          TWiki::Func::checkTopicEditLock( $web, $topic );
 
-      if ( $lockUser ) {
-	$message = "Commenting is locked out by <nop>$lockUser for at least $lockTime more minutes";
-	$disable = "disabled";
-      }
+        if ( $lockUser ) {
+            $message = "Commenting is locked out by <nop>$lockUser for at least $lockTime more minutes";
+            $disable = "disabled";
+        }
     }
 
     if ( $input !~ m/^%RED%/o ) {
-      $input =~ s/%DISABLED%/$disable/go;
-      $input =~ s/%MESSAGE%/$message/g;
-      my $n = $$pidx + 0;
+        $input =~ s/%DISABLED%/$disable/go;
+        $input =~ s/%MESSAGE%/$message/g;
+        my $n = $$pidx + 0;
 	
-      $input = "<form name=\"${disable}$type$n\" " .
-	"action=\"$disable$url\" method=\"${disable}post\">$input";
-      if ( $disable eq "" ) {
-	$input .= "<input name=\"comment_action\" " .
-	"type=\"hidden\" value=\"save\" />";
-	$input .= "<input name=\"comment_type\" " .
-	  "type=\"hidden\" value=\"$type\" />";
-	# remember to unlock the page
-	$input .= "<input name=\"unlock\" " .
-	"type=\"hidden\" value=\"1\" />";
-	if( defined( $silent )) {
-	  $input .= "<input name=\"comment_quietly\" " .
-	    "type=\"hidden\" value=\"1\" />";
-	}
-	if ( $location ) {
-	  $input .= "<input name=\"comment_location\" " .
-	    "type=\"hidden\" value=\"$location\" />";
-	} elsif ( $anchor ) {
-	  $input .= "<input name=\"comment_anchor\" " .
-	    "type=\"hidden\" value=\"$anchor\" />";
-	} else {
-	  $input .= "<input name=\"comment_index\" " .
-	    "type=\"hidden\" value=\"$$pidx\" />";
-	}
-      }
-      $input .= "</form>";
+        $input = "<form name=\"${disable}$type$n\" " .
+          "action=\"$disable$url\" method=\"${disable}post\">$input";
+        if ( $disable eq "" ) {
+            $input .= "<input name=\"comment_action\" " .
+              "type=\"hidden\" value=\"save\" />";
+            $input .= "<input name=\"comment_type\" " .
+              "type=\"hidden\" value=\"$type\" />";
+            # remember to unlock the page
+            $input .= "<input name=\"unlock\" " .
+              "type=\"hidden\" value=\"1\" />";
+            if( defined( $silent )) {
+                $input .= "<input name=\"comment_quietly\" " .
+                  "type=\"hidden\" value=\"1\" />";
+            }
+            if ( $location ) {
+                $input .= "<input name=\"comment_location\" " .
+                  "type=\"hidden\" value=\"$location\" />";
+            } elsif ( $anchor ) {
+                $input .= "<input name=\"comment_anchor\" " .
+                  "type=\"hidden\" value=\"$anchor\" />";
+            } else {
+                $input .= "<input name=\"comment_index\" " .
+                  "type=\"hidden\" value=\"$$pidx\" />";
+            }
+        }
+        $input .= "</form>";
     }
     $$pidx++;
     return $input;
-  }
+}
 
-  # PRIVATE get the given template and do standard expansions
-  sub _getTemplate {
+# PRIVATE get the given template and do standard expansions
+sub _getTemplate {
     my ( $name, $topic, $web ) = @_;
 
     # Get the templates.
     my $templateFile =
       TWiki::Func::getPreferencesValue("COMMENTPLUGIN_TEMPLATES") ||
-	"comments";
+          "comments";
 
     my $templates;
 
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
-      eval 'use TWiki::Contrib::CairoContrib; $templates = TWiki::Contrib::CairoContrib::readTemplate( $templateFile )';
+        eval 'use TWiki::Contrib::CairoContrib; $templates = TWiki::Contrib::CairoContrib::readTemplate( $templateFile )';
 	} else {
-	  $templates = TWiki::Store::readTemplate( $templateFile );
+        $templates = TWiki::Store::readTemplate( $templateFile );
 	}
     if (! $templates ) {
-      TWiki::Func::writeWarning("Could not read template file '$templateFile'");
-      return;
+        TWiki::Func::writeWarning("Could not read template file '$templateFile'");
+        return;
     }
 
-    my $t =
-      TWiki::Func::expandCommonVariables( "%TMPL:P{$name}%", $topic, $web );
+    my $t;
+    # SMELL: no way to do this through the Func interface without expanding
+    # other variables in the template as well. Bah humbug.
+    $t = TWiki::handleTmplP( $name );
+    # This is the only option Func offers:
+    # $t =
+    #  TWiki::Func::expandCommonVariables("%TMPL:P{$name}%",$topic,$web );
 
     return "%RED%No such template def %<nop>TMPL:DEF{$name}%%ENDCOLOR%"
       unless ( defined($t) && $t ne "" );
 
     return $t;
-  }
+}
 
-  # PRIVATE expand special %param|default% parameters in PROMPT template
-  sub _expandPromptParams {
+# PRIVATE expand special %param|default% parameters in PROMPT template
+sub _expandPromptParams {
     my ( $name, $default, $attrs ) = @_;
 
     my $val = $attrs->get( $name );
     return $val if defined( $val );
     return $default;
-  }
+}
 
-  # PRIVATE STATIC Performs comment insertion in the topic.
-  sub _buildNewTopic {
+# PRIVATE STATIC Performs comment insertion in the topic.
+sub _buildNewTopic {
     my ( $web, $topic, $query ) = @_;
 
     my $type = $query->param( 'comment_type' );
@@ -223,9 +227,9 @@ use TWiki::Contrib::Attrs;
 
     my $output = _getTemplate( "OUTPUT:$type", $topic, $web );
     if ( $output =~ m/^%RED%/o ) {
-      return $output;
+        return $output;
     }
-
+die unless $output;
     # Expand the template
     $output =~ s/%POS:(.*?)%//go;
     my $position = $1 || "AFTER";
@@ -233,7 +237,7 @@ use TWiki::Contrib::Attrs;
     # Expand common variables in the template, but don't expand other
     # tags.
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
-      eval 'use TWiki::Contrib::CairoContrib';
+        eval 'use TWiki::Contrib::CairoContrib';
 	}
 	$output = TWiki::expandVariablesOnTopicCreation($output);
 
@@ -248,61 +252,66 @@ use TWiki::Contrib::Attrs;
     my $inpost = 0;
     my $text = "";
     foreach my $line ( split( /\n/, $bloody_hell )) {
-      if( $line =~ /^(%META:[^{]+{[^}]*}%)/ ) {
-		if ( $inpost) {
-		  $postmeta .= "$1\n";
-		} else {
-		  $premeta .= "$1\n";
-		}
-      } else {
-		$text .= "$line\n";
-		$inpost = 1;
-      }
+        if( $line =~ /^(%META:[^{]+{[^}]*}%)/ ) {
+            if ( $inpost) {
+                $postmeta .= "$1\n";
+            } else {
+                $premeta .= "$1\n";
+            }
+        } else {
+            $text .= "$line\n";
+            $inpost = 1;
+        }
     }
 
     if ( $position eq "TOP" ) {
-      $text = "$output$text";
+        $text = "$output$text";
     } elsif ( $position eq "BOTTOM" ) {
-      $text .= "$output";
+        # Awkward newlines here, to avoid running into meta-data.
+        # This should _not_ be a problem.
+        $text =~ s/[\r\n]+$//;
+        $text .= "\n" unless $output =~ /^\n/;;
+        $text .= $output;
+        $text .= "\n" unless $text =~ m/\n$/;
     } else {
-      if ( $location ) {
-		if ( $position eq "BEFORE" ) {
-		  $text =~ s/($location)/$output$1/m;
-		} else { # AFTER
-		  $text =~ s/($location)/$1$output/m;
-		}
-      } elsif ( $anchor ) {
-		# position relative to anchor
-		if ( $position eq "BEFORE" ) {
-		  $text =~ s/^($anchor)/$output$1/m;
-		} else { # AFTER
-		  $text =~ s/^($anchor)/$1$output/m;
-		}
-      } else {
-		# Position relative to index'th comment
-		my $idx = 0;
-		$text =~ s/(%COMMENT({.*?})?%)/&_nth($1,\$idx,$position,$index,$output)/ego;
-      }
+        if ( $location ) {
+            if ( $position eq "BEFORE" ) {
+                $text =~ s/($location)/$output$1/m;
+            } else { # AFTER
+                $text =~ s/($location)/$1$output/m;
+            }
+        } elsif ( $anchor ) {
+            # position relative to anchor
+            if ( $position eq "BEFORE" ) {
+                $text =~ s/^($anchor)/$output$1/m;
+            } else { # AFTER
+                $text =~ s/^($anchor)/$1$output/m;
+            }
+        } else {
+            # Position relative to index'th comment
+            my $idx = 0;
+            $text =~ s/(%COMMENT({.*?})?%.*\n)/&_nth($1,\$idx,$position,$index,$output)/eg;
+        }
     }
     $text =~ s/ {3}/\t/go;
     $text = $premeta . $text . $postmeta;
-	return TWiki::Func::saveTopicText( $web, $topic, $text, 1, $silent );
-  }
 
-  # PRIVATE embed output if this comment is the interesting one
-  sub _nth {
+	return TWiki::Func::saveTopicText( $web, $topic, $text, 1, $silent );
+}
+
+# PRIVATE embed output if this comment is the interesting one
+sub _nth {
     my ( $tag, $pidx, $position, $index, $output ) = @_;
 
     if ( $$pidx == $index) {
-      if ( $position eq "BEFORE" ) {
-	$tag = "$output$tag";
-      } else { # AFTER
-	$tag .= "$output";
-      }
+        if ( $position eq "BEFORE" ) {
+            $tag = "$output$tag";
+        } else { # AFTER
+            $tag .= $output;
+        }
     }
     $$pidx++;
     return $tag;
-  }
 }
 
 1;
