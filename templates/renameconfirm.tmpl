@@ -1,0 +1,10 @@
+%TMPL:INCLUDE{"renamebase"}%
+%TMPL:DEF{"topicaction"}% <input type="submit" value="Rename/Move"> %TMPL:END%
+%TMPL:DEF{"titleaction"}% (rename) %TMPL:END%
+%TMPL:DEF{"newtopic"}% 
+   <nop>%NEW_TOPIC%
+   <input type="hidden" name="newtopic" value="%NEW_TOPIC%"> %TMPL:END%
+%TMPL:DEF{"newweb"}% 
+   %NEW_WEB%
+   <input type="hidden" name="newweb" value="%NEW_WEB%"> %TMPL:END%
+%TMPL:P{"rename"}%
