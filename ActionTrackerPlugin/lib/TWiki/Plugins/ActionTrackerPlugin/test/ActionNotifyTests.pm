@@ -8,7 +8,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 use TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
-use TWiki::Plugins::ActionTrackerPlugin::Attrs;
+use TWiki::Plugins::SharedCode;
 use Time::ParseDate;
 
 sub new {

@@ -23,7 +23,7 @@ package TWiki::Plugins::ActionTrackerPlugin;
 use strict;
 
 use TWiki::Func;
-use TWiki::Plugins::ActionTrackerPlugin::Attrs;
+use TWiki::Plugins::SharedCode::Attrs;
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
@@ -50,12 +50,12 @@ sub initPlugin {
 
   # check for Plugins.pm versions
   # COVERAGE OFF standard plugin code
-  if( $TWiki::Plugins::VERSION < 1 ) {
+  if( $TWiki::Plugins::VERSION < 1.010 ) {
     TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION" );
     return 0;
   }
   if( $TWiki::Plugins::VERSION < 1.020 ) {
-    TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION. Trying compatability module." );
+    TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION. Will not work without compatability module." );
   }
   # COVERAGE ON
 
@@ -545,7 +545,7 @@ sub _dumpPrefs {
 sub _handleActionSearch {
   my ( $web, $expr ) = @_;
 
-  my $attrs = new ActionTrackerPlugin::Attrs( $expr );
+  my $attrs = new TWiki::Attrs( $expr );
   # use default format unless overridden
   my $fmt;
   my $fmts = $attrs->remove( "format" );
@@ -580,7 +580,6 @@ sub _init_defaults
       eval {
         $libsFound = require TWiki::Plugins::ActionTrackerPlugin::Action;
         require TWiki::Plugins::ActionTrackerPlugin::ActionSet;
-        require TWiki::Plugins::ActionTrackerPlugin::Attrs;
         require TWiki::Plugins::ActionTrackerPlugin::AttrDef;
       };
       unless( $libsFound ) {
@@ -588,20 +587,14 @@ sub _init_defaults
         # of relative use of lib dir and chdir after initialization.
         # Try again with absolute TWiki lib dir path
         eval {
-          my $libDir = TWiki::getTWikiLibDir(); # CONFORMS
+          my $libDir = TWiki::getTWikiLibDir(); # COMPATIBILITY
           $libDir =~ /(.*)/;
           $libDir = $1;       # untaint
           $libsFound = require "$libDir/TWiki/Plugins/ActionTrackerPlugin/Action.pm";
           require "$libDir/TWiki/Plugins/ActionTrackerPlugin/ActionSet.pm";
-          require "$libDir/TWiki/Plugins/ActionTrackerPlugin/Attrs.pm";
           require "$libDir/TWiki/Plugins/ActionTrackerPlugin/AttrDef.pm";
         };
       }
-#      @TWiki::Plugins::ISA = qw(
-#          TWiki::Plugins::ActionTrackerPlugin::Action;
-#          TWiki::Plugins::ActionTrackerPlugin::ActionSet;
-#          TWiki::Plugins::ActionTrackerPlugin::Attrs;
-#        );
     }
   };
   $pluginInitialized = 1;

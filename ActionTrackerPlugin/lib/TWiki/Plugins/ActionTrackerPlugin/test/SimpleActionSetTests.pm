@@ -8,7 +8,7 @@ use base qw(BaseFixture);
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
-use TWiki::Plugins::ActionTrackerPlugin::Attrs;
+use TWiki::Plugins::SharedCode;
 use Time::ParseDate;
 use CGI;
 
@@ -83,7 +83,7 @@ sub testAVTable {
 
 sub testSearchOpen {
   my $this = shift;
-  my $attrs = new ActionTrackerPlugin::Attrs("state=open");
+  my $attrs = new TWiki::Attrs("state=open");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -94,7 +94,7 @@ sub testSearchOpen {
 
 sub testSearchClosed {
   my $this = shift;
-  my $attrs = new ActionTrackerPlugin::Attrs("closed");
+  my $attrs = new TWiki::Attrs("closed");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -103,7 +103,7 @@ sub testSearchClosed {
 
 sub testSearchWho {
   my $this = shift;
-  my $attrs = new ActionTrackerPlugin::Attrs("who=A");
+  my $attrs = new TWiki::Attrs("who=A");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -112,7 +112,7 @@ sub testSearchWho {
 
 sub testSearchLate {
   my $this = shift;
-  my $attrs = new ActionTrackerPlugin::Attrs("late");
+  my $attrs = new TWiki::Attrs("late");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -122,7 +122,7 @@ sub testSearchLate {
 
 sub testSearchLate2 {
   my $this = shift;
-  my $attrs = new ActionTrackerPlugin::Attrs("state=\"late\"");
+  my $attrs = new TWiki::Attrs("state=\"late\"");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -132,7 +132,7 @@ sub testSearchLate2 {
 
 sub testSearchAll {
   my $this = shift;
-  my $attrs = new ActionTrackerPlugin::Attrs("");
+  my $attrs = new TWiki::Attrs("");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -156,7 +156,7 @@ sub addMoreActions {
 sub testx1Search {
   my $this = shift;
   addMoreActions();
-  my $attrs = new ActionTrackerPlugin::Attrs("late");
+  my $attrs = new TWiki::Attrs("late");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -169,7 +169,7 @@ sub testx1Search {
 sub testx2Actionees {
   my $this = shift;
   addMoreActions();
-  my $attrs = new ActionTrackerPlugin::Attrs("late");
+  my $attrs = new TWiki::Attrs("late");
   my $chosen = $actions->search($attrs);
   my %peeps;
   $chosen->getActionees(\%peeps);
