@@ -1,24 +1,34 @@
 
-sfdistro :
-	tar cjf sfwiki.tar.bz2 README install_twiki.cgi pre-twiki.sh post-twiki.sh un-twiki.sh downloads cpan/MIRROR/TWIKI
+PLATFORM ?= sourceforge
 
+TAR_EXCLUDE = --exclude CVS --exclude *~ --exclude bak
 
-#cpan :
-#	cd cpan ; ./mirror-cpan.pl `./calc-twiki-deps.pl`
+sfwiki.tar.bz2 :
+	tar -c $(TAR_EXCLUDE) --no-recursion -f sfwiki.tar -C platform/$(PLATFORM) `cd platform/$(PLATFORM); ls` 
+	tar -r $(TAR_EXCLUDE) --exclude downloads/webs --exclude .zip -f sfwiki.tar bin/* cpan/*.pl cpan/MIRROR/TWIKI downloads 
+	bzip2 sfwiki.tar
+
+distro : sfwiki.tar.bz2 cpan plugins contrib addons
+
+cpan :
+	cd cpan ; ./mirror-cpan.pl `./calc-twiki-deps.pl`
 
 #downloads/releases/TWiki20040901.tar.gz :
 #	wget -O downloads/releases/TWiki20040901.tar.gz http://twiki.org/releases/TWiki20040901.tar.gz
 #	wget -O downloads/releases/TWiki20040901.tar.gz http://twikiplugins.sourceforge.net/releases/TWiki20040901.tar.gz
 
-#downloads/plugins :
-#	bin/download-twiki-plugins.pl 
-#	bin/zip2tgz downloads/plugins
+plugins :
+	bin/download-twiki-plugins.pl 
+	bin/zip2tgz.pl downloads/plugins/*.zip
 
-#downloads/contib :
-#	bin/download-twiki-contribs.pl 
-#	bin/zip2tgz downloads/contrib
+contrib :
+	bin/download-twiki-contribs.pl 
+	bin/zip2tgz.pl downloads/contrib/*.zip
 
-#downloads/addons :
-#	bin/download-twiki-addons.pl 
-#	bin/zip2tgz downloads/addons
+addons :
+	bin/download-twiki-addons.pl 
+	bin/zip2tgz.pl downloads/addons/*.zip
 
+
+print :
+	@echo PLATFORM = $(PLATFORM)
