@@ -183,6 +183,7 @@ sub main
 
     if( $TWiki::doLogTopicView ) {
         # write log entry
+        &TWiki::Store::writeLog( "view", "$webName.$topic", $extra );
     }
 
     my( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote ) = &TWiki::readOnlyMirrorWeb( $webName );
