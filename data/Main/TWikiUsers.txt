@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="JohnTalintyre" date="996671161" format="1.0beta2" version="1.12"}%
 *List of %WIKITOOLNAME% users*
 
 Please take the time and add yourself to the list. To do that fill out the form in %TWIKIWEB%.TWikiRegistration. This will create an account for you which allows you to edit topics. 
@@ -14,6 +15,7 @@ Please take the time and add yourself to the list. To do that fill out the form 
 	* H - <A name="H">
 	* I - <A name="I">
 	* J - <A name="J">
+	* JohnTalintyre - JohnTalintyre - 01 Aug 2001
 	* K - <A name="K">
 	* KevinKinnell - kk - 22 May 2000
 	* L - <A name="L">
