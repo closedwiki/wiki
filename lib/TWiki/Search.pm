@@ -32,6 +32,7 @@ This module implements all the search functionality.
 package TWiki::Search;
 
 use strict;
+use Assert;
 use TWiki::Sandbox;
 
 # 'Use locale' for internationalisation of Perl sorting and searching - 
@@ -55,6 +56,7 @@ sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
 
+    assert(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
 
     $this->{cacheRev1webTopic} = undef;
@@ -449,9 +451,9 @@ the search template head and tail blocks.
 
 =cut
 
-sub searchWeb
-{
+sub searchWeb {
     my $this = shift;
+    assert(ref($this) eq "TWiki::Search") if DEBUG;
     my %params = @_;
     my $callback =      $params{_callback};
     my $inline =        $params{inline};

@@ -34,6 +34,7 @@ use File::Copy;
 use File::Spec;
 use Time::Local;	# Added for revDate2EpSecs
 use TWiki::Sandbox;
+use Assert;
 
 # ======================
 =pod
@@ -45,6 +46,7 @@ use TWiki::Sandbox;
 sub new
 {
     my( $class, $session, $web, $topic, $attachment, $settings ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
     my $self = bless( {}, $class );
     $self->{session} = $session;
     $self->{"web"} = $web;
@@ -673,12 +675,20 @@ sub _mktemp {
    return($template);
 }
 
-my %mon2num;
-
-{ 
-    my $count = 0;
-    %mon2num = map { $_ => $count++ } @TWiki::isoMonth; 
-}
+use constant {
+    Jan => 0,
+    Feb => 1,
+    Mar => 2,
+    Apr => 3,
+    May => 4,
+    Jun => 5,
+    Jul => 6,
+    Aug => 7,
+    Sep => 8,
+    Oct => 9,
+    Nov => 10,
+    Dec => 11
+};
 
 # =========================
 =pod
@@ -699,7 +709,8 @@ sub revDate2EpSecs
     if ($date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)[\s\-]+([0-9]+)\:([0-9]+)/) {
         my $year = $3;
         $year -= 1900 if( $year > 1900 );
-        return timegm( 0, $5, $4, $1, $mon2num{$2}, $year );
+        # The ($2) will look up the constant so named
+        return timegm( 0, $5, $4, $1, ($2), $year );
     }
 
     # try "2001/12/31 23:59:59" or "2001.12.31.23.59.59" (RCS date)

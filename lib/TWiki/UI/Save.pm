@@ -136,7 +136,7 @@ sub _save {
         return 0;
     }
 
-    $text = $session->{renderer}->decodeSpecialChars( $text );
+    $text = TWiki::decodeSpecialChars( $text );
     $text =~ s/ {3}/\t/go;
 
     if( $saveCmd eq "repRev" ) {

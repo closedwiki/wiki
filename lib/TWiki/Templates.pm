@@ -41,6 +41,8 @@ easily be coverted into a true singleton (template manager).
 
 package TWiki::Templates;
 
+use Assert;
+
 =pod
 
 ---++ sub new ()
@@ -50,6 +52,7 @@ Constructor. Creates a new template database object.
 
 sub new {
     my ( $class, $session ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
     my $this = bless( {}, $class );
     $this->{session} = $session;
 
@@ -76,7 +79,7 @@ Return true if the template exists and is loaded into the cache
 
 sub haveTemplate {
     my ( $this, $template ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Templates/;
+    assert(ref($this) eq "TWiki::Templates") if DEBUG;
 
     return exists( $this->{VARS}{ $template } );
 }
@@ -101,7 +104,7 @@ to do this in the MacrosPlugin.
 
 sub expandTemplate {
     my( $this, $theParam ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Templates/;
+    assert(ref($this) eq "TWiki::Templates") if DEBUG;
 
     $theParam = TWiki::extractNameValuePair( $theParam );
     my $value = $this->_tmplP( $theParam );
@@ -115,7 +118,6 @@ sub expandTemplate {
 sub _tmplP {
     # Print template variable, called by %TMPL:P{"$theVar"}%
     my( $this, $theVar ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Templates/;
 
     my $val = "";
     if( exists($this->{VARS}{ $theVar } )) {
@@ -158,7 +160,7 @@ list of loaded templates, overwriting any previous definition.
 
 sub readTemplate {
     my( $this, $theName, $theSkin, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Templates/;
+    assert(ref($this) eq "TWiki::Templates") if DEBUG;
 
     if( ! defined($theSkin) ) {
         $theSkin = $this->{session}->getSkin();
@@ -242,8 +244,7 @@ sub __diagnoseReadTemplate {
 1;
 
 # STATIC: Return value: raw template text, or "" if read fails
-sub _readTemplateFile
-{
+sub _readTemplateFile {
     my( $this, $theName, $theSkin, $theWeb ) = @_;
     $theSkin = "" unless $theSkin; # prevent 'uninitialized value' warnings
 

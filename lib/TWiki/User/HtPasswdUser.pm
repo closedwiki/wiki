@@ -46,6 +46,7 @@ if( 'md5' eq $TWiki::htpasswdEncoding ) {
 }
 
 use strict;
+use Assert;
 
 # 'Use locale' for internationalisation of Perl sorting in getTopicNames
 # and other routines - main locale settings are done in TWiki::setupLocale
@@ -59,11 +60,12 @@ BEGIN {
 
 # ======================
 sub new {
-   my( $class, $session ) = @_;
-   my $self = bless( {}, $class );
-   $self->{session} = $session;
+    my( $class, $session ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
+    my $self = bless( {}, $class );
+    $self->{session} = $session;
 
-   return $self;
+    return $self;
 }
 
 sub users { my $this = shift; return $this->{session}->{users}; }

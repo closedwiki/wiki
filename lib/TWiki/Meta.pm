@@ -52,8 +52,8 @@ are populated using the =put= method.
 package TWiki::Meta;
 
 use strict;
-
 use Error qw(:try);
+use Assert;
 
 use vars qw( $formatVersion );
 
@@ -69,6 +69,7 @@ Construct a new, empty Meta collection.
 
 sub new {
     my ( $class, $session, $web, $topic ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
     my $self = bless( {}, $class );
 
     # Note: internal fields must be prepended with _. All other
@@ -104,49 +105,49 @@ represented.
 =cut
 
 sub put {
-   my( $self, $type, %args ) = @_;
+    my( $self, $type, %args ) = @_;
+    assert(ref($self) eq "TWiki::Meta") if DEBUG;
 
-   my $data = $self->{$type};
-   my $key = _key( $type );
+    my $data = $self->{$type};
+    my $key = _key( $type );
 
-   if( $data ) {
-       if( $key ) {
-           my $found = "";
-           my $keyName = $args{$key};
-           my @data = @$data;
-           unless( $keyName ) {
-               $self->{_session}->writeWarning( "Meta: Required $key parameter is missing for META:$type" );
-               return;
-           }
-           for( my $i = 0; $i < scalar( @$data ); $i++ ) {
-               if( $data[$i]->{$key} eq $keyName ) {
-                   $data->[$i] = \%args;
-                   $found = 1;
-                   last;
-               }
-           }
-           unless( $found ) {
-               push @$data, \%args;
-           }
-       } else {
-           $data->[0] = \%args; 
-       }
-   } else {
-       my @data = ( \%args );
-       $self->{$type} = \@data;
-   }
+    if( $data ) {
+        if( $key ) {
+            my $found = "";
+            my $keyName = $args{$key};
+            my @data = @$data;
+            unless( $keyName ) {
+                $self->{_session}->writeWarning( "Meta: Required $key parameter is missing for META:$type" );
+                return;
+            }
+            for( my $i = 0; $i < scalar( @$data ); $i++ ) {
+                if( $data[$i]->{$key} eq $keyName ) {
+                    $data->[$i] = \%args;
+                    $found = 1;
+                    last;
+                }
+            }
+            unless( $found ) {
+                push @$data, \%args;
+            }
+        } else {
+            $data->[0] = \%args; 
+        }
+    } else {
+        my @data = ( \%args );
+        $self->{$type} = \@data;
+    }
 }
 
 # ===========================
 # Give the key field for a type, "" if no key
 
-sub _key
-{
-   my $type = shift;
+sub _key {
+    my $type = shift;
 
-   return "name" if( $type eq "FIELD" || $type eq "FILEATTACHMENT" );
+    return "name" if( $type eq "FIELD" || $type eq "FILEATTACHMENT" );
 
-   return undef;
+    return undef;
 }
 
 # ===========================
@@ -162,30 +163,30 @@ SMELL: This method would be better named "lookup" or "get".
 
 =cut
 
-sub findOne
-{
-   my( $self, $type, $keyValue ) = @_;
+sub findOne {
+    my( $self, $type, $keyValue ) = @_;
+    assert(ref($self) eq "TWiki::Meta") if DEBUG;
 
-   my %args = ();
+    my %args = ();
 
-   my $data = $self->{$type};
-   my $key = _key( $type );
+    my $data = $self->{$type};
+    my $key = _key( $type );
 
-   if( $data ) {
-       if( $key ) {
-           foreach my $item ( @$data ) {
-               if( $item->{$key} eq $keyValue ) {
-                   %args = %$item;
-                   last;
-               }
-           }
-       } else {
-           my $item = $data->[0];
-           %args = %$item;
-       }
-   }
+    if( $data ) {
+        if( $key ) {
+            foreach my $item ( @$data ) {
+                if( $item->{$key} eq $keyValue ) {
+                    %args = %$item;
+                    last;
+                }
+            }
+        } else {
+            my $item = $data->[0];
+            %args = %$item;
+        }
+    }
 
-   return %args;
+    return %args;
 }
 
 =pod
@@ -198,17 +199,17 @@ if there are no entries.
 
 =cut
 
-sub find
-{
+sub find {
     my( $self, $type ) = @_;
-    
+    assert(ref($self) eq "TWiki::Meta") if DEBUG;
+
     my $itemsr = $self->{$type};
     my @items = ();
-    
+
     if( $itemsr ) {
         @items = @$itemsr;
     }
-    
+
     return @items;
 }
 
@@ -224,14 +225,14 @@ With a $type and a $key it will remove only the specific item.
 
 =cut
 
-sub remove
-{
+sub remove {
     my( $self, $type, $keyValue ) = @_;
-    
+    assert(ref($self) eq "TWiki::Meta") if DEBUG;
+
     my %args = ();
     my $key = "";
     $key = _key( $type ) if( $type );
-    
+
     if( $keyValue && $key ) {
        my $data = $self->{$type};
        my @newData = ();
@@ -262,9 +263,9 @@ SMELL: That spec absolutely _STINKS_ !!
 
 =cut
 
-sub copyFrom
-{
+sub copyFrom {
     my( $self, $otherMeta, $type ) = @_;
+    assert(ref($self) eq "TWiki::Meta") if DEBUG;
 
     my $data = $otherMeta->{$type};
     $self->{$type} = $data if( $data );
@@ -278,36 +279,14 @@ Return the number of entries of the given type that are in this meta set
 
 =cut
 
-sub count
-{
+sub count {
     my( $self, $type ) = @_;
+    assert(ref($self) eq "TWiki::Meta") if DEBUG;
     my $data = $self->{$type};
 
     return scalar @$data if( defined( $data ));
 
     return 0;
-}
-
-=pod
-
----++ sub restoreValue (  $value  )
-
-Converts %_N_% to a newline and %_Q_% to a " in the string. This is
-part of Meta because it is an operation that is frequently associated
-with meta-data values.
-
-SMELL: That isn't a good enough reason!
-
-=cut
-
-sub restoreValue
-{
-    my( $value ) = @_;
-
-    $value =~ s/%_N_%/\n/go;
-    $value =~ s/%_Q_%/"/go;
-
-    return $value;
 }
 
 =pod
@@ -320,6 +299,7 @@ Add TOPICINFO type data to the object, as specified by the parameters.
 
 sub addTOPICINFO {
     my( $self, $web, $topic, $rev, $forceDate, $forceUser ) = @_;
+    assert(ref($self) eq "TWiki::Meta") if DEBUG;
 
     my $time = $forceDate || time();
     my $user = $forceUser || $self->{_session}->{userName};
@@ -353,6 +333,7 @@ $rev is an integer revision number.
 
 sub getRevisionInfo {
     my $self = shift;
+    assert(ref($self) eq "TWiki::Meta") if DEBUG;
 
     my %topicinfo = $self->findOne( "TOPICINFO" );
 
@@ -384,6 +365,7 @@ value in the =$text= setting is the same as the one set in the =$meta= form.
 
 sub updateSets {
     my( $this, $rtext ) = @_;
+    assert(ref($this) eq "TWiki::Meta") if DEBUG;
 
     my %form = $this->findOne( "FORM" );
     if( %form ) {

@@ -23,16 +23,14 @@ this object.
 package TWiki::Sandbox;
 
 use strict;
+use Assert;
 use Error qw( :try );
 
-# TODO: Sandbox module should probably use custom 'die' handler so that output goes
-# only to web server error log - otherwise it might give useful debugging
-# information to someone developing an exploit.  
+# TODO: Sandbox module should probably use custom 'die' handler so that
+# output goes only to web server error log - otherwise it might give
+# useful debugging information to someone developing an exploit.
 
 # TODO: Get rid of $cmdQuote in TWiki.cfg and TWiki.pm
-
-# DEBUG - use confess instead of die for stack trace
-# use CGI::Carp qw(confess fatalsToBrowser);
 
 sub _writeDebug {
     my $this = shift;
@@ -40,8 +38,9 @@ sub _writeDebug {
 #    print STDERR $_[0],"\n";
 }
 
-=pod 
----++ new( $OS, $detailedOS )
+=pod
+
+---++ new( $session, $OS, $detailedOS )
 
 Construct a new sandbox suitable for $OS, setting
 flags for platform features that help.  $detailedOS distinguishes
@@ -53,6 +52,7 @@ sub new {
     my ( $class, $session, $OS, $detailedOS ) = @_;
     my $this = bless( {}, $class );
 
+    assert(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
 
     $this->{REAL_SAFE_PIPE_OPEN} = 0;           # supports "open FH, '-|"
@@ -110,7 +110,7 @@ places using grep.
 
 =cut
 
-sub untaintUnchecked ($) {
+sub untaintUnchecked {
     my ( $string ) = @_;
 
     if ( defined( $string) && $string =~ /^(.*)$/ ) {
@@ -131,7 +131,7 @@ metacharacters and even control characters.
 
 =cut
 
-sub normalizeFileName ($;$) {
+sub normalizeFileName {
     my ($string, $dotdot) = @_;
     return "" unless $string;
     my $absolute = $string =~ /^\//;
@@ -188,6 +188,7 @@ single character flag.  Permitted flags are
 
 sub buildCommandLine {
     my ($this, $template, %params) = @_;
+    assert(ref($this) eq "TWiki::Sandbox") if DEBUG;
     my @arguments;
 
     for my $tmplarg (split /\s+/, $template) {
@@ -287,6 +288,7 @@ ensures that the shell does not interpret any of the passed arguments.
 
 sub readFromProcessArray {
     my ($this, $path, $template, %params) = @_;
+    assert(ref($this) eq "TWiki::Sandbox") if DEBUG;
 
     my @data;                          # Output lines
     my $processFileHandle;             # Holds filehandle to read from process
@@ -416,7 +418,6 @@ sub _openSafePipeFromProcess {
         close STDERR;
         open(STDERR, ">&=" . fileno($childFileHandle)) or die;
         $this->_writeDebug("fileno of stderr handle is now " . fileno(STDERR));
-        #die "test 3\n";     # Never works after dupe of stdout...
         return ($pid, $parentFileHandle);
     }
 }
@@ -436,6 +437,7 @@ error is redirected to standard input.
 # FIXME: need to upgrade as per the Array variant
 sub readFromProcess {
     my ($this, $template, %params) = @_;
+    assert(ref($this) eq "TWiki::Sandbox") if DEBUG;
 
     my @args = $this->buildCommandLine( $template, %params );
     my $data;
@@ -453,7 +455,7 @@ sub readFromProcess {
         } else {
             # Redirect standard error to standard output.
             # FIXME: do a require since only needed with safe pipe platform
-            use POSIX;
+            use POSIX qw(close dup);
             POSIX::close 2;
             POSIX::dup 1;
             exec { $args[0] } @args;

@@ -28,6 +28,8 @@ use File::Copy qw(copy);
 use IO::File;
 use Error qw( :try );
 
+use constant ISOMONTH => qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+
 =pod
 
 ---++ statistics( $session )
@@ -75,7 +77,7 @@ sub statistics {
     $tmp = $logDate;
     $tmp =~ s/([0-9]{4})(.*)/$2/g;
     if( $tmp && $tmp < 13 ) {
-        $logMonth = $TWiki::isoMonth[$tmp-1];
+        $logMonth = (ISOMONTH)[$tmp-1];
     } else {
         $logMonth = "Date error";
     }

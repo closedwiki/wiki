@@ -26,9 +26,11 @@ Object that brokers access to network resources.
 package TWiki::Net;
 
 use strict;
+use Assert;
 
 sub new {
     my ( $class, $session ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
     my $this = bless( {}, $class );
 
     $this->{session} = $session;
@@ -57,6 +59,7 @@ Get the text at the other end of a URL
 
 sub getUrl {
     my ( $this, $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader ) = @_;
+    assert(ref($this) eq "TWiki::Net") if DEBUG;
 
     # Run-time use of Socket module when needed
     require Socket;
@@ -126,6 +129,7 @@ sub sendEmail {
     # $theText Format: "Date: ...\nFrom: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody..."
 
     my( $this, $theText, $retries ) = @_;
+    assert(ref($this) eq "TWiki::Net") if DEBUG;
 
     # Put in a Date header, mainly for Qmail
     my $dateStr = TWiki::formatTime(time, 'email');

@@ -19,10 +19,11 @@
 package TWiki::UI;
 
 use strict;
+use Error qw( :try );
+use Assert;
 use CGI::Carp qw( fatalsToBrowser );
 use CGI;
 use TWiki;
-use Error qw( :try );
 use TWiki::UI::OopsException;
 use IO::Handle; STDOUT->blocking(0);
 use Data::Dumper;
@@ -71,7 +72,7 @@ sub run {
             # the benchmark parameter to write a file on the server.
             my $bm = $query->param( 'benchmark' );
             if ( $bm ) {
-                open(OF, ">$bm") || die "Store failed";
+                open(OF, ">$bm") || throw Error::Simple( "Store failed" );
                 print OF Dumper(\$query, $pathInfo, $user, $url);
                 close(OF);
             }
@@ -134,8 +135,6 @@ sub run {
     } catch Error::Simple with {
         my $e = shift;
         print "Content-type: text/plain\n\n";
-        print "Got Error::Simple\n";
-        print $e->{-text},"\n";
         print $e->stringify();
     };
 }
@@ -152,17 +151,18 @@ ignored for a redirect.
 =cut
 
 sub redirect {
-  my ($session, $url ) = @_;
+    my ($session, $url ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
 
-  my $query = $session->{cgiQuery};
+    my $query = $session->{cgiQuery};
 
-  if ( $query && $query->param( 'noredirect' )) {
-      my $content = join(" ", @_) . " \n";
-      $session->writeHeader( $query, length( $content ) );
-      print $content;
-  } elsif ( $query ) {
-      $session->redirect( $query, $url );
-  }
+    if ( $query && $query->param( 'noredirect' )) {
+        my $content = join(" ", @_) . " \n";
+        $session->writeHeader( $query, length( $content ) );
+        print $content;
+    } elsif ( $query ) {
+        $session->redirect( $query, $url );
+    }
 }
 
 =pod twiki
@@ -173,15 +173,16 @@ Check if the web exists. If it doesn't, will throw an oops exception.
 =cut
 
 sub checkWebExists {
-  my ( $session, $webName, $topic ) = @_;
+    my ( $session, $webName, $topic ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
 
-  unless ( $session->{store}->webExists( $webName ) ) {
-      throw
-        TWiki::UI::OopsException( $webName,
-                                  $topic,
-                                  "noweb",
-                                  "ERROR $webName.$topic web does not exist" );
-  }
+    unless ( $session->{store}->webExists( $webName ) ) {
+        throw
+          TWiki::UI::OopsException( $webName,
+                                    $topic,
+                                    "noweb",
+                                    "ERROR $webName.$topic web does not exist" );
+    }
 }
 
 =pod twiki
@@ -193,11 +194,12 @@ if it doesn't. $op is %PARAM1% in the "oopsnotopic" template.
 =cut
 
 sub checkTopicExists {
-  my ( $session, $webName, $topic, $op ) = @_;
+    my ( $session, $webName, $topic, $op ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
 
-  unless( $session->{store}->topicExists( $webName, $topic )) {
-      throw TWiki::UI::OopsException( $webName, $topic, "notopic", $op );
-  }
+    unless( $session->{store}->topicExists( $webName, $topic )) {
+        throw TWiki::UI::OopsException( $webName, $topic, "notopic", $op );
+    }
 }
 
 =pod twiki
@@ -209,17 +211,18 @@ if it is.
 =cut
 
 sub checkMirror {
-  my ( $session, $webName, $topic ) = @_;
+    my ( $session, $webName, $topic ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
 
-  my( $mirrorSiteName, $mirrorViewURL ) =
-    $session->readOnlyMirrorWeb( $webName );
+    my( $mirrorSiteName, $mirrorViewURL ) =
+      $session->readOnlyMirrorWeb( $webName );
 
-  return unless ( $mirrorSiteName );
+    return unless ( $mirrorSiteName );
 
-  throw TWiki::UI::OopsException( $webName, $topic,
-                                  "mirror",
-                                  $mirrorSiteName,
-                                  $mirrorViewURL );
+    throw TWiki::UI::OopsException( $webName, $topic,
+                                    "mirror",
+                                    $mirrorSiteName,
+                                    $mirrorViewURL );
 }
 
 =pod twiki
@@ -231,15 +234,16 @@ web.topic is permissible, throwing a TWiki::UI::OopsException if not.
 =cut
 
 sub checkAccess {
-   my ( $session, $web, $topic, $mode, $user ) = @_;
+    my ( $session, $web, $topic, $mode, $user ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
 
-   unless( $session->{security}->checkAccessPermission( $mode, $user, "",
-                                                        $topic, $web )) {
-       throw
-         TWiki::UI::OopsException( $web,
-                                   $topic,
-                                   "access$mode" );
-   }
+    unless( $session->{security}->checkAccessPermission( $mode, $user, "",
+                                                         $topic, $web )) {
+        throw
+          TWiki::UI::OopsException( $web,
+                                    $topic,
+                                    "access$mode" );
+    }
 }
 
 =pod twiki
@@ -251,13 +255,14 @@ OopsException.
 =cut
 
 sub checkAdmin {
-  my ( $session, $webName, $topic, $user ) = @_;
+    my ( $session, $webName, $topic, $user ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
 
-  unless( $session->{security}->userIsInGroup( $user,
-                                               $TWiki::superAdminGroup )) {
-      throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
-            "$TWiki::mainWebname.$TWiki::superAdminGroup" );
-  }
+    unless( $session->{security}->userIsInGroup( $user,
+                                                 $TWiki::superAdminGroup )) {
+        throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
+                                        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
+    }
 }
 
 =pod
@@ -269,9 +274,9 @@ web.
 
 =cut
 
-sub readTemplateTopic
-{
+sub readTemplateTopic {
     my( $session, $theTopicName ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
 
     $theTopicName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
 

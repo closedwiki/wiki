@@ -135,7 +135,7 @@ sub preview {
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
     $tmpl =~ s/%TEXT%/$ptext/go;
 
-    $text = $session->{renderer}->encodeSpecialChars( $text );
+    $text = TWiki::encodeSpecialChars( $text );
 
     $tmpl =~ s/%HIDDENTEXT%/$text/go;
     $tmpl =~ s/%FORMFIELDS%/$formFields/go;

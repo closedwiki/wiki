@@ -29,7 +29,7 @@ approach, an earlier type of form.
 package TWiki::Form;
 
 use strict;
-
+use Assert;
 
 =pod
 
@@ -41,6 +41,7 @@ Constructor
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
+    assert(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
     return $this;
 }
@@ -172,7 +173,8 @@ If form contains Web this overrides webName
 
 sub getFormDef {
     my( $this, $webName, $form ) = @_;
-    
+    assert(ref($this) eq "TWiki::Form") if DEBUG;
+
     if( $form =~ /^(.*)\.(.*)$/ ) {
         $webName = $1;
         $form = $2;
@@ -284,6 +286,7 @@ Render form information
 
 sub renderForEdit {
     my( $this, $web, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldsInfo ) = @_;
+    assert(ref($this) eq "TWiki::Form") if DEBUG;
 
     my $chooseForm = "";   
     if( $this->prefs()->getPreferencesValue( "WEBFORMS", "$web" ) ) {
@@ -449,6 +452,8 @@ Note that existing meta information for fields is removed unless $justOverride i
 
 sub fieldVars2Meta {
     my( $this, $webName, $query, $meta, $justOverride ) = @_;
+    assert(ref($this) eq "TWiki::Form") if DEBUG;
+    assert(ref($meta) eq "TWiki::Meta") if DEBUG;
 
     $meta->remove( "FIELD" ) if( ! $justOverride );
 
@@ -470,7 +475,7 @@ sub fieldVars2Meta {
        my $attributes = shift @fieldInfo;
        my $value     = $query->param( $fieldName );
        my $cvalue    = "";
-       
+
        if( ! $value && $type =~ "^checkbox" ) {
           foreach my $name ( @fieldInfo ) {
              my $cleanName = $name;
@@ -486,11 +491,11 @@ sub fieldVars2Meta {
              }
           }
        }
-       
+
        if( defined( $value ) ) {
-           $value = TWiki::Meta::restoreValue( $value );
+           $value = TWiki::decodeSpecialChars( $value );
        }
-              
+
        # Have title and name stored so that topic can be viewed without reading in form definition
        $value = "" if( ! defined( $value ) && ! $justOverride );
        if( defined( $value ) ) {
@@ -498,11 +503,11 @@ sub fieldVars2Meta {
                         "title" => $title,
                         "value" => $value );
            push @args, ( "attributes" => $attributes ) if( $attributes );
-                    
+
            $meta->put( "FIELD", @args );
        }
    }
-   
+
    return $meta;
 }
 
@@ -518,6 +523,7 @@ Not yet documented.
 
 sub getFieldParams {
     my( $meta ) = @_;
+    assert(ref($meta) eq "TWiki::Meta") if DEBUG;
 
     my $params = "";
 
@@ -547,12 +553,13 @@ Called by script to change the form for a topic
 
 sub changeForm {
     my( $this, $theWeb, $theTopic, $theQuery ) = @_;
+    assert(ref($this) eq "TWiki::Form") if DEBUG;
 
     my $tmpl = $this->templates()->readTemplate( "changeform" );
     $tmpl = $this->{session}->handleCommonTags( $tmpl, $theTopic );
     $tmpl = $this->renderer()->getRenderedVersion( $tmpl );
     my $text = $theQuery->param( 'text' );
-    $text = $this->renderer()->encodeSpecialChars( $text );
+    $text = TWiki::encodeSpecialChars( $text );
     $tmpl =~ s/%TEXT%/$text/go;
 
     my $listForms = $this->prefs()->getPreferencesValue( "WEBFORMS", "$theWeb" );
@@ -688,6 +695,7 @@ Upgrade old style category table
 
 sub upgradeCategoryTable {
     my( $this, $web, $topic, $meta, $text ) = @_;
+    assert(ref($this) eq "TWiki::Form") if DEBUG;
 
     my $icat = $this->templates()->readTemplate( "twikicatitems" );
 

@@ -67,13 +67,13 @@ sub _parse {
             $opt = $1;
             $gathering = 1;
         } elsif ( $tok =~ /<!--\s*\/$tag\s*-->/ ) {
-            die "<!-- /$tag --> found without matching <!-- $tag -->"
+            throw Error::Simple("<!-- /$tag --> found without matching <!-- $tag -->")
               unless ( $gathering );
             push( @list, { text => $lastTok, options=> $opt } );
             $gathering = 0;
         } elsif ( $gathering &&
                   $tok =~ /^<!--\/?\s*(expected|actual).*?-->$/ ) {
-            die "$tok encountered when in open <!-- $tag --> bracket";
+            throw Error::Simple("$tok encountered when in open <!-- $tag --> bracket");
         }
         $lastTok = $tok;
     }
@@ -151,7 +151,7 @@ sub _compareResults {
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
-    #die "initPlugin called twice" if $called{initPlugin};
+    #throw Error::Simple( "initPlugin called twice" ) if $called{initPlugin};
     undef %called;
     $called{initPlugin} = 1;
 
@@ -160,26 +160,26 @@ sub initPlugin {
 
 sub DISABLE_earlyInitPlugin {
     # There's a delicate relationship between this and initializeUserHandler
-    die "unexpected call to earlyInitPlugin", join(",",@_);
+    throw Error::Simple( "unexpected call to earlyInitPlugin", join(",",@_));
 }
 
 sub DISABLE_initializeUserHandler {
     # There's a delicate relationship between this and earlyInitPlugin
-    die "unexpected call to initializeUserHandler", join(",",@_);
+    throw Error::Simple( "unexpected call to initializeUserHandler", join(",",@_));
 }
 
 sub DISABLE_registrationHandler {
-    die "unexpected call to registrationHandler(", join(",",@_);
+    throw Error::Simple( "unexpected call to registrationHandler(", join(",",@_));
 }
 
 sub DISABLE_getSessionValueHandler {
     # this can only be enabled in one plugin
-    die "unexpected call to getSessionValueHandler ", join(",",@_);
+    throw Error::Simple( "unexpected call to getSessionValueHandler ", join(",",@_));
 }
 
 sub DISABLE_setSessionValueHandler {
     # this can only be enabled in one plugin
-    die "unexpected call to setSessionValueHandler ", join(",",@_);
+    throw Error::Simple( "unexpected call to setSessionValueHandler ", join(",",@_));
 }
 
 sub DISABLE_beforeCommonTagsHandler {

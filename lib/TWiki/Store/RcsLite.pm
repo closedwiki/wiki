@@ -45,6 +45,7 @@ use strict;
 #use Algorithm::Diff;# qw(diff sdiff);
 use Algorithm::Diff;
 use FileHandle;
+use Assert;
 
 #$self->{session}->writeDebug("Diff version $Algorithm::Diff::VERSION\n");
 
@@ -63,6 +64,7 @@ Construct new file
 sub new
 {
     my( $class, $session, $web, $topic, $attachment, $settings ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
     my $self =
       bless( new TWiki::Store::RcsFile( $session, $web, $topic, $attachment, $settings ),
              $class );

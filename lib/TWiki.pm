@@ -38,6 +38,7 @@ into any of the others.
 package TWiki;
 
 use strict;
+use Assert;
 
 require 5.005;		# For regex objects and internationalisation
 
@@ -52,7 +53,8 @@ use vars qw(
             $userListFilename $doMapUserToWikiName
             $twikiWebname $mainWebname $mainTopicname $notifyTopicname
             $wikiPrefsTopicname $webPrefsTopicname
-            $statisticsTopicname $statsTopViews $statsTopContrib $doDebugStatistics
+            $statisticsTopicname $statsTopViews $statsTopContrib
+            $doDebugStatistics
             $numberOfRevisions $editLockTime $scriptSuffix
             $safeEnvPath $mailProgram $noSpamPadding $mimeTypesFilename
             $doKeepRevIfEditLock $doGetScriptUrlFromCgi $doRemovePortNumber
@@ -74,7 +76,7 @@ use vars qw(
 use vars qw(
             $localeRegexes $siteLocale $siteCharsetOverride
             $upperNational $lowerNational
-            @isoMonth @weekDay $wikiversion
+            $wikiversion
             $TranslationToken $twikiLibDir
             %regex
             %staticInternalTags
@@ -89,8 +91,8 @@ $wikiversion = '12 Dec 2004 $Rev$';
 $defaultWikiName = "TWikiGuest";
 
 # (new variables must be declared in "use vars qw(..)" above)
-@isoMonth = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
-@weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+use constant ISOMONTH => qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+use constant WEEKDAY => qw( Sun Mon Tue Wed Thu Fri Sat );
 
 # Token character that must not occur in any normal text - converted
 # to a flag character if it ever does occur (very unlikely)
@@ -369,7 +371,7 @@ sub _writeReport {
         my $yearmonth = sprintf( "%.4u%.2u", $year, $mon+1 );
         $log =~ s/%DATE%/$yearmonth/go;
 
-        my( $tmon) = $isoMonth[$mon];
+        my $tmon = (ISOMONTH)[$mon];
         $year = sprintf( "%.4u", $year + 1900 );
         my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u",
                             $mday, $year, $hour, $min );
@@ -393,7 +395,7 @@ Write the log for an event to the logfile
 
 sub writeLog {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    assert(ref($this) eq "TWiki") if DEBUG;
     my $action = shift || "";
     my $webTopic = shift || "";
     my $extra = shift || "";
@@ -419,7 +421,7 @@ intervention. Use this for defensive programming warnings (e.g. assertions).
 
 sub writeWarning {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    assert(ref($this) eq "TWiki") if DEBUG;
     $this->_writeReport( $warningFilename, @_ );
 }
 
@@ -434,7 +436,7 @@ Prints date, time, and contents of $text to $debugFilename, typically
 
 sub writeDebug {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    assert(ref($this) eq "TWiki") if DEBUG;
     $this->_writeReport( $debugFilename, @_ );
 }
 
@@ -563,7 +565,8 @@ Simple header setup for most scripts.  Calls writeHeaderFull, assuming
 
 sub writeHeader {
     my( $this, $query, $contentLength ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+
+    assert(ref($this) eq "TWiki") if DEBUG;
 
     # Pass real content-length to make persistent connections work
     # in HTTP/1.1 (performance improvement for browsers and servers)
@@ -598,7 +601,8 @@ whatever reason, and any illegal headers.
 
 sub writeHeaderFull {
     my( $this, $query, $pageType, $contentType, $contentLength ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+
+    assert(ref($this) eq "TWiki") if DEBUG;
 
     # Handle Edit pages - future versions will extend to caching
     # of other types of page, with expiry time driven by page type.
@@ -683,11 +687,11 @@ overridden by a plugin declaring a =redirectCgiQueryHandler=.
 
 sub redirect {
     my( $this, $query, $url ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+
+    assert(ref($this) eq "TWiki") if DEBUG;
 
     $query = $this->{cgiQuery} unless $query;
     if( ! $this->{plugins}->redirectCgiQueryHandler( $query, $url ) ) {
-        die "ASSERT $this from ".join(",",caller)."\n" unless $query;
         print $query->redirect( $url );
     }
 }
@@ -758,7 +762,8 @@ is returned in a quadruple:
 
 sub readOnlyMirrorWeb {
     my( $this, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+
+    assert(ref($this) eq "TWiki") if DEBUG;
 
     my @mirrorInfo = ( "", "", "", "" );
     if( $siteWebTopicName ) {
@@ -844,7 +849,8 @@ Get the name of the currently requested skin
 
 sub getSkin {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+
+    assert(ref($this) eq "TWiki") if DEBUG;
 
     my $skin = "";
     $skin = $this->{cgiQuery}->param( 'skin' ) if( $this->{cgiQuery} );
@@ -863,7 +869,8 @@ Returns a fully-qualified URL to the specified topic.
 
 sub getViewUrl {
     my( $this, $theWeb, $theTopic ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+
+    assert(ref($this) eq "TWiki") if DEBUG;
 
     $theWeb = $this->{webName} unless $theWeb;
 
@@ -885,7 +892,8 @@ Returns the absolute URL to a TWiki script, providing the wub and topic as
 
 sub getScriptUrl {
     my( $this, $theWeb, $theTopic, $theScript ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+
+    assert(ref($this) eq "TWiki") if DEBUG;
 
     my $url = "$this->{urlHost}$dispScriptUrlPath/$theScript$scriptSuffix/$theWeb/$theTopic";
     # FIXME consider a plugin call here - useful for certificated logon environment
@@ -908,7 +916,9 @@ The returned URL ends up looking something like:
 sub getOopsUrl {
     my( $this, $theWeb, $theTopic, $theTemplate,
         $theParam1, $theParam2, $theParam3, $theParam4 ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+
+    assert(ref($this) eq "TWiki") if DEBUG;
+
     my $web = $this->{webName};  # current web
     if( $theWeb ) {
         $web = $theWeb;
@@ -944,17 +954,18 @@ Note: Function renamed from getWebTopic
 =cut
 
 sub normalizeWebTopicName {
-   my( $this, $theWeb, $theTopic ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    my( $this, $theWeb, $theTopic ) = @_;
 
-   if( $theTopic =~ m|^([^.]+)[\.\/](.*)$| ) {
-       $theWeb = $1;
-       $theTopic = $2;
-   }
-   $theWeb = $this->{webName} unless( $theWeb );
-   $theTopic = $this->{topicName} unless( $theTopic );
+    assert(ref($this) eq "TWiki") if DEBUG;
 
-   return( $theWeb, $theTopic );
+    if( $theTopic =~ m|^([^.]+)[\.\/](.*)$| ) {
+        $theWeb = $1;
+        $theTopic = $2;
+    }
+    $theWeb = $this->{webName} unless( $theWeb );
+    $theTopic = $this->{topicName} unless( $theTopic );
+
+    return( $theWeb, $theTopic );
 }
 
 =pod
@@ -1421,8 +1432,6 @@ sub _handleMETASEARCH {
        $searchVal = "%META:TOPICPARENT[{].*name=\\\"($attrWeb\\.)?$attrTopic\\\".*[}]%";
     }
 
-    use TWiki::Search;    # search engine
-
     my $text = $this->{search}->searchWeb(
         #"_callback"    => undef,
         "search"        => $searchVal,
@@ -1509,9 +1518,8 @@ sub formatTime  {
     $value =~ s/\$minu?t?e?s?/sprintf("%.2u",$min)/geoi;
     $value =~ s/\$hour?s?/sprintf("%.2u",$hour)/geoi;
     $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
-    my @weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
-    $value =~ s/\$wday/$weekDay[$wday]/geoi;
-    $value =~ s/\$mont?h?/$isoMonth[$mon]/goi;
+    $value =~ s/\$wday/(WEEKDAY)[$wday]/geoi;
+    $value =~ s/\$mont?h?/(ISOMONTH)[$mon]/goi;
     $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
     $value =~ s/\$year?/sprintf("%.4u",$year+1900)/geoi;
     $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
@@ -1732,7 +1740,8 @@ Return public web list, i.e. exclude hidden webs, but include current web
 
 sub getPublicWebList {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+
+    assert(ref($this) eq "TWiki") if DEBUG;
 
     if( ! @{$this->{publicWebList}} ) {
         my @list = $this->{store}->getAllWebs();
@@ -1765,28 +1774,29 @@ The expanded variables are:
 =cut
 
 sub expandVariablesOnTopicCreation {
-  my ( $this, $theText, $theUser, $theWikiName, $theWikiUserName ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    my ( $this, $theText, $theUser, $theWikiName, $theWikiUserName ) = @_;
 
-  $theUser = $this->{userName} unless $theUser;
-  $theWikiName = $this->{users}->userToWikiName( $theUser, 1 )
-    unless $theWikiName;
-  $theWikiUserName = $this->{users}->userToWikiName( $theUser )
-    unless $theWikiUserName;
+    assert(ref($this) eq "TWiki") if DEBUG;
 
-  $theText =~ s/%DATE%/$this->_handleDATE()/ge;
-  $theText =~ s/%USERNAME%/$theUser/go;               # "jdoe"
-  $theText =~ s/%WIKINAME%/$theWikiName/go;           # "JonDoe"
-  $theText =~ s/%WIKIUSERNAME%/$theWikiUserName/go; # "Main.JonDoe"
-  $theText =~ s/%URLPARAM{(.*?)}%/$this->_handleURLPARAM(\%{extractParameters($1)})/geo;
-  # Remove filler: Use it to remove access control at time of
-  # topic instantiation or to prevent search from hitting a template
-  # SMELL: this expansion of %NOP{}% is different to the default
-  # which retains content.....
-  $theText =~ s/%NOP{.*?}%//gos;
-  $theText =~ s/%NOP%//go;
+    $theUser = $this->{userName} unless $theUser;
+    $theWikiName = $this->{users}->userToWikiName( $theUser, 1 )
+      unless $theWikiName;
+    $theWikiUserName = $this->{users}->userToWikiName( $theUser )
+      unless $theWikiUserName;
 
-  return $theText;
+    $theText =~ s/%DATE%/$this->_handleDATE()/ge;
+    $theText =~ s/%USERNAME%/$theUser/go;               # "jdoe"
+    $theText =~ s/%WIKINAME%/$theWikiName/go;           # "JonDoe"
+    $theText =~ s/%WIKIUSERNAME%/$theWikiUserName/go; # "Main.JonDoe"
+    $theText =~ s/%URLPARAM{(.*?)}%/$this->_handleURLPARAM(\%{extractParameters($1)})/geo;
+    # Remove filler: Use it to remove access control at time of
+    # topic instantiation or to prevent search from hitting a template
+    # SMELL: this expansion of %NOP{}% is different to the default
+    # which retains content.....
+    $theText =~ s/%NOP{.*?}%//gos;
+    $theText =~ s/%NOP%//go;
+
+    return $theText;
 }
 
 sub _handleWEBLIST {
@@ -1973,6 +1983,51 @@ sub _handleINTURLENCODE {
 
 =pod
 
+---++ sub encodeSpecialChars (  $text  )
+
+Escape out the chars &, ", >, <, \r and \n with replaceable tokens.
+This is used to protect hidden fields from the browser.
+
+=cut
+
+# "
+sub encodeSpecialChars {
+    my $text = shift;
+
+    $text = "" unless defined( $text );
+    $text =~ s/%/%_P_%/g;
+    $text =~ s/&/%_A_%/g;
+    $text =~ s/\"/%_Q_%/g;
+    $text =~ s/>/%_G_%/g;
+    $text =~ s/</%_L_%/g;
+    $text =~ s/\r*\n\r*/%_N_%/g;
+
+    return $text;
+}
+
+=pod
+
+---++ sub decodeSpecialChars (  $text  )
+
+Reverse the encoding of encodeSpecialChars.
+
+=cut
+
+sub decodeSpecialChars {
+    my $text = shift;
+
+    $text =~ s/%_N_%/\n/g;
+    $text =~ s/%_L_%/</g;
+    $text =~ s/%_G_%/>/g;
+    $text =~ s/%_Q_%/\"/g;
+    $text =~ s/%_A_%/&/g;
+    $text =~ s/%_P_%/%/g;
+
+    return $text;
+}
+
+=pod
+
 ---++ sub searchableTopic (  $topic  )
 
 Space out the topic name for a search, by inserting " *" at
@@ -1980,8 +2035,7 @@ the start of each component word.
 
 =cut
 
-sub searchableTopic
-{
+sub searchableTopic {
     my( $topic ) = @_;
     # FindMe -> Find\s*Me
     $topic =~ s/([$regex{lowerAlpha}]+)([$regex{upperAlpha}$regex{numeric}]+)/$1%20*$2/go;   # "%20*" is " *" - I18N: only in ASCII-derived charsets
@@ -2221,7 +2275,8 @@ table-of-contents generation, and any plugin changes from commonTagsHandler.
 
 sub handleCommonTags {
     my( $this, $text, $theTopic, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+
+    assert(ref($this) eq "TWiki") if DEBUG;
 
     $theWeb = $this->{webName} unless $theWeb;
 
@@ -2299,23 +2354,15 @@ sub new {
     # create the various sub-objects
     $this->{sandbox} = new TWiki::Sandbox( $this,
                                            $TWiki::OS, $TWiki::detailedOS );
-    die "ASSERT $this sandbox from ".join(",",caller)."\n" unless $this->{sandbox};
 
     $this->{plugins} = new TWiki::Plugins( $this );
-    die "ASSERT $this plugins from ".join(",",caller)."\n" unless $this->{plugins};
     $this->{net} = new TWiki::Net( $this );
-    die "ASSERT $this net from ".join(",",caller)."\n" unless $this->{net};
     my %ss = @storeSettings;
     $this->{store} = new TWiki::Store( $this, $storeTopicImpl, \%ss );
-    die "ASSERT $this store from ".join(",",caller)."\n" unless $this->{store};
     $this->{search} = new TWiki::Search( $this );
-    die "ASSERT $this search from ".join(",",caller)."\n" unless $this->{search};
     $this->{templates} = new TWiki::Templates( $this );
-    die "ASSERT $this templates from ".join(",",caller)."\n" unless $this->{templates};
     $this->{attach} = new TWiki::Attach( $this );
-    die "ASSERT $this attach from ".join(",",caller)."\n" unless $this->{attach};
     $this->{form} = new TWiki::Form( $this );
-    die "ASSERT $this form from ".join(",",caller)."\n" unless $this->{form};
 
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
@@ -2350,7 +2397,6 @@ sub new {
     getTWikiLibDir();
 
     $this->{security} = new TWiki::Access( $this );
-    die "ASSERT $this security from ".join(",",caller)."\n" unless $this->{security};
 
     my $web = "";
     if( $topic ) {
@@ -2432,7 +2478,6 @@ sub new {
 
     # initialize preferences, first part for site and web level
     $this->{prefs} = new TWiki::Prefs( $this );
-    die "ASSERT $this prefs from ".join(",",caller)."\n" unless $this->{prefs};
 
     my $user = $this->{plugins}->load( $disableAllPlugins );
     unless( $user ) {
@@ -2462,7 +2507,6 @@ sub new {
     $this->{prefs}->initializeUser( $this->{wikiUserName}, $this->{topicName} );
 
     $this->{renderer} = new TWiki::Render( $this );
-    die "ASSERT $this renderer from ".join(",",caller)."\n" unless $this->{renderer};
 
     # Finish plugin initialization - register handlers
     $this->{plugins}->enable();

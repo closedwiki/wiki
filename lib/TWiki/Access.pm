@@ -25,6 +25,7 @@ This object manages the access control database.
 package TWiki::Access;
 
 use strict;
+use Assert;
 
 =pod
 
@@ -37,6 +38,7 @@ database.
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
+    assert(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
 
     %{$this->{GROUPS}} = ();
@@ -64,8 +66,8 @@ Are there any security restrictions for this Web
 
 sub permissionsSet {
     my( $this, $web ) = @_;
+    assert(ref($this) eq "TWiki::Access") if DEBUG;
 
-    die "$this from ".join(",",caller)."\n" unless $this =~ /TWiki::Access/;
     my $permSet = 0;
 
     my @types = qw/ALLOW DENY/;
@@ -101,8 +103,7 @@ sub permissionsSet {
 sub checkAccessPermission {
     my( $this, $theAccessType, $theUserName,
         $theTopicText, $theTopicName, $theWebName ) = @_;
-
-    die "$this from ".join(",",caller)."\n" unless $this =~ /TWiki::Access/;
+    assert(ref($this) eq "TWiki::Access") if DEBUG;
 
     # super admin is always allowed
     if ( $TWiki::doSuperAdminGroup && $TWiki::superAdminGroup ) {
@@ -208,8 +209,8 @@ sub _getListOfGroups {
 
 sub getGroupsUserIsIn {
     my( $this, $theUserName ) = @_;
+    assert(ref($this) eq "TWiki::Access") if DEBUG;
 
-    die "$this from ".join(",",caller)."\n" unless $this =~ /TWiki::Access/;
     my $userTopic = _getWebTopicName( $TWiki::mainWebname, $theUserName );
     my @grpMembers = ();
     my @listOfGroups = $this->_getListOfGroups();
@@ -238,8 +239,7 @@ not a group is specified, checks if it is the users topic.
 
 sub userIsInGroup {
     my( $this, $theUserName, $theGroupTopicName ) = @_;
-
-    die "$this from ".join(",",caller)."\n" unless $this =~ /TWiki::Access/;
+    assert(ref($this) eq "TWiki::Access") if DEBUG;
 
     my $usrTopic = _getWebTopicName( $TWiki::mainWebname, $theUserName );
     my $grpTopic = _getWebTopicName( $TWiki::mainWebname, $theGroupTopicName );
@@ -263,8 +263,6 @@ sub userIsInGroup {
 # | =$group=  | Group topic name, e.g. "Main.EngineeringGroup" |
 sub _getUsersOfGroup {
     my( $this, $theGroupTopicName, $processedGroups ) = @_;
-
-    die "$this from ".join(",",caller)."\n" unless $this =~ /TWiki::Access/;
 
     my @resultList = ();
     # extract web and topic name
@@ -347,7 +345,6 @@ sub _getWebTopicName {
 sub _parseUserList {
     my( $this, $theItems, $expand ) = @_;
 
-    die "$this from ".join(",",caller)."\n" unless $this =~ /TWiki::Access/;
     # comma delimited list of users or groups
     # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
     $theItems =~ s/(<[^>]*>)//go;     # Remove HTML tags

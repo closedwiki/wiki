@@ -250,7 +250,7 @@ sub bulkRegister {
 sub _registerSingleBulkUser {
     my ($session, $row, %settings) = @_;
 
-    my @fieldNames = @{$settings{fieldNames} || die "No fieldNames"};
+    my @fieldNames = @{$settings{fieldNames} || throw Error::Simple( "No fieldNames" )};
     my $doUseHtPasswd = defined $settings{doUseHtPasswd} || throw Error::Simple( "No doHtPasswd" );
     my $doOverwriteTopics = defined $settings{doOverwriteTopics} || throw Error::Simple( "No doOverwriteTopics" );
     my $log;

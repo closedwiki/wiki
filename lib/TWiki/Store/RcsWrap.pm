@@ -34,6 +34,7 @@ use TWiki::Store::RcsFile;
 @ISA = qw(TWiki::Store::RcsFile);
 
 use strict;
+use Assert;
 
 ## Details of settings
 #
@@ -58,6 +59,7 @@ use strict;
 
 sub new {
     my( $class, $session, $web, $topic, $attachment, $settings ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
     my $self =
       bless(new TWiki::Store::RcsFile( $session, $web, $topic, $attachment, $settings ),
             $class );

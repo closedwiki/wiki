@@ -15,12 +15,13 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
+# Reference information for a single plugin
+package TWiki::Plugin;
+
 use strict;
 use TWiki;
 use TWiki::Sandbox;
-
-# Reference information for a single plugin
-package TWiki::Plugin;
+use Assert;
 
 use vars qw( @registrableHandlers );
 
@@ -53,6 +54,7 @@ use vars qw( @registrableHandlers );
 
 sub new {
     my ( $class, $session, $name ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
     my $this = bless( {}, $class );
 
     $name = TWiki::Sandbox::untaintUnchecked( $name );
@@ -76,6 +78,7 @@ sub prefs { my $this = shift; return $this->{session}->{prefs}; }
 # handlers. Return the user resulting from the user handler call.
 sub load {
     my ( $this ) = @_;
+    assert(ref($this) eq "TWiki::Plugin") if DEBUG;
 
     return if $this->{disabled};
 
@@ -139,6 +142,7 @@ sub load {
 # invoke plugin initialisation and register handlers.
 sub registerHandlers {
     my ( $this, $plugins ) = @_;
+    assert(ref($this) eq "TWiki::Plugin") if DEBUG;
 
     return if $this->{disabled};
 
@@ -178,6 +182,7 @@ sub registerHandlers {
 
 sub getVersion {
     my $this = shift;
+    assert(ref($this) eq "TWiki::Plugin") if DEBUG;
 
     no strict 'refs';
     return ${"TWiki::Plugins::$this->{name}::VERSION"};
@@ -186,6 +191,7 @@ sub getVersion {
 
 sub getDescription {
     my $this = shift;
+    assert(ref($this) eq "TWiki::Plugin") if DEBUG;
 
     return "" if $this->{disabled};
 
@@ -207,6 +213,9 @@ loading, initialization and execution
 =cut
 
 package TWiki::Plugins;
+
+use strict;
+use Assert;
 
 use vars qw ( $VERSION $SESSION $inited );
 
@@ -238,6 +247,7 @@ sub new {
 
     my $this = bless( {}, $class );
 
+    assert(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
 
     unless( $inited ) {
@@ -270,6 +280,7 @@ If disabled is set, no plugin handlers will be called.
 
 sub load {
     my ( $this, $disabled ) = @_;
+    assert(ref($this) eq "TWiki::Plugins") if DEBUG;
 
     my %disabledPlugins;
 
@@ -370,6 +381,8 @@ Initialisation that is done after the user is known.
 
 sub enable {
     my $this = shift;
+    assert(ref($this) eq "TWiki::Plugins") if DEBUG;
+
     foreach my $plugin ( @{$this->{plugins}} ) {
         $plugin->registerHandlers( $this );
         # Report initialisation errors
@@ -391,6 +404,7 @@ be found or is not active, 0 is returned.
 
 sub getPluginVersion {
     my ( $this, $thePlugin ) = @_;
+    assert(ref($this) eq "TWiki::Plugins") if DEBUG;
 
     return $VERSION unless $thePlugin;
 
@@ -407,6 +421,7 @@ sub getPluginVersion {
 sub _applyHandlers {
     # must be shifted to clear parameter vector
     my $this = shift;
+    assert(ref($this) eq "TWiki::Plugins") if DEBUG;
     my $handlerName = shift;
 
     my $status;
@@ -488,8 +503,8 @@ Called by the register script
 
 sub registrationHandler {
     my $this = shift;
+    assert(ref($this) eq "TWiki::Plugins") if DEBUG;
     #my( $web, $wikiName, $loginName ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'registrationHandler', @_ );
 }
 
@@ -504,7 +519,6 @@ Called by sub handleCommonTags at the beginning (for cache Plugins only)
 sub beforeCommonTagsHandler {
     my $this = shift;
     #my( $text, $topic, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'beforeCommonTagsHandler', @_ );
 }
 
@@ -519,7 +533,6 @@ Called by sub handleCommonTags, after %INCLUDE:"..."%
 sub commonTagsHandler {
     my $this = shift;
     #my( $text, $topic, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'commonTagsHandler', @_ );
 }
 
@@ -534,7 +547,6 @@ Called by sub handleCommonTags at the end (for cache Plugins only)
 sub afterCommonTagsHandler {
     my $this = shift;
     #my( $text, $topic, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'afterCommonTagsHandler', @_ );
 }
 
@@ -549,7 +561,6 @@ Called by getRenderedVersion just before the line loop
 sub startRenderingHandler {
     my $this = shift;
     #my ( $text, $web ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'startRenderingHandler', @_ );
 }
 
@@ -564,7 +575,6 @@ Called by sub getRenderedVersion, in loop outside of <PRE> tag
 sub outsidePREHandler {
     my $this = shift;
     #my( $text ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'outsidePREHandler', @_ );
 }
 
@@ -579,7 +589,6 @@ Called by sub getRenderedVersion, in loop inside of <PRE> tag
 sub insidePREHandler {
     my $this = shift;
     #my( $text ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'insidePREHandler', @_ );
 }
 
@@ -594,7 +603,6 @@ Called by getRenderedVersion just after the line loop
 sub endRenderingHandler {
     my $this = shift;
     #my ( $text ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'endRenderingHandler', @_ );
 }
 
@@ -609,7 +617,6 @@ Called by edit
 sub beforeEditHandler {
     my $this = shift;
     #my( $text, $topic, $web ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'beforeEditHandler', @_ );
 }
 
@@ -624,7 +631,6 @@ Called by edit
 sub afterEditHandler {
     my $this = shift;
     #my( $text, $topic, $web ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'afterEditHandler', @_ );
 }
 
@@ -639,7 +645,6 @@ Called just before the save action
 sub beforeSaveHandler {
     my $this = shift;
     #my ( $theText, $theTopic, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'beforeSaveHandler', @_ );
 }
 
@@ -654,7 +659,6 @@ Called just after the save action
 sub afterSaveHandler {
     my $this = shift;
     #my ( $theText, $theTopic, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'afterSaveHandler', @_ );
 }
 
@@ -689,7 +693,6 @@ Example usage:
 sub beforeAttachmentSaveHandler {
     my $this = shift;
     #my ( $theAttrHash, $theTopic, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'beforeAttachmentSaveHandler', @_ );
 }
 
@@ -719,7 +722,6 @@ Note: All keys should be used read-only.
 sub afterAttachmentSaveHandler {
     my $this = shift;
     #my ( $theText, $theTopic, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'afterAttachmentSaveHandler', @_ );
 }
 
@@ -734,7 +736,6 @@ Called by $TWiki::writeHeader
 
 sub writeHeaderHandler {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     return $this->_applyHandlers( 'writeHeaderHandler', @_ );
 }
 
@@ -748,7 +749,6 @@ Called by TWiki::redirect
 
 sub redirectCgiQueryHandler {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     return $this->_applyHandlers( 'redirectCgiQueryHandler', @_ );
 }
 
@@ -762,7 +762,6 @@ Called by TWiki::getSessionValue
 
 sub getSessionValueHandler {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     return $this->_applyHandlers( 'getSessionValueHandler', @_ );
 }
 
@@ -776,7 +775,6 @@ Called by TWiki::setSessionValue
 
 sub setSessionValueHandler {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     return $this->_applyHandlers( 'setSessionValueHandler', @_ );
 }
 
@@ -805,7 +803,6 @@ times throughout the page.
 
 sub renderFormFieldForEditHandler {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     return $this->_applyHandlers( 'renderFormFieldForEditHandler', @_ );
 }
 
@@ -821,7 +818,6 @@ Originated from the TWiki:Plugins.SpacedWikiWordPlugin hack
 
 sub renderWikiWordHandler {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     return $this->_applyHandlers( 'renderWikiWordHandler', @_ );
 }
 

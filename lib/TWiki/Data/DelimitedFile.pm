@@ -4,7 +4,6 @@ use Data::Dumper;
 
 sub read {
     my (%settings) = @_;
-    # die Dumper(\%settings);
     my $filename = $settings{filename};
     my $content = $settings{content};
     my $delimiter = $settings{delimiter} || "\t";
@@ -27,7 +26,7 @@ sub read {
     $headerRow =~ s/\x0d*//g;
     
     @fieldNames = (split /\s*\Q$delimiter\E\s*/, $headerRow); 
-    #print  Dumper(\@fieldNames);
+
     # Target:
     # $data{$rowNumber}{$fieldName} = $fieldValue
     
@@ -36,7 +35,6 @@ sub read {
         #     print "popping ".pop @fieldNames;
     }
     
-    # die "done";
     foreach my $rowNumber (0..$#content) {
         my $line = shift @content;
         $line =~ s/\x0a*//;
@@ -55,7 +53,6 @@ sub read {
             #      print "'$field ($colNumber)'='$value'\n";
             if ($field ne "") {
                 $data{$rowNumber}{$field} = $value;
-                #	  die "'$field' = '$value'";
             }
         }
         #  print Dumper(\$data{$rowNumber});
@@ -70,16 +67,14 @@ sub read {
 
 sub save {
     my (%settings) = @_;
-    my $filename = $settings{filename} || die "Save: filename parameter is mandatory";
+    my $filename = $settings{filename} || throw Error::Simple( "Save: filename parameter is mandatory" );
     my $delimiter = $settings{delimiter} || "\t";
     my $rowstart = $settings{rowstart} || "";
     my $rowend = $settings{rowend} || "\n";
-    my %data = %{$settings{data} || die "Save: data parameter is mandatory"};
-    my @fieldNames = @{$settings{fieldNames} || die "Save: fieldNames parameter is mandatory"};
-    # die Dumper(\@fieldNames);
-    # die Dumper(\%data);
-    
-    my $fh         = new FileHandle("> ".$filename) || die "Can't write $filename";
+    my %data = %{$settings{data} || throw Error::Simple( "Save: data parameter is mandatory" )};
+    my @fieldNames = @{$settings{fieldNames} || throw Error::Simple( "Save: fieldNames parameter is mandatory" )};
+
+    my $fh         = new FileHandle("> ".$filename) || throw Error::Simple( "Can't write $filename" );
     my $headerRow = $rowstart.join($delimiter, @fieldNames).$rowend;
     print $fh $headerRow;
     

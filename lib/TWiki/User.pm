@@ -26,6 +26,7 @@ vice versa, and user authentication checking.
 package TWiki::User;
 
 use strict;
+use Assert;
 
 # 'Use locale' for internationalisation of Perl sorting in getTopicNames
 # and other routines - main locale settings are done in TWiki::setupLocale
@@ -45,6 +46,7 @@ Construct the user management object
 
 sub new {
     my ( $class, $session, $impl ) = @_;
+    assert(ref($session) eq "TWiki") if DEBUG;
     my $this = bless( {}, $class );
     $this->{session} = $session;
 
@@ -52,8 +54,6 @@ sub new {
     $this->{CACHED} = 0;
 
 	eval "use $this->{IMPL}";
-
-    die $@ if $@;
 
     return $this;
 }
@@ -67,13 +67,13 @@ sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 # Get the password implementation
 sub _getPasswordHandler {
-   my( $this, $web, $topic, $attachment ) = @_;
+    my( $this, $web, $topic, $attachment ) = @_;
 
-   $attachment = "" if( ! $attachment );
+    $attachment = "" if( ! $attachment );
 
-   my $passwordHandler = $this->{IMPL}->new( $this->{session} );
+    my $passwordHandler = $this->{IMPL}->new( $this->{session} );
 
-   return $passwordHandler;
+    return $passwordHandler;
 }
 
 =pod
@@ -88,6 +88,7 @@ sub _getPasswordHandler {
 
 sub userPasswordExists {
     my ( $this, $user ) = @_;
+    assert(ref($this) eq "TWiki::User") if DEBUG;
 
     my $passwordHandler = $this->_getPasswordHandler();
 
