@@ -31,6 +31,8 @@ package TWiki::Form;
 
 use strict;
 use Assert;
+use Error qw( :try );
+use TWiki::UI::OopsException;
 
 =pod
 
@@ -170,6 +172,8 @@ sub getPossibleFieldValues {
 Get array of field definition, given form name
 If form contains Web this overrides webName
 
+May throw TWiki::UI::OopsException
+
 =cut
 
 sub getFormDef {
@@ -187,7 +191,9 @@ sub getFormDef {
           $this->store()->readTopic( $this->{session}->{user}, $webName, $form, undef );
         @fieldDefs = $this->_parseFormDefinition( $text );
     } else {
-        # FIXME - do what if there is an error?
+        throw TWiki::UI::OopsException( $this->{session}->{webName},
+                                        $this->{session}->{topicName},
+                                        "noformdef", $webName, $form);
     }
 
     my @fieldsInfo = ();
@@ -277,14 +283,17 @@ sub chooseFormButton {
 
 =pod
 
----++ ObjectMethod renderForEdit (  $web, $topic, $form, $meta, $getValuesFromFormTopic,  @fieldsInfo  ) -> $html
+---++ ObjectMethod renderForEdit (  $web, $topic, $formWeb, $form, $meta, $getValuesFromFormTopic ) -> $html
 
 Render form fields for entry during an edit session
+
+SMELL: this method is a horrible hack. It badly wants cleaning up.
+e.g. FIXME could do with some of this being in template
 
 =cut
 
 sub renderForEdit {
-    my( $this, $web, $topic, $form, $meta, $getValuesFromFormTopic, @fieldsInfo ) = @_;
+    my( $this, $web, $topic, $formWeb, $form, $meta, $getValuesFromFormTopic ) = @_;
     ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
 
     my $chooseForm = "";
@@ -292,13 +301,10 @@ sub renderForEdit {
         $chooseForm = chooseFormButton( "Replace form..." );
     }
 
-    # FIXME could do with some of this being in template
     my $text = "<div class=\"twikiForm twikiEditForm\"><table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
                $this->_link( $web, $form, "", "h", "", 2, $chooseForm ) . "</tr>\n";
 
-    my $query = $this->{session}->{cgiQuery};
-    $this->fieldVars2Meta( $web, $query, $meta, "override" );
-
+    my @fieldsInfo = $this->getFormDef( $formWeb, $form );
     foreach my $c ( @fieldsInfo ) {
         my @fieldInfo = @$c;
         my $fieldName = shift @fieldInfo;
@@ -315,36 +321,28 @@ sub renderForEdit {
             # Allow initialisation based on a preference
             $value = $this->prefs()->getPreferencesValue($fieldName);
         }
-        if( !defined( $value ) && $type !~ /^checkbox/ && $getValuesFromFormTopic ) {
-            my $tmp = $fieldInfo[0];
-            if( defined( $tmp )) {
-                $value = $this->{session}->handleCommonTags( $tmp,
+        if( !defined( $value ) && $type !~ /^checkbox/ &&
+            $getValuesFromFormTopic ) {
+
+            $value = $fieldInfo[0];
+            if( defined( $value )) {
+                $value = $this->{session}->handleCommonTags( $value,
                                                              $web, $topic );
             }
         }
         $value = "" unless defined $value;  # allow "0" values
         my $extra = "";
 
-        $tooltip =~ s/&/&amp\;/g;
-        $tooltip =~ s/"/&quot\;/g;
-        $tooltip =~ s/</&lt\;/g;
-        $tooltip =~ s/>/&gt\;/g;
+        $tooltip = TWiki::entityEncode( $tooltip );
 
         my $output = $this->{session}->{plugins}->renderFormFieldForEditHandler( $name, $type, $size, $value, $attributes, \@fieldInfo );
         if( $output ) {
             $value = $output;
         } elsif( $type eq "text" ) {
-            $value =~ s/&/&amp\;/go;
-            $value =~ s/"/&quot\;/go; # Make sure double quote don't kill us
-            $value =~ s/</&lt\;/go;
-            $value =~ s/>/&gt\;/go;
+            $value = TWiki::entityEncode( $value );
             $value = "<input class=\"twikiEditFormTextField\" type=\"text\" name=\"$name\" size=\"$size\" value=\"$value\" />";
         } elsif( $type eq "label" ) {
-            my $escaped = $value;
-            $escaped =~ s/&/&amp\;/go;
-            $escaped =~ s/"/&quot\;/go; # Make sure double quote don't kill us
-            $escaped =~ s/</&lt\;/go;
-            $escaped =~ s/>/&gt\;/go;
+            my $escaped = TWiki::entityEncode( $value );
             $value = "<input class=\"twikiEditFormLabelField\" type=\"hidden\" name=\"$name\" value=\"$escaped\" />$value";
         } elsif( $type eq "textarea" ) {
             my $cols = 40;
@@ -353,10 +351,7 @@ sub renderForEdit {
                $cols = $1;
                $rows = $2;
             }
-            $value =~ s/&/&amp\;/go;
-            $value =~ s/"/&quot\;/go; # Make sure double quote don't kill us
-            $value =~ s/</&lt\;/go;
-            $value =~ s/>/&gt\;/go;
+            $value = TWiki::entityEncode( $value );
             $value = "<textarea class=\"twikiEditFormTextAreaField\" cols=\"$cols\" rows=\"$rows\" name=\"$name\">$value</textarea>";
         } elsif( $type eq "select" ) {
             my $val = "";
@@ -431,11 +426,9 @@ sub renderForEdit {
             $value = "$val\n</tr></table>\n";
         } else {
             # Treat like test, make it reasonably long
-#TODO: Sven thinks this should be an error condition - so users know about typo's, and don't loose data when the typo is fixed
-            $value =~ s/&/&amp\;/go;
-            $value =~ s/"/&quot\;/go; # Make sure double quote don't kill us
-            $value =~ s/</&lt\;/go;
-            $value =~ s/>/&gt\;/go;
+            # SMELL: Sven thinks this should be an error condition - so users
+            # know about typo's, and don't lose data when the typo is fixed
+            $value = TWiki::entityEncode( $value );
             $value = "<input class=\"twikiEditFormError\" type=\"text\" name=\"$name\" size=\"80\" value=\"$value\" />";
         }
         $text .= "   <tr> " . $this->_link( $web, $title, $tooltip, "h", "right", "", $extra ) . "<td align=\"left\"> $value </td> </tr>\n";
@@ -453,6 +446,8 @@ sub renderForEdit {
 Extract new values of form fields from a query.
 
 Note that existing meta information for fields is removed unless $justOverride is true
+
+May throw TWiki::UI::OopsException
 
 =cut
 
@@ -480,6 +475,7 @@ sub fieldVars2Meta {
        my $tooltip   = shift @fieldInfo;
        my $attributes = shift @fieldInfo;
        my $value     = $query->param( $fieldName );
+
        my $cvalue    = "";
 
        if( ! $value && $type =~ "^checkbox" ) {
@@ -693,6 +689,8 @@ sub _upgradeCategoryItem {
 ---++ ObjectMethod upgradeCategoryTable (  $web, $topic, $meta, $text  ) -> $text
 
 Upgrade old style category table
+
+May throw TWiki::UI::OopsException
 
 =cut
 

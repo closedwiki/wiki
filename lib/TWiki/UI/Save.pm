@@ -170,8 +170,8 @@ sub _save {
         $newMeta->put( "FORM", { name => $formTemplate } ) if( $formTemplate ne "none" );
     }
 
-    # Expand field variables, unless this new page is templated
-    $session->{form}->fieldVars2Meta( $webName, $query, $newMeta ) unless $templatetopic;
+    # Expand field variables.
+    $session->{form}->fieldVars2Meta( $webName, $query, $newMeta );
     $newMeta->updateSets( \$newText );
 
     # assumes rev numbers start at 1
