@@ -1093,7 +1093,7 @@ sub renderMoved
             $putBack .= " href=\"$scriptUrlPath/rename?newWeb=$fromWeb&newTopic=$fromTopic&oldWeb=$web";
             $putBack .= "&oldTopic=$topic&confirm=yes\">put it back</a>";
         }
-        $text = "<p><I><nop>$to moved from <nop>$from on $date by %MAINWEB%.$by </I>$putBack</p>";
+        $text = "<p><i><nop>$to moved from <nop>$from on $date by %MAINWEB%.$by </i>$putBack</p>";
     }
     
     return $text;
@@ -1338,10 +1338,10 @@ sub externalLink
     if( $url =~ /\.(gif|jpg|jpeg|png)$/i ) {
         my $filename = $url;
         $filename =~ s@.*/([^/]*)@$1@go;
-        return "$pre<IMG src=\"$url\" alt=\"$filename\">";
+        return "$pre<img src=\"$url\" alt=\"$filename\" />";
     }
 
-    return "$pre<A href=\"$url\" target=\"_top\">$url</A>";
+    return "$pre<a href=\"$url\" target=\"_top\">$url</a>";
 }
 
 # =========================
@@ -1422,7 +1422,7 @@ sub getRenderedVersion
             &TWiki::Plugins::outsidePREHandler( $_ );
 
 # Blockquote
-            s/^>(.*?)$/> <cite> $1 <\/cite><BR>/go;
+            s/^>(.*?)$/> <cite> $1 <\/cite><br>/go;
 
 # Embedded HTML
             s/\<(\!\-\-)/$TranslationToken$1/go;  # Allow standalone "<!--"
@@ -1452,7 +1452,7 @@ sub getRenderedVersion
             s/$headerPatternDa/&makeAnchorHeading($2,(length($1)))/geo;
 
 # Horizontal rule
-            s/^---+/<HR>/o;
+            s/^---+/<hr \/>/o;
             s@^([a-zA-Z0-9]+)----*@<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><HR></td></tr></table>@o;
 
 # Table of format: | cell | cell |
@@ -1468,9 +1468,9 @@ sub getRenderedVersion
 # Lists etc.
             s/^\s*$/<p> /o                   && ( $code = 0 );
             m/^(\S+?)/o                      && ( $code = 0 );
-            s/^(\t+)(\S+?):\s/<DT> $2<DD> /o && ( $result .= &emitCode( "DL", length $1 ) );
-            s/^(\t+)\* /<LI> /o              && ( $result .= &emitCode( "UL", length $1 ) );
-            s/^(\t+)\d+\.?/<LI> /o           && ( $result .= &emitCode( "OL", length $1 ) );
+            s/^(\t+)(\S+?):\s/<dt> $2<dd> /o && ( $result .= &emitCode( "dl", length $1 ) );
+            s/^(\t+)\* /<li> /o              && ( $result .= &emitCode( "ul", length $1 ) );
+            s/^(\t+)\d+\.?/<li> /o           && ( $result .= &emitCode( "ol", length $1 ) );
             if( !$code ) {
                 $result .= &emitCode( "", 0 );
                 $code = "";
@@ -1485,9 +1485,9 @@ sub getRenderedVersion
 # Emphasizing
             # PTh 25 Sep 2000: More relaxing rules, allow leading '(' and trailing ',.;:!?)'
             s/([\s\(])==([^\s]+?|[^\s].*?[^\s])==([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText( $2, 1 ) . $3/geo;
-            s/([\s\(])__([^\s]+?|[^\s].*?[^\s])__([\s\,\.\;\:\!\?\)])/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
-            s/([\s\(])\*([^\s]+?|[^\s].*?[^\s])\*([\s\,\.\;\:\!\?\)])/$1<STRONG>$2<\/STRONG>$3/go;
-            s/([\s\(])_([^\s]+?|[^\s].*?[^\s])_([\s\,\.\;\:\!\?\)])/$1<EM>$2<\/EM>$3/go;
+            s/([\s\(])__([^\s]+?|[^\s].*?[^\s])__([\s\,\.\;\:\!\?\)])/$1<strong><em>$2<\/em><\/strong>$3/go;
+            s/([\s\(])\*([^\s]+?|[^\s].*?[^\s])\*([\s\,\.\;\:\!\?\)])/$1<strong>$2<\/strong>$3/go;
+            s/([\s\(])_([^\s]+?|[^\s].*?[^\s])_([\s\,\.\;\:\!\?\)])/$1<em>$2<\/em>$3/go;
             s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText( $2, 0 ) . $3/geo;
 
 # Mailto
