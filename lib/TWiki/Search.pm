@@ -33,12 +33,17 @@
 # PTh 03 Nov 2000: Performance improvements
 
 package TWiki::Search;
-
 use strict;
 
-##use vars qw(
-##        $lsCmd $egrepCmd $fgrepCmd
-##);
+# 'Use locale' for internationalisation of Perl sorting - 
+# main locale settings are done in TWiki::setupLocale
+BEGIN {
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::useLocale ) {
+        require locale;
+        import locale ();
+    }
+}
 
 # ===========================
 # Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
@@ -58,6 +63,8 @@ sub searchWeb
          $noSearch, $noHeader, $noTotal, $doBookView, $doRenameView,
          $doShowLock, $noEmpty, $theTemplate, $theHeader, $theFormat,
          @junk ) = @_;
+
+    ##TWiki::writeDebug "Search locale is $TWiki::siteLocale";
 
     ## 0501 kk : vvv new option to limit results
     # process the result limit here, this is the 'global' limit for
@@ -421,6 +428,7 @@ sub searchWeb
 
         } else {
             # sort by filename, Schwartzian Transform
+	    ##TWiki::writeDebug "Topic list before sort = @topicList";
             if( $revSort ) {
                 @topicList = map { $_->[1] }
                              sort {$b->[0] cmp $a->[0] }
@@ -432,6 +440,7 @@ sub searchWeb
                              map { [ $_, $_ ] }
                              @topicList;
             }
+	    ##TWiki::writeDebug "Topic list after sort = @topicList";
         }
 
         # output header of $thisWebName
