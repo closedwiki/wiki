@@ -248,14 +248,20 @@ sub expandCommonVariables {
   $text =~ s/%TMPL:P{\"?(.*?)\"?}%/&_handleTmplP($1)/geo;
   $text =~ s/%([A-Za-z0-9_]+)%/&_evbl($1)/ego;
   if ($query) {
-    $text =~ s/%URLPARAM{\"?(.*?)"?}%/&_eurlp($1)/ego;
+    $text =~ s/%URLPARAM{(.*?)}%/&_eurlp($1)/ego;
   }
   return $text;
 }
 
 sub _eurlp {
-  my $vbl = shift;
-  return $query->param($vbl) if ( $query->param($vbl));
+  my $ats = shift;
+  my $vbl = extractNameValuePair($ats);
+  my $repl = extractNameValuePair($ats, "newline");
+  if ( $query->param($vbl)) {
+    my $val = $query->param($vbl);
+    $val =~ s/\n/$repl/go if ($repl);
+    return $val;
+  }
   return "%URLPARAM{\"$vbl\"}%";
 }
 
