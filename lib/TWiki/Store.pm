@@ -41,6 +41,7 @@ use vars qw( %templateVars ); # init in TWiki.pm so okay for modPerl
 sub initialize
 {
     %templateVars = ();
+    eval "use TWiki::Store::$TWiki::storeTopicImpl;";
 }
 
 # ===========================
@@ -59,13 +60,11 @@ sub writeDebug
 sub _getTopicHandler
 {
    my( $web, $topic, $attachment ) = @_;
-   
+
    $attachment = "" if( ! $attachment );
-   
-   my $package = "use TWiki::Store::$TWiki::storeTopicImpl;";
-   eval $package;
+
    my $handlerName = "TWiki::Store::$TWiki::storeTopicImpl";
-   
+
    my $handler = $handlerName->new( $web, $topic, $attachment, @TWiki::storeSettings );
    return $handler;
 }
@@ -808,7 +807,7 @@ sub getFileName
 
 # ======================
 # Just read the meta data at the top of the topic
-# Generalise for Codev.DataFramework
+# Generalise for Codev.DataFramework, but needs to be fast because of use by view script
 sub readTopMeta
 {
     my( $theWeb, $theTopic ) = @_;
