@@ -15,6 +15,15 @@
     }
     return false;
  }
+
+ function checkAll( theCheck )
+ {
+   // find button element index
+   var j = 0;
+   for( var i = 0; i < document.rename.length; i++ ) {
+     document.rename.elements[i].checked = theCheck;
+   }
+ }
  //STOP HIDING-->
  </script>
 </head>
@@ -29,13 +38,15 @@
 |  *To:* |  %TMPL:P{"newweb"}%. | %TMPL:P{"newtopic"}% |
 %TMPL:P{"notes"}%
 
----++ Change links in topics that refer to %TOPIC% in the %WEB% Web:
+---++ Change links in topics that refer to <nop>%TOPIC% in the %WEB% Web:
 
-%RESEARCH{ "(^|[^A-Za-z0-9_])((%TOPIC%|%RESPACEDTOPIC%))([^A-Za-z0-9_]|$)" web="%WEB%" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
+%RESEARCH{ "%TOPIC%" web="%WEB%" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
 
----++ Change links in topics that refer to [[%WEB%.%TOPIC%]] in any Web:
+---++ Change links in topics that refer to <nop>%WEB%.<nop>%TOPIC% in any Web:
 
-%RESEARCH{ "(^|[^A-Za-z0-9_])((%WEB%\.)%TOPIC%)([^A-Za-z0-9_]|$)" web="all" noempty="on" showlock="on" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
+%RESEARCH{ "%WEB%\.%TOPIC%" web="all" noempty="on" showlock="on" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
+
+<input type="button" value="Clear all checkboxes" onClick="checkAll(false);" />
 
 __Note:__
    * Get help on
