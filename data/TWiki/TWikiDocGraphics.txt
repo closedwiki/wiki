@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1047017580" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="PeterThoeny" date="1047103320" format="1.0" version="1.14"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -24,10 +24,10 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 	* <img src="%ATTACHURLPATH%/attachfile.gif" alt="attachfile.gif"  width="16" height="16"  /> Attach file
 	* <img src="%ATTACHURLPATH%/home.gif" alt="home.gif"  width="16" height="16"  /> Home
 	* <img src="%ATTACHURLPATH%/changes.gif" alt="changes.gif"  width="16" height="16"  /> Changes
+	* <img src="%ATTACHURLPATH%/notify.gif" alt="notify.gif"  width="16" height="16"  /> Notify
 
 -- Main.PeterThoeny - 17 Jan 2003<br />
 -- Main.MikeMannix - 16 May 2002
-
 %META:FILEATTACHMENT{name="help.gif" attr="" comment="Help" date="1001637645" path="C:\02_TWikiDocs\help.gif" size="130" user="MikeMannix" version="1.1"}%
 %META:FILEATTACHMENT{name="tip.gif" attr="" comment="Tip" date="1007360101" path="C:\02_TWikiDocs\tip.gif" size="123" user="MikeMannix" version="1.2"}%
 %META:FILEATTACHMENT{name="warning.gif" attr="" comment="Warning" date="1001637707" path="C:\02_TWikiDocs\warning.gif" size="138" user="MikeMannix" version="1.1"}%
@@ -45,3 +45,4 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="attachfile.gif" attr="" comment="Attach file" date="1042874171" path="C:\Data\Temp\attachfile.gif" size="193" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="home.gif" attr="" comment="Home" date="1047017417" path="C:\Data\Temp\home.gif" size="172" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="changes.gif" attr="" comment="Changes" date="1047017437" path="C:\Data\Temp\changes.gif" size="167" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="notify.gif" attr="" comment="Notify" date="1047103200" path="C:\Data\Temp\notify.gif" size="183" user="PeterThoeny" version="1.1"}%
