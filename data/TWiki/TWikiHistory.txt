@@ -74,11 +74,11 @@
 	* PeterThoeny - 29 Jul 2000: New variables =%<nop>GMTIME{"..."}%= and =%<nop>SERVERTIME{"..."}%= . More in TWikiVariables.
 	* PeterThoeny - 16 Aug 2000: New TWikiPreferences variables =%<nop>HTTP_EQUIV_ON_VIEW%= , =%<nop>HTTP_EQUIV_ON_EDIT%= and =%<nop>HTTP_EQUIV_ON_PREVIEW%= that define the =&lt;meta http-equiv="..."&gt;= meta tags for the TWiki templates. This can be used for example to set a document expiration time.
 	* PeterThoeny - 19 Aug 2000: Ref-By link searches all webs (not just the current web.)
-
+	* AlWilliams, ManpreetSingh - 18 Sep 2000: Added forced internal links. Write =[<nop>[text formatting FAQ]]= to get the link [[text formatting FAQ]] that points to topic TextFormattingFAQ.
 
 *Related Topics*
 	* TWikiDocumentation has implementation details.
 	* TWikiPlannedFeatures has a list of planned features. 
 	* TWikiEnhancementRequests is the place where you can add your enhancement requests. 
 
--- Main.PeterThoeny - 20 Aug 2000 <br>
+-- Main.PeterThoeny - 18 Sep 2000 <br>
