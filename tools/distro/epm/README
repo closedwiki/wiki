@@ -1,2 +1,25 @@
-README
-======
+TWiki (TM) - A Web Based Collaboration Platform
+===============================================
+
+TWiki is a flexible and powerful web-based collaboration 
+platform that allows you to run a dynamic intranet site, a 
+project development space, a document management system, a 
+knowledge base, an issue tracking system and many other 
+groupware application. TWiki looks and feels like a normal 
+intranet or Web site. Users can freely change or create 
+content from any Web browser, without requiring special 
+browser plugins. 
+
+Major companies like British Telecom, Sun Microsystems, 
+Motorola and SAP depend on the TWiki platform to increase 
+the productivity of their engineering teams. 
+
+Features include automatic link generation, full text 
+search, authorization based on groups, Web form handling, 
+email notification of changes, file attachments to Web 
+pages, revision control of pages and attachments, and 
+more. The server-side TWiki Plugins API provides developers 
+with a simple way to build new groupware applications. 
+
+The GPLed TWiki software and over 100 Plugins can be 
+downloaded from the TWiki.org web site, http://TWiki.org/.
