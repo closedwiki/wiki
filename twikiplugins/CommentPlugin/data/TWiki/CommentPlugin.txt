@@ -1,92 +1,133 @@
-%META:TOPICINFO{author="guest" date="1014576900" format="1.0" version="1.3"}%
+---+!! Comment Plugin
 
-<H4> _post development notes in %TOPIC%Dev_ </H4>
+This plugin allows users to quickly post comments to a page without edit/preview/save cycle. 
+
+_( Discussion in TWiki:Plugins/CommentPluginDev )_
 
 %TOC%
+---+ Features
 
----++ %TOPIC%
+Inserts an edit box into the page that allows users to type in and save comments. Comments can be made:
+	* in different formats (as defined by a template). 
+	* in both forward and reverse chronological order.  
+	* signed or unsigned, dated or undated (as defined by a template).
 
-The CommentPlugin gives the ability to quickly post comments in forward/reverse
-chronological order.  Simply entering text and clicking on the Comment button will have your comments added before or after the form, including your name and date.
+---+ Syntax Rules
 
+Write the command =%<nop>COMMENT{= _attributes_ =}%= anywhere in a TWiki topic.
 
----++ Syntax Rules
+Two attributes are supported:
+	| *Name* | *Description* |
+	| =id= | This gives a unique name to this COMMENT tag, in case you have more than one COMMENT tag in a page. If you have more than one COMMENT on a page, you *must* give an id for each. If there is only one COMMENT, the id is optional. |
+	| =mode= | This is the name of the template to use for this comment. Comment templates are defined in a template topic - see [[#TemPlates][Customisation]], below. If this is not defined, the mode is whatever is defined by COMMENTPLUGIN_MODE, either in this topic or in your WebPreferences. By default this is 'after'. |
 
-There are only five options with the Comment meta tag:
-   * rows: Any number > 0 will set the rows of the text area (default is 5)
-   * cols: Any number > 10 will set the columns of the textarea (default is 70)
-   * mode: The word "after" tells Comment to put the posted data after the form in reverse chronological order (default = "normal" chronological order)
-   * button: This lets you change the text of the submit button (default is "Add Comment")
-   * id: This gives a unique name for a COMMENT, in case you have more than one COMMENT tag in a topic (mandatory with > 1 COMMENT)
+#TemPlates
+---+ Customisation
+The plugin installs a set of default templates in the %TWIKIWEB%.CommentTemplates topic of your %TWIKIWEB% web.You can customise the comment plugin by either editing that topic (not recommended), or by changing the setting of the COMMENTPLUGIN_TEMPLATES variable in your WebPreferences to point to an alternative topic (recommended).
 
----++ %TOPIC% Settings
+The format of the template topic is a series of tagged blocks, two for each template type, one (INPUT) defining what you see in a browser and the other (OUTPUT) defining what gets put into the text. For example, if we have a mode called 'append' there has to be an =append:INPUT= block and an =append:OUTPUT= block in the template file. These sections are written as follows:
+<pre>
+---++ !!append:INPUT
+</pre>
+_text of the INPUT template_
+<pre>
+---++ !!append:END
+</pre>
+<pre>
+---++ !!append:OUTPUT
+</pre>
+_text of the OUTPUT template_
+<pre>
+---++ !!append:END
+</pre>
+You can write whatever you like outside the tags, it simply gets ignored. You can define as many templates as you like in a single file. See CommentTemplates for an example.
 
-   * Description:
-      * Set SHORTDESCRIPTION = Allows users to quickly edit a topic without going through the edit/preview/save cycle
+---++ INPUT template
+The INPUT template defines the HTML that gets embedded in your topic at the site of the =%COMMENT= when the page is displayed in a browser. The definition uses HTML tags, but uses {} instead of &lt;&gt;. As well as standard HTML constructs, INPUT can also use:
+    | *Tag* | *Description* |
+    | {COMMENT} | The value of the input field named 'comment' |
+    | {URL} | The value of the input field named 'comment_url' |
+    | {LINK} | The value of the input field named 'comment_link' |
+    | {DISABLED} | Disabled message, generated when you cannot comment (see [[#HandlingPageLock][Important Note regarding Locks]], below). |
+    | {LOCKMSG} | lock message (generated) |
+    | {ID} | id defined in =%COMMENT= (blank, if there is none) |
 
-   * Default number of rows in a COMMENT
-      * Set ROWS = 5
-   * Default number of columns in a COMMENT
-      * Set COLS = 70
+---++ OUTPUT template
+The OUTPUT section defines the format for the text that actually gets embedded into the topic. It should be written using TWiki markup though it can also include HTML (same rules about {} replacing &lt;&gt;). As well as standard TWiki variables and formatting, OUTPUT can also use:
+    | {USERNAME} | Wiki name of the person saving ||
+    | {DATE} | Local date when the topic was saved |
+    | {TIME} | Local time when the topic was saved |
+    | {GROWHEAD} | If present, comments will be inserted *immediately before* the =%COMMENT= tag |
+    | {GROWTAIL} | If present, comments will be inserted *immediatley after* the =%COMMENT= tag |
+These will be expanded before the topic is saved. Note that other TWiki variables (such as %<nop>WEB%) in the output template will *not* be expanded before the topic is saved.
 
-   * Default "submit button" text for COMMENT
-      * Set BUTTONNAME = Add Comment
+#HandlingPageLock
+---+ Important Note regarding Locks
 
-   * Default signature line
-      * Set SIGNATURE = -- %WIKIUSERNAME% - %DATE%
+The plugin checks if the page is locked for edit. When a locked page is displayed in 'view' mode, comment input is automatically disabled.
 
-   * Default label for "mode" in a COMMENT
-      * Set PREFIXMODENAME = before
-      * Set PREFIXLABEL = Your post will appear before this form in chronological order (newest at bottom)
-      * Set POSTFIXMODENAME = after
-      * Set POSTFIXLABEL = Your post will appear after this form in reverse chronological order (newest at top)
+Note that if the page was read long time ago, it's possible that page was locked by another user *after* it was read, and the lock is still outstanding. In this case, comments cannot be saved immediately. Instead, when you try to save you are redirected to the ==oopslockedcomments.tmpl== template to report the lock. The comment is passed on to to this page. You then have several options:
+	* *Cancel* - throw away your comment and return to viewing the page.
+	* *Back* - *WARNING* some browsers might requery the page and *lose* your comments - so test how your browser behaves before using the Back button.
+	* Continue browsing in a new window and return later. The new window has name =%<nop>WEB%%<nop>TOPIC%= , and is opened using  &lt;a target="..." (no javascript), so make sure that you don't try to open it twice (the old window will be reused instead of creating a new one).
 
----+++ Plugin Installation Instructions
+When passing entered data to ==oopslockedcomments.tmpl== to be copy/pasted, Twiki uses GET, which has a limit (per browser and per web server) on the length of URL-encoded params - so the end of a long comment might be lost. Unfortunately, there is no simple solution to this problem. 
+
+To help avoid edit conflict, a reminder to refresh the page before entering comments is the default text for a =%COMMENT=
+
+---+ Settings
+
+	* Description:
+		* Set SHORTDESCRIPTION = Allows users to quickly post comments to a page without edit/preview/save cycle.
+	* "please refresh" message to help prevent edit conflict
+		* Set REFRESH = Remember to refresh before you comment
+	* templates
+		* Set TEMPLATE = TWiki.CommentTemplates
+	* default mode (if no mode given)
+		* Set MODE = after
+
+---+ Plugin Installation Instructions
 
 *TWO WARNINGS*
 
-   * *WARNING 1*: Anybody can refactor Comments, just like any other topic.  CommentPlugin knows nothing about what you've done once you have posted your comments.
-   * *WARNING 2 (Installation warning)*: Because Plugins have no capability to handle form post-processing (from what I can see), I was left with no recourse but to create a =savecomment= script in the bin directory.  I will be delighted if one of the more seasoned developers could help fix this, but for now I guess it's in the "hack" category.
+	* *WARNING 1*: Anyone can refactor text added via comments, just like any other page.  CommentPlugin knows nothing about what you've done once you have posted your comments.
+	* *WARNING 2 (Installation warning)*: Because the Plugins API cannot handle form processing, the plugin requires a =savecomment= script in the bin directory. Be careful to make sure =.htaccess= to this script is set up correctly.
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	| *File:* | *Description:* |
+	| ==data/TWiki/CommentPlugin.txt== | Plugin doc page (this page) |
+	| ==data/TWiki/CommentTemplates.txt== | Plugin templates |
+	| ==lib/TWiki/Plugins/CommentPlugin.pm== | Plugin Perl module |
+	| ==lib/TWiki/Plugins/CommentPlugin/test.zip== | Tests |
+	| ==lib/TWiki/Plugins/CommentPlugin/build.xml== | Ant build file |
+	| ==templates/oopslockedcomment.tmpl== | error message when page is locked by another user |
+	| ==bin/savecomment== | Plugin save script (*HACK*) - should be included into another - preferably =savemulti= |
 
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-| *File:* | *Description:* | 
-| ==data/TWiki/%TOPIC%.txt== | Plugin topic | 
-| ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository | 
-| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module | 
-| ==bin/savecomment== | Plugin save script (*HACK*)| 
-   * Check this topic here if the installation was successful
-   * Test if the plugin is correctly installed:
+If installed correctly, you should see a some =%COMMENT= edit boxes below here.Please don't enter comments here, as that would change this topic. Instead, copy and paste the =%COMMENT= tags into another topic and try it there.
 
-If installed correctly, you should see a 4 "Comment" form fields below here, not
- the meta tag.  Feel free to use this sequence of comments as a way to test the
-"behaviour" of multiple comments with multiple modes.  But please test it in ano
-ther topic, preferably in the [[Test.WebHome][Test]] Web :) :
-
-%COMMENT{mode="before" id="first" button="Comment 1"}%
-
-%COMMENT{mode="after" id="second" button="Comment 2"}%
-----
+---
+%COMMENT{mode="before" id="first"}%
+---
+%COMMENT{mode="after" id="second"}%
 ----
 
-%COMMENT{mode="before" id="third" button="Comment 3"}%
+---+ Plugin Info
 
-%COMMENT{mode="after" id="fourth" button="Comment 4"}%
-
-
----+++ Plugin Info
-
-|  Plugin Author: | Main.DavidWeller |
+|  Plugin Author: | v1.0 TWiki:Main/DavidWeller v2.0 TWiki:Main/PeterMasiar|
 |  Plugin Version: | 30 Nov 2001 |
-|  Change History: | 30 Nov 2001: Initial version<br> 4 Dec 2001: 1.01 release, changed name to CommentPlugin, added $button var, changed textarea WRAP setting to "soft"<br> 24 Feb 2002 added a few more user requests, made "English" text configurable <br> 5 March 2002  Bug fixes |
+|  Change History: | 30 Nov 2001: Initial version<br> 4 Dec 2001: 1.01 release, changed name to CommentPlugin, added $button var, changed textarea WRAP setting to "soft"<br> 24 Feb 2002 added a few more user requests, made "English" text configurable <br> 5 March 2002  Bug fixes<br>Jon Lambert created oopslockedcomments.tmpl template<br>15 July 2003: Peter Masiar added "reminder" parameter and feature to pass comments to oopslockedcomments.tmpl template to copy-paste later |
+| | 23 Sep 2003 Peter Masiar: 80% rewrite/refactor, adding templates |
+| | 7 Feb 2004: Crawford Currie: rewrote this page and CommentTemplates in an effort to make the plugin more user friendly. Added {TIME} variable. Also updated CVS. |
 |  CPAN Dependencies: | None |
 |  Other Dependencies: | None |
 |  Perl Version: | 5.0 |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Plugin Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- Main.DavidWeller - 05 Mar 2002 <br>
-
+-- TWiki:Main/DavidWeller - 05 Mar 2002 <br>
+-- TWiki:Main/PeterMasiar - 15 Jul 2003,  23 Sep 2003<br>
+-- TWiki:Main/CrawfordCurrie - 7 Feb 2004
