@@ -230,14 +230,25 @@ sub load {
         }
     }
 
-    my $user;
+    my $user; # the user login name
+    my $userDefiner; # the plugin that is defining the user
     foreach my $p ( @{$this->{plugins}} ) {
         if ( $disabled ) {
             # all plugins are disabled
             push( @{$this->{errors}}, 'all plugins are disabled' );
             $p->{disabled} = 1;
         } else {
-            $user = $p->load();
+            my $anotherUser = $p->load();
+            if( $anotherUser ) {
+                if( $userDefiner ) {
+                    die 'Two plugins - '. $userDefiner->{name} . ' and ' .
+                      $p->{name} .
+                        ' are both trying to define the user login name.';
+                } else {
+                    $userDefiner = $p;
+                    $user = $anotherUser;
+                }
+            }
             # Report initialisation errors
             if( $p->{errors} ) {
                 $this->{session}->writeWarning( join( "\n", $p->{errors} ));
