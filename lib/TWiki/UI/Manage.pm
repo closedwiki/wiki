@@ -193,7 +193,7 @@ sub createWeb {
     }
 
     # create the empty web
-    my $err = _createEmptyWeb( $newWeb );
+    my $err = $session->{store}->createWeb( $newWeb );
     if( $err ) {
         throw TWiki::UI::OopsException( "", "", $oopsTmpl,
                                         _template("msg_web_create"), $err );
@@ -223,38 +223,7 @@ sub createWeb {
                                     _template("msg_create_web_ok") );
 }
 
-# CODE_SMELL: Surely this should be done by Store?
-sub _createEmptyWeb {
-    my ( $theWeb ) = @_;
-
-    my $dir = "$TWiki::dataDir/$theWeb";
-    umask( 0 );
-    unless( mkdir( $dir, 0775 ) ) {
-        return( "Could not create $dir, error: $!" );
-    }
-
-    if ( $TWiki::useRcsDir ) {
-        unless( mkdir( "$dir/RCS", 0775 ) ) {
-            return( "Could not create $dir/RCS, error: $!" );
-        }
-    }
-
-    unless( open( FILE, ">$dir/.changes" ) ) {
-        return( "Could not create changes file $dir/.changes, error: $!" );
-    }
-    print FILE "";  # empty file
-    close( FILE );
-
-    unless( open( FILE, ">$dir/.mailnotify" ) ) {
-        return( "Could not create mailnotify timestamp file $dir/.mailnotify, error: $!" );
-    }
-    print FILE "";  # empty file
-    close( FILE );
-    return "";
-}
-
-sub _copyWebTopics
-{
+sub _copyWebTopics {
     my ( $session, $theBaseWeb, $theNewWeb ) = @_;
 
     my $err = "";
@@ -273,8 +242,7 @@ sub _copyWebTopics
     return "";
 }
 
-sub _patchWebPreferences
-{
+sub _patchWebPreferences {
     my ( $session, $theWeb, $theTopic, $theWebBgColor, $theSiteMapWhat, $theSiteMapUseTo, $doNoSearchAll ) = @_;
 
     my( $meta, $text ) =

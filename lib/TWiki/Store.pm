@@ -79,6 +79,7 @@ sub new {
 }
 
 sub security { my $this = shift; return $this->{session}->{security}; }
+sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
 sub users { my $this = shift; return $this->{session}->{users}; }
 sub form { my $this = shift; return $this->{session}->{form}; }
 sub attach { my $this = shift; return $this->{session}->{attach}; }
@@ -1035,7 +1036,7 @@ sub removeObsoleteTopicLocks {
     my $systemTime = time();
     foreach $file ( @fileList ) {
         $pathFile = TWiki::Sandbox::untaintUnchecked( "$webDir/$file" );
-        ( $lockUser, $lockTime ) = split( /\n/, readFile( "$pathFile" ) );
+        ( $lockUser, $lockTime ) = split( /\n/, $this->readFile( "$pathFile" ) );
         $lockTime = 0 unless( $lockTime );
 
         # time stamp of lock over one hour of current time?
@@ -1181,6 +1182,21 @@ sub getTopicParent {
 
 =pod
 
+---++ sub getTopicLatestRevTime (  $theWeb, $theTopic  ) -> $epochsecs
+
+Get an approximate rev time for the latest rev of the topic. This method
+is used to optimise searching. Needs to be as fast as possible.
+
+=cut
+
+sub getTopicLatestRevTime {
+    my ( $this, $web, $topic ) = @_;
+
+    return (stat "$TWiki::dataDir\/$web\/$topic.txt")[9];
+}
+
+=pod
+
 ---++ readFile( $filename )
 Return value: $fileContents
 
@@ -1250,22 +1266,6 @@ sub saveMetaData {
 
 =pod
 
----++ sub readFileHead (  $name, $maxLines  )
-
-A hack intended to deliver topic text more rapidly than "normal", but
-it goes astray and was actually slower. So it's been redone to use
-readFile.
-
-This method is *DEPRECATED* and SHOULD NOT BE CALLED.
-
-=cut
-
-sub readFileHead {
-    return readFile( @_ );
-}
-
-=pod
-
 ---+++ getTopicNames( $web ) ==> @topics
 
 | Description: | Get list of all topics in a web |
@@ -1315,12 +1315,12 @@ sub _getSubWebs {
 Gets a list of webnames, of webs contained within the given
 web. Potentially able to expand recursively, but this is
 commented out as support is lacking for subwebs almost everywhere
-else.
+else. If the web parameter is not given or is "", returns the
+list of all top-level webs (including hidden webs).
 
 =cut
 
 sub getAllWebs {
-    # returns a list of subweb names
     my( $this, $web ) = @_ ;
     assert(ref($this) eq "TWiki::Store") if DEBUG;
 
@@ -1340,6 +1340,43 @@ sub getAllWebs {
 #cc        return @subWebs;
 #cc    }
     return @webList;
+}
+
+=pod
+
+---++ sub createWeb( $name ) -> $err
+Create a new empty web (empty means "with no topic". Returns an error
+string if it fails.
+
+=cut
+
+sub createWeb {
+    my ( $this, $theWeb ) = @_;
+
+    my $dir = "$TWiki::dataDir/$theWeb";
+    umask( 0 );
+    unless( mkdir( $dir, 0775 ) ) {
+        return "Could not create $dir, error: $!";
+    }
+
+    if ( $TWiki::useRcsDir ) {
+        unless( mkdir( "$dir/RCS", 0775 ) ) {
+            return "Could not create $dir/RCS, error: $!";
+        }
+    }
+
+    unless( open( FILE, ">$dir/.changes" ) ) {
+        return "Could not create changes file $dir/.changes, error: $!";
+    }
+    print FILE "";  # empty file
+    close( FILE );
+
+    unless( open( FILE, ">$dir/.mailnotify" ) ) {
+        return "Could not create mailnotify timestamp file $dir/.mailnotify, error: $!";
+    }
+    print FILE "";
+    close( FILE );
+    return undef;
 }
 
 # STATIC Write a meta-data key=value pair
@@ -1587,6 +1624,71 @@ sub _collate {
     my $ref = shift;
 
     $$ref .= join( " ", @_ );
+}
+
+=pod
+
+---+ sub searchInWebContent
+
+Search for a token in the content of a web. The search must be over all
+content and all formatted meta-data, though the latter search type is
+deprecated (use searchMetaData instead).
+| $web | The web to search in |
+| $type | "regex" or something else |
+| $searchString | the search string, in egrep format |
+| $topics | reference to a list of topics to search |
+
+The return value is a reference to a hash which maps each matching topic
+name to a list of the lines in that topic that matched the search,
+as would be returned by 'grep'. If $justTopics is specified, it will
+return on the first match in each topic (i.e. it will return only one
+match per topic, and will not return matching lines).
+
+=cut
+
+sub searchInWebContent {
+    my( $this, $web, $type, $caseSensitive, $justTopics, $searchString, $topics ) = @_;
+
+    # I18N: 'grep' must use locales if needed,
+    # for case-insensitive searching.  See TWiki::setupLocale.
+    my $program = "";
+    # FIXME: For Cygwin grep, do something about -E and -F switches
+    # - best to strip off any switches after first space in
+    # $egrepCmd etc and apply those as argument 1.
+    if( $type eq "regex" ) {
+        # SMELL: this should be specific to the store implementation
+        $program = $TWiki::egrepCmd;
+    } else {
+        # SMELL: this should be specific to the store implementation
+        $program = $TWiki::fgrepCmd;
+    }
+
+    my $args = '';
+    $args .= ' -i' unless $caseSensitive;
+    $args .= ' -l' if $justTopics;
+    $args .= ' -- %TOKEN|U% %FILES|F%';
+
+    my $sDir = "$TWiki::dataDir/$web/";
+    my $seen = {};
+    # process topics in sets, fix for Codev.ArgumentListIsTooLongForSearch
+    my $maxTopicsInSet = 512; # max number of topics for a grep call
+    my @take = @$topics;
+    my @set = splice( @take, 0, $maxTopicsInSet );
+    while( @set ) {
+        @set = map { "$sDir/$_.txt" } @set;
+        @set =
+          $this->sandbox()->readFromProcessArray ($program, $args,
+                                                  TOKEN => $searchString,
+                                                  FILES => \@set);
+
+        foreach my $match ( @set ) {
+            if( $match =~ m/([^\/]*)\.txt(:?: (.*))?$/ ) {
+                push( @{$seen->{$1}}, $2 );
+            }
+        }
+        @set = splice( @take, 0, $maxTopicsInSet );
+    }
+    return $seen;
 }
 
 1;
