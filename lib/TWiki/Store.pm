@@ -853,7 +853,7 @@ sub noHandlersSave
                 # write log entry
                 my $extra = "";
                 $extra   .= "dontNotify" if( $dontNotify );
-                TWiki::writeLog( "save", "$TWiki::webName.$topic", $extra );
+                TWiki::writeLog( "save", "$web.$topic", $extra );
             }
         }
     }
@@ -883,7 +883,7 @@ sub noHandlersSave
             $date = TWiki::formatTime( $epochSec, "rcs", "gmtime" );
             $extra   .= " $date";
             $extra   .= " dontNotify" if( $dontNotify );
-            TWiki::writeLog( "save", "$TWiki::webName.$topic", $extra );
+            TWiki::writeLog( "save", "$web.$topic", $extra );
         }
     }
 
@@ -908,7 +908,7 @@ sub noHandlersSave
 
         if( $TWiki::doLogTopicSave ) {
             # write log entry
-            TWiki::writeLog( "cmd", "$TWiki::webName.$topic", "delRev $rev" );
+            TWiki::writeLog( "cmd", "$web.$topic", "delRev $rev" );
         }
     }
     return ""; # all is well
