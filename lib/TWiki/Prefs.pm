@@ -341,12 +341,21 @@ sub loadPrefsFromTopic
     for ( my $i = 0; $i < @$topicVals; $i++) {
 	$self->_insertPreference($theKeyPrefix . $topicKeys->[$i], $topicVals->[$i]);
     }
+
+    if (exists($self->{prefsHash}{$TWiki::Prefs::finalPrefsName})) {
+	my $finalPrefsRef = $self->{prefsHash}{$TWiki::Prefs::finalPrefsName};
+	my @finalPrefsList = split /[\s,]+/, $$finalPrefsRef;
+	$self->{finalHash} = { map { $_ => 1 } @finalPrefsList };
+    }
+    
 }
 
 # Private function to insert a value into a PrefsCache object
 sub _insertPreference
 {
     my ($self, $theKey, $theValue) = @_;
+
+    return if (exists $self->{finalHash}{$theKey}); # $theKey is in FINALPREFERENCES, don't update it
     
     if (exists $self->{prefsHash}{$theKey}) {
 	# key exists, need to deal with existing preference
