@@ -5,7 +5,7 @@ A replacement for the core 'mailnotify' functionality. This module brings a new 
 ---+ Summary of Contents
 The main part of the mailer module is a script, contrib/bin/mailnotify. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard Web<nop>Notify topic. As well as providing the usual notification service, it also provides per-topic notification services.
 
-The second part of the module is a code library that provides the services for other applications to modify Web<nop>Notify through a clean, well documented interface. This allows (for example) skin developers to add a "Register me for noitification" button to their skins.
+The second part of the module is a code library that provides the services for other applications to modify Web<nop>Notify through a clean, well documented interface. This allows (for example) plugin developers to add a "Register me for noitification" button to their pages. The main interface is the =Web<nop>Notify= topic described below.
 
 The "new" format of Web<nop>Notify is a natural extension of the existing format. In the old format, subscribers are listed in "bullet lists" following one of the following formats:
 
@@ -18,7 +18,7 @@ _three spaces_ * _SMTP mail address_ %BR%
 _three spaces_ * _SMTP mail address_ : _topics_ %BR%
 _three spaces_ * [ _webname_ . ] _wikiName_ : _topics_
 
-where _topics_ is a space-separated list of topic names (without a web specification; the topics must exist in this web). Topics may be specified using wildcards. Each topic may optionally be followed by an integer in parentheses, indicating the depth of the tree of children below that topic. Changes in all these children will be detected and reported along with changes to the topic itself.
+where _topics_ is a space-separated list of topic names (without a web specification; the topics must exist in this web). Topics may be specified using * wildcards. Each topic may optionally be followed by an integer in parentheses, indicating the depth of the tree of children below that topic. Changes in all these children will be detected and reported along with changes to the topic itself.
 
 For example:
 <verbatim>
