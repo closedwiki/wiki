@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "20 Jan 2003";
+$wikiversion      = "30 Jan 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -308,7 +308,9 @@ sub initialize
         } elsif( $theTopic =~ /(.*)[\.\/](.*)/ ) {
             # is "bin/script?topic=Webname.SomeTopic"
             $webName   = $1 || "";
-            $topicName = $2 || $mainTopicname;
+            $topicName = $2 || "";
+            # jump to WebHome if ""bin/script?topic=Webname."
+            $topicName = $mainTopicname if( $webName && ( ! $topicName ) );
         } else {
             # assume "bin/script/Webname?topic=SomeTopic"
             $topicName = $theTopic;
