@@ -696,6 +696,7 @@ sub saveTopic
     $text = $meta->read( $text );   # restore meta data
 
     my $error = saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $comment, $forceDate );
+    $text = $meta->write( $text );  # add meta data for Plugin callback
     TWiki::Plugins::afterSaveHandler( $text, $topic, $web, $error );
     return $error;
 }
