@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1065939300" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="PeterThoeny" date="1065982296" format="1.0" version="1.14"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Skins
@@ -38,7 +38,7 @@ You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVaria
 | =%<nop>REVTITLE%= | The revision title, if any, ex: =(r1.6)= |
 | =%<nop>REVINFO%= | Revision info, ex: =r1.6 - 24 Dec 2002 - 08:12 GMT - %WIKIUSERNAME%= |
 | =%<nop>WEBCOPYRIGHT%= | Copyright notice, defined in the WebPreferences |
-| =%<nop>BROADCASTMESSAGE%= | Broadcast message at the beginning of your view template, can be used to alert users of scheduled downtimes; is defined in TWikiPreferences |
+| =%<nop>BROADCASTMESSAGE%= | Broadcast message at the beginning of your view template, can be used to alert users of scheduled downtimes; is set in TWikiPreferences |
 
 #GoBox
 ---+++ The "Go" Box and Navigation Box
@@ -63,6 +63,28 @@ Bare bones header for demo only
 %WEBTOPICLIST%
 </td></tr></table>
 </form> 
+
+---++ Using Cascading Style Sheets
+
+The regular templates files currently do not use style sheets. Many skin developers choose to use them, it helps in separating style from content.
+
+Example: To use a style sheet for the broadcast message, add this to =view.myskin.tmpl=:
+
+<verbatim>
+<style type="text/css">
+.broadcastmessage {
+	 background: yellow; display:block;
+	 border-style:solid;border-width: 2px;border-color:red;
+}
+.broadcastmessage strong {color: red}
+</style>
+</verbatim>
+
+Then add a div tag to the =%<nop>BROADCASTMESSAGE%= variable located after the =#PageTop= anchor or after the opening form tag:
+
+<verbatim>
+<div class="broadcastmessage"> %BROADCASTMESSAGE% </div>
+</verbatim>
 
 ---++ Packaging and Publishing Skins
 
