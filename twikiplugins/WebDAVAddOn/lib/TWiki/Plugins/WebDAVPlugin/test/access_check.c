@@ -19,7 +19,7 @@ int main(int argc, const char** argv) {
   if (strcmp(user,"-") == 0)
 	user = NULL;
   dav_twiki_setDBpath(db);
-  if (checkAccessibility(web, topic, file, mode, user, monitor))
+  if (checkAccessibility(web, topic, file, mode[0], user, monitor))
 	printf("permitted\n");
   else
 	printf("denied\n");

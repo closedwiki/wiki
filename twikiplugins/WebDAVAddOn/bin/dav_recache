@@ -16,9 +16,12 @@
 
 BEGIN {
     # Set default current working directory (needed for mod_perl)
-    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
-        chdir $1;
-    }
+    if( $ENV{"SCRIPT_FILENAME"} &&
+		$ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+	  chdir $1;
+	} elsif ( $0 =~ /^(.*)\/.*?$/ ) {
+	  chdir $1;
+	}
     # Set library paths in @INC, at compile time
     unshift @INC, '.';
     require 'setlib.cfg';
@@ -43,17 +46,23 @@ my $chosenTopic;
 my $fromBrowser = 0;
 
 if( $ENV{'DOCUMENT_ROOT'} ) {
-  # Called from browser
+  # Called from browser.
+  # CODE_SMELL: Is this really a reliable way of detecting
+  # a browser environment?
+  use CGI;
   $query = new CGI;
   $thePathInfo = $query->path_info() || ""; 
   $theRemoteUser = $query->remote_user() || "";
   $theTopic = $query->param( 'topic' ) || "";
   $theUrl = $query->url;
   $fromBrowser = 1;
+  $chosenWeb = $query->param( "web" );
+  $chosenTopic = $query->param( "topic" );
+  print "Content-type: test/plain\n\n";
 } else {
-  # called from the command line
+  # Called from the command line
   $chosenWeb = $ARGV[$#ARGV];
-  if ( $chosenWeb && $chosenWeb =~ m/(.*)\.(.*)/o ) {
+  if ( $chosenWeb && $chosenWeb =~ m/(.*)[\.\/\\](.*)/o ) {
 	( $chosenWeb, $chosenTopic ) = ( $1, $2 );
   }
   $thePathInfo = "/Main";
@@ -69,8 +78,7 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
 my $pdb = TWiki::Prefs::getPreferencesValue("WEBDAVPLUGIN_LOCK_DB");
 my $permDB = new WebDAVPlugin::Permissions( $pdb );
 
-if ( $fromBrowser ) {
-  ( $chosenWeb, $chosenTopic ) = ( $web, $topic );
+if ( !defined( $chosenWeb ) && -w "$pdb/TWiki" ) {
+  unlink "$pdb/TWiki";
 }
-
 $permDB->recache( $chosenWeb, $chosenTopic );

@@ -20,7 +20,8 @@ extern "C" {
 #endif
 
 extern int dav_twiki_setDBpath(const char* dbname);
-extern int dav_twiki_accessible(const request_rec* r, const dav_resource* dr);
+extern int dav_twiki_accessible(const request_rec* r,
+								const dav_resource* dr, int tgt);
 #define TWIKI_NOTYPE 0
 /* .../data */
 #define TWIKI_DATA 1
