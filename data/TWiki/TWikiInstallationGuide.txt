@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007450820" format="1.0" version="1.40"}%
+%META:TOPICINFO{author="PeterThoeny" date="1007517630" format="1.0" version="1.41"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
@@ -31,6 +31,7 @@ __NOTE:__ _If you don't have access to your Web server configuration files - for
  &lt;Directory "/home/httpd/twiki/bin"&gt;
 	 Options +ExecCGI
 	 Set<nop>Handler cgi-script
+	 AllowOverride all
 	 Allow from all
  &lt;/Directory&gt;
  &lt;Directory "/home/httpd/twiki/pub"&gt;
