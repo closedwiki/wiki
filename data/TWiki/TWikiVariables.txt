@@ -39,6 +39,18 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> =%<nop>DATE%= </td>
   <td> Todays date, is <b>%DATE%</b> </td>
 </tr><tr>
-  <td> =%<nop>INCLUDE:"file.ext"%= </td>
-  <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: =<b>%<nop>INCLUDE:"../Know/TopicName.txt"%</b>= </td>
+  <td> =%<nop>INCLUDE{"file.ext"}%= </td>
+  <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: =<b>%<nop>INCLUDE{"../Know/TopicName.txt"}%</b>= </td>
+</tr><tr>
+  <td> =%<nop>SEARCH{"str" ...}%= </td>
+  <td> Inline search, shows a search result embedded in a topic. Parameter is composed of the search string, followed by optional =name="value"= pairs:
+| *Pair:* | *Description:* | *Default:* |
+| =web="Name"= | Specify Wiki web to search | Current web |
+| =scope="topic"= | Search topic name (title) | Topic text (body) |
+| =regex="on"= | RegularExpression search | Literal search |
+| =casesensitive="on"= | Case sensitive search | Ignore case |
+| =nosummary="on"= | Show topic title only | Show topic summary |
+| =nosearch="on"= | Suppress search string | Show search string |
+| =nototal="on"= | Do not show number of topics found | Show number |
+Example: =<b>%<nop>SEARCH{"wiki" web="Main" scope="topic"}%</b>= </td>
 </tr></table>
