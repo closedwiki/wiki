@@ -1,11 +1,18 @@
-	* Name: Peter Thoeny
-	* Work: peter.thoeny@takefive.com
+	* Name: Peter Thoeny, author of the TWikiWeb
+	* Work: peter.thoeny@windriver.com
 	* Home: peter.thoeny@attglobal.net
 	* Location: Cupertino, CA
 	* Local time: Current <A HREF="http://www.bsdi.com/date?America/Los_Angeles">time</A> in Cupertino.
 
-Notes: Peter created the TWikiWeb.
+__Personal Preferences__
+	* Horizontal size of text edit box:
+		* Set EDITBOXWIDTH = 70
+	* Vertical size of text edit box:
+		* Set EDITBOXHEIGHT = 17
 
-Related topic: TWikiUsers has a list of other TWiki users.
+__Related topics__
+	* %WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.
+	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
+	* TWikiUsers has a list of other TWiki users.
 
--- Main.PeterThoeny - 11 Feb 1999 <br>
+-- Main.PeterThoeny - 26 Feb 2000 <br>
