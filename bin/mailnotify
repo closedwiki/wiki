@@ -68,8 +68,9 @@ sub processWeb
     my $emailbody = "";
     my $topiclist = "";
 
-    my $text = &TWiki::Store::readTemplate( "changes" );
-    my $changes= &TWiki::Store::readFile( "$dataDir/$webName/.changes" );
+    my $skin = TWiki::Prefs::getPreferencesValue( "SKIN" );
+    my $text = TWiki::Store::readTemplate( "changes", $skin );
+    my $changes= TWiki::Store::readFile( "$dataDir/$webName/.changes" );
 
     my %exclude;
 
@@ -166,7 +167,7 @@ sub processWeb
 
     my $notifylist = join ', ', @notifylist;
 
-    $text = &TWiki::Store::readTemplate( "mailnotify" );
+    $text = &TWiki::Store::readTemplate( "mailnotify", $skin );
     $text =~ s/%EMAILFROM%/$from/go;
     $text =~ s/%EMAILTO%/$notifylist/go;
     $text =~ s/%EMAILBODY%/$emailbody/go;

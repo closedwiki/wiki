@@ -37,11 +37,9 @@ sub main
     my( $topic ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
-    my $tmplName = $query->param( 'template' );
-    if( ! $tmplName ) {
-        $tmplName = "oops";
-    }
-    my $tmplData = &TWiki::Store::readTemplate( $tmplName );
+    my $tmplName = $query->param( 'template' ) || "oops";
+    my $skin = $query->param( "skin" ) || TWiki::Prefs::getPreferencesValue( "SKIN" );
+    my $tmplData = TWiki::Store::readTemplate( $tmplName, $skin );
     if( ! $tmplData ) {
         TWiki::writeHeader( $query );
         print "<html><body>\n"

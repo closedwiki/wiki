@@ -47,8 +47,9 @@ sub main
         return;
     }
 
-    my $text = &TWiki::Store::readTemplate( "changes" );
-    my $changes= &TWiki::Store::readFile( "$dataDir/$webName/.changes" );
+    my $skin = $query->param( "skin" ) || TWiki::Prefs::getPreferencesValue( "SKIN" );
+    my $text = TWiki::Store::readTemplate( "changes", $skin );
+    my $changes= TWiki::Store::readFile( "$dataDir/$webName/.changes" );
    
     my @bar = ();
     my $foo = "";

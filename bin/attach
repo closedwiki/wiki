@@ -128,11 +128,12 @@ sub main
     }
 
     my $fileWikiUser = "";
+    my $skin = $query->param( "skin" ) || TWiki::Prefs::getPreferencesValue( "SKIN" );
     if( $fileName && %args ) {
-        $tmpl = &TWiki::Store::readTemplate( "attachagain" );
+        $tmpl = TWiki::Store::readTemplate( "attachagain", $skin );
         $fileWikiUser = &TWiki::userToWikiName( $args{"user"} );
     } else {
-        $tmpl = &TWiki::Store::readTemplate( "attachnew" );
+        $tmpl = TWiki::Store::readTemplate( "attachnew", $skin );
     }
     $tmpl =~ s/%ATTACHTABLE%/$atext/go;
     $tmpl =~ s/%FILEUSER%/$fileWikiUser/go;

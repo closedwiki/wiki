@@ -44,6 +44,7 @@ sub main
     my $theAttachment = $query->param( 'attachment' );
     my $confirm = $query->param( 'confirm' );
     my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || "";
+    my $skin = $query->param( "skin" ) || TWiki::Prefs::getPreferencesValue( "SKIN" );
 
     
     $newTopic =~ s/\s//go;
@@ -81,12 +82,12 @@ sub main
 
     # Has user selected new name yet?
     if( ! $newTopic || $confirm ) {
-       newTopicScreen( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $confirm );
-       return;    
+       newTopicScreen( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $confirm, $skin );
+       return;
     } 
     
     if( ! $justChangeRefs ) {
-        if( ! getLocks( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock ) ) {
+        if( ! getLocks( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock, $skin ) ) {
               return;
         }
     }
@@ -122,7 +123,7 @@ sub main
 
     my $new_url = "";
     if( $lockFailure ) {
-       moreRefsToChange( $oldWeb, $oldTopic, $newWeb, $newTopic );
+       moreRefsToChange( $oldWeb, $oldTopic, $newWeb, $newTopic, $skin );
        return;
     } else {
        #redirect to new topic
@@ -311,7 +312,7 @@ sub checkExist
 #Return "" if can't get lock, otherwise "okay"
 sub getLocks
 {
-    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock ) = @_;
+    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock, $skin ) = @_;
     
     my( $oldLockUser, $oldLockTime, $newLockUser, $newLockTime );
     
@@ -336,7 +337,7 @@ sub getLocks
     }
     
     if( $oldLockUser || $newLockUser ) {
-       my $tmpl = &TWiki::Store::readTemplate( "oopslockedrename" );
+       my $tmpl = &TWiki::Store::readTemplate( "oopslockedrename", $skin );
        my $editLock = $TWiki::editLockTime / 60;
        if( $oldLockUser ) {
            $tmpl =~ s/%OLD_LOCK%/Source topic $oldWeb.$oldTopic is locked by $oldLockUser, lock expires in $oldLockTime minutes.<br \/>/go;
@@ -371,7 +372,7 @@ sub getLocks
 # Display screen so user can decide on new web and topic.
 sub newTopicScreen
 {
-   my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $confirm ) = @_;
+   my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $confirm, $skin ) = @_;
    
    my $tmpl = "";
    
@@ -381,12 +382,12 @@ sub newTopicScreen
    
    TWiki::writeHeader( $query );
    if( $theAttachment ) {
-     $tmpl = &TWiki::Store::readTemplate( "moveattachment" );
+     $tmpl = TWiki::Store::readTemplate( "moveattachment", $skin );
      $tmpl =~ s/%FILENAME%/$theAttachment/go;
    } elsif( $confirm ) {
-     $tmpl = &TWiki::Store::readTemplate( "renameconfirm" );
+     $tmpl = TWiki::Store::readTemplate( "renameconfirm", $skin );
    } else {
-     $tmpl = &TWiki::Store::readTemplate( "rename" );
+     $tmpl = &TWiki::Store::readTemplate( "rename", $skin );
    }
    
    $tmpl = setVars( $tmpl, $oldTopic, $newWeb, $newTopic );
@@ -410,14 +411,14 @@ sub newTopicScreen
  #=========================
  sub moreRefsToChange
  {
-    my( $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
+    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $skin ) = @_;
     
     TWiki::writeHeader( $query );
-    my $tmpl = &TWiki::Store::readTemplate( "renamerefs" );
+    my $tmpl = TWiki::Store::readTemplate( "renamerefs", $skin );
     $tmpl = setVars( $tmpl, $oldTopic, $newWeb, $newTopic );
-    $tmpl = &TWiki::getRenderedVersion( $tmpl );
+    $tmpl = TWiki::getRenderedVersion( $tmpl );
     $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
-    $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
+    $tmpl = TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
     print $tmpl;
  }
 

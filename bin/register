@@ -127,7 +127,8 @@ sub main
     }
 
     # send email confirmation
-    $text = &TWiki::Store::readTemplate( "registernotify" );
+    my $skin = $query->param( "skin" ) || TWiki::Prefs::getPreferencesValue( "SKIN" );
+    $text = TWiki::Store::readTemplate( "registernotify", $skin );
     $text =~ s/%FIRSTLASTNAME%/$firstLastName/go;
     $text =~ s/%WIKINAME%/$wikiName/go;
     $text =~ s/%EMAILADDRESS%/$emailAddress/go;
