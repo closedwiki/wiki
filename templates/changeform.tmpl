@@ -22,11 +22,12 @@ Choose a new form template.  Notes:
 </table>
 
 <input type="hidden" name="text" value="%TEXT%">
+<input type="hidden" name="parent" value="%PARENT%">
 
-%FOOTER:START%
+%FOOTER{%
       <INPUT type="submit" name="submit" value=" &nbsp; Change form &nbsp; ">
       %SEP%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> change form FIXME
-%FOOTER:END%
+%}FOOTER%
 
 </FORM>
 </BODY></HTML>
