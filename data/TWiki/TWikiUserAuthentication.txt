@@ -7,7 +7,9 @@
 
 _TWiki site access control and user activity tracking options_
 
-TWiki does not authenticate users internally, it depends on the =REMOTE_USER= environment variable. This variable is set when you enable Basic Authentication (.htaccess) or SSL "secure server" authentication (https protocol).
+%X% This topic describes the _default_ authentication scheme in the TWiki package. Your environment may have an alternative authentication scheme in place.
+
+TWiki does not authenticate users internally, it depends on the =REMOTE_USER= environment variable, which is set when you enable Basic Authentication (.htaccess) or SSL "secure server" authentication (https protocol).
 
 TWiki uses visitor identification to keep track of who made changes to topics at what time and to manage a wide range of personal site settings. This gives a complete audit trail of changes and activity.
 

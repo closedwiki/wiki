@@ -2,7 +2,7 @@
 
 
 <div class="twikiLeftBarPersonal" style="margin-top:0;">
-%CALC{"$IF($EXACT(%USERNAME%,guest),[[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%BASETOPIC%][login]],Hello [[%WIKIUSERNAME%][$PROPERSPACE(%WIKINAME%)]]<!-- <br /><small>[[Sandbox.LogoutAndLogin][Not me?]]</small> -->)"}%
+%CALC{"$IF($EXACT(%WIKINAME%,TWikiGuest),[[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%BASETOPIC%][login]],Hello [[%WIKIUSERNAME%][$PROPERSPACE(%WIKINAME%)]]<!-- <br /><small>[[Sandbox.LogoutAndLogin][Not me?]]</small> -->)"}%
 <script type="text/javascript">
 //<![CDATA[
 writeToggle("show","hide","twikiLeftBarPersonalContent")
