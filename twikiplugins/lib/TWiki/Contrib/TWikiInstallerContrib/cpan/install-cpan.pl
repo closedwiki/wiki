@@ -57,12 +57,10 @@ installLocalModules({
 				     LWP::Simple 
 				     CGI::Session 
 				     Weather::Com
-				     Barcode::Code128
+				     GD Barcode::Code128
 				     XML::NamespaceSupport XML::SAX XML::LibXML::Common XML::LibXML 
 				     XML::LibXSLT Cache::Cache String::CRC
 				     Data::UUID Safe Language::Prolog XMLRPC::Transport::HTTP
-				     GD 
-				     Image::LibRSVG
 				     ) ],
 });
 
