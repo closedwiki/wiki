@@ -1,95 +1,105 @@
 %TMPL:INCLUDE{"twiki"}%
 
+%TMPL:DEF{"titleaction"}%(attach) %TMPL:END%
+
+%TMPL:DEF{"simpleheader"}%
+---+ Attach image or document to %TOPIC%
+%TMPL:END%
+
 %TMPL:DEF{"script"}%
-<script language="JavaScript">
+<script type="text/javascript">
 <!--HIDE
-function initForm() {
-   document.main.filepath.focus();
-}
-function launchWindow( theWeb, theTopic ) {
-  win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-  if( win ) {
-    win.focus();
-  }
-  return false;
-}
+	function initForm() {
+	   document.main.filepath.focus();
+	}
+	function launchWindow( theWeb, theTopic ) {
+	  win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+	  if( win ) {
+		win.focus();
+	  }
+	  return false;
+	}
 //STOP HIDING-->
 </script>
 %TMPL:END%
 
+%TMPL:DEF{"notes"}%
+<div class="TWikiNotes">
+   * *Help:* Please see %TWIKIWEB%.FileAttachment for more information about attaching files.
+   * *Bug:* Internet Explorer 4.0 or earlier: If you get an "Internal Server Error" message when you upload a file, you need to try again. It should work the second time.
+</div>%TMPL:END%
+
 %TMPL:DEF{"bodystart"}%
-<body id="viewpage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+<body class="TWikiAttachPage" onLoad="initForm()"><a name="PageTop"></a>%TMPL:END%
+
+
+%TMPL:DEF{"main"}%
+<div class="TWikiMiddleContainer">
+<div class="TWikiMain">
+%TMPL:P{"simpleheader"}%
+<div class="TWikiTopic">
+%TMPL:P{"previousdetails"}%
+<table class="attachTable" width="100%">
+<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
+	%TMPL:P{"previous"}% 
+	<tr>
+		<td class="title input">
+			Local file 
+		</td>
+		<td class="input">
+			<input type="hidden" name="filename" value="%FILENAME%" /><input type="file" name="filepath" value="%FILEPATH%" size="30" /> 
+		</td>
+		<td class="help input">
+Upload up to %ATTACHFILESIZELIMIT% KB.
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			Comment 
+		</td>
+		<td>
+			<input class="comment" type="text" name="filecomment" value="%FILECOMMENT%" maxlength="30" size="50" /> 
+		</td>
+		<td class="help"></td>
+	</tr>
+	<tr>
+		<td class="title">
+			Link 
+		</td>
+		<td>
+			<input type="checkbox" name="createlink" %attachlinkbox% /> Create a link to the attached file
+		</td>
+		<td class="help">
+Images will be displayed, for other attachments a link will be created.
+		</td>
+	</tr>
+	<tr>
+		<td class="title">
+			Hide file 
+		</td>
+		<td>
+			<input type="checkbox" name="hidefile" %hidefile% /> Do not show attachment in table
+		</td>
+		<td class="help">Attachments will not be shown in topic view page.</td>
+	</tr>
+</table>
+
+%TMPL:P{"notes"}%
+%TMPL:P{"extranotes"}%</div>
+%TMPL:P{"topicaction"}%
+%BR%
+---++ Existing attachments for <nop>%TOPIC%
+%META{"attachments" all="on"}%
+%TMPL:P{"standardfooter"}%</div></div></form>%TMPL:END%
 
 %TMPL:DEF{"attach"}%
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
-%TMPL:P{"script"}%
 %TMPL:P{"bodystart"}%
-
-<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%TMPL:P{"topbar"}%
----++ Existing attachments for <nop>%TOPIC%
-%META{"attachments" all="on"}%
-%TMPL:P{"previousdetails"}%
-<table width="100%">
-   %TMPL:P{"previous"}%
- <tr>
-  <td align="right">
-   Local file:
-  </td><td>
-   <input type="hidden" name="filename" value="%FILENAME%" />
-   <input type="file" name="filepath" value="%FILEPATH%" size="50" />
-  </td>
- </tr>
- <tr>
-  <td align="right">
-   Comment:
-  </td><td>
-   <input type="text" name="filecomment" value="%FILECOMMENT%" maxlength="256" size="50" />
-  </td>
- </tr>
- <tr>
-  <td align="right">
-   Link:
-  </td><td>
-   <input type="checkbox" name="createlink" %ATTACHLINKBOX% /> Create a link to the attached file at the end of the topic.
-  </td>
- </tr>
- <tr>
-  <td align="right">
-   Hide file:
-  </td><td>
-   <input type="checkbox" name="hidefile" %HIDEFILE% /> Hide attachment in normal topic view.
-  </td>
- </tr>
-</table>
-
-__Notes:__
-
-   * *Help:* Please see %TWIKIWEB%.FileAttachment for more information about attaching files.
-   * *File size:* You can upload files up to %ATTACHFILESIZELIMIT% KB in size.
-   * *Link checkbox:* In case the attached file is a JPG, GIF or PNG image and you check the box, 
-     it will create an inline image (e.g. show the image) at the end of the topic.  For other
-     file types a simple link will be created.
-   * *Bug:* Internet Explorer 4.0 or earlier: If you get an "Internal Server Error"
-     message when you upload a file, you need to try again. It should work the second time.
-%TMPL:P{"extranotes"}%
-
-%TMPL:P{"standardfooter"}%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr>
-  <td>%TMPL:P{"topicaction"}%</td>
-  <td valign="top">
-   &nbsp;
-  </td>
-  <td width="50%" valign="top">
-   %WEBCOPYRIGHT%
-  </td>
- </tr>
- <tr>
-  <td colspan="2"> %META{"moved"}% </td>
- </tr>
-</table>
-</form>
+%TMPL:P{"main"}%
 %TMPL:P{"bodyend"}%
 %TMPL:END%
+
+
+
+
