@@ -645,45 +645,90 @@ sub saveTopic
 
 =pod
 
----++ sub saveAttachment ($web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $theTmpFilename,
-        $forceDate)
-| =$web= | |
-| =$topic= | |
-| =$saveCmd= | |
-| =$attachment= | |
-| =$dontLogSave= | |
-| =$doUnlock= | |
-| =$dontNotify= | |
-| =$theComment= | |
-| =$theTmpFilename= | |
-| =$forceDate= | |
+---++ sub saveAttachment ($web, $topic, $attachment, $opts )
+| =$web= | web for topic |
+| =$topic= | topic to atach to |
+| =$user= | user doing the saving |
+| =$attachment= | name of the attachment |
+| =$opts= | Ref to hash of options |
+=$opts= may include:
+| =dontlog= | don't log this change in twiki log |
+| =dontnotify= | don't log this change in .changes |
+| =hide= | if the attachment is to be hidden in normal topic view |
+| =comment= | comment for save |
+| =file= | Temporary file name to upload |
+
 Saves a new revision of the attachment, invoking plugin handlers as
 appropriate.
+
+If file is not set, this is a properties-only save.
 
 =cut
 
 sub saveAttachment
 {
-    my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $theTmpFilename,
-        $forceDate) = @_;
+    my( $web, $topic, $attachment, $user, $opts ) = @_;
+    my $action;
 
-    #TWiki::writeDebug("saveAttachment");
-    my %attachmentAtt = ( attachment => $attachment,
-                           tmpFilename => $theTmpFilename,
-                           comment => $theComment,
-                           user => $TWiki::userName
-                         ); # pass a hash of stuff using keys
+    lockTopic( $web, $topic, 0 );
 
-    my $topicHandler = _getTopicHandler( $web, $topic, $attachment );
-    TWiki::Plugins::beforeAttachmentSaveHandler( \%attachmentAtt, $topic, $web );
+    # update topic
+    my( $meta, $text ) = TWiki::Store::readTopic( $web, $topic );
 
-    # SMELL: Not clear why this is so radically different to a topic save
-    $theComment = $attachmentAtt{comment};
-    my $error = $topicHandler->addRevision( $theTmpFilename, $theComment, $TWiki::userName );
-    TWiki::Plugins::afterAttachmentSaveHandler( \%attachmentAtt, $topic, $web, $error );
+    if ( $opts->{file} ) {
+        my $fileVersion = TWiki::Store::getRevisionNumber( $web, $topic,
+                                                           $attachment );
+        $action = "upload";
 
-    $topicHandler->setLock( ! $doUnlock );
-    
+        my %attrs =
+          (
+           attachment => $attachment,
+           tmpFilename => $opts->{file},
+           comment => $opts->{comment},
+           user => $user
+          );
+
+        my $topicHandler = _getTopicHandler( $web, $topic, $attachment );
+        TWiki::Plugins::beforeAttachmentSaveHandler( \%attrs,
+                                                     $topic, $web );
+
+        my $error = $topicHandler->addRevision( $opts->{file},
+                                                $opts->{comment},
+                                                $user );
+
+        TWiki::Plugins::afterAttachmentSaveHandler( \%attrs,
+                                                    $topic, $web, $error );
+
+        return "attachment save failed: $error" if $error;
+
+        $attrs{name} = $attachment;
+        $attrs{version} = $fileVersion;
+        $attrs{path} = $opts->{filepath},;
+        $attrs{size} = $opts->{filesize};
+        $attrs{date} = $opts->{filedate};
+        $attrs{attr} = ( $opts->{hide} ) ? "h" : "";
+
+        $meta->put( "FILEATTACHMENT", %attrs );
+    } else {
+        my %attrs = $meta->findOne( "FILEATTACHMENT", $attachment );
+        $attrs{attr} = ( $opts->{hide} ) ? "h" : "";
+        $attrs{comment} = $opts->{comment};
+        $meta->put( "FILEATTACHMENT", %attrs );
+    }
+
+    if( $opts->{createlink} ) {
+        $text .= TWiki::Attach::getAttachmentLink( $web, $topic,
+                                                   $attachment, $meta );
+    }
+
+    my $error = TWiki::Store::saveTopic( $web, $topic, $text,
+                                         $meta, "", 1 );
+
+    lockTopic( $web, $topic, 1 );
+    unless( $error || $opts->{dontlog} ) {
+        TWiki::writeLog( $action, "$web.$topic", $attachment );
+    }
+
     return $error;
 }
 
@@ -779,13 +824,13 @@ sub noHandlersSave
                 }
             }
         }
-        
+
         if( $saveCmd ne "repRev" ) {
             $text = _addMeta( $web, $topic, $text, $attachment, $nextRev, $meta, $forceDate );
 
             $dataError = $topicHandler->addRevision( $text, $theComment, $TWiki::userName );
             return $dataError if( $dataError );
-            
+
             $topicHandler->setLock( ! $doUnlock );
 
             if( ! $dontNotify ) {

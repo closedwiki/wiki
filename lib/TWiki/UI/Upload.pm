@@ -120,181 +120,101 @@ CGI parameters, passed in $query:
 
 =cut
 sub upload {
-  my ( $webName, $topic, $userName, $query ) = @_;
+    my ( $webName, $topic, $userName, $query ) = @_;
 
-  my $hideFile = $query->param( 'hidefile' ) || "";
-  my $fileComment = $query->param( 'filecomment' ) || "";
-  my $createLink = $query->param( 'createlink' ) || "";
-  my $doChangeProperties = $query->param( 'changeproperties' );
-  my $filePath = $query->param( 'filepath' ) || "";
-  my $fileName = $query->param( 'filename' ) || "";
-  if ( $filePath && ! $fileName ) {
-    $filePath =~ m|([^/\\]*$)|;
-    $fileName = $1;
-  }
-  my $tmpFilename = $query->tmpFileName( $filePath ) || "";
-  # CODE_SMELL: should really be using the file handle, not
-  # an undocumented CGI function. The previous line of code causes
-  # an Apache warning.
-  #my $tmpFile = $query->upload( "filepath" ) || "";
+    my $hideFile = $query->param( 'hidefile' ) || "";
+    my $fileComment = $query->param( 'filecomment' ) || "";
+    my $createLink = $query->param( 'createlink' ) || "";
+    my $doPropsOnly = $query->param( 'changeproperties' );
+    my $filePath = $query->param( 'filepath' ) || "";
+    my $fileName = $query->param( 'filename' ) || "";
+    if ( $filePath && ! $fileName ) {
+        $filePath =~ m|([^/\\]*$)|;
+        $fileName = $1;
+    }
 
-  $fileComment =~ s/\s+/ /go;
-  $fileComment =~ s/^\s*//o;
-  $fileComment =~ s/\s*$//o;
+    my $stream;
+    $stream = $query->upload( "filepath" ) unless ( $doPropsOnly );
 
-  close $filePath if( $TWiki::OS eq "WINDOWS");
+    $fileComment =~ s/\s+/ /go;
+    $fileComment =~ s/^\s*//o;
+    $fileComment =~ s/\s*$//o;
 
-  # Change Windows path to Unix path
-  $tmpFilename =~ s!\\!/!go;
-  $tmpFilename =~ /(.*)/;
-    $tmpFilename = $1;
-    ##TWiki::writeDebug( "upload: tmpFilename $tmpFilename" );
-  
-  my @error =
-    updateAttachment( $webName, $topic, $userName,
-                      $createLink,
-                      $doChangeProperties,
-                      $filePath, $tmpFilename,
-                      $fileName, $hideFile, $fileComment );
+    close $filePath if( $TWiki::OS eq "WINDOWS");
 
-  if ( ( @error ) && scalar( @error ) && defined( $error[0] )) {
-    # error[0] will be "" if redirect already printed
-    TWiki::UI::oops( $webName, $topic, @error ) if ( $error[0] )
-  } else {
-    # and finally display topic
-    TWiki::UI::redirect( &TWiki::getViewUrl( $webName, $topic ) );
-    my $message = ( $doChangeProperties ) ? "properties changed" : "$fileName uploaded";
-    print( "OK $message\n" );
-  }
-}
-  
-=pod
-  
----++ updateAttachment( $webName, $topic, $userName, $createLink, $propsOnly, $filePath, $localFile, $attName, $hideFile, $comment ) => undef or error
-  
-CODE_SMELL: this should really be in Store
-  
-Update an attachment, file or properties or both. This may also be used to
-create an attachment.
-| =$webName= | Web containing topic |
-| =$topic= | Topic |
-| =$userName= | Username of user doing upload/change - username, *not* wikiName |
-| =$createLink= | 1 if a link is to be created in the topic text |
-| =$propsOnly= | 1 if only change properties, not atachment |
-| =$filePath= | if !propsOnly, gives the remote path name of the file to upload. This is used to derive the attName. |
-| =$localFile= | Name of local file to replace attachment |
-| =$attName= | If propsOnly, the name of the attachment. Ignored if !propsOnly. |
-| =$hideFile= | (property) on if files is to be hidden in normal view |
-| =$comment= | (property) comment associated with file |
-| return | on error, a list of parameters to the TWiki::UI::oops function, not including the webName and topic. |
-|               |  If the first element in the list is the empty string, an error has already been printed to the browser, and no oops call is necessary. |
-
-=cut
-sub updateAttachment {
-  my ( $webName, $topic, $userName,
-       $createLink,
-       $propsOnly,
-       $filePath, $localFile,
-       $attName, $hideFile, $comment ) = @_;
-
-  my $wikiUserName = TWiki::User::userToWikiName( $userName );
-  return ( 0 ) unless TWiki::UI::webExists( $webName, $topic );
-  return ( 0 ) if TWiki::UI::isMirror( $webName, $topic );
-  return ( 0 ) unless TWiki::UI::isAccessPermitted( $webName, $topic,
+    my $wikiUserName = TWiki::User::userToWikiName( $userName );
+    return ( 0 ) unless TWiki::UI::webExists( $webName, $topic );
+    return ( 0 ) if TWiki::UI::isMirror( $webName, $topic );
+    return ( 0 ) unless TWiki::UI::isAccessPermitted( $webName, $topic,
                                               "change", $wikiUserName );
-  return ( 0 ) unless TWiki::UI::topicExists( $webName, $topic, "upload" );
+    return ( 0 ) unless TWiki::UI::topicExists( $webName, $topic, "upload" );
 
-  my( $fileSize, $fileUser, $fileDate, $fileVersion ) = "";
+    my ( $fileSize, $fileDate, $tmpFileName );
 
-  unless( $propsOnly ) {
-      # cut path from filepath name (Windows "\" and Unix "/" format)
-      my @pathz = ( split( /\\/, $filePath ) );
-      my $filetemp = $pathz[$#pathz];
-      my @pathza = ( split( '/', $filetemp ) );
-    $attName = $pathza[$#pathza];
-  
-      # Delete unwanted characters from filename, with I18N
-      my $nonAlphaNum = "[^$TWiki::regex{mixedAlphaNum}" . '\._-]+';
-    $attName =~ s/${nonAlphaNum}//go;
-    $attName =~ s/$TWiki::uploadFilter/$1\.txt/goi;  # apply security filter
-    $attName =~ /(.*)/;  # untaint
-    $attName = $1;
+    unless( $doPropsOnly ) {
+        # cut path from filepath name (Windows "\" and Unix "/" format)
+        my @pathz = ( split( /\\/, $filePath ) );
+        my $filetemp = $pathz[$#pathz];
+        my @pathza = ( split( '/', $filetemp ) );
+        $fileName = $pathza[$#pathza];
 
-    ##TWiki::writeDebug ("Upload filename after cleanup is '$attName'");
+        # Delete unwanted characters from filename, with I18N
+        my $nonAlphaNum = "[^$TWiki::regex{mixedAlphaNum}" . '\._-]+';
+        $fileName =~ s/${nonAlphaNum}//go;
+        # apply security filter
+        $fileName =~ s/$TWiki::uploadFilter/$1\.txt/goi;
+        $fileName =~ /(.*)/;  # untaint (why?)
+        $fileName = $1;
 
-    # check if file exists and has non zero size
-    my $size = -s $localFile;
-  
-    if( ! -e $localFile || ! $size ) {
-      return ( "upload",
-               "ERROR $webName.$topic File missing or zero size", $attName );
+        ##TWiki::writeDebug ("Upload filename after cleanup is '$fileName'");
+
+        # check if upload has non zero size
+        $tmpFileName = $query->tmpFileName( $filePath );
+        my @stats = stat $tmpFileName;
+        $fileSize = $stats[7];
+        $fileDate = $stats[9];
+
+        if( ! $fileSize ) {
+            TWiki::UI::oops( $webName, $topic,
+                             "upload",
+                             "ERROR $webName.$topic File missing or zero size",
+                             $fileName );
+            return;
+        }
+
+        my $maxSize = TWiki::Prefs::getPreferencesValue( "ATTACHFILESIZELIMIT" );
+        $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
+
+        if( $maxSize && $fileSize > $maxSize * 1024 ) {
+            TWiki::UI::oops( $webName, $topic,
+                             "uploadlimit", $fileName, $maxSize );
+            return;
+        }
     }
 
-    my $maxSize = TWiki::Prefs::getPreferencesValue( "ATTACHFILESIZELIMIT" );
-    $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
-
-    if( $maxSize && $size > $maxSize * 1024 ) {
-      return ( "uploadlimit", $attName, $maxSize );
-    }
-  
-      # Update
-      my $text1 = "";
-    my $saveCmd = "";
-    my $doNotLogChanges = 1;
-    my $doUnlock = 0;
-    my $dontNotify = "";
     my $error =
-      TWiki::Store::saveAttachment( $webName, $topic, $text1, $saveCmd,
-                                    $attName, $doNotLogChanges, $doUnlock,
-                                    $dontNotify, $comment, $localFile );
+      TWiki::Store::saveAttachment( $webName, $topic, $fileName, $userName,
+                                    { dontlog => !$TWiki::doLogTopicUpload,
+                                      comment => $fileComment,
+                                      hide => $hideFile,
+                                      createlink => $createLink,
+                                      # Undocumented CGI call
+                                      file => $tmpFileName,
+                                      filepath => $filePath,
+                                      filesize => $fileSize,
+                                      filedate => $fileDate,
+                                    } );
 
-    if ( $error ) {
-      return ( "saveerr", "Save attachment error $error" );
+    if( $error ) {
+        TWiki::UI::oops( $webName, $topic, "saveerr", "Save error $error" );
+        return;
     }
 
-    # get user name
-    $fileUser = $userName;
+    TWiki::UI::redirect( &TWiki::getViewUrl( $webName, $topic ) );
+    my $message = ( $doPropsOnly ) ?
+      "properties changed" : "$fileName uploaded";
 
-    # get time stamp and file size of uploaded file:
-    my @stats = stat $localFile;
-    $fileSize = $stats[7];
-    $fileDate = $stats[9];
-
-    $fileVersion = TWiki::Store::getRevisionNumber( $webName, $topic,
-                                                    $attName );
-
-    if( $TWiki::doLogTopicUpload ) {
-      # write log entry
-      TWiki::writeLog( "upload", "$webName.$topic", $attName );
-      #FIXE also do log for change property?
-    }
-  }
-
-  # update topic
-  my( $meta, $text ) = TWiki::Store::readTopic( $webName, $topic );
-
-  # update meta-data
-  if( $propsOnly ) {
-    TWiki::Attach::updateProperties( $attName, $hideFile, $comment, $meta );
-  } else {
-    TWiki::Attach::updateAttachment( $fileVersion, $attName, $filePath,
-                                     $fileSize,
-                                     $fileDate, $fileUser, $comment,
-                                     $hideFile, $meta );
-  }
-
-  if( $createLink ) {
-    $text .= TWiki::Attach::getAttachmentLink( $webName, $topic,
-                                               $attName, $meta );
-  }
-
-  # update topic
-  my $error = TWiki::Store::saveTopic( $webName, $topic, $text, $meta, "", 1 );
-  if( $error ) {
-    return ( "saveerr", "Save topic error $error" );
-  }
-
-  return undef;
+    print( "OK $message\n" );
 }
 
 1;
