@@ -94,8 +94,7 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 | 2-Jan-2005 |
 
 ---++ Plugin Installation Instructions
-
-*Note:* You do not need to install anything on the browser to use this plugin. Below installation instructions are for the administrator who needs to install this plugin on the TWiki server.
+This plugin is pre-installed with your TWiki release. You should not have to install it other than to do an upgrade.
 
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -113,8 +112,9 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
-|  Plugin Version: | 01 Aug 2004 |
+|  Plugin Version: | 1.014 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  5 Mar 2005 | 1.014: Crawford Currie eliminated deprecated handlers for Dakar |
 |  01 Aug 2004: | AC: Added CSS support for first column and ascending/descending table headers |
 |  21 Mar 2004: | PTh: Internal change: Fixed reference to unofficial variable |
 |  01 Jan 2004: | PTh: Alternating data row colors restart again after each header row |

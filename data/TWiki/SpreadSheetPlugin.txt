@@ -542,9 +542,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>S
 
 
 ---++ Plugin Installation Instructions
-
-__Note:__ You do not need to install anything on the browser to use this plugin. Below installation instructions are for the administrator who needs to install this plugin on the TWiki server. 
-
+This plugin is pre-installed with your TWiki release. You should not need to install it unless you are upgrading to a new version.
 	* Download the ZIP file from the <nop>%TOPIC% home
 	* Unzip ==SpreadSheetPlugin.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
@@ -556,8 +554,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 17 Jul 2004 |
+|  Plugin Version: | 1.014 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+| 5 Mar 2004 | 1.014 Crawford Currie added strict and prepped for Dakar Release |
 |  17 Jul 2004: | Added $WORKINGDAYS(), contributed by TWiki:Main/CrawfordCurrie |
 |  24 May 2004: | Refactored documentation (no code changes) |
 |  03 Apr 2004: | Added $ABS(), $LISTIF(); fixed $VALUE() to remove leading zeros; changed $FIND() and $SEARCH() to return 0 instead of empty string if no match |

@@ -353,8 +353,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 21 Mar 2004 (V1.031) |
+|  Plugin Version: | 1.032 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  5 Mar 2005   | 1.032: Crawford Currie prepared for Dakar release |
 |  21 Mar 2004: | Internal change: Fixed inofficial function call |
 |  01 Mar 2004: | Added FILE_THEME and folder/file icons |
 |  29 Dec 2003: | Fixed rendering issue if focus bullet contains =icon:name=; added TREND_THEME |

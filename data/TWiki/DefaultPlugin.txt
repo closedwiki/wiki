@@ -1,15 +1,18 @@
 %META:TOPICINFO{author="PeterThoeny" date="1079856725" format="1.0" version="1.6"}%
 ---+ Default TWiki Plugin
 
-The default plugin is used for some depreciated rendering of older TWiki versions and of <nop>JosWiki. This plugin can also be used to specify some simple custom rendering rules. __Note:__ Create a new [[%TWIKIWEB%.TWikiPlugins][TWikiPlugin]] based on EmptyPlugin if you plan to offer some complex rendering or other functionality.
+This plugin supports some depreciated rendering of older TWiki versions and of <nop>JosWiki. Create a new [[%TWIKIWEB%.TWikiPlugins][TWikiPlugin]] based on EmptyPlugin if you plan to offer some other functionality.
+
+The plugin is *disabled* by default. You should enable it on sites where there is very old data using legacy syntax.
 
 ---++ Syntax Rules
 
 Custom rendering rules of the default plugin:
 
 	* Allow old include syntax ( ==%<nop>INCLUDE:"TopicName"%== ) if Plugin Preferences variable ==OLDINCLUDE== is set to ==1==
-	* Render depreciated ==*_text_*== as __bold italic__ text. Test if installed: *_This is bold italic_*
+	* Render deprecated ==*_text_*== as __bold italic__ text. Test if installed: *_This is bold italic_*
 	* Enable <nop>JosWiki rules if <nop>JosWiki specific code is uncommented
+    * Rewrite certain attachment URLs according to legacy usage
 
 Modify file ==TWiki/Plugins/DefaultPlugin.pm== to add your own rules or to enable <nop>JosWiki rules.
 
@@ -27,7 +30,6 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>D
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
 
-
 ---++ Plugin Installation Instructions
 
 	* This plugin is preinstalled, you do not need to install it.
@@ -35,8 +37,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>D
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
-|  Plugin Version: | 21 Mar 2004 |
+|  Plugin Version: | 1.030 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 5 Mar 2004 | 1.030 Crawford Currie prepared for Dakar release; disabled by default |
 |  21 Mar 2004: | Added afterSaveHandler |
 |  14 Jul 2001: | Changed to plug&amp;play |
 |  27 Feb 2001: | Initial version |

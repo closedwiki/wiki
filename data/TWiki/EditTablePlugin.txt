@@ -142,9 +142,7 @@ __Note:__ The Plugin looks for the =JSCALENDAR*= settings first in the TWiki Pre
 	  <br /> =select,1,%&lt;nop&gt;X%,%&lt;nop&gt;Y%=
 
 ---++ Plugin Installation Instructions
-
-__Note:__ You do not need to install anything on the browser to use this Plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
-
+This plugin is pre-installed with your TWiki release. You should not need to install it unless you are upgrading to a new version.
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
@@ -172,8 +170,9 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 01 Aug 2004 |
+|  Plugin Version: | 1.024 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+| 5 Mar 2005 | 1.024 Crawford Currie changed to use JSCalendarContrib and prepped for Dakar release |
 |  01 Aug 2004: | Fixed bug where edittable did not work if at the end of a topic |
 |  07 Apr 2004: | Fixed bug where two tables got updated when you edit and save a table included into a topic containing other edit tables |
 |  02 Mar 2004: | Default for =%<nop>EDITCELL{editbutton}%= is EDITBUTTON preference |
