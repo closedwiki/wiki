@@ -1,11 +1,10 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079505802" format="1.0" version="1.16"}%
----++!! Text Formatting FAQ
+%META:TOPICINFO{author="PeterThoeny" date="1092606139" format="1.0" version="1.17"}%
+---++ Text Formatting FAQ
 
 The most frequently asked questions about text formatting are answered. Also, TextFormattingRules contains the complete TWiki shorthand system on one quick reference page.
 
 %TOC%
 
-<blockquote>
 ---
 ---+++ How do I make a separator?
 
@@ -36,9 +35,9 @@ If you want to display angle brackets, enter them as HTML codes instead of typin
 
 A question mark after a word is a link to a topic that doesn't yet exist - click it to create the new page. This is a TWiki feature - typing a MeaningfulTitle in a comment is an invitation for someone else to add a new branch to the topic.  
 
-To prevent auto-linking - say you want to enter a word like <nop>JavaScript (the proper spelling!) - prefix the WikiStyleWord with the special TWiki HTML tag =&lt;nop&gt;=: 
+To prevent auto-linking - say you want to enter a word like <nop>JavaScript (the proper spelling!) - prefix the WikiStyleWord with an exclamation point: 
 
-	* =&lt;nop&gt;WikiStyleWord= displays as <nop>WikiStyleWord
+	* =!WikiStyleWord= displays as !WikiStyleWord
 
 ---
 ---+++ How can I write fixed font text?
@@ -115,7 +114,9 @@ __Result:__
 
 See [[#VerbatimText]["Text I enter gets wrapped around..."]] 
 
+
 ---
+
 ---+++ Can I include images on a page?
 
 Yes. The easiest way is to [[FileAttachment][attach]] a GIF, JPG or PNG file to a topic and then to place it with: =%<nop>ATTACHURL%/myImage.gif=. This works only for the page that the image is attached to.
@@ -156,7 +157,7 @@ If you need more colors you can use HTML, like =&lt;font color="#ff0000"&gt; red
 The code is the _hexadecimal RGB color code_, which is simply Red, Green and Blue values in hex notation (base 16, 0-F). For pure red, the RGB components are 255-0-0 - full red (255), no green or blue. That's FF-0-0 in hex, or ="#ff0000"= for Web page purposes. StandardColors lists basic colors.
 
 -----
-</blockquote>
 
--- TWiki:Main.PeterThoeny - 16 Mar 2004 <br />
--- TWiki:Main.MikeMannix - 14 Sep 2001 <br />	
+-- TWiki:Main.PeterThoeny - 15 Aug 2004 %BR%
+-- TWiki:Main.MikeMannix - 14 Sep 2001 %BR%	
+
