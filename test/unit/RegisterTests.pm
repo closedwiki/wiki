@@ -11,7 +11,7 @@ package RegisterTests;
                 #test_registerVerifyAndFinish
 
 #Uncomment to isolate 
-#our @TESTS = qw(test_UnregisteredUser);
+#our @TESTS = qw(test_registerVerifyOk); #test_UnregisteredUser);
 
 use base qw(Test::Unit::TestCase);
 BEGIN {
@@ -60,7 +60,7 @@ my $saveHP;
 sub set_up {
     my $self = shift;
     my $here = `pwd`;
-    $here =~ s/\s//g;;
+    $here =~ s/\s//g;; #SMELL: yuck!
     $myDataDir = "$here/tmpRegisterTestData";
     $myPubDir =  "$here/tmpRegisterTestPub";
 
@@ -73,8 +73,8 @@ sub set_up {
     $TWiki::cfg{PubDir} = $myPubDir;
     $TWiki::cfg{HtpasswdFileName} = "$myDataDir/htpasswd";
 
-    $tempUserDir = $TWiki::cfg{DataDir};
-
+    $tempUserDir = $TWiki::cfg{PubDir};
+    my $approvalsDir = $tempUserDir.'/TWiki/RegistrationApprovals';
     $SIG{__DIE__} = sub { confess $_[0] };
 
     mkdir $myDataDir;
@@ -94,6 +94,8 @@ sub set_up {
 
     $Error::Debug = 1;
     $TWiki::UI::Register::unitTestMode = 1;
+    UnregisteredUser::setDir($approvalsDir); #mirrors real situation
+
     setupUnregistered();
 
     $twikiUsersFile = "$TWiki::cfg{DataDir}/Main/TWikiUsers.txt";
@@ -101,7 +103,7 @@ sub set_up {
 
 sub tear_down {
     # clean up after test
-    `rm -rf $myDataDir $myPubDir`;
+#    `rm -rf $myDataDir $myPubDir`;
     $TWiki::cfg{DataDir} = $saveDD;
     $TWiki::cfg{PubDir} = $savePD;
     $TWiki::cfg{HtpasswdFileName} = $saveHP;
@@ -146,7 +148,8 @@ sub register {
                                       ]
                          });
     my $session = initialise($query, $TWiki::cfg{DefaultUserName});
-    TWiki::UI::Register::register($session, 1, $tempUserDir);
+    TWiki::UI::Register::register($session);
+    print "REGISTERED\n";
 }
 
 sub j {
@@ -167,7 +170,7 @@ sub verify {
 
     my $session = initialise($query, $TWiki::cfg{DefaultUserName});
 
-    TWiki::UI::Register::verifyEmailAddress($session,$tempUserDir,1);
+    TWiki::UI::Register::verifyEmailAddress($session,$tempUserDir);
 }
 
 sub finish {
@@ -184,7 +187,7 @@ sub finish {
                         });
     my $session = initialise($query, $TWiki::cfg{DefaultUserName});
     try {
-        TWiki::UI::Register::finish ( $session, $tempUserDir, 1 );
+        TWiki::UI::Register::finish ( $session, $tempUserDir );
     } catch TWiki::UI::OopsException with {
         my $e = shift;
         $self->assert_matches(qr/$testUserEmail/, $e->{-text});
@@ -223,6 +226,9 @@ sub test_registerVerifyOk {
         $self->assert(0, "expected an oops redirect");
     };
 
+die "FOO";
+
+    print "VERIFYING...\n";
     try {
         $self->verify();
     } catch TWiki::AccessControlException with {
@@ -421,13 +427,12 @@ my %regSave;
 sub setupUnregistered {
     $name = "MartinCleaver";
     $code = "$name.ba";
-    $dir = $tempUserDir;
+
 
     %regSave = (doh => "homer",
                 VerificationCode => $code,
                 WikiName => $name
                );
-    UnregisteredUser::setDir("$dir/TWiki/RegistrationApprovals"); #mirrors real situation
 }
 
 =pod
@@ -446,9 +451,17 @@ sub test_UnregisteredUser {
     my %result2 = UnregisteredUser::reloadUserContext($code);
     $self->assert_deep_equals(\%result2, \%regSave);
 
-    UnregisteredUser::deleteUserContext( $code );
-    # if _deleteUserContext is commented out this will fail!
-    $self->assert_null( UnregisteredUser::reloadUserContext($code));
+   try {
+    # this is a deliberate attempt to reload an already used token.
+    # this should fail!
+     UnregisteredUser::deleteUserContext( $code );
+   } catch TWiki::UI::OopsException with {
+     my $e = shift;
+     $self->assert_matches(qr/has no file/, $e->{-text});
+   }
+
+
+#    $self->assert_null( UnregisteredUser::reloadUserContext($code));
 }
 
 sub test_missingElements {

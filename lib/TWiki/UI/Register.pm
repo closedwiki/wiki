@@ -64,7 +64,7 @@ sub register_cgi {
 
     my $tempUserDir = $TWiki::cfg{PubDir}."/TWiki/RegistrationApprovals";
     # SMELL hacked name, and stores in binary format!
-    my $needVerification = 1;
+    my $needVerification = 1; # NB. No test harness for needVerification = 0.
     my $needApproval = 0;
 
     # Register -> Verify -> Approve -> Finish
@@ -86,12 +86,12 @@ sub register_cgi {
         if ($needApproval) {
             throw Error::Simple("Approval code has not been written!");
         }
-        finish( $session, $tempUserDir, $session->{cgiQuery}->param('code'));
+        finish( $session, $tempUserDir);
 
     } elsif ($action eq 'resetPassword') {
         resetPassword( $session ); #SMELL - is this still called here, or only by passwd? 
     } elsif ($action eq 'approve') {
-        finish($session, $tempUserDir, 0 );
+        finish($session, $tempUserDir );
     } else {
         # SMELL: this should be an OopsException
         throw Error::Simple("invalid action ($action) in register");
@@ -335,7 +335,7 @@ sub _makeFormFieldOrderMatch {
 This is called through: TWikiRegistration -> RegisterCgiScript -> here
 
    1 gets rows and fields as an InTopicTable using IntopicTable::populateEntries()
-   2 calls _validateRegistration() to ensure required fields correct
+   2 calls _validateRegistration() to ensure required fields correct, else OopsException 
 
 =cut
 
@@ -1014,13 +1014,17 @@ sub _putRegDetailsByCode {
     # write tmpuser file
     my $file = _verificationCodeFilename($data{VerificationCode} );
     $file = TWiki::Sandbox::untaintUnchecked($file);
-
+#    print "Putting into $file\n";
     store( $dataRef, $file ) or throw Error::Simple( $! );
+#    print "done\n";
 }
 
 sub _verificationCodeFilename {
     my ($code) = @_;
-    return $tmpDir . "/$code";
+
+    my $file = $tmpDir . "/$code";
+#    print "Filename = $file\n";
+    return $file;
 }
 
 #| In | activation code |
@@ -1029,7 +1033,9 @@ sub _verificationCodeFilename {
 sub _getRegDetailsByCode {
     my ($code) = @_;
     my $file   = _verificationCodeFilename($code);
+#    print "Getting from $file\n";
     my $ref    = retrieve $file;                    # SMELL throws?
+#    print "done\n";
     return $ref;
 }
 
