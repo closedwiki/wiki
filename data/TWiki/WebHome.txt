@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079600096" format="1.0" version="1.82"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092472322" format="1.0" version="1.83"}%
 <table><tr><td valign="top">
 *Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
 This is the place to learn about TWiki features, find where to download it, and try it out for yourself...
 </td><td width="25">&nbsp;</td><td width="200" align="center" valign="top">
-<a href="http://TWiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/twikiRobot131x64.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a> <br>
-The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
+<a href="http://TWiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/twikiRobot131x64.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a><br />
+The official TWiki<sup>TM</sup><br /> site is http://twiki.org/
 </td></tr>
 </table>
 %TOC{depth="2"}%
@@ -58,34 +58,37 @@ _Documentation for TWiki users._
 _Documentation for webmasters, system administrators, project managers, team leaders, and all other users of the TWiki advanced online collaboration platform._
 
 	* All manual sections in one big page:
-		* [[TWiki Documentation]] (560k)
+		* [[TWikiDocumentation][TWiki Documentation]] (560k)
 	* Manual sections in separate pages:
-		1. [[TWiki System Requirements]]
-		1. [[TWiki Installation Guide]]
-		1. [[Windows Install Cookbook]]
-		1. [[TWiki Upgrade Guide]]
-		1. [[TWiki User Authentication]]
-		1. [[TWiki Access Control]]
-		1. [[Text Formatting Rules]]
-		1. [[TWiki Variables]]
-		1. [[File Attachment]]
-		1. [[TWiki Forms]]
-		1. [[TWiki Templates]]
-		1. [[TWiki Skins]]
-		1. [[Formatted Search]]
-		1. [[TWiki MetaData]]
-		1. [[TWiki Plugins]]
+		1. [[TWikiSystemRequirements][TWiki System Requirements]]
+		1. [[TWikiInstallationGuide][TWiki Installation Guide]]
+		1. [[WindowsInstallCookbook][Windows Install Cookbook]]
+		1. [[TWikiUpgradeGuide][TWiki Upgrade Guide]]
+		1. [[TWikiUserAuthentication][TWiki User Authentication]]
+		1. [[TWikiAccessControl][TWiki Access Control]]
+		1. [[TextFormattingRules][Text Formatting Rules]]
+		1. [[TWikiVariables][TWiki Variables]]
+		1. [[FileAttachment][File Attachment]]
+		1. [[TWikiForms][TWiki Forms]]
+		1. [[TWikiTemplates][TWiki Templates]]
+		1. [[TWikiSkins][TWiki Skins]]
+		1. [[FormattedSearch][Formatted Search]]
+		1. [[TWikiMetaData][TWiki MetaData]]
+		1. [[TWikiPlugins][TWiki Plugins]]
 		1. [[TWikiFuncModule][TWiki::Func Module Documentation]]
-		1. [[TWiki Site Tools]] 
+		1. [[TWikiSiteTools][TWiki Site Tools]] 
 		1. [[ManagingTopics][Managing Topics]] 
 		1. [[ManagingWebs][Managing Webs]]
 		* *Appendices*
 			* [[AppendixFileSystem][A. TWiki File System]]
-			* [[TWikiHistory][B. TWiki Development Timeline]]
+			* [[TWikiCss][B. TWiki CSS]]
+			* [[AppendixEncodeURLsWithUTF8][C. Encode URLs With UTF8]]
+			* [[TWikiHistory][D. TWiki Development Timeline]]
 
 	* %T% *ADMINS:* In less than an hour, you can read through and customize the [[#UsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. See also other enhancement pages: 
 		* TWikiAdminCookBook: Some tips that can be applied *before installation*
 		* InstantEnhancements: Simple tips (using just browser, no install needed) and quick (max couple of minutes).
+
 
 ---++ <nop>TWikiSiteTools
 
@@ -102,6 +105,7 @@ _Documentation for webmasters, system administrators, project managers, team lea
 	* TWiki<sup>TM</sup> is a trademark of PeterThoeny
 		* __Note__: Twiki (with a lower case "w") is a robot character in the _Buck Rogers<sup>TM</sup> in the 25th Century_ TV series. TWiki (with an upper case "W") is not affiliated with the Dillie Family Trust, the registered trademark owner of the _Buck Rogers_ name
 	* TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
-	* This site is running TWiki version *%WIKIVERSION%*
+	* This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
 	* Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]] <br />
 	  %PUBURL%/%TWIKIWEB%/TWikiLogos/twikiRobot88x31.gif
+
