@@ -537,7 +537,7 @@ foreach my $web ( grep /^\w+$/, readdir DATA ) {
 #TODO replace with TWiki::Store::reLockTopic( $web, $topic );	  
 	  print `$TWiki::rcsDir/rcs -q -l $TWiki::dataDir/$web/$topic`;
 #TODO replace with TWiki::Store::checkIn (or something)
-          print `$TWiki::rcsDir/ci $TWiki::dataDir/$web/$topic`;
+          print `$TWiki::rcsDir/ci -mtestenv -t-missing_v $TWiki::dataDir/$web/$topic`;
           print `$TWiki::rcsDir/co -q -l -M $TWiki::dataDir/$web/$topic`;
 	  print "<br />\n";
 	}
