@@ -34,7 +34,7 @@ use vars qw(
 			$VERSION $initialisationErrors
     );
 
-$VERSION = '1.024';
+$VERSION = '1.025'; # TWiki production release 01 Aug 2004
 
 @registrableHandlers = (                 #                                      VERSION:
         'earlyInitPlugin',               # ( )                                   1.020
@@ -59,7 +59,7 @@ $VERSION = '1.024';
         'getSessionValueHandler',        # ( $key )                              1.010
         'setSessionValueHandler',        # ( $key, $value )                      1.010
         'renderFormFieldForEditHandler', # ( $name, $type, $size, $value, $attributes, $output )
-        'renderWikiWordHandler',         # ( text )                              2.023
+        'renderWikiWordHandler',         # ( text )                              1.023
     );
     
 %onlyOnceHandlers = ( 'initializeUserHandler'   => 1,

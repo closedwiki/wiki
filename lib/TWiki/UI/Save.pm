@@ -181,7 +181,7 @@ sub savemulti {
     TWiki::redirect( $query, "$viewURL?unlock=on" );
     return;
   } elsif( $saveaction eq "preview" ) {
-		TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );
+    TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );
     return;
   }
 
