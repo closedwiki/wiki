@@ -208,10 +208,10 @@ sub view {
     } else {
         $indexableView = 1;
         my $editAction = $topicExists ? 'Edit' : 'Create';
-        my $ea = CGI::a( { href => $session->{SESSION_TAGS}{EDITURL},
+        my $ea = CGI::a( { href => '%EDITURL%',
                            rel => 'nofollow' },
                          CGI::b($editAction));
-        $tmpl =~ s/%EDITTOPIC%/$ea/go;
+        $tmpl =~ s/%EDITTOPIC%/$ea/g;
         $tmpl =~ s/%REVTITLE%//go;
         $tmpl =~ s/%REVARG%//go;
     }
