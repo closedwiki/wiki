@@ -1604,7 +1604,7 @@ sub _TOC {
         return $result;
 
     } else {
-        return _inlineError("TOC: No TOC in $web.$topicname");
+        return "";
     }
 }
 
