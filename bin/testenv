@@ -167,39 +167,33 @@ if ( !defined $detailedOS ) {
 }
 
 # Detect Perl flavour on Windows, and Cygwin Perl/RCS package versions
-my ($perltype, @lines);
+my $perltype;
 my $rcsver;
 if ($detailedOS eq 'cygwin') {
-    $perltype = 'Cygwin';
+    $perltype = 'Cygwin';				# Cygwin Perl only
+    my ($pkg, $pkgName);
 
-    # Get Cygwin perl-x.x package version number
-    my $pkg = `/bin/grep 'inst=[^ ]*/'perl-5 /setup.log.full 2>/dev/null`; 
+    # Get Cygwin perl's package version number
+    $pkgName = 'perl';
+    $pkg = `/bin/cygcheck -c $pkgName | /bin/grep $pkgName 2>/dev/null`; 
     if ($?) { 
-        $pkg = " [Can't identify package - no grep command installed]";
+        $pkg = " [Can't identify package - cygcheck or grep not installed]";
 	$perlver .= $pkg
     } else {
-	# Grab the last line in case of upgrades
-	@lines = split /\n/, $pkg;
-	$pkg = $lines[ (scalar @lines) - 1 ];
-	$pkg =~ s!^.*perl/perl-!!;
-	$pkg =~ s!\.tar.*!!;
-	$perlver = $pkg;	# Use package version number, more detailed
+	$pkg = (split ' ', $pkg)[1];	# Package version
+	$perlver = $pkg;
     }
 	
-    # Get Cygwin rcs-x.x package version number
-    $pkg = `/bin/grep 'inst=[^ ]*/'rcs-5 /setup.log.full 2>/dev/null`; 
+    # Get Cygwin perl's package version number
+    $pkgName = 'rcs';
+    $pkg = `/bin/cygcheck -c $pkgName | /bin/grep $pkgName 2>/dev/null`; 
     if ($?) { 
-        $pkg = " [Can't identify package - no grep command installed]";
-	$rcsver = $pkg
+        $pkg = " [Can't identify package - cygcheck or grep not installed]";
+	$perlver .= $pkg
     } else {
-	# Grab the last line in case of upgrades
-	@lines = split /\n/, $pkg;
-	$pkg = $lines[ (scalar @lines) - 1 ];
-	$pkg =~ s!^.*rcs/rcs-!!;
-	$pkg =~ s!\.tar.*!!;
-	$rcsver = $pkg;		# Use package version number, more detailed
+	$pkg = (split ' ', $pkg)[1];	# Package version
+	$rcsver = $pkg;	
     }
-
 } elsif ($detailedOS =~ /win/i && $detailedOS !~ /darwin/i ) {
     $perltype = 'ActiveState';
     $perlver .= ", build " . Win32::BuildNumber();	# ActivePerl only
