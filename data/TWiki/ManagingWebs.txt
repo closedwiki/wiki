@@ -1,34 +1,34 @@
-%META:TOPICINFO{author="MikeMannix" date="1000278166" format="1.0" version="1.15"}%
-%INCLUDE{"UtilTempDocNote"}%
-
+%META:TOPICINFO{author="MikeMannix" date="1000458041" format="1.0" version="1.16"}%
 %TOC%
 %STARTINCLUDE%
 ---# Managing Webs
 
-_Adding, renaming and deleting webs is done directly on the server_
+_Adding, renaming and deleting webs are manual operations done directly on the server_
 
 ---++ Overview
 
-Managing TWiki webs requires direct access to the installation files on the host server. There are no browser-based web tools.
+Managing TWiki webs requires direct access to the installation files on the host server. There are currently no browser-based equivalents of the Rename/move/delete topic tools for working with webs.
 
----++ How to Add a New Web
+---++ Adding a New Web
 
 Adding new webs is quick and easy - you can have a basic web up and running in a couple of minutes:
 
-	1. *Create* a new directory under ==twiki/data/==, ex: =twiki/data/newweb=
+	1. *Create* a new directory under =twiki/data/=, ex: =twiki/data/Newweb= <br>
+		* the name has to start with a capital and _cannot_ be a WikiWord
 	1. *Copy* in the contents of =twiki/data/_default=.
 
-For detailed instructions: [[TWikiDocumentation#CreateWeb][TWiki Installation Guide: Creating a New Web]].
+For detailed instructions, see [[TWikiDocumentation#CreateWeb][TWiki Installation Guide: Adding a New Web]].
 
----++ How to Rename or Delete a Web
+---++ Renaming or Deleting a Web
 
-*NOTE:* Think twice if you intend to rename the %WIKITOOLNAME%.%MAINWEB% web, since many files point to it. If you rename it, you also have to change all occurrences of =Main= to the new web name (like the web prefixes for all user signatures, =Main.<nop>SomeName=). (On the other hand, if the =%<nop>MAINWEB%= variable is used throughout, you won't have that problem.)
-	1. Prepare your site: Other webs may link to the web you want to rename or delete. Search each web for links to the target web: search all webs for =Abouttochange.= - include the period to find topics like =Abouttochange.SomeTopic=. Make changes as required.
+*NOTE:* If you plan to rename the %WIKITOOLNAME%.%MAINWEB% web, remember that TWiki stores user and group topics in =%<nop />MAINWEB%=, default named =Main=. That means, every WikiName signature - =Main.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout).
+	1. Prepare your site: Search each web for links to the target web, searching topic text for =Oldwebname.=, including the dot so you'll find references like =Oldwebname.SomeTopic=. 
+		* Make changes as required, to =Newwebname.SomeTopic= or better yet, to ==%<nop>MAINWEB%.<nop>SomeTopic=.
 	1. Edit the %WIKIPREFSTOPIC% topic: Rename or delete the web from the =WIKIWEBLIST= variable.
 	1. Edit the TWikiWebsTable topic: Rename or delete the web from the table.
-	1. Connect to the %WIKITOOLNAME% server: Login via Telnet or FTP.
-	1. Edit the data files: Go to =twiki/data= and rename or delete the web directory.
-	1. Edit the template files: Go to =twiki/templates= and rename or delete the web directory if present.
-	1. Edit the public files: Go to =twiki/pub= and rename or delete the web directory if present.
+	1. Login to the %WIKITOOLNAME% server, via Telnet or FTP.
+	1. Go to =twiki/data= and rename or remove the web directory.
+	1. Go to =twiki/templates= and rename or remove the web directory if present.
+	1. Go to =twiki/pub= and rename or remove the web directory if present.
 
--- MikeMannix - 29 Aug 2001 <br>
+-- MikeMannix - 14 Sep 2001 <br />
