@@ -1,4 +1,4 @@
-	* Name: Peter Thoeny, author of the TWikiWeb
+	* Name: Peter Thoeny, author of the TWikiWeb (and therefore a TWikiContributor)
 	* Work: Peter.Thoeny@WindRiver.com
 	* Home: Peter@Thoeny.com
 	* Location: SanJoseOffice
