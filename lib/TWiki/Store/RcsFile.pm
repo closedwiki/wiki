@@ -19,7 +19,7 @@
 
 =begin twiki
 
----+ TWiki::Store::RcsFile Module
+---+ UNPUBLISHED package TWiki::Store::RcsFile
 
 Superclass of RcsWrap and RcsLite, encapsulating common functionality.
 
@@ -43,7 +43,7 @@ use Assert;
 
 =pod
 
----++ sub new (  $proto, $web, $topic, $attachment )
+---++ ClassMethod new (  $proto, $web, $topic, $attachment )
 
 =cut to implementation
 
@@ -90,7 +90,7 @@ sub init {
 
 =pod
 
----++ sub revisionFileExists (  $self  )
+---++ ObjectMethod revisionFileExists (   ) -> $boolean
 
 Not yet documented.
 
@@ -110,7 +110,7 @@ sub _getRevisionInfoDefault {
 
 =pod
 
----++ sub getTimestamp (  $self  )
+---++ ObjectMethod getTimestamp (   ) -> $integer
 
 Get the timestamp of the topic file
 Returns 0 if no file, otherwise epoch seconds
@@ -129,7 +129,7 @@ sub getTimestamp {
 
 =pod
 
----++ sub restoreLatestRevision (  $self  )
+---++ ObjectMethod restoreLatestRevision (   )
 
 Not yet documented.
 
@@ -145,7 +145,7 @@ sub restoreLatestRevision {
 
 =pod
 
----++ sub moveMe (  $self, $newWeb, $newTopic, $attachment  )
+---++ ObjectMethod moveMe (   $newWeb, $newTopic, $attachment  )
 
 Not yet documented.
 
@@ -286,7 +286,7 @@ sub _rcsDateTimeToEpoch {
 
 =pod
 
----++ sub isAsciiDefault (  $self  )
+---++ ObjectMethod isAsciiDefault (   ) -> $string
 
 Not yet documented.
 
@@ -304,7 +304,7 @@ sub isAsciiDefault {
 
 =pod
 
----++ sub setBinary (  $self, $binary  )
+---++ ObjectMethod setBinary (   $binary  )
 
 Not yet documented.
 
@@ -320,7 +320,7 @@ sub setBinary {
 
 =pod
 
----++ sub setLock (  $self, $lock, $user  )
+---++ ObjectMethod setLock (   $lock, $user  )
 
 Set a twiki lock on the topic, if $lock, otherwise clear it.
 $user is a wikiname.
@@ -343,7 +343,7 @@ sub setLock {
 
 =pod
 
----++ sub isLocked( $self )
+---++ ObjectMethod isLocked( ) -> $boolean
 
 See if a twiki lock exists. Return the lock user and lock time if it does.
 
@@ -583,7 +583,7 @@ use constant MON2NUM => {
 
 =pod
 
----++ sub revDate2EpSecs ()
+---++ StaticMethod revDate2EpSecs ()
 
 Convert RCS revision date/time to seconds since epoch, for easier sorting 
 

@@ -18,7 +18,8 @@ use File::Copy;
 use Carp;
 
 =pod
----+ UpgradeTWikiConfig
+
+---+ UNPUBLISHED package UpgradeTWikiConfig
 
 Create an upgraded twiki installation configuration file from an existing one
 and a new distribution.

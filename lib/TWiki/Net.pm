@@ -17,7 +17,7 @@
 
 =begin twiki
 
----+ TWiki::Net Module
+---+ package TWiki::Net
 
 Object that brokers access to network resources.
 
@@ -51,7 +51,7 @@ sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 =pod
 
----++ sub getUrl (  $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader  )
+---++ ObjectMethod getUrl (  $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader  ) -> $text
 
 Get the text at the other end of a URL
 
@@ -116,10 +116,9 @@ sub getUrl {
     return $result;
 }
 
-# =========================
 =pod
 
----++ sub sendEmail (  $theText  )
+---++ ObjectMethod sendEmail ( $theText ) -> $error
 
 Send an email specified as MIME format content.
 

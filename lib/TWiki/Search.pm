@@ -19,7 +19,7 @@
 
 =begin twiki
 
----+ TWiki::Search Module
+---+ package TWiki::Search
 
 This module implements all the search functionality.
 
@@ -45,7 +45,7 @@ my $emptySearch =   "something.Very/unLikelyTo+search-for;-)";
 
 =pod
 
----++ sub new ()
+---++ ClassMethod new ($session)
 
 Constructor for the singleton Search engine object.
 
@@ -71,15 +71,8 @@ sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 sub writeDebug { my $this = shift; $this->{session}->writeDebug($_[0]); }
 
-=pod
-
----++ sub _filterSearchString ( $this, $searchString, $theType ) -> $searchString
-
-Untaints the search value (text string, regex or search expression) by
-'filtering in' valid characters only.
-
-=cut
-
+# Untaints the search value (text string, regex or search expression) by
+# 'filtering in' valid characters only.
 sub _filterSearchString {
     my $this = shift;
     my $searchString = shift;
@@ -160,7 +153,7 @@ sub _filterSearchString {
 
 =pod
 
----++ sub getTextPattern (  $theText, $thePattern  )
+---++ StaticMethod getTextPattern (  $theText, $thePattern  )
 
 Sanitise search pattern - currently used for FormattedSearch only
 
@@ -183,16 +176,9 @@ sub getTextPattern
 }
 
 
-=pod
-
----++ sub _tokensFromSearchString ( $this, $theSearchVal, $theType  )
-
-Split the search string into tokens depending on type of search.
-Search is an 'AND' of all tokens - various syntaxes implemented
-by this routine.
-
-=cut
-
+# Split the search string into tokens depending on type of search.
+# Search is an 'AND' of all tokens - various syntaxes implemented
+# by this routine.
 sub _tokensFromSearchString
 {
     my( $this, $theSearchVal, $theType ) = @_;
@@ -231,17 +217,10 @@ sub _tokensFromSearchString
     return @tokens;
 }
 
-=pod
-
----++ sub _translateSpace (  $theText  )
-
-Convert spaces into translation token characters (typically NULs),
-preventing tokenization.  
-
-FIXME: Terminology confusing here!
-
-=cut
-
+# Convert spaces into translation token characters (typically NULs),
+# preventing tokenization.
+#
+# FIXME: Terminology confusing here!
 sub _translateSpace
 {
     my( $theText ) = @_;
@@ -250,17 +229,10 @@ sub _translateSpace
 }
 
 
-=pod
-
----++ sub _searchTopicsInWeb (  $theWeb, $theTopic, $theScope, $theType, $caseSensitive, @theTokens  )
-
-Search a single web based on parameters - @theTokens is a list of search terms
-to be ANDed together, $theTopic is list of one or more topics.  
-
-Executes external command to do the search.
-
-=cut
-
+# Search a single web based on parameters - @theTokens is a list of search terms
+# to be ANDed together, $theTopic is list of one or more topics.  
+#
+# Executes external command to do the search.
 sub _searchTopicsInWeb
 {
     my( $this, $theWeb, $theTopic, $theScope, $theType, $caseSensitive, @theTokens ) = @_;
@@ -339,14 +311,6 @@ sub _searchTopicsInWeb
     return @topicList;
 }
 
-=pod
-
----++ sub _makeTopicPattern (  $theTopic  )
-
-Not yet documented.
-
-=cut
-
 sub _makeTopicPattern
 {
     my( $theTopic ) = @_ ;
@@ -359,14 +323,6 @@ sub _makeTopicPattern
     return '^(' . join( "|", @arr ) . ')$';
 }
 
-=pod
-
----++ sub revDate2ISO ()
-
-Not yet documented.
-
-=cut
-
 sub revDate2ISO
 {
     my $epochSec = TWiki::Store::RcsFile::revDate2EpSecs( $_[0] );
@@ -375,7 +331,7 @@ sub revDate2ISO
 
 =pod
 
----++ sub searchWeb (...)
+---++ ObjectMethod searchWeb (...)
 
 Search one or more webs according to the parameters.
 
@@ -768,7 +724,7 @@ sub searchWeb {
                 if( $theFormat ) {
                     $out = $theFormat;
                     $out =~ s/\$web/$web/gos;
-                    $out =~ s/\$topic\(([^\)]*)\)/breakName( $topic, $1 )/geos;
+                    $out =~ s/\$topic\(([^\)]*)\)/_breakName( $topic, $1 )/geos;
                     $out =~ s/\$topic/$topic/gos;
                     $out =~ s/\$date/$revDate/gos;
                     $out =~ s/\$isodate/&revDate2ISO($revDate)/geos;
@@ -891,8 +847,8 @@ sub searchWeb {
                 } elsif( $theFormat ) {
                     $out =~ s/\$summary\(([^\)]*)\)/$this->renderer()->makeTopicSummary( $text, $topic, $web, $1 )/geos;
                     $out =~ s/\$summary/$this->renderer()->makeTopicSummary( $text, $topic, $web )/geos;
-                    $out =~ s/\$parent\(([^\)]*)\)/breakName( getMetaParent( $meta ), $1 )/geos;
-                    $out =~ s/\$parent/getMetaParent( $meta )/geos;
+                    $out =~ s/\$parent\(([^\)]*)\)/_breakName( _getMetaParent( $meta ), $1 )/geos;
+                    $out =~ s/\$parent/_getMetaParent( $meta )/geos;
                     $out =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
                     $out =~ s/\$formname/_getMetaFormName( $meta )/geos;
                     # FIXME: Allow all regex characters but escape them
@@ -1107,17 +1063,10 @@ sub _getTextAndMeta {
     return ( $meta, $text );
 }
 
-=pod
-
----++ sub _getRev1Info( $theWeb, $theTopic, $theAttr, $info )
-
-Returns the topic revision info of the base version,
-attributes are "date", "username", "wikiname",
-"wikiusername". Revision info is cached in the search
-object for speed.
-
-=cut
-
+# Returns the topic revision info of the base version,
+# attributes are "date", "username", "wikiname",
+# "wikiusername". Revision info is cached in the search
+# object for speed.
 sub _getRev1Info {
     my( $this, $theWeb, $theTopic, $theAttr, $info ) = @_;
     my $key = "$theWeb.$theTopic";
@@ -1144,16 +1093,7 @@ sub _getRev1Info {
     return 1;
 }
 
-#=========================
-=pod
-
----++ sub getMetaParent( $theMeta )
-
-Not yet documented.
-
-=cut
-
-sub getMetaParent
+sub _getMetaParent
 {
     my( $theMeta ) = @_;
 
@@ -1166,9 +1106,9 @@ sub getMetaParent
 #=========================
 =pod
 
----++ sub getMetaFormField (  $theMeta, $theParams  )
+---++ StaticMethod getMetaFormField (  $theMeta, $theParams  )
 
-Not yet documented.
+Not yet documented, though used by Render.pm!
 
 =cut
 
@@ -1189,22 +1129,14 @@ sub getMetaFormField
         $value = $field->{"value"};
         $value =~ s/^\s*(.*?)\s*$/$1/go;
         if( $name =~ /^($field->{"name"}|$field->{"title"})$/ ) {
-            $value = breakName( $value, $break );
+            $value = _breakName( $value, $break );
             return $value;
         }
     }
     return "";
 }
 
-#=========================
-=pod
-
----++ sub _getMetaFormName (  $theMeta )
-
-Returns the name of the form attached to the topic
-
-=cut
-
+# Returns the name of the form attached to the topic
 sub _getMetaFormName
 {
     my( $theMeta ) = @_;
@@ -1216,15 +1148,7 @@ sub _getMetaFormName
     return "";
 }
 
-=pod
-
----++ sub breakName (  $theText, $theParams  )
-
-Not yet documented.
-
-=cut
-
-sub breakName
+sub _breakName
 {
     my( $theText, $theParams ) = @_;
 

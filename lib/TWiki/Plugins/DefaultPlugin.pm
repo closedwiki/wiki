@@ -103,8 +103,8 @@ sub commonTagsHandler
     # Old INCLUDE syntax
     if( $doOldInclude ) {
         # allow two level includes
-        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/TWiki::_handleINCLUDE( TWiki::extractParameters( $1 ), $_[1], $_[2], "" )/geo;
-        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/TWiki::_handleINCLUDE( TWiki::extractParameters( $1 ), $_[1], $_[2], "" )/geo;
+        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/$TWiki::Plugins::SESSION->_INCLUDE( TWiki::extractParameters( $1 ), $_[1], $_[2], "" )/geo;
+        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/$TWiki::Plugins::SESSION->_INCLUDE( TWiki::extractParameters( $1 ), $_[1], $_[2], "" )/geo;
     }
 
     ######################

@@ -21,11 +21,15 @@ use TWiki;
 
 =pod
 
----+ TWiki::User package
+---+ package TWiki::User
 
 A User object is an internal representation of a user in the real world.
 The object knows about users having login names, wiki names, personal
 topics, and email addresses.
+
+=cut
+
+=pod
 
 Groups are also handled here. A group is really a subclass of a user,
 in that it is a user with a set of users within it.
@@ -38,19 +42,14 @@ user.
 # global used by test harness to give predictable results
 use vars qw( $password );
 
-=pod
-
-STATIC function that returns a random password
-
-=cut
-
+# STATIC function that returns a random password
 sub randomPassword {
     return $password || int( rand(9999) );
 }
 
 =pod
 
----++ new( $users, $name, $wikiname )
+---++ ClassMethod new( $users, $name, $wikiname )
 
 Construct a new user object for the given login name, wiki name.
 
@@ -87,7 +86,7 @@ sub users { my $this = shift; return $this->{session}->{users}; }
 
 =pod
 
----++ wikiName()
+---++ ObjectMethod wikiName() -> $wikiName
 
 Return the wikiname of the user (without the web!)
 
@@ -101,7 +100,7 @@ sub wikiName {
 
 =pod
 
----++ webDotWikiName()
+---++ ObjectMethod webDotWikiName() -> $webDotWiki
 
 Return the fully qualified wikiname of the user
 
@@ -115,7 +114,7 @@ sub webDotWikiName {
 
 =pod
 
----++ login()
+---++ ObjectMethod login() -> $loginName
 
 Return the login name of the user
 
@@ -129,7 +128,7 @@ sub login {
 
 =pod
 
----++ web()
+---++ ObjectMethod web() -> $webName
 
 Return the registration web of the user
 
@@ -143,7 +142,7 @@ sub web {
 
 =pod
 
----++ equals()
+---++ ObjectMethod equals() -> $boolean
 
 Test is this is the same user as another user object
 
@@ -159,7 +158,7 @@ sub equals {
 
 =pod
 
----++ stringify()
+---++ ObjectMethod stringify() -> $string
 
 Generate a string representation of this object, suitable for debugging
 
@@ -174,7 +173,7 @@ sub stringify {
 
 =pod
 
----++ passwordExists( ) ==> $passwordExists
+---++ ObjectMethod passwordExists( ) -> $boolean
 
 Checks to see if there is an entry in the password system
 Return "1" if true, "" if not
@@ -191,10 +190,12 @@ sub passwordExists {
 
 =pod
 
----++ checkPassword( $password ) ==> $success
+---++ ObjectMethod checkPassword( $password ) -> $boolean
 
 used to check the user's password
+
 =$password= unencrypted password
+
 =$success= "1" if success
 
 TODO: need to improve the error mechanism so TWikiAdmins know what failed
@@ -211,16 +212,15 @@ sub checkPassword {
 
 =pod
 
----++ removePassword() ==> $success
-used to remove the user and password from the password system.
-"1" if success
+---++ ObjectMethod removePassword() -> $boolean
 
-TODO: need to improve the error mechanism so TWikiAdmins know what failed |
+Used to remove the user and password from the password system.
+Returns true if success
 
 =cut
 
+# TODO: need to improve the error mechanism so TWikiAdmins know what failed
 # SMELL - should this not also delete the user topic?
-
 sub removePassword {
     my $this = shift;
     ASSERT(ref($this) eq "TWiki::User") if DEBUG;
@@ -231,16 +231,16 @@ sub removePassword {
 
 =pod
 
----++ changePassword( $user, $oldUserPassword, $newUserPassword ) ==> $success
+---++ ObjectMethod changePassword( $user, $oldUserPassword, $newUserPassword ) -> $boolean
+
 used to change the user's password
 =$oldUserPassword= unencrypted password
 =$newUserPassword= unencrypted password
 "1" if success
 
-| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
-
 =cut
 
+# TODO: need to improve the error mechanism so TWikiAdmins know what failed |
 sub changePassword {
     my ( $this, $oldUserPassword, $newUserPassword ) = @_;
     ASSERT(ref($this) eq "TWiki::User") if DEBUG;
@@ -251,11 +251,11 @@ sub changePassword {
 
 =pod
 
----++ addPassword( $newPassword ) ==> $success
+---++ ObjectMethod addPassword( $newPassword ) -> $boolean
 creates a password entry
 =$newUserPassword= unencrypted password
 "1" if success
-| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
+TODO: need to improve the error mechanism so TWikiAdmins know what failed
 
 =cut
 
@@ -269,7 +269,7 @@ sub addPassword {
 
 =pod
 
----+ resetPassword()
+---++ ObjectMethod resetPassword() -> $newPassword
 
 Reset the users password, returning the new generated password.
 
@@ -296,7 +296,7 @@ sub isDefaultUser {
 
 =pod
 
----++ emails() ==> list of $emailAddress
+---++ ObjectMethod emails() -> @emailAddress
 
 If this is a user, return their email addresses. If it is a group,
 return the addresses of everyone in the group.
@@ -343,7 +343,7 @@ sub _getEmailsFromUserTopic {
 
 =pod
 
----++ isAdmin()
+---++ ObjectMethod isAdmin() -> $boolean
 
 True if the user is an admin (is a member of the $TWiki::cfg{SuperAdminGroup})
 
@@ -359,7 +359,7 @@ sub isAdmin {
 
 =pod
 
----++ getGroups( ) ==> @listOfGroups
+---++ ObjectMethod getGroups( ) -> @groups
 
 Get a list of user objects for the groups a user is in
 
@@ -374,7 +374,7 @@ sub getGroups {
 
 =pod
 
----++ isInList( @list )
+---++ ObjectMethod isInList( @list ) -> $boolean
 
 Return true we are in the list of user objects passed.
 
@@ -404,7 +404,7 @@ sub isInList {
 
 =pod
 
----++ isGroup()
+---++ ObjectMethod isGroup() -> $boolean
 
 Test if this is a group user or not
 
@@ -419,7 +419,7 @@ sub isGroup {
 
 =pod
 
----++ groupMembers()
+---++ ObjectMethod groupMembers() -> @members
 
 Return a list of members of this group. Should only be
 called on groups.

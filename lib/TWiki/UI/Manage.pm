@@ -16,7 +16,7 @@
 # http://www.gnu.org/copyleft/gpl.html
 =begin twiki
 
----+ TWiki::UI::Manage
+---+ package TWiki::UI::Manage
 
 UI functions for web, topic and user management
 
@@ -34,8 +34,10 @@ use TWiki::UI::OopsException;
 
 =pod
 
----++ manage( $session )
-UI delegate designed for calling from TWiki::UI::run
+---++ StaticMethod manage( $session )
+=manage= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
 
 =cut
 
@@ -64,8 +66,11 @@ sub manage {
 
 =pod
 
----+++ removeUser( $session )
-Renames the user's topic (with renaming all links)
+---++ StaticMethod removeUser( $session )
+=removeuser= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
+Renames the user's topic (with renaming all links) and
 removes user entry from passwords. CGI parameters:
 | =password= | |
 
@@ -133,7 +138,11 @@ sub _template {
 }
 
 =pod
----++ createWeb( $session )
+
+---++ StaticMethod createWeb( $session )
+=create_web= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
 Create a new web. Parameters defining the new web are
 in the query.
 
@@ -212,9 +221,13 @@ sub createWeb {
 
 =pod
 
----+++ rename( $session )
+---++ StaticMethod rename( $session )
+=rename= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
 Rename the given topic. Details of the new topic name are passed in CGI
-paremeters:
+parameters:
+
 | =skin= | skin to use for derivative topics |
 | =newweb= | new web name |
 | =newtopic= | new topic name |
@@ -375,19 +388,13 @@ sub rename {
     $session->redirect( $new_url );
 }
 
-=pod
-
----++ _getReferringTopicsListFromURL ( $oldWeb, $oldTopic, $newWeb, $newTopic ) ==> @refs
-| Description:           | returns the list of topics that have been found that refer to the renamed topic |
-| Parameter: =$oldWeb=   |   |
-| Parameter: =$oldTopic= |   |
-| Parameter: =$newWeb=   |   |
-| Parameter: =$newTopic= |   |
-| Return: =@refs=        |   |
-| TODO: | docco what the return list means |
-
-=cut
-
+#| Description:           | returns the list of topics that have been found that refer to the renamed topic |
+#| Parameter: =$oldWeb=   |   |
+#| Parameter: =$oldTopic= |   |
+#| Parameter: =$newWeb=   |   |
+#| Parameter: =$newTopic= |   |
+#| Return: =@refs=        |   |
+#| TODO: | docco what the return list means |
 sub _getReferringTopicsListFromURL {
     my $session = shift;
 

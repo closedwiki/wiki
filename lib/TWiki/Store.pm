@@ -48,7 +48,7 @@ BEGIN {
 
 =pod
 
----++ sub new()
+---++ ClassMethod new()
 
 Construct a Store module, linking in the chosen sub-implementation.
 
@@ -96,7 +96,7 @@ sub _getTopicHandler {
 
 =pod
 
----++ readTopic($user, $web, $topic, $version) -> ($meta, $text)
+---++ ObjectMethod readTopic($user, $web, $topic, $version) -> ($metaObject, $text)
 
 Reads the given version of a topic and it's meta-data. If the version
 is undef, then read the most recent version. The version number must be
@@ -126,8 +126,7 @@ sub readTopic {
 
 =pod
 
----++ readTopicRaw( $user, $web, $topic, $version )
-Return value: $topicText
+---++ ObjectMethod readTopicRaw( $user, $web, $topic, $version ) ->  $topicText
 
 Reads the given version of a topic, without separating out any embedded
 meta-data. If the version is undef, then read the most recent version.
@@ -178,11 +177,11 @@ sub readTopicRaw {
 
 =pod
 
----++ sub moveAttachment (  $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $user  )
+---++ ObjectMethod moveAttachment (  $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $user  ) -> $error
 
 Move an attachment from one topic to another.
 
-If there is a problem an error string is returned.
+If there is a problem an error string is returned, or may throw an exception.
 
 The caller to this routine should check that all topics are valid.
 
@@ -264,11 +263,11 @@ sub moveAttachment {
 
 =pod
 
----++ sub getAttachmentStream( $user, $web, $topic, $attName ) -> stream
-| =$user= | the user doing the reading, or undef if no access checks |
-| =$web= | The web |
-| =$topic= | The topic |
-| =$attName= | Name of the attachment |
+---++ ObjectMethod getAttachmentStream( $user, $web, $topic, $attName ) -> \*STREAM
+   * =$user= - the user doing the reading, or undef if no access checks
+   * =$web= - The web
+   * =$topic= - The topic
+   * =$attName= - Name of the attachment
 
 Open a standard input stream from an attachment. Will return undef
 if the stream could not be opened (permissions, or nonexistant etc)
@@ -304,7 +303,7 @@ sub getAttachmentStream {
 
 =pod
 
----++ sub attachmentExists( $web, $topic, $att ) -> boolean
+---++ ObjectMethod attachmentExists( $web, $topic, $att ) -> $boolean
 
 Determine if the attachment already exists on the given topic
 
@@ -387,7 +386,7 @@ sub _changeRefTo {
 
 =pod
 
----++ sub renameTopic(  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  $user ) -> error string or undef
+---++ ObjectMethod renameTopic(  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  $user ) -> $error
 
 Rename a topic, allowing for transfer between Webs. This method will change
 all references _from_ this topic to other topics _within the old web_
@@ -460,7 +459,7 @@ sub renameTopic {
 
 =pod
 
----++ sub updateReferringPages( $oldWeb, $oldTopic, $user, $newWeb, $newTopic, @refs  ) -> ( count of lock failures, result text)
+---++ ObjectMethod updateReferringPages( $oldWeb, $oldTopic, $user, $newWeb, $newTopic, @refs  ) -> ( $countoflockfailures, $resulttext)
 
 Update pages that refer to a page that is being renamed/moved. Return the
 number of updates that failed due to active locks and a message.
@@ -559,7 +558,7 @@ sub updateReferringPages {
 
 =pod
 
----++ sub readAttachment( $user, $theWeb, $theTopic, $theAttachment, $theRev  )
+---++ ObjectMethod readAttachment( $user, $theWeb, $theTopic, $theAttachment, $theRev  ) -> $text
 
 Read the given version of an attachment, returning the content.
 
@@ -589,7 +588,7 @@ sub readAttachment {
 
 =pod
 
----++ sub getRevisionNumber ( $theWebName, $theTopic, $attachment  )
+---++ ObjectMethod getRevisionNumber ( $theWebName, $theTopic, $attachment  ) -> $integer
 
 Get the revision number of the most recent revision. Returns
 the integer revision number or "" if the topic doesn't exist.
@@ -611,14 +610,15 @@ sub getRevisionNumber {
 
 =pod
 
----++ sub getRevisionDiff (  $web, $topic, $rev1, $rev2, $contextLines  )
+---++ ObjectMethod getRevisionDiff (  $web, $topic, $rev1, $rev2, $contextLines  ) -> \@diffArray
 
-| $webName|
-| $topic |
-| $rev1 | Integer revision number |
-| $rev2 | Integer revision number |
-</pre>
-| Return: =\@diffArray= | reference to an array of [ diffType, $right, $left ] |
+Return reference to an array of [ diffType, $right, $left ]
+
+   * =$webName= - the web
+   * =$topic= - the topic
+   * =$rev1= Integer revision number
+   * =$rev2= Integer revision number
+   * =$contextLines= - number of lines of context required
 
 =cut
 
@@ -636,16 +636,16 @@ sub getRevisionDiff {
 
 =pod
 
----+++ getRevisionInfo($theWebName, $theTopic, $theRev, $attachment, $topicHandler) ==> ( $date, $user, $rev, $comment ) 
-| Description: | Get revision info of a topic |
-| Parameter: =$theWebName= | Web name, optional, e.g. ="Main"= |
-| Parameter: =$theTopic= | Topic name, required, e.g. ="TokyoOffice"= |
-| Parameter: =$theRev= | revision number |
-| Parameter: =$attachment= |attachment filename |
-| Parameter: =$topicHandler= | internal store use only |
-| Return: =( $date, $user, $rev, $comment )= | List with: ( last update date, login name of last user, integer revision number ), e.g. =( 1234561, "phoeny", "5" )= |
+---++ ObjectMethod getRevisionInfo($theWebName, $theTopic, $theRev, $attachment, $topicHandler) -> ( $date, $user, $rev, $comment )
+Get revision info of a topic
+   * =$theWebName= Web name, optional, e.g. ="Main"=
+   * =$theTopic= Topic name, required, e.g. ="TokyoOffice"=
+   * =$theRev= revision number
+   * =$attachment= ttachment filename
+   * =$topicHandler= internal store use only
+Return list with: ( last update date, login name of last user, integer revision number ), e.g. =( 1234561, "phoeny", "5" )=
 | $date | in epochSec |
-| $user | |
+| $user | user *object* |
 | $rev | the revision number |
 | $comment | WHAT COMMENT? |
 
@@ -691,13 +691,13 @@ sub _readKeyValue
 
 =pod
 
----++ sub saveTopic (  $user, $web, $topic, $text, $meta, $options  )
-| =$user= | login name of user doing the saving |
-| =$web= | web for topic |
-| =$topic= | topic to atach to |
-| =$text= | topic text |
-| =$meta= | topic meta-data |
-| =$options= | Ref to hash of options |
+---++ ObjectMethod saveTopic (  $user, $web, $topic, $text, $meta, $options  ) -> $error
+   * =$user= - login name of user doing the saving
+   * =$web= - web for topic
+   * =$topic= - topic to atach to
+   * =$text= - topic text
+   * =$meta= - topic meta-data
+   * =$options= - Ref to hash of options
 =$options= may include:
 | =dontlog= | don't log this change in twiki log |
 | =hide= | if the attachment is to be hidden in normal topic view |
@@ -745,12 +745,12 @@ sub saveTopic {
 
 =pod
 
----++ sub saveAttachment ($web, $topic, $attachment, $user, $opts )
-| =$user= | user doing the saving |
-| =$web= | web for topic |
-| =$topic= | topic to atach to |
-| =$attachment= | name of the attachment |
-| =$opts= | Ref to hash of options |
+---++ ObjectMethod saveAttachment ($web, $topic, $attachment, $user, $opts ) -> $error
+   * =$user= - user doing the saving
+   * =$web= - web for topic
+   * =$topic= - topic to atach to
+   * =$attachment= - name of the attachment
+   * =$opts= - Ref to hash of options
 =$opts= may include:
 | =dontlog= | don't log this change in twiki log |
 | =minor= | don't log this change in .changes |
@@ -910,7 +910,7 @@ sub _noHandlersSave {
 
 =pod
 
----++ repRev( $user, $web, $topic, $text, $meta, $options )
+---++ ObjectMethod repRev( $user, $web, $topic, $text, $meta, $options ) -> $error
 
 Parameters and return value as saveTopic.
 
@@ -966,7 +966,7 @@ sub repRev {
 
 =pod
 
----++ delRev( $user, $web, $topic, $text, $meta, $options )
+---++ ObjectMethod delRev( $user, $web, $topic, $text, $meta, $options ) -> $error
 
 Parameters and return value as saveTopic.
 
@@ -1010,7 +1010,7 @@ sub delRev {
 
 =pod
 
----++ sub saveFile (  $name, $text  )
+---++ ObjectMethod saveFile (  $name, $text  )
 
 Save an arbitrary file
 
@@ -1039,7 +1039,7 @@ sub saveFile {
 
 =pod
 
----++ sub lockTopic( $web, $topic )
+---++ ObjectMethod lockTopic( $web, $topic )
 
 Grab a topic lock on the given topic. A topic lock will cause other
 processes that also try to claim a lock to block. A lock has a
@@ -1082,7 +1082,7 @@ sub lockTopic {
 
 =pod
 
----++ sub unlockTopic( $user, $web, $topic )
+---++ ObjectMethod unlockTopic( $user, $web, $topic )
 Release the topic lock on the given topic. A topic lock will cause other
 processes that also try to claim a lock to block. It is important to
 release a topic lock after a guard section is complete.
@@ -1100,11 +1100,10 @@ sub unlockTopic {
 
 =pod
 
----+++ webExists( $web ) ==> $flag
+---++ ObjectMethod webExists( $web ) -> $boolean
 
-| Description: | Test if web exists |
-| Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
-| Return: =$flag= | ="1"= if web exists, ="0"= if not |
+Test if web exists
+   * =$web= - Web name, required, e.g. ="Sandbox"=
 
 Note: see isKnownWeb to test for whether the web is actually a usable
 web or not (it has to have a home topic if it is)
@@ -1121,12 +1120,11 @@ sub webExists {
 
 =pod
 
----+++ topicExists( $web, $topic ) ==> $flag
+---++ ObjectMethod topicExists( $web, $topic ) -> $boolean
 
-| Description: | Test if topic exists |
-| Parameter: =$web= | Web name, optional, e.g. ="Main"= |
-| Parameter: =$topic= | Topic name, required, e.g. ="TokyoOffice"=, or ="Main.TokyoOffice"= |
-| Return: =$flag= | ="1"= if topic exists, ="0"= if not |
+Test if topic exists
+   * =$web= - Web name, optional, e.g. ="Main"=
+   * =$topic= - Topic name, required, e.g. ="TokyoOffice"=, or ="Main.TokyoOffice"=
 
 =cut
 
@@ -1196,14 +1194,14 @@ sub extractMetaData {
 
 =pod
 
----++ sub getTopicParent (  $theWeb, $theTopic  ) -> $meta
+---++ ObjectMethod getTopicParent (  $theWeb, $theTopic  ) -> $string
 
 Get the name of the topic parent. Needs to be fast because
 of use by Render.pm.
 
-SMELL: does not honour access controls
-
 =cut
+
+# SMELL: does not honour access controls
 
 sub getTopicParent {
     my( $this, $theWeb, $theTopic ) = @_;
@@ -1237,7 +1235,7 @@ sub getTopicParent {
 
 =pod
 
----++ sub getTopicLatestRevTime (  $theWeb, $theTopic  ) -> $epochsecs
+---++ ObjectMethod getTopicLatestRevTime (  $theWeb, $theTopic  ) -> $epochSecs
 
 Get an approximate rev time for the latest rev of the topic. This method
 is used to optimise searching. Needs to be as fast as possible.
@@ -1252,7 +1250,8 @@ sub getTopicLatestRevTime {
 
 =pod
 
----++ readFile( $filename )
+---++ ObjectMethod readFile( $filename ) -> $text
+
 Return value: $fileContents
 
 Returns the entire contents of the given file, which can be specified in any
@@ -1281,7 +1280,7 @@ sub readFile {
 
 =pod
 
----++ sub readMetaData( $web, $name ) -> $text
+---++ ObjectMethod readMetaData( $web, $name ) -> $text
 
 Read a named meta-data string. If web is given the meta-data
 is stored alongside a web. If the web is not
@@ -1302,7 +1301,7 @@ sub readMetaData {
 
 =pod
 
----++ sub saveMetaData( $web, $name ) -> $text
+---++ ObjectMethod saveMetaData( $web, $name ) -> $text
 
 Write a named meta-data string. If web is given the meta-data
 is stored alongside a web. If the web is not
@@ -1323,11 +1322,11 @@ sub saveMetaData {
 
 =pod
 
----+++ getTopicNames( $web ) ==> @topics
+---++ ObjectMethod getTopicNames( $web ) -> @topics
 
-| Description: | Get list of all topics in a web |
-| Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
-| Return: =@topics= | Topic list, e.g. =( "WebChanges",  "WebHome", "WebIndex", "WebNotify" )= |
+Get list of all topics in a web
+   * =$web= - Web name, required, e.g. ="Sandbox"=
+Return a topic list, e.g. =( "WebChanges",  "WebHome", "WebIndex", "WebNotify" )=
 
 =cut
 
@@ -1345,7 +1344,7 @@ sub getTopicNames {
 
 =pod
 
----++ sub getListOfWebs( $filter ) -> list of web names
+---++ ObjectMethod getListOfWebs( $filter ) -> @webNames
 
 Gets a list of webs, filtered according to the spec in the $filter,
 which may include one of:
@@ -1385,7 +1384,7 @@ sub getListOfWebs {
 
 =pod
 
----++ sub isKnownWeb( $webName ) -> boolean
+---++ ObjectMethod isKnownWeb( $webName ) -> $boolean
 
 Check if the given name refers to a web known to the store system
 (including system webs). Differs from webExists because it checks
@@ -1402,7 +1401,7 @@ sub isKnownWeb {
 
 =pod
 
----++ sub createWeb( $newWeb, $baseWeb, $opts ) -> $err
+---++ ObjectMethod createWeb( $newWeb, $baseWeb, $opts ) -> $error
 
 Create a new web. Returns an error string if it fails, undef if alles gut.
 
@@ -1568,7 +1567,8 @@ sub _writeMeta {
 
 =pod
 
----++ sub getDebugText($meta, $text) -> $text
+---++ ObjectMethod getDebugText($meta, $text) -> $text
+
 Generate a debug text form of the text/meta, for use in debug displays,
 by annotating the text with meta informtion.
 
@@ -1583,7 +1583,8 @@ sub getDebugText {
 
 =pod
 
----++ sub cleanUpRevID( $rev )
+---++ ObjectMethod cleanUpRevID( $rev ) -> $integer
+
 Cleans up (maps) a user-supplied revision ID and converts it to an integer
 number that can be incremented to create a new revision number.
 
@@ -1637,7 +1638,8 @@ sub _copyTopicBetweenWebs {
 
 =pod
 
----++ sub searchMetaData($params)
+---++ ObjectMethod searchMetaData($params) -> $text
+
 Search meta-data associated with topics. Parameters are passed in the $params hash,
 which may contain:
 | =type= | =topicmoved=, =parent= or =field= |
@@ -1717,15 +1719,16 @@ sub _collate {
 
 =pod
 
----+ sub searchInWebContent
+---++ ObjectMethod searchInWebContent($web, $type, $caseSensitive, $justTopics, $searchString, \@topics ) -> \%map
 
 Search for a token in the content of a web. The search must be over all
 content and all formatted meta-data, though the latter search type is
 deprecated (use searchMetaData instead).
-| $web | The web to search in |
-| $type | "regex" or something else |
-| $searchString | the search string, in egrep format |
-| $topics | reference to a list of topics to search |
+
+   * =$web= - The web to search in
+   * =$type= - "regex" or something else
+   * =$searchString= - the search string, in egrep format
+   * =\@topics= - reference to a list of topics to search
 
 The return value is a reference to a hash which maps each matching topic
 name to a list of the lines in that topic that matched the search,

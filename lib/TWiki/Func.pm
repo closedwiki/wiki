@@ -19,7 +19,7 @@
 
 =begin twiki
 
----++ Description
+---++ package TWiki::Func
 
 This module defines official funtions that [[%TWIKIWEB%.TWikiPlugins][Plugins]] 
 and add-on scripts can use to interact with the TWiki engine and content.

@@ -19,7 +19,7 @@
 # http://www.gnu.org/copyleft/gpl.html
 =begin twiki
 
----+ TWiki::UI::View
+---+ package TWiki::UI::View
 
 UI delegate for view function
 
@@ -34,13 +34,18 @@ use TWiki::UI;
 
 =pod
 
----++ view( $web, $topic, $scruptUrl, $query )
+---++ StaticMethod view( $session, $web, $topic, $scruptUrl, $query )
+=view= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
+
 Generate a complete HTML page that represents the viewed topics.
 The view is controlled by CGI parameters as follows:
+
 | =rev= | topic revision to view |
 | =raw= | no format body text if set |
 | =skin= | name of skin to use |
-| =contenttype= | |
+| =contenttype= | Allows you to specify an alternate content type |
 
 =cut
 sub view {
@@ -270,11 +275,14 @@ sub view {
 
 =pod
 
----++ viewfile( $web, $topic, $query )
+---++ StaticMethod viewfile( $session, $web, $topic, $query )
+=viewfile= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
 Command handler for viewfile. View a file in the browser.
 Some parameters are passed in CGI query:
-| =filename= | |
-| =rev= | |
+| =filename= | Attachment to view |
+| =rev= | Revision to view |
 
 =cut
 

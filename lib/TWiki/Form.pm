@@ -18,7 +18,7 @@
 
 =begin twiki
 
----+ TWiki::Form Module
+---+ package TWiki::Form
 
 This module handles the encoding and decoding of %TWIKIWEB%.TWikiForms,
 including upgrade of older format topics using the 'Category Table'
@@ -33,7 +33,7 @@ use Assert;
 
 =pod
 
----++ new ( $session )
+---++ ClassMethod new ( $session )
 Constructor
 
 =cut
@@ -128,7 +128,7 @@ sub _cleanField {
 
 =pod
 
----++ sub getPossibleFieldValues (  $text  )
+---++ StaticMethod getPossibleFieldValues (  $text  )
 
 Possible field values for select, checkbox, radio from supplied topic text
 
@@ -164,7 +164,7 @@ sub getPossibleFieldValues {
 
 =pod
 
----++ sub getFormDef (  $webName, $form  )
+---++ ObjectMethod getFormDef (  $webName, $form  ) -> @fields
 
 Get array of field definition, given form name
 If form contains Web this overrides webName
@@ -263,7 +263,7 @@ sub _link {
 
 =pod
 
----++ sub chooseFormButton (  $text  )
+---++ StaticMethod chooseFormButton (  $text  )
 
 Not yet documented.
 
@@ -278,7 +278,7 @@ sub chooseFormButton {
 
 =pod
 
----++ sub renderForEdit (  $web, $topic, $form, $meta, $getValuesFromFormTopic,  @fieldsInfo  )
+---++ ObjectMethod renderForEdit (  $web, $topic, $form, $meta, $getValuesFromFormTopic,  @fieldsInfo  ) -> $html
 
 Render form fields for entry during an edit session
 
@@ -444,7 +444,8 @@ sub renderForEdit {
 
 =pod
 
----++ sub fieldVars2Meta
+---++ ObjectMethod fieldVars2Meta($webName, $query, $metaObject, $justOverride) -> $metaObject
+
 Extract new values of form fields from a query.
 
 Note that existing meta information for fields is removed unless $justOverride is true
@@ -516,7 +517,7 @@ sub fieldVars2Meta {
 # =============================
 =pod
 
----++ sub getFieldParams (  $meta  )
+---++ StaticMethod getFieldParams (  $meta  )
 
 Not yet documented.
 
@@ -546,11 +547,13 @@ sub getFieldParams {
 
 =pod
 
----++ sub changeForm (  $theWeb, $theTopic )
+---++ ObjectMethod changeForm (  $theWeb, $theTopic )
 
 Called by script to change the form for a topic
 
 =cut
+
+# SMELL: surely this should be in UI somewhere??
 
 sub changeForm {
     my( $this, $theWeb, $theTopic ) = @_;
@@ -596,14 +599,7 @@ sub changeForm {
     $this->{session}->writeCompletePage( $tmpl );
 }
 
-=pod
-
----++ sub _upgradeCategoryItem (  $catitems, $ctext  )
-
-Upgrade old style category table item
-
-=cut 
-
+#Upgrade old style category table item
 sub _upgradeCategoryItem {
     my ( $catitems, $ctext ) = @_;
     my $catname = "";
@@ -688,7 +684,7 @@ sub _upgradeCategoryItem {
 
 =pod
 
----++ sub upgradeCategoryTable (  $web, $topic, $meta, $text  )
+---++ ObjectMethod upgradeCategoryTable (  $web, $topic, $meta, $text  ) -> $text
 
 Upgrade old style category table
 

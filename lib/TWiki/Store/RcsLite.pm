@@ -17,7 +17,7 @@
 
 =pod
 
----+ package TWiki::Store::RcsLite
+---+ UNPUBLISHED package TWiki::Store::RcsLite
 
 Simple replacement for RCS.  Doesn't support:
    * branches
@@ -56,14 +56,13 @@ my $DIFFEND_DEBUG = 0;
 # ======================
 =pod
 
----++ sub new(  $class, $session, $web, $topic, $attachment, $settings  )
+---++ ClassMethod new(  $class, $session, $web, $topic, $attachment, $settings  )
 
 Construct new file
 
 =cut to implementation
 
-sub new
-{
+sub new {
     my( $class, $session, $web, $topic, $attachment, $settings ) = @_;
     ASSERT(ref($session) eq "TWiki") if DEBUG;
     my $self =
@@ -128,8 +127,7 @@ sub new
 # of RCS files. No newphrase will begin with any keyword already in use. 
 
 # ======================
-sub _readTo
-{
+sub _readTo {
     my( $file, $char ) = @_;
     my $buf = "";
     my $ch;
@@ -184,8 +182,7 @@ sub _readTo
 
 # ======================
 # Called by routines that must make sure RCS file has been read in
-sub _ensureProcessed
-{
+sub _ensureProcessed {
     my( $self ) = @_;
     if( ! $self->{where} ) {
         $self->_process();
@@ -333,7 +330,7 @@ sub _write
     
     # admin
     print $file "head\t1." . $self->numRevisions() . ";\n";
-    print $file "access" . $self->access() . ";\n";
+    print $file "access" . $self->{access} . ";\n";
     print $file "symbols" . $self->{symbols} . ";\n";
     print $file "locks; strict;\n";
     printf $file "comment\t%s;\n", ( _formatString( $self->comment() ) );
@@ -372,7 +369,7 @@ sub _binaryChange
 # ======================
 =pod
 
----++ sub numRevisions (  $self  )
+---++ ObjectMethod numRevisions() -> $integer
 
 Get number of revs
 
@@ -385,26 +382,9 @@ sub numRevisions
     return $self->{head};
 }
 
-# ======================
 =pod
 
----++ sub access (  $self  )
-
-Not yet documented.
-
-=cut to implementation
-
-sub access
-{
-    my( $self ) = @_;
-    $self->_ensureProcessed();
-    return $self->{access};
-}
-
-# ======================
-=pod
-
----++ sub comment (  $self  )
+---++ ObjectMethod comment() -> $string
 
 Get the comment
 
@@ -420,9 +400,9 @@ sub comment
 # ======================
 =pod
 
----++ sub date (  $self, $version  )
+---++ ObjectMethod date (   $version  ) -> $dateInSecs
 
-| $date | in epoch seconds |
+Get the revision date in epoch seconds (secs since 1970)
 
 =cut to implementation
 
@@ -442,7 +422,7 @@ sub date
 # ======================
 =pod
 
----++ sub description (  $self  )
+---++ ObjectMethod description() -> $string
 
 Get description
 
@@ -458,7 +438,7 @@ sub description
 # ======================
 =pod
 
----++ sub author (  $self, $version  )
+---++ ObjectMethod author($version) -> $string
 
 Get author
 
@@ -474,14 +454,13 @@ sub author
 # ======================
 =pod
 
----++ sub log (  $self, $version  )
+---++ ObjectMethod log (   $version  ) -> $string
 
 Get log
 
 =cut to implementation
 
-sub log
-{
+sub log {
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
     return ${$self->{log}}[$version];
@@ -490,7 +469,7 @@ sub log
 # ======================
 =pod
 
----++ sub delta (  $self, $version  )
+---++ ObjectMethod delta($version) -> ??
 
 get delta to rev
 
@@ -506,9 +485,9 @@ sub delta
 # ======================
 =pod
 
----++ sub addRevision (  $self, $text, $log, $author, $date  )
+---++ ObjectMethod addRevision (   $text, $log, $author, $date  ) -> $error
 
-| $date | in epoch seconds |
+$date in epoch seconds
 
 =cut to implementation
 
@@ -565,7 +544,7 @@ sub _writeMe
 # ======================
 =pod
 
----++ sub replaceRevision (  $self, $text, $comment, $user, $date  )
+---++ ObjectMethod replaceRevision($text, $comment, $user, $date) -> $error
 
 Replace the top revision
 Return non empty string with error message if there is a problem
@@ -578,13 +557,13 @@ sub replaceRevision
     my( $self, $text, $comment, $user, $date ) = @_;
     $self->_ensureProcessed();
     $self->_delLastRevision();
-    $self->addRevision( $text, $comment, $user, $date );    
+    return $self->addRevision( $text, $comment, $user, $date );
 }
 
 # ======================
 =pod
 
----++ sub deleteRevision (  $self  )
+---++ ObjectMethod deleteRevision() -> $error
 
 Delete the last revision - do nothing if there is only one revision
 
@@ -615,10 +594,9 @@ sub _delLastRevision
     $self->{head} = $numRevisions;
 }
 
-# ======================
 =pod
 
----++ sub revisionDiff (  $self, $rev1, $rev2, $contextLines  )
+---++ ObjectMethod revisionDiff($rev1, $rev2, $contextLines) -> $error
 | TODO: | so why does this read the rcs file, re-create each of the 2 revisions and then diff them? isn't the delta in the rcs file good enough? (until you want context?) |
 =cut to implementation
 
@@ -645,7 +623,7 @@ sub revisionDiff
 
 =pod
 
----++ sub getRevision (  $self, $version  )
+---++ ObjectMethod getRevision (   $version  ) -> $text
 
 Get a rev
 
@@ -665,10 +643,10 @@ sub getRevision
     }
 }
 
-# ======================
 =pod
 
----++ sub getRevisionInfo (  $self, $version  )
+---++ ObjectMethod getRevisionInfo (   $version  ) -> ($rcsError, $rev, $date, $user, $comment)
+
 
 If revision file is missing, information based on actual file is returned.
 Date is in epoch based seconds
@@ -700,8 +678,7 @@ sub getRevisionInfo
 # is patched to produce text for revision x-1.
 # It is fiddly dealing with differences in number of line breaks after the end of the
 # text.
-sub _patch
-{
+sub _patch {
    # Both params are references to arrays
    my( $text, $delta ) = @_;
    my $adj = 0;

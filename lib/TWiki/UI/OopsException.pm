@@ -19,13 +19,7 @@
 ---+ package TWiki::UI::OopsException
 
 Exception used by UI methods to raise a request to redirect to an Oops URL.
-The following named parameters are required to the exception:
-   * -web
-   * -topic
-   * -template (without the oops prefix)
-   * -text
-Optional parameters are:
-   * -param1 through -param4
+
 =cut
 
 package TWiki::UI::OopsException;
@@ -35,6 +29,17 @@ use Error;
 
 @TWiki::UI::OopsException::ISA = qw(Error);
 
+=pod
+
+---++ ClassMethod new($web, $topic, $template, ...)
+
+   * =$web= - web
+   * =$topic= - topic
+   * =$template= - name of the oops template (without the oops prefix)
+   * The remaining N parameters will be taken as param1..paramN
+
+=cut
+
 sub new {
     my $class = shift;
     my @params;
@@ -42,11 +47,16 @@ sub new {
     push( @params, -topic => shift );
     push( @params, -template => shift );
     push( @params, -text => "OopsException(" . join(",", @_) .")");
-#.join(",", caller(1)) );
     push( @params, -params => [ @_ ] );
 
     $class->SUPER::new( @params );
 }
+
+=pod
+
+---++ ObjectMethod stringify() -> $string
+
+=cut
 
 sub stringify {
     my $self = shift;

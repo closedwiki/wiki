@@ -15,7 +15,7 @@
 # http://www.gnu.org/copyleft/gpl.html
 =begin twiki
 
----+ TWiki::UI::Upload
+---+ package TWiki::UI::Upload
 
 UI delegate for attachment management functions
 
@@ -30,8 +30,13 @@ use TWiki::UI::OopsException;
 
 =pod
 
----++ attach( $session )
-Perform the functions of an 'attach' URL. CGI parameters are:
+---++ StaticMethod attach( $session )
+=upload= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
+
+Attach a file to a topic. CGI parameters are:
+
 | =filename= | Name of attachment |
 | =skin= | Skin to use in presenting pages |
 
@@ -114,9 +119,13 @@ sub attach {
 
 =pod
 
----++ upload( $session )
-Perform the functions of an 'upload' url.
+---++ StaticMethod upload( $session )
+
+=upload= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
 CGI parameters, passed in $query:
+
 | =hidefile= | if defined, will not show file in attachment table |
 | =filepath= | |
 | =filename= | |
@@ -125,6 +134,7 @@ CGI parameters, passed in $query:
 | =changeproperties= | |
 
 =cut
+
 sub upload {
     my $session = shift;
 

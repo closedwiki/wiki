@@ -17,7 +17,7 @@
 #
 =begin twiki
 
----+ TWiki::UI::Statistics
+---+ package TWiki::UI::Statistics
 Statistics extraction and presentation
 
 =cut
@@ -34,12 +34,17 @@ my $debug = 0;
 
 =pod
 
----++ statistics( $session )
+---++ StaticMethod statistics( $session )
+=statistics= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
+
 Generate statistics topic.
 If a web is specified in the session object, generate WebStatistics
 topic update for that web. Otherwise do it for all webs
 
 =cut
+
 sub statistics {
     my $session = shift;
 
@@ -122,20 +127,18 @@ sub statistics {
     my ($viewRef, $contribRef, $statViewsRef, $statSavesRef, 
         $statUploadsRef) = _collectLogData( $session, $TMPFILE, $logMonthYear );
 
-=pod
-    # DEBUG ONLY
-    _debugPrintHash($viewRef);
-    _debugPrintHash($contribRef);
-    print "statViews tests===========\n";
-    print "Views in Main = " . ${$statViewsRef}{'Main'} . "\n";
-    print "hash stats (used/avail) = " . %{$statViewsRef}."\n";
-    foreach my $web (keys %{$statViewsRef}) {
-        print "Web summary for $web\n";
-        print $statViewsRef->{$web}."\n";
-        print $statSavesRef->{$web}."\n";
-        print $statUploadsRef->{$web}."\n";
-    }
-=cut
+#    # DEBUG ONLY
+#    _debugPrintHash($viewRef);
+#    _debugPrintHash($contribRef);
+#    print "statViews tests===========\n";
+#    print "Views in Main = " . ${$statViewsRef}{'Main'} . "\n";
+#    print "hash stats (used/avail) = " . %{$statViewsRef}."\n";
+#    foreach my $web (keys %{$statViewsRef}) {
+#        print "Web summary for $web\n";
+#        print $statViewsRef->{$web}."\n";
+#        print $statSavesRef->{$web}."\n";
+#        print $statUploadsRef->{$web}."\n";
+#    }
 
     my @weblist;
 

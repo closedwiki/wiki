@@ -15,7 +15,7 @@
 # http://www.gnu.org/copyleft/gpl.html
 =begin twiki
 
----+ TWiki::UI::Search
+---+ package TWiki::UI::Search
 
 UI functions for searchng.
 
@@ -29,7 +29,7 @@ use TWiki::UI;
 
 =pod
 
----+++ search( $web, $topic, $query )
+---++ StaticMethod search( $session )
 Perform a search as dictated by CGI parameters:
 | query_string | is the actual search string |
 | =search= | |

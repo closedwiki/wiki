@@ -14,7 +14,13 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-# Service functions used by the UI packages
+=pod
+
+---+ package TWiki::UI
+
+Service functions used by the UI packages
+
+=cut
 
 package TWiki::UI;
 
@@ -30,7 +36,8 @@ use constant ENABLEBM => 0;
 
 =pod
 
----++ run( $class, $method )
+---++ StaticMethod run( $class, $method )
+
 Entry point for execution of a UI function. The parameters are the
 class that contains the method, and the name of the method. This
 function handles redirection to Oops topics by catching OopsException.
@@ -190,7 +197,8 @@ sub run {
 
 =pod twiki
 
----+++ checkWebExists( $web, $topic )
+---++ StaticMethod checkWebExists( $web, $topic )
+
 Check if the web exists. If it doesn't, will throw an oops exception.
 
 =cut
@@ -210,7 +218,7 @@ sub checkWebExists {
 
 =pod twiki
 
----+++ topicExists( $session, $web, $topic, $op ) => boolean
+---++ StaticMethod topicExists( $session, $web, $topic, $op ) => boolean
 Check if the given topic exists, throwing an OopsException
 if it doesn't. $op is %PARAM1% in the "oopsnotopic" template.
 
@@ -227,7 +235,7 @@ sub checkTopicExists {
 
 =pod twiki
 
----+++ checkMirror( $session, $web, $topic )
+---++ StaticMethod checkMirror( $session, $web, $topic )
 Checks if this web is a mirror web, throwing an OopsException
 if it is.
 
@@ -250,7 +258,7 @@ sub checkMirror {
 
 =pod twiki
 
----+++ checkAccess( $web, $topic, $mode, $user )
+---++ StaticMethod checkAccess( $web, $topic, $mode, $user )
 Check if the given mode of access by the given user to the given
 web.topic is permissible, throwing a TWiki::UI::OopsException if not.
 
@@ -271,7 +279,7 @@ sub checkAccess {
 
 =pod
 
----++ sub readTemplateTopic (  $theTopicName  )
+---++ StaticMethod readTemplateTopic ( $session, $theTopicName  )
 
 Read a topic from the TWiki web, or if that fails from the current
 web.

@@ -96,6 +96,10 @@ else {
     chdir( '../..' ) or die $!;            # from tools/distro up to BRANCH (eg, trunk, DEVELOP)
 }
 
+###############################################################################
+# build source code docs
+execute( "cd tools && perl gendocs.pl nosmells" ) or die $!;
+
 ################################################################################
 #-[lib/, templates/, data/, pub/icn, pub/TWiki, bin/]-----------------------------------
 foreach my $dir qw( lib templates data bin pub logs )

@@ -17,7 +17,7 @@
 
 =begin twiki
 
----+ TWiki::Users::HtPasswdUser Package
+---+ package TWiki::Users::HtPasswdUser
 
 The HtPasswdUser module seperates out the User Authentication code that is htpasswd and htdigest
 specific. 
@@ -50,7 +50,6 @@ BEGIN {
     }
 }
 
-# ======================
 sub new {
     my( $class, $session ) = @_;
     ASSERT(ref($session) eq "TWiki") if DEBUG;
@@ -68,18 +67,12 @@ sub security { my $this = shift; return $this->{session}->{security}; }
 sub templates { my $this = shift; return $this->{session}->{templates}; }
 sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
-# =========================
-=pod
-
----+++ htpasswdGeneratePasswd( $user, $passwd , $useOldSalt ) ==> $passwordExists
-| Description: | (private) implementation method that generates an encrypted password |
-| Parameter: =$user= | userName |
-| Parameter: =$passwd= | unencypted password |
-| Parameter: =$useOldSalt= | if $useOldSalt == 1 then we are attempting to match $passwd an existing one 
-otherwise, we are just creating a new use encrypted passwd |
-| Return: =$value= | returns "" on failure, an encrypted password otherwise |
-
-=cut
+#| Description: | (private) implementation method that generates an encrypted password |
+#| Parameter: =$user= | userName |
+#| Parameter: =$passwd= | unencypted password |
+#| Parameter: =$useOldSalt= | if $useOldSalt == 1 then we are attempting to match $passwd an existing one 
+#otherwise, we are just creating a new use encrypted passwd |
+#| Return: =$value= | returns "" on failure, an encrypted password otherwise |
 sub htpasswdGeneratePasswd
 {
     my ( $this, $user, $passwd , $useOldSalt ) = @_;
@@ -125,15 +118,9 @@ sub htpasswdGeneratePasswd
     return $encodedPassword;
 }
 
-#========================= 
-=pod
-
----+++ htpasswdReadPasswd( $user ) ==> $encryptedPassword
-| Description: | gets the encrypted password from the htpasswd / htdigest file |
-| Parameter: =$user= | UserName |
-| Return: =$encryptedPassword= | "" if there is none, the encrypted password otherwise |
-
-=cut
+#| Description: | gets the encrypted password from the htpasswd / htdigest file |
+#| Parameter: =$user= | UserName |
+#| Return: =$encryptedPassword= | "" if there is none, the encrypted password otherwise |
 sub htpasswdReadPasswd
 {
     my ( $this, $user ) = @_;
@@ -149,15 +136,9 @@ sub htpasswdReadPasswd
     return "";
 }
  
-#========================= 
-=pod
-
----+++ UserPasswordExists( $user ) ==> $passwordExists
-| Description: | checks to see if there is a $user in the password system |
-| Parameter: =$user= | the username we are looking for  |
-| Return: =$passwordExists= | "1" if true, "" if not |
-
-=cut
+#| Description: | checks to see if there is a $user in the password system |
+#| Parameter: =$user= | the username we are looking for  |
+#| Return: =$passwordExists= | "1" if true, "" if not |
 sub UserPasswordExists
 {
     my ( $self, $user ) = @_;
@@ -173,17 +154,11 @@ sub UserPasswordExists
     return 0;
 }
  
-#========================= 
-=pod
-
----+++ UpdateUserPassword( $user, $oldUserPassword, $newUserPassword ) ==> $success
-| Description: | used to change the user's password |
-| Parameter: =$user= | the username we are replacing  |
-| Parameter: =$oldUserPassword= | unencrypted password |
-| Parameter: =$newUserPassword= | unencrypted password |
-| Return: =$success= | "1" if success |
-
-=cut
+#| Description: | used to change the user's password |
+#| Parameter: =$user= | the username we are replacing  |
+#| Parameter: =$oldUserPassword= | unencrypted password |
+#| Parameter: =$newUserPassword= | unencrypted password |
+#| Return: =$success= | "1" if success |
 # TODO: needs to fail if it doesw not succed due to file permissions
 sub UpdateUserPassword
 {
@@ -203,19 +178,13 @@ sub UpdateUserPassword
     return "1";
 }
 
-#===========================
-=pod
-
----+++ htpasswdUpdateUser( $self, $oldEncryptedUserPassword, $newEncryptedUserPassword ) ==> $success
-| Description: |  |
-| Parameter: =$oldEncryptedUserPassword= | formated as in the htpasswd file user:encryptedPasswd |
-| Parameter: =$newEncryptedUserPassword= | formated as in the htpasswd file user:encryptedPasswd |
-| Return: =$success= |  |
-| TODO: | __Needs to go away!__ |
-| TODO: | we be better off generating a new password that we email to the user, and then let them change it? |
-| Note: | used by the htpasswd specific installpasswd & script  |
-
-=cut
+#| Description: |  |
+#| Parameter: =$oldEncryptedUserPassword= | formated as in the htpasswd file user:encryptedPasswd |
+#| Parameter: =$newEncryptedUserPassword= | formated as in the htpasswd file user:encryptedPasswd |
+#| Return: =$success= |  |
+#| TODO: | __Needs to go away!__ |
+#| TODO: | we be better off generating a new password that we email to the user, and then let them change it? |
+#| Note: | used by the htpasswd specific installpasswd & script  |
 sub htpasswdUpdateUser
 {
     my ( $self, $oldEncryptedUserPassword, $newEncryptedUserPassword ) = @_;
@@ -231,17 +200,11 @@ sub htpasswdUpdateUser
     return "1";
 }
 
-#===========================
-=pod
-
----+++ AddUserPassword( $user, $newUserPassword ) ==> $success
-| Description: | creates a new user & password entry |
-| Parameter: =$user= | the username we are replacing  |
-| Parameter: =$newUserPassword= | unencrypted password |
-| Return: =$success= | "1" if success |
-| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
-
-=cut
+#| Description: | creates a new user & password entry |
+#| Parameter: =$user= | the username we are replacing  |
+#| Parameter: =$newUserPassword= | unencrypted password |
+#| Return: =$success= | "1" if success |
+#| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 sub AddUserPassword
 {
     my ( $self, $user, $newUserPassword ) = @_;
@@ -257,16 +220,10 @@ sub AddUserPassword
 	return "1";
 }
 
-#===========================
-=pod
-
----+++ RemoveUser( $user ) ==> $success
-| Description: | used to remove the user from the password system |
-| Parameter: =$user= | the username we are replacing  |
-| Return: =$success= | "1" if success |
-| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
-
-=cut
+#| Description: | used to remove the user from the password system |
+#| Parameter: =$user= | the username we are replacing  |
+#| Return: =$success= | "1" if success |
+#| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 sub RemoveUser
 {
     my ( $self, $user ) = @_;
@@ -275,17 +232,11 @@ sub RemoveUser
     return $self->htpasswdUpdateUser( $userEntry, "");
 }
 
-# =========================
-=pod
-
----+++ CheckUserPasswd( $user, $password ) ==> $success
-| Description: | used to check the user's password |
-| Parameter: =$user= | the username we are replacing  |
-| Parameter: =$password= | unencrypted password |
-| Return: =$success= | "1" if success |
-| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
-
-=cut
+#| Description: | used to check the user's password |
+#| Parameter: =$user= | the username we are replacing  |
+#| Parameter: =$password= | unencrypted password |
+#| Return: =$success= | "1" if success |
+#| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 sub CheckUserPasswd
 {
     my ( $self, $user, $password ) = @_;

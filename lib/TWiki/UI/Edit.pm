@@ -19,7 +19,7 @@
 # http://www.gnu.org/copyleft/gpl.html
 =begin twiki
 
----+ TWiki::UI::Edit
+---+ package TWiki::UI::Edit
 Edit command handler
 
 =cut
@@ -37,8 +37,13 @@ use TWiki::UI::OopsException;
 
 =pod
 
----++ edit( $session )
-Edit handler. Most parameters are in the CGI query:
+---++ StaticMethod edit( $session )
+
+Edit command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
+Most parameters are in the CGI query:
+
 | =cmd= | Undocumented save command, passed on to save script |
 | =onlywikiname= | if defined, requires a wiki name for the topic name if this is a new topic |
 | =onlynewtopic= | if defined, and the topic exists, then moans |

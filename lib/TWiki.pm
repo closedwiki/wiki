@@ -436,8 +436,11 @@ sub _writeReport {
 
 =pod
 
----++ writeLog (  $action, $webTopic, $extra, $user  )
-
+---++ ObjectMethod writeLog (  $action, $webTopic, $extra, $user  )
+   * =$action= - what happened, e.g. view, save, rename
+   * =$wbTopic= - what it happened to
+   * =$extra= - extra info, such as minor flag
+   * =$user= - user who did the saving (user object or string user name)
 Write the log for an event to the logfile
 
 =cut
@@ -462,7 +465,7 @@ sub writeLog {
 
 =pod
 
----++ writeWarning( $text )
+---++ ObjectMethod writeWarning( $text )
 
 Prints date, time, and contents $text to $TWiki::cfg{WarningFileName}, typically
 'warnings.txt'. Use for warnings and errors that may require admin
@@ -478,7 +481,7 @@ sub writeWarning {
 
 =pod
 
----++ writeDebug( $text )
+---++ ObjectMethod writeDebug( $text )
 
 Prints date, time, and contents of $text to $TWiki::cfg{DebugFileName}, typically
 'debug.txt'.  Use for debugging messages.
@@ -581,7 +584,7 @@ sub _convertUtf8URLtoSiteCharset {
 
 =pod
 
----++ writeCompletePage( $text )
+---++ ObjectMethod writeCompletePage( $text )
 
 Write a complete HTML page with basic header to the browser.
 $text is the HTML of the page body (&lt;html&gt; to &lt;/html&gt;)
@@ -604,14 +607,14 @@ sub writeCompletePage {
 
 =pod
 
----++ writePageHeader( $query, $pageType, $contentType, $contentLength )
+---++ ObjectMethod writePageHeader( $query, $pageType, $contentType, $contentLength )
 
 All parameters are optional.
 
-| $query | CGI query object | Session CGI query (there is no good reason to set this) |
-| $pageType | May be "edit", which will cause headers to be generated that force caching for 24 hours, to prevent Codev.BackFromPreviewLosesText bug, which caused data loss with IE5 and IE6. |
-| $contentType | page content type | text/html |
-| $contentLength | content-length | no content-length will be set if this is undefined, as required by HTTP1.1 |
+   * =$query= CGI query object | Session CGI query (there is no good reason to set this)
+   * =$pageType= - May be "edit", which will cause headers to be generated that force caching for 24 hours, to prevent Codev.BackFromPreviewLosesText bug, which caused data loss with IE5 and IE6.
+   * =$contentType= - page content type | text/html
+   * =$contentLength= - content-length | no content-length will be set if this is undefined, as required by HTTP1.1
 
 Implements the post-Dec2001 release plugin API, which requires the
 writeHeaderHandler in plugin to return a string of HTTP headers, CR/LF
@@ -682,7 +685,7 @@ sub writePageHeader {
 
 =pod
 
----++ redirect( $url, ... )
+---++ ObjectMethod redirect( $url, ... )
 
 Generate a CGI redirect to $url unless (1) $session->{cgiQuery} is undef or
 (2) $query->param('noredirect') is set to a true value. Thus a redirect is
@@ -716,7 +719,7 @@ sub redirect {
 
 =pod
 
----++ isValidWikiWord (  $name  ) -> boolean
+---++ StaticMethod isValidWikiWord (  $name  ) -> $boolean
 
 Check for a valid WikiWord or WikiName
 
@@ -729,7 +732,7 @@ sub isValidWikiWord {
 
 =pod
 
----++ isValidTopicName (  $name  ) -> boolean
+---++ StaticMethod isValidTopicName (  $name  ) -> $boolean
 
 Check for a valid topic name
 
@@ -743,7 +746,7 @@ sub isValidTopicName {
 
 =pod
 
----++ isValidAbbrev (  $name  ) -> boolean
+---++ StaticMethod isValidAbbrev (  $name  ) -> $boolean
 
 Check for a valid ABBREV (acronym)
 
@@ -756,7 +759,7 @@ sub isValidAbbrev {
 
 =pod
 
----++ isValidWebName (  $name, $system  ) -> boolean
+---++ StaticMethod isValidWebName (  $name, $system  ) -> $boolean
 
 STATIC Check for a valid web name. If $system is true, then
 system web names are considered valid (names starting with _)
@@ -773,7 +776,7 @@ sub isValidWebName {
 
 =pod
 
----++ readOnlyMirrorWeb (  $theWeb  )
+---++ ObjectMethod readOnlyMirrorWeb (  $theWeb  ) -> ( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote )
 
 If this is a mirrored web, return information about the mirror. The info
 is returned in a quadruple:
@@ -811,7 +814,7 @@ sub readOnlyMirrorWeb {
 
 =pod
 
----++ getTWikiLibDir()
+---++ StaticMethod getTWikiLibDir() -> $path
 
 STATIC method.
 
@@ -863,7 +866,7 @@ sub getTWikiLibDir {
 
 =pod
 
----++ getSkin ()
+---++ ObjectMethod getSkin () -> $string
 
 Get the name of the currently requested skin
 
@@ -882,7 +885,7 @@ sub getSkin {
 
 =pod
 
----++ getScriptURL( $web, $topic, $script ) -> $absoluteScriptURL
+---++ ObjectMethod getScriptURL( $web, $topic, $script ) -> $absoluteScriptURL
 
 Returns the absolute URL to a TWiki script, providing the web and topic as
 "path info" parameters.  The result looks something like this:
@@ -905,7 +908,7 @@ sub getScriptUrl {
 
 =pod
 
----++ getOopsUrl( $web, $topic, $template, @scriptParams ) -> $absoluteOopsURL
+---++ ObjectMethod getOopsUrl( $web, $topic, $template, @scriptParams ) -> $absoluteOopsURL
 
 Composes a URL for an "oops" error page.  The last parameters depend on the
 specific oops template in use, and are passed in the URL as '&param1=' etc.
@@ -938,9 +941,9 @@ sub getOopsUrl {
 
 =pod
 
----++ normalizeWebTopicName (  $theWeb, $theTopic  )
+---++ ObjectMethod normalizeWebTopicName (  $theWeb, $theTopic  ) -> ( $theWeb, $theTopic )
 
-Normalize a Web.TopicName
+Normalize a Web<nop>.<nop>TopicName
 <pre>
 Input:                      Return:
   ( "Web",  "Topic" )         ( "Web",  "Topic" )
@@ -976,7 +979,7 @@ sub normalizeWebTopicName {
 
 =pod
 
----++ new( $pathInfo, $remoteUser, $topic, $url, $query )
+---++ ClassMethod new( $pathInfo, $remoteUser, $topic, $url, $query )
 Constructs a new TWiki object.
 
 Initializes the Store, User, Access, and Prefs modules.
@@ -985,12 +988,12 @@ Also parses $theTopic to determine whether it's a URI, a "Web.Topic"
 pair, a "Web." WebHome shorthand, or just a topic name.  Note that
 if $pathInfo is set, this overrides $theTopic.
 
-| =$pathInfo= | .pathinfo from query |
-| =remoteUser= | the logged-in user |
-| =topic= | topic from "topic" parameter to url (overrides pathinfo if present ) |
-| =url= | the full url used |
-| =query= | the query |
-| =scripted= | true if this is called from a script rather than a browser query |
+   * =$pathInfo= .pathinfo from query
+   * =remoteUser= the logged-in user
+   * =topic= topic from "topic" parameter to url (overrides pathinfo if present )
+   * =url= the full url used
+   * =query= the query
+   * =scripted= true if this is called from a script rather than a browser query
 
 =cut
 
@@ -1173,7 +1176,7 @@ sub new {
 
 =pod
 
----++ extractParameters( $str ) -> $hashref
+---++ StaticMethod extractParameters( $str ) -> \%hash
 
 Extracts parameters from a variable string and returns a hash with all parameters.
 The nameless parameter key is _DEFAULT.
@@ -1225,13 +1228,13 @@ sub extractParameters {
 
 =pod
 
----++ extractNameValuePair (  $str, $name  )
+---++ StaticMethod extractNameValuePair (  $str, $name  ) -> $string
 
 Extract a named or unnamed value from a variable parameter string
 Function extractParameters is more efficient for extracting several parameters
-| =$attr= | Attribute string |
-| =$name= | Name, optional |
-| Return: =$value=   | Extracted value |
+   * | =$attr= | Attribute string |
+   * | =$name= | Name, optional |
+Returns the extracted value
 
 =cut
 
@@ -1333,7 +1336,7 @@ sub _cleanupIncludedHTML {
 
 =pod
 
----++ applyPatternToIncludedText (  $theText, $thePattern )
+---++ StaticMethod applyPatternToIncludedText (  $text, $pattern ) -> $text
 
 Apply a pattern on included text to extract a subset
 
@@ -1428,10 +1431,10 @@ sub _includeUrl {
 
 =pod
 
----++ formatTime ($epochSeconds, $formatString, $outputTimeZone) ==> $value
-| $epochSeconds | epochSecs GMT |
-| $formatString | twiki time date format |
-| $outputTimeZone | timezone to display. (not sure this will work)(gmtime or servertime) |
+---++ StaticMethod formatTime ($epochSeconds, $formatString, $outputTimeZone) -> $value
+   * =$epochSeconds= epochSecs GMT
+   * =$formatString= twiki time date format
+   * =$outputTimeZone= timezone to display. (not sure this will work)(gmtime or servertime)
 
 =cut
 sub formatTime  {
@@ -1492,7 +1495,6 @@ sub formatTime  {
 # a plugin, and since it has an interface exactly like a plugin, would be much
 # happier as a plugin. Having it here requires more code, and offers no perceptible benefit.
 #
-# Parameters:
 #    * $text  : ref to the text of the current topic
 #    * $topic : the topic we are in
 #    * $web   : the web we are in
@@ -1637,17 +1639,17 @@ sub _inlineError {
 
 =pod
 
----++ expandVariablesOnTopicCreation ( $theText, $user )
+---++ ObjectMethod expandVariablesOnTopicCreation ( $text, $user ) -> $text
 Expand limited set of variables during topic creation. These are variables
 expected in templates that must be statically expanded in new content.
 
 The expanded variables are:
-| =%DATE%= | Signature-format date |
-| =%USERNAME%= | Base login name |
-| =%WIKINAME%= | Wiki name |
-| =%WIKIUSERNAME%= | Wiki name with prepended web |
-| =%URLPARAM%= | Parameters to the current CGI query |
-| =%NOP%= | No-op |
+| =%<nop>DATE%= | Signature-format date |
+| =%<nop>USERNAME%= | Base login name |
+| =%<nop>WIKINAME%= | Wiki name |
+| =%<nop>WIKIUSERNAME%= | Wiki name with prepended web |
+| =%<nop>URLPARAM%= | Parameters to the current CGI query |
+| =%<nop>NOP%= | No-op |
 
 =cut
 
@@ -1724,8 +1726,8 @@ sub _webOrTopicList {
 
 =pod
 
----++ entityEncode (text )
-| =$text= | Text to encode |
+---++ StaticMethod entityEncode (text ) -> $html
+
 Escape certain characters to HTML entities
 
 =cut
@@ -1748,7 +1750,8 @@ sub _hexchar {
 
 =pod
 
----++ urlEncode( $string ) -> $encodedString
+---++ StaticMethod urlEncode( $string ) -> encoded string
+
 Encode by converting characters that are illegal in URLs to
 their %NN equivalents.
 
@@ -1774,7 +1777,8 @@ sub urlEncode {
 
 =pod
 
----++ nativeUrlEncode ( $theStr, $doExtract )
+---++ StaticMethod nativeUrlEncode ( $theStr, $doExtract ) -> encoded string
+
 Perform URL encoding into native charset ($siteCharset) - for use when
 viewing attachments via browsers that generate UTF-8 URLs, on sites running
 with non-UTF-8 (Native) character sets.  Aim is to prevent UTF-8 URL
@@ -1800,7 +1804,7 @@ sub nativeUrlEncode {
 
 =pod
 
----++ encodeSpecialChars (  $text  )
+---++ StaticMethod encodeSpecialChars (  $text  ) -> encoded string
 
 Escape out the chars &, ", >, <, \r and \n with replaceable tokens.
 This is used to protect hidden fields from the browser.
@@ -1824,7 +1828,7 @@ sub encodeSpecialChars {
 
 =pod
 
----++ decodeSpecialChars (  $text  )
+---++ StaticMethod decodeSpecialChars (  $text  ) -> decoded $text
 
 Reverse the encoding of encodeSpecialChars.
 
@@ -1845,7 +1849,7 @@ sub decodeSpecialChars {
 
 =pod
 
----++ searchableTopic (  $topic  )
+---++ StaticMethod searchableTopic (  $topic  ) -> spaced $topic
 
 Space out the topic name for a search, by inserting " *" at
 the start of each component word.
@@ -2024,11 +2028,11 @@ sub _expandTag {
 
 =pod
 
----++ registerTagHandler( $fnref )
+---++ StaticMethod registerTagHandler( $fnref )
 
 STATIC Add a tag handler to the function tag handlers.
-| $tag | name of the tag e.g. MYTAG |
-| $fnref | Function to execute. Will be passed ($session, \%params, $web, $topic )
+   * =$tag= name of the tag e.g. MYTAG
+   * =$fnref= Function to execute. Will be passed ($session, \%params, $web, $topic )
 
 =cut
 
@@ -2039,7 +2043,7 @@ sub registerTagHandler {
 
 =pod
 
----++ handleCommonTags( $text, $topic, $web ) => processed $text
+---++ ObjectMethod handleCommonTags( $text, $topic, $web ) -> $text
 Processes %<nop>VARIABLE%, and %<nop>TOC% syntax; also includes
 "commonTagsHandler" plugin hook.
 
@@ -2101,7 +2105,8 @@ sub handleCommonTags {
 
 =pod
 
----++ initialize( $pathInfo, $remoteUser, $topic, $url, $query )
+---++ StaticMethod initialize( $pathInfo, $remoteUser, $topic, $url, $query ) -> ($topicName, $webName, $scriptUrlPath, $userName, $dataDir)
+
 Return value: ( $topicName, $webName, $TWiki::cfg{ScriptUrlPath}, $userName, $TWiki::cfg{DataDir} )
 
 Static method to construct a new singleton session instance.

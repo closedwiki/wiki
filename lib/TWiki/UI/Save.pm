@@ -20,7 +20,7 @@
 # http://www.gnu.org/copyleft/gpl.html
 =begin twiki
 
----+ TWiki::UI::Save
+---+ package TWiki::UI::Save
 
 UI delegate for save function
 
@@ -171,8 +171,8 @@ sub _save {
     if ( $originalrev ) {
         my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
         # temporary to find problem
-        print STDERR "Merge ",$user->stringify(),
-          $author->stringify(), $originalrev, $rev\n");
+        print STDERR "Merge ", $user->stringify(),
+          $author->stringify(), " $originalrev, $rev\n";
         if ( $rev ne $originalrev ) {
             $newText = TWiki::Merge::merge( $currText, $newText, "\\r?\\n" );
             $newMeta->merge( $currMeta );
@@ -192,22 +192,30 @@ sub _save {
 
 =pod
 
----++ save( )
-Command handler for save command. Some parameters are passed in CGI:
+---++ StaticMethod save($session)
+
+Command handler for =save= command.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
+
+Some parameters are passed in CGI:
+
 | =cmd= | DEPRECATED optionally delRev or repRev, which trigger those actions. |
 | =dontnotify= | if defined, suppress change notification |
 | =submitChangeForm= | |
 | =topicparent= | |
 | =formtemplate= | if defined, use the named template for the form |
 | =action= | savemulti overrides, everything else is passed on the normal =save= |
+
 action values are:
+
 | =save= | save, return to view, dontnotify is OFF |
 | =quietsave= | save, return to view, dontnotify is ON |
 | =checkpoint= | save and continue editing, dontnotify is ON |
 | =cancel= | exit without save, return to view (does _not_ undo Checkpoint saves) |
 | =preview= | preview edit text; same as before |
 
-=cmd= has been deprecated in favour of =action=. It will be deleted at
+<tt>cmd</tt> has been deprecated in favour of =action=. It will be deleted at
 some point.
 
 =cut

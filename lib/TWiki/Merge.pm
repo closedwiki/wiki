@@ -16,11 +16,19 @@
 use strict;
 use Algorithm::Diff;
 
+=pod
+
+---+ package TWiki::Merge
+
+Support for merging strings
+
+=cut
+
 package TWiki::Merge;
 
 =pod
 
----++ sub merge( $a, $b, $sep )
+---++ StaticMethod merge( $a, $b, $sep )
 
 Perform a merge of two versions of the same text, using
 HTML tags to mark conflicts.

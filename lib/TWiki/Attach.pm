@@ -19,7 +19,7 @@
 
 ---+ package TWiki::Attach
 
-A singleton object for dealing with attachments to topics.
+A singleton object of this class is used to deal with attachments to topics.
 
 =cut
 
@@ -35,8 +35,8 @@ use TWiki::Meta;
 
 =pod
 
----++ new( $session )
-Constructor for singleton obeject.
+---++ ClassMethod new( $session )
+Constructor
 
 =cut
 
@@ -58,15 +58,15 @@ sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 =pod
 
----++ sub renderMetaData (  $web, $topic, $meta, $args, $isTopRev  )
+---++ ObjectMethod renderMetaData (  $web, $topic, $meta, $args, $isTopRev  ) -> $text
 
 Generate a table of attachments suitable for the bottom of a topic
 view, using templates for the header, footer and each row.
-| =$web= | the web |
-| =$topic= | the topic |
-| =$meta= | meta-data hash for the topic |
-| =$attrs= | hash of attachment arguments |
-| $isTopTopicRev | 1 if this topic is being rendered at the most recent revision |
+   * =$web= the web
+   * =$topic= the topic
+   * =$meta= meta-data hash for the topic
+   * =$args= hash of attachment arguments
+   * =$isTopRev= if this topic is being rendered at the most recent revision
 
 =cut
 
@@ -117,12 +117,12 @@ sub _getTemplate {
 
 =pod
 
----++ sub formatVersions ( $theWeb, $theTopic, $attrs )
+---++ ObjectMethod formatVersions ( $web, $topic, $attrs ) -> $text
 
 Generate a version history table for a single attachment
-| =$web= | the web |
-| =$topic= | the topic |
-| =$attrs= | Hash of meta-data attributes |
+   * =$web= - the web
+   * =$topic= - the topic
+   * =$attrs= - Hash of meta-data attributes
 
 =cut
 
@@ -162,19 +162,12 @@ sub formatVersions {
     return "$header$rows$footer";
 }
 
-=pod
-
----++ sub _formatRow ( $web, $topic, $info, $topRev, $attrs, $tmpl )
-
-Format a single row in an attachment table by expanding a template.
-| =$web= | the web |
-| =$topic= | the topic |
-| =$info= | hash containing fields name, user (user (not wikiname) who uploaded this revision), date (date of _this revision_ of the attachment), command and version  (the required revision; required to be a full (major.minor) revision number) |
-| =$topRev= | boolean indicating if this revision is the most recent revision |
-| =$tmpl= | The template of a row |
-
-=cut
-
+#Format a single row in an attachment table by expanding a template.
+#| =$web= | the web |
+#| =$topic= | the topic |
+#| =$info= | hash containing fields name, user (user (not wikiname) who uploaded this revision), date (date of _this revision_ of the attachment), command and version  (the required revision; required to be a full (major.minor) revision number) |
+#| =$topRev= | boolean indicating if this revision is the most recent revision |
+#| =$tmpl= | The template of a row |
 sub _formatRow {
     my ( $this, $web, $topic, $info, $topRev, $tmpl ) = @_;
 
@@ -246,12 +239,14 @@ sub _expandAttrs {
 
 =pod
 
----++ sub getAttachmentLink( $user, $web, $topic, $name, $meta )
-| =$user= | User doing the reading |
-| =$web= | Name of the web |
-| =$topic= | Name of the topic |
-| =$name= | Name of the attachment |
-| =$meta= | Meta object that contains the meta info |
+---++ ObjectMethod getAttachmentLink( $user, $web, $topic, $name, $meta ) -> $html
+
+   * =$user= - User doing the reading
+   * =$web= - Name of the web
+   * =$topic= - Name of the topic
+   * =$name= - Name of the attachment
+   * =$meta= - Meta object that contains the meta info
+
 Build a link to the attachment, suitable for insertion in the topic.
 
 =cut
@@ -516,15 +511,8 @@ sub _pngsize {
     return (0,0);
 }
 
-=pod
-
----++ sub _getOldAttachAttr (  $atext  )
-
-Get file attachment attributes for old html
-format.
-
-=cut
-
+#Get file attachment attributes for old html
+#format.
 sub _getOldAttachAttr
 {
     my( $this, $atext ) = @_;
@@ -591,7 +579,7 @@ sub _keyValue2list
 # =========================
 =pod
 
----++ sub migrateToFileAttachmentMacro (  $meta, $text  )
+---++ ObjectMethod migrateToFileAttachmentMacro (  $meta, $text  ) -> $text
 
 Migrate old HTML format
 
@@ -649,7 +637,7 @@ sub migrateToFileAttachmentMacro {
 # =========================
 =pod
 
----++ sub upgradeFrom1v0beta (  $meta  )
+---++ ObjectMethod upgradeFrom1v0beta (  $meta  ) -> $text
 
 CODE_SMELL: Is this really necessary? upgradeFrom1v0beta?
 

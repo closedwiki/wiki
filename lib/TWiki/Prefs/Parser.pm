@@ -17,7 +17,7 @@ use strict;
 
 =pod
 
----++ Prefs::Parser Object
+---+ UNPUBLISHED package TWiki::Prefs::Parser
 
 This Prefs-internal class is used to parse * Set statements from arbitrary
 text, and extract settings from meta objects.  It is used by TopicPrefs to
@@ -36,9 +36,9 @@ my $formPrefPrefix = "FORM_";
 
 =pod
 
----+++ sub new()
+---++ ClassMethod new() -> topic parser object
 
-Returns a new TopicParser object.
+Construct a new parser object.
 
 =cut
 
@@ -49,7 +49,7 @@ sub new {
 
 =pod
 
----+++ sub parseText( $text, $prefs )
+---++ ObjectMethod parseText( $text, $prefs )
 
 Parse settings from text and add them to the preferences in $prefs
 
@@ -86,7 +86,7 @@ sub parseText {
 
 =pod
 
----+++ sub parseMeta( $metaObject, $prefs )
+---++ ObjectMethod parseMeta( $metaObject, $prefs )
 
 Traverses through all FIELD attributes of the meta object, creating one setting
 named with $formPrefPrefix . $fieldTitle for each.  If the

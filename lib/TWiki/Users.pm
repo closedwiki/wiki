@@ -15,9 +15,9 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 
-=begin twiki
+=pod
 
----+ TWiki::Users Package
+---+ package TWiki::Users
 Singleton object that handles mapping of users to wikinames and
 vice versa, and user authentication checking.
 
@@ -40,7 +40,7 @@ BEGIN {
 
 =pod
 
----++ new ()
+---++ ClassMethod new ($session, $impl)
 Construct the user management object
 
 =cut
@@ -124,7 +124,7 @@ sub expandUserList {
 
 =pod
 
----+ findUser( $name [, $wikiname] [, $nocreate ] )
+---++ ObjectMethod findUser( $name [, $wikiname] [, $nocreate ] ) -> $userObject
 
 Find the user object corresponding to a name, either a
 login name or a wiki name. If now user object is found,
@@ -189,7 +189,7 @@ sub _getPasswordHandler {
 
 =pod
 
----++ addUserToTWikiUsersTopic( $user ) ==> $topicName
+---++ ObjectMethod addUserToTWikiUsersTopic( $user ) -> $topicName
 
 Add a user to the TWikiUsers topic. This is a topic that
 maps from usernames to wikinames. It is maintained by
@@ -299,7 +299,7 @@ sub _cacheTWikiUsersTopic {
 
 =pod
 
----++ initializeRemoteUser( $remoteUser )
+---++ ObjectMethod initializeRemoteUser( $remoteUser ) -> $loginName
 
 Return value: $remoteUser
 

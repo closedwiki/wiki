@@ -53,7 +53,7 @@ $formatVersion = "1.0";
 
 =pod
 
----++ sub new ()
+---++ ClassMethod new($session, $web, $topic)
 
 Construct a new, empty Meta collection.
 
@@ -82,13 +82,7 @@ sub users { my $this = shift; return $this->{_session}->{users}; }
 
 =pod
 
-# ===========================
-# Replace data for this type.  If type is keyed then only the entry where
-# key matches relevant field is replaced
-# Order that args sets are put in is maintained
-=pod
-
----++ sub put (  $self, $type, %args  )
+---++ ObjectMethod put($type, %args)
 
 Put a hash of key=value pairs into the given type set in this meta.
 
@@ -146,7 +140,7 @@ sub _key {
 # ===========================
 =pod
 
----++ sub findOne (  $self, $type, $key  )
+---++ ObjectMethod findOne( $type, $key  ) -> $string
 
 Find the value of a meta-datum in the map. If the type is FIELD or
 FILEATTACHMENT, the $key parameter is required to say _which_
@@ -184,7 +178,7 @@ sub findOne {
 
 =pod
 
----++ sub find (  $self, $type  )
+---++ ObjectMethod find (  $type  ) -> @values
 
 Get all meta data for a specific type
 Returns the array stored for the type. This will be zero length
@@ -208,7 +202,7 @@ sub find {
 
 =pod
 
----++ sub remove ( $self, $type, $key )
+---++ ObjectMethod remove ( $type, $key )
 
 With no type, will remove all the contents of the object.
 
@@ -245,7 +239,7 @@ sub remove {
 
 =pod
 
----++ sub copyFrom (  $self, $otherMeta, $type  )
+---++ ObjectMethod copyFrom ( $otherMeta, $type  )
 
 Copy all entries of a type from another meta data set. This
 will destroy the old values for that type, unless the
@@ -266,7 +260,7 @@ sub copyFrom {
 
 =pod
 
----++ sub count (  $self, $type  )
+---++ ObjectMethod count (  $type  ) -> $integer
 
 Return the number of entries of the given type that are in this meta set
 
@@ -284,7 +278,7 @@ sub count {
 
 =pod
 
----++ sub addTOPICINFO (  $web, $topic, $rev, $meta, $options )
+---++ ObjectMethod addTOPICINFO (  $web, $topic, $rev, $meta, $options )
 
 Add TOPICINFO type data to the object, as specified by the parameters.
 
@@ -317,7 +311,7 @@ sub addTOPICINFO {
 
 =pod
 
----++ sub getRevisionInfo ( )
+---++ ObjectMethod getRevisionInfo ( ) -> ( $date, $author, $rev, $comment )
 
 Try and get revision info from the meta information, or, if it is not
 present, kick down to the Store module for the same information.
@@ -352,7 +346,7 @@ sub getRevisionInfo {
 
 =pod
 
----+++ sub updateSets( \$text )
+---++ ObjectMethod updateSets( \$text )
 
 If there are any settings "Set SETTING = value" in =$text= for a setting
 that is set in form metadata in =$meta=, these are changed so that the
@@ -382,7 +376,7 @@ sub updateSets {
 
 =pod
 
----++ sub merge( $otherMeta )
+---++ ObjectMethod merge( $otherMeta )
 
 Merge the data in the other meta block.
    * File attachments that only appear in one set are preserved.

@@ -16,7 +16,7 @@
 
 =begin twiki
 
----+ TWiki::Render package
+---+ package TWiki::Render
 
 This module provides most of the actual HTML rendering code in TWiki.
 
@@ -38,7 +38,7 @@ BEGIN {
 
 =pod
 
----++ sub new ()
+---++ ClassMethod new ($session)
 
 Creates a new renderer with initial state from preference values
 (NEWTOPICBGCOLOR, NEWTOPICFONTCOLOR NEWTOPICLINKSYMBOL
@@ -315,9 +315,10 @@ sub _makeAnchorHeading {
 
 =pod
 
----++ sub makeAnchorName($anchorName, $compatibilityMode)
-| =$anchorName= | |
-| =$compatibilityMode= | |
+---++ ObjectMethod makeAnchorName($anchorName, $compatibilityMode) -> $anchorName
+
+   * =$anchorName= -
+   * =$compatibilityMode= -
 
 Build a valid HTML anchor name
 
@@ -392,16 +393,16 @@ sub _linkToolTipInfo {
 
 =pod
 
----++ sub internalLink ( $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink, $doKeepWeb )
+---++ ObjectMethod internalLink ( $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink, $doKeepWeb ) -> $html
 
 Generate a link.
 
-| =$theWeb= | the web containing the topic |
-| =$theTopic= | the topic to be lunk |
-| =$theLinkText= | text to use for the link |
-| =$theAnchor= | the link anchor, if any |
-| =$doLink= | boolean: false means suppress link for non-existing pages |
-| =$doKeepWeb= | boolean: true to keep web prefix (for non existing Web.TOPIC) |
+   * =$theWeb= - the web containing the topic
+   * =$theTopic= - the topic to be lunk
+   * =$theLinkText= - text to use for the link
+   * =$theAnchor= - the link anchor, if any
+   * =$doLink= - boolean: false means suppress link for non-existing pages
+   * =$doKeepWeb= - boolean: true to keep web prefix (for non existing Web.TOPIC)
 
 =cut
 
@@ -577,7 +578,7 @@ sub _mailtoLinkSimple {
 
 =pod
 
----++ sub filenameToIcon (  $fileName  )
+---++ ObjectMethod filenameToIcon (  $fileName  ) -> $html
 
 Produce an image tailored to the type of the file, guessed from
 its extension.
@@ -607,7 +608,7 @@ sub filenameToIcon {
 
 =pod
 
----++ sub renderFormField ( %params, $topic, $web )
+---++ ObjectMethod renderFormField ( %params, $topic, $web ) -> $html
 
 Returns the fully rendered expansion of a %FORMFIELD{}% tag.
 
@@ -687,7 +688,7 @@ sub renderFormField {
 
 =pod
 
----++ sub getRenderedVersion (  $text, $theWeb, $meta  )
+---++ ObjectMethod getRenderedVersion (  $text, $theWeb, $meta  ) -> $html
 
 The main rendering function.
 
@@ -1019,8 +1020,9 @@ sub _handleMailto {
 
 =pod
 
----++ sub verbatimCallBack
-STATIC Callback for use with putBackBlocks that replaces &lt; and >
+---++ StaticMethod verbatimCallBack
+
+Callback for use with putBackBlocks that replaces &lt; and >
 by their HTML entities &amp;lt; and &amp;gt;
 
 =cut
@@ -1040,14 +1042,14 @@ sub verbatimCallBack {
 
 =pod
 
----++ sub renderMetaTags (  $theWeb, $theTopic, $text, $meta, $isTopRev  )
+---++ ObjectMethod renderMetaTags (  $theWeb, $theTopic, $text, $meta, $isTopRev, $noexpand ) -> $html
 
-| $theWeb | Name of the web |
-| $theTopic | Name of the topic |
-| $text | Text being expanded |
-| $meta | Meta-data object |
-| $isTopRev | 1 if this topic is being rendered at the most recent revision |
-| $noexpand | 1 if META tags are simply to be removed |
+   * =$theWeb - name of the web
+   * =$theTopic - name of the topic
+   * =$text - text being expanded
+   * =$meta - meta-data object
+   * =$isTopRev |- if this topic is being rendered at the most recent revision
+   * =$noexpand= - if META tags are simply to be removed
 Used to render %META{}% tags in templates for non-active views
 (view, preview etc)
 
@@ -1077,7 +1079,7 @@ sub renderMetaTags {
 
 =pod
 
----++ sub TML2PlainText( $text, $web, $topic, $opts )
+---++ ObjectMethod TML2PlainText( $text, $web, $topic, $opts ) -> $plainText
 
 Clean up TWiki text for display as plain text without pushing it
 through the full rendering pipeline. Intended for generation of
@@ -1139,7 +1141,7 @@ sub TML2PlainText {
 
 =pod
 
----++ sub protectPlainText
+---++ ObjectMethod protectPlainText($text) -> $tml
 
 Protect plain text from expansions that would normally be done
 duing rendering, such as wikiwords. Topic summaries, for example,
@@ -1170,7 +1172,7 @@ sub protectPlainText {
 
 =pod
 
----++ sub makeTopicSummary (  $theText, $theTopic, $theWeb, $theFlags )
+---++ ObjectMethod makeTopicSummary (  $theText, $theTopic, $theWeb, $theFlags ) -> $tml
 
 Makes a plain text summary of the given topic by simply trimming a bit
 off the top. Truncates to 162 chars or, if a number is specified in $theFlags,
@@ -1208,7 +1210,7 @@ sub makeTopicSummary {
 
 =pod
 
----++ setPageMode( $mode )
+---++ ObjectMethod setPageMode( $mode )
 
 Set page rendering mode:
    * rss - encode 8-bit characters as XML entities
@@ -1223,10 +1225,11 @@ sub setRenderMode {
 
 =pod
 
----++ takeOutBlocks( $text, $tag, \@buffer )
-| =$text= | Text to process |
-| =$tag= | XHTML-style tag. |
-| =$buffer= | Reference to an array to contain the remove blocks |
+---++ ObjectMethod takeOutBlocks( $text, $tag, \@buffer ) -> $text
+
+   * =$text= - Text to process
+   * =$tag= - XHTML-style tag.
+   * =\@buffer= - Reference to an array to contain the remove blocks
 
 Return value: $text with blocks removed
 
@@ -1287,13 +1290,14 @@ sub takeOutBlocks {
 
 =pod
 
----++ putBackBlocks( $text, \@buffer, $tag, $newtag, $callBack )
+---++ ObjectMethod putBackBlocks( $text, \@buffer, $tag, $newtag, $callBack ) -> $text
+
 Return value: $text with blocks added back
-| =$text= | text to process |
-| =$buffer= | Buffer of removed blocks generated by takeOutBlocks |
-| =$tag= | Tag name processed by takeOutBlocks |
-| =$newtag= | Tag name to use in output, in place of $tag (optional) |
-| =$callback= | Reference to function to call on each block being inserted (optional) |
+   * =$text= - text to process
+   * =$buffer= - Buffer of removed blocks generated by takeOutBlocks
+   * =$tag= - Tag name processed by takeOutBlocks
+   * =$newtag= - Tag name to use in output, in place of $tag (optional)
+   * =$callback= - Reference to function to call on each block being inserted (optional)
 
 Reverses the actions of takeOutBlocks.
 

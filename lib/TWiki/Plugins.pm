@@ -17,10 +17,14 @@
 
 =pod
 
----+ TWiki::Plugins Module
+---+ package TWiki::Plugins
 
 This module defines the singleton object that handles Plugins
 loading, initialization and execution.
+
+=cut
+
+=pod
 
 Note that as of version 1.026 of this module, TWiki internal
 methods are _no longer available_ to plugins. Any calls to
@@ -73,6 +77,16 @@ use vars qw ( $VERSION $SESSION $inited );
 =pod
 
 ---++ PUBLIC constant $VERSION
+This is the version number of the plugins package. Use it for checking
+if you have a recent enough version.
+
+---++ PUBLIC $SESSION
+This is a reference to the TWiki session object. It can be used in
+plugins to get at the methods of the TWiki kernel.
+
+You are _highly_ recommended to only use the methods in the
+[[TWikiFuncDotPm][Func]] interface, unless you have no other choice,
+as kernel methods may change between TWiki releases.
 
 =cut
 
@@ -94,7 +108,8 @@ my %onlyOnceHandlers =
 
 =pod
 
----++ sub new( $session )
+---++ ClassMethod new( $session )
+
 Construct new singleton plugins engine object. The object is a contained for
 a list of plugins and a set of handlers registered by each plugin. The plugins
 and the handlers are carefully ordered.
@@ -126,7 +141,8 @@ sub prefs { my $this = shift; return $this->{session}->{prefs}; }
 
 =pod
 
----+ load()
+---++ ObjectMethod load($disabled) -> $loginName
+
 Find all active plugins, and invoke the early initialisation.
 Has to be done _after_ prefs are read.
 
@@ -232,7 +248,7 @@ sub _discoverPluginPerlModules {
 
 =pod
 
----++ sub enable()
+---++ ObjectMethod enable()
 
 Initialisation that is done after the user is known.
 
@@ -253,7 +269,7 @@ sub enable {
 
 =pod
 
----++ sub getPluginVersion()
+---++ ObjectMethod getPluginVersion() -> $number
 
 Returns the $TWiki::Plugins::VERSION number if no parameter is specified,
 else returns the version number of a named Plugin. If the Plugin cannot
@@ -354,7 +370,7 @@ sub _handleACTIVATEDPLUGINS {
 
 =pod
 
----++ sub registrationHandler ()
+---++ ObjectMethod registrationHandler ()
 
 Called by the register script
 
@@ -369,7 +385,7 @@ sub registrationHandler {
 
 =pod
 
----++ sub beforeCommonTagsHandler ()
+---++ ObjectMethod beforeCommonTagsHandler ()
 
 Called by sub handleCommonTags at the beginning (for cache Plugins only)
 
@@ -383,7 +399,7 @@ sub beforeCommonTagsHandler {
 
 =pod
 
----++ sub commonTagsHandler ()
+---++ ObjectMethod commonTagsHandler ()
 
 Called by sub handleCommonTags, after %INCLUDE:"..."%
 
@@ -397,7 +413,7 @@ sub commonTagsHandler {
 
 =pod
 
----++ sub afterCommonTagsHandler ()
+---++ ObjectMethod afterCommonTagsHandler ()
 
 Called by sub handleCommonTags at the end (for cache Plugins only)
 
@@ -411,7 +427,7 @@ sub afterCommonTagsHandler {
 
 =pod
 
----++ sub startRenderingHandler ()
+---++ ObjectMethod startRenderingHandler ()
 
 Called by getRenderedVersion just before the line loop
 
@@ -425,9 +441,9 @@ sub startRenderingHandler {
 
 =pod
 
----++ sub outsidePREHandler ()
+---++ ObjectMethod outsidePREHandler ()
 
-Called by sub getRenderedVersion, in loop outside of <PRE> tag
+Called by sub getRenderedVersion, in loop outside of &lt;PRE&gt; tag
 
 =cut
 
@@ -439,9 +455,9 @@ sub outsidePREHandler {
 
 =pod
 
----++ sub insidePREHandler ()
+---++ ObjectMethod insidePREHandler ()
 
-Called by sub getRenderedVersion, in loop inside of <PRE> tag
+Called by sub getRenderedVersion, in loop inside of &lt;PRE&gt; tag
 
 =cut
 
@@ -453,7 +469,7 @@ sub insidePREHandler {
 
 =pod
 
----++ sub endRenderingHandler ()
+---++ ObjectMethod endRenderingHandler ()
 
 Called by getRenderedVersion just after the line loop
 
@@ -467,7 +483,7 @@ sub endRenderingHandler {
 
 =pod
 
----++ sub beforeEditHandler ()
+---++ ObjectMethod beforeEditHandler ()
 
 Called by edit
 
@@ -481,7 +497,7 @@ sub beforeEditHandler {
 
 =pod
 
----++ sub afterEditHandler ()
+---++ ObjectMethod afterEditHandler ()
 
 Called by edit
 
@@ -495,7 +511,7 @@ sub afterEditHandler {
 
 =pod
 
----++ sub beforeSaveHandler ()
+---++ ObjectMethod beforeSaveHandler ()
 
 Called just before the save action
 
@@ -509,7 +525,7 @@ sub beforeSaveHandler {
 
 =pod
 
----++ sub afterSaveHandler ()
+---++ ObjectMethod afterSaveHandler ()
 
 Called just after the save action
 
@@ -523,13 +539,12 @@ sub afterSaveHandler {
 
 =pod
 
----++ sub beforeAttachmentSaveHandler ( $attrHashRef, $topic, $web ) 
+---++ ObjectMethod beforeAttachmentSaveHandler ( $attrHashRef, $topic, $web ) 
 
-| Description: | This code provides Plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other Plugins. |
-| Parameter: =$attrHashRef= | Hash reference of attachment attributes (keys are indicated below) |
-| Parameter: =$topic=       | Topic name |
-| Parameter: =$web=         | Web name |
-| Return:                   | There is no defined return value for this call |
+This code provides Plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other Plugins.
+   * =$attrHashRef= - Hash reference of attachment attributes (keys are indicated below)
+   * =$topic= -     | Topic name
+   * =$web= -       | Web name
 
 Keys in $attrHashRef:
 | *Key*       | *Value* |
@@ -557,15 +572,14 @@ sub beforeAttachmentSaveHandler {
 
 =pod
 
----++ sub afterAttachmentSaveHandler( $attachmentAttrHash, $topic, $web, $error ) 
+---++ ObjectMethod afterAttachmentSaveHandler( $attachmentAttrHash, $topic, $web, $error )
 
-| Description: | This code provides plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other plugins. |
+This code provides plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other plugins.
 
-| Parameter: =$attrHashRef= | Hash reference of attachment attributes (keys are indicated below) |
-| Parameter: =$topic=       | Topic name |
-| Parameter: =$web=         | Web name |
-| Parameter: =$error=       | Error string of save action, empty if OK |
-| Return:                   | There is no defined return value for this call |
+   * =$attrHashRef= - Hash reference of attachment attributes (keys are indicated below)
+   * =$topic= -     | Topic name
+   * =$web= -       | Web name
+   * =$error= -     | Error string of save action, empty if OK
 
 Keys in $attrHashRef:
 | *Key*       | *Value* |
@@ -587,7 +601,7 @@ sub afterAttachmentSaveHandler {
 
 =pod
 
----++ sub writeHeaderHandler ()
+---++ ObjectMethod writeHeaderHandler () -> $headers
 
 Called by TWiki::writePageHeader
 
@@ -600,7 +614,7 @@ sub writeHeaderHandler {
 
 =pod
 
----++ sub redirectCgiQueryHandler ()
+---++ ObjectMethod redirectCgiQueryHandler () -> $result
 
 Called by TWiki::redirect
 
@@ -613,7 +627,7 @@ sub redirectCgiQueryHandler {
 
 =pod
 
----++ sub getSessionValueHandler ()
+---++ ObjectMethod getSessionValueHandler () -> $sessionValue
 
 Called by TWiki::getSessionValue
 
@@ -626,7 +640,7 @@ sub getSessionValueHandler {
 
 =pod
 
----++ sub setSessionValueHandler ()
+---++ ObjectMethod setSessionValueHandler () -> $result
 
 Called by TWiki::setSessionValue
 
@@ -639,16 +653,16 @@ sub setSessionValueHandler {
 
 =pod
 
----++ sub renderFormFieldForEditHandler ( $name, $type, $size, $value, $attributes, $possibleValues )
+---++ ObjectMethod renderFormFieldForEditHandler ( $name, $type, $size, $value, $attributes, $possibleValues ) -> $html
 
-| Description:       | This handler is called before built-in types are considered. It generates the HTML text rendering this form field, or false, if the rendering should be done by the built-in type handlers. |
-| Parameter: =$name= | name of form field |
-| Parameter: =$type= | type of form field |
-| Parameter: =$size= | size of form field |
-| Parameter: =$value= | value held in the form field |
-| Parameter: =$attributes= | attributes of form field  |
-| Parameter: =$possibleValues= | the values defined as options for form field, if any |
-| Return: =$text=  | HTML text that renders this field. If false, form rendering continues by considering the built-in types. |
+This handler is called before built-in types are considered. It generates the HTML text rendering this form field, or false, if the rendering should be done by the built-in type handlers.
+   * =$name= - name of form field
+   * =$type= - type of form field
+   * =$size= - size of form field
+   * =$value= - value held in the form field
+   * =$attributes= - attributes of form field 
+   * =$possibleValues= - the values defined as options for form field, if any
+Return HTML text that renders this field. If false, form rendering continues by considering the built-in types.
 
 Note that a common application would be to generate formatting of the
 field involving generation of javascript. Such usually also requires
@@ -667,7 +681,7 @@ sub renderFormFieldForEditHandler {
 
 =pod
 
----++ sub renderWikiWordHandler ()
+---++ ObjectMethod renderWikiWordHandler () -> $result
 
 Change how a WikiWord is rendered
 

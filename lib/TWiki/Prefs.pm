@@ -17,7 +17,7 @@ use strict;
 
 =begin twiki
 
----+ TWiki::Prefs Module
+---+ package TWiki::Prefs
 
 This module reads TWiki preferences of site-level, web-level and user-level
 topics and implements routines to access those preferences.
@@ -36,7 +36,7 @@ use Assert;
 
 =pod
 
----+++ sub new( $webName )
+---++ ClassMethod new( $webName )
 
 Creates a new Prefs object, reading
 preferences from TWiki::TWikiPreferences, Main::TWikiPreferences, and
@@ -63,7 +63,7 @@ sub new {
 
 =pod
 
----+++ sub initializeUser( $user, $usertopic )
+---++ ObjectMethod initializeUser( $user, $usertopic )
 
 Reads preferences from the user's personal topic.
 
@@ -83,7 +83,7 @@ sub initializeUser {
 
 =pod
 
----+++ sub getPrefsFromTopic( $web, $topic, $keyPrefix )
+---++ ObjectMethod getPrefsFromTopic( $web, $topic, $keyPrefix )
 
 Reads preferences from the topic at =$theWeb.$theTopic=, prefixes them with
 =$theKeyPrefix= if one is provided, and adds them to the preference cache.
@@ -98,7 +98,7 @@ sub getPrefsFromTopic {
 
 =pod
 
----+++ sub loadHash( \%hash )
+---++ ObjectMethod loadHash( \%hash )
 Loads the top level of all the preferences into the passed
 hash, in order to accelerate substitutions.
 
@@ -131,7 +131,7 @@ sub _flag {
 
 =pod
 
----+++ sub getPreferencesValue( $theKey, $theWeb )
+---++ ObjectMethod getPreferencesValue( $theKey, $theWeb ) -> $value
 
 Returns the value of the preference =$theKey=.  If =$theWeb= is also specified,
 looks up the value with respect to that web instead of the current one; also,
@@ -174,7 +174,7 @@ sub getPreferencesValue {
 
 =pod
 
----+++ sub getPreferencesFlag( $theKey, $theWeb )
+---++ ObjectMethod getPreferencesFlag( $theKey, $theWeb ) -> $boolean
 
 Returns the preference =$theKey= from =$theWeb= as a flag.  See
 =getPreferencesValue= for the semantics of the parameters.
@@ -196,7 +196,7 @@ sub getPreferencesFlag {
 
 =pod
 
----+++ sub getPreferencesNumber( $theKey, $theWeb )
+---++ ObjectMethod getPreferencesNumber( $theKey, $theWeb ) -> $number
 
 Returns the preference =$theKey= from =$theWeb= as a flag.  See
 =getPreferencesValue= for the semantics of the parameters.

@@ -17,7 +17,7 @@
 
 =begin twiki
 
----+ TWiki::Users::NoPasswdUser Package
+---+ package TWiki::Users::NoPasswdUser
 
 The NoPasswdUser module is an implementation of the User Authentication code that has no passwords / users
 
@@ -54,15 +54,9 @@ sub new
    return $self;
 }
 
-#========================= 
-=pod
-
----+++ UserPasswordExists( $user ) ==> $passwordExists
-| Description: | checks to see if there is a $user in the password system |
-| Parameter: =$user= | the username we are looking for  |
-| Return: =$passwordExists= | "" as there is no password in NoPasswdUser (this allows the registration script (and others) register new users) |
-
-=cut
+#| Description: | checks to see if there is a $user in the password system |
+#| Parameter: =$user= | the username we are looking for  |
+#| Return: =$passwordExists= | "" as there is no password in NoPasswdUser (this allows the registration script (and others) register new users) |
 sub UserPasswordExists
 {
     my ( $self, $user ) = @_;
@@ -70,17 +64,11 @@ sub UserPasswordExists
     return "";
 }
  
-#========================= 
-=pod
-
----+++ UpdateUserPassword( $user, $oldUserPassword, $newUserPassword ) ==> $success
-| Description: | used to change the user's password |
-| Parameter: =$user= | the username we are replacing  |
-| Parameter: =$oldUserPassword= | unencrypted password |
-| Parameter: =$newUserPassword= | unencrypted password |
-| Return: =$success= | "1" always |
-
-=cut
+#| Description: | used to change the user's password |
+#| Parameter: =$user= | the username we are replacing  |
+#| Parameter: =$oldUserPassword= | unencrypted password |
+#| Parameter: =$newUserPassword= | unencrypted password |
+#| Return: =$success= | "1" always |
 # TODO: needs to fail if it doesw not succed due to file permissions
 sub UpdateUserPassword
 {
@@ -89,17 +77,11 @@ sub UpdateUserPassword
     return "1";
 }
 
-#===========================
-=pod
-
----+++ AddUserPassword( $user, $newUserPassword ) ==> $success
-| Description: | creates a new user & password entry |
-| Parameter: =$user= | the username we are replacing  |
-| Parameter: =$newUserPassword= | unencrypted password |
-| Return: =$success= | "1" if success |
-| TODO: | not sure if this should be true / false |
-
-=cut
+#| Description: | creates a new user & password entry |
+#| Parameter: =$user= | the username we are replacing  |
+#| Parameter: =$newUserPassword= | unencrypted password |
+#| Return: =$success= | "1" if success |
+#| TODO: | not sure if this should be true / false |
 sub AddUserPassword
 {
     my ( $self, $user, $newUserPassword ) = @_;
@@ -108,15 +90,9 @@ sub AddUserPassword
 	return "1";
 }
 
-#===========================
-=pod
-
----+++ RemoveUser( $user ) ==> $success
-| Description: | used to remove the user from the password system |
-| Parameter: =$user= | the username we are replacing  |
-| Return: =$success= | "1" if success |
-
-=cut
+#| Description: | used to remove the user from the password system |
+#| Parameter: =$user= | the username we are replacing  |
+#| Return: =$success= | "1" if success |
 #i'm a wimp - comment out the password entry
 sub RemoveUser
 {
@@ -125,16 +101,10 @@ sub RemoveUser
     return "1";
 }
 
-# =========================
-=pod
-
----+++ CheckUserPasswd( $user, $password ) ==> $success
-| Description: | used to check the user's password |
-| Parameter: =$user= | the username we are replacing  |
-| Parameter: =$password= | unencrypted password |
-| Return: =$success= | "1" if success |
-
-=cut
+#| Description: | used to check the user's password |
+#| Parameter: =$user= | the username we are replacing  |
+#| Parameter: =$password= | unencrypted password |
+#| Return: =$success= | "1" if success |
 sub CheckUserPasswd
 {
     my ( $self, $user, $password ) = @_;

@@ -18,7 +18,7 @@
 
 =pod
 
----+ TWiki::Store::RcsWrap
+---+ UNPUBLISHED package TWiki::Store::RcsWrap
 
 Wrapper around the RCS commands required by TWiki.
 There is one of these object for each file stored under RCS.
@@ -72,7 +72,7 @@ sub _binaryChange {
 # ======================
 =pod
 
----++ sub addRevision (  $self, $text, $comment, $user )
+---++ ObjectMethod addRevision (   $text, $comment, $user ) -> $error
 
 Add new revision. Replace file (if exists) with text.
 $user is a wikiname.
@@ -88,7 +88,7 @@ sub addRevision {
 # ======================
 =pod
 
----++ sub replaceRevision (  $self, $text, $comment, $user, $date  )
+---++ ObjectMethod replaceRevision($text, $comment, $user, $date) -> $error
 
 Replace the top revision.
 Return non empty string with error message if there is a problem.
@@ -129,7 +129,7 @@ sub replaceRevision {
 # ======================
 =pod
 
----++ sub deleteRevision (  $self  )
+---++ ObjectMethod deleteRevision() -> $error
 
 Return with empty string if only one revision.
 
@@ -179,7 +179,7 @@ sub _deleteRevision {
 # ======================
 =pod
 
----++ sub getRevision (  $self, $version  )
+---++ ObjectMethod getRevision($version) -> $text
 
 Get the text for a given revision. The version number must be an integer.
 
@@ -225,7 +225,7 @@ sub getRevision {
 # ======================
 =pod
 
----++ sub numRevisions (  $self  )
+---++ ObjectMethod numRevisions() -> $integer
 
 Find out how many revisions there are. If there is a problem, such
 as a nonexistent file, returns the null string.
@@ -252,7 +252,7 @@ sub numRevisions {
 # ======================
 =pod
 
----++ sub getRevisionInfo (  $self, $version  )
+---++ ObjectMethod getRevisionInfo($version) -> ($rcsError, $rev, $date, $user, $comment)
 
 A version number of 0 or undef will return info on the _latest_ revision.
 
@@ -302,10 +302,9 @@ sub getRevisionInfo {
 # ======================
 =pod
 
----++ sub revisionDiff (  $self, $rev1, $rev2, $contextLines  )
-# rev2 newer than rev1
-
-| Return: =\@diffArray= | reference to an array of [ diffType, $right, $left ] |
+---++ ObjectMethod revisionDiff (   $rev1, $rev2, $contextLines  ) -> \@diffArray
+rev2 newer than rev1.
+Return reference to an array of [ diffType, $right, $left ]
 
 =cut
 
@@ -337,10 +336,9 @@ sub revisionDiff {
     return ($error, parseRevisionDiff( $tmp ) );
 }
 
-# =========================
 =pod
 
----+++ parseRevisionDiff( $text ) ==> \@diffArray
+---++ StaticMethod parseRevisionDiff( $text ) -> \@diffArray
 
 | Description: | parse the text into an array of diff cells |
 | #Description: | unlike Algorithm::Diff I concatinate lines of the same diffType that are sqential (this might be something that should be left up to the renderer) |
@@ -349,7 +347,7 @@ sub revisionDiff {
 | TODO: | move into RcsFile and add indirection in Store |
 
 =cut
-# -------------------------
+
 sub parseRevisionDiff {
     my( $text ) = @_;
 

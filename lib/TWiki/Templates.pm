@@ -20,8 +20,13 @@ use strict;
 
 ---+ package TWiki::Templates
 
-Support for the TWiki template language. The following tokens are
-supported by this language:
+Support for the TWiki template language.
+
+=cut
+
+=pod
+
+The following tokens are supported by this language:
 
 | %<nop>TMPL:P% | Instantiates a previously defined template |
 | %<nop>TMPL:DEF% | Opens a template definition |
@@ -45,7 +50,8 @@ use Assert;
 
 =pod
 
----++ sub new ()
+---++ ClassMethod new ()
+
 Constructor. Creates a new template database object.
 
 =cut
@@ -71,7 +77,7 @@ sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 =pod
 
----++ sub haveTemplate( $name )
+---++ ObjectMethod haveTemplate( $name ) -> $boolean
 
 Return true if the template exists and is loaded into the cache
 
@@ -86,7 +92,7 @@ sub haveTemplate {
 
 =pod
 
----++ sub expandTemplate( $theParam  )
+---++ ObjectMethod expandTemplate( $theParam  ) -> $string
 
 Expand the template named in the parameter after recursive expansion
 of any TMPL:P tags it contains. Note that all other template tags
@@ -133,7 +139,8 @@ sub _tmplP {
 
 =pod
 
----++ sub readTemplate ( $theName, $theSkin, $theWeb )
+---++ ObjectMethod readTemplate ( $theName, $theSkin, $theWeb ) -> $text
+
 Return value: expanded template text
 
 Reads a template, constructing a candidate name for the template thus
@@ -219,15 +226,8 @@ sub readTemplate {
     return $result;
 }
 
-=pod 
-
----++ __diagnoseReadTemplate($templateVarsRef, $result) 
-
-Call this to illustrate the state of the readTemplate sub
-
-=cut
+# Call this to illustrate the state of the readTemplate sub
 # If you don't want this (indeed, any) diagnostics in the main codebase feel free to delete it.
-
 sub __diagnoseReadTemplate {
     my ($templateVarsRef, $result) = @_;
     print "Content-type: text/html\n\n";

@@ -16,9 +16,9 @@
 #
 =pod
 
----+ TWiki::Access Object
+---+ package TWiki::Access
 
-This object manages the access control database.
+A singleton object of this class manages the access control database.
 
 =cut
 
@@ -29,7 +29,8 @@ use Assert;
 
 =pod
 
----++ new()
+---++ ClassMethod new()
+
 Construct a new singleton object to manage the permissions
 database.
 
@@ -57,7 +58,7 @@ sub search { my $this = shift; return $this->{session}->{search}; }
 
 =pod
 
----++ sub permissionsSet (  $web  )
+---++ ObjectMethod permissionsSet (  $web  ) -> $boolean
 
 Are there any security restrictions for this Web
 (ignoring settings on individual pages).
@@ -89,7 +90,7 @@ sub permissionsSet {
 
 =pod
 
----++ getReason() -> $string
+---++ ObjectMethod getReason() -> $string
 
 Return a string describing the reason why the last access control failure
 occurred.
@@ -104,14 +105,14 @@ sub getReason {
 
 =pod
 
----++ checkAccessPermission( $action, $user, $text, $topic, $web ) ==> $ok
-| Description:          | Check if user is allowed to access topic |
-| Parameter: =$action=  | "VIEW", "CHANGE", "CREATE", etc. |
-| Parameter: =$user=    | User object |
-| Parameter: =$text=    | If empty: Read "$theWebName.$theTopicName" to check permissions |
-| Parameter: =$topic=   | Topic name to check, e.g. "SomeTopic" |
-| Parameter: =$web=     | Web, e.g. "Know" |
-| Return:    undef if access is OK, an explanation otherwise  |
+---++ ObjectMethod checkAccessPermission( $action, $user, $text, $topic, $web ) -> $boolean
+Check if user is allowed to access topic
+   * =$action=  - "VIEW", "CHANGE", "CREATE", etc.
+   * =$user=    - User object
+   * =$text=    - If empty: Read "$theWebName.$theTopicName" to check permissions
+   * =$topic=   - Topic name to check, e.g. "SomeTopic"
+   * =$web=     - Web, e.g. "Know"
+If the check fails, the reason can be recoveered using getReason
 
 =cut
 

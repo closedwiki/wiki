@@ -24,6 +24,14 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 
+=pod
+
+---+ package TWiki::UI::Register
+
+User registration handling.
+
+=cut
+
 package TWiki::UI::Register;
 
 use strict;
@@ -44,8 +52,10 @@ my $twikiRegistrationAgent = 'TWikiRegistrationAgent';
 
 =pod
 
----++ register_cgi( $session )
-Body of 'register' script
+---++ StaticMethod register_cgi( $session )
+=register= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
 
 =cut
 
@@ -102,8 +112,10 @@ sub register_cgi {
 
 =pod
 
----++ register_cgi( $session )
-Body of 'passwd' script
+---++ StaticMethod passwd_cgi( $session )
+=passwd= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
 
 =cut
 
@@ -148,10 +160,11 @@ my $indent = "\t"; # SMELL indent legacy
 
 =pod
 
----++ bulkRegister
+---++ StaticMethod bulkRegister($session)
+
   Called by ManageCgiScript::bulkRegister (requires authentication) with topic = the page with the entries on it.
    1 Makes sure you are an admin user ;)
-2 Calls TWiki::Data::DelimitedFile (delimiter => "|", content =>textReadFromTopic)
+   2 Calls TWiki::Data::DelimitedFile (delimiter => "|", content =>textReadFromTopic)
    3 ensures requiredFieldsPresent()
    4 starts a log file
    5 calls registerSingleBulkUser() for each row 
@@ -217,20 +230,14 @@ sub bulkRegister {
     $session->redirect($session->getScriptUrl($web, $logTopic, "view"));
 }
 
-=pod
-
----++ _registerSingleBulkUser($rowHashRef, %settings)
-    Process a single user, parameters passed as a hash
-
-    * receives row and a fieldNamesOrderedList
-    * sets LoginName to be WikiName if not present
-    * rearranges the row to comply with the ordered list
-    * if using htpasswd, calls _addUserToPasswordSystem()
-    * makes newUserFromTemplate
-    * calls addUserToTWikiUsersTopic()
-
-=cut
-
+#    Process a single user, parameters passed as a hash
+#
+#    * receives row and a fieldNamesOrderedList
+#    * sets LoginName to be WikiName if not present
+#    * rearranges the row to comply with the ordered list
+#    * if using htpasswd, calls _addUserToPasswordSystem()
+#    * makes newUserFromTemplate
+#    * calls addUserToTWikiUsersTopic()
 # SMELL could be made much more efficient if needed, as calls to addUserToTWikiUsersTopic()
 # are quite expensive when doing 300 in succession!
 sub _registerSingleBulkUser {
@@ -291,14 +298,8 @@ sub _registerSingleBulkUser {
     return ($userTopic, $log);
 }
 
-=pod
-
----++ _missingElements(\@present, \@required) 
-ensures all named fields exist in hash
-returns array containing any that are missing
-
-=cut
-
+#ensures all named fields exist in hash
+#returns array containing any that are missing
 sub _missingElements {
     my ($presentArrRef, $requiredArrRef) = @_;
     my %present;
@@ -313,13 +314,8 @@ sub _missingElements {
     return @missing;
 }
 
-=pod
-
----++ _makeFormFieldOrderMatch(rearranges the fields in settings->{data}->{form} so that they match settings->{fieldNames}
-returns a new ordered form
-
-=cut
-
+# rearranges the fields in settings->{data}->{form} so that they match settings
+#returns a new ordered form
 sub _makeFormFieldOrderMatch {
     my (%settings) =@_;
     my @fieldNames = @{$settings{fieldNames}};
@@ -333,10 +329,13 @@ sub _makeFormFieldOrderMatch {
 
 =pod
 
----++ RegisterDotPm::register
+---++ StaticMethod register($session)
+
 This is called through: TWikiRegistration -> RegisterCgiScript -> here
+
    1 gets rows and fields as an InTopicTable using IntopicTable::populateEntries()
    2 calls _validateRegistration() to ensure required fields correct
+
 =cut
 
 sub register {
@@ -360,15 +359,10 @@ sub register {
 
 }
 
-=pod
----++ RegisterDotPm::_requireVerification
-   1 generates a activation password
-   2 calls UnregisteredUser::putRegDetailsByCode(activation password)
-   3 sends them a "registerconfirm" email.
-   4 redirects browser to "regconfirm"
-
-=cut
-
+#   1 generates a activation password
+#   2 calls UnregisteredUser::putRegDetailsByCode(activation password)
+#   3 sends them a "registerconfirm" email.
+#   4 redirects browser to "regconfirm"
 sub _requireVerification {
     my ($session, $tmpUserDir) = @_;
 
@@ -383,7 +377,7 @@ sub _requireVerification {
     $data{VerificationCode} =
       "$data{WikiName}." . TWiki::User::randomPassword();
     UnregisteredUser::setDir($tmpUserDir);
-    UnregisteredUser::putRegDetailsByCode( \%data );
+    UnregisteredUser::_putRegDetailsByCode( \%data );
 
     $session->writeLog( "regstart", "$data{webName}.$data{WikiName}",
 			$data{Email}, $data{WikiName} );
@@ -396,7 +390,7 @@ sub _requireVerification {
 
 =pod
 
----++ Register::resetPassword
+---++ StaticMethod resetPassword($session)
 
 Generates a password. Mails it to them and asks them to change it. Entry
 point intended to be called from TWiki::UI::run
@@ -483,7 +477,8 @@ sub _resetUsersPassword {
 
 =pod
 
----+++ changePassword( $session )
+---++ StaticMethod changePassword( $session )
+
 Change the user's password. Details of the user and password
 are passed in CGI parameters.
 
@@ -550,12 +545,13 @@ sub changePassword {
 
 =pod
 
----++ RegisterDotPm::verifyEmailAddress
+---++ StaticMethod verifyEmailAddress($session, $tmpDir)
+
 This is called: on receipt of the activation password -> RegisterCgiScript -> here
    1 calls UnregisteredUser::reloadUserContext(activation password)
    2 throws oops if appropriate
    3 calls emailRegistrationConfirmations
-   4 still calls "oopssendmailerr" if a problem, but this is not done uniformly 
+   4 still calls "oopssendmailerr" if a problem, but this is not done uniformly
 
 =cut
 
@@ -580,7 +576,7 @@ sub verifyEmailAddress {
 
 =pod
 
----++ finish
+---++ StaticMethod finish
 
 Presently this is called in RegisterCgiScript directly after a call to verify. The separation is intended for the RegistrationApprovals functionality
    1 calls UnregisteredUser::reloadUserContext (throws oops if appropriate)
@@ -657,18 +653,12 @@ sub finish {
                                     "regthanks", $data{Email} );
 }
 
-=pod
-
---++ _newUserFromTemplate($template, $row)
-Given a template and a hash, creates a new topic for a user
-   1 reads the template topic
-   2 calls RegistrationHandler::register with the row details, so that a plugin can augment/delete/change the entries
-
-I use RegistrationHandler::register to prevent certain fields (like password) 
-appearing in the homepage and to fetch photos into the topic
-
-=cut
-
+#Given a template and a hash, creates a new topic for a user
+#   1 reads the template topic
+#   2 calls RegistrationHandler::register with the row details, so that a plugin can augment/delete/change the entries
+#
+#I use RegistrationHandler::register to prevent certain fields (like password) 
+#appearing in the homepage and to fetch photos into the topic
 sub _newUserFromTemplate {
     my ($session, $template, $row) = @_;
     my ( $meta, $text ) = TWiki::UI::readTemplateTopic($session, $template);
@@ -684,16 +674,10 @@ sub _newUserFromTemplate {
     return $log;
 }
 
-=pod
-
----++ _writeRegistrationDetailsToTopic($dataRef, $meta, $text)
-Writes the registration details passed as a hash to either BulletFields or FormFields
-on the user's topic.
-
-Returns "BulletFields" or "FormFields" depending on what it chose.
-
-=cut 
-
+#Writes the registration details passed as a hash to either BulletFields or FormFields
+#on the user's topic.
+#
+#Returns "BulletFields" or "FormFields" depending on what it chose.
 sub _writeRegistrationDetailsToTopic {
     my ($session, $dataRef, $meta, $text) = @_;
     my %data = %$dataRef;
@@ -727,14 +711,10 @@ sub _writeRegistrationDetailsToTopic {
     return $log;
 }
 
-=pod
-
----+++ Caveats
- Ideally we'd put any fields mentioned on the registration form
- but not in the UserForm into the text. However there is no API to 
- through which to determine what is legal. So I can't
-
-=cut
+# Caveats
+# Ideally we'd put any fields mentioned on the registration form
+# but not in the UserForm into the text. However there is no API to 
+# through which to determine what is legal. So I can't
 
 sub _getRegFormAsTopicForm {
     my ( $meta, $dataRef ) = @_;
@@ -747,15 +727,9 @@ sub _getRegFormAsTopicForm {
     return _getKeyValuePairsAsTopicForm($meta, @{$data{form}});
 }
 
-=pod
-
----++ _getKeyValuePairsAsTopicForm ($meta, @fieldArray)
 # SMELL
 # problem now is that the fields are ordered by the HTML form
 # not by the order of the template form definition. Hence they are arguably in the wrong order.
-
-=cut
-
 sub _getKeyValuePairsAsTopicForm {
     my ($meta, @fieldArray)     = @_;   # SMELL - why is this an array? surely a hash is better?
     my $leftoverText = "";
@@ -785,13 +759,7 @@ sub _getKeyValuePairsAsTopicForm {
     return ( $meta, $leftoverText );
 }
 
-=pod
-
----++ _getRegFormAsTopicContent($row) 
-Registers a user using the old bullet field code
-
-=cut
-
+#Registers a user using the old bullet field code
 sub _getRegFormAsTopicContent {
     my ($dataRef) = @_;
     my %data = %$dataRef;
@@ -807,16 +775,9 @@ sub _getRegFormAsTopicContent {
     return $text;
 }
 
-=pod
-
----++ _emailRegistrationConfirmations
-
-Sends to both the WIKIWEBMASTER and the USER notice of the registration
-emails both the admin "registernotifyadmin" and the user "registernotify", 
-in separate emails so they both get targeted information (and no password to the admin).
-
-=cut
-
+#Sends to both the WIKIWEBMASTER and the USER notice of the registration
+#emails both the admin "registernotifyadmin" and the user "registernotify", 
+#in separate emails so they both get targeted information (and no password to the admin).
 sub _emailRegistrationConfirmations {
     my ( $session, $dataHashRef ) = @_;
     my %data = %$dataHashRef;
@@ -854,14 +815,7 @@ sub _emailRegistrationConfirmations {
       if ( $err && ! $unitTestMode );
 }
 
-=pod
-
----++ builds a confirmation using a named template
-
-The template dictates the to: field
-
-=cut
-
+#The template dictates the to: field
 sub _buildConfirmationEmail {
     my ( $session, $dataHashRef, $templateText, $hidePassword ) = @_;
     my %data = %$dataHashRef;
@@ -889,13 +843,7 @@ sub _buildConfirmationEmail {
     return $templateText;
 }
 
-=pod
-
---++ _validateRegistration
-Returns a url if there is a problem.
-
-=cut
-
+# Returns a url if there is a problem.
 sub _validateRegistration {
     my ( $session, $dataRef, $query, $topic ) = @_;
     my %data = %$dataRef;
@@ -982,13 +930,7 @@ sub _addUserToPasswordSystem {
     return $success;
 }
 
-=pod
-
----++ _sendEmail(%p)
-sends $p{template} to $p{Email} with a bunch of substitutions.
-
-=cut
-
+# sends $p{template} to $p{Email} with a bunch of substitutions.
 sub _sendEmail {
     my %p = @_;
     my $session = $p{session};
@@ -1059,16 +1001,10 @@ use File::Path qw( mkpath );
 
 #SMELL - writes directly to filespace, should go via attachments.
 
-=pod
----++ putRegDetailsByCode 
-| In | reference to the users data structure |
-| Out | none |
-
-dies if fails to store
-
-=cut
-
-sub putRegDetailsByCode {
+# | In | reference to the users data structure |
+# | Out | none |
+# dies if fails to store
+sub _putRegDetailsByCode {
     my ($dataRef) = @_;
 
     my %data = %$dataRef;
@@ -1080,26 +1016,14 @@ sub putRegDetailsByCode {
     store( $dataRef, $file ) or throw Error::Simple( $! );
 }
 
-=pod 
-
----++ _verificationCodeFilename 
-
-=cut
-
 sub _verificationCodeFilename {
     my ($code) = @_;
     return $tmpDir . "/$code";
 }
 
-=pod
-
----++ _getRegDetailsByCode 
-| In | activation code |
-| Out | reference to user the user's data structure
-Dies if fails to get
-
-=cut
-
+#| In | activation code |
+#| Out | reference to user the user's data structure
+#Dies if fails to get
 sub _getRegDetailsByCode {
     my ($code) = @_;
     my $file   = _verificationCodeFilename($code);

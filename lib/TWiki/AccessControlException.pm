@@ -29,6 +29,21 @@ use Error;
 
 @TWiki::AccessControlException::ISA = qw(Error);
 
+=pod
+
+---+ ClassMethod new($mode, $user, $web, $topic, $reason)
+
+   * =$mode= - mode of access (view, change etc)
+   * =$user= - user object doing the accessing
+   * =$web= - web being accessed
+   * =$topic= - topic being accessed
+   * =$reason= - string reason for failure
+
+All the above fields are accessible from the object in a catch clause
+in the usual way e.g. =$e->{-web}= and =$e->{-reason}=
+
+=cut
+
 sub new {
     my ( $class, $mode, $user, $web, $topic, $reason ) = @_;
 
@@ -40,6 +55,14 @@ sub new {
                               -reason => $reason,
                              );
 }
+
+=pod
+
+---++ ObjectMethod stringify() -> $string
+
+Generate a summary string
+
+=cut
 
 sub stringify {
     my $self = shift;

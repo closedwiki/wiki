@@ -16,7 +16,7 @@
 # http://www.gnu.org/copyleft/gpl.html
 =begin twiki
 
----+ TWiki::UI::Oops
+---+ package TWiki::UI::Oops
 
 UI delegate for oops function
 
@@ -29,13 +29,18 @@ use TWiki;
 
 =pod
 
----++ oops( )
-Command handler for error command. Some parameters are passed in CGI:
+---++ StaticMethod oops_cgi($session)
+
+=oops= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
+CGI parameters:
 | =template= | name of template to use |
 | =param1= | Parameter for expansion of template |
 | =param2= | Parameter for expansion of template |
 | =param3= | Parameter for expansion of template |
 | =param4= | Parameter for expansion of template |
+
 =cut
 
 sub oops_cgi {

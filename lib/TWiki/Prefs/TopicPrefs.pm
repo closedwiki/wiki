@@ -16,7 +16,7 @@
 
 =pod
 
----++ TopicPrefs Object
+---+ UNPUBLISHED package TWiki::Prefs::TopicPrefs
 
 This Prefs-internal class is used to cache preferences read in from a single
 topic.
@@ -34,7 +34,7 @@ use Assert;
 
 =pod
 
----+++ sub new( $web, $topic )
+---++ ClassMethod new( $web, $topic )
 
 Reads preferences from the specified topic into a new TopicPrefs object.
 

@@ -38,7 +38,7 @@ sub _writeDebug {
 
 =pod
 
----++ new( $session, $os, $realOS )
+---++ ClassMethod new( $session, $os, $realOS )
 
 Construct a new sandbox suitable for $os, setting
 flags for platform features that help.  $realOS distinguishes
@@ -98,7 +98,7 @@ sub new {
 
 =pod
 
----++ untaintUnchecked ( $string ) -> $untainted
+---++ StaticMethod untaintUnchecked ( $string ) -> $untainted
 
 Untaints $string without any checks (dangerous).  If $string is
 undefined, return undef.
@@ -119,7 +119,7 @@ sub untaintUnchecked {
 
 =pod
 
----++ normalizeFileName ( $string [, $dotdot] ) -> $filename
+---++ StaticMethod normalizeFileName ( $string [, $dotdot] ) -> $filename
 
 STATIC Errors out if $string contains whitespace characters.  If $dotdot is
 present and true, allow ".." in path names.
@@ -166,7 +166,7 @@ sub normalizeFileName {
 
 =pod
 
----++ buildCommandLine ( $template, %params ) -> @arguments
+---++ ObjectMethod buildCommandLine ( $template, %params ) -> @arguments
 
 $template is split at whitespace, and '%VAR%' strings contained in it
 are replaced with $params{VAR}.  %params may consist of scalars and
@@ -268,7 +268,7 @@ ASSERT(0);
 
 =pod
 
----++ readFromProcessArray ( $path, $template, @params ) -> @outputLines
+---++ ObjectMethod readFromProcessArray ( $path, $template, @params ) -> @outputLines
 
 Invokes the program $path with the arguments described by $template
 and @params, and returns the output of the program as an array of
@@ -426,7 +426,7 @@ sub _openSafePipeFromProcess {
 
 =pod
 
----++ readFromProcess( $template, @params ) -> ($output, $status)
+---++ ObjectMethod readFromProcess( $template, @params ) -> ($output, $status)
 
 Like readFromProcessArray, but returns the process output as a single
 string, together with the exit status.  Furthermore, the program to

@@ -152,11 +152,6 @@ sub j {
     return join("\r\n",@_);
 }
 
-=pod
----++ Calls verify
-
-=cut
-
 sub verify {
     my $self = shift;
     my $code = shift || $testUserWikiName.".foo";
@@ -173,12 +168,6 @@ sub verify {
 
     TWiki::UI::Register::verifyEmailAddress($session,$tempUserDir,1);
 }
-
-=pod
----++ finish
-Calls 
-
-=cut 
 
 sub finish {
     my $self = shift;
@@ -216,13 +205,8 @@ sub registerAccount {
     $self->finish();
 }
 
-=pod
----++ test_registerVerifyOk
-Register a user, and then verify it
-Assumes the verification code is foo
-
-=cut
-
+#Register a user, and then verify it
+#Assumes the verification code is foo
 sub test_registerVerifyOk {
     my $self = shift;
     try {
@@ -250,13 +234,7 @@ sub test_registerVerifyOk {
     }
 }
 
-=pod 
----++ test_registerBadVerify()
-
-Register a user, then give a bad verification code. It should barf.
-
-=cut
-
+#Register a user, then give a bad verification code. It should barf.
 sub test_registerBadVerify {
     my $self = shift;
     try {
@@ -459,7 +437,7 @@ Once complete, try again - the second attempt at completion should fail.
 sub test_UnregisteredUser {
     my $self = shift;
 
-    UnregisteredUser::putRegDetailsByCode(\%regSave);
+    UnregisteredUser::_putRegDetailsByCode(\%regSave);
 
     my %result = %{UnregisteredUser::_getRegDetailsByCode($code)};
     $self->assert_equals("homer", $result{doh} );

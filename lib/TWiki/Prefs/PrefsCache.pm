@@ -17,7 +17,7 @@ use strict;
 
 =pod
 
----++ PrefsCache Static Package Functions
+---+ UNPUBLISHED package TWiki::Prefs::PrefsCache
 
 The PrefsCache package holds a cache of topics that have been read in, using
 the TopicPrefs class.  These functions manage that cache.
@@ -32,15 +32,9 @@ use Assert;
 
 =pod
 
----++ PrefsCache Object
+---++ ClassMethod new( $session, $type, $parent, @target )
 
-This defines an object used internally by the functions in Prefs to hold
-preferences.  This object handles the cascading of preferences from site, to
-web, to topic/user.
-
----+++ sub new( $session, $type, $parent, @target )
-
-| Description: | Creates a new Prefs object. |
+Creates a new Prefs object.
 | Parameter: =$type= | Type of prefs object to create, see notes. |
 | Parameter: =$parent= | Prefs object from which to inherit higher-level settings. |
 | Parameter: =@target= | What this object stores preferences for, see notes. |
@@ -101,7 +95,7 @@ sub prefs { my $this = shift; return $this->{session}->{prefs}; }
 
 =pod
 
----+++ sub loadPrefs( $allowCache )
+---++ ObjectMethod loadPrefs( $allowCache )
 
 Requests for Prefs object to load preferences from its defining topics,
 re-cascading the overrides.  If =$allowCache= is set, the topic cache will be
@@ -161,7 +155,7 @@ sub loadPrefs {
 
 =pod
 
----+++ sub loadPrefsFromTopic( $web, $topic, $keyPrefix, $allowCache )
+---++ ObjectMethod loadPrefsFromTopic( $web, $topic, $keyPrefix, $allowCache )
 
 Loads preferences from a topic.  If =$allowCache= is set then cached
 settings are used where available.  All settings loaded are prefixed
@@ -206,7 +200,7 @@ sub _insertPreference {
 
 =pod
 
----+++ sub inheritPrefs( $otherPrefsObject )
+---++ ObjectMethod inheritPrefs( $otherPrefsObject )
 
 Simply copies the preferences contained in the $otherPrefsObject into the
 current one, overwriting anything that may currently be there.
@@ -229,7 +223,7 @@ sub inheritPrefs {
 
 =pod
 
----+++ sub loadHash(\%hash)
+---++ ObjectMethod loadHash(\%hash)
 
 Loads the passed hash with the "active" preferences. This hash can then
 be used for rapid lookups, much faster than refering back to this module.
