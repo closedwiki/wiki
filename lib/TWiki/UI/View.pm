@@ -256,12 +256,23 @@ sub view {
       # try again with authenticated viewauth script
       # instead of non authenticated view script
       my $url = $ENV{"REQUEST_URI"};
-      if( $url ) {
+      if( $url && $url =~ m|/view| ) {
         # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
         $url =~ s|/view|/viewauth|o;
         $url = "$TWiki::urlHost$url";
       } else {
-        $url = "$TWiki::urlHost$TWiki::scriptUrlPath/$viewauthFile/$webName/$topic";
+        # If REQUEST_URI is rewritten and does not contain the name "view"
+        # try looking at the CGI environment variable SCRIPT_NAME.
+        $url = $ENV{'SCRIPT_NAME'};
+        if ($url && $url =~ m|/view| ) {
+          $url =~ s|/view|/viewauth|o;
+          $url = "$TWiki::urlHost$url/$webName/$topic";
+        } else {
+          # If SCRIPT_NAME doesn not contain the name "view"
+          # the last hope is to try the SCRIPT_FILENAME ...
+          $viewauthFile =~ s|^.*/viewauth|/viewauth|o;  # strip off $Twiki::scriptUrlPath
+          $url = "$TWiki::urlHost$TWiki::scriptUrlPath/$viewauthFile/$webName/$topic";
+        }
       }
       TWiki::UI::redirect( $url );
     }
