@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1046157672" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="guest" date="1047362971" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ SeeSkinToo
 
@@ -37,6 +37,14 @@ _things I don't know how to do or could use some help with_
 	* IE5.5/Win has this annoying habit of making tables wider than the containing =div=  ,a fix or workaround would be nice.
 
 ---++ Changelog
+
+2003-Mar-10
+	* Numerous stylesheet refinements.
+		* fixed bug where the "More..." menu item used a different font size and background extended slightly beyond the menu panel.
+		* started developing =menu-bottom.css=  (only works in browsers which support =position: fixed= )
+	* Added templates: search, edit, oopsmore, attach, preview. 
+		* Introduced a bug: menu-left.css only works for the view template, in others the empty menu pane covers up page contents.
+	* fixed bug in cvs where the SeeSkin and SeeSkinToo directories kept overwriting each other (note: if you copy a directory and contents to use as a template make sure to _delete the CVS subdirectory_ )
 
 2003-Feb-24
 	* =twiki.seetoo.tmpl= : search link was hardcoded to TWiki web.
