@@ -38,9 +38,7 @@ my $theRemoteUser = $query->remote_user();
 my $theTopic = $query->param( 'topic' );
 my $theUrl = $query->url;
 
-my( $topic, $webName, $dummy, $userName ) = 
-  TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic,
-                     $theUrl, $query );
-$dummy = "";  # to suppress warning
+my( $topic, $webName, undef, $userName ) = 
+  TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
 TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );

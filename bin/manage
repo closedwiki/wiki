@@ -61,7 +61,7 @@ my $theTopic = $query->param( 'topic' );
 # different parameters, oddly.
 if( $action eq "createweb" ) {
 
-  my( $topic, $webName, $dummy, $userName ) = 
+  my( $topic, $webName, undef, $userName ) = 
     TWiki::initialize( $thePathInfo, $theRemoteUser,
                        $theTopic, $theUrl, $query );
 
@@ -91,7 +91,7 @@ if( $action eq "createweb" ) {
     TWiki::UI::Manage::relockRcsFiles();
 } elsif( $action ) {
 
-  my( $topic, $webName, $dummy, $userName ) = 
+  my( $topic, $webName, undef, $userName ) = 
     TWiki::initialize( $thePathInfo, $theRemoteUser,
                        $theTopic, $theUrl, $query );
   TWiki::UI::oops( "", "", "manage",
@@ -100,7 +100,7 @@ if( $action eq "createweb" ) {
 
 } else {
 
-  my( $topic, $webName, $dummy, $userName ) = 
+  my( $topic, $webName, undef, $userName ) = 
     TWiki::initialize( $thePathInfo, $theRemoteUser,
                        $theTopic, $theUrl, $query );
   TWiki::UI::oops( "", "", "manage",

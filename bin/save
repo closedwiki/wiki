@@ -42,9 +42,8 @@ my $theRemoteUser = $query->remote_user();
 my $theUrl = $query->url;
 my $theTopic = $query->param( 'topic' );
 
-my ( $topic, $web, $dummy, $userName ) = 
-  TWiki::initialize( $thePathInfo, $theRemoteUser,
-                     $theTopic, $theUrl, $query );
+my ( $topic, $web, undef, $userName ) = 
+  TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
 TWiki::UI::Save::savemulti( $web, $topic, $userName, $query );
 

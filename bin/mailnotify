@@ -63,9 +63,8 @@ sub processWeb
 {
     my( $web) = @_;
 
-    my ( $topic, $webName, $dummy, $userName, $dataDir) = 
+    my ( $topic, $webName, undef, $userName, $dataDir) = 
 	&TWiki::initialize( "/$web", "nobody" );
-    $dummy = "";  # to suppress warning
 
     $debug && print "Checking TWiki.$webName\n";
 
