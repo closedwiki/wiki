@@ -108,9 +108,10 @@ sub prvAddToPrefsList
         }
     }
 
-    $theValue =~ s/\t/ /go;     # replace TAB by space
-    $theValue =~ s/\\n/\n/go;   # replace \n by new line
-    $theValue =~ s/`//go;       # filter out dangerous chars
+    $theValue =~ s/\t/ /go;                 # replace TAB by space
+    $theValue =~ s/([^\\])\\n/$1\n/go;      # replace \n by new line
+    $theValue =~ s/([^\\])\\\\n/$1\\n/go;   # replace \\n by \n
+    $theValue =~ s/`//go;                   # filter out dangerous chars
     my $x;
     my $found = 0;
     for( $x = 0; $x < @prefsKeys; $x++ ) {
