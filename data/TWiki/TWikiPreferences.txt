@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1073193360" format="1.0" version="1.59"}%
+%META:TOPICINFO{author="PeterThoeny" date="1073580224" format="1.0" version="1.60"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -17,7 +17,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set WEBBGCOLOR = #C0C0C0
 
 	* Copyright notice:
-		* Set WEBCOPYRIGHT = <font size="-2">Copyright &copy; 1999-2003 by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%WEB%.%TOPIC%">Send</a> feedback. </font>
+		* Set WEBCOPYRIGHT = <font size="-2">Copyright &copy; 1999-%GMTIME{"$year"}% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%WEB%.%TOPIC%">Send</a> feedback. </font>
 
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences)
 		* Set NOSEARCHALL =
