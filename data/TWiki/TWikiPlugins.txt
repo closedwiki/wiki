@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="998854083" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="MikeMannix" date="998886618" format="1.0" version="1.6"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Plugins
@@ -179,4 +179,4 @@ You can release your tested, packaged Plugin to the TWiki community through the 
 	1. *Attach* the distribution zip file to the topic, ex: ==YourPlugin.zip==.
 	1. *Link* from the doc page to a new, blank page named after the Plugin, and ending in ==Dev==, ex: ==YourPluginDev==. This is the discussion page for future development. (User support for Plugins is handled in TWiki:Support.)
 
--- Main.MikeMannix - 26 Aug 2001
+-- MikeMannix - 26 Aug 2001

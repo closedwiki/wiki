@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="998863709" format="1.0" version="1.31"}%
+%META:TOPICINFO{author="MikeMannix" date="998886670" format="1.0" version="1.32"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Variables
@@ -325,4 +325,4 @@ __Notes:__
 		* =<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif=
 
 -- PeterThoeny - 23 Jul 2001 <br>
--- Main.MikeMannix - 26 Aug 2001 <br />	
+-- MikeMannix - 26 Aug 2001 <br>	
