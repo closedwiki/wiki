@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1051155780" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="PeterThoeny" date="1051159860" format="1.0" version="1.16"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -17,6 +17,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 	* <img src="%ATTACHURLPATH%/new.gif" alt="new.gif"  width="28" height="8"  /> New
 	* <img src="%ATTACHURLPATH%/starred.gif" alt="starred.gif"  width="16" height="16"  /> Highlight (positive)
 	* <img src="%ATTACHURLPATH%/arrowright.gif" alt="arrowright.gif"  width="16" height="16"  /> Moved to...
+	* <img src="%ATTACHURLPATH%/watch.gif" alt="watch.gif"  width="16" height="16"  /> Watch
 	* <img src="%ATTACHURLPATH%/viewtopic.gif" alt="viewtopic.gif"  width="16" height="16"  /> View topic
 	* <img src="%ATTACHURLPATH%/edittopic.gif" alt="edittopic.gif"  width="16" height="16"  /> Edit topic
 	* <img src="%ATTACHURLPATH%/newtopic.gif" alt="newtopic.gif"  width="16" height="16"  /> New topic
@@ -48,3 +49,4 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="changes.gif" attr="" comment="Changes" date="1047017437" path="C:\Data\Temp\changes.gif" size="167" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="notify.gif" attr="" comment="Notify" date="1047103200" path="C:\Data\Temp\notify.gif" size="183" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="stop.gif" attr="" comment="Stop" date="1051155739" path="C:\Data\Temp\stop.gif" size="895" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="watch.gif" attr="" comment="Watch" date="1051159775" path="C:\Data\Temp\watch.gif" size="925" user="PeterThoeny" version="1.1"}%
