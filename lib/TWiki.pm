@@ -49,7 +49,7 @@ use vars qw(
         $defaultUserName $userName $wikiName $wikiUserName
         $wikiHomeUrl $defaultUrlHost $urlHost
         $scriptUrlPath $pubUrlPath $viewScript
-        $pubDir $templateDir $dataDir $twikiLibDir
+        $pubDir $templateDir $dataDir $logDir $twikiLibDir
         $siteWebTopicName $wikiToolName $securityFilter $uploadFilter
         $debugFilename $warningFilename $htpasswdFilename
         $logFilename $remoteUserFilename $wikiUsersTopicname
@@ -416,17 +416,17 @@ sub writeDebugTimes
     my( $text ) = @_;
 
     if( ! $debugUserTime ) {
-        writeDebug( "=====       sec: (delta:)        sec: (delta:) function:" );
+        writeDebug( "===      sec (delta:)     sec (delta:)     sec   function:" );
     }
     my( $puser, $psystem, $cuser, $csystem ) = times();
     my $duser = $puser - $debugUserTime;
     my $dsystem = $psystem - $debugSystemTime;
-    my $times = sprintf( "user: %1.2f (%1.2f), system: %1.2f (%1.2f)",
-                  $puser, $duser, $psystem, $dsystem );
+    my $times = sprintf( "usr %1.2f (%1.2f), sys %1.2f (%1.2f), sum %1.2f",
+                  $puser, $duser, $psystem, $dsystem, $puser+$psystem );
     $debugUserTime   = $puser;
     $debugSystemTime = $psystem;
 
-    writeDebug( "===== $times,  $text" );
+    writeDebug( "==> $times,  $text" );
 }
 
 # =========================
