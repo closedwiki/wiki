@@ -208,7 +208,7 @@ sub main
             TWiki::redirect( $query, $url );
             return;
        }
-       my $formText = &TWiki::Form::renderForEdit( $webName, $form, $meta, $query, @fieldDefs );
+       my $formText = &TWiki::Form::renderForEdit( $webName, $topic, $form, $meta, $query, @fieldDefs );
        $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } elsif( $saveCmd ne "repRev" && TWiki::Prefs::getPreferencesValue( "WEBFORMS", $webName )) {
        $form = '<table width="100%"><tr><td align="right">'

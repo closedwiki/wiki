@@ -221,7 +221,7 @@ sub chooseFormButton
 # Render form information 
 sub renderForEdit
 {
-    my( $web, $form, $meta, $query, @fieldsInfo ) = @_;
+    my( $web, $topic, $form, $meta, $query, @fieldsInfo ) = @_;
 
     my $chooseForm = "";   
     if( TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) ) {
@@ -289,7 +289,7 @@ sub renderForEdit
             my $lines = 0;
             foreach my $item ( @fieldInfo ) {
                 my $flag = "";
-                my $expandedItem = &TWiki::handleCommonTags( $item );
+                my $expandedItem = &TWiki::handleCommonTags( $item, $topic );
                 if( $value =~ /(^|,\s*)$item(,|$)/ ) {
                     $flag = ' checked="checked"';
                 }
@@ -307,7 +307,7 @@ sub renderForEdit
             my $lines = 0;
             foreach my $item ( @fieldInfo ) {
                 my $selected = $defaultMarker;
-                my $expandedItem = &TWiki::handleCommonTags( $item );
+                my $expandedItem = &TWiki::handleCommonTags( $item, $topic );
                 if( $item eq $value ) {
                    $selected = ' checked="checked"';
                    $matched = $item;
