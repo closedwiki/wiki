@@ -2160,6 +2160,7 @@ sub fixedFontText
 }
 
 # =========================
+# Build an HTML <Hn> element with suitable anchor for linking from %TOC%
 sub makeAnchorHeading
 {
     my( $theText, $theLevel ) = @_;
@@ -2193,6 +2194,7 @@ sub makeAnchorHeading
 }
 
 # =========================
+# Build a valid HTML anchor name
 sub makeAnchorName
 {
     my( $theName ) = @_;
@@ -2207,6 +2209,9 @@ sub makeAnchorName
     $anchorName =~ s/$singleMixedNonAlphaNumRegex/_/g;      # only allowed chars
     $anchorName =~ s/__+/_/g;               # remove excessive '_'
     $anchorName =~ s/^(.{32})(.*)$/$1/;     # limit to 32 chars
+
+    # URL-encode 8-bit characters
+    $anchorName =~ s/([\x7f-\xff])/'%' . unpack( "H*", $1 ) /ge;
 
     return $anchorName;
 }
