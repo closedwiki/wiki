@@ -81,7 +81,7 @@ use vars qw(
             %regex
             %staticInternalTags
             %dynamicInternalTags
-            $siteCharset $useUnicode $siteLang $siteFullLang $urlCharEncoding
+            $siteCharset $siteLang $siteFullLang $urlCharEncoding
             $langAlphabetic
            );
 
@@ -1411,46 +1411,8 @@ sub _handleREMOTE_USER {
 # text.
 sub _handleMETASEARCH {
     my( $this, $params ) = @_;
-    my $attrWeb           = $params->{web} || "";
-    my $attrTopic         = $params->{topic} || "";
-    my $attrType          = $params->{type};
-    my $attrTitle         = $params->{title} || "";
-    my $attrDefault       = $params->{default} || "";
 
-    my $searchVal = "XXX";
-
-    if( ! $attrType ) {
-       $attrType = "";
-    }
-
-    my $searchWeb = "all";
-
-    if( $attrType eq "topicmoved" ) {
-       $searchVal = "%META:TOPICMOVED[{].*from=\\\"$attrWeb\.$attrTopic\\\".*[}]%";
-    } elsif ( $attrType eq "parent" ) {
-       $searchWeb = $attrWeb;
-       $searchVal = "%META:TOPICPARENT[{].*name=\\\"($attrWeb\\.)?$attrTopic\\\".*[}]%";
-    }
-
-    my $text = $this->{search}->searchWeb(
-        #"_callback"    => undef,
-        "search"        => $searchVal,
-        "web"           => $searchWeb,
-        "type"          => "regex",
-        "nosummary"     => "on",
-        "nosearch"      => "on",
-        "noheader"      => "on",
-        "nototal"       => "on",
-        "noempty"       => "on",
-        "template"      => "searchmeta",
-    );
-
-    if( $text =~ /^\s*$/ ) {
-       $text = "$attrTitle$attrDefault";
-    } else {
-       $text = "$attrTitle$text";
-    }
-    return $text;
+    return $this->{store}->searchMetaData( $params );
 }
 
 # Deprecated, but used in signatures

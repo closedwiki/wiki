@@ -82,6 +82,7 @@ sub security { my $this = shift; return $this->{session}->{security}; }
 sub users { my $this = shift; return $this->{session}->{users}; }
 sub form { my $this = shift; return $this->{session}->{form}; }
 sub attach { my $this = shift; return $this->{session}->{attach}; }
+sub search { my $this = shift; return $this->{session}->{search}; }
 
 # PRIVATE
 # Get the handler for the current store implementation, either RcsFile
@@ -655,7 +656,9 @@ sub topicIsLockedBy {
 }
 
 # STATIC Build a hash by parsing name=value comma separated pairs
-sub _keyValue2Hash
+# SMELL: duplication of TWiki::extractParameters, using a different
+# system of escapes :-(
+sub _readKeyValue
 {
     my( $args ) = @_;
     my %res = ();
@@ -664,7 +667,10 @@ sub _keyValue2Hash
     while( $args =~ s/\s*([^=]+)=\"([^"]*)\"//o ) {
         my $key = $1;
         my $value = $2;
-        $value = TWiki::decodeSpecialChars( $value );
+        # reverse the encoding in _writeKeyValue
+        $value =~ s/%_N_%/\n/g;
+        $value =~ s/%_Q_%/\"/g;
+        $value =~ s/%_P_%/%/g;
         $res{$key} = $value;
     }
     return %res;
@@ -1082,7 +1088,7 @@ sub topicExists {
 # PRIVATE parse and add a meta-datum. Returns "" so it can be used in s///e
 sub _addMetaDatum {
     #my ( $meta, $type, $args ) = @_;
-    $_[0]->put( $_[1], _keyValue2Hash( $_[2] ));
+    $_[0]->put( $_[1], _readKeyValue( $_[2] ));
     return ""; # so it can be used in s///e
 }
 
@@ -1337,12 +1343,18 @@ sub getAllWebs {
 }
 
 # STATIC Write a meta-data key=value pair
+# The encoding is reversed in _readKeyValue
+# SMELL: this uses a really bad escape encoding
+# 1. it doesn't handle all characters that need escaping.
+# 2. it's excessively noisy
+# 3. it's not a reversible encoding; \r's are lost
 sub _writeKeyValue {
     my( $key, $value ) = @_;
 
     if( defined( $value )) {
-        $value = TWiki::encodeSpecialChars( $value );
-print STDERR "Writing $value\n" if ($key eq "value");
+        $value =~ s/\%/%_P_%/g;
+        $value =~ s/\"/%_Q_%/g;
+        $value =~ s/\r*\n\r*/%_N_%/g;
     } else {
         $value = "";
     }
@@ -1495,6 +1507,74 @@ sub copyTopicBetweenWebs {
     # FIXME: Copy also attachments if present
 
     return "";
+}
+
+=pod
+
+---++ sub searchMetaData($params)
+Search meta-data associated with topics. Parameters are passed in the $params hash,
+which may contain:
+| =type= | =topicmoved=, =parent= or =field= |
+| =topic= | topic to search for, for =topicmoved= and =parent= |
+| =name= | form field to search, for =field= type searches. May be a regex. |
+| =value= | form field value. May be a regex. |
+| =title= | Title prepended to the returned search results |
+| =default= | defualt value if there are no results |
+| =web= | web to search in, default is all webs |
+The idea is that people can search for meta-data values without having to be
+aware of how or where meta-data is stored.
+
+SMELL: should be replaced with a proper SQL-like search, c.f. Plugins.DBCacheContrib.
+
+=cut
+
+sub searchMetaData {
+    my ( $this, $params ) = @_;
+
+    my $attrType = $params->{type} || "FIELD";
+
+    my $searchVal = "XXX";
+
+    my $attrWeb = $params->{web} || "";
+    my $searchWeb = $attrWeb || "all";
+
+    if ( $attrType eq "parent" ) {
+        my $attrTopic = $params->{topic} || "";
+        $searchVal = "%META:TOPICPARENT[{].*name=\\\"($attrWeb\\.)?$attrTopic\\\".*[}]%";
+   } elsif ( $attrType eq "topicmoved" ) {
+        my $attrTopic = $params->{topic} || "";
+        $searchVal = "%META:TOPICMOVED[{].*from=\\\"$attrWeb\.$attrTopic\\\".*[}]%";
+    } else {
+        $searchVal = "%META:".uc( $attrType )."[{].*";
+        $searchVal .= "name=\\\"$params->{name}\\\".*"
+          if (defined $params->{name});
+        $searchVal .= "value=\\\"$params->{value}\\\".*"
+          if (defined $params->{value});
+        $searchVal .= "[}]%";
+    }
+
+    my $text = $this->search()->searchWeb(
+        #"_callback"    => undef,
+        "search"        => $searchVal,
+        "web"           => $searchWeb,
+        "type"          => "regex",
+        "nosummary"     => "on",
+        "nosearch"      => "on",
+        "noheader"      => "on",
+        "nototal"       => "on",
+        "noempty"       => "on",
+        "template"      => "searchmeta",
+    );
+    my $attrTitle = $params->{title} || "";
+    if( $text =~ /^\s*$/ ) {
+        # this doesn't work with pattern skin (or much else, for that matter!)
+        my $attrDefault = $params->{default} || "";
+        $text = "$attrTitle$attrDefault";
+    } else {
+        $text = "$attrTitle$text";
+    }
+
+    return $text;
 }
 
 1;
