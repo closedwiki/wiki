@@ -553,37 +553,46 @@ sub getRevisionInfo
 # ======================
 # Apply delta (patch) to text.  Note that RCS stores reverse deltas, the is text for revision x
 # is patched to produce text for revision x-1.
+# It is fiddly dealing with differences in number of line breaks after the end of the
+# text.
 sub _patch
 {
    # Both params are references to arrays
    my( $text, $delta ) = @_;
    my $adj = 0;
    my $pos = 0;
+   my $last = "";
+   my $len = @$text;
    my $d;
+   my $doPop = "";
+   my( $posLast, $blanksAtEnd ) = _lastNoEmptyItem( $text );
    while( $pos <= $#${delta} ) {
        $d = $delta->[$pos];
-       #_trace( "patch: $pos -> $d" );
        if( $d =~ /^([ad])(\d+)\s(\d+)$/ ) {
+          $last = $1;
           my $offset = $2;
           my $length = $3;
-          if( $1 eq "d" ) {
-             #_trace( "patch: text = @$text\n  adj=$adj\n" );
-             splice( @$text, $offset + $adj - 1, $length );
+          if( $last eq "d" ) {
+             my $start = $offset + $adj - 1;
+             my @removed = splice( @$text, $start, $length );
              $adj -= $length;
              $pos++;
-          } elsif( $1 eq "a" ) {
+             $doPop =  ( $start + length >= $posLast );
+          } elsif( $last eq "a" ) {
              splice( @$text, $offset + $adj, 0, @${delta}[$pos+1..$pos+$length] );
              $adj += $length;
              $pos += $length + 1;
+             pop @$text if( $doPop && $blanksAtEnd);
           } else {
              die( "only a and d supported, found " . $d );
           }
        } elsif( $pos = $#${delta} && $d =~ /^$/o ) {
+          push @$text, ("") if( $last eq "a" && $doPop );
+          $last = "";
           last;
        } else {
           die( "wrong! - should be \"[ad]<num> <num>\" and was: \"" . $d . "\"\n\n" ); #FIXME remove die
        }
-       #_trace( "patch: end loop $pos $#${delta}\n" );
    }
 }
 
@@ -593,16 +602,9 @@ sub _patchN
 {
     my( $self, $text, $version, $target ) = @_;
     my $deltaText= $self->delta( $version );
-    #my @delta = split( /\n/, $deltaText );
     my @delta = _mySplit( \$deltaText );
-    #FIXME might need something here, but only if delta is last line, removing before join below is
-    #well naff
-    #$delta[$#delta] .= "$1" if( $deltaText =~ /(\n+)$/o );
     _patch( $text, \@delta );
     if( $version == $target ) {
-    #    for(my $i=$#${text}-1; $i>=0; $i-- ) {
-    #        $text->[$i] =~ s/\n+$//o;
-    #    }
         return join( "\n", @$text );
     } else {
         return $self->_patchN( $text, $version-1, $target );
@@ -636,6 +638,21 @@ sub _diffText
     return _diff( \@lNew, \@lOld, $type );
 }
 
+# ======================
+sub _lastNoEmptyItem
+{
+   my( $items ) = @_;
+   my $pos = $#${items};
+   my $count = 0;
+   my $item;
+   while( $pos >= 0 ) {
+      $item = $items->[$pos];
+      last if( $item );
+      $count++;
+      $pos--;
+   }
+   return( $pos, $count );
+}
 
 # ======================
 # Deal with trailing carriage returns - Algorithm doesn't give output that RCS format is too happy with
@@ -644,24 +661,9 @@ sub _diffEnd
    my( $new, $old, $type ) = @_;
    return if( $type ); # FIXME
    
-   my $item;
-   my $posNew = $#${new};
-   my $countNew = 0;
-   while($posNew >= 0) {
-       $item = $new->[$posNew];
-       last if( $item );
-       $countNew++;
-       $posNew--;
-   }
-   my $posOld = $#${old};
-   my $countOld = 0;
-   while($posOld >= 0) {
-       $item = $old->[$posOld];
-       last if( $item );
-       $countOld++;
-       $posOld--;
-   }
-   
+   my( $posNew, $countNew ) = _lastNoEmptyItem( $new );
+   my( $posOld, $countOld ) = _lastNoEmptyItem( $old );
+
    return "" if( $countNew == $countOld );
    
    if( $DIFFEND_DEBUG ) {
