@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = '06 Oct 2004 $Rev$';
+$wikiversion      = '20 Oct 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2025,10 +2025,12 @@ again to prevent infinte recursive inclusion.
 sub handleIncludeFile
 {
     my( $theAttributes, $theTopic, $theWeb, $verbatim, @theProcessedTopics ) = @_;
-    my $incfile = extractNameValuePair( $theAttributes );
-    my $pattern = extractNameValuePair( $theAttributes, "pattern" );
-    my $rev     = extractNameValuePair( $theAttributes, "rev" );
-    my $warn    = extractNameValuePair( $theAttributes, "warn" );
+
+    my %params  = extractParameters( $theAttributes );
+    my $incfile = $params{"_DEFAULT"} || "";
+    my $pattern = $params{"pattern"}  || "";
+    my $rev     = $params{"rev"}      || "";
+    my $warn    = $params{"warn"}     || "";
 
     if( $incfile =~ /^http\:/ ) {
         # include web page
@@ -2165,13 +2167,14 @@ Not yet documented.
 
 sub handleMetaSearch
 {
-    my( $attributes ) = @_;
-    
-    my $attrWeb           = extractNameValuePair( $attributes, "web" );
-    my $attrTopic         = extractNameValuePair( $attributes, "topic" );
-    my $attrType          = extractNameValuePair( $attributes, "type" );
-    my $attrTitle         = extractNameValuePair( $attributes, "title" );
-    my $attrDefault       = extractNameValuePair( $attributes, "default" );
+    my( $theAttributes ) = @_;
+
+    my %params      = extractParameters( $theAttributes );
+    my $attrWeb     = $params{"web"}     || "";
+    my $attrTopic   = $params{"topic"}   || "";
+    my $attrType    = $params{"type"}    || "";
+    my $attrTitle   = $params{"title"}   || "";
+    my $attrDefault = $params{"default"} || "";
 
     my $searchVal = "XXX";
     
@@ -2344,14 +2347,15 @@ sub handleRevisionInfo
 {
     my( $theWeb, $theTopic, $theArgs ) = @_;
 
-    my $format = extractNameValuePair( $theArgs ) || extractNameValuePair( $theArgs, "format" )
-                 || "r1.\$rev - \$date - \$wikiusername";
-    my $web    = extractNameValuePair( $theArgs, "web" ) || $theWeb;
-    my $topic  = extractNameValuePair( $theArgs, "topic" ) || $theTopic;
+    my %params = extractParameters( $theArgs );
+
+    my $format = $params{"_DEFAULT"} || $params{"format"} || "r1.\$rev - \$date - \$wikiusername";
+    my $web    = $params{"web"}   || $theWeb;
+    my $topic  = $params{"topic"} || $theTopic;
     my $cgiQuery = getCgiQuery();
     my $cgiRev = "";
     $cgiRev = $cgiQuery->param('rev') if( $cgiQuery );
-    my $revnum = $cgiRev || extractNameValuePair( $theArgs, "rev" ) || "";
+    my $revnum = $cgiRev || $params{"rev"} || "";
     $revnum =~ s/r?1\.//; # cut "r" and major
 
     my( $date, $user, $rev, $comment ) = TWiki::Store::getRevisionInfo( $web, $topic, $revnum );
@@ -2413,20 +2417,22 @@ sub handleToc
     ##     $_[0]     $_[1]      $_[2]    $_[3]
     ## my( $theText, $theTopic, $theWeb, $attributes ) = @_;
 
+    my %params = extractParameters( $_[3] );
+
     # get the topic name attribute
-    my $topicname = extractNameValuePair( $_[3] )  || $_[1];
+    my $topicname = $params{"_DEFAULT"}  || $_[1];
 
     # get the web name attribute
-    my $web = extractNameValuePair( $_[3], "web" ) || $_[2];
+    my $web = $params{"web"} || $_[2];
     $web =~ s/\//\./g;
     my $webPath = $web;
     $webPath =~ s/\./\//g;
 
     # get the depth limit attribute
-    my $depth = extractNameValuePair( $_[3], "depth" ) || 6;
+    my $depth = $params{"depth"} || 6;
 
     #get the title attribute
-    my $title = extractNameValuePair( $_[3], "title" ) || "";
+    my $title = $params{"title"} || "";
     $title = "\n<span class=\"twikiTocTitle\">$title</span>" if( $title );
 
     my $result  = "";
@@ -2597,15 +2603,17 @@ sub handleWebAndTopicList
 {
     my( $theAttr, $isWeb ) = @_;
 
-    my $format = extractNameValuePair( $theAttr ) || extractNameValuePair( $theAttr, "format" );
+    my %params = extractParameters( $theAttr );
+
+    my $format    = $params{"_DEFAULT"}  || $params{"format"} || "";
     $format .= '$name' unless( $format =~ /\$name/ );
-    my $separator = extractNameValuePair( $theAttr, "separator" ) || "\n";
-    my $web = extractNameValuePair( $theAttr, "web" ) || "";
-    my $webs = extractNameValuePair( $theAttr, "webs" ) || "public";
-    my $selection = extractNameValuePair( $theAttr, "selection" ) || "";
+    my $separator = $params{"separator"} || "\n";
+    my $web       = $params{"web"}       || "";
+    my $webs      = $params{"webs"}      || "public";
+    my $selection = $params{"selection"} || "";
     $selection =~ s/\,/ /g;
     $selection = " $selection ";
-    my $marker    = extractNameValuePair( $theAttr, "marker" ) || 'selected="selected"';
+    my $marker    = $params{"marker"}    || 'selected="selected"';
 
     my @list = ();
     if( $isWeb ) {
@@ -2656,11 +2664,13 @@ sub handleUrlParam
 {
     my( $theArgs ) = @_;
 
-    my $param     = extractNameValuePair( $theArgs );
-    my $newLine   = extractNameValuePair( $theArgs, "newline" ) || "";
-    my $encode    = extractNameValuePair( $theArgs, "encode" ) || "";
-    my $multiple  = extractNameValuePair( $theArgs, "multiple" ) || "";
-    my $separator = extractNameValuePair( $theArgs, "separator" ) || "\n";
+    my %params    = extractParameters( $theArgs );
+    my $param     = $params{"_DEFAULT"}  || "";
+    my $newLine   = $params{"newline"}   || "";
+    my $encode    = $params{"encode"}    || "";
+    my $multiple  = $params{"multiple"}  || "";
+    my $separator = $params{"separator"} || "\n";
+
     my $value = "";
     if( $cgiQuery ) {
         if( $multiple ) {
@@ -2685,7 +2695,7 @@ sub handleUrlParam
     $value =~ s/\r?\n/$newLine/go if( $newLine );
     $value = handleUrlEncode( $value, 0, $encode ) if( $encode );
     unless( $value ) {
-        $value = extractNameValuePair( $theArgs, "default" ) || "";
+        $value = $params{"default"} || "";
     }
     return $value;
 }
