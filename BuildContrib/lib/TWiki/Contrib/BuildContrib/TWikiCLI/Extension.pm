@@ -74,7 +74,7 @@ sub cli_download {
 
     use TWiki::Contrib::DistributionContrib::DistributionFetcher;
     my $localCopy = TWiki::Contrib::DistributionContrib::DistributionFetcher::fetchLatestDistributionVersion($extension);
-    if ($localCopy == "") {
+    if ($localCopy eq "") {
      return "Couldn't get it";
     } else {
      return "okay - got it as $localCopy";

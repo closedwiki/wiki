@@ -6,6 +6,8 @@ package TWiki::Contrib::DistributionContrib::DistributionFetcher;
 use TWiki::Contrib::DistributionContrib::Config qw(%config);
 my %config = %TWiki::Contrib::DistributionContrib::Config::config;
 
+use TWiki;
+use TWiki::Func;
 use LWP::Simple;
 
 =pod
@@ -34,10 +36,10 @@ sub fetchLatestDistributionVersion {
 
 	my $fileUrlBase = $config{'serverUrl'}. "/" . $distribution;
 
-	my $pubDir = "/tmp"; # TODO make this TWiki::Func::getPubDir();
+	my $pubDir = TWiki::Func::getPubDir();
 	my $webTopicBodge = $config{'saveTopic'};
 	$webTopicBodge =~ s!\.!/!;
-	my $attachmentDir = $pubDir."/".$webTopicBodge."/";
+	my $attachmentDir = $pubDir."/".$webTopicBodge;
 	
 	my $distributionFile = $distribution.'.zip';
 	
