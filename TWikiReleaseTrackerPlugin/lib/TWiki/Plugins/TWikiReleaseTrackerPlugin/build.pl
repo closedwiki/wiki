@@ -92,9 +92,14 @@ sub target_test {
 
 sub target_release {
 	my $this = shift;
-	if ( $Common::installationDir ne "" ) {
-		warn "YOU FORGOT TO REMOVE THE DEFAULT INSTALL DIR!\n";
-	}
+	chdir( $runDir . "/test" ) || die "$! - can't cd into test dir";
+
+	#FIXME: this line hardcodes where to find a working TWiki.pm etc. Not good.
+	my $compilationErrors = `perl -I/home/mrjc/latestbetatwiki.mrjc.com/twiki/lib testPluginCompiles.pl`;
+	if ($compilationErrors ne "") {
+	    print STDERR $compilationErrors;
+	    die "The plugin failed to compile!!"
+	    }
 	$this->SUPER::target_release();
 }
 

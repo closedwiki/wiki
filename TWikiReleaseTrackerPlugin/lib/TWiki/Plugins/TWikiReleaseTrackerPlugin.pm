@@ -57,13 +57,13 @@ sub getParam {
 	my $ans = untaint( $cgiQuery->param($paramName) );
 
 	#    writeDebug("$inlineParamString\n1: $paramName = $ans");
-	unless ( $ans ne "" ) {
+	if ( $ans eq "" ) {
 		$ans =
 		  TWiki::Func::extractNameValuePair( $inlineParamString, $paramName );
 	}
 
 	#    writeDebug("2: $paramName = $ans");
-	unless ( $ans ne "" ) {
+	if ( $ans eq "" ) {
 		$ans =
 		  TWiki::Prefs::getPreferencesValue("\U$pluginName\E_\U$paramName\E");
 	}
@@ -89,22 +89,20 @@ sub handleDiffWiki {
 	Common::setIndexTopic( getParam( $param, 'indexTopic' )
 		  || 'TWiki.TWikiReleaseTrackerPlugin' );
 
-	$fscsFormat = getParam( $param, "fscsFormat" )
-	  || '| $relativeFile | FSCS | $locations |' . "\n";
+	$listingFormat{'FSCS'} = getParam( $param, "fscsFormat" )
+	  || '| $relativeFile | FSCS | $locations |';
 
-	$fscdFormat = getParam( $param, "fscdFormat" )
-	  || '<TABLE border=1> <TR><TD><b> $fromDistribution - $relativeFile (FSCDCALLBACK)</b>'
-	  . "\n"
-	  . '</TD><TD>FSCDDIFF </TD></TR></TABLE>';
+	$listingFormat{'FSCD'} = getParam( $param, "fscdFormat" )
+	 || '| $relativeFile | FSCDCALLBACK | FSCDDIST |';
 
-	#        '| $relativeFile | FSCDCALLBACK | FSCDDIST |'."\n";
-
-	$fdcdFormat = getParam( $param, "fdcdFormat" )
-	  || '| ($relativeFile name not recognised, and no content match)  | FDCD | |'
-	  . "\n";
+	$listingFormat{'FDCD'} = getParam( $param, "fdcdFormat" )
+	    || '| ($relativeFile name not recognised, and no content match)  | FDCD | |';
 
 	$listingFormat{'FDCS'} = getParam( $param, "fdcsFormat" )
-	  || '| $relativeFile | FDCS | $locations |' . "\n";
+	    || '| $relativeFile | FDCS | $locations |';
+
+	$listingFormat{'HEADER'} = getParam( $param, "headerFormat" ) 
+	    || "| *File* | *Status* | *Also Occurs In* |";
 
 	$debug = getParam( $param, 'debug' ) || 0;
 	if ( $debug eq "1" ) { $debug = "on" }
@@ -128,7 +126,8 @@ sub handleDiffWiki {
 		$ans .= dumpIndex();
 	}
 	elsif ($modeParam eq 'indexLocalInstallation' ) {
-	    $ans = "<pre>".IndexDistributions::indexLocalInstallation()."</pre>";
+	    $ans .= "<pre>".IndexDistributions::indexLocalInstallation()."</pre>";
+	    $ans .= browserCallback("Back to listing", 'mode' => 'listing');
 	}
 	else {
 		$ans .=
@@ -194,37 +193,7 @@ sub foundFile {
 
 	return $ans unless $showStatusFilter{$status};
 
-	# FIXME: simplify into a hash
-	if ( $status eq "FSCS" ) {
-		if ($fscsFormat) {
-			my $line = $fscsFormat;
-			$ans .= $line;
-		}
-	}
-	elsif ( $status eq "FSCD" ) {
-		if ($fscdFormat) {
-			my $line = $fscdFormat;
-			$ans .= $line;
-		}
-	}
-	elsif ( $status eq "FDCS" ) {
-		if ( $listingFormat{'FDCS'} ) {
-			my $line = $listingFormat{'FDCS'};
-			$ans .= $line;
-		}
-	}
-	elsif ( $status eq "FDCD" ) {
-		if ($fdcdFormat) {
-			my $line = $fdcdFormat;
-			$ans .= $line;
-		}
-	}
-	else {
-		unless ($debug) {
-			die "Illegal status - $!";
-		}
-		$ans .= "| $relativeFile | DIED | $locations |\n";
-	}
+	$ans .= $listingFormat{$status};
 	$ans =~ s/\$relativeFile/$relativeFile/;
 	$ans =~ s/\$locations/$locations/;
 	$ans =~ s/\$fromDistribution/$comparedToDistribution/;
@@ -249,7 +218,7 @@ sub foundFile {
 		}
 		$ans =~ s!FSCDDIFF!$comparison!;
 	}
-
+	$ans .= "\n"; # because users often specify HTML table and omit \n, breaking TWiki table
 	$ans .= $debugInfo if ( $debug eq "on" );
 	return $ans;
 }
@@ -282,6 +251,14 @@ sub compareFile {
 	  . "\n";
 
 	$ans .= "---++!! Comparing $compareToDistribution:$file ($mode) \n";
+	$ans .= "   <LI> "
+	  . browserCallback(
+		"Swap to and from distributions",
+		'to'   => $compareToDistribution,
+		'from' => $distString
+	  )
+	  . "\n";
+
 	$ans .= "%TOC%\n";    # FIXME (NB. This TOC does not work);
 	foreach my $distribution ( reverse sort @distributions ) {
 		next if ( $distribution eq $compareToDistribution );
@@ -328,13 +305,6 @@ sub compareFile {
 	else {
 		$ans .= "All distributions where this file occurs are listed above\n";
 	}
-	$ans .= "---++ Swap to and from\n" . "<LI>"
-	  . browserCallback(
-		"Swap to and from distributions",
-		'to'   => $compareToDistribution,
-		'from' => $distString
-	  )
-	  . "\n";
 
 	return $ans;
 }
@@ -446,7 +416,7 @@ sub listFiles {
 	loadIndexes();
 
 	$ans .= $@ if ($@);
-	$ans .= "| *File* | *Status* | *Also Occurs In* |\n";
+	$ans .= $listingFormat{'HEADER'}."\n";
 
 # This sub is called for every file found to match the compareToDistribution parameter
 	my $matchCallback = sub {
@@ -544,7 +514,7 @@ sub listFiles {
 		my $numberEntries = scalar(FileDigest::retreiveOccurancesForDistribution($dist));
 		$ans .= "<LI> Distribution $dist has ". $numberEntries." entries\n";
 		if ($dist eq "localInstallation") {
-		    $ans .= browserCallback("regenerate index", 'mode' => 'indexLocalInstallation');
+		    $ans .= browserCallback("Regenerate index (slow)", 'mode' => 'indexLocalInstallation');
 		}
 	    }
 #	    $ans .= "localInstallation has ".scalar(retreiveOccurancesForDistribution('localInstallation'))." entries\n";

@@ -26,7 +26,7 @@ sub indexDistribution {
   Common::debug "$pathname\n";
   my $relativePath =
     Common::relativeFromPathname( $pathname, $distributionLocation );
-#  return unless includeInResults($relativePath);
+  return unless includeInResults($relativePath);
   return unless -f $pathname;
   return if -z $pathname;
   Common::debug "$pathname\n";
@@ -79,21 +79,20 @@ sub includeInResults {
  my ($relativePath) = @_;
 
  #CodeSmell: should be able to do this in preprocessCallback
- if (( $relativePath =~ m!data/(.*)/! )
-  or ( $relativePath =~ m!pub/(.*)/! ) )
+ if (( $relativePath =~ m!.*data/(.*)/! )
+  or ( $relativePath =~ m!.*templates/(.*)/! ) 
+  or ( $relativePath =~ m!.*pub/(.*)/! ) )
  {
   my $web = $1;
 
   #	    print "Index web '$web'?" ;
-  if ( $web =~ m/$Common::websToIndex/ ) {
-   return 1;
-
+  if ( $web =~ m/$Common::websToIndex$/ ) {
    #		print "yes\n";
+   return 1;
   }
   else {
-   return 0;
-
    #		print "no\n";
+   return 0;
   }
  }
  return 1;
@@ -103,7 +102,7 @@ sub indexLocalInstallation {
  my $ans;
  ensureInstallationDir();
  FileDigest::emptyIndexes();
- $ans .=  "Indexing localInstallation\n";
+ $ans .=  "Indexing localInstallation '$Common::installationDir'\n";
  IndexDistributions::indexDistribution( "localInstallation", 
 					$Common::installationDir, $Common::excludeFilePattern,
 					"twiki");
