@@ -93,6 +93,10 @@ sub preview {
         # get the edited text and combine text, form and attachments for preview
         $session->{form}->fieldVars2Meta( $webName, $query, $meta );
         $text = $textparam;
+        unless ( defined $text ) {
+            # empty topic not allowed
+            throw TWiki::UI::OopsException( $webName, $topic, "empty" );
+        }
         #AS added hook for plugins that want to do heavy stuff
         $session->{plugins}->afterEditHandler( $text, $topic, $webName );
         $ptext = $text;
