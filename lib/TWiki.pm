@@ -1359,7 +1359,7 @@ sub renderParent
     if( $args ) {
        $dontRecurse = extractNameValuePair( $args, "dontrecurse" );
        $prefix = extractNameValuePair( $args, "prefix" );
-       $usesep = extractNameValuePair( $args, "seperator" );
+       $usesep = extractNameValuePair( $args, "separator" );
     }
     
     if( ! $usesep ) {
