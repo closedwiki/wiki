@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "11 Jul 2002";
+$wikiversion      = "16 Jul 2002";
 
 # ===========================
 # read the configuration part
@@ -2193,6 +2193,8 @@ sub getRenderedVersion
 # Embedded HTML
             s/\<(\!\-\-)/$TranslationToken$1/go;  # Allow standalone "<!--"
             s/(\-\-)\>/$1$TranslationToken/go;    # Allow standalone "-->"
+            s/(\<\<+)/"&lt\;" x length($1)/geo;
+            s/(\>\>+)/"&gt\;" x length($1)/geo;
             s/\<(\S.*?)\>/$TranslationToken$1$TranslationToken/go;
             s/</&lt\;/go;
             s/>/&gt\;/go;
