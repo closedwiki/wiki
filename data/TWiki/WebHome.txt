@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007281253" format="1.0" version="1.56"}%
+%META:TOPICINFO{author="MikeMannix" date="1007296581" format="1.0" version="1.57"}%
 <table><tr><td>
 Welcome to TWiki, a flexible, powerful, and simple Web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base, or any other groupware tool, on an intranet or on the Web. <p>This is the place to learn about it, download it, and try it out for yourself... </p></td><td width="25">&nbsp;</td><td width="200">
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a> <br>
@@ -43,6 +43,7 @@ Documentation for webmasters, system administrators, project managers, team lead
 		* [[TWikiAccessControl][Access Control]]
 		* [[TextFormattingRules][TWiki Text Formatting]]
 		* TWikiVariables
+		* [[FormattedSearch][TWiki Search Formatting]]
 		* TWikiForms
 		* [[FileAttachment][TWikiAttachments]]
 		* TWikiTemplates
@@ -54,8 +55,7 @@ Documentation for webmasters, system administrators, project managers, team lead
 		*Appendices* <br />
 		  [[AppendixFileSystem][A. TWiki File System]]<br />
 		  [[TWikiMetaData][B. TWiki Meta Data]]<br />
-		  [[TWikiVariablesExamples][C. <nop>TWikiVariables Examples]]<br />
-		  [[TWikiHistory][D. TWiki Dev Timeline]]
+		  [[TWikiHistory][C. TWiki Dev Timeline]]
 
 ---+++ TWiki Site Tools
 
