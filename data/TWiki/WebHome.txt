@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000524299" format="1.0" version="1.44"}%
+%META:TOPICINFO{author="MikeMannix" date="1000531731" format="1.0" version="1.45"}%
 <table><tr><td>
 Welcome to TWiki, a flexible, powerful, and simple Web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base, or any other groupware tool, on an intranet or on the Web. <p>This is the place to learn about it, download it, and try it out for yourself... </p></td><td width="25">&nbsp;</td><td width="200">
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a> <br>
@@ -39,9 +39,9 @@ _While installing TWiki, it's easy to customize the User's Guide pages to fit th
 
 		* TWikiHistory: The TWiki development timeline
 		* TWikiDocumentation: Complete current reference...
-			1 [[TWikiImplementationNotes][TWiki System Requirements]]
-			1 [[TWikiInstallationGuide][TWiki Installation Guide]]
-			1 [[TWikiUpgradeGuide][TWiki Upgrade Guide]] 
+			1 [[TWikiImplementationNotes][System Requirements]]
+			1 [[TWikiInstallationGuide][Installation Guide]]
+			1 [[TWikiUpgradeGuide][Upgrade Guide]] 
 			1 [[TWikiUserAuthentication][User Authentication]] 
 			1 [[TWikiAccessControl][Access Control]] 
 			1 TWikiTemplates
@@ -51,9 +51,9 @@ _While installing TWiki, it's easy to customize the User's Guide pages to fit th
 			1 TWikiForms
 			1 TWikiPlugins
 			1 [[MonitoringSiteActivity][Monitoring Activity]] 
-			1 [[ManagingTopics][Managing Topics]] 
+			1 [[ManagingTopics][Managing Pages]] 
 			1 [[ManagingWebs][Managing Webs]] 
-			1 [[AppendixFileSystem][A: TWiki File System]]
+			1 [[AppendixFileSystem][A - TWiki File System]]
 
 ---+++ TWiki Site Tools
 
@@ -78,6 +78,6 @@ Site tools include utilities for navigating and keeping up with site activity on
 	* TWiki<sup>TM</sup> is a trademark of PeterThoeny
 	* TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
 	* Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]] <br>
-	  %TLS%
+	  %PUBURL%/twikilogo88x31.gif
 
 -- MikeMannix - 14 Sep 2001 <br />	

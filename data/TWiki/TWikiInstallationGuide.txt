@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000527435" format="1.0" version="1.33"}%
+%META:TOPICINFO{author="MikeMannix" date="1000531222" format="1.0" version="1.34"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
@@ -17,18 +17,18 @@ These installation steps are based on the Apache Web server on Linux. TWiki runs
 ---++ Standard Installation
 
 Request and download the TWiki 01-Sep-2001 distribution in Unix ZIP format from http://TWiki.org/download.html.
-
 ---+++ Step 1: Create &amp; Configure the Directories
 
-__NOTE:__ _If you don't have access to your Web server configuration files - for example, if you're installing on an ISP-hosted account - use the [[#StepOneB][alternative Step 1]] instead._
+	* __NOTE:__ _If you don't have access to your Web server configuration files - for example, if you're installing on an ISP-hosted account - use the [[#StepOneB][alternative Step 1]] instead._
+	* __NOTE:__ To install TWiki on <nop>SourceForge, for use on a software development project, read TWiki:Codev/SourceForgeHowTo.
 
 	* Create directory =/home/httpd/twiki= and unzip the TWiki distribution into this directory.
 	* The =twiki/bin= directory of TWiki must be set as a cgi-bin directory. Add =/home/httpd/twiki/bin= to file =/etc/httpd/httpd.conf= with only =ExecCGI= option.
 	* The =twiki/pub= directory of TWiki must be set so that it is visible as a URL. Add =/home/httpd/twiki= to file =httpd.conf= with normal access options (copy from =/home/httpd/html= ).
 	* Now add =ScriptAlias= for =/twiki/bin= and =Alias= for =/twiki= to file =httpd.conf= .
-	  <br> __Note:__ The =ScriptAlias=  *must* come before the =Alias= in Apache, otherwise it will fail to correctly set up =/twiki/bin/= , due to the fact that it sees that as being just another subdirectory of the =/twiki/= alias. <br>
+	  <br> __NOTE:__ The =ScriptAlias= __must__ come before the =Alias=, otherwise, Apache will fail to correctly set up =/twiki/bin/=, by treating it as just another subdirectory of the =/twiki/= alias.
 
-<blockquote style="background-color:#f0f0f0">
+<blockquote style="background-color:#F5F5F5">
 *Example =httpd.conf= entries:*
  <pre> Script<nop>Alias /twiki/bin/ "/home/httpd/twiki/bin/"
  Alias /twiki/ "/home/httpd/twiki/"
@@ -56,13 +56,11 @@ To install TWiki on a system where you don't have server administrator privilege
 	* Upload the TWiki files by FTP (transfer as _text_ except for the image files in =pub=)
 <blockquote>
 | *TWiki dir:* | *What it is:* | *Where to copy:* | *Example:* |
-| =twiki/bin= | CGI bin | cgi-bin enabled dir | =/home/smith/public_html/cgi-bin= |
-| =twiki/lib= | library files | same level like =twiki/bin= | =/home/smith/public_html/lib= |
+| =twiki/bin= | CGI bin | cgi-enabled dir | =/home/smith/public_html/cgi-bin= |
+| =twiki/lib= | library files | same level as =twiki/bin= | =/home/smith/public_html/lib= |
 | =twiki/pub= | public files | htdoc enabled dir | =/home/smith/public_html/pub= |
 | =twiki/data= | topic data | outside of htdoc tree (for security) | =/home/smith/twiki/data= |
 | =twiki/templates= | web templates | outside of htdoc tree (for security) | =/home/smith/twiki/templates= |
-
-(Read TWiki:Codev/SourceForgeHowTo in case you want to install TWiki on <nop>SourceForge, to use on a software development project.)
 </blockquote>
 
 #StepTwo
