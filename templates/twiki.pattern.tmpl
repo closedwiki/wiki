@@ -7,26 +7,25 @@
 
 %TMPL:DEF{"script"}%
 <script type="text/javascript">
-//<![CDATA[
+<!-- HIDE
 	function initPage() { }
-//]]>
+-->
 </script>
 %TMPL:END%
 
 %TMPL:DEF{"twikistyle"}%
 <style type="text/css" media="all">
-		/*@import url("%PUBURL%/skins/pattern/PatternStyle.css");*/
 		/* Default TWiki layout */
         @import url("%TWIKILAYOUTURL%");
         /* Default TWiki style */
         @import url("%TWIKISTYLEURL%");
 </style>
 %TMPL:END%
-%TMPL:DEF{"topicstyle"}%
+%TMPL:DEF{"userstyle"}%
 <style type="text/css" media="all">
-        /* Custom overriding layout */
+        /* Custom overriding layout per web or per topic */
         @import url("%USERLAYOUTURL%");
-        /* Custom overriding style */
+        /* Custom overriding style per web or per topic */
         @import url("%USERSTYLEURL%");
 </style>
 %TMPL:END%
@@ -39,7 +38,7 @@
 %HTTP_EQUIV_ON_VIEW%
 <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
 %TMPL:P{"twikistyle"}%
-%TMPL:P{"topicstyle"}%
+%TMPL:P{"userstyle"}%
 %TMPL:P{"script"}%
 </head> %TMPL:END%
 
