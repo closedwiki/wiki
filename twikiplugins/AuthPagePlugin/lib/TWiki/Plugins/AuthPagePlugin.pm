@@ -32,7 +32,7 @@ use TWiki::Plugins::AuthPagePlugin::Validator;
 
 use vars qw( $VERSION );
 
-$VERSION = 1.000;
+$VERSION = 1.001;
 
 =pod
 
@@ -87,26 +87,33 @@ sub logon {
     if( $TWiki::Plugins::SessionPlugin::session ) {
         my $currUser = $TWiki::Plugins::SessionPlugin::session->param
           ( $TWiki::Plugins::SessionPlugin::authUserSessionVar );
-        $banner = $currUser.' is currently logged in';
-        $note = "Enter a new username and password to change identity";
+        if( $currUser ) {
+            $banner = $currUser.' is currently logged in';
+            $note = "Enter a new username and password to change identity";
+        }
     }
 
     if( $loginName ) {
-        my $validation = TWiki::Plugins::AuthPagePlugin::Validator::validate
-          ( $loginName, $loginPass );
-        if( $validation ) {
-            $TWiki::Plugins::SessionPlugin::session->param
-              ( $TWiki::Plugins::SessionPlugin::authUserSessionVar,
-                $loginName );
-            $TWiki::Plugins::SessionPlugin::session->param
-              ( 'VALIDATION', $validation );
-            if( $origurl && $origurl ne $query->url() ) {
-                TWiki::redirect( $query, $origurl );
-                return;
+        if( $TWiki::Plugins::SessionPlugin::session ) {
+            my $validation =
+              TWiki::Plugins::AuthPagePlugin::Validator::validate
+                  ( $loginName, $loginPass );
+            if( $validation ) {
+                $TWiki::Plugins::SessionPlugin::session->param
+                  ( $TWiki::Plugins::SessionPlugin::authUserSessionVar,
+                    $loginName );
+                $TWiki::Plugins::SessionPlugin::session->param
+                  ( 'VALIDATION', $validation );
+                if( $origurl && $origurl ne $query->url() ) {
+                    TWiki::redirect( $query, $origurl );
+                    return;
+                }
+                $banner = "$loginName is logged in";
+            } else {
+                $banner = "Unrecognised user and/or password";
             }
-            $banner = "$loginName is logged in";
         } else {
-            $banner = "Unrecognised user and/or password";
+            $banner = "There is no session - is SessionPlugin working?";
         }
     }
 

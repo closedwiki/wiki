@@ -5,7 +5,7 @@ This plugin is an *add-on to SessionPlugin*, designed to support a "logon page" 
    * *you want multiple layers of authentication*, for example, Basic<nop>Auth to access the site and view pages as a guest, and then some other scheme to allow access to edit)
    * *you want to logout and login as another user*
 
-You have to provide an implementation of the =TWiki::Plugins::%TOPIC%::Validator::validate= method. A working example implementation using =Apache::Htpasswd= is included as a template.
+You have to provide an implementation of the =TWiki::Plugins::%TOPIC%::Validator::validate= method. Two working example implementations, one using the =TWiki::User::HtPasswdUser= module and the other using =Apache::Htpasswd= are included.
 
 The plugin works by adding a call to an authentication function from each TWiki bin script that is to be protected. This function checks if the current session is authenticated, and if not, it redirects to a =login= script. This script prompts for credentials and calls your validator to check the credentials. If the credentials are sound, it caches the result of the validation in the session cookie and redirects to the original URL. The validator results are available from the SessionPlugin session variable =VALIDATION=, so other plugins can pick them up if needed.
 
@@ -30,21 +30,25 @@ This plugin requires the TWiki20040902 ("Cairo") TWiki release, and the [[TWiki:
 	* =perl= ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. This script also includes an _uninstaller_ should you ever wish to remove the plugin from your installation.
 	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
 %$DEPENDENCIES%
-	* Set the permissions correctly on the =logon= script
+	* Set the permissions correctly on the =login= script
 	* You will have to edit each of the TWiki scripts in the =bin= directory that you want protected by a logon step. Immediately after the =TWiki::initialize= function has been called, add the following two lines:
 	<pre>
 	use TWiki::Plugins::AuthPagePlugin;
 	TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
 	</pre>
 	( __Note__ that the variable names in =save= are slightly different; but you will work it out easily enough. )
-	* To enable the "Apache" validator
-		* install the CPAN:Apache::Htpasswd (http://www.cpan.org) 
+	* To enable the =TWiki::User::HtPasswdUser= validator
 		* change directory to  =lib/TWiki/Plugins/AuthPagePlugin=
-		* copy the .pm module for the validator you want to use to the file =Validator.pm=
+		* copy =HtPasswdUser_Validator.pm= to =Validator.pm=
 		* edit the validator and set up paths to password files etc.
+	* To enable the =Apache::Htpasswd= validator
+		* install CPAN:Apache::Htpasswd (http://www.cpan.org) 
+		* change directory to  =lib/TWiki/Plugins/AuthPagePlugin=
+		* copy =Apache_Htpasswd_Validator.pm to =Validator.pm=
+		* edit the =.pm= file and set up the path to your password file.
 	* Alternatively write a validator appropriate to your preferred authentication method.
 
-If you are _also_ using standard webserver authentication, then some changes to SessionPlugin are required. SessionPlugin by default assumes that the REMOTE_USER set up by the webserver will be the same as the authorised user. In our case that isn't the case, so we need to make some small changes to SessionPlugin. Edit =Session<nop>Plugin.pm= and comment out the following lines in =_init_authuser=
+If you are _also_ using standard webserver authentication, then some changes to SessionPlugin are required. SessionPlugin by default assumes that the REMOTE_USER set up by the webserver will be the same as the authorised user. When using %TOPIC% that isn't the case, so we need to make some small changes to SessionPlugin. Edit =Session<nop>Plugin.pm= and comment out the following lines in =_init_authuser=
 <verbatim>
 $session->clear() if( defined($session) && defined($session->param) && 
    defined($query) && defined( $query->remote_user() ) &&
@@ -54,14 +58,15 @@ $session->clear() if( defined($session) && defined($session->param) &&
    "" ne $session->param( $authUserSessionVar ) &&
    $query->remote_user() ne $session->param( $authUserSessionVar ) );
 </verbatim>
-then reverse the order of the first two terms of the condition just below, thus:
+then comment out the first term of the condition just below, thus:
 <verbatim>
        # See whether the user was logged in (first session, then webserver, then default)
-        $authUser = $session->param( $authUserSessionVar ) ||
-                    $query->remote_user() ||
+        $authUser = #$query->remote_user() ||
+                    $session->param( $authUserSessionVar ) || 
                     TWiki::Func::getDefaultUserName();
 </verbatim>
 
+A future release of SessionPlugin will make this behaviour conditional.
 ---
 ---+ Plugin Info
 
@@ -70,6 +75,7 @@ then reverse the order of the first two terms of the condition just below, thus:
 |  License: | GPL |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  29 Mar 2005 | 1.001 Added HtPasswdUser_Validator.pm |
 |  24 Mar 2005 | 1.000 First version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
