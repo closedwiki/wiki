@@ -264,15 +264,15 @@ sub renderForEdit
         if( $output ) {
             $value = $output;
         } elsif( $type eq "text" ) {
-            $value =~ s/"/&#34/go; # Make sure double quote don't kill us
             $value =~ s/&/&amp\;/go;
+            $value =~ s/"/&quot\;/go; # Make sure double quote don't kill us
             $value =~ s/</&lt\;/go;
             $value =~ s/>/&gt\;/go;
             $value = "<input type=\"text\" name=\"$name\" size=\"$size\" value=\"$value\" />";
         } elsif( $type eq "label" ) {
             my $escaped = $value;
-            $escaped =~ s/"/&#34/go; # Make sure double quote don't kill us
             $escaped =~ s/&/&amp\;/go;
+            $escaped =~ s/"/&quot\;/go; # Make sure double quote don't kill us
             $escaped =~ s/</&lt\;/go;
             $escaped =~ s/>/&gt\;/go;
             $value = "<input type=\"hidden\" name=\"$name\" value=\"$escaped\" />$value";
@@ -283,8 +283,8 @@ sub renderForEdit
                $cols = $1;
                $rows = $2;
             }
-            $value =~ s/"/&#34/go; # Make sure double quote don't kill us
             $value =~ s/&/&amp\;/go;
+            $value =~ s/"/&quot\;/go; # Make sure double quote don't kill us
             $value =~ s/</&lt\;/go;
             $value =~ s/>/&gt\;/go;
             $value = "<textarea cols=\"$cols\" rows=\"$rows\" name=\"$name\">$value</textarea>";
@@ -357,7 +357,10 @@ sub renderForEdit
             $value = "$val\n</tr></table>\n";
         } else {
             # Treat like test, make it reasonably long
-            $value =~ s/"/&#34/go; # Make sure double quote don't kill us
+            $value =~ s/&/&amp\;/go;
+            $value =~ s/"/&quot\;/go; # Make sure double quote don't kill us
+            $value =~ s/</&lt\;/go;
+            $value =~ s/>/&gt\;/go;
             $value = "<input type=\"text\" name=\"$name\" size=\"80\" value=\"$value\" />";
         }
         $text .= "   <tr> " . &link( $web, $title, $tooltip, "h", "right", "", $extra ) . "<td align=\"left\"> $value </td> </tr>\n";
