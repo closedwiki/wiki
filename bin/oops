@@ -53,5 +53,6 @@ sub main
     $tmplData = &wiki::handleCommonTags( $tmplData, $topic );
     my( $head, $body ) = split( /<\/HEAD>/, $tmplData );
     $body = &wiki::getRenderedVersion( $body );
+    $body =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
     print "$head</HEAD>$body";
 }

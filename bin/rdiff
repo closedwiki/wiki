@@ -159,6 +159,7 @@ sub main
     $before =~ s/%REVTITLE1%/$revTitle1/go;
     $before =~ s/%REVTITLE2%/$revTitle2/go;
     $before = &wiki::handleCommonTags( $before, $topic );
+    $before =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
     print $before;
 
     # do one or more diffs
@@ -177,6 +178,7 @@ sub main
             $text = &wiki::getRevisionDiff( $topic, "1.$r2", "1.$r1" );
             $text = renderRevisionDiff( $text, $topic );
             $diff =~ s/%TEXT%/$text/go;
+            $diff =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
             print $diff;
             $r1 = $r1 - 1;
             $r2 = $r2 - 1;
@@ -188,6 +190,7 @@ sub main
         $diff =~ s/%REVTITLE1%/$revTitle1/go;
         $diff =~ s/%REVTITLE2%/$revTitle2/go;
         $diff =~ s/%TEXT%//go;
+        $diff =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
         print $diff;
     }
 
@@ -230,5 +233,7 @@ sub main
     $after =~ s/%REVINFO2%/$revInfo2/go;
 
     $after = &wiki::handleCommonTags( $after, $topic );
+    $after =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
+
     print $after;
 }

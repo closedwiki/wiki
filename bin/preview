@@ -1,9 +1,8 @@
-#!/usr/bin/perl -wT -I.
+#!/usr/bin/perl -wTI.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
-# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
-# TakeFive Software Inc.
+# Copyright (C) 1999 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -211,6 +210,7 @@ sub main
     $text =~ s/\n/%_N_%/go;
 
     $tmpl =~ s/%HIDDENTEXT%/$text/go;
+    $tmpl =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
 
     print $tmpl;
 }

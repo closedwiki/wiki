@@ -137,6 +137,7 @@ sub searchWikiWeb
 
     if( ! $doInline ) {
         # print first part of full HTML page
+        $tmplHead =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
         print $tmplHead;
     }
 
@@ -150,6 +151,7 @@ sub searchWikiWeb
         if( $doInline ) {
             $searchResult .= $tmplSearch;
         } else {
+            $tmplSearch =~ s|</*nop/*>||goi;   # remove <nop> tag
             print $tmplSearch;
         }
     }
@@ -342,6 +344,7 @@ sub searchWikiWeb
         if( $doInline ) {
             $searchResult .= $beforeText;
         } else {
+            $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
             print $beforeText;
         }
 
@@ -389,6 +392,7 @@ sub searchWikiWeb
             if( $doInline ) {
                 $searchResult .= $tempVal;
             } else {
+                $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
                 print $tempVal;
             }
 
@@ -400,6 +404,7 @@ sub searchWikiWeb
         if( $doInline ) {
             $searchResult .= $afterText;
         } else {
+            $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
             print $afterText;
         }
 
@@ -410,12 +415,14 @@ sub searchWikiWeb
             if( $doInline ) {
                 $searchResult .= $thisNumber;
             } else {
+                $thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
                 print $thisNumber;
             }
         }
     }
     if( ! $doInline ) {
         # print last part of full HTML page
+        $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
         print $tmplTail;
     }
     return $searchResult;

@@ -163,6 +163,7 @@ sub main
 
     $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
     $tmpl =~ s/%TEXT%/$text/go;
+    $tmpl =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
     print "Content-type: text/html\n\n";
     print $tmpl;
 }
