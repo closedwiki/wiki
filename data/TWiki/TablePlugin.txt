@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1005906204" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1007021551" format="1.0" version="1.5"}%
 ---+ Table Plugin
 
 Gives extra control off table display:
@@ -95,8 +95,8 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="3" cellsp
 ---+++ Plugin Info
 
 |  Plugin Author: | %TWIKIWEB%.JohnTalintyre |
-|  Plugin Version: | 07 Oct 2001 |
-|  Change History: | 16 Nov 2001: PTh added table border, cell spacing, cell padding, gif files <br /> 07 Oct 2001: Initial version |
+|  Plugin Version: | 29 Nov 2001 |
+|  Change History: | 29 Nov 2001: PTh fixed Perl warnings <br /> 16 Nov 2001: PTh added table border, cell spacing, cell padding, gif files <br /> 07 Oct 2001: Initial version |
 |  CPAN Dependencies: |  |
 |  Other Dependencies: |  |
 |  Perl Version: | 5.0 |
