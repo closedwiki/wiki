@@ -92,7 +92,7 @@ Add this to style.css:
 This CSS is also attached to this topic, [[%ATTACHURL%/LowRes.css][LowRes.css]]. To use this style, add this to your home page:
 <verbatim>
 	* Personal TWiki.PatternSkin CSS settings
-		* Set USERLAYOUTURL = %PUBURL%/%SYSTEMWEB%/PatternSkinCustomization/LowRes.css
+		* Set USERLAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkinCustomization/LowRes.css
 </verbatim>
 
 ---+++ Bottom bar
