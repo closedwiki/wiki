@@ -258,7 +258,7 @@ sub getRevision
 ---++ sub numRevisions (  $self  )
 
 Find out how many revisions there are. If there is a problem, such
-as a nonexistant file, returns the null string.
+as a nonexistent file, returns the null string.
 
 =cut
 

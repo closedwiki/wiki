@@ -262,36 +262,35 @@ sub _addListItem {
     $theIndent =~ s/   /\t/g;
     my $depth = length( $theIndent );
 
-    my $top = scalar( @{$this->{LISTTYPES}} );
-    if( $top < $depth ) {
+    my $size = scalar( @{$this->{LIST}} );
+    if( $size < $depth ) {
         my $firstTime = 1;
-        while( $top < $depth ) {
-            push( @{$this->{LISTTYPES}}, $theType );
-            push( @{$this->{LISTELEMENTS}}, $theElement );
+        while( $size < $depth ) {
+            push( @{$this->{LIST}}, { type=>$theType, element=>$theElement } );
             push( @$result, "<$theElement>\n" ) unless( $firstTime );
             push( @$result, "<$theType>\n" );
             $firstTime = 0;
-            $top++;
+            $size++;
         }
-    } elsif( $top > $depth ) {
-        while( $top > $depth ) {
-            push( @$result, "</".pop( @{$this->{LISTELEMENTS}} ).">\n" );
-            push( @$result, "</".pop( @{$this->{LISTTYPES}} ).">\n" );
-            $top--;
+    } else {
+        while( $size > $depth ) {
+            my $tags = pop( @{$this->{LIST}} );
+            push( @$result, "</$tags->{element}>\n" );
+            push( @$result, "</$tags->{type}>\n" );
+            $size--;
         }
-        $top = @{$this->{LISTELEMENTS}};
-        push( @$result, "</".$this->{LISTELEMENTS}->[$top].">\n") if( $top );
-    } elsif( scalar( @{$this->{LISTELEMENTS}} )) {
-        $top = $#{$this->{LISTELEMENTS}};
-        push ( @$result, "</".$this->{LISTELEMENTS}->[$top].">\n" );
+        if ($size) {
+            push( @$result, "</$this->{LIST}->[$size-1]->{element}>\n" );
+        }
     }
 
-    $top = $#{$this->{LISTTYPES}};
-    my $oldt = $this->{LISTTYPES}->[$top] || "";
-    if( $top && $oldt ne $theType ) {
-        push( @$result, "</$oldt>\n<$theType>\n" );
-        $this->{LISTTYPES}->[$top] = $theType;
-        $this->{LISTELEMENTS}->[$#{$this->{LISTELEMENTS}}] = $theElement;
+    if ( $size ) {
+        my $oldt = $this->{LIST}->[$size-1];
+        if( $oldt->{type} ne $theType ) {
+            push( @$result, "</$oldt->{type}>\n<$theType>\n" );
+            pop( @{$this->{LIST}} );
+            push( @{$this->{LIST}}, { type=>$theType, element=>$theElement } );
+        }
     }
 }
 
@@ -779,8 +778,7 @@ sub getRenderedVersion {
     $insideTABLE = 0;
     $insideNoAutoLink = 0;
 
-    @{$this->{LISTTYPES}} = ();
-    @{$this->{LISTELEMENTS}} = ();
+    @{$this->{LIST}} = ();
 
     # Initial cleanup
     $text =~ s/\r//g;
@@ -833,7 +831,7 @@ sub getRenderedVersion {
             # inside <PRE>
 
             # close list tags if any
-            if( @{$this->{LISTTYPES}} ) {
+            if( @{$this->{LIST}} ) {
                 $this->_addListItem( \@result, "", "", "" );
                 $isList = 0;
             }

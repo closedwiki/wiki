@@ -35,7 +35,8 @@ sub oops {
     $topic = $TWiki::mainTopicname unless ( $topic );
 
     my $url = $session->getOopsUrl( $webName, $topic, "oops$script", @_ );
-    redirect( $url, @_ );
+
+    redirect( $session, $url, @_ );
 }
 
 =pod twiki

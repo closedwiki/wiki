@@ -48,6 +48,7 @@ saw:
 Expected:
 <!-- expected expand -->
 %EGGSAMPLE%
+<p />
 <!-- /expected -->
 saw:
 <!-- actual -->

@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="guest" date="1102566706" format="1.0" version="1.4"}%
 Description: Simple formatting, as described in TWiki.TextFormattingRules
 
 <table cols=3 border=2>
@@ -238,11 +239,11 @@ Note: noautolink tags will still be there, because they are not removed until im
 </td></tr>
 <tr><td> Wiki Word Links</td><td>
 <!-- expected expand -->
-<a class="twikiLink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WebPreferences">WebPreferences</a>
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/WebPreferences">WebPreferences</a>
 <p />
-<a class="twikiLink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%MAINWEB%/TWikiUsers">TWikiUsers</a>
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/TWikiUsers">TWikiUsers</a>
 <p />
-<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">CompleteAndUtterNothing</font><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
+<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">CompleteAndUtterNothing</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
 <!-- /expected -->
 </td><td>
 <!-- actual -->
@@ -255,9 +256,9 @@ CompleteAndUtterNothing
 </td></tr>
 <tr><td> Square Brackets</td><td>
 <!-- expected expand -->
-<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">wiki syntax</font><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
+<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">wiki syntax</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
 <p />
-<a class="twikiLink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%MAINWEB%/TWikiUsers">Main.TWiki users</a>
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/TWikiUsers">Main.TWiki users</a>
 <p />
 escaped:
 [<nop>[wiki syntax]]
@@ -274,7 +275,7 @@ escaped:
 </td></tr>
 <tr><td> Specific Links</td><td>
 <!-- expected expand -->
-<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">syntax</font><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
+<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">syntax</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
 <p />
 <a href="http://gnu.org" target="_top">GNU</a>
 <p />
@@ -291,9 +292,9 @@ escaped:
 </td></tr>
 <tr><td> Anchors</td><td>
 <!-- expected expand -->
-<a class="twikiAnchorLink" href="%SCRIPTURLPATH%/view/TestCases/TestCaseAutoFormatting#NotThere">TestCaseAutoFormatting#NotThere</a>
+<a class="twikiAnchorLink" href="%SCRIPTURL%/view/TestCases/TestCaseAutoFormatting#NotThere">TestCaseAutoFormatting#NotThere</a>
 <p />
-<a class="twikiAnchorLink" href="%SCRIPTURLPATH%/view/TestCases/TestCaseAutoFormatting#MyAnchor">Jump</a>
+<a class="twikiAnchorLink" href="%SCRIPTURL%/view/TestCases/TestCaseAutoFormatting#MyAnchor">Jump</a>
 <p />
 <a name="MyAnchor"></a> To here
 <!-- /expected -->

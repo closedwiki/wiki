@@ -326,15 +326,14 @@ sub rename {
     # justChangeRefs will be true when some topics that had links to $oldTopic
     # still need updating, previous update being prevented by a lock.
 
-    unless ( $justChangeRefs ||
-             _checkExist( $oldWeb, $oldTopic, $newWeb, $newTopic,
-                          $theAttachment ) &&
-             TWiki::UI::isAccessPermitted( $session, $oldWeb, $oldTopic,
-                                           "change", $wikiUserName ) &&
-             TWiki::UI::isAccessPermitted( $session, $oldWeb, $oldTopic,
-                                           "rename", $wikiUserName )
-           ) {
-        return;
+    unless ( $justChangeRefs ) {
+        return if _checkExist( $session,
+                               $oldWeb, $oldTopic, $newWeb, $newTopic,
+                               $theAttachment );
+        return unless TWiki::UI::isAccessPermitted( $session, $oldWeb, $oldTopic,
+                                                    "change", $wikiUserName );
+        return unless TWiki::UI::isAccessPermitted( $session, $oldWeb, $oldTopic,
+                                                    "rename", $wikiUserName );
     }
 
     # Has user selected new name yet?
@@ -389,7 +388,6 @@ sub rename {
         ( $lockFailure, $problems ) = 
           $session->{store}->updateReferringPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
     }
-
     my $new_url = "";
     if( $lockFailure ) {
         _moreRefsToChange( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $skin );
@@ -470,7 +468,7 @@ sub _getReferringTopicsListFromURL {
 
 # Check that various webs and topics exist or don't exist as required
 sub _checkExist {
-    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment ) = @_;
+    my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment ) = @_;
 
     my $ret = 0;
     my $query = $session->{cgiQuery};

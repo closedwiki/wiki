@@ -24,36 +24,82 @@ package TWiki::Sandbox;
 
 use strict;
 
-=pod
+# TODO: Sandbox module should probably use custom 'die' handler so that output goes
+# only to web server error log - otherwise it might give useful debugging
+# information to someone developing an exploit.  
 
----++ new( $OS )
-Construct a new sandbox suitable for $OS
+# TODO: Get rid of $cmdQuote in TWiki.cfg and TWiki.pm
+
+# DEBUG - use confess instead of die for stack trace
+# use CGI::Carp qw(confess fatalsToBrowser);
+
+sub _writeDebug {
+    my $this = shift;
+#    $this->{session}->writeDebug($_[0]);
+#    print STDERR $_[0],"\n";
+}
+
+=pod 
+---++ new( $OS, $detailedOS )
+
+Construct a new sandbox suitable for $OS, setting
+flags for platform features that help.  $detailedOS distinguishes
+Perl variants on platforms such as Windows.
 
 =cut
 
 sub new {
-    my ( $class, $session, $OS ) = @_;
+    my ( $class, $session, $OS, $detailedOS ) = @_;
     my $this = bless( {}, $class );
 
     $this->{session} = $session;
 
-    $this->{USE_SAFE_PIPES} = 0;
-    if ( $OS ne "WINDOWS" ) {
-        eval 'require 5.008';
-        return if $@;
-        eval 'use POSIX';
-        return if $@;
-        $this->{USE_SAFE_PIPES} = 1;
+    $this->{REAL_SAFE_PIPE_OPEN} = 0;           # supports "open FH, '-|"
+    $this->{EMULATED_SAFE_PIPE_OPEN} = 0;       # emulate open from pipe
+
+    if ( $OS eq "UNIX" or 
+        ($OS eq "WINDOWS" and $detailedOS eq "cygwin"  ) ) {
+        # Real safe pipes on Unix/Linux/Cygwin, for Perl 5.005+
+        $this->{REAL_SAFE_PIPE_OPEN} = 1;
+
+    } elsif ( $OS eq "WINDOWS" ) {
+        # Emulated safe pipes on ActivePerl 5.8 or higher 
+        my $isActivePerl = eval 'Win32::BuildNumber !~ /Win32/';
+        if ( $isActivePerl and $] >= 5.008 ) {
+            $this->{EMULATED_SAFE_PIPE_OPEN} = 1 unless $@;
+        }
+        # FIXME - not yet working, disable!
+        $this->{EMULATED_SAFE_PIPE_OPEN} = 0;
     }
-    # Set to 1 to trace all command executrions to STDERR
+
+    $this->_writeDebug("use safe pipes setting = $this->{REAL_SAFE_PIPE_OPEN}");
+    $this->_writeDebug("emulated safe pipes setting = $this->{EMULATED_SAFE_PIPE_OPEN}");
+
+    # 'Safe' means no need to filter in on this platform - check 
+    # sandbox status at time of filtering
+    $this->{SAFE} = ($this->{REAL_SAFE_PIPE_OPEN} || 
+                    $this->{EMULATED_SAFE_PIPE_OPEN});
+
+    ##$this->_writeDebug("safe setting = $this->{SAFE}");
+
+    # Shell quoting - shell used only on non-safe platforms
+    if ($OS eq "UNIX" or ($OS eq "WINDOWS" and $detailedOS eq "cygwin"  ) ) {
+        $this->{CMDQUOTE} = '\'';
+    } else {
+        $this->{CMDQUOTE} = '\"';
+    }
+
+    # Set to 1 to trace all command executions to STDERR
     $this->{TRACE} = 0;
+    #$this->{TRACE} = 1;             # DEBUG
 
     return $this;
 };
 
+
 =pod
 
----++ untaintUnchecked ( $string ) ->: $untainted
+---++ untaintUnchecked ( $string ) -> $untainted
 
 Untaints $string without any checks (dangerous).  If $string is
 undefined, return undef.
@@ -96,14 +142,14 @@ sub normalizeFileName ($;$) {
             if ($dotdot && @result > 0) {
                 pop @result;
             } else {
-                die 'directory traversal attempt';
+                die "directory traversal attempt in filename '$string'";
             }
         } elsif ($component =~ /^(\S+)$/) {
             # We need to untaint the string explicitly.
             # FIXME: This might be a Perl bug.
             push @result, untaintUnchecked $1;
         } else {
-            die 'whitespace in file name component';
+            die "whitespace in file name component '$component' of filename '$string'";
         }
     }
     if (@result) {
@@ -115,13 +161,14 @@ sub normalizeFileName ($;$) {
         return join '/', @result;
     } else {
         return '/' if $absolute;
-        die 'empty file name';
+        die "empty filename '$string'";
     }
 }
 
 =pod
 
 ---++ buildCommandLine ( $template, %params ) -> @arguments
+
 $template is split at whitespace, and '%VAR%' strings contained in it
 are replaced with $params{VAR}.  %params may consist of scalars and
 array references as values.  Array references are dereferenced and the
@@ -174,21 +221,21 @@ sub buildCommandLine {
                             push @targs, normalizeFileName $param;
                         } elsif ($flag =~ /N/) {
                             # Generalized number.
-                            if ($param =~ /^([0-9A-Fa-f.x+\-]{0,30})$/) {
+                            if ( $param =~ /^([0-9A-Fa-f.x+\-]{0,30})$/ ) {
                                 push @targs, $1;
                             } else {
                                 die "invalid number argument '$param'";
                             }
                         } elsif ($flag =~ /S/) {
                             # Harmless string.
-                            if ($param =~ /^([0-9A-Za-z.+_\-]{0,30})$/) {
+                            if ( $param =~ /^([0-9A-Za-z.+_\-]{0,30})$/ ) {
                                 push @targs, $1;
                             } else {
                                 die "invalid string argument";
                             }
                         } elsif ($flag =~ /D/) {
                             # RCS date.
-                            if ($param =~ m!^(\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d)$!) {
+                            if ( $param =~ m|^(\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d)$| ) {
                                 push @targs, $1;
                             } else {
                                 die "invalid date argument";
@@ -234,30 +281,145 @@ ensures that the shell does not interpret any of the passed arguments.
 
 =cut
 
+# TODO: get emulated pipes or even backticks working on ActivePerl...
+# TODO: make most of this routine common with readFromProcess?
+
 sub readFromProcessArray {
     my ($this, $path, $template, %params) = @_;
 
+    my @data;                          # Output lines
+    my $processFileHandle;             # Holds filehandle to read from process
+
+    # Build argument list from template
     my @args = $this->buildCommandLine( $template, %params );
-    my @data;
-    if ( $this->{USE_SAFE_PIPES} ) {
-        my $process;
-        open $process, '-|', $path, @args
-          or die "open failed: $!";
-        # remove newline characters.
-        @data = map { chomp $_; $_ } <$process>;
-        close $process;
+
+    $this->_writeDebug("path = $path");
+    $this->_writeDebug("args = @args");
+
+    if ( $this->{REAL_SAFE_PIPE_OPEN} ) {
+        $this->_writeDebug("Got to safe pipes section");
+        # Real safe pipes, open from process directly - works
+        # for most Unix/Linux Perl platforms and on Cygwin.  Based on
+        # perlipc(1).
+        my $pid = open ($processFileHandle, '-|');
+        die "open of pipe failed: $!" unless defined $pid;
+
+        $this->_writeDebug("processFileHandle = $processFileHandle");
+
+        if ( $pid ) {
+            # Parent - read data from process filehandle and remove newlines 
+            $this->_writeDebug("pid = $pid");
+            @data = map { chomp $_; $_ } <$processFileHandle>;
+            $this->_writeDebug("data = @data");
+            close $processFileHandle;
+        } else {
+            # Child - run the command, stdout to pipe
+            exec $path, @args
+                or die "exec of $path with args @args failed: $!";
+            die "cannot happen";
+            exit 127;
+        }
+
+    } elsif ( $this->{EMULATED_SAFE_PIPE_OPEN} ) {
+        $this->_writeDebug("Got to emulated pipes section");
+
+        # FIXME: not working yet for ActivePerl on Windows
+        # Safe pipe emulation mostly on Windows platforms
+        my $pid;
+        ($pid, $processFileHandle) = $this->_openSafePipeFromProcess();
+        if ( $pid ) {
+            # Parent - read data from process filehandle and remove newlines 
+            $this->_writeDebug("pid = $pid");
+            # Exec definitely does work, can cause error if wrong pathname 
+            $this->_writeDebug("fileno of processFileHandle= " . fileno($processFileHandle) );
+            # FIXME: Doesn't read (or perhaps write in child) any data here... File handle
+            # issue of some sort...
+            @data = map { chomp $_; $_ } <$processFileHandle>;
+            $this->_writeDebug("data = @data ");
+            close $processFileHandle;
+        } else {
+            # Child - run the command, stdout to pipe
+            exec $path, @args
+                or die "exec of $path with args @args failed: $!";
+            die "should never happen";
+            exit 127;
+        }
+
     } else {
-        my $cmd = "$path $TWiki::cmdQuote";
-        $cmd .= join( "$TWiki::cmdQuote $TWiki::cmdQuote", @args ) .
-          $TWiki::cmdQuote;
+        # FIXME: not working yet for ActivePerl on Windows
+        # No safe pipes available, use the shell as last resort (with
+        # earlier filtering in unless administrator forced to use filtering out)
+        my $cmdQuote = $this->{CMDQUOTE};
+
+        my $cmd = "$path $cmdQuote";
+        $cmd .= join( "$cmdQuote $cmdQuote", @args ) .  $cmdQuote;
+        # DEBUG
+        $cmd .= ' >c:\temp\searchout.log';
         @data = split( /\r?\n/, `$cmd` );
     }
+
     if( $this->{TRACE} ) {
-        print STDERR "$path ",join( "  ", @args ), " -> ",
+        my $q = $this->{CMDQUOTE};
+        print STDERR "$path $q",join( "$q $q", @args ), "$q -> ",
           join( "\n", @data ),"\n";
-    }
+   }
     return @data;
 }
+
+
+# _openSafePipeFromProcess ( $parentFileHandle ) -> $pid
+#
+# Simulate open(FOO, "-|") for read from piped process on platforms such as
+# Windows - see perlfork(1).  
+#
+# NOTE: This routine does a fork and returns in both the parent and child
+# processes - check for $pid == 0 to see if you are in the child process.
+sub _openSafePipeFromProcess {
+    my $this = shift;
+
+    # Create pipe 
+    my $parentFileHandle;
+    my $childFileHandle;
+    pipe ($parentFileHandle, $childFileHandle) or 
+        die "could not create pipe: $!";
+    $this->_writeDebug("filehandles = $parentFileHandle $childFileHandle ");
+
+    my $pid = fork();
+    if (not defined $pid) {
+        die "fork() failed: $!";
+    }
+
+    if ($pid) {
+        $this->_writeDebug("Parent, pid = $pid");
+        # Parent
+        close $childFileHandle or die;
+        $this->_writeDebug("fileno of parent handle is " . fileno($parentFileHandle));
+        return ($pid, $parentFileHandle);
+    } else {
+        # Child
+        $this->_writeDebug("Child, pid = $pid");
+        close $parentFileHandle or die;
+        # FIXME: standard output to pipe disappears - hard to work out
+        # what's happening
+        $this->_writeDebug("fileno of stdout handle is " . fileno(STDOUT));
+        $this->_writeDebug("fileno of stderr handle is " . fileno(STDERR));
+        $this->_writeDebug("fileno of child handle is " . fileno($childFileHandle));
+        # Tried this from readFromProcess routine - doesn't work either ...
+        # use POSIX;
+        # POSIX::close 2;
+        # POSIX::dup 1;
+
+        close STDOUT;
+        open(STDOUT, ">&=" . fileno($childFileHandle)) or die;
+        $this->_writeDebug("fileno of stdout handle is now " . fileno(STDOUT));
+        close STDERR;
+        open(STDERR, ">&=" . fileno($childFileHandle)) or die;
+        $this->_writeDebug("fileno of stderr handle is now " . fileno(STDERR));
+        #die "test 3\n";     # Never works after dupe of stdout...
+        return ($pid, $parentFileHandle);
+    }
+}
+
 
 =pod
 
@@ -270,14 +432,16 @@ error is redirected to standard input.
 
 =cut
 
+# FIXME: need to upgrade as per the Array variant
 sub readFromProcess {
     my ($this, $template, %params) = @_;
 
     my @args = $this->buildCommandLine( $template, %params );
     my $data;
     my $exit;
-    if ( $this->{USE_SAFE_PIPES} ) {
-        # The code follows the safe pipe construct found in perlipc(1).
+    if ( $this->{REAL_SAFE_PIPE_OPEN} ) {
+        # The code follows the safe pipe construct found in perlipc(1)
+        # since Perl 5.005 
         my $pipe;
         my $pid = open $pipe, '-|';
         if ($pid) {                        # parent
@@ -287,6 +451,7 @@ sub readFromProcess {
             $exit = ( $? >> 8 );
         } else {
             # Redirect standard error to standard output.
+            # FIXME: do a require since only needed with safe pipe platform
             use POSIX;
             POSIX::close 2;
             POSIX::dup 1;
@@ -295,9 +460,12 @@ sub readFromProcess {
             exit 127;
         }
     } else {
+        # FIXME: Should be able to do similarly safe pipe open in 5.6 or
+        # earlier, see perlipc(1)
+        my $cmdQuote = $this->{CMDQUOTE}; 
+
         my $cmd = shift( @args ) . " $TWiki::cmdQuote";
-        $cmd .= join( "$TWiki::cmdQuote $TWiki::cmdQuote", @args ) .
-          $TWiki::cmdQuote;
+        $cmd .= join( "$cmdQuote $cmdQuote", @args ) .  $cmdQuote;
         $cmd .= " 2>&1" if( $TWiki::OS eq "UNIX" );
         $data = `$cmd`;
         $exit = ( $? >> 8 );

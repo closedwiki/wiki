@@ -98,7 +98,7 @@ sub bulkRegister {
     my $topic = $session->{topicName};
     my $web = $session->{webName};
 
-    my ($wikiName, $loginName) = _getUserByEitherLoginOrWikiName( $remoteUser );
+    my ($wikiName, $loginName) = _getUserByEitherLoginOrWikiName( $session, $remoteUser );
 
     #    die "WikiName: '".$wikiName."', LoginName: '".$loginName."' RemoteUser: '".$remoteUser."' TWiki::userName: '".$TWiki::userName."'";
 
@@ -109,7 +109,7 @@ sub bulkRegister {
     #-- Read the topic containing a table of people to be registered
 
 
-    my ($meta, $text) = TWiki::Store::readTopic($web, $topic, undef, 1);
+    my ($meta, $text) = $session->{store}->readTopic($web, $topic, undef, 1);
     my %data;
     ( $settings{fieldNames}, %data) =
       TWiki::Data::DelimitedFile::read(content => $text, delimiter => "|" );
@@ -123,7 +123,7 @@ sub bulkRegister {
     foreach my $row ( (values %data) ) {
         $row->{webName} = $userweb;
 
-        my ($userTopic, $uLog) = _registerSingleBulkUser($row, %settings );
+        my ($userTopic, $uLog) = _registerSingleBulkUser($session, $row, %settings );
         $log .= "\n---++ ". $row->{WikiName}."\n";
         $log .= "$b Added to users' topic ".$userTopic.":\n".join("\n$indent",split /\n/, "$uLog")."\n";	
         $registrationsMade++; # SMELL - no detection for failure
@@ -161,7 +161,7 @@ sub bulkRegister {
 # SMELL could be made much more efficient if needed, as calls to addUserToTWikiUsersTopic()
 # are quite expensive when doing 300 in succession!
 sub _registerSingleBulkUser {
-    my ($row, %settings) = @_;
+    my ($session, $row, %settings) = @_;
     #    die Dumper(\%settings);
 
     my @fieldNames = @{$settings{fieldNames} || die "No fieldNames"};
@@ -179,7 +179,6 @@ sub _registerSingleBulkUser {
     } else {
         #	    die Dumper($row);
     }
-
 
     #-- Ensure every required field exists
     # NB. LoginName is OPTIONAL
@@ -202,13 +201,13 @@ sub _registerSingleBulkUser {
     }
     #    die Dumper($row);
 
-    if( $doOverwriteTopics or !TWiki::Store::topicExists( $row->{webName}, $row->{WikiName} ) ) {
+    if( $doOverwriteTopics or !$sessoin->{store}->topicExists( $row->{webName}, $row->{WikiName} ) ) {
         $log .= _newUserFromTemplate("NewUserTemplate", $row);
     } else {
         $log .= "$b Not writing topic ".$row->{WikiName}."\n";
 	}
 
-    my $userTopic = TWiki::User::addUserToTWikiUsersTopic( $row->{WikiName}, $row->{LoginName} );
+    my $userTopic = $session->{users}->addUserToTWikiUsersTopic( $row->{WikiName}, $row->{LoginName} );
 
     if ($TWiki::doEmailUserDetails) {
         #	    _sendEmail(\%data, template => "registernotifybulk"); # If you want it, write it.
@@ -368,7 +367,7 @@ sub resetPassword {
     my $topic = $session->{topicName};
     my $web = $session->{webName};
 
-    my $wikiName = TWiki::User::userToWikiName($remoteUser);
+    my $wikiName = $session->{users}->userToWikiName($remoteUser);
     # die "remote: $remoteUser - wikiname: ".$wikiName." ".$#userNames;
 
     if ($#userNames > 0) {
@@ -386,7 +385,6 @@ sub resetPassword {
     # die Dumper(\%userAns);
 
     if (scalar(keys %userAns) == 1) {
-        use TWiki::UI;
         my %ans = %{$userAns{$userNames[0]}};
         #  die Dumper($key, \%userAns, \%ans);
         TWiki::UI::oops( $session, $web, $ans{wikiName}, $ans{oops}, $ans{email}, $ans{wikiName} );
@@ -402,8 +400,8 @@ This should be in User
 =cut
 
 sub resetUserPassword {
-    my ($userName, $introduction) = @_;
-    my ($wikiName, $loginName) = _getUserByEitherLoginOrWikiName($userName);   
+    my ($session, $userName, $introduction) = @_;
+    my ($wikiName, $loginName) = _getUserByEitherLoginOrWikiName( $session, $userName);
     my %ans;
     unless ($wikiName) {
         # couldn't work out who they are, its neither loginName nor wikiName
@@ -413,9 +411,9 @@ sub resetUserPassword {
     } else {
         $ans{wikiName} = $wikiName;
     }
-    
-    my $email = (TWiki::User::getEmail($wikiName))[0];
-    
+
+    my $email = ($session->{users}->getEmail($wikiName))[0];
+
     unless ($email) {
         $ans{oops} = "regemail";
         $ans{comment} = "I can't get their email address so there is no point resetting it! LoginName = $loginName; WikiName = $wikiName; email = null";
@@ -423,11 +421,10 @@ sub resetUserPassword {
     } else {
         $ans{email} = $email;
     }
-    
-    if (TWiki::User::UserPasswordExists($loginName)) {
-        TWiki::User::RemoveUser($loginName);
+
+    if ($session->{users}->userPasswordExists($loginName)) {
+        $session->{users}->removeUser($loginName);
     } else {
-        
         # Assume the htpasswd file is out of sync with TWikiUsers, and generate a new one.
         # Would be nice to 
         # We could do with an integrity checker for loginname <-> twikiusers <-> home topics <-> .htpasswd
@@ -436,7 +433,7 @@ sub resetUserPassword {
     
     my $password = _randomPassword(); 
     # die "$loginName, $password";
-    my $err = TWiki::User::AddUserPassword( $loginName, $password );
+    my $err = $session->{users}->addUserPassword( $loginName, $password );
     if ($err) {
         $ans{addPasswordResult} = $err;
     }
@@ -467,10 +464,11 @@ first against LoginName then WikiName
 =cut
 
 sub _getUserByEitherLoginOrWikiName {
-    my ($eitherLoginOrWikiName) = shift || return (undef, undef);
+    my ($session, $eitherLoginOrWikiName) = @_;
+    return (undef, undef) unless $eitherLoginOrWikiName;
 
     my $loginName = $eitherLoginOrWikiName;
-    my $wikiName = TWiki::User::userToWikiName($eitherLoginOrWikiName, 2);
+    my $wikiName = $session->{users}->userToWikiName($eitherLoginOrWikiName, 2);
     # YUCK SMELL: 1 = Don't add web name. Very unintuitive.
     
     unless ($wikiName) {
@@ -479,7 +477,7 @@ sub _getUserByEitherLoginOrWikiName {
         
         # So do it using the inverse function
         my $probablyWikiName = $eitherLoginOrWikiName;
-        $loginName = TWiki::User::wikiToUserName($probablyWikiName);
+        $loginName = $session->{users}->wikiToUserName($probablyWikiName);
         
         #         die "\n Claimed = $probablyWikiName; LoginName = $eitherLoginOrWikiName; WikiName = $wikiName";
         if ($loginName eq $probablyWikiName) { # the function didn't map: returning the same means lookup failure
@@ -506,7 +504,7 @@ are passed in CGI parameters.
    1 Checks required fields have values
    2 get wikiName and userName from getUserByEitherLoginOrWikiName(username)
    3 check passwords match each other, and that the password is correct, otherwise "wrongpassword"
-   4 TWiki::User::UpdateUserPassword
+   4 TWiki::User::updateUserPassword
    5 "oopschangepasswd"
 
 The NoPasswdUser case is not handled
@@ -531,7 +529,7 @@ sub changePassword {
         return;
     }
 
-    my ($wikiName, $loginName) = _getUserByEitherLoginOrWikiName($username);
+    my ($wikiName, $loginName) = _getUserByEitherLoginOrWikiName( $session, $username);
     # check if user entry exists
 
     unless ($wikiName) {
@@ -554,7 +552,7 @@ sub changePassword {
         return;
     }
 
-    my $pw = TWiki::User::CheckUserPasswd( $loginName, $oldpassword );
+    my $pw = $session->{users}->checkUserPasswd( $loginName, $oldpassword );
     if( ! $pw ) {
         # NO - wrong old password
         TWiki::UI::oops( $session, $webName, $topic, "wrongpassword");
@@ -562,7 +560,7 @@ sub changePassword {
     }
 
     # OK - password may be changed
-    TWiki::User::UpdateUserPassword($loginName,  $oldpassword, $passwordA );
+    $session->{users}->updateUserPassword($loginName,  $oldpassword, $passwordA );
 
     # OK - password changed
     TWiki::UI::oops( $session, $webName, $topic, "changepasswd" );
@@ -613,7 +611,7 @@ sub verifyEmailAddress {
     my $topic = $session->{topicName};
     my $web = $session->{webName};
 
-    my $senderr = _emailRegistrationConfirmations( $query, \%data );
+    my $senderr = _emailRegistrationConfirmations( $session, \%data );
     if ($senderr) {
         my $url =
           $session->getOopsUrl( $data{webName}, $data{WikiName}, "oopssendmailerr",
@@ -697,7 +695,7 @@ sub finish {
     
     # add user to TWikiUsers topic
     my $userTopic =
-      TWiki::User::addUserToTWikiUsersTopic( $data{WikiName}, $data{LoginName} );
+      $session->{users}->addUserToTWikiUsersTopic( $data{WikiName}, $data{LoginName} );
     
     # write log entry
     if ($TWiki::doLogRegistration) {
@@ -884,33 +882,34 @@ in separate emails so they both get targeted information (and no password to the
 =cut
 
 sub _emailRegistrationConfirmations {
- my ( $query, $dataHashRef ) = @_;
- my %data = %$dataHashRef;
+    my ( $session, $dataHashRef ) = @_;
+    my %data = %$dataHashRef;
 
- my $skin = $query->param("skin") || $TWiki::prefsObject->getValue("SKIN");
- my $email;
+    my $skin = $session->{cgiQuery}->param("skin") || $session->{prefs}->getValue("SKIN");
+    my $email;
 
-# die Dumper(\%data);
- $email = _buildConfirmationEmail(
-				 \%data,
-				 TWiki::Templates::readTemplate( "registernotify", $skin ),
-				 $TWiki::doHidePasswdInRegistration
-				);
+    # die Dumper(\%data);
+    $email =
+      _buildConfirmationEmail(
+                              \%data,
+                              $session->{templates}->readTemplate( "registernotify", $skin ),
+                              $TWiki::doHidePasswdInRegistration
+                             );
 
- my $err1 = 
-   TWiki::Net::sendEmail($email); # This needs to throw, and log to tell the admin.
- # Furthermore it would be better if it returned
- # A template to give to the user.
+    my $err1 = 
+      $session->{net}->sendEmail($email); # This needs to throw, and log to tell the admin.
 
- $email = _buildConfirmationEmail(
-				 \%data,
-				 TWiki::Templates::readTemplate( "registernotifyadmin", $skin ), 
-				 1 );
- my $err2 =
-   TWiki::Net::sendEmail($email);
- 
-return $err1 . $err2; # SMELL - see above.
+    # Furthermore it would be better if it returned
+    # A template to give to the user.
 
+    $email =
+      _buildConfirmationEmail(
+                              \%data,
+                              $session->{templates}->readTemplate( "registernotifyadmin", $skin ),
+                              1 );
+    my $err2 = $session->{net}->sendEmail($email);
+
+    return $err1 . $err2; # SMELL - see above.
 }
 
 =pod
@@ -966,13 +965,13 @@ sub _validateRegistration {
                                   $data{WikiName} );
     }
 
-    if (TWiki::Store::topicExists( $data{webName}, $data{WikiName} ))
+    if ($session->{store}->topicExists( $data{webName}, $data{WikiName} ))
       {
           return $session->getOopsUrl( $data{webName}, $topic, "oopsregexist",
                                     $data{WikiName} );
       }
     
-    if (TWiki::User::UserPasswordExists( $data{LoginName} ) ) {
+    if ($session->{users}->userPasswordExists( $data{LoginName} ) ) {
         return $session->getOopsUrl( $data{webName}, $topic, "oopsregexist",
                                   $data{LoginName} );
     }
@@ -1023,14 +1022,14 @@ sub _addUserToPasswordSystem {
     my %p  = @_;
     #    die Dumper(\%p);
 
-    if (TWiki::User::UserPasswordExists($p{LoginName})) {
-        TWiki::User::RemoveUser($p{LoginName});
+    if ($session->{users}->userPasswordExists($p{LoginName})) {
+        $session->{users}->removeUser($p{LoginName});
     }
 
     my $success;
     if ($p{CryptPassword})  {
         die "No API to install crypted password"
-          #	$success = TWiki::User::InstallCryptedPassword($p{LoginName},
+          #	$success = $session->{users}->installCryptedPassword($p{LoginName},
           #						   $p{CryptPassword});
     } else {
         my $password = $p{Password};
@@ -1038,7 +1037,7 @@ sub _addUserToPasswordSystem {
             $password = _randomPassword(); 
             $session->writeWarning("No password specified for ".$p{LoginName}." - using random=".$password);
         }
-        $success = TWiki::User::AddUserPassword( $p{LoginName}, $password );
+        $success = $session->{users}->addUserPassword( $p{LoginName}, $password );
     }
     return $success;
 }
@@ -1053,7 +1052,7 @@ sends $p{template} to $p{Email} with a bunch of substitutions.
 sub _sendEmail {
     my %p = @_;
     die "no template in _sendEmail ".Dumper(\%p) unless $p{template}; #SMELL - no way to throw
-    my $text      = TWiki::Templates::readTemplate($p{template});
+    my $text      = $session->{templates}->readTemplate($p{template});
     
     $p{Introduction} = '' unless $p{Introduction}; # ugly? See Footnote [1]
     
@@ -1066,10 +1065,10 @@ sub _sendEmail {
     $text =~ s/%PASSWORD%/$p{PasswordA}/go;
     $text = $session->handleCommonTags( $text, $p{WikiName} );
     
-    my $senderr = TWiki::Net::sendEmail($text);
+    my $senderr = $session->{net}->sendEmail($text);
     
     if ($senderr) {
-        $session->TWiki::writeWarning("Couldn't send message:\n\n$text\n\n - $senderr");
+        $session->writeWarning("Couldn't send message:\n\n$text\n\n - $senderr");
     }
     
     return $senderr;
@@ -1383,7 +1382,7 @@ sub addPhotoToTopic {
     #    die Dumper($dirName, \@fileNames);    
     foreach my $fileName (@fileNames) {
         my $error =
-          TWiki::Store::saveAttachment( $p{web}, $p{topic}, "", "",
+          $session->{store}->saveAttachment( $p{web}, $p{topic}, "", "",
                                         $fileName, 0, 1,
                                         1, "", $dirName."/".$fileName );
         

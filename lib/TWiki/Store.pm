@@ -223,7 +223,7 @@ sub moveAttachment {
         $theAttachment, $user ) = @_;
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Store/;
 
-    my $wName = TWiki::userToWikiName( $user );
+    my $wName = $this->users()->userToWikiName( $user );
     # Remove file attachment from old topic
     my $topicHandler = $this->_getTopicHandler( $oldWeb, $oldTopic, $theAttachment );
     my $error = $topicHandler->moveMe( $newWeb, $newTopic );
@@ -444,7 +444,7 @@ sub updateReferringPages {
     my $preTopic = '^|\W';		# Start of line or non-alphanumeric
     my $postTopic = '$|\W';	# End of line or non-alphanumeric
     my $spacedTopic = TWiki::searchableTopic( $oldTopic );
-    my $wikiUserName = TWiki::userToWikiName( $user );
+    my $wikiUserName = $this->users()->userToWikiName( $user );
 
     while ( @refs ) {
         my $type = shift @refs;
@@ -1159,7 +1159,7 @@ sub getTopicParent {
     }
     close( IN_FILE );
 
-    my $meta = $this, extractMetaData( $theWeb, $theTopic, \$data );
+    my $meta = $this->extractMetaData( $theWeb, $theTopic, \$data );
     my %parentMeta = $meta->findOne( "TOPICPARENT" );
     return $parentMeta{name} if %parentMeta;
     return undef;

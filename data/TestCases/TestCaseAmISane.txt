@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1102321544" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="guest" date="1102353378" format="1.0" version="1.10"}%
 Description: Manual trivial fast sanity checks for script functions.
 
 | *Script* | *Description* | *Test* |
@@ -8,10 +8,10 @@ Description: Manual trivial fast sanity checks for script functions.
 | =oops= | Tested by quietsave, below | |
 | =preview= | Should redirect to preview | <a href="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/TestCases/WasteOfSpace?text=Cabbages%20And%20Kings&topicparent=TestCaseQuickScriptsChecks">click here</a> |
 | =rdiff=  | Compare WebHome 1.1 and 1.2 | <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WebHome?rev1=1&rev2=2">click here</a> |
-| =rename= | | |
 | =save= | =action= = =save= Should redirect to view | <a href="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/TestCases/WasteOfSpace?action=save&text=Save%20PASSED&topicparent=TestCaseQuickScriptsChecks">click here</a> |
 | =save= | =action= = =checkpoint= (should come back to edit) | <a href="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/TestCases/WasteOfSpace?action=checkpoint&text=Checkpoint%2-save%20PASSED&topicparent=TestCaseQuickScriptsChecks">click here</a> |
 | =save= | =action= = =quietsave= (should redirect to view) | <a href="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/TestCases/WasteOfSpace?action=quietsave&text=Quietsave%20test%20PASSED&topicparent=TestCaseQuickScriptsChecks">click here </a> |
+| =rename= | Rename topic WasteOfSpace. Rename it within this web, and take care to clear the checkboxes so this topic doesn't get munged. | <a href="%SCRIPTURLPATH%/rename/TestCases/WasteOfSpace">click here</a> |
 | =search= | Search for the word "sanity" |<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/TestCases/WasteOfSpace?search=sanity">click here</a> |
 | =statistics= | Should redirect to refreshed statistics |<a href="%SCRIPTURLPATH%/statistics%SCRIPTSUFFIX%/TestCases">click here</a> |
 | =attach=, =upload= | Attach a file to topic WasteOfSpace | <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/WasteOfSpace">click here</a> |
@@ -25,3 +25,4 @@ Description: Manual trivial fast sanity checks for script functions.
 
 
 %META:FILEATTACHMENT{name="volcano.jpg" attachment="volcano.jpg" attr="" comment="" date="1102080112" path="volcano.jpg" size="2637" tmpFilename="/usr/tmp/CGItemp3319" user="guest" version="1"}%
+

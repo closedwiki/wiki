@@ -60,13 +60,13 @@ use vars qw(
             $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
             $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
             $doLogTopicChanges $doLogTopicSearch $doLogRegistration
-            $superAdminGroup $doSuperAdminGroup $OS
+            $superAdminGroup $doSuperAdminGroup $OS $detailedOS
             $disableAllPlugins $attachAsciiPath $displayTimeValues
             $dispScriptUrlPath
             $useLocale
             $rcsDir $rcsArg $nullDev $endRcsCmd $storeTopicImpl $keywordMode
             @storeSettings
-            $cmdQuote $lsCmd $egrepCmd $fgrepCmd
+            $cmdQuote $lsCmd $egrepCmd $fgrepCmd $forceUnsafeRegexes
            );
 
 # Other constants
@@ -80,6 +80,7 @@ use vars qw(
             %staticInternalTags
             %dynamicInternalTags
             $siteCharset $useUnicode $siteLang $siteFullLang $urlCharEncoding
+            $langAlphabetic
            );
 
 # The singleton "twiki" object instance and exporter bits
@@ -117,6 +118,10 @@ sub _setupLocale {
     $siteCharset = 'ISO-8859-1';	# Default values if locale mis-configured
     $siteLang = 'en';
     $siteFullLang = 'en-us';
+
+    # Language assumed alphabetic unless otherwise configured - used to 
+    # turn on filtering-in of valid characters in user input 
+    $langAlphabetic = 1 if not defined $langAlphabetic;      # Default is 1 if not configured
 
     if ( $useLocale ) {
         if ( not defined $siteLocale or $siteLocale !~ /[a-z]/i ) {
@@ -364,7 +369,6 @@ use TWiki::Net;       # SMTP, get URL
 # | =$message= | Message to print |
 sub _writeReport {
     my ( $this, $log, $message ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
 
     if ( $log ) {
         my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
@@ -474,7 +478,6 @@ sub _invalidSiteCharset {
 # TODO: remove dependence on webname and topicname.
 sub _convertUtf8URLtoSiteCharset {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
 
     my $fullTopicName = "$this->{webName}.$this->{topicName}";
     my $charEncoding;
@@ -845,7 +848,6 @@ sub getSkin {
 
     my $skin = "";
     $skin = $this->{cgiQuery}->param( 'skin' ) if( $this->{cgiQuery} );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     $skin = $this->{prefs}->getPreferencesValue( "SKIN" ) unless( $skin );
     return $skin;
 }
@@ -882,11 +884,9 @@ Returns the absolute URL to a TWiki script, providing the wub and topic as
 sub getScriptUrl {
     my( $this, $theWeb, $theTopic, $theScript ) = @_;
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
-    
-    my $url = $this->{urlHost}."$dispScriptUrlPath/$theScript$scriptSuffix/$theWeb/$theTopic";
 
+    my $url = "$this->{urlHost}$dispScriptUrlPath/$theScript$scriptSuffix/$theWeb/$theTopic";
     # FIXME consider a plugin call here - useful for certificated logon environment
-    
     return $url;
 }
 
@@ -1130,19 +1130,16 @@ sub applyPatternToIncludedText {
 
 sub _handleFORMFIELD {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     return $this->{renderer}->renderFormField( @_ );
 }
 
 sub _handleTMPLP {
     my( $this, $params ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     return $this->{templates}->expandTemplate( $params->{_DEFAULT} );
 }
 
 sub _handleVAR {
     my( $this, $params, $topic, $inweb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     my $key = $params->{_DEFAULT};
     my $web = $params->{web} || $inweb;
     if( $web =~ /%[A-Z]+%/ ) { # handle %MAINWEB%-type cases 
@@ -1153,14 +1150,12 @@ sub _handleVAR {
 
 sub _handlePLUGINVERSION {
     my( $this, $params ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     TWiki::Plugins::getPluginVersion( $params->{_DEFAULT} );
 }
 
 # Fetch content from a URL for includion by an INCLUDE
 sub _includeUrl {
     my( $this, $theUrl, $thePattern, $theWeb, $theTopic ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     my $text = "";
     my $host = "";
     my $port = 80;
@@ -1250,8 +1245,6 @@ sub _includeUrl {
 # inclusion. It is optional (will be created on demand).
 sub _handleINCLUDE {
     my ( $this, $params, $theTopic, $theWeb, $verbatim, $theProcessedTopics ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
-
     my $incfile = $params->{_DEFAULT} || "";
     my $pattern = $params->{pattern};
     my $rev     = $params->{rev};
@@ -1333,7 +1326,7 @@ sub _handleINCLUDE {
 
         ( $meta, $text ) =
           $this->{store}->readTopic( $this->{wikiUserName}, $theWeb, $theTopic, $rev, 0 );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+
         # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
         $text =~ s/.*?%STARTINCLUDE%//s;
         $text =~ s/%STOPINCLUDE%.*//s;
@@ -1406,7 +1399,6 @@ sub _handleREMOTE_USER {
 # text.
 sub _handleMETASEARCH {
     my( $this, $params ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     my $attrWeb           = $params->{web} || "";
     my $attrTopic         = $params->{topic} || "";
     my $attrType          = $params->{type};
@@ -1454,25 +1446,21 @@ sub _handleMETASEARCH {
 # Deprecated, but used in signatures
 sub _handleDATE {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     return formatTime(time(), "\$day \$mon \$year", "gmtime");
 }
 
 sub _handleGMTIME {
     my( $this, $params ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     return formatTime( time(), $params->{_DEFAULT} || "", "gmtime" );
 }
 
 sub _handleSERVERTIME {
     my( $this, $params ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     return formatTime( time(), $params->{_DEFAULT} || "", "servertime" );
 }
 
 sub _handleDISPLAYTIME {
     my( $this, $params ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     return formatTime( time(), $params->{_DEFAULT} || "", $displayTimeValues );
 }
 
@@ -1556,7 +1544,6 @@ sub formatTime  {
 #    * $headingPatternHt : &lt;h[1-6]> HTML section heading &lt;/h[1-6]>
 sub _TOC {
     my ( $this, $text, $defaultTopic, $defaultWeb, $args ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
 
     my %params = extractParameters( $args );
 
@@ -1581,7 +1568,7 @@ sub _TOC {
     my $level = "";
     if( "$web.$topicname" ne "$defaultWeb.$defaultTopic" ) {
         my %p = ( _DEFAULT => "$web.$topicname" );
-        $text = _handleINCLUDE( \%p, $defaultWeb, $defaultTopic );
+        $text = $this->_handleINCLUDE( \%p, $defaultWeb, $defaultTopic );
     }
 
     my $headerDaRE =  $regex{headerPatternDa};
@@ -1677,8 +1664,6 @@ sub _TOC {
 #| $formatString | twiki format string (like in search) |
 sub _handleREVINFO {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
-
     my $format = $params->{_DEFAULT} || $params->{format}
                  || "\$rev - \$date - \$wikiusername";
     my $web    = $params->{web} || $theWeb;
@@ -1709,8 +1694,6 @@ sub _handleREVINFO {
 
 sub _handleENCODE {
     my( $this, $params ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
-
     my $type = $params->{type};
     my $text = $params->{_DEFAULT} || "";
     if ( $type && $type =~ /^entit(y|ies)$/i ) {
@@ -1722,8 +1705,6 @@ sub _handleENCODE {
 
 sub _handleSEARCH {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
-
     # pass on all attrs, and add some more
     #$params->{_callback} = undef;
     $params->{inline} = 1;
@@ -1809,20 +1790,16 @@ sub expandVariablesOnTopicCreation {
 
 sub _handleWEBLIST {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     return $this->_webOrTopicList( 1, @_ );
 }
 
 sub _handleTOPICLIST {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     return $this->_webOrTopicList( 0, @_ );
 }
 
 sub _webOrTopicList {
     my( $this, $isWeb, $params ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
-
     my $format = $params->{_DEFAULT} || $params->{format};
     $format .= '$name' unless( $format =~ /\$name/ );
     my $separator = $params->{separator} || "\n";
@@ -1843,7 +1820,6 @@ sub _webOrTopicList {
                 push( @list, grep { /^\_/o } $this->{store}->getAllWebs() );
             } else{
                 push( @list, $aweb ) if( $this->{store}->webExists( $aweb ) );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
             }
         }
     } else {
@@ -1873,8 +1849,6 @@ sub _webOrTopicList {
 
 sub _handleURLPARAM {
     my( $this, $params ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
-
     my $param     = $params->{_DEFAULT} || "";
     my $newLine   = $params->{newline} || "";
     my $encode    = $params->{encode};
@@ -1883,7 +1857,6 @@ sub _handleURLPARAM {
 
     my $value = "";
     if( $this->{cgiQuery} ) {
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
         if( $multiple ) {
             my @valueArray = $this->{cgiQuery}->param( $param );
             if( @valueArray ) {
@@ -1992,7 +1965,6 @@ sub nativeUrlEncode {
 # skins that may still be using the deprecated %INTURLENCODE%.
 sub _handleINTURLENCODE {
     my( $this, $params ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     # Just strip double quotes, no URL encoding - Mozilla UTF-8 URLs
     # directly supported now
     return $params->{_DEFAULT} || "";
@@ -2017,15 +1989,11 @@ sub searchableTopic
 
 sub _handleSPACEDTOPIC {
     my ( $this, $params, $theTopic ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
-
     return _urlEncode( searchableTopic( $theTopic ));
 }
 
 sub _handleICON {
     my( $this, $params ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
-
     my $theParam = $params->{_DEFAULT};
 
     my $value = $this->{renderer}->filenameToIcon( "file.$theParam" );
@@ -2034,8 +2002,6 @@ sub _handleICON {
 
 sub _handleRELATIVETOPICPATH {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
-
     my $theStyleTopic = $params->{_DEFAULT} || "";
 
     return "" unless $theStyleTopic;
@@ -2058,8 +2024,6 @@ sub _handleRELATIVETOPICPATH {
 
 sub _handleATTACHURLPATH {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
-
     return nativeUrlEncode( "$pubUrlPath/$theWeb/$theTopic" );
 }
 
@@ -2078,7 +2042,6 @@ sub _handleATTACHURLPATH {
 # because the old name clashes with the namespace of handlers.
 sub _expandAllTags {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     my $text = shift; # reference
     my ( $topic, $web ) = @_;
 
@@ -2123,9 +2086,6 @@ sub _expandAllTags {
 # can be performed on expanded tags.
 sub _processTags {
     my $this = shift;
-
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
-
     my $text = shift;
 
     return "" unless defined( $text );
@@ -2211,7 +2171,6 @@ sub _processTags {
 # $args is the bit in the {} (if there are any)
 sub _expandTag {
     my $this = shift;
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     my $tag = shift;
     my $args = shift;
     # my( $topic, $web, $verbatim, $processedTopics ) = @_;
@@ -2219,10 +2178,8 @@ sub _expandTag {
     my $res;
 
     if ( defined( $this->{PREFS}{$tag} )) {
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
         $res = $this->{PREFS}{$tag};
     } elsif ( defined( $this->{SESSION}{$tag} )) {
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
         $res = $this->{SESSION}{$tag};
     } elsif ( defined( $staticInternalTags{$tag} )) {
         $res = $staticInternalTags{$tag};
@@ -2230,7 +2187,6 @@ sub _expandTag {
         my %params = extractParameters( $args );
 
         $res = &{$dynamicInternalTags{$tag}}( $this, \%params, @_ );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     }
 
     return ( defined( $res ), $res );
@@ -2324,7 +2280,7 @@ sub new {
     # initialisation. When we are properly OO it will not be needed.
     $T = $this;
 
-    $this->{sandbox} = new TWiki::Sandbox( $this, $TWiki::OS );
+    $this->{sandbox} = new TWiki::Sandbox( $this, $TWiki::OS, $TWiki::detailedOS );
     die "ASSERT $this sandbox from ".join(",",caller)."\n" unless $this->{sandbox};
 
     $this->{net} = new TWiki::Net( $this );
@@ -2362,12 +2318,16 @@ sub new {
     }
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
+    # Check for unsafe search regex mode (affects filtering in) - default
+    # to safe mode
+    $TWiki::forceUnsafeRegexes = 0 unless defined $TWiki::forceUnsafeRegexes;
+
     # initialize lib directory early because of later 'cd's
     getTWikiLibDir();
 
     # initialize access control
     $this->{security} = new TWiki::Access( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{security};
+    die "ASSERT $this security from ".join(",",caller)."\n" unless $this->{security};
 
     # initialize $webName and $topicName from URL
     $this->{topicName} = "";
@@ -2446,7 +2406,7 @@ sub new {
 
     # initialize preferences, first part for site and web level
     $this->{prefs} = new TWiki::Prefs( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    die "ASSERT $this prefs from ".join(",",caller)."\n" unless $this->{prefs};
 
     if( !$disableAllPlugins ) {
         # Early plugin initialization, allow plugins like SessionPlugin
@@ -2460,7 +2420,6 @@ sub new {
 
     $this->{SESSION}{USERNAME} = $this->{userName};
     $this->{SESSION}{WIKINAME} = $this->{users}->userToWikiName( $this->{userName}, 1 );      # i.e. "JonDoe";
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     $this->{SESSION}{WIKIUSERNAME} = $this->{wikiUserName};
     $this->{SESSION}{BASEWEB} = $this->{webName};
     $this->{SESSION}{BASETOPIC} = $this->{topicName};
@@ -2474,7 +2433,7 @@ sub new {
     $this->{prefs}->initializeUser( $this->{wikiUserName}, $this->{topicName} );
 
     $this->{renderer} = new TWiki::Render( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{renderer};
+    die "ASSERT $this renderer from ".join(",",caller)."\n" unless $this->{renderer};
 
     if( !$disableAllPlugins ) {
         # Normal plugin initialization - userName is known and preferences available

@@ -54,7 +54,8 @@ BEGIN {
 =pod
 
 ---++ sub new ()
-Constructor for the signleton Search engine object.
+
+Constructor for the singleton Search engine object.
 
 =cut
 
@@ -79,45 +80,145 @@ sub security { my $this = shift; return $this->{session}->{security}; }
 sub templates { my $this = shift; return $this->{session}->{templates}; }
 sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
+sub writeDebug { my $this = shift; $this->{session}->writeDebug($_[0]); }
+
 # ===========================
-# Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
+
 =pod
 
 ---++ sub _traceExec (  $cmd, $result  )
 
-Not yet documented.
+Normally writes no output, uncomment writeDebug line to get output of all external commands and chdirs to debug file
 
 =cut
 
 sub _traceExec
 {
-   my( $cmd, $result ) = @_;
+   my( $this, $cmd, $result ) = @_;
    
-   #$this->{session}->writeDebug( "Search exec: $cmd -> $result" );
+   $this->writeDebug( "Search exec: $cmd -> $result" );
 }
 
-# ===========================
 =pod
 
----++ sub _translateSpace (  $theText  )
 
-Not yet documented.
+---++ sub _filterSearchString ( $this, $searchString, $theType ) -> $searchString
+
+Untaints the search value (text string, regex or search expression) by
+'filtering in' valid characters only.
 
 =cut
 
-sub _translateSpace
+sub _filterSearchString {
+    my $this = shift;
+    my $searchString = shift;
+    my $theType = shift;
+
+    # Use filtering-out of regexes only if (1) on a safe sandbox platform
+    # OR (2) administrator has explicitly configured $forceUnsafeRegexes == 1.
+    #
+    # Only well-secured intranet sites, authenticated for all access
+    # (view, edit, attach, search, etc), AND forced to use unsafe
+    # platforms, should use the $forceUnsafeRegexes flag.
+    my $unsafePlatform = ( not ($this->sandbox()->{SAFE} ) );
+
+    # FIXME: Use of new global
+    my $useFilterIn = ($unsafePlatform and not $TWiki::forceUnsafeRegexes);
+
+    $this->writeDebug("unsafePlatform = $unsafePlatform");
+    $this->writeDebug("useFilterIn = $useFilterIn");
+
+    # Non-alphabetic language sites (e.g. Japanese and Chinese) cannot use
+    # filtering-in and must use safe pipes, since TWiki does not currently
+    # support Unicode, required for filtering-in.  Alphabetic languages such
+    # as English, French, Russian, Greek and most European languages are
+    # handled by filtering-in.
+    if ( not $TWiki::langAlphabetic and $unsafePlatform ) {
+        # Best option is to upgrade Perl.
+        die "You are using a non-alphabetic language on a non-safe-pipes platform.  This is a serious SECURITY RISK,\nso TWiki cannot be used as it is currently installed - please\nread TWiki:Codev/SafePipes for options to avoid or remove this risk.";
+    }
+
+    my $mixedAlphaNum = $TWiki::regex{mixedAlphaNum};
+
+    my $validChars;            # String of valid characters or POSIX
+                               # regex elements (e.g. [:alpha:] from 
+                               # _setupRegexes) - designed to
+                               # be used within a character class.
+
+    if( $theType eq "regex" ) {
+        # Regular expression search - example: soap;wsdl;web service;!shampoo;[Ff]red
+        if ( $useFilterIn ) {
+            # Filter in
+            $validChars = "${mixedAlphaNum} " . 
+                    '!;' .      # TWiki search syntax 
+                    '.[]\\*\\+';    # Limited regex syntax
+        } else {
+            # Filter out - only for use on safe pipe platform or
+            # if forced by admin
+            # FIXME: Review and test since first versions were broken
+            # SMELL: CC commented out next two lines as they escape escape chars in REs
+            #$searchString =~ s/(^|[^\\])(['"`\\])/$1\\$2/g;    # Escape all types of quotes and backslashes
+            #$searchString =~ s/([\@\$])\(/$1\\\(/g;          # Escape @( ... ) and $( ... )
+        }
+
+    } elsif( $theType eq "literal" ) {
+        # Filter in
+        # Literal search - search for exactly what was typed in (old style TWiki non-regex search)
+        $validChars = "${mixedAlphaNum} " . '\.';      # Alphanumeric, spaces, selected punctuation
+
+    } else {
+        # FIXME: spaces not working - url encoded in search pattern
+        # Filter in
+        # Keyword search (new style, Google-like). Example: soap +wsdl +"web service" -shampoo
+        $validChars = "${mixedAlphaNum} +\"\-";   # Alphanumeric, spaces and search syntax 
+    }
+
+    if ( $useFilterIn ) {
+        # Clean up - delete all invalid characters
+        # FIXME: be sure to escape special characters in literal
+        $searchString =~ s/[^${validChars}]+//go;
+    }
+
+    # Untaint - same for filtering in and out since already sanitised
+    $searchString =~ /^(.*)$/;
+    $searchString = $1;
+
+    # Limit string length
+    $searchString = substr($searchString, 0, 1500); 
+}
+
+=pod
+
+---++ sub getTextPattern (  $theText, $thePattern  )
+
+Sanitise search pattern - currently used for FormattedSearch only
+
+=cut
+
+sub getTextPattern
 {
-    my( $theText ) = @_;
-    $theText =~ s/\s+/$TWiki::TranslationToken/go;
+    my( $theText, $thePattern ) = @_;
+
+    $thePattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
+    $thePattern =~ /(.*)/;     # untaint
+    $thePattern = $1;
+    my $OK = 0;
+    eval {
+       $OK = ( $theText =~ s/$thePattern/$1/is );
+    };
+    $theText = "" unless( $OK );
+
     return $theText;
 }
 
-# ===========================
+
 =pod
 
 ---++ sub _tokensFromSearchString ( $this, $theSearchVal, $theType  )
 
-Not yet documented.
+Split the search string into tokens depending on type of search.
+Search is an 'AND' of all tokens - various syntaxes implemented
+by this routine.
 
 =cut
 
@@ -127,24 +228,28 @@ sub _tokensFromSearchString
 
     my @tokens = ();
     if( $theType eq "regex" ) {
-        # regular expression search Example: soap;wsdl;web service;!shampoo
+        # Regular expression search Example: soap;wsdl;web service;!shampoo
         @tokens = split( /;/, $theSearchVal );
 
     } elsif( $theType eq "literal" ) {
-        # literal search
+        # Literal search (old style)
         $tokens[0] = $theSearchVal;
 
     } else {
-        # keyword search. Example: soap +wsdl +"web service" -shampoo
-        $theSearchVal =~ s/(\".*?)\"/&_translateSpace($1)/geo;  # hide spaces in "literal text"
+        # Keyword search (Google-style) - implemented by converting
+        # to regex format. Example: soap +wsdl +"web service" -shampoo
+
+        # Prevent tokenizing on spaces in "literal string" 
+        $theSearchVal =~ s/(\".*?)\"/&_translateSpace($1)/geo;  
         $theSearchVal =~ s/[\+\-]\s+//go;
 
-        # build pattern of stop words
+        # Build pattern of stop words
         my $stopWords = $this->prefs()->getPreferencesValue( "SEARCHSTOPWORDS" ) || "";
         $stopWords =~ s/[\s\,]+/\|/go;
         $stopWords =~ s/[\(\)]//go;
 
-        # read from bottom to up:
+        # Tokenize string taking account of literal strings, then remove
+        # stop words and convert '+' and '-' syntax.
         @tokens =
             map { s/^\+//o; s/^\-/\!/o; s/^\"//o; $_ }    # remove +, change - to !, remove "
             grep { ! /^($stopWords)$/i }                  # remove stopwords
@@ -155,12 +260,33 @@ sub _tokensFromSearchString
     return @tokens;
 }
 
-# =========================
+=pod
+
+---++ sub _translateSpace (  $theText  )
+
+Convert spaces into translation token characters (typically NULs),
+preventing tokenization.  
+
+FIXME: Terminology confusing here!
+
+=cut
+
+sub _translateSpace
+{
+    my( $theText ) = @_;
+    $theText =~ s/\s+/$TWiki::TranslationToken/go;
+    return $theText;
+}
+
+
 =pod
 
 ---++ sub _searchTopicsInWeb (  $theWeb, $theTopic, $theScope, $theType, $caseSensitive, @theTokens  )
 
-Not yet documented.
+Search a single web based on parameters - @theTokens is a list of search terms
+to be ANDed together, $theTopic is list of one or more topics.  
+
+Executes external command to do the search.
 
 =cut
 
@@ -193,7 +319,8 @@ sub _searchTopicsInWeb
     my $sDir = "$TWiki::dataDir/$theWeb";
     $theScope = "text" unless( $theScope =~ /^(topic|all)$/ );     # default scope is "text"
 
-    foreach my $token ( @theTokens ) {                             # search each token
+    # AND search - search once for each token, ANDing result together
+    foreach my $token ( @theTokens ) {                             # search on each token
         my $invertSearch = ( $token =~ s/^\!//o );                 # flag for AND NOT search
         my @scopeTextList = ();
         my @scopeTopicList = ();
@@ -217,10 +344,13 @@ sub _searchTopicsInWeb
             # I18N: 'grep' must use locales if needed,
             # for case-insensitive searching.  See TWiki::setupLocale.
             my $program = "";
+            # FIXME: For Cygwin grep, do something about -E and -F switches
+            # - best to strip off any switches after first space in
+            # $egrepCmd etc and apply those as argument 1.
             if( $theType eq "regex" ) {
                 $program = $TWiki::egrepCmd;
             } else {
-                $ program= $TWiki::fgrepCmd;
+                $program = $TWiki::fgrepCmd;
             }
             my $template = '';
             $template .= ' -i' unless( $caseSensitive );
@@ -228,11 +358,11 @@ sub _searchTopicsInWeb
 
             if( $sDir ) {
                 chdir( "$sDir" );
-                _traceExec( "chdir to $sDir", "" );
+                $this->_traceExec( "chdir to $sDir", "" );
                 $sDir = "";  # chdir only once
             }
 
-            # process topics in sets,  fix for Codev.ArgumentListIsTooLongForSearch
+            # process topics in sets, fix for Codev.ArgumentListIsTooLongForSearch
             my $maxTopicsInSet = 512;                      # max number of topics for a grep call
             my @take = @topicList;
             my @set = splice( @take, 0, $maxTopicsInSet );
@@ -275,7 +405,6 @@ sub _searchTopicsInWeb
     return @topicList;
 }
 
-# =========================
 =pod
 
 ---++ sub _makeTopicPattern (  $theTopic  )
@@ -296,7 +425,6 @@ sub _makeTopicPattern
     return '^(' . join( "|", @arr ) . ')$';
 }
 
-# =========================
 =pod
 
 ---++ sub revDate2ISO ()
@@ -311,12 +439,11 @@ sub revDate2ISO
     return &TWiki::formatTime( $epochSec, "\$iso", "gmtime");
 }
 
-# =========================
 =pod
 
 ---++ sub searchWeb (...)
 
-Search according to the parameters.
+Search one or more webs according to the parameters.
 
 If =_callback= is set, that means the caller wants results as
 soon as they are ready. =_callback_ should be set to a reference
@@ -366,8 +493,9 @@ sub searchWeb
     my $theSeparator =  $params{"separator"} || "";
     my $newLine =       $params{"newline"} || "";
 
-    ##$this->{session}->writeDebug "Search locale is $TWiki::siteLocale";
+    ##$this->writeDebug "Search locale is $TWiki::siteLocale";
 
+    # Limit search results
     if ($theLimit =~ /(^\d+$)/o) { # only digits, all else is the same as
         $theLimit = $1;            # an empty string.  "+10" won't work.
     } else {
@@ -379,9 +507,10 @@ sub searchWeb
 
     $theType = "regex" if( $theRegex );
 
-    # I18N fix
-    my $mixedAlpha = $TWiki::regex{mixedAlpha};
+    # Filter the search string for security and untaint it 
+    $theSearchVal = $this->_filterSearchString( $theSearchVal, $theType );
 
+    my $mixedAlpha = $TWiki::regex{mixedAlpha};
     if( $theSeparator ) {
         $theSeparator =~ s/\$n\(\)/\n/gos;  # expand "$n()" to new line
         $theSeparator =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos;
@@ -401,29 +530,34 @@ sub searchWeb
     my $searchAllFlag = ( $theWebName =~ /(^|[\,\s])(all|on)([\,\s]|$)/i );
 
     # Search what webs?  "" current web, list gets the list, all gets
-    # all (unless marked in WebPrefs as NOSEARCHALL)
+    # all (unless marked in WebPrefs as NOSEARCHALL) - build up list of
+    # webs to be searched in @webList.
     if( $theWebName ) {
         foreach my $web ( split( /[\,\s]+/, $theWebName ) ) {
             # the web processing loop filters for valid web names, so don't do it here.
 
             if( $web =~ /^(all|on)$/i  ) {
-                # get list of all webs by scanning $dataDir
+                # Get list of all webs - first scan $dataDir
                 opendir DIR, $TWiki::dataDir;
                 my @tmpList = readdir(DIR);
                 closedir(DIR);
+
+                # Now get list of pathnames to web directories
                 @tmpList = sort
                    grep { s#^.+/([^/]+)$#$1# }
                    grep { -d }
                    map  { "$TWiki::dataDir/$_" }
                    grep { ! /^[._]/ } @tmpList;
 
-                   # what that does (looking from the bottom up) is take the file
-                   # list, filter out the dot directories and dot files, turn the
-                   # list into full paths instead of just file names, filter out
-                   # any non-directories, strip the path back off, and sort
-                   # whatever was left after all that (which should be merely a
-                   # list of directory's names.)
+                   # what the above does (looking from the bottom up) is
+                   # take the file list, filter out the dot directories and
+                   # dot files, turn the list into full paths instead of
+                   # just file names, filter out any non-directories, strip
+                   # the path back off, and sort whatever was left after
+                   # all that (which should be merely a list of directory's
+                   # names.)
 
+                # Build list of webs, without duplicates
                 foreach my $aweb ( @tmpList ) {
                     push( @webList, $aweb ) unless( grep { /^$aweb$/ } @webList );
                 }
@@ -445,17 +579,13 @@ sub searchWeb
     my $tmpl = "";
     my $topicCount = 0; # JohnTalintyre
 
-    # See Codev.SecurityAlertExecuteCommandsWithSearch
-    $theSearchVal =~ s/(^|[^\\])([\'\`])/\\$2/g;    # Escape ' and `
-    $theSearchVal =~ s/[\@\$]\(/$1\\\(/g;           # Defuse @( ... ) and $( ... )
-    $theSearchVal = substr($theSearchVal, 0, 1500); # Limit string length
-
     my $originalSearch = $theSearchVal;
     my $renameTopic;
     my $renameWeb = "";
     my $spacedTopic;
-    $theTemplate = "searchformat" if( $theFormat );
+    $theTemplate = "searchformat" if( $theFormat );     # FormattedSearch
 
+    # Handle normal, book view and rename cases
     if( $theTemplate ) {
         $tmpl = $this->templates()->readTemplate( "$theTemplate" );
         # FIXME replace following with this @@@
@@ -477,9 +607,9 @@ sub searchWeb
 	# I18N: match non-alpha before and after topic name in renameview searches
 	# This regex must work under grep, i.e. if using Perl 5.6 or higher
 	# the POSIX character classes will be used in grep as well.
-        my $alphaNum = $TWiki::regex{mixedAlphaNum};
-        $theSearchVal = "(^|[^${alphaNum}_])$theSearchVal" . 
-			"([^${alphaNum}_]" . '|$)|' .
+        my $mixedAlphaNum = $TWiki::regex{mixedAlphaNum};
+        $theSearchVal = "(^|[^${mixedAlphaNum}_])$theSearchVal" . 
+			"([^${mixedAlphaNum}_]" . '|$)|' .
                         '(\[\[' . $spacedTopic . '\]\])';
     } else {
         $tmpl = $this->templates()->readTemplate( "search" );
@@ -487,9 +617,11 @@ sub searchWeb
 
     $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
+    # Split template into 5 sections
     my( $tmplHead, $tmplSearch, $tmplTable, $tmplNumber, $tmplTail ) =
           split( /%SPLIT%/, $tmpl );
 
+    # Invalid template?
     if( ! $tmplTail ) {
         my $mess = "<html><body>" .
           "<h1>TWiki Installation Error</h1>" .
@@ -504,11 +636,12 @@ sub searchWeb
         }
     }
 
+    # Expand tags in template sections
     $tmplSearch = $this->{session}->handleCommonTags( $tmplSearch, $topic );
     $tmplNumber = $this->{session}->handleCommonTags( $tmplNumber, $topic );
 
+    # If not inline search, also expand tags in head and tail sections
     unless( $inline ) {
-        # head and tail only required if _not_ inline
         $tmplHead = $this->{session}->handleCommonTags( $tmplHead, $topic );
 
         if( $callback) {
@@ -522,8 +655,8 @@ sub searchWeb
         }
     }
 
+    # Generate "Search:" part showing actual search string used
     unless( $noSearch ) {
-        # generate "Search:" part
         my $searchStr = $theSearchVal;
         $searchStr = "" if( $theSearchVal eq $emptySearch );
         $searchStr =~ s/&/&amp;/go;
@@ -541,19 +674,21 @@ sub searchWeb
         }
     }
 
+    # Split the search string into tokens depending on type of search -
+    # each token is ANDed together by actual search
     my @tokens = $this->_tokensFromSearchString( $theSearchVal, $theType );
 
-    # write log entry
+    # Write log entry
     # FIXME: Move log entry further down to log actual webs searched
     if( ( $TWiki::doLogTopicSearch ) && ( ! $inline ) ) {
         $tempVal = join( ' ', @webList );
         $this->{session}->writeLog( "search", $tempVal, $theSearchVal );
     }
 
-    # loop through webs
+    # Loop through webs
     foreach my $thisWebName ( @webList ) {
         $thisWebName =~ s/$TWiki::securityFilter//go;
-        $thisWebName =~ /(.*)/;
+        $thisWebName =~ /(.*)/;         # FIXME: untaint using webname regex
         $thisWebName = $1;  # untaint variable
 
         next unless $this->store()->webExists( $thisWebName );  # can't process what ain't thar
@@ -568,7 +703,7 @@ sub searchWeb
                  && ( ( $thisWebNoSearchAll =~ /on/i ) || ( $thisWebName =~ /^[\.\_]/ ) )
                  && ( $thisWebName ne $this->{session}->{webName} ) );
 
-        # search topics in this web
+        # Run the search on topics in this web
         my @topicList = $this->_searchTopicsInWeb( $thisWebName, $theTopic, $theScope, $theType, $caseSensitive, @tokens );
 
         # exclude topics, Codev.ExcludeWebTopicsFromSearch
@@ -758,13 +893,13 @@ sub searchWeb
 
         } else {
             # simple sort, suggested by RaymondLutz in Codev.SchwartzianTransformMisused
-	    ##$this->{session}->writeDebug "Topic list before sort = @topicList";
+	    ##$this->writeDebug "Topic list before sort = @topicList";
             if( $revSort ) {
                 @topicList = sort {$b cmp $a} @topicList;
             } else {
                 @topicList = sort {$a cmp $b} @topicList;
             }
-	    ##$this->{session}->writeDebug "Topic list after sort = @topicList";
+	    ##$this->writeDebug "Topic list after sort = @topicList";
         }
 
         # header and footer of $thisWebName
@@ -966,8 +1101,8 @@ sub searchWeb
                    if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
                        # Case insensitive option is required to get [[spaced Word]] to match
 		       # I18N: match non-alpha before and after topic name in renameview searches
-		       my $alphaNum = $TWiki::regex{mixedAlphaNum};
-                       my $match =  "(^|[^${alphaNum}_.])($originalSearch)(?=[^${alphaNum}]|\$)";
+		       my $mixedAlphaNum = $TWiki::regex{mixedAlphaNum};
+                       my $match =  "(^|[^${mixedAlphaNum}_.])($originalSearch)(?=[^${mixedAlphaNum}]|\$)";
 		       # NOTE: Must *not* use /o here, since $match is based on
 		       # search string that will vary during lifetime of
 		       # compiled code with mod_perl.
@@ -1007,6 +1142,7 @@ sub searchWeb
                 $tempVal =~ s/\$parent/getMetaParent( $meta )/geos;
                 $tempVal =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
                 $tempVal =~ s/\$formname/_getMetaFormName( $meta )/geos;
+                # FIXME: Allow all regex characters but escape them
                 $tempVal =~ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/geos;
                 $tempVal =~ s/\r?\n/$newLine/gos if( $newLine );
                 if( $theSeparator ) {
@@ -1137,7 +1273,6 @@ sub searchWeb
     return $searchResult;
 }
 
-#=========================
 =pod
 
 ---++ sub _getRev1Info( $theWeb, $theTopic, $theAttr )
@@ -1248,32 +1383,6 @@ sub _getMetaFormName
     return "";
 }
 
-#=========================
-=pod
-
----++ sub getTextPattern (  $theText, $thePattern  )
-
-Not yet documented.
-
-=cut
-
-sub getTextPattern
-{
-    my( $theText, $thePattern ) = @_;
-
-    $thePattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
-    $thePattern =~ /(.*)/;     # untaint
-    $thePattern = $1;
-    my $OK = 0;
-    eval {
-       $OK = ( $theText =~ s/$thePattern/$1/is );
-    };
-    $theText = "" unless( $OK );
-
-    return $theText;
-}
-
-#=========================
 =pod
 
 ---++ sub wikiName (  $theWikiUserName  )
@@ -1290,7 +1399,6 @@ sub wikiName
     return $theWikiUserName;
 }
 
-#=========================
 =pod
 
 ---++ sub breakName (  $theText, $theParams  )
@@ -1321,6 +1429,8 @@ sub breakName
     }
     return $theText;
 }
+
+
 
 #=========================
 

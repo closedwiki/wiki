@@ -116,7 +116,7 @@ sub updateUserPassword {
 		return;
 	}
 
-    my $passwordHandler = _getPasswordHandler();
+    my $passwordHandler = $this->_getPasswordHandler();
     return $passwordHandler->UpdateUserPassword($user, $oldUserPassword, $newUserPassword);
 }
 
@@ -140,7 +140,7 @@ sub addUserPassword {
 		return;
 	}
 
-    my $passwordHandler = _getPasswordHandler();
+    my $passwordHandler = $this->_getPasswordHandler();
     return $passwordHandler->AddUserPassword($user, $newUserPassword);
 }
 
@@ -157,7 +157,7 @@ sub addUserPassword {
 sub removeUser {
     my ( $this, $user ) = @_;
 
-    my $passwordHandler = _getPasswordHandler();
+    my $passwordHandler = $this->_getPasswordHandler();
     return $passwordHandler->RemoveUser($user);
 }
 
@@ -173,9 +173,9 @@ sub removeUser {
 =cut
 
 sub checkUserPasswd {
-    my ( $user, $password ) = @_;
+    my ( $this, $user, $password ) = @_;
 
-    my $passwordHandler = _getPasswordHandler();
+    my $passwordHandler = $this->getPasswordHandler();
     return $passwordHandler->CheckUserPasswd($user, $password);
 }
 
