@@ -1262,7 +1262,7 @@ sub _handleINCLUDE {
     unless( $this->{store}->topicExists($incweb, $inctopic)) {
         # give up, file not found
         $warn = $this->{prefs}->getPreferencesValue( "INCLUDEWARNING" ) unless( $warn );
-        if( $warn =~ /^on$/i ) {
+        if( $warn && $warn =~ /^on$/i ) {
             return _inlineError( "Warning: Can't INCLUDE <nop>$inctopic, topic not found" );
         } elsif( $warn && $warn !~ /^(off|no)$/i ) {
             $inctopic =~ s/\//\./go;
@@ -1277,12 +1277,10 @@ sub _handleINCLUDE {
     # itself is not blocked; however subsequent attempts to include the
     # topic will fail.
     if( $this->{processingTopic}{$path} ) {
-        # file already included
-        if( $warn || $this->{prefs}->getPreferencesFlag( "INCLUDEWARNING" ) ) {
-            unless( $warn =~ /^(off|no)$/i ) {
-                return _inlineError( "Warning: Can't INCLUDE <nop>$inctopic twice, topic is already included" );
-            }
-        }
+        $warn = $this->{prefs}->getPreferencesValue( "INCLUDEWARNING" ) unless( $warn );
+        if( $warn && $warn !~ /^(off|no)$/i ) {
+            return _inlineError( "Warning: Can't INCLUDE <nop>$inctopic twice, topic is already included" );
+        } # else fail silently
         return "";
     } else {
         $this->{processingTopic}{$path} = 1;
@@ -1987,6 +1985,8 @@ sub _handleSPACEDTOPIC {
 sub _handleICON {
     my( $this, $params ) = @_;
     my $theParam = $params->{_DEFAULT};
+
+    return "" unless $theParam;
 
     my $value = $this->{renderer}->filenameToIcon( "file.$theParam" );
     return $value;
