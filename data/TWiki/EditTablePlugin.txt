@@ -1,18 +1,9 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071217860" format="1.0" version="1.1"}%
-<h1>Edit Table Plugin</h1>
+%META:TOPICINFO{author="PeterThoeny" date="1071363180" format="1.0" version="1.2"}%
+---+!! Edit Table Plugin
 
-This plugin allows you to edit TWiki tables using edit fields and drop down boxes. Tables have an *[&nbsp;Edit&nbsp;table&nbsp;]* button if preceeded by an =%<nop>EDITTABLE{...}%= variable. Each column can be a text field, a drop down box or a row number. Multiple tables per topic can be editable, but only one at a time canbe edited.
+This plugin allows you to edit TWiki tables using edit fields and drop down boxes. Tables have an *[&nbsp;Edit&nbsp;table&nbsp;]* button if preceeded by an =%<nop>EDITTABLE{...}%= variable. Each column can be a text field, a drop down box or a row number. Multiple tables per topic are editable, but only one at a time can be edited.
 
----++ <nop>%TOPIC% Global Settings
-
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
-
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Edit TWiki tables using edit fields and drop down boxes.
-
-	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
-		* Set DEBUG = 0
+%TOC%
 
 ---++ Per Table Settings
 
@@ -20,8 +11,8 @@ Add a =%<nop>EDITTABLE{...}%= variable just before an existing table to make it 
 
 | *Parameter* | *Comment* | *Default* |
 | =header= | Enable static header if ="on"=, e.g. disable editing of the first row;<br /> Else specify the header format of a new table like ="&#124;*Food*&#124;*Drink*&#124;"=. | (no header) |
-| =format= | The format of one row when editing the table. A cell can be a text input field, a drop down box, a fixed label, or a row number. Cell definitions: <table cellpadding="0" cellspacing="0"><tr><td valign="top">-Text input field (1 line): </td><td> =&#124; text, &lt;size&gt;, &lt;initial value&gt; &#124;= </td></tr><tr><td valign="top">-Textarea input field: </td><td> =&#124; textarea, &lt;rows&gt;x&lt;columns&gt;, &lt;initial value&gt; &#124;= </td></tr><tr><td valign="top">- Drop down box: </td><td> =&#124; select, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;, etc &#124;= </td></tr><tr><td valign="top">- Fixed label: </td><td> =&#124; label, 0, &lt;label text&gt; &#124;= </td></tr><tr><td valign="top">- Row number: </td><td> =&#124; row, &lt;offset&gt; &#124;= </td></tr><tr><td valign="top">- Date: </td><td> =&#124; date, &lt;sizet&gt; &#124;= </td></tr></table>  | ="text, 16"= for all cells |
-| =changerows= | Rows can be added and removed if ="on"=;<br /> Rows can be added but not removed if ="add"= | ="on"= |
+| =format= | The format of one row when editing the table. A cell can be a text input field, a drop down box, a fixed label, or a row number. Cell definitions:%BR% - Text input field (1 line):%BR% &nbsp; =&#124; text, &lt;size&gt;, &lt;initial value&gt; &#124;= %BR% - Textarea input field:%BR% &nbsp; =&#124; textarea, &lt;rows&gt;x&lt;columns&gt;, &lt;initial value&gt; &#124;= %BR% - Drop down box: %BR% &nbsp; =&#124; select, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;, etc &#124;= %BR% - Fixed label: %BR% &nbsp; =&#124; label, 0, &lt;label text&gt; &#124;= %BR% - Row number: %BR% &nbsp; =&#124; row, &lt;offset&gt; &#124;= %BR% - Date: %BR% &nbsp; =&#124; date, &lt;size&gt;, &lt;initial value&gt;, &lt;DHTML date format&gt; &#124;= | ="text, 16"= %BR% for all cells |
+| =changerows= | Rows can be added and removed if ="on"=;<br /> Rows can be added but not removed if ="add"= | =CHANGEROWS= %BR% Plugin setting |
 | =include= | Other topic defining the EDITTABLE parameters. The first %<nop>EDITTABLE% in the topic is used. This is useful if you have many topics with the same table format and you want to update the format in one place. | (none) |
 | =helptopic= | Topic name containing help text shown below the table when editing a table. The %<nop>STARTINCLUDE% and %<nop>STOPINCLUDE% variables can be used in the topic to specify what is shown. | (no help text) |
 
@@ -31,6 +22,19 @@ __Note:__ By default, variables in =&lt;initial value&gt;= (of text input field)
 | =$percnt= | Percent sign (=%=) |
 | =$dollar= | Dollar sign (=$=) |
 | =$nop= or =$nop()= | Is a "no operation" |
+
+---++ Table Buttons
+
+<form>
+	* In page view mode:
+		* <input type="submit" name="et"	value="Edit table" onClick="return(false);" /> - turn the table into edit mode
+	* In edit mode:
+		* <input type="submit" name="etsave"	value="Save table"  onClick="return(false);" /> - save your changes
+		* <input type="submit" name="etqsave"	value="Quiet save"  onClick="return(false);" /> - save your changes without alerting subscribed WebNotify users
+		* <input type="submit" name="etaddrow" value="Add row" onClick="return(false);" /> - add row to the table (if enabled)
+		* <input type="submit" name="etdelrow" value="Delete last row" onClick="return(false);" /> - remove last row from the table (if enabled)
+		* <input type="submit" name="etcancel" value="Cancel" onClick="return(false);" /> - cancel without saving and release edit lock
+</form>
 
 ---++ Examples
 
@@ -49,12 +53,41 @@ If this plugin is installed you will see an *[&nbsp;Edit&nbsp;table&nbsp;]* butt
 <tr><td  bgcolor="#FFFF99"> 2<input type="hidden" name="etcell3x1" value="2" />  </td><td  bgcolor="#FFFF99"> <input type="text" name="etcell3x2" size="20" value="" />  </td><td  bgcolor="#FFFF99"> <select name="etcell3x3" size="1"> <option>one</option> <option selected="selected">two</option> <option>three</option> <option>four</option> </select>  </td><td  bgcolor="#FFFF99"> 27 Jun 2002 12:40<input type="hidden" name="etcell3x4" value="27 Jun 2002 12:40" />  </td></tr>
 </table>
 <input type="submit" name="etsave"	value="Save table" onClick="return(false);" />
-<input type="submit" name="etqsave"	value="Quietsave"  onClick="return(false);" />
+<input type="submit" name="etqsave"	value="Quiet save"  onClick="return(false);" />
 <input type="submit" name="etaddrow" value="Add row" onClick="return(false);" />
 <input type="submit" name="etdelrow" value="Delete last row" onClick="return(false);" />
 <input type="submit" name="etcancel" value="Cancel" onClick="return(false);" /> (demo only, these buttons do not work)
 </form>
 
+---+++ Date Field Type
+
+<img src="%ATTACHURLPATH%/EditTablePluginCalendarExample.gif" alt="Edit Table Calendar Example" width="549" height="210" align="left"  />
+The =date= field type allows one to choose a date with a popup calendar. Popup calendar works for Netscape 6.0 or better, all other Gecko-based browsers, Internet Explorer 5.0 or better for Windows, Opera 7 and Konqueror 3.1.2. The =...= button is inactive if the browser cannot support the popup calendar. It uses the nice [[http://dynarch.com/mishoo/calendar.epl][Mishoo DHTML calendar]], see also TWiki:Codev/JavaScriptDatePickerForForm <br clear="all">
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>EDITTABLEPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Edit TWiki tables using edit fields and drop down boxes
+
+	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+		* Set DEBUG = 0
+
+	* Default for change rows flag: =on=, =off=, =add=
+		* Set CHANGEROWS = on
+
+	* Date format of [[http://dynarch.com/mishoo/calendar.epl][Mishoo DHTML calendar]]:
+		* Set JSCALENDARDATEFORMAT = %Y/%m/%d
+
+	* Language of DHTML calendar, pointing to attached =calendar-&lt;code&gt;.js= language file: =en=, =de=, =es=, =fr=, =jp=
+		* Set JSCALENDARLANGUAGE = en
+
+	* Additional options of DHTML calendar:
+		* Set JSCALENDAROPTIONS = 
+
+__Note:__ The Plugin looks for the =JSCALENDAR*= settings first in the TWiki Preferences, then in above Plugin settings
 
 ---++ Limitations and Known Issues
 
@@ -69,14 +102,10 @@ If this plugin is installed you will see an *[&nbsp;Edit&nbsp;table&nbsp;]* butt
 	* You can include %-vars now in select values, by quoting them with
 	  &lt;nop&gt;, as in %&lt;nop&gt;X% for %X%, say for instance:
 	  <br /> =select,1,%&lt;nop&gt;X%,%&lt;nop&gt;Y%=
-	* =date= field type for the =format= parameter adds a button popping a javascript 
-	  calendar to choose the date
-	  on browsers supporting it.
-	  It uses the nice *Mishoo DHTML calendar* at http://dynarch.com/mishoo/calendar.epl,
-	  that should be included in Cairo release, or see TWiki:Codev/JavaScriptDatePickerForForm
-	  for installing it on Beijing Release
 
 ---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this Plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -85,21 +114,28 @@ If this plugin is installed you will see an *[&nbsp;Edit&nbsp;table&nbsp;]* butt
 	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	* The plugin depends on the =viewauth= script to authenticate the user. As described in %TWIKIWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file. 
+	* The Mishoo DHTML calendar 0.9.5 is preinstalled and should work without any configuration. If you wish to use another language, attach the language files to the Plugin topic and change the Plugin settings
 	* Test if the plugin is correctly installed:
 		* Check above example if there is an *[&nbsp;Edit&nbsp;table&nbsp;]* button below the table in above example
 		* Click on *[&nbsp;Edit&nbsp;table&nbsp;]*, make changes and save the table
 
+---++ License
+
+	* The Edit Table Plugin is released under the [[http://www.gnu.org/licenses/gpl.html][GPL]]
+	* The [[http://dynarch.com/mishoo/calendar.epl][Mishoo DHTML calendar]] bundled with this Plugin was created by Mihai Bazon and is released under the [[http://www.gnu.org/licenses/lgpl.html][LGPL]] -- thanks Mihai for the great tool :-)
+
 
 ---++ Plugin Info
 
-|  Plugin Author: | %TWIKIWEB%.PeterThoeny |
-|  Plugin Version: | 16 Oct 2003 |
+|  Plugin Author: | TWiki:Main/PeterThoeny |
+|  Plugin Version: | 13 Dec 2003 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  13 Dec 2003: | Added CHANGEROWS, JSCALENDARDATEFORMAT, JSCALENDARLANGUAGE, JSCALENDAROPTIONS settings |
 |  16 Oct 2003: | small typo fixed (garbled if ---<nop>+ header on top) |
 |  15 Oct 2003: | new date field type with javascript calendar - CN |
 |  14 Oct 2003: | docfix: the documentation page was an old one - CN |
 |  13 Oct 2003: | bugfix: %-vars in select were resetted to first on add/del row - CN |
-|  18 Sep 2003: | *incompatibility:* changed default of =changerows= to =on=<br /> support for %-vars, Quietsave for saving without notification, all other fixes in Dev topic integrated - CN |
+|  18 Sep 2003: | incompatibility: changed default of =changerows= to =on=; support for %-vars, Quiet save for saving without notification; all other fixes in Dev topic integrated - CN |
 |  08 Nov 2002: | Prevent variable expansion in label text; added escape characters |
 |  27 Jun 2002: | New =helptopic= parameter |
 |  26 Jun 2002: | Support for variables in included EDITTABLE parameters; fixed problem with HTML in cells |
@@ -109,11 +145,24 @@ If this plugin is installed you will see an *[&nbsp;Edit&nbsp;table&nbsp;]* butt
 |  08 Apr 2002: | Check for change permission and edit lock of topic |
 |  05 Apr 2002: | Initial version |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | none |
+|  Other Dependencies: | [[http://dynarch.com/mishoo/calendar.epl][Mishoo DHTML calendar]] (version 0.9.5 preinstalled) |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- %TWIKIWEB%.PeterThoeny - 08 Nov 2002
+-- TWiki:Main/PeterThoeny - 13 Dec 2003
+%META:FILEATTACHMENT{name="EditTablePluginCalendarExample.gif" attr="h" comment="Screenshot" date="1071361684" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\EditTablePluginCalendarExample.gif" size="7823" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="README" attr="h" comment="Component of Mishoo DHTML calendar" date="1071361959" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\README" size="823" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="release-notes.html" attr="h" comment="Component of Mishoo DHTML calendar" date="1071361968" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\release-notes.html" size="10593" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="calendar.js" attr="h" comment="Component of Mishoo DHTML calendar" date="1071361980" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\calendar.js" size="45484" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="calendar-setup.js" attr="h" comment="Component of Mishoo DHTML calendar" date="1071361988" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\calendar-setup.js" size="7244" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="calendar-system.css" attr="h" comment="Component of Mishoo DHTML calendar" date="1071361999" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\calendar-system.css" size="5506" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="calendar-en.js" attr="h" comment="Component of Mishoo DHTML calendar" date="1071362008" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\calendar-en.js" size="3151" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="calendar-fr.js" attr="h" comment="Component of Mishoo DHTML calendar" date="1071362034" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\calendar-fr.js" size="1148" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="calendar-es.js" attr="h" comment="Component of Mishoo DHTML calendar" date="1071362044" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\calendar-es.js" size="3365" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="calendar-de.js" attr="h" comment="Component of Mishoo DHTML calendar" date="1071362054" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\calendar-de.js" size="2493" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="calendar-jp.js" attr="h" comment="Component of Mishoo DHTML calendar" date="1071362064" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\calendar-jp.js" size="908" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="calendar-pt.js" attr="h" comment="Component of Mishoo DHTML calendar" date="1071362076" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\calendar-pt.js" size="1131" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="calendar-ru.js" attr="h" comment="Component of Mishoo DHTML calendar" date="1071362089" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\calendar-ru.js" size="1144" user="PeterThoeny" version="1.1"}%
