@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999102360" format="1.0" version="1.16"}%
+%META:TOPICINFO{author="JohnTalintyre" date="999102984" format="1.0" version="1.17"}%
 <table><tr><td>
 Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about the tool.</td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
@@ -23,7 +23,6 @@ Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management t
 		* TWikiVariables: Manipulate text, graphics, calculations, and more with simple expanding text strings.
 		* FileAttachments: Upload files to any topic, for display or distribution.
 		* [[RenameTopic][ModifyTopics]]: Rename, move, delete pages.
-		* [[TWikiFormTemplate][TWikiForms]]: Create custom forms to structure information as required.
 
 ---+++ Webmaster Reference
 
@@ -41,6 +40,7 @@ Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management t
 			1 TWikiSkins
 			1 TWikiPlugins
 			1 MetaDataDefinition
+			1 MetaDataRendering
 			1 [[TWikiNotificationOfChanges][MonitorSiteActivity]]
 			1 [[RenameTopic][ModifyTopics]]
 			1 [[TWikiAdministration][ModifyWebs]]
