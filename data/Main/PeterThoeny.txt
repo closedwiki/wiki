@@ -1,0 +1,11 @@
+	* Name: Peter Thoeny
+	* Work: peter.thoeny@takefive.com
+	* Home: peter.thoeny@attglobal.net
+	* Location: Cupertino, CA
+	* Local time: Current <A HREF="http://www.bsdi.com/date?America/Los_Angeles">time</A> in Cupertino.
+
+Notes: Peter created the TWikiWeb.
+
+Related topic: TWikiUsers has a list of other TWiki users.
+
+-- Main.PeterThoeny - 11 Feb 1999 <br>
