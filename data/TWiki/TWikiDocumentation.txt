@@ -3,13 +3,14 @@
 	* <A href="#installation">(2)</A> Installation Notes
 	* <A href="#upgrade">(3)</A> Upgrading Earlier Versions of TWiki
 	* <A href="#authentication">(4)</A> TWiki Authentication
-	* <A href="#login">(5)</A> Wiki Username vs. Login Username
+	* <A href="#login">(5)</A> TWiki Username vs. Login Username
 	* <A href="#access">(6)</A> TWiki Access Control
-	* <A href="#templates">(7)</A> Wiki Templates
-	* <A href="#variables">(8)</A> Wiki Variables
-	* <A href="#notification">(9)</A> Notification of Changes by Email
-	* <A href="#category">(10)</A> TWiki Category Table
-	* <A href="#administration">(11)</A> TWiki Administration
+	* <A href="#templates">(7)</A> TWiki Templates
+	* <A href="#skins">(8)</A> TWiki Skins
+	* <A href="#variables">(9)</A> TWiki Variables
+	* <A href="#notification">(10)</A> Notification of Changes by Email
+	* <A href="#category">(11)</A> TWiki Category Table
+	* <A href="#administration">(12)</A> TWiki Administration
 
 __Note:__ Read the most up to date version of this document at http://TWiki.org/cgi-bin/view/TWiki/TWikiDocumentation
 
@@ -45,7 +46,7 @@ __Related Topics:__ TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhanceme
 
 <A name="login">
 -----
-*(5) Wiki Username vs. Login Username*
+*(5) TWiki Username vs. Login Username*
 
 %INCLUDE{"TWikiUsernameVsLoginUsername"}%
 
@@ -59,34 +60,41 @@ __Related Topics:__ TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhanceme
 
 <A name="templates">
 -----
-*(7) Wiki Templates*
+*(7) TWiki Templates*
 
 %INCLUDE{"TWikiTemplates"}%
 
 
+<A name="skins">
+-----
+*(8) TWiki Skins*
+
+%INCLUDE{"TWikiSkins"}%
+
+
 <A name="variables">
 -----
-*(8) Wiki Variables*
+*(9) TWiki Variables*
 
 %INCLUDE{"TWikiVariables"}%
 
 
 <A name="notification">
 -----
-*(9) Notification of Changes by Email*
+*(10) Notification of Changes by Email*
 
 %INCLUDE{"TWikiNotificationOfChanges"}%
 
 
 <A name="category">
 -----
-*(10) TWiki Category Table*
+*(11) TWiki Category Table*
 
 %INCLUDE{"TWikiCategoryTable"}%
 
 
 <A name="administration">
 -----
-*(11) TWiki Administration*
+*(12) TWiki Administration*
 
 %INCLUDE{"TWikiAdministration"}%

@@ -9,27 +9,30 @@ Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management t
 *Starting points* at the %WIKITOOLNAME%.%WEB% web:
 	* WelcomeGuest: Look here first to get you rolling on %WIKITOOLNAME%.
 	* TWikiRegistration: Create your %WIKITOOLNAME% account in order to edit topics.
-	* User documentation:
+	* __User documentation:__
 		* TWikiWeb: Explains what %WIKITOOLNAME% is.
 		* TWikiFAQ: List of frequently asked questions around the %WIKITOOLNAME% tool.
 		* TWikiTutorial: Get a jump start on %WIKITOOLNAME%.
 		* GoodStyle: Things to consider when changing text.
 		* WikiSyntax, TextFormattingRules: Easy to learn rules for editing text.
 		* TextFormattingFAQ: Answers to frequently asked questions about text formatting.
-	* Webmaster documentation: 
+		* TWikiVariables: Add variable content like other topics and inline search.
+		* FileAttachments: Add files to any topic.
+	* __Webmaster documentation:__
 		* TWikiHistory shows TWiki's implementation history. 
 		* TWikiDocumentation is the implementation documentation of TWiki, containing these topics:
-			* TWikiImplementationNotes 
-			* TWikiInstallationNotes 
-			* TWikiUpgradeNotes
-			* TWikiAuthentication
-			* TWikiUsernameVsLoginUsername
-			* TWikiAccessControl
-			* TWikiTemplates
-			* TWikiVariables
-			* TWikiNotificationOfChanges 
-			* TWikiCategoryTable 
-			* TWikiAdministration tells you how to rename or delete a topic or web.
+			1 TWikiImplementationNotes 
+			1 TWikiInstallationNotes 
+			1 TWikiUpgradeNotes
+			1 TWikiAuthentication
+			1 TWikiUsernameVsLoginUsername
+			1 TWikiAccessControl
+			1 TWikiTemplates
+			1 TWikiSkins
+			1 TWikiVariables
+			1 TWikiNotificationOfChanges 
+			1 TWikiCategoryTable 
+			1 TWikiAdministration tells you how to rename or delete a topic or web.
 
 <FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
 	* WebSearch: Full text search of the %WIKITOOLNAME%.%WEB% web.
