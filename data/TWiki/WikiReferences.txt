@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="PeterThoeny" date="996221392" format="1.0beta2" version="1.1"}%
-%META:TOPICPARENT{name="TWikiWeb"}%
+%META:TOPICINFO{author="PeterThoeny" date="1013454978" format="1.0" version="1.2"}%
+%META:TOPICPARENT{name="TWikiSite"}%
 ---+ References on Wiki and Collaboration
 
 Some useful articles and books around collaboration and the Wiki technology in particular. 
@@ -10,9 +10,11 @@ Some useful articles and books around collaboration and the Wiki technology in p
 
 	* Article: Corporate Collaboration With TWiki; by Peter Thoeny; Web Techniques Magazine; December 2000; http://www.webtechniques.com/archives/2000/12/thoeny/
 
+	* Article: Tool of the Month: TWiki; by Joe "Zonker" Brockmeier; <nop>UnixReview.com; January 2002; http://www.unixreview.com/documents/s=1820/uni1011715271489/0201j.htm
+
 	* Presentation: TWiki Collaboration Tool - A Mature and Full Featured Platform for building Web Based Groupware Applications; by Peter Thoeny; TWiki:Main/TWikiPlatformPresentation
 
-	* Directory: Google.com &t; Computers &t; Software &t; Groupware &t; Wiki; http://directory.google.com/Top/Computers/Software/Groupware/Wiki/
+	* Directory: Google.com &gt; Computers &gt; Software &gt; Groupware &gt; Wiki; http://directory.google.com/Top/Computers/Software/Groupware/Wiki/
 
 ---++ Collaboration and Knowledge Management
 
