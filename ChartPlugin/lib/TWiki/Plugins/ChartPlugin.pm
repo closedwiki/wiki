@@ -40,9 +40,10 @@ use vars qw(
 	$pluginInitialized $perlGDModuleFound $perlPOSIXModuleFound
 	$defaultType @defaultAreaColors @defaultLineColors
 	$defaultWidth $defaultHeight $defaultBGcolor $defaultNumYGrids
+	$defaultDataValue $defaultScale
     );
 
-$VERSION = '1.003';
+$VERSION = '1.1';
 $pluginInitialized = 0;
 $perlGDModuleFound = 0;
 $perlPOSIXModuleFound = 0;
@@ -122,6 +123,11 @@ sub _init_defaults
     $defaultBGcolor = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_BGCOLOR" ) || '#FFFFFF #FFFFFF';
     # Get default number of Y axis grids
     $defaultNumYGrids = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_NUMYGRIDS" ) || 10;
+    # Get default value to use if there is no data seen in the table
+    $defaultDataValue = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_DEFAULTDATA" );
+    # Get default value to use if there is no data seen in the table
+    $defaultScale = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_SCALE" );
+
     $pluginInitialized = 1;
 }
 
@@ -270,6 +276,13 @@ sub _makeChart
     }
     $chart->setType($type);
 
+    # See if the parameter 'scale' is available.
+    my $scale = $this->_Parameters->getParameter( "scale", $defaultScale);
+    if ($scale ne "base10" and $scale ne "semilog") {
+	return _make_error("Invalid value of *$scale* for parameter *scale* ");
+    }
+    $chart->setScale($scale);
+
     # See if the parameter 'name' is available.  This is a required
     # parameter.  If it is missing, then generate an error message.
     my $name = $this->_Parameters->getParameter( "name", undef);
@@ -286,15 +299,14 @@ sub _makeChart
     # Before we parse any further parameters, lets get the contents of the
     # specified web/topic.
     if (! $this->_setTopicContents($inWeb, $inTopic)) {
-	return _make_error("Error retrieving TWiki topic <nop>$inWeb.$inTopic");
+	return _make_error("Error retrieving TWiki topic $inWeb<nop>.$inTopic");
     }
 
     # Determine which table the user wants to chart
     my $tableName = $this->_Parameters->getParameter( "table", 1);
     # Verify that the table name is valid.
     if (! $this->_tables->checkTableExists($tableName) ) {
-	return _make_error( "parameter *table* is not valid table; the specified "
-                          . "table '$tableName' does not exist." );
+	return _make_error("parameter *table* is not valid table; the specified table '$tableName' does not exist.");
     }
 
     # See if the parameter 'title' is available.
@@ -324,14 +336,30 @@ sub _makeChart
     my $yAxis = $this->_Parameters->getParameter( "yaxis", "off");
     $chart->setYaxis($yAxis);
 
+    # See if the parameter 'ytic' is available.
+    my $yTic = $this->_Parameters->getParameter( "ytics", -1);
+    $chart->setNumYTics($yTic);
+
+    # See if the parameter 'xaxisangle' is available.
+    my $xaxisangle = $this->_Parameters->getParameter( "xaxisangle", 0);
+    $chart->setXaxisAngle($xaxisangle);
+
     # See if the parameter 'ymin' is available.
-    $chart->setYmin( $this->_Parameters->getParameter( "ymin", undef) );
+    my $yMin =$this->_Parameters->getParameter( "ymin", undef);
+    if (defined $yMin && $scale eq "semilog" && $yMin <= 0) {
+	return _make_error("user set ymin=$yMin is &lt;= 0 which is not valid when scale=semilog");
+    }
+    $chart->setYmin( $yMin );
 
     # See if the parameter 'ymax' is available.
     $chart->setYmax( $this->_Parameters->getParameter( "ymax", undef) );
 
     # See if the parameter 'numygrids' is available.
     $chart->setNumYGrids( $this->_Parameters->getParameter( "numygrids", $defaultNumYGrids) );
+
+    # See if the parameter 'numxgrids' is available.
+    my $numxgrids = $this->_Parameters->getParameter( "numxgrids", undef);
+    $chart->setNumXGrids($numxgrids);
 
     # See if the parameter 'xgrid' is available.
     my $xGrid = $this->_Parameters->getParameter( "xgrid", "dot");
@@ -369,6 +397,11 @@ sub _makeChart
     # See if the parameter 'colors' is available.
     my $colors = $this->_Parameters->getParameter( "colors", undef);
     $chart->setColors(split(/[\s,]+/, $colors)) if (defined $colors);
+
+    # See if the parameter 'defaultdata' is available.
+    my $DataValueDefault = $this->_Parameters->getParameter( "defaultdata", $defaultDataValue);
+    $DataValueDefault = '' if ($DataValueDefault eq "none");
+    $chart->setDefaultDataValue($DataValueDefault);
 
     # Get the name of the directory and filename in which to create the
     # graphics file.
@@ -427,7 +460,11 @@ sub _makeChart
     # Validate that there is real data returned.
     return _make_error("no data found in specified area of table [$data]") if (! @data);
 
-    $chart->setData(@data);
+    $yMin = $chart->setData(@data);
+    # If scale=semilog and any data is <= 0, then error
+    if ($scale eq "semilog" && $yMin <= 0) {
+	return _make_error("data ($yMin) &lt;= 0 not valid when scale=semilog");
+    }
 
     # Make sure that there are enough legends to go with all specified
     # data sets (if legends were specified)
@@ -435,8 +472,7 @@ sub _makeChart
 	my $numLegends = @legend;
 	my $numDataSets = @data;
 	if ($numDataSets != $numLegends) {
-	    return _make_error("parameter *legend* contains an invalid value '$legend' "
-             . "since it specifies $numLegends legends and there are $numDataSets data sets.");
+	    return _make_error("parameter *legend* contains an invalid value '$legend' since it specifies $numLegends legends and there are $numDataSets data sets.");
 	}
     }
 
@@ -473,7 +509,6 @@ sub _timeit
     my ( $this, $loops, $params, $topic, $web ) = @_;
     my $removeFiles = 0;	# Flag on whether to remove the test graphics or not
     my $start_time = time();
-    my $ret;
     for (my $i = 0; $i < $loops; $i++) {
 	my $str = "$params name=\"timeit_$i\"";
 	$this->_makeChart( $str, $topic, $web );

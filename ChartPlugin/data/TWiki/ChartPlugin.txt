@@ -1,7 +1,8 @@
-%META:TOPICINFO{author="PeterThoeny" date="1034359320" format="1.0" version="1.4"}%
----+ Chart Plugin
+%META:TOPICINFO{author="TaitCyrus" date="1055799060" format="1.0" version="1.5"}%
+---+ Chart Plugin (v1.2b)
 
-This plugin creates PNG or GIF charts to visualize TWiki tables.
+This plugin creates PNG or GIF charts to visualize TWiki tables using a
+default base 10 scale or an optional semilogirihmic scale.
 
 Three types of charts are currently available, an _area_ chart that shows data as areas under a line, a _line_ chart that shows data as simple lines, and _arealine_ which combines _area_ and _line_.
 
@@ -31,10 +32,12 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 	* Default dimensions, scale and colors for a chart. See details in the syntax rules.
 		* Set WIDTH = 400
 		* Set HEIGHT = 250
-		* Set NUMYGRIDS = 10
-		* Set BGCOLOR = #FFFFFF, #FFFFFF
 		* Set AREA_COLORS = #FF3333, #FFFF33, #33FF33, #CC66FF, #33CCFF, #FFCC00, #996633, #33CCCC, #3366CC
 		* Set LINE_COLORS = #0000FF, #00FF00, #FF0000, #FF6600, #FF00FF, #0099FF, #000000
+		* Set BGCOLOR = #FFFFFF, #FFFFFF
+		* Set NUMYGRIDS = 10
+		* Set DEFAULTDATA = 0
+		* Set SCALE = base10
 
 ---++ Syntax Rules
 
@@ -48,6 +51,7 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
 
 | *%<nop>CHART% Parameter* | *Comment* | *Default* |
 | =type= | The type of chart to create, =area=, =line=, or =arealine= | Global =TYPE= setting |
+| =scale= | The scale to use when creating the chart.  =base10= or =semilog= | Global =SCALE= setting |
 | =name= | Name to uniquely identify the chart file that is auto-created. | None; is required for all charts |
 | =web= | The web in which to find =topic= (specified below) in which to find the TWiki tables | The current web |
 | =topic= | The topic in which to find the TWiki tables | The current topic |
@@ -56,14 +60,18 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
 | =xlabel= | The label placed under the X axis describing the X values | None |
 | =ylabel= | The label placed to the left of the Y axis describing the Y values | None |
 | =data= | The source data to build the chart, defined as a range of table cells. For example for =type="line"=, a =data="R2:C3..R999:C6"= would say that four lines were to be drawn with first line being rows 2-999 column 3 and last line being rows 2-999 column 6. | None; is required for all charts |
+| =defaultdata= | If there is sparse data, then use the value specified by =defaultdata= to fill in the missing data | Global =DEFAULTDATA= setting |
 | =datatype= | For =type="arealine"= only: An ="area, line"= list defining how to represent the data. For example ="area, area, area, line"= would say that the first three data sets are areas and the last one is a line. | All but the last data set are assumed to be =area= and the last data set is assumed to be =line= |
 | =xaxis= | X-Axis labels: The values are defined as a range of table cells. The range also defines the orientation -- row or column oriented (if specified). For example ="R2:C2..R999:C2"= would take all of column 2 starting at row 2 and going through row 999.  It would also denote that all remaining data is oriented columnar. | None.  If not specified, then no X axis labels shown and data assumed to be in columnar format. |
+| =xaxisangle= | Angle the X-Axis labels are drawn.  Currently only values == 0 and != 0 are supported where == 0 is horizontal labels while != 0 is vertical labels | 0 |
 | =yaxis= | Y-Axis labels: ="on"= to show the labels, ="off"= for no labels. | ="off"= |
-| =ymin= | Minimum value drawn on the Y axis. Nice human readable values are calculated from the =data= values if =ymin= and =ymax= are unspecified. | The minimum value specified by =data= |
+| =ymin= | Minimum value drawn on the Y axis | The minimum value specified by =data= |
 | =ymax= | Maximum value drawn on the Y axis | The maximum value specified by =data= |
 | =xgrid= | Grid shown for X axis: ="on"= for solid grid lines, ="dot"= for dotted grid lines, ="off"= for none. | ="dot"= |
 | =ygrid= | Grid shown for Y axis: ="on"= for solid grid lines, ="dot"= for dotted grid lines, ="off"= for none. | ="dot"= |
-| =numygrids= | Number of grids drawn for Y axis. This value gets adjusted up or down if =ymin= and =ymax= are unspecified so that the grid values fall on nice human readable values | Global =NUMYGRIDS= setting |
+| =numygrids= | Number of Y axis grids drawn | Global =NUMYGRIDS= setting |
+| =ytics= | Number of tic marks to draw between Y axis grid lines.  | If =scale=semilog=, then =ytics=10=, else defaults to 0 |
+| =numxgrids= | Number of X axis grids drawn.  This can be used if there are a large number of X axis data points such that the X axis labels overlap. | Draw all X-Axis labels |
 | =datalabel= | Show data labels: ="on"= for labels, ="box"= for label in a box, ="off"= for none. It can also be a list like ="off, off, off, box"= to show values in a box for the fourth set of data points only. | ="off"= |
 | =legend= | Legend shown to the right of the chart.  For example ="R1:C3..R1:C6"= would take all of row 1 starting at column 3 and going through column 6 as the name/legend of each set of data points | None; no legend if not specified |
 | =width= | Defines the overall width of the chart in pixels. | Global =WIDTH= setting |
@@ -91,10 +99,10 @@ Assuming the following two TWiki tables.  The first shows the data oriented in c
 | *Actual* | 9 | 14 | 15 | 19 | 27 |
 
 | *Type of chart* | *You type* | *You should get...* | *...if installed* |
-| line | =%<nop>CHART{ type="line" name="t1" table="4" data="R2:C2..R6:C2" xaxis="R2:C1..R6:C1" yaxis="on" legend="R1:C2..R1:C2" width="225" height="200"}%= | <img src="%ATTACHURLPATH%/line1.png" /> | %CHART{ type="line" name="t1" table="4" data="R2:C2..R6:C2" xaxis="R2:C1..R6:C1" yaxis="on" legend="R1:C2..R1:C2" width="225" height="200"}% |
-| line | =%<nop>CHART{ type="line" name="t2" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" yaxis="on" legend="R2:C1..R5:C1" width="225" height="200"}%= | <img src="%ATTACHURLPATH%/line2.png" /> | %CHART{ type="line" name="t2" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" yaxis="on" legend="R2:C1..R5:C1" width="225" height="200"}% |
-| area | =%<nop>CHART{ type="area" name="t3" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" yaxis="on" legend="R2:C1..R5:C1" width="225" height="200"}%= | <img src="%ATTACHURLPATH%/area3.png" /> | %CHART{ type="area" name="t3" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" yaxis="on" legend="R2:C1..R5:C1" width="225" height="200"}% |
-| arealine | =%<nop>CHART{ type="arealine" name="t4" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" yaxis="on" legend="R2:C1..R5:C1" datatype="area area area line" width="225" height="200"}%= | <img src="%ATTACHURLPATH%/arealine4.png" /> | %CHART{ type="arealine" name="t4" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" yaxis="on" legend="R2:C1..R5:C1" datatype="area area area line" width="225" height="200"}% |
+| line | =%<nop>CHART{ type="line" name="t1" table="4" data="R2:C2..R6:C2" xaxis="R2:C1..R6:C1" legend="R1:C2..R1:C2" width="225" height="200"}%= | <img src="%ATTACHURLPATH%/line1.png" /> | %CHART{ type="line" name="t1" table="4" data="R2:C2..R6:C2" xaxis="R2:C1..R6:C1" legend="R1:C2..R1:C2" width="225" height="200"}% |
+| line | =%<nop>CHART{ type="line" name="t2" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" width="225" height="200"}%= | <img src="%ATTACHURLPATH%/line2.png" /> | %CHART{ type="line" name="t2" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" width="225" height="200"}% |
+| area | =%<nop>CHART{ type="area" name="t3" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" width="225" height="200"}%= | <img src="%ATTACHURLPATH%/area3.png" /> | %CHART{ type="area" name="t3" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" width="225" height="200"}% |
+| arealine | =%<nop>CHART{ type="arealine" name="t4" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" datatype="area area area line" width="225" height="200"}%= | <img src="%ATTACHURLPATH%/arealine4.png" /> | %CHART{ type="arealine" name="t4" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" datatype="area area area line" width="225" height="200"}% |
 
 The "if installed" column shows images instead of variables in case the plugin is installed correctly.
 
@@ -105,7 +113,7 @@ The "if installed" column shows images instead of variables in case the plugin i
 
 ---++ Error Handling
 
-If the required parameters are not defined, then an error message is returned or an =&lt;img ... /&gt;= image tag is returned pointing to a graphic containing the error message.
+If the required parameters are not defined, then an error message is returned or an &lt;img ... /&gt; image tag is returned pointing to a graphic containing the error message.
 
 ---++ Plugin Installation Instructions
 
@@ -139,11 +147,14 @@ If the required parameters are not defined, then an error message is returned or
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/TaitCyrus, %TWIKIWEB%.PeterThoeny |
-|  Plugin Version: | 30 Sep 2002 (V1.003) |
+|  Plugin Author: | %TWIKIWEB%.PeterThoeny, %MAINWEB%.TaitCyrus |
+|  Plugin Version: | 17 Oct 2003 (V1.2b) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  10 Oct 2002: | V1.003 - Improved performance, fixed bugs with color allocation, auto-legend placement and parsing of numbers in tables.  Also bumped the upper value when numbers switch from decimal format to engineering format |
-|  30 Sep 2002: | V1.002 - Add support for better placement of legends so they don't overlap, add auto ymin/ymax determination if not specified, add =bgcolor= and =numygrids= options |
+|	17 Oct 2003: | V1.2b - Fix boundry cases with =semilog= scale |
+|	16 Oct 2003: | V1.2 - Add new options of _scale_ and _ytics_. |
+|	16 Jun 2003: | V1.1 - Add support for reversed tables (R999..R1), add new options of _xaxisangle_, _numxgrids_, and _defaultdata_, and allow sparse data. |
+|	7 Oct 2002: | V1.003 - Improved performance, fixed bugs with color allocation, auto-legend placement and parsing of numbers in tables.  Also bumped the upper value when numbers switch from decimal format to engineering format |
+|  13 Sept 2002: | V1.002 - Add support for better placement of legends so they don't overlap, add auto ymin/ymax determination if not specified, add =bgcolor= and =numygrids= options |
 |  27 Jun 2002: | V1.001 - Data range specified is clipped to actual table size; more forgiving data parsing by extracting first numeral from a table cell, e.g. extract =25= from =&lt;u&gt;25%&lt;/u&gt;= |
 |  20 Jun 2002: | Initial version (V1.000) |
 |  CPAN Dependencies: | GD from http://stein.cshl.org/WWW/software/GD |
@@ -154,12 +165,12 @@ If the required parameters are not defined, then an error message is returned or
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- Main.TaitCyrus - 10 Oct 2002 <br />
--- Main.PeterThoeny - 10 Oct 2002
-%META:FILEATTACHMENT{name="line1.png" attr="h" comment="" date="1034358856" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\line1.png" size="1247" user="PeterThoeny" version="1.2"}%
-%META:FILEATTACHMENT{name="line2.png" attr="h" comment="" date="1034358866" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\line2.png" size="2289" user="PeterThoeny" version="1.2"}%
+-- Main.TaitCyrus - 17 Oct 2003 <br />
+-- Main.PeterThoeny - 7 Oct 2002
+%META:FILEATTACHMENT{name="line1.png" attr="h" comment="" date="1024533179" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\line1.png" size="999" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line2.png" attr="h" comment="" date="1024533191" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\line2.png" size="2110" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="lineexample.png" attr="h" comment="" date="1024533198" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\lineexample.png" size="2462" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="area3.png" attr="h" comment="" date="1034358879" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\area3.png" size="1988" user="PeterThoeny" version="1.2"}%
+%META:FILEATTACHMENT{name="area3.png" attr="h" comment="" date="1024533204" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\area3.png" size="1686" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="areaexample.png" attr="h" comment="" date="1024533210" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\areaexample.png" size="3370" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="arealine4.png" attr="h" comment="" date="1034358891" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\arealine4.png" size="2102" user="PeterThoeny" version="1.2"}%
+%META:FILEATTACHMENT{name="arealine4.png" attr="h" comment="" date="1024533217" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\arealine4.png" size="1828" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="arealineexample.png" attr="h" comment="" date="1024533223" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\arealineexample.png" size="4211" user="PeterThoeny" version="1.1"}%
