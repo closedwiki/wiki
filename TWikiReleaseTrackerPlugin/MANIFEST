@@ -2,16 +2,6 @@
 ./data/TWiki/TRTTestSuite.txt
 ./data/TWiki/TWikiReleaseTrackerPlugin.txt
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin.pm
-./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/ArraySets.pm
-./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/diffwiki.pl
-./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/makeTestSymlinks.pl
-./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/matchDistributionAgainstInstallation.pl
-./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/matchInstallationAgainstDistribution.pl
-./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/matchTestSuite.pl
-./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/oldBuildindex.pl
-./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/testAttachmentSave.pl
-./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/testIndexesLoad.pl
-./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/testUnionOfArrays.pl
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/Common.pm
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/DistributionWalker.pm
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/FileDigest.pm
