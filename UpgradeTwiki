@@ -7,6 +7,7 @@
 #
 # Jul 2004 - written by Martin Gregory, martin@gregories.net
 # Changes copyright (C) 2005 Crawford Currie http://c-dot.co.uk
+# Changes copyright (C) 2005 Sven Dowideit http://www.home.org.au
 #
 
 use strict;
