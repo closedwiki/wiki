@@ -131,7 +131,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "07 Mar 2004";
+$wikiversion      = "10 Mar 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1008,7 +1008,7 @@ form "Main.JohnSmith".
 
 sub getEmailOfUser
 {
-    my ($wikiName) = @_;		# WikiName without web prefix
+    my( $wikiName ) = @_;		# WikiName without web prefix
 
     my @list = ();
     # Ignore guest entry and non-existent pages
@@ -2396,6 +2396,34 @@ sub getPublicWebList
         }
     }
     return @publicWebList;
+}
+
+# =========================
+=pod
+
+---++ sub expandVariablesOnTopicCreation ( $text )
+
+Expand limited set of variables with a topic during topic creation
+
+=cut
+
+sub expandVariablesOnTopicCreation {
+  my ( $theText, $theUser, $theWikiName, $theWikiUserName ) = @_;
+
+  my $today = formatTime(time(), "\$day \$mon \$year", "gmtime");
+  $theUser         = $userName                     unless $theUser;
+  $theWikiName     = userToWikiName( $theUser, 1 ) unless $theWikiName;
+  $theWikiUserName = userToWikiName( $theUser )    unless $theWikiUserName;
+
+  $theText =~ s/%DATE%/$today/go;
+  $theText =~ s/%USERNAME%/$theUser/go;                     # "jdoe"
+  $theText =~ s/%WIKINAME%/$theWikiName/go;                 # "JonDoe"
+  $theText =~ s/%WIKIUSERNAME%/$theWikiUserName/go;         # "Main.JonDoe"
+  $theText =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/geo;  # expand URL parameters
+  $theText =~ s/%NOP{.*?}%//gos;  # Remove filler: Use it to remove access control at time of
+  $theText =~ s/%NOP%//go;        # topic instantiation or to prevent search from hitting a template
+
+  return $theText;
 }
 
 # =========================

@@ -2,7 +2,7 @@
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -197,17 +197,8 @@ sub main
         }
         $text = "$before$after";
 
-        # expand limited set of variables
-        # NOTE: Keep it in sync with the edit script (FIXME: Put in function)
-        my $today = &TWiki::formatTime(time(), "\$day \$mon \$year", "gmtime");
-        my $userName = $remoteUser || $wikiName;
-        $text =~ s/%DATE%/$today/go;
-        $text =~ s/%USERNAME%/$userName/go;               # "jdoe"
-        $text =~ s/%WIKINAME%/$wikiName/go;               # "JonDoe"
-        $text =~ s/%WIKIUSERNAME%/$webName.$wikiName/go;  # "Main.JonDoe"
-        $text =~ s/%URLPARAM{(.*?)}%/TWiki::handleUrlParam($1)/geo;  # expand URL parameters
-        $text =~ s/%NOP{.*?}%//gos;  # Remove filler: Use it to remove access control at time of
-        $text =~ s/%NOP%//go;        # topic instantiation or to prevent search from hitting a template
+       my $userName = $remoteUser || $wikiName;
+       $text = TWiki::expandVariablesOnTopicCreation( $text, $userName, $wikiName, "$webName.$wikiName" );
 
         $meta->put( "TOPICPARENT", ( "name" => $TWiki::wikiUsersTopicname ) );
         &TWiki::Store::saveTopic( $webName, $wikiName, $text, $meta, "", 1 );
