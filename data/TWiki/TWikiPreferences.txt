@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="JohnTalintyre" date="997261149" format="1.0beta2" version="1.15"}%
+%META:TOPICINFO{author="PeterThoeny" date="998030806" format="1.0beta2" version="1.16"}%
 *%WIKITOOLNAME% Site-Level Preferences*
 
 The following settings are __site-level preferences__ , e.g. affecting all users in all %WIKITOOLNAME% webs. These preferences can be overwritten by __web preferences__ (topic %WEBPREFSTOPIC% in each %WIKITOOLNAME% web) and __user preferences__ (your personal topic, i.e. Main.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
@@ -44,6 +44,15 @@ __Preferences:__
 
 	* Default state of the __link__ check box in the attach file page. Checkbox is initially checked if =Set ATTACHLINKBOX = checked="checked"=, or unchecked if empty (=Set ATTACHLINKBOX ==). If checked, a link is created to the attached file at the end of the topic: (can be overwritten by user preferences)
 		* Set ATTACHLINKBOX = 
+
+	* Format of file link when the __link__ check box is checked: (can be overwritten by user preferences)
+		* Set ATTACHEDFILELINKFORMAT = \t* [[%ATTACHURL%/$name][$name]]: $comment
+		* __Note:__ Keyword =$name= gets expanded to filename; =$comment= to comment; =\t= to tab (3 spaces for bullets).
+
+	* Format of images when the __link__ check box is checked: (can be overwritten by user preferences)
+		* Set ATTACHEDIMAGEFORMAT = \t* $comment: <br /> <img src="%ATTACHURLPATH%/$name" alt="$name" $size />
+		* __Note:__ Above image is shown as broken, it gets expanded correctly when you attach an image.
+		* __Note:__ Keyword =$name= gets expanded to filename; =$comment= to comment; =$size= to =width="..." height="..."= attribute of =img= tag; =\t= to tab (3 spaces for bullets).
 
 	* Wiki webmaster email address:
 		* Set WIKIWEBMASTER = webmaster@your.company
