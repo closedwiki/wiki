@@ -1,4 +1,6 @@
-#!/usr/bin/perl -wT 
+#!c:/apps/perl/bin/perl 
+#-d:ptkdb 
+sub BEGIN {$ENV{PTKDB_STOP_TAG_COLOR} = "yellow" } 
 #
 # TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
 #
@@ -16,12 +18,6 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
-#usage example:
-#<FORM name="rename" action="/%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/">
-#<input type="text" name="topic" value="%TOPIC%" size="16">
-#<input type="text" name="newtopic" size="16">
-#<input type="submit" name="Rename">
-#</FORM>
 
 use CGI::Carp qw( fatalsToBrowser );
 use CGI;
