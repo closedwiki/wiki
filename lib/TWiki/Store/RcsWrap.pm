@@ -242,9 +242,9 @@ sub getRevisionInfo {
        $rcsError = "Error with $cmd, output: $rcsOut" if( $exit );
        if( ! $rcsError ) {
             if( $rcsOut =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/ ) {
-                $date = $1 || '';
-                $user = $2 || '';
-                $comment = $3 || '';
+                $date = $1;
+                $user = $2;
+                $comment = $3;
                 $date = TWiki::Time::parseTime( $date );
                 if( $rcsOut =~ /revision 1.([0-9]*)/ ) {
                     $rev = $1;

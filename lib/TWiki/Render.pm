@@ -270,9 +270,11 @@ sub _emitTR {
             push( @attr, colspan => $1 );
         }
         s/^\s+$/ &nbsp; /;
-        /^(\s*).*?(\s*)$/;
-        my $l1 = length( $1 || '' );
-        my $l2 = length( $2 || '' );
+        my( $l1, $l2 ) = ( 0, 0 );
+        if( /^(\s*).*?(\s*)$/ ) {
+            $l1 = length( $1 );
+            $l2 = length( $2 );
+        }
         if( $l1 >= 2 ) {
             if( $l2 <= 1 ) {
                 push( @attr, align => 'right' );
@@ -594,8 +596,10 @@ sub _handleSquareBracketedLink {
     # Extract '#anchor'
     # FIXME and NOTE: Had '-' as valid anchor character, removed
     # $theLink =~ s/(\#[a-zA-Z_0-9\-]*$)//;
-    $theLink =~ s/($TWiki::regex{anchorRegex}$)//;
-    my $anchor = $1 || '';
+    my $anchor = '';
+    if( $theLink =~ s/($TWiki::regex{anchorRegex}$)// ) {
+        $anchor = $1;
+    }
 
     # Get the topic name
     my $topic = $theLink || $theTopic;  # remaining is topic
@@ -828,8 +832,10 @@ sub getRenderedVersion {
 
     my $removed = {};    # Map of placeholders to tag parameters and text
 
-    $text =~ s/(\s*<!DOCTYPE.*?>\s*)//is;
-    my $doctype = $1 || '';
+    my $doctype = '';
+    if( $text =~ s/(\s*<!DOCTYPE.*?>\s*)//is ) {
+        $doctype = $1;
+    }
 
     $text = $this->takeOutBlocks( $text, 'verbatim', $removed );
     $text = $this->takeOutBlocks( $text, 'head', $removed );
@@ -1317,7 +1323,7 @@ sub takeOutBlocks {
     foreach my $line ( split/\r?\n/, $intext ) {
         if ( $line =~ m/$open/ ) {
             unless ( $depth++ ) {
-                $scoop = $2 || '';
+                $scoop = $2;
                 next;
             }
             $tagParams = $1;

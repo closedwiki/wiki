@@ -200,14 +200,14 @@ sub readTemplate {
                 $this->{VARS}{ $key } = $val;
             }
             $key = $1;
-            $val = $2 || '';
+            $val = $2;
 
         } elsif( /^END%[\n\r]*(.*)/s ) {
             # handle %TMPL:END%
             $this->{VARS}{ $key } = $val;
             $key = '';
             $val = '';
-            $result .= $1 || '';
+            $result .= $1;
 
         } elsif( $key ) {
             $val    .= "$delim$_";

@@ -1002,8 +1002,8 @@ sub new {
             return;
         } elsif( $topic =~ /(.*)[\.\/](.*)/ ) {
             # is 'bin/script?topic=Webname.SomeTopic'
-            $web   = $1 || '';
-            $topic = $2 || '';
+            $web   = $1;
+            $topic = $2;
             # jump to WebHome if 'bin/script?topic=Webname.'
             $topic = $TWiki::cfg{HomeTopicName} if( $web && ! $topic );
         }
@@ -1021,11 +1021,11 @@ sub new {
     # Get the web and topic names from PATH_INFO
     if( $pathInfo =~ /\/+(.*)[\.\/](.*)/ ) {
         # is 'bin/script/Webname/SomeTopic' or 'bin/script/Webname/'
-        $web   = $1 || '' unless $web;
-        $topic = $2 || '' unless $topic;
+        $web   = $1 unless $web;
+        $topic = $2 unless $topic;
     } elsif( $pathInfo =~ /\/(.*)/ ) {
         # is 'bin/script/Webname' or 'bin/script/'
-        $web   = $1 || '' unless $web;
+        $web   = $1 unless $web;
     }
 
     # All roads lead to WebHome

@@ -255,13 +255,11 @@ sub _collectLogData
         # ignore minor changes - not statistically helpful
         next if( $line =~ / (minor|dontNotify) / );
 
-        $line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)[. ]/o;
-        $userName = $1 || '';		# Main.FredBloggs
-        $opName = $2 || '';
-        $webName = $3 || '';
-
-        # Skip bad logfile lines and warn if necessary
-        unless ($userName && $opName && $webName) {
+        if( $line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)[. ]/o ) {
+            $userName = $1;		# Main.FredBloggs
+            $opName = $2;
+            $webName = $3;
+        } else {
             if( $debug ) {
                 $session->writeDebug("Invalid log file line = '$line'");
                 $session->writeDebug("userName = '$userName'");
@@ -275,11 +273,15 @@ sub _collectLogData
         if ($opName eq 'view' ) {
             $statViews{$webName}++;
             # Pick up the topic name and any error string
-            $line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)\.($topicRegex) \| +(${errorRegex}?) */o;
-            $topicName = $4 || '';
-            my $noSuchTopic = $5 || '';		# Set if '(not exist)' matched
+            if( $line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)\.($topicRegex) \| +(${errorRegex}?) */o ) {
+                $topicName = $4;
+                my $noSuchTopic = $5;		# Set if '(not exist)' matched
 
-            unless( $topicName ) {
+                unless( $noSuchTopic ) {
+                    # Count this topic access
+                    $view{$webName}{$topicName}++;
+                }
+            } else {
                 if( $debug ) {
                     $session->writeDebug("Invalid log file line = '$line'");
                     $session->writeDebug("userName = '$userName'");
@@ -290,13 +292,6 @@ sub _collectLogData
                 next;
             }
 
-            # Skip accesses to non-existent topics
-            if ($noSuchTopic) {
-                next;
-            } else {
-                # Count this topic access
-                $view{$webName}{$topicName}++;
-            }
 
         } elsif ($opName eq 'save' ) {
             $statSaves{$webName}++;
@@ -308,13 +303,12 @@ sub _collectLogData
 
         } elsif ($opName eq 'rename' ) {
             # Pick up the old and new topic names
-            $line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)\.($topicRegex) \| moved to ($webNameRegex)\.($topicRegex) /o;
-            $topicName = $4 || '';
-            $newTopicWeb = $5 || '';
-            $newTopicName = $6 || '';
-            ## session->writeDebug("$topicName renamed to $newTopicWeb.$newTopicName");
-
-            unless ($topicName && $newTopicWeb && $newTopicName) {
+            if( $line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)\.($topicRegex) \| moved to ($webNameRegex)\.($topicRegex) /o ) {
+                $topicName = $4;
+                $newTopicWeb = $5;
+                $newTopicName = $6;
+                ## session->writeDebug("$topicName renamed to $newTopicWeb.$newTopicName");
+            } else {
                 if( $debug ) {
                     $session->writeDebug("Invalid log file line (rename) = '$line'");
                     $session->writeDebug("userName = '$userName'");
