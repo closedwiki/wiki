@@ -52,7 +52,6 @@ use strict;
 
 use Time::Local;	# Added for revDate2EpSecs
 use Cwd qw( cwd ); 	# Added for getTWikiLibDir
-use Exporter qw( import ); # For exporting render flags
 
 require 5.005;		# For regex objects and internationalisation
 
@@ -136,9 +135,12 @@ use vars qw(
 # TWiki.cfg, so we export them here.  We also export the %regex hash
 # and a few other useful constants.
 
-use vars qw(@EXPORT_OK %EXPORT_TAGS);
+use vars qw(@EXPORT_OK %EXPORT_TAGS @ISA);
 
 BEGIN {
+    require Exporter;
+    @ISA = qw(Exporter);
+    
     %EXPORT_TAGS = (
 	renderflags => [qw($siteLang $securityFilter $twikiWebname $mainWebname
 	    $mainTopicname $scriptSuffix $doPluralToSingular
@@ -3029,7 +3031,7 @@ sub handleCommonTags
     &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
 
-    $text =~ s/%FORMFIELD{(.*?)}%/&getFormField($theWeb,$theTopic,$1)/ge;
+    $text =~ s/%FORMFIELD{(.*?)}%/&TWiki::Render::getFormField($theWeb,$theTopic,$1)/ge;
     $text =~ s/%TOC{([^}]*)}%/&handleToc($text,$theTopic,$theWeb,$1)/ge;
     $text =~ s/%TOC%/&handleToc($text,$theTopic,$theWeb,"")/ge;
 #SVEN

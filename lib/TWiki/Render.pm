@@ -796,11 +796,11 @@ sub getFormField
     my ( $altText, $found, $format );
     my ( $formField, $formTopic, $default );
     
-    $formField = extractNameValuePair( $args );
-    $formTopic = extractNameValuePair( $args, "topic" );
-    $altText   = extractNameValuePair( $args, "alttext" );
-    $default   = extractNameValuePair( $args, "default" ) || undef;
-    $format    = extractNameValuePair( $args, "format" ) || '$value';
+    $formField = TWiki::extractNameValuePair( $args );
+    $formTopic = TWiki::extractNameValuePair( $args, "topic" );
+    $altText   = TWiki::extractNameValuePair( $args, "alttext" );
+    $default   = TWiki::extractNameValuePair( $args, "default" ) || undef;
+    $format    = TWiki::extractNameValuePair( $args, "format" ) || '$value';
 
     my $meta;
     if ($formTopic) {
