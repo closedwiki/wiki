@@ -223,4 +223,132 @@ sub _weekNumber {
     return sprintf('%.0f', ($nextThursday - $firstFourth) / ( 7 * 86400 )) + 1;
 }
 
+
+=pod
+
+---++ StaticMethod parseInterval( $szInterval ) -> [$iSecs, $iSecs]
+
+Convert string representing a time interval to a pair of integers
+representing the amount of seconds since epoch for the start and end
+extremes of the time interval.
+
+   * =$szInterval= - time interval string
+
+in yacc syntax, grammar and actions:
+<verbatim>
+interval ::= date                 { $$.start = fillStart($1); $$.end = fillEnd($1); }
+         | date '/' date          { $$.start = fillStart($1); $$.end = fillEnd($3); }
+         | 'P' duration '/' date  { $$.start = fillEnd($4)-$2; $$.end = fillEnd($4); }
+         | date '/' 'P' duration  { $$.start = fillStart($1); $$.end = fillStart($1)+$4; }
+         ;
+</verbatim>
+an =interval= may be followed by a timezone specification string (this is not supported yet).
+
+=duration= has the form (regular expression):
+<verbatim>
+   P(<number><nameOfDuration>)+
+</verbatim>
+
+nameOfDuration may be one of:
+   * y(year), m(month), w(week), d(day), h(hour), M(minute), S(second)
+
+=date= follows ISO8601 and must include hypens.  (any amount of trailing
+       elements may be omitted and will be filled in differently on the
+       differents ends of the interval as to include the longest possible
+       interval):
+
+   * 2001-01-01T00:00:00
+   * 2001-12-31T23:59:59
+
+timezone is optional and not supported yet.
+
+If the format is not recognised, will return empty interval [0,0].
+
+TODO: timezone
+      testing, especially on non valid strings
+
+=cut
+
+sub parseInterval{
+    my ($theInterval) = @_;
+
+    use HTTP::Date;
+    my @lt = localtime();
+    my $today = sprintf("%04d-%02d-%02d",$lt[5]+1900, $lt[4]+1, $lt[3]);
+    my $now = $today . sprintf("T%02d:%02d:02d",$lt[2], $lt[1], $lt[0]);
+
+    # replace $now and $today shortcuts
+    $theInterval =~ s/\$today/$today/g;
+    $theInterval =~ s/\$now/$now/g;
+
+    # if $theDate does not contain a '/': force it to do so.
+    $theInterval = $theInterval."/".$theInterval unless ($theInterval =~ /\// );
+
+    my @ends = split(/\//, $theInterval);
+
+    # first translate dates into seconds from epoch,
+    # in the second loop we will examine interval durations.
+
+    foreach my $i (0,1) {
+        #   if not a period of time:
+        next if ($ends[$i] =~ "^P");
+
+        #   TODO assert(must include the year)
+        if($i) {
+            # fillEnd
+            #     if ending point, complete with parts from "-12-31T23:59:60"
+            #     if completing ending point, check last day of month
+            # TODO: do we do leap years?
+            if (length($ends[$i]) == 7){
+                my $month = substr($ends[$i],5);
+                my @monthLens = (31,28,31,30,31,30,31,31,30,31,30,31);
+                $ends[$i] .= @monthLens[$month-1];
+            }
+            $ends[$i] .= substr("0000-12-31T23:59:59",length($ends[$i]));
+        } else {
+            # fillStart
+            #     if starting point, complete with parts from "-01-01T00:00:00"
+            $ends[$i] .= substr("0000-01-01T00:00:00",length($ends[$i]));
+        }
+
+        #     convert the string into integer amount of seconds
+        #     from 1970-01-01T00:00:00.00 UTC
+
+        $ends[$i] = &HTTP::Date::str2time($ends[$i]);
+    }
+
+    # now we're ready to translate interval durations...
+    # ... we don't do P<whatever/P<whatever> !!!
+
+    my @oper = ("-","+");
+    # if any extreme was a time duration, examine it
+    foreach my $i (0,1) {
+        next unless ($ends[$i] =~ /^P/);
+
+        #   drop the 'P', substitute each letter with '*<value>+',
+        #   where <value> is the amount of seconds represented by
+        #   the unit.  for example: w (week) becomes '*604800+'.
+        $ends[$i] =~ s/^P//;
+        $ends[$i] =~ s/y/\*31556925\+/gi; # tropical year
+        $ends[$i] =~ s/m/\*2592000\+/g;   # 1m = 30 days
+        $ends[$i] =~ s/w/\*604800\+/gi;   # 1w = 7 days
+        $ends[$i] =~ s/d/\*86400\+/gi;
+        $ends[$i] =~ s/h/\*3600\+/gi;
+        $ends[$i] =~ s/M/\*60\+/g;        # note: m != M
+        $ends[$i] =~ s/S/\*1\+/gi;
+        #   possibly append '0' and evaluate numerically the string.  
+        $ends[$i] =~ s/\+$/+0/;
+        my $duration = eval($ends[$i]);
+        #   the value computed, if it specifies the starting point
+        #   in time, must be subtracted from the previously
+        #   computed ending point.  if it specifies the ending
+        #   point, it must be added to the previously computed
+        #   starting point.
+        $ends[$i] = eval($ends[1-$i].$oper[$i].$ends[$i]);
+        #   in case the user specified both start and end as a
+        #   time duration, some kind of error must be reported.
+    }    
+    return @ends;
+}
+
 1;

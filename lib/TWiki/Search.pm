@@ -375,6 +375,7 @@ sub searchWeb {
     my $theTopic =      $params{topic} || '';
     my $theType =       $params{type} || '';
     my $theWebName =    $params{web} || '';
+    my $theDate =       $params{date} || "";
 
     my $renderer = $this->{session}->{renderer};
 
@@ -651,6 +652,18 @@ sub searchWeb {
                 @topicList = sort {$a cmp $b} @topicList;
             }
             ##$this->{session}->writeDebug 'Topic list after sort = @topicList';
+        }
+
+        if( $theDate ){
+            use TWiki::Time;
+            my @ends = &TWiki::Time::parseInterval($theDate);
+            my @resultList=();
+            foreach my $topic (@topicList){
+                # if date falls out of interval: exclude topic from result
+                my $topicdate = $store->getTopicLatestRevTime( $web, $topic );
+                push(@resultList, $topic) unless (($topicdate<$ends[0]) || ($topicdate>$ends[1]));
+            }
+            @topicList = @resultList;   
         }
 
         # header and footer of $web
