@@ -145,7 +145,11 @@ sub main
 
     # generate user entry and add to .htpasswd file
     unless( $remoteUser ) {
-        TWiki::User::AddUserPassword($wikiName, $passwordA );
+        if ( ! TWiki::User::AddUserPassword($wikiName, $passwordA ) ) {
+	    $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregerr" );
+       	    TWiki::redirect( $query, $url );
+            return;
+	}
     }
 
     # send email confirmation

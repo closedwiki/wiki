@@ -134,12 +134,18 @@ sub UserPasswordExists
 | Parameter: =$newUserPassword= | unencrypted password |
 | Return: =$success= | "1" if success |
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
+| Notes: | always return failure if the $user is AnonymousContributor |
+| | this is to stop hyjacking of DeletedUser's content |
 
 =cut
 
 sub UpdateUserPassword
 {
     my ( $user, $oldUserPassword, $newUserPassword ) = @_;
+
+	if ( $user =~ /AnonymousContributor/ ) {
+		return;
+	}
 
     my $handler = _getUserHandler();
     return $handler->UpdateUserPassword($user, $oldUserPassword, $newUserPassword);
@@ -154,12 +160,18 @@ sub UpdateUserPassword
 | Parameter: =$newUserPassword= | unencrypted password |
 | Return: =$success= | "1" if success |
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
+| Notes: | always return failure if the $user is AnonymousContributor |
+| | this is to stop hyjacking of DeletedUser's content |
 
 =cut
 
 sub AddUserPassword
 {
     my ( $user, $newUserPassword ) = @_;
+
+	if ( $user =~ /AnonymousContributor/ ) {
+		return;
+	}
 
     my $handler = _getUserHandler();
     return $handler->AddUserPassword($user, $newUserPassword);
