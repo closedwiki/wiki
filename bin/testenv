@@ -19,20 +19,21 @@
 # for the bin directory, and check a variety of TWiki, Perl and RCS
 # setup.
 
-# Compile-time module use
+# Compile-time use of modules
 use lib ( '.' );
 use lib ( '../lib' );
 
 use Config; 		# Perl's configuration details
 
 # use strict;		# Recommended for mod_perl, enable for Perl 5.6.1 only
-			# Doesn't work well on this script due to 'do "TWiki.cfg"'
+			# Doesn't work well here, due to 'do "TWiki.cfg"'
 # use diagnostics;	# Debug only
 
-
 package TWiki;
+
+
 # Check whether basic CGI modules exist (some broken installations of
-# Perl don't have this, even though they ars standard modules), and warn user
+# Perl don't have this, even though they are standard modules), and warn user
 my @basicMods = qw( CGI CGI::Carp );
 my $modMissing = 0;
 my $mod;
@@ -113,7 +114,7 @@ print <<EOM;
 EOM
 
 
-# read the TWiki configuration early - includes OS detection
+# Read the TWiki configuration early - includes OS detection
 do "TWiki.cfg";
 
 # Get Perl version - output looks neater with new variable
