@@ -1,0 +1,6 @@
+./twikishell
+./data/TWiki/TWikiShellContrib.txt
+./lib/TWiki/Contrib/TWikiShellContrib/Ext/Dump.pm
+./lib/TWiki/Contrib/TWikiShellContrib/Standard.pm
+./lib/TWiki/Contrib/TWikiShellContrib/TWikiShell.pm
+./lib/TWiki/Contrib/TWikiShellContrib/build.pl
