@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1024123680" format="1.0" version="1.35"}%
+%META:TOPICINFO{author="PeterThoeny" date="1024880197" format="1.0" version="1.36"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %MAINWEB%.%USERNAME%). 
@@ -100,6 +100,9 @@ The following are __site-level__ settings that affect all users in all webs on t
 </verbatim>
 
 ---++ Miscellaneous Settings
+
+	* Line break:
+		* Set BR = <br />
 
 	* Graphics used in TWiki documentation - view all images in %TWIKIWEB%.TWikiDocGraphics. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
 		* Set H = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif" border="0" alt="HELP" width="16" height="16" />
