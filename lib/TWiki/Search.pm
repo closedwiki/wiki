@@ -186,6 +186,7 @@ sub searchWeb
 
     if( ! $noSearch ) {
         # print "Search:" part
+#FIXME: The following regex changes the actual search string!
         $theSearchVal =~ s/&/&amp;/go;
         $theSearchVal =~ s/</&lt;/go;
         $theSearchVal =~ s/>/&gt;/go;
@@ -427,6 +428,8 @@ sub searchWeb
         if( $theHeader ) {
             $theHeader =~ s/([^\n])$/$1\n/gos;
             $beforeText = $theHeader;
+            $beforeText =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
+            $beforeText =~ s/\$web/$thisWebName/gos;
         }
 
         $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
@@ -434,7 +437,8 @@ sub searchWeb
         $beforeText = &TWiki::handleCommonTags( $beforeText, $topic );
         $afterText  = &TWiki::handleCommonTags( $afterText, $topic );
         if( ! $noHeader ) {
-            if( $doInline ) {
+            if( $doInline || $theFormat ) {
+                # print at the end if formatted search because of table rendering
                 $searchResult .= $beforeText;
             } else {
                 $beforeText = &TWiki::getRenderedVersion( $beforeText, $thisWebName );
@@ -457,7 +461,7 @@ sub searchWeb
             
             my $meta = "";
             my $text = "";
-            my $forceRedering = 0;
+            my $forceRendering = 0;
             
             # make sure we have date and author
             if( exists( $topicRevUser{$topic} ) ) {
@@ -508,7 +512,7 @@ sub searchWeb
                         $text =~ s/%SEARCH{.*?}%/SEARCH{...}/go;
                     }
                     $tempVal =~ s/\$text/$text/gos;
-                    $forceRedering = 1;
+                    $forceRendering = 1;
                 }
             } else {
                 $tempVal = $repeatText;
@@ -524,10 +528,17 @@ sub searchWeb
             }
             $tempVal =~ s/%REVISION%/$revNum/o;
             $tempVal =~ s/%AUTHOR%/$revUser/o;
-            if( ( ! $doInline ) || ( $forceRedering ) ) {
+
+            if( ( $doInline || $theFormat ) && ( ! ( $forceRendering ) )
+) {
+                # print at the end if formatted search because of table rendering
+                # do nothing
+            } else {
                 $tempVal = &TWiki::handleCommonTags( $tempVal, $topic );
                 $tempVal = &TWiki::getRenderedVersion( $tempVal );
             }
+
+
 
             if( $doRenameView ) { # added JET 19 Feb 2000
                 my $rawText = &TWiki::Store::readTopicRaw( $thisWebName, $topic );
@@ -618,7 +629,8 @@ sub searchWeb
                 $tempVal =~ s/%TEXTHEAD%/$head/go;
             }
 
-            if( $doInline ) {
+            if( $doInline || $theFormat ) {
+                # print at the end if formatted search because of table rendering
                 $searchResult .= $tempVal;
             } else {
                 $tempVal = &TWiki::getRenderedVersion( $tempVal, $thisWebName );
@@ -634,7 +646,8 @@ sub searchWeb
         }
     
         # output footer of $thisWebName
-        if( $doInline ) {
+        if( $doInline || $theFormat ) {
+            # print at the end if formatted search because of table rendering
             $searchResult .= $afterText;
         } else {
             $afterText = &TWiki::getRenderedVersion( $afterText, $thisWebName );
@@ -646,7 +659,8 @@ sub searchWeb
             # print "Number of topics:" part
             my $thisNumber = $tmplNumber;
             $thisNumber =~ s/%NTOPICS%/$ntopics/go;
-            if( $doInline ) {
+            if( $doInline || $theFormat ) {
+                # print at the end if formatted search because of table rendering
                 $searchResult .= $thisNumber;
             } else {
                 $thisNumber = &TWiki::getRenderedVersion( $thisNumber, $thisWebName );
@@ -655,13 +669,22 @@ sub searchWeb
             }
         }
     }
-    if( ! $doInline ) {
+
+    if( $doInline ) {
+        # return formatted search result
+        return $searchResult;
+
+    } else {
+        if( $theFormat ) {
+            # finally print $searchResult which got delayed because of formatted search
+            $tmplTail = "$searchResult$tmplTail";
+        }
+
         # print last part of full HTML page
         $tmplTail = &TWiki::getRenderedVersion( $tmplTail );
         $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
         print $tmplTail;
     }
-    return $searchResult;
 }
 
 #=========================
