@@ -16,7 +16,6 @@ import java.util.AbstractList;
 import java.util.Iterator;
 import java.text.MessageFormat;
 
-import com.sun.corba.se.internal.core.SendingContextServiceContext;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
