@@ -776,7 +776,7 @@ sub initializeRemoteUser
 
 # =========================
 # Build hashes to translate in both directions between username (e.g. jsmith) 
-# WikiName (e.g. JaneSmith)
+# and WikiName (e.g. JaneSmith)
 sub userToWikiListInit
 {
     my $text = &TWiki::Store::readFile( $userListFilename );
@@ -1816,8 +1816,7 @@ sub handleUrlParam
 }
 
 # =========================
-# Encode 8-bit-set characters for use in URLs (not using UTF8 URL
-# encoding by browser)
+# Encode URLs
 sub handleUrlEncode
 {
     my( $theStr, $doExtract ) = @_;
@@ -1828,9 +1827,30 @@ sub handleUrlEncode
     $theStr =~ s/\&/\%26/g;
     $theStr =~ s/\</\%3C/g;
     $theStr =~ s/\>/\%3E/g;
+    # Encode characters with 8th bit set (ASCII-derived charsets only)
     $theStr =~ s/([\x7f-\xff])/'%' . unpack( "H*", $1 ) /ge;
 
     return $theStr;
+}
+
+# =========================
+# Encode characters with 8th bit set for use in URLs (not using UTF8 URL
+# encoding by browser) - mainly for Mozilla
+sub handleIntUrlEncode
+{
+    my( $theStr, $doExtract ) = @_;
+
+    # Detect EBCDIC platform 
+    my $isEbcdic = ( 'A' eq chr(193) ); 
+    if( $isEbcdic ) {
+	# URL encoding breaks EBCDIC, so just strip double quotes
+	$theStr =~ s/^"(.*)"$/$1/;	
+	return $theStr;
+    } else {
+	# Normal case
+	return handleUrlEncode( $theStr, $doExtract );
+    }
+
 }
 
 # =========================
@@ -1919,7 +1939,7 @@ sub handleInternalTags
     $_[0] =~ s/%ICON{(.*?)}%/&handleIcon($1)/geo;
     $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/ge;
     $_[0] =~ s/%URLENCODE{(.*?)}%/&handleUrlEncode($1,1)/ge;
-    $_[0] =~ s/%INTURLENCODE{(.*?)}%/&handleUrlEncode($1,1)/ge;
+    $_[0] =~ s/%INTURLENCODE{(.*?)}%/&handleIntUrlEncode($1,1)/ge;
     $_[0] =~ s/%DATE%/&getGmDate()/ge; # deprecated, but used in signatures
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/ge;
     $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/ge;
@@ -2716,8 +2736,9 @@ sub getRenderedVersion {
     # Initial cleanup
     $text =~ s/\r//g;
     $text =~ s/(\n?)$/\n<nop>\n/s; # clutch to enforce correct rendering at end of doc
-    $text =~ s/$TranslationToken/!/go;	# Convert any occurrences of token
-    					# (very unlikely)
+    # Convert any occurrences of token (very unlikely - details in
+    # Codev.NationalCharTokenClash)
+    $text =~ s/$TranslationToken/!/go;	
 
     my @verbatim = ();
     $text = takeOutVerbatim( $text, \@verbatim );
