@@ -40,7 +40,6 @@ sub main
     my $theUrl = $query->url;
 
     my $doShowAttachmentAttr = $query->param( 'showAttr' );
-    TWiki::writeDebug( "view showAttr = $doShowAttachmentAttr" );
 
     ( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
@@ -140,12 +139,9 @@ sub main
         return;
     }
 
-    TWiki::writeDebug("view showAtt = $doShowAttachmentAttr");
-    if ( $doShowAttachmentAttr ) {
-        # FIXME a rather inefficient way of doing things.
-        my $endMacro = TWiki::Attach::startMacro();
-        $text =~ s/(\Q$startMacro\E)(}%)/$1 view=\"$doShowAttachmentAttr\"$2/go;
-    }
+    ##&TWiki::writeDebug("view showAtt = $doShowAttachmentAttr");
+    # FIXME a rather messy way of doing things - maybe extra info to handleCommonTags?
+    $TWiki::Attach::showAttr = $doShowAttachmentAttr;
 
     $text = &TWiki::handleCommonTags( $text, $topic );
     $text = &TWiki::getRenderedVersion( $text );
