@@ -75,10 +75,18 @@ sub main
         TWiki::redirect( $query, $url );
         return;
     }
+    
+    # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
+    $text =~ s/%_N_%/\r\n/go;
+    $text =~ s/%_L_%/</go;
+    $text =~ s/%_G_%/>/go;
+    $text =~ s/%_Q_%/\"/go;
+    $text =~ s/%_A_%/&/go;
+    $text =~ s/ {3}/\t/go;
 
     my $meta = "";
     if( $saveCmd eq "repRev" ) {
-        # Nothing to do
+	( $meta, $text ) = &TWiki::Store::_extractMetaData( $webName, $topic, $text );
     } else {
         # normal case: Get latest attachment from file for preview
         my $tmp;
@@ -103,13 +111,6 @@ sub main
         &TWiki::Form::fieldVars2Meta( $webName, $query, $meta );
     }
 
-    # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
-    $text =~ s/%_N_%/\r\n/go;
-    $text =~ s/%_L_%/</go;
-    $text =~ s/%_G_%/>/go;
-    $text =~ s/%_Q_%/\"/go;
-    $text =~ s/%_A_%/&/go;
-    $text =~ s/ {3}/\t/go;
 
     my $error = &TWiki::Store::saveTopic( $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
     if( $error ) {
