@@ -53,8 +53,7 @@ my $where = 'cpan';
 if ( ( $ARGV[0] || '' ) =~ /^--/ )
 {
     ( $where = shift ) =~ s/^--//;
-    exit Usage() if 
-	( $where =~ /^(h(elp)?|\?)$/i ) { exit Usage() }
+    if ( $where =~ /^(h(elp)?|\?)$/i ) { exit Usage() }
 }
 
 # pass module list on the command line
