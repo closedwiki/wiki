@@ -22,7 +22,8 @@ __External links:__
 	* Words get *bold* by enclosing them in <b>*</b> asterisks
 	* Words get _italic_ by enclosing them in <b>_</b> underscores
 	* Words get __bold italic__ by enclosing them in <b>__</b> double-underscores
-	* Words get shown in =fixed font= by enclosing them in = equal signs
+	* Words get shown in =fixed font= by enclosing them in <b>=</b> equal signs
+	* Words get shown in ==bold fixed font== by enclosing them in <b>==</b> double equal signs
 	* Note for *bold* , _italic_ , __bold italic__ and =fixed font= text:
 		* Make sure to "stick" the =* _ == signs to the characters, e.g.
 			* _This works_ 
