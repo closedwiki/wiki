@@ -66,10 +66,6 @@ sub attach {
     $isHideChecked = "checked";
   }
 
-  if ( $fileName ) { 
-    $atext = _listVersions( $webName, $topic, $fileName );
-  }
-
   # why log attach before post is called?
   # FIXME: Move down, log only if successful (or with error msg?)
   # Attach is a read function, only has potential for a change
@@ -86,6 +82,10 @@ sub attach {
   } else {
     $tmpl = TWiki::Store::readTemplate( "attachnew", $skin );
   }
+  if ( $fileName ) {
+	# must come after templates have been read
+    $atext .= TWiki::Attach::formatVersions( $webName, $topic, $fileName, %args );
+  }
   $tmpl =~ s/%ATTACHTABLE%/$atext/go;
   $tmpl =~ s/%FILEUSER%/$fileWikiUser/go;
   $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
@@ -98,31 +98,6 @@ sub attach {
   $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
   TWiki::writeHeader( TWiki::getCgiQuery() );
   print $tmpl;
-}
-
-sub _listVersions {
-  my( $web, $topic, $attachment ) = @_;
-
-  my $latestRev = TWiki::Store::getRevisionNumber( $web, $topic, $attachment );
-  $latestRev =~ /\.(.*)/;
-  my $maxRevNum = $1;
-  my $found = 0;
-  my $result = "\n|  *Version*  |  *Action*   |  *Date*  |  *Who*  |  *Comment*  |\n";
-
-  for( my $version = $maxRevNum; $version >= 1; $version-- ) {
-    my $rev = "1.$version";
-
-    my( $date, $userName, $dummy, $comment ) = 
-      TWiki::Store::getRevisionInfo( $web, $topic, $rev, $attachment );
-    $date = TWiki::formatTime( $date );
-    my $wikiUserName = &TWiki::userToWikiName( $userName );
-
-    my $viewAction = "<a href=\"%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$rev&filename=$attachment\">view</a>";
-    $result .= "| 1.$version  | $viewAction | $date | $wikiUserName | $comment |\n";
-  }
-
-  $result = "$result";
-  return $result;
 }
 
 # =========================
