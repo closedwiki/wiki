@@ -437,9 +437,10 @@ sub searchWeb
         # output header of $thisWebName
         my( $beforeText, $repeatText, $afterText ) = split( /%REPEAT%/, $tmplTable );
         if( $theHeader ) {
+            $theHeader =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
+            $theHeader =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
             $theHeader =~ s/([^\n])$/$1\n/gos;
             $beforeText = $theHeader;
-            $beforeText =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
             $beforeText =~ s/\$web/$thisWebName/gos;
         }
 
