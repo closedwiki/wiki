@@ -35,7 +35,7 @@ use TWiki::Func;
   }
 
   sub testAllActionsInWebTest {
-    my $attrs = ActionTrackerPlugin::Attrs->new("topic=\".*\"");
+    my $attrs = new ActionTrackerPlugin::Attrs("topic=\".*\"");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
     my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
     my $chosen = $actions->formatAsString($fmt);
@@ -55,7 +55,7 @@ use TWiki::Func;
   }
 
   sub testAllActionsInWebMain {
-    my $attrs = ActionTrackerPlugin::Attrs->new();
+    my $attrs = new ActionTrackerPlugin::Attrs();
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Main", $attrs);
     my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
     my $chosen = $actions->formatAsString( $fmt );
@@ -75,9 +75,8 @@ use TWiki::Func;
   }
 
   sub testOpenActions {
-    my $attrs = ActionTrackerPlugin::Attrs->new();
+    my $attrs = new ActionTrackerPlugin::Attrs("open");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs );
-    $actions = $actions->search( "open" );
     my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
     my $chosen = $actions->formatAsString($fmt);
     Assert::assert($chosen =~ /C_open_ontime/o);
@@ -93,9 +92,8 @@ use TWiki::Func;
 #%ACTION{who=A,     due=\"1 Jan 02\",closed}%  A_closed_ontime
 #%ACTION{who=Blah.B,due=\"29 Jan 2010\",open}% B_open_ontime");
   sub testLateActions {
-    my $attrs = ActionTrackerPlugin::Attrs->new();
+    my $attrs = new ActionTrackerPlugin::Attrs("late");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs );
-    $actions = $actions->search("late");
     my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
     my $chosen = $actions->formatAsString($fmt);
 
@@ -107,9 +105,8 @@ use TWiki::Func;
   }
 
   sub testMyActions {
-    my $attrs = ActionTrackerPlugin::Attrs->new();
+    my $attrs = new ActionTrackerPlugin::Attrs("who=me");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
-    $actions = $actions->search( "who=me" );
     my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
     my $chosen = $actions->formatAsString($fmt);
     Assert::assert($chosen !~ /C_open_ontime/o);

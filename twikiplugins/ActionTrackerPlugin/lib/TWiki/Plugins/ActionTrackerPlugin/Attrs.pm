@@ -49,14 +49,6 @@ use integer;
     return $this->{$attr};
   }
 
-  # PUBLIC Set an attr value; return previous value
-  sub set {
-    my ( $this, $attr, $val ) = @_;
-    my $oval = $this->get($attr);
-    $this->{$attr} = $val;
-    return $oval;
-  }
-
   # PUBLIC remove an attr value, return old value
   sub remove {
     my ( $this, $attr ) = @_;

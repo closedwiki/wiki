@@ -17,7 +17,7 @@ This plugin provides support for action tracking and notification in meeting min
 
 ---+++ Actions
 
-Write the command =%<nop>ACTION{ attributes }%= anywhere in a TWiki topic. All the text following the final % up to the next end-of-line is taken as the action description. Standard attributes are
+Write the command =%<nop>ACTION{ attributes }%= anywhere in a TWiki topic. All the text following the final % up to the next end-of-line is taken as the action description (i.e. you can only have one action per line). Standard attributes are
 	| *Name* | *Value* | *Description* |
 	| =who= | See [[#PeopleAnchor][People]] | The person or team responsible for completing the action. %GREEN% Auto-completed %ENDCOLOR%. |
 	| =due= | See [[#DateFormats][Date Formats]] | The due date |
@@ -34,6 +34,17 @@ For example,
 %<nop>ACTION{ who="TWikiGuest" due="2 Jan 2004" state="open" notify="AttillaTheHun" }% An action for TWikiGuest
 </pre>
 The fields marked %GREEN% Auto-completed %ENDCOLOR% are automatically filled in when you save the topic containing the action if you don't supply a value. =who=, =creator= and =closer= default to the name of the person doing the saving, and =created= and =closed= default to todays date (=closed= and =closer= are only filled in if the state is set to =closed=). You can override this behaviour by providing values for any of these attributes when you type the action. Note: you are __not__ recommended to provide a value for the =uid= field!
+
+__Note__: If the action description doesn't all fit on one line you can use shell-style here-document syntax to grab the next few lines. For example,
+<pre>
+%<nop>ACTION{ who="LittleOysters" due="2 Jan 1884" state="open" }% <<EOF
+The time has come, the walrus said,
+To speak of many things.
+Of shoes, and ships, and sealing wax,
+Of cabbages and kings.
+EOF
+</pre>
+The delimiter must be a sequence of word characters.
 
 #DateFormats
 ---++++ Date formats

@@ -168,10 +168,12 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
     $descr =~ s/^\s+//o;
     $descr =~ s/\s+$//o;
+    $descr =~ s/\r+//o;
 
     # Translate newlines in the description to XHTML tags
     $descr =~ s/\n\n/<p \/>/gos;
     $descr =~ s/\n/<br \/>/gos;
+    $descr =~ s/%(ACTION\w*)\{/%<nop>$1\{/gso;
 
     $this->{text} = $descr;
 
@@ -218,13 +220,6 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     %types = %basetypes;
   }
 
-  # STATIC Debug only
-  sub dumpTypes {
-    foreach my $key ( keys %types ) {
-      print STDERR "$key ", $types{$key}->toString(), "\n";
-    }
-  }
-
   # PUBLIC get the base type of an attribute name i.e.
   # with the formatting attributes stripped off.
   sub getBaseType {
@@ -243,6 +238,43 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     return $types{$name};
   }
 
+  # PRIVATE allocate a new UID for this action. This uses a file
+  # in the data directory called "atUidReg" that contains the
+  # highest UID allocated so far.
+  sub _getNewUID {
+    my $this = shift;
+    my $uidRegister = TWiki::Func::getDataDir() . "/atUidReg";
+    my $lockFile = "$uidRegister.lock";
+
+    # Could do this using flock but it's not guaranteed to be
+    # implemented on all systems. This technique is simpler
+    # and mostly works.
+    # COVERAGE OFF
+    while ( -f $lockFile ) {
+      sleep(1);
+    }
+    # COVERAGE ON
+
+    open( FH, ">$lockFile" ) or die "Locking $lockFile: $!";
+    print FH "locked\n";
+    close( FH );
+
+    my $lastUID = 0;
+    if ( -f $uidRegister ) {
+      open( FH, "<$uidRegister" ) or die "Reading $uidRegister: $!";
+      $lastUID = <FH>;
+      close( FH );
+    }
+
+    my $uid = $lastUID + 1;
+    open( FH, ">$uidRegister" ) or die "Writing $uidRegister: $!";
+    print FH "$uid\n";
+    close( FH );
+    unlink( $lockFile ) or die "Unlocking $lockFile: $!";
+
+    return sprintf( "%06d", $uid );
+  }
+
   # PUBLIC when a topic containing an action is about to be saved,
   # populate these fields for the action.
   # Note: This will put a wrong date on closed actions if they were
@@ -252,8 +284,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $me = _canonicalName( TWiki::Func::getWikiName() );
 
     if ( !defined( $this->{uid} )) {
-      $this->{uid} = $this->{web} . $this->{topic} .
-	  formatTime( $now, "uid" ) . "n" . $this->{ACTION_NUMBER};
+      $this->{uid} = $this->_getNewUID();
     }
 
     if ( !defined( $this->{who} )) {
@@ -302,6 +333,15 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	}
       }
     }
+    if ( $descr =~ m/<(p|br)\s*\/>/io ) {
+      $descr =~ s/<p\s*\/>/\n\n/gio;
+      $descr =~ s/<br\s*\/>/\n/gio;
+      my $term = "EOF";
+      while ( $descr =~ m/^$term/m ) {
+	$term .= "F";
+      }
+      $descr = "<<$term\n$descr\n$term";
+    }
     return "%ACTION{$attrs }% $descr";
   }
 
@@ -310,9 +350,8 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub _canonicalName {
     my $who = shift;
 
-    if ( !defined( $who )) {
-      return undef;
-    }
+    return undef unless ( defined( $who ));
+
     if ( $who !~ /([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/ ) {
       if ( $who eq "me" ) {
 	$who = TWiki::Func::getWikiName();
@@ -351,10 +390,10 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       if ( $format eq "attr" ) {
         $stime = localtime( $time );
 	$stime =~ s/(\w+)\s+(\w+)\s+(\w+)\s+([^\s]+)\s+(\w+).*/$3-$2-$5/o;
-      } elsif ( $format eq "uid" ) {
-	my @els = localtime( $time );
-	# year yearday hour min sec
-	$stime = "$els[5]$els[7]$els[2]$els[1]$els[0]";
+#      } elsif ( $format eq "uid" ) {
+#	my @els = localtime( $time );
+#	# year yearday hour min sec
+#	$stime = "$els[5]$els[7]$els[2]$els[1]$els[0]";
       } else {
         $stime = localtime( $time );
 	$stime =~ s/(\w+)\s+(\w+)\s+(\w+)\s+([^\s]+)\s+(\w+).*/$1, $3 $2 $5/o;
@@ -369,9 +408,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # is late
   sub secsToGo {
     my $this = shift;
-    if ( !defined( $now )) {
-      $now = time();
-    }
+
     if ( defined( $this->{due} )) {
       return $this->{due} - $now;
     }
@@ -405,9 +442,9 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # names in the field.
   sub _matchType_names {
     my ( $this, $vbl, $val ) = @_;
-    if ( !defined( $this->{$vbl} )) {
-      return 0;
-    }
+
+    return 0 unless ( defined( $this->{$vbl} ));
+
     foreach my $name ( split( /\s*,\s*/, $val )) {
       my $who = _canonicalName( $name );
       $who =~ s/\./\\./go;
@@ -518,15 +555,12 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
     if ( $asHTML && defined( $type ) && $type eq "href" ) {
       # Generate a jump-to in wiki syntax
-      my $rest = $text;
-      $rest =~ s/<br ?\/?>/\n/sgo;
-      $rest =~ s/^([^\n]*)(.*)/$2/so;
-      my $fline = $1;
-      # escape wikiwords
-      $fline =~ s/\b([A-Z]+[a-z]+[A-Z]+\w*)\b/<nop>$1/go;
-
-      $text = "[[" . $this->{web} . "." . $this->{topic} .
-	"#" . $this->getAnchor() . "][ $fline ]]$rest";
+      $text =~ s/<br ?\/?>/\n/sgo;
+      # Would be nice to do the goto as a button image....
+      my $jump = " (<a href=\"" .
+	TWiki::Func::getViewUrl( $this->{web}, $this->{topic} ) .
+	  "#" . $this->getAnchor() . "\">go to action</a>)";
+      $text .= $jump;
     }
     return ( $text, 0 );
   }
@@ -551,16 +585,6 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     return ( "${text}>edit</a>", 0 );
   }
 
-  # PRIVATE format the UID field
-  sub _formatField_uid {
-    my ( $this, $asHTML ) = @_;
-    my $uid = $this->{uid};
-    if ( $asHTML ) {
-      return "<nop>$uid";
-    }
-    return ( $uid, 0 );
-  }
-
   # PUBLIC see if this other action matches according to fuzzy
   # rules. Return a number indicating the quality of the match, which
   # is the sum of:
@@ -571,10 +595,12 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # state identical - 1
   # text identical - length of matching text
   # text sounds match - number of matching sounds
+  # This is deprecated but is retained for support of non-UID actions.
   sub fuzzyMatches {
     my ( $this, $old ) = @_;
     my $sum = 0;
 
+    # COVERAGE OFF
     if ( defined( $this->{uid} )) {
       if ( defined( $old->{uid} ) && $this->{uid} eq $old->{uid} ) {
 	return 100;
@@ -605,7 +631,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     if ( $this->{state} eq $old->{state} ) {
       $sum += 1;
     }
-
+    # COVERAGE ON
     return $sum;
   }
 
@@ -642,9 +668,12 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub findChanges {
     my ( $this, $old, $format, $notifications ) = @_;
 
+    # COVERAGE OFF
     if ( !defined( $this->{notify} ) || $this->{notify} !~ m/\w/o ) {
+      # Shouldn't ever get here
       return 0;
     }
+    # COVERAGE ON
 
     my $changes = $format->formatChangesAsString( $old, $this );
     if ( $changes eq "" ) {
@@ -668,43 +697,69 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     return 1;
   }
 
-  # PUBLIC STATIC find the action in the text with the given uid
+  # PUBLIC STATIC find the action in the text with the given uid,
+  # splitting the rest of the text into text before the action,
+  # and text after the action.
   sub findActionByUID {
     my ( $web, $topic, $text, $uid ) = @_;
+
+    my $sn = -1;
+    if ( $uid =~ m/^AcTion(\d+)$/o ) {
+      $sn = $1;
+    }
 
     my $action;
     my $pretext = "";
     my $posttext = "";
     my $found = 0;
     my $an = 0;
-    my $sn = -1;
-    if ( $uid =~ m/^AcTion(\d+)$/o ) {
-      $sn = $1;
-    }
+    my $gathering;
+    my $attrs;
+    my $descr;
+    my $processAction = 0;
 
-    foreach my $line ( split( /[\r\n]+/, $text ) ) {
-      if ( $line =~ /(.*)%ACTION{(.*?)}%\s*([^\n\r]*)/so ) {
-	my $anAction = new ActionTrackerPlugin::Action( $web, $topic, $an, $2, $3 );
-	my $auid = $anAction->{uid};
-	if ( ( defined( $auid ) && $auid eq $uid ) || $an == $sn ) {
-	  $pretext .= $1;
-	  $found = 1;
-	  $action = $anAction;
-	} elsif ( $found ) {
-	  $posttext .= "$line\n";
-	} else {
-	  $pretext .= "$line\n";
-	}
-	$an++;
-      } elsif ( $found ) {
+    # FORMAT DEPENDANT ACTION SCAN
+    foreach my $line ( split( /\r?\n/, $text ) ) {
+      if ( $found ) {
 	$posttext .= "$line\n";
+      } elsif ( $gathering ) {
+	if ( $line =~ m/^$gathering\b.*/ ) {
+	  $gathering = undef;
+	  $processAction = 1;
+	} else {
+	  $descr .= "$line\n";
+	  next;
+	}
+      } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)$/o ) {
+	$pretext .= $1;
+	$attrs = $2;
+	$descr = $3;
+	if ( $descr =~ m/\s*<<(\w+)\s*(.*)$/o ) {
+	  $descr = $2;
+	  $gathering = $1;
+	  next;
+	}
+	$processAction = 1;
       } else {
 	$pretext .= "$line\n";
       }
+
+      if ( $processAction ) {
+	my $anAction = new ActionTrackerPlugin::Action( $web, $topic,
+							$an, $attrs, $descr );
+	my $auid = $anAction->{uid};
+	if ( ( defined( $auid ) && $auid eq $uid ) || $an == $sn ) {
+	  $found = 1;
+	  $action = $anAction;
+	} else {
+	  $pretext .= "%ACTION{$attrs}%$descr\n";
+	}
+	$an++;
+	$processAction = 0;
+      }
     }
-    if ( !$action ) {
-      TWiki::Func::writeDebug("Action not found $uid");
-    }
+    TWiki::Func::writeDebug("Action not found $uid") unless ( $action );
+
     return ( $action, $pretext, $posttext );
   }
 

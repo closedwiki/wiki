@@ -39,10 +39,10 @@ use TWiki::Func;
   }
 
   sub testSort {
-    my $chosen = $actions->search("state=open sort=\"\$ap,\$due\"");
+    $actions->sort("\$ap,\$due");
     my $fmt = new ActionTrackerPlugin::Format("|AP|","|\$ap|","\$ap");
-    my $s = $chosen->formatAsString($fmt);
-    Assert::sEquals($s,"2\n\n");
+    my $s = $actions->formatAsString($fmt);
+    Assert::sEquals($s,"1\n2\n\n");
   }
 }
 

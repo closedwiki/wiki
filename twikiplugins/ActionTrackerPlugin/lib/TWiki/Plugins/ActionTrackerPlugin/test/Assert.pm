@@ -4,7 +4,7 @@ use integer;
 { package Assert;
 
   my $debug = 0;
-
+  my $banner = "*********";
   # call from test to get a print every time an assert is executed
   sub showProgress() {
     $debug = 1;
@@ -22,7 +22,7 @@ use integer;
 	$mess .= "\n$f: $l";
       }
       #print STDERR "FAILURE Assert failed: $mess\n";
-      die "Assert failed: $mess\ndied";
+      die "${banner}Assert failed: $mess\ndied";
     }
     #print "Passed $mess\n" if ($debug);
   }
@@ -72,6 +72,7 @@ use integer;
     my $afterSaw = "";
     my $beforeExp = $exp;
     my $afterExp = "";
+    my $context = 40;
 
     if (!$pass) {
       # find the first mismatched character
@@ -82,23 +83,23 @@ use integer;
 	my $expCh = substr($exp, $i, 1);
 	if ($sawCh ne $expCh) {
 	  $beforeSaw = substr($saw, 0, $i);
-	  if (length($beforeSaw) > 30) {
-	    $beforeSaw = "....".substr($beforeSaw,length($beforeSaw)-30);
+	  if (length($beforeSaw) > $context) {
+	    $beforeSaw = "....".substr($beforeSaw,length($beforeSaw)-$context);
 	  }
 	  
 	  $afterSaw = substr($saw, $i, length($saw));
-	  if (length($afterSaw) > 30) {
-	    $afterSaw = substr($afterSaw, 0, 30) . "....";
+	  if (length($afterSaw) > $context) {
+	    $afterSaw = substr($afterSaw, 0, $context) . "....";
 	  }
 	  
 	  $beforeExp = substr($exp, 0, $i);
-	  if (length($beforeExp) > 30) {
-	    $beforeExp = "....".substr($beforeExp,length($beforeExp)-30);
+	  if (length($beforeExp) > $context) {
+	    $beforeExp = "....".substr($beforeExp,length($beforeExp)-$context);
 	  }
 	  
 	  $afterExp = substr($exp, $i, length($exp));
-	  if (length($afterExp) > 30) {
-	    $afterExp = substr($afterExp, 0, 30) . "....";
+	  if (length($afterExp) > $context) {
+	    $afterExp = substr($afterExp, 0, $context) . "....";
 	  }
 	  $pass = 0;
 	  last;
@@ -110,8 +111,8 @@ use integer;
       }
     }
     assert($pass,
-	   "\nsaw      \"$beforeSaw***** HERE->$afterSaw\"".
-	   "\nexpected \"$beforeExp***** HERE->$afterExp\"");
+	   "\n${banner}saw\n\"$beforeSaw***** HERE->$afterSaw\"".
+	   "\n${banner}expected\n\"$beforeExp***** HERE->$afterExp\"");
   }
 
   sub sContains {
@@ -119,13 +120,22 @@ use integer;
     my $re = unregex($expected);
     my $pass = $test =~ m/$re/s ? 1 : 0;
     assert($pass,
-	   "\nsaw      \"$test\"\nsContains\"$expected\"");
+	   "\n${banner}saw\n\"$test\"\n${banner}does not contain\n\"$expected\"");
+  }
+
+  sub startsWith {
+    my ($test,$expected) = @_;
+    my $re = unregex($expected);
+    my $pass = $test =~ m/^$re/s ? 1 : 0;
+    assert($pass,
+	   "\n${banner}saw\n\"$test\"\n${banner}does not start with\n\"$expected\"");
   }
   
   sub sEquals {
     my ($test,$expected) = @_;
+    assert(defined($test),"${banner}saw\nundef\n${banner}expected\n\"\"");
     if ($expected eq "") {
-      assert($test eq "", "saw \"$test\" expected \"\"");
+      assert($test eq "", "${banner}saw\n\"$test\"\n${banner}expected\n\"\"");
     }
     my $pass = ($test eq $expected) ? 1 : 0;
     _assertMismatch($pass, $test, $expected);
@@ -137,7 +147,7 @@ use integer;
 
     my $pass = $test =~ m/$re/s ? 1 : 0;
     assert($pass,
-	   "\n$test\n*********failed htmlContains\n$expected");
+	   "\n$test\n${banner}failed htmlContains\n$expected");
   }
   
   sub htmlEquals {
@@ -151,7 +161,7 @@ use integer;
   sub equals {
     my ($test,$expected) = @_;
     my $pass = ($test == $expected);
-    assert($pass, "saw $test expected $expected");
+    assert($pass, "${banner}saw $test expected $expected");
   }
 
   sub fileContains {

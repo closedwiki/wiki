@@ -80,6 +80,10 @@ use vars qw(
 
     return ( $topic, $webName, "scripturlpath", "testrunner", TWiki::TestMaker::getDataDir() );
   }
+
+  sub getGmDate {
+    return "GMDATE";
+  }
 }
 
 1;

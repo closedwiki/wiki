@@ -43,6 +43,48 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
     push @{$this->{ACTIONS}}, $action;
   }
 
+  # PUBLIC STATIC load an action set from a block of text,
+  # ignoring the rest of the text
+  sub load {
+    my ( $web, $topic, $text ) = @_;
+    my $actions = new ActionTrackerPlugin::ActionSet();
+
+    # FORMAT DEPENDANT ACTION SCAN
+    my $actionNumber = 0;
+    my $gathering;
+    my $processAction = 0;
+    my $attrs;
+    my $descr;
+    foreach my $line ( split( /\r?\n/, $text )) {
+      if ( $gathering ) {
+	if ( $line =~ m/^$gathering\b.*/ ) {
+	  $gathering = undef;
+	  $processAction = 1;
+	} else {
+	  $descr .= "$line\n";
+	  next;
+	}
+      } elsif ( $line =~ m/.*?%ACTION{(.*?)}%(.*)$/o ) {
+	$attrs = $1;
+	$descr = $2;
+	if ( $descr =~ m/\s*<<(\w+)\s*(.*)$/o ) {
+	  $descr = $2;
+	  $gathering = $1;
+	  next;
+	}
+	$processAction = 1;
+      }
+      if ( $processAction ) {
+	my $action = new ActionTrackerPlugin::Action( $web, $topic,
+						      $actionNumber++,
+						      $attrs, $descr );
+	$actions->add( $action );
+	$processAction = 0;
+      }
+    }
+    return $actions;
+  }
+
   # PRIVATE place to put sort fields
   my @_sortfields;
 
@@ -59,11 +101,13 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
 	  if ( defined( $x ) && defined( $y )) {
 	    my $c = ( $x cmp $y );
 	    return $c if ( $c != 0 );
+	    # COVERAGE OFF
 	  } elsif ( defined( $x ) ) {
 	    return -1;
 	  } elsif ( defined( $y ) ) {
 	    return 1;
 	  }
+	  # COVERAGE ON
 	}
 	# default to sorting on due
 	$a->{due} <=> $b->{due};
@@ -82,24 +126,18 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
   }
 
   # PUBLIC Search the set of actions for actions that match the given
-  # attributes string. Return an ActionSet.
-  # If the search expression is empty, all actions match.
+  # attributes. Return an ActionSet. If the search expression is empty,
+  # all actions match.
   sub search {
     my ( $this, $attrs ) = @_;
-    my $attr = new ActionTrackerPlugin::Attrs( $attrs );
     my $action;
     my $chosen = new ActionTrackerPlugin::ActionSet();
 
-    my $sort = $attr->remove( "sort" );
-
     foreach $action ( @{$this->{ACTIONS}} ) {
-      if ( $action->matches( $attr ) ) {
+      if ( $action->matches( $attrs ) ) {
 	$chosen->add( $action );
       }
     }
-
-    # by default actions will be sorted by due date
-    $chosen->sort( $sort );
 
     return $chosen;
   }
@@ -226,22 +264,19 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
     my $cmd = $ActionTrackerPlugin::Config::egrepCmd;
     my $q = $ActionTrackerPlugin::Config::cmdQuote;
     my $grep = `$cmd $q%ACTION\\{.*\\}%$q $dd/$web/*.txt`;
-    my $number = 0;
-    my $topics = $attrs->get( "topic" ) || "";
-    my $lastTopic = "";
-    while ( $grep =~ s/^.*\/([^\/\.\n]+)\.txt:.*%ACTION{([^\}]*)}%([^\r\n]*)//m ) {
-      my $topic = $1;
-      my $sat = $2;
-      my $text = $3;
-      $topic =~ s/[\r\n\s]+//go;
-      $number = 0 if ( $topic ne $lastTopic );
-      if ( ! $topics || $topic =~ /^$topics$/ ) {
-	my $action = new ActionTrackerPlugin::Action( $web, $topic, $number++, $sat, $text );
-	if ( $action->matches( $attrs ) ) {
-	  $actions->add( $action )
+    my $topics = $attrs->get( "topic" );
+    my %processed;
+    foreach my $line ( split( /\r?\n/, $grep )) {
+      if ( $line =~ m/^.*\/([^\/\.\r\n]+)\.txt:/o ) {
+	my $topic = $1;
+	if ( !$processed{$topic} && ( !$topics || $topic =~ m/^$topics$/ )) {
+	  my $text = TWiki::Func::readTopicText( $web, $topic );
+	  my $tacts = ActionTrackerPlugin::ActionSet::load( $web, $topic, $text );
+	  $tacts = $tacts->search( $attrs );
+	  $actions->concat( $tacts );
+	  $processed{$topic} = 1;
 	}
       }
-      $lastTopic = $topic;
     }
 
     return $actions;
@@ -254,11 +289,13 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
     my $webs = $attrs->get( "web" ) || $theweb;
     my $actions = new ActionTrackerPlugin::ActionSet();
     my $dataDir = TWiki::Func::getDataDir();
+    # COVERAGE OFF
     if ( !opendir( DIR, "$dataDir" )) {
       TWiki::Func::writeWarning("could not open $dataDir in " .
 				__FILE__ . ": " .__LINE__);
       return $actions;
     }
+    # COVERAGE ON
     my @weblist = grep !/^[._].*$/, readdir DIR;
     closedir DIR;
     my $web;

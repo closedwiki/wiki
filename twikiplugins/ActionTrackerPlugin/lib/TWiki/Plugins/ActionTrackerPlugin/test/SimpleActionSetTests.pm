@@ -68,7 +68,8 @@ use TWiki::Func;
   }
 
   sub testSearchOpen {
-    my $chosen = $actions->search("state=open");
+    my $attrs = new ActionTrackerPlugin::Attrs("state=open");
+    my $chosen = $actions->search($attrs);
     my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
     Assert::assert($text =~ /Blah_B_open/);
@@ -77,28 +78,32 @@ use TWiki::Func;
   }
 
   sub testSearchClosed {
-    my $chosen = $actions->search("closed");
+    my $attrs = new ActionTrackerPlugin::Attrs("closed");
+    my $chosen = $actions->search($attrs);
     my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
     Assert::assert($text !~ /open/o);
   }
 
   sub testSearchWho {
-    my $chosen = $actions->search("who=A");
+    my $attrs = new ActionTrackerPlugin::Attrs("who=A");
+    my $chosen = $actions->search($attrs);
     my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
     Assert::assert($text !~ /B_open_ontime/o);
   }
 
   sub testSearchLate {
-    my $chosen = $actions->search("late");
+    my $attrs = new ActionTrackerPlugin::Attrs("late");
+    my $chosen = $actions->search($attrs);
     my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
     Assert::assert($text !~ /ontime/o);
   }
 
   sub testSearchAll {
-    my $chosen = $actions->search("");
+    my $attrs = new ActionTrackerPlugin::Attrs("");
+    my $chosen = $actions->search($attrs);
     my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
     Assert::assert($text =~ /Main_A_open_late/o);
@@ -120,7 +125,8 @@ use TWiki::Func;
   # x1 so it gets executed second last
   sub testx1Search {
     addMoreActions();
-    my $chosen = $actions->search("late");
+    my $attrs = new ActionTrackerPlugin::Attrs("late");
+    my $chosen = $actions->search($attrs);
     my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
     Assert::assert($text =~ /A_open_late/);
@@ -130,7 +136,8 @@ use TWiki::Func;
 
   # x2 so it gets executed last
   sub testx2Actionees {
-    my $chosen = $actions->search("late");
+    my $attrs = new ActionTrackerPlugin::Attrs("late");
+    my $chosen = $actions->search($attrs);
     my %peeps;
     $chosen->getActionees(\%peeps);
     Assert::assert($peeps{"Main.A"});
