@@ -25,6 +25,14 @@ sub new {
   return bless( $class->SUPER::new( "WebDAVPlugin" ), $class );
 }
 
+# override to build C program in test dir
+sub target_test {
+  my $this = shift;
+  $this->cd("$TWiki::Plugins::Build::basedir/".$this->{plugin_libdir}."/test");
+  $this->sys_action("gcc access_check.c -I ../../../../twiki_dav -g -o accesscheck -ltdb");
+  $this->SUPER::target_test;
+}
+
 # Override the build target to build the twiki_dav C code
 sub target_build {
   my $this = shift;
