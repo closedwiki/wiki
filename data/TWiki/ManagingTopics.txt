@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042362854" format="1.0" version="1.17"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092556502" format="1.0" version="1.18"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -85,5 +85,6 @@ The following shows some limitations of square bracket processing.
 </verbatim>
 </blockquote>
 
--- Main.MikeMannix - 27 Dec 2001
+-- TWiki:Main.MikeMannix - 27 Dec 2001
+
 %META:TOPICMOVED{by="MikeMannix" date="999329908" from="TWiki.RenameTopic" to="TWiki.ManagingTopics"}%

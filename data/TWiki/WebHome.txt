@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092548287" format="1.0" version="1.84"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092556616" format="1.0" version="1.85"}%
 <table><tr><td valign="top">
 *Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
@@ -79,6 +79,7 @@ _Documentation for webmasters, system administrators, project managers, team lea
 		1. [[TWikiSiteTools][TWiki Site Tools]] 
 		1. [[ManagingTopics][Managing Topics]] 
 		1. [[ManagingWebs][Managing Webs]]
+		1. [[ManagingUsers][Managing Users]]
 		* *Appendices*
 			* [[AppendixFileSystem][A. TWiki File System]]
 			* [[TWikiCss][B. TWiki CSS]]
