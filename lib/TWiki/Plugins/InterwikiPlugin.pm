@@ -37,7 +37,7 @@ use vars qw(
         %interSiteTable $debug
     );
 
-$VERSION = '1.000';
+$VERSION = '1.003'; # 18 Jan 2003
 $interSiteLinkRulesTopicName = "InterWikis";
 
 # 'Use locale' for internationalisation of Perl sorting and searching - 
@@ -55,7 +55,7 @@ BEGIN {
 # TODO: Need to update the Plugins API to support export of regexes and regex components
 $prefixPattern  = '(^|[\s\-\*\(])';
 $sitePattern    = "([${TWiki::upperAlpha}][${TWiki::mixedAlphaNum}]+)";
-$pagePattern    = "([${TWiki::mixedAlphaNum}_\/][${TWiki::mixedAlphaNum}" . '\+\_\.\,\;\:\!\?\/\%-]+?)';
+$pagePattern    = "([${TWiki::mixedAlphaNum}_\/][${TWiki::mixedAlphaNum}" . '\+\_\.\,\;\:\!\?\/\%\#-]+?)';
 $postfixPattern = '(?=[\s\.\,\;\:\!\?\)]*(\s|$))';
 
 # =========================
