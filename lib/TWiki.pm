@@ -98,7 +98,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "17 Jul 2001";
+$wikiversion      = "20 Jul 2001";
 
 # ===========================
 # read the configuration part
@@ -1741,7 +1741,7 @@ sub isWikiName
 sub getRenderedVersion
 {
     my( $text, $theWeb ) = @_;
-    my( $result, $insidePRE, $insideVERBATIM, $insideTABLE, $noAutoLink, $blockquote );
+    my( $head, $result, $insidePRE, $insideVERBATIM, $insideTABLE, $noAutoLink, $blockquote );
 
     # FIXME: Get $theTopic from parameter to handle [[#anchor]] correctly
     # (fails in %INCLUDE%, %SEARCH%)
@@ -1751,6 +1751,8 @@ sub getRenderedVersion
     if( !$theWeb ) {
         $theWeb = $webName;
     }
+
+    $head = "";
     $result = "";
     $insidePRE = 0;
     $insideVERBATIM = 0;  # PTh 31 Jan 2001: Added Codev.VerbatimModeForSourceCodes
@@ -1760,6 +1762,14 @@ sub getRenderedVersion
     $code = "";
     $text =~ s/\r//go;
     $text =~ s/\\\n//go;  # Join lines ending in "\"
+
+    # do not render HTML head, style sheets and scripts
+    if( $text =~ m/<body[\s\>]/i ) {
+        my $bodyTag = "";
+        my $bodyText = "";
+        ( $head, $bodyTag, $bodyText ) = split( /(<body)/i, $text, 3 );
+        $text = $bodyTag . $bodyText;
+    }
 
     # Wiki Plugin Hook
     &TWiki::Plugins::startRenderingHandler( $text, $theWeb );
@@ -1916,7 +1926,7 @@ sub getRenderedVersion
     # Wiki Plugin Hook
     &TWiki::Plugins::endRenderingHandler( $result );
 
-    return $result;
+    return "$head$result";
 }
 
 1;

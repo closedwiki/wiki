@@ -160,6 +160,7 @@ sub searchWeb
 
     if( ! $doInline ) {
         # print first part of full HTML page
+        $tmplHead = &TWiki::getRenderedVersion( $tmplHead );
         $tmplHead =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
         print $tmplHead;
     }
@@ -174,6 +175,7 @@ sub searchWeb
         if( $doInline ) {
             $searchResult .= $tmplSearch;
         } else {
+            $tmplSearch = &TWiki::getRenderedVersion( $tmplSearch );
             $tmplSearch =~ s|</*nop/*>||goi;   # remove <nop> tag
             print $tmplSearch;
         }
@@ -382,6 +384,7 @@ sub searchWeb
             if( $doInline ) {
                 $searchResult .= $beforeText;
             } else {
+                $beforeText = &TWiki::getRenderedVersion( $beforeText, $thisWebName );
                 $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
                 print $beforeText;
             }
@@ -520,6 +523,7 @@ sub searchWeb
             if( $doInline ) {
                 $searchResult .= $tempVal;
             } else {
+                $tempVal = &TWiki::getRenderedVersion( $tempVal, $thisWebName );
                 $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
                 print $tempVal;
             }
@@ -532,6 +536,7 @@ sub searchWeb
         if( $doInline ) {
             $searchResult .= $afterText;
         } else {
+            $afterText = &TWiki::getRenderedVersion( $afterText, $thisWebName );
             $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
             print $afterText;
         }
@@ -543,6 +548,7 @@ sub searchWeb
             if( $doInline ) {
                 $searchResult .= $thisNumber;
             } else {
+                $thisNumber = &TWiki::getRenderedVersion( $thisNumber, $thisWebName );
                 $thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
                 print $thisNumber;
             }
@@ -550,6 +556,7 @@ sub searchWeb
     }
     if( ! $doInline ) {
         # print last part of full HTML page
+        $tmplTail = &TWiki::getRenderedVersion( $tmplTail );
         $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
         print $tmplTail;
     }
