@@ -2007,6 +2007,28 @@ sub mailtoLink
 }
 
 # =========================
+sub mailtoLinkFull
+{
+    my( $theAccount, $theSubDomain, $theTopDomain, $theLinkText ) = @_;
+
+    my $addr = "$theAccount\@$theSubDomain$TWiki::noSpamPadding\.$theTopDomain";
+    return "<a href=\"mailto\:$addr\">$theLinkText</a>";
+}
+
+# =========================
+sub mailtoLinkSimple
+{
+    # Does not do any anti-spam padding, because address will not include '@'
+    my( $theMailtoString, $theLinkText ) = @_;	
+
+    # Defensive coding
+    if ($theMailtoString =~ s/@//g ) {
+    	writeDebug("mailtoLinkSimple called with an '\@' in string - internal TWiki error");
+    }
+    return "<a href=\"mailto\:$theMailtoString\">$theLinkText</a>";
+}
+
+# =========================
 sub isWikiName
 {
     my( $name ) = @_;
@@ -2111,7 +2133,7 @@ sub getRenderedVersion
             s/$TranslationToken(\!\-\-)/\<$1/go;
 
 # Handle embedded URLs
-            s@(^|[\-\*\s])($linkProtocolPattern\:(\S+[^\s\.,!\?;:]))@&externalLink($1,$2)@geo;
+            s!(^|[\-\*\s])($linkProtocolPattern\:(\S+[^\s\.,\!\?;:]))!&externalLink($1,$2)!geo;
 
 # Entities
             s/&(\w+?)\;/$TranslationToken$1\;/go;      # "&abc;"
@@ -2129,7 +2151,7 @@ sub getRenderedVersion
 
 # Horizontal rule
             s/^---+/<hr \/>/o;
-            s@^([a-zA-Z0-9]+)----*@<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><hr /></td></tr></table>@o;
+            s!^([a-zA-Z0-9]+)----*!<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><hr /></td></tr></table>!o;
 
 # Table of format: | cell | cell |
             # PTh 25 Jan 2001: Forgiving syntax, allow trailing white space
@@ -2167,6 +2189,16 @@ sub getRenderedVersion
             s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText( $2, 0 ) . $3/geo;
 
 # Mailto
+	    # RD 27 Mar 02: Mailto improvements - FIXME: check security...
+	    # Explicit [[mailto:... ]] link without an '@' - hence no 
+	    # anti-spam padding needed.
+            # '[[mailto:string display text]]' link (no '@' in 'string'):
+            s/\[\[mailto\:([^\s\@]+)\s+(.+?)\]\]/&mailtoLinkSimple( $1, $2 )/geo;
+	    # Explicit [[mailto:... ]] link including '@', with anti-spam 
+	    # padding, so match name@subdom.dom.
+            # '[[mailto:string display text]]' link
+            s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.(.+?)\s+(.*?)\]\]/&mailtoLinkFull( $1, $2, $3, $4 )/geo;
+	    # Normal mailto:foo@example.com ('mailto:' part optional)
             s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &mailtoLink( $2, $3, $4 )/geo;
 
 # Make internal links
