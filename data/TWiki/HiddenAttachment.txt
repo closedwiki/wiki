@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="PeterThoeny" date="1005688933" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="FileAttachment"}%
+---+ Hide/Unhide Attachments
+
+You can hide/unhide file attachments.
+
+	* In the FileAttachment table, click on an *action* link,
+	* enable the *Hide file* checkbox,
+	* then click *Change properties* 
+
+-- Main.PeterThoeny - 13 Nov 2001
