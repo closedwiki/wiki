@@ -75,38 +75,92 @@ sub renderCellData
 }
 
 # =========================
+sub renderSideBySide
+{
+  my ( $diffstr, $left, $right ) = @_;
+  my $result = "";
+  if ( $diffstr ne "" ) {
+    $diffstr =~ /^([0-9]+)[0-9\,]*([adc])([0-9]+)/;
+    $result .= qq(<tr bgcolor="#eeeeee"><th>Line: $1</th><th>Line: $3</th></tr>\n);
+    if ( $2 eq "c" ) {
+      $lcolor = $rcolor = "#99ff99";
+    } elsif ( $2 eq "a" ) {
+      $lcolor = "#cccccc";
+      $rcolor = "#ccccff";
+    } elsif ( $2 eq "d" ) {
+      $lcolor = "#ff9999";
+      $rcolor = "#cccccc";
+    }
+
+    $right = renderCellData( $right, $topic );
+    $left = renderCellData( $left, $topic );
+
+    $result .= qq(<tr><td bgcolor="$lcolor" valign="top">$left&nbsp;</td><td bgcolor="$rcolor" valign="top">$right&nbsp;</td></tr>\n);
+  }
+  return $result;
+}
+
+# =========================
 sub renderRevisionDiff
 {
-    my( $text, $topic ) = @_;
+    my( $text, $topic, $rev2, $rev1 ) = @_;
 
     $text =~ s/\r//go;  # cut CR
     my $result = "<table width=\"100%\" cellspacing=\"0\">\n<tr><td>";
     my $data = "";
-    foreach( split( /\n/, $text ) ) {
-        if( /^[0-9]/ ) {
-            $data = renderCellData( $data, $topic );
-            $result .= $data;
-            $data = "";
-            s/^([0-9\,]+)d([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#FFD7D7" colspan ="2"><b> Deleted: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br \/>&lt;<\/td><td>/go;
-            s/^([0-9\,]+)a([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Added:   <\/b><\/td><\/tr>\n<tr><td bgcolor="#40FF40" valign="top" width="1%">&gt;<br \/>&gt;<\/td><td>/go;
-            s/^([0-9\,]+)c([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Changed: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br \/>&lt;<\/td><td>/go;
-            $result .= $_;
+#BEGIN - Side by side diffs
+	my $sideBySide = 1;#temporarily default to side-by-side (options come later :)
+	if ( $sideBySide ) {
+	    my $left = "";
+    	my $right = "";
+	    my $diffstr = "";
+    	my $lcolor = "";
+	    my $rcolor = "";
+    	$result .= "<tr><td width=\"50%\"><b>Rev. $rev2</b></td><td width=\"50%\"><b>Rev. $rev1</b></td></tr>\n";
+	    foreach( split( /\n/, $text ) ) {
+    	  if( /^[0-9]/ ) {
+        	  $result .= renderSideBySide ( $diffstr, $left, $right );
 
-        } elsif( /^[<>]/ ) {
-            s/^[<>] (.*)/$1/go;
-            $data .= "\n$_";
-
-        } elsif( /^--*/ ) {
-            $data = renderCellData( $data, $topic );
-            $result .= $data;
-            $data = "";
-            $result .= "\n</td></tr><tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br />&gt;</td><td>\n";
-        }
-    }
-    $data = renderCellData( $data, $topic );
-    $result .= $data;
-    $data = "";
-    $text = "$result<\/td><\/tr>\n<\/table>";
+	          $left = "";
+    	      $right = "";
+        	  $diffstr = $_;
+	      } elsif ( /^</ ) {
+    	    s/^< //go;
+        	$left .= "\n$_";
+	      } elsif ( /^>/ ) {
+    	    s/^> //go;
+        	$right .= "\n$_";
+	      }
+    	}
+	    $result .= renderSideBySide ( $diffstr, $left, $right );
+	    $text = "$result\n<\/table>";
+#END - Side by side diffs
+	} else {
+	    foreach( split( /\n/, $text ) ) {
+    	    if( /^[0-9]/ ) {
+        	    $data = renderCellData( $data, $topic );
+            	$result .= $data;
+	            $data = "";
+    	        s/^([0-9\,]+)d([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#FFD7D7" colspan ="2"><b> Deleted: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br \/>&lt;<\/td><td>/go;
+        	    s/^([0-9\,]+)a([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Added:   <\/b><\/td><\/tr>\n<tr><td bgcolor="#40FF40" valign="top" width="1%">&gt;<br \/>&gt;<\/td><td>/go;
+            	s/^([0-9\,]+)c([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Changed: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br \/>&lt;<\/td><td>/go;
+	            $result .= $_;
+	        } elsif( /^[<>]/ ) {
+    	        s/^[<>] (.*)/$1/go;
+        	    $data .= "\n$_";
+	
+	        } elsif( /^--*/ ) {
+    	        $data = renderCellData( $data, $topic );
+        	    $result .= $data;
+            	$data = "";
+	            $result .= "\n</td></tr><tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br />&gt;</td><td>\n";
+    	    }
+	    }
+	    $data = renderCellData( $data, $topic );
+    	$result .= $data;
+	    $data = "";
+    	$text = "$result<\/td><\/tr>\n<\/table>";
+	}
 
     return $text;
 }
@@ -241,7 +295,7 @@ sub main
             $rInfo = getRevInfo( $webName, $r1, $topic, 1 );
             $diff =~ s/%REVINFO1%/$rInfo/go;
             $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1" );
-            $text = renderRevisionDiff( $text, $topic );
+            $text = renderRevisionDiff( $text, $topic, "1.$r2", "1.$r1" );
             $diff =~ s/%TEXT%/$text/go;
             $diff =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
             print $diff;
