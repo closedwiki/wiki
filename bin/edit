@@ -173,15 +173,6 @@ sub main
        $text = TWiki::Store::readTopicRaw( $webName, $topic );
     }
     
-    my $possibleForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$webName" );
-    if( $possibleForms ) {
-        $tmpl =~ s/%CHANGEFORM%/<INPUT type="submit" name="submitChangeForm" value=" &nbsp; Change Form &nbsp; ">%SEP%/go;
-        $tmpl =~ s/%SEP%/&TWiki::handleSep( $topic, $skin )/geo; # FIXME remove from here to handleCommonTags
-
-    } else {
-        $tmpl =~ s/%CHANGEFORM%//go;
-    }
-
     $text =~ s/&/&amp\;/go;
     $text =~ s/</&lt\;/go;
     $text =~ s/>/&gt\;/go;
@@ -218,6 +209,8 @@ sub main
        }
        my $formText = &TWiki::Form::renderForEdit( $webName, $form, $meta, @fieldDefs );
        $tmpl =~ s/%FORMFIELDS%/$formText/go;
+    } elsif( $saveCmd ne "repRev" ) {
+       $tmpl =~ s/%FORMFIELDS%/&TWiki::Form::chooseFormButton( "Add form" )/goe;
     } else {
        $tmpl =~ s/%FORMFIELDS%//go;
     }
