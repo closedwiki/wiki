@@ -38,15 +38,24 @@ use vars qw(
 $VERSION = '1.000';
 
 @registrableHandlers = (
-        'initPlugin',            # ( $topic, $web, $user, $installWeb )
-        'commonTagsHandler',     # ( $text, $topic, $web )
-        'startRenderingHandler', # ( $text, $topic, $web )
-        'outsidePREHandler',     # ( $text, $web )
-        'insidePREHandler',      # ( $text, $web )
-        'endRenderingHandler',   # ( $text, $topic, $web )
-        'afterEditHandler',      # ( $text, $topic, $web )
-        'beforeSaveHandler'      # ( $text, $topic, $web )
+        'initPlugin',              # ( $topic, $web, $user, $installWeb )
+        'commonTagsHandler',       # ( $text, $topic, $web )
+        'startRenderingHandler',   # ( $text, $topic, $web )
+        'outsidePREHandler',       # ( $text, $web )
+        'insidePREHandler',        # ( $text, $web )
+        'endRenderingHandler',     # ( $text, $topic, $web )
+        'afterEditHandler',        # ( $text, $topic, $web )
+        'beforeSaveHandler',       # ( $text, $topic, $web )
+        'writeHeaderHandler',      # ( $query )
+        'redirectCgiQueryHandler', # ( $query, $url )
+        'getSessionValueHandler',  # ( $key )
+        'setSessionValueHandler'   # ( $key, $value )
     );
+    
+%onlyOnceHandlers = ( 'writeHeaderHandler'      => 1,
+                      'redirectCgiQueryHandler' => 1,
+                      'getSessionValueHandler'  => 1,
+                      'getSessionValueHandler'  => 1 );
 
 %registeredHandlers = ();
 
@@ -157,10 +166,19 @@ sub applyHandlers
     if( $TWiki::disableAllPlugins ) {
         return;
     }
+    my $status;
+    
     foreach $theHandler ( @{$registeredHandlers{$handlerName}} ) {
         # apply handler on the remaining list of args
-        &$theHandler;
+        $status = &$theHandler;
+        if( $onlyOnceHandlers{$handlerName} ) {
+            if( $status ) {
+                return $status;
+            }
+        }
     }
+    
+    return undef;
 }
 
 # =========================
@@ -224,6 +242,23 @@ sub handleActivatedPlugins
     return $text;
 }
 
+sub initializeUser
+{
+#   my( $theRemoteUser, $theUrl,  $thePathInfo ) = @_;
+    my $user;
+    my $p = "TWiki::Plugins::SessionPlugin";
+    my $sub = $p.'::initializeUserHandler';
+    eval "use $p;";
+    if( defined( &$sub ) ) {
+        $user = &$sub( @_ );
+    }
+    if( ! defined( $user ) ) {
+        $user = &TWiki::initializeRemoteUser( $_[0] );
+    }
+    
+    return $user;
+}
+
 # =========================
 sub commonTagsHandler
 {
@@ -269,6 +304,38 @@ sub endRenderingHandler
 #    my ( $text ) = @_;
     unshift @_, ( 'endRenderingHandler' );
     &applyHandlers;
+}
+
+# =========================
+sub writeHeaderHandler
+{
+    # Called by TWiki.writeHeader
+    unshift @_, ( 'writeHeaderHandler' );
+    return &applyHandlers;
+}
+
+# =========================
+sub redirectCgiQueryHandler
+{
+    # Called by TWiki.redirect
+    unshift @_, ( 'redirectCgiQueryHandler' );
+    return &applyHandlers;
+}
+
+# =========================
+sub getSessionValueHandler
+{
+    # Called by TWiki.getSessionValue
+    unshift @_, ( 'getSessionValueHandler' );
+    return &applyHandlers;
+}
+
+# =========================
+sub setSessionValueHandler
+{
+    # Called by TWiki.getSessionValue
+    unshift @_, ( 'setSessionValueHandler' );
+    return &applyHandlers;
 }
 
 # =========================
