@@ -1,16 +1,17 @@
-%META:TOPICINFO{author="martincleaver" date="1098818225" format="1.0" version="1.4"}%
-	* %LOGON_OR_WELCOME% 
+%META:TOPICINFO{author="PeterThoeny" date="1092718938" format="1.0" version="1.2"}%
+	* *[[%WIKILOGOURL%][TWiki]]*
+
+	* *[[%TWIKIWEB%.WelcomeGuest][Welcome]]*
+	* *[[%TWIKIWEB%.TWikiRegistration][Register]]*
 ---
 	* <b>%INCLUDINGWEB% Web</b>
-	* [[%INCLUDINGWEB%.%HOMETOPIC%][%INCLUDINGWEB% Web Home]]
-	* [[%INCLUDINGWEB%.WebChanges][Changes]] 
-	* [[%INCLUDINGWEB%.WebTopicList][Topics]]
-	* [[%INCLUDINGWEB%.WebIndex][Index]]
-	* [[%INCLUDINGWEB%.WebSearch][Search]]
+	* [[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]
+	* [[WebChanges][Changes]] 
+	* [[WebTopicList][Topics]]
+	* [[WebIndex][Index]]
+	* [[WebSearch][Search]]
 ---
-%INCLUDE{"%BASEWEB%.WebLeftBarInsert" warn="no"}%
-
-	* *Webs*
+	* *TWiki Webs*
 %WEBLIST{"		* [[$name.%HOMETOPIC%][$name]]" separator=""}%
 <div class="twikiLeftBarPersonal">
 %INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate\">Create</a> personal sidebar"}%
