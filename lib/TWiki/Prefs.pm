@@ -49,6 +49,7 @@ sub initializePrefs
     $altWebName = "";
     @finalPrefsKeys = ();
     getPrefsFromTopic( $TWiki::twikiWebname, $TWiki::wikiPrefsTopicname ); # site-level
+    getPrefsFromTopic( $TWiki::mainWebname,  $TWiki::wikiPrefsTopicname ); # alternate site-level
     getPrefsFromTopic( $theWebName, $TWiki::webPrefsTopicname );           # web-level
     if( $theWikiUserName =~ /^(.*)\.(.*)$/ ) {
         getPrefsFromTopic( $1, $2 );                                       # user-level
