@@ -3,10 +3,18 @@
 	<name>BuildContrib</name>
 	<comment></comment>
 	<projects>
+		<project>DistributionContrib</project>
+		<project>TWiki</project>
 	</projects>
 	<buildSpec>
+		<buildCommand>
+			<name>org.epic.perleditor.perlbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.epic.perleditor.perlnature</nature>
 	</natures>
 	<linkedResources>
 		<link>

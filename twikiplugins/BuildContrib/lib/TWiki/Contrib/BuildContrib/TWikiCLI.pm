@@ -46,7 +46,7 @@ sub helpText {
 sub dispatch2 {
     my ($class,$do,@args) = @_;
 
-    my $dispatchSubName = $class."::".$do;
+    my $dispatchSubName = $class."::".'cli_'.$do;
     print "dispatching to $dispatchSubName\n";
     my $ans;
     if (defined &$dispatchSubName) {
