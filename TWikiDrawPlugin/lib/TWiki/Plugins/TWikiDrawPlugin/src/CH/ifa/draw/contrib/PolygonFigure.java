@@ -322,8 +322,8 @@ public  class PolygonFigure extends AttributeFigure {
 		coords += ",";
 	    coords += fPoly.xpoints[i] + "," + fPoly.ypoints[i];
 	}
-	return "<AREA SHAPE=\"POLY\" COORDS=\"" + coords +
-            "\" HREF=\"" + sense + "\">\n";
+	return "<area shape=\"poly\" coords=\"" + coords +
+            "\" href=\"" + sense + "\" alt=\"" + sense + "\" />";
     }
     
     public void write(StorableOutput dw) {

@@ -106,9 +106,8 @@ public class EllipseFigure extends AttributeFigure {
 		coords += x + "," + y;
 		ang += Math.PI / 3;
 	    }
-	    return "<AREA SHAPE=\"POLY\" COORDS=\"" + coords +
-		"\" HREF=\"" +
-		sense + "\">\n";
+	    return "<area shape=\"poly\" coords=\"" + coords +
+		"\" href=\"" + sense + "\" alt=\"" + sense + "\" />";
 	}
 	return "";
     }
