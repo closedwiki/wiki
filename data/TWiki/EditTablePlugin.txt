@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1084087287" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="PeterThoeny" date="1091425534" format="1.0" version="1.9"}%
 ---+!! Edit Table Plugin
 
 This plugin allows you to edit TWiki tables using edit fields and drop down boxes. Tables have an *[&nbsp;Edit&nbsp;table&nbsp;]* button if preceeded by an =%<nop>EDITTABLE{...}%= variable. Each column can be a text field, a drop down box, a date field, etc. Multiple tables per topic are editable, but only one at a time can be edited.
@@ -46,13 +46,13 @@ __Note:__ The =%<nop>EDITCELL{ }%=variable cannot be used by itself; place an =%
 
 <form>
 	* In page view mode:
-		* <input type="submit" name="et"	value="Edit table" onClick="return(false);" /> - turn the table into edit mode
+		* <input type="submit" name="et"	value="Edit table" onclick="return(false);" /> - turn the table into edit mode
 	* In edit mode:
-		* <input type="submit" name="etsave"	value="Save table"  onClick="return(false);" /> - save your changes
-		* <input type="submit" name="etqsave"	value="Quiet save"  onClick="return(false);" /> - save your changes without alerting subscribed WebNotify users
-		* <input type="submit" name="etaddrow" value="Add row" onClick="return(false);" /> - add row to the table (if enabled)
-		* <input type="submit" name="etdelrow" value="Delete last row" onClick="return(false);" /> - remove last row from the table (if enabled)
-		* <input type="submit" name="etcancel" value="Cancel" onClick="return(false);" /> - cancel without saving and release edit lock
+		* <input type="submit" name="etsave"	value="Save table"  onclick="return(false);" /> - save your changes
+		* <input type="submit" name="etqsave"	value="Quiet save"  onclick="return(false);" /> - save your changes without alerting subscribed WebNotify users
+		* <input type="submit" name="etaddrow" value="Add row" onclick="return(false);" /> - add row to the table (if enabled)
+		* <input type="submit" name="etdelrow" value="Delete last row" onclick="return(false);" /> - remove last row from the table (if enabled)
+		* <input type="submit" name="etcancel" value="Cancel" onclick="return(false);" /> - cancel without saving and release edit lock
 </form>
 
 ---++ Examples
@@ -63,9 +63,9 @@ Line before table: =%<nop>EDITTABLE{ header="|*Nr*|*Text field sandbox*|*Drop do
 | 1 | hello table | one | 26 Jun 2002 12:30 |
 | 2 |  | two | 27 Jun 2002 12:40 |
 
-__Note:__ Please use TWiki:Sandbox.EditTablePluginTesting if you want to try out this Plugin
+%RED% __Note:__ Please use TWiki:Sandbox.EditTablePluginTesting if you want to try out this Plugin %ENDCOLOR%
 
-If this plugin is installed you will see an *[&nbsp;Edit&nbsp;table&nbsp;]* button above; when you click on it you get this form:
+If this plugin is installed you will see an *[&nbsp;Edit&nbsp;table&nbsp;]* button above; if you were to click on it (please don't, use TWiki:Sandbox.EditTablePluginTesting for testing) you get this form:
 
 <form>
 <table border="1" cellspacing="1" cellpadding="0">
@@ -73,11 +73,11 @@ If this plugin is installed you will see an *[&nbsp;Edit&nbsp;table&nbsp;]* butt
 <tr><td  bgcolor="#FFFFFF"> 1<input type="hidden" name="etcell2x1" value="1" />  </td><td  bgcolor="#FFFFFF"> <input type="text" name="etcell2x2" size="20" value="hello table" />  </td><td  bgcolor="#FFFFFF"> <select name="etcell2x3" size="1"> <option selected="selected">one</option> <option>two</option> <option>three</option> <option>four</option> </select>  </td><td  bgcolor="#FFFFFF"> 26 Jun 2002 12:30<input type="hidden" name="etcell2x4" value="26 Jun 2002 12:30" />  </td></tr>
 <tr><td  bgcolor="#FFFF99"> 2<input type="hidden" name="etcell3x1" value="2" />  </td><td  bgcolor="#FFFF99"> <input type="text" name="etcell3x2" size="20" value="" />  </td><td  bgcolor="#FFFF99"> <select name="etcell3x3" size="1"> <option>one</option> <option selected="selected">two</option> <option>three</option> <option>four</option> </select>  </td><td  bgcolor="#FFFF99"> 27 Jun 2002 12:40<input type="hidden" name="etcell3x4" value="27 Jun 2002 12:40" />  </td></tr>
 </table>
-<input type="submit" name="etsave"	value="Save table" onClick="return(false);" />
-<input type="submit" name="etqsave"	value="Quiet save"  onClick="return(false);" />
-<input type="submit" name="etaddrow" value="Add row" onClick="return(false);" />
-<input type="submit" name="etdelrow" value="Delete last row" onClick="return(false);" />
-<input type="submit" name="etcancel" value="Cancel" onClick="return(false);" /> (demo only, these buttons do not work)
+<input type="submit" name="etsave"	value="Save table" onclick="return(false);" />
+<input type="submit" name="etqsave"	value="Quiet save"  onclick="return(false);" />
+<input type="submit" name="etaddrow" value="Add row" onclick="return(false);" />
+<input type="submit" name="etdelrow" value="Delete last row" onclick="return(false);" />
+<input type="submit" name="etcancel" value="Cancel" onclick="return(false);" /> (demo only, these buttons do not work)
 </form>
 
 The following example shows a simple table with key/value rows. The default edit field type for the value column is a text field. This is overloaded by a selector for the Gender, and a date picker for the DOB. This is typically used by TWiki applications where new topics with tables are created based on a template topic.
@@ -134,7 +134,6 @@ __Note:__ The Plugin looks for the =JSCALENDAR*= settings first in the TWiki Pre
 
 ---++ Limitations and Known Issues
 
-	* %X% Bug: The Plugin fails if the table is at the very end of the topic (without a new line) Always ensure there is a newline after the table
 	* This Plugin does not support TWiki table formatting like Multi-span cells (e.g. =| ... ||=) and cell justification (e.g. =|  centered  |	right |=)
 	* There is a performance issue when editing a large table, say, with more then 50 rows
 	* Variables like =%<nop>ATTACHURL%= get expanded unless they are in a label
@@ -173,8 +172,9 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 07 Apr 2004 |
+|  Plugin Version: | 01 Aug 2004 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  01 Aug 2004: | Fixed bug where edittable did not work if at the end of a topic |
 |  07 Apr 2004: | Fixed bug where two tables got updated when you edit and save a table included into a topic containing other edit tables |
 |  02 Mar 2004: | Default for =%<nop>EDITCELL{editbutton}%= is EDITBUTTON preference |
 |  27 Feb 2004: | Added QUIETSAVE setting and =quietsave= parameter; image for Edit button |
@@ -204,7 +204,7 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/PeterThoeny - 07 Apr 2004
+-- TWiki:Main/PeterThoeny - 01 Aug 2004
 
 %META:FILEATTACHMENT{name="EditTablePluginCalendarExample.gif" attr="h" comment="Screenshot" date="1078005196" path="C:\Data\Temp\EditTablePluginCalendarExample.gif" size="7823" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="README" attr="h" comment="Component of Mishoo DHTML calendar" date="1071361959" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\README" size="823" user="PeterThoeny" version="1.1"}%
