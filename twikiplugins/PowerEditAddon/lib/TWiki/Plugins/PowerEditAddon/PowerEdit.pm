@@ -51,18 +51,20 @@ sub serverCommand {
 			$theTopic, $theUrl, $query );
   
   if ( $action eq "get" ) {
-    _getAction( $webName, $topic, $userName, $query );
+    _getTopicText( $webName, $topic, $userName, $query );
   } elsif ( $action eq "put" ) {
-    _putAction( $webName, $topic, $query );
+    _cacheText( $webName, $topic, $query );
   } elsif ( $action eq "commit" ) {
-    _commitAction( $webName, $topic, $query );
+    _executeBinScript( "save", $webName, $topic, $query );
+  } elsif ( $action eq "preview" ) {
+    _executeBinScript( "preview", $webName, $topic, $query );
   } else {
     # error message
-    TWiki::writeDebug( "Unknown server command $action" );
+    TWiki::Func::writeDebug( "Unknown server command $action" );
     # Can't do much more because context is unknown.
-    my $url = &TWiki::getOopsUrl( $webName, $topic, "oopslocked",
-				  "ERROR action $action" );
-    TWiki::redirect( $query, $url );
+    my $url = &TWiki::Func::getOopsUrl( $webName, $topic, "oopslocked",
+					"ERROR action $action" );
+    TWiki::Func::redirectCgiQuery( $query, $url );
   }
 }
 
@@ -74,7 +76,7 @@ sub serverCommand {
 # and happens to match the name of the locking user, then
 # they will receive back the file contents unadulterated without
 # further security checks.
-sub _getAction {
+sub _getTopicText {
   my ( $webName, $topic, $userName, $query ) = @_;
   
   # Make sure there's a lock on the topic, and it's locked by the
@@ -99,17 +101,16 @@ sub _getAction {
     my ( $meta, $text ) = &TWiki::Func::readTopic( $webName, $topic );
     # Meta gets ignored. It gets re-attached when we save.
     $text =~ s/\t/   /go;
-    $text = "OK" . $text;
-    print $text;
+    print "OK", $text;
   } else {
     print "ERROR no such topic $topic";
   }
 }
 
 # url: <twiki>/bin/poweredit/<web>/<topic>?action=put&text=...
-# return: a url that will commit the changes
+# return: a url
 # Cache the new text provided from the client
-sub _putAction {
+sub _cacheText {
   my ( $webName, $topic, $query ) = @_;
   
   # Security note: This is safe insofar as it doesn't write back to
@@ -117,59 +118,61 @@ sub _putAction {
   # We can't simply invoke the preview script from here because
   # java needs to exit and it can't do it from here.
   
-  TWiki::Store::savePreview( $webName, $topic,
-			     $query->param( 'text' ));
+  _writeCache( $webName, $topic,
+	       $query->param( 'text' ) );
   # write the url required to access it back to java
   print $query->header( -type=>'text/plain', -expires=>'+1s' ),
-  TWiki::Func::getScriptUrlPath(),
-  "/poweredit/$webName/$topic?action=commit",
-  "&topic=$webName.$topic";
+  "OK", TWiki::Func::getScriptUrl( $webName, $topic, "poweredit" );
 }
 
-# url:  <twiki>/bin/poweredit/<web>/<topic>?action=commit
-# return: nothing; commit is invoked by a redirect from the
-# applet (which terminates the applet).
+# Execute a CGI script from the twiki bin directory by evaling it,
+# replacing the "new CGI" with a query passed in.
+sub _executeBinScript {
+  my ( $script, $webName, $topic, $query ) = @_;
 
-# Commit the cached text by passing to the preview script
-sub _commitAction {
-  my ( $webName, $topic, $query ) = @_;
-  
   # Take a copy of the query so we can add to it...
-  my $query2 = new CGI( $query );
-  
+  my $newQuery = new CGI( $query );
+
   # Recover the meta information from the original topic and restore
   # it. 
-  my ( $meta, $oldtext ) = &TWiki::Store::readTopic( $webName, $topic );
+  my ( $meta, $oldtext ) = &TWiki::Func::readTopic( $webName, $topic );
   # Push all the fields in the meta into parameters
   my @fields = $meta->find( "FIELD" );
   foreach my $field ( @fields ) {
     my $name  = $field->{"name"};
     my $value = $field->{"value"};
-    $query2->param( -name=>"$name", -value=>"$value" );
+    $newQuery->param( -name=>"$name", -value=>"$value" );
   }
-  
-  # set the text in the query by reading the cache
-  my $text = TWiki::Store::readRemovePreview( $webName, $topic );
-  $query2->param( -name=>'text', -value=>$text );
 
-  # FIXME: truly nasty - edit the preview script. I really want to call
-  # the 'preview function' on my modified query, but just can't figure a way.
-  my $preview = TWiki::Store::readFile( "preview" . $TWiki::scriptSuffix );
-  # edit off the offensive bits, starting with the comments
-  $preview =~ s/^\s*\#.*$//gom;
-  # take out the call to main
-  $preview =~ s/\&main.*$//om;
-  # kill main
-  $preview =~ s/sub\s+main//om;
-  # convert the CGI creation to read the parameter
-  $preview =~ s/new CGI/\$query2/o;
-  $preview =~ /(.*)/s; # untaint
-  $preview = $1;
-  open FH, ">/tmp/blah";
-  print FH $preview;
-  close FH;
-  # invoke the edited preview script on the edited query
-  eval "$preview";
+  # set the text in the query by reading the cache
+  my $text = _readRemoveCache( $webName, $topic );
+  $newQuery->param( -name=>'text', -value=>$text );
+
+  my $theScript = TWiki::Func::readFile( $script . $TWiki::scriptSuffix );
+  $theScript =~ s/new CGI/\$newQuery/o;
+  $theScript =~ /(.*)/s;
+  $theScript = $1;
+  {
+    package IncludedScript;
+    # declarations required because not declared 'my' in save script
+    # Note that this causes warnings that I can't get rid of
+    my ($topic, $webName, $dummy, $userName);
+    eval "$theScript";
+  }
+}
+
+sub _writeCache {
+    my( $theWeb, $theTopic, $theText ) = @_;
+    my $fileName = TWiki::Func::getDataDir() . "/$theWeb/$theTopic.tmp";
+    TWiki::Func::saveFile( $fileName, $theText );   
+}
+
+sub _readRemoveCache {
+    my( $theWeb, $theTopic ) = @_;
+    my $fileName = TWiki::Func::getDataDir() . "/$theWeb/$theTopic.tmp";
+    my $text = TWiki::Func::readFile( $fileName );
+    unlink( $fileName );
+    return $text;
 }
 
 1;
