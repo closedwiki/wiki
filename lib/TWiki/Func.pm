@@ -326,7 +326,7 @@ sub getPreferencesValue
 | Description:      | Get a preferences value from your Plugin |
 | Parameter: =$key= | Plugin Preferences key w/o PLUGINNAME_ prefix. |
 | Return: =$value=  | Preferences value; empty string if not set |
-| Since:            | TWiki::Plugins::VERSION 1.020 (26 Mar 2004) |
+| Since:            | TWiki::Plugins::VERSION 1.021 (27 Mar 2004) |
 
 =cut
 
@@ -360,6 +360,24 @@ sub getPreferencesFlag
 {
 #   my( $theKey, $theWeb ) = @_;
     return &TWiki::Prefs::getPreferencesFlag( @_ );
+}
+
+=pod
+
+---+++ getPluginPreferencesFlag( $key ) ==> $flag
+
+| Description:      | Get a preferences flag from your Plugin |
+| Parameter: =$key= | Plugin Preferences key w/o PLUGINNAME_ prefix. |
+| Return: =$flag=   | Preferences flag ="1"= (if set), or ="0"= (for preferences values ="off"=, ="no"= and ="0"=, or values not set at all) |
+| Since:            | TWiki::Plugins::VERSION 1.021 (27 Mar 2004) |
+
+=cut
+
+sub getPluginPreferencesFlag
+{
+    my( $theKey ) = @_;
+    my $value = getPluginPreferencesValue( $theKey );
+    return TWiki::Prefs::formatAsFlag($value);
 }
 
 # =========================
