@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="JohnTalintyre" date="997199070" format="1.0beta2" version="1.9"}%
 ---## TWiki Access Control
 
 %WIKITOOLNAME% allows you to define restrictions of who is allowed to view a %WIKITOOLNAME% web, make changes to topics or attach files.
@@ -49,6 +50,32 @@ Define one or both of these variable in the %WEBPREFSTOPIC% topic:
 The same rules apply like the one for Access Control for Individual Topics; with these additions:
 	* DENYTOPICCHANGE (in topic) overrides DENYWEBCHANGE (in <nop>%WEBPREFSTOPIC%)
 	* ALLOWTOPICCHANGE (in topic) overrides ALLOWWEBCHANGE (in <nop>%WEBPREFSTOPIC%)
+
+---+++ Rename Access Restriction for Individual Topics
+
+You can define restrictions of who is allowed to rename a topic.  Note that users need this permission in addition to the CHANGE permission in order to rename a topic.  They also need CHANGE access to change references in referring topics.
+
+Define one or both of these variables in a topic, preferably at the end of the topic:
+	* Set <nop>DENYTOPICRENAME = &lt; list of users and groups &gt;
+	* Set <nop>ALLOWTOPICRENAME = &lt; list of users and groups &gt;
+
+DENYTOPICCRENAME defines users or groups that *are not* allowed to rename the topic. It is a comma delimited list of users and groups. Example: <br> =&nbsp; &nbsp; * Set <nop>DENYTOPICRENAME = %MAINWEB%.<nop>SomeBadBoy, %MAINWEB%.<nop>SomeBadGirl, %MAINWEB%.<nop>SomeHackerGroup=
+
+ALLOWTOPICRENAME defines users or groups that *are* allowed to rename the topic. It is a comma delimited list of users and groups. Example: <br> =&nbsp; &nbsp; * Set <nop>ALLOWTOPICRENAME = %MAINWEB%.<nop>SomeGoodGuy, %MAINWEB%.<nop>SomeGoodGirl, %MAINWEB%.<nop>TWikiAdminGroup=
+
+DENYTOPICRENAME is evaluated before ALLOWTOPICRENAME. Access is denied if the authenticated person is in the DENYTOPICRENAME list, or not in the ALLOWTOPICRENAME list. Access is granted in case DENYTOPICRENAME and ALLOWTOPICRENAME is not defined.
+
+---+++ Rename Access Restriction for a Whole %WIKITOOLNAME% Web
+
+You can define restrictions of who is allowed to do renames for a %WIKITOOLNAME% web.
+
+Define one or both of these variable in the %WEBPREFSTOPIC% topic:
+	* Set <nop>DENYWEBRENAME = &lt; list of users and groups &gt;
+	* Set <nop>ALLOWWEBRENAME = &lt; list of users and groups &gt;
+
+The same rules apply like the one for Access Control for Individual Topics; with these additions:
+	* DENYTOPICRENAME (in topic) overrides DENYWEBRENAME (in <nop>%WEBPREFSTOPIC%)
+	* ALLOWTOPICRENAME (in topic) overrides ALLOWWEBRENAME (in <nop>%WEBPREFSTOPIC%)
 
 ---+++ Read Access Restriction for a Whole %WIKITOOLNAME% Web
 
