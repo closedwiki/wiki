@@ -169,15 +169,23 @@ sub link
             $tooltip = "Click to see details in separate window";
         }
         $link =  "<a target=\"$name\" " .
-                 "onClick=\"return launchWindow('%WEB%','$name')\" " .
+                 "onClick=\"return launchWindow('$web','$name')\" " .
                  "title=\"$tooltip\" " .
-                 "href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/$name\">$name</a>";
+                 "href=\"$TWiki::scriptUrlPath/view$TWiki::scriptSuffix/$web/$name\">$name</a>";
     } elsif ( $tooltip ) {
         $link = "<span title=\"$tooltip\">$name</span>";
     }
 
     my $html = "<$cell$span$align>$link $extra</$cell>";
     return $html;
+}
+
+sub chooseFormButton
+{
+    my( $text ) = @_;
+    
+    return "<INPUT type=\"submit\" STYLE=\"font-size:8pt; border-width:1px; " .
+           "margin:2px\" name=\"submitChangeForm\" value=\" &nbsp; $text &nbsp; \">";
 }
 
 
@@ -187,8 +195,14 @@ sub renderForEdit
 {
     my( $web, $form, $meta, @fieldsInfo ) = @_;
     
+    my $chooseForm = "";   
+    if( TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) ) {
+        $chooseForm = chooseFormButton( "Change" );
+    }
+    
+    # FIXME could do with some of this being in template
     my $text = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
-               &link( $web, $form, "", "h", "", 2 ) . "</tr>\n";
+               &link( $web, $form, "", "h", "", 2, $chooseForm ) . "</tr>\n";
     
     foreach my $c ( @fieldsInfo ) {
         my @fieldInfo = @$c;
