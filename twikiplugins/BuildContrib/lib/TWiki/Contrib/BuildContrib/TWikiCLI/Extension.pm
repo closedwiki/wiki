@@ -6,7 +6,7 @@ my $oldPwd;
 # Ultimately we'd like to ask the Extension to handle this command 
 # itself. For now we just call build.pl
 
-sub _init {
+sub cli__init {
     $oldPwd = cwd();
 }
 
