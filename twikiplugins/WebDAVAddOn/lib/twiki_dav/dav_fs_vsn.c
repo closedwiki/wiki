@@ -38,7 +38,7 @@ static dav_error * dav_fs_mkresource(dav_resource *resource)
  */
 static dav_error * dav_fs_checkout(dav_resource *resource) {
 
-    logEvent("FS_CHECKOUT ", resource);
+    /*logEvent("FS_CHECKOUT ", resource);*/
     /* working is supposed to be the revision number of the working
      * revision, but I'm cheating here and simply using it as a
      * semaphore to ensure the rest of mod_dav understands that this
@@ -52,7 +52,7 @@ static dav_error * dav_fs_checkout(dav_resource *resource) {
  */
 static dav_error * dav_fs_uncheckout(dav_resource *resource)
 {
-    logEvent("FS_UNCHECKOUT ", resource);
+    /*logEvent("FS_UNCHECKOUT ", resource);*/
     resource->working = 0;
 
     return NULL;
@@ -63,7 +63,7 @@ static dav_error * dav_fs_uncheckout(dav_resource *resource)
  */
 static dav_error * dav_fs_checkin(dav_resource *resource)
 {
-    logEvent("FS_CHECKIN ", resource);
+    /*logEvent("FS_CHECKIN ", resource);*/
     twiki_resources* tr = resource->twiki;
     pool* p = dav_fs_pool(resource);
     const char* cmd = ap_psprintf(p,

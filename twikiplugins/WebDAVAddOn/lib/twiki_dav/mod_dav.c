@@ -52,6 +52,8 @@
 
 #include "dav_opaquelock.h"
 
+#include "PROT.h"
+
 /* ### what is the best way to set this? */
 #define DAV_DEFAULT_PROVIDER    "filesystem"
 
@@ -66,6 +68,7 @@ typedef struct {
     const char *provider_name;  /* ### aka "module" name */
     const char *dir;
     int twiki_dir_type;
+    const char* twiki_dir_root;
     const char* twiki_access_script;
 
     int locktimeout;
@@ -110,10 +113,18 @@ void writeLog(const char* s) {
 }
 
 /* DEBUG */
+#define LOGEVENT(x,y) logEvent(x,y)
+extern pool* dav_fs_pool(dav_resource* r);
 void logEvent(const char* s, dav_resource* r) {
   pool* p = dav_fs_pool(r);
-  const char* type;
   if (r) {
+    const char* exists = r->exists ? "exists" : "does not exist";
+    const char* collection = r->collection ? "collection" : "file";
+    const char* versioned = r->versioned ? "versioned" : "unversioned";
+    const char* web = r->twiki? r->twiki->web : "";
+    const char* topic = r->twiki? r->twiki->topic : "";
+    const char* type = NULL;
+
     switch (r->type) {
     case DAV_RESOURCE_TYPE_REGULAR: type = "regular"; break;
     case DAV_RESOURCE_TYPE_REVISION: type = "revision"; break;
@@ -122,13 +133,6 @@ void logEvent(const char* s, dav_resource* r) {
     case DAV_RESOURCE_TYPE_ACTIVITY: type = "activity"; break;
     case DAV_RESOURCE_TYPE_CONFIGURATION: type = "configuration"; break;
     }
-
-    const char* exists = r->exists ? "exists" : "does not exist";
-    const char* collection = r->collection ? "collection" : "file";
-    const char* versioned = r->versioned ? "versioned" : "unversioned";
-
-    const char* web = r->twiki? r->twiki->web : "";
-    const char* topic = r->twiki? r->twiki->topic : "";
       
     writeLog(ap_psprintf(p, "%s %s: %s %s %s, %s, base %d work %d (%s/%s)",
                          s,
@@ -234,6 +238,7 @@ static void *dav_create_server_config(pool *p, server_rec *s)
     newconf = (dav_server_conf *) ap_pcalloc(p, sizeof(*newconf));
 
     newconf->lockdb_path = NULL;
+
     dav_create_uuid_state(&newconf->st);
 
     return newconf;
@@ -299,6 +304,7 @@ static void *dav_merge_dir_config(pool *p, void *base, void *overrides)
     newconf->dir = DAV_INHERIT_VALUE(parent, child, dir);
 
     newconf->twiki_dir_type = DAV_INHERIT_VALUE(parent, child, twiki_dir_type);
+    newconf->twiki_dir_root = DAV_INHERIT_VALUE(parent, child, twiki_dir_root);
     newconf->twiki_access_script = DAV_INHERIT_VALUE(parent, child, twiki_access_script);
 
     newconf->allow_depthinfinity = DAV_INHERIT_VALUE(parent, child,
@@ -393,7 +399,7 @@ int dav_get_twiki_dir_type(const request_rec *r) {
 
 const char* dav_get_twiki_dir_root(const request_rec* r) {
     dav_dir_conf *conf = ap_get_module_config(r->per_dir_config, &dav_module);
-    return conf->twiki_dir_type ? conf->dir : NULL;
+    return conf->twiki_dir_root;
 }
 
 const dav_dyn_hooks *dav_get_provider_hooks(request_rec *r, int provider_type)
@@ -497,6 +503,9 @@ static const char *dav_cmd_davlockdb(cmd_parms *cmd, void *config, char *arg1)
     arg1 = ap_os_canonical_filename(cmd->pool, arg1);
     conf->lockdb_path = ap_server_root_relative(cmd->pool, arg1);
 
+	/* Initialise the TWiki protections cache DB */
+	PROT_setDBpath(conf->lockdb_path);
+
     return NULL;
 }
 
@@ -544,20 +553,33 @@ static const char *dav_cmd_limitxmlrequestbody(cmd_parms *cmd, void *config,
 }
 
 /*
- * TAKE3 command handler for TWiki
+ * TAKE2 command handler for TWikiDir
  */
-static const char *dav_cmd_twiki(cmd_parms *cmd, void *config,
+static const char *dav_cmd_twiki_dir(cmd_parms *cmd, void *config,
                                          char* arg1, char* arg2) {
   dav_dir_conf *conf = config;
 
-  conf->twiki_access_script = ap_pstrdup(cmd->pool, arg1);
-
-  if (strcasecmp(arg2, "pub") == 0) {
+  if (strcasecmp(arg1, "pub") == 0) {
       conf->twiki_dir_type = TWIKI_PUB;
   }
-  else if (strcasecmp(arg2, "data") == 0) {
+  else if (strcasecmp(arg1, "data") == 0) {
       conf->twiki_dir_type = TWIKI_DATA;
   }
+
+  conf->twiki_dir_root = ap_pstrdup(cmd->pool, arg2);
+
+  return NULL;
+}
+
+/*
+ * TAKE1 command handler for TWikiScript
+ */
+static const char *dav_cmd_twiki_script(cmd_parms *cmd, void *config,
+                                         char* arg1) {
+  dav_dir_conf *conf = config;
+
+  arg1 = ap_os_canonical_filename(cmd->pool, arg1);
+  conf->twiki_access_script = ap_server_root_relative(cmd->pool, arg1);
 
   return NULL;
 }
@@ -984,7 +1006,7 @@ static int dav_method_get(request_rec *r)
     result = dav_get_resource(r, &resource);
     if (result != OK)
         return result;
-    logEvent("GET ", resource);
+    LOGEVENT("GET ", resource);
     if (!resource->exists) {
         /* Apache will supply a default error for this. */
         return HTTP_NOT_FOUND;
@@ -1160,7 +1182,7 @@ static int dav_method_post(request_rec *r)
     if (result != OK) {
         return result;
     }
-    logEvent("POST ", resource);
+    LOGEVENT("POST ", resource);
 
     /* Note: depth == 0. Implies no need for a multistatus response. */
     if ((err = dav_validate_request(r, resource, 0, NULL, NULL,
@@ -1202,7 +1224,7 @@ static int dav_method_put(request_rec *r)
     if (result != OK) {
         return result;
     }
-    logEvent("PUT ", resource);
+    LOGEVENT("PUT ", resource);
 
     /* If not a file or collection resource, PUT not allowed */
     if (resource->type != DAV_RESOURCE_TYPE_REGULAR) {
@@ -1434,7 +1456,7 @@ static int dav_method_delete(request_rec *r)
     result = dav_get_resource(r, &resource);
     if (result != OK)
         return result;
-    logEvent("DELETE ", resource);
+    LOGEVENT("DELETE ", resource);
     if (!resource->exists) {
         /* Apache will supply a default error for this. */
 	return HTTP_NOT_FOUND;
@@ -1563,7 +1585,7 @@ static int dav_method_options(request_rec *r)
     result = dav_get_resource(r, &resource);
     if (result != OK)
         return result;
-    logEvent("OPTIONS ", resource);
+    LOGEVENT("OPTIONS ", resource);
 
     /* determine which providers are available */
     dav_level = "1";
@@ -1777,7 +1799,7 @@ static int dav_method_propfind(request_rec *r)
     if (result != OK)
         return result;
 
-    logEvent("PROPFIND ", resource);
+    LOGEVENT("PROPFIND ", resource);
 
     if (dav_get_resource_state(r, resource) == DAV_RESOURCE_NULL) {
 	/* Apache will supply a default error for this. */
@@ -2042,7 +2064,7 @@ static int dav_method_proppatch(request_rec *r)
     result = dav_get_resource(r, &resource);
     if (result != OK)
         return result;
-    logEvent("PROPPATCH ", resource);
+    LOGEVENT("PROPPATCH ", resource);
     if (!resource->exists) {
 	/* Apache will supply a default error for this. */
 	return HTTP_NOT_FOUND;
@@ -2244,7 +2266,7 @@ static int dav_method_mkcol(request_rec *r)
     result = dav_get_resource(r, &resource);
     if (result != OK)
         return result;
-    logEvent("MKCOL ", resource);
+    LOGEVENT("MKCOL ", resource);
 
     if (resource->exists) {
 	/* oops. something was already there! */
@@ -2374,7 +2396,7 @@ static int dav_method_copymove(request_rec *r, int is_move)
 	return HTTP_NOT_FOUND;
     }
 
-    logEvent("COPYMOVE ", resource);
+    LOGEVENT("COPYMOVE ", resource);
 
     /* If not a file or collection resource, COPY/MOVE not allowed */
     if (resource->type != DAV_RESOURCE_TYPE_REGULAR) {
@@ -2426,7 +2448,7 @@ static int dav_method_copymove(request_rec *r, int is_move)
     if (result != OK)
         return result;
 
-    logEvent("COPYMOVE_TO ", resnew);
+    LOGEVENT("COPYMOVE_TO ", resnew);
 
     /* are the two resources handled by the same repository? */
     if (resource->hooks != resnew->hooks) {
@@ -2758,7 +2780,7 @@ static int dav_method_lock(request_rec *r)
     if (result != OK)
         return result;
 
-    logEvent("LOCK ", resource);
+    LOGEVENT("LOCK ", resource);
 
     parent_resource  = (*resource->hooks->get_parent_resource)(resource);
     if (parent_resource == NULL || !parent_resource->exists) {
@@ -2957,7 +2979,7 @@ static int dav_method_unlock(request_rec *r)
     if (result != OK)
         return result;
 
-    logEvent("UNLOCK ", resource);
+    LOGEVENT("UNLOCK ", resource);
 
     resource_state = dav_get_resource_state(r, resource);
 
@@ -3030,7 +3052,7 @@ static int dav_method_checkout(request_rec *r)
     result = dav_get_resource(r, &resource);
     if (result != OK)
         return result;
-    logEvent("CHECKOUT ", resource);
+    LOGEVENT("CHECKOUT ", resource);
     if (!resource->exists) {
         /* Apache will supply a default error for this. */
         return HTTP_NOT_FOUND;
@@ -3093,7 +3115,7 @@ static int dav_method_uncheckout(request_rec *r)
     result = dav_get_resource(r, &resource);
     if (result != OK)
         return result;
-    logEvent("UNCHECKOUT ", resource);
+    LOGEVENT("UNCHECKOUT ", resource);
     if (!resource->exists) {
         /* Apache will supply a default error for this. */
         return HTTP_NOT_FOUND;
@@ -3156,7 +3178,7 @@ static int dav_method_checkin(request_rec *r)
     result = dav_get_resource(r, &resource);
     if (result != OK)
         return result;
-    logEvent("CHECKIN ", resource);
+    LOGEVENT("CHECKIN ", resource);
     if (!resource->exists) {
         /* Apache will supply a default error for this. */
         return HTTP_NOT_FOUND;
@@ -3352,43 +3374,46 @@ static int dav_handler(request_rec *r)
 static int dav_access_checker(request_rec *r)
 {
     dav_dir_conf *conf;
+    dav_resource* resource;
+    int result;
+    twiki_resources* tr;
+    const char* mode;
+	const char* script;
+	const char* whoami;
+	const char* pw;
 
     conf = (dav_dir_conf *) ap_get_module_config(r->per_dir_config,
 						 &dav_module);
 
     /* if DAV is not enabled, then we've got nothing to do */
-    if (conf->provider_name == NULL) {
-	return DECLINED;
-    }
+    if (conf->provider_name == NULL)
+	  return DECLINED;
 
-    if (r->method_number != M_GET)
+    if (r->method_number == M_GET)
+	  mode = "V";
+	else if (r->method_number == M_PUT)
+	  mode = "C";
+	else
       return DECLINED;
 
-    if (conf->twiki_access_script == NULL)
+    if (conf->twiki_dir_root == NULL)
       return DECLINED;
 
-    if (strncmp(r->uri, "/twikiedit/", strlen("/twikiedit/")) != 0) {
-      return DECLINED;
-    }
+	script = dav_get_twiki_access_script(r);
+	if (script == NULL)
+	  return DECLINED;
 
-    dav_resource* resource;
-    int result = dav_get_resource(r, &resource);
+    result = dav_get_resource(r, &resource);
     if (result != OK)
         return DECLINED;
 
-    twiki_resources* tr = resource->twiki;
-    const char* cmd = ap_psprintf(r->pool,
-                                  "%s check %s %s %s %s",
-                                  tr->script,
-                                  tr->web,
-                                  tr->topic,
-                                  tr->file,
-                                  tr->user ? tr->user : "guest");
-    writeLog(cmd);
-    /* Wait for process to finish. Dangerous? Maybe. */
-    int e = system(cmd);
-    if (e)
-        return HTTP_UNAUTHORIZED;
+	ap_get_basic_auth_pw(r, &pw);
+	whoami = r->connection->user;
+
+    tr = resource->twiki;
+
+	if (!PROT_accessible(tr->web, tr->topic, mode, whoami))
+      return HTTP_UNAUTHORIZED;
     
     return OK;
 }
@@ -3450,70 +3475,78 @@ static int dav_type_checker(request_rec *r)
 
 static const command_rec dav_cmds[] =
 {
-    {
+  {
 	"DAV",
 	dav_cmd_dav,
 	NULL,
 	ACCESS_CONF,            /* per directory/location */
 	TAKE1,
-	"turn TWikiDAV on/off for a directory or location"
-    },
-    {
+	"turn DAV on/off for a directory or location"
+  },
+  {
 	"DAVLockDB",
 	dav_cmd_davlockdb,
 	NULL,
 	RSRC_CONF,              /* per server */
 	TAKE1,
 	"specify a lock database"
-    },
-    {
+  },
+  {
 	"DAVMinTimeout",
 	dav_cmd_davmintimeout,
 	NULL,
 	ACCESS_CONF|RSRC_CONF,  /* per directory/location, or per server */
 	TAKE1,
 	"specify minimum allowed timeout"
-    },
-    {
+  },
+  {
 	"DAVDepthInfinity",
 	dav_cmd_davdepthinfinity,
 	NULL,
 	ACCESS_CONF|RSRC_CONF,  /* per directory/location, or per server */
 	FLAG,
 	"allow Depth infinity PROPFIND requests"
-    },
-    {
+  },
+  {
 	"DAVParam",
 	dav_cmd_davparam,
 	NULL,
 	ACCESS_CONF|RSRC_CONF,  /* per directory/location, or per server */
 	TAKE2,
 	"DAVParam <parameter name> <parameter value>"
-    },
-    {
+  },
+  {
 	"LimitXMLRequestBody",
 	dav_cmd_limitxmlrequestbody,
 	NULL,
 	ACCESS_CONF|RSRC_CONF,  /* per directory/location, or per server */
 	TAKE1,
 	"Limit (in bytes) on maximum size of an XML-based request body"
-    },
-    {
-        "TWiki",
-        dav_cmd_twiki,
-        NULL,
-        ACCESS_CONF,    /* per directory/location */
-        TAKE2,
-        "access script and dir type (pub or data) for twiki dir."
-    },
-    { NULL }
+  },
+  {
+	"TWikiDir",
+	dav_cmd_twiki_dir,
+	NULL,
+	ACCESS_CONF,    /* per directory/location */
+	TAKE2,
+	"dir type (pub or data) and canonical file root for twiki dir"
+  },
+  {
+	"TWikiScript",
+	dav_cmd_twiki_script,
+	NULL,
+	ACCESS_CONF,    /* per directory/location */
+	TAKE1,
+	"script for twiki checkin"
+  },
+  { NULL }
 };
 
 static const handler_rec dav_handlers[] =
-{
+  {
     {"dav-handler", dav_handler},
     { NULL }
-};
+  };
 
 module MODULE_VAR_EXPORT dav_module =
 {

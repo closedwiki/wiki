@@ -24,6 +24,7 @@
 #include "http_log.h"
 #include "http_protocol.h"	/* for ap_set_* (in dav_fs_set_headers) */
 #include "http_request.h"       /* for ap_update_mtime() */
+#include "http_core.h"
 
 #include "mod_dav.h"
 #include "dav_fs_repos.h"
@@ -544,73 +545,136 @@ static dav_error *dav_fs_deleteset(pool *p, const dav_resource *resource)
     return NULL;
 }
 
-/** Get TWiki position info for this resource, and add it to the resource. 
- * If the resource is a twiki resource, and we are not allowed to edit
- * the resource, return NULL. This is equivalent to mod_dav not recognising
- * the resource at all, so it won't respond to any queries about it.
+/** Create a TWiki resource decorator for resources that are known to be in a TWiki
+ * tree. This includes the root, webs, topics and attachments.
  */
+static twiki_resources* make_twiki_resource(pool* p,
+                                            int type,
+                                            const char* script,
+                                            const char* web, int webl,
+                                            const char*topic, int topicl,
+                                            const char* file) {
+
+  twiki_resources* tr = (twiki_resources *) ap_pcalloc(p, sizeof(twiki_resources));
+  tr->type = type;
+  tr->script = ap_pstrdup(p, script);
+  if (webl > 0) {
+    tr->web = ap_pcalloc(p, webl + 1);
+    strncpy((char*)tr->web, web, webl);
+  }
+  if (topicl > 0) {
+    tr->topic = ap_pcalloc(p, topicl + 1);
+    strncpy((char*)tr->topic, topic, topicl);
+  }
+  tr->file = ap_pstrdup(p, file);
+
+  return tr;
+}
+
+/**
+ * Get TWiki info for this resource, and add it to the resource. The info built up
+ * is based on a parse of the filename of the resource (which is canonical with the
+ * directory infor path).
+ */
+extern int dav_get_twiki_dir_type(const request_rec *r);
+extern const char* dav_get_twiki_dir_root(const request_rec *r);
+extern const char* dav_get_twiki_access_script(const request_rec *r);
 static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* resource) {
 
     int type = dav_get_twiki_dir_type(r);
+    const char *a, *b, *web, *topic;
+    int webl, topicl;
+
     if (!type)
         /* Not a twiki enabled dir */
         return resource;
 
-    const char* a = dav_get_twiki_dir_root(r);
+    a = dav_get_twiki_dir_root(r);
+    b = r->filename;
 
-    if (!a)
-        return NULL;
-    const char *b = r->filename;
+    if (!a || !b)
+        return resource;
+
+    /* remove common prefix and the / after it */
     while (*a == *b && *a != '\0' && *b != '\0') {
         a++; b++;
     }
     while (*b == '/' || *b == '\\')
         b++;
-    const char* web = b;
+
+    if (!*b) {
+      /* This is the root of the web hierarchy, and should be browseable */
+      resource->twiki = make_twiki_resource(r->pool,
+                                            type,
+                                            dav_get_twiki_access_script(r),
+                                            NULL, 0,
+                                            NULL, 0,
+                                            NULL);
+      return resource;
+    }
+
+    /* next path component is the web */
+    web = b;
     while (*b != '\0' && *b != '/' && *b != '\\') {
         b++;
     }
-    int webl = b - web;
-    if (!*b)
-        return NULL;
-    b++;
-    const char* topic = b;
+    webl = b - web;
+
+    if (!*b) {
+      /* This is a TWiki web, and should be browseable, filtered by TWiki
+       * protections, though not versioned */
+      resource->twiki = make_twiki_resource(r->pool,
+                                            type,
+                                            dav_get_twiki_access_script(r),
+                                            web, webl,
+                                            NULL, 0,
+                                            NULL);
+      return resource;
+    }
+    b++; /* trailing / */
+
+    /* and now the topic */
+    topic = b;
     while (*b != '\0' && *b != '/' && *b != '\\' && *b != '.') {
         b++;
     }
-    if (!*b)
-        return NULL;
-    int topicl = b - topic;
+    topicl = b - topic;
 
+    if (!*b) {
+      /* This is a topic directory, and should be browseable for attachments,
+       filtered by protections, though not versioned */
+      resource->twiki = make_twiki_resource(r->pool,
+                                            type,
+                                            dav_get_twiki_access_script(r),
+                                            web, webl,
+                                            topic, topicl,
+                                            NULL);
+      return resource;
+    }
 
+    /* if this is data, expect a .txt extension. If it's pub, expect a subdirectory. */
     if (type == TWIKI_DATA && strcmp(b, ".txt") != 0) {
-        return NULL;
+        return resource;
     } else if (type == TWIKI_PUB) {
         if (*b != '/' && *b != '\\')
-            return NULL;
+            return resource;
         b++;
         while (*b != '\0' && *b != '/' && *b != '\\' && *b != '.') {
             b++;
         }
         if (*b == '/' || *b == '\\')
-            return NULL;
+            return resource;
     }
 
+    /* This is a twiki file (topic or attachment), versioned, checked out */
     resource->versioned = 1;
     resource->working = 1; /* to make sure it gets checked in */
-
-    twiki_resources* tr =
-        (twiki_resources *) ap_pcalloc(r->pool, sizeof(twiki_resources));
-    resource->twiki = tr;
-    tr->type = type;
-    tr->script = ap_pstrdup(r->pool, dav_get_twiki_access_script(r));
-    tr->web = ap_pcalloc(r->pool, webl + 1);
-    strncpy(tr->web, web, webl);
-    tr->topic = ap_pcalloc(r->pool, topicl + 1);
-    strncpy(tr->topic, topic, topicl);
-    tr->file = ap_pstrdup(r->pool, r->filename);
-    tr->user = ap_pstrdup(r->pool, ap_get_remote_logname(r));
-
+    resource->twiki = make_twiki_resource(r->pool,
+                                          type,
+                                          dav_get_twiki_access_script(r),
+                                          web, webl,
+                                          topic, topicl,
+                                          r->filename);
     return resource;
 }
 
