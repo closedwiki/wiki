@@ -336,24 +336,10 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 
 __Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required. *This plugin makes extensive use of new features added to TWiki in the Feb 2003 release*. Earlier versions lack all the features described here. Make sure you install using the zip appropriate to your TWiki installation. If you install an earlier version of the plugin with the Feb 2003 release, note that change notification will not function correctly.
 
-	* Make sure you have Time::ParseDate installed in your perl installation (available from www.cpan.org)
+	* Make sure you have Time::ParseDate installed in your perl installation (available from http://www.cpan.org)
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
-	| ==data/TWiki/ActionTrackerPlugin.txt== | Plugin topic |
-	| ==bin/actionnotify== | Mailer script |
-	| ==templates/actionnotify.tmpl== | Page template for notify message |
-	| ==templates/edit.action.tmpl== | Action editor page template |
-	| ==templates/actionform.tmpl== | Action editor page subtemplate |
-	| ==lib/TWiki/Plugins/ActionTrackerPlugin.pm== | Plugin Perl module |
-	| ==lib/TWiki/Plugins/ActionTrackerPlugin/Action.pm== | Perl support module |
-	| ==lib/TWiki/Plugins/ActionTrackerPlugin/ActionNotify.pm== | Perl support module |
-	| ==lib/TWiki/Plugins/ActionTrackerPlugin/ActionSet.pm== | Perl support module |
-	| ==lib/TWiki/Plugins/ActionTrackerPlugin/Attrs.pm== | Perl support module |
-	| ==lib/TWiki/Plugins/ActionTrackerPlugin/AttrDef.pm== | Perl support module |
-	| ==lib/TWiki/Plugins/ActionTrackerPlugin/Config.pm== | Configuration module |
-	| ==lib/TWiki/Plugins/ActionTrackerPlugin/Format.pm== | Perl support module |
-	| ==lib/TWiki/Plugins/ActionTrackerPlugin/build.xml== | Ant build file |
-	| ==lib/TWiki/Plugins/ActionTrackerPlugin/test.zip== | Test scripts |
+%$MANIFEST%
 	* Unzip ==ActionTrackerPlugin.zip== in your twiki installation directory.
 	* Configure lib/TWiki/Plugins/ActionTrackerPlugin/Config.pm appropriately for your installation. Several of the configuration items are the same as in lib/TWiki.cfg - you can copy your local values from there if you're not sure what you're doing. If you are using Rcs<nop>Lite, just ignore the rlogCmd; you can't use the changedsince feature with Rcs<nop>Lite anyway.
 	* If the plugin is installed and enabled correctly you should see a formatted action below: %ACTION{who=TWikiGuest,due="1 Jan 2003",open}% Example action
@@ -402,7 +388,7 @@ Due to limitations in the Time::Parsedate module, dates before January 1, 1970 m
 ---+ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
-|  Plugin Version: | 2.010 |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | 4 Jan 2002: Initial version |
 |			| 9 Jan 2002: Bugfix version |
 |			| 11 Jan 2002: Added ACTIONSEARCH for selected webs and topics; Changed action editor to use a template; Eliminated UNIX dependencies; Fixed formatting of actions in bulleted lists |
@@ -412,7 +398,7 @@ Due to limitations in the Time::Parsedate module, dates before January 1, 1970 m
 |			| 30 Apr 2003: Version 2.0; Large sections rewritten to take advantage of improvements in Plugin support, eliminating two scripts in bin. Added UIDs and formattable action searches |
 |			| 21 May 2003: Non-standard fields. Configurability of tables and action editor. Non-standard attributes. Eliminated chdir. Multi-line actions. Optimisation of notifies. |
 |			| 3 Feb 2004: Fixes for internationalisation, name matching, QBE, within= behaviour, documentation. |
-|  CPAN Dependencies: | Time::ParseDate |
+|  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPlugin |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev |
@@ -442,3 +428,5 @@ WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details, published at
 http://www.gnu.org/copyleft/gpl.html
+
+--- TWiki:Main/CrawfordCurrie - %$DATE%
