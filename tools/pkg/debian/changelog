@@ -1,3 +1,8 @@
+twiki (20040902-2) unstable; urgency=emergency
+  * removed Text::Diff, added depends libtext-diff-perl (Closes #29522)
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 13 Mar 2005 00:00:01 -1000
+
 twiki (20040902-1) unstable; urgency=high
   * upgraded to 02-Sept-2004 release (Cairo) 
     (Closes :#270143, #283517, #281597)
@@ -14,7 +19,7 @@ twiki (20040902-1) unstable; urgency=high
   * added Brazilian Portuguese translation of debconf messages 
     Thanks to Tiago Bortoletto Vaz (Closes: #267513)
 
- -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 16 Nov 2005 00:00:01 -1000
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 16 Nov 2004 00:00:01 -1000
 
 twiki (20030201-6) unstable; urgency=emergency
 

@@ -102,6 +102,7 @@ install: build
 
 	cp -pR lib/* debian/twiki/usr/share/perl5/
 	rm -r debian/twiki/usr/share/perl5/Algorithm
+	rm -r debian/twiki/usr/share/perl5/Text
 	cp -p debian/apache.conf debian/twiki/etc/twiki/
 
 #!!!!why does this not work?
