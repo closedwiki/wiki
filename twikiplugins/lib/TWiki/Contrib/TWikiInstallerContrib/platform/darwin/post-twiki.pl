@@ -2,11 +2,12 @@
 # post-twiki.sh
 use strict;
 use Data::Dumper qw( Dumper );
-use Cwd qw( getcwd );
+use Cwd qw( cwd );
+use File::Basename qw( basename );
 
 BEGIN {
     use Config;
-    my $localLibBase = getcwd() . "/cgi-bin/lib/CPAN/lib/site_perl/" . $Config{version};
+    my $localLibBase = cwd() . "/cgi-bin/lib/CPAN/lib/site_perl/" . $Config{version};
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
     # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
 };
@@ -15,6 +16,19 @@ system( "mkdir -p htdocs/twiki/" );
 system( "mv cgi-bin/tmp/twiki/pub/* htdocs/twiki/" );
 system( "mkdir twiki/templates" );
 system( "cp cgi-bin/tmp/twiki/templates/* twiki/templates/" );
+
+my $agent = "TWikiInstaller: " . basename( $0 );
+my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;
+$mech->cgibin( "http://localhost/~twiki/cgi-bin/twiki" );
+
+# open up the system (could be locked down at the end)
+$mech->edit( "Main.TWikiAdminGroup" );
+my $text = $mech->value( "text", 1 );
+$text =~ s/(\* Set GROUP = )PeterThoeny/$1TWikiGuest/;
+$mech->field( text => $text );
+$mech->click_button( value => 'Save' );
+
+################################################################################
 
 #rm -rf cgi-bin/install_twiki.cgi cgi-bin/tmp/
 
@@ -25,34 +39,25 @@ system( "cp cgi-bin/tmp/twiki/templates/* twiki/templates/" );
 
 if ( -e "TWikiInstallationReport.html" )
 {
-    use WWW::Mechanize;
-
-    my $tt = TWiki::Topic->new() or die $!;
-    
-    my $mech = WWW::Mechanize::TWiki->new( agent => 'TWikiInstaller', autocheck => 1 ) or die $!;
-    
-    my $baseUrl = "http://localhost/~twiki/cgi-bin/twiki/view";
-    my $baseWebUrl = "$baseUrl/TWiki";
-    
     ################################################################################
     # attach TWikiInstallationReport
     
     my $topic = 'TWikiInstallationReport';
-    $mech->get( "http://localhost/~twiki/cgi-bin/twiki/edit/TWiki/$topic" );
+    $mech->edit( "TWiki.$topic" );
     
-    $mech->field( text => qq[%TOC%\n\n%INCLUDE{"%ATTACHURL%/TWikiInstallationReport.html"}%\n] );
+    $mech->field( text => qq[%TOC%\n\n%INCLUDE{"%ATTACHURL%/$topic.html"}%\n] );
     $mech->click_button( value => 'Save' );
     
     $mech->follow_link( text => 'Attach' );
     if ( $mech->submit_form(
 			    form_name => 'main',
 			    fields    => { 
-				filepath => getcwd() . "/TWikiInstallationReport.html",
+				filepath => cwd() . "/$topic.html",
 				filecomment => `date`,
 				hidefile => undef,
 			    },
 			    ) 
-	 ) { unlink "TWikiInstallationReport.html" }
+	 ) { unlink "${topic}.html" }
 }
 
 ################################################################################
@@ -72,7 +77,7 @@ package WWW::Mechanize::TWiki;
 
 use strict;
 use warnings FATAL => 'all';
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use base qw( WWW::Mechanize );
 
@@ -83,30 +88,32 @@ sub new {
     return $self;
 }
 
-use Data::Dumper qw( Dumper );
-sub go {
+sub cgibin {
     my $self = shift;
-    my %args = @_;
-    return $args{url};
+    my $cgibin = shift;
+    my $args = @_;
+
+    $self->{cgibin} = $cgibin;
+
+    return $self;
+}
+
+# pub (that's all the directories, right?)
+# config (query on page text or bin script for cgibin and pub (and anything else))
+# page list?
+# web exists?
+
+# maps function calls into twiki urls
+sub AUTOLOAD {
+    our ($AUTOLOAD);
+    no strict 'refs';
+    (my $action = $AUTOLOAD) =~ s/.*:://;
+    *$AUTOLOAD = sub {
+        my ($self, $topic, $args) = @_;
+        (my $url = URI->new( "$self->{cgibin}/$action/$topic" ))->query_form( $args );
+        return $self->get( $url );
+    };
+    goto &$AUTOLOAD;
 }
 
 ################################################################################
-
-package TWiki::Topic;
-
-use strict;
-use warnings FATAL => 'all';
-our $VERSION = '0.01';
-
-#use base qw();
-
-sub new {
-    my $class = shift;
-    my $self  = { @_,
-#  defaults here...
-	      };
-    return bless ($self, $class);
-}
-
-
-
