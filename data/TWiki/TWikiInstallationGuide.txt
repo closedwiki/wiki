@@ -36,7 +36,7 @@ __Note:__ These installation notes assume user =nobody= for all files manupulate
 	* Point your browser at http://your.domain.com/twiki/bin/view and start TWiki-ing away!
 	* Note in case the cgi scripts are __not__ running as user =nobody=: The =*,v= RCS repository files delivered with the installation package are locked by user =nobody= . In case the user is different (e.g. =www-data= ), it is not possible to check in files, this has the effect that the topic version number does not increase when saving a topic. In this case you need to unlock all repository files and lock them as user =www-data= (check the rcs man pages), or simply delete all the repository files. A simple way to switch the locker of the RCS files is to use sed: <br> =for f in *,v; do sed 's/nobody/www-data/' $f &gt; x; mv x $f; done=
 	* Security issue: Directories =twiki/data= , =twiki/templates= and all its subdirectories should be set so that they are *not* visible as a URL. (Alternatively, move the directries to a place where they are not visible, and change the variables in =twiki/bin/wikicfg.pm= accordingly)
-	* Enable email notification of topic changes, <A href="TWikiDocumentation#notification">(4)</A> has more.
+	* Enable email notification of topic changes, <A href="TWikiDocumentation#notification">Notification of Changes</A> has more.
 	* Add the <a href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PoweredByTWikiLogo">PoweredByTWikiLogo</a> if TWiki is installed on a public web server.
 
 	* Optional: You can add new rendering rules or new %<nop>VARIABLES%. To insure an easy upgrade of TWiki it is recommended to do this customization in =twiki/bin/wikicfg.pm= , not =twiki/bin/wiki.pm= .
@@ -69,7 +69,7 @@ __Note:__ These installation notes assume user =nobody= for all files manupulate
 			* Customize the WEBTOPICLIST variable to contain the web specific links you prefer.
 			* Optional: Set the WEBCOPYRIGHT variable to have a web-specific copyright text (at the bottom of each topic).
 		* If needed, create customized templates in the new templates directory. (Non existing templates are inherited from =twiki/templates= )
-		* If you want to use a category table, copy the three files =twikicatitems.tmpl= , =twikicatedit.tmpl= and =twikicatview.tmpl= from the =twiki/templates/Know= directory to the new templates directory, and customize it. More on that in <A href="TWikiDocumentation#category">(5)</A> TWiki Category Table.
+		* If you want to use a category table, copy the three files =twikicatitems.tmpl= , =twikicatedit.tmpl= and =twikicatview.tmpl= from the =twiki/templates/Know= directory to the new templates directory, and customize it. More on that in <A href="TWikiDocumentation#category">TWiki Category Table</A>.
 		* In case you want usage statistics for this web: Copy file =WebStatistics.txt= from the =twiki/data/Main= directory to the new data directory. Edit topic <nop>WebStatistics in the new web and delete old usage entries.
 
 
@@ -97,9 +97,12 @@ drwxrwxr-x	3 twiki twiki	4096 Jun 17 16:34 ..
 -rwxrwxr-x	1 twiki twiki  14543 Jul 20 18:46 upload
 -rwxrwxr-x	1 twiki twiki	4755 May 22 18:11 view
 -rwxrwxr-x	1 twiki twiki	1689 Jun 20 20:10 viewfile
--rw-rw-r--	1 twiki twiki  40103 Aug 18 13:00 wiki.pm
--rw-rw-r--	1 twiki twiki  11521 Aug 19 18:38 wikicfg.pm
--rw-rw-r--	1 twiki twiki  13969 Aug 19 00:30 wikisearch.pm
+-rw-rw-r--	1 twiki twiki  34123 Nov  1 15:43 wiki.pm
+-rw-rw-r--	1 twiki twiki	7234 Oct 23 00:34 wikiaccess.pm
+-rw-rw-r--	1 twiki twiki  11719 Oct 28 21:58 wikicfg.pm
+-rw-rw-r--	1 twiki twiki	6441 Nov  1 23:13 wikiprefs.pm
+-rw-rw-r--	1 twiki twiki  13160 Oct 27 14:53 wikisearch.pm
+-rw-rw-r--	1 twiki twiki  10540 Oct 28 21:43 wikistore.pm
 </pre>
 
 
@@ -120,6 +123,8 @@ drwxrwxr-x	2 twiki twiki	4096 May  1 01:24 Main
 -rw-rw-r--	1 twiki twiki	 907 Jul 20 16:01 notwiki.tmpl
 -rw-rw-r--	1 twiki twiki	 341 Mar  8 11:39 noweb.tmpl
 -rw-rw-r--	1 twiki twiki	1000 Mar  8 11:40 oops.tmpl
+-rw-rw-r--	1 twiki twiki	1043 Oct 23 19:17 oopsaccesschange.tmpl
+-rw-rw-r--	1 twiki twiki	1036 Oct 23 19:17 oopsaccessview.tmpl
 -rw-rw-r--	1 twiki twiki	 914 Mar  8 11:40 oopsdel.tmpl
 -rw-rw-r--	1 twiki twiki	1423 May 29 01:23 oopslocked.tmpl
 -rw-rw-r--	1 twiki twiki	1067 Mar  8 11:41 oopsregexist.tmpl
@@ -250,4 +255,4 @@ drwxrwxrwx	6 nobody  nobody  4096 Aug  3 01:21 ..
 -rw-rw-r--	1 twiki	twiki	 144 Mar  9  1999 zip.gif
 </pre>
 
--- Main.PeterThoeny - 23 Sep 2000 <br>
+-- Main.PeterThoeny - 02 Nov 2000 <br>
