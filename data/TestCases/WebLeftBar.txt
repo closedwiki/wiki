@@ -1,11 +1,31 @@
 %META:TOPICINFO{author="guest" date="1101123389" format="1.0" version="1.2"}%
 %META:TOPICPARENT{name="WebHome"}%
 </form>
+<script type="text/javascript">
+function toggleShowHide( e )
+{
+   var display = e.style.display;
+   if ( display == 'none' )
+   {
+      display = '';
+   }
+   else
+   {
+      display = 'none';
+   }
+   e.style.display = display;
+}
+</script>
+<a href="#" onclick="javascript:toggleShowHide(document.getElementById('toggle_toc')); return false;"><b>Table of Contents</b></a>
+<div id="toggle_toc">
+%TOC{ "%BASETOPIC%" depth="2" }%
+</div>
+
 %INCLUDE{CreateNewTestCaseForm}%
 <form>
 
 <img src="%PUBURL%/TWiki/TWikiDocGraphics/recentchanges.gif" /> [[%SCRIPTURL%/changes%SCRIPTSUFFIX%/%WEB%/ Changes]]<br/>
-<img src="%PUBURL%/TWiki/TWikiDocGraphics/home.gif" /> [[%HOMETOPIC%][%WEB%]]<br/>
+<img src="%PUBURL%/TWiki/TWikiDocGraphics/home.gif" /> [[%HOMETOPIC%][%WEB%]] &middot; [[WebTopicList][Topics]]<br/>
 <img src="%PUBURL%/TWiki/TWikiDocGraphics/home.gif" /> [[TWiki.%HOMETOPIC%][TWiki]]
 
 ---++ Admin topics
