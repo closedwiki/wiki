@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "29 Jul 2003";
+$wikiversion      = "31 Jul 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1332,6 +1332,7 @@ sub handleIncludeFile
     my( $theAttributes, $theTopic, $theWeb, $verbatim, @theProcessedTopics ) = @_;
     my $incfile = extractNameValuePair( $theAttributes );
     my $pattern = extractNameValuePair( $theAttributes, "pattern" );
+    my $section = extractNameValuePair( $theAttributes, "section" );
     my $rev = extractNameValuePair( $theAttributes, "rev" );
 
     if( $incfile =~ /^http\:/ ) {
@@ -1401,9 +1402,21 @@ sub handleIncludeFile
         } else {
             ( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
         }
-        # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
-        $text =~ s/.*?%STARTINCLUDE%//s;
-        $text =~ s/%STOPINCLUDE%.*//s;
+        if( $section ) {
+            # This is where we handle sections
+            if ($text =~ /%SECTION{\s*\"?$section\"?\s*}%/) {
+                # Remove text preceding the section marker
+                $text =~ s/.*?%SECTION{\s*\"?$section\"?\s*}%//s;
+                # Remove text following the section marker
+                $text =~ s/%ENDSECTION%.*//s;
+            } else {
+                $text = ""; # Section doesn't exist - include no text
+            }
+        } else {
+            # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
+            $text =~ s/.*?%STARTINCLUDE%//s;
+            $text =~ s/%STOPINCLUDE%.*//s;
+        }
     } # else is a file with relative path, e.g. $dataDir/../../path/to/non-twiki/file.ext
 
     if( $pattern ) {
@@ -1882,6 +1895,8 @@ sub handleInternalTags
     $_[0] =~ s/%STATISTICSTOPIC%/$statisticsTopicname/g;
     $_[0] =~ s/%STARTINCLUDE%//g;
     $_[0] =~ s/%STOPINCLUDE%//g;
+    $_[0] =~ s/%SECTION{(.*?)}%//g;
+    $_[0] =~ s/%ENDSECTION%//g;
     $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/ge; # can be nested
     $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/ge if( $_[0] =~ /%SEARCH/o );
     $_[0] =~ s/%METASEARCH{(.*?)}%/&handleMetaSearch($1)/ge;
