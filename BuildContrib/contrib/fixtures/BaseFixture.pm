@@ -2,7 +2,7 @@ use strict;
 
 =begin text
 
----+ Package Base<nop>Fixture - test fixture
+---++ Package Base<nop>Fixture - test fixture
 Basic class of all test fixtures. Sets up a very basic TWiki environment
 suitable for testing plugins. As well as the standard =set_up= and
 =tear_down=, provides functions for the generation of data (.txt) files

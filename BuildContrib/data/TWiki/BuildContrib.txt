@@ -15,9 +15,14 @@ Note that this topic and all the embedded POD documentation are generated using 
 
 The build environment does _not_ assume the use of CVS, though it is highly recommended.
 
----++ !TWikiCLI - command line interface to TWiki
+---++ Test Fixtures
+The are a number of test fixtures in the repository that can be used for testing plugins with =Test::Unit=. The fixtures replace the =TWiki::Func=, =TWiki::Store= and TWiki modules, allowing a stand-alone unit test suite to be built for the plugin. The easiest way to use the fixtures is to copy the tests from an existing plugin that uses them - for example, CommentPlugin, ActionTrackerPlugin, WebDAVPlugin or FormQueryPlugin - and modify the tests appropriately for your plugin.
 
-Note that the !TWikiCLI (BuildContrib/contrib/bin/twikicli) feature is strictly experimental.
+The fixtures do not replace _all_ of the TWiki core functionality, just those pieces used by the plugins. If you find a piece is missing, and you need it, please feel free to extend the fixtures on condition that you check your improvements back in.
+
+---++ <nop>TWikiCLI - command line interface to TWiki
+
+Note that the <nop>TWikiCLI (BuildContrib/contrib/bin/twikicli) feature is strictly experimental.
 Its interfaces are likely to change and it may be dropped completely.
 
 Purpose:
@@ -50,11 +55,6 @@ Development notes:
 	1 This is a very rough implementation - I built one myself as I could not find one on CPAN. If
 	we find one we will trash the implementation. Hopefully we will be able to keep the functionality though
 	
----++ Test Fixtures
-The are a number of test fixtures in the repository that can be used for testing plugins with =Test::Unit=. The fixtures replace the =TWiki::Func=, =TWiki::Store= and TWiki modules, allowing a stand-alone unit test suite to be built for the plugin. The easiest way to use the fixtures is to copy the tests from an existing plugin that uses them - for example, CommentPlugin, ActionTrackerPlugin, WebDAVPlugin or FormQueryPlugin - and modify the tests appropriately for your plugin.
-
-The fixtures do not replace _all_ of the TWiki core functionality, just those pieces used by the plugins. If you find a piece is missing, and you need it, please feel free to extend the fixtures on condition that you check your improvements back in.
-
 ---++ Support scripts
 =conformance_analyser.pl= is a perl script that analyses the conformance of plugins to the API and packaging standards. It is driven from the zips downloadable from twiki.org.
 

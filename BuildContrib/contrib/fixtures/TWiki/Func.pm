@@ -1,6 +1,6 @@
 =begin text
 
----+ Package TWiki::Func - test fixture
+---++ Package TWiki::Func - test fixture
 A test fixture module that provides an ultra-thin implementation of the
 functions of the TWiki::Func module that are required by plugins and add-ons.
 

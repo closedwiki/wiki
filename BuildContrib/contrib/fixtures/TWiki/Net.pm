@@ -1,6 +1,6 @@
 =begin text
 
----+ Package TWiki::Net - test fixture
+---++ Package TWiki::Net - test fixture
 A test fixture module that provides an ultra-thin implementation of the
 functions of the TWiki::Net module that are required by plugins and add-ons.
 
