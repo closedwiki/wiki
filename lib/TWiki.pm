@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = "27 Apr 2004";
+$wikiversion      = "29 Apr 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2881,7 +2881,8 @@ sub handleInternalTags
     $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/ge; # can be nested
     $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/ge if( $_[0] =~ /%SEARCH/o );
     $_[0] =~ s/%METASEARCH{(.*?)}%/&handleMetaSearch($1)/ge;
-
+    $_[0] =~ s/%FORMFIELD{(.*?)}%/&TWiki::Render::getFormField($_[2],$_[1],$1)/ge;
+    $_[0] =~ s/%GROUPS%/join( ", ", &TWiki::Access::getListOfGroups() )/ge;  #SVEN
 }
 
 =pod
@@ -3033,12 +3034,9 @@ sub handleCommonTags
     &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
 
-    $text =~ s/%FORMFIELD{(.*?)}%/&TWiki::Render::getFormField($theWeb,$theTopic,$1)/ge;
     $text =~ s/%TOC{([^}]*)}%/&handleToc($text,$theTopic,$theWeb,$1)/ge;
     $text =~ s/%TOC%/&handleToc($text,$theTopic,$theWeb,"")/ge;
-#SVEN
-    $text =~ s/%GROUPS%/join( ", ", &TWiki::Access::getListOfGroups() )/ge;
-    
+
     # Ideally would put back in getRenderedVersion rather than here which would save removing
     # it again!  But this would mean altering many scripts to pass back verbatim
     $text = putBackVerbatim( $text, "verbatim", @verbatim );
