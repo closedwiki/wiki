@@ -16,7 +16,7 @@ __Preferences:__
 			 | Go <input type="text" name="topic" size="16">
 		  }
 
-	* Web specific background color:
+	* Web specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors)
 		* Set WEBBGCOLOR = #FFFFC0
 
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs)
