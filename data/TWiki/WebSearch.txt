@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042966680" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071558730" format="1.0" version="1.13"}%
 %META:TOPICPARENT{name="WebHome"}%
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
 	* <b>Simple search</b>:
@@ -12,7 +12,8 @@
 	  <input type="checkbox" name="bookview" /> %TWIKIWEB%.BookView
 	</td></tr></table>
 	<input type="text" name="search" size="32" />
-	<input type="submit" value="Search text" />
+	<input type="submit" value="Search text" /><br />
+	__%T% Note:__ %WIKITOOLNAME% search is literal, e.g. if you search for =sushi bar= <br /> it will search literally for "sushi bar".
 </form>
 
 
