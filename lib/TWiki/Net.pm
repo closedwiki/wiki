@@ -52,10 +52,10 @@ sub getUrl
         $thePort = 80;
     }
     if( ! $theHeader ) {
-        $theHeader = "";
+        $theHeader = "Host: $theHost";
     }
     my $result = '';
-    my $req = "GET $theUrl HTTP/1.0\r\n$theHeader\r\n\r\n";
+    my $req = "GET $theUrl HTTP/1.1\r\n$theHeader\r\n\r\n";
     my ( $iaddr, $paddr, $proto );
     $iaddr   = inet_aton( $theHost );
     $paddr   = sockaddr_in( $thePort, $iaddr );

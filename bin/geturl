@@ -27,7 +27,7 @@ if( ! $ARGV[1] ) {
 my $host   = $ARGV[0];
 my $url    = $ARGV[1];
 my $port   = $ARGV[2] || "80";
-my $header = $ARGV[3] || "";
+my $header = $ARGV[3] || "Host: $host";
 print getUrl( $host, $port, $url, $header );
 
 # =========================
@@ -35,7 +35,7 @@ sub getUrl
 {
     my ( $theHost, $thePort, $theUrl, $theHeader ) = @_;
     my $result = '';
-    my $req = "GET $theUrl HTTP/1.0\r\n$theHeader\r\n\r\n";
+    my $req = "GET $theUrl HTTP/1.1\r\n$theHeader\r\n\r\n";
     my ( $iaddr, $paddr, $proto );
     $iaddr   = inet_aton( $theHost );
     $paddr   = sockaddr_in( $thePort, $iaddr );
