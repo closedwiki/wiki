@@ -84,19 +84,17 @@ sub initPlugin
 
     # get the Interwiki site->url map topic
     my $InterFile = '';
+    my $dataDir = &TWiki::Func::getDataDir();
     if( $interFileName =~ m/^([^.]+)\.([^.]+)$/ ) {
-        $InterFile   = "$TWiki::dataDir/$1/$2.txt"; 	
-    }
-    elsif( $interFileName =~ m/^([^.]+)$/ ) {
-        $InterFile   = "$TWiki::dataDir/$installWeb/$1.txt"; 
-    }
-    else 
-    {
+        $InterFile = "$dataDir/$1/$2.txt"; 	
+    } elsif( $interFileName =~ m/^([^.]+)$/ ) {
+        $InterFile = "$dataDir/$installWeb/$1.txt"; 
+    } else {
         return 0;
     }
 
-    $InterFile =~ s/%MAINWEB%/$TWiki::mainWebname/go;
-    $InterFile =~ s/%TWIKIWEB%/$TWiki::twikiWebname/go;
+    $InterFile =~ s/%MAINWEB%/&TWiki::Func::getMainWebname()/geo;
+    $InterFile =~ s/%TWIKIWEB%/&TWiki::Func::getTwikiWebname/geo;
     &TWiki::Func::writeDebug( "- InterwikiPlugin, rules file: $InterFile" ) if $debug;
 
     # FIXME: use readWebTopic
@@ -121,33 +119,13 @@ sub initPlugin
 }
 
 # =========================
-sub DISABLE_commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-    &TWiki::Func::writeDebug( "- InterwikiPlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-}
-
-# =========================
-sub DISABLE_startRenderingHandler
+sub startRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
     &TWiki::Func::writeDebug( "- InterwikiPlugin::startRenderingHandler( $_[1] )" ) if $debug;
-}
-
-# =========================
-# Expand the Site:page references, called once per line of text
-sub outsidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
     $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\]\]|\]\[| )/&handleInterwiki($1,$2,$3,$4)/geo;
     $_[0] =~ s/$prefixPattern$sitePattern:$pagePattern$postfixPattern/&handleInterwiki($1,$2,$3,"")/geo;
-}
-
-# =========================
-sub DISABLE_insidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 }
 
 # =========================
