@@ -283,7 +283,7 @@ sub moveAttachment
 sub changeRefTo
 {
    my( $text, $oldWeb, $oldTopic ) = @_;
-   my $preTopic = '^|[\*\s\[][_\(\s]*';
+   my $preTopic = '^|[\*\s\[][-\(\s]*';
    my $postTopic = '$|[^A-Za-z0-9_.]|\.\s';
    my $metaPreTopic = '"|[\s[,\(-]';
    my $metaPostTopic = '[^A-Za-z0-9_.]|\.\s';
