@@ -8,6 +8,8 @@ use File::Basename qw( basename );
 # TODO notes:
 # * tighten up templates directory permissions (chmod -R o-w twiki/templates)
 
+sub mychomp { chomp $_[0]; $_[0] }
+
 my $startupTopic = "";
 
 BEGIN {
@@ -79,7 +81,7 @@ close( INDEX_PHP );
 
 ################################################################################
 
-system( open => "http://`hostname`/~`whoami`/cgi-bin/twiki/view/$startupTopic" );
+system( open => "http://" . mychomp(`hostname`) . "/~" . mychomp(`whoami`) . "/cgi-bin/twiki/view/$startupTopic" );
 
 ################################################################################
 ################################################################################
