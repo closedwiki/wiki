@@ -1,46 +1,62 @@
 #!/usr/bin/perl -w
 # Copyright 2004 Will Norris.  All Rights Reserved.
 # License: GPL
-
-use Data::Dumper qw( Dumper );
-
-use CGI;
+use strict;
+my $VERSION = '0.97';
 
 BEGIN {
+    ++$|;
     # Set default current working directory
     if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
         chdir $1;
     }
     # Set library paths in @INC at compile time
-    unshift @INC, '.';
-    require 'setlib.cfg';
+    require './setlib.cfg';
 }
 
+use Data::Dumper qw( Dumper );
+use CGI;
+use CGI::Carp qw( fatalsToBrowser );;
 use TWiki;
-use TWiki::Func;
 
+my $query = new CGI;
+
+my $thePathInfo = $query->path_info(); 
+my $theRemoteUser = $query->remote_user();
+my $theTopic = $query->param( 'topic' );
+my $theUrl = $query->url;
+
+my( $topic, $webName, $scriptUrlPath, $userName ) = 
+  TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+
+TWiki::UI::GetAWeb::getaweb( $webName, $topic, $userName, $query );
+
+################################################################################
+
+package TWiki::UI::GetAWeb;
 use Cwd qw( cwd );
 use Archive::Tar;
-#use IO::Zlib;
+use TWiki::Func;
 
-$| = 1;                  # no buffering
-
-&main();
-
-sub main
+sub getaweb
 {
+    my ( $webName, $topic, $userName, $query ) = @_;
+    die unless $query;
     my $error = '';
 
-    my $query = CGI->new() or die $!;
-    (my $webName = $query->path_info()) =~ s|^/?(.*)\.(tar)$|$1|;
+    ($webName = $query->path_info()) =~ s|^/?(.*?)[\/\.](.*)\.(tar)$|$1|;
     my $saveasweb = $query->param('saveasweb' ) || $webName;
 
-    # check for Web existence
-    unless ( TWiki::Func::webExists( $webName ) ) 
-    {
-	$error .= "web $webName doesn't exist\n";
-    }
+    my $dataDir = $TWiki::cfg{DataDir} || $TWiki::dataDir;
+    my $pubDir = $TWiki::cfg{PubDir} || $TWiki::pubDir;
+    my $templateDir = $TWiki::cfg{TemplateDir} || $TWiki::templateDir;
 
+    $error .= qq{web "$webName" doesn't exist<br/>} unless TWiki::Func::webExists( $webName );
+    $error .= qq{data dir "$dataDir}" doesn't exist<br/>} unless -d $dataDir;
+    $error .= qq{pub dir "$pubDir" doesn't exist<br/>} unless -d $pubDir;
+    $error .= qq{template dir "$templateDir" doesn't exist<br/>} unless -d $templateDir;
+
+    # TODO: use oops stuff
     if ( $error ) 
     {
     	print "Content-type: text/html\n\n";
@@ -53,16 +69,17 @@ sub main
 
     my $tar = Archive::Tar->new() or die $!;
     foreach my $dirEntry ( 
-			   { dir => $TWiki::dataDir, name => 'data' },
-			   { dir => $TWiki::pubDir, name => 'pub' },
-			   { dir => $TWiki::templateDir, name => 'templates' },
+			   { dir => $dataDir, name => 'data' },
+			   { dir => $pubDir, name => 'pub' },
+			   { dir => $templateDir, name => 'templates' },
 			   )
     {
 	next unless -d "$dirEntry->{dir}/$webName";
 	my $pushd = cwd();
 	chdir "$dirEntry->{dir}/$webName" or die $!;
 
-	my @files = <* */*>;		# HACK: make true recursive thingee
+	# CODE SMELL: the archive will fail if no topics end up being exported
+	my @files = grep { !/(\.htpasswd|\.htaccess|.*\.lock)/ } <* */*>;		# HACK: make true recursive thingee
 	foreach my $file ( @files )
 	{
 	    next if -d $file;
@@ -70,22 +87,13 @@ sub main
 	    open( FH, $file ) or die $!;
 	    my $contents = <FH>;
 	    
-	    $tar->add_data( "$dirEntry->{name}/$saveasweb/$file", $contents );
+	    $tar->add_data( "$dirEntry->{name}/$saveasweb/$file", $contents );	# or die ???
 	}
 	chdir $pushd;
     }
 
-#    my $fh = IO::File->new( '| gzip -c -', 'w' ) or die $!;
-#    my $fh = IO::File->new( '| cat -', 'w' ) or die $!;
-
     my $io = IO::Handle->new() or die $!;
     $io->fdopen(fileno(STDOUT), "w") or die $!;
-
-#    my $ioz = IO::Zlib->new() or die $!;
-#    $ioz->fdopen( $io, "w" ) or die $!;
-
-    $tar->write( $io );
-
-#    tie *STDOUT, 'IO::Zlib', "file.gz", "wb";
-#    print $tar->write;
+    $tar->write( $io ) or die $!;
+    $io->close() or die $!;
 }
