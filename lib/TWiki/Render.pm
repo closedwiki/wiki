@@ -41,7 +41,9 @@ use TWiki qw(:renderflags %regex $TranslationToken);
 # Globals used in rendering
 use vars qw(
 	$isList @listTypes @listElements
-        $newTopicFontColor $newTopicBgColor $linkToolTipInfo $noAutoLink $newLinkSymbol
+        $newTopicFontColor $newTopicBgColor $linkToolTipInfo $noAutoLink
+        $newLinkSymbol %ffCache
+        
     );
     
 
@@ -51,7 +53,10 @@ $noAutoLink = 0;
 
 ---++ sub initialize ()
 
-Initializes global render module state.
+Initializes global render module state from preference values (NEWTOPICBGCOLOR, NEWTOPICFONTCOLOR NEWTOPICLINKSYMBOL LINKTOOLTIPINFO NOAUTOLINK)
+
+Clears the FORMFIELD metadata cache preparatory to expanding %FORMFIELD
+tags.
 
 =cut
 
@@ -67,6 +72,8 @@ sub initialize
     $linkToolTipInfo = '$username - $date - r$rev: $summary' if( $linkToolTipInfo =~ /^on$/ );
     # Prevent autolink of WikiWords
     $noAutoLink        = TWiki::Prefs::getPreferencesValue("NOAUTOLINK") || 0;
+
+  undef %ffCache;
 }
 
 =pod
@@ -771,69 +778,78 @@ sub mailtoLinkSimple
 
 ---++ sub getFormField ( $web, $topic, $args )
 
-Handles %FORMFIELD{}% tags in topics, used in TWiki::handleInternalTags
-
-TODO: use Prefs subsystem to read form info, instead of rereadeing
-topic every time a form field value is requested.
++Returns the expansion of a %FORMFIELD{}% tag.
 
 =cut
 
 sub getFormField
 {
-    my( $web, $topic, $args ) = @_;
-    
-    my ( $altText, $found, $format );
-    my ( $formField, $formTopic, $default );
-    
-    $formField = TWiki::extractNameValuePair( $args );
-    $formTopic = TWiki::extractNameValuePair( $args, "topic" );
-    $altText   = TWiki::extractNameValuePair( $args, "alttext" );
-    $default   = TWiki::extractNameValuePair( $args, "default" ) || undef;
-    $format    = TWiki::extractNameValuePair( $args, "format" ) || '<nop>';
+   my( $web, $topic, $args ) = @_;
 
-    my $meta;
-    if ($formTopic) {
-       my $formTopicWeb;
+  my $formField = TWiki::extractNameValuePair( $args );
+  my $formTopic = TWiki::extractNameValuePair( $args, "topic" );
+  my $altText   = TWiki::extractNameValuePair( $args, "alttext" );
+  my $default   = TWiki::extractNameValuePair( $args, "default" ) || undef;
+  my $format    = TWiki::extractNameValuePair( $args, "format" );
+
+  unless ( $format ) {
+       # if null format explicitly set, return empty
+       return "" if ( $args =~ m/format\s*=/o);
+       # Otherwise default to value
+       $format = "\$value";
+  }
+
+  my $formWeb;
+  if ( $formTopic ) {
        if ($topic =~ /^([^.]+)\.([^.]+)/o) {
-	   ( $formTopicWeb, $topic ) = ( $1, $2 );
-       } else {
-	   $formTopicWeb = TWiki::extractNameValuePair( $args, "web" );
-       }
-       $formTopicWeb = $web unless defined $formTopicWeb;
-       ( $meta, my $dummyText ) = &TWiki::Store::readTopic( $formTopicWeb, $formTopic );
-    } else {
-       ( $meta, my $dummyText ) = &TWiki::Store::readTopic( $web, $topic );
-    }
+         ( $formWeb, $topic ) = ( $1, $2 );
+	   } else {
+         # SMELL: Undocumented feature, "web" parameter
+         $formWeb = TWiki::extractNameValuePair( $args, "web" );
+	   }
+       $formWeb = $web unless $formWeb;
+  } else {
+       $formWeb = $web;
+       $formTopic = $topic;
+  }
 
-    my $text = "";
-    my @fields = $meta->find( "FIELD" );
-    foreach my $field ( @fields ) {
-	my $title = $field->{"title"};
-	my $name = $field->{"name"};
-	if( $title eq $formField || $name eq $formField ) {
-	    my $value = $field->{"value"};
-	    if (length $value) {
-		$found = 1;
-		$text = $format;
-		$text =~ s/\$value/$value/g;
-	    } elsif (defined $altText) {
-		$found = 1;
-		$text = $altText;
-	    }
-	    last; #one hit suffices
-	}
-    }          
-    if (!$found) {
-	if (defined $default) {
-	    $text = $format;
-	    $text =~ s/\$value/$default/g;
-	} else {
-	    $text = $altText;
-	}
-    }
-    $text = getRenderedVersion( $text, $web );
-    return $text;
-} 
+  my $meta = $ffCache{"$formWeb.$formTopic"};
+  unless ( $meta ) {
+       my $dummyText;
+       ( $meta, $dummyText ) =
+         TWiki::Store::readTopic( $formWeb, $formTopic );
+       $ffCache{"$formWeb.$formTopic"} = $meta;
+  }
+
+  my $text = "";
+  my $found = 0;
+  if ( $meta ) {
+       my @fields = $meta->find( "FIELD" );
+       foreach my $field ( @fields ) {
+         my $title = $field->{"title"};
+         my $name = $field->{"name"};
+         if( $title eq $formField || $name eq $formField ) {
+               $found = 1;
+               my $value = $field->{"value"};
+               if (length $value) {
+                 $text = $format;
+                 $text =~ s/\$value/$value/go;
+               } elsif ( defined $default ) {
+                 $text = $default;
+               }
+               last; #one hit suffices
+         }
+       }
+  }
+
+  unless ( $found ) {
+       $text = $altText;
+  }
+
+  return "" unless $text;
+
+  return getRenderedVersion( $text, $web );
+}
 
 =pod
 
