@@ -53,7 +53,7 @@ sub main
     if ( $rev ) {
         # FIXME doesn't deal with extension correctly yet.
         my $fileContent = TWiki::Store::readAttachmentVersion( $webName, $topic, $fileName, $rev ); 
-        TWiki::writeDebug( "$fileContent" );
+        #TWiki::writeDebug( "$fileContent" );
         if ( $fileName =~ /\.txt$/ ) {
            print "Content-type: text/plain\n\n";
         } else {
