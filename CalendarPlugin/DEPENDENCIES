@@ -1,0 +1,2 @@
+Date::Calc,>=1.000,perl,Required. Download from CPAN and install.
+HTML::CalendarMonthSimple,>=1.23,perl,Required. Download from CPAN and install.

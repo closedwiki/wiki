@@ -1,0 +1,6 @@
+./data/TWiki/CalendarPlugin.txt
+./data/TWiki/CalendarPlugin.txt,v
+./lib/TWiki/Plugins/CalendarPlugin.pm
+./lib/TWiki/Plugins/CalendarPlugin/build.pl
+./pub/TWiki/CalendarPlugin/exclam.gif
+./CalendarPlugin_installer.pl
