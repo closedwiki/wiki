@@ -30,18 +30,44 @@ $query = new CGI;
 sub main
 {
     # get all parameters from the form
-    my $firstLastName = $query->param( 'FirstLastName' );
-    my $emailAddress = $query->param( 'EmailAddress' );
-    my $wikiName = $query->param( 'WikiName' );
-    my $passwordA = $query->param( 'PasswordA' );
-    my $passwordB = $query->param( 'PasswordB' );
-    my $companyName = $query->param( 'CompanyName' );
-    my $companyUrl = $query->param( 'CompanyUrl' );
-    my $countryName = $query->param( 'CountryName' );
-    my $hearFrom = $query->param( 'HearFrom' );
-    my $commentText = $query->param( 'CommentText' );
-    my $topicName = $query->param( 'TopicName' );
+    my @paramNames = $query->param();
+    my @formDataName = ();
+    my @formDataValue = ();
+    my @formDataRequired = ();
+    my $name = "";
+    my $value = "";
+    my $emailAddress = "";
+    my $firstLastName = "";
+    my $wikiName = "";
+    my $remoteUser = "";
+    my $passwordA = "";
+    my $passwordB = "";
+    foreach( @paramNames ) {
+        if( /^(Twk)([0-9])(.*)/ ) {
+            $value = $query->param( "$1$2$3" );
+            $formDataRequired[@formDataRequired] = $2;
+            $name = $3;
+            $name =~ s/([a-z0-9])([A-Z0-9])/$1 $2/go;
+            $formDataName[@formDataName] = $name;
+            $formDataValue[@formDataValue] = $value;
+            if( $name eq "Name" ) {
+                $firstLastName = $value;
+            } elsif( $name eq "Wiki Name" ) {
+                $wikiName = $value;
+            } elsif( $name eq "Login Name" ) {
+                $remoteUser = $value;
+            } elsif( $name eq "Email" ) {
+                $emailAddress = $value;
+            } elsif( $name eq "Password" ) {
+                $passwordA = $value;
+            } elsif( $name eq "Confirm" ) {
+                $passwordB = $value;
+            }
+        }
+    }
+    my $formLen = @formDataValue;
 
+    my $topicName = $query->param( 'TopicName' );
     my $thePathInfo = $query->path_info(); 
     my $theUrl = $query->url;
     ( $topic, $webName, $scriptUrlPath ) = 
@@ -50,12 +76,22 @@ sub main
     my $text = "";
     my $scriptSuffix = $wiki::scriptSuffix;
 
-    # check if required fields are filled in
-    if( ( ! $firstLastName ) || ( ! $emailAddress ) || ( ! $wikiName ) || 
-        ( ! $passwordA ) || ( ! $passwordB ) || ( $countryName eq "SelectCountry" ) )
-    {
-        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregrequ" );
+    # check if user entry already exists
+    if(  ( $wikiName ) 
+      && (  ( &wiki::topicExists( $webName,  $wikiName ) )
+         || ( htpasswdExistUser( $wikiName ) ) 
+         ) ) {
+        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregexist&param1=$wikiName" );
         return;
+    }
+
+    # check if required fields are filled in
+    my $x;
+    for( $x = 0; $x < $formLen; $x++ ) {
+        if( ( $formDataRequired[$x] ) && ( ! $formDataValue[$x] ) ) {
+            print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregrequ" );
+            return;
+        }
     }
 
     # check if wikiName is a WikiName
@@ -73,48 +109,49 @@ sub main
         return;
     }
 
-    # check if user entry already exists
-    if( htpasswdExistUser( $wikiName ) ) {
-        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregexist&param1=$wikiName" );
-        return;
-    }
-
     # everything OK
 
     # generate user entry and add to .htpasswd file
-    htpasswdAddUser( htpasswdGeneratePasswd( $wikiName, $passwordA ) );
+    if( ! $remoteUser ) {
+        htpasswdAddUser( htpasswdGeneratePasswd( $wikiName, $passwordA ) );
+    }
 
     # send email confirmation
-    $text= &wiki::readTemplate( "registernotify" );
-    $text =~ s/%WIKINAME%/$wikiName/go;
-    $text =~ s/%PASSWORD%/$passwordA/go;
+    $text = &wiki::readTemplate( "registernotify" );
     $text =~ s/%FIRSTLASTNAME%/$firstLastName/go;
+    $text =~ s/%WIKINAME%/$wikiName/go;
     $text =~ s/%EMAILADDRESS%/$emailAddress/go;
-    $text =~ s/%COMPANYNAME%/$companyName/go;
-    $text =~ s/%COMPANYURL%/$companyUrl/go;
-    $text =~ s/%COUNTRYNAME%/$countryName/go;
-    $text =~ s/%HEARFROM%/$hearFrom/go;
-    $text =~ s/%COMMENTTEXT%/$commentText/go;
+    ( $before, $after) = split( /%FORMDATA%/, $text );
+    for( $x = 0; $x < $formLen; $x++ ) {
+        if( $formDataName[$x] ne "Confirm" ) {
+            $before .= "   * $formDataName[$x]\: $formDataValue[$x]\n";
+        }
+    }
+    $text = "$before$after";
     $text = &wiki::handleCommonTags( $text, $wikiName );
     &wiki::sendEmail( $text );
 
     # create user topic if not exist
     if( ! &wiki::topicExists( $wiki::mainWebname, $wikiName ) ) {
-        $commentText =~ s/\n/ /go;
-        $text= &wiki::readTemplate( "register" );
-        $text =~ s/%FIRSTLASTNAME%/$firstLastName/go;
-        $text =~ s/%EMAILADDRESS%/$emailAddress/go;
-        $text =~ s/%COMPANYNAME%/$companyName/go;
-        $text =~ s/%COMPANYURL%/$companyUrl/go;
-        $text =~ s/%COUNTRYNAME%/$countryName/go;
-        $text =~ s/%HEARFROM%/$hearFrom/go;
-        $text =~ s/%COMMENTTEXT%/$commentText/go;
+        $text = &wiki::readTemplate( "register" );
+        ( $before, $after) = split( /%FORMDATA%/, $text );
+        for( $x = 0; $x < $formLen; $x++ ) {
+            $name = $formDataName[$x];
+            $value = $formDataValue[$x];
+            $value =~ s/[\n\r]/ /go;
+            if( ! (    ( $name eq "Wiki Name" )
+                    || ( $name eq "Password" )
+                    || ( $name eq "Confirm" ) ) ) {
+                $before .= "   * $name\: $value\n";
+            }
+        }
+        $text = "$before$after";
         $text =~ s/ {3}/\t/go;
         &wiki::saveTopic( $wikiName, $text, "" );
     }
 
     # add user to TWikiUsers topic
-    my $userTopic = addUserToTWikiUsersTopic( $wikiName );
+    my $userTopic = addUserToTWikiUsersTopic( $wikiName, $remoteUser );
 
     # write log entry
     if( $wiki::doLogRegistration ) {
@@ -142,6 +179,10 @@ sub htpasswdExistUser
 {
     my ( $user ) = @_;
 
+    if( ! $user ) {
+        return "";
+    }
+
     my $text = &wiki::readFile( $wiki::htpasswdFilename );
     if( $text =~ /$user\:/go ) {
         return "1";
@@ -162,7 +203,7 @@ sub htpasswdAddUser
 
 sub addUserToTWikiUsersTopic
 {
-    my ( $wikiName ) = @_;
+    my ( $wikiName, $remoteUser ) = @_;
     my $today = &wiki::getLocaldate();
     my $topicName = $wiki::userListFilename;
     $topicName =~ s/(.*[^\/])\/([a-zA-Z0-9]*)\.txt$/$2/go;
@@ -188,12 +229,20 @@ sub addUserToTWikiUsersTopic
                     return $topicName;
                 } elsif( $wikiName lt $name ) {
                     # found alphabetical position
-                    $result .= "\t* $wikiName - $today\n";
+                    if( $remoteUser ) {
+                        $result .= "\t* $wikiName - $remoteUser - $today\n";
+                    } else {
+                        $result .= "\t* $wikiName - $today\n";
+                    }
                     $status = "2";
                 }
             } else {
                 # is last entry
-                $result .= "\t* $wikiName - $today\n";
+                if( $remoteUser ) {
+                    $result .= "\t* $wikiName - $remoteUser - $today\n";
+                } else {
+                    $result .= "\t* $wikiName - $today\n";
+                }
                 $status = "2";
             }
         }

@@ -1,31 +1,35 @@
 <html><head>
 <title>TWikiDocumentation</title>
 </head><body>
-<h3>Documentation of the TWiki Implementation (version 04 Apr 2000)</h3>
+<h3>Documentation of the TWiki Implementation (version 21 Apr 2000)</h3>
 <UL>
-<LI> <A href="#login">(1)</A> Login Username vs. Wiki Username
+<LI> <A href="#login">(1)</A> Wiki Username vs. Login Username
 <LI> <A href="#variables">(2)</A> Wiki Variables
 <LI> <A href="#notification">(3)</A> Notification of Changes by Email
 <LI> <A href="#category">(4)</A> TWiki Category Table
 <LI> <A href="#implementation">(5)</A> Implementation Notes
 <LI> <A href="#installation">(6)</A> Installation Notes
+<LI> <A href="#upgrade20000501">(7)</A> Upgrading Earlier Versions to TWiki 01 Mai 2000
 </UL>
 <p> 
-Related Topics: <A href="/cgi-bin/d/bin/view/Main/TWikiHistory">TWikiHistory</A>, <A href="/cgi-bin/d/bin/view/Main/TWikiPlannedFeatures">TWikiPlannedFeatures</A>, <A href="/cgi-bin/d/bin/view/Main/TWikiEnhancementRequests">TWikiEnhancementRequests</A>.
+Related Topics: <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiWeb">TWikiWeb</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiHistory">TWikiHistory</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiPlannedFeatures">TWikiPlannedFeatures</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiEnhancementRequests">TWikiEnhancementRequests</A>.
 <p> 
 <A name="login">
 <HR>
-<STRONG>(1) Login Username vs. Wiki Username</STRONG>
+<STRONG>(1) Wiki Username vs. Login Username</STRONG>
 <p> 
 TWiki manages internally two usernames: Login username and Wiki username. 
 <UL>
 <LI> <STRONG>Login username:</STRONG> When you login to the Intranet you use your login username, e.g. <code>thoeny</code>. TWiki uses this name internally to log who changed topics.
-<LI> <STRONG>Wiki username:</STRONG> Is your name in <A href="/cgi-bin/d/bin/view/Main/WikiNotation">WikiNotation</A>, e.g. <code>PeterThoeny</code>. When you create your own home page topic, you should use your <A href="/cgi-bin/d/bin/view/Main/WikiName">WikiName</A> for the topic name. Like that, your name will be linked automatically where ever it is used. Please create your home page in TWiki.Main, not any other TWiki web. 
+<LI> <STRONG>Wiki username:</STRONG> Is your name in <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WikiNotation">WikiNotation</A>, e.g. <code>PeterThoeny</code>. When you register in <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiRegistration">TWikiRegistration</A> your <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WikiName">WikiName</A> will be created along with your personal home page.
 </UL>
 <p> 
-<STRONG>Note:</STRONG> When you write a <A href="/cgi-bin/d/bin/view/Main/WikiName">WikiName</A> of a user (your own or somebody else's) be sure to specify the Main web in front of the Wiki user name, e.g. write it as Main.wikiUsername. This assures that the name will be linked automatically to the TWiki.Main web, even if the text is written in a different Wiki web.
+<STRONG>Note:</STRONG> When you refer to a <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WikiName">WikiName</A> of a user (your own or somebody else's) be sure to specify the Main web in front of the Wiki user name, e.g. write it as Main.<nop>WikiUsername. This assures that the name will be linked automatically to the TWiki.Main web, even if the text is written in a different Wiki web.
 <p> 
-TWiki can map the Intranet username to the Wiki username automatically, provided that the Login username and Wiki username pair has been entered in the <A href="/cgi-bin/d/bin/view/Main/TWikiUsers">TWikiUsers</A> topic.
+TWiki can map the Intranet username to the Wiki username automatically, provided that the Login username and Wiki username pair has been entered in the <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiUsers">TWikiUsers</A> topic. This happens automatically when you register.
+<p> 
+-- <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PeterThoeny">PeterThoeny</A> - 21 Apr 2000 <br>
+<p> 
 <p> 
 <p> 
 <A name="variables">
@@ -38,13 +42,13 @@ TWiki expands the following variables enclosed in % percent signs:
   <th> Variable: </th><th> Expanded to: </th>
 </tr><tr>
   <td> <CODE>%<nop>WIKIHOMEURL%</CODE> </td>
-  <td> The base script URL of TWiki, link of Home icon in upper left corner is <b>http://TWiki.SourceForge.net/</b> </td>
+  <td> The base script URL of TWiki, link of Home icon in upper left corner, is <b>http://TWiki.SourceForge.net/</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>SCRIPTURL%</CODE> </td>
-  <td> The script URL of TWiki, is <b>http://TWiki.SourceForge.net/cgi-bin/d/bin</b></td>
+  <td> The script URL of TWiki, is <b>http://TWiki.SourceForge.net/cgi-bin</b></td>
 </tr><tr>
   <td> <CODE>%<nop>SCRIPTURLPATH%</CODE> </td>
-  <td> The path of the script URL of TWiki, is <b>/cgi-bin/d/bin</b></td>
+  <td> The path of the script URL of TWiki, is <b>/cgi-bin</b></td>
 </tr><tr>
   <td> <CODE>%<nop>PUBURL%</CODE> </td>
   <td> The public URL of TWiki, is <b>http://TWiki.SourceForge.net/d/pub</b> </td>
@@ -62,13 +66,13 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> Name of wiki tool, is <b>TWikibeta</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WIKIVERSION%</CODE> </td>
-  <td> Wiki tool version, is <b>04 Apr 2000</b> </td>
+  <td> Wiki tool version, is <b>21 Apr 2000</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>USERNAME%</CODE> </td>
   <td> Your login username, is <b>guest</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WIKIUSERNAME%</CODE> </td>
-  <td> Your Wiki username, if defined in <A href="/cgi-bin/d/bin/view/Main/TWikiUsers">TWikiUsers</A>. Same as %<nop>USERNAME% if not defined. Is <b>Main.TWikiGuest</b> </td>
+  <td> Your Wiki username, if defined in <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiUsers">TWikiUsers</A>. Same as %<nop>USERNAME% if not defined. Is <b>Main.TWikiGuest</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WEB%</CODE> </td>
   <td> The current web, is <b>Main</b> </td>
@@ -77,7 +81,19 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> The current topic name, is <b>TWikiDocumentation</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>DATE%</CODE> </td>
-  <td> Todays date, is <b>11 Apr 2000</b> </td>
+  <td> Todays date, is <b>28 Apr 2000</b> </td>
+</tr><tr>
+  <td> <CODE>%<nop>HTTP_HOST%</CODE> </td>
+  <td> HTTP_HOST environment variable, is <b></b> </td>
+</tr><tr>
+  <td> <CODE>%<nop>REMOTE_ADDR%</CODE> </td>
+  <td> REMOTE_ADDR environment variable, is <b></b> </td>
+</tr><tr>
+  <td> <CODE>%<nop>REMOTE_PORT%</CODE> </td>
+  <td> REMOTE_PORT environment variable, is <b></b> </td>
+</tr><tr>
+  <td> <CODE>%<nop>REMOTE_USER%</CODE> </td>
+  <td> REMOTE_USER environment variable, is <b></b> </td>
 </tr><tr>
   <td> <CODE>%<nop>INCLUDE{"file.ext"}%</CODE> </td>
   <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: <CODE><b>%<nop>INCLUDE{"../Know/TopicName.txt"}%</b></CODE> </td>
@@ -87,7 +103,7 @@ TWiki expands the following variables enclosed in % percent signs:
 <TABLE border="1"><TR><TD> <STRONG>Pair:</STRONG>  </TD><TD>  <STRONG>Description:</STRONG>  </TD><TD>  <STRONG>Default:</STRONG>  </TD></TR>
 <TR><TD> <CODE>web="Name"</CODE>  </TD><TD>  Specify Wiki web to search  </TD><TD>  Current web  </TD></TR>
 <TR><TD> <CODE>scope="topic"</CODE>  </TD><TD>  Search topic name (title)  </TD><TD>  Topic text (body)  </TD></TR>
-<TR><TD> <CODE>regex="on"</CODE>  </TD><TD>  <A href="/cgi-bin/d/bin/view/Main/RegularExpression">RegularExpression</A> search  </TD><TD>  Literal search  </TD></TR>
+<TR><TD> <CODE>regex="on"</CODE>  </TD><TD>  <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/RegularExpression">RegularExpression</A> search  </TD><TD>  Literal search  </TD></TR>
 <TR><TD> <CODE>casesensitive="on"</CODE>  </TD><TD>  Case sensitive search  </TD><TD>  Ignore case  </TD></TR>
 <TR><TD> <CODE>nosummary="on"</CODE>  </TD><TD>  Show topic title only  </TD><TD>  Show topic summary  </TD></TR>
 <TR><TD> <CODE>nosearch="on"</CODE>  </TD><TD>  Suppress search string  </TD><TD>  Show search string  </TD></TR>
@@ -96,7 +112,7 @@ TWiki expands the following variables enclosed in % percent signs:
 Example: <CODE><b>%<nop>SEARCH{"wiki" web="Main" scope="topic"}%</b></CODE> </td>
 </tr></table>
 <p> 
-Additional variables are defined in the preferences ( site-level ( <STRONG><EM>SL</EM></STRONG> ) in <A href="/cgi-bin/d/bin/view/Main/TWikiPreferences">TWikiPreferences</A>, web-level ( <STRONG><EM>WL</EM></STRONG> ) in <A href="/cgi-bin/d/bin/view/Main/WebPreferences">WebPreferences</A> of each web, and user level ( <STRONG><EM>UL</EM></STRONG> ) preferences in individual user topics):
+Additional variables are defined in the preferences ( site-level ( <STRONG><EM>SL</EM></STRONG> ) in <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiPreferences">TWikiPreferences</A>, web-level ( <STRONG><EM>WL</EM></STRONG> ) in <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebPreferences">WebPreferences</A> of each web, and user level ( <STRONG><EM>UL</EM></STRONG> ) preferences in individual user topics):
 <p> 
 <table border="1"><tr>
   <th> Variable: </th><th> Level: </th><th> What: </th>
@@ -134,20 +150,26 @@ Additional variables are defined in the preferences ( site-level ( <STRONG><EM>S
   <td> Default state of the link check box in the attach file page. Check box is initially checked if value is set to <CODE>CHECKED</CODE> , unchecked if empty. If checked, a link is created to the attached file at the end of the topic. Value is: <b><code></code></b> </td>
 </tr></table>
 <p> 
+-- <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PeterThoeny">PeterThoeny</A> - 21 Apr 2000 <br>
+<p> 
 <p> 
 <p> 
 <A name="notification">
 <HR>
 <STRONG>(3) Notification of Changes by Email</STRONG>
 <p> 
-Each TWiki web does an automatic email notification of recent changes. Users can subscribe / unsubscribe themselves in <A href="/cgi-bin/d/bin/view/Main/WebNotify">WebNotify</A> of each TWiki web. The Perl script <code> mailnotify </code> is called by a deamon once every 60 minutes. For each Twiki web <code> mailnotify </code> is sending an automated email to subscribed users in case some topics changed within these 60 minutes. 
+Each TWikibeta web does an automatic email notification of recent changes. Users can subscribe / unsubscribe themselves in <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebNotify">WebNotify</A> of each TWiki web. The Perl script <CODE>mailnotify</CODE> is called by a deamon in regular intervals. The script is sending an automated email to subscribed users in case some topics changed in a web within this interval. 
 <p> 
-Implementation note: Edit the cron table so that <code> mailnotify </code> is called every 60 minutes. Please consult <code> man crontab </code> of how to modify the table that schedules program execution at certain intervals. Example:
+Implementation note: Edit the cron table so that <CODE>mailnotify</CODE> is called every 60 minutes. Please consult <CODE>man crontab</CODE> of how to modify the table that schedules program execution at certain intervals. Example:
 <pre>
 % crontab -e
 15,45 * * * * (cd ~twiki/public_html/bin; ./mailnotify)
 </pre>
 The above line will call mailnotify at 15 minutes and 45 minutes passed every hour.
+<p> 
+-- <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PeterThoeny">PeterThoeny</A> - 21 Apr 2000 <br>
+<p> 
+<p> 
 <p> 
 <A name="category">
 <HR>
@@ -266,8 +288,11 @@ Above template files will result in the following table when <STRONG><EM>editing
 <p> 
 Example (edit this page to see the source) :
 <UL>
-<LI> <form action="/cgi-bin/d/bin/edit/Know/"> New <A href="/cgi-bin/d/bin/view/Know/PublicFAQ">PublicFAQ</A> topic: <input type="text" name="topic" size="32"> <input type="hidden" name="TopicClassification" value="PublicFAQ"> <input type="hidden" name="OperatingSystem" value="OsSolaris,OsSunOS"> <input type="hidden" name="OsVersion" value="Just testing..."> <input type="hidden" name="onlywikiname" value="on"> <input type="submit" value="Create Topic"> </form>
+<LI> <form action="http://TWiki.SourceForge.net/cgi-bin/edit/Know/"> New <A href="http://TWiki.SourceForge.net/cgi-bin/view/Know/PublicFAQ">PublicFAQ</A> topic: <input type="text" name="topic" size="32"> <input type="hidden" name="TopicClassification" value="PublicFAQ"> <input type="hidden" name="OperatingSystem" value="OsSolaris,OsSunOS"> <input type="hidden" name="OsVersion" value="Just testing..."> <input type="hidden" name="onlywikiname" value="on"> <input type="submit" value="Create Topic"> </form>
 </UL>
+<p> 
+-- <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PeterThoeny">PeterThoeny</A> - 21 Apr 2000 <br>
+<p> 
 <p> 
 <p> 
 <A name="implementation">
@@ -282,7 +307,7 @@ TWiki is written in PERL 5, but it uses also many shell command. The current imp
 <p> 
 <TABLE border="1"><TR><TD> <STRONG>Directory:</STRONG>     </TD><TD>  <STRONG>Used for:</STRONG>  </TD></TR>
 <TR><TD> twiki/bin        </TD><TD>  TWiki PERL scripts  </TD></TR>
-<TR><TD> twiki/pub        </TD><TD>  Public files (<A href="/cgi-bin/d/bin/view/Main/FileAttachment">FileAttachments</A>, images)  </TD></TR>
+<TR><TD> twiki/pub        </TD><TD>  Public files (<A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/FileAttachment">FileAttachments</A>, images)  </TD></TR>
 <TR><TD> twiki/data       </TD><TD>  source text  </TD></TR>
 <TR><TD> twiki/templates  </TD><TD>  HTML templates, used by TWiki scripts  </TD></TR>
 </TABLE>
@@ -291,7 +316,7 @@ TWiki is written in PERL 5, but it uses also many shell command. The current imp
 <p> 
 <TABLE border="1"><TR><TD> <STRONG>File:</STRONG>        </TD><TD>  <STRONG>Used for:</STRONG>  </TD></TR>
 <TR><TD> .htaccess.txt  </TD><TD>  Authentication. Rename to .htaccess and customize if used  </TD></TR>
-<TR><TD> attach         </TD><TD>  Script that shows the attach file page (<A href="/cgi-bin/d/bin/view/Main/FileAttachment">FileAttachment</A>)  </TD></TR>
+<TR><TD> attach         </TD><TD>  Script that shows the attach file page (<A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/FileAttachment">FileAttachment</A>)  </TD></TR>
 <TR><TD> changes        </TD><TD>  Script that shows recent changes  </TD></TR>
 <TR><TD> delete         </TD><TD>  (not used yet)  </TD></TR>
 <TR><TD> edit           </TD><TD>  Script to edit a topic  </TD></TR>
@@ -305,7 +330,7 @@ TWiki is written in PERL 5, but it uses also many shell command. The current imp
 <TR><TD> search         </TD><TD>  Script that displays search results  </TD></TR>
 <TR><TD> statistics     </TD><TD>  Script to create statistics topic  </TD></TR>
 <TR><TD> testenv        </TD><TD>  Script to test CGI environment variables  </TD></TR>
-<TR><TD> upload         </TD><TD>  Script that does file upload (<A href="/cgi-bin/d/bin/view/Main/FileAttachment">FileAttachment</A>)  </TD></TR>
+<TR><TD> upload         </TD><TD>  Script that does file upload (<A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/FileAttachment">FileAttachment</A>)  </TD></TR>
 <TR><TD> view           </TD><TD>  Script to view a topic ( <STRONG>the</STRONG> script )  </TD></TR>
 <TR><TD> viewfile       </TD><TD>  Script to view an file attachment  </TD></TR>
 <TR><TD> wiki.pm        </TD><TD>  main TWiki library  </TD></TR>
@@ -313,12 +338,15 @@ TWiki is written in PERL 5, but it uses also many shell command. The current imp
 <TR><TD> wikisearch.pm  </TD><TD>  search engine, used by wiki.pm  </TD></TR>
 </TABLE>
 <p> 
+-- <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PeterThoeny">PeterThoeny</A> - 21 Apr 2000 <br>
+<p> 
+<p> 
 <p> 
 <A name="installation">
 <HR>
 <STRONG>(6) Installation Notes</STRONG>
 <p> 
-These installation steps use Apache web server on Linux as an example. TWiki should run on other web servers and Unix systems as well.
+These installation steps use the Apache web server on Linux as an example. TWiki should run on other web servers and Unix systems as well.
 <p> 
 <STRONG><EM>Note:</EM></STRONG> These installation notes assume user <CODE>nobody</CODE> for all files manupulated by the cgi scripts (executed by the web server), and user <CODE>twiki</CODE> for all other files. You need to replace user <CODE>nobody</CODE> with an other user in case the web server executes the script with a different user ( default for Debian is <CODE>www-data</CODE> ). Also, you can substitute user <CODE>twiki</CODE> with your own user name.
 <p> 
@@ -326,8 +354,8 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 <LI> Request the TWiki distribution (in Unix ZIP format) from <A href="http://TWiki.SourceForge.net/download.html" target="_top">http://TWiki.SourceForge.net/download.html</A> .
 <LI> Create directory <CODE>/home/httpd/twiki</CODE> and unzip the TWiki distribution to this directory.
 <LI> The <CODE>twiki/bin</CODE> directory of TWiki must be set as a cgi-bin directory. Add <CODE>/home/httpd/twiki/bin</CODE> to <CODE>/etc/httpd/conf/access.conf</CODE> with only <CODE>ExecCGI</CODE> option.
-<LI> The <CODE>twiki/pub</CODE> directory of TWiki must be set so that it is visible as a URL. Add <CODE>/home/httpd/twiki/pub</CODE> to <CODE>/etc/httpd/conf/access.conf</CODE> with normal access options (copy from /home/httpd/html).
-<LI> Now add <CODE>Alias</CODE> for <CODE>/twiki/pub</CODE> and <CODE>ScriptAlias</CODE> for <CODE>/twiki/bin</CODE> to <CODE>/etc/httpd/conf/srm-conf</CODE> .
+<LI> The <CODE>twiki/pub</CODE> directory of TWiki must be set so that it is visible as a URL. Add <CODE>/home/httpd/twiki</CODE> to <CODE>/etc/httpd/conf/access.conf</CODE> with normal access options (copy from /home/httpd/html).
+<LI> Now add <CODE>Alias</CODE> for <CODE>/twiki</CODE> and <CODE>ScriptAlias</CODE> for <CODE>/twiki/bin</CODE> to <CODE>/etc/httpd/conf/srm-conf</CODE> .
 <LI> Restart Apache by <CODE>/etc/rc.d/rc5.d/S85httpd restart</CODE> .
 <LI> Test if the <CODE>twiki/bin</CODE> directory is cgi-enabled:
 <UL>
@@ -345,23 +373,28 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 <LI> Point your browser at <A href="http://your.domain.com/twiki/bin/view" target="_top">http://your.domain.com/twiki/bin/view</A> and start wiki-ing away! 
 <LI> Note in case cgi user is <STRONG><EM>not</EM></STRONG> <CODE>nobody</CODE> : The <CODE>*,v</CODE> RCS repository files delivered with the installation package are locked by user <CODE>nobody</CODE> . In case the user is different (e.g. <CODE>www-data</CODE> ), it is not possible to check in files, this has the effect that the topic version number does not increase when saving a topic. In this case you need to unlock all repository files and lock them as user <CODE>www-data</CODE> (check the rcs man pages), or simply delete all the repository files.
 <LI> Security issue: Directories <CODE>twiki/data</CODE> , <CODE>twiki/templates</CODE> and all its subdirectories should be set so that they are <STRONG>not</STRONG> visible as a URL. (Alternatively, move the directries to a place where they are not visible, and change the variables in <CODE>twiki/bin/wikicfg.pm</CODE> accordingly)
-<LI> Enable email notification of topic changes, <A href="#notification">(3)</A> has more.
+<LI> Enable email notification of topic changes, <A href="TWikiDocumentation#notification">(3)</A> has more.
+<LI> Add the <a href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PoweredByTWikiLogo">PoweredByTWikiLogo</a> if TWiki is installed on a public web server.
 </UL>
 <p> 
 <UL>
-<LI> Optional: You can add new rendering rules or new %variables%. To insure an easy upgrade of TWiki it is recommended to do this customization in <CODE>twiki/bin/wikicfg.pm</CODE> , not <CODE>twiki/bin/wiki.pm</CODE> .
+<LI> Optional: You can add new rendering rules or new %<nop>variables%. To insure an easy upgrade of TWiki it is recommended to do this customization in <CODE>twiki/bin/wikicfg.pm</CODE> , not <CODE>twiki/bin/wiki.pm</CODE> .
 </UL>
 <p> 
 <UL>
-<LI> Optional: If you are on a public server and you would like to authenticate users you need to rename file <CODE>.htaccess.txt</CODE> in the <CODE>twiki/bin</CODE> directory to <CODE>.htaccess</CODE> and change it to your needs. For details consult the HTTP server documentation (for Apache server: <a href="http://www.scs.nevada.edu/cs/documents/web/htaccess.html">[1]</a>, <a href="http://www.mcs.kent.edu/system/web_help/htaccess/introduction.html">[2]</a>, <a href="http://www.apache.org/docs/mod/directives.html">[3]</a>). <STRONG><EM>Note:</EM></STRONG> In case <CODE>.htaccess</CODE> does not have any effect you need to enable it: Add "AllowOverride All" to the Directory section of <CODE>access.conf</CODE> for your <CODE>twiki/bin</CODE> directory.
+<LI> Optional: If you are on a public server and you would like to authenticate users:
+<UL>
+<LI> Rename file <CODE>.htaccess.txt</CODE> in the <CODE>twiki/bin</CODE> directory to <CODE>.htaccess</CODE> and change it to your needs. For details consult the HTTP server documentation (for Apache server: <a href="http://www.scs.nevada.edu/cs/documents/web/htaccess.html">[1]</a>, <a href="http://www.mcs.kent.edu/system/web_help/htaccess/introduction.html">[2]</a>, <a href="http://www.apache.org/docs/mod/directives.html">[3]</a>). <STRONG><EM>Note:</EM></STRONG> In case <CODE>.htaccess</CODE> does not have any effect you need to enable it: Add "AllowOverride All" to the Directory section of <CODE>access.conf</CODE> for your <CODE>twiki/bin</CODE> directory.
+<LI> Copy the <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiRegistrationPub">TWikiRegistrationPub</A> topic to <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiRegistration">TWikiRegistration</A>. You can customize the topic if needed. <STRONG><EM>Note:</EM></STRONG> You can delete or add new input variables to the registration form. The <CODE>name=""</CODE> parameter of the input tags must start with: <CODE>"Twk0..."</CODE> (if this is an optional entry), or <CODE>"Twk1..."</CODE> (if this is a required entry). This will ensure that the fields are processed correctly.
+</UL>
 </UL>
 <p> 
 <UL>
 <LI> Optional: You can automatically generate usage statistics for all webs. To enable this:
 <UL>
 <LI> Make sure variable <CODE>$doLogTopicView, $doLogTopicSave and $doLogTopicUpload</CODE> in <CODE>wikicfg.pm</CODE> are set. This will generate log entries in file <CODE>twiki/data/log&lt;date&gt;.txt</CODE> .
-<LI> Topic <A href="/cgi-bin/d/bin/view/Main/WebStatistics">WebStatistics</A> must be present in all webs where you want to have statistics. You can use the topic in the Main web as a template.
-<LI> Call the <CODE>twiki/bin/statistics</CODE> script from a cron job, once a day is recommended. This will update the <A href="/cgi-bin/d/bin/view/Main/WebStatistics">WebStatistics</A> topics in all webs.
+<LI> Topic <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebStatistics">WebStatistics</A> must be present in all webs where you want to have statistics. You can use the topic in the Main web as a template.
+<LI> Call the <CODE>twiki/bin/statistics</CODE> script from a cron job, once a day is recommended. This will update the <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebStatistics">WebStatistics</A> topics in all webs.
 <LI> <STRONG><EM>Attention:</EM></STRONG> The script must run as the same user as the CGI scripts are running, which is user <CODE>nobody</CODE> on most systems. Example crontab entry: <br> <CODE>0 0 * * * (cd /path/to/TWiki/bin; ./statistics &gt;/dev/null 2&gt;&amp;1)</CODE>
 <LI> There is a workaround in case you can't run the script as user <CODE>nobody</CODE> : Run the utility <CODE>twiki/bin/geturl</CODE> in your cron job and specify the URL of the <CODE>twiki/bin/statistics</CODE> script as a parameter. Example: <br> <CODE>0 0 * * * (cd /path/to/TWiki/bin; ./geturl mydomain.com /urlpath/to/TWiki/bin/statistics &gt;/dev/null 2&gt;&amp;1)</CODE>
 <LI> The <CODE>twiki/bin/statistics</CODE> script can also be executed as a CGI script, just enter the URL in your browser. Examples:
@@ -376,15 +409,15 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 <UL>
 <LI> To create a new web:
 <UL>
-<LI> Use a name for the web consisting of characters <CODE>A..Z</CODE> , <CODE>a..z</CODE> but <STRONG>not</STRONG> in <A href="/cgi-bin/d/bin/view/Main/WikiNotation">WikiNotation</A>.
+<LI> Use a name for the web consisting of characters <CODE>A..Z</CODE> , <CODE>a..z</CODE> but <STRONG>not</STRONG> in <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WikiNotation">WikiNotation</A>.
 <LI> Create a new template directory under <CODE>twiki/templates</CODE> .
 <LI> Create a new data directory under <CODE>twiki/data</CODE> and check the file permission of the directory.
 <LI> Copy the files <CODE>WebHome.txt</CODE> , <CODE>WebPreferences.txt</CODE> , <CODE>WebNotify.txt</CODE> , <CODE>WebSearch.txt</CODE> and <CODE>WebStatistics.txt</CODE> from the <CODE>twiki/data/Main</CODE> directory to the new data directory, preserving the original files' owner, group and permissions ( on Unix use <CODE>cp -p</CODE> ). The data files must be writable by the owner the CGI scripts are running on ( usually <CODE>nobody</CODE> ). Hint: You can set permissions of <CODE>.txt</CODE> and <CODE>.txt,v</CODE> files to <CODE>-rw-rw-rw-</CODE> and then edit the topic using your browser, RCS will restore the file permission correctly when saving the topic.
-<LI> Add the new web to the web list (on top of each topic) by editing the site-level preferences <A href="/cgi-bin/d/bin/view/Main/TWikiPreferences">TWikiPreferences</A>:
+<LI> Add the new web to the web list (on top of each topic) by editing the site-level preferences <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiPreferences">TWikiPreferences</A>:
 <UL>
 <LI> Add the new web to the WIKIWEBLIST variable.
 </UL>
-<LI> Add the new web to the web table (at the bottom of each <A href="/cgi-bin/d/bin/view/Main/WebHome">WebHome</A> topic) by editing the <A href="/cgi-bin/d/bin/view/Main/TWikiWebsTable">TWikiWebsTable</A> topic.
+<LI> Add the new web to the web table (at the bottom of each <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebHome">WebHome</A> topic) by editing the <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiWebsTable">TWikiWebsTable</A> topic.
 <LI> Change the web preferences by editing the <nop>WebPreferences topic of the new web:
 <UL>
 <LI> Set the WEBBGCOLOR variable to a color of your taste. The number represents the unique color for the web (consult an HTML book for colors.)
@@ -582,6 +615,43 @@ drwxrwxrwx  11 twiki   twiki       1024 Feb  8 18:10 ..
 -rw-r--r--   1 twiki   twiki        144 Mar 27  1999 zip.gif
 </pre>
 <p> 
--- <A href="/cgi-bin/d/bin/view/Main/PeterThoeny">PeterThoeny</A> - 05 Apr 2000 <br>
+-- <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PeterThoeny">PeterThoeny</A> - 21 Apr 2000 <br>
+<p> 
+<p> 
+<p> 
+<A name="upgrade20000501">
+<HR>
+<STRONG>(7) Upgrading Earlier Versions to TWiki 01 Mai 2000</STRONG>
+<p> 
+To upgrade an earlier TWiki version like <CODE>01 Sep 1999</CODE> to version <CODE>01 Mai 2000</CODE> you should do the following things:
+<p> 
+<UL>
+<LI> Update the templates in the <CODE>/templates</CODE> directory (and its subdirs):
+<UL>
+<LI> Take the templates of the latest distribution as the base and merge your changes back into it.
+</UL>
+<LI> Update the Perl scripts in the <CODE>/bin</CODE> directory:
+<UL>
+<LI> Take the scripts of the latest distribution as the base and merge your changes back into it. Do so also for <CODE>wikicfg.pm</CODE> because it has important changes as well.
+</UL>
+<LI> Update topics:
+<UL>
+<LI> Copy the new Main. <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiPreferences">TWikiPreferences</A> topic (and <CODE>*,v</CODE> file) into your TWiki.Main web. Customize the topic to your needs.
+<LI> Copy the new Main. <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebPreferences">WebPreferences</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebStatistics">WebStatistics</A> topics (and <CODE>*,v</CODE> files) into all your webs. Customize all <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebPreferences">WebPreferences</A> topics to your needs (e.g. web color).
+<LI> Copy <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebSearch">WebSearch</A> into all your webs, or modify the existing ones. <STRONG><EM>Reason:</EM></STRONG> Some switches for search changed.
+<LI> Copy the TWiki documentation into your Main web: Topics <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiDocumentation">TWikiDocumentation</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiUsernameVsLoginUsername">TWikiUsernameVsLoginUsername</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiVariables">TWikiVariables</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiNotificationOfChanges">TWikiNotificationOfChanges</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiCategoryTable">TWikiCategoryTable</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiImplementationNotes">TWikiImplementationNotes</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiInstallationNotes">TWikiInstallationNotes</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiUpgradeTo01Mai2000">TWikiUpgradeTo01Mai2000</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TextFormattingRules">TextFormattingRules</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiHistory">TWikiHistory</A> .
+<LI> Copy the registration topic into your Main web:
+<UL>
+<LI> In case you are on an Intranet: Copy topic <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiRegistration">TWikiRegistration</A> to Main.<nop>TWikiRegistration. Customize if needed.
+<LI> In case you are on a public server: Copy topic <nop>TWikiRegistrationPub to Main.<nop>TWikiRegistration. Customize if needed.
+</UL>
+<LI> Copy the Main. <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiWebsTable">TWikiWebsTable</A> topic (and <CODE>*,v</CODE> file) into your Main web and customize it. <STRONG><EM>Reason:</EM></STRONG> The new release does not use the <CODE>*.inc</CODE> include files anymore.
+<LI> Optionally: Search for <CODE>%<nop>INCLUDE%'s</CODE> in all your webs and change them to the new <CODE>%<nop>INCLUDE{"file.ext"}%</CODE> syntax. <STRONG><EM>Note:</EM></STRONG> Your old <CODE>%<nop>INCLUDE:"file.ext"%</CODE> syntax still works (the legacy rule is defined in <CODE>wikicfg.pm</CODE> .) 
+</UL>
+<LI> Add the <a href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PoweredByTWikiLogo">PoweredByTWikiLogo</a> if TWiki is installed on a public web server.
+</UL>
+<p> 
+-- <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PeterThoeny">PeterThoeny</A> - 21 Apr 2000 <br>
+<p> 
 <p> 
 </body></html>

@@ -157,21 +157,21 @@ $doRemovePortNumber = "0";
 #                   e.g. TestPolicies to TestPolicy. Default "1"
 $doPluralToSingular = "1";
 #                   Log topic views to $logFilename. Default "0"
-$doLogTopicView     = "0";
+$doLogTopicView     = "1";
 #                   Log topic saves to $logFilename. Default "0"
-$doLogTopicEdit     = "0";
+$doLogTopicEdit     = "1";
 #                   Log topic saves to $logFilename. Default "1"
 $doLogTopicSave     = "1";
 #                   Log view attach to $logFilename. Default "0"
-$doLogTopicAttach   = "0";
+$doLogTopicAttach   = "1";
 #                   Log file upload to $logFilename. Default "1"
 $doLogTopicUpload   = "1";
 #                   Log topic rdiffs to $logFilename. Default "0"
-$doLogTopicRdiff    = "0";
+$doLogTopicRdiff    = "1";
 #                   Log view changes to $logFilename. Default "0"
-$doLogTopicChanges  = "0";
+$doLogTopicChanges  = "1";
 #                   Log view changes to $logFilename. Default "0"
-$doLogTopicSearch   = "0";
+$doLogTopicSearch   = "1";
 #                   Log user registration to $logFilename. Default "1"
 $doLogRegistration  = "1";
 

@@ -57,7 +57,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "04 Apr 2000";
+$wikiversion      = "21 Apr 2000";
 
 # ===========================
 # read the configuration part
@@ -841,6 +841,14 @@ sub handlePrefsValue
 }
 
 # =========================
+sub handleEnvVariable
+{
+    my( $theVar ) = @_;
+    my $value = $ENV{$theVar} || "";
+    return $value;
+}
+
+# =========================
 sub handleCommonTags
 {
     my( $text, $topic ) = @_;
@@ -857,6 +865,10 @@ sub handleCommonTags
         eval( $cmd );
     }
 
+    $text =~ s/%HTTP_HOST%/&handleEnvVariable('HTTP_HOST')/geo;
+    $text =~ s/%REMOTE_ADDR%/&handleEnvVariable('REMOTE_ADDR')/geo;
+    $text =~ s/%REMOTE_PORT%/&handleEnvVariable('REMOTE_PORT')/geo;
+    $text =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/geo;
     $text =~ s/%TOPIC%/$topic/go;
     $text =~ s/%WEB%/$webName/go;
     $text =~ s/%WIKIHOMEURL%/$wikiHomeUrl/go;
