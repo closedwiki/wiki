@@ -43,6 +43,8 @@ sub main
     my $breakLock = $query->param( 'breaklock' );
     my $theAttachment = $query->param( 'attachment' );
     my $confirm = $query->param( 'confirm' );
+    my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || "";
+
     
     if( ! $theAttachment ) {
         $theAttachment = "";
@@ -86,8 +88,6 @@ sub main
         }
     }
 
-    # FIXME Might be good to insure that new topic is a WikiWord or that user is intentionally picking a non-WikiWord.
-    # At present we just have a note in the template.
     if( ! $theAttachment ) {
         my @refs = findReferingPages( $oldWeb, $oldTopic );
         my $problems;
@@ -104,6 +104,15 @@ sub main
               return;
           }
        } else {
+          if( $doAllowNonWikiWord ) {
+              if( $newTopic =~ /$TWiki::securityFilter/o  ) {
+                  TWiki::redirect( $query, &TWiki::getOopsUrl( $newWeb, $newTopic, "oopsrenameinvalidchars" ) );
+                  return;
+              }
+          } elsif( ! &TWiki::isWikiName( $newTopic )) {
+              TWiki::redirect( $query, &TWiki::getOopsUrl( $newWeb, $newTopic, "oopsrenamenotwikiword" ) );
+              return;
+          }
 	  my $renameError = &TWiki::Store::renameTopic( $oldWeb, $oldTopic, $newWeb, $newTopic, "relink" );
 	  if( $renameError ) {
 	      TWiki::redirect( $query, &TWiki::getOopsUrl( $oldWeb, $oldTopic, "oopsrenameerr", $renameError, $newWeb, $newTopic ) );
@@ -407,8 +416,9 @@ sub newTopicScreen
     TWiki::writeHeader( $query );
     my $tmpl = &TWiki::Store::readTemplate( "renamerefs" );
     $tmpl = setVars( $tmpl, $oldTopic, $newWeb, $newTopic );
-    $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
     $tmpl = &TWiki::getRenderedVersion( $tmpl );
+    $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
+    $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
     print $tmpl;
  }
 
