@@ -1,0 +1,74 @@
+Description: Tests for Comment plugin
+
+Pay special attention to the correct insertion of newlines
+
+---+ type=top
+Should add to the top of this topic
+%COMMENT{type=top}%
+---+ No attributes
+Should add immediately after the comment box
+%COMMENT%
+---+ Empty attributes
+Should add immediately after the comment box
+%COMMENT{}%
+---+ type=above
+Should add above the comment box
+%COMMENT{type=above}%
+---++ type=top target=CommentJunkYard
+Should add to the top of topic CommentJunkYard
+%COMMENT{type=top target=CommentJunkYard}%
+---++ type=bottom target=CommentJunkYard
+%COMMENT{type=bottom target=CommentJunkYard}%
+Should add to the bottom of topic CommentJunkYard
+---+ type=above target=#AnchorOne
+Should add above the anchor
+%COMMENT{type=above target="#AnchorOne"}%
+<verbatim>
+#AnchorOne
+</verbatim>
+---+ type=below
+Should add below the box
+%COMMENT{type=below}%
+---+ type=below target='#AnchorTwo'
+Should add below the anchor
+%COMMENT{type=below target='#AnchorTwo'}%
+<verbatim>
+#AnchorTwo
+</verbatim>
+---+ type=threadmode
+%COMMENT{type=threadmode}%
+---+ type=tableprepend
+%COMMENT{type=tableprepend}%
+---+ type=tableappend
+%COMMENT{type=tableappend}%
+---+ type=after
+%COMMENT{type=after}%
+---+ type=action target="#AnchorThree"
+%COMMENT{type=action target="#AnchorThree"}%
+<verbatim>
+#AnchorThree
+</verbatim>
+---+ type=table
+%COMMENT{type=table}%
+---+ type=toctalk
+%COMMENT{type=toctalk}%
+---+ type=bookmark
+%COMMENT{type=bookmark}%
+---+ INCLUDEd from another topic
+%INCLUDE{"CommentPluginFixture1"}%
+<verbatim>
+#IncludeAnchor
+</verbatim>
+---+ location="Stick it here\n"
+%COMMENT{location="Stick it here\n"}%
+<verbatim>
+Stick it here
+</verbatim>
+---+ type=above location="No, stick it here"
+%COMMENT{type="above" location="No, stick it here\n"}%
+<verbatim>
+No, stick it here
+</verbatim>
+---+ type=bottom
+Should add to the bottom of this topic
+%COMMENT{type=bottom}%

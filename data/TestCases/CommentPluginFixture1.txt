@@ -1,0 +1,2 @@
+---++ type=below, target=%<nop>INCLUDINGTOPIC%#IncludeAnchor
+%COMMENT{type="below" target="%INCLUDINGTOPIC%#IncludeAnchor"}%
