@@ -66,10 +66,10 @@ my $installBase = $Config->{install_base};
 
 ( rmtree( $installBase ) or die "Unable to empty the twiki build directory: $!" ) if -e $installBase;
 my $tar = 'TWiki20040901.tar.gz';
-my $localTar = $tempDir."/".$tar;
+my $localTar = "$Config->{local_cache}/$tar";
 unless ( -e $localTar )
 {
-	print "downloading $tar\n";
+    print "downloading $tar\n";
     my $ua = LWP::TWikiGuestAgent->new( agent => $Config->{agent} ) or die $!;
     $ua->mirror( "http://twiki.org/release/$tar", $localTar );
 }
@@ -90,9 +90,10 @@ map { my $dir = $_; rmtree "$installBase/pub/$dir/" or warn "$dir: $!" } qw( Mai
 #-[docs]-------------------------------------------------------------------------------
 map { my $doc = $_; unlink "$installBase/$doc" or die "$doc: $!" } 
 qw (
-      pub-htaccess.txt root-htaccess.txt subdir-htaccess.txt robots.txt
-      UpgradeTwiki
-      TWikiDocumentation.html TWikiHistory.html
+    pub-htaccess.txt root-htaccess.txt subdir-htaccess.txt robots.txt
+    UpgradeTwiki
+    TWikiDocumentation.html TWikiHistory.html
+    pub/favicon.ico
     );
 
 
