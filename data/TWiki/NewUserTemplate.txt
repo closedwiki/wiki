@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1020557400" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1022916389" format="1.0" version="1.2"}%
 %SPLIT%
 	* %KEY%: %VALUE%%SPLIT%
 
@@ -7,6 +7,8 @@ __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
 		* Set EDITBOXWIDTH = 70
 	* Vertical size of text edit box:
 		* Set EDITBOXHEIGHT = 17
+	* Style of text edit box. =width: 100%= for full window width (default), =width: auto= to disable.
+		* Set EDITBOXSTYLE = width: 100%
 	* Optionally write protect your home page: (set it to your %TWIKIWEB%.WikiName)
 		* Set ALLOWTOPICCHANGE =
 
