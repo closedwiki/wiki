@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="JohnTalintyre" date="997197916" format="1.0beta2" version="1.29"}%
+%META:TOPICINFO{author="PeterThoeny" date="997885781" format="1.0beta2" version="1.30"}%
 ---## TWiki Variables
 
 ---+++ Predefined Variables
@@ -171,7 +171,7 @@
   <td> Table of Content of current topic. </td>
 </tr><tr>
   <td> =%<nop>TOC{"SomeTopic" ...}%= </td>
-  <td> Table of Content. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;h2&gt;"=) are taken into account. Parameters are topic name, web and depth:
+  <td> Table of Content. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;h2&gt;"=) are taken into account. (But not ="&lt;H2&gt;text&lt;H2&gt;"=, which can be used to exclude a heading from the TOC.) Parameters are topic name, web and depth:
 | *Parameter:* | *Description:* | *Default:* |
 | ="TopicName"= | topic name | Current topic |
 | =web="Name"= | Name of web | Current web |
