@@ -212,10 +212,15 @@ sub renderForEdit
         my $type = shift @fieldInfo;
         my $size = shift @fieldInfo;
         my $tooltip = shift @fieldInfo;
-            
+
         my %field = $meta->findOne( "FIELD", $fieldName );
         my $value = $field{"value"} || "";
         my $extra = "";
+        
+        # Special processing for UseForm
+        if( ! $value && $fieldName eq "UseForm" ) {
+           $value = $fieldInfo[1];
+        }
                 
         if( $type eq "text" ) {
             $value = "<input name=\"$name\" size=\"$size\" type=\"input\" value=\"$value\">";
@@ -333,6 +338,15 @@ sub fieldVars2Meta
        my $size      = shift @fieldInfo;
        my $value     = "";
        $value = $query->param( $fieldName . "FLD" );
+       
+       if( $fieldName eq "UseForm" ) {
+          if( lc $value ne "yes" ) {
+              $meta->remove( "FORM" );
+              $meta->remove( "FIELD" );
+              return $meta;
+          }
+       }
+       
        if( ! $value && $type =~ "^checkbox" ) {
           foreach my $name ( @fieldInfo ) {
              if( $query->param( "$fieldName" . "FLD$name" ) ) {
