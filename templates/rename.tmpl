@@ -1,6 +1,17 @@
 <HEAD>
   <TITLE> %WIKITOOLNAME% Rename/move %OLD_WEB%.%OLD_TOPIC% </TITLE>
   <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/WebHome"> <META NAME="ROBOTS" CONTENT="NOINDEX">
+<SCRIPT LANGUAGE="JavaScript">
+<!--HIDE
+  function launchWindow( theWeb, theTopic ) {
+    win = open("/cgi-bin/view/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+    if( win ) {
+      win.focus();
+    }
+    return false;
+}
+//STOP HIDING-->
+</SCRIPT>
 </HEAD>
 <BODY bgcolor="#ffffff">
 <FORM name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%OLD_WEB%/%OLD_TOPIC%/">
@@ -39,13 +50,16 @@
 </TABLE>
 <input type="hidden" name="changeRefs" value="%CHANGE_REFS%">
 <br>
+See <A target="RenameTopic" onClick="return launchWindow('%TWIKIWEB%','RenameTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/RenameTopic">RenameTopic</A>.
+Select Trash Web to delete.
+<BR>
 <hr>
 <br>
-
 <B>Change references in referring pages</B> - the ticked pages will be updated (if not locked, in which case you'll be able to re-submit.)
+<P>
 <BR>
-
-%SEARCH{ "(^|[_\*\> \t])((%OLD_WEB%\.)?%OLD_TOPIC%)([^A-Za-z0-9]|$)" web="all" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="on"}%
+%SEARCH{ "(^|[_\*\> \t])(()%OLD_TOPIC%)([^A-Za-z0-9]|$)" web="%TOPIC%" noempty="on" showlock="on" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
+%SEARCH{ "(^|[_\*\> \t])((%OLD_WEB%\.)%OLD_TOPIC%)([^A-Za-z0-9]|$)" web="all" noempty="on" showlock="on" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
 
 
 <hr>
