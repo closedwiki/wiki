@@ -69,7 +69,7 @@ use vars qw(
         $disableAllPlugins
         @isoMonth $TranslationToken %mon2num $isList @listTypes @listElements
         $newTopicFontColor $newTopicBgColor
-        $headerPatternDa $headerPatternSp $headerPatternHt
+        $linkProtocolPattern $headerPatternDa $headerPatternSp $headerPatternHt
         $debugUserTime $debugSystemTime
         $viewableAttachmentCount $noviewableAttachmentCount
         $superAdminGroup $doSuperAdminGroup
@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "21 Dec 2001";
+$wikiversion      = "12 Jan 2002";
 
 # ===========================
 # read the configuration part
@@ -127,6 +127,8 @@ $TranslationToken= "\263";
 $cgiQuery = 0;
 @publicWebList = ();
 $viewScript = "view";
+
+$linkProtocolPattern = "(http|ftp|gopher|news|file|https|telnet)";
 
 # Header patterns based on '+++'. The '###' are reserved for numbered headers
 $headerPatternDa = '^---+(\++|\#+)\s+(.+)\s*$';       # '---++ Header', '---## Header'
@@ -742,7 +744,7 @@ sub makeTopicSummary
 
     # inline search renders text, 
     # so prevent linking of external and internal links:
-    $htext =~ s/([\-\*\s])((http|ftp|gopher|news|file|https)\:)/$1<nop>$2/go;
+    $htext =~ s/([\-\*\s])($linkProtocolPattern\:)/$1<nop>$2/go;
     $htext =~ s/([\s\(])([A-Z]+[a-z0-9]*\.[A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
     $htext =~ s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
     $htext =~ s/([\s\(])([A-Z]{3,})/$1<nop>$2/go;
@@ -804,7 +806,7 @@ sub fixURL
     } elsif( $url =~ /^\./ ) {
         # fix relative URL
         $url = "$theHost$theAbsPath/$url";
-    } elsif( $url =~ /^(http|ftp|gopher|news|file|https)\:/ ) {
+    } elsif( $url =~ /^$linkProtocolPattern\:/ ) {
         # full qualified URL, do nothing
     } elsif( $url ) {
         # FIXME: is this test enough to detect relative URLs?
@@ -1881,7 +1883,7 @@ sub specificLink
     $theLink =~ s/^\s*//o;
     $theLink =~ s/\s*$//o;
 
-    if( $theLink =~ /^(http|ftp|gopher|news|file|https)\:/ ) {
+    if( $theLink =~ /^$linkProtocolPattern\:/ ) {
         # found external link
         return "$thePreamble<a href=\"$theLink\" target=\"_top\">$theText</a>";
     }
@@ -2046,7 +2048,7 @@ sub getRenderedVersion
             s/$TranslationToken(\!\-\-)/\<$1/go;
 
 # Handle embedded URLs
-            s@(^|[\-\*\s])((http|ftp|gopher|news|file|https)\:(\S+[^\s\.,!\?;:]))@&externalLink($1,$2)@geo;
+            s@(^|[\-\*\s])($linkProtocolPattern\:(\S+[^\s\.,!\?;:]))@&externalLink($1,$2)@geo;
 
 # Entities
             s/&(\w+?)\;/$TranslationToken$1\;/go;      # "&abc;"
