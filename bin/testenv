@@ -849,13 +849,12 @@ if ( $showLocales ) {		# Only if TWiki.pm found
 	print "</td></tr>\n";
     } 
 
-    # d_setlocale in Config (same as 'perl -V:d_setlocale')
+    # Check for d_setlocale in Config (same as 'perl -V:d_setlocale')
     eval "use Config"; 
     if ( not ( exists $Config{d_setlocale} and $Config{d_setlocale} eq 'define' ) ) {
-	# Warn re Perl not compiled for locale support
 	print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
 	print "This version of Perl was not compiled with locale support ('d_setlocale' not set in Config.pm)\n";
-	print "- re-compilation of Perl will be required before it can be used\n";
+	print "- re-compilation of Perl will be required before it can be used to support TWiki internationalisation.\n";
 	print "</td></tr>\n";
     }
 
@@ -899,12 +898,22 @@ if ( $showLocales ) {		# Only if TWiki.pm found
 	print "<a href=\"http://twiki.org/cgi-bin/view/Codev/TWikiBetaRelease\">TWikiBetaRelease</a> topic.\n";
 	print "</td></tr>\n";
 
-	# Warn against UTF-8 without Perl 5.8
+	# Warn against Perl 5.6 or lower for UTF-8
 	if ( $perlvernum < 5.008 ) {
 	    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-	    print "Perl 5.8 is <b>strongly</b> recommended if you are testing TWiki's current UTF-8 support\n";
+	    print "Perl 5.8 is required if you are using TWiki's experimental UTF-8 support\n";
 	    print "</td></tr>\n";
 	}
+
+        # Check for 'useperlio' in Config on Perl 5.8 or higher - required
+        # for use of ':utf8' layer.
+        if ( $perlvernum >= 5.008 and 
+                not ( exists $Config{useperlio} and $Config{useperlio} eq 'define' ) ) {
+            print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+            print "This version of Perl was not compiled to use PerlIO by default ('useperlio' not set in Config.pm, see <i>Perl's Unicode Model</i> in 'perldoc perluniintro')\n";
+            print "- re-compilation of Perl will be required before it can be used to enable TWiki's experimental UTF-8 support.\n";
+            print "</td></tr>\n";
+        }
     }
 
     # Locales are off/broken, or using pre-5.6 Perl, so have to 
