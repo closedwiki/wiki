@@ -396,7 +396,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. If you are short of disc space you can delete all the files under lib/TWiki/Plugins/FormQueryPlugin/test without breaking the plugin.
 	* The variable %<nop>FORMQUERYPLUGIN_ENABLE% must be set either globally or in the web where you want to use it.
 	* Set ENABLE = 1
-	*  By default the plugin is enabled globally (on all webs). To enable it for selected webs only, comment out the previous line (put a # in front of the word 'Set') and put the following line (without the #) into the WebPreferences topic of the web you want to enable it on:
+	* By default the plugin is enabled globally (on all webs). To enable it for selected webs only, comment out the previous line (put a # in front of the word 'Set') and put the following line (without the #) into the WebPreferences topic of the web you want to enable it on:
 	* #Set FORMQUERYPLUGIN_ENABLE = 1
 
 ---++ Plugin Uninstallation Instructions (Unix/Linux)
@@ -406,13 +406,15 @@ cd to =lib/TWiki/Plugins/FormQueryPlugin/= and type =make uninstall=
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
-|  Plugin Version: | 1.2 |
-|  Change History: | 11 Jul 2003: Initial version |
+|  Plugin Version: | 1.201 |
+|  Change History: | 02 Apr 2004: SimonHardyFrancis bugfixes incorporated. TimSlidel patches incoporated for mod_perl, autocreate, and collapsing same-type tables in a single topic |
 |  | 05 Feb 2004: Bugfix version |
+|  | 11 Jul 2003: Initial version |
 |  CPAN Dependencies: | Time::Parse<nop>Date, Storable |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Demo URL: | http://www.owiki.org/FQP/ |
 
 ---+++ Copyright
 
