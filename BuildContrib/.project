@@ -16,11 +16,4 @@
 	<natures>
 		<nature>org.epic.perleditor.perlnature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>my_version.pl</name>
-			<type>1</type>
-			<location>C:/temp/conformance_analyser.pl</location>
-		</link>
-	</linkedResources>
 </projectDescription>
