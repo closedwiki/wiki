@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1101815419" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="guest" date="1102081000" format="1.0" version="1.8"}%
 Description: Manual trivial fast sanity checks for script functions.
 
 | *Script* | *Description* | *Test* |
@@ -17,6 +17,12 @@ Description: Manual trivial fast sanity checks for script functions.
 | =statistics= | Should redirect to refreshed statistics |<a href="%SCRIPTURLPATH%/statistics%SCRIPTSUFFIX%/TestCases">click here</a> |
 | =upload= | | |
 | =view= | Create non-existant (should redirect to create screen, which is an =oops= test) | <a href="%SCRIPTURLPATH%/view/%SCRIPTSUFFIX%/%WEB%/DontCreateThisTopic">click here</a> |
-| =viewfile= | | |
+| =viewfile= | Click on the links to =viewfile= the images | <a href="%SCRIPTURLPATH%/viewfile/%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=volcano.jpg&rev=1">revision 1</a> <a href="%SCRIPTURLPATH%/viewfile/%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=volcano.jpg&rev=2">revision2</a> |
 
+
+
+
+
+
+%META:FILEATTACHMENT{name="volcano.jpg" attachment="volcano.jpg" attr="" comment="" date="1102080112" path="volcano.jpg" size="2637" tmpFilename="/usr/tmp/CGItemp3319" user="guest" version="1"}%
 

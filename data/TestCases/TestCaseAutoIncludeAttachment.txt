@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1101889773" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="guest" date="1102079307" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! %TOPIC%
 
@@ -21,11 +21,12 @@ Description: Tests for inclusion of attachments
 <h1><a name="Not_Found"> </a> Not Found </h1>
 The requested URL %ATTACHURLPATH%/noexist was not found on this server.<P>
 <HR>
-<!-- /expected -->
+<!-- manual /expected -->
 ---++ Actual
 <!-- manual actual -->
 %INCLUDE{"%ATTACHURL%/noexist"}%
-<!-- /actual -->
+<!-- manual /actual -->
+
 
 %META:FILEATTACHMENT{name="attachment.html" attachment="attachment.html" attr="" comment="" date="1101889684" path="attachment.html" size="18" tmpFilename="/var/tmp/CGItemp34644" user="guest" version="1.1"}%
 
