@@ -91,7 +91,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 %TMPL:DEF{"main"}%
 <form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"topbar"}%
-<textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea><br />
+<textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onKeyDown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 <input type="hidden" name="cmd" value="%CMD%" />     

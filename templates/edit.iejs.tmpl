@@ -349,7 +349,7 @@ function writeJavaScriptNote()
 writeToolbar("top");
 //STOP HIDING-->
 </script>
-<textarea name="text" id="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onclick="storeCaret(this)" onKeyUp="storeCaret(this)" onselect="storeCaret(this)">%TEXT%</textarea>
+<textarea name="text" id="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onclick="storeCaret(this)" onKeyDown="if(window.event.keyCode==27) return false;" onKeyUp="storeCaret(this)" onselect="storeCaret(this)" >%TEXT%</textarea>
 <script language="JavaScript">
 <!--HIDE
 writeToolbar("bottom");
