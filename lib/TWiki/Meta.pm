@@ -31,6 +31,14 @@ package TWiki::Meta;
 
 use strict;
 
+=pod
+
+---++ sub new ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub new
 {
    my $self = {};
@@ -42,6 +50,14 @@ sub new
 # Replace data for this type.  If type is keyed then only the entry where
 # key matches relavent field is replaced
 # Order that args sets are put in is maintained
+=pod
+
+---++ sub put (  $self, $type, %args  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub put
 {
    my( $self, $type, %args ) = @_;
@@ -80,6 +96,14 @@ sub put
 
 # ===========================
 # Give the key field for a type, "" if no key
+=pod
+
+---++ sub _key (  $type  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _key
 {
    my( $type ) = @_;
@@ -94,6 +118,14 @@ sub _key
 # ===========================
 # Find one meta data item
 # Key needed for some types (see _key)
+=pod
+
+---++ sub findOne (  $self, $type, $keyValue  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub findOne
 {
    my( $self, $type, $keyValue ) = @_;
@@ -123,6 +155,14 @@ sub findOne
 # ===========================
 # Get all meta data for a specific type
 # Returns array, zero length if no items
+=pod
+
+---++ sub find (  $self, $type  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub find
 {
     my( $self, $type ) = @_;
@@ -141,6 +181,14 @@ sub find
 # If no keyValue, remove all types, otherwise for types
 # with key, just remove specified item. Remove all types
 # if $type is empty.
+=pod
+
+---++ sub remove (  $self, $type, $keyValue  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub remove
 {
     my( $self, $type, $keyValue ) = @_;
@@ -169,6 +217,14 @@ sub remove
 # ===========================
 # Copy all entries of a type from another meta data set to self,
 # overwriting the own set
+=pod
+
+---++ sub copyFrom (  $self, $otherMeta, $type  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub copyFrom
 {
     my( $self, $otherMeta, $type ) = @_;
@@ -179,6 +235,14 @@ sub copyFrom
 
 # ===========================
 # Number of entries of a given type
+=pod
+
+---++ sub count (  $self, $type  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub count
 {
     my( $self, $type ) = @_;
@@ -193,6 +257,14 @@ sub count
     return $count;
 }
 
+=pod
+
+---++ sub _writeKeyValue (  $key, $value  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _writeKeyValue
 {
     my( $key, $value ) = @_;
@@ -203,6 +275,14 @@ sub _writeKeyValue
     
     return $text;
 }
+
+=pod
+
+---++ sub _writeTypes (  $self, @types  )
+
+Not yet documented.
+
+=cut to implementation
 
 sub _writeTypes
 {
@@ -245,6 +325,14 @@ sub _writeTypes
     return $text;
 }
 
+=pod
+
+---++ sub cleanValue (  $value  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub cleanValue
 {
     my( $value ) = @_;
@@ -260,6 +348,14 @@ sub cleanValue
     return $value;
 }
 
+=pod
+
+---++ sub restoreValue (  $value  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub restoreValue
 {
     my( $value ) = @_;
@@ -273,6 +369,14 @@ sub restoreValue
 
 
 # ======================
+=pod
+
+---++ sub _keyValue2Hash (  $args  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _keyValue2Hash
 {
     my( $args ) = @_;
@@ -292,6 +396,14 @@ sub _keyValue2Hash
 
 # ===========================
 # Returns text with meta stripped out
+=pod
+
+---++ sub read (  $self, $text  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub read
 {
     my( $self, $text ) = @_;
@@ -314,6 +426,14 @@ sub read
 
 # ===========================
 # Meta data for start of topic
+=pod
+
+---++ sub writeStart (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub writeStart
 {
     my( $self ) = @_;
@@ -323,6 +443,14 @@ sub writeStart
 
 # ===========================
 # Meta data for end of topic
+=pod
+
+---++ sub writeEnd (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub writeEnd
 {
     my( $self ) = @_;
@@ -335,6 +463,14 @@ sub writeEnd
 
 # ===========================
 # Prepend/append meta data to topic
+=pod
+
+---++ sub write (  $self, $text  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub write
 {
     my( $self, $text ) = @_;

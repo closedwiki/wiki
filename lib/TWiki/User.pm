@@ -64,6 +64,14 @@ use vars qw( %templateVars ); # init in TWiki.pm so okay for modPerl
 
 # ===========================
 # TODO: why / what is this (docco it)
+=pod
+
+---++ sub initialize ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub initialize
 {
     %templateVars = ();
@@ -72,6 +80,14 @@ sub initialize
 
 # ===========================
 # Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
+=pod
+
+---++ sub _traceExec ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub _traceExec
 {
    #my( $cmd, $result ) = @_;
@@ -79,12 +95,28 @@ sub _traceExec
 }
 
 # ===========================
+=pod
+
+---++ sub writeDebug ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub writeDebug
 {
    #TWiki::writeDebug( "User: $_[0]" );
 }
 
 # ===========================
+=pod
+
+---++ sub _getUserHandler (  $web, $topic, $attachment  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _getUserHandler
 {
    my( $web, $topic, $attachment ) = @_;
@@ -107,6 +139,14 @@ sub _getUserHandler
 | TODO: | what if the login name is not the same as the twikiname?? (I think we don't have TWikiName to username mapping fully worked out|
 
 =cut
+=pod
+
+---++ sub UserPasswordExists (  $user  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub UserPasswordExists
 {
     my ( $user ) = @_;
@@ -128,6 +168,14 @@ sub UserPasswordExists
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 
 =cut
+=pod
+
+---++ sub UpdateUserPassword (  $user, $oldUserPassword, $newUserPassword  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub UpdateUserPassword
 {
     my ( $user, $oldUserPassword, $newUserPassword ) = @_;
@@ -147,6 +195,14 @@ sub UpdateUserPassword
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 
 =cut
+=pod
+
+---++ sub AddUserPassword (  $user, $newUserPassword  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub AddUserPassword
 {
     my ( $user, $newUserPassword ) = @_;
@@ -165,6 +221,14 @@ sub AddUserPassword
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 
 =cut
+=pod
+
+---++ sub RemoveUser (  $user  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub RemoveUser
 {
     my ( $user ) = @_;
@@ -184,6 +248,14 @@ sub RemoveUser
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 
 =cut
+=pod
+
+---++ sub CheckUserPasswd (  $user, $password  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub CheckUserPasswd
 {
     my ( $user, $password ) = @_;
@@ -203,6 +275,14 @@ sub CheckUserPasswd
 | TODO: | does this really belong here? |
 
 =cut
+=pod
+
+---++ sub addUserToTWikiUsersTopic (  $wikiName, $remoteUser  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub addUserToTWikiUsersTopic
 {
     my ( $wikiName, $remoteUser ) = @_;

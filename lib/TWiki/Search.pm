@@ -46,6 +46,14 @@ BEGIN {
 
 # ===========================
 # Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
+=pod
+
+---++ sub _traceExec (  $cmd, $result  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _traceExec
 {
    my( $cmd, $result ) = @_;
@@ -54,6 +62,14 @@ sub _traceExec
 }
 
 # ===========================
+=pod
+
+---++ sub _translateSpace (  $theText  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _translateSpace
 {
     my( $theText ) = @_;
@@ -62,6 +78,14 @@ sub _translateSpace
 }
 
 # ===========================
+=pod
+
+---++ sub _tokensFromSearchString (  $theSearchVal, $theType, $theRegex  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _tokensFromSearchString
 {
     my( $theSearchVal, $theType, $theRegex ) = @_;
@@ -97,6 +121,14 @@ sub _tokensFromSearchString
 }
 
 # =========================
+=pod
+
+---++ sub _searchTopicsInWeb (  $theWeb, $theTopic, $theScope, $theRegex, $caseSensitive, @theTokens  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _searchTopicsInWeb
 {
     my( $theWeb, $theTopic, $theScope, $theRegex, $caseSensitive, @theTokens ) = @_;
@@ -208,6 +240,14 @@ sub _searchTopicsInWeb
 }
 
 # =========================
+=pod
+
+---++ sub _getTopicList (  $web  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _getTopicList
 {
     my( $web ) = @_ ;
@@ -218,6 +258,14 @@ sub _getTopicList
 }
 
 # =========================
+=pod
+
+---++ sub _makeTopicPattern (  $theTopic  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _makeTopicPattern
 {
     my( $theTopic ) = @_ ;
@@ -231,6 +279,14 @@ sub _makeTopicPattern
 }
 
 # =========================
+=pod
+
+---++ sub searchWeb ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub searchWeb
 {
     my %params = @_;
@@ -924,6 +980,14 @@ sub searchWeb
 }
 
 #=========================
+=pod
+
+---++ sub getMetaFormField (  $theMeta, $theParams  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getMetaFormField
 {
     my( $theMeta, $theParams ) = @_;
@@ -951,6 +1015,14 @@ sub getMetaFormField
 }
 
 #=========================
+=pod
+
+---++ sub getTextPattern (  $theText, $thePattern  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getTextPattern
 {
     my( $theText, $thePattern ) = @_;
@@ -964,6 +1036,14 @@ sub getTextPattern
 }
 
 #=========================
+=pod
+
+---++ sub wikiName (  $theWikiUserName  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub wikiName
 {
     my( $theWikiUserName ) = @_;
@@ -973,6 +1053,14 @@ sub wikiName
 }
 
 #=========================
+=pod
+
+---++ sub breakName (  $theText, $theParams  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub breakName
 {
     my( $theText, $theParams ) = @_;
@@ -999,6 +1087,14 @@ sub breakName
 #=========================
 # Turn a topic into a spaced-out topic, with space before each part of
 # the WikiWord.
+=pod
+
+---++ sub spacedTopic (  $topic  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub spacedTopic
 {
     my( $topic ) = @_;

@@ -26,6 +26,14 @@ use strict;
 # Returns array of arrays
 #   1st - list fields
 #   2nd - name, title, type, size, vals, tooltip, setting
+=pod
+
+---++ sub getFormDefinition (  $text  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getFormDefinition
 {
     my( $text ) = @_;
@@ -83,6 +91,14 @@ sub getFormDefinition
 
 
 # ============================
+=pod
+
+---++ sub _cleanField (  $text  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _cleanField
 {
    my( $text ) = @_;
@@ -94,6 +110,14 @@ sub _cleanField
 
 # ============================
 # Possible field values for select, checkbox, radio from supplied topic text
+=pod
+
+---++ sub getPossibleFieldValues (  $text  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getPossibleFieldValues
 {
     my( $text ) = @_;
@@ -126,6 +150,14 @@ sub getPossibleFieldValues
 # ============================
 # Get array of field definition, given form name
 # If form contains Web this overrides webName
+=pod
+
+---++ sub getFormDef (  $webName, $form  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getFormDef
 {
     my( $webName, $form ) = @_;
@@ -173,6 +205,14 @@ sub getFormDef
 
 
 # ============================
+=pod
+
+---++ sub link (  $web, $name, $tooltip, $heading, $align, $span, $extra  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub link
 {
     my( $web, $name, $tooltip, $heading, $align, $span, $extra ) = @_;
@@ -217,6 +257,14 @@ sub link
     return $html;
 }
 
+=pod
+
+---++ sub chooseFormButton (  $text  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub chooseFormButton
 {
     my( $text ) = @_;
@@ -227,6 +275,14 @@ sub chooseFormButton
 
 # ============================
 # Render form information 
+=pod
+
+---++ sub renderForEdit (  $web, $topic, $form, $meta, $query, @fieldsInfo  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub renderForEdit
 {
     my( $web, $topic, $form, $meta, $query, @fieldsInfo ) = @_;
@@ -373,6 +429,14 @@ sub renderForEdit
 
 
 # =============================
+=pod
+
+---++ sub getFormInfoFromMeta (  $webName, $meta  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getFormInfoFromMeta
 {
     my( $webName, $meta ) = @_;
@@ -391,6 +455,14 @@ sub getFormInfoFromMeta
 # =============================
 # Form parameters to meta
 # Note that existing meta information for fields is removed unless $justOverride is true
+=pod
+
+---++ sub fieldVars2Meta (  $webName, $query, $meta, $justOverride  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub fieldVars2Meta
 {
    my( $webName, $query, $meta, $justOverride ) = @_;
@@ -448,6 +520,14 @@ sub fieldVars2Meta
 
 
 # =============================
+=pod
+
+---++ sub getFieldParams (  $meta  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getFieldParams
 {
     my( $meta ) = @_;
@@ -473,6 +553,14 @@ sub getFieldParams
 
 # =============================
 # Called by script to change the form for a topic
+=pod
+
+---++ sub changeForm (  $theWeb, $theTopic, $theQuery  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub changeForm
 {
     my( $theWeb, $theTopic, $theQuery ) = @_;
@@ -519,6 +607,14 @@ sub changeForm
 
 # ============================
 # load old style category table item
+=pod
+
+---++ sub upgradeCategoryItem (  $catitems, $ctext  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub upgradeCategoryItem
 {
     my ( $catitems, $ctext ) = @_;
@@ -603,6 +699,14 @@ sub upgradeCategoryItem
 
 # ============================
 # load old style category table
+=pod
+
+---++ sub upgradeCategoryTable (  $web, $topic, $meta, $text  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub upgradeCategoryTable
 {
     my( $web, $topic, $meta, $text ) = @_;

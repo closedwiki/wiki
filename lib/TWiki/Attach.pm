@@ -32,6 +32,14 @@ use vars qw(
     );
 
 # ======================
+=pod
+
+---++ sub renderMetaData (  $web, $topic, $meta, $args, $isTopRev  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub renderMetaData
 {
     my( $web, $topic, $meta, $args, $isTopRev ) = @_;
@@ -72,6 +80,14 @@ sub renderMetaData
 
 
 # =========================
+=pod
+
+---++ sub filenameToIcon (  $fileName  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub filenameToIcon
 {
     my( $fileName ) = @_;
@@ -94,6 +110,14 @@ sub filenameToIcon
 
 
 # =========================
+=pod
+
+---++ sub formatAttachments (  $theWeb, $theTopic, $showAttr, $isTopRev, %attachment  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub formatAttachments
 {
     my ( $theWeb, $theTopic, $showAttr, $isTopRev, %attachment ) = @_;
@@ -130,6 +154,14 @@ sub formatAttachments
 
 
 #=========================
+=pod
+
+---++ sub migrateFormatForTopic (  $theWeb, $theTopic, $doLogToStdOut  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub migrateFormatForTopic
 {
    my ( $theWeb, $theTopic, $doLogToStdOut ) = @_;
@@ -158,6 +190,14 @@ sub migrateFormatForTopic
 # Get file attachment attributes for old html
 # format.
 # =========================
+=pod
+
+---++ sub getOldAttachAttr (  $atext  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getOldAttachAttr
 {
     my( $atext ) = @_;
@@ -198,6 +238,14 @@ sub getOldAttachAttr
 # Migrate old HTML format, to %FILEATTACHMENT ... format
 # for one piece of text
 # =========================
+=pod
+
+---++ sub migrateToFileAttachmentMacro (  $meta, $text  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub migrateToFileAttachmentMacro
 {
    my ( $meta, $text ) = @_;
@@ -241,6 +289,14 @@ sub migrateToFileAttachmentMacro
 
 
 # =========================
+=pod
+
+---++ sub upgradeFrom1v0beta (  $meta  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub upgradeFrom1v0beta
 {
    my( $meta ) = @_;
@@ -260,6 +316,14 @@ sub upgradeFrom1v0beta
 
 
 # =========================
+=pod
+
+---++ sub formFileAttachmentArgs ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub formFileAttachmentArgs
 {
     my( $theFile, $theVersion, $thePath, $theSize, $theDate, $theUser, 
@@ -282,6 +346,14 @@ sub formFileAttachmentArgs
 
 # =========================
 # Includes required formatting and conversion
+=pod
+
+---++ sub extractFileAttachmentArgs (  %attributes  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub extractFileAttachmentArgs
 {
     my( %attributes ) = @_;
@@ -305,6 +377,14 @@ sub extractFileAttachmentArgs
 
 # FIXME - could be used more?
 # ==========================
+=pod
+
+---++ sub extractArgsForFile (  $theText, $theFile  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub extractArgsForFile
 {
    my ( $theText, $theFile ) = @_;
@@ -320,6 +400,14 @@ sub extractArgsForFile
 # =========================
 # Remove attachment macro for specified file from topic
 # return "", or error string
+=pod
+
+---++ sub removeFile ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub removeFile
 {
     my $theFile = $_[1];
@@ -333,6 +421,14 @@ sub removeFile
 }
 
 # =========================
+=pod
+
+---++ sub updateProperties (  $fileName, $hideFile, $fileComment, $meta  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub updateProperties
 {
     my( $fileName, $hideFile, $fileComment, $meta ) = @_;
@@ -347,6 +443,14 @@ sub updateProperties
 # =========================
 # Add/update attachment for a topic
 # $text is full set of attachments, new attachments will be added to the end.
+=pod
+
+---++ sub updateAttachment (  $fileVersion, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $hideFile, $meta  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub updateAttachment
 {
     my ( $fileVersion, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $hideFile, $meta ) = @_;

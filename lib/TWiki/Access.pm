@@ -46,6 +46,7 @@ use vars qw(
 | Description: | Basic module initialization, called from TWiki::initialize |
 
 =cut to implementation
+
 sub initializeAccess
 {
     %allGroups = ();
@@ -55,6 +56,14 @@ sub initializeAccess
 # =========================
 # Are there any security restrictions for this Web
 # (ignoring settings on individual pages).
+=pod
+
+---++ sub permissionsSet (  $web  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub permissionsSet
 {
     my( $web ) = @_;
@@ -91,6 +100,14 @@ sub permissionsSet
 | Return:    =$ok=      | 1 if OK to access, 0 if no permission |
 
 =cut to implementation
+=pod
+
+---++ sub checkAccessPermission ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub checkAccessPermission
 {
     my( $theAccessType, $theUserName,
@@ -196,6 +213,14 @@ sub checkAccessPermission
 | Return:    =$ok=    | 1 user is in group, 0 if not |
 
 =cut to implementation
+=pod
+
+---++ sub userIsInGroup (  $theUserName, $theGroupTopicName  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub userIsInGroup
 {
     my( $theUserName, $theGroupTopicName ) = @_;
@@ -227,6 +252,14 @@ sub userIsInGroup
 | Return:    =@users=  | List of users, e.g. ( "Main.JohnSmith", "Main.JaneMiller" ) |
 
 =cut to implementation
+=pod
+
+---++ sub getUsersOfGroup (  $theGroupTopicName  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getUsersOfGroup
 {
     my( $theGroupTopicName ) = @_;
@@ -235,6 +268,14 @@ sub getUsersOfGroup
 }
 
 # =========================
+=pod
+
+---++ sub prvGetUsersOfGroup (  $theGroupTopicName, $theFirstCall  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub prvGetUsersOfGroup
 {
     my( $theGroupTopicName, $theFirstCall ) = @_;
@@ -305,6 +346,14 @@ sub prvGetUsersOfGroup
 }
 
 # =========================
+=pod
+
+---++ sub prvGetWebTopicName (  $theWebName, $theTopicName  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub prvGetWebTopicName
 {
     my( $theWebName, $theTopicName ) = @_;
@@ -319,6 +368,14 @@ sub prvGetWebTopicName
 }
 
 # =========================
+=pod
+
+---++ sub prvGetUserList (  $theItems  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub prvGetUserList
 {
     my( $theItems ) = @_;

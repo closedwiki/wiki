@@ -64,6 +64,14 @@ $VERSION = '1.010';
 
 
 # =========================
+=pod
+
+---++ sub discoverPluginPerlModules ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub discoverPluginPerlModules
 {
     my $libDir = &TWiki::getTWikiLibDir();
@@ -80,6 +88,14 @@ sub discoverPluginPerlModules
 }
 
 # =========================
+=pod
+
+---++ sub registerHandler (  $handlerName, $theHandler  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub registerHandler
 {
     my ( $handlerName, $theHandler ) = @_;
@@ -87,6 +103,14 @@ sub registerHandler
 }
 
 # =========================
+=pod
+
+---++ sub registerPlugin (  $plugin, $topic, $web, $user, $theLoginName, $theUrl, $thePathInfo  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub registerPlugin
 {
     #FIXME make all this sub more robust
@@ -174,6 +198,14 @@ sub registerPlugin
 }
 
 # =========================
+=pod
+
+---++ sub applyHandlers ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub applyHandlers
 {
     my $handlerName = shift;
@@ -200,6 +232,14 @@ sub applyHandlers
 # Initialisation that is done is done before the user is known
 # Can return a user e.g. if a plugin like SessionPlugin sets the user
 # using initializeUserHandler.
+=pod
+
+---++ sub initialize1 (  $theTopicName, $theWebName, $theLoginName, $theUrl, $thePathInfo  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub initialize1
 {
     my( $theTopicName, $theWebName, $theLoginName, $theUrl, $thePathInfo ) = @_;
@@ -251,6 +291,14 @@ sub initialize1
 
 # =========================
 # Initialisation that is done is done after the user is known
+=pod
+
+---++ sub initialize2 (  $theTopicName, $theWebName, $theUser  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub initialize2
 {
     my( $theTopicName, $theWebName, $theUser ) = @_;
@@ -268,6 +316,14 @@ sub initialize2
 }
 
 # =========================
+=pod
+
+---++ sub handlePluginDescription ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub handlePluginDescription
 {
     my $text = "";
@@ -285,6 +341,14 @@ sub handlePluginDescription
 }
 
 # =========================
+=pod
+
+---++ sub handleActivatedPlugins ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleActivatedPlugins
 {
     my $text = "";
@@ -298,6 +362,14 @@ sub handleActivatedPlugins
 # =========================
 # FIXME: This function no longer used: superseded by initialize1.
 # remove on non documentation-only commit.
+=pod
+
+---++ sub initializeUserHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub initializeUserHandler
 {
     # Called by TWiki::initialize
@@ -314,6 +386,14 @@ sub initializeUserHandler
 }
 
 # =========================
+=pod
+
+---++ sub registrationHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub registrationHandler
 {
     # Called by the register script
@@ -323,6 +403,14 @@ sub registrationHandler
 }
 
 # =========================
+=pod
+
+---++ sub commonTagsHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub commonTagsHandler
 {
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
@@ -334,6 +422,14 @@ sub commonTagsHandler
 }
 
 # =========================
+=pod
+
+---++ sub startRenderingHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub startRenderingHandler
 {
     # Called by getRenderedVersion just before the line loop
@@ -343,6 +439,14 @@ sub startRenderingHandler
 }
 
 # =========================
+=pod
+
+---++ sub outsidePREHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub outsidePREHandler
 {
     # Called by sub getRenderedVersion, in loop outside of <PRE> tag
@@ -352,6 +456,14 @@ sub outsidePREHandler
 }
 
 # =========================
+=pod
+
+---++ sub insidePREHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub insidePREHandler
 {
     # Called by sub getRenderedVersion, in loop inside of <PRE> tag
@@ -361,6 +473,14 @@ sub insidePREHandler
 }
 
 # =========================
+=pod
+
+---++ sub endRenderingHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub endRenderingHandler
 {
     # Called by getRenderedVersion just after the line loop
@@ -370,6 +490,14 @@ sub endRenderingHandler
 }
 
 # =========================
+=pod
+
+---++ sub beforeEditHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub beforeEditHandler
 {
     # Called by edit
@@ -379,6 +507,14 @@ sub beforeEditHandler
 }
 
 # =========================
+=pod
+
+---++ sub afterEditHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub afterEditHandler
 {
     # Called by edit
@@ -388,6 +524,14 @@ sub afterEditHandler
 }
 
 # =========================
+=pod
+
+---++ sub beforeSaveHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub beforeSaveHandler
 {
     # Called by TWiki::Store::saveTopic before the save action
@@ -397,6 +541,14 @@ sub beforeSaveHandler
 }
 
 # =========================
+=pod
+
+---++ sub writeHeaderHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub writeHeaderHandler
 {
     # Called by TWiki::writeHeader
@@ -405,6 +557,14 @@ sub writeHeaderHandler
 }
 
 # =========================
+=pod
+
+---++ sub redirectCgiQueryHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub redirectCgiQueryHandler
 {
     # Called by TWiki::redirect
@@ -413,6 +573,14 @@ sub redirectCgiQueryHandler
 }
 
 # =========================
+=pod
+
+---++ sub getSessionValueHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub getSessionValueHandler
 {
     # Called by TWiki::getSessionValue
@@ -421,6 +589,14 @@ sub getSessionValueHandler
 }
 
 # =========================
+=pod
+
+---++ sub setSessionValueHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub setSessionValueHandler
 {
     # Called by TWiki::setSessionValue
@@ -429,6 +605,14 @@ sub setSessionValueHandler
 }
 
 # =========================
+=pod
+
+---++ sub renderFormFieldForEditHandler ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub renderFormFieldForEditHandler
 {
     # Called by Form.TODO

@@ -39,6 +39,14 @@ BEGIN {
 }
 
 # =========================
+=pod
+
+---++ sub getUrl (  $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getUrl
 {
     my ( $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader ) = @_;
@@ -101,6 +109,14 @@ sub getUrl
 }
 
 # =========================
+=pod
+
+---++ sub sendEmail (  $theText  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub sendEmail
 {
     # $theText Format: "Date: ...\nFrom: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody..."
@@ -186,6 +202,14 @@ sub sendEmail
 }
 
 # =========================
+=pod
+
+---++ sub _fixLineLength (  $theAddrs  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _fixLineLength
 {
     my( $theAddrs ) = @_;
@@ -196,6 +220,14 @@ sub _fixLineLength
 }
 
 # =========================
+=pod
+
+---++ sub _sendEmailBySendmail (  $theText  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _sendEmailBySendmail
 {
     my( $theText ) = @_;
@@ -209,6 +241,14 @@ sub _sendEmailBySendmail
 }
 
 # =========================
+=pod
+
+---++ sub _sendEmailByNetSMTP (  $from, $toref, $data  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _sendEmailByNetSMTP
 {
     my( $from, $toref, $data ) = @_;

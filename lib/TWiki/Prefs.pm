@@ -42,6 +42,14 @@ Resets all preference globals (for mod_perl compatibility), and reads
 preferences from TWiki::TWikiPreferences, Main::TWikiPreferences, and
 $webName::WebPreferences.
 =cut to implementation
+=pod
+
+---++ sub initializePrefs (  $theWebName  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub initializePrefs
 {
     my( $theWebName ) = @_;
@@ -68,6 +76,14 @@ Called after user is known (potentially by Plugin), this function
 reads preferences from the user's personal topic.  Note that the
 parameter is of the form "Main.JohnSmith", not just "JohnSmith".
 =cut to implementation
+=pod
+
+---++ sub initializeUserPrefs (  $theWikiUserName  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub initializeUserPrefs
 {
     my( $theWikiUserName ) = @_;
@@ -81,6 +97,14 @@ sub initializeUserPrefs
 
 
 # =========================
+=pod
+
+---++ sub getPrefsFromTopic (  $theWeb, $theTopic, $theKeyPrefix  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getPrefsFromTopic
 {
     my ( $theWeb, $theTopic, $theKeyPrefix ) = @_;
@@ -133,6 +157,14 @@ sub getPrefsFromTopic
 }
 
 # =========================
+=pod
+
+---++ sub updateSetFromForm (  $meta, $text  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub updateSetFromForm
 {
     my( $meta, $text ) = @_;
@@ -166,6 +198,14 @@ sub updateSetFromForm
 }
 
 # =========================
+=pod
+
+---++ sub prvAddToPrefsList (  $theKey, $theValue  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub prvAddToPrefsList
 {
     my ( $theKey, $theValue ) = @_;
@@ -205,6 +245,14 @@ sub prvAddToPrefsList
 }
 
 # =========================
+=pod
+
+---++ sub prvHandlePrefsValue (  $theIdx  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub prvHandlePrefsValue
 {
     my( $theIdx ) = @_;
@@ -214,6 +262,14 @@ sub prvHandlePrefsValue
 }
 
 # =========================
+=pod
+
+---++ sub prvHandleWebVariable (  $attributes  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub prvHandleWebVariable
 {
     my( $attributes ) = @_;
@@ -227,6 +283,14 @@ sub prvHandleWebVariable
 }
 
 # =========================
+=pod
+
+---++ sub handlePreferencesTags ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub handlePreferencesTags
 {
     # modify argument directly, e.g. call by reference
@@ -244,6 +308,14 @@ sub handlePreferencesTags
 }
 
 # =========================
+=pod
+
+---++ sub getPreferencesValue (  $theKey, $theWeb  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getPreferencesValue
 {
     my ( $theKey, $theWeb ) = @_;
@@ -289,6 +361,14 @@ sub getPreferencesValue
 }
 
 # =========================
+=pod
+
+---++ sub getPreferencesFlag (  $theKey, $theWeb  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getPreferencesFlag
 {
     my ( $theKey, $theWeb ) = @_;

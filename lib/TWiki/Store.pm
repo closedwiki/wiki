@@ -48,6 +48,14 @@ BEGIN {
 use vars qw( %templateVars ); # init in TWiki.pm so okay for modPerl
 
 # ===========================
+=pod
+
+---++ sub initialize ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub initialize
 {
     %templateVars = ();
@@ -56,16 +64,40 @@ sub initialize
 
 # ===========================
 # Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
+=pod
+
+---++ sub _traceExec ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub _traceExec
 {
    #my( $cmd, $result ) = @_;
    #TWiki::writeDebug( "Store exec: $cmd -> $result" );
 }
 
+=pod
+
+---++ sub writeDebug ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub writeDebug
 {
    #TWiki::writeDebug( "Store: $_[0]" );
 }
+
+=pod
+
+---++ sub _getTopicHandler (  $web, $topic, $attachment  )
+
+Not yet documented.
+
+=cut to implementation
 
 sub _getTopicHandler
 {
@@ -90,6 +122,14 @@ sub _getTopicHandler
 #   ( "",     "Web.Topic" )     ( "Web",  "Topic" )
 #   ( "Web1", "Web2.Topic" )    ( "Web2", "Topic" )
 # Note: Function renamed from getWebTopic
+=pod
+
+---++ sub normalizeWebTopicName (  $theWeb, $theTopic  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub normalizeWebTopicName
 {
    my( $theWeb, $theTopic ) = @_;
@@ -109,6 +149,14 @@ sub normalizeWebTopicName
 # Get rid of a topic and its attachments completely
 # Intended for TEST purposes.
 # Use with GREAT CARE as file will be gone, including RCS history
+=pod
+
+---++ sub erase (  $web, $topic  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub erase
 {
     my( $web, $topic ) = @_;
@@ -124,6 +172,14 @@ sub erase
 # If there is a problem an error string is returned.
 # The caller to this routine should check that all topics are valid and
 # do lock on the topics.
+=pod
+
+---++ sub moveAttachment (  $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub moveAttachment
 {
     my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment ) = @_;
@@ -163,6 +219,14 @@ sub moveAttachment
 # =========================
 # When moving a topic to another web, change within-web refs from this topic so that they'll work
 # when the topic is in the new web. I have a feeling this shouldn't be in Store.pm.
+=pod
+
+---++ sub changeRefTo (  $text, $oldWeb, $oldTopic  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub changeRefTo
 {
    my( $text, $oldWeb, $oldTopic ) = @_;
@@ -226,6 +290,14 @@ sub changeRefTo
 # Rename a topic, allowing for transfer between Webs
 # It is the responsibility of the caller to check for existence of webs,
 # topics & lock taken for topic
+=pod
+
+---++ sub renameTopic (  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub renameTopic
 {
    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo ) = @_;
@@ -264,6 +336,14 @@ sub renameTopic
 
 #==================================
 # update pages that refer to the one being renamed/moved
+=pod
+
+---++ sub updateReferingPages (  $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub updateReferingPages
 {
     my ( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs ) = @_;
@@ -343,6 +423,14 @@ sub updateReferingPages
 # =========================
 # Read a specific version of a topic
 # view:     $text= &TWiki::Store::readTopicVersion( $topic, "1.$rev" );
+=pod
+
+---++ sub readTopicVersion (  $theWeb, $theTopic, $theRev  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub readTopicVersion
 {
     my( $theWeb, $theTopic, $theRev ) = @_;
@@ -356,6 +444,14 @@ sub readTopicVersion
 
 # =========================
 # Read a specific version of a topic
+=pod
+
+---++ sub _readVersionNoMeta (  $theWeb, $theTopic, $theRev  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _readVersionNoMeta
 {
     my( $theWeb, $theTopic, $theRev ) = @_;
@@ -366,6 +462,14 @@ sub _readVersionNoMeta
 }
 
 # =========================
+=pod
+
+---++ sub readAttachmentVersion (  $theWeb, $theTopic, $theAttachment, $theRev  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub readAttachmentVersion
 {
    my ( $theWeb, $theTopic, $theAttachment, $theRev ) = @_;
@@ -377,6 +481,14 @@ sub readAttachmentVersion
 
 # =========================
 # Use meta information if available ...
+=pod
+
+---++ sub getRevisionNumber (  $theWebName, $theTopic, $attachment  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getRevisionNumber
 {
     my( $theWebName, $theTopic, $attachment ) = @_;
@@ -393,6 +505,14 @@ sub getRevisionNumber
 # =========================
 # Latest revision number
 # Returns "" if there is no revision
+=pod
+
+---++ sub getRevisionNumberX (  $theWebName, $theTopic, $attachment  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getRevisionNumberX
 {
     my( $theWebName, $theTopic, $attachment ) = @_;
@@ -412,6 +532,14 @@ sub getRevisionNumberX
 
 # =========================
 # rdiff:            $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1" );
+=pod
+
+---++ sub getRevisionDiff (  $web, $topic, $rev1, $rev2  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getRevisionDiff
 {
     my( $web, $topic, $rev1, $rev2 ) = @_;
@@ -428,6 +556,14 @@ sub getRevisionDiff
 # Call getRevisionInfoFromMeta for faster response for topics
 # FIXME try and get rid of this it's a mess
 # In direct calls changeToIsoDate always seems to be 1
+=pod
+
+---++ sub getRevisionInfo (  $theWebName, $theTopic, $theRev, $changeToIsoDate, $attachment, $topicHandler  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getRevisionInfo
 {
     my( $theWebName, $theTopic, $theRev, $changeToIsoDate, $attachment, $topicHandler ) = @_;
@@ -452,6 +588,14 @@ sub getRevisionInfo
 
 
 # =========================
+=pod
+
+---++ sub topicIsLockedBy (  $theWeb, $theTopic  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub topicIsLockedBy
 {
     my( $theWeb, $theTopic ) = @_;
@@ -483,6 +627,14 @@ sub topicIsLockedBy
 
 
 # ======================
+=pod
+
+---++ sub keyValue2list (  $args  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub keyValue2list
 {
     my( $args ) = @_;
@@ -500,6 +652,14 @@ sub keyValue2list
 
 
 # ========================
+=pod
+
+---++ sub metaAddTopicData (  $web, $topic, $rev, $meta, $forceDate, $forceUser  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub metaAddTopicData
 {
     my( $web, $topic, $rev, $meta, $forceDate, $forceUser ) = @_;
@@ -517,6 +677,14 @@ sub metaAddTopicData
 
 
 # =========================
+=pod
+
+---++ sub saveTopicNew (  $web, $topic, $text, $metaData, $saveCmd, $doUnlock, $dontNotify, $dontLogSave  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub saveTopicNew
 {
     my( $web, $topic, $text, $metaData, $saveCmd, $doUnlock, $dontNotify, $dontLogSave ) = @_;
@@ -527,6 +695,14 @@ sub saveTopicNew
 }
 
 # =========================
+=pod
+
+---++ sub saveTopic (  $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave, $forceDate  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub saveTopic
 {
     my( $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave, $forceDate ) = @_;
@@ -544,6 +720,14 @@ sub saveTopic
 }
 
 # =========================
+=pod
+
+---++ sub saveAttachment ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub saveAttachment
 {
     my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $theTmpFilename,
@@ -558,6 +742,14 @@ sub saveAttachment
 
 
 # =========================
+=pod
+
+---++ sub save (  $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub save
 {
     my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate ) = @_;
@@ -572,6 +764,14 @@ sub save
 
 # =========================
 # Add meta data to the topic
+=pod
+
+---++ sub _addMeta (  $web, $topic, $text, $attachment, $nextRev, $meta, $forceDate, $forceUser  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _addMeta
 {
     my( $web, $topic, $text, $attachment, $nextRev, $meta, $forceDate, $forceUser ) = @_;
@@ -589,6 +789,14 @@ sub _addMeta
 # =========================
 # return non-null string if there is an (RCS) error.
 # FIXME: does rev info from meta work if user saves a topic with no change?
+=pod
+
+---++ sub saveNew (  $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub saveNew
 {
     my( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate ) = @_;
@@ -732,6 +940,14 @@ sub saveNew
 }
 
 # =========================
+=pod
+
+---++ sub writeLog (  $action, $webTopic, $extra, $user  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub writeLog
 {
     my( $action, $webTopic, $extra, $user ) = @_;
@@ -757,6 +973,14 @@ sub writeLog
 }
 
 # =========================
+=pod
+
+---++ sub saveFile (  $name, $text  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub saveFile
 {
     my( $name, $text ) = @_;
@@ -771,6 +995,14 @@ sub saveFile
 }
 
 # =========================
+=pod
+
+---++ sub lockTopic (  $name, $doUnlock  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub lockTopic
 {
    my ( $name, $doUnlock ) = @_;
@@ -780,6 +1012,14 @@ sub lockTopic
 
 # =========================
 # Called from rename and TWiki::Func
+=pod
+
+---++ sub lockTopicNew (  $theWeb, $theTopic, $doUnlock  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub lockTopicNew
 {
     my( $theWeb, $theTopic, $doUnlock ) = @_;
@@ -791,6 +1031,14 @@ sub lockTopicNew
 }
 
 # =========================
+=pod
+
+---++ sub removeObsoleteTopicLocks (  $web  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub removeObsoleteTopicLocks
 {
     my( $web ) = @_;
@@ -823,6 +1071,14 @@ sub removeObsoleteTopicLocks
 }
 
 # =========================
+=pod
+
+---++ sub webExists (  $theWeb  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub webExists
 {
     my( $theWeb ) = @_;
@@ -830,6 +1086,14 @@ sub webExists
 }
 
 # =========================
+=pod
+
+---++ sub topicExists (  $theWeb, $theTopic  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub topicExists
 {
     my( $theWeb, $theTopic ) = @_;
@@ -840,6 +1104,14 @@ sub topicExists
 # =========================
 # Try and get from meta information in topic, if this can't be done then use RCS
 # Note there is no "1." prefix to this data
+=pod
+
+---++ sub getRevisionInfoFromMeta (  $web, $topic, $meta, $changeToIsoDate  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getRevisionInfoFromMeta
 {
     my( $web, $topic, $meta, $changeToIsoDate ) = @_;
@@ -870,6 +1142,14 @@ sub getRevisionInfoFromMeta
 
 
 # =========================
+=pod
+
+---++ sub convert2metaFormat (  $web, $topic, $text  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub convert2metaFormat
 {
     my( $web, $topic, $text ) = @_;
@@ -891,6 +1171,14 @@ sub convert2metaFormat
 # =========================
 # Expect meta data at top of file, but willing to accept it anywhere
 # If we have an old file format without meta data, then convert
+=pod
+
+---++ sub _extractMetaData (  $web, $topic, $fulltext  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _extractMetaData
 {
     my( $web, $topic, $fulltext ) = @_;
@@ -924,6 +1212,14 @@ sub _extractMetaData
 }
 
 # FIXME - get rid of this because uses private part of handler
+=pod
+
+---++ sub getFileName (  $theWeb, $theTopic, $theAttachment  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getFileName
 {
     my( $theWeb, $theTopic, $theAttachment ) = @_;
@@ -935,6 +1231,14 @@ sub getFileName
 # ======================
 # Just read the meta data at the top of the topic
 # Generalise for Codev.DataFramework, but needs to be fast because of use by view script
+=pod
+
+---++ sub readTopMeta (  $theWeb, $theTopic  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub readTopMeta
 {
     my( $theWeb, $theTopic ) = @_;
@@ -961,8 +1265,20 @@ sub readTopMeta
     return $meta;
 }
 
-# =========================
-# $internal true if topic being read for internal use
+=pod
+
+---++ readTopic( $web, $topic, $internal )
+Return value: ( $metaObject, $topicText )
+
+Reads the most recent version of a topic.  If $internal is false, view
+permission will be required for the topic read to be successful.  A failed
+topic read is indicated by setting $TWiki::readTopicPermissionFailed.
+
+The metadata and topic text are returned separately, with the metadata in a
+TWiki::Meta object.  (The topic text is, as usual, just a string.)
+
+=cut to implementation
+
 sub readTopic
 {
     my( $theWeb, $theTopic, $internal ) = @_;
@@ -975,6 +1291,14 @@ sub readTopic
 }
 
 # =========================
+=pod
+
+---++ sub readWebTopic (  $theWeb, $theName  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub readWebTopic
 {
     my( $theWeb, $theName ) = @_;
@@ -983,8 +1307,18 @@ sub readWebTopic
     return $text;
 }
 
-# =========================
-# Optional version in format 1.x
+=pod
+
+---++ readTopicRaw( $web, $topic, $version, $internal )
+Return value: $topicText
+
+Reads a topic; the most recent version is used unless $version is specified.
+If $internal is false, view access permission will be checked.  If permission
+is not granted, then an error message will be returned in $text, and set in
+$TWiki::readTopicPermissionFailed.
+
+=cut to implementation
+
 sub readTopicRaw
 {
     my( $theWeb, $theTopic, $theVersion, $internal ) = @_;
@@ -1017,6 +1351,14 @@ sub readTopicRaw
 
 
 # =========================
+=pod
+
+---++ sub readTemplateTopic (  $theTopicName  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub readTemplateTopic
 {
     my( $theTopicName ) = @_;
@@ -1033,6 +1375,14 @@ sub readTemplateTopic
 }
 
 # =========================
+=pod
+
+---++ sub _readTemplateFile (  $theName, $theSkin  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _readTemplateFile
 {
     my( $theName, $theSkin ) = @_;
@@ -1090,6 +1440,14 @@ sub _readTemplateFile
 }
 
 # =========================
+=pod
+
+---++ sub handleTmplP (  $theVar  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleTmplP
 {
     # Print template variable, called by %TMPL:P{"$theVar"}%
@@ -1108,6 +1466,14 @@ sub handleTmplP
 }
 
 # =========================
+=pod
+
+---++ sub readTemplate (  $theName, $theSkin  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub readTemplate
 {
     my( $theName, $theSkin ) = @_;
@@ -1164,8 +1530,18 @@ sub readTemplate
     return $result;
 }
 
+=pod
 
-# =========================
+---++ readFile( $filename )
+Return value: $fileContents
+
+Returns the entire contents of the given file, which can be specified in any
+format acceptable to the Perl open() function.  SECURITY NOTE: make sure
+any $filename coming from a user is stripped of special characters that might
+change Perl's open() semantics.
+
+=cut to implementation
+
 sub readFile
 {
     my( $name ) = @_;
@@ -1181,6 +1557,14 @@ sub readFile
 
 
 # =========================
+=pod
+
+---++ sub readFileHead (  $name, $maxLines  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub readFileHead
 {
     my( $name, $maxLines ) = @_;
@@ -1200,6 +1584,14 @@ sub readFileHead
 
 # =========================
 #AS 5 Dec 2000 collect all Web's topic names
+=pod
+
+---++ sub getTopicNames (  $web  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getTopicNames {
     my( $web ) = @_ ;
 
@@ -1228,6 +1620,14 @@ sub getTopicNames {
 
 # =========================
 #AS 5 Dec 2000 collect immediate subWeb names
+=pod
+
+---++ sub getSubWebs (  $web  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getSubWebs {
     my( $web ) = @_ ;
     
@@ -1259,6 +1659,14 @@ sub getSubWebs {
 #FIXME: move var to TWiki.cfg ?
 use vars qw ($subWebsAllowedP);
 $subWebsAllowedP = 0; # 1 = subwebs allowed, 0 = flat webs
+
+=pod
+
+---++ sub getAllWebs (  $web  )
+
+Not yet documented.
+
+=cut to implementation
 
 sub getAllWebs {
     # returns a list of subweb names
