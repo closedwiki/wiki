@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="JohnTalintyre" date="999762483" format="1.0" version="1.46"}%
+%META:TOPICINFO{author="MikeMannix" date="999807765" format="1.0" version="1.47"}%
 <font size="+3"> *TWiki History: The Dev Timeline* </font>
 
 %TOC%
@@ -21,7 +21,7 @@
 		* New =%<nop>URLPARAM{"name"}%= variable to query URL parameters. More in TWikiVariables. 
 	* *Apr/Jun 2001* - AndreaSterbini
 		* API to extend TWiki, see [[TWikiPlugins#PluginAPI][TWikiPluginAPI]] 
-	* *Jun 2001* - [[http://TWiki.org/cgi-bin/view/%MAINWEB%/KlausWriessnegger][KlausWriessnegger]], AndreaSterbini
+	* *Jun 2001* - KlausWriessnegger, AndreaSterbini
 		* Forms to change/reset/install passwords, see ChangePassword &amp; ResetPassword
 	* *May 2001* - AndreaSterbini
 		* The %MAINWEB%.TWikiAdminGroup (or other group) can be enabled as a [[TWikiAccessControl#SuperAdminGroup][SuperAdminGroup]]. Members have browser edit access to _all_ locked topics. 
