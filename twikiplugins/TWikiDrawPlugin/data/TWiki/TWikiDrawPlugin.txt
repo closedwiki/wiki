@@ -31,7 +31,7 @@ The tools on the left create or manipulate figures.
 | <img src="%ATTACHURLPATH%/SCRIBBL1.gif" width="24" height="24" alt="Scribble"> | creates a scribble figure; dragging the mouse creates a smooth line while successive clicks yields a polyline figure. A two-button click terminates the figure. |
 | <img src="%ATTACHURLPATH%/POLYGON1.gif" width="24" height="24" alt="Polygon"> | creates a polygon figure; dragging the mouse creates a smooth border while successive clicks yields a polyline border. A two-button click or the ESCAPE key terminates the figure. |
 | <img src="%ATTACHURLPATH%/BORDDEC1.gif" width="24" height="24" alt="Border"> | decorates the clicked figure with a border |
-| <img src="%ATTACHURLPATH%/URL1.gif" width="24" height="24" alt="URL"> | adds a sensitive area to the figure that will redirect to a URL. If an image contains any sensitive areas it can only be selected for edit by clicking on the boundary or (if enabled) the attached Edit button. |
+| <img src="%ATTACHURLPATH%/URL1.gif" width="24" height="24" alt="URL"> | adds a sensitive area to the figure that will redirect to a URL. If an image contains any sensitive areas it can only be selected for edit by clicking on the boundary or (if enabled) the attached Edit button. You can use wikiwords and web.topic wiki link expressions as well as full URLs. |
 
 ---+++ Handles
 

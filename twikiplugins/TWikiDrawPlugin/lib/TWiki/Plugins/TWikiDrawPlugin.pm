@@ -9,7 +9,7 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $editButton
     );
 
-$VERSION = 1.100;
+$VERSION = 1.101;
 my $editmess;
 
 sub initPlugin {
@@ -55,6 +55,8 @@ sub handleDrawing {
 	$mapname =~ s/^.*\/([^\/]+)$/$1/;
 	$img .= " usemap=\"#$mapname\"";
 	my $map = TWiki::Func::readFile($mapFile);
+    # Unashamed hack to handle Web.TopicName links
+    $map =~ s/href=\"((\w+)\.)?(\w+)\"/&_processHref($2,$3,$web)/ge;
 	$map = TWiki::Func::expandCommonVariables( $map, $topic );
 	$map =~ s/%MAPNAME%/$mapname/g;
 	$map =~ s/%TWIKIDRAW%/$editUrl/g;
@@ -77,6 +79,13 @@ sub handleDrawing {
 #          "$edittext</button><br />" if ( $editButton == 1 );
   }
   return $imgText;
+}
+
+sub _processHref {
+    my ( $web, $topic, $defweb ) = @_;
+
+    $web = $defweb unless ( $web );
+    return "href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"";
 }
 
 sub commonTagsHandler
