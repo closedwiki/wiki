@@ -130,7 +130,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "05 Mar 2004";
+$wikiversion      = "07 Mar 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -3461,7 +3461,7 @@ Warning: Slower performance if enabled.
 sub linkToolTipInfo
 {
     my( $theWeb, $theTopic ) = @_;
-    return unless( $linkToolTipInfo );
+    return "" unless( $linkToolTipInfo );
 
     # FIXME: This is slow, it can be improved by caching topic rev info and summary
     my( $date, $user, $rev ) = TWiki::Store::getRevisionInfo( $theWeb, $theTopic );
