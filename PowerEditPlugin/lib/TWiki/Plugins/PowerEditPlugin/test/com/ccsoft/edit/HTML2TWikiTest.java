@@ -30,7 +30,7 @@ public class HTML2TWikiTest extends TestCase {
 	}
     }
 
-    public void test1() {
+    public void testHTMLConversion() {
 	thingsToProcess = new Vector();
 	thingsProcessed = new Vector();
 	//thingsToProcess.add("http://localhost");

@@ -9,7 +9,7 @@
 <project name="PowerEditPlugin" default="build">
 
     <!-- set to "yes" for debug info in the java -->
-    <property name="debug.setting" value="no" />
+    <property name="debug.setting" value="yes" />
 
     <property environment="ENV" />
     <property name="twiki" value="${ENV.TWIKI_HOME}" />
@@ -25,6 +25,7 @@
 
     <property name="app.test" value="${plugin.lib}/test" />
     <property name="jar.file" value="${plugin.pub}/poweredit.jar" />
+    <property name="jar.lite.file" value="${plugin.pub}/powereditlite.jar" />
     <property name="src.zip" value="${plugin.lib}/source.zip" />
     <property name="release.zip" value="${ant.project.name}.zip" />
 
@@ -55,7 +56,6 @@
     <!-- Classpath for running tests -->
     <path id="test.class.path">
         <pathelement path="${java.class.path}/" />
-        <pathelement path="/usr/lib/netscape/java/classes/java40.jar" />
         <pathelement path="${test.classes}" />
         <pathelement path="${jar.file}" />
         <pathelement path="${junit}" />
@@ -67,6 +67,7 @@
 	<include name="${lib.plugins}/PowerEditPlugin.pm" />
 	<include name="templates/*.power.tmpl" />
 	<include name="${jar.file}" />
+	<include name="${jar.lite.file}" />
 	<include name="${plugin.data}*.txt" />
 	<include name="${src.zip}" />
     </patternset>
@@ -91,8 +92,11 @@
             includes="**/*.java"
         />
 	<delete file="${jar.file}" />
+	<delete file="${jar.lite.file}" />
 	<mkdir dir="${plugin.pub}" />
         <jar jarfile="${jar.file}" basedir="${applet.classes}" />
+        <jar jarfile="${jar.lite.file}" basedir="${applet.classes}"
+	excludes="**/HTML2TWiki*.class,com/kizna/**/*" />
     </target>
 
     <!-- Build distributed source file zip -->

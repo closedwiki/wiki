@@ -29,7 +29,7 @@ public class UndoBufferTest extends TestCase {
 	text = new Undoable();
     }
 
-    public void test4() {
+    public void testUndo4() {
 	assert(!ub.hasUndo());
 	ub.push(new Difference("before", "after"));
 	assert(ub.hasUndo());
@@ -37,7 +37,7 @@ public class UndoBufferTest extends TestCase {
 	assert(!ub.hasUndo());
     }
 
-    public void test3() {
+    public void testUndo3() {
 	assert(!ub.hasUndo());
 	text.t = "before";
 	for (int i = 0; i < 5; i++) {
@@ -60,7 +60,7 @@ public class UndoBufferTest extends TestCase {
 	assert(!ub.hasUndo());
     }
 
-    public void test2() {
+    public void testUndo2() {
 	assert(!ub.hasUndo());
 	text.t = "before";
 	for (int i = 0; i < 3; i++) {
@@ -79,7 +79,7 @@ public class UndoBufferTest extends TestCase {
 	assert(!ub.hasUndo());
     }
 
-    public void test1() {
+    public void testUndo1() {
 	assert(!ub.hasUndo());
 	text.t = "after";
 	ub.push(new Difference("before", text.t));

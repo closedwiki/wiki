@@ -5,6 +5,8 @@ import java.awt.*;
 import java.net.*;
 import java.util.Enumeration;
 import junit.framework.*;
+import netscape.javascript.JSObject;
+import java.io.*;
 
 public class TWikiEditTest extends TestCase {
 
@@ -86,14 +88,49 @@ public class TWikiEditTest extends TestCase {
 	return new TestSuite(TWikiEditTest.class);
     }
 
+    public void setUp() throws Exception {
+	File f = new File("PowerEditPlugin.txt");
+	Reader fr = new FileReader(f.getAbsolutePath());
+	int c;
+	String str = "";
+	while ((c = fr.read()) != -1) {
+	    if (c == '\n')
+		str += '\r';
+	    str += (char)c;
+	}
+	fr.close();
+	JSObject text = new JSObject();
+	text.put("value", str);
+
+	f = new File("PowerEditControls.txt");
+	fr = new FileReader(f.getAbsolutePath());
+	str = "";
+	while ((c = fr.read()) != -1) {
+	    if (c == '\n')
+		str += '\r';
+	    str += (char)c;
+	}
+	fr.close();
+	JSObject controls = new JSObject();
+	controls.put("value", str);
+
+	JSObject main = new JSObject();
+	main.put("text", text);
+	main.put("controls", controls);
+
+	JSObject document = new JSObject();
+	document.put("main", main);
+
+	JSObject window = new JSObject();
+	window.put("document", document);
+	JSObject.setWindow(window);
+    }
+
     public void test1() {
-/* No longer works because we use JavaScript
 	TWikiEdit a = new TWikiEdit();
 	a.setStub(new AStub());
 	a.init();
 	a.start();
-	a.save();
 	a.destroy();
-*/
     }
 }
