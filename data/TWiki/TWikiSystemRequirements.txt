@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="JohnTalintyre" date="999877336" format="1.0" version="1.17"}%
+%META:TOPICINFO{author="MikeMannix" date="999927128" format="1.0" version="1.18"}%
 %TOC%
 %STARTINCLUDE%
----# TWiki Operating Environment
+---# TWiki Application Environment
 
-_Server and client system requirements, file system structure_
+_Server and client system requirements; file system structure_
 
 ---++ Overview
 
@@ -52,24 +52,24 @@ You can rename the root TWiki directory - =twiki= - to whatever you like by chan
 
 ---+++ File Descriptions
 
-A rundown of the individual files in the current %VERSION% distribution, organized by TWiki root directories. All listings are complete unless otherwise noted.
+A rundown of the individual files included in the current 01-Sep-2001 distribution, organized by TWiki root directories.
 
 #TWikiFiles
 ---++++ Files in <code>twiki</code>
 
-Introductory and installation files.
+Application info and the current reference documentation. _Full file list:_
 
 | *File:*		 | *Used for:* |
 | =index.html= | A page with a link to first launch TWiki after install |
 | =license.txt=		  | GNU General Public License and TWiki-specific info |
-| =readme.txt=		  | General TWiki start-up info with relevant URLs. |
+| =readme.txt=		  | General TWiki start-up info with relevant URLs |
 | =TWikiDocumentation.html=			 | All documentation packaged as a single page |
 | =TWikiHistory.html=		  | TWiki development timeline |
 
 #BinFiles
 ---++++ Files in <code>twiki/bin</code>
 
-All Perl CGI scripts.
+Perl CGI scripts. _Full file list:_
 
 | *File:*		 | *Used for:* |
 | =.htaccess.txt= | Authentication. Rename to .htaccess and customize if used |
@@ -94,7 +94,7 @@ All Perl CGI scripts.
 #LibFiles
 ---++++ Files under <code>twiki/lib</code>
 
-The new =lib/TWiki/Plugins= directories contain core configuration, libraries and function modules, and Plugins.
+The new =lib/TWiki/Plugins= directories contain configuration, library and function files, and [[TWikiDocumentation#TWiki_Plugins][TWikiPlugins]]. _Full file list:_
 
 | *File:*			  | *Used for:* |
 | =TWiki.pm=		| Main TWiki library |
@@ -108,184 +108,122 @@ The new =lib/TWiki/Plugins= directories contain core configuration, libraries an
 | =TWiki/Prefs.pm=	 | Preferences handling |
 | =TWiki/Search.pm=	| Search engine, used by wiki.pm |
 | =TWiki/Store.pm=	 | Back-end storage, =*.txt= text file and =*.txt,v= RCS repository file handling |
-| =TWiki/Plugins/DefaultPlugin.pm= | Default plugin |
+| =TWiki/Plugins/DefaultPlugin.pm= | Handles some legacy rules |
 | =TWiki/Plugins/EmptyPlugin.pm=	| Empty plugin, use to create your own |
-| =TWiki/Plugins/InterwikiPlugin.pm= | Refer to external Wikis and other Web sites |
+| =TWiki/Plugins/InterwikiPlugin.pm= | Use aliases as links for predefined URLs |
 
 #PubFiles
 ---++++ Files under <code>twiki/pub</code>
 
-__attachments like images...__
+The =pub= directory stores data-related files, including images used by TWiki and FileAttachments. Attachments are stored in sub-directories created with the related topic name. _Partial file list:_
 
 | *File:*			| *Used for:* |
-| =favicon.ico= | xxxx |
-| =twikilogo.gif= | xxxx |
-| =twikilogo1.gif= | xxxx |
-| =twikilogo2.gif= | xxxx |
-| =twikilogo3.gif= | xxxx |
-| =twikilogo4.gif= | xxxx |
-| =wikiHome.gif= | xxxx |
-| =icn/_filetypes.txt= | xxxx |
-| =icn/bat.gif= | xxxx |
-| =icn/bmp.gif= | xxxx |
-| =icn/c.gif= | xxxx |
-| =icn/dll.gif= | xxxx |
-| =icn/doc.gif= | xxxx |
-| =icn/else.gif= | xxxx |
-| =icn/exe.gif= | xxxx |
-| =icn/fon.gif= | xxxx |
-| =icn/h.gif= | xxxx |
-| =icn/hlp.gif= | xxxx |
-| =icn/html.gif= | xxxx |
-| =icn/java.gif= | xxxx |
-| =icn/mov.gif= | xxxx |
-| =icn/pdf.gif= | xxxx |
-| =icn/pl.gif= | xxxx |
-| =icn/ppt.gif= | xxxx |
-| =icn/ps.gif= | xxxx |
-| =icn/py.gif= | xxxx |
-| =icn/ram.gif= | xxxx |
-| =icn/reg.gif= | xxxx |
-| =icn/sh.gif= | xxxx |
-| =icn/sniff.gif= | xxxx |
-| =icn/ttf.gif= | xxxx |
-| =icn/txt.gif= | xxxx |
-| =icn/wav.gif= | xxxx |
-| =icn/wri.gif= | xxxx |
-| =icn/xls.gif= | xxxx |
-| =icn/zip.gif= | xxxx |
-| =Know/IncorrectDllVersionW32PTH10DLL/W32PTH10.DLL= | xxxx |
-| =TWiki/FileAttachment/Sample.txt= | xxxx |
-| =TWiki/FileAttachment/Smile.gif= | xxxx |
-| =TWiki/PreviewBackground/blankltgraybg.gif= | xxxx |
-| =TWiki/PreviewBackground/blankwhitebg.gif= | xxxx |
-| =TWiki/PreviewBackground/previewbg.gif= | xxxx |
-| =TWiki/WabiSabi/wabisabi.gif= | xxxx |
+| =favicon.ico= | ICO file |
+| =twikilogo.gif= | GIF file |
+| =twikilogo1.gif= | GIF file |
+| =twikilogo2.gif= | GIF file |
+| =twikilogo3.gif= | GIF file |
+| =twikilogo4.gif= | GIF file |
+| =wikiHome.gif= | GIF file |
+| =icn/_filetypes.txt= | GIF file |
+| =icn/bat.gif= | GIF file |
+| =icn/bmp.gif= | GIF file |
+|  *...*  |  *...*  |
+| =TWiki/FileAttachment/Sample.txt= | TEXT file |
+| =TWiki/FileAttachment/Smile.gif= | GIF file |
+| =TWiki/PreviewBackground/blankltgraybg.gif= | GIF file |
+| =TWiki/PreviewBackground/blankwhitebg.gif= | GIF file |
+| =TWiki/PreviewBackground/previewbg.gif= | GIF file |
+| =TWiki/WabiSabi/wabisabi.gif= | GIF file |
 
 #DataFiles
 ---++++ Files under <code>twiki/data</code>
 
-The =data= directory stores TWiki page data as individual text files. Each active web has its own subdirectory. The TWiki distribution package includes four start-up webs, with a number of pages of documentation and demo content. _This is a representative partial file listing..._
+TWiki page data stored as individual text files. Each active web has its own subdirectory. The TWiki distribution includes four start-up webs - =Main=, =TWiki=, =Know=, =Test= - with documentation and demo content, and a =_default= directory containing all topics required to start a new web. _Partial file list:_ 
 
 | *File:*			| *Used for:* |
-| =.htpasswd= | xxxx |
-| =debug.txt= | xxxx |
-| =mime.types= | xxxx |
-| =warning.txt= | xxxx |
+| =.htpasswd= | Basic Authentication (htaccess) password file |
+| =debug.txt= | Program messages useful for debugging |
+| =mime.types= | Recognized file formats |
+| =warning.txt= | Diagnostic messages for identifying problems |
 | _default directory can be copied to empty directory when creating new Webs ||
-| =_default/.changes= | Record of topic changes recorded here |
-| =_default/WebChanges.txt= | Display most recent changes |
-| =_default/WebChanges.txt,v= | History |
-| =_default/WebHome.txt= | xxxx |
-| =_default/WebHome.txt,v= | xxxx |
-| =_default/WebIndex.txt= | xxxx |
-| =_default/WebIndex.txt,v= | xxxx |
-| =_default/WebNotify.txt= | xxxx |
-| =_default/WebNotify.txt,v= | xxxx |
-| =_default/WebPreferences.txt= | xxxx |
-| =_default/WebPreferences.txt,v= | xxxx |
-| =_default/WebSearch.txt= | xxxx |
-| =_default/WebSearch.txt,v= | xxxx |
-| =_default/WebStatistics.txt= | xxxx |
-| =_default/WebStatistics.txt,v= | xxxx |
-|  *...*  |  *...*  |
-| =Know/TopicClassification.txt= | xxxx |
-| =Know/TopicClassification.txt,v= | xxxx |
-| =Know/TWikiCategory.txt= | xxxx |
-| =Know/TWikiCategory.txt,v= | xxxx |
-| =Know/UseCategory.txt= | xxxx |
-| =Know/UseCategory.txt,v= | xxxx |
-| =Know/WebChanges.txt= | xxxx |
-| =Know/WebChanges.txt,v= | xxxx |
-| =Know/WebForm.txt= | xxxx |
-| =Know/WebForm.txt,v= | xxxx |
-|  *...*  |  *...*  |
-| =Main/OfficeLocations.txt= | xxxx |
-| =Main/OfficeLocations.txt,v= | xxxx |
-| =Main/PeterThoeny.txt= | xxxx |
-| =Main/PeterThoeny.txt,v= | xxxx |
-| =Main/SanJoseOffice.txt= | xxxx |
-| =Main/SanJoseOffice.txt,v= | xxxx |
-|  *...*  |  *...*  |
-| =Main/TWikiGuest.txt= | xxxx |
-| =Main/TWikiGuest.txt,v= | xxxx |
-| =Main/TWikiUsers.txt= | xxxx |
-| =Main/TWikiUsers.txt,v= | xxxx |
-|  *...*  |  *...*  |
-| =Test/TestTopic1.txt= | xxxx |
-| =Test/TestTopic1.txt,v= | xxxx |
-| =Test/WebHome.txt= | xxxx |
-| =Test/WebHome.txt,v= | xxxx |
-|  *...*  |  *...*  |
-| =Trash/WebHome.txt= | xxxx |
-| =Trash/WebHome.txt,v= | xxxx |
-|  *...*  |  *...*  |
-| =TWiki/DeleteTopic.txt= | xxxx |
-| =TWiki/DeleteTopic.txt,v= | xxxx |
-| =TWiki/DontNotify.txt= | xxxx |
-| =TWiki/DontNotify.txt,v= | xxxx |
+| =_default/.changes= | Web-level record of topic changes |
+| =_default/WebChanges.txt= | Display most recent topic changes in web|
+| =_default/WebChanges.txt,v= | Revisions history (RCS) |
+| =_default/WebHome.txt= | Default web home page |
+| =_default/WebHome.txt,v= | Revisions history (RCS) |
+| =_default/WebIndex.txt= | Lists all topics in a web|
+| =_default/WebIndex.txt,v= | Revisions history (RCS) |
+| =_default/WebNotify.txt= | Subscribe/unsubscribe to web changes email alert |
+| =_default/WebNotify.txt,v= | Revisions history (RCS) |
+| =_default/WebPreferences.txt= | Web-level preference settings |
+| =_default/WebPreferences.txt,v= | Revisions history (RCS) |
+| =_default/WebSearch.txt= | Web-level search options |
+| =_default/WebSearch.txt,v= | Revisions history (RCS) |
+| =_default/WebStatistics.txt= | Generates web usage statistics |
+| =_default/WebStatistics.txt,v= | Revisions history (RCS) |
 |  *...*  |  *...*  |
 
 #TemplatesFiles
 ---++++ Files in <code>twiki/templates</code>
 
-_Used to flexibly control appearance of rendered pages..._
+Templates used to control appearance of all rendered pages. _Full file list:_
 
 | *File:*			| *Used for:* |
-| =oopsbadpwformat.tmpl= | xxxx |
-| =attachagain.tmpl= | xxxx |
-| =attachnew.tmpl= | xxxx |
-| =changeform.tmpl= | xxxx |
-| =changes.tmpl= | xxxx |
+| =oopsbadpwformat.tmpl= | Error message |
+| =attachagain.tmpl= | Control screen |
+| =attachnew.tmpl= | Control screen |
+| =changeform.tmpl= | Control screen |
+| =changes.tmpl= | Displays WebChanges list of recently changed topics |
 | =edit.iejs.tmpl= | xxxx |
-| =edit.tmpl= | xxxx |
+| =edit.tmpl= | Main edit window |
 | =mailnotify.tmpl= | xxxx |
-| =moveattachment.tmpl= | xxxx |
-| =oopsaccesschange.tmpl= | xxxx |
-| =oopsaccessgroup.tmpl= | xxxx |
-| =oopsaccessrename.tmpl= | xxxx |
-| =oopsaccessview.tmpl= | xxxx |
-| =oopsauth.tmpl= | xxxx |
-| =attach.tmpl= | xxxx |
-| =oopschangepasswd.tmpl= | xxxx |
-| =oopsempty.tmpl= | xxxx |
-| =oopslocked.tmpl= | xxxx |
-| =oopslockedrename.tmpl= | xxxx |
-| =oopsmissing.tmpl= | xxxx |
-| =oopsmoveerr.tmpl= | xxxx |
-| =oopsnoformdef.tmpl= | xxxx |
-| =oopsnotwikiuser.tmpl= | xxxx |
-| =oopsnoweb.tmpl= | xxxx |
-| =oopspreview.tmpl= | xxxx |
-| =oopsregexist.tmpl= | xxxx |
-| =oopsregpasswd.tmpl= | xxxx |
-| =oopsregrequ.tmpl= | xxxx |
-| =oopsregthanks.tmpl= | xxxx |
-| =oopsregwiki.tmpl= | xxxx |
-| =oopsrenameerr.tmpl= | xxxx |
-| =oopsresetpasswd.tmpl= | xxxx |
-| =oopsrev.tmpl= | xxxx |
-| =oopssave.tmpl= | xxxx |
-| =oopssaveerr.tmpl= | xxxx |
-| =oopssendmailerr.tmpl= | xxxx |
-| =oopstopicexists.tmpl= | xxxx |
-| =oopsupload.tmpl= | xxxx |
-| =oopswrongpassword.tmpl= | xxxx |
-| =preview.tmpl= | xxxx |
-| =rdiff.tmpl= | xxxx |
-| =register.tmpl= | xxxx |
+| =moveattachment.tmpl= | Control screen |
+| =oopsaccesschange.tmpl= | Error message |
+| =oopsaccessgroup.tmpl= | Error message |
+| =oopsaccessrename.tmpl= | Error message |
+| =oopsaccessview.tmpl= | Error message |
+| =oopsauth.tmpl= | Error message |
+| =attach.tmpl= | Error message |
+| =oopschangepasswd.tmpl= | Error message |
+| =oopsempty.tmpl= | Error message |
+| =oopslocked.tmpl= | Error message |
+| =oopslockedrename.tmpl= | Error message |
+| =oopsmissing.tmpl= | Error message |
+| =oopsmoveerr.tmpl= | Error message |
+| =oopsnoformdef.tmpl= | Error message |
+| =oopsnotwikiuser.tmpl= | Error message |
+| =oopsnoweb.tmpl= | Error message |
+| =oopspreview.tmpl= | Error message |
+| =oopsregexist.tmpl= | Error message |
+| =oopsregpasswd.tmpl= | Error message |
+| =oopsregrequ.tmpl= | Error message |
+| =oopsregthanks.tmpl= | Error message |
+| =oopsregwiki.tmpl= | Error message |
+| =oopsrenameerr.tmpl= | Error message |
+| =oopsresetpasswd.tmpl= | Error message |
+| =oopsrev.tmpl= | Error message |
+| =oopssave.tmpl= | Error message |
+| =oopssaveerr.tmpl= | Error message |
+| =oopssendmailerr.tmpl= | Error message |
+| =oopstopicexists.tmpl= | Error message |
+| =oopsupload.tmpl= | Error message |
+| =oopswrongpassword.tmpl= | Error message |
+| =preview.tmpl= | Preview Changes screen |
+| =rdiff.tmpl= | Displays text changes before &amp; after (Diffs) |
+| =register.tmpl= | Registration page |
 | =registernotify.tmpl= | xxxx |
-| =rename.tmpl= | Doing a new topic rename, user chooses web & topic |
+| =rename.tmpl= | Doing a new topic rename, user chooses web &amp; topic |
 | =renamebase.tmpl= | Used by other rename templates |
-| =renameconfirm.tmpl= | Confirming a pre-specified rename e.g. when undoing a rename |
-| =renamerefs.tmpl= | Rename done, still some references to change (topcis were previously locked) |
+| =renameconfirm.tmpl= | Confirms a pre-specified rename, ex: undoing a rename |
+| =renamerefs.tmpl= | Rename done, but some references not changed (topics were  locked) |
 | =search.tmpl= | xxxx |
-| =searchbookview.tmpl= | xxxx |
+| =searchbookview.tmpl= | Search results with full topic content |
 | =searchmeta.tmpl= | xxxx |
 | =searchrenameview.tmpl= | Used by =rename= to list references to topic being renamed |
-| =twiki.tmpl= | xxxx |
-| =view.plain.tmpl= | xxxx |
-| =view.print.tmpl= | xxxx |
-| =view.tmpl= | xxxx |
+| =twiki.tmpl= | Base template definitions used by other templates |
+| =view.plain.tmpl= | Alternate topic header/footer view |
+| =view.print.tmpl= | Alternate topic header/footer view |
+| =view.tmpl= | Main topic view |
 
 -- MikeMannix - 29 Aug 2001 
