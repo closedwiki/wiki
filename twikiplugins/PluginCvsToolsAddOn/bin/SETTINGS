@@ -1,16 +1,22 @@
-
-# CVSUSER is the sourceforge username used when using ssh authentication 
+# CVSUSER is the sourceforge username used when using ssh authentication
 # You will be prompted for the SSH password for that user.
 export CVSUSER=mrjc
 export TWIKIROOT=~/www/twiki
-export PLUGINNAME=EncryptedPagesPlugin
+export PLUGINNAME=$1
 
 export TWIKISTAGE=$TWIKIROOT/stage
 
-# As of 14-Jan-03, Sourceforge's pserver is down. So, we can only check out as a registered user.
+# As of 14-Jan-03, Sourceforge's pserver is down. So, we can only check out
+as
 export CVS_RSH=ssh
-export CVSROOT=$CVSUSER@cvs.twikiplugins.sourceforge.net:/cvsroot/twikiplugins
+export
+CVSROOT=$CVSUSER@cvs.twikiplugins.sourceforge.net:/cvsroot/twikiplugins
 
+if [ ! "$PLUGINNAME" ]
+then
+   echo "usage: $0 pluginname"
+   exit
+fi
 
 if [ ! -d "$TWIKISTAGE" ]
 then
