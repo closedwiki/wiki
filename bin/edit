@@ -71,11 +71,13 @@ sub main
     my $saveCmd = $query->param( 'cmd' ) || "";
     my $breakLock = $query->param( 'breaklock' ) || "";
     my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
+    my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
     my $tmpl = "";
     my $text = "";
     my $meta = "";
     my $extra = "";
     my $wikiUserName = &TWiki::userToWikiName( $userName );
+    my $topicExists  = &TWiki::Store::topicExists( $webName, $topic );
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
@@ -90,9 +92,18 @@ sub main
         return;
     }
 
+
+    # Prevent editing existing topic?
+    if( $onlyNewTopic && $topicExists ) {
+       # Topic exists and user requested oops if it exists
+       my $url = &TWiki::getOopsUrl( $webName, $topic, "oopscreatenewtopic" );
+       print $query->redirect( $url );
+       return;       
+    }
+
     # prevent non-Wiki names?
     if( ( $onlyWikiName )
-      && ( ! &TWiki::Store::topicExists( $webName, $topic ) )
+      && ( ! $topicExists )
       && ( ! ( &TWiki::isWikiName( $topic ) || &TWiki::isAbbrev( $topic ) ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         TWiki::redirect( $query, &TWiki::getViewUrl( $webName, $topic ) );
@@ -100,7 +111,7 @@ sub main
     }
 
     # Read topic 
-    if( &TWiki::Store::topicExists( $webName, $topic ) ) {
+    if( $topicExists ) {
         ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
     }
 
@@ -144,7 +155,7 @@ sub main
     # Get edit template, standard or a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
     $tmpl = &TWiki::Store::readTemplate( "edit", $skin );
-    if( ! &TWiki::Store::topicExists( $webName, $topic ) ) {
+    unless( $topicExists ) {
         if( $templateTopic ) {
             if( $templateTopic =~ /^(.+)\.(.+)$/ ) {
                 # is "Webname.SomeTopic"
