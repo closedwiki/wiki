@@ -21,6 +21,7 @@ sub dispatch {
  }
  my $fqClass = $prefix."::".$class;
 
+ dispatch2($fqClass, "_init");
  dispatch2($fqClass, @args);
  
  }

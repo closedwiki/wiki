@@ -5,6 +5,11 @@ use Cwd;
 # Ultimately we'd like to ask the Extension to handle this command 
 # itself. For now we just call build.pl
 
+sub _init {
+
+
+}
+
 sub upload {
     return "Not implemented\n";
 
@@ -17,7 +22,7 @@ sub cvsupdate {
     print "Doing cvs update for $extension\n\n";
     my $libFrag = getLibFragmentForExtension($extension);
 
-   	my $dir = selectTWikiLibDir($libFrag);
+   	my $dir = selectTWikiLibDir($libFrag)."/..; # codesmell: Lazy 
 
 	$dir;
 }
