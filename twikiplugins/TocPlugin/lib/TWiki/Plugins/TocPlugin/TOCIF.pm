@@ -60,7 +60,15 @@ use TWiki::Func;
 
   sub readTopic {
     my ($this, $topic) = @_;
-    return TWiki::Func::readTopic($this->webName(), $topic);
+    my $text = "";
+    # read the topic
+    $text = TWiki::Func::readTopic($this->webName(), $topic);
+    # expand the variables -- in the context of the appropriate topic
+    $text = TWiki::Func::expandCommonVariables($text, $topic, $this->webName());
+    # this can't be right -- turn verbatim tags into pre tags
+    $text =~ s/<verbatim>/<pre>/go;
+    $text =~ s/<\/verbatim>/<\/pre>/go;
+    return $text;
   }
 
   sub webDirList {

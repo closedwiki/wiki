@@ -14,8 +14,8 @@
     <property name="appletviewer" value="${ENV.JAVA_HOME}/bin/appletviewer"/>
 
     <property name="lib.plugins" value="lib/TWiki/Plugins"/>
-    <property name="pub.plugins" value="pub/Plugins"/>
-    <property name="data.plugins" value="data/Plugins"/>
+    <property name="pub.plugins" value="pub/TWiki"/>
+    <property name="data.plugins" value="data/TWiki"/>
 
     <property name="plugin.lib" value="${lib.plugins}/${ant.project.name}"/>
     <property name="plugin.pub" value="${pub.plugins}/${ant.project.name}"/>

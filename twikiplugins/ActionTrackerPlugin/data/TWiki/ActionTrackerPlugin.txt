@@ -161,11 +161,12 @@ Not all action changes get notified; only changes to the action state, or change
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 	| ==%TOPIC%.xml== | Ant build file |
-	| ==data/Plugins/%TOPIC%.txt== | Plugin topic |
+	| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	| ==bin/actionnotify== | Mailer script |
 	| ==bin/editaction== | Action editor |
 	| ==bin/previewaction== | Edit preview script |
-	| ==templates/actionnotify.tmpl== | Applet page template |
+	| ==templates/actionnotify.tmpl== | Page template for notify |
+	| ==templates/actionchangenotify.tmpl== | Page template for change notify |
 	| ==templates/editaction.tmpl== | Edit page template |
 	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	| ==lib/TWiki/Plugins/%TOPIC%/Action.pm== | Perl support module |

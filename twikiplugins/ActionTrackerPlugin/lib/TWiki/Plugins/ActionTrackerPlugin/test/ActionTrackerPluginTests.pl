@@ -47,6 +47,8 @@ TWiki::TestMaker::writeTopic("Main", "TheWholeBunch", "
    * Main.GungaDin - gunga-din\@war_lords-home.ind
 ");
 
+Action::forceTime(Time::ParseDate::parsedate("3 Jun 2002"));
+
 $chosen = TWiki::Plugins::ActionTrackerPlugin::handleActionSearch("Main", "web=\".*\"");
 Assert::assert(__FILE__,__LINE__, $chosen =~ /Test0:/);
 Assert::assert(__FILE__,__LINE__, $chosen =~ /Test1:/);
@@ -90,28 +92,28 @@ break the table here %ACTION{who=ActorSeven,due=01/01/02,open}% Create the maile
 TWiki::Plugins::ActionTrackerPlugin::commonTagsHandler($text, "TheTopic", "TheWeb");
 
 Assert::htmlEquals(__FILE__,__LINE__, $text, "<table border=$Action::border>
-<tr bgcolor=$Action::hdrcol><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
+<tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
 <tr valign=\"top\"><td> Main.ActorOne </td><td> Fri, 1 Nov 2002 </td><td> <A name=\"AcTion0\"></A>  __Unknown__ =status= www.twiki.org </td><td> open </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=0\">edit</a></td></tr>
 <tr valign=\"top\"><td> Main.ActorTwo </td><td> Mon, 11 Mar 2002 </td><td> <A name=\"AcTion1\"></A>  Open <table><td>status<td>status2</table> </td><td> closed </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=1\">edit</a></td></tr>
 </table>
 
 text <table border=$Action::border>
-<tr bgcolor=$Action::hdrcol><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
+<tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
 <tr valign=\"top\"><td> Main.ActorThree </td><td> Sun, 11 Mar 2001 </td><td> <A name=\"AcTion2\"></A> The *world* is flat </td><td> closed </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=2\">edit</a></td></tr>
-<tr valign=\"top\"><td> Main.ActorFour </td><td bgcolor=$Action::latecol> Sun, 11 Mar 2001 </td><td> <A name=\"AcTion3\"></A>  _Late_ the late great *date* </td><td> open </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=3\">edit</a></td></tr>
-<tr valign=\"top\"><td> Main.ActorFiveVeryLongNameBecauseItsATest </td><td bgcolor=$Action::latecol> Wed, 13 Feb 2002 </td><td> <A name=\"AcTion4\"></A>  This is an action with a lot of associated text to test \n   * the VingPazingPoodleFactor, \n   * when large actions get edited by the edit button.\n   * George Bush is a brick.\n   * Who should really be built\n   * Into a very high wall. </td><td> open </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=4\">edit</a></td></tr>
-<tr valign=\"top\"><td> Main.ActorSix </td><td bgcolor=$Action::badcol> BAD DATE FORMAT see Plugins.ActionTrackerPlugin#DateFormats </td><td> <A name=\"AcTion5\"></A>  Bad date </td><td> open </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=5\">edit</a></td></tr>
+<tr valign=\"top\"><td> Main.ActorFour </td><td bgcolor=\"$Action::latecol\"> Sun, 11 Mar 2001 </td><td> <A name=\"AcTion3\"></A>  _Late_ the late great *date* </td><td> open </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=3\">edit</a></td></tr>
+<tr valign=\"top\"><td> Main.ActorFiveVeryLongNameBecauseItsATest </td><td bgcolor=\"$Action::latecol\"> Wed, 13 Feb 2002 </td><td> <A name=\"AcTion4\"></A>  This is an action with a lot of associated text to test \n   * the VingPazingPoodleFactor, \n   * when large actions get edited by the edit button.\n   * George Bush is a brick.\n   * Who should really be built\n   * Into a very high wall. </td><td> open </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=4\">edit</a></td></tr>
+<tr valign=\"top\"><td> Main.ActorSix </td><td bgcolor=\"$Action::badcol\"> BAD DATE FORMAT see Plugins.ActionTrackerPlugin#DateFormats </td><td> <A name=\"AcTion5\"></A>  Bad date </td><td> open </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=5\">edit</a></td></tr>
 </table>
 
 break the table here <table border=$Action::border>
-<tr bgcolor=$Action::hdrcol><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr><tr valign=\"top\"><td> Main.ActorSeven </td><td bgcolor=$Action::latecol> Tue, 1 Jan 2002 </td><td> <A name=\"AcTion6\"></A>  Create the mailer, %USERNAME% </td><td> open </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=6\">edit</a></td></tr>
+<tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr><tr valign=\"top\"><td> Main.ActorSeven </td><td bgcolor=\"$Action::latecol\"> Tue, 1 Jan 2002 </td><td> <A name=\"AcTion6\"></A>  Create the mailer, %USERNAME% </td><td> open </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=6\">edit</a></td></tr>
 </table>
 
    * A list
-   * should generate <table border=$Action::border><tr bgcolor=$Action::hdrcol><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr><tr valign=\"top\"><td> Main.ActorEight </td><td bgcolor=$Action::latecol> Tue, 1 Jan 2002 </td><td> <A name=\"AcTion7\"></A>  Create the mailer </td><td> open </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=7\">edit</a></td></tr></table>
+   * should generate <table border=$Action::border><tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr><tr valign=\"top\"><td> Main.ActorEight </td><td bgcolor=\"$Action::latecol\"> Tue, 1 Jan 2002 </td><td> <A name=\"AcTion7\"></A>  Create the mailer </td><td> open </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=7\">edit</a></td></tr></table>
    * endofthelist
 
    * A list
-   * should generate <table border=$Action::border><tr bgcolor=$Action::hdrcol><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr><tr valign=\"top\"><td> Main.ActorNine </td><td> Tue, 1 Jan 2002 </td><td> <A name=\"AcTion8\"></A>  Create the mailer </td><td> closed </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=8\">edit</a></td></tr></table>");
+   * should generate <table border=$Action::border><tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr><tr valign=\"top\"><td> Main.ActorNine </td><td> Tue, 1 Jan 2002 </td><td> <A name=\"AcTion8\"></A>  Create the mailer </td><td> closed </td><td><A href=\"%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/TheWeb/TheTopic?action=8\">edit</a></td></tr></table>");
 
 1;

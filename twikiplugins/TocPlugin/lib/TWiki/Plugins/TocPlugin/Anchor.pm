@@ -125,6 +125,10 @@ use integer;
       $this->unWikiWord($text) . "</A>";
   }
 
+  # Generate expanded HTML for printing
+  sub toPrint {
+  }
+
   # Generate a string representation for debugging
   sub toString {
     my ($this, $nohtml) = @_;

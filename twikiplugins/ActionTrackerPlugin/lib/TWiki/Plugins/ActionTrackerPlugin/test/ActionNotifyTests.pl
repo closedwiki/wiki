@@ -74,23 +74,23 @@ Assert::sContains(__FILE__,__LINE__, $html, "From: PREFS(WIKIWEBMASTER)");
 Assert::sContains(__FILE__,__LINE__, $html, "To: joe\@sesame.street.com,fred\@sesame.street.com,sam\@sesame.street.com,gunga-din\@war_lords-home.ind");
 Assert::sContains(__FILE__,__LINE__, $html, "Subject: Outstanding actions on PREFS(WIKITOOLNAME)");
 Assert::htmlContains(__FILE__,__LINE__, $html, "<table border=$Action::border>
-<tr bgcolor=$Action::hdrcol><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
-<tr valign=\"top\"><td> Main.TheWholeBunch </td><td bgcolor=$Action::latecol> Mon, 29 Jan 2001 </td><td> [[Main.Topic2#AcTion2][ A4: Joe_open_ontime ]] </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Main/Topic2?action=2\">edit</a></td></tr></table>");
+<tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
+<tr valign=\"top\"><td> Main.TheWholeBunch </td><td bgcolor=\"$Action::latecol\"> Mon, 29 Jan 2001 </td><td> [[Main.Topic2#AcTion2][ A4: Joe_open_ontime ]] </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Main/Topic2?action=2\">edit</a></td></tr></table>");
 $html = shift(@TWiki::Net::sent);
 Assert::sContains(__FILE__,__LINE__, $html, "From: PREFS(WIKIWEBMASTER)");
 Assert::sContains(__FILE__,__LINE__, $html, "To: sam\@sesame.street.com");
 Assert::sContains(__FILE__,__LINE__, $html, "Subject: Outstanding actions on PREFS(WIKITOOLNAME)");
 Assert::htmlContains(__FILE__,__LINE__, $html, "<table border=$Action::border>
-<tr bgcolor=$Action::hdrcol><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
-<tr valign=\"top\"><td> Main.Sam </td><td bgcolor=$Action::latecol> Tue, 1 Jan 2002 </td><td> [[Test.Topic1#AcTion0][ A0: Sam_open_late ]] </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Test/Topic1?action=0\">edit</a></td></tr>
+<tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
+<tr valign=\"top\"><td> Main.Sam </td><td bgcolor=\"$Action::latecol\"> Tue, 1 Jan 2002 </td><td> [[Test.Topic1#AcTion0][ A0: Sam_open_late ]] </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Test/Topic1?action=0\">edit</a></td></tr>
 </table>");
 $html = shift(@TWiki::Net::sent);
 Assert::sContains(__FILE__,__LINE__, $html, "From: PREFS(WIKIWEBMASTER)");
 Assert::sContains(__FILE__,__LINE__, $html, "To: fred\@sesame.street.com");
 Assert::sContains(__FILE__,__LINE__, $html, "Subject: Outstanding actions on PREFS(WIKITOOLNAME)");
 Assert::htmlContains(__FILE__,__LINE__, $html, "<table border=$Action::border>
-<tr bgcolor=$Action::hdrcol><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
-<tr valign=\"top\"><td> Main.Fred </td><td bgcolor=$Action::latecol> Tue, 1 Jan 2002 </td><td> [[Test.Topic2#AcTion0][ A1: Fred_open_ontime ]] </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Test/Topic2?action=0\">edit</a></td></tr>
+<tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
+<tr valign=\"top\"><td> Main.Fred </td><td bgcolor=\"$Action::latecol\"> Tue, 1 Jan 2002 </td><td> [[Test.Topic2#AcTion0][ A1: Fred_open_ontime ]] </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Test/Topic2?action=0\">edit</a></td></tr>
 </table>");
 
 # Action changes are hard to fake because the RCS files are not there.
@@ -148,7 +148,7 @@ Assert::sContains(__FILE__,__LINE__, $html, "From: PREFS(WIKIWEBMASTER)");
 Assert::sContains(__FILE__,__LINE__, $html, "To: Mowgli\@there.com");
 Assert::sContains(__FILE__,__LINE__, $html, "Subject: Changed actions on PREFS(WIKITOOLNAME)");
 Assert::sContains(__FILE__,__LINE__, $html, "Actions that have changed since Sat Dec  1 00:00:00 2001");
-Assert::htmlContains(__FILE__,__LINE__, $html, "<table><td> Main.RikkiTikkiTavi </td><td bgcolor=yellow> Sun, 22 Jul 2001 </td><td> [[Test.ActionChanged#AcTion2][  Text change from original ]]  </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Test/ActionChanged?action=2\">edit</a></td></table>Text appended ... from original");
+Assert::htmlContains(__FILE__,__LINE__, $html, "<table><td> Main.RikkiTikkiTavi </td><td bgcolor=\"yellow\"> Sun, 22 Jul 2001 </td><td> [[Test.ActionChanged#AcTion2][  Text change from original ]]  </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Test/ActionChanged?action=2\">edit</a></td></table>Text appended ... from original");
 $html = shift(@TWiki::Net::sent);
 Assert::sContains(__FILE__,__LINE__, $html, "From: PREFS(WIKIWEBMASTER)");
 Assert::sContains(__FILE__,__LINE__, $html, "To: RikkiTikkiTavi\@here.com");

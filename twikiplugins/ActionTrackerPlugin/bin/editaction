@@ -44,7 +44,6 @@ sub main
 
     my $breakLock = $query->param( 'breaklock' ) || "";
     my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
-    my $tmpl = "";
     my $text = "";
     my $meta = "";
     my $extra = "";
@@ -95,7 +94,7 @@ sub main
 
     if( $TWiki::doLogTopicEdit ) {
         # write log entry
-        &TWiki::Store::writeLog( "editaction", "$webName.$topic" );
+        &TWiki::Store::writeLog( "editaction", "$webName.$topic", "" );
     }
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
@@ -136,8 +135,8 @@ sub main
     my $state = $action->state();
     my $openselect;
     my $closedselect;
-    $openselect = "SELECTED" if ( $state eq "open" );
-    $closedselect = "SELECTED" if ( $state eq "closed" );
+    $openselect = ( $state eq "open" ) ? "SELECTED" : "";
+    $closedselect = ( $state eq "closed" ) ? "SELECTED" : "";
 
     my $an = $action->actionNumber();
     my $ebw = TWiki::Prefs::getPreferencesValue( 'ACTIONTRACKERPLUGIN_EDITBOXWIDTH');

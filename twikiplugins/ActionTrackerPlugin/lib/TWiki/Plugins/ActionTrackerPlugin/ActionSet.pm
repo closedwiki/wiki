@@ -82,7 +82,7 @@ use TWiki::Func;
     my $action;
 
     my $text = "<table border=$Action::border>\n" .
-      "<tr bgcolor=$Action::hdrcol><th>Assignee</th>" .
+      "<tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th>" .
 	"<th>Due date</th>" .
 	  "<th>Description</th>" .
 	    "<th>State</th><th>&nbsp;</th></tr>\n";
@@ -197,12 +197,14 @@ use TWiki::Func;
     my $web;
     foreach $web ( @weblist ) {
       if ( -d "$dataDir/$web" && $web =~ /^$webs$/ ) {
+	$web =~ s/$TWiki::securityFilter//go;  # FIXME: This bypasses the official API
 	$web =~ /(.*)/; # untaint
+	$web = $1;
 	# Exclude webs flagged as NOSEARCHALL
         my $thisWebNoSearchAll =
 	  TWiki::Func::getPreferencesValue( "NOSEARCHALL", $web );
-	next if ( $thisWebNoSearchAll =~ /on/i );
-	my $subacts = allActionsInWeb( $1, $attrs );
+	next if ( $thisWebNoSearchAll =~ /on/i && ( $web ne $theweb ) );
+	my $subacts = allActionsInWeb( $web, $attrs );
 	$actions->concat( $subacts );
       }
     }

@@ -67,7 +67,7 @@ ${ERF}Topic $l1btext used more than once in WebOrder<br>$FRE");
 
   ($root, $mess) = TopLevelSection::createTOC("Test", $wif);
   die $mess unless $root;
-  Assert::sEquals(__LINE__, $root->processTOCTag(Attrs->new("")),
+  Assert::sEquals(__LINE__, $root->processTOCTag(TocPlugin::Attrs->new("")),
 "$DIV
 $UL$LI$JS$l1text${JE}1. $l1texp$AE$UL
 $LI$JS$l2text${JE}1.1. $l2texp$AE$UL
@@ -81,7 +81,7 @@ $LI$JS$l1text#Section_1.3.${JE}1.3. $l2tagtexp$AE$IL
 $LU$IL
 $LI$JS$l1btext${JE}2. $l1btexp$AE$IL
 $LU$VID");
-  Assert::sEquals(__LINE__, $root->processTOCTag(Attrs->new("topic=$l1text")),
+  Assert::sEquals(__LINE__, $root->processTOCTag(TocPlugin::Attrs->new("topic=$l1text")),
 "$DIV
 $UL$LI$JS$l1text${JE}1. $l1texp$AE$UL
 $LI$JS$l2text${JE}1.1. $l2texp$AE$UL
@@ -103,7 +103,7 @@ $LU$VID");
   Assert::assert(__LINE__, $ct->{IS_LOADED});
 
   $root->loadTopics($root);
-  Assert::sEquals(__LINE__, $root->processTOCTag(Attrs->new("")),
+  Assert::sEquals(__LINE__, $root->processTOCTag(TocPlugin::Attrs->new("")),
 "$DIV$UL$LI$JS$l1text${JE}1. $l1texp$AE$UL
 $LI$JS$l2text${JE}1.1. $l2texp$AE$UL
 $LI$JS$l3text${JE}1.1.1. $l3texp$AE$UL
@@ -123,9 +123,9 @@ $LU$VID");
 "${ERF}The following topics were not found in the WebOrder:
 <OL>${LI}Missing$IL</OL>$FRE");
 
-  Assert::sEquals(__LINE__, $root->processREFTABLETag(Attrs->new("")),
+  Assert::sEquals(__LINE__, $root->processREFTABLETag(TocPlugin::Attrs->new("")),
 "${ERF}Bad type in REFTABLE$FRE");
-  Assert::sEquals(__LINE__, $root->processREFTABLETag(Attrs->new("type=fred")),
+  Assert::sEquals(__LINE__, $root->processREFTABLETag(TocPlugin::Attrs->new("type=fred")),
 "$REFT$TR${TH}fred$HT$RT$TFER");
 
 }

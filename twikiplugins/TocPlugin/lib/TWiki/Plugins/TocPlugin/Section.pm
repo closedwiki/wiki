@@ -502,7 +502,7 @@ use TWiki::Plugins::TocPlugin::TopLevelSection;
     
     while ($text =~ s/%(SECTION[0-9]+|ANCHOR)({[^%]*})?%(.*)//o) {
       my $key = $1;
-      my $attrs = Attrs->new($2);
+      my $attrs = TocPlugin::Attrs->new($2);
       my $title = $3;
       $title =~ s/(^\s+|\s+$)//go;
       $attrs->set("text", $title);
@@ -566,6 +566,28 @@ use TWiki::Plugins::TocPlugin::TopLevelSection;
     $res .= "</ul>" if ($listed && ! $nohtml);
 
     $res .= "}";
+    return $res;
+  }
+
+  # for webPrint function 
+  sub toPrint { 
+    my ($this, $wif, $toc, $web, $nohtml) = @_;
+    my $res = "";
+
+    if (defined($this->wikiName())) {
+       my $ct = $toc->_findTopic($this->wikiName);
+       my $text = $wif->readTopic($this->wikiName);
+
+      # $res .= "Expanding wikiName= " . $wif->webName . "." . $this->wikiName() . " ";
+       $res .= TOC::_printWithTOCTags($toc, $wif, $ct, $text);
+
+    }
+    
+    my $child;
+    foreach $child ( @{$this->{SECTIONS}} ) {
+      $res .= $child->toPrint($wif, $toc, $web, $nohtml);
+    }
+
     return $res;
   }
 
