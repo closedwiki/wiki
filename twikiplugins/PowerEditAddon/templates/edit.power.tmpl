@@ -1,0 +1,60 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:P{"htmldoctype"}%
+<head>
+ <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+ <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_EDIT%
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+<script language="JavaScript">
+<!--HIDE
+function launchWindow( theWeb, theTopic ) {
+  win = open( "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain",
+              theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+  if( win ) {
+    win.focus();
+  }
+  return false;
+}
+//STOP HIDING-->
+</script>
+</head>
+<body bgcolor="#ffffff"">
+#PageTop
+%TMPL:DEF{"titleaction"}%(edit)%TMPL:END%
+%TMPL:DEF{"titlehelp"}% %TMPL:END%
+%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+%TMPL:P{"simpleheader"}%
+<applet code="com.ccsoft.edit.TWikiEdit" archive="%PUBURLPATH%/Plugins/PowerEditAddon/poweredit.jar" height="75%" width="100%">
+<param name="useframe" value="no">
+<param name="editboxwidth" value="%EDITBOXWIDTH%">
+<param name="editboxheight" value="%EDITBOXHEIGHT%">
+<param name="server" value="%SCRIPTURLPATH%/poweredit%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<param name="top_buttons" value="Undo=%undo%|Find...=%find%|Replace...=%replace%|Again=%redo%">
+<param name="bottom_buttons" value="Preview Changes=%save%">
+<param name="left_buttons" value="B=bold|I=italic|TT=tt|LI=li|Red=red">
+<param name="bold" value="%cut%*%paste%*">
+<param name="italic" value="%cut%_%paste%_">
+<param name="tt" value="%cut%=%paste%=">
+<param name="red" value="%cut%&lt;font color=red&gt;%paste%&lt;/font&gt;">
+<param name="li" value="%home%   * %cut%">
+<param name="right_buttons" value="H1=%cut%&lt;H1&gt;%paste%&lt;/H1&gt;|H2=%cut%&lt;H2&gt;%paste%&lt;/H2&gt;|H3=%cut%&lt;H3&gt;%paste%&lt;/H3&gt;|H4=%cut%&lt;H4&gt;%paste%&lt;/H4&gt;|H5=%cut%&lt;H5&gt;%paste%&lt;/H5&gt;|H6=%cut%&lt;H6&gt;%paste%&lt;/H6&gt;|">
+You need a Java enabled browser
+</applet>
+<input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
+<input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+<br />
+Don't forget - if you change something, do it in 
+<a target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">GoodStyle</a>
+and follow the
+<a target="TextFormattingRules" onClick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">TextFormattingRules</a>.
+<br /> <b>-- <nop>%WIKIUSERNAME% - %DATE% &lt;br /&gt;</b> &nbsp;&nbsp;<code>&lt;==</code> 
+This is your signature for easy copy & paste operation
+<br /> %FORMFIELDS%
+%TMPL:DEF{"topicaction"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
+%TMPL:P{"standardfooter"}%
+%WEBCOPYRIGHT%
+
+#PageBottom
+</body>
+</html>
+
