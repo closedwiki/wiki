@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="997885781" format="1.0beta2" version="1.30"}%
+%META:TOPICINFO{author="MikeMannix" date="998863709" format="1.0" version="1.31"}%
+%TOC%
+%STARTINCLUDE%
 ---## TWiki Variables
 
 ---+++ Predefined Variables
@@ -168,10 +170,10 @@
   <td> If present in included topic, stop to include text at this location and ignore the remaining text. A normal view of the topic shows everyting exept the =%<nop>STOPINCLUDE%= variable itself. </td>
 </tr><tr>
   <td> =%<nop>TOC%= </td>
-  <td> Table of Content of current topic. </td>
+  <td> Table of Contents of current topic. </td>
 </tr><tr>
   <td> =%<nop>TOC{"SomeTopic" ...}%= </td>
-  <td> Table of Content. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;h2&gt;"=) are taken into account. (But not ="&lt;H2&gt;text&lt;H2&gt;"=, which can be used to exclude a heading from the TOC.) Parameters are topic name, web and depth:
+  <td> Table of Contents. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;h2&gt;"=) are taken into account. (But not ="&lt;H2&gt;text&lt;/H2&gt;"=, which can be used to exclude a heading from the TOC.) Parameters are topic name, web and depth:
 | *Parameter:* | *Description:* | *Default:* |
 | ="TopicName"= | topic name | Current topic |
 | =web="Name"= | Name of web | Current web |
@@ -323,3 +325,4 @@ __Notes:__
 		* =<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif=
 
 -- PeterThoeny - 23 Jul 2001 <br>
+-- Main.MikeMannix - 26 Aug 2001 <br />	
