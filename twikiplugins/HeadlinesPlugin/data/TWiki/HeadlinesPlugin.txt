@@ -1,0 +1,94 @@
+%META:TOPICINFO{author="PeterThoeny" date="1028273417" format="1.0" version="1.4"}%
+---+ Headlines Plugin
+
+This plugin displays RSS feeds from news sites. Use it to build news portals that show headline news.
+
+__Note:__ Syndic8.com ( http://www.syndic8.com/ ) is a good site listing many RSS feeds.
+
+---++ <nop>%TOPIC% Global Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>HEADLINES_SHORTDESCRIPTION%==
+
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Build news portals that show headline news based on RSS news feeds from news sites.
+
+	* Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0=
+		* Set DEBUG = 0
+
+	* Refresh rate in minutes for cached feeds. Disable caching: =0=, default: =30=
+		* Set REFRESH = 30
+
+	* Maximum number of items shown. Default: =100=
+		* Set LIMIT = 100
+
+	* Default header: (variables are explained in the syntax rules)
+<verbatim>
+		* Set HEADER = | *[[$channellink][$channeltitle]] [[$imagelink][<img src="$imageurl" alt="$imagetitle" border="0" />]]* |
+</verbatim>
+
+	* Default format of one item: (variables are explained in the syntax rules)
+<verbatim>
+		* Set FORMAT = | [[$link][$title]] |
+</verbatim>
+
+---++ Syntax Rules
+
+The =%<nop>HEADLINES{...}%= variable gets expanded to the content pulled from an RSS feed. 
+
+| *%<nop>HEADLINES% Parameter* | *Explanation* | *Default* |
+| =href= | URL of RSS feed | None; is required |
+| =refresh= | Refresh rate in minutes for caching feed; ="0"= for no caching | Global =REFRESH= setting |
+| =limit= | Maximum number of items shown | Global =LIMIT= setting |
+| =header= | Header. Can include these variables:<br /> - $channeltitle: Title of channel <br /> - $channellink: Link of channel <br /> - $channeldescription: Description of channel <br /> - $imagetitle: Title text for site <br /> - $imagelink: Link for site <br /> - $imageurl: URL of image <br /> - $imagedescription: Description of image | Global =HEADER= setting |
+| =format= | Format of one item. Can include these variables:<br /> - $title: News item title <br /> - $link: News item link <br /> - $description: News item description | Global =FORMAT= setting |
+
+<!-- NOT YET IMPLEMENTED:
+| =refresh= | Refresh rate in minutes | Global =REFRESH= setting |
+-->
+
+---++ Examples
+
+Write =%<nop>HEADLINES{ href="http://slashdot.org/slashdot.rdf" }%= to get the latest Slashdot news in table format:
+
+  %HEADLINES{ href="http://slashdot.org/slashdot.rdf" }%
+
+Write =%<nop>HEADLINES{ href="http://www.moreover.com/cgi-local/page?o=rss&c=Aerospace%20and%20defense%20industry%20news" header="	* [<nop>[$channellink][$channeltitle]]:" format="		* [<nop>[$link][$title]] ($description)" }%= to get Aerospace and defense industry news rendered as a bullet list:
+
+%HEADLINES{ href="http://www.moreover.com/cgi-local/page?o=rss&c=Aerospace%20and%20defense%20industry%20news" header="	* [[$channellink][$channeltitle]]:" format="		* [[$link][$title]] ($description)" }%
+
+---++ Known issues
+
+	* Topic load time depends on timeit takes to load the RSS feed. A future version might include some caching to improve performance.
+	* This plugin uses the undocumented =TWiki::Net::getUrl()= function. The plugin might break in a future TWiki release.
+	* URLs on virtual hosts cannot be read, for example, TWiki:Codev/TWikiSyndication does not work. This is a limitation of =TWiki::Net::getUrl()=
+
+---++ Plugin Installation Instructions
+
+*Note:* You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* Test if the plugin is correctly installed:
+		* Check if above example shows a news feed instead of variable.
+
+---++ Plugin Info
+
+|  Plugin Author: | %TWIKIWEB%.PeterThoeny |
+|  Plugin Version: | 02 Aug 2002 (V1.001) |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  02 Aug 2002: | Implemented caching of feeds, thanks to TWiki:Main/RobDuarte |
+|  11 Jun 2002: | Initial version (V1.000) |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.004 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- Main.PeterThoeny - 02 Aug 2002
