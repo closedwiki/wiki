@@ -1,4 +1,7 @@
-%META:TOPICINFO{author="MikeMannix" date="999078876" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="MikeMannix" date="999209840" format="1.0" version="1.11"}%
+%TOC%
+%STARTINCLUDE%
+
 ---## TWiki Access Control
 
 %WIKITOOLNAME% allows you to define restrictions of who is allowed to view a %WIKITOOLNAME% web, make changes to topics or attach files.
@@ -25,7 +28,7 @@ __Groups__ are defined by group topics in the %MAINWEB% web, i.e. %MAINWEB%.TWik
 	* ALLOWTOPICCHANGE defines who is allowed to change the group topic; it is a comma delimited list of users and groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic, i.e. <br> =&nbsp; &nbsp; * Set <nop>ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup= <br> for the <nop>TWikiAdminGroup topic. (This is to prevent users not in the group from editing the topic and gaining unauthorized membership to the group.)
 
 
----+++ Write Access Restriction for Individual Topics
+---+++ Write Access Restriction by Topic
 
 You can define restrictions of who is allowed to make changes to a topic or attach files to it.
 
@@ -39,7 +42,7 @@ ALLOWTOPICCHANGE defines users or groups that *are* allowed to make changes to t
 
 DENYTOPICCHANGE is evaluated before ALLOWTOPICCHANGE. Access is denied if the authenticated person is in the DENYTOPICCHANGE list, or not in the ALLOWTOPICCHANGE list. Access is granted in case DENYTOPICCHANGE and ALLOWTOPICCHANGE is not defined.
 
----+++ Write Access Restriction for a Whole %WIKITOOLNAME% Web
+---+++ Write Access Restriction by Web
 
 You can define restrictions of who is allowed to make changes to a %WIKITOOLNAME% web. This includes creating new topics, changing topics or attaching files.
 
@@ -51,7 +54,7 @@ The same rules apply like the one for Access Control for Individual Topics; with
 	* DENYTOPICCHANGE (in topic) overrides DENYWEBCHANGE (in <nop>%WEBPREFSTOPIC%)
 	* ALLOWTOPICCHANGE (in topic) overrides ALLOWWEBCHANGE (in <nop>%WEBPREFSTOPIC%)
 
----+++ Rename Access Restriction for Individual Topics
+---+++ Rename Access Restriction by Topic
 
 You can define restrictions of who is allowed to rename a topic.  Note that users need this permission in addition to the CHANGE permission in order to rename a topic.  They also need CHANGE access to change references in referring topics.
 
@@ -65,7 +68,7 @@ ALLOWTOPICRENAME defines users or groups that *are* allowed to rename the topic.
 
 DENYTOPICRENAME is evaluated before ALLOWTOPICRENAME. Access is denied if the authenticated person is in the DENYTOPICRENAME list, or not in the ALLOWTOPICRENAME list. Access is granted in case DENYTOPICRENAME and ALLOWTOPICRENAME is not defined.
 
----+++ Rename Access Restriction for a Whole %WIKITOOLNAME% Web
+---+++ Rename Access Restriction by Web
 
 You can define restrictions of who is allowed to do renames for a %WIKITOOLNAME% web.
 
@@ -77,7 +80,7 @@ The same rules apply like the one for Access Control for Individual Topics; with
 	* DENYTOPICRENAME (in topic) overrides DENYWEBRENAME (in <nop>%WEBPREFSTOPIC%)
 	* ALLOWTOPICRENAME (in topic) overrides ALLOWWEBRENAME (in <nop>%WEBPREFSTOPIC%)
 
----+++ Read Access Restriction for a Whole %WIKITOOLNAME% Web
+---+++ Read Access Restriction by Web
 
 You can define restrictions of who is allowed to view a %WIKITOOLNAME% web.
 
@@ -85,7 +88,8 @@ Define one or both of these variable in the %WEBPREFSTOPIC% topic:
 	* Set <nop>DENYWEBVIEW = &lt; list of users and groups &gt;
 	* Set <nop>ALLOWWEBVIEW = &lt; list of users and groups &gt;
 
-_Notes for read access restriction:_
+---++++ Read Access Restriction Notes
+
 	* The view restriction is not suitable for very sensitive content since there is a way to circumvent the read access restriction.
 	* Read access restriction only works if the view script is authenticated, that means that users need to log on also just to read topics. <a href="TWikiDocumentation#installation">TWiki Installation</a> has more on basic authentication based on the =.htaccess= file.
 	* There is a workaround if you prefer to to have unrestricted access to view topics located in normal webs, and to authenticate users only for webs where view restriction is enabled:
@@ -99,9 +103,8 @@ _Notes for read access restriction:_
 	* It is not recommended to restrict view access to individual topics since all content is searchable __within__ a web.
 	* The view restriction is not suitable for very sensitive content since there is a way to circumvent the read access restriction.
 
--- PeterThoeny - 16 Mar 2001 <br>
 
-__NOTE:__
+---+++ The SuperAdminGroup
 
 The above schema can lock completely a topic in case of a typing error of the ALLOWTOPICCHANGE setting (see [[http://www.twiki.org/cgi-bin/view/Codev/UnchangeableTopicBug][UnchangeableTopicBug]]). To avoid this:
 	* set the =$superAdminGroup= variable in =TWiki.cfg= to the name of a group of users that are always allowed to edit/view topics. E.g.:
@@ -110,6 +113,7 @@ $superAdminGroup = "TWikiAdminGroup";
 </pre>
 	* the default setting is not to have superusers
 
+-- PeterThoeny - 16 Mar 2001 <br>
 -- AndreaSterbini - 11 Apr 2001 <br> 
-
+%STOPINCLUDE%
 __Related topics:__ %WIKIPREFSTOPIC%, %WEBPREFSTOPIC% (in every web), %MAINWEB%.TWikiAdminGroup, %MAINWEB%.TWikiGroups
