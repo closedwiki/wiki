@@ -203,6 +203,7 @@ sub view {
     $tmpl =~ s/%REVARG%//go;
   }
 
+#SMELL: HUH? - TODO: why would you not show the revisions around the version that you are displaying? and this logic is yucky@!
   my $i = $maxrev;
   my $j = $maxrev;
   my $revisions = "";
