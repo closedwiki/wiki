@@ -103,6 +103,9 @@ sub _settings
     $self->{tagCmd}      = $settings{tagCmd};
 }
 
+#TODO set from TWiki.cfg
+my $cmdQuote = "'";
+
 # ======================
 =pod
 
@@ -156,7 +159,7 @@ sub _binaryChange
         # Can only do something when changing to binary
         my $cmd = $self->{"initBinaryCmd"};
         my $file = $self->file();
-        $cmd =~ s/%FILENAME%/$file/go;
+        $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/go;
         $cmd =~ /(.*)/;
         $cmd = "$1";       # safe, so untaint variable
         my $rcsOutput = `$cmd`;
@@ -229,7 +232,7 @@ sub replaceRevision
     $cmd =~ s/%USERNAME%/$user/;
     $file =~ s/$TWiki::securityFilter//go;
     $rcsFile =~ s/$TWiki::securityFilter//go;
-    $cmd =~ s/%FILENAME%/$file $rcsFile/;
+    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote $cmdQuote$rcsFile$cmdQuote/;
     $cmd =~ /(.*)/;
     $cmd = $1;       # safe, so untaint variable
     $rcsOut = `$cmd`;
@@ -278,7 +281,7 @@ sub _deleteRevision
     my $file    = $self->{file};
     my $rcsFile = $self->{rcsFile};
     my $cmd= $self->{unlockCmd};
-    $cmd =~ s/%FILENAME%/$file $rcsFile/go;
+    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote $cmdQuote$rcsFile$cmdQuote/go;
     $cmd =~ /(.*)/;
     $cmd = $1;       # safe, so untaint
     my $rcsOut = `$cmd`; # capture stderr
@@ -291,7 +294,7 @@ sub _deleteRevision
     }
     $cmd= $self->{delRevCmd};
     $cmd =~ s/%REVISION%/1.$rev/go;
-    $cmd =~ s/%FILENAME%/$file $rcsFile/go;
+    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote $cmdQuote$rcsFile$cmdQuote/go;
     $cmd =~ /(.*)/;
     $cmd = $1;       # safe, so untaint variable
     $rcsOut = `$cmd`;
@@ -304,7 +307,7 @@ sub _deleteRevision
     }
     $cmd= $self->{lockCmd};
     $cmd =~ s/%REVISION%/$rev/go;
-    $cmd =~ s/%FILENAME%/$file $rcsFile/go;
+    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote $cmdQuote$rcsFile$cmdQuote/go;
     $cmd =~ /(.*)/;
     $cmd = $1;       # safe, so untaint variable
     $rcsOut = `$cmd`;
@@ -341,7 +344,7 @@ sub getRevision
         $tmpRevFile = "$tmpfile,v";
         copy( $self->rcsFile(), $tmpRevFile );
         my $cmd1 = $self->{tmpBinaryCmd};
-        $cmd1 =~ s/%FILENAME%/$tmpRevFile/;
+        $cmd1 =~ s/%FILENAME%/$cmdQuote$tmpRevFile$cmdQuote/;
         $cmd1 =~ /(.*)/;
         $cmd1 = "$1";
         my $tmp = `$cmd1`;
@@ -350,7 +353,7 @@ sub getRevision
         $cmd =~ s/-p%REVISION%/-r%REVISION%/;
     }    
     $cmd =~ s/%REVISION%/1.$version/;
-    $cmd =~ s/%FILENAME%/$file/;
+    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
     $cmd =~ /(.*)/;
     $cmd = "$1"; # untaint
     my $text = `$cmd`;
@@ -385,7 +388,7 @@ sub numRevisions
        return "";
     }
 
-    $cmd =~ s/%FILENAME%/$rcsFile/;
+    $cmd =~ s/%FILENAME%/$cmdQuote$rcsFile$cmdQuote/;
     $cmd =~ /(.*)/;
     $cmd = $1;       # now safe, so untaint variable
     my $rcsOutput = `$cmd`;
@@ -431,7 +434,7 @@ sub getRevisionInfo
     if ( -e $rcsFile ) {
        my $cmd= $self->{infoCmd};
        $cmd =~ s/%REVISION%/$version/;
-       $cmd =~ s/%FILENAME%/$rcsFile/;
+       $cmd =~ s/%FILENAME%/$cmdQuote$rcsFile$cmdQuote/;
        $cmd =~ /(.*)/; $cmd = $1;       # Untaint
        my $rcsOut = `$cmd`;
        my $exit = $? >> 8;
@@ -486,7 +489,7 @@ sub revisionDiff
         $tmp =~ s/%REVISION2%/1.$rev2/;
         my $rcsFile = $self->rcsFile();
         $rcsFile =~ s/$TWiki::securityFilter//go;
-        $tmp =~ s/%FILENAME%/$rcsFile/;
+        $tmp =~ s/%FILENAME%/$cmdQuote$rcsFile$cmdQuote/;
         $tmp =~ s/%CONTEXT%/$contextLines/;
         $tmp =~ /(.*)/;
         my $cmd = $1;       # now safe, so untaint variable
@@ -498,8 +501,9 @@ sub revisionDiff
         # Avoid showing change in revision number!
         # I'm not too happy with this implementation, I think it may be better to filter before sending to diff command,
         # possibly using Algorithm::Diff from CPAN.
-        $tmp =~ s/[0-9]+c[0-9]+\n[<>]\s*%META:TOPICINFO{[^}]*}%\s*\n---\n[<>]\s*%META:TOPICINFO{[^}]*}%\s*\n//go;
-        $tmp =~ s/[<>]\s*%META:TOPICINFO{[^}]*}%\s*//go;
+#removed as it causes erronious changes - and it _has_ to be done in Store.pm so it works for rsclite too
+#        $tmp =~ s/[0-9]+c[0-9]+\n[<>]\s*%META:TOPICINFO{[^}]*}%\s*\n---\n[+-<>]\s*%META:TOPICINFO{[^}]*}%\s*n//go;
+#        $tmp =~ s/[+-<>]\s*%META:TOPICINFO{[^}]*}%\s*//go;
     }
 	
     return ($error, parseRevisionDiff( $tmp ) );
@@ -527,32 +531,28 @@ sub parseRevisionDiff
 
     $diffFormat = "unified" if ( $text =~ /^---/ );
 
-    if ( $diffFormat eq "unified" ) {
-	#skip the 2 header lines
-	$text =~ s/^---.*$//go;  #  --- WebHome.txt 2000/08/03 08:37:18     1.1
-        $text =~ s/^\+\+\+.*$//go;  #  +++ WebHome.txt 2000/08/19 00:08:37     1.3
-    }
-
     $text =~ s/\r//go;  # cut CR
 
+    my $lineNumber=1;
     if ( $diffFormat eq "unified" ) {
         foreach( split( /\n/, $text ) ) {
-	    if ( /^\-\-\- / ) {
-	    } elsif ( /^\+\+\+ / ) {
-    	    } elsif ( /@@ [-+]([0-9]+)([,0-9]+)? [-+]([0-9]+)(,[0-9]+)? @@/ ) {
-    	        #line number
-	        push @diffArray, ["l", $1, $3];
-	    } elsif ( /^\-/ ) {
-	        s/^\-//go;
-	            push @diffArray, ["-", $_, ""];
-	    } elsif ( /^\+/ ) {
-	        s/^\+//go;
-	            push @diffArray, ["+", "", $_];
-	    } else {
-	        s/^ (.*)$/$1/go;
-	            push @diffArray, ["u", $_, $_];
+	    if ( $lineNumber > 3 ) {   #skip the first 2 lines (filenames)
+ 	   	    if ( /@@ [-+]([0-9]+)([,0-9]+)? [-+]([0-9]+)(,[0-9]+)? @@/ ) {
+	    	        #line number
+		        push @diffArray, ["l", $1, $3];
+		    } elsif ( /^\-/ ) {
+		        s/^\-//go;
+		        push @diffArray, ["-", $_, ""];
+		    } elsif ( /^\+/ ) {
+		        s/^\+//go;
+		        push @diffArray, ["+", "", $_];
+		    } else {
+	  		s/^ (.*)$/$1/go;
+			push @diffArray, ["u", $_, $_];
+		    }
 	    }
-        }
+	    $lineNumber = $lineNumber + 1;
+       	 }
     } else {
         #"normal" rcsdiff output 
         foreach( split( /\n/, $text ) ) {
@@ -561,18 +561,10 @@ sub parseRevisionDiff
 	        push @diffArray, ["l", $1, $3];
 	    } elsif ( /^</ ) {
 	        s/^< //go;
-	        if ( @{$diffArray[$#diffArray]}[0] eq "-" ) {
-	            @{$diffArray[$#diffArray]}[1] .= "\n$_";
-	        } else {
 	            push @diffArray, ["-", $_, ""];
-	        }
 	    } elsif ( /^>/ ) {
 	        s/^> //go;
-	        if ( @{$diffArray[$#diffArray]}[0] eq "+" ) {
-	            @{$diffArray[$#diffArray]}[2] .= "\n$_";
-	        } else {
 	            push @diffArray, ["+", "", $_];
-	        }
 	    } else {
 	        #empty lines and the --- selerator in the diff
 	        #push @diffArray, ["u", "$_", $_];
@@ -599,7 +591,7 @@ sub _ci
     my $rcsOutput = "";
     $cmd =~ s/%USERNAME%/$userName/;
     $file =~ s/$TWiki::securityFilter//go;
-    $cmd =~ s/%FILENAME%/$file/;
+    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
     $comment = "none" unless( $comment );
     $comment =~ s/[\"\'\`\;]//go;  # security, Codev.NoShellCharacterEscapingInFileAttachComment, MikeSmith
     $cmd =~ s/%COMMENT%/$comment/;
@@ -611,7 +603,7 @@ sub _ci
     if( $exit && $rcsOutput =~ /no lock set by/ ) {
           # Try and break lock, setting new one and doing ci again
           my $cmd = $self->{"breakLockCmd"};
-          $cmd =~ s/%FILENAME%/$file/go;
+          $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/go;
           $cmd =~ /(.*)/;
           my $out = `$cmd`;
           _traceExec( $cmd, $out );
@@ -653,7 +645,7 @@ sub setTopicRevisionTag
     if ( -e $file ) {
        my $cmd= $self->{tagCmd};
        $cmd =~ s/%REVISION%/$rev/;
-       $cmd =~ s/%FILENAME%/$file/;
+       $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
        $cmd =~ s/%TAG%/$tag/;
 	   $cmd = $cmd."  2>> $TWiki::warningFilename";
        $cmd =~ /(.*)/; $cmd = $1;       # Untaint
