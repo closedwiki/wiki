@@ -348,9 +348,9 @@ foreach my $patch ( @patches )
 
 ################################################################################
 # TODO: install plugins dependencies (and/or optional core dependencies)
-# MathModePlugin: sudo fink install latex2html (tetex, ...)
+# MathModePlugin: sudo fink install latex2html (tetex, ...), gd, librsvg
 # ImageGalleryPlugin: sudo fink install ImageMagick (...)
-# ChartPlugin: sudo fink install GD
+# ChartPlugin: sudo fink install gd2 librsvg
 
 
 ################################################################################
