@@ -1470,25 +1470,26 @@ sub renderFormData
 {
     my( $web, $topic, $meta ) = @_;
 
-    my $metaText = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>";
+    my $metaText = "";
     
     my %form = $meta->findOne( "FORM" );
     if( %form ) {
-       my $name = $form{"name"};
-       $metaText .= "<th colspan=\"2\" align=\"center\" bgcolor=\"#99CCCC\"> $name </th></tr>\n";        
-    }
-    
-    my @fields = $meta->find( "FIELD" );
-    foreach my $field ( @fields ) {
-        my $title = $field->{"title"};
-        my $value = $field->{"value"};
-        $metaText .= "<tr><th bgcolor=\"#99CCCC\" align=\"right\"> $title:</th><td align=\"left\"> $value </td></tr>\n";
-    }
-    
-    $metaText .= "</table>\n";
+        my $name = $form{"name"};
+        $metaText = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>";
+        $metaText .= "<th colspan=\"2\" align=\"center\" bgcolor=\"#99CCCC\"> $name </th></tr>\n";        
+        
+        my @fields = $meta->find( "FIELD" );
+        foreach my $field ( @fields ) {
+            my $title = $field->{"title"};
+            my $value = $field->{"value"};
+            $metaText .= "<tr><th bgcolor=\"#99CCCC\" align=\"right\"> $title:</th><td align=\"left\"> $value </td></tr>\n";
+        }
 
-    $metaText = getRenderedVersion( $metaText, $web );
-    
+        $metaText .= "</table>\n";
+
+        $metaText = getRenderedVersion( $metaText, $web );
+    }
+
     return $metaText;
 }
 
