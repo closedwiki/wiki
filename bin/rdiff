@@ -93,7 +93,8 @@ sub renderSideBySide
   if ( $diffType eq "c" ) {
       $lcolor = $rcolor = "#99ff99";
   } elsif ( $diffType eq "u" ) {
-      $lcolor = $rcolor = "#99ff99";
+      $lcolor = $rcolor = "#ffffff";
+#      $lcolor = $rcolor = "#99ff99";
   } elsif ( $diffType eq "+" ) {
       $lcolor = "#cccccc";
       $rcolor = "#ccccff";
@@ -106,6 +107,9 @@ sub renderSideBySide
       $result .= qq(<tr bgcolor="#eeeeee"><th>Line: $left</th><th>Line: $right</th></tr>\n)
     }
   } else {
+#    $right = renderCellData( $right, $topic );
+#    $left = renderCellData( $left, $topic );
+#    $result .= qq(<tr><td bgcolor="$lcolor" valign="top">$left&nbsp;</td><td bgcolor="$rcolor" valign="top">$right&nbsp;</td></tr>\n);
     $right = renderCellData( $right, $topic );
     $left = renderCellData( $left, $topic );
     $result .= qq(<tr><td bgcolor="$lcolor" valign="top">$left&nbsp;</td><td bgcolor="$rcolor" valign="top">$right&nbsp;</td></tr>\n);
@@ -134,13 +138,19 @@ sub renderSequential
   my $result = "";
 
   if ( $diffType eq "-") {
-    $result = "\n<\/td><\/tr>\n<tr><td bgcolor=\"#FFD7D7\" colspan =\"2\"><b> Deleted: <\/b><\/td><\/tr>\n<tr><td bgcolor=\"#FF4040\" valign=\"top\" width=\"1%\">&lt;<br \/>&lt;<\/td><td>" ;
+    $result .= "\n<\/td><\/tr>\n<tr><td bgcolor=\"#FFD7D7\" colspan =\"2\"><b> Deleted: <\/b>";
+    $result .= "<\/td><\/tr>\n<tr><td bgcolor=\"#FF4040\" valign=\"top\" width=\"1%\">&lt;<br \/>&lt;<\/td><td>" ;
     $result .= renderCellData( $left, $topic );
   } elsif ( $diffType eq "+") {
-    $result = "\n<\/td><\/tr>\n<tr><td bgcolor=\"#D0FFD0\" colspan =\"2\"><b> Added:   <\/b><\/td><\/tr>\n<tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br \/>&gt;<\/td><td>" ;
+    $result .= "\n<\/td><\/tr>\n<tr><td bgcolor=\"#D0FFD0\" colspan =\"2\"><b> Added:   <\/b>";
+    $result .= "<\/td><\/tr>\n<tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br \/>&gt;<\/td><td>" ;
+    $result .= renderCellData( $right, $topic );
+  } elsif ( $diffType eq "u") {
+    $result .= "\n<\/td><\/tr>\n<tr><\/tr>\n<tr><td></td><td>" ;
     $result .= renderCellData( $right, $topic );
   } elsif ( $diffType eq "c") {
-    $result = "\n<\/td><\/tr>\n<tr><td bgcolor=\"#D0FFD0\" colspan =\"2\"><b> Changed: <\/b><\/td><\/tr>\n<tr><td bgcolor=\"#FF4040\" valign=\"top\" width=\"1%\">&lt;<br \/>&lt;<\/td><td>" ;
+    $result .= "\n<\/td><\/tr>\n<tr><td bgcolor=\"#D0FFD0\" colspan =\"2\"><b> Changed: <\/b>";
+    $result .= "<\/td><\/tr>\n<tr><td bgcolor=\"#FF4040\" valign=\"top\" width=\"1%\">&lt;<br \/>&lt;<\/td><td>" ;
     $result .= renderCellData( $left, $topic );
     $result .= renderCellData( $right, $topic );
   }
@@ -167,29 +177,62 @@ sub parseRevisionDiff
 
     $text =~ s/\r//go;  # cut CR
 
-    #"normal" rcsdiff output 
-    foreach( split( /\n/, $text ) ) {
-	if ( /^([0-9]+)[0-9\,]*([acd])([0-9]+)/ ) {
-	    #line number
-	    push @diffArray, ["l", $1, $3];
-	} elsif ( /^</ ) {
-	    s/^< //go;
-	    if ( @{@diffArray[$#diffArray]}[0] eq "-" ) {
-	        @{@diffArray[$#diffArray]}[1] .= "\n$_";
+    if ( $diffFormat eq "unified" ) {
+        foreach( split( /\n/, $text ) ) {
+	    if ( /^\-\-\- / ) {
+	    } elsif ( /^\+\+\+ / ) {
+    	    } elsif ( /^@@ ([\-\+0-9]+)\,([0-9]+) ([\-\+0-9]+)\,([0-9]+) @@$/ ) {
+    	        #line number
+	        push @diffArray, ["l", $1, $3];
+	    } elsif ( /^\-/ ) {
+	        s/^\-//go;
+	        if ( ($#diffArray >= 0) && ( @{@diffArray[$#diffArray]}[0] eq "-" ) ) {
+	            @{@diffArray[$#diffArray]}[1] .= "\n$_";
+	        } else {
+	            push @diffArray, ["-", $_, ""];
+	        }
+	    } elsif ( /^\+/ ) {
+	        s/^\+//go;
+	        if ( ($#diffArray >= 0) && ( @{@diffArray[$#diffArray]}[0] eq "+" ) ) {
+	            @{@diffArray[$#diffArray]}[2] .= "\n$_";
+	        } else {
+	            push @diffArray, ["+", "", $_];
+	        }
 	    } else {
-	        push @diffArray, ["-", $_, ""];
+	        s/^ (.*)$/$1/go;
+	        if ( ($#diffArray >= 0) && ( @{@diffArray[$#diffArray]}[0] eq "u" ) ) {
+	            @{@diffArray[$#diffArray]}[1] .= "\n$_";
+	            @{@diffArray[$#diffArray]}[2] .= "\n$_";
+	        } else {
+	            push @diffArray, ["u", $_, $_];
+	        }
 	    }
-	} elsif ( /^>/ ) {
-	    s/^> //go;
-	    if ( @{@diffArray[$#diffArray]}[0] eq "+" ) {
-	        @{@diffArray[$#diffArray]}[2] .= "\n$_";
+        }
+    } else {
+        #"normal" rcsdiff output 
+        foreach( split( /\n/, $text ) ) {
+    	    if ( /^([0-9]+)[0-9\,]*([acd])([0-9]+)/ ) {
+    	        #line number
+	        push @diffArray, ["l", $1, $3];
+	    } elsif ( /^</ ) {
+	        s/^< //go;
+	        if ( @{@diffArray[$#diffArray]}[0] eq "-" ) {
+	            @{@diffArray[$#diffArray]}[1] .= "\n$_";
+	        } else {
+	            push @diffArray, ["-", $_, ""];
+	        }
+	    } elsif ( /^>/ ) {
+	        s/^> //go;
+	        if ( @{@diffArray[$#diffArray]}[0] eq "+" ) {
+	            @{@diffArray[$#diffArray]}[2] .= "\n$_";
+	        } else {
+	            push @diffArray, ["+", "", $_];
+	        }
 	    } else {
-	        push @diffArray, ["+", "", $_];
+	        #empty lines and the --- selerator in the diff
+	        #push @diffArray, ["u", "$_", $_];
 	    }
-	} else {
-	    #empty lines and the --- selerator in the diff
-	    #push @diffArray, ["u", "$_", $_];
-	}
+        }
     }
     return \@diffArray;
 }
