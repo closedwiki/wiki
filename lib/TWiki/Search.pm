@@ -152,6 +152,7 @@ sub searchWeb
     if( ! $tmplTail ) {
         print "<html><body>";
         print "<h1>TWiki Installation Error</h1>";
+        # Might not be search.tmpl FIXME
         print "Incorrect format of search.tmpl (missing %SPLIT% parts)";
         print "</body></html>";
         return;
@@ -262,10 +263,11 @@ sub searchWeb
         
         next if ( $noEmpty && ! @topicList ); # Nothing to show for this topic
 
-        # use hash tables for date and author
+        # use hash tables for date, author, rev number and view permission
         my %topicRevDate = ();
         my %topicRevUser = ();
         my %topicRevNum = ();
+        my %topicAllowView = ();
 
         # sort the topic list by date, author or topic name
         if( $theOrder eq "modified" ) {
@@ -307,10 +309,12 @@ sub searchWeb
             foreach( @topicList ) {
                 my $tempVal = $_;
                 # FIXME should be able to get data from topic
-                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $thisWebName, $tempVal, "", 1 );
+                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal );
+                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta, 1 );
                 $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
                 $topicRevNum{ $tempVal } = $revnum;
+                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $tempVal, $thisWebName );
             }
 
             # sort by date (second time if exercise), Schwartzian Transform
@@ -332,10 +336,12 @@ sub searchWeb
             # first we need to build the hashes for date and author
             foreach( @topicList ) {
                 $tempVal = $_;
-                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $thisWebName, $tempVal, "", 1 );
+                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal );
+                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta, 1 );
                 $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
                 $topicRevNum{ $tempVal } = $revnum;
+                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $tempVal, $thisWebName );
             }
 
             # sort by author, Schwartzian Transform
@@ -388,21 +394,29 @@ sub searchWeb
         my $revDate = "";
         my $revUser = "";
         my $revNum = "";
+        my $allowView = "";
         my $locked = "";
         foreach( @topicList ) {
             $topic = $_;
-
+            
+            my $text = "";
+            
             # make sure we have date and author
             if( exists( $topicRevUser{$topic} ) ) {
                 $revDate = $topicRevDate{$topic};
                 $revUser = $topicRevUser{$topic};
                 $revNum  = $topicRevNum{$topic};
+                $allowView = $topicAllowView{$topic};
             } else {
                 # lazy query, need to do it at last
-                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $thisWebName, $topic, "", 1 );
-                $revUser = &TWiki::userToWikiName( $revuser );
-                $revDate = $revdate;
-                $revNum  = $revnum;
+                my $meta = "";
+                ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
+                $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $topic, $thisWebName );
+                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta, 1 );
+                $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
+                $topicRevDate{ $tempVal } = $revdate;
+                $topicRevNum{ $tempVal } = $revnum;
+                $topicAllowView{ $tempVal } = $allowView;
             }
 
             $locked = "";
@@ -412,6 +426,12 @@ sub searchWeb
                     $revUser = &TWiki::userToWikiName( $tempVal );
                     $locked = "(LOCKED)";
                 }
+            }
+            
+            # Check security
+            # FIXME - how deal with user login not available if coming from search script?
+            if( ! $allowView ) {
+                next;
             }
 
             $tempVal = $repeatText;
@@ -432,10 +452,23 @@ sub searchWeb
             }
 
             if( $doRenameView ) { # added JET 19 Feb 2000
-                $topicCount++;
+                if( ! $text ) {
+                    my $meta = "";
+                    ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
+                }
+                my $changeable = "";
+                my $changeAccessOK = &TWiki::Access::checkAccessPermission( "change", $TWiki::wikiUserName, $text, $topic, $thisWebName );
+                if( ! $changeAccessOK ) {
+                   $changeable = "(NO CHANGE PERMISSION)";
+                   $tempVal =~ s/%SELECTION%.*%SELECTION%//o;
+                } else {
+                   $tempVal =~ s/%SELECTION%//go;
+                   $topicCount++;
+                }
+                $tempVal =~ s/%CHANGEABLE%/$changeable/o;
+
                 $tempVal =~ s/%TOPIC_NUMBER%/$topicCount/go;
                 $tempVal =~ s/%LABEL%/$doRenameView/go;
-                my ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $thisWebName, $topic );
                 my $reducedOutput = "";
                 
                 # Remove lines that don't contain the topic and highlight matched string
@@ -469,13 +502,20 @@ sub searchWeb
                 $tempVal =~ s/%TEXTHEAD%//go;
                 $tempVal =~ s/&nbsp;//go;
             } elsif( $doBookView ) {  # added PTh 20 Jul 2000
-                my @meta;
-                ( $head, @meta ) = &TWiki::Store::readWebTopicNew( $thisWebName, $topic );
-                $head = &TWiki::handleCommonTags( $head, $topic, $thisWebName );
-                $head = &TWiki::getRenderedVersion( $head, $thisWebName );
+                if( ! $text ) {
+                    my $meta = "";
+                    ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
+                }
+
+                $text = &TWiki::handleCommonTags( $text, $topic, $thisWebName );
+                $text = &TWiki::getRenderedVersion( $text, $thisWebName );
                 $tempVal =~ s/%TEXTHEAD%/$head/go;
             } else {
-                $head = &TWiki::Store::readFileHead( "$TWiki::dataDir\/$thisWebName\/$topic.txt", 16 );
+                if( $text ) {
+                    $head = $text;
+                } else {
+                    $head = &TWiki::Store::readFileHead( "$TWiki::dataDir\/$thisWebName\/$topic.txt", 16 );
+                }
                 $head = &TWiki::makeTopicSummary( $head, $topic, $thisWebName );
                 $tempVal =~ s/%TEXTHEAD%/$head/go;
             }
