@@ -12,7 +12,7 @@ Render bullet lists in a variety of formats
 	* Supported parameters:
 		| ="name"= or%BR% =theme="name"= | Select a rendering theme |
 		| =focus="any&nbsp;text"= | Focus list on a bullet with specified text |
-		| =depth="2"= | Remove bullets with an indent greater then the depth. The depth is relative to the highlighted bullet in case =focus= is specified |
+		| =depth="2"= | Remove bullets with an indent greater then the depth. The depth is relative to the highlighted bullet if =focus= is specified |
 	* Rendering themes can be defined by =&lt;name&gt;_THEME= Plugin settings
 		* Each theme is defined by a comma separated list containing the render type and parameters required by that render type
 		* There are different render types; this initial Plugin version has *tree* and *icon* render types
