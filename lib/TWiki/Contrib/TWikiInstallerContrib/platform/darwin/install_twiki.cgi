@@ -34,22 +34,24 @@
 
 use Error qw( :try );
 
-my $account;
+my ( $hostname, $account );
 my ( $cgibin, $home );
 my $localDirConfig;
-my @patches;
-my $hostname = $ENV{SERVER_NAME} || 'localhost';
 
 BEGIN {
     use Cwd qw( cwd getcwd );
     use Config;
-    $account = [ split( '/', getcwd() ) ]->[-3];   # format: /Users/(account)/Sites/cgi-bin/...
+    $account = [ split( '/', getcwd() ) ]->[-3]   # format: /Users/(account)/Sites/cgi-bin/...
+	or die "no account?";
     my $localLibBase = getcwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
     # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
 
     $cgibin = "/Users/$account/Sites/cgi-bin";
     $home = "/Users/$account/Sites";
+    chomp( $hostname = $ENV{SERVER_NAME} || `hostname` || 'localhost' );
+
+    die "hostname?" unless $hostname;
 
     $localDirConfig = qq{
 \$cfg{DefaultUrlHost}   = "http://$hostname";
@@ -60,9 +62,6 @@ BEGIN {
 \$cfg{DataDir}          = "$home/twiki/data"; 
 \$cfg{LogDir}           = "$home/twiki/data"; 
 
-\$cfg{EgrepCmd}         = '/usr/bin/egrep';
-\$cfg{FgrepCmd}         = '/usr/bin/fgrep';
-
 \$cfg{LogFileName}      = "\$cfg{LogDir}/log%DATE%.txt";
 \$cfg{WarningFileName}  = "\$cfg{LogDir}/warn%DATE%.txt";
 \$cfg{DebugFileName}    = "\$cfg{LogDir}/debug.txt";
@@ -70,15 +69,11 @@ BEGIN {
 \$cfg{HtpasswdFileName}   = "\$cfg{DataDir}/.htpasswd";
 \$cfg{RemoteUserFileName} = "\$cfg{DataDir}/remoteusers.txt";
 \$cfg{MimeTypesFileName}  = "\$cfg{DataDir}/mime.types";
+
+# Mac-specific
+\$cfg{EgrepCmd}         = '/usr/bin/egrep';
+\$cfg{FgrepCmd}         = '/usr/bin/fgrep';
 };
-
-################################################################################
-### various patches/fixes/upgrades
-    @patches = (
-#	       'macosx',				# fixes paths for gnu tools (e|f)grep
-#	       'LocalSite.cfg',				# 
-		);
-
 }
 use strict;
 ++$|;
@@ -171,20 +166,19 @@ __HTML__
     wikiCatalogue({ %systemWikis, cgi => $q });
     print catalogue({ %systemWikis, title => "System Wiki Webs (Updates)", cgi => $q });
 
-#    my %localWikis = ( dir => "tmp/install/downloads/webs/local/", xml => "localwebs.xml", type => "localweb" );
-#    wikiCatalogue({ %localWikis, cgi => $q });
-#    print catalogue({ %localWikis, title => "Local Wiki Webs", cgi => $q });
+    my %localWikis = ( dir => "tmp/install/webs/local/", xml => "localwebs.xml", type => "localweb" );
+    wikiCatalogue({ %localWikis, cgi => $q });
+    print catalogue({ %localWikis, title => "Local Wiki Webs", cgi => $q });
 
 ################################################################################
 # PRECONFIGURATIONS
 
 my $releaseTracker = ";contrib=DistributionContrib;plugin=TWikiReleaseTrackerPlugin";
 
-#plugin=CommentPlugin
+#plugin=CommentPlugin;plugin=SectionalEditPlugin
 #plugin=CalendarPlugin or plugin=QuickCalendarPlugin
 
 my $baseWiki = ";plugin=InterwikiPlugin;plugin=SpacedWikiWordPlugin;plugin=SpreadSheetPlugin;plugin=TablePlugin;addon=GetAWebAddOn;plugin=SmiliesPlugin;addon=CompareRevisionsAddOn;plugin=SessionPlugin";
-	#plugin=SessionPlugin;plugin=TocPlugin
 my $level2Wiki = $baseWiki . $releaseTracker . ";plugin=SlideShowPlugin;plugin=TocPlugin;plugin=RandomTopicPlugin";
 my $publicWiki = $level2Wiki . ";plugin=BlackListPlugin";
 my $level3Wiki = $level2Wiki . ";plugin=FindElsewherePlugin;plugin=InterwikiPlugin;contrib=AttrsContrib";
@@ -297,7 +291,7 @@ my @types = (
 	{ type => 'plugin', dir => "downloads/plugins/", xml => "plugins.xml", },
 	{ type => 'addon', dir => "downloads/addons/", xml => "addons.xml", },
 	{ type => 'systemweb', dir => "downloads/webs/system/", xml => "systemwebs.xml", },
-#	{ type => 'localweb', dir => "webs/local/", xml => "localwebs.xml", },
+	{ type => 'localweb', dir => "webs/local/", xml => "localwebs.xml", },
     );
     
 foreach my $iType ( @types )
@@ -318,19 +312,6 @@ foreach my $iType ( @types )
 	
 	installTWikiExtension({ file => $ExtS->{file}, name => $name, dir => $iType->{dir} });
     }
-}
-
-################################################################################
-### various patches/fixes/upgrades
-
-if ( 0 ) {
-print qq{<h2>Patches</h2>\n};
-foreach my $patch ( @patches )
-{
-    print qq{<h3>Applying patch "$patch"</h3>\n};
-    my $patchFile = "tmp/install/downloads/patches/local/${patch}.patch";
-    execute( "cat $patchFile ; (patch -p1 <$patchFile) || (patch -p0 <$patchFile)" ) or warn $!;
-}
 }
 
 ################################################################################
@@ -401,7 +382,7 @@ sub _dirCatalogue
 sub SaveXML
 {
     my $p = shift;
-    die unless $p->{dir} && $p->{xml} && $p->{list} && $p->{list};
+    die unless $p->{dir} && $p->{xml} && $p->{list} && $p->{type};
 
     my $xs = new XML::Simple() or die $!;
     my $xml = "$p->{dir}/$p->{xml}";
@@ -416,7 +397,7 @@ sub SaveXML
 sub wikiCatalogue
 {
     my $p = shift;
-    $p->{fileFilter} = qr/\.wiki\.tar\.bz2$/;
+    $p->{fileFilter} = qr/\.wiki\.tar\.gz$/;
     $p->{list} = _dirCatalogue( $p );
     SaveXML( $p ) if @{$p->{list}};
 }
@@ -427,10 +408,9 @@ sub releasesCatalogue
 {
     my $p = shift;
     $p->{fileFilter} = qr/\.tar\.gz$/;
-    my $releases = _dirCatalogue( $p );
-    if ( @$releases )
+    if ( $p->{list} = [ reverse sort { $a->{name} cmp $b->{name} } @{_dirCatalogue( $p )} ] )
     {
-	foreach my $release ( @$releases )
+    	foreach my $release ( @{$p->{list}} )
 	{
 	    my $rel = $release->{name};
 	    my ( $label, undef, $branch, $revInfo ) = $rel =~ m/TWiki(Kernel)?(-([^-]+)-)?(.+)?/;
@@ -454,7 +434,6 @@ sub releasesCatalogue
 	    }
 	}
 
-	$p->{list} = $releases;
 	SaveXML( $p );
     }
 }
@@ -530,19 +509,27 @@ sub installTWikiExtension
     my $name = $p->{name} || $file;
 
     print "<h3>Installing $name</h3>\n";
-    my $tarPackage = "$dir/$file";
-    unless ( -e "tmp/install/$tarPackage" )
-    { 
-	$tarPackage .= ".tar.gz";
+    (my $tarPackage = $file);
+    print STDERR "trying tarPackage=[$tarPackage]\n";
+    unless ( -e $tarPackage )
+    {
+	($tarPackage = "$dir/$file") =~ s|^tmp/install/||;
+	print STDERR "trying tarPackage=[$tarPackage]\n";
 	unless ( -e "tmp/install/$tarPackage" )
-    	{
-	    print "<br/>Skipping $name ($tarPackage not found)<br/>\n"; 
-	    return;
-    	}
+	{ 
+	    $tarPackage .= ".tar.gz";
+	    print STDERR "trying tarPackage=[$tarPackage]\n";
+	    unless ( -e "tmp/install/$tarPackage" )
+	    {
+		print "<br/>Skipping $name ($tarPackage not found)<br/>\n"; 
+		return;
+	    }
+	}
     }
 
     my $pushd = getcwd();
     chdir( "tmp/install" ) or warn $!;
+    ( $tarPackage ) =~ s|^tmp/install/||;
     execute("tar xzvf $tarPackage") or warn $!;
     chdir $p->{cdinto} if $p->{cdinto};
     # TODO: run an standard-named install script (if included)
