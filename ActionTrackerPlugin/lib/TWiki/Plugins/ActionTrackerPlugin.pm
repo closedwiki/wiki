@@ -51,8 +51,11 @@ sub initPlugin {
   # check for Plugins.pm versions
   # COVERAGE OFF standard plugin code
   if( $TWiki::Plugins::VERSION < 1 ) {
-    &TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION" );
+    TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION" );
     return 0;
+  }
+  if( $TWiki::Plugins::VERSION < 1.020 ) {
+    TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION. Trying compatability module." );
   }
   # COVERAGE ON
 
@@ -90,9 +93,10 @@ sub initPlugin {
     # COVERAGE ON
   }
 
-  &TWiki::Func::writeDebug( "- TWiki::Plugins::ActionTrackerPlugin::initPlugin($web.$topic) is OK" ) if $debug;
+  &TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin::initPlugin($web.$topic) is OK" ) if $debug;
   $pluginInitialized = 0;
   $javaScriptIncluded = 0;
+
   return 1;
 }
 
@@ -229,7 +233,15 @@ sub beforeEditHandler {
   # as %TEXT%. This is done so we can use the standard template mechanism
   # without screwing up the content of the subtemplate.
   my $tmpl = TWiki::Func::readTemplate( "actionform", "");
-  my $date = TWiki::getGmDate();
+  my $date;
+  if( $TWiki::Plugins::VERSION < 1.020 ) {
+	$date = TWiki::getGmDate(); # COMPATIBILITY
+  } else {
+	$date = TWiki::Func::formatTime( time(), undef, 'gmtime' );
+  }
+
+  die unless ($date);
+
   $tmpl =~ s/%DATE%/$date/go;
   my $user = TWiki::Func::getWikiUserName();
   $tmpl =~ s/%WIKIUSERNAME%/$user/go;
@@ -334,7 +346,7 @@ sub beforeEditHandler {
 
   $tmpl =~ s/%TEXT%/$text/go;
   $tmpl =~ s/%HIDDENFIELDS%/$fields/go;
-
+  TWiki::Func::writeWarning("Ret $text");
   $_[0] = $tmpl;
 }
 
@@ -385,10 +397,7 @@ sub afterEditHandler {
   $_[0] = $text;
 }
 
-# This handler is called by TWiki::Store::saveTopic just before
-# the save action. The text passed is the raw text of the topic, so it
-# contains meta-data.
-# New hook in TWiki::Plugins $VERSION = '1.010'
+# Process the actions and add UIDs and other missing attributes
 sub beforeSaveHandler {
 ### my ( $text, $topic, $web ) = @_;
 
@@ -486,6 +495,7 @@ sub _getPref {
     $val = TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_$vbl" );
     if ( !defined( $val ) || $val eq "" ) {
       $val = $default;
+	  $val = "" unless ( $val );
     }
   }
   return $val;
@@ -578,7 +588,7 @@ sub _init_defaults
         # of relative use of lib dir and chdir after initialization.
         # Try again with absolute TWiki lib dir path
         eval {
-          my $libDir = TWiki::getTWikiLibDir();
+          my $libDir = TWiki::getTWikiLibDir(); # CONFORMS
           $libDir =~ /(.*)/;
           $libDir = $1;       # untaint
           $libsFound = require "$libDir/TWiki/Plugins/ActionTrackerPlugin/Action.pm";
