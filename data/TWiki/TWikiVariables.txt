@@ -42,8 +42,20 @@
   <td> =%<nop>WEB%= </td>
   <td> The current web, is <b>%WEB%</b> </td>
 </tr><tr>
+  <td> =%<nop>BASEWEB%= </td>
+  <td> The web name where the includes started, e.g. the web of the first topic of nested includes. Same as =%<nop>WEB%= in case there is no include. </td>
+</tr><tr>
+  <td> =%<nop>INCLUDINGWEB%= </td>
+  <td> The web name of the topic that includes the current topic. Same as =%<nop>WEB%= in case there is no include. </td>
+</tr><tr>
   <td> =%<nop>TOPIC%= </td>
   <td> The current topic name, is <b>%TOPIC%</b> </td>
+</tr><tr>
+  <td> =%<nop>BASETOPIC%= </td>
+  <td> The name of the topic where the includes started, e.g. the first topic of nested includes. Same as =%<nop>TOPIC%= in case there is no include. </td>
+</tr><tr>
+  <td> =%<nop>INCLUDINGTOPIC%= </td>
+  <td> The name of the topic that includes the current topic. Same as =%<nop>TOPIC%= in case there is no include. </td>
 </tr><tr>
   <td> =%<nop>SPACEDTOPIC%= </td>
   <td> The current topic name with added spaces, for regular expression search of Ref-By, is <b>%SPACEDTOPIC%</b> </td>
@@ -52,13 +64,23 @@
   <td> GM time, is <b>%GMTIME%</b> </td>
 </tr><tr>
   <td> =%<nop>GMTIME{"format"}%= </td>
-  <td> Formatted GM time based on keywords (first three characters needed.) <br> Example: =%<nop>GMTIME{"day month, year - hour:min:sec"}%= is <b>%GMTIME{"day month, year - hour:min:sec"}%</b> </td>
+  <td> Formatted GM time based on time variables.
+	 | *Variable:* | *Unit:* | *Example* |
+	 | $seconds | seconds | 59 |
+	 | $minutes | minutes | 59 |
+	 | $hours | hours | 23 |
+	 | $day | day of month | 31 |
+	 | $month | month in ISO format | Dec |
+	 | $mo | 2 digit month | 12 |
+	 | $year | 4 digit year | 1999 |
+	 | $ye | 2 digit year | 99 |
+	 Variables can be shortened to 3 characters. Example: <br> =%<nop>GMTIME{"$day $month, $year - $hour:$min:$sec"}%= is <br> <b>%GMTIME{"$day $month, $year - $hour:$min:$sec"}%</b> </td>
 </tr><tr>
   <td> =%<nop>SERVERTIME%= </td>
   <td> Server time, is <b>%SERVERTIME%</b> </td>
 </tr><tr>
   <td> =%<nop>SERVERTIME{"format"}%= </td>
-  <td> Formatted server time. Example: =%<nop>SERVERTIME{"hou:min"}%= is <b>%SERVERTIME{"hou:min"}%</b> </td>
+  <td> Formatted server time. <br> Example: =%<nop>SERVERTIME{"$hou:$min"}%= is <b>%SERVERTIME{"$hou:$min"}%</b> </td>
 </tr><tr>
   <td> =%<nop>HTTP_HOST%= </td>
   <td> HTTP_HOST environment variable, is <b>%HTTP_HOST%</b> </td>
