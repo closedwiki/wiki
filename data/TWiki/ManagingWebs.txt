@@ -1,9 +1,13 @@
-%META:TOPICINFO{author="MikeMannix" date="999329908" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="MikeMannix" date="999501050" format="1.0" version="1.11"}%
 %TOC%
 %STARTINCLUDE%
 ---## Managing Webs
 
-To work with entire TWiki webs, you need direct access to the installation files on the host server. Connecting by Telnet or FTP is the usual approach. Before making changes to a web, you can move individual topics through your browser (see [[TWiki.ManagingTopics][ModifyTopics]]). No similar web controls are available through the browser interface.
+Adding, renaming and deleting webs is done directly on the server
+
+---+++ Overview
+
+To work with entire TWiki webs, you need direct access to the installation files on the host server. Connecting by Telnet or FTP is the usual approach. There are no browser-based web management tools. You can prepare a web for changes through browser-based individual topics by browser (see [[TWiki.ManagingTopics][ModifyTopics]]). 
 
 ---+++ How to Add a New Web
 
