@@ -21,6 +21,20 @@ ange password]] to change their password to something memorable.
 
 You need to close your browser to make this change take effect.
 %TMPL:END%
+%TMPL:DEF{"confirm"}%
+---++ Thank you for registering
+
+Your activation code has been sent to %PARAM1%.  Either click on the
+link in your email or enter the code in the box below to activate your membership.
+(This code is of the form "YourName.xxxx")
+
+<form action="%SCRIPTURL%/register%SCRIPTSUFFIX%" method=get>
+<input type="hidden" name="action" value="verify" size="20">
+<input type="text" name="code" size="20">
+<input type="submit" value=" Submit ">
+</form>
+
+%TMPL:END%
 %TMPL:DEF{"message"}%
 %INSTANTIATE%
 %TMPL:END%

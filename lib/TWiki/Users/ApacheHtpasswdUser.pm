@@ -1,8 +1,8 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2005 Peter Thoeny, peter@thoeny.com
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (C) 1999-2005 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root
+# of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # Additional copyrights apply to some or all of the code in this
@@ -20,19 +20,19 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
+package TWiki::Users::ApacheHtpasswdUser;
+
+use Apache::Htpasswd;
+use Assert;
+use strict;
+
 =begin twiki
 
----+ package TWiki::Users::NoPasswdUser
+---+ package TWiki::Users::ApacheHtpasswdUser
 
-This class is an implementation of the TWiki::Password interface
-that has no passwords / users. It is implemented to always succeed
-(so anyone can be anyone they like)
+Use Apache::HtPasswd to manage users and passwords.
 
 =cut
-
-package TWiki::Users::NoPasswdUser;
-
-use strict;
 
 =pod
 
@@ -45,7 +45,13 @@ for any required TWiki services.
 =cut
 
 sub new {
-   return bless( {}, shift );
+    my( $class, $session ) = @_;
+
+    my $this = bless( {}, $class );
+    $this->{apache} = new Apache::Htpasswd
+      ( { passwdFile => $TWiki::cfg{Htpasswd}{FileName} } );
+
+    return $this;
 }
 
 =pod
@@ -59,7 +65,10 @@ Returns undef otherwise.
 =cut
 
 sub fetchPass {
-    return '';
+    my( $this, $login ) = @_;
+    ASSERT( $login ) if DEBUG;
+
+    return $this->{apache}->fetchPass( $login );
 }
 
 =pod
@@ -74,7 +83,10 @@ Returns 1 if passes.  Returns 0 if fails.
 =cut
 
 sub checkPassword {
-    return 1;
+    my( $this, $login, $passU ) = @_;
+    ASSERT( $login ) if DEBUG;
+
+    return $this->{apache}->htCheckPassword( $login, $passU );
 }
 
 =pod
@@ -86,7 +98,10 @@ Returns 1 on success Returns undef on failure.
 =cut
 
 sub deleteUser {
-    return 1;
+    my( $this, $login ) = @_;
+    ASSERT( $login ) if DEBUG;
+
+    return $this->{apache}->htDelete( $login );
 }
 
 =pod
@@ -110,24 +125,36 @@ Otherwise returns 1 if succeeds. Returns undef on failure.
 =cut
 
 sub passwd {
-    return 1;
+    my( $this, $user, $newPassU, $oldPassU ) = @_;
+    ASSERT( $user ) if DEBUG;
+
+    return $this->{apache}->htpasswd( $user, $newPassU, $oldPassU );
 }
 
 =pod
 
----++ encrypt( $user, $passwordU ) -> $passwordE
+---++ encrypt( $user, $passwordU, $fresh ) -> $passwordE
 Implements TWiki::Password
 
 
 Will return an encrypted password. Repeated calls
 to encrypt with the same user/passU will return the same passE.
-However if the passU is changed, and subsequently changed _back_
-to the old user/passU pair, then the old passE is no longer valid.
+
+If $fresh is true, then a new password not based on any pre-existing
+salt will be used. Set this if you are generating a new password.
 
 =cut
 
 sub encrypt {
-    return '';
+    my( $this, $user, $passwordU, $fresh ) = @_;
+    ASSERT( $user ) if DEBUG;
+
+    my $salt = '';
+    unless( $fresh ) {
+        my $epass = $this->fetchPass( $user );
+        $salt = substr( $epass, 0, 2 ) if ( $epass );
+    }
+    return $this->{apache}->CryptPasswd( $passwordU, $salt );
 }
 
 =pod
@@ -142,7 +169,9 @@ method call succeeded.
 =cut
 
 sub error {
-    return '';
+    my $this = shift;
+
+    return $this->{apache}->error();
 }
 
 1;

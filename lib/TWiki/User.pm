@@ -185,8 +185,8 @@ sub passwordExists {
     my $this  = shift;
     ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
-    my $passwordHandler = $this->{session}->{users}->_getPasswordHandler();
-    return $passwordHandler->UserPasswordExists($this->{login});
+    my $passwordHandler = $this->{session}->{users}->{passwords};
+    return $passwordHandler->fetchPass($this->{login});
 }
 
 =pod
@@ -207,8 +207,8 @@ sub checkPassword {
     my ( $this, $password ) = @_;
     ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
-    my $passwordHandler = $this->{session}->{users}->_getPasswordHandler();
-    return $passwordHandler->CheckUserPasswd($this->{login}, $password);
+    my $passwordHandler = $this->{session}->{users}->{passwords};
+    return $passwordHandler->checkPassword($this->{login}, $password);
 }
 
 =pod
@@ -226,8 +226,8 @@ sub removePassword {
     my $this = shift;
     ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
-    my $passwordHandler = $this->{session}->{users}->_getPasswordHandler();
-    return $passwordHandler->RemoveUser($this->{login});
+    my $passwordHandler = $this->{session}->{users}->{passwords};
+    return $passwordHandler->deleteUser( $this->{login} );
 }
 
 =pod
@@ -246,8 +246,8 @@ sub changePassword {
     my ( $this, $oldUserPassword, $newUserPassword ) = @_;
     ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
-    my $passwordHandler = $this->{session}->{users}->_getPasswordHandler();
-    return $passwordHandler->UpdateUserPassword($this->{login}, $oldUserPassword, $newUserPassword);
+    my $passwordHandler = $this->{session}->{users}->{passwords};
+    return $passwordHandler->passwd($this->{login}, $newUserPassword, $oldUserPassword);
 }
 
 =pod
@@ -264,8 +264,8 @@ sub addPassword {
     my ( $this, $newUserPassword ) = @_;
     ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
-    my $passwordHandler = $this->{session}->{users}->_getPasswordHandler();
-    return $passwordHandler->AddUserPassword($this->{login}, $newUserPassword);
+    my $passwordHandler = $this->{session}->{users}->{passwords};
+    return $passwordHandler->passwd($this->{login}, $newUserPassword);
 }
 
 =pod

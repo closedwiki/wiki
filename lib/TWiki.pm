@@ -1007,14 +1007,7 @@ sub new {
 
     @{$this->{publicWebList}} = ();
 
-	if ( # (-e $TWiki::cfg{HtpasswdFileName} ) && #<<< maybe
-		( $TWiki::cfg{HtpasswdFormatFamily} eq 'htpasswd' ) ) {
-        $this->{users} = new TWiki::Users( $this, 'ProxyPasswdUser' );
-#	} elseif ($TWiki::cfg{HtpasswdFormatFamily} eq 'something?') {
-#        $this->{users} = new TWiki::Users( $this, 'SomethingUser' );
-	} else {
-        $this->{users} = new TWiki::Users( $this, 'NoPasswdUser' );
-	}
+    $this->{users} = new TWiki::Users( $this );
 
     # Make %ENV safer, preventing hijack of the search path
     # SMELL: can this be done in a BEGIN block? Or is the environment
@@ -2010,6 +2003,7 @@ browser, and needs to be very fast.
 
 Links to URLs that are escaped by $cfg{AntiSpam}{Clean} are left untouched. All
 other links have $cfg{AntiSpam}{Options} added.
+
 =cut
 
 sub spamProof {

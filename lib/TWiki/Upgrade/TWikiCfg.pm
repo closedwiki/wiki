@@ -165,7 +165,16 @@ sub upgradeConfig {
     print CFG old2new($twikiWebname, "TWiki", "{SystemWebName}" );
     print CFG old2new($debugFilename, "$logDir/debug.txt", "{DebugFileName}" );
     print CFG old2new($warningFilename, "$logDir/warning.txt", "{WarningFileName}" );
-    print CFG old2new($htpasswdFormatFamily, "htpasswd", "{HtpasswdFormatFamily}" );
+
+    print CFG old2new($htpasswdFilename, "$dataDir/.htpasswd",
+                      "{Htpasswd}{FileName}" );
+    print CFG old2new($htpasswdEncoding, "crypt",
+                      "{Htpasswd}{Encoding}" );
+    if($htpasswdFormatFamily eq "ht(passwd|digest)") {
+        print CFG "\$cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser'\n";
+    } else {
+        print CFG "\$cfg{PasswordManager} = 'TWiki::Users::NoPasswdUser'\n";
+    }
     print CFG old2new($logFilename, "$logDir/log%DATE%.txt", "{LogFileName}" );
     print CFG old2new($remoteUserFilename, "$dataDir/remoteusers.txt", "{RemoteUserFileName}" );
     print CFG old2new($wikiUsersTopicname, "TWikiUsers", "{UsersTopicName}" );

@@ -400,7 +400,7 @@ sub _requireVerification {
                                     def => 'send_mail_error',
                                     params => $data{Email}.' - '.$err);
     }
-    throw TWiki::OopsException( 'registerbad',
+    throw TWiki::OopsException( 'registerok',
                                 web => $data{webName},
                                 topic => $topic,
                                 def => 'confirm',
@@ -447,6 +447,7 @@ sub resetPassword {
         # Anyone can reset a single password - important because by definition
         # the user cannot authenticate
     }
+
     # Collect all messages into one string
     my $message = '';
     foreach my $userName (@userNames) {
@@ -458,7 +459,6 @@ sub resetPassword {
     # Redirect to a page that tells what happened
     my $br = CGI::br();
     $message =~ s/\n/$br/g;
-    # Don't offer the 
     if( scalar( @userNames ) == 1 ) {
         # one user; refine the change password link to include their
         # username (can't use logged in user - by definition this won't be them!)
@@ -468,7 +468,6 @@ sub resetPassword {
                                 topic => $user->wikiName(),
                                 def => 'reset_ok',
                                 params => $message );
-
 }
 
 # return a string of messages. If there was an error,

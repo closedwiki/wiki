@@ -43,7 +43,7 @@ Construct the user management object
 =cut
 
 sub new {
-    my ( $class, $session, $impl ) = @_;
+    my ( $class, $session ) = @_;
     ASSERT(ref($session) eq 'TWiki') if DEBUG;
     my $this = bless( {}, $class );
 
@@ -54,13 +54,12 @@ sub new {
 
     $this->{session} = $session;
 
-    $this->{IMPL} = "TWiki::Users::$impl";
-    $this->{CACHED} = 0;
+	my $impl = $TWiki::cfg{PasswordManager};
+    eval "use $impl";
+    die "Password Manager: $@" if $@;
+    $this->{passwords} = $impl->new( $session );
 
-	eval "use $this->{IMPL}";
-    if( $@ ) {
-        die "$this->{IMPL} compile failed: $@";
-    }
+    $this->{CACHED} = 0;
 
     # create the guest user
     $this->_createUser( $TWiki::cfg{DefaultUserLogin},
@@ -218,17 +217,6 @@ sub _createUser {
     $this->{wikiname}{$object->webDotWikiName()} = $object;
 
     return $object;
-}
-
-# Get the password implementation
-sub _getPasswordHandler {
-    my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
-
-    unless( $this->{passwordHandler} ) {
-        $this->{passwordHandler} = $this->{IMPL}->new( $this->{session} );
-    }
-    return $this->{passwordHandler};
 }
 
 =pod

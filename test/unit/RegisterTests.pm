@@ -11,7 +11,7 @@ package RegisterTests;
                 #test_registerVerifyAndFinish
 
 #Uncomment to isolate 
-our @TESTS = qw(test_registerVerifyOk); #test_UnregisteredUser);
+#our @TESTS = qw(test_registerVerifyOk); #test_UnregisteredUser);
 
 use base qw(Test::Unit::TestCase);
 BEGIN {

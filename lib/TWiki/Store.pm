@@ -1274,6 +1274,8 @@ sub getTopicLatestRevTime {
 
 Return value: $fileContents
 
+Thorws Error::Simple if a file operation failed.
+
 Returns the entire contents of the given file, which can be specified in any
 format acceptable to the Perl open() function.
 
@@ -1289,10 +1291,11 @@ sub readFile {
     ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
     $name = TWiki::Sandbox::normalizeFileName( $name );
     my $data = '';
-    undef $/; # set to read to EOF
     open( IN_FILE, "<$name" ) || return '';
+    my $s = $/;
+    undef $/; # set to read to EOF
     $data = <IN_FILE>;
-    $/ = "\n";
+    $/ = $s;
     close( IN_FILE );
     $data = '' unless $data; # no undefined
     return $data;
