@@ -36,20 +36,10 @@
 </form>
 
 <form name="main" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-<table>
-<tr><td>
    * *Compare revisions:*
-</td></td><tr><td>
-      * Older revision: 
-</td><td>
-<input type="text" name="rev2" size="6" value="1.1" />
-</td></tr><tr><td>
-      * Newer revision: 
-</td><td>
-<input type="text" name="rev1" size="6" value="%PARAM1%" />
-<input type="submit" value="View difference" />
-</td></tr>
-</table>
+      * Older revision:&nbsp;&nbsp; <input type="text" name="rev2" size="6" value="1.1" />
+      * Newer revision: <input type="text" name="rev1" size="6" value="%PARAM1%" />
+        <input type="submit" value="View difference" />
 </form> %TMPL:END%
 %TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
 %TMPL:P{"oops"}%
