@@ -1,0 +1,20 @@
+%META:TOPICINFO{author="ColasNahaboo" date="1031821452" format="1.0" version="1.3"}%
+%META:TOPICPARENT{name="NavbarPlugin"}%
+This example topic for the NavbarPlugin is comprised
+of 3 parts of a short text of Douglas Adams
+
+What we have to do is put a %<nop>NAVBARINDEX% in this page, and list the subtopics
+as items (bullets or numbered, any depth) with the topic name being the first thing after the bullet
+(rest is ignored)
+
+<!-- %NAVBARINDEX% (it can be in as HTML comment to hide it) --> 
+	1 NavbarPluginExampleFirst, where we start everything
+	10 NavbarPluginExampleMiddle for developing ideas
+		* NavbarPluginExampleLast conclusions
+<!-- %NAVBARINDEXEND% optional marker to ignore further bulleted items -->
+
+On this page (body and/or skin), 
+	* %<nop>NAVBAR% is expansed into %NAVBAR%
+	* and %<nop>NAVBAR{graphics="on"}% is expansed into %NAVBAR{graphics="on"}%
+
+-- Main.ColasNahaboo - 03 Sep 2002
