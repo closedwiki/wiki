@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071957779" format="1.0" version="1.57"}%
+%META:TOPICINFO{author="PeterThoeny" date="1072404840" format="1.0" version="1.58"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -87,6 +87,9 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* #Set BROADCASTMESSAGE = <table border="0" cellpadding="3" cellspacing="0" width="100%"><tr><td bgcolor="yellow"><font color="red"><strong>NOTE:</strong></font><font size="-1">
 		  Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled %WIKITOOLNAME% maintenance.
 		  </font></td></tr></table>
+
+	* Maximum size of %TWIKIWEB%.FileAttachments in KB, 0 for no limit:
+		* Set ATTACHFILESIZELIMIT = 10000
 
 ---++ Email and Proxy Server Settings
 
@@ -241,7 +244,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
 
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
-		* Set FINALPREFERENCES = PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST , SMTPSENDERHOST, ALLOWWEBMANAGE
+		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST , SMTPSENDERHOST, ALLOWWEBMANAGE
 
 
 ---++ Creating New Preference Variables
