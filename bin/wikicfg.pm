@@ -21,10 +21,8 @@
 # - Latest version at http://www.mindspring.net/~peterthoeny/twiki/index.html
 # - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
-# - Use package wikicfg.pm for custom extensions of rendering rules.
+# - Optionally change wikicfg.pm for custom extensions of rendering rules.
 # - Upgrading TWiki is easy as long as you do not customize wiki.pm.
-# - You can use variables in the wiki.pm namespace by including the
-#   package name, e.g. $wiki::webName (name of the current web.)
 # - Variables that can be accessed from topics (see details in
 #   TWikiDocumentation.html) :
 #       %TOPIC%          name of current topic
@@ -40,8 +38,6 @@
 #       %WIKIUSERNAME%   wiki user name
 #       %WIKITOOLNAME%   tool name
 
-package wikicfg;
-use wiki;
 
 # variables that need to be changed when installing on a new server:
 # ==================================================================
@@ -115,12 +111,12 @@ $notifyTopicname  = "WebNotify";
 sub extendHandleCommonTags
 {
     # This is the place to define customized tags and variables
-    # Called by wiki::handleCommonTags, after %INCLUDE:"..."%
+    # Called by sub handleCommonTags, after %INCLUDE:"..."%
 
     my( $text, $topic ) = @_;
 
     # do custom extension rule, like for example:
-    # $text=~ s/%WIKIWEB%/$wiki::wikiToolName.$wiki::webName/go;
+    # $text=~ s/%WIKIWEB%/$wikiToolName.$webName/go;
 
     return $text;
 }
@@ -130,7 +126,7 @@ sub extendHandleCommonTags
 sub extendGetRenderedVersionOutsidePRE
 {
     # This is the place to define customized rendering rules
-    # Called by wiki::getRenderedVersion, in loop outside of <PRE> tag
+    # Called by sub getRenderedVersion, in loop outside of <PRE> tag
 
     my( $text ) = @_;
 
@@ -140,6 +136,19 @@ sub extendGetRenderedVersionOutsidePRE
     # render *_text_* as "bold italic" text:
     s/(^|\s)\*_([^\s].*?[^\s])_\*(\s|$)/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
 
+    # Use alternate %Web:WikiName% syntax (versus the standard Web.WikiName).
+    # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)
+#    s/(^|\s|\()\%([^\s].*?[^\s]):([^\s].*?[^\s])\%/&internalLink($2,$3,"$2:$3",$1,1)/geo;
+
+    # Use "forced" non-WikiName links (i.e. %Linkname%)
+    # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)
+#    s/(^|\s|\()\%([^\s].*?[^\s])\%/&internalLink($wiki::webName,$2,$2,$1,1)/geo;
+
+    # Use "forced" non-WikiName links (i.e. %Web.Linkname%)
+    # This is an old JosWiki render option combined with the new Web.LinkName notation
+    # (Uncomment for JosWiki compatibility)
+#    s/(^|\s|\()\%([a-zA-Z0-9]+)\.(.*?[^\s])\%(\s|\)|$)/&internalLink($2,$3,$3,$1,1)/geo;
+
     return $_;
 }
 
@@ -148,7 +157,7 @@ sub extendGetRenderedVersionOutsidePRE
 sub extendGetRenderedVersionInsidePRE
 {
     # This is the place to define customized rendering rules
-    # Called by wiki::getRenderedVersion, in loop inside of <PRE> tag
+    # Called by sub getRenderedVersion, in loop inside of <PRE> tag
 
     my( $text ) = @_;
 
@@ -157,5 +166,3 @@ sub extendGetRenderedVersionInsidePRE
 
     return $_;
 }
-
-1;

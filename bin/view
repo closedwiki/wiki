@@ -24,7 +24,8 @@ use wiki;
 
 $query= new CGI;
 
-print "Content-type: text/html\n\n";
+# open(STDERR,'>&STDOUT'); # redirect error to browser
+print "Content-type: text/html\n\n<html><body>";
 
 &main();
 

@@ -22,13 +22,12 @@
 # - Latest version at http://www.mindspring.net/~peterthoeny/twiki/index.html
 # - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
-# - Use package wikicfg.pm for custom extensions of rendering rules.
+# - Optionally change wikicfg.pm for custom extensions of rendering rules.
 # - Upgrading TWiki is easy as long as you do not customize wiki.pm.
 
 
 package wiki;
 use strict;
-use wikicfg;
 
 use vars qw(
 	$webName $topicName $defaultUserName $userName 
@@ -42,42 +41,14 @@ use vars qw(
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "16 Jul 1999";
+$wikiversion      = "17 Jul 1999";
 
-# variables that need to be changed when installing on new server:
-$wikiHomeUrl      = $wikicfg::wikiHomeUrl;
-$defaultRootUrl   = $wikicfg::defaultRootUrl;
-$pubUrl           = $wikicfg::pubUrl;
-$wikiDir          = $wikicfg::wikiDir;
-$wikiwebmaster    = $wikicfg::wikiwebmaster;
-
-# variables that might need to be changed:
-$logDateCmd       = $wikicfg::logDateCmd;
-$mailProgram      = $wikicfg::mailProgram;
-$revCiCmd         = $wikicfg::revCiCmd;
-$revCiDateCmd     = $wikicfg::revCiDateCmd;
-$revCoCmd         = $wikicfg::revCoCmd;
-$revHistCmd       = $wikicfg::revHistCmd;
-$revInfoCmd       = $wikicfg::revInfoCmd;
-$revDiffCmd       = $wikicfg::revDiffCmd;
-$revDelRevCmd     = $wikicfg::revDelRevCmd;
-$revDelRepCmd     = $wikicfg::revDelRepCmd;
-$headCmd          = $wikicfg::headCmd;
-$rmFileCmd        = $wikicfg::rmFileCmd;
-
-# variables that probably do not change:
-$wikiToolName     = $wikicfg::wikiToolName;
-$templateDir      = $wikicfg::templateDir;
-$dataDir          = $wikicfg::dataDir;
-$pubDir           = $wikicfg::pubDir;
-$debugFilename    = $wikicfg::debugFilename;
-$logFilename      = $wikicfg::logFilename;
-$userListFilename = $wikicfg::userListFilename;
-$defaultUserName  = $wikicfg::defaultUserName;
-$mainWebname      = $wikicfg::mainWebname;
-$mainTopicname    = $wikicfg::mainTopicname;
-$notifyTopicname  = $wikicfg::notifyTopicname;
 @isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
+
+
+# ===========================
+# read the configuration part
+do "wikicfg.pm";
 
 
 # =========================
@@ -265,6 +236,7 @@ sub formatGmTime
     if ( $time =~ /[A-Za-z]/ )
     {
         # already formatted, for compatibility with older entries in .changes:
+        $time =~ s/GMT\s*$//;
         return $time;
     }
 
@@ -286,7 +258,13 @@ sub formatGmTime
 sub readFile
 {
     my( $name ) = @_;
-    return `cat $name`;
+    my $data = "";
+    undef $/; # set to read to EOF
+    open( IN_FILE, $name ) || return "";
+    $data = <IN_FILE>;
+    $/ = "\n";
+    close( IN_FILE );
+    return $data;
 }
 
 # =========================
@@ -556,7 +534,7 @@ sub saveTopic
 
             # update .changes
             my @foo = split(/\n/, &readFile("$dataDir/$webName/.changes"));
-            if( $#foo > 199)
+            if( $#foo > 100 )
             {
                 shift( @foo);
             }
@@ -658,7 +636,7 @@ sub handleCommonTags
     $text=~ s/%INCLUDE:"(.*?)"%/&readIncludeFile($1)/geo;  # allow two level includes
 
     # Wiki extended rules
-    $text = wikicfg::extendHandleCommonTags( $text, $topic );
+    $text = extendHandleCommonTags( $text, $topic );
 
     $text=~ s/%TOPIC%/$topic/go;
     $text=~ s/%WEB%/$webName/go;
@@ -766,7 +744,7 @@ sub getRenderedVersion
         {
 
 # Wiki extended rules
-	    $_ = wikicfg::extendGetRenderedVersionOutsidePRE( $_ );
+	    $_ = extendGetRenderedVersionOutsidePRE( $_ );
 
 #Blockquote
 	    s/^>(.*?)$/> <cite> $1 <\/cite><BR>/go;
@@ -815,13 +793,8 @@ sub getRenderedVersion
 	    s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($webName,$2,$2,$1,1)/geo;
 	    s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
 
-	    ## comment out name.org type link -- PeterThoeny:
-	    ##s/([\*\s][\-\*\s]*)([a-zA-Z]+[\._][a-zA-Z](?:[a-zA-Z\._]+))/&internalLink($webName,$2,$2,$1,1)/geo;
 	    s/([\*\s][\-\*\s]*)([A-Z]{3,})/&internalLink($webName,$2,$2,$1,0)/geo;
 	    s/<link>(.*?)<\/link>/&internalLink($webName,$1,$1,"",1)/geo;
-	    ## comment out %Web:TopicName% type link, use Web.TopicName instead -- PeterThoeny:
-	    ##s/(\s)\%(.*?):(.*?)\%/&internalLink($2,$3,"$2:$3",$1,1)/geo;
-	    ##s/(\s)\%(.*?)\%/&internalLink($webName,$2,$2,$1,1)/geo;
 
 # Mailto
 	    s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+)(?=[\s\)]|$)#$1<A href=\"mailto\:$2">$2</A>#go;
@@ -833,7 +806,7 @@ sub getRenderedVersion
             # inside <PRE>
 
 # Wiki extended rules
-	    $_ = wikicfg::extendGetRenderedVersionInsidePRE( $_ );
+	    $_ = extendGetRenderedVersionInsidePRE( $_ );
 
      	    s/(.*)/$1\n/o;
         }
