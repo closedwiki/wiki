@@ -1163,7 +1163,7 @@ sub protectPlainText {
 
     # prevent text from getting rendered in inline search and link tool
     # tip text by escaping links (external, internal, Interwiki)
-    $text =~ s/([\s\(])($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})/$1<nop>$2/g;
+    $text =~ s/([\s\(])((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/$1<nop>$2/g;
     $text =~ s/([\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/$1<nop>$2/go;
     $text =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
 
