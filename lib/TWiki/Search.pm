@@ -423,6 +423,12 @@ sub searchWeb
     my $tempVal = "";
     my $tmpl = "";
     my $topicCount = 0; # JohnTalintyre
+
+    # See Codev.SecurityAlertExecuteCommandsWithSearch
+    $theSearchVal =~ s/[\'\`]//g;                  # Filter ' and `
+    $theSearchVal =~ s/\@\(/\@\\\(/g;              # Defuse @( ... )
+    $theSearchVal = substr($theSearchVal, 0, 200); # Limit string length
+
     my $originalSearch = $theSearchVal;
     my $renameTopic;
     my $renameWeb = "";
