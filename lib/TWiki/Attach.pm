@@ -172,7 +172,7 @@ sub _formatRow {
   $row =~ s/%A_REV%/$rev/go;
 
   if ( $row =~ /%A_ICON%/o ) {
-	my $fileIcon = _filenameToIcon( $file );
+	my $fileIcon = filenameToIcon( $file );
 	$row =~ s/%A_ICON%/$fileIcon/go;
   }
 
@@ -222,14 +222,16 @@ sub _formatRow {
 # =========================
 =pod
 
----++ sub _filenameToIcon (  $fileName  )
+---++ sub filenameToIcon (  $fileName  )
 
-PRIVATE Produce an image tailored to the type of the file, guessed from
+Produce an image tailored to the type of the file, guessed from
 it's extension.
+
+used in TWiki::handleIcon
 
 =cut
 
-sub _filenameToIcon
+sub filenameToIcon
 {
     my( $fileName ) = @_;
 
