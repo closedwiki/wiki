@@ -70,7 +70,7 @@ sub _cleanField
 {
    my( $text ) = @_;
    $text = "" if( ! $text );
-   $text =~ s/[^A-Za-z0-9_]//go;
+   $text =~ s/[^A-Za-z0-9_\.]//go; # Need do for web.topic
    return $text;
 }
 
