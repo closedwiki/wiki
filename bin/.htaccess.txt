@@ -33,6 +33,10 @@ ErrorDocument 401 /urlpath/to/TWiki/bin/oops/TWiki/TWikiRegistration?template=oo
        require valid-user
 </Files>
 
+<Files "rename">
+       require valid-user
+</Files>
+
 <Files "installpasswd">
        require valid-user
 </Files>
