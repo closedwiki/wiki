@@ -133,7 +133,7 @@ $headerPatternHt = '^<h([1-6])>\s*(.+?)\s*</h[1-6]>'; # '<h6>Header</h6>
 $debugUserTime   = 0;
 $debugSystemTime = 0;
 
-$formatVersion = "1.0beta2";
+$formatVersion = "1.0";
 
 
 # =========================
