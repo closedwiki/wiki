@@ -228,13 +228,7 @@ sub view {
   }
   $tmpl =~ s/%REVISIONS%/$revisions/go;
 
-  if( $topicExists ) {
-    $revuser = &TWiki::userToWikiName( $revuser );
-    my $temp = &TWiki::Render::getRenderedVersion( "r1.$rev - $revdate - $revuser" );
-    $tmpl =~ s/%REVINFO%/$temp$mirrorNote/go;
-  } else {
-    $tmpl =~ s/%REVINFO%/$mirrorNote/go;
-  }
+  $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;
 
   $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
   if( $viewRaw ) {

@@ -1917,10 +1917,12 @@ sub handleIncludeUrl
 
     } elsif( $contentType =~ /^text\/plain/ ) {
         # do nothing
+    } elsif( $contentType =~ /^text\/css/ ) {
+        # do nothing
 
     } else {
         $text = showError( "Error: Unsupported content type: $contentType."
-              . " (Must be text/html or text/plain)" );
+              . " (Must be text/html or text/plain or text/css)" );
     }
 
     $text = applyPatternToIncludedText( $text, $thePattern ) if( $thePattern );
@@ -2267,6 +2269,36 @@ sub formatTime
     my $tz_str = "GMT";
     $tz_str = "Local" if ( $outputTimeZone eq "servertime" );
     $value =~ s/\$tz/$tz_str/geoi;
+ 
+    return $value;        
+}
+
+# =========================
+=pod
+---++ sub handleRevisionInfo ( $web, $topic, $formatString ) ==> $value
+| $web | web and  |
+| $topic | topic to display the name for |
+| $formatString | twiki format string (like in search) |
+
+=cut
+sub handleRevisionInfo 
+{
+    my ($web, $topic, $formatString) = @_;
+
+    $formatString = "r1.\$rev - \$date - \$wikiusername" unless( $formatString );
+    my ( $date, $user, $rev, $comment ) = TWiki::Store::getRevisionInfo($web, $topic);
+
+    my $value = $formatString;
+    $value =~ s/\$web/$web/geoi;
+    $value =~ s/\$topic/$topic/geoi;
+    $value =~ s/\$rev/$rev/geoi;
+    $value =~ s/\$date/&formatTime($date)/geoi;
+    $value =~ s/\$comment/$comment/geoi;
+    $value =~ s/\$username/$user/geoi;
+	my $theWikiName     = userToWikiName( $user, 1 );
+	my $theWikiUserName = userToWikiName( $user );
+    $value =~ s/\$wikiname/$theWikiName/geoi;
+    $value =~ s/\$wikiusername/$theWikiUserName/geoi;
  
     return $value;        
 }
@@ -2885,6 +2917,9 @@ sub handleInternalTags
     $_[0] =~ s/%METASEARCH{(.*?)}%/&handleMetaSearch($1)/ge;
     $_[0] =~ s/%FORMFIELD{(.*?)}%/&TWiki::Render::getFormField($_[2],$_[1],$1)/ge;
     $_[0] =~ s/%GROUPS%/join( ", ", &TWiki::Access::getListOfGroups() )/ge;  #SVEN
+
+	$_[0] =~ s/%REVINFO%/handleRevisionInfo( $_[2], $_[1] )/ge;
+	$_[0] =~ s/%REVINFO{\"(.*?)\"}%/handleRevisionInfo( $_[2], $_[1], $1 )/ge;
 }
 
 =pod
