@@ -284,7 +284,6 @@ sub updateAttachment
 {
    my ( $atext, $fileVersion, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $hideFile ) = @_;
 
-   my $tmpVersion = "-";
    my $tmpAttr = "";
    if ( $hideFile ) {
       $tmpAttr .= "h";
