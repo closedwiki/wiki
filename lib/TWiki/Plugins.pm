@@ -16,14 +16,8 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 # This program applies in order the installed TWiki plugins.
-# Each plugin is a package that contains the subs:
-#
-#   initPlugin           ( $topic, $web, $user )
-#   commonTagsHandler    ( $text, $topic, $web )
-#   startRenderingHandler( $text, $web, $meta )
-#   outsidePREHandler    ( $text )
-#   insidePREHandler     ( $text )
-#   endRenderingHandler  ( $text )
+# Each plugin is a package that contains the subs listed in
+# @registrableHandlers.
 
 package TWiki::Plugins;
 
@@ -37,19 +31,20 @@ use vars qw(
 
 $VERSION = '1.010';
 
-@registrableHandlers = (
-        'initPlugin',              # ( $topic, $web, $user, $installWeb )
-        'commonTagsHandler',       # ( $text, $topic, $web )
-        'startRenderingHandler',   # ( $text, $topic, $web, $meta )
-        'outsidePREHandler',       # ( $text, $web )
-        'insidePREHandler',        # ( $text, $web )
-        'endRenderingHandler',     # ( $text, $topic, $web )
-        'afterEditHandler',        # ( $text, $topic, $web )
-        'beforeSaveHandler',       # ( $text, $topic, $web )
-        'writeHeaderHandler',      # ( $query )
-        'redirectCgiQueryHandler', # ( $query, $url )
-        'getSessionValueHandler',  # ( $key )
-        'setSessionValueHandler'   # ( $key, $value )
+@registrableHandlers = (           #                                         VERSION:
+        'initPlugin',              # ( $topic, $web, $user, $installWeb )    1.000
+        'commonTagsHandler',       # ( $text, $topic, $web )                 1.000
+        'startRenderingHandler',   # ( $text, $web )                         1.000
+        'outsidePREHandler',       # ( $text )                               1.000
+        'insidePREHandler',        # ( $text )                               1.000
+        'endRenderingHandler',     # ( $text )                               1.000
+        'beforeEditHandler',       # ( $text, $topic, $web )                 1.010
+        'afterEditHandler',        # ( $text, $topic, $web )                 1.010
+        'beforeSaveHandler',       # ( $text, $topic, $web )                 1.010
+        'writeHeaderHandler',      # ( $query )                              1.010
+        'redirectCgiQueryHandler', # ( $query, $url )                        1.010
+        'getSessionValueHandler',  # ( $key )                                1.010
+        'setSessionValueHandler'   # ( $key, $value )                        1.010
     );
     
 %onlyOnceHandlers = ( 'writeHeaderHandler'      => 1,
@@ -314,6 +309,24 @@ sub endRenderingHandler
 }
 
 # =========================
+sub beforeEditHandler
+{
+    # Called by edit
+#    my( $text, $topic, $web ) = @_;
+    unshift @_, ( 'beforeEditHandler' );
+    &applyHandlers;
+}
+
+# =========================
+sub afterEditHandler
+{
+    # Called by edit
+#    my( $text, $topic, $web ) = @_;
+    unshift @_, ( 'afterEditHandler' );
+    &applyHandlers;
+}
+
+# =========================
 sub beforeSaveHandler
 {
     # Called by TWiki::Store::saveTopic before the save action
@@ -325,7 +338,7 @@ sub beforeSaveHandler
 # =========================
 sub writeHeaderHandler
 {
-    # Called by TWiki.writeHeader
+    # Called by TWiki::writeHeader
     unshift @_, ( 'writeHeaderHandler' );
     return &applyHandlers;
 }
@@ -333,7 +346,7 @@ sub writeHeaderHandler
 # =========================
 sub redirectCgiQueryHandler
 {
-    # Called by TWiki.redirect
+    # Called by TWiki::redirect
     unshift @_, ( 'redirectCgiQueryHandler' );
     return &applyHandlers;
 }
@@ -341,7 +354,7 @@ sub redirectCgiQueryHandler
 # =========================
 sub getSessionValueHandler
 {
-    # Called by TWiki.getSessionValue
+    # Called by TWiki::getSessionValue
     unshift @_, ( 'getSessionValueHandler' );
     return &applyHandlers;
 }
@@ -349,7 +362,7 @@ sub getSessionValueHandler
 # =========================
 sub setSessionValueHandler
 {
-    # Called by TWiki.getSessionValue
+    # Called by TWiki.setSessionValue
     unshift @_, ( 'setSessionValueHandler' );
     return &applyHandlers;
 }
