@@ -242,7 +242,8 @@ sub main
         }
         if( $i != 1 ) {
             if( $i == $breakRev ) {
-                $revisions = "$revisions | <a href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=1.$maxrev\">&gt;...</a>";
+                # Now obsolete because of 'More' link
+                # $revisions = "$revisions | <a href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=1.$maxrev\">&gt;...</a>";
                 $i = 1;
             } else {
                 $j = $i - 1;
