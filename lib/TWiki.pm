@@ -686,6 +686,42 @@ sub handleIncludeFile
 }
 
 # =========================
+# Only does simple search for topicmoved at present, can be expanded when required
+sub handleMetaSearch
+{
+    my( $attributes ) = @_;
+    
+    my $attrWeb           = extractNameValuePair( $attributes, "web" );
+    my $attrTopic         = extractNameValuePair( $attributes, "topic" );
+    my $attrType          = extractNameValuePair( $attributes, "type" );
+    my $attrTitle         = extractNameValuePair( $attributes, "title" );
+    
+    #%META:TOPICMOVED{from="Test.HiJohn"
+    my $searchVal = "XXX";
+    
+    if( ! $attrType ) {
+       $attrType = "";
+    }
+    
+    if( $attrType eq "topicmoved" ) {
+       $searchVal = "%META:TOPICMOVED\{.*from=\\\"$attrWeb\.$attrTopic\\\".*\}%";
+    }
+    
+    my $text = &TWiki::Search::searchWeb( "1", "all", $searchVal, "",
+       "", "on", "", "",
+       "", "on", "on",
+       "on", "on", "", "",
+       "", "on", "searchmeta"
+    );    
+    
+    if( $text !~ /^\s*$/ ) {
+       $text = "$attrTitle$text";
+    }
+    
+    return $text;
+}
+
+# =========================
 sub handleSearchWeb
 {
     my( $attributes ) = @_;
@@ -1026,6 +1062,7 @@ sub handleInternalTags
     $_[0] =~ s/%STARTINCLUDE%//go;
     $_[0] =~ s/%STOPINCLUDE%//go;
     $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo;
+    $_[0] =~ s/%METASEARCH{(.*?)}%/&handleMetaSearch($1)/geo;
 }
 
 # =========================
