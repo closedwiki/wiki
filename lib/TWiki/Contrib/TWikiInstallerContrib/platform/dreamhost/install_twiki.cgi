@@ -348,7 +348,7 @@ checkdir( $tmp, $dest, $bin, $lib, $cpan );
 # a handy link to the place to go *after* the next step
 print qq{<hr><hr>\n};
 print qq{do a <tt>./post-wiki.sh</tt> and then <a target="details" href="http://$hostname/~$account/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
-print qq{run <a target="details" href="http://$hostname/~$account/cgi-bin/twiki/testenv">testenv</a><br/>\n};
+print qq{run <a target="details" href="http://$hostname/~$account/cgi-bin/twiki/testenv/foo/bar" >testenv</a><br/>\n};
 print qq{<br/><br/>};
 print "you can perform this installation again using the following URL: <br/>";
 ( my $urlInstall = $q->self_url ) =~ s/install=install//;
@@ -421,7 +421,7 @@ sub wikiCatalogue
 sub releasesCatalogue
 {
     my $p = shift;
-    $p->{fileFilter} = qr/\.tar.gz$/;
+    $p->{fileFilter} = qr/\.tar\.gz$/;
     my $releases = _dirCatalogue( $p );
     if ( @$releases )
     {
