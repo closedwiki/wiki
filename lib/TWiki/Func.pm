@@ -31,10 +31,15 @@ Plugins should *only* use functions published in this module. If you use
 functions in other TWiki libraries you might create a security hole and
 you will likely need to change your Plugin when you upgrade TWiki.
 
+Deprecated functions will still work in older code, though they should
+_not_ be called in new plugins and should be replaced in older plugins
+as soon as possible.
+
 The version of the TWiki::Func module is defined by the VERSION number of the
-TWiki::Plugins module, currently %PLUGINVERSION{}%. This can be shown by the 
-=%<nop>PLUGINVERSION{}%= variable. The "Since" field in the function documentation 
-refers to the VERSION number and the date that the function was addded.
+TWiki::Plugins module, currently %PLUGINVERSION{}%. This can be shown
+by the =%<nop>PLUGINVERSION{}%= variable. The "Since" field in the function
+documentation refers to the VERSION number and the date that the function
+was addded.
 
 *Note* Contrib authors beware! These methods should only ever be called
 from the context of a TWiki plugin. They require a session context to be
@@ -67,8 +72,7 @@ Return: =$value=  Value associated with key; empty string if not set; undef if s
 
 =cut
 
-sub getSessionValue
-{
+sub getSessionValue {
 #   my( $theKey ) = @_;
 
     return TWiki::Plugins::getSessionValueHandler( @_ );
@@ -88,8 +92,7 @@ Return: =$result=   ="1"= if success; undef if session plugin is not installed
 
 =cut
 
-sub setSessionValue
-{
+sub setSessionValue {
 #   my( $theKey, $theValue ) = @_;
     TWiki::Plugins::setSessionValueHandler( @_ );
 }
@@ -105,8 +108,7 @@ Return: =$skin= Name of skin, e.g. ="gnu"=. Empty string if none
 
 =cut
 
-sub getSkin
-{
+sub getSkin {
     return $TWiki::Plugins::SESSION->getSkin();
 }
 
@@ -121,8 +123,7 @@ Return: =$host= URL host, e.g. ="http://example.com:80"=
 
 =cut
 
-sub getUrlHost
-{
+sub getUrlHost {
     return $TWiki::Plugins::SESSION->{urlHost};
 }
 
@@ -140,8 +141,7 @@ Return: =$url=       URL, e.g. ="http://example.com:80/cgi-bin/view.pl/Main/WebN
 
 =cut
 
-sub getScriptUrl
-{
+sub getScriptUrl {
 #   my( $web, $topic, $script ) = @_;
     return $TWiki::Plugins::SESSION->getScriptUrl( @_ ); 
 }
@@ -157,8 +157,7 @@ Return: =$path= URL path of TWiki scripts, e.g. ="/cgi-bin"=
 
 =cut
 
-sub getScriptUrlPath
-{
+sub getScriptUrlPath {
     return $TWiki::Plugins::SESSION->{scriptUrlPath};
 }
 
@@ -175,8 +174,7 @@ Return: =$url=      URL, e.g. ="http://example.com:80/cgi-bin/view.pl/Main/WebNo
 
 =cut
 
-sub getViewUrl
-{
+sub getViewUrl {
     my( $web, $topic ) = @_;
     return $TWiki::Plugins::SESSION->getScriptUrl( $web, $topic, "view" );
 }
@@ -196,8 +194,7 @@ Return: =$url=                     URL, e.g. ="http://example.com:80/cgi-bin/oop
 
 =cut
 
-sub getOopsUrl
-{
+sub getOopsUrl {
 #   my( $web, $topic, $template, @params ) = @_;
     return $TWiki::Plugins::SESSION->getOopsUrl( @_ );
 }
@@ -213,8 +210,7 @@ Return: =$path= URL path of pub directory, e.g. ="/pub"=
 
 =cut
 
-sub getPubUrlPath
-{
+sub getPubUrlPath {
     return $TWiki::cfg{PubUrlPath};
 }
 
@@ -229,8 +225,7 @@ Return: =$query= CGI query object; or 0 if script is called as a shell script
 
 =cut
 
-sub getCgiQuery
-{
+sub getCgiQuery {
     return $TWiki::Plugins::SESSION->{cgiQuery};
 }
 
@@ -247,8 +242,7 @@ Return:             none
 
 =cut
 
-sub writeHeader
-{
+sub writeHeader {
     my( $theQuery ) = @_;
     return $TWiki::Plugins::SESSION->writePageHeader( $theQuery );
 }
@@ -266,8 +260,7 @@ Return:             none, never returns
 
 =cut
 
-sub redirectCgiQuery
-{
+sub redirectCgiQuery {
     my( $theQuery, $theUrl ) = @_;
     return $TWiki::Plugins::SESSION->redirect( $theUrl );
 }
@@ -296,8 +289,7 @@ Return: =%params=  Hash containing all parameters. The nameless parameter is sto
 
 =cut
 
-sub extractParameters
-{
+sub extractParameters {
     my( $theAttr ) = @_;
     my $params = new TWiki::Attrs( $theAttr );
     return %$params;
@@ -325,8 +317,7 @@ Return: =$value=   Extracted value
 
 =cut
 
-sub extractNameValuePair
-{
+sub extractNameValuePair {
     return TWiki::Attrs::extractValue( @_ );
 }
 
@@ -352,8 +343,7 @@ Return: =$value=  Preferences value; empty string if not set
 
 =cut
 
-sub getPreferencesValue
-{
+sub getPreferencesValue {
 #   my( $theKey, $theWeb ) = @_;
     return $TWiki::Plugins::SESSION->{prefs}->getPreferencesValue( @_ );
 }
@@ -370,8 +360,7 @@ Return: =$value=  Preferences value; empty string if not set
 
 =cut
 
-sub getPluginPreferencesValue
-{
+sub getPluginPreferencesValue {
     my( $theKey ) = @_;
     my $package = caller;
     $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
@@ -396,8 +385,7 @@ Return: =$value=  Preferences flag ="1"= (if set), or ="0"= (for preferences val
 
 =cut
 
-sub getPreferencesFlag
-{
+sub getPreferencesFlag {
 #   my( $theKey, $theWeb ) = @_;
     return $TWiki::Plugins::SESSION->{prefs}->getPreferencesFlag( @_ );
 }
@@ -414,8 +402,7 @@ Return: =$flag=   Preferences flag ="1"= (if set), or ="0"= (for preferences val
 
 =cut
 
-sub getPluginPreferencesFlag
-{
+sub getPluginPreferencesFlag {
     my( $theKey ) = @_;
     my $package = caller;
     $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
@@ -433,8 +420,7 @@ Return: =$name= Name of tool, e.g. ="TWiki"=
 
 =cut
 
-sub getWikiToolName
-{
+sub getWikiToolName {
     return $TWiki::cfg{WikiToolName};
 }
 
@@ -449,8 +435,7 @@ Return: =$name= Name, e.g. ="Main"=
 
 =cut
 
-sub getMainWebname
-{
+sub getMainWebname {
     return $TWiki::cfg{UsersWebName};
 }
 
@@ -465,8 +450,7 @@ Return: =$name= Name, e.g. ="TWiki"=
 
 =cut
 
-sub getTwikiWebname
-{
+sub getTwikiWebname {
     return $TWiki::cfg{SystemWebName};
 }
 
@@ -483,8 +467,7 @@ Return: =$loginName= Default user name, e.g. ="guest"=
 
 =cut
 
-sub getDefaultUserName
-{
+sub getDefaultUserName {
     return $TWiki::cfg{DefaultUserLogin};
 }
 
@@ -499,8 +482,7 @@ Return: =$wikiName= Wiki Name, e.g. ="JohnDoe"=
 
 =cut
 
-sub getWikiName
-{
+sub getWikiName {
     return $TWiki::Plugins::SESSION->{user}->wikiName();
 }
 
@@ -515,8 +497,7 @@ Return: =$wikiName= Wiki Name, e.g. ="Main.JohnDoe"=
 
 =cut
 
-sub getWikiUserName
-{
+sub getWikiUserName {
     return $TWiki::Plugins::SESSION->{user}->webDotWikiName();
 }
 
@@ -532,8 +513,7 @@ Return: =$loginName=   Login name of user, e.g. ="jdoe"=
 
 =cut
 
-sub wikiToUserName
-{
+sub wikiToUserName {
     my( $wiki ) = @_;
     my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki );
     return $wiki unless $user;
@@ -553,8 +533,7 @@ Return: =$wikiName=      Wiki name of user, e.g. ="Main.JohnDoe"= or ="JohnDoe"=
 
 =cut
 
-sub userToWikiName
-{
+sub userToWikiName {
     my( $login, $dontAddWeb ) = @_;
     my $user = $TWiki::Plugins::SESSION->{users}->findUser( $login );
     return "" unless $user;
@@ -573,8 +552,7 @@ Return: =$flag= ="1"= if yes, ="0"= if not
 
 =cut
 
-sub isGuest
-{
+sub isGuest {
     return $TWiki::Plugins::SESSION->{user}->isDefaultUser();
 }
 
@@ -590,8 +568,7 @@ Return: =$flag=   ="1"= if yes, ="0"= if no
 
 =cut
 
-sub permissionsSet
-{
+sub permissionsSet {
 #   my( $web ) = @_;
     return $TWiki::Plugins::SESSION->{security}->permissionsSet( @_ );
 }
@@ -612,8 +589,7 @@ Return: =$flag=        ="1"= if access may be granted, ="0"= if not
 
 =cut
 
-sub checkAccessPermission
-{
+sub checkAccessPermission {
     my( $type, $user, $text, $topic, $web ) = @_;
     $user = $TWiki::Plugins::SESSION->{users}->findUser( $user );
     return $TWiki::Plugins::SESSION->{security}->checkAccessPermission
@@ -634,8 +610,7 @@ Return: =$flag=   ="1"= if web exists, ="0"= if not
 
 =cut
 
-sub webExists
-{
+sub webExists {
 #   my( $theWeb ) = @_;
     return $TWiki::Plugins::SESSION->{store}->webExists( @_ );
 }
@@ -653,8 +628,7 @@ Return: =$flag=     ="1"= if topic exists, ="0"= if not
 
 =cut
 
-sub topicExists
-{
+sub topicExists {
 #   my( $web, $topic ) = @_;
     return $TWiki::Plugins::SESSION->{store}->topicExists( @_ );
 }
@@ -677,37 +651,60 @@ Return: =( $date, $user, $rev, $comment )= List with: ( last update date, login 
 
 =cut
 
-sub getRevisionInfo
-{
+sub getRevisionInfo {
     return $TWiki::Plugins::SESSION->{store}->getRevisionInfo( @_ );
 }
 
 =pod
 
 ---+++ checkTopicEditLock( $web, $topic ) -> ( $oopsUrl, $loginName, $unlockTime )
+*DEPRECATED* since TWiki::Plugins::VERSION 1.026
 
-*DOES NOTHING* - deprecated by ReleaseEditLocksOnSave since
-TWiki::Plugins::VERSION 1.026
+Does nothing, always returns ( "", "", 0 )
 
 =cut
 
-sub checkTopicEditLock
-{
+sub checkTopicEditLock {
     return( "", "", 0 );
 }
 
 =pod
 
 ---+++ setTopicEditLock( $web, $topic, $lock ) -> $oopsUrl
+*DEPRECATED* since TWiki::Plugins::VERSION 1.026
 
-*DOES NOTHING* - deprecated by ReleaseEditLocksOnSave since
-TWiki::Plugins::VERSION 1.026
+Does nothing, always returns ""
 
 =cut
 
-sub setTopicEditLock
-{
+sub setTopicEditLock {
     return "";
+}
+
+=pod
+
+---+++ readTopic( $web, $topic, $rev ) -> ( $meta, $text )
+
+Read topic text and meta data, regardless of access permissions.
+   * =$web= - Web name, required, e.g. ="Main"=
+   * =$topic= - Topic name, required, e.g. ="TokyoOffice"=
+   * =$rev= - revision to read (default latest)
+Return: =( $meta, $text )= Meta data object and topic text
+
+=$meta= is a perl "object" of class =TWiki::Meta=. This class is
+fully documented in the source code documentation shipped with the
+release, or can be inspected in the =lib/TWiki/Meta.pm= file.
+
+This method *ignores* topic access permissions. You should be careful to use =checkAccessPermissions= to ensure the current user has read access to the topic.
+
+*Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
+
+=cut
+
+sub readTopic {
+    my( $web, $topic ) = @_;
+
+    return $TWiki::Plugins::SESSION->{store}->readTopic( undef, $web, $topic, undef, 0 );
 }
 
 =pod
@@ -721,12 +718,13 @@ Read topic text, including meta data
    * =$ignorePermissions=  - Set to ="1"= if checkAccessPermission() is already performed and OK; an oops URL is returned if user has no permission
 Return: =$text=                  Topic text with embedded meta data; an oops URL for calling redirectCgiQuery() is returned in case of an error
 
+This method is more efficient than =readTopic=, but returns meta-data embedded in the text. Plugins authors must be very careful to avoid damaging meta-data. You are recommended to use readTopic instead, which is a lot safer..
+
 *Since:* TWiki::Plugins::VERSION 1.010 (31 Dec 2002)
 
 =cut
 
-sub readTopicText
-{
+sub readTopicText {
     my( $web, $topic, $rev, $ignorePermissions ) = @_;
 
     my $user;
@@ -749,6 +747,42 @@ sub readTopicText
 
 =pod
 
+---+++ saveTopic( $web, $topic, $meta, $text, $options )
+   * =$web= - web for the topic
+   * =$topic= - topic name
+   * =$meta= - reference to TWiki::Meta object
+   * =$text= - text of the topic (without embedded meta-data!!!
+   * =\%options= - ref to hash of save options
+=\%options= may include:
+| =dontlog= | don't log this change in twiki log |
+| =comment= | comment for save |
+| =minor= | True if this is a minor change, and is not to be notified |
+
+Return: error message or undef.
+
+For example,
+<verbatim>
+my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic )
+$text =~ s/APPLE/ORANGE/g;
+TWiki::Func::saveTopic( $web, $topic, $meta, $text, { comment => 'refruited' } );
+</verbatim>
+
+*Note* plugins handlers ( e.g. =beforeSaveHandler= ) will be called as
+appropriate.
+
+=cut
+
+sub saveTopic {
+    my( $web, $topic, $meta, $text, $options ) = @_;
+
+    return $TWiki::Plugins::SESSION->{store}->saveTopic
+      ( $TWiki::Plugins::SESSION->{user}, $web, $topic, $text, $meta,
+        $options );
+
+}
+
+=pod
+
 ---+++ saveTopicText( $web, $topic, $text, $ignorePermissions, $dontNotify ) -> $oopsUrl
 
 Save topic text, typically obtained by readTopicText(). Topic data usually includes meta data; the file attachment meta data is replaced by the meta data from the topic file if it exists.
@@ -758,6 +792,8 @@ Save topic text, typically obtained by readTopicText(). Topic data usually inclu
    * =$ignorePermissions=  - Set to ="1"= if checkAccessPermission() is already performed and OK
    * =$dontNotify=         - Set to ="1"= if not to notify users of the change
 Return: =$oopsUrl=               Empty string if OK; the =$oopsUrl= for calling redirectCgiQuery() in case of error
+
+This method is inherently less efficient and more dangerous than =saveTopic=.
 
 *Since:* TWiki::Plugins::VERSION 1.010 (31 Dec 2002)
 
@@ -776,9 +812,7 @@ Return: =$oopsUrl=               Empty string if OK; the =$oopsUrl= for calling 
 
 =cut
 
-
-sub saveTopicText
-{
+sub saveTopicText {
     my( $web, $topic, $text, $ignorePermissions, $dontNotify ) = @_;
 
     my( $mirrorSite, $mirrorViewURL ) = $TWiki::Plugins::SESSION->readOnlyMirrorWeb( $web );
@@ -813,6 +847,7 @@ sub saveTopicText
 =pod
 
 ---+++ getPublicWebList( ) -> @webs
+*DEPRECATED* since 1.026 - use =getListOfWebs= instead.
 
 Get list of all public webs, e.g. all webs that do not have the =NOSEARCHALL= flag set in the WebPreferences
 Return: =@webs= List of all public webs, e.g. =( "Main",  "Know", "TWiki" )=
@@ -821,10 +856,10 @@ Return: =@webs= List of all public webs, e.g. =( "Main",  "Know", "TWiki" )=
 
 =cut
 
-sub getPublicWebList
-{
+sub getPublicWebList {
     return $TWiki::Plugins::SESSION->{store}->getListOfWebs("user,public");
 }
+
 
 =pod
 
@@ -852,8 +887,7 @@ Return: =@topics= Topic list, e.g. =( "WebChanges",  "WebHome", "WebIndex", "Web
 
 =cut
 
-sub getTopicList
-{
+sub getTopicList {
 #   my( $web ) = @_;
     return $TWiki::Plugins::SESSION->{store}->getTopicNames ( @_ );
 }
@@ -912,8 +946,7 @@ See also: expandVariablesOnTopicCreation
 
 =cut
 
-sub expandCommonVariables
-{
+sub expandCommonVariables {
     my( $text, $topic, $web ) = @_;
     $topic ||= $TWiki::Plugins::SESSION->{topicName};
     $web ||= $TWiki::Plugins::SESSION->{webName};
@@ -933,8 +966,7 @@ Return: =$text=    XHTML text, e.g. ="&lt;b>bold&lt;/b> and &lt;code>fixed font&
 
 =cut
 
-sub renderText
-{
+sub renderText {
 #   my( $text, $web ) = @_;
     return $TWiki::Plugins::SESSION->{renderer}->getRenderedVersion( @_ );
 }
@@ -956,8 +988,7 @@ Return: =$text=          XHTML anchor, e.g. ="&lt;a href="/cgi-bin/view/Main/Web
 
 =cut
 
-sub internalLink
-{
+sub internalLink {
     my $pre = shift;
 #   my( $web, $topic, $label, $anchor, $anchor, $createLink ) = @_;
     return $pre . $TWiki::Plugins::SESSION->{renderer}->internalLink( @_ );
@@ -988,8 +1019,7 @@ Return: =$text=        Formatted time string
 
 =cut
 
-sub formatTime
-{
+sub formatTime {
 #   my ( $epSecs, $format, $timezone ) = @_;
     return TWiki::Time::formatTime( @_ );
 }
@@ -997,8 +1027,8 @@ sub formatTime
 =pod
 
 ---+++ formatGmTime( $time, $format ) -> $text
+*DEPRECATED* since  TWiki::Plugins::VERSION 1.025 (7 Dec 2002)
 
-| NOTE:                | <b>This function is deprecated and should not be used. Use formatTime() instead</b> |
 Format the time to GM time
    * =$time=   - Time in epoc seconds
    * =$format= - Format type, optional. Default e.g. ="31 Dec 2002 - 19:30"=, can be ="iso"= (e.g. ="2002-12-31T19:30Z"=), ="rcs"= (e.g. ="2001/12/31 23:59:59"=, ="http"= for HTTP header format (e.g. ="Thu, 23 Jul 1998 07:21:56 GMT"=)
@@ -1008,8 +1038,7 @@ Return: =$text=      Formatted time string
 
 =cut
 
-sub formatGmTime
-{
+sub formatGmTime {
 #   my ( $epSecs, $format ) = @_;
 
     # FIXME: Write warning based on flag (disabled for now); indicate who is calling this function
@@ -1035,8 +1064,7 @@ wherever possible!
 
 =cut
 
-sub getDataDir
-{
+sub getDataDir {
     return $TWiki::cfg{DataDir};
 }
 
@@ -1054,30 +1082,8 @@ wherever possible!
 
 =cut
 
-sub getPubDir
-{
+sub getPubDir {
     return $TWiki::cfg{PubDir};
-}
-
-=pod
-
----+++ readTopic( $web, $topic ) -> ( $meta, $text )
-
-| NOTE:                      | <b>The following function is deprecated and should not be used. Use readTopicText() instead</b> |
-Read topic text and meta data, regardless of access permissions.
-   * =$web=          - Web name, required, e.g. ="Main"=
-   * =$topic=        - Topic name, required, e.g. ="TokyoOffice"=
-Return: =( $meta, $text )= Meta data object and topic text
-
-*Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
-
-=cut
-
-sub readTopic
-{
-    my( $web, $topic ) = @_;
-
-    return $TWiki::Plugins::SESSION->{store}->readTopic( $TWiki::Plugins::SESSION->{user}, $web, $topic, undef, 0 );
 }
 
 =pod
@@ -1093,8 +1099,7 @@ Return: =$text=    Template text
 
 =cut
 
-sub readTemplate
-{
+sub readTemplate {
 #   my( $name, $skin ) = @_;
     return &TWiki::Store::readTemplate( @_ );
 }
@@ -1111,8 +1116,7 @@ Return: =$text=        Content of file
 
 =cut
 
-sub readFile
-{
+sub readFile {
 #   my( $filename ) = @_;
     return $TWiki::Plugins::SESSION->{store}->readFile( @_ );
 }
@@ -1131,8 +1135,7 @@ Return:                none
 =cut
 
 # TODO: This should return an error for the different failure modes.
-sub saveFile
-{
+sub saveFile {
 #   my( $filename, $text ) = @_;
     return $TWiki::Plugins::SESSION->{store}->saveFile( @_ );
 }
@@ -1149,8 +1152,7 @@ Return:            none
 
 =cut
 
-sub writeWarning
-{
+sub writeWarning {
 #   my( $theText ) = @_;
     return $TWiki::Plugins::SESSION->writeWarning( @_ );
 }
@@ -1167,8 +1169,7 @@ Return:            none
 
 =cut
 
-sub writeDebug
-{
+sub writeDebug {
 #   my( $theText ) = @_;
     return $TWiki::Plugins::SESSION->writeDebug( @_ );
 }
@@ -1221,8 +1222,7 @@ Those expressions marked type 'RE' are precompiled regular expressions that can 
 
 =cut
 
-sub getRegularExpression
-{
+sub getRegularExpression {
     my ( $regexName ) = @_;
     return $TWiki::regex{$regexName};
 }
@@ -1261,42 +1261,42 @@ like this:
 =cut
 
 sub checkDependencies {
-  my ( $context, $deps ) = @_;
-  my $report = "";
-  my $depsOK = 1;
-  foreach my $dep ( @$deps ) {
-    my ( $ok, $ver ) = ( 1, 0 );
-    my $msg = "";
-    my $const = "";
+    my ( $context, $deps ) = @_;
+    my $report = "";
+    my $depsOK = 1;
+    foreach my $dep ( @$deps ) {
+        my ( $ok, $ver ) = ( 1, 0 );
+        my $msg = "";
+        my $const = "";
 
-    eval "use $dep->{package}";
-    if ( $@ ) {
-        $msg .= "it could not be found: $@";
-        $ok = 0;
-    } else {
-        if ( defined( $dep->{constraint} ) ) {
-            $const = $dep->{constraint};
-            eval "\$ver = \$$dep->{package}::VERSION;";
-            if ( $@ ) {
-                $msg .= "the VERSION of the package could not be found: $@";
-                $ok = 0;
-            } else {
-                eval "\$ok = ( \$ver $const )";
-                if ( $@ || ! $ok ) {
-                    $msg .= " $ver is currently installed: $@";
+        eval "use $dep->{package}";
+        if ( $@ ) {
+            $msg .= "it could not be found: $@";
+            $ok = 0;
+        } else {
+            if ( defined( $dep->{constraint} ) ) {
+                $const = $dep->{constraint};
+                eval "\$ver = \$$dep->{package}::VERSION;";
+                if ( $@ ) {
+                    $msg .= "the VERSION of the package could not be found: $@";
                     $ok = 0;
+                } else {
+                    eval "\$ok = ( \$ver $const )";
+                    if ( $@ || ! $ok ) {
+                        $msg .= " $ver is currently installed: $@";
+                        $ok = 0;
+                    }
                 }
             }
         }
+        unless ( $ok ) {
+            $report .= "WARNING: $dep->{package}$const is required for $context, but $msg\n";
+            $depsOK = 0;
+        }
     }
-    unless ( $ok ) {
-        $report .= "WARNING: $dep->{package}$const is required for $context, but $msg\n";
-        $depsOK = 0;
-    }
-  }
-  return undef if( $depsOK );
+    return undef if( $depsOK );
 
-  return $report;
+    return $report;
 }
 
 =pod
