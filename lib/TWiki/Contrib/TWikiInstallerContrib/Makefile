@@ -5,7 +5,7 @@ TAR_EXCLUDE = --exclude CVS --exclude *~ --exclude bak
 
 twiki-$(PLATFORM).tar.bz2 :
 	tar -c $(TAR_EXCLUDE) --no-recursion -f twiki-$(PLATFORM).tar --directory platform/$(PLATFORM) `cd platform/$(PLATFORM); ls` 
-	tar -r $(TAR_EXCLUDE) --exclude "downloads/*/*.zip" -f twiki-$(PLATFORM).tar bin/* cpan/*.pl cpan/MIRROR/TWIKI downloads 
+	tar -r $(TAR_EXCLUDE) --exclude "downloads/*/*.zip" -f twiki-$(PLATFORM).tar bin/* cpan/*.pl cpan/MIRROR/TWIKI/ downloads/ config/
 	bzip2 twiki-$(PLATFORM).tar
 
 distro : twiki-cpan plugins contribs addons release twiki-$(PLATFORM).tar.bz2 
@@ -17,22 +17,22 @@ twiki-cpan :
 	cd cpan ; ./mirror-cpan.pl --twiki `./calc-twiki-deps.pl`
 
 release :
-	wget -nc --http-user=TWikiGuest --http-passwd=guest -O downloads/releases/TWiki20040902.tar.gz http://twiki.org/release/TWiki20040902.tar.gz
+	[ -e downloads/releases/TWiki20040902.tar.gz ] || wget -nc --http-user=TWikiGuest --http-passwd=guest -O downloads/releases/TWiki20040902.tar.gz http://twiki.org/release/TWiki20040902.tar.gz
 
 plugins :
-	bin/download-twiki-plugins.pl 
+	bin/download-twiki-extensions.pl plugins
 	bin/zip2tgz.pl downloads/plugins/*.zip
 
 contribs :
-	bin/download-twiki-contribs.pl 
+	bin/download-twiki-extensions.pl contribs
 	bin/zip2tgz.pl downloads/contribs/*.zip
 
 addons :
-	bin/download-twiki-addons.pl 
+	bin/download-twiki-extensions.pl addons
 	bin/zip2tgz.pl downloads/addons/*.zip
 
 patches :
-	bin/download-twiki-patches.pl
+	bin/download-twiki-extensions.pl patches
 
 print :
 	@echo PLATFORM = $(PLATFORM)
