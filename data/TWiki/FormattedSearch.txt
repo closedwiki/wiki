@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1064795573" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071560368" format="1.0" version="1.12"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
@@ -24,7 +24,7 @@ Use the format parameter to specify the format of one search hit.
 Variables that can be used in the format string:
 
 | *Name:* | *Expands To:* |
-| =$web= | Name of the web |
+| =$web= | Name of the web(s), separated by commas, or 'all' |
 | =$topic= | Topic name |
 | =$topic(20)= | Topic name, "<tt>- </tt>" hyphenated each 20 characters |
 | =$topic(30, -&lt;br /&gt;)= | Topic name, hyphenated each 30 characters with separator "<tt>-&lt;br /&gt;</tt>" |
@@ -125,5 +125,14 @@ Here is an example. Let's search for all topics that contain the word "culture" 
 
 %SEARCH{ "culture" format="	* $topic is referenced by:$n		* $percntSEARCH{ \"$topic\" format=\"	$dollartopic\" nosearch=\"on\" nototal=\"on\" }$nop%" nosearch="on" nototal="on" }%
 
+---+++ Most recently changed pages
 
--- Main.PeterThoeny - 16 May 2002
+*Write this:*
+
+=%<nop>SEARCH{ "\.*" scope="topic" regex="on" nosearch="on" nototal="on" order="modified" reverse="on"  format="| [<nop>[$topic]] | $wikiusername  | $date |" limit="7" }%=
+
+*To get this:*
+
+%SEARCH{ "\.*" scope="topic" regex="on" nosearch="on" nototal="on" order="modified" reverse="on"  format="| [[$topic]] | $wikiusername  | $date |" limit="7" }%
+
+-- TWiki:Main.PeterThoeny - 15 Dec 2003
