@@ -4,7 +4,8 @@ package TWiki::Plugins::CommentPlugin;
 use strict;
 use integer;
 
-require  TWiki::Plugins::CommentPlugin::Comment;
+use TWiki::Plugins::CommentPlugin::Comment;
+use TWiki::Func;
 
 use vars qw( $VERSION $firstCall );
 

@@ -1,0 +1,1 @@
+TWiki::Plugins::CairoCompatabilityModule perl Required if the plugin is to be run with versions of TWiki before Cairo
