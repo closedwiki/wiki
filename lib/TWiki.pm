@@ -120,7 +120,7 @@ use TWiki::Plugins;   # plugins handler  #AS
 { my $count = 0;
   %mon2num = map { $_ => $count++ } @isoMonth; }
 
-$headerPatternDa = '^---*(\++)\s+(.+)\s*$';     # '---++ Header', '---+ Header'
+$headerPatternDa = '^---+(\++)\s+(.+)\s*$';     # '---++ Header', '---+ Header'
 $headerPatternSp = '^\t(\++)\s+(.+)\s*$';       # '   ++ Header', '   + Header'
 $headerPatternHt = '^<h([1-6])>\s*(.+?)\s*</h[1-6]>'; # '<h6>Header</h6>
 
@@ -1114,7 +1114,7 @@ sub getRenderedVersion
 
 
 # Horizontal rule
-            s/^---*/<HR>/o;
+            s/^---+/<HR>/o;
             s@^([a-zA-Z0-9]+)----*@<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><HR></td></tr></table>@o;
 
 # Table of format: | cell | cell |
