@@ -462,15 +462,36 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     # The output is thrown away. So we could use fgrep instead, but
     # since this is run as a cron there's not much benefit. If Search
 	# had a halfway-decent interface we could use that instead.
-    my $grep = `$cmd -c $q%ACTION\\{.*\\}%$q $dd/$theWeb/*.txt`;
+	my $topic;
+	my @groups;
+	my $group = "";
+	my $cnt = 512;
+	my @tops = TWiki::Func::getTopicList( $theWeb );
+	@tops = grep( /$topics/, @tops ) if ( $topics );
+
+	foreach $topic ( @tops ) {
+	  unless ( $cnt ) {
+		push( @groups, $group );
+		$group = "";
+		$cnt = 512;
+	  }
+	  $cnt--;
+	  $group .= " $dd/$theWeb/$topic.txt";
+	}
+	push( @groups, $group ) if ( $group );
+
+    my $grep = "";
+	foreach $group ( @groups ) {
+	  $grep .= `$cmd -H -c $q%ACTION\\{.*\\}%$q $group`;
+	}
+
     my $number = 0;
-    my %processed;
+    my $processed = "";
 	my $date = Time::ParseDate::parsedate( $theDate );
 
     foreach my $line ( split( /\r?\n/, $grep )) {
-      $line =~ m/^.*\/([^\/\.\n]+)\.txt:/o;
-      my $topic = $1;
-      if ( !$processed{$topic} && $topic =~ /^$topics$/ ) {
+      if ( $line =~ m/^.*\/([^\/\.\n]+)\.txt:/o ) {
+		my $topic = $1;
 		my @st = stat( "$dd/$theWeb/$topic.txt" );
 		my $mtime = $st[9];
 		# There can be no changes if the file date on the topic file
@@ -479,8 +500,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 		  _findChangesInTopic( $theWeb, $topic, $theDate, $format,
 							   $notifications );
 		}
-		$processed{$topic} = 1;
-      }
+	  }
     }
   }
 
