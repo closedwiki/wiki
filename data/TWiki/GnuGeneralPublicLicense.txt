@@ -1,8 +1,9 @@
-*FAQ:*
+%META:TOPICINFO{author="PeterThoeny" date="999303632" format="1.0" version="1.2"}%
+---++ FAQ:
 
 TWiki has a GPL (GNU General Public License). What is GPL?
 
-*Answer:*
+---++ Answer:
 
 TWiki is distributed under the GNU General Public License, see TWikiDownload. GPL is one of the free software licenses that protects the copyright holder, and at the same time allows users to redistribute the software under the terms of the license. Extract:
 
@@ -12,6 +13,6 @@ TWiki is distributed under the GNU General Public License, see TWikiDownload. GP
 
 Please note that TWiki is not distributed under the LGPL (Lesser General Public Licence), which implies TWiki can only be used with software that is licensed under conditions compliant with the GPL. Embedding in proprietary software requires an alternative license. Contact the author for details.
 
-See other TWikiFAQs.
+__Back to:__ TWikiFAQ
 
 -- Main.PeterThoeny - 27 Nov 2000 <br>
