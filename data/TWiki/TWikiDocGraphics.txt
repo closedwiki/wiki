@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1080450166" format="1.0" version="1.28"}%
+%META:TOPICINFO{author="PeterThoeny" date="1080465212" format="1.0" version="1.29"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -27,8 +27,21 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/new.gif" alt="new.gif"  width="28" height="8"  />  | =new.gif= | New |
 |  <img src="%ATTACHURLPATH%/starred.gif" alt="starred.gif"  width="16" height="16"  />  | =starred.gif= | Highlight (positive) |
 |  <img src="%ATTACHURLPATH%/stargold.gif" alt="stargold.gif"  width="16" height="16"  />  | =stargold.gif= | Favorites (gold star) |
-|  <img src="%ATTACHURLPATH%/arrowright.gif" alt="arrowright.gif"  width="16" height="16"  />  | =arrowright.gif= | Moved to... |
+|  <img src="%ATTACHURLPATH%/arrowleft.gif" alt="arrowleft.gif"  width="16" height="16"  />  | =arrowleft.gif= | Arrow red left |
+|  <img src="%ATTACHURLPATH%/arrowright.gif" alt="arrowright.gif"  width="16" height="16"  />  | =arrowright.gif= | Arrow red right |
+|  <img src="%ATTACHURLPATH%/arrowup.gif" alt="arrowup.gif"  width="16" height="16"  />  | =arrowup.gif= | Arrow red up |
+|  <img src="%ATTACHURLPATH%/arrowdown.gif" alt="arrowdown.gif"  width="16" height="16"  />  | =arrowdown.gif= | Arrow red down |
+|  <img src="%ATTACHURLPATH%/arrowbleft.gif" alt="arrowbleft.gif"  width="16" height="16"  />  | =arrowbleft.gif= | Arrow blue left |
+|  <img src="%ATTACHURLPATH%/arrowbright.gif" alt="arrowbright.gif"  width="16" height="16"  />  | =arrowbright.gif= | Arrow blue right |
+|  <img src="%ATTACHURLPATH%/arrowbup.gif" alt="arrowbup.gif"  width="16" height="16"  />  | =arrowbup.gif= | Arrow blue up |
+|  <img src="%ATTACHURLPATH%/arrowbdown.gif" alt="arrowbdown.gif"  width="16" height="16"  />  | =arrowbdown.gif= | Arrow blue down |
 |  <img src="%ATTACHURLPATH%/arrowdot.gif" alt="arrowdot.gif"  width="16" height="16"  />  | =arrowdot.gif= | Meet here (arrows to red dot) |
+|  <img src="%ATTACHURLPATH%/go_start.gif" alt="go_start.gif"  width="16" height="16"  />  | =go_start.gif= | Go start |
+|  <img src="%ATTACHURLPATH%/go_fb.gif" alt="go_fb.gif"  width="16" height="16"  />  | =go_fb.gif= | Go fast back |
+|  <img src="%ATTACHURLPATH%/go_back.gif" alt="go_back.gif"  width="16" height="16"  />  | =go_back.gif= | Go back |
+|  <img src="%ATTACHURLPATH%/go_forward.gif" alt="go_forward.gif"  width="16" height="16"  />  | =go_forward.gif= | Go forward |
+|  <img src="%ATTACHURLPATH%/go_ff.gif" alt="go_ff.gif"  width="16" height="16"  />  | =go_ff.gif= | Go fast forward |
+|  <img src="%ATTACHURLPATH%/go_end.gif" alt="go_end.gif"  width="16" height="16"  />  | =go_end.gif= | Go end |
 |  <img src="%ATTACHURLPATH%/wip.gif" alt="wip.gif"  width="16" height="16"  />  | =wip.gif= | Work in progress |
 |  <img src="%ATTACHURLPATH%/rfc.gif" alt="rfc.gif"  width="16" height="16"  />  | =rfc.gif= | Request for comments |
 |  <img src="%ATTACHURLPATH%/days.gif" alt="days.gif"  width="16" height="16"  />  | =days.gif= | Days |
@@ -55,6 +68,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/changes.gif" alt="changes.gif"  width="16" height="16"  />  | =changes.gif= | Changes |
 |  <img src="%ATTACHURLPATH%/notify.gif" alt="notify.gif"  width="16" height="16"  />  | =notify.gif= | Notify |
 |  <img src="%ATTACHURLPATH%/mail.gif" alt="mail.gif"  width="16" height="16"  />  | =mail.gif= | Mail |
+|  <img src="%ATTACHURLPATH%/trash.gif" alt="trash.gif"  width="16" height="16"  />  | =trash.gif= | Trash |
 |  <img src="%ATTACHURLPATH%/empty.gif" alt="empty.gif"  width="16" height="16"  />  | =empty.gif= | Empty transparent 16x16 spacer |
 |  <img src="%ATTACHURLPATH%/line_ud.gif" alt="line_ud.gif"  width="16" height="16"  />  | =line_ud.gif= | Line graph up-down |
 |  <img src="%ATTACHURLPATH%/line_lr.gif" alt="line_lr.gif"  width="16" height="16"  />  | =line_lr.gif= | Line graph left-right |
@@ -90,7 +104,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="updated.gif" attr="" comment="Updated" date="1018768662" path="C:\DATA\updated.gif" size="317" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="new.gif" attr="" comment="New" date="1018768672" path="C:\DATA\new.gif" size="167" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="starred.gif" attr="" comment="Star" date="1018768688" path="C:\DATA\starred.gif" size="128" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="arrowright.gif" attr="" comment="Red arrow to right" date="1018768726" path="C:\DATA\arrowright.gif" size="81" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="arrowright.gif" attr="" comment="Arrow red right" date="1080463965" path="C:\Data\Temp\arrowright.gif" size="878" user="PeterThoeny" version="1.2"}%
 %META:FILEATTACHMENT{name="viewtopic.gif" attr="" comment="View topic" date="1036034850" path="C:\Data\Temp\viewtopic.gif" size="904" user="PeterThoeny" version="1.2"}%
 %META:FILEATTACHMENT{name="edittopic.gif" attr="" comment="Edit topic" date="1036034837" path="C:\Data\Temp\edittopic.gif" size="931" user="PeterThoeny" version="1.2"}%
 %META:FILEATTACHMENT{name="newtopic.gif" attr="" comment="New topic" date="1043200306" path="C:\Data\Temp\newtopic.gif" size="158" user="PeterThoeny" version="1.1"}%
@@ -148,3 +162,17 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="locktopicgray.gif" attr="" comment="Locked topic, gray" date="1080346376" path="locktopicgray.gif" size="926" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="bubble.gif" attr="" comment="Speech bubble" date="1080449960" path="C:\Data\Temp\bubble.gif" size="889" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="refreshtopic.gif" attr="" comment="Refresh topic" date="1080450158" path="C:\Data\Temp\refreshtopic.gif" size="916" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="arrowleft.gif" attr="" comment="Arrow red left" date="1080464176" path="C:\Data\Temp\arrowleft.gif" size="878" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="arrowup.gif" attr="" comment="Arrow red up" date="1080464341" path="C:\Data\Temp\arrowup.gif" size="876" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="arrowdown.gif" attr="" comment="Arrow red down" date="1080463995" path="C:\Data\Temp\arrowdown.gif" size="880" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="arrowbleft.gif" attr="" comment="Arrow blue left" date="1080464253" path="C:\Data\Temp\arrowbleft.gif" size="879" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="arrowbright.gif" attr="" comment="Arrow blue right" date="1080464088" path="C:\Data\Temp\arrowbright.gif" size="877" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="arrowbup.gif" attr="" comment="Arrow blue up" date="1080464284" path="C:\Data\Temp\arrowbup.gif" size="877" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="arrowbdown.gif" attr="" comment="Arrow blue down" date="1080464285" path="C:\Data\Temp\arrowbdown.gif" size="880" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="go_start.gif" attr="" comment="Go start" date="1080464310" path="C:\Data\Temp\go_start.gif" size="880" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="go_fb.gif" attr="" comment="Go fast back" date="1080464339" path="C:\Data\Temp\go_fb.gif" size="881" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="go_back.gif" attr="" comment="Go back" date="1080464473" path="C:\Data\Temp\go_back.gif" size="870" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="go_forward.gif" attr="" comment="Go forward" date="1080464366" path="C:\Data\Temp\go_forward.gif" size="870" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="go_ff.gif" attr="" comment="Go fast forward" date="1080464141" path="C:\Data\Temp\go_ff.gif" size="882" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="go_end.gif" attr="" comment="Go end" date="1080464095" path="C:\Data\Temp\go_end.gif" size="876" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="trash.gif" attr="" comment="Trash" date="1080464135" path="C:\Data\Temp\trash.gif" size="927" user="PeterThoeny" version="1.1"}%
