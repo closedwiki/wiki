@@ -140,7 +140,7 @@ break the table here %ACTION{who=ActorSeven,due=01/01/02,open}% Create the maile
     TWiki::Plugins::ActionTrackerPlugin::commonTagsHandler($text, "TheTopic", "TheWeb");
 
     # Check the script is the first thing
-    $text =~ s/^\s*(<script.*\/script>)//so;
+    $text =~ s/^\s*(<script.*\/script>)\n//so;
     my $script = $1;
     $script =~ s/\s+/ /go;
     Assert::sEquals($script, "<script language=\"JavaScript\"><!-- function editWindow(url) { win=open(url,\"none\",\"titlebar=0,width=700,height=400,resizable,scrollbars\"); if(win){win.focus();} return false; } // --> </script>");

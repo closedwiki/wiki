@@ -445,7 +445,7 @@ EOF";
   }
 
   sub testXtendTypes {
-    my $s = ActionTrackerPlugin::Action::extendTypes("|plaintiffs,names,16|decision,text,16|sentencing,date|sentence,select,17,life,\"5 years\",\"community service\"|");
+    my $s = ActionTrackerPlugin::Action::extendTypes("| plaintiffs,names,16| decision, text, 16|sentencing,date|sentence,select,17,life,\"5 years\",\"community service\"|");
     Assert::assert(!defined($s), $s);
 
     my $action = ActionTrackerPlugin::Action->new( "Test", "Topic", 0, "who=JohnDoe due=\"2 Jun 02\" state=open,plaintiffs=\"fred.bloggs\@limp.net,JoeShmoe\",decision=\"cut off their heads\" sentencing=2-mar-2006 sentence=\"5 years\"", "A court action");

@@ -599,7 +599,7 @@ function editWindow(url) {
   return false;
 }
 // -->
-</script>";
+</script>\n";
 }
 
 # PRIVATE return formatted actions that have changed in all webs
