@@ -52,17 +52,20 @@ sub put
    if( $data ) {
        if( $key ) {
            my $found = "";
-           my $argsKey = "";
+           my $keyName = $args{$key};
            my @data = @$data;
+           unless( $keyName ) {
+               TWiki::writeWarning( "Meta: Required $key parameter is missing for META:$type" );
+               return;
+           }
            for( my $i=0; $i<scalar @$data; $i++ ) {
-               $argsKey = $args{$key};
-               if( $argsKey && $data[$i]->{$key} eq $argsKey ) {
+               if( $data[$i]->{$key} eq $keyName ) {
                    $data->[$i] = \%args;
                    $found = 1;
                    last;
                }
            }
-           if( ! $found ) {
+           unless( $found ) {
                push @$data, \%args;
            }
        } else {
