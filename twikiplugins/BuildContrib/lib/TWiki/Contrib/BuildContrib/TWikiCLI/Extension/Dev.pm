@@ -1,6 +1,7 @@
 package TWiki::Contrib::BuildContrib::TWikiCLI::Extension::Dev;
 #use TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
 use base qw(TWiki::Contrib::BuildContrib::TWikiCLI::Extension);
+no strict 'refs';
 
 sub new {
         my $proto = shift;
@@ -8,6 +9,10 @@ sub new {
         my $self  = {};
         bless ($self, $class);
         return $self;
+}
+
+sub run_test {
+  print "foo";
 }
 
 sub cli__init {
