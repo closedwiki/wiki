@@ -24,6 +24,8 @@ use TWiki::Func;
 use Text::Soundex;
 use Time::ParseDate;
 
+use TWiki::Contrib::Attrs;
+
 use TWiki::Plugins::ActionTrackerPlugin::AttrDef;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
 
@@ -237,10 +239,10 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     return $types{$name};
   }
 
-  # PRIVATE allocate a new UID for this action. This uses a file
+  # Allocate a new UID for this action. This uses a file
   # in the data directory called "atUidReg" that contains the
   # highest UID allocated so far.
-  sub _getNewUID {
+  sub getNewUID {
     my $this = shift;
     my $uidRegister = TWiki::Func::getDataDir() . "/atUidReg";
     my $lockFile = "$uidRegister.lock";
@@ -271,7 +273,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     close( FH );
     unlink( $lockFile ) or die "Unlocking $lockFile: $!";
 
-    return sprintf( "%06d", $uid );
+    $this->{uid} = sprintf( "%06d", $uid );
   }
 
   # PUBLIC when a topic containing an action is about to be saved,
@@ -283,7 +285,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $me = _canonicalName( "me" );
 
     if ( !defined( $this->{uid} )) {
-      $this->{uid} = $this->_getNewUID();
+        $this->getNewUID();
     }
 
     if ( !defined( $this->{who} )) {
@@ -629,26 +631,27 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
     # identical text
     if ( $this->{text} =~ m/^\Q$old->{text}\E/ ) {
-      $sum += length( $this->{text} );
+        $sum += length( $this->{text} );
     } else {
-      $sum += _partialMatch( $old->{text}, $this->{text} ) * 4;
+        $sum += _partialMatch( $old->{text}, $this->{text} ) * 4;
     }
     if ( $this->{ACTION_NUMBER} == $old->{ACTION_NUMBER} ) {
-      $sum += 3; # 50;
+        $sum += 3; # 50;
     }
     if ( defined( $this->{notify} ) && defined( $old->{notify} ) &&
-	 $this->{notify} eq $old->{notify} ) {
-      $sum += 2;
+         $this->{notify} eq $old->{notify} ) {
+        $sum += 2;
     }
-    if ( defined( $this->{who} ) &&
-	 $this->{who} eq $old->{who} ) {
-      $sum += 2;
+    if ( defined( $this->{who} ) && defined( $old->{who} ) &&
+         $this->{who} eq $old->{who} ) {
+        $sum += 2;
     }
-    if ( $this->{due} == $old->{due} ) {
-      $sum += 1;
+    if ( defined( $this->{due} ) && defined( $old->{due} ) &&
+         $this->{due} == $old->{due} ) {
+        $sum += 1;
     }
     if ( $this->{state} eq $old->{state} ) {
-      $sum += 1;
+        $sum += 1;
     }
     # COVERAGE ON
     return $sum;
