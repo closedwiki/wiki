@@ -1,10 +1,14 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
-locks
-	nobody:1.3; strict;
+locks; strict;
 comment	@# @;
 
+
+1.4
+date	2005.01.28.19.14.11;	author alaster;	state Exp;
+branches;
+next	1.3;
 
 1.3
 date	2004.01.16.15.10.31;	author PeterThoeny;	state Exp;
@@ -27,12 +31,310 @@ desc
 @
 
 
+1.4
+log
+@none@
+text
+@%META:TOPICINFO{author="alaster" date="1106939651" format="1.0" version="1.4"}%
+---++!! Calendar Plugin (version 1.014)
+
+The <nop>CalendarPlugin handles the tag *%<nop>CALENDAR%* that inserts a monthly calendar in the page. Multiple topics can be specified as the source of the events, and these can be in any web.
+
+Moreover, the Calendar highlights dates corresponding to a list of Events.
+
+NB. This Plugin does not, and has never, observed topic permissions.
+
+%TOC%
+
+---++ Usage example
+
+<table border=1 width="80%">
+<tr><th>You type:</th><th>You get:</th><th>If correctly installed:</th></tr>
+<tr><td>
+A list of Events is just a bullet list like this:
+	* 2 Feb - Andrea's birthday
+	* 7 Mar - Nicoletta's birthday
+	* 29 May 1996 - Maria Teresa is born!
+	* 29 Sep 1998 - Davide is born!
+
+%<nop>CALENDAR{month="2" year="2002" bgcolor="cyan"}%
+%<nop>CALENDAR{month="3" year="2002" showweekdayheaders="1"}%
+
+</td><td align=center>
+
+<table border="0" cellpadding="0" cellspacing="0">
+<tr valign="top" align="left">
+<td align="left" valign="top" bgcolor="black"><table border="0" cellpadding="3" cellspacing="1" width="100%"><tr><td colspan=7 bgcolor="pink"><center><font size=+2>February 2002</font></center></td></tr>
+<TR>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">1&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">2 <br> Andrea's birthday&nbsp;</td>
+</tr>
+<TR>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">3&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">4&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">5&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">6&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">7&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">8&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">9&nbsp;</td>
+</tr>
+<TR>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">10&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">11&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">12&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">13&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">14&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">15&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">16&nbsp;</td>
+</tr>
+<TR>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">17&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">18&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">19&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">20&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">21&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">22&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">23&nbsp;</td>
+</tr>
+<TR>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">24&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">25&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">26&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">27&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">28&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p />
+<table border="0" cellpadding="0" cellspacing="0">
+<tr valign="top" align="left">
+<td align="left" valign="top" bgcolor="black"><table border="0" cellpadding="3" cellspacing="1" width="100%"><tr><td colspan=7 bgcolor="pink"><center><font size=+2>March 2002</font></center></td></tr>
+<tr>
+<th bgcolor="white">Sunday</th>
+<th bgcolor="white">Monday</th>
+<th bgcolor="white">Tuesday</th>
+<th bgcolor="white">Wednesday</th>
+<th bgcolor="white">Thursday</th>
+<th bgcolor="white">Friday</th>
+<th bgcolor="white">Saturday</th>
+</tr>
+<TR>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">1&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">2&nbsp;</td>
+</tr>
+<TR>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">3&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">4&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">5&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">6&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">7 <br> Nicoletta's birthday&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">8&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">9&nbsp;</td>
+</tr>
+<TR>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">10&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">11&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">12&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">13&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">14&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">15&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">16&nbsp;</td>
+</tr>
+<TR>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">17&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">18&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">19&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">20&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">21&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">22&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">23&nbsp;</td>
+</tr>
+<TR>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">24&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">25&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">26&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">27&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">28&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">29&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">30&nbsp;</td>
+</tr>
+<TR>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">31&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+
+</td><td align=center>
+%CALENDAR{month="2" year="2002" bgcolor="cyan"}%
+%CALENDAR{month="3" year="2002" showweekdayheaders="1"}%
+</td></tr>
+</table>
+
+---++ Syntax
+| *You type* | *you get* |
+| %<nop>CALENDAR% | a monthly calendar for the current month/year, with events taken from the current topic |
+| %<nop>CALENDAR{&lt;attributes>}% | is the full syntax |
+
+---+++ Attributes recognized
+| *Attribute*				| *Meaning* | *Default* |
+| ==year="yyyy"==		  | The year | Current year |
+| ==year="+yy"== or =="-yy"== | Relative year | Current year |
+| ==month="mm"==			| The month | Current month |
+| ==month="+mm"== or =="-mm"== | relative month | Current month |
+| ==gmtoffset="+/-hh"== | Timezone expressed as number of hours offset from GMT | Server timezone |
+| ==topic="TopicName"==  | Topic containig events | The topic containing the tag |
+| ==topic="Web.TopicName1, Web.TopicName2"==  | Topics containig events | The topics containing the tags |
+| ==web="Webname"==		| Web containing the event topic | The current web |
+| ==lang="language"==	 | Language: First few characters of "English", "Français", "Deutsch", "Español", "Português", "Nederlands", "Italiano", "Norsk", "Svenska", "Dansk", "suomi", "Magyar", "Polski | "English" |
+| ==daynames="Mon&brvbar;Tue&brvbar;..."== | Custom day names | "Monday&brvbar;Tuesday&brvbar;Wednesday&brvbar;Thursday&brvbar;<br />Friday&brvbar;Saturday&brvbar;Sunday" |
+| ==header="..."==	 | Text at the top of the calendar; use ==$m== for current month, ==$y== for year | Current month and year |
+| ==weekstartsonmonday="1"== or =="0"== | Flag to start week on Monday | "0" (Sunday) |
+| ==showdatenumbers="0"== | Show day numbers 1...31 in date cells | "1" |
+| ==showweekdayheaders="1"== | Show the weekday headers | "0" |
+| ==weekdayheadersbig="0"== | If enabled, show weekday headers in bold cell headings | "1" |
+| ==cellalignment="left"== | Horizontal cell alignment of day cells: "left", "center", "right", "justify", "char" | "center" |
+| ==vcellalignment="middle"== | Vertical cell alignment of day cells: "top", "middle", "bottom", "baseline" | "top" |
+| ==cellheight="n"== | Height in pixels of each cell in the calendar | Minimum height needed |
+| ==format="..."== | How to highlight a date | See above |
+| ==width="n"== or =="n%"== | Width of calendar table in pixels or percent | Minimum width needed |
+| ==border="n"== | Border width of calendar table | "1" |
+| ==nowrap="1"== or =="0"== | Prevent cell content from wrapping | "0" |
+| ==bgcolor="#nnnn"== | Default background color of all cells unless redefined by other color settings below (use an HTML color-code like "#000000" as defined in %TWIKIWEB%.StandardColors) | white |
+| ==contentcolor="#nnnn"== | Default content color of all cells unless redefined | black |
+| ==headercolor="#nnnn"== | Background color of the Month+Year header | The web bgcolor |
+| ==headercontentcolor="#nnnn"== | Content color of the Month+Year header | contentcolor setting |
+| ==weekdayheadercolor="#nnnn"== | Background color of weekdays' headers | bgcolor setting |
+| ==weekdayheadercontentcolor=<br /> "#nnnn"== | Content color of weekdays' headers | contentcolor setting |
+| ==weekendheadercolor="#nnnn"== | Background color of weekends' headers | bgcolor setting |
+| ==weekendheadercontentcolor=<br /> "#nnnn"== | Content color of weekends' headers | contentcolor setting |
+| ==weekdaycolor="#nnnn"== | Background color of weekday cells | bgcolor setting |
+| ==weekdaycontentcolor="#nnnn"== | Content color of weekday cells | contentcolor setting |
+| ==weekendcolor="#nnnn"== | Background of weekend cells | light gray |
+| ==weekendcontentcolor="#nnnn"== | Content color of weekend cells | contentcolor setting |
+| ==todaycolor="#nnnn"== | Background of today's cell | The web bgcolor |
+| ==todaycontentcolor="#nnnn"== | Content color of today's cell | contentcolor setting |
+| and other attributes of HTML::CalendarMonthSimple |||
+
+---+++ Event Syntax
+
+Events are defined by bullets with the following syntax:
+
+| *Event type* | *Syntax* | *Example* |
+| *Single*: | ==&nbsp;&nbsp; * dd MMM yyyy - description== | 09 Dec 2002 - Expo |
+| *Interval*: | ==&nbsp;&nbsp; * dd MMM yyyy - dd MMM yyyy - description== | 02 Feb 2002 - 04 Feb 2002 - Vacation |
+| *Yearly*: | ==&nbsp;&nbsp; * dd MMM - description== | 05 Jun - Every 5th of June |
+|^| ==&nbsp;&nbsp; * w DDD MMM - description== | 2 Tue Mar - Every 2nd Tuesday of March |
+|^| ==&nbsp;&nbsp; * L DDD MMM - description== | L Mon May - The last Monday of May |
+| *Monthly*: | ==&nbsp;&nbsp; * w DDD - description== | 1 Fri - Every 1st Friday of the month |
+|^| ==&nbsp;&nbsp; * dd - description== | 14 - The 14th of every month |
+| *Weekly*: | ==&nbsp;&nbsp; * E DDD - description== | E Wed - Every Wednesday |
+| ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - description== | E Wed 27 Jan 2005 - Every Wednesday Starting 27 Jan 2005|
+| ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - dd MMM yyyy - description== | E Wed 1 Jan 2005 - 27 Jan 2005 - Every Wednesday from 1 Jan 2005 through 27 Jan 2005 (inclusive) |
+| *Periodic*: | <nobr> ==&nbsp;&nbsp; * En dd MMM yyyy - description== </nobr> | E3 02 Dec 2002 - Every three days starting 02 Dec 2002 |
+| *Exception*: | Above syntax, followed by:<br /> =={ dd MMM yyyy, dd MMM yyyy - dd MMM yyyy }== | 1 Fri X { 01 Dec 2002, 06 Dec 2002 - 14 Dec 2002 } - Every first Friday except on the 01 Dec 2002 and between 06 Dec 2002 and 14 Dec 2002 |
+
+If an event falls in the selected month then the corresponding day is (by default):
+	* highlighted (font size +2)
+	* linked to the topic containing the event list
+	* marked with an icon whose ALT string is the event's description
+I.e. ==format== is:
+<verbatim>
+<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic"><font size="+2">$old</font>
+<img alt="$description" SRC="%PUBURLPATH%/$installWeb/CalendarPlugin/exclam.gif" /></a>
+</verbatim>
+
+---++ Default settings
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = This plugin shows a monthly calendar with highlighted events
+	* How the cell content is formatted
+<verbatim>
+		* Set FORMAT = $old <br /> $description
+</verbatim>
+	* __Note:__ You can add settings of any of the recognized attributes (in upper case like SHOWWEEKDAYHEADERS)
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* The Plugin uses the ==HTML::CalendarMonthSimple== and ==Date::Calc== CPAN packages (see http://www.cpan.org)
+		* Install ==Date::Calc==
+		* Install ==HTML::CalendarMonthSimple==
+		* Change line 197 of <nop>CalendarMonthSimple.pm as follows to avoid an annoying log message:<br />
+		  =if ($self->year == $todayyear && $self->month == $todaymonth &lt;font color="red"&gt;&& defined $thisday&lt;/font&gt; && $thisday == $todaydate)=
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==pub/TWiki/%TOPIC%/exclam.gif== | Image file |
+	* Test if the installation was successful:
+		* You should see two calendars near the Event list above
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/AndreaSterbini |
+|  Plugin Version: | V1.012 (15 Jan 2004) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.014: | TWiki:Main.NathanKerr: Added start and end date support for weekly repeaters |
+|  V1.013: | TWiki:Main.MartinCleaver: Added multiple topic=web.topic parameters |
+|  V1.012: | TWiki:Main/PeterThoeny: Added missing doc of gmtoffset parameter (was deleted in V1.011) |
+|  V1.011: | TWiki:Main/PeterThoeny: Fixed deep recursion bug; preview shows now unsaved events; performance and resource improvements; documented most of HTML::CalendarMonthSimple attributes; TWiki:Main/PaulineCheung: Fixed uninitialized value in join |
+|  V1.010: | TWiki:Main/DanBoitnott: Fixed variable conflict in timezone code |
+|  V1.009: | TWiki:Main/DanBoitnott: Added ability to have event topics in other webs |
+|  V1.008: | TWiki:Main/AnthonPang: Added daynames attribute; TWiki:Main/JensKloecker: Added lang attribute; TWiki:Main/DanBoitnott: Added yearly, monthly, weekly, and periodic events and exceptions |
+|  V1.006: | TWiki:Main/DanBoitnott: Added monthly date support |
+|  V1.005: | TWiki:Main/AkimDemaille: handle date intervals (thanks!) |
+|  V1.004: | uses only HTML::CalendarMonthSimple, ISO dates, all possible settings, fixed month bug |
+|  V1.003: | introducing HTML::CalendarMonthSimple |
+|  V1.002: | TWiki:Main/ChristianSchultze: highlight today, relative month/year and debugging (thanks!) |
+|  V1.001: | delayed load of used packages |
+|  V1.000: | first release using only HTML::CalendarMonth |
+|  CPAN Dependencies: | CPAN:HTML::CalendarMonthSimple >= v1.23, CPAN:Date::Calc |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.000 and up |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 95%, %TWIKIWEB%.FormattedSearch 97%, %TOPIC% 88% with installed Plugin |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main/AndreaSterbini - 27 Feb 2001 <br />
+-- TWiki:Main/PeterThoeny - 15 Jan 2004
+
+%META:FILEATTACHMENT{name="exclam.gif" attr="h" comment="Image of exclamation point" date="1073090410" path="exclam.gif" size="79" user="PeterThoeny" version="1.1"}%
+@
+
 1.3
 log
 @none
 @
 text
-@%META:TOPICINFO{author="PeterThoeny" date="1074265831" format="1.0" version="1.3"}%
+@d1 289
+a289 281
+%META:TOPICINFO{author="PeterThoeny" date="1074265831" format="1.0" version="1.3"}%
 ---++!! Calendar Plugin (version 1.012)
 
 The <nop>CalendarPlugin handles the tag *%<nop>CALENDAR%* that inserts a monthly calendar in the page.
@@ -313,9 +615,7 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main/AndreaSterbini - 27 Feb 2001 <br />
 -- TWiki:Main/PeterThoeny - 15 Jan 2004
-%META:FILEATTACHMENT{name="exclam.gif" attr="h" comment="Image of exclamation point" date="1073090410" path="exclam.gif" size="79" user="PeterThoeny" version="1.1"}%
 @
-
 
 1.2
 log
@@ -330,7 +630,6 @@ a167 2
 | ==gmtoffset="+/-hh"== | Timezone expressed as number of
  hours offset from GMT | Server timezone |
 @
-
 
 1.1
 log
