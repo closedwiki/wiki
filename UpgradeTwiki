@@ -31,15 +31,22 @@ use File::Copy;
 use Text::Diff;
 use File::Find;
 
-my $targetDir = shift or die "Usage: $0 <target directory for new wiki build>\n";
+print "Checklist: 
+\t- This script should be run in the directory where you unpacked the new distribtion
+\t- The argument to this script is the target directory where it will create a whole new installation 
+\t  (_not_ the same as where you unpacked the new distribution, nor where your existing twiki installation is)
+\t- You need enough disk space to copy your existing twiki installation to the target directory.
+\t- The target directory does not have to be web-accessible.
+";
 
-# not sure if a relative path with be safe... better safe than sorry...
+my $targetDir = shift or die "Usage: $0 <target directory to build merged new wiki...>\n";
+
+# not sure if a relative path will be safe... better safe than sorry...
 $targetDir =~ m|^[/~]| or die "Usage: $0 <full path to target directory for new wiki build>\n"; 
 
 $targetDir =~ s|/$||;  # avoid ugly double slashes.
 
-print "OK - I'm assuming you've unpacked a TWiki distribution in this directory.
-
+print "
 That means that there should be all the normal TWiki directories here: bin, lib, pub, templates etc. right here.
 
 Here's what's about to happen:
@@ -138,6 +145,12 @@ I copied in your existing .htaccess into $targetDir/bin.
 
 ";
 	print join "\n", grep( /^[+-][^#]/ , split( /\n/, diff("$targetDir/bin/.htaccess", "./bin/.htaccess.txt")));
+
+	print "
+You may need to apply some of these differences to the new .htaccess that I created... that's up to you.
+(I'm not gonna mess with security settings at all!)
+";
+
     }
     else
     {
@@ -149,6 +162,28 @@ else
 {
     warn "
 Couldn't see a .htaccess in $setlibPath ... so I didn't try to help in that respect\n";
+}
+
+# now let's try to get their scriptSuffix right for them (is this a good idea, I wonder?)
+
+if ($TWikiCfg::scriptSuffix)
+{
+    print "
+Applying your '\$scriptSuffix' ($TWikiCfg::scriptSuffix) to the scripts in $targetDir/bin...
+";
+
+    opendir(BINDIR, "$targetDir/bin") or 
+	warn "Ooops - couldn't open $targetDir/bin for reading... that's certainly strange! ($!)\n";
+
+    foreach my $f (readdir BINDIR)
+    {
+	next if ($f =~ m|\.|);  # scripts should not have dots, other things should!
+
+	print "$f ";
+	rename "$targetDir/bin/$f", "$targetDir/bin/$f$TWikiCfg::scriptSuffix"
+	    or warn "Oops, couldn't rename $setlibPath/$f to $setlibPath/$f$TWikiCfg::scriptSuffix : $!\n";
+    }
+    print "\ndone\n";
 }
 
 print "
@@ -201,9 +236,12 @@ Now: you need to
 
  - Move the newly created twiki directory ($targetDir) to the place where your previous version was.
 
+ - Rearrange sub-directories the way you like them, if needed.
+   (some sites have bin in a very different place to the rest, for example)
+
  - Use your browser to check the whole thing: visit the 'testenv' script, which I am guessing is at:
 
-      $TWikiCfg::defaultUrlHost$TWikiCfg::scriptUrlPath/testenv
+      $TWikiCfg::defaultUrlHost$TWikiCfg::scriptUrlPath/testenv$TWikiCfg::scriptSuffix
 
    make sure there are no unwarranted warnings, and press the 'relockrcs' button if advised to do so,
 

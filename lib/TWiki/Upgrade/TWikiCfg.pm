@@ -116,11 +116,24 @@ sub UpgradeTWikiConfig
 
 	print "Now reading the old TWiki.cfg  and generating the new...\n\n";
 
-	$twikiCfgFile = "$twikiLibPath/TWiki.cfg";
+	if ($twikiLibPath =~ m|^[~/]|)
+	{
+	    # absolute path in $twikiLibPath
+	    $twikiCfgFile = "$twikiLibPath/TWiki.cfg";
+	}
+	else
+	{
+	    # relative path in $twikiLibPath
+	    $twikiCfgFile = "$existingConfigInfo/$twikiLibPath/TWiki.cfg";
+	}
     }
     elsif (-f "$existingConfigInfo/TWiki.cfg")
     {
 	$twikiCfgFile = "$existingConfigInfo/TWiki.cfg";
+    }
+    else
+    {
+	die "UpgradeTwikiConfig couldn't find either setlib.cfg or TWiki.cfg at $existingConfigInfo: seems like a bug, someone needs to check it's arguments!\n";
     }
 
     # read 'em in...
