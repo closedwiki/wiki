@@ -188,8 +188,8 @@ sub main
     if( $mirrorSiteName ) {
         # disable edit and attach
 	# FIXME: won't work with non-default skins, see %EDITURL%
-        $tmpl =~ s/%EDITTOPIC%/$mirrorLink | <strike>Edit<\/strike>/o;
-        $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/oi;
+        $tmpl =~ s/%EDITTOPIC%/$mirrorLink | <strike>Edit<\/strike>/go;
+        $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/goi;
         if( $topicExists ) {
             # remove the NOINDEX meta tag
             $tmpl =~ s/<meta name="robots"[^>]*>//goi;
@@ -201,9 +201,9 @@ sub main
     } elsif( $rev < $maxrev ) {
         # disable edit of previous revisions - FIXME consider change to use two templates
 	# FIXME: won't work with non-default skins, see %EDITURL%
-        $tmpl =~ s/%EDITTOPIC%/<strike>Edit<\/strike>/o;
-        $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/oi;
-        $tmpl =~ s|<a [^>]*?>Rename/move<\/a>|<strike>Rename/move<\/strike>|oi;
+        $tmpl =~ s/%EDITTOPIC%/<strike>Edit<\/strike>/go;
+        $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/goi;
+        $tmpl =~ s|<a [^>]*?>Rename/move<\/a>|<strike>Rename/move<\/strike>|goi;
         $tmpl =~ s/%REVTITLE%/\(r1.$rev\)/go;
         $tmpl =~ s/%REVARG%/&rev=1.$rev/go;
     } else {
