@@ -457,6 +457,7 @@ sub searchWeb
             
             my $meta = "";
             my $text = "";
+            my $forceRedering = 0;
             
             # make sure we have date and author
             if( exists( $topicRevUser{$topic} ) ) {
@@ -492,18 +493,19 @@ sub searchWeb
                 $tempVal =~ s/([^\n])$/$1\n/gos;       # cut last trailing new line
                 $tempVal =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
                 $tempVal =~ s/\$web/$thisWebName/gos;
-                $tempVal =~ s/\$topic[^\w]/$topic/gos;
+                $tempVal =~ s/\$topic([^\w])/$topic$1/gos;
                 $tempVal =~ s/\$locked/$locked/gos;
                 $tempVal =~ s/\$date/$revDate/gos;
                 $tempVal =~ s/\$isodate/&TWiki::revDate2ISO($revDate)/geos;
                 $tempVal =~ s/\$rev/1.$revNum/gos;
                 $tempVal =~ s/\$wikiusername/$revUser/gos;
                 $tempVal =~ s/\$username/&TWiki::wikiToUserName($revUser)/geos;
-# FIXME: Next to fix relative links before expanding full text:
-#                if( $tempVal =~ m/\$topictext/ ) {
-#                    ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic ) unless $text;
-#                    $tempVal =~ s/\$topictext/$text/gos;
-#                }
+                if( ( $tempVal =~ m/\$topictext/ ) && ( $topic ne $TWiki::topicName ) ) {
+                    # expand topic text, but not for current topic to prevent loop
+                    ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic ) unless $text;
+                    $tempVal =~ s/\$topictext/$text/gos;
+                    $forceRedering = 1;
+                }
             } else {
                 $tempVal = $repeatText;
             }
@@ -518,7 +520,7 @@ sub searchWeb
             }
             $tempVal =~ s/%REVISION%/$revNum/o;
             $tempVal =~ s/%AUTHOR%/$revUser/o;
-            if( ! $doInline ) {
+            if( ( ! $doInline ) || ( $forceRedering ) ) {
                 $tempVal = &TWiki::handleCommonTags( $tempVal, $topic );
                 $tempVal = &TWiki::getRenderedVersion( $tempVal );
             }
