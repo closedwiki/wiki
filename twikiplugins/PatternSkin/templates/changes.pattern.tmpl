@@ -1,5 +1,5 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:INCLUDE{"search"}%
 %TMPL:DEF{"titleaction"}%(changes) %TMPL:END%
-%TMPL:DEF{"content"}%%TMPL:P{"searchbody"}%%TMPL:END%
-%TMPL:DEF{"searchbody"}%<div class="twikiSearchResults"><div class="twikiSearchResultsHeader" style="background-color:%WEBBGCOLOR%">Results from %WEB% web</div><table width="100%" border="0" cellspacing="0" cellpadding="0">%TMPL:P{"repeatedsearchblock"}%</table></div><br />%TMPL:END%
+%TMPL:DEF{"searchbody"}%<br />%TMPL:P{"repeatedsearchblock"}%%TMPL:END%
+%TMPL:DEF{"content"}%<div class="twikiTopic">%TMPL:P{"searchbody"}%</div>%TMPL:END%
