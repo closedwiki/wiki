@@ -1,34 +1,63 @@
 %TMPL:INCLUDE{"attach"}%
+
+
+
 %TMPL:DEF{"headerhelp"}% %TMPL:END%
+
+
+
 %TMPL:DEF{"webaction"}% Update attachment *%FILENAME%* on *%TOPIC%* %TMPL:END%
+
+
+
 %TMPL:DEF{"simpleheader"}%
----+ Update image or document on %TOPIC%
-%TMPL:END%
+---+ Update image or document on %TOPIC% %TMPL:END%
+
+
+
 %TMPL:DEF{"previousdetails"}%
----++ Update file %FILENAME%
-%ATTACHTABLE% %TMPL:END%
+---++ Update file <span class="twikiTitle">%FILENAME%</span>
+<div class="twikiPrevious"><div class="twikiAttachments">
+%ATTACHTABLE%</div></div> %TMPL:END%
+
+
+
 %TMPL:DEF{"previous"}%
   <tr>
-  <td class="title old">Previous upload</td>
-  <td class="old">
-   <code>%FILEPATH%</code> %TMPL:P{"fileuser"}%
+  <th class="twikiOldCol">Previous upload</th>
+  <td class="twikiOldCol">
+   <code>%FILEPATH%</code> <span class="twikiGrayText">%TMPL:P{"fileuser"}%</span>
   </td>
-  <td class="help old">Select a new local file to update this attachment.</td>
+  <td class="twikiHelpCol twikiOldCol">Select a new local file to update this attachment.</td>
  </tr>%TMPL:END%
+
 %TMPL:DEF{"extranotes"}%
-<div class="TWikiNotes">
    * *Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without 
-     uploading a file by pressing "Change Properties"; see <a target="HiddenAttachment" onClick="return launchWindow('%TWIKIWEB%','HiddenAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/HiddenAttachment">HiddenAttachment</a>
+     uploading a file by pressing "Change Properties"; see <a target="HiddenAttachment" onclick="return launchWindow('%TWIKIWEB%','HiddenAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/HiddenAttachment">HiddenAttachment</a>
    * *Change comment:* If you use _Change Properties_ to change a comment, the comment shown in 
      the topic will change, but the comment shown against the attachment history will be the 
      comment when the file was uploaded.
    * *Local file:* If you select a different file in _Local file:_, it is this that will be 
      updated or added.
-</div>
 %TMPL:END%
 
-%TMPL:DEF{"topicaction"}%<div class="TWikiFormButtons"><span class="left">[[%WEB%.%TOPIC%][Cancel]]</span><span class="TWikiSubmitButton"><input type="submit" value="Upload file" /><input type="submit" name="changeproperties" value="Change properties" /></span><span class="TWikiRight"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move&nbsp;attachment</a></span><br class="TWikiClearLine" /></div>%TMPL:END%
+
+
+%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction"><div class="twikiTopicActionSecondary"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move&nbsp;attachment...</a>
+</div>
+<table>
+<tr>
+<td class="twikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>
+<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Upload file" /></td>
+<td class="twikiAddCol"><input type="submit" class="twikiSubmit twikiTertiary" name="changeproperties" value="Change properties only" /></td>
+</tr>
+</table>
+</div>%TMPL:END%
+
 
 
 %TMPL:DEF{"fileuser"}%(%FILEUSER%)%TMPL:END%
+
+
+
 %TMPL:P{"attach"}%

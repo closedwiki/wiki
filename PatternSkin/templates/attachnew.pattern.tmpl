@@ -1,8 +1,34 @@
 %TMPL:INCLUDE{"attach"}%
+
+
+
 %TMPL:DEF{"headerhelp"}% %TMPL:END%
+
+
+
 %TMPL:DEF{"webaction"}% Attach file to topic <b>%TOPIC%</b> %TMPL:END%
+
+
+
 %TMPL:DEF{"previousdetails"}%
 ---++ Attach new file%TMPL:END%
+
+
+
 %TMPL:DEF{"action"}%Attach new file%TMPL:END%
-%TMPL:DEF{"topicaction"}%<div class="TWikiFormButtons"><span class="left">[[%WEB%.%TOPIC%][Cancel]]</span><span class="TWikiSubmitButton"><input type="submit" value="Upload file" /></span><br class="TWikiClearLine" /></div>%TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
+<table>
+<tr>
+<td class="twikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>
+<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Upload file" /></td>
+<td class="twikiAddCol">&nbsp;</td>
+</tr>
+</table>
+</div>%TMPL:END%
+
+
+
 %TMPL:P{"attach"}%

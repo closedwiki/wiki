@@ -1,48 +1,62 @@
 %TMPL:INCLUDE{"twiki"}%
 
+
+
+
+%TMPL:DEF{"bodystart"}%
+<body class="twikiViewPage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+
+
+
 %TMPL:DEF{"titleaction"}% %REVTITLE% %TMPL:END%
 
-%TMPL:DEF{"form"}%%META{"form"}%%TMPL:END%
+
+
+%TMPL:DEF{"form"}%%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%%META{"form"}%%TMPL:END%
+
+
 
 %TMPL:DEF{"attachments"}%%META{"attachments"}%%TMPL:END%
 
-%TMPL:DEF{"toolbar"}%<div class="TWikiToolBar"><span class="TWikiLeft">
+
+
+%TMPL:DEF{"toolbar"}%<div class="twikiToolBar"><div>
    * %EDITTOPIC%
    * <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach</a>
-   * <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print%REVARG%">Print version</a>
-</span><span class="TWikiRight"><span class="TWikiRevInfo !TWikiGrayText">Last changed: %REVINFO{"$date"}% GMT by %REVINFO{"$wikiusername"}% </span><span class="TWikiPageNav !TWikiGrayText"><a href="#PageBottom">to bottom</a><br class="TWikiClearLine" />
-</div>%TMPL:END%
+   * <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%">Printable</a>
+</div><div class="twikiRevInfo"><span class="twikiToolbarElem"><b><nop>%WEB%.%TOPIC%</b></span><span class="twikiGrayText"><span class="twikiToolbarElem">%REVINFO{"$date"}% GMT - <nop>%REVINFO{"$username"}%</span><span class="twikiToolbarElem"><a href="#TopicEnd">topic&nbsp;end</a></span></span></div></div>%TMPL:END%
 
-%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><span class="hidden"><br /></span><div class="TWikiTopicAction">%EDITTOPIC% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach image or document</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print%REVARG%">Print version</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on">Raw text</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%">Advanced topic actions</a><br />Revisions: %REVISIONS% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Total page history</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Backlinks</a></div>%TMPL:END%
 
-%TMPL:DEF{"topicinfo"}%<span class="hidden"><br /></span><div class="TWikiTopicInfo"><span class="TWikiRevInfo !TWikiGrayText">Revision: %REVINFO% <br />%META{"moved"}%</span></div>%TMPL:END%
+
+%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="twikiMiddleContainer">%TMPL:P{"leftbar"}%<div class="twikiMain">%BROADCASTMESSAGE%%TMPL:P{"toolbar"}%
+%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%</div></div>%TMPL:P{"bottombar"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"content"}%<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden">Start of topic | <a href="#Actions">Skip to actions</a><hr /></div>
+<div class="twikiTopic">
+%TEXT%
+<br class="twikiClear" />
+#TopicEnd
+<span class="twikiRight twikiPageNav twikiGrayText"><a href="#PageTop">to&nbsp;top</a></span><br class="twikiClear" />
+</div><div class="twikiHidden"><hr />End of topic<br /><a href="#Actions">Skip to action links</a> | <a href="#PageTop">Back&nbsp;to&nbsp;top</a><hr /></div>
+%TMPL:P{"form"}%%TMPL:P{"attachments"}%%TMPL:P{"topicaction"}%
+%TMPL:P{"topicinfo"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><span class="twikiHidden"><br /></span><div class="twikiTopicAction">%EDITTOPIC% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach image or document</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%">Printable version</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on">Raw text</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%">More topic actions</a><br />Revisions: %REVISIONS% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Total page history</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;web=all&amp;excludetopic=%TOPIC%&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z0-9%5D">Backlinks</a></div>%TMPL:END%
+
+
+
+%TMPL:DEF{"topicinfo"}%<span class="twikiHidden"><br /></span><div class="twikiTopicInfo"><span class="twikiRevInfo twikiGrayText">Revision: %REVINFO% <br />%META{"moved"}%</span></div>%TMPL:END%
+
+
 
 %TMPL:DEF{"standardfooter"}%
-<div class="TWikiTopicFooter"><span class="TWikiLeft"><span class="TWikiHomePath">You are here: [[%WEB%.WebHome][%WEB%]] %META{"parent" nowebhome="on" prefix=" <span class='sep'>&gt;</span> " suffix=""}% <span class='sep'>&gt;</span> <nop>%TOPIC% </span></span><span class="hidden"><br /><br /></span><span class="TWikiRight"><span class="TWikiPageNav !TWikiGrayText"><a href="#PageTop">to top</a></span></span><br class="TWikiClearLine" /><span class="hidden"><br /></span></div>
-#PageBottom
-%TMPL:END%
-
-%TMPL:DEF{"content"}%<span class="hidden"><hr /></span><a name="Content"> </a><span class="hidden">Start of topic | <a href="#Actions">Skip to actions</a><hr /></span>
-<div class="TWikiTopic">
-%TEXT%
-</div><span class="hidden"><hr />End of topic<br /><a href="#Actions">Skip to action links</a> | <a href="#PageTop">Back to top</a><hr /></span>
-%TMPL:P{"form"}%%TMPL:P{"attachments"}%
-%TMPL:P{"topicaction"}%
-%TMPL:P{"topicinfo"}%
-%TMPL:END%
-
-%TMPL:DEF{"main"}%
-%TMPL:P{"topbar"}%
-<div class="TWikiMiddleContainer">
-%TMPL:P{"leftbar"}%
-<div class="TWikiMain">
-%TMPL:P{"toolbar"}%
-%TMPL:P{"content"}%
-%TMPL:P{"standardfooter"}%</div>
-</div>
-%TMPL:P{"bottombar"}%
-%TMPL:END%
-
+<div class="twikiTopicFooter"><span class="twikiLeft"><span class="twikiHomePath">You are here: [[%WEB%.WebHome][%WEB%]] %META{"parent" nowebhome="on" prefix=" <span class='twikiSeparator'>&gt;</span> " suffix=""}% <span class='twikiSeparator'>&gt;</span> <nop>%TOPIC% </span></span><span class="twikiHidden"><br /><br /></span><span class="twikiRight twikiPageNav twikiGrayText"><a href="#PageTop">to&nbsp;top</a></span><br class="twikiClear" /><span class="twikiHidden"><br /></span></div>
+#PageBottom %TMPL:END%
 
 
 
