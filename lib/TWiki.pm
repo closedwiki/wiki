@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "29 Oct 2001";
+$wikiversion      = "16 Nov 2001";
 
 # ===========================
 # read the configuration part
@@ -672,6 +672,9 @@ sub makeTopicSummary
     $htext =~ s/\-\-\-+\+*/ /go;       # remove heading formatting
     $htext =~ s/\s+[\+\-]*/ /go;       # remove newlines and special chars
 
+    # limit to 162 chars
+    $htext =~ s/(.{162})([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
+
     # inline search renders text, 
     # so prevent linking of external and internal links:
     $htext =~ s/([\-\*\s])((http|ftp|gopher|news|file|https)\:)/$1<nop>$2/go;
@@ -679,9 +682,6 @@ sub makeTopicSummary
     $htext =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
     $htext =~ s/([\*\s][\-\*\s]*)([A-Z]{3,})/$1<nop>$2/go;
     $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/go;
-
-    # limit to 162 chars
-    $htext =~ s/(.{162})([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
 
     return $htext;
 }
@@ -1474,7 +1474,7 @@ sub renderFormData
     my %form = $meta->findOne( "FORM" );
     if( %form ) {
         my $name = $form{"name"};
-        $metaText = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>";
+        $metaText = "<p />\n<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>";
         $metaText .= "<th colspan=\"2\" align=\"center\" bgcolor=\"#99CCCC\"> $name </th></tr>\n";        
         
         my @fields = $meta->find( "FIELD" );
@@ -1775,7 +1775,7 @@ sub isWikiName
 sub getRenderedVersion
 {
     my( $text, $theWeb, $meta ) = @_;
-    my( $head, $result, $insidePRE, $insideVERBATIM, $insideTABLE, $noAutoLink, $blockquote );
+    my( $head, $result, $extraLines, $insidePRE, $insideVERBATIM, $insideTABLE, $noAutoLink );
 
     # FIXME: Get $theTopic from parameter to handle [[#anchor]] correctly
     # (fails in %INCLUDE%, %SEARCH%)
@@ -1792,10 +1792,10 @@ sub getRenderedVersion
     $insideVERBATIM = 0;  # PTh 31 Jan 2001: Added Codev.VerbatimModeForSourceCodes
     $insideTABLE = 0;
     $noAutoLink = 0;      # PTh 02 Feb 2001: Added Codev.DisableWikiWordLinks
-    $blockquote = 0;
     $code = "";
     $text =~ s/\r//go;
     $text =~ s/\\\n//go;  # Join lines ending in "\"
+    $text .= "\n<nop>\n"; # clutch to enforce correct rendering at end of doc
 
     # do not render HTML head, style sheets and scripts
     if( $text =~ m/<body[\s\>]/i ) {
@@ -1844,12 +1844,19 @@ sub getRenderedVersion
             &TWiki::Plugins::insidePREHandler( $_ );
 
             s/(.*)/$1\n/o;
+            s/\t/   /go;
+            $result .= $_;
 
         } else {
-            # normal state, do Wiki rendering
+          # normal state, do Wiki rendering
 
 # Wiki Plugin Hook
-            &TWiki::Plugins::outsidePREHandler( $_ );
+          &TWiki::Plugins::outsidePREHandler( $_ );
+          $extraLines = undef;   # Plugins might introduce extra lines
+          do {
+            $_ = $extraLines if( defined $extraLines );
+            s/^(.*?)\n(.*)$/$1/os;
+            $extraLines = $2;    # Save extra lines, need to parse each separately
 
 # Blockquote
             s/^>(.*?)$/> <cite> $1 <\/cite><br \/>/go;
@@ -1951,9 +1958,11 @@ sub getRenderedVersion
             }
 
             s/^\n//o;
+            s/\t/   /go;
+            $result .= $_;
+
+          } while( defined( $extraLines ) );  # extra lines produced by plugins
         }
-        s/\t/   /go;
-        $result .= $_;
     }
     if( $insideTABLE ) {
         $result .= "</table>\n";
@@ -1966,6 +1975,7 @@ sub getRenderedVersion
     # Wiki Plugin Hook
     &TWiki::Plugins::endRenderingHandler( $result );
 
+    $result =~ s|\n?<nop>\n$||os; # clean up clutch
     return "$head$result";
 }
 
