@@ -148,7 +148,7 @@ sub searchWeb
     } elsif ($doRenameView ) {
         $tmpl = &TWiki::Store::readTemplate( "searchrenameview" ); # JohnTalintyre
         # Create full search string from topic name that is passed in
-        my $renameTopic = $theSearchVal;
+        $renameTopic = $theSearchVal;
         if( $renameTopic =~ /(.*)\\\.(.*)/o ) {
             $renameWeb = $1;
             $renameTopic = $2;
