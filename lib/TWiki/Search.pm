@@ -298,6 +298,21 @@ sub _makeTopicPattern
 # =========================
 =pod
 
+---++ sub revDate2ISO ()
+
+Not yet documented.
+
+=cut
+
+sub revDate2ISO
+{
+    my $epochSec = &TWiki::revDate2EpSecs( $_[0] );
+    return &TWiki::formatTime( $epochSec, "iso", "gmtime");
+}
+
+# =========================
+=pod
+
 ---++ sub searchWeb ()
 
 Not yet documented.
@@ -826,7 +841,7 @@ sub searchWeb
                 $tempVal =~ s/\$topic/$topic/gos;
                 $tempVal =~ s/\$locked/$locked/gos;
                 $tempVal =~ s/\$date/$revDate/gos;
-                $tempVal =~ s/\$isodate/&TWiki::revDate2ISO($revDate)/geos;
+                $tempVal =~ s/\$isodate/&revDate2ISO($revDate)/geos;
                 $tempVal =~ s/\$rev/1.$revNum/gos;
                 $tempVal =~ s/\$wikiusername/$revUser/gos;
                 $tempVal =~ s/\$wikiname/wikiName($revUser)/geos;

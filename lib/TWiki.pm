@@ -1402,21 +1402,6 @@ sub getTWikiLibDir
 # =========================
 =pod
 
----++ sub revDate2ISO ()
-
-Not yet documented.
-
-=cut
-
-sub revDate2ISO
-{
-    my $epochSec = revDate2EpSecs( $_[0] );
-    return formatTime( $epochSec, 1, "gmtime");
-}
-
-# =========================
-=pod
-
 ---++ sub revDate2EpSecs ()
 
 Not yet documented.
