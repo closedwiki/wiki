@@ -35,10 +35,9 @@ sub main
     $query= new CGI;
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
-    my $theOldWeb = $query->param( 'oldWeb' );
-    my $theOldTopic = $query->param( 'oldTopic' );
-    my $newWeb = $query->param( 'newWeb' );
-    my $newTopic = $query->param( 'newTopic' );
+    my $theTopic = $query->param( 'topic' );
+    my $newWeb = $query->param( 'newweb' );
+    my $newTopic = $query->param( 'newtopic' );
     my $theUrl = $query->url;
     my $lockFailure = "";
     my $breakLock = $query->param( 'breaklock' );
@@ -49,26 +48,10 @@ sub main
         $theAttachment = "";
     }
     
-    TWiki::writeDebug( "rename: theAttachment = $theAttachment" );
-
-    if( ! $newWeb ) {
-       # Get selection
-       $newWeb = $query->param( 'webselection' );
-    }
-    
-    my ( $topic, $webName, $scriptUrlPath, $userName, $dataDir ) = 
-        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theOldTopic, $theUrl, $query ); # DRKW difference to core
+    my ( $oldTopic, $oldWeb, $scriptUrlPath, $userName, $dataDir ) = 
+        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query ); # DRKW difference to core
 
     my $wikiUserName = &TWiki::userToWikiName( $userName );
-
-    my $oldWeb = $theOldWeb;
-    my $oldTopic = $theOldTopic;
-    if ( ! $oldWeb ) {
-       $oldWeb = $webName;
-    }
-    if( ! $oldTopic ) {
-       $oldTopic = $topic;
-    }
     
     # justChangeRefs will be true when some topics that had links to $oldTopic
     # still need updating, previous update being prevented by a lock.
@@ -77,18 +60,15 @@ sub main
        $justChangeRefs = "";
     }
 
-    if ( ! $justChangeRefs ) {
+    if( ! $justChangeRefs ) {
        if( ! checkPermissions( $oldWeb, $oldTopic, $wikiUserName ) ) {
           # FIXME below error indicated by true return
            # FIXME: This produces Internal Server Error if oldWeb does not exist
            return;
        }
        
-       TWiki::writeDebug( "rename: about to checkLocks" );
-       
        # FIXME no point old and new topics being same (if in same WEB)
     }
-    TWiki::writeDebug( "rename: permission okay" );
 
     # Has user selected new name yet? FIXME are there too many checks above?
     if( ! $newTopic || $confirm ) {
@@ -105,8 +85,6 @@ sub main
     my $fileName = &TWiki::Store::getFileName($oldWeb, $oldTopic);
     my $newName = &TWiki::Store::getFileName($newWeb, $newTopic);
     
-    TWiki::writeDebug( "rename: about to check exists" );
-
     if( ! $justChangeRefs ) {
         # Check all is okay before we proceed.
         if( checkExist( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $fileName, $newName ) ) {
@@ -114,14 +92,13 @@ sub main
         }
     }
     
-    TWiki::writeDebug( "rename: checkExist okay" );
-
     # FIXME should warn if newname is not a wiki name
     # FIXME to do after move?
     TWiki::writeDebug( "rename: about to find referring pages" );
     if( ! $theAttachment ) {
         my @refs = findReferingPages( $oldWeb, $oldTopic );
-        my ( $lockFailues, $problems ) = 
+        my $problems;
+        ( $lockFailure, $problems ) = 
             updateReferingPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
     }
 
@@ -133,7 +110,7 @@ sub main
 	  if( $moveError ) {
 	      TWiki::writeHeader( $query );
               my $tmpl = &TWiki::Store::readTemplate( "oopsgeneral" );
-	      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
+	      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic ); # FIXME newtopic?
 	      $tmpl =~ s/%SUMMARY%/problem moving attachment/go;
 	      $tmpl =~ s/%DETAIL%/$moveError/go;
               print $tmpl;
@@ -144,7 +121,7 @@ sub main
 	  if( $renameError ) {
 	      TWiki::writeHeader( $query );
 	      my $tmpl = &TWiki::Store::readTemplate( "oopsgeneral" );
-	      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
+	      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic ); #FIXME newTopic?
 	      $tmpl =~ s/%SUMMARY%/problem renaming topic/go;
 	      $tmpl =~ s/%DETAIL%/$renameError/go;
 	      print $tmpl;
@@ -153,39 +130,17 @@ sub main
        } 
     }
 
-    TWiki::writeDebug( "rename: nearly done" );
     my $new_url = "";
     if( $lockFailure ) {
        moreRefsToChange( $oldWeb, $oldTopic, $newWeb, $newTopic );
-       TWiki::writeDebug( "rename: are locks" );
        return;
     } else {
        #redirect to new topic
-       TWiki::writeDebug("Dealt with locks moving to new page");
        $new_url = &TWiki::getViewUrl( $newWeb, $newTopic );
     }
 
     TWiki::redirect( $query, $new_url );
     return;
-}
-
-
-#==================================
-# List of webs to form drop-down.
-sub dropListOfWebs
-{
-   my ($web) = @_;
-
-   my @webs = &TWiki::Store::getAllWebs();
-
-   my $html = "<SELECT NAME=\"webselection\">\n";
-   foreach ( @webs ) {
-      my $selected = ($_ eq $web) ? "SELECTED" : "";
-      $html .= "   <OPTION $selected VALUE=\"$_\">$_</OPTION>\n"; 
-   }
-   $html .= "</SELECT>\n";
-
-   return $html;
 }
 
 
@@ -200,11 +155,9 @@ sub findReferingPages
 	my $count = 1;
 	while( $query->param( "TOPIC$type$count" ) ) {
 	   my $checked = $query->param( "RENAME$type$count" );
-	   TWiki::writeDebug("rename: $count $type $checked");
 	   if ($checked) {
 	      push @result, $type;
 	      push @result, $query->param( "TOPIC$type$count" );
-	      TWiki::writeDebug("rename: $count $type @result");
 	   }
 	   $count++;
 	}
@@ -219,7 +172,6 @@ sub updateReferingPages
 {
     my ( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs ) = @_;
 
-    ##TWiki::writeDebug("rename refering pages @refs");
     my $lockFailure = 0;
 
     my $result = "";
@@ -230,10 +182,8 @@ sub updateReferingPages
        my $type = shift @refs;
        my $item = shift @refs;
        my($itemWeb, $itemTopic) = TWiki::Store::getWebTopic($item);
-       TWiki::writeDebug("link to change in $item, $itemWeb, $itemTopic");
        if ( &TWiki::Store::topicIsLockedBy( $itemWeb, $itemTopic ) ) {
           $lockFailure = 1;
-          TWiki::writeDebug("rename lock failure $itemWeb.$itemTopic");
        } else {
           my $resultText = "";
           $result .= ":$item: , "; 
@@ -331,7 +281,7 @@ sub checkExist
       # FIXME: Below code needs also getRenderedVersion. Better to use redirect instead. 
       TWiki::writeHeader( $query ); 
       $tmpl = &TWiki::Store::readTemplate( "oopsnoweb" );
-      $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic );
+      $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
       print $tmpl;
       $ret = "problem";
    }
@@ -340,7 +290,7 @@ sub checkExist
    if( ! &TWiki::Store::webExists( $newWeb ) ) {
       TWiki::writeHeader( $query );
       $tmpl= &TWiki::Store::readTemplate( "oopsnoweb" );
-      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
+      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic, $newWeb );
       print $tmpl;
       $ret = "problem";
    }
@@ -349,7 +299,7 @@ sub checkExist
    if( ! -e $oldFileName) {
       TWiki::writeHeader( $query );
       $tmpl= &TWiki::Store::readTemplate( "oopsmissing" );
-      $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic );
+      $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
       print $tmpl;
       $ret = "problem"; 
    }
@@ -360,13 +310,11 @@ sub checkExist
       TWiki::writeHeader( $query );
       # FIXME - should this use oopsexists rather than oopsgeneral?
       $tmpl = &TWiki::Store::readTemplate( "oopsgeneral" );
-      ##TWiki::writeDebug( "rename: tmpl = $tmpl" );
       $tmpl =~ s/%SUMMARY%/Topic $newTopic already exists/go;
       $tmpl =~ s|%DETAIL%|Topic $newTopic already exists in Web $newWeb, press <I>Back</I> and try a new name|go;
       # FIXME - could offer number addition to topic name that doesn't exist?
-      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
+      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic, $newWeb );
       print $tmpl;
-      ##TWiki::writeDebug( "rename: topic already exists" );
       # FIXME error doesn't appear on user screen.
       $ret = "problem";    
    }    
@@ -458,41 +406,37 @@ sub newTopicScreen
    if( $theAttachment ) {
      $tmpl = &TWiki::Store::readTemplate( "moveattachment" );
      $tmpl =~ s/%FILENAME%/$theAttachment/go;
+   } elsif( $confirm ) {
+     $tmpl = &TWiki::Store::readTemplate( "renameconfirm" );
    } else {
-     $tmpl= &TWiki::Store::readTemplate( "rename" );
+     $tmpl = &TWiki::Store::readTemplate( "rename" );
    }
-   $tmpl =~ s/%OLD_TOPIC%/$oldTopic/go;
-   $tmpl =~ s/%OLD_WEB%/$oldWeb/go;
-   if( $confirm ) {
-       $tmpl =~ s/%WEB_SELECTION%/$newWeb/go;
-       my $tmp = "$newTopic\n<input type=\"hidden\" name=\"newTopic\" value=\"$newTopic\">";
-       $tmpl =~ s/%NEW_TOPIC%/$tmp/go;
-       $tmpl =~ s/%NEW_WEB%/$newWeb/go;
-   } else {
-       $tmpl =~ s/%WEB_SELECTION%/&dropListOfWebs( $oldWeb )/geo;
-       my $tmp = "<input type=\"text\" name=\"newTopic\" size=\"16\" value=\"$newTopic\">";
-       $tmpl =~ s/%NEW_TOPIC%/$tmp/go;
-       $tmpl =~ s/%NEW_WEB%//go;
-   }
-   $tmpl =~ s/%CHANGE_REFS%//go;
-   $tmpl = &TWiki::handleCommonTags( $tmpl, "" );
+   
+   $tmpl = setVars( $tmpl, $newWeb, $newTopic );
+   $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
+   $tmpl = &TWiki::getRenderedVersion( $tmpl );
    print $tmpl;
  }
  
+ #=========================
+ sub setVars
+ {
+     my( $tmpl, $newWeb, $newTopic ) = @_;
+     $tmpl =~ s/%NEW_WEB%/$newWeb/go;
+     $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
+     return $tmpl;
+ }
+ 
+ #=========================
  sub moreRefsToChange
  {
     my( $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
     
-    TWiki::writeDebug("lock failure in rename");
     TWiki::writeHeader( $query );
-    my $tmpl = &TWiki::Store::readTemplate( "oopsneednewtopic" );
-    $tmpl =~ s/%OLD_TOPIC%/$oldTopic/go;
-    $tmpl =~ s/%OLD_WEB%/$oldWeb/go;
-    $tmpl =~ s/%NEW_WEB%/$newWeb/go;
-    $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
-    $tmpl =~ s/%WEB_SELECTION%/$newWeb/go;
-    $tmpl =~ s/%CHANGE_REFS%/ON/go; # Still locks to deal with
-    $tmpl = &TWiki::handleCommonTags( $tmpl, "" );
+    my $tmpl = &TWiki::Store::readTemplate( "renamerefs" );
+    $tmpl = setVars( $tmpl, $newWeb, $newTopic );
+    $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
+    $tmpl = &TWiki::getRenderedVersion( $tmpl );
     print $tmpl;
  }
 
