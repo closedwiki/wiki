@@ -40,27 +40,22 @@ use strict;
 # FIXME: Beware global $| in mod_perl!  Should use 'local'
 $| = 1;                    # no buffering
 
-# initialize variables
-my $isCgi = "";
-my $cgiQuery = "";
-
 &main();
 
 # =========================
 sub main
 {
-    my $tmp;
+    # initialize variables
+    my $cgiQuery = undef;
+    my $tmp = "";
     my $theTopic = "";
     my $thePathInfo = ""; 
     my $theRemoteUser = "";
     my $logDate = "";
-    $isCgi = "";
-    $cgiQuery = "";
 
     # determine at runtime if script is called by browser or cron job
     if( $ENV{'DOCUMENT_ROOT'} ) {
         # script is called by browser
-        $isCgi = "1";
         $cgiQuery = new CGI;
         $thePathInfo = $cgiQuery->path_info() || ""; 
         $theRemoteUser = $cgiQuery->remote_user() || "";
@@ -78,16 +73,16 @@ sub main
     }
 
     # Initial messages
-    printMsg( "TWiki: Create Usage Statistics" );
-    if( $isCgi ) {
+    printMsg( "TWiki: Create Usage Statistics", $cgiQuery );
+    if( $cgiQuery ) {
         print "<h4><font color=\"red\">Do not interrupt this script!</font> ( Please wait until page download has finished )</h4>\n";
     }
     if ( $theRemoteUser ) {
         $tmp = &TWiki::userToWikiName( $theRemoteUser );
         $tmp =~ s/^Main\.//;
-        printMsg( "* Executed by $tmp" );
+        printMsg( "* Executed by $tmp", $cgiQuery );
     } else {
-        printMsg( "* Executed by a guest or a cron job scheduler" );
+        printMsg( "* Executed by a guest or a cron job scheduler", $cgiQuery );
     }
 
     if( ! $logDate ) {
@@ -110,7 +105,7 @@ sub main
     $logYear = $logDate;
     $logYear =~ s/([0-9]{4})(.*)/$1/g;
     my $logMonthYear = "$logMonth $logYear";
-    printMsg( "* Statistics for $logMonthYear" );
+    printMsg( "* Statistics for $logMonthYear", $cgiQuery );
 
     my $logFile = $TWiki::logFilename;
     $logFile =~ s/%DATE%/$logDate/g;
@@ -164,7 +159,8 @@ sub main
 	# Generate WebStatistics topic update for one or more webs
         if ( $thePathInfo ) {
             # do a particular web:
-            processWeb( $thePathInfo, $theRemoteUser, $theTopic, $logMonthYear, $viewRef, $contribRef, $statViewsRef, $statSavesRef, $statUploadsRef );
+            processWeb( $thePathInfo, $theRemoteUser, $theTopic, $logMonthYear, $viewRef, $contribRef,
+                        $statViewsRef, $statSavesRef, $statUploadsRef, $cgiQuery );
 
         } else {
             # do all webs:
@@ -174,11 +170,12 @@ sub main
                 @weblist = grep /^[^\.\_]/, readdir DIR; # exclude webs starting with . or _
                 closedir DIR;
             } else {
-                printMsg( "  *** Error: opendir $dataDir, $!" );
+                printMsg( "  *** Error: opendir $dataDir, $!", $cgiQuery );
             }
             foreach my $web ( @weblist ) {
                 if( -d "$dataDir/$web" ) {
-                    processWeb( "/$web", $theRemoteUser, $theTopic, $logMonthYear, $viewRef, $contribRef, $statViewsRef, $statSavesRef, $statUploadsRef );
+                    processWeb( "/$web", $theRemoteUser, $theTopic, $logMonthYear, $viewRef, $contribRef,
+                                $statViewsRef, $statSavesRef, $statUploadsRef, $cgiQuery );
                 }
             }
         }
@@ -186,17 +183,17 @@ sub main
 	unlink $tmpFilename;	# FIXME: works on Windows???  Unlink before
 				# usage to ensure deleted on crash?
     } else {
-        printMsg( "  - Note: Log file $logFile does not exist" );
+        printMsg( "  - Note: Log file $logFile does not exist", $cgiQuery );
     }
 
-    if( $isCgi ) {
+    if( $cgiQuery ) {
         $tmp = $TWiki::statisticsTopicname;
         my $url = &TWiki::getViewUrl( "", $tmp );
-        printMsg( "* Go back to <a href=\"$url\">$tmp</a> topic" );
-        printMsg( "End creating usage statistics" );
+        printMsg( "* Go back to <a href=\"$url\">$tmp</a> topic", $cgiQuery );
+        printMsg( "End creating usage statistics", $cgiQuery );
         print "</body></html>\n";
     } else {
-        printMsg( "End creating usage statistics" );
+        printMsg( "End creating usage statistics", $cgiQuery );
     }
 }
 
@@ -337,16 +334,17 @@ sub collectLogData
 # =========================
 sub processWeb
 {
-    my( $thePathInfo, $theRemoteUser, $theTopic, $theLogMonthYear, $viewRef, $contribRef, $statViewsRef, $statSavesRef, $statUploadsRef ) = @_;
+    my( $thePathInfo, $theRemoteUser, $theTopic, $theLogMonthYear, $viewRef, $contribRef, 
+        $statViewsRef, $statSavesRef, $statUploadsRef, $cgiQuery ) = @_;
 
     my ( $topic, $webName, $dummy, $userName, $dataDir ) = 
         &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, "", $cgiQuery );
     $dummy = "";  # to suppress warning
 
-    printMsg( "* Reporting on TWiki.$webName web" );
+    printMsg( "* Reporting on TWiki.$webName web", $cgiQuery );
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-        printMsg( "  *** Error: Web $webName does not exist" );
+        printMsg( "  *** Error: Web $webName does not exist", $cgiQuery );
         return;
     }
 
@@ -357,7 +355,7 @@ sub processWeb
     $statViews ||= 0;
     $statSaves ||= 0;
     $statUploads ||= 0;
-    printMsg( "  - view: $statViews, save: $statSaves, upload: $statUploads" );
+    printMsg( "  - view: $statViews, save: $statSaves, upload: $statUploads", $cgiQuery );
 
 
     # Get the top N views and contribs in this web
@@ -368,11 +366,11 @@ sub processWeb
     my $statTopViews = "";
     my $statTopContributors = "";
     if( @topViews ) {
-	printMsg( "  - top view: $topViews[0]" );
+	printMsg( "  - top view: $topViews[0]", $cgiQuery );
 	$statTopViews = join( "<br /> ", @topViews );
     }
     if( @topContribs ) {
-	printMsg( "  - top contributor: $topContribs[0]" );
+	printMsg( "  - top contributor: $topContribs[0]", $cgiQuery );
 	$statTopContributors = join( "<br /> ", @topContribs );
     }
 
@@ -424,10 +422,10 @@ sub processWeb
 	$text .= "\n";
 
 	&TWiki::Store::saveTopic( $webName, $statsTopic, $text, $meta, "", 1, 1, 1 );
-	printMsg( "  - Topic $statsTopic updated" );
+	printMsg( "  - Topic $statsTopic updated", $cgiQuery );
 
     } else {
-	printMsg( "  *** Warning: No updates done, topic $webName.$statsTopic does not exist" );
+	printMsg( "  *** Warning: No updates done, topic $webName.$statsTopic does not exist", $cgiQuery );
     }
 }
 
@@ -478,10 +476,10 @@ sub getTopList
 # =========================
 sub printMsg
 {
-    my( $msg ) = @_;
+    my( $msg, $cgiQuery ) = @_;
     my $htmlMsg = $msg;
 
-    if( $isCgi ) {
+    if( $cgiQuery ) {
 	if( $htmlMsg =~ /^[A-Z]/ ) {
 	    $htmlMsg =~ s/^([A-Z].*)/<h3>$1<\/h3>/go;
 	} else {
