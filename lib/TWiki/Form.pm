@@ -404,6 +404,7 @@ sub renderForEdit
                 }
                 $lines++;
             }
+            $val =~ s/\n<\/tr><tr>$//;
             $value = "$val\n</tr></table>\n";
         } elsif( $type eq "radio" ) {
             my $val = "<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
