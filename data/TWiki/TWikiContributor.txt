@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042332533" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044254876" format="1.0" version="1.7"}%
 ---+ TWiki Contributor
 
 A TWiki contributor is a person devoting his/her time to contribute on the development of the Open Source project TWiki, hosted at http://TWiki.org/ . It is defined as a person who:
@@ -10,12 +10,12 @@ I would like to take this opportunity to express my appreciation to all who cont
 
 ---++ List of contributors
 
-%SEARCH{"TWiki+Contributor" regex="on" nosummary="on" nosearch="on" }%
+%SEARCH{"TWiki+Contributor" web="%WEB%" regex="on" nosummary="on" nosearch="on" }%
 
 __Note:__ Please contact a TWiki:Codev/CoreTeam member in case you contributed to TWiki and your name is not on this list!
 
 ---++ List of contributions
 
-	* See TWikiHistory
+	* See %TWIKIWEB%.TWikiHistory
 
--- PeterThoeny
+-- Main.PeterThoeny
