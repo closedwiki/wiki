@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999858607" format="1.0" version="1.31"}%
+%META:TOPICINFO{author="MikeMannix" date="999905477" format="1.0" version="1.32"}%
 <script language="JavaScript1.2" type="text/javascript">
 function dblclick() { window.scrollTo(0,0) }
 if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
@@ -41,7 +41,7 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 %INCLUDE{"TWikiVariables"}%
 
 ----
-%INCLUDE{"MetaDataDefinition"}%
+%INCLUDE{"TWikiMetaData"}%
 
 -----
 %INCLUDE{"TWikiFormTemplate"}%
