@@ -68,8 +68,8 @@ use vars qw(
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
         $disableAllPlugins @isoMonth @weekDay 
 	$TranslationToken %mon2num $isList @listTypes @listElements
-        $newTopicFontColor $newTopicBgColor
-        $linkProtocolPattern $headerPatternDa $headerPatternSp $headerPatternHt
+        $newTopicFontColor $newTopicBgColor $linkProtocolPattern
+        $headerPatternDa $headerPatternSp $headerPatternHt $headerPatternNoTOC
         $debugUserTime $debugSystemTime
         $viewableAttachmentCount $noviewableAttachmentCount
         $superAdminGroup $doSuperAdminGroup
@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "14 Apr 2002";
+$wikiversion      = "25 Apr 2002";
 
 # ===========================
 # read the configuration part
@@ -129,9 +129,10 @@ $viewScript = "view";
 $linkProtocolPattern = "(http|ftp|gopher|news|file|https|telnet)";
 
 # Header patterns based on '+++'. The '###' are reserved for numbered headers
-$headerPatternDa = '^---+(\++|\#+)\s+(.+)\s*$';       # '---++ Header', '---## Header'
-$headerPatternSp = '^\t(\++|\#+)\s+(.+)\s*$';         # '   ++ Header', '   + Header'
+$headerPatternDa = '^---+(\++|\#+)\s*(.+)\s*$';       # '---++ Header', '---## Header'
+$headerPatternSp = '^\t(\++|\#+)\s*(.+)\s*$';         # '   ++ Header', '   + Header'
 $headerPatternHt = '^<h([1-6])>\s*(.+?)\s*</h[1-6]>'; # '<h6>Header</h6>
+$headerPatternNoTOC = '(\!\!+|%NOTOC%)';  # '---++!! Header' or '---++ Header %NOTOC% ^top'
 
 $debugUserTime   = 0;
 $debugSystemTime = 0;
@@ -1291,23 +1292,24 @@ sub handleToc
         if (!$insidePre) {
             $level = $line ;
             if ( $line =~  /$headerPatternDa/o ) {
-                $level =~ s/$headerPatternDa/$1/go ;
+                $level =~ s/$headerPatternDa/$1/go;
                 $level = length $level;
-                $line  =~ s/$headerPatternDa/$2/go ;
-                $anchor = makeAnchorName( $line );
+                $line  =~ s/$headerPatternDa/$2/go;
             } elsif
                ( $line =~  /$headerPatternSp/o ) {
-                $level =~ s/$headerPatternSp/$1/go ;
+                $level =~ s/$headerPatternSp/$1/go;
                 $level = length $level;
-                $line  =~ s/$headerPatternSp/$2/go ;
-                $anchor = makeAnchorName( $line );
+                $line  =~ s/$headerPatternSp/$2/go;
             } elsif
                ( $line =~  /$headerPatternHt/io ) {
-                $level =~ s/$headerPatternHt/$1/gio ;
-                $line  =~ s/$headerPatternHt/$2/gio ;
-                $anchor = makeAnchorName( $line );
+                $level =~ s/$headerPatternHt/$1/gio;
+                $line  =~ s/$headerPatternHt/$2/gio;
             }
             if( ( $line ) && ( $level <= $depth ) ) {
+                $anchor = makeAnchorName( $line );
+                # cut TOC exclude '---+ heading !! exclude'
+                $line  =~ s/\s*$headerPatternNoTOC.+$//go;
+                next unless $line;
                 $highest = $level if( $level < $highest );
                 $tabs = "";
                 for( $i=0 ; $i<$level ; $i++ ) {
@@ -1924,9 +1926,11 @@ sub makeAnchorHeading
     # - Initial '<nop>' is needed to prevent subsequent matches.
     # - Need to make sure that <a> tags are not nested, i.e. in
     #   case heading has a WikiName or ABBREV that gets linked
+    # - filter out $headerPatternNoTOC ( '!!' and '%NOTOC%' )
 
     my $text = $theText;
     my $anchorName = &makeAnchorName( $text );
+    $text =~ s/$headerPatternNoTOC//o; # filter '!!', '%NOTOC%'
     my $hasAnchor = 0;  # text contains potential anchor
     $hasAnchor = 1 if( $text =~ m/<a /i );
     $hasAnchor = 1 if( $text =~ m/\[\[/ );
@@ -1937,9 +1941,9 @@ sub makeAnchorHeading
     if( $hasAnchor ) {
         # FIXME: '<h1><a name="atext"></a></h1> WikiName' has an
         #        empty <a> tag, which is not HTML conform
-        $text = "<nop><h$theLevel><a name=\"$anchorName\"> </a> $theText <\/h$theLevel>";
+        $text = "<nop><h$theLevel><a name=\"$anchorName\"> </a> $text <\/h$theLevel>";
     } else {
-        $text = "<nop><h$theLevel><a name=\"$anchorName\"> $theText <\/a><\/h$theLevel>";
+        $text = "<nop><h$theLevel><a name=\"$anchorName\"> $text <\/a><\/h$theLevel>";
     }
 
     return $text;
@@ -1951,12 +1955,14 @@ sub makeAnchorName
     my( $theName ) = @_;
     my $anchorName = $theName;
 
-    $anchorName =~ s/^[\s\#\_]*//o;       # no leading space nor '#', '_'
-    $anchorName =~ s/[\s\_]*$//o;         # no trailing space, nor '_'
-    $anchorName =~ s/<\w[^>]*>//goi;      # remove HTML tags
-    $anchorName =~ s/[^a-zA-Z0-9]/_/go;   # only allowed chars
-    $anchorName =~ s/__+/_/go;            # remove excessive '_'
-    $anchorName =~ s/^(.{32})(.*)$/$1/o;  # limit to 32 chars
+    $anchorName =~ s/^[\s\#\_]*//o;          # no leading space nor '#', '_'
+    $anchorName =~ s/[\s\_]*$//o;            # no trailing space, nor '_'
+    $anchorName =~ s/<\w[^>]*>//goi;         # remove HTML tags
+    $anchorName =~ s/^(.+?)\s*$headerPatternNoTOC.*/$1/o; # filter TOC excludes if not at beginning
+    $anchorName =~ s/$headerPatternNoTOC//o; # filter '!!', '%NOTOC%'
+    $anchorName =~ s/[^a-zA-Z0-9]/_/go;      # only allowed chars
+    $anchorName =~ s/__+/_/go;               # remove excessive '_'
+    $anchorName =~ s/^(.{32})(.*)$/$1/o;     # limit to 32 chars
 
     return $anchorName;
 }
