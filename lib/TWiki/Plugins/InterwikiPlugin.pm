@@ -41,6 +41,16 @@ use vars qw(
 $VERSION = '1.000';
 $interSiteLinkRulesTopicName = "InterWikis";
 
+# 'Use locale' for internationalisation of Perl sorting and searching - 
+# main locale settings are done in TWiki::setupLocale
+BEGIN {
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::useLocale ) {
+        require locale;
+        import locale ();
+    }
+}
+
 # Regexes for the Site:page format InterWiki reference - updated to support
 # 8-bit characters in both parts - see Codev.InternationalisationEnhancements
 # TODO: Need to update the Plugins API to support export of regexes and regex components
