@@ -60,12 +60,20 @@ sub getUrl
     $iaddr   = inet_aton( $theHost );
     $paddr   = sockaddr_in( $thePort, $iaddr );
     $proto   = getprotobyname( 'tcp' );
-    socket( SOCK, PF_INET, SOCK_STREAM, $proto )  or die "socket: $!";
-    connect( SOCK, $paddr ) or die "connect: $!";
+    unless( socket( SOCK, PF_INET, SOCK_STREAM, $proto ) ) {
+        &TWiki::writeWarning( "TWiki::Net::getUrl socket: $!" );
+        return "content-type: text/plain\n\nERROR: TWiki::Net::getUrl socket: $!";
+    }
+    unless( connect( SOCK, $paddr ) ) {
+        &TWiki::writeWarning( "TWiki::Net::getUrl connect: $!" );
+        return "content-type: text/plain\n\nERROR: TWiki::Net::getUrl connect: $!";
+    }
     select SOCK; $| = 1;
     print SOCK $req;
     while( <SOCK> ) { $result .= $_; }
-    close( SOCK )  or die "close: $!";
+    unless( close( SOCK ) ) {
+        &TWiki::writeWarning( "TWiki::Net::getUrl close: $!" );
+    }
     select STDOUT;
     return $result;
 }
