@@ -135,7 +135,7 @@ sub inputTest {
   $this->assert_matches(qr/name=\"comment\"/, $dattrs);
   my $mess = $2;
   if ($locked) {
-    $this->assert_str_equals("Commenting is locked out by locker for at least 1 minutes", $mess);
+    $this->assert_str_equals("Commenting is locked out by locker for at least 0 minutes", $mess);
   } else {
     $this->assert_str_equals("The Message", $mess);
   }
