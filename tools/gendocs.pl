@@ -6,14 +6,14 @@
 use strict;
 use File::Find;
 
-my $here;
+my $root;
 
 BEGIN {
-    $here = `pwd`;
-    chomp($here);
-    $here =~ s/\/[^\/]*$//;
+    $root = `pwd`;
+    chomp($root);
+    $root =~ s/\/[^\/]*$//;
 
-    unshift @INC, "$here/bin";
+    unshift @INC, "$root/bin";
     do 'setlib.cfg';
 };
 
@@ -26,7 +26,7 @@ my $user = $twiki->{users}->findUser("admin", "TWikiAdminGroup");
 my @index;
 my $smells = 0;
 
-find( \&eachfile, ( $here ));
+find( \&eachfile, ( $root ));
 
 my $i = "---+ TWiki Source Code Packages\n";
 $i .= "Wherever you see a smell, your help is needed to get rid of it!\n";
@@ -45,7 +45,7 @@ print $twiki->{store}->saveTopic( $user, "TWiki", "SourceCode",
 
 sub eachfile {
     my $dir = $File::Find::dir;
-    if( $dir =~ m!/\.svn! ||
+    if( $dir =~ m!/\.! ||
         $dir =~ m!/test! ||
         $dir =~ m!/Plugins! ||
         $dir =~ m!/Contrib! ) {
@@ -65,7 +65,7 @@ sub eachfile {
     return unless $count > 0;
 
     my $package = $dir;
-    $package =~ s!$here/lib/?!!;
+    $package =~ s!.*/lib/?!!;
     $package =~ s!/!::!g;
     $package .= "::$file";
     $package =~ s/\.pm$//;
@@ -73,7 +73,7 @@ sub eachfile {
 
     $file =~ s/^(.)/uc($1)/e;
     my $topic = "$dir$file";
-    $topic =~ s!$here/lib/!!;
+    $topic =~ s!.*/lib/?!!;
     $topic =~ s/\.(.)/"Dot".uc($1)/ge;
     $topic =~ s!/(.)!uc($1)!ge;
     $topic =~ s/^(.)/uc($1)/e;

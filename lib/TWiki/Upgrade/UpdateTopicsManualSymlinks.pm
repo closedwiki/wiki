@@ -5,6 +5,7 @@
 #            put in a package and made a subroutine to work with UpgradeTWiki 
 #             by Martin "GreenAsJade" Gregory.
 
+=pod
 
 *** THIS IS AN ENTIRELY UNTESTED VERSION WITH CODE TO SHOW WHAT NEEDS TO 
     HAPPEN IF WE NEED TO FOLLOW SYMLINKS MANUALLY, WHICH IS THE CASE IF WE
@@ -424,5 +425,7 @@ sub getRevision
 
     return $content;
 }
+
+=cut
 
 1;
