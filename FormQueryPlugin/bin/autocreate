@@ -17,7 +17,7 @@ my $theUrl = $query->url;
 my( $topic, $webName, $scriptUrlPath, $userName ) = 
   &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
-my $db = new FormQueryPlugin::WebDB( $webName );
+my $db = new TWiki::Plugins::FormQueryPlugin::WebDB( $webName );
 my $relation = $query->param( "relation" );
 
 # Get the new topic name with \n in place of a number
