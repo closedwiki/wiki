@@ -10,7 +10,7 @@ my ( $session ) = @_;
 	if (! $session->{store}->webExists('TWikiConfiguration') ) {
 		my $opts =
 		{
-			WEBBGCOLOR => '',
+			WEBBGCOLOR => '#C0FFFF',
 			SITEMAPWHAT => 'TWiki System Configuration',
 			SITEMAPUSETO => 'configure the TWiki installation',
 			NOSEARCHALL => '',
@@ -21,7 +21,7 @@ my ( $session ) = @_;
 	if (! $session->{store}->webExists('TWikiDocumentation') ) {
 		my $opts =
 		{
-			WEBBGCOLOR => '',
+			WEBBGCOLOR => '#C0C0C0',
 			SITEMAPWHAT => 'TWiki System Documentation',
 			SITEMAPUSETO => 'TWiki System Documentation',
 			NOSEARCHALL => '',
@@ -29,16 +29,16 @@ my ( $session ) = @_;
 		$opts->{SITEMAPLIST} = "on" if( $opts->{SITEMAPWHAT} );
 	    my $err = $session->{store}->createWeb( 'TWikiDocumentation', '_default', $opts );
 	}
-	if (! $session->{store}->webExists('Users') ) {
+	if (! $session->{store}->webExists('TWikiUsers') ) {
 		my $opts =
 		{
-			WEBBGCOLOR => '',
-			SITEMAPWHAT => 'Users',
-			SITEMAPUSETO => 'Users',
+			WEBBGCOLOR => '#C0C0FF',
+			SITEMAPWHAT => 'TWikiUsers',
+			SITEMAPUSETO => 'contains registered TWiki Users',
 			NOSEARCHALL => '',
 		};
 		$opts->{SITEMAPLIST} = "on" if( $opts->{SITEMAPWHAT} );
-	    my $err = $session->{store}->createWeb( 'Users', '_default', $opts );
+	    my $err = $session->{store}->createWeb( 'TWikiUsers', '_default', $opts );
 	}
 
 	my %moveTopicsHash;
@@ -51,7 +51,6 @@ my ( $session ) = @_;
 	$moveTopicsHash{"TWiki.DeleteOrRenameATopic"} = "TWikiDocumentation.DeleteOrRenameATopic";
 	$moveTopicsHash{"TWiki.DeleteOrRenameAnAttachment"} = "TWikiDocumentation.DeleteOrRenameAnAttachment";
 	$moveTopicsHash{"TWiki.DontNotify"} = "TWikiDocumentation.DontNotify";
-	$moveTopicsHash{"TWiki.DragonSkinSiteMap"} = "TWikiDocumentation.DragonSkinSiteMap";
 	$moveTopicsHash{"TWiki.EditDoesNotIncreaseTheRevision"} = "TWikiDocumentation.EditDoesNotIncreaseTheRevision";
 	$moveTopicsHash{"TWiki.FileAttachment"} = "TWikiDocumentation.FileAttachment";
 	$moveTopicsHash{"TWiki.FileAttribute"} = "TWikiDocumentation.FileAttribute";
@@ -86,7 +85,6 @@ my ( $session ) = @_;
 	$moveTopicsHash{"TWiki.TimBernersLee"} = "TWikiDocumentation.TimBernersLee";
 	$moveTopicsHash{"TWiki.UnlockTopic"} = "TWikiDocumentation.UnlockTopic";
 	$moveTopicsHash{"TWiki.WabiSabi"} = "TWikiDocumentation.WabiSabi";
-	$moveTopicsHash{"TWiki.WebChangesAlert"} = "TWikiDocumentation.WebChangesAlert";
 	$moveTopicsHash{"TWiki.WelcomeGuest"} = "TWikiDocumentation.WelcomeGuest";
 	$moveTopicsHash{"TWiki.WhatIsWikiWiki"} = "TWikiDocumentation.WhatIsWikiWiki";
 	$moveTopicsHash{"TWiki.WikiCulture"} = "TWikiDocumentation.WikiCulture";
@@ -104,6 +102,11 @@ my ( $session ) = @_;
 	$moveTopicsHash{"TWiki.StaticMethod"} = "TWikiDocumentation.StaticMethod";
 
 #actual active topics
+	$moveTopicsHash{"TWiki.WebChangesAlert"} = "TWikiConfiguration.WebChangesAlert";
+	$moveTopicsHash{"TWiki.JSCalendarContrib"} = "TWikiConfiguration.JSCalendarContrib";
+	$moveTopicsHash{"TWiki.MailerContrib"} = "TWikiConfiguration.MailerContrib";
+	$moveTopicsHash{"TWiki.TimeInterval"} = "TWikiConfiguration.TimeInterval";
+	$moveTopicsHash{"TWiki.DragonSkinSiteMap"} = "TWikiConfiguration.DragonSkinSiteMap";
 	$moveTopicsHash{"TWiki.AdminTools"} = "TWikiConfiguration.AdminTools";
 	$moveTopicsHash{"TWiki.BulkRegistration"} = "TWikiConfiguration.BulkRegistration";
 	$moveTopicsHash{"TWiki.BulkResetPassword"} = "TWikiConfiguration.BulkResetPassword";
@@ -221,33 +224,58 @@ my ( $session ) = @_;
 	$moveTopicsHash{"TWiki.WindowsInstallSummary"} = "TWikiConfiguration.WindowsInstallSummary";
 
 	$moveTopicsHash{"Main.FileAttachment"} = "Trash.FileAttachment";
-	$moveTopicsHash{"Main.FirstName"} = "Users.FirstName";
-	$moveTopicsHash{"Main.LastName"} = "Users.LastName";
-	$moveTopicsHash{"Main.LondonOffice"} = "Users.LondonOffice";
-	$moveTopicsHash{"Main.NobodyGroup"} = "Users.NobodyGroup";
-	$moveTopicsHash{"Main.OfficeLocations"} = "Users.OfficeLocations";
-	$moveTopicsHash{"Main.PeterThoeny"} = "Users.PeterThoeny";
-	$moveTopicsHash{"Main.SanJoseOffice"} = "Users.SanJoseOffice";
-	$moveTopicsHash{"Main.TWikiAdminGroup"} = "Users.TWikiAdminGroup";
-	$moveTopicsHash{"Main.TWikiGroupTemplate"} = "Users.TWikiGroupTemplate";
-	$moveTopicsHash{"Main.TWikiGroups"} = "Users.TWikiGroups";
-	$moveTopicsHash{"Main.TWikiGuest"} = "Users.TWikiGuest";
+	$moveTopicsHash{"Main.FirstName"} = "TWikiUsers.FirstName";
+	$moveTopicsHash{"Main.LastName"} = "TWikiUsers.LastName";
+	$moveTopicsHash{"Main.LondonOffice"} = "TWikiUsers.LondonOffice";
+	$moveTopicsHash{"Main.NobodyGroup"} = "TWikiUsers.NobodyGroup";
+	$moveTopicsHash{"Main.OfficeLocations"} = "TWikiUsers.OfficeLocations";
+	$moveTopicsHash{"Main.PeterThoeny"} = "TWikiUsers.PeterThoeny";
+	$moveTopicsHash{"Main.SanJoseOffice"} = "TWikiUsers.SanJoseOffice";
+	$moveTopicsHash{"Main.TWikiAdminGroup"} = "TWikiUsers.TWikiAdminGroup";
+	$moveTopicsHash{"Main.TWikiGroupTemplate"} = "TWikiUsers.TWikiGroupTemplate";
+	$moveTopicsHash{"Main.TWikiGroups"} = "TWikiUsers.TWikiGroups";
+	$moveTopicsHash{"Main.TWikiGuest"} = "TWikiUsers.TWikiGuest";
 	$moveTopicsHash{"Main.TWikiPreferences"} = "Trash.TWikiPreferences";
-	$moveTopicsHash{"Main.TWikiUsers"} = "Users.TWikiUsers";
+	$moveTopicsHash{"Main.TWikiUsers"} = "TWikiUsers.TWikiUsers";
 	$moveTopicsHash{"Main.TWikiVariables"} = "Trash.TWikiVariables";
-	$moveTopicsHash{"Main.TokyoOffice"} = "Users.TokyoOffice";
-	$moveTopicsHash{"Main.UserForm"} = "Users.UserForm";
-	$moveTopicsHash{"Main.UserList"} = "Users.UserList";
-	$moveTopicsHash{"Main.UserListByDateJoined"} = "Users.UserListByDateJoined";
-	$moveTopicsHash{"Main.UserListByLocation"} = "Users.UserListByLocation";
-	$moveTopicsHash{"Main.UserListByOrganization"} = "Users.UserListByOrganization";
-	$moveTopicsHash{"Main.UserListHeader"} = "Users.UserListHeader";
+	$moveTopicsHash{"Main.TokyoOffice"} = "TWikiUsers.TokyoOffice";
+	$moveTopicsHash{"Main.UserForm"} = "TWikiUsers.UserForm";
+	$moveTopicsHash{"Main.UserList"} = "TWikiUsers.UserList";
+	$moveTopicsHash{"Main.UserListByDateJoined"} = "TWikiUsers.UserListByDateJoined";
+	$moveTopicsHash{"Main.UserListByLocation"} = "TWikiUsers.UserListByLocation";
+	$moveTopicsHash{"Main.UserListByOrganization"} = "TWikiUsers.UserListByOrganization";
+	$moveTopicsHash{"Main.UserListHeader"} = "TWikiUsers.UserListHeader";
+	$moveTopicsHash{"Main.TWikiGuestLeftBar"} = "TWikiConfiguration.TWikiGuestLeftBar";
+	$moveTopicsHash{"Main.TWikiRegistrationAgent"} = "TWikiConfiguration.TWikiRegistrationAgent";
+
+	$moveTopicsHash{"Main.WebChanges"} = "TWikiUsers.WebChanges";
+	$moveTopicsHash{"Main.WebHome"} = "TWikiUsers.WebHome";
+	$moveTopicsHash{"Main.WebIndex"} = "TWikiUsers.WebIndex";
+	$moveTopicsHash{"Main.WebLeftBar"} = "TWikiUsers.WebLeftBar";
+	$moveTopicsHash{"Main.WebNotify"} = "TWikiUsers.WebNotify";
+	$moveTopicsHash{"Main.WebPreferences"} = "TWikiUsers.WebPreferences";
+	$moveTopicsHash{"Main.WebRss"} = "TWikiUsers.WebRss";
+	$moveTopicsHash{"TWiki.WebSearch"} = "TWikiUsers.WebSearch";
+	$moveTopicsHash{"Main.WebSearchAdvanced"} = "TWikiUsers.WebSearchAdvanced";
+	$moveTopicsHash{"Main.WebStatistics"} = "TWikiUsers.WebStatistics";
+	$moveTopicsHash{"Main.WebTopicList"} = "TWikiUsers.WebTopicList";
 
 	my $key;
 	foreach $key (keys %moveTopicsHash) {
 		moveTopic( $session , $key, $moveTopicsHash{$key});
 	}
 
+##
+	print "====================================================================================\n";
+	print "Now you need to:\n";
+	print "   * set \$cfg{SystemWebName} = 'TWikiConfiguration';\n";
+	print "   * set \$cfg{UsersWebName} = 'TWikiUsers';\n";
+	print "   * You should also be able to remove the TWiki, and Main webs (unless you have personal topics in them\n";
+	print "   * \n";
+
+#TODO: I think we should consider a post processing step where we remove the Web. qualifier for topic links that 
+#	are in that web (ie remove TWikiConfiguration. from TWikiConfiguration.PatternSkin in the 
+#	TWikiConfiguration.TWikiPreferences topic
 }
 
 sub moveTopic {
