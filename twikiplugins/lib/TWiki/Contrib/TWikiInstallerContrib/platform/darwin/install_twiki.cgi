@@ -63,6 +63,10 @@ BEGIN {
 \$cfg{LogFileName}      = "\$cfg{LogDir}/log%DATE%.txt";
 \$cfg{WarningFileName}  = "\$cfg{LogDir}/warn%DATE%.txt";
 \$cfg{DebugFileName}    = "\$cfg{LogDir}/debug.txt";
+
+\$cfg{HtpasswdFileName}   = "\$cfg{DataDir}/.htpasswd";
+\$cfg{RemoteUserFileName} = "\$cfg{DataDir}/remoteusers.txt";
+\$cfg{MimeTypesFileName}  = "\$cfg{DataDir}/mime.types";
 };
 
 ################################################################################
