@@ -11,7 +11,7 @@
 /* HTML elements */
 
 html body {
-	line-height:1.55em;
+	line-height:1.3em;
 	font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
 	background-color:#f8f8f8;
 	margin:0;
@@ -343,6 +343,7 @@ html>body .twikiLeftBar li a {
 	empty-cells:show;
 	border:0px;
 	font-size:90%;
+	color:#888e9c;
 	background-color:white;
 	border-top:1px solid #ccc;
 	border-right:1px solid #ccc;
@@ -389,7 +390,11 @@ html>body .twikiLeftBar li a {
 	text-align:left;
 	vertical-align:top;
 }
-
+/*
+.twikiAttachments td {
+   white-space:nowrap;
+}
+*/
 .twikiAttachments td.twikiFirstCol,
 .twikiForm td.twikiFirstCol {
 	border-left:none;
@@ -430,7 +435,7 @@ html>body .twikiLeftBar li a {
 .twikiAttachments th.twikiSortedAscendingCol a:visited,
 .twikiAttachments th.twikiSortedDescendingCol a:link,
 .twikiAttachments th.twikiSortedDescendingCol a:visited {
-	color:#334455;
+	color:#345;
 }
 .twikiAttachments th.twikiSortedAscendingCol a:hover,
 .twikiAttachments th.twikiSortedDescendingCol a:hover {
@@ -795,7 +800,7 @@ html>body .twikiToc li a {
 	border:none;
 	background-color:transparent;
 }
-.twikiTopic .twikiSubmit { /* secondary submit button */
+.twikiTopic .twikiSubmit { /* topic submit button */
 	background-color:#E8F1F9;
 }
 .twikiSecondary { }
@@ -806,17 +811,17 @@ html>body .twikiToc li a {
 	background-color:#eee;
 }
 .twikiBroadcastMessage {
-	background-color:yellow;
+	background-color:#ff0;
 	color:black;
 	padding:0.2em 0.7em;
 	margin:0 -0.7em 0.5em -0.7em;
 }
 .twikiBroadcastMessage b,
 .twikiBroadcastMessage strong {
-	color:red;
+	color:#f00;
 }
 .twikiAlert {
-	color:red;
+	color:#f00;
 }
 .twikiGrayText,
 .twikiHelpCol {
@@ -839,7 +844,7 @@ html>body .twikiToc li a {
 .twikiNew { }
 .twikiSummary {
 	font-size:85%;
-	line-height:1.3em;
+	line-height:1.25em;
 }
 .twikiNewLink {
 	background-color:transparent;
@@ -850,7 +855,10 @@ html>body .twikiToc li a {
 	styles and overridden styles used in search.pattern.tmpl
 	-----------------------------------------------------------	*/
 	
-.twikiSearchResults {}
+.twikiSearchResults {
+	border-bottom:1px solid #ddd;
+	padding-bottom:0.2em;
+}
 .twikiSearchResultsHeader,
 .twikiSearchString {
 	padding:0.2em 0.7em 0.2em 0.7em;
@@ -871,22 +879,44 @@ html>body .twikiToc li a {
 	width:100%;
 }
 .twikiSearchResults .twikiTopRow {
-	padding-top:0.2em;
+	padding:0.2em 0 0.1em 0;
+}
+.twikiSearchResults .twikiTopRow .twikiLeft {
+	display:inline;
+}
+.twikiSearchResults .twikiTopRow .twikiRight {
+   display:inline;
+   	text-align:left;
+}
+.twikiSearchResults .twikiSRAuthor {
+	width:15%;
+	text-align:left;
+	white-space: nowrap;
+	margin-left:0.7em;
+}
+.twikiSearchResults .twikiSRRev {
+	width:30%;
+	text-align:left;
+	white-space: nowrap;
+	margin-left:0.7em;
 }
 .twikiSearchResults .twikiBottomRow {
-	padding-bottom:0.25em;
-	border-bottom:1px solid #ddd;
+	width:85%;
+	padding-bottom:0.15em;
 }
 .twikiSearchResults .twikiAlert {
-	color:red;
+	color:#f00;
 	font-weight:bold;
+}
+.twikiSearchResults .twikiSummary {
+	display:inline;
 }
 .twikiSearchResults .twikiSummary .twikiAlert {
 	color:#900;
 	font-weight:normal;
 }
 .twikiSearchResults .twikiNew b {
-	font-weight:normal;
+	font-size:85%;
 }
 .twikiSearchResultCount {
 	margin:0.5em 0 2em 0;
@@ -943,7 +973,6 @@ html>body .twikiToc li a {
 	background-color:#f1f1f1;
 	padding:2em;
 	border-top:1px solid #bbb;
-	color: #888e9c;
 	margin-top:0;
 	margin-bottom:0em;
 }
@@ -1037,7 +1066,6 @@ html>body .twikiToc li a {
 	margin-top:1.5em;
 }
 .twikiEditPage .twikiEditForm table {
-	background-color:#E8F1F9;
 	width:auto;
 	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
 	voice-family:inherit;
@@ -1141,6 +1169,7 @@ html>body .twikiToc li a {
 }
 .twikiAttachPage .twikiPrevious .twikiAttachments table {
 	width:auto;
+	color:black;
 }
 .twikiAttachPage .twikiTopic {
 	padding-bottom:0;
