@@ -148,7 +148,7 @@ sub main
     }
     $tmpl =~ s/%FILEPATH%/$args{"path"}/go;
     $tmpl =~ s/%FILECOMMENT%/$args{"comment"}/go;
-    TWiki::writeHeader( $query );
+    print "Content-type: text/html\n\n";
     print $tmpl;
 }
 
