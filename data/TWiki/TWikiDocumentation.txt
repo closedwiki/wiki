@@ -1,9 +1,8 @@
-%META:TOPICINFO{author="MikeMannix" date="1000524678" format="1.0" version="1.36"}%
+%META:TOPICINFO{author="MikeMannix" date="1001960423" format="1.0" version="1.37"}%
 <script language="JavaScript1.2" type="text/javascript">
 function dblclick() { window.scrollTo(0,0) }
 if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
-document.ondblclick=dblclick;
-//--> </script>
+document.ondblclick=dblclick; //--> </script>
 
 <font size="+3">TWiki Reference Manual</font><font size="+2"> (01-Sep-2001)</font>
 
@@ -40,9 +39,6 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 -----
 %INCLUDE{"TWikiVariables"}%
 
-----
-%INCLUDE{"TWikiMetaData"}%
-
 -----
 %INCLUDE{"TWikiForms"}%
 
@@ -52,6 +48,9 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 -----
 %INCLUDE{"MonitoringSiteActivity"}%
 
+-----
+%INCLUDE{"FileAttachment"}%
+
 ----
 %INCLUDE{"ManagingTopics"}%
 
@@ -60,3 +59,9 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 
 -----
 %INCLUDE{"AppendixFileSystem"}%
+
+-----
+%INCLUDE{"TWikiMetaData"}%
+
+----
+%INCLUDE{"TextFormattingRules"}%
