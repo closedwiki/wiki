@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007352711" format="1.0" version="1.30"}%
+%META:TOPICINFO{author="RichardDonkin" date="1017131194" format="1.0" version="1.31"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---+ TWiki Text Formatting
@@ -326,6 +326,20 @@ Know.ReadmeFirst
 </tr>
 <tr bgcolor="#ffffff">
 <td valign="top">
+ *Easier External Links:* <br>
+ An easier syntax for external links is now available: =[<nop>[externalURL text]]= - just hit the spacebar to separate the link URL from the descriptive text, e.g. =[<nop>[http://gnu.org/ GNU]]=. This also supports anchors, e.g. =[<nop>[http://www.yahoo.com/#somewhere Yahoo!]]=.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+[[http://gnu.org GNU]]
+</pre>
+</font></span>
+</td><td valign="top">
+[[http://gnu.org GNU]]
+</td>
+</tr>
+<tr bgcolor="#ffffff">
+<td valign="top">
  *Anchors:* <br>
  You can define a link reference inside a %WIKITOOLNAME% topic (called an anchor name) and link to that. To __define__ an anchor write =#AnchorName= at the beginning of a line. The anchor name must be a WikiWord. To __link to__ an anchor name use the =[<nop>[MyTopic#MyAnchor]]= syntax. You can omit the topic name if you want to link within the same topic.
 </td><td valign="top">
@@ -396,6 +410,9 @@ Being able to create links without any formatting required is a core TWiki featu
 	* Email addresses like =name@domain.com= are linked automatically.
 
 	* =[<nop>[Square bracket rules]]= let you easily create [[#SquareBrackets][non-WikiWord links]].
+		* You can also write =[<nop>[http://yahoo.com Yahoo home page]]= as an easier way of doing external links with descriptive text for the link, such as [[http://yahoo.com Yahoo home page]].
+
+
 
 ---++ <nop>TWikiPlugin Formatting Extensions
 
@@ -408,3 +425,7 @@ Available Plugins are located in the [[http://twiki.org/cgi-bin/view/Plugins][Pl
 Check on current Plugin status and settings for this site in TWikiPreferences.
 
 -- Main.MikeMannix - 02 Dec 2001
+
+Updated to cover TWiki:Codev/EasierExternalLinking (in the alpha release).
+
+-- Main.RichardDonkin - 26 Mar 2002	
