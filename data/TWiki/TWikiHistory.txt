@@ -1,5 +1,7 @@
 *History of the TWiki Implementation (version %WIKIVERSION%)*
 
+	* PeterThoeny - 27 Mar 2001: The table syntax has been enhanced to (i) render ==| <nop>*bold*<nop> |== cells as table headers, (ii) render space padded cells ==|  center aligned  |== and ==|	right aligned |==, (iii) span multiple columns using ==| empty cells |||==. More in TextFormattingRules.
+	* PeterThoeny - 25 Mar 2001: Security fix: Questionable files like PHP scripts (executables) and ==.htaccess== files that are attached to a topic get a ==.txt== suffix appended to the file name. See also [[http://TWiki.org/cgi-bin/view/Codev/FileAttachmentFilterSecurityAlert][TWiki:Codev.FileAttachmentFilterSecurityAlert]]
 	* AndreaSterbini, PeterThoeny - 28 Feb 2001: New Wiki rule for headings, i.e. =---++ My Title=; and new =%<nop>TOC%= variable to build a table of content from headings in a topic. More in TWikiVariables.
 	* PeterThoeny - 28 Feb 2001: New Wiki rule to specify arbitrary text for external links (i.e. =[<nop>[http://TWki.org][TWiki]]=) and internal links (i.e =[<nop>[WikiSyntax][syntax]]=). More in TWikiVariables.
 	* PeterThoeny - 28 Feb 2001: New Wiki rule for named anchors, e.g. links within a topic. Define a named anchor with =#MyAnchor= at the beginning of a line, and link to it with =[<nop>[#MyAnchor]]=. More in TWikiVariables.
