@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="995354133" format="1.0beta2" version="1.14"}%
+%META:TOPICINFO{author="MikeMannix" date="999241484" format="1.0" version="1.15"}%
 <table><tr><td>
 *<font size="+1"> %TWIKIWEB%.WelcomeGuest: </font>* %WIKITOOLNAME% is a web-based collaboration tool, web authoring tool, document management tool and knowledge base tool. You can edit any %WIKITOOLNAME% page.
 </td><td>
@@ -27,7 +27,7 @@
 
 *%WIKITOOLNAME%.%TWIKIWEB% Web:*
 	* <b> %TWIKIWEB%.WelcomeGuest: </b> Look here first to get you rolling on %WIKITOOLNAME%.
-	* %TWIKIWEB%.TWikiWeb: Explains what a %WIKITOOLNAME% web is.
+	* %TWIKIWEB%.TWikiSite: Explains what a %WIKITOOLNAME% site is.
 	* %TWIKIWEB%.TWikiRegistration: Create your account in order to edit topics.
 	* Documentation:
 		* %TWIKIWEB%.TWikiFAQ has a list of frequently asked questions.
