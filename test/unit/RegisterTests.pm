@@ -3,7 +3,7 @@ package RegisterTests;
 use TestCaseStdOutCapturer;
 use base qw(Test::Unit::TestCase);
 BEGIN {
-    unshift @INC, '../../bin', '../../lib'; # SMELL hack - setlib with relative paths fails
+    unshift @INC, '../../bin';
     require 'setlib.cfg';
 };
 use strict;
