@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1074420459" format="1.0" version="1.80"}%
+%META:TOPICINFO{author="PeterThoeny" date="1079502931" format="1.0" version="1.81"}%
 <table><tr><td valign="top">
 *Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
@@ -56,11 +56,9 @@ _Documentation for TWiki users._
 
 _Documentation for webmasters, system administrators, project managers, team leaders, and all other users of the TWiki advanced online collaboration platform._
 
-	* %T% *ADMINS:* In less than an hour, you can read through and customize the [[#UsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. See also other enhancement pages: 
-		* TWikiAdminCookBook: Some tips that can be applied *before installation*
-		* InstantEnhancements: Simple tips (using just browser, no install needed) and quick (max couple of minutes).
-
-	* *[[TWikiDocumentation]]*: All manual sections in one file...
+	* All manual sections in one big page:
+		* [[TWiki Documentation]] (560k)
+	* Manual sections in separate pages:
 		1. [[TWiki System Requirements]]
 		1. [[TWiki Installation Guide]]
 		1. [[Windows Install Cookbook]]
@@ -83,6 +81,10 @@ _Documentation for webmasters, system administrators, project managers, team lea
 		* *Appendices*
 			* [[AppendixFileSystem][A. TWiki File System]]
 			* [[TWikiHistory][B. TWiki Development Timeline]]
+
+	* %T% *ADMINS:* In less than an hour, you can read through and customize the [[#UsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. See also other enhancement pages: 
+		* TWikiAdminCookBook: Some tips that can be applied *before installation*
+		* InstantEnhancements: Simple tips (using just browser, no install needed) and quick (max couple of minutes).
 
 ---++ <nop>TWikiSiteTools
 
