@@ -85,6 +85,15 @@ sub sendEmail
 
     my( $theText ) = @_;
 
+    # Put in a Date header, mainly for Qmail
+    my @date = gmtime;
+    my @month = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
+    my @wday = qw(Mon Tue Wed Thu Fri Sat Sun);
+    my $dateStr = sprintf "%s, %02d %s %4d %02d:%02d:%02d -0000", 
+        ($wday[$date[6]], $date[3], $month[$date[4]], $date[5] + 1900, 
+         @date[2,1,0]);
+    $theText = "Date: " . $dateStr . "\n" . $theText;
+
     if( ! $mailInitialized ) {
         $mailInitialized = 1;
         $mailHost  = &TWiki::Prefs::getPreferencesValue( "SMTPMAILHOST" );
