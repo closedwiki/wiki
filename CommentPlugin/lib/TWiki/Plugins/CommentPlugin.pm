@@ -8,7 +8,7 @@ use TWiki::Func;
 use vars qw( $initialised $VERSION $firstCall $pluginName $testing );
 
 BEGIN {
-    $VERSION = 3.005;
+    $VERSION = 3.007;
     $pluginName = "CommentPlugin";
     $firstCall = 0;
 	$testing = 0;
@@ -25,7 +25,7 @@ sub initPlugin {
   #my ( $topic, $web, $user, $installWeb ) = @_;
 
   if( $TWiki::Plugins::VERSION < 1.020 ) {
-    TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION. Will not work without compatability module." );
+    TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm $TWiki::Plugins::VERSION. Will not work without compatability module." );
   }
 
   $firstCall = 1;
@@ -52,10 +52,10 @@ sub commonTagsHandler {
             TWiki::Plugins::CommentPlugin::Comment::save( $_[2], $_[1], $query );
         }
     } elsif ( $_[0] =~ m/%COMMENT({.*?})?%/o ) {
-        # Nasty, tacky way to find out where we were invoked from
+        # SMELL: Nasty, tacky way to find out where we were invoked from
         my $scriptname = $ENV{'SCRIPT_NAME'} || "";
-        my $previewing = ($scriptname =~ /\/preview/ ||
-                          $scriptname =~ /\/gnusave/);
+        # SMELL: unreliable
+        my $previewing = ($scriptname =~ /\/(preview|gnusave|rdiff)/);
         TWiki::Plugins::CommentPlugin::Comment::prompt( $previewing, @_ );
     }
 }

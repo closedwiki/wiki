@@ -12,7 +12,7 @@ Put your local templates into TWiki.UserTemplates.
 Generic prompt box used by other templates
 <verbatim>
 %TMPL:DEF{promptbox}%
-<table><tr valign="middle"><td><textarea %DISABLED% rows="%rows|3%" cols="%cols|50%" name="comment" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea></td><td><input %DISABLED% type="submit" value="%button|Add comment%" /></td></tr></table>
+<table><tr valign="middle"><td><textarea %DISABLED% rows="%rows|3%" cols="%cols|70%" name="comment" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea></td><td><input %DISABLED% type="submit" value="%button|Add comment%" /></td></tr></table>
 %TMPL:END%
 </verbatim>
 Short comment, signed and dated
@@ -96,12 +96,13 @@ Comments, signed and dated, added at end of table above the anchor/location/COMM
 %TMPL:END%
 </verbatim>
 ---------------------------------------------------------------------------
----+++ after: Add before the comment box
+---+++ after: Add before the comment box, after the last comment
 <verbatim>
 %TMPL:DEF{PROMPT:after}%%TMPL:P{promptbox}%%TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{OUTPUT:after}%%TMPL:P{outputoneliner}% %POS:BEFORE%%TMPL:END%
+%TMPL:DEF{OUTPUT:after}%%NOP%
+%TMPL:P{outputoneliner}% %POS:BEFORE%%TMPL:END%
 </verbatim>
 ----------------------------------------------------------------------------
 ---+++ action
@@ -135,42 +136,6 @@ Action added to action table directly above comment box
 %TMPL:END%
 </verbatim>
 ----------------------------------------------------------------------------
----+++ poll
-TWiki table that collects results from a poll on plugin usage
-<verbatim>
-%TMPL:DEF{PROMPT:poll}%
-<table valign="middle">
- <tr>
-  <td align=right>Number of sites?</td>
-  <td align=left><input %DISABLED% type="text" name="sites" size="3" value="1" /></td>
-  <td align=right>Plugin hacked?</td>
-  <td align=left>
-   <select %DISABLED% name="pluginhacked">
-    <option>no</option>
-    <option>yes</option>
-   </select>
-  </td>
-  <td align=right>TWiki hacked?</td>
-  <td align=left>
-   <select %DISABLED% name="twikihacked">
-    <option>no</option>
-    <option>yes</option>
-   </select>
-  </td>
-  <td align=right>Remarks</td>
-  <td align=left><input %DISABLED% type="text" name="remarks" size="30" value="" /></td>
-  <td>
-   <input %DISABLED% type="submit" value="Yes, I use it" />
-  </td>
- </tr>
-</table>
-%TMPL:END%
-</verbatim>
-<verbatim>
-%TMPL:DEF{OUTPUT:poll}%%POS:BEFORE%| %WIKIUSERNAME% | %URLPARAM{"sites"}% | %URLPARAM{"pluginhacked"}% | %URLPARAM{"twikihacked"}% | %URLPARAM{"remarks"}% |
-%TMPL:END%
-</verbatim>
----------------------------------------------------------------------------
 ---+++ table
 Tablerows adding on end - TWiki:Main/FranzJosefSilli
 <verbatim>
