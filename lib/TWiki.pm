@@ -67,7 +67,7 @@ use vars qw(
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
         $disableAllPlugins
-        @isoMonth $TranslationToken $code @code $depth %mon2num
+        @isoMonth $TranslationToken %mon2num $isList @listTypes @listElements
         $newTopicFontColor $newTopicBgColor
         $headerPatternDa $headerPatternSp $headerPatternHt
         $debugUserTime $debugSystemTime
@@ -222,8 +222,6 @@ sub initialize
     &TWiki::Prefs::initializePrefs( $wikiUserName, $webName );
 
     # some remaining init
-    $code="";
-    @code= ();
     $viewScript = "view";
     $viewScript = "viewauth" if( $ENV{'SCRIPT_NAME'} =~ /^.*\/viewauth$/ );  # Needed for TOC
 
@@ -1528,21 +1526,40 @@ sub decodeSpecialChars
 
 
 # =========================
-sub emitCode {
-    ( $code, $depth ) = @_;
-    my $result="";
-    while( @code > $depth ) {
-        local($_) = pop @code;
-        $result= "$result</$_>\n"
-    } while( @code < $depth ) {
-        push( @code, ($code) );
-        $result= "$result<$code>\n"
+sub emitList {
+    my( $theType, $theElement, $theDepth ) = @_;
+    my $result = "";
+    $isList = 1;
+
+    if( @listTypes < $theDepth ) {
+        my $firstTime = 1;
+        while( @listTypes < $theDepth ) {
+            push( @listTypes, $theType );
+            push( @listElements, $theElement );
+            $result .= "<$theElement>\n" unless( $firstTime );
+            $result .= "<$theType>\n";
+            $firstTime = 0;
+        }
+
+    } elsif( @listTypes > $theDepth ) {
+        while( @listTypes > $theDepth ) {
+            local($_) = pop @listElements;
+            $result .= "</$_>\n";
+            local($_) = pop @listTypes;
+            $result .= "</$_>\n";
+        }
+        $result .= "</$listElements[$#listElements]>\n" if( @listElements );
+
+    } elsif( @listElements ) {
+        $result = "</$listElements[$#listElements]>\n";
     }
 
-    if( ( $#code > -1 ) && ( $code[$#code] ne $code ) ) {
-        $result= "$result</$code[$#code]><$code>\n";
-        $code[$#code] = $code;
+    if( ( @listTypes ) && ( $listTypes[$#listTypes] ne $theType ) ) {
+        $result .= "</$listTypes[$#listTypes]>\n<$theType>\n";
+        $listTypes[$#listTypes] = $theType;
+        $listElements[$#listElements] = $theElement;
     }
+
     return $result;
 }
 
@@ -1793,7 +1810,9 @@ sub getRenderedVersion
     $insideVERBATIM = 0;  # PTh 31 Jan 2001: Added Codev.VerbatimModeForSourceCodes
     $insideTABLE = 0;
     $noAutoLink = 0;      # PTh 02 Feb 2001: Added Codev.DisableWikiWordLinks
-    $code = "";
+    $isList = 0;
+    @listTypes = ();
+    @listElements = ();
     $text =~ s/\r//go;
     $text =~ s/\\\n//go;  # Join lines ending in "\"
     $text =~ s/(\n?)$/\n<nop>\n/os; # clutch to enforce correct rendering at end of doc
@@ -1829,9 +1848,9 @@ sub getRenderedVersion
             # inside <PRE> or <VERBATIM>
 
             # close list tags if any
-            if( @code ) {
-                $result .= &emitCode( "", 0 );
-                $code = "";
+            if( @listTypes ) {
+                $result .= &emitList( "", "", 0 );
+                $isList = 0;
             }
 
             if( $insideVERBATIM ) {
@@ -1903,15 +1922,15 @@ sub getRenderedVersion
                 $insideTABLE = 0;
             }
 
-# Lists etc.
-            s/^\s*$/<p \/>/o                 && ( $code = 0 );
-            m/^(\S+?)/o                      && ( $code = 0 );
-            s/^(\t+)(\S+?):\s/<dt> $2<dd> /o && ( $result .= &emitCode( "dl", length $1 ) );
-            s/^(\t+)\* /<li> /o              && ( $result .= &emitCode( "ul", length $1 ) );
-            s/^(\t+)\d+\.?/<li> /o           && ( $result .= &emitCode( "ol", length $1 ) );
-            if( !$code ) {
-                $result .= &emitCode( "", 0 );
-                $code = "";
+# Lists and paragraphs
+            s/^\s*$/<p \/>/o                 && ( $isList = 0 );
+            m/^(\S+?)/o                      && ( $isList = 0 );
+            s/^(\t+)(\S+?):\s/<dt> $2<\/dt><dd> /o && ( $result .= &emitList( "dl", "dd", length $1 ) );
+            s/^(\t+)\* /<li> /o              && ( $result .= &emitList( "ul", "li", length $1 ) );
+            s/^(\t+)\d+\.? ?/<li> /o         && ( $result .= &emitList( "ol", "li", length $1 ) );
+            if( ! $isList ) {
+                $result .= &emitList( "", "", 0 );
+                $isList = 0;
             }
 
 # '#WikiName' anchors
@@ -1968,7 +1987,7 @@ sub getRenderedVersion
     if( $insideTABLE ) {
         $result .= "</table>\n";
     }
-    $result .= &emitCode( "", 0 );
+    $result .= &emitList( "", "", 0 );
     if( $insidePRE || $insideVERBATIM ) {
         $result .= "</pre>\n";
     }
