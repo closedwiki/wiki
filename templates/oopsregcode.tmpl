@@ -5,6 +5,12 @@
 %TMPL:DEF{"message"}%
 The activation code ==%PARAM1%== is invalid.  Please try again.
 
+<form action="%SCRIPTURL%/register%SCRIPTSUFFIX%" method=get>
+<input type="hidden" name="action" value="verify" size="20">
+<input type="text" name="code" size="20">
+<input type="submit" value=" Submit ">
+</form>
+
 Please contact 
 <a href="mailto:%WIKIWEBMASTER%">%WIKIWEBMASTER%</a>
 if you have any questions. %TMPL:END%
