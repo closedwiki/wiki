@@ -97,7 +97,11 @@ sub getPluginsCatalogList
 	next unless $tag->[1]{href} && $tag->[1]{href} =~ m|/view/Plugins/.+AddOn$|;
 	my ( $plugin ) = $tag->[1]{href} =~ m|.+/(.+AddOn)|;
 	next unless $plugin;
-	my $pluginS = { name => $plugin };
+	my $pluginS = { 
+	    name => $plugin,
+	    description => "$plugin description",
+	    homepage => "http://twiki.org/cgi-bin/view/Plugins/$plugin",
+	};
 	push @plugins, $pluginS;
     }
 

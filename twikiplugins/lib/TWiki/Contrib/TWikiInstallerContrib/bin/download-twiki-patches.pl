@@ -15,9 +15,13 @@ use strict;
 use diagnostics;
 ++$|;
 
+my $account;
 BEGIN {
-    unshift @INC, '/Users/wbniv/twiki/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/cpan/lib';
-    unshift @INC, '/Users/wbniv/Sites/twiki/lib';
+    use Cwd qw( cwd getcwd );
+    use Config;
+    chomp( $account = `whoami` );
+    my $localLibBase = getcwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
+    unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
 }
 
 use LWP;
@@ -86,7 +90,7 @@ foreach my $patchS ( @patches )
     # create a GetAWebAddOn-compatable (er, really the installer at this point)
     system( "tar czvf $Config->{local_cache}/$topic.wiki.tar.gz -C $Config->{local_cache}/web/$topic ." );
 
-    File::Path::rmtree( "$Config->{local_cache}/web/$topic" ) or warn $!;
+##    File::Path::rmtree( "$Config->{local_cache}/web/$topic" ) or warn $!;
 
 #    if ($status == RC_OK) {
 #	++$nDownloadedPatches;
@@ -111,6 +115,12 @@ File::Path::rmtree( "$Config->{local_cache}/web" ) or warn $!;
 #local $, = "\n   * TWiki:.";
 #print "Missing/Error patch topics: ", @errors; 
 #print "\n";
+
+use XML::Simple;
+my $xs = new XML::Simple() or die $!;
+open( XML, ">$Config->{local_cache}/patches.xml" ) or die $!;
+print XML $xs->XMLout( { patch => [ @plugins ] }, NoAttr => 1 );
+close( XML ) or warn $!;
 
 ################################################################################
 
