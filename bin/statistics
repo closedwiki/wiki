@@ -36,6 +36,7 @@ BEGIN {
     # 'Use locale' for internationalisation of Perl regexes -
     # main locale settings are done in TWiki::setupLocale
     # Do a dynamic 'use locale' for this module
+    require TWiki;
     if( $TWiki::useLocale ) {
         require locale;
 	import locale ();
@@ -47,7 +48,7 @@ use CGI;
 use File::Copy qw(copy);
 use IO::File;
 
-use TWiki;
+# use TWiki;
 
 use strict;
 # use diagnostics;		# Debug only
@@ -541,10 +542,15 @@ sub getTopList
 
     # Sort @list by frequency and pick the top N entries
     if( @list ) {
-        @list = map{ s/^([0-9][0-9][^0-9])/\&nbsp\;$1/; $_ }
+	# Strip initial spaces
+	@list = map{ s/^\s*//; $_ } @list;
+
+        @list = # Prepend spaces depending on no. of digits
+		map{ s/^([0-9][0-9][^0-9])/\&nbsp\;$1/; $_ }
                 map{ s/^([0-9][^0-9])/\&nbsp\;\&nbsp\;$1/; $_ }
-                map{ s/^\s*//; $_ }
-                reverse( sort( @list ) );
+		# Sort numerically, descending order
+                sort { (split / /, $b)[0] <=> (split / /, $a)[0] }  @list;
+
         if( $theMaxNum >= @list ) {
             $theMaxNum = @list - 1;
         }
