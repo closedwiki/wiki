@@ -193,6 +193,7 @@ sub userIsInGroup
 sub getUsersOfGroup
 {
     my( $theGroupTopicName ) = @_;
+    ##TWiki::writeDebug( "group is $theGroupTopicName" );
     return prvGetUsersOfGroup( $theGroupTopicName, 1 );
 }
 
@@ -210,6 +211,7 @@ sub prvGetUsersOfGroup
         $web = $1;
         $topic = $2;
     }
+    ##TWiki::writeDebug( "Web is $web, topic is $topic" );
 
     if( $topic !~ /.*Group$/ ) {
         # return user, is not a group
@@ -260,6 +262,7 @@ sub prvGetUsersOfGroup
             push( @resultList, $_ );
         }
     }
+    ##TWiki::writeDebug( "Returning group member list of @resultList" );
     return @resultList;
 }
 
