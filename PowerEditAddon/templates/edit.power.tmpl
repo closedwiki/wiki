@@ -45,20 +45,12 @@ function launchWindow( theWeb, theTopic ) {
 <param name="editboxwidth" value="%EDITBOXWIDTH%">
 <param name="editboxheight" value="%EDITBOXHEIGHT%">
 <param name="server" value="%SCRIPTURLPATH%/poweredit%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-<param name="locker" value="%REMOTE_USER%">
-<param name="top_buttons" value="Undo=%undo%|Find...=%find%|Replace...=%replace%|Again=%redo%|HTML2Wiki=%convert%">
-<param name="bottom_buttons" value="Preview=%preview%|Save=%save%">
-<param name="left_buttons" value="B=bold|I=italic|TT=tt|*=ul|1=ol|Red=red">
-<param name="bold" value="%cut%*%paste%*">
-<param name="italic" value="%cut%_%paste%_">
-<param name="tt" value="%cut%=%paste%=">
-<param name="red" value="%cut%&lt;font color=red&gt;%paste%&lt;/font&gt;">
-<param name="ul" value="%home%   * %cut%">
-<param name="ol" value="%home%   1 %cut%">
-<param name="right_buttons" value="H1=%cut%%br%---+ %paste%%br%|H2=%cut%%br%---++ %paste%%br%|H3=%cut%%br%---+++ %paste%%br%|H4=%cut%br%---++++ %paste%|H5=%cut%%br%---+++++ %paste%%br%|H6=%cut%%br%---++++++ %paste%%br%|">
+<param name="dontnotify" value="%DONTNOTIFYCHECKBOX%">
+<param name="releaseeditlock" value="%RELEASEEDITLOCKCHECKBOX%">
 You need a Java enabled browser
 </applet>
 <br />
+For help on this editor, click [[TWiki.PowerEditAddon][here]].
 Don't forget - if you change something, do it in 
 <a target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">GoodStyle</a>
 and follow the
