@@ -35,6 +35,7 @@ sub check
       trace( "$message" );
    }
    
+   $TestUtil::okay = 0 unless $okay;
    return $okay;
 }
 
@@ -92,7 +93,7 @@ sub leave
    if( $okay ) {
       $okayCount++;
    } else {
-      print "=== $routine failed";
+      print "=== $routine failed\n";
    }
    trace( "Leaving $routine" );
 }   
