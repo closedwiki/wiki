@@ -1,4 +1,4 @@
-%META:TOPICINFO{version="1.12" date="995096802" author="PeterThoeny" format="1.0beta2"}%
+%META:TOPICINFO{author="PeterThoeny" date="995876052" format="1.0beta2" version="1.13"}%
 *%WIKITOOLNAME% Site-Level Preferences*
 
 The following settings are __site-level preferences__ , e.g. affecting all users in all %WIKITOOLNAME% webs. These preferences can be overwritten by __web preferences__ (topic %WEBPREFSTOPIC% in each %WIKITOOLNAME% web) and __user preferences__ (your personal topic, i.e. Main.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
@@ -6,24 +6,14 @@ The following settings are __site-level preferences__ , e.g. affecting all users
 __Preferences:__
 
 	* List of %WIKITOOLNAME% webs: (the first line of a topic; to add a web see TWikiDocumentation and TWikiWebsTable)
-		* Set WIKIWEBLIST = <a href="%WIKIHOMEURL%">%WIKITOOLNAME%</a> . {
-			 <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%MAINWEB%/%HOMETOPIC%">Main</a> 
-		  | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/%HOMETOPIC%">TWiki</a> 
-		  | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Know/%HOMETOPIC%">Know</a> 
-		  | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Test/%HOMETOPIC%">Test</a> 
-		  }
+		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][Main]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][TWiki]] %SEP% [[Know.%HOMETOPIC%][Know]] %SEP% [[Test.%HOMETOPIC%][Test]]
+		* __Note:__ To automatically list all non-hidden webs in alphabetical order you can use this variable instead: Set WIKIWEBLIST = %WEBLIST{"[[$name.%HOMETOPIC%][$name]]" separator=" %SEP% "}%
 
 	* List of topics of a web: (the second line of a topic, is overwritten by web preferences)
-		* Set WEBTOPICLIST = %WEB% . {
-				<a href="%HOMETOPIC%">Home</a> 
-			 | <a href="WebChanges">Changes</a>
-			 | <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&amp;regex=on&amp;search=.*">Index</A>
-			 | <a href="WebSearch">Search</a>
-			 | Go <input type="text" name="topic" size="16">
-		  }
+		* Set WEBTOPICLIST = [[%HOMETOPIC%][Home]] %SEP% [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
 
 	* Copyright notice:
-		* Set WEBCOPYRIGHT = <font size="-2">Copyright &copy; 2000 by the contributing authors. \nAll material on this collaboration tool is the property of the contributing authors. <br> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME% Feedback">Send</a> feedback. </font>
+		* Set WEBCOPYRIGHT = <font size="-2">Copyright &copy; 2000 by the contributing authors. \nAll material on this collaboration tool is the property of the contributing authors. <br> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback">Send</a> feedback. </font>
 
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences)
 		* Set NOSEARCHALL =
