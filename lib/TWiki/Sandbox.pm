@@ -51,6 +51,9 @@ sub new {
     my $this = bless( {}, $class );
 
     ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT( defined $os );
+    ASSERT( defined $realOS );
+
     $this->{session} = $session;
 
     $this->{REAL_SAFE_PIPE_OPEN} = 0;           # supports "open FH, '-|"
@@ -121,7 +124,7 @@ sub untaintUnchecked {
 
 ---++ StaticMethod normalizeFileName ( $string [, $dotdot] ) -> $filename
 
-STATIC Errors out if $string contains whitespace characters.  If $dotdot is
+STATIC Errors out if $string contains filtered characters.  If $dotdot is
 present and true, allow ".." in path names.
 
 The returned string is not tainted, but it may contain shell
@@ -143,10 +146,10 @@ sub normalizeFileName {
             } else {
                 throw Error::Simple( "directory traversal attempt in filename '$string'" );
             }
-        } elsif ($component =~ /^(\S+)$/) {
+        } elsif ($component !~ /$TWiki::cfg{NameFilter}/) {
             # We need to untaint the string explicitly.
             # FIXME: This might be a Perl bug.
-            push @result, untaintUnchecked $1;
+            push @result, untaintUnchecked( $component );
         } else {
             throw Error::Simple( "whitespace in file name component '$component' of filename '$string'" );
         }
