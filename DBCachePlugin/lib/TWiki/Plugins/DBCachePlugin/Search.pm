@@ -36,7 +36,7 @@ Dates for =EARLIER_THAN=, =LATER_THAN= and =WITHIN_DAYS= must be dates in the fo
 A search object implements the "matches" method as its general
 contract with the rest of the world.
 
----++++ Example
+---+++ Example
 Get a list of attachments that have a date earlier than 1st January 2000
 <verbatim>
   $db = new DBCachePlugin::DBCache( $web ); # always done
@@ -91,7 +91,7 @@ Get a list of attachments that have a date earlier than 1st January 2000
 
 =begin text
 
----+++ =new($string)
+---+++ =new($string)=
    * =$string= - string containing an expression to parse
 Construct a new search node by parsing the passed expression.
 

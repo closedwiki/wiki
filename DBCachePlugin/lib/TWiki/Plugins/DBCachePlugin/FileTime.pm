@@ -4,8 +4,15 @@
 #
 use strict;
 
-# Object that handles a file/time tuple for use in Storable and
-# DBCachePlugin::Archive. Only works on .txt files.
+=begin text
+
+---++ class FileTime
+
+Object that handles a file/time tuple for use in Storable and
+=DBCachePlugin::Archive=.
+
+=cut
+
 { package DBCachePlugin::FileTime;
 
 =begin text
@@ -28,7 +35,7 @@ Construct from a file name
 
 =begin text
 
----+++ =uptodate()=
+---+++ =uptodate()= -< boolean
 Check the file time against what is seen on disc. Return 1 if consistent, 0 if inconsistent.
 
 =cut
