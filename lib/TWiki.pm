@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "01 Feb 2003";
+$wikiversion      = "10 Feb 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1587,7 +1587,7 @@ sub handleToc
             &TWiki::Store::readWebTopic( $web, $topicname ), $topicname, $web ) );
     }
 
-    @list = grep { /(<\/?pre>)|($headerPatternDa)|($headerPatternSp)|($headerPatternHt)/i } @list;
+    @list = grep { /(<\/?pre>)|($headerPatternDa)|($headerPatternSp)|($headerPatternHt)/ } @list;
     my $insidePre = 0;
     my $i = 0;
     my $tabs = "";
