@@ -2,6 +2,7 @@ use strict;
 
 package CommentTest;
 
+use TWiki::Plugins::CommentPlugin;
 use TWiki::Plugins::CommentPlugin::Comment;
 require 'FuncFixture.pm';
 require 'StoreFixture.pm';
@@ -52,7 +53,7 @@ sub inputTest {
     $sattrs .= "\"";
   }
 
-  my $url = "http://twiki/save.cgi/$web/$topic";
+  my $url = "http://twiki/viewauth.cgi/%INTURLENCODE{$web}%/%INTURLENCODE{$topic}%";
 
   if ( $location ) {
     $sattrs .= " location=\"$location\"";
@@ -163,8 +164,7 @@ sub inputTest {
   # can't save, button disabled, so no point trying
 
   my $comm = "This is the comment";
-  $query = new CGI({
-		    'comment_type' => $type,
+  $query = new CGI({'comment_type' => $type,
 		    'comment' => $comm });
   if ( $anchor ) {
     $query->param(-name=>'comment_anchor', -value=>$anchor);
@@ -175,9 +175,15 @@ sub inputTest {
   }
 
   TWiki::Func::TESTsetCGIQuery($query);
-  my $text = "This will be lost!";
-  # invoke the before save handler
-  _doubleBlind($text, $topic, $web);
+  my $text = "Ignore this text";
+  # invoke the save handler
+  TWiki::Plugins::CommentPlugin::commonTagsHandler($text, $topic, $web);
+
+  $this->assert_str_equals("http://twiki/view.cgi/$web/$topic",
+			   TWiki::Func::TESTredirected());
+
+  $text = TWiki::Func::readTopic($web, $topic);
+
   $this->assert_matches(qr/$comm/, $text);
 
   my $refexpr;
@@ -198,11 +204,6 @@ sub inputTest {
   } elsif ( $type eq "below" ) {
     $this->assert_matches(qr/$refexpr.*$comm.*BottomOfTopic/s, $text);
   }
-}
-
-# mirror how the plugin calls it
-sub _doubleBlind() {
-  CommentPlugin::Comment::save($query, @_);
 }
 
 sub test1default {

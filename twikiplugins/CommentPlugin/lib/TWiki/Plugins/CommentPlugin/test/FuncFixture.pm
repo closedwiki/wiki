@@ -12,6 +12,7 @@ use base qw(Test::Unit::TestCase);
 
 my $pwd = undef;
 my $testDir;
+my $redirected;
 $TWiki::webNameRegex = "[A-Z]+[A-Za-z0-9]*";
 $TWiki::anchorRegex = "\#[A-Za-z0-9_]+";
 
@@ -20,6 +21,7 @@ sub new {
   $pwd = `pwd`;
   chop($pwd);
   $testDir = "$pwd/testdata";
+  $redirected = undef;
   return $self;
 }
 
@@ -33,11 +35,12 @@ sub getSkin {
 
 sub set_up {
   mkdir $testDir, 0777 || die "mkdir $testDir";
-  mkdir getDataDir(), 0777 || die "mkdir ".getDataDir();
+  `cp -r ../../../../../data $testDir`;
 }
-  
+
 sub tear_down {
   `rm -rf $testDir`;
+  $redirected = undef;
 }
 
 sub TESTwriteFile {
@@ -120,6 +123,15 @@ sub _handleTmplP {
     return $val;
 }
 
+sub TESTredirected {
+  return $redirected;
+}
+
+sub redirectCgiQuery {
+  my ($query, $url ) = @_;
+  $redirected = $url;
+}
+
 my $query = undef;
 
 sub TESTsetCGIQuery {
@@ -136,6 +148,23 @@ sub getMainWebname {
 
 sub getWikiName {
   return "TestRunner";
+}
+
+sub getWikiUserName {
+  return "Main.TestRunner";
+}
+
+sub wikiToUserName {
+  my $n = shift;
+
+  return "testrunner" if $n =~ /TestRunner$/;
+  return "unknown";
+}
+
+sub formatGmTime {
+    my( $theTime, $theFormat ) = @_;
+
+    return gmtime( $theTime );
 }
 
 sub getUrlHost {
@@ -202,9 +231,37 @@ sub checkTopicEditLock {
   return (undef, undef, 0);
 }
 
+sub setTopicEditLock {
+  my( $web, $topic, $lock ) = @_;
+  die unless ($web);
+  die unless ($topic);
+  if ($lock) {
+    TESTlockTopic($web, $topic, time());
+  } else {
+    TESTunlockTopic($web,$topic);
+  }
+}
+
+sub checkAccessPermission {
+  my ($type, $wikiName, $text, $topic, $web) = @_;
+
+  die unless ($type =~ /^(view|change|create)$/i);
+  die unless ($wikiName);
+  die unless ($web);
+  return 1;
+}
+
 sub readTopicText {
   my ( $web,$topic ) = @_;
   return TESTreadFile( getDataDir() . "/$web/$topic.txt" );
+}
+
+sub readTopic {
+  my ($web, $topic) = @_;
+
+  my $text = readTopicText($web, $topic);
+  $text =~ s/^%META.*?$//g;
+  return (undef, $text);
 }
 
 sub readTemplate {
@@ -337,6 +394,18 @@ sub extractNameValuePair
     }
     $value =~ s/\\$TranslationToken/\"/go;  # resolve \"
     return $value;
+}
+
+sub saveTopicText {
+  my ( $web, $topic, $text, $ignorePermissions, $dontNotify ) = @_;
+
+  die unless ($web);
+  die unless ($topic);
+  die unless ($text);
+
+  print STDERR "Warning: write ignoring perms" if ($ignorePermissions);
+  TESTwriteTopic($web, $topic, $text);
+  print STDERR "Warning: no notify of change to $web.$topic" if ( $dontNotify );
 }
 
 1;
