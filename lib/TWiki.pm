@@ -2328,7 +2328,7 @@ sub _processTags {
                     # behaviour is different in each case.
                     #unshift( @queue, split( /(%)/, $e ));
                     $stack[$#stack] .=
-                      _processTags($e, $depth, $expanding + 1, @_ );
+                      _processTags($e, $depth+1, $expanding , @_ );
                 } else { # expansion failed
                     #print " " x $tell++,"EXPAND $tag FAILED\n" if $tell;
                     push( @stack, "%" ); # push a new context, starting
