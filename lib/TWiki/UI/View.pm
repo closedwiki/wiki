@@ -139,6 +139,7 @@ sub view {
       my $vtext = "<form><textarea readonly=\"readonly\" wrap=\"virtual\" rows=\"%EDITBOXHEIGHT%\" cols=\"%EDITBOXWIDTH%\">";
       $vtext = &TWiki::handleCommonTags( $vtext, $topic );
       $text =~ s/&/&amp\;/go;
+      $text =~ s/%/&\#037\;/go;
       $text =~ s/</&lt\;/go;
       $text =~ s/>/&gt\;/go;
       $text =~ s/\t/   /go;
