@@ -35,7 +35,7 @@ use vars qw(
 	$VERSION
     );
 
-$VERSION = '1.000';
+$VERSION = '1.010';
 
 @registrableHandlers = (
         'initPlugin',              # ( $topic, $web, $user, $installWeb )
