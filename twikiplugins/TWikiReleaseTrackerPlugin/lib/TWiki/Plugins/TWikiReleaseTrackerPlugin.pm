@@ -21,6 +21,7 @@ use strict;
 
 # =========================
 package TWiki::Plugins::TWikiReleaseTrackerPlugin;
+# See also TWiki::Plugins::TWikiReleaseTrackerPlugin::Shell2
 use TWiki::Func;
 use TWiki;
 use CGI;
@@ -221,7 +222,7 @@ sub foundFile {
    $dist = untaint($dist);
 
    my ( $output, $changeExpression, $cmd ) =
-     diffFiles( $relativeFile, $comparedToDistribution, $dist, "-w -u" );
+     diffFiles( $relativeFile, $comparedToDistribution, $dist, "-w -u" );  ## to, from BUG
    $comparison .= "<b>\$toDistribution</b>\n<pre>$output</pre>\n";
    $comparison =~ s/\$toDistribution/$dist/;
   }
@@ -320,16 +321,16 @@ sub compareFile {
 }
 
 #==============================================================
-
 sub diffFiles {
- my ( $file, $distribution, $comparedDistribution, $fileDiffParams ) = @_;
+
+my ( $file, $from, $to, $fileDiffParams ) = @_;
  my $ans;
  $ans .=
-"   * file = '$file', dist='$distribution', comp='$comparedDistribution' <HR>"
+"   * file = '$file', dist='$from', comp='$to' <HR>"
    if $debug;
 
- my $file1 = getFile( $file, $distribution,         "From" );
- my $file2 = getFile( $file, $comparedDistribution, "To" );
+ my $file1 = getFile( $file, $from, "From" );
+ my $file2 = getFile( $file, $to,   "To" );
 
  my $cmd              = "diff $fileDiffParams $file1 $file2";
  my $output           = captureOutput($cmd);
@@ -342,7 +343,7 @@ sub diffFilesLineCountModeCallback {
  my ( $file, $distribution, $comparedDistribution, $fileDiffParams ) = @_;
 
  my ( $output, $changeExpression, $cmd ) =
-   diffFiles( $file, $distribution, $comparedDistribution, $fileDiffParams );
+   diffFiles( $file, $distribution, $comparedDistribution, $fileDiffParams ); # FROM, TO
 
  my $ans = "<LI> Show diff detail for only this distribution: "
    . browserCallback(
@@ -679,7 +680,7 @@ sub initPlugin {
  my $pluginNameCaps = "\U$pluginName\E";
 
  # Get plugin debug flag
- $debug = 1;    #TWiki::Func::getPreferencesFlag( "$pluginNameCaps_DEBUG" );
+ $debug = TWiki::Func::getPreferencesFlag( "${pluginNameCaps}_DEBUG" );
  writeDebug("initialising");
 
  use TWiki::Plugins::TWikiReleaseTrackerPlugin::DistributionWalker;
