@@ -480,7 +480,8 @@ sub updateReferringPages {
     # SMELL: does not handle <nop> before the wikiword
     my $preTopic = qr/^|[^!\w]/;    # Start of line or non-alphanumeric and not !
     my $postTopic = qr/s?(?=$|\W)/;	# End of line or non-alphanumeric; s? for plurals
-    my $spacedTopic = TWiki::searchableTopic( $oldTopic );
+    my $spacedTopic = TWiki::spaceOutWikiWord( $oldTopic );
+    $spacedTopic =~ s/ / */g;
     my $lockFailures = 0;
 
     while ( @refs ) {
@@ -530,6 +531,8 @@ sub updateReferringPages {
                     # the web of the referring topic is the original web of
                     # the topic that's being moved.
                     if( $oldWeb eq $itemWeb ) {
+                        # SMELL: these searches are not consistent with
+                        # what is expanded in Render.pm
                         $line =~ s/($preTopic)\Q$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
                         $line =~ s/\[\[($spacedTopic)\]\]/[[$newTopic][$1]]/gi;
                     }
@@ -813,7 +816,7 @@ sub saveAttachment {
                                                 $user->wikiName() );
 
         $plugins->afterAttachmentSaveHandler( $attrs,
-                                                      $topic, $web, $error );
+                                              $topic, $web, $error );
 
         return "attachment save failed: $error" if $error;
 
@@ -1729,15 +1732,15 @@ sub _collate {
 
 =pod
 
----++ ObjectMethod searchInWebContent($web, $type, $caseSensitive, $justTopics, $searchString, \@topics ) -> \%map
+---++ ObjectMethod searchInWebContent($searchString, $web, $type, $caseSensitive, $justTopics, \@topics ) -> \%map
 
-Search for a token in the content of a web. The search must be over all
+Search for a string in the content of a web. The search must be over all
 content and all formatted meta-data, though the latter search type is
 deprecated (use searchMetaData instead).
 
+   * =$searchString= - the search string, in egrep format if regex
    * =$web= - The web to search in
    * =$type= - 'regex' or something else
-   * =$searchString= - the search string, in egrep format
    * =\@topics= - reference to a list of topics to search
 
 The return value is a reference to a hash which maps each matching topic
@@ -1749,7 +1752,7 @@ match per topic, and will not return matching lines).
 =cut
 
 sub searchInWebContent {
-    my( $this, $web, $type, $caseSensitive, $justTopics, $searchString, $topics ) = @_;
+    my( $this, $searchString, $web, $type, $caseSensitive, $justTopics, $topics ) = @_;
 
     # I18N: 'grep' must use locales if needed,
     # for case-insensitive searching.  See TWiki::setupLocale.
@@ -1801,31 +1804,50 @@ getReferingTopics($oldWeb, $oldTopic);
 SMELL: this does not hide NONSEARCHABLE webs or do any of the security things at the moment.
 
 =cut
-sub getReferingTopics
-{
-        my ($this, $oldWeb, $oldTopic, $newWeb) = @_;
+sub getReferingTopics {
+    my ($this, $oldWeb, $oldTopic, $newWeb) = @_;
 
-        my $searchString = $oldTopic;#BUGGO - this is only true in the oldWeb, otherwise need to qualify
+    my $searchString = $oldTopic;#BUGGO - this is only true in the oldWeb, otherwise need to qualify
 
-        my @results;
+    my @results;
 
-        my ($web, $topic);
+    my ($web, $topic);
 
-        foreach $web ($this->getListOfWebs()) {
-                my @topicList = $this->getTopicNames( $web );
+    foreach $web ($this->getListOfWebs()) {
+        my @topicList = $this->getTopicNames( $web );
 
-                my $matches = $this->searchInWebContent( $web, '', '', 1, $searchString, \@topicList );
-                foreach $topic (keys %$matches) {
-                        if ( $web eq $newWeb ) {
-                                push (@results, 'global');
-                        } else {
-                                push (@results, 'stupid');
-                        }
-                        push (@results, $web.'.'.$topic);
-                }
+        my $matches = $this->searchInWebContent( $searchString, $web, '', '', 1, \@topicList );
+        foreach $topic (keys %$matches) {
+            if ( $web eq $newWeb ) {
+                push (@results, 'global');
+            } else {
+                push (@results, 'stupid');
+            }
+            push (@results, $web.'.'.$topic);
         }
+    }
 
-        return \@results;
+    return \@results;
+}
+
+=pod
+
+---++ ObjectMethod getRevisionAtTime( $web, $topic, $time ) -> $rev
+   * =$web= - web for topic
+   * =$topic= - topic
+   * =$time= - time (in epoch secs) for the rev
+
+Get the revision number of a topic at a specific time.
+Returns a single-digit rev number or undef if it couldn't be determined
+(either because the topic isn't that old, or there was a problem)
+
+=cut
+
+sub getRevisionAtTime {
+    my ( $this, $theWeb, $theTopic, $time ) = @_;
+
+    my $topicHandler = $this->_getTopicHandler( $theWeb, $theTopic );
+    return $topicHandler->getRevisionAtTime( $time );
 }
 
 1;

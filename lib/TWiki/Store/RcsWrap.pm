@@ -394,4 +394,21 @@ sub _lock {
     return undef;
 }
 
+sub getRevisionAtTime {
+    my( $this, $date ) = @_;
+
+    if ( !-e $this->{rcsFile} ) {
+        return undef;
+    }
+	$date = TWiki::Time::formatTime( $date , '\$rcs', 'gmtime');
+    my ($rcsOutput, $exit) = $this->{session}->{sandbox}->readFromProcess
+      ( $TWiki::cfg{RCS}{rlogDateCmd}, DATE => $date, FILENAME => $this->{file} );
+
+    if ( $rcsOutput =~ m/revision \d+\.(\d+)/ ) {
+        return $1;
+    } else {
+        return undef;
+    }
+}
+
 1;

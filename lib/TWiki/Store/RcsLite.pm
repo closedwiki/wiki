@@ -846,4 +846,10 @@ sub _addChunk {
    return $nLines;
 }
 
+sub getRevisionAtTime {
+    my( $this, $date ) = @_;
+
+    return undef;
+}
+
 1;

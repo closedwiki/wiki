@@ -715,4 +715,15 @@ User returned as a wikiname.
 
 =cut
 
+=pod
+
+---++ ObjectMethod getRevisionAtTime($time) -> $rev
+
+Get a single-digit version number for the rev that was alive at the
+given epoch-secs time, or undef it none could be found.
+
+*Virtual method* - must be implemented by subclasses
+
+=cut
+
 1;
