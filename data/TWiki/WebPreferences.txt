@@ -23,7 +23,7 @@ __Preferences:__
 		* Set NOSEARCHALL =
 
 	* Users or groups who __are not__ / __are__ allowed to change topics in the %WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
-		* Set DENYWEBCHANGE = %MAINWEB%.TWikiGuest
+		* Set DENYWEBCHANGE = 
 		* Set ALLOWWEBCHANGE = 
 
 	* Users or groups allowed to change this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
