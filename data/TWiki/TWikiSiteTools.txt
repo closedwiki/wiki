@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="MikeMannix" date="1020528636" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043912580" format="1.0" version="1.7"}%
 %TOC%
 %STARTINCLUDE%
----# <nop>TWikiSiteTools
+---# TWiki Site Tools
 
 _Utilities for searching, navigation, and monitoring site activity_
 
@@ -9,13 +9,29 @@ TWikiSiteTools include utilities for navigating, searching and keeping up with s
 
 ---++ <nop>WebNotify Recent Changes Alert
 
-Each TWiki web has an automatic email alert service that sends a list of recent changes on a preset schedule, like once a day. Users can subscribe and unsubscribe using %NOTIFYTOPIC% in each web. The Perl script =mailnotify= is called by a deamon in regular intervals. The script sends an automated email to subscribed users if topics were changed in a web within last interval.
+Each TWiki web has an automatic email alert service that sends a list of recent changes on a preset schedule, like once a day. Users can subscribe and unsubscribe using %NOTIFYTOPIC% in each web. The Perl script =mailnotify= is called by a background process at regular intervals. The script sends an automated email to subscribed users if topics were changed in a web since the script was last run.
 
-	* You can create a WebNotify using TWikiVariables with ==%<nop>NOTIFYTOPIC%==
+	* You can create a WebNotify link using TWikiVariables with ==%<nop>NOTIFYTOPIC%==
+
+TWiki handles <nop>%NOTIFYTOPIC% entries that include the WikiName of a user or a [[%MAINWEB%.TWikiGroups][TWikiGroup]] and an optional e-mail address. Example entries in <nop>%NOTIFYTOPIC%:
+<pre>
+	 * %MAINWEB%.FredBloggs
+	 * %MAINWEB%.FredBloggs - secondary@home.com
+	 * %MAINWEB%.EngineeringGroup
+</pre>
+
+The first entry is the default form, the notification gets sent to the e-mail address specified in the user's home page. The second entry lists an alternative e-mail address. The third entry specifies a group, the notification gets sent to each member of the group.
+
+You can also use =%<nop>MAINWEB%= instead of =Main=, but this is not necessary even if you have renamed the main web by configuring =$mainWebname= in =TWiki.cfg=.  
+
 
 ---+++ Configuring Outgoing Mail
 
 %WIKITOOLNAME% will use the ==Net::SMTP== module if it is installed on your system. Set this with the ==SMTPMAILHOST== variable in TWikiPreferences.
+
+The notify e-mail uses the default =changes.tmpl= template, or a skin if activated in the TWikiPreferences.
+
+mailnotify also relies on two hidden files in each =TWiki/data/[web]= directory: =.changes= and =.mailnotify.= Make sure both are writable by your web server process. =.changes= contains a list of changes; go ahead and make this empty. =.mailnotify= contains a timestamp of the last time notification was done.
 
 You can use an external mail program, like ==sendmail==, if the =Net::SMTP= module is not installed. Set the program path in ==$mailProgram== in ==TWiki.cfg==.
 
@@ -93,4 +109,5 @@ WebIndex lists all web topics in alphabetical order, with the first couple of li
 </pre>
 </blockquote>
 
--- Main.MikeMannix - 01 Dec 2001
+-- Main.MikeMannix - 01 Dec 2001 %BR%
+-- Main.PeterThoeny - 30 Jan 2003
