@@ -2,22 +2,22 @@ package ServerTest;
 
 use HTTP::DAV;
 
-my @davuser;
+my @davUser;
 #######################################################
 # Configure the following for your local installation #
 # Requres a correctly installed server and a twiki    #
 #######################################################
-my $twikicfg = "/home/twiki/alpha/lib/TWiki.cfg";
-my $pubdavpath  = "twiki/pub";
-my $datadavpath  = "twiki/data";
-my $lockpath = "/var/lock/webdav";
-my $bindir = "/home/twiki/alpha/bin";
-$davuser[0] = {
+my $twikiCfg = "/home/twiki/alpha/lib/TWiki.cfg";
+my $davPubPath  = "twiki/pub";
+my $davDataPath  = "twiki/data";
+my $davLockPath = "/var/lock/webdav";
+my $twikiBinDir = "/home/twiki/alpha/bin";
+$davUser[0] = {
 			   wikiname => "TestUser1",
 			   password => "hubbahubba",
 			   username => "TestUser1" # username as in REMOTE_USER
 			  };
-$davuser[1] = {
+$davUser[1] = {
 			   wikiname=>"TestUser2",
 			   password=>"bloodandguts",
 			   username => "TestUser2"
@@ -57,58 +57,62 @@ use vars qw( $defaultUrlHost $scriptUrlPath $dispScriptUrlPath $dispViewPath
 	 $doLogTopicChanges $doLogTopicSearch $doLogRegistration
 	 $disableAllPlugins $doSuperAdminGroup );
 
-require "$twikicfg";
+require "$twikiCfg";
 my $twikiurl = "$defaultUrlHost/$scriptUrlPath";
-my $davpuburl = "$defaultUrlHost/$pubdavpath";
-my $davdataurl = "$defaultUrlHost/$datadavpath";
+my $davPubURL = "$defaultUrlHost/$davPubPath";
+my $davDataURL = "$defaultUrlHost/$davDataPath";
 my $binurl = "$defaultUrlHost/$scriptUrlPath";
 
-my $tmpfile = "/tmp/SugarKane.txt";
+my $testAttName = "TestAttachment.gif";
+my $testAttPath = "/tmp/$testAttName";
 
 sub set_up {
   my $this = shift;
-  `cp -R $dataDir/_default $dataDir/Davtest` or $this->assert("Fixture");
-  # DavTest0 is accessible only to $davuser[0]
-  # DavTest1 is accessible only to $davuser[1]
-  # DavTest2 is accessible to both, except user 0 can't rename it
-  # DavTest3 is accessible to neither
-  savetopic(1, "Davtest", "DavTest0",
-			"\t* Set DENYTOPICVIEW = $davuser[1]{wikiname}\n".
-			"\t* Set DENYTOPICRENAME = $davuser[1]{wikiname}\n".
-			"\t* Set DENYTOPICCHANGE = $davuser[1]{wikiname}\n");
-  savetopic(0, "Davtest", "DavTest1",
-			"\t* Set DENYTOPICVIEW = $davuser[0]{wikiname}\n".
-			"\t* Set DENYTOPICRENAME = $davuser[0]{wikiname}\n".
-			"\t* Set DENYTOPICCHANGE = $davuser[0]{wikiname}\n");
-  savetopic(0, "Davtest", "DavTest2",
-			"\t* Set DENYTOPICRENAME = $davuser[0]{wikiname}\n");
-  savetopic(0, "Davtest", "DavTest3",
-			"\t* Set DENYTOPICVIEW = $davuser[0]{wikiname},$davuser[1]{wikiname}\n".
-			"\t* Set DENYTOPICRENAME = $davuser[0]{wikiname},$davuser[1]{wikiname}\n".
-			"\t* Set DENYTOPICCHANGE = $davuser[0]{wikiname},$davuser[1]{wikiname}\n");
-  `chmod -f -R 777 $dataDir/Davtest`;
-  `mkdir -p $pubDir/Davtest`;
-  `mkdir -p $pubDir/Davtest/Davtest0`;
-  `mkdir -p $pubDir/Davtest/Davtest1`;
-  `mkdir -p $pubDir/Davtest/Davtest2`;
-  `mkdir -p $pubDir/Davtest/Davtest3`;
-  `chmod -f -R 777 $pubDir/Davtest`;
-  open TF, ">$tmpfile";
-  print TF "Sugar Kowalski\nMarilynMonroe\n";
-  close TF;
+  `cp -R $dataDir/_default $dataDir/Attest` or $this->assert("Fixture");
+  `mkdir -p $pubDir/Attest` or $this->assert("Fixture");
+  `chmod -f -R 777 $dataDir/Atttest`;
+  `chmod -f -R 777 $pubDir/Attest`;
+  open(TA, ">$testAttPath");
+  print TA "Bollocks";
+  close(TA);
 }
 
 sub tear_down {
-  `rm -rf $dataDir/Davtest`;
-  `rm -rf $pubDir/Davtest`;
-  unlink $tmpfile;
+  `rm -rf $dataDir/Attest`;
+  `rm -rf $pubDir/Attest`;
+  unlink $testAttPath;
+}
+
+sub _createProtectedTopic {
+  my ($this, $web, $root, $a, $b ) = @_;
+
+  my $text = "\n";
+  my (@v, @c, @r);
+  push(@v, $davUser[0]{wikiname}) unless ($a & 4);
+  push(@v, $davUser[1]{wikiname}) unless ($b & 4);
+  push(@c, $davUser[0]{wikiname}) unless ($a & 2);
+  push(@c, $davUser[1]{wikiname}) unless ($b & 2);
+  push(@r, $davUser[0]{wikiname}) unless ($a & 1);
+  push(@r, $davUser[1]{wikiname}) unless ($b & 1);
+
+  $text .= "\t* Set DENYTOPICVIEW = ".join(",",@v)."\n" if (scalar(@v));
+  $text .= "\t* Set DENYTOPICCHANGE = ".join(",",@c)."\n" if (scalar(@c));
+  $text .= "\t* Set DENYTOPICRENAME = ".join(",",@r)."\n" if (scalar(@r));
+
+  my $tname = "$root$a$b";
+  _saveTopic(0, $web, $tname, $text);
+
+  # make sure the pub dir exists, so puts work
+  mkdir("$pubDir/$web/$tname");
+
+  return $tname;
 }
 
 sub urlencode {
   return "%".sprintf("%02x", ord(shift));
 }
 
-sub savetopic {
+sub _saveTopic {
   my ($user, $web, $topic, $text) = @_;
 
   die unless $web;
@@ -120,12 +124,21 @@ sub savetopic {
 	;
   }
   my $cmd = "curl -s -S ";
-  $cmd .= "-u $davuser[$user]{username}:$davuser[$user]{password} ";
+  $cmd .= "-u $davUser[$user]{username}:$davUser[$user]{password} ";
   $cmd .= "-d text='$text' ";
   $cmd .= "-d dontnotify=on ";
   $cmd .= "-d unlock=on ";
   $cmd .= "$binurl/save$scriptSuffix/${web}/${topic} ";
-  `$cmd` && die "$cmd failed $?";
+  my $retries = 0;
+  do {
+	`$cmd`;
+	if ($?) {
+	  print STDERR "$cmd failed - retrying\n";
+	  $retries++;
+	  sleep 2;
+	}
+  } while ($? && $retries < 5);
+  die "Gave in" if ($retries && $?);
 }
 
 sub saveattachment {
@@ -133,25 +146,33 @@ sub saveattachment {
   die unless $web;
   die unless $topic;
   my $cmd = "curl -s -S ";
-  $cmd .= "-u $davuser[$user]{username}:$davuser[$user]{password} ";
-  $cmd .= "-F filepath=\\\@SugarKane.txt ";
+  $cmd .= "-u $davUser[$user]{username}:$davUser[$user]{password} ";
+  $cmd .= "-F filepath=\\\@$testAttPath ";
   $cmd .= "-F filename=$att ";
   $cmd .= "-F filecomment=ElucidateTheGoose ";
   $cmd .= "$binurl/upload$scriptSuffix/${web}/${topic} ";
-  my $err = `$cmd`;
-  die "$cmd failed $?: $err" if ($?);
+  my $retries = 0;
+  do {
+	`$cmd`;
+	if ($?) {
+	  print STDERR "$cmd failed - retrying\n";
+	  $retries++;
+	  sleep 2;
+	}
+  } while ($? && $retries < 5);
+  die "Gave in" if ($retries && $?);
 }
 
 sub davopen {
-  my ($this, $user) = @_;
+  my ($this, $user, $url) = @_;
   my ($un,$up);
   my $dav = new HTTP::DAV;
-  $dav->credentials(-user=>$davuser[$user]{username},
-					-pass=>$davuser[$user]{password},
-					-url=>$davpuburl);
+  $dav->credentials(-user=>$davUser[$user]{username},
+					-pass=>$davUser[$user]{password},
+					-url=>$url);
 
-  $dav->open(-url=>$davpuburl)
-	or die "Failed to open $davpuburl ".$dav->message." at ".join(":",caller);
+  $dav->open(-url=>$url)
+	or die "Failed to open $url ".$dav->message." at ".join(":",caller);
 
   return $dav;
 }
@@ -182,199 +203,273 @@ sub checklist {
 sub checkatt {
   my ($this, $exp, $web, $topic, $att, $nocom) = @_;
   my $al = `egrep 'META:FILEATTACHMENT.*name=\"$att\"' $dataDir/$web/$topic.txt`;
+  my $res = $?;
   my $at = " at ".join(":",caller);
   if ($exp) {
-	$this->assert(!$?, "$web/$topic meta $att");
-	$this->assert(-e "$pubDir/$web/$topic/$att", $at);
-	$this->assert(-e "$pubDir/$web/$topic/$att,v", $at);
+	$this->assert(-e "$pubDir/$web/$topic/$att", "$web/$topic/$att doesn't exist $at");
+	$this->assert(-e "$pubDir/$web/$topic/$att,v", "$pubDir/$web/$topic/$att,v doesn't exist $at");
+	$this->assert(!$res, "$att is not in META of $web/$topic $at");
 	$this->assert_matches(qr/name=\"$att\"/, $al, $at);
 	if (!$nocom) {
 	  $this->assert_matches(qr/comment=\"ElucidateTheGoose\"/, $al,
 							" at $at in $al");
 	}
   } else {
-	$this->assert($?, "$web/$topic meta $att", $at);
-	$this->assert(!-e "$pubDir/$web/$topic/$att", $at);
-	$this->assert(!-e "$pubDir/$web/$topic/$att,v", $at);
+	$this->assert(!-e "$pubDir/$web/$topic/$att", "$web/$topic/$att exists $at");
+	$this->assert(!-e "$pubDir/$web/$topic/$att,v", "$web/$topic/$att,v exists $at");
+	$this->assert($res, "$att is in META ($al) of $web/$topic $at");
   }
 }
 
-# make an extended fixture for testing copies and moves
-sub copymovefixture {
-  my $this=shift;
-  my $dav = $this->davopen(0);
-
-  $this->saveattachment(0, "Davtest", "DavTest0", "SugarKane.txt");
-
-  $this->checkatt(1, "Davtest","DavTest0", "SugarKane.txt");
-  $this->checkatt(0, "Davtest","DavTest0", "MarilynMonroe.dat");
-}
-
-sub test_copyAttachmentWithinTopic {
-  my $this=shift;
-  $this->copymovefixture();
-
-  # copy leaf access permitted within topic
-  my $dav = $this->davopen(0);
-  $this->checkatt(1, "Davtest","DavTest0", "SugarKane.txt");
-  $this->davcheck($dav->copy("Davtest/DavTest0/SugarKane.txt",
-							 "Davtest/DavTest0/MarilynMonroe.dat"), $dav);
-  $this->checkatt(1, "Davtest","DavTest0", "SugarKane.txt");
-  $this->checkatt(1, "Davtest","DavTest0", "MarilynMonroe.dat");
-}
-
-sub test_copyAttachmentWithinTopicDenied {
-  my $this=shift;
-  $this->copymovefixture();
-
-  # copy leaf access denied
-  my $dav = $this->davopen(1);
-  $this->davcheck(!$dav->copy("Davtest/DavTest0/SugarKane.txt",
-							  "Davtest/DavTest0/MrsKennedy.txt"), $dav);
-}
-
-sub test_copyPubCollection {
-  my $this=shift;
-
-  # copy collection
-  my $dav = $this->davopen(0);
-  $this->davcheck(!$dav->copy("Davtest/DavTest0",
-							  "Davtest/SmeaGol"), $dav);
-}
-
-sub test_copyAttacmnetToDenied {
-  my $this=shift;
-  $this->copymovefixture();
-
-  # copy leaf access permitted but change denied
-  my $dav = $this->davopen(1);
-  $this->davcheck(!$dav->copy("Davtest/DavTest0/SugarKane.txt",
-							  "Davtest/DavTest1/SugarKane.txt"), $dav);
-}
-
-sub test_deleteAttachment {
-  my $this=shift;
-  my $dav = $this->davopen(0);
-
-  $this->saveattachment(0,"Davtest","DavTest0","SugarKane.txt");
-
-  # delete leaf access denied
-  $dav = $this->davopen(1);
-  $this->davcheck(!$dav->delete("Davtest/DavTest0/SugarKane.txt"), $dav);
-
-  # delete leaf access permitted
-  $dav = $this->davopen(0);
-  $this->checkatt(1, "Davtest","DavTest0", "SugarKane.txt");
-  $this->davcheck($dav->delete("Davtest/DavTest0/SugarKane.txt"), $dav);
-  $this->checkatt(0, "Davtest","DavTest0", "SugarKane.txt");
-
-  # delete collection
-  $this->davcheck(!$dav->delete("Davtest/DavTest0"), $dav);
-}
-
-# make sure of permissions
-sub test_getAttachment {
+sub test_get {
   my $this=shift;
   my $dav;
+  my $t = $this->_createProtectedTopic("Attest", "DavTest", 7, 0);
+  $this->assert(-e "$dataDir/Attest/$t.txt");
 
-  $this->saveattachment(0,"Davtest","DavTest0","SugarKane.txt");
-  $this->saveattachment(1,"Davtest","DavTest1","SugarKane.txt");
+  # view access permitted
+  $dav = $this->davopen(0, $davDataURL);
+  $this->davcheck($dav->get("Attest/$t.txt"), $dav);
 
-  $dav = $this->davopen(0);
-  # get access permitted
-  $this->davcheck($dav->get("Davtest/DavTest0/SugarKane.txt"), $dav);
-  # get access denied
-  $this->davcheck(!$dav->get("Davtest/DavTest1/SugarKane.txt"), $dav);
+  # view access denied
+  $dav = $this->davopen(1, $davDataURL);
+  $this->davcheck(!$dav->get("Attest/$t.txt"), $dav);
 
-  $dav = $this->davopen(1);
-  # get access denied
-  $this->davcheck(!$dav->get("Davtest/DavTest0/SugarKane.txt"), $dav);
-  # get access permitted
-  $this->davcheck($dav->get("Davtest/DavTest1/SugarKane.txt"), $dav);
+  my $tt = $this->_createProtectedTopic("Attest", "DavTest", 4, 2);
+  $dav = $this->davopen(0, $davDataURL);
+  $this->davcheck($dav->get("Attest/$tt.txt"), $dav);
+  $dav = $this->davopen(1, $davDataURL);
+  $this->davcheck(!$dav->get("Attest/$tt.txt"), $dav);
+
+  $tt = $this->_createProtectedTopic("Attest", "DavTest", 4, 1);
+  $dav = $this->davopen(0, $davDataURL);
+  $this->davcheck($dav->get("Attest/$tt.txt"), $dav);
+  $dav = $this->davopen(1, $davDataURL);
+  $this->davcheck(!$dav->get("Attest/$tt.txt"), $dav);
+
+  # Attachments
+  $this->saveattachment(0,"Attest",$t,$testAttName);
+
+  # view access permitted
+  $dav = $this->davopen(0, $davPubURL);
+  $this->davcheck($dav->get("Attest/$t/$testAttName"), $dav);
+
+  # view access denied
+  $dav = $this->davopen(1, $davPubURL);
+  $this->davcheck(!$dav->get("Attest/$t/$testAttName"), $dav);
+}
+
+sub test_put {
+  my $this=shift;
+  my $t = "TestTopic";
+
+  # put to web
+  my $dav = $this->davopen(0, $davDataURL);
+  $this->davcheck(!$dav->put(-local=>$testAttPath,
+							-url=>"Davtestweb"), $dav);
+  $this->assert(!-e "$dataDir/Davtestweb");
+
+  $dav = $this->davopen(0, $davPubURL);
+  $this->davcheck(!$dav->put(-local=>$testAttPath,
+							-url=>"Davtestweb"), $dav);
+  $this->assert(!-e "$pubDir/Davtestweb");
+
+  # create new topic is no problem
+  $dav = $this->davopen(0, $davDataURL);
+  $this->davcheck($dav->put(-local=>$testAttPath,
+							-url=>"Attest/$t.txt"), $dav);
+  $this->assert(-e "$dataDir/Attest/$t.txt");
+  $this->assert(-e "$dataDir/Attest/$t.txt,v");
+
+  #
+  $dav = $this->davopen(0, $davPubURL);
+  $this->davcheck(!$dav->put(-local=>$testAttPath,
+							 -url=>"Attest/TestTopicTwo.txt"), $dav);
+  $this->assert(!-e "$pubDir/Attest/TestTopicTwo.txt");
+
+  # put to existing topic is OK
+  $t = $this->_createProtectedTopic("Attest", "DavTest", 7, 3);
+  $this->davcheck(!$dav->put(-local=>$testAttPath,
+							-url=>"Attest/$t.txt"), $dav);
+
+  # put to web where change is denied
+  $dav = $this->davopen(0, $davDataURL);
+  _saveTopic(0, "Attest", "WebPreferences",
+			 "\t* Set DENYWEBCHANGE = $davUser[1]{wikiname}\n");
+  $dav = $this->davopen(1, $davDataURL);
+  $this->davcheck(!$dav->put(-local=>$testAttPath,
+							 -url=>"Attest/TestTopicTwo.txt"), $dav);
+  $this->assert(!-e "$dataDir/Attest/TestTopicTwo.txt");
+
+  # attach to non-existent topic
+  $dav = $this->davopen(0, $davPubURL);
+  $this->davcheck(!$dav->put(-local=>$testAttPath,
+							 -url=>"Attest/NonExistant/$testAttName"), $dav);
+  $this->assert(!-e "$pubDir/Attest/NonExistant/$testAttName");
+
+  # attach to existing topic.
+  # and put to the pub dir
+  $this->davcheck($dav->put(-local=>$testAttPath,
+							-url=>"Attest/$t/$testAttName"), $dav);
+  $this->checkatt(1, "Attest", $t, $testAttName, 1);
+
+  _saveTopic(0, "Attest", "WebPreferences", "$davUser[1]{wikiname}\n");
+
+  # view denied, but can still change.
+  $dav = $this->davopen(1, $davPubURL);
+  $this->davcheck($dav->put(-local=>$testAttPath,
+							-url=>"Attest/$t/$testAttName"), $dav);
+  $this->checkatt(1, "Attest", $t, $testAttName, 1);
+
+  # change denied, view allowed, should not be able to save
+  $t = $this->_createProtectedTopic("Attest", "DavTest", 7, 5);
+  $this->davcheck(!$dav->put(-local=>$testAttPath,
+							-url=>"Attest/$t/$testAttName"), $dav);
+  $this->checkatt(0, "Attest", $t, $testAttName, 1);
+
+  # rename denied, but should be able to save
+  $t = $this->_createProtectedTopic("Attest", "DavTest", 7, 6);
+  $this->davcheck($dav->put(-local=>$testAttPath,
+							-url=>"Attest/$t/$testAttName"), $dav);
+  $this->checkatt(1, "Attest", $t, $testAttName, 1);
+}
+
+sub test_delete {
+  my $this=shift;
+  my $dav = $this->davopen(0, $davPubURL);
+
+  my $t = $this->_createProtectedTopic("Attest", "DavTest", 7, 6);
+  $this->saveattachment(0,"Attest",$t, $testAttName);
+
+  # delete whole web
+  $dav = $this->davopen(0, $davDataURL);
+  $this->davcheck(!$dav->delete("Attest"), $dav);
+  $this->checkatt(1, "Attest",$t, $testAttName);
+
+  $dav = $this->davopen(0, $davPubURL);
+  $this->davcheck(!$dav->delete("Attest"), $dav);
+  $this->checkatt(1, "Attest",$t, $testAttName);
+
+  # delete attachment only
+  $dav = $this->davopen(1, $davPubURL);
+  $this->davcheck(!$dav->delete("Attest/$t/$testAttName"), $dav);
+  $this->checkatt(1, "Attest",$t, $testAttName);
+
+  $dav = $this->davopen(0, $davPubURL);
+  $this->davcheck($dav->delete("Attest/$t/$testAttName"), $dav);
+  $this->checkatt(0, "Attest", $t, $testAttName);
+
+  $this->saveattachment(0,"Attest",$t, $testAttName);
+
+  # delete whole topic
+  $dav = $this->davopen(0, $davPubURL);
+  $this->davcheck(!$dav->delete("Attest/$t"), $dav);
+  $this->checkatt(1, "Attest",$t, $testAttName);
+
+  $dav = $this->davopen(1, $davDataURL);
+  $this->davcheck(!$dav->delete("Attest/$t"), $dav);
+  $this->checkatt(1, "Attest",$t, $testAttName);
+
+  # delete topic is banned
+  $dav = $this->davopen(0, $davDataURL);
+  $this->davcheck(!$dav->delete("Attest/$t.txt"), $dav);
 }
 
 # collection making is banned everywhere
 sub test_mkcol {
   my $this=shift;
 
-  my $dav = $this->davopen(0);
+  my $dav = $this->davopen(0, $davDataURL);
+  $this->davcheck(!$dav->mkcol("Blockme"), $dav);
+  $this->assert(!-d "$dataDir/Blockme");
+  $this->davcheck(!$dav->mkcol("Attest/Blockme"),$dav);
+  $this->assert(!-d "$dataDir/Attest/Blockme");
+  $this->davcheck(!$dav->mkcol("Attest/Attest1/Blockme"),$dav);
+  $this->assert(!-d "$dataDir/Attest/DavTest07/Blockme");
+
+  $dav = $this->davopen(0, $davPubURL);
   $this->davcheck(!$dav->mkcol("Blockme"), $dav);
   $this->assert(!-d "$pubDir/Blockme");
-  $this->davcheck(!$dav->mkcol("Davtest/Blockme"),$dav);
-  $this->assert(!-d "$pubDir/Davtest/Blockme");
-  $this->davcheck(!$dav->mkcol("Davtest/Davtest1/Blockme"),$dav);
-  $this->assert(!-d "$pubDir/Davtest/DavTest1/Blockme");
+  $this->davcheck(!$dav->mkcol("Attest/Blockme"),$dav);
+  $this->assert(!-d "$pubDir/Attest/Blockme");
+  $this->davcheck(!$dav->mkcol("Attest/Attest1/Blockme"),$dav);
+  $this->assert(!-d "$pubDir/Attest/DavTest07/Blockme");
 }
 
-sub test_moveCollection {
+sub test_copy {
   my $this=shift;
 
-  my $dav = $this->davopen(0);
-  # move collection
-  $this->davcheck(!$dav->move("Davtest/DavTest0", "DavTest/SmeAgol"), $dav);
+  my $t = $this->_createProtectedTopic("Attest", "DavTest", 7, 0);
+  $this->saveattachment(0, "Attest", $t, $testAttName);
+
+  my $dav = $this->davopen(0, $davPubURL);
+  $this->davcheck($dav->copy("Attest/$t/$testAttName",
+							 "Attest/$t/LegalCopy.dat"), $dav);
+  $this->checkatt(1, "Attest",$t, $testAttName);
+  $this->checkatt(1, "Attest",$t, "LegalCopy.dat");
+
+  $dav = $this->davopen(1, $davPubURL);
+  $this->davcheck(!$dav->copy("Attest/$t/$testAttName",
+							  "Attest/$t/IllegalCopy.dat"), $dav);
+  $this->checkatt(1, "Attest",$t, $testAttName);
+  $this->checkatt(0, "Attest",$t, "IllegalCopy.dat");
+
+  $t = $this->_createProtectedTopic("Attest", "DavTest", 7, 4);
+  $this->saveattachment(0, "Attest", $t, $testAttName);
+
+  $dav = $this->davopen(1, $davPubURL);
+  $this->davcheck(!$dav->copy("Attest/$t/$testAttName",
+							  "Attest/$t/IllegalCopy.dat"), $dav);
+  $this->checkatt(1, "Attest",$t, $testAttName);
+  $this->checkatt(0, "Attest",$t, "IllegalCopy.dat");
+
+  # Copy topic is banned
+  $dav = $this->davopen(0, $davDataURL);
+  $this->davcheck(!$dav->copy("Attest/$t.txt",
+							  "Attest/SmeaGol.txt"), $dav);
 }
 
-sub test_moveWithinTopic {
+sub test_move {
   my $this=shift;
-  $this->copymovefixture();
 
-  my $dav = $this->davopen(0);
+  my $t = $this->_createProtectedTopic("Attest", "DavTest", 7, 4);
+  $this->saveattachment(0, "Attest", $t, $testAttName);
+
+  my $dav = $this->davopen(0, $davPubURL);
+  $this->davcheck(!$dav->move("Attest/$t", "DavTest/SmeAgol"), $dav);
+
   # move leaf access permitted within topic
-  $this->davcheck($dav->move("Davtest/DavTest0/SugarKane.txt",
-							 "Davtest/DavTest0/MarilynMonroe.dat"), $dav);
-  $this->checkatt(0, "Davtest","DavTest0", "SugarKane.txt");
-  $this->checkatt(1, "Davtest","DavTest0", "MarilynMonroe.dat");
-}
+  $this->davcheck($dav->move("Attest/$t/$testAttName",
+							 "Attest/$t/MarilynMonroe.dat"), $dav);
+  $this->checkatt(0, "Attest",$t, $testAttName);
+  $this->checkatt(1, "Attest",$t, "MarilynMonroe.dat");
 
-sub test_moveAttachmentNoRead {
-  my $this=shift;
-  $this->copymovefixture();
+  my $tt = $this->_createProtectedTopic("Attest", "DavTest", 6, 7);
 
-  my $dav = $this->davopen(1);
-  $this->davcheck(!$dav->move("Davtest/DavTest0/SugarKane.txt",
-							  "Davtest/DavTest2/MarilynMonroe.dat"), $dav);
-}
+  $this->saveattachment(0, "Attest", $t, $testAttName);
+  $dav = $this->davopen(1, $davPubURL);
+  $this->davcheck(!$dav->move("Attest/$t/$testAttName",
+							  "Attest/$tt/MarilynMonroe.dat"), $dav);
 
-# move leaf access permitted between topics
-sub test_moveAttachmentBetweenTopics {
-  my $this=shift;
-  $this->copymovefixture();
-  my $dav = $this->davopen(0);
-  $this->saveattachment(0,"Davtest","DavTest0","SugarKane.txt");
+  # illegal to move topics
+  $dav = $this->davopen(0, $davDataURL);
+  $this->davcheck(!$dav->move("Attest/$t.txt",
+							  "Attest/SmeAgol.txt"), $dav);
 
-  $this->davcheck($dav->move("Davtest/DavTest0/SugarKane.txt",
-							 "Davtest/DavTest2/MarilynMonroe.dat"), $dav);
-  $this->checkatt(0, "Davtest","DavTest0", "SugarKane.txt");
-  $this->checkatt(0, "Davtest","DavTest0", "MarilynMonroe.dat");
-  $this->checkatt(0, "Davtest","DavTest2", "SugarKane.txt");
-  $this->checkatt(1, "Davtest","DavTest2", "MarilynMonroe.dat");
-}
+  # move attachment between topics
+  $dav = $this->davopen(0, $davPubURL);
+  $this->saveattachment(0,"Attest",$t,$testAttName);
+  $this->davcheck($dav->move("Attest/$t/$testAttName",
+							 "Attest/$tt/$testAttName"), $dav);
+  $this->checkatt(0, "Attest", $t,  $testAttName);
+  $this->checkatt(1, "Attest", $tt, $testAttName);
+  # try and move it back - rename is denied
+  $this->davcheck(!$dav->move("Attest/$tt/$testAttName",
+							  "Attest/$t/$testAttName"), $dav);
 
-# move leaf access permitted to other topic write denied
-sub test_moveToDenied {
-  my $this=shift;
-  $this->copymovefixture();
-  my $dav = $this->davopen(0);
-  $this->davcheck(!$dav->move("Davtest/Davtest0/SugarKane.txt",
-							  "Davtest/DavTest1/MarilynMonroe.dat"),$dav);
-}
-
-sub test_moveRenameAttachmentDenied {
-  my $this=shift;
-  $this->copymovefixture();
-  my $dav = $this->davopen(0);
-  $this->saveattachment(0,"Davtest","DavTest2","SugarKane.txt");
-
-  $this->davcheck(!$dav->move("Davtest/DavTest2/SugarKane.txt",
-							  "Davtest/DavTest0/MarilynMonroe.dat"), $dav);
-}
-
-sub test_moveAttachmentToWebLevel {
-  my $this=shift;
-  $this->copymovefixture();
-  my $dav = $this->davopen(0);
-  $this->davcheck(!$dav->move("Davtest/Davtest0/SugarKane.txt",
-							  "Davtest/MarilynMonroe.dat"),$dav);
+  # disallow moving to web level
+  $this->davcheck(!$dav->move("Attest/$t/$testAttName",
+							  "Attest/MarilynMonroe.dat"),$dav);
 }
 
 # options that say what methods are available where
@@ -383,19 +478,19 @@ sub test_moveAttachmentToWebLevel {
 sub DISABLEtest_options {
   my $this=shift;
   # root
-  my $dav = $this->davopen(0);
+  my $dav = $this->davopen(0, $davPubURL);
   # attachment
-  $this->checklist($dav->options("Davtest/DavTest0/Kitty.gif"),
+  $this->checklist($dav->options("Attest/DavTest70/Kitty.gif"),
 				   "OPTIONS,GET,DELETE,POST,COPY,MOVE,PROPFIND",
 				  "PROPPATCH,LOCK,UNLOCK");
 
   # topic dir
-  $this->checklist($dav->options("Davtest/DavTest0"),
+  $this->checklist($dav->options("Attest/DavTest70"),
 				   "OPTIONS,GET,PROPFIND,COPY",
 				   "PUT,MOVE,DELETE,PROPPATCH,LOCK,UNLOCK");
 
   # web dir
-  $this->checklist($dav->options("Davtest"),
+  $this->checklist($dav->options("Attest"),
 				   "OPTIONS,GET,PROPFIND,COPY",
 				   "PUT,MOVE,DELETE,PROPPATCH,LOCK,UNLOCK");
 
@@ -403,43 +498,16 @@ sub DISABLEtest_options {
 				   "OPTIONS,GET,PROPFIND,COPY");
 }
 
-# put into various directories
-# this is what drag and drop does
-sub test_putAttachment {
-  my $this=shift;
-
-  my $dav = $this->davopen(0);
-  # illegal - save to root
-  $this->davcheck(!$dav->put(-local=>$tmpfile,
-							-url=>"/SugarKane.txt"), $dav);
-  $this->assert(!-e "$pubDir/SugarKane.txt");
-
-  # illegal - save to web dir
-  $this->davcheck(!$dav->put(-local=>$tmpfile,
-							-url=>"Davtest/SugarKane.txt"), $dav);
-  $this->assert(!-e "$pubDir/Davtest/SugarKane.txt");
-
-  # illegal - save to non-existent topic
-  $this->davcheck(!$dav->put(-local=>$tmpfile,
-							 -url=>"Davtest/SpiggleTodt/SugarKane.txt"), $dav);
-  $this->assert(!-e "$pubDir/Davtest/SpiggleTodt/SugarKane.txt");
-
-  # legal - put to topic
-  $this->davcheck($dav->put(-local=>$tmpfile,
-							-url=>"Davtest/DavTest0/SugarKane.txt"), $dav);
-  $this->checkatt(1, "Davtest","DavTest0", "SugarKane.txt", 1);
-}
-
 sub test_recache_command_line {
   my $this = shift;
   # delete the db, regenerate it, create a topic with limitation,
   # recache, check the difference.
-  $this->assert(-w $lockpath, "No permission to run this test");
-  $this->assert(-w "$lockpath/TWiki", "No permission to run this test");
-  unlink("$lockpath/TWiki");
+  $this->assert(-w $davLockPath, "No permission to run this test");
+  $this->assert(-w "$davLockPath/TWiki", "No permission to run this test");
+  unlink("$davLockPath/TWiki");
   $this->assert(!$?, "Can't set up");
-  my $monitor = `$bindir/dav_recache$scriptSuffix`;
-  $this->assert(!$?, "Can't run $bindir/dav_recache$scriptSuffix");
+  my $monitor = `$twikiBinDir/dav_recache$scriptSuffix`;
+  $this->assert(!$?, "Can't run $twikiBinDir/dav_recache$scriptSuffix");
   # Make sure it ran over all webs
   foreach my $web(glob("$dataDir/*")) {
 	if (-d $web) {
@@ -451,60 +519,58 @@ sub test_recache_command_line {
 	  $this->assert($1 <= scalar(@topics), "$web $1 ".scalar(@topics));
 	}
   }
-  my $dump = `../dumpLockDB.pl $lockpath`;
+  my $dump = `../dumpLockDB.pl $davLockPath`;
   $this->assert(!$?, "Can't dump");
-  my $du = $davuser[1]{wikiname};
-  $this->assert_matches(qr/P:\/Davtest\/DavTest0:V:D => \|$du\|/, $dump);
-  $this->assert_matches(qr/P:\/Davtest\/DavTest0:C:D => \|$du\|/, $dump);
-  savetopic(0, "Davtest", "DavTest0",
+  my $du = $davUser[1]{wikiname};
+  _saveTopic(0, "Attest", "DavTest70",
 			"\t* Set DENYTOPICVIEW = OakTree\n".
 			"\t* Set DENYTOPICCHANGE = AshTree\n");
-  unlink("$lockpath/TWiki") || die "Failed";
+  unlink("$davLockPath/TWiki") || die "Failed";
   $this->assert(!$?, "Can't set_up");
-  $this->assert(!-e "$lockpath/TWiki");
-  $monitor = `$bindir/dav_recache$scriptSuffix`;
+  $this->assert(!-e "$davLockPath/TWiki");
+  $monitor = `$twikiBinDir/dav_recache$scriptSuffix`;
   $this->assert(!$?, "Can't run");
-  $dump = `../dumpLockDB.pl $lockpath`;
-  $this->assert_does_not_match(qr/P:\/Davtest\/DavTest0:V:D => \|$du\|/, $dump);
-  $this->assert_does_not_match(qr/P:\/Davtest\/DavTest0:C:D => \|$du\|/, $dump);
-  $this->assert_matches(qr/P:\/Davtest\/DavTest0:V:D => |OakTree|/, $dump);
-  $this->assert_matches(qr/P:\/Davtest\/DavTest0:C:D => |AshTree|/, $dump);
+  $dump = `../dumpLockDB.pl $davLockPath`;
+  $this->assert_does_not_match(qr/P:\/Attest\/DavTest70:V:D => \|$du\|/, $dump);
+  $this->assert_does_not_match(qr/P:\/Attest\/DavTest70:C:D => \|$du\|/, $dump);
+  $this->assert_matches(qr/P:\/Attest\/DavTest70:V:D => |OakTree|/, $dump);
+  $this->assert_matches(qr/P:\/Attest\/DavTest70:C:D => |AshTree|/, $dump);
 
-  $monitor = `$bindir/dav_recache$scriptSuffix Sandbox`;
+  $monitor = `$twikiBinDir/dav_recache$scriptSuffix Sandbox`;
   $this->assert_matches(qr/Processed \d+ topics from Sandbox\b/, $monitor);
   $monitor =~ s/Processed \d+ topics from Sandbox\b//;
   $this->assert_does_not_match(qr/Processed \d+ topics from \w+/, $monitor);
 
-  $monitor = `$bindir/dav_recache$scriptSuffix Davtest.DavTest0`;
-  $this->assert_matches(qr/Processing topic Davtest\.DavTest0\b/, $monitor);
-  $monitor =~ s/Processing topic Davtest\.DavTest0\b//;
-  $this->assert_matches(qr/Processed 1 topics from Davtest\b/, $monitor);
-  $monitor =~ s/Processed \d+ topics from Davtest\b//;
+  $monitor = `$twikiBinDir/dav_recache$scriptSuffix Attest.DavTest70`;
+  $this->assert_matches(qr/Processing topic Attest\.DavTest70\b/, $monitor);
+  $monitor =~ s/Processing topic Attest\.DavTest70\b//;
+  $this->assert_matches(qr/Processed 1 topics from Attest\b/, $monitor);
+  $monitor =~ s/Processed \d+ topics from Attest\b//;
   $this->assert_does_not_match(qr/Processed \d+ topics from \w+/, $monitor);
 }
 
 sub test_recache_query {
   my $this = shift;
-  unlink("$lockpath/TWiki") || die "Failed";
+  $this->assert(-w $davLockPath, "No permission to run this test");
+  $this->assert(-w "$davLockPath/TWiki", "No permission to run this test");
+  unlink("$davLockPath/TWiki") || die "Failed";
   my $monitor = `curl -s -S $binurl/dav_recache/$scriptSuffix`;
   $this->assert(!$?, "Can't run");
-  my $dump = `../dumpLockDB.pl $lockpath`;
+  my $dump = `../dumpLockDB.pl $davLockPath`;
   $this->assert(!$?, "Can't dump");
-  my $du = $davuser[1]{wikiname};
-  $this->assert_matches(qr/P:\/Davtest\/DavTest0:V:D => \|$du\|/, $dump);
-  $this->assert_matches(qr/P:\/Davtest\/DavTest0:C:D => \|$du\|/, $dump);
-  savetopic(0, "Davtest", "DavTest0",
+  my $du = $davUser[1]{wikiname};
+  _saveTopic(0, "Attest", "DavTest70",
 			"\t* Set DENYTOPICVIEW = OakTree\n".
 			"\t* Set DENYTOPICCHANGE = AshTree\n");
-  unlink("$lockpath/TWiki");
+  unlink("$davLockPath/TWiki");
   $this->assert(!$?, "Can't set_up");
   $monitor = `curl -s -S $binurl/dav_recache/$scriptSuffix`;
   $this->assert(!$?, "Can't run");
-  $dump = `../dumpLockDB.pl $lockpath`;
-  $this->assert_does_not_match(qr/P:\/Davtest\/DavTest0:V:\w => \|$du\|/, $dump);
-  $this->assert_does_not_match(qr/P:\/Davtest\/DavTest0:C:\w => \|$du\|/, $dump);
-  $this->assert_matches(qr/P:\/Davtest\/DavTest0:V:D => \|OakTree\|/, $dump);
-  $this->assert_matches(qr/P:\/Davtest\/DavTest0:C:D => \|AshTree\|/, $dump);
+  $dump = `../dumpLockDB.pl $davLockPath`;
+  $this->assert_does_not_match(qr/P:\/Attest\/DavTest70:V:\w => \|$du\|/, $dump);
+  $this->assert_does_not_match(qr/P:\/Attest\/DavTest70:C:\w => \|$du\|/, $dump);
+  $this->assert_matches(qr/P:\/Attest\/DavTest70:V:D => \|OakTree\|/, $dump);
+  $this->assert_matches(qr/P:\/Attest\/DavTest70:C:D => \|AshTree\|/, $dump);
 }
 
 1;

@@ -36,6 +36,7 @@ extern int dav_twiki_accessible(const request_rec* r,
 const char* dav_twiki_make_tmp_filename(pool* p);
 const char* dav_twiki_tostring(const dav_resource* r);
 dav_error* dav_twiki_delete(const dav_resource* r);
+dav_error* dav_twiki_move(const dav_resource* s, const dav_resource* d);
 dav_error* dav_twiki_commit(const dav_resource* r, const char* path);
 const char* dav_twiki_detach_metadata(const dav_resource* r);
 dav_error* dav_twiki_reattach_metadata(const char* tmppath,
