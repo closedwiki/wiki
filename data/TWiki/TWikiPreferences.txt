@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093849111" format="1.0" version="1.72"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093932738" format="1.0" version="1.73"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), __topic level__ (the topic being rendered), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -161,7 +161,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 ---++ Skin Settings
 
 	* Skin overriding the default TWiki templates: (can be overwritten by WebPreferences and user preferences) 
-		* #Set SKIN = pattern
+		* Set SKIN = pattern
 
 	* __Note:__ See TWikiSkinBrowser for currently installed skins
 
