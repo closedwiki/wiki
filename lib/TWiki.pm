@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "28 Sep 2003";
+$wikiversion      = "19 Oct 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1328,16 +1328,18 @@ sub fixIncludeLink
 
     if( $theLabel ) {
         # [[...][...]] link
-        if( $theLink =~ /^($webNameRegex|$defaultWebNameRegex)\./ ) {
-            return "[[$theLink][$theLabel]]";
+        if( $theLink =~ /^($webNameRegex\.|$defaultWebNameRegex\.|$linkProtocolPattern\:)/ ) {
+            return "[[$theLink][$theLabel]]";  # no change
         }
+        # add 'Web.' prefix
         return "[[$theWeb.$theLink][$theLabel]]";
 
     } else {
         # [[...]] link
-        if( $theLink =~ /^($webNameRegex|$defaultWebNameRegex)\./ ) {
-            return "[[$theLink]]";
+        if( $theLink =~ /^($webNameRegex\.|$defaultWebNameRegex\.|$linkProtocolPattern\:)/ ) {
+            return "[[$theLink]]";  # no change
         }
+        # add 'Web.' prefix
         return "[[$theWeb.$theLink][$theLink]]";
     }
 }
