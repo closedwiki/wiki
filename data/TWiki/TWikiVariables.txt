@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042964469" format="1.0" version="1.61"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043655738" format="1.0" version="1.62"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -246,6 +246,7 @@ Example: ==%<nop>METASEARCH{type="topicmoved" web="%<nop>WEB%" topic="%<nop>TOPI
 [2] __Note__: A web can be excluded from a ==web="all"== search if you define a ==NOSEARCHALL=on== variable in its %WEBPREFSTOPIC%.
 </blockquote>
 
+#PreferencesVariables
 ---++ Preferences Variables
 
 Additional variables are defined in the preferences ( site-level ( __SL__ ) in %TWIKIWEB%.%WIKIPREFSTOPIC%, web-level ( __WL__ ) in %WEBPREFSTOPIC% of each web, and user level ( __UL__ ) preferences in individual user topics):
