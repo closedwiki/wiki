@@ -59,7 +59,7 @@ use vars qw(
         $debug $doOldInclude $renderingWeb
     );
 
-$VERSION = '1.010';
+$VERSION = '1.021';
 $pluginName = 'DefaultPlugin';  # Name of this Plugin
 
 # =========================
@@ -68,16 +68,16 @@ sub initPlugin
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1 ) {
+    if( $TWiki::Plugins::VERSION < 1.021 ) {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
 
     # Get plugin preferences
-    $doOldInclude = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_OLDINCLUDE" ) || "";
+    $doOldInclude = TWiki::Func::getPluginPreferencesFlag( "OLDINCLUDE" ) || "";
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
+    $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
 
     $renderingWeb = $web;
 

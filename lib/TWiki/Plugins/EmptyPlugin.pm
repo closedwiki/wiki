@@ -58,7 +58,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '1.010';
+$VERSION = '1.021';
 $pluginName = 'EmptyPlugin';  # Name of this Plugin
 
 # =========================
@@ -67,16 +67,16 @@ sub initPlugin
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1 ) {
+    if( $TWiki::Plugins::VERSION < 1.021 ) {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
+    $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
+    $exampleCfgVar = TWiki::Func::getPluginPreferencesValue( "EXAMPLE" ) || "default";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
