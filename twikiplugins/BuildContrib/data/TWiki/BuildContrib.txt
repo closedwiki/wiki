@@ -81,17 +81,18 @@ Development notes:
 
 ---++ Contrib Info
 
-|  Authors: | TWiki:Main.CrawfordCurrie, TWiki:Main.MartinCleaver |
-|  Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
-|  License: | GPL |
-|  Dependencies: | %$DEPENDENCIES% |
-|  30/08/04 | Crawford Currie added installer scripts |
-|  26/08/04 | Martin Cleaver added twikicli |
-|  14/08/04 | Crawford Currie made the initial implementation, separated out from the old SharedCode module |
+| Authors: | TWiki:Main.CrawfordCurrie, TWiki:Main.MartinCleaver |
+| Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
+| License: | GPL |
+| Dependencies: | %$DEPENDENCIES% |
+| 1/10/04 | 1.002 Crawford Currie added topic updating reminder to installer |
+| 30/08/04 | 1.001 Crawford Currie added installer scripts |
+| 26/08/04 | Martin Cleaver added twikicli |
+| 14/08/04 | 1.000 Crawford Currie made the initial implementation, separated out from the old SharedCode module |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main/CrawfordCurrie - %$DATE%
+-- TWiki:Main/CrawfordCurrie - %$DATE% %BR%
 -- TWiki:Main/MartinCleaver - %$DATE%
