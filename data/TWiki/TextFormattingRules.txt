@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1059255424" format="1.0" version="1.39"}%
+%META:TOPICINFO{author="PeterThoeny" date="1059714736" format="1.0" version="1.40"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---# TWiki Text Formatting
@@ -301,6 +301,7 @@ Know.ReadmeFirst
  *Forced Links:* %BR%
  You can create a forced internal link by enclosing words in double square brackets.
  %BR% __Note:__ Text within the brackets may contain optional spaces; the topic name is formed by capitalizing the initial letter and by removing the spaces; for example, =[<nop>[text formatting FAQ]]= links to topic TextFormattingFAQ.  You can also refer to a different web and use anchors.
+ %BR% __Note:__ To "escape" double square brackets that would otherwise be a correct link, use =&lt;nop&gt;= between the leading left square brackets, that is, begin with =[&lt;nop&gt;[....=
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -479,6 +480,7 @@ Variables are names that are enclosed in percent signs =%= that are expanded on 
 
 	* There are many more variables, see *[[TWikiVariables]]*.
 
+	* To "escape" a percent sign that would otherwise be interpreted as a variable, add =&lt;nop&gt;= after the first percent sign. Write: =<span style='background : #FFFFCC;'><font color="#990000"> %&lt;nop&gt;SOMEVARIABLE% </font></span>= to get: %<nop>SOMEVARIABLE%.
 
 ---++ <nop>TWikiPlugin Formatting Extensions
 
