@@ -27,6 +27,10 @@ sub getDataDir {
   return "$testDir/data";
 }
 
+sub getSkin {
+  return "";
+}
+
 sub set_up {
   mkdir $testDir, 0777 || die "mkdir $testDir";
   mkdir getDataDir(), 0777 || die "mkdir ".getDataDir();
@@ -105,14 +109,12 @@ sub TESTcallersCaller {
   return "$filename:$line: ";
 }
 
-my %templateVars = ();
-
 sub _handleTmplP {
     my( $theVar ) = @_;
 
     my $val = "";
-    if( ( %templateVars ) && ( exists $templateVars{ $theVar } ) ) {
-        $val = $templateVars{ $theVar };
+    if( ( %TWiki::Store::templateVars ) && ( exists $TWiki::Store::templateVars{ $theVar } ) ) {
+        $val = $TWiki::Store::templateVars{ $theVar };
         $val =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/&_handleTmplP($1)/geo;
     }
     return $val;
@@ -145,6 +147,10 @@ sub getViewUrl {
   return getScriptUrl($w, $t, "view");
 }
 
+sub getTwikiWebname {
+  return "TWiki";
+}
+
 sub getScriptUrlPath {
   return "$pwd/../../../../../bin";
 }
@@ -156,6 +162,10 @@ sub getScriptUrl {
 
 sub getPubDir {
   return "$pwd/../../../../../pub";
+}
+
+sub TESTgetTemplatesDir {
+  return "$pwd/../../../../../templates";
 }
 
 sub getTopicList {
@@ -212,12 +222,12 @@ sub readTemplate {
     } elsif( ( /^DEF{[\s\"]*(.*?)[\"\s]*}%[\n\r]*(.*)/s ) && ( $1 ) ) {
       # handle %TMPL:DEF{"key"}%
       if( $key ) {
-	$templateVars{ $key } = $val;
+	$TWiki::Store::templateVars{ $key } = $val;
       }
       $key = $1;
       $val = $2 || "";
     } elsif( /^END%[\n\r]*(.*)/s ) {
-      $templateVars{ $key } = $val;
+      $TWiki::Store::templateVars{ $key } = $val;
       $key = "";
       $val = "";
       $result .= $1 || "";

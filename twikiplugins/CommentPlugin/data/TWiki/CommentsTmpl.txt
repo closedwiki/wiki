@@ -1,0 +1,32 @@
+---+ User defined templates
+---++ TWiki table that collects results from a poll on plugin usage
+%TMPL:DEF{PROMPT:poll}%
+<table valign="middle">
+ <tr>
+  <td align=right>Number of sites?</td>
+  <td align=left><input %DISABLED% type="text" name="sites" size="3" value="1"></td>
+  <td align=right>Plugin hacked?</td>
+  <td align=left>
+   <select %DISABLED% name="pluginhacked">
+    <option>no</option>
+    <option>yes</option>
+   </select>
+  </td>
+  <td align=right>TWiki hacked?</td>
+  <td align=left>
+   <select %DISABLED% name="twikihacked">
+    <option>no</option>
+    <option>yes</option>
+   </select>
+  </td>
+  <td align=right>Remarks</td>
+  <td align=left><input %DISABLED% type="text" name="remarks" size="30" value=""></td>
+  <td>
+   <input %DISABLED% type="submit" value="Yes, I use it" />
+  </td>
+ </tr>
+</table>
+%TMPL:END%
+%TMPL:DEF{OUTPUT:poll}%
+%POS:BEFORE%| %WIKIUSERNAME% | %URLPARAM{"sites"}% | %URLPARAM{"pluginhacked"}% | %URLPARAM{"twikihacked"}% |
+%TMPL:END%
