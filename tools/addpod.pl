@@ -49,7 +49,7 @@ foreach $sub (@subs) {
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 ENDPOD
     s/^sub $sub(\s*{?\s*)$/${pod}sub $sub$1/m;
