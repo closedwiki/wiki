@@ -88,8 +88,11 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 			addText("for instance, <APPLET CODE = \"...>\"\n"+ 
 				"<PARAM NAME=\"action\" VALUE=\"http://localhost:8123/twiki/bin/upload.pl/Main/CatherineMacleod>\"\n");
 		} else {
+			System.out.println("$Version:$ ACTION='"+action+"'");
 		    System.out.println("ACTION='"+action+"'");
-		    addText("TWiki Paste initiated\n");
+		    addText("TWiki Paste initiated\n\n");
+		    addText("With this utility, you can paste capture pictures or files\n placed on the Clipboard.\n");
+			addText("For conversation on this tool, please see:\n http://javapaste.mrjc.com/JavaPaste.htm\n");
 		}
 		repaint();
     }
@@ -104,9 +107,25 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 	{
 		msgTxt.append(newWord);
         repaint();
-        System.out.println("repainted");
     }
 	
+    private String getTypeOfData(Object dataOnClipboard) 
+    {
+    	String ans;
+		if (dataOnClipboard instanceof Byte) {
+			ans = "\nData on clipboard is a byte array";
+		} else if (dataOnClipboard instanceof String)
+    		ans = "\nData on clipboard is "+DATATYPE_TEXT;
+		else if (dataOnClipboard instanceof Reader)
+			ans = "\nData on clipboard is "+DATATYPE_RICHTEXT;
+		else if (dataOnClipboard instanceof Image)
+			ans = "\nData on clipboard is "+DATATYPE_IMAGE;
+		else if (dataOnClipboard instanceof AbstractList)
+			ans = "\nData on clipboard is "+DATATYPE_FILE;
+		else ans = "\n(unrecognised type)"+dataOnClipboard.getClass().getName() +"\n";
+		
+		return ans;
+    }
 
 	/**
 	 * Pastes clipboard contents onto Twiki page (saves clipboard contents are file and
@@ -142,44 +161,34 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 
 		String comment = "";
 		
-		addText("\nData on clipboard is "+dataOnClipboard.getClass().getName());
+		addText("Okay, starting paste. Please wait.");
+		addText(getTypeOfData(dataOnClipboard));
 
-		if (dataOnClipboard instanceof Byte) {
-			addText("\nData on clipboard is a byte array");
-		}
-
-		if (dataOnClipboard instanceof String)
-			addText("\nData on clipboard is "+DATATYPE_TEXT);
-		else if (dataOnClipboard instanceof Reader)
-			addText("\nData on clipboard is "+DATATYPE_RICHTEXT);
-		else if (dataOnClipboard instanceof Image)
-			addText("\nData on clipboard is "+DATATYPE_IMAGE);
-		else if (dataOnClipboard instanceof AbstractList)
-			addText("\nData on clipboard is "+DATATYPE_FILE);
-		else addText("\n(unrecognised type)"+dataOnClipboard.getClass().getName() +"\n");
 
 		try {
 			fu = new FileUploader(action);
 			fu.uploadData(dataOnClipboard, comment);
+			redirectHTML = fu.getPOSTRequestResponse();
+			
+			addText(redirectHTML);
+			redirectURL = getBaseURL(redirectHTML);
+			if ( !(redirectURL.equals("")) )
+			{
+				try
+				{
+					getAppletContext().showDocument(new URL(redirectURL));
+				}
+				catch (MalformedURLException murle)
+				{
+					murle.printStackTrace();
+				}
+			}
 		} catch (Exception e)
 		{
 		    addText("\n\nOoops! Fatal exception: "+e.getMessage()+"\n"+e.toString());	
 		}
 		
-		redirectHTML = fu.getPOSTRequestResponse();
-		addText(redirectHTML);
-		redirectURL = getBaseURL(redirectHTML);
-		if ( !(redirectURL.equals("")) )
-		{
-			try
-			{
-				getAppletContext().showDocument(new URL(redirectURL));
-			}
-			catch (MalformedURLException murle)
-			{
-				murle.printStackTrace();
-			}
-		}
+		
 		
     }
 	

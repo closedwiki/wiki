@@ -1,50 +1,37 @@
-`package com.mrjc.twiki.addons;
+package com.mrjc.twiki.addons;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.AbstractList;
 //import java.util.Hashtable;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-
 
 /**
- *  Helper class for clipboard functions. 
+ *  Helper class for clipboard functions.
  *
- *@author	Catherine Macleod 
+ *@author	Catherine Macleod
  */
 public class ClipboardHelper
 {
-	
+
 	Toolkit toolkit;
-	
+
 	public static void main(String args[])
 	{
 		ClipboardHelper app = new ClipboardHelper();
 	}
-	
+
 	/**
 	 * Returns object representing data on clipboard
-	 * 
+	 *
 	 * @author	Catherine Macleod
-	 * @return	  
+	 * @return
 	 */
 	public Object getClipboardContents()
 	{
@@ -52,13 +39,13 @@ public class ClipboardHelper
 		Clipboard clip=Toolkit.getDefaultToolkit().getSystemClipboard();
 		// Get the clipboard contents
 		return getData(clip.getContents(ClipboardHelper.this));
-		
+
 	}
-		
-	public Object getData(Transferable contents) {	
-		
+
+	public Object getData(Transferable contents) {
+
 		Object data = null;
-		
+
 		if (contents!=null)
 		{
 			 // Get the data flavors associated with the clipboard contents
@@ -67,8 +54,8 @@ public class ClipboardHelper
 			 File resultsFile;
 			 for(int i=0;i<flavors.length;++i)
 			 {
-			 	System.out.println("In loop " + i);
-				if (flavors[i].getRepresentationClass() != null) 
+				System.out.println("In loop " + i);
+				if (flavors[i].getRepresentationClass() != null)
 				{
 					try
 					{
@@ -77,13 +64,13 @@ public class ClipboardHelper
 						data = contents.getTransferData(flavors[i]);
 						System.out.println("in loop:3");
 						if ((data instanceof Reader)
-						     || (data instanceof String)
-						     || (data instanceof Image)
-						     || (data instanceof AbstractList)) {
+							 || (data instanceof String)
+							 || (data instanceof Image)
+							 || (data instanceof AbstractList)) {
 
-						     break;
+							 break;
 
-						}						
+						}
 
 					}
 					catch (UnsupportedFlavorException ufe)
@@ -94,22 +81,22 @@ public class ClipboardHelper
 					{
 						System.out.println("ClipboardHelper.getClipboardContentsDataType IOException: "+ioe);
 					}
-					
+
 				}
 
 			 }
 		}
 		return data;
 	}
-	
-		
-		
+
+
+
 	/**
 	 * Writes contents of the clipboard to a file
-	 * 
+	 *
 	 * @author	Catherine Macleod
-	 * @param	o object containing data from clipboard 
-	 * @return	file containing clipboard contents  
+	 * @param	o object containing data from clipboard
+	 * @return	file containing clipboard contents
 	 *
 	public File saveClipboardContentsToFile(Object o)
 	{
@@ -153,7 +140,7 @@ public class ClipboardHelper
 				out.flush();
 				out.close();
 			}
-		  
+
 		}
 		catch (IOException ioe)
 		{
@@ -162,46 +149,7 @@ public class ClipboardHelper
 		return file;
 	}
 	*/
-	
-	/**
-	 * Reads contents of a file.
-	 * 
-	 * @author	Catherine Macleod
-	 * @param	file file from which content is to be read 
-	 * @return	file contents  
-	 */
-	public static void writeFileContentsToOutputStream(File file, DataOutputStream outStream)
-	{
-		outStream.
-		byte[] buff = new byte[1024];
-		
-		try
-		{
-			FileInputStream fis = new FileInputStream(file);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			int len;
-			while (bis.available() != 0)
-			{
-				
-				/* WE are working on this  */
-				fis.read();
-				outStream.write();
-			}
-		
-			fis.close();
-		}
-		catch (FileNotFoundException fnfe)
-		{
-			fnfe.printStackTrace();
-		}
-		catch (IOException ioe)
-		{
-			ioe.printStackTrace();
-		}
-		return (str.toString()).trim();
-	}
-	
-		
+
 
 }
 
