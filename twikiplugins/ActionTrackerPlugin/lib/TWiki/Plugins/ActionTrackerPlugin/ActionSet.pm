@@ -19,9 +19,8 @@ use integer;
 
 use TWiki::Func;
 
-use TWiki::Plugins::ActionTrackerPlugin::Attrs;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
-use TWiki::Plugins::ActionTrackerPlugin::Config;
+use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
 
 # Perl object that represents a set of actions.
 { package ActionTrackerPlugin::ActionSet;
@@ -262,8 +261,8 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
     # isn't very useful in TWiki.
     # Also assumed: the output of the egrepCmd must be of the form
     # file.txt: ...matched text...
-    my $cmd = $ActionTrackerPlugin::Config::egrepCmd;
-    my $q = $ActionTrackerPlugin::Config::cmdQuote;
+    my $cmd = $ActionTrackerPlugin::ActionTrackerConfig::egrepCmd;
+    my $q = $ActionTrackerPlugin::ActionTrackerConfig::cmdQuote;
     my $grep = `$cmd $q%ACTION\\{.*\\}%$q $dd/$web/*.txt`;
     my $topics = $attrs->get( "topic" );
     my %processed;
@@ -303,12 +302,12 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
     my $web;
     foreach $web ( @weblist ) {
       if ( -d "$dataDir/$web" && $web =~ /^$webs$/ ) {
-	$web =~ s/$ActionTrackerPlugin::Config::securityFilter//go;  # FIXME: This bypasses the official API
+	$web =~ s/$ActionTrackerPlugin::ActionTrackerConfig::securityFilter//go;  # FIXME: This bypasses the official API
 	$web =~ /(.*)/; # untaint
 	$web = $1;
 	# Exclude webs flagged as NOSEARCHALL
-        my $thisWebNoSearchAll =
-	  TWiki::Func::getPreferencesValue( "NOSEARCHALL", $web );
+	my $thisWebNoSearchAll =
+	  TWiki::Func::getPreferencesValue( "NOSEARCHALL", $web ) || "";
 	next if ( $thisWebNoSearchAll =~ /on/i && ( $web ne $theweb ) );
 	my $subacts = allActionsInWeb( $web, $attrs, $internal);
 	$actions->concat( $subacts );

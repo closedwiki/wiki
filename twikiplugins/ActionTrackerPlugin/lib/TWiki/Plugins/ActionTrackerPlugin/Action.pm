@@ -24,7 +24,8 @@ use TWiki::Func;
 use Text::Soundex;
 use Time::ParseDate;
 
-use TWiki::Plugins::ActionTrackerPlugin::Attrs;
+use TWiki::Plugins::SharedCode;
+
 use TWiki::Plugins::ActionTrackerPlugin::AttrDef;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
 
@@ -124,7 +125,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my ( $class, $web, $topic, $number, $attrs, $descr ) = @_;
     my $this = {};
     
-    my $attr = new ActionTrackerPlugin::Attrs( $attrs );
+    my $attr = new TWiki::Attrs( $attrs );
 
     # We always have a state, and if it's not defined in the
     # attribute set, and the closed attribute isn't defined,

@@ -28,13 +28,17 @@ use locale;
 use TWiki;# for unpublished functions
 
 use TWiki::Net;
+
+use TWiki::Plugins::SharedCode;
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
-use TWiki::Plugins::ActionTrackerPlugin::Config;
+use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
 
 # This module contains the functionality of the bin/actionnotify script
 { package ActionTrackerPlugin::ActionNotify;
+
+  my $wikiWordRE;
 
   # PUBLIC actionnotify script entry point. Reinitialises TWiki.
   #
@@ -43,7 +47,6 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   #
   sub actionNotify {
       my $expr = shift;
-      
       # Initialise TWiki in the main web
       my ( $topic, $webName, $dummy, $userName, $dataDir) = 
 	  &TWiki::initialize( "/Main", "nobody" );
@@ -63,7 +66,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub doNotifications {
     my ( $webName, $expr, $debugMailer ) = @_;
     
-    my $attrs = new ActionTrackerPlugin::Attrs( $expr );
+    my $attrs = new TWiki::Attrs( $expr );
     my $hdr =
       TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEHEADER" );
     my $bdy =
@@ -97,6 +100,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	}
       }
     }
+
     my $actions;
     if ( scalar( keys %$attrs ) > 0 ) {
       # Get all the actions that match the search
@@ -137,7 +141,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       # find all the actions for this wikiname
       my $myActions;
       if ( $actions ) {
-	my $ats = new ActionTrackerPlugin::Attrs( "who=\"$wikiname\"" );
+	my $ats = new TWiki::Attrs( "who=\"$wikiname\"" );
 	$myActions = $actions->search( $ats );
       }
 
@@ -227,7 +231,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     }
     # COVERAGE ON
 
-    my $topicname = $ActionTrackerPlugin::Config::notifyTopicname;
+    my $topicname = $ActionTrackerPlugin::ActionTrackerConfig::notifyTopicname;
     return undef unless TWiki::Func::topicExists( $web, $topicname );
     
     my $list = {};
@@ -251,17 +255,20 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # personal topic in the Main web and looking for Email:
   sub _getMailAddress {
     my ( $who, $mailAddress ) = @_;
-    
+
     if ( defined( $mailAddress->{$who} )) {
       return $mailAddress->{$who};
     }
 
     my $addresses;
+	my $wikiWordRE = TWiki::Func::getRegularExpression('wikiWordRegex');
+	my $webNameRE = TWiki::Func::getRegularExpression('webNameRegex');
 
     if ( $who =~ m/^([\w\-\.\+]+\@[\w\-\.\+]+)$/o ) {
       # Valid mail address
       $addresses = $who;
-    } elsif ( $who =~ m/,\s*/o ) {
+    }
+	elsif ( $who =~ m/,\s*/o ) {
       # Multiple addresses
       # (e.g. who="GenghisKhan,AttillaTheHun")
       # split on , and recursively expand
@@ -272,13 +279,15 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       $addresses = join( ",", @persons );
 # Replaced by NKO, so that danish names accepted ... damn its hard to be Danish
 #   } elsif ( $who =~ m/^[A-Z]+[a-z]+[A-Z]+\w+$/o ) {
-    } elsif ( $who =~ m/^$TWiki::wikiWordRegex$/o ) {
+    }
+	elsif ( $who =~ m/^$wikiWordRE$/o ) {
       # A legal topic wikiname
       $who = ActionTrackerPlugin::Action::_canonicalName( $who );
       $addresses = _getMailAddress( $who, $mailAddress );
 # Replaced by NKO
 #   } elsif ( $who =~ m/^(\w+)\.([A-Z]+[a-z]+[A-Z]+\w+)$/o ) {
-    } elsif ( $who =~ m/^($TWiki::webNameRegex)\.($TWiki::wikiWordRegex)$/o ) {
+    }
+	elsif ( $who =~ m/^($webNameRE)\.($wikiWordRE)$/o ) {
       # A topic in a web
       my ( $inweb, $intopic ) = ( $1, $2 );
       if ( TWiki::Func::topicExists( $inweb, $intopic ) ) {
@@ -380,12 +389,13 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       return undef;
     }
     # COVERAGE ON
-    my $tmp = $ActionTrackerPlugin::Config::rlogCmd;
+    my $tmp = $ActionTrackerPlugin::ActionTrackerConfig::rlogCmd;
     $tmp =~ s/%DATE%/$date/o;
     $tmp =~ s/%FILENAME%/$fname/o;
     $tmp =~ /(.*)/;
     $tmp = $1;
     my $rlog = `$tmp`;
+
     if ( $rlog =~ s/.*revision (\d+\.\d+).*/$1/so ) {
       return $rlog;
     } else {
@@ -409,7 +419,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
     # There can be no changes if the file date on the topic file
     # is earlier than theDate!
-    
+
     # Recover the rev at the previous date
     my $oldrev = _getRevAtDate( $theWeb, $theTopic, $theDate );
     return unless defined( $oldrev );
@@ -424,7 +434,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     $text = TWiki::Func::readTopicText( $theWeb, $theTopic, undef, 1 );
     my $currentActions =
       ActionTrackerPlugin::ActionSet::load( $theWeb, $theTopic, $text );
-    
+
     # find actions that have changed between the two dates. These
     # are added as text to a hash keyed on the names of people
     # interested in notification of that action.
@@ -438,7 +448,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my ( $theWeb, $theDate, $format, $notifications ) = @_;
     my $actions = new ActionTrackerPlugin::ActionSet();
     my $dd = TWiki::Func::getDataDir() || "..";
-    
+
     # Known problem; if there's only one file in the web matching
     # *.txt then the file name won't be printed, at least with GNU
     # grep. The GNU -H switch, which would solve the problem, is
@@ -446,16 +456,16 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     # isn't very useful in TWiki.
     # Also assumed: the output of the egrepCmd must be of the form
     # file.txt: ...matched text...
-    my $cmd = $ActionTrackerPlugin::Config::egrepCmd;
-    my $q = $ActionTrackerPlugin::Config::cmdQuote;
-    # This greb is only used to find the files containing actions.
+    my $cmd = $ActionTrackerPlugin::ActionTrackerConfig::egrepCmd;
+    my $q = $ActionTrackerPlugin::ActionTrackerConfig::cmdQuote;
+    # This grep is only used to find the files containing actions.
     # The output is thrown away. So we could use fgrep instead, but
-    # since this is run as a cron there's not much benefit.
-    my $grep = `$cmd $q%ACTION\\{.*\\}%$q $dd/$theWeb/*.txt`;
-
+    # since this is run as a cron there's not much benefit. If Search
+	# had a halfway-decent interface we could use that instead.
+    my $grep = `$cmd -c $q%ACTION\\{.*\\}%$q $dd/$theWeb/*.txt`;
     my $number = 0;
     my %processed;
-    
+
     foreach my $line ( split( /\r?\n/, $grep )) {
       $line =~ m/^.*\/([^\/\.\n]+)\.txt:/o;
       my $topic = $1;
@@ -466,7 +476,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       }
     }
   }
-  
+
   # PRIVATE STATIC
   # Gather notifications for modifications in all webs matched in
   # the "web" value of the attribute set. This searches all webs,
