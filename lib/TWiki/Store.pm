@@ -1793,5 +1793,39 @@ sub searchInWebContent {
     return $seen;
 }
 
+=pod
+
+getReferingTopics($oldWeb, $oldTopic);
+
+SMELL: this does not hide NONSEARCHABLE webs or do any of the security things at the moment.
+
+=cut
+sub getReferingTopics
+{
+        my ($this, $oldWeb, $oldTopic, $newWeb) = @_;
+
+        my $searchString = $oldTopic;#BUGGO - this is only true in the oldWeb, otherwise need to qualify
+
+        my @results;
+
+        my ($web, $topic);
+
+        foreach $web ($this->getListOfWebs()) {
+                my @topicList = $this->getTopicNames( $web );
+
+                my $matches = $this->searchInWebContent( $web, '', '', 1, $searchString, \@topicList );
+                foreach $topic (keys %$matches) {
+                        if ( $web eq $newWeb ) {
+                                push (@results, "global");
+                        } else {
+                                push (@results, "stupid");
+                        }
+                        push (@results, "$web.$topic");
+                }
+        }
+
+        return \@results;
+}
+
 1;
 
