@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044335963" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093847178" format="1.0" version="1.5"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -103,3 +103,5 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 
 -- Main.PeterThoeny - 01 Feb 2002 %BR%
 -- Main.MartinRaabe - 15 Jan 2003
+
+%META:TOPICMOVED{by="PeterThoeny" date="1093847178" from="TWiki.TWikiUpgradeGuide" to="TWiki.TWikiUpgradeTo01Feb2003"}%
