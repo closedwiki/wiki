@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1101525088" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="guest" date="1101525328" format="1.0" version="1.1"}%
 Manual trivial fast sanity checks for script functions.
 
 | *Script* | *Description* | *Test* |
@@ -6,14 +6,15 @@ Manual trivial fast sanity checks for script functions.
 | =changes= | Should redirect to changes |<a href="%SCRIPTURLPATH%/changes%SCRIPTSUFFIX%/%WEB%/TestCaseQuickScriptsChecks">click here</a> |
 | =edit= | Simple edit (don't save) | <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/TestCaseQuickScriptsChecks">click here</a> |
 | =manage= | | |
+| =oops= | Tested by quietsave, below | |
 | =preview= | Should redirect to preview | <a href="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/TestCases/WasteOfSpace?text=Cabbages%20And%20Kings&topicparent=TestCaseQuickScriptsChecks">click here</a> |
-| =rdiff=  | | |
+| =rdiff=  | Compare WebHome 1.1 and 1.2 | <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WebHome?rev1=1&rev2=2">click here</a> |
 | =rename= | | |
-| =save= | Save: Should redirect to view | <a href="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/TestCases/WasteOfSpace?action=save&text=Save%20PASSED&topicparent=TestCaseQuickScriptsChecks">click here</a> |
-| =save= | Checkpoint (should come back to edit) | <a href="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/TestCases/WasteOfSpace?action=checkpoint&text=Checkpoint%2-save%20PASSED&topicparent=TestCaseQuickScriptsChecks">click here</a> |
-| =save= | Quietsave: (should redirect to view) | <a href="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/TestCases/WasteOfSpace?action=quietsave&text=Quietsave%20test%20PASSED&topicparent=TestCaseQuickScriptsChecks">click here </a> |
-| =search= | | |
-| =statistics= | Should redeirect to refreshed statistics |<a href="%SCRIPTURLPATH%/statistics%SCRIPTSUFFIX%/TestCases">click here</a> |
+| =save= | =action= = =save= Should redirect to view | <a href="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/TestCases/WasteOfSpace?action=save&text=Save%20PASSED&topicparent=TestCaseQuickScriptsChecks">click here</a> |
+| =save= | =action= = =checkpoint= (should come back to edit) | <a href="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/TestCases/WasteOfSpace?action=checkpoint&text=Checkpoint%2-save%20PASSED&topicparent=TestCaseQuickScriptsChecks">click here</a> |
+| =save= | =action= = =quietsave= (should redirect to view) | <a href="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/TestCases/WasteOfSpace?action=quietsave&text=Quietsave%20test%20PASSED&topicparent=TestCaseQuickScriptsChecks">click here </a> |
+| =search= | Search for the word "sanity" |<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/TestCases/WasteOfSpace?search=sanity">click here</a> |
+| =statistics= | Should redirect to refreshed statistics |<a href="%SCRIPTURLPATH%/statistics%SCRIPTSUFFIX%/TestCases">click here</a> |
 | =upload= | | |
 | =view= | Create non-existant (should redirect to create screen, which is an =oops= test) | <a href="%SCRIPTURLPATH%/view/%SCRIPTSUFFIX%/%WEB%/DontCreateThisTopic">click here</a> |
 | =viewfile= | | |
