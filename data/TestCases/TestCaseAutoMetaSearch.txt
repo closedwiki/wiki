@@ -1,0 +1,43 @@
+%META:TOPICINFO{author="guest" date="1104704940" format="1.0" version="1.1"}%
+Description: tests for METASEARCH tags
+---+ Search for parents
+Expected:
+<!-- expected expand -->
+<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/RecursiveInclude"><b>RecursiveInclude</b></a>
+<!--Dummy tail-->
+<!-- /expected -->
+Actual:
+<!-- actual -->
+%METASEARCH{web="%WEB%" type="parent" topic="TestCaseAutoIncludes"}%
+<!-- /actual -->
+---+ Search for moved topic
+Expected:
+<!-- expected expand -->
+Itwos <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/DeliberatelyMoved"><b>DeliberatelyMoved</b></a>
+<!--Dummy tail-->
+<!-- /expected -->
+Actual: 
+<!-- actual -->
+%METASEARCH{web="%WEB%" topic="MovedFrom" type="topicmoved" title="Itwos "}%
+<!-- /actual -->
+---+ Search for field value
+Expected:
+<!-- expected expand -->
+<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/DeliberatelyMoved"><b>DeliberatelyMoved</b></a>
+<!--Dummy tail-->
+<!-- /expected -->
+Actual: 
+<!-- actual -->
+%METASEARCH{web="%WEB%" type="field" name="RubaDuba" value="Heeby.*by"}%
+<!-- /actual -->
+---+ Search with no result
+Expected:
+<!-- expected -->
+Not a sausage
+<!--Dummy tail-->
+<!-- /expected -->
+Actual:
+<!-- actual -->
+%METASEARCH{web="%WEB%" type="field" name="Not a field" value="Not a value" default="Not a sausage"}%
+<!-- /actual -->
+
