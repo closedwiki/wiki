@@ -184,16 +184,21 @@ sub _sendEmailByNetSMTP
     } else {
         $smtp = Net::SMTP->new( $mailHost );
     }
-    $smtp->mail( $from );
-    $smtp->to( @to, { SkipBad => 1 } );
-    $smtp->data( $data );
-    $smtp->dataend();
-    
-    # I think this has to occur before the $smtp->quit, 
-    # otherwise we'll miss the status message for the sending of the mail.
-    my $status = ($smtp->ok() ? "" : "ERROR: Can't send mail using Net::SMTP" );
+    my $status;
+    if ($smtp) {
+	$smtp->mail( $from );
+	$smtp->to( @to, { SkipBad => 1 } );
+	$smtp->data( $data );
+	$smtp->dataend();
+	
+	# I think this has to occur before the $smtp->quit, 
+	# otherwise we'll miss the status message for the sending of the mail.
+	$status = ($smtp->ok() ? "" : "ERROR: Can't send mail using Net::SMTP" );
 
-    $smtp->quit();
+	$smtp->quit();
+    } else {
+	$status = "ERROR: Can't send mail using Net::SMTP (can't connect to '$mailHost')";
+    }
     return $status;    
 }
 
