@@ -609,8 +609,6 @@ sub searchWeb
 
                    if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
                        # Case insensitive option is required to get [[spaced Word]] to match
-                       my $match =  "(^|[^[:alpha:][:digit:]_.])($originalSearch)(?=[^[:alpha:][:digit:]]|\$)";
-
 		       # I18N: match non-alpha before and after topic name in renameview searches
 		       my $alphaNum = $TWiki::mixedAlphaNum;
                        my $match =  "(^|[^${alphaNum}_.])($originalSearch)(?=[^${alphaNum}]|\$)";
