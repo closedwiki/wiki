@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1041743138" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1042010203" format="1.0" version="1.11"}%
 %META:TOPICPARENT{name="WebHome"}%
-<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%URLENCODE{"%INCLUDINGWEB%"}%/">
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
 	* <b>Simple search</b>:
 	<table border="0" cellspacing="0" cellpadding="0"><tr><td>
 	  <input type="radio" name="scope" value="text" checked="checked" /> Topic text (body) &nbsp; &nbsp;
@@ -16,7 +16,7 @@
 </form>
 
 
-<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%URLENCODE{"%INCLUDINGWEB%"}%/">
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
 	* <b>Advanced search</b>:
 	<table border="0" cellspacing="0" cellpadding="0"><tr><td>
 	  <input type="radio" name="scope" value="text" checked="checked" /> Topic text (body) &nbsp; &nbsp;
