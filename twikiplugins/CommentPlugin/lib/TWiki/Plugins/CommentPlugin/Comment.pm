@@ -12,79 +12,82 @@ use TWiki::Plugins::CommentPlugin::Templates;
 
 { package CommentPlugin::Comment;
 
-  # PUBLIC method that handles the presense of %COMMENT in a topic. Operates
-  # in three modes, view, preview and viewauth
+  use vars qw( $inSave ); # recursion block
+
+  # PUBLIC save the given comment. Note that this method is protected against
+  # recursion. This is because the expansion of variables in the template
+  # will invoke the commonTagsHandler in the plugin and therefore
+  # this method.
   sub save {
-    my ( $web, $topic, $type, $index, $anchor, $location ) = @_;
-    my $query = TWiki::Func::getCgiQuery();
+    my ( $web, $topic, $query ) = @_;
+
+    return if ( $inSave );
+
+    my $url;
 
     my $wikiUserName = &TWiki::Func::getWikiUserName();
     if( ! TWiki::Func::checkAccessPermission( "change", $wikiUserName, "",
 					       $topic, $web ) ) {
       # user has no permission to change the topic
-      my $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsaccesschange" );
-      TWiki::Func::redirectCgiQuery( $query, $url );
-      return 0;
-    }
-
-    my( $oopsUrl, $lockUser ) = TWiki::Func::checkTopicEditLock( $web, $topic );
-    if( $lockUser ) {
-      # warn user that other person is editing this topic
-      TWiki::Func::redirectCgiQuery( $query, $oopsUrl );
-      return 0;
-    }
-    TWiki::Func::setTopicEditLock( $web, $topic, 1 );
-
-    my $text = _buildNewTopic( $web, $topic, $type, $index, $anchor, $location );
-
-    my $error = TWiki::Func::saveTopicText( $web, $topic, $text, "", 0 );
-    TWiki::Func::setTopicEditLock( $web, $topic, 0 );
-    my $url;
-    if( $error ) {
-      $url = TWiki::Func::getOopsUrl( $web, $topic, "oopssaveerr", $error );
+      $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsaccesschange" );
     } else {
-      $url = TWiki::Func::getViewUrl( $web, $topic );
+      my( $oopsUrl, $lockUser ) =
+	TWiki::Func::checkTopicEditLock( $web, $topic );
+      if( $lockUser ) {
+	$url = $oopsUrl;
+      } else {
+	TWiki::Func::setTopicEditLock( $web, $topic, 1 );
+
+	$inSave = 1;
+	my $error = _buildNewTopic( $web, $topic, $query );
+	$inSave = 0;
+
+	TWiki::Func::setTopicEditLock( $web, $topic, 0 );
+	if( $error ) {
+	  $url = $error;
+	} else {
+	  $url = TWiki::Func::getViewUrl( $web, $topic );
+	}
+      }
     }
+
+    # shouldn't need this, but seem to.
+    $query->param( -name=>'comment_action', -value=>'none' );
     TWiki::Func::redirectCgiQuery( $query, $url );
   }
 
   # PUBLIC STATIC convert COMMENT statements to form prompts
   sub prompt {
-    #my ( $text, $topic, $web ) = @_;
+    #my ( $previewing, $text, $topic, $web ) = @_;
 
     my $defaultType = 
       TWiki::Func::getPreferencesValue("COMMENTPLUGIN_DEFAULT_TYPE") ||
-	  "bottom";
+	  "below";
 
-    my $message = TWiki::Func::getPreferencesValue("COMMENTPLUGIN_REFRESH") ||
-      "";
-
+    my $message = "";
     # Is commenting disabled?
     my $disable = "";
-    # Nasty, tacky, error prone way to find out if we are previewing or not
-    my $scriptname = $ENV{'SCRIPT_NAME'} || "";
-    if ( $scriptname =~ /^.*\/preview/ ||
-	 $scriptname =~ /^.*\/gnusave/ ) {
+    if ( $_[0] ) {
       # We are in Preview mode
       $message  = "(Edit - Preview)";
       $disable = "disabled";
     }
 
     my $idx = 0;
-    $_[0] =~ s/%COMMENT{(.*?)}%/&_handleInput($1,$_[1],$_[2],\$idx,$message,$disable,$defaultType)/ego;
+    $_[1] =~ s/%COMMENT({.*?})?%/&_handleInput($1,$_[2],$_[3],\$idx,$message,$disable,$defaultType)/ego;
   }
-
 
   # PRIVATE generate an input form for a %COMMENT tag
   sub _handleInput {
     my ( $attributes, $topic, $web, $pidx, $message,
 	 $disable, $defaultType ) = @_;
 
+    $attributes =~ s/^{(.*)}$/$1/o if ( $attributes );
     my $attrs = new CommentPlugin::Attrs( $attributes );
 
     my $type =
       $attrs->remove( "type" ) || $attrs->remove( "mode" ) || $defaultType;
-
+    my $silent = $attrs->remove( "nonotify" );
     my $location = $attrs->remove( "location" );
 
     # clean off whitespace
@@ -139,25 +142,28 @@ use TWiki::Plugins::CommentPlugin::Templates;
 	
       $input = "<form name=\"${disable}$type$n\" " .
 	"action=\"$disable$url\" method=\"${disable}post\">\n$input";
-      # need to provide text or the save script will reject us; even though we
-      # are going to override it in the beforeSaveHandler
-      $input .= "<input $disable name=\"${disable}text\" " .
-	"type=\"hidden\" value=\"dummy\" />\n";
-      # remember to unlock the page
-      $input .= "<input $disable name=\"${disable}unlock\" " .
+      if ( $disable eq "" ) {
+	$input .= "<input name=\"comment_action\" " .
+	"type=\"hidden\" value=\"save\" />\n";
+	$input .= "<input name=\"comment_type\" " .
+	  "type=\"hidden\" value=\"$type\" />\n";
+	# remember to unlock the page
+	$input .= "<input name=\"unlock\" " .
 	"type=\"hidden\" value=\"1\" />\n";
-      # the presence of these next three urlparams indicates a comment save
-      $input .= "<input $disable name=\"${disable}comment_type\" " .
-	"type=\"hidden\" value=\"$type\" />\n";
-      if ( $location ) {
-	$input .= "<input $disable name=\"${disable}comment_location\" " .
-	  "type=\"hidden\" value=\"$location\" />\n";
-      } elsif ( $anchor ) {
-	$input .= "<input $disable name=\"${disable}comment_anchor\" " .
-	  "type=\"hidden\" value=\"$anchor\" />\n";
-      } else {
-	$input .= "<input $disable name=\"${disable}comment_index\" " .
-	  "type=\"hidden\" value=\"$$pidx\" />\n";
+	if( defined( $silent )) {
+	  $input .= "<input name=\"comment_quietly\" " .
+	    "type=\"hidden\" value=\"1\" />\n";
+	}
+	if ( $location ) {
+	  $input .= "<input name=\"comment_location\" " .
+	    "type=\"hidden\" value=\"$location\" />\n";
+	} elsif ( $anchor ) {
+	  $input .= "<input name=\"comment_anchor\" " .
+	    "type=\"hidden\" value=\"$anchor\" />\n";
+	} else {
+	  $input .= "<input name=\"comment_index\" " .
+	    "type=\"hidden\" value=\"$$pidx\" />\n";
+	}
       }
       $input .= "</form>\n";
     }
@@ -169,7 +175,7 @@ use TWiki::Plugins::CommentPlugin::Templates;
   sub _getTemplate {
     my ( $name, $topic, $web ) = @_;
 
-    # Get the templates
+    # Get the templates.
     my $templateFile =
       TWiki::Func::getPreferencesValue("COMMENTPLUGIN_TEMPLATES") ||
 	"comments";
@@ -200,7 +206,13 @@ use TWiki::Plugins::CommentPlugin::Templates;
 
   # PRIVATE STATIC Performs comment insertion in the topic.
   sub _buildNewTopic {
-    my ( $web, $topic, $type, $index, $anchor, $location ) = @_;
+    my ( $web, $topic, $query ) = @_;
+
+    my $type = $query->param( 'comment_type' );
+    my $index = $query->param( 'comment_index' );
+    my $anchor = $query->param( 'comment_anchor' );
+    my $location = $query->param( 'comment_location' );
+    my $silent = $query->param( 'comment_quietly' );
 
     my $output = _getTemplate( "OUTPUT:$type", $topic, $web );
     if ( $output =~ m/^%RED%/o ) {
@@ -209,7 +221,7 @@ use TWiki::Plugins::CommentPlugin::Templates;
 
     # Expand the template
     $output =~ s/%POS:(.*?)%//go;
-    my $position = $1 || "BOTTOM";
+    my $position = $1 || "AFTER";
 
     # Expand common variables in the template, but don't expand other
     # tags. KEEP IN SYNC WITH edit and register SCRIPTS. NOTE: A patch
@@ -218,8 +230,9 @@ use TWiki::Plugins::CommentPlugin::Templates;
     my $wikiUserName = TWiki::Func::getWikiUserName();
     my $userName = TWiki::Func::wikiToUserName( $wikiName );
 
-    my $today = TWiki::Func::formatGmTime(time());
-    $output =~ s/%DATE%/$today/go;
+    my @t = gmtime();
+    my $now = sprintf( "%02d:%02d:%02d", $t[2], $t[1], $t[0] );
+    $output =~ s/%TIME%/$now/go;
     $output =~ s/%USERNAME%/$userName/go;
     $output =~ s/%WIKINAME%/$wikiName/go;
     $output =~ s/%WIKIUSERNAME%/$wikiUserName/go;
@@ -227,7 +240,23 @@ use TWiki::Plugins::CommentPlugin::Templates;
     $output =~ s/%NOP{.*?}%//gos;
     $output =~ s/%NOP%//go;
 
-    my $text = TWiki::Func::readTopicText( $web, $topic, undef, 1 );
+    my $bloody_hell = TWiki::Func::readTopicText( $web, $topic, undef, 1 );
+    my $premeta = "";
+    my $postmeta = "";
+    my $inpost = 0;
+    my $text = "";
+    foreach my $line ( split( /\n/, $bloody_hell )) {
+      if( $line =~ /^(%META:[^{]+{[^}]*}%)/ ) {
+	if ( $inpost) {
+	  $postmeta .= "$1\n";
+	} else {
+	  $premeta .= "$1\n";
+	}
+      } else {
+	$text .= "$line\n";
+	$inpost = 1;
+      }
+    }
 
     if ( $position eq "TOP" ) {
       $text = "$output$text";
@@ -236,25 +265,27 @@ use TWiki::Plugins::CommentPlugin::Templates;
     } else {
       if ( $location ) {
 	if ( $position eq "BEFORE" ) {
-	  $text =~ s/($location)/$output\n$1/m;
+	  $text =~ s/($location)/$output$1/m;
 	} else { # AFTER
-	  $text =~ s/($location)/$1\n$output/m;
+	  $text =~ s/($location)/$1$output/m;
 	}
       } elsif ( $anchor ) {
 	# position relative to anchor
 	if ( $position eq "BEFORE" ) {
-	  $text =~ s/^($anchor)/$output\n$1/m;
+	  $text =~ s/^($anchor)/$output$1/m;
 	} else { # AFTER
-	  $text =~ s/^($anchor)/$1\n$output/m;
+	  $text =~ s/^($anchor)/$1$output/m;
 	}
       } else {
 	# Position relative to index'th comment
 	my $idx = 0;
-	$text =~ s/(%COMMENT{.*?}%)/&_nth($1,\$idx,$position,$index,$output)/ego;
+	$text =~ s/(%COMMENT({.*?})?%)/&_nth($1,\$idx,$position,$index,$output)/ego;
       }
     }
+    $text =~ s/ {3}/\t/go;
+    $text = $premeta . $text . $postmeta;
 
-    return $text;
+    return TWiki::Func::saveTopicText( $web, $topic, $text, 1, $silent );
   }
 
   # PRIVATE embed output if this comment is the interesting one

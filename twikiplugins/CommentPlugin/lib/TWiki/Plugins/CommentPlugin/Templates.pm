@@ -11,7 +11,8 @@
   # a template handing class. But we can't.
   sub _loadFile {
     my( $theName, $theSkin ) = @_;
-    my $text = TWiki::Store::_readTemplateFile( $theName, $theSkin );
+    my $text = TWiki::Store::_readTemplateFile( $theName, $theSkin,
+						$TWiki::webName );
     return $text unless ( $text eq "" );
     # wasn't a matched template, try topic
     my $theTopic = $theName;

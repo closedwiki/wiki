@@ -15,6 +15,7 @@ my $testDir;
 my $redirected;
 $TWiki::webNameRegex = "[A-Z]+[A-Za-z0-9]*";
 $TWiki::anchorRegex = "\#[A-Za-z0-9_]+";
+$TWiki::Plugins::VERSION = 1;
 
 sub new {
   my $self = shift()->SUPER::new(@_);
@@ -226,7 +227,7 @@ sub checkTopicEditLock {
   if ( -f $lockf ) {
     my $data = TESTreadFile($lockf);
     $data =~ m/^(.*)\n(.*)$/s;
-    return ("OOPS", $1, $2);
+    return ("OOPSLOCKED", $1, $2);
   }
   return (undef, undef, 0);
 }
@@ -403,9 +404,7 @@ sub saveTopicText {
   die unless ($topic);
   die unless ($text);
 
-  print STDERR "Warning: write ignoring perms" if ($ignorePermissions);
   TESTwriteTopic($web, $topic, $text);
-  print STDERR "Warning: no notify of change to $web.$topic" if ( $dontNotify );
 }
 
 1;

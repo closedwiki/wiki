@@ -4,48 +4,46 @@ package TWiki::Plugins::CommentPlugin;
 use strict;
 use integer;
 
-use TWiki::Plugins::CommentPlugin::Comment;
+require  TWiki::Plugins::CommentPlugin::Comment;
 
-# =========================
-use vars qw(
-	    $web $topic $user $installWeb $VERSION $debug
-	   );
+use vars qw( $VERSION $firstCall );
 
-$VERSION = '3.000';
+BEGIN {
+    $VERSION = '3.003';
+    $firstCall = 0;
+}
 
 sub initPlugin {
-  ( $topic, $web, $user, $installWeb ) = @_;
+  #my ( $topic, $web, $user, $installWeb ) = @_;
 
   if( $TWiki::Plugins::VERSION < 1 ) {
     TWiki::Func::writeWarning( "Version mismatch between CommentPlugin and Plugins.pm $TWiki::Plugins::VERSION" );
     return 0;
   }
+  $firstCall = 1;
 
-  # Plugin correctly initialized
-  TWiki::Func::writeDebug( "- TWiki::Plugins::CommentPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
   return 1;
 }
 
 sub commonTagsHandler {
-  ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-  TWiki::Func::writeDebug( "- CommentPlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
+  ### my ( $text, $topic, $web ) = @_;
 
   my $query = TWiki::Func::getCgiQuery();
+  return unless( defined( $query ));
+  my $action = $query->param( 'comment_action' ) || "";
 
-  my $type = $query->param( 'comment_type' );
-  my $index = $query->param( 'comment_index' );
-  my $anchor = $query->param( 'comment_anchor' );
-  my $location = $query->param( 'comment_location' );
-
-  # the presence of these three urlparams indicates this is a comment save
-  # from a viewauth invocation.
-  if ( defined( $type ) && $type ne "" &&
-       ( defined( $index ) || defined( $anchor ) ||
-	 defined( $location ))) {
-    CommentPlugin::Comment::save( $_[2], $_[1], $type, $index, $anchor, $location );
-  } else {
-    CommentPlugin::Comment::prompt( @_ );
+  if ( defined( $action ) && $action eq "save" ) {
+    # $firstCall ensures we only save once, ever.
+    if ( $firstCall ) {
+      $firstCall = 0;
+      CommentPlugin::Comment::save( $_[2], $_[1], $query );
+    }
+  } elsif ( $_[0] =~ m/%COMMENT{.*?}%/o ) {
+    # Nasty, tacky way to find out where we were invoked from
+    my $scriptname = $ENV{'SCRIPT_NAME'} || "";
+    my $previewing = ($scriptname =~ /\/preview/ ||
+		      $scriptname =~ /\/gnusave/);
+    CommentPlugin::Comment::prompt( $previewing, @_ );
   }
 }
 

@@ -10,6 +10,9 @@ import TWiki::Func;
 import TWiki::Store;
 
 use CGI;
+# Base ourselves on the "Func" fixture. This makes set-up and
+# tear-down easier - though we could equally create and use a
+# FuncFixture object to do the same thing.
 use base qw(TWiki::Func);
 my $query;
 
@@ -18,10 +21,12 @@ sub new {
   return $self;
 }
 
+# Set up the test fixture
 sub set_up {
   my $this = shift;
-  
+
   $this->SUPER::set_up();
+  TWiki::Plugins::CommentPlugin::initPlugin();
 }
 
 sub trim {
@@ -30,6 +35,7 @@ sub trim {
   return $s;
 }
 
+# Not a test, a helper.
 sub inputTest {
   my ($this, $type, $web, $topic, $anchor, $location, $locked) = @_;
 
@@ -101,52 +107,62 @@ sub inputTest {
   $this->assert_str_equals("${disabled}$url", $1);
   $this->assert_str_equals("", trim($dattrs));
 
-  $html =~ s/<input ${disabled} name=\"${disabled}comment_type"(.*?)\s*\/>//i;
-  $dattrs = $1;
-  $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
-  $this->assert(scalar($dattrs =~ s/\s*value=\"$type\"//), $dattrs);
-  $this->assert_str_equals("", trim($dattrs));
+  # no hiddens should be generated if disabled
+  if ($disabled eq "") {
+    $html =~ s/<input name=\"comment_type"(.*?)\s*\/>//i;
+    $dattrs = $1;
+    $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
+    $this->assert(scalar($dattrs =~ s/\s*value=\"$type\"//), $dattrs);
+    $this->assert_str_equals("", trim($dattrs));
 
-  if ( $anchor ) {
-    $html =~ s/<input ${disabled} name=\"${disabled}comment_anchor"(.*?)\s*\/>//i;
+    if ( $anchor ) {
+      $this->assert_matches(qr/<input name=\"comment_anchor"(.*?)\s*\/>/i,$html);
+      $html =~ s/<input name=\"comment_anchor"(.*?)\s*\/>//i;
+      $dattrs = $1;
+      $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
+      $this->assert(scalar($dattrs =~ s/\s*value=\"(.*?)\"//o), $dattrs);
+      $this->assert_str_equals($anchor, $1);
+      $this->assert_str_equals("", trim($dattrs));
+      $this->assert_does_not_match(qr/<input name=\"comment_index/, $html);
+      $this->assert_does_not_match(qr/<input name=\"comment_location/, $html);
+    } elsif ( $location ) {
+      $this->assert_matches(qr/<input name=\"comment_location"(.*?)\s*\/>/i, $html);
+      $html =~ s/<input name=\"comment_location"(.*?)\s*\/>//i;
+      $dattrs = $1;
+      $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
+      $this->assert(scalar($dattrs =~ s/\s*value=\"(.*?)\"//o), $dattrs);
+      $this->assert_str_equals($location, $1);
+      $this->assert_str_equals("", trim($dattrs));
+      $this->assert_does_not_match(qr/<input name=\"comment_index/, $html);
+      $this->assert_does_not_match(qr/<input name=\"comment_anchor/, $html);
+    } else {
+      $this->assert_matches(qr/<input name=\"comment_index"(.*?)\s*\/>/i, $html);
+      $html =~ s/<input name=\"comment_index"(.*?)\s*\/>//i;
+      $dattrs = $1;
+      $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
+      $this->assert(scalar($dattrs =~ s/\s*value=\"(.*?)\"//io), $dattrs);
+      $this->assert_str_equals($eidx, $1);
+      $this->assert_str_equals("", trim($dattrs));
+      $this->assert_does_not_match(qr/<input name=\"comment_anchor/, $html);
+      $this->assert_does_not_match(qr/<input name=\"comment_location/, $html);
+    }
+
+    $this->assert_matches(qr/<input name=\"unlock\"(.*?)\s*\/>/, $html);
+    $html =~ s/<input name=\"unlock\"(.*?)\s*\/>//i;
     $dattrs = $1;
     $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
-    $this->assert(scalar($dattrs =~ s/\s*value=\"(.*?)\"//o), $dattrs);
-    $this->assert_str_equals($anchor, $1);
+    $this->assert(scalar($dattrs =~ s/\s*value=\"1\"//io), $dattrs);
     $this->assert_str_equals("", trim($dattrs));
-    $this->assert_does_not_match(qr/<input name=\"comment_index/, $html);
-    $this->assert_does_not_match(qr/<input name=\"comment_location/, $html);
-  } elsif ( $location) {
-    $html =~ s/<input ${disabled} name=\"${disabled}comment_location"(.*?)\s*\/>//i;
+
+    $this->assert_matches(qr/<input name=\"comment_action\"(.*?)\s*\/>/, $html);
+    $html =~ s/<input name=\"comment_action\"(.*?)\s*\/>//i;
     $dattrs = $1;
     $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
-    $this->assert(scalar($dattrs =~ s/\s*value=\"(.*?)\"//o), $dattrs);
-    $this->assert_str_equals($location, $1);
+    $this->assert(scalar($dattrs =~ s/\s*value=\"save\"//io), $dattrs);
     $this->assert_str_equals("", trim($dattrs));
-    $this->assert_does_not_match(qr/<input name=\"comment_index/, $html);
-    $this->assert_does_not_match(qr/<input name=\"comment_anchor/, $html);
   } else {
-    $html =~ s/<input ${disabled} name=\"${disabled}comment_index"(.*?)\s*\/>//i;
-    $dattrs = $1;
-    $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
-    $this->assert(scalar($dattrs =~ s/\s*value=\"(.*?)\"//io), $dattrs);
-    $this->assert_str_equals($eidx, $1);
-    $this->assert_str_equals("", trim($dattrs));
-    $this->assert_does_not_match(qr/<input name=\"comment_anchor/, $html);
-    $this->assert_does_not_match(qr/<input name=\"comment_location/, $html);
+    $this->assert_does_not_match(qr/<input name/, $html);
   }
-  $this->assert_matches(qr/<input ${disabled} name=\"${disabled}unlock\"(.*?)\s*\/>/, $html);
-  $html =~ s/<input ${disabled} name=\"${disabled}unlock\"(.*?)\s*\/>//i;
-  $dattrs = $1;
-  $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
-  $this->assert(scalar($dattrs =~ s/\s*value=\"1\"//io), $dattrs);
-  $this->assert_str_equals("", trim($dattrs));
-
-  $html =~ s/<input ${disabled} name=\"${disabled}text\"(.*?)\s*\/>//i;
-  $dattrs = $1;
-  $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
-  $this->assert(scalar($dattrs =~ s/\s*value=\"dummy\"//io), $dattrs);
-  $this->assert_str_equals("", trim($dattrs));
 
   $html =~ s/<textarea ${disabled} (.*?)>(.*?)<\/textarea>//i;
   $dattrs = $1;
@@ -160,11 +176,10 @@ sub inputTest {
   $this->assert_matches(qr/<input\s+$disabled\s*type="submit"\s*value=\".*?"\s*\/>/i,
 			$html);
 
-  return if ( $locked );
-  # can't save, button disabled, so no point trying
-
+  # Compose the query
   my $comm = "This is the comment";
-  $query = new CGI({'comment_type' => $type,
+  $query = new CGI({'comment_action' => 'save',
+		    'comment_type' => $type,
 		    'comment' => $comm });
   if ( $anchor ) {
     $query->param(-name=>'comment_anchor', -value=>$anchor);
@@ -179,33 +194,41 @@ sub inputTest {
   # invoke the save handler
   TWiki::Plugins::CommentPlugin::commonTagsHandler($text, $topic, $web);
 
-  $this->assert_str_equals("http://twiki/view.cgi/$web/$topic",
-			   TWiki::Func::TESTredirected());
-
-  $text = TWiki::Func::readTopic($web, $topic);
-
-  $this->assert_matches(qr/$comm/, $text);
-
-  my $refexpr;
-  if ($anchor) {
-    $refexpr = $anchor;
-  } elsif ($location) {
-    $refexpr = "HereIsTheLocation";
+  if ( $locked ) {
+    # Even though the button is disabled, we need to check that a locked
+    # target bounces the save and nothing gets written
+    $this->assert_str_equals("OOPSLOCKED",
+			     TWiki::Func::TESTredirected());
+    $text = TWiki::Func::readTopic($web, $topic);
+    $this->assert_str_equals($sample, $text);
   } else {
-    $refexpr = $commentref;
-  }
+    $this->assert_str_equals("http://twiki/view.cgi/$web/$topic",
+			     TWiki::Func::TESTredirected());
+    $text = TWiki::Func::readTopic($web, $topic);
+    $this->assert_matches(qr/$comm/, $text);
 
-  if ( $type eq "top" ) {
-    $this->assert_matches(qr/$comm.*TopOfTopic/s, $text);
-  } elsif ( $type eq "bottom" ) {
-    $this->assert_matches(qr/BottomOfTopic.*$comm/s, $text);
-  } elsif ( $type eq "above" ) {
-    $this->assert_matches(qr/TopOfTopic.*$comm.*$refexpr/s, $text);
-  } elsif ( $type eq "below" ) {
-    $this->assert_matches(qr/$refexpr.*$comm.*BottomOfTopic/s, $text);
+    my $refexpr;
+    if ($anchor) {
+      $refexpr = $anchor;
+    } elsif ($location) {
+      $refexpr = "HereIsTheLocation";
+    } else {
+      $refexpr = $commentref;
+    }
+
+    if ( $type eq "top" ) {
+      $this->assert_matches(qr/$comm.*TopOfTopic/s, $text);
+    } elsif ( $type eq "bottom" ) {
+      $this->assert_matches(qr/BottomOfTopic.*$comm/s, $text);
+    } elsif ( $type eq "above" ) {
+      $this->assert_matches(qr/TopOfTopic.*$comm.*$refexpr/s, $text);
+    } elsif ( $type eq "below" ) {
+      $this->assert_matches(qr/$refexpr.*$comm.*BottomOfTopic/s, $text);
+    }
   }
 }
 
+# All test subs start with "test"
 sub test1default {
   my $this = shift;
   
