@@ -142,7 +142,7 @@ sub handleDiffWiki {
 
 sub handleConvertWikiVersion {
    my ($wikiVersion) = @_;
-   use TWikiReleaseNames;
+   use TWiki::Contrib::DistributionContrib::TWikiReleaseNames;
    return TWikiReleaseNames::wikiVersionToDistributionName($wikiVersion);
 }
 
