@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000545368" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000599260" format="1.0" version="1.20"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -28,7 +28,7 @@ The 01-Sep-2001 release includes the following new features and enhancements:
 	* *[[TWikiMetaData]]* - New data format 
 	* *[[TWikiForms]]* - Create multiple input forms per web; data is rendered in HTML tables.
 	* *[[ManagingTopics]]* Individual topics can be renamed, moved and deleted through the browser. Deleted topics are stored in a common Trash web.
-	* *[[Changing_Passwords][Change passwords]]* Change and reset passwords using forms.
+	* *[[ChangingPasswords][Change passwords]]* Change and reset passwords using forms.
 	* *[[TWikiVariables][TOC (Table of Contents)]]* - =%<nop>TOC%= variable generates a hierarchical table of contents from topic headings: &lt;hI&gt;...&lt;h6&gt;. Set depth.
 	* *[[TWikiVariables][Arbitrary Text for <nop>WikiWord Links]]* - Text formatting rules to generate automatic links from any combination of words and spaces.
 	* *[[FileAttachment][Attachments Under Revision Control]]* Changes made to files attached to topics are now saved under revision control (RCS).
@@ -109,6 +109,8 @@ The following steps describe the upgrade on Unix. Windows setup is very similar.
 	  <br /> =mv ~/tmp/data/Trash $TWIKIROOT/data=
 	1. Move the MIME types file, ex:
 	  <br /> =mv ~/tmp/data/mime.types $TWIKIROOT/data=
+	1. Move the TWiki logo files, ex:
+	  <br /> =mv ~/tmp/pub/*.gif $TWIKIROOT/pub=
 	1. Pay attention to the file permissions of the =TWiki2= and =Know2= directories and its files. The files must be writable by the cgi-scripts (usually user =nobody=).
 	1. In case the cgi-scripts are not running as user =nobody=: The =*,v= RCS repository files delivered with the installation package are locked by user nobody and need to be changed the user of your cgi-scripts, i.e. =www-data=. A simple way to switch the locker of the RCS files is to use sed:
 	  <br /> =for f in *,v; do sed 's/nobody\:/www-data\:/' $f > x; mv x $f; done=
