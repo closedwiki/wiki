@@ -38,7 +38,7 @@ This zip file can be generated and subsequently uploaded to twiki.org, or you ca
 
 The easiest way to start using the module is to copy the =build.pl= file from =lib/TWiki/Contrib/BuildContrib/build.pl= into your own plugin or contrib, in the corresponding place i.e. copy it to =lib/TWiki/Plugins/MyPlugin/build.pl= or =lib/TWiki/Contrib/MyContrib/build.pl=. Then edit the file, and change as appropriate (it should be fairly obvious what you have to do). Then type
    * =perl build.pl manifest=
-and copy and paste the output file list into a file called MANIFEST in the root of your plugin checkout area (ie. alongside lib, bin. templates etc.)
+This should inspect the directory structure and write a best-guess MANIFEST file.
 
 __Notes__
    * This is a _build_ module for use by developers, not an _install_ module for end users. When a release is built, an installer/uninstaller script is automatically generated that is packaged with the release. This simple script is the only part of the build system visible to end users
@@ -76,6 +76,8 @@ The fixtures do not replace _all_ of the TWiki core functionality, just those pi
 | Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
 | License: | GPL |
 | Dependencies: | %$DEPENDENCIES% |
+| 24/03/05 | 1.006 Crawford Currie  made it look in the same directory as build.pl for MANIFEST and DEPENDENCIES and the INSTALL files, first |
+| 15/03/05 | 1.005 Crawford Currie made the installer script check in files in Dakar installs, and fixed bugs highlighted by ThomasWeigert |
 | 04/12/04 | 1.004 Martin Cleaver removed twikicli - now in TWiki:Plugins.TWikiShellContrib |
 | 12/10/04 | 1.003 Crawford Currie added ONLYIF control to DEPENDENCIES. Added optional PREINSTALL and POSTINSTALL scripts (used to e.g. remove dead code). |
 | 1/10/04 | 1.002 Crawford Currie added topic updating reminder to installer |

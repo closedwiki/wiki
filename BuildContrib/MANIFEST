@@ -1,9 +1,11 @@
-data/TWiki/BuildContrib.txt
-lib/TWiki/Contrib/Build.pm
-lib/TWiki/Contrib/BuildContrib/build.pl
-contrib/fixtures/BaseFixture.pm
-contrib/fixtures/TWiki/Func.pm
-contrib/fixtures/TWiki/Net.pm
-contrib/fixtures/TWiki.pm
-contrib/fixtures/TWiki/Store.pm
-contrib/TestRunner.pl
+data/TWiki/BuildContrib.txt Description
+lib/TWiki/Contrib/Build.pm Main code module
+lib/TWiki/Contrib/BuildContrib/build.pl Build script
+contrib/TEMPLATE_installer.pl Installer template
+contrib/fixtures/BaseFixture.pm Test fixture
+contrib/fixtures/TWiki/Func.pm Test fixture
+contrib/fixtures/TWiki/Plugins.pm Test fixture
+contrib/fixtures/TWiki/Net.pm Test fixture
+contrib/fixtures/TWiki.pm Test fixture
+contrib/fixtures/TWiki/Store.pm Test fixture
+contrib/TestRunner.pl Script for running tests

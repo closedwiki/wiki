@@ -5,20 +5,33 @@
 # NOTE TO THE DEVELOPER: THIS FILE IS GENERATED AUTOMATICALLY
 # BY THE BUILD PROCESS DO NOT EDIT IT - IT WILL BE OVERWRITTEN
 #
+# It's not smart enough to use the TWiki.cfg to drive the
+# installation - yet.
+#
 use strict;
 use Socket;
 
 my $noconfirm = 0;
+my $twiki;
 
 BEGIN {
     unless ( -d "lib" &&
              -d "bin" &&
-             -e "lib/TWiki.pm" ) {
+             -e "bin/setlib.cfg" ) {
         die "This installer must be run from the root directory of a TWiki installation";
     }
-    # Add the TWiki lib dir to the include path to get Algorithm::Diff
-    unshift @INC, "lib";
-    eval 'use TWiki::Plugins;';
+    my $here = `pwd`; # in case bin is a link
+    # read setlib.cfg
+    chdir("bin");
+    require "setlib.cfg";
+    chomp($here); chdir($here);
+    # See if we can make a TWiki. If we can, then we can save topic
+    # and attachment histories.
+    eval "use TWiki::Merge";
+    unless( $@ ) {
+        require TWiki;
+        $twiki = TWiki->new();
+    }
 }
 
 # Satisfy dependencies on modules, by checking:
@@ -204,19 +217,45 @@ sub download {
     return 1;
 }
 
-# Do your best to check in, despite the fact that the apache user
+# Check in. On Cairo, do nothing because the apache user
 # has everything checked out :-(
 sub checkin {
-    my $file = shift;
+    my( $web, $topic, $file ) = @_;
 
-    print STDERR "I can't automatically update the revision history for\n";
-    print STDERR "$file.\nPlease ";
-    if ( $file =~ /^data/ ) {
-        print STDERR "edit the topic in TWiki and Save without changing it";
-    } elsif( $file =~ /^pub/ ) {
-        print STDERR "upload the file in TWiki";
+    # If this is Dakar, we have a good chance of completing the
+    # install.
+    my $err = 1;
+    if( $twiki ) {
+        my $user =
+          $twiki->{users}->findUser($TWiki::cfg{DefaultUserLogin});
+        if( $file ) {
+            $err = $twiki->{store}->saveAttachment
+              ( $web, $topic, $file, $user,
+                { comment => "Saved by installer" } );
+        } else {
+            # read the topic to recover meta-data
+            my( $meta, $text ) =
+              $twiki->{store}->readTopic( $user, $web, $topic );
+            $err = $twiki->{store}->saveTopic
+              ( $user, $web, $topic, $text, $meta,
+                { comment => "Saved by installer" } );
+        }
     }
-    print STDERR " to update the history.\n";
+    if( $err ) {
+        if( $file ) {
+            $err = "$web.$topic:$file";
+        } else {
+            $err = "$web.$topic";
+        }
+        print STDERR "I can't automatically update the revision history for\n";
+        print STDERR "$err\nPlease ";
+        unless ( $file ) {
+            print STDERR "edit the topic in TWiki and Save without changing it";
+        } else {
+            print STDERR "upload the file in TWiki";
+        }
+        print STDERR " to update the history.\n";
+    }
 }
 
 # Print a useful message
@@ -276,13 +315,23 @@ if( $install ) {
     # For each file in the MANIFEST, check to see if it is targeted
     # at pub or data. If it is, then add a call to "checkin" for the
     # file.
-    my @checkin;
-    foreach my $file ( @manifest ) {
-        if( $file =~ /^data\/\w+\/\w+.txt$/ ) {
-            checkin( $file );
-        } elsif( $file =~ /^pub\/\w+\/\w+\/[^\/]+$/ ) {
-            checkin( $file );
+    my @topic;
+    my @pub;
+    my $file;
+    foreach $file ( @manifest ) {
+        if( $file =~ /^data\/(\w+)\/(\w+).txt$/ ) {
+            push(@topic, $file);
+        } elsif( $file =~ /^pub\/(\w+)\/(\w+)\/([^\/]+)$/ ) {
+            push(@pub, $file);
         }
+    }
+    foreach $file ( @topic ) {
+        $file =~ /^data\/(\w+)\/(\w+).txt$/;
+        checkin( $1, $2, undef );
+    }
+    foreach $file ( @pub ) {
+        $file =~ /^pub\/(\w+)\/(\w+)\/([^\/]+)$/;
+        checkin( $1, $2, $3 );
     }
 
     print "\n### %$MODULE% installed";
