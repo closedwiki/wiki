@@ -41,7 +41,7 @@ sub renderCellData
             }
             if( $data !~ m/<\/table/i )
             {
-                $data = "$data\n</table>";
+                $data .= "\n</table>";
             }
         }
     }
@@ -61,28 +61,28 @@ sub renderRevisionDiff
         if( /^[0-9]/ )
         {
             $data = renderCellData( $data, $topic );
-            $result = "$result$data";
+            $result .= $data;
             $data = "";
             s/^([0-9\,]+)d([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#FFD7D7" colspan ="2"><b> Deleted: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br>&lt;<\/td><td>/go;
             s/^([0-9\,]+)a([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Added:   <\/b><\/td><\/tr>\n<tr><td bgcolor="#40FF40" valign="top" width="1%">&gt;<br>&gt;<\/td><td>/go;
             s/^([0-9\,]+)c([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Changed: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br>&lt;<\/td><td>/go;
-            $result = "$result$_";
+            $result .= $_;
         }
         elsif( /^[<>]/ )
         {
             s/^[<>] (.*)/$1/go;
-            $data = "$data\n$_";
+            $data .= "\n$_";
         }
         elsif( /^--*/ )
         {
             $data = renderCellData( $data, $topic );
-            $result = "$result$data";
+            $result .= $data;
             $data = "";
-            $result = "$result\n</td></tr><tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br>&gt;</td><td>\n";
+            $result .= "\n</td></tr><tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br>&gt;</td><td>\n";
         }
     }
     $data = renderCellData( $data, $topic );
-    $result = "$result$data";
+    $result .= $data;
     $data = "";
     $text = "$result<\/td><\/tr>\n<\/table>";
 
@@ -214,17 +214,17 @@ sub main
 
     while( $i > 0 )
     {
-        $revisions = "$revisions | <A href=\"../../view/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
+        $revisions .= " | <A href=\"../../view/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
         if( $i != 1 )
         {
             if( ( $i == $rev1 ) && ( !$isMultipleDiff ) )
             {
-                $revisions = "$revisions | &gt;";
+                $revisions .= " | &gt;";
             }
             else
             {
                 $j = $i - 1;
-                $revisions = "$revisions | <A href=\"../../rdiff/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
+                $revisions .= " | <A href=\"../../rdiff/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
             }
         }
         $i = $i - 1;

@@ -88,7 +88,7 @@ $rmFileCmd        = "rm -f %FILENAME%";
 # variables that probably do not change:
 # ==================================================================
 #                   %WIKITOOLNAME% : TWiki tool name :
-$wikiToolName     = "betaTWiki";
+$wikiToolName     = "TWikibeta";
 #                   Template directory :
 $templateDir      = "$wikiDir/bin/templates";
 #                   Data (topic files) root directory :

@@ -14,7 +14,7 @@
     <TD>
       <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>Changes</B></FONT>
     </TD><TD ALIGN="right">
-      %INCLUDE:"../wikiwebs.inc"%
+      %INCLUDE:"wikiwebs.inc"%
     </TD>
   </TR>
   <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
@@ -39,7 +39,7 @@
 %REPEAT%<TABLE width="100%" border="0" cellspacing="0" cellpadding="0">
 <TR>
   <TD width="50%">
-    <B> %TOPICNAME% </B>
+    <A HREF="%SCRIPTURL%/view/%WEB%/%TOPICNAME%"><B>%TOPICNAME%</B></A>
   </TD><TD width="30%">
     <A HREF="%SCRIPTURL%/rdiff/%WEB%/%TOPICNAME%">%TIME%</A>
   </TD><TD width="20%">

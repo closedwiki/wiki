@@ -53,10 +53,10 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> The email address of the Wiki webmaster, is <b>yourname@your.domain.com</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WIKITOOLNAME%</CODE> </td>
-  <td> Name of wiki tool, is <b>betaTWiki</b> </td>
+  <td> Name of wiki tool, is <b>TWikibeta</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WIKIVERSION%</CODE> </td>
-  <td> Wiki tool version, is <b>07 Jul 1999</b> </td>
+  <td> Wiki tool version, is <b>15 Jul 1999</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>USERNAME%</CODE> </td>
   <td> Your login username, is <b>guest</b> </td>
@@ -71,7 +71,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> The current topic name, is <b>TWikiDocumentation</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>DATE%</CODE> </td>
-  <td> Todays date, is <b>07 Jul 1999</b> </td>
+  <td> Todays date, is <b>16 Jul 1999</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>INCLUDE:"file.ext"%</CODE> </td>
   <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: <CODE><b>%<nop>INCLUDE:"../Know/TopicName.txt"%</b></CODE> </td>
@@ -264,10 +264,13 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 <LI> To create a new web:
 <UL>
 <LI> Use a topic name consisting of characters <CODE>A..Z</CODE> , <CODE>a..z</CODE> but <STRONG>not</STRONG> in <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WikiNotation">WikiNotation</A>.
-<LI> Create a new template directory and copy all files from the <CODE>twiki/bin/templates/Main</CODE> directory to the new directory.
-<LI> Create a new data directory and copy the files .changes, .mailnotify, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/TWikiUsers">TWikiUsers</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebHome">WebHome</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebNotify">WebNotify</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebSearch">WebSearch</A>.txt, webcolor.inc, webcopyright.inc and weblist.inc from the <CODE>twiki/bin/data/Main</CODE> directory to the new directory.
-<LI> Make changes to webcolor.inc (unique color for web), possibly also webcopyright.inc (copyright at the bottom) and weblist.inc (web specific links on top).
-<LI> If you want to use a category table, create the three files twikicatitems.tmpl, twikicatedit.tmpl and twikicatview.tmpl described in the TWiki Category Table section.
+<LI> Create a new template directory under <CODE>twiki/bin/templates</CODE> .
+<LI> Create a new data directory under <CODE>twiki/bin/data</CODE> .
+<LI> Copy the files <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/TWikiUsers">TWikiUsers</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebHome">WebHome</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebNotify">WebNotify</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebSearch">WebSearch</A>.txt, webcolor.inc, and weblist.inc from the <CODE>twiki/bin/data/Main</CODE> directory to the new data directory.
+<LI> Make changes to webcolor.inc (unique color for web), and possibly also weblist.inc (web specific links on top).
+<LI> In case you need a web specific copyright notice (at the bottom), copy file webcopyright.inc from the <CODE>twiki/bin/data</CODE> directory to the new data directory, and customize it.
+<LI> If needed, create customized templates in the new templates directory. (Non existing templates are inherited from <CODE>twiki/bin/templates</CODE> )
+<LI> If you want to use a category table, copy the three files twikicatitems.tmpl, twikicatedit.tmpl and twikicatview.tmpl from the <CODE>twiki/bin/templates/Know</CODE> directory to the new templates directory, and customize it. The TWiki Category Table section has more.
 </UL>
 </UL>
 <p> 
@@ -353,6 +356,7 @@ drwxrwxrwx   2 twiki    t5           9216 Nov 13 13:55 Know
 drwxrwxrwx   2 twiki    t5           4608 Nov 15 21:42 Main
 -rw-r--r--   1 nobody   65535        4153 Nov 19 01:01 log199810.txt
 -rw-r--r--   1 nobody   65535        7189 Nov 19 01:01 log199811.txt
+-rw-r--r--   1 twiki    t5           2356 Oct 22 00:56 webcopyright.inc
 -rw-r--r--   1 twiki    t5            276 Oct 22 00:28 wikiwebs.inc
 -rw-r--r--   1 twiki    t5           1484 Oct 22 01:11 wikiwebtable.inc
 </pre>

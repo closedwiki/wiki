@@ -42,7 +42,7 @@ use vars qw(
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "07 Jul 1999";
+$wikiversion      = "15 Jul 1999";
 
 # variables that need to be changed when installing on new server:
 $wikiHomeUrl      = $wikicfg::wikiHomeUrl;
@@ -280,17 +280,22 @@ sub formatGmTime
 }
 
 # =========================
-sub readIncludeFile
-{
-    my( $name ) = @_;
-    return `cat $dataDir/$webName/$name`;
-}
-
-# =========================
 sub readFile
 {
     my( $name ) = @_;
     return `cat $name`;
+}
+
+# =========================
+sub readIncludeFile
+{
+    my( $name ) = @_;
+    my $incfile = "$dataDir/$webName/$name";
+    if( -e $incfile )
+    {
+	return &readFile( $incfile );
+    }
+    return &readFile( "$dataDir/$name");
 }
 
 # =========================
@@ -744,9 +749,9 @@ sub getRenderedVersion
     my( $result, $insidePRE, $blockquote );
 
     $result = "";
-    $insidePRE= 0;
-    $blockquote= 0;
-    $code= "";
+    $insidePRE = 0;
+    $blockquote = 0;
+    $code = "";
     $text =~ s/\\\n//go;
     $text =~ s/\r//go;
     foreach( split( /\n/, $text))
@@ -780,15 +785,15 @@ sub getRenderedVersion
 	    s@^([a-zA-Z0-9]+)----*@<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><HR></td></tr></table>@o;
 
 # Lists etc.
-	    s/^\s*$/<p> /o                   && ($code= 0);
-	    m/^(\S+?)/o                      && ($code= 0);
-	    s/^(\t+)(\S+?):\s/<DT> $2<DD> /o && ($result= $result . &emitCode( "DL", length $1));
-	    s/^(\t+)\* /<LI> /o              && ($result= $result . &emitCode( "UL", length $1));
-	    s/^(\t+)\d+\.?/<LI> /o           && ($result= $result . &emitCode( "OL", length $1));
+	    s/^\s*$/<p> /o                   && ( $code = 0 );
+	    m/^(\S+?)/o                      && ( $code = 0 );
+	    s/^(\t+)(\S+?):\s/<DT> $2<DD> /o && ( $result .= &emitCode( "DL", length $1 ) );
+	    s/^(\t+)\* /<LI> /o              && ( $result .= &emitCode( "UL", length $1 ) );
+	    s/^(\t+)\d+\.?/<LI> /o           && ( $result .= &emitCode( "OL", length $1 ) );
 	    if( !$code )
 	    {
-	        $result=$result.&emitCode("",0);
-	        $code= "";
+	        $result .= &emitCode( "", 0 );
+	        $code = "";
 	    }
 
 	    s/(.*)/\n$1\n/o;
@@ -830,9 +835,9 @@ sub getRenderedVersion
      	    s/(.*)/$1\n/o;
         }
 	s/\t/   /go;
-        $result="$result$_";
+        $result .= $_;
     }
-    $result=$result . &emitCode("",0);
+    $result .= &emitCode( "", 0 );
     return $result;
 }
 

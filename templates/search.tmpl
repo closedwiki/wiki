@@ -5,7 +5,7 @@
 <BODY bgcolor="#ffffff">
 <BASE href="%SCRIPTURL%/view/%WEB%/main">
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-<FORM name="main" action="../../view/%WEB%/">
+<FORM name="main" action="%SCRIPTURL%/view/%WEB%/">
   <TR>
     <TD BGCOLOR="%INCLUDE:"webcolor.inc"%" rowspan="2" valign="top" width="1%">
       <A href="%WIKIHOMEURL%/"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
@@ -13,7 +13,7 @@
     <TD>
       <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>SearchResult</B></FONT>
     </TD><TD ALIGN="right">
-      %INCLUDE:"../wikiwebs.inc"%
+      %INCLUDE:"wikiwebs.inc"%
     </TD>
   </TR>
   <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
@@ -40,7 +40,7 @@ Search: <B> %SEARCHSTRING% </B>
 %REPEAT%<TABLE width="100%" border="0" cellspacing="0" cellpadding="0">
 <TR>
   <TD width="50%">
-    <B> %TOPICNAME% </B>
+    <A HREF="%SCRIPTURL%/view/%WEB%/%TOPICNAME%"><B>%TOPICNAME%</B></A>
   </TD><TD width="30%">
     <A HREF="%SCRIPTURL%/rdiff/%WEB%/%TOPICNAME%">%TIME%</A>
   </TD><TD width="20%">

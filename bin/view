@@ -93,11 +93,11 @@ sub main
     {
         if( $topicExists )
         {
-            $tmpl =~ s/%EDITTOPIC%/<A href=\"..\/..\/edit\/%WEB%\/%TOPIC%\"><B>Edit<\/B><\/A>/go; 
+            $tmpl =~ s/%EDITTOPIC%/<A href=\"%SCRIPTURL%\/edit\/%WEB%\/%TOPIC%\"><B>Edit<\/B><\/A>/go; 
         }
         else
         {
-            $tmpl =~ s/%EDITTOPIC%/<A href=\"..\/..\/edit\/%WEB%\/%TOPIC%\"><B>Create<\/B><\/A>/go; 
+            $tmpl =~ s/%EDITTOPIC%/<A href=\"%SCRIPTURL%\/edit\/%WEB%\/%TOPIC%\"><B>Create<\/B><\/A>/go; 
         }
         $tmpl =~ s/%REVTITLE%//go;
     }
