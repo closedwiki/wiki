@@ -448,9 +448,9 @@ sub main
     my $filetemp = $pathz[$#pathz];
     my @pathza = ( split( '/', $filetemp ) );
     $fileName = $pathza[$#pathza];
-    $fileName =~ s/[^A-Za-z0-9_\.\-]//go;  # delete special characters
+    $fileName =~ s/[^A-Za-z0-9_\.\-]//go;             # delete special characters
+    $fileName =~ s/$TWiki::uploadFilter/$1\.txt/goi;  # apply security filter
 
-    
     # Update RCS if required
     # FIXME make optional
     my $text1 = "";
