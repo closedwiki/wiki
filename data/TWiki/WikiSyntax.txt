@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000440500" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="MikeMannix" date="1000621139" format="1.0" version="1.8"}%
 ---# <nop>Instant TWiki Shorthand
 
 If you can enter text, write an email, you're ready for TWiki. Use simple, intuitive TWiki shorthand to get even more control - instantly!
@@ -41,7 +41,7 @@ If you can enter text, write an email, you're ready for TWiki. Use simple, intui
 </pre>
 
 	* Use three (or more) consecutive *hyphens* expands into a horizontal rule: =---=
----
-	* See TextFormattingRules for more....
 
+	* See TextFormattingRules for more....
+---
 -- MikeMannix - 14 Sep 2001 <br />	
