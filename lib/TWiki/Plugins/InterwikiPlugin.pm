@@ -33,7 +33,7 @@ package TWiki::Plugins::InterwikiPlugin;
 use vars qw(
         $web $topic $user $installWeb  $VERSION $debug
         $interSiteLinkRulesTopicName $suppressTooltip
-        $prefixPattern $sitePattern $pagePattern $postfixPattern
+        $prefixPattern $upperAlpha $mixedAlphaNum $sitePattern $pagePattern $postfixPattern
         %interSiteTable $debug
     );
 
@@ -53,8 +53,13 @@ BEGIN {
 # Regexes for the Site:page format InterWiki reference - updated to support
 # 8-bit characters in both parts - see Codev.InternationalisationEnhancements
 $prefixPattern  = '(^|[\s\-\*\(])';
-my $upperAlpha = TWiki::Func::getRegularExpression("upperAlpha");
-my $mixedAlphaNum = TWiki::Func::getRegularExpression("mixedAlphaNum");
+if( $TWiki::Plugins::VERSION >= 1.020 ) {
+    $upperAlpha    = TWiki::Func::getRegularExpression("upperAlpha");
+    $mixedAlphaNum = TWiki::Func::getRegularExpression("mixedAlphaNum");
+} else {
+    $upperAlpha    = $TWiki::upperAlpha;
+    $mixedAlphaNum = $TWiki::mixedAlphaNum;
+}
 $sitePattern    = "([${upperAlpha}][${mixedAlphaNum}]+)";
 $pagePattern    = "([${mixedAlphaNum}_\/][${mixedAlphaNum}" . '\+\_\.\,\;\:\!\?\/\%\#-]+?)';
 $postfixPattern = '(?=[\s\.\,\;\:\!\?\)]*(\s|$))';
