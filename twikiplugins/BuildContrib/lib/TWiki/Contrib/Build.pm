@@ -16,13 +16,14 @@ package TWiki::Contrib::Build;
 
 =begin text
 
----+ Package TWiki::Contrib::Build
+---++ Package TWiki::Contrib::Build
 Base class of build objects for TWiki packages. Creates a build environment
 that addresses most of the common requirements for building plugins and
 contrib modules.
 
-Works by defining targets as functions that can then be subclassed and added
-to. Just about as simple a build system as you could get.
+Use by writing a subclass in a script that you then run. Targets are defined as functions, so adding new targets or dependencies between targets is done by subclassing the base class. When used to generate a build script, this class will interpret the following command-line options:
+| -n | Do nothing |
+| -v | Be verbose |
 
 The list of files to be installed is determined from the MANIFEST.
 Only these files will get into the release zip.
@@ -32,41 +33,38 @@ list) to be set to point at any required dependencies.
 
 The following help information is cursory; for full details, look at an example or read the code.
 
----++ Targets
+---+++ Targets
 The following targets will always exist:
-   1 build - check that everything is perl
-   1 test - run unit tests
-   1 install - install on local installation defined by $TWIKI_HOME
-   1 uninstall - uninstall from local installation defined by $TWIKI_HOME
-   1 pod - build POD documentation
-   1 release - build, pod and package a release zip
-   1 upload - build, pod, package and upload to twiki.org
+| build | check that everything is perl |
+| test | run unit tests |
+| install | install on local installation defined by $TWIKI_HOME |
+| uninstall | uninstall from local installation defined by $TWIKI_HOME |
+| pod | build POD documentation |
+| release | build, pod and package a release zip |
+| upload | build, pod, package and upload to twiki.org |
 Note: if you override any of these targets it is generally wise to call the SUPER version of the target!
----++ Standard directory structure
+---+++ Standard directory structure
 The standard module directory structure mirrors the TWiki installation directory structure, so each file in the development directory structure is in the place it will be in in the actual installation. From the root, these are the key files:
-   * MANIFEST - required - list of files and descriptions to include in release zip
-      * each file is given by the full path to the file relative to the build TWiki installation directory. Wildcards may NOT be used.
-   * DEPENDENCIES - optional list of dependencies on other modules and descriptions
-      * Dependencies should be expressed as "name,version,type,description" where name is the name of the module, version is the version constraint (e.g. ">1.5"), type is its type (CPAN, perl, C etc) and description is a short description of the module and where to get it.
-      *  The special type "contrib" is used to refer to another plugin or code library. In this case "name" must be the fully-qualified package name, and the description should explain how to get the package.
-   * lib/ - as you expect to see in installation. Should also contain other Perl modules.
-      * lib/TWiki/
-         * lib/TWiki/Plugins/ - this is where your <plugin name>.pm file goes for plugins
-            * lib/TWiki/Plugins/<plugin name>/ - directory containing sub-modules used by your plugin, and your build script.
-         * lib/TWiki/Contrib/ - this is where your <contrib name>.pm file goes for contribs
-            * lib/TWiki/Contrib/<contrib name>/ - directory containing sub-modules used by your contrib, and your build script.
-   * data/ - as you expect to see in the installation
-   * pub/ - as you expect to see in the installation. You must list required directories, even if they are initially empty.
-   * templates/ - as you expect to see in installation
-      * templates/<skin name>/ - this is where templates for your skin go
----++ Token expansion
+| MANIFEST | required - list of files and descriptions to include in release zip. Each file is given by the full path to the file relative to the build TWiki installation directory. Wildcards may NOT be used. |
+| DEPENDENCIES | optional list of dependencies on other modules and descriptions. Dependencies should be expressed as "name,version,type,description" where name is the name of the module, version is the version constraint (e.g. ">1.5"), type is its type (CPAN, perl, C etc) and description is a short description of the module and where to get it. Perl modules also referenced in the dependencies list in the stub topic should be listed using their perl package name (e.g. TWiki::Contrib::MyContrib) and use the type 'perl'. The instructions should describe where to get the module. |
+| lib/TWiki/Plugins/ | this is where your <plugin name>.pm file goes for plugins |
+| lib/TWiki/Plugins/<plugin name>/ | directory containing sub-modules used by your plugin, and your build.pl script. |
+| lib/TWiki/Contrib/ | this is where your <contrib name>.pm file goes for contribs |
+| lib/TWiki/Contrib/<contrib name>/ | directory containing sub-modules used by your contrib, and your build.pl script. |
+| data/ | as you expect to see in the installation |
+| pub/ | as you expect to see in the installation. You must list required directories, even if they are initially empty. |
+| templates/ | as you expect to see in installation |
+| templates/<skin name>/ | this is where templates for your skin go |
+| contrib/ | this is where non-TWiki, non-web-accessible files associated with a Contrib or plugin go |
+---+++ Token expansion
 The build supports limited token expansion in =.txt= files. It expands the following tokens by default when the release target is built.
 | =%$<nop>MANIFEST%= | Expands to a TWiki table of MANIFEST contents |
 | =%$<nop>DEPENDENCIES%= | Expands to a comma-separated list of dependencies |
 | =%$<nop>DATE%= | Expands to today's date |
 | =%$<nop>VERSION%= | Expands to the VERSION number set in the plugin/contrib main .pm topic |
 | =%$<nop>POD%= | Expands POD text in all =.pm= files in the MANIFEST. Pod is generated for each module in the order of the MANIFEST. |
----++ Methods
+| =%$<nop>STUB%= | Expands to the name of the package stub for this module |
+---+++ Methods
 
 =cut
 
@@ -84,7 +82,6 @@ BEGIN {
   use File::Spec;
   $buildpldir = `dirname $0`; chop($buildpldir);
   $buildpldir = File::Spec->rel2abs($buildpldir);
-  print "Building in $buildpldir\n";
   $basedir = $buildpldir;
   # Find the lib root
   unless ($basedir =~ s/^(.*)[\\\/](lib[\\\/]TWiki[\\\/].*)$/$1/) {
@@ -93,7 +90,6 @@ BEGIN {
   $libpath = $2;
   $libpath =~ s/[\\\/][^\\\/]*$//;
 
-  print "Basedir is $basedir\nComponent dir is $libpath\n";
   $twiki_home = $ENV{"TWIKI_HOME"};
   if ($ENV{TWIKI_LIBS}) {
     foreach my $pc (split(/:/,$ENV{TWIKI_LIBS})) {
@@ -105,7 +101,6 @@ BEGIN {
   unless(grep(/$basedir\/lib/,@INC)) {
     unshift(@INC, "$basedir/lib");
   }
-  print "Using path ".join(":",@INC)."\n";
 
   # find testrunner
   foreach my $d ( @INC ) {
@@ -121,7 +116,7 @@ BEGIN {
 
 =begin text
 
----+++ new($project)
+---++++ new($project)
 | $project | Name of plugin, addon, contrib or skin |
 | $rootModule | Optional, if defined gives the name of the root .pm module that carries the VERSION and dependencies. Defaults to $project |
 Construct a new build object. Define the basic directory
@@ -146,6 +141,11 @@ sub new {
 	  $this->{target} = $ARGV[$n];
 	}
 	$n++;
+  }
+  if ($this->{-v}) {
+      print "Building in $buildpldir\n";
+      print "Basedir is $basedir\nComponent dir is $libpath\n";
+      print "Using path ".join(":",@INC)."\n";
   }
 
   chdir($basedir);
@@ -175,7 +175,7 @@ sub new {
   $this->{data_twiki} = "data/TWiki";
 
   # the root of the name of data files
-  $this->{data_twiki_module} = $this->{data_twiki}."/".$this->{project};
+  $this->{data_twiki_module} = "$this->{data_twiki}/$this->{project}";
 
   # read the manifest
   my $manifest = "$basedir/MANIFEST";
@@ -203,33 +203,34 @@ sub new {
 	while ($line = <PF>) {
 	  if ($line =~ m/^(\w+)\s+(\w*)\s*(.*)$/o) {
 		push(@{$this->{dependencies}},
-			 { name=>$1, type=>$2, version=>"1.000", description=>$3 });
-	  } elsif ($line =~ m/^([^,]+),([^,]+),\s*(\w*)\s*,\s*(.+)$/o) {
+			 { name=>$1, type=>$2, version=>"", description=>$3 });
+	  } elsif ($line =~ m/^([^,]+),([^,]*),\s*(\w*)\s*,\s*(.+)$/o) {
 		push(@{$this->{dependencies}},
 			 { name=>$1, version=>$2, type=>$3, description=>$4 });
-	  }
+	  } elsif ($line !~ /^\s*$/ && $line !~ /^\s*#/) {
+          warn "WARNING: LINE $line IN $basedir/DEPENDENCIES IGNORED\n";
+      }
 	}
   } else {
-    print STDERR "WARNING: no $deps; dependencies will only be extracted from code\n";
+    warn "WARNING: no $deps; dependencies will only be extracted from code\n";
   }
   close(PF);
 
   my $version = "Unknown";
-
   if (open(PF,"<$basedir/$this->{pm}")) {
 	my $text = "";
 	while ($line = <PF>) {
 	  $line =~ s/\s+//g;
-	  $text .= $line;
+	  $text .= "$line\n";
 	}
-    if ($text =~ /^\s*\$VERSION\s*=\s*(.*)\s*;+\s*$/m) {
+    if ($text =~ /^\$VERSION=(.*?);$/m) {
       $version = $1;
     }
 	if ($text =~ /\@dependencies=\((.*?)\)/o ) {
 	  $text = $1;
-	  while ($text =~ s/package=>'(.*?)',constraint=>'(.*?)'//) {
+	  while ($text =~ s/package=>['"](.*?)['"],constraint=>['"](.*?)['"]//) {
 		my ($name,$ver,$found) = ($1,$2,0);
-		if ($name ne "TWiki::(Plugins|Contrib)") {
+		if ($name !~ /^TWiki::(Plugins|Contrib)$/) {
 		  foreach my $dep (@{$this->{dependencies}}) {
 			if ($dep->{name} eq $name) {
 			  $dep->{version} = $ver;
@@ -237,15 +238,15 @@ sub new {
 			  last;
 			}
 		  }
-		  unless ($found) {
+		  unless ($found || $name eq "TWiki::Plugins") {
 			push(@{$this->{dependencies}},
-				 { name=>$name, version=>$ver, type=>'contrib', description=>$name });
+				 { name=>$name, version=>$ver, type=>'perl', description=>$name });
 		  }
 		}
 	  }
 	}
   } else {
-    print STDERR "WARNING: $this->{pm} not found; cannot extract VERSION or in-code dependencies\n";
+    warn "WARNING: $this->{pm} not found; cannot extract VERSION or in-code dependencies\n";
   }
   close(PF);
 
@@ -275,7 +276,7 @@ sub new {
 
 =begin text
 
----+++ cd($dir)
+---++++ cd($dir)
   Change to the given directory
 
 =cut
@@ -296,14 +297,14 @@ sub rm {
   if ($this->{-v} || $this->{-n}) {
 	print "rm $file\n";
   }
-  unless ($this->{-n}) {
-	unlink($file) || warn "Warning: Failed to delete $file";
+  if (-e $file && !$this->{-n}) {
+	unlink($file) || warn "WARNING: Failed to delete $file";
   }
 }
 
 =begin text
 
----+++ makepath($to)
+---++++ makepath($to)
 Make a directory and all directories leading to it.
 
 =cut
@@ -330,7 +331,7 @@ sub makepath {
 
 =begin text
 
----+++ cp($from, $to)
+---++++ cp($from, $to)
 Copy a single file from - to. Will automatically make intervening
 directories in the target. Also works for target directories.
 
@@ -357,7 +358,7 @@ sub cp {
 
 =begin text
 
----+++ prot($perms, $file)
+---++++ prot($perms, $file)
 Set permissions on a file. Permissions should be expressed using POSIX
 chmod notation.
 
@@ -370,7 +371,7 @@ sub prot {
 
 =begin text
 
----+++ sys_action($cmd)
+---++++ sys_action($cmd)
 Perform a "system" command.
 
 =cut
@@ -388,7 +389,7 @@ sub sys_action {
 
 =begin text
 
----+++ target_build
+---++++ target_build
 Basic build target. By default does nothing, but subclasses may want to
 extend on that.
 
@@ -400,7 +401,7 @@ sub target_build {
 
 =begin text
 
----+++ target_test
+---++++ target_test
 Basic Test::Unit test target, runs <project>Suite.
 
 =cut
@@ -411,11 +412,11 @@ sub target_test {
   my $testdir = "$basedir/$this->{libdir}/$this->{project}/test";
   my $testsuite = $this->{project}."Suite";
   if (!-f "$testdir/$testsuite.pm") {
-    print STDERR "WARNING: COULD NOT FIND ANY TESTS FOR '$this->{project}' IN $testdir/$testsuite.pm\n";
+    warn "WARNING: COULD NOT FIND ANY TESTS FOR '$this->{project}' IN $testdir/$testsuite.pm\n";
     return;
   }
   unless($testrunner) {
-    print STDERR "WARNING: CANNOT RUN TESTS; ../contrib/TestRunner.pl not found in path\n";
+    warn "WARNING: CANNOT RUN TESTS; ../contrib/TestRunner.pl not found in path\n";
     return;
   }
 
@@ -426,7 +427,7 @@ sub target_test {
 
 =begin text
 
----+++ filter
+---++++ filter
 Expands tokens in a documentation topic.Four tokens are supported:
    * %$MANIFEST% - TWiki table of files in MANIFEST
    * %$DEPENDENCIES% - list of dependencies from DEPENDENCIES
@@ -472,7 +473,7 @@ sub _expand {
 
 =begin text
 
----+++ target_release
+---++++ target_release
 Release target, builds release zip by creating a full release directory
 structure in /tmp and then zipping it in one go. Only files explicitly listed
 in the MANIFEST are released. Automatically runs =filter= on all =.txt= files
@@ -492,23 +493,24 @@ sub target_release {
   foreach my $file (@{$this->{files}}) {
 	if ($file->{name} =~ /\.txt$/) {
 	  my $txt = $file->{name};
-print "Filtering $txt\n";
 	  $this->filter("$basedir/$txt", "$tmpdir/$txt");
 	}
   }
   $this->cp("$tmpdir/".$this->{data_twiki_module}.".txt",
 			"$basedir/$project.txt");
   $this->cd($tmpdir);
-  $this->sys_action("zip -r $project.zip *");
+  $this->sys_action("zip -r -q $project.zip *");
   $this->sys_action("mv $tmpdir/$project.zip $basedir/$project.zip");
-  print "Release ZIP is $basedir/$project.zip\n";
-  print "Release TOPIC is $basedir/$project.txt\n";
+  if ($this->{-v}) {
+      print "Release ZIP is $basedir/$project.zip\n";
+      print "Release TOPIC is $basedir/$project.txt\n";
+  }
   $this->sys_action("rm -rf $tmpdir");
 }
 
 =begin text
 
----+++ copy_fileset
+---++++ copy_fileset
 Copy all files in a file set from on directory root to another.
 
 =cut
@@ -516,7 +518,9 @@ sub copy_fileset {
   my ($this, $set, $from, $to) = @_;
 
   my $uncopied = scalar(@$set);
-  print "Copying $uncopied files to $to\n";
+  if ($this->{-v} || $this->{-n}) {
+      print "Copying $uncopied files to $to\n";
+  }
   foreach my $file (@$set) {
 	my $name = $file->{name};
 	if (! -e "$from/$name") {
@@ -531,22 +535,23 @@ sub copy_fileset {
 
 =begin text
 
----+++ target_install
+---++++ target_install
 Install target, installs to local twiki pointed at by TWIKI_HOME.
 
 =cut
 sub target_install {
   my $this = shift;
-  $this->build("build");
+  $this->build("release");
 
   my $twiki = $ENV{TWIKI_HOME};
   die "TWIKI_HOME not set" unless $twiki;
-  $this->copy_fileset($this->{files}, $basedir, $twiki);
+  $this->cd($twiki);
+  $this->sys_action("unzip -u -o $basedir/$this->{project}.zip");
 }
 
 =begin text
 
----+++ target_uninstall
+---++++ target_uninstall
 Uninstall target, uninstall from local twiki pointed at by TWIKI_HOME.
 
 =cut
@@ -561,23 +566,25 @@ sub target_uninstall {
 
 =begin text
 
----+++ target_test_zip
+---++++ target_test_zip
 Make the tests zip file for inclusion in the release package.
 
 =cut
 sub target_tests_zip {
   my $this = shift;
-
-  $this->cd("$basedir/".$this->{libdir});
-  $this->rm("test.zip");
+  my $where = "$basedir/$this->{libdir}/$this->{project}";
+  $this->rm("$where/test.zip");
+  $this->cd($where);
   if (-d 'test') {
-	$this->sys_action("zip -r test.zip test -x '*~' -x '*/CVS*' -x '*/testdata*'");
+	$this->sys_action("zip -r -q test.zip test -x '*~' -x '*/CVS*' -x '*/testdata*'");
+  } else {
+    warn "WARNING: no test subdirectory of $where\n";
   }
 }
 
 =begin text
 
----+++ target_upload
+---++++ target_upload
 Upload to twiki.org. Prompts for username and password. Uploads the zip and
 the text topic to the appropriate places. Creates the topic on twiki.org if
 necessary. Requires curl.
@@ -638,7 +645,7 @@ sub _unhtml {
 
 =begin text
 
----+++ target_pod
+---++++ target_pod
 
 Build POD documentation. This target defines =%$POD%= - it
 does not generate any output files. The target will be invoked
@@ -675,7 +682,7 @@ sub target_pod {
 
 =begin text
 
----+++ build($target)
+---++++ build($target)
 Build the given target
 
 =cut
@@ -683,13 +690,17 @@ no strict "refs";
 sub build {
   my $this = shift;
   my $target = shift;
-  print "Building $target\n";
+  if ($this->{-v}) {
+      print "Building $target\n";
+  }
   eval "\$this->target_$target()";
   if ($@) {
 	print "Failed to build $target: $@\n";
 	die $@;
   }
-  print "Built $target\n";
+  if ($this->{-v}) {
+      print "Built $target\n";
+  }
 }
 use strict "refs";
 

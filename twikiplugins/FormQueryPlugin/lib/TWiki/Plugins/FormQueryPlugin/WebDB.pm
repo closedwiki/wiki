@@ -6,8 +6,8 @@ use strict;
 use Time::ParseDate;
 use Benchmark;
 
-use TWiki::Plugins::DBCachePlugin::DBCache;
-use TWiki::Plugins::DBCachePlugin::Search;
+use TWiki::Contrib::DBCache;
+use TWiki::Contrib::Search;
 
 use TWiki::Plugins::FormQueryPlugin::ColourMap;
 use TWiki::Plugins::FormQueryPlugin::Relation;
@@ -18,11 +18,10 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
 
   # A DB is a hash keyed on topic name
 
-  @FormQueryPlugin::WebDB::ISA = ("DBCachePlugin::DBCache");
+  @FormQueryPlugin::WebDB::ISA = ("TWiki::Contrib::DBCache");
 
   my %prefs;
   my @relations;
-  my $tablenames;
   my $colourmap;
 
   # PUBLIC
@@ -50,7 +49,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
 
     my $rtext = TWiki::Func::getPreferencesValue( "FQRELATIONS" ) ||
       "ReQ%Ax%B SubReq ReQ%A; TiT%An%B TestItem ReQ%A";
-    $tablenames = TWiki::Func::getPreferencesValue( "FQTABLES" ) ||
+    my $tablenames = TWiki::Func::getPreferencesValue( "FQTABLES" ) ||
       "TaskTable";
     my $hmap = TWiki::Func::getPreferencesValue( "FQHIGHLIGHTMAP" ) ||
 	  "HighlightMap";
@@ -88,6 +87,9 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   sub readTopicLine {
     my ( $this, $topic, $meta, $line, $fh ) = @_;
 	my $re = $this->{_tableRE};
+
+    return $line unless ( defined( $re ));
+
 	my $text = $line;
 
 	while ( $line =~ s/%EDITTABLE{\s*include=\"($re)\"\s*}%//o ) {
@@ -96,10 +98,10 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
 	  if ( defined( $ttype )) {
 		# TimSlidel: collapse multiple instances
 		# of the same table type into a single table
-		# my $table = new DBCachePlugin::Array();
+		# my $table = new TWiki::Contrib::Array();
 		my $table = $meta->fastget( $tablename );
 		if ( !defined( $table )) {
-		  $table = new DBCachePlugin::Array();
+		  $table = new TWiki::Contrib::Array();
 		}
 		my $lc = 0;
 		my $row = "";
@@ -117,7 +119,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
 			} else {
 			  # Load the row
 			  my $rowmeta =
-				$ttype->loadRow( $row, "DBCachePlugin::Map" );
+				$ttype->loadRow( $row, "TWiki::Contrib::Map" );
 			  $rowmeta->set( "topic", $topic );
 			  $rowmeta->set( "${tablename}_of", $meta ); 
 			  $table->add( $rowmeta );
@@ -182,7 +184,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
 			$childMeta->set( $relation->childToParent(), $parentMeta );
 			my $known = $parentMeta->fastget( $relation->parentToChild() );
 			if ( !defined( $known )) {
-			  $known = new DBCachePlugin::Array();
+			  $known = new TWiki::Contrib::Array();
 			  $parentMeta->set( $relation->parentToChild(), $known );
 			}
 			if ( !$known->contains( $childMeta )) {
@@ -222,7 +224,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   sub formQuery {
     my ( $this, $macro, $params ) = @_;
 
-    my $attrs = new TWiki::Attrs( $params );
+    my $attrs = new TWiki::Contrib::Attrs( $params );
 
     my $name = $attrs->get( "name" );
     if ( !defined( $name )) {
@@ -231,7 +233,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
 
     my $search;
     eval {
-      $search = new DBCachePlugin::Search( $attrs->get( "search" ));
+      $search = new TWiki::Contrib::Search( $attrs->get( "search" ));
     };
     if ( !defined( $search )) {
       return moan( $macro, $params,
@@ -268,11 +270,11 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
       # Extract a defined subfield and make the query result an
       # array of the subfield. If the subfield is an array, flatten out
       # the array.
-      my $realMatches = new DBCachePlugin::Array();
+      my $realMatches = new TWiki::Contrib::Array();
       foreach my $match ( $matches->getValues() ) {
 	my $subfield = $match->get( $extract );
 	if ( defined( $subfield )) {
-	  if ( $subfield->isa( "DBCachePlugin::Array" )) {
+	  if ( $subfield->isa( "TWiki::Contrib::Array" )) {
 	    foreach my $entry ( $subfield->getValues() ) {
 	      $realMatches->add( $entry );
 	    }
@@ -296,7 +298,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   sub tableFormat {
     my ( $this, $macro, $params ) = @_;
 
-    my $attrs = new TWiki::Attrs( $params );
+    my $attrs = new TWiki::Contrib::Attrs( $params );
 
     my $name = $attrs->get( "name" );
     if ( !defined( $name )) {
@@ -328,7 +330,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   sub showQuery {
     my ( $this, $macro, $params ) = @_;
 
-    my $attrs = new TWiki::Attrs( $params );
+    my $attrs = new TWiki::Contrib::Attrs( $params );
 
     my $name = $attrs->get( "query" );
     if ( !defined( $name )) {
@@ -362,7 +364,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   # field in a query
   sub sumQuery {
     my ( $this, $macro, $params ) = @_;
-    my $attrs = new TWiki::Attrs( $params );
+    my $attrs = new TWiki::Contrib::Attrs( $params );
 
     my $name = $attrs->get( "query" );
     if ( !defined( $name )) {
@@ -387,7 +389,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   sub createNewTopic {
     my ( $this, $macro, $params, $web, $topic ) = @_;
 
-    my $attrs = new TWiki::Attrs( $params );
+    my $attrs = new TWiki::Contrib::Attrs( $params );
 
     my $relation = $attrs->get( "relation" );
     if ( !defined( $relation )) {
@@ -449,7 +451,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   sub getInfo {
     my ( $this, $params ) = @_;
 
-    my $attrs = new TWiki::Attrs( $params );
+    my $attrs = new TWiki::Contrib::Attrs( $params );
 
     $this->SUPER::load();
     my $topic = $attrs->get("topic");

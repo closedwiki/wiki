@@ -242,7 +242,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---+ Plugin Info
 
-|  Plugin Author: | Main.CrawfordCurrie |
+|  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
 |  Plugin Version: | 14 Mar 2003 |
 |  Change History: | 1 Oct 2001: Initial version as an Addon |
 |  | 14 Mar 2003: Total rewrite as a Plugin |
@@ -270,9 +270,9 @@ Further development of this plugin is welcomed. The sources are all checked in t
 ---+ Copyright
 
 This code is a development of C-dot Software and is protected by the following copyrights:
-	* Copyright (C) 2004 Crawford Currie. All Rights Reserved.
+	* Copyright &copy; 2004 Crawford Currie http://www.c-dot.co.uk.
 Portions of this code (clearly marked) are based on code developed by Motorola Inc. and are protected by the following copyrights:
-	* Portions Copyright (C) 2001-2003 Motorola. All Rights Reserved.
+	* Portions Copyright &copy; 2001-2003 Motorola. All Rights Reserved.
 
 ---+ License
 

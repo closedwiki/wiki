@@ -1,4 +1,4 @@
-Common attributes parser object.
+Common attributes parser code module, for use by Plugins authors.
 
 ---+ Summary of Contents
 Provides a simple and consistent interface for creation and management of lists of standard TWiki-syntax attribute value lists, as used in tags.
@@ -19,8 +19,8 @@ Provides a simple and consistent interface for creation and management of lists 
 
 ---++ Plugin Info
 
-|  Author: | TWiki:Main/CrawfordCurrie |
-|  Copyright &copy;: | 2001, Motorola Corp, All Rights Reserved" --> |
+|  Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
+|  Copyright &copy;: | 2001, Motorola Corp, All Rights Reserved |
 |  License: | GPL |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Change History: | |

@@ -1,10 +1,9 @@
 data/TWiki/BuildContrib.txt
 lib/TWiki/Contrib/Build.pm
 lib/TWiki/Contrib/BuildContrib/build.pl
-lib/TWiki/Contrib/BuildContrib/test.zip
-test/fixtures/BaseFixture.pm
-test/fixtures/TWiki/Func.pm
-test/fixtures/TWiki/Net.pm
-test/fixtures/TWiki.pm
-test/fixtures/TWiki/Store.pm
-test/TestRunner.pl
+contrib/fixtures/BaseFixture.pm
+contrib/fixtures/TWiki/Func.pm
+contrib/fixtures/TWiki/Net.pm
+contrib/fixtures/TWiki.pm
+contrib/fixtures/TWiki/Store.pm
+contrib/TestRunner.pl

@@ -99,15 +99,17 @@ Small memory leaks will occur when topics with protections are renamed frequentl
 
 Error and warning messages may be generated in the Apache =error_log=. Tracing may be enabled so that you can monitor the DAV transactions from messages in the Apache =error_log=. Tracing is enabled using the global Apache directive =DAVMonitor=, which takes an integer representing a bitmask where bit 0 switches on tracing of method calls (GET, POST, etc), bit 2 switches on resource resolution tracing, and bit 3 switches on tracing of twiki script invocations.
 ---++ Settings
+		* Set SHORTDESCRIPTION = Support for a set of extensions to the HTTP protocol which allows users to collaboratively edit and manage files on remote web servers.
 	* *IMPORTANT* The following TWiki variable must be set to point to the same directory as your =DAV<nop>LockDB= directive. The protections database will be in a single file named =TWiki= and will be written to this directory.
 		* Set LOCK_DB = /var/lock/webdav
 
 ---++ Plugin Info
-|  Plugin Author: | TWiki:Main/CrawfordCurrie |
+|  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
 |  Plugin Version: | %$VERSION% build %$DATE% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  22 May 2004: | Support for topics added. Production release. |
-|  14 Apr 2004: | Initial very _very_ early access release |
+|  16 Aug 2004 | Minor bugfixes |
+|  22 May 2004 | Support for topics added. Production release. |
+|  14 Apr 2004 | Initial very _very_ early access release |
 |  Other Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.005 |
 |  License: | GPL |

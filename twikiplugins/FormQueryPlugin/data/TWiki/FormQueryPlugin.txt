@@ -1,8 +1,8 @@
 ---+!! FormQueryPlugin
 
-The FormQueryPlugin provides a query interface to the TWiki:Plugins/DBCachePlugin, giving a way to present query results as formatted tables.
+The FormQueryPlugin provides a query interface to the [[TWiki:Plugins/DBCacheContrib][TWiki::Contrib::DBCache]] module, giving a way to present query results as formatted tables.
 
-When using the plugin each topic is treated as a container for data fields. These fields can be the fields in the form attached to the topic, or can be parsed out of the topic. The database is managed by the TWiki:Plugins/DBCachePlugin, which must be installed for this plugin to work.
+When using the plugin each topic is treated as a container for data fields. These fields can be the fields in the form attached to the topic, or can be parsed out of the topic. The database is managed by the [[TWiki:Plugins/DBCacheContrib][TWiki::Contrib::DBCache]] module, which must be installed for this plugin to work.
 
 The tutorial section of this topic gives an introduction to formulating and formatting queries using this plugin, and is a good place to start.
 
@@ -16,7 +16,7 @@ Note: Since the last release the following macros have been deprecated. Please g
 | =WORKDAYS= | Still supported in this release though undocumented and deprecated on the basis that it should be in %CALC% at some point |
 The =tasknotify= script has also been removed and is now shipped separately as the  TWiki:Plugins/NotifierAddon.
 
-If the appropriate anicillary plugins are loaded, this release should be fully compatible with previous releases of this plugin.
+If the appropriate plugins and contributed code modules are loaded, this release should be fully compatible with previous releases of this plugin.
 %ENDCOLOR%
 
 %TOC%
@@ -28,9 +28,9 @@ If the appropriate anicillary plugins are loaded, this release should be fully c
 	* Recognition and special formatting of key data strings
 
 ---+++ How the database gets built
-The basic database is built using the DBCachePlugin. Refer to the documentation of that plugin for details of how it works.
+The basic database is built using the DBCache. Refer to the documentation of that module for details of how it works.
 
-As well as the form data loaded by the DBCachePlugin, the FormQueryPlugin adds the ability to extract embedded tables from topics.
+As well as the form data loaded by the DBCache, the FormQueryPlugin adds the ability to extract embedded tables from topics.
 
 Embedded tables that follow a specific format (defined using the Edit<nop>TablePlugin) are added to the topic as an array of rows, each of which contains a map keyed on the fields and mapping to the values in the table. This array is added to the topic as a field named the same as the table type. Where there are multiple tables of the same type in a topic, they are concatenated together into a single array. See [[#SettingsAnchor][Settings]] for more information about how to set up tables.
 
@@ -70,7 +70,7 @@ FORMQUERY is normally silent i.e. it generates no output unless there is an erro
 
 #SearchOperators
 ---+++++ Search operators
-The available search operators are described in the documentation for the [[DBCachePlugin#SearchOperators][DB Cache Plugin]]. Search operators work on the fields of each map, be it a topic or an embedded table row.
+The available search operators are described in the documentation for the [[DBCacheContrib#SearchOperators][DB Cache Plugin]]. Search operators work on the fields of each map, be it a topic or an embedded table row.
 
 Fields can be simple field names or can be more complex, and may even contain embedded searches. See [[#FieldRefs][Fields]] below for more information.
 
@@ -336,8 +336,8 @@ Just about any formatting can be included on the LHS of the map; for example, yo
 ---
 ---++ Plugin Installation Instructions
 __Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required.
-    * Make sure you have the TWiki:Plugins/SharedCode module installed
-    * Make sure you have the TWiki:Plugins/DBCachePlugin module installed
+	* Make sure all the required dependencies listed in the table below are resolved:
+	%$DEPENDENCIES%
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 %$MANIFEST%
@@ -353,7 +353,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
 |  Plugin Version: | 1.3 |
-|  Change History: | 16 Jul 2004: Split into MacrosPlugin, DBCachePlugin, and NotifierAddon |
+|  Change History: | 16 Jul 2004: Split into sub-components |
 |  | 02 Apr 2004: SimonHardyFrancis bugfixes incorporated. TimSlidel patches incoporated for mod_perl, autocreate, and collapsing same-type tables in a single topic |
 |  | 05 Feb 2004: Bugfix version |
 |  | 11 Jul 2003: Initial version |
@@ -366,8 +366,8 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 ---+++ Copyright
 
 This code is based on an original development of Motorola Inc. and is protected by the following copyrights:
-	* Copyright (C) 2002-2003 Motorola. All Rights Reserved.
-	* Portions copyright (C) 2004. Crawford Currie.
+	* Copyright &copy; 2002-2003 Motorola. All Rights Reserved.
+	* Copyright &copy; 2004. Crawford Currie http://www.c-dot.co.uk
 
 ---+++ Extending or customising
 Extension or customisation is welcome, as long as all extensions are described and code provided back to the author.

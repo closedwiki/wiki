@@ -1,24 +1,21 @@
 #!/usr/bin/perl -w
 #
 # Build class for WebDAVPlugin
-# Requires the environment variable TWIKI_SHARED to be
-# set to point at the shared code repository
+# Requires the environment variable TWIKI_LIBS to be
+# set to point at the AttrsContrib code repository root
 
 # Standard preamble
 BEGIN {
-  use File::Spec;
-  my $cwd = `dirname $0`; chop($cwd);
-  my $basedir = File::Spec->rel2abs("../../../..", $cwd);
-  die "TWIKI_SHARED not set" unless ($ENV{TWIKI_SHARED});
-  unshift @INC, "$ENV{TWIKI_SHARED}/lib";
-  unshift @INC, $basedir;
-  unshift @INC, $cwd;
+  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
+    unshift @INC, $pc;
+  }
 }
-use TWiki::Plugins::Build;
+
+use TWiki::Contrib::Build;
 
 package WebDAVPluginBuild;
 
-@WebDAVPluginBuild::ISA = ( "TWiki::Plugins::Build" );
+@WebDAVPluginBuild::ISA = ( "TWiki::Contrib::Build" );
 
 sub new {
   my $class = shift;
@@ -28,7 +25,7 @@ sub new {
 # override to build C program in test dir
 sub target_test {
   my $this = shift;
-  $this->cd("$TWiki::Plugins::Build::basedir/".$this->{plugin_libdir}."/test");
+  $this->cd("$this->{basedir}/$this->{libdir}/WebDAVPlugin/test");
   $this->sys_action("gcc access_check.c -I ../../../../twiki_dav -g -o accesscheck -ltdb");
   $this->SUPER::target_test;
 }

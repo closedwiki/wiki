@@ -117,19 +117,22 @@ sub redirectCgiQueryHandler {
   ### my ( $query, $url ) = @_;
 
   push(@queue, "redirectCgiQueryHandler $_[1]") if $active;
+  # this overrides the method in plugins
+  print $_[0]->redirect( $_[1] );
+  return 0;
 }
 
-sub getSessionValueHandler {
-  ### my ( $key ) = @_;
+#sub getSessionValueHandler {
+#  ### my ( $key ) = @_;
+#
+#  push(@queue, "getSessionValueHandler $_[0]") if $active;
+#}
 
-  push(@queue, "getSessionValueHandler $_[0]") if $active;
-}
-
-sub setSessionValueHandler {
-  ### my ( $key, $value ) = @_;
-
-  push(@queue, "setSessionValueHandler $_[0] $_[1]") if $active;
-}
+#sub setSessionValueHandler {
+#  ### my ( $key, $value ) = @_;
+#
+#  push(@queue, "setSessionValueHandler $_[0] $_[1]") if $active;
+#}
 
 sub writeHeaderHandler {
   ### my ( $query ) = @_;

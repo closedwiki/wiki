@@ -24,8 +24,6 @@ use TWiki::Func;
 use Text::Soundex;
 use Time::ParseDate;
 
-use TWiki::Plugins::SharedCode;
-
 use TWiki::Plugins::ActionTrackerPlugin::AttrDef;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
 
@@ -125,7 +123,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my ( $class, $web, $topic, $number, $attrs, $descr ) = @_;
     my $this = {};
     
-    my $attr = new TWiki::Attrs( $attrs );
+    my $attr = new TWiki::Contrib::Attrs( $attrs );
 
     # We always have a state, and if it's not defined in the
     # attribute set, and the closed attribute isn't defined,
@@ -468,7 +466,12 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # action falls due
   sub _matchField_within {
     my ( $this, $val ) = @_;
-    return ( abs( $this->secsToGo() ) <= $val * 60 * 60 * 24 );
+    my $stg = $this->secsToGo();
+    if ( $val < 0 ) {
+        return ( $stg < 0 && $stg >= $val * 60 * 60 * 24 );
+    } else {
+        return ( $stg <= $val * 60 * 60 * 24 );
+    }
   }
 
   # PRIVATE match boolean attribute "closed"
@@ -591,7 +594,8 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
     my $url = "%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/" .
       $this->{web} . "/" . $this->{topic} .
-	"?skin=action&action=" . $this->getAnchor();
+		"?skin=action&action=" . $this->getAnchor() .
+		  "&t=".time();
     my $text = "<a href=\"$url\"";
     if ( $newWindow ) {
       # Javascript window call

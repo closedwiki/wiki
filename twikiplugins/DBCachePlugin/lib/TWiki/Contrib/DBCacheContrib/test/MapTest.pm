@@ -12,7 +12,7 @@ sub new {
 
 sub test_parse1 {
   my $this = shift;
-  my $attrs = new DBCachePlugin::Map( "a = one bit=\"two\" c" );
+  my $attrs = new TWiki::Contrib::Map( "a = one bit=\"two\" c" );
   $this->assert_not_null($attrs);
   $this->assert_str_equals("one", $attrs->get("a"));
   $this->assert_str_equals("two", $attrs->get("bit"));
@@ -21,7 +21,7 @@ sub test_parse1 {
 
 sub test_parse2 {
   my $this = shift;
-  my $attrs = new DBCachePlugin::Map( "aname = one,b = \"two\",c" );
+  my $attrs = new TWiki::Contrib::Map( "aname = one,b = \"two\",c" );
   $this->assert_not_null($attrs);
   $this->assert_str_equals("one", $attrs->get("aname"));
   $this->assert_str_equals("two", $attrs->get("b"));
@@ -30,7 +30,7 @@ sub test_parse2 {
 
 sub test_parse3 {
   my $this = shift;
-  my $attrs = new DBCachePlugin::Map( "x.y=one" );
+  my $attrs = new TWiki::Contrib::Map( "x.y=one" );
   $this->assert_not_null($attrs);
   $this->assert_str_equals("one", $attrs->get("x.y"));
 }
@@ -38,14 +38,14 @@ sub test_parse3 {
 sub test_parse4 {
   my $this = shift;
   my $attrs;
-  eval { new DBCachePlugin::Map( "topic=MacroReqDetails area = \"Signal Integrity\" status=\"Assigned\" release=\"2003.06|All product=\"Fsim\"" ); };
+  eval { new TWiki::Contrib::Map( "topic=MacroReqDetails area = \"Signal Integrity\" status=\"Assigned\" release=\"2003.06|All product=\"Fsim\"" ); };
 
   $this->assert_not_null($@);
 }
 
 sub test_remove {
   my $this = shift;
-  my $attrs = new DBCachePlugin::Map( "a = one bit=\"two\" c" );
+  my $attrs = new TWiki::Contrib::Map( "a = one bit=\"two\" c" );
   $this->assert_not_null($attrs);
   $this->assert_str_equals("one", $attrs->remove("a"));
   $this->assert_str_equals("two", $attrs->remove("bit"));
@@ -57,28 +57,28 @@ sub test_remove {
 
 sub test_multipleDefs1 {
   my $this = shift;
-  my $attrs = new DBCachePlugin::Map( "a = one a=\"two\"" );
+  my $attrs = new TWiki::Contrib::Map( "a = one a=\"two\"" );
   $this->assert_not_null($attrs);
   $this->assert_str_equals("two", $attrs->get("a"));
 }
 
 sub testMultipleDefs2 {
   my $this = shift;
-  my $attrs = new DBCachePlugin::Map( "a=\"two\" a" );
+  my $attrs = new TWiki::Contrib::Map( "a=\"two\" a" );
   $this->assert_not_null($attrs);
   $this->assert_str_equals("on", $attrs->remove("a"));
 }
 
 sub testMultipleDefs3 {
   my $this = shift;
-  my $attrs = new DBCachePlugin::Map( "a=two a" );
+  my $attrs = new TWiki::Contrib::Map( "a=two a" );
   $this->assert_not_null($attrs);
   $this->assert_str_equals("on", $attrs->remove("a"));
 }
 
 sub testMultipleDefs4 {
   my $this = shift;
-  my $attrs = new DBCachePlugin::Map( "a a = one" );
+  my $attrs = new TWiki::Contrib::Map( "a a = one" );
   $this->assert_not_null($attrs);
   $this->assert_str_equals("one", $attrs->remove("a"));
 }
@@ -86,7 +86,7 @@ sub testMultipleDefs4 {
 # Where did this come from? Undocumented "feature"
 #sub testStringOnOwn {
 #  my $this = shift;
-#  my $attrs = new DBCachePlugin::Map( "\"able cain\" a=\"no\"" );
+#  my $attrs = new TWiki::Contrib::Map( "\"able cain\" a=\"no\"" );
 #  $this->assert_not_null($attrs);
 #  $this->assert_str_equals("able cain", $attrs->get("\$1"));
 #  $this->assert_str_equals("no", $attrs->remove("a"));
@@ -100,12 +100,12 @@ sub test_big {
     $str .= ",a$n=b$n";
     $n++;
   }
-  my $attrs = new DBCachePlugin::Map( $str );
+  my $attrs = new TWiki::Contrib::Map( $str );
 }
 
 sub test_set {
   my $this = shift;
-  my $attrs = new DBCachePlugin::Map( "\"able cain\" a=\"no\"" );
+  my $attrs = new TWiki::Contrib::Map( "\"able cain\" a=\"no\"" );
   $attrs->set( "2", "two" );
   $this->assert_equals(3, $attrs->size());
   $this->assert_str_equals("able cain", $attrs->remove("\$1"));
@@ -116,7 +116,7 @@ sub test_set {
 
 sub test_kandv {
   my $this = shift;
-  my $attrs = new DBCachePlugin::Map( "a=A b=B c=C d=D" );
+  my $attrs = new TWiki::Contrib::Map( "a=A b=B c=C d=D" );
   $this->assert_equals(4, $attrs->size());
   my $tst = "abcd";
   foreach my $val ($attrs->getKeys()) {
@@ -132,13 +132,13 @@ sub test_kandv {
 
 sub test_search {
   my $this = shift;
-  my $attrs = new DBCachePlugin::Map();
-  $attrs->set("a", new DBCachePlugin::Map("f=A"));
-  $attrs->set("b", new DBCachePlugin::Map("f=B"));
-  $attrs->set("c", new DBCachePlugin::Map("f=C"));
-  $attrs->set("d", new DBCachePlugin::Map("f=D"));
+  my $attrs = new TWiki::Contrib::Map();
+  $attrs->set("a", new TWiki::Contrib::Map("f=A"));
+  $attrs->set("b", new TWiki::Contrib::Map("f=B"));
+  $attrs->set("c", new TWiki::Contrib::Map("f=C"));
+  $attrs->set("d", new TWiki::Contrib::Map("f=D"));
   $this->assert_equals(4, $attrs->size());
-  my $search = new DBCachePlugin::Search("f=~'(B|C)'");
+  my $search = new TWiki::Contrib::Search("f=~'(B|C)'");
   my $res = $attrs->search($search);
   my $tst = "BC";
   foreach my $e ($res->getValues()) {
@@ -150,9 +150,9 @@ sub test_search {
 
 sub test_get {
   my $this = shift;
-  my $a = new DBCachePlugin::Map("name=a");
-  my $b = new DBCachePlugin::Map("name=b");
-  my $c = new DBCachePlugin::Map("name=c");
+  my $a = new TWiki::Contrib::Map("name=a");
+  my $b = new TWiki::Contrib::Map("name=b");
+  my $c = new TWiki::Contrib::Map("name=c");
 
   $a->set("b", $b);
   $a->set("c", $c);

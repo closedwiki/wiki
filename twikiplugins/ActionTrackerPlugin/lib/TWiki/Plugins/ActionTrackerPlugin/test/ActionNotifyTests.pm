@@ -8,8 +8,8 @@ use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 use TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
-use TWiki::Plugins::SharedCode;
 use Time::ParseDate;
+use TWiki::Contrib::Attrs;
 
 sub new {
   my $self = shift()->SUPER::new(@_);
@@ -330,13 +330,13 @@ sub test_C_ChangedSince {
 	  $this->assert_matches(qr/A8:/,$html, $html);
 	  $re = qr/Attribute \"text\" changed, was \"A8: Text change\", now \"A8: Text change from original, late\"/;
 	  $this->assert_matches($re, $html);
-	  $this->assert_html_matches("<tr><td>text</td><td> A8: Text change</td><td> A8: Text change from original, late</td></tr>", $html);
+	  $this->assert_html_matches("<tr><td>text</td><td>A8: Text change</td><td>A8: Text change from original, late</td></tr>", $html);
 	  $saw .= "B";
 	} elsif ($html =~ /To: actor-8\@correct.address/) {
 	  $this->assert_does_not_match(qr/A[1234567]:/,$html, $html);
 	  $this->assert_matches(qr/A8:/,$html, $html);
 	  $this->assert_matches(qr/Attribute \"text\" changed, was \"A8: Text change\", now \"A8: Text change from original, late\"/, $html);
-	  $this->assert_html_matches("<tr><td>text</td><td> A8: Text change</td><td> A8: Text change from original, late</td></tr>", $html);
+	  $this->assert_html_matches("<tr><td>text</td><td>A8: Text change</td><td>A8: Text change from original, late</td></tr>", $html);
 	  $saw .= "C";
 	} else {
 	  $this->assert(0, "Not good $html");

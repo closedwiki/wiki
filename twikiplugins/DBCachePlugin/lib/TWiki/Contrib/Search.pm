@@ -9,7 +9,7 @@ use Time::ParseDate;
 =begin text
 
 ---++ class Search
-Search operators work on the fields of a DBCachePlugin::Map. The fields are given by name, and the values by strings. Strings should always be surrounded by 'single-quotes'. String which are regular expressions use 'perl' re syntax (see =man perlre= for help)
+Search operators work on the fields of a TWiki::Contrib::Map. The fields are given by name, and the values by strings. Strings should always be surrounded by 'single-quotes'. String which are regular expressions use 'perl' re syntax (see =man perlre= for help)
 
 *Warning* single and double quotes are not allowed in values!
 
@@ -39,9 +39,9 @@ contract with the rest of the world.
 ---+++ Example
 Get a list of attachments that have a date earlier than 1st January 2000
 <verbatim>
-  $db = new DBCachePlugin::DBCache( $web ); # always done
+  $db = new TWiki::Contrib::DBCache( $web ); # always done
   $db->load();
-  my $search = new DBCachePlugin::Search("date EARLIER_THAN '1st January 2000'");
+  my $search = new TWiki::Contrib::Search("date EARLIER_THAN '1st January 2000'");
 
   foreach my $topic ($db->getKeys()) {
      my $attachments = $topic->get("attachments");

@@ -23,11 +23,10 @@ The Plugins.<nop>TocPluginHelp topic in the installation contains complete help 
 
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
-	| ==%TOPIC%.xml== | Ant build file |
-	| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	| ==data/TWiki/TocPlugin.txt== | Plugin topic |
 	| ==data/TWiki/TocPluginHelp.txt== | Plugin help |
 	| ==data/TWiki/WebOrder.txt== | Order topic for TWiki web |
-	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	| ==lib/TWiki/Plugins/TocPlugin.pm== | Plugin Perl module |
 	| ==lib/TWiki/Plugins/TocPlugin/Attrs.pm== | Library component |
 	| ==lib/TWiki/Plugins/TocPlugin/Anchor.pm== | Library component |
 	| ==lib/TWiki/Plugins/TocPlugin/Section.pm== | Library component |
@@ -35,6 +34,7 @@ The Plugins.<nop>TocPluginHelp topic in the installation contains complete help 
 	| ==lib/TWiki/Plugins/TocPlugin/TOCIF.pm== | Library component |
 	| ==lib/TWiki/Plugins/TocPlugin/TopLevelSection.pm== | Library component |
 	| ==lib/TWiki/Plugins/TocPlugin/test.zip== | Test code |
+	| ==lib/TWiki/Plugins/TocPlugin/build.xml== | Ant build file |
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 	* Add ==Plugins.%TOPIC%== to the ==INSTALLEDPLUGINS== variable in %TWIKIWEB%.TWikiPreferences (or any WebPreferences topic).
 	* If you see a link here: %REF{topic=TocPluginHelp,type=Section,name=installation}% then installation was successful

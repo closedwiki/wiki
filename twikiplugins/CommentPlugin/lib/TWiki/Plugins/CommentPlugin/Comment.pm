@@ -6,9 +6,9 @@
 #
 use strict;
 
-use TWiki::Plugins::SharedCode::Attrs;
+use TWiki::Contrib::Attrs;
 
-{ package CommentPlugin::Comment;
+{ package TWiki::Plugins::CommentPlugin::Comment;
 
   use vars qw( $inSave ); # recursion block
 
@@ -81,7 +81,7 @@ use TWiki::Plugins::SharedCode::Attrs;
 	 $disable, $defaultType ) = @_;
 
     $attributes =~ s/^{(.*)}$/$1/o if ( $attributes );
-    my $attrs = new TWiki::Attrs( $attributes );
+    my $attrs = new TWiki::Contrib::Attrs( $attributes );
 
     my $type =
       $attrs->remove( "type" ) || $attrs->remove( "mode" ) || $defaultType;
@@ -184,12 +184,12 @@ use TWiki::Plugins::SharedCode::Attrs;
     my $templates;
 
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
-	  $templates = CairoCompatibilityModule::readTemplate( $templateFile );
+      eval 'use TWiki::Contrib::CairoContrib; $templates = TWiki::Contrib::CairoContrib::readTemplate( $templateFile )';
 	} else {
 	  $templates = TWiki::Store::readTemplate( $templateFile );
 	}
     if (! $templates ) {
-      TWiki::Func::writeWarning("No such template file '$templateFile'");
+      TWiki::Func::writeWarning("Could not read template file '$templateFile'");
       return;
     }
 
@@ -233,7 +233,7 @@ use TWiki::Plugins::SharedCode::Attrs;
     # Expand common variables in the template, but don't expand other
     # tags.
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
-	  eval "use TWiki::Plugins::CairoCompatibilityModule;";
+      eval 'use TWiki::Contrib::CairoContrib';
 	}
 	$output = TWiki::expandVariablesOnTopicCreation($output);
 

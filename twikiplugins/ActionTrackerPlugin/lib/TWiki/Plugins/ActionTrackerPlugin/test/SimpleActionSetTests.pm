@@ -8,7 +8,7 @@ use base qw(BaseFixture);
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
-use TWiki::Plugins::SharedCode;
+use TWiki::Contrib::Attrs;
 use Time::ParseDate;
 use CGI;
 
@@ -54,13 +54,19 @@ sub testAHTable {
   my $s;
   $s = $actions->formatAsHTML( $fmt, "href", 0 );
   $s =~ s/\n//go;
-  $this->assert_html_matches_all("<table border=\"1\"><tr><th bgcolor=\"orange\">Web</th><td>Test</td><td>Test</td><td>Test</td></tr><tr><th bgcolor=\"orange\">Topic</th><td>Topic</td><td>Topic</td><td>Topic</td></tr><tr><th bgcolor=\"orange\">Edit</th><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\">edit</a></td></tr></table>", $s);
+  $s =~ /(&t=\d+)/;
+  my $t = $1;
+  $this->assert_html_matches_all("<table border=\"1\"><tr><th bgcolor=\"orange\">Web</th><td>Test</td><td>Test</td><td>Test</td></tr><tr><th bgcolor=\"orange\">Topic</th><td>Topic</td><td>Topic</td><td>Topic</td></tr><tr><th bgcolor=\"orange\">Edit</th><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0$t\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1$t\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2$t\">edit</a></td></tr></table>", $s);
   $s = $actions->formatAsHTML( $fmt, "name", 0 );
   $s =~ s/\n//go;
-  $this->assert_html_matches_all("<table border=\"1\"><a name=\"AcTion0\"></a><a name=\"AcTion1\"></a><a name=\"AcTion2\"></a><tr><th bgcolor=\"orange\">Web</th><td>Test</td><td>Test</td><td>Test</td></tr><tr><th bgcolor=\"orange\">Topic</th><td>Topic</td><td>Topic</td><td>Topic</td></tr><tr><th bgcolor=\"orange\">Edit</th><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\">edit</a></td></tr></table>", $s);
+  $s =~ /(&t=\d+)/;
+  $t = $1;
+  $this->assert_html_matches_all("<table border=\"1\"><a name=\"AcTion0\"></a><a name=\"AcTion1\"></a><a name=\"AcTion2\"></a><tr><th bgcolor=\"orange\">Web</th><td>Test</td><td>Test</td><td>Test</td></tr><tr><th bgcolor=\"orange\">Topic</th><td>Topic</td><td>Topic</td><td>Topic</td></tr><tr><th bgcolor=\"orange\">Edit</th><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0$t\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1$t\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2$t\">edit</a></td></tr></table>", $s);
   $s = $actions->formatAsHTML( $fmt, "name", 1 );
   $s =~ s/\n//go;
-  $this->assert_html_matches_all("<table border=\"1\"><a name=\"AcTion0\"></a><a name=\"AcTion1\"></a><a name=\"AcTion2\"></a><tr><th bgcolor=\"orange\">Web</th><td>Test</td><td>Test</td><td>Test</td></tr><tr><th bgcolor=\"orange\">Topic</th><td>Topic</td><td>Topic</td><td>Topic</td></tr><tr><th bgcolor=\"orange\">Edit</th><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0')\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1')\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2')\">edit</a></td></tr></table>", $s);
+  $s =~ /(&t=\d+)/;
+  $t = $1;
+  $this->assert_html_matches_all("<table border=\"1\"><a name=\"AcTion0\"></a><a name=\"AcTion1\"></a><a name=\"AcTion2\"></a><tr><th bgcolor=\"orange\">Web</th><td>Test</td><td>Test</td><td>Test</td></tr><tr><th bgcolor=\"orange\">Topic</th><td>Topic</td><td>Topic</td><td>Topic</td></tr><tr><th bgcolor=\"orange\">Edit</th><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0$t\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0$t')\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1$t\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1$t')\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2$t\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2$t')\">edit</a></td></tr></table>", $s);
 }
 
 sub testAVTable {
@@ -72,18 +78,24 @@ sub testAVTable {
   my $s;
   $s = $actions->formatAsHTML( $fmt, "href", 0 );
   $s =~ s/\n//go;
-  $this->assert_html_matches_all("<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\">edit</a></td></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\">edit</a></td></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\">edit</a></td></tr></table>", $s);
+  $s =~ /(&t=\d+)/;
+  my $t = $1;
+  $this->assert_html_matches_all("<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0$t\">edit</a></td></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1$t\">edit</a></td></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2$t\">edit</a></td></tr></table>", $s);
   $s = $actions->formatAsHTML( $fmt, "name", 0 );
   $s =~ s/\n//go;
-  $this->assert_html_matches_all("<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><a name=\"AcTion0\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion1\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion2\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\">edit</a></td></tr></table>", $s);
+  $s =~ /(&t=\d+)/;
+  $t = $1;
+  $this->assert_html_matches_all("<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><a name=\"AcTion0\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0$t\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion1\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1$t\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion2\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2$t\">edit</a></td></tr></table>", $s);
   $s = $actions->formatAsHTML( $fmt, "name", 1 );
   $s =~ s/\n//go;
-  $this->assert_html_matches_all("<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><a name=\"AcTion0\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0')\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion1\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1')\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion2\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2')\">edit</a></td></tr></table>", $s);
+  $s =~ /(&t=\d+)/;
+  $t = $1;
+  $this->assert_html_matches_all("<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><a name=\"AcTion0\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0$t\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0$t')\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion1\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1$t\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1$t')\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion2\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2$t\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2$t')\">edit</a></td></tr></table>", $s);
 }
 
 sub testSearchOpen {
   my $this = shift;
-  my $attrs = new TWiki::Attrs("state=open");
+  my $attrs = new TWiki::Contrib::Attrs("state=open");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -94,7 +106,7 @@ sub testSearchOpen {
 
 sub testSearchClosed {
   my $this = shift;
-  my $attrs = new TWiki::Attrs("closed");
+  my $attrs = new TWiki::Contrib::Attrs("closed");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -103,7 +115,7 @@ sub testSearchClosed {
 
 sub testSearchWho {
   my $this = shift;
-  my $attrs = new TWiki::Attrs("who=A");
+  my $attrs = new TWiki::Contrib::Attrs("who=A");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -112,7 +124,7 @@ sub testSearchWho {
 
 sub testSearchLate {
   my $this = shift;
-  my $attrs = new TWiki::Attrs("late");
+  my $attrs = new TWiki::Contrib::Attrs("late");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -122,7 +134,7 @@ sub testSearchLate {
 
 sub testSearchLate2 {
   my $this = shift;
-  my $attrs = new TWiki::Attrs("state=\"late\"");
+  my $attrs = new TWiki::Contrib::Attrs("state=\"late\"");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -132,7 +144,7 @@ sub testSearchLate2 {
 
 sub testSearchAll {
   my $this = shift;
-  my $attrs = new TWiki::Attrs("");
+  my $attrs = new TWiki::Contrib::Attrs("");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -156,7 +168,7 @@ sub addMoreActions {
 sub testx1Search {
   my $this = shift;
   addMoreActions();
-  my $attrs = new TWiki::Attrs("late");
+  my $attrs = new TWiki::Contrib::Attrs("late");
   my $chosen = $actions->search($attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
@@ -169,7 +181,7 @@ sub testx1Search {
 sub testx2Actionees {
   my $this = shift;
   addMoreActions();
-  my $attrs = new TWiki::Attrs("late");
+  my $attrs = new TWiki::Contrib::Attrs("late");
   my $chosen = $actions->search($attrs);
   my %peeps;
   $chosen->getActionees(\%peeps);

@@ -8,7 +8,6 @@ use TWiki::Plugins::ActionTrackerPlugin;
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
-use TWiki::Plugins::SharedCode;
 use Time::ParseDate;
 
 sub new {
@@ -100,7 +99,7 @@ sub testActionSearchFormat {
   my $this = shift;
   my $chosen = TWiki::Plugins::ActionTrackerPlugin::_handleActionSearch("Main", "web=\".*\" who=Sam header=\"|Who|Due|\" format=\"|\$who|\$due|\" orient=rows");
   $chosen =~ s/\n//og;
-  $this->assert_html_matches("<table border=\"1\"><tr><th bgcolor=\"green\">Who</th><td>Main.Sam</td></tr><tr><th bgcolor=\"green\">Due</th><td bgcolor=\"yellow\">Thu, 3 Jan 2002</td></tr></table>", $chosen);
+  $this->assert_html_matches("<table border=\"1\"><tr><th bgcolor=\"$ActionTrackerPlugin::Format::hdrcol\">Who</th><td>Main.Sam</td></tr><tr><th bgcolor=\"$ActionTrackerPlugin::Format::hdrcol\">Due</th><td bgcolor=\"yellow\">Thu, 3 Jan 2002</td></tr></table>", $chosen);
 }
 
 sub test2CommonTagsHandler {
@@ -157,30 +156,46 @@ break the table here %ACTION{who=ActorSeven,due=01/01/02,open}% Create the maile
   $text =~ s/$re//s;
   my $script = $1;
   $script =~ s/\s+/ /go;
-  $this->assert_str_equals( "<script language=\"JavaScript\"><!-- function editWindow(url) { win=open(url,\"none\",\"titlebar=0,width=700,height=400,resizable,scrollbars\"); if(win){win.focus();} return false; } // --> </script>", $script);
+  $this->assert_str_equals( "<script language=\"JavaScript\"><!-- function editWindow(url) { win=open(url,\"none\",\"titlebar=0,width=800,height=400,resizable,scrollbars\"); if(win){win.focus();} return false; } // --> </script>", $script);
   
   my $tblhdr = "<table border=\"$ActionTrackerPlugin::Format::border\"><tr bgcolor=\"$ActionTrackerPlugin::Format::hdrcol\"><th> Assigned to </th><th> Due date </th><th> Description </th><th> State </th><th> Notify </th><th>&nbsp;</th></tr>";
-  $this->assert_html_matches_all
-      (
-       "$tblhdr".
-	   action("UidOnFirst","Main.ActorOne",undef,"Fri, 1 Nov 2002","__Unknown__ =status= www.twiki.org","open").
-	   action("AcTion1","Main.ActorTwo",undef,"Mon, 11 Mar 2002","Open <table><td>status<td>status2</table>","closed")."</table>
-text $tblhdr".
-	   action("AcTion2","Main.ActorThree",undef,"Sun, 11 Mar 2001","The *world* is flat","closed").
-	   action("AcTion3","Main.ActorFour",$ActionTrackerPlugin::Format::latecol,"Sun, 11 Mar 2001","_Late_ the late great *date*","open").
-	   action("AcTion4","Main.ActorFiveVeryLongNameBecauseItsATest",$ActionTrackerPlugin::Format::latecol,"Wed, 13 Feb 2002","This is an action with a lot of associated text to test<br />   * the VingPazingPoodleFactor,<br />   * Tony Blair is a brick.<br />   * Who should really be built<br />   * Into a very high wall.","open").
-	   action("AcTion5","Main.ActorSix",$ActionTrackerPlugin::Format::badcol,"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb.ActionTrackerPlugin#DateFormats","Bad date","open")."</table>
-break the table here $tblhdr".
-	   action("AcTion6","Main.ActorSeven",$ActionTrackerPlugin::Format::latecol,"Tue, 1 Jan 2002","Create the mailer, %USERNAME%","open")."</table>
+  $text =~ s/&t=\d+//g;
+  my $t = BaseFixture::unhtml($tblhdr);
+  $this->assert($text =~ s/^\s*$t//);
+  $t = BaseFixture::unhtml(action("UidOnFirst","Main.ActorOne",undef,"Fri, 1 Nov 2002","__Unknown__ =status= www.twiki.org","open"));
+  $this->assert($text =~ s/^\s*$t//);
 
-   * A list
-   * $tblhdr".
-	   action("AcTion7","Main.ActorEight","yellow","Tue, 1 Jan 2002","Create the mailer","open")."</table>
-   * endofthelist
-
-   * Another list
-   * should generate $tblhdr".
-	   action("AcTion8","Main.ActorNine",undef,"Tue, 1 Jan 2002","Create the mailer","closed")."</table>", $text);
+  $t = BaseFixture::unhtml(action("AcTion1","Main.ActorTwo",undef,"Mon, 11 Mar 2002","Open <table><td>status<td>status2</table>","closed"));
+  $this->assert($text =~ s/^\s*$t//);
+  $t = BaseFixture::unhtml("</table> text $tblhdr");
+  $this->assert($text =~ s/^\s*$t//);
+  $t = BaseFixture::unhtml(action("AcTion2","Main.ActorThree",undef,"Sun, 11 Mar 2001","The *world* is flat","closed"));
+  $this->assert($text =~ s/^\s*$t//);
+  $t = BaseFixture::unhtml(action("AcTion3","Main.ActorFour",$ActionTrackerPlugin::Format::latecol,"Sun, 11 Mar 2001","_Late_ the late great *date*","open"));
+  $this->assert($text =~ s/^\s*$t//);
+  $t = BaseFixture::unhtml(action("AcTion4","Main.ActorFiveVeryLongNameBecauseItsATest",$ActionTrackerPlugin::Format::latecol,"Wed, 13 Feb 2002","This is an action with a lot of associated text to test<br />   * the VingPazingPoodleFactor,<br />   * Tony Blair is a brick.<br />   * Who should really be built<br />   * Into a very high wall.","open"));
+  $this->assert($text =~ s/^\s*$t//);
+  $t = BaseFixture::unhtml(action("AcTion5","Main.ActorSix",$ActionTrackerPlugin::Format::badcol,"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb.ActionTrackerPlugin#DateFormats","Bad date","open"));
+  $this->assert($text =~ s/^\s*$t//, "$t NOT IN $text");
+  $t = BaseFixture::unhtml("</table> break the table here $tblhdr");
+  $this->assert($text =~ s/^\s*$t//);
+  $t = BaseFixture::unhtml(action("AcTion6","Main.ActorSeven",$ActionTrackerPlugin::Format::latecol,"Tue, 1 Jan 2002","Create the mailer, %USERNAME%","open"));
+  $this->assert($text =~ s/^\s*$t//);
+  $t = BaseFixture::unhtml("</table>");
+  $this->assert($text =~ s/^\s*$t//);
+  $t = BaseFixture::unhtml("* A list *");
+  $this->assert($text =~ s/^\s*$t//, "$t: $text");
+  $t = BaseFixture::unhtml("$tblhdr");
+  $this->assert($text =~ s/^\s*$t//, "$t: $text");
+  $t = BaseFixture::unhtml(action("AcTion7","Main.ActorEight","yellow","Tue, 1 Jan 2002","Create the mailer","open"));
+  $this->assert($text =~ s/^\s*$t//);
+  $t = BaseFixture::unhtml("</table> * endofthelist * Another list * should generate $tblhdr");
+  $this->assert($text =~ s/^\s*$t//);
+  $t = BaseFixture::unhtml(action("AcTion8","Main.ActorNine",undef,"Tue, 1 Jan 2002","Create the mailer","closed"));
+  $this->assert($text =~ s/^\s*$t//, "$t: $text");
+  $t = BaseFixture::unhtml("</table>");
+  $this->assert($text =~ s/^\s*$t\s*$//, "$t: $text");
+  
 }
 
 sub anchor {
@@ -212,44 +227,25 @@ sub testBeforeEditHandler {
   my $text = "JUNK";
   BaseFixture::setSkin("action");
   TWiki::Plugins::ActionTrackerPlugin::beforeEditHandler($text,"Topic2","Main");
-  my $re = qr/<(?i)INPUT TYPE(?-i)=\"text\" (?i)NAME(?-i)=\"who\" (?i)VALUE(?-i)=\"Main\.Fred\" SIZE=\"35\"\/>/;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"text\" (?i)NAME(?-i)=\"due\" (?i)VALUE(?-i)=\"Tue, 1 Jan 2002\" SIZE=\"16\"\/>/;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)SELECT(?-i) (?i)NAME(?-i)=\"state\" SIZE=\"1\">/o;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)OPTION(?-i) (?i)NAME(?-i)=\"open\">open<\/(?i)OPTION(?-i)>/o;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)OPTION(?-i) (?i)NAME(?-i)=\"closed\" (?i)SELECT(?-i)ED>closed<\/(?i)OPTION(?-i)><\/(?i)SELECT(?-i)>/o;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"text\" (?i)NAME(?-i)=\"notify\" (?i)VALUE(?-i)=\"\" SIZE=\"35\"\/>/o;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"creator\" (?i)VALUE(?-i)=\"\">/o;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"closed\" (?i)VALUE(?-i)=\"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb\.ActionTrackerPlugin\#DateFormats\">/;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"closer\" (?i)VALUE(?-i)=\"\">/o;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"created\" (?i)VALUE(?-i)=\"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb\.ActionTrackerPlugin\#DateFormats\">/;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"uid\" (?i)VALUE(?-i)=\"\">/o;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"closeactioneditor\" (?i)VALUE(?-i)=\"1\" \/>/;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"cmd\" (?i)VALUE(?-i)=\"\" \/>/;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"Know\.TopicClassification\" (?i)VALUE(?-i)=\"Know\.PublicSupported\" \/>/;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"Know\.OperatingSystem\" (?i)VALUE(?-i)=\"Know\.OsHPUX, Know\.OsLinux\" \/>/;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"Know\.OsVersion\" (?i)VALUE(?-i)=\"hhhhhh\" \/>/;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"pretext\" (?i)VALUE(?-i)=\"&#10;\" \/>/i;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"posttext\" (?i)VALUE(?-i)=\"%ACTION{who=Joe,due=&quot;29 Jan 2010&quot;,open}% Main1: Joe_open_ontime&#10;%ACTION{who=TheWholeBunch,due=&quot;29 Jan 2001&quot;,open}% Main2: Joe_open_ontime&#10;\" \/>/i;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<textarea (?i)NAME(?-i)=\"text\" (?i)WRAP=\"virtual\" ROWS=\"\" COLS=\"\"(?-i)>Main0: Fred_closed_ontime<\/textarea>/o;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
+  $text = $this->assert_html_matches("<INPUT TYPE=\"text\" NAME=\"who\" VALUE=\"Main\.Fred\" SIZE=\"35\"\/>", $text);
+  $text = $this->assert_html_matches("<INPUT TYPE=\"text\" NAME=\"due\" VALUE=\"Tue, 1 Jan 2002\" SIZE=\"16\"\/>", $text);
+  $this->assert_html_matches("<SELECT NAME=\"state\" SIZE=\"1\">", $text);
+  $this->assert_html_matches("<OPTION NAME=\"open\">open</OPTION>", $text);
+  $this->assert_html_matches("<OPTION NAME=\"closed\" SELECTED>closed</OPTION></SELECT>", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"text\" NAME=\"notify\" VALUE=\"\" SIZE=\"35\"/>", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"hidden\" NAME=\"creator\" VALUE=\"\">", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"hidden\" NAME=\"closed\" VALUE=\"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb\.ActionTrackerPlugin\#DateFormats\">", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"hidden\" NAME=\"closer\" VALUE=\"\">", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"hidden\" NAME=\"created\" VALUE=\"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb\.ActionTrackerPlugin\#DateFormats\">", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"hidden\" NAME=\"uid\" VALUE=\"\">", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"hidden\" NAME=\"closeactioneditor\" VALUE=\"1\" />", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"hidden\" NAME=\"cmd\" VALUE=\"\" />", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"hidden\" NAME=\"Know\.TopicClassification\" VALUE=\"Know\.PublicSupported\" />", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"hidden\" NAME=\"Know\.OperatingSystem\" VALUE=\"Know\.OsHPUX, Know\.OsLinux\" />", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"hidden\" NAME=\"Know\.OsVersion\" VALUE=\"hhhhhh\" />", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"hidden\" NAME=\"pretext\" VALUE=\"&#10;\" />", $text);
+  $this->assert_html_matches("<INPUT TYPE=\"hidden\" NAME=\"posttext\" VALUE=\"%ACTION{who=Joe,due=&quot;29 Jan 2010&quot;,open}% Main1: Joe_open_ontime&#10;%ACTION{who=TheWholeBunch,due=&quot;29 Jan 2001&quot;,open}% Main2: Joe_open_ontime&#10;\" />", $text);
+  $this->assert_html_matches("<textarea NAME=\"text\" WRAP=\"virtual\" ROWS=\"\" COLS=\"\">Main0: Fred_closed_ontime</textarea>", $text);
 }
 
 sub testAfterEditHandler {

@@ -51,8 +51,8 @@ See documentation in TWiki:Codev/TWikiDotPm
 sub TWiki::expandVariablesOnTopicCreation {
   my ( $theText, $theUser, $theWikiName, $theWikiUserName ) = @_;
 
-  $today = TWiki::Func::formatTime(time(), "\$day \$mon \$year", "gmtime");
-  $theUser         = $userName                     unless $theUser;
+  my $today = TWiki::Func::formatTime(time(), "\$day \$mon \$year", "gmtime");
+  #$theUser         = $userName                     unless $theUser;
   $theWikiName     = TWiki::Func::userToWikiName( $theUser, 1 ) unless $theWikiName;
   $theWikiUserName = TWiki::Func::userToWikiName( $theUser )    unless $theWikiUserName;
 
@@ -66,8 +66,6 @@ sub TWiki::expandVariablesOnTopicCreation {
 
   return $theText;
 }
-
-package CairoCompatibilityModule;
 
 use TWiki::Store;
 

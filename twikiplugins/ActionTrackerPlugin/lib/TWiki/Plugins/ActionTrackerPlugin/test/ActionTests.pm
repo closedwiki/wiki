@@ -7,7 +7,7 @@ use base qw(BaseFixture);
 
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
-use TWiki::Plugins::SharedCode;
+use TWiki::Contrib::Attrs;
 use Time::ParseDate;
 use CGI;
 
@@ -97,95 +97,95 @@ sub testMatches {
 	new ActionTrackerPlugin::Action( "Test", "Topic", 0,
 									 "who=\"JohnDoe,SlyStallone,TestRunner\" due=\"2 Jun 02\" state=open notify=\"SamPeckinpah,QuentinTarantino\" created=\"1 Jan 1999\" creator=\"ThomasMoore\"", "A new action");
   
-  my $attrs = new TWiki::Attrs("who=JohnDoe"); 
+  my $attrs = new TWiki::Contrib::Attrs("who=JohnDoe"); 
   $this->assert($action->matches($attrs),$attrs->toString());
-  $attrs = new TWiki::Attrs("who=Main.JohnDoe"); 
+  $attrs = new TWiki::Contrib::Attrs("who=Main.JohnDoe"); 
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("who=me"); 
+  $attrs = new TWiki::Contrib::Attrs("who=me"); 
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("who=JohnSmith"); 
+  $attrs = new TWiki::Contrib::Attrs("who=JohnSmith"); 
   $this->assert(!$action->matches($attrs));
-  $attrs = new TWiki::Attrs("who=Main.SlyStallone"); 
+  $attrs = new TWiki::Contrib::Attrs("who=Main.SlyStallone"); 
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("who"); 
-  $this->assert(!$action->matches($attrs));
-  
-  $attrs = new TWiki::Attrs("notify=\"SamPeckinpah\"");
-  $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("notify=\"QuentinTarantino\"");
-  $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("notify=\"JonasSalk,QuentinTarantino\"");
-  $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("notify=\"SamBrowne,OscarWilde\"");
-  $this->assert(!$action->matches($attrs));
-  $attrs = new TWiki::Attrs("notify"); 
+  $attrs = new TWiki::Contrib::Attrs("who"); 
   $this->assert(!$action->matches($attrs));
   
-  $attrs = new TWiki::Attrs("state=\"open\"");
+  $attrs = new TWiki::Contrib::Attrs("notify=\"SamPeckinpah\"");
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("open");
+  $attrs = new TWiki::Contrib::Attrs("notify=\"QuentinTarantino\"");
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("openday");
+  $attrs = new TWiki::Contrib::Attrs("notify=\"JonasSalk,QuentinTarantino\"");
+  $this->assert($action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("notify=\"SamBrowne,OscarWilde\"");
   $this->assert(!$action->matches($attrs));
-  $attrs = new TWiki::Attrs("closed");
+  $attrs = new TWiki::Contrib::Attrs("notify"); 
+  $this->assert(!$action->matches($attrs));
+  
+  $attrs = new TWiki::Contrib::Attrs("state=\"open\"");
+  $this->assert($action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("open");
+  $this->assert($action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("openday");
+  $this->assert(!$action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("closed");
   $this->assert(!$action->matches($attrs));
   
   ActionTrackerPlugin::Action::forceTime("31 May 2002");
-  $attrs = new TWiki::Attrs("within=2");
+  $attrs = new TWiki::Contrib::Attrs("within=2");
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("within=1");
+  $attrs = new TWiki::Contrib::Attrs("within=1");
   $this->assert(!$action->matches($attrs));
-  $attrs = new TWiki::Attrs("late");
-  $this->assert(!$action->matches($attrs));
-  
-  $attrs = new TWiki::Attrs("web=Test");
-  $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("web=\".*t\"");
-  $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("web=\"A.*\"");
+  $attrs = new TWiki::Contrib::Attrs("late");
   $this->assert(!$action->matches($attrs));
   
-  $attrs = new TWiki::Attrs("topic=Topic");
+  $attrs = new TWiki::Contrib::Attrs("web=Test");
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("topic=\".*c\"");
+  $attrs = new TWiki::Contrib::Attrs("web=\".*t\"");
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("topic=\"A.*\"");
+  $attrs = new TWiki::Contrib::Attrs("web=\"A.*\"");
   $this->assert(!$action->matches($attrs));
   
-  $attrs = new TWiki::Attrs("due=\"2 Jun 02\"");
+  $attrs = new TWiki::Contrib::Attrs("topic=Topic");
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("due=\"3 Jun 02\"");
+  $attrs = new TWiki::Contrib::Attrs("topic=\".*c\"");
+  $this->assert($action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("topic=\"A.*\"");
   $this->assert(!$action->matches($attrs));
   
-  $attrs = new TWiki::Attrs("creator=ThomasMoore");
+  $attrs = new TWiki::Contrib::Attrs("due=\"2 Jun 02\"");
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("creator=QuentinTarantino");
+  $attrs = new TWiki::Contrib::Attrs("due=\"3 Jun 02\"");
   $this->assert(!$action->matches($attrs));
   
-  $attrs = new TWiki::Attrs("created=\"1-Jan-1999\"");
+  $attrs = new TWiki::Contrib::Attrs("creator=ThomasMoore");
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("created=\"2 Jun 02\"");
+  $attrs = new TWiki::Contrib::Attrs("creator=QuentinTarantino");
   $this->assert(!$action->matches($attrs));
   
-  $attrs = new TWiki::Attrs("closed=\"2 Jun 02\"");
+  $attrs = new TWiki::Contrib::Attrs("created=\"1-Jan-1999\"");
+  $this->assert($action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("created=\"2 Jun 02\"");
   $this->assert(!$action->matches($attrs));
-  $attrs = new TWiki::Attrs("closed=\"1 Jan 1999\"");
+  
+  $attrs = new TWiki::Contrib::Attrs("closed=\"2 Jun 02\"");
+  $this->assert(!$action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("closed=\"1 Jan 1999\"");
   $this->assert(!$action->matches($attrs));
   
   # make it late
   ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
-  $attrs = new TWiki::Attrs("late");
+  $attrs = new TWiki::Contrib::Attrs("late");
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("within=1");
+  $attrs = new TWiki::Contrib::Attrs("within=1");
   $this->assert($action->matches($attrs), $action->secsToGo());
   
   # now again, only closed
   $action = new ActionTrackerPlugin::Action( "Test", "Topic", 0, "who=\"JohnDoe,SlyStallone\",due=\"2 Jun 02\" closed=\"2 Dec 00\" closer=\"Death\" notify=\"SamPeckinpah,QuentinTarantino\" created=\"1 Jan 1999\" creator=\"ThomasMoore\"", "A new action");
-  $attrs = new TWiki::Attrs("closed");
+  $attrs = new TWiki::Contrib::Attrs("closed");
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("closer=Death");
+  $attrs = new TWiki::Contrib::Attrs("closer=Death");
   $this->assert($action->matches($attrs));
-  $attrs = new TWiki::Attrs("open");
+  $attrs = new TWiki::Contrib::Attrs("open");
   $this->assert(!$action->matches($attrs));
 }
 
@@ -257,6 +257,7 @@ sub testVerticalOrient {
   
   $s =~ s/<table border=\"1\">//ios;
   $s =~ s/<\/table>//ios;
+  $s =~ s/\n//g;
   $this->assert_str_equals("<a name=\"AcTion0\"></a><tr><th bgcolor=\"orange\">Who</th><td>Main.JohnDoe</td></tr><tr><th bgcolor=\"orange\">Due</th><td>Sun, 2 Jun 2002</td></tr>", $s);
 }
 
@@ -304,11 +305,14 @@ sub testHTMLFormattingOpen {
   
   $fmt = new ActionTrackerPlugin::Format("", "| \$edit |", "");
   $s = $fmt->formatHTMLTable([$action], "href", 0);
-  my $url="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0";
-  $this->assert_html_matches("<td> <a href=\"$url\">edit</a> </td>", $s);
+  my $url= "%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic\\?skin=action&action=AcTion0&t=";
+  $s =~ s/\n//g;
+  my $r = ($s =~ s/<td> <a href="$url\d+">edit<\/a> <\/td>//);
+  $this->assert($r, $s." is not ".$url);
   $fmt = new ActionTrackerPlugin::Format("", "| \$edit |", "");
   $s = $fmt->formatHTMLTable([$action], "href", 1);
-  $this->assert_html_matches("<td><a href=\"$url\" onClick=\"return editWindow('$url')\">edit</a></td>", $s );
+  $r = ($s =~ s/<td>\s*<a href="$url\d+" onClick="return editWindow\('$url\d+'\)">edit<\/a>\s*<\/td>//);
+  $this->assert($r, $s );
   
   $fmt = new ActionTrackerPlugin::Format("", "| \$web.\$topic |", "");
   $s = $fmt->formatHTMLTable([$action], "href", 0);
@@ -518,11 +522,11 @@ sub testXtendTypes {
   $s = $fmt->formatStringTable([$action]);
   $this->assert_str_equals("Thu, 2 Mar 2006\n", $s);
   
-  my $attrs = TWiki::Attrs->new("sentence=\"5 years\"");
+  my $attrs = TWiki::Contrib::Attrs->new("sentence=\"5 years\"");
   $this->assert($action->matches($attrs));
-  $attrs = TWiki::Attrs->new("sentence=\"life\"");
+  $attrs = TWiki::Contrib::Attrs->new("sentence=\"life\"");
   $this->assert(!$action->matches($attrs));
-  $attrs = TWiki::Attrs->new("sentence=\"\\d+ years\"");
+  $attrs = TWiki::Contrib::Attrs->new("sentence=\"\\d+ years\"");
   $this->assert($action->matches($attrs));
   
   $s = ActionTrackerPlugin::Action::extendTypes("|state,select,17,life,\"5 years\",\"community service\"|");
@@ -624,18 +628,22 @@ sub testFormatForEdit {
 	$this->assert($s =~ s/<td>$n<\/td>//s, $n);
   }
   $this->assert($s =~ s/<th>state<\/th>//);
-  
   foreach my $n (split(/\|/,$expand)) {
 	$this->assert($s =~ s/<th>$n<\/th>//, $n);
-	$s =~ s/<td><input type=\"text\" name=\"$n\" value=\"(.*?)\" size=\"(.*?)\/><\/td>//gim;
+    my $r;
+    eval '$r = TWiki::Contrib::JSCalendarContrib::VERSION';
+    if ($r && ($n eq "closed" || $n eq "due" || $n eq "created")) {
+      $s = $this->assert_html_matches("<td><input type=\"text\" name=\"$n\" value=\"\" size=\"\" id=\"date_$n\"/><a onclick=\"return showCalendar\('date_$n', '\%e \%B \%Y'\)\"><img src=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/img.gif\"/></a></td>", $s);
+    } else {
+      $s = $this->assert_html_matches("<td><input type=\"text\" name=\"$n\" value=\"{*.*?*}\" size=\"{*.*?*}\"/></td>", $s);
+    }
   }
-  $this->assert($s =~ s/<td><SELECT NAME=\"state\" SIZE=\"1\"><OPTION NAME=\"open\" SELECTED>open<\/OPTION><OPTION NAME=\"closed\">closed<\/OPTION><\/SELECT><\/td>//om);
-  $this->assert($s =~ s/<table border=\"1\">//mo);
+  $s = $this->assert_html_matches("<td><SELECT NAME=\"state\" SIZE=\"1\"><OPTION NAME=\"open\" SELECTED>open<\/OPTION><OPTION NAME=\"closed\">closed<\/OPTION><\/SELECT><\/td>", $s);
+  $s = $this->assert_html_matches("<table border=\"1\">", $s);
   $s =~ s/<tr( bgcolor=\"orange\")?>//gom;
-  $s =~ s/<tr valign=\"top\">//gos;
+ $s = $this->assert_html_matches("<tr valign=\"top\">", $s);
   $s =~ s/<\/?(tr|table)>//gom;
-  $s =~ s/\s+//gos;
-  $this->assert_str_equals("", $s);
+  $this->assert_matches(qr/^\s*$/, $s);
   
   $action =
 	new ActionTrackerPlugin::Action("Web", "Topic", 9,
@@ -657,10 +665,11 @@ sub testExtendStates {
 									"state=\"5 years\"", "Text");
   my $fmt = new ActionTrackerPlugin::Format( "|State|", "|\$state|", "","");
   $s = $action->formatForEdit($fmt);
-  $s =~ s/<OPTION NAME=\"life\">life<\/OPTION>//io;
-  $s =~ s/<OPTION NAME=\"5 years\" SELECTED>5 years<\/OPTION>//io;
-  $s =~ s/<OPTION NAME=\"community service\">community service<\/OPTION>//io;
-  $s =~ s/<SELECT NAME=\"state\" SIZE=\"17\"><\/SELECT>//io;
+  $s =~ s/\n/ /g;
+  $s =~ s/<OPTION NAME=\"life\">life<\/OPTION>//i;
+  $s =~ s/<OPTION NAME=\"5 years\" SELECTED>5 years<\/OPTION>//i;
+  $s =~ s/<OPTION NAME=\"community service\">community service<\/OPTION>//i;
+  $s =~ s/<SELECT NAME=\"state\" SIZE=\"17\">\s*<\/SELECT>//i;
   $s =~ s/<\/?table.*?>//gio;
   $s =~ s/<\/?tr.*?>//gio;
   $s =~ s/<\/?t[hd].*?>//gio;

@@ -6,7 +6,6 @@ use base qw(BaseFixture);
 
 use TWiki::Store;
 use TWiki::Func;
-use TWiki::Plugins::CairoCompatibilityModule;
 
 use TWiki::Plugins::MacrosPlugin;
 

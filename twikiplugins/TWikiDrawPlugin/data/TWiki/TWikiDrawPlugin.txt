@@ -4,7 +4,7 @@
 
 This plugin encapsulates the <nop>TWikiDraw Java Applet first developed by Main.PeterThoeny from the original <nop>JHotDraw.
 
-<nop>JHotDraw is a drawing editor that supports drawing in a style similar to that found in MS Powerpoint and MS Word. Various shaped figures can be placed in the drawing and text annotations joined to them.
+<nop>JHotDraw is a simple drawing editor that supports drawing in a style similar to that found in MS Powerpoint and MS Word. Various shaped figures can be placed in the drawing and text annotations joined to them.
 
 Unique to TWikiDraw, a drawing can also have a "map" which makes figures in the drawing sensitive to the mouse cursor. A map is automatically added to an image when a URL is attached to any of the figures.
 
@@ -125,13 +125,14 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 
 ---+++ Plugin Info
 
-|  Plugin Author: | Main.CrawfordCurrie |
+|  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
 |  Plugin Version: | 23 Sep 2001 |
-|  Change History: | 23 Sep 2001: Initial version |
-| | 1 Oct 2001: Updated this text |
-| | 20 Feb 2002: Merged Main.RobWalker's fixes for text attached to figures |
+|  Change History: | |
+| | 17 Feb 2003: Bug fixes; incoporated BertrandDelacretaz's fix for too many colours in GIF. |
 | | 30 Sep 2002: Add support for URLs, EXTRA_COLORS, fixed a number of outstanding bugs |
-| | 2 Feb 2003: Bug fixes
+| | 20 Feb 2002: Merged Main.RobWalker's fixes for text attached to figures |
+| | 1 Oct 2001: Updated this text |
+| | 23 Sep 2001: Initial version |
 |  CPAN Dependencies: | None |
 |  Other Dependencies: | Java 1.1 enabled browser |
 |  Perl Version: | 5.0 |
@@ -145,14 +146,18 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 	* TWikiDraw uses <a href="http://www.acme.com/java/">ACME Labs</a>' <nop>GifEncoder to convert a drawing into a GIF file format. (<nop>GifEncoder is Copyright (C)1996,1998 by Jef Poskanzer, jef@acme.com . All rights reserved. _<font size="-6"> THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. )</font>_
 	* TWikiDraw uses some ideas of <a href="http://www.eng.untech.com/serg/bin/KmWiki?Load=FrontPage">KmWiki</a> drawing applet.
 	* TWikiDraw: Copyright 2000 by Peter Thoeny, Peter@Thoeny.com. It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies.
-	* Modifications Copyright (C) 2001 Motorola. All Rights Reserved.
 	* Main.PeterThoeny created <nop>TWikiDraw based on above software:
 		* <nop>TWikiDraw applet that allows you to save a drawing as a =.draw= and a =.gif= file. (Save calls the TWiki =upload= script)
 		* New =%<nop>DRAWING%= variable to insert a drawing into any TWiki topic. (defined in =wikicfg.pm= )
 		* New =oopstwikidraw.tmpl= template that contains the <nop>TWikiDraw applet.
+	* Modifications Copyright (C) 2001 Motorola. All Rights Reserved.
 	* Main.CrawfordCurrie made a number of improvements, including porting to the 2001 release.
+	* Modifications Copyright (C) 2003-2004
 	* Main.RobWalker fixed a couple of related bugs noted below. The approach to these seems correct, although the fix implementation could possibly be done better
 	   * if a connected text figure were added to a shape figure, and the pair were then duplicated, the text figure in the copy did not appear in same relative location as the original
 	   * if a selection of figures included both the shape and it's connected text, moving by cursor key or drag cause the relative text location to change incorrectly
 	   * if a composite figure included a shape and it's connected text, moving the composite figure cause the relative text location to move incorrectly
        * also added a "clean" and "run" step to the Ant build to aid in development
+       * Main.BertrandDelacretaz had problems when saving images from macosx / JDK 1.3.1 and modified the applet to reduce the number of colors before converting to GIF, if needed. Without this he would sometimes get the "too many colors for a GIF" error when saving drawings.
+       * Main.CrawfordCurrie corrected behaviour in Konqueror
+ 

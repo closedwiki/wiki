@@ -14,12 +14,12 @@ use strict;
 package TWiki::Store;
 
 use BaseFixture;
+use TWiki::Contrib::CairoContrib;
 
 sub _readTemplateFile {
   return readTemplateFile( @_ );
 }
 
-# Required for CairoCompatabilityMode
 sub readTemplateFile {
     my( $theName, $theSkin ) = @_;
     $theSkin = "" unless $theSkin; # prevent 'uninitialized value' warnings
@@ -55,7 +55,7 @@ sub readTemplateFile {
 sub readTemplate {
   my( $theName, $theSkin ) = @_;
 
-  return CairoCompatibilityModule::readTemplate($theName, $theSkin);
+  return TWiki::Contrib::CairoContrib::readTemplate($theName, $theSkin);
 }
 
 1;

@@ -5,14 +5,14 @@ Lets you use parameterised includes in TWiki. This plugin supports tags original
 %TOC%
 
 ---+ Features
-   * Macros defined in topics
-   * Topic-scope SET function
-   * Strip newlines from macro topics
+	* Macros defined in topics
+	* Topic-scope SET function
+	* Strip newlines from macro topics
 
 ---+ Syntax Rules
 ---++ <code>%<nop>CALLMACRO{...}%</code>
 
-<code>%CALLMACRO</code> is used to include a macro defined in a topic in the current web immediately, as if it were simply typed in the topic. It is like =%<nop>INCLUDE% except that parameters can be passed in and expanded in the included text.
+<code>%CALLMACRO</code> is used to include a macro defined in a topic in the current web immediately, as if it were simply typed in the topic. It is like =%<nop>INCLUDE%= except that parameters can be passed in and expanded in the included text.
 
 A macro is defined by creating a topic that contains the macro body. For example, a topic named =MacroMaturity= may contain the text:
 <verbatim>
@@ -51,7 +51,8 @@ One line description, shown in the TWiki.TextFormattingRules topic:
 
 ---+ Plugin Installation Instructions
 __Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required.
-	* Make sure you have the TWiki:Plugins/SharedCode module installed. Among other things, TWiki:Plugins/SharedCode includes a compatibility module that enables plugins to use new TWiki features with earlier TWiki releases. If you don't already have it, install it now.
+	* Make sure all the required dependencies listed in the table below are resolved:
+	%$DEPENDENCIES%
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 %$MANIFEST%
@@ -77,8 +78,8 @@ Developer discussion is in TWiki:Plugins/%TOPIC%Dev.
 ---++ Copyright
 
 This code is based on an original development of Motorola Inc. and is protected by the following copyrights:
-	* Copyright (C) 2002-2003 Motorola. All Rights Reserved.
-	* Portions Copyright (C) 2004 Crawford Currie. All Rights Reserved.
+	* Copyright &copy; 2002-2003 Motorola. All Rights Reserved.
+	* Portions Copyright &copy; 2004 Crawford Currie http://www.c-dot.co.uk
 
 ---++ License
 

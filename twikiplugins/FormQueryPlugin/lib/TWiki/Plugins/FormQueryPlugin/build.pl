@@ -1,26 +1,21 @@
 #!/usr/bin/perl -w
 #
 # Build class for FormQueryPlugin
-# Requires the environment variable TWIKI_SHARED to be
-# set to point at the shared code repository
+# Requires the environment variable TWIKI_LIBS to be
+# set to point at the DBCache repository
 
 # Standard preamble
 BEGIN {
-  use File::Spec;
-  my $cwd = `dirname $0`; chop($cwd);
-  my $basedir = File::Spec->rel2abs("../../../..", $cwd);
-  unshift @INC, "$basedir/lib";
-  die "TWIKI_SHARED not set" unless ($ENV{TWIKI_SHARED});
-  unshift @INC, "$ENV{TWIKI_SHARED}/lib";
-  die "DBCACHE_INCLUDE not set; must point to a DBCachePlugin install" unless ($ENV{DBCACHE_INCLUDE});
-  unshift @INC, "$ENV{DBCACHE_INCLUDE}/lib";
-  unshift @INC, $cwd;
+  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
+    unshift @INC, $pc;
+  }
 }
-use TWiki::Plugins::Build;
+
+use TWiki::Contrib::Build;
 
 package FormQueryPluginBuild;
 
-@FormQueryPluginBuild::ISA = ( "TWiki::Plugins::Build" );
+@FormQueryPluginBuild::ISA = ( "TWiki::Contrib::Build" );
 
 sub new {
   my $class = shift;

@@ -51,6 +51,20 @@ Comments, signed and dated, added immediately before anchor
 %TMPL:END%
 </verbatim>
 ---------------------------------------------------------------------------
+---+++ threadmode
+Wiki thread mode comment, signed and dated
+<verbatim>
+%TMPL:DEF{PROMPT:threadmode}%%TMPL:P{promptbox}%%TMPL:END%
+</verbatim>
+<verbatim>
+%TMPL:DEF{OUTPUT:threadmode}%%POS:BEFORE%
+
+%URLPARAM{"comment"}%
+
+-- %WIKIUSERNAME% - %DATE%
+%TMPL:END%
+</verbatim>
+---------------------------------------------------------------------------
 ---+++ below
 Comments, signed and dated, added immediately below anchor
 <verbatim>

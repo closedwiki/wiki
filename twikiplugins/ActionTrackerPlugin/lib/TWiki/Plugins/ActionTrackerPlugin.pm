@@ -29,7 +29,7 @@ use TWiki::Func;
 use vars qw(
 	    $web $topic $user $installWeb $VERSION $initialised
 	    $allActions $useNewWindow $debug $javaScriptIncluded
-	    $pluginName $defaultFormat
+	    $pluginName $defaultFormat $calendarIncludes
 	   );
 
 $VERSION = '2.010';
@@ -43,7 +43,7 @@ my %prefs;
 my @dependencies =
   (
    { package => 'TWiki::Plugins', constraint => '>= 1.010' },
-   { package => 'TWiki::Plugins::SharedCode::Attrs' },
+   { package => 'TWiki::Contrib::Attrs', constraint => '>= 1.00' },
    { package => 'Time::ParseDate' }
   );
 
@@ -63,21 +63,34 @@ sub initPlugin {
   $javaScriptIncluded = 0;
 
   return 1;
-}
+};
 
 sub commonTagsHandler {
-  ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-  
-  # This is the place to define customized tags and variables
-  # Called by sub handleCommonTags, after %INCLUDE:"..."%
-  
-  # do custom extension rule, like for example:
-  # $_[0] =~ s/%XYZ%/&handleXyz()/geo;
-  # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/geo;
+    ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+    unless ($calendarIncludes) {
+        # must do this before checking if %ACTION is in the text, as this
+        # is intended to apply to the skin, not the body
+        eval 'use TWiki::Contrib::JSCalendarContrib';
+        if ( $@ ) {
+            $calendarIncludes = "";
+        } else {
+            $calendarIncludes =
+"<LINK TYPE=\"text/css\" rel=\"stylesheet\" href=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar-%ACTIONTRACKERPLUGIN_CAL_STYLE%.css\" />
+ <base href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%\" />
+<script type=\"text/javascript\" src=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar.js\"></script>
+<script type=\"text/javascript\" src=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/lang/calendar-%ACTIONTRACKERPLUGIN_CAL_LANG%.js\"></script>
+<script type=\"text/javascript\" src=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/twiki.js\"></script>";
+            $calendarIncludes =
+              TWiki::Func::expandCommonVariables( $calendarIncludes, $topic, $web );
+        }
+    }
+    $_[0] =~ s/<!-- INCLUDEJSCALENDAR -->/$calendarIncludes/;
 
   return unless ( $_[0] =~ m/%ACTION.*{.*}%/o );
 
-  return unless _lazyInit();
+    if ( !$initialised ) {
+        return unless _lazyInit();
+    }
 
   # Format actions in the topic.
   # Done this way so we get tables built up by
@@ -179,7 +192,9 @@ sub beforeEditHandler {
 
   return unless ( TWiki::Func::getSkin() eq "action" );
 
-  return unless _lazyInit();
+    if ( !$initialised ) {
+        return unless _lazyInit();
+    }
 
   TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
 
@@ -325,7 +340,9 @@ sub afterEditHandler {
   my $query = TWiki::Func::getCgiQuery();
   return unless ( $query->param( 'closeactioneditor' ));
 
-  return unless _lazyInit();
+    if ( !$initialised ) {
+        return unless _lazyInit();
+    }
 
   my $pretext = $query->param( 'pretext' ) || "";
    # Fix from RichardBaar 8/10/03 for Mozilla
@@ -360,7 +377,9 @@ sub afterEditHandler {
 sub beforeSaveHandler {
 ### my ( $text, $topic, $web ) = @_;
 
-  return unless _lazyInit();
+    if ( !$initialised ) {
+        return unless _lazyInit();
+    }
 
   my $query = TWiki::Func::getCgiQuery();
   return unless ( $query ); # Fix from GarethEdwards 13 Jun 2003
@@ -502,7 +521,7 @@ sub _dumpPrefs {
 sub _handleActionSearch {
   my ( $web, $expr ) = @_;
 
-  my $attrs = new TWiki::Attrs( $expr );
+  my $attrs = new TWiki::Contrib::Attrs( $expr );
   # use default format unless overridden
   my $fmt;
   my $fmts = $attrs->remove( "format" );
@@ -526,34 +545,15 @@ sub _handleActionSearch {
 # Lazy initialize of plugin 'cause of performance
 sub _lazyInit {
 
-  return 1 if ( $initialised );
-
-  my $depsOK = 1;
-  foreach my $dep ( @dependencies ) {
-    my ( $ok, $ver ) = ( 0, 0 );
-    eval "use $dep->{package}";
-    unless ( $@ ) {
-	  if ( defined( $dep->{constraint} )) {
-		eval "\$ver = \$$dep->{package}::VERSION;\$ok = (\$ver $dep->{constraint})";
-	  } else {
-		$ok = 1;
-	  }
-	}
-	unless ( $ok ) {
-	  my $mess = "$dep->{package} ";
-	  $mess .= "version $dep->{constraint} " if ( $dep->{constraint} );
-	  $mess .= "is required for $pluginName version $VERSION. ";
-	  $mess .= "$dep->{package} $ver is currently installed. " if ( $ver );
-	  $mess .= "Please check the plugin installation documentation. ";
-	  TWiki::Func::writeWarning( $mess );
-	  print STDERR "$mess\n";
-	  $depsOK = 0;
+  if ( defined( &TWiki::Func::checkDependencies ) ) {
+	my $err = TWiki::Func::checkDependencies($pluginName, \@dependencies);
+	if ( $err ) {
+	  TWiki::Func::writeWarning($err);
+	  print STDERR $err;
+	  return 0;
 	}
   }
-  return 0 unless $depsOK;
 
-  eval 'use TWiki::Plugins::SharedCode::Attrs';
-  return 0 if $@;
   eval 'use TWiki::Plugins::ActionTrackerPlugin::Action';
   return 0 if $@;
   eval 'use TWiki::Plugins::ActionTrackerPlugin::ActionSet';
@@ -608,7 +608,7 @@ sub _embedJS {
     return "
 <script language=\"JavaScript\"><!--
 function editWindow(url) {
-  win=open(url,\"none\",\"titlebar=0,width=700,height=400,resizable,scrollbars\");
+  win=open(url,\"none\",\"titlebar=0,width=800,height=400,resizable,scrollbars\");
   if(win){win.focus();}
   return false;
 }

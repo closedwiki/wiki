@@ -168,22 +168,38 @@ sub unregex {
   return $re;
 }
 
-# 'free' the format of html
+my $htmltags = 
+qr/A|ABBR|ACRONYM|ADDRESS|APPLET|AREA|B|BASE|BASEFONT|BDO|BIG|BLOCKQUOTE|BODY|BR|BUTTON|CAPTION|CENTER|CITE|CODE|COL|COLGROUP|DD|DEL|DFN|DIR|DIV|DL|DT|EM|FIELDSET|FONT|FORM|FRAME|FRAMESET|H1|H2|H3|H4|H5|H6|HEAD|HR|HTML|I|IFRAME|IMG|INPUT|INS|ISINDEX|KBD|LABEL|LEGEND|LI|LINK|MAP|MENU|META|NOFRAMES|NOSCRIPT|OBJECT|OL|OPTGROUP|OPTION|P|PARAM|PRE|Q|S|SAMP|SCRIPT|SELECT|SMALL|SPAN|STRIKE|STRONG|STYLE|SUB|SUP|TABLE|TBODY|TD|TEXTAREA|TFOOT|TH|THEAD|TITLE|TR|TT|U|UL|VAR/i;
+
+# 'free' the format of html. REs can be embedded by encasing them in {* *}
 sub unhtml {
   my ($re) = @_;
+
+  # Lift out REs protected by {* *}
+  my $i = 0;
+  my %res;
+  while ( $re =~ s/{\*(.*?)\*}/PROTECTEDRE{$i}/) {
+      $res{$i} = $1;
+      $i++;
+  }
   $re = unregex($re);
-  # make open tags with params case-insensitive
-  $re =~ s/<(\w+)\s+(\w+)\s*=\s*([^>]+)>/<$1\\s+(?i)$2(?-i)\\s*=\\s*$3>/go;
-  # make close tags and open tags without params case insensitive
-  $re =~ s/<(\/?\w+)>/<(?i)$1(?-i)>/go;
-  $re =~ s/<(\/?\w+)(\s+\/)>/<(?i)$1(?-i)$2>/go;
-  # Make conditional spaces around tags
-  $re =~ s/\s*(<[^>]+>)\s*/\\s*$1\\s*/go;
+  # Add conditional spaces around > in tags
+  $re =~ s/(<\/?($htmltags).*?)(\/?>)/$1\\s*$3\\s*/gio;
+  # make open tag param names case-insensitive
+  while ($re =~ s/(<($htmltags)\b[^>]*?\s)([a-zA-Z]+)=/$1\\s+(?i)$3(?-i)\\s*=\\s*/go) {
+  }
+  # make open and close tags case insensitive
+  $re =~ s/(<\/?)($htmltags)\b/$1(?i)$2(?i-)/gio;
+
   # Turn whitespace into \s+
   $re =~ s/\s+/\\s+/go;
+
   # Collapse space sequences
-  $re =~ s/\\s\*\\s([*+])/\\s$1/go;
-  $re =~ s/\\s([*+])\\s\*/\\s$1/go;
+  $re =~ s/\\s\*\\s([*+])/\\s$1/g;
+  $re =~ s/\\s([*+])\\s\*/\\s$1/g;
+  $re =~ s/\\s\+\\s\+/\\s+/g;
+
+  $re =~ s/PROTECTEDRE{(\d+)}/$res{$1}/g;
 
   return $re;
 }
@@ -192,16 +208,19 @@ sub assert_html_matches {
   my ($this, $expected, $test, $mess ) = @_;
 
   my $re = unhtml($expected);
-  $mess = "$test\nmatches\n$expected" unless ($mess);
+  $mess = "$test\ndoes not match\n$expected" unless ($mess);
   my ($package, $filename, $line) = caller(0);
-  $this->assert_matches(qr/$re/s, $test, "$mess at $filename:$line");
+  unless ($test =~ s/$re//s) {
+      $this->assert(0, "$mess at $filename:$line\nRE was $re");
+  }
+  return $test;
 }
 
 sub assert_html_matches_all {
   my ($this, $expected, $test, $mess ) = @_;
 
   my $re = unhtml($expected);
-  $mess = "$test\nmatches\n$expected" unless ($mess);
+  $mess = "$test\n does not match\n$expected" unless ($mess);
   my ($package, $filename, $line) = caller(0);
   $this->assert_matches(qr/^\s*$re\s*$/s, $test, "at $filename:$line: $mess");
 }

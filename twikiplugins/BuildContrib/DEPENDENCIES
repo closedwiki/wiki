@@ -1,0 +1,3 @@
+Test::Unit,,CPAN,Optional, required for unit testing
+Pod::Text,,CPAN, POD documentation extracter
+File::Spec,,CPAN,Used to convert relative paths to absolute

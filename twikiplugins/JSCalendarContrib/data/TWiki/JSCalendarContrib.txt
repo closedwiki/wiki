@@ -1,11 +1,34 @@
-Cairo compatibility module
+[[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons.
 
 ---+ Summary of Contents
----+++ <nop>CairoCompatibilityModule
-This module implements some of the functions added in Cairo so they are available to plugins running in a pre-Cairo installation. This allows plugin authors to upgrade to Cairo without losing compatibility with earlier TWiki releases.
+This module packages the [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]] Javascript in a form suitable for use with TWiki.
 
 ---+ Detailed Documentation
-Read the code!
+Read [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] or [[%ATTACHURL%][visit the demo page]].
+
+This package also includes an extra Javascript to make using the calendar easier from TWiki plugins. In the normal way, include the styles in the header. For example,
+<verbatim>
+ <LINK TYPE="text/css" rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar-system.css" />
+</verbatim>
+and in either header or text body put the standard scripts:
+<verbatim>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar.js"></script>
+<!-- Language to use in calendars. The following languages are usually available from the JSCalendarContrib module: af br ca cs da de du el en es fi fr hr hr hu it jp ko ko lt lt nl no pl pl-utf8 pt ro ru si sk sp sv tr zh -->
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/lang/calendar-en.js"></script>
+</verbatim>
+Now also include (in header or text):
+<verbatim>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/twiki.js"></script>
+</verbatim>
+you will then be able to create popup calendar buttons like this:
+<verbatim>
+<INPUT TYPE="text" NAME="My date" VALUE="Sat, 17 May 2003" SIZE="16" id="mydatefieldid"/>
+<button type="reset" onclick="return showCalendar('mydatefieldid','%e %B %Y')">
+  <img src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/img.gif" alt="Calendar"/>
+</button>
+</verbatim>
+
+See TWiki:Plugins/ActionTrackerPlugin for an example of this style of usage.
 
 ---++ Settings
 	* Name of the perl package
@@ -21,9 +44,10 @@ Read the code!
 
 ---++ Contrib Info
 
-|  Author: | TWiki:Main/CrawfordCurrie |
-|  Copyright &copy;: | See Mishoo documentation |
-|  License: | See Mishoo documentation |
+|  Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
+| Version: | %$VERSION% of the Mishoo calendar |
+|  Copyright &copy;: | See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] |
+|  License: | GNU LGPL |
 |  Dependencies: | %$DEPENDENCIES% |
 |  14/08/04 | Separated out from SharedCode module |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
