@@ -131,7 +131,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "30 Mar 2004";
+$wikiversion      = "10 Apr 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2329,15 +2329,9 @@ sub handleToc
                 $line =~ s/\[\[(.*?)\]\]/$1/ge;        # '[[...]]'
                 $line =~ s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/$1<nop>$3/g;  # 'Web.TopicName'
                 $line =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/g;  # 'TopicName'
-                $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/g;  # 'TLA'
-                # create linked bullet item
-                # AB change
-		# $line = "$tabs* <a href=\"$dispScriptUrlPath/$viewScript$scriptSuffix/$webPath/$topicname#$anchor\">$line</a>";
-		if ( $viewScript eq 'view' ) {
-		    $line = "$tabs* <a href=\"$dispScriptUrlPath$dispViewPath/$webPath/$topicname#$anchor\">$line</a>";
-		} else {
-		    $line = "$tabs* <a href=\"$dispScriptUrlPath/$viewScript$scriptSuffix/$webPath/$topicname#$anchor\">$line</a>";
-		}
+                $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/g;    # 'TLA'
+                # create linked bullet item, using a relative link to anchor
+                $line = "$tabs* <a href=\"#$anchor\">$line</a>";
                 $result .= "\n$line";
             }
         }
@@ -3136,7 +3130,7 @@ sub renderMoved
         my $putBack = "";
         if( $web eq $toWeb && $topic eq $toTopic ) {
             $putBack  = " - <a title=\"Click to move topic back to previous location, with option to change references.\"";
-            $putBack .= " href=\"$dispScriptUrlPath/rename/$web/$topic?newweb=$fromWeb&newtopic=$fromTopic&";
+            $putBack .= " href=\"$dispScriptUrlPath/rename$scriptSuffix/$web/$topic?newweb=$fromWeb&newtopic=$fromTopic&";
             $putBack .= "confirm=on\">put it back</a>";
         }
         $text = "<i><nop>$to moved from <nop>$from on $date by $by </i>$putBack";
