@@ -1,0 +1,139 @@
+#!/usr/bin/perl -wT
+#
+# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+#
+# Based on parts of Ward Cunninghams original Wiki and JosWiki.
+# Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
+# Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
+# Copyright (C) 1999-2000 Peter Thoeny, peter@thoeny.com
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+
+#This is a hack to the standard "save" script until Plugins are allowed
+#to handle form processing
+
+# It still needs to do the same kind of general checks that "save" does.
+
+#Version history...
+#30 Nov 2001: Initial version
+#4 Dec 2001: 1.01 release, changed name to CommentPlugin, 
+#            added $button var, changed textarea WRAP setting to "soft"
+#24 Feb 2002: added a few more user requests, made "English" text configurable 
+#5 March 2002: Bug fixes 
+#6 March 2002: Hopefully the LAST bug fix for savecomment for now...
+#              formattedPost was processing TWiki variables incorrectly
+
+
+use CGI::Carp qw(fatalsToBrowser);
+use CGI;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
+
+
+$query= new CGI;
+
+&main();
+
+sub main
+{
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theTopic = $query->param( 'topic' );
+    my $theUrl = $query->url;
+
+    my $theName  = $query->param( 'commentname' );
+    my $mode = $query->param( 'mode' );
+
+    ( $topic, $webName, $dummy, $userName ) = 
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+    $dummy = "";  # to suppress warning	
+
+    my $wikiUserName = &TWiki::userToWikiName( $userName );
+
+    if( ! &TWiki::Store::webExists( $webName ) ) {
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+
+    my( $mirrorSiteName, $mirrorViewURL ) = &TWiki::readOnlyMirrorWeb( $webName );
+    if( $mirrorSiteName ) {
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsmirror", $mirrorSiteName, $mirrorViewURL );
+        print $query->redirect( $url );
+        return;
+    }
+
+    # check access permission using POST
+    if( ! &TWiki::Access::checkAccessPermission( "post", $wikiUserName, "", $topic, $webName ) ) {
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+
+
+    # get text and other parameters
+    my $comment = $query->param( "comment" );
+
+    #OMFG...what a hack!
+    $comment = &TWiki::decodeSpecialChars( $comment );
+    $comment =~ s/ {3}/\t/go;
+
+    my $errMsg = '<font color="red">(attempt to change authorization settings detected)</font>';
+
+    $comment =~ s/\s*\*\s+Set\s+(ALLOW|DENY)(TOPIC|WEB)(CHANGE|RENAME|POST)\s*=.*/$errMsg/go;
+
+    my $unlock = "on";
+    my $dontNotify = "";
+    my $saveCmd = "";
+
+    my $defaultBgColor = &TWiki::Prefs::getPreferencesValue("COMMENTPLUGIN_BACKGROUNDCOLOR");
+    my $defaultSignature = &TWiki::Prefs::getPreferencesValue("COMMENTPLUGIN_SIGNATURE");
+    my $defaultPrefixName = &TWiki::Prefs::getPreferencesValue("COMMENTPLUGIN_PREFIXMODENAME");
+    my $defaultPostfixName = &TWiki::Prefs::getPreferencesValue("COMMENTPLUGIN_POSTFIXMODENAME");
+
+    my $formattedPost = "----\n\n$comment\n\n";
+    #Thanks to Laurent AMON for finding/killing this bug...
+    $formattedPost .= TWiki::Func::expandCommonVariables("$defaultSignature\n\n", $topic, $webname);
+
+    my $localDate = &TWiki::getLocaldate();
+    $defaultSignature =~ s/%DATE%/$localDate/go;
+    $defaultSignature =~ s/%WIKIUSERNAME%/$wikiUserName/go;
+
+    #now just read in the topic file, modify it, and save
+    my ($meta, $text) =  &TWiki::Store::readTopic( $webName, $topic );
+
+    if ($comment ne "") { #no post if no comment
+        if ($theName ne "__default__") { #Find a comment by its given name
+          if ($mode eq $defaultPostfixName) {
+            $text =~ s/%COMMENT(.*"$theName".*?)%/%COMMENT$1%\n$formattedPost/g;
+          } else {
+            $text =~ s/%COMMENT(.*"$theName".*?)%/$formattedPost%COMMENT$1%/g;
+          }
+        } else {
+          if ($mode eq $defaultPostfixName) {
+            $text =~ s/%COMMENT(.*?)%/%COMMENT$1%\n$formattedPost/g;
+          } else {
+            $text =~ s/%COMMENT/$formattedPost%COMMENT/g;
+          }
+        }
+    }
+
+    my $error = &TWiki::Store::saveTopic( $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
+    if( $error ) {
+        # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
+        TWiki::redirect( $query, $url );
+    } else {
+        TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) );
+    }
+}
