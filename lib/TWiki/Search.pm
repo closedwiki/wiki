@@ -60,13 +60,23 @@ sub _searchTopicsInWeb
 
     my @topicList = ();
     return @topicList unless( @theTokens );                        # bail out if no search string
-    @topicList = _getTopicList( $theWeb );                         # get all topics in web
-    if( $theTopic ) {
-        if( $caseSensitive ) {
-            @topicList = grep( /$theTopic/, @topicList );          # limit by topic name,
-        } else {                                                   # Codev.SearchTopicNameAndTopicText
-            @topicList = grep( /$theTopic/i, @topicList );
+
+    if( $theTopic ) {                                              # limit search to topic list
+        if( $theTopic =~ /^\^\([$TWiki::mixedAlphaNum\|]+\)\$$/ ) { # topic list without wildcards
+            my $topics = $theTopic;                                # for speed, do not get all topics in web
+            $topics =~ s/^\^\(//o;                                 # but convert topic pattern into topic list
+            $topics =~ s/\)\$//o;                                  #
+            @topicList = split( /\|/, $topics );                   # build list from topic pattern
+        } else {                                                   # topic list with wildcards
+            @topicList = _getTopicList( $theWeb );                 # get all topics in web
+            if( $caseSensitive ) {
+                @topicList = grep( /$theTopic/, @topicList );      # limit by topic name,
+            } else {                                               # Codev.SearchTopicNameAndTopicText
+                @topicList = grep( /$theTopic/i, @topicList );
+            }
         }
+    } else {
+        @topicList = _getTopicList( $theWeb );                     # get all topics in web
     }
     return @topicList unless( @topicList );                        # bail out if no topics
 
