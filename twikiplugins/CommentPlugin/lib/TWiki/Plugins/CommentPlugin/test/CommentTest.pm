@@ -20,9 +20,8 @@ sub set_up {
   my $this = shift;
 
   $this->SUPER::set_up();
-  # to force it to use Cairo compatability mode, change the following
-  # to "1"
-  $TWiki::Plugins::VERSION = 1.010;
+  # to force it to use Cairo compatability mode, uncomment the following
+  #$TWiki::Plugins::VERSION = 1;
   TWiki::Plugins::CommentPlugin::initPlugin();
   $TWiki::Plugins::CommentPlugin::testing = 1;
 }

@@ -7,6 +7,9 @@
 use strict;
 
 use TWiki::Contrib::Attrs;
+use TWiki;
+use TWiki::Plugins;
+use TWiki::Store;
 
 package TWiki::Plugins::CommentPlugin::Comment;
 
@@ -183,6 +186,7 @@ sub _getTemplate {
     my $templates;
 
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
+die "FUCKSHIT $TWiki::Plugins::VERSION";
         eval 'use TWiki::Contrib::CairoContrib; $templates = TWiki::Contrib::CairoContrib::readTemplate( $templateFile )';
 	} else {
         $templates = TWiki::Store::readTemplate( $templateFile );
