@@ -1,7 +1,11 @@
-%META:TOPICINFO{author="MikeMannix" date="998886670" format="1.0" version="1.32"}%
+%META:TOPICINFO{author="MikeMannix" date="999044161" format="1.0" version="1.33"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Variables
+
+---+++ About Variables
+
+__Include/write if not found elsewhere.__
 
 ---+++ Predefined Variables
 
@@ -317,12 +321,11 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> List of preferences that are not allowed to be overridden by next level preferences</td>
 </tr></table>
 
-__Notes:__
+---+++ Setting and Creating New Preferences
 
-	* Preferences variables ( on site-level, web-level and user level ) are defined by bullet lines with this syntax: 
-		* =<nop>Set VARIABLENAME = value=
-	* Additional preferences variables can be defined on all three level as needed. Example:
-		* =<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif=
+	* The syntax for Preferences variables is the same anywhere in TWiki. In Edit mode, from the start of a new line: <br>[6 spaces] * [space] Set [space] VARIABLENAME [space] = [value] <br> __Example:__ 
+		* ==<nop>Set VARIABLENAME = value==
+	* You can add your own preference variables for an entire site, a single web, or a single topic, using the standard syntax. Whatever you include in your variable will be expanded on display, and treated exactly as if it had been written out. So you can place formatted text, page links, images.<br> __Example:__ To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, define the variable in the web's WebPreferences topic, like this (in this case, you also have to upload ==logo.gif== to the same directory): 
+		* ==<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif==
 
--- PeterThoeny - 23 Jul 2001 <br>
 -- MikeMannix - 26 Aug 2001 <br>	
