@@ -44,12 +44,20 @@ $query= new CGI;
 #(now can we do this in a way that automagically can cope eith word / letter based diffs?)
 #NOTE: if we do our own diffs in perl we can go straight to renderDiffs
 #CPAN: there is a Diffs module - it outputs **********
+#TODO: I'm starting to think that we should have a variable number of lines of context. more context if you are doing a 1.13 tp 1.14 diff, less when you do a show page history.
+#TODO: ***URGENT*** the diff rendering dies badly when you have table cell changes and context
 
 # =========================
 sub renderCellData
 {
     my( $data, $topic ) = @_;
-    if( $data ) {
+    if (( $data ) && ( $data ne "" )) {
+#remove possibly mis-matched html tags :(
+#this also un-does the mess of <!------ to hide multiple lines of topic
+#and therefore its probably only important when you don't have full topic context
+#TODO: re-write?
+#        $data =~ s/</$lt/gm;
+#        $data =~ s/>/$gt/gm;
 #improve meta-data diff's - Main.PeterKlausner
         if( $data =~ /%META/ )
         {
@@ -107,9 +115,6 @@ sub renderSideBySide
       $result .= qq(<tr bgcolor="#eeeeee"><th>Line: $left</th><th>Line: $right</th></tr>\n)
     }
   } else {
-#    $right = renderCellData( $right, $topic );
-#    $left = renderCellData( $left, $topic );
-#    $result .= qq(<tr><td bgcolor="$lcolor" valign="top">$left&nbsp;</td><td bgcolor="$rcolor" valign="top">$right&nbsp;</td></tr>\n);
     $right = renderCellData( $right, $topic );
     $left = renderCellData( $left, $topic );
     $result .= qq(<tr><td bgcolor="$lcolor" valign="top">$left&nbsp;</td><td bgcolor="$rcolor" valign="top">$right&nbsp;</td></tr>\n);
@@ -138,21 +143,29 @@ sub renderSequential
   my $result = "";
 
   if ( $diffType eq "-") {
-    $result .= "\n<\/td><\/tr>\n<tr><td bgcolor=\"#FFD7D7\" colspan =\"2\"><b> Deleted: <\/b>";
-    $result .= "<\/td><\/tr>\n<tr><td bgcolor=\"#FF4040\" valign=\"top\" width=\"1%\">&lt;<br \/>&lt;<\/td><td>" ;
+    $result .= "<tr><td bgcolor=\"#FFD7D7\" colspan =\"2\"><b> Deleted: <\/b>\n<\/td><\/tr>\n";
+    $result .= "<tr><td bgcolor=\"#FF4040\" valign=\"top\" width=\"1%\">&lt;<br \/>&lt;<\/td><td>" ;
     $result .= renderCellData( $left, $topic );
+    $result .= "\n<\/td><\/tr>\n";
   } elsif ( $diffType eq "+") {
-    $result .= "\n<\/td><\/tr>\n<tr><td bgcolor=\"#D0FFD0\" colspan =\"2\"><b> Added:   <\/b>";
-    $result .= "<\/td><\/tr>\n<tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br \/>&gt;<\/td><td>" ;
+    $result .= "<tr><td bgcolor=\"#D0FFD0\" colspan =\"2\"><b> Added:   <\/b>\n<\/td><\/tr>\n";
+    $result .= "<tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br \/>&gt;<\/td><td>" ;
     $result .= renderCellData( $right, $topic );
+    $result .= "\n<\/td><\/tr>\n";
   } elsif ( $diffType eq "u") {
-    $result .= "\n<\/td><\/tr>\n<tr><\/tr>\n<tr><td></td><td>" ;
+    $result .= "<tr><td valign=\"top\" width=\"1%\"><br \/><\/td><td>" ;
     $result .= renderCellData( $right, $topic );
+    $result .= "\n<\/td><\/tr>\n";
   } elsif ( $diffType eq "c") {
-    $result .= "\n<\/td><\/tr>\n<tr><td bgcolor=\"#D0FFD0\" colspan =\"2\"><b> Changed: <\/b>";
-    $result .= "<\/td><\/tr>\n<tr><td bgcolor=\"#FF4040\" valign=\"top\" width=\"1%\">&lt;<br \/>&lt;<\/td><td>" ;
+    $result .= "<tr><td bgcolor=\"#D0FFD0\" colspan =\"2\"><b> Changed: <\/b>\n<\/td><\/tr>\n";
+    $result .= "<tr><td bgcolor=\"#FF4040\" valign=\"top\" width=\"1%\">&lt;<br \/>&lt;<\/td><td>" ;
     $result .= renderCellData( $left, $topic );
+    $result .= "<tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br \/>&gt;<\/td><td>" ;
     $result .= renderCellData( $right, $topic );
+    $result .= "\n<\/td><\/tr>\n";
+  } elsif ( $diffType eq "l") {
+    $result .= "<tr bgcolor=\"#eeeeee\"><th></th><th align=\"left\">Line: $left to $right</th></tr>";
+    $result .= "\n<\/td><\/tr>\n";
   }
 
   return $result;
@@ -181,7 +194,7 @@ sub parseRevisionDiff
         foreach( split( /\n/, $text ) ) {
 	    if ( /^\-\-\- / ) {
 	    } elsif ( /^\+\+\+ / ) {
-    	    } elsif ( /^@@ ([\-\+0-9]+)\,([0-9]+) ([\-\+0-9]+)\,([0-9]+) @@$/ ) {
+    	    } elsif ( /@@ [-+]([0-9]+)([,0-9]+)? [-+]([0-9]+)(,[0-9]+)? @@/ ) {
     	        #line number
 	        push @diffArray, ["l", $1, $3];
 	    } elsif ( /^\-/ ) {
@@ -241,14 +254,33 @@ sub renderRevisionDiff
 {
     my( $diffArray_ref, $renderStyle ) = @_;
 
-    my @diffArray = @{ $diffArray_ref };
-
     my $result = "<table width=\"100%\" cellspacing=\"0\">\n<tr><td>";
     my $data = "";
-    for my $diff_ref ( @diffArray ) {
-    	if (( @$diff_ref[0] eq "l" ) && ( @$diff_ref[1] eq 0 ) && (@$diff_ref[2] eq 0)) {
+    my $diff_ref = undef;
+    for my $next_ref ( @$diffArray_ref ) {
+    	if (( @$next_ref[0] eq "l" ) && ( @$next_ref[1] eq 0 ) && (@$next_ref[2] eq 0)) {
 	    next;
+		}
+		if (! $diff_ref ) {
+		   $diff_ref = $next_ref;
+		   next;
+		}
+		if (( @$diff_ref[0] eq "-" ) && ( @$next_ref[0] eq "+" )) {
+		    $diff_ref = ["c", @$diff_ref[1], @$next_ref[2]];
+    	        $next_ref = undef;
+		}
+		if ( $renderStyle eq "sequential" ) {
+		    $result .= renderSequential ( @$diff_ref );
+		} elsif ( $renderStyle eq "sidebyside" ) {
+    		    $result .= "<tr><td width=\"50%\"></td><td width=\"50%\"></td></tr>\n";
+		    $result .= renderSideBySide ( @$diff_ref );
+		} elsif ( $renderStyle eq "debug" ) {
+		    $result .= renderDebug ( @$diff_ref );
+		}
+		$diff_ref = $next_ref;
 	}
+#don't forget the last one ;)
+   if ( $diff_ref ) {
 	if ( $renderStyle eq "sequential" ) {
 	    $result .= renderSequential ( @$diff_ref );
 	} elsif ( $renderStyle eq "sidebyside" ) {
@@ -257,7 +289,7 @@ sub renderRevisionDiff
 	} elsif ( $renderStyle eq "debug" ) {
 	    $result .= renderDebug ( @$diff_ref );
 	}
-   }
+    }
     $text = "$result\n<\/table>";
 
     return $text;
