@@ -323,8 +323,9 @@ sub redirect
 }
 
 # =========================
-# Warning and errors that may require admin intervention
-# Not using store writeLog and log file is more of an audit/usage file
+# Warning and errors that may require admin intervention, to 'warnings.txt' typically.
+# Not using store writeLog; log file is more of an audit/usage file.
+# Use this for defensive programming warnings (e.g. assertions).
 sub writeWarning
 {
     my( $text ) = @_;
@@ -341,6 +342,7 @@ sub writeWarning
 
 # =========================
 sub writeDebug
+# Use for debugging messages, goes to 'debug.txt' normally
 {
     my( $text ) = @_;
     open( FILE, ">>$debugFilename" );
@@ -356,6 +358,7 @@ sub writeDebug
 
 # =========================
 sub writeDebugTimes
+# Use for performance monitoring/debugging
 {
     my( $text ) = @_;
 
@@ -598,6 +601,7 @@ sub getLocaldate
 }
 
 # =========================
+# Return GMT date/time as formatted string 
 sub formatGmTime
 {
     my( $theTime, $theFormat ) = @_;
@@ -608,23 +612,24 @@ sub formatGmTime
         $year += 1900;
 
         if( $theFormat =~ /rcs/i ) {
-            # RCS format, example: "2001/12/31 23:59:59:59"
+            # RCS format, example: "2001/12/31 23:59:59"
             return sprintf( "%.4u/%.2u/%.2u %.2u:%.2u:%.2u", 
                             $year, $mon+1, $mday, $hour, $min, $sec );
         } elsif ( $theFormat =~ /http/i ) {
-            # HTTP header format, example: "Thu, 23 Jul 1998 07:21:56 GMT"
+            # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 GMT"
 	    # - based on RFC 2616/1123 and HTTP::Date
 	    return sprintf( "%s, %02d %s %04d %02d:%02d:%02d GMT", 
 			$weekDay[$wday], $mday, $isoMonth[$mon], $year, 
 			$hour, $min, $sec );
         } else {
 	    # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
+	    # e.g. "2002-12-31T19:30Z"
 	    return sprintf( "%.4u\-%.2u\-%.2uT%.2u\:%.2u:%.2uZ", 
 			    $year, $mon+1, $mday, $hour, $min, $sec );
 	}
     }
 
-    # Default format
+    # Default format, e.g. "31 Dec 2002 - 19:30"
     my( $tmon ) = $isoMonth[$mon];
     $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
     return sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
@@ -639,6 +644,7 @@ sub revDate2ISO
 
 # =========================
 sub revDate2EpSecs
+# Convert RCS revision date/time to seconds since epoch, for easier sorting 
 {
     my( $date ) = @_;
     # NOTE: This routine *will break* if input is not one of below formats!
