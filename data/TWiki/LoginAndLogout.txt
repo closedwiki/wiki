@@ -14,16 +14,4 @@ There is a drawback however. IP address based session tracking fails if people s
 
 -- Main.PeterThoeny - 12 Feb 2005
 
----++ Discussions
-
-Why are we not using what I suggest in Codev.RememberUserBug?
-
--- Main.SvenDowideit - 12 Feb 2005
-
-That approach seems to have a drawback, see my reply in Codev.RememberUserBug.
-
--- Main.PeterThoeny - 12 Feb 2005
-
-Changed the view/not guest message because I didn't like the grammar of "not me?" and "not you?" seemed a bit impolite.
-
--- Main.SamHasler - 12 Feb 2005
+Additional discussion at TWiki:TWiki.%TOPIC%
