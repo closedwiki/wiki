@@ -27,9 +27,8 @@
 #standardfooter input {	background-color: ButtonFace; border: 2px outset; }
 
 /* keep the "a" rules in this order, else you might not get what you expect */
-a{ color: rgb(170, 80, 0); text-decoration:none; font-weight: bold;}
-a:link{ }
-a:visited{ }
+a:link{ color: rgb(170, 80, 0); text-decoration:none; font-weight: bold;}
+a:visited{text-decoration: none;}
 a:active{ }
 a:hover{color: rgb(255,255,192); background-color: rgb(170,80,0); }
 
