@@ -199,6 +199,7 @@ sub _formatRow {
 	$row =~ s/%A_SIZE%/$attrSize/go;
   }
 
+  $comment =~ s/\|/&#124;/g;
   $comment = "&nbsp;" unless ( $comment );
   $row =~ s/%A_COMMENT%/$comment/go;
 
