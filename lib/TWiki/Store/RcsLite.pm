@@ -38,6 +38,7 @@ use TWiki::Store::RcsFile;
 
 use strict;
 use Algorithm::Diff;
+use FileHandle;
 use TWiki;
 
 my $DIFF_DEBUG = 0;
@@ -187,8 +188,8 @@ sub _process
         $self->{where} = "nofile";
         return;
     }
-    my $fh;
-    if( ! open( $fh, "$rcsFile" ) ) {
+    my $fh = new FileHandle;
+    if( ! $fh->open( $rcsFile ) ) {
         $self->_warn( "Couldn't open file $rcsFile" );
         $self->{where} = "nofile";
         return;
@@ -454,10 +455,10 @@ sub _writeMe
 {
     my( $self ) = @_;
     my $dataError = "";
-    my $out;
+    my $out = new FileHandle;
     
     chmod( 0644, $self->rcsFile()  ); # FIXME move permission to config or similar
-    if( ! open( $out, ">", $self->rcsFile() ) ) {
+    if( ! $out->open( "> " . $self->rcsFile() ) ) {
        $dataError = "Problem opening " . $self->rcsFile() . " for writing";
     } else {
        binmode( $out );
