@@ -106,7 +106,10 @@ my $perlverRequired = 5.00503;		# Oldest supported version of Perl
 my $perlverRequiredString = '5.005_03';
 my $perlverRecommended = '5.6.1';
 my $ActivePerlRecommendedBuild = 631;	# Fixes PERL5SHELL bugs
-my $cgiModVerRecommended = 2.90;	# CGI.pm version, on some platforms
+my $cgiModVerRecommended = '2.90';	# CGI.pm version, on some platforms
+					# - actually need CGI 2.87+ for
+					# mod_perl 2.0 and CGI 2.90 for 
+					# Cygwin Perl 5.8.0
 
 my $rcsverRequired = 5.7;
 
@@ -278,16 +281,17 @@ my $theUrl = $query->url;
 
 # Detect whether mod_perl was loaded into Apache
 my $modPerlLoaded = ( exists $ENV{'SERVER_SOFTWARE'} && 
-			  ( $ENV{'SERVER_SOFTWARE'} =~ /mod_perl/ )) && 
-					"loaded" || "not loaded";
+			  ( $ENV{'SERVER_SOFTWARE'} =~ /mod_perl/ ));
 
 # Detect whether we are actually running under mod_perl
 # - test for MOD_PERL alone, which is enough.
-my $usingModPerl = ( exists $ENV{'MOD_PERL'} ) && "Used" || "Not used";
+my $usingModPerl = ( exists $ENV{'MOD_PERL'} );
 
 # Get the version of mod_perl if it's being used
-my $modPerlVersion = eval 'use mod_perl; return $mod_perl::VERSION' 
-    if $usingModPerl;
+my $modPerlVersion;
+if ( $usingModPerl ) {
+    $modPerlVersion = eval 'use mod_perl; return $mod_perl::VERSION';
+}
 
 
 # OS
@@ -369,11 +373,22 @@ foreach $mod (@requiredMods) {
 	my $mod_version;
 	$mod_version = ${"${mod}::VERSION"};
         print "$mod ($mod_version)";
-	# Recommend CGI.pm upgrade on Cygwin Perl 5.8.0 only
-	if( $mod eq 'CGI' and $mod_version < $cgiModVerRecommended and
-		$perltype eq 'Cygwin' and $perlver eq '5.8.0' ) {
-	    print "<br /><b><font color=\"red\">Warning:</font></b> ";
-	    print "CGI.pm version $cgiModVerRecommended or higher is recommended to avoid problems with attachment uploads on Perl $perlver.\n";
+
+	# Check for potential CGI.pm module upgrade 
+	if( $mod eq 'CGI' and $mod_version < $cgiModVerRecommended ) {
+
+	    if ( $perltype eq 'Cygwin' and $perlver eq '5.8.0' ) {
+		# Recommend CGI.pm upgrade if using Cygwin Perl 5.8.0 
+		print "<br /><b><font color=\"red\">Warning:</font></b> ";
+		print "CGI.pm version $cgiModVerRecommended or higher is recommended to avoid problems with attachment uploads on Cygwin Perl $perlver.\n";
+
+	    } elsif ( $usingModPerl and $modPerlVersion >= 1.99 ) {
+
+		# Recommend CGI.pm upgrade if using mod_perl 2.0, which
+		# is reported as version 1.99 and implies Apache 2.0
+		print "<br /><b><font color=\"red\">Warning:</font></b> ";
+		print "CGI.pm version $cgiModVerRecommended or higher is recommended to avoid problems with mod_perl version $modPerlVersion on Apache 2.0 or higher.\n";
+	    }
 	}
 	print "</td></tr>\n";
     }
@@ -413,9 +428,12 @@ print "The page resulting from the test link should have a PATH_INFO of <b>/foo/
 print "</td></tr>\n";
 
 # mod_perl 
-print "<tr><th align=\"right\">mod_perl:</th><td>$usingModPerl for this script (mod_perl $modPerlLoaded)\n";
+my $usingModPerlText = $usingModPerl ? "Used" : "Not used";
+my $modPerlLoadedText = ( $modPerlLoaded ? "loaded" : "not loaded" );
+
+print "<tr><th align=\"right\">mod_perl:</th><td>$usingModPerlText for this script (mod_perl $modPerlLoadedText into Apache)\n";
 if ( $modPerlVersion ) {
-    print "- <b>mod_perl</b> version $modPerlVersion\n";
+    print "- mod_perl version $modPerlVersion\n";
 }
 print "</td></tr>\n";
 
