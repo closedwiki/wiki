@@ -178,14 +178,14 @@ build-twiki-kernel.pl - Codev.TWikiKernel
 
 =head1 SYNOPSIS
 
-build-twiki-kernel.pl [options] [-tempdir=] [-outputdir=] [-agent=]
+build-twiki-kernel.pl [options] [-tempdir] [-outputdir] [-agent]
 
 Copyright 2004 Will Norris and Sven Dowideit.  All Rights Reserved.
 
  Options:
-   -tempdir=[.]		where all temporary files for this build are placed
-   -outputdir=[.]	where the generated TWikiKernel-BRANCH-DATE.tar.gz is placed
-   -agent=[$Config->{agent}]	LWP::UserAgent name (used for downloading some documentation from wiki pages on twiki.org)
+   -tempdir [.]		where all temporary files for this build are placed
+   -outputdir [.]	where the generated TWikiKernel-BRANCH-DATE.tar.gz is placed
+   -agent [$Config->{agent}]	LWP::UserAgent name (used for downloading some documentation from wiki pages on twiki.org)
    -verbose
    -debug
    -help			this documentation
