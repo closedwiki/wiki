@@ -1,7 +1,4 @@
-<font color="red" size="+2">Authorization Failed</font>
-
-Did you type in your WikiName and password correctly?
-
+%META:TOPICINFO{author="PeterThoeny" date="997076292" format="1.0beta2" version="1.4"}%
 To edit pages on this %WIKITOOLNAME% Collaborative Web, you must have a registered user name and password. <br> __Note:__ You can also login anonymously as user *TWikiGuest* with password *guest*
 
 To register as a new user, simply fill out this form:
@@ -12,25 +9,25 @@ To register as a new user, simply fill out this form:
 <table border="1">
 <tr>
   <td align="right"> First & last name: </td>
-  <td><input type="text" name="Twk1Name" size="40" value="" onBlur="var sIn = this.value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); var ch2 = ''; if( (ch=='à')||(ch=='á')||(ch=='â')||(ch=='ã')||(ch=='å') ) { ch = 'a'; } if( (ch=='è')||(ch=='é')||(ch=='ê') ) { ch = 'e'; } if( ch=='ç') { ch = 'c'; } if( ch=='ó') { ch = 'o'; } if( ch=='ä') { ch = 'a'; ch2 = 'e'; } if( ch=='ö') { ch = 'o'; ch2 = 'e'; } if( ch=='ü') { ch = 'u'; ch2 = 'e'; } if( ch=='Ä') { ch = 'A'; ch2 = 'e'; } if( ch=='Ö') { ch = 'O'; ch2 = 'e'; } if( ch=='Ü') { ch = 'U'; ch2 = 'e'; } if( ch=='ß') { ch = 's'; ch2 = 's'; } if( ((ch>='a')&&(ch<='z')) || ((ch>='A')&&(ch<='Z')) ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } sOut+=ch; if( ch2!='') { sOut+=ch2; } } else { if( ch==' ' ) { chgUpper = true; } } } this.form.Twk1WikiName.value=sOut;" > =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1Name" size="40" value="" onBlur="var sIn = this.value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); var ch2 = ''; if( (ch=='à')||(ch=='á')||(ch=='â')||(ch=='ã')||(ch=='å') ) { ch = 'a'; } if( (ch=='è')||(ch=='é')||(ch=='ê') ) { ch = 'e'; } if( ch=='ç') { ch = 'c'; } if( ch=='ó') { ch = 'o'; } if( ch=='ä') { ch = 'a'; ch2 = 'e'; } if( ch=='ö') { ch = 'o'; ch2 = 'e'; } if( ch=='ü') { ch = 'u'; ch2 = 'e'; } if( ch=='Ä') { ch = 'A'; ch2 = 'e'; } if( ch=='Ö') { ch = 'O'; ch2 = 'e'; } if( ch=='Ü') { ch = 'U'; ch2 = 'e'; } if( ch=='ß') { ch = 's'; ch2 = 's'; } if( ((ch>='a')&&(ch<='z')) || ((ch>='A')&&(ch<='Z')) ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } sOut+=ch; if( ch2!='') { sOut+=ch2; } } else { if( ch==' ' ) { chgUpper = true; } } } this.form.Twk1WikiName.value=sOut;" /> =<font color="red">**</font>= </td>
 </tr><tr>
   <td align="right"> Your WikiName: </td>
-  <td><input type="text" name="Twk1WikiName" size="40" value="" > =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1WikiName" size="40" value="" /> =<font color="red">**</font>= </td>
 </tr><tr>
   <td align="right"> Email address: </td>
-  <td><input type="text" name="Twk1Email" size="40" value="" > =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1Email" size="40" value="" /> =<font color="red">**</font>= </td>
 </tr><tr>
   <td align="right"> Your password: </td>
-  <td><input type="password" name="Twk1Password" size="40" value="" > =<font color="red">**</font>= </td>
+  <td><input type="password" name="Twk1Password" size="40" value="" /> =<font color="red">**</font>= </td>
 </tr><tr>
   <td align="right"> Retype password: </td>
-  <td><input type="password" name="Twk1Confirm" size="40" value="" > =<font color="red">**</font>= </td>
+  <td><input type="password" name="Twk1Confirm" size="40" value="" /> =<font color="red">**</font>= </td>
 </tr><tr>
   <td align="right"> Company name: </td>
-  <td><input type="text" name="Twk0CompanyName" size="40" value="" ></td>
+  <td><input type="text" name="Twk0CompanyName" size="40" value="" /></td>
 </tr><tr>
   <td align="right"> Company URL: <br> (or department URL) &nbsp; </td>
-  <td><input type="text" name="Twk0CompanyURL" size="40" onBlur="if(this.value=='http://') { this.value='' }" onFocus="if(this.value=='') { this.value='http://' }"></td>
+  <td><input type="text" name="Twk0CompanyURL" size="40" onBlur="if(this.value=='http://') { this.value='' }" onFocus="if(this.value=='') { this.value='http://' }" /></td>
 </tr><tr>
   <td align="right"> Country: </td>
   <td>
@@ -173,16 +170,17 @@ To register as a new user, simply fill out this form:
   </select> =<font color="red">**</font>=
   </td>
 </tr><tr>
-  <td valign="top" align="right"> Comments : <br> (optional) &nbsp; </td>
+  <td valign="top" align="right"> Comments : <br /> (optional) &nbsp; </td>
   <td><textarea name="Twk0Comment" wrap="virtual" rows="4" cols="38"></textarea></td>
 </tr><tr>
-  <td valign="top" align="right"> &nbsp; <input type="hidden" name="TopicName" value="%TOPIC%"></td>
-  <td> <input type="submit" value=" Submit "> &nbsp;&nbsp; (Fields marked =<Font color="red">**</font>= are required) </td>
+  <td valign="top" align="right"> &nbsp; <input type="hidden" name="TopicName" value="%TOPIC%" /></td>
+  <td> <input type="submit" value=" Submit " /> &nbsp;&nbsp; (Fields marked =<Font color="red">**</font>= are required) </td>
 </tr>
 </table>
 </form>
 
 __Submitting the form will automatically:__ 
+
 	* Create an account for you, so that you can start editing pages using your WikiName.
 	* Create your personal %WIKITOOLNAME% topic using your WikiName as topic name, and add the data you submitted to the topic.
 	* Add your name to the list of users in the %MAINWEB%.%WIKIUSERSTOPIC% topic in the %WIKITOOLNAME%.%MAINWEB% web.
@@ -191,4 +189,4 @@ __Submitting the form will automatically:__
 
 Once registered you can login using your WikiName and password.
 
-If you have any questions about registration, send an email to <A href="mailto:%WIKIWEBMASTER%?subject=%TOPIC% Question">%WIKIWEBMASTER%</A>.
+If you have any questions about registration, send an email to <A href="mailto:%WIKIWEBMASTER%?subject=%TOPIC%&#32;Question">%WIKIWEBMASTER%</A>.

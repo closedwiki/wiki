@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="PeterThoeny" date="997076248" format="1.0beta2" version="1.5"}%
 To edit pages on this %WIKITOOLNAME% Collaborative Web, you must have a registered user name in WikiNotation.
 
 To register as a new user, simply fill out this form:
@@ -8,22 +9,22 @@ To register as a new user, simply fill out this form:
 <table border="1">
 <tr>
   <td align="right"> First & last name: </td>
-  <td><input type="text" name="Twk1Name" size="40" value="" onBlur="var sIn = this.value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); var ch2 = ''; if( (ch=='à')||(ch=='á')||(ch=='â')||(ch=='ã')||(ch=='å') ) { ch = 'a'; } if( (ch=='è')||(ch=='é')||(ch=='ê') ) { ch = 'e'; } if( ch=='ç') { ch = 'c'; } if( ch=='ó') { ch = 'o'; } if( ch=='ä') { ch = 'a'; ch2 = 'e'; } if( ch=='ö') { ch = 'o'; ch2 = 'e'; } if( ch=='ü') { ch = 'u'; ch2 = 'e'; } if( ch=='Ä') { ch = 'A'; ch2 = 'e'; } if( ch=='Ö') { ch = 'O'; ch2 = 'e'; } if( ch=='Ü') { ch = 'U'; ch2 = 'e'; } if( ch=='ß') { ch = 's'; ch2 = 's'; } if( ((ch>='a')&&(ch<='z')) || ((ch>='A')&&(ch<='Z')) ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } sOut+=ch; if( ch2!='') { sOut+=ch2; } } else { if( ch==' ' ) { chgUpper = true; } } } this.form.Twk1WikiName.value=sOut;" > =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1Name" size="40" value="" onBlur="var sIn = this.value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); var ch2 = ''; if( (ch=='à')||(ch=='á')||(ch=='â')||(ch=='ã')||(ch=='å') ) { ch = 'a'; } if( (ch=='è')||(ch=='é')||(ch=='ê') ) { ch = 'e'; } if( ch=='ç') { ch = 'c'; } if( ch=='ó') { ch = 'o'; } if( ch=='ä') { ch = 'a'; ch2 = 'e'; } if( ch=='ö') { ch = 'o'; ch2 = 'e'; } if( ch=='ü') { ch = 'u'; ch2 = 'e'; } if( ch=='Ä') { ch = 'A'; ch2 = 'e'; } if( ch=='Ö') { ch = 'O'; ch2 = 'e'; } if( ch=='Ü') { ch = 'U'; ch2 = 'e'; } if( ch=='ß') { ch = 's'; ch2 = 's'; } if( ((ch>='a')&&(ch<='z')) || ((ch>='A')&&(ch<='Z')) ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } sOut+=ch; if( ch2!='') { sOut+=ch2; } } else { if( ch==' ' ) { chgUpper = true; } } } this.form.Twk1WikiName.value=sOut;" /> =<font color="red">**</font>= </td>
 </tr><tr>
   <td align="right"> Your WikiName: </td>
-  <td><input type="text" name="Twk1WikiName" size="40" value="" > =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1WikiName" size="40" value="" /> =<font color="red">**</font>= </td>
 </tr><tr>
   <td align="right"> Intranet login name: </td>
-  <td><input type="text" name="Twk1LoginName" size="40" value="%REMOTE_USER%" > =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1LoginName" size="40" value="%REMOTE_USER%" /> =<font color="red">**</font>= </td>
 </tr><tr>
   <td align="right"> Email address: </td>
-  <td><input type="text" name="Twk1Email" size="40" value="" > =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1Email" size="40" value="" /> =<font color="red">**</font>= </td>
 </tr><tr>
   <td align="right"> Phone: </td>
-  <td><input type="text" name="Twk0Phone" size="40" value="" ></td>
+  <td><input type="text" name="Twk0Phone" size="40" value="" /></td>
 </tr><tr>
   <td align="right"> Department: </td>
-  <td><input type="text" name="Twk0Department" size="40" value="" </tr><tr>
+  <td><input type="text" name="Twk0Department" size="40" value="" /></tr><tr>
   <td align="right"> Office location: </td>
   <td>
   <select name="Twk1Location" size="1">
@@ -35,16 +36,17 @@ To register as a new user, simply fill out this form:
   </select> =<font color="red">**</font>=
   </td>
 </tr><tr>
-  <td valign="top" align="right"> Comments : <br> (optional) &nbsp; </td>
+  <td valign="top" align="right"> Comments : <br /> (optional) &nbsp; </td>
   <td><textarea name="Twk0Comment" wrap="virtual" rows="4" cols="38"></textarea></td>
 </tr><tr>
-  <td valign="top" align="right"> &nbsp; <input type="hidden" name="TopicName" value="%TOPIC%"></td>
+  <td valign="top" align="right"> &nbsp; <input type="hidden" name="TopicName" value="%TOPIC%" /></td>
   <td> <input type="submit" value=" Submit "> &nbsp;&nbsp; (Fields marked =<Font color="red">**</font>= are required) </td>
 </tr>
 </table>
 </form>
 
 __Submitting the form will automatically:__ 
+
 	* Create an account for you, so that you can start editing pages using your WikiName.
 	* Create your personal %WIKITOOLNAME% topic using your WikiName as topic name, and add the data you submitted to the topic.
 	* Add your name to the list of users in the %MAINWEB%.%WIKIUSERSTOPIC% topic in the %WIKITOOLNAME%.%MAINWEB% web.
@@ -53,4 +55,4 @@ __Submitting the form will automatically:__
 
 Once registered you can login using your WikiName and password.
 
-If you have any questions about registration, send an email to <A href="mailto:%WIKIWEBMASTER%?subject=%TOPIC% Question">%WIKIWEBMASTER%</A>.
+If you have any questions about registration, send an email to <A href="mailto:%WIKIWEBMASTER%?subject=%TOPIC%&#32;Question">%WIKIWEBMASTER%</A>.
