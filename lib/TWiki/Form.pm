@@ -215,6 +215,12 @@ sub chooseFormButton
            "margin:2px\" name=\"submitChangeForm\" value=\" &nbsp; $text &nbsp; \">";
 }
 
+# ============================
+sub useFormSpecial
+{
+   return &TWiki::Prefs::getPreferencesValue( "DEFFORM" );
+}
+
 
 # ============================
 # Render form information 
@@ -247,7 +253,7 @@ sub renderForEdit
         my $extra = "";
         
         # Special processing for UseForm
-        if( ! $value && $fieldName eq "UseForm" ) {
+        if( ! $value && $fieldName eq "UseForm" && useFormSpecial() ) {
            $value = $fieldInfo[1];
         }
                 
@@ -369,7 +375,7 @@ sub fieldVars2Meta
        my $value     = $query->param( $fieldName . "FLD" );
        my $cvalue    = "";
        
-       if( $fieldName eq "UseForm" ) {
+       if( $fieldName eq "UseForm" && useFormSpecial() ) {
           if( lc $value ne "yes" ) {
               $meta->remove( "FORM" );
               $meta->remove( "FIELD" );
@@ -517,6 +523,21 @@ sub upgradeCategoryItem
 
 
 # ============================
+sub getDefaultForm
+{
+    my( $web ) = @_;
+    
+    my $default = TWiki::Prefs::getPreferencesValue( "DEFFORM", $web );
+    if( $default ) {
+        my @formTemplates = split( /,\s*/, TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) );
+        if( @formTemplates ) {
+            $default = @formTemplates[0];
+        }
+    }
+}
+
+
+# ============================
 # load old style category table
 sub upgradeCategoryTable
 {
@@ -545,10 +566,9 @@ sub upgradeCategoryTable
             }
         }
         
-        my @formTemplates = split( /,\s*/, TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) );
-        # FIXME - deal with none
+        my $defaultFormTemplate = getDefaultForm( $web );
         
-        if( ! @formTemplates ) {
+        if( ! $defaultFormTemplate ) {
             &TWiki::writeWarning( "Form: can't get form definition to convert category table " .
                                   " for topic $web.$topic" );
                                   
@@ -562,7 +582,6 @@ sub upgradeCategoryTable
             return;
         }
         
-        my $defaultFormTemplate = $formTemplates[0];
         my @fieldsInfo = getFormDef( $web, $defaultFormTemplate );
         $meta->put( "FORM", ( name => $defaultFormTemplate ) );
         
@@ -584,8 +603,9 @@ sub upgradeCategoryTable
            $meta->put( "FIELD", @args );
         }
 
+    } else {
+        &TWiki::writeWarning( "Form: get find category template twikicatitems for Web $web" );
     }
-    
     
     return $text;
 }
