@@ -821,7 +821,7 @@ if ( $showLocales ) {		# Only if TWiki.pm found
 	print "Unable to set locale to $siteLocale, actual locale is $currentLocale\n";
 	print "- please test your locale settings. This warning can be ignored\n";
 	print "if you are not planning to use locales (e.g. your site uses English only)\n";
-	print "- or you can set <b>$siteLocale</b>to <code>C<code>, which should always work.\n";
+	print "- or you can set <b>$siteLocale</b> to <code>C</code>, which should always work.\n";
 	print "</td></tr>\n";
     }
 
