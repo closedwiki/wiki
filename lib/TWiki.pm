@@ -323,7 +323,7 @@ sub writeHeaderFull
     ##writeDebug( "===== After trim, Headers are:\n$coreHeaders" );
 
     # Wiki Plugin Hook - get additional headers from plugin
-    $pluginHeaders = &TWiki::Plugins::writeHeaderHandler( $query );
+    $pluginHeaders = &TWiki::Plugins::writeHeaderHandler( $query ) || '';
 
     # Delete any trailing blank line
     $pluginHeaders =~ s/\r\n\r\n$/\r\n/so;
@@ -617,7 +617,7 @@ sub getTWikiLibDir
 
     # fix relative path
     if( $twikiLibDir =~ /^\./ ) {
-        my $curr = getcwd();
+        my $curr = cwd();
         $twikiLibDir = "$curr/$twikiLibDir/";
         # normalize "/../" and "/./"
         $twikiLibDir =~ s|([\\/])[^\\/]+[\\/]\.\.[\\/]|$1|go;
