@@ -10,10 +10,12 @@ This upgrade is somewhat more labor intensive, mainly caused by splitting up the
 
 These are the steps you need to perform to upgrade the 01 May 2000 version to the 01 Dec 2000 release: [ We assume =export TWIKIROOT=/some/dir/= ]
 
-	* Unpack the beta zip file into some working directory:
+	* __Backup__ all existing TWiki directories ( =bin=, =pub=, =data=, =templates= )
+
+	* __Unpack the zip file__ into some working directory:
 	  <br> =mkdir -p ~/tmp/=
 	  <br> =cd ~/tmp=
-	  <br> =unzip ~/TWiki20001105.zip=
+	  <br> =unzip ~/TWiki20001201.zip=
 
 	* __Upgrade the TWiki document files__ ( =twiki= )
 		* Move the document files to your TWiki root, i.e.
@@ -50,17 +52,27 @@ These are the steps you need to perform to upgrade the 01 May 2000 version to th
 		* Move the new =twiki/pub/TWiki= directory to your installation, i.e.
 		  <br> =mv ~/tmp/pub/TWiki $TWIKIROOT/pub/=
 		* Pay attention to the file permissions of the =TWiki= directory and its subdirectory and files. The files must be writable by the cgi-scripts (usually user "nobody")
+		* Move the new =twiki/pub/twikilogo*= image files to your installation, i.e.
+		  <br> =mv ~/tmp/pub/twikilogo* $TWIKIROOT/pub/=
 
 	* __Upgrade data files__ ( =twiki/data= )
 		* Move the new =twiki/data/TWiki= directory to your installation, i.e.
 		  <br> =mv ~/tmp/data/TWiki $TWIKIROOT/data/=
-		* Pay attention to the file permissions of the =TWiki= directory and its files. The files must be writable by the cgi-scripts (usually user "nobody")
+		  <br> Pay attention to the file permissions of the =TWiki= directory and its files. The files must be writable by the cgi-scripts (usually user "nobody")
+		* Optionally move the new =twiki/data/Test= directory to your installation, i.e.
+		  <br> =mv ~/tmp/data/Test $TWIKIROOT/data/=
+		  <br> (Pay attention to the file permissions)
+		* Move these new TWiki.Main web topics to your TWiki.Main web: =TWikiGroups=, =TWikiAdminGroup=, and if needed also =OfficeLocations= , i.e.
+		  <br> =mv ~/tmp/data/Main/TWikiGroups.* $TWIKIROOT/data/Main=
+		  <br> (Pay attention to the file permissions)
+		* The following topics in the TWiki.Main web are obsolete and can be deleted: =BillClinton=, =GoodStyle=, =RegularExpression=, =TextFormattingFAQ=, =TextFormattingRules=, =TWikiAdministration=, =TWikiCategoryTable=, =TWikiEnhancementRequests=, =TWikiImplementationNotes=, =TWikiInstallationNotes=, =TWikiNotificationOfChanges=, =TWikiPlannedFeatures=, =TWikiUpgradeTo01May2000=, =TWikiUsernameVsLoginUsername=, =TWikiWeb=, =WelcomeGuest=, =WelcomeVisitor=, =WikiName=, =WikiNotation=, =WikiTopic=, =WikiWikiClones=. Sample delete command:
+		  <br> =rm -f $TWIKIROOT/data/Main/BillClinton.*=
 		* The following topics are new and most be copied to all of your TWiki webs: =WebChanges=, =WebIndex=.
 		  <br> =cp -p $TWIKIROOT/data/TWiki/WebChanges.txt* $TWIKIROOT/data/Main=
 		  <br> =cp -p $TWIKIROOT/data/TWiki/WebIndex.txt* $TWIKIROOT/data/Main=
 		  <br> Repeat this for all your webs. Pay attention to the file permissions.
 		* =TWikiRegistration= moved from TWiki.Main to TWiki.TWiki. In case you customized =TWikiRegistration= , merge your changes back into =TWiki.TWikiRegistration= , then delete =$TWIKIROOT/data/Main/TWikiRegistration*=.
-		* =TWikiPreferences= moved from TWiki.Main to TWiki.TWiki. Merge your changes to =TWikiPreferences= into =TWiki.TWikiPreferences=, then delete =$TWIKIROOT/data/Main/TWikiPreferences*=.
+		* =TWikiPreferences= moved from TWiki.Main to TWiki.TWiki. Merge your changes to =TWikiPreferences= into =TWiki.TWikiPreferences=.
 		* Modify the =WebPreferences= topics in all your webs to reflect the following:
 			* =WEBTOPICLIST= should use =WebChanges= for ="Changes"=, and =WebIndex= for ="Index"=, i.e.
 			  <br> =| &lt;a href="WebChanges"&gt;Changes&lt;/a&gt;=
@@ -71,13 +83,11 @@ These are the steps you need to perform to upgrade the 01 May 2000 version to th
 		* Change the =WebHome= topics in all your webs to reflect these changes:
 			1. The "Changes" link should point to =WebChanges=.
 			2. The "Topic index" link should point to =WebIndex=.
-			3. Change the include of the web table to =%<nop>INCLUDE{"TWiki.TWikiWebsTable"}%=
+			3. Change the include of the web table to =%<nop>INCLUDE{"%<nop>TWIKIWEB%.TWikiWebsTable"}%=
 		* Merge your =TWikiWebsTable= topic in TWiki.Main with the =TWikiWebsTable= topic in TWiki.TWiki. Note the new variable to query the color of a web. Delete the old =TWikiWebsTable= topic in TWiki.Main after merge is complete.
-		* The following topics in the TWiki.Main web are depreciated (because they moved to TWiki.TWiki), but still need to be present in TWiki.Main because of existing links to these topics: =FileAttachment=, =TWikiDocumentation=, =TWikiHistory=, =TWikiPreferences=, =TWikiVariables=.
+		* The following topics in the TWiki.Main web are depreciated (because they moved to TWiki.TWiki), but still need to be present in TWiki.Main because of existing links to them: =FileAttachment=, =TWikiDocumentation=, =TWikiHistory=, =TWikiPreferences=, =TWikiVariables=.
 		  <br> It is recommended to edit these topics in TWiki.Main and replace the content with this line:
 		  <br> =This topic moved to %<nop>TWIKIWEB%.%<nop>TOPIC% in the %<nop>WIKITOOLNAME%.%<nop>TWIKIWEB% web.=
-		* The following topics in the TWiki.Main web are obsolete and can be deleted: =BillClinton=, =GoodStyle=, =RegularExpression=, =TextFormattingFAQ=, =TextFormattingRules=, =TWikiAdministration=, =TWikiCategoryTable=, =TWikiEnhancementRequests=, =TWikiImplementationNotes=, =TWikiInstallationNotes=, =TWikiNotificationOfChanges=, =TWikiPlannedFeatures=, =TWikiUpgradeTo01May2000=, =TWikiUsernameVsLoginUsername=, =TWikiWeb=, =WelcomeGuest=, =WelcomeVisitor=, =WikiName=, =WikiNotation=, =WikiTopic=, =WikiWikiClones=. Sample delete command:
-		  <br> =rm -f $TWIKIROOT/data/Main/BillClinton.*=
 		* In all your webs, change references to topics that moved to the TWiki.TWiki web:
 			* Change topics: =TWikiUsers= , =WebNotify= , =WebHome=
 			* With links to: =TWikiPreferences= , =TWikiVariables= , =TWikiUsers= , =TWikiWebsTable= and =WelcomeGuest=
