@@ -99,7 +99,6 @@ public class TWikiEdit extends Applet implements Application {
             getParameter("useframe").equals("yes");
 
 	controls = null;
-
 	String text = getFieldValue("text");
 	String ct = getFieldValue("controls");
 	try {
@@ -144,7 +143,6 @@ public class TWikiEdit extends Applet implements Application {
      * Provided for JavaScript to get the value of the text
      */
     public String getText() {
-	System.out.println("Got text " + textarea.getText());
 	return textarea.getText();
     }
 

@@ -168,12 +168,29 @@ public class HTML2TWiki {
 	linkCallback = cb;
     }
 
-    // Only if NAME is wikiword
+    // See if NAME is a valid wikiword
     // [:upper:]+[:lower:]+[:upper:]+[:alpha:]
+    private boolean isWikiWord(String name) {
+	int i = 0, n = name.length();
+	while (i < n && Character.isUpperCase(name.charAt(i)))
+	    i++;
+	while (i < n && Character.isLowerCase(name.charAt(i)))
+	    i++;
+	while (i < n && Character.isUpperCase(name.charAt(i)))
+	    i++;
+	while (i < n && Character.isLetterOrDigit(name.charAt(i)))
+	    i++;
+	return i == n;
+    }
+
     public void openA(HTMLTag node) {
 	// This only occurs when its <A NAME=
 	// <A HREF= gets caught as a HTMLLinkNode
-	out.println("\n#" + node.getParameter("NAME"));
+	String name = node.getParameter("NAME");
+	if (isWikiWord(name))
+	    out.println("\n#" + name);
+	else
+	    out.print("\n" + toHTML(node));
     }
 
     public void closeA(HTMLEndTag node) {
@@ -366,13 +383,18 @@ public class HTML2TWiki {
 
     /**
      * Format while stripping Core Attributes ID, STYLE, CLASS, TITLE
-     * and renaming the tag
+     * and renaming the tag if required.
      */
     private String toHTML(HTMLNode tag, String rename) {
 	if (!(tag instanceof HTMLTag))
+	    // HTMLEndTag
 	    return tag.toHTML();
 	Hashtable h = ((HTMLTag)tag).parseParameters();
-	String res = "<" + ((rename != null) ? rename : h.get(HTMLTag.TAGNAME));
+	String res = "<";
+	if (rename != null)
+	    res += rename;
+	else
+	    res += h.get(HTMLTag.TAGNAME);
 	h.remove(HTMLTag.TAGNAME);
 	h.remove("ID");
 	h.remove("STYLE");
@@ -389,6 +411,10 @@ public class HTML2TWiki {
 	return res + ">";
     }
 
+    /**
+     * Look for a method named (open|close)<tag> in this class and
+     * call it for the tag
+     */
     private void processElement(boolean open, String tag, HTMLNode node) {
 	String type = (open ? "open" : "close");
 	try {
@@ -472,7 +498,7 @@ public class HTML2TWiki {
 		if (ignore.get(tag) != null) {
 		    // ignore
 		} else if (passThrough.get(tag) != null) {
-		    out.print(toHTML(node));
+		    out.print("\n" + toHTML(node));
 		} else if (translate.get(tag) != null) {
 		    out.print(toHTML(node, (String)translate.get(tag)));
 		} else if (ignoreToClose.get(tag) != null) {
