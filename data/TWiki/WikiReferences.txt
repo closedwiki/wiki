@@ -1,26 +1,38 @@
-%META:TOPICINFO{author="PeterThoeny" date="1013454978" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092622969" format="1.0" version="1.3"}%
 %META:TOPICPARENT{name="TWikiSite"}%
----+ References on Wiki and Collaboration
+---+!! References on Wiki and Collaboration
 
 Some useful articles and books around collaboration and the Wiki technology in particular. 
+
+%TOC%
 
 ---++ Wiki Technology and TWiki
 
 	* Book: The Wiki Way, Quick Collaboration on the Web; by Bo Leuf and Ward Cunningham; Addison-Wesley Pub Co; ISBN:020171499X
 
+	* Presentation: Wiki, a Shared Blog for the Corporate World; by Peter Thoeny; !LinuxWorld; 05 Aug 2004; http://TWiki.org/cgi-bin/view/Codev/TWikiPresentation05Aug2004
+
+	* Article: 'Wiki' May Alter How Employees Work Together; by Kara Swisher; Wall Street Journal; 29 Jul 2004; http://online.wsj.com/article/0,,SB109105974578777189,00.html (subscription required)
+
+	* Article: Something Wiki This Way Comes: They're Web sites anyone can edit -- and they could transform Corporate America; by Rob Hof; !BusinessWeek; 07 Jun 2004; http://www.businessweek.com/magazine/content/04_23/b3886138.htm
+
+	* Article: Wiki Time; by Jeremy Zawodny; Linux Magazine; 01 Dec 2002 - http://www.linux-mag.com/2002-12/lamp_01.html
+
 	* Article: Corporate Collaboration With TWiki; by Peter Thoeny; Web Techniques Magazine; December 2000; http://www.webtechniques.com/archives/2000/12/thoeny/
+
+	* Article: Mr. TWiki's Collaboration Software; by Nancy Cohen; Open Magazine; 01 Aug 2002; http://www.open-mag.com/9143483279.htm
 
 	* Article: Tool of the Month: TWiki; by Joe "Zonker" Brockmeier; <nop>UnixReview.com; January 2002; http://www.unixreview.com/documents/s=1820/uni1011715271489/0201j.htm
 
-	* Presentation: TWiki Collaboration Tool - A Mature and Full Featured Platform for building Web Based Groupware Applications; by Peter Thoeny; TWiki:Main/TWikiPlatformPresentation
-
 	* Directory: Google.com &gt; Computers &gt; Software &gt; Groupware &gt; Wiki; http://directory.google.com/Top/Computers/Software/Groupware/Wiki/
+
+	* See also TWiki:Codev.TWikiInTheNews and TWiki:Codev.WikiInTheNews
 
 ---++ Collaboration and Knowledge Management
 
-	* Article: Internet Groupware for Scientific Collaboration; Jon Udell; Software Carpentry; http://software-carpentry.codesourcery.com/Groupware/report.html 
+	* Article: Internet Groupware for Scientific Collaboration; Jon Udell; http://udell.roninhouse.com/GroupwareReport.html
 
-	* Directory: Google.com &t; Reference &t; Knowledge Management; http://directory.google.com/Top/Reference/Knowledge_Management/
+	* Directory: Google.com &gt; Reference &gt; Knowledge Management; http://directory.google.com/Top/Reference/Knowledge_Management/
 
 	* Book: The Knowledge Management Toolkit: Practical Techniques for Building a Knowledge Management System; by Amrit Tiwana; Prentice Hall PTR; ISBN:0130128538
 
@@ -35,5 +47,5 @@ Some useful articles and books around collaboration and the Wiki technology in p
 
 	* Book: Extreme Programming Explored; by William C. Wake and Bill Wake; Addison-Wesley Pub Co; ISBN:0201733978
 
+-- TWiki:Main.PeterThoeny - 15 Aug 2004
 
--- Main.PeterThoeny - 27 Jul 2001 <br>
