@@ -87,7 +87,7 @@ public class FileUploader
     }
 	
 	void appendDispositionToOutputStream(DataOutputStream outStream, String fileName) throws IOException {
-		String contentDispositionLines = "XXContent-Disposition: form-data; name=\"filepath\";" + " filename=\"{0}\"" + lineEnd +lineEnd;
+		String contentDispositionLines = "Content-Disposition: form-data; name=\"filepath\";" + " filename=\"{0}\"" + lineEnd +lineEnd;
 		Object[] args = {fileName};
 		outStream.writeBytes(MessageFormat.format(contentDispositionLines, args));		
 	}
