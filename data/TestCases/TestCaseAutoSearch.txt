@@ -1,0 +1,74 @@
+Description: Automated search function tests
+
+Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "classic" skin.
+
+---++ Actual
+%SEARCH{ "hit me with your rhythm stick" }%
+
+---++ Actual
+%SEARCH{ search="hit me with your rhythm stick" }%
+
+---++ Actual
+%SEARCH{ "sausages" search="hit me with your rhythm stick" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+---++ Actual
+%SEARCH{ "WhatIsWikiWiki" scope="topic" web="TestCases, TWiki" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+---++ Actual
+%SEARCH{ "WhatIsWikiWiki" web="all" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+---++ Actual
+%SEARCH{ "hit me with" topic="TWiki*" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+---++ Actual
+%SEARCH{ "your rythm" topic="TestCase*" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+---++ Actual
+%SEARCH{ "your rythm" excludetopic="TestCaseAutoSearch" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+---++ Actual
+%SEARCH{ "your rythm" excludetopic="TestCaseAuto*" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+---++ Actual
+%SEARCH{ "hit me" excludetopic="TestCaseAutoSearch, WhatIsWikiWiki" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+---++ Actual
+%SEARCH{ "hit me" web="TestCases" multiple="on" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+---++ Actual
+%SEARCH{ "hit\s*me" web="TestCases" type="regex" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+---++ Actual
+%SEARCH{ "hit me -schmerz" web="TestCases" type="keyword" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+---++ Actual
+%SEARCH{ "What" web="TestCases" scope="topic" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+---++ Actual
+%SEARCH{ "WhatIsWikiWiki" web="TestCases" scope="all" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+
+      order="topic" (default)
+      order="created"
+      order="modified"
+      order="editby"
+      order="formfield(name)"
+
+      limit="all" (default, no limit)
+      limit="16"
+
+      reverse="on"
+      casesensitive="on"
+      nosummary="on"
+      bookview="on"
+      nosearch="on"
+      noheader="on"
+      nototal="on"
+      header="..."
+      format="..."
+
+      expandvariables="on"
+
+
+      separator=", " (default newline)
+
+      newline="%BR%" 	Line separator within a search hit, effective only in FormattedSearch.
