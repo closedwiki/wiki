@@ -64,16 +64,16 @@
 
 
 
-%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
+%TMPL:DEF{"webaction"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"topbar"}%<div class="twikiHidden"><a href="#Content">Skip to topic</a> | <a href="#PageBottom">Skip to bottom</a><hr /></div><div class="twikiTopBar"><div class="twikiTopBarMainContents">%INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div>%TMPL:END%
+%TMPL:DEF{"topbar"}%<div class="twikiHidden"><a href="#Content">Skip to topic</a> | <a href="#PageBottom">Skip to bottom</a><hr /></div><div class="twikiTopBar"><div class="twikiTopBarMainContents"><form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> %INCLUDE{"%TWIKIWEB%.WebTopBar"}%</form></div></div>%TMPL:END%
 
 
 
-%TMPL:DEF{"leftbar"}%<div class="twikiLeftBar"><div class="twikiLeftBarContents">
-%INCLUDE{"%TWIKIWEB%.WebLeftBar"}%</div></div>%TMPL:END%
+%TMPL:DEF{"leftbar"}%<div class="twikiLeftBar"><div class="twikiLeftBarContents"><form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> 
+%INCLUDE{"%TWIKIWEB%.WebLeftBar"}%</form></div></div>%TMPL:END%
 
 
 
