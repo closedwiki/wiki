@@ -182,8 +182,8 @@ Returns where downloaded distribution files should be stored
 
 sub getDistributionTopicDir {
     my $pubDir = TWiki::Func::getPubDir();
-    my $webTopic = TWiki::Contrib::DistributionContrib::DistributionFetcher::getDistributionTopic();
-  	my $webTopicDir =~ s!\.!/!;
+    my $webTopicDir = TWiki::Contrib::DistributionContrib::DistributionFetcher::getDistributionTopic();
+  	$webTopicDir =~ s!\.!/!;
 	my $attachmentDir = $pubDir."/".$webTopicDir;
     return $attachmentDir;	
 }
