@@ -155,7 +155,7 @@ sub main
     if( $topicExists ) {
         my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
         $user = &wiki::userToWikiName( $user );
-        my $temp = &wiki::getRenderedVersion( "r1.$rev - $date by $user" );
+        my $temp = &wiki::getRenderedVersion( "r1.$rev - $date GMT - $user" );
         $tmpl =~ s/%REVINFO%/$temp/go;
     } else {
         $tmpl =~ s/%REVINFO%//go;

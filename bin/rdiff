@@ -90,15 +90,15 @@ sub getRevInfo
 
     my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
     $user = &wiki::userToWikiName( $user );
-    my $revInfo = &wiki::getRenderedVersion( "$date - $user" );
+    my $revInfo = &wiki::getRenderedVersion( "$date GMT - $user" );
     if( $short ) {
         # cut time
-        $revInfo =~ s/ \- [0-9]*\:[0-9]*//go;
+        $revInfo =~ s/ \- [0-9]*\:[0-9]*(?:\sGMT)*//go;
         # eliminate white space to prevent wrap around in HR table:
         $revInfo =~ s/ /\&nbsp\;/go;
     }
 
-    $revInfo =~ s/\n//go;
+    $revInfo =~ s/[\n\r]*//go;
     return $revInfo;
 }
 
