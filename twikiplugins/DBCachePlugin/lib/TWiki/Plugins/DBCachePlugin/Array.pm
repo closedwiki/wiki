@@ -57,7 +57,7 @@ Add an element to the end of the array
 
 =begin text
 
----+++ =find($object) -> integer
+---+++ =find($object)= -> integer
    * $object datum of the same type as the content of the array
 Uses "==" to find the given element in the array and return it's index
 
@@ -75,7 +75,7 @@ Uses "==" to find the given element in the array and return it's index
 
 =begin text
 
----+++ =remove($index)
+---+++ =remove($index)=
    * =$index= - integer index
 Remove an entry at an index from the array.
 
@@ -88,7 +88,7 @@ Remove an entry at an index from the array.
 
 =begin text
 
----+++ =get($index)=
+---+++ =get($index)= -> object
    * =$index= - integer index
 Get the element at an index. if =$index= is not an integer, will return the result
 of $this->sum($index)
@@ -107,7 +107,7 @@ of $this->sum($index)
 
 =begin text
 
----+++ =size()=
+---+++ =size()= -> integer
 Get the size of the array
 
 =cut
@@ -120,7 +120,7 @@ Get the size of the array
 
 =begin text
 
----+++ =sum($field)=
+---+++ =sum($field)= -> number
    * =$field= - name of a field in the class of objects stored by this array
 Returns the sum of values of the given field in the objects stored in this array.
 
@@ -185,7 +185,7 @@ values. Return a =DBCachePlugin::Array= of matching entries.
 
 =begin text
 
----+++ =getValues()=
+---+++ =getValues()= -> perl array
 
 Get a "perl" array of the values in the array, suitable for use with =foreach=
 

@@ -217,7 +217,7 @@ Read a 32-bit integer from the archive
   
 =begin text
 
----+++ =readObject()=
+---+++ =readObject()= -> object
 Read an object from the archive
 
 =cut

@@ -68,7 +68,7 @@ value may be a word or a quoted string (no escapes!)
 
 =begin text
 
----+++ =get($k)=
+---+++ =fastget($k)= -> datum
    * =$k= - key
 Get the value for a key, but without any subfield field expansion
 
@@ -81,7 +81,7 @@ Get the value for a key, but without any subfield field expansion
 
 =begin text
 
----+++ =get($k)=
+---+++ =get($k)= -> datum
    * =$k= - key
 Get the value corresponding to this key; return undef if not set.
 If =$k= is a string of the form =X.Y= then the result will be the
@@ -99,9 +99,9 @@ of calling =X->sum("Y")=.
       my $field = $2;
       $attr = $this->{keys}{$1};
       if ( defined( $attr ) && ref( $attr )) {
-	return $attr->get( $field );
+		return $attr->get( $field );
       } else {
-	return undef;
+		return undef;
       }
     } else {
       return $this->{keys}{$attr};
@@ -133,7 +133,7 @@ Set the given key, value pair in the map.
 
 =begin text
 
----+++ =size()=
+---+++ =size()= -> integer
 Get the size of the map
 
 =cut
@@ -146,7 +146,7 @@ Get the size of the map
 
 =begin text
 
----+++ =remove($index) -> old value
+---+++ =remove($index)= -> old value
    * =$index= - integer index
 Remove an entry at an index from the array. Return the old value.
 
@@ -168,7 +168,7 @@ Remove an entry at an index from the array. Return the old value.
 
 =begin text
 
----+++ =getKeys()=
+---+++ =getKeys()= -> perl array
 
 Get a "perl" array of the keys in the map, suitable for use with =foreach=
 
@@ -182,7 +182,7 @@ Get a "perl" array of the keys in the map, suitable for use with =foreach=
 
 =begin text
 
----+++ =getValues()=
+---+++ =getValues()= -> perl array
 
 Get a "perl" array of the values in the Map, suitable for use with =foreach=
 
