@@ -3,13 +3,11 @@
 <head>
  <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
+ <meta name="expires" content="0" />
  <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_EDIT%
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
 <script language="JavaScript">
 <!--HIDE
-function initForm() {
-  document.main.text.focus();
-}
 function checkAll( theButton, theButtonOffset, theNum, theCheck )
 {
   // find button element index
@@ -37,7 +35,7 @@ function launchWindow( theWeb, theTopic ) {
 //STOP HIDING-->
 </script>
 </head>
-<body bgcolor="#ffffff" onLoad="initForm()">
+<body bgcolor="#ffffff">
 #PageTop
 <form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 %TMPL:DEF{"titleaction"}%(edit)%TMPL:END%

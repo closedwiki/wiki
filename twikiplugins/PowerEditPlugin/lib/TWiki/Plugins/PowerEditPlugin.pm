@@ -75,7 +75,14 @@ sub beforeEditHandler {
   $controls = $query->hidden( -name=>"controls", -value=>$controls );
   $tmpl =~ s/%CONTROLS%/$controls/go;
 
-  my $text = $query->hidden( -name=>"text", -value=>$_[0] );
+  my $text = $_[0];
+  # Undo the nasties done by the edit script so the correct text
+  # will go in the parameter
+  $text =~ s/&lt\;/</go;
+  $text =~ s/&gt\;/>/go;
+  $text =~ s/&amp\;/&/go;
+
+  $text = $query->hidden( -name=>"text", -value=>$text );
   $tmpl =~ s/%TEXT%/$text/go;
 
   $_[0] = $tmpl;
