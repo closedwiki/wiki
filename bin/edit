@@ -32,120 +32,6 @@ $query = new CGI;
 
 &main();
 
-sub buildCategoryItem
-{
-    my ( $catitems, $ctext ) = @_;
-    my $catname = "";
-    my $scatname = "";
-    my $catmodifier = "";
-    my $catvalue = "";
-    my @cmd = split( /\|/, $catitems );
-    my $src = "";
-    my $len = @cmd;
-    if( $len < "2" ) {
-        return ( $catname, $catmodifier, $catvalue )
-    }
-    
-    my $i;
-    my $itemsPerLine;
-
-    # check for CategoryName=CategoryValue parameter
-    my $cvalue = $query->param( $cmd[1] );
-    if( $cvalue ) {
-        $src = "<!---->$cvalue<!---->";
-    } elsif( $ctext ) {
-        foreach( split( /\n/, $ctext ) ) {
-            if( /$cmd[1]/ ) {
-                $src = $_;
-                last;
-            }
-        }
-    }
-
-    if( $cmd[0] eq "select" ) {
-        $catname = $cmd[1];
-        $scatname = $catname;
-        $scatname =~ s/[^a-zA-Z0-9]//g;
-        my $size = $cmd[2];
-        $catvalue = "<select name=\"$scatname\" size=\"$size\">";
-        for( $i = 3; $i < $len; $i++ ) {
-            my $value = $cmd[$i];
-            my $svalue = $value;
-            $svalue =~ s/[^a-zA-Z0-9]//g;
-            my $flag = "";
-            if( $src =~ /$value/ ) {
-                $flag = "selected";
-            }
-            $catvalue = "$catvalue\n<option value=\"$svalue\" $flag>$value";
-        }
-        $catvalue = "$catvalue\n</select>";
-
-    } elsif( $cmd[0] eq "checkbox" ) {
-        $catname = $cmd[1];
-        $scatname = $catname;
-        $scatname =~ s/[^a-zA-Z0-9]//g;
-        if( $cmd[2] eq "true" || $cmd[2] eq "1" ) {
-            $i = $len - 4;
-            $catmodifier = "$catmodifier\n<input type=\"button\" value=\" Set \" onClick=\"checkAll(this, 2, $i, true)\">&nbsp;";
-            $catmodifier = "$catmodifier\n<input type=\"button\" value=\"Clear\" onClick=\"checkAll(this, 1, $i, false)\">&nbsp;";
-        }
-        $itemsPerLine = $cmd[3];
-        $catvalue = "\n<table cellspacing=\"0\" cellpadding=\"0\"><tr>";
-        for( $i = 4; $i < $len; $i++ ) {
-            my $value = $cmd[$i];
-            my $svalue = $value;
-            $svalue =~ s/[^a-zA-Z0-9]//g;
-            my $flag = "";
-            if( $src =~ /$value[^a-zA-Z0-9\.]/ ) {
-                $flag = "checked";
-            }
-            $catvalue = "$catvalue\n<td><input type=\"checkbox\" name=\"$scatname$svalue\" $flag>$value &nbsp;&nbsp;</td>";
-            if( ( $itemsPerLine > 0 ) && (($i-4) % $itemsPerLine == $itemsPerLine - 1 ) ) {
-                $catvalue = "$catvalue\n</tr><tr>";
-            }
-        }
-        $catvalue = "$catvalue\n</tr></table>\n";
-
-    } elsif( $cmd[0] eq "radio" ) {
-        $catname = $cmd[1];
-        $scatname = $catname;
-        $scatname =~ s/[^a-zA-Z0-9]//g;
-        $itemsPerLine = $cmd[2];
-        $catvalue = "\n<table cellspacing=\"0\" cellpadding=\"0\"><tr>";
-        for( $i = 3; $i < $len; $i++ ) {
-            my $value = $cmd[$i];
-            my $svalue = $value;
-            $svalue =~ s/[^a-zA-Z0-9]//g;
-            my $flag = "";
-            if( $src =~ /$value[^a-zA-Z0-9\.]/ ) {
-                $flag = "checked";
-            } elsif( ( $scatname eq "UseCategory" ) && 
-                     ( ( $i == 3 && $ctext ) || ( $i == 4 && ! $ctext ) ) ) {
-                $flag = "checked";
-            }
-            $catvalue = "$catvalue\n<td><input type=\"radio\" name=\"$scatname\" value=\"$svalue\" $flag>$value &nbsp;&nbsp;</td>";
-            if( ( $itemsPerLine > 0 ) && (($i-3) % $itemsPerLine == $itemsPerLine - 1 ) ) {
-                $catvalue = "$catvalue\n</tr><tr>";
-            }
-        }
-        $catvalue = "$catvalue\n</tr></table>\n";
-
-    } elsif( $cmd[0] eq "text" ) {
-        $catname = $cmd[1];
-        $scatname = $catname;
-        $scatname =~ s/[^a-zA-Z0-9]//g;
-        $src =~ /<!---->(.*)<!---->/;
-        if( $1 ) {
-            $src = $1;
-        } else {
-            $src = "";
-        }
-        $catvalue = "<input type=\"text\" name=\"$scatname\" size=\"$cmd[2]\" value=\"$src\" >";
-    }
-
-    return ( $catname, $catmodifier, $catvalue )
-}
-
 sub main
 {
     my $thePathInfo = $query->path_info(); 
@@ -161,17 +47,8 @@ sub main
     my $breakLock = $query->param( 'breaklock' ) || "";
     my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
     my $tmpl = "";
-    my $tcat = "";
-    my $icat = "";
     my $text = "";
     my @meta = ();
-    my $before = "";
-    my $atext = "";
-    my $ctext = "";
-    my $after = "";
-    my $catname = "";
-    my $catmod = "";
-    my $catvalue = "";
     my $extra = "";
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
@@ -236,7 +113,6 @@ sub main
     # get edit template, standard or a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
     $tmpl = &TWiki::Store::readTemplate( "edit", $topic, $skin );
-    $icat = &TWiki::Store::readTemplate( "twikicatitems" );
     if( ! &TWiki::Store::topicExists( $webName, $topic ) ) {
         my $templateTopic = $query->param( "templatetopic" ) || "";
         if( $templateTopic ) {
@@ -252,64 +128,49 @@ sub main
         $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
     }
     
-    # FIXME - note that this does not allow for multiple classifications
     my $oldargsr;
-    ( $oldargsr, @meta ) = &TWiki::Store::metaExtract( "CLASSIFICATION", "", "", @meta );
+    my $formTemplate = $query->param( "formtemplate" );
+    if( $formTemplate ) {
+       # FIXME temporary because potentially shared fields
+       my @args = ( name => $formTemplate );
+       @meta = &TWiki::Store::metaRemove( "FORM", @meta );
+       if( $formTemplate ne "none" ) {
+          @meta = &TWiki::Store::metaUpdate( "FORM", \@args, "name", @meta);
+       } else {
+          $formTemplate = "";
+       }
+       $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
+       $text = $query->param( 'text' );
+    } else {
+       $tmpl =~ s/%FORMTEMPLATE%//go;
+    }
+    
+    ( $oldargsr, @meta ) = &TWiki::Store::metaExtract( "FORM", "", "", @meta );
     my @oldargs = @$oldargsr;
     if( @oldargs ) {
        my %args = @oldargs;
-       my $classification = $args{"name"};
-       my @categoriesInfo = &TWiki::Classification::getCategoriesInfo( $webName, $classification );
-       my $catInfo = &TWiki::Classification::renderCategoryInfo( "edit", $classification, \@meta, @categoriesInfo );
-       my $catInfo = &TWiki::handleCommonTags( $catInfo, $topic, $webName );
-       my $catInfo = &TWiki::getRenderedVersion( $catInfo, $webName );
-       $tmpl =~ s/%CATEGORIES%/$catInfo/go;
+       my $form = $args{"name"};
+       my @fieldDefs = &TWiki::Form::getFormDef( $webName, $form );
+       my $formText = &TWiki::Form::renderForEdit( $webName, $form, \@meta, @fieldDefs );
+       my $formText = &TWiki::handleCommonTags( $formText, $topic, $webName );
+       my $formText = &TWiki::getRenderedVersion( $formText, $webName ); # FIXME need this?
+       $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } else {
-       $tmpl =~ s/%CATEGORIES%//go;
+       $tmpl =~ s/%FORMFIELDS%//go;
     }
-
-    if( $icat ) {
-        # extract category section and build category form elements
-        ( $before, $ctext, $after) = split( /<!--TWikiCat-->/, $text);
-        # cut TWikiCat part
-        $text = $before;
-        if( ! $ctext ) { $ctext = ""; }
-        if( $after ) {
-            $text .= $after;
-        }
-
-        $tcat = &TWiki::Store::readTemplate( "twikicatedit" );
-        if( ! $tcat ) {
-            $tcat = &TWiki::Store::readTemplate( "twikicatview" );
-        }
-        my $line = "";
-        my $ttext = "";
-        my $temp = "";
-        ( $before, $line, $after) = split( /%REPEAT%/, $tcat );
-        foreach( split( /\n/, $icat ) ) {
-            ( $catname, $catmod, $catvalue ) = buildCategoryItem( $_, $ctext );
-            if( $catname ) {
-                $catname = &TWiki::getRenderedVersion( $catname );
-                $temp = $line;
-                $temp =~ s/%CATNAME%/$catname/go;
-                $temp =~ s/%CATMODIFIER%/$catmod/go;
-                $temp =~ s/%CATVALUE%/$catvalue/go;
-                $ttext = "$ttext$temp";
-            }
-        }
-        $tcat = "$before$ttext$after";
-    }
-
+    
     if( $saveCmd ne "repRev" ) {
         # hide meta data
         $text =~ s/%META:.*?%\r?\n?//go;
+    }
+    
+    my $possibleForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$webName" );
+    if( $possibleForms ) {
+        $tmpl =~ s/%CHANGEFORM%/<INPUT type="submit" name="submitChangeForm" value=" &nbsp; Change Form &nbsp; ">%SEP%/go;
+        $tmpl =~ s/%SEP%/&TWiki::handleSep( $topic, $skin )/geo; # FIXME remove from here to handleCommonTags
 
-        # cut attachment section if not in debug mode
-        ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text );
-        $text = $before;
-        if( $after ) {
-            $text .= $after;
-        }
+    } else {
+        $tmpl =~ s/%CHANGEFORM%//go;
     }
 
     $text =~ s/&/&amp\;/go;
@@ -331,7 +192,6 @@ sub main
     $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
 
     $tmpl =~ s/%TEXT%/$text/go;
-    $tmpl =~ s/%TWIKICAT%/$tcat/go;
 
     print $tmpl;
 }
