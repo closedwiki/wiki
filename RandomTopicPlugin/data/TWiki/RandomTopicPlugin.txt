@@ -1,0 +1,75 @@
+---+ !! <nop>RandomTopicPlugin
+
+%TOC%
+
+Pick and display some random topic names/links.
+
+_( Discussion in TWiki:Plugins/RandomTopicPluginDev )_
+
+---++ Syntax Rules
+
+   * =%<nop>RANDOMTOPIC%= - inserts a single random topic name in it's place.
+   * =%<nop>RANDOMTOPIC{<i>params</i>}%= - inserts potentially more than one random topic, with user formatting. Parameters:
+      * topics="5" - Number of topics requested. Default is 1 topic
+      * include="^Web" - Perl regular expression. Only topics that match this expression will shown_. Default is set by RANDOMTOPICPLUGIN_INCLUDE (see below).
+      * exclude="^Web" - Perl regular expression. Any topics that match this expression will _never be shown_. Default is set by RANDOMTOPICPLUGIN_EXCLUDE (see below).
+      * format="<i> format string </i>" . The format string accepts 3 quoted parameters:
+         * =$t= will be expanded to =\t= (necessary for bullet lists)
+         * =$n= will be expanded to =\n= (So that things appear on separate lines - again for bullet lists
+         * =$topic= will be expanded to the randomly chosen name
+         * Default is a bullet list : "$t* $topic$n"
+
+---++ Examples
+
+	* =%<nop>RANDOMTOPIC{topics="5"}%= - 5 random topics as a bullet list
+	* =%<nop>RANDOMTOPIC{topics="5" format="| <nop>*<nop>$topic* | $topic|$n"}%=
+		* Provides 5 random topics.
+		* They will be formatted to look like this:
+<table border="1" cellspacing="0" cellpadding="1"> <tr><th bgcolor="#99CCCC"> <strong>TWikiMetaData</strong> </th><td>  <a href="/twiki/bin/oops/System/RandomTopicPlugin?template=oopspreview">TWikiMetaData</a> </td></tr>
+<tr><th bgcolor="#99CCCC"> <strong>TWikiTemplates</strong> </th><td>  <a href="/twiki/bin/oops/System/RandomTopicPlugin?template=oopspreview">TWikiTemplates</a> </td></tr>
+<tr><th bgcolor="#99CCCC"> <strong>TWikiUserAuthentication</strong> </th><td>  <a href="/twiki/bin/oops/System/RandomTopicPlugin?template=oopspreview">TWikiUserAuthentication</a> </td></tr>
+<tr><th bgcolor="#99CCCC"> <strong>HiddenAttachment</strong> </th><td>  <a href="/twiki/bin/oops/System/RandomTopicPlugin?template=oopspreview">HiddenAttachment</a> </td></tr>
+<tr><th bgcolor="#99CCCC"> <strong>WikiName</strong> </th><td>  <a href="/twiki/bin/oops/System/RandomTopicPlugin?template=oopspreview">WikiName</a> </td></tr>
+</table>
+   * =%<nop>RANDOMTOPIC{topics="10" exclude="^Web"}%= - 10 random topics, excluding any that start with "Web".
+
+---++ <nop>%TOPIC% Global Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Pick a selection of Random Topics
+   * Perl regular expression matching topics to be selected from
+      * Set INCLUDE = 
+   * Perl regular expression matching topics to be excluded
+      * Set EXCLUDE = ^Web
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+      %$MANIFEST%
+	* Test if the installation was successful:
+		* If you see a table below of 5 random topics then you have successfully installed this:
+----
+%RANDOMTOPIC{topics="5" format="| $topic |$n"}%
+----
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/MichaelSparks |
+|  Plugin Version: | %$VERSION% |
+| Change History: <!-- Most recent first --> ||
+|  15 Nov 2004 | 1.200 Crawford Currie - removed non-functional persist option, added exclude and include parameters, ported to Cairo & BuildCOntrib build system, add to CVS. |
+|  10 Jul 2003 | 1.010 Initial version |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Perl Version: | 5.005 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main/MichaelSparks - 10 Jul 2003
+-- TWiki:Main/CrawfordCurrie - %$DATE%
