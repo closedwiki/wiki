@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043918229" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044099332" format="1.0" version="1.2"}%
 %TOC%
 %STARTINCLUDE%
 ---# Windows Install Cookbook 
@@ -576,8 +576,7 @@ $ <b>rm */*~~~</b>
 
 	* *If something goes wrong:* to restore your existing files from the backup, just type =tar xzvf all-files.tar.gz= and all your files, both .txt and .txt,v, will be back as they were before the edits.
 
-You have now re-locked all the RCS files and are ready to start using TWiki!  Of course, testing that it works is always a good idea, so that's next.
-
+You have now re-locked all the RCS files and are almost ready to start using TWiki!  
 
 ---+++ Email setup
 
@@ -593,7 +592,7 @@ There are other settings to be made in TWikiPreferences, e.g. the =WIKIWEBMASTER
 
 ---++ Testing your TWiki installation
 
-Do try and exercise your TWiki in test mode before you release it to other users or put any significant data into it.
+It is important to test your TWiki installation before you release it to other users or put any significant data into it.
 
 Here are the main things to test:
 
