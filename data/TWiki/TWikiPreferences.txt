@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1022915578" format="1.0" version="1.33"}%
+%META:TOPICINFO{author="PeterThoeny" date="1023262455" format="1.0" version="1.34"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %MAINWEB%.%USERNAME%). 
@@ -39,8 +39,8 @@ The following are __site-level__ settings that affect all users in all webs on t
 	* Vertical size of text edit box: (can be overwritten by user preferences)
 		* Set EDITBOXHEIGHT = 15
 
-	* Style of text edit box. Set to =width: 100%= for full window width (default; this will overwrite the EDITBOXWIDTH setting), or =width: auto= to disable. This setting works for IE and some other recent browsers. (can be overwritten by user preferences)
-		* Set EDITBOXSTYLE = width: 100%
+	* Style of text edit box. Set to =width: 99%= for full window width (default; this will overwrite the EDITBOXWIDTH setting), or =width: auto= to disable. This setting works for IE and some other recent browsers. (can be overwritten by user preferences)
+		* Set EDITBOXSTYLE = width: 99%
 
 	* Default state of the __Release edit lock__ (UnlockTopic) check box in preview. Checkbox is initially checked if =Set RELEASEEDITLOCKCHECKBOX = checked="checked"=, or unchecked if empty. If checked, make sure to click on <u>Edit</u> to do more changes; do *not* go back in your browser to the edit page, or you risk that someone else will edit the topic at the same time: (can be overwritten by user preferences)
 		* Set RELEASEEDITLOCKCHECKBOX = 
