@@ -39,6 +39,33 @@ implements Difference.ModifiableText {
 
     private HTML2TWiki html2wiki = null;
 
+    private final static int CTRL_A = 'A' - 'A';
+    private final static int CTRL_B = 'B' - 'A';
+    private final static int CTRL_C = 'C' - 'A';
+    private final static int CTRL_D = 'D' - 'A';
+    private final static int CTRL_E = 'E' - 'A';
+    private final static int CTRL_F = 'F' - 'A';
+    private final static int CTRL_G = 'G' - 'A';
+    private final static int CTRL_H = 'H' - 'A';
+    private final static int CTRL_I = 'I' - 'A';
+    private final static int CTRL_J = 'J' - 'A';
+    private final static int CTRL_K = 'K' - 'A';
+    private final static int CTRL_L = 'L' - 'A';
+    private final static int CTRL_M = 'M' - 'A';
+    private final static int CTRL_N = 'N' - 'A';
+    private final static int CTRL_O = 'O' - 'A';
+    private final static int CTRL_P = 'P' - 'A';
+    private final static int CTRL_Q = 'Q' - 'A';
+    private final static int CTRL_R = 'R' - 'A';
+    private final static int CTRL_S = 'S' - 'A';
+    private final static int CTRL_T = 'T' - 'A';
+    private final static int CTRL_U = 'U' - 'A';
+    private final static int CTRL_V = 'V' - 'A';
+    private final static int CTRL_W = 'W' - 'A';
+    private final static int CTRL_X = 'X' - 'A';
+    private final static int CTRL_Y = 'Y' - 'A';
+    private final static int CTRL_Z = 'Z' - 'A';
+
     /**
      * Create a new searchable text area. The area must be reset
      * before it is usable.
@@ -121,6 +148,14 @@ implements Difference.ModifiableText {
     }
 
     /**
+     * Has the textarea been modified? If it has, the undo buffer will
+     * contain something.
+     */
+    public boolean isModified() {
+	return undoBuffer.hasUndo();
+    }
+
+    /**
      * Replay a macro command. Editor commands are delineated by % signs.
      */
     public void replayMacro(String macro) {
@@ -181,34 +216,16 @@ implements Difference.ModifiableText {
      */
     protected void processKeyEvent(KeyEvent k) {
 	int kc = k.getKeyChar();
-        if (kc < ' ') {
-            //System.out.println("prcoessKeyEvent Keycode " + k.getKeyCode() + " " + kc);
-            String command = null;
-            switch (kc) {
-            case 3:		// Ctrl+C
-                command = "copy"; break;
-            case 6:             // Ctrl+F
-                command = "find"; break;
-            case 14:            // Ctrl+N
-                command = "redo"; break;
-            case 18:	        // Ctrl+R
-                command = "replace"; break;
-            case 22:	        // Ctrl+V
-                command = "paste"; break;
-            case 24:	        // Ctrl+X
-                command = "cut"; break;
-            case 25:	        // Ctrl+Y
-                command = "undo"; break;
-            }
-            if (command != null) {
-                // consume all events associated with command keys. Otherwise
-                // over-enthusiastic Netscape will insert characters for them.
-                k.consume();
-                if (k.getID() == KeyEvent.KEY_PRESSED)
-                    doCommand(command);
-                return;
-            }
-        }
+	String command = application.getKeyCommand("" + ('A' + kc));
+	if (command != null) {
+	    // consume all events associated with command keys. Otherwise
+	    // default event handling will insert characters for them.
+	    k.consume();
+	    if (k.getID() == KeyEvent.KEY_PRESSED)
+		doCommand(command);
+	    return;
+	}
+
 	super.processKeyEvent(k);
     }
 

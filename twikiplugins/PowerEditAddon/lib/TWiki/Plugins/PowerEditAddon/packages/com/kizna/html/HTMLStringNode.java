@@ -102,6 +102,7 @@ public class HTMLStringNode extends HTMLNode
 			   (((i+1)<input.length()) &&  // test if next char available
 			    (((input.charAt(i+1)>='A') && (input.charAt(i+1)<='Z')) || // next char must be A-Z 
 			     ((input.charAt(i+1)>='a') && (input.charAt(i+1)<='z')) || // next char must be a-z
+			     (input.charAt(i+1)=='!') || // bugfix by Crawford Currie 1/3/2003
 			     (input.charAt(i+1)=='/'))))   // or next char is a '/' 
 			{
 				state = 2;

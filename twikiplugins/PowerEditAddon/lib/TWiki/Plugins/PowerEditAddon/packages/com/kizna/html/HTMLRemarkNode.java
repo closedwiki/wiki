@@ -93,6 +93,7 @@ public class HTMLRemarkNode extends HTMLNode
 		int i=position;
 		int inputLen = input.length();
 		char ch,prevChar=' ';
+
 		while (i < inputLen && state < 7)
 		{
 			ch = input.charAt(i);
@@ -153,11 +154,15 @@ public class HTMLRemarkNode extends HTMLNode
 			}
 			if (state > 1 && state < 7 && i == input.length() - 1)
 			{
-				// We need to continue parsing to the next line
+			    // We need to continue parsing to the next line
+			    // bugfix: Crawford Currie 1/3/2003 - put in loop to eat blank lines
+			    // in state 4
+			    do {
 				input = reader.getNextLine();
 				tagContents.append("\n");
 				inputLen = input.length();
-				i=-1;
+			    } while (state == 4 && inputLen == 0);
+			    i=-1;
 			}		
 			i++;
 			prevChar = ch;

@@ -254,6 +254,7 @@ public Enumeration getScanners() {
 	/*
 	 * The main program, which can be executed from the command line
 	 */
+/* Commented out to lighten jar - CC 2/3/03
 	public static void main(String [] args)
 	{
 		System.out.println("HTMLParser v"+VERSION_STRING);
@@ -294,6 +295,7 @@ public Enumeration getScanners() {
 		parser.parse(null);
 
 	}
+*/
 	/**
 	 * Opens the connection with the resource to begin reading, by creating a HTML reader
 	 * object.
@@ -376,6 +378,7 @@ public Enumeration getScanners() {
  * parser.registerScanners();
  * </pre>
  */ 
+/* Commented out to lighten Jar CC - 2/3/03
 public void registerScanners() {
 	if (scanners.size()>0) {
 		System.err.println("registerScanners() should be called first, when no other scanner has been registered.");
@@ -394,6 +397,7 @@ public void registerScanners() {
 	addScanner(new HTMLFormScanner("-f"));
 	addScanner(new HTMLFrameSetScanner("-r"));	
 }
+*/
 /**
  * Removes a specified scanner object.
  * @param scanner HTMLTagScanner object to be removed from the list of registered scanners

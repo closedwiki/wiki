@@ -31,6 +31,10 @@ public class SearchableTextAreaTest extends TestCase implements Application {
         return frame;
     }
 
+    public String getKeyCommand(String key) {
+	throw new Error(key);
+    }
+
     protected void tearDown() {
         frame.remove(sa);
     }
