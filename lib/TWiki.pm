@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "14 Jan 2004";
+$wikiversion      = "18 Jan 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2065,8 +2065,8 @@ sub handleInternalTags
     $_[0] =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$_[2]\/$_[1]/g;
     $_[0] =~ s/%ATTACHURLPATH%/$pubUrlPath\/$_[2]\/$_[1]/g;
     $_[0] =~ s/%ICON{(.*?)}%/&handleIcon($1)/geo;
-    $_[0] =~ s/%(URL)?PARAM{(.*?)}%/&handleUrlParam($2)/ge;     # PARAM is documented URLPARAM is legacy
-    $_[0] =~ s/%(URL)?ENCODE{(.*?)}%/&handleUrlEncode($2,1)/ge; # ENCODE is documented URLENCODE is legacy
+    $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($2)/ge;
+    $_[0] =~ s/%(URL)?ENCODE{(.*?)}%/&handleUrlEncode($2,1)/ge; # ENCODE is documented, URLENCODE is legacy
     $_[0] =~ s/%INTURLENCODE{(.*?)}%/&handleIntUrlEncode($1,1)/ge;
     $_[0] =~ s/%DATE%/&getGmDate()/ge; # deprecated, but used in signatures
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/ge;
