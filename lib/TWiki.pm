@@ -65,7 +65,7 @@ use vars qw(
         $wikiHomeUrl $defaultUrlHost $urlHost
         $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir
         $wikiToolName $securityFilter $uploadFilter
-        $debugFilename $htpasswdFilename
+        $debugFilename $warningFilename $htpasswdFilename
         $logFilename $remoteUserFilename $wikiUsersTopicname
         $userListFilename %userToWikiList
         $twikiWebname $mainWebname $mainTopicname $notifyTopicname
@@ -99,7 +99,7 @@ use vars qw(
 
 # TWiki::Search config:
 use vars qw(
-        $lsCmd $egrepCmd $fgrepCmd
+        $cmdQuote $lsCmd $egrepCmd $fgrepCmd
     );
 
 
@@ -244,10 +244,23 @@ sub redirect
 }
 
 # =========================
+# Warning and errors that may require admin intervention
+# Not using store writeLog and log file is more of an audit/usage file
+sub writeWarning
+{
+    my( $text ) = @_;
+    if( $warningFilename ) {
+        open( FILE, ">>$warningFilename" );
+        print FILE "$text\n";
+        close( FILE );
+    }
+}
+
+# =========================
 sub writeDebug
 {
-    my( $text) = @_;
-    open( FILE, ">>$debugFilename");
+    my( $text ) = @_;
+    open( FILE, ">>$debugFilename" );
     print FILE "$text\n";
     close( FILE);
 }
@@ -361,7 +374,7 @@ sub userToWikiListInit
 # =========================
 sub userToWikiName
 {
-    my( $loginUser ) = @_;
+    my( $loginUser, $onlyTranslate ) = @_;
     
     if( !$loginUser ) {
         return "";
@@ -372,7 +385,11 @@ sub userToWikiName
     if( $wUser ) {
         return "$mainWebname.$wUser";
     }
-    return "$mainWebname.$loginUser";
+    if( $onlyTranslate ) {
+       return "";
+    } else {
+       return "$mainWebname.$loginUser";
+    }
 }
 
 # =========================
@@ -951,7 +968,7 @@ sub renderMoved
             $putBack .= " href=\"$scriptUrlPath/rename?newWeb=$fromWeb&newTopic=$fromTopic&oldWeb=$web";
             $putBack .= "&oldTopic=$topic&confirm=yes\">put it back</a>";
         }
-        $text = "<p><I><nop>$to moved from <nop>$from on $date by %MAINWEB%.$by</I>$putBack</p>";
+        $text = "<p><I><nop>$to moved from <nop>$from on $date by %MAINWEB%.$by </I>$putBack</p>";
     }
     
     return $text;
@@ -1174,6 +1191,9 @@ sub externalLink
 sub isWikiName
 {
     my( $name ) = @_;
+    if( ! $name ) {
+        $name = "";
+    }
     if ( $name =~ /^[A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*$/ ) {
         return "1";
     }
