@@ -123,6 +123,7 @@ sub _tidy {
     $a =~ s/\s+$//s;
     $a =~ s/&/&amp;/g;
     $a =~ s/</&lt;/g;
+    $a =~ s/>/&gt;/g;
     return $a;
 }
 
@@ -138,22 +139,13 @@ sub _compareResults {
         my $b = _tidy( $diff->[2] );
 
         if ( $diff->[0] eq 'u' || $a eq $b ) {
-            $result .= "$a\n";
+            $result .= "<tr bgcolor='8fff8f'><td valign=top><pre>$a</pre></td><td><pre>$a</pre></td></td></tr>\n";
         } else {
-            $result .= "<p /></code><font color=\"red\"><bold>$group: ";
-            if ( $diff->[0] eq "+" ) {
-                $result .= "UNEXPECTED: <code>'$b'";
-            } elsif ( $diff->[0] eq "-" ) {
-                $result .= "  EXPECTED: <code>'$a'";
-            } else {
-                $result .= "  EXPECTED <code>'$a'";
-                $result .= "<br /></code>$group: UNEXPECTED <code>'$b'";
-            }
-            $result .= "</bold></font><p />";
+            $result .= "<tr valign=top bgcolor='#ff8f8f'><td width=50%><pre>$a</pre></td><td width=50%><pre>$b</pre></td></tr>\n";
             $failed = 1;
         }
     }
-    return $failed ? "<pre>$result</pre>" : "";
+    return $failed ? "<table border=1><tr><th>Expected</th><th>Actual</th></tr>$result</table>" : "";
 }
 
 sub initPlugin {
