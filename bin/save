@@ -83,6 +83,18 @@ sub main
         # normal case: Get latest attachment from file for preview
         my $tmp;
         ( $tmp, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
+        
+	# parent setting
+	my $theParent = $query->param( 'parent' ) || "";
+	if( $theParent ) {
+	    if( $theParent !~ /\./ ) {
+	       $theParent = "$webName.$theParent";
+	    }
+	    $tmpl =~ s/%TOPICPARENT%/$theParent/go;
+	    my @args = ( "name" => $theParent );
+	    @meta = &TWiki::Store::metaUpdate( "TOPICPARENT", \@args, "", @meta );
+	}
+        
 	my $formTemplate = $query->param( "formtemplate" );
 	if( $formTemplate ) {
 	   # FIXME temporary because potentially shared fields
