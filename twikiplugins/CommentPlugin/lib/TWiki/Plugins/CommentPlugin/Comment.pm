@@ -35,8 +35,8 @@ use integer;
   # %NAME%
   # @return the HTML that implements a comment entry box
   sub prompt {
-    
     #my ( $text, $topic, $web ) = @_;
+
     # Nasty, tacky, error prone way to find out if we are previewing or not
     my $scriptname = $ENV{'SCRIPT_NAME'} || "";
     my $previewing = ( $scriptname =~ /^.*\/preview/ );
@@ -49,14 +49,7 @@ use integer;
 
     # Is commenting disabled?
     my $disable = 'disabled';
-    my ( $oopsUrl, $lockUser, $lockTime ) =
-      TWiki::Func::checkTopicEditLock( $_[2], $_[1] );
-    if( $lockUser ) {
-      # Topic is locked by another edit
-      $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
-      $message = "You cannot comment as the topic is locked temporarily\n" .
-	"by $lockUser for the next $lockTime minutes.";
-    } elsif ( $previewing ) {
+    if ( $previewing ) {
       # We are in Preview mode
       $message  = "(Edit - Preview)";
     } else { # view
@@ -64,42 +57,50 @@ use integer;
       $disable = '';
     }
 
-    my $url = $disable;
-    if ( $disable ne "disabled" ) {
-      $url = TWiki::Func::getScriptUrl( $_[2], $_[1], "save" );
-    }
-
     my $idx = 0;
-    $_[0] =~ s/%COMMENT{(.*?)}%/&_handleInput($1,$_[1],$_[2],\$idx,$message,$disable,$defaultType,$url)/ego;
+    $_[0] =~ s/%COMMENT{(.*?)}%/&_handleInput($1,$_[1],$_[2],\$idx,$message,$disable,$defaultType)/ego;
   }
 
   # PRIVATE generate an input form for a %COMMENT tag
   sub _handleInput {
     my ( $attributes, $topic, $web, $pidx, $message,
-	 $disable, $defaultType, $url ) = @_;
+	 $disable, $defaultType ) = @_;
 
     my $type =
       TWiki::Func::extractNameValuePair( $attributes, "type" ) ||
 	$defaultType;
 
     # Expand the template in the context of the web where the comment
-    # box is
+    # box is (not the target of the comment!)
     my $input = _getTemplate( "PROMPT:$type", $topic, $web );
 
     # see if this comment is targeted at a different topic, and
     # change the url if it is.
+    my $anchor = "";
     my $target =
       TWiki::Func::extractNameValuePair( $attributes, "target" );
     if ( $target ) {
-      if ( $target =~ m/^(.*?)\.(.*?)$/o ) {
+      # extract web and anchor
+      if ( $target =~ s/^($TWiki::webNameRegex)\.//o ) {
 	$web = $1;
-	$topic = $2;
-      } else {
-	$topic = $target;
       }
+      if ( $target =~ s/($TWiki::anchorRegex)$//o ) {
+	$anchor = $1;
+      }
+      $topic = $target;
+    }
 
-      if ( $url ne "disabled" ) {
-	$url = TWiki::Func::getScriptUrl( $web, $topic, "save" );
+    my $url = $disable;
+    if ( $url ne "disabled" ) {
+      $url = TWiki::Func::getScriptUrl( $web, $topic, "save" );
+
+      my ( $oopsUrl, $lockUser, $lockTime ) =
+	TWiki::Func::checkTopicEditLock( $web, $topic );
+
+      if ( $lockUser ) {
+	$lockTime = ( $lockTime / 60 ) + 1;
+	$message = "Commenting is locked out by $lockUser for at least $lockTime minutes";
+	$url = "disabled";
       }
     }
 
@@ -112,11 +113,15 @@ use integer;
       # need to provide text or the save script will reject us; even though we
       # are going to override it in the beforeSaveHandler
       $input .= "<input name=\"text\" type=\"hidden\" value=\"dummy\" />\n";
-      # the presence of these next two urlparams indicates a comment save
+      # remember to unlock the page
+      $input .= "<input name=\"unlock\" type=\"hidden\" value=\"1\" />\n";
+      # the presence of these next three urlparams indicates a comment save
       $input .= "<input name=\"comment_type\" type=\"hidden\" ";
       $input .= "value=\"$type\" />\n";
+      $input .= "<input name=\"comment_anchor\" type=\"hidden\"";
+      $input .= "value=\"$anchor\" />\n";
       $input .= "<input name=\"comment_index\" type=\"hidden\" ";
-      $input .= "value=\"$$pidx\" />\n</form>";
+      $input .= "value=\"$$pidx\" />\n</form>\n";
     }
     $$pidx++;
     return $input;
@@ -127,16 +132,16 @@ use integer;
   # parameters direct from CGI query. Because this is done through the
   # normal save channel, all the access checking should have been done there.
   sub save {
-    # my ( $text, $topic, $web ) = @_;
+    # my ( $query, $text, $topic, $web ) = @_;
 
-    my $query = TWiki::Func::getCgiQuery() || return;
-    my $type = $query->param( 'comment_type' );
-    my $tgt_idx = $query->param( 'comment_index' );
+    my $type = $_[0]->param( 'comment_type' );
+    my $tgt_idx = $_[0]->param( 'comment_index' );
+    my $anchor = $_[0]->param( 'comment_anchor' );
 
-    # the presence of these two urlparams indicates it's a comment save
-    return unless ( defined($type) && defined($tgt_idx) );
+    # the presence of these three urlparams indicates it's a comment save
+    return unless (defined($type) && defined($tgt_idx) && defined($anchor));
 
-    my $output = _getTemplate( "OUTPUT:$type", $_[2], $_[1] );
+    my $output = _getTemplate( "OUTPUT:$type", $_[3], $_[2] );
     if ( $output =~ m/^%RED%/o ) {
       TWiki::Func::writeWarning( $output );
       return;
@@ -145,30 +150,40 @@ use integer;
     # Expand the template
     $output =~ s/%POS:(.*?)%//go;
     my $position = $1 || "BOTTOM";
-    TWiki::Func::expandCommonVariables( $output, $_[1], $_[2] );
+    TWiki::Func::expandCommonVariables( $output, $_[2], $_[3] );
 
     # reread the topic, throwing away the dummy text set up in
     # _handleInput
-    $_[0] = TWiki::Func::readTopicText( $_[2], $_[1], undef, 1 );
+    $_[1] = TWiki::Func::readTopicText( $_[3], $_[2], undef, 1 );
 
-    if ( $position eq "TOP" ) {
-      $_[0] = "$output$_[0]";
+    if ($position eq "TOP" ) {
+      $_[1] = "$output$_[1]";
     } elsif ( $position eq "BOTTOM" ) {
-      $_[0] .= "$output";
+      $_[1] .= "$output";
     } else {
-      my $idx = 0;
-      $_[0] =~ s/(%COMMENT{.*?}%)/&_embed($1,\$idx,$position,$tgt_idx,$output)/ego;
+      if ( $anchor ne "" ) {
+	# position relative to anchor
+	if ( $position eq "BEFORE" ) {
+	  $_[1] =~ s/^($anchor)/$output\n$1/;
+	} else { # AFTER
+	  $_[1] =~ s/^($anchor)/$1\n$output/;
+	}
+      } else {
+	# Position relative to comment
+	my $idx = 0;
+	$_[1] =~ s/(%COMMENT{.*?}%)/&_nth($1,\$idx,$position,$tgt_idx,$output)/ego;
+      }
     }
   }
 
-  # PRIVATE embed an output if this comment is the interesting one
-  sub _embed {
+  # PRIVATE embed output if this comment is the interesting one
+  sub _nth {
     my ( $tag, $pidx, $position, $tgt_idx, $output ) = @_;
 
     if ( $$pidx == $tgt_idx) {
       if ( $position eq "BEFORE" ) {
 	$tag = "$output$tag";
-      } else {
+      } else { # AFTER
 	$tag .= "$output";
       }
     }
