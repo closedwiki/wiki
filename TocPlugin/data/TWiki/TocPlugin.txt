@@ -24,9 +24,9 @@ The Plugins.<nop>TocPluginHelp topic in the installation contains complete help 
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 	| ==%TOPIC%.xml== | Ant build file |
-	| ==data/Plugins/%TOPIC%.txt== | Plugin topic |
-	| ==data/Plugins/TocPluginHelp.txt== | Plugin help |
-	| ==data/Plugins/WebOrder.txt== | Order topic for Plugins web |
+	| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	| ==data/TWiki/TocPluginHelp.txt== | Plugin help |
+	| ==data/TWiki/WebOrder.txt== | Order topic for TWiki web |
 	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	| ==lib/TWiki/Plugins/TocPlugin/Attrs.pm== | Library component |
 	| ==lib/TWiki/Plugins/TocPlugin/Anchor.pm== | Library component |
