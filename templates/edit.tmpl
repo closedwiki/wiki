@@ -1,38 +1,34 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:P{"htmldoctype"}%
-<html>
 <head>
+ <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
- <title> %WIKITOOLNAME% . %WEB% . %TOPIC% (edit)</title>
- <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
  <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_EDIT%
-</head>
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
 <script language="JavaScript">
 <!--HIDE
 function initForm() {
-   document.main.text.focus();
+  document.main.text.focus();
 }
 function checkAll( theButton, theButtonOffset, theNum, theCheck )
 {
-    // find button element index
-    var j = 0
-    for (var i = 0; i <= document.main.length; i++)
-    {
-        if ( theButton == document.main.elements[i] )
-        {
-            j = i
-            break
-        }
+  // find button element index
+  var j = 0;
+  for( var i = 0; i <= document.main.length; i++ ) {
+    if( theButton == document.main.elements[i] ) {
+      j = i;
+      break;
     }
-    // set/clear all checkboxes
-    var last = j+theButtonOffset+theNum
-    for (i = last-theNum; i < last; i++)
-    {
-        document.main.elements[i].checked = theCheck
-    }
+  }
+  // set/clear all checkboxes
+  var last = j+theButtonOffset+theNum;
+  for( i = last-theNum; i < last; i++ ) {
+    document.main.elements[i].checked = theCheck;
+  }
 }
 function launchWindow( theWeb, theTopic ) {
-  win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+  win = open( "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain",
+              theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
   if( win ) {
     win.focus();
   }
@@ -42,12 +38,11 @@ function launchWindow( theWeb, theTopic ) {
 </script>
 </head>
 <body bgcolor="#ffffff" onLoad="initForm()">
-
-%TMPL:DEF{"titleaction"}% (edit) %TMPL:END%
-%TMPL:DEF{"webaction"}% Change topic %TMPL:END%
 <form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-<link href="/twiki/pub/%TWIKIWEB%/TigerSkin/twiki.css" rel=stylesheet type=TEXT/CSS>
-%TMPL:P{"standardheader"}%
+%TMPL:DEF{"titleaction"}%(edit)%TMPL:END%
+%TMPL:DEF{"titlehelp"}% %TMPL:END%
+%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+%TMPL:P{"simpleheader"}%
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%">%TEXT%</textarea>
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="parent" value="%TOPICPARENT%" />
@@ -59,10 +54,9 @@ and follow the
 <a target="TextFormattingRules" onClick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">TextFormattingRules</a>.
 <br /> <b>-- %WIKIUSERNAME% - %DATE% &lt;br&gt;</b> &nbsp;&nbsp;<code>&lt;==</code> 
 This is your signature for easy copy & paste operation
-<br />
-%FORMFIELDS%
+<br /> %FORMFIELDS%
 %TMPL:DEF{"topicaction"}% <input type="submit" value=" &nbsp; Preview Changes &nbsp; " />
-      %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
 %TMPL:P{"standardfooter"}%
 %WEBCOPYRIGHT%
 </form>

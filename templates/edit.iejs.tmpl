@@ -1,8 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:P{"htmldoctype"}%
 <head>
+ <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
- <title> %WIKITOOLNAME% . %WEB% . %TOPIC% (edit)</title>
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_EDIT%
 <style>
 A.editButton:link {
@@ -287,7 +287,7 @@ function writeToolbar()
   '<td>\n' +
   '<select name="topic" onchange="insert(this.options [this.selectedIndex].value);this.options [0].selected = true" class="editDropdown">\n' +
   '<option value="">Topic ...</option>\n' +
-  '%TOPICLIST{"<option value="$name">$name</option>" separator=" "}%>\n' +
+  '%TOPICLIST{"<option value=$name>$name</option>" separator=" "}%>\n' +
   '</select>\n' +
   '</td>\n' +
   '</tr>\n' +
@@ -310,10 +310,9 @@ function writeJavaScriptNote()
 </head>
 <body bgcolor="#ffffff" onLoad="initForm()">
 <form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%TMPL:INCLUDE{"twiki"}%
 %TMPL:DEF{"titleaction"}%(edit)%TMPL:END%
 %TMPL:DEF{"webaction"}%Change topic%TMPL:END%
-%TMPL:P{"standardheader"}%
+%TMPL:P{"simpleheader"}%
 <script language="JavaScript">
 <!--HIDE
 writeToolbar();
@@ -327,6 +326,7 @@ writeToolbar();
 </script>
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="parent" value="%TOPICPARENT%" />
+<input type="hidden" name="cmd" value="%CMD%" />
 <br />
 Don't forget - if you change something, do it in
 <a target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">GoodStyle</a>
@@ -345,11 +345,8 @@ writeJavaScriptNote();
 </noscript>
 <br />
 %FORMFIELDS%
-%TMPL:DEF{"topicaction"}%
-      <INPUT type="submit" name="submitEdit" value=" &nbsp; Preview Changes &nbsp; "> <INPUT type="hidden" name="cmd" value="%CMD%">
-      %SEP%
-      <a CLASS="footerlink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit
-%TMPL:END%
+%TMPL:DEF{"topicaction"}% <input type="submit" name="submitEdit" value=" &nbsp; Preview Changes &nbsp; ">
+  %SEP% <a class="footerlink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
 %TMPL:P{"standardfooter"}%
 </form>
 </body></html>

@@ -1,12 +1,4 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"titleaction"}% (attach) %TMPL:END%
-%TMPL:DEF{"webaction"}% Attach file to topic <B>%TOPIC%</B> %TMPL:END%
-%TMPL:DEF{"topicaction"}%
-  <input type="submit" name="uploadButton" value=" &nbsp; Upload file &nbsp; " /> %TMPL:P{"sep"}%
-  <input type="submit" name="changeButton" value="Change properties" />  %TMPL:P{"sep"}%
-  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">cancel</a> %TMPL:P{"sep"}%
-  <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move attachment</a>
-  <a href="FIXME">(Help)</a> %TMPL:END%
 %TMPL:P{"htmldoctype"}%
 <head>
  <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
@@ -30,10 +22,12 @@ function launchWindow( theWeb, theTopic ) {
 </script>
 <body bgcolor="#ffffff"  onLoad="initForm()" >
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+%TMPL:DEF{"titleaction"}% (attach) %TMPL:END%
+%TMPL:DEF{"headerhelp"}% %TMPL:END%
+%TMPL:DEF{"webaction"}% Attach file to topic <B>%TOPIC%</B> %TMPL:END%
 %TMPL:P{"simpleheader"}%
 %META{"attachments" all="on"}%
 %ATTACHTABLE%
-
 <b>%ACTION% <code>%FILENAME%</code></b>
 <table width="100%">
  <tr>
@@ -83,6 +77,12 @@ __Notes:__
    * *Properties:* Can be changed without uploading a file; see
      <a target="HiddenAttachment" onClick="return launchWindow('%TWIKIWEB%','HiddenAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/HiddenAttachment">HiddenAttachment</a>
 
+%TMPL:DEF{"topicaction"}%
+  <input type="submit" name="uploadButton" value=" &nbsp; Upload file &nbsp; " /> %TMPL:P{"sep"}%
+  <input type="submit" name="changeButton" value="Change properties" />  %TMPL:P{"sep"}%
+  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">cancel</a> %TMPL:P{"sep"}%
+  <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move attachment</a>
+  <a href="FIXME">(Help)</a> %TMPL:END%
 %TMPL:P{"standardfooter"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
