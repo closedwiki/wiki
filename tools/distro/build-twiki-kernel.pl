@@ -67,7 +67,7 @@ my $ruleDiscardRcsHistory = File::Find::Rule->file->name("*,v")->discard;
 my $ruleDiscardRcsLock = File::Find::Rule->file->name("*.lock")->discard;
 my $ruleDiscardBackup = File::Find::Rule->file->name("*~")->discard;
 my $ruleDiscardSVN = File::Find::Rule->directory->name(".svn")->prune->discard;
-my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardSVN, $ruleDiscardBackup, File::Find::Rule->file );
+my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardSVN, $ruleDiscardBackup, File::Find::Rule->file );
 
 ################################################################################
 
@@ -93,6 +93,29 @@ foreach my $dir qw( lib templates data bin pub )
     my $tree = slurp_tree( $dir, rule => $ruleNormalFiles->start( $dir ) );
     spew_tree( "$installBase/$dir" => $tree );
 }
+
+sub filterDoc {
+    my $path = $File::Find::name;
+    return 1 unless $path && $path =~ /\.txt$/;
+    open(FR, "<$path") || die "failed to open $path for read";
+    my $slash = $/;
+    undef $/;
+    my $conts = <FR>;
+    $/ = $slash;
+    close(FR);
+
+    $conts =~ s/^.*%STARTINCLUDE%//s;
+    $conts =~ s/%STOPINCLUDE%.*$//s;
+    $conts =~ s/^-- (TWiki:)?Main.[A-Z]+[a-z]+[A-Z]+\w+ - \d\s \s{3} \d{4}( <br \/>)?$//g;
+
+    open(FR, ">$path") || die "failed to open $path for write";;
+    print FR $conts;
+    close(FR);
+    return 1;
+}
+
+# post-filter docs
+File::Find::find( \&filterDoc, "$installBase/data/TWiki" );
 
 #-[docs]-------------------------------------------------------------------------------
 map { my $doc = $_; cp( $doc, "$installBase/$doc" ) or warn "$doc: $!" }
@@ -122,7 +145,7 @@ foreach my $auth qw( rdiff view )
 #my @bin = qw( attach changes edit geturl installpasswd mailnotify manage oops passwd preview rdiff rdiffauth register rename save search setlib.cfg statistics testenv upload view viewauth viewfile );
 
 # stop distributing cpan modules; get the latest versions from cpan itself
-rmtree( [ "$installBase/lib/Algorithm", "$installBase/lib/Text" ] ) or warn $!;
+rmtree( [ "$installBase/lib/Algorithm", "$installBase/lib/Text", "$installBase/lib/Error.pm" ] ) or warn $!;
 
 ################################################################################
 
@@ -265,6 +288,7 @@ differences between output of build-twiki-kernel.pl vs. TWiki20040901.tar.gz
 # to get from cpan
 <           'lib/Algorithm/Diff.pm',
 <           'lib/Text/Diff.pm',
+<           'lib/Error.pm',
 
 
 ################################################################################
