@@ -38,11 +38,12 @@ if ( opendir( RELEASES, $outputDir ) )
     @dirReleases = grep { /^TWiki.+\.tar\.gz/ } readdir( RELEASES );  #or warn $!;
     closedir( RELEASES ) or warn $!;
 }
-foreach my $kernel ( @dirReleases )
+foreach my $kernel ( reverse sort @dirReleases )
 {
     ( my $rel = $kernel ) =~ s/\.tar\.gz$//;
     my ( $label, undef, $branch, $revInfo ) = $rel =~ m/TWiki(Kernel)?(-([^-]+)-)?(.+)?/;
-    warn "Skipping $kernel\n" unless $branch && $revInfo;
+    $branch ||= '';
+    warn "Skipping $kernel\n" unless $revInfo;
     # CODE_SMELL: hardcoded to twiki.org (would need some sort of super project configuration file)
     my $homepage = "http://twiki.org/cgi-bin/view/Codev/TWikiKernel$branch$revInfo";
     # CODE_SMELL: hardcoded to ntwiki (can be fixed using hostname and ...?)
