@@ -250,7 +250,7 @@ sub _epochToRcsDateTime
    # TODO: should this be gmtime or local time?
    my( $sec,$min,$hour,$mday,$mon,$year,$wday,$yday ) = gmtime( $dateTime );
    $year += 1900 if( $year > 99 );
-   my $rcsDateTime = sprintf "%d.%02d.%02d.%02d.%02d.%02d", ( $year, $mon, $mday, $hour, $min, $sec );
+   my $rcsDateTime = sprintf "%d.%02d.%02d.%02d.%02d.%02d", ( $year, $mon + 1, $mday, $hour, $min, $sec );
    return $rcsDateTime;
 }
 

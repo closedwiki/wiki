@@ -444,8 +444,12 @@ sub addRevision
     $self->{"head"} = $head;
     ${$self->{"log"}}[$head] = $log;
     ${$self->{"author"}}[$head] = $author;
-    $date = time() if( ! $date );
-    ${$self->{"date"}}[$head] = TWiki::Store::RcsFile::_epochToRcsDateTime( $date );
+    if( $date ) {
+        $date =~ s/[ \/\:]/\./go;
+    } else {
+        $date = TWiki::Store::RcsFile::_epochToRcsDateTime( time() );
+    }
+    ${$self->{"date"}}[$head] = $date;
 
     return $self->_writeMe();
 }
