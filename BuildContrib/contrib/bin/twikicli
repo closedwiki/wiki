@@ -3,6 +3,12 @@
 use strict;
 use diagnostics;
 
+BEGIN {
+  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
+    unshift @INC, $pc;
+  }
+}
+
 use TWiki::Contrib::BuildContrib::TWikiCLI;
 
 =pod
