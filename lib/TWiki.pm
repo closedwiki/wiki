@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = "24 Apr 2004";
+$wikiversion      = "27 Apr 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2386,9 +2386,10 @@ sub handleToc
                 for( $i=0 ; $i<$level ; $i++ ) {
                     $tabs = "\t$tabs";
                 }
-                # Remove *bold* and _italic_ formatting
+                # Remove *bold*, _italic_ and =fixed= formatting
                 $line =~ s/(^|[\s\(])\*([^\s]+?|[^\s].*?[^\s])\*($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
                 $line =~ s/(^|[\s\(])_+([^\s]+?|[^\s].*?[^\s])_+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+                $line =~ s/(^|[\s\(])=+([^\s]+?|[^\s].*?[^\s])=+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
                 # Prevent WikiLinks
                 $line =~ s/\[\[.*?\]\[(.*?)\]\]/$1/g;  # '[[...][...]]'
                 $line =~ s/\[\[(.*?)\]\]/$1/ge;        # '[[...]]'
