@@ -76,7 +76,7 @@
 	* PeterThoeny - 19 Aug 2000: Ref-By link searches all webs (not just the current web.)
 	* AlWilliams, ManpreetSingh, PeterThoeny - 18 Sep 2000: Added forced internal links. Write =[<nop>[text formatting FAQ]]= to get the link [[text formatting FAQ]] that points to topic TextFormattingFAQ.
 	* PeterThoeny - 19 Sep 2000: Fixed <a href="http://TWiki.org/cgi-bin/view/Codev/AttachedNotificationLinksBug">TWiki:Codev.AttachedNotificationLinksBug</a>.
-	* ManpreetSingh - 20 Sep 2000: New -q switch in =mailnotify= to suppresses all normal output.
+	* ManpreetSingh - 20 Sep 2000: New -q switch in =mailnotify= to suppress all normal output.
 	* HaroldGottschalk, AndreaSterbini, PeterThoeny - 26 Sep 2000: Allow nesting of variables, i.e. =%<nop>INCLUDE{"%<nop>TWIKIWEB%.TWikiWebsTable"}%=. More in <a href="http://TWiki.org/cgi-bin/view/Codev/BetterTWikiTagTemplateProcessing">TWiki:Codev.BetterTWikiTagTemplateProcessing</a>
 	* AlWilliams, PeterThoeny - 26 Sep 2000: Fixed <a href="http://TWiki.org/cgi-bin/view/Codev/UppercaseAttachments">TWiki:Codev.UppercaseAttachments</a> bug and added =png= image support.
 	* PeterThoeny - 05 Oct 2000: Remember user by IP address so that =view= "knows" the user once authenticated in =edit=. More in TWikiAuthentication.
@@ -84,7 +84,14 @@
 	* PeterThoeny - 01 Nov 2000: Added a "Cancel" link in edit that releases the edit lock.
 	* PeterThoeny - 01 Nov 2000: New variable =%<nop>VAR{"NAME" web="Web"}%= to get web specific preferences. More in TWikiVariables.
 	* PeterThoeny - 03 Nov 2000: Flag =$doHidePasswdInRegistration= in =wikicfg.pm= to hide plain text password in registration email.
-
+	* PeterThoeny - 03 Dec 2000: New =noheader="on"= switch in =%<nop>SEARCH{...}%= to suppress table header. More in TWikiVariables.
+	* PeterThoeny - 05 Dec 2000: Improved include handling. Infinite recursion of includes are prevented; new variables =%<nop>BASEWEB%=, =%<nop>INCLUDINGWEB%=, =%<nop>BASETOPIC%= and =%<nop>INCLUDINGTOPIC%= to have more control over include handling. More in TWikiVariables and <a href="http://TWiki.org/cgi-bin/view/Codev/IncludeHandlingImprovements">TWiki:Codev.IncludeHandlingImprovements</a>.
+	* PeterThoeny - 05 Jan 2001: View authorization based on groups. Define who is allowed to see a TWiki web. More in TWikiAccessControl and <a href="http://TWiki.org/cgi-bin/view/Codev/AuthenticationBasedOnGroups">TWiki:Codev.AuthenticationBasedOnGroups</a>.
+	* StanleyKnutson - 07 Jan 2001: Better error handling when saving a topic.
+	* PeterThoeny - 16 Jan 2001: TWiki skins: Define a different page layout with a customized header and footer layout, i.e. a =print= skin for a printable view of a topic. More in TWikiSkins and <a href="http://TWiki.org/cgi-bin/view/Codev/TWikiSkins">TWiki:Codev.TWikiSkins</a>.
+	* PeterThoeny - 16 Jan 2001: New variable =%<nop>STARTINCLUDE%= and =%<nop>STOPINCLUDE%= variables to control what gets included of a topic. More in TWikiVariables.
+	* PeterThoeny - 18 Jan 2001: WebChanges, WebSearch and e-mail notification indicate also the revision number of a topic (i.e. <u>18 Jan 2001 - 16:43 - r1.5</u>), or NEW for a new topic (i.e. i.e. <u>18 Jan 2001 - 16:43 - <b>NEW</b></u>).
+	* PeterThoeny - 20 Jan 2001: Format changed of =%<nop>GMTIME{"..."}%= and =%<nop>SERVERTIME{"..."}%= variables. Format is now ="$hour:$min"= instead of ="hour:min"=. More in TWikiVariables.
 
 *Related Topics*
 	* TWikiDocumentation has implementation details.
