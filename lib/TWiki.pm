@@ -3470,8 +3470,6 @@ sub makeAnchorName
 {
     my( $anchorName ) = @_;
 
-    $anchorName =~ s/^[\s\#\_]*//;          # no leading space nor '#', '_'
-    $anchorName =~ s/[\s\_]*$//;            # no trailing space, nor '_'
     $anchorName =~ s/<\w[^>]*>//gi;         # remove HTML tags
     $anchorName =~ s/\&\#?[a-zA-Z0-9]*;//g; # remove HTML entities
     $anchorName =~ s/^(.+?)\s*$regex{headerPatternNoTOC}.*/$1/o; # filter TOC excludes if not at beginning
@@ -3479,6 +3477,8 @@ sub makeAnchorName
     # FIXME: More efficient to match with '+' on next line:
     $anchorName =~ s/$regex{singleMixedNonAlphaNumRegex}/_/g;      # only allowed chars
     $anchorName =~ s/__+/_/g;               # remove excessive '_'
+    $anchorName =~ s/^[\s\#\_]*//;          # no leading space nor '#', '_'
+    $anchorName =~ s/[\s\_]*$//;            # no trailing space, nor '_'
     $anchorName =~ s/^(.{32})(.*)$/$1/;     # limit to 32 chars - FIXME: Use Unicode chars before truncate
 
     # No need to encode 8-bit characters in anchor due to UTF-8 URL support
