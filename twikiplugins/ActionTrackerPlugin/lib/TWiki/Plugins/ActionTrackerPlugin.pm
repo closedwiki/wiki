@@ -41,19 +41,48 @@ $VERSION = '2.010';
 $pluginInitialized = 0;
 $perlTimeParseDateFound = 0;
 $pluginName = "ActionTrackerPlugin";
+$installWeb = "TWiki";
 
 my $actionNumber = 0;
 my %prefs;
+
+my @dependencies =
+  (
+   { package => 'TWiki::Plugins', constraint => '>= 1.010' },
+   { package => 'TWiki::Plugins::SharedCode::Attrs' },
+   { package => 'Time::ParseDate' }
+  );
 
 sub initPlugin {
   ( $topic, $web, $user, $installWeb ) = @_;
 
   # check for Plugins.pm versions
   # COVERAGE OFF standard plugin code
-  if( $TWiki::Plugins::VERSION < 1.010 ) {
-    TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION" );
-    return 0;
+
+  my $depsOK = 1;
+  foreach my $dep ( @dependencies ) {
+    my ( $ok, $ver ) = ( 0, 0 );
+    eval "use $dep->{package}";
+    unless ( $@ ) {
+	  if ( defined( $dep->{constraint} )) {
+		eval "\$ver = \$$dep->{package}::VERSION;\$ok = (\$ver $dep->{constraint})";
+	  } else {
+		$ok = 1;
+	  }
+	}
+	unless ( $ok ) {
+	  my $mess = "$dep->{package} ";
+	  $mess .= "version $dep->{constraint} " if ( $dep->{constraint} );
+	  $mess .= "is required for $pluginName version $VERSION. ";
+	  $mess .= "$dep->{package} $ver is currently installed. " if ( $ver );
+	  $mess .= "Please check the plugin installation documentation. ";
+	  TWiki::Func::writeWarning( $mess );
+	  print STDERR "$mess\n";
+	  $depsOK = 0;
+	}
   }
+  return 0 unless $depsOK;
+
   if( $TWiki::Plugins::VERSION < 1.020 ) {
     TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION. Will not work without compatability module." );
   }
@@ -234,7 +263,7 @@ sub beforeEditHandler {
   # without screwing up the content of the subtemplate.
   my $tmpl = TWiki::Func::readTemplate( "actionform", "");
   my $date;
-  if( $TWiki::Plugins::VERSION < 1.020 ) {
+  if( exists( &TWiki::getGmDate )) {
 	$date = TWiki::getGmDate(); # COMPATIBILITY
   } else {
 	$date = TWiki::Func::formatTime( time(), undef, 'gmtime' );
