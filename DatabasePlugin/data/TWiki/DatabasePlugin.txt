@@ -1,27 +1,33 @@
-%META:TOPICINFO{author="TaitCyrus" date="1016668560" format="1.0" version="1.4"}%
----++ %TOPIC% (Version 1.2)
+%META:TOPICINFO{author="TaitCyrus" date="1051904047" format="1.0" version="1.2"}%
+---++ %TOPIC% (Version 1.3)
 
-Provide secure access (read and write) to data in a database allowing the user to specify the resulting output format as well as editable tables.  'secure', in this case, just means not putting passwords in clear text into a TWiki page.
+Provide secure access (read and write [mysql only]) to data in a database allowing the user to specify the resulting output format as well as editable tables.  'secure', in this case, just means not putting passwords in clear text into a TWiki page but placing it either in a 'secure' flat TWiki file or in a database.
 
 *NOTE:* <br>Security is _only_ achieved if:
 	1 File ==bin/DatabasePluginConfig.pm== is not readable through a web page and has been _locked_ by updating the ==.htaccess== file in ==bin== (or locking via whatever your security procedure is on your web server)
 	1 File ==bin/DatabasePluginEdit== has been _locked_ (requiring a valid user) by updating the ==.htaccess== file in ==bin== (or locking via whatever your security procedure is on your web server)
 	1 People with login/ftp access to your web server do *not* have read access to ==bin/DatabasePluginConfig.pm==
 
-This plugin provides access to database information in a semi-secure manor.  Since clear text passwords in a TWiki page is not good, the passwords to databases are themselves placed into a DatabasePlugin database.  This database contains the following fields:
+This plugin references ==bin/DatabasePluginConfig.pm==.  This file contains one required section and one optional section.
+	* *Required* - Description of where the primary DatabasePlugin database is located and
+	* *Optional* - Any local database specific information if the above required section says that the _db_driver_ is ==Local==.
+
+Again, this plugin provides access to database information in a semi-secure manner.  Since clear text passwords in a TWiki page is not good, the passwords to databases are themselves placed into a DatabasePlugin database (either located in a real database or located in the ==bin/DatabasePluginConfig.pm== file).  This database contains the following fields:
 	| *Column Name* | *Description* |
-	| ID | Standard auto_increment column to allow for unique db entries |
+	| ID | Standard auto_increment column to allow for unique db entries (optional if a real database) |
 	| description | This field acts as the look-up mechanism for the indirection.  A TWiki page would reference this name instead of having to publicly specify user names, passwords, etc. |
 	| driver | Database driver name (currently only =mysql= has been tested) |
 	| db_name | The name of the database in which the =table_name= is found |
+	| db_sid | The SID of the database in which the =table_name= is found (optional: used for Oracle) |
 	| table_name | The name of the table found in the =db_name= database |
 	| ro_username | A user name providing read-only access to the specified table |
 	| ro_password | The password for the specified =ro_username= |
 	| hostname | The name of the host on which the specified =db_name= lives |
 
 To secure the database information allowing access to the above database, a Perl .pm is created and placed into =bin= where the ==.htaccess== file (or whatever your security mechanism is) is updated such that this file can NOT be viewed from a web browser.  This file contains variables defining access information to the above database. The variables are:
-	| $db_driver | DBI driver (only =mysql= has been tested) |
+	| $db_driver | DBI driver -- Tested values are: *mysql*, *Oracle*, and *Local* (where *Local* means instead of the indirection into the database to get the further database information the info is obtained locally) |
 	| $db_database | The name of the database in which the table described above can be found |
+	| $db_sid | The SID of the database in which the table described above can be fond (optional: used for Oracle) |
 	| $db_table | The table in which the above information is found.  I used =DatabasePlugin= as the table name, though you can specify anything you wish |
 	| $db_username | The user name allowing access to the above database (for both read and write access) |
 	| $db_password | The password allowing $db_username access to the table (for both read and write access) |
@@ -69,12 +75,13 @@ To secure the database information allowing access to the above database, a Perl
 Assume that the =DatabasePluginConfig.pm= file (locked away in =bin= so that a user can not view the contents) contains the following:
 
 <verbatim>
-$db_driver	= "mysql";
-$db_database	= "mydb";
-$db_table	= "DatabasePlugin";
-$db_username	= "user";
-$db_password	= "123456"; # (Note: this is the clear text password)
-$db_hostname	= "localhost";
+$db_driver      = "Oracle";
+$db_database    = "mydb";
+$db_sid         = "sid";
+$db_table       = "DatabasePlugin";
+$db_username    = "user";
+$db_password    = "123456"; # (Note: this is the clear text password)
+$db_hostname    = "localhost";
 </verbatim>
 
 Assume that the database specified above contains the following information:
@@ -124,7 +131,6 @@ a plugin setting write ==%<plugin>_<setting>%==, i.e. ==%INTERWIKIPLUGIN_SHORTDE
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==bin/%TOPIC%Config.pm== | Plugin configuration/initialization information |
 	  | ==bin/%TOPIC%Edit== | Routine which generates a frame based HTML page for editing a <nop>MySql table. <font color=red>NOTE: For security reasons, you MUST add this application to your .htaccess list as requiring a valid user since the output from this script will embed the database username and password allowing write access to the tables</font> |
@@ -134,15 +140,19 @@ a plugin setting write ==%<plugin>_<setting>%==, i.e. ==%INTERWIKIPLUGIN_SHORTDE
 ---+++ Plugin Info
 
 |  Plugin Author: | Main.TaitCyrus |
-|  Plugin Version: | 20 Mar 2002 (v1.2)|
-|  Change History: | 20 Mar 2002 (v1.2): Added table editing ability <br /> 18 Feb 2002 (v1.11): Removed hard coded $debug=1;<br />16 Feb 2002 (v1.1): Added the two REPEAT functions <br /> 20 Jan 2002 (v1.0): Initial version  |
+|  Plugin Version: | 5 May 2003 (v1.3)|
+|  Change History: | 5 May 2003 (v1.3) Add support for the primary DB to be in a local file instead of in a DB.  It is acknowledged that this reduces security somewhat<BR>Also added support for Oracle (by adding in the concept of a SID) |
+| | 20 Mar 2002 (v1.2): Added table editing ability |
+| | 18 Feb 2002 (v1.11): Removed hard coded $debug=1; |
+| | 16 Feb 2002 (v1.1): Added the two REPEAT functions |
+| | 20 Jan 2002 (v1.0): Initial version  |
 |  CPAN Dependencies: | DBI |
 |  Other Dependencies: | phpmyadmin (to support the edit ability) |
-|  Perl Version: | 5.0 (tested with 5.6.1) |
+|  Perl Version: | 5.0 (tested with 5.6.1 [mysql] and 5.8.0 [Oracle and Local] ) |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- Main.TaitCyrus - 20 Mar 2002 <br>
+-- Main.TaitCyrus - 5 May 2003 <br>
 
