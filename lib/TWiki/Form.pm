@@ -302,7 +302,7 @@ sub renderForEdit
     }
     
     # FIXME could do with some of this being in template
-    my $text = "<table class=\"twikiForm twikiEditForm\" border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
+    my $text = "<div class=\"twikiForm twikiEditForm\"><table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
                _link( $web, $form, "", "h", "", 2, $chooseForm ) . "</tr>\n";
                
     fieldVars2Meta( $web, $query, $meta, "override" );
@@ -382,7 +382,7 @@ sub renderForEdit
             } else {
                $val =~ s/%DEFAULTOPTION%//go;
             }
-            $value = "<select class=\"twikiEditFormSelectField\" name=\"$name\" size=\"$size\">$val</select>";
+            $value = "<select name=\"$name\" size=\"$size\">$val</select>";
         } elsif( $type =~ "^checkbox" ) {
             if( $type eq "checkbox+buttons" ) {
                 my $boxes = $#fieldInfo + 1;
@@ -442,7 +442,7 @@ sub renderForEdit
         }
         $text .= "   <tr> " . _link( $web, $title, $tooltip, "h", "right", "", $extra ) . "<td align=\"left\"> $value </td> </tr>\n";
     }
-    $text .= "</table>\n";
+    $text .= "</table></div>\n";
     
     return $text;
 }
