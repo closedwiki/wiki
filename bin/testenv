@@ -37,7 +37,9 @@ package TWiki;
 
 sub main() {
 
-my $perlverRequired = 5.005;
+my $perlverRequired = 5.005;		# Oldest supported version of Perl
+my $perlverRecommended = '5.6.1';
+
 my $rcsverRequired = 5.7;
 
 my @requiredMods = ( 
@@ -172,7 +174,8 @@ print " ($perltype)" if $perltype ne 'generic';
 print "</td></tr>\n";
 if( $perlvernum < $perlverRequired ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "This version of Perl is old - upgrade to the recommended Perl $required_version.\n";
+    print "This version of Perl is old - upgrade to at least Perl $perlverRequired\n";
+    print "and preferably to Perl $perlverRecommended.\n";
     print "</td></tr>\n";
 }
 
@@ -207,7 +210,6 @@ print "the correct PATH_INFO is '/foo/bar', without any prefixed path ";
 print "components. Click <a href=\"$theUrl/foo/bar\">here</a> to test.";
 print "</td></tr>\n";
 print "<tr><th align=\"right\">mod_perl:</th><td>$USE_MOD_PERL for this script (mod_perl $LOAD_MOD_PERL)</td></tr>\n";
-print "<tr><th align=\"right\">RCS version:</th><td>$rcsver" if defined($rcsver);
 
 
 # print "<tr><th align=\"right\">Null device:</th><td>$nullDev</td></tr>\n";
@@ -366,15 +368,17 @@ if( ! ( -e "$rcsDir/ci$exeSuffix" ) ) {
     my $rcsvernum = `$rcsDir/ci$exeSuffix -V`;
     $rcsvernum = (split(/\s+/, $rcsvernum))[2];
     
-    print "<tr><th align=\"right\">RCS Version:</th><td>$rcsvernum</td></tr>\n";
+    print "<tr><th align=\"right\">RCS Version:</th><td>$rcsvernum";
+    print "&nbsp;&nbsp;(Cygwin package <tt>rcs-$rcsver</tt>)" if defined($rcsver);
+    print "</td></tr>\n";
     print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
     print "This is the version of RCS which will be used.";
     print "</td></tr>\n";
     
     if( $rcsvernum < $rcsverRequired ) {
-   print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-   print "RCS program is too old, upgrade to version $rcsverRequired or higher.";
-   print "</td></tr>\n";
+	print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+	print "RCS program is too old, upgrade to version $rcsverRequired or higher.";
+	print "</td></tr>\n";
     }
 
 }
