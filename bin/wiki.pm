@@ -69,8 +69,7 @@ use vars qw(
         $twikiWebname $mainWebname $mainTopicname $notifyTopicname
         $wikiPrefsTopicname $webPrefsTopicname
         $statisticsTopicname $statsTopViews $statsTopContrib
-	$editLockTime 
-        $mailProgram $wikiversion 
+	$editLockTime $mailProgram $wikiversion 
         $doKeepRevIfEditLock $doRemovePortNumber
         $doRememberRemoteUser $doPluralToSingular
         $doHidePasswdInRegistration $doSecureInclude
@@ -86,7 +85,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "04 Dec 2000";
+$wikiversion      = "20 Jan 2001";
 
 # ===========================
 # read the configuration part
@@ -579,33 +578,77 @@ sub getOopsUrl
     return $url;
 }
 
+
 # =========================
 sub readTemplate
 {
-    my( $name, $topic ) = @_;
-    $topic = "" unless $topic; # prevent 'uninitialized value' warnings
+    my( $theName, $theTopic, $theSkin ) = @_;
+    $theTopic = "" unless $theTopic; # prevent 'uninitialized value' ...
+    $theSkin  = "" unless $theSkin;  #   ... warnings
 
     # CrisBailiff, PeterThoeny 13 Jun 2000: Add security
-    $name =~ s/$securityFilter//go;    # zap anything suspicious
-    $name =~ s/\.+/\./g;               # Filter out ".." from filename
-    $topic =~ s/$securityFilter//go;   # zap anything suspicious
-    $topic =~ s/\.+/\./g;              # Filter out ".." from filename
+    $theName =~ s/$securityFilter//go;    # zap anything suspicious
+    $theName =~ s/\.+/\./g;               # Filter out ".." from filename
+    $theTopic =~ s/$securityFilter//go;   # zap anything suspicious
+    $theTopic =~ s/\.+/\./g;              # Filter out ".." from filename
+    $theSkin =~ s/$securityFilter//go;    # zap anything suspicious
+    $theSkin =~ s/\.+/\./g;               # Filter out ".." from filename
 
-    my $webtmpl = "$templateDir/$webName/$name.$topic.tmpl";
-    if( -e $webtmpl ) {
-        return &readFile( $webtmpl );
+    my $tmplFile = "";
+
+    # search first in twiki/templates/Web dir
+    # for file script(.topic)(.skin).tmpl
+    my $tmplDir = "$templateDir/$webName";
+    if( opendir( DIR, $tmplDir ) ) {
+        # for performance use readdir, not a row of ( -e file )
+        my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
+        closedir DIR;
+        $tmplFile = "$theName.$theTopic.tmpl";
+        if( ! grep { /^$tmplFile$/ } @filelist ) {
+            $tmplFile = "$theName.$theSkin.tmpl";
+            if( ! grep { /^$tmplFile$/ } @filelist ) {
+                $tmplFile = "$theName.$theTopic.$theSkin.tmpl";
+                if( ! grep { /^$tmplFile$/ } @filelist ) {
+                    $tmplFile = "$theName.tmpl";
+                    if( ! grep { /^$tmplFile$/ } @filelist ) {
+                        $tmplFile = "";
+                    }
+                }
+            }
+        }
+        if( $tmplFile ) {
+            $tmplFile = "$tmplDir/$tmplFile";
+        }
     }
-    
-    $webtmpl = "$templateDir/$webName/$name.tmpl";
-    if( -e $webtmpl ) {
-        return &readFile( $webtmpl );
+
+    # if not found, search in twiki/templates dir
+    $tmplDir = $templateDir;
+    if( ( ! $tmplFile ) && ( opendir( DIR, $tmplDir ) ) ) {
+        my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
+        closedir DIR;
+        $tmplFile = "$theName.$theTopic.tmpl";
+        if( ! grep { /^$tmplFile$/ } @filelist ) {
+            $tmplFile = "$theName.$theSkin.tmpl";
+            if( ! grep { /^$tmplFile$/ } @filelist ) {
+                $tmplFile = "$theName.$theTopic.$theSkin.tmpl";
+                if( ! grep { /^$tmplFile$/ } @filelist ) {
+                    $tmplFile = "$theName.tmpl";
+                    if( ! grep { /^$tmplFile$/ } @filelist ) {
+                        $tmplFile = "";
+                    }
+                }
+            }
+        }
+        if( $tmplFile ) {
+            $tmplFile = "$tmplDir/$tmplFile";
+        }
     }
-    
-    $webtmpl = "$templateDir/$name.$topic.tmpl";
-    if( -e $webtmpl ) {
-        return &readFile( $webtmpl );
+
+    # read the template file
+    if( -e $tmplFile ) {
+        return &readFile( $tmplFile );
     }
-    return &readFile( "$templateDir/$name.tmpl" );
+    return "";
 }
 
 
@@ -724,6 +767,10 @@ sub handleIncludeFile
         # so save the current web and topic name
         $theWeb = $1;
         $theTopic = $2;
+
+        # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
+        $text =~ s/.*?%STARTINCLUDE%//os;
+        $text =~ s/%STOPINCLUDE%.*//os;
     }
 
     # handle all preferences and internal tags (for speed: call by reference)
@@ -771,7 +818,9 @@ sub handleSearchWeb
 sub handleTime
 {
     my( $theAttributes, $theZone ) = @_;
-    # format example: 28 Jul 2000 15:33 is "day month year hour:min:sec"
+    # format examples:
+    #   28 Jul 2000 15:33 is "day month year hour:min:sec"
+    #   001128 "2year0monthday"
 
     my $format = extractNameValuePair( $theAttributes );
 
@@ -781,21 +830,25 @@ sub handleTime
         if( $theZone eq "gmtime" ) {
             my( $sec, $min, $hour, $day, $mon, $year) = gmtime( $time );
             $value = $format;
-            $value =~ s/sec[a-z]*/sprintf("%.2u",$sec)/geoi;
-            $value =~ s/min[a-z]*/sprintf("%.2u",$min)/geoi;
-            $value =~ s/hou[a-z]*/sprintf("%.2u",$hour)/geoi;
-            $value =~ s/day[a-z]*/sprintf("%.2u",$day)/geoi;
-            $value =~ s/mon[a-z]*/$isoMonth[$mon]/goi;
-            $value =~ s/yea[a-z]*/sprintf("%.4u",$year+1900)/geoi;
+            $value =~ s/\$sec[a-z]*/sprintf("%.2u",$sec)/geoi;
+            $value =~ s/\$min[a-z]*/sprintf("%.2u",$min)/geoi;
+            $value =~ s/\$hou[a-z]*/sprintf("%.2u",$hour)/geoi;
+            $value =~ s/\$day[a-z]*/sprintf("%.2u",$day)/geoi;
+            $value =~ s/\$mon[a-z]*/$isoMonth[$mon]/goi;
+            $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
+            $value =~ s/\$yea[a-z]*/sprintf("%.4u",$year+1900)/geoi;
+            $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
         } elsif( $theZone eq "servertime" ) {
             my( $sec, $min, $hour, $day, $mon, $year) = localtime( $time );
             $value = $format;
-            $value =~ s/sec[a-z]*/sprintf("%.2u",$sec)/geoi;
-            $value =~ s/min[a-z]*/sprintf("%.2u",$min)/geoi;
-            $value =~ s/hou[a-z]*/sprintf("%.2u",$hour)/geoi;
-            $value =~ s/day[a-z]*/sprintf("%.2u",$day)/geoi;
-            $value =~ s/mon[a-z]*/$isoMonth[$mon]/goi;
-            $value =~ s/yea[a-z]*/sprintf("%.4u",$year+1900)/geoi;
+            $value =~ s/\$sec[a-z]*/sprintf("%.2u",$sec)/geoi;
+            $value =~ s/\$min[a-z]*/sprintf("%.2u",$min)/geoi;
+            $value =~ s/\$hou[a-z]*/sprintf("%.2u",$hour)/geoi;
+            $value =~ s/\$day[a-z]*/sprintf("%.2u",$day)/geoi;
+            $value =~ s/\$mon[a-z]*/$isoMonth[$mon]/goi;
+            $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
+            $value =~ s/\$yea[a-z]*/sprintf("%.4u",$year+1900)/geoi;
+            $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
         }
     } else {
         if( $theZone eq "gmtime" ) {
@@ -868,6 +921,8 @@ sub handleInternalTags
     $_[0] =~ s/%WEBPREFSTOPIC%/$webPrefsTopicname/go;
     $_[0] =~ s/%NOTIFYTOPIC%/$notifyTopicname/go;
     $_[0] =~ s/%STATISTICSTOPIC%/$statisticsTopicname/go;
+    $_[0] =~ s/%STARTINCLUDE%//go;
+    $_[0] =~ s/%STOPINCLUDE%//go;
     $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo;
 }
 
