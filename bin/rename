@@ -1,0 +1,303 @@
+#!/usr/bin/perl -wT
+#
+# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+#
+# Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2001 Sven Dowideit, svenud@ozemail.com.au
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at
+# http://www.gnu.org/copyleft/gpl.html
+#
+#usage example:
+#<FORM name="rename" action="/%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/">
+#<input type="text" name="topic" value="%TOPIC%" size="16">
+#<input type="text" name="newtopic" size="16">
+#<input type="submit" name="Rename">
+#</FORM>
+
+use CGI::Carp qw( fatalsToBrowser );
+use CGI;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
+
+#print "Content-type: text/html\n\n";
+
+my $query= new CGI;
+
+&main();
+
+# List of webs to form drop-down.
+sub dropListOfWebs
+{
+   my ($web) = @_;
+
+   my @webs = &TWiki::Store::listWebs();
+
+   my $html = "<SELECT NAME=\"webselection\">\n";
+   foreach ( @webs ) {
+      my $selected = ($_ eq $web) ? "SELECTED" : "";
+      $html .= "   <OPTION $selected VALUE=\"$_\">$_</OPTION>\n"; 
+   }
+   $html .= "</SELECT>\n";
+
+   return $html;
+}
+
+sub main
+{
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theOldWeb = $query->param( 'oldWeb' );
+    my $theOldTopic = $query->param( 'oldTopic' );
+    my $newWeb = $query->param( 'newWeb' );
+    my $newTopic = $query->param( 'newTopic' );
+    my $theUrl = $query->url;
+    my $lockFailure = "";
+    my $breakLock = $query->param( 'breaklock' );
+
+    if (!$newWeb) {
+      # Get selection
+      $newWeb = $query->param( 'webselection' );
+    }
+
+    my $testing = 0;
+    
+    my ( $topic, $webName, $scriptUrlPath, $userName, $dataDir ) = 
+        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theOldTopic, $theUrl );
+
+    my $wikiUserName = &TWiki::userToWikiName( $userName );
+
+    my $oldWeb = $theOldWeb;
+    my $oldTopic = $theOldTopic;
+    if (! $oldWeb) {
+       $oldWeb = $webName;
+    }
+    if (! $oldTopic) {
+       $oldTopic = $topic;
+    }
+        
+    my $redoRename = "";
+    if ($newTopic) {
+       $redoRename = 1;
+    }
+
+    if (! $redoRename) {
+       # check access permission
+       my $text = "";
+       if( &TWiki::Store::topicExists( $oldWeb, $oldTopic ) ) {
+   	   $text = &TWiki::Store::readTopic( $oldTopic );
+       }
+       if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $text, $oldTopic, $oldWeb ) ) {
+          # user has not permission to change the topic
+          my $url = &TWiki::getOopsUrl( $oldWeb, $oldTopic, "oopsaccesschange" );
+          print $query->redirect( $url );
+          return;
+       }
+
+       # Check for lock - at present the lock can't be broken
+       my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedNew( $oldWeb, $oldTopic );
+       TWiki::writeDebug( "rename lockUser = $lockUser");
+       if( ! $breakLock && $lockUser ) {
+          # warn user that other person is editing this topic
+          $lockUser = &TWiki::userToWikiName( $lockUser );
+          use integer;
+          $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
+          my $editLock = $TWiki::editLockTime / 60;
+          # PTh 20 Jun 2000: changed to getOopsUrl
+          my $url = &TWiki::getOopsUrl( $oldWeb, $oldTopic, "oopslockedrename",
+              $lockUser, $editLock, $lockTime );
+          print $query->redirect( $url );
+	  return;
+       }
+       &TWiki::Store::lockTopicNew( $oldWeb, $oldopic );
+    }
+
+    # Has user selected new name yet?
+    if (! $newTopic) {
+        $newTopic = $oldTopic;
+        if ($testing) {
+           $oldTopic =~ /^(.*)(...)$/;
+           if ($2 eq "One") {
+              $newTopic = "$1Two";
+           } else {
+              $newTopic = "$1One";
+           }
+        }
+        print "Content-type: text/html\n\n";
+        $tmpl= &TWiki::Store::readTemplate( "oopsneednewtopic" );
+        $tmpl =~ s/%OLD_TOPIC%/$oldTopic/go;
+        $tmpl =~ s/%OLD_WEB%/$oldWeb/go;
+        $tmpl =~ s/%NEW_WEB%//go; # JET set from selection
+        my @webs = dropListOfWebs($oldWeb);
+        $tmpl =~ s/%WEB_SELECTION%/@webs/go;
+        $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
+        $tmpl = &TWiki::handleCommonTags( $tmpl, "" );
+        print $tmpl;
+        return;    
+    } 
+        
+    TWiki::writeDebug("A oldWeb, oldTopic: $oldWeb, $oldTopic");
+    TWiki::writeDebug("B newWeb, newTopic: $newWeb, $newTopic");
+
+    # Check all is okay before we proceed.
+    if( ! &TWiki::Store::webExists( $oldWeb ) ) {
+        print "Content-type: text/html\n\n";
+        $tmpl= &TWiki::Store::readTemplate( "noweb" );
+        $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic );
+        print $tmpl;
+        return;
+    }
+    
+    if( ! &TWiki::Store::webExists( $newWeb ) ) {
+        print "Content-type: text/html\n\n";
+        $tmpl= &TWiki::Store::readTemplate( "noweb" );
+        $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
+        print $tmpl;
+        return;
+    }
+
+
+    my $fileName = &TWiki::Store::getFileName($oldWeb, $oldTopic);
+    my $newName = &TWiki::Store::getFileName($newWeb, $newTopic);
+    
+    if (!redoRename && ! -e $fileName) {
+        print "Content-type: text/html\n\n";
+        $tmpl= &TWiki::Store::readTemplate( "oopsmissing" );
+        $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic );
+        print $tmpl;
+        return;    
+    }
+    
+    if ( -e $newName ) {
+        print "Content-type: text/html\n\n";
+        $tmpl= &TWiki::Store::readTemplate( "oopsexists" );
+        $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
+        print $tmpl;
+        return;    
+    }
+
+    if (( $redoRename eq "ON" ) || !&TWiki::Store::topicIsLocked( $fileName ))
+         #need to make sure newName ia a wikiName, use normal oops mechanism !!!
+    {
+      my $search        =  $newTopic;
+      my $scope         = "text";
+      my $caseSensitive = "";
+
+      my @result = findReferingPages($oldWeb, $oldTopic);
+      TWiki::writeDebug("rename refering pages @result");
+      my $result = "";
+      foreach $item (@result)
+      {
+        my ($itemWeb, $itemTopic) = TWiki::Store::getWebTopic($item);
+        TWiki::writeDebug("link to change in $item, $itemWeb, $itemTopic");
+        if ( &TWiki::Store::topicIsLockedNew( $itemWeb, $itemTopic ) ) {
+           $lockFailure = 1;
+           TWiki::writeDebug("rename lock failure $itemWeb.$itemTopic");
+        } else {
+           my $resultText = "";
+           $result .= ":$item: , "; 
+           #open each file, replace $topic with $newTopic
+           if ( &TWiki::Store::topicExists($itemWeb, $itemTopic) ) { 
+             my $scantext = &TWiki::Store::readWebTopic($itemWeb, $itemTopic);
+             foreach( split( /\n/, $scantext ) ) {
+                s/([^.A-Za-z0-9])\Q$oldWeb\.$oldTopic\E([_\*<\s]+)/$1$newWeb.$newTopic$2/go;
+                my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
+                s/([^.A-Za-z0-9])\Q$oldTopic\E([_\*<\s]+)/$1$insertWeb$newTopic$2/go;
+                s/([^.A-Za-z0-9])\Q$oldTopic\E$/$1$insertWeb$newTopic/go;
+                $resultText .= "$_\n";
+             }
+          } else {
+             $result .= ";$item does not exist;"
+          }
+          TWiki::writeDebug("save web=$itemWeb topic=$itemTopic");
+          &TWiki::Store::save($itemWeb, $itemTopic, $resultText);
+        }
+      }
+      TWiki::writeDebug("rename - just saved topic");
+      if ( $redoRename ne "ON" )
+      {
+          TWiki::writeDebug("rename - call rename");
+          &TWiki::Store::renameTopic($oldWeb, $oldTopic, $newWeb, $newTopic);
+      }
+      my $new_url = "";
+      
+   
+        if ( $lockFailure )
+        {
+           TWiki::writeDebug("lock failure in rename");
+           print "Content-type: text/html\n\n";
+           $tmpl= &TWiki::Store::readTemplate( "oopsneednewtopic" );
+           $tmpl =~ s/%OLD_TOPIC%/$oldTopic/go;
+           $tmpl =~ s/%OLD_WEB%/$oldWeb/go;
+           $tmpl =~ s/%NEW_WEB%/$newWeb/go;
+           $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
+           $tmpl =~ s/%WEB_SELECTION%/$newTopic/go;
+           $tmpl =~ s/%%/TRUE/go;
+           $tmpl = &TWiki::handleCommonTags( $tmpl, "" );
+           print $tmpl;
+           return;
+        }
+        else
+        {
+           #redirect to new pagename...
+           TWiki::writeDebug("Dealt with locks moving to new page");
+           $new_url = &TWiki::getViewUrl( $newWeb, $newTopic );
+           # print "<p>Redirecting to <a href=\"$new_url\">$new_url</a><p>";
+        }
+
+       print $query->redirect( $new_url );
+       return;
+
+#       print "<html>";
+#       print "<head>";
+#       print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">";
+#       print "<title> Rename Page  </title>";
+#       print "</head>";
+#       print "<body bgcolor=\"#FFFFFF\">";
+#       print "rename done<p><hr>";
+#       print "<pre>$result</pre>";
+#       print "</body>";
+#       print "</html>";
+    }
+    else
+    {
+       print "<html>";
+       print "<head>";
+       print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">";
+       print "<title> Rename page ERROR  </title>";
+       print "</head>";
+       print "<body bgcolor=\"#FFFFFF\">";
+       print "rename Not done - either the source page does not exist, or the destination page already exists :)";
+       print "</body>";
+       print "</html>";
+    }
+}
+
+sub findReferingPages
+{
+    my @result = ();
+    
+    # Go through parameters finding all topics for change
+    my $count = 1;
+    while ($query->param("TOPIC$count")) {
+       my $checked = $query->param("RENAME$count");
+       TWiki::writeDebug("$count $checked");
+       if ($checked) {
+          push @result, $query->param("TOPIC$count");
+          TWiki::writeDebug("$count @result");
+       }
+       $count++;
+    }
+    
+    return @result;
+}
+
