@@ -152,6 +152,12 @@ Above template files will result in the following table when *_editing_* a topic
 </table>
 </form>
 
+__Note:__ It is possible to force the values of a category table when creating a new topic. This is useful to create new topics using a form for the topic name. The default values of the category table can be specified as hidden fields if needed, i.e. =&lt;input type="hidden" name="someCategory" value="someValue"&gt;= 
+
+Example (edit this page to see the source) :
+	* <form name="main" action="../../edit/Know/"> New Know.PublicFAQ topic: <input type="text" name="topic" size="32"> <input type="hidden" name="TopicClassification" value="PublicFAQ"> <input type="hidden" name="OperatingSystem" value="OsSolaris,OsSunOS"> <input type="hidden" name="OsVersion" value="Just testing..."> <input type="submit" value="Create"> </FORM>
+
+
 <A name="implementation">
 -----
 *(5) Implementation Notes*
@@ -222,7 +228,7 @@ __Note:__ These installation notes assume user =nobody= for all files manupulate
 	* To create a new web:
 		* Use a topic name consisting of characters =A..Z= , =a..z= but *not* in WikiNotation.
 		* Create a new template directory under =twiki/templates= .
-		* Create a new data directory under =twiki/data= .
+		* Create a new data directory under =twiki/data= and check the file permission of the directory.
 		* Copy the files TWikiUsers.txt, WebHome.txt, WebNotify.txt, WebSearch.txt, webcolor.inc, and weblist.inc from the =twiki/data/Main= directory to the new data directory.
 		* Make changes to webcolor.inc (unique color for web), and possibly also weblist.inc (web specific links on top).
 		* In case you need a web specific copyright notice (at the bottom), copy file webcopyright.inc from the =twiki/data= directory to the new data directory, and customize it.
@@ -402,3 +408,4 @@ drwxrwxrwx	4 twiki	 t5			  1024 Mar 27 02:58 ..
 -- Main.PeterThoeny - 23 Jun 1999 <br>
 -- Main.PeterThoeny - 01 Sep 1999 <br>
 -- Main.PeterThoeny - 29 Sep 1999 <br>
+-- Main.PeterThoeny - 14 Jan 2000 <br>
