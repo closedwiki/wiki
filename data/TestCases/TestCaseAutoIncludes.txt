@@ -1,0 +1,40 @@
+%META:TOPICINFO{author="guest" date="1101042317" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+!! %TOPIC%
+
+Description: Check for the correct detection and handling of recursive and repeated includes
+
+---+ Expected
+<!-- expected -->
+<pre>
+There was an old Man of the coast
+<font size="-1" class="twikiAlert" color="red">Warning: Can't INCLUDE <nop>RecursiveInclude twice, topic is already included</font>
+
+Who placidly sat on a post;
+But when it was cold
+He relinquished his hold
+And called for some hot buttered toast.
+</pre>
+<p />
+Who placidly sat on a post;
+But when it was cold
+He relinquished his hold
+And called for some hot buttered toast.
+</pre>
+<p />
+<!-- /expected -->
+---+ Actual
+<!-- actual -->
+%INCLUDE{"RecursiveInclude"}%
+%INCLUDE{"IncludeMeTwice"}%
+%INCLUDE{"IncludeMeTwice"}%
+<!-- /actual -->
+---+ Expected
+<!-- expected expand -->
+<font color="#ff0000"> <strong><em>Note:</em></strong> </font> Included topic <span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">FileNotFound</font><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/TestCases/FileNotFound?topicparent=TestCases.TestCaseAutoIncludes"><sup>?</sup></a></span> does not exist yet
+<!-- /expected -->
+---+ Actual
+<!-- actual -->
+%INCLUDE{"FileNotFound"}%
+<!-- /actual -->
+

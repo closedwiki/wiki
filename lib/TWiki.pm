@@ -1473,8 +1473,10 @@ sub _handleINCLUDE {
         return "";
     }
 
+    my $inFile = $fileName;
+
     # prevent recursive loop
-    if( $theProcessedTopics->{$fileName} ) {
+    if( $theProcessedTopics->{$inFile} ) {
         # file already included
         if( $warn || TWiki::Prefs::getPreferencesFlag( "INCLUDEWARNING" ) ) {
             unless( $warn =~ /^(off|no)$/i ) {
@@ -1483,8 +1485,9 @@ sub _handleINCLUDE {
         }
         return "";
     } else {
-        # remember for next time
-        $theProcessedTopics->{$fileName} = 1;
+        # remember for recursions
+print STDERR "Push $inFile\n";
+        $theProcessedTopics->{$inFile} = 1;
     }
 
     # set include web/filenames and current web/filenames
@@ -1546,6 +1549,9 @@ sub _handleINCLUDE {
     $text =~ s/\n+$/\n/;
 
     # FIXME What about attachments?
+
+    # no longer processing this
+    $theProcessedTopics->{$inFile} = 0;
 
     return $text;
 }
