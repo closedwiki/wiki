@@ -4,7 +4,9 @@ package CommentTest;
 
 use TWiki::Plugins::CommentPlugin::Comment;
 require 'FuncFixture.pm';
+require 'StoreFixture.pm';
 import TWiki::Func;
+import TWiki::Store;
 
 use CGI;
 use base qw(TWiki::Func);
@@ -86,7 +88,7 @@ sub inputTest {
 	 "",
 	 "bottom");
 
-  $this->assert($pidx == $eidx + 1);
+  $this->assert($pidx == $eidx + 1, $html);
 
   $html =~ s/^<form(.*?)>//sio;
   my $dattrs = $1;
@@ -150,7 +152,7 @@ sub inputTest {
   $this->assert_matches(qr/name=\"comment\"/, $dattrs);
   my $mess = $2;
   if ($locked) {
-    $this->assert_str_equals("Commenting is locked out by locker for at least 0 minutes", $mess);
+    $this->assert_matches(qr/\Wlocker for at least 0 /, $mess);
   } else {
     $this->assert_str_equals("The Message", $mess);
   }

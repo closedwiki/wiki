@@ -24,6 +24,7 @@
         <include name="${plugin.lib}/*.pm"/>
         <include name="${plugin.lib}/build.xml"/>
         <include name="${plugin.data}*.txt"/>
+        <include name="${data.plugins}/CommentsTmpl.txt"/>
         <include name="templates/comments.tmpl"/>
         <include name="${test.zip}"/>
     </patternset>

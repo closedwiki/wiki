@@ -8,6 +8,7 @@ use strict;
 use integer;
 
 use TWiki::Plugins::CommentPlugin::Attrs;
+use TWiki::Plugins::CommentPlugin::Templates;
 
 { package CommentPlugin::Comment;
 
@@ -19,7 +20,8 @@ use TWiki::Plugins::CommentPlugin::Attrs;
     my $templateFile =
       TWiki::Func::getPreferencesValue("COMMENTPLUGIN_TEMPLATES") ||
 	"comments";
-    my $templates = TWiki::Func::readTemplate( $templateFile );
+
+    my $templates = CommentPlugin::Templates::readTemplate( $templateFile );
     if (! $templates ) {
       TWiki::Func::writeWarning("No such template file '$templateFile'");
       return;
@@ -27,7 +29,7 @@ use TWiki::Plugins::CommentPlugin::Attrs;
 
     my $t =
       TWiki::Func::expandCommonVariables( "%TMPL:P{$name}%", $topic, $web );
-    
+
     return "%RED%No such template def %<nop>TMPL:DEF{$name}%%ENDCOLOR%"
       unless ( defined($t) && $t ne "" );
 
@@ -47,7 +49,8 @@ use TWiki::Plugins::CommentPlugin::Attrs;
 
     # Nasty, tacky, error prone way to find out if we are previewing or not
     my $scriptname = $ENV{'SCRIPT_NAME'} || "";
-    my $previewing = ( $scriptname =~ /^.*\/preview/ );
+    my $previewing = ( $scriptname =~ /^.*\/preview/ ||
+		       $scriptname =~ /^.*\/gnusave/ );
 
     my $defaultType = 
 	TWiki::Func::getPreferencesValue("COMMENTPLUGIN_DEFAULT_TYPE") ||
@@ -88,6 +91,8 @@ use TWiki::Plugins::CommentPlugin::Attrs;
     # box is (not the target of the comment!)
     my $input = _getTemplate( "PROMPT:$type", $topic, $web );
 
+    return $input if $input =~ m/^%RED%/so;
+
     # Expand special attributes as required
     $input =~ s/%([a-z]\w+)\|(.*?)%/&_expandPromptParams($1, $2, $attrs)/iego;
 
@@ -97,10 +102,10 @@ use TWiki::Plugins::CommentPlugin::Attrs;
     my $target = $attrs->remove( "target" );
     if ( $target ) {
       # extract web and anchor
-      if ( $target =~ s/^($TWiki::webNameRegex)\.//o ) {
+      if ( $target =~ s/^(\w+)\.//o ) {
 	$web = $1;
       }
-      if ( $target =~ s/($TWiki::anchorRegex)$//o ) {
+      if ( $target =~ s/(#\w+)$//o ) {
 	$anchor = $1;
       }
       if ( $target ne "" ) {
@@ -116,7 +121,7 @@ use TWiki::Plugins::CommentPlugin::Attrs;
 	TWiki::Func::checkTopicEditLock( $web, $topic );
 
       if ( $lockUser ) {
-	$message = "Commenting is locked out by $lockUser for at least $lockTime minutes";
+	$message = "Commenting is locked out by <nop>$lockUser for at least $lockTime more minutes";
 	$disable = "disabled";
       }
     }
