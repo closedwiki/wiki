@@ -1206,14 +1206,20 @@ sub userToWikiName
     }
 
     $loginUser =~ s/$securityFilter//go;
-    my $wUser = $userToWikiList{ $loginUser };  # || $loginUser;
-	if ( $wUser ) {
+    my $wUser = $userToWikiList{ $loginUser };
+    if ( $wUser ) {
        if( $dontAddWeb ) {
-           return $wUser;
+          return $wUser;
        }
        return "$mainWebname.$wUser";
-	}
-	return $loginUser;
+    }
+    if ( $wikiToUserList{"$loginUser"} ) {
+       if( $dontAddWeb ) {
+          return $loginUser;
+       }
+       return "$mainWebname.$loginUser";
+    }
+    return $loginUser;
 }
 
 =pod
