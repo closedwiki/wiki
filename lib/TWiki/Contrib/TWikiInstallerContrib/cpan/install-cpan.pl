@@ -28,6 +28,7 @@ installLocalModules({
 				     XML::Parser XML::Simple 
 				     File::Slurp File::Slurp::Tree
 				     List::Permutor File::Temp 
+				     WWW::Mechanize
 				     Carp::Clan Bit::Vector Date::Calc 
 				     Error Class::Inner Devel::Symdump
 				     URI HTML::Parser HTML::Tagset
