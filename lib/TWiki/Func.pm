@@ -196,14 +196,6 @@ sub getTwikiWebname
     return $TWiki::twikiWebname;
 }
 
-# ==========================
-# get ScriptName
-# ==========================
-sub getScriptName
-{
-    return &TWiki::getScriptName();
-}
-
 # =========================
 # expand all common %VARIABLES%
 # =========================

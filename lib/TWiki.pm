@@ -566,14 +566,6 @@ sub setSessionValue
     return &TWiki::Plugins::setSessionValueHandler( @_ );
 }
 
-# ==========================
-sub getScriptName
-{
-    my $url = $cgiQuery->url();
-    $url =~ /^[^\:]*\:\/\/[^\/]*.*\/(.*)$/;
-    return $1;
-}
-
 # =========================
 sub getSkin
 {
