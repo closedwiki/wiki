@@ -214,7 +214,9 @@ sub endRenderingHandler {
     $called{endRenderingHandler} = join(",", @_);
     my $q = TWiki::Func::getCgiQuery();
 
-    if ( $q->param( "test" ) eq "compare" && $_[0] =~ /<!--\s*actual\s*-->/ ) {
+    if ( $q &&
+         $q->param( "test" ) eq "compare" &&
+         $_[0] =~ /<!--\s*actual\s*-->/ ) {
         my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
         my $res = _compareExpectedWithActual( _parse( $text, "expected" ),
                                               _parse( $_[0], "actual" ),
@@ -222,7 +224,7 @@ sub endRenderingHandler {
         if ( $res ) {
             $res = "<font color=\"red\">TESTS FAILED</font><p />$res";
         } else {
-            $res = "<font color=\"\green\">ALL TESTS PASSED</font>";
+            $res = "<font color=\"green\">ALL TESTS PASSED</font>";
         }
         $_[0] = $res;
     }
