@@ -2396,8 +2396,10 @@ sub handleToc
         if ( ! &TWiki::Store::topicExists( $web, $topicname ) ) {
             return showError( "TOC: Cannot find topic \"$web.$topicname\"" );
         }
-        @list = split( /\n/, handleCommonTags( 
-            &TWiki::Store::readWebTopic( $web, $topicname ), $topicname, $web ) );
+        my $t = TWiki::Store::readWebTopic( $web, $topicname );
+        $t =~ s/.*?%STARTINCLUDE%//s;
+        $t =~ s/%STOPINCLUDE%.*//s;
+        @list = split( /\n/, handleCommonTags( $t, $topicname, $web ) );
     }
 
     @list = grep { /(<\/?pre>)|($regex{headerPatternDa})|($regex{headerPatternSp})|($regex{headerPatternHt})/ } @list;
