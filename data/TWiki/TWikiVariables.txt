@@ -1,9 +1,7 @@
-%META:TOPICINFO{author="MikeMannix" date="999187591" format="1.0" version="1.35"}%
+%META:TOPICINFO{author="MikeMannix" date="999237983" format="1.0" version="1.36"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Variables
-
----+++ About Variables
 
 <nop>TWikiVariables are text strings enclosed in percentage signs: ==%<no>VARIABLE%== that represent stored data. When a topic is rendered for viewing, defined variables replaced by their actual values. TWiki has two types of variable, predefined, and Preference-based, where you can change settings. Through Preference variables, you can even define custom variables. Clearly, they are a power TWiki feature.
 

@@ -1,9 +1,7 @@
-%META:TOPICINFO{author="MikeMannix" date="998903988" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="MikeMannix" date="999237943" format="1.0" version="1.8"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Plugins
-
----+++ About Plugins
 
 <nop>TWikiPlugins allow you to add new features to TWiki without changing the core program. Using a plug-in approach means that you can:
 
