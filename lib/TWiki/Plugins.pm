@@ -53,8 +53,8 @@ $VERSION = '1.010';
                       'writeHeaderHandler'      => 1,
                       'redirectCgiQueryHandler' => 1,
                       'getSessionValueHandler'  => 1,
-                      'getSessionValueHandler'  => 1 );
-                      'renderFormFieldForEditHandler'  => 1,
+                      'renderFormFieldForEditHandler'  => 1
+                    );
 
 %registeredHandlers = ();
 
