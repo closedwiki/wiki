@@ -1,7 +1,5 @@
-%META:TOPICINFO{author="MikeMannix" date="999397089" format="1.0" version="1.9"}%
-%TOC%
-
+%META:TOPICINFO{author="MikeMannix" date="999857962" format="1.0" version="1.10"}%
 ---++ Web Changes Notification Service
 
-%INCLUDE{"%TWIKIWEB%.MonitoringSiteActivity"}%
+Each %WIKITOOLNAME% web has an automatic email notification service for recent changes. You can subscribe and unsubscribe yourself in WebNotify on each web. 
 %META:TOPICMOVED{by="MikeMannix" date="999396004" from="TWiki.WebNotification" to="TWiki.WebChangesNotify"}%

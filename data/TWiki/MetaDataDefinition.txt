@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="MikeMannix" date="999300220" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="MikeMannix" date="999857394" format="1.0" version="1.6"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
 #MetaDataDefinition
----## TWiki Meta Data
+---# TWiki Meta Data
 
----+++ What is Meta Data in TWiki?
+---++ What is Meta Data in TWiki?
 
 __What, indeed!__
 
@@ -15,7 +15,7 @@ See [[#MetaDataRendering][Meta Data Rendering]] for variables used to display me
 
 Current version: *1.0*
 
----++++ Syntax
+---+++ Syntax
 
 	* Format is as for [[TWikiDocumentation#TWiki_Variables, except all fields have a key.
 		* %<nop>META:&lt;type&gt;{key1="value1" [key2="value2" [...]]}%
@@ -39,9 +39,9 @@ Current version: *1.0*
 </verbatim>
 </blockquote>
 
----++++ Specifications
+---+++ Specifications
 
----+++++ TOPICINFO
+---++++ TOPICINFO
 
 	|  *Key*  |  *Comment*			 |
 	| version	| Same as RCS version |
@@ -49,7 +49,7 @@ Current version: *1.0*
 	| author	 | last to change topic, is the REMOTE_USER |
 	| format	 | Format of this topic, will be used for automatic format conversion |
 
----+++++ TOPICMOVED
+---++++ TOPICMOVED
 
 This is optional, exists if topic has ever been moved.  If a topic is moved more than once, only the most recent TOPICMOVED meta variable exists in the topic, older ones are to be found in the rcs history.
 
@@ -65,12 +65,12 @@ Notes:
 	* at present version number is not supported directly, it can be inferred from the RCS history.
 	* there is only one META:TOPICMOVED in a topic, older move information can be found in the RCS history.
  
----+++++ TOPICPARENT
+---++++ TOPICPARENT
 
 	| *Key*	| *Comment* |
 	| name	 | The topic from which this was created, WebHome if done from =Go=, othewise topic where =?= or form used.  Normally just topic, but is full web.topic format if parent is in a different Web.  Renaming a Web will then only break a few of these references or they can be scanned and fixed. |
 
----+++++ FILEATTACHMENT
+---++++ FILEATTACHMENT
 
 	| *Key*	| *Comment* |
 	| name	 | Name of file, no path.  Must be unique within topic |
@@ -89,12 +89,12 @@ Extra field that are added if an attachment is moved:
 	| movedto	| full topic name - web.topic |
 	| moveddate | integer, unx time, seconds since start 1970 |
 
----+++++ FORM
+---++++ FORM
 
 	| *Key*	| *Comment* |
 	| name	 | A topic name - the topic is a [[TWikiDocumentation#Form_Template][Form Template]].  Can optionally include the web name i.e. web.topic, but doesn't normally |
 
----+++++ FIELD
+---++++ FIELD
 
 Should only be present if there is a FORM entry.  Note that this data is used when viewing a topic, the form template definition is not read.
 
@@ -103,7 +103,7 @@ Should only be present if there is a FORM entry.  Note that this data is used wh
 	| title	| Full text from [[TWikiDocumentation#Form_Template][Form Template]] |
 	| value	| Value user has supplied via form |
 
----++++ Recommended Sequence
+---+++ Recommended Sequence
 
 There no absolute need for meta data variables to be in a specific order, however, it does for the following reasons:
 	* Keep (form) fields in the order they are defined
@@ -122,16 +122,16 @@ So the order is:
 	* FORM - optional
 	* FIELD - 0 or more entries (FORM required)
 
----++++ Viewing Meta Data in Page Source
+---+++ Viewing Meta Data in Page Source
 
 When viewing a topic the ==Raw Text== link can be clicked to show the text of a topic (ie: as seen when editing).  This is done by adding <code>raw=on</code> to URL.  <code>raw=debug</code> shows the meta data as well as the topic data, ex: <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug">debug view for this topic</a>
 
----++++ Future Support for Plugins 
+---+++ Future Support for Plugins 
 
 There is currently no support for meta data for Plugins.  However, the format is readily extendable and the =Meta.pm= code that supports the format needs only minor alteration.
 
 #MetaDataRendering
----+++ Rendering Meta Data
+---++ Rendering Meta Data
 
 Various types of meta data can be [[#MetaDataDefinition][stored in topics]]. The data is rendered using the %<nop>META% variable. This is mostly used in the ==view==, ==preview== and ==edit== scripts.
 

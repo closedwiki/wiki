@@ -1,15 +1,15 @@
-%META:TOPICINFO{author="JohnTalintyre" date="999706127" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="MikeMannix" date="999856896" format="1.0" version="1.16"}%
 %TOC%
 %STARTINCLUDE%
----## TWiki Operating Environment
+---# TWiki Operating Environment
 
 _Server and client system requirements, file system structure_
 
----+++ Overview
+---++ Overview
 
 Maintaining minimum client and server requirements is necessary to keep TWiki deployment as broad as possible. 
 
----+++ Server-Side Requirements
+---++ Server-Side Requirements
 
 TWiki is written in Perl 5 and uses a number of shell commands. It requires GNU RCS (Revision Control System) to be installed on the same system. TWiki is developed in a standard Linux/Apache environment. It can also work with Microsoft Windows and other platforms.
 
@@ -23,7 +23,7 @@ TWiki is written in Perl 5 and uses a number of shell commands. It requires GNU 
 
 Current documentation covers Linux only. Compiling a basic [[http://twiki.org/cgi-bin/view/Codev/TWikiOnWindows][TWikiOnWindows]] installation guide is an ongoing effort. 
 
----+++ Client-Side Requirements
+---++ Client-Side Requirements
 
 The TWiki standard installation has extremely low browser requirements:
 
@@ -34,11 +34,11 @@ The TWiki standard installation has extremely low browser requirements:
 
 TWiki generates XHTML 1.0 code as long as it is compatible with HTML 3.2.
 
----++++ Known Issues
+---+++ Known Issues
 
 	* The new TWikiPlugins feature currently does not have any compatibility guidelines for developers. Plugins can require just about anything: browser-specific functions, stylesheets (CSS), Java, cookies, etc.
 
----+++ TWiki File System
+---++ TWiki File System
 
 You can rename the root TWiki directory - =twiki= - to whatever you like by changing it in the =twiki.cfg= configuration file. However, to keep the current installation and future upgrades simple, you should leave the subdirectory structure intact:
 
@@ -50,12 +50,12 @@ You can rename the root TWiki directory - =twiki= - to whatever you like by chan
 | =twiki/data=		|  [[#DataFiles][list]]  | Topic text (page content) and RCS histories; |
 | =twiki/templates= |  [[#TemplatesFiles][list]]  | HTML templates, used by TWiki scripts |
 
----++++ File Descriptions
+---+++ File Descriptions
 
 A rundown of the individual files in the current %VERSION% distribution, organized by TWiki root directories. All listings are complete unless otherwise noted.
 
 #TWikiFiles
----+++++ Files in <code>twiki</code>
+---++++ Files in <code>twiki</code>
 
 Introductory and installation files.
 
@@ -67,7 +67,7 @@ Introductory and installation files.
 | =TWikiHistory.html=		  | TWiki development timeline |
 
 #BinFiles
----+++++ Files in <code>twiki/bin</code>
+---++++ Files in <code>twiki/bin</code>
 
 All Perl CGI scripts.
 
@@ -92,7 +92,7 @@ All Perl CGI scripts.
 | =viewfile=		| Script to view an file attachment |
 
 #LibFiles
----+++++ Files under <code>twiki/lib</code>
+---++++ Files under <code>twiki/lib</code>
 
 The new =lib/TWiki/Plugins= directories contain core configuration, libraries and function modules, and Plugins.
 
@@ -112,7 +112,7 @@ The new =lib/TWiki/Plugins= directories contain core configuration, libraries an
 | =TWiki/Plugins/InterwikiPlugin.pm= | Refer to external Wikis and other Web sites |
 
 #PubFiles
----+++++ Files under <code>twiki/pub</code>
+---++++ Files under <code>twiki/pub</code>
 
 __attachments like images...__
 
@@ -162,7 +162,7 @@ __attachments like images...__
 | =TWiki/WabiSabi/wabisabi.gif= | xxxx |
 
 #DataFiles
----+++++ Files under <code>twiki/data</code>
+---++++ Files under <code>twiki/data</code>
 
 The =data= directory stores TWiki page data as individual text files. Each active web has its own subdirectory. The TWiki distribution package includes four start-up webs, with a number of pages of documentation and demo content. _This is a representative partial file listing..._
 
@@ -224,9 +224,8 @@ The =data= directory stores TWiki page data as individual text files. Each activ
 | =TWiki/DontNotify.txt,v= | xxxx |
 |  *...*  |  *...*  |
 
-
 #TemplatesFiles
----+++++ Files in <code>twiki/templates</code>
+---++++ Files in <code>twiki/templates</code>
 
 _Used to flexibly control appearance of rendered pages..._
 

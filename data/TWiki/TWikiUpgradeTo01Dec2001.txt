@@ -1,15 +1,15 @@
-%META:TOPICINFO{author="MikeMannix" date="999769010" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="MikeMannix" date="999857059" format="1.0" version="1.12"}%
 %TOC%
 %STARTINCLUDE%
----## TWiki Upgrade Guide
+---# TWiki Upgrade Guide
 
 _Upgrading from the 01-Dec-2000 release to the new TWiki 01-Sep-2001_
 
----+++ Overview
+---++ Overview
 
 The latest version of TWiki (01-Sep-2001) involves several major new features and numerous enhancements of the last full version (01-Dec-2001). The file system set-up is almost identical, but much of the underlying data structure and processes are new. With all the changes, the upgrade procedure is straightforward, and your existing page data is imported directly. 
 
----+++ Upgrade Requirements
+---++ Upgrade Requirements
 
 	* To upgrade from a 01-Dec-2000 standard installation to the new, next generation 01-Sep-2001 TWiki Production Release, follow the instructions below.
 
@@ -17,7 +17,7 @@ The latest version of TWiki (01-Sep-2001) involves several major new features an
 
 	* To upgrade from a Beta of the new release, or if you've made custom modifications, read through the documentation and use the procedure below as a guideline.  
 
----+++ Major Changes from TWiki 01-Dec-2000
+---++ Major Changes from TWiki 01-Dec-2000
 
 The 01 Sep 2001 release includes the following new features and enhancements:
 
@@ -37,11 +37,11 @@ The 01 Sep 2001 release includes the following new features and enhancements:
 
 The TWiki directory structure remains the same, with one exception, the new =lib/TWiki/Plugins= directory tree to for the main configuration file, library, internal modules and the new Plugin modules. Pre-existing files were formerly in =bin=.
 
----+++ Standard Upgrade Procedure
+---++ Standard Upgrade Procedure
 
 Follow this step-by-step guide to upgrade the 01 Dec 2000 version to the 01 Sep 2001 release, and import your original page data:
 
----++++ Step 1: Backup & Unpack
+---+++ Step 1: Backup & Unpack
 
 		1. Backup all existing TWiki directories ( =bin=, =pub=, =data=, =templates= )
 
@@ -50,7 +50,7 @@ Follow this step-by-step guide to upgrade the 01 Dec 2000 version to the 01 Sep 
 	  <br> =cd ~/tmp=
 	  <br> =unzip ~/TWiki20001201.zip=
 
----++++ Step 2: Upgrade TWiki document files 
+---+++ Step 2: Upgrade TWiki document files 
 
 		1. Move the document files to your TWiki root ( =twiki= ):
 		  <br> =mv ~/tmp/TWiki*.html $TWIKIROOT=
@@ -58,7 +58,7 @@ Follow this step-by-step guide to upgrade the 01 Dec 2000 version to the 01 Sep 
 		  <br> =mv ~/tmp/readme.txt $TWIKIROOT=
 		  <br> =mv ~/tmp/license.txt $TWIKIROOT=
 
----++++ Step 3: Upgrade CGI scripts
+---+++ Step 3: Upgrade CGI scripts
 
 		1. Rename your original =twiki/bin= directory: ( =twiki/bin= )
 		  <br> =mv $TWIKIROOT/bin $TWIKIROOT/bin.old=
@@ -72,7 +72,7 @@ Follow this step-by-step guide to upgrade the 01 Dec 2000 version to the 01 Sep 
 		  
 		* Pay attention to the file and directory permissions (security issue)
 
----++++ Step 4: Upgrade template files 
+---+++ Step 4: Upgrade template files 
 
 		1. Rename your original =twiki/templates= directory: ( =twiki/templates= )
 		  <br> =mv $TWIKIROOT/templates $TWIKIROOT/templates.old=
@@ -83,7 +83,7 @@ Follow this step-by-step guide to upgrade the 01 Dec 2000 version to the 01 Sep 
 		1. Restore any additional template subdirectories of your TWiki webs you might have and merge the changes.
 		1. Test your TWiki installation to see if you can view topics.
 
----++++ Step 5: Upgrade public files
+---+++ Step 5: Upgrade public files
 
 		1. Move the new =twiki/pub/TWiki= directory to your installation: ( =twiki/pub= )
 		  <br> =mv ~/tmp/pub/TWiki $TWIKIROOT/pub/=
@@ -92,7 +92,7 @@ Follow this step-by-step guide to upgrade the 01 Dec 2000 version to the 01 Sep 
 		  
 		* Pay attention to the file permissions of the =TWiki= directory and its subdirectory and files. The files must be writable by the CGI scripts (usually user "nobody").
 
----++++ Step 6: Upgrade data files 
+---+++ Step 6: Upgrade data files 
 
 		1. Move the new =twiki/data/TWiki= directory to your installation: ( =twiki/data= )
 		  <br> =mv ~/tmp/data/TWiki $TWIKIROOT/data/=
@@ -112,6 +112,6 @@ Follow this step-by-step guide to upgrade the 01 Dec 2000 version to the 01 Sep 
 		1. The =WebSearch= topic has considerable changes. Copy the one from =TWiki.TWiki= into all webs, or merge them if you made changes. To copy, do an edit-copy-edit-paste operation.
 		1. __Change the =WebHome= topics in all your webs to reflect these changes:__
 
----+++ Known Upgrade Issues
+---++ Known Upgrade Issues
 
 		* Check http://TWiki.org/cgi-bin/view/Codev/KnownIssuesOfTWiki01Sep2001 for known issues of TWiki 01 Sep 2001 (production release)

@@ -1,11 +1,15 @@
-%META:TOPICINFO{author="MikeMannix" date="999839991" format="1.0" version="1.38"}%
+%META:TOPICINFO{author="MikeMannix" date="999858969" format="1.0" version="1.39"}%
 %TOC%
 %STARTINCLUDE%
----## TWiki Variables
+---# TWiki Variables
+
+_Text strings expanded on the fly include predefined, preference-driven and custom-defined data_
+
+---++ Overview
 
 <nop>TWikiVariables are text strings enclosed in percentage signs: ==%<no>VARIABLE%== that represent stored data. When a topic is rendered for viewing, defined variables are replaced by their actual values. TWiki has two types of variable, predefined and Preference-based, where usually you determine the content. Through Preference variables, you can also define custom variables, creating new variable name and value. TWiki variables are as simple to use as they are powerful, and vice versa!
 
----+++ Predefined Variables
+---++ Predefined Variables
 
 With a couple of notable exceptions, predefined variables return  set values that are defined one-time on installation and left alone. Most are directory names and file paths, customized for your server, and only have to be updated once in the main configuration file if your server set-up changes. 
 
@@ -214,7 +218,7 @@ Example: =<b>%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%</b>= </td>
 [2] __Note__: A web can be excluded from a =web="all"= search if you define a =NOSEARCHALL=on= variable in its %WEBPREFSTOPIC%.
 </blockquote>
 
----+++ Preferences Variables
+---++ Preferences Variables
 
 Additional variables are defined in the preferences ( site-level ( __SL__ ) in %TWIKIWEB%.%WIKIPREFSTOPIC%, web-level ( __WL__ ) in %WEBPREFSTOPIC% of each web, and user level ( __UL__ ) preferences in individual user topics):
 
@@ -324,12 +328,12 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> List of preferences that are not allowed to be overridden by next level preferences</td>
 </tr></table>
 
----+++ Setting Preferences
+---++ Setting Preferences
 
 	* The syntax for Preferences variables is the same anywhere in TWiki. In Edit mode, from the start of a new line: <br>[6 spaces] * [space] Set [space] VARIABLENAME [space] = [value] <br> __Example:__ 
 		* ==<nop>Set VARIABLENAME = value==
 
----+++ Creating Custom Variables
+---++ Creating Custom Variables
 
 	* You can add your own preference variables for an entire site, a single web, or a single topic, using the standard syntax. Whatever you include in your variable will be expanded on display, and treated exactly as if it had been written out. So you can place formatted text, page links, image paths.
 

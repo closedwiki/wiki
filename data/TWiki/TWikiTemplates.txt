@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999598350" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="MikeMannix" date="999857234" format="1.0" version="1.2"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ new topic for the final doc
 
@@ -8,23 +8,23 @@ see also for ref: orig TWikiTemplatingSystem
 %TOC%
 
 %STARTINCLUDE%
----## TWiki Template System
+---# TWiki Template System
 
 _Define the templates used to render all HTML pages displayed in TWiki_ 
 
----+++ Overview
+---+ Overview
 
 We have a need for more advanced template handling. As Main.JohnTalintyre pointed out in CommonHeaderFooterTemplate it makes sense to separate the header and footer into one file so that it can be easily altered (or even overloaded by a skin). Also the oops dialog messages are all identical except for a few variables like heading, and so on.
 
 Using external modules like the TemplateToolkit would be one way to go, but this will add a lot of baggage to TWiki.
 
----+++ Needs of the TWiki templating system
+---++ Needs of the TWiki templating system
 
 	* Separate common parts into one (or more) base template file(s) and include that from other template files like =view.tmpl=.
 	* Define common variables like a "|" separator in the base template and use them in other template files
 	* Define variable text in templates (i.e. =view.tmpl=) and pass them to the base template
 
----+++ Functional Spec
+---++ Functional Spec
 
 I tried to define a simple but powerful solution that can be extended over time. Here we go:
 
@@ -44,11 +44,11 @@ I tried to define a simple but powerful solution that can be extended over time.
 	* __Note:__ The template directive work only for templates, they do not get processed in topic text.
 
 
----+++ Examples
+---++ Examples
 
 Attached is an example of an oops base template =oopsbase.tmpl= and a example oops dialog =oopstest.tmpl= which is based on the base template. This is not the version that will go into the release, it is just a quick hack.
 
----+++++ Base template oopsbase.tmpl
+---++++ Base template oopsbase.tmpl
 
 The first line declares the delimiter variable called "sep", used to separate multiple link items. The variable can be called anywhere by writing =%<nop>TMPL:P{"sep"}%=
 
@@ -101,7 +101,7 @@ __Note:__ Added a dot to escape rendering of variables, i.e. read ==%.WEB%== as 
 </pre>
 
 
----+++++ Test template oopstest.tmpl
+---++++ Test template oopstest.tmpl
 
 Each oops template basically just defines some variables and includes the base template that does the layout work.
 
@@ -130,13 +130,13 @@ Test =topicaction=:
 </td></tr>
 </table >
 
----+++++ Sample screen shot of oopstest.tmpl
+---++++ Sample screen shot of oopstest.tmpl
 
 With URL: ==.../bin/oops/Test/TestTopic2?template=oopstest&param1=WebHome&param2=WebNotify==
 
 | <img src="%ATTACHURLPATH%/testscreen.gif" width="554" height="304" alt="testscreen.gif"> |
 
----+++ Comments and feedback
+---++ Comments and feedback
 
 	* The itching factor to put this into the upcoming release is to easy the pending converstion of the templates into XHTML format and to have a more flexible solution for templates and skins.
 	* Is the terminology OK?
