@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="MikeMannix" date="999242309" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="JohnTalintyre" date="999762718" format="1.0" version="1.11"}%
+%META:TOPICPARENT{name="WebHome"}%
 Welcome %WIKIUSERNAME%,
 
 You have reached a TWikiSite (pronounced twee-kee site). %WIKITOOLNAME% is a meeting place to collaborate on common interests. Everybody can contribute by just using a Web browser. It looks like a normal Web site, but then... everybody can (and is encouraged to) *edit the web pages* here and to contribute their questions and what they know. It really is very simple to learn and use. 
@@ -25,6 +26,7 @@ You have reached a TWikiSite (pronounced twee-kee site). %WIKITOOLNAME% is a mee
 		* To create a free-floating topic, e.g. a topic that is not linked from anywhere, type its WikiWord in the entry field at the top of any page. If the topic already exists you'll then be taken to it. If it doesn't exist, you'll then have the option to create it.
 	1. *See the History of a Topic:* Check out the the various "Diff" entries at the bottom of page.
 	1. *Attach Files:* Upload and attach any file to a topic by following the "Attach" link at the bottom of page.
+	1. *Forms:* Use forms in topics to capture specific information e.g. for use in FAQs or bug tracking - see TWikiFormTemplate
 	1. *Learn More*: The TWikiTutorial gives you some more details on the %WIKITOOLNAME%. WikiReferences has links to articles and books around collaboration and the Wiki technology in particular.
 
 
@@ -34,7 +36,7 @@ You have reached a TWikiSite (pronounced twee-kee site). %WIKITOOLNAME% is a mee
 	* Web pages are automatically linked. You do not need to learn HTML commands to link pages.
 	* Very simple text formatting. Basically, you write a web page like you would write an email.
 	* Full text search with/without regular expressions.
-	* All changes to pages are under revision control. Find out who changed what and when.
+	* All changes to pages and attachments are under revision control. Find out who changed what and when.
 	* Fine grained access control based on groups.
 	* Automatic email notification when web pages change.
 	* File attachments: Upload and download any file as an attachment to a page by using your browser. This is similar to email file attachments, but it happens on web pages.
