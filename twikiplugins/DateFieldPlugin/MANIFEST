@@ -1,0 +1,3 @@
+data/TWiki/DateFieldPlugin.txt Plugin topic
+lib/TWiki/Plugins/DateFieldPlugin.pm Plugin Perl module
+lib/TWiki/Plugins/DateFieldPlugin/build.pl Build file

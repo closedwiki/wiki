@@ -1,0 +1,58 @@
+---+!! Date Field Plugin
+
+Provides support for a new type, =date=, in form fields. When a form field is set to this type it will no longer be editable by normal means, but only through a date selection popup.
+
+---+ Usage
+
+In a form definition, enter =date= where you would normally put =text= . For example:
+<verbatim>
+| Birthday | date | 0 | 1 April 2004 | A date |
+</verbatim>
+This will display an *uneditable* text field and a date selection icon that can be clicked to use the Mishoo Javascript calendar widget to insert a date. The =size= field is ignored.
+
+If you want to use Javascript to create other data types in form fields, you can use this plugin as a model of how to do it.
+
+---+ Settings
+	* Description:
+		* Set SHORTDESCRIPTION = Adds a =date= type to forms
+
+	* Setup for [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]]
+	* The following styles are available: system blue blue2 brown green tas win2k-1 win2k-2 win2k-cold-1 win2k-cold-2
+		* Set CAL_STYLE = system
+	* The following languages are available: af es ko-utf8 ru br fi lt si ca fr lt-utf8 sk cs-win hr nl sp da hr-utf8 no sv de hu pl tr du it pl-utf8 zh el jp pt en ko ro
+		* Set CAL_LANG = en
+
+---+ Plugin Installation Instructions
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	| *File:* | *Description:* |
+%$MANIFEST%
+	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
+	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
+	%$DEPENDENCIES%
+	* Edit your =edit= template (in the templates directory). The actual file name to edit will depend on the skin you are using, but will usually be =edit.pattern.tmpl= or =edit.tmpl= or similar. Add the following line to the HEADER block:
+<verbatim>
+<!-- INCLUDEJSCALENDAR -->
+</verbatim>
+If you are using pattern skin ( =edit.pattern.tmpl= ), it should be added just after the line reading:
+<verbatim>
+%TMPL:DEF{"script"}%
+</verbatim>
+
+---+ Plugin Info
+
+|  Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
+|  Version: | %$VERSION% |
+|  Copyright &copy;: | 2004 Deutsche Bank AG |
+|  License: | [[GPL][http://www.gnu.org/copyleft/gpl.html]] |
+|  Change History: <!-- Most recent first --> ||
+|  9 Dec 2004 | 1.000 initial version |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, TWiki::Plugins/FormFieldsPlugin
+
+This work was commissioned by [[http://www.db.com/][Deutsche Bank AG]].
+
+-- TWiki:Main/CrawfordCurrie - %$DATE%
