@@ -151,7 +151,6 @@ sub main
     my $before="", $atext="", $ctext="", $after="";
     my $catname="", $catmod="", $catvalue="";
     my $extra = "";
-    my $scriptSuffix = $wiki::scriptSuffix;
 
     if( ! &wiki::webExists( $webName ) ) {
         print "Content-type: text/html\n\n";
@@ -163,7 +162,7 @@ sub main
 
     if( ( $onlyWikiName ) && ( ! &wiki::isWikiName( $topic ) ) && ( ! &wiki::topicExists( $webName, $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
-        print $query->redirect( "$scriptUrlPath/view$scriptSuffix/$webName/$topic" );
+        print $query->redirect( &wiki::getViewUrl( $webName, $topic ) );
 	return;
     }
 
@@ -174,7 +173,10 @@ sub main
         use integer;
         $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
         my $editLock = $wiki::editLockTime / 60;
-        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopslocked&param1=$lockUser&param2=$editLock&param3=$lockTime" );
+        # PTh 20 Jun 2000: changed to getOopsUrl
+        my $url = &wiki::getOopsUrl( $webName, $topic, "oopslocked",
+            $lockUser, $editLock, $lockTime );
+        print $query->redirect( $url );
 	return;
     }
     &wiki::lockTopic( $topic );

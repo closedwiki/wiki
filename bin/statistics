@@ -128,7 +128,7 @@ sub main
 
     if( $isCgi ) {
         $tmp = $wiki::statisticsTopicname;
-        my $url = &wiki::viewUrl( $tmp );
+        my $url = &wiki::getViewUrl( "", $tmp );
         printMsg( "* Go back to <a href=\"$url\">$tmp</a> topic" );
         printMsg( "End creating usage statistics" );
         print "</body></html>\n";

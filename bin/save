@@ -73,5 +73,5 @@ sub main
     $text =~ s/ {3}/\t/go;
 
     &wiki::saveTopic( $topic, $text, $saveCmd );
-    print $query->redirect( &wiki::viewUrl( $topic ) );
+    print $query->redirect( &wiki::getViewUrl( "", $topic ) );
 }

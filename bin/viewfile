@@ -50,6 +50,8 @@ sub main
     # Convert only if html file does not yet exist
     # for now, show the original document:
 
-    my $pubUrl = &wiki::getPubUrlPath();
-    print $query->redirect( "$pubUrl/$webName/$topic/$fileName" );
+    # PTh 20 Jun 2000: Added host
+    my $pubUrlPath = &wiki::getPubUrlPath();
+    my $host = $wiki::urlHost;
+    print $query->redirect( "$host$pubUrlPath/$webName/$topic/$fileName" );
 }

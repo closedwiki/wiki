@@ -365,8 +365,9 @@ sub main
 
     # check if file exists and has non zero size
     if( ! -s "$tmpFilename" ) {
-        my $scriptSuffix = $wiki::scriptSuffix;
-        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsupload&param1=$fileName" );
+        # PTh 20 Jun 2000: changed to getOopsUrl
+        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsupload", $fileName );
+        print $query->redirect( $url );
         return;
     }
 
@@ -432,5 +433,5 @@ sub main
     &wiki::saveTopic( $topic, $text );
 
     # and finally display topic
-    print $query->redirect( &wiki::viewUrl( $topic ) );
+    print $query->redirect( &wiki::getViewUrl( "", $topic ) );
 }

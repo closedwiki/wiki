@@ -74,14 +74,16 @@ sub main
 	&wiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl );
 
     my $text = "";
-    my $scriptSuffix = $wiki::scriptSuffix;
+    my $url = "";
 
     # check if user entry already exists
     if(  ( $wikiName ) 
       && (  ( &wiki::topicExists( $webName,  $wikiName ) )
          || ( htpasswdExistUser( $wikiName ) ) 
          ) ) {
-        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregexist&param1=$wikiName" );
+        # PTh 20 Jun 2000: changed to getOopsUrl
+        $url = &wiki::getOopsUrl( $webName, $topic, "oopsregexist", $wikiName );
+        print $query->redirect( $url );
         return;
     }
 
@@ -89,14 +91,16 @@ sub main
     my $x;
     for( $x = 0; $x < $formLen; $x++ ) {
         if( ( $formDataRequired[$x] ) && ( ! $formDataValue[$x] ) ) {
-            print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregrequ" );
+            $url = &wiki::getOopsUrl( $webName, $topic, "oopsregrequ", );
+            print $query->redirect( $url );
             return;
         }
     }
 
     # check if wikiName is a WikiName
     if( ! &wiki::isWikiName( $wikiName ) ) {
-        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregwiki" );
+        $url = &wiki::getOopsUrl( $webName, $topic, "oopsregwiki" );
+        print $query->redirect( $url );
         return;
     }
     # a WikiName is safe, so untaint variable
@@ -105,7 +109,8 @@ sub main
 
     # check if passwords are identical
     if( $passwordA ne $passwordB ) {
-        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregpasswd" );
+        $url = &wiki::getOopsUrl( $webName, $topic, "oopsregpasswd" );
+        print $query->redirect( $url );
         return;
     }
 
@@ -159,7 +164,8 @@ sub main
     }
 
     # and finally display thank you page
-    print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$wikiName?template=oopsregthanks&param1=$emailAddress" );
+        $url = &wiki::getOopsUrl( $webName, $topic, "oopsregthanks", $emailAddress );
+        print $query->redirect( $url );
 }
 
 sub htpasswdGeneratePasswd

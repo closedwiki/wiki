@@ -41,6 +41,7 @@ sub main
         return;
     }
 
-    my $scriptSuffix = $wiki::scriptSuffix;
-    print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsdel" );
+    # PTh 20 Jun 2000: changed to getOopsUrl
+    my $url = &wiki::getOopsUrl( $webName, $topic, "oopsdel" );
+    print $query->redirect( $url );
 }
