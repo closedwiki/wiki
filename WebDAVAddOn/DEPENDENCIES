@@ -1,2 +1,2 @@
-tdb C library, widely available
-TDB_File perl Trivial database interface. Part of the Samba project.
+tdb C Trivial database, widely available. Part of the Samba project.
+TDB_File perl Trivial database interface, available from CPAN.

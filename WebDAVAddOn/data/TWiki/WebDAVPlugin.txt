@@ -74,7 +74,6 @@ If you are not sure what applications are WebDAV enabled, just try typing a URL 
 |  Add-on Version: | %$DATE% %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  14 Apr 2004: | Initial very _very_ early access release |
-|  CPAN Dependencies: | none |
 |  Other Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.005 |
 |  License: | GPL |

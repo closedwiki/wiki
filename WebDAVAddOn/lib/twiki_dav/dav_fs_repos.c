@@ -591,20 +591,32 @@ static twiki_resources* make_twiki_resource(request_rec* r,
  */
 static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* resource) {
 
-    int type = dav_get_twiki_dir_type(r);
-    const char *a, *b, *web, *topic;
-    int webl, topicl;
-
-    if (!type)
-        /* Not a twiki enabled dir */
-        return resource;
+  int type = dav_get_twiki_dir_type(r);
+  const char *a, *b, *web, *topic;
+  int webl, topicl;
 
 
-    a = dav_get_twiki_dir_root(r);
-    b = r->filename;
+  if (!type) {
+	/* Not a twiki enabled dir */
+#ifdef DETAIL
+	ap_log_printf(r->server, "Not a twiki enabled dir\n");
+#endif
+	return resource;
+  }
 
-    if (!a || !b)
-        return resource;
+  a = dav_get_twiki_dir_root(r);
+  b = r->filename;
+
+#ifdef DETAIL
+  ap_log_printf(r->server, "Getting info %s %s\n", a, b);
+#endif
+
+  if (!a || !b) {
+#ifdef DETAIL
+	ap_log_printf(r->server, "Not a twiki enabled dir2\n");
+#endif
+	return resource;
+  }
 
 	/*fprintf(stderr, "Get %s from root %s\n", b, a);*/
 
@@ -622,7 +634,9 @@ static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* r
                                             NULL, 0,
                                             NULL, 0,
                                             NULL);
-	  /*fprintf(stderr, "OK, root\n");*/
+#ifdef DETAIL
+	  ap_log_printf(r->server, "OK, root\n");
+#endif
       return resource;
     }
 
@@ -641,7 +655,9 @@ static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* r
                                             web, webl,
                                             NULL, 0,
                                             NULL);
-	  /*fprintf(stderr, "OK, web\n");*/
+#ifdef DETAIL
+	  ap_log_printf(r->server, "OK, web %s\n", web);
+#endif
       return resource;
     }
     b++; /* trailing / */
@@ -661,17 +677,23 @@ static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* r
                                             web, webl,
                                             topic, topicl,
                                             NULL);
-	  /*fprintf(stderr, "OK, topic\n");*/
+#ifdef DETAIL
+	  ap_log_printf(r->server, "OK, web %s topic %s\n", web, topic);
+#endif
       return resource;
     }
 
     /* if this is data, expect a .txt extension. If it's pub, expect a subdirectory. */
     if (type == TWIKI_DATA && strcmp(b, ".txt") != 0) {
-	  /*fprintf(stderr, "NOT OK, data\n");*/
+#ifdef DETAIL
+	  ap_log_printf(r->server, "NOT OK, data\n");
+#endif
         return resource;
     } else if (type == TWIKI_PUB) {
 	  if (*b != '/' && *b != '\\') {
-		/*fprintf(stderr, "NOT OK, pub\n");*/
+#ifdef DETAIL
+	  ap_log_printf(r->server, "NOT OK, pub\n");
+#endif
 		return resource;
 	  }
 	  b++;
@@ -679,7 +701,9 @@ static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* r
 		b++;
 	  }
 	  if (*b == '/' || *b == '\\') {
-		/*fprintf(stderr, "NOT OK, pub2\n");*/
+#ifdef DETAIL
+	  ap_log_printf(r->server, "NOT OK, pub 2\n");
+#endif
 		return resource;
 	  }
     }
@@ -692,7 +716,9 @@ static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* r
                                           web, webl,
                                           topic, topicl,
                                           r->filename);
-	/*fprintf(stderr, "OK, attachment\n");*/
+#ifdef DETAIL
+	  ap_log_printf(r->server, "OK\n");
+#endif
     return resource;
 }
 
