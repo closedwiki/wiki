@@ -130,7 +130,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "25 Feb 2004";
+$wikiversion      = "26 Feb 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1806,12 +1806,10 @@ sub makeTopicSummary
 	$htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
     }
 
-    # inline search renders text, so prevent linking of external and
-    # internal links:
+    # prevent text from getting rendered in inline search and link tool 
+    # tip text by escaping links (external, internal, Interwiki)
     $htext =~ s/([\-\*\s])($regex{linkProtocolPattern}\:)/$1<nop>$2/go;
-    $htext =~ s/([\s\(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1<nop>$2/g;
-    $htext =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/g;
-    $htext =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/g;
+    $htext =~ s/([\s\(])(\S)/$1<nop>$2/g;
     $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
 
     return $htext;
@@ -3572,6 +3570,7 @@ sub linkToolTipInfo
     my( $theWeb, $theTopic ) = @_;
     return unless( $linkToolTipInfo );
 
+    # FIXME: This is slow, it can be improved by caching topic rev info and summary
     my( $date, $user, $rev ) = TWiki::Store::getRevisionInfo( $theWeb, $theTopic );
     my $text = $linkToolTipInfo;
     $text =~ s/\$web/<nop>$theWeb/g;
@@ -3584,6 +3583,7 @@ sub linkToolTipInfo
     if( $text =~ /\$summary/ ) {
         my $summary = &TWiki::Store::readFileHead( "$TWiki::dataDir\/$theWeb\/$theTopic.txt", 16 );
         $summary = &TWiki::makeTopicSummary( $summary, $theTopic, $theWeb );
+        $summary =~ s/[\"\']/<nop>/g;       # remove quotes (not allowed in title attribute)
         $text =~ s/\$summary/$summary/g;
     }
     return " title=\"$text\"";
