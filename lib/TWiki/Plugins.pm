@@ -302,7 +302,7 @@ sub initialize1
         $p = $plugin;
         $p =~ s/^.*\.(.*)$/$1/o; # cut web
         unless( grep { /^$p$/ } @disabledPlugins ) {
-            push( @instPlugins, $plugins );
+            push( @instPlugins, $plugin );
         }
     }
     # append discovered plugin modules to installed plugin list
