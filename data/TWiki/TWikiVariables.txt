@@ -1,22 +1,22 @@
-TWiki expands the following variables enclosed in % percent signs:
+%WIKITOOLNAME% expands the following variables enclosed in % percent signs:
 
 <table border="1"><tr>
   <th> Variable: </th><th> Expanded to: </th>
 </tr><tr>
   <td> =%<nop>WIKIHOMEURL%= </td>
-  <td> The base script URL of TWiki, link of Home icon in upper left corner, is <b>%WIKIHOMEURL%</b> </td>
+  <td> The base script URL of %WIKITOOLNAME%, is the link of the Home icon in the upper left corner, is <b>%WIKIHOMEURL%</b> </td>
 </tr><tr>
   <td> =%<nop>SCRIPTURL%= </td>
-  <td> The script URL of TWiki, is <b>%SCRIPTURL%</b></td>
+  <td> The script URL of %WIKITOOLNAME%, is <b>%SCRIPTURL%</b></td>
 </tr><tr>
   <td> =%<nop>SCRIPTURLPATH%= </td>
-  <td> The path of the script URL of TWiki, is <b>%SCRIPTURLPATH%</b></td>
+  <td> The path of the script URL of %WIKITOOLNAME%, is <b>%SCRIPTURLPATH%</b></td>
 </tr><tr>
   <td> =%<nop>PUBURL%= </td>
   <td> The public URL of TWiki, is <b>%PUBURL%</b> </td>
 </tr><tr>
   <td> =%<nop>PUBURLPATH%= </td>
-  <td> The path of the public URL of TWiki, is <b>%PUBURLPATH%</b> </td>
+  <td> The path of the public URL of %WIKITOOLNAME%, is <b>%PUBURLPATH%</b> </td>
 </tr><tr>
   <td> =%<nop>ATTACHURL%= </td>
   <td> The attachment URL of the current topic, is <b>%ATTACHURL%</b> <br> Example: If you attach a file you can refer to it as =<b>%<nop>ATTACHURL%/image.gif</b>= </td>
@@ -70,12 +70,12 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> REMOTE_USER environment variable, is <b>%REMOTE_USER%</b> </td>
 </tr><tr>
   <td> =%<nop>INCLUDE{"SomeTopic"}%= </td>
-  <td> Server side include, includes another topic. The current Wiki web is searched by default. Example: =<b>%<nop>INCLUDE{"TWiki.TWikiWebsTable"}%</b>= </td>
+  <td> Server side include, includes another topic. The current Wiki web is searched by default. Example: =<b>%<nop>INCLUDE{"%TWIKIWEB%.TWikiWebsTable"}%</b>= </td>
 </tr><tr>
   <td> =%<nop>SEARCH{"str" ...}%= </td>
   <td> Inline search, shows a search result embedded in a topic. Parameter is composed of the search string, followed by optional =name="value"= pairs:
 | *Pair:* | *Description:* | *Default:* |
-| =web="Name"= <br> =web="Main Know"= <br> =web="all"= | Wiki web to search: A web, a list of webs separated by whitespace, or all webs =[1]= | Current web |
+| =web="Name"= <br> =web="%MAINWEB% Know"= <br> =web="all"= | Wiki web to search: A web, a list of webs separated by whitespace, or all webs =[1]= | Current web |
 | =scope="topic"= <br> =scope="text"= | Search topic name (title) or in the text (body) of the topic | Topic text (body) |
 | =order="topic"= <br> =order="modified"= <br> =order="editby"= | Sort the results of search by the topic names, last modified time, or last editor | Sort by topic name |
 | =limit="all"= <br> =limit="16"= | Limit the number of results returned | All results |
@@ -86,10 +86,10 @@ TWiki expands the following variables enclosed in % percent signs:
 | =bookview="on"= | BookView search, e.g. show complete topic text | Show topic summary |
 | =nosearch="on"= | Suppress search string | Show search string |
 | =nototal="on"= | Do not show number of topics found | Show number |
-Example: =<b>%<nop>SEARCH{"wiki" web="Main" scope="topic"}%</b>= </td>
+Example: =<b>%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%</b>= </td>
 </tr><tr>
   <td> =%<nop>VAR{"NAME" web="Web"}%= </td>
-  <td> Get a preference value from another web then the current one. Example: To get =%<nop>WEBBGCOLOR%= of the Main web write =%<nop>VAR{"WEBBGCOLOR" web="Main"}%=, is =<b>%VAR{"WEBBGCOLOR" web="Main"}%</b>= </td>
+  <td> Get a preference value from another web then the current one. Example: To get =%<nop>WEBBGCOLOR%= of the %MAINWEB% web write =%<nop>VAR{"WEBBGCOLOR" web="%MAINWEB%"}%=, is =<b>%VAR{"WEBBGCOLOR" web="%MAINWEB%"}%</b>= </td>
 
 </tr></table>
 
@@ -155,6 +155,26 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> =%<nop>HTTP_EQUIV_ON_PREVIEW%= </td>
   <td> __SL__ , __UL__ </td>
   <td> http-equiv meta tags for preview script. </td>
+</tr><tr>
+  <td> =%<nop>DENYWEBCHANGE%= </td>
+  <td> __WL__ </td>
+  <td> List of users and groups who are *not allowed* to change topics in the %WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
+</tr><tr>
+  <td> =%<nop>ALLOWWEBCHANGE%= </td>
+  <td> __WL__ </td>
+  <td> List of users and groups who are *allowed* to change topics in the %WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
+</tr><tr>
+  <td> =%<nop>DENYTOPICCHANGE%= </td>
+  <td> __(any topic)__ </td>
+  <td> List of users and groups who are *not allowed* to change the current topic. (More in TWikiAccessControl) </td>
+</tr><tr>
+  <td> =%<nop>ALLOWTOPICCHANGE%= </td>
+  <td> __(any topic)__ </td>
+  <td> List of users and groups who are *allowed* to change the current topic. (More in TWikiAccessControl) </td>
+</tr><tr>
+  <td> =%<nop>FINALPREFERENCES%= </td>
+  <td> __SL__ , __WL__ </td>
+  <td> List of preferences that are not allowed to be overridden by next level preferences</td>
 </tr></table>
 
 __Notes:__
@@ -164,4 +184,4 @@ __Notes:__
 	* Additional preferences variables can be defined on all three level as needed. Example:
 		* =<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif=
 
--- Main.PeterThoeny - 01 Nov 2000 <br>
+-- %MAINWEB%.PeterThoeny - 10 Nov 2000 <br>
