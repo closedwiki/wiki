@@ -1,0 +1,144 @@
+#
+# TWiki WikiClone ($wikiversion has version info)
+#
+# @(#)$Id$
+#
+# Copyright (C) 2002 Peter Klausner pklausner(at)bluewin.ch
+# Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
+# Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+#
+# =========================
+#
+# This is the IncludeIndex TWiki plugin.
+#
+
+# =========================
+package TWiki::Plugins::IncludeIndexPlugin; 	# change the package name!!!
+
+# =========================
+use vars qw(
+        $web $topic $user $installWeb $VERSION $debug
+    );
+
+$VERSION = '1.000';	# $Revision$
+
+# =========================
+sub initPlugin
+{
+    return 1;
+}
+
+# =========================
+sub linkToInclude	  # instead of handling %INCLUDE, return link to it
+{
+    my( $theAttributes, $linktext, $format ) = @_;
+    my $incfile = &TWiki::extractNameValuePair( $theAttributes );
+
+    if ( $format )	{
+	$linktext = '%SEARCH{"' . $incfile . '" regex="on" nosearch="on"'
+	    . ' scope="topic" nototal="on"' 
+	    . ' format="' . $format . '"}%'; 
+    }
+    else	{
+	if ( $linktext )	{
+	    $linktext =~ s/\$page/$incfile/;
+	} else {
+	    $linktext = "    -- [[$incfile]] ";
+	}
+    }
+    return $linktext;
+}
+
+# =========================
+sub handleIncludeIndex	  # clone of TWiki::handleIncludeFile
+{
+    my( $theAttributes, $theWeb ) = @_;
+    my $incfile = &TWiki::extractNameValuePair( $theAttributes );
+    my $headers = &TWiki::extractNameValuePair( $theAttributes, "headers" );
+    my $linktext = &TWiki::extractNameValuePair( $theAttributes, "linktext" );
+    my $format = &TWiki::extractNameValuePair( $theAttributes, "format" );
+
+    $headers = 4	unless $headers =~ /^[0-6]$/;
+    # CrisBailiff, PeterThoeny 12 Jun 2000: Add security
+    $incfile =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
+    $incfile =~ s/passwd//goi;    # filter out passwd filename
+
+    if( $TWiki::doSecureInclude ) {
+        # Filter out ".." from filename, this is to
+        # prevent includes of "../../file"
+        $incfile =~ s/\.+/\./g;
+    }
+
+    if ( $incfile =~ m|^(.+)[./](.*)$| ) {
+	$theWeb = $1;
+	$theTopic = $2;
+    } else	{
+	$theTopic = $incfile
+    }
+
+    my $text = "";
+    my $meta = "";
+
+    # set include web/filenames and current web/filenames
+    {
+
+        ( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
+        # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
+        $text =~ s/.*?%STARTINCLUDE%//os;
+        $text =~ s/%STOPINCLUDE%.*//os;
+    } # FIXME what if it's not a topic, is this possible given only dataDir above?
+    
+
+    my @lines = split /^/m, $text;
+    $text = "";
+    foreach $line (@lines)
+    {
+	if ($line =~ /^\s*%INCLUDE{/)	{
+	    $line =~ s/%INCLUDE{(.*?)}%/&linkToInclude($1, $linktext, $format)/geo;
+	    $text .= $line;
+	}
+	elsif ($headers && $line =~ /^----*\+/)	{
+	    $line =~ s/^----*\+\+\+\+\s+/				0 <nop>/mg;
+	    $line =~ s/^----*\+\+\+\s+/			0 <nop>/mg;
+	    $line =~ s/^----*\+\+\s+/		0 <nop>/mg;
+	    $line =~ s/^----*\+\s+/	0 <nop>/mg;
+	    $text .= $line;
+	}
+	elsif ($headers && $line =~ /^\s*<[Hh][1-4]/)	{
+	    $line =~ s/<[Hh]4[^>]*>\s*/				0 <nop>/mg;
+	    $line =~ s/<[Hh]3[^>]*>\s*/			0 <nop>/mg;
+	    $line =~ s/<[Hh]2[^>]*>\s*/		0 <nop>/mg;
+	    $line =~ s/<[Hh]1[^>]*>\s*/	0 <nop>/mg;
+	    $text .= $line;
+	}
+    }
+    return $text;
+}
+
+# =========================
+sub commonTagsHandler
+{
+### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
+
+    # This is the place to define customized tags and variables
+    # Called by sub handleCommonTags, after %INCLUDE:"..."%
+
+    # do custom extension rule, like for example:
+    # $_[0] =~ s/%XYZ%/&handleXyz()/geo;
+    $_[0] =~ s/%INCLUDEINDEX{(.*?)}%/&handleIncludeIndex($1,$_[2])/geo;
+}
+
+# =========================
+1;
