@@ -433,16 +433,33 @@ sub searchWeb
                 $topicCount++;
                 $tempVal =~ s/%TOPIC_NUMBER%/$topicCount/go;
                 $tempVal =~ s/%LABEL%/$doRenameView/go;
-                my @meta;
-                ( $head, @meta ) = &TWiki::Store::readWebTopicNew( $thisWebName, $topic );
-                # Remove lines that don't contain the topic and highlight matched string
-                my @lines = split( /\n/, $head );
+                my ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $thisWebName, $topic );
                 my $reducedOutput = "";
-                my $line;
-                foreach $line ( @lines ) {
-                   if( $line =~ /$theSearchVal/go ) {
-                      $line =~ s|$theSearchVal|$1<font color="red">$2</font>&nbsp;$4|g;
-                      $reducedOutput .= "$line<BR>";
+                
+                # Remove lines that don't contain the topic and highlight matched string
+                my $insidePRE = 0;
+                my $insideVERBATIM = 0;
+                my $noAutoLink = 0;
+                
+                foreach( split( /\n/, $text ) ) {
+
+                   # This code is in far too many places
+                   m|<pre>|i  && ( $insidePRE = 1 );
+                   m|</pre>|i && ( $insidePRE = 0 );
+                   if( m|<verbatim>|i ) {
+                       $insideVERBATIM = 1;
+                   }
+                   if( m|</verbatim>|i ) {
+                       $insideVERBATIM = 0;
+                   }
+                   m|<noautolink>|i   && ( $noAutoLink = 1 );
+                   m|</noautolink>|i  && ( $noAutoLink = 0 );
+
+                   if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
+                       if( /$theSearchVal/g ) {
+                           s|$theSearchVal|$1<font color="red">$2</font>&nbsp;$4|g;
+                           $reducedOutput .= "$_<br>\n";
+                       }
                    }
                 }
                 $tempVal =~ s/%TEXTHEAD%/$reducedOutput/go;
