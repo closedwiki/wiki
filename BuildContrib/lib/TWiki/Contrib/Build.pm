@@ -577,6 +577,8 @@ sub checkin_fileset {
 ---++++ target_install
 Install target, installs to local twiki pointed at by TWIKI_HOME.
 
+Uses the installer script written by target_installer
+
 =cut
 sub target_install {
     my $this = shift;
@@ -594,14 +596,15 @@ sub target_install {
 ---++++ target_uninstall
 Uninstall target, uninstall from local twiki pointed at by TWIKI_HOME.
 
+Uses the installer script written by target_installer
+
 =cut
 sub target_uninstall {
     my $this = shift;
     my $twiki = $ENV{TWIKI_HOME};
     die "TWIKI_HOME not set" unless $twiki;
-    foreach my $file (@{$this->{files}}) {
-        $this->rm("$twiki/".$file->{name});
-    }
+    $this->cd($twiki);
+    $this->sys_action("perl $this->{project}_installer.pl uninstall");
 }
 
 =begin text
@@ -622,55 +625,95 @@ sub target_tests_zip {
     }
 }
 
+{   package TWiki::Contrib::Build::UserAgent;
+    @TWiki::Contrib::Build::UserAgent::ISA = qw(LWP::UserAgent);
+
+    my ( $knownUser, $knownPass );
+
+    sub get_basic_credentials {
+        my($self, $realm, $uri) = @_;
+        unless ( $knownUser ) {
+            print "Logon to ",$uri->host_port,"\n";
+            print "Enter $realm: ";
+            $knownUser = <STDIN>;
+            chomp($knownUser);
+            return (undef, undef) unless length $knownUser;
+            print "Password on ",$uri->host_port,": ";
+            system("stty -echo");
+            $knownPass = <STDIN>;
+            system("stty echo");
+            print "\n";  # because we disabled echo
+            chomp($knownPass);
+        }
+        return ($knownUser, $knownPass);
+    }
+}
+
 =begin text
 
 ---++++ target_upload
 Upload to twiki.org. Prompts for username and password. Uploads the zip and
 the text topic to the appropriate places. Creates the topic on twiki.org if
-necessary. Requires curl.
+necessary.
 
 =cut
 
 sub target_upload {
     my $this = shift;
     $this->build("release");
-    
-    my $user;
-    my $pass;
-    do {
-        print "Username on TWiki.org: ";
-        $user = <STDIN>;
-    } while ( !$user || $user =~ /^\s*$/ );
-    chop($user);
-    do {
-        print "Password: ";
-        $pass = <STDIN>;
-    } while (!$pass || $pass =~ /^\s*$/);
-    chop($pass);
-    my $curl = "curl -s -S -u $user:$pass";
+
+    eval 'use LWP';
+    if ( $@ ) {
+        print STDERR "LWP is not installed; cannot upload\n";
+        return 0;
+    }
+
+    my $userAgent = TWiki::Contrib::Build::UserAgent->new();
+    $userAgent->agent( "TWikiContribBuild/$VERSION " );
+
     my $to = $this->{project};
+
     # Get the old form data and attach it to the update
-    my $oldform = `$curl http://TWiki.org/cgi-bin/view/Plugins/$to`;
-    my $opts = "";
-    foreach my $line ( split(/\n/, $oldform)) {
-        if ( $line =~ m/(TopicClassification|CVSModificationPolicy|DeveloperVersionInCVS|InstalledOnTWikiOrg|DemoUrl).*?<\/td><td.*?>(.*)<\/td>/o ) {
-            my $val = _unhtml($2);
+    print "Downloading old topic to recover form\n";
+    my $response = $userAgent->get( "http://twiki.org/cgi-bin/view/Plugins/$to?raw=debug" );
+
+    die "Failed to GET old plugins topic ", $response->request->uri,
+      " -- ", $response->status_line, "\nAborting"
+        unless $response->is_success;
+    my %newform;
+    foreach my $line ( split(/\n/, $response->content() )) {
+        if ( $line =~ m/META:FIELD{name=\"(.*?)\".*?value=\"(.*?)\"}/ ) {
+            my $val = $2;
             if ($val && $val ne "") {
-                $opts .= " -F $1=$val";
-            }
-        } elsif ( $line =~ m/(TestedOnTWiki|TestedOnOS|ShouldRunOnOS).*?<\/td><td.*?>(.*?)<\/td>/o ) {
-            my $func = $1;
-            foreach my $plaf ( split( /,/, _unhtml($2))) {
-                if ($plaf ne "") {
-                    $opts .= " -F $func$plaf=Yes";
-                }
+                $newform{$1} = $val;
             }
         }
     }
-    print `$curl -F text=\\<$basedir/$to.txt $opts http://TWiki.org/cgi-bin/save/Plugins/$to`;
-    die "Update of topic failed: $?" if ( $?);
-    print `$curl -F filepath=\\\@$basedir/$to.zip -F filename=$to.zip http://TWiki.org/cgi-bin/upload/Plugins/$to`;
-    die "Update of zip failed: $?" if ( $?);
+    undef $/; # set to read to EOF
+    open( IN_FILE, "<$basedir/$to.txt" ) or
+      die "Failed to reopen topic: $@";
+    $newform{'text'} = <IN_FILE>;
+    $/ = "\n";
+    close( IN_FILE );
+
+    print "Uploading new topic\n";
+    $response = $userAgent->post( "http://twiki.org/cgi-bin/save/Plugins/$to",
+                                  \%newform );
+
+    die "Update of topic failed ", $response->request->uri,
+      " -- ", $response->status_line, "\nAborting"
+        unless $response->is_redirect &&
+          $response->headers->header('Location') =~ /view([\.\w]*)\/Plugins\/$to/;
+
+    print "Uploading zip\n";
+    $response =
+      $userAgent->post( "http://twiki.org/cgi-bin/upload/Plugins/$to",
+                        { 'filename' => "$to.zip" },
+                        ':content_file' => "$basedir/$to.zip" );
+
+    die "Update of zip failed ", $response->request->uri,
+      " -- ", $response->status_line, "\nAborting"
+        unless $response->is_redirect;
 }
 
 sub _unhtml {
@@ -724,12 +767,32 @@ sub target_pod {
 
 ---++++ target_installer
 
-Write an install script that checks dependencies, tries (using curl, wget
-and geturl in that order) to find a program to download and install required
-zips. If it fails, generates a message.
+Write an install/uninstall script that checks dependencies, and optionally
+downloads and installs required zips from twiki.org.
+
+The install script is templated from =contrib/TEMPLATE_installer= and
+is always named =module_installer.pl= (where module is your module). It is
+added to the release zip and is always shipped in the root directory.
+It will automatically be added to the manifest if it doesn't appear in
+MANIFEST.
+
+The install script works using the dependency type and version fields.
+It will try to download from twiki.org to satisfy any missing dependencies.
+Downloaded modules are automatically installed.
+
+Note that the dependencies will only work if the module depended on follows
+the naming standards for zips i.e. it must be attached to the topic in
+twiki.org and have the same name as the topic, and must be a zip file.
+
+Dependencies on CPAN modules are also checked (type perl) but no attempt
+is made to install them.
+
+The install script also acts as an uninstaller.
+
+__Note__ that =target_install= builds and invokes this install script.
 
 At present there is no support for a caller-provided post-install script, but
-this would be straightforward to invoke if it were required.
+this would be straightforward to do if it were required.
 
 =cut
 
