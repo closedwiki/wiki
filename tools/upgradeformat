@@ -16,8 +16,9 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-use lib ( '.' );
-use lib ( '../lib' );
+# Set library paths in @INC, at compile time
+BEGIN { unshift @INC, '.'; require 'setlib.cfg' }
+
 use TWiki;
 
 sub showArgs
