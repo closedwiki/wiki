@@ -4,7 +4,7 @@
 <SCRIPT LANGUAGE="JavaScript">
 <!--HIDE
   function launchWindow( theWeb, theTopic ) {
-    win = open("/cgi-bin/view/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+    win = open("%SCRIPTURLPATH%/view/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
     if( win ) {
       win.focus();
     }
