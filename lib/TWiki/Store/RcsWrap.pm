@@ -48,6 +48,7 @@ use strict;
 # delRevCmd               RCS delete revision command
 # unlockCmd               RCS unlock command
 # lockCmd                 RCS lock command
+# tagCmd                  RCS tag command
 #
 # (from RcsFile)
 # dataDir
@@ -99,6 +100,7 @@ sub _settings
     $self->{delRevCmd}    = $settings{delRevCmd};
     $self->{unlockCmd}    = $settings{unlockCmd};
     $self->{lockCmd}      = $settings{lockCmd};
+    $self->{tagCmd}      = $settings{tagCmd};
 }
 
 # ======================
@@ -326,7 +328,7 @@ Not yet documented.
 sub getRevision
 {
     my( $self, $version ) = @_;
-    
+
     my $tmpfile = "";
     my $tmpRevFile = "";
     my $cmd = $self->{"coCmd"};
@@ -354,7 +356,11 @@ sub getRevision
     my $text = `$cmd`;
     if( $tmpfile ) {
         $text = $self->_readFile( $tmpfile );
+        $tmpfile =~ /(.*)/;
+        $tmpfile = "$1"; # untaint		
         unlink $tmpfile;
+        $tmpRevFile =~ /(.*)/;
+        $tmpRevFile = "$1"; # untaint		
         unlink $tmpRevFile;
     }
     _traceExec( $cmd, $text );
@@ -396,6 +402,7 @@ sub numRevisions
 
 ---++ sub getRevisionInfo (  $self, $version  )
 
+| FIXME | there is an inconguity here. if you ask for a revisino that does not exist, getRevisionInfo gives you 1.1, but readTopic gives you the last version |
 Not yet documented.
 # Date return in epoch seconds
 # If revision file is missing, information based on actual file is returned.
@@ -411,7 +418,11 @@ sub getRevisionInfo
         ### $theRev = getRevisionNumber( $theTopic, $theWebName );
         $version = "";  # do a "rlog -r filename" to get top revision info
     } else {
-        $version = "1.$version";
+		if ( $version =~ /^\d/ ) 
+		{
+			#if we are asking for a minor nmber, re-constitue it to Major.minor
+			$version = "1.$version";
+		}
     }
     
     my $rcsFile = $self->{rcsFile};
@@ -618,6 +629,45 @@ sub _ci
     return $rcsOutput;
 }
 
+=pod
 
+---+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
+
+| Description: | sets a names tag on the specified revision |
+| Parameter: =$web= | webname |
+| Parameter: =$topic= | topic name |
+| Parameter: =$rev= | the revision we are taging |
+| Parameter: =$tag= | the string to tag with |
+| Return: =$success= |  |
+| TODO: | we _need_ an error mechanism! |
+| TODO: | NEED to check if the version exists (rcs does not) |
+| Since: | TWiki:: (20 April 2004) |
+
+=cut
+
+sub setTopicRevisionTag
+{
+	my ( $self,  $web, $topic, $rev, $tag ) = @_;
+
+    my $file = $self->{file};
+    if ( -e $file ) {
+       my $cmd= $self->{tagCmd};
+       $cmd =~ s/%REVISION%/$rev/;
+       $cmd =~ s/%FILENAME%/$file/;
+       $cmd =~ s/%TAG%/$tag/;
+	   $cmd = $cmd."  2>> $TWiki::warningFilename";
+       $cmd =~ /(.*)/; $cmd = $1;       # Untaint
+       my $rcsOut = `$cmd`;
+       my $exit = $? >> 8;
+       _traceExec( $cmd, $cmd, $exit );
+		if( $exit && $rcsOut ) { # oops, stderr was not empty, return error
+			$rcsOut = "$cmd\n$$rcsOut";
+			TWiki:writeDebug("RCSWrap::setTopicRevisionTag error - $rcsOut");
+			return;
+		}
+   }
+	   
+	return 1;#success 
+}
 
 1;

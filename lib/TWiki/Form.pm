@@ -422,6 +422,7 @@ sub renderForEdit
             $value = "$val\n</tr></table>\n";
         } else {
             # Treat like test, make it reasonably long
+#TODO: Sven thinks this should be an error condition - so users know about typo's, and don't loose data when the typo is fixed
             $value =~ s/&/&amp\;/go;
             $value =~ s/"/&quot\;/go; # Make sure double quote don't kill us
             $value =~ s/</&lt\;/go;

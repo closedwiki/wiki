@@ -729,6 +729,33 @@ sub revisionDiff
 	return ("", \@list);	
 }
 
+
+=pod
+
+---+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
+
+| Description: | sets a names tag on the specified revision |
+| Parameter: =$web= | webname |
+| Parameter: =$topic= | topic name |
+| Parameter: =$rev= | the revision we are taging |
+| Parameter: =$tag= | the string to tag with |
+| Return: =$success= |  |
+| TODO: | we _need_ an error mechanism! |
+| Since: | TWiki:: (20 April 2004) |
+
+=cut
+
+sub setTopicRevisionTag
+{
+#	my ( $self, $web, $topic, $rev, $tag ) = @_;
+
+	TWiki::writeDebug("setTopicRevisionTag - not implemented in RCSLite");
+#TODO: implement me :)
+	
+	return "";
+}
+
+
 # ======================
 =pod
 
@@ -768,6 +795,8 @@ sub getRevisionInfo
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
     $version = $self->numRevisions() if( ! $version );
+
+	#TODO: need to add a where $revision is not number, find out what rev number the tag refers to
 
     my @result;
     

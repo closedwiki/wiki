@@ -613,20 +613,24 @@ sub topicExists
 # =========================
 =pod
 
----+++ getRevisionInfo( $web, $topic ) ==> ( $date, $loginName, $rev )
-
-| Description:                          | Get revision info of a topic |
-| Parameter: =$web=                     | Web name, optional, e.g. ="Main"= |
-| Parameter: =$topic=                   | Topic name, required, e.g. ="TokyoOffice"= |
-| Return: =( $date, $loginName, $rev )= | List with: ( last update date, login name of last user, minor part of top revision number ), e.g. =( 12345 "phoeny", "5" )=. Unit of =$date= is epoch seconds |
+---+++ getRevisionInfo($theWebName, $theTopic, $theRev, $attachment ) ==> ( $date, $user, $rev, $comment ) 
+| Description:           | Get revision info of a topic |
+| Parameter: =$theWebName= | Web name, optional, e.g. ="Main"= |
+| Parameter: =$theTopic=   | Topic name, required, e.g. ="TokyoOffice"= |
+| Parameter: =$theRev=     | revsion number, or tag name (can be in the format 1.2, or just the minor number) |
+| Parameter: =$attachment=                 |attachment filename |
+| Return: =( $date, $user, $rev, $comment )= | List with: ( last update date, login name of last user, minor part of top revision number ), e.g. =( 1234561, "phoeny", "5" )= |
+| $date | in epochSec |
+| $user | |
+| $rev |  |
+| $comment | WHAT COMMENT? |
 | Since:                                | TWiki::Plugins::VERSION 1.000 (29 Jul 2001) |
 
 =cut
 # -------------------------
 sub getRevisionInfo
 {
-#   my( $web, $topic );
-    return TWiki::Store::getRevisionInfoFromMeta( @_ );
+    return TWiki::Store::getRevisionInfo( @_ );
 }
 
 # =========================
@@ -1121,6 +1125,28 @@ sub getRegularExpression
 {
     my ( $regexName ) = @_;
     return $TWiki::regex{$regexName};
+}
+
+=pod
+
+---+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
+
+| Description: | sets a names tag on the specified revision |
+| Parameter: =$web= | webname |
+| Parameter: =$topic= | topic name |
+| Parameter: =$rev= | the revision we are taging |
+| Parameter: =$tag= | the string to tag with |
+| Return: =$success= |  |
+| TODO: | we _need_ an error mechanism! |
+| Since: | TWiki::VERSION 1.022 (20 April 2004) |
+
+=cut
+
+sub setTopicRevisionTag
+{
+#	my ( $web, $topic, $rev, $tag ) = @_;
+	
+    return TWiki::Store::setTopicRevisionTag( @_ );
 }
 
 # =========================

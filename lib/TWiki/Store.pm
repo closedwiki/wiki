@@ -546,10 +546,13 @@ sub getRevisionDiff
 
 =pod
 
----+++ getRevisionInfo($theWebName, $theTopic, $theRev, $attachment, $topicHandler) ==> ( $theWebName, $theTopic, $theRev, $attachment, $topicHandler ) 
+---+++ getRevisionInfo($theWebName, $theTopic, $theRev, $attachment, $topicHandler) ==> ( $date, $user, $rev, $comment ) 
 | Description: | Get revision info of a topic |
 | Parameter: =$theWebName= | Web name, optional, e.g. ="Main"= |
 | Parameter: =$theTopic= | Topic name, required, e.g. ="TokyoOffice"= |
+| Parameter: =$theRev= | revsion number, or tag name (can be in the format 1.2, or just the minor number) |
+| Parameter: =$attachment= |attachment filename |
+| Parameter: =$topicHandler= | internal store use only |
 | Return: =( $date, $user, $rev, $comment )= | List with: ( last update date, login name of last user, minor part of top revision number ), e.g. =( 1234561, "phoeny", "5" )= |
 | $date | in epochSec |
 | $user | |
@@ -1724,6 +1727,31 @@ sub getAllWebs {
     return @webList ;
 }
 #/AS
+
+=pod
+
+---+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
+
+| Description: | sets a names tag on the specified revision |
+| Parameter: =$web= | webname |
+| Parameter: =$topic= | topic name |
+| Parameter: =$rev= | the revision we are taging |
+| Parameter: =$tag= | the string to tag with |
+| Return: =$success= |  |
+| TODO: | we _need_ an error mechanism! |
+| Since: | TWiki:: (20 April 2004) |
+
+=cut
+
+sub setTopicRevisionTag
+{
+	my ( $web, $topic, $rev, $tag ) = @_;
+	
+    my $topicHandler = _getTopicHandler( $web, $topic );
+#	TWiki::writeDebug("Store - setTopicRevisionTag ( $web, $topic, $rev, $tag )");	
+    return $topicHandler->setTopicRevisionTag( $web, $topic, $rev, $tag );
+}
+
 
 
 # =========================
