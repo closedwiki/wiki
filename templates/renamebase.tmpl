@@ -1,0 +1,59 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"rename"}%
+%TMPL:P{"htmldoctype"}%
+<head>
+ <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+ <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+ <script language="JavaScript">
+ <!--HIDE
+  function launchWindow( theWeb, theTopic ) {
+    win = open("%SCRIPTURLPATH%/view/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+    if( win ) {
+      win.focus();
+    }
+    return false;
+ }
+ //STOP HIDING-->
+ </script>
+</head>
+<body bgcolor="#ffffff">
+<form method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+%TMPL:P{"standardheader"}%
+<BR>
+<TABLE border="1" cellpadding="1" cellspacing="0">
+<TR>
+  <TH></TH><TH bgcolor=#00FFFF>Currently</TH><TH bgcolor=#FFFFC0>Change to</TH>
+</TR>
+<TR>
+  <TH>Web</TH><TD  bgcolor=#00FFFF>&nbsp;%WEB%&nbsp;</TD>
+  <TD bgcolor=#FFFFC0>&nbsp; %TMPL:P{"newweb"}% &nbsp;</TD>
+<TR>
+<TR>
+  <TH>Topic</TH><TD bgcolor=#00FFFF>&nbsp;%TOPIC%&nbsp;</TD>
+  <TD bgcolor=#FFFFC0>
+  &nbsp; %TMPL:P{"newtopic"}% &nbsp;
+  </TD>
+</TR>
+</TABLE>
+%TMPL:P{"hidden"}%
+<br>
+See <A target="RenameTopic" onClick="return launchWindow('%TWIKIWEB%','RenameTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/RenameTopic">RenameTopic</A>.
+Select Trash Web to delete.
+<BR>
+<hr>
+<br>
+<B>Change references in referring pages</B> - the ticked pages will be updated (if not locked, in which case you'll be able to re-submit.)
+<P>
+<BR>
+---++ Topics that refer to %TOPIC% in Web %WEB%:
+%SEARCH{ "(^|[_\*\> \t])((%TOPIC%))([^A-Za-z0-9_]|$)" web="%WEB%" noempty="on" showlock="on" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
+---++ Topics that refer to [[%WEB%.%TOPIC%]] in any Web:
+%SEARCH{ "(^|[_\*\> \t])((%WEB%\.)%TOPIC%)([^A-Za-z0-9_]|$)" web="all" noempty="on" showlock="on" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
+
+
+<hr>
+%TMPL:P{"standardfooter"}%
+</form>
+</body> %TMPL:END%
