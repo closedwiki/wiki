@@ -1,3 +1,9 @@
+%META:TOPICINFO{author="MikeMannix" date="999338304" format="1.0" version="1.5"}%
+---++ Dev Reorg
+	* This feature has been replaced by: TWikiFormTemplate
+
+---
+
 ---## TWiki Category Table
 
 ---+++ What is a Category Table?
