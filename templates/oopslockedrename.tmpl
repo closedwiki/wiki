@@ -1,6 +1,6 @@
 <HTML>
 <HEAD>
-  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (oops)</TITLE>
+  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (oops rename)</TITLE>
   <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX">
 </HEAD>
 <BODY bgcolor="#ffffff">
@@ -10,7 +10,7 @@
       <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
     </TD>
     <TD>
-      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (oops)</FONT>
+      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (oops rename)</FONT>
     </TD>
   </TR>
   <TR BGCOLOR="%WEBBGCOLOR%">
@@ -20,24 +20,22 @@
   </TR>
 </TABLE>
 <H1>Topic is locked by an other user</H1>
-There is a possibility that <b> %PARAM1% </b> is editing this topic. 
-Please ask the contributor before making changes to this topic. <p>
 
+%OLD_LOCK%
+%NEW_LOCK%
+
+<BR>
 <ul>
-<li> To rename anyway press the Rename link at the bottom of the page
+<li> To rename anyway press the <I>Rename anyway</I> at the bottom of the page
 <li> To cancel go back in your browser
 </ul>
-
-<b>Note:</b> Locking gets reset after %PARAM2% minutes of inactivity, 
-the earliest in <b>%PARAM3% minutes</b>.
 
 <p>
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR BGCOLOR="%WEBBGCOLOR%">
     <TD valign="top">
       Topic <B>%TOPIC%</B> . {
-        <A href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?breaklock=on">Rename anyway</A> | 
-        <A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Cancel</A>
+        <A href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%">Rename anyway</A>
       }
     </TD>
   </TR>
