@@ -1,0 +1,4 @@
+%BASETOPIC%
+%INCLUDINGTOPIC%
+%INCLUDE{"%INCLUDINGTOPIC%" pattern=".*AAA (.*) AAA.*"}%
+%INCLUDE{"IncludedIncludedTopic"}%

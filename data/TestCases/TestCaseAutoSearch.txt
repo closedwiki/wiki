@@ -270,6 +270,16 @@ Same as last test
 %SEARCH{ "Rhythm" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" casesensitive="on" }%
 <!-- /actual -->
 
+---+ format="..." (very incomplete)
+---++ Expected
+<!-- expected expand rex FORMAT -->
+%WEB% %TOPIC% <br /> %WIKINAME% <img src="pingu.gif" alt="<nop>" > 
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+%SEARCH{ "Pingu the Penguin" nototal="on" nosearch="on" format="<nop>$web <nop>$topic <br /> <nop>$wikiname <img src=\"pingu.gif\" alt=\"<nop>\" > " }%
+<!-- /actual -->
+
 ---+ order="created"
 ---+ order="modified"
 ---+ order="editby"
@@ -280,15 +290,6 @@ Same as last test
 ---+ expandvariables="on"
 
 ---+ header="..."
----+ format="..." (very incomplete)
----++ Expected
-<!-- expected expand rex FORMAT -->
-%WEB% %TOPIC% <br /> %WIKINAME% <img src="pingu.gif" alt="<nop>" > 
-<!-- /expected -->
----++ Actual
-<!-- actual -->
-%SEARCH{ "Pingu the Penguin" nototal="on" nosearch="on" format="<nop>$web <nop>$topic <br /> <nop>$wikiname <img src=\"pingu.gif\" alt=\"<nop>\" > " }%
-<!-- /actual -->
 
 ---+ separator=", " (default newline)
 ---+ newline="%BR%" 	Line separator within a search hit, effective only in FormattedSearch.
