@@ -1,15 +1,17 @@
-%META:TOPICINFO{author="PeterThoeny" date="1007404200" format="1.0" version="1.21"}%
-*%WIKITOOLNAME% Site-Level Preferences*
+%META:TOPICINFO{author="MikeMannix" date="1009781940" format="1.0" version="1.22"}%
+<H1>%WIKITOOLNAME% Site-Level Preferences</H1>
+The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %MAINWEB%.%USERNAME%). 
+	* %X% *NOTE:* You can lock individual settings at the site or web levels using User & Group Access Control - see section below.
+%TOC%
+---
 
-The following settings are __site-level preferences__ , e.g. affecting all users in all %WIKITOOLNAME% webs. These preferences can be overwritten by __web preferences__ (topic %WEBPREFSTOPIC% in each %WIKITOOLNAME% web) and __user preferences__ (your personal topic, i.e. Main.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
+---++ General Preferences:
 
-__Preferences:__
-
-	* List of %WIKITOOLNAME% webs: (the first line of a topic; to add a web see TWikiDocumentation and TWikiWebsTable)
+	* List of %WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and TWikiWebsTable):
 		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][Main]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][TWiki]] %SEP% [[Know.%HOMETOPIC%][Know]] %SEP% [[Test.%HOMETOPIC%][Test]]
-		* __Note:__ To automatically list all non-hidden webs in alphabetical order you can use this variable instead: Set WIKIWEBLIST = %WEBLIST{"[[$name.%HOMETOPIC%][$name]]" separator=" %SEP% "}%
+		* %T% *NOTE:* To automatically list all non-hidden webs in alphabetical order, use this variable instead: <br />Set WIKIWEBLIST = %WEBLIST{"[[$name.%HOMETOPIC%][$name]]" separator=" %SEP% "}%
 
-	* List of topics of a web: (the second line of a topic, is overwritten by web preferences)
+	* List of selected topics in a web - the second line of the upper toolbar (usually overwritten in individual %WEBPREFSTOPIC%):
 		* Set WEBTOPICLIST = [[%HOMETOPIC%][Home]] %SEP% [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
 
 	* Copyright notice:
@@ -47,60 +49,69 @@ __Preferences:__
 
 	* Format of file link when the __link__ check box is checked: (can be overwritten by user preferences)
 		* Set ATTACHEDFILELINKFORMAT = \t* [[%ATTACHURL%/$name][$name]]: $comment
-		* __Note:__ Keyword =$name= gets expanded to filename; =$comment= to comment; =\t= to tab (3 spaces for bullets).
+		* %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==\t== to tab (3 spaces for bullets).
 
 	* Format of images when the __link__ check box is checked: (can be overwritten by user preferences)
-		* Set ATTACHEDIMAGEFORMAT = \t* $comment: <br /> <img src="%ATTACHURLPATH%/$name" alt="$name" $size />
-		* __Note:__ Above image is shown as broken, it gets expanded correctly when you attach an image.
-		* __Note:__ Keyword =$name= gets expanded to filename; =$comment= to comment; =$size= to =width="..." height="..."= attribute of =img= tag; =\t= to tab (3 spaces for bullets).
+		* Set ATTACHEDIMAGEFORMAT = \t* $comment: <br /> <img src="%ATTACHURLPATH%/$name" alt="$name" $size /> __Example image is broken because there is no attached image file.__
+		* %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab (3 spaces for bullets).
 
-	* Wiki webmaster email address:
+---++ Email Settings
+
+	* TWiki webmaster email address:
 		* Set WIKIWEBMASTER = webmaster@your.company
 
-	* Mail host for outgoing mail. This is used for WebChangesAlert if Perl module ==Net::SMTP== is installed. If not, or if =SMTPMAILHOST= is empty, the external sendmail program is used instead (defined by ==$mailProgram== in ==TWiki.cfg==). Examples: =mail.your.company= or =localhost=
+	* Mail host for outgoing mail. This is used for WebChangesAlert if Perl module ==Net::SMTP== is installed. If not, or if =SMTPMAILHOST= is empty, the external sendmail program is used instead (defined by ==$mailProgram== in ==TWiki.cfg==). Examples: ==mail.your.company== or ==localhost==
 		* Set SMTPMAILHOST = mail
 
-	* Mail domain sending mail. SMTP requires that you identify the TWiki server sending mail. If not set, ==Net::SMTP== will guess it for you. Examples: =twiki.your.company=
+	* Mail domain sending mail. SMTP requires that you identify the TWiki server sending mail. If not set, ==Net::SMTP== will guess it for you. Ex: ==twiki.your.company==
 		* Set SMTPSENDERHOST = 
+
+---++ Plugins Settings
 
 	* TWikiPlugins configuration: All plugin modules that exist in the =lib/TWiki/Plugins= directory are activated automatically unless disabled by DISABLEDPLUGINS. You can optionally list the installed plugins in INSTALLEDPLUGINS. This is useful to define the sequence of plugin execution, or to specify other webs then the %TWIKIWEB% web for the plugin topics. Specify plugins as a comma separated list of topics.
 		* Set INSTALLEDPLUGINS = TWiki.DefaultPlugin
 		* Set DISABLEDPLUGINS = EmptyPlugin
 		* Currently activated plugins: %ACTIVATEDPLUGINS%
-		* __Note:__ In case you have a rough plugin you can disable all plugins with the ==$disableAllPlugins== flag in the =TWiki.cfg= file.
+		* %T% *NOTE:* You can enable/disable all plugins with the ==$disableAllPlugins== flag in the ==lib/TWiki.cfg== file.
 
-	* http-equiv meta tags for __view__, __rdiff__, __attach__, __search*__ scripts:
+---++ HTTP-<nop>EQUIV Settings
+
+	* ==http-equiv== meta tags for ==view==, ==rdiff==, ==attach==, ==search*== scripts:
 <verbatim>
 		* Set HTTP_EQUIV_ON_VIEW = 
 </verbatim>
 
-	* http-equiv meta tags for __edit__ script. Example to expire immediately: <br> =Set HTTP_EQUIV_ON_EDIT = &lt;meta http-equiv="Expires" content="%<nop>GMTIME{"$day $month, $year - $hour:$min:$sec"}% GMT"&gt;=
+	* ==http-equiv== meta tags for ==edit== script. Example, to expire immediately: <br /> =Set HTTP_EQUIV_ON_EDIT = &lt;meta http-equiv="Expires" content="%<nop>GMTIME{"day month, year - hour:min:sec"}% GMT"&gt;=
 <verbatim>
 		* Set HTTP_EQUIV_ON_EDIT = 
 </verbatim>
 
-	* http-equiv meta tags for __preview__ script:
+	* ==http-equiv== meta tags for ==preview== script:
 <verbatim>
 		* Set HTTP_EQUIV_ON_PREVIEW = 
 </verbatim>
 
-	* Users or groups allowed to change or rename this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
+---++ Preferences Access Control
+
+	* Users or groups allowed to change or rename this <nop>%TOPIC% topic: (ex: %MAINWEB%.TWikiAdminGroup)
 		* Set ALLOWTOPICCHANGE = 
 		* Set ALLOWTOPICRENAME = 
 
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
 		* Set FINALPREFERENCES = PREVIEWBGIMAGE, WIKIWEBMASTER, SMTPMAILHOST , SMTPSENDERHOST
 
-
-__Notes:__
-	* A preference is defined as: <br> =6 spaces * Set NAME = value= <br> Example:
+---++ Creating New Preference Variables
+ 
+You can introduce new VARIABLES and use them in your topics and templates. There is no need to change the TWiki engine (Perl scripts).
+	* A preference is defined in a TWikiShorthand bullet item: ==[3 spaces] * [space] Set NAME = value== <br /> Example (as a nested bullet item, indented 6 spaces):
 		* S<nop>et WEBBGCOLOR = #FFFFC0
-	* Preferences are used as %TWIKIWEB%.TWikiVariables by enclosing the name in percent signs. Example:
-		* When you write variable =%WEB<nop>BGCOLOR%= , it gets expanded to =%WEBBGCOLOR%= .
-	* The sequential order of the preference settings is significant. Define preferences that use other preferences first, i.e. set =<nop>WEBCOPYRIGHT= before =<nop>WIKIWEBMASTER= since =%<nop>WEBCOPYRIGHT%= uses the =%<nop>WIKIWEBMASTER%= variable.
-	* You can introduce new variables and use them in your topics and templates. There is no need to change the %WIKITOOLNAME% engine (Perl scripts).
+	* Preferences are used as %TWIKIWEB%.TWikiVariables by enclosing the name in percent signs: ==%==. Example:
+		* When you write variable ==%WEB<nop>BGCOLOR%==, it gets expanded to =%WEBBGCOLOR%= .
 
-__Related Topics:__
+	* %X% The sequential order of the preference settings is significant. Define preferences that use other preferences FIRST. For example, set ==<nop>WEBCOPYRIGHT== before ==<nop>WIKIWEBMASTER== since the copyright notice uses the webmaster email address.
+
+---++ Related Topics
+
 	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
 	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%= .
