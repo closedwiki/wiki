@@ -348,6 +348,9 @@ $CGI::Carp::WRAP = $CGI::Carp::WRAP = 0;	# Avoid warnings...
 # Perl as 'Darwin') - $detailedOS is set in TWiki.cfg.
 if ( defined $detailedOS and ($detailedOS =~ /darwin/i or $OS ne 'UNIX') ) {
     push @requiredMods,  @requiredModsNonUnix;
+} else {
+#these are optional on Unix
+    push @optionalMods,  @requiredModsNonUnix;
 }
 
 # Check that the TWiki.pm module can be found
@@ -988,4 +991,3 @@ sub deleteTestFile
         unlink $name;
     }
 }
-
