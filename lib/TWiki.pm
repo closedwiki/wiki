@@ -113,7 +113,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "14 Dec 2002";
+$wikiversion      = "17 Dec 2002";
 
 # ===========================
 # Key Global variables, required for writeDebug
