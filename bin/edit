@@ -162,6 +162,12 @@ sub main
        }
        $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
        $text = $query->param( 'text' );
+       # FIXME move this to a common area
+       $text =~ s/%_N_%/\r\n/go;
+       $text =~ s/%_L_%/</go;
+       $text =~ s/%_G_%/>/go;
+       $text =~ s/%_Q_%/\"/go;
+       $text =~ s/%_A_%/&/go;
     }
     
     if( $saveCmd eq "repRev" ) {
