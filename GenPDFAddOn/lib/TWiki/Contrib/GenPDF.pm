@@ -54,7 +54,7 @@ use File::Temp;
 
 use vars qw($VERSION);
 
-$VERSION = 0.1;
+$VERSION = 0.2;
 
 =pod
 
@@ -80,7 +80,8 @@ sub _fixTags {
 
 =head2 _getRenderedView($webName, $topic)
 
-Generates rendered HTML of $topic in $webName using TWiki rendering functions and returns it.
+Generates rendered HTML of $topic in $webName using TWiki rendering functions and
+returns it.
  
 =cut
 
@@ -94,6 +95,31 @@ sub _getRenderedView {
    return $text;
 }
 
+
+=pod
+
+=head2 _extractPdfSections
+
+Removes the text not found between PDFSTART and PDFSTOP HTML
+comments. PDFSTART and PDFSTOP comments must appear in pairs.
+If PDFSTART is not included in the text, the entire text is
+return (i.e. as if PDFSTART was at the beginning and PDFSTOP
+was at the end).
+
+=cut
+
+sub _extractPdfSections {
+   my ($text) = @_;
+
+   # If no start tag, just return everything
+   return $text if ($text !~ /<!--\s*PDFSTART\s*-->/);
+
+   my $output = "";
+   while ($text =~ /(.*?)<!--\s*PDFSTART\s*-->(.*?)<!--\s*PDFSTOP\s*-->/sg) {
+      $output .= $2;
+   }
+   return $output;
+}
 
 =pod
 
@@ -118,8 +144,8 @@ sub _getHeaderFooterData {
    }
    # TBD: Should probably check for valid text (e.g. topic actually found, no oops URL, etc.).
 
-   # Extract the content between the %PDFSTART% and %PDFSTOP% comment markers
-   $text =~ s|.*<!--\s*PDFSTART\s*-->(.*)<!--\s*PDFSTOP\s*-->.*|$1|s;
+   # Extract the content between the PDFSTART and PDFSTOP comment markers
+   $text = _extractPdfSections($text);
    $text = _fixTags($text, $rhPrefs);
    return $text;
 }
@@ -155,8 +181,8 @@ sub _createTitleFile {
    }
    # TBD: Should probably check for valid text (e.g. topic actually found, no oops URL, etc.).
 
-   # Extract the content between the %PDFSTART% and %PDFSTOP% markers
-   $text =~ s|.*<!--\s*PDFSTART\s*-->(.*)<!--\s*PDFSTOP\s*-->.*|$1|s;
+   # Extract the content between the PDFSTART and PDFSTOP comment markers
+   $text = _extractPdfSections($text);
    $text = _fixTags($text, $rhPrefs);
 
    # Save it to a file
@@ -209,10 +235,8 @@ sub _fixHtml {
       $html =~ s|^(.)|<h1>$rhPrefs->{'title'}</h1>$1|;
    }
 
-   # Extract the content between the %PDFSTART% and %PDFSTOP% markers
-   if ($html =~ /<!--\s*PDFSTART\s*-->/) {
-      $html =~ s|.*<!--\s*PDFSTART\s*-->(.*)<!--\s*PDFSTOP\s*-->.*|$1|s;
-   }
+   # Extract the content between the PDFSTART and PDFSTOP comment markers
+   $html = _extractPdfSections($html);
 
    # Fix the image tags for links relative to web server root
    my $url = TWiki::Func::getUrlHost();
@@ -231,7 +255,7 @@ sub _fixHtml {
 
 =pod
 
-=head2 _getPRefsHashRef($query)
+=head2 _getPrefsHashRef($query)
 
 Creates a hash with the various preference values. For each preference key, it will set the
 value first to the one supplied in the URL query. If that is not present, it will use the TWiki
@@ -273,8 +297,9 @@ sub _getPrefsHashRef {
    $prefs{'format'} = $query->param('pdfformat') || TWiki::Func::getPreferencesValue("PDFFORMAT");
    $prefs{'format'} = "pdf14" if ($prefs{'format'} =~ /\s*/);
    # note that 0 for toclevels with turn off the TOC
-   $prefs{'toclevels'} = $query->param('pdftoclevels') || TWiki::Func::getPreferencesValue("PDFTOCLEVELS");
-   $prefs{'toclevels'} = "5" if ($prefs{'toclevels'} =~ /\s*/);
+   $prefs{'toclevels'} = $query->param('pdftoclevels');
+   $prefs{'toclevels'} = TWiki::Func::getPreferencesValue("PDFTOCLEVELS") if (!defined($query->param('pdftoclevels')));
+   $prefs{'toclevels'} = "5" if ((!defined($query->param('pdftoclevels'))) && (TWiki::Func::getPreferencesValue("PDFTOCLEVELS") eq ""));
    $prefs{'size'} = $query->param('pdfpagesize') || TWiki::Func::getPreferencesValue("PDFPAGESIZE");
    $prefs{'size'} = "a4" if ($prefs{'size'} =~ /\s*/);
    $prefs{'orientation'} = $query->param('pdforientation') || TWiki::Func::getPreferencesValue("PDFORIENTATION");
@@ -353,6 +378,9 @@ sub viewPDF {
 
    print STDERR "Calling htmldoc: $callHtmldoc\n";
 
+   # Disable CGI feature of newer versions of htmldoc
+   # (thanks to Brent Roberts for this fix)
+   $ENV{HTMLDOC_NOCGI} = "yes";
    my $pid = open(PDF,"$callHtmldoc |") or die "Failed to fork: $!\n";
 
    #  output the HTML header and the output of HTMLDOC
