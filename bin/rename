@@ -65,9 +65,9 @@ sub main
     # still need updating, previous update being prevented by a lock.
     my $justChangeRefs = $query->param( 'changeRefs' ) || "";
 
-    my $fileName = &TWiki::Store::getFileName($oldWeb, $oldTopic);
+    my $fileName = &TWiki::Store::getFileName( $oldWeb, $oldTopic );
     my $newName;
-    $newName = &TWiki::Store::getFileName($newWeb, $newTopic) if( defined( $newWeb ) );
+    $newName = &TWiki::Store::getFileName( $newWeb, $newTopic ) if( $newWeb );
     
     if( ! $justChangeRefs ) {
        if( checkExist( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $fileName, $newName ) ) {
