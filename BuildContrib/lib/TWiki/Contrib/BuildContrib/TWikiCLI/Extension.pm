@@ -79,7 +79,7 @@ sub cli_install_download {
  print "$localFile\n";
 
 # TODO : Find out why its called both Build and BuildContrib...
- my $buildObj = new( $extension, "Build" );
+ my $buildObj = TWiki::Contrib::BuildContrib::Build->new($extension);
  $buildObj->manifest();
 
 }
