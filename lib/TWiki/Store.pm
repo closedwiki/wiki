@@ -65,13 +65,14 @@ sub getFileName
    if( ! $attachment ) {
       if( ! $extension ) {
          $extension = ".txt";
+      } else {
+         $extension = ".txt$extension";
       }
       $file = "$TWiki::dataDir/$web/$topic$extension";
 
    } else {
-      # FIXME may well want to switch this back to having rcs history under pub
       if ( $extension eq ",v" ) {
-         $file = "$TWiki::dataDir/$web/$topic/$attachment$extension";
+         $file = "$TWiki::pubDir/$web/$topic/$attachment$extension";
       } else {
          $file = "$TWiki::pubDir/$web/$topic/$attachment$extension";
       }
@@ -101,7 +102,7 @@ sub getFileDir
          $suffix = "/$suffix";
       }
       if ( $extension ) {
-         $dir = "$TWiki::dataDir/$web$suffix";
+         $dir = "$TWiki::pubDir/$web$suffix";
       } else { 
          $dir = "$TWiki::pubDir/$web$suffix";
       }
@@ -131,6 +132,7 @@ sub listWebs
 
 # =========================
 # Get rid a topic and its attachments completely
+# Intended for TEST purposes.
 # Use with GREAT CARE as file will be gone, including RCS history
 sub erase
 {
@@ -160,8 +162,101 @@ sub erase
        
        rmdir( "$attDir" ) || warn "Couldn't remove directory $attDir";
    }
+   
+   # Delete any attachment history
+   my $attDir = getFileDir( $web, $topic, 1, ",v" );
+   if ( -e $attDir ) {
+       opendir( DIR, $attDir );
+       my @attachments = readdir( DIR );
+       closedir( DIR );
+       my $attachment;
+       foreach $attachment ( @attachments ) {
+          if( $attachment !~ /^\./ ) {
+             unlink( "$attDir/$attachment" ) || warn "Couldn't remove $attDir/$attachment";
+             if( $attachment !~ /,v$/ ) {
+                writeLog( "erase", "$web.$topic.$attachment" );
+             }
+          }
+       }
+    
+   }
 
    writeLog( "erase", "$web.$topic", "" );
+}
+
+# =========================
+# Move an attachment from one topic to another.
+# If there is a problem an error string is returned.
+# The caller to this routine check that all topics are valid and
+# to lock the topics.
+sub moveAttachment
+{
+    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment ) = @_;
+    
+    my $error = "";   
+    my $what = "$oldWeb.$oldTopic.$theAttachment -> $newWeb.$newTopic";
+    
+    # Make sure directory exists to move to - FIMXE might want to delete old one if empty?
+    my $newPubDir = getFileDir( $newWeb, $newTopic, $theAttachment, "" );
+    if ( ! -e $newPubDir ) {
+        umask( 0 );
+        mkdir( $newPubDir, 0777 );        
+    }
+    
+    # Move attachment
+    my $oldAttachment = getFileName( $oldWeb, $oldTopic, $theAttachment );
+    my $newAttachment = getFileName( $newWeb, $newTopic, $theAttachment );
+    if( ! move( $oldAttachment, $newAttachment ) ) {
+        $error = "Failed to move attachment; $what ($!)";
+        return $error;
+    }
+    
+    # Make sure rcs directory exists
+    my $newRcsDir = getFileDir( $newWeb, $newTopic, $theAttachment, ",v" );
+    if ( ! -e $newRcsDir ) {
+        umask( 0 );
+        mkdir( $newRcsDir, 0777 );
+    }
+    
+    # Move attachment history
+    my $oldAttachmentRcs = getFileName( $oldWeb, $oldTopic, $theAttachment, ",v" );
+    my $newAttachmentRcs = getFileName( $newWeb, $newTopic, $theAttachment, ",v" );
+    if( ! move( $oldAttachmentRcs, $newAttachmentRcs ) ) {
+        $error .= "Failed to move attachment history; $what ($!)";
+        # Don't return here as attachment file has already been moved
+    }
+
+    # Remove file attachment from old topic
+    my $text = readWebTopic( $oldWeb, $oldTopic );
+    my ( $file, $attrVersion, $filePath, $fileSize, $fileDate, $fileUser, 
+             $fileComment, $fileAttr ) = TWiki::Attach::extractArgsForFile( $text, $theAttachment );
+    TWiki::Attach::removeFile( $text, $theAttachment );
+    $error .= save( $oldWeb, $oldTopic, $text, "", "", "", "doUnlock", "dont notify", "" ); 
+    
+    # Remove lock file
+    lockTopicNew( $oldWeb, $oldTopic, 1 );
+    
+    # Add file attachment to new topic
+    $text = readWebTopic( $newWeb, $newTopic );
+    my $hideFile = "";
+    # FIXME doesn't deal with delete flag
+    my $hideFile = $fileAttr;
+    # FIXME concentrate TWikiAttachment code in one place
+    my( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
+    if( ! $before ) { $before = ""; }
+    if( ! $atext  ) { $atext  = ""; }
+    $atext = TWiki::Attach::updateAttachment( 
+                    $atext, $theAttachment, $filePath, $fileSize,
+                    $fileDate, $fileUser, $fileComment, $hideFile );
+    $text = "$before<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
+    
+    $error .= save( $newWeb, $newTopic, $text, "", "", "", "doUnlock", "dont notify", "" ); 
+    # Remove lock file
+    lockTopicNew( $newWeb, $newTopic, 1 );
+    
+    writeLog( "move", "$oldWeb.$oldTopic", "Attachment $theAttachment moved to $newWeb.$newTopic" );
+
+    return $error;
 }
 
 
@@ -170,35 +265,45 @@ sub erase
 sub renameTopic
 {
    my( $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
+   
+   my $error = "";
 
    #!!!check lock
    
    # Change data file
    my $from = getFileName( $oldWeb, $oldTopic );
    my $to =  getFileName( $newWeb, $newTopic );
-   rename( $from, $to );
+   if( ! move( $from, $to ) ) {
+       $error .= "data file move failed.  ";
+   }
 
    # Remove lock file
    lockTopicNew( $oldWeb, $oldTopic, 1 );
    
    # Change data file history
-   rename(
-     getFileName( $oldWeb, $oldTopic, "", ".txt,v" ),
-     getFileName( $newWeb, $newTopic, "", ".txt,v" )
-   );
+   if( ! move(
+     getFileName( $oldWeb, $oldTopic, "", ",v" ),
+     getFileName( $newWeb, $newTopic, "", ",v" )
+   ) ) {
+      $error .= "history file move failed.  ";
+   }
    
    # Rename the attachment directory if there is one
    my $oldAttachDir = getFileDir( $oldWeb, $oldTopic, 1, "");
-   if( $oldAttachDir ) {
-      rename( $oldAttachDir, getFileDir( $newWeb, $newTopic, 1, "") );
-      # FIXME assumption that if attachment dir is present then so is history dir 
-      rename( getFileDir( $oldWeb, $oldTopic, 1, ",v" ), getFileDir( $newWeb, $newTopic, 1, ",v" ) );
+   my $newAttachDir = getFileDir( $newWeb, $newTopic, 1, "");
+   if( -e $oldAttachDir ) {
+      if( ! move( $oldAttachDir, $newAttachDir ) ) {
+          $error .= "attach move failed";
+      }
+      # FIXME can't deal with attach history being in different place to attachments
    }
    
    # Log rename
    if( $TWiki::doLogRename ) {
-      writeLog( "rename", "$oldWeb.$oldTopic -> $newWeb.$newTopic", "" );
+      writeLog( "rename", "$oldWeb.$oldTopic", "moved to $newWeb.$newTopic" );
    }
+   
+   return $error;
 }
 
 
@@ -236,6 +341,7 @@ sub readAttachmentVersion
 # =========================
 # rdiff:	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
 # view:	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
+# FIXME get rid of this
 sub getRevisionNumber
 {
     my( $theTopic, $theWebName ) = @_;
@@ -245,29 +351,43 @@ sub getRevisionNumber
     return getRevisionNumberNew( $theWebName, $theTopic, "" );
 }
 
+# =========================
+# FIXME get rid of this
+sub getRevisionNumberNew
+{
+    my( $theWebName, $theTopic, $attachment ) = @_;
+    my $ret = getRevisionNumberX( $theWebName, $theTopic, $attachment );
+    TWiki::writeDebug( "Store: rev = $ret" );
+    if( ! $ret ) {
+       $ret = "1.1"; # Temporary
+    }
+    
+    return $ret;
+}
+
 
 # =========================
 # Latest reviewion number
-sub getRevisionNumberNew
+# FIXME rename to getRevisionNumber
+# FIXME pick up errors, but what to do with them as return value already used?
+sub getRevisionNumberX
 {
     my( $theWebName, $theTopic, $attachment ) = @_;
     if( ! $theWebName ) {
         $theWebName = $TWiki::webName;
     }
-    my $extension = ",v";
     if( ! $attachment ) {
         $attachment = "";
-        $extension = ".txt,v";
     }
 
     my $tmp= $TWiki::revHistCmd;
     my $fileName = getFileName( $theWebName, $theTopic, $attachment );
     
     ##&TWiki::writeDebug( "getRevisionNumberNew: fileName: $fileName" );
-    my $rcsfilename = getFileName( $theWebName, $theTopic, $attachment, $extension );
+    my $rcsfilename = getFileName( $theWebName, $theTopic, $attachment, ",v" );
     ##&TWiki::writeDebug( "getRevisionNumberNew: rcsfilename: $rcsfilename" );
     if( ! -e $rcsfilename ) {
-       return "1.1"; # FIXME Can't tell that there is no revision file
+       return "";
     }
 
     $tmp =~ s/%FILENAME%/$rcsfilename/;
@@ -278,7 +398,7 @@ sub getRevisionNumberNew
     if( ( $tmp ) && ( $1 ) ) {
         return $1;
     } else {
-        return "1.1"; # !!!ever get here?
+        return "";
     }
 }
 
@@ -315,6 +435,7 @@ sub getRevisionDiff
 # rdiff:         my( $date, $user ) = &TWiki::Store::getRevisionInfo( $topic, "1.$rev", 1 );
 # view:          my( $date, $user ) = &TWiki::Store::getRevisionInfo( $topic, "1.$rev", 1 );
 # wikisearch.pm: my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $filename, "", 1, $thisWebName );
+# FIXME get rid of this
 sub getRevisionInfo
 {
     my( $theTopic, $theRev, $changeToIsoDate, $theWebName) = @_;
@@ -323,6 +444,7 @@ sub getRevisionInfo
 
 
 # =========================
+# FIXME rename to getRevisionInfo
 sub getRevisionInfoNew
 {
     my( $theTopic, $theRev, $changeToIsoDate, $theWebName, $attachment ) = @_;
@@ -344,12 +466,16 @@ sub getRevisionInfoNew
     $fileName =~ s/$TWiki::securityFilter//go;
     $fileName =~ /(.*)/;
     $fileName = $1;       # now safe, so untaint variable
-    my $rcsFile = "";
-    if ( $attachment ) {
-       $rcsFile = getFileName( $theWebName, $theTopic, $attachment, ",v" );
+    my $rcsFile = getFileName( $theWebName, $theTopic, $attachment, ",v" );
+    $tmp =~ s/%FILENAME%/$rcsFile/;
+    # FIXME - do elsewhere for rlog call.
+    TWiki::writeDebug( "Store: revInfo; rcsfile = $rcsFile" );
+    TWiki::writeDebug( "Store: revcmd = $tmp" );
+    if ( -e $rcsFile ) {
+       $tmp = `$tmp`;
+    } else {
+       $tmp = "";
     }
-    $tmp =~ s/%FILENAME%/$fileName $rcsFile/;
-    $tmp = `$tmp`;
     $tmp =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/;
     my $date = $1;
     my $user = $2;
@@ -453,7 +579,22 @@ sub saveAttachment
 }
 
 
+#==========================
+# FIXME use properties
+sub isBinary
+{
+   my( $filename ) = @_;
+   
+   if( $filename =~ /\.txt$/ ) {
+      return "";
+   } else {
+      return "binary";
+   }
+}
+
+
 # =========================
+# return non-null string if there is an (RCS) error.
 sub save
 {
     my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment ) = @_;
@@ -538,26 +679,45 @@ sub save
                   mkdir( $tempPath, 0777 );
                }
  
-               if( ! -e $rcsFile ) {
-                  # FIXME add RCS error handling
+               if( ! -e $rcsFile && $TWiki::revInitBinaryCmd ) {
                   $tmp = $TWiki::revInitBinaryCmd;
-                  $tmp =~ s/%USERNAME%/$TWiki::userName/;
-                  $tmp =~ s/%FILENAME%/$name $rcsFile/;
+                  $tmp =~ s/%FILENAME%/$rcsFile/go;
+                  if( ! isBinary( $attachment ) ) {
+                      # FIXME naff
+                      $tmp =~ s/-kb //go;
+                  }
                   $tmp =~ /(.*)/;
-                  $tmp = $1;       # safe, so untaint variable
+                  $tmp = "$1 2>&1 1>$TWiki::nullDev";       # safe, so untaint variable
                   ##&TWiki::writeDebug( "save: Init RCS file, $tmp" );
-                  `$tmp`;
+                  $rcsError = `$tmp`;
+                  TWiki::writeDebug( "Store::save initci $tmp\n   res = $rcsError");
+                  if( $rcsError ) { # oops, stderr was not empty, return error
+                     $rcsError = "$tmp\n$rcsError";
+                     return $rcsError;
+                  }
+                  
+                  # Sometimes (on Windows?) rcs file not formed, so check for it
+                  if( ! -e $rcsFile ) {
+                     return "Failed to create history file $rcsFile";
+                  }
                }
             }
 
             # update repository
             $tmp= $TWiki::revCiCmd;
             $tmp =~ s/%USERNAME%/$TWiki::userName/;
-            $tmp =~ s/%FILENAME%/$name $rcsFile/;
-            $tmp =~ s/%COMMENT%/\'$theComment\'/;
+            # FIXME put back $rcsFile if history for attachments moves to data area
+            $tmp =~ s/%FILENAME%/$name/;
+            $tmp =~ s/%COMMENT%/$theComment/;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
-            $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+            $tmp .= " 2>&1 1>$TWiki::nullDev";
+            TWiki::writeDebug( "Store: ci to rcs; $tmp" );
+            if( -e $name ) {
+               TWiki::writeDebug( "Store: source file $name exists" );
+            }
+            $rcsError = `$tmp`; # capture stderr  (S.Knutson)
+            TWiki::writeDebug( "Store: rcsError post ci = $rcsError" );
             $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
             if( $rcsError ) { # oops, stderr was not empty, return error
                 $rcsError = "$tmp\n$rcsError";
@@ -607,7 +767,7 @@ sub save
             $tmp =~ s/%FILENAME%/$name $rcsFile/go;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
-            $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+            $rcsError = `$tmp 2>&1 1>$TWiki::nullDev`; # capture stderr  (S.Knutson)
             $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
             if( $rcsError ) {   # oops, stderr was not empty, return error
                 $rcsError = "$tmp\n$rcsError";
@@ -618,7 +778,7 @@ sub save
             $tmp =~ s/%FILENAME%/$name $rcsFile/go;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
-            $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+            $rcsError = `$tmp 2>&1 1>$TWiki::nullDev`; # capture stderr  (S.Knutson)
             $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
             if( $rcsError ) {   # oops, stderr was not empty, return error
                 $rcsError = "$tmp\n$rcsError";
@@ -629,7 +789,7 @@ sub save
             $tmp =~ s/%FILENAME%/$name $rcsFile/go;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
-            $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+            $rcsError = `$tmp 2>&1 1>$TWiki::nullDev`; # capture stderr  (S.Knutson)
             $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
             if( $rcsError ) {   # oops, stderr was not empty, return error
                 $rcsError = "$tmp\n$rcsError";
@@ -642,7 +802,7 @@ sub save
         $tmp =~ s/%FILENAME%/$name $rcsFile/;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
-        $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+        $rcsError = `$tmp 2>&1 1>$TWiki::nullDev`; # capture stderr  (S.Knutson)
         $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
         if( $rcsError ) {   # oops, stderr was not empty, return error
             $rcsError = "$tmp\n$rcsError";
@@ -670,7 +830,7 @@ sub save
         $tmp =~ s/%FILENAME%/$name $rcsFile/go;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
-        $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+        $rcsError = `$tmp 2>&1 1>$TWiki::nullDev`; # capture stderr  (S.Knutson)
         $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
         if( $rcsError ) {   # oops, stderr was not empty, return error
             $rcsError = "$tmp\n$rcsError";
@@ -681,7 +841,7 @@ sub save
         $tmp =~ s/%FILENAME%/$name $rcsFile/go;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
-        $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+        $rcsError = `$tmp 2>&1 1>$TWiki::nullDev`; # capture stderr  (S.Knutson)
         $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
         if( $rcsError ) {   # oops, stderr was not empty, return error
             $rcsError = "$tmp\n$rcsError";
@@ -692,7 +852,7 @@ sub save
         $tmp =~ s/%FILENAME%/$name $rcsFile/go;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
-        $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+        $rcsError = `$tmp 2>&1 1>$TWiki::nullDev`; # capture stderr  (S.Knutson)
         $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
         if( $rcsError ) {   # oops, stderr was not empty, return error
             $rcsError = "$tmp\n$rcsError";
@@ -712,7 +872,7 @@ sub save
             writeLog( "cmd", "$TWiki::webName.$topic", "delRev $rev" );
         }
     }
-    return 0; # all is well
+    return ""; # all is well
 }
 
 # =========================
