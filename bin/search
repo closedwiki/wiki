@@ -2,7 +2,7 @@
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
-# Copyright (C) 1999 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2002 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -89,12 +89,14 @@ sub main
     my $renameView    = $query->param( "renameview" )  || "";
     my $showlock      = $query->param( "showlock" ) || "";
     my $noempty       = $query->param( "noempty" ) || "";
+    my $attrHeader    = $query->param( "header" ) || "";
+    my $attrFormat    = $query->param( "format" ) || "";
 
     &TWiki::writeHeader( $query );
     &TWiki::Search::searchWeb( "0",
         $websStr, $search, $scope, $order, $regex,
         $limit, $revSort, $caseSensitive, $nosummary,
         $nosearch, $noheader, $nototal, $bookView, $renameView,
-        $showlock, $noempty, ""
+        $showlock, $noempty, "", $attrHeader, $attrFormat
     );
 }
