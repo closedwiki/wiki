@@ -390,7 +390,7 @@ sub initialize
 # =========================
 # Run-time locale setup - 'use locale' must be done in BEGIN block
 # for regexes and sorting to work properly, although regexes can still
-# work without this in 'list chars' mode (see setupRegexes routine).
+# work without this in 'non-locale regexes' mode (see setupRegexes routine).
 sub setupLocale {
  
     $siteCharset = 'ISO-8859-1';	# Defaults if locale mis-configured
