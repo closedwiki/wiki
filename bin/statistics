@@ -165,15 +165,15 @@ sub processWeb
     # | 03 Feb 2000 - 02:53 | Main.PeterThoeny | save | Know.WebHome | repRev 1.7 Main.PeterThoeny 2000/02/03 02:43:22 |
 
     my $tmp;
-    my @list = grep( /^\|[^\|]*\|[^\|]*\| view \| $webName/, @theLogList );
+    my @list = grep( /^\|[^\|]*\|[^\|]*\| view \| $webName\./, @theLogList );
     my $statViews = @list;
     my @topViews = getTopList( 0, $TWiki::statsTopViews, @list );
 
-    @list = grep( /^\|[^\|]*\|[^\|]*\| save \| $webName/, @theLogList );
+    @list = grep( /^\|[^\|]*\|[^\|]*\| save \| $webName\./, @theLogList );
     my $statSaves = @list;
-    @list = grep( /^\|[^\|]*\|[^\|]*\| upload \| $webName/, @theLogList );
+    @list = grep( /^\|[^\|]*\|[^\|]*\| upload \| $webName\./, @theLogList );
     my $statUploads = @list;
-    @list = grep( /^\|[^\|]*\|[^\|]*\| (save|upload) \| $webName/, @theLogList );
+    @list = grep( /^\|[^\|]*\|[^\|]*\| (save|upload) \| $webName\./, @theLogList );
     my @topContrib = getTopList( 1, $TWiki::statsTopContrib, @list );
     printMsg( "  - view: $statViews, save: $statSaves, upload: $statUploads" );
     my $statTopViews = "";
