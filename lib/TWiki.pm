@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "01 Dec 2001";
+$wikiversion      = "19 Dec 2001";
 
 # ===========================
 # read the configuration part
@@ -1708,9 +1708,9 @@ sub makeAnchorHeading
     if( $hasAnchor ) {
         # FIXME: '<h1><a name="atext"></a></h1> WikiName' has an
         #        empty <a> tag, which is not HTML conform
-        $text = "<nop><h$theLevel><a name =\"$anchorName\"> </a> $theText <\/h$theLevel>";
+        $text = "<nop><h$theLevel><a name=\"$anchorName\"> </a> $theText <\/h$theLevel>";
     } else {
-        $text = "<nop><h$theLevel><a name =\"$anchorName\"> $theText <\/a><\/h$theLevel>";
+        $text = "<nop><h$theLevel><a name=\"$anchorName\"> $theText <\/a><\/h$theLevel>";
     }
 
     return $text;
