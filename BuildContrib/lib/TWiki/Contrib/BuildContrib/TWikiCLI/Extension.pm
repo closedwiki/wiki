@@ -71,19 +71,30 @@ sub cli_install {
 sub cli_download {
     my ($extension) = @_;
 
-    print "Installing $extension\n\n";
-    my $libFrag = getLibFragmentForExtension($extension);
 
     use TWiki::Contrib::DistributionContrib::DistributionFetcher;
     my $localCopy = TWiki::Contrib::DistributionContrib::DistributionFetcher::fetchLatestDistributionVersion($extension);
-
-    my $buildDotPlDir = $localCopy."/lib/TWiki/$libFrag/";
-    
-    if (-f $buildDotPlDir."/build.pl") {
-     print "Woah! Found it!!\n";
+    if ($localCopy == "") {
+     return "Couldn't get it";
     } else {
-     print "boo :( failed - no build.pl in $buildDotPlDir \n";
+     return "okay - got it as $localCopy";
     }
+
+=pod
+    print "Installing $extension\n\n";
+    my $libFrag = getLibFragmentForExtension($extension);
+
+     my $buildDotPlDir = $localCopy."/lib/TWiki/$libFrag/";
+     
+     if (-f $buildDotPlDir."/build.pl") {
+      print "Woah! Found it!!\n";
+     } else {
+      print "boo :( failed - no build.pl in $buildDotPlDir \n";
+     }
+    } else {
+    
+    }
+=cut
 
 }
 
