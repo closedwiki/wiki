@@ -142,7 +142,7 @@ sub isAccessPermitted {
 
    return 1 if TWiki::Access::checkAccessPermission( $mode, $user, "",
                                                      $topic, $web );
-   oops( $webName, $topic, "access$mode" );
+   oops( $web, $topic, "access$mode" );
 
    return 0;
 }
