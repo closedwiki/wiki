@@ -787,6 +787,7 @@ sub _range
 sub _addChunk
 {
    my( $chunkSign, $out, $lines, $start, $adj, $type, $start1, $last, $newLines ) = @_;
+   # FIXME - do away with $last special processing use _diffEnd instead
    #print "chunk: sign start adj $chunkSign $start $adj $start1\n";
    my $nLines = @$lines;
    if( $nLines > 0 ) {
