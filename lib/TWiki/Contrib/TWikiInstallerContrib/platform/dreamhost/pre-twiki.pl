@@ -36,4 +36,4 @@ print `chmod -R 777 cgi-bin/lib/CPAN/`;
 
 print `find cgi-bin -print | xargs chmod go-w`;
 
-system( open => $INSTALL ) or print "continue installation at $INSTALL\n";
+system( open => $INSTALL ) == 0 or print "continue installation at $INSTALL\n";
