@@ -64,7 +64,7 @@ sub getPrefsFromTopic
 {
     my ( $theWeb, $theTopic, $theKeyPrefix ) = @_;
 
-    my( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
+    my( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic, 1 );
     $text =~ s/\r/\n/go;
     $text =~ s/\n+/\n/go;
 

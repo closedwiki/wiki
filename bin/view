@@ -152,36 +152,6 @@ sub main
 
     writeDebugTimes( "view - get rev info" );
 
-    # check access permission
-    # To Do: Need to protect also %INCLUDE% and search
-    my $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );
-    if( ! $viewAccessOK ) {
-        # user could not be authenticated, may be not logged in yet?
-        my $viewauthFile = $ENV{'SCRIPT_FILENAME'};
-        $viewauthFile =~ s|/view|/viewauth|o;
-        if( ( ! $theRemoteUser ) && (-e $viewauthFile ) ) {
-            # try again with authenticated viewauth script
-            # instead of non authenticated view script
-            my $url = $ENV{"REQUEST_URI"};
-            if( $url ) {
-                # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
-                $url =~ s|/view|/viewauth|o;
-                $url = "$TWiki::urlHost$url";
-            } else {
-                $url = "$TWiki::urlHost$scriptUrlPath/$viewauthFile/$webName/$topic";
-            }
-            TWiki::redirect( $query, $url );
-            return;
-        }
-    }
-    if( ! $viewAccessOK ) {
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessview" );
-        TWiki::redirect( $query, $url );
-        return;
-    }
-
-    writeDebugTimes( "view - checked access permissions" );
-
     if( ! $viewRaw ) {
         $text = &TWiki::handleCommonTags( $text, $topic );
         writeDebugTimes( "view - handleCommonTags done" );
@@ -281,6 +251,36 @@ sub main
     $tmpl =~ s/%MAXREV%/1.$maxrev/go;
     $tmpl =~ s/%CURRREV%/1.$rev/go;
     $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags (PTh 06 Nov 2000)
+
+    # check access permission
+    my $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );
+    if( $TWiki::readTopicPermissionFailed ) {
+        # Can't read requested topic and/or included (or other accessed topics
+        # user could not be authenticated, may be not logged in yet?
+        my $viewauthFile = $ENV{'SCRIPT_FILENAME'};
+        $viewauthFile =~ s|/view|/viewauth|o;
+        if( ( ! $theRemoteUser ) && (-e $viewauthFile ) ) {
+            # try again with authenticated viewauth script
+            # instead of non authenticated view script
+            my $url = $ENV{"REQUEST_URI"};
+            if( $url ) {
+                # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
+                $url =~ s|/view|/viewauth|o;
+                $url = "$TWiki::urlHost$url";
+            } else {
+                $url = "$TWiki::urlHost$scriptUrlPath/$viewauthFile/$webName/$topic";
+            }
+            TWiki::redirect( $query, $url );
+            return;
+        }
+    }
+    if( ! $viewAccessOK ) {
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessview" );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+
+    writeDebugTimes( "view - checked access permissions" );
 
     # print header information.
     # check for "contenttype" parameter, used to produce

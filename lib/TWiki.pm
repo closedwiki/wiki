@@ -75,6 +75,7 @@ use vars qw(
         $superAdminGroup $doSuperAdminGroup
         $cgiQuery @publicWebList
         $formatVersion $OS
+        $readTopicPermissionFailed
     );
 
 # TWiki::Store config:
@@ -165,6 +166,7 @@ sub initialize
 
     # initialize access control
     &TWiki::Access::initializeAccess();
+    $readTopicPermissionFailed = ""; # Will be set to name(s) of topic(s) that can't be read
 
     # initialize user name and user to WikiName list
     userToWikiListInit();

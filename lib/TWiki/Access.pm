@@ -114,17 +114,28 @@ sub checkAccessPermission
             }
         }
     }
+    
+    my $webPrefix = "";
+    if( $theWebName ne $TWiki::webName && $theWebName ne $TWiki::twikiWebname && 
+        $theWebName ne $TWiki::mainWebname) {
+        # Different Web to current one, but we assume read access to twiki and main webs to
+        # save frequent loading of these preferences
+        $webPrefix = "Web$theWebName.";
+        # A rather crude way of deciding if these preferences have already been loaded
+        &TWiki::Prefs::getPrefsFromTopic( $theWebName, $TWiki::webPrefsTopicname, $webPrefix ) unless
+            &TWiki::Prefs::getPreferencesValue( "$webPrefix"  . "WEBBGCOLOR" );
+    }    
 
     # if empty, get access permissions from preferences
     if( ! @denyList ) {
-        my $tmpVal = &TWiki::Prefs::getPreferencesValue( "DENYWEB$theAccessType" );
+        my $tmpVal = &TWiki::Prefs::getPreferencesValue( "$webPrefix"  . "DENYWEB$theAccessType" );
         @denyList  = map { getUsersOfGroup( $_ ) }
                      prvGetUserList( $tmpVal );
         ##my $tmp = join( ', ', @denyList );
         ##&TWiki::writeDebug( "  Prefs DENYWEB$theAccessType: {$tmp}" );
     }
     if( ! @allowList ) {
-        my $tmpVal = &TWiki::Prefs::getPreferencesValue( "ALLOWWEB$theAccessType" );
+        my $tmpVal = &TWiki::Prefs::getPreferencesValue( "$webPrefix" . "ALLOWWEB$theAccessType" );
         @allowList  = map { getUsersOfGroup( $_ ) }
                       prvGetUserList( $tmpVal );
         ##my $tmp = join( ', ', @allowList );

@@ -840,11 +840,12 @@ sub readTopMeta
 }
 
 # =========================
+# $internal true if topic being read for internal use
 sub readTopic
 {
-    my( $theWeb, $theTopic ) = @_;
+    my( $theWeb, $theTopic, $internal ) = @_;
     
-    my $fullText = readTopicRaw( $theWeb, $theTopic );
+    my $fullText = readTopicRaw( $theWeb, $theTopic, "", $internal );
     
     my ( $meta, $text ) = _extractMetaData( $theWeb, $theTopic, $fullText );
     
@@ -864,14 +865,26 @@ sub readWebTopic
 # Optional version in format 1.x
 sub readTopicRaw
 {
-    my( $theWeb, $theTopic, $theVersion ) = @_;
+    my( $theWeb, $theTopic, $theVersion, $internal ) = @_;
     my $text = "";
     if( ! $theVersion ) {
         $text = &readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt" );
     } else {
         $text = _readVersionNoMeta( $theWeb, $theTopic, $theVersion);
     }
+
+    my $viewAccessOK = 1;
+    if( ! $internal ) {
+        $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $theTopic, $theWeb );
+        TWiki::writeDebug( "readTopicRaw $viewAccessOK $TWiki::wikiUserName $theWeb $theTopic" );
+    }
     
+    if( ! $viewAccessOK ) {
+        $text = "No permission to read topic $theWeb.$theTopic\n";
+        # Could note inability to read so can divert to viewauth or similar
+        $TWiki::readTopicPermissionFailed = "$TWiki::readTopicPermissionFailed $theWeb.$theTopic";
+    }
+
     return $text;
 }
 
