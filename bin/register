@@ -26,6 +26,7 @@ use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use TWiki;
 use TWiki::Net;
+use TWiki::Plugins;
 
 if( $TWiki::OS eq "WINDOWS" ) {
     require MIME::Base64;
@@ -166,7 +167,7 @@ sub main
 
     my $senderr = &TWiki::Net::sendEmail( $text );
 
-    # create user topic if not exist
+    # create user topic if it does not exist
     if( ! &TWiki::Store::topicExists( $TWiki::mainWebname, $wikiName ) ) {
         my $meta = "";
         my $row = "";
@@ -192,7 +193,7 @@ sub main
     }
 
     # Plugin callback to set cookies. Contrib by SvenDowideit
-    TWiki::registrationHandler( $webName, $wikiName, $remoteUser );
+    &TWiki::Plugins::registrationHandler( $webName, $wikiName, $remoteUser );
 
     # add user to TWikiUsers topic
     my $userTopic = addUserToTWikiUsersTopic( $wikiName, $remoteUser );
