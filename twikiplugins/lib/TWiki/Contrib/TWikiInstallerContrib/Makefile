@@ -8,10 +8,13 @@ twiki-$(PLATFORM).tar.bz2 :
 	tar -r $(TAR_EXCLUDE) --exclude "downloads/*/*.zip" -f twiki-$(PLATFORM).tar bin/* cpan/*.pl cpan/MIRROR/TWIKI downloads 
 	bzip2 twiki-$(PLATFORM).tar
 
-distro : cpan release plugins contrib addons patches twiki-$(PLATFORM).tar.bz2 
+distro : twiki-cpan plugins contrib addons patches release twiki-$(PLATFORM).tar.bz2 
 
-cpan :
-	cd cpan ; ./mirror-cpan.pl `./calc-twiki-deps.pl`
+minicpan :
+	cd cpan ; ./mirror-cpan.pl
+
+twiki-cpan :
+	cd cpan ; ./mirror-cpan.pl --twiki `./calc-twiki-deps.pl`
 
 release :
 	wget -nc --http-user=TWikiGuest --http-passwd=guest -O downloads/releases/TWiki20040901.tar.gz http://twiki.org/release/TWiki20040901.tar.gz
