@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1089858569" format="1.0" version="1.31"}%
+%META:TOPICINFO{author="PeterThoeny" date="1091842546" format="1.0" version="1.32"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -19,6 +19,8 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/warning.gif" alt="warning.gif"  width="16" height="16" />  | =warning.gif= | Warning / Important |
 |  <img src="%ATTACHURLPATH%/stop.gif" alt="stop.gif"  width="16" height="16"  />  | =stop.gif= | Stop |
 |  <img src="%ATTACHURLPATH%/target.gif" alt="target.gif"  width="16" height="16"  />  | =target.gif= | Blue target |
+|  <img src="%ATTACHURLPATH%/gear.gif" alt="gear.gif"  width="16" height="16"  />  | =gear.gif= | Gear |
+|  <img src="%ATTACHURLPATH%/wrench.gif" alt="wrench.gif"  width="16" height="16"  />  | =wrench.gif= | Wrench |
 |  <img src="%ATTACHURLPATH%/pencil.gif" alt="pencil.gif"  width="16" height="16"  />  | =pencil.gif= | Refactor / Edit |
 |  <img src="%ATTACHURLPATH%/choice-yes.gif" alt="choice-yes.gif"  width="16" height="16"  />  | =choice-yes.gif= | Yes / Done |
 |  <img src="%ATTACHURLPATH%/choice-no.gif" alt="choice-no.gif"  width="16" height="16"  />  | =choice-no.gif= | No |
@@ -66,14 +68,16 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/topicbacklinks.gif" alt="topicbacklinks.gif"  width="16" height="16"  />  | =topicbacklinks.gif= | Topic back-links |
 |  <img src="%ATTACHURLPATH%/newtopic.gif" alt="newtopic.gif"  width="16" height="16"  />  | =newtopic.gif= | New topic |
 |  <img src="%ATTACHURLPATH%/searchtopic.gif" alt="searchtopic.gif"  width="16" height="16"  />  | =searchtopic.gif= | Search topic |
-|  <img src="%ATTACHURLPATH%/printtopic.gif" alt="printtopic.gif"  width="16" height="16"  />  | =printtopic.gif= | Print topic |
 |  <img src="%ATTACHURLPATH%/cachetopic.gif" alt="cachetopic.gif"  width="16" height="16"  />  | =cachetopic.gif= | Cache topic |
+|  <img src="%ATTACHURLPATH%/printtopic.gif" alt="printtopic.gif"  width="16" height="16"  />  | =printtopic.gif= | Print topic |
 |  <img src="%ATTACHURLPATH%/attachfile.gif" alt="attachfile.gif"  width="16" height="16"  />  | =attachfile.gif= | Attach file |
 |  <img src="%ATTACHURLPATH%/recentchanges.gif" alt="recentchanges.gif"  width="16" height="16"  />  | =recentchanges.gif= | Recent changes |
 |  <img src="%ATTACHURLPATH%/changes.gif" alt="changes.gif"  width="16" height="16"  />  | =changes.gif= | Changes |
 |  <img src="%ATTACHURLPATH%/notify.gif" alt="notify.gif"  width="16" height="16"  />  | =notify.gif= | Notify |
 |  <img src="%ATTACHURLPATH%/mail.gif" alt="mail.gif"  width="16" height="16"  />  | =mail.gif= | Mail |
 |  <img src="%ATTACHURLPATH%/trash.gif" alt="trash.gif"  width="16" height="16"  />  | =trash.gif= | Trash |
+|  <img src="%ATTACHURLPATH%/rss-feed.gif" alt="rss-feed.gif"  width="36" height="14"  />  | =rss-feed.gif= | RSS feed 36x14 |
+|  <img src="%ATTACHURLPATH%/xml-feed.gif" alt="xml-feed.gif"  width="36" height="14"  />  | =xml-feed.gif= | RSS feed 36x14 |
 |  <img src="%ATTACHURLPATH%/empty.gif" alt="empty.gif"  width="16" height="16"  />  | =empty.gif= | Empty transparent 16x16 spacer |
 |  <img src="%ATTACHURLPATH%/line_ud.gif" alt="line_ud.gif"  width="16" height="16"  />  | =line_ud.gif= | Line graph up-down |
 |  <img src="%ATTACHURLPATH%/line_lr.gif" alt="line_lr.gif"  width="16" height="16"  />  | =line_lr.gif= | Line graph left-right |
@@ -98,7 +102,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/dot_udl.gif" alt="dot_udl.gif"  width="16" height="16"  />  | =dot_udl.gif= | Dot graph up-down-left |
 |  <img src="%ATTACHURLPATH%/dot_ulr.gif" alt="dot_ulr.gif"  width="16" height="16"  />  | =dot_ulr.gif= | Dot graph up-left-right |
 
--- TWiki:Main.PeterThoeny - 23 Mar 2004 %BR%
+-- TWiki:Main.PeterThoeny - 06 Aug 2004 %BR%
 -- TWiki:Main.MikeMannix - 16 May 2002
 
 %META:FILEATTACHMENT{name="help.gif" attr="" comment="Help" date="1001637645" path="C:\02_TWikiDocs\help.gif" size="130" user="MikeMannix" version="1.1"}%
@@ -186,3 +190,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="person.gif" attr="" comment="Person" date="1081656665" path="C:\Data\Temp\person.gif" size="153" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="persons.gif" attr="" comment="Persons" date="1081656676" path="C:\Data\Temp\persons.gif" size="164" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="cachetopic.gif" attr="" comment="Cache topic" date="1089858540" path="cachetopic.gif" size="935" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="rss-feed.gif" attr="" comment="RSS feed 36x14" date="1091842365" path="rss-feed.gif" size="678" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="xml-feed.gif" attr="" comment="XML feed 36x14" date="1091842396" path="xml-feed.gif" size="429" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="gear.gif" attr="" comment="Gear" date="1091842414" path="gear.gif" size="191" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="wrench.gif" attr="" comment="Wrench" date="1091842433" path="wrench.gif" size="171" user="PeterThoeny" version="1.1"}%
