@@ -1,0 +1,73 @@
+%META:TOPICINFO{author="gnaegi" date="1029748440" format="1.0" version="1.2"}%
+---++ %TOPIC%
+
+Instead of writing =[<nop>[yourBugZillaURL/path/shob_bug.cgi?id=123][Bug #123]]= for every bug this plugin provides a convenient way to to this. Now, you only have to write =%<nop>BUG{123}%= to get the same result. This plugin does nothing else than giving your a shorthand for the above plus it places a nice bug-icon next to the bug. Have fun! ;-)
+
+Since version 1.1 there is another shorthand to display buglists depending on your milestones. Just specify a milestone in the list tag like this =%<nop>BUGLIST{1.8}%= and you will get all bugs that have a target milestone of 1.8 or 1.8b. The beta thing is hard coded, so if you dont neet this you have to change this in the code, but as far as I know you can also ignore it.
+
+In version 1.2 a shorthand for the 'mybugs' feature was added. 
+
+---+++ Syntax Rules
+<blockquote style="background-color:#f5f5f5">
+	* =%<nop>BUG{yourBugzillaBugNumberGoesHere}%=
+	* =%<nop>BUGLIST{yourBugzillaMilestoneNumberGoesHere}%=
+	* =%<nop>MYBUGS{user@some.domain}%=
+</blockquote>
+
+---+++ Example
+	* %BUG{12}%
+	* %BUGLIST{1.8}%
+	* %MYBUGS{joe@loos.er}%
+
+---+++ <nop>%TOPIC% Settings
+<blockquote style="background-color:#f5f5f5">
+		* Set BUGURL = http://bugzilla.mozilla.org/show_bug.cgi?id=
+		* Set MILESTONEBUGLISTURL = http://bugzilla.mozilla.org/buglist.cgi?
+		* Set BUGIMGURL = %ATTACHURL%/bug_small.gif
+		* Set BUGTEXT = Bug #
+		* Set MILESTONEBUGLISTEXT = Buglist for Release
+		* Set SHORTDESCRIPTION = This plugin is useful to display links to bugzilla bugs.
+		* Set DEBUG = 1
+</blockquote>
+
+---+++ Plugin Installation Instructions
+Extract BugzillaPlugin1.0.tar.gz, edit the BugzillaLinkPlugin-topic to your needs and have fun.
+
+
+---+++ Files
+	* ==lib/TWiki/Plugins/BugzillaLinkPlugin.pm==
+	* ==data/TWiki/BugzillaLinkPlugin.txt==
+	* ==pub/TWiki/BugzillaLinkPlugin/bug.gif==
+	* ==pub/TWiki/BugzillaLinkPlugin/bug_small.gif==
+	* ==pub/TWiki/BugzillaLinkPlugin/bug_small.png==
+	* ==pub/TWiki/BugzillaLinkPlugin/bug_small_white.png==
+
+---+++ Plugin Info
+|  Plugin Author: | %MAINWEB%.FlorianGnaegi |
+|  Plugin Version: | 1.2 |
+|  Change History: | 15 August 2002: Initial version<BR> 19. August Version 1.1 <br> 8. July 2003 Version 1.2|
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+---+++ History
+   * 1.0: BUG function
+   * 1.1: Added BUGLIST function, renamed to BugzillaLinkPlugin
+   * 1.2: Added MYBUGS function (Thanks to Steve Kostecke), dealing with whitespace (Thanks to Alan Shields)
+
+---+++ Contributors
+   * Steve Kostecke (MYBUGS function)
+   * AnthonPang (Repackaging)
+   * AlanShields (White space elimination in queries)
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+
+-- %TWIKIWEB%.FlorianGnaegi - 07 July 2003 <br>
+
+%META:FILEATTACHMENT{name="bug.gif" attr="" comment="GIF Bug large" date="1029409171" path="/home/gnaegi/bug.gif" size="166" user="FlorianGnaegi" version="1.1"}%
+%META:FILEATTACHMENT{name="bug_small.gif" attr="" comment="GIF Bug small" date="1029416770" path="/home/gnaegi/bug_small.gif" size="885" user="FlorianGnaegi" version="1.1"}%
+%META:FILEATTACHMENT{name="bug_small.png" attr="" comment="PNG Bug transparent" date="1029409171" path="/home/gnaegi/bug.gif" size="166" user="FlorianGnaegi" version="1.0"}%
+%META:FILEATTACHMENT{name="bug_small_whilte.png" attr="" comment="PNG Bug, white background" date="1029409171" path="/home/gnaegi/bug.gif" size="166" user="FlorianGnaegi" version="1.0"}%
