@@ -1480,7 +1480,6 @@ sub renderFormData
     my @fields = $meta->find( "FIELD" );
     foreach my $field ( @fields ) {
         my $title = $field->{"title"};
-        next if( $title eq "UseForm" && TWiki::Form::useFormSpecial() );
         my $value = $field->{"value"};
         $metaText .= "<tr><th bgcolor=\"#99CCCC\" align=\"right\"> $title:</th><td align=\"left\"> $value </td></tr>\n";
     }
@@ -1490,6 +1489,39 @@ sub renderFormData
     $metaText = getRenderedVersion( $metaText, $web );
     
     return $metaText;
+}
+
+# =========================
+sub encodeSpecialChars
+{
+    my( $text ) = @_;
+    
+    $text =~ s/&/%_A_%/go;
+    $text =~ s/\"/%_Q_%/go;
+    $text =~ s/>/%_G_%/go;
+    $text =~ s/</%_L_%/go;
+    # PTh 10 Apr 2001: Fix for Codev.OperaBrowserDoublesEndOfLines
+    $text =~ s/\r\r\n/%_N_%/go;
+    # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
+    $text =~ s/\r\n/%_N_%/go;
+    $text =~ s/\n\r/%_N_%/go;
+    $text =~ s/\r/%_N_%/go;
+    $text =~ s/\n/%_N_%/go;
+    
+    return $text;
+}
+
+sub decodeSpecialChars
+{
+    my( $text ) = @_;
+    
+    $text =~ s/%_N_%/\r\n/go;
+    $text =~ s/%_L_%/</go;
+    $text =~ s/%_G_%/>/go;
+    $text =~ s/%_Q_%/\"/go;
+    $text =~ s/%_A_%/&/go;
+
+    return $text;
 }
 
 
