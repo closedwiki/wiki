@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="MikeMannix" date="1000453233" format="1.0" version="1.3"}%
-*FAQ:*
+%META:TOPICINFO{author="PeterThoeny" date="1005371982" format="1.0" version="1.4"}%
+---++ FAQ:
 
 How do I delete or rename a topic?
 
-*Answer:*
+---++ Answer:
 
 New to the 01-Sep-2001 version of TWiki, you can rename, move and delete topics directly from your browser (previously, these operations could only be done manually, by someone with file-level access to the Web server). 
 
@@ -13,7 +13,7 @@ Click ==[More]== on the control bar at the bottom of the page you want to change
 
 __NOTE:__ The configuration of your site and your own access permissions determine whether you can access these functions.
 
-See other TWikiFAQs.
+__Back to:__ TWikiFAQ
 
 -- MikeMannix - 14 Sep 2001 <br />
 %META:TOPICMOVED{by="MikeMannix" date="1000453233" from="TWiki.DeleteTopic" to="TWiki.DeleteOrRenameATopic"}%
