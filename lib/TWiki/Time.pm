@@ -315,9 +315,7 @@ sub parseInterval{
         #     convert the string into integer amount of seconds
         #     from 1970-01-01T00:00:00.00 UTC
 
-        require HTTP::Date;
-        die "Cannot find HTTP::Date: $@" if $@;
-        $ends[$i] = HTTP::Date::str2time($ends[$i]);
+        $ends[$i] = &parseTime($ends[$i]);
     }
 
     # now we're ready to translate interval durations...
