@@ -1,4 +1,14 @@
 %TMPL:INCLUDE{"twiki"}%
+
+
+%TMPL:DEF{"footernote"}%
+<div class="TWikiFooterNote">
+   Revision %REVINFO% %META{"parent" prefix="<br />Parents: "}%
+ %META{"moved"}%
+ </div>
+%TMPL:END%
+
+
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 <body bgcolor="#ffffff">
@@ -19,17 +29,6 @@
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a> %REVISIONS%
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%">More</a> %TMPL:END%
 %TMPL:P{"standardfooter"}%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr>
-  <td valign="top">
-   Revision %REVINFO% %META{"parent" prefix="<br />Parents: "}%
-  </td>
-  <td width="40%" valign="top">
-   %WEBCOPYRIGHT%
-  </td>
- </tr>
- <tr><td colspan="2"> %META{"moved"}% </td></tr>
-</table>
 #PageBottom
 </body>
 </html>

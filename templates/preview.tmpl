@@ -14,6 +14,19 @@ function launchWindow( theWeb, theTopic ) {
 </script>
 %TMPL:END%
 
+%TMPL:DEF{"footernote"}%
+  <div >
+   &nbsp; &nbsp;
+  </td><td valign="top">
+   &nbsp; &nbsp;
+   <input type="checkbox" name="unlock" %RELEASEEDITLOCKCHECKBOX% /> Release edit lock
+   <font size="-1">(<a target="UnlockTopic" onClick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font> <br />
+   &nbsp; &nbsp;
+   <input type="checkbox" name="dontnotify" %DONTNOTIFYCHECKBOX% /> Minor changes, don't notify
+   <font size="-1">(<a target="DontNotify" onClick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>)</font>
+   </div>
+%TMPL:END%
+
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 <body bgcolor="#ffffff" background="%PREVIEWBGIMAGE%">
@@ -41,23 +54,7 @@ function launchWindow( theWeb, theTopic ) {
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 %TMPL:DEF{"topicaction"}% <input type="submit" value=" Save Changes " /> %FORMFIELDS% %TMPL:END%
 %TMPL:P{"standardfooter"}%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr>
-  <td bgcolor="%WEBBGCOLOR%">
-   &nbsp; &nbsp;
-  </td><td valign="top">
-   &nbsp; &nbsp;
-   <input type="checkbox" name="unlock" %RELEASEEDITLOCKCHECKBOX% /> Release edit lock
-   <font size="-1">(<a target="UnlockTopic" onClick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font> <br />
-   &nbsp; &nbsp;
-   <input type="checkbox" name="dontnotify" %DONTNOTIFYCHECKBOX% /> Minor changes, don't notify
-   <font size="-1">(<a target="DontNotify" onClick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>)</font>
-  </td>
-  <td width="50%" valign="top">
-   %WEBCOPYRIGHT%
-  </td>
- </tr>
-</table>
+
 </form>
 #PageBottom
 </body>

@@ -64,6 +64,16 @@
   </td>
  </tr>
 </table> %TMPL:END%
+
+%TMPL:DEF{"copyright"}%
+<div class="TWikiCopyright">
+%WEBCOPYRIGHT%
+</div>
+%TMPL:END%
+
+%TMPL:DEF{"footernote"}%
+%TMPL:END%
+
 %TMPL:DEF{"standardfooter"}%
 <br clear="all" />
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -73,7 +83,19 @@
    }
   </td>
  </tr>
-</table> %TMPL:END%
+</table>
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+ <tr>
+  <td>
+%TMPL:P{"footernote"}%
+  </td>
+  <td width="50%">
+    %TMPL:P{"copyright"}%
+  </td>
+ </tr>
+</table>
+%TMPL:END%
+
 %TMPL:DEF{"oops"}%
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%

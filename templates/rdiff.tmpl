@@ -1,5 +1,10 @@
 %TMPL:INCLUDE{"twiki"}%
 
+%TMPL:DEF{"footernote"}%
+    Revision %REVTITLE2% - %REVINFO2%<br />
+    Revision %REVTITLE1% - %REVINFO1%
+%TMPL:END%
+
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 <body bgcolor="#ffffff">
@@ -24,17 +29,6 @@
  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a> %REVISIONS%
  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%">More</a> %TMPL:END%
 %TMPL:P{"standardfooter"}%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr>
-  <td valign="top">
-    Revision %REVTITLE2% - %REVINFO2%<br />
-    Revision %REVTITLE1% - %REVINFO1%
-  </td>
-  <td width="40%" valign="top">
-   %WEBCOPYRIGHT%
-  </td>
- </tr>
-</table>
 #PageBottom
 </body>
 </html>

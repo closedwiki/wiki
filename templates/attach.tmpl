@@ -1,5 +1,11 @@
 %TMPL:INCLUDE{"twiki"}%
 
+%TMPL:DEF{"footernote"}%
+<div class="TWikiFooterNote">
+%META{"moved"}%
+</div>
+%TMPL:END%
+
 %TMPL:DEF{"script"}%
 <script language="JavaScript">
 <!--HIDE
@@ -70,21 +76,7 @@ __Notes:__
    * *Bug:* Internet Explorer 4.0 or earlier: If you get an "Internal Server Error"
      message when you upload a file, you need to try again. It should work the second time.
 %TMPL:P{"extranotes"}%
-
 %TMPL:P{"standardfooter"}%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr>
-  <td valign="top">
-   &nbsp;
-  </td>
-  <td width="50%" valign="top">
-   %WEBCOPYRIGHT%
-  </td>
- </tr>
- <tr>
-  <td colspan="2"> %META{"moved"}% </td>
- </tr>
-</table>
 </form>
 #PageBottom
 </body>
