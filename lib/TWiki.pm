@@ -1330,7 +1330,7 @@ sub renderMetaData
         $movedText = renderMoved( $web, $topic, $meta );
     }
     
-    my $text = "\n---\n$attachmentText\n$classificationText\n$movedText";
+    my $text = "\n$attachmentText\n$classificationText\n$movedText";
     
     $text = handleCommonTags( $text, $topic, $web );
     $text = getRenderedVersion( $text, $web );
