@@ -4,6 +4,14 @@
 use strict;
 use Data::Dumper qw( Dumper );
 
+# TODO:
+#   * parameter for output filename (probably eliminate outputdir completely)
+#   * remove the "smartness" from the output filename generation (use above parameter, 
+#     and just `date ...` on the command line; after all, that's all that's being done 
+#     in this script anyway)
+#   * use svn export (but mirror it so 
+#   * readme.txt - needs editting, customising per build (type, etc.)
+#   * probably something else i can't remember now
 use Cwd qw( cwd );
 use File::Copy qw( cp );
 use File::Path qw( rmtree mkpath );
@@ -209,47 +217,8 @@ Notably the TWikiKernel does not include any TWikiExtensions (e.g. Plugins or Sk
 =cut
 
 __END__
-################################################################################
-# from source control and/or automated 
-
-[X] /bin (SVN)
-
-[X] /lib (on down, from SVN)
-
-[x] /templates (SVN)
-
-[x] /data (SVN)
-   * Main/, Sandbox/, TWiki/, Trash/, _default/ (SVN); also TestWeb/
-   * .htpasswd (SVN; added to DEVELOP)
-   * mime.types (SVN; added to DEVELOP)
-   * delete debug.txt, warning.txt (deletes whole data/ tree from .tar.gz now)
-
-/pub
-   * TWiki/ (SVN)
-   * Main/, Sandbox/, Trash/, <strike>_default/</strike> (empty; deleted by build-twiki-kernel.pl)
-   * icn/_filetypes.txt, icn/*.gif (SVN)
-   * wikiHome.gif (changed to TWiki BGCOLOR)
-   * favicon.ico (changed to TWiki BGCOLOR; moved to pub/TWiki/WebPreferences)
-
-/
-   8 -rw-r--r--    1 twiki  twiki     475 29 May 02:51 pub-htaccess.txt (SVN)
-   8 -rw-r--r--    1 twiki  twiki     564 30 Aug 02:37 robots.txt (SVN)
-   8 -rw-r--r--    1 twiki  twiki     554 29 May 02:51 root-htaccess.txt (SVN)
-   8 -rw-r--r--    1 twiki  twiki     516 29 May 02:51 subdir-htaccess.txt (SVN)
-  24 -rwxr-xr-x    1 twiki  twiki   10283 21 Aug 18:35 UpgradeTwiki* (SVN)
-1352 -rw-r--r--    1 twiki  twiki  692162 31 Aug 12:35 TWikiDocumentation.html (mirrored from twiki.org)
- 248 -rw-r--r--    1 twiki  twiki  123154 31 Aug 12:35 TWikiHistory.html (mirrored from twiki.org)
-(these need updating)
-   8 -rw-r--r--    1 twiki  twiki     837 30 Aug 03:02 index.html (SVN) - doesn't look very good (at all!) really needs upating
-  16 -rw-r--r--    1 twiki  twiki    4516 31 Aug 12:35 readme.txt (SVN) - needs editting, customising per build (type, etc.)
-  40 -rw-r--r--    1 twiki  twiki   19696 30 Aug 02:52 license.txt (SVN) - use confused with (re-)distribution
  
 ================================================================================
-# not assembled (yet) by build-twiki-kernel.pl; uses files from TWiki20040901.tar.gz
-# THESE FILES HAVE "ISSUES"
-
-/pub/TWiki/TWikiLogos
-   * Codev.TWikiLogosDropInReplacements - hm, actually, i'm not sure sure now...
 
 
 ################################################################################
@@ -257,56 +226,60 @@ __END__
 differences between output of build-twiki-kernel.pl vs. TWiki20040901.tar.gz
 (not including the ,v files list)
 
-672c363
->           'pub/TWiki/PatternSkin/empty.css',		# need to add empty.css to topic text attachment
-1021,1022c478
->           'templates/.cvsignore',
 
 ################################################################################
-# old code / to get from cpan
-480,481d272
+# questionable files in the new build
+>           'templates/.cvsignore',			# where did this come from???
+>           'data/_empty/.placeholder',		# because tar ignores empty directories
+
+
+################################################################################
+# new/refactored code
+>           'lib/TWiki/Sandbox.pm',
+>           'lib/TWiki/Templates.pm',
+>           'lib/TWiki/Prefs/Parser.pm',
+>           'lib/TWiki/Prefs/PrefsCache.pm',
+>           'lib/TWiki/Prefs/TopicPrefs.pm',
+
+################################################################################
+# images changes (see above)
+<           'pub/TWiki/TWikiLogos/twikilogo88x31.gif',
+<           'pub/TWiki/TWikiLogos/twikiRobot121x54.gif',
+<           'pub/TWiki/TWikiLogos/twikiRobot121x54a.gif',
+<           'pub/TWiki/TWikiLogos/twikiRobot131x64.gif',
+<           'pub/TWiki/TWikiLogos/twikiRobot46x50.gif',
+<           'pub/TWiki/TWikiLogos/twikiRobot81x119.gif',
+<           'pub/TWiki/TWikiLogos/twikiRobot88x31.gif',
+<           'pub/favicon.ico',
+>           'pub/TWiki/WebPreferences/favicon.ico',
+
+
+################################################################################
+# to get from cpan
 <           'lib/Algorithm/Diff.pm',
 <           'lib/Text/Diff.pm',
 
-################################################################################
-# new code
-492a285,287
->           'lib/TWiki/Templates.pm',
-
-################################################################################
-# added new test cases: data/TestCases/*, pub/TestCases/*
-
-################################################################################
-################################################################################
 
 ################################################################################
 # empty and/or junk files recreated at runtime
-37d37
 <           'data/debug.txt',
-39,41d38
 <           'data/warning.txt',
 <           'data/_default/.changes',
 <           'data/_default/.mailnotify',
-63,65d49
 <           'data/Main/.changes',
 <           'data/Main/.mailnotify',
-115,117d74
 <           'data/Sandbox/.changes',
 <           'data/Sandbox/.mailnotify',
-139,141c86,101
 <           'data/Trash/.changes',
 <           'data/Trash/.mailnotify',
-163,165d112
 <           'data/TWiki/.changes',
 <           'data/TWiki/.mailnotify',
 
+
 ################################################################################
-# preinstalled plugins/skin
-495d289
+# cairo preinstalled plugins
 <           'lib/TWiki/Plugins/CommentPlugin.pm',
-497d290
 <           'lib/TWiki/Plugins/EditTablePlugin.pm',
-500,509c293,296
 <           'lib/TWiki/Plugins/RenderListPlugin.pm',
 <           'lib/TWiki/Plugins/SlideShowPlugin.pm',
 <           'lib/TWiki/Plugins/SmiliesPlugin.pm',
@@ -317,19 +290,6 @@ differences between output of build-twiki-kernel.pl vs. TWiki20040901.tar.gz
 <           'lib/TWiki/Plugins/CommentPlugin/Comment.pm',
 <           'lib/TWiki/Plugins/CommentPlugin/Templates.pm',
 <           'lib/TWiki/Plugins/CommentPlugin/test.zip',
----
->           'lib/TWiki/Plugins/TestFixturePlugin.pm',
->           'lib/TWiki/Prefs/Parser.pm',
->           'lib/TWiki/Prefs/PrefsCache.pm',
->           'lib/TWiki/Prefs/TopicPrefs.pm',
-579,669d360
-<           'pub/TWiki/DragonSkin/fullscreen.gif',
-<           'pub/TWiki/DragonSkin/gray.theme.css',
-<           'pub/TWiki/DragonSkin/monochrome.theme.css',
-<           'pub/TWiki/DragonSkin/screenshot.gif',
-<           'pub/TWiki/DragonSkin/spacer.gif',
-<           'pub/TWiki/DragonSkin/tabstyle.theme.css',
-<           'pub/TWiki/DragonSkin/typography.css',
 <           'pub/TWiki/EditTablePlugin/calendar-af.js',
 <           'pub/TWiki/EditTablePlugin/calendar-br.js',
 <           'pub/TWiki/EditTablePlugin/calendar-ca.js',
@@ -368,7 +328,6 @@ differences between output of build-twiki-kernel.pl vs. TWiki20040901.tar.gz
 <           'pub/TWiki/EditTablePlugin/release-notes.html',
 <           'pub/TWiki/EditTablePlugin/ScreenshotEditCell1.gif',
 <           'pub/TWiki/EditTablePlugin/ScreenshotEditCell2.gif',
-707,817d382
 <           'pub/TWiki/RenderListPlugin/doc.gif',
 <           'pub/TWiki/RenderListPlugin/dot_ud.gif',
 <           'pub/TWiki/RenderListPlugin/dot_udr.gif',
@@ -424,45 +383,74 @@ differences between output of build-twiki-kernel.pl vs. TWiki20040901.tar.gz
 <           'pub/TWiki/TablePlugin/diamond.gif',
 <           'pub/TWiki/TablePlugin/down.gif',
 <           'pub/TWiki/TablePlugin/up.gif',
-1001,1015d474
-<           'pub/TWiki/TWikiLogos/twikilogo88x31.gif',
-<           'pub/TWiki/TWikiLogos/twikiRobot121x54.gif',
-<           'pub/TWiki/TWikiLogos/twikiRobot121x54a.gif',
-<           'pub/TWiki/TWikiLogos/twikiRobot131x64.gif',
-<           'pub/TWiki/TWikiLogos/twikiRobot46x50.gif',
-<           'pub/TWiki/TWikiLogos/twikiRobot81x119.gif',
-<           'pub/TWiki/TWikiLogos/twikiRobot88x31.gif',
-1021,1022c478
+
+
+################################################################################
+# added new test cases: data/TestCases/*, pub/TestCases/*
+>           'data/TWiki/TestFixturePlugin.txt',
+>           'lib/TWiki/Plugins/TestFixturePlugin.pm',
+>           'data/TestCases/AnInvalidGroup.txt',
+>           'data/TestCases/CreateNewTestCaseForm.txt',
+>           'data/TestCases/FixtureIncludedTopic.txt',
+>           'data/TestCases/IncludeMeTwice.txt',
+>           'data/TestCases/RecursiveInclude.txt',
+>           'data/TestCases/TestCaseAmISane.txt',
+>           'data/TestCases/TestCaseAutoCategoryTable1.txt',
+>           'data/TestCases/TestCaseAutoCategoryTable2.txt',
+>           'data/TestCases/TestCaseAutoFormatting.txt',
+>           'data/TestCases/TestCaseAutoIncludeAttachment.txt',
+>           'data/TestCases/TestCaseAutoIncludes.txt',
+>           'data/TestCases/TestCaseAutoInOutPre.txt',
+>           'data/TestCases/TestCaseAutoInternalTags.txt',
+>           'data/TestCases/TestCaseAutoSearchWithInternalTag.txt',
+>           'data/TestCases/TestCaseAutoTagFromTags.txt',
+>           'data/TestCases/TestCaseAutoUnexpandedTagsInSearchResults.txt',
+>           'data/TestCases/TestCaseChangePassword.txt',
+>           'data/TestCases/TestCaseDifferentSkin.txt',
+>           'data/TestCases/TestCaseEmbeddedTags.txt',
+>           'data/TestCases/TestCaseEmptyGroupTreatedAsNoGroup.txt',
+>           'data/TestCases/TestCaseInternalTags.txt',
+>           'data/TestCases/TestCaseIntranetRegistration.txt',
+>           'data/TestCases/TestCaseNestedVerbatim.txt',
+>           'data/TestCases/TestCaseTemplate.txt',
+>           'data/TestCases/TestCaseTemplatedTopic.txt',
+>           'data/TestCases/TestCaseTopicListTag.txt',
+>           'data/TestCases/TestCaseWebListTag.txt',
+>           'data/TestCases/WebHome.txt',
+>           'data/TestCases/WebLeftBar.txt',
+>           'data/TestCases/WebPreferences.txt',
+>           'pub/TestCases/TestCaseAutoIncludeAttachment/attachment.html',
+
+
+################################################################################
+# cario preinstalled skins
+>           'pub/TWiki/PatternSkin/empty.css',						# need to add empty.css to topic text attachment
 <           'templates/attach.dragon.tmpl',
-1031d486
 <           'templates/changeform.dragon.tmpl',
-1034d488
 <           'templates/changes.dragon.tmpl',
-1037,1040d490
 <           'templates/comments.tmpl',
 <           'templates/dragoncssvars.dragon.tmpl',
 <           'templates/dragonmenu.dragon.tmpl',
 <           'templates/edit.dragon.tmpl',
-1045d494
 <           'templates/moveattachment.dragon.tmpl',
-1092d540
 <           'templates/preview.dragon.tmpl',
-1095d542
 <           'templates/rdiff.dragon.tmpl',
-1102d548
 <           'templates/renamebase.dragon.tmpl',
-1111d556
 <           'templates/search.dragon.tmpl',
-1114d558
 <           'templates/searchbookview.dragon.tmpl',
-1117d560
 <           'templates/searchformat.dragon.tmpl',
-1122d564
 <           'templates/searchrenameview.dragon.tmpl',
-1125d566
 <           'templates/twiki.dragon.tmpl',
-1128d568
 <           'templates/view.dragon.tmpl',
+<           'pub/TWiki/DragonSkin/fullscreen.gif',
+<           'pub/TWiki/DragonSkin/gray.theme.css',
+<           'pub/TWiki/DragonSkin/monochrome.theme.css',
+<           'pub/TWiki/DragonSkin/screenshot.gif',
+<           'pub/TWiki/DragonSkin/spacer.gif',
+<           'pub/TWiki/DragonSkin/tabstyle.theme.css',
+<           'pub/TWiki/DragonSkin/typography.css',
+
+
 
 
 wikiHome.gif references:
