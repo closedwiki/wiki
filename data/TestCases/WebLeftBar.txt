@@ -16,7 +16,7 @@ function toggleShowHide( e )
    e.style.display = display;
 }
 </script>
-<a href="#" onclick="javascript:toggleShowHide(document.getElementById('toggle_toc')); return false;"><b>Table of Contents</b></a>
+<a href="void:" onclick="javascript:toggleShowHide(document.getElementById('toggle_toc')); return false;"><b>Table of Contents</b></a>
 <div id="toggle_toc">
 %TOC{ "%BASETOPIC%" depth="2" }%
 </div>
