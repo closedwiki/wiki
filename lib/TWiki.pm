@@ -1146,12 +1146,14 @@ sub userToWikiListInit
 {
     %userToWikiList = ();
     %wikiToUserList = ();
-
-    # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
-    # bail out in .htpasswd authenticated sites
-    return unless( $doMapUserToWikiName );
-
-    my @list = split( /\n/, &TWiki::Store::readFile( $userListFilename ) );
+    my @list = ();
+    if( $doMapUserToWikiName ) {
+        # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
+        # for .htpasswd authenticated sites ignore user list, but map only guest to TWikiGuest
+        @list = ( "\t* TWikiGuest - guest - " ); # CODE_SMELL on localization
+    } else {
+        @list = split( /\n/, &TWiki::Store::readFile( $userListFilename ) );
+    }
 
     # Get all entries with two '-' characters on same line, i.e.
     # 'WikiName - userid - date created'
