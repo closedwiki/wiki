@@ -16,7 +16,7 @@ use vars qw(
 	    $debug $db $bming
 	   );
 
-$VERSION = '1.020';
+$VERSION = '1.200';
 $pluginName = 'FormQueryPlugin';
 #$bming = 0;
 
@@ -28,7 +28,10 @@ sub initPlugin {
     TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
     return 0;
   }
-  
+
+  # FQP_ENABLE must be set globally or in this web!
+  return 0 unless ( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_ENABLE" ));
+
   # Get plugin debug flag
   $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
@@ -58,17 +61,19 @@ sub commonTagsHandler {
 #    $bming = 1;
 #  }
 
+  return unless ( $_[0] =~ m/%(CALLMACRO|FQPDEBUG|FORMQUERY|WORKDAYS|SUMFIELD|ARITH|TABLEFORMAT|SHOWQUERY|TOPICCREATOR|PROGRESS)/o );
+
   my $text = "";
 
   # flatten out macros
   $_[0] =~ s/%(CALLMACRO){(.+?)}%/&_handleMacroCall($1,$2,$_[2],$_[1])/geo;
 
   my %sets; # scope of this topic only
-  foreach my $line ( split( /\r?\n/, $_[0] )) {
+  foreach my $line ( split( /\n/, $_[0] )) {
     foreach my $set ( keys %sets ) {
       $line =~ s/\%$set\%/$sets{$set}/g;
     }
-    if ( $line =~ m/^%SET\s+(\w+)\s*=\s*(.*)$/mo ) {
+    if ( $line =~ m/^%SET\s+(\w+)\s*=\s*([^\r]*)\r*$/mo ) {
       my $setname = $1;
       my $setval = $2;
       $setval = TWiki::Func::expandCommonVariables( $setval, $topic, $web );
@@ -94,7 +99,8 @@ sub commonTagsHandler {
       $text .= "$line\n";
     }
   }
-  chop( $text ); # remove trailing NL
+  chop( $text ) if ( $text =~ m/\n$/so ); # remove trailing NL
+
   $_[0] =~ s/^.*$/$text/s;
 
 #  if ( $debug && $bmstart ) {

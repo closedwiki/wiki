@@ -126,8 +126,9 @@ use TWiki::Plugins::FormQueryPlugin::Map;
     my ( $this, $vbl, $map, $cmap ) = @_;
     my $ret = $map->get( $vbl );
     if ( !defined( $ret ) || $ret =~ m/^\s*$/o ) {
-      $ret = "<font color=red>Undefined <nop>$vbl</font>";
-    } elsif ( defined( $cmap )) {
+      $ret = "<font color=\"red\">Undefined <nop>$vbl</font> _(must be one of: =" . join ( ', ', $map->getKeys() ) . "=)_";
+    }
+    if ( defined( $cmap )) {
       $ret = $cmap->map( $ret );
     } else {
       $ret = " $ret ";
@@ -139,7 +140,7 @@ use TWiki::Plugins::FormQueryPlugin::Map;
     my ( $this, $vbl, $fmt, $map, $cmap ) = @_;
     my $table = $map->get( $vbl );
     if ( !defined( $table )) {
-      return "<font color=red>UNDEFINED <nop>$vbl</font>";
+      return "<font color=\"red\">UNDEFINED <nop>$vbl</font> _(must be one of: =" . join ( ', ', $map->getKeys()) . "=)_";
     }
     my $attrs = new FormQueryPlugin::Map( $fmt );
     my $format = new FormQueryPlugin::TableFormat( $attrs );

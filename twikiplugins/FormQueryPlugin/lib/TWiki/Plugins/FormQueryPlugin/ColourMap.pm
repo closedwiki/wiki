@@ -37,9 +37,18 @@ use strict;
     foreach my $entry ( @{$this->{map}} ) {
       my $e = $entry->{expr};
       if ( $test =~ m/^$e$/ ) {
-	my $c = $entry->{colour};
-	$c =~ s/\$1/$test/o;
-	return $c;
+	# SimonHardyFrancis; extend to expand $1..$n in colourmap entry
+	if ( $test =~ m/^($e)$/ ) {
+	  my $c = $entry->{colour};
+	  my @matches;
+	  foreach ( 1..$#+ ) {
+	    $matches[$_] = substr($test, $-[$_], $+[$_] - $-[$_]);
+	  }
+	  foreach my $index ( 1..$#matches ) {
+	    $c =~ s/\$$index/$matches[$index]/g;
+	  }
+	  return $c;
+	}
       }
     }
     return $test;
