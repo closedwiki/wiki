@@ -32,6 +32,8 @@
 #    * run rcslock
 ################################################################################
 
+use Error qw( :try );
+
 my $account;
 my ( $cgibin, $home );
 my $localDirConfig;
@@ -185,7 +187,8 @@ my $baseWiki = ";plugin=InterwikiPlugin;plugin=SpacedWikiWordPlugin;plugin=Sprea
 	#plugin=SessionPlugin;plugin=TocPlugin
 my $level2Wiki = $baseWiki . $releaseTracker . ";plugin=SlideShowPlugin;plugin=TocPlugin;plugin=RandomTopicPlugin";
 my $publicWiki = $level2Wiki . ";plugin=BlackListPlugin";
-my $level3Wiki = $level2Wiki . ";plugin=FindElsewherePlugin;plugin=InterwikiPlugin;contrib=AttrsContrib;plugin=ImageGalleryPlugin";
+my $level3Wiki = $level2Wiki . ";plugin=FindElsewherePlugin;plugin=InterwikiPlugin;contrib=AttrsContrib";
+	#plugin=ImageGalleryPlugin - problems with DEVELOP atm?
 	#plugin=BatchPlugin (esp. handy with ImageGallery (but i haven't tested it))
 my $appWiki = $level3Wiki . ";plugin=FormQueryPlugin;plugin=MacrosPlugin";
 
@@ -195,7 +198,7 @@ my $softwareDevWiki = $level3Wiki . ";plugin=BeautifierPlugin;plugin=MathModePlu
 <h2>Preconfigurations</h2>
 Configuration <a href="?$baseWiki">Lean and Mean Wiki</a><br/>
 Configuration <a href="?$appWiki">Application Base Wiki</a><br/>
-Configuration <a href="?$softwareDevWiki">Software Development</a><br/>
+Configuration <a href="?$softwareDevWiki">Software Development Wiki</a><br/>
 Configuration <a href="?$level3Wiki">Personal Wiki</a><br/>
 Configuration <a href="?$publicWiki">Community Wiki</a><br/>
 </form>
@@ -249,7 +252,8 @@ installTWikiExtension({ file => $tar, name => 'TWiki', dir => "downloads/release
 print qq{<h2>TWiki.cfg</h2>\n};
 print qq{<h3>LocalSite.cfg</h3>\n};
 
-my $file = "$lib/LocalSite.cfg";
+#my $file = "$lib/LocalSite.cfg";
+my $file = "tmp/install/LocalSite.cfg";
 open(FH, ">$file") or die "Can't open $file: $!";
 print FH $localDirConfig;
 close(FH) or die "Can't write to $file: $!";
@@ -400,7 +404,8 @@ sub SaveXML
     die unless $p->{dir} && $p->{xml} && $p->{list} && $p->{list};
 
     my $xs = new XML::Simple() or die $!;
-    open( XML, ">$p->{dir}/$p->{xml}" ) or die $!;
+    my $xml = "$p->{dir}/$p->{xml}";
+    open( XML, ">$xml" ) or die qq{$!: Can't write xml to "$xml"\n};
     print XML $xs->XMLout( { $p->{type} => $p->{list} }, NoAttr => 1 );
     close( XML ) or warn $!;
 
