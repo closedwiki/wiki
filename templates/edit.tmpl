@@ -59,12 +59,22 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 }
 //STOP HIDING-->
 </script>%TMPL:END%
+
 %TMPL:DEF{"footernote"}%
 <div class="TWikiFooterNote">
+&nbsp; &nbsp;
+</td><td valign="top">
+&nbsp; &nbsp;
+<input type="checkbox" name="unlock" %RELEASEEDITLOCKCHECKBOX% /> Release edit lock
+<font size="-1">(<a target="UnlockTopic" onclick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font> <br />
+&nbsp; &nbsp;
+<input type="checkbox" name="dontnotify" %DONTNOTIFYCHECKBOX% /> Minor changes, don't notify
+<font size="-1">(<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>)</font>
 <font color="#333333" size="-1">
 %INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%
 </font>
  </div>%TMPL:END%
+ 
 %TMPL:DEF{"topicaction"}%
 	<input type="submit" class="twikiSubmit" name="action" value="Cancel" id="cancel" />
 	<input type="submit" class="twikiSubmit" name="action" value="Preview" id="preview" />

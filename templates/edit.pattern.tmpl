@@ -98,6 +98,13 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 </div>
 <div class="twikiRight"></div>
 <br class="twikiClear" />
+&nbsp; &nbsp;
+</td><td valign="top">
+<input type="checkbox" name="unlock" %RELEASEEDITLOCKCHECKBOX% /> Release edit lock
+<font size="-1">(<a target="UnlockTopic" onclick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font> <br />
+&nbsp; &nbsp;
+<input type="checkbox" name="dontnotify" %DONTNOTIFYCHECKBOX% /> Minor changes, don't notify
+<font size="-1">(<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>)</font>
 </fieldset>%TMPL:END%
 
 
