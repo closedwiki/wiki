@@ -984,6 +984,9 @@ The nameless parameter key is _DEFAULT.
      name1 => "val1" <br />
      name2 => "val2"
 
+SMELL: shouldn't this return a Hash reference? (had to make makeHashRefFromHash for 
+		 expandVariablesOnTopicCreation) 
+
 =cut
 
 sub extractParameters {
@@ -1752,7 +1755,8 @@ sub expandVariablesOnTopicCreation {
     $theText =~ s/%USERNAME%/$theUser/go;               # "jdoe"
     $theText =~ s/%WIKINAME%/$theWikiName/go;           # "JonDoe"
     $theText =~ s/%WIKIUSERNAME%/$theWikiUserName/go; # "Main.JonDoe"
-    $theText =~ s/%URLPARAM{(.*?)}%/$this->_handleURLPARAM(\%{extractParameters($1)})/geo;
+    $theText =~ s/%URLPARAM{(.*?)}%/$this->_handleURLPARAM(makeHashRefFromHash(extractParameters($1)))/geo;
+
     # Remove filler: Use it to remove access control at time of
     # topic instantiation or to prevent search from hitting a template
     # SMELL: this expansion of %NOP{}% is different to the default
@@ -1761,6 +1765,19 @@ sub expandVariablesOnTopicCreation {
     $theText =~ s/%NOP%//go;
 
     return $theText;
+}
+
+=pod
+
+---++ makeHashRefFromHash
+implemented just to convert the Hash returned by extractParameters into the HashRef expected by _handleURLPARAM
+
+=cut
+
+sub makeHashRefFromHash
+{
+my %param = @_;
+return \%param;
 }
 
 sub _handleWEBLIST {
