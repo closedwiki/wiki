@@ -173,6 +173,14 @@ sub main
         return;
     }
 
+    my( $mirrorSiteName, $mirrorViewURL ) = &TWiki::readOnlyMirrorWeb( $webName );
+    if( $mirrorSiteName ) {
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsmirror", $mirrorSiteName, $mirrorViewURL );
+        print $query->redirect( $url );
+        return;
+    }
+
+    # prevent non-Wiki names?
     if( ( $onlyWikiName ) && ( ! &TWiki::isWikiName( $topic ) ) &&
         ( ! &TWiki::Store::topicExists( $webName, $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
@@ -180,7 +188,7 @@ sub main
 	return;
     }
 
-    # check access permission
+    # read topic and check access permission
     if( &TWiki::Store::topicExists( $webName, $topic ) ) {
 	( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
     }
@@ -220,12 +228,18 @@ sub main
     $tmpl = &TWiki::Store::readTemplate( "edit", $topic, $skin );
     $icat = &TWiki::Store::readTemplate( "twikicatitems" );
     if( ! &TWiki::Store::topicExists( $webName, $topic ) ) {
-        $text= &TWiki::Store::readTemplate( "notedited" );
+        my $templateTopic = $query->param( "templatetopic" ) || "";
+        if( $templateTopic ) {
+	    ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $templateTopic );
+        }
+        if( ! $text ) {
+            ( $text, @meta ) = &TWiki::Store::readTemplateTopic( "WebTopicEditTemplate" );
+        }
         $extra = "(not exist)";
 
         my $foo = &TWiki::getLocaldate();
         $text =~ s/%DATE%/$foo/go;
-        $text =~ s/%USERNAME%/$wikiUserName/go;
+        $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
     }
 
     if( $icat ) {

@@ -23,8 +23,6 @@ use TWiki;
 
 $query= new CGI;
 
-TWiki::writeHeader( $query );
-
 &main();
 
 sub buildCategoryItem
@@ -126,8 +124,16 @@ sub main
     if( ! &TWiki::Store::webExists( $webName ) ) {
 	$tmpl= &TWiki::Store::readTemplate( "noweb" );
 	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+        &TWiki::writeHeader( $query );
 	print $tmpl;
 	return;
+    }
+
+    my( $mirrorSiteName, $mirrorViewURL ) = &TWiki::readOnlyMirrorWeb( $webName );
+    if( $mirrorSiteName ) {
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsmirror", $mirrorSiteName, $mirrorViewURL );
+        print $query->redirect( $url );
+        return;
     }
 
     # reset lock time, this is to prevent contention in case of a long edit session
@@ -225,5 +231,6 @@ sub main
     $tmpl =~ s/%HIDDENTEXT%/$text/go;
     $tmpl =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
 
+    &TWiki::writeHeader( $query );
     print $tmpl;
 }

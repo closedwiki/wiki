@@ -25,10 +25,8 @@ use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
 
-
-TWiki::writeHeader( $query );
-
 $query= new CGI;
+TWiki::writeHeader( $query );
 
 &main();
 

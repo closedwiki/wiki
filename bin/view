@@ -128,9 +128,9 @@ sub main
     } else {
         $rev = 1;
         if( &TWiki::isWikiName( $topic ) ) {
-            $text= &TWiki::Store::readTemplate( "notext" );
+            ( $text, @meta ) = &TWiki::Store::readTemplateTopic( "WebTopicViewTemplate" )
         } else {
-            $text= &TWiki::Store::readTemplate( "notwiki" );
+            ( $text, @meta ) = &TWiki::Store::readTemplateTopic( "WebTopicNonWikiTemplate" );
         }
         $extra .= " (not exist)";
     }
@@ -181,10 +181,26 @@ sub main
         &TWiki::Store::writeLog( "view", "$webName.$topic", $extra );
     }
 
-    if( $rev < $maxrev ) {
+    my( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote ) = &TWiki::readOnlyMirrorWeb( $webName );
+
+    if( $mirrorSiteName ) {
+        # disable edit and attach
+        $tmpl =~ s/%EDITTOPIC%/$mirrorLink | <strike>Edit<\/strike>/o;
+        $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/oi;
+        if( $topicExists ) {
+            # remove the NOINDEX meta tag
+            $tmpl =~ s/<META NAME="ROBOTS"[^>]*>//goi;
+        } else {
+            $text = "";
+        }
+        $tmpl =~ s/%REVTITLE%//go;
+
+    } elsif( $rev < $maxrev ) {
         # disable edit of previous revisions
-        $tmpl =~ s/%EDITTOPIC%/Edit/go;
+        $tmpl =~ s/%EDITTOPIC%/<strike>Edit<\/strike>/o;
+        $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/oi;
         $tmpl =~ s/%REVTITLE%/\(r1.$rev\)/go;
+
     } else {
         if( $topicExists ) {
             $tmpl =~ s/%EDITTOPIC%/<a href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><b>Edit<\/b><\/a>/go;
@@ -226,9 +242,9 @@ sub main
     if( $topicExists ) {
         $revuser = &TWiki::userToWikiName( $revuser );
         my $temp = &TWiki::getRenderedVersion( "r1.$rev - $revdate GMT - $revuser" );
-        $tmpl =~ s/%REVINFO%/$temp/go;
+        $tmpl =~ s/%REVINFO%/$temp$mirrorNote/go;
     } else {
-        $tmpl =~ s/%REVINFO%//go;
+        $tmpl =~ s/%REVINFO%/$mirrorNote/go;
     }
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
