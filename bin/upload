@@ -415,6 +415,8 @@ sub main
 	my $nonAlphaNum = "[^$TWiki::regex{mixedAlphaNum}" . '\._-]+';
         $fileName =~ s/${nonAlphaNum}//go;
         $fileName =~ s/$TWiki::uploadFilter/$1\.txt/goi;  # apply security filter
+        $fileName =~ /(.*)/;  # untaint
+        $fileName = $1;
 
 	##TWiki::writeDebug ("Upload filename after cleanup is '$fileName'");
 
