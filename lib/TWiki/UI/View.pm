@@ -31,6 +31,7 @@ use strict;
 use TWiki;
 use TWiki::User;
 use TWiki::UI;
+use TWiki::UI::OopsException;
 
 =pod
 
@@ -271,7 +272,7 @@ sub view {
             if( $url && $url =~ m|/view| ) {
                 # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
                 $url =~ s|/view|/viewauth|o;
-                $url = "Urlhost()$url";
+                $url = "$session->{urlHost}$url";
             } else {
                 # If REQUEST_URI is rewritten and does not contain the name "view"
                 # try looking at the CGI environment variable SCRIPT_NAME.
@@ -286,7 +287,7 @@ sub view {
                 $queryString = '?' . $queryString if ($queryString);
                 if ($script && $script =~ m|/view| ) {
                     $script =~ s|/view|/viewauth|o;
-                    $url = "Urlhost()$script$pathInfo$queryString";
+                    $url = "$session->{urlHost}$script$pathInfo$queryString";
                 } else {
                     # If SCRIPT_NAME does not contain the name "view"
                     # the last hope is to try the SCRIPT_FILENAME ...
@@ -294,11 +295,12 @@ sub view {
                     $url = $session->{urlhost}.$session->{scriptUrlPath}."/$viewauthFile$pathInfo$queryString";
                 }
             }
-            throw TWiki::UI::Redirect( $url );
+            $session->redirect( $url );
+	    return;
         }
     }
     if( $topicExists && ! $viewAccessOK ) {
-        throw TWiki::UI::Oops( $webName, $topicName, "accessview" );
+        throw TWiki::UI::OopsException( $webName, $topicName, "accessview" );
     }
 
     # Write header based on "contenttype" parameter, used to produce
