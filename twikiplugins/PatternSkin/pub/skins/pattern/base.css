@@ -1,869 +1,541 @@
 
-
 /* HTML elements */
 
-
-
 html body {
-
 	margin: 0;
-
 	padding: 0;
-
 	line-height: 1.3em;
-
 	font-family: "Lucida Grande", verdana, lucida, helvetica, sans-serif;
-
-	background-color: transparent;
-
+	background-color: #f3f3f3;
 	font-size: x-small;
-
 	voice-family: "\"}\""; 
-
 	voice-family: inherit;
-
 	font-size: small;
-
 }
-
 html>body {
-
 	font-size: small;	
-
 }
-
 /* be kind to netscape 4 that doesn't understand inheritance */
-
 body, p, li, ul, ol, dl, dt, dd, acronym, h1, h2, h3, h4, h5, h6 {
-
 	background-color: transparent;
-
 }
-
-
 
 h1, h2, h3, h4, h5, h6 {
-
 	font-family: "Lucida Grande", helvetica, lucida, verdana, sans-serif;
-
 	line-height: 104%;
-
 	margin: 0 0 0.1em 0;
-
 	padding: 0;
-
-	color: #3B77BC;
-
+	color: #36689A/*#3B77BC*/;
 	font-weight: bold;
-
 }
-
 h1 { font-size: 200%; }
-
 h2 { font-size: 160%; }
-
 h3 { font-size: 145%; }
-
 h4 { font-size: 125%; }
-
 h5 { font-size: 110%; }
-
 h6 { font-size: 100%; }
 
-
-
 p {
-
 	margin: 1em 0 1.1em 0;
-
 }
-
-
 
 :link:focus, :visited:focus, :link, :visited, :link:active, :visited:active {
-
-	text-decoration:none;
-
-	color:#2c57c2;
-
+	text-decoration: none;
+	color: #2c57c2;
 	background-color: transparent;
-
 }
-
 :link:hover, :visited:hover {
-
 	text-decoration:underline;
-
 	background-color: #daeaff;
-
 }
-
-
 
 a:link img, a:visited img, a:hover img, a:active img { 
-
 	background-color: transparent;
-
 	display: block;
-
 }
-
-
 
 table {
-
 	border-collapse: collapse;
-
 }
-
 th {
-
 	vertical-align: middle;
-
 }
-
 th.sortedAscending a:link,
-
 th.sortedAscending a:visited {
-
 	border-top: 1px solid #ccc;
-
 }
-
 th.sortedAscending a:hover,
-
 th.sortedAscending a:hover {
-
 	text-decoration: none;
-
 	border-top: 0;
-
 	border-bottom: 1px solid #ccc;
-
 }
-
 th.sortedDescending a:link,
-
 th.sortedDescending a:visited,
-
 th.sortedDescending a:link,
-
 th.sortedDescending a:visited {
-
 	border-bottom: 1px solid #ccc;
-
 }
-
 th.sortedDescending a:hover,
-
 th.sortedDescending a:hover {
-
 	text-decoration: none;
-
 	border-bottom: 0;
-
 	border-top: 1px solid #ccc;
-
 }
-
-
 
 strong, b {
-
 	font-weight: bold;
-
 }
-
-
 
 form { 
-
 	display: inline;
-
 	margin: 0;
-
 	padding: 0;
-
 }
-
-
 
 pre, code {
-
 	font-size: 100%;
-
 }
 
-
-
-/* LAYOUT BLOCKS */
-
-
-
-#TWikiMain {
-
-	margin: 0 20px 0 220px;
-
-	/*
-
-	position: absolute;
-
-	top: 50px;
-
-	left: 200px;
-
-	padding: 0 20px 0 20px;
-
-	*/
-
-}
-
-
-
-#TWikiTopic {
-
-	background-color: transparent;
-
-	margin: 1em 0 3em 0;
-
-}
-
-#TWikiTopic a:link {
-
-	text-decoration: underline;
-
-}
-
-#TWikiTopic a:visited {
-
-	text-decoration: underline;
-
-	color: purple;
-
-}
-
-
-
-#TWikiTopBar {
-
-	height: 60px;
-
-	background-color: white;
-
-	border-bottom: 1px solid #a9b2be;
-
-}
-
-
-
-#TWikiLeftBar {
-
-	position: absolute;
-
-	left: 0;
-
-	top: 61px;
-
-	/*
-
-	position: relative;
-
+.left {
 	float: left;
-
-	*/
-
+	position: relative;
+}
+.right {
+	position: relative;
+	float: right;
+	display: inline;
 	margin: 0;
-
-	padding: 0;
-
-	width: 200px;
-
-	
-
-	background-color: #f2f2f2;
-
-	font-size: 90%;
-
-	line-height: 130%;
-
-	color: #666;
-
 }
 
+/*	LAYOUT BLOCKS */
 
+/*	POSITIONING ONLY */
 
-#TWikiLeftBar .TWikiNavigation {
-
-	padding: 0;
-
-	margin: 1em 0 1.8em 16px;
-
+div#TWikiMiddleContainer {
 }
-
-#TWikiLeftBar .TWikiNavigation ul {
-
-	padding: 0;
-
+div#TWikiTopic {
+	margin: 1.5em 0 3em 0;
+}
+div#TWikiMain {
+	font-size: 100%;
+	margin: 0 0 0 18em;
+	padding: 0 2em 1em 2em;
+}
+div#TWikiTopBar {
+	height: 60px;
+}
+div#TWikiLeftBar {
+	position: absolute;
+	left: 0;
+	top: 60px;
+	width: 18em;
 	margin: 0;
-
+	padding: 0;
 }
-
-#TWikiLeftBar .TWikiNavigation li {
-
-	display: block;
-
-	list-style: none;
-
-	width: 100%;
-
-}
-
-#TWikiLeftBar .TWikiNavigation li a {
-
-	display: block;	
-
-	width: 100%;
-
-}
-
-html>body .TWikiNavigation li a {
-
-	width: auto;
-
-}
-
-
-
-#TWikiBottomBar {
-
-	border-top: 1px solid #ddd;
-
-	font-size: 90%;
-
-	line-height: 140%;
-
+div#TWikiBottomBar {
 	padding-bottom: 1em;
-
-	margin: 0 20px 0.5em 0;
-
+	margin: 0 0 0.5em 0;
 }
 
+/*	STYLING OF LAYOUT BLOCKS */
 
+div#TWikiMiddleContainer { }
+
+div#TWikiMain {
+	background-color: white;
+	border-left: 1px solid #ccc;
+}
+
+/**	----------------------------------
+*	topic
+*	---------------------------------- */
+
+div#TWikiTopic {
+	background-color: transparent;
+}
+div#TWikiTopic a:link {
+	text-decoration: underline;
+}
+div#TWikiTopic a:visited {
+	text-decoration: underline;
+	color: #95ABE0;
+}
+div#TWikiTopic a:hover {
+	color: #2c57c2;
+}
+
+/**	----------------------------------
+*	top bar
+*	---------------------------------- */
+
+div#TWikiTopBar {
+	background-color: white;
+}
+
+/**	----------------------------------
+*	left bar
+*	---------------------------------- */
+
+div#TWikiLeftBar {
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 1em;
+	padding-top: 0;
+	color: #666;
+	background-color: #fbfbfb;
+}
+div#TWikiLeftBar div.TWikiLeftBarContents {
+	font-size: 95%;
+	line-height: 130%;
+	margin: 1em 0 1em 2em;
+}
+div#TWikiLeftBar .TWikiLeftBarContents ul {
+	padding: 0;
+	margin: 0;
+}
+div#TWikiLeftBar .TWikiLeftBarContents li {
+	display: block;
+	list-style: none;
+	width: 100%;
+}
+div#TWikiLeftBar .TWikiLeftBarContents li a {
+	display: block;	
+	width: 97%;
+	padding-right: 3%;
+}
+html>body .TWikiLeftBarContents li a {
+	width: auto;
+}
+
+/**	----------------------------------
+*	bottom bar
+*	---------------------------------- */
+
+div#TWikiBottomBar {
+	border-top: 1px solid #ddd;
+	/* align with TWikiMain content */
+	margin: 0 0 0 18em;
+	padding: 0.25em 2em 0.5em 2em;
+}
 
 /* CONTENT ELEMENTS */
 
-
+/**	----------------------------------
+*	top bar contents, bottom bar contents
+*	---------------------------------- */
 
 .TWikiTopBarMainContents {
-
-	margin: 0 1em 2em 0;
-
+	margin: 0 0 0.5em 0;
+	
 }
-
 .TWikiBottomBarMainContents {
-
-	margin: 0.25em 0 0 220px; /* align with TWikiMain content */
-
-	color: #a9b2be;
-
+	font-size: 90%;
+	line-height: 140%;
 }
+
+/**	----------------------------------
+*	attachments table, form
+*	---------------------------------- */
 
 .TWikiAttachments,
-
 .TWikiForm {
-
-	background-color: #e2e2e7;
-
+	background-color: #e2e2e2;
 	padding: 2em 2em 2em 2em;
-
 	border-top: 1px solid #a9b2be;
-
+	/*
+	background-color: #F2F5C8;
+	background-image:url(/twiki/pub/skins/pattern/img/pattern1_bg.gif);
+	background-repeat: repeat;
+	*/
 }
-
 .TWikiAttachments table,
-
 .TWikiForm table {
-
 	font-size: 90%;
-
 	background-color: white;
-
 	border-collapse: collapse;
-
 	border-spacing: 0px;
-
 	border: none;
-
 	padding: 0;
-
 }
-
 .TWikiAttachments table {
-
 	width: 100%;
-
 }
-
 .TWikiAttachments th, .TWikiAttachments td,
-
 .TWikiForm th, .TWikiForm td {	
-
 	border-bottom: 1px solid #a2a6a9;
-
 	line-height: 1.4em;
-
 }
-
 .TWikiAttachments th,
-
 .TWikiForm th {
-
 	padding: 2px 6px 2px 6px;
-
 	background-color: #6b7f93;
-
 	text-align: middle;
-
 	height: 2.4em;
-
 	border-left: 1px solid white;
-
 }
-
 .TWikiAttachments th.first,
-
 .TWikiForm th.first {
-
 	border-left: none;
-
 }
-
 .TWikiAttachments th.sortedAscending, .TWikiAttachments th.sortedDescending,
-
 .TWikiForm th.sortedAscending, .TWikiForm th.sortedDescending {
-
 	background-color: #345;
-
 }
-
 .TWikiAttachments th img,
-
 .TWikiForm th img {
-
 	display: none;
-
 }
-
 .TWikiAttachments th a:link,
-
 .TWikiAttachments th a:visited,
-
 .TWikiForm th a:link,
-
 .TWikiForm th a:visited {
-
 	color: white;
-
 	text-decoration: none;
-
 }
-
 .TWikiAttachments th a:hover,
-
 .TWikiForm th a:hover {
-
 	text-decoration: underline;
-
 	background-color: transparent;
-
 }
-
 .TWikiAttachments th.sortedAscending a:hover,
-
 .TWikiAttachments th.sortedDescending a:hover,
-
 .TWikiForm th.sortedAscending a:hover,
-
 .TWikiForm th.sortedDescending a:hover {
-
 	text-decoration: none;
-
 	background-color: transparent;
-
 }
-
 .TWikiAttachments td,
-
 .TWikiForm td {
-
 	padding: 2px 6px 2px 6px;
-
 	background-color: white;
-
 	height: 1.4em;
-
 	text-align: left;
-
 	vertical-align: top;
-
 }
-
 .TWikiAttachments p,
-
 .TWikiForm p {
-
 	display: none;
-
 }
 
+/**	----------------------------------
+*	action buttons
+*	---------------------------------- */
 
-
-.TWikiTopicAction {
-
+div.TWikiTopicAction {
 	display: block;
-
 	font-size: 90%;
-
 	color: white;
-
 	font-weight: normal;
-
-	background-color: #a9b2be;
-
+	background-color: #98A2B0;
 	padding: 0.6em 2em 0.7em 2em;
-
 }
-
-.TWikiTopicAction a {
-
+div.TWikiTopicAction a {
 	border-bottom: 1px solid #ccc;
-
 	text-decoration: none;
-
 	font-weight: bold;
-
 	color: white;
-
 }
-
-.TWikiTopicAction a:hover { 
-
+div.TWikiTopicAction a:hover { 
 	border-bottom: 1px solid white;
-
 	text-decoration: none;
-
 	color: white;
-
 	background-color: transparent;
-
 }
-
-.TWikiTopicAction a:active {
-
+div.TWikiTopicAction a:active {
 	color: white;
-
 }
 
-
-
-.TWikiTopicAction .separator {
-
+div.TWikiTopicAction .separator {
 	color: white;
-
 }
 
+/**	----------------------------------
+*	topic info
+*	---------------------------------- */
 
-
-.TWikiTopicInfo {
-
+div.TWikiTopicInfo {
 	margin: 0.5em 0 0 0;
-
-	font-size: 90%;
-
-	color: #a9b2be;
-
 }
 
-.TWikiTopicInfo em,
+/**	----------------------------------
+*	rev info
+*	---------------------------------- */
 
-.TWikiTopicInfo i {
-
+.TWikiRevInfo {
+	font-size: 95%;
+}
+.TWikiRevInfo em,
+.TWikiRevInfo i {
 	font-style: normal;
-
 }
 
+div.TWikiTopicFooter {
+	display: block;
+	margin-top: 1em;
+	padding-bottom: 1em;
+}
 
+/**	----------------------------------
+*	home path
+*	---------------------------------- */
 
 .TWikiHomePath {
-
-	display: block;
-
-	margin-top: 1em;
-
-	color: #000;
-
-}
-
-.TWikiHomePath .sep {
-
-	font-family: Arial,Helvetica, "Franklin Gothic Medium", "Lucida Sans", Arial, sans-serif;
-
-}
-
-.TWikiHomePath a:hover {
-
-	text-decoration: underline;
-
-}
-
-
-
-
-
-
-
-.TWikiToolBar {
-
-	border-bottom: 1px solid #a9b2be;
-
-	background-color: #e2e2e7;
-
 	font-size: 90%;
-
-	padding: 0.25em 1em 0.25em 2em;
-
-	height: 1.8em;
-
-	color: #666;
-
-	font-weight: normal;
-
+	color: #000;
 }
-
-.TWikiToolBar input {
-
-	margin: 0.1em 0 0.1em 0;
-
-	width: 10em;
-
-	height: 1.2em;
-
-	font-size: 100%;
-
-	font-family: "Lucida Grande", verdana, lucida, helvetica, sans-serif;
-
-	border-width: 1px;
-
-	vertical-align: middle;
-
-}
-
-.TWikiToolBar .inputButton {
-
-	margin-left: 3px;
-
-	padding: 0;
-
-	height: 18px;
-
-	width: 18px;
-
-	vertical-align: middle;
-
-}
-
-.TWikiToolsLeft {
-
-	float: left;
-
-	position: relative;
-
-	margin-top: 0.25em;
-
-	color: #666;
-
-}
-
-.TWikiToolsLeft .sep {
-
+.TWikiHomePath .sep {
 	font-family: Arial,Helvetica, "Franklin Gothic Medium", "Lucida Sans", Arial, sans-serif;
-
 }
-
-.TWikiToolsLeft a:hover {
-
+.TWikiHomePath a:hover {
 	text-decoration: underline;
-
 }
 
+/**	----------------------------------
+*	tool bar
+*	---------------------------------- */
 
-
-.TWikiToolsRight {
-
-	position: relative;
-
-	float: right;
-
-	display: inline;
-
+div.TWikiToolBar {
+	height: 1.5em; /* must define a height ... (?); include button padding */
+}
+div.TWikiToolBar p {
+	clear: both;
+	height: 0;
+	display: none;
+}
+div.TWikiToolBar ul {
+	padding: 0;
 	margin: 0;
-
+	float: left;
+	width: 100%;
+	font-size: 95%;
+	color: #666;
+	background-color: #98A2B0;
 }
-
-.TWikiButton {
-
-	margin: 0 0.25em 0 0.25em;
-
+div.TWikiToolBar ul li {
+	display: inline;
 }
-
-.TWikiButton a:link, .TWikiButton a:visited {
-
+div.TWikiToolBar ul li a:link,
+div.TWikiToolBar ul li a:visited {
+	padding: 0.25em 0.75em;
+	text-decoration: none;
+	float: left;
 	color: white;
-
-	padding: 0.2em 0.7em 0.2em 0.7em;
-
-	background-color: #a9b2be;
-
-	text-decoration: none;
-
+	font-weight: bold;
+	background-color: transparent/*#98A2B0*/;
+	margin-right: 1px;
 }
-
-.TWikiButton a:hover {
-
-	text-decoration: none;
-
+div.TWikiToolBar ul li a:hover {
 	background-color: #daeaff;
-
 	color: #2c57c2;
-
+	text-decoration: underline;
 }
+div.TWikiToolBar input {
+	margin: 0.1em 0 0.1em 0;
+	width: 10em;
+	height: 1.2em;
+	font-size: 100%;
+	font-family: "Lucida Grande", verdana, lucida, helvetica, sans-serif;
+	border-width: 1px;
+	vertical-align: middle;
+}
+div.TWikiToolBar .inputButton {
+	margin-left: 3px;
+	padding: 0;
+	height: 18px;
+	width: 18px;
+	vertical-align: middle;
+}
+div.TWikiToolBar .left a:hover {
+	text-decoration: underline;
+}
+
+/**	----------------------------------
+*	topic header
+*	---------------------------------- */
+
+div.TWikiTopicHeader {
+	display: block;
+	height: 1em;
+	margin-top: 0.3em;
+}
+
+/**	----------------------------------
+*	page nav: top to, to bottom
+*	---------------------------------- */
 
 .TWikiPageNav {
-
-	display: block;
-
-	margin: 0.5em 0 0.5em 0;
-
-	text-align: right;
-
 	font-size: 95%;
-
-}
-
-.TWikiPageNav a:link, .TWikiPageNav a:visited {
-
 	font-weight: bold;
-
-	color: #a9b2be;
-
 }
 
-.TWikiPageNav a:hover {
+/**	----------------------------------
+*	TOC
+*	---------------------------------- */
 
-	color: #2347d7;
-
+.TWikiToc {
+	display: block;
+	font-size: 95%;
+	line-height: 1.3em;
+	margin: 1em 0 2em 0;
+	padding: 0.3em 0 0.6em 0;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	border-color: #e2e2e2;
+	color: #666;
 }
 
-  
+.TWikiToc ul {
+	list-style: outside;
+	padding: 0 0 0 0.5em;
+	margin: 0;
+	list-style-image: url(/twiki/pub/skins/pattern/img/arrow_down.gif);
+}
+.TWikiToc li {
+	margin-left: 2em;
+}
+.TWikiToc a {
+	display: block;	
+	width: 100%;
+}
+html>body .TWikiToc a {
+	width: auto;
+}
+.TWikiToc a:hover {
+	text-decoration: underline;
+}
+.TWikiToc .title {
+	margin: 0;
+	padding: 0;
+	font-weight: bold;
+}
 
 /* OTHER STYLES */
 
-
-
-.TWikiAlert {
-
-	color: red;
-
-}
-
-.apart {
-
-	color: green;
-
-}
-
-
-
-
-
-.TWikiToc {
-
-	display: block;
-
-	font-size: 95%;
-
-	line-height: 1.3em;
-
-	margin: 1em 0 2em 0;
-
-	padding: 0.3em 0 0.6em 0;
-
-	border-top: 1px solid;
-
-	border-bottom: 1px solid;
-
-	border-color: #e2e2e2;
-
-	color: #666;
-
-}
-
-
-
-.TWikiToc ul {
-
-	list-style: outside;
-
-	padding: 0 0 0 0.5em;
-
+.TWikiClearLine {
 	margin: 0;
-
-	list-style-image: url(/twiki/pub/skins/pattern/img/arrow_down.gif);
-
-}
-
-.TWikiToc li {
-
-	margin-left: 2em;
-
-}
-
-.TWikiToc a {
-
-	display: block;	
-
-	width: 100%;
-
-}
-
-html>body .TWikiToc a {
-
-	width: auto;
-
-}
-
-.TWikiToc a:hover {
-
-	text-decoration: underline;
-
-}
-
-.TWikiToc .title {
-
-	margin: 0;
-
 	padding: 0;
-
-	font-weight: bold;
-
+	height: 0;
+	clear: all;
+}
+.TWikiAlert {
+	color: red;
+}
+.apart {
+	color: green;
 }
 
-
-
-
+.TWikiGrayText {
+	color: #a9b2be;
+}
+.TWikiGrayText a:link, .TWikiGrayText a:visited {
+	color: #a9b2be;
+	text-decoration: underline;
+}
+.TWikiGrayText a:hover {
+	color: #2c57c2;
+}
 
 /* handy: */
-
 /* color names */
-
 /* aqua, black, blue, fuchsia, gray, green, lime, maroon, navy, olive, purple, red, silver, teal, white, and yellow */

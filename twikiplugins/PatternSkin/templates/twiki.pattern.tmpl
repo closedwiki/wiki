@@ -16,7 +16,7 @@
 
 %TMPL:DEF{"style"}%
 <style type="text/css" media="all">
-		@import url("%PUBURL%/skins/pattern/base.css");
+		@import url("%PUBURL%/skins/pattern/basetest.css");
 		/*@import url("%RELATIVETOPICPATH{%TWIKISTYLETOPIC%}%?raw=on&skin=text&contenttype=text/css");*/
 </style>
 %TMPL:END%
@@ -47,20 +47,19 @@
 %TMPL:DEF{"topbar"}%<div id="TWikiTopBar"><div class="TWikiTopBarMainContents">
 %INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div>%TMPL:END%
 
-%TMPL:DEF{"leftbar"}%<div id="TWikiLeftBar">
-%INCLUDE{"%TWIKIWEB%.WebLeftBar"}%</div>%TMPL:END%
+%TMPL:DEF{"leftbar"}%<div id="TWikiLeftBar"><div class="TWikiLeftBarContents">
+%INCLUDE{"%TWIKIWEB%.WebLeftBar"}%</div></div>%TMPL:END%
 
-%TMPL:DEF{"bottombar"}%<div id="TWikiBottomBar"><div class="TWikiBottomBarMainContents">%INCLUDE{"%TWIKIWEB%.WebBottomBar"}%</div></div>%TMPL:END%
+%TMPL:DEF{"bottombar"}%<div id="TWikiBottomBar"><div class="TWikiBottomBarMainContents"><span class="TWikiGrayText">%INCLUDE{"%TWIKIWEB%.WebBottomBar"}%</span></div></div>%TMPL:END%
 
 %TMPL:DEF{"bodystart"}%
-<body id="viewpage" onload="initPage()">
-#PageTop%TMPL:END%
+<body id="viewpage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
 
 %TMPL:DEF{"attachments"}%%TMPL:END%
 
-%TMPL:DEF{"standardheader"}%<span class="TWikiPageNav"><a href="#PageBottom">to bottom</a></span>%TMPL:END%
+%TMPL:DEF{"standardheader"}%%TMPL:END%
 
-%TMPL:DEF{"standardfooter"}%<span class="TWikiPageNav"><a href="#PageTop">to top</a></span>
+%TMPL:DEF{"standardfooter"}%
 #PageBottom
 %TMPL:END%
 
