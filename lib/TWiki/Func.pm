@@ -876,7 +876,7 @@ sub renderText
 sub internalLink
 {
 #   my( $pre, $web, $topic, $label, $anchor, $anchor, $createLink ) = @_;
-    return &TWiki::internalLink( @_ );
+    return TWiki::Render::internalLink( @_ );
 }
 
 # =========================

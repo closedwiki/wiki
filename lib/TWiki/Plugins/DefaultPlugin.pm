@@ -175,16 +175,16 @@ sub outsidePREHandler
 
     # Use alternate %Web:WikiName% syntax (versus the standard Web.WikiName).
     # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)
-#   $_[0] =~ s/(^|\s|\()\%([^\s].*?[^\s]):([^\s].*?[^\s])\%/&TWiki::internalLink($2,$3,"$2:$3",$1,1)/geo;
+#   $_[0] =~ s/(^|\s|\()\%([^\s].*?[^\s]):([^\s].*?[^\s])\%/&TWiki::Render::internalLink($2,$3,"$2:$3",$1,1)/geo;
 
     # Use "forced" non-WikiName links (i.e. %Linkname%)
     # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)
-#   $_[0] =~ s/(^|\s|\()\%([^\s].*?[^\s])\%/&TWiki::internalLink($web,$2,$2,$1,1)/geo;
+#   $_[0] =~ s/(^|\s|\()\%([^\s].*?[^\s])\%/&TWiki::Render::internalLink($web,$2,$2,$1,1)/geo;
 
     # Use "forced" non-WikiName links (i.e. %Web.Linkname%)
     # This is an old JosWiki render option combined with the new Web.LinkName notation
     # (Uncomment for JosWiki compatibility)
-#   $_[0] =~ s/(^|\s|\()\%([a-zA-Z0-9]+)\.(.*?[^\s])\%(\s|\)|$)/&TWiki::internalLink($2,$3,$3,$1,1)/geo;
+#   $_[0] =~ s/(^|\s|\()\%([a-zA-Z0-9]+)\.(.*?[^\s])\%(\s|\)|$)/&TWiki::Render::internalLink($2,$3,$3,$1,1)/geo;
 
     # Use <link>....</link> links
     # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)
