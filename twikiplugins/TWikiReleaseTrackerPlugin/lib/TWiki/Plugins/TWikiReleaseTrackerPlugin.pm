@@ -328,8 +328,8 @@ sub diffFiles {
 "   * file = '$file', dist='$distribution', comp='$comparedDistribution' <HR>"
 	  if $debug;
 
-	my $file1 = getFile( $file, $distribution );
-	my $file2 = getFile( $file, $comparedDistribution );
+	my $file1 = getFile( $file, $distribution, 1 );
+	my $file2 = getFile( $file, $comparedDistribution, 2 );
 
 	my $cmd              = "diff $fileDiffParams $file1 $file2";
 	my $output           = captureOutput($cmd);
@@ -548,12 +548,12 @@ sub listFiles {
 # =====================================================
 
 sub getFile {
-	my ( $file, $distribution ) = @_;
+	my ( $file, $distribution, $copyNumber ) = @_;
 	if ( $distribution eq "localInstallation" ) {
 		return getLocalVersion($file);
 	}
 	else {
-		return getDistributionVersion( $file, $distribution );
+		return getDistributionVersion( $file, $distribution, $copyNumber );
 	}
 }
 
@@ -566,10 +566,10 @@ Pick up from CVS if before XXXX/2004, else look in SVN.
 
 =cut
 sub getDistributionVersion {
-	my ( $file, $distribution ) = @_;
+	my ( $file, $distribution, $uniqifier ) = @_;
 	$file =~ s!^twiki/!!;
 	use TWiki::Contrib::DistributionContrib::FileFetcher;
-	my $file2 = TWiki::Contrib::DistributionContrib::FileFetcher::fetchDistributionFile($file, $distribution);
+	my $file2 = TWiki::Contrib::DistributionContrib::FileFetcher::fetchDistributionFile($file, $distribution, $uniqifier);
 	return $file2;
 }
 
