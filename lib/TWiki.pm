@@ -127,7 +127,7 @@ use vars qw(
 
 # Misc. Globals
 use vars qw(
-	@isoMonth @weekDay %userToWikiList %wikiToUserList $wikiVersion
+	@isoMonth @weekDay %userToWikiList %wikiToUserList $wikiversion
 	$TranslationToken %mon2num $viewScript $twikiLibDir $formatVersion
 	@publicWebList
     );

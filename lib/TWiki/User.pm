@@ -58,7 +58,7 @@ BEGIN {
 
 # FIXME: Move elsewhere?
 # template variable hash: (built from %TMPL:DEF{"key"}% ... %TMPL:END%)
-use vars qw( %templateVars ); # init in TWiki.pm so okay for modPerl
+use vars qw( %templateVars $UserImpl ); # init in TWiki.pm so okay for modPerl
 
 $UserImpl = "";
 
