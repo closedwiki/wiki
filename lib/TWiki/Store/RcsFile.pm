@@ -197,10 +197,22 @@ sub _moveAttachment
     my $error = "";   
     my $what = "$oldWeb.$oldTopic.$attachment -> $newWeb.$newTopic";
 
+    # FIMXE might want to delete old directories if empty
+
     my $new = TWiki::Store::RcsFile->new( $newWeb, $newTopic, $attachment,
         ( pubDir => $self->{pubDir} ) );
 
-    # FIMXE might want to delete old directories if empty
+    # before save, create directories if they don't exist
+    my $tempPath = $new->_makePubWebDir();
+    unless( -e $tempPath ) {
+        umask( 0 );
+        mkdir( $tempPath, 0775 );
+    }
+    $tempPath = $new->_makeFileDir( 1 );
+    unless( -e $tempPath ) {
+        umask( 0 );
+        mkdir( $tempPath, 0775 );
+    }
     
     # Move attachment
     my $oldAttachment = $self->{file};
