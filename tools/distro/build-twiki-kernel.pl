@@ -112,6 +112,7 @@ chomp( my $now = `date +'%Y%m%d.%H%M%S'` );
 chomp( my $branch = `head -n 1 branch` || 'MAIN' );
 my $newDistro = "TWikiKernel-$branch-$now";
 execute( "tar czf $newDistro.tar.gz twiki" );	# .tar.gz goes *here* because *z* is here
+print "${newDistro}.tar.gz\n";
 
 exit 0;
 
