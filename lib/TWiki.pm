@@ -1716,6 +1716,15 @@ sub externalLink
 }
 
 # =========================
+sub mailtoLink
+{
+    my( $theAccount, $theSubDomain, $theTopDomain ) = @_;
+
+    my $addr = "$theAccount\@$theSubDomain$TWiki::noSpamPadding\.$theTopDomain";
+    return "<a href=\"mailto\:$addr\">$addr</a>";
+}
+
+# =========================
 sub isWikiName
 {
     my( $name ) = @_;
@@ -1872,7 +1881,7 @@ sub getRenderedVersion
             s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText( $2, 0 ) . $3/geo;
 
 # Mailto
-            s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_\.]*[a-zA-Z0-9\-\_])(?=[\s\.\,\;\:\!\?\)])#$1<a href=\"mailto\:$2">$2</a>#go;
+            s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &mailtoLink( $2, $3, $4 )/geo;
 
 # Make internal links
             # '[[Web.odd wiki word#anchor][display text]]' link:
