@@ -1,7 +1,5 @@
-%META:TOPICINFO{author="MikeMannix" date="1000277643" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000459879" format="1.0" version="1.11"}%
 %META:TOPICPARENT{name="WebHome"}%
-%INCLUDE{"UtilTempDocNote"}%
-
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Forms
@@ -10,7 +8,7 @@ _Form-based input in topics, with name/value pairs stored as Meta Data variables
 
 ---++ Overview
 
-By adding form-based input to free-form content, you can structure topics with unlimited, easily searchable categories. When forms are enabled for a web and selected in a topic, the form appears in edit mode, and the contents are rendered as a table when viewing the actual page. When editing, can switch forms, if more than one is defined, or remove forms entirely. Form input values are stored as [[TWikiDocumentation#TWiki_Meta_Data][TWikiMetaData]]; all data is saved. 
+By adding form-based input to free-form content, you can structure topics with unlimited, easily searchable categories. When forms are enabled for a web and selected in a topic, the form appears in edit mode, and the contents are rendered as a table when viewing the actual page. When editing, can switch forms, if more than one is defined, or remove forms entirely. Form input values are stored as TWikiMetaData; all data is saved. 
 
 Form Templates replace <nop>TWikiCategory Tables from the 01-Dec-2000 version of TWiki.
 
@@ -27,7 +25,7 @@ Form Templates more powerful, flexible replacement for the original <nop>TWikiCa
 
 ---+++ Importing Category Table Data
 
-On upgrading from the previous TWiki, a Form Template topic has to be built for each web that used a Category Table, recreating the fields and values from the old ==twikicatitems.tmpl==. The replacement Form Template must be set as the first item in the WebPreferences variable ==WEBFORM=. If missing, pages will display, but attempting to edit results in an error message.
+On upgrading from the previous TWiki, a Form Template topic has to be built for each web that used a Category Table, recreating the fields and values from the old ==twikicatitems.tmpl==. The replacement Form Template must be set as the first item in the WebPreferences variable =WEBFORMS=. If missing, pages will display, but attempting to edit results in an error message.
 
 The new Form Template system should work with old Category Table data with no special conversion. Data is assigned to Meta variables the first time an imported topic is edited and saved in the new system.
 
@@ -61,7 +59,7 @@ A Form Template is simply a page containing your form, defined in a table where 
 	1. Save the topic.
 
 <blockquote style="background-color:#f0f0f0">
-*Example: <nop>WebFormTemplate from the TWiki.Know web*
+*Example: <nop>WebForm from the TWiki.Know web*
 <verbatim>
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* |
 | Know.TopicClassification | select | 1 | Know.NoDisclosure, 
@@ -103,15 +101,15 @@ The Form Template can also be defined in an alternative way by using more then o
 </blockquote>
 
 	* *Implementation Notes:* This format allows you to define field items with or without TWiki.WikiNames, depending on your needs.
-		
+
 		* The topic can be protected in the usual manner so that not everybody can change the form template - see TWikiAccessControl
-		
-		* =[[...]]= can be used for force a link, at present =[[...][...]]= format is not supported.
-		
-		* The "Tooltip message:" column is used as a tool tip for the field name (only if field name is a TWiki.WikiName) - you only see the tooltip on edit.
-		
+
+		* =[<nop>[...]]= links can be used for force a link, at present =[<nop>[...][...]]= format is not supported.
+
+		* The "Tooltip message" column is used as a tool tip for the field name (only if field name is a TWiki.WikiName) - you only see the tooltip on edit.
+
 		* The first item in the list is the default item.  Alternative initial values can be given in a topic template such as =WebTopicEditTemplate= or using field=value or for checkboxes field<checkbox name>=1.
-		
+
 		* The topic definition is not read when a topic is viewed.
 
 ---++ Enabling Forms by Web
@@ -147,7 +145,7 @@ A form embedded in a topic also appears in a new topic. This is done by specifyi
 
 ---++ Form Template Data Storage
 
-The Form Template topic name, fields and values are stored as [[TWikiDocumentation#TWikiMetaData][Meta Data]]. The order of field/value pairs in the Meta Data is the same as in the Template.
+The Form Template topic name, fields and values are stored as TWikiMetaData. The order of field/value pairs in the Meta Data is the same as in the Template.
 
 -- JohnTalintyre - 16 Aug 2001 <br>
 %META:TOPICMOVED{by="MikeMannix" date="1000277489" from="TWiki.TWikiFormTemplate" to="TWiki.TWikiForms"}%
