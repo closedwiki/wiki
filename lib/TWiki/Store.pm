@@ -262,6 +262,11 @@ sub moveAttachment
     # Add file attachment to new topic
     ( $meta, $text ) = readTopic( $newWeb, $newTopic );
 
+
+    $fileAttachment{"movefrom"} = "$oldWeb.$oldTopic";
+    $fileAttachment{"moveby"}   = $TWiki::userName;
+    $fileAttachment{"movedto"}  = "$newWeb.$newTopic";
+    $fileAttachment{"movedwhen"} = time();
     $meta->put( "FILEATTACHMENT", %fileAttachment );    
     
     $error .= saveNew( $newWeb, $newTopic, $text, $meta, "", "", "", "doUnlock", "dont notify", "" ); 
