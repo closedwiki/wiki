@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1016357431" format="1.0" version="1.40"}%
+%META:TOPICINFO{author="PeterThoeny" date="1039329680" format="1.0" version="1.41"}%
 <script language="JavaScript1.2" type="text/javascript">
 function dblclick() { window.scrollTo(0,0) }
 if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
@@ -56,6 +56,9 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 
 ------
 %INCLUDE{"TWikiPlugins"}%
+
+------
+%INCLUDE{"TWikiFuncModule"}%
 
 ------
 %INCLUDE{"TWikiSiteTools"}%
