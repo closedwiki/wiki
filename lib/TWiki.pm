@@ -2222,9 +2222,11 @@ sub decodeSpecialChars
 
 # =========================
 sub emitList {
-    my( $theType, $theElement, $theDepth ) = @_;
+    my( $theType, $theElement, $theDepth, $theOlType ) = @_;
     my $result = "";
     $isList = 1;
+    $theOlType = "" unless( $theOlType );
+    $theOlType =~ s/^(.).*/$1/;
 
     if( @listTypes < $theDepth ) {
         my $firstTime = 1;
@@ -2232,7 +2234,11 @@ sub emitList {
             push( @listTypes, $theType );
             push( @listElements, $theElement );
             $result .= "<$theElement>\n" unless( $firstTime );
-            $result .= "<$theType>\n";
+            if ($theOlType) {
+                $result .= "<$theType type=\"$theOlType\">\n";
+            } else {
+                $result .= "<$theType>\n";
+            }
             $firstTime = 0;
         }
 
@@ -2772,7 +2778,7 @@ sub getRenderedVersion {
             m/^(\S+?)/o                      && ( $isList = 0 );
             s/^(\t+)(\S+?):\s/<dt> $2<\/dt><dd> /o && ( $result .= &emitList( "dl", "dd", length $1 ) );
             s/^(\t+)\* /<li> /o              && ( $result .= &emitList( "ul", "li", length $1 ) );
-            s/^(\t+)\d+\.? ?/<li> /o         && ( $result .= &emitList( "ol", "li", length $1 ) );
+            s/^(\t+)([1AaIi]\.|\d+\.?) ?/<li> /o && ( $result .= &emitList( "ol", "li", length $1, $2 ) );
             if( ! $isList ) {
                 $result .= &emitList( "", "", 0 );
                 $isList = 0;
