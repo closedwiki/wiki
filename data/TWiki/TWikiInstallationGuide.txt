@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1045285021" format="1.0" version="1.54"}%
+%META:TOPICINFO{author="PeterThoeny" date="1050385753" format="1.0" version="1.55"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
@@ -106,7 +106,7 @@ You can also edit =$localPerlLibPath= in the =setlib.cfg= file if you are not ro
 <blockquote style="background-color:#F5F5F5">
 <pre>
 cd twiki/data
-perl -pi~ -e 's/nobody:/www-data:/' */*,v
+perl -pi~ -e 's/nobody(\:[0-9\.]+[\;\s]+strict\;)/www-data$1/' */*,v
 </pre>
 </blockquote>
 
