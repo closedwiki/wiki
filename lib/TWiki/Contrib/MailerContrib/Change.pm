@@ -140,10 +140,13 @@ sub expandPlain {
     my ( $this, $web ) = @_;
 
     unless( defined $this->{TEXT_SUMMARY} ) {
-        $this->{TEXT_SUMMARY} =
+        my $s =
           $this->{SESSION}->{renderer}->summariseChanges
             ( undef, $this->{WEB}, $this->{TOPIC}, $this->{BASE_REV},
               $this->{CURR_REV}, 0 );
+        $s =~ s/\n/\n   /gs;
+        $s = "   $s";
+        $this->{TEXT_SUMMARY} = $s;
     }
 
     # URL-encode topic names for use of I18N topic names in plain text

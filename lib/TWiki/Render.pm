@@ -1481,15 +1481,34 @@ sub summariseChanges {
         $otext = $this->TML2PlainText( $otext, $web, $topic, "nonop" );
 
         my $blocks = TWiki::Merge::simpleMerge( $otext, $ntext, qr/[\r\n]+/ );
-        my $n = 6; # max number of lines
-        foreach ( @$blocks ) {
-            $_ =~ s/^(.{67}).*$/$1.../ if( length($_) > 70 );
-            if( $tml ) {
-                $_ =~ s/^\+(.*)$/<ins>$1<\/ins>/s;
-                $_ =~ s/^-(.*)$/<br><del>$1<\/del>/s;
+        # sort through, keeping one line of context either side of a change
+        my @revised;
+        my $getnext = 0;
+        my $prev = "";
+        while ( scalar @$blocks && scalar( @revised ) < 10 ) {
+            my $block = shift( @$blocks );
+            next unless $block =~ /\S/;
+            $block =~ s/^(.{67}).*$/$1.../ if( length($block) > 70 );
+            if ( $block =~ m/^[-+]/ ) {
+                if( $tml ) {
+                    $block =~ s/^-(.*)$/<br><del>$1<\/del>/s;
+                    $block =~ s/^\+(.*)$/<ins>$1<\/ins>/s;
+                }
+                push( @revised, $prev ) if $prev;
+                push( @revised, $block );
+                $getnext = 1;
+                $prev = "";
+            } else {
+                if( $getnext ) {
+                    push( @revised, $block );
+                    $getnext = 0;
+                    $prev = "";
+                } else {
+                    $prev = $block;
+                }
             }
         }
-        $summary = join("\n", @$blocks );
+        $summary = join("\n", @revised );
     }
 
     unless( $summary ) {
