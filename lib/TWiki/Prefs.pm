@@ -47,7 +47,7 @@ $webName::WebPreferences.
 sub new {
     my( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
     my $web = $session->{webName};
 
@@ -73,7 +73,7 @@ is the topic to read user-level preferences from (Generally
 
 sub initializeUser {
     my( $this, $wikiname, $topic ) = @_;
-    assert(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
 
     $wikiname = "$TWiki::mainWebname.$TWiki::defaultWikiName" unless $wikiname;
 
@@ -97,7 +97,7 @@ Reads preferences from the topic at =$theWeb.$theTopic=, prefixes them with
 
 sub getPrefsFromTopic {
     my( $this, $web, $topic, $keyPrefix ) = @_;
-    assert(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
     $this->{REQUEST}->loadPrefsFromTopic( $web, $topic, $keyPrefix, 1 );
 }
 
@@ -111,7 +111,7 @@ hash, in order to accelerate substitutions.
 
 sub loadHash {
     my ( $this, $hashRef ) = @_;
-    assert(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
 
     $this->{REQUEST}->loadHash( $hashRef );
 }
@@ -149,7 +149,7 @@ this value overrides all preference settings in any web.
 
 sub getPreferencesValue {
     my( $this, $theKey, $theWeb ) = @_;
-    assert(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
 
     my $sessionValue =
       $this->{session}->{plugins}->getSessionValueHandler( $theKey );
@@ -193,7 +193,7 @@ prior to this conversion.
 
 sub getPreferencesFlag {
     my( $this, $theKey, $theWeb ) = @_;
-    assert(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
 
     my $value = $this->getPreferencesValue( $theKey, $theWeb );
     return _flag( $value );
@@ -220,7 +220,7 @@ will always return zero for these, rather than 'undef'.</strong>
 
 sub getPreferencesNumber {
     my( $this, $theKey, $theWeb ) = @_;
-    assert(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
 
     my $value = $this->getPreferencesValue( $theKey, $theWeb );
 

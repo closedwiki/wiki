@@ -54,7 +54,7 @@ use vars qw( @registrableHandlers );
 
 sub new {
     my ( $class, $session, $name ) = @_;
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     my $this = bless( {}, $class );
 
     $name = TWiki::Sandbox::untaintUnchecked( $name );
@@ -78,7 +78,7 @@ sub prefs { my $this = shift; return $this->{session}->{prefs}; }
 # handlers. Return the user resulting from the user handler call.
 sub load {
     my ( $this ) = @_;
-    assert(ref($this) eq "TWiki::Plugin") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Plugin") if DEBUG;
 
     return if $this->{disabled};
 
@@ -142,7 +142,7 @@ sub load {
 # invoke plugin initialisation and register handlers.
 sub registerHandlers {
     my ( $this, $plugins ) = @_;
-    assert(ref($this) eq "TWiki::Plugin") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Plugin") if DEBUG;
 
     return if $this->{disabled};
 
@@ -182,7 +182,7 @@ sub registerHandlers {
 
 sub getVersion {
     my $this = shift;
-    assert(ref($this) eq "TWiki::Plugin") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Plugin") if DEBUG;
 
     no strict 'refs';
     return ${"TWiki::Plugins::$this->{name}::VERSION"};
@@ -191,7 +191,7 @@ sub getVersion {
 
 sub getDescription {
     my $this = shift;
-    assert(ref($this) eq "TWiki::Plugin") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Plugin") if DEBUG;
 
     return "" if $this->{disabled};
 
@@ -247,7 +247,7 @@ sub new {
 
     my $this = bless( {}, $class );
 
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
 
     unless( $inited ) {
@@ -280,7 +280,7 @@ If disabled is set, no plugin handlers will be called.
 
 sub load {
     my ( $this, $disabled ) = @_;
-    assert(ref($this) eq "TWiki::Plugins") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Plugins") if DEBUG;
 
     my %disabledPlugins;
 
@@ -381,7 +381,7 @@ Initialisation that is done after the user is known.
 
 sub enable {
     my $this = shift;
-    assert(ref($this) eq "TWiki::Plugins") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Plugins") if DEBUG;
 
     foreach my $plugin ( @{$this->{plugins}} ) {
         $plugin->registerHandlers( $this );
@@ -404,7 +404,7 @@ be found or is not active, 0 is returned.
 
 sub getPluginVersion {
     my ( $this, $thePlugin ) = @_;
-    assert(ref($this) eq "TWiki::Plugins") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Plugins") if DEBUG;
 
     return $VERSION unless $thePlugin;
 
@@ -421,7 +421,7 @@ sub getPluginVersion {
 sub _applyHandlers {
     # must be shifted to clear parameter vector
     my $this = shift;
-    assert(ref($this) eq "TWiki::Plugins") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Plugins") if DEBUG;
     my $handlerName = shift;
 
     my $status;
@@ -503,7 +503,7 @@ Called by the register script
 
 sub registrationHandler {
     my $this = shift;
-    assert(ref($this) eq "TWiki::Plugins") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Plugins") if DEBUG;
     #my( $web, $wikiName, $loginName ) = @_;
     $this->_applyHandlers( 'registrationHandler', @_ );
 }

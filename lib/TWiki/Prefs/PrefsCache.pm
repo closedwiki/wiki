@@ -62,7 +62,7 @@ sub new {
     my( $class, $session, $theType, $theParent, @theTarget ) = @_;
     my $self;
 
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
 
     if( $theType eq "copy" ) {
         $self = { %$theParent };
@@ -105,7 +105,7 @@ placed in the cache regardless of the setting of $allowCache.
 
 sub loadPrefs {
     my( $self, $allowCache ) = @_;
-    assert(ref($self) eq "TWiki::Prefs::PrefsCache") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Prefs::PrefsCache") if DEBUG;
 
     $self->{finalHash} = {};
 
@@ -164,7 +164,7 @@ with =$keyPrefix=.
 
 sub loadPrefsFromTopic {
     my( $self, $theWeb, $theTopic, $theKeyPrefix, $allowCache ) = @_;
-    assert(ref($self) eq "TWiki::Prefs::PrefsCache") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Prefs::PrefsCache") if DEBUG;
 
     my $topicPrefs = new TWiki::Prefs::TopicPrefs( $self->{session},
                                                    $theWeb, $theTopic );
@@ -208,7 +208,7 @@ current one, overwriting anything that may currently be there.
 
 sub inheritPrefs {
     my( $self, $otherPrefsObject ) = @_;
-    assert(ref($self) eq "TWiki::Prefs::PrefsCache") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Prefs::PrefsCache") if DEBUG;
     my $key;
 
     foreach $key( keys %{$otherPrefsObject->{prefs}} ) {
@@ -231,7 +231,7 @@ be used for rapid lookups, much faster than refering back to this module.
 
 sub loadHash {
     my( $self, $hash ) = @_;
-    assert(ref($self) eq "TWiki::Prefs::PrefsCache") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Prefs::PrefsCache") if DEBUG;
     foreach my $var ( keys %{$self->{prefs}} ) {
         $hash->{$var} = $self->{prefs}{$var};
     }

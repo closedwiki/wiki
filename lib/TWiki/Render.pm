@@ -59,7 +59,7 @@ Creates a new renderer with initial state from preference values
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
 
     $this->{NOAUTOLINK} = 0;
@@ -334,7 +334,7 @@ Build a valid HTML anchor name
 
 sub makeAnchorName {
     my( $this, $anchorName, $compatibilityMode ) = @_;
-    assert(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
 
     if ( ! $compatibilityMode && $anchorName =~ /^$TWiki::regex{anchorRegex}$/ ) {
 	# accept, already valid -- just remove leading #
@@ -416,7 +416,7 @@ Generate a link.
 
 sub internalLink {
     my( $this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink, $doKeepWeb ) = @_;
-    assert(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
 
     # Get rid of leading/trailing spaces in topic name
     $theTopic =~ s/^\s*//;
@@ -597,7 +597,7 @@ used in TWiki::handleIcon
 
 sub filenameToIcon {
     my( $this, $fileName ) = @_;
-    assert(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
 
     my @bits = ( split( /\./, $fileName ) );
     my $fileExt = lc $bits[$#bits];
@@ -624,7 +624,7 @@ Returns the fully rendered expansion of a %FORMFIELD{}% tag.
 
 sub renderFormField {
     my ( $this, $params, $topic, $web ) = @_;
-    assert(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
 
     my $formField = $params->{_DEFAULT};
     my $formTopic = $params->{topic};
@@ -704,7 +704,7 @@ The main rendering function.
 
 sub getRenderedVersion {
     my( $this, $text, $theWeb, $meta ) = @_;
-    assert(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
     my( $head, $result, $extraLines, $insidePRE, $insideTABLE, $insideNoAutoLink );
 
     return "" unless $text;  # nothing to do
@@ -1066,7 +1066,7 @@ Used to render %META{}% tags in templates for non-active views
 
 sub renderMetaTags {
     my( $this, $theWeb, $theTopic, $text, $meta, $isTopRev, $noexpand ) = @_;
-    assert(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
 
     if ( $noexpand ) {
         $text =~ s/%META{[^}]*}%//go;
@@ -1096,7 +1096,7 @@ Makes a summary of the given topic by simply trimming a bit off the top.
 
 sub makeTopicSummary {
     my( $this, $theText, $theTopic, $theWeb, $theFlags ) = @_;
-    assert(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
     # called by search, mailnotify & changes after calling readFile
 
     my $htext = $theText;
@@ -1200,7 +1200,7 @@ Parameters to the open tag are recorded.
 
 sub takeOutBlocks {
     my( $this, $intext, $tag, $buffer ) = @_;
-    assert(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
 
     return $intext unless ( $intext =~ m/<$tag>/ );
 
@@ -1271,7 +1271,7 @@ Cool, eh what? Jolly good show.
 
 sub putBackBlocks {
     my( $this, $text, $buffer, $tag, $newtag, $callback ) = @_;
-    assert(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
 
     $newtag = $tag unless defined( $newtag );
 

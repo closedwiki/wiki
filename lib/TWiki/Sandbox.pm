@@ -52,7 +52,7 @@ sub new {
     my ( $class, $session, $OS, $detailedOS ) = @_;
     my $this = bless( {}, $class );
 
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
 
     $this->{REAL_SAFE_PIPE_OPEN} = 0;           # supports "open FH, '-|"
@@ -188,7 +188,7 @@ single character flag.  Permitted flags are
 
 sub buildCommandLine {
     my ($this, $template, %params) = @_;
-    assert(ref($this) eq "TWiki::Sandbox") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Sandbox") if DEBUG;
     my @arguments;
 
     for my $tmplarg (split /\s+/, $template) {
@@ -288,7 +288,7 @@ ensures that the shell does not interpret any of the passed arguments.
 
 sub readFromProcessArray {
     my ($this, $path, $template, %params) = @_;
-    assert(ref($this) eq "TWiki::Sandbox") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Sandbox") if DEBUG;
 
     my $data;                          # Output
     my $processFileHandle;             # Holds filehandle to read from process
@@ -439,7 +439,7 @@ error is redirected to standard input.
 # FIXME: need to upgrade as per the Array variant
 sub readFromProcess {
     my ($this, $template, %params) = @_;
-    assert(ref($this) eq "TWiki::Sandbox") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Sandbox") if DEBUG;
 
     my @args = $this->buildCommandLine( $template, %params );
     my $data;

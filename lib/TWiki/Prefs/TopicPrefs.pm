@@ -42,7 +42,7 @@ Reads preferences from the specified topic into a new TopicPrefs object.
 
 sub new {
     my( $class, $session, $theWeb, $theTopic ) = @_;
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     my $self = bless( {}, $class );
     $self->{session} = $session;
 
@@ -66,7 +66,7 @@ Rereads preferences from the topic, updating the TopicPrefs object.
 
 sub readPrefs {
     my $self = shift;
-    assert(ref($self) eq "TWiki::Prefs::TopicPrefs") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Prefs::TopicPrefs") if DEBUG;
 
     my $theWeb = $self->{web};
     my $theTopic = $self->{topic};

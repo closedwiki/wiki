@@ -156,7 +156,7 @@ Check if the web exists. If it doesn't, will throw an oops exception.
 
 sub checkWebExists {
     my ( $session, $webName, $topic ) = @_;
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
 
     unless ( $session->{store}->webExists( $webName ) ) {
         throw
@@ -177,7 +177,7 @@ if it doesn't. $op is %PARAM1% in the "oopsnotopic" template.
 
 sub checkTopicExists {
     my ( $session, $webName, $topic, $op ) = @_;
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
 
     unless( $session->{store}->topicExists( $webName, $topic )) {
         throw TWiki::UI::OopsException( $webName, $topic, "notopic", $op );
@@ -194,7 +194,7 @@ if it is.
 
 sub checkMirror {
     my ( $session, $webName, $topic ) = @_;
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
 
     my( $mirrorSiteName, $mirrorViewURL ) =
       $session->readOnlyMirrorWeb( $webName );
@@ -217,7 +217,7 @@ web.topic is permissible, throwing a TWiki::UI::OopsException if not.
 
 sub checkAccess {
     my ( $session, $web, $topic, $mode, $user ) = @_;
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
 
     unless( $session->{security}->checkAccessPermission( $mode, $user, "",
                                                          $topic, $web )) {
@@ -238,7 +238,7 @@ OopsException.
 
 sub checkAdmin {
     my ( $session, $webName, $topic, $user ) = @_;
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
 
     unless( $session->{security}->userIsInGroup( $user,
                                                  $TWiki::superAdminGroup )) {
@@ -258,7 +258,7 @@ web.
 
 sub readTemplateTopic {
     my( $session, $theTopicName ) = @_;
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
 
     $theTopicName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
 

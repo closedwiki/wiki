@@ -5,8 +5,9 @@ package Assert;
 # Copyright 2002 by Michael G Schwern <schwern@pobox.com
 # Slightly simplified derived version of Assert
 # Differences are:
-#  1. Assert has to be _explicitly enabled_ using the $ENV{ASSERT}
-#  2. should and shouldnt have been removed
+#  1. ASSERT instead of assert
+#  2. has to be _explicitly enabled_ using the $ENV{ASSERT}
+#  3. should and shouldnt have been removed
 #
 # Usage is as for Carp::Assert except that you have to explicitly
 # enable asserts using the environment variable "TWIKI_ASSERTS"
@@ -23,7 +24,7 @@ BEGIN {
     @ISA = qw(Exporter);
 
     %EXPORT_TAGS = (
-                    NDEBUG => [qw(assert affirm DEBUG)],
+                    NDEBUG => [qw(ASSERT affirm DEBUG)],
                    );
     $EXPORT_TAGS{DEBUG} = $EXPORT_TAGS{NDEBUG};
     Exporter::export_tags(qw(NDEBUG DEBUG));
@@ -83,7 +84,7 @@ sub _fail_msg {
     return $msg;
 }
 
-sub assert ($;$) {
+sub ASSERT ($;$) {
     unless($_[0]) {
         require Carp;
         Carp::confess( _fail_msg($_[1]) );

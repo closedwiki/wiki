@@ -41,7 +41,7 @@ Constructor
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
     return $this;
 }
@@ -173,7 +173,7 @@ If form contains Web this overrides webName
 
 sub getFormDef {
     my( $this, $webName, $form ) = @_;
-    assert(ref($this) eq "TWiki::Form") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
 
     if( $form =~ /^(.*)\.(.*)$/ ) {
         $webName = $1;
@@ -286,7 +286,7 @@ Render form fields for entry during an edit session
 
 sub renderForEdit {
     my( $this, $web, $topic, $form, $meta, $getValuesFromFormTopic, @fieldsInfo ) = @_;
-    assert(ref($this) eq "TWiki::Form") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
 
     my $chooseForm = "";
     if( $this->prefs()->getPreferencesValue( "WEBFORMS", "$web" ) ) {
@@ -453,8 +453,8 @@ Note that existing meta information for fields is removed unless $justOverride i
 
 sub fieldVars2Meta {
     my( $this, $webName, $query, $meta, $justOverride ) = @_;
-    assert(ref($this) eq "TWiki::Form") if DEBUG;
-    assert(ref($meta) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
+    ASSERT(ref($meta) eq "TWiki::Meta") if DEBUG;
 
     $meta->remove( "FIELD" ) if( ! $justOverride );
 
@@ -524,7 +524,7 @@ Not yet documented.
 
 sub getFieldParams {
     my( $meta ) = @_;
-    assert(ref($meta) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($meta) eq "TWiki::Meta") if DEBUG;
 
     my $params = "";
 
@@ -554,7 +554,7 @@ Called by script to change the form for a topic
 
 sub changeForm {
     my( $this, $theWeb, $theTopic ) = @_;
-    assert(ref($this) eq "TWiki::Form") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
 
     my $tmpl = $this->templates()->readTemplate( "changeform" );
     $tmpl = $this->{session}->handleCommonTags( $tmpl, $theTopic );
@@ -696,7 +696,7 @@ Upgrade old style category table
 
 sub upgradeCategoryTable {
     my( $this, $web, $topic, $meta, $text ) = @_;
-    assert(ref($this) eq "TWiki::Form") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
 
     my $icat = $this->templates()->readTemplate( "twikicatitems" );
 

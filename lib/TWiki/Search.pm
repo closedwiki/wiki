@@ -54,7 +54,7 @@ sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
 
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
 
     return $this;
@@ -399,7 +399,7 @@ SMELL: If =template= is defined neither =bookview= nor =renameview= will work
 
 sub searchWeb {
     my $this = shift;
-    assert(ref($this) eq "TWiki::Search") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Search") if DEBUG;
     my %params = @_;
     my $callback =      $params{_callback};
     my $cbdata =        $params{_cbdata};

@@ -69,7 +69,7 @@ Construct a new, empty Meta collection.
 
 sub new {
     my ( $class, $session, $web, $topic ) = @_;
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     my $self = bless( {}, $class );
 
     # Note: internal fields must be prepended with _. All other
@@ -106,7 +106,7 @@ represented.
 
 sub put {
     my( $self, $type, %args ) = @_;
-    assert(ref($self) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
 
     my $data = $self->{$type};
     my $key = _key( $type );
@@ -165,7 +165,7 @@ SMELL: This method would be better named "lookup" or "get".
 
 sub findOne {
     my( $self, $type, $keyValue ) = @_;
-    assert(ref($self) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
 
     my %args = ();
 
@@ -201,7 +201,7 @@ if there are no entries.
 
 sub find {
     my( $self, $type ) = @_;
-    assert(ref($self) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
 
     my $itemsr = $self->{$type};
     my @items = ();
@@ -227,7 +227,7 @@ With a $type and a $key it will remove only the specific item.
 
 sub remove {
     my( $self, $type, $keyValue ) = @_;
-    assert(ref($self) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
 
     my %args = ();
     my $key = "";
@@ -265,7 +265,7 @@ SMELL: That spec absolutely _STINKS_ !!
 
 sub copyFrom {
     my( $self, $otherMeta, $type ) = @_;
-    assert(ref($self) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
 
     my $data = $otherMeta->{$type};
     $self->{$type} = $data if( $data );
@@ -281,7 +281,7 @@ Return the number of entries of the given type that are in this meta set
 
 sub count {
     my( $self, $type ) = @_;
-    assert(ref($self) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
     my $data = $self->{$type};
 
     return scalar @$data if( defined( $data ));
@@ -299,7 +299,7 @@ Add TOPICINFO type data to the object, as specified by the parameters.
 
 sub addTOPICINFO {
     my( $self, $web, $topic, $rev, $forceDate, $forceUser ) = @_;
-    assert(ref($self) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
 
     my $time = $forceDate || time();
     my $user = $forceUser || $self->{_session}->{userName};
@@ -333,7 +333,7 @@ $rev is an integer revision number.
 
 sub getRevisionInfo {
     my $self = shift;
-    assert(ref($self) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
 
     my %topicinfo = $self->findOne( "TOPICINFO" );
 
@@ -365,7 +365,7 @@ value in the =$text= setting is the same as the one set in the =$meta= form.
 
 sub updateSets {
     my( $this, $rtext ) = @_;
-    assert(ref($this) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Meta") if DEBUG;
 
     my %form = $this->findOne( "FORM" );
     if( %form ) {

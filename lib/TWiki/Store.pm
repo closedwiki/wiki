@@ -65,7 +65,7 @@ Construct a Store module, linking in the chosen implementation.
 
 sub new {
     my ( $class, $session, $impl, $storeSettings ) = @_;
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     my $this = bless( {}, $class );
 
     $this->{session} = $session;
@@ -122,8 +122,8 @@ TWiki::Meta object.  (The topic text is, as usual, just a string.)
 
 sub readTopic {
     my( $this, $user, $theWeb, $theTopic, $version, $internal ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($internal)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($internal)) if DEBUG;
 
     my $text = $this->readTopicRaw( $user, $theWeb, $theTopic, $version, $internal );
     my $meta = $this->extractMetaData( $theWeb, $theTopic, \$text );
@@ -156,8 +156,8 @@ correct operation of View raw=debug and the "repRev" mode of Edit.
 
 sub readTopicRaw {
     my( $this, $user, $theWeb, $theTopic, $version, $internal ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($internal)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($internal)) if DEBUG;
 
     # test if theTopic contains a webName to override $theWeb
     ( $theWeb, $theTopic ) =
@@ -198,7 +198,7 @@ failures since this Store was created.
 =cut
 sub accessFailed {
     my $this = shift;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     return $this->{ACCESSFAILED};
 }
@@ -220,8 +220,8 @@ SMELL: $user must be the user login name, not their wiki name
 sub moveAttachment {
     my( $this, $oldWeb, $oldTopic, $newWeb, $newTopic,
         $theAttachment, $user ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($user)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($user)) if DEBUG;
 
     my $wName = $this->users()->userToWikiName( $user );
     # Remove file attachment from old topic
@@ -276,7 +276,7 @@ if the stream could not be opened (permissions, or nonexistant etc)
 sub getAttachmentStream {
     my $this = shift;
     #my ( $web, $topic, $att ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     my $topicHandler = $this->_getTopicHandler( @_ );
     my $strm;
@@ -301,7 +301,7 @@ sub attachmentExists {
     my $this = shift;
     #my ( $web, $topic, $att ) = @_;
 
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
     my $topicHandler = $this->_getTopicHandler( @_ );
     return -e $topicHandler->{file};
 }
@@ -390,8 +390,8 @@ SMELL: $user must be the user login name, not their wiki name
 
 sub renameTopic {
     my( $this, $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo, $user ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($user)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($user)) if DEBUG;
 
     my $topicHandler = $this->_getTopicHandler( $oldWeb, $oldTopic, "" );
     my $error = $topicHandler->moveMe( $newWeb, $newTopic );
@@ -438,7 +438,7 @@ SMELL: duplicates rendering parser code!
 
 sub updateReferringPages {
     my ( $this, $oldWeb, $oldTopic, $user, $newWeb, $newTopic, @refs ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     my $lockFailure = 0;
 
@@ -532,7 +532,7 @@ Read the given version of an attachment, returning the content.
 
 sub readAttachmentVersion {
    my ( $this, $theWeb, $theTopic, $theAttachment, $theRev ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
    my $topicHandler = $this->_getTopicHandler( $theWeb, $theTopic, $theAttachment );
    return $topicHandler->getRevision( $theRev );
@@ -551,8 +551,8 @@ WORKS FOR ATTACHMENTS AS WELL AS TOPICS
 
 sub getRevisionNumber {
     my( $this, $theWebName, $theTopic, $attachment ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($attachment)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($attachment)) if DEBUG;
 
     $attachment = "" unless $attachment;
 
@@ -576,8 +576,8 @@ sub getRevisionNumber {
 
 sub getRevisionDiff {
     my( $this, $web, $topic, $rev1, $rev2, $contextLines ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($contextLines)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($contextLines)) if DEBUG;
 
     my $rcs = $this->_getTopicHandler( $web, $topic );
     my( $error, $diffArrayRef ) =
@@ -605,8 +605,8 @@ sub getRevisionDiff {
 
 sub getRevisionInfo {
     my( $this, $theWebName, $theTopic, $theRev, $attachment, $topicHandler ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($attachment)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($attachment)) if DEBUG;
 
     $theRev = 0 unless( $theRev );
 
@@ -630,7 +630,7 @@ sub getRevisionInfo {
 
 sub topicIsLockedBy {
     my( $this, $theWeb, $theTopic ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     # pragmatic approach: Warn user if somebody else pressed the
     # edit link within a time limit e.g. 1 hour
@@ -697,8 +697,8 @@ Save a new revision of the topic, calling plugins handlers as appropriate.
 
 sub saveTopic {
     my( $this, $user, $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave, $forceDate ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($forceDate)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($forceDate)) if DEBUG;
 
     # SMELL: Staggeringly inefficient code that adds meta-data for
     # Plugin callback. Why not simply pass the meta in? It would be far
@@ -740,8 +740,8 @@ If file is not set, this is a properties-only save.
 
 sub saveAttachment {
     my( $this, $web, $topic, $attachment, $user, $opts ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($opts)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($opts)) if DEBUG;
     my $action;
 
     $this->lockTopic( $web, $topic, 0 );
@@ -977,7 +977,7 @@ in another store implementation. Use =saveTopic*= and =saveMetaData= instead.
 
 sub saveFile {
     my( $this, $name, $text ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     $name = TWiki::Sandbox::normalizeFileName( $name );
 
@@ -1000,8 +1000,8 @@ Get a lock on the given topic.
 
 sub lockTopic {
     my( $this, $theWeb, $theTopic, $doUnlock ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($doUnlock)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($doUnlock)) if DEBUG;
 
     ( $theWeb, $theTopic ) = $this->{session}->normalizeWebTopicName( $theWeb, $theTopic );
 
@@ -1022,8 +1022,8 @@ implementations of Store.
 
 sub removeObsoleteTopicLocks {
     my( $this, $web ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($web)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($web)) if DEBUG;
 
     my $webDir = "$TWiki::dataDir/$web";
     opendir( DIR, "$webDir" );
@@ -1059,9 +1059,9 @@ sub removeObsoleteTopicLocks {
 
 sub webExists {
     my( $this, $theWeb ) = @_;
-    assert(defined($theWeb)) if DEBUG;
+    ASSERT(defined($theWeb)) if DEBUG;
 
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
     return -e "$TWiki::dataDir/$theWeb";
 }
 
@@ -1078,8 +1078,8 @@ sub webExists {
 
 sub topicExists {
     my( $this, $theWeb, $theTopic ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($theTopic)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($theTopic)) if DEBUG;
 
     ( $theWeb, $theTopic ) =
       $this->{session}->normalizeWebTopicName( $theWeb, $theTopic );
@@ -1104,7 +1104,7 @@ sub _addMetaDatum {
 #
 sub extractMetaData {
     my( $this, $web, $topic, $rtext ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
     $$rtext =~ s/^%META:([^{]+){(.*)}%\r?\n/&_addMetaDatum($meta,$1,$2)/gem;
@@ -1152,9 +1152,9 @@ of use by Render.pm.
 
 sub getTopicParent {
     my( $this, $theWeb, $theTopic ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
-    assert(defined($theWeb)) if DEBUG;
-    assert(defined($theTopic)) if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(defined($theWeb)) if DEBUG;
+    ASSERT(defined($theTopic)) if DEBUG;
 
     return undef unless $this->topicExists( $theWeb, $theTopic );
 
@@ -1212,7 +1212,7 @@ in another store implementation. Use =readTopic*= and =readMetaData= instead.
 
 sub readFile {
     my( $this, $name ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
     $name = TWiki::Sandbox::normalizeFileName( $name );
     my $data = "";
     undef $/; # set to read to EOF
@@ -1235,7 +1235,7 @@ given, the meta-data is assumed to be globally unique.
 
 sub readMetaData {
     my ( $this, $web, $name ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     my $file = "$TWiki::dataDir/";
     $file .= "$web/" if $web;
@@ -1255,7 +1255,7 @@ given, the meta-data is assumed to be globally unique.
 
 sub saveMetaData {
     my ( $this, $web, $name, $text ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     my $file = "$TWiki::dataDir/";
     $file .= "$web/" if $web;
@@ -1276,7 +1276,7 @@ sub saveMetaData {
 
 sub getTopicNames {
     my( $this, $web ) = @_ ;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     $web = "" unless( defined $web );
 
@@ -1322,7 +1322,7 @@ list of all top-level webs (including hidden webs).
 
 sub getAllWebs {
     my( $this, $web ) = @_ ;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     $web = "" unless( defined $web );
 
@@ -1481,7 +1481,7 @@ by annotating the text with meta informtion.
 
 sub getDebugText {
     my ( $this, $meta, $text ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     return _writeMeta( $meta, $text );
 }
@@ -1498,7 +1498,7 @@ This method should be used to sanitise user-provided revision IDs.
 
 sub cleanUpRevID {
     my ( $this, $rev ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     return 0 unless $rev;
 
@@ -1518,7 +1518,7 @@ Returns an error string if it fails.
 
 sub copyTopicBetweenWebs {
     my ( $this, $theFromWeb, $theTopic, $theToWeb ) = @_;
-    assert(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     # copy topic file
     my $from = "$TWiki::dataDir/$theFromWeb/$theTopic.txt";

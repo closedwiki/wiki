@@ -38,7 +38,7 @@ database.
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
 
     %{$this->{GROUPS}} = ();
@@ -66,7 +66,7 @@ Are there any security restrictions for this Web
 
 sub permissionsSet {
     my( $this, $web ) = @_;
-    assert(ref($this) eq "TWiki::Access") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Access") if DEBUG;
 
     my $permSet = 0;
 
@@ -103,7 +103,7 @@ sub permissionsSet {
 sub checkAccessPermission {
     my( $this, $theAccessType, $theUserName,
         $theTopicText, $theTopicName, $theWebName ) = @_;
-    assert(ref($this) eq "TWiki::Access") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Access") if DEBUG;
 
     # super admin is always allowed
     if ( $TWiki::doSuperAdminGroup && $TWiki::superAdminGroup ) {
@@ -217,7 +217,7 @@ sub _collateGroups {
 
 sub getGroupsUserIsIn {
     my( $this, $theUserName ) = @_;
-    assert(ref($this) eq "TWiki::Access") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Access") if DEBUG;
 
     my $userTopic = _getWebTopicName( $TWiki::mainWebname, $theUserName );
 
@@ -245,7 +245,7 @@ not a group is specified, checks if it is the users topic.
 
 sub userIsInGroup {
     my( $this, $theUserName, $theGroupTopicName ) = @_;
-    assert(ref($this) eq "TWiki::Access") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Access") if DEBUG;
 
     my $usrTopic = _getWebTopicName( $TWiki::mainWebname, $theUserName );
     my $grpTopic = _getWebTopicName( $TWiki::mainWebname, $theGroupTopicName );

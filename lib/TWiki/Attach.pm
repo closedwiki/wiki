@@ -47,7 +47,7 @@ Constructor for singleton obeject.
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
     return $this;
 }
@@ -76,7 +76,7 @@ view, using templates for the header, footer and each row.
 
 sub renderMetaData {
     my( $this, $web, $topic, $meta, $attrs, $isTopTopicRev ) = @_;
-    assert(ref($this) eq "TWiki::Attach") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
 
     my $showAll = TWiki::extractNameValuePair( $attrs, "all" );
     my $showAttr = $showAll ? "h" : "";
@@ -132,7 +132,7 @@ Generate a version history table for a single attachment
 
 sub formatVersions {
     my( $this, $web, $topic, %attrs ) = @_;
-    assert(ref($this) eq "TWiki::Attach") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
 
     my $latestRev =
       $this->store()->getRevisionNumber( $web, $topic, $attrs{name} );
@@ -258,7 +258,7 @@ Build a link to the attachment, suitable for insertion in the topic.
 
 sub getAttachmentLink {
     my ( $this, $web, $topic, $attName, $meta ) = @_;
-    assert(ref($this) eq "TWiki::Attach") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
 
     my %att = $meta->findOne( "FILEATTACHMENT", $attName );
     my $fileComment = $att{comment};
@@ -598,8 +598,8 @@ Migrate old HTML format
 
 sub migrateToFileAttachmentMacro {
     my ( $this, $meta, $text ) = @_;
-    assert(ref($this) eq "TWiki::Attach") if DEBUG;
-    assert(ref($meta) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
+    ASSERT(ref($meta) eq "TWiki::Meta") if DEBUG;
 
     my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
     $text = $before || "";
@@ -656,7 +656,7 @@ CODE_SMELL: Is this really necessary? upgradeFrom1v0beta?
 
 sub upgradeFrom1v0beta {
     my( $this, $meta ) = @_;
-    assert(ref($this) eq "TWiki::Attach") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
 
     my @attach = $meta->find( "FILEATTACHMENT" );
     foreach my $att ( @attach ) {

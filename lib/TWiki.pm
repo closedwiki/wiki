@@ -382,7 +382,7 @@ Write the log for an event to the logfile
 
 sub writeLog {
     my $this = shift;
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
     my $action = shift || "";
     my $webTopic = shift || "";
     my $extra = shift || "";
@@ -408,7 +408,7 @@ intervention. Use this for defensive programming warnings (e.g. assertions).
 
 sub writeWarning {
     my $this = shift;
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
     $this->_writeReport( $warningFilename, @_ );
 }
 
@@ -423,7 +423,7 @@ Prints date, time, and contents of $text to $debugFilename, typically
 
 sub writeDebug {
     my $this = shift;
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
     $this->_writeReport( $debugFilename, @_ );
 }
 
@@ -552,7 +552,7 @@ Write a complete HTML page with basic header to the browser.
 sub writeCompletePage {
     my ( $this, $text, $pageType, $contentType ) = @_;
 
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     $text .= "\n" unless $text =~ /\n$/s;
 
@@ -584,7 +584,7 @@ core settings.
 sub writePageHeader {
     my( $this, $query, $pageType, $contentType, $contentLength ) = @_;
 
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     $query = $this->{cgiQuery} unless $query;
 
@@ -663,7 +663,7 @@ sub redirect {
     my $this = shift;
     my $url = shift;
 
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     my $query = $this->{cgiQuery};
 
@@ -744,7 +744,7 @@ is returned in a quadruple:
 sub readOnlyMirrorWeb {
     my( $this, $theWeb ) = @_;
 
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     my @mirrorInfo = ( "", "", "", "" );
     if( $siteWebTopicName ) {
@@ -831,7 +831,7 @@ Get the name of the currently requested skin
 sub getSkin {
     my $this = shift;
 
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     my $skin = "";
     $skin = $this->{cgiQuery}->param( 'skin' ) if( $this->{cgiQuery} );
@@ -851,7 +851,7 @@ Returns a fully-qualified URL to the specified topic.
 sub getViewUrl {
     my( $this, $theWeb, $theTopic ) = @_;
 
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     $theWeb = $this->{webName} unless $theWeb;
 
@@ -874,7 +874,7 @@ Returns the absolute URL to a TWiki script, providing the wub and topic as
 sub getScriptUrl {
     my( $this, $theWeb, $theTopic, $theScript ) = @_;
 
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     my $url = "$this->{urlHost}$dispScriptUrlPath/$theScript$scriptSuffix/$theWeb/$theTopic";
     # FIXME consider a plugin call here - useful for certificated logon environment
@@ -898,7 +898,7 @@ sub getOopsUrl {
     my( $this, $theWeb, $theTopic, $theTemplate,
         $theParam1, $theParam2, $theParam3, $theParam4 ) = @_;
 
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     my $web = $this->{webName};  # current web
     if( $theWeb ) {
@@ -937,7 +937,7 @@ Note: Function renamed from getWebTopic
 sub normalizeWebTopicName {
     my( $this, $theWeb, $theTopic ) = @_;
 
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     if( $theTopic =~ m|^([^.]+)[\.\/](.*)$| ) {
         $theWeb = $1;
@@ -1673,7 +1673,7 @@ Return public web list, i.e. exclude hidden webs, but include current web
 sub getPublicWebList {
     my $this = shift;
 
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     if( ! @{$this->{publicWebList}} ) {
         my @list = $this->{store}->getAllWebs();
@@ -1708,7 +1708,7 @@ The expanded variables are:
 sub expandVariablesOnTopicCreation {
     my ( $this, $theText, $theUser, $theWikiName, $theWikiUserName ) = @_;
 
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     $theUser = $this->{userName} unless $theUser;
     $theWikiName = $this->{users}->userToWikiName( $theUser, 1 )
@@ -2226,7 +2226,7 @@ table-of-contents generation, and any plugin changes from commonTagsHandler.
 sub handleCommonTags {
     my( $this, $text, $theTopic, $theWeb ) = @_;
 
-    assert(ref($this) eq "TWiki") if DEBUG;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     $theWeb = $this->{webName} unless $theWeb;
 

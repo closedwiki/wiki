@@ -46,7 +46,7 @@ Construct the user management object
 
 sub new {
     my ( $class, $session, $impl ) = @_;
-    assert(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq "TWiki") if DEBUG;
     my $this = bless( {}, $class );
     $this->{session} = $session;
 
@@ -88,7 +88,7 @@ sub _getPasswordHandler {
 
 sub userPasswordExists {
     my ( $this, $user ) = @_;
-    assert(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
 
     my $passwordHandler = $this->_getPasswordHandler();
 
