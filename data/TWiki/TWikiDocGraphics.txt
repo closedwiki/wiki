@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1055023080" format="1.0" version="1.17"}%
+%META:TOPICINFO{author="PeterThoeny" date="1064988720" format="1.0" version="1.18"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -16,6 +16,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 	* <img src="%ATTACHURLPATH%/updated.gif" alt="updated.gif"  width="56" height="8"  /> Updated
 	* <img src="%ATTACHURLPATH%/new.gif" alt="new.gif"  width="28" height="8"  /> New
 	* <img src="%ATTACHURLPATH%/starred.gif" alt="starred.gif"  width="16" height="16"  /> Highlight (positive)
+	* <img src="%ATTACHURLPATH%/stargold.gif" alt="stargold.gif"  width="16" height="16"  /> Favorites (gold star)
 	* <img src="%ATTACHURLPATH%/arrowright.gif" alt="arrowright.gif"  width="16" height="16"  /> Moved to...
 	* <img src="%ATTACHURLPATH%/wip.gif" alt="wip.gif"  width="16" height="16"  /> Work in progress
 	* <img src="%ATTACHURLPATH%/rfc.gif" alt="rfc.gif"  width="16" height="16"  /> Request for comments
@@ -59,3 +60,4 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="rfc.gif" attr="" comment="Request for comments" date="1055022645" path="C:\Data\Temp\rfc.gif" size="177" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="days.gif" attr="" comment="Days" date="1055022662" path="C:\Data\Temp\days.gif" size="125" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="hourglass.gif" attr="" comment="Hour glass" date="1055022919" path="C:\Data\Temp\hourglass.gif" size="128" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="stargold.gif" attr="" comment="Favorites" date="1064988628" path="C:\Data\Temp\stargold.gif" size="180" user="PeterThoeny" version="1.1"}%
