@@ -327,7 +327,12 @@ sub addLinkToEndOfTopic
 {
     my ( $text, $pathFilename, $fileName, $fileComment ) = @_;
     my( $before, $after ) = split( /<!--TWikiCat-->/, $text );
-    if( ! $after ) { $after = ""; }
+    if( $after ) {
+       # PTh 31 Jan 2001: Fixed Codev.CreateLinkToAttachedFileBug
+       $after = "<!--TWikiCat-->$after";
+    } else {
+       $after = "";
+    }
     my $fileLink = "";
     if( $fileName =~ /\.(gif|jpg|jpeg|png)$/i ) {
         if( $fileComment ) {
