@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1039329388" format="1.0" version="1.20"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043824860" format="1.0" version="1.21"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Plugins
@@ -108,8 +108,8 @@ The TWikiFuncModule (=lib/TWiki/Func.pm=) implements ALL official Plugin functio
 
 In addition to TWiki core functions, Plugins can use *predefined hooks*, or *call backs*, listed in the =lib/TWiki/Plugins/EmptyPlugin.pm= module.
 
-	* For best performance, enable only the functions you really need. NOTE: =outsidePREHandler= and =insidePREHandler= are particularly expensive. 
 	* All but the initPlugin are disabled. To enable a call back, remove =DISABLE_= from the function name.
+	* For best performance, enable only the functions you really need. NOTE: =outsidePREHandler= and =insidePREHandler= are particularly expensive. 
 
 ---+++ Plugin Version Detection
 
@@ -146,35 +146,45 @@ The Plugin API handles the details of connecting your Perl module with main TWik
 
 ---+++ Creating the Perl Module 
 
-Copy file =lib/TWiki/Plugins/EmptyPlugin.pm= to =&lt;name&gt;Plugin.pm=. =EmptyPlugin.pm= contains no executable code, so it does nothing, but it's ready to be used. Customize it. Refer to the [[#PluginAPI][Plugin API]] specs for more information.
+Copy file =lib/TWiki/Plugins/EmptyPlugin.pm= to =&lt;name&gt;Plugin.pm=. The =EmptyPlugin.pm= module contains mostly empty functions, so it does nothing, but it's ready to be used. Customize it. Refer to the [[#PluginAPI][Plugin API]] specs for more information.
+
+If your Plugin uses its own modules and objects, you must include the name of the Plugin in the package name. For example, write =Package <nop>MyFirstPlugin::Attrs;= instead of just =Package Attrs;=. Then call it using:
+<pre>
+  use TWiki::Plugins::MyFirstPlugin::Attrs;
+  $var = MyFirstPlugin::Attrs->new();
+</pre>
 
 #CreatePluginTopic
 ---+++ Writing the Documentation Topic
 
 The Plugin documentation topic contains usage instructions and version details. It serves the Plugin files as %TWIKIWEB%.FileAttachments for downloading. (The doc topic is also included _in_ the [[#CreatePluginPackage][distribution package]].) To create a documentation topic:
 
-	1. *Copy* the Plugin topic template from EmptyPlugin. To copy the text, go to the page and:
-		* click Edit
-		* select all in the Edit box & copy 
+	1. *Copy* the Plugin topic template from TWiki.org. To copy the text, go to TWiki:Plugins/PluginPackage and:
+		* enter the Plugin name in the "How to Create a Plugin" section
+		* click Create
+		* select all in the Edit box &amp; copy 
 		* Cancel the edit
-		* paste & save as a text file or new topic on your site
-	2. *Customize* the template for your Plugin; you'll probably want to post a working version on your local TWiki site.
-	3. *Save* your topic as a text file, for use in [[#CreatePluginPackage][packaging]] and [[#PublishPlugin][publishing]] your Plugin.
+		* go back to your site to the %TWIKIWEB% web
+		* In the GoBox enter your Plugin name, for example =MyFirstPlugin=, press enter and create the new topic
+		* paste &amp; save new Plugin topic on your site
+	2. *Customize* your Plugin topic.
+		* In case you plan to publish your Plugin at TWiki.org, use Interwiki names for author names, like TWiki:Main/%WIKINAME%. 
+	3. *Save* your topic, for use in [[#CreatePluginPackage][packaging]] and [[#PublishPlugin][publishing]] your Plugin.
 
 <blockquote style="background-color:#f5f5f5">
 *OUTLINE: Doc Topic Contents* <br />
-Check EmptyPlugin on TWiki.org for the latest Plugin doc topic template. Here's a quick overview of what's covered:
+Check the Plugins web on TWiki.org for the latest Plugin doc topic template. Here's a quick overview of what's covered:
 
 *Syntax Rules:* &lt;<i>Describe any special text formatting that will be rendered.</i>&gt;" 
 
-*<nop>MyFirstPlugin Settings:* &lt;<i>Description and settings for custom Plugin %VARIABLES%, and those required by TWiki.</i>&gt;"
+*Example:* &lt;<i>Include an example of the Plugin in action. Possibly include a static HTML version of the example to compare if the installation was a success!</i>&gt;"
 
-	* *Plugins Preferences* &lt;<i>If user settings are needed, explain... Entering valuse works exactly like %TWIKIWEB%.TWikiPreferences and WebPreferences: six (6) spaces and then:</i>&gt;"
+*Plugin Global Settings:* &lt;<i>Description and settings for custom Plugin %<nop>VARIABLES%, and those required by TWiki.</i>&gt;"
+
+	* *Plugins Preferences* &lt;<i>If user settings are needed, explain... Entering values works exactly like %TWIKIWEB%.TWikiPreferences and WebPreferences: six (6) spaces and then:</i>&gt;"
 		* *Set &lt;<i>EXAMPLE = value added</i>&gt;*
 
-*How-to Instructions:* &lt;<i>Step-by-step set-up guide, user help, whatever it takes to install and run, goes here.</i>&gt;"
-
-*Test Example:* &lt;<i>Include an example of the Plugin in action: if it works, the installation was a success!</i>&gt;"
+*Plugin Installation Instructions:* &lt;<i>Step-by-step set-up guide, user help, whatever it takes to install and run, goes here.</i>&gt;"
 
 *Plugin Info:* &lt;<i>Version, credits, history, requirements - entered in a form, displayed as a table. Both are automatically generated when you create or edit a page in the TWiki:Plugins web.</i>&gt;"
 </blockquote>
@@ -205,5 +215,5 @@ You can release your tested, packaged Plugin to the TWiki community through the 
 	1. *Link* from the doc page to a new, blank page named after the Plugin, and ending in =Dev=, ex: =MyFirstPluginDev=. This is the discussion page for future development. (User support for Plugins is handled in TWiki:Support.)
 
 -- AndreaSterbini - 29 May 2001 <br />
--- PeterThoeny - 14 Sep 2001 <br />
+-- PeterThoeny - 29 Jan 2003 <br />
 -- MikeMannix - 03 Dec 2001	
