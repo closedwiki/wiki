@@ -48,32 +48,44 @@ use vars qw(
 $VERSION = '1.021';
 $pluginName = 'TestFixturePlugin';
 
-# use HTML::Diff to compare the expected and actual brace contents
-sub _compareExpectedWithActual {
-    #my $text = shift;
-    my @tokens = split( /(<!-- \/?(?:expected|actual) -->)/, $_[0] );
+sub _parse {
+    my ( $text, $tag ) = @_;
+
+    $text =~ s/\r//g;
+    $text =~ s/\t/   /g;
+    $text =~ s/[^ -~\n]/./g;
+
+    my @tokens = split( /(<!--\s*\/?(?:expected|actual)\s*\w*\s*-->)/, $text );
     my $errors = "";
     my $expected;
     my $actual;
     my $gather = "";
     my $gathering;
+    my $group = 1;
+    my @list = ();
+    my $opened = 0;
 
     while ( scalar( @tokens )) {
         my $tok = shift( @tokens );
-        if ( $tok eq "<!-- (actual|expected) -->" ) {
+        if ( $tok =~ /<!--\s*(actual|expected)\s*(\d*)\s*-->/ ) {
             $gather = "";
             $gathering = $1;
-        } elsif ( $tok eq "<!-- /expected -->" ) {
+            $opened = $2;
+        } elsif ( $tok =~ /<!--\s*\/expected\s*(\d*)\s*-->/ ) {
             $expected = $gather;
             undef $gathering;
-        } elsif ( $tok eq "<!-- /actual -->" ) {
+        } elsif ( $tok =~ /<!--\s*\/actual\s*(\d*)\s*-->/ ) {
             $actual = $gather;
             undef $gathering;
         } else {
             $gather = $tok;
         }
         if ( defined( $actual ) && defined( $expected )) {
-            $errors .= _compareResults( $expected, $actual );
+            if ( $tag eq "expected" ) {
+                push( @list, $expected );
+            } elsif ( $tag eq "actual" ) {
+                push( @list, $actual );
+            }
             undef $actual;
             undef $expected;
         }
@@ -81,30 +93,60 @@ sub _compareExpectedWithActual {
     if ( $gathering && $gathering eq "actual" && defined( $expected )) {
         $actual = $gather;
     }
+
     if ( defined( $actual ) && defined( $expected )) {
-        $errors .= _compareResults( $expected, $actual );
+        if ( $tag eq "expected" ) {
+            push( @list, $expected );
+        } elsif ( $tag eq "actual" ) {
+            push( @list, $actual );
+        }
+    }
+
+    return \@list;
+}
+
+# use HTML::Diff to compare the expected and actual brace contents
+sub _compareExpectedWithActual {
+    my ( $expected, $actual ) = @_;
+    my $errors = "";
+
+    die "Actual ($#$actual) and expected ($#$expected) blocks don't match"
+      unless $#$actual == $#$expected;
+
+    for my $i ( 0..$#$actual ) {
+        $errors .= _compareResults( $expected->[$i],
+                                    $actual->[$i], $i + 1 );
     }
 
     die $errors if $errors;
 }
 
 sub _compareResults {
-    my ( $expected, $actual ) = @_;
+    my ( $expected, $actual, $group ) = @_;
 
     my $result = "";
     my $diffs = HTML::Diff::html_word_diff($expected, $actual);
+    my $diffc = 0;
 
-    if ( scalar( @$diffs )) {
-        my $diffc = 0;
-        foreach my $diff ( @$diffs ) {
-            if ( $diff->[0] ne 'u' &&
-                 !( $diff->[1] =~ /^\s*$/ &&
-                    $diff->[2] =~ /^\s*$/ )) {
-                $result .= "*** $diff->[0]\n<EXPECTED>\n$diff->[1]\n</EXPECTED>\n<ACTUAL>\n$diff->[2]\n</ACTUAL>\n";
+    foreach my $diff ( @$diffs ) {
+        if ( $diff->[0] ne 'u' &&
+             $diff->[1] !~ /^\s*$diff->[2]\s*$/ &&
+             $diff->[2] !~ /^\s*$diff->[1]\s*$/ ) {
+            my $a = $diff->[1];
+            my $b = $diff->[2];
+            if ( $diff->[0] eq "+" ) {
+                $result .= "\n$group+ $b\n";
+            } elsif ( $diff->[0] eq "-" ) {
+                $result .= "\n$group- $a\n";
+            } else {
+                $result .= "\n$group$diff->[0]- |$a|\n$group$diff->[0]+ |$b|\n";
             }
+            $diffc++;
+        } else {
+            $result .= $diff->[1];
         }
     }
-    return $result;
+    return $diffc ? $result : "";
 }
 
 sub initPlugin {
@@ -169,8 +211,13 @@ sub endRenderingHandler {
     $called{endRenderingHandler} = join(",", @_);
     my $q = TWiki::Func::getCgiQuery();
 
-    if ( $q->param( "test" ) eq "compare" ) {
-        _compareExpectedWithActual( $_[0] );
+    # SMELL@ really only want to call this only once, on the body text.
+    # The only way to see if it's the bloody template is to test
+    # if it contains %TEXT%. Which is an utter, utter hack.
+    if ( $q->param( "test" ) eq "compare" && $0 !~ /%TEXT%) {
+        my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
+        _compareExpectedWithActual( _parse( $text, "expected" ),
+                                    _parse( $_[0], "actual" ));
     }
 }
 
