@@ -1,55 +1,39 @@
-<HTML>
-<HEAD>
-  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (%REVTITLE2% vs. %REVTITLE1%) </TITLE>
-  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX"> %HTTP_EQUIV_ON_VIEW%
-</HEAD>
-<BODY bgcolor="#ffffff">
-<FORM name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
-    </TD>
-    <TD>
-      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (%REVTITLE2% vs. %REVTITLE1%)</FONT>
-    </TD><TD ALIGN="right">
-      %WIKIWEBLIST%
-    </TD>
-  </TR>
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD COLSPAN="2">
-      %WEBTOPICLIST%
-    </TD>
-  </TR>
-</TABLE>
-</FORM>
-%REPEAT%<TABLE width="100%" border="3" cellpadding="0" cellspacing="0">
-  <TR bgcolor="%WEBBGCOLOR%">
-    <TD width="99%">
-      &nbsp;<tt><b>&lt;&lt;O&gt;&gt;</b></tt>&nbsp; Difference Topic <B>%TOPIC%</B> (%REVTITLE1% - %REVINFO1%)
-    </TD>
-  </TR>
-</TABLE>
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:P{"htmldoctype"}%
+<head>
+ <title>%WIKITOOLNAME% . %WEB% . %TOPIC% (%REVTITLE2% vs. %REVTITLE1%)</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+ <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+</head>
+<body bgcolor="#ffffff">
+<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/">
+%TMPL:DEF{"titleaction"}%(%REVTITLE2% vs. %REVTITLE1%)%TMPL:END%
+%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
+%TMPL:P{"standardheader"}%
+</form>
+%REPEAT%<table width="100%" border="3" cellpadding="0" cellspacing="0">
+  <tr bgcolor="%WEBBGCOLOR%">
+    <td width="99%">
+      &nbsp;<tt><b>&lt;&lt;O&gt;&gt;</b></tt>&nbsp; Difference Topic <b>%TOPIC%</b> (%REVTITLE1% - %REVINFO1%)
+    </td>
+  </tr>
+</table>
 %TEXT%
-<BR clear=all>%REPEAT%
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD valign="top">
-      Topic <B>%TOPIC%</B> . {
-      <A href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</A>
-      %REVISIONS% }
-    </TD>
-  </TR>
-</TABLE>
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD valign="top">
-      Revision %REVTITLE2% - %REVINFO2%<br>
-      Revision %REVTITLE1% - %REVINFO1%
-    </TD>
-    <TD width="40%" valign="top">
-      %WEBCOPYRIGHT%
-    </TD>
-  </TR>
-</TABLE>
-</BODY></HTML>
+<br clear="all" />%REPEAT%
+%TMPL:DEF{"topicaction"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a>
+ %REVISIONS% %TMPL:END%
+%TMPL:P{"standardfooter"}%
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+ <tr>
+  <td valign="top">
+    Revision %REVTITLE2% - %REVINFO2%<br />
+    Revision %REVTITLE1% - %REVINFO1%
+  </td>
+  <td width="40%" valign="top">
+   %WEBCOPYRIGHT%
+  </td>
+ </tr>
+</table>
+</body>
+</html>

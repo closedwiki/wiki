@@ -1,7 +1,9 @@
-<html>
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:P{"htmldoctype"}%
 <head>
-  <title>%WIKITOOLNAME% . %WEB% . %TOPIC%</title>
-  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <meta name="ROBOTS" content="NOINDEX"> %HTTP_EQUIV_ON_VIEW%
+ <title> %WIKITOOLNAME% . %WEB% . %TOPIC%</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
 </head>
 <body bgcolor="#ffffff">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -13,11 +15,13 @@
 </table>
 <p>
 %TEXT%
-<br clear=all><p>
+%META{"form"}%
+%META{"attachments"}%
+<p>
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
   <tr bgcolor="%WEBBGCOLOR%">
     <td valign="top">
-      ===== Revision %REVINFO%
+      =-----= Revision %REVINFO%
     </td>
   </tr>
 </table>
