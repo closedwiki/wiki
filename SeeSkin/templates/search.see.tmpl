@@ -5,19 +5,20 @@
  %TMPL:P{"css"}%
 </head>
 <body>
-#PageTop
+#PageTop 
 <div id="topsection"> %TMPL:P{"searchbox"}% </div>
 <div id="content">
----+ Recent changes in %WEB% web
-
-<table width="100%" border="0" cellpadding="0" cellspacing="4">
-<tr>
+---+ Search results
+%SPLIT%Search: <b> %SEARCHSTRING% </b>
+<p />
+%SPLIT%<table width="100%" border="0" cellpadding="0" cellspacing="4">
+<tr bgcolor="%WEBBGCOLOR%">
   <td width="50%">
-    <strong>Topic:</strong>
+    <b>Topics in <nop>%WEB% web:</b>
   </td><td width="30%">
-    <strong>Changed:</strong> now %GMTIME{"$hour:$min"}% GMT
+    <b>Changed:</b> now %GMTIME{"$hour:$min"}% GMT
   </td><td width="20%">
-    <strong>Changed by:</strong>
+    <b>Changed by:</b>
   </td>
 </tr>
 </table>
@@ -40,18 +41,20 @@
     &nbsp;
   </td>
 </tr></table>
-%REPEAT%<p />
+%REPEAT%<br clear="all" />
+<p />%SPLIT%Number of topics: <b>%NTOPICS%</b>
+<p />%SPLIT%
 </div><!-- end content -->
 
 <hr class="nocss">
 <dl id="navigate">
 	<dt><a name="Navigate"></a>Near:
-	<dd>%WEBTOPICLIST%
+	<dd> %WEBTOPICLIST%
 	<dt><a name="%TMPL:P{"weblabel"}%s"></a>Far:
-	<dd>%WIKIWEBLIST%
+	<dd> %WIKIWEBLIST%
 </dl>
-<div id="logochar">%LOGOCHAR%</div>
-<span id="bugreport">%TMPL:P{"bugreport"}%</span>
+<div id="logochar"> %LOGOCHAR% </div>
+<span id="bugreport"> %TMPL:P{"bugreport"}% </span>
 #PageBottom
 </body>
 </html>

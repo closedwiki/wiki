@@ -32,8 +32,7 @@
 %TMPL:DEF{"standardheader"}%
 <div id="topsection">
 	<h1 class="nocss">%LOGOCHAR% %INTURLENCODE{"%TOPIC%"}% %TMPL:P{"titleaction"}%</h1>
-		<!-- <form id="search"> -->
-		<form id="search" name="photonsearch" action="%SCRIPTURLPATH%/photonsearch%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%" method="post">
+		<form id="search" name="photonsearch" action="%SCRIPTURLPATH%/photonsearch%SCRIPTSUFFIX%/%INTURLENCODE{'%INCLUDINGWEB%'}%" method="post">
 			<p align="right">
 		<input type="text" name="topic" size="10" title="type topic name to search for and press [Enter]" accesskey="/" /> <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebSearch" title="Go to advanced search form">Search</a>
 	</form>
@@ -47,13 +46,11 @@
 %TMPL:END%
 %TMPL:DEF{"simpleheader"}%
 <h1>%LOGOCHAR%  %INTURLENCODE{"%TOPIC%"}% <span class="deem">%TMPL:P{"titleaction"}%</span></h1>
-%TMPL:P{"headerhelp"}%
-%TMPL:P{"webaction"}%
-%TMPL:END%
+%TMPL:P{"headerhelp"}% %TMPL:P{"webaction"}% %TMPL:END%
 %TMPL:DEF{"searchbox"}%
-<form id="search" name="photonsearch" action="%SCRIPTURLPATH%/photonsearch%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%" method="post">
+<form id="search" name="photonsearch" action="%SCRIPTURLPATH%/photonsearch%SCRIPTSUFFIX%/%INTURLENCODE{'%INCLUDINGWEB%'}%" method="post">
 		<p align="right">
-	<input type="text" name="topic" size="10" title="type topic name to search for and press [Enter]" accesskey="/" /> <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebSearch" title="Go to advanced search form">Search</a>
+	<input type="text" name="topic" size="12" title="type topic name to search for and press [Enter]" accesskey="/" /> <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebSearch" title="Go to advanced search form">Search</a>
 </form>%TMPL:END%
 %TMPL:DEF{"menu"}%
 %TMPL:P{"webaction"}%
@@ -63,6 +60,12 @@
 	Topic <strong>%TOPIC%</strong> . { %TMPL:P{"topicaction"}% }
 	<span id="bugreport">%TMPL:P{"bugreport"}%</span>
 	</div>
+	<!-- These extra divs/spans may be used as catch-alls to add extra imagery. -->
+	<!-- Add a background image to each and use width and height to control sizing, place with absolute positioning -->
+	<!-- There's a rather nasty colour shift bug with transparent GIFs in Netscape 6/7 and Mozilla v1.0 up to v1.3 (in which it's fixed),
+			so make sure to test your work in these browsers. -->
+	<div id="extraDiv1"><span></span></div><div id="extraDiv2"><span></span></div><div id="extraDiv3"><span></span></div>
+	<div id="extraDiv4"><span></span></div><div id="extraDiv5"><span></span></div><div id="extraDiv6"><span></span></div>
 %TMPL:END%
 %TMPL:DEF{"plainfooter"}%
 	%TMPL:P{"topicaction"}%
@@ -82,14 +85,7 @@
 %TMPL:P{"message"}%
 <p />
 %TMPL:P{"standardfooter"}%
-<!-- These extra divs/spans may be used as catch-alls to add extra imagery. -->
-<!-- Add a background image to each and use width and height to control sizing, place with absolute positioning -->
-<!-- There's a rather nasty colour shift bug with transparent GIFs in Netscape 6/7 and Mozilla v1.0 up to v1.3 (in which it's fixed),
-		so make sure to test your work in these browsers. -->
-<div id="extraDiv1"><span></span></div><div id="extraDiv2"><span></span></div><div id="extraDiv3"><span></span></div>
-<div id="extraDiv4"><span></span></div><div id="extraDiv5"><span></span></div><div id="extraDiv6"><span></span></div>
 #PageBottom
-<span id="bugreport">%TMPL:P{"bugreport"}%</span>
 </body>
 </html> %TMPL:END%
 %TMPL:DEF{"sep"}%<dd>%TMPL:END%
