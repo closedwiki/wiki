@@ -6,4 +6,4 @@ mkdir twiki/templates
 cp cgi-bin/tmp/twiki/templates/* twiki/templates/
 
 # $account = /Users/(twiki)/Sites
-#echo `wget -O - http://localhost/~twiki/twiki/bin/manage?action=relockrcs | grep code | wc -l` topic(s) unlocked
+#echo `wget -O - http://localhost/~twiki/cgi-bin/twiki/manage?action=relockrcs | grep code | wc -l` topic(s) unlocked
