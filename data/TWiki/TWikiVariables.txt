@@ -34,7 +34,7 @@
   <td> Your login username, is <b>%USERNAME%</b> </td>
 </tr><tr>
   <td> =%<nop>WIKIUSERNAME%= </td>
-  <td> Your Wiki username, if defined in %MAINWEB%.TWikiUsers. Same as %<nop>USERNAME% if not defined. Is <b>%WIKIUSERNAME%</b> </td>
+  <td> Your Wiki username, if defined in %MAINWEB%.%WIKIUSERSTOPIC%. Same as %<nop>USERNAME% if not defined. Is <b>%WIKIUSERNAME%</b> </td>
 </tr><tr>
   <td> =%<nop>WEB%= </td>
   <td> The current web, is <b>%WEB%</b> </td>
@@ -93,7 +93,7 @@ Example: =<b>%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%</b>= </td>
 
 </tr></table>
 
-[1] __Note__: A web can be excluded from a =web="all"= search if you define a =NOSEARCHALL=on= variable in its WebPreferences.
+[1] __Note__: A web can be excluded from a =web="all"= search if you define a =NOSEARCHALL=on= variable in its %WEBPREFSTOPIC%.
 
 Additional variables are defined in the preferences ( site-level ( __SL__ ) in %TWIKIWEB%.%WIKIPREFSTOPIC%, web-level ( __WL__ ) in %WEBPREFSTOPIC% of each web, and user level ( __UL__ ) preferences in individual user topics):
 
