@@ -39,6 +39,17 @@ sub renderCellData
 {
     my( $data, $topic ) = @_;
     if( $data ) {
+#improve meta-data diff's - Main.PeterKlausner
+        if( $data =~ /%META/ )
+        {
+            $data =~ s(^%META:TOPICPARENT.*="([^"]+).*$)
+                      (|*META TOPICPARENT*|$1 ||)gm;
+            $data =~ s(^%META:FIELD.name="(.*?)".title="(.*?)".value="(.*?)".*$)
+                      (|*META FIELD $2*|$1 |$3 |)gm;
+            $data =~ s(^%META:([A-Z]+).\w+="([^"]+)"(.*).%$)
+                      (|*META $1*|$2 |$3 |)gm;
+        }
+
         $data = &TWiki::handleCommonTags( $data, $topic );
         $data = &TWiki::getRenderedVersion( $data );
         if( $data =~ m/<\/?(th|td|table)/i )
