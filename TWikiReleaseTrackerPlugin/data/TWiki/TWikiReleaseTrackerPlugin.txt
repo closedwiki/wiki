@@ -4,6 +4,32 @@
 
 The TWiki Release Tracker (aka TRT) plugin tells you exactly how your install differs from every production and beta release of TWiki.
 
+---++ Synopsis
+
+This plugin provides an interface to show to what degree a TWiki
+installation is different from the distribution from which it was
+installed. After installing TWiki, many administrators make minor
+modifications to tweak its functionality or to apply patches. While
+the some adminstrators keep a patch log, alterations often get
+forgotten about. Upgrading poses a problem when adminstrators make
+local changes to code because the code changes get lost in the
+upgrade.  This in turn can make some users reticent about
+upgrading. Furthermore it can be package up and feedback such changes
+back to TWiki.org.
+
+This plugin provides a web-based environment to query the differences:
+users can walk around the code base, get a per-file fast comparison by
+comparing the MD5 index of their installation with that of the
+distribution and then examine it in depth by instructing it to produce
+diffs. 
+
+The command line environment adds commands that give the user to save
+the diffs as a patch file to be used to refit their changes onto a new
+release, and that same patch file can be shared with the community to
+accelerate TWiki development.
+
+---++ Further development
+
 If you find it useful, please send me (Martin AT Cleaver.org) a note of thanks. 
 Donations towards specifics for further development can be sent to the same paypal address.
 
