@@ -153,15 +153,10 @@ if (defined $^V) {
 
  
 
-# Detect OS in more detail, in order to get type of Perl on Windows
-my $opsys ='';
+# Detect Perl flavour on Windows, and Cygwin Perl/RCS package versions
 my ($perltype, @lines);
 my $rcsver;
-unless ($opsys = $^O) {
-    require Config;
-    $opsys = $Config::Config{'osname'};
-}
-if ($opsys eq 'cygwin') {
+if ($detailedOS eq 'cygwin') {
     $perltype = 'Cygwin';
 
     # Get Cygwin perl-x.x package version number
@@ -192,7 +187,7 @@ if ($opsys eq 'cygwin') {
 	$rcsver = $pkg;		# Use package version number, more detailed
     }
 
-} elsif ($opsys=~/win/i && $opsys !~ /darwin/i ) {
+} elsif ($detailedOS=~/win/i && $detailedOS !~ /darwin/i ) {
     $perltype = 'ActiveState';
     $perlver .= ", build " . Win32::BuildNumber();	# ActivePerl only
 } else {
@@ -227,7 +222,8 @@ my $USE_MOD_PERL = ((exists $ENV{'GATEWAY_INTERFACE'}
 
 
 # OS
-print "<tr><th align=\"right\">Operating system:</th><td>" . ucfirst(lc($OS)) . "</td></tr>\n";
+print "<tr><th align=\"right\">Operating system:</th><td>" . 
+		ucfirst(lc($OS)) . " ($detailedOS)" . "</td></tr>\n";
 
 # Perl version
 print "<tr><th align=\"right\">Perl version:</th><td>$perlver";
@@ -249,9 +245,9 @@ print "This is the Perl library path, used to load TWiki modules, ";
 print "third-party modules used by some plugins, and Perl built-in modules.";
 print "</td></tr>\n";
 
-# Add to list of required modules if non-Unix, e.g. Windows and MacOS X 
-# FIXME: also needed for most non-Unix OSes 
-if ( $OS ne 'UNIX' ) {
+# Add to list of required modules if non-Unix, or MacOS X (detected by
+# Perl as 'Darwin)
+if ( $detailedOS =~ /darwin/i or $OS ne 'UNIX' ) {
     push @requiredMods,  @requiredModsNonUnix;
 }
 
