@@ -1,0 +1,129 @@
+%META:TOPICINFO{author="guest" date="1098330689" format="1.0" version="1.2"}%
+---+!! TWiki Shell
+
+%TOC%
+
+---+ Purpose
+
+TWikiShellContrib is  a shell that can be use to replace all twiki command line scripts with a single interface. Each command available in the twikishell is also available as a command line option using the -e switch.
+
+---+ Installation
+
+	* Make sure that Term::Shell is installed (either in the perl distribution or locally in twiki)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	| *File:* | *Description:* |
+
+If you have a non-standard instalation, then move the files wherever you need them to be.
+
+---+ Usage
+
+In the TWiki home directory, there is an uber-command:
+	* twikishell
+
+This will fire the shell. The following command line options are available:
+
+| *Option* | *Description* |
+| -v | Verbose mode (Verbosity level 1) (Default) |
+| -vv | Very Verbose mode (Verbosity level 2) |
+| -q | Quiet Operation (Verbosity level 0) |
+| -e <command> | Execute the specified command. Must be the last option in the cli. i.e: twikishell -e install plugin CalendarPlugin|
+
+---+ Operation
+
+When the shell starts, it first try to load the .twikishellrc file for the stored configuration. If it can't find it, it 'll try to guess where setlib.cfg is, and if it can't find it it will ask the user for it's location.
+
+Once it knows the setlib.cfg directory or if the config file is found, the correct twikiLibPath is addded to the @INC var and the shell is ready to go.
+
+On a bare installation (without any Extensions installed), you have the following available commands:
+
+| *Command* | *Description* |
+| help | Shows a list of available commands  |
+| exit, q , quit | Quits the shell |
+| import <perl module> | Imports a perl module and scan it for new commands to be added to the shell |
+| verbose <level> | Changes the verbosity level to either 1 or 2 |
+| quiet | Changes the verbosity level to 0 |
+
+The config file is a dump (using Data::Dumper) of the configuration object used internally
+
+---+ Extensions
+
+---++ Creation
+
+An extention is a perl module inside the TWiki::Contrib::TWikiShellContrib::Ext that defines one or more of the following subs:
+
+| *Sub* | *Description*|
+| run | Command execution |
+| smry | One-line help to be used by "help" to sumarize all the commands |
+| help | Complete help to be shown by the "help <command>" command |
+| run_<subcommand> | SubCommand execution |
+| smry_<subcommand> | One-line help to be used by "help" to sumarize all the commands |
+| help_<subcommand> | Complete help to be shown by the "help <command> <subcommand>" command |
+
+There are several ways to implement extentions. The first thing to understand is how the commands map to perl modules and handler subs. See the following table:
+
+| *command/subcommand* | *Module Name* | *Implemented Handlers * |
+| dump | Dump | run, smry, help |
+| dump config | Dump | run_config, smry_config, help_config |
+|^ | Dump::Config | run, smry, help |
+| dump handlers | Dump | run_handlers, smry_handlers, help_handlers |
+|^ | Dump::Handlers | run, smry, help |
+
+Module Name assumes the TWiki::Contrib::TWikiShellContrib::Ext prefix
+
+For an example, check the Dump.pm module (implementation of the dump command).
+
+---++ Loading an extension to the Shell
+
+To load an extension, use:
+
+<verbatim>
+	import <command>
+</verbatim>
+
+or 
+
+<verbatim>
+	import <extention_module_without_prefix>
+</verbatim>
+
+Also, if the extension is in a subpackage of Ext (like the Dump extension) it will be imported automatically on it first invocation (for example, the Dump extension will be loaded automatically when the dump, dump config or dump handlers commands are called). 
+
+---++ Extension contract
+
+All the handlers will be called with the following parameters (in order):
+
+|*Parameter*|*Description*|
+|$shell| A reference to the shell object |
+|$config| A reference to the config object|
+|@args| The list of parameters passed to the command|
+
+---+ Config Object
+
+The config object provides a centralized place where extentions can store their settings. It's a blessed hash with the following published methods
+
+	 
+	* sub printVeryVerbose : Prints no matter what is the verbosity
+	* sub printNotQuiet : Print if verbosity is not 0
+	* sub save : Save the configuration to the .twikishellrc file, using Data::Dumper
+
+Also, the configuration will always have the following variables set:
+
+	* twikiBinDir : TWiki bin directory (where setlib.cfg is)
+	* twikiLibPath : TWiki lib directory 
+	* verbosity : Last verbosity set
+
+
+Any extention that want to store a setting in the config object, must call the save method.
+
+---+ Contrib Info
+
+| Authors: | TWiki:Main.CrawfordCurrie, TWiki:Main.MartinCleaver,TWiki:Main.RafaelAlvarez |
+| Copyright &copy;: | 2004, Crawford Currie, Rafael Alvarez and Martin Cleaver|
+| License: | GPL |
+| Dependencies: | Term::Shell |
+| 21/10/04 | 1.000 Initial release, based on the work of TWiki:Main.CrawfordCurrie, TWiki:Main.MartinCleaver|
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ TWiki:Main.TWikiShell
+
