@@ -248,22 +248,28 @@ sub collectLogData
     my %statSaves;
     my %statUploads;
 
-    my ($webName, $opName, $topicName);
+    my ($webName, $opName, $topicName, $userName);
     binmode $TMPFILE;
     while ( <$TMPFILE> ) {
         my $line = $_;
 	$line =~ s/\r*\n$//o;		# Clean out line endings
 
-	$line =~ /^\|[^\|]*\| ([A-Z0-9]+\.[A-Z0-9]+) \| ([A-Z0-9]+) \| ([A-Z0-9]+)[. ]/io;
-	my $userName = $1;		# Main.FredBloggs
-	$opName = $2;
-	$webName = $3;
+	$line =~ /^\|[^\|]*\| ([A-Za-z0-9]+\.[A-Za-z0-9]+) \| ([A-Za-z0-9]+) \| ([A-Za-z0-9]+)[. ]/o;
+	$userName = $1 || "";		# Main.FredBloggs
+	$opName = $2 || "";
+	$webName = $3 || "";
+	if (!defined $1) {
+	    TWiki::writeDebug("Invalid log file line = '$line'");
+	    TWiki::writeDebug("userName = '$userName'");
+	    TWiki::writeDebug("opName = '$opName'");
+	    TWiki::writeDebug("webName = '$webName'");
+	}
 
 	my $logContrib = 0;
 	if ($opName eq 'view' ) {
 	    $statViews{$webName}++;
 	    # Pick up the topic name - should be in this log entry
-	    $line =~ /^\|[^\|]*\| ([A-Z0-9]+\.[A-Z0-9]+) \| ([A-Z0-9]+) \| ([A-Z0-9]+)\.([A-Z0-9]+) /io;
+	    $line =~ /^\|[^\|]*\| ([A-Za-z0-9]+\.[A-Za-z0-9]+) \| ([A-Za-z0-9]+) \| ([A-Za-z0-9]+)\.([A-Za-z0-9]+) /o;
 	    $topicName = $4;
 	    $view{$webName}{$topicName}++;
 	} elsif ($opName eq 'save' ) {
