@@ -677,8 +677,12 @@ sub _readKeyValues {
         $value =~ s/%_N_%/\n/g;
         $value =~ s/%_Q_%/\"/g;
         $value =~ s/%_P_%/%/g;
+        $value =~ s/&/&amp\;/go;
+        $value =~ s/</&lt\;/go;
+        $value =~ s/>/&gt\;/go;
         $res->{$key} = $value;
     }
+
     return $res;
 }
 
@@ -726,7 +730,9 @@ sub saveTopic {
     # more sensible.
     $text = _writeMeta( $meta, $text );  # add meta data for Plugin callback
     my $plugins = $this->{session}->{plugins};
+
     $plugins->beforeSaveHandler( $text, $topic, $web );
+
     # remove meta data again!
     $meta = $this->extractMetaData( $web, $topic, \$text );
 

@@ -43,11 +43,14 @@ use TWiki::UI::OopsException;
 #TODO: this needs to be exposed to plugins and whoever might want to over-ride the rendering of diffs
 #Hash, indexed by diffType (+,-,c,u,l.....)
 #contains {colour, CssClassName}
-my %diffColours = ( '+' => [ '#ccccff', 'twikiDiffAddedMarker'],
-                    '-' => [ '#ff9999', 'twikiDiffDeletedMarker'],
-                    'c' => [ '#99ff99', 'twikiDiffChangedText'],
-                    'u' => [ '#ffffff', 'twikiDiffUnchangedText'],
-                    'l' => [ '#eeeeee', 'twikiDiffLineNumberHeader'] );
+my %format =
+  (
+   '+' => [ '#ccccff', 'twikiDiffAddedMarker'],
+   '-' => [ '#ff9999', 'twikiDiffDeletedMarker'],
+   'c' => [ '#99ff99', 'twikiDiffChangedText'],
+   'u' => [ '#ffffff', 'twikiDiffUnchangedText'],
+   'l' => [ '#eeeeee', 'twikiDiffLineNumberHeader']
+  );
 
 #SVEN - new design.
 #main gets the info (NO MAJOR CHANGES NEEDED)
@@ -68,42 +71,51 @@ my %diffColours = ( '+' => [ '#ccccff', 'twikiDiffAddedMarker'],
 #| Parameter: =$topic= |  |
 #| Return: =$text= | Formatted html text |
 #| TODO: | this should move to Render.pm |
-#| TODO: | need to fix unmatched <p>, <div> and.... |
 sub _renderCellData {
     my( $session, $data, $web, $topic ) = @_;
-    if (( $data ) && ( $data ne '' )) {
-        #improve meta-data diff's - Main.PeterKlausner
-        if( $data =~ /%META/ ) {
-            $data =~ s(^%META:TOPICPARENT.*="([^"]+).*$)
-              (|*META TOPICPARENT*|$1 ||)gm;
-            $data =~ s(^%META:FIELD.name="(.*?)".title="(.*?)".value="(.*?)".*$)
-              (|*META FIELD $2*|$1 |$3 |)gm;
-            $data =~ s(^%META:([A-Z]+).\w+="([^"]+)"(.*).%$)
-              (|*META $1*|$2 |$3 |)gm;
-        }
+    if ( $data ){
+        $data =~ s(^%META:TOPICPARENT.*="([^"]+).*$)
+          (|*META TOPICPARENT*|$1 ||)gm;
+        $data =~ s(^%META:FIELD.name="(.*?)".title="(.*?)".value="(.*?)".*$)
+          (|*META FIELD $2*|$1 |$3 |)gm;
+        $data =~ s(^%META:([A-Z]+).\w+="([^"]+)"(.*).%$)
+          (|*META $1*|$2 |$3 |)gm;
+
         $data = $session->handleCommonTags( $data, $web, $topic );
         $data = $session->{renderer}->getRenderedVersion( $data, $web, $topic );
-        if( $data =~ m/<\/?(th|td|table)/i ) {
-            # data has <th> or <td>, need to fix <table>
+        # Match up table tags, remove comments
+        if( $data =~ m/<\/?(th|td|table)\b/i ) {
+            # data has <th> or <td>, need to fix ables
             my $bTable = ( $data =~ s/(<table)/$1/gois ) || 0;
             my $eTable = ( $data =~ s/(<\/table)/$1/gois ) || 0;
-            my $i = 0;
-            if( $bTable > $eTable ) {
-                for( $i = $eTable; $i < $bTable; $i++ ) {
-                    $data .= '</table>';
-                }
-            } elsif( $bTable < $eTable ) {
-                for( $i = $bTable; $i < $eTable; $i++ ) {
-                    $data = "\n<table>".$data;
-                }
-            } elsif( ( $bTable == 0 ) && ( $eTable == 0 ) ) {
-                $data = "\n<table>$data\n</table>";
+            while( $eTable < $bTable ) {
+                $data .= CGI::end_table();
+                $eTable++;
+            }
+            while( $bTable < $eTable ) {
+                $data = CGI::start_table().$data;
+                $bTable++;
+            }
+            unless( $bTable ) {
+                $data = CGI::start_table().$data.CGI::end_table();
             }
         }
         #remove the <!--- type tag (i don't know how you would find the matching >)
-        $data =~ s/<!/&lt!/go;
+        #$data =~ s/<!/&lt!/go;
     }
     return $data;
+}
+
+sub _sideBySideRow {
+    my( $left, $right, $lc, $rc ) = @_;
+
+    my $d1 = CGI::td({ bgcolor=>$format{$lc}[0],
+                       class=>$format{$lc}[1],
+                       valign=>'top'}, $left.'&nbsp;' );
+    my $d2 = CGI::td({ bgcolor=>$format{$rc}[0],
+                       class=>$format{$rc}[1],
+                       valign=>'top'}, $right.'&nbsp;' );
+    return CGI::Tr( $d1 . $d2 );
 }
 
 #| Description: | render the Diff entry using side by side |
@@ -121,40 +133,22 @@ sub _renderSideBySide
     $right = _renderCellData( $session, $right, $web, $topic );
 
     if ( $diffType eq '-') {
-        $result .= '<tr><td bgcolor="'.$diffColours{'-'}[0].
-          '" class="'.$diffColours{'-'}[1].
-            '" valign="top">'.$left.'&nbsp;</td>';
-        $result .= '<td bgcolor="'.$diffColours{u}[0].
-          '" class="'.$diffColours{u}[1].
-            '" valign="top">'.$right.'&nbsp;</td></tr>';
+        $result .= _sideBySideRow( $left, $right, '-', 'u' )
     } elsif ( $diffType eq "+") {
-        $result .= '<tr><td bgcolor="'.$diffColours{u}[0].
-          '" class="'.$diffColours{u}[1].
-            '" valign="top">'.$left.'&nbsp;</td>';
-        $result .= '<td bgcolor="'.$diffColours{"+"}[0].
-          '" class="'.$diffColours{"+"}[1].
-            '" valign="top">'.$right.'&nbsp;</td></tr>';
+        $result .= _sideBySideRow( $left, $right, 'u', '+' )
     } elsif ( $diffType eq "u") {
-        $result .= '<tr><td bgcolor="'.$diffColours{u}[0].
-          '" class="'.$diffColours{u}[1].
-            '" valign="top">'.$left.'&nbsp;</td>';
-        $result .= '<td bgcolor="'.$diffColours{u}[0].
-          '" class="'.$diffColours{u}[1].
-            '" valign="top">'.$right.'&nbsp;</td></tr>';
+        $result .= _sideBySideRow( $left, $right, 'u', 'u' )
     } elsif ( $diffType eq "c") {
-        $result .= '<tr><td bgcolor="'.$diffColours{c}[0].
-          '" class="'.$diffColours{c}[1].
-            '" valign="top">'.$left.'&nbsp;</td>';
-        $result .= '<td bgcolor="'.$diffColours{c}[0].
-          '" class="'.$diffColours{c}[1].
-            '" valign="top">'.$right.'&nbsp;</td></tr>';
-    } elsif ( $diffType eq "l") {
-        if (( $left ne '' ) && ($right ne '' )) {
-            $result .= '<tr bgcolor="'.$diffColours{l}[0].
-              '" class="'.$diffColours{l}[1].
-                '"><th align="center">Line: '.$left.
-                  '</th><th align="center">Line: '.$right.'</th></tr>';
-        }
+        $result .= _sideBySideRow( $left, $right, 'c', 'c' )
+    } elsif ( $diffType eq "l" && $left ne '' && $right ne '' ) {
+        $result .= CGI::Tr({
+                            bgcolor=>$format{l}[0],
+                            class=>$format{l}[1],
+                           },
+                           CGI::th({align=>'center'},
+                                   'Line: '.$left).
+                           CGI::th({align=>'center'},
+                                   'Line: '.$right));
     }
     return $result;
 }
@@ -171,18 +165,41 @@ sub _renderDebug
     my $result = '';
 
     #de-html-ize
+    $left =~ s/&/&amp;/go;
     $left =~ s/</&lt;/go;
-    $right =~ s/</&lt;/go;
     $left =~ s/>/&gt;/go;
+    $right =~ s/&/&amp;/go;
+    $right =~ s/</&lt;/go;
     $right =~ s/>/&gt;/go;
 
-    $result = '<hr>type: '.$diffType."\n";
-    $result .= '<div style="border: 1px dotted;">'.$left.'</div>';
-    $result .= '<div style="border: 1px dotted;">'.$right.'</div>';
+    $result = CGI::hr().'type: '.$diffType;
+    $result .= CGI::div({style=>'border: 1px dotted;'}, $left);
+    $result .= CGI::div({style=>'border: 1px dotted;'}, $right);
 
     return $result;
 }
 
+sub _sequentialRow {
+    my( $bg, $hdrcls, $bodycls, $data, $code, $char ) = @_;
+    my $row = '';
+    if( $char ) {
+        $row = CGI::td({bgcolor=>$format{$code}[0],
+                        class=>$format{$code}[1],
+                        valign=>'top',
+                        width=>"1%"},
+                       $char.CGI::br().$char);
+    }
+    $row .= CGI::td({class=>"twikiDiff${bodycls}Text"}, $data);
+    $row = CGI::Tr( $row );
+    if( $bg ) {
+        return CGI::Tr(CGI::td({bgcolor=>$bg,
+                                class=>"twikiDiff${hdrcls}Header",
+                                colspan=>9},
+                               CGI::b( " $hdrcls: "))).$row;
+    } else {
+        return $row;
+    }
+}
 
 #| Description: | render the Diff using old style sequential blocks |
 #| Parameter: =$diffType= | {+,-,u,c,l} denotes the patch operation |
@@ -197,48 +214,40 @@ sub _renderSequential
 
     #note: I have made the colspan 9 to make sure that it spans all columns (thought there are only 2 now)
     if ( $diffType eq '-') {
-        $result .= '<tr><td bgcolor="#FFD7D7" class="twikiDiffDeletedHeader" colspan ="9"><b> Deleted: </b></td></tr>';
-        $result .= '<tr><td bgcolor="'.$diffColours{"-"}[0].
-          '" class="'.$diffColours{"-"}[1].
-            '" valign="top" width="1%">&lt;<br />&lt;</td>';
-        $result .= '<td class="twikiDiffDeletedText">';
-        $result .= _renderCellData( $session, $left, $web, $topic );
-        $result .= '</td></tr>';
+        $result .=
+          _sequentialRow( '#FFD7D7',
+                          'Deleted', 'Deleted',
+                          _renderCellData( $session, $left, $web, $topic ),
+                          '-', '&lt;');
     } elsif ( $diffType eq '+') {
-        $result .= '<tr><td bgcolor="#D0FFD0" class="twikiDiffAddedHeader" colspan ="9"><b> Added:   </b></td></tr>';
-        $result .= '<tr><td bgcolor="'.$diffColours{"+"}[0].
-          '" class="'.$diffColours{"+"}[1].
-            '" valign="top" width="1%">&gt;<br />&gt;</td>';
-        $result .= '<td class="twikiDiffAddedText">';
-        $result .= _renderCellData( $session, $right, $web, $topic );
-        $result .= '</td></tr>';
+        $result .=
+          _sequentialRow( '#D0FFD0',
+                          'Added', 'Added',
+                          _renderCellData( $session, $right, $web, $topic ),
+                          '+', '&gt;' );
     } elsif ( $diffType eq 'u') {
-        $result .= '<tr><td valign="top" bgcolor="'.$diffColours{u}[0].
-          '" class="'.$diffColours{u}[1].
-            '" width="1%"><br /></td>';
-        $result .= '<td class="twikiDiffUnchangedText">';
-        $result .= _renderCellData( $session, $right, $web, $topic );
-        $result .= '</td></tr>';
+        $result .=
+          _sequentialRow( undef,
+                          'Unchanged', 'Unchanged',
+                          _renderCellData( $session, $right, $web, $topic ),
+                          'u', '' );
     } elsif ( $diffType eq 'c') {
-        $result .= '<tr><td bgcolor="#D0FFD0" class="twikiDiffChangedHeader" colspan ="9"><b> Changed: </b></td></tr>';
-        $result .= '<tr><td bgcolor="'.$diffColours{"-"}[0].
-          '" class="'.$diffColours{"-"}[1].
-            '" valign="top" width="1%">&lt;<br />&lt;</td>';
-        $result .= '<td class="twikiDiffDeletedText">';
-        $result .= _renderCellData( $session, $left, $web, $topic );
-        $result .= '</td></tr>';
-        $result .= '<tr><td bgcolor="'.$diffColours{"+"}[0].
-          '" class="'.$diffColours{"+"}[1].
-            '" valign="top" width="1%">&gt;<br />&gt;</td>';
-        $result .= '<td class="twikiDiffAddedText">';
-        $result .= _renderCellData( $session, $right, $web, $topic );
-        $result .= '</td></tr>';
-    } elsif ( $diffType eq 'l') {
-        if (( $left ne '' ) && ($right ne '' )) {
-            $result .= '<tr bgcolor="'.$diffColours{"l"}[0].
-              '" class="twikiDiffLineNumberHeader"><th align="left" colspan="9">Line: '.
-                "$left to $right</th></tr>";
-        }
+        $result .=
+          _sequentialRow( '#D0FFD0',
+                          'Changed', 'Added',
+                          _renderCellData( $session, $left, $web, $topic ),
+                          '-', '&lt;' );
+        $result .=
+          _sequentialRow( undef,
+                          'Changed', 'Added',
+                          _renderCellData( $session, $right, $web, $topic ),
+                          '+', '&gt;' );
+    } elsif ( $diffType eq 'l' && $left ne '' && $right ne '' ) {
+        $result .= CGI::Tr({bgcolor=>$format{l}[0],
+                            class=>'twikiDiffLineNumberHeader'},
+                           CGI::th({align=>'left',
+                                    colspan=>9}, 'Line: '.
+                                   "$left to $right"));
     }
 
     return $result;
@@ -268,43 +277,48 @@ sub _renderRevisionDiff
 	}
 	my $diffArray_ref = \@diffArray;
 
-    my $result = '<table class="twikiDiffTable" width="100%" cellspacing="0">';
+
+    my $result = "";
     my $data = '';
     my $diff_ref = undef;
     for my $next_ref ( @$diffArray_ref ) {
     	if (( @$next_ref[0] eq 'l' ) && ( @$next_ref[1] eq 0 ) && (@$next_ref[2] eq 0)) {
-	    next;
+            next;
 		}
 		if (! $diff_ref ) {
-		   $diff_ref = $next_ref;
-		   next;
+            $diff_ref = $next_ref;
+            next;
 		}
 		if (( @$diff_ref[0] eq '-' ) && ( @$next_ref[0] eq '+' )) {
 		    $diff_ref = ['c', @$diff_ref[1], @$next_ref[2]];
-    	        $next_ref = undef;
+            $next_ref = undef;
 		}
 		if ( $renderStyle eq 'sequential' ) {
-		    $result .= _renderSequential ( $session, $web, $topic, @$diff_ref );
+		    $result .= _renderSequential( $session, $web, $topic, @$diff_ref );
 		} elsif ( $renderStyle eq 'sidebyside' ) {
-    		    $result .= '<tr><td width="50%"></td><td width="50%"></td></tr>';
-		    $result .= _renderSideBySide ( $session, $web, $topic, @$diff_ref );
+            $result .= CGI::Tr(CGI::td({ width=>'50%'}, ''),
+                               CGI::td({ width=>'50%'}, ''));
+		    $result .= _renderSideBySide( $session, $web, $topic, @$diff_ref );
 		} elsif ( $renderStyle eq 'debug' ) {
-		    $result .= _renderDebug ( @$diff_ref );
+		    $result .= _renderDebug( @$diff_ref );
 		}
 		$diff_ref = $next_ref;
 	}
-#don't forget the last one ;)
-   if ( $diff_ref ) {
-	if ( $renderStyle eq 'sequential' ) {
-	    $result .= _renderSequential ( $session, $web, $topic, @$diff_ref );
-	} elsif ( $renderStyle eq 'sidebyside' ) {
-    	    $result .= '<tr><td width="50%"></td><td width="50%"></td></tr>';
-	    $result .= _renderSideBySide ( $session, $web, $topic, @$diff_ref );
-	} elsif ( $renderStyle eq 'debug' ) {
-	    $result .= _renderDebug ( @$diff_ref );
-	}
+    #don't forget the last one ;)
+    if ( $diff_ref ) {
+        if ( $renderStyle eq 'sequential' ) {
+            $result .= _renderSequential ( $session, $web, $topic, @$diff_ref );
+        } elsif ( $renderStyle eq 'sidebyside' ) {
+            $result .= CGI::Tr(CGI::td({ width=>'50%'}, ''),
+                               CGI::td({ width=>'50%'}, ''));
+            $result .= _renderSideBySide( $session, $web, $topic, @$diff_ref );
+        } elsif ( $renderStyle eq 'debug' ) {
+            $result .= _renderDebug( @$diff_ref );
+        }
     }
-    return $result."\n<\/table>";
+    return CGI::table( { class => 'twikiDiffTable',
+                         width => '100%',
+                         cellspacing => 0 }, $result );
 }
 
 =pod
@@ -421,7 +435,7 @@ sub diff {
             my $diffArrayRef = $session->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
             # $text = $session->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
             # if ( $renderStyle eq "raw" ) {
-            #     $text = "\n<code>\n$text\n</code>\n";
+            #     $text = CGI::code($text);
             # } else {
             #    my $diffArray = parseRevisionDiff( $text );
             my $text = _renderRevisionDiff( $session, $webName, $topic, $diffArrayRef, $renderStyle );
@@ -458,7 +472,10 @@ sub diff {
     }
 
     while( $i > 0 ) {
-        $revisions .= " | <a href=\"$session->{scriptUrlPath}/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\" $TWiki::cfg{NoFollow}>$i</a>";
+        $revisions .= ' | '.
+          CGI::a( { href=>$session->getScriptUrl($webName, $topic,'view',
+                                                 rev => $i ),
+                    rel => 'nofollow' }, $i);
         if( $i != 1 ) {
             if( $i == $breakRev ) {
                 $i = 1;
@@ -467,7 +484,13 @@ sub diff {
                     $revisions .= ' | &gt;';
                 } else {
                     $j = $i - 1;
-                    $revisions .= " | <a href=\"$session->{scriptUrlPath}/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=$j\" $TWiki::cfg{NoFollow}>&gt;</a>";
+                    $revisions .= ' | '.
+                      CGI::a( { href=>$session->getScriptUrl( $webName, $topic,
+                                                              'rdiff',
+                                                              rev1 => $i,
+                                                              rev2 => $j ),
+                                rel => 'nofollow' },
+                              '&gt;');
                 }
             }
         }
@@ -478,9 +501,11 @@ sub diff {
     my $tailResult = '';
     my $revTitle   = '';
     while( $i >= $rev2) {
-        $revTitle = '<a href="'.$session->{scriptUrlPath}.
-          '/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev='.$i.'" '.
-            "$TWiki::cfg{NoFollow}>$i</a>";
+        $revTitle = CGI::a( { href=>$session->getScriptUrl($webName, $topic,
+                                                           'view',
+                                                           rev => $i ),
+                              rel => 'nofollow' },
+                            $i);
         $revInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $i, undef );
         $tailResult .= $tail;
         $tailResult =~ s/%REVTITLE%/$revTitle/go;

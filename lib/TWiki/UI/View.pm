@@ -143,14 +143,17 @@ sub view {
         # SMELL: this is not documented anywhere that I can find, and the
         # poor slob who creates 'texture_skin' is going to get a hell of
         # a shock! This should be done with "raw=text", not with a skin.
-        if( $skin !~ /^text/ ) {
-            my $vtext = '<form><textarea readonly="readonly" ' .
-              'wrap="virtual" rows="%EDITBOXHEIGHT%" ' .
-                'style="%EDITBOXSTYLE%" ' .
-                  'cols="%EDITBOXWIDTH%">';
-            $vtext = $session->handleCommonTags( $vtext, $webName, $topicName );
-            $text = TWiki::entityEncode( $text );
-            $text = $vtext.$text.'</textarea></form>';
+        if( $skin !~ /^text\b/ ) {
+            my $p = $session->{prefs};
+            $text =
+              CGI::textarea
+                  ( -readonly => 'readonly',
+                    -wrap => 'virtual',
+                    -rows => $p->getPreferencesValue('EDITBOXHEIGHT'),
+                    -cols => $p->getPreferencesValue('EDITBOXWIDTH'),
+                    -style => $p->getPreferencesValue('EDITBOXSTYLE'),
+                    -default => "\n".$text
+                  );
         }
     } else {
         $text = $session->handleCommonTags( $text, $webName, $topicName );
@@ -167,11 +170,12 @@ sub view {
     # get view template, standard view or a view with a different skin
     my $tmpl = $session->{templates}->readTemplate( 'view', $skin );
     if( ! $tmpl ) {
-        my $mess = '<html><body><h1>TWiki Installation Error</h1>'.
+        my $mess = CGI::start_html().
+          CGI::h1('TWiki Installation Error').
           'Template file view.tmpl not found or template directory'.
-            $TWiki::cfg{TemplateDir}.' not found.<p />'.
+            $TWiki::cfg{TemplateDir}.' not found.'.CGI::p().
               'Check the configuration setting for TemplateDir'.
-                '</body></html>';
+                CGI::end_html();
         $session->writeCompletePage( $mess );
         return;
     }
@@ -185,8 +189,8 @@ sub view {
     if( $mirrorSiteName ) {
         # disable edit and attach
         # FIXME: won't work with non-default skins, see %EDITURL%
-        $tmpl =~ s/%EDITTOPIC%/$mirrorLink | <strike>Edit<\/strike>/go;
-        $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/goi;
+        $tmpl =~ s/%EDITTOPIC%/$mirrorLink.' | '.CGI::strike('Edit')/ge;
+        $tmpl =~ s/<a [^>]*?>Attach<\/a>/CGI::strike('Attach')/gei;
         if( $topicExists ) {
             # allow view to be indexed
             $indexableView = 1;
@@ -198,24 +202,18 @@ sub view {
         # disable edit of previous revisions - FIXME consider change
         # to use two templates
         # SMELL: won't work with non-default skins, see %EDITURL%
-        $tmpl =~ s/%EDITTOPIC%/<strike>Edit<\/strike>/go;
-        $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/goi;
-        $tmpl =~ s|<a [^>]*?>Rename/move<\/a>|<strike>Rename/move<\/strike>|goi;
-        $tmpl =~ s/%REVTITLE%/\(r$rev\)/go;
+        $tmpl =~ s/%EDITTOPIC%/CGI::strike('Edit')/ge;
+        $tmpl =~ s/<a [^>]*?>(Attach)<\/a>/CGI::strike($1)/gei;
+        $tmpl =~ s!<a [^>]*?>(Rename\/move)</a>!CGI::strike($1)!gei;
+        $tmpl =~ s/%REVTITLE%/(r$rev)/go;
         $tmpl =~ s/%REVARG%/&rev=$rev/go;
     } else {
         $indexableView = 1;
         my $editAction = $topicExists ? 'Edit' : 'Create';
-        # Special case for 'view' to handle %EDITTOPIC% and Edit vs.
-        # Create.
-        # New %EDITURL% variable is implemented by handleCommonTags,
-        # suffixes '?t=NNNN' to ensure that every Edit link is unique,
-        # fixing
-        # Codev.RefreshEditPage bug relating to caching of Edit page.
-        $tmpl =~ s!%EDITTOPIC%!<a href="%EDITURL%" $TWiki::cfg{NoFollow}><b>$editAction</b></a>!go;
-
-        # FIXME: Implement ColasNahaboo's suggested %EDITLINK% along
-        # same lines, within handleCommonTags
+        my $ea = CGI::a( { href => $session->{SESSION_TAGS}{EDITURL},
+                           rel => 'nofollow' },
+                         CGI::b($editAction));
+        $tmpl =~ s/%EDITTOPIC%/$ea/go;
         $tmpl =~ s/%REVTITLE%//go;
         $tmpl =~ s/%REVARG%//go;
     }
@@ -237,9 +235,14 @@ sub view {
         if( $doingRev == $rev) {
             $revs .= ' r'.$rev;
         } else {
-            $revs .= ' <a href="'.
-              $session->getScriptUrl( $webName, $topicName, 'view' ) .
-                "?rev=$doingRev\" $TWiki::cfg{NoFollow}>r$doingRev</a>";
+            $revs .= CGI::a({
+                             href=>$session->getScriptUrl( $webName,
+                                                           $topicName,
+                                                           'view',
+                                                           rev => $doingRev ),
+                             rel => 'nofollow'
+                            },
+                            " r$doingRev" );
         }
         if ($doingRev-$rev >= $TWiki::cfg{NumberOfRevisions}) {
             # we started too far away, need to jump closer to $rev
@@ -250,10 +253,13 @@ sub view {
             next;
         }
         if( $revsToShow ) {
-            $revs .= ' <a href="'.
-              $session->getScriptUrl( $webName, $topicName, 'rdiff' ).
-                '?rev1='.$doingRev.'&amp;rev2='.($doingRev-1).
-                  "\" $TWiki::cfg{NoFollow}>&gt;</a>";
+            $revs .= CGI::a
+              ( { href=>$session->getScriptUrl
+                  ( $webName, $topicName, 'rdiff',
+                    rev1 => $doingRev,
+                    rev2 => $doingRev-1 ),
+                  rel => 'nofollow' },
+                '&gt;' );
         }
         $doingRev--;
     }
@@ -291,20 +297,20 @@ sub _bungOut {
     my ($text, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, $isText) = @_;
     my $renderer = $session->{renderer};
 
-    $text = $renderer->renderMetaTags
-      ( $webName, $topicName, $text, $meta, $isTop, $viewRaw );
-
-    $text = $session->handleCommonTags( $text, $webName, $topicName );
     unless( $viewRaw && $isText ) {
+        $text = $renderer->renderMetaTags
+          ( $webName, $topicName, $text, $meta, $isTop, $viewRaw );
+
+        $text = $session->handleCommonTags( $text, $webName, $topicName );
         $text = $renderer->getRenderedVersion( $text, $webName, $topicName );
         $text =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
         # Write header based on 'contenttype' parameter, used to produce
         # MIME types like text/plain or text/xml, e.g. for RSS feeds.
         if( $strip ) {
-            $text =~ s/<img [^>]*>//g;  # remove image tags
-            $text =~ s/<a [^>]*>//g;    # remove anchor tags
-            $text =~ s/<\/a>//g;        # remove anchor tags
+            $text =~ s/<img [^>]*>//gi;  # remove image tags
+            $text =~ s/<a [^>]*>//gi;    # remove anchor tags
+            $text =~ s/<\/a>//gi;        # remove anchor tags
         }
     }
     print $text;

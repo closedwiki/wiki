@@ -369,7 +369,8 @@ sub _handleFAILEDPLUGINS {
     foreach my $handler (@TWiki::Plugin::registrableHandlers) {
         $text .= "| $handler |";
         if ( defined( $this->{registeredHandlers}{$handler} ) ) {
-            $text .= join "<br />", @{$this->{registeredHandlers}{$handler}};
+            $text .=
+              join( CGI::br(), @{$this->{registeredHandlers}{$handler}} );
         }
         $text .= " |\n";
     }

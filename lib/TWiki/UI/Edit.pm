@@ -37,6 +37,7 @@ use TWiki::Store;
 use TWiki::UI;
 use Error qw( :try );
 use TWiki::UI::OopsException;
+use CGI qw( :form );
 
 =pod
 
@@ -182,19 +183,12 @@ sub edit {
             $meta->remove( 'FORM' );
         }
         $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
-        if( defined $ptext ) {
-            $text = TWiki::decodeSpecialChars( $ptext );
-        }
     }
 
     if( $saveCmd ) {
         $text = $session->{store}->readTopicRaw( $session->{user}, $webName,
                                                  $topic, undef );
     }
-
-    $text =~ s/&/&amp\;/go;
-    $text =~ s/</&lt\;/go;
-    $text =~ s/>/&gt\;/go;
 
     $session->{plugins}->beforeEditHandler( $text, $topic, $webName ) unless( $saveCmd );
 
@@ -229,15 +223,35 @@ sub edit {
     } elsif( !$saveCmd && $session->{prefs}->getPreferencesValue( 'WEBFORMS', $webName )) {
         # follows a hybrid html monster to let the 'choose form button' align at
         # the right of the page in all browsers
-        $form = '<div style="text-align:right;"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder"><tr><td align="right">'
-          . TWiki::Form::chooseFormButton( 'Add form' )
-            . '</td></tr></table></div>';
+        $form = CGI::submit(-name => 'submitChangeForm',
+                            -value => 'Add form',
+                            -class => "twikiChangeFormButton twikiSubmit");
+        $form = CGI::Tr(CGI::td( { align=>'right' }, $form ));
+        $form = CGI::table( { width=>'100%',
+                              border=>0,
+                              cellspacing=>0,
+                              cellpadding=>0,
+                              class=>'twikiChangeFormButtonHolder' }, $form );
+        $form = CGI::div( { style=>'text-align:right;' }, $form );
+
         $tmpl =~ s/%FORMFIELDS%/$form/go;
     } else {
         $tmpl =~ s/%FORMFIELDS%//go;
     }
 
     $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
+    my $p = $session->{prefs};
+    $text = CGI::textarea(
+                          -id => 'topic',
+                          -name => 'text',
+                          -wrap => 'virtual',
+                          -rows => $p->getPreferencesValue('EDITBOXHEIGHT')
+                          || 15,
+                          -cols => $p->getPreferencesValue('EDITBOXWIDTH')
+                          || 70,
+                          -style => $p->getPreferencesValue('EDITBOXSTYLE'),
+                          -onKeyDown => 'if(window.event.keyCode==27)return false;',
+                          -default=>"\n".$text );
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 

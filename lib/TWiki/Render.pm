@@ -76,7 +76,7 @@ sub new {
         || '#0000FF';
     $this->{NEWLINKSYMBOL} =
       $session->{prefs}->getPreferencesValue('NEWTOPICLINKSYMBOL')
-        || '<sup>?</sup>';
+        || CGI::sup('?');
     # tooltip init
     $this->{LINKTOOLTIPINFO} =
       $session->{prefs}->getPreferencesValue('LINKTOOLTIPINFO')
@@ -159,13 +159,20 @@ sub _renderMoved {
         # Only allow put back if current web and topic match stored information
         my $putBack = '';
         if( $web eq $toWeb && $topic eq $toTopic ) {
-            $putBack  = ' - <a title="Click to move topic back to previous location, with option to change references."';
-            $putBack .= ' href="'.$this->{session}->getScriptUrl($web, $topic, 'rename').'?newweb='.$fromWeb.'&newtopic='.$fromTopic.'&';
-            $putBack .= 'confirm=on" '.$TWiki::cfg{NoFollow}.
-              '>put it back</a>';
+            $putBack  = ' - '.
+              CGI::a( { title=>'Click to move topic back to previous location, with option to change references.',
+                        href => $this->{session}->getScriptUrl
+                        ($web, $topic,
+                         'rename',
+                         newweb => $fromWeb,
+                         newtopic => $fromTopic,
+                         confirm => 'on' ),
+                        rel => 'nofollow'
+                      },
+                      'put it back' );
         }
-        $text = "<i><nop>$toWeb.<nop>$toTopic moved from <nop>$fromWeb".
-          ".<nop>$fromTopic on $date by $by </i>$putBack";
+        $text = CGI::i("<nop>$toWeb.<nop>$toTopic moved from <nop>$fromWeb".
+          ".<nop>$fromTopic on $date by $by ").$putBack;
     }
     return $text;
 }
@@ -188,7 +195,7 @@ sub _renderFormData {
 
     if( $form ) {
         my $name = $form->{name};
-        $metaText = '<div class="twikiForm"><p></p>';
+        $metaText = CGI::p();
         $metaText .= "\n|*[[$name]]*||\n"; # table header
         my @fields = $meta->find( 'FIELD' );
         foreach my $field ( @fields ) {
@@ -197,7 +204,7 @@ sub _renderFormData {
             $value =~ s/\n/<br \/>/g;      # undo expansion
             $metaText .= "|  $title:|$value  |\n";
         }
-        $metaText .= "\n</div>";
+        return CGI::div( { -class=>'twikiForm' }, $metaText );
     }
 
     return $metaText;
@@ -246,45 +253,41 @@ sub _addListItem {
 sub _emitTR {
     my ( $this, $thePre, $theRow, $insideTABLE ) = @_;
 
-    my $text = '';
-    my $attr = '';
-    my $l1 = 0;
-    my $l2 = 0;
-    if( $insideTABLE ) {
-        $text = $thePre.'<tr>';
-    } else {
-        $text = $thePre.
-          '<table border="1" cellspacing="0" cellpadding="1"><tr>';
+    unless( $insideTABLE ) {
+        $thePre .=
+          CGI::start_table({ border=>1, cellspacing=>0, cellpadding=>1} );
     }
+
     $theRow =~ s/\t/   /g;  # change tabs to space
     $theRow =~ s/\s*$//;    # remove trailing spaces
     $theRow =~ s/(\|\|+)/$TWiki::TranslationToken.length($1).'|'/ge;  # calc COLSPAN
+    my $cells = '';
     foreach( split( /\|/, $theRow ) ) {
-        $attr = '';
-        # Avoid matching single columns
-        if ( s/$TWiki::TranslationToken([0-9]+)//o ) { 
-            $attr = ' colspan="'.$1.'"';
+        my @attr;
 
+        # Avoid matching single columns
+        if ( s/$TWiki::TranslationToken([0-9]+)//o ) {
+            push( @attr, colspan => $1 );
         }
         s/^\s+$/ &nbsp; /;
         /^(\s*).*?(\s*)$/;
-        $l1 = length( $1 || '' );
-        $l2 = length( $2 || '' );
+        my $l1 = length( $1 || '' );
+        my $l2 = length( $2 || '' );
         if( $l1 >= 2 ) {
             if( $l2 <= 1 ) {
-                $attr .= ' align="right"';
+                push( @attr, align => 'right' );
             } else {
-                $attr .= ' align="center"';
+                push( @attr, align => 'center' );
             }
         }
-        if( /^\s*(\*.*\*)\s*$/ ) {
-            $text .= "<th$attr bgcolor=\"#99CCCC\"> $1 </th>";
+        if( /^\s*\*(.*)\*\s*$/ ) {
+            push( @attr, bgcolor => '#99CCCC' );
+            $cells .= CGI::th( { @attr }, CGI::strong( $1 ));
         } else {
-            $text .= "<td$attr> $_ </td>";
+            $cells .= CGI::td( { @attr }, " $_" );
         }
     }
-    $text .= '</tr>';
-    return $text;
+    return $thePre.CGI::Tr( $cells );
 }
 
 sub _fixedFontText {
@@ -292,11 +295,8 @@ sub _fixedFontText {
     # preserve white space, so replace it by '&nbsp; ' patterns
     $theText =~ s/\t/   /g;
     $theText =~ s|((?:[\s]{2})+)([^\s])|'&nbsp; ' x (length($1) / 2) . $2|eg;
-    if( $theDoBold ) {
-        return '<code><b>'.$theText.'</b></code>';
-    } else {
-        return '<code>'.$theText.'</code>';
-    }
+    $theText = CGI::b( $theText ) if $theDoBold;
+    return CGI::code( $theText );
 }
 
 # Build an HTML &lt;Hn> element with suitable anchor for linking from %<nop>TOC%
@@ -313,8 +313,8 @@ sub _makeAnchorHeading {
     # filter '!!', '%NOTOC%'
     $theHeading =~ s/$TWiki::regex{headerPatternNoTOC}//o;
     my $text = "<nop><h$theLevel>";
-    $text .= "<a name=\"$anchorName\"> </a>";
-    $text .= "<a name=\"$compatAnchorName\"> </a>" if( $compatAnchorName ne $anchorName );
+    $text .= CGI::a({ -name=>$anchorName }, "" );
+    $text .= CGI::a({-name=>$compatAnchorName}, "") if( $compatAnchorName ne $anchorName );
     $text .= " $theHeading </h$theLevel>";
 
     return $text;
@@ -395,7 +395,7 @@ sub _linkToolTipInfo {
         $summary =~ s/[\"\']/<nop>/g;       # remove quotes (not allowed in title attribute)
         $text =~ s/\$summary/$summary/g;
     }
-    return ' title="'.$text.'"';
+    return $text;
 }
 
 =pod
@@ -471,39 +471,35 @@ sub _renderWikiWord {
 
 sub _renderExistingWikiWord {
     my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor) = @_;
-    my $ans;
 
+    my @attrs;
+    my $href = $this->{session}->getScriptUrl($theWeb, $theTopic, 'view');
     if( $theAnchor ) {
         my $anchor = $this->makeAnchorName( $theAnchor );
-        $ans = '<a class="twikiAnchorLink" href="'.
-	      $this->{session}->getScriptUrl($theWeb, $theTopic, 'view')
-            . "#$anchor\""
-              .  $this->_linkToolTipInfo( $theWeb, $theTopic )
-                . ">$theLinkText</a>";
+        push( @attrs, class => 'twikiAnchorLink', href => $href.'#'.$anchor );
     } else {
-        $ans = '<a class="twikiLink" href="'
-	      .	$this->{session}->getScriptUrl($theWeb, $theTopic, 'view') .'"'
-            .  $this->_linkToolTipInfo( $theWeb, $theTopic )
-              .  ">$theLinkText</a>";
+        push( @attrs, class => 'twikiLink', href => $href );
     }
-    return $ans;
+    my $tooltip = $this->_linkToolTipInfo( $theWeb, $theTopic );
+    push( @attrs, title => $tooltip ) if $tooltip;
+    return CGI::a( { @attrs }, $theLinkText );
 }
 
 sub _renderNonExistingWikiWord {
     my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor) = @_;
     my $ans;
 
-    $ans .= '<span class="twikiNewLink" style=\'background : '.
-      $this->{NEWTOPICBGCOLOR}.';\'>'
-      .  "<font color=\"$this->{NEWTOPICFONTCOLOR}\">$theLinkText</font>"
-        .  '<a href="'.
-          $this->{session}->getScriptUrl($theWeb, $theTopic, 'edit').
-            '?topicparent='
-              .$this->{session}->{webName}.".".
-                $this->{session}->{topicName}.'" '.
-                  $TWiki::cfg{NoFollow}.'>'.
-                    $this->{NEWLINKSYMBOL}.'</a></span>';
-    return $ans;
+    $ans = CGI::font( { -color=>$this->{NEWTOPICFONTCOLOR} }, $theLinkText );
+    $ans .= CGI::a( { href=>$this->{session}->getScriptUrl
+                      ($theWeb, $theTopic, 'edit',
+                       topicparent => $this->{session}->{webName}.'.'.
+                       $this->{session}->{topicName} ),
+                      rel => 'nofollow'
+                    },
+                    $this->{NEWLINKSYMBOL} );
+    return CGI::span( { class=>'twikiNewLink',
+                        style=>'background : '.$this->{NEWTOPICBGCOLOR}.';' },
+                      $ans );
 }
 
 # NOTE: factored for clarity. Test for any speed penalty.
@@ -644,7 +640,7 @@ sub _protocolLink {
             $theText =~ s/([\s\(])([$TWiki::regex{upperAlpha}])/$1<nop>$2/go;
         }
 #	  die $theText unless ($theText eq 'GNU' || $theText eq 'Run Test' || $theText eq 'XHTML Validator');
-       return '<a href="'.$theLink.'" target="_top">'.$theText.'</a>';
+       return CGI::a( { -href=>$theLink, -target=>'_top' }, $theText );
 }
 
 sub _externalLink {
@@ -652,24 +648,24 @@ sub _externalLink {
     if( $url =~ /\.(gif|jpg|jpeg|png)$/i ) {
         my $filename = $url;
         $filename =~ s@.*/([^/]*)@$1@go;
-        return '$pre<img src="'.$url.'" alt="'.$filename.'" />';
+        return $pre.CGI::img( src => $url, alt => $filename );
     }
 
-    return "$pre<a href=\"$url\" target=\"_top\">$url</a>";
+    return $pre.CGI::a( {href=>$url, target=>'_top'}, $url );
 }
 
 sub _mailtoLink {
     my( $this, $theAccount, $theSubDomain, $theTopDomain ) = @_;
 
     my $addr = "$theAccount\@$theSubDomain$TWiki::cfg{NoSpamPadding}\.$theTopDomain";
-    return "<a href=\"mailto\:$addr\">$addr</a>";
+    return CGI::a( { href=>'mailto:'.$addr }, $addr );
 }
 
 sub _mailtoLinkFull {
     my( $this, $theAccount, $theSubDomain, $theTopDomain, $theLinkText ) = @_;
 
     my $addr = "$theAccount\@$theSubDomain$TWiki::cfg{NoSpamPadding}\.$theTopDomain";
-    return "<a href=\"mailto\:$addr\">$theLinkText</a>";
+    return CGI::a( { href=>'mailto:'.$addr }, $theLinkText );
 }
 
 sub _mailtoLinkSimple {
@@ -679,7 +675,7 @@ sub _mailtoLinkSimple {
     if ($theMailtoString =~ s/@//g ) {
     	writeWarning("mailtoLinkSimple called with an '\@' in string - internal TWiki error");
     }
-    return "<a href=\"mailto\:$theMailtoString\">$theLinkText</a>";
+    return CGI::a( { href=>'mailto:'.$theMailtoString }, $theLinkText );
 }
 
 =pod
@@ -706,11 +702,15 @@ sub filenameToIcon {
     my $iconList = $store->readFile( $iconDir.'/_filetypes.txt' );
     foreach( split( /\n/, $iconList ) ) {
         @bits = ( split( / / ) );
-	if( $bits[0] eq $fileExt ) {
-            return "<img src=\"$iconUrl/$bits[1].gif\" width=\"16\" height=\"16\" align=\"top\" alt=\"\" border=\"0\" />";
+        if( $bits[0] eq $fileExt ) {
+            return CGI::img( { src => "$iconUrl/$bits[1].gif",
+                               width => 16, height=>16, align => 'top',
+                               alt => '', border => 0 } );
         }
     }
-    return "<img src=\"$iconUrl/else.gif\" width=\"16\" height=\"16\" align=\"top\" alt=\"\" border=\"0\" />";
+    return CGI::img( { src => "$iconUrl/else.gif",
+                       width => 16, height => 16, align => 'top', alt => '',
+                       border => 0 } );
 }
 
 =pod
@@ -891,7 +891,7 @@ sub getRenderedVersion {
 
     # Blockquoted email (indented with '> ')
     # Could be used to provide different colours for different numbers of '>'
-    $text =~ s/^>(.*?)$/> <cite> $1 <\/cite><br \/>/gm;
+    $text =~ s/^>(.*?)$/'&gt;'.CGI::cite( $1 ).CGI::br()/gem;
 
     # locate isolated < and > and translate to entities
     # Protect isolated <!-- and -->
@@ -930,7 +930,8 @@ sub getRenderedVersion {
     $text =~ s/$TWiki::regex{headerPatternDa}/$this->_makeAnchorHeading($2,(length($1)))/geom;
 
     # Horizontal rule
-    $text =~ s/^---+/<hr \/>/gm;
+    my $hr = CGI::hr();
+    $text =~ s/^---+/$hr/gm;
 
     # Now we really _do_ need a line loop, to process TML
     # line-oriented stuff.
@@ -1003,7 +1004,7 @@ sub getRenderedVersion {
     $text = join("\n", @result );
 
     # '#WikiName' anchors
-    $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/ '<a name="' . $this->makeAnchorName( $2 ) . '"><\/a>'/geom;
+    $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a( { name=>$this->makeAnchorName( $2 )}, '')/geom;
 
     # Emphasizing
     $text =~ s/(^|[\s\(])==([^\s]+?|[^\s].*?[^\s])==([\s\,\.\;\:\!\?\)])/$1 . $this->_fixedFontText( $2, 1 ) . $3/gem;
@@ -1090,14 +1091,11 @@ by their HTML entities &amp;lt; and &amp;gt;
 sub verbatimCallBack {
     my $val = shift;
 
-    $val =~ s/&/&amp;/g;
-    $val =~ s/</&lt;/g;
-    $val =~ s/>/&gt;/g;
     # SMELL: A shame to do this, but been in TWiki.org have converted
     # 3 spaces to tabs since day 1
     $val =~ s/\t/   /g;
 
-    return $val;
+    return TWiki::entityEncode( $val );
 }
 
 =pod
@@ -1509,8 +1507,8 @@ sub summariseChanges {
             $block =~ s/^(.{$trunc}).*$/$1/ if( $trim );
             if ( $block =~ m/^[-+]/ ) {
                 if( $tml ) {
-                    $block =~ s/^-(.*)$/<del>$1<\/del>/s;
-                    $block =~ s/^\+(.*)$/<ins>$1<\/ins>/s;
+                    $block =~ s/^-(.*)$/CGI::del( $1 )/se;
+                    $block =~ s/^\+(.*)$/CGI::ins( $1 )/se;
                 }
                 push( @revised, $prev ) if $prev;
                 $block .= $ellipsis if $trim;
@@ -1529,7 +1527,7 @@ sub summariseChanges {
             }
         }
         if( $tml ) {
-            $summary = join('<br />', @revised );
+            $summary = join(CGI::br(), @revised );
         } else {
             $summary = join("\n", @revised );
         }

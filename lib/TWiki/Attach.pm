@@ -201,8 +201,9 @@ sub _expandAttrs {
             # character set.
             $url = TWiki::nativeUrlEncode( "%PUBURLPATH%/$web/$topic/$file" );
         } else {
-            $url = "%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/".
-              "$web/$topic?rev=$info->{version}&filename=$file";
+            $url = $this->{session}->getScriptUrl
+              ( $web, $topic, 'viewfile',
+                rev => $info->{version}, filename => $file );
         }
         return $url;
     }
@@ -275,17 +276,24 @@ sub getAttachmentLink {
         # img parameters, speeding up the page rendering.
         my $stream =  $store->getAttachmentStream( $user, $web, $topic, $attName );
         my( $nx, $ny ) = &_imgsize( $stream, $attName );
+        my @attrs;
 
-        if( ( $nx > 0 ) && ( $ny > 0 ) ) {
-            $imgSize = "width=\"$nx\" height=\"$ny\" ";
+        if( $nx > 0 && $ny > 0 ) {
+            push( @attrs, width=>$nx, height=>$ny );
+            $imgSize = "width='$nx' height='$ny'";
         }
-        $fileLink = $prefs->getPreferencesValue( 'ATTACHEDIMAGEFORMAT' )
-          || '   * $comment: <br />'
-            . ' <img src="%ATTACHURLPATH%/$name" alt="$name" $size />';
+        $fileLink = $prefs->getPreferencesValue( 'ATTACHEDIMAGEFORMAT' );
+        unless( $fileLink ) {
+            push( @attrs, src=>"%ATTACHURLPATH%/$attName" );
+            push( @attrs, alt=>$attName );
+            return "\t* $fileComment: ".CGI::br().CGI::img({ @attrs });
+        }
     } else {
         # normal attached file
-        $fileLink = $prefs->getPreferencesValue( 'ATTACHEDFILELINKFORMAT' )
-          || '   * [[%ATTACHURL%/$name][$name]]: $comment';
+        $fileLink = $prefs->getPreferencesValue( 'ATTACHEDFILELINKFORMAT' );
+        unless( $fileLink ) {
+            return "\t* [[%ATTACHURL%/$attName][$attName]]: $fileComment";
+        }
     }
 
     $fileLink =~ s/^      /\t\t/go;

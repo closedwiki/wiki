@@ -190,7 +190,9 @@ BEGIN {
           $TWiki::cfg{ScriptSuffix};
     $constantTags{WIKIPREFSTOPIC}  = $TWiki::cfg{SitePrefsTopicName};
     $constantTags{WIKIUSERSTOPIC}  = $TWiki::cfg{UsersTopicName};
-    $constantTags{NOFOLLOW} = $TWiki::cfg{NoFollow};
+    if( $TWiki::cfg{NoFollow} ) {
+        $constantTags{NOFOLLOW} = 'rel='.$TWiki::cfg{NoFollow};
+    }
 
     # locale setup
     #
@@ -775,16 +777,16 @@ sub getSkin {
 
 =pod
 
----++ ObjectMethod getScriptURL( $web, $topic, $script ) -> $absoluteScriptURL
+---++ ObjectMethod getScriptUrl( $web, $topic, $script, ... ) -> $absoluteScriptURL
 
 Returns the absolute URL to a TWiki script, providing the web and topic as
 "path info" parameters.  The result looks something like this:
-"http://host/twiki/bin/$script/$web/$topic"
+"http://host/twiki/bin/$script/$web/$topic". ... represents an arbitrary number of name,value parameter pairs that will be url-encoded and added to the url. The special parameter name '#' is reserved for specifying an anchor. e.g. <tt>getScriptUrl('x','y','view','#'=>'XXX',a=>1,b=>2)</tt> will give <tt>.../view/x/y#XXX?a=1&b=2</tt>
 
 =cut
 
 sub getScriptUrl {
-    my( $this, $theWeb, $theTopic, $theScript ) = @_;
+    my( $this, $theWeb, $theTopic, $theScript, @params ) = @_;
 
     ASSERT(ref($this) eq 'TWiki') if DEBUG;
 
@@ -798,8 +800,23 @@ sub getScriptUrl {
     $url .= $TWiki::cfg{DispScriptUrlPath} . "/$theScript";
     $url .= $TWiki::cfg{ScriptSuffix};
     $url .= "/$theWeb/$theTopic";
+
+    my $ps = '';
+    while( my $p = shift @params ) {
+        if( $p eq '#' ) {
+            $url .= '#' . shift( @params );
+        } else {
+            $ps .= '&' . $p.'='.urlEncode( shift( @params ));
+        }
+    }
+    if( $ps ) {
+        $ps =~ s/&/?/;
+        $url .= $ps;
+    }
+
     # FIXME consider a plugin call here - useful for certificated
     # logon environment
+
     return $url;
 }
 
@@ -817,7 +834,7 @@ defeat browser cacheing. The result looks something like this:
 sub getUniqueScriptUrl {
     my( $this, $web, $topic, $script ) = @_;
 
-    return $this->getScriptUrl( $web, $topic, $script) . '?t=' . time();
+    return $this->getScriptUrl( $web, $topic, $script, t => time() );
 }
 
 =pod
@@ -840,8 +857,8 @@ sub getOopsUrl {
 
     ASSERT(ref($this) eq 'TWiki') if DEBUG;
 
-    my $url = $this->getScriptUrl( $web, $topic, 'oops' ) .
-      '?template=' . urlEncode( $template );
+    my $url =
+      $this->getScriptUrl( $web, $topic, 'oops', template => $template );
 
     my $n = 1;
     my $p;
@@ -938,7 +955,6 @@ sub new {
     $this->{cgiQuery} = $query;
     $this->{remoteUser} = $remoteUser;
     $this->{url} = $url;
-    $this->{pathInfo} = $pathInfo;
 
     @{$this->{publicWebList}} = ();
 
@@ -994,7 +1010,7 @@ sub new {
     $pathInfo =~ s!$cgiScriptName/!/!i;
 
     # Get the web and topic names from PATH_INFO
-    if( $pathInfo =~ /\/(.*)[\.\/](.*)/ ) {
+    if( $pathInfo =~ /\/+(.*)[\.\/](.*)/ ) {
         # is 'bin/script/Webname/SomeTopic' or 'bin/script/Webname/'
         $web   = $1 || '' unless $web;
         $topic = $2 || '' unless $topic;
@@ -1003,9 +1019,8 @@ sub new {
         $web   = $1 || '' unless $web;
     }
 
-    if ( $topic =~ /\.\./ ) {
-        $topic = $this->{mainTopicname};
-    }
+    # All roads lead to WebHome
+    $topic = $TWiki::cfg{HomeTopicName} if ( $topic =~ /\.\./ );
 
     $topic =~ s/$TWiki::cfg{NameFilter}//go;
     $topic = $TWiki::cfg{HomeTopicName} unless $topic;
@@ -1020,7 +1035,6 @@ sub new {
 
     $this->{scriptUrlPath} = $TWiki::cfg{ScriptUrlPath};
 
-    # initialize $urlHost and $TWiki::cfg{ScriptUrlPath} 
     if( $url && $url =~ m!^([^:]*://[^/]*)(.*)/.*$! && $2 ) {
         if( $TWiki::cfg{GetScriptUrlFromCgi} ) {
             # SMELL: this is a really dangerous hack. It will fail
@@ -1260,7 +1274,7 @@ sub _includeUrl {
         my $fileName = "$TWiki::cfg{PubDir}/$web/$topic/$3";
         if( $fileName =~ m/\.(txt|html?)$/i ) {       # FIXME: Check for MIME type, not file suffix
             unless( -e $fileName ) {
-                return _inlineError( "Error: File attachment at $theUrl does not exist" );
+                return inlineAlert( "Error: File attachment at $theUrl does not exist" );
             }
             if( $web ne $theWeb || $topic ne $theTopic ) {
                 # CODE_SMELL: Does not account for not yet authenticated user
@@ -1268,7 +1282,7 @@ sub _includeUrl {
                                                                  $this->{user},
                                                                  '', $topic,
                                                                  $web ) ) {
-                    return _inlineError( "Error: No permission to view files attached to $web.$topic" );
+                    return inlineAlert( "Error: No permission to view files attached to $web.$topic" );
                 }
             }
             $text = $this->{store}->readFile( $fileName );
@@ -1288,7 +1302,7 @@ sub _includeUrl {
     } elsif( $theUrl =~ /http\:\/\/([^\/]+)(\/.*)/ ) {
         ( $host, $path ) = ( $1, $2 );
     } else {
-        $text = _inlineError( "Error: Unsupported protocol. (Must be 'http://domain/...')" );
+        $text = inlineAlert( "Error: Unsupported protocol. (Must be 'http://domain/...')" );
         return $text;
     }
 
@@ -1313,7 +1327,7 @@ sub _includeUrl {
         # do nothing
 
     } else {
-        $text = _inlineError( "Error: Unsupported content type: $contentType."
+        $text = inlineAlert( "Error: Unsupported content type: $contentType."
               . " (Must be text/html, text/plain or text/css)" );
     }
 
@@ -1359,12 +1373,12 @@ sub _TOC {
 
     # get the title attribute
     my $title = $params->{title} || '';
-    $title = '<span class="twikiTocTitle">'.$title.'</span>' if( $title );
+    $title = CGI::span( { -class => 'twikiTocTitle' }, $title ) if( $title );
 
     if( $web ne $defaultWeb || $topic ne $defaultTopic ) {
         unless( $this->{security}->checkAccessPermission
                 ( 'view', $this->{user}, '', $topic, $web ) ) {
-            return _inlineError( 'Error: No permission to view '.
+            return inlineAlert( 'Error: No permission to view '.
                                  $web.'.'.$topic );
         }
         my $meta;
@@ -1432,7 +1446,8 @@ sub _TOC {
             $line =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/go;  # 'TopicName'
             $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/go;    # 'TLA'
             # create linked bullet item, using a relative link to anchor
-            $line = "$tabs* <a href=\"$urlPath#$anchor\">$line</a>";
+            $line = $tabs.'* '.
+              CGI::a( { -href=>$urlPath.'#'.$anchor }, $line );
             $result .= "\n".$line;
         }
     }
@@ -1442,18 +1457,17 @@ sub _TOC {
             $highest--;
             $result =~ s/^\t{$highest}//gm;
         }
-        return '<div class="twikiToc">'.$title.$result."\n</div>";
+        return CGI::div( { -class=>'twikiToc' }, $title.$result );
     } else {
         return '';
     }
 }
 
 # Format an error for inline inclusion in HTML
-sub _inlineError {
+sub inlineAlert {
     my( $errormessage ) = @_;
-    return '<font size="-1" class="twikiAlert" color="red">' .
-      $errormessage .
-        '</font>';
+    return CGI::font( { -size => -1, -class => 'twikiAlert', -color => 'red' },
+                      $errormessage ).'&nbsp;';
 }
 
 =pod
@@ -1555,26 +1569,49 @@ sub _webOrTopicList {
 
 =pod
 
----++ StaticMethod entityEncode (text ) -> $html
+---++ StaticMethod entityEncode( $text ) -> $encodedText
 
-Escape certain characters to HTML entities
+Escape characters to HTML entities. Should handle unicode
+characters.
+
+HTML4.0 spec:
+"Certain characters in HTML are reserved for use as markup and must be
+escaped to appear literally. The "&lt;" character may be represented with
+an <em>entity</em>, <strong class=html>&amp;lt;</strong>. Similarly, "&gt;"
+is escaped as <strong class=html>&amp;gt;</strong>, and "&amp;" is escaped
+as <strong class=html>&amp;amp;</strong>. If an attribute value contains a
+double quotation mark and is delimited by double quotation marks, then the
+quote should be escaped as <strong class=html>&amp;quot;</strong>.</p>
+
+Other entities exist for special characters that cannot easily be entered
+with some keyboards...
+
+This method encodes &lt;, &gt;, &amp;, &quot; and any 8-bit characters
+using numeric entities.
 
 =cut
 
 sub entityEncode {
     my $text = shift;
 
-    # HTML entity encoding
-    $text =~ s/([\"\%\*\_\=\[\]\<\>\|])/"\&\#".ord( $1 ).';'/ge;
+    $text =~ s/([^ -~\n\r]|["<>])/'&#'.ord( $1 ).';'/ge;
     return $text;
 }
 
-# Generate a $w-char hexidecimal number representing $n.
-# Default $w is 2 (one byte)
-sub _hexchar {
-    my( $n, $w ) = @_;
-    $w = 2 unless $w;
-    return sprintf( "%0${w}x", ord( $n ));
+=pod
+
+---++ StaticMethod entityDecode ( $encodedText ) -> $text
+
+Revrses the encoding from =entityEncode=. _Does not_ decode
+named entities such as &amp;
+
+=cut
+
+sub entityDecode {
+    my $text = shift;
+
+    $text =~ s/&#(\d+);/chr($1)/ge;
+    return $text;
 }
 
 =pod
@@ -1582,24 +1619,46 @@ sub _hexchar {
 ---++ StaticMethod urlEncode( $string ) -> encoded string
 
 Encode by converting characters that are illegal in URLs to
-their %NN equivalents.
+their %NN equivalents. This method is used for encoding
+strings that must be embedded _verbatim_ in URLs; it cannot
+be applied to URLs themselves, as it escapes reserved
+characters such as = and ?.
 
-TODO: For non-ISO-8859-1 $siteCharset, need to convert to
-UTF-8 before URL encoding.
+RFC 1738, Dec. '94:
+<verbatim>>
+...Only alphanumerics [0-9a-zA-Z], the special
+characters $-_.+!*'(), and reserved characters used for their
+reserved purposes may be used unencoded within a URL.
+</verbatim>
+Reserved characters are $&+,/:;=?@ - these are _also_ encoded by
+this method.
+
+SMELL: For non-ISO-8859-1 $siteCharset, need to convert to
+UTF-8 before URL encoding. This encoding only supports 8-bit
+character codes.
 
 =cut
 
-# SMELL: what is the relationship to nativeUrlEncode??
 sub urlEncode {
     my $text = shift;
 
-    # URL encoding
-    $text =~ s/[\n\r]/\%3Cbr\%20\%2F\%3E/g;
-    $text =~ s/\s/\%20/g;
-    $text =~ s/(["&+<>\\])/"%"._hexchar($1,2)/ge;
-    # Encode characters > 0x7F (ASCII-derived charsets only)
-	# TODO: Encode to UTF-8 first
-    $text =~ s/([\x7f-\xff])/'%' . unpack( 'H*', $1 ) /ge;
+    $text =~ s/([^0-9a-zA-Z-_.!*'()])/'%'.sprintf('%02x',ord($1))/ge;
+
+    return $text;
+}
+
+=pod
+
+---++ StaticMethod urlDecode( $string ) -> decoded string
+
+Reverses the encoding done in urlEncode.
+
+=cut
+
+sub urlDecode {
+    my $text = shift;
+
+    $text =~ s/%(\d\d)/chr($1)/ge;
 
     return $text;
 }
@@ -1614,6 +1673,9 @@ with non-UTF-8 (Native) character sets.  Aim is to prevent UTF-8 URL
 encoding.  For mainframes, we assume that UTF-8 URLs will be translated
 by the web server to an EBCDIC character set.
 
+THIS METHOD SHOULD ONLY BE USED IF YOU ABSOLUTELY UNDERSTAND IT. It is
+most likely you were looking for =urlEncode=.
+
 =cut
 
 sub nativeUrlEncode {
@@ -1622,6 +1684,9 @@ sub nativeUrlEncode {
     my $isEbcdic = ( 'A' eq chr(193) ); 	# True if Perl is using EBCDIC
 
     if( $siteCharset eq 'utf-8' or $isEbcdic ) {
+        # SMELL: does this really work? What if non RFC-1738 characters
+        # are in the string?
+
         # Just strip double quotes, no URL encoding - let browser encode to
         # UTF-8 or EBCDIC based $siteCharset as appropriate
         $theStr =~ s/^"(.*)"$/$1/;	
@@ -1629,51 +1694,6 @@ sub nativeUrlEncode {
     } else {
         return urlEncode( $theStr );
     }
-}
-
-=pod
-
----++ StaticMethod encodeSpecialChars (  $text  ) -> encoded string
-
-Escape out the chars &, ", >, <, \r and \n with replaceable tokens.
-This is used to protect hidden fields from the browser.
-
-=cut
-
-# "
-sub encodeSpecialChars {
-    my $text = shift;
-
-    $text = '' unless defined( $text );
-    $text =~ s/\%/%_P_%/g;
-    $text =~ s/&/%_A_%/g;
-    $text =~ s/\"/%_Q_%/g;
-    $text =~ s/>/%_G_%/g;
-    $text =~ s/</%_L_%/g;
-    $text =~ s/\r*\n\r*/%_N_%/g;
-
-    return $text;
-}
-
-=pod
-
----++ StaticMethod decodeSpecialChars (  $text  ) -> decoded $text
-
-Reverse the encoding of encodeSpecialChars.
-
-=cut
-
-sub decodeSpecialChars {
-    my $text = shift;
-
-    $text =~ s/%_N_%/\n/g;
-    $text =~ s/%_L_%/</g;
-    $text =~ s/%_G_%/>/g;
-    $text =~ s/%_Q_%/\"/g;
-    $text =~ s/%_A_%/&/g;
-    $text =~ s/%_P_%/%/g;
-
-    return $text;
 }
 
 =pod
@@ -1765,7 +1785,7 @@ sub _processTags {
         my $mess = "Max recursive depth reached: $expanding";
         $this->writeWarning( $mess );
         return $text;
-        #return _inlineError( $mess );
+        #return inlineAlert( $mess );
     }
 
     my @queue = split( /(%)/, $text );
@@ -1807,7 +1827,7 @@ sub _processTags {
                     # behaviour is different in each case.
                     #unshift( @queue, split( /(%)/, $e ));
                     $stack[$#stack] .=
-                      $this->_processTags($e, $depth+1, $expanding , @_ );
+                      $this->_processTags($e, $depth-1, $expanding , @_ );
                 } else { # expansion failed
                     #print ' ' x $tell++,"EXPAND $tag FAILED\n" if $tell;
                     push( @stack, '%' ); # push a new context, starting
@@ -2030,7 +2050,7 @@ sub _INCLUDE {
         # give up, file not found
         $warn = $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' ) unless( $warn );
         if( $warn && $warn =~ /^on$/i ) {
-            return _inlineError( "Warning: Can't INCLUDE <nop>$inctopic, topic not found" );
+            return inlineAlert( "Warning: Can't INCLUDE <nop>$inctopic, topic not found" );
         } elsif( $warn && $warn !~ /^(off|no)$/i ) {
             $inctopic =~ s/\//\./go;
             $warn =~ s/\$topic/$inctopic/go;
@@ -2051,7 +2071,7 @@ sub _INCLUDE {
                 $mess .= '; include path is ' .
                   join('/', @{$this->{includeStack}});
             }
-            return _inlineError( $mess );
+            return inlineAlert( $mess );
         } # else fail silently
         return '';
     }
@@ -2192,6 +2212,7 @@ sub _ENCODE {
     if ( $type && $type =~ /^entit(y|ies)$/i ) {
         return entityEncode( $text );
     } else {
+        $text =~ s/\r*\n\r*/<br \/>/; # Legacy.
         return urlEncode( $text );
     }
 }
@@ -2254,6 +2275,7 @@ sub _URLPARAM {
         if ( $encode =~ /^entit(y|ies)$/ ) {
         	$value = entityEncode( $value );
     	} else {
+            $value =~ s/\r*\n\r*/<br \/>/; # Legacy
         	$value = urlEncode( $value );
     	}
     }

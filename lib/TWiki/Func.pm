@@ -129,7 +129,7 @@ sub getUrlHost {
 
 =pod
 
----+++ getScriptUrl( $web, $topic, $script ) -> $url
+---+++ getScriptUrl( $web, $topic, $script, ... ) -> $url
 
 Compose fully qualified URL
    * =$web=    - Web name, e.g. ='Main'=

@@ -133,7 +133,7 @@ sub preview {
     # do not allow click on link before save: (mods by TedPavlic)
     my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
     $oopsUrl = $session->handleCommonTags( $oopsUrl, $webName, $topic );
-    $ptext =~ s/(?<=<a\s)([^>]*)(href=(?:".*?"|[^"].*?(?=[\s>])))/$1href="$oopsUrl?template=oopspreview" $TWiki::cfg{NoFollow}/goi;
+    $ptext =~ s/(?<=<a\s)([^>]*)(href=(?:".*?"|[^"].*?(?=[\s>])))/$1href="$oopsUrl?template=oopspreview" rel="nofollow"/goi;
     $ptext =~ s/<form(?:|\s.*?)>/<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">/goi;
     $ptext =~ s/(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))/$1onclick="location.href='$oopsUrl\?template=oopspreview'"/goi;
 
@@ -145,8 +145,6 @@ sub preview {
     $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
     $tmpl =~ s/%TEXT%/$ptext/go;
-
-    $text = TWiki::encodeSpecialChars( $text );
 
     $tmpl =~ s/%HIDDENTEXT%/$text/go;
     $tmpl =~ s/%FORMFIELDS%/$formFields/go;

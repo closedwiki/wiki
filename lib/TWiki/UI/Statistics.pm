@@ -62,10 +62,8 @@ sub statistics {
 
     if( !$session->{scripted} ) {
         # running from CGI
-        my $mess =
-          '<html><head><title>TWiki: Create Usage Statistics</title></head><body>';
         $session->writePageHeader();
-        print $mess;
+        print CGI::start_html(-title=>'TWiki: Create Usage Statistics');
     }
 
     # Initial messages
@@ -173,10 +171,12 @@ sub statistics {
     if( !$session->{scripted} ) {
         $tmp = $TWiki::cfg{Stats}{TopicName};
         my $url = $session->getScriptUrl( $destWeb, $tmp, 'view' );
-        _printMsg( "* Go back to <a href=\"$url\" $TWiki::cfg{NoFollow}>$tmp</a> topic", $session );
+        _printMsg( '* Go back to '
+                   . CGI::a( { href => $url,
+                               rel => 'nofollow' }, $tmp), $session );
     }
     _printMsg( 'End creating usage statistics', $session );
-    print '</body></html>' unless( $session->{scripted} );
+    print CGI::end_html() unless( $session->{scripted} );
 }
 
 # Debug only
@@ -225,8 +225,8 @@ sub _collectLogData
     # | 28 Mar 2002 - 07:11 | Main.FredBloggs | rename | Test.TestTopic7 | moved to Test.TestTopic7New  | 127.0.0.1 |
 
     
-    my %view;		# Hash of hashes, counts topic views by <web, topic>
-    my %contrib;	# Hash of hashes, counts uploads/saves by <web, user>
+    my %view;		# Hash of hashes, counts topic views by (web, topic)
+    my %contrib;	# Hash of hashes, counts uploads/saves by (web, user)
 
     # Hashes for each type of statistic, one hash entry per web
     my %statViews;
@@ -409,13 +409,13 @@ sub _processWeb {
     my $statTopViews = '';
     my $statTopContributors = '';
     if( @topViews ) {
-        $statTopViews = join( '<br /> ', @topViews );
+        $statTopViews = join( CGI::br(), @topViews );
         $topViews[0] =~ s/[\[\]]*//g;
-        _printMsg( "  - top view: $topViews[0]", $session );
+        _printMsg( '  - top view: '.$topViews[0], $session );
     }
     if( @topContribs ) {
-        $statTopContributors = join( '<br /> ', @topContribs );
-        _printMsg( "  - top contributor: $topContribs[0]", $session );
+        $statTopContributors = join( CGI::br(), @topContribs );
+        _printMsg( '  - top contributor: '.$topContribs[0], $session );
     }
 
     # Update the WebStatistics topic
@@ -540,19 +540,22 @@ sub _printMsg {
         $msg =~ s/&nbsp;/ /go;
     } else {
         if( $msg =~ s/^\!// ) {
-            $msg = '<h4><font color="red"><span class="twikiAlert">'.
-              $msg.'</span></font>';
-
+            $msg = CGI::h4
+              ( CGI::font
+                ( {color=>'red'},
+                  CGI::span( { class=>'twikiAlert' }, $msg )));
         } elsif( $msg =~ /^[A-Z]/ ) {
             # SMELL: does not support internationalised script messages
-            $msg =~ s/^([A-Z].*)/<h3>$1<\/h3>/go;
+            $msg =~ s/^([A-Z].*)/CGI::h3($1)/ge;
         } else {
-            $msg =~ s/(\*\*\*.*)/<font color=\"#FF0000\"><span class=\"twikiAlert\">$1<\/span><\/font>/go;
+            $msg =~ s/(\*\*\*.*)/CGI::font({color=>'#FF0000',
+                                            class=>'twikiAlert'},$1)/ge;
             $msg =~ s/^\s\s/&nbsp;&nbsp;/go;
             $msg =~ s/^\s/&nbsp;/go;
-            $msg .= '<br />';
+            $msg .= CGI::br();
         }
-        $msg =~ s/==([A-Z]*)==/<font color=\"#FF0000\"><span class=\"twikiAlert\">==$1==<\/span><\/font>/go;
+        $msg =~ s/==([A-Z]*)==/'=='.CGI::font({color=>'#FF0000',
+                                               class=>'twikiAlert'},$1).'=='/ge;
     }
     print $msg,"\n";
 }

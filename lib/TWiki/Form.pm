@@ -33,6 +33,7 @@ use strict;
 use Assert;
 use Error qw( :try );
 use TWiki::UI::OopsException;
+use CGI qw( :form );
 
 =pod
 
@@ -224,24 +225,10 @@ sub _link {
 
     $name =~ s/[\[\]]//go;
 
-    my $cell = 'td';
-    my $attr = '';
-    if( $heading ) {
-       $cell = 'th';
-       $attr = ' bgcolor="#99CCCC"';
-    }
+    my %attrs;
 
-    if( !$align ) {
-       $align = '';
-    } else {
-       $align = ' align="'.$align.'"';
-    }
-
-    if( $span ) {
-       $span = ' colspan="'.$span.'"';
-    } else {
-       $span = '';
-    }
+    $attrs{-align} = $align if $align;
+    $attrs{-colspan} = $span if $span;
 
     my $link = $name;
 
@@ -251,35 +238,24 @@ sub _link {
         if( ! $tooltip ) {
             $tooltip = 'Click to see details in separate window';
         }
-        $link = '<a target="'.$name.'" ' .
-          'onclick="return launchWindow('."'$web','$name')\" " .
-            'title="'.$tooltip.'" ' .
-              'href="'.$this->{session}->getScriptUrl($web, $name, 'view').
-                  "\" $TWiki::cfg{NoFollow}>$name</a>";
+        $link =
+          CGI::a( { target => $name,
+                    onclick => 'return launchWindow("'.$web.'","'.$name.'")',
+                    title => $tooltip,
+                    href =>$this->{session}->getScriptUrl($web, $name, 'view'),
+                    rel => 'nofollow'
+                  }, $name );
     } elsif ( $tooltip ) {
-        $link = '<span title="'.$tooltip.'">'.$name.'</span>';
+        $link = CGI::span({ -title=>$tooltip }, $name );
     }
 
-    my $html =
-      '<'.$cell.$attr.$span.$align.'>'.$link.' '.$extra.'</'.$cell.'>';
-    return $html;
+    if( $heading ) {
+        $attrs{-bgcolor} = '#99CCCC';
+        return CGI::th( \%attrs, $link, );
+    } else {
+        return CGI::td( \%attrs, $link );
+    }
 }
-
-=pod
-
----++ StaticMethod chooseFormButton (  $text  )
-
-Not yet documented.
-
-=cut
-
-sub chooseFormButton {
-    my( $text ) = @_;
-
-    return '<input type="submit" name="submitChangeForm" value="'.$text.
-      '" class="twikiChangeFormButton twikiSubmit " />';
-}
-
 
 =pod
 
@@ -299,12 +275,14 @@ sub renderForEdit {
     my $chooseForm = '';
     my $prefs = $this->{session}->{prefs};
     if( $prefs->getPreferencesValue( 'WEBFORMS', $web ) ) {
-        $chooseForm = chooseFormButton( 'Replace form...' );
+        $chooseForm =
+          CGI::submit(-name => 'submitChangeForm',
+                      -value => 'Replace form...',
+                      -class => "twikiChangeFormButton twikiSubmit");
     }
 
-    my $text = '<div class="twikiForm twikiEditForm"><table border="1" '.
-      'cellspacing="0" cellpadding="0"><tr>' .
-        $this->_link( $web, $form, '', 'h', '', 2, $chooseForm ) . '</tr>';
+    my $text = CGI::start_table(-border=>1, -cellspacing=>0, -cellpadding=>0 );
+    $text .= CGI::Tr($this->_link( $web, $form, '', 1, '', 2, $chooseForm ));
 
     my @fieldsInfo = $this->getFormDef( $formWeb, $form );
     foreach my $c ( @fieldsInfo ) {
@@ -335,19 +313,18 @@ sub renderForEdit {
         $value = '' unless defined $value;  # allow 0 values
         my $extra = '';
 
-        $tooltip = TWiki::entityEncode( $tooltip );
-
         my $output = $this->{session}->{plugins}->renderFormFieldForEditHandler( $name, $type, $size, $value, $attributes, \@fieldInfo );
         if( $output ) {
             $value = $output;
         } elsif( $type eq 'text' ) {
-            $value = TWiki::entityEncode( $value );
-            $value = '<input class="twikiEditFormTextField" type="text" '.
-              'name="'.$name.'" size="'.$size.'" value="'.$value.'" />';
+            $value = CGI::textfield( -class => 'twikiEditFormTextField',
+                                     -name => $name,
+                                     -size => $size,
+                                     -value => $value );
         } elsif( $type eq 'label' ) {
-            my $escaped = TWiki::entityEncode( $value );
-            $value = '<input class="twikiEditFormLabelField" type="hidden" '.
-              'name="'.$name.'" value="'.$escaped.'" />'.$value;
+            $value = CGI::hidden( -class => 'twikiEditFormLabelField',
+                                  -name => $name,
+                                  -value => $value );
         } elsif( $type eq 'textarea' ) {
             my $cols = 40;
             my $rows = 5;
@@ -355,102 +332,115 @@ sub renderForEdit {
                $cols = $1;
                $rows = $2;
             }
-            $value = TWiki::entityEncode( $value );
-            $value = '<textarea class="twikiEditFormTextAreaField" '.
-              'cols="'.$cols.'" rows="'.$rows.'" name="'.$name.'">'.
-                $value.'</textarea>';
+            $value = CGI::textarea( -class => 'twikiEditFormTextAreaField',
+                                    -cols => $cols,
+                                    -rows => $rows,
+                                    -name => $name,
+                                    -default => "\n".$value );
         } elsif( $type eq 'select' ) {
-            my $val = '';
-            my $matched = '';
-            my $defaultMarker = '%DEFAULTOPTION%';
+            my $choices = '';
+            my $matched = 0;
             foreach my $item ( @fieldInfo ) {
-                my $selected = $defaultMarker;
+                my $selected = '';
                 if( $item eq $value ) {
-                   $selected = ' selected="selected"';
-                   $matched = $item;
+                    $selected = 'selected';
+                    $matched = 1;
                 }
-                $defaultMarker = '';
                 $item =~ s/<nop/&lt\;nop/go;
-                $val .= '   <option'.$selected.'>'.$item.'</option>';
+                $choices .= CGI::option({-selected=>$selected}, $item );
             }
-            if( ! $matched ) {
-               $val =~ s/%DEFAULTOPTION%/ selected="selected"/go;
-            } else {
-               $val =~ s/%DEFAULTOPTION%//go;
-            }
-            $value = '<select name="'.$name.'" size="'.$size.'">'.
-              $val.'</select>';
+            $choices =~ s/selected=""/selected="selected"/ unless $matched;
+            $value = CGI::Select({ -name=>$name, -size=>$size }, $choices );
         } elsif( $type =~ "^checkbox" ) {
             if( $type eq 'checkbox+buttons' ) {
                 my $boxes = $#fieldInfo + 1;
-                $extra = '<br /><input class="twikiEditFormCheckboxButton '.
-                  'twikiCheckbox" type="button" value=" Set " '.
-                    'onclick="checkAll(this, 2, $boxes, true)" />&nbsp;' .
-                      '<input class="twikiEditFormCheckboxButton '.
-                        'twikiCheckbox" type="button" value="Clear" '.
-                          'onclick="checkAll(this, 1, '.$boxes.
-                            ', false)" />';
+                $extra = CGI::br();
+                $extra .= CGI::button
+                  ( -class=>'twikiEditFormCheckboxButton twikiCheckbox',
+                    -value=>' Set ',
+                    -onClick=>"checkAll(this,2,$boxes,true)");
+                $extra .= '&nbsp;' . CGI::button
+                  ( -class=>'twikiEditFormCheckboxButton twikiCheckbox',
+                    -value=>'Clear',
+                    -onClick=>"checkAll(this,1,$boxes,false)");
             }
 
-            my $val ='<table cellspacing="0" cellpadding="0"><tr>';
+            my $rows = '';
+            my $row = '';
             my $lines = 0;
             foreach my $item ( @fieldInfo ) {
-                my $flag = '';
-                my $expandedItem = $this->{session}->handleCommonTags
-                  ( $item, $web, $topic );
-                if( $value =~ /(^|,\s*)\Q$item\E(,|$)/ ) {
-                    $flag = ' checked="checked"';
-                }
-                $val .= '<td><input class="twikiEditFormCheckboxField" '.
-                  'type="checkbox" name="'.
-                    $name.$item.'"'.$flag.' />'.$expandedItem.
-                      ' &nbsp;&nbsp;</td>';
-                if( $size > 0 && ($lines % $size == $size - 1 ) ) {
-                    $val .= '</tr><tr>';
+                my $checked = '';
+                $checked = 'checked' if( $value =~ /(^|,\s*)\Q$item\E(,|$)/ );
+                my $data =
+                  CGI::checkbox(-class=>'twikiEditFormCheckboxField',
+                                -name=>$name,
+                                -value=>$item,
+                                -checked=>$checked,
+                                -label=>
+                                $this->{session}->handleCommonTags( $item,
+                                                                    $web,
+                                                                    $topic ).
+                                ' &nbsp;&nbsp;' );
+                $row .= CGI::td( $data );
+                if( $size && ($lines % $size) == $size - 1 ) {
+                    $rows .= CGI::Tr( $row );
+                    $row = '';
                 }
                 $lines++;
             }
-            $val =~ s/<\/tr><tr>$//;
-            $value = $val.'</tr></table>';
+            $rows .= $row;
+
+            $value = CGI::table( { -cellspacing=>0, -cellpadding=>0 }, $rows );
         } elsif( $type eq 'radio' ) {
-            my $val = '<table cellspacing="0" cellpadding="0"><tr>';
-            my $matched = '';
-            my $defaultMarker = '%DEFAULTOPTION%';
+            my $rows = '';
+            my $row = '';
+            my $matched = 0;
             my $lines = 0;
+            # SMELL: radio buttons ought to be mutually exclusive
+            # checkboxes should be used otherwise.
             foreach my $item ( @fieldInfo ) {
-                my $selected = $defaultMarker;
+                my $selected = '';
+                if( $item eq $value ) {
+                   $selected = 'checked';
+                   $matched = 1;
+                }
                 my $expandedItem = $this->{session}->handleCommonTags
                   ( $item, $web, $topic );
-                if( $item eq $value ) {
-                   $selected = ' checked="checked"';
-                   $matched = $item;
-                }
-                $defaultMarker = '';
-                $val .= "\n<td><input class=\"twikiEditFormRadioField twikiRadioButton\" type=\"radio\" name=\"$name\" value=\"$item\" $selected />$expandedItem &nbsp;&nbsp;</td>";
+                my $data =
+                  CGI::input
+                      ({ -class => 'twikiEditFormRadioField twikiRadioButton',
+                         -name => $name,
+                         -value => $item,
+                         -checked => $selected,
+                         -label => $expandedItem });
+                $row .= CGI::td( $data );
                 if( $size > 0 && ($lines % $size == $size - 1 ) ) {
-                   $val .= "\n</tr><tr>";
+                    $rows .= CGI::Tr( $row );
+                    $row = '';
                 }
                 $lines++;
             }
-            if( ! $matched ) {
-               $val =~ s/%DEFAULTOPTION%/ checked="checked"/go;
-            } else {
-               $val =~ s/%DEFAULTOPTION%//go;
-            }
-            $val =~ s/\n<\/tr><tr>$//;
-            $value = "$val\n</tr></table>\n";
+
+            $rows .= $row;
+            $rows =~ s/checked=""/checked="checked"/ unless $matched;
+
+            $value = CGI::table( { -cellspacing=>0, -cellpadding=>0 }, $rows );
         } else {
-            # Treat like test, make it reasonably long
+            # Treat like text, make it reasonably long
             # SMELL: Sven thinks this should be an error condition - so users
             # know about typo's, and don't lose data when the typo is fixed
-            $value = TWiki::entityEncode( $value );
-            $value = "<input class=\"twikiEditFormError\" type=\"text\" name=\"$name\" size=\"80\" value=\"$value\" />";
+            $value = CGI::textfield( -class=>'twikiEditFormError',
+                                     -name=>$name,
+                                     -size=>80,
+                                     -value=>$value );
         }
-        $text .= '<tr>' . $this->_link( $web, $title, $tooltip, 'h', 'right', '', $extra ) . "<td align=\"left\"> $value </td> </tr>\n";
+        $text .= CGI::Tr($this->_link( $web, $title, $tooltip, 1,
+                                       'right', '', $extra ) .
+                         CGI::td( { -align=>'left' } , $value ));
     }
-    $text .= "</table></div>\n";
-    
-    return $text;
+    $text .= CGI::end_table();
+
+    return CGI::div({-class=>'twikiForm twikiEditForm'}, $text );
 }
 
 
@@ -509,10 +499,6 @@ sub fieldVars2Meta {
           }
        }
 
-       if( defined( $value ) ) {
-           $value = TWiki::decodeSpecialChars( $value );
-       }
-
        # Have title and name stored so that topic can be viewed without reading in form definition
        $value = '' if( ! defined( $value ) && ! $justOverride );
        if( defined( $value ) ) {
@@ -552,11 +538,8 @@ sub getFieldParams {
        my $name  = $field->{name};
        my $value = $field->{value};
        #$this->{session}->writeDebug( "Form::getFieldParams " . $name . ", " . $value );
-       $value = TWiki::decodeSpecialChars( $value );
-       $value =~ s/&/&amp\;/go;
-       $value =~ s/</&lt\;/go;
-       $value =~ s/>/&gt\;/go;
-       $params .= "<input type=\"hidden\" name=\"$name\" value=\"$value\" />\n";
+       $params .= CGI::hidden( -name => $name,
+                               -default => $value );
     }
     return $params;
 
@@ -580,8 +563,7 @@ sub changeForm {
     $tmpl = $this->{session}->handleCommonTags( $tmpl, $theWeb, $theTopic );
     $tmpl = $this->{session}->{renderer}->getRenderedVersion( $tmpl, $theWeb, $theTopic );
     my $q = $this->{session}->{cgiQuery};
-    my $text = $q->param( 'text' );
-    $text = TWiki::encodeSpecialChars( $text );
+    my $text = CGI::hidden( -name => 'text', -value => $q->param( 'text' ) );
     $tmpl =~ s/%TEXT%/$text/go;
 
     my $prefs = $this->{session}->{prefs};
@@ -602,12 +584,15 @@ sub changeForm {
 
     my $formList = '';
     foreach my $form ( @forms ) {
-       my $selected = ( $form eq $formName ) ? 'checked="checked"' : '';
-       $formList .= '<br />' if( $formList );
-       my $show = $form ? $form : '&lt;none&gt;';
-       my $value = $form ? $form : 'none';
-       $formList .= '<input type="radio" name="formtemplate" value="'.
-         $value.'" '.$selected.' />&nbsp;'.$show;
+       my $selected = ( $form eq $formName ) ? 'checked' : '';
+       $formList .= CGI::br() if( $formList );
+       my $value = 
+       $formList .= CGI::input( {
+                                 type => 'radio',
+                                 name => 'formtemplate',
+                                 value => $form ? $form : 'none',
+                                 checked => $selected,
+                                } ). ( $form ? $form : '&lt;none&gt;' );
     }
     $tmpl =~ s/%FORMLIST%/$formList/go;
 

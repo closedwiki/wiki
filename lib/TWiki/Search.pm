@@ -497,10 +497,9 @@ sub searchWeb {
 
     # Invalid template?
     if( ! $tmplTail ) {
-        my $mess = '<html><body>' .
-          '<h1>TWiki Installation Error</h1>' .
-            "Incorrect format of $theTemplate template (missing sections? There should be 4 %SPLIT% tags.)" .
-              '</body></html>';
+        my $mess = CGI::start_html() .
+          CGI::h1('TWiki Installation Error') .
+              'Incorrect format of '.$theTemplate.' template (missing sections? There should be 4 %SPLIT% tags)' . CGI::end_html();
         if ( defined $callback ) {
             &$callback( $cbdata, $mess );
             return undef;
@@ -685,7 +684,7 @@ sub searchWeb {
 
             my $revUser = $topicInfo->{$topic}->{editby} || 'UnknownUser';
             my $ru = $this->{session}->{users}->findUser( $revUser );
-            my $revNum  = $topicInfo->{$topic}->{revNum};
+            my $revNum  = $topicInfo->{$topic}->{revNum} || 0;
 
             # Check security
             # FIXME - how do we deal with user login not being available if
@@ -759,10 +758,11 @@ sub searchWeb {
                 $out =~ s/%TOPICNAME%/$topic/go;
                 $out =~ s/%TIME%/$revDate/o;
                 my $revNumText;
+                $revNum = 0 unless $revNum =~ /^\d+$/;
                 if( $revNum > 1 ) {
                     $revNumText = 'r'.$revNum;
                 } else {
-                    $revNumText = '<span class="twikiNew">NEW</span>';
+                    $revNumText = CGI::span( { class=>'twikiNew' }, 'NEW');
                 }
                 $out =~ s/%REVISION%/$revNumText/o;
                 $out =~ s/%AUTHOR%/$revUser/o;
@@ -829,12 +829,12 @@ sub searchWeb {
                             # NOTE: Must *not* use /o here, since $match is based on
                             # search string that will vary during lifetime of
                             # compiled code with mod_perl.
-                            my $subs = s|$match|$1<font color='red'><span class="twikiAlert">$2</span></font>&nbsp;|g;
+                            my $subs = s/$match/$1.TWiki::inlineAlert($2)/ge;
                             $match = '(\[\[)('.$spacedTopic.')(?=\]\])';
-                            $subs += s|$match|$1<font color='red'><span class="twikiAlert">$2</span></font>&nbsp;|gi;
+                            $subs += s/$match/$1.TWiki::inlineAlert($2)/gei;
                             if( $subs ) {
                                 $topicCount++ if( ! $reducedOutput );
-                                $reducedOutput .= $_.'<br />' if( $subs );
+                                $reducedOutput .= $_.CGI::br() if( $subs );
                             }
                         }
                     }

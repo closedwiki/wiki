@@ -59,7 +59,10 @@ sub changes {
     my @changes = split( /\r?\n/, $changeData );
     unless( $query->param( 'minor' )) {
         @changes = grep { !/\tminor$/ } @changes;
-        $page .= '<b>Note:</b> This page is showing major changes only. To see all changes <a href="'.$query->url() . "/$webName?minor=1\" $TWiki::cfg{NoFollow}>click here</a>";
+        $page .= CGI::b( 'Note:' ).
+          'This page is showing major changes only. To see all changes '.
+            CGI::a( { href => $query->url()."/$webName?minor=1",
+                      rel => 'nofollow' }, 'click here' );
     }
     my %done = ();
     foreach my $change ( reverse @changes ) {
@@ -76,7 +79,7 @@ sub changes {
             $rev = 1 unless $rev;
             my $srev = $rev;
             if( $rev == 1 ) {
-                $srev = '<span class="twikiNew">NEW</span>';
+                $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
             }
             $thisChange =~ s/%TIME%/$time/go;
             $thisChange =~ s/%REVISION%/$rev/go;

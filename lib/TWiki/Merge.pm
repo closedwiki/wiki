@@ -91,7 +91,7 @@ sub _change {
     # been accepts.
     if( $ai->[$a] =~ /\S/ ) {
         # there is some non-white text to delete
-        push( @$out, "<del>$ai->[$a]</del>" );
+        push( @$out, CGI::del( $ai->[$a] ) );
     } else {
         # otherwise this insert is not replacing anything
         $simpleInsert = 1;
@@ -99,7 +99,7 @@ sub _change {
 
     if( !$simpleInsert && $bi->[$b] =~ /\S/ ) {
         # this insert is replacing something with something
-        push( @$out, "<ins>$bi->[$b]</ins>" );
+        push( @$out, CGI::ins( $bi->[$b] ) );
     } else {
         # otherwise it is replacing nothing, or is whitespace or null
         push( @$out, $bi->[$b] );

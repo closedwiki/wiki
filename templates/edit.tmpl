@@ -88,8 +88,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 #PageTop
 <form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"simpleheader"}%
-<textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onkeydown="if(window.event.keyCode==27) return false;">
-%TEXT%</textarea><br />
+%TEXT%<br />
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />

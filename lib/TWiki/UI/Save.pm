@@ -128,7 +128,7 @@ sub _save {
     $saveOpts->{forcenewrevision} = 1
       if( $query->param( 'forcenewrevision' ) || !$newText );
 
-    $newText = TWiki::decodeSpecialChars( $newText );
+    $newText ||= '';
 
     if( $saveCmd eq 'repRev' ) {
         $newText =~ s/%__(.)__%/%_$1_%/go;
@@ -221,7 +221,7 @@ action values are:
 | =cancel= | exit without save, return to view (does _not_ undo Checkpoint saves) |
 | =preview= | preview edit text; same as before |
 
-<tt>cmd</tt> has been deprecated in favour of =action=. It will be deleted at
+=cmd= has been deprecated in favour of =action=. It will be deleted at
 some point.
 
 =cut
@@ -236,6 +236,7 @@ sub save {
     my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), 'view' );
 
     my $saveaction = lc($query->param( 'action' ));
+
     if ( $saveaction eq 'checkpoint' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
         my $editURL = $session->getScriptUrl( $webName, $topic, 'edit' );

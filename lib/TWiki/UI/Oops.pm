@@ -60,12 +60,13 @@ sub oops_cgi {
 
     my $tmplData = $session->{templates}->readTemplate( $tmplName, $skin );
     if( ! $tmplData ) {
-        $tmplData = '<html><body>'
-          . '<h1>TWiki Installation Error</h1>Template file'
-            . $tmplName.'.tmpl not found or template directory '
-              . "$TWiki::cfg{TemplateDir} not found.<p />"
-                . 'Check the configuration setting for TemplateDir.'
-                  . '</body></html>';
+        $tmplData = CGI::start_html()
+          . CGI::h1('TWiki Installation Error')
+            . 'Template file'.$tmplName
+               . '.tmpl not found or template directory '
+                 . $TWiki::cfg{TemplateDir}.' not found.'.CGI::p()
+                   . 'Check the configuration setting for TemplateDir.'
+                     .end_html();
     } else {
         my $param = $query->param( 'param1' ) || '';
         $tmplData =~ s/%PARAM1%/$param/go;

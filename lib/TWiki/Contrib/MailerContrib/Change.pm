@@ -116,10 +116,10 @@ sub expandHTML {
     my $frev = '';
     if( $this->{CURR_REV} ) {
         if( $this->{CURR_REV} > 1 ) {
-            $frev = "r$this->{BASE_REV}-&gt;r$this->{CURR_REV}";
+            $frev = 'r'.$this->{BASE_REV}.'-&gt;r'.$this->{CURR_REV};
         } else {
             # new _since the last notification_
-            $frev = "<span class=\"twikinew\">>NEW</span>";
+            $frev = CGI::span( { class=>'twikiNew' }, 'NEW' );
         }
     }
     $html =~ s/%REVISION%/$frev/go;

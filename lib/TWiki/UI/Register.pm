@@ -448,7 +448,7 @@ sub resetPassword {
 
     my $action = '';
     # Redirect to a page that tells what happened
-    $message =~ s/\n/<br \/>\n/g;
+    $message =~ s/\n/CGI::br()/g;
     if( scalar( @userNames ) == 1 ) {
         # one user; refine the change password link to include their
         # username
