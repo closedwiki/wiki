@@ -46,8 +46,6 @@ BEGIN {
 	or die "no account?";
     print STDERR "account=[$account]\n";
 
-
-#    my $localLibBase = "$FindBin::Bin/lib/CPAN/lib/site_perl/" . $Config{version};
     my $localLibBase = "$FindBin::Bin/lib/CPAN/lib";
     my @localLibs = ( $localLibBase, "$localLibBase/$Config{archname}" );
     print STDERR "@localLibs\n";
@@ -356,9 +354,10 @@ checkdir( $tmp, $dest, $bin, $lib, $cpan );
 
 # a handy link to the place to go *after* the next step
 my $BIN = "http://$hostname/~$account/cgi-bin/twiki";
+my $scriptSuffix = '';
 print qq{<hr><hr>\n};
-print qq{do a <tt>./post-wiki.sh</tt> and then <a target="details" href="$BIN/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
-print qq{run <a target="details" href="$BIN/testenv/foo/bar" >testenv</a><br/>\n};
+print qq{do a <tt>./post-wiki.sh</tt> and then <a target="details" href="$BIN/view$scriptSuffix/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
+print qq{run <a target="details" href="$BIN/testenv$scriptSuffix/foo/bar" >testenv</a><br/>\n};
 print qq{<br/><br/>};
 print "you can perform this installation again using the following URL: <br/>";
 ( my $urlInstall = $q->self_url ) =~ s/install=install//;
@@ -575,7 +574,7 @@ sub installTWikiExtension
 
     # TODO: assert( isDirectoryEmpty() );
 
-	print STDERR "fixing permissions...\n";
+    print STDERR "fixing permissions...\n";
     execute("chmod -R 777 $dest $lib $tmp; chmod -R 755 $bin $lib; chmod -R 775 $dest/data; chmod -R 775 $tmp/twiki");
     checkdir( $tmp, $dest, $bin, $lib );		# removed bin because it shouldn't be world-writable (taint checking)
 
