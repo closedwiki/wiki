@@ -111,8 +111,6 @@ sub main
 	return;
     }
     &TWiki::Store::lockTopic( $topic );
-
-    TWiki::writeHeader( $query );
     
     my $formTemplate = $query->param( "formtemplate" ) || "";
 
@@ -171,9 +169,8 @@ sub main
        $tmpl =~ s/%FORMTEMPLATE%//go;
     }
     
-    if( $saveCmd ne "repRev" ) {
-        # hide meta data
-        $text =~ s/%META:.*?%\r?\n?//go;
+    if( $saveCmd eq "repRev" ) {
+       $text = TWiki::Store::readTopicRaw( $webName, $topic );
     }
     
     my $possibleForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$webName" );
@@ -200,15 +197,25 @@ sub main
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-    $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
+    if( $saveCmd ne "repRev" ) {
+        $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
+    } else {
+        $tmpl =~ s/%META{[^}]*}%//go;
+    }
     my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
     $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
 
-    # Dont want to render form fields
+    # Dont want to render form fields, so this after getRenderedVersion
     my %form = $meta->findOne( "FORM" );
-    if( %form ) {
+    if( %form && $saveCmd ne "repRev" ) {
        my $form = $form{"name"};
        my @fieldDefs = &TWiki::Form::getFormDef( $webName, $form );
+       
+       if( ! @fieldDefs ) {
+            my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoformdef" );
+            TWiki::redirect( $query, $url );
+            return;
+       }
        my $formText = &TWiki::Form::renderForEdit( $webName, $form, $meta, @fieldDefs );
        $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } else {
@@ -217,6 +224,8 @@ sub main
     
 
     $tmpl =~ s/%TEXT%/$text/go;
+    
+    TWiki::writeHeader( $query );
 
     print $tmpl;
 }
