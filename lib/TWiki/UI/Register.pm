@@ -425,7 +425,6 @@ sub resetPassword {
 
     # need admin priv if resetting bulk, or resetting another user
     my $needsAdmin = ( scalar( @userNames ) > 1 );
-    $needsAdmin ||= ( scalar(@userNames) && $user->login() ne $userNames[0] );
 
     if ( $needsAdmin ) {
         # Only admin is able to reset more than one password or
@@ -464,7 +463,7 @@ sub resetPassword {
 sub _resetUsersPassword {
     my( $session, $userName, $introduction ) = @_;
 
-    my $user = $session->{users}->findUser( $userName, undef, 1 );
+    my $user = $session->{users}->findUser( $userName, undef);
     unless( $user ) {
         # couldn't work out who they are, its neither loginName nor
         # wikiName.
