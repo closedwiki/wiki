@@ -50,6 +50,7 @@ function checkAll( theButton, theButtonOffset, theNum, theCheck )
   }
 }
 function launchWindow( theWeb, theTopic, theAnchor ) {
+alert("theWeb = " + theWeb);
   if( ! theAnchor ) {
     theAnchor = "";
   }
@@ -95,7 +96,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 
 %TMPL:DEF{"topicaction"}%
-<fieldset><legend class="twikiGrayText">[[%TWIKIWEB%.AccessKeys][AccessKeys]]: C = Cancel, Q = Quiet Save, K = Checkpoint, P = Preview, S = Save</legend>
+<fieldset><legend class="twikiGrayText"><a href="#" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">Access keys</a>: C = Cancel, Q = Quiet Save, K = Checkpoint, P = Preview, S = Save</legend>
 	<div class="twikiFieldsetButtons twikiLeft">
    <label accesskey="c" for="cancel">
         <input type="submit" class="twikiSubmit twikiCancel" name="action" id="cancel" value="Cancel" />
