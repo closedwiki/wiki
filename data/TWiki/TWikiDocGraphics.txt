@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1081656169" format="1.0" version="1.30"}%
+%META:TOPICINFO{author="PeterThoeny" date="1089858569" format="1.0" version="1.31"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -67,6 +67,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/newtopic.gif" alt="newtopic.gif"  width="16" height="16"  />  | =newtopic.gif= | New topic |
 |  <img src="%ATTACHURLPATH%/searchtopic.gif" alt="searchtopic.gif"  width="16" height="16"  />  | =searchtopic.gif= | Search topic |
 |  <img src="%ATTACHURLPATH%/printtopic.gif" alt="printtopic.gif"  width="16" height="16"  />  | =printtopic.gif= | Print topic |
+|  <img src="%ATTACHURLPATH%/cachetopic.gif" alt="cachetopic.gif"  width="16" height="16"  />  | =cachetopic.gif= | Cache topic |
 |  <img src="%ATTACHURLPATH%/attachfile.gif" alt="attachfile.gif"  width="16" height="16"  />  | =attachfile.gif= | Attach file |
 |  <img src="%ATTACHURLPATH%/recentchanges.gif" alt="recentchanges.gif"  width="16" height="16"  />  | =recentchanges.gif= | Recent changes |
 |  <img src="%ATTACHURLPATH%/changes.gif" alt="changes.gif"  width="16" height="16"  />  | =changes.gif= | Changes |
@@ -184,3 +185,4 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="group.gif" attr="" comment="Group" date="1081656648" path="C:\Data\Temp\group.gif" size="162" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="person.gif" attr="" comment="Person" date="1081656665" path="C:\Data\Temp\person.gif" size="153" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="persons.gif" attr="" comment="Persons" date="1081656676" path="C:\Data\Temp\persons.gif" size="164" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="cachetopic.gif" attr="" comment="Cache topic" date="1089858540" path="cachetopic.gif" size="935" user="PeterThoeny" version="1.1"}%
