@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018175160" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PeterThoeny" date="1037243520" format="1.0" version="1.3"}%
 *Include Topics and Web Pages Using ==%<nop>INCLUDE{...}%== Variable*
 
 Use the ==%<nop>INCLUDE{...}%== variable to embed the content of another topic or web page inside a %WIKITOOLNAME% topic. The whole content or only parts of a page can be included.
@@ -8,16 +8,19 @@ Use the ==%<nop>INCLUDE{...}%== variable to embed the content of another topic o
 
 ---++ Syntax
 
-==%<nop>INCLUDE{"page" pattern="reg-exp"}%==
+==%<nop>INCLUDE{ "page" pattern="reg-exp" rev="1.2" }%==
 
-	* =="page"==: <br>
+	* =="page"==: %BR%
 	  The nameless parameter specifies the page to include. It is
 		* The name of a topic located in the current web, i.e. ==%<nop>INCLUDE{"WebNotify"}%==
 		* A =Web.Topic= name specifying a topic in another web, i.e. ==%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%==
 		* A full qualified URL with ==http== protocol, domain name and optional port number, i.e. ==%<nop>INCLUDE{"http://twiki.org:80/index.html"}%==. Supported content types are ==text/html== and ==text/plain==. The full page is included by default, but the HTML header and scripts are stripped in case it is a web page.
 
-	* ==pattern="reg-exp"==: <br>
+	* ==pattern="reg-exp"==: %BR%
 	  The *pattern* parameter is optional and allows you to extract some parts of a web page. Specify a %TWIKIWEB%.RegularExpression that scans from start (='^'=) to end and contains the text you want to keep in parenthesis, i.e. ==pattern="^.*?(from here.*?to here).*"==. You need to make sure that the integrity of a web page is not compromised, i.e. if you include a table make sure to include everything including the table end tag.
+
+	* ==rev="1.x"==: %BR%
+	  The *rev* parameter is optional and allows you to include an earlier revision of a topic. This can be used to include an official version of a topic, e.g. one that has been signed of by management.
 
 __Note:__ All text of a topic is included unless you specify ==%<nop>STARTINCLUDE%==, ==%<nop>STOPINCLUDE%== and/or a *pattern* parameter.
 
