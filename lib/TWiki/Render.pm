@@ -208,27 +208,27 @@ sub _addListItem {
         my $firstTime = 1;
         while( $size < $depth ) {
             push( @{$this->{LIST}}, { type=>$theType, element=>$theElement } );
-            push( @$result, "<$theElement>\n" ) unless( $firstTime );
-            push( @$result, "<$theType>\n" );
+            push( @$result, "<$theElement>" ) unless( $firstTime );
+            push( @$result, "<$theType>" );
             $firstTime = 0;
             $size++;
         }
     } else {
         while( $size > $depth ) {
             my $tags = pop( @{$this->{LIST}} );
-            push( @$result, "</$tags->{element}>\n" );
-            push( @$result, "</$tags->{type}>\n" );
+            push( @$result, "</$tags->{element}>" );
+            push( @$result, "</$tags->{type}>" );
             $size--;
         }
         if ($size) {
-            push( @$result, "</$this->{LIST}->[$size-1]->{element}>\n" );
+            push( @$result, "</$this->{LIST}->[$size-1]->{element}>" );
         }
     }
 
     if ( $size ) {
         my $oldt = $this->{LIST}->[$size-1];
         if( $oldt->{type} ne $theType ) {
-            push( @$result, "</$oldt->{type}>\n<$theType>\n" );
+            push( @$result, "</$oldt->{type}>\n<$theType>" );
             pop( @{$this->{LIST}} );
             push( @{$this->{LIST}}, { type=>$theType, element=>$theElement } );
         }
@@ -876,7 +876,7 @@ sub getRenderedVersion {
 
     # Escape rendering: Change " !AnyWord" to " <nop>AnyWord",
     # for final " AnyWord" output
-    $text =~ s/(^|[\s\(])\!(?=[\w\*\=])/$1<nop>/g;
+    $text =~ s/(^|[\s\(])\!(?=[\w\*\=])/$1<nop>/gm;
 
     # Blockquoted email (indented with '> ')
     # Could be used to provide different colours for different numbers of '>'
