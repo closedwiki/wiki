@@ -1,84 +1,77 @@
 Description: Simple formatting, as described in TWiki.TextFormattingRules
----+ Paragraphs
----++ Expected
+
+<table cols=3 border=2>
+<tr><th>Feature</th><th>Expected</th><th>Actual</th></tr>
+<tr><td> Paragraphs</td><td>
 <!-- expected -->
 1st paragraph
 <p />
 2nd paragraph
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 1st paragraph
 
 2nd paragraph
 <!-- /actual-->
-
----+ Headings
----++ Expected
+</td></tr>
+<tr><td> Headings</td><td>
 <!-- expected -->
 <h2 >Sushi</h2>
 <h3 >Maguro</h3>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 ---++ Sushi
 ---+++ Maguro
----++ Actual
-<!-- actual -->
-
----+ Bold Text
----++ Expected
+<!-- /actual -->
+</td></tr>
+<tr><td> Bold Text</td><td>
 <!-- expected -->
 <strong>Bold</strong>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 *Bold*
 <!-- /actual -->
-
----+ Italic Text
- Words get _italic_ by enclosing them in =_= underscores.
----++ Expected
+</td></tr>
+<tr><td> Italic Text</td><td>
 <!-- expected -->
 _Italic_
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 _Italic_
 <!-- /actual -->
-
----+ Bold Italic
----++ Expected
+</td></tr>
+<tr><td> Bold Italic</td><td>
 <!-- expected -->
 __Bold italic__
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 __Bold italic__
 <!-- /actual -->
-
----+ Fixed Font
----++ Expected
+</td></tr>
+<tr><td> Fixed Font</td><td>
 <!-- expected -->
 <code>Fixed font</code>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 =Fixed font=
 <!-- /actual -->
-
----+ Bold Fixed Font
----++ Expected
+</td></tr>
+<tr><td> Bold Fixed Font</td><td>
 <!-- expected -->
 <strong><code>Bold fixed</code></strong>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 ==Bold fixed==
 <!-- /actual -->
-
----+ Verbatim Mode
----++ Expected
+</td></tr>
+<tr><td> Verbatim Mode</td><td>
 <!-- expected -->
 <pre>
 class CatAnimal {
@@ -88,7 +81,7 @@ class CatAnimal {
 }
 </pre>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 <verbatim>
 class CatAnimal {
@@ -98,37 +91,33 @@ class CatAnimal {
 }
 </verbatim>
 <!-- /actual -->
-
----+ Separator
- At least three dashes at the beginning of a line.
----++ Expected
+</td></tr>
+<tr><td> Separator</td><td>
 <!-- expected -->
 <hr>
 <hr>
 --
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 ---
 -------
 --
 <!-- /actual -->
-
----+ List Item
----++ Expected
+</td></tr>
+<tr><td> List Item</td><td>
 <!-- expected -->
 <ul>
 <li>bullet item
 </li>
 </ul>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 	* bullet item
 <!-- /actual -->
-
----+ Nested List Item
----++ Expected
+</td></tr>
+<tr><td> Nested List Item</td><td>
 <!-- expected -->
 <ul>
 <li>level 1
@@ -139,14 +128,13 @@ class CatAnimal {
 </li>
 </ul>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 	* level 1
 		* level 2
 <!-- /actual -->
-
----+ Ordered List
----++ Expected
+</td></tr>
+<tr><td> Ordered List</td><td>
 <!-- expected -->
 <ol>
 <li> Sushi</li>
@@ -160,15 +148,14 @@ class CatAnimal {
 </li>
 </ol>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 	1. Sushi
 	A. Sushi
 	i. Sushi
 <!-- /actual -->
-
----+ Definition List
----++ Expected
+</td></tr>
+<tr><td> Definition List</td><td>
 <!-- expected -->
 <dl>
 <dt> Sushi </dt><dd> Japan
@@ -178,17 +165,16 @@ class CatAnimal {
 
 </dl>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 	$ Sushi: Japan
 	$ Dim Sum: S.F.
 <!-- /actual -->
-
----+ Table
----++ Expected
+</td></tr>
+<tr><td> Table</td><td>
 <!-- expected -->
 <table border="0" cellspacing="2" cellpadding="1">
-<tr><th valign="top" class="twikiFirstCol" bgcolor="#0c2577"><a href="http://twiki.org/cgi-bin/view/Codev/TestCaseBasicFormatting?sortcol=0&amp;table=1&amp;up=0#sorted_table" title="Sort by this column"><font color="#FFFF99"> L</font></a> </th><th valign="top" bgcolor="#0c2577"><a href="http://twiki.org/cgi-bin/view/Codev/TestCaseBasicFormatting?sortcol=1&amp;table=1&amp;up=0#sorted_table" title="Sort by this column"><font color="#FFFF99"> C</font></a> </th><th valign="top" bgcolor="#0c2577"><a href="http://twiki.org/cgi-bin/view/Codev/TestCaseBasicFormatting?sortcol=2&amp;table=1&amp;up=0#sorted_table" title="Sort by this column"><font color="#FFFF99"> R</font></a> </th></tr>
+<tr><th valign="top" class="twikiFirstCol" bgcolor="#0c2577"><a href="%SCRIPTURL%/view/TestCases/TestCaseBasicFormatting?sortcol=0&amp;table=1&amp;up=0#sorted_table" title="Sort by this column"><font color="#FFFF99"> L</font></a> </th><th valign="top" bgcolor="#0c2577"><a href="%SCRIPTURL%/TestCases/TestCaseBasicFormatting?sortcol=1&amp;table=1&amp;up=0#sorted_table" title="Sort by this column"><font color="#FFFF99"> C</font></a> </th><th valign="top" bgcolor="#0c2577"><a href="%SCRIPTURL%/TestCases/TestCaseBasicFormatting?sortcol=2&amp;table=1&amp;up=0#sorted_table" title="Sort by this column"><font color="#FFFF99"> R</font></a> </th></tr>
 <tr><td valign="top" class="twikiFirstCol" bgcolor="#F8F8F8"> A2 </td><td align="center" valign="top" bgcolor="#F8F8F8"> 2 </td><td align="right" valign="top" bgcolor="#F8F8F8"> 2 </td></tr>
 
 <tr><td valign="top" class="twikiFirstCol" bgcolor="#DDDDDD"> A3 </td><td align="center" valign="top" bgcolor="#DDDDDD"> 3 </td><td align="right" valign="top" bgcolor="#DDDDDD"> 3 </td></tr>
@@ -202,7 +188,7 @@ class CatAnimal {
 <tr><td valign="top" bgcolor="#DDDDDD"> six </td><td valign="top" bgcolor="#DDDDDD"> six </td></tr>
 </table>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 | *L* | *C* | *R* |
 | A2 |  2  |  2 |
@@ -213,23 +199,21 @@ class CatAnimal {
 
 |^| six | six |
 <!-- /actual -->
-
----+ Wiki Word Links
----++ Expected
+</td></tr>
+<tr><td> Wiki Word Links</td><td>
 <!-- expected -->
 <a class="twikiLink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/WebNotify">WebNotify</a>
 <p />
 <a class="twikiLink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Main/TWikiUsers">TWikiUsers</a>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 WebNotify
 
 %MAINWEB%.TWikiUsers
 <!-- /actual -->
-
----+ SquareBrackets
----++ Expected
+</td></tr>
+<tr><td> SquareBrackets</td><td>
 <verbatim>
 <!-- expected -->
 <span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">wiki syntax</font><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/WikiSyntax?topicparent=%WEB%.TestCaseBasicFormatting"><sup>?</sup></a></span>
@@ -240,7 +224,7 @@ escaped:
 [[wiki syntax]]
 <!-- /expected -->
 </verbatim>
----++ Actual
+</td><td>
 <!-- actual -->
 [[wiki syntax]]
 
@@ -249,9 +233,8 @@ escaped:
 escaped:
 ![[wiki syntax]]
 <!-- /actual -->
-
----+ Specific Links
----++ Expected
+</td></tr>
+<tr><td> Specific Links</td><td>
 <!-- expected -->
 <span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">syntax</font><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/WikiSyntax?topicparent=%WEB%.TestCaseBasicFormatting"><sup>?</sup></a></span>
 <p />
@@ -259,7 +242,7 @@ escaped:
 <p />
 <a href="http://xml.org" target="_top">XML</a>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 [[WikiSyntax][syntax]]
 
@@ -267,17 +250,16 @@ escaped:
 
 [[http://xml.org XML]]
 <!-- /actual -->
-
----+ Anchors
----++ Expected
+</td></tr>
+<tr><td> Anchors</td><td>
 <!-- expected -->
-<a class="twikiAnchorLink" href="/cgi-bin/view/Codev/WikiWord#NotThere">WikiWord#NotThere</a>
+<a class="twikiAnchorLink" href="%SCRIPTURLPATH%/view/WikiWord#NotThere">WikiWord#NotThere</a>
 <p />
-<a class="twikiAnchorLink" href="/cgi-bin/view/Codev/TestCaseBasicFormatting#MyAnchor">Jump</a>
+<a class="twikiAnchorLink" href="%SCRIPTURLPATH%/view/TestCases/TestCaseBasicFormatting#MyAnchor">Jump</a>
 <p />
 <a name="MyAnchor"></a> To here
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 [[WikiWord#NotThere]]
 
@@ -285,46 +267,43 @@ escaped:
 
 #MyAnchor To here
 <!-- /actual -->
-
----+ Prevent a Link
----++ Expected
+</td></tr>
+<tr><td> Prevent a Link</td><td>
 <verbatim>
 <!-- expected -->
 SunOS
 <!-- /expected -->
 </verbatim>
----++ Actual
+</td><td>
 <!-- actual -->
 !SunOS
 <!-- /actual -->
-
----+ Disable Links
----++ Expected
+</td></tr>
+<tr><td> Disable Links</td><td>
 <verbatim>
 <!-- expected -->
  RedHat & SuSE
 <!-- /expected -->
 </verbatim>
----++ Actual
+</td><td>
 <!-- actual -->
  <noautolink>
  RedHat & SuSE
  </noautolink>
 <!-- /actual -->
-
----+ Mailto: Links
----++ Expected
+</td></tr>
+<tr><td> Mailto: Links</td><td>
 <!-- expected -->
 <a href="mailto:a@zSTOPSPAM.com">Mail</a>
 
 <p />
 <a href="mailto:?subject=Hi">Hi</a>
 <!-- /expected -->
----++ Actual
+</td><td>
 <!-- actual -->
 [[mailto:a@z.com Mail]]
 
 [[mailto:?subject=Hi Hi]]
 <!-- /actual -->
-
--- Main.CrawfordCurrie - 21 Oct 2004
+</td></tr>
+</table>
