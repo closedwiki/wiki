@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "23 Nov 2001";
+$wikiversion      = "29 Nov 2001";
 
 # ===========================
 # read the configuration part
@@ -532,38 +532,80 @@ sub getLocaldate
 # =========================
 sub formatGmTime
 {
-    my( $time ) = @_;
+    my( $time, $isoFormat ) = @_;
 
     my( $sec, $min, $hour, $mday, $mon, $year) = gmtime( $time );
-    my( $tmon) = $isoMonth[$mon];
+
+    if( $isoFormat ) {
+        $mon += 1;
+        $year += 1900;
+        # Note: ISO date spec is at http://www.w3.org/TR/NOTE-datetime
+        return "$year-$mon-$mday" . "T$hour:$min" . "Z";
+    }
+
+    my( $tmon ) = $isoMonth[$mon];
     $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
     $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
     return $time;
 }
 
 # =========================
-sub revDate2ISO {
-
-    # NOTE: This routine *will break* if formatGMTime changes output format.
-    # Change "28 Nov 2001 - 06:41" to "2001-11-28T18:41Z"
-    # ISO date spec at http://www.w3.org/TR/NOTE-datetime
-
-    my ($day, $mon, $year, $hyph, $hrmin, @junk) = split(" ",$_[0]);
-    $mon = $mon2num{$mon};
-
-    return "$year-$mon-$day" . "T$hrmin" . "Z";
+sub revDate2ISO
+{
+    my $epochSec = revDate2EpSecs( $_[0] );
+    return formatGmTime( $epochSec, 1 );
 }
 
 # =========================
-sub revDate2EpSecs {
+sub revDate2EpSecs
+{
+    my( $date ) = @_;
+    # NOTE: This routine *will break* if input is not one of below formats!
 
-    # NOTE: This routine *will break* if formatGMTime changes output format.
-    # Change "28 Nov 2001 - 06:41" to "1234567"
+    # try "31 Dec 2001 - 23:59"  (TWiki date)
+    $date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)[\s\-]+([0-9]+)\:([0-9]+)/;
+    if( $5 ) {
+        my $year = $3;
+        $year -= 1900 if( $year > 1900 );
+        return timegm( 0, $5, $4, $1, $mon2num{$2}, $year );
+    }
 
-    my ($day, $mon, $year, $hyph, $hrmin, @junk) = split(" ",$_[0]);
-    my ($hr, $min) = split(/:/, $hrmin);
+    # try "2001/12/31 23:59:59" or "2001.12.31.23.59.59" (RCS date)
+    $date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)[\.\:]([0-9]+)/;
+    if( $6 ) {
+        my $year = $1;
+        $year -= 1900 if( $year > 1900 );
+        return timegm( $6, $5, $4, $3, $2-1, $year );
+    }
 
-    return timegm(0, $min, $hr, $day, $mon2num{$mon}, $year - 1900);
+    # try "2001/12/31 23:59" or "2001.12.31.23.59" (RCS short date)
+    $date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)/;
+    if( $5 ) {
+        my $year = $1;
+        $year -= 1900 if( $year > 1900 );
+        return timegm( 0, $5, $4, $3, $2-1, $year );
+    }
+
+    # try "2001-12-31T23:59:59Z" or "2001-12-31T23:59:59+01:00" (ISO date)
+    # FIXME: Calc local to zulu time "2001-12-31T23:59:59+01:00"
+    $date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)\:([0-9]+)/;
+    if( $6 ) {
+        my $year = $1;
+        $year -= 1900 if( $year > 1900 );
+        return timegm( $6, $5, $4, $3, $2-1, $year );
+    }
+
+    # try "2001-12-31T23:59Z" or "2001-12-31T23:59+01:00" (ISO short date)
+    # FIXME: Calc local to zulu time "2001-12-31T23:59+01:00"
+    $date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)/;
+    if( $5 ) {
+        my $year = $1;
+        $year -= 1900 if( $year > 1900 );
+        return timegm( 0, $5, $4, $3, $2-1, $year );
+    }
+
+    # give up, return start of epoch (01 Jan 1970 GMT)
+    return 0;
 }
 
 # =========================
@@ -2011,5 +2053,3 @@ sub getRenderedVersion
 }
 
 1;
-
-
