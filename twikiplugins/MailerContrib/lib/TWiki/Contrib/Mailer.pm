@@ -159,7 +159,7 @@ sub _processChanges {
           new TWiki::Contrib::MailerContrib::Change
             ( $web,
               $topicName,
-              TWiki::Func::userToWikiName( $userName, 1 ),
+              TWiki::Func::userToWikiName( $userName, 0 ),
               TWiki::Func::formatTime( $changeTime ),
               $frev,
               # SMELL: Call to TWiki::makeTopicSummary is unavoidable
