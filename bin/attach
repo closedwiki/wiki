@@ -141,7 +141,7 @@ sub main
         $tmpl =~ s/%ACTION%/Update file:/go;
         $tmpl =~ s/%PREVIOUS%/Previous <br> upload:/go;
         $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
-        $fileUser = &TWiki::getRenderedVersion( $args{"user"} );
+        $fileUser = &TWiki::getRenderedVersion( $TWiki::mainWebname . "." . $args{"user"} );
         $fileUser =~ s/\n//go;
         $tmpl =~ s/%FILEUSER%/\($fileUser\)/go;
     } else {
