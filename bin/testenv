@@ -736,14 +736,15 @@ if ( $showLocales ) {		# Only if TWiki.pm found
 	print "</td></tr>\n";
     }
 
-    # Locales are off, or using old Perl, so have to explicitly list the accented characters
-    if ( not $useLocale or $perlvernum < 5.6 ) {
+    # Locales are off, or using pre-5.6 Perl, so have to explicitly list the accented characters
+    my $perlVerPreferred = 5.006	# 5.6 or higher has [:lower:] etc
+    if ( not $useLocale or $perlvernum < $perlVerPreferred ) {
 
 	# If using Perl 5.005_03 or lower, generate upper and lower case character
 	# classes to avoid doing this at run-time in TWiki.
 	my $forUpperNat;
 	my $forLowerNat;
-	if ( $perlvernum < 5.6 ) {
+	if ( $perlvernum < $perlVerPreferred ) {
 	    
 	    # Get strings with the non-ASCII alphabetic characters only, upper and lower case
 	    $forUpperNat = join '', grep { lc($_) ne $_ and m/[^A-Z]/ } map { chr($_) } 1..255;
