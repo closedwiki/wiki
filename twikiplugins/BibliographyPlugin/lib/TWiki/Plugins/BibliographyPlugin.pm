@@ -79,24 +79,30 @@ sub initPlugin
  
 sub readBibliography
 {
-  # read the references topic:
-  my $referencesTopic = $_[0];
+  # read the references topics:
+  my @referencesTopics = @_;
 
   my %bibliography;
-  my ($key, $value);
-  $_ = TWiki::Func::readTopicText("", $referencesTopic, "", 1);
-  while (m/^\|([^\|]*)\|([^\|]*)\|/gm)
-  {
-    ($key,$value) = ($1,$2);
-    
-    # remove leading and trailing whitespaces from $key and from $value
-    $key   =~ s/^\s+|\s+$//g; 
-    $value =~ s/^\s+|\s+$//g;
+  my ($key, $value, $topic);
 
-    $bibliography{$key} = {  "name" => $value,
-                            "cited" => 0,
-                            "order" => 0
-                          };
+  foreach $topic (@referencesTopics)
+  {
+    TWiki::Func::writeDebug("readBibliography:: reading $topic") if $debug;
+
+    $_ = TWiki::Func::readTopicText("", $topic, "", 1);
+    while (m/^\|([^\|]*)\|([^\|]*)\|/gm)
+    {
+      ($key,$value) = ($1,$2);
+      
+      # remove leading and trailing whitespaces from $key and from $value
+      $key   =~ s/^\s+|\s+$//g; 
+      $value =~ s/^\s+|\s+$//g;
+
+      $bibliography{$key} = {  "name" => $value,
+                              "cited" => 0,
+                              "order" => 0
+                            };
+    }
   }
 
   return %bibliography;
@@ -139,11 +145,12 @@ sub parseArgs
   }
 
   #get the typed references topic. Defaults do the BIBLIOGRAPHYPLUGIN_DEFAULTBIBLIOGRAPHYTOPIC.
-  my $referencesTopic = &TWiki::Func::getPreferencesValue("BIBLIOGRAPHYPLUGIN_DEFAULTBIBLIOGRAPHYTOPIC");
+  my $referencesTopics = &TWiki::Func::getPreferencesValue("BIBLIOGRAPHYPLUGIN_DEFAULTBIBLIOGRAPHYTOPIC");
   if ($args =~ m/referencesTopic="([^"]*)"/)
   {
-    $referencesTopic = $1;
+    $referencesTopics = $1;
   }
+  @referencesTopics = split(/\s*,\s*/,$referencesTopics);
 
   # get the typed order. Defaults to BIBLIOGRAPHYPLUGIN_DEFAULTSORTING setting.
   my $order = &TWiki::Func::getPreferencesValue("BIBLIOGRAPHYPLUGIN_DEFAULTSORTING");
@@ -152,11 +159,7 @@ sub parseArgs
     $order = $1;
   }
 
-  &TWiki::Func::writeDebug("header=$header");
-  &TWiki::Func::writeDebug("referencesTopic=$referencesTopic");
-  &TWiki::Func::writeDebug("order=$order");
-
-  return ($header, $referencesTopic, $order);
+  return ($header, $order, @referencesTopics);
 }
 
 
@@ -187,11 +190,11 @@ sub startRenderingHandler
     # do custom extension rule, like for example:
     # $_[0] =~ s/old/new/g;
     
-    my ($header, $referencesTopic, $order);
+    my ($header, @referencesTopics, $order);
     if ($_[0] =~ m/%BIBLIOGRAPHY{([^}]*)}%/mg)
     {
-      ($header, $referencesTopic, $order) = parseArgs ($1);
-      %bibliography = readBibliography ($referencesTopic);
+      ($header, $order, @referencesTopics) = parseArgs ($1);
+      %bibliography = readBibliography (@referencesTopics);
     }
     else
     {
