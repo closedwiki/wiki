@@ -1,4 +1,3 @@
-<<<<<<< .working
 %META:TOPICINFO{author="PeterThoeny" date="1043916483" format="1.0" version="1.8"}%
 To edit pages on this %WIKITOOLNAME% Collaborative Web, you must have a registered user name in WikiNotation.
 
