@@ -9,8 +9,7 @@ import java.awt.*;
 /**
  * Dialog to capture a 'Find' string
  */
-class FindDialog
-extends SearchDialog {
+class FindDialog extends SearchDialog {
 
     /**
      * @param parent containing frame
