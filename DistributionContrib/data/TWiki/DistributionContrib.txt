@@ -1,0 +1,3 @@
+		* Set STUB = TWiki::Contrib::DistributionContrib
+		* Set SHORTDESCRIPTION = Provides access to TWiki Distribution meta information
+		
