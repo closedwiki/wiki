@@ -22,6 +22,12 @@ use lib ( '../lib' );
 use TWiki;
 use TWiki::Net;
 
+if( $TWiki::OS eq "WINDOWS" ) {
+    use MIME::Base64;
+    use Digest::SHA1;
+}
+
+
 $query = new CGI;
 
 ##### for debug only: Remove next 3 comments (but redirect does not work)
@@ -189,6 +195,9 @@ sub htpasswdGeneratePasswd
     my ( $user, $passwd ) = @_;
     # by David Levy, Internet Channel, 1997
     # found at http://world.inch.com/Scripts/htpasswd.pl.html
+    if ( $TWiki::OS eq "WINDOWS" ) {
+        return $user . ':{SHA}' . encode_base64(Digest::SHA1::sha1($passwd));
+    }
     srand( $$|time );
     my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
     my $salt = $saltchars[ int( rand( $#saltchars+1 ) ) ];
