@@ -1,0 +1,170 @@
+<!-- ANTfile for PowerEdit
+  Ant is at http://jakarta.apache.org
+  Four main targets are available:
+        test - runs unit tests on the package
+        release - runs tests and creates a zipped package
+        install - installs in the local TWiki
+        uninstall - inverse of install
+-->
+<project name="PowerEditPlugin" default="build">
+
+    <!-- set to "yes" for debug info in the java -->
+    <property name="debug.setting" value="no" />
+
+    <property environment="ENV" />
+    <property name="twiki" value="${ENV.TWIKI_HOME}" />
+    <property name="junit" value="${ENV.JUNIT_HOME}" />
+
+    <property name="lib.plugins" value="lib/TWiki/Plugins" />
+    <property name="data.plugins" value="data/TWiki" />
+    <property name="pub.plugins" value="pub/TWiki" />
+
+    <property name="plugin.lib" value="${lib.plugins}/${ant.project.name}" />
+    <property name="plugin.data" value="${data.plugins}/PowerEdit" />
+    <property name="plugin.pub" value="${pub.plugins}/${ant.project.name}" />
+
+    <property name="app.test" value="${plugin.lib}/test" />
+    <property name="jar.file" value="${plugin.pub}/poweredit.jar" />
+    <property name="src.zip" value="${plugin.lib}/source.zip" />
+    <property name="release.zip" value="${ant.project.name}.zip" />
+
+    <property name="applet.classes" value="${plugin.lib}/applet.classes" />
+    <property name="test.classes" value="${plugin.lib}/test.classes" />
+
+    <!-- Init target -->
+    <target name="init">
+        <tstamp />
+    </target>
+
+    <!-- Environment variable checks -->
+    <target name="checkJUNIT" unless="ENV.JUNIT_HOME">
+        <fail message="JUNIT_HOME must be set!!" />
+    </target>
+
+    <target name="checkTWIKI" unless="ENV.TWIKI_HOME">
+        <fail message="TWIKI_HOME must be set!!" />
+    </target>
+
+    <!-- Classpath for compiling -->
+    <path id="compile.class.path">
+        <pathelement path="/usr/lib/netscape/java/classes/java40.jar" />
+        <pathelement path="/usr/lib/netscape/java/classes/jio40.jar" />
+        <pathelement path="/usr/lib/netscape/java/classes/joptio40.jar" />
+    </path>
+
+    <!-- Classpath for running tests -->
+    <path id="test.class.path">
+        <pathelement path="${java.class.path}/" />
+        <pathelement path="/usr/lib/netscape/java/classes/java40.jar" />
+        <pathelement path="${test.classes}" />
+        <pathelement path="${jar.file}" />
+        <pathelement path="${junit}" />
+    </path>
+
+    <!-- Files that get installed in the twiki -->
+    <patternset id="installed.files">
+	<include name="${ant.project.name}.xml" />
+	<include name="${lib.plugins}/PowerEditPlugin.pm" />
+	<include name="templates/*.power.tmpl" />
+	<include name="${jar.file}" />
+	<include name="${plugin.data}*.txt" />
+	<include name="${src.zip}" />
+    </patternset>
+
+    <!-- Build jar file -->
+    <target name="build" depends="init">
+        <mkdir dir="${applet.classes}" />
+        <javac
+	    srcdir="${plugin.lib}/packages"
+            bootclasspathref="compile.class.path"
+            destdir="${applet.classes}"
+	    debug="${debug.setting}"
+            target="1.1"
+	    includes="**/*.java"
+	/>
+        <javac
+	    srcdir="${plugin.lib}/src"
+            bootclasspathref="compile.class.path"
+            destdir="${applet.classes}"
+	    debug="${debug.setting}"
+            target="1.1"
+            includes="**/*.java"
+        />
+	<delete file="${jar.file}" />
+	<mkdir dir="${plugin.pub}" />
+        <jar jarfile="${jar.file}" basedir="${applet.classes}" />
+    </target>
+
+    <!-- Build distributed source file zip -->
+    <target name="src.zip">
+	<delete file="${src.zip}" />
+	<zip zipfile="${src.zip}">
+	    <zipfileset dir="${plugin.lib}">
+		<include name="**/*.java" />
+		<include name="**/*.html" />
+	    </zipfileset>
+	</zip>
+    </target>
+
+    <!--
+        MAIN TARGETS
+     -->
+
+    <target description="Build and execute tests"
+	name="test" depends="build,checkJUNIT,checkTWIKI">
+        <mkdir dir="${test.classes}" />
+        <javac srcdir="${plugin.lib}/test"
+            destdir="${test.classes}"
+            classpathref="test.class.path"
+	    debug="yes"
+            includes="**/*.java"
+        />
+        <junit fork="yes" printsummary="yes" haltonerror="yes"
+		dir="${ENV.TWIKI_HOME}/data/TWiki">
+	    <formatter type="plain" usefile="no" />
+            <test name="com.ccsoft.edit.TWikiEditSuite" />
+            <classpath refid="test.class.path" />
+        </junit>
+    </target>
+
+    <target description="Build release zip file"
+            name="release" depends="test,src.zip">
+        <delete file="${release.zip}" />
+        <zip zipfile="${release.zip}">
+            <zipfileset dir="${basedir}">
+                <patternset refid="installed.files" />
+            </zipfileset>
+	</zip>
+    </target>
+
+    <target description="Build, test, and install in local TWiki"
+	name="install" depends="test,src.zip">
+        <copy todir="${twiki}" overwrite="yes">
+            <fileset dir="${basedir}">
+                <patternset refid="installed.files" />
+            </fileset>
+        </copy>
+
+        <chmod perm="u+rwx" parallel="no">
+            <fileset dir="${twiki}">
+                <patternset refid="installed.files" />
+            </fileset>
+        </chmod>
+
+        <chmod perm="goa+rx" parallel="no">
+            <fileset dir="${twiki}">
+                <patternset refid="installed.files" />
+            </fileset>
+        </chmod>
+    </target>
+
+    <target description="Uninstall from local twiki"
+	name="uninstall" depends="checkTWIKI">
+        <delete>
+            <fileset dir="${twiki}">
+                <patternset refid="installed.files" />
+            </fileset>
+        </delete>
+    </target>
+
+</project>
