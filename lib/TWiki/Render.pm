@@ -587,6 +587,11 @@ sub internalLink {
 
     # Add <nop> before WikiWord inside link text to prevent double links
     $theLinkText =~ s/([\s\(])($regex{singleUpperAlphaRegex})/$1<nop>$2/go;
+ 
+     # Allow spacing out, etc
+     if (TWiki::isWikiName($theLinkText)) {
+        $theLinkText = TWiki::Plugins::renderWikiWordHandler( $theLinkText ) || $theLinkText;
+     }
 
     my $exist = &TWiki::Store::topicExists( $theWeb, $theTopic );
     # I18N - Only apply plural processing if site language is English, or

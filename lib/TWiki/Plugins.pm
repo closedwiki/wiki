@@ -33,7 +33,7 @@ use vars qw(
 	$VERSION $initialisationErrors
     );
 
-$VERSION = '1.022';
+$VERSION = '1.023';
 
 @registrableHandlers = (           #                                         VERSION:
         'earlyInitPlugin',         # ( )                                     1.020
@@ -56,6 +56,7 @@ $VERSION = '1.022';
         'getSessionValueHandler',  # ( $key )                                1.010
         'setSessionValueHandler',  # ( $key, $value )                        1.010
         'renderFormFieldForEditHandler', # ( $name, $type, $size, $value, $attributes, $output )
+        'renderWikiWordHandler',   # text                                    2.023
     );
     
 %onlyOnceHandlers = ( 'initializeUserHandler'   => 1,
@@ -64,7 +65,8 @@ $VERSION = '1.022';
                       'redirectCgiQueryHandler' => 1,
                       'getSessionValueHandler'  => 1,
                       'setSessionValueHandler'  => 1,
-                      'renderFormFieldForEditHandler'  => 1
+                      'renderFormFieldForEditHandler'  => 1,
+                      'renderWikiWordHandler'  => 1
                     );
 
 %registeredHandlers = ();
@@ -724,4 +726,22 @@ sub renderFormFieldForEditHandler
     unshift @_, ( 'renderFormFieldForEditHandler' );
     return &applyHandlers;
 }
+
+=pod
+
+---++ sub renderWikiWordHandler ()
+
+Called by TWiki::internalLink to change how a WikiWord is rendered
+
+Originated from the TWiki:Plugins.SpacedWikiWordPlugin hack
+
+=cut
+
+sub renderWikiWordHandler
+{
+    unshift @_, ( 'renderWikiWordHandler' );
+    return &applyHandlers;
+}
+
+
 1;

@@ -1252,6 +1252,7 @@ sub getWikiUserTopic
 ---++ sub isWikiName (  $name  )
 
 Not yet documented.
+CODE_SMELL - this should be called isWikiWord
 
 =cut
 
