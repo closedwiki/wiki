@@ -120,7 +120,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set WIKIWEBMASTERNAME = TWiki Administrator
 
 	* Mail host for outgoing mail. This is used for WebChangesAlert if [[CPAN:Net::SMTP][Net::SMTP]] is installed and =SMTPMAILHOST= is set. Otherwise the external sendmail program is used instead (defined by the ==MailProgram== configuration setting; see ==TWiki.cfg==). Examples: ==mail.your.company== or ==localhost==
-		* Set SMTPMAILHOST = mail
+		* Set SMTPMAILHOST =
 
 	* Mail domain sending mail, required if you are using ==Net::SMTP==. SMTP requires that you identify the TWiki server sending mail. If not set, ==Net::SMTP== will guess it for you. Ex: ==twiki.your.company==
 		* Set SMTPSENDERHOST = 

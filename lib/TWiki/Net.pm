@@ -30,6 +30,7 @@ package TWiki::Net;
 use strict;
 use Assert;
 use TWiki::Time;
+use TWiki::Sandbox;
 
 sub new {
     my ( $class, $session ) = @_;
@@ -140,6 +141,10 @@ sub sendEmail {
         $this->{MAIL_HOST}  = $prefs->getPreferencesValue( 'SMTPMAILHOST' );
         $this->{HELLO_HOST} = $prefs->getPreferencesValue( 'SMTPSENDERHOST' );
         if( $this->{MAIL_HOST} ) {
+            # See Codev.RegisterFailureInsecureDependencyCygwin for why
+            # this must be untainted
+            $this->{MAIL_HOST} =
+              TWiki::Sandbox::untaintUnchecked( $this->{MAIL_HOST} );
             eval {	# May fail if Net::SMTP not installed
                 $this->{USENETSMTP} = require Net::SMTP;
             }
