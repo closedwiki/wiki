@@ -380,8 +380,8 @@ sub renderForEdit {
                                 -label=>
                                 $this->{session}->handleCommonTags( $item,
                                                                     $web,
-                                                                    $topic ).
-                                ' &nbsp;&nbsp;' );
+                                                                    $topic )).
+                                ' &nbsp;&nbsp;';
                 $row .= CGI::td( $data );
                 if( $size && ($lines % $size) == $size - 1 ) {
                     $rows .= CGI::Tr( $row );
