@@ -1,5 +1,22 @@
-"Golden" Tests
-==============
+This file documents the various automatic TWiki test suites.
+
+   1. Unit Tests
+   2. Golden Tests
+   3. TestCases Tests
+
+Unit Tests
+==========
+
+Unit tests are held in the subdirectory "unit", and are written using Test::Unit/
+
+All TWiki unit tests are run from that directory with the command:
+
+../bin/TestRunner.pl TWikiUnitTestSuite
+
+Golden Tests
+============
+
+Golden tests are held in the subdirectory "golden"
 
 - YOU MUST CREATE LocalSite.cfg FOR YOUR CONFIGURATION - see
   the comment in ScriptTestFixtures.pm for details.
@@ -24,7 +41,7 @@ perl TestRunner.pl CGIScriptSuite.pm
 
 If you get any errors, you can work out what's going on by running individual test cases. Individual test cases can be run by using the name of the testcase e.g.
 
-perl TestRunner.pl viewScriptTest.pm
+perl ../bin/TestRunner.pl viewScriptTest.pm
 
 If this is still too much information, open the testcase and disable all but one of the tests (the easiest way to do this it to change "sub test_..." to "sub notest_...".
 
@@ -40,3 +57,10 @@ rm -rf <path to pub>/Sandbox/AutoCreated*.*
 for both old and new installations. Please don't complain at me until you've tried this and re-run the tests.
 
 Note that as of April 2004 the script tests are very naive; many of them are little more than compile and compare tests. All the scripts need more sophisticated testing of their various parameters.
+
+TestCases Tests
+===============
+
+TestCases tests use static test case topics held in the "TestCases" TWiki web. See ../lib/TWiki/Plugins/TestFixturePlugin and ../data/TestCases/WebHome for details on the support and process for these tests.
+
+--- Main.CrawfordCurrie 23-11-2004
