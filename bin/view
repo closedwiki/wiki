@@ -40,7 +40,6 @@ sub main
 
     my $tmpl= "", $text="";
     my $rev= $query->param("rev");
-    $rev =~ s/1\.//go;  # cut major
     my $maxrev = 1;
 
     if( ! &wiki::webExists( $webName ) )
@@ -58,6 +57,7 @@ sub main
         $maxrev =~ s/1\.//go;  # cut major
 	if( $rev )
 	{
+            $rev =~ s/1\.//go;  # cut major
 	    if( $rev < 1 )       { $rev = 1; }
             if( $rev > $maxrev ) { $rev = $maxrev; }
 	    $text= &wiki::readVersion( $topic, "1.$rev" );

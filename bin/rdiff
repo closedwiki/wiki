@@ -123,8 +123,6 @@ sub main
     my $tmpl = "", $text = "", $diff = "";
     my $rev1 = $query->param( "rev1" );
     my $rev2 = $query->param( "rev2" );
-    $rev1 =~ s/1\.//go;  # cut major
-    $rev2 =~ s/1\.//go;  # cut major
     my $maxrev= 1;
     my $i = $maxrev,    $j = $maxrev;
     my $revTitle1 = "", $revTitle2 = "";
@@ -146,6 +144,10 @@ sub main
     {
 	$maxrev = &wiki::getRevisionNumber( $topic );
         $maxrev =~ s/1\.//go;  # cut major
+	if( ! $rev1 ) { $rev1 = ""; }
+	if( ! $rev2 ) { $rev2 = ""; }
+        $rev1 =~ s/1\.//go;  # cut major
+        $rev2 =~ s/1\.//go;  # cut major
         if( $rev1 < 1 )       { $rev1 = $maxrev; }
         if( $rev1 > $maxrev ) { $rev1 = $maxrev; }
         if( $rev2 < 1 )       { $rev2 = 1; }

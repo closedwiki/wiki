@@ -42,7 +42,7 @@ use vars qw(
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "15 Jul 1999";
+$wikiversion      = "16 Jul 1999";
 
 # variables that need to be changed when installing on new server:
 $wikiHomeUrl      = $wikicfg::wikiHomeUrl;
@@ -91,30 +91,33 @@ sub initialize
     }
 
     $thePathInfo =~ /[\/](.*)\/(.*)/;
-    $webName= $1;
-	if( ! $1)
-	{
-		$thePathInfo =~ /[\/](.*)/;
-		$webName= $1 || $mainWebname;
-	}	
-
-    if( ! $2)
+    if( $1 )
     {
-	if( $theTopic)
-	{
-	    $topicName = $theTopic;
-	}
-	else
-	{
-	    $topicName = $mainTopicname;
-	}
+        $webName = $1;
     }
     else
     {
-	$topicName = $2;
+        $thePathInfo =~ /[\/](.*)/;
+        $webName = $1 || $mainWebname;
     }
 
-    ($topicName =~ /\.\./) && ($topicName = $mainTopicname);
+    if( $2 )
+    {
+        $topicName = $2;
+    }
+    else
+    {
+        if( $theTopic )
+        {
+            $topicName = $theTopic;
+        }
+        else
+        {
+            $topicName = $mainTopicname;
+        }
+    }
+
+    ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
 
     if( $theUrl eq "")
     {
@@ -197,19 +200,19 @@ sub getEmailNotifyList
 # =========================
 sub userToWikiName
 {
-    my( $user) = @_;
+    my( $loginUser ) = @_;
 
-    my $result = `grep '\* [A-Za-z0-9]* \- $user' $userListFilename`;
-    my @foo = split(" ", $result);
-    if ( isWikiName( $foo[1]))
+    my $result = `grep '\* [A-Za-z0-9]* \- $loginUser' $userListFilename`;
+    my @foo = split( " ", $result );
+    if ( ( $foo[1] ) && ( isWikiName( $foo[1] ) ) )
     {
-        return "$mainWebname.$foo[1]";
+        $loginUser = "$mainWebname.$foo[1]";
     }
-    if ( isWikiName( $foo[2]))
+    if ( ( $foo[2] ) && ( isWikiName( $foo[2] ) ) )
     {
-        return "$mainWebname.$foo[2]";
+        $loginUser = "$mainWebname.$foo[2]";
     }
-    return $user;
+    return "$loginUser";
 }
 
 # =========================
@@ -390,35 +393,35 @@ sub removeObsoleteTopicLocks
 # =========================
 sub topicExists
 {
-    my( $web, $name) = @_;
+    my( $web, $name ) = @_;
     return -e "$dataDir/$web/$name.txt";
 }
 
 # =========================
 sub readTopic
 {
-    my( $name) = @_;
+    my( $name ) = @_;
     return &readFile( "$dataDir/$webName/$name.txt");
 }
 
 # =========================
 sub readWebTopic
 {
-    my( $web, $name) = @_;
+    my( $web, $name ) = @_;
     return &readFile( "$dataDir/$web/$name.txt");
 }
 
 # =========================
 sub viewUrl
 {
-    my( $topic) = @_;
+    my( $topic ) = @_;
     return "$scriptUrl/view/$webName/$topic";
 }
 
 # =========================
 sub readTemplate
 {
-    my( $name) = @_;
+    my( $name ) = @_;
     my $webtmpl = "$templateDir/$webName/$name.tmpl";
     if( -e $webtmpl )
     {
@@ -430,7 +433,7 @@ sub readTemplate
 # =========================
 sub readVersion
 {
-    my( $name, $rev) = @_;
+    my( $name, $rev ) = @_;
     my $tmp= $revCoCmd;
     $tmp =~ s/%REVISION%/$rev/;
     $tmp =~ s/%FILENAME%/$dataDir\/$webName\/$name.txt/;
@@ -440,7 +443,7 @@ sub readVersion
 # =========================
 sub getRevisionNumber
 {
-    my( $topic) = @_;
+    my( $topic ) = @_;
     my $tmp= $revHistCmd;
     $tmp =~ s/%FILENAME%/$dataDir\/$webName\/$topic.txt/;
     $tmp = `$tmp`;
@@ -451,7 +454,7 @@ sub getRevisionNumber
 # =========================
 sub getRevisionDiff
 {
-    my( $topic, $rev1, $rev2) = @_;
+    my( $topic, $rev1, $rev2 ) = @_;
 
     my $tmp= "";
     if ( $rev1 eq "1.1" && $rev2 eq "1.1" )
@@ -505,7 +508,7 @@ sub getRevisionInfo
 # =========================
 sub saveTopic
 {
-    my( $topic, $text, $saveCmd) = @_;
+    my( $topic, $text, $saveCmd ) = @_;
     my $name = "$dataDir/$webName/$topic.txt";
     my $time = time();
     my $tmp = "";
@@ -643,8 +646,8 @@ sub saveTopic
 # =========================
 sub webExists
 {
-    my( $web) = @_;
-    return -e "$templateDir/$web";
+    my( $web ) = @_;
+    return -e "$dataDir/$web";
 }
 
 # =========================
@@ -675,7 +678,7 @@ sub handleCommonTags
 
 # =========================
 sub emitCode {
-    ($code, $depth) = @_;
+    ( $code, $depth ) = @_;
     my $result="";
     while (@code > $depth) {
 	local($_) = pop @code;
@@ -698,7 +701,7 @@ sub emitCode {
 # =========================
 sub internalLink
 {
-    my( $web, $page, $text, $bar, $foo) = @_;
+    my( $web, $page, $text, $bar, $foo ) = @_;
     # bar is heading space
     # foo is boolean, false suppress link for non-existing pages
 
@@ -722,7 +725,7 @@ sub internalLink
 # =========================
 sub externalLink
 {
-    my( $pre, $url) = @_;
+    my( $pre, $url ) = @_;
     if( $url =~ /\.(gif|jpg|jpeg)$/ )
     {
 	return "$pre<IMG src=\"$url\" alt=\"$url\">";
@@ -734,7 +737,7 @@ sub externalLink
 # =========================
 sub isWikiName
 {
-    my( $name) = @_;
+    my( $name ) = @_;
      if ( $name =~ /[A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*)$/ )
     {
         return "1";
