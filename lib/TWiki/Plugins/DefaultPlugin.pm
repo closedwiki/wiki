@@ -21,6 +21,7 @@
 #
 # Each plugin is a package that may contain these functions:        VERSION:
 #
+#   earlyInitPlugin         ( )                                     1.020
 #   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
 #   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
 #   registrationHandler     ( $web, $wikiName, $loginName )         1.010
