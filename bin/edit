@@ -55,13 +55,13 @@ sub buildCategoryItem
     if( $cmd[0] eq "select" ) {
         $catname = $cmd[1];
         $scatname = $catname;
-        $scatname =~ s/[^a-zA-z0-9]//g;
+        $scatname =~ s/[^a-zA-Z0-9]//g;
         my $size = $cmd[2];
         $catvalue = "<select name=\"$scatname\" size=\"$size\">";
         for( $i = 3; $i < $len; $i++ ) {
             my $value = $cmd[$i];
             my $svalue = $value;
-            $svalue =~ s/[^a-zA-z0-9]//g;
+            $svalue =~ s/[^a-zA-Z0-9]//g;
             my $flag = "";
             if( $src =~ /$value/ ) {
                 $flag = "selected";
@@ -73,7 +73,7 @@ sub buildCategoryItem
     } elsif( $cmd[0] eq "checkbox" ) {
         $catname = $cmd[1];
         $scatname = $catname;
-        $scatname =~ s/[^a-zA-z0-9]//g;
+        $scatname =~ s/[^a-zA-Z0-9]//g;
         if( $cmd[2] eq "true" || $cmd[2] eq "1" ) {
             $i = $len - 4;
             $catmodifier = "$catmodifier\n<input type=\"button\" value=\" Set \" onClick=\"checkAll(this, 2, $i, true)\">&nbsp;";
@@ -84,7 +84,7 @@ sub buildCategoryItem
         for( $i = 4; $i < $len; $i++ ) {
             my $value = $cmd[$i];
             my $svalue = $value;
-            $svalue =~ s/[^a-zA-z0-9]//g;
+            $svalue =~ s/[^a-zA-Z0-9]//g;
             my $flag = "";
             if( $src =~ /$value[^a-zA-Z0-9\.]/ ) {
                 $flag = "checked";
@@ -99,13 +99,13 @@ sub buildCategoryItem
     } elsif( $cmd[0] eq "radio" ) {
         $catname = $cmd[1];
         $scatname = $catname;
-        $scatname =~ s/[^a-zA-z0-9]//g;
+        $scatname =~ s/[^a-zA-Z0-9]//g;
         $itemsPerLine = $cmd[2];
         $catvalue = "\n<table cellspacing=\"0\" cellpadding=\"0\"><tr>";
         for( $i = 3; $i < $len; $i++ ) {
             my $value = $cmd[$i];
             my $svalue = $value;
-            $svalue =~ s/[^a-zA-z0-9]//g;
+            $svalue =~ s/[^a-zA-Z0-9]//g;
             my $flag = "";
             if( $src =~ /$value[^a-zA-Z0-9\.]/ ) {
                 $flag = "checked";
@@ -123,7 +123,7 @@ sub buildCategoryItem
     } elsif( $cmd[0] eq "text" ) {
         $catname = $cmd[1];
         $scatname = $catname;
-        $scatname =~ s/[^a-zA-z0-9]//g;
+        $scatname =~ s/[^a-zA-Z0-9]//g;
         $src =~ /<!---->(.*)<!---->/;
         if( $1 ) {
             $src = $1;

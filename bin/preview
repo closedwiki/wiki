@@ -41,12 +41,12 @@ sub buildCategoryItem
     if( $cmd[0] eq "select" ) {
         $catname = $cmd[1];
         $scatname = $catname;
-        $scatname =~ s/[^a-zA-z0-9]//g;
+        $scatname =~ s/[^a-zA-Z0-9]//g;
         $param = $query->param( "$scatname" );
         for( $i = 3; $i < $len; $i++ ) {
             my $value = $cmd[$i];
             my $svalue = $value;
-            $svalue =~ s/[^a-zA-z0-9]//g;
+            $svalue =~ s/[^a-zA-Z0-9]//g;
             if( $param eq $svalue ) {
                 $catvalue = "$value";
                 last;
@@ -59,11 +59,11 @@ sub buildCategoryItem
     } elsif( $cmd[0] eq "checkbox" ) {
         $catname = $cmd[1];
         $scatname = $catname;
-        $scatname =~ s/[^a-zA-z0-9]//g;
+        $scatname =~ s/[^a-zA-Z0-9]//g;
         for( $i = 4; $i < $len; $i++ ) {
             my $value = $cmd[$i];
             my $svalue = $value;
-            $svalue =~ s/[^a-zA-z0-9]//g;
+            $svalue =~ s/[^a-zA-Z0-9]//g;
             $param = $query->param( "$scatname$svalue" );
             if( $param ) {
                 $catvalue = "$catvalue, $value";
@@ -77,12 +77,12 @@ sub buildCategoryItem
     } elsif( $cmd[0] eq "radio" ) {
         $catname = $cmd[1];
         $scatname = $catname;
-        $scatname =~ s/[^a-zA-z0-9]//g;
+        $scatname =~ s/[^a-zA-Z0-9]//g;
         $param = $query->param( "$scatname" );
         for( $i = 3; $i < $len; $i++ ) {
             my $value = $cmd[$i];
             my $svalue = $value;
-            $svalue =~ s/[^a-zA-z0-9]//g;
+            $svalue =~ s/[^a-zA-Z0-9]//g;
             if( $param eq $svalue ) {
                 $catvalue = "$value";
                 last;
@@ -104,7 +104,7 @@ sub buildCategoryItem
     } elsif( $cmd[0] eq "text" ) {
         $catname = $cmd[1];
         $scatname = $catname;
-        $scatname =~ s/[^a-zA-z0-9]//g;
+        $scatname =~ s/[^a-zA-Z0-9]//g;
         $param = $query->param( "$scatname" );
         $catvalue = "<!---->$param<!---->&nbsp;";
     }
