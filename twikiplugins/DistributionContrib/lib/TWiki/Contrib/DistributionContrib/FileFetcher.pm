@@ -31,9 +31,10 @@ sub fetchDistributionFile {
 	$webTopicBodge =~ s!\.!/!;
 	my $attachmentPath = TWiki::Func::getPubDir()."/".$webTopicBodge."/".$config{'saveTopicAttachmentName'};
 	my $ans = $attachmentPath;
-	unless (mirror($fileUrl, $attachmentPath)) {
-		TWiki::Func::writeWarning("Couldn't get $distribution:$file as $fileUrl to $attachmentPath\n");
-		$ans = "Couldn't download";
+	my $status = mirror($fileUrl, $attachmentPath);
+	if (is_error($status)) {
+		TWiki::Func::writeWarning("Couldn't get $distribution:$file as $fileUrl to $attachmentPath ($status)\n");
+		$ans = "Couldn't download - $status";
 	}
 	return $ans;
 }
