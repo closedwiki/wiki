@@ -1,28 +1,27 @@
-%META:TOPICINFO{author="PeterThoeny" date="1007858684" format="1.0" version="1.42"}%
+%META:TOPICINFO{author="MikeMannix" date="1012136640" format="1.0" version="1.43"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
 
 _Installation instructions for the TWiki 01-Sep-2001 production release_
 
----++ Overview
-
 These installation steps are based on the Apache Web server on Linux. TWiki runs on other Web servers and Unix systems, and should be fine with any OS and server that meet the [[TWikiImplementationNotes][system requirements]]. Documentation for other platforms is currently limited. For Windows, check TWiki:Codev/TWikiOnWindows. Search the TWiki:Codev web for other intallation notes.
 
 #StandardInstallation
 ---++ Standard Installation
 
-Request and download the TWiki 01-Sep-2001 distribution in Unix ZIP format from http://TWiki.org/download.html. _(To install TWiki on <nop>SourceForge, for use on a software development project, read TWiki:Codev/SourceForgeHowTo.)_ 
+Request and download the TWiki 01-Sep-2001 distribution in Unix ZIP format from http://TWiki.org/download.html. _(To install TWiki on <nop>SourceForge, for use on a software development project, read TWiki:Codev/SourceForgeHowTo .)_ 
 
 ---+++ Step 1: Create &amp; Configure the Directories
 
-__NOTE:__ _If you don't have access to your Web server configuration files - for example, if you're installing on an ISP-hosted account - use the [[#StepOneB][alternative Step 1]] instead._
+%X% *NOTE:* _If you don't have access to your Web server configuration files - for example, if you're installing on an ISP-hosted account - use the [[#StepOneB][alternative Step 1]] instead._
 
 	* Create directory =/home/httpd/twiki= and unzip the TWiki distribution into this directory.
 	* The =twiki/bin= directory of TWiki must be set as a cgi-bin directory. Add =/home/httpd/twiki/bin= to file =/etc/httpd/httpd.conf= with only =ExecCGI= option.
 	* The =twiki/pub= directory of TWiki must be set so that it is visible as a URL. Add =/home/httpd/twiki= to file =httpd.conf= with normal access options (copy from =/home/httpd/html= ).
 	* Now add =ScriptAlias= for =/twiki/bin= and =Alias= for =/twiki= to file =httpd.conf= .
-	  <br> __NOTE:__ The =ScriptAlias= __must__ come before the =Alias=, otherwise, Apache will fail to correctly set up =/twiki/bin/=, by treating it as just another subdirectory of the =/twiki/= alias.
+	  <br /> %X% *NOTE:* The =ScriptAlias= __must__ come before the =Alias=, otherwise, Apache will fail to correctly set up =/twiki/bin/=, by treating it as just another subdirectory of the =/twiki/= alias.
+	* The =twiki/data= and =twiki/templates= directories should be set so that they are *not* visible as URLs. Add them to =httpd.conf= with =deny from all=.
 
 <blockquote style="background-color:#F5F5F5">
 *Example =httpd.conf= entries:*
@@ -31,13 +30,18 @@ __NOTE:__ _If you don't have access to your Web server configuration files - for
  &lt;Directory "/home/httpd/twiki/bin"&gt;
 	 Options +ExecCGI
 	 Set<nop>Handler cgi-script
-	 AllowOverride all
 	 Allow from all
  &lt;/Directory&gt;
  &lt;Directory "/home/httpd/twiki/pub"&gt;
 	 Options Follow<nop>Sym<nop>Links +Includes
 	 Allow<nop>Override None
 	 Allow from all
+ &lt;/Directory&gt;
+ &lt;Directory "/home/httpd/twiki/data"&gt;
+	 deny from all
+ &lt;/Directory&gt;
+ &lt;Directory "/home/httpd/twiki/templates"&gt;
+	 deny from all
  &lt;/Directory&gt;</pre>
 </blockquote>
 
@@ -59,11 +63,12 @@ To install TWiki on a system where you don't have server administrator privilege
 	* Upload the TWiki files by FTP (transfer as _text_ except for the image files in =pub=)
 <blockquote>
 | *TWiki dir:* | *What it is:* | *Where to copy:* | *Example:* |
-| =twiki/bin= | CGI bin | cgi-enabled dir | =/home/smith/public_html/cgi-bin= |
-| =twiki/lib= | library files | same level as =twiki/bin= | =/home/smith/public_html/lib= |
-| =twiki/pub= | public files | htdoc enabled dir | =/home/smith/public_html/pub= |
-| =twiki/data= | topic data | outside of htdoc tree (for security) | =/home/smith/twiki/data= |
-| =twiki/templates= | web templates | outside of htdoc tree (for security) | =/home/smith/twiki/templates= |
+| =twiki= | start-up pages | root TWiki dir | =/home/smith/twiki/= |
+| =twiki/bin= | CGI bin | CGI-enabled dir | =/home/smith/twiki/bin= |
+| =twiki/lib= | library files | same level as =twiki/bin= | =/home/smith/twiki/lib= |
+| =twiki/pub= | public files | htdoc enabled dir | =/home/smith/twiki/pub= |
+| =twiki/data= | topic data | dir secure from public access | =/home/smith/twiki/data= |
+| =twiki/templates= | web templates | dir secure from public access | =/home/smith/twiki/templates= |
 </blockquote>
 
 #StepTwo
@@ -73,26 +78,33 @@ To install TWiki on a system where you don't have server administrator privilege
 		* *IMPORTANT:* On ISP-hosted accounts, Perl CGI scripts usually require a =.cgi= extension to run. Some systems need =.pl=, the regular Perl extension. Modify all =twiki/bin= script filenames if necessary.
 	* Set the file permission of all Perl scripts in the =twiki/bin= directory as executable to =-rwxr-xr-x= (755).
 	* To be able to edit the Perl scripts and =.tmpl= files it is necessary to =chown= and =chgrp -R twiki= so all the files have the owner you want.
-	* __NOTE:__ This Guide assumes user =nobody= ownership for all files manipulated by the CGI scripts (executed by the Web server), and user =twiki= for all other files. You can: 
+	* %H% This Guide assumes user =nobody= ownership for all files manipulated by the CGI scripts (executed by the Web server), and user =twiki= for all other files. You can: 
 		* replace =nobody= with another user if your server executes scripts under a different name (ex: default for Debian is =www-data=).
-			* *HINT:* Run the =testenv= script from your browser: =http://yourdomain.com/twiki/bin/testenv=. It will show you the user name of the CGI scripts, a table listing all CGI environment variables, and a test of your =twiki/lib/TWiki.cfg= configuration file (you'll configure that in a minute).
+			* %T% *HINT:* Run the =testenv= script from your browser: =http://yourdomain.com/twiki/bin/testenv=. It will show you the user name of the CGI scripts, a table listing all CGI environment variables, and a test of your =twiki/lib/TWiki.cfg= configuration file (you'll configure that in a minute).
 		* replace user =twiki= with your own username
 	* Set the permission of all files below =twiki/data= so that they are writable by user =nobody=. A simple way is to =chmod= them to =-rw-rw-r--= (664) and to =chown= them to =nobody=.
 	* Set the permission of the =twiki/data= directory and its subdirectories so that files in there are writable by user =nobody=. A simple way is to chmod them to =drwxrwxr-x= (775) and to =chown= them to =nobody=.
 	* Set the permission of the =twiki/pub= directory and all its subdirectories so that files in there are writable by user =nobody=. A simple way is to =chmod= them to =drwxrwxr-x= (775) and to =chown= them to =nobody=.
-	* __NOTE:__ The =twiki/data/*/*.txt,v= RCS repository files in the installation package are locked by user =nobody=. If your CGI scripts are __not__ running as user =nobody=, it's not possible to check in files (you'll see that the revision number won't increase after saving a topic). In this case, you need to unlock all repository files (check the RCS man pages) and lock them with a different user, ex =www-data=, or delete them all - new files will be automatically created the first time each topic is edited. A simple way to change ownership is with a search-and-replace in all files; for example, using sed: <br /> =for f in *,v; do sed 's/nobody\:/www-data\:/' $f &gt; x; mv x $f; done=
+	* %H% The =twiki/data/*/*.txt,v= RCS repository files in the installation package are locked by user =nobody=. If your CGI scripts are __not__ running as user =nobody=, it's not possible to check in files (you'll see that the revision number won't increase after saving a topic). In this case, you need to unlock all repository files (check the RCS man pages) and lock them with a different user, ex =www-data=, or delete them all - new files will be automatically created the first time each topic is edited. A simple way to change ownership is with a search-and-replace in all files; for example, using sed:
+<blockquote style="background-color:#F5F5F5">
+<pre>
+cd twiki/data
+for f in */*,v; do sed 's/nobody\:/www-data\:/' $f &gt; x; mv -f x $f; done
+</pre>
+</blockquote>
 
 ---+++ Step 3: Set the Main Configuration File
 
 	* Edit the file =twiki/lib/TWiki.cfg=, setting the variables to your needs.
 		* Set the file extension in the =$scriptSuffix= variable to =cgi= or =pl= if required.
-		* Make sure RCS is installed. Set =$rcsDir= in =twiki/lib/TWiki.cfg= to mach the location of your RCS binaries.
+		* Make sure RCS is installed. Set =$rcsDir= in =twiki/lib/TWiki.cfg= to mach the location of your RCS binaries. You can check this by issuing the comand =rcs= at the prompt, it should result in something like ="rcs: no input file"=.
 	* *Security issue:* Directories =twiki/data= , =twiki/templates= and all its subdirectories should be set so that they are __not__ visible as a URL. (Alternatively, move the directories to a place where they are not visible, and change the variables in =twiki/lib/TWiki.cfg= accordingly)
 	* Test your settings by running the =testenv= script from your browser: =http://yourdomain.com/twiki/bin/testenv=. Check if your =twiki/lib/TWiki.cfg= configuration file settings are correct.
 
 ---+++ Step 4: Finish Up from Your Browser
 
 	* Point your Web browser at =http://yourdomain.com/twiki/bin/view= and start TWiki-ing away!
+		* %T% Or, point to =http://yourdomain.com/twiki/= to get the pre-TWiki =index.html= page, with a link to the =view= script. Customize this page if you want a public intro screen with a login link, instead of immediately calling up the .htaccess login dialog by going directly to =view=.
 	* Edit the TWikiPreferences topic in the TWiki:%TWIKIWEB% web to set the =WIKIWEBMASTER= email address, and other preferences.
 	* Edit the WebPreferences topic in each web, if necessary: set individual =WEBCOPYRIGHT= messages, and other preferences.
 	* Enable email notification of topic changes, TWikiSiteTools has more. 
@@ -109,17 +121,18 @@ With your new TWiki installation up and running, you can manage most aspects of 
 ---+++ Enabling Authentication of Users
 
 	* If TWiki is installed on a non-authenticated server - not using SSL - and you'd like to authenticate users:
-		1. *Rename* file =.htaccess.txt= in the =twiki/bin= directory to =.htaccess= and change it to your needs. For details, consult the HTTP server documentation (for Apache server: <a href="http://www.apache.org/docs/mod/directives.html">[1]</a>, <a href="http://www.mcs.kent.edu/system/web_help/htaccess/introduction.html">[2]</a>). In particular, the following <font color="red">red</font> part needs to be configured correctly: <br>
-		  =Redirect <font color="red">/urlpath/to/TWiki/index.html</font> http<nop>://<font color="red">your.domain.com/urlpath/to/TWiki/bin/</font>view= <br>
-		  =AuthUserFile <font color="red">/filepath/to/TWiki/data/</font>.htpasswd= <br>
-		  =ErrorDocument 401 <font color="red">/urlpath/to/TWiki/bin/</font>oops/TWiki/TWikiRegistration?template=oopsauth=
-			* __NOTE:__ In case you renamed the CGI script files to have a file extension you need to reflect that in the =edit=, =view=, =preview=, etc entries in =.htaccess=.
-			* __NOTE:__ The browser should ask for login name and password when you click on the <u>Edit</u> link. In case =.htaccess= does not have the desired effect you need to enable it: Add "AllowOverride All" to the Directory section of =access.conf= for your =twiki/bin= directory.
-			* __NOTE:__ The distribution package has a =twiki/data/.htpasswd= file which contains some TWiki core team user accounts and a guest user account. You probably want to remove those accounts by deleting the entries in =.htpasswd=. Do not remove the guest user in case you want to allow guest logins.
+		1. *Rename* file =.htaccess.txt= in the =twiki/bin= directory to =.htaccess= and change it to your needs. For details, consult the HTTP server documentation (for Apache server: <a href="http://www.apache.org/docs/mod/directives.html">[1]</a>, <a href="http://www.mcs.kent.edu/system/web_help/htaccess/introduction.html">[2]</a>). In particular, the following <font color="red">red</font> part needs to be configured correctly: <br />
+		 =Redirect <font color="red">/urlpathto/twiki/index.html</font> http<nop>://<font color="red">yourdomain.com/urlpathto/twiki/bin/</font>view= <br>
+		  =AuthUserFile <font color="red">/filepathto/twiki/data/</font>.htpasswd= <br />
+		  =ErrorDocument 401 <font color="red">/urlpathto/twiki/bin/</font>oops/TWiki/TWikiRegistration?template=oopsauth=
+			* %X% *NOTE:* If you had to add a =.cgi= or =.pl= file extension to the =bin= scripts, make sure to do the same for =edit=, =view=, =preview=, and all the other script names in =.htaccess=. 
+			* %H% The browser should ask for login name and password when you click on the <u>Edit</u> link. In case =.htaccess= does not have the desired effect, you need to enable it: Add "AllowOverride All" to the Directory <a href=http://httpd.apache.org/docs/mod/core.html#directory>[3]</a> section of =access.conf= for your =twiki/bin= directory. 
+				* *This applies only if you have root access:* on hosted accounts, you shouldn't have this problem - otherwise, email tech support.
+			* %X% *NOTE:* In the TWiki distribution package, tje =twiki/data/.htpasswd.txt= file contains several TWiki core team user accounts and a guest user account. You probably want to remove those accounts by deleting the entries in =.htpasswd=. Do not remove the guest user if you want to allow guest logins.
 		1. *Copy* the TWikiRegistrationPub topic to TWikiRegistration. Do that by either editing the topics in the%TWIKIWEB% web, or by renaming the =.txt= and =.txt,v= files in the =twiki/data/%TWIKIWEB%= directory.
-			* __HINT:__ You can customize the registration form by deleting or adding input tags. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are processed correctly.
+			* %T% *HINT:* You can customize the registration form by deleting or adding input tags. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are processed correctly.
 	* Register yourself in the TWikiRegistration topic.
-		* __NOTE:__ When a user registers, a new line with the username and encrypted password is added to the =data/.htpasswd= file. The =.htpasswd= file that comes with the TWiki installation includes user accounts for TWiki core team members that are used for testing on TWiki.org. You can edit the file and delete those lines.
+		* %X% *NOTE:* When a user registers, a new line with the username and encrypted password is added to the =data/.htpasswd= file. The =.htpasswd= file that comes with the TWiki installation includes user accounts for TWiki core team members that are used for testing on TWiki.org. You can edit the file and delete those lines.
 	* Create a new topic to check if authentication works.
 	* Edit the %MAINWEB%.TWikiAdminGroup topic in the TWiki:%MAINWEB% web to include users with system administrator status.
 	* Edit the TWikiPreferences topic in the TWiki:%TWIKIWEB% web to set access privileges.
@@ -130,9 +143,9 @@ With your new TWiki installation up and running, you can manage most aspects of 
 
 To create a new web:
 	1. *Create* a new web data directory under =twiki/data= and check the file permission of the directory.
-		* Use a name starting with characters =A..Z=, followed by =a..z= and/or =0..9= characters, but __not__ a WikiWord.
+		* Use a name consisting of characters =A..Z= , =a..z= but __not__ in WikiNotation.  (The name should start with one (or more) uppercase letters, but have no uppercase letters after the first group -- if it starts with a lowercase letter or is a WikiWord, some features of TWiki will not work as expected.)
 	1. *Copy* all files from the =twiki/data/_default= directory to the new data directory, preserving the original files' owner, group and permissions (on Unix, use =cp -p=). The data files must be writable by the owner the CGI scripts are running on (usually, =nobody=). 
-		* __HINT:__ You can set permissions of =.txt= and =.txt,v= files to =-rw-rw-rw-= (666) and then edit the topic using your browser; RCS will restore the file permissions correctly when saving the topic.
+		* %T% *HINT:* You can set permissions of =.txt= and =.txt,v= files to =-rw-rw-rw-= (666) and then edit the topic using your browser; RCS will restore the file permissions correctly when saving the topic.
 	1. *Add* the new web to the web list (visible in the upper right corner of each topic) by editing the site-level preferences, %TWIKIWEB%.%WIKIPREFSTOPIC%:
 		* Add the new web to the =%<nop>WIKIWEBLIST%= variable.
 	1. *Update* the web settings by editing the <nop>WebPreferences topic of the new web:
@@ -148,13 +161,12 @@ Optionally, you can also:
 	* Create custom web-specific templates in a new =twiki/templates/Someweb= directory (otherwise, templates are inherited from =twiki/templates=).
 	* Add TWikiForms for form-based page input that's stored separately from the main free-form topic text.
 
-__NOTE:__ User home topics are located in the %WIKITOOLNAME%.%MAINWEB% web - don't try to move them or create them in other webs. From any other web, user signatures have to point to %WIKITOOLNAME%.%MAINWEB% web, using a =%MAINWEB%.<nop>UserName= or =%<nop>MAINWEB%.<nop>UserName= format. (The =%<nop>MAINWEB%= variable is an advantage if you ever change the %MAINWEB% web name, but the standard =%MAINWEB%.<nop>UserName= is easier for users to enter, which is the bottom line! 
+%X% *NOTE:* User home topics are located in the %WIKITOOLNAME%.%MAINWEB% web - don't try to move them or create them in other webs. From any other web, user signatures have to point to %WIKITOOLNAME%.%MAINWEB% web, using a =%MAINWEB%.<nop>UserName= or =%<nop>MAINWEB%.<nop>UserName= format. (The =%<nop>MAINWEB%= variable is an advantage if you ever change the %MAINWEB% web name, but the standard =%MAINWEB%.<nop>UserName= is easier for users to enter, which is the bottom line! 
 
 ---++ TWiki File System Info
 
 See [[AppendixFileSystem][Appendix A: TWiki File System]] for an installed system snapshot and descriptions of all files in the TWiki 01-Sep-2001 distribution.
 
 -- PeterThoeny - 13 Sep 2001 <br />
--- MikeMannix - 03 Dec 2001	
-
+-- MikeMannix - 27 Jan 2002
 %META:TOPICMOVED{by="MikeMannix" date="999319650" from="TWiki.TWikiInstallationNotes" to="TWiki.TWikiInstallationGuide"}%
