@@ -284,7 +284,7 @@ sub writeDebugTimes
 
 =pod
 
----++ initaliaze( $pathInfo, $remoteUser, $topic, $url, $query )
+---++ initialize( $pathInfo, $remoteUser, $topic, $url, $query )
 Return value: ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir )
 
 Per-web initialization of all aspects of TWiki.  Initializes the
@@ -1165,8 +1165,18 @@ sub userToWikiListInit
     }
 }
 
-# =========================
-# Translate intranet username (e.g. jsmith) to WikiName (e.g. JaneSmith)
+=pod
+
+---++ userToWikiName( $loginUser, $dontAddWeb )
+Return value: $wikiName
+
+Translates intranet username (e.g. jsmith) to WikiName (e.g. JaneSmith)
+userToWikiListInit must be called before this function is used.
+
+Unless $dontAddWeb is set, "Main." is prepended to the returned WikiName.
+
+=cut to implementation
+
 sub userToWikiName
 {
     my( $loginUser, $dontAddWeb ) = @_;
@@ -1183,7 +1193,16 @@ sub userToWikiName
     return "$mainWebname.$wUser";
 }
 
-# =========================
+=pod
+
+---++ wikiToUserName( $wikiName )
+Return value: $loginUser
+
+Translates WikiName (e.g. JaneSmith) to an intranet username (e.g. jsmith)
+userToWikiListInit must be called before this function is used.
+
+=cut to implementation
+
 sub wikiToUserName
 {
     my( $wikiUser ) = @_;
@@ -1193,13 +1212,28 @@ sub wikiToUserName
     return $userName;
 }
 
-# =========================
+=pod
+
+---++ isGuest()
+
+Returns whether the current user is TWikiGuest or equivalent.
+
+=cut to implementation
+
 sub isGuest
 {
    return ( $userName eq $defaultUserName );
 }
 
 # =========================
+=pod
+
+---++ sub getWikiUserTopic ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub getWikiUserTopic
 {
     # Topic without Web name
@@ -1208,6 +1242,14 @@ sub getWikiUserTopic
 
 # =========================
 # Check for a valid WikiWord or WikiName
+=pod
+
+---++ sub isWikiName (  $name  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub isWikiName
 {
     my( $name ) = @_;
@@ -1218,6 +1260,14 @@ sub isWikiName
 
 # =========================
 # Check for a valid ABBREV (acronym)
+=pod
+
+---++ sub isAbbrev (  $name  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub isAbbrev
 {
     my( $name ) = @_;
@@ -1228,6 +1278,14 @@ sub isAbbrev
 
 # =========================
 # Check for a valid web name
+=pod
+
+---++ sub isWebName (  $name  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub isWebName
 {
     my( $name ) = @_;
@@ -1237,6 +1295,14 @@ sub isWebName
 }
 
 # =========================
+=pod
+
+---++ sub readOnlyMirrorWeb (  $theWeb  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub readOnlyMirrorWeb
 {
     my( $theWeb ) = @_;
@@ -1263,18 +1329,42 @@ sub readOnlyMirrorWeb
 
 
 # =========================
+=pod
+
+---++ sub getDataDir ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub getDataDir
 {
     return $dataDir;
 }
 
 # =========================
+=pod
+
+---++ sub getPubDir ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub getPubDir
 {
     return $pubDir;
 }
 
 # =========================
+=pod
+
+---++ sub getPubUrlPath ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub getPubUrlPath
 {
     return $pubUrlPath;
@@ -1322,6 +1412,14 @@ sub getTWikiLibDir
 
 # =========================
 # Get date in '1 Jan 2002' format, in GMT as for other dates
+=pod
+
+---++ sub getGmDate (  $sec, $min, $hour, $mday, $mon, $year) = gmtime(time() )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getGmDate
 {
     my( $sec, $min, $hour, $mday, $mon, $year) = gmtime(time());
@@ -1333,6 +1431,14 @@ sub getGmDate
 
 # =========================
 # Get date in '1 Jan 2002' format, in local timezone of server
+=pod
+
+---++ sub getLocaldate (  $sec, $min, $hour, $mday, $mon, $year) = localtime(time() )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getLocaldate
 {
     my( $sec, $min, $hour, $mday, $mon, $year) = localtime(time());
@@ -1344,6 +1450,14 @@ sub getLocaldate
 
 # =========================
 # Return GMT date/time as formatted string 
+=pod
+
+---++ sub formatGmTime (  $theTime, $theFormat  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub formatGmTime
 {
     my( $theTime, $theFormat ) = @_;
@@ -1379,6 +1493,14 @@ sub formatGmTime
 }
 
 # =========================
+=pod
+
+---++ sub revDate2ISO ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub revDate2ISO
 {
     my $epochSec = revDate2EpSecs( $_[0] );
@@ -1386,6 +1508,14 @@ sub revDate2ISO
 }
 
 # =========================
+=pod
+
+---++ sub revDate2EpSecs ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub revDate2EpSecs
 # Convert RCS revision date/time to seconds since epoch, for easier sorting 
 {
@@ -1440,6 +1570,14 @@ sub revDate2EpSecs
 }
 
 # =========================
+=pod
+
+---++ sub getSessionValue ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub getSessionValue
 {
 #   my( $key ) = @_;
@@ -1447,6 +1585,14 @@ sub getSessionValue
 }
 
 # =========================
+=pod
+
+---++ sub setSessionValue ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub setSessionValue
 {
 #   my( $key, $value ) = @_;
@@ -1454,6 +1600,14 @@ sub setSessionValue
 }
 
 # =========================
+=pod
+
+---++ sub getSkin ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub getSkin
 {
     my $skin = "";
@@ -1463,6 +1617,14 @@ sub getSkin
 }
 
 # =========================
+=pod
+
+---++ sub getViewUrl (  $theWeb, $theTopic  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getViewUrl
 {
     my( $theWeb, $theTopic ) = @_;
@@ -1478,7 +1640,17 @@ sub getViewUrl
     return "$urlHost$scriptUrlPath/view$scriptSuffix/$web/$theTopic";
 }
 
-# =========================
+=pod
+
+---++ getScriptURL( $web, $topic, $script )
+Return value: $absoluteScriptURL
+
+Returns the absolute URL to a TWiki script, providing the wub and topic as
+"path info" parameters.  The result looks something like this:
+"http://host/twiki/bin/$script/$web/$topic"
+
+=cut to implementation
+
 sub getScriptUrl
 {
     my( $theWeb, $theTopic, $theScript ) = @_;
@@ -1490,7 +1662,19 @@ sub getScriptUrl
     return $url;
 }
 
-# =========================
+=pod
+
+---++ getOopsUrl( $web, $topic, $template, @scriptParams )
+Return Value: $absoluteOopsURL
+
+Composes a URL for an "oops" error page.  The last parameters depend on the
+specific oops template in use, and are passed in the URL as 'param1..paramN'.
+
+The returned URL ends up looking something like:
+"http://host/twiki/bin/oops/$web/$topic?template=$template&param1=$scriptParams[0]..."
+
+=cut to implementation
+
 sub getOopsUrl
 {
     my( $theWeb, $theTopic, $theTemplate,
@@ -1513,6 +1697,14 @@ sub getOopsUrl
 }
 
 # =========================
+=pod
+
+---++ sub makeTopicSummary (  $theText, $theTopic, $theWeb  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub makeTopicSummary
 {
     my( $theText, $theTopic, $theWeb ) = @_;
@@ -1564,6 +1756,14 @@ sub makeTopicSummary
 }
 
 # =========================
+=pod
+
+---++ sub extractNameValuePair (  $str, $name  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub extractNameValuePair
 {
     my( $str, $name ) = @_;
@@ -1601,6 +1801,14 @@ sub extractNameValuePair
 }
 
 # =========================
+=pod
+
+---++ sub fixN (  $theTag  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub fixN
 {
     my( $theTag ) = @_;
@@ -1609,6 +1817,14 @@ sub fixN
 }
 
 # =========================
+=pod
+
+---++ sub fixURL (  $theHost, $theAbsPath, $theUrl  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub fixURL
 {
     my( $theHost, $theAbsPath, $theUrl ) = @_;
@@ -1631,6 +1847,14 @@ sub fixURL
 }
 
 # =========================
+=pod
+
+---++ sub fixIncludeLink (  $theWeb, $theLink, $theLabel  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub fixIncludeLink
 {
     my( $theWeb, $theLink, $theLabel ) = @_;
@@ -1654,6 +1878,14 @@ sub fixIncludeLink
 }
 
 # =========================
+=pod
+
+---++ sub handleIncludeUrl (  $theUrl, $thePattern  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleIncludeUrl
 {
     my( $theUrl, $thePattern ) = @_;
@@ -1736,7 +1968,20 @@ sub handleIncludeUrl
     return $text;
 }
 
-# =========================
+=pod
+
+---++ handleIncludeFile( $includeCommandAttribs, $topic, $web, \@verbatimBuffer, @processedTopics )
+Return value: $includedText
+
+Processes a specific instance %INCLUDE{...}% syntax.  Returns the text to be
+inserted in place of the INCLUDE command.  $topic and $web should be for the
+immediate parent topic in the include hierarchy. @verbatimBuffer is the request-
+global buffer for storing removed verbatim blocks, and @processedTopics is a
+list of topics already %INCLUDE%'ed -- these are not allowed to be included
+again to prevent infinte recursive inclusion.
+
+=cut to implementation
+
 sub handleIncludeFile
 {
     my( $theAttributes, $theTopic, $theWeb, $verbatim, @theProcessedTopics ) = @_;
@@ -1871,6 +2116,14 @@ sub handleIncludeFile
 
 # =========================
 # Only does simple search for topicmoved at present, can be expanded when required
+=pod
+
+---++ sub handleMetaSearch (  $attributes  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleMetaSearch
 {
     my( $attributes ) = @_;
@@ -1917,6 +2170,14 @@ sub handleMetaSearch
 }
 
 # =========================
+=pod
+
+---++ sub handleSearchWeb (  $attributes  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleSearchWeb
 {
     my( $attributes ) = @_;
@@ -1952,6 +2213,14 @@ sub handleSearchWeb
 }
 
 # =========================
+=pod
+
+---++ sub handleTime (  $theAttributes, $theZone  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleTime
 {
     my( $theAttributes, $theZone ) = @_;
@@ -1989,29 +2258,43 @@ sub handleTime
 
 #AS
 # =========================
+=pod
+
+---++ sub showError (  $errormessage  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub showError
 {
     my( $errormessage ) = @_;
     return "<font size=\"-1\" color=\"#FF0000\">$errormessage</font>" ;
 }
 
-#AS
-# =========================
-# Create markup for %TOC%
+=pod
+
+---++ handleToc( $text, $topic, $web, $tocAttributes )
+Parameters:
+   $text          : the text of the current topic
+   $topic         : the topic we are in
+   $web           : the web we are in
+   $tocAttributes : "Topic" [web="Web"] [depth="N"]
+Return value: $tableOfContents
+
+Andrea Sterbini 22-08-00 / PTh 28 Feb 2001
+
+Handles %TOC{...}% syntax.  Creates a table of contents using TWiki bulleted
+list markup, linked to the section headings of a topic. A section heading is
+entered in one of the following forms:
+   * $headingPatternSp : \t++... spaces section heading
+   * $headingPatternDa : ---++... dashes section heading
+   * $headingPatternHt : <h[1-6]> HTML section heading </h[1-6]>
+
+=cut to implementation
+
 sub handleToc
 {
-    # Andrea Sterbini 22-08-00 / PTh 28 Feb 2001
-    # Routine to create a TOC bulleted list linked to the section headings
-    # of a topic. A section heading is entered in one of the following forms:
-    #   $headingPatternSp : \t++... spaces section heading
-    #   $headingPatternDa : ---++... dashes section heading
-    #   $headingPatternHt : <h[1-6]> HTML section heading </h[1-6]>
-    # Parameters:
-    #   $_[0] : the text of the current topic
-    #   $_[1] : the topic we are in
-    #   $_[2] : the web we are in
-    #   $_[3] : attributes = "Topic" [web="Web"] [depth="N"]
-
     ##     $_[0]     $_[1]      $_[2]    $_[3]
     ## my( $theText, $theTopic, $theWeb, $attributes ) = @_;
 
@@ -2121,6 +2404,14 @@ sub handleToc
 }
 
 # =========================
+=pod
+
+---++ sub getPublicWebList ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub getPublicWebList
 {
     # FIXME: Should this go elsewhere?
@@ -2143,6 +2434,14 @@ sub getPublicWebList
 }
 
 # =========================
+=pod
+
+---++ sub handleWebAndTopicList (  $theAttr, $isWeb  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleWebAndTopicList
 {
     my( $theAttr, $isWeb ) = @_;
@@ -2193,6 +2492,14 @@ sub handleWebAndTopicList
 }
 
 # =========================
+=pod
+
+---++ sub handleUrlParam (  $theArgs  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleUrlParam
 {
     my( $theArgs ) = @_;
@@ -2217,6 +2524,14 @@ sub handleUrlParam
 # Encode to URL parameter or HTML entity
 # TODO: For non-ISO-8859-1 $siteCharset, need to convert to Unicode 
 # for use in entity or to UTF-8 before URL encoding.
+=pod
+
+---++ sub handleUrlEncode (  $theArgs, $doExtract  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleUrlEncode
 {
     my( $theArgs, $doExtract ) = @_;
@@ -2261,6 +2576,14 @@ sub handleUrlEncode
 # Encode characters with 8th bit set for use in URLs with non-UTF-8 '$siteCharset'
 # encoding by browser - mainly for older browsers with no UTF-8 support.
 # Ignored when using UTF-8 URLs or when on EBCDIC platforms.
+=pod
+
+---++ sub handleIntUrlEncode (  $theStr, $doExtract  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleIntUrlEncode
 {
     my( $theStr, $doExtract ) = @_;
@@ -2279,6 +2602,14 @@ sub handleIntUrlEncode
 }
 
 # =========================
+=pod
+
+---++ sub handleEnvVariable (  $theVar  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleEnvVariable
 {
     my( $theVar ) = @_;
@@ -2287,6 +2618,14 @@ sub handleEnvVariable
 }
 
 # =========================
+=pod
+
+---++ sub handleTmplP (  $theParam  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleTmplP
 {
     my( $theParam ) = @_;
@@ -2298,6 +2637,14 @@ sub handleTmplP
 
 # =========================
 # Create spaced-out topic name for Ref-By search 
+=pod
+
+---++ sub handleSpacedTopic (  $theTopic  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleSpacedTopic
 {
     my( $theTopic ) = @_;
@@ -2307,6 +2654,14 @@ sub handleSpacedTopic
 }
 
 # =========================
+=pod
+
+---++ sub handleIcon (  $theParam  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleIcon
 {
     my( $theParam ) = @_;
@@ -2316,7 +2671,15 @@ sub handleIcon
     return $value;
 }
 
-# =========================
+=pod
+
+---++ handleInternalTags( $text, $topic, $web )
+
+Modifies $text in-place, replacing variables internal to TWiki with their
+values.  Some example variables: %TOPIC%, %SCRIPTURL%, %WIKINAME%, etc.
+
+=cut to implementation
+
 sub handleInternalTags
 {
     # modify arguments directly, i.e. call by reference
@@ -2389,7 +2752,32 @@ sub handleInternalTags
 
 }
 
-# =========================
+=pod
+
+---++ takeOutVerbatim( $text, \@verbatimBuffer )
+Return value: $textWithoutVerbatim
+
+Searches through $text and extracts <verbatim> blocks, appending each
+onto the end of the @verbatimBuffer array and replacing it with a token
+string which is not affected by TWiki rendering.  The text after these
+substitutions is returned.
+
+This function is designed to preserve the contents of verbatim blocks
+through some rendering operation.  The general sequence of calls for
+this use is something like this:
+
+   $textToRender = takeOutVerbatim($inputText, \@verbatimBlocks);
+   $renderedText = performSomeRendering($textToRender);
+   $resultText = putBackVerbatim($renderedText, "pre", @verbatimBlocks);
+
+Note that some changes are made to verbatim blocks here: < and > are replaced
+by their HTML entities &lt; and &gt;, and the actual <verbatim> tags are
+replaced with <pre> tags so that the text is rendered truly "verbatim" by
+a browser.  If this is not desired pass "verbatim" as the second parameter of
+putBackVerbatim instead of "pre".
+
+=cut to implementation
+
 sub takeOutVerbatim
 {
     my( $intext, $verbatim ) = @_;	# $verbatim is ref to array
@@ -2436,9 +2824,19 @@ sub takeOutVerbatim
     return $outtext;
 }
 
-# =========================
-# set type=verbatim to get back original text
-#     type=pre to convert to HTML readable verbatim text
+=pod
+
+---++putBackVerbatim( $textWithoutVerbatim, $putBackType, @verbatimBuffer )
+Return value: $textWithVerbatim
+
+This function reverses the actions of takeOutVerbatim above.  See the text for
+takeOutVerbatim for a more thorough description.
+
+Set $putBackType to 'verbatim' to get back original text, or to 'pre' to
+convert to HTML readable verbatim text.
+
+=cut to implementation
+
 sub putBackVerbatim
 {
     my( $text, $type, @verbatim ) = @_;
@@ -2457,9 +2855,21 @@ sub putBackVerbatim
     return $text;
 }
 
+=pod
 
+---++ handleCommonTags( $text, $topic, $web, @processedTopics )
+Return value: $handledText
 
-# =========================
+Processes %VARIABLE%, %TOC%, and %INCLUDE% syntax; also includes
+"commonTagsHandler" plugin hook.  If processing an included topic,
+@processedTopics should be a list of topics already included, or in
+the process of being included.
+
+Returns the text of the topic, after file inclusion, variable substitution,
+table-of-contents generation, and any plugin changes from commonTagsHandler.
+
+=cut to implementation
+
 sub handleCommonTags
 {
     my( $text, $theTopic, $theWeb, @theProcessedTopics ) = @_;
@@ -2499,6 +2909,14 @@ sub handleCommonTags
 }
 
 # =========================
+=pod
+
+---++ sub handleMetaTags (  $theWeb, $theTopic, $text, $meta, $isTopRev  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub handleMetaTags
 {
     my( $theWeb, $theTopic, $text, $meta, $isTopRev ) = @_;
@@ -2516,6 +2934,14 @@ sub handleMetaTags
 }
 
 # ========================
+=pod
+
+---++ sub renderParent (  $web, $topic, $meta, $args  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub renderParent
 {
     my( $web, $topic, $meta, $args ) = @_;
@@ -2599,6 +3025,14 @@ sub renderParent
 }
 
 # ========================
+=pod
+
+---++ sub renderMoved (  $web, $topic, $meta  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub renderMoved
 {
     my( $web, $topic, $meta ) = @_;
@@ -2640,6 +3074,14 @@ sub renderMoved
 
 
 # ========================
+=pod
+
+---++ sub renderFormField (  $meta, $args  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub renderFormField
 {
     my( $meta, $args ) = @_;
@@ -2652,6 +3094,14 @@ sub renderFormField
 }
 
 # =========================
+=pod
+
+---++ sub renderFormData (  $web, $topic, $meta  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub renderFormData
 {
     my( $web, $topic, $meta ) = @_;
@@ -2679,6 +3129,14 @@ sub renderFormData
 
 # Before including topic text in a hidden field in web form, encode
 # characters that would break the field
+=pod
+
+---++ sub encodeSpecialChars (  $text  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub encodeSpecialChars
 {
     my( $text ) = @_;
@@ -2692,6 +3150,14 @@ sub encodeSpecialChars
 
     return $text;
 }
+
+=pod
+
+---++ sub decodeSpecialChars (  $text  )
+
+Not yet documented.
+
+=cut to implementation
 
 sub decodeSpecialChars
 {
@@ -2711,6 +3177,14 @@ sub decodeSpecialChars
 # Render bulleted and numbered lists, including nesting.
 # Called from several places.  Accumulates @listTypes and @listElements
 # to track nested lists.
+=pod
+
+---++ sub emitList (  $theType, $theElement, $theDepth, $theOlType  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub emitList {
     my( $theType, $theElement, $theDepth, $theOlType ) = @_;
 
@@ -2759,6 +3233,14 @@ sub emitList {
 }
 
 # ========================
+=pod
+
+---++ sub emitTR (  $thePre, $theRow, $insideTABLE  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub emitTR {
     my ( $thePre, $theRow, $insideTABLE ) = @_;
 
@@ -2803,6 +3285,14 @@ sub emitTR {
 }
 
 # =========================
+=pod
+
+---++ sub fixedFontText (  $theText, $theDoBold  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub fixedFontText
 {
     my( $theText, $theDoBold ) = @_;
@@ -2818,6 +3308,14 @@ sub fixedFontText
 
 # =========================
 # Build an HTML <Hn> element with suitable anchor for linking from %TOC%
+=pod
+
+---++ sub makeAnchorHeading (  $theText, $theLevel  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub makeAnchorHeading
 {
     my( $theText, $theLevel ) = @_;
@@ -2852,6 +3350,14 @@ sub makeAnchorHeading
 
 # =========================
 # Build a valid HTML anchor name
+=pod
+
+---++ sub makeAnchorName (  $anchorName  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub makeAnchorName
 {
     my( $anchorName ) = @_;
@@ -2878,6 +3384,14 @@ sub makeAnchorName
 }
 
 # =========================
+=pod
+
+---++ sub internalCrosswebLink (  $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub internalCrosswebLink
 {
     my( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink ) = @_;
@@ -2889,6 +3403,14 @@ sub internalCrosswebLink
 }
 
 # =========================
+=pod
+
+---++ sub internalLink (  $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub internalLink {
     my( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink ) = @_;
     # $thePreamble is text used before the TWiki link syntax
@@ -2957,6 +3479,14 @@ sub internalLink {
 
 # =========================
 # Handle most internal and external links
+=pod
+
+---++ sub specificLink (  $thePreamble, $theWeb, $theTopic, $theText, $theLink  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub specificLink
 {
     my( $thePreamble, $theWeb, $theTopic, $theText, $theLink ) = @_;
@@ -3006,6 +3536,14 @@ sub specificLink
 }
 
 # =========================
+=pod
+
+---++ sub externalLink (  $pre, $url  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub externalLink
 {
     my( $pre, $url ) = @_;
@@ -3019,6 +3557,14 @@ sub externalLink
 }
 
 # =========================
+=pod
+
+---++ sub mailtoLink (  $theAccount, $theSubDomain, $theTopDomain  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub mailtoLink
 {
     my( $theAccount, $theSubDomain, $theTopDomain ) = @_;
@@ -3028,6 +3574,14 @@ sub mailtoLink
 }
 
 # =========================
+=pod
+
+---++ sub mailtoLinkFull (  $theAccount, $theSubDomain, $theTopDomain, $theLinkText  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub mailtoLinkFull
 {
     my( $theAccount, $theSubDomain, $theTopDomain, $theLinkText ) = @_;
@@ -3037,6 +3591,14 @@ sub mailtoLinkFull
 }
 
 # =========================
+=pod
+
+---++ sub mailtoLinkSimple (  $theMailtoString, $theLinkText  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub mailtoLinkSimple
 {
     # Does not do any anti-spam padding, because address will not include '@'
@@ -3051,6 +3613,14 @@ sub mailtoLinkSimple
 
 
 # =========================
+=pod
+
+---++ sub getRenderedVersion (  $text, $theWeb, $meta  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getRenderedVersion {
     my( $text, $theWeb, $meta ) = @_;
     my( $head, $result, $extraLines, $insidePRE, $insideTABLE, $insideNoAutoLink );
