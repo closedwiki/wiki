@@ -15,7 +15,7 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-# SingletonWikiWordsPlugin implements features as described on
+# SingletonWikiWordPlugin implements features as described on
 # http://twiki.org/cgi-bin/view/Codev/?topic=SingletonWikiWord
 
 # =========================
@@ -27,7 +27,7 @@ use vars qw(
         $exampleCfgVar
     );
 
-$VERSION = '1.000';
+$VERSION = '1.001';
 
 # =========================
 sub initPlugin
@@ -36,7 +36,7 @@ sub initPlugin
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1 ) {
-        &TWiki::Func::writeWarning( "Version mismatch between SingletonWikiWordsPlugin and Plugins.pm" );
+        &TWiki::Func::writeWarning( "Version mismatch between SingletonWikiWordPlugin and Plugins.pm" );
         return 0;
     }
 
@@ -44,7 +44,7 @@ sub initPlugin
     $debug = &TWiki::Func::getPreferencesFlag( "SINGLETONWIKIWORDPLUGIN_DEBUG" );
 
     # Plugin correctly initialized
-    &TWiki::Func::writeDebug( "- TWiki::Plugins::SingletonWikiWordsPlugin::initPlugin( $web.$topic ) is OK" );# if $debug;
+    writeDebug( "- TWiki::Plugins::SingletonWikiWordPlugin::initPlugin( $web.$topic ) is OK" );
     return 1;
 }
 
@@ -53,11 +53,11 @@ sub commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-    writeDebug( "- X - SingletonWikiWordsPlugin::commonTagsHandler( $_[0]$_[2].$_[1] )" );
+    writeDebug( "- X - SingletonWikiWordPlugin::commonTagsHandler( $_[0]$_[2].$_[1] )" );
 
     # This is the place to define customized tags and variables
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
-    $_[0] =~ s/\s+\.([A-Z]+[a-z]*)/&TWiki::Func::internalLink("[[$1]]",$web,$web,"", 1)/geo; # MRJC - WikiWord for single word, only works within same web.
+    $_[0] =~ s/(\s+)\.([A-Z]+[a-z]*)/"$1".&TWiki::Func::internalLink("[[$2]]",$web,$web,"",1)/geo;
 
     # do custom extension rule, like for example:
     # $_[0] =~ s/%XYZ%/&handleXyz()/geo;
