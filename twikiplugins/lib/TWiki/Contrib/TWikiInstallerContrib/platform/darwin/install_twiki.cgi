@@ -36,6 +36,7 @@ my $account;
 my ( $cgibin, $home );
 my $localDirConfig;
 my @patches;
+my $hostname = $ENV{SERVER_NAME} || 'localhost';
 
 BEGIN {
     use Cwd qw( cwd getcwd );
@@ -49,7 +50,7 @@ BEGIN {
     $home = "/Users/$account/Sites";
 
     $localDirConfig = qq{
-\$cfg{DefaultUrlHost}   = "http://localhost";
+\$cfg{DefaultUrlHost}   = "http://$hostname";
 \$cfg{ScriptUrlPath}    = "/~$account/cgi-bin/twiki";
 \$cfg{PubUrlPath}       = "/~$account/htdocs/twiki";
 \$cfg{PubDir}           = "$home/htdocs/twiki"; 
@@ -172,7 +173,31 @@ __HTML__
 #    wikiCatalogue({ %localWikis, cgi => $q });
 #    print catalogue({ %localWikis, title => "Local Wiki Webs", cgi => $q });
 
+################################################################################
+# PRECONFIGURATIONS
+
+my $releaseTracker = ";contrib=DistributionContrib;plugin=TWikiReleaseTrackerPlugin";
+
+#plugin=CommentPlugin
+#plugin=CalendarPlugin or plugin=QuickCalendarPlugin
+
+my $baseWiki = ";plugin=InterwikiPlugin;plugin=SpacedWikiWordPlugin;plugin=SpreadSheetPlugin;plugin=TablePlugin;addon=GetAWebAddOn;plugin=SmiliesPlugin;addon=CompareRevisionsAddOn;plugin=SessionPlugin";
+	#plugin=SessionPlugin;plugin=TocPlugin
+my $level2Wiki = $baseWiki . $releaseTracker . ";plugin=SlideShowPlugin;plugin=TocPlugin;plugin=RandomTopicPlugin";
+my $publicWiki = $level2Wiki . ";plugin=BlackListPlugin";
+my $level3Wiki = $level2Wiki . ";plugin=FindElsewherePlugin;plugin=InterwikiPlugin;contrib=AttrsContrib;plugin=ImageGalleryPlugin";
+	#plugin=BatchPlugin (esp. handy with ImageGallery (but i haven't tested it))
+my $appWiki = $level3Wiki . ";plugin=FormQueryPlugin;plugin=MacrosPlugin";
+
+my $softwareDevWiki = $level3Wiki . ";plugin=BeautifierPlugin;plugin=MathModePlugin;plugin=PerlDocPlugin";
+
     print <<__HTML__;
+<h2>Preconfigurations</h2>
+Configuration <a href="?$baseWiki">Lean and Mean Wiki</a><br/>
+Configuration <a href="?$appWiki">Application Base Wiki</a><br/>
+Configuration <a href="?$softwareDevWiki">Software Development</a><br/>
+Configuration <a href="?$level3Wiki">Personal Wiki</a><br/>
+Configuration <a href="?$publicWiki">Community Wiki</a><br/>
 </form>
 </body>
 </html>
@@ -215,6 +240,7 @@ checkdir( $cpan );
 ################################################################################
 # setup directory skeleton workplace
 
+# TODO: change this to require a kernel parameter? (probably, but need to deal with creating the error "screens")
 my $tar = $q->param( 'kernel' ) || "TWiki20040902.tar.gz";
 installTWikiExtension({ file => $tar, name => 'TWiki', dir => "downloads/releases", cdinto => 'twiki' });
 
@@ -321,8 +347,8 @@ checkdir( $tmp, $dest, $bin, $lib, $cpan );
 
 # a handy link to the place to go *after* the next step
 print qq{<hr><hr>\n};
-print qq{do a <tt>./post-wiki.sh</tt> and then <a target="details" href="http://localhost/~$account/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
-print qq{run <a target="details" href="http://localhost/~$account/cgi-bin/twiki/testenv">testenv</a><br/>\n};
+print qq{do a <tt>./post-wiki.sh</tt> and then <a target="details" href="http://$hostname/~$account/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
+print qq{run <a target="details" href="http://$hostname/~$account/cgi-bin/twiki/testenv">testenv</a><br/>\n};
 print qq{<br/><br/>};
 print "you can perform this installation again using the following URL: <br/>";
 ( my $urlInstall = $q->self_url ) =~ s/install=install//;
