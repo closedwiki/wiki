@@ -134,27 +134,35 @@ use strict;
   }
 
   sub toString {
-    my ( $this, $strung ) = @_;
+    my ( $this, $limit, $level, $strung ) = @_;
     if ( !defined( $strung )) {
       $strung = {};
     } elsif ( $strung->{$this} ) {
-      return "$this\[...\]";
+      return "$this";
+    }
+    $level = 0 unless (defined($level));
+    $limit = 2 unless (defined($limit));
+    if ( $level == $limit ) {
+      return "$this.....";
     }
     $strung->{$this} = 1;
-    my $ss = "$this\[";
+    my $ss = "$this<ol start=0>";
     if ( $this->size() > 0 ) {
+      my $n = 0;
       foreach my $entry ( @{$this->{values}} ) {
-	$ss .= "," if $ss ne "[";
+	$ss .= "<li>";
 	if ( ref( $entry )) {
-	  $ss .= $entry->toString( $strung );
+	  $ss .= $entry->toString( $limit, $level + 1, $strung );
 	} elsif ( defined( $entry )) {
 	  $ss .= "\"$entry\"";
 	} else {
 	  $ss .= "UNDEF";
 	}
+	$ss .= "</li>";
+	$n++;
       }
     }
-    return "$ss]";
+    return "$ss</ol>";
   }
 
   sub write {

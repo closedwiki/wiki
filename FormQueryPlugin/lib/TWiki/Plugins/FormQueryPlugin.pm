@@ -16,9 +16,9 @@ use vars qw(
 	    $debug $db $bming
 	   );
 
-$VERSION = '1.010';
+$VERSION = '1.020';
 $pluginName = 'FormQueryPlugin';
-$bming = 0;
+#$bming = 0;
 
 sub initPlugin {
   ( $topic, $web, $user, $installWeb ) = @_;
@@ -51,24 +51,12 @@ sub commonTagsHandler {
   ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
   my $topic = $_[1];
-# THE FOLLOWING SECTION AND THE fixMacro FUNCTION MUST REMAIN UNTIL
-# THE OLD PLUGIN IS DEPRECATED!
-  $_[0] =~ s/%(PROJ_LISTMILESTONES){(.*?)}%/&deprecatedMacro($1,$2, "MacroListTasks")/geo;
-  $_[0] =~ s/%(PROJ_REQOVERVIEW){(.*?)}%/&deprecatedMacro($1,$2,"MacroReqOverview")/geo;
-  $_[0] =~ s/%(PROJ_REQINFO)%/&deprecatedMacro($1,"of=$topic","MacroReqInfo")/geo;
-  $_[0] =~ s/%(PROJ_TITINFO)%/&deprecatedMacro($1,"of=$topic","MacroTiTInfo")/geo;
-  $_[0] =~ s/%(PROJ_EFFORTSUM){(.*?)}%/&deprecatedMacro($1,$2,"MacroEffortSum")/geo;
-  $_[0] =~ s/%(PROJ_REQDETAILS){(.*?)}%/&deprecatedMacro($1,$2,"MacroReqDetails")/geo;
-  $_[0] =~ s/%(PROJ_TESTSTATUS){(.*?)}%/&deprecatedMacro($1,$2,"MacroTestStatus")/geo;
-#PROJ_REQSEARCH
-# END OF SECTION
+#  my $bmstart;
 
-  my $bmstart;
-
-  if ( $debug && !$bming ) {
-    $bmstart = new Benchmark;
-    $bming = 1;
-  }
+#  if ( $debug && !$bming ) {
+#   $bmstart = new Benchmark;
+#    $bming = 1;
+#  }
 
   my $text = "";
 
@@ -86,6 +74,8 @@ sub commonTagsHandler {
       $setval = TWiki::Func::expandCommonVariables( $setval, $topic, $web );
       $sets{$setname} = $setval;
     } else {
+      $line =~
+	s/%FQPDEBUG{(.*?)}%/&_handleFQPInfo($1)/geo;
       $line =~
 	s/%(FORMQUERY){(.+?)}%/&_handleFormQuery($1,$2)/geo;
       $line =~
@@ -107,29 +97,33 @@ sub commonTagsHandler {
   chop( $text ); # remove trailing NL
   $_[0] =~ s/^.*$/$text/s;
 
-  if ( $debug && $bmstart ) {
-    my $bmend = new Benchmark;
-    my $td = Benchmark::timestr( Benchmark::timediff( $bmend, $bmstart ));
-    my $mess = "<br><b>--Time: $td";
-    $mess .= " MOD_PERL" if ( $ENV{MOD_PERL} );
-    $mess .= " Storable" if ( defined( $WebDB::storable ));
-    $_[0] .= "$mess</b><br>";
-  }
+#  if ( $debug && $bmstart ) {
+#    my $bmend = new Benchmark;
+#    my $td = Benchmark::timestr( Benchmark::timediff( $bmend, $bmstart ));
+#    my $mess = "<br><b>--Time: $td";
+#    $mess .= " MOD_PERL" if ( $ENV{MOD_PERL} );
+#    $mess .= " Storable" if ( defined( $WebDB::storable ));
+#    $_[0] .= "$mess</b><br>";
+#  }
 }
 
-sub deprecatedMacro {
-  my ( $mn, $params, $macro ) = @_;
-  my $ret = "%CALLMACRO{topic=$macro $params}%";
-  if ( $mn ne "PROJ_EFFORTSUM" ) {
-    $ret = "<br><font color=red><i>DEPRECATED MACRO %<nop>".
-	$mn .
-	"% USED. Suggest you replace with<br>".
-	"%<nop>CALLMACRO{topic=$macro $params}%<br>".
-	"(don't forget to check the parameters against the definition ".
-	"of $macro)</font></i><br>".
-	$ret;
-  }
-  return $ret;
+#sub deprecatedMacro {
+#  my ( $mn, $params, $macro ) = @_;
+#  my $ret = "%CALLMACRO{topic=$macro $params}%";
+#  if ( $mn ne "PROJ_EFFORTSUM" ) {
+#    $ret = "<br><font color=red><i>DEPRECATED MACRO %<nop>".
+#	$mn .
+#	"% USED. Suggest you replace with<br>".
+#	"%<nop>CALLMACRO{topic=$macro $params}%<br>".
+#	"(don't forget to check the parameters against the definition ".
+#	"of $macro)</font></i><br>".
+#	$ret;
+#  }
+#  return $ret;
+#}
+
+sub _handleFQPInfo {
+  return $db->getInfo( @_ );
 }
 
 sub _handleCalc {

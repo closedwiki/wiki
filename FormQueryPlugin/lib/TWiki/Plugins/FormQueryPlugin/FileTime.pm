@@ -35,7 +35,8 @@ use strict;
 
   sub toString {
     my $this = shift;
-    return $this->{file} . ":" . $this->{time};
+    my $stime = localtime( $this->{time} );
+    return $this->{file} . ":$stime"
   }
 
   # PUBLIC FormQueryPlugin::Archive hook

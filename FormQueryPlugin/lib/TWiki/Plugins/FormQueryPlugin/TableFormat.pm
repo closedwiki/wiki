@@ -59,24 +59,28 @@ use TWiki::Plugins::FormQueryPlugin::Map;
     return $this;
   }
 
-  # PRIVATE STATIC fields used in sorting
+  # PRIVATE STATIC fields used in sorting; entries are hashes
   my @compareFields;
 
   # PRIVATE STATIC compare function for sorting
   sub _compare {
     my ( $va, $vb );
     foreach my $field ( @compareFields ) {
-      if ( $field =~ m/^-/o ) {
+      if ( $field->{reverse} ) {
 	# reverse sort this field
-	my $f = substr( $field, 1 );
-	$va = $b->get( $f );
-	$vb = $a->get( $f );
+	$va = $b->get( $field->{name} );
+	$vb = $a->get( $field->{name} );
       } else {
-	$va = $a->get( $field );
-	$vb = $b->get( $field );
+	$va = $a->get( $field->{name} );
+	$vb = $b->get( $field->{name} );
       }
       if ( defined( $va ) && defined( $vb )) {
-	my $cmp = $va cmp $vb;
+	my $cmp;
+	if ( $field->{numeric} ) {
+	  $cmp = $va <=> $vb;
+	} else {
+	  $cmp = $va cmp $vb;
+	}
 	return $cmp unless ( $cmp == 0 );
       }
     }
@@ -92,7 +96,17 @@ use TWiki::Plugins::FormQueryPlugin::Map;
     return "<font color=red>Empty table</font>" if ( $entries->size() == 0 );
 
     if ( $entries->size() > 1 && defined( $this->{sort} )) {
-      @compareFields = split( /\s*,\s*/, $this->{sort} );
+      @compareFields = ();
+      foreach my $field ( split( /\s*,\s*/, $this->{sort} )) {
+	my $numeric = 0;
+	my $reverse = 0;
+	$field =~ s/^\#-/-\#/o;
+	$reverse = 1 if ( $field =~ s/^-//o );
+	$numeric = 1 if ( $field =~ s/^\#//o );
+	push( @compareFields, { name=>$field,
+				reverse=>$reverse,
+				numeric=>$numeric } );
+      }
       @{$entries->{values}} = sort _compare @{$entries->{values}};
     }
 
