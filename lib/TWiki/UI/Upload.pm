@@ -453,7 +453,7 @@ sub upload {
     }
 
     # cut path from filepath name (Windows "\" and Unix "/" format)
-    my @pathz = ( split( /\\/, $filePath ) );
+    my @pathz = ( split( /\\/, $fileName ) );
     my $filetemp = $pathz[$#pathz];
     my @pathza = ( split( '/', $filetemp ) );
     $fileName = $pathza[$#pathza];
