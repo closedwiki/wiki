@@ -76,10 +76,11 @@ sub initPlugin
 sub handleImageGallery
 {
     my( $attributes ) = @_;
+#    return '<b>IMAGE(' . $settings->{topic} . ")</b>\n";
 
     my $settings = {
        size => scalar &TWiki::Func::extractNameValuePair( $attributes, "size" ) || 'medium',
-       topic => scalar &TWiki::Func::extractNameValuePair( $attributes, "topic" ) || $topic,
+       topic => scalar TWiki::Func::extractNameValuePair( $attributes ) || scalar TWiki::Func::extractNameValuePair( $attributes, "topic" ) || $topic,
        web => scalar &TWiki::Func::extractNameValuePair( $attributes, "web" ) || $web,
        columns => scalar &TWiki::Func::extractNameValuePair( $attributes, "columns" ) || '0',
        rowstart => scalar &TWiki::Func::extractNameValuePair( $attributes, "rowstart" ) || '',
@@ -92,21 +93,19 @@ sub handleImageGallery
     	|| q(<span class="imgGallery"><a href="$imageurl"><img src="$thumburl" title="$sizeK: $comment"/></a></span>$n),
     };
        $settings->{resize} = TWiki::Func::getPreferencesValue( uc "IMAGEGALLERYPLUGIN_$settings->{size}" ) || $settings->{size};
-    
-    my @topics = _getTopics($web, $topic);
+
+    my @topics = $settings->{topic} eq 'all' && TWiki::Func::getTopicList() || ( $settings->{topic} );
     my $output = '';
     foreach my $wantedTopic (@topics) {
-       my ( $meta, undef ) = &TWiki::Func::readTopic( $web, $wantedTopic );
-       $output .= _formatTMLforTopic($web, $wantedTopic, $meta, $settings);
+	$settings->{topic} = $wantedTopic;
+       my ( $meta, undef ) = &TWiki::Func::readTopic( $settings->{web}, $wantedTopic );
+       $output .= _formatTMLforTopic( $settings->{web}, $wantedTopic, $meta, $settings );
     }
     return $output;
 }
 
 # Potentially we could provide a topic name/other-attribute(e.g. form) filter...
 sub _getTopics {
-
-    return ($topic) unless ($topic eq 'all');
-    return TWiki::Func::getTopicList();
 }
 
 # DESIGN: I chose to reset the image number with each new topic, but arguably
@@ -156,7 +155,7 @@ sub _updateThumb {
    TWiki::Func::writeDebug( "thumb=[$thumb] fn=[$fn]" ) if $debug;
    unless ( ( -M $thumb ) && ( -M $fn > -M $thumb ) )
 	{   # only update the thumbnail if (1) it doesn't exist or (2) the thumbnail is older than the source image
-	    my $thumbDir = &TWiki::Func::getPubDir() . "/$web/$topic/thumbs";
+	    my $thumbDir = &TWiki::Func::getPubDir() . "/$settings->{web}/$settings->{topic}/thumbs";
 	    mkdir $thumbDir unless -d $thumbDir;
 	    $thumbDir .= "/$resize";
 	    mkdir $thumbDir unless -d $thumbDir;
