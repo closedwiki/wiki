@@ -1,11 +1,11 @@
-	* Name: Peter Thoeny, author of the TWikiWeb (and therefore a TWikiContributor)
+	* Name: Peter Thoeny, author of the %TWIKIWEB%.TWikiWeb (and therefore a %TWIKIWEB%.TWikiContributor)
 	* Work: Peter.Thoeny@WindRiver.com
 	* Home: Peter@Thoeny.com
 	* Location: SanJoseOffice
 	* Personal web: http://www.thoeny.com/peter/
 	* Local time: Current <A HREF="http://www.bsdi.com/date?America/Los_Angeles">time</A> in the Silicon Valley.
 
-__Personal Preferences (details in TWikiVariables)__
+__Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
 	* Horizontal size of text edit box:
 		* Set EDITBOXWIDTH = 70
 	* Vertical size of text edit box:
@@ -14,8 +14,6 @@ __Personal Preferences (details in TWikiVariables)__
 		* Set ATTACHLINKBOX = 
 
 __Related topics__
-	* %WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.
+	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.
 	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
-	* TWikiUsers has a list of other TWiki users.
-
--- Main.PeterThoeny - 26 Feb 2000 <br>
+	* TWikiUsers has a list of other %WIKITOOLNAME% users.
