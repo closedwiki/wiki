@@ -43,7 +43,7 @@ use vars qw(
         %varStore @monArr @wdayArr %mon2num
     );
 
-$VERSION = '1.011';
+$VERSION = '1.012';  # 03 Apr 2004
 $escToken = "\0";
 %varStore = ();
 $dontSpaceRE = "";
@@ -199,7 +199,7 @@ sub doFunc
 
     &TWiki::Func::writeDebug( "- SpreadSheetPlugin::doFunc: $theFunc( $theAttr ) start" ) if $debug;
 
-    unless( $theFunc =~ /^(IF|LISTMAP)$/ ) {
+    unless( $theFunc =~ /^(IF|LISTIF|LISTMAP)$/ ) {
         # Handle functions recursively
         $theAttr =~ s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
         # Clean up unbalanced mess
@@ -329,6 +329,9 @@ sub doFunc
         $result = 1;
         $result = 0 if( _getNumber( $theAttr ) );
 
+    } elsif( $theFunc eq "ABS" ) {
+        $result = abs( _getNumber( $theAttr ) );
+
     } elsif( $theFunc eq "SIGN" ) {
         $i = _getNumber( $theAttr );
         $result =  0;
@@ -379,7 +382,7 @@ sub doFunc
 
     } elsif( $theFunc eq "REPEAT" ) {
         my( $str, $num ) = split( /,\s*/, $theAttr, 2 );
-        $str = "" unless( $str );
+        $str = "" unless( defined( $str ) );
         $num = _getNumber( $num );
         $result = "$str" x $num;
 
@@ -554,7 +557,7 @@ sub doFunc
 
     } elsif( $theFunc =~ /^(FIND|SEARCH)$/ ) {
         my( $searchString, $string, $pos ) = split( /,\s*/, $theAttr, 3 );
-        $result = "";
+        $result = 0;
         $pos--;
         $pos = 0 if( $pos < 0 );
         pos( $string ) = $pos if( $pos );
@@ -690,8 +693,9 @@ sub doFunc
     } elsif( $theFunc eq "LISTITEM" ) {
         my( $index, $str ) = _properSplit( $theAttr, 2 );
         $index = _getNumber( $index );
+        $str = "" unless( defined( $str ) );
         my @arr = getList( $str );
-        my $size =scalar @arr;
+        my $size = scalar @arr;
         if( $index && $size ) {
             $index-- if( $index > 0 );                 # documented index starts at 1
             $index = $size + $index if( $index < 0 );  # start from back if negative
@@ -729,21 +733,57 @@ sub doFunc
     } elsif( $theFunc eq "LISTMAP" ) {
         # LISTMAP(action, item 1, item 2, ...)
         my( $action, $str ) = _properSplit( $theAttr, 2 );
+        $action = "" unless( defined( $action ) );
+        $str = "" unless( defined( $str ) );
         # with delay, handle functions in result recursively and clean up unbalanced parenthesis
         $str =~ s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
         $str =~ s/$escToken\-*[0-9]+([\(\)])/$1/go;
         my $item = "";
         $i = 0;
-        my @arr = map {
-            $item = $_;
-            $_ = $action;
-            $i++;
-            s/\$index/$i/go;
-            $_ .= $item unless( s/\$item/$item/go );
-            s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
-            s/$escToken\-*[0-9]+([\(\)])/$1/go;
-            $_
-        } getList( $str );
+        my @arr =
+            map {
+               $item = $_;
+               $_ = $action;
+               $i++;
+               s/\$index/$i/go;
+               $_ .= $item unless( s/\$item/$item/go );
+               s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
+               s/$escToken\-*[0-9]+([\(\)])/$1/go;
+               $_
+            } getList( $str );
+        $result = _listToDelimitedString( @arr );
+
+    } elsif( $theFunc eq "LISTIF" ) {
+        # LISTIF(cmd, item 1, item 2, ...)
+        my( $cmd, $str ) = _properSplit( $theAttr, 2 );
+        $cmd = "" unless( defined( $cmd ) );
+        $cmd =~ s/^\s*(.*?)\s*$/$1/o;
+        $str = "" unless( defined( $str ) );
+        # with delay, handle functions in result recursively and clean up unbalanced parenthesis
+        $str =~ s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
+        $str =~ s/$escToken\-*[0-9]+([\(\)])/$1/go;
+        my $item = "";
+        my $eval = "";
+        $i = 0;
+        my @arr =
+            grep { ! /^TWIKI_GREP_REMOVE$/ }
+            map {
+                $item = $_;
+                $_ = $cmd;
+                $i++;
+                s/\$index/$i/go;
+                s/\$item/$item/go;
+                s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
+                s/$escToken\-*[0-9]+([\(\)])/$1/go;
+                $eval = safeEvalPerl( $_ );
+                if( $eval =~ /^ERROR/ ) {
+                    $_ = $eval;
+                } elsif( $eval ) {
+                    $_ = $item;
+                } else {
+                    $_ = "TWIKI_GREP_REMOVE";
+                }
+            } getList( $str );
         $result = _listToDelimitedString( @arr );
 
     } elsif ( $theFunc eq "NOP" ) {
@@ -790,8 +830,13 @@ sub _getNumber
 {
     my( $theText ) = @_;
     return 0 unless( $theText );
-    $theText =~ s/([0-9])\,(?=[0-9]{3})/$1/go;
-    $theText = 0 unless( $theText =~ s/^.*?([\-\+]?[0-9\.]+).*$/$1/o );
+    $theText =~ s/([0-9])\,(?=[0-9]{3})/$1/go;          # "1,234,567" ==> "1234567"
+    unless( $theText =~ s/^.*?(\-?[0-9\.]+).*$/$1/o ) { # "xy-1.23zz" ==> "-1.23"
+        $theText = 0;
+    }
+    $theText =~ s/^(\-?)0+([0-9])/$1$2/o;               # "-0009.12"  ==> "-9.12"
+    $theText =~ s/^(\-?)\./${1}0\./o;                   # "-.25"      ==> "-0.25"
+    $theText =~ s/^\-0$/0/o;                            # "-0"        ==> "0"
     return $theText;
 }
 
