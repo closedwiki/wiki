@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071217740" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1079859586" format="1.0" version="1.2"}%
 ---+!! Slide Show Plugin
 
 This Plugin converts a topic with headings into a slide show.
@@ -113,7 +113,7 @@ The part between the rulers defines the default format of a slide:
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
 <tr bgcolor="#FFFF99"><td width="1">
 <img src="%PUBURL%/%WEB%/SlideShowPlugin/clearpixel.gif" width="1" height="480" alt="" /></td>
-<td valign="top" width="719">
+<td valign="top">
 %BR%
 <font size="+2" color="#003399">
 %SLIDETEXT%
@@ -146,8 +146,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 24 Dec 2002 (V1.003) |
+|  Plugin Version: | 21 Mar 2004 (V1.003) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  21 Mar 2004: | Internal change: Fixed inofficial function call |
 |  14 Dec 2002: | Added =%<nop>SLIDENAVALL%= template keyword; added HIDECOMMENTS setting |
 |  23 Nov 2002: | Added =%<nop>SLIDENAVLAST%= template keyword; using print Skin for presentation mode |
 |  19 Nov 2002: | Added "Start presentation" and "End presentation" buttons; added =%<nop>SLIDENAVFIRST%=, =%<nop>SLIDENAVPREV%=, =%<nop>SLIDENAVNEXT%= template keywords |
@@ -160,7 +161,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- Main.PeterThoeny - 14 Dec 2002
+-- TWiki:Main.PeterThoeny - 21 Mar 2004
 %META:FILEATTACHMENT{name="clearpixel.gif" attr="" comment="Clear pixel for spacing" date="1071216910" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\clearpixel.gif" size="807" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="startpres.gif" attr="" comment="Start Presentation button" date="1071217038" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\startpres.gif" size="2065" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="endpres.gif" attr="" comment="End Presentation button" date="1071217056" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\endpres.gif" size="2066" user="PeterThoeny" version="1.1"}%
