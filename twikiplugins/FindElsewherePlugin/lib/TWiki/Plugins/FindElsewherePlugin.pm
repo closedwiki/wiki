@@ -138,6 +138,16 @@ sub findTopicElsewhere
    my @topicLinks;
    foreach ( @webList ) {
       my $otherWeb = $_;
+
+      # For systems running WebNameAsWikiName 
+      # If the $theTopic is a reference to a the name of 
+      # otherWeb, point at otherWeb.WebHome - MRJC
+      if ($otherWeb eq $theTopic) {
+         &TWiki::Func::writeDebug( "- $theTopic is the name of another web $otherWeb." );# if $debug;
+         $text .= "[[$otherWeb.WebHome][$otherWeb]]";
+         return $text;
+      }
+
       my $exist = &TWiki::Func::topicExists( $otherWeb, $theTopic );
       if ( ! $exist ) {
          if ( ( $doPluralToSingular ) && ( $theTopic =~ /s$/o ) ) {
