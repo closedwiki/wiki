@@ -561,6 +561,7 @@ table.twikiTopicAction {
 .twikiTopicAction label {
 	font-size:100%;
 }
+.twikiTopicAction .
 
 /**	----------------------------------
 *	TOC
@@ -626,6 +627,7 @@ html>body .twikiToc li a {
 .twikiRevInfo i {
 	font-style:normal;
 }
+.twikiRevision {}
 
 /* Footer */
 
