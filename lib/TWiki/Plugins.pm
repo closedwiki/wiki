@@ -45,7 +45,8 @@ $VERSION = '1.010';
         'writeHeaderHandler',      # ( $query )                              1.010
         'redirectCgiQueryHandler', # ( $query, $url )                        1.010
         'getSessionValueHandler',  # ( $key )                                1.010
-        'setSessionValueHandler'   # ( $key, $value )                        1.010
+        'setSessionValueHandler',  # ( $key, $value )                        1.010
+        'renderFormFieldForEditHandler', # ( $name, $type, $size, $value, $attributes, $output )
     );
     
 %onlyOnceHandlers = ( 'registrationHandler'     => 1,
@@ -53,6 +54,7 @@ $VERSION = '1.010';
                       'redirectCgiQueryHandler' => 1,
                       'getSessionValueHandler'  => 1,
                       'getSessionValueHandler'  => 1 );
+                      'renderFormFieldForEditHandler'  => 1,
 
 %registeredHandlers = ();
 
@@ -397,5 +399,10 @@ sub setSessionValueHandler
 }
 
 # =========================
-
+sub renderFormFieldForEditHandler
+{
+    # Called by Form.TODO
+    unshift @_, ( 'renderFormFieldForEditHandler' );
+    return &applyHandlers;
+}
 1;
