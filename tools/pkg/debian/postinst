@@ -35,7 +35,6 @@ if [ "$RET" = true ]; then
 #TODO: later this will be replaced by the upgrade script
     if [ ! -e /var/lib/twiki/data/Main/WebHome.txt ]; then
         if [ ! -e /var/lib/twiki/data/TWiki/WebHome.txt ]; then
-	if [ ! -e /var/lib/twiki/data/Know/WebHome.txt ]; then
 	if [ ! -e /var/lib/twiki/data/Sandbox/WebHome.txt ]; then
 	if [ ! -e /var/lib/twiki/data/Trash/WebHome.txt ]; then
 	if [ ! -e /var/lib/twiki/data/_default/WebHome.txt ]; then
@@ -43,14 +42,13 @@ if [ "$RET" = true ]; then
 		    # and even then, fail on overwrite so we don't stomp.
 		    tar -zxk -C / -f /usr/share/doc/twiki/twiki-data.tar.gz
 		    # clean up the .mailnotify timestamps.
-		    webs="Know Main Sandbox TWiki Trash _default";
+		    webs="Main Sandbox TWiki Trash _default";
 		    for web in $webs; do
 		    	    date +%s > /var/lib/twiki/data/$web/.mailnotify
     		    done
 			if [ ! -e /var/www/twiki/pub/wikiHome.gif ]; then
 				tar -zxk -C / -f /usr/share/doc/twiki/twiki-pub.tar.gz
 			fi
-       	fi
        	fi
        	fi
        	fi
