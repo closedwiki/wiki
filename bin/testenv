@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+# TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
 #
 # Copyright (C) 2000 Peter Thoeny, peter@thoeny.com
 #
@@ -35,6 +35,7 @@ BEGIN {
 
 package TWiki;
 
+my $setlibAvail = -r './setlib.cfg'; 
 
 
 &main();
@@ -85,13 +86,14 @@ my $ActivePerlRecommendedBuild = 631;	# Fixes PERL5SHELL bugs
 
 my $rcsverRequired = 5.7;
 
-my @requiredMods = ( @basicMods,  
+my @requiredMods = ( 
+    	@basicMods,  
 	'File::Copy',
     ); 
 my @requiredModsNonUnix = ( 
-	'Digest::SHA1', 
-	'MIME::Base64', 
-	'Net::SMTP',
+	'Digest::SHA1', 	# For register script
+	'MIME::Base64', 	# For register script
+	'Net::SMTP',		# For registration emails and mailnotify
    );
 my @optionalMods = ( 
 	'Algorithm::Diff', 	# For RcsLite
@@ -242,7 +244,7 @@ if ( $perlvernum < $perlverRequired ) {
 }
 
 # Perl @INC (lib path)
-print "<tr><th align=\"right\" valign=\"top\">\@INC:</th><td>" . 
+print "<tr><th align=\"right\" valign=\"top\">\@INC library path:</th><td>" . 
 			( join "<br />\n", @INC ) . 
 			"</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
@@ -261,6 +263,25 @@ if ( $detailedOS =~ /darwin/i or $OS ne 'UNIX' ) {
 # browser.
 $CGI::Carp::WRAP = 0;
 
+# Check that the TWiki.pm module can be found
+print "<tr><th align=\"right\">TWiki module in \@INC path:</th><td>";
+$mod = 'TWiki';
+eval "use $mod";
+print "<tr><th></th><td>\n";
+if ($@) {
+    print "<b><font color=\"red\">Warning:</font></b> ";
+    print "'$mod.pm' not found - check path to <code>twiki/lib</code>";
+    print " and edit <code>twiki/bin/setlib.cfg</code> if necessary" if $setlibAvail;
+    print ".\n";
+    print "</td></tr>\n";
+} else {
+    my $mod_version = eval "\$TWiki::wikiversion";
+    $mod_version ||= 'unknown';
+    print "OK, $mod.pm found (TWiki version: <b>$mod_version</b>)";
+    print "</td></tr>\n";
+}
+print "</td></tr>\n";
+
 # Check that each of the required Perl modules can be loaded, and
 # print its version number.
 print "<tr><th align=\"right\">Required Perl modules:</th><td>";
@@ -272,7 +293,13 @@ foreach $mod (@requiredMods) {
 	print "'$mod' not installed - check TWiki documentation to see if this is required.\n";
 	print "</td></tr>\n";
     } else {
-	my $mod_version = $ {"$ {mod}::VERSION"};
+	my $mod_version;
+	if ( $mod eq 'TWiki' ) {
+	    $mod_version = eval "\$TWiki::wikiversion";
+	    $mod_version ||= 'unknown';
+	} else {
+	    $mod_version = ${"${mod}::VERSION"};
+	}
         print "$mod ($mod_version)";
 	print "</td></tr>\n";
     }
