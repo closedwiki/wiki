@@ -26,6 +26,21 @@ $query= new CGI;
 
 &main();
 
+sub suffixToMimeType
+{
+    my( $theFilename ) = @_;
+
+    my $mimeType = 'application';
+    if( $theFilename =~ /\.(.+)$/ ) {
+        my $suffix = $1;
+        my @types = grep{ s/^\s*([^\s]+).*?\s$suffix\s.*$/$1/ }
+                    map{ "$_ " }
+                    split( /[\n\r]/, &TWiki::Store::readFile( $TWiki::mimeTypesFilename ) );
+        $mimeType = @types[0] if( @types );
+    }
+    return $mimeType;
+}
+
 sub main
 {
     my $thePathInfo = $query->path_info(); 
@@ -47,17 +62,15 @@ sub main
     my $fileName = $query->param( 'filename' );
 
     my $rev = $query->param( 'rev' );
+    my $topRev = &TWiki::Store::getRevisionNumber( $webName, $topic, $fileName );
 
-    if ( $rev ) {
-        my $fileContent = TWiki::Store::readAttachmentVersion( $webName, $topic, $fileName, $rev ); 
+    if ( $rev ne $topRev ) {
+        my $fileContent = &TWiki::Store::readAttachmentVersion( $webName, $topic, $fileName, $rev ); 
         if( $fileContent ) {
-	    if ( $fileName =~ /\.txt$/ ) {
-	       print $query->header( -type=>'text/plain' );
-	    } else {
-	       print $query->header( -type=>'application' );
-	    }
-	    print "$fileContent";
-	    return;
+            my $mimeType = suffixToMimeType( $fileName );
+            print $query->header( -type=>$mimeType );
+            print "$fileContent";
+            return;
         } else {
             # If no file content we'll try and show pub content, should there be a warning FIXME
         }

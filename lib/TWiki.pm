@@ -58,8 +58,8 @@ use vars qw(
         $wikiPrefsTopicname $webPrefsTopicname
         $statisticsTopicname $statsTopViews $statsTopContrib
         $numberOfRevisions $editLockTime
-        $attachAsciiPath
-        $scriptSuffix $safeEnvPath $mailProgram $wikiversion
+        $attachAsciiPath $scriptSuffix $wikiversion
+        $safeEnvPath $mailProgram $noSpamPadding $mimeTypesFilename
         $doKeepRevIfEditLock $doGetScriptUrlFromCgi $doRemovePortNumber
         $doRememberRemoteUser $doPluralToSingular
         $doHidePasswdInRegistration $doSecureInclude
