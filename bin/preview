@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wTI.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
@@ -15,8 +15,11 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
+use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use wiki;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
 
 $query= new CGI;
 
@@ -116,24 +119,24 @@ sub main
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
     ( $topic, $webName ) = 
-	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $tmpl = "", $atext = "", $text = "", $ptext = "", $tcat = "", $icat = "";
 
-    if( ! &wiki::webExists( $webName ) ) {
-	$tmpl= &wiki::readTemplate( "noweb" );
-	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    if( ! &TWiki::webExists( $webName ) ) {
+	$tmpl= &TWiki::readTemplate( "noweb" );
+	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
 	return;
     }
 
     # reset lock time, this is to prevent contention in case of a long edit session
-    &wiki::lockTopic( $topic );
+    &TWiki::lockTopic( $topic );
 
     # get view template, standard view or a view with a different skin
-    my $skin = $query->param( "skin" ) || &wiki::getPreferencesValue( "SKIN" );
-    $tmpl = &wiki::readTemplate( "preview", "", $skin );
-    $icat = &wiki::readTemplate( "twikicatitems" );
+    my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
+    $tmpl = &TWiki::readTemplate( "preview", "", $skin );
+    $icat = &TWiki::readTemplate( "twikicatitems" );
     my $dontNotify = $query->param( "dontnotify" ) || "";
     $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
     my $saveCmd = $query->param( "cmd" ) || "";
@@ -144,7 +147,7 @@ sub main
 
     if( $icat ) {
         # get category items from parameters and build category section
-        $tcat = &wiki::readTemplate( "twikicatview" );
+        $tcat = &TWiki::readTemplate( "twikicatview" );
         my $line = "", $ttext = "", $temp = "";
         ( $before, $line, $after) = split( /%REPEAT%/, $tcat );
         foreach( split( /\n/, $icat ) ) {
@@ -170,7 +173,7 @@ sub main
 
     if( $saveCmd ne "repRev" ) {
         # normal case: Get latest attachment from file for preview
-        $text= &wiki::readTopic( $topic );
+        $text= &TWiki::readTopic( $topic );
         ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
         # get the edited text and combine text, category table and attachment for preview
         $text = $query->param( "text" );
@@ -194,14 +197,14 @@ sub main
     }
 
     $ptext =~ s/ {3}/\t/go;
-    $ptext = &wiki::handleCommonTags( $ptext, $topic );
-    $ptext = &wiki::getRenderedVersion( $ptext );
+    $ptext = &TWiki::handleCommonTags( $ptext, $topic );
+    $ptext = &TWiki::getRenderedVersion( $ptext );
 
     # do not allow click on link before save:
     $ptext =~ s@(href=".*?")@href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?template=oops"@goi;
 
     $tmpl =~ s/%TEXT%/$ptext/go;
-    $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
 
     $text =~ s/&/%_A_%/go;
     $text =~ s/\"/%_Q_%/go;

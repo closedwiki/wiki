@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wTI.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
@@ -15,8 +15,11 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
+use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use wiki;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
 
 $query= new CGI;
 
@@ -28,8 +31,8 @@ sub renderCellData
 {
     my( $data, $topic ) = @_;
     if( $data ) {
-        $data = &wiki::handleCommonTags( $data, $topic );
-        $data = &wiki::getRenderedVersion( $data );
+        $data = &TWiki::handleCommonTags( $data, $topic );
+        $data = &TWiki::getRenderedVersion( $data );
         if( $data =~ m/<\/?(th|td|table)/i )
         {
             # data has <th> or <td>, check if need to add <table>
@@ -88,9 +91,9 @@ sub getRevInfo
 {
     my( $rev, $topic, $short ) = @_;
 
-    my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
-    $user = &wiki::userToWikiName( $user );
-    my $revInfo = &wiki::getRenderedVersion( "$date GMT - $user" );
+    my( $date, $user ) = &TWiki::Store::getRevisionInfo( $topic, "1.$rev", 1 );
+    $user = &TWiki::userToWikiName( $user );
+    my $revInfo = &TWiki::getRenderedVersion( "$date GMT - $user" );
     if( $short ) {
         # cut time
         $revInfo =~ s/ \- [0-9]*\:[0-9]*(?:\sGMT)*//go;
@@ -111,7 +114,7 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName, $scriptUrlPath ) = 
-	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $tmpl = "", $text = "", $diff = "";
     my $rev1 = $query->param( "rev1" );
@@ -122,21 +125,21 @@ sub main
     my $revInfo1 = "",  $revInfo2 = "";
     my $isMultipleDiff = 0;
 
-    if( ! &wiki::webExists( $webName ) ) {
-	$tmpl= &wiki::readTemplate( "noweb" );
-	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    if( ! &TWiki::webExists( $webName ) ) {
+	$tmpl= &TWiki::readTemplate( "noweb" );
+	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
 	return;
     }
 
     # get view template, standard view or a view with a different skin
-    my $skin = $query->param( "skin" ) || &wiki::getPreferencesValue( "SKIN" );
-    $tmpl = &wiki::readTemplate( "rdiff", $topic, $skin );
+    my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
+    $tmpl = &TWiki::readTemplate( "rdiff", $topic, $skin );
     my( $before, $difftmpl, $after) = split( /%REPEAT%/, $tmpl);
 
-    my $topicExists = &wiki::topicExists( $webName, $topic );
+    my $topicExists = &TWiki::topicExists( $webName, $topic );
     if( $topicExists ) {
-	$maxrev = &wiki::getRevisionNumber( $topic );
+	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
         $maxrev =~ s/1\.//go;  # cut major
 	if( ! $rev1 ) { $rev1 = 0; }
 	if( ! $rev2 ) { $rev2 = 0; }
@@ -161,12 +164,12 @@ sub main
     # format "before" part
     $before =~ s/%REVTITLE1%/$revTitle1/go;
     $before =~ s/%REVTITLE2%/$revTitle2/go;
-    $before = &wiki::handleCommonTags( $before, $topic );
+    $before = &TWiki::handleCommonTags( $before, $topic );
     $before =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
     print $before;
 
     # do one or more diffs
-    $difftmpl = &wiki::handleCommonTags( $difftmpl, $topic );
+    $difftmpl = &TWiki::handleCommonTags( $difftmpl, $topic );
     if( $topicExists ) {
         my $r1 = $rev1, $r2 = $rev2, $rInfo = "";
         if( $r1 > $r2 + 1) {
@@ -178,7 +181,7 @@ sub main
             $diff =~ s/%REVTITLE1%/r1\.$r1/go;
             $rInfo = getRevInfo( $r1, $topic, 1 );
             $diff =~ s/%REVINFO1%/$rInfo/go;
-            $text = &wiki::getRevisionDiff( $topic, "1.$r2", "1.$r1" );
+            $text = &TWiki::Store::getRevisionDiff( $topic, "1.$r2", "1.$r1" );
             $text = renderRevisionDiff( $text, $topic );
             $diff =~ s/%TEXT%/$text/go;
             $diff =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
@@ -197,9 +200,9 @@ sub main
         print $diff;
     }
 
-    if( $wiki::doLogTopicRdiff ) {
+    if( $TWiki::doLogTopicRdiff ) {
         # write log entry
-        &wiki::writeLog( "rdiff", "$webName.$topic", "r1.$rev1 r1.$rev2" );
+        &TWiki::writeLog( "rdiff", "$webName.$topic", "r1.$rev1 r1.$rev2" );
     }
 
     # format "after" part
@@ -207,8 +210,8 @@ sub main
     $j = $maxrev;
     my $revisions = "";
     my $breakRev = 0;
-    if( ( $wiki::numberOfRevisions > 0 ) && ( $wiki::numberOfRevisions < $maxrev ) ) {
-        $breakRev = $maxrev - $wiki::numberOfRevisions + 1;
+    if( ( $TWiki::numberOfRevisions > 0 ) && ( $TWiki::numberOfRevisions < $maxrev ) ) {
+        $breakRev = $maxrev - $TWiki::numberOfRevisions + 1;
     }
 
     while( $i > 0 ) {
@@ -235,7 +238,7 @@ sub main
     $after =~ s/%REVTITLE2%/$revTitle2/go;
     $after =~ s/%REVINFO2%/$revInfo2/go;
 
-    $after = &wiki::handleCommonTags( $after, $topic );
+    $after = &TWiki::handleCommonTags( $after, $topic );
     $after =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
 
     print $after;

@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wTI.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
@@ -22,8 +22,11 @@
 # The script should be called by a cron job, it is recommended to
 # call it once a day.
 
+use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use wiki;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
 
 open(STDERR,'>&STDOUT');   # redirect error to browser
 $| = 1;                    # no buffering
@@ -68,7 +71,7 @@ sub main
         print "<h4><font color=\"red\">Do not interupt!</font> ( Wait until page download has finished )</h4>\n";
     }
     if ( $theRemoteUser ) {
-        $tmp = &wiki::userToWikiName( $theRemoteUser );
+        $tmp = &TWiki::userToWikiName( $theRemoteUser );
         $tmp =~ s/Main\.//go;
         printMsg( "* Executed by $tmp" );
     } else {
@@ -88,7 +91,7 @@ sub main
     $tmp = $logDate;
     $tmp =~ s/([0-9]{4})(.*)/$2/go;
     if( $tmp && $tmp < 13 ) {
-        $logMonth = $wiki::isoMonth[$tmp-1];
+        $logMonth = $TWiki::isoMonth[$tmp-1];
     } else {
         $logMonth = "Date error";
     }
@@ -97,19 +100,19 @@ sub main
     my $logMonthYear = "$logMonth $logYear";
     printMsg( "* Statistics for $logMonthYear" );
 
-    my $logFile = $wiki::logFilename;
+    my $logFile = $TWiki::logFilename;
     $logFile =~ s/%DATE%/$logDate/go;
 
     if( -e $logFile ) {
 
-        my @logList = split( /\n/, &wiki::readFile( $logFile ) );
+        my @logList = split( /\n/, &TWiki::readFile( $logFile ) );
 
         if( $thePathInfo ) {
             # do a particular web:
             processWeb( $thePathInfo, $theRemoteUser, $theTopic, $logMonthYear, @logList );
         } else {
             # do all webs:
-            my $dataDir = &wiki::getDataDir();
+            my $dataDir = &TWiki::getDataDir();
             opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
             @weblist = grep !/^\.\.?$/, readdir DIR;
             closedir DIR;
@@ -126,8 +129,8 @@ sub main
     }
 
     if( $isCgi ) {
-        $tmp = $wiki::statisticsTopicname;
-        my $url = &wiki::getViewUrl( "", $tmp );
+        $tmp = $TWiki::statisticsTopicname;
+        my $url = &TWiki::getViewUrl( "", $tmp );
         printMsg( "* Go back to <a href=\"$url\">$tmp</a> topic" );
         printMsg( "End creating usage statistics" );
         print "</body></html>\n";
@@ -142,12 +145,12 @@ sub processWeb
 
     # initialize wiki
     my ( $topic, $webName, $dummy, $userName, $dataDir ) = 
-        &wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic );
+        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic );
     $dummy = "";  # to suppress warning
 
     printMsg( "* Checking TWiki.$webName web" );
 
-    if( ! &wiki::webExists( $webName ) ) {
+    if( ! &TWiki::webExists( $webName ) ) {
         printMsg( "  *** Error: Web $webName does not exist" );
         return;
     }
@@ -160,14 +163,14 @@ sub processWeb
     my $tmp;
     my @list = grep( /^\|[^\|]*\|[^\|]*\| view \| $webName/, @theLogList );
     my $statViews = @list;
-    my @topViews = getTopList( 0, $wiki::statsTopViews, @list );
+    my @topViews = getTopList( 0, $TWiki::statsTopViews, @list );
 
     @list = grep( /^\|[^\|]*\|[^\|]*\| save \| $webName/, @theLogList );
     my $statSaves = @list;
     @list = grep( /^\|[^\|]*\|[^\|]*\| upload \| $webName/, @theLogList );
     my $statUploads = @list;
     @list = grep( /^\|[^\|]*\|[^\|]*\| (save|upload) \| $webName/, @theLogList );
-    my @topContrib = getTopList( 1, $wiki::statsTopContrib, @list );
+    my @topContrib = getTopList( 1, $TWiki::statsTopContrib, @list );
     printMsg( "  - view: $statViews, save: $statSaves, upload: $statUploads" );
     my $statTopViews = "";
     my $statTopContributors = "";
@@ -186,9 +189,9 @@ sub processWeb
         }
     }
 
-    my $statsFile = $wiki::statisticsTopicname;
-    if( &wiki::topicExists( $webName, $statsFile ) ) {
-        my $text = &wiki::readTopic( $statsFile );
+    my $statsFile = $TWiki::statisticsTopicname;
+    if( &TWiki::topicExists( $webName, $statsFile ) ) {
+        my $text = &TWiki::readTopic( $statsFile );
         my @lines = split( /\n/, $text );
         my $statLine;
         my $idxStat = -1;
@@ -226,7 +229,7 @@ sub processWeb
         }
         $text = join( "\n", @lines );
         $text .= "\n";
-        &wiki::saveTopic( $statsFile, $text, "", 1 );
+        &TWiki::Store::saveTopic( $statsFile, $text, "", 1 );
         printMsg( "  - Topic $statsFile updated" );
 
     } else {

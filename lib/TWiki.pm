@@ -4,7 +4,7 @@
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
 # Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
-# Copyright (C) 1999, 2000 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 1999-2001 Peter Thoeny, Peter@Thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,10 +20,10 @@
 # Notes:
 # - Latest version at http://twiki.org/
 # - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
-# - Customize variables in wikicfg.pm when installing TWiki.
-# - Optionally change wikicfg.pm for custom extensions of rendering rules.
-# - Files wiki[a-z]+.pm are included by wiki.pm
-# - Upgrading TWiki is easy as long as you only customize wikicfg.pm.
+# - Customize variables in TWiki.cfg when installing TWiki.
+# - Optionally create a new plugin or customize DefaultPlugin.pm for
+#   custom extensions of rendering rules.
+# - Upgrading TWiki is easy as long as you only customize DefaultPlugin.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 #
 # 20000501 Kevin Kinnell : changed beta0404 to have many new search
@@ -36,7 +36,7 @@
 #                          to sort dates.)
 #
 # 15 May 2000  PeterFokkinga :
-#    With this patch each topic can have its own template. wiki::readTemplate()
+#    With this patch each topic can have its own template. TWiki::readTemplate()
 #    has been modified to search for the following templates (in this order): 
 #
 #     1.$templateDir/$webName/$name.$topic.tmpl 
@@ -50,13 +50,15 @@
 #    See http://twiki.org/cgi-bin/view/Codev/UniqueTopicTemplates
 #    for further details    
 
-package wiki;
+package TWiki;
 
 ## 0501 kk : vvv Added for revDate2EpSecs
 use Time::Local;
 
 use strict;
 
+# ===========================
+# TWiki config variables:
 use vars qw(
         $webName $topicName $includingWebName $includingTopicName
         $defaultUserName $userName $wikiUserName 
@@ -69,7 +71,7 @@ use vars qw(
         $twikiWebname $mainWebname $mainTopicname $notifyTopicname
         $wikiPrefsTopicname $webPrefsTopicname
         $statisticsTopicname $statsTopViews $statsTopContrib
-	$editLockTime $mailProgram $wikiversion 
+        $numberOfRevisions $editLockTime $mailProgram $wikiversion 
         $doKeepRevIfEditLock $doRemovePortNumber
         $doRememberRemoteUser $doPluralToSingular
         $doHidePasswdInRegistration $doSecureInclude
@@ -79,33 +81,55 @@ use vars qw(
         @isoMonth $TranslationToken $code @code $depth %mon2num
         $scriptSuffix
         $newTopicFontColor $newTopicBgColor
-);
+    );
+
+# TWiki::Store config:
+use vars qw(
+        $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd
+        $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd
+    );
+
+# TWiki::Search config:
+use vars qw(
+        $lsCmd $egrepCmd $fgrepCmd
+    );
 
 
 
 # ===========================
 # TWiki version:
-$wikiversion      = "03 Feb 2001";
+$wikiversion      = "11 Feb 2001";
 
 # ===========================
 # read the configuration part
-do "wikicfg.pm";
+do "TWiki.cfg";
 
 # ===========================
 # read the preferences part
-do "wikiprefs.pm";
+##do "TWiki/Prefs.pm";
+use TWiki::Prefs;
 
 # ===========================
 # read the search engine part
-do "wikisearch.pm";
+##do "TWiki/Search.pm";
+use TWiki::Search;
 
 # ===========================
 # read the access control part
-do "wikiaccess.pm";
+##do "TWiki/Access.pm";
+use TWiki::Access;
 
 # ===========================
 # read the rcs related functions
-do "wikistore.pm";
+##do "TWiki/Store.pm";
+use TWiki::Store;
+
+#AS
+# =========================
+# read the plugins handler
+##do "TWiki/Plugins.pm";
+use TWiki::Plugins;
+#/AS
 
 
 # ===========================
@@ -125,7 +149,7 @@ sub initialize
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
     # initialize access control
-    initializeAccess();
+    &TWiki::Access::initializeAccess();
 
     # initialize user name and user to WikiName list
     $userName = initializeRemoteUser( $theRemoteUser );
@@ -175,7 +199,7 @@ sub initialize
     }
 
     # initialize preferences
-    &wiki::initializePrefs( $wikiUserName, $webName );
+    &TWiki::Prefs::initializePrefs( $wikiUserName, $webName );
 
     # some remaining init
     $TranslationToken= "\263";
@@ -184,10 +208,14 @@ sub initialize
 
     # Add background color and font color (AlWilliams - 18 Sep 2000)
     # PTh: Moved from interalLink to initialize ('cause of performance)
-    $newTopicBgColor = &wiki::getPreferencesValue("NEWTOPICBGCOLOR");
+    $newTopicBgColor = &TWiki::Prefs::getPreferencesValue("NEWTOPICBGCOLOR");
     if ($newTopicBgColor eq "") { $newTopicBgColor="#FFFFCE"; }
-    $newTopicFontColor = &wiki::getPreferencesValue("NEWTOPICFONTCOLOR");
+    $newTopicFontColor = &TWiki::Prefs::getPreferencesValue("NEWTOPICFONTCOLOR");
     if ($newTopicFontColor eq "") { $newTopicFontColor="#0000FF"; }
+
+#AS
+    &TWiki::Plugins::initialize( $topicName, $webName, $userName );
+#/AS
 
     return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
 }
@@ -284,7 +312,7 @@ sub initializeRemoteUser
         return $remoteUser;
     }
 
-    my $text = readFile( $remoteUserFilename );
+    my $text = TWiki::readFile( $remoteUserFilename );
     my %AddrToName = map { split( /\|/, $_ ) }
                    grep { /[^\|]*\|[^\|]*\|$/ }
                    split( /\n/, $text );
@@ -307,7 +335,7 @@ sub initializeRemoteUser
                     $text .= "$usrAddr|$usrName|\n";
                 }
             }
-            saveFile( $remoteUserFilename, $text );
+            TWiki::saveFile( $remoteUserFilename, $text );
         }
     } else {
         # get user name from AddrToName table
@@ -320,7 +348,7 @@ sub initializeRemoteUser
 # =========================
 sub userToWikiListInit
 {
-    my $text = readFile( $userListFilename );
+    my $text = TWiki::readFile( $userListFilename );
     my @list = split( /\n/, $text );
     @list = grep { /^\s*\* [A-Za-z0-9]*\s*\-\s*[^\-]*\-/ } @list;
     %userToWikiList = ();
@@ -453,7 +481,7 @@ sub topicIsLocked
 
     my $lockFilename = "$dataDir/$webName/$name.lock";
     if( ( -e "$lockFilename" ) && ( $editLockTime > 0 ) ) {
-        my $tmp = readFile( $lockFilename );
+        my $tmp = TWiki::readFile( $lockFilename );
         my( $lockUser, $lockTime ) = split( /\n/, $tmp );
         if( $lockUser ne $userName ) {
             # time stamp of lock within one hour of current time?
@@ -795,7 +823,7 @@ sub handleIncludeFile
     }
 
     # handle all preferences and internal tags (for speed: call by reference)
-    &wiki::handlePreferencesTags( $text );
+    &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
 
     # recursively process multiple embeded %INCLUDE% statements and prefs
@@ -828,7 +856,7 @@ sub handleSearchWeb
     my $attrNototal = extractNameValuePair( $attributes, "nototal" );
     my $attrBookview = extractNameValuePair( $attributes, "bookview" );
 
-    return &searchWikiWeb( "1", $attrWeb, $searchVal, $attrScope,
+    return &TWiki::Search::searchWeb( "1", $attrWeb, $searchVal, $attrScope,
        $attrOrder, $attrRegex, $attrLimit, $attrReverse,
        $attrCasesensitive, $attrNosummary, $attrNosearch,
        $attrNoheader, $attrNototal, $attrBookview
@@ -960,16 +988,17 @@ sub handleCommonTags
     # handle all preferences and internal tags (for speed: call by reference)
     $includingWebName = $theWeb;
     $includingTopicName = $theTopic;
-    &wiki::handlePreferencesTags( $text );
+    &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
 
     # recursively process multiple embeded %INCLUDE% statements and prefs
     $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $theTopic, $theWeb, @theProcessedTopics )/geo;
 
-    # Wiki extended rules
-    $text = extendHandleCommonTags( $text, $theTopic, $theWeb );
+    # Wiki Plugin Hook
+    &TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb );
+
     # handle tags again because of extend
-    &wiki::handlePreferencesTags( $text );
+    &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
 
     return $text;
@@ -1094,8 +1123,12 @@ sub getRenderedVersion
     $noAutoLink = 0;      # PTh 02 Feb 2001: Added Codev.DisableWikiWordLinks
     $blockquote = 0;
     $code = "";
-    $text =~ s/\\\n//go;
     $text =~ s/\r//go;
+    $text =~ s/\\\n//go;  # Join lines ending in "\"
+
+    # Wiki Plugin Hook
+    &TWiki::Plugins::startRenderingHandler( $text, $theWeb );
+
     foreach( split( /\n/, $text ) ) {
 
         # change state:
@@ -1122,16 +1155,16 @@ sub getRenderedVersion
                 s/\&lt;pre\&gt;/<pre>/go;  # fix escaped <pre>
             }
 
-# Wiki extended rules
-            $_ = extendGetRenderedVersionInsidePRE( $_, $theWeb );
+# Wiki Plugin Hook
+            &TWiki::Plugins::insidePREHandler( $_ );
 
             s/(.*)/$1\n/o;
 
         } else {
             # normal state, do Wiki rendering
 
-# Wiki extended rules
-            $_ = extendGetRenderedVersionOutsidePRE( $_, $theWeb );
+# Wiki Plugin Hook
+            &TWiki::Plugins::outsidePREHandler( $_ );
 
 # Blockquote
             s/^>(.*?)$/> <cite> $1 <\/cite><BR>/go;
@@ -1224,6 +1257,10 @@ sub getRenderedVersion
     if( $insidePRE || $insideVERBATIM ) {
         $result .= "</pre>\n";
     }
+
+    # Wiki Plugin Hook
+    &TWiki::Plugins::endRenderingHandler( $result );
+
     return $result;
 }
 

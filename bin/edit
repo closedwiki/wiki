@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wTI.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
@@ -18,8 +18,11 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
+use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use wiki;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
 
 $query = new CGI;
 
@@ -141,7 +144,7 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName, $dummy, $userName ) = 
-	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
     $dummy = "";  # to suppress warning
 
     my $saveCmd = $query->param( 'cmd' ) || "";
@@ -159,66 +162,66 @@ sub main
     my $catmod = "";
     my $catvalue = "";
     my $extra = "";
-    my $wikiUserName = &wiki::userToWikiName( $userName );
+    my $wikiUserName = &TWiki::userToWikiName( $userName );
 
-    if( ! &wiki::webExists( $webName ) ) {
+    if( ! &TWiki::webExists( $webName ) ) {
         print "Content-type: text/html\n\n";
-	$tmpl= &wiki::readTemplate( "noweb" );
-	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+	$tmpl= &TWiki::readTemplate( "noweb" );
+	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
         return;
     }
 
-    if( ( $onlyWikiName ) && ( ! &wiki::isWikiName( $topic ) ) && ( ! &wiki::topicExists( $webName, $topic ) ) ) {
+    if( ( $onlyWikiName ) && ( ! &TWiki::isWikiName( $topic ) ) && ( ! &wiki::topicExists( $webName, $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
-        print $query->redirect( &wiki::getViewUrl( $webName, $topic ) );
+        print $query->redirect( &TWiki::getViewUrl( $webName, $topic ) );
 	return;
     }
 
     # check access permission
-    if( &wiki::topicExists( $webName, $topic ) ) {
-	$text = &wiki::readTopic( $topic );
+    if( &TWiki::topicExists( $webName, $topic ) ) {
+	$text = &TWiki::readTopic( $topic );
     }
-    if( ! &wiki::checkAccessPermission( "change", $wikiUserName, $text, $topic, $webName ) ) {
+    if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $text, $topic, $webName ) ) {
         # user has not permission to change the topic
-        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
         print $query->redirect( $url );
         return;
     }
     if( ( $saveCmd ) &&
-        ( ! &wiki::userIsInGroup( $wikiUserName, "TWikiAdminGroup" ) ) ) {
+        ( ! &TWiki::Access::userIsInGroup( $wikiUserName, "TWikiAdminGroup" ) ) ) {
         # user has no permission to execute undocumented cmd=... parameter
-        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$wiki::mainWebname.TWikiAdminGroup" );
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$wiki::mainWebname.TWikiAdminGroup" );
         print $query->redirect( $url );
         return;
     }
 
-    my( $lockUser, $lockTime ) = &wiki::topicIsLocked( $topic );
+    my( $lockUser, $lockTime ) = &TWiki::topicIsLocked( $topic );
     if( ( ! $breakLock ) && ( $lockUser ) ) {
         # warn user that other person is editing this topic
-        $lockUser = &wiki::userToWikiName( $lockUser );
+        $lockUser = &TWiki::userToWikiName( $lockUser );
         use integer;
         $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
-        my $editLock = $wiki::editLockTime / 60;
+        my $editLock = $TWiki::editLockTime / 60;
         # PTh 20 Jun 2000: changed to getOopsUrl
-        my $url = &wiki::getOopsUrl( $webName, $topic, "oopslocked",
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopslocked",
             $lockUser, $editLock, $lockTime );
         print $query->redirect( $url );
 	return;
     }
-    &wiki::lockTopic( $topic );
+    &TWiki::lockTopic( $topic );
 
     print "Content-type: text/html\n\n";
 
     # get edit template, standard or a different skin
-    my $skin = $query->param( "skin" ) || &wiki::getPreferencesValue( "SKIN" );
-    $tmpl = &wiki::readTemplate( "edit", $topic, $skin );
-    $icat = &wiki::readTemplate( "twikicatitems" );
-    if( ! &wiki::topicExists( $webName, $topic ) ) {
-        $text= &wiki::readTemplate( "notedited" );
+    my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
+    $tmpl = &TWiki::readTemplate( "edit", $topic, $skin );
+    $icat = &TWiki::readTemplate( "twikicatitems" );
+    if( ! &TWiki::topicExists( $webName, $topic ) ) {
+        $text= &TWiki::readTemplate( "notedited" );
         $extra = "(not exist)";
 
-        my $foo = &wiki::getLocaldate();
+        my $foo = &TWiki::getLocaldate();
         $text =~ s/%DATE%/$foo/go;
         $text =~ s/%USERNAME%/$wikiUserName/go;
     }
@@ -233,16 +236,16 @@ sub main
             $text .= $after;
         }
 
-        $tcat = &wiki::readTemplate( "twikicatedit" );
+        $tcat = &TWiki::readTemplate( "twikicatedit" );
         if( ! $tcat ) {
-            $tcat = &wiki::readTemplate( "twikicatview" );
+            $tcat = &TWiki::readTemplate( "twikicatview" );
         }
         my $line = "", $ttext = "", $temp = "";
         ( $before, $line, $after) = split( /%REPEAT%/, $tcat );
         foreach( split( /\n/, $icat ) ) {
             ( $catname, $catmod, $catvalue ) = buildCategoryItem( $_, $ctext );
             if( $catname ) {
-                $catname = &wiki::getRenderedVersion( $catname );
+                $catname = &TWiki::getRenderedVersion( $catname );
                 $temp = $line;
                 $temp =~ s/%CATNAME%/$catname/go;
                 $temp =~ s/%CATMODIFIER%/$catmod/go;
@@ -267,16 +270,16 @@ sub main
     $text =~ s/>/&gt\;/go;
     $text =~ s/\t/   /go;
 
-    if( $wiki::doLogTopicEdit ) {
+    if( $TWiki::doLogTopicEdit ) {
         # write log entry
-        &wiki::writeLog( "edit", "$webName.$topic", $extra );
+        &TWiki::writeLog( "edit", "$webName.$topic", $extra );
     }
 
     if( $saveCmd ) {
         $tmpl =~ s/\(edit\)/\(edit cmd=$saveCmd\)/go;
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
-    $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
 
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/%TWIKICAT%/$tcat/go;

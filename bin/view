@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wTI.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
@@ -18,8 +18,11 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
+use CGI::Carp qw( fatalsToBrowser );
 use CGI;
-use wiki;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
 
 $query= new CGI;
 
@@ -37,18 +40,18 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName, $scriptUrlPath, $userName ) = 
-	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $tmpl = "";
     my $text = "";
     my $rev = $query->param( "rev" );
     my $maxrev = 1;
     my $extra = "";
-    my $wikiUserName = &wiki::userToWikiName( $userName );
+    my $wikiUserName = &TWiki::userToWikiName( $userName );
 
-    if( ! &wiki::webExists( $webName ) ) {
-	$tmpl= &wiki::readTemplate( "noweb" );
-	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    if( ! &TWiki::webExists( $webName ) ) {
+	$tmpl= &TWiki::readTemplate( "noweb" );
+	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print "Content-type: text/html\n\n";
 	print $tmpl;
 	return;
@@ -57,49 +60,49 @@ sub main
     my $unlock = $query->param( "unlock" ) || "";
     if( $unlock eq "on" ) {
         # unlock topic, user cancelled out of edit
-        &wiki::lockTopic( $topic, "on" );
+        &TWiki::lockTopic( $topic, "on" );
     }
 
     # get view template, standard view or a view with a different skin
-    my $skin = $query->param( "skin" ) || &wiki::getPreferencesValue( "SKIN" );
-    $tmpl = &wiki::readTemplate( "view", $topic, $skin );
+    my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
+    $tmpl = &TWiki::readTemplate( "view", $topic, $skin );
     if( ! $tmpl ) {
         print "Content-type: text/html\n\n";
         print "<html><body>";
         print "<h1>TWiki Installation Error</h1>";
-        print "Template directory $wiki::templateDir not found.<p>";
-        print "Check the \$templateDir variable in wikicfg.pm.";
+        print "Template directory $TWiki::templateDir not found.<p>";
+        print "Check the \$templateDir variable in TWiki.cfg.";
         print "</body></html>";
 	return;
     }
 
-    my $topicExists = &wiki::topicExists( $webName, $topic );
+    my $topicExists = &TWiki::topicExists( $webName, $topic );
     if( $topicExists ) {
-	$maxrev = &wiki::getRevisionNumber( $topic );
+	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
         $maxrev =~ s/1\.//go;  # cut major
 	if( $rev ) {
             $rev =~ s/1\.//go;  # cut major
 	    if( $rev < 1 )       { $rev = 1; }
             if( $rev > $maxrev ) { $rev = $maxrev; }
-	    $text= &wiki::readVersion( $topic, "1.$rev" );
+	    $text= &TWiki::Store::readVersion( $topic, "1.$rev" );
             $extra .= "r1.$rev";
 	} else {
-	    $text= &wiki::readTopic( $topic );
+	    $text= &TWiki::readTopic( $topic );
 	    $rev= $maxrev;
 	}
     } else {
 	$rev = 1;
-	if( &wiki::isWikiName( $topic ) ) {
-	    $text= &wiki::readTemplate( "notext" );
+	if( &TWiki::isWikiName( $topic ) ) {
+	    $text= &TWiki::readTemplate( "notext" );
 	} else {
-	    $text= &wiki::readTemplate( "notwiki" );
+	    $text= &TWiki::readTemplate( "notwiki" );
 	}
         $extra .= " (not exist)";
     }
 
     # check access permission
     # To Do: Need to protect also %INCLUDE% and search
-    my $viewAccessOK = &wiki::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );
+    my $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );
     if( ! $viewAccessOK ) {
         # user could not be authenticated, may be not logged in yet?
         my $viewauthFile = $ENV{'SCRIPT_FILENAME'};
@@ -111,26 +114,26 @@ sub main
             if( $url ) {
                 # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
                 $url =~ s|/view|/viewauth|o;
-                $url = "$wiki::urlHost$url";
+                $url = "$TWiki::urlHost$url";
             } else {
-                $url = "$wiki::urlHost$scriptUrlPath/$viewauthFile/$webName/$topic";
+                $url = "$TWiki::urlHost$scriptUrlPath/$viewauthFile/$webName/$topic";
             }
             print $query->redirect( $url );
             return;
         }
     }
     if( ! $viewAccessOK ) {
-        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccessview" );
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessview" );
         print $query->redirect( $url );
         return;
     }
 
-    $text = &wiki::handleCommonTags( $text, $topic );
-    $text = &wiki::getRenderedVersion( $text );
+    $text = &TWiki::handleCommonTags( $text, $topic );
+    $text = &TWiki::getRenderedVersion( $text );
 
-    if( $wiki::doLogTopicView ) {
+    if( $TWiki::doLogTopicView ) {
         # write log entry
-        &wiki::writeLog( "view", "$webName.$topic", $extra );
+        &TWiki::writeLog( "view", "$webName.$topic", $extra );
     }
 
     if( $rev < $maxrev ) {
@@ -152,8 +155,8 @@ sub main
     my $j = $maxrev;
     my $revisions = "";
     my $breakRev = 0;
-    if( ( $wiki::numberOfRevisions > 0 ) && ( $wiki::numberOfRevisions < $maxrev ) ) {
-        $breakRev = $maxrev - $wiki::numberOfRevisions + 1;
+    if( ( $TWiki::numberOfRevisions > 0 ) && ( $TWiki::numberOfRevisions < $maxrev ) ) {
+        $breakRev = $maxrev - $TWiki::numberOfRevisions + 1;
     }
     while( $i > 0 ) {
         if( $i eq $rev) {
@@ -175,15 +178,15 @@ sub main
     $tmpl =~ s/%REVISIONS%/$revisions/go;
 
     if( $topicExists ) {
-        my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
-        $user = &wiki::userToWikiName( $user );
-        my $temp = &wiki::getRenderedVersion( "r1.$rev - $date GMT - $user" );
+        my( $date, $user ) = &TWiki::Store::getRevisionInfo( $topic, "1.$rev", 1 );
+        $user = &TWiki::userToWikiName( $user );
+        my $temp = &TWiki::getRenderedVersion( "r1.$rev - $date GMT - $user" );
         $tmpl =~ s/%REVINFO%/$temp/go;
     } else {
         $tmpl =~ s/%REVINFO%//go;
     }
 
-    $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
     print "Content-type: text/html\n\n";

@@ -18,6 +18,9 @@
 # DESCRIPTION: Test utility to see if CGI is running and enabled
 # for the bin directory
 
+use lib ( '.' );
+use lib ( '../lib' );
+
 open(STDERR,'>&STDOUT'); # redirect error to browser
 $| = 1;                  # no buffering
 print "Content-type: text/html\n\n";
@@ -57,10 +60,10 @@ foreach( split( " ", $( ) ) {
 }
 print "</table>\n";
 
-print "<h3>Test of <tt>wikicfg.pm</tt> Configuration:</h3>\n";
+print "<h3>Test of <tt>TWiki.cfg</tt> Configuration:</h3>\n";
 
 # read the TWiki configuration
-do "wikicfg.pm";
+do "TWiki.cfg";
 
 print "<table>\n";
 

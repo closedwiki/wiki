@@ -23,6 +23,10 @@
 # - Upgrading TWiki is easy as long as you only customize wikicfg.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 
+package TWiki::Access;
+
+use strict;
+
 use vars qw(
     %allGroups @processedGroups
 );
@@ -48,17 +52,17 @@ sub checkAccessPermission
 
     $theAccessType = uc( $theAccessType );  # upper case
     if( ! $theWebName ) {
-        $theWebName = $wiki::webName;
+        $theWebName = $TWiki::webName;
     }
     if( ! $theTopicText ) {
         # text not supplied as parameter, so read topic
-        $theTopicText = &wiki::readWebTopic( $theWebName, $theTopicName );
+        $theTopicText = &TWiki::readWebTopic( $theWebName, $theTopicName );
     }
-    ##&wiki::writeDebug( "checkAccessPermission: Type $theAccessType, user $theUserName, topic $theTopicName" );
+    ##&TWiki::writeDebug( "checkAccessPermission: Type $theAccessType, user $theUserName, topic $theTopicName" );
 
     # parse the " * Set (ALLOWTOPIC|DENYTOPIC)$theAccessType = " in body text
-    my $denyList = ();
-    my $allowList = ();
+    my @denyList = ();
+    my @allowList = ();
     foreach( split( /\n/, $theTopicText ) ) {
         if( /^\s+\*\sSet\s(ALLOWTOPIC|DENYTOPIC)$theAccessType\s*\=\s*(.*)/ ) {
             if( $2 ) {
@@ -66,7 +70,7 @@ sub checkAccessPermission
                 my @tmpList = map { getUsersOfGroup( $_ ) }
                               prvGetUserList( $2 );
                 ##my $tmp = join( ', ', @tmpList );
-                ##&wiki::writeDebug( "  Topic $allowOrDeny$theAccessType: {$tmp}" );
+                ##&TWiki::writeDebug( "  Topic $allowOrDeny$theAccessType: {$tmp}" );
                 if( $allowOrDeny eq "DENYTOPIC" ) {
                     @denyList = @tmpList;
                 } else {
@@ -78,41 +82,41 @@ sub checkAccessPermission
 
     # if empty, get access permissions from preferences
     if( ! @denyList ) {
-        my $tmpVal = &wiki::getPreferencesValue( "DENYWEB$theAccessType" );
+        my $tmpVal = &TWiki::Prefs::getPreferencesValue( "DENYWEB$theAccessType" );
         @denyList  = map { getUsersOfGroup( $_ ) }
                      prvGetUserList( $tmpVal );
         ##my $tmp = join( ', ', @denyList );
-        ##&wiki::writeDebug( "  Prefs DENYWEB$theAccessType: {$tmp}" );
+        ##&TWiki::writeDebug( "  Prefs DENYWEB$theAccessType: {$tmp}" );
     }
     if( ! @allowList ) {
-        my $tmpVal = &wiki::getPreferencesValue( "ALLOWWEB$theAccessType" );
+        my $tmpVal = &TWiki::Prefs::getPreferencesValue( "ALLOWWEB$theAccessType" );
         @allowList  = map { getUsersOfGroup( $_ ) }
                       prvGetUserList( $tmpVal );
         ##my $tmp = join( ', ', @allowList );
-        ##&wiki::writeDebug( "  Prefs ALLOWWEB$theAccessType: {$tmp}" );
+        ##&TWiki::writeDebug( "  Prefs ALLOWWEB$theAccessType: {$tmp}" );
     }
 
     # access permission logic
     if( @denyList ) {
         if( grep { /^$theUserName$/ } @denyList  ) {
             # user is on deny list
-            ##&wiki::writeDebug( "  return 0, user is on deny list" );
+            ##&TWiki::writeDebug( "  return 0, user is on deny list" );
             return 0;
         }
     }
     if( @allowList ) {
         if( grep { /^$theUserName$/ } @allowList  ) {
             # user is on allow list
-            ##&wiki::writeDebug( "  return 1, user is on allow list" );
+            ##&TWiki::writeDebug( "  return 1, user is on allow list" );
             return 1;
         } else {
             # user is not on allow list
-            ##&wiki::writeDebug( "  return 0, user is not on allow list" );
+            ##&TWiki::writeDebug( "  return 0, user is not on allow list" );
             return 0;
         }
     }
     # allow is undefined, so grant access
-    ##&wiki::writeDebug( "  return 1, allow is undefined" );
+    ##&TWiki::writeDebug( "  return 1, allow is undefined" );
     return 1;
 }
 
@@ -121,8 +125,8 @@ sub userIsInGroup
 {
     my( $theUserName, $theGroupTopicName ) = @_;
 
-    my $usrTopic = prvGetWebTopicName( $wiki::mainWebname, $theUserName );
-    my $grpTopic = prvGetWebTopicName( $wiki::mainWebname, $theGroupTopicName );
+    my $usrTopic = prvGetWebTopicName( $TWiki::mainWebname, $theUserName );
+    my $grpTopic = prvGetWebTopicName( $TWiki::mainWebname, $theGroupTopicName );
     my @grpMembers = ();
 
     if( $grpTopic !~ /.*Group$/ ) {
@@ -154,7 +158,7 @@ sub prvGetUsersOfGroup
     my @resultList = ();
     # extract web and topic name
     my $topic = $theGroupTopicName;
-    my $web = $wiki::mainWebname;
+    my $web = $TWiki::mainWebname;
     $topic =~ /^([^\.]*)\.(.*)$/;
     if( $2 ) {
         $topic = $2;
@@ -176,7 +180,7 @@ sub prvGetUsersOfGroup
     push( @processedGroups, "$web\.$topic" );
 
     # read topic
-    my $text = readWebTopic( $web, $topic );
+    my $text = &TWiki::readWebTopic( $web, $topic );
 
     # reset variables, defensive coding needed for recursion
     (my $baz = "foo") =~ s/foo//;
@@ -235,11 +239,14 @@ sub prvGetUserList
     # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
     $theItems =~ s/(<[^>]*>)//go;     # Remove HTML tags
     $theItems =~ s/\s*([a-zA-Z0-9_\.\,\s\%]*)\s*(.*)/$1/go; # Limit list
-    my @list = map { prvGetWebTopicName( $wiki::mainWebname, $_ ) }
+    my @list = map { prvGetWebTopicName( $TWiki::mainWebname, $_ ) }
                split( /[\,\s]+/, $theItems );
     return @list;
 }
 
 # =========================
+
+1;
+
 # EOF
 

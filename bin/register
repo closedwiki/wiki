@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wTI.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
@@ -15,8 +15,11 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
+use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use wiki;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
 
 $query = new CGI;
 
@@ -71,18 +74,18 @@ sub main
     my $thePathInfo = $query->path_info(); 
     my $theUrl = $query->url;
     ( $topic, $webName ) = 
-	&wiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl );
+	&TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl );
 
     my $text = "";
     my $url = "";
 
     # check if user entry already exists
     if(  ( $wikiName ) 
-      && (  ( &wiki::topicExists( $webName,  $wikiName ) )
+      && (  ( &TWiki::topicExists( $webName,  $wikiName ) )
          || ( htpasswdExistUser( $wikiName ) ) 
          ) ) {
         # PTh 20 Jun 2000: changed to getOopsUrl
-        $url = &wiki::getOopsUrl( $webName, $topic, "oopsregexist", $wikiName );
+        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregexist", $wikiName );
         print $query->redirect( $url );
         return;
     }
@@ -91,15 +94,15 @@ sub main
     my $x;
     for( $x = 0; $x < $formLen; $x++ ) {
         if( ( $formDataRequired[$x] ) && ( ! $formDataValue[$x] ) ) {
-            $url = &wiki::getOopsUrl( $webName, $topic, "oopsregrequ", );
+            $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregrequ", );
             print $query->redirect( $url );
             return;
         }
     }
 
     # check if wikiName is a WikiName
-    if( ! &wiki::isWikiName( $wikiName ) ) {
-        $url = &wiki::getOopsUrl( $webName, $topic, "oopsregwiki" );
+    if( ! &TWiki::isWikiName( $wikiName ) ) {
+        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregwiki" );
         print $query->redirect( $url );
         return;
     }
@@ -109,7 +112,7 @@ sub main
 
     # check if passwords are identical
     if( $passwordA ne $passwordB ) {
-        $url = &wiki::getOopsUrl( $webName, $topic, "oopsregpasswd" );
+        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregpasswd" );
         print $query->redirect( $url );
         return;
     }
@@ -122,7 +125,7 @@ sub main
     }
 
     # send email confirmation
-    $text = &wiki::readTemplate( "registernotify" );
+    $text = &TWiki::readTemplate( "registernotify" );
     $text =~ s/%FIRSTLASTNAME%/$firstLastName/go;
     $text =~ s/%WIKINAME%/$wikiName/go;
     $text =~ s/%EMAILADDRESS%/$emailAddress/go;
@@ -130,7 +133,7 @@ sub main
     for( $x = 0; $x < $formLen; $x++ ) {
         $name = $formDataName[$x];
         $value = $formDataValue[$x];
-        if( ( $name eq "Password" ) && ( $wiki::doHidePasswdInRegistration ) ) {
+        if( ( $name eq "Password" ) && ( $TWiki::doHidePasswdInRegistration ) ) {
             $value = "*******";
         }
         if( $name ne "Confirm" ) {
@@ -138,12 +141,12 @@ sub main
         }
     }
     $text = "$before$after";
-    $text = &wiki::handleCommonTags( $text, $wikiName );
-    &wiki::sendEmail( $text );
+    $text = &TWiki::handleCommonTags( $text, $wikiName );
+    &TWiki::sendEmail( $text );
 
     # create user topic if not exist
-    if( ! &wiki::topicExists( $wiki::mainWebname, $wikiName ) ) {
-        $text = &wiki::readTemplate( "register" );
+    if( ! &TWiki::topicExists( $wiki::mainWebname, $wikiName ) ) {
+        $text = &TWiki::readTemplate( "register" );
         ( $before, $after) = split( /%FORMDATA%/, $text );
         for( $x = 0; $x < $formLen; $x++ ) {
             $name = $formDataName[$x];
@@ -157,19 +160,19 @@ sub main
         }
         $text = "$before$after";
         $text =~ s/ {3}/\t/go;
-        &wiki::saveTopic( $wikiName, $text, "" );
+        &TWiki::Store::saveTopic( $wikiName, $text, "" );
     }
 
     # add user to TWikiUsers topic
     my $userTopic = addUserToTWikiUsersTopic( $wikiName, $remoteUser );
 
     # write log entry
-    if( $wiki::doLogRegistration ) {
-        &wiki::writeLog( "register", "$webName.$userTopic", $emailAddress, $wikiName );
+    if( $TWiki::doLogRegistration ) {
+        &TWiki::writeLog( "register", "$webName.$userTopic", $emailAddress, $wikiName );
     }
 
     # and finally display thank you page
-    $url = &wiki::getOopsUrl( $webName, $wikiName, "oopsregthanks", $emailAddress );
+    $url = &TWiki::getOopsUrl( $webName, $wikiName, "oopsregthanks", $emailAddress );
     print $query->redirect( $url );
 }
 
@@ -194,7 +197,7 @@ sub htpasswdExistUser
         return "";
     }
 
-    my $text = &wiki::readFile( $wiki::htpasswdFilename );
+    my $text = &TWiki::readFile( $wiki::htpasswdFilename );
     if( $text =~ /$user\:/go ) {
         return "1";
     }
@@ -207,18 +210,18 @@ sub htpasswdAddUser
 
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = &wiki::readFile( $wiki::htpasswdFilename );
+    my $text = &TWiki::readFile( $wiki::htpasswdFilename );
     $text .= "$userEntry\n";
-    &wiki::saveFile( $wiki::htpasswdFilename, $text );
+    &TWiki::saveFile( $wiki::htpasswdFilename, $text );
 }
 
 sub addUserToTWikiUsersTopic
 {
     my ( $wikiName, $remoteUser ) = @_;
-    my $today = &wiki::getLocaldate();
-    my $topicName = $wiki::userListFilename;
+    my $today = &TWiki::getLocaldate();
+    my $topicName = $TWiki::userListFilename;
     $topicName =~ s/(.*[^\/])\/([a-zA-Z0-9]*)\.txt$/$2/go;
-    my $text  = &wiki::readTopic( $topicName );
+    my $text  = &TWiki::readTopic( $topicName );
     my $result = "";
     my $status = "0";
     my $line = "";
@@ -260,6 +263,6 @@ sub addUserToTWikiUsersTopic
 
         $result .= "$line\n";
     }
-    &wiki::saveTopic( $topicName, $result, "" );
+    &TWiki::Store::saveTopic( $topicName, $result, "" );
     return $topicName;
 }

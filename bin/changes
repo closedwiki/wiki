@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wT -I.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -19,8 +19,11 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.ai.mit.edu/copyleft/gpl.html 
 
+use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use wiki;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
 
 
 print "Content-type: text/html\n\n";
@@ -37,24 +40,28 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName, $dummy1, $dummy2, $dataDir ) = 
-        &wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
     $dummy1 = "";  # to suppress warning
     $dummy2 = "";  # to suppress warning
 
-    if( ! &wiki::webExists( $webName ) ) {
-        my $tmpl= &wiki::readTemplate( "noweb" );
-        $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    if( ! &TWiki::webExists( $webName ) ) {
+        my $tmpl= &TWiki::readTemplate( "noweb" );
+        $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print $tmpl;
         return;
     }
 
-    my $text = &wiki::readTemplate( "changes" );
-    my $changes= &wiki::readFile( "$dataDir/$webName/.changes" );
+    my $text = &TWiki::readTemplate( "changes" );
+    my $changes= &TWiki::readFile( "$dataDir/$webName/.changes" );
    
-    my %exclude;
-    my $head;
+    my @bar = ();
+    my $foo = "";
+    my %exclude = ();
+    my $head = "";
+    my $time = "";
+    my $frev = "";
 
-    $text = &wiki::handleCommonTags( $text, $topic );
+    $text = &TWiki::handleCommonTags( $text, $topic );
 
     ( $before, $text, $after) = split( /%REPEAT%/, $text);
     print $before;
@@ -64,14 +71,22 @@ sub main
         if( ( !defined( %exclude ) ) || ( ! $exclude{ $bar[0] } ) ) {
             $foo = $text;
             $foo =~ s/%TOPICNAME%/$bar[0]/go;
-            $wikiuser = &wiki::userToWikiName( $bar[1] );
+            $wikiuser = &TWiki::userToWikiName( $bar[1] );
             $foo =~ s/%AUTHOR%/$wikiuser/go;
-            $time = &wiki::formatGmTime( $bar[2] );
-            $foo =~ s/%TIME%/$time/go;
-            $foo = &wiki::getRenderedVersion( $foo );
+            $time = &TWiki::formatGmTime( $bar[2] );
+            $frev = "";
+            if( $bar[3] ) {
+                if( $bar[3] > 1 ) {
+                    $frev = " - r1.$bar[3]";
+                } else {
+                    $frev = " - <b>NEW</b>";
+                }
+            }
+            $foo =~ s/%TIME%/$time$frev/go;
+            $foo = &TWiki::getRenderedVersion( $foo );
 
-            $head = &wiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );
-            $head = &wiki::makeTopicSummary( $head, $bar[0], $webName );
+            $head = &TWiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );
+            $head = &TWiki::makeTopicSummary( $head, $bar[0], $webName );
             $foo =~ s/%TEXTHEAD%/$head/go;
 
             print $foo;
@@ -79,9 +94,9 @@ sub main
         }
     }
 
-    if( $wiki::doLogTopicChanges ) {
+    if( $TWiki::doLogTopicChanges ) {
         # write log entry
-        &wiki::writeLog( "changes", $webName, "" );
+        &TWiki::writeLog( "changes", $webName, "" );
     }
 
     print $after;

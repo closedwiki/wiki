@@ -32,12 +32,16 @@
 #                           params if a match fails... *^&$#!!!
 # PTh 03 Nov 2000: Performance improvements
 
-use vars qw(
-        $lsCmd $egrepCmd $fgrepCmd
-);
+package TWiki::Search;
+
+use strict;
+
+##use vars qw(
+##        $lsCmd $egrepCmd $fgrepCmd
+##);
 
 # =========================
-sub searchWikiWeb
+sub searchWeb
 {
     ## 0501 kk : vvv Added params
     my ( $doInline, $theWebName, $theSearchVal, $theScope, $theOrder,
@@ -64,7 +68,7 @@ sub searchWikiWeb
     }
 
     my $searchResult = ""; 
-    my $topic = $wiki::mainTopicname;
+    my $topic = $TWiki::mainTopicname;
 
     ## #############
     ## 0501 kk : vvv An entire new chunk devoted to setting up mult-web
@@ -82,12 +86,12 @@ sub searchWikiWeb
     if( ! $theWebName ) {
 
         #default to current web
-        push @webList, $wiki::webName;
+        push @webList, $TWiki::webName;
 
     } elsif ($searchAllFlag) {
 
         # get list of all webs by scanning $dataDir
-        opendir DIR, $dataDir;
+        opendir DIR, $TWiki::dataDir;
         my @tmpList = readdir(DIR);
         closedir(DIR);
 
@@ -95,7 +99,7 @@ sub searchWikiWeb
         @webList = sort
 	           grep { s#^.+/([^/]+)$#$1# }
                    grep { -d }
-	           map  { "$dataDir/$_" }
+	           map  { "$TWiki::dataDir/$_" }
                    grep { ! /^\.\.?$/ } @tmpList;
 
         # what that does (looking from the bottom up) is take the file
@@ -118,16 +122,16 @@ sub searchWikiWeb
     my $tempVal = "";
     my $tmpl = "";
     if( $doBookView ) {
-        $tmpl = readTemplate( "searchbookview" );
+        $tmpl = &TWiki::readTemplate( "searchbookview" );
     } else {
-        $tmpl = readTemplate( "search" );
+        $tmpl = &TWiki::readTemplate( "search" );
     }
     my( $tmplHead, $tmplSearch,
 	$tmplTable, $tmplNumber, $tmplTail ) = split( /%SPLIT%/, $tmpl );
-    $tmplHead = handleCommonTags( $tmplHead, $topic );
-    $tmplSearch = handleCommonTags( $tmplSearch, $topic );
-    $tmplNumber = handleCommonTags( $tmplNumber, $topic );
-    $tmplTail = handleCommonTags( $tmplTail, $topic );
+    $tmplHead   = &TWiki::handleCommonTags( $tmplHead, $topic );
+    $tmplSearch = &TWiki::handleCommonTags( $tmplSearch, $topic );
+    $tmplNumber = &TWiki::handleCommonTags( $tmplNumber, $topic );
+    $tmplTail   = &TWiki::handleCommonTags( $tmplTail, $topic );
 
     if( ! $tmplTail ) {
         print "<html><body>";
@@ -158,8 +162,9 @@ sub searchWikiWeb
         }
     }
 
+    my $cmd = "";
     if( $theScope eq "topic" ) {
-        $cmd = "$wiki::lsCmd *.txt | %GREP% %SWITCHES% '$theSearchVal'";
+        $cmd = "$TWiki::lsCmd *.txt | %GREP% %SWITCHES% '$theSearchVal'";
     } else {
         $cmd = "%GREP% %SWITCHES% -l '$theSearchVal' *.txt";
     }
@@ -172,20 +177,20 @@ sub searchWikiWeb
     $cmd =~ s/%SWITCHES%/$tempVal/go;
 
     if( $theRegex ) {
-        $tempVal = $wiki::egrepCmd;
+        $tempVal = $TWiki::egrepCmd;
     } else {
-        $tempVal = $wiki::fgrepCmd;
+        $tempVal = $TWiki::fgrepCmd;
     }
     $cmd =~ s/%GREP%/$tempVal/go;
 
     # write log entry
-    if( ( $wiki::doLogTopicSearch ) && ( ! $doInline ) ) {
+    if( ( $TWiki::doLogTopicSearch ) && ( ! $doInline ) ) {
         # 0501 kk : vvv Moved from search
         # PTh 17 May 2000: reverted to old behaviour,
         #     e.g. do not log inline search
         # PTh 03 Nov 2000: Moved out of the 'foreach $thisWebName' loop
         my $tempVal = join( ' ', @webList );
-        &wiki::writeLog( "search", $tempVal, $theSearchVal );
+        &TWiki::writeLog( "search", $tempVal, $theSearchVal );
     }
 
     ## #############
@@ -196,26 +201,26 @@ sub searchWikiWeb
     foreach my $thisWebName (@webList) {
 
         # PTh 03 Nov 2000: Add security check
-        $thisWebName =~ s/$wiki::securityFilter//go;
+        $thisWebName =~ s/$TWiki::securityFilter//go;
         $thisWebName =~ /(.*)/;
         $thisWebName = $1;  # untaint variable
 
-        next unless webExists( $thisWebName );  # can't process what ain't thar
+        next unless &TWiki::webExists( $thisWebName );  # can't process what ain't thar
 
-        my $thisWebBGColor = getPreferencesValue( "WEBBGCOLOR", $thisWebName ) || "\#FF00FF";
-        my $thisWebNoSearchAll = getPreferencesValue( "NOSEARCHALL", $thisWebName );
+        my $thisWebBGColor     = &TWiki::Prefs::getPreferencesValue( "WEBBGCOLOR", $thisWebName ) || "\#FF00FF";
+        my $thisWebNoSearchAll = &TWiki::Prefs::getPreferencesValue( "NOSEARCHALL", $thisWebName );
 
         # make sure we can report this web on an 'all' search
         # DON'T filter out unless it's part of an 'all' search.
         # PTh 18 Aug 2000: Need to include if it is the current web
         next if ( ( $searchAllFlag ) &&
                   ( $thisWebNoSearchAll =~ /on/i ) &&
-                  ( $thisWebName ne $wiki::webName ) );
+                  ( $thisWebName ne $TWiki::webName ) );
 
         (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding
 
         # 0501 kjk : vvv New var for accessing web dirs.
-        my $sDir = "$dataDir/$thisWebName";
+        my $sDir = "$TWiki::dataDir/$thisWebName";
         my @topicList = "";
         if( $theSearchVal ) {
             # do grep search
@@ -259,12 +264,12 @@ sub searchWikiWeb
                 if( $revSort ) {
                     @tmpList = map { $_->[1] }
                                sort {$b->[0] <=> $a->[0] }
-                               map { [ (stat "$dataDir\/$thisWebName\/$_.txt")[9], $_ ] }
+                               map { [ (stat "$TWiki::dataDir\/$thisWebName\/$_.txt")[9], $_ ] }
                                @topicList;
                 } else {
                     @tmpList = map { $_->[1] }
                                sort {$a->[0] <=> $b->[0] }
-                               map { [ (stat "$dataDir\/$thisWebName\/$_.txt")[9], $_ ] }
+                               map { [ (stat "$TWiki::dataDir\/$thisWebName\/$_.txt")[9], $_ ] }
                                @topicList;
                 }
 
@@ -281,8 +286,8 @@ sub searchWikiWeb
             # build the hashes for date and author
             foreach( @topicList ) {
                 my $tempVal = $_;
-                my ( $revdate, $revuser, $revnum ) = getRevisionInfo( $tempVal, "", 1, $thisWebName );
-                $topicRevUser{ $tempVal } = &wiki::userToWikiName( $revuser );
+                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $tempVal, "", 1, $thisWebName );
+                $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
                 $topicRevNum{ $tempVal } = $revnum;
             }
@@ -291,12 +296,12 @@ sub searchWikiWeb
             if( $revSort ) {
                 @topicList = map { $_->[1] }
                              sort {$b->[0] <=> $a->[0] }
-                             map { [ &wiki::revDate2EpSecs( $topicRevDate{$_} ), $_ ] }
+                             map { [ &TWiki::revDate2EpSecs( $topicRevDate{$_} ), $_ ] }
                              @topicList;
             } else {
                 @topicList = map { $_->[1] }
                              sort {$a->[0] <=> $b->[0] }
-                             map { [ &wiki::revDate2EpSecs( $topicRevDate{$_} ), $_ ] }
+                             map { [ &TWiki::revDate2EpSecs( $topicRevDate{$_} ), $_ ] }
                              @topicList;
             }
 
@@ -306,8 +311,8 @@ sub searchWikiWeb
             # first we need to build the hashes for date and author
             foreach( @topicList ) {
                 $tempVal = $_;
-                my ( $revdate, $revuser, $revnum ) = getRevisionInfo( $tempVal, "", 1, $thisWebName );
-                $topicRevUser{ $tempVal } = &wiki::userToWikiName( $revuser );
+                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $tempVal, "", 1, $thisWebName );
+                $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
                 $topicRevNum{ $tempVal } = $revnum;
             }
@@ -344,8 +349,8 @@ sub searchWikiWeb
         my( $beforeText, $repeatText, $afterText ) = split( /%REPEAT%/, $tmplTable );
         $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/o;
         $beforeText =~ s/%WEB%/$thisWebName/o;
-        $beforeText = handleCommonTags( $beforeText, $topic );
-        $afterText = handleCommonTags( $afterText, $topic );
+        $beforeText = &TWiki::handleCommonTags( $beforeText, $topic );
+        $afterText  = &TWiki::handleCommonTags( $afterText, $topic );
         if( ! $noHeader ) {
             if( $doInline ) {
                 $searchResult .= $beforeText;
@@ -358,6 +363,7 @@ sub searchWikiWeb
         # output the list of topics in $thisWebName
         my $ntopics = 0;
         my $topic = "";
+        my $head = "";
         my $revDate = "";
         my $revUser = "";
         my $revNum = "";
@@ -371,8 +377,8 @@ sub searchWikiWeb
                 $revNum  = $topicRevNum{$topic};
             } else {
                 # lazy query, need to do it at last
-                my ( $revdate, $revuser, $revnum ) = getRevisionInfo( $topic, "", 1, $thisWebName );
-                $revUser = &wiki::userToWikiName( $revuser );
+                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $topic, "", 1, $thisWebName );
+                $revUser = &TWiki::userToWikiName( $revuser );
                 $revDate = $revdate;
                 $revNum  = $revnum;
             }
@@ -387,20 +393,20 @@ sub searchWikiWeb
             }
             $tempVal =~ s/%TIME%/$revNum/go;
             $tempVal =~ s/%AUTHOR%/$revUser/go;
-            $tempVal = handleCommonTags( $tempVal, $topic );
-            $tempVal = getRenderedVersion( $tempVal );
+            $tempVal = &TWiki::handleCommonTags( $tempVal, $topic );
+            $tempVal = &TWiki::getRenderedVersion( $tempVal );
 
             if( $noSummary ) {
                 $tempVal =~ s/%TEXTHEAD%//go;
                 $tempVal =~ s/&nbsp;//go;
             } elsif( $doBookView ) {  # added PTh 20 Jul 2000
-                $head = readFile( "$dataDir\/$thisWebName\/$topic.txt" );
-                $head = handleCommonTags( $head, $topic, $thisWebName );
-                $head = getRenderedVersion( $head, $thisWebName );
+                $head = &TWiki::readFile( "$TWiki::dataDir\/$thisWebName\/$topic.txt" );
+                $head = &TWiki::handleCommonTags( $head, $topic, $thisWebName );
+                $head = &TWiki::getRenderedVersion( $head, $thisWebName );
                 $tempVal =~ s/%TEXTHEAD%/$head/go;
             } else {
-                $head = readFileHead( "$dataDir\/$thisWebName\/$topic.txt", 16 );
-                $head = makeTopicSummary( $head, $topic, $thisWebName );
+                $head = &TWiki::readFileHead( "$TWiki::dataDir\/$thisWebName\/$topic.txt", 16 );
+                $head = &TWiki::makeTopicSummary( $head, $topic, $thisWebName );
                 $tempVal =~ s/%TEXTHEAD%/$head/go;
             }
 
@@ -442,4 +448,10 @@ sub searchWikiWeb
     }
     return $searchResult;
 }
+
+# =========================
+
+1;
+
+# EOF
 

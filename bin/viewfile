@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wTI.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
@@ -15,8 +15,11 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 
+use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use wiki;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
 
 
 $query= new CGI;
@@ -31,13 +34,13 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName) = 
-	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $tmpl= "";
 
-    if( ! &wiki::webExists( $webName ) ) {
-	$tmpl= &wiki::readTemplate( "noweb" );
-	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    if( ! &TWiki::webExists( $webName ) ) {
+	$tmpl= &TWiki::readTemplate( "noweb" );
+	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print "Content-type: text/html\n\n";  # Fixed n.lee 20000922
 	print $tmpl;
 	return;
@@ -51,7 +54,7 @@ sub main
     # for now, show the original document:
 
     # PTh 20 Jun 2000: Added host
-    my $pubUrlPath = &wiki::getPubUrlPath();
-    my $host = $wiki::urlHost;
+    my $pubUrlPath = &TWiki::getPubUrlPath();
+    my $host = $TWiki::urlHost;
     print $query->redirect( "$host$pubUrlPath/$webName/$topic/$fileName" );
 }

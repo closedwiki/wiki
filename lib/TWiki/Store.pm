@@ -26,19 +26,22 @@
 # 20000917 - NicholasLee : Split file/storage related functions from wiki.pm
 #
 
-use vars qw(
-        $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
-        $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd
+package TWiki::Store;
 
-);
+use strict;
+
+##use vars qw(
+##        $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
+##        $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd
+##);
 
 
-# view:	    $text= &wiki::readVersion( $topic, "1.$rev" );
+# view:	    $text= &TWiki::readVersion( $topic, "1.$rev" );
 sub readVersion
 {
     my( $theTopic, $theRev ) = @_;
-    my $tmp= $revCoCmd;
-    my $fileName = "$dataDir/$webName/$theTopic.txt";
+    my $tmp= $TWiki::revCoCmd;
+    my $fileName = "$TWiki::dataDir/$TWiki::webName/$theTopic.txt";
     $tmp =~ s/%FILENAME%/$fileName/;
     $tmp =~ s/%REVISION%/$theRev/;
     $tmp =~ /(.*)/;
@@ -47,17 +50,17 @@ sub readVersion
 }
 
 # =========================
-# rdiff:	$maxrev = &wiki::getRevisionNumber( $topic );
-# view:	$maxrev = &wiki::getRevisionNumber( $topic );
+# rdiff:	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
+# view:	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
 
 sub getRevisionNumber
 {
     my( $theTopic, $theWebName ) = @_;
     if( ! $theWebName ) {
-        $theWebName = $webName;
+        $theWebName = $TWiki::webName;
     }
-    my $tmp= $revHistCmd;
-    my $fileName = "$dataDir/$theWebName/$theTopic.txt";
+    my $tmp= $TWiki::revHistCmd;
+    my $fileName = "$TWiki::dataDir/$theWebName/$theTopic.txt";
     $tmp =~ s/%FILENAME%/$fileName/;
     $tmp =~ /(.*)/;
     $tmp = $1;       # now safe, so untaint variable
@@ -71,7 +74,7 @@ sub getRevisionNumber
 }
 
 # =========================
-# rdiff:            $text = &wiki::getRevisionDiff( $topic, "1.$r2", "1.$r1" );
+# rdiff:            $text = &TWiki::Store::getRevisionDiff( $topic, "1.$r2", "1.$r1" );
 sub getRevisionDiff
 {
     my( $topic, $rev1, $rev2 ) = @_;
@@ -84,11 +87,11 @@ sub getRevisionDiff
            $tmp = "$tmp> $_\n";
         }
     } else {
-        $tmp= $revDiffCmd;
+        $tmp= $TWiki::revDiffCmd;
         $tmp =~ s/%REVISION1%/$rev1/;
         $tmp =~ s/%REVISION2%/$rev2/;
-        my $fileName = "$dataDir/$webName/$topic.txt";
-        $fileName =~ s/$securityFilter//go;
+        my $fileName = "$TWiki::dataDir/$TWiki::webName/$topic.txt";
+        $fileName =~ s/$TWiki::securityFilter//go;
         $tmp =~ s/%FILENAME%/$fileName/;
         $tmp =~ /(.*)/;
         $tmp = $1;       # now safe, so untaint variable
@@ -99,27 +102,27 @@ sub getRevisionDiff
 
 
 # =========================
-# rdiff:         my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
-# view:          my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
-# wikisearch.pm: my ( $revdate, $revuser, $revnum ) = getRevisionInfo( $filename, "", 1, $thisWebName );
+# rdiff:         my( $date, $user ) = &TWiki::Store::getRevisionInfo( $topic, "1.$rev", 1 );
+# view:          my( $date, $user ) = &TWiki::Store::getRevisionInfo( $topic, "1.$rev", 1 );
+# wikisearch.pm: my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $filename, "", 1, $thisWebName );
 sub getRevisionInfo
 {
     my( $theTopic, $theRev, $changeToIsoDate, $theWebName ) = @_;
     if( ! $theWebName ) {
-        $theWebName = $webName;
+        $theWebName = $TWiki::webName;
     }
     if( ! $theRev ) {
         # PTh 03 Nov 2000: comment out for performance
         ### $theRev = getRevisionNumber( $theTopic, $theWebName );
         $theRev = "";  # do a "rlog -r filename" to get top revision info
     }
-    my $tmp= $revInfoCmd;
-    $theRev =~ s/$securityFilter//go;
+    my $tmp= $TWiki::revInfoCmd;
+    $theRev =~ s/$TWiki::securityFilter//go;
     $theRev =~ /(.*)/;
     $theRev = $1;       # now safe, so untaint variable
     $tmp =~ s/%REVISION%/$theRev/;
-    my $fileName = "$dataDir/$theWebName/$theTopic.txt";
-    $fileName =~ s/$securityFilter//go;
+    my $fileName = "$TWiki::dataDir/$theWebName/$theTopic.txt";
+    $fileName =~ s/$TWiki::securityFilter//go;
     $fileName =~ /(.*)/;
     $fileName = $1;       # now safe, so untaint variable
     $tmp =~ s/%FILENAME%/$fileName/;
@@ -131,7 +134,7 @@ sub getRevisionInfo
     my $rev = $1;
     if( ! $user ) {
         # repository file is missing or corrupt, use file timestamp
-        $user = $defaultUserName;
+        $user = $TWiki::defaultUserName;
         $date = (stat "$fileName")[9] || 600000000;
         my @arr = gmtime( $date );
         # format to RCS date "2000.12.31.23.59.59"
@@ -145,12 +148,12 @@ sub getRevisionInfo
         # try "2000.12.31.23.59.59" format
         $tmp =~ /(.*?)\.(.*?)\.(.*?)\.(.*?)\.(.*?)\.[0-9]/;
         if( $5 ) {
-            $date = "$3 $isoMonth[$2-1] $1 - $4:$5";
+            $date = "$3 $TWiki::isoMonth[$2-1] $1 - $4:$5";
         } else {
             # try "2000/12/31 23:59:59" format
             $tmp =~ /(.*?)\/(.*?)\/(.*?) (.*?):[0-9][0-9]$/;
             if( $4 ) {
-                $date = "$3 $isoMonth[$2-1] $1 - $4";
+                $date = "$3 $TWiki::isoMonth[$2-1] $1 - $4";
             }
         }
     }
@@ -163,7 +166,7 @@ sub getRevisionInfo
 sub saveTopic
 {
     my( $topic, $text, $saveCmd, $dontNotify, $doUnlock ) = @_;
-    my $name = "$dataDir/$webName/$topic.txt";
+    my $name = "$TWiki::dataDir/$TWiki::webName/$topic.txt";
     my $time = time();
     my $tmp = "";
     my $rcsError = "";
@@ -182,20 +185,20 @@ sub saveTopic
         }
 
         # save file
-        saveFile( $name, $text );
+        &TWiki::saveFile( $name, $text );
 
         # reset lock time, this is to prevent contention in case of a long edit session
-        lockTopic( $topic, $doUnlock );
+        &TWiki::lockTopic( $topic, $doUnlock );
 
         # time stamp of existing file within one hour of old one?
         my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp8,$tmp9,
             $tmp10,$tmp11,$tmp12,$tmp13 ) = stat $name;
         $mtime2 = $tmp10;
-        if( abs( $mtime2 - $mtime1 ) < $editLockTime ) {
+        if( abs( $mtime2 - $mtime1 ) < $TWiki::editLockTime ) {
             my $rev = getRevisionNumber( $topic );
             my( $date, $user ) = getRevisionInfo( $topic, $rev );
             # same user?
-            if( ( $doKeepRevIfEditLock ) && ( $user eq $userName ) ) {
+            if( ( $TWiki::doKeepRevIfEditLock ) && ( $user eq $TWiki::userName ) ) {
                 # replace last repository entry
                 $saveCmd = "repRev";
             }
@@ -203,8 +206,8 @@ sub saveTopic
 
         if( $saveCmd ne "repRev" ) {
             # update repository
-            $tmp= $revCiCmd;
-            $tmp =~ s/%USERNAME%/$userName/;
+            $tmp= $TWiki::revCiCmd;
+            $tmp =~ s/%USERNAME%/$TWiki::userName/;
             $tmp =~ s/%FILENAME%/$name/;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
@@ -219,19 +222,19 @@ sub saveTopic
                 $fdate = ""; # suppress warning
                 $fuser = ""; # suppress warning
 
-                my @foo = split(/\n/, &readFile( "$dataDir/$webName/.changes" ) );
+                my @foo = split(/\n/, &TWiki::readFile( "$TWiki::dataDir/$TWiki::webName/.changes" ) );
                 if( $#foo > 100 ) {
                     shift( @foo);
                 }
-                push( @foo, "$topic\t$userName\t$time\t$frev" );
-                open( FILE, ">$dataDir/$webName/.changes" );
+                push( @foo, "$topic\t$TWiki::userName\t$time\t$frev" );
+                open( FILE, ">$TWiki::dataDir/$TWiki::webName/.changes" );
                 print FILE join( "\n", @foo )."\n";
                 close(FILE);
+            }
 
-                if( $doLogTopicSave ) {
-                    # write log entry
-                    writeLog( "save", "$webName.$topic", "" );
-                }
+            if( $TWiki::doLogTopicSave ) {
+                # write log entry
+                &TWiki::writeLog( "save", "$TWiki::webName.$topic", "" );
             }
         }
     }
@@ -241,8 +244,8 @@ sub saveTopic
         # fix topic by replacing last revision
 
         # save file
-        saveFile( $name, $text );
-        lockTopic( $topic, $doUnlock );
+        &TWiki::saveFile( $name, $text );
+        &TWiki::lockTopic( $topic, $doUnlock );
 
         # update repository with same userName and date, but do not update .changes
         my $rev = getRevisionNumber( $topic );
@@ -252,7 +255,7 @@ sub saveTopic
             unlink "$name,v";
         } else {
             # delete latest revision (unlock, delete revision, lock)
-            $tmp= $revUnlockCmd;
+            $tmp= $TWiki::revUnlockCmd;
             $tmp =~ s/%FILENAME%/$name/go;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
@@ -260,7 +263,7 @@ sub saveTopic
             if( $rcsError ) {   # oops, stderr was not empty, return error
                 return $rcsError;
             }
-            $tmp= $revDelRevCmd;
+            $tmp= $TWiki::revDelRevCmd;
             $tmp =~ s/%REVISION%/$rev/go;
             $tmp =~ s/%FILENAME%/$name/go;
             $tmp =~ /(.*)/;
@@ -269,7 +272,7 @@ sub saveTopic
             if( $rcsError ) {   # oops, stderr was not empty, return error
                 return $rcsError;
             }
-            $tmp= $revLockCmd;
+            $tmp= $TWiki::revLockCmd;
             $tmp =~ s/%REVISION%/$rev/go;
             $tmp =~ s/%FILENAME%/$name/go;
             $tmp =~ /(.*)/;
@@ -279,7 +282,7 @@ sub saveTopic
                 return $rcsError;
             }
         }
-        $tmp = $revCiDateCmd;
+        $tmp = $TWiki::revCiDateCmd;
         $tmp =~ s/%DATE%/$date/;
         $tmp =~ s/%USERNAME%/$user/;
         $tmp =~ s/%FILENAME%/$name/;
@@ -290,10 +293,10 @@ sub saveTopic
             return $rcsError;
         }
 
-        if( ( $doLogTopicSave ) && ( ! $dontNotify ) ) {
+        if( $TWiki::doLogTopicSave ) {
             # write log entry
-            $tmp  = userToWikiName( $user );
-            writeLog( "save", "$webName.$topic", "repRev $rev $tmp $date" );
+            $tmp  = &TWiki::userToWikiName( $user );
+            &TWiki::writeLog( "save", "$TWiki::webName.$topic", "repRev $rev $tmp $date" );
         }
     }
 
@@ -307,7 +310,7 @@ sub saveTopic
             # can't delete initial revision
             return;
         }
-        $tmp= $revUnlockCmd;
+        $tmp= $TWiki::revUnlockCmd;
         $tmp =~ s/%FILENAME%/$name/go;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
@@ -315,7 +318,7 @@ sub saveTopic
         if( $rcsError ) {   # oops, stderr was not empty, return error
             return $rcsError;
         }
-        $tmp= $revDelRevCmd;
+        $tmp= $TWiki::revDelRevCmd;
         $tmp =~ s/%REVISION%/$rev/go;
         $tmp =~ s/%FILENAME%/$name/go;
         $tmp =~ /(.*)/;
@@ -324,7 +327,7 @@ sub saveTopic
         if( $rcsError ) {   # oops, stderr was not empty, return error
             return $rcsError;
         }
-        $tmp= $revLockCmd;
+        $tmp= $TWiki::revLockCmd;
         $tmp =~ s/%REVISION%/$rev/go;
         $tmp =~ s/%FILENAME%/$name/go;
         $tmp =~ /(.*)/;
@@ -337,16 +340,22 @@ sub saveTopic
         # restore last topic from repository
         $rev = getRevisionNumber( $topic );
         $tmp = readVersion( $topic, $rev );
-        saveFile( $name, $tmp );
-        lockTopic( $topic, $doUnlock );
+        &TWiki::saveFile( $name, $tmp );
+        &TWiki::lockTopic( $topic, $doUnlock );
 
         # delete entry in .changes : To Do !
 
-        if( $doLogTopicSave ) {
+        if( $TWiki::doLogTopicSave ) {
             # write log entry
-            writeLog( "cmd", "$webName.$topic", "delRev $rev" );
+            &TWiki::writeLog( "cmd", "$TWiki::webName.$topic", "delRev $rev" );
         }
     }
     return 0; # all is well
 }
+
+# =========================
+
+1;
+
+# EOF
 

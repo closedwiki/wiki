@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wTI.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
@@ -20,8 +20,11 @@
 #                          hardcoded flags (except the inline flag) from
 #                          the searchWikiWeb call, added new params.
 
+use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use wiki;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
 
 
 print "Content-type: text/html\n\n";
@@ -38,11 +41,11 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName ) = 
-	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
-    if( ! &wiki::webExists( $webName ) ) {
-        $tmpl= &wiki::readTemplate( "noweb" );
-        $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    if( ! &TWiki::webExists( $webName ) ) {
+        $tmpl= &TWiki::readTemplate( "noweb" );
+        $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print $tmpl;
         return;
     }
@@ -85,14 +88,7 @@ sub main
     my $nototal       = $query->param( "nototal" ) || "";
     my $bookView      = $query->param( "bookview" )  || ""; # PTh 20 Jul 2000
 
-    &wiki::searchWikiWeb( "0", $websStr, $search, $scope, $order, $regex,
-                          $limit, $revSort, $caseSensitive, $nosummary,
-                          $nosearch, $noheader, $nototal, $bookView );
-
-# Had to move this to wikisearch to cope with new process.
-#    if( $wiki::doLogTopicSearch ) {
-#        # write log entry
-#        &wiki::writeLog( "search", $webStr, $search );
-#    }
-
+    &TWiki::Search::searchWeb( "0", $websStr, $search, $scope, $order, $regex,
+                               $limit, $revSort, $caseSensitive, $nosummary,
+                               $nosearch, $noheader, $nototal, $bookView );
 }

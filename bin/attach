@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wTI.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
@@ -15,8 +15,11 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
+use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use wiki;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
 
 $query = new CGI;
 
@@ -67,34 +70,34 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName, $dummy, $userName ) = 
-        &wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
     $dummy = "";  # to suppress warning
 
     my $tmpl = "";
     my $text = "";
     my $atext = "";
     my $fileName = "";
-    my $wikiUserName = &wiki::userToWikiName( $userName );
+    my $wikiUserName = &TWiki::userToWikiName( $userName );
 
-    if( ! &wiki::webExists( $webName ) ) {
-        $tmpl= &wiki::readTemplate( "noweb" );
-        $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    if( ! &TWiki::webExists( $webName ) ) {
+        $tmpl= &TWiki::readTemplate( "noweb" );
+        $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print "Content-type: text/html\n\n";
         print $tmpl;
         return;
     }
 
     # check access permission
-    if( ! &wiki::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
-        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
+    if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
         print $query->redirect( $url );
         return;
     }
 
     $fileName = $query->param( 'filename' ) || "";
 
-    if( &wiki::topicExists( $webName, $topic ) ) {
-        $text = &wiki::readTopic( $topic );
+    if( &TWiki::topicExists( $webName, $topic ) ) {
+        $text = &TWiki::readTopic( $topic );
         # extract attachment section
         my $before="", $after="";
         ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
@@ -104,23 +107,23 @@ sub main
     my ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) 
       = getAttachAttr( $atext, $fileName );
 
-    if( $wiki::doLogTopicAttach ) {
+    if( $TWiki::doLogTopicAttach ) {
         # write log entry
-        &wiki::writeLog( "attach", "$webName.$topic", $fileName );
+        &TWiki::writeLog( "attach", "$webName.$topic", $fileName );
     }
 
     # get view template, standard view or a view with a different skin
-    my $skin = $query->param( "skin" ) || &wiki::getPreferencesValue( "SKIN" );
-    $tmpl = &wiki::readTemplate( "attach", "", $skin );
-    $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
-    $atext = &wiki::getRenderedVersion( $atext );
-    $atext = &wiki::handleCommonTags( $atext, $topic );
+    my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
+    $tmpl = &TWiki::readTemplate( "attach", "", $skin );
+    $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+    $atext = &TWiki::getRenderedVersion( $atext );
+    $atext = &TWiki::handleCommonTags( $atext, $topic );
     $tmpl =~ s/%ATTACHTABLE%/$atext/go;
     if( $fileName ) {
         $tmpl =~ s/%FILENAME%/$fileName/go;
         $tmpl =~ s/%ACTION%/Update file:/go;
         $tmpl =~ s/%PREVIOUS%/Previous <br> upload:/go;
-        $fileUser = &wiki::getRenderedVersion( $fileUser );
+        $fileUser = &TWiki::getRenderedVersion( $fileUser );
         $fileUser =~ s/\n//go;
         $tmpl =~ s/%FILEUSER%/\($fileUser\)/go;
     } else {

@@ -23,6 +23,10 @@
 # - Upgrading TWiki is easy as long as you only customize wikicfg.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 
+package TWiki::Prefs;
+
+use strict;
+
 use vars qw(
     $finalPrefsName @finalPrefsKeys @prefsKeys @prefsValues
     $defaultWebName $altWebName @altPrefsKeys @altPrefsValues
@@ -44,9 +48,9 @@ sub initializePrefs
     $defaultWebName = $theWebName;
     $altWebName = "";
     @finalPrefsKeys = ();
-    prvGetPrefsList( "$twikiWebname\.$wikiPrefsTopicname" ); # site-level
-    prvGetPrefsList( "$theWebName\.$webPrefsTopicname" );    # web-level
-    prvGetPrefsList( $theWikiUserName );                     # user-level
+    prvGetPrefsList( "$TWiki::twikiWebname\.$TWiki::wikiPrefsTopicname" ); # site-level
+    prvGetPrefsList( "$theWebName\.$TWiki::webPrefsTopicname" );           # web-level
+    prvGetPrefsList( $theWikiUserName );                                   # user-level
 
     return;
 }
@@ -58,7 +62,7 @@ sub prvGetPrefsList
     my ( $theWebTopic ) = @_;
     my $fileName = $theWebTopic;                  # "Main.TopicName"
     $fileName =~ s/([^\.]*)\.(.*)/$1\/$2\.txt/go; # "Main/TopicName.txt"
-    my $text = readFile( "$dataDir/$fileName" );  # read topic text
+    my $text = &TWiki::readFile( "$TWiki::dataDir/$fileName" );  # read topic text
     $text =~ s/\r//go;                            # cut CR
     my $key;
     my $value;
@@ -139,10 +143,10 @@ sub prvHandlePrefsValue
 sub prvHandleWebVariable
 {
     my( $attributes ) = @_;
-    my $key = extractNameValuePair( $attributes );
-    my $attrWeb = extractNameValuePair( $attributes, "web" );
+    my $key = &TWiki::extractNameValuePair( $attributes );
+    my $attrWeb = &TWiki::extractNameValuePair( $attributes, "web" );
     if( $attrWeb =~ /%[A-Z]+%/ ) {
-        &wiki::handleInternalTags( $attrWeb, $defaultWebName, "dummy" );
+        &TWiki::handleInternalTags( $attrWeb, $defaultWebName, "dummy" );
     }
     my $val = getPreferencesValue( $key, $attrWeb );
     return $val;
@@ -154,7 +158,7 @@ sub handlePreferencesTags
     # modify argument directly, e.g. call by reference
     my $x;
     my $cmd;
-    for( $x = 0; $x < @wiki::prefsKeys; $x++ ) {
+    for( $x = 0; $x < @prefsKeys; $x++ ) {
         $cmd = "\$_[0] =~ s/%$prefsKeys[$x]%/&prvHandlePrefsValue($x)/geo;";
         eval( $cmd );
     }
@@ -179,15 +183,15 @@ sub getPreferencesValue
                 return $prefsValues[$x];
             }
         }
-    } elsif( &wiki::webExists( $theWeb ) ) {
+    } elsif( &TWiki::webExists( $theWeb ) ) {
         # search the alternate web, rebuild prefs if necessary
         if( $theWeb ne $altWebName ) {
             $altWebName = $theWeb;
             @finalPrefsKeys = ();
             my @saveKeys    = @prefsKeys; # quick hack, this stinks
             my @saveValues  = @prefsValues; # ditto
-            prvGetPrefsList( "$twikiWebname\.$wikiPrefsTopicname" );
-            prvGetPrefsList( "$altWebName\.$webPrefsTopicname" );
+            prvGetPrefsList( "$TWiki::twikiWebname\.$TWiki::wikiPrefsTopicname" );
+            prvGetPrefsList( "$altWebName\.$TWiki::webPrefsTopicname" );
             @altPrefsKeys   = @prefsKeys; # quick hack, this stinks
             @altPrefsValues = @prefsValues; # quick hack, this stinks
             @prefsKeys      = @saveKeys; # quick hack, this stinks
@@ -204,5 +208,24 @@ sub getPreferencesValue
 }
 
 # =========================
+sub getPreferencesFlag
+{
+    my ( $theKey, $theWeb ) = @_;
+
+    my $flag = getPreferencesValue( $theKey, $theWeb );
+    $flag =~ s/^\s*(.*?)\s*$/$1/goi;
+    $flag =~ s/off//goi;
+    $flag =~ s/no//goi;
+    if( $flag ) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+# =========================
+
+1;
+
 # EOF
 

@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wTI.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
@@ -15,8 +15,11 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
+use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use wiki;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
 
 $query= new CGI;
 
@@ -30,19 +33,19 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic ) = 
-	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $tmplName = $query->param( 'template' );
     if( ! $tmplName ) {
         $tmplName = "oops";
     }
-    my $tmplData = &wiki::readTemplate( $tmplName );
+    my $tmplData = &TWiki::readTemplate( $tmplName );
     if( ! $tmplData ) {
         print "Content-type: text/html\n\n";
         print "<html><body>";
         print "<h1>TWiki Installation Error</h1>";
-        print "Template directory $wiki::templateDir not found.<p>";
-        print "Check the \$templateDir variable in wikicfg.pm.";
+        print "Template directory $TWiki::templateDir not found.<p>";
+        print "Check the \$templateDir variable in TWiki.cfg.";
         print "</body></html>";
         return;
     }
@@ -56,9 +59,9 @@ sub main
     $param = $query->param( 'param4' ) || "";
     $tmplData =~ s/%PARAM4%/$param/go;
 
-    $tmplData = &wiki::handleCommonTags( $tmplData, $topic );
+    $tmplData = &TWiki::handleCommonTags( $tmplData, $topic );
     my( $head, $body ) = split( /<\/head>/i, $tmplData );
-    $body = &wiki::getRenderedVersion( "</head>$body" );
+    $body = &TWiki::getRenderedVersion( "</head>$body" );
     $body =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
 
     print "Content-type: text/html\n\n";

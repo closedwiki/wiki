@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wTI.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
@@ -18,8 +18,11 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
+use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use wiki;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
 
 
 $query= new CGI;
@@ -34,7 +37,7 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName, $dummy, $userName ) = 
-	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     $dummy = "";  # to suppress warning
     my $text = "";
@@ -42,18 +45,18 @@ sub main
     my $atext = "";
     my $before = "";
     my $after = "";
-    my $wikiUserName = &wiki::userToWikiName( $userName );
+    my $wikiUserName = &TWiki::userToWikiName( $userName );
 
-    if( ! &wiki::webExists( $webName ) ) {
-	$tmpl= &wiki::readTemplate( "noweb" );
-	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    if( ! &TWiki::webExists( $webName ) ) {
+	$tmpl= &TWiki::readTemplate( "noweb" );
+	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
 	return;
     }
 
     # check access permission
-    if( ! &wiki::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
-        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
+    if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
         print $query->redirect( $url );
         return;
     }
@@ -66,7 +69,7 @@ sub main
 
     # PTh 06 Nov 2000: check if proper use of save script
     if( ! ( defined $text ) ) {
-        my $url = &wiki::getOopsUrl( $webName, $topic, "oopssave" );
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssave" );
         print $query->redirect( $url );
         return;
     }
@@ -75,7 +78,7 @@ sub main
         # for debug: Use $text as is, it possibly contains an attachment table
     } else {
         # normal case: Get latest attachment from file for preview
-        my $tmp = &wiki::readTopic( $topic );
+        my $tmp = &TWiki::readTopic( $topic );
         my ( $tmp1, $atext, $tmp2 ) = split( /<!--TWikiAttachment-->/, $tmp );
         # combine text and attachment
         ( $before, $tmp, $after ) = split( /<!--TWikiAttachment-->/, $text );
@@ -95,12 +98,12 @@ sub main
     $text =~ s/%_A_%/&/go;
     $text =~ s/ {3}/\t/go;
 
-    my $error = &wiki::saveTopic( $topic, $text, $saveCmd, $dontNotify, $unlock );
+    my $error = &TWiki::Store::saveTopic( $topic, $text, $saveCmd, $dontNotify, $unlock );
     if( $error ) {
         # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
-        my $url = &wiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
         print $query->redirect( $url );
     } else {
-        print $query->redirect( &wiki::getViewUrl( "", $topic ) );
+        print $query->redirect( &TWiki::getViewUrl( "", $topic ) );
     }
 }
