@@ -1,6 +1,6 @@
 package TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
 use TWiki::Contrib::DistributionContrib::DistributionFetcher;
-use TWiki::Contrib::Build;
+#use TWiki::Contrib::Build;
 use TWiki;    # TODO why do I have to use this? Why not just TWiki::Func?
 use TWiki::Func;
 use strict;
