@@ -1,12 +1,15 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042701668" format="1.0" version="1.42"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043997325" format="1.0" version="1.43"}%
+---+!! TWiki Reference Manual (%WIKIVERSION%)
+
 <script language="JavaScript1.2" type="text/javascript">
+<!--
 function dblclick() { window.scrollTo(0,0) }
 if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
-document.ondblclick=dblclick; //--> </script>
+document.ondblclick=dblclick; 
+-->
+</script>
 
-<font size="+3">TWiki Reference Manual</font><font size="+2"> (%WIKIVERSION%)</font>
-
-This page contains all documentation topics as one long, complete reference sheet.<br>
+This page contains all documentation topics as one long, complete reference sheet.%BR%
 __Doubleclick anywhere__ to return to the top of the page.
 
 %TOC{depth="5"}%
@@ -20,6 +23,9 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 
 ------
 %INCLUDE{"TWikiInstallationGuide"}%
+
+------
+%INCLUDE{"WindowsInstallCookbook"}%
 
 ------
 %INCLUDE{"TWikiUpgradeGuide"}%
