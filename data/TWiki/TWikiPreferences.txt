@@ -66,6 +66,16 @@ __Preferences:__
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
 		* Set FINALPREFERENCES = WIKIWEBMASTER, PREVIEWBGIMAGE
 
+__Plugin Preferences:__
+
+	* Installed TWikiPlugins: To enable/disable plugins, move them between ACTIVEPLUGINS and INACTIVEPLUGINS. Specify a comma separated list of plugin topics; the name of the web __must__ be specified (i.e. ==TWiki.<nop>DefaultPlugin, TWiki.<nop>AnOtherPlugin==)
+		* Set ACTIVEPLUGINS = TWiki.DefaultPlugin
+		* Set INACTIVEPLUGINS = TWiki.EmptyPlugin
+
+	* Preferences of DefaultPlugin:
+		* Allow depreciated =%<nop>INCLUDE:"topic"%= syntax: (=0= or =1=)
+			* Set DEFAULTPLUGIN_OLDINCLUDE = 1
+
 __Notes:__
 	* A preference is defined as: <br> =6 spaces * Set NAME = value= <br> Example:
 		* S<nop>et WEBBGCOLOR = #FFFFC0

@@ -1,0 +1,15 @@
+*Default TWiki Plugin*
+
+The default plugin is used for some depreciated rendering of older TWiki versions and of <nop>JosWiki. This plugin can also be used to specify some simple custom rendering rules. __Note:__ Create a new [[TWikiPlugins][TWikiPlugin]] based on EmptyPlugin if you plan to offer some complex rendering or functions.
+
+Custom rendering rules of the default plugin:
+
+	* Allow old include syntax ( ==%<nop>INCLUDE:"TopicName"%== ) if TWikiPreferences variable ==DEFAULTPLUGIN_OLDINCLUDE== is set to ==1==
+	* Render depreciated ==*_text_*== as __bold italic__ text. Test if installed: *_This is bold italic_*
+	* Enable <nop>JosWiki rules if <nop>JosWiki specific code is uncommented
+
+Modify file ==TWiki/Plugins/DefaultPlugin.pm== to add your own rules or to enable <nop>JosWiki rules.
+
+__Related Topics:__ TWikiPreferences, TWikiPlugins, EmptyPlugin
+
+-- Main.PeterThoeny - 13 Mar 2001 <br>
