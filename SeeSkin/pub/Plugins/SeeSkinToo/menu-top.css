@@ -87,6 +87,7 @@
    display:inline;
    -moz-border-radius:1ex;
 }
+#diffs>a {font-size:0.9em;}
 #diffs ul, #diffs li {font-size:0.8em;padding-left: 0; padding-right: 1ex; }
 #menu #editmore { /*position: absolute; right: 1ex; top:1ex; */font-style: italic;}
 * html #diffs {padding:0;/* for IE5.5/win */}
