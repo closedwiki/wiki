@@ -88,7 +88,7 @@ use vars qw(
 
 # Internationalisation and regex setup:
 use vars qw(
-	$basicInitDone $useLocale $siteLocale 
+	$basicInitDone $useLocale $siteLocale $siteCharset $siteLang
 
 	$upperNational $lowerNational 
 	$upperAlpha $lowerAlpha $mixedAlpha $mixedAlphaNum $lowerAlphaNum $numeric
@@ -382,11 +382,26 @@ sub initialize
 # for regexes and sorting to work properly.
 sub setupLocale {
  
-    # TODO: Extract the character set from locale and use as variable in templates
-    # as well as in HTTP headers.
-    # TODO: Extract the language and use to disable plural processing if
-    # non-English
+    $siteCharset = 'ISO-8859-1';	# Defaults if locale mis-configured
+    $siteLang = 'en';
+
     if ( $useLocale ) {
+	if ( not defined $siteLocale or $siteLocale !~ /[a-z]/i ) {
+	    writeWarning "Locale $siteLocale unset or has no alphabetic characters";
+	    return;
+	}
+	# Extract the character set from locale and use in HTML templates
+	# and HTTP headers
+	$siteLocale =~ m/\.([a-z0-9_-]+)$/i;
+	$siteCharset = $1 if defined $1;
+	##writeDebug "Charset is now $siteCharset";
+
+	# Extract the language - use to disable plural processing if
+	# non-English
+	$siteLocale =~ m/^([a-z]+)_/i;
+	$siteLang = $1 if defined $1;
+	##writeDebug "Language is now $siteLang";
+
 	# Set environment variables for grep, ls, etc.
 	$ENV{'LC_CTYPE'}= $siteLocale;
 	$ENV{'LC_COLLATE'}= $siteLocale;
@@ -492,6 +507,8 @@ sub writeHeaderFull
     # of other types of page, with expiry time driven by page type.
     my( $pluginHeaders, $coreHeaders );
 
+    $contentType .= "; charset=$siteCharset";
+
     if ($pageType eq 'edit') {
 	# Get time now in HTTP header format
 	my $lastModifiedString = formatGmTime(time, 'http');
@@ -508,14 +525,17 @@ sub writeHeaderFull
 	# Set content length, to enable HTTP/1.1 persistent connections 
 	# (aka HTTP keepalive), and cache control headers, to ensure edit page 
 	# is cached until required expiry time.
-	$coreHeaders = $query->header( -content_type => $contentType,
-			     -content_length => $contentLength,
-			     -last_modified => $lastModifiedString,
-			     -expires => "+${expireHours}h",
-			     -cache_control => "max-age=$expireSeconds"
+	$coreHeaders = $query->header( 
+			    -content_type => $contentType,
+			    -content_length => $contentLength,
+			    -last_modified => $lastModifiedString,
+			    -expires => "+${expireHours}h",
+			    -cache_control => "max-age=$expireSeconds",
 			 );
     } elsif ($pageType eq 'basic') {
-	$coreHeaders = $query->header(-content_type => $contentType);
+	$coreHeaders = $query->header(
+	    		    -content_type => $contentType,
+			 );
     } else {
 	writeWarning( "===== invalid page type in TWiki.pm, writeHeaderFull(): $pageType" );
     }
@@ -1097,9 +1117,13 @@ sub makeTopicSummary
     # limit to 162 chars
     $htext =~ s/(.{162})($mixedAlphaNumRegex)(.*?)$/$1$2 \.\.\./g;
 
+    # Commented out by RD - encoding breaks non-ISO-8859-1 character sets, and 
+    # the browsers and RSS readers work OK with unencoded 8 bit characters
+    # within RSS feeds, as long as %CHARSET% is included in template.
+    #
     # Encode special chars into HTML &#nnn; entities for international
-    # character support
-    $htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
+    # character support 
+    # $htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
 
     # inline search renders text, so prevent linking of external and
     # internal links:
@@ -1744,10 +1768,13 @@ sub handleInternalTags
     $_[0] =~ s/%NOP%/<nop>/g;
     $_[0] =~ s/%TMPL\:P{(.*?)}%/&handleTmplP($1)/ge;
     $_[0] =~ s/%SEP%/&handleTmplP('"sep"')/ge;
+
     $_[0] =~ s/%HTTP_HOST%/&handleEnvVariable('HTTP_HOST')/ge;
     $_[0] =~ s/%REMOTE_ADDR%/&handleEnvVariable('REMOTE_ADDR')/ge;
     $_[0] =~ s/%REMOTE_PORT%/&handleEnvVariable('REMOTE_PORT')/ge;
     $_[0] =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/ge;
+
+    # Un-encoded topic and web names
     $_[0] =~ s/%TOPIC%/$_[1]/g;
     $_[0] =~ s/%BASETOPIC%/$topicName/g;
     $_[0] =~ s/%INCLUDINGTOPIC%/$includingTopicName/g;
@@ -1756,12 +1783,16 @@ sub handleInternalTags
     $_[0] =~ s/%BASEWEB%/$webName/g;
     $_[0] =~ s/%INCLUDINGWEB%/$includingWebName/g;
 
-    # URL encoding for use in form submission URLs with topics/webs that
-    # have 8-bit characters in name.
+    # I18N: URL encoded topic and web names for use in form submission URLs with
+    # topics/webs that have 8-bit characters in name.
     $_[0] =~ s/%TOPICURLENCODED%/&urlEncode($_[1])/ge;
+    $_[0] =~ s/%BASETOPICURLENCODED%/&urlEncode($topicName)/g;
+    $_[0] =~ s/%INCLUDINGTOPICURLENCODED%/&urlEncode($includingTopicName)/g;
     $_[0] =~ s/%WEBURLENCODED%/&urlEncode($_[2])/ge; 
     $_[0] =~ s/%BASEWEBURLENCODED%/&urlEncode($webName)/ge;
     $_[0] =~ s/%INCLUDINGWEBURLENCODED%/&urlEncode($includingWebName)/ge;
+
+    $_[0] =~ s/%CHARSET%/$siteCharset/g;
 
     $_[0] =~ s/%TOPICLIST{(.*?)}%/&handleWebAndTopicList($1,'0')/ge;
     $_[0] =~ s/%WEBLIST{(.*?)}%/&handleWebAndTopicList($1,'1')/ge;
@@ -2290,8 +2321,10 @@ sub internalLink {
     $theLinkText =~ s/([\s\(])($singleUpperAlphaRegex)/$1<nop>$2/go;
 
     my $exist = &TWiki::Store::topicExists( $theWeb, $theTopic );
-    # TODO: i18n - Only apply plural processing if site language is English..
-    if(  ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) && ! ( $exist ) ) {
+    # I18N - Only apply plural processing if site language is English,
+    # and to topic names ending in 's'.
+    if(  ( $doPluralToSingular ) && ( $siteLang eq 'en' ) 
+		&& ( $theTopic =~ /s$/ ) && ! ( $exist ) ) {
         # Topic name is plural in form and doesn't exist as written
         my $tmp = $theTopic;
         $tmp =~ s/ies$/y/;       # plurals like policy / policies
