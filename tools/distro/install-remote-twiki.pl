@@ -155,7 +155,7 @@ Copyright 2004 Will Norris.  All Rights Reserved.
 
   Install Options:
    -distro 
-   -kernel						TWiki20040901.tar.gz
+   -kernel						none currently, though perhaps it should be TWiki20040902.tar.gz
    -web []						...
 
    -install_account [twiki]
