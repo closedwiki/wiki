@@ -30,6 +30,9 @@
 ################################################################################
 
 my $account;
+my ( $cgibin, $home );
+my $localDirConfig;
+my @patches;
 
 BEGIN {
     use Cwd qw( cwd getcwd );
@@ -38,6 +41,39 @@ BEGIN {
     my $localLibBase = getcwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
     # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
+
+    $cgibin = "/Users/$account/Sites/cgi-bin";
+    $home = "/Users/$account/Sites";
+
+    $localDirConfig = qq{
+\$defaultUrlHost   = "http://localhost";
+\$scriptUrlPath    = "/~$account/cgi-bin/twiki";
+\$dispScriptUrlPath = \$scriptUrlPath;
+\$pubUrlPath       = "/~$account/htdocs/twiki";
+\$pubDir           = "$home/htdocs/twiki"; 
+\$templateDir      = "$home/twiki/templates"; 
+\$dataDir          = "$home/twiki/data"; 
+\$logDir           = \$dataDir;
+};
+
+################################################################################
+### various patches/fixes/upgrades
+    @patches = (
+	       'macosx',				# fixes paths for gnu tools (e|f)grep
+#	       'SetMultipleDirsInSetlibDotCfg',		# TODO: make into a branch
+#	       'testenv',				# make testenv a little more useful...
+#	       'create-new-web-copy-attachments',	# update "create new web" to also copy attachments, not just topics
+##	       'trash-attachment-button',		# a clickable link/button to (more easily) trash attachments
+#	       'preview-manage-attachment',		# provide an image preview when working with attachments
+#	       'ImageGallery-fix-unrecognised-formats',	# bugfixes for ImageGalleryPlugin 
+#	       'PreviewOnEditPage',			# PreviewOnEditPage
+#	       'InterWikiPlugin-icons',			# InterWiki icons
+#	       'prefsperf',			# cdot's preferences handling performance improvements (http://twiki.org/cgi-bin/view/Codev/PrefsPmPerformanceFixes)
+##	       'WikiWord-web-names',			# fix templates use of %WEB% instead of <nop>%WEB%
+##	       'force-new-revision',			# add force new revision (TWiki:Codev.ForceNewRevisionCheckBox)
+#	       'AttachmentVersionsBrokenOnlyShowsLast',	# view attachment v1.1 fix
+		);
+
 }
 use strict;
 ++$|;
@@ -146,8 +182,6 @@ __HTML__
 # INSTALL
 ################################################################################
 
-my $cgibin      = "/Users/$account/Sites/cgi-bin";
-my $home        = "/Users/$account/Sites";
 my $tmp		= "$cgibin/tmp";
 my $htdocs	= $home . '/htdocs';
 my $dest	= $home . '/twiki';
@@ -178,7 +212,7 @@ checkdir( $cpan );
 ################################################################################
 # setup directory skeleton workplace
 
-my $tar		= $q->param( 'twiki' ) || "TWiki20040901.tar.gz";
+my $tar = $q->param( 'twiki' ) || "TWiki20040901.tar.gz";
 installTWikiExtension({ file => $tar,
 			dir => "downloads/releases",
 			name => 'TWiki',
@@ -199,19 +233,6 @@ my $file = "$lib/TWiki.cfg";
 open(FH, "<$file") or die "Can't open $file: $!";
 my $config = join( "", <FH> );
 close(FH) || die "Can't write to $file: $!";
-
-my $localDirConfig = qq{
-
-\$defaultUrlHost   = "http://localhost";
-\$scriptUrlPath    = "/~$account/cgi-bin/twiki";
-\$dispScriptUrlPath = \$scriptUrlPath;
-\$pubUrlPath       = "/~$account/htdocs/twiki";
-\$pubDir           = "$home/htdocs/twiki"; 
-\$templateDir      = "$home/twiki/templates"; 
-\$dataDir          = "$home/twiki/data"; 
-\$logDir           = \$dataDir;
-
-};
 
 # need to put our configurations in the "right" spot in the configuration file
 # they need to be inserted after the default definitions, but before any of them are used
@@ -324,21 +345,6 @@ foreach my $web ( $q->param('localweb') )
 
 ################################################################################
 ### various patches/fixes/upgrades
-my @patches = (
-	       'macosx',				# fixes paths for gnu tools (e|f)grep
-	       'SetMultipleDirsInSetlibDotCfg',		# 
-#	       'testenv',				# make testenv a little more useful...
-#	       'create-new-web-copy-attachments',	# update "create new web" to also copy attachments, not just topics
-##	       'trash-attachment-button',		# a clickable link/button to (more easily) trash attachments
-#	       'preview-manage-attachment',		# provide an image preview when working with attachments
-#	       'ImageGallery-fix-unrecognised-formats',	# bugfixes for ImageGalleryPlugin 
-#	       'PreviewOnEditPage',			# PreviewOnEditPage
-#	       'InterWikiPlugin-icons',			# InterWiki icons
-#	       'prefsperf',			# cdot's preferences handling performance improvements (http://twiki.org/cgi-bin/view/Codev/PrefsPmPerformanceFixes)
-##	       'WikiWord-web-names',			# fix templates use of %WEB% instead of <nop>%WEB%
-##	       'force-new-revision',			# add force new revision (TWiki:Codev.ForceNewRevisionCheckBox)
-#	       'AttachmentVersionsBrokenOnlyShowsLast',	# view attachment v1.1 fix
-	       );
 
 print qq{<h2>Patches</h2>\n};
 foreach my $patch ( @patches )
@@ -487,6 +493,8 @@ sub catalogue
 #	print "<pre>", Dumper( $p->{cgi}->param( $p->{type} ) ), "</pre>\n";
 	foreach ( @{$xmlCatalogue->{ $p->{type} } } )
 	{
+	    next unless $_->{name};
+
 	    $text .= qq{<tr class="$p->{type}" onclick="toggleHover(this);" >};
 	    #--------------------------------------------------------------------------------
 	    my $findCheck = $_->{name};
@@ -571,7 +579,8 @@ sub mode
 
 #--------------------------------------------------------------------------------
 
-sub checkdir {
+sub checkdir 
+{
     foreach my $dir ( @_ )
     {
 	unless (-d $dir) {
