@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1092179550" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="ArthurClemens" date="1092513086" format="1.0" version="1.4"}%
 ---+!! Pattern skin
 
 *<nop>PatternSkin is developed to provide a CSS based default look and feel for TWiki - flexible and W3C-compliant.* Its layout and color scheme are designed to provide a nice, clean and productive _editing environment_. For use in corporate or perhaps in personal websites it should be fairly easy to tune the looks or even create a !PatternSkin-based new skin.
@@ -7,8 +7,10 @@
 
 ---++ Screen Shot
 
+<a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.gif" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a>
+<!--
 %SEARCH{ "%TOPIC%" scope="topic" nosearch="on" nototal="on" format="$pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*)" }%
-<div class="twikiGrayText">Click to view full screenshot</div>
+<div class="twikiGrayText">Click to view full screenshot</div>-->
 
 ---++ Supported browsers
 
@@ -55,47 +57,6 @@ If this still does not work, contact the administrator who installs skins.
 
 For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev.
 
----++ Customization
-
----+++ Screen parts
-
-The !PatternSkin view template uses four screen parts:
-	* The topic part - contains besides the topic content: action buttons, form table, attachment table, topic info  
-	* Top bar - used for a logo, contains Go box
-	* Left bar - site and web navigation, contains a personal link block; may contain a Go box
-	* Bottom bar - copyright, disclaimer
-
-These parts are dynamically included topics:
-	* Top bar: TWiki.WebTopBar 
-	* Left bar: included topic WebLeftBar (one !WebLeftBar topic per web)
-		* Personal links block: %MAINWEB%.%<nop>USERNAME%LeftBar. Your own personal leftbar: %MAINWEB%.%USERNAME%LeftBar
-	* Bottom bar: included topic TWiki.WebBottomBar
-
----++++ Top bar
-
-The top bar is mainly used as branding space. To change the screen room for the logo, see below, [[%TOPIC%#Creating_your_own_look][Creating your own look]].
-
----++++ Left bar
-
-The menu items are css-formatted bullet lists. So in WebLeftBar you write:
-<verbatim>
-	* *Group*
-	* [[SomeTopic][Link 1]]
-	* [[AnotherTopic][Link 2]]
-	* [[ThirdTopic][Link 3]]
-</verbatim>
-
-The left bar may contain a Go box instead of the top bar. Use:
-<verbatim>
-	* <input type="text" name="topic" size="16" />
-</verbatim>
-
-The personal left bar block is formatted like the rest of the left bar.
-
----++++ Bottom bar
-
-The bottom bar contains the copyright disclaimer, but may contain other information, perhaps a web list.
-
 ---++ Creating your own look
 
 It is easy to tune the look and feel of !PatternSkin by changing the color and space (margin, padding) settings in the Style Sheet files. 
@@ -109,43 +70,31 @@ You can eiter:
 If you want to change colors and white space of screen elements, modify =style.css=. <br/>
 If you want to change the positioning of screen elements, modify =layout.css=.
 
+See for practical details: PatternSkinCustomization <br />
 The CSS classes that !PatternSkin uses are documented in PatternSkinCss.
 
----+++ Customizing the logo
+---++ Customization
 
-The top bar is 60 pixels high, and has a padding of 5 pixels on top, bottom and left, so the logo should be 50 pixels high. If your logo image has a different size, you can either alter the padding in =style.css= (.twikiTopBarContents) or change the top bar height in =layout.css= (look for the comment _setting the height of the top bar_).
-
-You can also choose to set a background image for the top bar. In =style.css=, add this to .twikiTopBar:
-<verbatim>
-	background-position:top left;
-	background-attachment:fixed;
-	background-repeat:no-repeat;
-	background-image:url(http://absolute_path_to_your_image);
-</verbatim>
-and set the correct image file path.
-
----+++ Examples
-
-Forthcoming.
+See: PatternSkinCustomization
 
 ---++ Skin Info
 
-|  Description: | Provides a CSS based default look and feel for TWiki installations |
+|  Description: | Provides a CSS based default look and feel for TWiki - flexible and W3C-compliant |
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.gif" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Base Name: | pattern |
 |  Skin Author: | TWiki:Main/ArthurClemens |
 |  Skin Version: | 08 Aug 2004 (v1.000) |
+|  Download&nbsp;<nop>PatternSkin: | [[%ATTACHURL%/PatternSkin.zip][PatternSkin.zip]]<br /> *Note:* the CSS files in this topic may be more recent than the version in the zip file | 
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  13 Aug 2004: | v.1.0.1 - Updated /data/TWiki/WebLeftBarPersonalTemplate and style.css |
 |  08 Aug 2004: | Initial version (v1.000) |
 |  Dependencies: | TWiki.TablePlugin |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki:TWiki/TWikiSkinBrowser
-
 __Related topic:__ %TWIKIWEB%.TWikiSkins, TWiki:TWiki/TWikiSkinBrowser
 
--- TWiki:Main/ArthurClemens - 09 Aug 2004
+-- TWiki:Main/ArthurClemens - 13 Aug 2004
 
 %META:FILEATTACHMENT{name="layout.css" attr="" comment="Layout" date="1091016527" path="layout.css" size="1961" user="guest" version="1.1"}%
 %META:FILEATTACHMENT{name="style.css" attr="" comment="Style" date="1091277544" path="style.css" size="23415" user="guest" version="1.2"}%

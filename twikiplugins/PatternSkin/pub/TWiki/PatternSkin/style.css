@@ -7,7 +7,6 @@
 /*	-----------------------------------------------------------
 	General elements
 	-----------------------------------------------------------	*/
-
 	
 /* HTML elements */
 
@@ -15,9 +14,9 @@ html body {
 	line-height:1.55em;
 	font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
 	background-color:#f8f8f8;
-	font-size:90%;
 	margin:0;
 	padding:0;
+	font-size:90%; /* seems to make a difference */
 	font-size:x-small;
 	voice-family:"\"}\""; 
 	voice-family:inherit;
@@ -26,6 +25,7 @@ html body {
 html>body {
 	font-size:small;	
 }
+
 /* be kind to netscape 4 that doesn't understand inheritance */
 body, p, li, ul, ol, dl, dt, dd, acronym, h1, h2, h3, h4, h5, h6 {
 	background-color:transparent;
@@ -35,9 +35,6 @@ p {
 }
 table, caption, colgroup, col, tr, th, td {
 	border-collapse:collapse;
-	margin:0px;
-	border:0px none;
-	padding:0px;
 }
 table {
 	border-collapse:separate;
@@ -46,10 +43,14 @@ strong, b {
 	font-weight:bold;
 }
 hr {
-	color:#EFD1C4;
-	background-color:#EFD1C4;
-	height:2px;
+	color:#9E9E70;
+	background-color:#9E9E70;
+	height:1px;
 	border:none;
+}
+pre, code, tt {
+	font-size:100%;
+	color:#844F0C;
 }
 
 /* Text */
@@ -167,19 +168,13 @@ label {
 	line-height:125%;
 }
 
-/* Various */
-
-pre, code, tt {
-	font-size:100%;
-}
-
 /*	-----------------------------------------------------------
 	TWiki specific elements
 	-----------------------------------------------------------	*/
 
 .twikiMiddleContainer { }
 .twikiMain {
-	padding:0 4em;
+	padding:0 3.5em;
 	background-color:white;
 	border-width:1px;
 	border-style:solid;
@@ -215,8 +210,9 @@ pre, code, tt {
 
 .twikiLeftBar {
 	border-top:1px solid #ddd;
-	color:#666;
+	color:#800;
 	overflow:hidden;
+	line-height:1.3em;
 }
 .twikiWebIndicator {
 	font-size:95%;
@@ -229,7 +225,7 @@ pre, code, tt {
 }
 .twikiLeftBarContents {
 	font-size:95%;
-	line-height:1.4em;
+	font-weight:normal;
 	margin:0;
 	padding:1em 0 1.7em 1em;
 	width:auto;
@@ -239,18 +235,33 @@ pre, code, tt {
 	padding:0;
 	margin:0;
 }
+.twikiLeftBar a:link,
+.twikiLeftBar a:visited {
+	font-weight:normal;
+}
+.twikiLeftBar strong a:link,
+.twikiLeftBar strong a:visited {
+	font-weight:bold;
+}
 .twikiLeftBar li {
 	display:block;
 	list-style:none;
 	width:100%;
 }
 .twikiLeftBar li a {
-	display:block;	
+	display:block;
+	font-weight:normal;
 	width:98%;
 	padding-right:2%;
 }
 html>body .twikiLeftBar li a {
 	width:auto;
+}
+.twikiLeftBar hr {
+	color:#ccc;
+	background-color:#ccc;
+	height:1px;
+	border:none;
 }
 .twikiLeftBarPersonal {
 	margin:-0.5em -1px -0.5em -1em;
@@ -546,6 +557,7 @@ create a div based solution instead of tables */
 .twikiToc a:visited {
 	text-decoration:none;
 	color:#1e5bbd;
+	font-weight:normal;
 }
 .twikiToc a:hover {
 	text-decoration:underline;
@@ -587,9 +599,6 @@ html>body .twikiToc li a {
 
 .twikiHomePath {
 	font-size:90%;
-}
-.twikiHomePath .twikiSeparator {
-	font-family:Arial,Helvetica,"Franklin Gothic Medium","Lucida Sans",sans-serif;
 }
 .twikiHomePath a:hover {
 	text-decoration:underline;
@@ -715,6 +724,9 @@ html>body .twikiToc li a {
 	Other styles
 	-----------------------------------------------------------	*/
 
+.twikiSeparator {
+	font-family:Arial,sans-serif;
+}
 .twikiHelp ul {
 	margin-top:0;
 	margin-bottom:0;
@@ -1244,7 +1256,7 @@ html>body .twikiToc li a {
 	padding-top:2em;
 }
 .twikiPrintPage h2 {
-	border-bottom:1px solid #aaa;
+	border-bottom:1px solid #900;
 }
 .twikiPrintPage .twikiAttachments,
 .twikiPrintPage .twikiForm {
