@@ -149,7 +149,7 @@ sub findUser {
     ASSERT($name) if DEBUG;
     my $object;
 
-    $this->{session}->writeWarning("Looking for $name / $wikiname / $dontCreate");
+    $this->{session}->writeDebug("Looking for $name / $wikiname / $dontCreate");
 
     # is it a cached login name?
     $object = $this->{login}{$name};
