@@ -1,15 +1,11 @@
 %META:TOPICINFO{author="MarioFrasca" date="1110650557" format="1.0" version="1.3"}%
 ---++ Time Interval Strings
 
-whenever TWiki has to interpret a string as a time interval, it will apply the following rules.  the result of translating a time interval string into a time interval is a pair of numbers, representing the first second in the interval and the first second following the interval, as counted from january 1st, 1970 at 0000 hours.
+Some features of TWiki, such as searches, permit the specification of _time intervals_. A time interval is a period of time, such as "1337 to 1451" (the Hundred Years War) or "9th February 2005 to 26th March 2005" (the Christian season of Lent).
 
-the format we recognize is a restricted interpretation of the ISO standard 8601.
+The recognised format is a [[#RestrictedInterpretation][restricted]] interpretation of the [[http://www.iso.ch/iso/en/prods-services/popstds/datesandtime.html][ISO standard 8601]].
 
-
-
----+++ the interval grammar
-
-a string is accepted as a valid time interval string if it can be described accoring to the following grammar:
+A string is accepted as a valid time interval string if it conforms to the following grammar:
 
 <verbatim>
 interval ::= date
@@ -32,66 +28,28 @@ unit ::= 'y' | 'm' | 'w' | 'd' | 'h' | 'M' | 'S'
 year, month, day, hour, minute, second ::= NUM
 </verbatim>
 
-| examples | to be interpreted as |
-| ="2003"= | the whole year 2003 |
-| ="2003-03-28T/2003-05-15"= | from march 28th to may 15th of the year 2003 |
-| ="P3w/$today"= | three weeks until today |
+An incompletely specified date will be completed by including as much time as possible.
 
----+++ specification
+For example, if the start of a date range is specified by just a year, e.g. =1999/2006=, it will be interpreted as starting at January 1st 1999, at zero hours zero minutes zero seconds. Similarly for the end of the range; =2006= will be interpreted as the last second of 2006.
 
-an interval specifying only one date is to be considered as if
-the user had written the same string as a start and end date.
+If only one date is specified (e.g. the interval string is =1999=) it will be treated as if the same date were the start and the end i.e. =1999-1999=. Thus =1999= is interpreted as the whole of the year 1999.
 
-an incompletely specified date must be completed by including as much time as possible.  
-so if a starting point is specified by the sole year, we will read 'year', 
-January, the 1st, at zero hours zero minutes zero seconds.  
-similarly for the ending point, December, the 31st, at 23 hours, 59 minutes and 60 seconds.  
-I'm sorry for any lost leap seconds.
+| *You write* | *You mean* |
+| =2003=                   | the whole year 2003 |
+| =2003-03-28T/2003-05-15= | from March 28th to May 15th of the year 2003 |
+| =P3w/$today=             | three weeks until today |
+| 2003-12-12               | 12th Dec 2003, from 0:00 to 23:59:59 |
+| 2003                     | any time in the year 2003 |
+| 2003/P20w                | the first 20 weeks of the year 2003 |
+| P20w/2003                | the last 20 weeks of the year 2003 |
+| $today                   | any second during the present day |
+| P2d/$today               | today and yesterday |
+| P1d/$now                 | the last 24 hours |
+| $now/P50y                | the next 50 years |
 
-if we were using yacc, we could think of something like this...
+Further examples can be seen [[http://www.iso.ch/iso/en/prods-services/popstds/datesandtime.html#three][here]].
 
-<verbatim>
-interval ::= date                   { $$.start = fillStart($1); $$.end = fillEnd($1); }
-           | date '/' date          { $$.start = fillStart($1); $$.end = fillEnd($3); }
-           | 'P' duration '/' date  { $$.start = fillEnd($4)-$2; $$.end = fillEnd($4); }
-           | date '/' 'P' duration  { $$.start = fillStart($1); $$.end = fillStart($1)+$4; }
-           ;
-</verbatim>
+#RestrictedInterpretation
+---+++ Limitations
 
-if we accept that the format is to be quite rigid, the perl
-implementation is very easy.  the rigidity lies in the fact
-that all fields have to be specified with a fixed width.  this
-way it is easy completing either end with the string
-'0000-01-01T00:00:00' or '0000-12-31T23:59:60' respectively.
-
-it is not too difficult to release this rigidity, but I'm not
-familiar enough with perl to do it...  all right, I'm lazy...
-
----+++ examples
-
-| *you write* | *you mean* |
-| 2003-12-12 | on the 12th Dec 2003, from 0:00 to 23:59:59 |
-| 2003 | any second in the year 2003 |
-| 2003/P20w | the first 20 weeks of the year 2003 |
-| P20w/2003 | the last 20 weeks of the year 2003 |
-| $today | any second during the present day |
-| P2d/$today | today and yesterday |
-| P1d/$now | the last 24 hours |
-| $now/P50y | are any topics placed in the future? |
-
----+++ possible uses
-
-one of the places where the TimeInterval can be used by the end user is in the [[TWikiVariables#VarSEARCH][%<nop>SEARCH{...}%]] variable, documented in TWikiVariables.
-
-two sample searches, from the author's personal twiki topic:
-
-|Topic modificati fra ieri ed oggi  | =%<nop>SEARCH{ "." date="P2d/$today" format="[&lt;nop>[<nop>[$web.$topic][$topic]]<nop>] &lt;nop>" web="Main Private Ibo Servizi Culturali" scope="text" regex="on" nosearch="on" nototal="on" }%= |
-|Topic che mi riguardano modificati recentemente  | =%<nop>SEARCH{ "Main\.MarioFrasca" date="P3w/$today" format="[&lt;nop>[<nop>[$web.$topic][$topic]]<nop>] &lt;nop>" web="Main Private Ibo Servizi Culturali" scope="text" regex="on" nosearch="on" nototal="on" }%= |
-
-
----+++ limitations
-
-if you are entering a date at both ends of the time interval string, the end date must include all leading fields, even if these are the same as in the start date.  this limitation is not really necessary and forms a proper restriction to the ISO8601 standard.  look at it as "not implemented yet".
-
-| *you write* | *you mean* | *notes* |
-| 2003-12-12/14 | from 12th Dec 2003 0:00 to 14th Dec 2003  23:59:59 | not implemented (yet) |
+If you are entering a date at both ends of the time interval string, the end date must include all leading fields, even if these are the same as in the start date. This limitation forms a proper restriction to the ISO8601 standard. i.e. ISO8601 specifies that =2003-12-12/14= means 12th Dec 2003 00:00 to 14th Dec 2003 23:59:59. However this shorthand is not supported by TWiki and must be written as =2003-12-12/2003-12-14=
