@@ -361,8 +361,8 @@ sub searchWeb
             # build the hashes for date and author
             foreach( @topicList ) {
                 my $tempVal = $_;
-                # FIXME should be able to get data from topic
-                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal );
+                # Permission check done below, so force this read to succeed with "internal" parameter
+                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal, "", "internal" );
                 my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta, 1 );
                 $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
@@ -492,7 +492,8 @@ sub searchWeb
                 $allowView = $topicAllowView{$topic};
             } else {
                 # lazy query, need to do it at last
-                ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
+                # Permission check done below, so force this read to succeed with "internal" parameter
+                ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic, "internal" );
                 $text =~ s/%WEB%/$thisWebName/gos;
                 $text =~ s/%TOPIC%/$topic/gos;
                 $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $topic, $thisWebName );
@@ -512,6 +513,7 @@ sub searchWeb
             # Check security
 	    # FIXME - how do we deal with user login not being available if
 	    # coming from search script?
+            # Need to re-direct to a searchauth script
 	    if( ! $allowView ) {
                 next;
             }
@@ -567,7 +569,8 @@ sub searchWeb
             }
 
             if( $doRenameView ) { # added JET 19 Feb 2000
-                my $rawText = &TWiki::Store::readTopicRaw( $thisWebName, $topic );
+                # Permission check done below, so force this read to succeed with "internal" parameter
+                my $rawText = &TWiki::Store::readTopicRaw( $thisWebName, $topic, "", "internal" );
                 my $changeable = "";
                 my $changeAccessOK = &TWiki::Access::checkAccessPermission( "change", $TWiki::wikiUserName, $text, $topic, $thisWebName );
                 if( ! $changeAccessOK ) {
