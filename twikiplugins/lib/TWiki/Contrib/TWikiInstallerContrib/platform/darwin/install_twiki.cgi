@@ -44,6 +44,7 @@ use CGI qw(:all);
 use CGI::Carp qw(fatalsToBrowser);
 use File::Copy qw( cp );
 use File::Path qw( rmtree );
+use File::Basename;
 use Cwd qw( cwd getcwd );
 use Data::Dumper qw( Dumper );
 #use CPAN;
@@ -146,6 +147,8 @@ execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt $dest/data/TWiki/TWikiReg
 execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt,v $dest/data/TWiki/TWikiRegistration.txt,v") or warn $!;
 
 ################################################################################
+
+#exit 0;
 
 eraseBundledPlugins();
 
@@ -446,8 +449,9 @@ if ( opendir( WIKIS, "webs/local" ) )
 }
 foreach my $web ( @webs )
 {
+    $web = basename( $web, qw( .wiki.tar.gz ) );
     print "<h3>Installing web $web</h3>\n";
-    execute("tar xzvf webs/local/$web") or warn $!;
+    execute("tar xzvf webs/local/$web.wiki.tar.gz") or warn $!;
 
     if ( -d 'data' ) { execute( "cp -rpv data $dest" ); execute( "rm -rf data" ); }
     if ( -d 'pub' ) { execute( "cp -rpv pub $tmp/twiki" ); execute( "rm -rf pub" ); }
@@ -525,21 +529,17 @@ __HTML__
     chomp( my $output = `$cmd` );
     my ( $clrCommand, $clrError ) = ( ( my $error = $? ) ? qw( black red ) : qw( gray gray ) );
 
-#    print "<font color=gray>\n";
-
-    print qq{<a href="#" onclick="toggleDisplay('cmd$nCmd')" >cmd</a> };
+    print qq{<br/><a href="#" onclick="toggleDisplay('cmd$nCmd')" >cmd</a> };
 
     my $display = $error ? "" : "none";
-    print qq{<div style="display:$display" id="cmd$nCmd" >\n};
+    print qq{<span style="display:$display" id="cmd$nCmd" >\n};
 
     print "[<font color=$clrError>$error</font>]: ";
     print "<font color=$clrCommand>", pre($cmd), "</font>\n";
 
     print "<pre>$output</pre>\n";
 
-    print "</div>\n";
-
-#    print "</font>\n\n";
+    print "</span>\n";
 }
 
 }
@@ -559,15 +559,16 @@ sub erasePlugin
 {
     my ( $plugin ) = @_;
 
-    print "erasing [$plugin]; pwd = [" . getcwd() . "]\n";
+    print qq{<h3>Erasing preinstalled plugin $plugin</h3>\n};
+#    print "pwd = [" . getcwd() . "]\n";
     # removing the code should be good enough (but not totally clean)
     # do this instead of modifying the standard TWiki20040901.tar.gz distribution file
     # when TWiki:Codev.AutomatedBuild is done, this won't be necessary 
     # (because specific distribution/release files will be able to be generated?)
-    execute( "rm lib/TWiki/Plugins/${plugin}.pm" );
-    execute( "rm -r lib/TWiki/Plugins/${plugin}" );
-    execute( "rm tmp/twiki/data/TWiki/${plugin}.txt*" );
-    execute( "rm -r tmp/twiki/pub/TWiki/${plugin}" );
+    execute( "rm $lib/TWiki/Plugins/${plugin}.pm" );
+    execute( "rm -r $lib/TWiki/Plugins/${plugin}" ) if -d "$lib/TWiki/Plugins/${plugin}";
+    execute( "rm $dest/data/TWiki/${plugin}.txt*" );
+    execute( "rm -r tmp/twiki/pub/TWiki/${plugin}" ) if -d "tmp/twiki/pub/TWiki/${plugin}";
 }
 
 __END__
