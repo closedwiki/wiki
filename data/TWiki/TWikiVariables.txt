@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1039594200" format="1.0" version="1.60"}%
+%META:TOPICINFO{author="PeterThoeny" date="1042964469" format="1.0" version="1.61"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -218,7 +218,8 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
 | =nototal="on"= | Do not show number of topics found | Show number |
 | =header="..."= <br /> =format="..."= | Custom format results: see *[[FormattedSearch]]* for usage, variables &amp; examples | Results in table |
 Regular example: =<b>%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%</b>= <br />
-Formatted example: ==%<nop>SEARCH{"FAQ" scope="topic" nosearch="on" nototal="on" header="| *Topic: * | *Summary: * |" format="<nop>| $topic | $summary |"%== _(displays results in a table with header - [[FormattedSearch][details]])_
+Formatted example: ==%<nop>SEARCH{"FAQ" scope="topic" nosearch="on" nototal="on" header="| *Topic: * | *Summary: * |" format="<nop>| $topic | $summary |"%== _(displays results in a table with header - [[FormattedSearch][details]])_ <br />
+%H% If the TWiki:Plugins.TablePlugin is installed, you may set a =%<nop>TABLE{}%= variable just before the =%<nop>SEARCH{}%= to alter the output of a search.  Example: ==%<nop>TABLE{ tablewidth="90%" }%==
 </td>
 </tr>
 <tr>
@@ -376,5 +377,5 @@ __Note:__ There are some more useful variables defined in the TWikiPreferences l
 		* ==<nop>Set MYLOGO = %<nop>PUBURL%/<nop>TWiki/LogoTopic/mylogo.gif== 
 </blockquote>
 
--- PeterThoeny - 13 Sep 2001 <br />
+-- PeterThoeny - 19 Jan 2003 <br />
 -- Main.MikeMannix - 12 May 2002
