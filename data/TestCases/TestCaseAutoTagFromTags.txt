@@ -1,22 +1,22 @@
-%META:TOPICINFO{author="guest" date="1101348158" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="guest" date="1101996425" format="1.0" version="1.1"}%
 ---+!! %TOPIC%
 
 Description: Tags composed from the expansion of other tags. Example: is * Set A=Some and * Set B=Tag, then <nop>%%A<nop>%<nop>%B<nop>%% must expand to whatever is the expansion of %SomeTag%
 
-        * Set EGGSAMPLE = Egg sample
-        * Set A = EGG
-        * Set B = SAMPLE
+	* Set EGGSAMPLE = Egg sample
+	* Set A = EGG
+	* Set B = SAMPLE
 
-        * Set C = %%A%
-        * Set D = %B%%
+	* Set C = %%A%
+	* Set D = %B%%
 
-        * Set E = %EGG
-        * Set F = SAMPLE%
-   
-        * Set PA = A
-        * Set SB = B
+	* Set E = %EGG
+	* Set F = SAMPLE%
+	
+	* Set PA = A
+	* Set SB = B
 
-  	* A: = %A%
+	* A: = %A%
 	* B: = %B%
 	* C: = %C%
 	* D: = %D%
@@ -24,6 +24,7 @@ Description: Tags composed from the expansion of other tags. Example: is * Set A
 	* F: = %F%
 
 ---++ <nop>%<nop>%A<nop>%<nop>%B<nop>%<nop>%
+
 Expected:
 <!-- expected expand -->
 %EGGSAMPLE%
@@ -77,7 +78,7 @@ saw:
 %%XA%%XB%{}%
 <!-- /actual -->
 
---++ <nop>%<nop>%<nop>%PA<nop>%<nop>%<nop>%<nop>%SB{}<nop>%<nop>%<nop>%
+---++ <nop>%<nop>%<nop>%PA<nop>%<nop>%<nop>%<nop>%SB{}<nop>%<nop>%<nop>%
 Expected:
 <!-- expected expand -->
 %EGGSAMPLE%
