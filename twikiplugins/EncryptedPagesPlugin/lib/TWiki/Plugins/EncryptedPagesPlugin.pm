@@ -43,7 +43,7 @@ $VERSION = '1.000';
 $prefixPattern  = '%ENCRYPTEDPAGE{';
 $postfixPattern = '}%';
 $replacementText = <<EOT;
-<APPLET CODE = "uk.org.ellery.twiki.TwikiEncrypt.class"  ARCHIVE = "http://twiki.org/p/pub/Sandbox/EncryptionApplet/TwikiEncrypt.jar,http://twiki.org/p/pub/Sandbox/EncryptionApplet/Crypt.jar"  WIDTH = 400 HEIGHT = 200>
+<APPLET CODE = "uk.org.ellery.twiki.TwikiEncrypt.class"  ARCHIVE = "%ATTACHURL%/TwikiEncrypt.jar,%ATTACHURL%/Crypt.jar"  WIDTH = 400 HEIGHT = 200>
 <PARAM NAME ="ATTACHURL" VALUE="%ATTACHURL%">
 <PARAM NAME="KEY" VALUE="--!!--">
 </APPLET>
