@@ -1,37 +1,60 @@
 <HEAD>
-  <TITLE> %WIKITOOLNAME% Rename a topic </TITLE>
+  <TITLE> %WIKITOOLNAME% Rename/move %OLD_WEB%.%OLD_TOPIC% </TITLE>
   <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/WebHome"> <META NAME="ROBOTS" CONTENT="NOINDEX">
 </HEAD>
 <BODY bgcolor="#ffffff">
-<H1>Rename topic %OLD_TOPIC%</H1>
 <FORM name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%OLD_WEB%/%OLD_TOPIC%/">
 <input type="hidden" name="oldWeb" value="%OLD_WEB%">
 <input type="hidden" name="oldTopic" value="%OLD_TOPIC%">
-<TABLE>
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR>
+    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
+    </TD>
+    <TD>
+      <B>%OLD_WEB% . </B><FONT size="+2"><B>%OLD_TOPIC%</B> (rename/move)</FONT>
+    </TD>
+  </TR>
+    <TR BGCOLOR="%WEBBGCOLOR%">
+      <TD colspan="2">&nbsp;
+      </TD>
+  </TR>
+</TABLE>
+<BR>
+<TABLE border="1" cellpadding="1" cellspacing="0">
 <TR>
-  <TH></TH><TH bgcolor=yellow>Currently</TH><TH bgcolor=red>Change to</TH>
+  <TH></TH><TH bgcolor=#00FFFF>Currently</TH><TH bgcolor=#FFFFC0>Change to</TH>
 </TR>
 <TR>
-  <TH>Web</TH><TD  bgcolor=yellow>%OLD_WEB%</TD>
-  <TD bgcolor=red>%WEB_SELECTION%</TD>
+  <TH>Web</TH><TD  bgcolor=#00FFFF>&nbsp;%OLD_WEB%&nbsp;</TD>
+  <TD bgcolor=#FFFFC0>&nbsp;%WEB_SELECTION%&nbsp;</TD>
 <TR>
 <TR>
-  <TH>Topic</TH><TD bgcolor=yellow>%OLD_TOPIC%</TD>
-  <TD bgcolor=red>
+  <TH>Topic</TH><TD bgcolor=#00FFFF>&nbsp;%OLD_TOPIC%&nbsp;</TD>
+  <TD bgcolor=#FFFFC0>
   <input type="hidden" name="newWeb" value="%NEW_WEB%">
-  <input type="text" name="newTopic" size="16" value="%NEW_TOPIC%">
+  &nbsp;%NEW_TOPIC%&nbsp;
   </TD>
 </TR>
 </TABLE>
 <input type="hidden" name="changeRefs" value="%CHANGE_REFS%">
+<br>
 <hr>
+<br>
 
-<B>Change references in refering pages</B> - the ticked pages will be updated (if not locked, in which case you'll be able to re-submit.)
+<B>Change references in referring pages</B> - the ticked pages will be updated (if not locked, in which case you'll be able to re-submit.)
+<BR>
 
 %SEARCH{ "(^|[_\*\> \t])((%OLD_WEB%\.)?%OLD_TOPIC%)([^A-Za-z0-9]|$)" web="all" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="on"}%
 
 
 <hr>
-<input type="submit" value="Rename">
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR>
+    <TD bgcolor="%WEBBGCOLOR%" align="center">
+       <input type="submit" value="Rename/Move">
+    </TD>
+  </TR>
+</TABLE>
 </FORM>
 </BODY>
