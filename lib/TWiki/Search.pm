@@ -486,6 +486,7 @@ sub searchWeb
         my $revDate = "";
         my $revUser = "";
         my $revNum = "";
+        my $revNumText = "";
         my $allowView = "";
         my $locked = "";
         foreach( @topicList ) {
@@ -582,11 +583,11 @@ sub searchWeb
             $tempVal =~ s/%LOCKED%/$locked/o;
             $tempVal =~ s/%TIME%/$revDate/o;
             if( $revNum > 1 ) {
-                $revNum = "r1.$revNum";
+                $revNumText = "r1.$revNum";
             } else {
-                $revNum = "<b>NEW</b>";
+                $revNumText = "<b>NEW</b>";
             }
-            $tempVal =~ s/%REVISION%/$revNum/o;
+            $tempVal =~ s/%REVISION%/$revNumText/o;
             $tempVal =~ s/%AUTHOR%/$revUser/o;
 
             if( ( $doInline || $theFormat ) && ( ! ( $forceRendering ) ) ) {

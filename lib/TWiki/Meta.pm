@@ -52,9 +52,11 @@ sub put
    if( $data ) {
        if( $key ) {
            my $found = "";
+           my $argsKey = "";
            my @data = @$data;
            for( my $i=0; $i<scalar @$data; $i++ ) {
-               if( $data[$i]->{$key} eq $args{$key} ) {
+               $argsKey = $args{$key};
+               if( $argsKey && $data[$i]->{$key} eq $argsKey ) {
                    $data->[$i] = \%args;
                    $found = 1;
                    last;
