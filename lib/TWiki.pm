@@ -2104,14 +2104,14 @@ sub handleMetaSearch
     my $attrTopic         = extractNameValuePair( $attributes, "topic" );
     my $attrType          = extractNameValuePair( $attributes, "type" );
     my $attrTitle         = extractNameValuePair( $attributes, "title" );
-    
+    my $attrDefault       = extractNameValuePair( $attributes, "default" );
+
     my $searchVal = "XXX";
     
     if( ! $attrType ) {
        $attrType = "";
     }
-    
-    
+
     my $searchWeb = "all";
     
     if( $attrType eq "topicmoved" ) {
@@ -2120,7 +2120,7 @@ sub handleMetaSearch
        $searchWeb = $attrWeb;
        $searchVal = "%META:TOPICPARENT[{].*name=\\\"($attrWeb\\.)?$attrTopic\\\".*[}]%";
     }
-    
+
     my $text = &TWiki::Search::searchWeb(
         "inline"        => "1",
         "search"        => $searchVal,
@@ -2132,12 +2132,13 @@ sub handleMetaSearch
         "nototal"       => "on",
         "noempty"       => "on",
         "template"      => "searchmeta",
-    );    
-    
-    if( $text !~ /^\s*$/ ) {
+    );
+
+    if( $text =~ /^\s*$/ ) {
+       $text = "$attrTitle$attrDefault";
+    } else {
        $text = "$attrTitle$text";
     }
-    
     return $text;
 }
 
