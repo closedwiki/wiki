@@ -88,11 +88,12 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 
 		if (action == null || action.equals("")) {
 			System.out.println("no action");
-			addText("no action parameter supplied to applet. This should be the URL of the upload script.");
+			addText("No action parameter supplied to applet. This should be the URL of the upload script.");
 			addText("for instance, <APPLET CODE = \"...>\"\n"+ 
 				"<PARAM NAME=\"action\" VALUE=\"http://localhost:8123/twiki/bin/upload.pl/Main/CatherineMacleod>\"\n");
 		} else {
 		    System.out.println("ACTION='"+action+"'");
+		    addText("TWiki Paste initiated\n");
 		}
 		repaint();
     }

@@ -1,0 +1,24 @@
+POST /twiki/bin/upload.pl/Main/CatherineMacleod HTTP/1.1
+Connection: Keep-Alive
+Accept-Charset: iso-8859-1,*,utf-8
+Accept-Language: en
+Content-type: multipart/form-data; boundary=7d1fbfe5050c
+User-Agent: Mozilla/4.0 (Windows 2000 5.0)
+Host: localhost:8123
+Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+Content-length: 573
+
+
+--7d1fbfe5050c
+Content-Disposition: form-data; name="filepath"; filename="clipboard.txt"
+if (action == null || action.equals("")) {
+			System.out.println("no action");
+			addText("No action parameter supplied to applet. This should be the URL of the upload script.");
+			addText("for instance, <APPLET CODE = \"...>\"\n"+ 
+				"<PARAM NAME=\"action\" VALUE=\"http://localhost:8123/twiki/bin/upload.pl/Main/CatherineMacleod>\"\n");
+		} else {
+		    System.out.println("ACTION='"+action+"'");
+		    addText("TWiki Paste initiated\n");
+		}
+		repaint();
+--7d1fbfe5050c--
