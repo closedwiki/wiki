@@ -51,6 +51,16 @@ sub save {
 
   my $saveCmd = $query->param( "cmd" ) || "";
   my $text = $query->param( "text" );
+  my $meta = "";
+
+  # A template was requested; read it, and expand URLPARAMs within the
+  # template using our CGI record
+  my $templatetopic = $query->param( "templatetopic");
+  if ($templatetopic) {
+    ($meta, $text) = &TWiki::Store::readTopic( $webName, $templatetopic );
+    $text = TWiki::expandVariablesOnTopicCreation( $text );
+  }
+	
   my $unlock = $query->param( "unlock" ) || "";
   my $dontNotify = $query->param( "dontnotify" ) || "";
   my $changeform = $query->param( 'submitChangeForm' ) || "";
@@ -61,7 +71,7 @@ sub save {
 
   return if TWiki::UI::isMirror( $webName, $topic );
 
-  my $wikiUserName = &TWiki::userToWikiName( $userName );
+  my $wikiUserName = TWiki::userToWikiName( $userName );
   return unless TWiki::UI::isAccessPermitted( $webName, $topic,
                                             "change", $wikiUserName );
 
@@ -81,21 +91,22 @@ sub save {
 
   if( $changeform ) {
     use TWiki::Form;
-    &TWiki::Form::changeForm( $webName, $topic, $query );
+    TWiki::Form::changeForm( $webName, $topic, $query );
     return;
   }
 
-  $text = &TWiki::Render::decodeSpecialChars( $text );
+  $text = TWiki::Render::decodeSpecialChars( $text );
   $text =~ s/ {3}/\t/go;
 
   my $meta = "";
   if( $saveCmd eq "repRev" ) {
     $text =~ s/%__(.)__%/%_$1_%/go;
-    ( $meta, $text ) = &TWiki::Store::_extractMetaData( $webName, $topic, $text );
+    ( $meta, $text ) = TWiki::Store::_extractMetaData( $webName, $topic, $text );
   } else {
     # normal case: Get latest attachment from file for preview
     my $tmp;
-    ( $meta, $tmp ) = &TWiki::Store::readTopic( $webName, $topic );
+	# read meta (if not already read when reading template)
+    ( $meta, $tmp ) = TWiki::Store::readTopic( $webName, $topic ) unless $meta;
 
     # parent setting
     if( $theParent eq "none" ) {
@@ -111,16 +122,17 @@ sub save {
 
     use TWiki::Form;
     # CODE_SMELL: this fieldVars2Meta thing should be in UI, not Meta
-    &TWiki::Form::fieldVars2Meta( $webName, $query, $meta );
+	# Expand field variables, unless this new page is templated
+    TWiki::Form::fieldVars2Meta( $webName, $query, $meta ) unless $templatetopic;
     use TWiki::Prefs;
-    $text = &TWiki::Prefs::updateSetFromForm( $meta, $text );
+    $text = TWiki::Prefs::updateSetFromForm( $meta, $text );
   }
 
-  my $error = &TWiki::Store::saveTopic( $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
+  my $error = TWiki::Store::saveTopic( $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
   if( $error ) {
     TWiki::UI::oops( $webName, $topic, "saveerr", $error );
   } else {
-    TWiki::UI::redirect( TWiki::getViewUrl( $webName, $topic ) );
+   	TWiki::UI::redirect( $query, TWiki::getViewUrl( TWiki::Store::normalizeWebTopicName($webName, $topic)) );
   }
 }
 

@@ -2450,7 +2450,7 @@ sub getPublicWebList
 # =========================
 =pod
 
----++ sub expandVariablesOnTopicCreation ( $text )
+---++ sub expandVariablesOnTopicCreation ( $theText, $theUser, $theWikiName, $theWikiUserName )
 
 Expand limited set of variables with a topic during topic creation
 
