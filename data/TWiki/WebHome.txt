@@ -1,6 +1,8 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042701668" format="1.0" version="1.74"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043309760" format="1.0" version="1.75"}%
 <table><tr><td valign="top">
-Welcome to TWiki, a flexible, powerful, and simple, secure, Web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base, or any other groupware tool, on an intranet or on the Web. <p>This is the place to learn about it, download it, and try it out for yourself...
+Welcome to TWiki: a flexible, powerful, secure, simple, Web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either on an intranet or on the Internet.
+
+This is the place to learn about TWiki features, find where to download it, and try it out for yourself...
 </td><td width="25">&nbsp;</td><td width="200" align="center" valign="top">
 <a href="http://TWiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/twikiRobot131x64.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a> <br>
 The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
