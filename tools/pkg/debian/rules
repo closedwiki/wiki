@@ -79,8 +79,8 @@ install: build
 # and change the RCS lock owners to match
 
 # Copy the TWikiRegistrationPub topic to TWikiRegistration
-	cp debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistration.txt debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistrationIntranet.txt
-	cp debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistration.txt,v debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistrationIntranet.txt,v
+	cp debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistration.txt debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistrationDefault.txt
+	cp debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistration.txt,v debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistrationDefault.txt,v
 	cp debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistrationPub.txt debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistration.txt
 	cp debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistrationPub.txt,v debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistration.txt,v
 

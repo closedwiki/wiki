@@ -31,10 +31,11 @@ Description: Install sample wiki universe on initial install?
 Template: twiki/apacheUserCreationNote
 Type: note
 Description: User Registration configuration required
- The default installation of the TWiki is configured to require the 
- administrator to manually create each user account after the user registers.
- To change it so the users are created automatically when each user registers, 
+ The default debian installation of the TWiki is configured to create new users 
+ automatically when a user Registers. This is not as secure as the default TWiki
+ but is more useful for trying TWiki out.
+ To change it so the users are created manually by the administrator
  use TWiki RenameTopic to rename the TWikiRegistration to 
- TWikiRegistrationDefault, and TWikiRegistrationPub to TWikiRegistration.
- ALSO: After you have created yourself a user, edit the Main.TWikiAdminGroup
+ TWikiRegistrationPub, and TWikiRegistrationDefault to TWikiRegistration.
+ IMPORTANT: After you have created yourself a user, edit the Main.TWikiAdminGroup
  to restrict Admin privileges
