@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042009992" format="1.0" version="1.17"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044103560" format="1.0" version="1.18"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -87,6 +87,25 @@ All template topics are located in the %TWIKIWEB% web. The WebTopicEditTemplate 
 	1. A topic name specified by the =templatetopic= CGI parameter.
 	1. <nop>WebTopicEditTemplate in the current web
 	1. <nop>WebTopicEditTemplate in the %TWIKIWEB% web
+
+---++++ Edit Template Topics and Variable Expansion
+
+The following variables get expanded when a user creates a new topic based on a template topic:
+
+<blockquote>
+| *Variable:* | *Description:* |
+| =%<nop>DATE%= | Current date, e.g. =%DATE%= |
+| =%<nop>WIKIUSERNAME%= | User name, e.g. =%WIKIUSERNAME%= |
+| =%<nop>URLPARAM{"name"}%= | Value of a named URL parameter |
+| =%<nop>NOP%= | A no-operation variable that gets removed. Useful to prevent a SEARCH from hitting an edit template topic; also useful to escape a variable like =%<nop>URLPARAM%<nop>NOP%{...}%= |
+| =%<nop>NOP{ ... }%= | A no-operation text that gets removed. Useful to write-protect an edit template topic, but not the topics based this template topic. See notes below. Example:%BR% =%<nop>NOP{%BR%&nbsp; &nbsp;* Set&nbsp;ALLOWTOPICCHANGE = <nop>Main.TWikiAdminGroup%BR% }%= |
+</blockquote>
+
+__Notes:__
+	* Unlike other variables, =%<nop>NOP{ ... }%= can span multiple lines. 
+	* The scan for the closing =}%= pattern is "non-greedy", that is, it stops at the first occurance. That means, you need to escape variables with parameters located inside =%<nop>NOP{ ... }%=: Insert a =%<nop>NOP%= between =}= and =%=. Silly example: =%<nop>NOP{ %<nop>GMTIME{"$year"}%<nop>NOP%% }%=.
+
+All other variables are unchanged, e.g. are carried over "as is" into the new topic.
 
 ---++++ Template Topics in Action
 
@@ -215,7 +234,7 @@ With URL: ==.../bin/oops/Sandbox/TestTopic2?template=oopstest&param1=WebHome&par
 
 	* A drawback of referring to a master template is that you can only test a template from within TWiki, where the include variables are resolved. In the previous system, each template was a structurally complete HTML document with a =.tmpl= filename extension - it contained unresolved =%VARIABLES%=, but could still be previewed directly in a browser.
 
--- PeterThoeny - 23 Jul 2001 <br />
+-- PeterThoeny - 01 Feb 2003 <br />
 -- MikeMannix - 14 Sep 2001 <br />
 -- TWiki:Main/DavidLeBlanc - 11 Mar 2002
 %META:FILEATTACHMENT{name="testscreen.gif" attr="h" comment="Example of oopstest.tmpl rendered" date="1026977240" path="C:\Data\Temp\testscreen.gif" size="9566" user="PeterThoeny" version="1.2"}%
