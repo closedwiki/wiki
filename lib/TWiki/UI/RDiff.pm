@@ -316,7 +316,7 @@ sub diff {
     my $rev2 = $query->param( "rev2" );
 
     $renderStyle = "sequential" if ( ! $renderStyle );
-    $diffType = "history" if ( ! $diffType );
+    $diffType = "diff" if ( ! $diffType );
     $contextLines = 3 unless ( defined $contextLines );
 
     TWiki::UI::checkWebExists( $session, $webName, $topic );
@@ -328,16 +328,15 @@ sub diff {
     my $j = $maxrev;
     my $revTitle1 = "";
     my $revTitle2 = "";
-    my $revInfo1 = "";
-    my $revInfo2 = "";
+    my $revInfo = "";
     my $isMultipleDiff = 0;
-    my( $before, $difftmpl, $after);
+    my( $before, $difftmpl, $after, $tail);
     my $topicExists;
 
     $tmpl = $session->{templates}->readTemplate( "rdiff", $skin );
     $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
-    ( $before, $difftmpl, $after) = split( /%REPEAT%/, $tmpl);
+    ( $before, $difftmpl, $after, $tail) = split( /%REPEAT%/, $tmpl);
 
     $topicExists = $session->{store}->topicExists( $webName, $topic );
     if( $topicExists ) {
@@ -356,10 +355,8 @@ sub diff {
             $rev2 = $maxrev-1;
         }
         $revTitle1 = $rev1;
-        $revInfo1 = $session->{renderer}->renderRevisionInfo( $webName, $topic, $rev1, undef );
         if( $rev1 != $rev2 ) {
             $revTitle2 = $rev2;
-            $revInfo2 = $session->{renderer}->renderRevisionInfo( $webName, $topic, $rev2, undef );
         }
     } else {
         $rev1 = 1;
@@ -386,7 +383,7 @@ sub diff {
         }
         do {
             $diff = $difftmpl;
-            $diff =~ s/%REVTITLE1%/r1\.$r1/go;
+            $diff =~ s/%REVTITLE1%/$r1/go;
             $rInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $r1, "\$date - \$wikiusername" );
             # eliminate white space to prevent wrap around in HR table:
             $rInfo =~ s/\s+/&nbsp;/g;
@@ -444,15 +441,24 @@ sub diff {
                 }
             }
         }
-        $i = $i - 1;
+        $i--;
     }
+
+    $i = $rev1;
+    my $tailResult = "";
+    my $revTitle   = "";
+    while( $i >= $rev2) {
+        $revTitle = "<a href=\"$session->{scriptUrlPath}/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\" $TWiki::cfg{NoFollow}>$i</a>";
+        $revInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $i, undef );
+        $tailResult .= $tail;
+        $tailResult =~ s/%REVTITLE%/$revTitle/go;
+        $tailResult =~ s/%REVINFO%/$revInfo/go;
+        $i--;
+    }
+    $after =~ s/%TAIL%/$tailResult/go;
     $after =~ s/%REVISIONS%/$revisions/go;
     $after =~ s/%CURRREV%/$rev1/go;
     $after =~ s/%MAXREV%/$maxrev/go;
-    $after =~ s/%REVTITLE1%/$revTitle1/go;
-    $after =~ s/%REVINFO1%/$revInfo1/go;
-    $after =~ s/%REVTITLE2%/$revTitle2/go;
-    $after =~ s/%REVINFO2%/$revInfo2/go;
 
     $after = $session->handleCommonTags( $after, $webName, $topic );
     $after = $session->{renderer}->getRenderedVersion( $after, $webName, $topic );
