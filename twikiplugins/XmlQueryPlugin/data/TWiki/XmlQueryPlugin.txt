@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PatrickDiamond" date="1100098539" format="1.0" version="1.35"}%
+%META:TOPICINFO{author="PatrickDiamond" date="1102412524" format="1.0" version="1.38"}%
 ---++ <nop>XmlQuery TWiki Plugin
 
 This Plugin allows TWiki topics to become XML data sources that can be queried and transformed via XSLT. XML data is extracted for each table, action, form and for any metadata. This XML data is created when a topic is saved and stored separately
@@ -116,6 +116,7 @@ As XSLT has has a very powerful but complex syntax here are several (hopefully) 
 	* [[XmlQueryPluginRecipe3][Recipe 3]]: Table Contents Filtered
 	* [[XmlQueryPluginRecipe4][Recipe 4]]: Table Contents Restructured
 	* [[XmlQueryPluginRecipe5][Recipe 5]]: Creating a unique, sorted, list from the contents of a table column
+	* [[XmlQueryPluginRecipe6][Recipe 6]]: Outputing TWiki syntax from XSLT
 
 ---++ Notes on Performance
 
@@ -190,14 +191,15 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PatrickDiamond |
-|  Plugin Version: | 10 Nov 2004 (V1.002) |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Plugin Version: | 7th Dec 2004 (V1.003) |
+|  Change History: | |	 
+|  7th Dec 2004: | Small fix, metadata date format problem. Date fields are now being padded to correct width |
 |  10 Nov 2004: | Initial version |
 |  TWiki Dependency: | TWiki version 01 Feb 2003 or later |
 |  CPAN Dependencies: | XML::LibXML, XML::LibXSLT, XML::Simple, Text::ParseWords, Cache::Cache, String::CRC |
 |  Other Dependencies: | |
 |  Perl Version: | 5.6 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 98%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC%Recipe4 96% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 

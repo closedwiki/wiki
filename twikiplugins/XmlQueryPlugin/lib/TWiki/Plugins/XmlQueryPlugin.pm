@@ -42,7 +42,7 @@ BEGIN {
     $initialized = 0;
     $xmldir = '/var/tmp/twiki_xml';
     $xmldir = 'c:/.twiki_xml' if $^O eq 'MSWin32' and $xmldir !~ /^\[a-z]\:/i;
-    $VERSION = '1.002';
+    $VERSION = '1.003';
     $debug=0;
     $cache=undef;
     $cachelimit=1024*1024*100; # default 100 meg
@@ -214,7 +214,7 @@ sub _processMetaData {
 	if (exists $args->{'date'}) {
 	    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday) = gmtime($args->{'date'});
 	    $year += 1900;
-	    $args->{'date'} = "$year-$mon-${mday}T$hour:$min:$sec";
+	    $args->{'date'} = sprintf('%04d-%02d-%02dT%02d:%02d:%02d', $year, $mon, $mday, $hour, $min, $sec);
 	}
 	$metatype = lc($metatype);
 	$metadata->{$metatype} = [] if not exists $metadata->{$metatype};
@@ -701,7 +701,7 @@ sub _initialize {
 	foreach my $lib ('XML::LibXML', 'XML::LibXSLT', 'XML::Simple', 'Benchmark', 'Text::ParseWords', 'Cache::SizeAwareFileCache', 'String::CRC', 'File::Basename', 'LWP::UserAgent') {
 	  eval "use $lib;";
 	  if ($@) {
-		TWiki::Func::writeWarning( "Module $lib failed to load" );
+		TWiki::Func::writeWarning( "Module $lib failed to load $@" );
 		return 0;
 	    }
 	}
