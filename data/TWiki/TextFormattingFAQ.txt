@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1014367320" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1025251620" format="1.0" version="1.13"}%
 <font size="+3"><b>Text Formatting FAQ</b></font>
 
 The most frequently asked questions about text formatting are answered. Also, TextFormattingRules contains the complete TWiki shorthand system on one quick reference page.
@@ -125,8 +125,8 @@ To place an image on any page, ther are two ways of including inline images.
 
 This is a simple and automatic way of including inline images. Simply write the URL of the image file, this will create the inline image for you. __NOTE:__ The images must be [[#ImgUpload][accessible]] as a URL.
 
-	* __You enter:__ <code> TWiki <nop>%PUBURL%/wikiHome.gif logo.</code> <br />
-	  __Result:__ TWiki %PUBURL%/wikiHome.gif logo.
+	* __You enter:__ <code> TWiki <nop>%PUBURL%/%TWIKIWEB%/TWikiLogos/twikilogo88x31.gif logo.</code> <br />
+	  __Result:__ TWiki %PUBURL%/%TWIKIWEB%/TWikiLogos/twikilogo88x31.gif logo.
 
 #ImgUpload
 You can upload images directly to your server with FTP access. You can also [[FileAttachment][attach]] image files to a topic - you could even create a dedicated image topic, like =ImageLibrary= - and then link to the images directly:
@@ -137,8 +137,8 @@ You can upload images directly to your server with FTP access. You can also [[Fi
 
 This is a manual process where you have more control over the rendering of the image. Use the &lt;img&gt; tag of HTML to include GIF, JPG and PNG files. *Note:* The display of the topic is faster if you include the =WIDTH= and =HEIGHT= parameters that have the actual image size. http://www.htmlhelp.com/reference/wilbur/special/img.html has more on inline images.
 
-	* __You enter:__ <code>TWiki &lt;img src="%PUBURL%/wikiHome.gif" width="46" height="50" border="0" alt="logo" /&gt; logo.</code><br />
-	  __Result:__ <br /> TWiki <img src="%PUBURL%/wikiHome.gif" width="46" height="50" border="0" alt="logo" /> logo.
+	* __You enter:__ <code>TWiki &lt;img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/twikilogo88x31.gif" width="88" height="31" border="0" alt="logo" /&gt; logo.</code><br />
+	  __Result:__ <br /> TWiki <img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/twikilogo88x31.gif" width="88" height="31" border="0" alt="logo" /> logo.
 
 -----
 ---+++ Can I write colored text?
