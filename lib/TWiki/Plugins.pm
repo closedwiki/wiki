@@ -53,6 +53,7 @@ $VERSION = '1.010';
                       'writeHeaderHandler'      => 1,
                       'redirectCgiQueryHandler' => 1,
                       'getSessionValueHandler'  => 1,
+                      'setSessionValueHandler'  => 1,
                       'renderFormFieldForEditHandler'  => 1
                     );
 
@@ -393,7 +394,7 @@ sub getSessionValueHandler
 # =========================
 sub setSessionValueHandler
 {
-    # Called by TWiki.setSessionValue
+    # Called by TWiki::setSessionValue
     unshift @_, ( 'setSessionValueHandler' );
     return &applyHandlers;
 }
