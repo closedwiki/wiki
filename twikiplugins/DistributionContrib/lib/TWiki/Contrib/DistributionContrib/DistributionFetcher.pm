@@ -6,8 +6,6 @@ package TWiki::Contrib::DistributionContrib::DistributionFetcher;
 use TWiki::Contrib::DistributionContrib::Config qw(%config);
 my %config = %TWiki::Contrib::DistributionContrib::Config::config;
 
-use TWiki;
-use TWiki::Func;
 use LWP::Simple;
 
 =pod
@@ -32,10 +30,9 @@ It will have the same name as it did on the remote server.
 
 
 sub fetchLatestDistributionVersion {
-   my ($distribution, $attachmentPath) = @_;
+   my ($distribution, $distributionFile, $attachmentPath) = @_;
 
-	my $fileUrlBase = $config{'serverUrl'}. "/" . $distribution;
-	my $fileUrl = $fileUrlBase.'/'.$distributionFile;
+	my $fileUrl = $config{'serverUrl'}. "/" . $distribution.'/'.$distributionFile;
 	my $ans = $attachmentPath;
 	my $status = getstore($fileUrl, $attachmentPath);
 	if (is_error($status)) {
@@ -46,5 +43,10 @@ sub fetchLatestDistributionVersion {
 	return $ans;
 
 }
+
+sub getDistributionTopic {
+	return $config{'saveTopic'};
+}
+
 
 1;

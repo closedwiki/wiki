@@ -1,4 +1,5 @@
 package TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
+use TWiki::Contrib::DistributionContrib::DistributionFetcher;
 use strict;
 use Cwd;
 my $oldPwd;
@@ -42,8 +43,7 @@ sub cli_cvsupdate {
 sub cli_install_download {
    my ($extension) = @_;
    
-   my $attachmentPath = getFilenameForDistributionDownload($extension);
-   my $localFile = getFilenameForDistributionDownload($extension, $attachmentPath);
+   my $localFile = getFilenameForDistributionDownload($extension);
    print "$localFile\n";
 
 }
@@ -80,7 +80,7 @@ sub cli_install_dev {
 sub cli_download {
  my ($extension) = @_;
 
- use TWiki::Contrib::DistributionContrib::DistributionFetcher;
+
  	
  my $localCopy =
    TWiki::Contrib::DistributionContrib::DistributionFetcher::fetchLatestDistributionVersion
@@ -158,16 +158,32 @@ sub getLibFragmentForExtension {
 
 }
 
+=pod
+  sub getFilenameForDistributionDownload 
+  
+  In: distribution name (e.g. TWiki20030201, KoalaSkin) 
+  Out: local file name that it would be stored in, usually an attachment on BuildContrib
+
+=cut
+
 sub getFilenameForDistributionDownload {
     my ($distribution) = @_;
-    my $pubDir = TWiki::Func::getPubDir();
-	my $webTopicBodge = $config{'saveTopic'};
-	$webTopicBodge =~ s!\.!/!;
-	my $attachmentDir = $pubDir."/".$webTopicBodge;
-	
+	my $attachmentDir = getDistributionTopicDir();
 	my $distributionFile = $distribution.'.zip';
 	
 	my $attachmentPath = $attachmentDir.'/'.$distributionFile;
 	return $attachmentPath;
+}
+
+=pod
+Returns where downloaded distribution files should be stored
+=cut
+
+sub getDistributionTopicDir {
+    my $pubDir = TWiki::Func::getPubDir();
+    my $webTopic = TWiki::Contrib::DistributionContrib::DistributionFetcher::getDistributionTopic();
+  	my $webTopicDir =~ s!\.!/!;
+	my $attachmentDir = $pubDir."/".$webTopicDir;
+    return $attachmentDir;	
 }
 1;
