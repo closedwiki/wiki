@@ -162,10 +162,10 @@ sub handlePreferencesTags
 {
     # modify argument directly, e.g. call by reference
     my $x;
-    my $cmd;
+    my $term;
     for( $x = 0; $x < @prefsKeys; $x++ ) {
-        $cmd = "\$_[0] =~ s/%$prefsKeys[$x]%/&prvHandlePrefsValue($x)/geo;";
-        eval( $cmd );
+        $term = "\%$prefsKeys[$x]\%";
+        $_[0] =~ s/$term/&prvHandlePrefsValue($x)/ge;
     }
 
     if( $_[0] =~ /%VAR{(.*?)}%/ ) {
