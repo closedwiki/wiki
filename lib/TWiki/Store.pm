@@ -1061,7 +1061,7 @@ sub lockTopic {
         # held that long, by _any_ process.
         if ( time() - $time > 2 * 60 ) {
             $this->{session}->writeWarning
-              ( $locker->wikiName()." broke ".$user->login()."'s lock on $web.$topic" );
+              ( $locker->wikiName()." broke $user's lock on $web.$topic" );
             $topicHandler->setLock( 0 );
             last;
         }
