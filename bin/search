@@ -73,7 +73,11 @@ sub main
     my $websStr       = join ' ',
                         grep { s/^web=(.*)$/$1/ }
                         split(/[&;]/, $query->query_string);
-                        
+    # need to unescape URL-encoded data since we use the raw query_string
+    # suggested by JeromeBouvattier
+    $websStr =~ tr/+/ /;       # pluses become spaces
+    $websStr =~ s/%([0-9a-fA-F]{2})/pack("c",hex($1))/ge;  # %20 becomes space
+
     my $search        = $query->param( "search" ) || "";
     my $scope         = $query->param( "scope" )  || "";
     my $order         = $query->param( "order" )  || "";
@@ -89,6 +93,7 @@ sub main
     my $renameView    = $query->param( "renameview" )  || "";
     my $showlock      = $query->param( "showlock" ) || "";
     my $noempty       = $query->param( "noempty" ) || "";
+    my $attrTemplate  = $query->param( "template" ) || "";  # undocumented
     my $attrHeader    = $query->param( "header" ) || "";
     my $attrFormat    = $query->param( "format" ) || "";
 
@@ -97,6 +102,8 @@ sub main
         $websStr, $search, $scope, $order, $regex,
         $limit, $revSort, $caseSensitive, $nosummary,
         $nosearch, $noheader, $nototal, $bookView, $renameView,
-        $showlock, $noempty, "", $attrHeader, $attrFormat
+        $showlock, $noempty, $attrTemplate, $attrHeader, $attrFormat
     );
 }
+
+# EOF

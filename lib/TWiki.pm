@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "16 Mar 2002";
+$wikiversion      = "24 Mar 2002";
 
 # ===========================
 # read the configuration part
@@ -1104,6 +1104,7 @@ sub handleSearchWeb
     my $attrRenameview    = extractNameValuePair( $attributes, "renameview" );
     my $attrShowlock      = extractNameValuePair( $attributes, "showlock" );
     my $attrNoEmpty       = extractNameValuePair( $attributes, "noempty" );
+    my $attrTemplate      = extractNameValuePair( $attributes, "template" ); # undocumented
     my $attrHeader        = extractNameValuePair( $attributes, "header" );
     my $attrFormat        = extractNameValuePair( $attributes, "format" );
 
@@ -1111,7 +1112,7 @@ sub handleSearchWeb
        $attrOrder, $attrRegex, $attrLimit, $attrReverse,
        $attrCasesensitive, $attrNosummary, $attrNosearch,
        $attrNoheader, $attrNototal, $attrBookview, $attrRenameview,
-       $attrShowlock, $attrNoEmpty, "", $attrHeader, $attrFormat
+       $attrShowlock, $attrNoEmpty, $attrTemplate, $attrHeader, $attrFormat
     );
 }
 
