@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="PeterThoeny" date="999309114" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1012841561" format="1.0" version="1.7"}%
 ---++ FAQ:
 
 Everybody can edit any page, this is scary. Doesn't that lead to chaos?
 
 ---++ Answer:
 
-%WIKITOOLNAME% is one of many WikiWikiClones, the first one was built by Ward Cummingham. Collaborating the Wiki way is different from other collaboration tools like Usenet. A distinct __Wiki culture__ forms around these tools:
+%WIKITOOLNAME% is one of many WikiWikiClones, the first one was built by Ward Cunningham. Collaborating the Wiki way is different from other collaboration tools like Usenet. A distinct __Wiki culture__ forms around these tools:
 
 	* Any and all information can be deleted by anyone. Wiki pages represent nothing but discussion and consensus because it's much easier to delete flames, spam and trivia than to indulge them. What remains is naturally meaningful. 
 
