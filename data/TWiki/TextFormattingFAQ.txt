@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000530761" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1014358573" format="1.0" version="1.11"}%
 <font size="+3"><b>Text Formatting FAQ</b></font>
 
 The most frequently asked questions about text formatting are answered. Also, TextFormattingRules contains the complete TWiki shorthand system on one quick reference page.
@@ -166,7 +166,7 @@ You can also use the up-to-date =style= attribute - ex:  =style="color:#ff0000"=
   <td><font color="#ff0000"> *Red:* </font></td><td> ="#ff0000"= </td>
   <td><font color="#0000ff"> *Blue:* </font></td><td> ="#0000ff"= </td>
 </tr><tr bgcolor="#c0c0c0">
-  <td><font color="#800080"> *Purple:* </font></td><td>="#800080"= </td>
+  <td><font color="#800080"> *Purple:* </font></td><td> ="#800080"= </td>
   <td><font color="#008080"> *Teal:* </font></td><td> ="#008080"= </td>
   <td><font color="#ff00ff"> *Fuchsia:* </font></td><td> ="#ff00ff"= </td>
   <td><font color="#00ffff"> *Aqua:* </font></td><td> ="#00ffff"= </td>
