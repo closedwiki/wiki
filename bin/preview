@@ -40,6 +40,7 @@ sub main
     my $text = "";
     my $ptext = "";
     my $meta = "";
+    my $formFields = "";
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
@@ -145,17 +146,12 @@ sub main
         }
         $ptext = $text;
         
-        my $fieldParams = &TWiki::Form::getFieldParams( $meta );
-
 	if( $meta->count( "FORM" ) ) {
-	   $tmpl =~ s/%FORMFIELDS%/$fieldParams/go;
-	} else {
-	   $tmpl =~ s/%FORMFIELDS%//go;
-        }
+	   $formFields = &TWiki::Form::getFieldParams( $meta );
+	}
     } else {
         $text = $query->param( "text" ); # text to save
         ( $meta, $ptext ) = &TWiki::Store::_extractMetaData( $webName, $topic, $text );
-        $tmpl =~ s/%FORMFIELDS%//go;
     }
 
     $ptext =~ s/ {3}/\t/go;
@@ -184,6 +180,7 @@ sub main
     $text =~ s/\n/%_N_%/go;
 
     $tmpl =~ s/%HIDDENTEXT%/$text/go;
+    $tmpl =~ s/%FORMFIELDS%/$formFields/go;
     $tmpl =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
 
     &TWiki::writeHeader( $query );
