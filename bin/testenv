@@ -371,17 +371,17 @@ print "</td></tr>\n";
 print "<tr><th align=\"right\">mod_perl:</th><td>$USE_MOD_PERL for this script (mod_perl $LOAD_MOD_PERL)</td></tr>\n";
 
 
-# Get userid (ActiveState or other Perl), should work on all Perl systems 
-my $usr = lc( getlogin || getpwuid($<) );
-# 
-# Get group info
+# Get web server's user and group info
+my $usr = "";
 my $grp = "";
 if( $OS eq 'UNIX' or  ($OS eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
-    foreach( split( " ", $( ) ) {	# Unix/Cygwin Perl
+    $usr = lc( getpwuid($<) );		# Unix/Cygwin Perl
+    foreach( split( " ", $( ) ) {
 	my $onegrp = getgrgid( $_ );
 	$grp .= " " . lc($onegrp);
     }
-} else {		# ActiveState or other Win32 Perl
+} else {				# ActiveState or other Win32 Perl
+    $usr = lc( getlogin );
     # Try to use Cygwin's 'id' command - may be on the path, since Cygwin
     # is probably installed to supply ls, egrep, etc - if it isn't, give up.
     # Run command without stderr output, to avoid CGI giving error.
@@ -636,7 +636,8 @@ print "</td></tr>\n";
 # Check that diff is found in PATH and is GNU diff - used by various RCS
 # commands, including ci.  Since Windows makes it hard to capture stderr
 # ('2>&1' works only on Win2000 or higher), and Windows will usually have
-# GNU diff in any case, we only check for diff on Unix/Linux and Cygwin.  
+# GNU diff in any case (installed for TWiki since there's no built-in
+# diff), we only check for diff on Unix/Linux and Cygwin.  
 if( $OS eq 'UNIX' or  ($OS eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
     print "<tr><th align=\"right\">diff:</th>";
     my $diffOut = `diff 2>&1` || "";
@@ -669,6 +670,8 @@ if( $OS eq 'UNIX' or  ($OS eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {
 if( $OS eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
 
     # ActiveState or SiePerl/other
+    # FIXME: Advice in this section should be reviewed and tested by people
+    # using ActivePerl
     my $perl5shell = $ENV{'PERL5SHELL'} || '';
     print "</td></tr>\n";
     print "<tr><th align=\"right\">PERL5SHELL:</th><td>$perl5shell</td></tr>\n";
@@ -696,6 +699,7 @@ if( $OS eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
 }
 
 # Generate a separate table for locale setup
+# FIXME: Need to update to handle core code's $localeRegexes feature
 if ( $showLocales ) {		# Only if TWiki.pm found
     print "</table>\n";
     print "<h3>Internationalisation and Locale Setup</h3>\n";
@@ -714,6 +718,16 @@ if ( $showLocales ) {		# Only if TWiki.pm found
 	print "- use of <b>\$useLocale</b> = 0 is recommended unless you know your version of Perl has working locale support.\n";
 	print "</td></tr>\n";
     } 
+
+    # d_setlocale in Config (same as 'perl -V:d_setlocale')
+    eval "use Config"; 
+    if ( not ( exists $Config{d_setlocale} and $Config{d_setlocale} eq 'define' ) ) {
+	# Warn re Perl not compiled for locale support
+	print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+	print "This version of Perl was not compiled with locale support ('d_setlocale' not set in Config.pm)\n";
+	print "- re-compilation of Perl will be required before it can be used\n";
+	print "</td></tr>\n";
+    }
 
     # $siteLocale
     print "<tr><th align=\"right\">\$siteLocale:</th><td>$siteLocale</td></tr>\n";
