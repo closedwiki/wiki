@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1092634781" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="ArthurClemens" date="1092647589" format="1.0" version="1.2"}%
 ---+!! Pattern skin
 
 *<nop>PatternSkin is developed to provide a CSS based default look and feel for TWiki - flexible and W3C-compliant.* Its layout and color scheme are designed to provide a nice, clean and productive _editing environment_. For use in corporate or perhaps in personal websites it should be fairly easy to tune the looks or even create a !PatternSkin-based new skin.
@@ -105,6 +105,7 @@ See: PatternSkinCustomization
 	* TWiki:TWiki/TWikiCss
 	* TWiki:TWiki/WebBottomBar
 	* TWiki:TWiki/WebLeftBar
+	* TWiki:TWiki/WebLeftBarExample
 	* TWiki:TWiki/WebLeftBarPersonalTemplate
 	* TWiki:TWiki/WebLeftBarCookbook
 	* TWiki:TWiki/WebTopBar
@@ -117,11 +118,11 @@ Other skins:
 
 ---
 
--- TWiki:Main/ArthurClemens - 15 Aug 2004
+-- TWiki:Main/ArthurClemens - 16 Aug 2004
 
 %META:FILEATTACHMENT{name="PatternSkin.zip" attr="" comment="Skin package v.1.0.3" date="1092634885" path="PatternSkin.zip" size="168808" user="ArthurClemens" version="1.1"}%
 %META:FILEATTACHMENT{name="i_arrow_down.gif" attr="" comment="Icon: down arrow; used for Table Of Contents" date="1092634909" path="i_arrow_down.gif" size="56" user="ArthurClemens" version="1.1"}%
 %META:FILEATTACHMENT{name="layout.css" attr="" comment="Layout: positioning of page elements" date="1092634933" path="layout.css" size="1713" user="ArthurClemens" version="1.1"}%
-%META:FILEATTACHMENT{name="style.css" attr="" comment="Style: appearance: margins, fonts, colors" date="1092634959" path="style.css" size="25954" user="ArthurClemens" version="1.1"}%
+%META:FILEATTACHMENT{name="style.css" attr="" comment="Style: appearance: margins, fonts, colors" date="1092647527" path="style.css" size="26003" user="ArthurClemens" version="1.2"}%
 %META:FILEATTACHMENT{name="patternskin_screenshot.gif" attr="h" comment="" date="1092635051" path="patternskin_screenshot.gif" size="6416" user="ArthurClemens" version="1.1"}%
 %META:FILEATTACHMENT{name="patternskin_screenshot_full.png" attr="h" comment="" date="1092635073" path="patternskin_screenshot_full.png" size="118816" user="ArthurClemens" version="1.1"}%
