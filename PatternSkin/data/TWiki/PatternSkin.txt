@@ -15,16 +15,16 @@
 ---++ Supported browsers
 
 !PatternSkin has been tested succesfully on the following browsers:
-	* Windows
-		* Internet Explorer 6.0, 5.5 (note: Explorer 5.0 is *not* supported: will function but shows visual quirks)
-		* Mozilla/Firefox
-	* Mac OS X
-		* Safari 1.2
-		* Mozilla/Firefox
+   * Windows
+      * Internet Explorer 6.0, 5.5 (note: Explorer 5.0 is *not* supported: will function but shows visual quirks)
+      * Mozilla/Firefox
+   * Mac OS X
+      * Safari 1.2
+      * Mozilla/Firefox
 
 Not tested, but will probably work (let me know):
-	* *nix
-		* Mozilla/Firefox
+   * *nix
+      * Mozilla/Firefox
 
 ---++ Installation
 
@@ -32,25 +32,25 @@ Not tested, but will probably work (let me know):
 
 *Note 2:* !PatternSkin is included with TWiki by default. Use the following instructions only if you are upgrading !PatternSkin.
 
-	* Download the ZIP file from the Skin Home page (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory
-	* Test if installed: %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=pattern
-	* For skin activation see %TWIKIWEB%.TWikiSkins
+   * Download the ZIP file from the Skin Home page (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory
+   * Test if installed: %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=pattern
+   * For skin activation see %TWIKIWEB%.TWikiSkins
 
 ---+++ Troubleshooting
 
 If you have set the SKIN variable setting to =pattern= and you still don't see the layout as on the <a href="%ATTACHURL%/patternskin_screenshot_full.png">screenshot</a>, a few settings in may have been disabled.
 
 Check these variables here:
-	* TWIKILAYOUTURL = %TWIKILAYOUTURL%
-	* TWIKISTYLEURL = %TWIKISTYLEURL%
-	* SKIN = %SKIN%
+   * TWIKILAYOUTURL = %TWIKILAYOUTURL%
+   * TWIKISTYLEURL = %TWIKISTYLEURL%
+   * SKIN = %SKIN%
 
 If TWIKILAYOUTURL or TWIKISTYLEURL don't give a value or point to non-existing files, check in TWiki.TWikiPreferences that the following variables do exist and that they are set to on:
 <pre>
-	* %<nop>TWIKIWEB%.PatternSkin settings:
-		* <nop>Set TWIKILAYOUTURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/layout.css
-		* <nop>Set TWIKISTYLEURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/style.css
+   * %<nop>TWIKIWEB%.PatternSkin settings:
+      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/layout.css
+      * <nop>Set TWIKISTYLEURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/style.css
 </pre>
 
 If this still does not work, contact the administrator who installs skins.
@@ -64,8 +64,8 @@ It is easy to tune the look and feel of !PatternSkin by changing the color and s
 You may also choose to radically change the look and create a !PatternSkin-based new skin. This is easier than to create a skin by writing new template files; you can concentrate on how things should look instead of what elements should get displayed.
 
 You can eiter:
-	* Change the =layout.css= and =style.css= attachment files for this topic (upload updated versions)
-	* In TWiki.TWikiPreferences, point the variables =TWIKILAYOUTURL= and =TWIKISTYLEURL= to other attachments, perhaps in another topic (your new skin topic?)
+   * Change the =layout.css= and =style.css= attachment files for this topic (upload updated versions)
+   * In TWiki.TWikiPreferences, point the variables =TWIKILAYOUTURL= and =TWIKISTYLEURL= to other attachments, perhaps in another topic (your new skin topic?)
 
 If you want to change colors and white space of screen elements, modify =style.css=. <br/>
 If you want to change the positioning of screen elements, modify =layout.css=.
@@ -86,6 +86,7 @@ See: PatternSkinCustomization
 |  Skin Version: | 08 Aug 2004 (v1.000) |
 |  Download&nbsp;<nop>PatternSkin: | [[%ATTACHURL%/PatternSkin.zip][PatternSkin.zip]]<br /> *Note:* the CSS files in this topic may be more recent than the version in the zip file | 
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  14 Aug 2004: | v.1.0.2 - Fixes print template, table paddings in topics, minor changes to style.css |
 |  13 Aug 2004: | v.1.0.1 - Updated /data/TWiki/WebLeftBarPersonalTemplate and style.css |
 |  08 Aug 2004: | Initial version (v1.000) |
 |  Dependencies: | TWiki.TablePlugin |
