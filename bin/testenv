@@ -837,7 +837,7 @@ if ( $showLocales ) {		# Only if TWiki.pm found
         # Warn re known broken locale setup
         $n .= WARN("Using Perl on Windows, which may have missing or",
                    "incorrect locales (in Cygwin or ActiveState Perl,",
-                   "respectively) - use of <b>LocaleRegexes</b> = 1",
+                   "respectively) - use of <b>LocaleRegexes</b> = 0",
                    "(see below) is recommended unless you know your",
                    "version of Perl has working locale support.");
     }
