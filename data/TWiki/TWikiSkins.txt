@@ -1,17 +1,29 @@
-%META:TOPICINFO{author="MikeMannix" date="999857258" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="MikeMannix" date="1000080465" format="1.0" version="1.6"}%
+%TOC%
+%STARTINCLUDE%
 ---# TWiki Skins
 
-Skins are customized [[TWikiTemplates][TWikiTemplate]] files. You can use skins to change the look of a %WIKITOOLNAME% topic, for example the layout of the header and footer. Note that the renderd text between header and footer does __not__ change. You can also use skins to define an alternate view, ex: a view optimized for printing.
+_Overlay regular templates with alternate header/footer layouts_
 
-Skin files are located in the ==twiki/template== directory and are name with this syntax: ==&lt;scriptname&gt;.&lt;skin&gt;.tmpl==. For example, the ==print== skin for the ==view== template is ==view<font color="red">.print</font>.tmpl== (red color added for clarification).
+---++ Overview
+
+Skins are customized [[TWikiDocumentation#TWiki_Template_System][TWiki Templates]] files. You can use skins to change the look of a %WIKITOOLNAME% topic, for example, the layout of the header and footer. Rendered text between header and footer does __not__ change. You can also use skins to define an alternate view, like a view optimized for printing.
+
+--++ Defining Skins
+
+Skin files are located in the =twiki/templates= directory and are named with the syntax: ==&lt;scriptname&gt;.&lt;skin&gt;.tmpl==. For example, the *Printable* skin for the =view= template is =view.print.tmpl=.
+
+---++ Activating Skins
 
 A skin can be activated in two ways:
-	* Define the SKIN preference variable in TWiki.TWikiPreferences, one of the WebPreferences, or a user preference. Ex: 
+
+	* Define the =SKIN= Preference variable in TWiki.TWikiPreferences, one of the WebPreferences, or in a user - %WIKIUSERNAME% - topic.
 		* =Set SKIN = print=
+
 	* Add =?skin=name= to the URL, for this example:
 		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print (for the print view skin)
 		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=plain (for the plain view skin that has no header and footer)
 
-The ==?skin=name== URL parameter overrides the SKIN preference value.
+The ==?skin=name== URL parameter overrides the SKIN Preference value.
 
 -- PeterThoeny - 14 Jul 2001 <br>
