@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="JohnTalintyre" date="1000368971" format="1.0" version="1.41"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000447660" format="1.0" version="1.42"}%
 %META:TOPICPARENT{name="WebHome"}%
 %INCLUDE{"UtilTempDocNote"}%
 
@@ -356,7 +356,8 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
 <blockquote style="background-color:#f0f0f0">
 *Example: Create a custom logo variable* <br />
 	* To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, simply define the variable on the web's WebPreferences page. You also have to upload =logo.gif= - this can be done by [[FileAttachment][attaching a file]] to =LogoTopic= (any topic name you choose):
-		* ==<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif== 
+		* ==<nop>Set MYLOGO = %<nop>PUBURL%/%<nop>MAINWEB%/LogoTopic/logo.gif== 
 </blockquote>
 
 -- MikeMannix - 30 Aug 2001 <br />	
+-- PeterThoeny - 13 Sep 2001 <br />
