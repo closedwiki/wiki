@@ -2920,14 +2920,16 @@ sub handleInternalTags
     $_[0] =~ s/%STOPINCLUDE%//g;
     $_[0] =~ s/%SECTION{(.*?)}%//g;
     $_[0] =~ s/%ENDSECTION%//g;
-    $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/ge; # can be nested
-    $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/ge if( $_[0] =~ /%SEARCH/o );
+    my $ok = 16; # SEARCH may be nested up to 16 times
+    TRY: while( $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/ge ) {
+        last TRY unless( --$ok );
+    }
     $_[0] =~ s/%METASEARCH{(.*?)}%/&handleMetaSearch($1)/ge;
     $_[0] =~ s/%FORMFIELD{(.*?)}%/&TWiki::Render::getFormField($_[2],$_[1],$1)/ge;
     $_[0] =~ s/%GROUPS%/join( ", ", &TWiki::Access::getListOfGroups() )/ge;  #SVEN
 
-	$_[0] =~ s/%REVINFO%/handleRevisionInfo( $_[2], $_[1] )/ge;
-	$_[0] =~ s/%REVINFO{\"(.*?)\"}%/handleRevisionInfo( $_[2], $_[1], $1 )/ge;
+    $_[0] =~ s/%REVINFO%/handleRevisionInfo( $_[2], $_[1] )/ge;
+    $_[0] =~ s/%REVINFO{\"(.*?)\"}%/handleRevisionInfo( $_[2], $_[1], $1 )/ge;
 }
 
 =pod
