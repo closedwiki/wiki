@@ -295,7 +295,7 @@ sub readFromProcessArray {
     my ($this, $path, $template, %params) = @_;
     ASSERT(ref($this) eq 'TWiki::Sandbox') if DEBUG;
 
-    my $data;                          # Output
+    my $data = '';                     # Output
     my $processFileHandle;             # Holds filehandle to read from process
 
     # Build argument list from template
