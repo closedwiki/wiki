@@ -17,6 +17,7 @@ FILES=	TWIKI/lib/TWiki/Plugins/FormQueryPlugin.pm \
 	TWIKI/lib/TWiki/Plugins/FormQueryPlugin/WebDB.pm\
 	TWIKI/lib/TWiki/Plugins/FormQueryPlugin/test\
 	TWIKI/lib/TWiki/Plugins/FormQueryPlugin/test/ArchiveTest.pm\
+	TWIKI/lib/TWiki/Plugins/FormQueryPlugin/test/ArithmeticTest.pm\
 	TWIKI/lib/TWiki/Plugins/FormQueryPlugin/test/ArrayTest.pm\
 	TWIKI/lib/TWiki/Plugins/FormQueryPlugin/test/ColourMapTest.pm\
 	TWIKI/lib/TWiki/Plugins/FormQueryPlugin/test/FileTimeTest.pm\
