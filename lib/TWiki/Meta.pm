@@ -229,7 +229,7 @@ sub remove {
        delete $self->{$type};
     } else {
        $self = {};
-       bless $self;   
+       bless $self;
     }
 }
 
@@ -242,16 +242,28 @@ will destroy the old values for that type, unless the
 copied object doesn't contain entries for that type, in which
 case it will retain the old values.
 
+If $type is undef, will copy ALL TYPES.
+
 SMELL: That spec absolutely _STINKS_ !!
+SMELL: this is a shallow copy
 
 =cut
 
 sub copyFrom {
     my( $self, $otherMeta, $type ) = @_;
     ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($otherMeta) eq "TWiki::Meta") if DEBUG;
 
-    my $data = $otherMeta->{$type};
-    $self->{$type} = $data if( $data );
+    if( $type ) {
+        my $data = $otherMeta->{$type};
+        $self->{$type} = $data if $data;
+    } else {
+        foreach my $k ( keys %$otherMeta ) {
+            unless( $k =~ /^_/ ) {
+                $self->copyFrom( $otherMeta, $k );
+            }
+        }
+    }
 }
 
 =pod

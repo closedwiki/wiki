@@ -147,6 +147,7 @@ sub _save {
         ( $currMeta, $currText ) =
           $session->{store}->readTopic( undef, $webName, $topic, undef );
         $newMeta = new TWiki::Meta( $session, $webName, $topic );
+        $newMeta->copyFrom( $currMeta );
     }
 
     my $theParent = $query->param( 'topicparent' ) || "";
