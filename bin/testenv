@@ -206,11 +206,13 @@ if (defined $^V) {
 
  
 
+# Load Config module - used here and elsewhere
+require Config;
+
 # Set $detailedOS if not using later versions of TWiki.cfg for BeijingRelease
 # - this code enables the latest testenv to be used with Dec 2001 and 
 # earlier releases.
 if ( !defined $detailedOS ) {
-    require Config;
     $detailedOS = $Config::Config{'osname'};
     # print "$detailedOS<br>";
 }
@@ -260,8 +262,10 @@ if ($detailedOS eq 'cygwin') {
 }
 
 # Detect executable name suffix, e.g. .exe on Windows or '' on Unix
+# Avoid testing for .exe suffixes on Cygwin, since the built-in
+# grep and ls don't end in '.exe'
 my $exeSuffix='';
-if ( $Config::Config{'_exe'}) { 
+if ( $Config::Config{'_exe'} and $perltype ne 'Cygwin' ) { 
     $exeSuffix = $Config::Config{'_exe'};
 }
 
