@@ -1,2 +1,3 @@
-tdb C Trivial database, widely available. Part of the Samba project.
-TDB_File perl Trivial database interface, available from CPAN.
+tdb,>=1.0.6,C.Trivial database, available from http://sourceforge.net/projects/tdb/
+TDB_File,>=0.50,perl,Trivial database perl interface, available from CPAN.
+SharedCode,>=1.000,plugin,Test fixtures. Only required if you want to make code changes; not required for normal use.

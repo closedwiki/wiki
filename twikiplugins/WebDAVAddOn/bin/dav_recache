@@ -58,7 +58,7 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
   $fromBrowser = 1;
   $chosenWeb = $query->param( "web" );
   $chosenTopic = $query->param( "topic" );
-  print "Content-type: test/plain\n\n";
+  print "Content-type: text/plain\n\n";
 } else {
   # Called from the command line
   $chosenWeb = $ARGV[$#ARGV];

@@ -18,7 +18,6 @@ use File::Copy;
 my $defJWeb = "Trash";
 my $defJTopic = "TrashAttachment";
 
-print STDERR "Firing " . join(" ", @ARGV)."\n";
 my $rf = $ARGV[0];
 die "ERROR: No response file" unless $rf;
 
