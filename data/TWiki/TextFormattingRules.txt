@@ -1,14 +1,13 @@
-%META:TOPICINFO{author="MikeMannix" date="999762553" format="1.0" version="1.24"}%
+%META:TOPICINFO{author="MikeMannix" date="999766220" format="1.0" version="1.25"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
-It is easy to collaborate: just type in your text. You don't need to know HTML at all, though you can use it if you prefer. Links to topics will be created automatically, as long as you follow these simple Text Formatting Rules. TextFormattingFAQ has answers to frequently asked questions about text formatting. This page is also available as quick reference pop-up window from a link in the Edit screen.
+---+ TWiki Text Formatting
+Working in TWiki is as easy as typing in text - exactly like email. You don't need to know HTML, though you can use it if you prefer. Links to topics are created automatically when you enter WikiWords. And TWiki shorthand gives you all the power of HTML with a simple coding system that takes no time to learn. It's all layed out below - refer back to this page in a pop-up window from the *Edit* screen.
 
----++ Editing
+---++ TWiki Editing Shorthand
 
-<table border="0" cellpadding="0" cellspacing="1" bgcolor="#000000">
-<tr><td>
-<table border="0" cellpadding="3" cellspacing="0" bgcolor="#ffffff">
-<tr>
+<table border="0" cellpadding="3" cellspacing="1" bgcolor="#000000">
+<tr bgcolor="#ffffff">
 <td>
  *Formatting Command:*
 </td><td>
@@ -17,7 +16,7 @@ It is easy to collaborate: just type in your text. You don't need to know HTML a
  *You get:*
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Paragraphs:* <br>
  Blank lines will create new paragraphs.
@@ -35,7 +34,7 @@ It is easy to collaborate: just type in your text. You don't need to know HTML a
 2nd paragraph
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Headings:* <br>
  At least three dashes at the beginning of a line, followed by plus signs and the heading text. One plus creates a level 1 heading (most important), two pluses a level 2 heading; the maximum is level 6. __Note:__ A Table of Content can be created automatically with the =%<nop>TOC%= variable, see TWikiVariables.
@@ -53,7 +52,7 @@ It is easy to collaborate: just type in your text. You don't need to know HTML a
 <h3 >Maguro</h3>
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Bold Text:* <br>
  Words get *bold* by enclosing them in =*= asterisks.
@@ -67,7 +66,7 @@ It is easy to collaborate: just type in your text. You don't need to know HTML a
 *Bold*
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Italic Text:* <br>
  Words get _italic_ by enclosing them in =_= underscores.
@@ -81,7 +80,7 @@ _Italic_
 _Italic_
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Bold Italic:* <br>
  Words get __bold italic_ by enclosing them in =_= double-underscores.
@@ -95,7 +94,7 @@ __Bold italic__
 __Bold italic__
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Fixed Font:* <br>
  Words get shown in =fixed font= by enclosing them in =<nop>=<nop>= equal signs.
@@ -109,7 +108,7 @@ __Bold italic__
 =Fixed font=
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Bold Fixed Font:* <br>
  Words get shown in ==bold fixed font== by enclosing them in ==<nop>== double equal signs.
@@ -123,7 +122,7 @@ __Bold italic__
 ==Bold fixed==
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  __Note:__ Make sure to "stick" the =* _ = <nop>==<nop>= signs to the words, e.g. take away spaces.
 </td><td valign="top">
@@ -138,7 +137,7 @@ _This works_,
 _this not _
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Verbatim Mode:* <br>
  Surround code excerpts and other formatted text with =&lt;verbatim&gt;= and =&lt;/verbatim&gt;= tags. <br> __Note:__ Use =&lt;pre&gt;= and =&lt;/pre&gt;= tags instead if you want that HTML code is interpreted. <br> __Note:__ Each tag must be on a line by itself.
@@ -164,7 +163,7 @@ class CatAnimal {
 </verbatim>
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Separator:* <br>
  At least three dashes at the beginning of a line.
@@ -178,7 +177,7 @@ class CatAnimal {
 -------
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *List Item:* <br>
  Three spaces and an asterisk.
@@ -192,7 +191,7 @@ class CatAnimal {
 	* bullet item
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Nested List Item:* <br>
  Six, nine, ... spaces and an asterisk.
@@ -206,7 +205,7 @@ class CatAnimal {
 		* nested stuff
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Ordered List:* <br>
  Three spaces and a number.
@@ -222,7 +221,7 @@ class CatAnimal {
 	1 Dim Sum
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Definition List:* <br>
  Three spaces, the term, a colon, a space, followed by the definition. <br>
@@ -239,7 +238,7 @@ __Note:__ Terms with spaces are not supported. In case you do have a term with m
 	Dim&nbsp;Sum: S.F.
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Table:* <br>
  Optional spaces followed by the cells enclosed in vertical bars. <br>
@@ -270,7 +269,7 @@ __Note:__ In case you have a long row and you want it to be more readable when y
   | next |
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *<nop>WikiWord Links:* <br>
  <nop>CapitalizedWordsStuckTogether (or WikiWords) will produce a link automatically. <br> __Note:__ In case you want to link to a topic in a different %WIKITOOLNAME% web write =Webname.TopicName=.
@@ -288,7 +287,7 @@ WebNotify
 Know.ReadmeFirst
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Forced Links:* <br>
  You can create a forced internal link by enclosing words in double square brackets. <br> __Note:__ Text within the brackets may contain optional spaces; the topic name is formed by capitalizing the initial letter and by removing the spaces; i.e. =[<nop>[text formatting FAQ]]= links to topic TextFormattingFAQ.  You can also refer to a different web and use anchors.
@@ -306,7 +305,7 @@ Know.ReadmeFirst
 [[%MAINWEB%.TWiki users]]
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Specific Links:* <br>
  Create a link where you can specify the link text and the link reference separately, using nested square brackets like =[<nop>[reference][text]]=. Internal link references (i.e. WikiSyntax) and external link references (i.e. http://TWiki.org/) are supported. The same __Forced Links__ rules apply for internal link references. Anchor names can be added as well, like =[<nop>[WebHome#MyAnchor][go home]]= and =[<nop>[http://www.yahoo.com/#somewhere][Yahoo!]]=.
@@ -324,7 +323,7 @@ Know.ReadmeFirst
 [[http://gnu.org][GNU]]
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Anchors:* <br>
  You can define a link reference inside a %WIKITOOLNAME% topic (called an anchor name) and link to that. To __define__ an anchor write =#AnchorName= at the beginning of a line. The anchor name must be a WikiWord. To __link to__ an anchor name use the =[<nop>[MyTopic#MyAnchor]]= syntax. You can omit the topic name if you want to link within the same topic.
@@ -346,7 +345,7 @@ Know.ReadmeFirst
 #MyAnchor To here
 </td>
 </tr>
-<tr>
+<tr bgcolor="#ffffff">
 <td valign="top">
  *Prevent a Link:* <br>
  Prevent a WikiWord from being linked by prepending it with the =&lt;nop&gt;= tag.
@@ -363,7 +362,6 @@ Know.ReadmeFirst
 </table>
 </td></tr>
 </table>
-
 
 ---++ Using HTML
 
