@@ -123,11 +123,12 @@ install: build
 #	perl -pi~ -e 's|^(.storeTopicImpl\s*=\s*\"RcsWrap\").*|\#\1;|;' debian/twiki/usr/share/perl5/TWiki.cfg
 #	perl -pi~ -e 's|^\#(.storeTopicImpl\s*=\s*\"RcsLite\").*|\1;|;' debian/twiki/usr/share/perl5/TWiki.cfg
 #	perl -pi~ -e 's|^(.something).*|\1 = \"\";|;' debian/twiki/usr/share/perl5/TWiki.cfg
+	rm debian/twiki/usr/share/perl5/TWiki.cfg~
 
 # setlib.cfg
 	perl -pi~ -e 's|^(.twikiLibPath).*|\1 = \"/usr/share/perl5\";|;' debian/twiki/usr/lib/cgi-bin/twiki/setlib.cfg
+	rm debian/twiki/usr/lib/cgi-bin/twiki/setlib.cfg~
 
-	rm debian/twiki/usr/share/perl5/TWiki.cfg~
 #move twiki.cfg to /etc/twiki
 	mv debian/twiki/usr/share/perl5/TWiki.cfg debian/twiki/etc/twiki/TWiki.cfg
 
