@@ -1,0 +1,54 @@
+%META:TOPICINFO{author="JohnKnottenbelt" date="1080649080" format="1.0" version="1.3"}%
+---++ Sectional Editing Plugin
+
+This plugin allows the user to break a topic up into sections which can be edited individually.
+
+---+++ Syntax Rules
+
+Insert a &lt;sectionbreak/&gt; tag between sections.
+
+*NOTE:* This breaks the page up at the lowest level, meaning that you can't put section breaks inside tables, lists, etc. as it breaks the whole page up into a table.
+
+---+++ <nop>%TOPIC% Settings
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Allows the user to break a topic into sections for individual editing.
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+	* Edit Bar Background Color:
+		* Set BGCOLOR = %WEBBGCOLOR%
+
+	* Edit Bar Label (may also be an &lt;img&gt; tag):
+		* Set LABEL = e
+
+	* A comma separated list of skins *NOT* to section (you'll probably want the print skin here):
+		* Set SKIPSKIN = print
+
+	* Left or Right Justification of Edit Bar
+		* Set JUSTIFICATION = Left
+
+	* Edit Box Width, Height, Style (set to width: 99% for full width, auto to disable).
+		* Set EDITBOXWIDTH = 70
+		* Set EDITBOXHEIGHT = 27
+		* Set EDITBOXSTYLE = width: 54%;
+
+---+++ Plugin Installation Instructions
+
+	1 Download the zip file.
+	1 Unzip the zip file into your twiki web folder.
+	1 Edit your .htaccess file to require a valid user for the editsection and previewsection scripts.
+
+---+++ Plugin Info
+
+|  Plugin Author: | Main.DanBoitnott |
+|  Plugin Version: | 30 Mar 2004 |
+|  Change History: | 30 Mar 2004: Added justification preference; &lt;editsections&gt; to automatically split on ---+; BGCOLOR can now be variables such as %<nop>WEBBGCOLOR%<br>09 Feb 2003: Added ability to exclude certain skins (like print) from sectioning; Added EDITBOXWIDTH, EDITBOXHEIGHT, EDITBOXSTYLE options to plugin configuration.<br> 07 Feb 2003: Wordwrap fixed in edit page<br> 06 Feb 2003: Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
