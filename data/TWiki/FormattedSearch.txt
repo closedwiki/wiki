@@ -45,7 +45,7 @@ Variables that can be used in the format string:
 | =$createusername= | Login name of topic revision 1.1, e.g. =jsmith= |
 | =$createwikiname= | Wiki user name of topic revision 1.1, e.g. =<nop>JohnSmith= |
 | =$createwikiusername= | Wiki user name of topic revision 1.1, e.g. =%MAINWEB%.<nop>JohnSmith= |
-| =$summary= | Topic summary |
+| =$summary(options)= | Topic summary, just the plain text, all formatting and line breaks discarded.  =options= may contain any of the following: a number (characters shown in the summary), =showvarnames= (shows variables as VARIABLE and VARIABLE{...}; otherwise removed), =noheader= (suppresses the headings at the beginning).  |
 | =$formname= | The name of the form attached to the topic; empty if none |
 | =$formfield(name)= | The field value of a form field; for example, =$formfield(<nop>TopicClassification)= would get expanded to =PublicFAQ=. This applies only to topics that have a [[TWikiForms][TWikiForm]] |
 | =$formfield(name, 10)= | Form field value, "<tt>- </tt>" hyphenated each 10 characters |
