@@ -52,7 +52,7 @@ sub main
     my( $mirrorSiteName, $mirrorViewURL ) = &TWiki::readOnlyMirrorWeb( $webName );
     if( $mirrorSiteName ) {
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsmirror", $mirrorSiteName, $mirrorViewURL );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
 
