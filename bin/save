@@ -98,7 +98,7 @@ sub main
     $text =~ s/%_A_%/&/go;
     $text =~ s/ {3}/\t/go;
 
-    my $error = &TWiki::Store::saveTopic( $topic, $text, $saveCmd, $dontNotify, $unlock );
+    my $error = &TWiki::Store::saveTopic( $topic, $text, $saveCmd, $unlock, $dontNotify );
     if( $error ) {
         # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );

@@ -164,7 +164,7 @@ sub getRevisionInfo
 # =========================
 sub saveTopic
 {
-    my( $topic, $text, $saveCmd, $dontNotify, $doUnlock ) = @_;
+    my( $topic, $text, $saveCmd, $doUnlock, $dontNotify, $dontLogSave ) = @_;
     my $name = "$TWiki::dataDir/$TWiki::webName/$topic.txt";
     my $time = time();
     my $tmp = "";
@@ -231,7 +231,7 @@ sub saveTopic
                 close(FILE);
             }
 
-            if( $TWiki::doLogTopicSave ) {
+            if( ( $TWiki::doLogTopicSave ) && ! ( $dontLogSave ) ) {
                 # write log entry
                 writeLog( "save", "$TWiki::webName.$topic", "" );
             }
@@ -292,7 +292,7 @@ sub saveTopic
             return $rcsError;
         }
 
-        if( $TWiki::doLogTopicSave ) {
+        if( ( $TWiki::doLogTopicSave ) && ! ( $dontLogSave ) ) {
             # write log entry
             $tmp  = &TWiki::userToWikiName( $user );
             writeLog( "save", "$TWiki::webName.$topic", "repRev $rev $tmp $date" );

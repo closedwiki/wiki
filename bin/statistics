@@ -229,7 +229,7 @@ sub processWeb
         }
         $text = join( "\n", @lines );
         $text .= "\n";
-        &TWiki::Store::saveTopic( $statsFile, $text, "", 1 );
+        &TWiki::Store::saveTopic( $statsFile, $text, "", 1, 1, 1 );
         printMsg( "  - Topic $statsFile updated" );
 
     } else {

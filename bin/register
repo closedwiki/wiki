@@ -20,6 +20,7 @@ use CGI;
 use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
+use TWiki::Net;
 
 $query = new CGI;
 
@@ -162,7 +163,7 @@ sub main
         }
         $text = "$before$after";
         $text =~ s/ {3}/\t/go;
-        &TWiki::Store::saveTopic( $wikiName, $text, "" );
+        &TWiki::Store::saveTopic( $wikiName, $text, "", 1 );
     }
 
     # add user to TWikiUsers topic
@@ -265,6 +266,6 @@ sub addUserToTWikiUsersTopic
 
         $result .= "$line\n";
     }
-    &TWiki::Store::saveTopic( $topicName, $result, "" );
+    &TWiki::Store::saveTopic( $topicName, $result, "", 1 );
     return $topicName;
 }
