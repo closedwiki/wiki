@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1059255946" format="1.0" version="1.22"}%
+%META:TOPICINFO{author="PeterThoeny" date="1079505783" format="1.0" version="1.23"}%
 ---++ Welcome, %WIKIUSERNAME%!
 
 Welcome to %WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_), a meeting place to work on common interests. Anyone can contribute using any web browser. %WIKITOOLNAME% looks like a normal Web site... except that it encourages contribution and *editing* of pages, questions, answers, comments and updates.
@@ -24,7 +24,7 @@ __Mission: &quot;TWiki is a leading-edge, web-based collaboration platform targe
 			* To create a link to an existing topic type its ==JoinCapitalizedWords== name.  WikiWords (two or more capitalized words run together) link automatically.
 			* To create a link to a new topic, enter a newly ==UsedPhrase==. 
 			* When previewing, the links show and "<u>?</u>" (question marks) are used to create topics.
-			* Another way to create a topic is to type it's WikiWord in the Go box or URL.
+			* Another way to create a topic is to type its WikiWord in the Go box or URL.
 		2. *Topic history* click ==Diffs== at the bottom of a topic
 		3. *Attach files* click ==Attach== to upload and attach any type of file.
 	1. *Organize:* You can learn to use TWikiForms and [[FormattedSearch]]es to include topic information - for example, classify pages by subject, status, or date.
