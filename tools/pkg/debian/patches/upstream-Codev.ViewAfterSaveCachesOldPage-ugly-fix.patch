@@ -10,7 +10,7 @@ diff -urw lib/TWiki.pm lib/TWiki.pm
 +    
      if ($pageType eq 'edit') {
  	# Get time now in HTTP header format
- 	my $lastModifiedString = formatGmTime(time, 'http');
+ 	my $lastModifiedString = formatTime(time, 'http', 'gmtime');
 @@ -537,8 +540,6 @@
  	# browser Back button always works.  The next Edit on this page 
  	# will use another URL and therefore won't use any cached 
@@ -29,8 +29,8 @@ diff -urw lib/TWiki.pm lib/TWiki.pm
 +	# See http://twiki.org/cgi-bin/view/Codev/ViewAfterSaveCachesOldPage
 +	# for discussion of this bug.
 +
-+	my $expiresString = formatGmTime(time - 2 * $expireSeconds, 'http');
-+	my $lastModifiedString = formatGmTime(time - $expireSeconds, 'http');
++	my $expiresString = formatTime(time - 2 * $expireSeconds, 'http', 'gmtime');
++	my $lastModifiedString = formatTime(time - $expireSeconds, 'http', 'gmtime');
 +
  	$coreHeaders = $query->header(
  	    		    -content_type => $contentType,
