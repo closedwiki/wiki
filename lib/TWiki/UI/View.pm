@@ -136,7 +136,7 @@ sub view {
   if( $viewRaw ) {
     $extra .= " raw=$viewRaw";
     if( $viewRaw !~ /debug/i ) {
-      $text =~ s/%META[\:A-Z]*{[^\}]*}%[\n\r]*//gos;
+      $text = join( "\n", grep{ !/^%META:([^{]+){(.*)}%$/ } split( /\r?\n/, $text ) );
     }
     if( $skin !~ /^text/ ) {
       my $vtext = "<form><textarea readonly=\"readonly\" wrap=\"virtual\" rows=\"%EDITBOXHEIGHT%\" cols=\"%EDITBOXWIDTH%\">";
