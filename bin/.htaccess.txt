@@ -1,15 +1,22 @@
-# The first path here must be a URL path, not a file pathname 
-Redirect /urlpath/to/twiki/index.html http://your.domain.com/urlpath/to/TWiki/bin/view
+# bin/.htaccess.txt
+#
+# Controls access to TWiki scripts - rename this to '.htaccess' to make
+# Apache use it.
 
-# The path here must be a file pathname, not a URL - first part should match 
-# the $dataDir setting in TWiki.cfg
+# Use CGI & Perl to handle all files in 'bin' directory, i.e. run as scripts
+# - this should remove the need to rename files to end in '.pl' etc,
+# if your web hosting provider permits this.  Remove if using mod_perl.
+SetHandler cgi-script
+
+# Password file for TWiki users
+#
+# The path here must be a system file pathname, not a URL - first part should 
+# match the $dataDir setting in TWiki.cfg
 AuthUserFile /filepath/to/TWiki/data/.htpasswd
 AuthName ByPassword
 AuthType Basic
 
-# No changes necessary to this line unless you are using mod_perl
-SetHandler cgi-script
-
+# File to return on access control error (e.g. wrong password)
 # The path here must be a URL path, not a file pathname - first part should 
 # match the $scriptUrlPath in TWiki.cfg
 ErrorDocument 401 /urlpath/to/twiki/bin/oops/TWiki/TWikiRegistration?template=oopsauth
