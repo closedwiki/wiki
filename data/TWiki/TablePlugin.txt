@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1023260211" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="PeterThoeny" date="1039479060" format="1.0" version="1.14"}%
 ---+ Table Plugin
 
 Gives extra control of table display:
@@ -38,11 +38,17 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 	* Table data cell alignment. Set to: =left=, =center=, =right= or =justify=; default: (empty)
 		* Set DATAALIGN = 
 
-	* Color for header cells ('*'s around text).  Default: <span style="background : #99CCCC;">#99CCCC</span>
-		* #Set HEADER_BG = red
+	* Background color of header cells ('*'s around text). Choose one of the %TWIKIWEB%.StandardColors. Default: <span style="background : #99CCCC;">#99CCCC</span>
+		* Set HEADER_BG = 
 
-	* Background color for table rows, two alternate colors.  Default: <span style="background : #FFFFCC;">#FFFFCC</span>,<span style="background : #FFFFFF;">#FFFFFF</span>
-		* Set DATA_BG = #FFFFCC,#FFFFFF
+	* Text color of header cells ('*'s around text).  Default: not specified, e.g. determined by the browser
+		* Set HEADER_COLOR = 
+
+	* Background color of table rows, two alternate colors.  Default: <span style="background : #FFFFCC;">#FFFFCC</span>, <span style="background : #FFFFFF;">#FFFFFF</span>
+		* Set DATA_BG = #FFFFCC, #FFFFFF
+
+	* Text color of table rows, alternate colors.  Default: not specified, e.g. determined by the browser
+		* Set DATA_COLOR = 
 
 	* Make sortable:
 		* #Set SORT = attachments
@@ -68,8 +74,10 @@ On line before the table use =%<nop>TABLE{...}%=:
 | =sort=	  | Set table sorting =on= or =off= | =sort="on"= |
 | =initsort= | Column to sort initially (1 to number of columns) | =initsort="2"= |
 | =initdirection= | Initial sorting direction for =initsort=, set to  =up= or =down= | =initsort="down"= |
-| =headerbg= | Header cell background colour | =headerbg="#99CCCC"= |
-| =databg=	| Data cell background colour, a comma separated list. Specify ="none"= for no colour, that is to use the colour/background of the page the table is on. | =databg="#C8CB8F,#DBDDB5"= |
+| =headerbg= | Header cell background colour. Choose one of the %TWIKIWEB%.StandardColors | =headerbg="#99CCCC"= |
+| =headercolor= | Header cell text colour | =headercolor="#0000CC"= |
+| =databg=	| Data cell background colour, a comma separated list. Specify ="none"= for no colour, that is to use the colour/background of the page the table is on. | =databg="#C8CB8F, #DBDDB5"= |
+| =datacolor= | Data cell text colour, a comma separated list | =datacolor="#0000CC, #000000"= |
 | =tableborder= | Table border width (pixels) | =tableborder="2"= |
 | =cellpadding= | Cell padding (pixels) | =cellpadding="0"= |
 | =cellspacing= | Cell spacing (pixels) | =cellspacing="3"= |
@@ -79,11 +87,11 @@ On line before the table use =%<nop>TABLE{...}%=:
 
 All default to the global setting
 
----++ Examples
+---++ Example
 
-Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%=
+Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#000099" headercolor="#FFFFCC" databg="#C8CB8F, #DBDDB5" }%=
 
-%TABLE{sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%
+%TABLE{ sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#000099" headercolor="#FFFFCC" databg="#C8CB8F, #DBDDB5" }%
 | *Num* | *Status* | *Action* | *Who* | *When* | *Progress* |
 | 1 | C | Chose new colours | John | 1-Dec-02 | |
 | 2 | X | Release | John | 1-Apr-02 | |
@@ -111,8 +119,9 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="1" cellsp
 ---++ Plugin Info
 
 |  Plugin Author: | %TWIKIWEB%.JohnTalintyre, %TWIKIWEB%.PeterThoeny |
-|  Plugin Version: | 13 Mar 2002 |
+|  Plugin Version: | 09 Dec 2002 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  09 Dec 2002: | PTh: Added headercolor and datacolor parameters |
 |  05 Jun 2002: | PTh: Added "none" value to databg parameter (suggested by TWiki:Main/TaitCyrus); fixed sorting by stripping HTML tags, removing links and making sort ignore case (suggested by TWiki:Main/ShawnBradford) |
 |  13 Mar 2002: | PTh: Added TWiki:Main/ShawnBradford 's initsort and initdirection |
 |  12 Mar 2002: | PTh: Added valign, headeralign and dataalign; fixed bug of swapped cellpadding/cellspacing; fixed warning of uninitialized value |
@@ -127,10 +136,10 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="1" cellsp
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.StandardColors
 
 -- %TWIKIWEB%.JohnTalintyre - 07 Oct 2001 <br />
--- %TWIKIWEB%.PeterThoeny - 05 Jun 2002 <br />
+-- %TWIKIWEB%.PeterThoeny - 09 Dec 2002 <br />
 %META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1005707580" path="C:\Data\Temp\up.gif" size="876" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1005707591" path="C:\Data\Temp\down.gif" size="869" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1005707607" path="C:\Data\Temp\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
