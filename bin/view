@@ -157,14 +157,15 @@ sub main
     }
 
     if( $viewRaw ) {
+        $extra .= " raw=$viewRaw";
         if( $skin !~ /^text/ ) {
             my $vtext = "<form><textarea readonly=\"readonly\" wrap=\"virtual\" rows=\"%EDITBOXHEIGHT%\" cols=\"%EDITBOXWIDTH%\">";
-	    $vtext = &TWiki::handleCommonTags( $vtext, $topic );
-	    $text =~ s/&/&amp\;/go;
-	    $text =~ s/</&lt\;/go;
-	    $text =~ s/>/&gt\;/go;
-	    $text =~ s/\t/   /go;
-	    $text = "$vtext$text</textarea></form>";
+            $vtext = &TWiki::handleCommonTags( $vtext, $topic );
+            $text =~ s/&/&amp\;/go;
+            $text =~ s/</&lt\;/go;
+            $text =~ s/>/&gt\;/go;
+            $text =~ s/\t/   /go;
+            $text = "$vtext$text</textarea></form>";
         }
         if( $viewRaw !~ /debug/i ) {
             $text =~ s/%META[\:A-Z]*{[^\}]*}%[\n\r]*//gos;
@@ -182,7 +183,6 @@ sub main
 
     if( $TWiki::doLogTopicView ) {
         # write log entry
-        &TWiki::Store::writeLog( "view", "$webName.$topic", $extra );
     }
 
     my( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote ) = &TWiki::readOnlyMirrorWeb( $webName );
