@@ -31,7 +31,7 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName, $scriptUrlPath ) = 
-        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
         my $tmpl= &TWiki::Store::readTemplate( "noweb" );

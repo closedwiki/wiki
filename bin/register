@@ -75,7 +75,7 @@ sub main
     my $thePathInfo = $query->path_info(); 
     my $theUrl = $query->url;
     ( $topic, $webName ) = 
-	&TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl );
+	&TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl, $query );
 
     my $text = "";
     my $url = "";
