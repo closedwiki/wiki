@@ -873,7 +873,7 @@ sub _noHandlersSave {
         }
     }
 
-    $meta->addTOPICINFO( $web, $topic, $nextRev, {} );
+    $meta->addTOPICINFO( $web, $topic, $nextRev );
     $text = _writeMeta( $meta, $text );
 
     # RCS requires a newline for the last line,
@@ -911,13 +911,16 @@ sub _noHandlersSave {
 =pod
 
 ---++ ObjectMethod repRev( $user, $web, $topic, $text, $meta, $options ) -> $error
+Replace last (top) revision with different text.
 
-Parameters and return value as saveTopic.
+Parameters and return value as saveTopic, except
+   * =$options= - as for saveTopic, with the extra option:
+      * =timetravel= - if we want to force the deposited revision to look as much like the revision specified in =$rev= as possible.
 
-Provided as a means for administrators to rewrite history.
+Used to try to avoid the deposition of "unecessary" revisions, for example
+where a user quickly goes back and fixes a spelling error.
 
-Replace last revision, but do not update .changes.
-Save topic with same user and date.
+Also provided as a means for administrators to rewrite history (timetravel).
 
 It is up to the store implementation if this is different
 to a normal save or not.
@@ -929,26 +932,32 @@ sub repRev {
 
     $this->lockTopic( $user, $web, $topic );
 
-    # FIXME why should date be the same if same user replacing with
-    # editLockTime?
-    my $topicHandler = $this->_getTopicHandler( $web, $topic );
-    my( $date, $revuser, $rev ) =
-      $this->getRevisionInfo( $web, $topic, "", undef, $topicHandler );
+    my( $revdate, $revuser, $rev ) =
+      $meta->getRevisionInfo( $web, $topic, "", undef );
 
     # RCS requires a newline for the last line,
     $text =~ s/([^\n\r])$/$1\n/os;
 
-    # Add one minute (make small difference, but not too big for notification)
-    # TODO: this seems wrong. if editLockTime == 3600, and i edit, 30 mins
-    # later... why would the recorded date be 29 mins too early?
-    my $epochSec = $date + 60;
-    $meta->addTOPICINFO( $web, $topic, $rev,
-                         { forcedate => $epochSec, forceuser => $user } );
+    if( $options->{timetravel} ) {
+        # We are trying to force the rev to be saved with the same date
+        # and user as the prior rev. However, exactly the same date may
+        # cause some revision control systems to barf, so to avoid this we
+        # add 1 minute to the rev time. Note that this mode of operation
+        # will normally require sysadmin privilege, as it can result in
+        # confused rev dates if abused.
+        $revdate += 60;
+    } else {
+        # use defaults (current time, current user)
+        $revdate = time();
+        $revuser = $user;
+    }
+    $meta->addTOPICINFO( $web, $topic, $rev, $revdate, $revuser );
     $text = _writeMeta( $meta, $text );
 
+    my $topicHandler = $this->_getTopicHandler( $web, $topic );
     my $error =
       $topicHandler->replaceRevision( $text, $options->{comment},
-                                      $user->wikiName(), $epochSec );
+                                      $revuser->wikiName(), $revdate );
     return $error if( $error );
 
     $this->unlockTopic( $user, $web, $topic );
@@ -957,7 +966,7 @@ sub repRev {
         # write log entry
         my $extra = "repRev by ".$user->login().": $rev " .
           $revuser->login().
-            " ". TWiki::Time::formatTime( $epochSec, "rcs", "gmtime" );
+            " ". TWiki::Time::formatTime( $revdate, "rcs", "gmtime" );
         $extra   .= " minor" if( $options->{minor} );
         $this->{session}->writeLog( "save", "$web.$topic", $extra );
     }

@@ -328,7 +328,8 @@ sub extractNameValuePair
     $theName ||= "_DEFAULT";
 
     my $attrs = new TWiki::Attrs( $theAttr );
-    return $attrs->{$theName};
+    my $val = $attrs->{$theName} || "";
+    return $val;
 }
 
 # =========================

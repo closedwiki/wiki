@@ -170,7 +170,6 @@ sub upgradeConfig {
     print CFG old2new($debugFilename, "$logDir/debug.txt", "{DebugFileName}" );
     print CFG old2new($warningFilename, "$logDir/warning.txt", "{WarningFileName}" );
     print CFG old2new($htpasswdFormatFamily, "htpasswd", "{HtpasswdFormatFamily}" );
-    print CFG old2new($authRealm, "Enter your WikiName. (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.", "{AuthRealm}" );
     print CFG old2new($logFilename, "$logDir/log%DATE%.txt", "{LogFileName}" );
     print CFG old2new($remoteUserFilename, "$dataDir/remoteusers.txt", "{RemoteUserFileName}" );
     print CFG old2new($wikiUsersTopicname, "TWikiUsers", "{UsersTopicName}" );
@@ -252,6 +251,7 @@ my @ActiveSubstitutions = ();
 # "/tmp/blah/debug.txt" then this will be mapped to "$cfg{dataDir}/debug.txt"
 # Note that the substitutions are done in order, so longer substitutions
 # defined later in the config will override shorter ones defined earlier.
+# NOTE THAT THE DEFAULT IS THE CAIRO DEFAULT, NOT THE DAKAR DEFAULT
 sub old2new {
     my( $val, $default, $new, $subs) = @_;
     return "" unless defined $val;

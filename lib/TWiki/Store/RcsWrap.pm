@@ -332,7 +332,6 @@ sub _ci {
     my( $self, $comment, $user ) = @_;
 
     $comment = "none" unless( $comment );
-
     my ($rcsOutput, $exit) = $self->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{ciCmd},
         USERNAME => $user,

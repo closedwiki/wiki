@@ -129,7 +129,9 @@ sub _save {
     if( $saveCmd eq "repRev" ) {
         $newText =~ s/%__(.)__%/%_$1_%/go;
         $newMeta = $session->{store}->extractMetaData( $webName, $topic, \$newText );
-        # replace top revision with this text
+        # replace top revision with this text, trying to make it look as
+        # much like the original as possible
+        $saveOpts->{timetravel} = 1;
         my $error =
           $session->{store}->repRev( $user, $webName, $topic,
                                      $newText, $newMeta, $saveOpts );
@@ -173,6 +175,8 @@ sub _save {
         if ( $rev ne $originalrev && !$author->equals( $user )) {
             $newText = TWiki::Merge::merge( $currText, $newText, "\\r?\\n" );
             $newMeta->merge( $currMeta );
+            $newText .= "\n\nMERGED " . $author->stringify() .
+              " and " . $user->stringify() . " original $originalrev current $rev\n";
         }
     }
 

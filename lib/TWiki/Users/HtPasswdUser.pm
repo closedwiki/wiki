@@ -105,8 +105,8 @@ sub htpasswdGeneratePasswd
 		}
 
     } elsif ( 'md5' eq $TWiki::cfg{HtpasswdEncoding} ) {
-#what does this do if we are using a htpasswd file?
-		my $toEncode= "$user:$TWiki::authRealm:$passwd";
+        # SMELL: what does this do if we are using a htpasswd file?
+		my $toEncode= "$user:$TWiki::cfg{AuthRealm}:$passwd";
 		$encodedPassword = Digest::MD5::md5_hex( $toEncode );
 
     } elsif ( 'plain' eq $TWiki::cfg{HtpasswdEncoding} ) {
