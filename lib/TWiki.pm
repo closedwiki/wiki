@@ -1541,7 +1541,7 @@ sub emitTR {
         if ( s/$TranslationToken([0-9]+)// ) { # No o flag for mod-perl compatibility
             $attr = " colspan=\"$1\"" ;
 	}
-        s/^\s$/ &nbsp; /o;
+        s/^\s+$/ &nbsp; /o;
         /^(\s*).*?(\s*)$/;
         $l1 = length( $1 || "" );
         $l2 = length( $2 || "" );
