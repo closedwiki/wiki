@@ -98,13 +98,16 @@ sub main
     my $attrTemplate  = $query->param( "template" ) || "";  # undocumented
     my $attrHeader    = $query->param( "header" ) || "";
     my $attrFormat    = $query->param( "format" ) || "";
+    my $attrMultiple  = $query->param( "multiple" ) || "";
+    my $attrSeparator = $query->param( "separator" ) || "";
 
     &TWiki::writeHeader( $query );
     &TWiki::Search::searchWeb( "0",
         $websStr, $search, $scope, $order, $regex,
         $limit, $revSort, $caseSensitive, $nosummary,
         $nosearch, $noheader, $nototal, $bookView, $renameView,
-        $showlock, $noempty, $attrTemplate, $attrHeader, $attrFormat
+        $showlock, $noempty, $attrTemplate, $attrHeader, $attrFormat,
+        $attrMultiple, $attrSeparator
     );
 }
 

@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "14 Sep 2003";
+$wikiversion      = "28 Sep 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1627,12 +1627,15 @@ sub handleSearchWeb
     my $attrTemplate      = extractNameValuePair( $attributes, "template" ); # undocumented
     my $attrHeader        = extractNameValuePair( $attributes, "header" );
     my $attrFormat        = extractNameValuePair( $attributes, "format" );
+    my $attrMultiple      = extractNameValuePair( $attributes, "multiple" );
+    my $attrSeparator     = extractNameValuePair( $attributes, "separator" );
 
     return &TWiki::Search::searchWeb( "1", $attrWeb, $searchVal, $attrScope,
        $attrOrder, $attrRegex, $attrLimit, $attrReverse,
        $attrCasesensitive, $attrNosummary, $attrNosearch,
        $attrNoheader, $attrNototal, $attrBookview, $attrRenameview,
-       $attrShowlock, $attrNoEmpty, $attrTemplate, $attrHeader, $attrFormat
+       $attrShowlock, $attrNoEmpty, $attrTemplate, $attrHeader, $attrFormat,
+       $attrMultiple, $attrSeparator
     );
 }
 

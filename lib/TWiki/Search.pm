@@ -61,7 +61,7 @@ sub searchWeb
          $theRegex, $theLimit, $revSort, $caseSensitive, $noSummary,
          $noSearch, $noHeader, $noTotal, $doBookView, $doRenameView,
          $doShowLock, $noEmpty, $theTemplate, $theHeader, $theFormat,
-         @junk ) = @_;
+         $doMultiple, $theSeparator, @junk ) = @_;
 
     ##TWiki::writeDebug "Search locale is $TWiki::siteLocale";
 
@@ -82,6 +82,11 @@ sub searchWeb
     }
     if (! $theLimit ) {            # PTh 03 Nov 2000:
         $theLimit = 32000;         # Big number, needed for performance improvements
+    }
+
+    if( $theSeparator ) {
+        $theSeparator =~ s/\$n/\n/gos;
+        $theSeparator =~ s/\$n\(\)/\n/gos;  # expand "$n()" to new line
     }
 
     my $searchResult = ""; 
@@ -247,6 +252,7 @@ sub searchWeb
     $cmd =~ s/%GREP%/$tempVal/go;
 
     # write log entry
+    # FIXME: Move log entry further down to log actual webs searched
     if( ( $TWiki::doLogTopicSearch ) && ( ! $doInline ) ) {
         # 0501 kk : vvv Moved from search
         # PTh 17 May 2000: reverted to old behaviour,
@@ -295,7 +301,7 @@ sub searchWeb
                 $acmd =~ s/%TOKEN%/$token/o;
                 $acmd =~ s/%FILES%/@topicList/;
                 $acmd =~ /(.*)/;
-                $acmd = "$1";       # untaint variable (NOTE: Needs a better check!)
+                $acmd = "$1";       # untaint variable (FIXME: Needs a better check!)
                 $tempVal = `$acmd`;
                 _traceExec( $acmd, $tempVal );
                 @topicList = split( /\n/, $tempVal );
@@ -465,11 +471,16 @@ sub searchWeb
 	    $theHeader =~ s/\$n([^$mixedAlpha])/\n$1/gos; # expand "$n" to new line
             $beforeText = $theHeader;
             $beforeText =~ s/\$web/$thisWebName/gos;
-            $beforeText =~ s/([^\n])$/$1\n/os;
+            if( $theSeparator ) {
+                $beforeText .= $theSeparator;
+            } else {
+                $beforeText =~ s/([^\n])$/$1\n/os;  # add new line at end of needed
+            }
         }
 
         # output the list of topics in $thisWebName
         my $ntopics = 0;
+        my $headerDone = 0;
         my $topic = "";
         my $head = "";
         my $revDate = "";
@@ -478,49 +489,63 @@ sub searchWeb
         my $allowView = "";
         my $locked = "";
         foreach( @topicList ) {
-            $topic = $_;
-            
-            my $meta = "";
-            my $text = "";
-            my $forceRendering = 0;
-            
-            # make sure we have date and author
-            if( exists( $topicRevUser{$topic} ) ) {
-                $revDate = $topicRevDate{$topic};
-                $revUser = $topicRevUser{$topic};
-                $revNum  = $topicRevNum{$topic};
-                $allowView = $topicAllowView{$topic};
-            } else {
-                # lazy query, need to do it at last
-                # Permission check done below, so force this read to succeed with "internal" parameter
-                ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic, "internal" );
-                $text =~ s/%WEB%/$thisWebName/gos;
-                $text =~ s/%TOPIC%/$topic/gos;
-                $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $topic, $thisWebName );
-                ( $revDate, $revUser, $revNum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta, 1 );
-                $revUser = &TWiki::userToWikiName( $revUser );
-            }
+          $topic = $_;
 
-            $locked = "";
-            if( $doShowLock ) {
-                ( $tempVal ) = &TWiki::Store::topicIsLockedBy( $thisWebName, $topic );
-                if( $tempVal ) {
-                    $revUser = &TWiki::userToWikiName( $tempVal );
-                    $locked = "(LOCKED)";
-                }
-            }
-            
-            # Check security
-	    # FIXME - how do we deal with user login not being available if
-	    # coming from search script?
-            # Need to re-direct to a searchauth script
-	    if( ! $allowView ) {
-                next;
-            }
+          my $meta = "";
+          my $text = "";
+          my $forceRendering = 0;
+
+          # make sure we have date and author
+          if( exists( $topicRevUser{$topic} ) ) {
+              $revDate = $topicRevDate{$topic};
+              $revUser = $topicRevUser{$topic};
+              $revNum  = $topicRevNum{$topic};
+              $allowView = $topicAllowView{$topic};
+          } else {
+              # lazy query, need to do it at last
+              ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
+              $text =~ s/%WEB%/$thisWebName/gos;
+              $text =~ s/%TOPIC%/$topic/gos;
+              $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $topic, $thisWebName );
+              ( $revDate, $revUser, $revNum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta, 1 );
+              $revUser = &TWiki::userToWikiName( $revUser );
+          }
+
+          $locked = "";
+          if( $doShowLock ) {
+              ( $tempVal ) = &TWiki::Store::topicIsLockedBy( $thisWebName, $topic );
+              if( $tempVal ) {
+                  $revUser = &TWiki::userToWikiName( $tempVal );
+                  $locked = "(LOCKED)";
+              }
+          }
+
+          # Check security
+          # FIXME - how do we deal with user login not being available if
+          # coming from search script?
+          if( ! $allowView ) {
+              next;
+          }
+
+          my @multipleHitLines = ();
+          if( $doMultiple ) {
+              my $pattern = $tokens[$#tokens]; # last token in an AND search
+              $pattern = quotemeta( $pattern ) unless( $theRegex );
+              ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic ) unless $text;
+              @multipleHitLines = reverse grep { /$pattern/ } split( /[\n\r]+/, $text );
+          }
+
+          do {    # multiple=on loop
+
+            $text = pop( @multipleHitLines ) if( scalar( @multipleHitLines ) );
 
             if( $theFormat ) {
                 $tempVal = $theFormat;
-                $tempVal =~ s/([^\n])$/$1\n/gos;       # cut last trailing new line
+                if( $theSeparator ) {
+                    $tempVal .= $theSeparator;
+                } else {
+                    $tempVal =~ s/([^\n])$/$1\n/os;       # add new line at end of needed
+                }
                 $tempVal =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
 		# I18N fix
 		my $mixedAlpha = $TWiki::mixedAlpha;
@@ -670,7 +695,8 @@ sub searchWeb
             }
 
             # lazy output of header (only if needed for the first time)
-            unless( $ntopics || $noHeader ) {
+            unless( $headerDone || $noHeader ) {
+                $headerDone = 1;
                 $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
                 $beforeText =~ s/%WEB%/$thisWebName/go;
                 $beforeText = &TWiki::handleCommonTags( $beforeText, $topic );
@@ -684,7 +710,7 @@ sub searchWeb
                 }
             }
 
-            # output topic
+            # output topic (or line if multiple=on)
             if( $doInline || $theFormat ) {
                 # print at the end if formatted search because of table rendering
                 $searchResult .= $tempVal;
@@ -694,8 +720,10 @@ sub searchWeb
                 print $tempVal;
             }
 
-            $ntopics += 1;
-            last if( $ntopics >= $theLimit );
+          } while( @multipleHitLines ); # multiple=on loop
+
+          $ntopics += 1;
+          last if( $ntopics >= $theLimit );
         } # end topic loop in a web
 
         # output footer only if hits in web
@@ -704,7 +732,7 @@ sub searchWeb
             $afterText  = &TWiki::handleCommonTags( $afterText, $topic );
             if( $doInline || $theFormat ) {
                 # print at the end if formatted search because of table rendering
-                $afterText =~ s/\n$//gos;  # remove trailing new line
+                $afterText =~ s/\n$//os;  # remove trailing new line
                 $searchResult .= $afterText;
             } else {
                 $afterText = &TWiki::getRenderedVersion( $afterText, $thisWebName );
@@ -731,7 +759,11 @@ sub searchWeb
     }
 
     if( $theFormat ) {
-        $searchResult =~ s/\n$//gos;  # remove trailing new line
+        if( $theSeparator ) {
+            $searchResult =~ s/$theSeparator$//s;  # remove separator at end
+        } else {
+            $searchResult =~ s/\n$//os;            # remove trailing new line
+        }
     }
     if( $doInline ) {
         # return formatted search result
