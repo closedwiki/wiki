@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1091946708" format="1.0" version="1.69"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092608916" format="1.0" version="1.70"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), __topic level__ (the topic being rendered), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -19,7 +19,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 	* Copyright notice:
 		* Set WEBCOPYRIGHT = Copyright &copy; 1999-%GMTIME{"$year"}% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%WEB%.%TOPIC%">Send feedback</a>
 
-	* Simplified Copyright notice for the WebRss feed (don't use any special characters or xml tags
+	* Simplified Copyright notice for the WebRss feed (don't use any special characters, xml tags or WikiWords)
 		* Set WEBRSSCOPYRIGHT = Copyright %GMTIME{"$year"}% by contributing authors
 
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences)

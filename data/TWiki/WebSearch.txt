@@ -1,17 +1,17 @@
-%META:TOPICINFO{author="PeterThoeny" date="1074422280" format="1.0" version="1.14"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092609067" format="1.0" version="1.15"}%
 %META:TOPICPARENT{name="WebHome"}%
 <noautolink>
 <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%/%INCLUDINGTOPIC%"}%">
 <table border="0" cellspacing="3" cellpadding="0"><tr><td>
-  <input type="text" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="32" /><input type="submit" value="Search" />%BR%
-  <input type="checkbox" name="web" %CALC{$IF($EXACT(%URLPARAM{web}%,),,checked="checked")}% /> All public webs
+  <input type="text" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="32" /><input type="submit" class="twikiSubmit" value="Search" />%BR%
+  <input type="checkbox" class="twikiCheckbox" id="web" name="web" %CALC{$IF($EXACT(%URLPARAM{web}%,),,checked="checked")}% /><label for="web">All public webs</label>
 </td><td>
 	* [[SearchHelp][Help]]
 	* [[%INCLUDINGWEB%.WebSearchAdvanced][Advanced search]]
 </td></tr><tr><td>
-  <input type="radio" name="scope" value="text" %CALC{$IF($EXACT(%URLPARAM{"scope" default="text"}%,text),checked="checked")}% /> Text body &nbsp;
-  <input type="radio" name="scope" value="topic" %CALC{$IF($EXACT(%URLPARAM{scope}%,topic),checked="checked")}% /> Topic title &nbsp;
-  <input type="radio" name="scope" value="all" %CALC{$IF($EXACT(%URLPARAM{scope}%,all),checked="checked")}% /> Both
+  <input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %CALC{$IF($EXACT(%URLPARAM{"scope" default="text"}%,text),checked="checked")}% /><label for="textbody">Text body &nbsp;</label>
+  <input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %CALC{$IF($EXACT(%URLPARAM{scope}%,topic),checked="checked")}% /><label for="topictitle">Topic title &nbsp;</label>
+  <input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %CALC{$IF($EXACT(%URLPARAM{scope}%,all),checked="checked")}% /><label for="both">Both </label>
 	</td></tr></table>
 </form>
 </noautolink>
@@ -30,3 +30,4 @@
 		* Make changes to topics in %TWIKIWEB%.GoodStyle,
 		* Learn the %TWIKIWEB%.TextFormattingRules, and
 		* Have a look at the %TWIKIWEB%.TextFormattingFAQ
+

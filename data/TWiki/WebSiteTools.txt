@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079861453" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092609220" format="1.0" version="1.5"}%
 ---+ Web Site Tools
 %STARTINCLUDE%
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/SearchResult">
@@ -16,4 +16,5 @@
 	* The list above provides the TWikiSiteTools used to navigate, search and maintain a particular web. It is included within other topics using the following directive: <p />
 	  =%<nop>INCLUDE{"%<nop>TWIKIWEB%.WebSiteTools"}%=
 
-	* [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%WEB%?scope=text&amp;web=all&amp;search=%25INCLUDE%7B%22%25TWIKIWEB%25.WebSiteTools%22%7D%25&amp;casesensitive=on&amp;nosummary=on&amp;nototal=on][List]] all topics which include this <nop>WebSiteTools topic.
+	* [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%WEB%?scope=text&amp;web=all&amp;regex=on&amp;search=INCLUDE.*WebSiteTools&amp;casesensitive=on&amp;nosummary=on&amp;nototal=on][List]] all topics which include this <nop>WebSiteTools topic.
+
