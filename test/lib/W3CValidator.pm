@@ -33,6 +33,8 @@ sub new {
 
     $this->{ua} = LWP::UserAgent->new;
     $this->{ua}->agent("W3CValidator ");
+
+    return $this;
 }
 
 # PRIVATE check the results
