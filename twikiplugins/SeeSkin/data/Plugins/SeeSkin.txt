@@ -1,0 +1,22 @@
+%META:TOPICINFO{author="guest" date="1039504600" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="ZoneHome"}%
+%INCLUDE{"%ATTACHURL%/SeeSkin.txt"}%
+------------------------------------
+---+ Comments
+
+---++ Changes in CVS
+
+	* SeeSkin is now available in twikiplugins cvs (See [[Plugins.ReadmeFirst]])
+	* integrated the fixes suggested by Main.TomKagan (WIKIWEBLIST, %<nop>SEP% bug)
+	* adopted KoalaSkin method of INCLUDEing the main skin topic to keep comments from being clobbered by upgrades.
+	* changed Edit access key to "i"; the "d" used previously is a shortcut to the address bar in Mozilla and IE on windows.
+
+----
+
+
+
+%META:FILEATTACHMENT{name="ss-layout.css" attr="" comment="basic document layout" date="1037197642" path="C:\Docs\www\htdocs\twiki\pub\Plugins\SeeSkin\ss-layout.css" size="2722" user="YNET+mhwilkie" version="1.1"}%
+%META:FILEATTACHMENT{name="ss-colour.css" attr="" comment="Colour and font settings" date="1037197694" path="C:\Docs\www\htdocs\twiki\pub\Plugins\SeeSkin\ss-colour.css" size="2206" user="YNET+mhwilkie" version="1.1"}%
+%META:FILEATTACHMENT{name="show-struct.css" attr="" comment="show document structure (for debugging layouts)" date="1037197746" path="C:\Docs\www\htdocs\twiki\pub\Plugins\SeeSkin\show-struct.css" size="944" user="YNET+mhwilkie" version="1.1"}%
+%META:FILEATTACHMENT{name="print.css" attr="" comment="for printing (not the same as using %_Q_%Printable%_Q_%)" date="1037197818" path="C:\Docs\www\htdocs\twiki\pub\Plugins\SeeSkin\print.css" size="826" user="YNET+mhwilkie" version="1.1"}%
+%META:FILEATTACHMENT{name="SeeSkin.txt" attr="" comment="SeeSkin topic, as included in the distribution" date="1039504315" path="SeeSkin.txt" size="7911" user="guest" version="1.1"}%
