@@ -1,12 +1,18 @@
-Redirect /urlpath/to/TWiki/index.html http://your.domain.com/urlpath/to/TWiki/bin/view
+# The first path here must be a URL path, not a file pathname 
+Redirect /urlpath/to/twiki/index.html http://your.domain.com/urlpath/to/TWiki/bin/view
 
+# The path here must be a file pathname, not a URL - first part should match 
+# the $dataDir setting in TWiki.cfg
 AuthUserFile /filepath/to/TWiki/data/.htpasswd
 AuthName ByPassword
 AuthType Basic
 
+# No changes necessary to this line unless you are using mod_perl
 SetHandler cgi-script
 
-ErrorDocument 401 /urlpath/to/TWiki/bin/oops/TWiki/TWikiRegistration?template=oopsauth
+# The path here must be a URL path, not a file pathname - first part should 
+# match the $scriptUrlPath in TWiki.cfg
+ErrorDocument 401 /urlpath/to/twiki/bin/oops/TWiki/TWikiRegistration?template=oopsauth
 
 <Files ~ "[^/]*\.html$">
        SetHandler blabla
