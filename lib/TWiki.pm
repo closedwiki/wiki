@@ -1738,20 +1738,9 @@ sub _TOC {
     my $result  = "";
     my $line  = "";
     my $level = "";
-    my @list  = ();
-    if( "$web.$topicname" eq "$defaultWeb.$defaultTopic" ) {
-        # use text from parameter
-        @list = split( /\n/, $text );
-
-    } else {
-        # read text from file
-        if ( ! TWiki::Func::topicExists( $web, $topicname ) ) {
-            return _inlineError( "TOC: Cannot find topic \"$web.$topicname\"" );
-        }
-        my $t = TWiki::Func::readWebTopic( $web, $topicname );
-        $t =~ s/.*?%STARTINCLUDE%//s;
-        $t =~ s/%STOPINCLUDE%.*//s;
-        @list = split( /\n/, TWiki::Func::expandCommonVariables( $t, $topicname, $web ) );
+    if( "$web.$topicname" ne "$defaultWeb.$defaultTopic" ) {
+        my %p = ( _DEFAULT => "$web.$topicname" );
+        $text = _handleINCLUDE( \%p, $defaultWeb, $defaultTopic );
     }
 
     my $headerDaRE =  $regex{headerPatternDa};
@@ -1761,14 +1750,16 @@ sub _TOC {
     my $wikiwordRE =  $regex{wikiWordRegex};
     my $abbrevRE =    $regex{abbrevRegex};
     my $headerNoTOC = $regex{headerPatternNoTOC};
-    @list = grep { /(<\/?pre>)|($headerDaRE)|($headerSpRE)|($headerHtRE)/o } @list;
+    my @list =
+      grep { /(<\/?pre>)|($headerDaRE)|($headerSpRE)|($headerHtRE)/o }
+        split( /\n/, $text );
+
     my $insidePre = 0;
     my $i = 0;
     my $tabs = "";
     my $anchor = "";
     my $highest = 99;
-    # SMELL: this handling of <pre> is archaic. Surely this should be
-    # done using the outsidePreHandler?
+    # SMELL: this handling of <pre> is archaic.
     foreach $line ( @list ) {
         if( $line =~ /^.*<pre>.*$/io ) {
             $insidePre = 1;
@@ -1836,7 +1827,7 @@ sub _TOC {
         return $result;
 
     } else {
-        return _inlineError("TOC: No TOC in \"$web.$topicname\"");
+        return _inlineError("TOC: No TOC in $web.$topicname");
     }
 }
 
