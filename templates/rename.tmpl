@@ -1,7 +1,7 @@
 %TMPL:INCLUDE{"renamebase"}%
 %TMPL:DEF{"titleaction"}%(rename)%TMPL:END%
 %TMPL:DEF{"webaction"}% *Rename and choose parameters* %TMPL:END%
-%TMPL:DEF{"newtopic"}%<input name="newtopic" value="%TOPIC%" />%TMPL:END%
+%TMPL:DEF{"newtopic"}%<input name="newtopic" value="%TOPIC%" size="36" />%TMPL:END%
 %TMPL:DEF{"newweb"}%<select name="newweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}%</select>%TMPL:END%
 %TMPL:DEF{"notes"}%Please choose a
 <a target="WikiWord" onClick="return launchWindow('%TWIKIWEB%','WikiWord')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/WikiWord">WikiWord</a>
