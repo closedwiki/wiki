@@ -132,7 +132,7 @@ sub getRevisionInfo
     if( ! $user ) {
         # repository file is missing or corrupt, use file timestamp
         $user = $defaultUserName;
-        $date = (stat "$fileName")[9];
+        $date = (stat "$fileName")[9] || 600000000;
         my @arr = gmtime( $date );
         # format to RCS date "2000.12.31.23.59.59"
         $date = sprintf( "%.4u.%.2u.%.2u.%.2u.%.2u.%.2u", $arr[5] + 1900,
