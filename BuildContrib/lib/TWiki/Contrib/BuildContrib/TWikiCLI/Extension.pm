@@ -85,7 +85,7 @@ sub cli_download {
 
  my $localFile = getFilenameForDistributionDownload($extension); 	
  my $localCopy =
-   TWiki::Contrib::DistributionContrib::DistributionFetcher::fetchLatestDistributionVersion ($extension, $distribution.'.zip', $localFile);
+   TWiki::Contrib::DistributionContrib::DistributionFetcher::fetchLatestDistributionVersion ($extension, $extension.'.zip', $localFile);
  if ( $localCopy eq "" ) {
   return "Couldn't get it";
  }
