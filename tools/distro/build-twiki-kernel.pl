@@ -144,9 +144,11 @@ chdir $pwdStart;
 # create TWikiKernel distribution file
 chomp( my $now = `date +'%Y%m%d.%H%M%S'` );
 chomp( my $branch = `head -n 1 branch` || 'MAIN' );
-my $newDistro = "$outputDirectory/TWikiKernel-$branch-$now";
+my $newFile = "TWikiKernel-$branch-$now";
+my $newDistro = "$outputDirectory/$newFile";
 execute( "cd $tempDir ; tar czf $newDistro.tar.gz twiki" );	# .tar.gz goes *here* because *z* is here
 print "${newDistro}.tar.gz\n";			# print name of generated file; other tools later in the chain use it
+print "<a href=\"${newFile}.tar.gz\">${newFile}.tar.gz</a>";
 
 exit 0;
 

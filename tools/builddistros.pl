@@ -15,17 +15,19 @@ if  ( $#ARGV == 0 ) {
 	exit(1);
 }
 
-print "building distros\n";
+print "<HTML><TITLE>Building Distros</TITLE><BODY>\n";
+print "<H2>building distros</H2>\n";
 print "results will be in $outputDir\n";
 
-#removing old build contents to save disk space
-( rmtree( $outputDir ) or die "Unable to empty the twiki build directory: $!" ) if -e $outputDir;
 mkpath( $outputDir, 1 );
 
 ################################################################################
 # build the twiki-kernel
 execute ( "cd distro ; ./build-twiki-kernel.pl /tmp $outputDir" ) or die $!;
+print "<HR />\n";
 
+
+print "</BODY></HTML>";
 exit 0;
 
 ################################################################################
