@@ -9,8 +9,8 @@
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
  %TMPL:P{"script"}%
-</head>
-%TMPL:END%
+</head>%TMPL:END%
+
 %TMPL:DEF{"standardheader"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
@@ -34,6 +34,7 @@
   </td>
  </tr>
 </table> %TMPL:END%
+
 %TMPL:DEF{"simpleheader"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
@@ -56,11 +57,9 @@
 %TMPL:DEF{"copyright"}%
 <div class="TWikiCopyright">
 <font size=-2">%WEBCOPYRIGHT%</font>
-</div>
-%TMPL:END%
+</div>%TMPL:END%
 
-%TMPL:DEF{"footernote"}%
-%TMPL:END%
+%TMPL:DEF{"footernote"}%%TMPL:END%
 
 %TMPL:DEF{"standardfooter"}%
 <br clear="all" />
@@ -81,8 +80,7 @@
     %TMPL:P{"copyright"}%
   </td>
  </tr>
-</table>
-%TMPL:END%
+</table>%TMPL:END%
 
 %TMPL:DEF{"oops"}%
 %TMPL:P{"htmldoctype"}%
