@@ -133,14 +133,16 @@ sub find
 }
 
 # ===========================
-# If no keyValue, remove all, otherwise for types
-# with key, just remove specified item
+# If no keyValue, remove all types, otherwise for types
+# with key, just remove specified item. Remove all types
+# if $type is empty.
 sub remove
 {
     my( $self, $type, $keyValue ) = @_;
     
     my %args = ();
-    my $key = _key( $type );
+    my $key = "";
+    $key = _key( $type ) if( $type );
     
     if( $keyValue && $key ) {
        my $data = $self->{$type};
@@ -151,8 +153,11 @@ sub remove
            }
        }
        $self->{$type} = \@newData;
-    } else {
+    } elsif( $type ) {
        delete $self->{$type};
+    } else {
+       $self = {};
+       bless $self;   
     }
 }
 
@@ -183,12 +188,21 @@ sub _writeKeyValue
     return $text;
 }
 
-
-sub writeTypes
+sub _writeTypes
 {
     my( $self, @types ) = @_;
     
     my $text = "";
+
+    if( $types[0] eq "not" ) {
+        # write all types that are not in the list
+        my %seen;
+        @seen{ @types } = ();
+        @types = ();  # empty "not in list"
+        foreach my $key ( keys %$self ) {
+            push( @types, $key ) unless exists $seen{ $key };
+        }
+    }
     
     foreach my $type ( @types ) {
         my $data = $self->{$type};
@@ -288,7 +302,7 @@ sub writeStart
 {
     my( $self ) = @_;
     
-    return $self->writeTypes( qw/TOPICINFO TOPICPARENT/ );
+    return $self->_writeTypes( qw/TOPICINFO TOPICPARENT/ );
 }
 
 # ===========================
@@ -297,7 +311,10 @@ sub writeEnd
 {
     my( $self ) = @_;
     
-    return $self->writeTypes( qw/FORM FIELD FILEATTACHMENT TOPICMOVED/ );
+    my $text = $self->_writeTypes( qw/FORM FIELD FILEATTACHMENT TOPICMOVED/ );
+    # append remaining meta data
+    $text .= $self->_writeTypes( qw/not TOPICINFO TOPICPARENT FORM FIELD FILEATTACHMENT TOPICMOVED/ );
+    return $text;
 }
 
 # ===========================
