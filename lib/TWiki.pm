@@ -2343,10 +2343,16 @@ sub internalLink {
     $theLinkText =~ s/([\s\(])($singleUpperAlphaRegex)/$1<nop>$2/go;
 
     my $exist = &TWiki::Store::topicExists( $theWeb, $theTopic );
-    # I18N - Only apply plural processing if site language is English,
-    # and to topic names ending in 's'.
-    if(  ( $doPluralToSingular ) && ( $siteLang eq 'en' ) 
-		&& ( $theTopic =~ /s$/ ) && ! ( $exist ) ) {
+    # I18N - Only apply plural processing if site language is English, or
+    # if a built-in English-language web (Main, TWiki or Plugins).  Plurals
+    # apply to names ending in 's', where topic doesn't exist with plural
+    # name.
+    if(  ( $doPluralToSingular ) and ( $siteLang eq 'en' 
+					or $theWeb eq $mainWebname
+					or $theWeb eq $twikiWebname
+					or $theWeb eq 'Plugins' 
+				     ) 
+	    and ( $theTopic =~ /s$/ ) and not ( $exist ) ) {
         # Topic name is plural in form and doesn't exist as written
         my $tmp = $theTopic;
         $tmp =~ s/ies$/y/;       # plurals like policy / policies
