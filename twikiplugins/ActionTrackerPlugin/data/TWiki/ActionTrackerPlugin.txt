@@ -429,4 +429,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details, published at
 http://www.gnu.org/copyleft/gpl.html
 
---- TWiki:Main/CrawfordCurrie - %$DATE%
+-- TWiki:Main/CrawfordCurrie - %$DATE%
