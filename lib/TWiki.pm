@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "01 Jul 2003";
+$wikiversion      = "29 Jul 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1361,6 +1361,9 @@ sub handleIncludeFile
                 $fileName = "$dataDir/$incfile.txt";      # Web.TopicName
                 if( ! -e $fileName ) {
                     # give up, file not found
+                    if( TWiki::Prefs::getPreferencesFlag("INCLUDEWARNING") ) {
+                        return showError( "Warning: Can't INCLUDE <nop>$incfile, topic not found" );
+                    }
                     return "";
                 }
             }
@@ -1370,6 +1373,9 @@ sub handleIncludeFile
     # prevent recursive loop
     if( ( @theProcessedTopics ) && ( grep { /^$fileName$/ } @theProcessedTopics ) ) {
         # file already included
+        if( TWiki::Prefs::getPreferencesFlag("INCLUDEWARNING") ) {
+            return showError( "Warning: Can't INCLUDE <nop>$incfile twice, topic is already included" );
+        }
         return "";
     } else {
         # remember for next time
