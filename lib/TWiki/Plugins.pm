@@ -24,7 +24,7 @@ package TWiki::Plugins;
 ##use strict;
 
 use vars qw(
-        @activePluginWebs @activePluginTopics
+        @activePluginWebs @activePluginTopics @instPlugins
         @registrableHandlers %registeredHandlers %onlyOnceHandlers
 	$VERSION
     );
@@ -32,7 +32,9 @@ use vars qw(
 $VERSION = '1.010';
 
 @registrableHandlers = (           #                                         VERSION:
+        'earlyInitPlugin',         # ( )                                     1.020
         'initPlugin',              # ( $topic, $web, $user, $installWeb )    1.000
+        'initializeUserHandler',   # ( $loginName, $url, $pathInfo )         1.010
         'registrationHandler',     # ( $web, $wikiName, $loginName )         1.010
         'commonTagsHandler',       # ( $text, $topic, $web )                 1.000
         'startRenderingHandler',   # ( $text, $web )                         1.000
@@ -49,7 +51,8 @@ $VERSION = '1.010';
         'renderFormFieldForEditHandler', # ( $name, $type, $size, $value, $attributes, $output )
     );
     
-%onlyOnceHandlers = ( 'registrationHandler'     => 1,
+%onlyOnceHandlers = ( 'initializeUserHandler'   => 1,
+                      'registrationHandler'     => 1,
                       'writeHeaderHandler'      => 1,
                       'redirectCgiQueryHandler' => 1,
                       'getSessionValueHandler'  => 1,
@@ -88,7 +91,8 @@ sub registerPlugin
 {
     #FIXME make all this sub more robust
     # parameters: ( $plugin, $topic, $web, $user )
-    my ( $plugin, $topic, $web, $user ) = @_;
+    # If $user is empty this is preInitPlugin call - used to establish the user
+    my ( $plugin, $topic, $web, $user, $theLoginName, $theUrl, $thePathInfo ) = @_;
 
     # look for the plugin installation web (needed for attached files)
     # in the order:
@@ -140,6 +144,16 @@ sub registerPlugin
     my $h   = "";
     my $sub = "";
     my $prefix = "";
+    if( ! $user ) {
+        $sub = $p . '::earlyInitPlugin';
+        if( ! defined( &$sub ) ) {
+            return;
+        }
+        $sub = $p. '::initializeUserHandler';
+        $user = &$sub( $theLoginName );
+        return $user;
+
+    }
     $sub = $p.'::initPlugin';
     # we register a plugin ONLY if it defines initPlugin AND it returns true 
     if( ! defined( &$sub ) ) {
@@ -183,19 +197,23 @@ sub applyHandlers
 }
 
 # =========================
-sub initialize
+# Initialisation that is done is done before the user is known
+# Can return a user e.g. if a plugin like SessionPlugin sets the user
+# using initializeUserHandler.
+sub initialize1
 {
-    my( $theTopicName, $theWebName, $theUserName ) = @_;
+    my( $theTopicName, $theWebName, $theLoginName, $theUrl, $thePathInfo ) = @_;
 
     # initialize variables, needed when TWiki::initialize called more then once
     %registeredHandlers = ();
     @activePluginTopics = ();
     @activePluginWebs = ();
+    @instPlugins = ();
 
     # Get INSTALLEDPLUGINS and DISABLEDPLUGINS variables
     my $plugin = &TWiki::Prefs::getPreferencesValue( "INSTALLEDPLUGINS" ) || "";
     $plugin =~ s/[\n\t\s\r]+/ /go;
-    my @instPlugins = grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
+    @instPlugins = grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
     $plugin = &TWiki::Prefs::getPreferencesValue( "DISABLEDPLUGINS" ) || "";
     $plugin =~ s/[\n\t\s\r]+/ /go;
     my @disabledPlugins = map{ s/^.*\.(.*)$/$1/o; $_ }
@@ -205,12 +223,41 @@ sub initialize
     push( @instPlugins, discoverPluginPerlModules() );
 
     # for efficiency we register all possible handlers at once
+    my $user = "";
     my $p = "";
+    my $noUser = "";
     foreach $plugin ( @instPlugins ) {
         $p = $plugin;
         $p =~ s/^.*\.(.*)$/$1/o; # cut web
         if( ! ( grep { /^$p$/ } @disabledPlugins ) ) {
-            &registerPlugin( $plugin, @_, $theWebName, $theUserName );
+            my $posUser = 
+               &registerPlugin( $plugin, $theTopicName, $theWebName, $noUser, $theLoginName, $theUrl, $thePathInfo );
+            if( $posUser ) {
+               $user = $posUser;
+            }
+        }
+    }
+    unless( $user ) {
+        $user = &TWiki::initializeRemoteUser( $_[0] );
+    }
+    return $user;
+}
+
+
+# =========================
+# Initialisation that is done is done after the user is known
+sub initialize2
+{
+    my( $theTopicName, $theWebName, $theUser ) = @_;
+
+    # for efficiency we register all possible handlers at once
+    my $p = "";
+    my $noUser = "";
+    foreach $plugin ( @instPlugins ) {
+        $p = $plugin;
+        $p =~ s/^.*\.(.*)$/$1/o; # cut web
+        if( ! ( grep { /^$p$/ } @disabledPlugins ) ) {
+            &registerPlugin( $plugin, @_, $theWebName, $theUser );
         }
     }
 }
@@ -244,45 +291,20 @@ sub handleActivatedPlugins
 }
 
 # =========================
-# This could be better integrated with the other auto discovery for plugins
-sub initializeUser
+sub initializeUserHandler
 {
-#   my( $theRemoteUser, $theUrl,  $thePathInfo ) = @_;
-    my $user;
-    my $p = "TWiki::Plugins::SessionPlugin";
-    my $sub = $p.'::initializeUserHandler';
+    # Called by TWiki::initialize
+#   my( $theLoginName, $theUrl, $thePathInfo ) = @_;
 
-    my $libDir = &TWiki::getTWikiLibDir();
-    if(  -e "$libDir/TWiki/Plugins/SessionPlugin.pm" ) {
-        eval "use $p;";
-        if( defined( &$sub ) ) {
-            $user = &$sub( @_ );
-        }
-    }
+    unshift @_, ( 'initializeUserHandler' );
+    my $user = &applyHandlers;
+
     if( ! defined( $user ) ) {
         $user = &TWiki::initializeRemoteUser( $_[0] );
     }
-    
+
     return $user;
 }
-
-# FIXME: For Beijing release, restored above initializeUser function and
-# comment out initializeUserHandler since Codev.InitializeUserHandlerBroken
-# =========================
-#sub initializeUserHandler
-#{
-#    # Called by TWiki::initialize
-##   my( $theLoginName, $theUrl, $thePathInfo ) = @_;
-#
-#    unshift @_, ( 'initializeUserHandler' );
-#    my $user = &applyHandlers;
-#
-#    if( ! defined( $user ) ) {
-#        $user = &TWiki::initializeRemoteUser( $_[0] );
-#    }
-#
-#    return $user;
-#}
 
 # =========================
 sub registrationHandler

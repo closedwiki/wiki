@@ -291,9 +291,11 @@ sub initialize
 
     # initialize user name and user to WikiName list
     userToWikiListInit();
-    # FIXME: Restored old spec for Beijing release since Codev.InitializeUserHandlerBroken
-    #$userName = TWiki::Plugins::initializeUserHandler( $theRemoteUser, $theUrl, $thePathInfo );  # e.g. "jdoe"
-    $userName = TWiki::Plugins::initializeUser( $theRemoteUser, $theUrl, $thePathInfo );  # e.g. "jdoe"
+    if( !$disableAllPlugins ) {
+            # Early plugin initialization, allow plugins like SessionPlugin to set the user
+            # This must be done before preferences are set, as we need to get user preferences
+            $userName = &TWiki::Plugins::initialize1( $topicName, $webName, $theRemoteUser, $theUrl, $thePathInfo );
+    }
     $wikiName     = userToWikiName( $userName, 1 );      # i.e. "JonDoe"
     $wikiUserName = userToWikiName( $userName );         # i.e. "Main.JonDoe"
 
@@ -382,7 +384,8 @@ sub initialize
 
 #AS
     if( !$disableAllPlugins ) {
-        &TWiki::Plugins::initialize( $topicName, $webName, $userName );
+        # Normal plugin initialization - userName is known and preferences available
+        &TWiki::Plugins::initialize2( $topicName, $webName, $userName );
     }
 #/AS
 
