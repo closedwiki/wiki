@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043227376" format="1.0" version="1.59"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043306629" format="1.0" version="1.60"}%
 ---# Appendix B: TWiki Development Timeline
 %TOC%
 
@@ -53,7 +53,7 @@
 	* *28 Mar 2002* - PeterThoeny
 		* Fixed IE5/IE6-specific problem whereby going back from preview sometimes removes all edit changes
 	* *23 Mar 2002* - JohnTalintyre
-		* Added AND search to =%<nop>SEARCH{}%= variable; the semicolon =";"= in a regular expression search is the AND operator
+		* New AND search; with regular expression enabled, use the semicolon ";" as the AND operator in =%<nop>SEARCH{}%= variable, FormattedSearch and WebSearch
 	* *21 Mar 2002* - ColasNahaboo, RichardDonkin
 		* Fixed cache issue where the edit page showed outdated content
 	* *06 Mar 2002* - RichardDonkin
