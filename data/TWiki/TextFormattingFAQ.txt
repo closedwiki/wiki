@@ -1,8 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000370644" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000464173" format="1.0" version="1.9"}%
 <font size="+3"><b>Text Formatting FAQ</b></font>
 
-	* The most frequently asked questions about text formatting are answered here. 
-		* TextFormattingRules has the complete system in a handy quick reference format.
+The most frequently asked questions about text formatting are answered. Also, TextFormattingRules contains the complete TWiki shorthand system on one quick reference page.
 
 %TOC%
 
@@ -10,7 +9,7 @@
 ---
 ---+++ How do I make a separator?
 
-You can make a horizontal separator by writing three or more dashes at the beginning of a line.
+You can make a horizontal separator by entering three dashes at the beginning of a line: =---=.
 
 ---
 ---+++ How do I create a heading?
@@ -25,33 +24,33 @@ You can create six sizes of headings - &lt;h1&gt;...&lt;h6&gt; in HTML - by typi
 TWiki interprets text as HTML. The '&lt;' and '&gt;' characters are used to define HTML commands. Text contained in angle brackets is interpreted by the browser if it's a valid HTML instruction, or ignored if it isn't - either way, the brackets and its contents are not displayed.
 
 If you want to display angle brackets, enter them as HTML codes instead of typing them in directly:
-		* =&amp;lt;= = =&lt;=
-		* =&amp;gt;= = =&gt;=
-		* Enter: =(a &amp;gt; 0)= to get =(a &gt; 0)=
+	* =&amp;lt;= = =&lt;= <br />
+	  =&amp;gt;= = =&gt;=
+
+	* __You enter:__ =(a &amp;gt; 0)= <p /> 
+	  __Result:__ =(a &gt; 0)=
 
 ---
----+++ Some words (like WinAPI) have an unwanted question mark at the end. How can I prevent that?
+---+++ Some words appear highlighted, with a "?" link at the end. How can I prevent that?
 
-A question mark after a word is a link to a topic that doesn't yet exist - click it to create the new page. This is a TWiki feature - typing a MeaningfulTitle in a comment is an invitation for someone else to add to the topic.  
+A question mark after a word is a link to a topic that doesn't yet exist - click it to create the new page. This is a TWiki feature - typing a MeaningfulTitle in a comment is an invitation for someone else to add a new branch to the topic.  
 
-To prevent auto-linking - you may simply want to enter a word like <nop>JavaScript (the proper spelling!) - prefix it with the special TWiki HTML tag =&lt;nop&gt;=: 
+To prevent auto-linking - say you want to enter a word like <nop>JavaScript (the proper spelling!) - prefix the WikiStyleWord with the special TWiki HTML tag =&lt;nop&gt;=: 
 
-	* =&lt;nop&gt;WikiWord= displays as <nop>WikiWord
+	* =&lt;nop&gt;WikiStyleWord= displays as <nop>WikiStyleWord
 
 ---
 ---+++ How can I write fixed font text?
 
-Enclose text in "=" equal signs:
+The quickest way is to enclose the text in equal signs:
 
-	* =Proportional text, <nop>=fixed font text=<nop>, proportional again.= appears as...
-	  <br /> Proportional text, =fixed font text= , proportional again.
-
-Alternatively you could also use preformatted text, see next question for details.
+	* __You enter:__ =Proportional text, <nop>=fixed font=<nop>, proportional again.= <p />
+	  __Result:__ Proportional text, =fixed font=, proportional again.
 
 ---
 ---+++ Text I enter gets wrapped around. How can I keep the formatting as it is?
 
-TWiki interprets text as HTML. It is possible to use preformatted text to workaround this. Use the preformatted HTML tags to keep the new line of text as it is. Do so by enclosing text in either &lt;pre&gt; &lt;/pre&gt; or &lt;verbatim&gt; &lt;/verbatim&gt; tags:
+TWiki interprets text as HTML, so you can use the =preformatted= HTML text option to keep the new line of text as is. Enclose the text in &lt;pre&gt; &lt;/pre&gt;, or in TWiki's own &lt;verbatim&gt; &lt;/verbatim&gt; tags:
 <pre>
 This text will keep its format as it is:
 &lt;verbatim&gt;
@@ -71,7 +70,7 @@ There are three possibilities:
 	2 Use HTML tables with &lt;table&gt;, &lt;tr&gt;, &lt;td&gt; tags.
 	3 Use preformatted text with &lt;verbatim&gt; tags.
 
-__1. Use Wiki rule with "|" vertical bars__
+*1. Use Wiki rule with "|" vertical bars*
 
 	* Example text: <br>
 	  =| cell A1 | cell B1 | cell C1 |= <br>
@@ -80,9 +79,11 @@ __1. Use Wiki rule with "|" vertical bars__
 	  | cell A1 | cell B1 | cell C1 |
 	  | cell A2 | cell B2 | cell C2 |
 
-__2. Use HTML tables with &lt;table&gt;, &lt;tr&gt;, &lt;td&gt; tags__
+*2. Use HTML tables with &lt;table&gt;, &lt;tr&gt;, &lt;td&gt; tags*
 
-This is a manual process using HTML commands. Here is an example. If you enter this:
+This is a manual process using HTML commands. 
+
+__You enter:__
 
 <pre>
 &lt;table border="1"&gt;
@@ -96,7 +97,7 @@ This is a manual process using HTML commands. Here is an example. If you enter t
 &lt;/table&gt;
 </pre>
 
-It is displayed as a table like this:
+__Result:__
 
 <table border="1">
   <tr>
@@ -108,9 +109,9 @@ It is displayed as a table like this:
   </tr>
 </table>
 
-__3. Use preformatted text with &lt;verbatim&gt; tags__
+*3. Use preformatted text with &lt;verbatim&gt; tags*
 
-Text I enter gets wrapped around. How can I keep the formatting as it is? See [[#TextEnclosed]["Text enclosed..."]] 
+See [[#TextEnclosed]["Text enclosed..."]] 
 
 ---
 ---+++ Can I include images and pictures?
@@ -119,28 +120,28 @@ Yes, this is possible. The easiest way of including images is to attach a GIF, J
 
 There are actually two ways of including inline images.
 
-__1. Using URL ending in .gif, .jpg, .jpeg, .png__
+*1. Using URL ending in .gif, .jpg, .jpeg, .png*
 
 This is a simple and automatic way of including inline images. Simply write the URL of the image file, this will create the inline image for you. *Note:* The images must be accessible as a URL.
 
-	* Example text: <br /> <code> TWiki <nop>%PUBURL%/wikiHome.gif logo.</code>
-	* Example output: <br /> TWiki %PUBURL%/wikiHome.gif logo.
+	* __You enter:__ <code> TWiki <nop>%PUBURL%/wikiHome.gif logo.</code> <br />
+	  __Result:__ TWiki %PUBURL%/wikiHome.gif logo.
 
-__2. Using &lt;img&gt; tag__
+*2. Using &lt;img&gt; tag*
 
 This is a manual process where you have more control over the rendering of the image. Use the &lt;img&gt; tag of HTML to include GIF, JPG and PNG files. *Note:* The display of the topic is faster if you include the WIDTH and HEIGHT parameters that have the actual image size. http://www.htmlhelp.com/reference/wilbur/special/img.html has more on inline images.
 
-	* Example text: <br /> <code>TWiki &lt;img src="%PUBURL%/wikiHome.gif" width="46" height="50" /&gt; logo.</code>
-	* Example output: <br /> TWiki <img src="%PUBURL%/wikiHome.gif" width="46" height="50" /> logo.
+	* __You enter:__ <code>TWiki &lt;img src="%PUBURL%/wikiHome.gif" width="46" height="50" /&gt; logo.</code><br />
+	  __Result:__ <br /> TWiki <img src="%PUBURL%/wikiHome.gif" width="46" height="50" /> logo.
 
 -----
 ---+++ Can I write colored text?
 
-Place text you would like to specify a color inside &lt;font color="colorCode"&gt; and &lt;/font&gt; tags. 
+Sure. The quickest way is to use the &lt;font color="colorCode"&gt; and &lt;/font&gt; tags - they're HTML tags that work in any browser, (although they've been phased in the latest version). 
 
-"colorCode" is the hexadecimal RGB color code. The color is composed
-by specifying the red, green and blue components of the color in
-hexadecimal notation. For example, to specify white, the red, green and blue components are 255, 255, 255, so you would use ="#ffffff=". You can use StandardColors or common color codes:
+You can also use a =style= attribute: =style="color:#ff0000"=, placed in most HTML tags - =span= is an all-purpose choice: "&lt;span style="color:#ff0000">.
+
+"colorCode" is the _hexadecimal RGB color code_, which is simply Red, Green and Blue values in hex notation (base 16, 0-F). For pure red, the RGB components are 255-0-0 - full red (255), no green or blue. That's FF-0-0 in hex, or ="#ff000=" for Web page purposes. For a basic color selection (you can [[StandardColors][StandardColor]] names instead of hex code in the =font= tag only):
 
 <table>
 <tr bgcolor="#e0e0e0">
@@ -166,11 +167,11 @@ hexadecimal notation. For example, to specify white, the red, green and blue com
 </tr>
 </table>
 
-	* Example text: <br /> <code> &lt;font color="#ff0000"&gt; Red color &lt;/font&gt; draws attention. </code>
-	* Example output: <br /> <font color="#ff0000"> Red color </font> draws attention.
+	* __You enter:__ <code> &lt;font color="#ff0000"&gt; Red color &lt;/font&gt; draws attention. </code><p>
+	  __Result:__ <font color="#ff0000"> Red color </font> draws attention.
 
 -----
 </blockquote>
 
--- Main.MikeMannix - 10 Sep 2001 <br />
--- Main.PeterThoeny - 13 Sep 2001 <br />
+-- PeterThoeny - 13 Sep 2001 <br />
+-- MikeMannix - 14 Sep 2001 <br />	
