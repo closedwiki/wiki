@@ -30,13 +30,13 @@ use strict;
 
 use vars qw(
         $useSocket $useNetSmtp
+        $mailInitialized $mailHost $helloHost
     );
 
 BEGIN {
     $useSocket = 0;
-    eval {
-       $useNetSmtp = require Net::SMTP;
-    }
+    $useNetSmtp = 0;
+    $mailInitialized = 0;
 }
 
 # =========================
@@ -84,6 +84,17 @@ sub sendEmail
     # $theText Format: "From: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody..."
 
     my( $theText ) = @_;
+
+    if( ! $mailInitialized ) {
+        $mailInitialized = 1;
+        $mailHost  = &TWiki::Prefs::getPreferencesValue( "SMTPMAILHOST" );
+        $helloHost = &TWiki::Prefs::getPreferencesValue( "SMTPSENDERHOST" );
+        if( $mailHost ) {
+            eval {
+               $useNetSmtp = require Net::SMTP;
+            }
+        }
+    }
 
     my $error = "";
     if( $useNetSmtp ) {
@@ -166,9 +177,13 @@ sub _sendEmailByNetSMTP
 	@to = @{$toref};
     }
     return undef unless( scalar @to );
-    my $mailhost = &TWiki::Prefs::getPreferencesValue( "SMTPMAILHOST" ) || "mail";
     
-    my $smtp = Net::SMTP->new( $mailhost );
+    my $smtp = 0;
+    if( $helloHost ) {
+        $smtp = Net::SMTP->new( $mailHost, Hello => $helloHost );
+    } else {
+        $smtp = Net::SMTP->new( $mailHost );
+    }
     $smtp->mail( $from );
     $smtp->to( @to, { SkipBad => 1 } );
     $smtp->data( $data );
