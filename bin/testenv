@@ -261,7 +261,7 @@ if ( $detailedOS =~ /darwin/i or $OS ne 'UNIX' ) {
 
 # Turn off fatalsToBrowser while checking module loads, to avoid load errors in
 # browser.
-$CGI::Carp::WRAP = 0;
+$CGI::Carp::WRAP = $CGI::Carp::WRAP = 0;	# Avoid warnings...
 
 # Check that the TWiki.pm module can be found
 print "<tr><th align=\"right\">TWiki module in \@INC path:</th><td>";
