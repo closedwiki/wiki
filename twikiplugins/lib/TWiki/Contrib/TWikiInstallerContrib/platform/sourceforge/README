@@ -1,3 +1,22 @@
 
-see http://twiki.org/cgi-bin/view/Codev/TWikiOnSourceForge
+if you use the form at http://twiki.org/cgi-bin/view/Codev/TWikiOnSourceForge#Basic_Install ,
+it will customise the script shown below for your account name and project name.
 
+================================================================================
+
+you'll have to copy the installation files from your computer, because you can't wget out of SourceForge
+
+local~ wget http://twikiplugins.sourceforge.net/twiki-sourceforge.tar.bz2 
+local~ scp twiki-sourceforge.tar.bz2 account@project.sourceforge.net:/home/groups/p/pr/project
+
+local~ ssh account@project.sourceforge.net 
+sf~ cd /home/groups/p/pr/project 
+sf~ tar xjf twiki-sourceforge.tar.bz2
+
+sf~ ./pre-twiki.sh
+
+browse to http://project.sourceforge.net/cgi-bin/twiki_install.cgi
+
+sf~ ./post-twiki.sh
+
+browse to http://project.sourceforge.net/cgi-bin/twiki/view/ to start using the wiki
