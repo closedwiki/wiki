@@ -179,10 +179,10 @@ sub UpgradeTWikiConfig
 	}
 
 	# There was a choice of either using regexes to parse out the user's code for all the variable settings
-	# as strings, and writing those strings into the new cfg file, or
-	# using perl to parse the old cfg file ('require') and writing the values into the new cfg file.
+	# as strings, and writing those _strings_ into the new cfg file, or
+	# using perl to parse the old cfg file ('require') and writing the _values_ into the new cfg file.
 	# Since really only perl can parse perl, I chose the latter.
-	# Unfortunately, the user needs actualy code for OS dependent variables, since the wiki might be
+	# Unfortunately, the user needs actual code for OS dependent variables, since the wiki might be
 	# being read from more than one OS.
 	
 	# This leaves me with the choice of letting them down by writing the 'require'd value, which
@@ -590,10 +590,6 @@ BEGIN {
 #                   htpasswd:plain, htpasswd:crypt, htpasswd:md5 (currently unsupported),
 #                   htpasswd:sha1, htdigest:md5, none:
 #default htpasswd:crypt;'},
-	 { 'varname' => 'htpasswdEncoding',
-	   'default' => ' ($OS eq "WINDOWS") ? "sha1" : "crypt" ' ,
-	   'comment' => '#'
-	  },
 	 { 'varname' => 'htpasswdFilename',
 	   'default' => ' ($htpasswdFormatFamily eq "htpasswd") ? "$dataDir/.htpasswd" : "$dataDir/.htdigest" ' ,
 	   'comment' => '#                   Pathname of user name/password file for authentication :'
@@ -751,7 +747,7 @@ if ($OS=~/darwin/i) { 		# MacOS X, suggested by Todd Jonker on Codev
     $OS = "UNIX";
 }
 ',
-	   comment => ''},
+	   'comment' => ''},
 	 { 'varname' => 'rcsArg',
 	   'default' => ' ($OS eq "WINDOWS") ? "-x,v" : ""',
 	   'comment' => '#                   Initialise RCS file, ignored if empty string,
@@ -761,6 +757,10 @@ if ($OS=~/darwin/i) { 		# MacOS X, suggested by Todd Jonker on Codev
     UNIX=>"/dev/null", OS2=>"", WINDOWS=>"NUL", DOS=>"NUL", MACINTOSH=>"", VMS=>""
     }->{$OS}',
 	'comment' => '#                   null device /dev/null for unix, NUL for windows'},
+	 { 'varname' => 'htpasswdEncoding',
+	   'default' => ' ($OS eq "WINDOWS") ? "sha1" : "crypt" ' ,
+	   'comment' => '#'
+	  },
 	 { 'varname' => 'endRcsCmd',
 	   'default' => ' ($OS eq "UNIX") ? " 2>&1" : ""',
 	   'comment' => '# This should enable gathering of extra error information on most OSes.  However, wont work on NT4 unless unix like shell is used'},
