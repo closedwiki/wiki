@@ -1,10 +1,29 @@
-head	1.1;
+head	1.5;
 access;
 symbols;
-locks
-	talint_j:1.1; strict;
+locks; strict;
 comment	@# @;
 
+
+1.5
+date	2004.09.29.15.32.04;	author mrjc;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2004.09.29.15.26.38;	author mrjc;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2004.09.29.15.20.27;	author mrjc;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2004.09.29.14.18.04;	author mrjc;	state Exp;
+branches;
+next	1.1;
 
 1.1
 date	2001.08.01.07.39.27;	author guest;	state Exp;
@@ -17,11 +36,372 @@ desc
 @
 
 
+1.5
+log
+@Automatic
+@
+text
+@%META:TOPICINFO{author="TedPavlic" date="1062605500" format="1.0" version="1.16"}%
+%TOC%
+
+---+ Session Plugin (Version 2.99)
+
+_<nop>[ Development discussions in TWiki:Plugins/SessionPluginDev ]_
+
+---++ Description
+
+
+What this plugin does with sessions is that it encapsulates all "logon memory" within the session. Once a user authenticates, their session contains their username and will use that username on all pages regardless of if they are authenticated pages or non-authenticated pages. This is a major improvement over the other mechanisms as it is nearly entirely transparent.
+	* It requires no changes to the TWiki source.
+	* It requires no changes to any TWiki templates.
+	* It requires no changes to the TWiki directory structure or the scripts TWiki uses.
+	* It simply requires that this plugin is installed and activated. After that, it immediately starts working. Logons will immediately start to be persistent.
+
+#ForceLogonsViaLogon
+---+++ Force Logons via bin/logon
+
+Any time a user enters a page that needs authentication, they will be forced to logon. However, if a user never has a need to authenticate, they will never logon and never retrieve their personal settings. It may be convenient to force a logon.
+
+The ==bin/logon== script provided with SessionPlugin accomplishes this. It is an artifact of the original TWiki:Plugins/SessionPlugin. The ==bin/logon== script must be setup in the ==bin/.htaccess== file to be a script which requires a valid user to authenticate. However, once authenticated, it will simply redirect the user to the view URL for the page from which logon was linked. 
+
+There are three %TWIKIWEB%.TWikiVariables below that retrieve this logon URL. One of them is used explicitly by the TWiki:Plugins/TigerSkinPlugin and other similar plugins like TWiki:Plugins/GnuSkinPlugin. 
+
+#StickySkins
+---+++ "Sticky Skins" for All Users, Authenticated or Not
+
+Even if a user is not authenticated, he or she may make the decision that the skin being used should be changed for the current session and the current session only. This could normally be done by passing ==?skin=_skinname_== after every URL, but this is hardly transparent to the user. 
+
+An idea that was implemented in the original version of TWiki:Plugins/SessionPlugin was to create the notion of a "sticky skin" which could be set via a configurable CGI variable (normally ==stickskin==) and would end up setting a session variable SKIN that would be respected over all other SKIN variables. In effect, this session variable would be exactly like passing ==?skin=_skinname_== to every TWiki script.
+
+This same idea is still implemented. The sticky persistent skin is available regardless of whether or not the user has logged in. On top of this, if the sticky skin is set to a configurable value (normally ==default==), the session SKIN will be cleared and let any other SKIN variables take over.
+
+There are a number of %TWIKIWEB%.TWikiVariables below that provide for easy methods to access these sticky skin features. If %<nop>SKINS% is set to be a comma-separated list of skins, the SelectSkin script will give an easy interface to changing skins on the fly and having them stick to the current session. An example of how to link to SelectSkin is given below. SelectSkin itself gives information on its usage as well. Plus, TWiki:Plugins/TigerSkinPlugin and TWiki:Plugins/GnuSkinPlugin both make a use of this SelectSkin page.
+
+#GetSetClearSessionVariables
+---+++ Getting, Setting, and Clearing Session Variables Directly
+
+A TWiki user can get, set, and clear session variables from within TWiki web pages or by using CGI. This allows the user to use the session as a personal "persistent memory space" that is not lost until the web browser is closed. Also note that if a session variable has the same name as a TWiki preference, the session variable's value takes precedence over the TWiki preference. *This allows for per-session preferences.*
+
+To make use of these features, use the tags:
+
+<blockquote>
+%<nop>GET_SESSION_VARIABLE{ *varName* }% %BR%
+%<nop>SET_SESSION_VARIABLE{ *varName*, *varValue* }% %BR%
+%<nop>CLEAR_SESSION_VARIABLE{ *varName* }%
+</blockquote>
+
+The session variables can also be set and cleared via CGI variables (include more than one in the string if necessary, separated by commas, as demonstrated here):
+
+<blockquote>
+set_session_variable=" *varName* = *varValue* , *varName* = *varValue* , ... " %BR%
+clear_session_variable=" *varName* , *varName* , ..."
+</blockquote>
+
+That is, to set the session variable SKIN equal to "gnu" while clearing the session variable TEST, adding this to the end of a TWiki URL should work:
+
+<blockquote><pre>
+?set_session_variable=SKIN=gnu&clear_session_variable=TEST
+</pre></blockquote>
+
+Of course, all of the "sticky skin" features are shortcuts to this functionality (as hinted at in the above example).
+
+---+++ Review: Cookies
+
+A common way to pass session information from client to server is by passing per-session cookies (i.e., cookies which are not stored on the user's computer; cookies which immediately expire once the browser exits; cookies which are tied to a particular browser session with a web site). These cookies will simply hold the unique session identifier 
+
+#TransparentCGISessionID
+---+++ Alternative: Transparent CGI Session ID
+
+For a number of reasons, it may not be possible to pass cookies to the user. In this case, another method is needed to pass session ID information from script to script. This could be done by passing a special CGI variable (rather than a cookie) that held the session ID in it.
+
+This would require the user to modify every form to either POST or GET the CGI session ID variable to each other script on the site. This could be a major modification, and as new templates are added to TWiki, each would need to be modified as well.
+
+Not only that, but passing the session ID over CGI poses security risks. If a user copies and pastes a URL that has the session ID in it and sends that URL to another person, that person may get access to the other user's session. If sessions are the only form of authentication verification, this could be catastrophic on an E-Commerce site, for example. So because of the security hazards here, it would be convenient to be able to selectively decide whether or not it is desirable to pass session ID information over CGI.
+
+So a non-intrusive transparent configurable interface is needed for this CGI session ID passing. This is implemented in this plugin as well. When turned on, this plugin will change every internal TWiki URL it seels to one that also passes session information. This is all done on the fly and requires no additional editing by the TWiki administrator. On top of this, it is configurable by way of a standard %TWIKIWEB%.TWikiVariable.
+
+#SessionSecurity
+---+++ Session Security: Stealing Session IDs
+
+As a security feature, SessionPlugin allows the administrator to turn on IP matching on sessions. That is, when a client passes a session ID to SessionPlugin, internally it will verify that the client's IP is the same as the IP stamped on the session associated with the session ID passed by the client. If it is not, a new session will be created with a new session ID (and the original compromised session will be deleted). 
+
+It is recommended that this feature, which is similar to TWiki.cfg's ==$<nop>doRememberRemoteUser== feature, is left at its default setting of on. This is an important security feature that should only be turned off if you are confident that your users are going to be coming from some sort of proxy which frequently could change its outgoing IP. An example might be a load balanced firewall. However, it's better to insist that the administrator of that proxy or firewall install modern technologies to make HTTP connections persistent rather than turning off a major security feature on your system. Sessions are often used for more complicated authentication and/or storing of valuable information from the user in a hopefully secure place. It may not be worth trading off keeping this information secure.
+
+*NOTE:* This setting currently cannot be set here in SessionPlugin. In order to change its setting, you must edit <nop>SessionPlugin.pm directly. This is because this plugin has a key role in authentication and must run earlier than preferences are initialized in the current version of TWiki. Because of this, this setting cannot be set like a normal TWiki preference. Edit the plugin module directly.
+
+#SessionConditionals
+---+++ Conditionals selected with authenticated state of session
+
+Using the operators, %<nop>SESSION_IF_AUTHENTICATED%, %<nop>SESSION_IF_NOT_AUTHENTICATED%, %<nop>SESSION_ELSE%, and %<nop>SESSION_ENDIF%, it is possible to make pages operate differently after authentication. This may be useful if a login prompt should be supressed (and possibly replaced with a user name) after a user has authenticated.
+
+This could originally be done with the %<nop>SESSION_IS_AUTHENTICATED% TWikiVariable combined with something like TWiki:Plugins/ConditionalPlugin. These new conditionals were added to prevent installation of other plugins, especially since those other plugins may not render at an appropriate time after this plugin's symbols have rendered.
+
+Examples showing all four possibilities:
+
+<blockquote>
+%<nop>SESSION_IF_AUTHENTICATED% Authenticated User %<nop>SESSION_ELSE% Not Authenticated %<nop>SESSION_ENDIF%
+
+%<nop>SESSION_IF_NOT_AUTHENTICATED% Not Authenticated %<nop>SESSION_ELSE% Authenticated User %<nop>SESSION_ENDIF%
+
+%<nop>SESSION_IF_AUTHENTICATED% Authenticated User %<nop>SESSION_ENDIF%
+
+%<nop>SESSION_IF_NOT_AUTHENTICATED% Not Authenticated %<nop>SESSION_ENDIF%
+</blockquote>
+
+If you have correctly installed this plugin, these will appear properly rendered here (square braces have been added around the tags since some of them will render an empty string if properly installed; these braces are not necessary and are only added here for clarity):
+
+<blockquote>
+[ %SESSION_IF_AUTHENTICATED% Authenticated User %SESSION_ELSE% Not Authenticated %SESSION_ENDIF% ]
+
+[ %SESSION_IF_NOT_AUTHENTICATED% Not Authenticated %SESSION_ELSE% Authenticated User %SESSION_ENDIF% ]
+
+[ %SESSION_IF_AUTHENTICATED% Authenticated User %SESSION_ENDIF% ]
+
+[ %SESSION_IF_NOT_AUTHENTICATED% Not Authenticated %SESSION_ENDIF% ]
+</blockquote>
+
+---+++ Technologies used in SessionPlugin
+
+	* [[http://search.cpan.org/author/SHERZODR/CGI-Session-3.94/][CGI::Session]] - SessionPlugin highly leverages CGI::Session in order to easily create (by default stored in '/tmp' - this may be configurable in later versions, but seems too much of a security hassle) and manage session information in a clean object-oriented fashion.
+		* CGI::Session knows how to pass cookies to receive session ID information
+		* CGI::Session also by default looks for CGI session ID variables
+		* So the difference between passing session ID via cookie or CGI is transparent within the SessionPlugin module
+		* Security is maintained in CGI::Session with its IP_MATCH feature which can be utilized with an option below. With this turned on, sessions will only be accessed if the current client's IP matches the original creator's IP. Otherwise, a new session will be created.
+
+	* After that, standard TWiki plugin handlers selectively refine URLs to pass session ID information or not based on configuration.
+
+---++ Syntax Rules
+
+Because most of the SessionPlugin is transparent, there is not much to configure aside from the use of transparent CGI session IDs (see [[#TransparentCGISessionID][above]] for description). Otherwise, these variables just serve to provide information.
+
+	* Information returned from plugin
+	| *You type* | *You get* | *If correctly installed* |
+	| %<nop>SESSIONID% | The unique ID for this session | %SESSIONID% |
+	| %<nop>SESSIONVAR% | The CGI and session variable that stores the session ID | %SESSIONVAR% |
+	| %<nop>STICKSKIN% | The current "sticky skin" being held in the session (see [[#StickySkins][above]] for description) | %STICKSKIN% |
+        | %<nop>LOGON_OR_WELCOME% | Put in WebLeftBar - it'll change from Logon or Register to Welcome <nop>WikiName | %LOGON_OR_WELCOME% |
+	| %<nop>SESSIONLOGON% | Pre-linked logon (used by <nop>TigerSkinPlugin) | %SESSIONLOGON% |
+	| %<nop>SESSIONLOGONURL% | URL for forced logon script | %SESSIONLOGONURL% |
+	| %<nop>SESSIONLOGONURLPATH% | URL path for forced logon script | %SESSIONLOGONURLPATH% |
+	| %<nop>SKINSELECT% | Expects %<nop>SKINS% to have comma-separted list of installed skins. Produces select input to select a "sticky skin" | %SKINSELECT% |
+	| %<nop>SESSION_IS_AUTHENTICATED% | Returns a 1 if the current session has gone through authentication. Otherwise returns a 0. Useful when used with something like TWiki:Plugins/ConditionalPlugin | %SESSION_IS_AUTHENTICATED% |
+	| %<nop>SESSION_IF_AUTHENTICATED% | Session conditional. | See [[#SessionConditionals][above]] for description and example. |
+	| %<nop>SESSION_IF_NOT_AUTHENTICATED% | Session conditional. | See [[#SessionConditionals][above]] for description and example. |
+	| %<nop>SESSION_ELSE% | Session conditional. | See [[#SessionConditionals][above]] for description and example. |
+	| %<nop>SESSION_ENDIF% | Session conditional. | See [[#SessionConditionals][above]] for description and example. |
+	| %<nop>GET_SESSION_VARIABLE% | Gets a session variable. | See [[#GetSetClearSessionVariables][above]] for description and example. |
+	| %<nop>SET_SESSION_VARIABLE% | Sets a session variable. | See [[#GetSetClearSessionVariables][above]] for description and example. |
+	| %<nop>CLEAR_SESSION_VARIABLE% | Clears a session variable. | See [[#GetSetClearSessionVariables][above]] for description and example. |
+
+	* Stickskin also spits back out what you give it so you can easily use it elsewhere (for example, in your templates) without having to use a really long TWiki variable like %<nop>SESSIONPLUGIN_USE_TRANS_SESSIONID% (though feel free to use the long names if you wish :-) ).
+	| *You type* | *You get* | *If correctly installed* |
+  | %<nop>DO_SESSION_IP_MATCHING% | Whether to verify that session ID is coming from same IP as its original creator (can currently only be set within *<nop>SessionPlugin.pm*) | %DO_SESSION_IP_MATCHING% |
+  | %<nop>AUTHUSER_SESSIONVAR% | The session variable that stores the authenticated user name. By setting this to different values, hopefully this plugin can be more easily integrated into other authentication schemes that already fill this session variable in before this plugin gets a chance (can currently only be set within *<nop>SessionPlugin.pm*) | %AUTHUSER_SESSIONVAR% |
+	| %<nop>USE_TRANS_SESSIONID% | Whether to use transparent session IDs | %USE_TRANS_SESSIONID% |
+	| %<nop>STICKSKINVAR% | The CGI variable to select "sticky skin" | %STICKSKINVAR% |
+	| %<nop>STICKSKINOFFVALUE% | The skin name to which to set the above CGI variable in order to turn off "sticky skins" | %STICKSKINOFFVALUE% |
+
+---++ <nop>%TOPIC% Global Settings
+
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Stores persistent information (like logon and skin information) in a session on the server identified transparently by ID passed from browser.
+
+	* Default Sesttings
+		* Set DO_SESSION_IP_MATCHING = 1
+			* Flag to check IP of client requesting session against session's original creator (recommended security feature)
+			* *NOTE:* This preference currently *has no effect* on SessionPlugin. See note above about this feature. In the current TWiki implementation, you must modify the *<nop>SessionPlugin.pm* source at the top where CGI::Session is included to determine whether or not to turn on this feature. 
+		* Set AUTHUSER_SESSIONVAR = AUTHUSER
+			* The session variable used to store the authenticated user name.
+			* *NOTE:* This preference currently *has no effect* on SessionPlugin. See note above about this feature. In the current TWiki implementation, you must modify the *<nop>SessionPlugin.pm* source at the top just after CGI::Session is included to determine whether or not to turn on this feature. Look for variable $<nop>authUserSessionVar being set to its default value of "AUTHUSER".
+		* Set USE_TRANS_SESSIONID = 1
+			* Flag to use transparent CGI session IDs (see [[#TransparentCGISessionID][above]] for description)
+		* Set STICKSKINVAR = stickskin
+			* CGI variable to use for "sticky skins" (see [[#StickySkins][above]] for description) (i.e. "stickskin")
+		* Set STICKSKINOFFVALUE = default
+			* If passed this value by way of the CGI variable defined with %<nop>STICKSKINVAR%, the current "sticky skin" will be "unstuck" (i.e. cleared so that the previous %<nop>SKIN% settings take effect again)
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==bin/logon== | Script to force logon |
+	* If you want to turn *OFF* _session IP matching_, edit _lib/TWiki/Plugins/%TOPIC%.pm_. The relevant line is well-commented near the top. (note that it is recommended that this is left ON)
+	* If you want to change the authenticated user session variable, edit _lib/TWiki/Plugins/%TOPIC%.pm_. The relevant line is well-commented near the top. (it is rare that this needs to be changed)
+	* Change ==bin/.htaccess== so that ==bin/logon== needs a valid-user. In other words, add these lines to ==bin/.htaccess==:%BR%
+<blockquote><blockquote><tt><noautolink><pre>	&lt;Files "logon"&gt;
+			 require valid-user
+	&lt;/Files&gt;</pre></noautolink></tt></blockquote></blockquote>
+		* chmod a+x,og-w bin/logon
+	* Test if the plugin is correctly installed:
+		* See if persistent logons work. This can be done in a number of ways:
+			* Use one of the [[%SESSIONLOGONURL%][logon]] links above linking to %<nop>SESSIONLOGONURL%. You should be prompted for username and password and will be returned to this page.
+			* Or logon to TWiki by doing something like attempting to edit this page and cancelling. 
+		* After you've logged on, the following should reflect your username and not the default TWiki user name (i.e. <nop>TWikiGuest):
+			* %<nop>WIKINAME% = <nop>%WIKINAME%
+		* Go to [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/SelectSkin?fromweb=%WEB%&fromtopic=%TOPIC%][SelectSkin]] to see if "sticky skin" selection works.
+		* Or simply add ==?%SESSIONPLUGIN_STICKSKINVAR%=plain== to the end of the URL for this page and see if the skin changes to the plain skin.
+			* If it does, try going to other pages without modifying the URL. The skin should stay plain.
+			* To restore your original skin, add ==?%SESSIONPLUGIN_STICKSKINVAR%=%SESSIONPLUGIN_STICKSKINOFFVALUE%== to a URL.
+		* Verify that the table above under Syntax Rules shows the appropriate data.
+
+
+---++ History
+
+Traditionally, TWiki modes of operation that did not require authentication (like viewing) did not "remember" if a user had already authenticated in a different mode that did require authentication. In other words, if a user logged in, his or her settings would not persist in non-authenticated modes like the viewing mode.
+
+This plugin provides one strong solution to this problem while also adding a number of other interesting features. This plugin adds the ability to use sessions within TWiki to store information persistently throughout a web browser's visit to a TWiki website. This information will be forgotten after the web browser has been closed, but during the visit it will persist in all modes of operation. This plugin uses cookies primarily to accomplish this, but also is configured by default to allow for a purely CGI way of doing this as well that does not require cookies.
+
+Note that within TWiki session variables are queried first before a TWiki preference is looked up. This means that if TWiki preferences are "reset" inside the session, the "new" TWiki preference will last throughout the session and will be unique to that particular session. The "sticky skin" features of this plugin are a simple example of this. Use the get, set, and clear features of this plugin for control of other types of preferences other than "SKIN."
+
+---+++ Background: Evolution from 1.0 to 2.0
+
+This plugin is a complete rewrite of the 1.000 version of TWiki:Plugins/SessionPlugin. It is meant to replace the functionality of TWiki:Plugins/SessionPlugin and provide an easy way to remember logon information on non-authenticated pages.
+
+After installing this plugin, a user will be able to authenticate and carry that authentication information (as well as any other session information other plugins decide to save) around the website, even on pages that do not require authenticated information. 
+
+Conditional features allow different text to be shown to authenticated users than non-authenticated users. This allows for non-authenticated users to be prompted to "logon" and authenticated users to be given links to features tied to themselves, like their TWiki user page.
+
+While the below description is lengthy to give the TWiki administrator as much background as possible, the installation is fairly simple as most of the defaults won't need to be changed except for in very specific cases.
+
+(note that sometimes this plugin is referred to as "SmartSessionPlugin" and other times "SessionPlugin" because it is a rewrite of "SessionPlugin" and must be named "SessionPlugin" to work with TWiki:Codev/BeijingRelease. When installing it, it is forever known as "SessionPlugin". It should only be referred to as "SmartSessionPlugin" in development discussions until TWiki is modified to allow for different session-handling plugin names)
+
+---+++ SessionPlugin and the Concept of Sessions
+
+SessionPlugin maintains session information during TWiki visits. The concept of a session became popular with ASP and [[http://www.php.net][PHP]]. A temporary text file is maintained on the server that is associated with an extremely unique identifier. That identifier then is passed from the user's browser in some manner in order to bring into "scope" values which have been stored in that temporary "session" text file.
+
+This not only allows web pages to pass information easily to other web pages on the same web site (i.e., without having to send a complex array of hidden form data back) but also allows for persistent authentication. When a user logs in, a session can be flagged with that user's information and for the remainder of the session the user will stay logged into the site.
+
+#PersistentAuthentication
+---+++ Persistent Authentication Information: How Sessions Remember an Authenticated Remote User
+
+As pointed out in a number of complaints about TWiki's authentication, in traditional authentication schemes that require a user to authenticate to do operations like editing TWiki pages but not authenticate to view them, the un-authenticated view pages never retain any user information even after a user has logged in. This means that a user's settings only appear to work while doing operations like editing and previewing changes while during most of the user's stay, the settings are not reflected in view.
+
+There are a number of small fixes for this. One of them within TWiki is to turn on ==$<nop>doRememberRemoteUser== inside _TWiki.cfg_ so that after a user logs in, his or her logon becomes tied to the IP address from which the user is connecting. This causes a problem when the user is going through a firewall that many users use or when the user's IP frequently changes (in the case of load balanced firewalls, both of these things might be happening at the same time).
+
+Other fixes involve creating duplicate copies or links of non-authenticated scripts and force those copies to authenticate. Then, once a user authenticates, force them in some manner to only use the authenticated scripts. In the right implementation, this can work fairly transparently, but it still involves a noticable change of URL of TWiki pages after the "authentication barrier" is crossed. User's that want to copy and paste URLs to other people over e-mail will end up sending an authenticated URL to perhaps a person who does not even have a TWiki account.
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.TedPavlic |
+|  Plugin Version: | 03 Sep 2003 (V2.122) |
+|  Change History: | &nbsp; |
+|  28 Sep 2004: | (V2.99) Minor patch to introduce LOGON_OR_WELCOME, to replace SessionPlugin and to make it work with Cairo. (TWiki:Main.MartinCleaver) |
+|  03 Sep 2003: | (V2.122) Changed things so plugin will work with modperl, <nop>SpeedyCGI, etc. |
+|  24 Aug 2003: | (V2.121) Added set_session_variable and clear_session_variable CGI sensitivity to allow for mangling of session variables from CGI as well. |
+|  24 Aug 2003: | (V2.120) Added SET_SESSION_VARIABLE, GET_SESSION_VARIABLE, and CLEAR_SESSION_VARIABLE and suggested addition to Plugin API to make clearing session variables easier from other plugins. This change really warns that ==TWiki.pm== should be patched according to TWiki:Codev/SessionVariablesOverrideFinalPreferences to prevent users from easily overriding FINALPREFERENCES settings. Anticipate ways to set, get, and clear with CGI variables in 2.121. |
+|  23 Aug 2003: | (V2.111) Added conditional operators SESSION_IF_AUTHENTICATED, SESSION_IF_NOT_AUTHENTICATED, SESSION_ELSE, SESSION_ENDIF that give <nop>ConditionalPlugin-like behavior without <nop>ConditionalPlugin (especially since <nop>ConditionalPlugin does not currently support SESSION_IS_AUTHENTICATED-based solutions). |
+|  23 Aug 2003: | (V2.110) Added new SESSION_IS_AUTHENTICATED flag for use with things like TWiki:Plugins/ConditionalPlugin. Anticipate internal conditional symbols soon. |
+|  23 Aug 2003: | (V2.103) Fixed minor bug that would not resolve %<nop>STICKSKIN% if it was not defined. |
+|  17 Aug 2003: | (V2.102) Fixed minor bug that session to be cleared immediately after it was created. This bug was a result of an attempt to clean up some perl warnings. Fixed now (and still no warnings). |
+|  17 Aug 2003: | (V2.101) Fixed minor bug that caused non-quoted hrefs to not render properly with transparent CGI session IDs. |
+|  17 Aug 2003: | (V2.100) First release. Some new features. Fixed some bugs. Does not break mailnotify anymore. |
+|  19 Jul 2003: | (V2.010) Beta release to fully replace TWiki:Plugins/SessionPlugin - lots of new features |
+|  17 Jul 2003: | (V2.001) Initial alpha release to replace TWiki:Plugins/SessionPlugin |
+|  CPAN Dependencies: | CGI::Session |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.6.0 (though Perl5 should be fine) |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- %MAINWEB%.TedPavlic - 24 Aug 2003
+@
+
+
+1.4
+log
+@Automatic
+@
+text
+@d4 1
+a4 1
+---+ Session Plugin (Version 2.122)
+d255 1
+a255 1
+|  28 Sep 2004: | (V2.99) Minor patch to introduce LOGON_OR_WELCOME, to replace SessionPlugin and to make work with Cairo. (TWiki:Main.MartinCleaver) |
+@
+
+
+1.3
+log
+@Automatic
+@
+text
+@d139 1
+a139 1
+        | %<nop>LOGON_OR_WELCOME% | Put in WebLeftBar - it'll change from Logon or Register to Welcome <nop>WikiName |
+@
+
+
+1.2
+log
+@Automatic
+@
+text
+@a9 32
+Traditionally, TWiki modes of operation that did not require authentication (like viewing) did not "remember" if a user had already authenticated in a different mode that did require authentication. In other words, if a user logged in, his or her settings would not persist in non-authenticated modes like the viewing mode.
+
+This plugin provides one strong solution to this problem while also adding a number of other interesting features. This plugin adds the ability to use sessions within TWiki to store information persistently throughout a web browser's visit to a TWiki website. This information will be forgotten after the web browser has been closed, but during the visit it will persist in all modes of operation. This plugin uses cookies primarily to accomplish this, but also is configured by default to allow for a purely CGI way of doing this as well that does not require cookies.
+
+Note that within TWiki session variables are queried first before a TWiki preference is looked up. This means that if TWiki preferences are "reset" inside the session, the "new" TWiki preference will last throughout the session and will be unique to that particular session. The "sticky skin" features of this plugin are a simple example of this. Use the get, set, and clear features of this plugin for control of other types of preferences other than "SKIN."
+
+---+++ Background: Evolution from 1.0 to 2.0
+
+This plugin is a complete rewrite of the 1.000 version of TWiki:Plugins/SessionPlugin. It is meant to replace the functionality of TWiki:Plugins/SessionPlugin and provide an easy way to remember logon information on non-authenticated pages.
+
+After installing this plugin, a user will be able to authenticate and carry that authentication information (as well as any other session information other plugins decide to save) around the website, even on pages that do not require authenticated information. 
+
+Conditional features allow different text to be shown to authenticated users than non-authenticated users. This allows for non-authenticated users to be prompted to "logon" and authenticated users to be given links to features tied to themselves, like their TWiki user page.
+
+While the below description is lengthy to give the TWiki administrator as much background as possible, the installation is fairly simple as most of the defaults won't need to be changed except for in very specific cases.
+
+(note that sometimes this plugin is referred to as "SmartSessionPlugin" and other times "SessionPlugin" because it is a rewrite of "SessionPlugin" and must be named "SessionPlugin" to work with TWiki:Codev/BeijingRelease. When installing it, it is forever known as "SessionPlugin". It should only be referred to as "SmartSessionPlugin" in development discussions until TWiki is modified to allow for different session-handling plugin names)
+
+---+++ SessionPlugin and the Concept of Sessions
+
+SessionPlugin maintains session information during TWiki visits. The concept of a session became popular with ASP and [[http://www.php.net][PHP]]. A temporary text file is maintained on the server that is associated with an extremely unique identifier. That identifier then is passed from the user's browser in some manner in order to bring into "scope" values which have been stored in that temporary "session" text file.
+
+This not only allows web pages to pass information easily to other web pages on the same web site (i.e., without having to send a complex array of hidden form data back) but also allows for persistent authentication. When a user logs in, a session can be flagged with that user's information and for the remainder of the session the user will stay logged into the site.
+
+#PersistentAuthentication
+---+++ Persistent Authentication Information: How Sessions Remember an Authenticated Remote User
+
+As pointed out in a number of complaints about TWiki's authentication, in traditional authentication schemes that require a user to authenticate to do operations like editing TWiki pages but not authenticate to view them, the un-authenticated view pages never retain any user information even after a user has logged in. This means that a user's settings only appear to work while doing operations like editing and previewing changes while during most of the user's stay, the settings are not reflected in view.
+
+There are a number of small fixes for this. One of them within TWiki is to turn on ==$<nop>doRememberRemoteUser== inside _TWiki.cfg_ so that after a user logs in, his or her logon becomes tied to the IP address from which the user is connecting. This causes a problem when the user is going through a firewall that many users use or when the user's IP frequently changes (in the case of load balanced firewalls, both of these things might be happening at the same time).
+
+Other fixes involve creating duplicate copies or links of non-authenticated scripts and force those copies to authenticate. Then, once a user authenticates, force them in some manner to only use the authenticated scripts. In the right implementation, this can work fairly transparently, but it still involves a noticable change of URL of TWiki pages after the "authentication barrier" is crossed. User's that want to copy and paste URLs to other people over e-mail will end up sending an authenticated URL to perhaps a person who does not even have a TWiki account.
+d11 1
+a11 1
+What this plugin does with sessions is that it encapsulates all of this "logon memory" within the session. Once a user authenticates, their session contains their username and will use that username on all pages regardless of if they are authenticated pages or non-authenticated pages. This is a major improvement over the other mechanisms as it is nearly entirely transparent.
+d139 1
+d200 1
+d213 37
+d252 1
+a252 1
+|  Plugin Author: | %MAINWEB%.TedPavlic |
+d255 1
+@
+
+
 1.1
 log
 @none
 @
 text
-@%META:TOPICINFO{author="guest" date="996651567" format="1.0beta2" version="1.1"}%
+@d1 267
+a267 2
+%META:TOPICINFO{author="guest" date="996651567" format="1.0beta2" version="1.1"}%
 d
 @

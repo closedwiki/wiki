@@ -1,5 +1,4 @@
-#!c:/apps/perl/bin/perl 
-#-d:ptkdb
+#!/usr/bin/perl
 sub BEGIN { $ENV{PTKDB_STOP_TAG_COLOR} = "yellow" } 
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
@@ -19,13 +18,21 @@ sub BEGIN { $ENV{PTKDB_STOP_TAG_COLOR} = "yellow" }
 
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use lib ( '.' );
-use lib ( '../lib' );
+
+BEGIN {
+    # Set default current working directory (needed for mod_perl)
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC, at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+}
 use TWiki;
 
-$query= new CGI;
+$query = new CGI();
 
-&main();
+main();
 
 sub main
 {
@@ -34,9 +41,12 @@ sub main
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
-    ( $topic ) = 
+    ( $topic, $web ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
-    my $url = &TWiki::getViewUrl( $webName, $topic );
+    my $url = &TWiki::getViewUrl( $TWiki::webName, $topic );
+
+    $url .= ( '?' . $query->query_string() ) if $query->query_string();
+
     &TWiki::redirect( $query, $url );
 }
