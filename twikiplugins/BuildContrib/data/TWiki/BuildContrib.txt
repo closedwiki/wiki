@@ -50,42 +50,6 @@ __Notes__
 The are a number of test fixtures in the repository that can be used for testing plugins with =Test::Unit=. The fixtures replace the =TWiki::Func=, =TWiki::Store= and TWiki modules, allowing a stand-alone unit test suite to be built for the plugin. The easiest way to use the fixtures is to copy the tests from an existing plugin that uses them - for example, CommentPlugin, ActionTrackerPlugin, WebDAVPlugin or FormQueryPlugin - and modify the tests appropriately for your plugin.
 
 The fixtures do not replace _all_ of the TWiki core functionality, just those pieces used by the plugins. If you find a piece is missing, and you need it, please feel free to extend the fixtures on condition that you check your improvements back in.
-
----++ <nop>TWikiCLI - command line interface to TWiki
-
-Note that the <nop>TWikiCLI (BuildContrib/contrib/bin/twikicli) feature is strictly experimental.
-Its interfaces are likely to change and it may be dropped completely.
-
-Purpose:
-	1 To replace all twiki command line scripts with a single interface script environment
-
-Its purpose is to seek out classes in the path that can do its bidding. Only one class is provided
-at present: TWikiCLI::Extension, so only the "twikicli extension" currently does anything.
-
-Usage:
-	1 Add BuildContrib/contrib/bin to your PATH. This contains one uber-command:
-		* twikicli
-
-You can use "twikicli extension install TWiki:Plugins.TWikiExtension "
-	* e.g.:
-		* twikicli extension install DistributionContrib
-		* twikicli extension install TWikiReleaseTrackerPlugin
-
-Prerequisite environment, assuming 
-	1 you have your development/test TWiki installs at (URI) =athens.twiki.com=, =beijing.twiki.com=, =beta.twiki.com= and =bleeding.twiki.com=
-	1 you have your development CVS checkout at =$HOME/twikiplugindev/twikiplugins=
-	1 You are using your bleeding edge as the source of contrib libraries for plugin testing
-<verbatim>
-export TWIKI_HOMES="athens.twiki.com/twiki beijing.twiki.com/twiki beta.twiki.com/twiki bleeding.twiki.com"
-export TWIKI_LIBSDIR=$HOME/twikiplugindev/twikiplugins/
-export TWIKI_RUNTIMELIB=/usr/local/twiki/bleeding/twiki/lib
-export TWIKI_LIBS=`echo $TWIKI_LIBSDIR*/lib/ | tr " " ":"`:$TWIKI_RUNTIMELIB
-</verbatim>
-	
-Development notes:
-	1 This is a very rough implementation - I built one myself as I could not find one on CPAN. If
-	we find one we will trash the implementation. Hopefully we will be able to keep the functionality though
-	
 ---++ Support scripts
 =conformance_analyser.pl= is a perl script that analyses the conformance of plugins to the API and packaging standards. It is driven from the zips downloadable from twiki.org.
 
@@ -108,10 +72,11 @@ Development notes:
 
 ---++ Contrib Info
 
-| Authors: | TWiki:Main.CrawfordCurrie, TWiki:Main.MartinCleaver |
+| Authors: | TWiki:Main.CrawfordCurrie |
 | Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
 | License: | GPL |
 | Dependencies: | %$DEPENDENCIES% |
+| 04/12/04 | 1.004 Martin Cleaver removed twikicli - now in TWiki:Plugins.TWikiShellContrib |
 | 12/10/04 | 1.003 Crawford Currie added ONLYIF control to DEPENDENCIES. Added optional PREINSTALL and POSTINSTALL scripts (used to e.g. remove dead code). |
 | 1/10/04 | 1.002 Crawford Currie added topic updating reminder to installer |
 | 30/08/04 | 1.001 Crawford Currie added installer scripts |

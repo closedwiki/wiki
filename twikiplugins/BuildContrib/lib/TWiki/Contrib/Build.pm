@@ -91,7 +91,7 @@ use POSIX;
 use diagnostics;
 use vars qw( $VERSION $basedir $twiki_home $buildpldir $libpath );
 
-$VERSION = 1.003;
+$VERSION = 1.004;
 
 BEGIN {
     use File::Spec;
