@@ -606,8 +606,8 @@ sub saveNew
         my( $date, $user, $rev ) = getRevisionInfo( $web, $topic, "", 1, $attachment, $topicHandler );
         $rev = "1.$rev";
 
-        # Add two minutes (make small difference, but not too big for notification)
-        my $epochSec = &TWiki::revDate2EpSecs( $date ) + 120;
+        # Add one minute (make small difference, but not too big for notification)
+        my $epochSec = &TWiki::revDate2EpSecs( $date ) + 60;
         $date = &TWiki::formatGmTime( $epochSec, "rcs" );
         $text = _addMeta( $web, $topic, $text, $attachment, $rev,
                           $meta, $epochSec, $user );
