@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="997250351" format="1.0beta2" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1007514285" format="1.0" version="1.8"}%
 %META:TOPICPARENT{name="WebHome"}%
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/">
 	* <b>Simple search</b>:
@@ -25,6 +25,7 @@
 	</td><td>
 	  <select name="web">
 	  <option value="all">all public</option>
+	  <option>%INCLUDINGWEB%</option>
 %WEBLIST{"	  <option>$name</option>"}%
 	  </select>
 	  web(s)
