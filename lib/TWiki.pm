@@ -76,7 +76,7 @@ use vars qw(
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
 	$superAdminGroup $doSuperAdminGroup $OS
-        $disableAllPlugins 
+        $disableAllPlugins $attachAsciiPath
     );
 
 # Internationalisation (I18N) config from TWiki.cfg:
@@ -85,27 +85,32 @@ use vars qw(
 	$upperNational $lowerNational
     );
 
+# TWiki::Store config:
+use vars qw(
+        $rcsDir $rcsArg $nullDev $endRcsCmd $storeTopicImpl $keywordMode
+        $storeImpl @storeSettings
+    );
+
+# TWiki::Search config:
+use vars qw(
+        $cmdQuote $lsCmd $egrepCmd $fgrepCmd
+    );
+
 # ===========================
-# Global variables:
+# Global variables
+
+# Refactoring Note: these are split up by "site" globals and "request"
+# globals so that the latter may latter be placed inside a Perl object
+# instead of being globals as now.
+
+# ---------------------------
+# Site-Wide Global Variables
+
+# Regex variables
 use vars qw(
-        $webName $topicName $includingWebName $includingTopicName
-	$userName $wikiName $wikiUserName $urlHost $viewScript
-	@isoMonth @weekDay %userToWikiList %wikiToUserList $wikiVersion
-	$TranslationToken %mon2num $isList @listTypes @listElements
-        $newTopicFontColor $newTopicBgColor $noAutoLink $linkProtocolPattern
         $headerPatternDa $headerPatternSp $headerPatternHt $headerPatternNoTOC
-        $debugUserTime $debugSystemTime $twikiLibDir $attachAsciiPath
-        $viewableAttachmentCount $noviewableAttachmentCount
-        $cgiQuery @publicWebList $formatVersion $script
-        $readTopicPermissionFailed
-	$pageMode
+	$linkProtocolPattern
     );
-
-# Internationalisation (I18N) setup:
-use vars qw(
-	$basicInitDone $siteCharset $siteLang $siteFullLang $urlCharEncoding 
-    );
-
 # Regex setup for internationalisation:
 use vars qw(
 	$upperAlpha $lowerAlpha $mixedAlpha $mixedAlphaNum $lowerAlphaNum $numeric
@@ -120,15 +125,26 @@ use vars qw(
 	$validAsciiStringRegex $validUtf8CharRegex $validUtf8StringRegex 
     );
 
-# TWiki::Store config:
+# Misc. Globals
 use vars qw(
-        $rcsDir $rcsArg $nullDev $endRcsCmd $storeTopicImpl $keywordMode
-        $storeImpl @storeSettings
+	@isoMonth @weekDay %userToWikiList %wikiToUserList $wikiVersion
+	$TranslationToken %mon2num $viewScript $twikiLibDir $formatVersion
+	@publicWebList
     );
 
-# TWiki::Search config:
+# Internationalisation (I18N) setup:
 use vars qw(
-        $cmdQuote $lsCmd $egrepCmd $fgrepCmd
+	$siteCharset $siteLang $siteFullLang $urlCharEncoding 
+    );
+
+# ---------------------------
+# Per-Request "Global" Variables
+use vars qw(
+        $webName $topicName $includingWebName $includingTopicName
+	$userName $wikiName $wikiUserName $urlHost $isList @listTypes
+	@listElements $debugUserTime $debugSystemTime $script
+        $newTopicFontColor $newTopicBgColor $noAutoLink
+	$pageMode $readTopicPermissionFailed $cgiQuery $basicInitDone
     );
 
 # ===========================
