@@ -1,3 +1,37 @@
+---++ Distribution Contrib
+
+A module to provide programmatic access to:
+    1 Conversion between release identifiers (e.g. %WIKINAME -> TWiki2002...)
+    2 Fetching of individual files of any given distribution name (excluding zip files)
+
+---+++ Settings
 		* Set STUB = TWiki::Contrib::DistributionContrib
 		* Set SHORTDESCRIPTION = Provides access to TWiki Distribution meta information
-		
+
+---+++ To Do
+   1 The settings in Config.pm should be made into settings on this page.
+
+---+++ POD Documentation
+
+%$POD%		
+
+---++ Manifest
+%$MANIFEST%
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.MartinCleaver |
+|  Plugin Version: | %$DATE% (%$VERSION%) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  23 Aug 2004: | Initial version |
+|  TWiki Dependency: | %$DEPENDENCIES% |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+If you have comments or questions, please put them at TWiki:Plugins.TWikiReleaseTrackerPluginDev
