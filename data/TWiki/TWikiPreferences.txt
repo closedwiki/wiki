@@ -1,0 +1,66 @@
+*%WIKITOOLNAME% Site-Level Preferences*
+
+The following settings are __site-level preferences__ , e.g. affecting all users in all %WIKITOOLNAME% webs. These preferences can be overwritten by __web preferences__ (topic %WEBPREFSTOPIC% in each %WIKITOOLNAME% web) and __user preferences__ (your personal topic, i.e. Main.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
+
+__Preferences:__
+
+	* List of %WIKITOOLNAME% webs: (the first line of a topic; to add a web see TWikiDocumentation and TWikiWebsTable)
+		* Set WIKIWEBLIST = <a href="%WIKIHOMEURL%">%WIKITOOLNAME%</a> . {
+			 <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%MAINWEB%/WebHome">Main</a> 
+		  | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/WebHome">TWiki</a> 
+		  | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Know/WebHome">Know</a> 
+		  | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Test/WebHome">Test</a> 
+		  }
+
+	* List of topics of a web: (the second line of a topic, is overwritten by web preferences)
+		* Set WEBTOPICLIST = %WEB% . {
+				<a href="WebHome">Home</a> 
+			 | <a href="WebChanges">Changes</a>
+			 | <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&amp;regex=on&amp;search=.*">Index</A>
+			 | <a href="WebSearch">Search</a>
+			 | Go <input type="text" name="topic" size="16">
+		  }
+
+	* Copyright notice:
+		* Set WEBCOPYRIGHT = <font size="-2">Copyright &copy; 2000 by the contributing authors. \nAll material on this collaboration tool is the property of the contributing authors. <br> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME% Feedback">Send</a> feedback. </font>
+
+	* Wiki webmaster email address:
+		* Set WIKIWEBMASTER = Peter@Thoeny.com
+
+	* Web specific background color: (is overwritten by web preferences)
+		* Set WEBBGCOLOR = #C0C0C0
+
+	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences)
+		* Set NOSEARCHALL =
+
+	* Horizontal size of text edit box: (can be overwritten by user preferences)
+		* Set EDITBOXWIDTH = 70
+
+	* Vertical size of text edit box: (can be overwritten by user preferences)
+		* Set EDITBOXHEIGHT = 15
+
+	* Default state of the __link__ check box in the attach file page. Check box is initially checked if _Set ATTACHLINKBOX = CHECKED_ , unchecked if empty ( _Set ATTACHLINKBOX =_ ). If checked, a link is created to the attached file at the end of the topic: (can be overwritten by user preferences)
+		* Set ATTACHLINKBOX = 
+
+	* http-equiv meta tags for __view__, __rdiff__, __attach__, __search*__ scripts:
+		* Set HTTP_EQUIV_ON_VIEW = 
+
+	* http-equiv meta tags for __edit__ script. Example to expire immediately: <br> =Set HTTP_EQUIV_ON_EDIT = &lt;meta http-equiv="Expires" content="%<nop>GMTIME{"day month, year - hour:min:sec"}% GMT"&gt;=
+		* Set HTTP_EQUIV_ON_EDIT = 
+
+	* http-equiv meta tags for __preview__ script:
+		* Set HTTP_EQUIV_ON_PREVIEW = 
+
+
+__Notes:__
+	* A preference is defined as: <br> =6 spaces * Set NAME = value= <br> Example:
+		* S<nop>et WEBBGCOLOR = #FFFFC0
+	* Preferences are used as %TWIKIWEB%.TWikiVariables by enclosing the name in percent signs. Example:
+		* When you write variable =%WEB<nop>BGCOLOR%= , it gets expanded to =%WEBBGCOLOR%= .
+	* The sequential order of the preference settings is significant. Define preferences that use other preferences first, i.e. set =<nop>WEBCOPYRIGHT= before =<nop>WIKIWEBMASTER= since =%<nop>WEBCOPYRIGHT%= uses the =%<nop>WIKIWEBMASTER%= variable.
+	* You can introduce new variables and use them in your topics and templates. There is no need to change the %WIKITOOLNAME% engine (Perl scripts).
+
+__Related Topics:__
+	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
+	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
+	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%= .
