@@ -1,0 +1,77 @@
+%META:TOPICINFO{author="GraemeLufkin" date="1023309361" format="1.0" version="1.7"}%
+---++ Math Mode TWiki Plugin
+
+%TOC%
+
+This plugin allows you to include mathematics in a TWiki page, with a format very similar to <nop>LaTeX.
+The external program =latex2html= is used to generate =png= images from the math markup, and the image is then included in the page.
+The first time a particular expression is rendered, you will notice a lag as =latex2html= is being run on the server.
+Once rendered, the image is saved as an attached file for the page, so subsequent viewings will not require re-renders.
+When you remove a math expression from a page, its image is deleted.
+The file =twiki_l2h.init= that is attached to this page is used by the plugin to determine how =latex2html= will render the images.
+Note that this plugin is called MathModePlugin, not <nop>LaTeXPlugin, because the only piece of <nop>LaTeX implemented is rendering of images of mathematics.
+
+---+++ Syntax Rules
+
+A new delimiter is used to define math strings, the percent sign and the dollar sign (%$ _math goes here_ 
+$%).
+As with the other markup tokens (asterisk, underscore, equals), you enclose the text to be specially rendered with the token.
+The closing token must be on the same line as the opening token.
+This use is identical to that of <nop>LaTeX.
+For example, consider this math string: =\int_{-\infty}^\infty e^{-\alpha x^2} dx = \sqrt{\frac{\pi}{\alpha}}=
+When we enclose this string with the math delimeter, we get %$\int_{-\infty}^\infty e^{-\alpha x^2} dx = \sqrt{\frac{\pi}{\alpha}}$%
+If the preceding statement is not replaced by an image of the expression, your installation of the plugin is broken.
+
+The use of %$ is very similar to <nop>LaTeX's inline math mode.
+The plugin also supports equations that go on their own line, using two alternate syntaxes.
+Again like in <nop>LaTeX, you can enclose math with %\[ ...
+ \]% to get equations that will be rendered in big mode and centered in their own line.
+You get the same effect with the long form %MATHMODE{ ... 
+}%
+
+---+++ <nop>%TOPIC% Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>MATHMODEPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = This plugin allows you to include <nop>LaTeX formatted math in your TWiki pages.
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+---+++ Plugin Installation Instructions
+
+	* Download the archive, and unzip in the =twiki= directory.
+	* Make sure that the =Digest::MD5= module is properly installed.
+	* =latex2html= must be properly installed and in the path of the process that runs the TWiki scripts.
+	* Include some math in a page, and view it.
+
+---+++ More Details
+No versioning is used for the image files.
+This is okay, because the text of the page includes all the versions of the markup for the expressions, and can be re-rendered when you view a different version.
+
+Since this plugin depends on =latex2html=, you will get different results using different versions of =latex2html=.
+For example, in some versions, you get an ugly black border on the left and bottom of your images.
+Some versions pad own-line equations with whitespace on the left, screwing up the centering of the image.
+Your mileage may vary, try installing a newer version of =latex2html= if you encounter these issues. 
+
+For information about where this plugin is going, visit MathModePluginDev
+
+---+++ Plugin Info
+
+|  Plugin Author: | %MAINWEB%.GraemeLufkin |
+|  Plugin Version: | 05 Jun 2002: Second Release |
+|  Change History: | 03 Apr 2002: Initial version |
+|  CPAN Dependencies: | Digest::MD5 |
+|  Other Dependencies: | A working installation of =latex2html= |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+This plugin was created and tested on the 01 Dec 2001 version of TWiki.
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+
+-- Main.GraemeLufkin - 05 Jun 2002
+%META:FILEATTACHMENT{name="twiki_l2h.init" attr="" comment="" date="1017883719" path="twiki_l2h.init" size="66" user="GraemeLufkin" version="1.2"}%

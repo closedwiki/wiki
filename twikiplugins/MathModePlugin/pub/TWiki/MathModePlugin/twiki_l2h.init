@@ -1,0 +1,5 @@
+$IMAGE_TYPE = 'png';
+$NO_SIMPLE_MATH = 1;
+$NO_NAVIGATION = 1;
+
+1;
