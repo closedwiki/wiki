@@ -252,7 +252,6 @@ sub edit {
   $tmpl =~ s/%INITIALS%/$simplesig/go;
 
   $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
-  $tmpl =~ s/%SCRIPT%/$TWiki::script/go;
   $tmpl =~ s/%TEXT%/$text/go;
   $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
