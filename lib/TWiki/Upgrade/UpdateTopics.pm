@@ -27,9 +27,11 @@ use vars qw($CurrentDataDir $NewReleaseDataDir $DestinationDataDir $BaseDir $deb
 sub UpdateTopics 
 {
 	$debug = 0;
-    $CurrentDataDir = shift or die "UpdateTopics not provided with existing data directory!\n";
     $NewReleaseDataDir = shift or die "UpdateTopics not provided with new data directory!\n";
+    $CurrentDataDir = shift or die "UpdateTopics not provided with existing data directory!\n";
     $DestinationDataDir = shift or die "DestinationDataDir not provided\n";
+
+print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n";
 
     my $whoCares = `which rcsdiff`;   # we should use File::Which to do this, except that would mean
                                       # getting yet another .pm into lib, which seems like hard work?
@@ -74,7 +76,7 @@ sub UpdateTopics
 
 #redirect stderr into a file (rcs dumps out heaps of info)
 
-    my $RcsLogFile = $BaseDir."/rcs.log";
+    $RcsLogFile = $BaseDir."/rcs.log";
 
     unlink($RcsLogFile);  # let's have just the messages from this session!
 
