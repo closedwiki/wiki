@@ -72,7 +72,7 @@ use vars qw(
             $langAlphabetic $VERSION
            );
 
-$VERSION = '$LastChangedDate$ $Rev$';
+$VERSION = ' $Date$ $Rev$ ';
 
 # SMELL: should this be part of the config?
 $defaultWikiName = "TWikiGuest";
