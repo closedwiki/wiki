@@ -73,6 +73,60 @@ use vars qw(
 # to a flag character if it ever does occur (very unlikely)
 $TranslationToken= "\0";	# Null not allowed in charsets used with TWiki
 
+=pod
+
+---++ StaticMethod getTWikiLibDir() -> $path
+
+STATIC method.
+
+Returns the full path of the directory containing TWiki.pm
+
+=cut
+
+sub getTWikiLibDir {
+    if( $twikiLibDir ) {
+        return $twikiLibDir;
+    }
+
+    # FIXME: Should just use $INC{"TWiki.pm"} to get path used to load this
+    # module.
+    my $dir = '';
+    foreach $dir ( @INC ) {
+        if( $dir && -e "$dir/TWiki.pm" ) {
+            $twikiLibDir = $dir;
+            last;
+        }
+    }
+
+    # fix path relative to location of called script
+    if( $twikiLibDir =~ /^\./ ) {
+        print STDERR "WARNING: TWiki lib path $twikiLibDir is relative; you should make it absolute, otherwise some scripts may not run from the command line.";
+        my $bin;
+        if( $ENV{SCRIPT_FILENAME} &&
+            $ENV{SCRIPT_FILENAME} =~ /^(.+)\/[^\/]+$/ ) {
+            # CGI script name
+            $bin = $1;
+        } elsif ( $0 =~ /^(.*)\/.*?$/ ) {
+            # program name
+            $bin = $1;
+        } else {
+            # last ditch; relative to current directory.
+            require Cwd;
+            import Cwd qw( cwd );
+            $bin = cwd();
+        }
+        $twikiLibDir = "$bin/$twikiLibDir/";
+        # normalize "/../" and "/./"
+        while ( $twikiLibDir =~ s|([\\/])[^\\/]+[\\/]\.\.[\\/]|$1| ) {
+        };
+        $twikiLibDir =~ s|([\\/])\.[\\/]|$1|g;
+    }
+    $twikiLibDir =~ s|([\\/])[\\/]*|$1|g; # reduce "//" to "/"
+    $twikiLibDir =~ s|[\\/]$||;           # cut trailing "/"
+
+    return $twikiLibDir;
+}
+
 BEGIN {
 
     $TRUE = 1;
@@ -381,6 +435,14 @@ BEGIN {
 
     $regex{validUtf8StringRegex} =
       qr/^ (?: $regex{validUtf8CharRegex} )+ $/xo;
+
+    # Check for unsafe search regex mode (affects filtering in) - default
+    # to safe mode
+    $TWiki::cfg{ForceUnsafeRegexes} = 0 unless defined $TWiki::cfg{ForceUnsafeRegexes};
+
+    # initialize lib directory early because of later 'cd's
+    getTWikiLibDir();
+
 };
 
 use TWiki::Access;    # access control
@@ -580,6 +642,8 @@ sub writePageHeader {
         }
     }
 
+    $this->{plugins}->modifyHeaderHandler();
+
     print $query->header( @hopts );
 }
 
@@ -711,60 +775,6 @@ sub readOnlyMirrorWeb {
         }
     }
     return @mirrorInfo;
-}
-
-=pod
-
----++ StaticMethod getTWikiLibDir() -> $path
-
-STATIC method.
-
-Returns the full path of the directory containing TWiki.pm
-
-=cut
-
-sub getTWikiLibDir {
-    if( $twikiLibDir ) {
-        return $twikiLibDir;
-    }
-
-    # FIXME: Should just use $INC{"TWiki.pm"} to get path used to load this
-    # module.
-    my $dir = '';
-    foreach $dir ( @INC ) {
-        if( $dir && -e "$dir/TWiki.pm" ) {
-            $twikiLibDir = $dir;
-            last;
-        }
-    }
-
-    # fix path relative to location of called script
-    if( $twikiLibDir =~ /^\./ ) {
-        print STDERR "WARNING: TWiki lib path $twikiLibDir is relative; you should make it absolute, otherwise some scripts may not run from the command line.";
-        my $bin;
-        if( $ENV{SCRIPT_FILENAME} &&
-            $ENV{SCRIPT_FILENAME} =~ /^(.+)\/[^\/]+$/ ) {
-            # CGI script name
-            $bin = $1;
-        } elsif ( $0 =~ /^(.*)\/.*?$/ ) {
-            # program name
-            $bin = $1;
-        } else {
-            # last ditch; relative to current directory.
-            require Cwd;
-            import Cwd qw( cwd );
-            $bin = cwd();
-        }
-        $twikiLibDir = "$bin/$twikiLibDir/";
-        # normalize "/../" and "/./"
-        while ( $twikiLibDir =~ s|([\\/])[^\\/]+[\\/]\.\.[\\/]|$1| ) {
-        };
-        $twikiLibDir =~ s|([\\/])\.[\\/]|$1|g;
-    }
-    $twikiLibDir =~ s|([\\/])[\\/]*|$1|g; # reduce "//" to "/"
-    $twikiLibDir =~ s|[\\/]$||;           # cut trailing "/"
-
-    return $twikiLibDir;
 }
 
 =pod
@@ -945,11 +955,15 @@ if $pathInfo is set, this overrides $theTopic.
 
 sub new {
     my( $class, $pathInfo, $remoteUser, $topic, $url, $query ) = @_;
-
     $pathInfo ||= '';
     $remoteUser ||= $TWiki::cfg{DefaultUserLogin};
     $topic ||= '';
     $url ||= '';
+
+    if( $ENV{'REDIRECT_STATUS'} && $ENV{'REDIRECT_STATUS'} eq '401' ) {
+        # bail out if authentication failed
+        return undef;
+    }
 
     my $this = bless( {}, $class );
 
@@ -988,13 +1002,6 @@ sub new {
         $ENV{'PATH'} = $TWiki::cfg{SafeEnvPath};
     }
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
-
-    # Check for unsafe search regex mode (affects filtering in) - default
-    # to safe mode
-    $TWiki::cfg{ForceUnsafeRegexes} = 0 unless defined $TWiki::cfg{ForceUnsafeRegexes};
-
-    # initialize lib directory early because of later 'cd's
-    getTWikiLibDir();
 
     $this->{security} = new TWiki::Access( $this );
 
@@ -1035,7 +1042,6 @@ sub new {
 
     # All roads lead to WebHome
     $topic = $TWiki::cfg{HomeTopicName} if ( $topic =~ /\.\./ );
-
     $topic =~ s/$TWiki::cfg{NameFilter}//go;
     $topic = $TWiki::cfg{HomeTopicName} unless $topic;
     $this->{topicName} = $topic;
@@ -1062,7 +1068,6 @@ sub new {
     } else {
         $this->{urlHost} = $TWiki::cfg{DefaultUrlHost};
     }
-
     # initialize preferences, first part for site and web level
     $this->{prefs} = new TWiki::Prefs( $this );
 
@@ -1094,7 +1099,6 @@ sub new {
 
     # initialize user preferences
     $this->{prefs}->initializeUser();
-
     $this->{renderer} = new TWiki::Render( $this );
 
     # Finish plugin initialization - register handlers
@@ -1709,18 +1713,16 @@ sub nativeUrlEncode {
 
 =pod
 
----++ StaticMethod searchableTopic (  $topic  ) -> spaced $topic
+---++ StaticMethod spaceOutWikiWord( $word ) -> $string
 
-Space out the topic name for a search, by inserting ' *' at
-the start of each component word.
+Space out a wiki word by inserting spaces before each word component
 
 =cut
 
-sub searchableTopic {
-    my( $topic ) = @_;
-    # FindMe -> Find\s*Me
-    $topic =~ s/([$regex{lowerAlpha}]+)([$regex{upperAlpha}$regex{numeric}]+)/$1%20*$2/go;   # "%20*" is " *" - I18N: only in ASCII-derived charsets
-    return $topic;
+sub spaceOutWikiWord {
+    my $word = shift;
+    $word =~ s/([$regex{lowerAlpha}]+)([$regex{upperAlpha}$regex{numeric}]+)/$1 $2/go;
+    return $word;
 }
 
 # Expands variables by replacing the variables with their
@@ -1803,9 +1805,11 @@ sub _processTags {
 
     my @queue = split( /(%)/, $text );
     my @stack;
-    #my $tell = 0; # uncomment all tell lines set this to 1 to print debugging
+    my $stackTop = ''; # the top stack entry. Done this way instead of
+    # referring to the top of the stack for efficiency. This var
+    # should be considered to be $stack[$#stack]
 
-    push( @stack, '' );
+    #my $tell = 0; # uncomment all tell lines set this to 1 to print debugging
     while ( scalar( @queue )) {
         my $token = shift( @queue );
         #print ' ' x $tell,"PROCESSING $token \n" if $tell;
@@ -1813,54 +1817,65 @@ sub _processTags {
         # each % sign either closes an existing stacked context, or
         # opens a new context.
         if ( $token eq '%' ) {
-            #print ' ' x $tell,"CONSIDER $stack[$#stack]\n" if $tell;
+            #print ' ' x $tell,"CONSIDER $stackTop\n" if $tell;
             # If this is a closing }%, try to rejoin the previous
             # tokens until we get to a valid tag construct. This is
             # a bit of a hack, but it's hard to think of a better
             # way to do this without a full parse that takes % signs
             # in tag parameters into account.
-            if ( $stack[$#stack] =~ /}$/ ) {
-                while ( $#stack &&
-                        $stack[$#stack] !~ /^%([A-Z][A-Z0-9_:]*){(.*)}$/ ) {
-                    my $top = pop( @stack );
+            if ( $stackTop =~ /}$/ ) {
+                while ( scalar( @stack) &&
+                        $stackTop !~ /^%([A-Z][A-Z0-9_:]*){.*}$/ ) {
+                    my $top = $stackTop;
                     #print ' ' x $tell,"COLLAPSE $top \n" if $tell;
-                    $stack[$#stack] .= $top;
+                    $stackTop = pop( @stack ) . $top;
                 }
             }
-            if ( $stack[$#stack] =~ m/^%([A-Z][A-Z0-9_:]*)(?:{(.*)})?$/ ) {
-                my $tag = $1;
-                my $args = $2;
+            if ( $stackTop =~ m/^%([A-Z][A-Z0-9_:]*)(?:{(.*)})?$/ ) {
+                my( $tag, $args ) = ( $1, $2 );
                 #print ' ' x $tell,"POP $tag\n" if $tell;
-                my $e = $this->_expandTag( $tag, $args, @_ );
+                my $e;
+                if ( defined( $this->{SESSION_TAGS}{$tag} )) {
+                    $e = $this->{SESSION_TAGS}{$tag};
+                } elsif ( defined( $constantTags{$tag} )) {
+                    $e = $constantTags{$tag};
+                } elsif ( defined( $functionTags{$tag} )) {
+                    $e = &{$functionTags{$tag}}
+                      ( $this, new TWiki::Attrs( $args ), @_ );
+                }
+
                 if ( defined( $e )) {
                     #print ' ' x $tell--,"EXPANDED $tag -> $e\n" if $tell;
-                    pop( @stack );
+                    $stackTop = pop( @stack );
                     # Choice: can either tokenise and push the expanded
                     # tag, or can recursively expand the tag. The
                     # behaviour is different in each case.
                     #unshift( @queue, split( /(%)/, $e ));
-                    $stack[$#stack] .=
+                    $stackTop .=
                       $this->_processTags($e, $depth-1, $expanding , @_ );
                 } else { # expansion failed
                     #print ' ' x $tell++,"EXPAND $tag FAILED\n" if $tell;
-                    push( @stack, '%' ); # push a new context, starting
+                    push( @stack, $stackTop );
+                    $stackTop = '%'; # push a new context
                 }
             } else {
-                push( @stack, '%' ); # push a new context
+                push( @stack, $stackTop );
+                $stackTop = '%'; # push a new context
                 #$tell++ if ( $tell );
             }
         } else {
-            $stack[$#stack] .= $token;
+            $stackTop .= $token;
         }
     }
 
     # Run out of input. Gather up everything in the stack.
-    while ( $#stack ) {
-        my $expr = pop( @stack );
-        $stack[$#stack] .= $expr;
+    while ( scalar( @stack )) {
+        my $expr = $stackTop;
+        $stackTop = pop( @stack );
+        $stackTop .= $expr;
     }
 
-    return pop( @stack );
+    return $stackTop;
 }
 
 # Handle expansion of a tag (as against preference tags)
@@ -2311,6 +2326,8 @@ sub _INTURLENCODE {
 
 sub _SPACEDTOPIC {
     my ( $this, $params, $theTopic ) = @_;
+    my $topic = spaceOutWikiWord( $theTopic );
+    $topic =~ s/ / */g;
     return urlEncode( searchableTopic( $theTopic ));
 }
 
