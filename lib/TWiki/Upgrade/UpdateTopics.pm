@@ -138,6 +138,7 @@ sub copyNewTopics
 #    return if $filename =~ /,v$/;
 #    return if $filename =~ /.lock$/;
 #    return if $filename =~ /~$/;
+	return if $filename =~ /.svn.*/;	#don't follow into .svn dirs
 
     if ( -d $filename) {
         print "\nprocessing directory $filename";
