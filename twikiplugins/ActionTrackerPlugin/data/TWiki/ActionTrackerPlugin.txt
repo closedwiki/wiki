@@ -22,23 +22,21 @@ _( Discussion in TWiki:Plugins/ActionTrackerPluginDev )_
 ---++ Actions
 
 Write the command =%<nop>ACTION{= _attributes_ =}%= anywhere in a TWiki topic. All the text following the final % up to the next end-of-line is taken as the action description. Standard attributes are
-	| *Name* | *Value* | *Description* |
-	| =who= | See [[#PeopleAnchor][People]] | The person or team responsible for completing the action. %GREEN% Auto-completed, current user %ENDCOLOR% |
-	| =due= | See [[#DateFormats][Date Formats]] | The due date %GREEN% Auto-completed, today %ENDCOLOR% |
-	| =state= | =open= or =closed= | Set to =open= if the action is still open; set to =closed= if the action is closed. To extend the state set, see [[#NonStandardAttributes][Non-standard attributes]]. %GREEN% Auto-completed, open %ENDCOLOR% |
-	| =notify= | See [[#PeopleAnchor][People]] | wikinames, or e-mail addresses, of people to notify when the action changes. See [[#NotiFication][Notification]] for details on action notification. |
-	| =creator= | See [[#PeopleAnchor][People]] | Who created the action. %GREEN% Auto-completed, current user %ENDCOLOR% |
-	| =created= | See [[#DateFormats][Date Formats]] | Date the action was created. %GREEN% Auto-completed, today %ENDCOLOR% |
-	| =closer= | See [[#PeopleAnchor][People]] | Who closed the action. %GREEN% Auto-completed if state="closed", current user%ENDCOLOR% |
-	| =closed= | See [[#DateFormats][Date Formats]] | Date the action was closed, if ever. %GREEN% Auto-completed if state="closed", today%ENDCOLOR% |
-	| =uid= | 6 digit number | Unique ID of the action. See [[#UiDs][UIDs]]. %GREEN% Auto-completed, calculated %ENDCOLOR% |
+	| *Name* | *Value* | *Description* | *Auto-completed* |
+	| =who= | See [[#PeopleAnchor][People]] | The person or team responsible for completing the action. | current user |
+	| =due= | See [[#DateFormats][Date Formats]] | The due date | today |
+	| =state= | =open= or =closed= | Set to =open= if the action is still open; set to =closed= if the action is closed. To extend the state set, see [[#NonStandardAttributes][Non-standard attributes]]. | open |
+	| =notify= | See [[#PeopleAnchor][People]] | wikinames, or e-mail addresses, of people to notify when the action changes. See [[#NotiFication][Notification]] for details on action notification. | |
+	| =creator= | See [[#PeopleAnchor][People]] | Who created the action. | current user |
+	| =created= | See [[#DateFormats][Date Formats]] | Date the action was created. | today |
+	| =closer= | See [[#PeopleAnchor][People]] | Who closed the action. | if (and only if) state="closed", current user |
+	| =closed= | See [[#DateFormats][Date Formats]] | Date the action was closed, if ever. | if (and only if) state="closed", today |
+	| =uid= | 6 digit number | Unique ID of the action. See [[#UiDs][UIDs]]. | calculated |
 
 For example,
 <pre>
 %<nop>ACTION{ who="TWikiGuest" due="2 Jan 2004" state="open" notify="AttillaTheHun" }% An action for TWikiGuest
 </pre>
-The fields marked %GREEN% Auto-completed %ENDCOLOR% are automatically filled in, if they are missing, whenever someone saves the topic containing the action. The %GREEN% default values %ENDCOLOR% are as indicated in the table. You can override this behaviour by providing values for any of these attributes when you type the action. __Note:__ you are __not__ recommended to provide a value for the =uid= (see [[#UiDs][UIDs]]) field!
-
 If the action description doesn't all fit on one line you can use shell-style here-document syntax to grab the next few lines. For example,
 <pre>
 %<nop>ACTION{ who="LittleOysters" due="2 Jan 1884" state="open" }% &lt;&lt;EOF
@@ -49,6 +47,8 @@ Of cabbages and kings.
 EOF
 </pre>
 The delimiter must be a sequence of alphanumeric characters, and the closing delimiter must be on a line of its own.
+
+The fields with an entry in the 'Auto-completed' column are automatically filled in, if they are missing, whenever someone saves the topic containing the action. The default values are as indicated in the table. You can override this behaviour by providing values for any of these attributes when you type the action. __Note:__ you are __not__ recommended to provide a value for the =uid= (see [[#UiDs][UIDs]]) field!
 
 #DateFormats
 ---+++ Date formats
@@ -75,7 +75,7 @@ You are *strongly* recommended never to use the 'mm/dd/yyyy or mm/dd/yyyy' forma
 #PeopleAnchor
 ---+++ People
 
-People are identified to the action tracker using a wikiname (e.g. =Main.WilliamWallace= or simply =WilliamWallace=) or an e-mail address (e.g. =a_einstein@<nop>pto.co.ch=). The e-mail address is useful if you want to notify people who aren't registered in the wiki, but bear in mind that if they are outside your firewall, they'll get action notifications but the chances are they won't be able to edit pages and close actions. _Very_ annoying!
+People are identified to the action tracker using a wikiname (e.g. =%MAINWEB%.William<nop>Wallace= or simply =William<nop>Wallace=) or an e-mail address (e.g. =a_einstein@<nop>pto.co.ch=). The e-mail address is useful if you want to notify people who aren't registered in the wiki, but bear in mind that if they are outside your firewall, they'll get action notifications but the chances are they won't be able to edit pages and close actions. _Very_ annoying!
 
 E-mail addresses of people are found by the process [[#TranslatingNamesToEMailAddresses][described below]].
 
@@ -88,7 +88,9 @@ You can assign an action to a group defined using a TWiki group topic (see %TWIK
 %ACTION<nop>{who=TWikiAdminGroup ...}%
 %ACTION<nop>{who="KnutHaraldsen,MagnusMagnusson" ...}%
 </pre>
+%RED%
 __Note__ in general you should *not* use these mechanisms for assigning actions, because the actions so created are not specific. Actions should be assigned to one person only, so that it's clear who is responsible for them.
+%ENDCOLOR%
 
 #UiDs
 ---+++ UIDs
@@ -131,7 +133,7 @@ _You should see values in all of the fields below; if they are all empty, your v
 |  Who: | <input type="text" name="qwho" value="%URLPARAM{"qwho" default=".*"}%" size="20" /> |
 |  Notify: | <input type="text" name="qnotify" value="%URLPARAM{"qnotify" default=".*"}%" size="20" /> |
 |  State: | <select name="qstate"> <option>%URLPARAM{"qstate" default=".*"}%</option> <option>open</option> <option>late</option> <option>closed</option> <option></option> </select> |
-|  Within: | <input type="text" name="qwithin" value="%URLPARAM{"qwithin" default="1000" }%" size="3" /> days |
+|  Within: | <input type="text" name="qwithin" value="%URLPARAM{"qwithin" default="365" }%" size="3" /> days |
 |  Web: | <input type="text" name="qweb" value="%URLPARAM{"qweb" default=".*"}%" size="20" /> |
 |  Topic: | <input type="text" name="qtopic" value="%URLPARAM{"qtopic" default=".*"}%" size="20" /> |
 | | <input type="submit" value="Go" /> |
@@ -298,23 +300,20 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 	* One line description, shown in the TextFormattingRules topic
 		* Set SHORTDESCRIPTION = Adds support for action tags in topics, and automatic notification of action statii
 
-	* The format of an action output. The following fields can be output: web, topic, text, who, due, notify, uid, creator, state, edit, and any EXTRAS you may have. These settings can be overridden in an ACTIONSEARCH command using the =format= and =header= attributes. 
-	* TABLEHEADER defines the column headings.
+	* The format of an action output. The following fields can be output: web, topic, text, who, due, notify, uid, creator, state, edit, and any EXTRAS you may have. These settings can be overridden in an ACTIONSEARCH command using the =format= and =header= attributes. TABLEHEADER defines the column headings,  TABLEFORMAT defines the contents of the columns, and if TABLEORIENT is set to "rows", action tables will be aligned as rows of values instead of the default columns of values.
 		* Set TABLEHEADER = | Assigned to | Due date | Description | State | Notify ||
-	* TABLEFORMAT defines the contents of the columns
 		* Set TABLEFORMAT = | $who | $due | $text | $state | $notify | $edit |
-	* If TABLEORIENT is set to "rows", action tables will be aligned as rows of values instead of the default columns of values.
 		* Set TABLEORIENT = cols
 
-	* The alternative text format of an action, used when mailing action or change notifications.
+	* The alternative text format of an action, as seen by a mail recipient who doesn't accept HTML in mail. Used when mailing action or change notifications.
 		* Set TEXTFORMAT = Action for $who, due $due, $state$n$text$n
 
-	* Set the colours for late actions, errors and the table headers. Accepts standard HTML colours.
+	* The colours for late actions, errors and the table headers. Accepts standard HTML colours.
 		* Set LATECOL = yellow
 		* Set BADDATECOL = red
 		* Set HEADERCOL = orange
 
-	* The format of the action editor. You can also set EDITBOXWIDTH and EDITBOXHEIGHT to override the defaults (which are %EDITBOXWIDTH%x%EDITBOXHEIGHT%) just for the action editor.
+	* The format of the fields in the action editor. You can also set EDITBOXWIDTH and EDITBOXHEIGHT to override the defaults (which are %EDITBOXWIDTH%x%EDITBOXHEIGHT%) just for the action editor.
 		* Set EDITHEADER = | Assigned to | Due date | State | Notify |
 		* Set EDITFORMAT = | $who | $due | $state | $notify |
 		* Set EDITORIENT = cols
@@ -397,7 +396,7 @@ The changedsince feature of the notificationscript requires you to be using RCS 
 ---++ Dates before 1970
 Due to limitations in the Time::Parsedate module, dates before January 1, 1970 may be parsed incorrectly.
 
-%RED% Please do *not* post bugs here. Either use the standard TWiki bug reporting mechanisms or add them to the developer topic http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev. %ENDCOLOR%
+%RED% Please do *not* post bugs here. Please use the [[http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev][standard TWiki bug reporting mechanisms]] instead. %ENDCOLOR%
 
 ---
 ---+ Plugin Info
@@ -430,6 +429,7 @@ Developer discussion is in TWiki:Plugins/ActionTrackerPluginDev.
 
 This code is an original development of Motorola Inc. and is protected by the following copyrights:
 	* Copyright (C) 2002-2003 Motorola. All Rights Reserved.
+	* Portions Copyright (C) 2004 Crawford Currie. All Rights Reserved.
 
 ---++ License
 
