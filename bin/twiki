@@ -1,0 +1,142 @@
+#!/usr/bin/perl -wT
+#
+# TWiki Collaboration Platform, http://TWiki.org/
+#
+# For licensing info read license.txt file in the TWiki root.
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+
+=pod
+Examination of a TWikiRoot/bin/ finds that the files are practically identical.
+
+This script goes one step further: it replaces the whole of the bin
+directory with a single CommonFrontEndCgiScript. It checks PATH_INFO,
+extracts the op, (e.g. op=view) and rewrites PATH_INFO without the
+op. (op was named verb in my original proposal). It then looks up 
+the op using the table below to work out which TWiki::UI:: method to call,
+and delegates control.
+
+This implementation eliminates the directory entirely but another suggestion
+was to make it take the place of each of the cgi scripts in
+the bin directory.  (i.e. if you want separate files, they can be sym-
+linked to the same implementations)
+
+Re: authentication - I suspect files are either authenticated or they are not.
+This necessitates TWO scripts - 'twikianon' and 'twikiauth', not a new one 
+everytime we want another type of action.
+
+This leads the way for a general method for e.g. plugins requiring bin
+
+I suspect that I've just reimplemented the core of CGI::Application, but
+we'll see.
+
+I have not yet considered what to do about setlib.cfg, etc.
+
+=cut
+
+
+use CGI::Carp qw(fatalsToBrowser);
+#print "Content-type: text/html\n\n";
+
+BEGIN {
+    # Set default current working directory (needed for mod_perl)
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC, at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+
+    # 'Use locale' for internationalisation of Perl regexes -
+    # main locale settings are done in TWiki::setupLocale
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::useLocale ) {
+        require locale;
+        import locale ();
+    }
+}
+use TWiki::UI;
+
+my %ops = (
+	     attach => [ "TWiki::UI::Upload", "attach" ],
+	     changes => [ "TWiki::UI::Changes", "changes" ],
+	     edit => [ "TWiki::UI::Edit", "edit" ],
+	     manage => [ "TWiki::UI::Manage", "manage" ],
+	     oops => [ "TWiki::UI::Oops", "oops_cgi" ],
+	     passwd => [ "TWiki::UI::Register", "passwd_cgi" ],
+	     preview => [ "TWiki::UI::Preview", "preview" ],
+	     rdiff => [ "TWiki::UI::RDiff", "diff" ],
+	     register => [ "TWiki::UI::Register", "register_cgi" ],
+	     rename => [ "TWiki::UI::Manage", "rename" ],
+	     resetpasswd => [ "TWiki::UI::Register", "resetPassword" ],
+	     save => [ "TWiki::UI::Save", "savemulti" ],
+	     search => [ "TWiki::UI::Search", "search" ],
+	     statistics => [ "TWiki::UI::Statistics", "statistics" ],
+	     upload => [ "TWiki::UI::Upload", "upload" ],
+	     view => [ "TWiki::UI::View", "view" ],
+	     viewfile => [ "TWiki::UI::View", "viewfile" ]
+	   );
+
+($ENV{PATH_INFO}, $op) = take_op($ENV{PATH_INFO});
+my ($lib, $entrypoint) = find_op($op);
+#print "E: $entrypoint\n";
+
+if ($entrypoint eq "") {
+    html_error();
+} else {
+#    print "<H1> For '$op'- running lib::$entrypoint</H1>";
+#    print "<h2>".join("\n<LI>",@INC)."</h2>";
+    eval "TWiki::UI::run($lib, $entrypoint)";
+}
+
+=pod
+Currently this only takes the hardcoded table of inbuilt TWikiOps.
+However, there is nothing to stop us adding a syntax:
+    /view => ...
+    /plugins => delegate according to some table
+    /bunch-of-legacy-files
+
+Now we just need to determine how to carve out the ops namespace.
+=cut
+sub find_op {
+    my $op = shift;
+    my $ref = $ops{$op};
+    my ($lib, $entrypoint) = @$ref;
+#    print "A: $lib, $entrypoint\n";
+    return ($lib, $entrypoint);
+}
+
+sub take_op {
+    my $path = shift;
+    $path =~ m!/(.*?)/.*!;
+    my $op = $1;
+    $path =~ s!/$op!!;
+    
+    #$op =~ s!/.*?!!;
+    #print "P: ".$path."\n";
+    #print "O: $op\n";
+    return ($path, $op);
+}
+
+sub html_error {
+    print "<html><head><title>TWiki</title></head>\n";
+    print "<body>\n";
+    print "<h1>".$op." is not valid</h1>\n";
+    print "<LI>".show_ops("\n<LI>");
+    print "</body></html>\n";
+}
+
+sub show_ops {
+    my ($delim) = @_;
+    for my $key (sort keys %ops) {
+	print $delim, $key;
+    }
+}
