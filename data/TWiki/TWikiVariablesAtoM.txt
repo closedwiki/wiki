@@ -32,10 +32,6 @@ __Note:__ This topic is included by TWikiVariables
 	* Syntax: =%<nop>BASEWEB%=
 	* Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
 
-#VarDATE
----+++ DATE -- date a topic based on a template was created
-   * %X% Only available in template topics. When used in a template topic, this variable will be expanded to the current date when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details. See also [[TWikiVariables#VarTIME][%<nop>DATE%]]
-
 #VarDISPLAYTIME
 ---+++ DISPLAYTIME -- display time
 	* Syntax: =%<nop>DISPLAYTIME%=
@@ -104,6 +100,8 @@ __Note:__ This topic is included by TWikiVariables
 	* Variables can be shortened to 3 characters
 	* Example: =%<nop>GMTIME{"$day $month, $year - $hour:$min:$sec"}%= expands to =%GMTIME{"$day $month, $year - $hour:$min:$sec"}%=
 	* Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
+
+%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarHOMETOPIC
 ---+++ HOMETOPIC -- home topic in each web

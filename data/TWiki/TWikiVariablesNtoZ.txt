@@ -157,6 +157,8 @@ __Note:__ This topic is included by TWikiVariables
 	* Example: =%<nop>SERVERTIME{"$hou:$min"}%= expands to =%SERVERTIME{"$hou:$min"}%=
 	* Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
 
+%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+
 #VarSPACEDTOPIC
 ---+++ SPACEDTOPIC -- topic name, spaced and encoded
 	* The current topic name with added spaces, for regular expression search of Ref-By
