@@ -10,11 +10,12 @@ use strict;
 open(STDERR,'>&STDOUT'); # redirect error to browser
 use Data::Dumper qw( Dumper );
 use CPAN;
+use Cwd qw( getcwd );
 
 my $account = "twiki";
 
 # TODO: copied (and cropped) from install_twiki.cgi; share
-my $cgibin      = "/Users/$account/Sites/cgi-bin";
+my $cgibin      = getcwd() . "/cgi-bin";
 my $lib		= $cgibin . '/lib';
 my $cpan        = "$lib/CPAN";
 
@@ -26,6 +27,7 @@ installLocalModules({
     # TODO: update to use same output as =cpan/calc-twiki-deps.pl=
     modules => [ @ARGV ? @ARGV : qw( 
 				     XML::Parser XML::Simple 
+				     Algorithm::Diff Text::Diff
 				     Text::Glob Number::Compare File::Find::Rule 
 				     File::Slurp File::Slurp::Tree
 				     List::Permutor File::Temp 
@@ -42,6 +44,7 @@ installLocalModules({
 				     CGI::Session 
 				     Weather::Com
 				     Barcode::Code128
+				     XML::LibXML XML::LibXSLT XML::Simple Text::ParseWords Cache::Cache String::CRC
 				     ) ],
 #    Data::UUID Date::Handler Safe Language::Prolog GD XMLRPC::Transport::HTTP
     dir => $cpan,
