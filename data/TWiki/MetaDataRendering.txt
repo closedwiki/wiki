@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999187860" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PeterThoeny" date="1010736000" format="1.0" version="1.3"}%
 %META:TOPICPARENT{name="TWikiTemplates"}%
 %STARTINCLUDE%
 ---## Meta Data Rendering
@@ -9,20 +9,21 @@ This is rendered using the %<nop>META% variable.  This is mostly used in the =vi
 
 At present support is fairly basic:
   | *Variable usage:*	| *Comment:*  |
-  | %<nop>META{"form"}% | Show form data, see [[TWikiDocumentation#Form_Templates][Form Templates]] |
-  | %<nop>META{"attachments"}% | Show attachments, excluding hidden ones |
-  | options for attachments: |
-  | all="on" | Show all attachments i.e.  including hidden ones |
-  | %<nop>META{"moved"}% | Details of any topic moves |
-  | %<nop>META{"parent [options]"}% | Show topic parent |
-  | options for parent: |
-  | dontrecurse="on" | By default recurses up tree, this has some cost |
-  | prefix="..." | Prefix that goes before parents, but only if there are parents, default "" |
-  | suffix="..." | Suffix, only appears if there are parents, default "" |
-  | seperator="..." | Seperator between parents, default is " > " |
+  | =%<nop>META{"form"}%= | Show form data, see [[TWikiDocumentation#Form_Templates][Form Templates]] |
+  | =%<nop>META{"attachments"}%= | Show attachments, excluding hidden ones. Options: <br > \
+	 ==all="on"==: Show all attachments i.e. including hidden ones |
+  | =%<nop>META{"moved"}%= | Details of any topic moves |
+  | =%<nop>META{"parent"}%= | Show topic parent. Options: <br /> \
+	 ==dontrecurse="on"==: By default recurses up tree, this has some cost. <br /> \
+	 ==nowebhome="on"==: Suppress <nop>%HOMETOPIC%. <br /> \
+	 ==prefix="..."==: Prefix that goes before parents, but only if there are parents, default =""=. <br /> \
+	 ==suffix="..."==: Suffix, only appears if there are parents, default =""=. <br /> \
+	 ==separator="..."==: Separator between parents, default is =" &gt; "=. |
 
 Possible future additions:
 	* Rendering of form data to alternate formats e.g. bullet lists
 	* Specify a template to be used for rendering
 %STOPINCLUDE%
+
 -- JohnTalintyre - 29 Aug 2001 <br />
+-- Main.PeterThoeny - 10 Jan 2002
