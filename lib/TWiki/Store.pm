@@ -131,6 +131,8 @@ sub getFileDir
 {
    my( $web, $topic, $attachment, $extension) = @_;
    
+   $extension = "" if( ! $extension );
+   
    my $dir = "";
    if( ! $attachment ) {
       if( $extension eq ",v" && $TWiki::useRcsDir && -d "$TWiki::dataDir/$web/RCS" ) {
