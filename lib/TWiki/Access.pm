@@ -145,7 +145,7 @@ sub checkAccessPermission {
     # extract the * Set (ALLOWTOPIC|DENYTOPIC)$mode =
     # from the topic text
     foreach( split( /\n/, $theTopicText ) ) {
-        if( /^(?:\t| {3})+\*\sSet\s(ALLOW|DENY)TOPIC$mode\s*\=\s*(.*)/ ) {
+        if( /^$TWiki::regex{setRegex}(ALLOW|DENY)TOPIC$mode\s*\=\s*(.*)$/ ) {
             my ( $how, $set ) = ( $1, $2 );
             # Note: an empty value is a valid value!
             if( defined( $set )) {

@@ -440,10 +440,11 @@ sub groupMembers {
                                 $this->{web}, $this->{wikiname},
                                 undef );
         foreach( split( /\n/, $text ) ) {
-            if( /^\s+\*\sSet\sGROUP\s*\=\s*(.+)$/ ) {
+            if( /$TWiki::regex{setRegex}GROUP\s*=\s*(.+)$/ ) {
                 # Note: if there are multiple GROUP assignments in the
-                # topic, the last will be taken.
-                $this->{members} = $this->{session}->{users}->expandUserList( $1 );
+                # topic, only the last will be taken.
+                $this->{members} = 
+                  $this->{session}->{users}->expandUserList( $1 );
             }
         }
         # backlink the user to the group

@@ -69,15 +69,15 @@ sub parseText {
     my $value ='';
     my $isKey = 0;
     foreach my $line ( split( /\r?\n/, $text ) ) {
-        if( $line =~ /^(\t|   )+\*\sSet\s(\w+)\s\=\s*(.*)$/ ) {
+        if( $line =~ m/$TWiki::regex{setVarRegex}/o ) {
             if( $isKey ) {
                 $prefs->insertPrefsValue( $key, $value );
             }
-            $key = $2;
-            $value = (defined $3) ? $3 : '';
+            $key = $1;
+            $value = (defined $2) ? $2 : '';
             $isKey = 1;
         } elsif( $isKey ) {
-            if( $line =~ /^\s+/ && $line !~ /^(\t|   )+\*/ ) {
+            if( $line =~ /^\s+/ && $line !~ m/$TWiki::regex{bulletRegex}/o ) {
                 # follow up line, extending value
                 $value .= "\n$line";
             } else {

@@ -332,6 +332,11 @@ BEGIN {
     # Multi-character alpha-based regexes
     $regex{mixedAlphaNumRegex} = qr/[$regex{mixedAlphaNum}]*/o;
 
+    # Set statement in a topic
+    $regex{bulletRegex} = qr/^(?:\t|   )+\*/;
+    $regex{setRegex} = qr/$regex{bulletRegex}\s+Set\s+/o;
+    $regex{setVarRegex} = qr/$regex{setRegex}(\w+)\s*=\s*(.*)$/o;
+
     # Character encoding regexes
 
     # 7-bit ASCII only

@@ -1466,7 +1466,7 @@ sub createWeb {
       $this->readTopic( undef, $newWeb, $wpt, undef );
 
     foreach my $key ( %$opts ) {
-        $text =~ s/(\s\* Set $key =)[^\n\r]*/$1 $opts->{$key}/;
+        $text =~ s/($TWiki::regex{setRegex}$key\s*=).*?$/$1 $opts->{$key}/gm;
     }
     return $this->saveTopic( $this->{session}->{user}, $newWeb, $wpt,
                              $text, $meta );
