@@ -1,0 +1,22 @@
+%META:TOPICINFO{author="PeterThoeny" date="1093932928" format="1.0" version="1.1"}%
+	* *[[%WIKILOGOURL%][TWiki.org]]*
+
+	* *[[%TWIKIWEB%.WelcomeGuest][Welcome]]*
+	* *[[%TWIKIWEB%.TWikiRegistration][Register]]*
+---
+	* <b>%INCLUDINGWEB% Web</b>
+	* [[%HOMETOPIC%][%WEB% Web Home]]
+	* [[TWikiUsers][Users]]
+	* [[TWikiGroups][Groups]]
+	* [[OfficeLocations][Offices]]
+	* [[%SCRIPTURL%/changes/%WEB%][Changes]]
+	* [[WebChanges][Changes detailed]]
+	* [[WebIndex][Topic list]]
+	* [[%INCLUDINGWEB%.WebSearch][Search]]
+---
+	* *TWiki Webs*
+%WEBLIST{"		* [[$name.%HOMETOPIC%][$name]]" separator=""}%
+<div class="twikiLeftBarPersonal">
+%INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate\">Create</a> personal sidebar"}%
+</div>
+

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042330156" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093932788" format="1.0" version="1.9"}%
 	* Name: Peter Thoeny
 	* Email: Peter@Thoeny.com
 	* Comment: Peter is the author of TWiki and therefore a TWiki:Codev/CoreTeam member. See home page at TWiki:Main/PeterThoeny
@@ -12,8 +12,11 @@ __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
 		* Set ATTACHLINKBOX = 
 	* Optionally write protect your home page: (set it to your %TWIKIWEB%.WikiName)
 		* Set ALLOWTOPICCHANGE =
+	* Skin:
+		* Set SKIN = classic
 
 __Related topics__
 	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.
 	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
 	* %WIKIUSERSTOPIC% has a list of other %WIKITOOLNAME% users.
+
