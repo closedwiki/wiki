@@ -118,10 +118,11 @@ my $perlverRequired = 5.00503;		# Oldest supported version of Perl
 my $perlverRequiredString = '5.005_03';
 my $perlverRecommended = '5.6.1';
 my $ActivePerlRecommendedBuild = 631;	# Fixes PERL5SHELL bugs
-my $cgiModVerRecommended = '2.90';	# CGI.pm version, on some platforms
-					# - actually need CGI 2.87+ for
-					# mod_perl 2.0 and CGI 2.90 for 
-					# Cygwin Perl 5.8.0
+
+# CGI.pm version, on some platforms - actually need CGI 2.93 for mod_perl
+# 2.0 and CGI 2.90 for Cygwin Perl 5.8.0.  See 
+# http://perl.apache.org/products/apache-modules.html#Porting_CPAN_modules_to_mod_perl_2_0_Status
+my $cgiModVerRecommended = '2.93';	
 
 my $rcsverRequired = 5.7;
 
@@ -448,7 +449,7 @@ print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
 print "For a URL such as <b>$theUrl/foo/bar</b>, \n";
 print "the correct PATH_INFO is <b>/foo/bar</b>, without any prefixed path \n";
 print "components. <a href=\"$theUrl/foo/bar#PATH_INFO\"><b>Test this now</b></a> \n";
-print "- particularly if you are using Apache or IIS, or are using a web hosting provider.\n";
+print "- particularly if you are using mod_perl, Apache or IIS, or are using a web hosting provider.\n";
 print "The page resulting from the test link should have a PATH_INFO of <b>/foo/bar</b>.\n";
 print "</td></tr>\n";
 
@@ -461,6 +462,9 @@ if ( $modPerlVersion ) {
     print "- mod_perl version $modPerlVersion\n";
 }
 print "</td></tr>\n";
+
+# FIXME: Insert warning about mod_perl version too old when in 1.99_*
+# range, see 'registry cooker' support request.
 
 
 # Get web server's user and group info
