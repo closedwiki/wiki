@@ -492,6 +492,7 @@ sub target_release {
   my $tmpdir = "/tmp/$$";
   $this->makepath($tmpdir);
 
+  $this->checkin_fileset($this->{files}, $basedir);
   $this->copy_fileset($this->{files}, $basedir, $tmpdir);
   foreach my $file (@{$this->{files}}) {
 	if ($file->{name} =~ /\.txt$/) {
@@ -504,10 +505,8 @@ sub target_release {
   $this->cd($tmpdir);
   $this->sys_action("zip -r -q $project.zip *");
   $this->sys_action("mv $tmpdir/$project.zip $basedir/$project.zip");
-  if ($this->{-v}) {
-      print "Release ZIP is $basedir/$project.zip\n";
-      print "Release TOPIC is $basedir/$project.txt\n";
-  }
+  print "Release ZIP is $basedir/$project.zip\n";
+  print "Release TOPIC is $basedir/$project.txt\n";
   $this->sys_action("rm -rf $tmpdir");
 }
 
@@ -534,6 +533,28 @@ sub copy_fileset {
 	$uncopied--;
   }
   die "Files left uncopied" if ($uncopied);
+}
+
+=begin text
+
+---++++ checkin_fileset
+If any of the files in the fileset have a corresponding ,v file next
+to them, then check in the file.
+
+=cut
+sub checkin_fileset {
+  my ($this, $set, $from, $to) = @_;
+
+  foreach my $file (@$set) {
+	my $name = $file->{name};
+	if (-e "$from/$name,v") {
+        my $safetynet = "$from/$name$$";
+        $this->sys_action("mv $from/$name $safetynet");
+        $this->sys_action("co -l -q $from/$name");
+        $this->sys_action("mv $safetynet $from/$name");
+        $this->sys_action("ci -q -u -mAutomatic $from/$name");
+	}
+  }
 }
 
 =begin text
