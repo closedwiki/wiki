@@ -8,6 +8,10 @@ twiki (20040902-1) unstable; urgency=high
     universe (Closes: #282947)
   * moved postinst backup files (~) to /tmp (Closes: #283812)
   * postinst can now deal with remnant apache.conf files (Closes: #282006)
+  * added Czech translation of debconf messages - Thanks to Miroslav Kure
+    (Closes: #287432)
+  * added Brazilian Portuguese translation of debconf messages 
+    Thanks to Tiago Bortoletto Vaz (Closes: #267513)
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 16 Nov 2005 00:00:01 -1000
 
