@@ -40,6 +40,7 @@ function launchWindow( theWeb, theTopic ) {
   </TR>
 </TABLE>
 <BR>
+Parent: %META{"parent"}%
 %TEXT%
 %META{"form"}%
 %META{"attachments"}%
@@ -52,6 +53,7 @@ function launchWindow( theWeb, theTopic ) {
         <INPUT type="hidden" name="text" value="%HIDDENTEXT%">
         <INPUT type="hidden" name="cmd" value="%CMD%">
         <INPUT type="hidden" name="formtemplate" value="%FORMTEMPLATE%">
+        <INPUT type="hidden" name="parent" value="%TOPICPARENT%">
         <INPUT type="submit" value=" Save Changes ">%FORMFIELDS% }
     </TD>
   </TR>
