@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1054708130" format="1.0" version="1.56"}%
+%META:TOPICINFO{author="PeterThoeny" date="1059252480" format="1.0" version="1.57"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
@@ -140,11 +140,11 @@ perl -pi~ -e 'NR <= 10 && s/nobody:/www-data:/ ' */*,v
 	* Edit the WebPreferences topic in each web, if necessary: set individual =WEBCOPYRIGHT= messages, and other preferences.
 	* Enable email notification of topic changes, TWikiSiteTools has more. 
 	* Edit the WebNotify topic in all webs and add the users you want to notify.
-	* Add the TWiki:Main/PoweredByTWikiLogo to your %MAINWEB%.WebHome topic.
+	* Add the TWiki:Main/PoweredByTWikiLogo to your [[%MAINWEB%.%HOMETOPIC%]] topic.
 	* You can add new =%<nop>VARIABLES%=. Define site-level variables in the TWikiPreferences topic. See also: TWikiVariables.
 
 That's it for the standard virgin installation of TWiki. Read on for server-level customization options.
-		
+
 ---++ Additional Server-Level Options
 
 With your new TWiki installation up and running, you can manage most aspects of your site from the browser interface. Only a few functions require access to the server file system, via Telnet or FTP. You can make these server-level changes during installation, and at any time afterwards.

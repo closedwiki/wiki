@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1055971140" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1059252743" format="1.0" version="1.13"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -69,7 +69,7 @@ Notes:
 ---+++ META:TOPICPARENT
 
 | *Key*	| *Comment* |
-| name	 | The topic from which this was created, WebHome if done from =Go=, othewise topic where =?= or form used.  Normally just topic, but is full web.topic format if parent is in a different Web.  Renaming a Web will then only break a few of these references or they can be scanned and fixed. |
+| name	 | The topic from which this was created, %HOMETOPIC% if done from =Go=, othewise topic where =?= or form used.  Normally just topic, but is full web.topic format if parent is in a different Web.  Renaming a Web will then only break a few of these references or they can be scanned and fixed. |
 
 ---+++ META:FILEATTACHMENT
 

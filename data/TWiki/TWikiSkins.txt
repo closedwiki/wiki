@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042010089" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1059253080" format="1.0" version="1.12"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Skins
@@ -51,9 +51,9 @@ Here is an example form that has a select box and the "Go" box for illustration 
 <select name="sel" onchange="this.form.topic.value=this.options[this.selectedIndex].value; this.form.submit()">
  <option selected="selected" value="">Navigate...</option>
  <option value="http://www.twiki.org/">Intranet home</option>
- <option value="%MAINWEB%.TWikiUsers">Employee index</option>
- <option value="%MAINWEB%.WebHome">%MAINWEB% web</option>
- <option value="%TWIKIWEB%.WebHome">%TWIKIWEB% web</option>
+ <option value="%MAINWEB%.%WIKIUSERSTOPIC%">Employee index</option>
+ <option value="%MAINWEB%.%HOMETOPIC%">%MAINWEB% web</option>
+ <option value="%TWIKIWEB%.%HOMETOPIC%">%TWIKIWEB% web</option>
  <option value="http://www.google.com/">Google</option>
  <option value="http://www.yahoo.com/">Yahoo!</option>
  </select>
