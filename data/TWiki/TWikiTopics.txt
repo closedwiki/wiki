@@ -1,7 +1,5 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000448321" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="MikeMannix" date="1000620542" format="1.0" version="1.7"}%
 %META:TOPICPARENT{name="WebHome"}%
-%INCLUDE{"UtilTempDocNote"}%
-
 ---+ TWiki Pages
 
 %TOC%
