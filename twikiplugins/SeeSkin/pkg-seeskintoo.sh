@@ -8,6 +8,7 @@ localcvs=/cygdrive/d/src/twikiplugins/SeeSkin
 
 list="$data/Plugins/SeeSkinToo.txt \
 	$templates/*.seetoo.tmpl \
+	$templates/*.c3*.tmpl \
 	$pub/Plugins/SeeSkinToo/*.css \
 	$pub/Plugins/SeeSkinToo/*.txt \
 	$bin/savemulti"

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1047362971" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="guest" date="1049266049" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ SeeSkinToo
 
@@ -33,8 +33,13 @@ _things I don't know how to do or could use some help with_
 
 	* anchor links classed by destination: within this page, local to site, external site, and opens new window. This is to allow different styles based on the link destination, for example local to page is <a href="#content" style="border-bottom: 1px dashed #00a;" title="jump to somewhere else on this page">dashed-underline</a>, local to site is a <a href="WebHome">normal link</a>, an external site is a <strong><a href="#">strong link</a></strong>, while a new browser window is a <a href="#" style="border: 1px dotted gray; padding: 1px;" title="opens new browser window">dotted border</a>.
 		* probably requires modifying twiki code, so this would be a desired patch rather than SeeSkin code (I want to this to remain a skin and not a plugin).
+		* found some javascript which does this; see http://squarefree.com/ and look for the *ext/int* bookmarklet.
 
 	* IE5.5/Win has this annoying habit of making tables wider than the containing =div=  ,a fix or workaround would be nice.
+
+I've decided I'm not worried about staying away from javascript _as long as it has little impact those surfing without it_. For example
+	* I want the left and right columns to be subdued and in the background (e.g. muted colours) until they are hovered over, or get keyboard focus, a they should come into focus (e.g. bright strong colours). I've tried using the css =:hover= element but it just doesn't do the trick.
+
 
 ---++ Changelog
 
