@@ -176,11 +176,10 @@ sub searchWeb
     }
 
     my $cmd = "";
-    # FIXME need \" for Windows and ' for unix
     if( $theScope eq "topic" ) {
-        $cmd = "$TWiki::lsCmd *.txt | %GREP% %SWITCHES% '$theSearchVal'";
+        $cmd = "$TWiki::lsCmd *.txt | %GREP% %SWITCHES% $TWiki::cmdQuote$theSearchVal$TWiki::cmdQuote";
     } else {
-        $cmd = "%GREP% %SWITCHES% -l '$theSearchVal' *.txt";
+        $cmd = "%GREP% %SWITCHES% -l $TWiki::cmdQuote$theSearchVal$TWiki::cmdQuote *.txt";
     }
 
     if( $caseSensitive ) {
