@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1013855830" format="1.0" version="1.49"}%
+%META:TOPICINFO{author="MikeMannix" date="1015559520" format="1.0" version="1.50"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -186,7 +186,7 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
   <td> Table of Contents of current topic. </td>
 </tr><tr>
   <td> =%<nop>TOC{"SomeTopic" ...}%= </td>
-  <td> Table of Contents. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;h2&gt;"=) are taken into account. (But not ="&lt;H2&gt;text&lt;/H2&gt;"=, which can be used to exclude a heading from the TOC.) Parameters are topic name, web and depth:
+  <td> Table of Contents. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;/h2&gt;"=) are taken into account. (But not ="&lt;H2&gt;text&lt;/H2&gt;"=, which can be used to exclude a heading from the TOC.) Parameters are topic name, web and depth:
 | *Parameter:* | *Description:* | *Default:* |
 | ="TopicName"= | topic name | Current topic |
 | =web="Name"= | Name of web | Current web |
@@ -366,4 +366,4 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
 </blockquote>
 
 -- PeterThoeny - 13 Sep 2001 <br />
--- Main.MikeMannix - 23 Jan 2002
+-- Main.MikeMannix - 07 Mar 2002
