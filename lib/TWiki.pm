@@ -905,22 +905,26 @@ pair, a "Web." WebHome shorthand, or just a topic name.  Note that
 if $pathInfo is set, this overrides $theTopic.
 
    * =$pathInfo= .pathinfo from query
-   * =remoteUser= the logged-in user
-   * =topic= topic from "topic" parameter to url (overrides pathinfo if present )
-   * =url= the full url used
-   * =query= the query
-   * =scripted= true if this is called from a script rather than a browser query
+   * =$remoteUser= the logged-in user (login name)
+   * =$topic= topic from "topic" parameter to url (overrides pathinfo if present )
+   * =$url= the full url used
+   * =$query= the query
 
 =cut
 
 sub new {
-    my( $class, $pathInfo, $remoteUser, $topic, $url, $query, $scripted ) = @_;
+    my( $class, $pathInfo, $remoteUser, $topic, $url, $query ) = @_;
+
+    $pathInfo ||= "";
+    $remoteUser ||= $TWiki::cfg{DefaultUserLogin};
+    $topic ||= "";
+    $url ||= "";
 
     my $this = bless( {}, $class );
 
     # create the various sub-objects
-    $this->{sandbox} = new TWiki::Sandbox( $this,
-                                           $TWiki::cfg{OS}, $TWiki::cfg{DetailedOS} );
+    $this->{sandbox} = new TWiki::Sandbox
+      ( $this, $TWiki::cfg{OS}, $TWiki::cfg{DetailedOS} );
 
     $this->{plugins} = new TWiki::Plugins( $this );
     $this->{net} = new TWiki::Net( $this );
