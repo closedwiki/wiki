@@ -65,16 +65,17 @@
 
 
 
-%TMPL:DEF{"topbar"}%<div class="twikiHidden"><a href="#Content">Skip to topic</a> | <a href="#PageBottom">Skip to bottom</a><hr /></div><div class="twikiTopBar"><div class="twikiTopBarMainContents">%INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div>%TMPL:END%
+%TMPL:DEF{"topbar"}%<div class="twikiHidden"><a href="#Content">Skip to topic</a> | <a href="#PageBottom">Skip to bottom</a><hr /></div><div class="twikiTopBar"><div class="twikiTopBarMainContents">%INCLUDE{"%TWIKIWEB%.PatternSkinTopBar"}%</div></div>%TMPL:END%
 
 
 
 %TMPL:DEF{"leftbar"}%<div class="twikiLeftBar"><div class="twikiLeftBarContents">
-%INCLUDE{"%TWIKIWEB%.WebLeftBar"}%</div></div>%TMPL:END%
+%INCLUDE{"%TWIKIWEB%.PatternSkinLeftBar"}%</div><div class="twikiLeftBarWebIndication"></div></div>%TMPL:END%
 
 
 
-%TMPL:DEF{"bottombar"}%<div class="twikiBottomBar"><div class="twikiBottomBarMainContents"><span class="twikiGrayText">%INCLUDE{"%TWIKIWEB%.WebBottomBar"}%</span></div></div>%TMPL:END%
+%TMPL:DEF{"bottombar"}%<div class="twikiBottomBar"><div class="twikiBottomBarMainContents"><span class="twikiGrayText">%INCLUDE{"%TWIKIWEB%.PatternSkinBottomBar"}%
+</span></div></div>%TMPL:END%
 
 
 
