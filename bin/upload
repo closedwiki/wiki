@@ -18,6 +18,15 @@
 # Set library paths in @INC, at compile time
 BEGIN { unshift @INC, '.'; require 'setlib.cfg'; }
 
+# 'Use locale' for internationalisation of Perl regexes - 
+# main locale settings are done in TWiki::setupLocale
+BEGIN {
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::useLocale ) {
+        require locale;
+    }
+}
+
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use File::Copy; # FIXME remove
@@ -355,7 +364,10 @@ sub main
 	my $filetemp = $pathz[$#pathz];
 	my @pathza = ( split( '/', $filetemp ) );
 	$fileName = $pathza[$#pathza];
-	$fileName =~ s/[^A-Za-z0-9_\.\-]//go;  # delete special characters
+
+	# Delete unwanted characters from filename, with I18N
+	my $nonAlphaNum = "[^${TWiki::mixedAlphaNum}" . '\._-]+';
+        $fileName =~ s/${nonAlphaNum}//go;
         $fileName =~ s/$TWiki::uploadFilter/$1\.txt/goi;  # apply security filter
 
 	# Update

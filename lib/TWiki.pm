@@ -132,7 +132,6 @@ BEGIN {
     # Do a dynamic 'use locale' for this module
     if( $useLocale ) {
         require locale;
-        import locale ();
     }
 }
 
@@ -452,6 +451,7 @@ sub setupRegexes {
     $singleLowerAlphaRegex = qr/[$lowerAlpha]/;
     $singleUpperAlphaNumRegex = qr/[${upperAlpha}${numeric}]/;
     $singleMixedAlphaNumRegex = qr/[${upperAlpha}${lowerAlpha}${numeric}]/;
+
     $singleMixedNonAlphaNumRegex = qr/[^${upperAlpha}${lowerAlpha}${numeric}]/;
 
     # Multi-character alpha-based regexes
