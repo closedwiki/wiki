@@ -79,7 +79,7 @@ install: build
 # and change the RCS lock owners to match
 
 	#stop lintian whinging
-	chmod 755 debian/twiki/usr/share/perl5/TWiki/Plugins/CommentPlugin/build.pl
+	chmod 755 lib/TWiki/Plugins/CommentPlugin/build.pl
 
 # Copy the TWikiRegistrationPub topic to TWikiRegistration
 	cp debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistration.txt debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistrationDefault.txt
