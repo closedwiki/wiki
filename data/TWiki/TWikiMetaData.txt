@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1074237044" format="1.0" version="1.14"}%
+%META:TOPICINFO{author="PeterThoeny" date="1074997449" format="1.0" version="1.15"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -46,7 +46,7 @@ The current version of Meta Data is 1.0, with support for the following variable
 
 |  *Key*  |  *Comment*			 |
 | version | Same as RCS version |
-| date	 | integer, unx time, seconds since start 1970 |
+| date	 | integer, unix time, seconds since start 1970 |
 | author  | last to change topic, is the REMOTE_USER |
 | format  | Format of this topic, will be used for automatic format conversion |
 
@@ -60,7 +60,7 @@ This is optional, exists if topic has ever been moved.  If a topic is moved more
 | from | Full name, i.e., web.topic |
 | to	| Full name, i.e., web.topic |
 | by	| Who did it, is the REMOTE_USER, not <nop>WikiName |
-| date | integer, unx time, seconds since start 1970 |
+| date | integer, unix time, seconds since start 1970 |
 
 Notes: 
 	* at present version number is not supported directly, it can be inferred from the RCS history.
@@ -78,7 +78,7 @@ Notes:
 | version | Same as RCS revision  |
 | path	 | Full path file was loaded from |
 | size	 | In bytes |
-| date	 | integer, unx time, seconds since start 1970 |
+| date	 | integer, unix time, seconds since start 1970 |
 | user	 | the REMOTE_USER, not <nop>WikiName |
 | comment | As supplied when file uploaded |
 | attr	 | =h= if hidden, optional |
@@ -89,7 +89,7 @@ Extra fields that are added if an attachment is moved:
 | movedfrom | full topic name - web.topic |
 | movedby	| the REMOTE_USER, not <nop>WikiName |
 | movedto	| full topic name - web.topic |
-| moveddate | integer, unx time, seconds since start 1970 |
+| moveddate | integer, unix time, seconds since start 1970 |
 
 ---+++ META:FORM
 
