@@ -131,7 +131,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "15 Mar 2004";
+$wikiversion      = "20 Mar 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2439,18 +2439,19 @@ sub handleWebAndTopicList
 {
     my( $theAttr, $isWeb ) = @_;
 
-    my $format = extractNameValuePair( $theAttr );
-    $format = extractNameValuePair( $theAttr, "format" ) if( ! $format );
+    my $format = extractNameValuePair( $theAttr ) || extractNameValuePair( $theAttr, "format" );
+    $format .= '$name' unless( $format =~ /\$name/ );
     my $separator = extractNameValuePair( $theAttr, "separator" ) || "\n";
-    $format .= '$name' if( ! ( $format =~ /\$name/ ) );
     my $web = extractNameValuePair( $theAttr, "web" ) || "";
     my $webs = extractNameValuePair( $theAttr, "webs" ) || "public";
     my $selection = extractNameValuePair( $theAttr, "selection" ) || "";
-    my $marker    = extractNameValuePair( $theAttr, "marker" ) || "selected";
+    $selection =~ s/\,/ /g;
+    $selection = " $selection ";
+    my $marker    = extractNameValuePair( $theAttr, "marker" ) || 'selected="selected"';
 
     my @list = ();
     if( $isWeb ) {
-        my @webslist = split( /,/, $webs );
+        my @webslist = split( /,\s?/, $webs );
         foreach my $aweb ( @webslist ) {
             if( $aweb eq "public" ) {
                 push( @list, getPublicWebList() );
@@ -2470,13 +2471,15 @@ sub handleWebAndTopicList
     my $text = "";
     my $item = "";
     my $line = "";
+#$text .= "format: $format, selection: $selection, marker: $marker\n";
     my $mark = "";
     foreach $item ( @list ) {
         $line = $format;
         $line =~ s/\$web/$web/goi;
         $line =~ s/\$name/$item/goi;
         $line =~ s/\$qname/"$item"/goi;
-        $mark = ( $item eq $selection ) ? $marker : "";
+        $mark = ( $selection =~ / $item / ) ? $marker : "";
+#$text .= "item: $item, mark: $mark.";
         $line =~ s/\$marker/$mark/goi;
         $text .= "$line$separator";
     }
@@ -2569,7 +2572,7 @@ sub handleUrlEncode
         $text =~ s/\|/\&\#124;/g;
     } else {
         # URL encoding
-        $text =~ s/[\n\r]/\%3Cbr\%20\%3E/g;
+        $text =~ s/[\n\r]/\%3Cbr\%20\%2F\%3E/g;
         $text =~ s/\s+/\%20/g;
         $text =~ s/\"/\%22/g;
         $text =~ s/\&/\%26/g;
