@@ -261,12 +261,14 @@ sub collectLogData
 	$userName = $1 || "";		# Main.FredBloggs
 	$opName = $2 || "";
 	$webName = $3 || "";
-	unless ($userName && $opName && $webName) {
-	    TWiki::writeDebug("Invalid log file line = '$line'");
-	    TWiki::writeDebug("userName = '$userName'");
-	    TWiki::writeDebug("opName = '$opName'");
-	    TWiki::writeDebug("webName = '$webName'");
-	}
+
+	# commented out, this blows up the debug files without much gain
+	##unless ($userName && $opName && $webName) {
+	##    TWiki::writeDebug("Invalid log file line = '$line'");
+	##    TWiki::writeDebug("userName = '$userName'");
+	##    TWiki::writeDebug("opName = '$opName'");
+	##    TWiki::writeDebug("webName = '$webName'");
+	##}
 
 	my $logContrib = 0;
 	if ($opName eq 'view' ) {
@@ -274,12 +276,13 @@ sub collectLogData
 	    # Pick up the topic name 
 	    $line =~ /^\|[^\|]*\| ([a-z0-9]+\.[a-z0-9]+) \| ([a-z0-9]+) \| ([a-z0-9]+)\.([a-z0-9]+) /io;
 	    $topicName = $4 || "";
-	    unless ($topicName) {
-		TWiki::writeDebug("Invalid log file line = '$line'");
-		TWiki::writeDebug("userName = '$userName'");
-		TWiki::writeDebug("opName = '$opName'");
-		TWiki::writeDebug("webName = '$webName'");
-	    }
+	    # commented out, this blows up the debug files without much gain
+	    ##unless ($topicName) {
+	    ##	TWiki::writeDebug("Invalid log file line = '$line'");
+	    ##	TWiki::writeDebug("userName = '$userName'");
+	    ##	TWiki::writeDebug("opName = '$opName'");
+	    ##	TWiki::writeDebug("webName = '$webName'");
+	    ##}
 	    $view{$webName}{$topicName}++;
 	} elsif ($opName eq 'save' ) {
 	    $statSaves{$webName}++;
@@ -294,15 +297,16 @@ sub collectLogData
 	    $newTopicWeb = $5 || "";
 	    $newTopicName = $6 || "";
 	    ## TWiki::writeDebug("$topicName renamed to $newTopicWeb.$newTopicName");
-	    unless ($topicName && $newTopicWeb && $newTopicName) {
-		TWiki::writeDebug("Invalid log file line (rename) = '$line'");
-		TWiki::writeDebug("userName = '$userName'");
-		TWiki::writeDebug("opName = '$opName'");
-		TWiki::writeDebug("webName = '$webName'");
-		TWiki::writeDebug("userName = '$topicName'");
-		TWiki::writeDebug("opName = '$newTopicWeb'");
-		TWiki::writeDebug("webName = '$newTopicName'");
-	    }
+	    # commented out, this blows up the debug files without much gain
+	    ##unless ($topicName && $newTopicWeb && $newTopicName) {
+	    ##	TWiki::writeDebug("Invalid log file line (rename) = '$line'");
+	    ##	TWiki::writeDebug("userName = '$userName'");
+	    ##	TWiki::writeDebug("opName = '$opName'");
+	    ##	TWiki::writeDebug("webName = '$webName'");
+	    ##	TWiki::writeDebug("userName = '$topicName'");
+	    ##	TWiki::writeDebug("opName = '$newTopicWeb'");
+	    ##	TWiki::writeDebug("webName = '$newTopicName'");
+	    ##}
 	    # Get number of views for old topic this month (may be zero)
 	    my $oldViews = $view{$webName}{$topicName} || 0;
 
