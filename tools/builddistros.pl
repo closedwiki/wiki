@@ -22,6 +22,8 @@ print "results will be in $outputDir\n";
 ( rmtree( $outputDir ) or die "Unable to empty the twiki build directory: $!" ) if -e $outputDir;
 mkpath( $outputDir, 1 );
 
+################################################################################
+# build the twiki-kernel
 execute ( "cd distro ; ./build-twiki-kernel.pl /tmp $outputDir" ) or die $!;
 
 exit 0;
