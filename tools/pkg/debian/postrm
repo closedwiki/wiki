@@ -23,11 +23,15 @@ set -e
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
 
-	if [ -e /usr/share/wwwconfig-common/apache-include-postrm.sh ]; then
-		servers="apache apache-ssl"
-		includefile=/etc/twiki/apache.conf
-		. /usr/share/wwwconfig-common/apache-include-postrm.sh
-		. /usr/share/wwwconfig-common/restart.sh
+	servers="apache apache-perl apache-ssl apache2"
+	for server in $servers; do 
+		if [ -e /etc/$server/conf.d/twiki.conf ]; then
+			rm /etc/$server/conf.d/twiki.conf 
+		fi
+	done
+
+	if [ -e /usr/sbin/apachectl ]; then
+		/usr/sbin/apachectl restart
 	fi
         ;;
 

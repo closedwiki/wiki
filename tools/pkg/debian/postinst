@@ -78,37 +78,16 @@ case "$1" in
 
 	servers="apache apache-perl apache-ssl apache2"
 	for server in $servers; do 
-	    . /usr/share/wwwconfig-common/apache-run.get
-	    includefile=/etc/twiki/apache.conf
-	    . /usr/share/wwwconfig-common/apache-include_all.sh
-	    if [ "$status" = "uncomment" -o "$status" = "include" ] ; then
-		restart="$server $restart"
-	    fi
+		if [ -e /etc/$server/conf.d ]; then
+			includefile=/etc/twiki/apache.conf
+			ln -s $includefile /etc/$server/conf.d/twiki.conf 
+		fi
 	done
-# 	if egrep '^twikidat$' /etc/cgiwrap.allow 2>&1 >/dev/null ; then
-# 	    : # already there
-# 	else
-# 	    # eek! this is a conffile of cgiwrap, so don't do that?
-# 	    echo twikidat >> /etc/cgiwrap.allow
-# 	fi
 
-
-        if test -s /etc/apache/httpd.conf
-        then
-           if grep '^LoadModule.*mod_actions\.so' /etc/apache/httpd.conf 2>&1 >/dev/null
-           then
-	       # we're ok
-	       :
-	   else
-	       echo "twiki needs mod_action loaded,  doing DSO scan..."
-	       if [ -x /usr/sbin/modules-config ]; then
-#grumble - why do i need to know which apache is loaded?
-		   /usr/sbin/modules-config apache enable modaction
-		   echo "Restart apache yourself for now..."
-	       fi
-	   fi
+	if [ -e /usr/sbin/apachectl ]; then
+		/usr/sbin/apachectl restart
 	fi
-	. /usr/share/wwwconfig-common/restart.sh
+
 	# create initial htpasswd, if needed
 	if [ -e /var/lib/twiki/data ]; then	
 		#for now prefer apache 1 config, I don't know how to detect which one is prefered
