@@ -56,11 +56,10 @@ use strict;
 # attachAsciiPath         Defines which attachments will be automatically treated as ASCII in RCS
 # dirPermission           File security for new directories
 
-sub new
-{
-    my( $class, $web, $topic, $attachment, $settings ) = @_;
+sub new {
+    my( $class, $session, $web, $topic, $attachment, $settings ) = @_;
     my $self =
-      bless(new TWiki::Store::RcsFile( $web, $topic, $attachment, $settings ),
+      bless(new TWiki::Store::RcsFile( $session, $web, $topic, $attachment, $settings ),
             $class );
     foreach my $key ( "initBinaryCmd", "tmpBinaryCmd", "ciCmd", "coCmd",
                       "histCmd", "infoCmd", "diffCmd", "breakLockCmd",
@@ -83,7 +82,7 @@ sub _binaryChange
         # Can only do something when changing to binary
         my $file = $self->{file};
         my ( $rcsOutput, $exit ) =
-          $TWiki::T->{sandbox}->readFromProcess ( $self->{initBinaryCmd},
+          $self->{session}->{sandbox}->readFromProcess ( $self->{initBinaryCmd},
                                    FILENAME => $self->{file} );
         if( $exit && $rcsOutput ) {
            $rcsOutput = "$self->{initBinaryCmd}\n$rcsOutput";
@@ -143,7 +142,7 @@ sub replaceRevision
     $self->_saveFile( $self->{file}, $text );
 	$date = TWiki::formatTime( $date , "\$rcs", "gmtime");
 
-    my ($rcsOut, $exit) = $TWiki::T->{sandbox}->readFromProcess
+    my ($rcsOut, $exit) = $self->{session}->{sandbox}->readFromProcess
       ( $self->{ciDateCmd},
         DATE => $date,
         USERNAME => $user,
@@ -181,14 +180,14 @@ sub _deleteRevision
     my $file    = $self->{file};
     my $rcsFile = $self->{rcsFile};
 
-    my ($rcsOut, $exit) = $TWiki::T->{sandbox}->readFromProcess
+    my ($rcsOut, $exit) = $self->{session}->{sandbox}->readFromProcess
       ( $self->{unlockCmd}, FILENAME => [$file, $rcsFile] );
     if( $exit ) {
         $rcsOut = "$self->{unlockCmd}\n$rcsOut";
         return $rcsOut;
     }
 
-    ($rcsOut, $exit) = $TWiki::T->{sandbox}->readFromProcess
+    ($rcsOut, $exit) = $self->{session}->{sandbox}->readFromProcess
       ( $self->{delRevCmd},
         REVISION => "1.$rev",
         FILENAME => [$file, $rcsFile] );
@@ -198,7 +197,7 @@ sub _deleteRevision
     }
 
     ($rcsOut, $exit) =
-      $TWiki::T->{sandbox}->readFromProcess( $self->{lockCmd},
+      $self->{session}->{sandbox}->readFromProcess( $self->{lockCmd},
                               REVISION => "1.$rev",
                               FILENAME => [$file, $rcsFile] );
     if( $exit ) {
@@ -234,13 +233,13 @@ sub getRevision
         $tmpRevFile = "$tmpfile,v";
         copy( $self->{rcsFile}, $tmpRevFile );
         my ($tmp) =
-          $TWiki::T->{sandbox}->readFromProcess( $self->{tmpBinaryCmd},
+          $self->{session}->{sandbox}->readFromProcess( $self->{tmpBinaryCmd},
                                   FILENAME => $tmpRevFile );
         $file = $tmpfile;
         $coCmd =~ s/-p%REVISION%/-r%REVISION%/;
     }
     my ($text) =
-      $TWiki::T->{sandbox}->readFromProcess( $coCmd,
+      $self->{session}->{sandbox}->readFromProcess( $coCmd,
                               REVISION => "1.$version",
                               FILENAME => $file );
 
@@ -272,7 +271,7 @@ sub numRevisions
     }
 
     my ($rcsOutput) =
-      $TWiki::T->{sandbox}->readFromProcess( $self->{histCmd},
+      $self->{session}->{sandbox}->readFromProcess( $self->{histCmd},
                                         FILENAME => $rcsFile );
     if( $rcsOutput =~ /head:\s+\d+\.(\d+)\n/ ) {
         return $1;
@@ -306,7 +305,7 @@ sub getRevisionInfo
             $version = $self->numRevisions();
         }
         my $cmd = $self->{infoCmd};
-        my ( $rcsOut, $exit ) = $TWiki::T->{sandbox}->readFromProcess
+        my ( $rcsOut, $exit ) = $self->{session}->{sandbox}->readFromProcess
           ( $cmd,
             REVISION => "1.$version",
             FILENAME => $rcsFile );
@@ -359,7 +358,7 @@ sub revisionDiff
         my $rcsFile = $self->{rcsFile};
         $contextLines = "" unless defined($contextLines);
         ( $tmp, $exit ) =
-          $TWiki::T->{sandbox}->readFromProcess( $self->{diffCmd},
+          $self->{session}->{sandbox}->readFromProcess( $self->{diffCmd},
                                   REVISION1 => "1.$rev1",
                                   REVISION2 => "1.$rev2",
                                   FILENAME => $rcsFile,
@@ -446,7 +445,7 @@ sub _ci {
 
     $comment = "none" unless( $comment );
 
-    my ($rcsOutput, $exit) = $TWiki::T->{sandbox}->readFromProcess
+    my ($rcsOutput, $exit) = $self->{session}->{sandbox}->readFromProcess
       ( $self->{ciCmd},
         USERNAME => $userName,
         FILENAME => $file,
@@ -454,12 +453,12 @@ sub _ci {
     if( $exit && $rcsOutput =~ /no lock set by/ ) {
         # Try and break lock, setting new lock and doing ci again
         # Assume it worked, as not sure how to trap failure
-        $TWiki::T->{sandbox}->readFromProcess( $self->{breakLockCmd},
+        $self->{session}->{sandbox}->readFromProcess( $self->{breakLockCmd},
                                 FILENAME => $file);
 
         # re-do the ci command
         ( $rcsOutput, $exit ) =
-          $TWiki::T->{sandbox}->readFromProcess( $self->{ciCmd},
+          $self->{session}->{sandbox}->readFromProcess( $self->{ciCmd},
                                   USERNAME => $userName,
                                   FILENAME => $file,
                                   COMMENT => $comment );

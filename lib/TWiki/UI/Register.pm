@@ -94,13 +94,16 @@ sub bulkRegister {
 
     #    die $TWiki::userName." - ".$remoteUser;
 
-    my ( $topic, $web ) = _initialise( $query, $remoteUser );
+    my $session = _initialise( $query, $remoteUser );
+    my $topic = $session->{topicName};
+    my $web = $session->{webName};
+
     my ($wikiName, $loginName) = _getUserByEitherLoginOrWikiName( $remoteUser );
 
     #    die "WikiName: '".$wikiName."', LoginName: '".$loginName."' RemoteUser: '".$remoteUser."' TWiki::userName: '".$TWiki::userName."'";
 
     warn "userIsAdmin check omitted";
-    #    return 0 unless(TWiki::UI::userIsAdmin( $web, $topic, $wikiName )); 
+    #    return 0 unless(TWiki::UI::userIsAdmin( $session, $web, $topic, $wikiName )); 
 
 
     #-- Read the topic containing a table of people to be registered
@@ -136,9 +139,9 @@ sub bulkRegister {
 
     $meta->put( "TOPICPARENT", ( "name" => $topic ) );
 
-    my $err = TWiki::Store::saveTopic($web, $logTopic, $log, $meta, "",  1 );
+    my $err = $session->{store}->saveTopic($web, $logTopic, $log, $meta, "",  1 );
 
-    TWiki::redirect($query, TWiki::getViewUrl($web, $logTopic));
+    $session->redirect($query, $session->getViewUrl($web, $logTopic));
 }
 
 =pod
@@ -282,7 +285,9 @@ sub register {
 
     my %data;    # this is persisted in the storable.
 
-    my ( $topic, $web ) = _initialise( $query, "" );  #SMELL - "" ?
+    my $session = _initialise( $query, "" );
+    my $topic = $session->{topicName};
+    my $web = $session->{webName};
 
     %data = IntopicTable::populateEntries( $query->param() );
     $data{webName} = $web;
@@ -299,7 +304,7 @@ sub register {
     if ($errorUrl) {
 
         #	::dumpIfDebug(\%data, $errorUrl);
-        TWiki::redirect( $query, $errorUrl );
+        $session->redirect( $query, $errorUrl );
         return;
     }
 
@@ -311,8 +316,8 @@ sub register {
     #die ($err); # SMELL - should we report this?
 
     my $url =
-      TWiki::getOopsUrl( $data{webName}, $topic, "oopsregconfirm", $data{Email} );
-    TWiki::redirect( $query, $url );
+      $session->getOopsUrl( $data{webName}, $topic, "oopsregconfirm", $data{Email} );
+    $session->redirect( $query, $url );
 }
 
 =pod
@@ -325,11 +330,9 @@ sub _initialise {
     my ( $query, $remoteUser ) = @_;
     my $topic = $query->param( 'topic' ) || $query->param( 'TopicName' ); # SMELL - why both? what order?
 
-    my $webName;
-    ( $topic, $webName )  =
-      TWiki::initialize( $query->path_info(), $remoteUser, $topic, $query->url, $query ); # SMELL - topic input and output?
+    TWiki::initialize( $query->path_info(), $remoteUser, $topic, $query->url, $query ); # SMELL - topic input and output?
     # die "$webName.$topic";
-    return ( $topic, $webName );
+    return $TWiki::T;
 }
 
 =pod
@@ -361,13 +364,15 @@ sub resetPassword {
     my $remoteUser = $query->remote_user();
     # die "Remote: ".$remoteUser;
 
-    my ( $topic, $web ) = _initialise( $query, $remoteUser ); 
-    
+    my $session = _initialise( $query, $remoteUser );
+    my $topic = $session->{topicName};
+    my $web = $session->{webName};
+
     my $wikiName = TWiki::User::userToWikiName($remoteUser);
     # die "remote: $remoteUser - wikiname: ".$wikiName." ".$#userNames;
 
     if ($#userNames > 0) {
-        if (!TWiki::UI::userIsAdmin( $web, $topic, $wikiName )) { 
+        if (!TWiki::UI::userIsAdmin( $session, $web, $topic, $wikiName )) { 
             die "You ain't admin, buddy";
         }
     }
@@ -384,7 +389,7 @@ sub resetPassword {
         use TWiki::UI;
         my %ans = %{$userAns{$userNames[0]}};
         #  die Dumper($key, \%userAns, \%ans);
-        TWiki::UI::oops( $web, $ans{wikiName}, $ans{oops}, $ans{email}, $ans{wikiName} );
+        TWiki::UI::oops( $session, $web, $ans{wikiName}, $ans{oops}, $ans{email}, $ans{wikiName} );
     } else {
         die Dumper(\%userAns);
     }
@@ -509,7 +514,11 @@ The NoPasswdUser case is not handled
 =cut
 
 sub changePassword {
-    my( $webName, $topic, $query ) = @_;
+    my $session = shift;
+
+    my $topic = $session->{topicName};
+    my $webName = $session->{webName};
+    my $query = $session->{cgiQuery};
 
     my $username = $query->param( 'username' );
     my $passwordA = $query->param( 'password' );
@@ -518,7 +527,7 @@ sub changePassword {
 
     # check if required fields are filled in
     if( ! $username || ! $passwordA ) {
-        TWiki::UI::oops( $webName, $topic, "regrequ", );
+        TWiki::UI::oops( $session, $webName, $topic, "regrequ", );
         return;
     }
 
@@ -526,13 +535,13 @@ sub changePassword {
     # check if user entry exists
 
     unless ($wikiName) {
-        TWiki::UI::oops( $webName, $topic, "notwikiuser", $loginName );
+        TWiki::UI::oops( $session, $webName, $topic, "notwikiuser", $loginName );
         return;
     }
 
     # check if passwords are identical
     if( $passwordA ne $passwordB ) {
-        TWiki::UI::oops( $webName, $topic, "regpasswd" );
+        TWiki::UI::oops( $session, $webName, $topic, "regpasswd" );
         return;
     }
 
@@ -541,14 +550,14 @@ sub changePassword {
     
     # check if required fields are filled in
     if( ! $oldpassword ) {
-        TWiki::UI::oops( $webName, $topic, "regrequ" );
+        TWiki::UI::oops( $session, $webName, $topic, "regrequ" );
         return;
     }
 
     my $pw = TWiki::User::CheckUserPasswd( $loginName, $oldpassword );
     if( ! $pw ) {
         # NO - wrong old password
-        TWiki::UI::oops( $webName, $topic, "wrongpassword");
+        TWiki::UI::oops( $session, $webName, $topic, "wrongpassword");
         return;
     }
 
@@ -556,7 +565,7 @@ sub changePassword {
     TWiki::User::UpdateUserPassword($loginName,  $oldpassword, $passwordA );
 
     # OK - password changed
-    TWiki::UI::oops( $webName, $topic, "changepasswd" );
+    TWiki::UI::oops( $session, $webName, $topic, "changepasswd" );
 }
 
 =pod
@@ -589,10 +598,10 @@ sub verifyEmailAddress {
     if (! exists $data{WikiName}) {
         my $err = UnregisteredUser::getLastError();
         if ($err =~ /oops/) {
-            my $url = TWiki::getOopsUrl("", "TWikiRegistration",  #SMELL - what web? We've not initialised because no wikiname
+            my $url = $session->getOopsUrl("", "TWikiRegistration",  #SMELL - what web? We've not initialised because no wikiname
                                         $err, $code,
                                        );
-            TWiki::redirect( $query, $url );
+            $session->redirect( $query, $url );
             return;
         } else {
             die "verifyEmailAddress:". $err;
@@ -600,14 +609,16 @@ sub verifyEmailAddress {
     }
     # die Dumper(\%data);
 
-    my ( $topic, $web ) = _initialise( $query, $data{WikiName} );
+    my $session = _initialise( $query, $data{WikiName} );
+    my $topic = $session->{topicName};
+    my $web = $session->{webName};
 
     my $senderr = _emailRegistrationConfirmations( $query, \%data );
     if ($senderr) {
         my $url =
-          &TWiki::getOopsUrl( $data{webName}, $data{WikiName}, "oopssendmailerr",
+          $session->getOopsUrl( $data{webName}, $data{WikiName}, "oopssendmailerr",
                               $senderr );
-        TWiki::redirect( $query, $url );
+        $session->redirect( $query, $url );
     }
 }
 
@@ -638,7 +649,9 @@ sub finish {
 
     ( $query, $tmpuserDir ) = ( $params{query}, $params{tempUserDir} );
 
-    my ( $topic, $web ) = _initialise( $query, $data{WikiName} );
+    my $session = _initialise( $query, $data{WikiName} );
+    my $topic = $session->{topicName};
+    my $web = $session->{webName};
 
     #    unless (%data) { #### SMELL HACK
     my $code = $query->param('code');
@@ -650,10 +663,10 @@ sub finish {
     if (! exists $data{WikiName}) {
         my $err = UnregisteredUser::getLastError();
         if ($err =~ /oops/) {
-            my $url = TWiki::getOopsUrl("", "TWikiRegistration",  #SMELL - what web? We've not initialised because no wikiname
+            my $url = $session->getOopsUrl("", "TWikiRegistration",  #SMELL - what web? We've not initialised because no wikiname
                                         $err, $code,
                                        );
-            TWiki::redirect( $query, $url );
+            $session->redirect( $query, $url );
             return;
         } else {
             die "verifyEmailAddress:". $err;
@@ -672,8 +685,8 @@ sub finish {
         my $success = _addUserToPasswordSystem( %data );
         # SMELL - error condition? surely need a way to flag an error?
         unless ( $success ) {
-            my $url = &TWiki::getOopsUrl( $data{webName}, $topic, "oopsregerr" );
-            TWiki::redirect( $query, $url );
+            my $url = $session->getOopsUrl( $data{webName}, $topic, "oopsregerr" );
+            $session->redirect( $query, $url );
             return;    
         }
     }
@@ -688,16 +701,16 @@ sub finish {
     
     # write log entry
     if ($TWiki::doLogRegistration) {
-        TWiki::writeLog( "register", "$data{webName}.$data{WikiName}",
+        $session->writeLog( "register", "$data{webName}.$data{WikiName}",
                          $data{Email}, $data{WikiName} );
     }
     
 
     # and finally display thank you page
     my $url =
-      TWiki::getOopsUrl( $data{webName}, $data{WikiName}, "oopsregthanks",
+      $session->getOopsUrl( $data{webName}, $data{WikiName}, "oopsregthanks",
                          $data{Email} );
-    TWiki::redirect( $query, $url );
+    $session->redirect( $query, $url );
 }
 
 =pod
@@ -714,7 +727,7 @@ appearing in the homepage and to fetch photos into the topic
 
 sub _newUserFromTemplate {
     my ($template, $row) = @_;
-    my ( $meta, $text ) = TWiki::UI::readTemplateTopic($template);
+    my ( $meta, $text ) = TWiki::UI::readTemplateTopic($$session, template);
     
     my $log = "$b Writing topic ".$row->{webName}.".".$row->{WikiName}."\n";
     
@@ -764,7 +777,7 @@ sub _writeRegistrationDetailsToTopic {
     
     my $userName = $data{remoteUser} || $data{WikiName};
     $text =
-      TWiki::expandVariablesOnTopicCreation( $text, $userName, $data{WikiName},
+      $session->expandVariablesOnTopicCreation( $text, $userName, $data{WikiName},
                                              "$data{webName}.$data{WikiName}" );
     # die Dumper(\%data);
     
@@ -772,8 +785,7 @@ sub _writeRegistrationDetailsToTopic {
     
     # my $topicSmell = $data{WikiName}."\n"; chomp $topicSmell; # should not be necessary
     # die \$data{WikiName}. " ". \$topicSmell;
-    TWiki::Store::saveTopic(
-                            $data{webName}, $data{WikiName}, $text, $meta, "",  1 );
+    $session->{store}->saveTopic( $data{webName}, $data{WikiName}, $text, $meta, "",  1 );
     return $log;
 }
 
@@ -929,7 +941,7 @@ sub _buildConfirmationEmail {
         }
     }
     $templateText = "$before$after";
-    $templateText = &TWiki::handleCommonTags( $templateText, $data{WikiName} );
+    $templateText = $session->handleCommonTags( $templateText, $data{WikiName} );
     $templateText =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois
       ;    # remove <nop> and <noautolink> tags
     
@@ -950,18 +962,18 @@ sub _validateRegistration {
     # DELETED CHECK: check for wikiName field.
     
     unless ( $data{form} && ( $#{ $data{form} } > 1 ) ) {
-        return TWiki::getOopsUrl( $data{webName}, $topic, "oopsregrequ",
+        return $session->getOopsUrl( $data{webName}, $topic, "oopsregrequ",
                                   $data{WikiName} );
     }
 
     if (TWiki::Store::topicExists( $data{webName}, $data{WikiName} ))
       {
-          return TWiki::getOopsUrl( $data{webName}, $topic, "oopsregexist",
+          return $session->getOopsUrl( $data{webName}, $topic, "oopsregexist",
                                     $data{WikiName} );
       }
     
     if (TWiki::User::UserPasswordExists( $data{LoginName} ) ) {
-        return TWiki::getOopsUrl( $data{webName}, $topic, "oopsregexist",
+        return $session->getOopsUrl( $data{webName}, $topic, "oopsregexist",
                                   $data{LoginName} );
     }
 
@@ -969,25 +981,25 @@ sub _validateRegistration {
     foreach my $fd ( @{ $data{form} } ) {
         if ( ( $fd->{required} ) && ( !$fd->{value} ) ) {
             # TODO - add all fields that are missing their values
-            return TWiki::getOopsUrl( $data{webName}, $topic, "oopsregrequ", );
+            return $session->getOopsUrl( $data{webName}, $topic, "oopsregrequ", );
         }
     }
 
     # check if WikiName is a WikiName
     if ( !TWiki::isValidWikiWord( $data{WikiName} ) ) {
-        return TWiki::getOopsUrl( $data{webName}, $topic, "oopsregwiki" );
+        return $session->getOopsUrl( $data{webName}, $topic, "oopsregwiki" );
     }
 
     if (exists $data{PasswordA}) {
         # check if passwords are identical
         if ( $data{passwordA} ne $data{passwordB} ) {
-            return TWiki::getOopsUrl( $data{webName}, $topic, "oopsregpasswd" );
+            return $session->getOopsUrl( $data{webName}, $topic, "oopsregpasswd" );
         }
     }
 
     # check valid email address
     if ( $data{Email} !~ $TWiki::regex{emailAddrRegex} ) {
-        return TWiki::getOopsUrl( $data{webName}, $topic, "oopsregemail" );
+        return $session->getOopsUrl( $data{webName}, $topic, "oopsregemail" );
     }
 
     # everything OK finish up
@@ -1024,7 +1036,7 @@ sub _addUserToPasswordSystem {
         my $password = $p{Password};
         unless ($password) {
             $password = _randomPassword(); 
-            TWiki::writeWarning("No password specified for ".$p{LoginName}." - using random=".$password);
+            $session->writeWarning("No password specified for ".$p{LoginName}." - using random=".$password);
         }
         $success = TWiki::User::AddUserPassword( $p{LoginName}, $password );
     }
@@ -1052,12 +1064,12 @@ sub _sendEmail {
     $text =~ s/%INTRODUCTION%/$p{Introduction}/go;
     $text =~ s/%VERIFICATIONCODE%/$p{VerificationCode}/go;
     $text =~ s/%PASSWORD%/$p{PasswordA}/go;
-    $text = TWiki::handleCommonTags( $text, $p{WikiName} );
+    $text = $session->handleCommonTags( $text, $p{WikiName} );
     
     my $senderr = TWiki::Net::sendEmail($text);
     
     if ($senderr) {
-        TWiki::writeWarning("Couldn't send message:\n\n$text\n\n - $senderr");
+        $session->TWiki::writeWarning("Couldn't send message:\n\n$text\n\n - $senderr");
     }
     
     return $senderr;
@@ -1392,7 +1404,7 @@ sub addPhotoToTopic {
         
         $meta->put( "FILEATTACHMENT", %attrs );
     }
-    #    TWiki::Store::saveTopic($p{web}, $p{user}, $text, $meta, "",  1 );
+    #     $session->{store}->saveTopic($p{web}, $p{user}, $text, $meta, "",  1 );
     return $meta;
 }
 

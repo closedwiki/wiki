@@ -88,7 +88,7 @@ sub processWeb
 
     my %exclude;
 
-    $text = &TWiki::handleCommonTags($text, $topic);
+    $text = $TWiki::T->handleCommonTags($text, $topic);
     $text =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
     if( $TWiki::doRemoveImgInMailnotify ) {
@@ -198,7 +198,7 @@ sub processWeb
     $text =~ s/%EMAILBODY%/$emailbody/go;
     $text =~ s/%TOPICLIST%/$topiclist/go;
     $text =~ s/%LASTDATE%/&TWiki::formatTime($prevLastmodify)/geo;
-    $text = &TWiki::handleCommonTags( $text, $topic );
+    $text = $TWiki::T->handleCommonTags( $text, $topic );
 
     # change absolute addresses to relative ones & do some cleanup
     $text =~ s/(href=\")$scriptUrlPath/$1..\/../goi;

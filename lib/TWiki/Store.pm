@@ -94,7 +94,7 @@ sub _getTopicHandler {
 
     my $handlerName = "TWiki::Store::$TWiki::storeTopicImpl";
 
-    return $this->{IMPL}->new( $web, $topic,
+    return $this->{IMPL}->new( $this->{session}, $web, $topic,
                                $attachment, $this->{STORESETTINGS} );
 }
 
@@ -162,7 +162,7 @@ sub readTopicRaw {
 
     # test if theTopic contains a webName to override $theWeb
     ( $theWeb, $theTopic ) =
-      TWiki::normalizeWebTopicName( $theWeb, $theTopic );
+      $this->{session}->normalizeWebTopicName( $theWeb, $theTopic );
 
     my $text;
 
@@ -234,7 +234,7 @@ sub moveAttachment {
     my %fileAttachment =
       $meta->findOne( "FILEATTACHMENT", $theAttachment );
     $meta->remove( "FILEATTACHMENT", $theAttachment );
-    $error .= _noHandlersSave( undef, $user, $oldWeb, $oldTopic, $text, $meta,
+    $error .= $this->_noHandlersSave( undef, $user, $oldWeb, $oldTopic, $text, $meta,
                                0, 1, 1, 0, "none" );
     # Remove lock
     $this->lockTopic( $oldWeb, $oldTopic, 1 );
@@ -249,14 +249,14 @@ sub moveAttachment {
     $fileAttachment{"movedwhen"} = time();
     $meta->put( "FILEATTACHMENT", %fileAttachment );
 
-    $error .= _noHandlersSave( undef, $user, $newWeb, $newTopic, $text, $meta,
+    $error .= $this->_noHandlersSave( undef, $user, $newWeb, $newTopic, $text, $meta,
                                0, 1, 1, 0, "none" );
     # Remove lock file.
     $this->lockTopic( $newWeb, $newTopic, 1 );
 
     return $error if( $error );
 
-    TWiki::writeLog( "move", "$oldWeb.$oldTopic",
+    $this->{session}->writeLog( "move", "$oldWeb.$oldTopic",
                      "Attachment $theAttachment moved to $newWeb.$newTopic" );
 
     return $error;
@@ -281,7 +281,7 @@ sub getAttachmentStream {
     my $fp = $topicHandler->{file};
     if ( $fp ) {
         unless ( open( $strm, "<$fp" )) {
-            TWiki::writeWarning( "File $fp open failed: error $!" );
+            $this->{session}->writeWarning( "File $fp open failed: error $!" );
         }
     }
     return $strm;
@@ -414,7 +414,7 @@ sub renameTopic {
 
     # Log rename
     if( $TWiki::doLogRename ) {
-        TWiki::writeLog( "rename", "$oldWeb.$oldTopic", "moved to $newWeb.$newTopic $error" );
+        $this->{session}->writeLog( "rename", "$oldWeb.$oldTopic", "moved to $newWeb.$newTopic $error" );
     }
 
     # Remove old lock file
@@ -449,7 +449,7 @@ sub updateReferringPages {
     while ( @refs ) {
         my $type = shift @refs;
         my $item = shift @refs;
-        my( $itemWeb, $itemTopic ) = TWiki::normalizeWebTopicName( "", $item );
+        my( $itemWeb, $itemTopic ) = $this->{session}->normalizeWebTopicName( "", $item );
         if ( $this->topicIsLockedBy( $itemWeb, $itemTopic ) ) {
             $lockFailure = 1;
         } else {
@@ -467,7 +467,7 @@ sub updateReferringPages {
                                                               $itemTopic ) ) {
                     # This shouldn't happen, as search will not return, but
                     # check to be on the safe side
-                    TWiki::writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
+                    $this->{session}->writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
                     next;
                 }
                 my $insidePRE = 0;
@@ -635,7 +635,7 @@ sub topicIsLockedBy {
     # edit link within a time limit e.g. 1 hour
 
     ( $theWeb, $theTopic ) =
-      TWiki::normalizeWebTopicName( $theWeb, $theTopic );
+      $this->{session}->normalizeWebTopicName( $theWeb, $theTopic );
 
     my $lockFilename = "$TWiki::dataDir/$theWeb/$theTopic.lock";
     if( ( -e "$lockFilename" ) && ( $TWiki::editLockTime > 0 ) ) {
@@ -792,7 +792,7 @@ sub saveAttachment {
 
     $this->lockTopic( $web, $topic, 1 );
     unless( $error || $opts->{dontlog} ) {
-        TWiki::writeLog( $action, "$web.$topic", $attachment );
+        $this->{session}->writeLog( $action, "$web.$topic", $attachment );
     }
 
     return $error;
@@ -886,7 +886,7 @@ sub _normalSave {
         # write log entry
         my $extra = "";
         $extra   .= "dontNotify" if( $dontNotify );
-        TWiki::writeLog( "save", "$web.$topic", $extra );
+        $this->{session}->writeLog( "save", "$web.$topic", $extra );
     }
 
     return "";
@@ -924,7 +924,7 @@ sub _repRev {
           $this->users()->userToWikiName( $user ) .
               " ". TWiki::formatTime( $epochSec, "rcs", "gmtime" );
         $extra   .= " dontNotify" if( $dontNotify );
-        TWiki::writeLog( "save", "$web.$topic", $extra );
+        $this->{session}->writeLog( "save", "$web.$topic", $extra );
     }
     return "";
 }
@@ -950,7 +950,7 @@ sub _delRev {
 
     if( $TWiki::doLogTopicSave ) {
         # write log entry
-        TWiki::writeLog( "cmd", "$web.$topic", "delRev by $userName: $rev" );
+        $this->{session}->writeLog( "cmd", "$web.$topic", "delRev by $userName: $rev" );
     }
 
     return "";
@@ -993,7 +993,7 @@ sub lockTopic {
     my( $this, $theWeb, $theTopic, $doUnlock ) = @_;
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Store/;
 
-    ( $theWeb, $theTopic ) = TWiki::normalizeWebTopicName( $theWeb, $theTopic );
+    ( $theWeb, $theTopic ) = $this->{session}->normalizeWebTopicName( $theWeb, $theTopic );
 
     my $topicHandler = $this->_getTopicHandler( $theWeb, $theTopic );
     $topicHandler->setLock( ! $doUnlock );
@@ -1069,7 +1069,7 @@ sub topicExists {
     my( $this, $theWeb, $theTopic ) = @_;
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Store/;
     ( $theWeb, $theTopic ) =
-      TWiki::normalizeWebTopicName( $theWeb, $theTopic );
+      $this->{session}->normalizeWebTopicName( $theWeb, $theTopic );
     return -e "$TWiki::dataDir/$theWeb/$theTopic.txt";
 }
 

@@ -64,13 +64,12 @@ use CGI;
 use TWiki;
 use TWiki::User;
 use TWiki::User::HtPasswdUser;
- 
+
 $query= new CGI;
- 
+
 &main();
- 
-sub main
-{
+
+sub main {
     my $wikiName = $query->param( 'username' );
 
     #initialize
@@ -79,32 +78,34 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName ) =
-        &TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl, $query );
- 
+      TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl, $query );
+    my $session = $TWiki::T;
+
     my $text = "";
     my $url = "";
 
     my $theRemoteUser = $query->remote_user();
     my ( undef, undef, undef, $userName ) = 
-	&TWiki::initialize( $thePathInfo, $theRemoteUser, $topicName, $theUrl, $query );
+      TWiki::initialize( $thePathInfo, $theRemoteUser, $topicName, $theUrl, $query );
+    $session = $TWiki::T;
 
     my $action = $query->param("installPasswd");
 
     if ( $action eq "on" ) {
-        installEncryptedPasswd ($webName, $topic, $userName);
+        _installEncryptedPasswd ($session, $webName, $topic, $userName);
     } elsif ( $action eq "requestReset" ) {
-        showEncryptedPasswd ($webName, $topic);
+        _showEncryptedPasswd ($session, $webName, $topic);
     } else {
-       $url = &TWiki::getOopsUrl( $webName, $topic, "oopsmanage");
-       TWiki::redirect( $query, $url );
+       $url = $session->getOopsUrl( $webName, $topic, "oopsmanage");
+       $session->redirect( $query, $url );
     }
 }
 
 #==============================================
 # ($webName, $topic)
-sub showEncryptedPasswd
+sub _showEncryptedPasswd
 {
-    my  ($webName, $topic) = @_;
+    my  ($session, $webName, $topic) = @_;
 
     # get all parameters from the form
     my $wikiName = $query->param( 'username' );
@@ -115,52 +116,52 @@ sub showEncryptedPasswd
 
     # check if required fields are filled in
     if( ! $wikiName || ! $passwordA ) {
-        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregrequ", );
-        TWiki::redirect( $query, $url );
+        $url = $session->getOopsUrl( $webName, $topic, "oopsregrequ", );
+        $session->redirect( $query, $url );
         return;
     }
  
     # check if user entry exists
-    if(  ( $wikiName )  && (! $TWiki::T->{users}->userPasswordExists( $wikiName ) ) ) {
+    if(  ( $wikiName )  && (! $session->{users}->userPasswordExists( $wikiName ) ) ) {
         # PTh 20 Jun 2000: changed to getOopsUrl
-        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnotwikiuser", $wikiName );
-        TWiki::redirect( $query, $url );
+        $url = $session->getOopsUrl( $webName, $topic, "oopsnotwikiuser", $wikiName );
+        $session->redirect( $query, $url );
         return;
     }
 
     # check if passwords are identical
     if( $passwordA ne $passwordB ) {
-        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregpasswd" );
-        TWiki::redirect( $query, $url );
+        $url = $session->getOopsUrl( $webName, $topic, "oopsregpasswd" );
+        $session->redirect( $query, $url );
         return;
     }
 
-    my $theCryptPassword = &TWiki::User::HtPasswdUser::_htpasswdGeneratePasswd( $wikiName,  $passwordA );
+    my $theCryptPassword = TWiki::User::HtPasswdUser::htpasswdGeneratePasswd( $wikiName,  $passwordA );
 
     # and finally display the reset password page
-    $url = &TWiki::getOopsUrl( $webName, $wikiName, "oopsresetpasswd", $wikiName.":".$theCryptPassword );
-    TWiki::redirect( $query, $url );
+    $url = $session->getOopsUrl( $webName, $wikiName, "oopsresetpasswd", $wikiName.":".$theCryptPassword );
+    $session->redirect( $query, $url );
 }
 
 #==============================================
-sub installEncryptedPasswd
+sub _installEncryptedPasswd
 {
-    my  ($webName, $topic, $userName) = @_;
+    my  ($session, $webName, $topic, $userName) = @_;
 
-    my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
+    my $wikiUserName = $session->{users}->userToWikiName( $userName );
 
-    if( ! &TWiki::Access::userIsInGroup( $wikiUserName, $TWiki::superAdminGroup ) ) {
+    if( ! $session->{security}->userIsInGroup( $wikiUserName, $TWiki::superAdminGroup ) ) {
     	# user has no permission to install the password
-    	my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$TWiki::mainWebname.$TWiki::superAdminGroup" );
-    	TWiki::redirect( $query, $url );
+    	my $url = $session->getOopsUrl( $webName, $topic, "oopsaccessgroup", "$TWiki::mainWebname.$TWiki::superAdminGroup" );
+    	$session->redirect( $query, $url );
     	return;
     }
 
     my $theCryptPassword = $query->param( 'encryptedPassword' ) || '';
     if ( ! $theCryptPassword ) {
 	# missing username:encryptedpassword
-    	$url = &TWiki::getOopsUrl( $webName, $topic, "oopsregrequ", );
-        TWiki::redirect( $query, $url );
+    	$url = $session->getOopsUrl( $webName, $topic, "oopsregrequ", );
+        $session->redirect( $query, $url );
         return;
     }
 	
@@ -170,29 +171,29 @@ sub installEncryptedPasswd
 	$wikiName = $1;
     } else {
 	# bad format
-    	$url = &TWiki::getOopsUrl( $webName, $topic, "oopsbadpwformat", $theCryptPassword);
-        TWiki::redirect( $query, $url );
+    	$url = $session->getOopsUrl( $webName, $topic, "oopsbadpwformat", $theCryptPassword);
+        $session->redirect( $query, $url );
         return;
     }
 
     # check if user entry exists
-    if(  ( $wikiName )  && (! $TWiki::T->{users}->userPasswordExists( $wikiName ) ) ){
-        # PTh 20 Jun 2000: changed to getOopsUrl
-        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnotwikiuser", $wikiName );
-        TWiki::redirect( $query, $url );
+    if(  ( $wikiName )  && (! $session->{users}->userPasswordExists( $wikiName ) ) ){
+        $url = $session->getOopsUrl( $webName, $topic, "oopsnotwikiuser", $wikiName );
+        $session->redirect( $query, $url );
         return;
     }
 
 #this bit is specific to the TWiki::User::HtPasswdUser module
+    my $htpu = new TWiki::User::HtPasswdUser($session);
     # old password
-    my $oldcrypt = TWiki::User::HtPasswdUser::_htpasswdReadPasswd( $wikiName );
+    my $oldcrypt = $htpu->htpasswdReadPasswd( $session, $wikiName );
     # OK - password may be changed
     my $oldCryptPassword = "$wikiName\:$oldcrypt";
-    TWiki::User::HtPasswdUser::htpasswdUpdateUser( $wikiName, $oldCryptPassword, $theCryptPassword );
+    $htpu->htpasswdUpdateUserPassword( $wikiName, $oldCryptPassword, $theCryptPassword );
 
     # OK - password changed
-    $url = &TWiki::getOopsUrl( $webName, $topic, "oopschangepasswd" );
-    TWiki::redirect( $query, $url );
+    $url = $session->getOopsUrl( $webName, $topic, "oopschangepasswd" );
+    $session->redirect( $query, $url );
     return; 
 }
 

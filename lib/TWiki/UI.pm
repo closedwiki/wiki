@@ -26,21 +26,22 @@ Generate a relevant URL to redirect to the given oops page
 =cut
 
 sub oops {
-  my $webName = shift;
-  my $topic = shift;
-  my $script = shift;
+    my $session = shift;
+    my $webName = shift;
+    my $topic = shift;
+    my $script = shift;
 
-  $webName = $TWiki::mainWebname unless ( $webName );
-  $topic = $TWiki::mainTopicname unless ( $topic );
+    $webName = $TWiki::mainWebname unless ( $webName );
+    $topic = $TWiki::mainTopicname unless ( $topic );
 
-  my $url = TWiki::getOopsUrl( $webName, $topic, "oops$script", @_ );
-  redirect( $url, @_ );
+    my $url = $session->getOopsUrl( $webName, $topic, "oops$script", @_ );
+    redirect( $url, @_ );
 }
 
 =pod twiki
 
 ---+++ redirect( $url, ... )
-Generate a CGI redirect unless (1) TWiki::getCgiQuery() returns undef or
+Generate a CGI redirect unless (1) $TWiki::T->{cgiQuery} is undef or
 (2) $query->param('noredirect') is set to any value. Thus a redirect is
 only generated when in a CGI context. The ... parameters are
 concatenated to the message written when printing to STDOUT, and are
@@ -49,16 +50,16 @@ ignored for a redirect.
 =cut
 
 sub redirect {
-  my $url = shift;
+  my ($session, $url ) = @_;
 
-  my $query = TWiki::getCgiQuery();
+  my $query = $session->{cgiQuery};
 
   if ( $query && $query->param( 'noredirect' )) {
       my $content = join(" ", @_) . " \n";
-      TWiki::writeHeader( $query, length( $content ) );
+      $session->writeHeader( $query, length( $content ) );
       print $content;
   } elsif ( $query ) {
-    TWiki::redirect( $query, $url );
+      $session->redirect( $query, $url );
   }
 }
 
@@ -71,9 +72,9 @@ calling TWiki::UI::oops and returning 0 if it doesn't.
 =cut
 
 sub webExists {
-  my ( $webName, $topic ) = @_;
+  my ( $session, $webName, $topic ) = @_;
 
-  return 1 if( $TWiki::T->{store}->webExists( $webName ) );
+  return 1 if( $session->{store}->webExists( $webName ) );
 
   oops( $webName, $topic, "noweb", "ERROR $webName.$topic Missing Web" );
 
@@ -93,7 +94,7 @@ the oops template name thus: oops${fn}notopic
 sub topicExists {
   my ( $webName, $topic, $fn ) = @_;
 
-  return 1 if $TWiki::T->{store}->topicExists( $webName, $topic );
+  return 1 if $session->{store}->topicExists( $webName, $topic );
 
   oops( $webName, $topic, "${fn}notopic", "ERROR $webName.$topic Missing topic" );
 
@@ -111,7 +112,7 @@ calling TWiki::UI::oops and returning 1 if it doesn't.
 sub isMirror {
   my ( $webName, $topic ) = @_;
 
-  my( $mirrorSiteName, $mirrorViewURL ) = TWiki::readOnlyMirrorWeb( $webName );
+  my( $mirrorSiteName, $mirrorViewURL ) = $session->readOnlyMirrorWeb( $webName );
 
   return 0 unless ( $mirrorSiteName );
 
@@ -135,9 +136,9 @@ oops and return 0.
 =cut
 
 sub isAccessPermitted {
-   my ( $web, $topic, $mode, $user ) = @_;
+   my ( $session, $web, $topic, $mode, $user ) = @_;
 
-   return 1 if $TWiki::T->{security}->checkAccessPermission( $mode, $user, "",
+   return 1 if $session->{security}->checkAccessPermission( $mode, $user, "",
                                                         $topic, $web );
    oops( $web, $topic, "access$mode" );
 
@@ -155,7 +156,7 @@ oops and return 0.
 sub userIsAdmin {
   my ( $webName, $topic, $user ) = @_;
 
-  return 1 if $TWiki::T->{security}->userIsInGroup( $user, $TWiki::superAdminGroup );
+  return 1 if $session->{security}->userIsInGroup( $user, $TWiki::superAdminGroup );
 
   oops( $webName, $topic, "accessgroup",
         "$TWiki::mainWebname.$TWiki::superAdminGroup" );

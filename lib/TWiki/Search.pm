@@ -93,7 +93,7 @@ sub _traceExec
 {
    my( $cmd, $result ) = @_;
    
-   #TWiki::writeDebug( "Search exec: $cmd -> $result" );
+   #$this->{session}->writeDebug( "Search exec: $cmd -> $result" );
 }
 
 # ===========================
@@ -366,7 +366,7 @@ sub searchWeb
     my $theSeparator =  $params{"separator"} || "";
     my $newLine =       $params{"newline"} || "";
 
-    ##TWiki::writeDebug "Search locale is $TWiki::siteLocale";
+    ##$this->{session}->writeDebug "Search locale is $TWiki::siteLocale";
 
     if ($theLimit =~ /(^\d+$)/o) { # only digits, all else is the same as
         $theLimit = $1;            # an empty string.  "+10" won't work.
@@ -504,12 +504,12 @@ sub searchWeb
         }
     }
 
-    $tmplSearch = TWiki::handleCommonTags( $tmplSearch, $topic );
-    $tmplNumber = TWiki::handleCommonTags( $tmplNumber, $topic );
+    $tmplSearch = $this->{session}->handleCommonTags( $tmplSearch, $topic );
+    $tmplNumber = $this->{session}->handleCommonTags( $tmplNumber, $topic );
 
     unless( $inline ) {
         # head and tail only required if _not_ inline
-        $tmplHead = TWiki::handleCommonTags( $tmplHead, $topic );
+        $tmplHead = $this->{session}->handleCommonTags( $tmplHead, $topic );
 
         if( $callback) {
             $tmplHead = $this->renderer()->getRenderedVersion( $tmplHead );
@@ -547,7 +547,7 @@ sub searchWeb
     # FIXME: Move log entry further down to log actual webs searched
     if( ( $TWiki::doLogTopicSearch ) && ( ! $inline ) ) {
         $tempVal = join( ' ', @webList );
-        TWiki::writeLog( "search", $tempVal, $theSearchVal );
+        $this->{session}->writeLog( "search", $tempVal, $theSearchVal );
     }
 
     # loop through webs
@@ -758,13 +758,13 @@ sub searchWeb
 
         } else {
             # simple sort, suggested by RaymondLutz in Codev.SchwartzianTransformMisused
-	    ##TWiki::writeDebug "Topic list before sort = @topicList";
+	    ##$this->{session}->writeDebug "Topic list before sort = @topicList";
             if( $revSort ) {
                 @topicList = sort {$b cmp $a} @topicList;
             } else {
                 @topicList = sort {$a cmp $b} @topicList;
             }
-	    ##TWiki::writeDebug "Topic list after sort = @topicList";
+	    ##$this->{session}->writeDebug "Topic list after sort = @topicList";
         }
 
         # header and footer of $thisWebName
@@ -850,7 +850,7 @@ sub searchWeb
                       # primitive way to prevent recursion
                       $text =~ s/%SEARCH/%<nop>SEARCH/g;
                   }
-                  $text = &TWiki::handleCommonTags( $text, $topic, $thisWebName );
+                  $text = $this->{session}->handleCommonTags( $text, $topic, $thisWebName );
               }
           }
 
@@ -916,7 +916,7 @@ sub searchWeb
             } else {
                 # don't callback yet because of table
                 # rendering
-                $tempVal = TWiki::handleCommonTags( $tempVal, $topic );
+                $tempVal = $this->{session}->handleCommonTags( $tempVal, $topic );
                 $tempVal = $this->renderer()->getRenderedVersion( $tempVal );
             }
 
@@ -994,7 +994,7 @@ sub searchWeb
                     # primitive way to prevent recursion
                     $text =~ s/%SEARCH/%<nop>SEARCH/g;
                 }
-                $text = TWiki::handleCommonTags( $text, $topic, $thisWebName );
+                $text = $this->{session}->handleCommonTags( $text, $topic, $thisWebName );
                 $text = $this->renderer()->getRenderedVersion( $text, $thisWebName );
                 # FIXME: What about meta data rendering?
                 $tempVal =~ s/%TEXTHEAD%/$text/go;
@@ -1041,7 +1041,7 @@ sub searchWeb
                 $headerDone = 1;
                 $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
                 $beforeText =~ s/%WEB%/$thisWebName/go;
-                $beforeText = TWiki::handleCommonTags( $beforeText,
+                $beforeText = $this->{session}->handleCommonTags( $beforeText,
                                                        $topic );
                 if ( $callback) {
                     $beforeText =
@@ -1076,7 +1076,7 @@ sub searchWeb
         # output footer only if hits in web
         if( $ntopics ) {
             # output footer of $thisWebName
-            $afterText  = TWiki::handleCommonTags( $afterText, $topic );
+            $afterText  = $this->{session}->handleCommonTags( $afterText, $topic );
             if( $inline || $theFormat ) {
                 $afterText =~ s/\n$//os;  # remove trailing new line
             }
@@ -1119,7 +1119,7 @@ sub searchWeb
     }
 
     unless( $inline ) {
-        $tmplTail = TWiki::handleCommonTags( $tmplTail, $topic );
+        $tmplTail = $this->{session}->handleCommonTags( $tmplTail, $topic );
 
         if( $callback ) {
             $tmplTail = $this->renderer()->getRenderedVersion( $tmplTail );
@@ -1131,7 +1131,7 @@ sub searchWeb
     }
 
     return undef if ( $callback );
-    $searchResult = TWiki::handleCommonTags( $searchResult, $topic );
+    $searchResult = $this->{session}->handleCommonTags( $searchResult, $topic );
     $searchResult = $this->renderer()->getRenderedVersion( $searchResult );
 #    $searchResult =~ s|</*nop/*>||goi;   # remove <nop> tag
     return $searchResult;

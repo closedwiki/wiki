@@ -50,29 +50,35 @@ duties.
 =cut
 
 sub save {
-  my( $webName, $topic, $userName, $query ) = @_;
-  if ( _save( @_ )) {
-    TWiki::redirect( $query, TWiki::getViewUrl( TWiki::normalizeWebTopicName($webName, $topic)) );
-  }
+    my $session = shift;
+
+    if ( _save( $session )) {
+        $session->redirect( $query, $session->getViewUrl( $session->normalizeWebTopicName($webName, $topic)) );
+    }
 }
 
 # Private - do not call outside this module!
 sub _save {
-  my( $webName, $topic, $userName, $query ) = @_;
+    my $session = shift;
+
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $userName = $session->{userName};
 
   my $saveCmd = $query->param( "cmd" ) || "";
   my $text = $query->param( "text" );
   my $meta = "";
-  my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
+  my $wikiUserName = $session->{users}->userToWikiName( $userName );
 
   # A template was requested; read it, and expand URLPARAMs within the
   # template using our CGI record
   my $templatetopic = $query->param( "templatetopic");
   if ($templatetopic) {
     ($meta, $text) =
-      $TWiki::T->{store}->readTopic( $wikiUserName, $webName,
+      $session->{store}->readTopic( $wikiUserName, $webName,
                                 $templatetopic, undef, 0 );
-    $text = TWiki::expandVariablesOnTopicCreation( $text );
+    $text = $session->expandVariablesOnTopicCreation( $text );
   }
 	
   my $unlock = $query->param( "unlock" ) || "";
@@ -83,16 +89,16 @@ sub _save {
   my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
   my $formTemplate = $query->param( "formtemplate" );
 
-  my $topicExists  = $TWiki::T->{store}->topicExists( $webName, $topic );
+  my $topicExists  = $session->{store}->topicExists( $webName, $topic );
 
-  return 0 if TWiki::UI::isMirror( $webName, $topic );
+  return 0 if TWiki::UI::isMirror( $session, $webName, $topic );
 
-  return 0 unless TWiki::UI::webExists( $webName, $topic );
+  return 0 unless TWiki::UI::webExists( $session, $webName, $topic );
 
   # Prevent saving existing topic?
   if( $onlyNewTopic && $topicExists ) {
     # Topic exists and user requested oops if it exists
-    TWiki::UI::oops( $webName, $topic, "createnewtopic" );
+    TWiki::UI::oops( $session, $webName, $topic, "createnewtopic" );
     return 0;
   }
 
@@ -101,43 +107,43 @@ sub _save {
       && ( ! $topicExists )
       && ( ! TWiki::isValidTopicName( $topic ) ) ) {
     # do not allow non-wikinames, redirect to view topic
-    TWiki::UI::redirect( TWiki::getViewUrl( $webName, $topic ) );
+    TWiki::UI::redirect( $session, $session->getViewUrl( $webName, $topic ) );
     return 0;
   }
 
-  return 0 unless TWiki::UI::isAccessPermitted( $webName, $topic,
+  return 0 unless TWiki::UI::isAccessPermitted( $session, $webName, $topic,
                                             "change", $wikiUserName );
 
   # check permission for undocumented cmd=... parameter
   return 0 if ( $saveCmd &&
-              ! TWiki::UI::userIsAdmin( $webName, $topic, $wikiUserName ));
+              ! TWiki::UI::userIsAdmin( $session, $webName, $topic, $wikiUserName ));
 
   if( ! ( defined $text ) ) {
-    TWiki::UI::oops( $webName, $topic, "save" );
+    TWiki::UI::oops( $session, $webName, $topic, "save" );
     return 0;
   } elsif( ! $text ) {
     # empty topic not allowed
-    TWiki::UI::oops( $webName, $topic, "empty" );
+    TWiki::UI::oops( $session, $webName, $topic, "empty" );
     return 0;
   }
 
   if( $changeform ) {
-      $TWiki::T->{form}->changeForm( $webName, $topic, $query );
+      $session->{form}->changeForm( $webName, $topic, $query );
       return 0;
   }
 
-  $text = $TWiki::T->{renderer}->decodeSpecialChars( $text );
+  $text = $session->{renderer}->decodeSpecialChars( $text );
   $text =~ s/ {3}/\t/go;
 
   if( $saveCmd eq "repRev" ) {
     $text =~ s/%__(.)__%/%_$1_%/go;
-    $meta = $TWiki::T->{store}->extractMetaData( $webName, $topic, \$text );
+    $meta = $session->{store}->extractMetaData( $webName, $topic, \$text );
   } else {
     # normal case: Get latest attachment from file for preview
     my $tmp;
 	# read meta (if not already read when reading template)
     ( $meta, $tmp ) =
-      $TWiki::T->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 ) unless $meta;
+      $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 ) unless $meta;
 
     # parent setting
     if( $theParent eq "none" ) {
@@ -153,13 +159,13 @@ sub _save {
 
     use TWiki::Form;
 	# Expand field variables, unless this new page is templated
-    $TWiki::T->{form}->fieldVars2Meta( $webName, $query, $meta ) unless $templatetopic;
+    $session->{form}->fieldVars2Meta( $webName, $query, $meta ) unless $templatetopic;
     $meta->updateSets( \$text );
   }
 
-  my $error = $TWiki::T->{store}->saveTopic( $userName, $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
+  my $error = $session->{store}->saveTopic( $userName, $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
   if( $error ) {
-    TWiki::UI::oops( $webName, $topic, "saveerr", $error );
+    TWiki::UI::oops( $session, $webName, $topic, "saveerr", $error );
     return 0;
   }
 
@@ -182,32 +188,37 @@ This function can replace "save" eventually.
 =cut
 
 sub savemulti {
-  my( $webName, $topic, $userName, $query ) = @_;
+    my $session = shift;
 
-  my $redirecturl = TWiki::getViewUrl( TWiki::normalizeWebTopicName($webName, $topic));
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $userName = $session->{userName};
 
-  my $saveaction = lc($query->param( 'action' ));
-  if ( $saveaction eq "checkpoint" ) {
-    $query->param( -name=>"dontnotify", -value=>"checked" );
-    $query->param( -name=>"unlock", -value=>'0' );
-    my $editURL = TWiki::getScriptUrl( $webName, $topic, "edit" );
-    my $randompart = randomURL();
-    $redirecturl = "$editURL|$randompart";
-  } elsif ( $saveaction eq "quietsave" ) {
-    $query->param( -name=>"dontnotify", -value=>"checked" );
-  } elsif ( $saveaction eq "cancel" ) {
-    my $viewURL = TWiki::getScriptUrl( $webName, $topic, "view" );
-    TWiki::redirect( $query, "$viewURL?unlock=on" );
-    return;
-  } elsif( $saveaction eq "preview" ) {
-    TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );
-    return;
-  }
+    my $redirecturl = $session->getViewUrl( $session->normalizeWebTopicName($webName, $topic));
 
-  # save called by preview
-  if ( _save( $webName, $topic, $userName, $query )) {
-    TWiki::redirect( $query, $redirecturl );
-  }
+    my $saveaction = lc($query->param( 'action' ));
+    if ( $saveaction eq "checkpoint" ) {
+        $query->param( -name=>"dontnotify", -value=>"checked" );
+        $query->param( -name=>"unlock", -value=>'0' );
+        my $editURL = $session->getScriptUrl( $webName, $topic, "edit" );
+        my $randompart = randomURL();
+        $redirecturl = "$editURL|$randompart";
+    } elsif ( $saveaction eq "quietsave" ) {
+        $query->param( -name=>"dontnotify", -value=>"checked" );
+    } elsif ( $saveaction eq "cancel" ) {
+        my $viewURL = $session->getScriptUrl( $webName, $topic, "view" );
+        $session->redirect( $query, "$viewURL?unlock=on" );
+        return;
+    } elsif( $saveaction eq "preview" ) {
+        TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );
+        return;
+    }
+
+    # save called by preview
+    if ( _save( $session )) {
+        $session->redirect( $query, $redirecturl );
+    }
 }
 
 ## Random URL:

@@ -96,18 +96,18 @@ sub getUrl {
     $paddr   = sockaddr_in( $thePort, $iaddr );
     $proto   = getprotobyname( 'tcp' );
     unless( socket( *SOCK, &PF_INET, &SOCK_STREAM, $proto ) ) {
-        &TWiki::writeWarning( "TWiki::Net::getUrl socket: $!" );
+        $this->{session}->writeWarning( "TWiki::Net::getUrl socket: $!" );
         return "content-type: text/plain\n\nERROR: TWiki::Net::getUrl socket: $!.";
     }
     unless( connect( *SOCK, $paddr ) ) {
-        &TWiki::writeWarning( "TWiki::Net::getUrl connect: $!" );
+        $this->{session}->writeWarning( "TWiki::Net::getUrl connect: $!" );
         return "content-type: text/plain\n\nERROR: TWiki::Net::getUrl connect: $!. \n$req";
     }
     select SOCK; $| = 1;
     print SOCK $req;
     while( <SOCK> ) { $result .= $_; }
     unless( close( SOCK ) ) {
-        &TWiki::writeWarning( "TWiki::Net::getUrl close: $!" );
+        $this->{session}->writeWarning( "TWiki::Net::getUrl close: $!" );
     }
     select STDOUT;
     return $result;

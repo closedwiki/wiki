@@ -37,14 +37,12 @@ use TWiki::UI::View;
 
 my $query = new CGI;
 
-my $thePathInfo = $query->path_info(); 
-my $theRemoteUser = $query->remote_user();
-my $theTopic = $query->param( 'topic' );
-my $theUrl = $query->url;
+my $pathInfo = $query->path_info();
+my $user = $query->remote_user();
+my $url = $query->url;
+my $topic = $query->param( 'topic' );
 
-my( $topic, $webName, $scriptUrlPath, $userName ) = 
-  TWiki::initialize( $thePathInfo, $theRemoteUser,
-                     $theTopic, $theUrl, $query );
+TWiki::initialize( $pathInfo, $user, $topic, $url, $query );
 
-TWiki::UI::View::view( $webName, $topic, $userName, $query );
+TWiki::UI::View::view( $TWiki::T );
 

@@ -21,122 +21,127 @@ use TWiki::UI;
 use TWiki::Form;
 
 sub preview {
-  my ( $webName, $topic, $userName, $query ) = @_;
+    my $session = shift;
 
-  my $skin = TWiki::getSkin();
-  my $changeform = $query->param( 'submitChangeForm' ) || "";
-  my $dontNotify = $query->param( "dontnotify" ) || "";
-  my $saveCmd = $query->param( "cmd" ) || "";
-  my $theParent = $query->param( 'topicparent' ) || "";
-  my $formTemplate = $query->param( "formtemplate" );
-  my $textparam = $query->param( "text" );
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $userName = $session->{userName};
 
-  return unless TWiki::UI::webExists( $webName, $topic );
+    my $skin = $session->getSkin();
+    my $changeform = $query->param( 'submitChangeForm' ) || "";
+    my $dontNotify = $query->param( "dontnotify" ) || "";
+    my $saveCmd = $query->param( "cmd" ) || "";
+    my $theParent = $query->param( 'topicparent' ) || "";
+    my $formTemplate = $query->param( "formtemplate" );
+    my $textparam = $query->param( "text" );
 
-  my $tmpl = ""; 
-  my $text = "";
-  my $ptext = "";
-  my $meta = "";
-  my $formFields = "";
-  my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
+    return unless TWiki::UI::webExists( $session, $webName, $topic );
 
-  return if TWiki::UI::isMirror( $webName, $topic );
+    my $tmpl = "";
+    my $text = "";
+    my $ptext = "";
+    my $meta = "";
+    my $formFields = "";
+    my $wikiUserName = $session->{users}->userToWikiName( $userName );
 
-  # reset lock time, this is to prevent contention in case of a long edit session
-  $TWiki::T->{store}->lockTopic( $webName, $topic );
+    return if TWiki::UI::isMirror( $session, $webName, $topic );
 
-  # Is user looking to change the form used?  Sits oddly in preview, but 
-  # to avoid Javascript and pick up text on edit page it has to be in preview.
-  if( $changeform ) {
-      $TWiki::T->{form}->changeForm( $webName, $topic, $query );
-    return;
-  }
+    # reset lock time, this is to prevent contention in case of a long edit session
+    $session->{store}->lockTopic( $webName, $topic );
 
-  # get view template, standard view or a view with a different skin
-  $tmpl = $TWiki::T->{templates}->readTemplate( "preview", $skin );
-  $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
-  if( $saveCmd ) {
-    return unless TWiki::UI::userIsAdmin( $webName, $topic, $wikiUserName );
-    $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;
-  }
-  $tmpl =~ s/%CMD%/$saveCmd/go;
-
-  if( $saveCmd ne "repRev" ) {
-    my $dummy = "";
-    ( $meta, $dummy ) =
-      $TWiki::T->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 );
-
-    # parent setting
-    if( $theParent eq "none" ) {
-      $meta->remove( "TOPICPARENT" );
-    } elsif( $theParent ) {
-      $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+    # Is user looking to change the form used?  Sits oddly in preview, but 
+    # to avoid Javascript and pick up text on edit page it has to be in preview.
+    if( $changeform ) {
+        $session->{form}->changeForm( $webName, $topic, $query );
+        return;
     }
-    $tmpl =~ s/%TOPICPARENT%/$theParent/go;
 
-    if( $formTemplate ) {
-      $meta->remove( "FORM" );
-      $meta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
-      $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
+    # get view template, standard view or a view with a different skin
+    $tmpl = $session->{templates}->readTemplate( "preview", $skin );
+    $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
+    if( $saveCmd ) {
+        return unless TWiki::UI::userIsAdmin( $session, $webName, $topic, $wikiUserName );
+        $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;
+    }
+    $tmpl =~ s/%CMD%/$saveCmd/go;
+
+    if( $saveCmd ne "repRev" ) {
+        my $dummy = "";
+        ( $meta, $dummy ) =
+          $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 );
+
+        # parent setting
+        if( $theParent eq "none" ) {
+            $meta->remove( "TOPICPARENT" );
+        } elsif( $theParent ) {
+            $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+        }
+        $tmpl =~ s/%TOPICPARENT%/$theParent/go;
+
+        if( $formTemplate ) {
+            $meta->remove( "FORM" );
+            $meta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
+            $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
+        } else {
+            $tmpl =~ s/%FORMTEMPLATE%//go;
+        }
+
+        # get the edited text and combine text, form and attachments for preview
+        $session->{form}->fieldVars2Meta( $webName, $query, $meta );
+        $text = $textparam;
+        if( ! $text ) {
+            # empty topic not allowed
+            TWiki::UI::oops( $session, $webName, $topic, "empty" );
+            return;
+        }
+        #AS added hook for plugins that want to do heavy stuff
+        TWiki::Plugins::afterEditHandler( $text, $topic, $webName );
+        $ptext = $text;
+
+        if( $meta->count( "FORM" ) ) {
+            $formFields = &TWiki::Form::getFieldParams( $meta );
+        }
     } else {
-      $tmpl =~ s/%FORMTEMPLATE%//go;
+        # undocumented "repRev" mode
+        $text = $textparam; # text to save
+        $ptext = $text;
+        $meta = $session->{store}->extractMetaData( $webName, $topic, \$ptext );
+        # SMELL: what the heck is this supposed to do?????
+        $text =~ s/%_(.)_%/%__$1__%/go;
     }
 
-    # get the edited text and combine text, form and attachments for preview
-    $TWiki::T->{form}->fieldVars2Meta( $webName, $query, $meta );
-    $text = $textparam;
-    if( ! $text ) {
-      # empty topic not allowed
-      TWiki::UI::oops( $webName, $topic, "empty" );
-      return;
-    }
-    #AS added hook for plugins that want to do heavy stuff
-    TWiki::Plugins::afterEditHandler( $text, $topic, $webName );
-    $ptext = $text;
+    my @verbatim = ();
+    $ptext = $session->{renderer}->takeOutBlocks( $ptext, "verbatim", \@verbatim );
+    $ptext =~ s/ {3}/\t/go;
+    $meta->updateSets( \$ptext );
+    $ptext = $session->handleCommonTags( $ptext, $topic );
+    $ptext = $session->{renderer}->getRenderedVersion( $ptext );
 
-    if( $meta->count( "FORM" ) ) {
-      $formFields = &TWiki::Form::getFieldParams( $meta );
-    }
-  } else {
-    # undocumented "repRev" mode
-    $text = $textparam; # text to save
-    $ptext = $text;
-    $meta = $TWiki::T->{store}->extractMetaData( $webName, $topic, \$ptext );
-    # SMELL: what the heck is this supposed to do?????
-    $text =~ s/%_(.)_%/%__$1__%/go;
-  }
+    # do not allow click on link before save: (mods by TedPavlic)
+    my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
+    $oopsUrl = $session->handleCommonTags( $oopsUrl, $topic );
+    $ptext =~ s@(?<=<a\s)([^>]*)(href=(?:".*?"|[^"].*?(?=[\s>])))@$1href="$oopsUrl?template=oopspreview"@goi;
+    $ptext =~ s@<form(?:|\s.*?)>@<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">@goi;
+    $ptext =~ s@(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))@$1onclick="location.href='$oopsUrl\?template=oopspreview'"@goi;
 
-  my @verbatim = ();
-  $ptext = $TWiki::T->{renderer}->takeOutBlocks( $ptext, "verbatim", \@verbatim );
-  $ptext =~ s/ {3}/\t/go;
-  $meta->updateSets( \$ptext );
-  $ptext = TWiki::handleCommonTags( $ptext, $topic );
-  $ptext = $TWiki::T->{renderer}->getRenderedVersion( $ptext );
+    $ptext = $session->{renderer}->putBackBlocks( $ptext, \@verbatim,
+                                                  "verbatim", "pre",
+                                                  \&TWiki::Render::verbatimCallBack );
 
-  # do not allow click on link before save: (mods by TedPavlic)
-  my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
-  $oopsUrl = &TWiki::handleCommonTags( $oopsUrl, $topic );
-  $ptext =~ s@(?<=<a\s)([^>]*)(href=(?:".*?"|[^"].*?(?=[\s>])))@$1href="$oopsUrl?template=oopspreview"@goi;
-  $ptext =~ s@<form(?:|\s.*?)>@<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">@goi;
-  $ptext =~ s@(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))@$1onclick="location.href='$oopsUrl\?template=oopspreview'"@goi;
+    $tmpl = $session->handleCommonTags( $tmpl, $topic );
+    $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
+    $tmpl =~ s/%TEXT%/$ptext/go;
 
-  $ptext = $TWiki::T->{renderer}->putBackBlocks( $ptext, \@verbatim,
-                                         "verbatim", "pre",
-                                         \&TWiki::Render::verbatimCallBack );
+    $text = $session->{renderer}->encodeSpecialChars( $text );
 
-  $tmpl = TWiki::handleCommonTags( $tmpl, $topic );
-  $tmpl = $TWiki::T->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
-  $tmpl = $TWiki::T->{renderer}->getRenderedVersion( $tmpl );
-  $tmpl =~ s/%TEXT%/$ptext/go;
+    $tmpl =~ s/%HIDDENTEXT%/$text/go;
+    $tmpl =~ s/%FORMFIELDS%/$formFields/go;
+    $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
-  $text = $TWiki::T->{renderer}->encodeSpecialChars( $text );
-
-  $tmpl =~ s/%HIDDENTEXT%/$text/go;
-  $tmpl =~ s/%FORMFIELDS%/$formFields/go;
-  $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-
-  TWiki::writeHeader( $query, length( $tmpl ));
-  print $tmpl;
+    $session->writeHeader( $query, length( $tmpl ));
+    print $tmpl;
 }
 
 1;

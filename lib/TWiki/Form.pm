@@ -238,7 +238,7 @@ sub _link {
     my $link = "$name";
     
     if( $this->store()->topicExists( $web, $name ) ) {
-        ( $web, $name ) = TWiki::normalizeWebTopicName( $web, $name );
+        ( $web, $name ) = $this->{session}->normalizeWebTopicName( $web, $name );
         if( ! $tooltip ) {
             $tooltip = "Click to see details in separate window";
         }
@@ -309,7 +309,7 @@ sub renderForEdit {
         }
         if( ($getValuesFromFormTopic ) ) {
             my $tmp = $fieldInfo[0] || "";
-            $value = &TWiki::handleCommonTags( $tmp, $topic );
+            $value = $this->{session}->handleCommonTags( $tmp, $topic );
         }
         $value = "" unless defined $value;  # allow "0" values
         my $extra = "";
@@ -378,7 +378,7 @@ sub renderForEdit {
             my $lines = 0;
             foreach my $item ( @fieldInfo ) {
                 my $flag = "";
-                my $expandedItem = &TWiki::handleCommonTags( $item, $topic );
+                my $expandedItem = $this->{session}->handleCommonTags( $item, $topic );
                 if( $value =~ /(^|,\s*)\Q$item\E(,|$)/ ) {
                     $flag = ' checked="checked"';
                 }
@@ -397,7 +397,7 @@ sub renderForEdit {
             my $lines = 0;
             foreach my $item ( @fieldInfo ) {
                 my $selected = $defaultMarker;
-                my $expandedItem = &TWiki::handleCommonTags( $item, $topic );
+                my $expandedItem = $this->{session}->handleCommonTags( $item, $topic );
                 if( $item eq $value ) {
                    $selected = ' checked="checked"';
                    $matched = $item;
@@ -447,7 +447,7 @@ sub fieldVars2Meta {
 
     $meta->remove( "FIELD" ) if( ! $justOverride );
 
-    #TWiki::writeDebug( "Form::fieldVars2Meta " . $query->query_string );
+    #$this->{session}->writeDebug( "Form::fieldVars2Meta " . $query->query_string );
 
     my @fieldsInfo = ();
     my %form = $meta->findOne( "FORM" );
@@ -521,7 +521,7 @@ sub getFieldParams {
        my $args = $2;
        my $name  = $field->{"name"};
        my $value = $field->{"value"};
-       #TWiki::writeDebug( "Form::getFieldParams " . $name . ", " . $value );
+       #$this->{session}->writeDebug( "Form::getFieldParams " . $name . ", " . $value );
        $value = TWiki::Meta::cleanValue( $value );
        $value =~ s/&/&amp\;/go;
        $value =~ s/</&lt\;/go;
@@ -544,7 +544,7 @@ sub changeForm {
     my( $this, $theWeb, $theTopic, $theQuery ) = @_;
 
     my $tmpl = $this->templates()->readTemplate( "changeform" );
-    $tmpl = TWiki::handleCommonTags( $tmpl, $theTopic );
+    $tmpl = $this->{session}->handleCommonTags( $tmpl, $theTopic );
     $tmpl = $this->renderer()->getRenderedVersion( $tmpl );
     my $text = $theQuery->param( 'text' );
     $text = $this->renderer()->encodeSpecialChars( $text );
@@ -579,7 +579,7 @@ sub changeForm {
 
     $tmpl =~ s|</*nop/*>||goi;
 
-    TWiki::writeHeader( $theQuery, length( $tmpl ));
+    $this->{session}->writeHeader( $theQuery, length( $tmpl ));
     print $tmpl;
 }
 
@@ -688,7 +688,7 @@ sub upgradeCategoryTable {
         my $ttext = "";
         foreach( split( /\n/, $icat ) ) {
             my( $catname, $catmod, $catvalue ) = _upgradeCategoryItem( $_, $ctext );
-            #TWiki::writeDebug( "Form: name, mod, value: $catname, $catmod, $catvalue" );
+            #$this->{session}->writeDebug( "Form: name, mod, value: $catname, $catmod, $catvalue" );
             if( $catname ) {
                 push @items, ( [$catname, $catmod, $catvalue] );
             }
@@ -701,7 +701,7 @@ sub upgradeCategoryTable {
         $defaultFormTemplate = $formTemplates[0] if ( @formTemplates );
 
         if( ! $defaultFormTemplate ) {
-            TWiki::writeWarning( "Form: can't get form definition to convert category table " .
+            $this->{session}->writeWarning( "Form: can't get form definition to convert category table " .
                                   " for topic $web.$topic" );
             foreach my $oldCat ( @items ) {
                 my $name = $oldCat->[0];
@@ -734,7 +734,7 @@ sub upgradeCategoryTable {
         }
 
     } else {
-        TWiki::writeWarning( "Form: get find category template twikicatitems for Web $web" );
+        $this->{session}->writeWarning( "Form: get find category template twikicatitems for Web $web" );
     }
     return $text;
 }

@@ -161,7 +161,7 @@ sub readTemplate {
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Templates/;
 
     if( ! defined($theSkin) ) {
-        $theSkin = TWiki::getSkin();
+        $theSkin = $this->{session}->getSkin();
     }
 
     if( ! defined( $theWeb ) ) {

@@ -38,31 +38,36 @@ removes user entry from passwords. CGI parameters:
 =cut
 
 sub removeUser {
-    my( $webName, $topic, $wikiName, $query ) = @_;
+    my $session = shift;
+
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $wikiName = $session->{userName};
+    my $query = $session->{cgiQuery};
 
     my $password = $query->param( 'password' );
 
     # check if user entry exists
     #TODO: need to handle the NoPasswdUser case (userPasswordExists will retun false here)
-    if(  ( $wikiName )  && (! $TWiki::T->{users}->userPasswordExists( $wikiName ) ) ) {
-        TWiki::UI::oops( $webName, $topic, "notwikiuser", $wikiName );
+    if(  ( $wikiName )  && (! $session->{users}->userPasswordExists( $wikiName ) ) ) {
+        TWiki::UI::oops( $session, $webName, $topic, "notwikiuser", $wikiName );
         return;
     }
 
     #check to see it the user we are trying to remove is a memebr of a group.
     #initially we refuse to delete the user
     #in a later implementation we will remove the from the group (if Access.pm implements it..)
-    my @groups =  $TWiki::T->{security}->getGroupsUserIsIn( $wikiName );
+    my @groups =  $session->{security}->getGroupsUserIsIn( $wikiName );
     my $numberOfGroups =  $#groups;
     if ( $numberOfGroups > -1 ) { 
-        TWiki::UI::oops( $webName, $topic, "genericerror");
+        TWiki::UI::oops( $session, $webName, $topic, "genericerror");
         return;
     }
 
-    my $pw = $TWiki::T->{users}->checkUserPasswd( $wikiName, $password );
+    my $pw = $session->{users}->checkUserPasswd( $wikiName, $password );
     if( ! $pw ) {
         # NO - wrong old password
-        TWiki::UI::oops( $webName, $topic, "wrongpassword");
+        TWiki::UI::oops( $session, $webName, $topic, "wrongpassword");
         return;
     }
 
@@ -70,85 +75,24 @@ sub removeUser {
     #   # appends a unique number to the requested topicname
     #    my $newTopicName = TWiki::getUniqueTopicName("AnonymousContributor");
     #
-    #   my $renameError = $TWiki::T->{store}->renameTopic( $TWiki::mainWebname, $wikiName, $TWiki::mainWebname, $newTopicName, "relink" );
+    #   my $renameError = $session->{store}->renameTopic( $TWiki::mainWebname, $wikiName, $TWiki::mainWebname, $newTopicName, "relink" );
     #
     #   if ( $renameError ) {
     #TODO: add better error message for rname failed
-    #         TWiki::UI::oops( $webName, $topic, "renameerr");
+    #         TWiki::UI::oops( $session, $webName, $topic, "renameerr");
     #         return;
     #     }
     #
     #    # Update references in referring pages - not applicable to attachments.
-    #    my @refs = $TWiki::T->{store}->findReferringPages( $oldWeb, $oldTopic );
+    #    my @refs = $session->{store}->findReferringPages( $oldWeb, $oldTopic );
     #    my $problems;
     #    ( $lockFailure, $problems ) = 
-    #       $TWiki::T->{store}->updateReferringPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
+    #       $session->{store}->updateReferringPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
 
-    $TWiki::T->{users}->removeUser($wikiName);
+    $session->{users}->removeUser($wikiName);
 
-    TWiki::UI::oops( $webName, $topic, "removeuserdone", $wikiName);
+    TWiki::UI::oops( $session, $webName, $topic, "removeuserdone", $wikiName);
     return;
-}
-
-=pod
-
----+++ changePassword( $webName, $topic, $query )
-Change the user's password. Details of the user and password
-are passed in CGI parameters.
-| =username= | |
-| =password= | |
-| =passwordA= | |
-| =TopicName= | |
-
-=cut
-
-sub changePassword {
-    my( $webName, $topic, $query ) = @_;
-
-    my $wikiName = $query->param( 'username' );
-    my $passwordA = $query->param( 'password' );
-    my $passwordB = $query->param( 'passwordA' );
-
-    # check if required fields are filled in
-    if( ! $wikiName || ! $passwordA ) {
-        TWiki::UI::oops( $webName, $topic, "regrequ", );
-        return;
-    }
-
-    # check if user entry exists
-    #TODO: need to handle the NoPasswdUser case (userPasswordExists will retun false here)
-    if(  ( $wikiName )  && (! $TWiki::T->{users}->userPasswordExists( $wikiName ) ) ) {
-        TWiki::UI::oops( $webName, $topic, "notwikiuser", $wikiName );
-        return;
-    }
-
-    # check if passwords are identical
-    if( $passwordA ne $passwordB ) {
-        TWiki::UI::oops( $webName, $topic, "regpasswd" );
-        return;
-    }
-
-    # c h a n g e
-    my $oldpassword = $query->param( 'oldpassword' );
-
-    # check if required fields are filled in
-    if( ! $oldpassword ) {
-        TWiki::UI::oops( $webName, $topic, "regrequ" );
-        return;
-    }
-
-    my $pw = $TWiki::T->{users}->checkUserPasswd( $wikiName, $oldpassword );
-    if( ! $pw ) {
-        # NO - wrong old password
-        TWiki::UI::oops( $webName, $topic, "wrongpassword");
-        return;
-    }
-
-    # OK - password may be changed
-    $TWiki::T->{users}->updateUserPassword($wikiName,  $oldpassword, $passwordA );
-
-    # OK - password changed
-    TWiki::UI::oops( $webName, $topic, "changepasswd" );
 }
 
 # PRIVATE Prepare a template var for expansion in a message
@@ -159,9 +103,9 @@ sub _template {
 
 =pod
 
----++ createWeb( $web, $topic, $user, $query )
-Create a new web. Parameters defining the new web are passed
-in a CGI query.
+---++ createWeb( $session )
+Create a new web. Parameters defining the new web are
+in the query.
 
 | =newweb= | Name of new web |
 | =baseweb= | Name of web to copy to create newweb |
@@ -173,7 +117,12 @@ in a CGI query.
 =cut
 
 sub createWeb {
-    my( $webName, $topicName, $userName, $query ) = @_;
+    my $session = shift;
+
+    my $topicName = $session->{topicName};
+    my $webName = $session->{webName};
+    my $userName = $session->{userName};
+    my $query = $session->{cgiQuery};
 
     my $newWeb = $query->param( 'newweb' ) || "";
     my $newTopic = $query->param( 'newtopic' ) || "";
@@ -186,8 +135,8 @@ sub createWeb {
     my $oopsTmpl = "mngcreateweb";
 
     # check permission, user authorized to create webs?
-    my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
-    return unless TWiki::UI::isAccessPermitted( $webName, $topicName,
+    my $wikiUserName = $session->{users}->userToWikiName( $userName );
+    return unless TWiki::UI::isAccessPermitted( $session, $webName, $topicName,
                                                 "manage", $wikiUserName );
 
     if( $newWeb =~ /^_[a-zA-Z0-9_]+$/ ) {
@@ -199,15 +148,15 @@ sub createWeb {
         $newWeb =~ /(.*)/;
         $newWeb = $1;
     } elsif( $newWeb ) {
-        TWiki::UI::oops( "", "", $oopsTmpl, _template("msg_web_name") );
+        TWiki::UI::oops( $session, "", "", $oopsTmpl, _template("msg_web_name") );
         return;
     } else {
-        TWiki::UI::oops( "", "", $oopsTmpl, _template("msg_web_missing") );
+        TWiki::UI::oops( $session, "", "", $oopsTmpl, _template("msg_web_missing") );
         return;
     }
 
-    if( $TWiki::T->{store}->topicExists( $newWeb, $TWiki::mainTopicname ) ) {
-        TWiki::UI::oops( "", "", $oopsTmpl,
+    if( $session->{store}->topicExists( $newWeb, $TWiki::mainTopicname ) ) {
+        TWiki::UI::oops( $session, "", "", $oopsTmpl,
                          _template("msg_web_exist"), $newWeb );
         return;
     }
@@ -216,41 +165,41 @@ sub createWeb {
     $baseWeb =~ /(.*)/;
     $baseWeb = $1;
 
-    unless( $TWiki::T->{store}->topicExists( $baseWeb, $TWiki::mainTopicname ) ) {
-        TWiki::UI::oops( "", "", $oopsTmpl, _template("msg_base_web"), $baseWeb );
+    unless( $session->{store}->topicExists( $baseWeb, $TWiki::mainTopicname ) ) {
+        TWiki::UI::oops( $session, "", "", $oopsTmpl, _template("msg_base_web"), $baseWeb );
         return;
     }
 
     unless( $webBgColor =~ /\#[0-9a-f]{6}/i ) {
-        TWiki::UI::oops( "", "", $oopsTmpl, _template("msg_web_color") );
+        TWiki::UI::oops( $session, "", "", $oopsTmpl, _template("msg_web_color") );
         return;
     }
 
     # create the empty web
     my $err = _createEmptyWeb( $newWeb );
     if( $err ) {
-        TWiki::UI::oops( "", "", $oopsTmpl, _template("msg_web_create"), $err );
+        TWiki::UI::oops( $session, "", "", $oopsTmpl, _template("msg_web_create"), $err );
         return;
     }
 
     # copy needed topics from base web
-    $err = _copyWebTopics( $baseWeb, $newWeb );
+    $err = _copyWebTopics( $session, $baseWeb, $newWeb );
     if( $err ) {
-        TWiki::UI::oops( $newWeb, "", $oopsTmpl, _template("msg_web_copy_topics"), $err );
+        TWiki::UI::oops( $session, $newWeb, "", $oopsTmpl, _template("msg_web_copy_topics"), $err );
         return;
     }
 
     # patch WebPreferences
-    $err = _patchWebPreferences( $newWeb, $TWiki::webPrefsTopicname, $webBgColor,
+    $err = _patchWebPreferences( $session, $newWeb, $TWiki::webPrefsTopicname, $webBgColor,
                                  $siteMapWhat, $siteMapUseTo, $noSearchAll );
     if( $err ) {
-        TWiki::UI::oops( $newWeb, $TWiki::webPrefsTopicname, $oopsTmpl, _template("msg_patch_webpreferences"), $err );
+        TWiki::UI::oops( $session, $newWeb, $TWiki::webPrefsTopicname, $oopsTmpl, _template("msg_patch_webpreferences"), $err );
         return;
     }
 
     # everything OK, redirect to last message
     $newTopic = $TWiki::mainTopicname unless( $newTopic );
-    TWiki::UI::oops( $newWeb, $newTopic, $oopsTmpl, _template("msg_create_web_ok") );
+    TWiki::UI::oops( $session, $newWeb, $newTopic, $oopsTmpl, _template("msg_create_web_ok") );
     return;
 }
 
@@ -286,10 +235,10 @@ sub _createEmptyWeb {
 
 sub _copyWebTopics
 {
-    my ( $theBaseWeb, $theNewWeb ) = @_;
+    my ( $session, $theBaseWeb, $theNewWeb ) = @_;
 
     my $err = "";
-    my @topicList = $TWiki::T->{store}->getTopicNames( $theBaseWeb );
+    my @topicList = $session->{store}->getTopicNames( $theBaseWeb );
     unless( $theBaseWeb =~ /^_/ ) {
         # not a template web, so filter for only Web* topics
         @topicList = grep { /^Web/ } @topicList;
@@ -298,7 +247,7 @@ sub _copyWebTopics
         $topic =~ s/$TWiki::securityFilter//go;
         $topic =~ /(.*)/;
         $topic = $1;
-        $err = $TWiki::T->{store}->copyTopicBetweenWebs( $theBaseWeb,
+        $err = $session->{store}->copyTopicBetweenWebs( $theBaseWeb,
                                                     $topic, $theNewWeb );
         return( $err ) if( $err );
     }
@@ -307,10 +256,10 @@ sub _copyWebTopics
 
 sub _patchWebPreferences
 {
-    my ( $theWeb, $theTopic, $theWebBgColor, $theSiteMapWhat, $theSiteMapUseTo, $doNoSearchAll ) = @_;
+    my ( $session, $theWeb, $theTopic, $theWebBgColor, $theSiteMapWhat, $theSiteMapUseTo, $doNoSearchAll ) = @_;
 
     my( $meta, $text ) =
-      $TWiki::T->{store}->readTopic( Wikiusername(),
+      $session->{store}->readTopic( Wikiusername(),
                                 $theWeb, $theTopic, undef, 1 );
 
     my $siteMapList = "";
@@ -321,7 +270,7 @@ sub _patchWebPreferences
     $text =~ s/(\s\* Set SITEMAPUSETO =)[^\n\r]*/$1 $theSiteMapUseTo/os;
     $text =~ s/(\s\* Set NOSEARCHALL =)[^\n\r]*/$1 $doNoSearchAll/os;
 
-    my $err = $TWiki::T->{store}->saveTopic( Username(), $theWeb, $theTopic, $text, $meta );
+    my $err = $session->{store}->saveTopic( Username(), $theWeb, $theTopic, $text, $meta );
 
     return $err;
 }
@@ -344,7 +293,12 @@ paremeters:
 =cut
 
 sub rename {
-    my ( $oldWeb, $oldTopic, $userName, $query ) = @_;
+    my $session = shift;
+
+    my $oldTopic = $session->{topicName};
+    my $oldWeb = $session->{webName};
+    my $userName = $session->{userName};
+    my $query = $session->{cgiQuery};
 
     my $newWeb = $query->param( 'newweb' ) || "";
     my $newTopic = $query->param( 'newtopic' ) || "";
@@ -357,7 +311,7 @@ sub rename {
     my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || "";
     my $justChangeRefs = $query->param( 'changeRefs' ) || "";
 
-    my $skin = TWiki::getSkin();
+    my $skin = $session->getSkin();
 
     $newTopic =~ s/\s//go;
     $newTopic =~ s/$TWiki::securityFilter//go;
@@ -366,7 +320,7 @@ sub rename {
         $theAttachment = "";
     }
 
-    my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
+    my $wikiUserName = $session->{users}->userToWikiName( $userName );
 
     # justChangeRefs will be true when some topics that had links to $oldTopic
     # still need updating, previous update being prevented by a lock.
@@ -374,9 +328,9 @@ sub rename {
     unless ( $justChangeRefs ||
              _checkExist( $oldWeb, $oldTopic, $newWeb, $newTopic,
                           $theAttachment ) &&
-             TWiki::UI::isAccessPermitted( $oldWeb, $oldTopic,
+             TWiki::UI::isAccessPermitted( $session, $oldWeb, $oldTopic,
                                            "change", $wikiUserName ) &&
-             TWiki::UI::isAccessPermitted( $oldWeb, $oldTopic,
+             TWiki::UI::isAccessPermitted( $session, $oldWeb, $oldTopic,
                                            "rename", $wikiUserName )
            ) {
         return;
@@ -384,13 +338,13 @@ sub rename {
 
     # Has user selected new name yet?
     if( ! $newTopic || $confirm ) {
-        _newTopicScreen( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
+        _newTopicScreen( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
                          $confirm, $currentWebOnly, $doAllowNonWikiWord, $skin );
         return;
   }
 
     if( ! $justChangeRefs ) {
-        if( ! _getLocks( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock, $skin ) ) {
+        if( ! _getLocks( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock, $skin ) ) {
             return;
         }
     }
@@ -398,28 +352,28 @@ sub rename {
     if( ! $justChangeRefs ) {
         if( $theAttachment ) {
             my $moveError = 
-              $TWiki::T->{store}->moveAttachment( $oldWeb, $oldTopic,
+              $session->{store}->moveAttachment( $oldWeb, $oldTopic,
                                              $newWeb, $newTopic,
                                              $theAttachment,
                                              $userName );
 
             if( $moveError ) {
-                TWiki::UI::oops( $newWeb, $newTopic, "moveerr",
+                TWiki::UI::oops( $session, $newWeb, $newTopic, "moveerr",
                                  $theAttachment, $moveError );
                 return;
             }
         } else {
             if( ! $doAllowNonWikiWord &&
                 ! TWiki::isValidWikiWord( $newTopic ) ) {
-                TWiki::UI::oops( $newWeb, $newTopic, "renamenotwikiword" );
+                TWiki::UI::oops( $session, $newWeb, $newTopic, "renamenotwikiword" );
                 return;
             }
 
             my $renameError =
-              $TWiki::T->{store}->renameTopic( $oldWeb, $oldTopic, $newWeb,
+              $session->{store}->renameTopic( $oldWeb, $oldTopic, $newWeb,
                                           $newTopic, 1, $userName );
             if( $renameError ) {
-                TWiki::UI::oops( $oldWeb, $oldTopic, "renameerr",
+                TWiki::UI::oops( $session, $oldWeb, $oldTopic, "renameerr",
                                  $renameError, $newWeb, $newTopic );
                 return;
             }
@@ -428,47 +382,47 @@ sub rename {
 
     # Update references in referring pages - not applicable to attachments.
     if( ! $theAttachment ) {
-        my @refs = _getReferringTopicsListFromURL( $oldWeb, $oldTopic, $newWeb, $newTopic );
+        my @refs = _getReferringTopicsListFromURL( $session, $oldWeb, $oldTopic, $newWeb, $newTopic );
 
         my $problems;
         ( $lockFailure, $problems ) = 
-          $TWiki::T->{store}->updateReferringPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
+          $session->{store}->updateReferringPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
     }
 
     my $new_url = "";
     if( $lockFailure ) {
-        _moreRefsToChange( $oldWeb, $oldTopic, $newWeb, $newTopic, $skin );
+        _moreRefsToChange( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $skin );
         return;
     } elsif ( "$newWeb" eq "Trash" && "$oldWeb" ne "Trash" ) {
         if( $theAttachment ) {
             # go back to old topic after deleting an attachment
-            $new_url = &TWiki::getViewUrl( $oldWeb, $oldTopic );
+            $new_url = $session->getViewUrl( $oldWeb, $oldTopic );
         } else {
             # redirect to parent: ending in Trash is not the expected way
             my $meta = "";
             my $text = "";
             ( $meta, $text ) =
-              $TWiki::T->{store}->readTopic( $wikiUserName, $newWeb, $newTopic,
+              $session->{store}->readTopic( $wikiUserName, $newWeb, $newTopic,
                                         undef, 1 );
             my %parent = $meta->findOne( "TOPICPARENT" );
             if( %parent && $parent{"name"} &&
                 $parent{"name"} ne $oldTopic ) {
                 if ( $parent{"name"} =~ /([^.]+)[.]([^.]+)/ ) {
-                    $new_url = TWiki::getViewUrl( $1, $2 );
+                    $new_url = $session->getViewUrl( $1, $2 );
                 } else {
                     $new_url =
-                      TWiki::getViewUrl( $oldWeb, $parent{"name"} );
+                      $session->getViewUrl( $oldWeb, $parent{"name"} );
                 }
             } else {
-                $new_url = TWiki::getViewUrl( $oldWeb, $TWiki::mainTopicname );
+                $new_url = $session->getViewUrl( $oldWeb, $TWiki::mainTopicname );
             }
         }
     } else {
         #redirect to new topic
-        $new_url = TWiki::getViewUrl( $newWeb, $newTopic );
+        $new_url = $session->getViewUrl( $newWeb, $newTopic );
     }
 
-    TWiki::UI::redirect( $new_url );
+    TWiki::UI::redirect( $session, $new_url );
     return;
 }
 
@@ -486,7 +440,9 @@ sub rename {
 =cut
 
 sub _getReferringTopicsListFromURL {
-    my $query = TWiki::getCgiQuery();
+    my $session = shift;
+
+    my $query = $session->{cgiQuery};
     my ( $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
 
     my @result = ();
@@ -516,29 +472,29 @@ sub _checkExist {
     my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment ) = @_;
 
     my $ret = 0;
-    my $query = TWiki::getCgiQuery();
+    my $query = $session->{cgiQuery};
 
-    $ret = 1 unless TWiki::UI::webExists( $oldWeb, $oldTopic );
-    $ret = 1 unless TWiki::UI::webExists( $newWeb, $newTopic );
+    $ret = 1 unless TWiki::UI::webExists( $session, $oldWeb, $oldTopic );
+    $ret = 1 unless TWiki::UI::webExists( $session, $newWeb, $newTopic );
 
     if ( $theAttachment) {
         # Does old attachment exist?
-        unless( $TWiki::T->{store}->attachmentExists( $oldWeb, $oldTopic,
+        unless( $session->{store}->attachmentExists( $oldWeb, $oldTopic,
                                                  $theAttachment )) {
-            TWiki::UI::oops( $oldWeb, $oldTopic, "moveerr", $theAttachment );
+            TWiki::UI::oops( $session, $oldWeb, $oldTopic, "moveerr", $theAttachment );
             $ret = 1;
         }
         # does new attachment already exist?
-        if( $TWiki::T->{store}->attachmentExists( $newWeb, $newTopic,
+        if( $session->{store}->attachmentExists( $newWeb, $newTopic,
                                              $theAttachment )) {
-            TWiki::UI::oops( $newWeb, $newTopic, "moverr", $theAttachment );
+            TWiki::UI::oops( $session, $newWeb, $newTopic, "moverr", $theAttachment );
             $ret = 1;
         }
     } else {
         # Check new topic doesn't exist
-        if( $newTopic && $TWiki::T->{store}->topicExists( $newWeb, $newTopic)) {
+        if( $newTopic && $session->{store}->topicExists( $newWeb, $newTopic)) {
             # Unless moving an attachment, new topic should not already exist
-            TWiki::UI::oops( $newWeb, $newTopic, "topicexists" );
+            TWiki::UI::oops( $session, $newWeb, $newTopic, "topicexists" );
             $ret = 1;
         }
     }
@@ -549,26 +505,26 @@ sub _checkExist {
 
 # Return 1 if can't get lock, otherwise 0
 sub _getLocks {
-    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock, $skin ) = @_;
+    my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock, $skin ) = @_;
 
     my( $oldLockUser, $oldLockTime, $newLockUser, $newLockTime );
-    my $query = TWiki::getCgiQuery();
+    my $query = $session->{cgiQuery};
 
     if( ! $breakLock ) {
         # Check for lock - at present the lock can't be broken
         ( $oldLockUser, $oldLockTime ) =
-          $TWiki::T->{store}->topicIsLockedBy( $oldWeb, $oldTopic );
+          $session->{store}->topicIsLockedBy( $oldWeb, $oldTopic );
         if( $oldLockUser ) {
-            $oldLockUser = $TWiki::T->{users}->userToWikiName( $oldLockUser );
+            $oldLockUser = $session->{users}->userToWikiName( $oldLockUser );
             use integer;
             $oldLockTime = ( $oldLockTime / 60 ) + 1; # convert to minutes
         }
 
         if( $theAttachment ) {
             ( $newLockUser, $newLockTime ) =
-              $TWiki::T->{store}->topicIsLockedBy( $newWeb, $newTopic );
+              $session->{store}->topicIsLockedBy( $newWeb, $newTopic );
             if( $newLockUser ) {
-                $newLockUser = $TWiki::T->{users}->userToWikiName( $newLockUser );
+                $newLockUser = $session->{users}->userToWikiName( $newLockUser );
                 use integer;
                 $newLockTime = ( $newLockTime / 60 ) + 1; # convert to minutes
                 my $editLock = $TWiki::editLockTime / 60;
@@ -577,7 +533,7 @@ sub _getLocks {
     }
 
     if( $oldLockUser || $newLockUser ) {
-        my $tmpl = $TWiki::T->{templates}->readTemplate( "oopslockedrename", $skin );
+        my $tmpl = $session->{templates}->readTemplate( "oopslockedrename", $skin );
         my $editLock = $TWiki::editLockTime / 60;
         if( $oldLockUser ) {
             $tmpl =~ s/%OLD_LOCK%/Source topic $oldWeb.$oldTopic is locked by $oldLockUser, lock expires in $oldLockTime minutes.<br \/>/go;
@@ -592,15 +548,15 @@ sub _getLocks {
         $tmpl =~ s/%NEW_WEB%/$newWeb/go;
         $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
         $tmpl =~ s/%ATTACHMENT%/$theAttachment/go;
-        $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
-        $tmpl = $TWiki::T->{renderer}->getRenderedVersion( $tmpl, $oldWeb );
+        $tmpl = $session->handleCommonTags( $tmpl, $oldTopic, $oldWeb );
+        $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $oldWeb );
         $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
         # SMELL: this is a redirect!
-        TWiki::writeHeader( $query, length( $tmpl ));
+        $session->writeHeader( $query, length( $tmpl ));
         print $tmpl;
         return 0;
     } else {
-        $TWiki::T->{store}->lockTopic( $oldWeb, $oldTopic );
+        $session->{store}->lockTopic( $oldWeb, $oldTopic );
     }
 
     return 1;
@@ -608,10 +564,10 @@ sub _getLocks {
 
 # Display screen so user can decide on new web and topic.
 sub _newTopicScreen {
-    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
+    my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
         $confirm, $currentWebOnly, $doAllowNonWikiWord, $skin ) = @_;
 
-    my $query = TWiki::getCgiQuery();
+    my $query = $session->{cgiQuery};
     my $tmpl = "";
 
     $newTopic = $oldTopic unless ( $newTopic );
@@ -620,27 +576,27 @@ sub _newTopicScreen {
     $nonWikiWordFlag = 'checked="checked"' if( $doAllowNonWikiWord );
 
     if( $theAttachment ) {
-        $tmpl = $TWiki::T->{templates}->readTemplate( "moveattachment", $skin );
+        $tmpl = $session->{templates}->readTemplate( "moveattachment", $skin );
         $tmpl =~ s/%FILENAME%/$theAttachment/go;
     } elsif( $confirm ) {
-        $tmpl = $TWiki::T->{templates}->readTemplate( "renameconfirm", $skin );
+        $tmpl = $session->{templates}->readTemplate( "renameconfirm", $skin );
     } elsif( $newWeb eq "Trash" ) {
-        $tmpl = $TWiki::T->{templates}->readTemplate( "renamedelete", $skin );
+        $tmpl = $session->{templates}->readTemplate( "renamedelete", $skin );
     } else {
-        $tmpl = $TWiki::T->{templates}->readTemplate( "rename", $skin );
+        $tmpl = $session->{templates}->readTemplate( "rename", $skin );
     }
 
     $tmpl = _setVars( $tmpl, $oldTopic, $newWeb, $newTopic, $nonWikiWordFlag );
-    $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
-    $tmpl = $TWiki::T->{renderer}->getRenderedVersion( $tmpl );
+    $tmpl = $session->handleCommonTags( $tmpl, $oldTopic, $oldWeb );
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
     if( $currentWebOnly ) {
         $tmpl =~ s/%RESEARCH\{.*?web=\"all\".*\}%/(skipped)/o; # Remove search all web search
     }
     $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
-    $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );   
+    $tmpl = $session->handleCommonTags( $tmpl, $oldTopic, $oldWeb );   
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
-    TWiki::writeHeader( $query, length( $tmpl ));
+    $session->writeHeader( $query, length( $tmpl ));
     print $tmpl;
 }
 
@@ -653,17 +609,17 @@ sub _setVars {
 }
 
 sub _moreRefsToChange {
-    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $skin ) = @_;
-    my $query = TWiki::getCgiQuery();
+    my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $skin ) = @_;
+    my $query = $session->{cgiQuery};
 
-    my $tmpl = $TWiki::T->{templates}->readTemplate( "renamerefs", $skin );
+    my $tmpl = $session->{templates}->readTemplate( "renamerefs", $skin );
     $tmpl = _setVars( $tmpl, $oldTopic, $newWeb, $newTopic );
-    $tmpl = $TWiki::T->{renderer}->getRenderedVersion( $tmpl );
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
     $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
-    $tmpl = TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
+    $tmpl = $session->handleCommonTags( $tmpl, $oldTopic, $oldWeb );
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
-    TWiki::writeHeader( $query, length( $tmpl ));
+    $session->writeHeader( $query, length( $tmpl ));
     print $tmpl;
 }
 

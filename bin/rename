@@ -46,8 +46,7 @@ my $theRemoteUser = $query->remote_user();
 my $theTopic = $query->param( 'topic' );
 my $theUrl = $query->url;
 
-my ( $topic, $web, $scriptUrlPath, $userName, $dataDir ) = 
-  TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic,
-                     $theUrl, $query );
+TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic,
+                   $theUrl, $query );
 
-TWiki::UI::Manage::rename( $web, $topic, $userName, $query );
+TWiki::UI::Manage::rename( $TWiki::T );

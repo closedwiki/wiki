@@ -36,9 +36,8 @@ my $theRemoteUser = $query->remote_user();
 my $theTopic = $query->param( 'topic' );
 my $theUrl = $query->url;
 
-my( $topic, $webName, undef, $userName ) = 
-  TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
-TWiki::UI::Upload::attach( $webName, $topic, $userName, $query );
+TWiki::UI::Upload::attach( $TWiki::T );
 
 

@@ -199,7 +199,8 @@ sub test_rename() {
 
     my $newRevAtt =
       $TWiki::T->{store}->getRevisionNumber($newWeb, $newTopic, $attachment );
-
+print `ls -l $TWiki::dataDir/$oldWeb/$oldTopic*`;
+print `ls -l $TWiki::dataDir/$newWeb/$newTopic*`;
     $this->assert_num_equals($oldRevAtt, $newRevAtt);
 
     # Topic is modified in move, because meta information is updated

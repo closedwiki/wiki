@@ -49,6 +49,7 @@ use CGI::Carp qw( fatalsToBrowser );
 use CGI;
 
 use TWiki::UI::Manage;
+use TWiki::UI::Register;
 
 my $query = new CGI;
 my $action = $query->param( 'action' ) || "";
@@ -61,54 +62,49 @@ my $theTopic = $query->param( 'topic' );
 # different parameters, oddly.
 if( $action eq "createweb" ) {
 
-  my( $topic, $webName, undef, $userName ) = 
     TWiki::initialize( $thePathInfo, $theRemoteUser,
                        $theTopic, $theUrl, $query );
 
-  TWiki::UI::Manage::createWeb( $webName, $topic, $userName, $query );
+    TWiki::UI::Manage::createWeb( $TWiki::T );
 
 } elsif( $action eq "changePassword" ) {
 
-  my $wikiName = $query->param( 'username' );
-  my $topicName = $query->param( 'TopicName' );
+    TWiki::initialize( $thePathInfo,
+                       $query->param( 'username' ),
+                       $query->param( 'TopicName' ),
+                       $theUrl, $query );
 
-  my ( $topic, $webName ) =
-    TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl, $query );
-
-  TWiki::UI::Register::changePassword( $webName, $topic, $query );
+    TWiki::UI::Register::changePassword( $TWiki::T );
 
 } elsif ($action eq 'bulkRegister') {
-    use TWiki::UI::Register;
     TWiki::UI::Register::bulkRegister(
                                         query => $query,
                                    );
 } elsif( $action eq "deleteUserAccount" ) {
 
-  my $wikiName = $query->param( 'username' );
-  my $topicName = $query->param( 'TopicName' );
+    my $wikiName = $query->param( 'username' );
+    my $topicName = $query->param( 'TopicName' );
 
-  my ( $topic, $webName ) =
     TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl, $query );
 
-    TWiki::UI::Manage::removeUser($webName, $topic, $wikiName, $query);
+    TWiki::UI::Manage::removeUser( $TWiki::T );
 
 } elsif( $action ) {
 
-  my( $topic, $webName, undef, $userName ) = 
     TWiki::initialize( $thePathInfo, $theRemoteUser,
                        $theTopic, $theUrl, $query );
-  TWiki::UI::oops( "", "", "manage",
-                   TWiki::UI::Manage::_template("msg_unrecognized_action"),
-                   $action );
+
+    TWiki::UI::oops( $session, "", "", "manage",
+                     TWiki::UI::Manage::_template("msg_unrecognized_action"),
+                     $action );
 
 } else {
 
-  my( $topic, $webName, undef, $userName ) = 
     TWiki::initialize( $thePathInfo, $theRemoteUser,
                        $theTopic, $theUrl, $query );
-  TWiki::UI::oops( "", "", "manage",
-                   TWiki::UI::Manage::_template("msg_missing_action") );
 
+    TWiki::UI::oops( $session, "", "", "manage",
+                     TWiki::UI::Manage::_template("msg_missing_action") );
 }
 
 

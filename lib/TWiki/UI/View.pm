@@ -46,7 +46,11 @@ The view is controlled by CGI parameters as follows:
 =cut
 
 sub view {
-    my ( $webName, $topic, $userName, $query ) = @_;
+    my $session = shift;
+
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topicName = $session->{topicName};
 
     my $viewRaw = $query->param( "raw" ) || "";
     my $unlock  = $query->param( "unlock" ) || "";
@@ -56,32 +60,32 @@ sub view {
     my $meta = "";
     my $maxrev = 1;
     my $extra = "";
-    my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
+    my $wikiUserName = $session->{users}->userToWikiName( $session->{userName} );
     my $revdate = "";
     my $revuser = "";
 
-    return unless TWiki::UI::webExists( $webName, $topic );
+    return unless TWiki::UI::webExists( $session, $webName, $topicName );
 
-    my $skin = TWiki::getSkin();
+    my $skin = $session->getSkin();
 
     # Set page generation mode to RSS if using an RSS skin
     if( $skin =~ /^rss/ ) {
-        $TWiki::T->{renderer}->setRenderMode( 'rss' );
+        $session->{renderer}->setRenderMode( 'rss' );
     }
 
     if( $unlock eq "on" ) {
         # unlock topic, user cancelled out of edit
-        $TWiki::T->{store}->lockTopic( $webName, $topic, "on" );
+        $session->{store}->lockTopic( $webName, $topicName, "on" );
     }
 
-    my $rev = $TWiki::T->{store}->cleanUpRevID( $query->param( "rev" ));
-    my $topicExists = $TWiki::T->{store}->topicExists( $webName, $topic );
+    my $rev = $session->{store}->cleanUpRevID( $query->param( "rev" ));
+    my $topicExists = $session->{store}->topicExists( $webName, $topicName );
     if( $topicExists ) {
-        ( $meta, $text ) = $TWiki::T->{store}->readTopic( $wikiUserName,
-                                                     $webName, $topic,
+        ( $meta, $text ) = $session->{store}->readTopic( $wikiUserName,
+                                                     $webName, $topicName,
                                                      undef, 1 );
         ( $revdate, $revuser, $maxrev ) =
-          $meta->getRevisionInfo( $webName, $topic );
+          $meta->getRevisionInfo( $webName, $topicName );
 
         $revdate = TWiki::formatTime( $revdate );
 
@@ -95,36 +99,36 @@ sub view {
             # Most recent topic read in even if earlier topic requested - makes
             # code simpler and performance impact should be minimal
             ( $meta, $text ) =
-              $TWiki::T->{store}->readTopic( $wikiUserName,
-                                        $webName, $topic, $rev, 0 );
+              $session->{store}->readTopic( $wikiUserName,
+                                        $webName, $topicName, $rev, 0 );
 
             # SMELL: why doesn't this use $meta?
             ( $revdate, $revuser ) =
-              $TWiki::T->{store}->getRevisionInfo( $webName, $topic, $rev );
+              $session->{store}->getRevisionInfo( $webName, $topicName, $rev );
             $revdate = TWiki::formatTime( $revdate );
             $extra .= "r$rev";
         }
     } else { # Topic does not exist yet
         $rev = 1;
-        if( TWiki::isValidTopicName( $topic )) {
+        if( TWiki::isValidTopicName( $topicName )) {
             ( $meta, $text ) =
-              TWiki::UI::readTemplateTopic( "WebTopicViewTemplate" );
+              TWiki::UI::readTemplateTopic( $session, "WebTopicViewTemplate" );
         } else {
             ( $meta, $text ) =
-              TWiki::UI::readTemplateTopic( "WebTopicNonWikiTemplate" );
+              TWiki::UI::readTemplateTopic( $session, "WebTopicNonWikiTemplate" );
         }
         $extra .= " (not exist)";
     }
 
     # This has to be done before $text is rendered!!
     my $viewAccessOK =
-      $TWiki::T->{security}->checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );
+      $session->{security}->checkAccessPermission( "view", $wikiUserName, $text, $topicName, $webName );
     # SMELL: why wait so long before processing this if the read access failed?
 
     if( $viewRaw ) {
         $extra .= " raw=$viewRaw";
         if( $viewRaw =~ /debug/i ) {
-            $text = $TWiki::T->{store}->getDebugText( $meta, $text );
+            $text = $session->{store}->getDebugText( $meta, $text );
         }
         # a skin name starting with the word 'text' is intended to be
         # used like this:
@@ -138,23 +142,23 @@ sub view {
             my $vtext = "<form><textarea readonly=\"readonly\" " .
               "wrap=\"virtual\" rows=\"\%EDITBOXHEIGHT%\" " .
                 "cols=\"\%EDITBOXWIDTH%\">";
-            $vtext = TWiki::handleCommonTags( $vtext, $topic );
+            $vtext = $session->handleCommonTags( $vtext, $topicName );
             $text = TWiki::entityEncode( $text );
             $text =~ s/\t/   /go;
             $text = "$vtext$text</textarea></form>";
         }
     } else {
-        $text = TWiki::handleCommonTags( $text, $topic );
-        $text = $TWiki::T->{renderer}->getRenderedVersion( $text );
+        $text = $session->handleCommonTags( $text, $topicName );
+        $text = $session->{renderer}->getRenderedVersion( $text );
     }
 
     if( $TWiki::doLogTopicView ) {
         # write log entry
-        TWiki::writeLog( "view", "$webName.$topic", $extra );
+        $session->writeLog( "view", "$webName.$topicName", $extra );
     }
 
     # get view template, standard view or a view with a different skin
-    my $tmpl = $TWiki::T->{templates}->readTemplate( "view", $skin );
+    my $tmpl = $session->{templates}->readTemplate( "view", $skin );
     if( ! $tmpl ) {
         my $mess = "<html><body>\n"
           . "<h1>TWiki Installation Error</h1>\n"
@@ -162,13 +166,13 @@ sub view {
               . "$TWiki::templateDir not found.<p />\n"
                 . "Check the \$templateDir variable in TWiki.cfg.\n"
                   . "</body></html>\n";
-        TWiki::writeHeader( $query, length( $mess ));
+        $session->writeHeader( $query, length( $mess ));
         print $mess;
         return;
     }
 
     my( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote ) =
-      TWiki::readOnlyMirrorWeb( $webName );
+      $session->readOnlyMirrorWeb( $webName );
 
     if( $mirrorSiteName ) {
         # disable edit and attach
@@ -238,14 +242,14 @@ sub view {
     $tmpl =~ s/%REVISIONS%/$revisions/go;
 
     $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;
-    $tmpl = TWiki::handleCommonTags( $tmpl, $topic );
+    $tmpl = $session->handleCommonTags( $tmpl, $topicName );
 
     if( $viewRaw ) {
         $tmpl =~ s/%META{[^}]*}%//go;
     } else {
-        $tmpl = $TWiki::T->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, ( $rev == $maxrev ) );
+        $tmpl = $session->{renderer}->renderMetaTags( $webName, $topicName, $tmpl, $meta, ( $rev == $maxrev ) );
     }
-    $tmpl = $TWiki::T->{renderer}->getRenderedVersion( $tmpl, "", $meta ); ## better to use meta rendering?
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, "", $meta ); ## better to use meta rendering?
 
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/%MAXREV%/$maxrev/go;
@@ -253,7 +257,7 @@ sub view {
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> tags (PTh 06 Nov 2000)
 
     # Check if some part of the sequence of Store accesses failed
-    if( $TWiki::T->{store}->accessFailed() ) {
+    if( $session->{store}->accessFailed() ) {
         # Can't read requested topic and/or included (or other accessed topics
         # user could not be authenticated, may be not logged in yet?
         my $viewauthFile = $ENV{'SCRIPT_FILENAME'};
@@ -288,14 +292,14 @@ sub view {
                     # If SCRIPT_NAME does not contain the name "view"
                     # the last hope is to try the SCRIPT_FILENAME ...
                     $viewauthFile =~ s|^.*/viewauth|/viewauth|o;  # strip off $Twiki::scriptUrlPath
-                    $url = $TWiki::T->{urlhost}.$TWiki::T->{scriptUrlPath}."/$viewauthFile$pathInfo$queryString";
+                    $url = $session->{urlhost}.$session->{scriptUrlPath}."/$viewauthFile$pathInfo$queryString";
                 }
             }
-            TWiki::UI::redirect( $url );
+            TWiki::UI::redirect( $session, $url );
         }
     }
     if( $topicExists && ! $viewAccessOK ) {
-        TWiki::UI::oops( $webName, $topic, "accessview" );
+        TWiki::UI::oops( $session, $webName, $topicName, "accessview" );
     }
 
     # Write header based on "contenttype" parameter, used to produce
@@ -315,8 +319,72 @@ sub view {
         $contentType = 'text/html'
     }
 
-    TWiki::writeHeaderFull( $query, 'basic', $contentType, length( $tmpl ));
+    $session->writeHeaderFull( $query, 'basic', $contentType, length( $tmpl ));
     print $tmpl;
+}
+
+=pod
+
+---++ viewfile( $web, $topic, $query )
+Command handler for viewfile. View a file in the browser.
+Some parameters are passed in CGI query:
+| =filename= | |
+| =rev= | |
+
+=cut
+
+sub viewfile {
+    my $session = shift;
+
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+
+    my $fileName = $query->param( 'filename' );
+
+    my $rev = $session->{store}->cleanUpRevID( $query->param( 'rev' ) );
+
+    return unless TWiki::UI::webExists( $session, $webName, $topic );
+
+    my $topRev = $session->{store}->getRevisionNumber( $webName, $topic, $fileName );
+
+    if( ( $rev ) && ( $rev ne $topRev ) ) {
+        my $fileContent =
+          $session->{store}->readAttachmentVersion( $webName, $topic,
+                                                     $fileName, $rev ); 
+        if( $fileContent ) {
+            my $mimeType = _suffixToMimeType( $session, $fileName );
+            print $query->header( -type => $mimeType,
+                                  -Content_Disposition => "inline;filename=$fileName");
+            print "$fileContent";
+            return;
+        } else {
+            # If no file content we'll try and show pub content, should there be a warning FIXME
+        }
+    }
+
+    # this should actually kick off a document conversion 
+    # (.doc, .xls... to .html) and show the html file.
+    # Convert only if html file does not yet exist
+    # for now, show the original document:
+
+    my $pubUrlPath = $TWiki::pubUrlPath;
+    my $host = $session->{urlHost};
+    TWiki::UI::redirect( $session, "$host$pubUrlPath/$webName/$topic/$fileName" );
+}
+
+sub _suffixToMimeType {
+    my( $session, $theFilename ) = @_;
+
+    my $mimeType = 'text/plain';
+    if( $theFilename =~ /\.(.+)$/ ) {
+        my $suffix = $1;
+        my @types = grep{ s/^\s*([^\s]+).*?\s$suffix\s.*$/$1/i }
+          map{ "$_ " }
+            split( /[\n\r]/, $session->{store}->readFile( $TWiki::mimeTypesFilename ) );
+        $mimeType = $types[0] if( @types );
+    }
+    return $mimeType;
 }
 
 1;

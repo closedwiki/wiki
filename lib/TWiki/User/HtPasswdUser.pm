@@ -60,25 +60,25 @@ BEGIN {
 # ======================
 sub new
 {
-   my( $proto ) = @_;
-   my $class = ref($proto) || $proto;
-   my $self = {};
-   bless( $self, $class );
-#   $self->_init();
-#   $self->{head} = 0;
+   my( $class, $session ) = @_;
+   my $self = bless( {}, $class );
+   $self->{session} = $session;
+
    return $self;
 }
 
-# ===========================
-sub writeDebug
-{
-#   TWiki::writeDebug( "User: $_[0]" );
-}
+sub users { my $this = shift; return $this->{session}->{users}; }
+sub prefs { my $this = shift; return $this->{session}->{prefs}; }
+sub store { my $this = shift; return $this->{session}->{store}; }
+sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
+sub security { my $this = shift; return $this->{session}->{security}; }
+sub templates { my $this = shift; return $this->{session}->{templates}; }
+sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 # =========================
 =pod
 
----+++ _htpasswdGeneratePasswd( $user, $passwd , $useOldSalt ) ==> $passwordExists
+---+++ htpasswdGeneratePasswd( $user, $passwd , $useOldSalt ) ==> $passwordExists
 | Description: | (private) implementation method that generates an encrypted password |
 | Parameter: =$user= | userName |
 | Parameter: =$passwd= | unencypted password |
@@ -87,9 +87,9 @@ otherwise, we are just creating a new use encrypted passwd |
 | Return: =$value= | returns "" on failure, an encrypted password otherwise |
 
 =cut
-sub _htpasswdGeneratePasswd
+sub htpasswdGeneratePasswd
 {
-    my ( $user, $passwd , $useOldSalt ) = @_;
+    my ( $this, $user, $passwd , $useOldSalt ) = @_;
 
 	my $encodedPassword = '';
 
@@ -104,7 +104,7 @@ sub _htpasswdGeneratePasswd
 
 		my $salt;
 		if ( $useOldSalt eq 1) {
-		    my $currentEncryptedPasswordEntry = _htpasswdReadPasswd( $user );
+		    my $currentEncryptedPasswordEntry = $this->htpasswdReadPasswd( $user );
 	        $salt = substr( $currentEncryptedPasswordEntry, 0, 2 );
 		} else {
 		    srand( $$|time );
@@ -134,21 +134,21 @@ sub _htpasswdGeneratePasswd
 #========================= 
 =pod
 
----+++ _htpasswdReadPasswd( $user ) ==> $encryptedPassword
+---+++ htpasswdReadPasswd( $user ) ==> $encryptedPassword
 | Description: | gets the encrypted password from the htpasswd / htdigest file |
 | Parameter: =$user= | UserName |
 | Return: =$encryptedPassword= | "" if there is none, the encrypted password otherwise |
 
 =cut
-sub _htpasswdReadPasswd
+sub htpasswdReadPasswd
 {
-    my ( $user ) = @_;
- 
+    my ( $this, $user ) = @_;
+
     if( ! $user ) {
         return "";
     }
- 
-    my $text = $TWiki::T->{store}->readFile( $TWiki::htpasswdFilename );
+
+    my $text = $this->store()->readFile( $TWiki::htpasswdFilename );
     if( $text =~ /$user\:(\S+)/ ) {
         return $1;
     }
@@ -172,7 +172,7 @@ sub UserPasswordExists
         return "";
     }
 
-    my $text = $TWiki::T->{store}->readFile( $TWiki::htpasswdFilename );
+    my $text = $self->store()->readFile( $TWiki::htpasswdFilename );
     if( $text =~ /^${user}:/gm ) {	# mod_perl: don't use /o
         return "1";
     }
@@ -195,16 +195,16 @@ sub UpdateUserPassword
 {
     my ( $self, $user, $oldUserPassword, $newUserPassword ) = @_;
 
-    my $oldUserEntry = _htpasswdGeneratePasswd( $user, $oldUserPassword , 1);
-    my $newUserEntry = _htpasswdGeneratePasswd( $user, $newUserPassword , 0);
+    my $oldUserEntry = htpasswdGeneratePasswd( $user, $oldUserPassword , 1);
+    my $newUserEntry = htpasswdGeneratePasswd( $user, $newUserPassword , 0);
  
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = $TWiki::T->{store}->readFile( $TWiki::htpasswdFilename );
+    my $text = $self->store()->readFile( $TWiki::htpasswdFilename );
     # escape + sign; SHA-passwords can have + signs
     $oldUserEntry =~ s/\+/\\\+/g;
     $text =~ s/$user:$oldUserEntry/$user:$newUserEntry/;
-    $TWiki::T->{store}->saveFile( $TWiki::htpasswdFilename, $text );
+    $self->store()->saveFile( $TWiki::htpasswdFilename, $text );
 
     return "1";
 }
@@ -228,11 +228,11 @@ sub htpasswdUpdateUser
 
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = $TWiki::T->{store}->readFile( $TWiki::htpasswdFilename );
+    my $text = $self->store()->readFile( $TWiki::htpasswdFilename );
     # escape + sign; SHA-passwords can have + signs
     $oldEncryptedUserPassword =~ s/\+/\\\+/g;
     $text =~ s/$oldEncryptedUserPassword/$newEncryptedUserPassword/;
-    $TWiki::T->{store}->saveFile( $TWiki::htpasswdFilename, $text );
+    $self->store()->saveFile( $TWiki::htpasswdFilename, $text );
 
     return "1";
 }
@@ -251,14 +251,14 @@ sub htpasswdUpdateUser
 sub AddUserPassword
 {
     my ( $self, $user, $newUserPassword ) = @_;
-    my $userEntry = $user.":". _htpasswdGeneratePasswd( $user, $newUserPassword , 0);
+    my $userEntry = $user.":". htpasswdGeneratePasswd( $user, $newUserPassword , 0);
 
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = $TWiki::T->{store}->readFile( $TWiki::htpasswdFilename );
-    ##TWiki::writeDebug "User entry is :$userEntry: before newline";
+    my $text = $self->store()->readFile( $TWiki::htpasswdFilename );
+    ##$self->{session}->writeDebug "User entry is :$userEntry: before newline";
     $text .= "$userEntry\n";
-    $TWiki::T->{store}->saveFile( $TWiki::htpasswdFilename, $text );
+    $self->store()->saveFile( $TWiki::htpasswdFilename, $text );
 
 	return "1";
 }
@@ -277,7 +277,7 @@ sub AddUserPassword
 sub RemoveUser
 {
     my ( $self, $user ) = @_;
-    my $userEntry = $user.":"._htpasswdReadPasswd( $user );
+    my $userEntry = $user.":".$self->htpasswdReadPasswd( $user );
 
     return $self->htpasswdUpdateUser( $userEntry, "#".$userEntry);
 }
@@ -296,9 +296,9 @@ sub RemoveUser
 sub CheckUserPasswd
 {
     my ( $self, $user, $password ) = @_;
-    my $currentEncryptedPasswordEntry = _htpasswdReadPasswd( $user );
+    my $currentEncryptedPasswordEntry = $self->htpasswdReadPasswd( $user );
 
-    my $encryptedPassword = _htpasswdGeneratePasswd($user, $password , 1);
+    my $encryptedPassword = htpasswdGeneratePasswd($user, $password , 1);
 
     # OK
     if( $encryptedPassword eq $currentEncryptedPasswordEntry ) {

@@ -50,7 +50,12 @@ Edit handler. Most parameters are in the CGI query:
 
 =cut
 sub edit {
-    my ( $webName, $topic, $userName, $query ) = @_;
+    my $session = shift;
+
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $userName = $session->{userName};
 
     my $saveCmd = $query->param( 'cmd' ) || "";
     my $breakLock = $query->param( 'breaklock' ) || "";
@@ -61,26 +66,26 @@ sub edit {
     # apptype is undocumented legacy
     my $cgiAppType = $query->param( 'contenttype' ) ||
       $query->param( 'apptype' ) || "text/html";
-    my $skin = TWiki::getSkin();
+    my $skin = $session->getSkin();
     my $theParent = $query->param( 'topicparent' ) || "";
     my $ptext = $query->param( 'text' );
 
     my $getValuesFromFormTopic = ( ( $formTemplate ) && ( ! $ptext ) );
 
-    return unless TWiki::UI::webExists( $webName, $topic );
+    return unless TWiki::UI::webExists( $session, $webName, $topic );
 
-    return if TWiki::UI::isMirror( $webName, $topic );
+    return if TWiki::UI::isMirror( $session, $webName, $topic );
 
     my $tmpl = "";
     my $text = "";
     my $meta = "";
     my $extra = "";
-    my $topicExists  = $TWiki::T->{store}->topicExists( $webName, $topic );
+    my $topicExists  = $session->{store}->topicExists( $webName, $topic );
 
     # Prevent editing existing topic?
     if( $onlyNewTopic && $topicExists ) {
         # Topic exists and user requested oops if it exists
-        TWiki::UI::oops( $webName, $topic, "createnewtopic" );
+        TWiki::UI::oops( $session, $webName, $topic, "createnewtopic" );
         return;
     }
 
@@ -89,47 +94,47 @@ sub edit {
         && ( ! $topicExists )
         && ( ! TWiki::isValidTopicName( $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
-        TWiki::UI::redirect( TWiki::getViewUrl( $webName, $topic ) );
+        TWiki::UI::redirect( $session, $session->getViewUrl( $webName, $topic ) );
         return;
     }
 
-    my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
+    my $wikiUserName = $session->{users}->userToWikiName( $userName );
 
     if( $topicExists ) {
         ( $meta, $text ) =
-          $TWiki::T->{store}->readTopic( $wikiUserName, $webName,
+          $session->{store}->readTopic( $wikiUserName, $webName,
                                     $topic, undef, 1 );
     }
 
     # If you want to edit, you have to be able to view and change.
-    return unless( TWiki::UI::isAccessPermitted( $webName, $topic,
+    return unless( TWiki::UI::isAccessPermitted( $session, $webName, $topic,
                                                  "view", $wikiUserName )
                    &&
-                   TWiki::UI::isAccessPermitted( $webName, $topic,
+                   TWiki::UI::isAccessPermitted( $session, $webName, $topic,
                                                  "change", $wikiUserName ));
 
     # Special save command, restricted to admin use
-    return if( $saveCmd && ! TWiki::UI::userIsAdmin( $webName, $topic, $wikiUserName ));
+    return if( $saveCmd && ! TWiki::UI::userIsAdmin( $session, $webName, $topic, $wikiUserName ));
 
     # Check for locks
     my( $lockUser, $lockTime ) =
-      $TWiki::T->{store}->topicIsLockedBy( $webName, $topic );
+      $session->{store}->topicIsLockedBy( $webName, $topic );
     if( ( ! $breakLock ) && ( $lockUser ) ) {
         # warn user that other person is editing this topic
-        $lockUser = $TWiki::T->{users}->userToWikiName( $lockUser );
+        $lockUser = $session->{users}->userToWikiName( $lockUser );
         use integer;
         $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
         my $editLock = $TWiki::editLockTime / 60;
-        TWiki::UI::oops( $webName, $topic, "locked",
+        TWiki::UI::oops( $session, $webName, $topic, "locked",
                          $lockUser, $editLock, $lockTime );
         return;
     }
-    $TWiki::T->{store}->lockTopic( $webName, $topic );
+    $session->{store}->lockTopic( $webName, $topic );
 
     my $templateWeb = $webName;
 
     # Get edit template, standard or a different skin
-    $tmpl = $TWiki::T->{templates}->readTemplate( "edit", $skin );
+    $tmpl = $session->{templates}->readTemplate( "edit", $skin );
     unless( $topicExists ) {
         if( $templateTopic ) {
             if( $templateTopic =~ /^(.+)\.(.+)$/ ) {
@@ -140,11 +145,11 @@ sub edit {
             }
 
             ( $meta, $text ) =
-              $TWiki::T->{store}->readTopic( $wikiUserName, $templateWeb,
+              $session->{store}->readTopic( $wikiUserName, $templateWeb,
                                         $templateTopic, undef, 0 );
         }
         unless( $text ) {
-            ( $meta, $text ) = TWiki::UI::readTemplateTopic( "WebTopicEditTemplate" );
+            ( $meta, $text ) = TWiki::UI::readTemplateTopic( $session, "WebTopicEditTemplate" );
         }
         $extra = "(not exist)";
 
@@ -154,7 +159,7 @@ sub edit {
             $formTemplate = $args{"name"};
         }
 
-        $text = TWiki::expandVariablesOnTopicCreation( $text, $userName );
+        $text = $session->expandVariablesOnTopicCreation( $text, $userName );
     }
 
     # parent setting
@@ -185,12 +190,12 @@ sub edit {
         $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
         if( defined $ptext ) {
             $text = $ptext;
-            $text = $TWiki::T->{renderer}->decodeSpecialChars( $text );
+            $text = $session->{renderer}->decodeSpecialChars( $text );
         }
     }
 
     if( $saveCmd eq "repRev" ) {
-        $text = $TWiki::T->{store}->readTopicRaw( $wikiUserName, $webName, $topic,
+        $text = $session->{store}->readTopicRaw( $wikiUserName, $webName, $topic,
                                              undef, 0 );
     }
 
@@ -203,31 +208,31 @@ sub edit {
 
     if( $TWiki::doLogTopicEdit ) {
         # write log entry
-        TWiki::writeLog( "edit", "$webName.$topic", $extra );
+        $session->writeLog( "edit", "$webName.$topic", $extra );
     }
 
     if( $saveCmd ) {
         $tmpl =~ s/\(edit\)/\(edit cmd=$saveCmd\)/go;
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
-    $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-    $tmpl = $TWiki::T->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd eq "repRev" );
-    $tmpl = $TWiki::T->{renderer}->getRenderedVersion( $tmpl );
+    $tmpl = $session->handleCommonTags( $tmpl, $topic );
+    $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd eq "repRev" );
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
 
     # Don't want to render form fields, so this after getRenderedVersion
     my %formMeta = $meta->findOne( "FORM" );
     my $form = "";
     $form = $formMeta{"name"} if( %formMeta );
     if( $form && $saveCmd ne "repRev" ) {
-        my @fieldDefs = $TWiki::T->{form}->getFormDef( $templateWeb, $form );
+        my @fieldDefs = $session->{form}->getFormDef( $templateWeb, $form );
 
         if( ! @fieldDefs ) {
-            TWiki::UI::oops( $webName, $topic, "noformdef" );
+            TWiki::UI::oops( $session, $webName, $topic, "noformdef" );
             return;
         }
-        my $formText = $TWiki::T->{form}->renderForEdit( $webName, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldDefs );
+        my $formText = $session->{form}->renderForEdit( $webName, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldDefs );
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
-    } elsif( $saveCmd ne "repRev" && $TWiki::T->{prefs}->getPreferencesValue( "WEBFORMS", $webName )) {
+    } elsif( $saveCmd ne "repRev" && $session->{prefs}->getPreferencesValue( "WEBFORMS", $webName )) {
         # follows a hybrid html monster to let the 'choose form button' align at
         # the right of the page in all browsers
         $form = '<div style="text-align:right;"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder"><tr><td align="right">'
@@ -242,7 +247,7 @@ sub edit {
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
-    TWiki::writeHeaderFull ( $query, 'edit', $cgiAppType, length($tmpl) );
+    $session->writeHeaderFull ( $query, 'edit', $cgiAppType, length($tmpl) );
 
     print $tmpl;
 }

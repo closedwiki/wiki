@@ -136,7 +136,7 @@ sub _registerHandler
 sub _initialisationError {
    my( $error ) = @_;
    $initialisationErrors .= $error."\n";
-   TWiki::writeWarning( $error );
+   $TWiki::T->writeWarning( $error );
 }
 
 # FIXME: make all this sub more robust
@@ -318,7 +318,7 @@ sub initialize1
     push( @instPlugins, @discoveredPlugins );
 
     # enable only specific plugins, for test and benchmarking
-    my $query = TWiki::getCgiQuery();
+    my $query = $TWiki::T->{cgiQuery};
     if ( $query ) {
         my $debugEnablePlugins = $query->param( 'debugenableplugins' );
         @instPlugins = split( /[\, ]+/, $debugEnablePlugins )
@@ -666,7 +666,7 @@ sub afterAttachmentSaveHandler
 
 ---++ sub writeHeaderHandler ()
 
-Called by TWiki::writeHeader
+Called by $TWiki::T->writeHeader
 
 =cut
 

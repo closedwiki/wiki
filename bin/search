@@ -42,9 +42,8 @@ my $theRemoteUser = $query->remote_user();
 my $theTopic = $query->param( 'topic' );
 my $theUrl = $query->url;
 
-my( $topic, $webName ) = 
-  &TWiki::initialize( $thePathInfo, $theRemoteUser,
-                      $theTopic, $theUrl, $query );
+TWiki::initialize( $thePathInfo, $theRemoteUser,
+                   $theTopic, $theUrl, $query );
 
-TWiki::UI::Search::search( $webName, $topic, $query );
+TWiki::UI::Search::search( $TWiki::T );
 

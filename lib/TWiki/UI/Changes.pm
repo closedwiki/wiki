@@ -30,75 +30,78 @@ use TWiki::UI;
 
 # Command handler for changes command
 sub changes {
-  my ( $webName, $topic, $query ) = @_;
+    my $session = shift;
 
-  return unless TWiki::UI::webExists( $webName, $topic );
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $userName = $session->{userName};
 
-  my $skin = TWiki::getSkin();
+    return unless TWiki::UI::webExists( $session, $webName, $topic );
 
-  my $text = $TWiki::T->{templates}->readTemplate( "changes", $skin );
-  my $changes= $TWiki::T->{store}->readFile( "$TWiki::dataDir/$webName/.changes" );
+    my $skin = $session->getSkin();
 
-  my @bar = ();
-  my $foo = "";
-  my %exclude = ();
-  my $summary = "";
-  my $time = "";
-  my $frev = "";
+    my $text = $session->{templates}->readTemplate( "changes", $skin );
+    my $changes= $session->{store}->readFile( "$TWiki::dataDir/$webName/.changes" );
 
-  $text = &TWiki::handleCommonTags( $text, $topic );
-  $text = $TWiki::T->{renderer}->getRenderedVersion( $text );
-  $text =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
+    my @bar = ();
+    my $foo = "";
+    my %exclude = ();
+    my $summary = "";
+    my $time = "";
+    my $frev = "";
 
-  my $before = "";
-  my $after = "";
-  ( $before, $text, $after) = split( /%REPEAT%/, $text );
+    $text = $session->handleCommonTags( $text, $topic );
+    $text = $session->{renderer}->getRenderedVersion( $text );
+    $text =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
-  $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;  # remove <nop> and <noautolink> tags
+    my $before = "";
+    my $after = "";
+    ( $before, $text, $after) = split( /%REPEAT%/, $text );
 
-  my $page = $before;
+    $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;  # remove <nop> and <noautolink> tags
 
-  foreach( reverse split( /\n/, $changes ) ) {
-    @bar = split( /\t/ );
-    if( ( ! %exclude ) || ( ! $exclude{ $bar[0] } ) ) {
-      next unless $TWiki::T->{store}->topicExists( $webName, $bar[0] );
-      $foo = $text;
-      $foo =~ s/%TOPICNAME%/$bar[0]/go;
-      my $wikiuser = $TWiki::T->{users}->userToWikiName( $bar[1] );
-      $foo =~ s/%AUTHOR%/$wikiuser/go;
-      $foo =~ s/%LOCKED%//go;
-      $time = &TWiki::formatTime( $bar[2] );
-      $frev = "";
-      if( $bar[3] ) {
-        if( $bar[3] > 1 ) {
-          $frev = $bar[3];
-        } else {
-          $frev = "<span class=\"twikiNew\"><b>NEW</b></span>";
+    my $page = $before;
+
+    foreach( reverse split( /\n/, $changes ) ) {
+        @bar = split( /\t/ );
+        if( ( ! %exclude ) || ( ! $exclude{ $bar[0] } ) ) {
+            next unless $session->{store}->topicExists( $webName, $bar[0] );
+            $foo = $text;
+            $foo =~ s/%TOPICNAME%/$bar[0]/go;
+            my $wikiuser = $session->{users}->userToWikiName( $bar[1] );
+            $foo =~ s/%AUTHOR%/$wikiuser/go;
+            $foo =~ s/%LOCKED%//go;
+            $time = &TWiki::formatTime( $bar[2] );
+            $frev = "";
+            if( $bar[3] ) {
+                if( $bar[3] > 1 ) {
+                    $frev = $bar[3];
+                } else {
+                    $frev = "<span class=\"twikiNew\"><b>NEW</b></span>";
+                }
+            }
+            $foo =~ s/%TIME%/$time/go;
+            $foo =~ s/%REVISION%/$frev/go;
+            $foo = $session->{renderer}->getRenderedVersion( $foo );
+
+            $summary = $session->{store}->readFile( "$TWiki::dataDir\/$webName\/$bar[0].txt", 16 );
+            $summary = $session->{renderer}->makeTopicSummary( $summary, $bar[0], $webName );
+            $foo =~ s/%TEXTHEAD%/$summary/go;
+            $foo =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
+            $page .= $foo;
+            $exclude{ $bar[0] } = "1";
         }
-      }
-      $foo =~ s/%TIME%/$time/go;
-      $foo =~ s/%REVISION%/$frev/go;
-      $foo = $TWiki::T->{renderer}->getRenderedVersion( $foo );
-      
-      $summary = $TWiki::T->{store}->readFile( "$TWiki::dataDir\/$webName\/$bar[0].txt", 16 );
-      $summary = $TWiki::T->{renderer}->makeTopicSummary( $summary, $bar[0], $webName );
-      $foo =~ s/%TEXTHEAD%/$summary/go;
-      $foo =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-      $page .= $foo;
-      $exclude{ $bar[0] } = "1";
     }
-  }
-  
-  if( $TWiki::doLogTopicChanges ) {
-    # write log entry
-    TWiki::writeLog( "changes", $webName, "" );
-  }
-  
-  $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-  $page .= $after;
+    if( $TWiki::doLogTopicChanges ) {
+        # write log entry
+        $session->writeLog( "changes", $webName, "" );
+    }
+    $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
+    $page .= $after;
 
-  TWiki::writeHeader( $query, length( $page ));
-  print $page;
+    $session->writeHeader( $query, length( $page ));
+    print $page;
 }
 
 1;

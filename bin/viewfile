@@ -37,9 +37,8 @@ my $theRemoteUser = $query->remote_user();
 my $theUrl = $query->url;
 my $theTopic = $query->param( 'topic' );
 
-my ( $topic, $webName ) = 
-  TWiki::initialize( $thePathInfo, $theRemoteUser,
-                     $theTopic, $theUrl, $query );
+TWiki::initialize( $thePathInfo, $theRemoteUser,
+                   $theTopic, $theUrl, $query );
 
-TWiki::UI::Viewfile::view( $webName, $topic, $query );
+TWiki::UI::View::viewfile( $webName, $topic, $query );
 

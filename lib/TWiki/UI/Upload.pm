@@ -35,12 +35,17 @@ Perform the functions of an 'attach' URL. CGI parameters are:
 
 =cut
 sub attach {
-  my ( $webName, $topic, $userName, $query ) = @_;
+    my $session = shift;
+
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $userName = $session->{userName};
 
   my $fileName = $query->param( 'filename' ) || "";
-  my $skin = TWiki::getSkin();
+  my $skin = $session->getSkin();
 
-  return unless TWiki::UI::webExists( $webName, $topic );
+  return unless TWiki::UI::webExists( $session, $webName, $topic );
 
   my $tmpl = "";
   my $text = "";
@@ -50,16 +55,16 @@ sub attach {
 
   my $isHideChecked = "";
 
-  return if TWiki::UI::isMirror( $webName, $topic );
+  return if TWiki::UI::isMirror( $session, $webName, $topic );
 
-  my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
-  return unless TWiki::UI::isAccessPermitted( $webName, $topic,
+  my $wikiUserName = $session->{users}->userToWikiName( $userName );
+  return unless TWiki::UI::isAccessPermitted( $session, $webName, $topic,
                                             "change", $wikiUserName );
 
-  return unless TWiki::UI::topicExists( $webName, $topic, "attach" );
+  return unless TWiki::UI::topicExists( $session, $webName, $topic, "attach" );
 
   ( $meta, $text ) =
-    $TWiki::T->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 );
+    $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 );
   my %args = $meta->findOne( "FILEATTACHMENT", $fileName );
   %args = (
            name => $fileName,
@@ -77,33 +82,33 @@ sub attach {
   # Attach is a read function, only has potential for a change
   if( $TWiki::doLogTopicAttach ) {
       # write log entry
-      TWiki::writeLog( "attach", "$webName.$topic", $fileName );
+      $session->writeLog( "attach", "$webName.$topic", $fileName );
   }
 
   my $fileWikiUser = "";
   if( $fileName && %args ) {
-    $tmpl = $TWiki::T->{templates}->readTemplate( "attachagain", $skin );
-    $fileWikiUser = $TWiki::T->{users}->userToWikiName( $args{"user"} );
+    $tmpl = $session->{templates}->readTemplate( "attachagain", $skin );
+    $fileWikiUser = $session->{users}->userToWikiName( $args{"user"} );
   } else {
-      $tmpl = $TWiki::T->{templates}->readTemplate( "attachnew", $skin );
+      $tmpl = $session->{templates}->readTemplate( "attachnew", $skin );
   }
   if ( $fileName ) {
 	# must come after templates have been read
-    $atext .= $TWiki::T->{attach}->formatVersions( $webName, $topic, %args );
+    $atext .= $session->{attach}->formatVersions( $webName, $topic, %args );
   }
   $tmpl =~ s/%ATTACHTABLE%/$atext/go;
   $tmpl =~ s/%FILEUSER%/$fileWikiUser/go;
-  $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+  $tmpl = $session->handleCommonTags( $tmpl, $topic );
   # SMELL: The following two calls are done in the reverse order in all
   # the other handlers. Why are they done in this order here?
-  $tmpl = $TWiki::T->{renderer}->getRenderedVersion( $tmpl );
-  $tmpl = $TWiki::T->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
+  $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
+  $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
   $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
   $tmpl =~ s/%FILENAME%/$fileName/go;
   $tmpl =~ s/%FILEPATH%/$args{"path"}/go;
   $tmpl =~ s/%FILECOMMENT%/$args{"comment"}/go;
   $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-  TWiki::writeHeader( TWiki::getCgiQuery(), length( $tmpl ));
+  $session->writeHeader( $session->{cgiQuery}, length( $tmpl ));
   print $tmpl;
 }
 
@@ -121,7 +126,12 @@ CGI parameters, passed in $query:
 
 =cut
 sub upload {
-    my ( $webName, $topic, $userName, $query ) = @_;
+    my $session = shift;
+
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $userName = $session->{userName};
 
     my $hideFile = $query->param( 'hidefile' ) || "";
     my $fileComment = $query->param( 'filecomment' ) || "";
@@ -143,12 +153,12 @@ sub upload {
 
     close $filePath if( $TWiki::OS eq "WINDOWS");
 
-    my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
-    return ( 0 ) unless TWiki::UI::webExists( $webName, $topic );
-    return ( 0 ) if TWiki::UI::isMirror( $webName, $topic );
-    return ( 0 ) unless TWiki::UI::isAccessPermitted( $webName, $topic,
+    my $wikiUserName = $session->{users}->userToWikiName( $userName );
+    return ( 0 ) unless TWiki::UI::webExists( $session, $webName, $topic );
+    return ( 0 ) if TWiki::UI::isMirror( $session, $webName, $topic );
+    return ( 0 ) unless TWiki::UI::isAccessPermitted( $session, $webName, $topic,
                                               "change", $wikiUserName );
-    return ( 0 ) unless TWiki::UI::topicExists( $webName, $topic, "upload" );
+    return ( 0 ) unless TWiki::UI::topicExists( $session, $webName, $topic, "upload" );
 
     my ( $fileSize, $fileDate, $tmpFileName );
 
@@ -167,7 +177,7 @@ sub upload {
         $fileName =~ /(.*)/;  # untaint (why?)
         $fileName = $1;
 
-        ##TWiki::writeDebug ("Upload filename after cleanup is '$fileName'");
+        ##$session->writeDebug ("Upload filename after cleanup is '$fileName'");
 
         # check if upload has non zero size
         $tmpFileName = $query->tmpFileName( $filePath );
@@ -176,25 +186,25 @@ sub upload {
         $fileDate = $stats[9];
 
         if( ! $fileSize ) {
-            TWiki::UI::oops( $webName, $topic,
+            TWiki::UI::oops( $session, $webName, $topic,
                              "upload",
                              "ERROR $webName.$topic File missing or zero size",
                              $fileName );
             return;
         }
 
-        my $maxSize = $TWiki::T->{prefs}->getPreferencesValue( "ATTACHFILESIZELIMIT" );
+        my $maxSize = $session->{prefs}->getPreferencesValue( "ATTACHFILESIZELIMIT" );
         $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
 
         if( $maxSize && $fileSize > $maxSize * 1024 ) {
-            TWiki::UI::oops( $webName, $topic,
+            TWiki::UI::oops( $session, $webName, $topic,
                              "uploadlimit", $fileName, $maxSize );
             return;
         }
     }
 
     my $error =
-      $TWiki::T->{store}->saveAttachment( $webName, $topic, $fileName, $userName,
+      $session->{store}->saveAttachment( $webName, $topic, $fileName, $userName,
                                     { dontlog => !$TWiki::doLogTopicUpload,
                                       comment => $fileComment,
                                       hide => $hideFile,
@@ -207,11 +217,11 @@ sub upload {
                                     } );
 
     if( $error ) {
-        TWiki::UI::oops( $webName, $topic, "saveerr", "Save error $error" );
+        TWiki::UI::oops( $session, $webName, $topic, "saveerr", "Save error $error" );
         return;
     }
 
-    TWiki::UI::redirect( &TWiki::getViewUrl( $webName, $topic ) );
+    TWiki::UI::redirect( $session, $session->getViewUrl( $webName, $topic ) );
     my $message = ( $doPropsOnly ) ?
       "properties changed" : "$fileName uploaded";
 

@@ -39,12 +39,16 @@ Command handler for error command. Some parameters are passed in CGI:
 =cut
 
 sub oops_cgi {
-  my ( $web, $topic, $user, $query ) = @_;
+    my $session = shift;
+    my $topic = $session->{topicName};
+    my $web = $session->{webName};
+    my $user = $session->{userName};
+    my $query = $session->{cgiQuery};
 
   my $tmplName = $query->param( 'template' ) || "oops";
-  my $skin = TWiki::getSkin();
+  my $skin = $session->getSkin();
 
-  my $tmplData = $TWiki::T->{templates}->readTemplate( $tmplName, $skin );
+  my $tmplData = $session->{templates}->readTemplate( $tmplName, $skin );
   if( ! $tmplData ) {
       $tmplData = "<html><body>\n"
         . "<h1>TWiki Installation Error</h1>\n"
@@ -62,12 +66,12 @@ sub oops_cgi {
       $param = $query->param( 'param4' ) || "";
       $tmplData =~ s/%PARAM4%/$param/go;
 
-      $tmplData = TWiki::handleCommonTags( $tmplData, $topic );
-      $tmplData = $TWiki::T->{renderer}->getRenderedVersion( $tmplData );
+      $tmplData = $session->handleCommonTags( $tmplData, $topic );
+      $tmplData = $session->{renderer}->getRenderedVersion( $tmplData );
       $tmplData =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
   }
 
-  TWiki::writeHeader( $query, length( $tmplData ));
+  $session->writeHeader( $query, length( $tmplData ));
   print $tmplData;
 }
 

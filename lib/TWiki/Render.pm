@@ -1138,7 +1138,7 @@ sub renderMetaTags {
     $text =~ s/%META{\s*"moved"\s*}%/$this->_renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
     $text =~ s/%META{\s*"parent"\s*(.*)}%/$this->_renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information
 
-    $text = TWiki::handleCommonTags( $text, $theTopic );
+    $text = $this->{session}->handleCommonTags( $text, $theTopic );
     $text = $this->getRenderedVersion( $text, $theWeb );
 
     return $text;

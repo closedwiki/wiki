@@ -46,7 +46,7 @@ use strict;
 use Algorithm::Diff;
 use FileHandle;
 
-#TWiki::writeDebug("Diff version $Algorithm::Diff::VERSION\n");
+#$self->{session}->writeDebug("Diff version $Algorithm::Diff::VERSION\n");
 
 my $DIFF_DEBUG = 0;
 my $DIFFEND_DEBUG = 0;
@@ -54,7 +54,7 @@ my $DIFFEND_DEBUG = 0;
 # ======================
 =pod
 
----++ sub new(  $proto, $web, $topic, $attachment, $settings  )
+---++ sub new(  $class, $session, $web, $topic, $attachment, $settings  )
 
 Construct new file
 
@@ -62,9 +62,9 @@ Construct new file
 
 sub new
 {
-    my( $class, $web, $topic, $attachment, $settings ) = @_;
+    my( $class, $session, $web, $topic, $attachment, $settings ) = @_;
     my $self =
-      bless( new TWiki::Store::RcsFile( $web, $topic, $attachment, $settings ),
+      bless( new TWiki::Store::RcsFile( $session, $web, $topic, $attachment, $settings ),
              $class );
     $self->{head} = 0;
     $self->{access} = "";

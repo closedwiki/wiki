@@ -39,14 +39,13 @@ use Time::Local;	# Added for revDate2EpSecs
 
 ---++ sub new (  $proto, $web, $topic, $attachment, $settings  )
 
-Not yet documented.
-
 =cut to implementation
 
 sub new
 {
-    my( $class, $web, $topic, $attachment, $settings ) = @_;
+    my( $class, $session, $web, $topic, $attachment, $settings ) = @_;
     my $self = bless( {}, $class );
+    $self->{session} = $session;
     $self->{"web"} = $web;
     $self->{"topic"} = $topic;
     $self->{"attachment"} = $attachment || "";
@@ -59,6 +58,14 @@ sub new
 
     return $self;
 }
+
+sub users { my $this = shift; return $this->{session}->{users}; }
+sub prefs { my $this = shift; return $this->{session}->{prefs}; }
+sub store { my $this = shift; return $this->{session}->{store}; }
+sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
+sub security { my $this = shift; return $this->{session}->{security}; }
+sub templates { my $this = shift; return $this->{session}->{templates}; }
+sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 # Call only after all settings initialised
 sub init {
@@ -186,7 +193,7 @@ sub _moveTopic
 
    # Change data file
    my %sets = ( pubDir =>$self->{pubDir}, dataDir => $self->{dataDir} );
-   my $new = TWiki::Store::RcsFile->new( $newWeb, $newTopic, "",
+   my $new = TWiki::Store::RcsFile->new( $self->{session}, $newWeb, $newTopic, "",
                                        \%sets);
    my $from = $self->{file};
    my $to =  $new->{file};
@@ -245,7 +252,7 @@ sub _moveAttachment
 
     # FIXME might want to delete old directories if empty
 
-    my $new = TWiki::Store::RcsFile->new( $newWeb, $newTopic, $attachment,
+    my $new = TWiki::Store::RcsFile->new( $self->{session}, $newWeb, $newTopic, $attachment,
         ( pubDir => $self->{pubDir} ) );
 
     # before save, create directories if they don't exist
@@ -428,7 +435,7 @@ sub setLock
 {
     my( $self, $lock, $userName ) = @_;
     
-    $userName = $TWiki::T->{userName} if( ! $userName );
+    $userName = $self->{session}->{userName} if( ! $userName );
 
     my $lockFilename = $self->_makeFileName( ".lock" );
     if( $lock ) {
@@ -546,8 +553,8 @@ sub _makeFileName
       if ( $extension eq ",v" && $self->{"useRcsDir"} && -d "$dataDir/$web/RCS" ) {
          $extra = "/RCS";
       }
-      $file = "$pubDir/$web/$topic$extra/$attachment$extension";
 
+      $file = "$pubDir/$web/$topic$extra/$attachment$extension";
    } else {
       if( ! $extension ) {
          $extension = ".txt";

@@ -100,7 +100,7 @@ sub setSessionValue
 # -------------------------
 sub getSkin
 {
-    return &TWiki::getSkin();
+    return $TWiki::T->getSkin();
 }
 
 # =========================
@@ -136,7 +136,7 @@ sub getUrlHost
 sub getScriptUrl
 {
 #   my( $web, $topic, $script ) = @_;
-    return &TWiki::getScriptUrl( @_ ); 
+    return $TWiki::T->getScriptUrl( @_ ); 
 }
 
 # =========================
@@ -171,7 +171,7 @@ sub getScriptUrlPath
 sub getViewUrl
 {
 #   my( $web, $topic ) = @_;
-    return &TWiki::getViewUrl( @_ );
+    return $TWiki::T->getViewUrl( @_ );
 }
 
 # =========================
@@ -193,7 +193,7 @@ sub getOopsUrl
 {
 #   my( $web, $topic, $template, @params ) = @_;
     # up to 4 parameters in @theParams
-    return &TWiki::getOopsUrl( @_ );
+    return $TWiki::T->getOopsUrl( @_ );
 }
 
 # =========================
@@ -225,7 +225,7 @@ sub getPubUrlPath
 # -------------------------
 sub getCgiQuery
 {
-    return &TWiki::getCgiQuery();
+    return $TWiki::T->{cgiQuery};
 }
 
 # =========================
@@ -244,7 +244,7 @@ sub getCgiQuery
 sub writeHeader
 {
 #   my( $theQuery ) = @_;
-    return TWiki::writeHeader( @_ );
+    return $TWiki::T->writeHeader( @_ );
 }
 
 # =========================
@@ -262,8 +262,8 @@ sub writeHeader
 # -------------------------
 sub redirectCgiQuery
 {
-#   my( $theQuery, $theUrl ) = @_;
-    return &TWiki::redirect( @_ );
+    my( $theQuery, $theUrl ) = @_;
+    return $TWiki::T->redirect( @_ );
 }
 
 # =========================
@@ -748,7 +748,7 @@ sub readTopicText
 
     # FIXME: The following breaks if spec of readTopicRaw() changes
     if( $text =~ /^No permission to read topic/ ) {
-        $text = TWiki::getOopsUrl( $web, $topic, "oopsaccessview" );
+        $text = $TWiki::T->getOopsUrl( $web, $topic, "oopsaccessview" );
     }
     return $text;
 }
@@ -796,8 +796,8 @@ sub saveTopicText
 {
     my( $web, $topic, $text, $ignorePermissions, $dontNotify ) = @_;
 
-    my( $mirrorSite, $mirrorViewURL ) = TWiki::readOnlyMirrorWeb( $web );
-    return TWiki::getOopsUrl( $web, $topic, "oopsmirror", $mirrorSite, $mirrorViewURL ) if( $mirrorSite );
+    my( $mirrorSite, $mirrorViewURL ) = $TWiki::T->readOnlyMirrorWeb( $web );
+    return $TWiki::T->getOopsUrl( $web, $topic, "oopsmirror", $mirrorSite, $mirrorViewURL ) if( $mirrorSite );
 
     # check access permission
     unless( $ignorePermissions ||
@@ -805,11 +805,11 @@ sub saveTopicText
                                                      $TWiki::T->{wikiUserName}, "",
                                                      $topic, $web )
           ) {
-        return TWiki::getOopsUrl( $web, $topic, "oopsaccesschange" );
+        return $TWiki::T->getOopsUrl( $web, $topic, "oopsaccesschange" );
     }
 
-    return TWiki::getOopsUrl( $web, $topic, "oopssave" )  unless( defined $text );
-    return TWiki::getOopsUrl( $web, $topic, "oopsempty" ) unless( $text ); # empty topic not allowed
+    return $TWiki::T->getOopsUrl( $web, $topic, "oopssave" )  unless( defined $text );
+    return $TWiki::T->getOopsUrl( $web, $topic, "oopsempty" ) unless( $text ); # empty topic not allowed
 
     # extract meta data and merge old attachment meta data
     my $meta = $TWiki::T->{store}->extractMetaData( $web, $topic, \$text );
@@ -820,7 +820,7 @@ sub saveTopicText
     # save topic
     my $error =
       $TWiki::T->{store}->saveTopic( $TWiki::T->{userName}, $web, $topic, $text, $meta, "", 0, $dontNotify );
-    return TWiki::getOopsUrl( $web, $topic, "oopssaveerr", $error ) if( $error );
+    return $TWiki::T->getOopsUrl( $web, $topic, "oopssaveerr", $error ) if( $error );
     return "";
 }
 
@@ -837,7 +837,7 @@ sub saveTopicText
 # -------------------------
 sub getPublicWebList
 {
-    return &TWiki::getPublicWebList();
+    return $TWiki::T->getPublicWebList();
 }
 
 # =========================
@@ -876,7 +876,7 @@ sub getTopicList
 sub expandCommonVariables
 {
 #   my( $text, $topic, $web ) = @_;
-    return &TWiki::handleCommonTags( @_ );
+    return $TWiki::T->handleCommonTags( @_ );
 }
 
 # =========================
@@ -1106,7 +1106,7 @@ sub saveFile
 sub writeWarning
 {
 #   my( $theText ) = @_;
-    return &TWiki::writeWarning( @_ );
+    return $TWiki::T->writeWarning( @_ );
 }
 
 # =========================
@@ -1124,7 +1124,7 @@ sub writeWarning
 sub writeDebug
 {
 #   my( $theText ) = @_;
-    return &TWiki::writeDebug( @_ );
+    return $TWiki::T->writeDebug( @_ );
 }
 
 # =========================

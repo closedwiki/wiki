@@ -99,8 +99,7 @@ represented.
 
 =cut
 
-sub put
-{
+sub put {
    my( $self, $type, %args ) = @_;
 
    my $data = $self->{$type};
@@ -112,7 +111,7 @@ sub put
            my $keyName = $args{$key};
            my @data = @$data;
            unless( $keyName ) {
-               TWiki::writeWarning( "Meta: Required $key parameter is missing for META:$type" );
+               $self->{_session}->writeWarning( "Meta: Required $key parameter is missing for META:$type" );
                return;
            }
            for( my $i = 0; $i < scalar( @$data ); $i++ ) {

@@ -61,9 +61,13 @@ See the documentation on %SEARCH for a full description of parameters.
 =cut
 
 sub search {
-    my ($webName, $topic, $query ) = @_;
+    my $session = shift;
 
-    return unless TWiki::UI::webExists( $webName, $topic );
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+
+    return unless TWiki::UI::webExists( $session, $webName, $topic );
 
     # The CGI.pm docs claim that it returns all of the values in a
     # multiple select if called in a list context, but that may not
@@ -95,9 +99,9 @@ sub search {
     $attrWeb =~ tr/+/ /;       # pluses become spaces
     $attrWeb =~ s/%([0-9a-fA-F]{2})/pack("c",hex($1))/ge;  # %20 becomes space
 
-    TWiki::writeHeader( $query, 0);
+    $session->writeHeader( $query, 0);
 
-    $TWiki::T->{search}->searchWeb(
+    $session->{search}->searchWeb(
         _callback       => \&_contentCallback,
         inline          => 0,
         "search"        => scalar $query->param( "search" ),
@@ -107,7 +111,7 @@ sub search {
         "scope"         => scalar $query->param( "scope" ),
         "order"         => scalar $query->param( "order" ),
         "type"          => scalar $query->param( "type" ) ||
-                             $TWiki::T->{prefs}->getPreferencesValue( "SEARCHDEFAULTTTYPE" ),
+                             $session->{prefs}->getPreferencesValue( "SEARCHDEFAULTTTYPE" ),
         "regex"         => scalar $query->param( "regex" ),
         "limit"         => scalar $query->param( "limit" ),
         "reverse"       => scalar $query->param( "reverse" ),

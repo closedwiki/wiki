@@ -16,7 +16,6 @@
 =begin twiki
 
 ---+ TWiki::UI::RDiff
-
 UI functions for diffing.
 
 =cut
@@ -67,41 +66,38 @@ my %diffColours = ( "+" => [ "#ccccff", "twikiDiffAddedMarker"],
 =cut
 # -------------------------
 sub _renderCellData {
-    my( $data, $topic ) = @_;
+    my( $session, $data, $topic ) = @_;
     if (( $data ) && ( $data ne "" )) {
-#improve meta-data diff's - Main.PeterKlausner
-        if( $data =~ /%META/ )
-        {
+        #improve meta-data diff's - Main.PeterKlausner
+        if( $data =~ /%META/ ) {
             $data =~ s(^%META:TOPICPARENT.*="([^"]+).*$)
-                      (|*META TOPICPARENT*|$1 ||)gm;
+              (|*META TOPICPARENT*|$1 ||)gm;
             $data =~ s(^%META:FIELD.name="(.*?)".title="(.*?)".value="(.*?)".*$)
-                      (|*META FIELD $2*|$1 |$3 |)gm;
+              (|*META FIELD $2*|$1 |$3 |)gm;
             $data =~ s(^%META:([A-Z]+).\w+="([^"]+)"(.*).%$)
-                      (|*META $1*|$2 |$3 |)gm;
+              (|*META $1*|$2 |$3 |)gm;
         }
-
-        $data = &TWiki::handleCommonTags( $data, $topic );
-        $data = $TWiki::T->{renderer}->getRenderedVersion( $data );
-        if( $data =~ m/<\/?(th|td|table)/i )
-        {
+        $data = $session->handleCommonTags( $data, $topic );
+        $data = $session->{renderer}->getRenderedVersion( $data );
+        if( $data =~ m/<\/?(th|td|table)/i ) {
             # data has <th> or <td>, need to fix <table>
             my $bTable = ( $data =~ s/(<table)/$1/gois ) || 0;
             my $eTable = ( $data =~ s/(<\/table)/$1/gois ) || 0;
             my $i = 0;
             if( $bTable > $eTable ) {
                 for( $i = $eTable; $i < $bTable; $i++ ) {
-                   $data .= "</table>";
+                    $data .= "</table>";
                 }
             } elsif( $bTable < $eTable ) {
                 for( $i = $bTable; $i < $eTable; $i++ ) {
-                   $data = "\n<table>$data";
+                    $data = "\n<table>$data";
                 }
             } elsif( ( $bTable == 0 ) && ( $eTable == 0 ) ) {
                 $data = "\n<table>$data\n</table>";
             }
         }
-	#remove the <!--- type tag (i don't know how you would find the matching >)
-	$data =~ s/<!/&lt!/go;
+        #remove the <!--- type tag (i don't know how you would find the matching >)
+        $data =~ s/<!/&lt!/go;
     }
     return $data;
 }
@@ -109,7 +105,7 @@ sub _renderCellData {
 # =========================
 =pod
 
----+++ _renderSideBySide( $topic, $diffType, $left, $right ) ==> $result
+---+++ _renderSideBySide( $session, $topic, $diffType, $left, $right ) ==> $result
 
 | Description: | render the Diff entry using side by side |
 | Parameter: =$diffType= | {+,-,u,c,l} denotes the patch operation |
@@ -122,31 +118,31 @@ sub _renderCellData {
 # -------------------------
 sub _renderSideBySide
 {
-  my ( $topic, $diffType, $left, $right ) = @_;
-  my $result = "";
+    my ( $session, $topic, $diffType, $left, $right ) = @_;
+    my $result = "";
 
-  $left = _renderCellData( $left, $topic );
-  $right = _renderCellData( $right, $topic );
+    $left = _renderCellData( $session, $left, $topic );
+    $right = _renderCellData( $session, $right, $topic );
 
-  if ( $diffType eq "-") {
-    $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top">$left&nbsp;</td>);
-    $result .= qq(<td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$right&nbsp;</td></tr>\n);
-  } elsif ( $diffType eq "+") {
-    $result .= qq(<tr><td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$left&nbsp;</td>);
-    $result .= qq(<td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top">$right&nbsp;</td></tr>\n);
-  } elsif ( $diffType eq "u") {
-    $result .= qq(<tr><td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$left&nbsp;</td>);
-    $result .= qq(<td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$right&nbsp;</td></tr>\n);
-  } elsif ( $diffType eq "c") {
-    $result .= qq(<tr><td bgcolor="$diffColours{"c"}[0]" class="$diffColours{"c"}[1]" valign="top">$left&nbsp;</td>);
-    $result .= qq(<td bgcolor="$diffColours{"c"}[0]" class="$diffColours{"c"}[1]" valign="top">$right&nbsp;</td></tr>\n);
-  } elsif ( $diffType eq "l") {
-    if (( $left ne "" ) && ($right ne "" )) {
-      $result .= qq(<tr bgcolor="$diffColours{"l"}[0]" class="$diffColours{"l"}[1]"><th align="center">Line: $left</th><th align="center">Line: $right</th></tr>\n);
+    if ( $diffType eq "-") {
+        $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top">$left&nbsp;</td>);
+        $result .= qq(<td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$right&nbsp;</td></tr>\n);
+    } elsif ( $diffType eq "+") {
+        $result .= qq(<tr><td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$left&nbsp;</td>);
+        $result .= qq(<td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top">$right&nbsp;</td></tr>\n);
+    } elsif ( $diffType eq "u") {
+        $result .= qq(<tr><td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$left&nbsp;</td>);
+        $result .= qq(<td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$right&nbsp;</td></tr>\n);
+    } elsif ( $diffType eq "c") {
+        $result .= qq(<tr><td bgcolor="$diffColours{"c"}[0]" class="$diffColours{"c"}[1]" valign="top">$left&nbsp;</td>);
+        $result .= qq(<td bgcolor="$diffColours{"c"}[0]" class="$diffColours{"c"}[1]" valign="top">$right&nbsp;</td></tr>\n);
+    } elsif ( $diffType eq "l") {
+        if (( $left ne "" ) && ($right ne "" )) {
+            $result .= qq(<tr bgcolor="$diffColours{"l"}[0]" class="$diffColours{"l"}[1]"><th align="center">Line: $left</th><th align="center">Line: $right</th></tr>\n);
+        }
     }
-  }
-
-  return $result;
+    
+    return $result;
 }
 
 # =========================
@@ -165,27 +161,27 @@ sub _renderSideBySide
 # -------------------------
 sub renderDebug
 {
-  my ( $diffType, $left, $right ) = @_;
-  my $result = "";
+    my ( $diffType, $left, $right ) = @_;
+    my $result = "";
 
-#de-html-ize
-  $left =~ s/</&lt;/go;
-  $right =~ s/</&lt;/go;
-  $left =~ s/>/&gt;/go;
-  $right =~ s/>/&gt;/go;
+    #de-html-ize
+    $left =~ s/</&lt;/go;
+    $right =~ s/</&lt;/go;
+    $left =~ s/>/&gt;/go;
+    $right =~ s/>/&gt;/go;
 
-  $result = "<hr>type: $diffType\n";
-  $result .= "<div style=\"border: 1px dotted;\">$left</div>\n";
-  $result .= "<div style=\"border: 1px dotted;\">$right</div>\n";
+    $result = "<hr>type: $diffType\n";
+    $result .= "<div style=\"border: 1px dotted;\">$left</div>\n";
+    $result .= "<div style=\"border: 1px dotted;\">$right</div>\n";
 
-  return $result;
+    return $result;
 }
 
 
 # =========================
 =pod
 
----+++ _renderSequential( $topic, $diffType, $left, $right ) ==> $result
+---+++ _renderSequential( $session, $topic, $diffType, $left, $right ) ==> $result
 
 | Description: | render the Diff using old style sequential blocks |
 | Parameter: =$diffType= | {+,-,u,c,l} denotes the patch operation |
@@ -198,44 +194,44 @@ sub renderDebug
 # -------------------------
 sub _renderSequential
 {
-  my ( $topic, $diffType, $left, $right ) = @_;
-  my $result = "";
+    my ( $session, $topic, $diffType, $left, $right ) = @_;
+    my $result = "";
 
-#note: I have made the colspan 9 to make sure that it spans all columns (thought there are only 2 now)
-  if ( $diffType eq "-") {
-    $result .= qq(<tr><td bgcolor="#FFD7D7" class="twikiDiffDeletedHeader" colspan ="9"><b> Deleted: </b>\n</td></tr>\n);
-    $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top" width="1%">&lt;<br />&lt;</td>\n);
-    $result .= qq(<td class="twikiDiffDeletedText">\n);
-    $result .= _renderCellData( $left, $topic );
-    $result .= qq(\n</td></tr>\n);
-  } elsif ( $diffType eq "+") {
-    $result .= qq(<tr><td bgcolor="#D0FFD0" class="twikiDiffAddedHeader" colspan ="9"><b> Added:   </b>\n</td></tr>\n);
-    $result .= qq(<tr><td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top" width="1%">&gt;<br />&gt;</td>\n);
-    $result .= qq(<td class="twikiDiffAddedText">\n);
-    $result .= _renderCellData( $right, $topic );
-    $result .= qq(\n</td></tr>\n);
-  } elsif ( $diffType eq "u") {
-    $result .= qq(<tr><td valign="top" bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" width="1%"><br /></td>\n);
-    $result .= qq(<td class="twikiDiffUnchangedText">\n);
-    $result .= _renderCellData( $right, $topic );
-    $result .= qq(\n</td></tr>\n);
-  } elsif ( $diffType eq "c") {
-    $result .= qq(<tr><td bgcolor="#D0FFD0" class="twikiDiffChangedHeader" colspan ="9"><b> Changed: </b></td></tr>\n);
-    $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top" width="1%">&lt;<br />&lt;</td>\n);
-    $result .= qq(<td class="twikiDiffDeletedText">\n);
-    $result .= _renderCellData( $left, $topic );
-    $result .= qq(\n</td></tr>\n);
-    $result .= qq(<tr><td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top" width="1%">&gt;<br />&gt;</td>\n);
-    $result .= qq(<td class="twikiDiffAddedText">\n);
-    $result .= _renderCellData( $right, $topic );
-    $result .= qq(\n</td></tr>\n);
-  } elsif ( $diffType eq "l") {
-    if (( $left ne "" ) && ($right ne "" )) {
-      $result .= qq(<tr bgcolor="$diffColours{"l"}[0]" class="twikiDiffLineNumberHeader"><th align="left" colspan="9">Line: $left to $right</th></tr>\n);
+    #note: I have made the colspan 9 to make sure that it spans all columns (thought there are only 2 now)
+    if ( $diffType eq "-") {
+        $result .= qq(<tr><td bgcolor="#FFD7D7" class="twikiDiffDeletedHeader" colspan ="9"><b> Deleted: </b>\n</td></tr>\n);
+        $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top" width="1%">&lt;<br />&lt;</td>\n);
+        $result .= qq(<td class="twikiDiffDeletedText">\n);
+        $result .= _renderCellData( $session, $left, $topic );
+        $result .= qq(\n</td></tr>\n);
+    } elsif ( $diffType eq "+") {
+        $result .= qq(<tr><td bgcolor="#D0FFD0" class="twikiDiffAddedHeader" colspan ="9"><b> Added:   </b>\n</td></tr>\n);
+        $result .= qq(<tr><td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top" width="1%">&gt;<br />&gt;</td>\n);
+        $result .= qq(<td class="twikiDiffAddedText">\n);
+        $result .= _renderCellData( $session, $right, $topic );
+        $result .= qq(\n</td></tr>\n);
+    } elsif ( $diffType eq "u") {
+        $result .= qq(<tr><td valign="top" bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" width="1%"><br /></td>\n);
+        $result .= qq(<td class="twikiDiffUnchangedText">\n);
+        $result .= _renderCellData( $session, $right, $topic );
+        $result .= qq(\n</td></tr>\n);
+    } elsif ( $diffType eq "c") {
+        $result .= qq(<tr><td bgcolor="#D0FFD0" class="twikiDiffChangedHeader" colspan ="9"><b> Changed: </b></td></tr>\n);
+        $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top" width="1%">&lt;<br />&lt;</td>\n);
+        $result .= qq(<td class="twikiDiffDeletedText">\n);
+        $result .= _renderCellData( $session, $left, $topic );
+        $result .= qq(\n</td></tr>\n);
+        $result .= qq(<tr><td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top" width="1%">&gt;<br />&gt;</td>\n);
+        $result .= qq(<td class="twikiDiffAddedText">\n);
+        $result .= _renderCellData( $session, $right, $topic );
+        $result .= qq(\n</td></tr>\n);
+    } elsif ( $diffType eq "l") {
+        if (( $left ne "" ) && ($right ne "" )) {
+            $result .= qq(<tr bgcolor="$diffColours{"l"}[0]" class="twikiDiffLineNumberHeader"><th align="left" colspan="9">Line: $left to $right</th></tr>\n);
+        }
     }
-  }
 
-  return $result;
+    return $result;
 }
 
 # =========================
@@ -286,10 +282,10 @@ sub _renderRevisionDiff
     	        $next_ref = undef;
 		}
 		if ( $renderStyle eq "sequential" ) {
-		    $result .= _renderSequential ( $topic, @$diff_ref );
+		    $result .= _renderSequential ( $session, $topic, @$diff_ref );
 		} elsif ( $renderStyle eq "sidebyside" ) {
     		    $result .= "<tr><td width=\"50%\"></td><td width=\"50%\"></td></tr>\n";
-		    $result .= _renderSideBySide ( $topic, @$diff_ref );
+		    $result .= _renderSideBySide ( $session, $topic, @$diff_ref );
 		} elsif ( $renderStyle eq "debug" ) {
 		    $result .= renderDebug ( @$diff_ref );
 		}
@@ -298,10 +294,10 @@ sub _renderRevisionDiff
 #don't forget the last one ;)
    if ( $diff_ref ) {
 	if ( $renderStyle eq "sequential" ) {
-	    $result .= _renderSequential ( $topic, @$diff_ref );
+	    $result .= _renderSequential ( $session, $topic, @$diff_ref );
 	} elsif ( $renderStyle eq "sidebyside" ) {
     	    $result .= "<tr><td width=\"50%\"></td><td width=\"50%\"></td></tr>\n";
-	    $result .= _renderSideBySide ( $topic, @$diff_ref );
+	    $result .= _renderSideBySide ( $session, $topic, @$diff_ref );
 	} elsif ( $renderStyle eq "debug" ) {
 	    $result .= renderDebug ( @$diff_ref );
 	}
@@ -328,8 +324,8 @@ sub getRevInfo
 {
     my( $web, $rev, $topic, $short ) = @_;
 
-    my( $date, $user ) = $TWiki::T->{store}->getRevisionInfo( $web, $topic, $rev);
-    $user = $TWiki::T->{renderer}->getRenderedVersion( $TWiki::T->{users}->userToWikiName( $user ) );
+    my( $date, $user ) = $session->{store}->getRevisionInfo( $web, $topic, $rev);
+    $user = $session->{renderer}->getRenderedVersion( $session->{users}->userToWikiName( $user ) );
 	
     if ( $short ) {
 	    $date = TWiki::formatTime( $date, "\$day \$month \$year" );
@@ -366,194 +362,199 @@ sub getRevInfo
 =cut
 
 sub diff {
-  my ( $webName, $topic, $userName, $query ) = @_;
+    my $session = shift;
 
-  my $renderStyle = $query->param('render');
-  $renderStyle = $TWiki::T->{prefs}->getPreferencesValue( "DIFFRENDERSTYLE" ) unless ( $renderStyle );
-  my $diffType = $query->param('type');
-  my $contextLines = $query->param('context');
-  $contextLines = $TWiki::T->{prefs}->getPreferencesValue( "DIFFCONTEXTLINES" ) unless ( $contextLines );
-  my $skin = TWiki::getSkin();
-  my $rev1 = $query->param( "rev1" );
-  my $rev2 = $query->param( "rev2" );
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $userName = $session->{userName};
 
-  $renderStyle = "sequential" if ( ! $renderStyle );
-  $diffType = "history" if ( ! $diffType );
-  $contextLines = 3 if ( ! $contextLines );
+    my $renderStyle = $query->param('render');
+    $renderStyle = $session->{prefs}->getPreferencesValue( "DIFFRENDERSTYLE" ) unless ( $renderStyle );
+    my $diffType = $query->param('type');
+    my $contextLines = $query->param('context');
+    $contextLines = $session->{prefs}->getPreferencesValue( "DIFFCONTEXTLINES" ) unless ( $contextLines );
+    my $skin = $session->getSkin();
+    my $rev1 = $query->param( "rev1" );
+    my $rev2 = $query->param( "rev2" );
 
-  return unless TWiki::UI::webExists( $webName, $topic );
+    $renderStyle = "sequential" if ( ! $renderStyle );
+    $diffType = "history" if ( ! $diffType );
+    $contextLines = 3 if ( ! $contextLines );
 
-  my $tmpl = "";
-  my $diff = "";
-  my $maxrev= 1;
-  my $i = $maxrev;
-  my $j = $maxrev;
-  my $revTitle1 = "";
-  my $revTitle2 = "";
-  my $revInfo1 = "";
-  my $revInfo2 = "";
-  my $isMultipleDiff = 0;
-  my $scriptUrlPath = $TWiki::T->{scriptUrlPath};
-
-  $tmpl = $TWiki::T->{templates}->readTemplate( "rdiff", $skin );
-  $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
-
-  my( $before, $difftmpl, $after) = split( /%REPEAT%/, $tmpl);
-
-  my $topicExists = $TWiki::T->{store}->topicExists( $webName, $topic );
-  if( $topicExists ) {
-    $maxrev = $TWiki::T->{store}->getRevisionNumber( $webName, $topic );
-    $maxrev =~ s/r?1\.//go;  # cut 'r' and major
-
-    $rev1 = $TWiki::T->{store}->cleanUpRevID( $rev1 );
-    if( $rev1 < 1 )       { $rev1 = $maxrev; }
-    if( $rev1 > $maxrev ) { $rev1 = $maxrev; }
-
-    $rev2 = $TWiki::T->{store}->cleanUpRevID( $rev2 );
-    if( $rev2 < 1 )       { $rev2 = 1; }
-    if( $rev2 > $maxrev ) { $rev2 = $maxrev; }
-    if ( $diffType eq "last" ) {
-      $rev1 = $maxrev;
-      $rev2 = $maxrev-1;
-    }
-    $revTitle1 = $rev1;
-    $revInfo1 = getRevInfo( $webName, $rev1, $topic );
-    if( $rev1 != $rev2 ) {
-      $revTitle2 = $rev2;
-      $revInfo2 = getRevInfo( $webName, $rev2, $topic );
-    }
-  } else {
-    $rev1 = 1;
-    $rev2 = 1;
-  }
-
-  # check access permission
-  my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
-  my $viewAccessOK =
-    $TWiki::T->{security}->checkAccessPermission( "view", $wikiUserName,
-                                             "", $topic, $webName );
-  if( $TWiki::T->{store}->accessFailed() ) {
-    # Can't read requested topic and/or included (or other accessed topics)
-    # user could not be authenticated, may be not logged in yet?
-    my $rdiffauthFile = $ENV{'SCRIPT_FILENAME'};
-    $rdiffauthFile =~ s|/rdiff|/rdiffauth|o;
-    if( ( ! $query->remote_user() ) && (-e $rdiffauthFile ) ) {
-      # try again with authenticated rdiffauth script
-      # instead of non authenticated rdiff script
-      my $url = $ENV{"REQUEST_URI"};
-      if( $url ) {
-        # $url i.e. is "twiki/bin/rdiff.cgi/Web/Topic?cms1=val1&cmd2=val2"
-        $url =~ s|/rdiff|/rdiffauth|o;
-        $url = $TWiki::T->{urlHost}.$url;
-      } else {
-        $url = $TWiki::T->{urlHost}."$scriptUrlPath/$rdiffauthFile/$webName/$topic";
-      }
-      TWiki::UI::redirect( $url );
-      return;
-    }
-  }
-  if( ! $viewAccessOK ) {
-    TWiki::UI::oops( $webName, $topic, "accessview" );
-    return;
-  }
-
-  # format "before" part
-  $before =~ s/%REVTITLE1%/$revTitle1/go;
-  $before =~ s/%REVTITLE2%/$revTitle2/go;
-  $before = &TWiki::handleCommonTags( $before, $topic );
-  $before = $TWiki::T->{renderer}->getRenderedVersion( $before );
-  $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-  my $page = $before;
-
-  # do one or more diffs
-  $difftmpl = &TWiki::handleCommonTags( $difftmpl, $topic );
-  if( $topicExists ) {
-    my $r1 = $rev1;
-    my $r2 = $rev2;
-    my $rInfo = "";
-    if (( $diffType eq "history" ) && ( $r1 > $r2 + 1)) {
-      $r2 = $r1 - 1;
-      $isMultipleDiff = 1;
-    }
-    do {
-      $diff = $difftmpl;
-      $diff =~ s/%REVTITLE1%/r1\.$r1/go;
-      $rInfo = getRevInfo( $webName, $r1, $topic, 1 );
-      $diff =~ s/%REVINFO1%/$rInfo/go;
-      my $diffArrayRef = $TWiki::T->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
-      # $text = $TWiki::T->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
-      # if ( $renderStyle eq "raw" ) {
-      #     $text = "\n<code>\n$text\n</code>\n";
-      # } else {
-      #    my $diffArray = parseRevisionDiff( $text );
-      my $text = _renderRevisionDiff( $topic, $diffArrayRef, $renderStyle );
-      #            }
-      $diff =~ s/%TEXT%/$text/go;
-      $diff =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-      $page .= $diff;
-      $r1 = $r1 - 1;
-      $r2 = $r2 - 1;
-      if( $r2 < 1 ) { $r2 = 1; }
-    } while( ( $diffType eq "history") && (( $r1 > $rev2 ) || ( $r1 == 1 )) );
+    return unless TWiki::UI::webExists( $session, $webName, $topic );
     
-  } else {
-    $diff = $difftmpl;
-    $diff =~ s/%REVTITLE1%/$revTitle1/go;
-    $diff =~ s/%REVTITLE2%/$revTitle2/go;
-    $diff =~ s/%TEXT%//go;
-    $diff =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-    $page .= $diff;
-  }
-  
-  if( $TWiki::doLogTopicRdiff ) {
-    # write log entry
-    TWiki::writeLog( "rdiff", "$webName.$topic", "$rev1 $rev2" );
-  }
-  
-  # format "after" part
-  $i = $maxrev;
-  $j = $maxrev;
-  my $revisions = "";
-  my $breakRev = 0;
-  if( ( $TWiki::numberOfRevisions > 0 ) && ( $TWiki::numberOfRevisions < $maxrev ) ) {
-    $breakRev = $maxrev - $TWiki::numberOfRevisions + 1;
-  }
-  
-  while( $i > 0 ) {
-    $revisions .= " | <a href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\">$i</a>";
-    if( $i != 1 ) {
-      if( $i == $breakRev ) {
-        # Now obsolete because of 'More' link
-        # $revisions = "$revisions | <a href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=$maxrev\">&gt;...</a>";
-        $i = 1;
-        
-      } else {
-        if( ( $i == $rev1 ) && ( !$isMultipleDiff ) ) {
-          $revisions .= " | &gt;";
-        } else {
-          $j = $i - 1;
-          $revisions .= " | <a href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=$j\">&gt;</a>";
-        }
-      }
-    }
-    $i = $i - 1;
-  }
-  $after =~ s/%REVISIONS%/$revisions/go;
-  $after =~ s/%CURRREV%/$rev1/go;
-  $after =~ s/%MAXREV%/$maxrev/go;
-  $after =~ s/%REVTITLE1%/$revTitle1/go;
-  $after =~ s/%REVINFO1%/$revInfo1/go;
-  $after =~ s/%REVTITLE2%/$revTitle2/go;
-  $after =~ s/%REVINFO2%/$revInfo2/go;
-  
-  $after = TWiki::handleCommonTags( $after, $topic );
-  $after = $TWiki::T->{renderer}->getRenderedVersion( $after );
-  $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-  
-  $page .= $after;
+    my $tmpl = "";
+    my $diff = "";
+    my $maxrev= 1;
+    my $i = $maxrev;
+    my $j = $maxrev;
+    my $revTitle1 = "";
+    my $revTitle2 = "";
+    my $revInfo1 = "";
+    my $revInfo2 = "";
+    my $isMultipleDiff = 0;
+    my $scriptUrlPath = $session->{scriptUrlPath};
 
-  TWiki::writeHeader( $query, length( $page ));
-  print $page;
+    $tmpl = $session->{templates}->readTemplate( "rdiff", $skin );
+    $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
+
+    my( $before, $difftmpl, $after) = split( /%REPEAT%/, $tmpl);
+
+    my $topicExists = $session->{store}->topicExists( $webName, $topic );
+    if( $topicExists ) {
+        $maxrev = $session->{store}->getRevisionNumber( $webName, $topic );
+        $maxrev =~ s/r?1\.//go;  # cut 'r' and major
+        
+        $rev1 = $session->{store}->cleanUpRevID( $rev1 );
+        if( $rev1 < 1 )       { $rev1 = $maxrev; }
+        if( $rev1 > $maxrev ) { $rev1 = $maxrev; }
+        
+        $rev2 = $session->{store}->cleanUpRevID( $rev2 );
+        if( $rev2 < 1 )       { $rev2 = 1; }
+        if( $rev2 > $maxrev ) { $rev2 = $maxrev; }
+        if ( $diffType eq "last" ) {
+            $rev1 = $maxrev;
+            $rev2 = $maxrev-1;
+        }
+        $revTitle1 = $rev1;
+        $revInfo1 = getRevInfo( $webName, $rev1, $topic );
+        if( $rev1 != $rev2 ) {
+            $revTitle2 = $rev2;
+            $revInfo2 = getRevInfo( $webName, $rev2, $topic );
+        }
+    } else {
+        $rev1 = 1;
+        $rev2 = 1;
+    }
+    
+    # check access permission
+    my $wikiUserName = $session->{users}->userToWikiName( $userName );
+    my $viewAccessOK =
+      $session->{security}->checkAccessPermission( "view", $wikiUserName,
+                                                   "", $topic, $webName );
+    if( $session->{store}->accessFailed() ) {
+        # Can't read requested topic and/or included (or other accessed topics)
+        # user could not be authenticated, may be not logged in yet?
+        my $rdiffauthFile = $ENV{'SCRIPT_FILENAME'};
+        $rdiffauthFile =~ s|/rdiff|/rdiffauth|o;
+        if( ( ! $query->remote_user() ) && (-e $rdiffauthFile ) ) {
+            # try again with authenticated rdiffauth script
+            # instead of non authenticated rdiff script
+            my $url = $ENV{"REQUEST_URI"};
+            if( $url ) {
+                # $url i.e. is "twiki/bin/rdiff.cgi/Web/Topic?cms1=val1&cmd2=val2"
+                $url =~ s|/rdiff|/rdiffauth|o;
+                $url = $session->{urlHost}.$url;
+            } else {
+                $url = $session->{urlHost}."$scriptUrlPath/$rdiffauthFile/$webName/$topic";
+            }
+            TWiki::UI::redirect( $session, $url );
+            return;
+        }
+    }
+    if( ! $viewAccessOK ) {
+        TWiki::UI::oops( $session, $webName, $topic, "accessview" );
+        return;
+    }
+    
+    # format "before" part
+    $before =~ s/%REVTITLE1%/$revTitle1/go;
+    $before =~ s/%REVTITLE2%/$revTitle2/go;
+    $before = $session->handleCommonTags( $before, $topic );
+    $before = $session->{renderer}->getRenderedVersion( $before );
+    $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
+    my $page = $before;
+    
+    # do one or more diffs
+    $difftmpl = $session->handleCommonTags( $difftmpl, $topic );
+    if( $topicExists ) {
+        my $r1 = $rev1;
+        my $r2 = $rev2;
+        my $rInfo = "";
+        if (( $diffType eq "history" ) && ( $r1 > $r2 + 1)) {
+            $r2 = $r1 - 1;
+            $isMultipleDiff = 1;
+        }
+        do {
+            $diff = $difftmpl;
+            $diff =~ s/%REVTITLE1%/r1\.$r1/go;
+            $rInfo = getRevInfo( $webName, $r1, $topic, 1 );
+            $diff =~ s/%REVINFO1%/$rInfo/go;
+            my $diffArrayRef = $session->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
+            # $text = $session->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
+            # if ( $renderStyle eq "raw" ) {
+            #     $text = "\n<code>\n$text\n</code>\n";
+            # } else {
+            #    my $diffArray = parseRevisionDiff( $text );
+            my $text = _renderRevisionDiff( $topic, $diffArrayRef, $renderStyle );
+            #            }
+            $diff =~ s/%TEXT%/$text/go;
+            $diff =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
+            $page .= $diff;
+            $r1 = $r1 - 1;
+            $r2 = $r2 - 1;
+            if( $r2 < 1 ) { $r2 = 1; }
+        } while( ( $diffType eq "history") && (( $r1 > $rev2 ) || ( $r1 == 1 )) );
+        
+    } else {
+        $diff = $difftmpl;
+        $diff =~ s/%REVTITLE1%/$revTitle1/go;
+        $diff =~ s/%REVTITLE2%/$revTitle2/go;
+        $diff =~ s/%TEXT%//go;
+        $diff =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
+        $page .= $diff;
+    }
+    
+    if( $TWiki::doLogTopicRdiff ) {
+        # write log entry
+        $session->writeLog( "rdiff", "$webName.$topic", "$rev1 $rev2" );
+    }
+    
+    # format "after" part
+    $i = $maxrev;
+    $j = $maxrev;
+    my $revisions = "";
+    my $breakRev = 0;
+    if( ( $TWiki::numberOfRevisions > 0 ) && ( $TWiki::numberOfRevisions < $maxrev ) ) {
+        $breakRev = $maxrev - $TWiki::numberOfRevisions + 1;
+    }
+    
+    while( $i > 0 ) {
+        $revisions .= " | <a href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\">$i</a>";
+        if( $i != 1 ) {
+            if( $i == $breakRev ) {
+                # Now obsolete because of 'More' link
+                # $revisions = "$revisions | <a href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=$maxrev\">&gt;...</a>";
+                $i = 1;
+                
+            } else {
+                if( ( $i == $rev1 ) && ( !$isMultipleDiff ) ) {
+                    $revisions .= " | &gt;";
+                } else {
+                    $j = $i - 1;
+                    $revisions .= " | <a href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=$j\">&gt;</a>";
+                }
+            }
+        }
+        $i = $i - 1;
+    }
+    $after =~ s/%REVISIONS%/$revisions/go;
+    $after =~ s/%CURRREV%/$rev1/go;
+    $after =~ s/%MAXREV%/$maxrev/go;
+    $after =~ s/%REVTITLE1%/$revTitle1/go;
+    $after =~ s/%REVINFO1%/$revInfo1/go;
+    $after =~ s/%REVTITLE2%/$revTitle2/go;
+    $after =~ s/%REVINFO2%/$revInfo2/go;
+    
+    $after = $session->handleCommonTags( $after, $topic );
+    $after = $session->{renderer}->getRenderedVersion( $after );
+    $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
+    
+    $page .= $after;
+    
+    $session->writeHeader( $query, length( $page ));
+    print $page;
 }
 
 1;

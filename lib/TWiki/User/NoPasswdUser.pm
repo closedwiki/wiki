@@ -62,12 +62,6 @@ sub new
    return $self;
 }
 
-# ===========================
-sub writeDebug
-{
-#   TWiki::writeDebug( "User: $_[0]" );
-}
- 
 #========================= 
 =pod
 
