@@ -97,7 +97,7 @@ sub main
 
     # check if user entry already exists
     if(  ( $wikiName ) 
-      && (  ( &TWiki::Store::topicExists( $webName,  $wikiName ) )
+      && (  ( $TWiki::store->topicExists( $webName,  $wikiName ) )
          || ( TWiki::User::UserPasswordExists( $wikiName ) ) 
          ) ) {
         # PTh 20 Jun 2000: changed to getOopsUrl
@@ -177,7 +177,7 @@ sub main
     my $senderr = &TWiki::Net::sendEmail( $text );
 
     # create user topic if it does not exist
-    if( ! &TWiki::Store::topicExists( $TWiki::mainWebname, $wikiName ) ) {
+    if( ! $TWiki::store->topicExists( $TWiki::mainWebname, $wikiName ) ) {
         my $meta = "";
         my $row = "";
         ( $meta, $text ) = TWiki::UI::readTemplateTopic( "NewUserTemplate" );

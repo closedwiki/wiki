@@ -87,8 +87,6 @@ if( $action eq "createweb" ) {
 
     TWiki::UI::Manage::removeUser($webName, $topic, $wikiName, $query);
 
-} elsif( $action eq "relockrcs" ) {
-    TWiki::UI::Manage::relockRcsFiles();
 } elsif( $action ) {
 
   my( $topic, $webName, undef, $userName ) = 
