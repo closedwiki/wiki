@@ -48,12 +48,9 @@ As topics are loaded, the readTopicLine method gives subclasses an opportunity t
 
   use vars qw( $initialised $storable $VERSION );
 
-  BEGIN {
-	$initialised = 0; # Not initialised until the first new
-	eval { require Storable; };
-    $storable = !defined( $@ );
-	$VERSION = 1.000;
-  }
+  $initialised = 0; # Not initialised until the first new
+  $VERSION = 1.000;
+  $storable = 1;
 
 =begin text
 
@@ -71,19 +68,41 @@ Construct a new DBCache object.
     $this->{loaded} = 0;
 	$this->{_cachename} = $cacheName || "_DBCache";
 
+    eval 'use Storable';
+
+    if ( $@ ) {
+        print STDERR "WARNING: Cannot use Storable: $@";
+        $storable = 0;
+    }
+
     return $this;
   }
 
   # PRIVATE write a new cache of the listed files.
   sub _writeCache {
     my ( $this, $cache ) = @_;
+    my $mayBeArchive = 1;
 
     if ( $storable ) {
-      Storable::lock_store( $this, $cache );
-    } else {
-      my $archive = new TWiki::Contrib::Archive( $cache, "w" );
-      $archive->writeObject( $this );
-      $archive->close();
+        eval {
+            $mayBeArchive = 0 if (Storable::lock_store( $this, $cache ));
+        };
+
+        if ( $@ ) {
+            print STDERR "Write of Storable $cache failed with $@\n";
+            $mayBeArchive = 1;
+        }
+    }
+
+    if ( $mayBeArchive ) {
+        eval {
+            my $archive = new TWiki::Contrib::Archive( $cache, "w" );
+            $archive->writeObject( $this );
+            $archive->close();
+        };
+        if ( $@ ) {
+            print STDERR "Write of Archive $cache failed with $@\n";
+        }
     }
   }
 
@@ -95,13 +114,31 @@ Construct a new DBCache object.
 
 	return undef unless ( -e $cache );
 
-	if ( $storable ) {
-	  $data = Storable::lock_retrieve( $cache );
-	} else {
-	  my $archive = new TWiki::Contrib::Archive( $cache, "r" );
-	  $data = $archive->readObject();
-	  $archive->close();
+    my $mayBeArchive = 1;
+
+    if ( $storable ) {
+	  eval {
+          $data = Storable::lock_retrieve( $cache );
+      };
+      if ( $@ ) {
+          print STDERR "Retrieve of Storable $cache failed with $@\n";
+      } elsif ( $data ) {
+          $mayBeArchive = 0;
+      }
 	}
+
+    if ( $mayBeArchive ) {
+	  eval {
+          my $archive = new TWiki::Contrib::Archive( $cache, "r" );
+          $data = $archive->readObject();
+          $archive->close();
+      };
+      if ( $@ ) {
+          print STDERR "Retrieve of Archive $cache failed with $@\n";
+          $data = undef;
+      }
+	}
+
 	return $data;
   }
 
@@ -224,16 +261,7 @@ cached topics that have been removed.
     my $time;
 
     my $writeCache = 0;
-    my $cache;
-
-	eval {
-	  $cache = $this->_readCache( $cacheFile );
-	};
-
-	if ( $@ ) {
-	  print STDERR "Cache read failed $@\n";
-	  $cache = undef;
-	}
+    my $cache = $this->_readCache( $cacheFile );
 
     my $readFromCache = 0;
     my $readFromFile = 0;
