@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000279941" format="1.0" version="1.17"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000455102" format="1.0" version="1.18"}%
 %INCLUDE{"UtilTempDocNote"}%
 
 %TOC%
@@ -10,18 +10,18 @@ _Restricting read and write access to topics and webs, by users and groups_
 
 ---++ Overview
 
-TWikiAccessControl allows you restrict access to single topics and entire webs, by individual user and by user groups, in three main areas: view; edit &amp; attach; and rename/move/delete. These controls, combined with [[TWikiDocumentation#TWiki_User_Authentication][TWikiUserAuthentication]], let you easily create and manage an extremely flexible, fine-grained privilege system.
+TWikiAccessControl allows you restrict access to single topics and entire webs, by individual user and by user groups, in three main areas: view; edit &amp; attach; and rename/move/delete. These controls, combined with TWikiUserAuthentication, let you easily create and manage an extremely flexible, fine-grained privilege system.
 
 ---++ An Important Control Consideration
 
-Open, freeform editing is the essence of the %TWIKIWEB%.WikiCulture - it's what makes TWiki different and often more effective than other collaboration tools. So, it is strongly recommended that decisions to restrict read or write access to a web or a topic are made with care. Experience shows that _unrestricted write access_ works very well because:
+Open, freeform editing is the essence of the WikiCulture - it's what makes TWiki different and often more effective than other collaboration tools. So, it is strongly recommended that decisions to restrict read or write access to a web or a topic are made with care. Experience shows that _unrestricted write access_ works very well because:
 
 	* Peer influence is enough to ensure that only relevant content is posted.
 
 	* Peer editing - the ability to rearrange anything on a page - keeps topics focussed.
 
 	* All content is preserved under revision control.
-		* Edits can be undone by the %MAINWEB%.TWikiAdminGroup (the default administrators group; see [[#ManagingGroups][Managing Groups]]).
+		* Edits can be undone by the %MAINWEB%.TWikiAdminGroup (the default administrators group; see #ManagingGroups).
 		* Users are encouraged to edit and refactor (condense a long topic), since there's a safety net.
 
 As a collaboration guideline:
@@ -35,9 +35,9 @@ Access control is based on users and groups. Users are defined by their WikiName
 
 ---+++ Managing Users
 
-A user is created by with the <a target="TWikiRegistration" onClick="return launchWindow('TWiki','TWikiRegistration')" href="%SCRIPTULRPATH%/view%SCRIPTSUFFIX%/TWiki/TWikiRegistration">TWikiRegistration</a> form. The process generates a topic in the %MAINWEB% web in the new user's WikiName. The default visitor name is %MAINWEB%.TWikiGuest.
+A user is created by with the TWikiRegistration form. The process generates a topic in the %MAINWEB% web in the new user's WikiName. The default visitor name is %MAINWEB%.TWikiGuest.
 
-	* Users can be authenticated using Basic Authentication or SSL. [[TWikiDocumentation#TWikiAuthentication][Authentication]] is required in order to track user identities.
+	* Users can be authenticated using Basic Authentication or SSL. TWikiUserAuthentication is required in order to track user identities.
 
 #ManagingGroups
 ---+++ Managing Groups
@@ -123,13 +123,13 @@ You can define restrictions of who is allowed to view a %WIKITOOLNAME% web.
 ---+++ Known Issues
 
 	* The view restriction is not suitable for very sensitive content since there is a way to circumvent the read access restriction.
-	* Read access restriction only works if the view script is authenticated, that means that users need to log on also just to read topics. [[TWikiDocumentation#TWikiInstallationGuide][TWiki Installation Guide]] has more on Basic Authentication based on the ==.htaccess== file.
+	* Read access restriction only works if the view script is authenticated, that means that users need to log on also just to read topics. TWikiInstallationGuide has more on Basic Authentication based on the ==.htaccess== file.
 
 ---++++ Selective Unrestricted Web Access
 
 	* There is a workaround if you prefer to have unrestricted access to view topics located in normal webs, and to authenticate users only for webs where view restriction is enabled:
 		1. *Omit* the ==view== script from the =.htaccess= file.
-		1. *Enable* the ==$doRememberRemoteUser== flag in ==lib/wikicfg.pm== as described in [[TWikiDocumentation#TWikiUserAuthentication][User Authentication]]. %WIKITOOLNAME% will now remember the IP address of an authenticated user.
+		1. *Enable* the ==$doRememberRemoteUser== flag in ==lib/TWiki.cfg== as described in TWikiUserAuthentication. %WIKITOOLNAME% will now remember the IP address of an authenticated user.
 		1. *Copy* the ==view== script to ==viewauth== (or better, create a symbolic link)
 		1. *Add* ==viewauth== to the list of authenticated scripts in the .htaccess file.
 			* When a user accesses a web where you enabled view restriction, %WIKITOOLNAME% will redirect from the =view= script to the =viewauth= script once (this happens only if the user has never edited a topic). Doing so will ask for authentication. The =viewauth= script shows the requested topic if the user could log on and if the user is authorized to see that web.
