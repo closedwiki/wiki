@@ -1,0 +1,4 @@
+lib/TWiki/Plugins/Attrs.pm
+lib/TWiki/Plugins/Build.pm
+lib/TWiki/Plugins/SharedCode/build.pl
+tools/conformance_analyser.pl

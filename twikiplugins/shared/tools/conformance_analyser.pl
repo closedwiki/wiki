@@ -212,7 +212,7 @@ foreach my $find (sort keys(%{$data{directives}})) {
 }
 
 if ($directivesReport ne "") {
-  TOC(\%data, "Directives", "Directives defined by modules",
+  TOC(\%data, "Directives", "Directives expanded by modules",
       THR("Directive", "Module(s)"),
       $directivesReport);
 }
