@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043655738" format="1.0" version="1.62"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044751568" format="1.0" version="1.63"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -294,6 +294,10 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> =%<nop>EDITBOXHEIGHT%= </td>
   <td> __SL__ , __UL__ </td>
   <td> Vertical size of edit box, is <b> =%EDITBOXHEIGHT%= </b> </td>
+</tr><tr>
+  <td> =%<nop>EDITBOXSTYLE%= </td>
+  <td> __SL__ , __UL__ </td>
+  <td> Style of text edit box. Set to =width: 99%= for full window width (default; overwrites the EDITBOXWIDTH setting), or =width: auto= to disable. Value is: <b><code>%EDITBOXSTYLE%</code></b> </td>
 </tr><tr>
   <td> =%<nop>RELEASEEDITLOCKCHECKBOX%= </td>
   <td> __SL__ , __UL__ </td>
