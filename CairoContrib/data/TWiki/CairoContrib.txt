@@ -1,7 +1,9 @@
-Cairo compatibility module
+Cairo compatibility module, for use with Plugins written for Cairo but run wiuth earlier versions of TWiki.
 
 ---+ Summary of Contents
 Implements some of the functions added in Cairo so they are available to plugins running in a pre-Cairo installation. This allows plugin authors to upgrade to Cairo without losing compatibility with earlier TWiki releases.
+
+If you find that this module doesn't enable the plugin you are interested in, but manage to fix it so it does, then please,, please, _please_ submit a patch with the fix.
 
 ---+ Detailed Documentation
 %$POD%

@@ -9,7 +9,7 @@ use strict;
 ---++ class FileTime
 
 Object that handles a file/time tuple for use in Storable and
-=DBCachePlugin::Archive=.
+=TWiki::Contrib::Archive=.
 
 =cut
 
@@ -68,7 +68,7 @@ Generates a string representation of the object.
 =begin text
 
 ---+++ =write()=
-DBCachePlugin::Archive hook
+TWiki::Contrib::Archive hook
 
 =cut
 
@@ -82,7 +82,7 @@ DBCachePlugin::Archive hook
 =begin text
 
 ---+++ =read()=
-DBCachePlugin::Archive hook
+TWiki::Contrib::Archive hook
 
 =cut
 

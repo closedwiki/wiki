@@ -10,6 +10,8 @@
 package CH.ifa.draw.twiki;
 
 import Acme.JPM.Encoders.*;
+import com.eteks.filter.Web216ColorsFilter;
+
 import CH.ifa.draw.appframe.*;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
@@ -25,6 +27,7 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 import java.lang.reflect.*;
+import java.awt.image.FilteredImageSource;
 
 public class TWikiFrame extends DrawFrame {
 
@@ -40,6 +43,8 @@ public class TWikiFrame extends DrawFrame {
     static private String BORDERSIZE_PARAMETER = "bordersize";
 
     private Label fStatusLabel;
+    // post can be disabled for testing
+    private boolean bPostEnabled = true;
 
     public TWikiFrame(Application applet, String colors) {
         super("TWikiDraw", applet);
@@ -393,9 +398,10 @@ public class TWikiFrame extends DrawFrame {
 	    // *.draw, *.map and *.gif
             // first upload *.draw file
             showStatus("Saving " + drawingPath);
-	    savedDraw = app.post(
-		savePath, "", "text/plain", drawingPath,
-		out.toString(), "TWikiDraw draw file");
+	    if (bPostEnabled)
+		savedDraw = app.post(
+			savePath, "", "text/plain", drawingPath,
+			out.toString(), "TWikiDraw draw file");
 
 	    // calculate the minimum size of the gif image
 	    Dimension d = new Dimension(0, 0); // not this.view().getSize();
@@ -460,6 +466,7 @@ public class TWikiFrame extends DrawFrame {
 		// create the svg data
 		String outsvg = SvgSaver.convertSVG(out.toString());
 		// now upload *.svg file
+		if (bPostEnabled)
 		savedSvg = app.post(savePath, "", "image/svg", svgPath,
 				    outsvg, "SVG file");
 	    }
@@ -476,31 +483,16 @@ public class TWikiFrame extends DrawFrame {
 	    // clear the selection so it doesn't appear
 	    view().clearSelection();
 
-	    Image oImgBuffer =
+	    final Image oImgBuffer =
 		this.view().createImage(d.width + iBorder, d.height + iBorder);
-	    Graphics oGrf = oImgBuffer.getGraphics();
-	    this.view().enableGuides(false);
-	    this.view().drawAll(oGrf);
-	    // test gif image:
-	    //TestFrame tf = new TestFrame( "tt2: " + oImgBuffer.toString() ); 
-	    //tf.setSize(new Dimension(d.width+30, d.height+30));
-	    //tf.setImage(oImgBuffer);
-	    //tf.show();
-	    ByteArrayOutputStream oOut = new ByteArrayOutputStream();
-	    GifEncoder oEncode = new GifEncoder(oImgBuffer, oOut);
-	    oEncode.encode();
-	    byte[] aByte = oOut.toByteArray();
-	    int size = oOut.size();
-	    char[] aChar = new char[size];
-	    for(int i = 0; i < size; i++) {
-		aChar[i] = (char)aByte[i];
-	    }
-	    
+	    final char[] aChar = convertToGif(oImgBuffer);
+
 	    // upload *.gif file
-	    savedGif = app.post(
-		savePath, "", "image/gif",
-		gifPath, String.valueOf( aChar, 0, size),
-		"TWikiDraw GIF file");
+	    if (bPostEnabled)
+		savedGif = app.post(
+			savePath, "", "image/gif",
+			gifPath, String.valueOf(aChar, 0, aChar.length),
+			"TWikiDraw GIF file");
         } catch (MalformedURLException e) {
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             showStatus("Bad Wiki servlet URL: "+e.getMessage());
@@ -516,4 +508,57 @@ public class TWikiFrame extends DrawFrame {
 	return savedDraw;
     }
 
+    
+    /** POST can be disabled for testing purposes */
+    void enablePost(boolean b) {
+	bPostEnabled = b;
+    	if(!bPostEnabled) this.setTitle(this.getTitle() +
+					" - POST DISABLED FOR TESTING");
+    }
+    
+    /** debugging messages */
+    static void debug(String msg) {
+    	System.err.println("TWikiDraw:" + msg);
+    }
+
+    /**
+     * convert Image to GIF-encoded data, reducing the number of colors
+     * if needed. Added by Bertrand Delacretaz
+     */
+    private char [] convertToGif(Image oImgBuffer) throws IOException {
+	debug("converting data to GIF...");
+	Graphics oGrf = oImgBuffer.getGraphics();
+	this.view().enableGuides(false);
+	this.view().drawAll(oGrf);
+	
+	// test gif image:
+	//TestFrame tf = new TestFrame( "tt2: " + oImgBuffer.toString() ); 
+	//tf.setSize(new Dimension(d.width+30, d.height+30));
+	//tf.setImage(oImgBuffer);
+	//tf.show();
+		
+	ByteArrayOutputStream oOut = null;
+		
+	try {
+	    oOut = new ByteArrayOutputStream();
+	    new GifEncoder(oImgBuffer,oOut).encode();
+	} catch(IOException ioe) {
+	    // GifEncoder throws IOException when GIF contains too many colors
+	    // if this happens, filter image to reduce number of colors
+	    debug("GIF uses too many colors, reducing to 216 colors...");
+	    final FilteredImageSource filter = new FilteredImageSource(oImgBuffer.getSource(),new Web216ColorsFilter());
+	    oOut = new ByteArrayOutputStream();
+	    new GifEncoder(filter,oOut).encode (); 
+	    debug("Color reduction successful.");
+	}
+	
+	byte[] aByte = oOut.toByteArray();
+	int size = oOut.size();
+	char[] aChar = new char[size];
+	for (int i = 0; i < size; i++) {
+	    aChar[i] = (char)aByte[i];
+	}
+	debug("conversion to GIF successful.");
+	return aChar;
+    }
 }

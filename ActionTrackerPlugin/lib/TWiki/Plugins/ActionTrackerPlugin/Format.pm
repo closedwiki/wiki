@@ -17,6 +17,8 @@
 use strict;
 use integer;
 
+use TWiki::Func;
+
 # Object that represents a header and fields format
 # This is where all formatting should be done; there should
 # be no HTML tags anywhere else in the code!
@@ -268,43 +270,43 @@ use integer;
   # a, optional list of anchors, one for each row. The anchors
   # are more useful if the table is oriented as rows.
   sub _generateHTMLTable {
-    my ( $this, $rows, $anchors ) = @_;
-    my $text = "<table border=\"$border\">";
-    my $i;
+      my ( $this, $rows, $anchors ) = @_;
+      my $text = "<table border=\"$border\">\n";
+      my $i;
 
-    if ( $this->{ORIENTATION} eq "rows" ) {
-      if ( defined( $anchors ) ) {
-	foreach $i ( @$anchors ) {
-	  $text .= $i;
-	}
+      if ( $this->{ORIENTATION} eq "rows" ) {
+          if ( defined( $anchors ) ) {
+              foreach $i ( @$anchors ) {
+                  $text .= $i;
+              }
+          }
+          for ( $i = 0; $i <= $#{$this->{HEADINGS}}; $i++ ) {
+              my $head = ${$this->{HEADINGS}}[$i];
+              $text .= "<tr><th bgcolor=\"$hdrcol\">$head</th>\n";
+              foreach my $col ( @$rows ) {
+                  my $datum = @$col[$i];
+                  $text .= "$datum\n";
+              }
+              $text .= "</tr>\n";
+          }
+      } else {
+          $text .= "<tr bgcolor=\"$hdrcol\">\n";
+          foreach $i ( @{$this->{HEADINGS}} ) {
+              $text .= "<th>$i</th>\n";
+          }
+          $text .= "</tr>\n";
+          foreach my $row ( @$rows ) {
+              $text .= "<tr valign=\"top\">\n";
+              if ( defined( $anchors ) ) {
+                  my $a = shift( @$anchors );
+                  $text .= "$a\n" if ( defined( $a ) );
+              }
+              $text .= join( "", @$row) . "</tr>\n";
+          }
       }
-      for ( $i = 0; $i <= $#{$this->{HEADINGS}}; $i++ ) {
-	my $head = ${$this->{HEADINGS}}[$i];
-	$text .= "<tr><th bgcolor=\"$hdrcol\">$head</th>";
-        foreach my $col ( @$rows ) {
-	  my $datum = @$col[$i];
-	  $text .= "$datum";
-	}
-        $text .= "</tr>";
-      }
-    } else {
-      $text .= "<tr bgcolor=\"$hdrcol\">";
-      foreach $i ( @{$this->{HEADINGS}} ) {
-	$text .= "<th>$i</th>";
-      }
-      $text .= "</tr>";
-      foreach my $row ( @$rows ) {
-	$text .= "<tr valign=\"top\">";
-	if ( defined( $anchors ) ) {
-	  my $a = shift( @$anchors );
-	  $text .= $a if ( defined( $a ) );
-	}
-	$text .= join( "", @$row) . "</tr>";
-      }
-    }
-    $text .= "</table>";
+      $text .= "</table>";
 
-    return $text;
+      return $text;
   }
 
   # PUBLIC format a list of actions into a table
@@ -329,19 +331,19 @@ use integer;
 	my ( $oldval, $c ) = _expandVar( $old, $field );
 	my ( $newval, $d ) = _expandVar( $new, $field );
 	if ( $oldval ne $newval ) {
-	  $tbl .= "<tr><td>$field</td><td>$oldval</td><td>$newval</td></tr>";
+	  $tbl .= "<tr><td>$field</td><td>$oldval</td><td>$newval</td></tr>\n";
 	}
       } elsif ( defined( $old->{$field} ) ) {
 	my ( $oldval, $c ) = _expandVar( $old, $field );
-	$tbl .= "<tr><td>$field</td><td>$oldval</td><td> *removed* </td></tr>";
+	$tbl .= "<tr><td>$field</td><td>$oldval</td><td> *removed* </td></tr>\n";
       } elsif ( defined( $new->{$field} )) {
 	my ( $newval, $c ) = _expandVar( $new, $field );
-	$tbl .= "<tr><td>$field</td><td> *missing* </td><td>$newval</td></tr>";
+	$tbl .= "<tr><td>$field</td><td> *missing* </td><td>$newval</td></tr>\n";
       }
     }
     if ( $tbl ne "" ) {
       return "<table border=\"$border\"><tr bgcolor=\"$badcol\"><th>Attribute</th>".
-	"<th>Old</th><th>New</th></tr>$tbl</table>";
+	"<th>Old</th><th>New</th></tr>$tbl</table>\n";
     }
     return $tbl;
   }
@@ -421,23 +423,41 @@ use integer;
     return $attrname unless ( defined( $type ));
     my $size = $type->{size};
     if ( $type->{type} eq 'select' ) {
-      my $field = "<SELECT NAME=\"$attrname\" SIZE=\"$size\">";
+      my $field = "<SELECT NAME=\"$attrname\" SIZE=\"$size\">\n";
       foreach my $option ( @{$type->{values}} ) {
-	$field .= "<OPTION NAME=\"$option\"";
-	if ( defined( $object->{$attrname} ) &&
-	     $object->{$attrname} eq $option ) {
-	  $field .= " SELECTED";
-	}
-	$field .= ">$option</OPTION>";
+		$field .= "<OPTION NAME=\"$option\"";
+		if ( defined( $object->{$attrname} ) &&
+			 $object->{$attrname} eq $option ) {
+		  $field .= " SELECTED";
+		}
+		$field .= ">$option</OPTION>\n";
       }
       return $field . "</SELECT>";
     } elsif ( $type->{type} !~ m/noload/ ) {
       my ( $val, $c ) = _expandVar( $object, $attrname );
-      if ( $type->{type} eq 'date' ) {
-	$val =~ s/ \(LATE\)//o;
-      }
       my $field = "<INPUT TYPE=\"text\" NAME=\"$attrname\" ";
-      return $field . "VALUE=\"$val\" SIZE=\"$size\"/>";
+      if ( $type->{type} eq 'date' ) {
+		$val =~ s/ \(LATE\)//o;
+      }
+      $field .= "VALUE=\"$val\" SIZE=\"$size\" ";
+      if ( $type->{type} eq 'date') {
+          # make sure JSCalendar is there
+          eval 'use TWiki::Contrib::JSCalendarContrib';
+          if ( $@ ) {
+              print STDERR "WARNING: JSCalendar not installed: $@\n";
+              $field .= "/>";
+          } else {
+              $field .= "id=\"date_$attrname\"/>";
+              $field .= "<button type=\"reset\" onclick=\"return showCalendar('date_$attrname','\%e \%B \%Y')\"><img src=\"";
+              $field .= TWiki::Func::getPubUrlPath();
+              $field .= "/";
+              $field .= TWiki::Func::getTwikiWebname();
+              $field .= "/JSCalendarContrib/img.gif\" alt=\"Calendar\"/></button>";
+          }
+	  } else {
+		$field .= "/>";
+	  }
+	  return $field;
     }
     return $attrname;
   }
@@ -448,7 +468,7 @@ use integer;
 
     my ( $v, $c ) = _expandVar( $object, $attrname, 0 );
     if ( defined( $v ) ) {
-      return "<INPUT TYPE=\"hidden\" NAME=\"$attrname\" VALUE=\"$v\">";
+      return "<INPUT TYPE=\"hidden\" NAME=\"$attrname\" VALUE=\"$v\">\n";
     }
     return "";
   }

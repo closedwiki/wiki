@@ -24,10 +24,8 @@ $debug = 0;
 my @dependencies =
   (
    { package => 'TWiki::Plugins', constraint => '>= 1.010' },
-   { package => 'TWiki::Plugins::ActionTrackerPlugin',
-	 constraint => '>= 2.010' },
-#   { package => 'TWiki::Plugins::DBCachePlugin::DBCache', constraint => '>= 1.000' },
-   { package => 'TWiki::Plugins::SharedCode::Attrs' }
+   { package => 'TWiki::Contrib::DBCache', constraint => '>= 1.000' },
+   { package => 'TWiki::Contrib::Attrs', constraint => '>= 1.000' }
   );
 
 sub initPlugin {
@@ -121,30 +119,14 @@ sub _lazyInit {
   # FQP_ENABLE must be set globally or in this web!
   return 0 unless ( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_ENABLE" ));
 
-  my $depsOK = 1;
-  foreach my $dep ( @dependencies ) {
-    my ( $ok, $ver ) = ( 0, 0 );
-    eval "use $dep->{package}";
-	die $@ if $@;
-    unless ( $@ ) {
-	  if ( defined( $dep->{constraint} )) {
-		eval "\$ver = \$$dep->{package}::VERSION;\$ok = (\$ver $dep->{constraint})";
-	  } else {
-		$ok = 1;
-	  }
-	}
-	unless ( $ok ) {
-	  my $mess = "$dep->{package} ";
-	  $mess .= "version $dep->{constraint} " if ( $dep->{constraint} );
-	  $mess .= "is required for $pluginName version $VERSION. ";
-	  $mess .= "$dep->{package} $ver is currently installed. " if ( $ver );
-	  $mess .= "Please check the plugin installation documentation. ";
-	  TWiki::Func::writeWarning( $mess );
-	  print STDERR "$mess\n";
-	  $depsOK = 0;
-	}
+  if ( defined( &TWiki::Func::checkDependencies ) ) {
+    my $err = TWiki::Func::checkDependencies( $pluginName, \@dependencies );
+    if( $err ) {
+      TWiki::Func::writeWarning( $err );
+      print STDERR $err; # print to webserver log file
+      return 0; # plugin initialisation failed
+    }
   }
-  return 0 unless $depsOK;
 
   eval 'use TWiki::Plugins::FormQueryPlugin::WebDB;';
   die $@ if $@;

@@ -20,7 +20,7 @@ Write the command =%<nop>COMMENT{= _attributes_ =}%= anywhere in a TWiki topic. 
 #StandardAttrs
 The following attributes are [[#MoreAttrs][recognised]]
 	| *Name* | *Description* |
-	| =type= | (Required) This is the name of the template to use for this comment. Comment templates are defined in a TWiki template - see [[#TemPlates][Customisation]], below. If this attribute is not defined, the type is whatever is defined by COMMENTPLUGIN_DEFAULT_TYPE, either in this topic or in your WebPreferences. By default this is 'below'. |
+	| =type= | This is the name of the template to use for this comment. Comment templates are defined in a TWiki template - see [[#TemPlates][Customisation]], below. If this attribute is not defined, the type is whatever is defined by COMMENTPLUGIN_DEFAULT_TYPE, either in this topic or in your WebPreferences. By default this is 'below'. |
 	| =target= | Name of the topic to add the comment to. Defaults to the current topic. |
 	| =location= | Regular expression specifying the comment location in the target topic. Read _carefully_ below! |
 	| =mode= | For compatability with older versions only, synonymous with =type= |
@@ -55,12 +55,15 @@ will place comments above the first occurence of the string =Flights of Fancy= i
 If you specify an anchor _and_ a =location=, the anchor will be ignored.
 
 ---++ Default templates
+Templates are used to define the "comment style" i.e. how comments appear in the page. The default is to add comments in "Blog like" style using bulleted lists, with the most recent comment at the top, but many other styles are available such as tables or Wiki thread mode comments. It is easy to define your own customer styles as well.
+
 A set of default comment templates are shipped with the plugin. These are:
 | *Template type* | *Description* |
 | =top= | Comments, signed and dated, added at top of the topic (the anchor is ignored) |
 | =bottom= | Comments, signed and dated, added at end of the target topic (the anchor is ignored) |
 | =above= | Comments, signed and dated, added immediately before the target anchor, or the =%COMMENT= if no anchor is specified |
 | =below= | Comments, signed and dated, added immediately below the target anchor, or the =%COMMENT= if no anchor is specified |
+| =threadmode= | Wiki thread mode comment, signed and dated |
 | =tableprepend= | Comments, signed and dated, formatted as an HTML table row, added below the anchor (which must be in an HTML &lt;table>) |
 | =tableappend= | Comments, signed and dated, formatted as an HTML table row, added above the anchor (which must be in an HTML &lt;table>) |
 
@@ -131,7 +134,8 @@ To help avoid edit conflict, a reminder to refresh the page before entering comm
 		* Set DEFAULT_TYPE = below
 		
 ---+ Plugin Installation Instructions
-    * Make sure you have the TWiki:Plugins/SharedCode module installed. Among other things, TWiki:Plugins/SharedCode includes a compatibility module that enables plugins to use new TWiki features with earlier TWiki releases. If you don't already have it, install it now.
+	* Make sure all the required dependencies listed in the table below are resolved:
+	%$DEPENDENCIES%
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	| *File:* | *Description:* |
@@ -144,12 +148,14 @@ If installed correctly, you should see a =%COMMENT= edit box below here.
 
 ---+ Plugin Info
 
-|  Plugin Author: | v1.0 TWiki:Main/DavidWeller v2.0 TWiki:Main/PeterMasiar v3.0 TWiki:Main/CrawfordCurrie |
-|  Plugin Version: | 3.0 |
-|  Change History: | <!-- Most recent first --> 3.003 11 Apr 2004: Minor line termination problem fixed, and "security" hyphen on standard comment removed and replaced with a bulleted list. |
-| | 3.002 6 April 2004: Applied patches (thanks Peter Thoeny) for multiple comment adding, BOTTOM and TOP inside meta-data, and moved example to Sandbox. |
-| | 3.001 13 March 2004: Modified to use viewauth save technique (safer), add nonotify parameter, move templates fully into topics, with a hook for site-specifics, support %<nop>COMMENT%, internationalisation fixes |
-| | 3.000 18 Feb 2004: TWiki:Main/CrawfordCurrie rewrote for standard templates and other user requests. Recognition to Patrice Fournier and Sam Abrams for terrific testing and patch support. |
+|  Plugin Author: | v1.0 TWiki:Main/DavidWeller v2.0 TWiki:Main/PeterMasiar v3.0 TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
+|  Plugin Version: | %$VERSION% |
+|  Change History: | <!-- Most recent first --> |
+| | 16 Aug 2004: Cairo readiness; dependency checking; added =threadmode= template. |
+| | 11 Apr 2004: Minor line termination problem fixed, and "security" hyphen on standard comment removed and replaced with a bulleted list. |
+| | 6 April 2004: Applied patches (thanks Peter Thoeny) for multiple comment adding, BOTTOM and TOP inside meta-data, and moved example to Sandbox. |
+| | 13 March 2004: Modified to use viewauth save technique (safer), add nonotify parameter, move templates fully into topics, with a hook for site-specifics, support %<nop>COMMENT%, internationalisation fixes |
+| | 18 Feb 2004: TWiki:Main/CrawfordCurrie rewrote for standard templates and other user requests. Recognition to Patrice Fournier and Sam Abrams for terrific testing and patch support. |
 | | 7 Feb 2004: TWiki:Main/CrawfordCurrie rewrote this page and CommentTemplates in an effort to make the plugin more user friendly. Added {TIME} variable. Also updated CVS. |
 | | 23 Sep 2003 TWiki:Main/PeterMasiar: 80% rewrite/refactor, adding templates |
 | | 15 July 2003: TWiki:Main/PeterMasiar added "reminder" parameter and feature to pass comments to oopslockedcomments.tmpl template to copy-paste later |

@@ -1,6 +1,6 @@
 package RelationTest;
 
-use TWiki::Plugins::DBCachePlugin::Map;
+use TWiki::Contrib::Map;
 use TWiki::Plugins::FormQueryPlugin::Relation;
 
 use base qw(Test::Unit::TestCase);
@@ -25,7 +25,7 @@ sub test_kids {
 
   my $rel = new FormQueryPlugin::Relation("Daughter%Aof%B Mummy Mother%B");
   $this->assert_equals("Mother5", $rel->apply("Daughter2of5"));
-  my $known = new DBCachePlugin::Map("Daughter1of5,Daughter2of5,Daughter99of5");
+  my $known = new TWiki::Contrib::Map("Daughter1of5,Daughter2of5,Daughter99of5");
   my $newKid = $rel->nextChild("Mother5", $known);
   $this->assert_str_equals("Daughter\nof5", $newKid);
 }

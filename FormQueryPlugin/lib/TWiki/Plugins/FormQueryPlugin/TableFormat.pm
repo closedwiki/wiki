@@ -3,7 +3,7 @@
 #
 use strict;
 
-use TWiki::Plugins::DBCachePlugin::Map;
+use TWiki::Contrib::Map;
 
 { package FormQueryPlugin::TableFormat;
 
@@ -163,7 +163,7 @@ use TWiki::Plugins::DBCachePlugin::Map;
     if ( !defined( $table )) {
       return "<font color=\"red\">UNDEFINED field <nop>$vbl</font> _(defined fields are: <code>" . join ( ', <nop>', $map->getKeys()) . "</code>)_";
     }
-    my $attrs = new DBCachePlugin::Map( $fmt );
+    my $attrs = new TWiki::Contrib::Map( $fmt );
     my $format = new FormQueryPlugin::TableFormat( $attrs );
     return $format->formatTable( $table, $cmap );
   }

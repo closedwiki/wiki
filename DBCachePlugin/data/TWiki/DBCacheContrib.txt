@@ -1,4 +1,4 @@
-Treat TWiki forms data as if it were a database
+Reusable code that treats TWiki forms data as if it were a database
 
 ---+ Summary of Contents
 
@@ -53,7 +53,7 @@ Extension or customisation is welcome, as long as all extensions are described a
 
 The module is shipped with a perl build file, which should be used for installation and testing. Testing is done using Test::Unit, and is invoked using the 'test' build target. Writing tests is a useful way of feeding back bugs as well. I can't encourage you enough to maintain and extend the tests!
 ---+ Detailed Documentation
-Clients use the DBCache by defining a subclass of the =DBCachePlugin::DBCache= class=. The following POD documentation describes the methods of this class and the various other classes provided by the plugin..
+Clients use the DBCache by defining a subclass of the =TWiki::Contrib::DBCache= class=. The following POD documentation describes the methods of this class and the various other classes provided by the plugin..
 %$POD%
 #SettingsAnchor
 ---+ Settings

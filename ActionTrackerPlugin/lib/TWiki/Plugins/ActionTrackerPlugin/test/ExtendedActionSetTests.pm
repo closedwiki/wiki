@@ -8,7 +8,6 @@ use base qw(BaseFixture);
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
-use TWiki::Plugins::SharedCode;
 use Time::ParseDate;
 
 sub new {

@@ -104,7 +104,7 @@ Write the command =%<nop>ACTIONSEARCH{= _attributes_ =}%= anywhere in a TWiki to
 	| =who= | See [[#PeopleAnchor][People]] | Person responsible for closing the action. |
 	| =notify= | See [[#PeopleAnchor][People]] | Persons who want to be notified of a change |
 	| =state= | =late=, or any legal state value | Set to =late= to search for late actions; set to any any legal state value to search for actions in that state. See [[#SettingsAnchor][Settings]] for details on how to extend the state set. |
-	| =within= | a number of days | Search for actions that are within a number of days of their due date. Usually used in conjunction with other attributes, such as <code>state="open"</code>. Works in both directions, so you can use this to search for actions which _are going to fall due_ within a certain number of days, or actions that _fell due_ in the past i.e. the window is 2 * within wide. |
+	| =within= | a number of days | Search for actions that are within a number of days of their due date. Usually used in conjunction with other attributes, such as <code>state="open"</code>. Works in both directions, so you can use this to search for actions which _are going to fall due_ within a certain number of days, or a negative number for actions that _fell due_ between a time in the past and now. |
 	| =web= | Perl regular expression | A regular expression that matches the names of all the webs to search. If this attribute is omitted, the default is to search only the current web. Searching many webs is much slower, especially in a large installation. Webs marked NOSEARCHALL will not be searched. | 
 	| =topic= | Perl regular expression | A regular expression that matches the names of all the topics to search. If this attribute is omitted, the default is to search all the topics in the selected webs. | 
 	| =due= | See [[#DateFormats][Date Formats]] | Due date for the action. |
@@ -331,13 +331,19 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 	* Non-standard attributes - see [[#NonStandardAttributes][Non-standard attributes]] above.
 		* Set EXTRAS = 
 
+	* Setup for Mishoo JSCalendar
+	* The following styles are available: system blue blue2 brown green tas win2k-1 win2k-2 win2k-cold-1 win2k-cold-2
+		* Set CAL_STYLE = system
+	* The following languages are available: af es ko-utf8 ru br fi lt si ca fr lt-utf8 sk cs-win hr nl sp da hr-utf8 no sv de hu pl tr du it pl-utf8 zh el jp pt en ko ro
+		* Set CAL_LANG = en
+
 ---
 ---+ Plugin Installation Instructions
 
 __Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required. *This plugin makes extensive use of new features added to TWiki in the Feb 2003 release*. Earlier versions lack all the features described here. Make sure you install using the zip appropriate to your TWiki installation. If you install an earlier version of the plugin with the Feb 2003 release, note that change notification will not function correctly. For best overall performance, please upgrade your TWiki to the latest released version.
 
-	* Make sure you have Time::ParseDate installed in your perl installation (available from http://www.cpan.org)
-	* Make sure you have the TWiki:Plugins/SharedCode module installed. Among other things, TWiki:Plugins/SharedCode includes a compatibility module that enables plugins to use new TWiki features with earlier TWiki releases. If you don't already have it, install it now.
+	* Make sure the dependencies listed in the table below are resolved.
+	%$DEPENDENCIES%
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 %$MANIFEST%
@@ -390,15 +396,16 @@ Due to limitations in the Time::Parsedate module, dates before January 1, 1970 m
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
 |  Plugin Version: | %$VERSION% |
-|  Change History: | 28 June 2004: Separated from TWiki:Plugins/FormQueryPlugin |
-|			| 9 Jan 2002: Bugfix version |
-|			| 11 Jan 2002: Added ACTIONSEARCH for selected webs and topics; Changed action editor to use a template; Eliminated UNIX dependencies; Fixed formatting of actions in bulleted lists |
-|			| 14 Feb 2002: Sorted ACTIONSEARCH results by due date; Fixed bugs editaction kills form data, Actions flagged as late the day before, TWiki table and bullet formatting doesn't work within action text |
-|			| 26 Sep 2002: Added changedsince notify support, added support for editing in a seperate window, incorporated attribute syntax corrections contributed by Main.PeterThoeny, sorted ACTIONSEARCH output and action notifications |
-|			| 30 Jan 2003: Query-by-example action search with notify field; notfication of change emails and actions email are sent as one; notify field was added to topic view and edit; various bug fixes by TWiki:Main/PaulineCheung |
-|			| 30 Apr 2003: Version 2.0; Large sections rewritten to take advantage of improvements in Plugin support, eliminating two scripts in bin. Added UIDs and formattable action searches |
-|			| 21 May 2003: Non-standard fields. Configurability of tables and action editor. Non-standard attributes. Eliminated chdir. Multi-line actions. Optimisation of notifies. |
+|  Change History: | |
+|           | 16 Aug 2004: Dependency automation and Cairo readiness, further change to =within= behaviour (bidirectionality) |
 |			| 3 Feb 2004: Fixes for internationalisation, name matching, QBE, within= behaviour, documentation. |
+|			| 21 May 2003: Non-standard fields. Configurability of tables and action editor. Non-standard attributes. Eliminated chdir. Multi-line actions. Optimisation of notifies. |
+|			| 30 Apr 2003: Version 2.0; Large sections rewritten to take advantage of improvements in Plugin support, eliminating two scripts in bin. Added UIDs and formattable action searches |
+|			| 30 Jan 2003: Query-by-example action search with notify field; notfication of change emails and actions email are sent as one; notify field was added to topic view and edit; various bug fixes by TWiki:Main/PaulineCheung |
+|			| 26 Sep 2002: Added changedsince notify support, added support for editing in a seperate window, incorporated attribute syntax corrections contributed by Main.PeterThoeny, sorted ACTIONSEARCH output and action notifications |
+|			| 14 Feb 2002: Sorted ACTIONSEARCH results by due date; Fixed bugs editaction kills form data, Actions flagged as late the day before, TWiki table and bullet formatting doesn't work within action text |
+|			| 11 Jan 2002: Added ACTIONSEARCH for selected webs and topics; Changed action editor to use a template; Eliminated UNIX dependencies; Fixed formatting of actions in bulleted lists |
+|			| 9 Jan 2002: Bugfix version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPlugin |
@@ -415,8 +422,8 @@ Developer discussion is in TWiki:Plugins/ActionTrackerPluginDev.
 ---++ Copyright
 
 This code is an original development of Motorola Inc. and is protected by the following copyrights:
-	* Copyright (C) 2002-2003 Motorola. All Rights Reserved.
-	* Portions Copyright (C) 2004 Crawford Currie. All Rights Reserved.
+	* Copyright &copy; 2002-2003 Motorola. All Rights Reserved.
+	* Portions Copyright &copy; 2004 Crawford Currie. All Rights Reserved.
 
 ---++ License
 

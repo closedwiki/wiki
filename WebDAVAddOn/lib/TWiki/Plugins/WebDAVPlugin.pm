@@ -21,65 +21,24 @@
 package TWiki::Plugins::WebDAVPlugin;
 
 use strict;
-use  TWiki::Plugins::WebDAVPlugin::Permissions;
 
 use vars qw(
             $web $topic $user $installWeb $VERSION
-            $permDB
+            $permDB $initialised
            );
 
-$VERSION = '1.010';
+$VERSION = 1.010;
+
 my $pluginName = 'WebDAVPlugin';
 
 my @dependencies =
   (
+   { package => 'TWiki::Plugins', constraint => '>= 1.000' },
    { package => 'TDB_File' }
- };
+  );
 
 sub initPlugin {
   ( $topic, $web, $user, $installWeb ) = @_;
-
-  # check for Plugins.pm versions
-  if( $TWiki::Plugins::VERSION < 1 ) {
-    TWiki::Func::writeWarning( "Version mismatch between WebDAVPlugin and Plugins.pm" );
-    return 0;
-  }
-
-  my $depsOK = 1;
-  foreach my $dep ( @dependencies ) {
-    my ( $ok, $ver ) = ( 0, 0 );
-    eval "use $dep->{package}";
-    unless ( $@ ) {
-	  if ( defined( $dep->{constraint} )) {
-		eval "\$ver = \$$dep->{package}::VERSION;\$ok = (\$ver $dep->{constraint})";
-	  } else {
-		$ok = 1;
-	  }
-	}
-	unless ( $ok ) {
-	  my $mess = "$dep->{package} ";
-	  $mess .= "version $dep->{constraint} " if ( $dep->{constraint} );
-	  $mess .= "is required for $pluginName version $VERSION. ";
-	  $mess .= "$dep->{package} $ver is currently installed. " if ( $ver );
-	  $mess .= "Please check the plugin installation documentation. ";
-	  TWiki::Func::writeWarning( $mess );
-	  print STDERR "$mess\n";
-	  $depsOK = 0;
-	}
-  }
-  return 0 unless $depsOK;
-
-  my $twn = TWiki::Func::getTwikiWebname();
-  my $pd = TWiki::Func::getPubDir();
-  my $pdb = TWiki::Func::getPreferencesValue( "WEBDAVPLUGIN_LOCK_DB" );
-  if ($pdb) {
-	$permDB = new WebDAVPlugin::Permissions( $pdb );
-  }
-
-  if ( ! $permDB ) {
-    TWiki::Func::writeWarning( "$pluginName failed to initialize $pdb" );
-    return 0;
-  }
 
   return 1;
 }
@@ -87,12 +46,50 @@ sub initPlugin {
 sub beforeSaveHandler {
   my ( $text, $topic, $web ) = @_;
 
+  unless ($initialised) {
+      # Late initialisation
+      if ( defined( &TWiki::Func::checkDependencies ) ) {
+          my $err = TWiki::Func::checkDependencies( $pluginName,
+                                                    \@dependencies );
+          if( $err ) {
+              TWiki::Func::writeWarning( $err );
+              print STDERR $err; # print to webserver log file
+              return 0; # plugin initialisation failed
+          }
+      }
+      my $twn = TWiki::Func::getTwikiWebname();
+      my $pd = TWiki::Func::getPubDir();
+      my $pdb = TWiki::Func::getPreferencesValue( "WEBDAVPLUGIN_LOCK_DB" );
+
+      eval 'use TWiki::Plugins::WebDAVPlugin::Permissions';
+      if ( $@ ) {
+          TWiki::Func::writeWarning( $@ );
+          print STDERR $@; # print to webserver log file
+          return 0;
+      }
+
+      if ($pdb) {
+          $permDB = new WebDAVPlugin::Permissions( $pdb );
+      }
+
+      if ( ! $permDB ) {
+          TWiki::Func::writeWarning( "$pluginName failed to initialize $pdb" );
+          print STDERR "$pluginName: failed to initialise $pdb\n";
+          return 0;
+      }
+
+      $initialised = 1;
+  }
+
   return unless ( $permDB );
 
   eval {
 	$permDB->processText( $web, $topic, $text );
-  }; if ( $@ ) {
+  };
+
+  if ( $@ ) {
     TWiki::Func::writeWarning( "$pluginName: $@" );
+    print STDERR "$pluginName: $@\n";
   }
 }
 

@@ -27,11 +27,11 @@ sub set_up {
 
   my $dbt = BaseFixture::readFile("./testDB.dat");
   $root = TWiki::Func::getDataDir() . "/$web";
-  $files = new DBCachePlugin::Array();
+  $files = new TWiki::Contrib::Array();
   foreach my $t ( split(/\<TOPIC\>/,$dbt)) {
     if ( $t =~ m/\"(.*?)\"/o ) {
       BaseFixture::writeTopic($web, $1, $t);
-      $files->add(new DBCachePlugin::FileTime( "$root/$1.txt" ));
+      $files->add(new TWiki::Contrib::FileTime( "$root/$1.txt" ));
     }
   }
   $acache = "$root/cache.Archive";

@@ -29,7 +29,6 @@ use TWiki;# for unpublished functions
 
 use TWiki::Net;
 
-use TWiki::Plugins::SharedCode;
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
@@ -66,7 +65,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub doNotifications {
     my ( $webName, $expr, $debugMailer ) = @_;
     
-    my $attrs = new TWiki::Attrs( $expr );
+    my $attrs = new TWiki::Contrib::Attrs( $expr );
     my $hdr =
       TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEHEADER" );
     my $bdy =
@@ -142,7 +141,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       # find all the actions for this wikiname
       my $myActions;
       if ( $actions ) {
-	my $ats = new TWiki::Attrs( "who=\"$wikiname\"" );
+	my $ats = new TWiki::Contrib::Attrs( "who=\"$wikiname\"" );
 	$myActions = $actions->search( $ats );
       }
 

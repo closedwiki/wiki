@@ -51,7 +51,7 @@ value may be a word or a quoted string (no escapes!)
 	  # skip bad char or comma
 	} else {
 	  # some other problem
-	  die "DBCachePlugin: Badly formatted attribute string at '$string' in '$orig'";
+	  die "TWiki::Contrib::Map: Badly formatted attribute string at '$string' in '$orig'";
 	}
       }
     }
@@ -97,7 +97,7 @@ Where the result of a subfield expansion is another object (a Map or an Array) t
 get("UserTable[0].Surname", $web);
 </verbatim>
 
-See also =DBCachePlugin::Array= for syntax that applies to arrays.
+See also =TWiki::Contrib::Array= for syntax that applies to arrays.
 
 =cut
 
@@ -215,9 +215,9 @@ Get a "perl" array of the values in the Map, suitable for use with =foreach=
 =begin text
 
 ---+++ =search($search)= -> search result
-   * =$search* =DBCachePlugin::Search object to use in the search
+   * =$search* =TWiki::Contrib::Search object to use in the search
 Search the map for keys that match with the given object.
-values. Return a =DBCachePlugin::Array= of matching keys.
+values. Return a =TWiki::Contrib::Array= of matching keys.
 
 =cut
 
@@ -276,7 +276,7 @@ Generates an HTML string representation of the object.
 =begin text
 
 ---+++ write($archive)
-   * =$archive= - the DBCachePlugin::Archive being written to
+   * =$archive= - the TWiki::Contrib::Archive being written to
 Writes this object to the archive. Archives are used only if Storable is not available. This
 method must be overridden by subclasses is serialisation of their data fields is required.
 
@@ -295,7 +295,7 @@ method must be overridden by subclasses is serialisation of their data fields is
 =begin text
 
 ---+++ read($archive)
-   * =$archive= - the DBCachePlugin::Archive being read from
+   * =$archive= - the TWiki::Contrib::Archive being read from
 Reads this object from the archive. Archives are used only if Storable is not available. This
 method must be overridden by subclasses is serialisation of their data fields is required.
 

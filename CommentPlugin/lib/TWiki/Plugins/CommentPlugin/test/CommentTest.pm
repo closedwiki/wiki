@@ -5,7 +5,6 @@ package CommentTest;
 use base qw(BaseFixture);
 
 use TWiki::Store;
-use TWiki::Plugins::CairoCompatibilityModule;
 
 use TWiki::Plugins::CommentPlugin;
 use TWiki::Plugins::CommentPlugin::Comment;
@@ -84,7 +83,7 @@ sub inputTest {
   BaseFixture::writeTopic($web, $topic, $sample);
   my $pidx = $eidx;
   my $html =
-    CommentPlugin::Comment::_handleInput
+    TWiki::Plugins::CommentPlugin::Comment::_handleInput
 	($sattrs,
 	 "TESTTOPIC",
 	 "TESTWEB",
@@ -305,7 +304,7 @@ sub testReverseCompat {
 
   my $pidx = 0;
   my $html =
-    CommentPlugin::Comment::_handleInput
+    TWiki::Plugins::CommentPlugin::Comment::_handleInput
 	("rows=99 cols=104 mode=after button=HoHo id=sausage",,
 	 "TESTTOPIC",
 	 "TESTWEB",
@@ -323,7 +322,7 @@ sub test_locationOverridesAnchor {
   my $this = shift;
   my $pidx = 0;
   my $html =
-    CommentPlugin::Comment::_handleInput
+    TWiki::Plugins::CommentPlugin::Comment::_handleInput
 	("target=\"AWeb.ATopic#AAnchor\" location=\"AnRE\"",
 	 "TESTTOPIC",
 	 "TESTWEB",

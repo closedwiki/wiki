@@ -1,13 +1,18 @@
 package TWiki::Plugins::MacrosPlugin;
 
-use vars qw( $VERSION );
-
-use TWiki::Plugins::SharedCode::Attrs;
+use vars qw( $VERSION $pluginName $initialised );
 
 $VERSION = '1.001';
-my $pluginName = 'ParameterisedIncludesPlugin';  # Name of this Plugin
+$initialised = 0;
+
+my $pluginName = 'MacrosPlugin';  # Name of this Plugin
 my %macros;
 my %macro_times; # TimSlidel 1/4/04
+
+my @dependencies =
+  (
+   { package => 'TWiki::Contrib::Attrs', constraint => '>= 1.00' }
+  );
 
 sub initPlugin {
     my ( $topic, $web, $user, $installWeb ) = @_;
@@ -24,6 +29,19 @@ sub initPlugin {
 sub commonTagsHandler {
   ### my ( $text, $topic, $web ) = @_;
 
+  unless ($initialised) {
+    if ( defined( &TWiki::Func::checkDependencies ) ) {
+      my $err = TWiki::Func::checkDependencies($pluginName, \@dependencies);
+      if ( $err ) {
+        TWiki::Func::writeWarning($err);
+        print STDERR $err;
+        return 0;
+      }
+    } else {
+      eval 'use TWiki::Contrib::Attrs';
+    }
+    $initialised = 1;
+  }
   # First expand all macros and macro parameters
   $_[0] =~ s/%CALLMACRO{(.*?)}%/&_callMacro($1,$_[2],$_[1])/ge;
 
@@ -57,7 +75,7 @@ sub commonTagsHandler {
 # is returned.
 sub _callMacro {
   my ( $params, $web, $topic ) = @_;
-  my $attrs = new TWiki::Attrs( $params );
+  my $attrs = new TWiki::Contrib::Attrs( $params );
   my $mtop = $attrs->get( "topic" );
   my $mweb = $web;
 

@@ -29,12 +29,12 @@ The fixtures do not replace _all_ of the TWiki core functionality, just those pi
 
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
+	| *File:* | *Description:* |
 %$MANIFEST%
 
 ---++ Contrib Info
 
-|  Author: | TWiki:Main/CrawfordCurrie |
+|  Author: | TWiki:Main/CrawfordCurrie|
 |  Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
 |  License: | GPL |
 |  Dependencies: | %$DEPENDENCIES% |

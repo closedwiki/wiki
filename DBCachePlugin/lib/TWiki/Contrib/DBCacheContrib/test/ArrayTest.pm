@@ -15,10 +15,10 @@ sub new {
 sub test_array {
   my $this = shift;
 
-  my $array = new DBCachePlugin::Array();
+  my $array = new TWiki::Contrib::Array();
   my $i;
   for ($i = 0; $i < 100; $i++) {
-    my $fred = new DBCachePlugin::Map("f1=$i");
+    my $fred = new TWiki::Contrib::Map("f1=$i");
     $array->add($fred);
   }
   my $sum = 0;
@@ -33,19 +33,19 @@ sub test_array {
     $this->assert_equals($i, $array->find( $v ));
     $i++;
   }
-  my $nonex = new DBCachePlugin::Map("f1=1");
+  my $nonex = new TWiki::Contrib::Map("f1=1");
   $this->assert_equals(-1, $array->find($nonex));
 
   $this->assert_equals(100, $array->size());
   $this->assert_equals($sum, $array->get("f1"));
   $this->assert_equals($sum, $array->sum("f1"));
 
-  my $search = new DBCachePlugin::Search("f1=50");
+  my $search = new TWiki::Contrib::Search("f1=50");
   my $res = $array->search($search);
   $this->assert_equals(1, $res->size());
   $this->assert_equals(50, $res->get(0)->get("f1"));
 
-  $search = new DBCachePlugin::Search("f1>=90");
+  $search = new TWiki::Contrib::Search("f1>=90");
   $res = $array->search($search);
   $this->assert_equals(10, $res->size());
   for ($i = 90; $i < 100; $i++) {
@@ -55,10 +55,10 @@ sub test_array {
 
 sub test_gets {
   my $this = shift;
-  my $array = new DBCachePlugin::Array();
+  my $array = new TWiki::Contrib::Array();
   my $i;
   for ($i = 0; $i < 10; $i++) {
-    my $fred = new DBCachePlugin::Map("f1=$i");
+    my $fred = new TWiki::Contrib::Map("f1=$i");
     $array->add($fred);
   }
   my $k = 0;
@@ -74,10 +74,10 @@ sub test_gets {
 
 sub test_contains {
   my $this = shift;
-  my $array = new DBCachePlugin::Array();
+  my $array = new TWiki::Contrib::Array();
   my $i;
   for ($i = 0; $i < 10; $i++) {
-    my $fred = new DBCachePlugin::Map("f1=$i");
+    my $fred = new TWiki::Contrib::Map("f1=$i");
     $this->assert(!$array->contains($fred));
     $array->add($fred);
     $this->assert($array->contains($fred));
@@ -86,10 +86,10 @@ sub test_contains {
 
 sub test_find {
   my $this = shift;
-  my $array = new DBCachePlugin::Array();
+  my $array = new TWiki::Contrib::Array();
   my $i;
   for ($i = 0; $i < 10; $i++) {
-    my $fred = new DBCachePlugin::Map("f1=$i");
+    my $fred = new TWiki::Contrib::Map("f1=$i");
     $this->assert_equals(-1,$array->find($fred));
     $array->add($fred);
     $this->assert_equals($i,$array->find($fred));
@@ -98,11 +98,11 @@ sub test_find {
 
 sub test_remove {
   my $this = shift;
-  my $array = new DBCachePlugin::Array();
+  my $array = new TWiki::Contrib::Array();
   my $i;
   my @nums;
   for ($i = 0; $i < 3; $i++) {
-    my $fred = new DBCachePlugin::Map("f1=$i");
+    my $fred = new TWiki::Contrib::Map("f1=$i");
     push(@nums, $fred);
     $array->add($fred);
   }
@@ -125,23 +125,23 @@ sub test_remove {
 sub test_sum {
   my $this = shift;
 
-  my $array = new DBCachePlugin::Array();
+  my $array = new TWiki::Contrib::Array();
 
-  $array->add(new DBCachePlugin::Map("f1=1"));
-  $array->add(new DBCachePlugin::Map("f1=2"));
-  $array->add(new DBCachePlugin::Map());
-  $array->add(new DBCachePlugin::Array());
+  $array->add(new TWiki::Contrib::Map("f1=1"));
+  $array->add(new TWiki::Contrib::Map("f1=2"));
+  $array->add(new TWiki::Contrib::Map());
+  $array->add(new TWiki::Contrib::Array());
   $this->assert_equals(3,$array->sum("f1"));
 }
 
 sub test_getsyntax {
   my $this = shift;
 
-  my $array = new DBCachePlugin::Array();
+  my $array = new TWiki::Contrib::Array();
 
-  my $a = new DBCachePlugin::Map("name=a");
-  my $b = new DBCachePlugin::Map("name=b");
-  my $c = new DBCachePlugin::Map("name=c");
+  my $a = new TWiki::Contrib::Map("name=a");
+  my $b = new TWiki::Contrib::Map("name=b");
+  my $c = new TWiki::Contrib::Map("name=c");
 
   $a->set("name", "a");
   $a->set("age", "40");

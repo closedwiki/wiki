@@ -1,2 +1,3 @@
-Storable perl Available from CPAN
-Time::ParseDate perl Available from CPAN
+TWiki::Contrib::Attrs,>=1.000,perl,Required. Download and install from the TWiki:Plugins/AttrsContrib code library.
+Time::ParseDate,>=2003.1126,perl,Required. Available from [[http://cpan.uwinnipeg.ca/dist/Time-modules][CPAN]].
+Storable,2.13 recommended,perl,Recommended; accelerates cache handling. Available from [[http://cpan.uwinnipeg.ca/dist/Storable][CPAN]]

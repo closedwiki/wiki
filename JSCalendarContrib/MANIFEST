@@ -1,6 +1,7 @@
 data/TWiki/JSCalendarContrib.txt
 lib/TWiki/Contrib/JSCalendarContrib/build.pl
 lib/TWiki/Contrib/JSCalendarContrib.pm
+pub/TWiki/JSCalendarContrib/twiki.js
 pub/TWiki/JSCalendarContrib/bugtest-hidden-selects.html
 pub/TWiki/JSCalendarContrib/calendar-blue2.css
 pub/TWiki/JSCalendarContrib/calendar-blue.css
