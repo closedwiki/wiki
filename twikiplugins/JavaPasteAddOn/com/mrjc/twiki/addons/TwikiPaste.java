@@ -74,8 +74,6 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
     public void init() 
 	{
 		cbHelper = new ClipboardHelper();
-		action = getParameter("action");
-		System.out.println("ACTION="+action);
 		
 		msgTxt.setLineWrap(true);
 		JScrollPane scrollPane = new JScrollPane(msgTxt);
@@ -88,11 +86,16 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 		add(scrollPane);
 		setBackground (Color.white);
 		
+		action = getParameter("action");
 
-	
-		//this.
-		
-		
+		if (action == null || action.equals("")) {
+			System.out.println("no action");
+			addText("no action parameter supplied to applet. This should be the URL of the upload script.");
+			addText("for instance, <APPLET CODE = \"...>\"\n"+ 
+				"<PARAM NAME=\"action\" VALUE=\"http://localhost:8123/twiki/bin/upload.pl/Main/CatherineMacleod>\"\n");
+		} else {
+		    System.out.println("ACTION='"+action+"'");
+		}
 		repaint();
     }
 
@@ -169,6 +172,7 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 		}
 		
 		redirectHTML = fu.getPOSTRequestResponse();
+		addText(redirectHTML);
 		redirectURL = getBaseURL(redirectHTML);
 		if ( !(redirectURL.equals("")) )
 		{
@@ -232,27 +236,10 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 	}
 	
 	
-	public void appInit()
-	{
-		cbHelper = new ClipboardHelper();
-		action = "http://10.117.16.143/twiki/bin/upload.pl/Main/CatherineMacleod";
-		msgTxt = new JTextArea();
-		msgTxt.setLineWrap(true);
-		JScrollPane scrollPane = new JScrollPane(msgTxt);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setPreferredSize(new Dimension(370,160));
-		
-		JButton pasteBtn = new JButton("paste from clipboard");
-		pasteBtn.addActionListener(this);
-		add(pasteBtn);
-		add(scrollPane);
-		setBackground (Color.white);
-		repaint();
-		
-	}
-	
-	
-	
+	/** If run as an application.
+	 * Don't do this.
+	 * @param args
+	 
 	public static void main(String[] args)
 	{
 		
@@ -277,7 +264,29 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 		});
 		
 	
+	public void appInit()
+	{
+		cbHelper = new ClipboardHelper();
+		action = "http://10.117.16.143/twiki/bin/upload.pl/Main/CatherineMacleod";
+		msgTxt = new JTextArea();
+		msgTxt.setLineWrap(true);
+		JScrollPane scrollPane = new JScrollPane(msgTxt);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setPreferredSize(new Dimension(370,160));
+		
+		JButton pasteBtn = new JButton("paste from clipboard");
+		pasteBtn.addActionListener(this);
+		add(pasteBtn);
+		add(scrollPane);
+		setBackground (Color.white);
+		repaint();
+		
 	}
+	
+		
+	}
+	
+	*/
 	/**
 	 * @see java.awt.dnd.DropTargetListener#dragEnter(java.awt.dnd.DropTargetDragEvent)
 	 */

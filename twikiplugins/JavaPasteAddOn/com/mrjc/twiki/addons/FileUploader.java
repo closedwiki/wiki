@@ -343,7 +343,9 @@ public class FileUploader
 	        inStream.close ();
 	    }
 	    catch (IOException ioex) {
-	        System.out.println("FileUploader.getPOSTRequestResponse IOException: Couldn't get server response..connection already closed.");
+	    	String problem = "FileUploader.getPOSTRequestResponse IOException: Couldn't get server response..connection already closed. "+ioex.toString();
+	    	System.out.println(problem);	        
+	        return problem;
 	    }
 		return results.toString();
     }

@@ -1,8 +1,9 @@
 @echo off
 set PATH=c:\j2sdk1.4.0\bin;%PATH%
 set PACKAGE=com\mrjc\twiki\addons
-set ECLIPSEPROJECTDIR=c:\eclipse\workspace\JavaPasteAddOn\%PACKAGE%
-set SOURCEFILES=%ECLIPSEPROJECTDIR%\*.class
+set ECLIPSEPROJECTDIR=c:\eclipse\workspace\JavaPasteAddOn\
+set SCRIPTDIR=%ECLIPSEPROJECTDIR%/signjar
+set SOURCEFILES=%ECLIPSEPROJECTDIR%\%PACKAGE%\*.class
 set JAVAPASTEDIR=c:\javapaste
 set TEMPBASEDIR=%JAVAPASTEDIR%\Temp
 set TEMPDIR=%TEMPBASEDIR%\%PACKAGE%
@@ -14,3 +15,5 @@ set KEYSTORE=ks0001
 set KEYPASS=kp0001
 set STOREPASS=usp0001
 set KEYSTOREALIAS=TWikiStoreAlias
+
+cd %TEMPBASEDIR%
