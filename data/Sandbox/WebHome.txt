@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="995354364" format="1.0beta2" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1006601942" format="1.0" version="1.5"}%
 The <b>%WIKITOOLNAME%.%WEB%</b> web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %TWIKIWEB%.TWikiTutorial to get a jumpstart on the %WIKITOOLNAME% tool. A good rule of thumb is to add at the end of the page and sign & date it with your %TWIKIWEB%.WikiName.
 
 	* TestTopic1, TestTopic2, TestTopic3, TestTopic4 
@@ -8,7 +8,7 @@ The <b>%WIKITOOLNAME%.%WEB%</b> web is the sandbox you can use for testing. Ever
 	* WebSearch: Full text search of the %WIKITOOLNAME%.%WEB% web.
 	* <input type="text" name="search" size="32" /> <input type="submit" value="Search" /> &nbsp;&nbsp; (More options in WebSearch)
 	* WebChanges: Find out recent modifications to the %WIKITOOLNAME%.%WEB% web.
-	* WebIndex: Display all %WIKITOOLNAME%.%WEB% topics in alphabetical order.
+	* WebIndex: Display all %WIKITOOLNAME%.%WEB% topics in alphabetical order. See also the faster WebTopicList 
 	* %NOTIFYTOPIC%: Subscribe to be automatically notified when something changes in the %WIKITOOLNAME%.%WEB% web.
 	* %STATISTICSTOPIC%: View access statistics of the %WIKITOOLNAME%.%WEB% web.
 	* %WEBPREFSTOPIC%: Preferences of the %WIKITOOLNAME%.%WEB% web.
