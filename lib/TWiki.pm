@@ -661,6 +661,7 @@ sub initializeRemoteUser
     }
 
     my $text = &TWiki::Store::readFile( $remoteUserFilename );
+    # TODO: i18n fix
     my %AddrToName = map { split( /\|/, $_ ) }
                      grep { /^[0-9\.]+\|[A-Za-z0-9]+\|$/ }
                      split( /\n/, $text );
@@ -694,6 +695,8 @@ sub initializeRemoteUser
 }
 
 # =========================
+# Build hashes to translate in both dirctions between username (e.g. jsmith) 
+# WikiName (e.g. JaneSmith)
 sub userToWikiListInit
 {
     my $text = &TWiki::Store::readFile( $userListFilename );
@@ -718,20 +721,7 @@ sub userToWikiListInit
 }
 
 # =========================
-# Used in mapping usernames to/from WikiNames
-sub isWikiName
-{
-    my( $name ) = @_;
-    if( ! $name ) {
-        $name = "";
-    }
-    if ( $name =~ m/^${wikiWordRegex}$/o ) {
-        return "1";
-    }
-    return "";
-}
-
-# =========================
+# Translate intranet username (e.g. jsmith) to WikiName (e.g. JaneSmith)
 sub userToWikiName
 {
     my( $loginUser, $dontAddWeb ) = @_;
@@ -769,6 +759,26 @@ sub getWikiUserTopic
 {
     # Topic without Web name
     return $wikiName;
+}
+
+# =========================
+# Check for a valid WikiWord
+sub isWikiName
+{
+    my( $name ) = @_;
+
+    $name ||= "";	# Default value if undef
+    return ( $name =~ m/^${wikiWordRegex}$/o )
+}
+
+# =========================
+# Check for a valid web name
+sub isWebName
+{
+    my( $name ) = @_;
+
+    $name ||= "";	# Default value if undef
+    return ( $name =~ m/^${webNameRegex}$/o )
 }
 
 # =========================
@@ -1704,7 +1714,7 @@ sub handleInternalTags
     # $_[2] is web
 
     # Make Edit URL unique for every edit - fix for RefreshEditPage
-    $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit$scriptSuffix/%WEB%/%TOPIC%\?t=".time()!geo;
+    $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit$scriptSuffix/%WEBURLENCODED%/%TOPICURLENCODED%\?t=".time()!geo;
 
     $_[0] =~ s/%NOP{(.*?)}%/$1/gs;  # remove NOP tag in template topics but show content
     $_[0] =~ s/%NOP%/<nop>/g;
@@ -1726,7 +1736,6 @@ sub handleInternalTags
     # characters in name
     $_[0] =~ s/%TOPICURLENCODED%/&urlEncode($_[1])/ge; 	# URL-encoded topic name 
     $_[0] =~ s/%WEBURLENCODED%/&urlEncode($_[2])/ge; 	# URL-encoded web name 
-
 
     $_[0] =~ s/%TOPICLIST{(.*?)}%/&handleWebAndTopicList($1,'0')/ge;
     $_[0] =~ s/%WEBLIST{(.*?)}%/&handleWebAndTopicList($1,'1')/ge;

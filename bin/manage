@@ -99,7 +99,7 @@ sub createWeb
         # valid template web name, untaint
         $newWeb =~ /(.*)/;
         $newWeb = $1;
-    } elsif( $newWeb =~ /^[A-Z]+[a-z0-9]*$/ ) {
+    } elsif( TWiki::isWebName( $newWeb ) ) {
         # valid web name, untaint
         $newWeb =~ /(.*)/;
         $newWeb = $1;
