@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1034393880" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1036034940" format="1.0" version="1.8"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -30,5 +30,5 @@ In this example, %TOPIC% - this topic - acts as the icon library. Graphics are u
 %META:FILEATTACHMENT{name="new.gif" attr="" comment="New" date="1018768672" path="C:\DATA\new.gif" size="167" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="starred.gif" attr="" comment="Star" date="1018768688" path="C:\DATA\starred.gif" size="128" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="arrowright.gif" attr="" comment="Red arrow to right" date="1018768726" path="C:\DATA\arrowright.gif" size="81" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="viewtopic.gif" attr="" comment="View topic" date="1034393656" path="C:\Data\Temp\viewtopic.gif" size="926" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="edittopic.gif" attr="" comment="Edit topic" date="1034393668" path="C:\Data\Temp\edittopic.gif" size="946" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="viewtopic.gif" attr="" comment="View topic" date="1036034850" path="C:\Data\Temp\viewtopic.gif" size="904" user="PeterThoeny" version="1.2"}%
+%META:FILEATTACHMENT{name="edittopic.gif" attr="" comment="Edit topic" date="1036034837" path="C:\Data\Temp\edittopic.gif" size="931" user="PeterThoeny" version="1.2"}%
