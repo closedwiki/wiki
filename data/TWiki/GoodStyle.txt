@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="JohnTalintyre" date="997201773" format="1.0beta2" version="1.2"}%
 TWiki has very simple TextFormattingRules. You won't go wrong if you start each line without spaces and separate paragraphs with a blank line. Run capitalized words together to make WikiWords, which
 become hyperlinks. This sometimes requires creativity; you're up to it. WikiWords tells you how to create good topic names.
 
@@ -15,6 +16,6 @@ Date format: %WIKITOOLNAME% is international, so the ISO date format like "06 Fe
 
 -----
 
-Feel free to look at the source to an existing page if you want to see how something is formatted. A bit of HTML experience can't hurt, but is far from necessary. 
+Feel free to look at the source to an existing page (click =Raw text=) if you want to see how something is formatted. A bit of HTML experience can't hurt, but is far from necessary. 
 
 -- Main.TWikiGuest - 27 May 2000
