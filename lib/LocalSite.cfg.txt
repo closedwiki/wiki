@@ -19,6 +19,9 @@
 # you may think it does). You can use '\' without problems inside
 # single quotes, e.g. 'c:\foo'.
 
+# If LocalSite.cfg is used (and it _should_ be), then _all_ the
+# following paths muct be defined.
+
 # URL for TWiki host e.g. http://myhost.com:123
 $cfg{DefaultUrlHost} = 'http://your.domain.com';
 
@@ -36,6 +39,12 @@ $cfg{PubDir} = '/home/httpd/twiki/pub';
 $cfg{TemplateDir} = '/home/httpd/twiki/templates';
 
 # Topic files store (file path not URL) e.g. /usr/local/twiki/data
+# TWiki will use this path to base other defaults, such as the location
+# of password files.
 $cfg{DataDir} = '/home/httpd/twiki/data';
+
+# TWiki.cfg will use this path to default where to put log files, unless
+# you override individual paths here.
+$cfg{LogDir} = $cfg{DataDir};
 
 1;

@@ -132,9 +132,18 @@ BEGIN {
         $TWiki::cfg{OS} = 'OS2';
     }
 
+    do "LocalSite.cfg";
+    die "Bad configuration: $@" if $@;
+
+    foreach my $var ( "DataDir", "DefaultUrlHost", "PubUrlPath", "PubDir", "TemplateDir" ) {
+        die "$var must be defined in LocalSite.cfg"
+          unless( defined $TWiki::cfg{$var} );
+    }
+
     do "TWiki.cfg";
     die "Cannot read TWiki.cfg: $!" if $!;
     die "Bad configuration: $@" if $@;
+
     do "LocalSite.cfg";
     die "Bad configuration: $@" if $@;
 
