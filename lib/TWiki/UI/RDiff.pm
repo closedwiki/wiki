@@ -256,11 +256,11 @@ sub _renderRevisionDiff
     my( $topic, $sdiffArray_ref, $renderStyle ) = @_;
 
 #combine sequential array elements that are the same diffType
-    my @diffArray = [];
+    my @diffArray = ();
 	foreach my $ele ( @$sdiffArray_ref ) {
-		if ( @{@diffArray[$#diffArray]}[0] eq @$ele[0]) {
-			@{@diffArray[$#diffArray]}[1] .= "\n".@$ele[1];
-			@{@diffArray[$#diffArray]}[2] .= "\n".@$ele[2];
+		if ( ( @diffArray ) && ( @{$diffArray[$#diffArray]}[0] eq @$ele[0] ) ) {
+			@{$diffArray[$#diffArray]}[1] .= "\n".@$ele[1];
+			@{$diffArray[$#diffArray]}[2] .= "\n".@$ele[2];
 		} else {
 			push @diffArray, $ele;
 		}

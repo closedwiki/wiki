@@ -527,7 +527,7 @@ sub parseRevisionDiff
     my( $text ) = @_;
 
     my ( $diffFormat ) = "normal"; #or rcs, unified...
-    my ( @diffArray );
+    my ( @diffArray ) = ();
 
     $diffFormat = "unified" if ( $text =~ /^---/ );
 
