@@ -8,7 +8,7 @@ Generic prompt box used by other templates
 <table>
  <tr valign="middle">
   <td>
-   <textarea %DISABLED% rows=3 cols=50 name="comment" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea>
+   <textarea %DISABLED% rows=3 cols=50 name="comment" wrap="soft">%MESSAGE%</textarea>
   </td>
   <td>
    <input %DISABLED% type="submit" value="Add comment" />
@@ -33,7 +33,7 @@ Comments, signed and dated, added at top of file
 %TMPL:END%
 
 ---------------------------------------------------------------------------
-Comments, signed and dated, added immediately before prompt
+Comments, signed and dated, added immediately before anchor
 %TMPL:DEF{PROMPT:above}%
 %TMPL:P{promptbox}%
 %TMPL:END%
@@ -43,7 +43,7 @@ Comments, signed and dated, added immediately before prompt
 %TMPL:END%
 
 ---------------------------------------------------------------------------
-Comments, signed and dated, added immediately below prompt
+Comments, signed and dated, added immediately below anchor
 %TMPL:DEF{PROMPT:below}%
 %TMPL:P{promptbox}%
 %TMPL:END%
@@ -63,21 +63,21 @@ Comments, signed and dated, added at end of file
 %TMPL:END%
 
 ---------------------------------------------------------------------------
-Comments, signed and dated, added at top of table below the comment box
+Comments, signed and dated, added at top of table below the anchor
 %TMPL:DEF{PROMPT:tableprepend}%
 %TMPL:P{promptbox}%
 %TMPL:END%
 
 %TMPL:DEF{OUTPUT:tableprepend}%
-| %POS:AFTER%%URLPARAM{"comment"}% | %WIKIUSERNAME% | %SERVERTIME% |
+%POS:AFTER%<tr><td> %URLPARAM{"comment"}% </td><td> %WIKIUSERNAME% </td><td> %SERVERTIME% </td></tr>
 %TMPL:END%
 
 ---------------------------------------------------------------------------
-Comments, signed and dated, added at end of table above the comment box
+Comments, signed and dated, added at end of table above the anchor
 %TMPL:DEF{PROMPT:tableappend}%
 %TMPL:P{promptbox}%
 %TMPL:END%
 
 %TMPL:DEF{OUTPUT:tableappend}%
-| %POS:BEFORE%%URLPARAM{"comment"}% | %WIKIUSERNAME% | %SERVERTIME% |
+%POS:BEFORE%<tr><td> %URLPARAM{"comment"}% </td><td> %WIKIUSERNAME% </td><td> %SERVERTIME% </td></tr>
 %TMPL:END%

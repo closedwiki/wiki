@@ -11,6 +11,7 @@ Inserts an edit box into the page that allows users to type in and save comments
 	* in different formats (as defined by a template). 
 	* in both forward and reverse chronological order.  
 	* signed or unsigned, dated or undated (as defined by a template).
+	* In other topics, or other positions within the current topic, as specified by a standard TWiki anchor.
 
 ---+ Syntax Rules
 
@@ -18,19 +19,19 @@ Write the command =%<nop>COMMENT{= _attributes_ =}%= anywhere in a TWiki topic.
 
 Only two attributes are supported:
 	| *Name* | *Description* |
-	| =target= | Name of the topic to add the comment to. Defaults to the current topic. The target name may also specify a web; for example, <code>target="%MAINWEB%.PersonalRemarks"</code> |
+	| =target= | Name of the topic to add the comment to. Defaults to the current topic. The target name may specify a web, and may specify an anchor within the target topic; for example, <code>target="%MAINWEB%.Personal<nop>Remarks#The<nop>Anchor"</code> |
 	| =type= | This is the name of the template to use for this comment. Comment templates are defined in a TWiki template - see [[#TemPlates][Customisation]], below. If this attribute is not defined, the type is whatever is defined by COMMENTPLUGIN_DEFAULT_TYPE, either in this topic or in your WebPreferences. By default this is 'bottom'. |
 
 A set of default comment templates are shipped with the plugin. These are:
 | *Template type* | *Description* |
-| =top= | Comments, signed and dated, added at top of file |
-| =above= | Comments, signed and dated, added immediately before prompt |
-| =below= | Comments, signed and dated, added immediately below prompt |
-| =bottom= | Comments, signed and dated, added at end of file |
-| =tableprepend= | Comments, signed and dated, added at top of table below the comment box |
-| =tableappend= | Comments, signed and dated, added at end of table above the comment box |
+| =top= | Comments, signed and dated, added at top of the topic (the anchor is ignored) |
+| =bottom= | Comments, signed and dated, added at end of the target topic (the anchor is ignored) |
+| =above= | Comments, signed and dated, added immediately before the target anchor, or the =%COMMENT= if no anchor is specified |
+| =below= | Comments, signed and dated, added immediately below the target anchor, or the =%COMMENT= if no anchor is specified |
+| =tableprepend= | Comments, signed and dated, formatted as an HTML table row, added below the anchor (which must be in an HTML &lt;table>) |
+| =tableappend= | Comments, signed and dated, formatted as an HTML table row, added above the anchor (which must be in an HTML &lt;table)) |
 
-*Note* that the "above" and "below" templates place comments relative to the comment box in the current topic. If you post to another topic (specified using the =target= parameter) it is *undefined* where the comments will end up!
+*Note* that the =above= and =below= templates normally place comments relative to the anchor specified in the %COMMENT. If specified, the anchor *must* exist in the target topic, or the comment will be ignored. If no anchor is specified in the %COMMENT, and the comment is being posted to the current topic, the comment will be placed relative to the %COMMENT. If no anchor is defined, and the comment is being posted to another topic, it is *undefined* where the comments will end up!
 
 Your local installation may add more template types as well - see 'Customisation', below.
 
@@ -108,6 +109,14 @@ If installed correctly, you should see a some =%COMMENT= edit boxes below here.
 %COMMENT{type="bottom" target="Trash.Comments"}%
 ----
 
+---+ Known problems
+---++ Use of unpublished functions and variables
+The plugin uses the following unpublished TWiki variables:
+<verbatim>
+$TWiki::webNameRegex
+$TWiki::anchorRegex
+</verbatim>
+
 ---+ Plugin Info
 
 |  Plugin Author: | v1.0 TWiki:Main/DavidWeller v2.0 TWiki:Main/PeterMasiar v3.0 TWiki:Main/CrawfordCurrie |
@@ -119,7 +128,7 @@ If installed correctly, you should see a some =%COMMENT= edit boxes below here.
 | | 15 July 2003: Peter Masiar added "reminder" parameter and feature to pass comments to oopslockedcomments.tmpl template to copy-paste later |
 | | 23 Sep 2003 Peter Masiar: 80% rewrite/refactor, adding templates |
 | | 7 Feb 2004: Crawford Currie: rewrote this page and CommentTemplates in an effort to make the plugin more user friendly. Added {TIME} variable. Also updated CVS. |
-| | 18 Feb 2004: rewrote for standard templates and other user requests. |
+| | 18 Feb 2004: Crawford Currie: rewrote for standard templates and other user requests. Recognition to Patrice Fournier and Sam Abrams for terrific testing and patch support. |
 |  CPAN Dependencies: | None |
 |  Other Dependencies: | None |
 |  Perl Version: | 5.0 |
