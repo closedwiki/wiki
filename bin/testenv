@@ -1047,21 +1047,18 @@ sub checkGnuVersion {
         my $notFound = ( $? == -1 );
         my $n;
         if( $notFound ) {
-            # Check if on path
             $n = WARN("'$progReadableName' program was not found on the",
                        "current PATH.");
         } elsif ( $diffOut !~ /\bGNU\b/ ) {
-            # Program found on path, check that GNU mentioned in version output
+            # Program found on path, complain if no GNU in version output
             $n = WARN("'$progReadableName' program was found on the PATH",
                        "but is not GNU $progReadableName - this may cause",
                        "problems.");
         } else {
-            # GNU version not found
             $n = "GNU $progReadableName was found on the PATH -".
                   "this is the recommended $progReadableName tool.";
         }
 
-        # Final table row applies to all cases
         RIGHT($n, NOTE("The '$progReadableName' command is $progUsage."));
     }
 }
