@@ -27,7 +27,7 @@ package TWiki::Plugins::AdvertsPlugin;
 # =========================
 use vars qw(
   $web $topic $user $installWeb $VERSION $pluginName
-  $debug $phpAdsNewBase $selectionStringPrefix $selectionStringPostfix;
+  $debug $phpAdsNewBase $selectionStringPrefix $selectionStringSuffix;
 );
 
 $VERSION    = '1.0';
@@ -51,7 +51,7 @@ sub initPlugin {
  $phpAdsNewBase = TWiki::Func::getPreferencesValue("ADVERTSPLUGIN_ADVERTSCRIPTBASE");
  
  $selectionStringPrefix = TWiki::Func::getPreferencesValue("ADVERTSPLUGIN_ADVERTSPREFIX") || "";
- $selectionStringPostfix = TWiki::Func::getPreferencesValue("ADVERTSPLUGIN_ADVERTSPOSTFIX") || "";
+ $selectionStringSuffix = TWiki::Func::getPreferencesValue("ADVERTSPLUGIN_ADVERTSSUFFIX") || "";
 
  # Plugin correctly initialized
  TWiki::Func::writeDebug(
@@ -127,7 +127,7 @@ sub handleAdvertRIJS {
     my ($param) = @_;
     my $ans = getTemplateAdvertRemoteInvocationJavaScript();
     $selectionString          = $param || "";
-    $selectionString = $selectionStringPrefix . $selectionString . $selectionStringPostfix;
+    $selectionString = $selectionStringPrefix . $selectionString . $selectionStringSuffix;
     TWiki::Func::writeDebug("Advert selection string: '".$selectionString."'");
     $random        = "ad13xc123"; # TODO fix this
     $serverUrlBase = $phpAdsNewBase;
@@ -158,6 +158,30 @@ sub getTemplateAdvertRemoteInvocationJavaScript {
 EOM
  return $ans;
 
+}
+# Template taken from https://www.google.com/adsense/faq-tech
+#
+sub getTemplateAdvertGoogleAdSense {
+ my $ans = <<EOM;
+<script language='JavaScript' type='text/javascript'>
+<!-- Hide JavaScript and <pre> escape TWiki rendering
+google_ad_client = "pub-0000000000000000"; 
+google_alternate_ad_url = "http://www.mydomain.com/my_banner.html"; 
+google_ad_width = 468; 
+google_ad_height = 60; 
+google_ad_format = "468x60_as"; 
+google_ad_channel = "0000000000"; 
+google_color_border = "B4D0DC"; 
+google_color_bg = "ECF8FF"; 
+google_color_link = "0000CC"; 
+google_color_url = "008000"; 
+google_color_text = "6F6F6F"; 
+// Stop hiding and stop </pre> escaping TWiki rendering -->
+</script> 
+<script type="text/javascript" 
+   src="http://pagead2.googlesyndication.com/pagead/show_ads.js"> 
+</script> 
+EOM
 }
 
 1;
