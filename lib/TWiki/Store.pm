@@ -844,7 +844,7 @@ sub noHandlersSave
                     shift( @foo);
                 }
                 push( @foo, "$topic\t$TWiki::userName\t$time\t$frev" );
-                open( FILE, ">$TWiki::dataDir/$TWiki::webName/.changes" );
+                open( FILE, ">$TWiki::dataDir/$web/.changes" );
                 print FILE join( "\n", @foo )."\n";
                 close(FILE);
             }
