@@ -44,9 +44,9 @@ sub renderMetaData
     $noviewableAttachmentCount = 0;
     $attachmentCount = 0;
     
-    $header .= "|  *[[%TWIKIWEB%.FileAttachment]]:*  |  *Action:*  |  *Size:*  |  *Date:*  |  *Who:*  |  *Comment:*  |";
+    my $header = "|  *[[$TWiki::twikiWebname.FileAttachment][Attachment]]:*  |  *Action:*  |  *Size:*  |  *Date:*  |  *Who:*  |  *Comment:*  |";
     if( $showAttr ) {
-        $header .= "  *[[%TWIKIWEB%.FileAttribute]]:*  |";
+        $header .= "  *[[$TWiki::twikiWebname.FileAttribute][Attribute]]:*  |";
     }
     $header .= "\n";
     
