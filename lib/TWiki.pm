@@ -3191,7 +3191,7 @@ sub renderFormData
             $value =~ s/\n/<br \/>/g;      # undo expansion
             $metaText .= "|  $title:|$value  |\n";
         }
-        $metaText .= "</div>";
+        $metaText .= "\n</div>";
         $metaText = getRenderedVersion( $metaText, $web );
     }
 
