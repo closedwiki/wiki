@@ -1,2 +1,2 @@
-TWiki::Plugins::CairoCompatabilityModule perl Required if the plugin is to be run with versions of TWiki before Cairo. Available from the TWiki:Plugins/SharedCode repository.
-TWiki::Attrs perl Required for Attrs module. Available from TWiki:Plugins/SharedCode repository.
+TWiki::Plugins::CairoCompatibilityModule, >= 1.000, plugin, Required if the plugin is to be run with versions of TWiki before Cairo. Available from the TWiki:Plugins/SharedCode repository.
+TWiki::Attrs, >= 1.000, plugin, Required for Attrs module. Available from the TWiki:Plugins/SharedCode repository.

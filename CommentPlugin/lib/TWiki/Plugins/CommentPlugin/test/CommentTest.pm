@@ -23,8 +23,9 @@ sub set_up {
   $this->SUPER::set_up();
   # to force it to use Cairo compatability mode, change the following
   # to "1"
-  $TWiki::Plugins::VERSION = 1.020;
+  $TWiki::Plugins::VERSION = 1.010;
   TWiki::Plugins::CommentPlugin::initPlugin();
+  $TWiki::Plugins::CommentPlugin::testing = 1;
 }
 
 sub trim {
