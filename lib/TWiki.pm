@@ -1378,43 +1378,44 @@ sub renderParent
     $visited{"$web.$topic"} = 1;
     
     my $sep = "";
+    my $cWeb = $web;
+
     while( 1 ) {
-	my %parent = $meta->findOne( "TOPICPARENT" );
-	if( %parent ) {
-	    my $name = $parent{"name"};
-	    $text = "$name$sep$text";
-	    $sep = $usesep;
-	    if( $dontRecurse || ! $name ) {
+        my %parent = $meta->findOne( "TOPICPARENT" );
+        if( %parent ) {
+            my $name = $parent{"name"};
+            my $pWeb = $cWeb;
+            my $pTopic = $name;
+            if( $name =~ /^(.*)\.(.*)$/ ) {
+               $pWeb = $1;
+               $pTopic = $2;
+            }
+            $text = "$pWeb.$pTopic$sep$text";
+            $sep = $usesep;
+            if( $dontRecurse || ! $name ) {
                last;
-	    } else {
-	       my $dummy;
-	       my $pWeb = $web;
-	       my $pTopic = $name;
-	       if( $name =~ /^(.*)\.(.*)$/ ) {
-	          $pWeb = $1;
-	          $pTopic = $2;
-	       }
-	       if( $visited{"$pWeb.$pTopic"} ) {
-	          last;
-	       } else {
-	          $visited{"$pWeb.$pTopic"} = 1;
-	       }
+            } else {
+               my $dummy;
+               if( $visited{"$pWeb.$pTopic"} ) {
+                  last;
+               } else {
+                  $visited{"$pWeb.$pTopic"} = 1;
+               }
                if( TWiki::Store::topicExists( $pWeb, $pTopic ) ) {
-	           ( $meta, $dummy ) = TWiki::Store::readTopMeta( $pWeb, $pTopic );
+                   ( $meta, $dummy ) = TWiki::Store::readTopMeta( $pWeb, $pTopic );
                } else {
                    last;
                }
-	    }
-	} else {
-	    last;
-	}
+               $cWeb = $pWeb;
+            }
+        } else {
+            last;
+        }
     }
 
-    if( $prefix ) {
+    if( $text && $prefix ) {
        $text = "$prefix$text";
     }
-        
-
 
     $text = handleCommonTags( $text, $topic, $web );
     $text = getRenderedVersion( $text, $web );
