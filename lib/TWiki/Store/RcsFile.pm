@@ -377,10 +377,11 @@ sub _settings
 # ======================
 sub isAsciiDefault
 {
-   my( $self, $filename ) = @_;
+   my( $self ) = @_;
    
-   my $attachAsciiPath = $self->{attachAsciiPath};
-   
+   my $attachAsciiPath = $self->{"attachAsciiPath"};
+   my $filename = $self->{"attachment"};
+
    if( $filename =~ /$attachAsciiPath/ ) {
       return "ascii";
    } else {
@@ -418,7 +419,6 @@ sub setLock
     my( $self, $lock, $userName ) = @_;
     
     $userName = $TWiki::userName if( ! $userName );
-    warn( "can't lock an attachment" ) if( $self->{attachment} );
 
     my $lockFilename = $self->_makeFileName( ".lock" );
     if( $lock ) {
@@ -528,8 +528,17 @@ sub _makeFileName
    my $attachment = $self->{"attachment"};
    my $dataDir = $self->{"dataDir"};
    my $pubDir  = $self->{"pubDir"};
-   
-   if( ! $self->{"attachment"} ) {
+
+   if( $extension eq ".lock" ) {
+      $file = "$dataDir/$web/$topic$extension";
+
+   } elsif( $attachment ) {
+      if ( $extension eq ",v" && $self->{"useRcsDir"} && -d "$dataDir/$web/RCS" ) {
+         $extra = "/RCS";
+      }
+      $file = "$pubDir/$web/$topic$extra/$attachment$extension";
+
+   } else {
       if( ! $extension ) {
          $extension = ".txt";
       } else {
@@ -541,12 +550,6 @@ sub _makeFileName
          }
       }
       $file = "$dataDir/$web$extra/$topic$extension";
-   } else {
-      if ( $extension eq ",v" && $self->{"useRcsDir"} && -d "$dataDir/$web/RCS" ) {
-         $extra = "/RCS";
-      }
-      
-      $file = "$pubDir/$web/$topic$extra/$attachment$extension";
    }
 
    # FIXME: Dangerous, need to make sure that parameters are not tainted
