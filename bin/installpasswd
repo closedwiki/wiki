@@ -45,6 +45,7 @@ BEGIN {
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use TWiki;
+use TWiki::User;
  
 $query= new CGI;
  
@@ -98,7 +99,7 @@ sub main
     }
 
     # check if user entry exists
-    if(  ( $wikiName )  && (! htpasswdExistUser( $wikiName ) ) ){
+    if(  ( $wikiName )  && (! TWiki::User::htpasswdExistUser( $wikiName ) ) ){
         # PTh 20 Jun 2000: changed to getOopsUrl
         $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnotwikiuser", $wikiName );
         TWiki::redirect( $query, $url );
@@ -106,56 +107,14 @@ sub main
     }
 
     # old password
-    my $oldcrypt = htpasswdReadPasswd( $wikiName );
+    my $oldcrypt = TWiki::User::htpasswdReadPasswd( $wikiName );
     # OK - password may be changed
     my $oldCryptPassword = "$wikiName\:$oldcrypt";
-    htpasswdAddUser( $oldCryptPassword, $theCryptPassword );
+    TWiki::User::htpasswdAddUser( $oldCryptPassword, $theCryptPassword );
 
     # OK - password changed
     $url = &TWiki::getOopsUrl( $webName, $topic, "oopschangepasswd" );
     TWiki::redirect( $query, $url );
     return; 
-}
-
-#========================= 
-sub htpasswdReadPasswd
-{
-    my ( $user ) = @_;
- 
-    if( ! $user ) {
-        return "";
-    }
- 
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
-    if( $text =~ /$user\:(\S+)/ ) {
-        return $1;
-    }
-    return "";
-}
- 
-sub htpasswdExistUser
-{
-    my ( $user ) = @_;
- 
-    if( ! $user ) {
-        return "";
-    }
- 
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
-    if( $text =~ /$user\:/go ) {
-        return "1";
-    }
-    return "";
-}
- 
-sub htpasswdAddUser
-{
-    my ( $oldUserEntry, $newUserEntry ) = @_;
- 
-    # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
-    # simply add name to file, but this is a security issue
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
-    $text =~ s/$oldUserEntry/$newUserEntry/;
-    &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
 }
 
