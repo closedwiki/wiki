@@ -460,8 +460,15 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
   sub _matchType_date {
     my ( $this, $vbl, $val ) = @_;
+    my $cond;
+    if ( $val =~ s/^([><]=?)\s*// ) {
+        $cond = $1;
+    } else {
+        $cond = "==";
+    }
+    return 0 unless defined( $this->{$vbl} );
     my $tim = Time::ParseDate::parsedate( $val, %pdopt );
-    return ( defined( $this->{$vbl} ) && $this->{$vbl} == $tim );
+    return eval "$this->{$vbl} $cond $tim";
   }
 
   # PRIVATE match if there are at least $val days to go before
@@ -478,8 +485,14 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
   # PRIVATE match boolean attribute "closed"
   sub _matchField_closed {
-    my $this = shift;
-    return ( $this->{state} eq "closed" );
+    my ( $this, $val ) = @_;
+    if ( $val eq "1" ) {
+        return ( $this->{state} eq "closed" );
+    } else {
+        # val is not a simple boolean, it's a date spec. Pass on to
+        # date matcher.
+        return $this->_matchType_date( "closed", $val );
+    }
   }
 
   # PRIVATE match boolean attribute "open"
@@ -570,19 +583,19 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
   # PRIVATE format text field
   sub _formatField_text {
-    my ( $this, $asHTML, $type ) = @_;
-    my $text = $this->{text};
+      my ( $this, $asHTML, $type ) = @_;
+      my $text = $this->{text};
 
-    if ( $asHTML && defined( $type ) && $type eq "href" ) {
-      # Generate a jump-to in wiki syntax
-      $text =~ s/<br ?\/?>/\n/sgo;
-      # Would be nice to do the goto as a button image....
-      my $jump = " (<a href=\"" .
-	TWiki::Func::getViewUrl( $this->{web}, $this->{topic} ) .
-	  "#" . $this->getAnchor() . "\">go to action</a>)";
-      $text .= $jump;
-    }
-    return ( $text, 0 );
+      if ( $asHTML && defined( $type ) && $type eq "href" ) {
+          # Generate a jump-to in wiki syntax
+          $text =~ s/<br ?\/?>/\n/sgo;
+          # Would be nice to do the goto as a button image....
+          my $jump = " (<a href=\"" .
+            TWiki::Func::getViewUrl( $this->{web}, $this->{topic} ) .
+                "#" . $this->getAnchor() . "\">go to action</a>)";
+          $text .= $jump;
+      }
+      return ( $text, 0 );
   }
 
   # PRIVATE format edit field

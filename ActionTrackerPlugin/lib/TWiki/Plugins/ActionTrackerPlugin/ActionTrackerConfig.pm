@@ -28,15 +28,27 @@ use TWiki; # required for unpublished constants!
   use vars qw( $rlogCmd $cmdQuote $egrepCmd $securityFilter $notifyTopicname );
 
   # RCS log command
-  $rlogCmd	  = "/usr/bin/rlog -d'%DATE%' %FILENAME%";
+  $rlogCmd	        = "/usr/bin/rlog -d'%DATE%' %FILENAME%";
+
   # Command quote ' for unix, \" for Windows. Copy from TWiki.cfg
-  $cmdQuote         = "'";
+  $cmdQuote         =
+    $TWiki::cmdQuote ||
+      "'";
+
   # Unix egrep command. Copy from TWiki.cfg
-  $egrepCmd         = $TWiki::egrepCmd;
+  $egrepCmd         =
+    $TWiki::egrepCmd ||
+      "/bin/egrep";
+
   # Regex security filter. Copy from TWiki.cfg
-  $securityFilter   = "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\x00-\x1F]";
+  $securityFilter   =
+    $TWiki::securityFilter ||
+      "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\x00-\x1F]";
+
   # Name of topic for email notifications. Copy from TWiki.cfg
-  $notifyTopicname  = "WebNotify";
+  $notifyTopicname  =
+    $TWiki::notifyTopicname ||
+      "WebNotify";
 }
 
 1;
