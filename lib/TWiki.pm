@@ -74,7 +74,7 @@ use vars qw(
         $viewableAttachmentCount $noviewableAttachmentCount
         $superAdminGroup $doSuperAdminGroup
         $cgiQuery @publicWebList
-        $formatVersion
+        $formatVersion $OS
     );
 
 # TWiki::Store config:
