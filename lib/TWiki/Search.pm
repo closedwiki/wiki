@@ -509,7 +509,8 @@ sub searchWeb
 
                 $text = &TWiki::handleCommonTags( $text, $topic, $thisWebName );
                 $text = &TWiki::getRenderedVersion( $text, $thisWebName );
-                $tempVal =~ s/%TEXTHEAD%/$head/go;
+                # FIXME: What about meta data rendering?
+                $tempVal =~ s/%TEXTHEAD%/$text/go;
             } else {
                 if( $text ) {
                     $head = $text;
