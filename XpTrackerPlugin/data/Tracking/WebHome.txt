@@ -1,0 +1,12 @@
+%META:TOPICINFO{author="mwatt" date="1036693652" format="1.0" version="1.1"}%
+<h2>XP tracking for projects</h2>
+
+%XPSHOWALLTEAMS%
+
+<h3>Introduction to XP tracking</h3>
+
+This is the home page for XP project tracking web. Currently iterations for all products are tracked in this one web.
+
+	* TrackingIntro - introduction to the organization of this web.
+
+	* SetupHowto - how to set up tracking for a project
