@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1021201634" format="1.0" version="1.52"}%
+%META:TOPICINFO{author="PeterThoeny" date="1021445972" format="1.0" version="1.53"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -172,7 +172,7 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
   <td> =%<nop>INCLUDE{"page" ...}%= </td>
   <td> Server side include to IncludeTopicsAndWebPages. Parameters are page name, and an optional =pattern="(reg-exp)"=. The page name is:
 	| ="SomeTopic"= | The name of a topic located in the current web, i.e. =%<nop>INCLUDE{"WebNotify"}%= |
-	| ="Web.Topic"= | A topic in another web, i.e. =%<nop>INCLUDE{"%TWIKIWEB%.TWikiSiteMap"}%= |
+	| ="Web.Topic"= | A topic in another web, i.e. =%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%= |
 	| ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org/"}%= |
   </td>
 </tr><tr>
