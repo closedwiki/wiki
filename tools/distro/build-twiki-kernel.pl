@@ -131,8 +131,12 @@ sub filterDoc {
     $/ = $slash;
     close(FR);
 
-    $conts =~ s/^.*%STARTINCLUDE%//s;
-    $conts =~ s/%STOPINCLUDE%.*$//s;
+    if ($conts =~ /%STARTINCLUDE%/ ) {
+        $conts =~ s/^.*%STARTINCLUDE%//s;
+    }
+    if ($conts =~ /%STOPINCLUDE%/ ) {
+        $conts =~ s/%STOPINCLUDE%.*$//s;
+    }
     $conts =~ s/^(-- (TWiki:)?Main.[A-Z]+[a-z]+[A-Z]+\w+ - \d{2} \w{3} \d{4}( <br \/>)?\s*)$/<!-- $1 -->/mg;
 
     open(FR, ">$path") || die "failed to open $path for write";;
