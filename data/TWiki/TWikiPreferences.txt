@@ -24,9 +24,6 @@ __Preferences:__
 	* Copyright notice:
 		* Set WEBCOPYRIGHT = <font size="-2">Copyright &copy; 2000 by the contributing authors. \nAll material on this collaboration tool is the property of the contributing authors. <br> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME% Feedback">Send</a> feedback. </font>
 
-	* Wiki webmaster email address:
-		* Set WIKIWEBMASTER = webmaster@your.company
-
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences)
 		* Set NOSEARCHALL =
 
@@ -51,6 +48,12 @@ __Preferences:__
 	* Default state of the __link__ check box in the attach file page. Check box is initially checked if _Set ATTACHLINKBOX = CHECKED_ , unchecked if empty ( _Set ATTACHLINKBOX =_ ). If checked, a link is created to the attached file at the end of the topic: (can be overwritten by user preferences)
 		* Set ATTACHLINKBOX = 
 
+	* Wiki webmaster email address:
+		* Set WIKIWEBMASTER = webmaster@your.company
+
+	* Mail host for outgoing mail. This is used for TWikiNotificationOfChanges if Perl module ==Net::SMTP== is installed. If not, sendmail is used instead (defined by ==$mailProgram== in ==TWiki.cfg==). Examples: mail.your.company, localhost
+		* Set SMTPMAILHOST = mail
+
 	* http-equiv meta tags for __view__, __rdiff__, __attach__, __search*__ scripts:
 		* Set HTTP_EQUIV_ON_VIEW = 
 
@@ -64,7 +67,8 @@ __Preferences:__
 		* Set ALLOWTOPICCHANGE = 
 
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
-		* Set FINALPREFERENCES = WIKIWEBMASTER, PREVIEWBGIMAGE
+		* Set FINALPREFERENCES = PREVIEWBGIMAGE, WIKIWEBMASTER, MAILHOST
+
 
 __Plugin Preferences:__
 
