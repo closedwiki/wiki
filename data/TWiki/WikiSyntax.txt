@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007298139" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="MikeMannix" date="1007364180" format="1.0" version="1.12"}%
 ---# <nop>TWikiShorthand Basics
 
 If you can enter text, you're ready for TWiki. With a few simple, intuitive TWikiShorthand rules, you'll be able to use plain text to create well-styled postings, instantly. Here's a fast-track guide to shorthand basics...
@@ -27,7 +27,7 @@ If you can enter text, you're ready for TWiki. With a few simple, intuitive TWik
 	1 Start items in a *numbered list* with =[space][space][space][1][space]=.
 	1 The "1" (or *any number*) will be replaced by the correct number, in order.
 
-	* Always start *counting* for bullets and such from the beginning of a new line.
+	* Start *counting spaces* for bullets from the beginning of a new line.
 
 	* To include an image, type its URL. You also can Attach an image to the page and display it with text <br />=%<nop>ATTACHURL%/yourimagefilename.jpg=.
 
@@ -42,7 +42,7 @@ unformatted text!
 </pre>
 </blockquote>
 
-	* Use three (or more) consecutive *hyphens* expands into a horizontal rule: =---=
+	* Three (or more) consecutive *hyphens* expand into a horizontal rule: =---=
+---
 
 	* See TWikiShorthand for the complete set of formatting rules.
----
