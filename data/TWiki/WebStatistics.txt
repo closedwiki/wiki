@@ -1,5 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="995325441" format="1.0beta2" version="1.1"}%
-*Statistics for %WIKITOOLNAME%.%WEB% Web*
+%META:TOPICINFO{author="PeterThoeny" date="997250019" format="1.0beta2" version="1.2"}%
+%META:TOPICPARENT{name="WebHome"}%
+---++ Statistics for %WIKITOOLNAME%.%WEB% Web
 
 | *Month:* | *Topic <br> views:* | *Topic <br> saves:* | *File <br> uploads:* | *Most popular <br> topic views:* | *Top contributors for <br> topic save and uploads:* |
 | <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |
