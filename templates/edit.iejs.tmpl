@@ -250,10 +250,25 @@ function changedCaret( range )
   document.all.text.caretPos = range.duplicate();
 }
 // =================
-function writeToolbar()
+function writeToolbar( thisToolbarType )
 {
+  var configToolbarType = "%IEJS_TOOLBAR%";	// 'top', 'bottom' or 'both'
+  			// FIXME: security hole - anyone can insert arbitrary
+			// Javascript code here - need Perl code to sanitise
+			// variables for use by JavaScript, perhaps...
+			// Actually, this applies almost anywhere in a TWiki
+			// template that a %-variable is used, not just here.
   if( ! doFancyEdit() ) {
     return;
+  }
+  if( ! ( configToolbarType == "top" || 	// Check if set wrongly or unset
+      configToolbarType == "bottom" ||     
+      configToolbarType == "both" ) ) {    
+    configToolbarType = "both";			// Default to current behaviour
+  }
+  if( thisToolbarType != configToolbarType &&
+  	configToolbarType != "both" ) {
+    return;					// Display only if required here
   }
   var toolbar =
   '<table border="1" cellpadding="1" bgcolor="gainsboro" style="border-color:black">\n' +
@@ -316,13 +331,13 @@ function writeJavaScriptNote()
 %TMPL:P{"simpleheader"}%
 <script language="JavaScript">
 <!--HIDE
-writeToolbar();
+writeToolbar("top");
 //STOP HIDING-->
 </script>
 <textarea name="text" id="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" onclick="storeCaret(this)" onKeyUp="storeCaret(this)" onselect="storeCaret(this)">%TEXT%</textarea>
 <script language="JavaScript">
 <!--HIDE
-writeToolbar();
+writeToolbar("bottom");
 //STOP HIDING-->
 </script>
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
@@ -338,12 +353,11 @@ and follow the
 This is your signature for easy copy & paste operation
 <script language="JavaScript">
 <!--HIDE
-writeJavaScriptNote();
+// Uncomment the next line if you really want to warn non-IE users that they 
+// could use this template's editor in IE.
+// writeJavaScriptNote();
 //STOP HIDING-->
 </script>
-<noscript>
-<br /><i>Note:</i> An advanced <nop>JavaScript editor is available for Microsoft Internet Explorer 4.0 and later
-</noscript>
 <br />
 %FORMFIELDS%
 %TMPL:DEF{"topicaction"}% <input type="submit" value=" &nbsp; Preview Changes &nbsp; " />
@@ -351,9 +365,9 @@ writeJavaScriptNote();
 %TMPL:P{"standardfooter"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
-  <td valign="top">
+  <td width="50%" valign="top">
   </td>
-  <td width="40%" valign="top">
+  <td width="50%" valign="top">
    %WEBCOPYRIGHT%
   </td>
  </tr>
