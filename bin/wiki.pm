@@ -57,7 +57,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "20 Mar 2000";
+$wikiversion      = "04 Apr 2000";
 
 # ===========================
 # read the configuration part
@@ -110,7 +110,11 @@ sub initialize
     ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
     # filter out dangerous or unwanted characters:
     $topicName =~ s/$securityFilter//go;
+    $topicName =~ /(.*)/;
+    $topicName = $1;  # untaint variable
     $webName   =~ s/$securityFilter//go;
+    $webName   =~ /(.*)/;
+    $webName   = $1;  # untaint variable
 
     # initialize $urlHost and $scriptUrlPath 
     if( ( $theUrl ) && ( $theUrl =~ /^([^\:]*\:\/\/[^\/]*)(.*)\/.*$/ ) && ( $2 ) ) {

@@ -21,6 +21,7 @@
 # - Latest version at http://www.mindspring.net/~peterthoeny/twiki/
 # - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
+#   NOTE: Don't forget to customize also the Main.TWikiPreferences topic.
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
 # - Files wikifcg.pm and wikisearch.pm are included by wiki.pm
 # - Upgrading TWiki is easy as long as you do not customize wiki.pm.
@@ -55,13 +56,13 @@
 # variables that need to be changed when installing on a new server:
 # ==================================================================
 #                   %WIKIHOMEURL% : link of TWiki icon in upper left corner :
-$wikiHomeUrl      = "http://your.domain.com/twiki/";
+$wikiHomeUrl      = "http://your.domain.com/twiki";
 #                   Host of TWiki URL :    (Example "http://myhost.com:123")
 $defaultUrlHost   = "http://your.domain.com";
 #                   %SCRIPTURLPATH% : cgi-bin path of TWiki URL:
 $scriptUrlPath    = "/twiki/bin";
 #                   %PUBURLPATH% : Public data path of TWiki URL (root of attachments) :
-$pubUrlPath       = "/twiki/pub";
+$pubUrlPath       = "/home/httpd/twiki/pub";
 #                   Public data directory, must match $pubUrlPath :
 $pubDir           = "/home/httpd/twiki/pub";
 #                   Template directory :
@@ -173,6 +174,8 @@ $doLogTopicChanges  = "0";
 $doLogTopicSearch   = "0";
 #                   Log user registration to $logFilename. Default "1"
 $doLogRegistration  = "1";
+
+# NOTE: Don't forget to customize also the Main.TWikiPreferences topic.
 
 
 # =========================

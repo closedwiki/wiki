@@ -1,15 +1,15 @@
 TWiki Distribution
 ------------------
 
-Version: 20 Mar 2000
+Version: 04 Apr 2000
 Release type: Beta release
 
 Installation instructions in TWikiDocumentation.html or
-http://starship.python.net/crew/scharf/TWiki/bin/view/Main/TWikiDocumentation
+http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiDocumentation
 
 History of implementation in TWikiHistory.html or
-http://starship.python.net/crew/scharf/TWiki/bin/view/Main/TWikiHistory
+http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiHistory
 
-For more details see http://www.mindspring.com/~peterthoeny/twiki/ .
+For more details see http://TWiki.SourceForge.net/
 
 -- Peter Thoeny

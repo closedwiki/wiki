@@ -210,7 +210,7 @@ sub main
         $revisions .= " | <A href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
         if( $i != 1 ) {
             if( $i == $breakRev ) {
-                $revisions = "$revisions | <A href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&param1=1.$maxrev\">&gt;...</A>";
+                $revisions = "$revisions | <A href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=1.$maxrev\">&gt;...</A>";
                 $i = 1;
 
             } else {
@@ -218,7 +218,7 @@ sub main
                     $revisions .= " | &gt;";
                 } else {
                     $j = $i - 1;
-                    $revisions .= " | <A href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
+                    $revisions .= " | <A href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&amp;rev2=1.$j\">&gt;</A>";
                 }
             }
         }
