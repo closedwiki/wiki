@@ -368,7 +368,6 @@ BEGIN {
     ASSERT( defined $TWiki::cfg{DetailedOS} );
     ASSERT( defined $TWiki::cfg{DisableAllPlugins} );
     ASSERT( defined $TWiki::cfg{DisplayTimeValues} );
-    ASSERT( defined $TWiki::cfg{DispScriptUrlPath} );
     ASSERT( defined $TWiki::cfg{CmdQuote} );
     ASSERT( defined $TWiki::cfg{EgrepCmd} );
     ASSERT( defined $TWiki::cfg{FgrepCmd} );
@@ -382,6 +381,9 @@ BEGIN {
     ASSERT( defined $TWiki::cfg{Stats} );
     ASSERT( defined $TWiki::cfg{Log} );
     ASSERT( defined $TWiki::cfg{RCS} );
+
+    $TWiki::cfg{DispScriptUrlPath} = $TWiki::cfg{ScriptUrlPath}
+      unless defined( $TWiki::cfg{DispScriptUrlPath} );
 
     _setupHandlerMaps();
     _setupLocale();
