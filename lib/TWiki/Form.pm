@@ -20,7 +20,9 @@
 
 ---+ TWiki::Form Module
 
-This module handles the encoding and decoding of %TWIKIWEB%.TWikiForms
+This module handles the encoding and decoding of %TWIKIWEB%.TWikiForms,
+including upgrade of older format topics using the 'Category Table'
+approach, an earlier type of form.
 
 =cut
 
@@ -115,7 +117,10 @@ sub _parseFormDefinition
 sub _cleanField {
    my( $text ) = @_;
    $text = "" if( ! $text );
-   $text =~ s/[^A-Za-z0-9_\.]//go; # Need do for web.topic
+   # TODO: make this dependent on a 'character set includes non-alpha'
+   # setting in TWiki.cfg - and do same in Render.pm re 8859 test.
+   # I18N: don't get rid of non-ASCII characters
+   # $text =~ s/[^A-Za-z0-9_\.]//go; # Need do for web.topic
    return $text;
 }
 
@@ -583,7 +588,14 @@ sub changeForm {
     print $tmpl;
 }
 
-# load old style category table item
+=pod
+
+---++ sub _upgradeCategoryItem (  $catitems, $ctext  )
+
+Upgrade old style category table item
+
+=cut 
+
 sub _upgradeCategoryItem {
     my ( $catitems, $ctext ) = @_;
     my $catname = "";
@@ -641,6 +653,9 @@ sub _upgradeCategoryItem {
         for( $i = 4; $i < $len; $i++ ) {
             my $value = $cmd[$i];
             my $svalue = $value;
+            # I18N: FIXME - need to look at this, but since it's upgrading
+            # old forms that probably didn't use I18N, it's not a high
+            # priority.
             if( $src =~ /$value[^a-zA-Z0-9\.]/ ) {
                 $catvalue .= ", " if( $catvalue );
                 $catvalue .= $svalue;
@@ -667,7 +682,7 @@ sub _upgradeCategoryItem {
 
 ---++ sub upgradeCategoryTable (  $web, $topic, $meta, $text  )
 
-load old style category table
+Upgrade old style category table
 
 =cut
 
