@@ -86,11 +86,11 @@ my $ActivePerlRecommendedBuild = 631;	# Fixes PERL5SHELL bugs
 my $rcsverRequired = 5.7;
 
 my @requiredMods = ( @basicMods,  
-	'File::Copy'
+	'File::Copy',
+	'MIME::Base64', 
     ); 
 my @requiredModsNonUnix = ( 
 	'Digest::SHA1', 
-	'MIME::Base64', 
 	'Net::SMTP',
    );
 
