@@ -2,7 +2,6 @@
 # post-twiki.sh
 use strict;
 use Data::Dumper qw( Dumper );
-use Cwd qw( cwd );
 use File::Basename qw( basename );
 
 # TODO notes:
@@ -11,14 +10,21 @@ use File::Basename qw( basename );
 
 sub mychomp { chomp $_[0]; $_[0] }
 
-my $startupTopic = "";
+my $opts = {
+    startupTopic => "",
+    scriptSuffix => '',
+};
 
 BEGIN {
     use Config;
-    my $localLibBase = cwd() . "/cgi-bin/lib/CPAN/lib/site_perl/" . $Config{version};
+    use FindBin;
+#    my $localLibBase = "$FindBin::Bin/cgi-bin/lib/CPAN/lib/site_perl/" . $Config{version};
+    my $localLibBase = "$FindBin::Bin/cgi-bin/lib/CPAN/lib";
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
     # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
 };
+
+#use WWW::Mechanize::TWiki;
 
 system( "mv cgi-bin/tmp/install/LocalSite.cfg cgi-bin/lib/" );
 system( "mkdir htdocs/" );
@@ -34,9 +40,9 @@ print `find cgi-bin/lib/ -print | xargs chmod go-w`;
 ################################################################################
 
 open( INDEX_PHP, ">htdocs/index.php" ) or die $!;
-print INDEX_PHP <<'EOF';
+print INDEX_PHP <<"EOF";
 <?php 
-Header( "Location: http://" . $_SERVER[HTTP_HOST] . "/cgi-bin/twiki/view/" );
+Header( "Location: http://" . \$_SERVER[HTTP_HOST] . "/cgi-bin/twiki/view$opts->{scriptSuffix}/" );
 ?>
 EOF
 close( INDEX_PHP );
@@ -47,9 +53,20 @@ close( INDEX_PHP );
 ################################################################################
 ################################################################################
 
+# format: /Users/(account)/Sites/cgi-bin/...
+# format: /home/(drive)/(account)/account.wikihosting.com/...
+my $account = [ split( '/', $FindBin::Bin ) ]->[-2];
+print STDERR "account=[$account]\n";
+
+
+chomp( my $hostname = $ENV{SERVER_NAME} || `hostname --long` || 'localhost' );
+die "hostname?" unless $hostname;
+
+my $BIN = "http://hostname/~$account/cgi-bin/twiki";
+
 my $agent = "TWikiInstaller: " . basename( $0 );
 my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;
-$mech->cgibin( "http://localhost/~twiki/cgi-bin/twiki" );
+$mech->cgibin( $BIN, { scriptSuffix => $opts->{scriptSuffix} } );
 
 # open up the system (could be locked down at the end)
 $mech->edit( "Main.TWikiAdminGroup" );
@@ -60,10 +77,7 @@ $mech->click_button( value => 'Save' );
 
 ################################################################################
 
-#rm -rf cgi-bin/install_twiki.cgi cgi-bin/tmp/
-
-# $account = /Users/(twiki)/Sites
-# echo `curl http://localhost/~twiki/cgi-bin/twiki/manage?action=relockrcs | grep code | wc -l` topic(s) unlocked
+#rm -rf cgi-bin/install_twiki$opts->{scriptSuffix} cgi-bin/tmp/
 
 ################################################################################
 
@@ -81,19 +95,19 @@ if ( -e "TWikiInstallationReport.html" )
     $mech->follow_link( text => 'Attach' );
     if ( $mech->submit_form(
 			    fields    => { 
-					filepath => cwd() . "/$topic.html",
+					filepath => "$FindBin::Bin/$topic.html",
 					filecomment => `date`,
 					hidefile => undef,
 			    },
 	) ) { #unlink "${topic}.html" 
 	}
     
-    $startupTopic = "TWiki.$topic";
+    $opts->{startupTopic} = "TWiki.$topic";
 }
 
 ################################################################################
 
-my $START = "http://" . mychomp(`hostname`) . "/~" . mychomp(`whoami`) . "/cgi-bin/twiki/view/$startupTopic";
+my $START = "$BIN/view$opts->{scriptSuffix}/$opts->{startupTopic}";
 system( open => $START ) == 0 or print "start using your wiki at $START\n";
 
 ################################################################################
@@ -117,9 +131,10 @@ sub new {
 sub cgibin {
     my $self = shift;
     my $cgibin = shift;
-    my $args = @_;
+    my $args = shift;
 
     $self->{cgibin} = $cgibin;
+    $self->{scriptSuffix} = $args->{scriptSuffix};
 
     return $self;
 }
@@ -136,7 +151,7 @@ sub AUTOLOAD {
     (my $action = $AUTOLOAD) =~ s/.*:://;
     *$AUTOLOAD = sub {
         my ($self, $topic, $args) = @_;
-        (my $url = URI->new( "$self->{cgibin}/$action/$topic" ))->query_form( $args );
+        (my $url = URI->new( "$self->{cgibin}/$action$self->{scriptSuffix}/$topic" ))->query_form( $args );
         return $self->get( $url );
     };
     goto &$AUTOLOAD;
