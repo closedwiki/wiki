@@ -105,6 +105,10 @@ sub getMainWebname {
   return "Main";
 }
 
+sub saveFile {
+    BaseFixture::saveFile(@_);
+}
+
 sub  getTopicList {
   my $web = shift;
 
@@ -166,6 +170,11 @@ sub readTopicText {
 	return `$cmd`;
   }
   return BaseFixture::readFile( getDataDir() . "/$web/$topic.txt" );
+}
+
+sub readFile {
+    return BaseFixture::readFile( @_ ) if ( -e $_[0] );
+    return undef;
 }
 
 sub readTopic {
@@ -341,10 +350,19 @@ sub getRegularExpression {
 	return qr/[A-Z]+[a-z]+[A-Z]\w*/;
   } elsif ($name eq "anchorRegex") {
 	return qr/\#[A-Za-z0-9_]+/;
+} elsif ($name eq "emailAddrRegex") {
+    return qr/([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/;
   } else {
 	die "$name is not usable";
   }
 }
 
+sub getPublicWebList {
+    return BaseFixture::webList();
+}
+
+sub getWebTopicList {
+    return BaseFixture::topicList(@_);
+}
 
 1;

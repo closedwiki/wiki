@@ -10,6 +10,8 @@ For full details, read the code.
 
 $TWiki::wikiPrefsTopicname = "TWikiPreferences";
 $TWiki::webPrefsTopicname = "WebPreferences";
+$TWiki::notifyTopicname = "WebNotify";
+$TWiki::cmdQuote = "'";
 
 #$TWiki::webNameRegex = "[A-Z]+[A-Za-z0-9]*";
 #$TWiki::anchorRegex = "\#[A-Za-z0-9_]+";
@@ -30,6 +32,19 @@ sub initialize {
   }
 
   return ($topic, $webName, "scripturlpath", "testrunner", $BaseFixture::testData);
+}
+
+sub getEmailOfUser
+{
+    my( $wikiName ) = @_;		# WikiName without web prefix
+
+    return ("$wikiName\@test.email");
+}
+
+sub makeTopicSummary {
+    my( $theText, $theTopic, $theWeb ) = @_;
+
+    return $theText;
 }
 
 sub formatTime

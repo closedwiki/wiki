@@ -49,10 +49,25 @@ sub tear_down {
   `rm -rf $testDir`;
 }
 
+sub webList {
+    opendir(WL, $testData);
+    my @list = grep(/^\w+$/, readdir(WL));
+    closedir(WL);
+    return @list;
+}
+
+sub webTopicList {
+    opendir(WL, "$testData/$_[0]");
+    my @list = map { $_ =~ s/\.txt$// } grep(/^\w+.txt$/, readdir(WL));
+    closedir(WL);
+    return @list;
+}
+
 sub writeFile {
   my ($web, $topic, $ext, $text) = @_;
+  $ext = ".$ext" if ($ext);
   mkdir "$testData/$web", 0777 unless ( -d "$testDir/$web" );
-  my $file = "$testData/$web/$topic.$ext";
+  my $file = "$testData/$web/$topic$ext";
   open(WF,">$file") || die;
   print WF $text;
   close(WF) || die;
@@ -104,6 +119,14 @@ sub readFile {
   $/ = "\n";
   close( IN_FILE );
   return $data;
+}
+
+sub saveFile {
+  my( $name,$text ) = @_;
+  my $data = "";
+  open( OUT_FILE, ">$name" ) || die "Failed to open $name";
+  print OUT_FILE $text;
+  close( OUT_FILE );
 }
 
 sub loadPreferencesFor {

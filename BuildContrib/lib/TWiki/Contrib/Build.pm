@@ -77,7 +77,7 @@ use POSIX;
 use diagnostics;
 use vars qw( $VERSION $basedir $twiki_home $buildpldir $libpath );
 
-$VERSION = 1.00;
+$VERSION = 1.002;
 
 BEGIN {
     use File::Spec;
@@ -451,7 +451,7 @@ Expands tokens in a documentation topic.Four tokens are supported:
    * %$VERSION% version from $VERSION in main .pm
    * %$DATE% - local date
    * %$POD% - expands to the POD documentation for the package, excluding test modules.
-
+Three spaces is automatically translated to tab.
 =cut
 
 sub filter {
@@ -460,15 +460,17 @@ sub filter {
     return unless (-f $from);
     
     open(IF, "<$from") || die "No source topic $from for filter";
+    undef $/;
+    my $text = <IF>;
+    close(IF);
+    $/ = "\n";
+    $text =~ s/%\$(\w+)%/&_expand($this,$1)/geo;
+    $text =~ s/ {3}/\t/g;
+
     unless ($this->{-n}) {
         open(OF, ">$to") || die "No dest topic $to for filter";
     }
-    my $line;	
-    while ($line = <IF>) {
-        $line =~ s/%\$(\w+)%/&_expand($this,$1)/geo;
-        print OF $line unless ($this->{-n});
-    }
-    close(IF);
+    print OF $text unless ($this->{-n});
     print OF "<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->\n";
     close(OF) unless ($this->{-n});
 }
@@ -507,7 +509,6 @@ sub target_release {
     my $tmpdir = "/tmp/$$";
     $this->makepath($tmpdir);
 
-    $this->checkin_fileset($this->{files}, $basedir);
     $this->copy_fileset($this->{files}, $basedir, $tmpdir);
     foreach my $file (@{$this->{files}}) {
         if ($file->{name} =~ /\.txt$/) {
@@ -548,28 +549,6 @@ sub copy_fileset {
         $uncopied--;
     }
     die "Files left uncopied" if ($uncopied);
-}
-
-=begin text
-
----++++ checkin_fileset
-If any of the files in the fileset have a corresponding ,v file next
-to them, then check in the file.
-
-=cut
-sub checkin_fileset {
-    my ($this, $set, $from, $to) = @_;
-    
-    foreach my $file (@$set) {
-        my $name = $file->{name};
-        if (-e "$from/$name,v") {
-            my $safetynet = "$from/$name$$";
-            $this->sys_action("mv $from/$name $safetynet");
-            $this->sys_action("co -l -q $from/$name");
-            $this->sys_action("mv $safetynet $from/$name");
-            $this->sys_action("ci -q -u -mAutomatic $from/$name");
-        }
-    }
 }
 
 =begin text
