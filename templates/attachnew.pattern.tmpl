@@ -4,5 +4,13 @@
 %TMPL:DEF{"previousdetails"}%
 ---++ Attach new file%TMPL:END%
 %TMPL:DEF{"action"}%Attach new file%TMPL:END%
-%TMPL:DEF{"topicaction"}%<div class="TWikiFormButtons"><span class="left">[[%WEB%.%TOPIC%][Cancel]]</span><span class="TWikiSubmitButton"><input type="submit" value="Upload file" /></span><br class="TWikiClearLine" /></div>%TMPL:END%
+%TMPL:DEF{"topicaction"}%<div class="TWikiTopicAction">
+<table>
+<tr>
+<td class="TWikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>
+<td class="TWikiSubmitCol"><input type="submit" class="TWikiSubmit" value="Upload file" /></td>
+<td>&nbsp;</td>
+</tr>
+</table>
+</div>%TMPL:END%
 %TMPL:P{"attach"}%

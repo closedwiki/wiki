@@ -3,7 +3,7 @@
 %TMPL:DEF{"titleaction"}%(attach) %TMPL:END%
 
 %TMPL:DEF{"simpleheader"}%
----+ Attach image or document to %TOPIC%
+---+ Attach image or document on %TOPIC%
 %TMPL:END%
 
 %TMPL:DEF{"script"}%
@@ -39,7 +39,7 @@
 %TMPL:P{"simpleheader"}%
 <div class="TWikiTopic">
 %TMPL:P{"previousdetails"}%
-<table class="attachTable" width="100%">
+<table class="TWikiAttachTable" width="100%">
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 	%TMPL:P{"previous"}% 
 	<tr>
@@ -97,9 +97,4 @@ Images will be displayed, for other attachments a link will be created.
 %TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%
 %TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
-%TMPL:END%
-
-
-
-
+%TMPL:P{"bodyend"}% %TMPL:END%

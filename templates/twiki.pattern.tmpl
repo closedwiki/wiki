@@ -1,4 +1,5 @@
 %TMPL:DEF{"sep"}%<span class="separator">|</span>%TMPL:END%
+%TMPL:DEF{"titlesep"}%&lt;%TMPL:END%
 
 %TMPL:DEF{"htmldoctype"}%
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -32,7 +33,7 @@
 
 %TMPL:DEF{"head"}%
 <head>
-<title>%TMPL:P{"titleaction"}%%TOPIC% &laquo; %WEB% &laquo; %WIKITOOLNAME%</title>
+<title>%TMPL:P{"titleaction"}%%TOPIC% %TMPL:P{"titlesep"}% %WEB% %TMPL:P{"titlesep"}% %WIKITOOLNAME%</title>
 <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
 <meta name="robots" content="noindex" />
 %HTTP_EQUIV_ON_VIEW%
@@ -46,7 +47,7 @@
 
 %TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
 
-%TMPL:DEF{"topbar"}%<span class="hidden"><a href="#Content">Skip to topic</a> | <a href="#PageBottom">Skip to bottom</a><hr /></span><div class="TWikiTopBar"><div class="TWikiTopBarMainContents" style="display: none">%INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div><br class="TWikiClearLine" /></div>%TMPL:END%
+%TMPL:DEF{"topbar"}%<div class="TWikiHidden"><a href="#Content">Skip to topic</a> | <a href="#PageBottom">Skip to bottom</a><hr /></div><div class="TWikiTopBar"><div class="TWikiTopBarMainContents">%INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div>%TMPL:END%
 
 %TMPL:DEF{"leftbar"}%<div class="TWikiLeftBar"><div class="TWikiLeftBarContents">
 %INCLUDE{"%TWIKIWEB%.WebLeftBar"}%</div></div>%TMPL:END%
@@ -67,7 +68,13 @@
 %TMPL:DEF{"bodyend"}%
 </body></html> %TMPL:END%
 
-%TMPL:P{"----------------------------------------------------------------------------"}%
+
+
+
+
+
+
+
 
 %TMPL:DEF{"main"}%
 %TMPL:P{"topbar"}%
@@ -81,13 +88,11 @@
 </div>
 %TMPL:P{"topicaction"}%
 %TMPL:P{"standardfooter"}%
-</div>
-%TMPL:END%
+</div>%TMPL:END%
 
 %TMPL:DEF{"oops"}%
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%
 %TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
-%TMPL:END%
+%TMPL:P{"bodyend"}% %TMPL:END%

@@ -2,17 +2,20 @@
 %TMPL:DEF{"headerhelp"}% %TMPL:END%
 %TMPL:DEF{"webaction"}% Update attachment *%FILENAME%* on *%TOPIC%* %TMPL:END%
 %TMPL:DEF{"simpleheader"}%
----+ Update image or document
+---+ Update image or document on %TOPIC%
 %TMPL:END%
 %TMPL:DEF{"previousdetails"}%
----++ Update attachment <code>%FILENAME%</code>
+---++ Update file %FILENAME%
 %ATTACHTABLE% %TMPL:END%
 %TMPL:DEF{"previous"}%
   <tr>
-  <td class="first">Previous upload</td><td>
+  <td class="title old">Previous upload</td>
+  <td class="old">
    <code>%FILEPATH%</code> %TMPL:P{"fileuser"}%
   </td>
+  <td class="help old">Select a new local file to update this attachment.</td>
  </tr>%TMPL:END%
+
 %TMPL:DEF{"extranotes"}%
 <div class="TWikiNotes">
    * *Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without 
@@ -22,9 +25,18 @@
      comment when the file was uploaded.
    * *Local file:* If you select a different file in _Local file:_, it is this that will be 
      updated or added.
-</div>
-%TMPL:END%
-%TMPL:DEF{"topicaction"}%<div class="TWikiFormButtons">[[%WEB%.%TOPIC%][Cancel]]
-   <input type="submit" value="Upload file" /><input type="submit" name="changeproperties" value="Change properties" /><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move&nbsp;attachment</a></div>%TMPL:END%
+</div>%TMPL:END%
+
+%TMPL:DEF{"topicaction"}%<div class="TWikiTopicAction">
+<table>
+<tr>
+<td class="TWikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>
+<td class="TWikiSubmitCol"><input type="submit" class="TWikiSubmit" value="Upload file" /><input type="submit" class="TWikiSubmit" name="changeproperties" value="Change properties" /></td>
+<td class="TWikiAddCol"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move&nbsp;attachment</a></td>
+</tr>
+</table>
+</div>%TMPL:END%
+
+
 %TMPL:DEF{"fileuser"}%(%FILEUSER%)%TMPL:END%
 %TMPL:P{"attach"}%
