@@ -3139,7 +3139,7 @@ sub renderMoved
             $putBack .= " href=\"$dispScriptUrlPath/rename/$web/$topic?newweb=$fromWeb&newtopic=$fromTopic&";
             $putBack .= "confirm=on\">put it back</a>";
         }
-        $text = "<p><i><nop>$to moved from <nop>$from on $date by $by </i>$putBack</p>";
+        $text = "<i><nop>$to moved from <nop>$from on $date by $by </i>$putBack";
     }
     
     $text = handleCommonTags( $text, $topic, $web );
