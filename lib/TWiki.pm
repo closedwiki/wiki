@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "08 Jan 2004";
+$wikiversion      = "14 Jan 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1287,8 +1287,11 @@ sub extractNameValuePair
 
     } else {
         # test if format: { "value" ... }
-        if( $str =~ /(^|\=\s*\"[^\"]*\")\s*\"([^\"]*)\"/ ) {
-            # is: %VAR{ ... = "..." "value" ... }%
+        if( $str =~ /(^|\=\s*\"[^\"]*\")\s*\"(.*?)\"\s*(\w+\s*=\s*\"|$)/ ) {
+            # is: %VAR{ "value" }%
+            # or: %VAR{ "value" param="etc" ... }%
+            # or: %VAR{ ... = "..." "value" ... }%
+            # Note: "value" may contain embedded double quotes
             $value = $2 if defined $2;  # distinguish between "" and "0";
 
         } elsif( ( $str =~ /^\s*\w+\s*=\s*\"([^\"]*)/ ) && ( $1 ) ) {
@@ -1903,12 +1906,14 @@ sub handleUrlParam
 
     my $param   = extractNameValuePair( $theArgs );
     my $newLine = extractNameValuePair( $theArgs, "newline" ) || "";
+    my $encode = extractNameValuePair( $theArgs, "encode" ) || "";
     my $value = "";
     if( $cgiQuery ) {
         $value = $cgiQuery->param( $param );
         $value = "" unless( defined $value );
-        $value =~ s/\r?\n/$newLine/go if( $newLine );
     }
+    $value = handleUrlEncode( "\"$value\" type=\"$encode\"", 1 ) if( $encode );
+    $value =~ s/\r?\n/$newLine/go if( $newLine );
     unless( $value ) {
         $value = extractNameValuePair( $theArgs, "default" ) || "";
     }
@@ -1916,24 +1921,44 @@ sub handleUrlParam
 }
 
 # =========================
-# Encode URLs
+# Encode to URL parameter or HTML entity
 sub handleUrlEncode
 {
-    my( $theStr, $doExtract ) = @_;
+    my( $theArgs, $doExtract ) = @_;
 
-    $theStr = extractNameValuePair( $theStr ) if( $doExtract );
-    $theStr =~ s/[\n\r]/\%3Cbr\%20\%3E/g;
-    $theStr =~ s/\s+/\%20/g;
-    $theStr =~ s/\"/\%22/g;
-    $theStr =~ s/\&/\%26/g;
-    $theStr =~ s/\+/\%2B/g;
-    $theStr =~ s/\</\%3C/g;
-    $theStr =~ s/\>/\%3E/g;
-    $theStr =~ s/\\/\%5C/g;
-    # Encode characters with 8th bit set (ASCII-derived charsets only)
-    $theStr =~ s/([\x7f-\xff])/'%' . unpack( "H*", $1 ) /ge;
-
-    return $theStr;
+    my $text = $theArgs;
+    my $type = "";
+    if( $doExtract ) {
+        $text = extractNameValuePair( $theArgs );
+        $type = extractNameValuePair( $theArgs, "type" ) || "";
+    }
+    if( $type =~ /^entit(y|ies)$/i ) {
+        # HTML entity encoding
+        # FIXME: Does this affect I18N?
+        $text =~ s/\"/\&\#034;/g;
+        $text =~ s/\%/\&\#037;/g;
+        $text =~ s/\*/\&\#042;/g;
+        $text =~ s/\_/\&\#095;/g;
+        $text =~ s/\=/\&\#061;/g;
+        $text =~ s/\[/\&\#091;/g;
+        $text =~ s/\]/\&\#093;/g;
+        $text =~ s/\</\&\#060;/g;
+        $text =~ s/\>/\&\#062;/g;
+        $text =~ s/\|/\&\#124;/g;
+    } else {
+        # URL encoding
+        $text =~ s/[\n\r]/\%3Cbr\%20\%3E/g;
+        $text =~ s/\s+/\%20/g;
+        $text =~ s/\"/\%22/g;
+        $text =~ s/\&/\%26/g;
+        $text =~ s/\+/\%2B/g;
+        $text =~ s/\</\%3C/g;
+        $text =~ s/\>/\%3E/g;
+        $text =~ s/\\/\%5C/g;
+        # Encode characters with 8th bit set (ASCII-derived charsets only)
+        $text =~ s/([\x7f-\xff])/'%' . unpack( "H*", $1 ) /ge;
+    }
+    return $text;
 }
 
 # =========================
@@ -2040,8 +2065,8 @@ sub handleInternalTags
     $_[0] =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$_[2]\/$_[1]/g;
     $_[0] =~ s/%ATTACHURLPATH%/$pubUrlPath\/$_[2]\/$_[1]/g;
     $_[0] =~ s/%ICON{(.*?)}%/&handleIcon($1)/geo;
-    $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/ge;
-    $_[0] =~ s/%URLENCODE{(.*?)}%/&handleUrlEncode($1,1)/ge;
+    $_[0] =~ s/%(URL)?PARAM{(.*?)}%/&handleUrlParam($2)/ge;     # PARAM is documented URLPARAM is legacy
+    $_[0] =~ s/%(URL)?ENCODE{(.*?)}%/&handleUrlEncode($2,1)/ge; # ENCODE is documented URLENCODE is legacy
     $_[0] =~ s/%INTURLENCODE{(.*?)}%/&handleIntUrlEncode($1,1)/ge;
     $_[0] =~ s/%DATE%/&getGmDate()/ge; # deprecated, but used in signatures
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/ge;
@@ -2548,7 +2573,6 @@ sub makeAnchorName
     # alphabetic character mapping could be defined to minimise this issue.  
     # FIXME: Issue for EBCDIC/UTF-8
     $anchorName =~ s/([\x7f-\xff])/_/g;		# Map 8-bit chars
-    ##$anchorName =~ handleUrlEncode( $anchorName );	# Was doing URL-encode 
 
     return $anchorName;
 }
