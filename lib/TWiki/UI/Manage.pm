@@ -456,7 +456,8 @@ sub rename {
 
   # Update references in referring pages - not applicable to attachments.
   if( ! $theAttachment ) {
-    my @refs = _getReferingTopicsListFromURL( $oldWeb, $oldTopic );
+    my @refs = _getReferingTopicsListFromURL( $oldWeb, $oldTopic, $newWeb, $newTopic );
+
     my $problems;
     ( $lockFailure, $problems ) = 
       &TWiki::Store::updateReferingPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
@@ -496,8 +497,23 @@ sub rename {
 }
 
 #=========================
+
+=pod
+
+---++ _getReferingTopicsListFromURL ( $oldWeb, $oldTopic, $newWeb, $newTopic ) ==> @refs
+| Description:           | returns the list of topics that have been found that refer to the renamed topic |
+| Parameter: =$oldWeb=   |   |
+| Parameter: =$oldTopic= |   |
+| Parameter: =$newWeb=   |   |
+| Parameter: =$newTopic= |   |
+| Return: =@refs=        |   |
+| TODO: | docco what the return list means |
+
+=cut
+
 sub _getReferingTopicsListFromURL {
   my $query = TWiki::getCgiQuery();
+  my ( $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
 
   my @result = ();
 
@@ -509,7 +525,11 @@ sub _getReferingTopicsListFromURL {
       my $checked = $query->param( "RENAME$type$count" );
       if ($checked) {
         push @result, $type;
-        push @result, $query->param( "TOPIC$type$count" );
+		my $topic = $query->param( "TOPIC$type$count" );
+		if ($topic =~ /$oldWeb.$oldTopic/ ) {
+			$topic = "$newWeb.$newTopic";
+		}
+        push @result, $topic;
       }
       $count++;
     }
