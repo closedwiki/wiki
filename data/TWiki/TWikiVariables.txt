@@ -12,6 +12,9 @@
   <td> =%<nop>SCRIPTURLPATH%= </td>
   <td> The path of the script URL of %WIKITOOLNAME%, is <b>%SCRIPTURLPATH%</b></td>
 </tr><tr>
+  <td> =%<nop>SCRIPTSUFFIX%= </td>
+  <td> The script suffix, i.e. =.pl=, is <b>%SCRIPTSUFFIX%</b></td>
+</tr><tr>
   <td> =%<nop>PUBURL%= </td>
   <td> The public URL of TWiki, is <b>%PUBURL%</b> </td>
 </tr><tr>
