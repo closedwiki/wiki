@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1072855797" format="1.0" version="1.21"}%
+%META:TOPICINFO{author="PeterThoeny" date="1082876858" format="1.0" version="1.22"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -95,7 +95,9 @@ The following variables get expanded when a user creates a new topic based on a 
 <blockquote>
 | *Variable:* | *Description:* |
 | =%<nop>DATE%= | Current date, e.g. =%DATE%= |
-| =%<nop>WIKIUSERNAME%= | User name, e.g. =%WIKIUSERNAME%= |
+| =%<nop>USERNAME%= | Login name, e.g. =jsmith= |
+| =%<nop>WIKINAME%= | WikiName of user, e.g. =JohnSmith= |
+| =%<nop>WIKIUSERNAME%= | User name, e.g. =Main.JohnSmith= |
 | =%<nop>URLPARAM{"name"}%= | Value of a named URL parameter |
 | =%<nop>NOP%= | A no-operation variable that gets removed. Useful to prevent a SEARCH from hitting an edit template topic; also useful to escape a variable like =%<nop>URLPARAM%<nop>NOP%{...}%= |
 | =%<nop>NOP{ ... }%= | A no-operation text that gets removed. Useful to write-protect an edit template topic, but not the topics based this template topic. See notes below. Example:%BR% =%<nop>NOP{%BR%&nbsp; &nbsp;* Set&nbsp;ALLOWTOPICCHANGE = <nop>Main.TWikiAdminGroup%BR% }%= |
@@ -250,8 +252,9 @@ With URL: ==.../bin/oops/Sandbox/TestTopic2?template=oopstest&param1=WebHome&par
 
 	* A drawback of referring to a master template is that you can only test a template from within TWiki, where the include variables are resolved. In the previous system, each template was a structurally complete HTML document with a =.tmpl= filename extension - it contained unresolved =%VARIABLES%=, but could still be previewed directly in a browser.
 
--- TWiki:Main.PeterThoeny - 30 Dec 2004 %BR%
+-- TWiki:Main.PeterThoeny - 25 Apr 2004 %BR%
 -- TWiki:Main.MikeMannix - 14 Sep 2001 %BR%
 -- TWiki:Main.DavidLeBlanc - 11 Mar 2002
+
 %META:FILEATTACHMENT{name="testscreen.gif" attr="h" comment="Example of oopstest.tmpl rendered" date="1026977240" path="C:\Data\Temp\testscreen.gif" size="9566" user="PeterThoeny" version="1.2"}%
 %META:TOPICMOVED{by="MikeMannix" date="1000277381" from="TWiki.TWikiTemplateSystem" to="TWiki.TWikiTemplates"}%
