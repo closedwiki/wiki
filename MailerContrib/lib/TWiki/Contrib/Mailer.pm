@@ -40,7 +40,7 @@ package TWiki::Contrib::Mailer;
 
 use vars qw ( $VERSION $sendmail $verbose );
 
-$VERSION = 1.001;
+$VERSION = 1.002;
 
 =begin text
 
@@ -66,14 +66,16 @@ sub mailNotify {
     $webstr =~ s/\*/\.\*/g;
 
     # No point, since we have to do a full initialise anyway
-    #TWiki::basicInitialize();
+    TWiki::basicInitialize();
 
     # SMELL: without a full initialise I get an error when trying to
     # list all webs!! Shouldn't be needed.
-    my ( $topic, $webName, $dummy, $userName, $dataDir) =
-      TWiki::initialize( "/TWiki", "nobody" );
+#    my ( $topic, $webName, $dummy, $userName, $dataDir) =
+#      TWiki::initialize( "/TWiki", "nobody" );
 
-    foreach my $web ( grep( /$webstr/o, TWiki::Func::getPublicWebList() )) {
+    # SMELL: have to getAllWebs, becuase only API only returns public
+    # webs.
+    foreach my $web ( grep( /$webstr/o, TWiki::Store::getAllWebs() )) {
         _processWeb( $web );
     }
 }

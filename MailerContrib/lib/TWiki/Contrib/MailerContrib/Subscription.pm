@@ -20,6 +20,7 @@ use strict;
 
 =begin text
 
+---
 ---++ package TWiki::Contrib::MailerContrib::Subscription
 Object that represents a single subscription of a user to
 notification on a page. A subscription is expressed as a page

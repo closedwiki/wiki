@@ -20,6 +20,7 @@ use strict;
 
 =begin text
 
+---
 ---++ package TWiki::Contrib::MailerContrib::Subscriber
 Object that represents a subscriber to notification. A subscriber is
 a name (which may be a wikiName or an email address) and a list of
