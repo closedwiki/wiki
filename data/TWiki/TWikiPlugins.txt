@@ -1,0 +1,11 @@
+Plugins allow you to extend the syntax or functionality of TWiki. ...
+
+__How to Create a Plugin__
+
+under construction... ( check back at http://TWiki.org/cgi-bin/view/TWiki/TWikiPlugins )
+
+__How to Install a Plugin__
+
+under construction... ( check back at http://TWiki.org/cgi-bin/view/TWiki/TWikiPlugins )
+
+-- Main.PeterThoeny - 17 Feb 2001 <br>

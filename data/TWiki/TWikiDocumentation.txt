@@ -10,7 +10,8 @@
 	* <A href="#variables">(9)</A> TWiki Variables
 	* <A href="#notification">(10)</A> Notification of Changes by Email
 	* <A href="#category">(11)</A> TWiki Category Table
-	* <A href="#administration">(12)</A> TWiki Administration
+	* <A href="#plugins">(12)</A> TWiki Plugins
+	* <A href="#administration">(13)</A> TWiki Administration
 
 __Note:__ Read the most up to date version of this document at http://TWiki.org/cgi-bin/view/TWiki/TWikiDocumentation
 
@@ -93,8 +94,15 @@ __Related Topics:__ TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhanceme
 %INCLUDE{"TWikiCategoryTable"}%
 
 
+<A name="plugins">
+-----
+*(12) TWiki Plugins*
+
+%INCLUDE{"TWikiPlugins"}%
+
+
 <A name="administration">
 -----
-*(12) TWiki Administration*
+*(13) TWiki Administration*
 
 %INCLUDE{"TWikiAdministration"}%
