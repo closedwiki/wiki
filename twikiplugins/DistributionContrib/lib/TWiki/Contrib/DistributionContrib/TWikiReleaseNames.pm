@@ -6,7 +6,7 @@ use diagnostics;
 
 ---+++ sub wikiVersionToDistributionName($wikiVersion)
 
-   * turns '01 Feb 2003' => "TWiki20030201"
+ * turns '01 Feb 2003' => "TWiki20030201"
 
 =cut
 
@@ -43,8 +43,8 @@ sub wikiVersionToDistributionName {
 
 ---+++ sub releaseTopicToDistributionName($releaseTopic)
 
-   * TWikiBetaRelease2004x07x30 => TWiki20040730beta 
-   * TWikiRelease20030201 => TWiki20030201
+ * TWikiBetaRelease2004x07x30 => TWiki20040730beta 
+ * TWikiRelease20030201 => TWiki20030201
 
 =cut 
 
