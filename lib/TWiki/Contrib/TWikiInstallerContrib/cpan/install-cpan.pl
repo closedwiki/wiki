@@ -56,8 +56,9 @@ installLocalModules({
 				     Text::Glob Number::Compare File::Find::Rule 
 				     File::Slurp File::Slurp::Tree
 				     List::Permutor File::Temp 
-				     WWW::Mechanize
+				     WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki LWP::UserAgent::TWiki::TWikiGuest
 				     Archive::Zip 
+				     IO::Zlib
 				     IO::String Archive::Tar 
 				     File::AnySpec File::Package Data::Startup Tie::Gzip File::Where Archive::TarGzip
 				     Class::Virtually::Abstract Carp::Assert Class::Data::Inheritable Archive::Any
