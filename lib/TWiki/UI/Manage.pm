@@ -526,7 +526,7 @@ sub _getReferingTopicsListFromURL {
       if ($checked) {
         push @result, $type;
 		my $topic = $query->param( "TOPIC$type$count" );
-		if ($topic =~ /$oldWeb.$oldTopic/ ) {
+		if ($topic =~ /^$oldWeb.$oldTopic$/ ) {
 			$topic = "$newWeb.$newTopic";
 		}
         push @result, $topic;
