@@ -1260,6 +1260,9 @@ sub makeTopicSummary {
     $nchar = 16 if( $nchar < 16 );
     $htext =~ s/(.{$nchar})($TWiki::regex{mixedAlphaNumRegex})(.*?)$/$1$2 \.\.\./;
 
+    # newline conversion to permit embedding in TWiki tables
+    $htext =~ s/\s+/ /g;
+
     return $this->protectPlainText( $htext );
 }
 
@@ -1497,7 +1500,7 @@ sub summariseChanges {
             $block =~ s/^(.{67}).*$/$1.../ if( length($block) > 70 );
             if ( $block =~ m/^[-+]/ ) {
                 if( $tml ) {
-                    $block =~ s/^-(.*)$/<br><del>$1<\/del>/s;
+                    $block =~ s/^-(.*)$/<br \/><del>$1<\/del>/s;
                     $block =~ s/^\+(.*)$/<ins>$1<\/ins>/s;
                 }
                 push( @revised, $prev ) if $prev;
@@ -1514,7 +1517,11 @@ sub summariseChanges {
                 }
             }
         }
-        $summary = join("\n", @revised );
+        if( $tml ) {
+            $summary = join("<br />", @revised );
+        } else {
+            $summary = join("\n", @revised );
+        }
     }
 
     unless( $summary ) {

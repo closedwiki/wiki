@@ -1055,7 +1055,7 @@ sub new {
     $this->{SESSION_TAGS}{SCRIPTURL}      = $this->{urlHost}.$TWiki::cfg{DispScriptUrlPath};
 
     # initialize user preferences
-    $this->{prefs}->initializeUser( $user, $this->{topicName} );
+    $this->{prefs}->initializeUser();
 
     $this->{renderer} = new TWiki::Render( $this );
 
