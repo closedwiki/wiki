@@ -45,7 +45,7 @@ dd a:hover{ }
 #topsection { position: relative; top: 6ex; left: 0; }
 #title { display: none; }
 #logochar {position:absolute; top:0; left:0; font-size: 36ex; font-weight: bold; color: rgb(234, 234, 234);width: 1em;}
-#search { position: relative; top: 0; right: 2ex; /*text-align: right;*/}
+#search {margin-right: 2ex;}
 #search input { font-size: 1.6ex; border: 1px solid #bbb;}
 #search a:link { color: #bbb; }
 
@@ -107,16 +107,17 @@ dd a:hover{ }
 /* de-emphasize */
 .deem { font-size: smaller; }
 /* inset box , e.g. for %TOC% */
-div.inset { width: 15em; float: right; border: thin dotted Gray; margin: 2ex; padding: 1ex;}
+div.inset { width: 35%; float: right; border: thin dotted Gray; margin: 2ex; padding: 1ex;}
 div.inset ul {padding-left:0; padding-right:0; margin-left:0; margin-right:0; list-style: circle; }
 div.inset ul li {padding-left:-1ex; margin-left:2ex;; }
 
 /* ----- IE5,6/Win workarounds ----- */
-* html body { margin: 0; }
+* html body { margin: 6ex 0; }
 * html #menu { /* IE doesn't do 'fixed' */ position: absolute; }
 * html #content table{ width: auto; }
 * html #content textarea { width: 40em; }
 * html #diffs {padding:0;}
+* html #navigate { top: 15ex; }
 /* Fix IE AccessKey behaviour; 
 	leave commented out, is handled by twiki.see.tmpl */
 /* a { behavior: url(/twiki/pub/Plugins/SeeSkin/akey.htc) } */
