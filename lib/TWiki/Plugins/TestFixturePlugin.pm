@@ -408,7 +408,8 @@ sub _compareResults {
         $b =~ s/\s+$//s;
         my $ok = 0;
 
-        if ( $diff->[0] eq 'u' || $a eq $b || $rex && _rexeq( $a, $b )) {
+        if ( $diff->[0] eq 'u' || $a eq $b || $rex && _rexeq( $a, $b ) ||
+             tagSame($a, $b)) {
             $ok = 1;
         }
         $a = _tidy( $a );
@@ -455,6 +456,30 @@ sub initPlugin {
 
 sub commonTagsHandler {
     $_[0] =~ s/%FRIENDLYTAG{(.*?)}%/&_extractParams($1)/ge;
+}
+
+sub tagSame {
+    my( $a, $b ) = @_;
+
+    return 0 unless ($a =~ /^\s*<\/?(\w+)\s+(.*?)>\s*$/i);
+    my $tag = $1;
+    my $pa = $2;
+    return 0 unless $b =~  /^\s*<\/?$tag\s+(.*?)>\s*$/i;
+    my $pb = $1;
+    return paramsSame($pa, $pb);
+}
+
+sub paramsSame {
+    my( $a, $b) = @_;
+    return 1 if ($a eq $b);
+    while( $a =~ s/^\s*([a-zA-Z]+)=["'](.*?)["']// ) {
+        my( $x, $y) = ($1, $2);
+        $y =~ s/(\W)/\\$1/g;
+        return 0 unless $b =~ s/\b${x}=["']${y}["']//;
+    }
+    $a =~ s/^\s*//;
+    $b =~ s/^\s*//;
+    return $b eq $a;
 }
 
 sub _extractParams {
