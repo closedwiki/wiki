@@ -23,17 +23,17 @@ sub set_up {
   my $this = shift;
   $this->SUPER::set_up();
 
-  ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
-  $actions = new ActionTrackerPlugin::ActionSet();
-  my $action = new ActionTrackerPlugin::Action("Test", "Topic", 0,
+  TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
+  $actions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
+  my $action = new TWiki::Plugins::ActionTrackerPlugin::Action("Test", "Topic", 0,
 											"who=A,due=1-Jan-02,open",
 											"Test_Main_A_open_late");
   $actions->add($action);
-  $action = new ActionTrackerPlugin::Action("Test", "Topic", 1,
+  $action = new TWiki::Plugins::ActionTrackerPlugin::Action("Test", "Topic", 1,
 											"who=Main.A,due=1-Jan-02,closed",
 											"Test_Main_A_closed_ontime");
   $actions->add($action);
-  $action = new ActionTrackerPlugin::Action("Test", "Topic", 2,
+  $action = new TWiki::Plugins::ActionTrackerPlugin::Action("Test", "Topic", 2,
 											"who=Blah.B,due=\"29 Jan 2010\",open",
 											"Test_Blah_B_open_ontime");
   $actions->add($action);
@@ -47,7 +47,7 @@ sub tear_down {
 
 sub testAHTable {
   my $this = shift;
-  my $fmt = new ActionTrackerPlugin::Format("|Web|Topic|Edit|",
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("|Web|Topic|Edit|",
 											"|\$web|\$topic|\$edit|",
 											"rows",
 											"", "");
@@ -71,7 +71,7 @@ sub testAHTable {
 
 sub testAVTable {
   my $this = shift;
-  my $fmt = new ActionTrackerPlugin::Format("|Web|Topic|Edit|",
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("|Web|Topic|Edit|",
 											"|\$web|\$topic|\$edit|",
 											"cols",
 											"", "",);
@@ -97,7 +97,7 @@ sub testSearchOpen {
   my $this = shift;
   my $attrs = new TWiki::Contrib::Attrs("state=open");
   my $chosen = $actions->search($attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
   $this->assert_matches(qr/Blah_B_open/, $text);
   $this->assert_matches(qr/A_open/, $text);
@@ -108,7 +108,7 @@ sub testSearchClosed {
   my $this = shift;
   my $attrs = new TWiki::Contrib::Attrs("closed");
   my $chosen = $actions->search($attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
   $this->assert_does_not_match(qr/open/o, $text);
 }
@@ -117,7 +117,7 @@ sub testSearchWho {
   my $this = shift;
   my $attrs = new TWiki::Contrib::Attrs("who=A");
   my $chosen = $actions->search($attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
   $this->assert_does_not_match(qr/B_open_ontime/o, $text);
 }
@@ -126,7 +126,7 @@ sub testSearchLate {
   my $this = shift;
   my $attrs = new TWiki::Contrib::Attrs("late");
   my $chosen = $actions->search($attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
   $this->assert_matches(qr/Test_Main_A_open_late/, $text);
   $this->assert_does_not_match(qr/ontime/o, $text);
@@ -136,7 +136,7 @@ sub testSearchLate2 {
   my $this = shift;
   my $attrs = new TWiki::Contrib::Attrs("state=\"late\"");
   my $chosen = $actions->search($attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
   $this->assert_matches(qr/Test_Main_A_open_late/, $text);
   $this->assert_does_not_match(qr/ontime/o, $text);
@@ -146,7 +146,7 @@ sub testSearchAll {
   my $this = shift;
   my $attrs = new TWiki::Contrib::Attrs("");
   my $chosen = $actions->search($attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
   $this->assert_matches(qr/Main_A_open_late/o, $text);
   $this->assert_matches(qr/Main_A_closed_ontime/o, $text);
@@ -155,9 +155,9 @@ sub testSearchAll {
 
 # add more actions to the fixture
 sub addMoreActions {
-  my $moreactions = new ActionTrackerPlugin::ActionSet();
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
-  my $action = new ActionTrackerPlugin::Action( "Test", "Topic", 0,
+  my $moreactions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $action = new TWiki::Plugins::ActionTrackerPlugin::Action( "Test", "Topic", 0,
 												"who=C,due=\"1 Jan 02\",open",
 												"C_open_late");
   $moreactions->add($action);
@@ -170,7 +170,7 @@ sub testx1Search {
   addMoreActions();
   my $attrs = new TWiki::Contrib::Attrs("late");
   my $chosen = $actions->search($attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $text = $chosen->formatAsString($fmt);
   $this->assert_matches(qr/A_open_late/, $text);
   $this->assert_matches(qr/C_open_late/o, $text);

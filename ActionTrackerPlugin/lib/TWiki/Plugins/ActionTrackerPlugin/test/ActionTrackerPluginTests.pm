@@ -20,7 +20,7 @@ sub set_up {
   $this->SUPER::set_up();
 
   BaseFixture::loadPreferencesFor("ActionTrackerPlugin");
-  ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
+  TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
 
   BaseFixture::writeTopic("Test", "Topic1", "
 %ACTION{who=Main.Sam,due=\"3 Jan 02\",open}% Test0: Sam_open_late");
@@ -99,7 +99,7 @@ sub testActionSearchFormat {
   my $this = shift;
   my $chosen = TWiki::Plugins::ActionTrackerPlugin::_handleActionSearch("Main", "web=\".*\" who=Sam header=\"|Who|Due|\" format=\"|\$who|\$due|\" orient=rows");
   $chosen =~ s/\n//og;
-  $this->assert_html_matches("<table border=\"1\"><tr><th bgcolor=\"$ActionTrackerPlugin::Format::hdrcol\">Who</th><td>Main.Sam</td></tr><tr><th bgcolor=\"$ActionTrackerPlugin::Format::hdrcol\">Due</th><td bgcolor=\"yellow\">Thu, 3 Jan 2002</td></tr></table>", $chosen);
+  $this->assert_html_matches("<table border=\"1\"><tr><th bgcolor=\"$TWiki::Plugins::ActionTrackerPlugin::Format::hdrcol\">Who</th><td>Main.Sam</td></tr><tr><th bgcolor=\"$TWiki::Plugins::ActionTrackerPlugin::Format::hdrcol\">Due</th><td bgcolor=\"yellow\">Thu, 3 Jan 2002</td></tr></table>", $chosen);
 }
 
 sub test2CommonTagsHandler {
@@ -158,18 +158,18 @@ break the table here %ACTION{who=ActorSeven,due=01/01/02,open}% Create the maile
   $script =~ s/\s+/ /go;
   $this->assert_str_equals( "<script language=\"JavaScript\"><!-- function editWindow(url) { win=open(url,\"none\",\"titlebar=0,width=800,height=400,resizable,scrollbars\"); if(win){win.focus();} return false; } // --> </script>", $script);
   
-  my $tblhdr = "<table border=\"$ActionTrackerPlugin::Format::border\"><tr bgcolor=\"$ActionTrackerPlugin::Format::hdrcol\"><th> Assigned to </th><th> Due date </th><th> Description </th><th> State </th><th> Notify </th><th>&nbsp;</th></tr>";
+  my $tblhdr = "<table border=\"$TWiki::Plugins::ActionTrackerPlugin::Format::border\"><tr bgcolor=\"$TWiki::Plugins::ActionTrackerPlugin::Format::hdrcol\"><th> Assigned to </th><th> Due date </th><th> Description </th><th> State </th><th> Notify </th><th>&nbsp;</th></tr>";
   $text = $this->assert_html_matches($tblhdr, $text);
   $text = $this->assert_html_matches(action("UidOnFirst","Main.ActorOne",undef,"Fri, 1 Nov 2002","__Unknown__ =status= www.twiki.org","open"), $text);
 
   $text = $this->assert_html_matches(action("AcTion1","Main.ActorTwo",undef,"Mon, 11 Mar 2002","Open <table><td>status<td>status2</table>","closed"), $text);
   $text = $this->assert_html_matches("</table> text $tblhdr", $text);
   $text = $this->assert_html_matches(action("AcTion2","Main.ActorThree",undef,"Sun, 11 Mar 2001","The *world* is flat","closed"), $text);
-  $text = $this->assert_html_matches(action("AcTion3","Main.ActorFour",$ActionTrackerPlugin::Format::latecol,"Sun, 11 Mar 2001","_Late_ the late great *date*","open"), $text);
-  $text = $this->assert_html_matches(action("AcTion4","Main.ActorFiveVeryLongNameBecauseItsATest",$ActionTrackerPlugin::Format::latecol,"Wed, 13 Feb 2002","This is an action with a lot of associated text to test<br />   * the VingPazingPoodleFactor,<br />   * Tony Blair is a brick.<br />   * Who should really be built<br />   * Into a very high wall.","open"), $text);
-  $text = $this->assert_html_matches(action("AcTion5","Main.ActorSix",$ActionTrackerPlugin::Format::badcol,"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb.ActionTrackerPlugin#DateFormats","Bad date","open"), $text);
+  $text = $this->assert_html_matches(action("AcTion3","Main.ActorFour",$TWiki::Plugins::ActionTrackerPlugin::Format::latecol,"Sun, 11 Mar 2001","_Late_ the late great *date*","open"), $text);
+  $text = $this->assert_html_matches(action("AcTion4","Main.ActorFiveVeryLongNameBecauseItsATest",$TWiki::Plugins::ActionTrackerPlugin::Format::latecol,"Wed, 13 Feb 2002","This is an action with a lot of associated text to test<br />   * the VingPazingPoodleFactor,<br />   * Tony Blair is a brick.<br />   * Who should really be built<br />   * Into a very high wall.","open"), $text);
+  $text = $this->assert_html_matches(action("AcTion5","Main.ActorSix",$TWiki::Plugins::ActionTrackerPlugin::Format::badcol,"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb.ActionTrackerPlugin#DateFormats","Bad date","open"), $text);
   $text = $this->assert_html_matches("</table> break the table here $tblhdr", $text);
-  $text = $this->assert_html_matches(action("AcTion6","Main.ActorSeven",$ActionTrackerPlugin::Format::latecol,"Tue, 1 Jan 2002","Create the mailer, %USERNAME%","open"), $text);
+  $text = $this->assert_html_matches(action("AcTion6","Main.ActorSeven",$TWiki::Plugins::ActionTrackerPlugin::Format::latecol,"Tue, 1 Jan 2002","Create the mailer, %USERNAME%","open"), $text);
   $text = $this->assert_html_matches("</table>", $text);
   $text = $this->assert_html_matches("* A list *", $text);
   $text = $this->assert_html_matches("$tblhdr", $text);

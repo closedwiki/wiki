@@ -21,7 +21,7 @@ sub set_up {
   $this->SUPER::set_up();
   
   BaseFixture::loadPreferencesFor("ActionTrackerPlugin");
-  ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
+  TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
   @TWiki::Net::sent = ();
 
   # Actor 1 - wikiname in main, not a member of any groups
@@ -166,46 +166,46 @@ sub test_A_AddressExpansion {
 			'Main.PaxoHen' => "chicken\@farm.net"
 		   );
   my $who =
-	ActionTrackerPlugin::ActionNotify::_getMailAddress("a\@b.c",\%ma);
+	TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("a\@b.c",\%ma);
   $this->assert_str_equals( "a\@b.c", $who);
   
   $who =
-	ActionTrackerPlugin::ActionNotify::_getMailAddress("Main.BimboChimp",\%ma);
+	TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("Main.BimboChimp",\%ma);
   $this->assert_str_equals( "bimbo\@zoo.org", $who);
   
   $who =
-	ActionTrackerPlugin::ActionNotify::_getMailAddress("BimboChimp",\%ma);
+	TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("BimboChimp",\%ma);
   $this->assert_str_equals( "bimbo\@zoo.org", $who);
   
   $who =
-	ActionTrackerPlugin::ActionNotify::_getMailAddress("PaxoHen,BimboChimp , BonzoClown",\%ma);
+	TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("PaxoHen,BimboChimp , BonzoClown",\%ma);
   $this->assert_str_equals( "chicken\@farm.net,bimbo\@zoo.org,bonzo\@circus.com", $who);
   
-  $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorOne",\%ma);
+  $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorOne",\%ma);
   $this->assert_str_equals( "actor-1\@an-address.net", $who);
   
-  $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("EMailGroup",\%ma);
+  $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("EMailGroup",\%ma);
   $this->assert_str_equals( "actorTwo\@another-address.net,actorfour\@yet-another-address.net", $who);
-  $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("TWikiFormGroup",\%ma);
+  $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("TWikiFormGroup",\%ma);
   $this->assert_str_equals( "actor3\@yet-another-address.net,actorfour\@yet-another-address.net", $who);
   
-  $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorFive",\%ma);
+  $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorFive",\%ma);
   $this->assert_null($who);
-  $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorEight",\%ma);
+  $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorEight",\%ma);
   $this->assert_null($who);
-  ActionTrackerPlugin::ActionNotify::_loadWebNotify("Main",\%ma);
-  $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorFive",\%ma);
+  TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_loadWebNotify("Main",\%ma);
+  $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorFive",\%ma);
   $this->assert_str_equals( "actor5\@correct.address", $who);
-  ActionTrackerPlugin::ActionNotify::_loadWebNotify("Test",\%ma);
-  $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorEight",\%ma);
+  TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_loadWebNotify("Test",\%ma);
+  $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorEight",\%ma);
   $this->assert_str_equals( "actor-8\@correct.address", $who);
 }
 
 sub test_B_NotifyLate {
   my $this = shift;
   my $html;
-  ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
-  ActionTrackerPlugin::ActionNotify::actionNotify( "late" );
+  TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
+  TWiki::Plugins::ActionTrackerPlugin::ActionNotify::actionNotify( "late" );
   if(scalar(@TWiki::Net::sent)!= 8) {
 	my $mess = "";
 	while ( $html = shift(@TWiki::Net::sent)) {
@@ -300,8 +300,8 @@ sub test_B_NotifyLate {
 
 sub test_C_ChangedSince {
   my $this = shift;
-  ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
-  ActionTrackerPlugin::ActionNotify::actionNotify( "changedsince=\"1 dec 2001\"" );
+  TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
+  TWiki::Plugins::ActionTrackerPlugin::ActionNotify::actionNotify( "changedsince=\"1 dec 2001\"" );
   my $saw = "";
   my $html;
   if(scalar(@TWiki::Net::sent)!= 3) {
@@ -352,8 +352,8 @@ sub test_C_ChangedSince {
 # A8 to Actor 6 late
 sub test_D_NotifyLateAndChanged {
   my $this = shift;
-  ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
-  ActionTrackerPlugin::ActionNotify::actionNotify( "due=22-Jul-2001,changedsince=\"1 dec 2001\"" );
+  TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
+  TWiki::Plugins::ActionTrackerPlugin::ActionNotify::actionNotify( "due=22-Jul-2001,changedsince=\"1 dec 2001\"" );
   my $html;
   
   my $ok = "";

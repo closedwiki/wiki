@@ -15,13 +15,13 @@ sub new {
   return $self;
 }
 
-my $textonlyfmt = new ActionTrackerPlugin::Format("Text", "\$text", "cols", "\$text", "", "");
+my $textonlyfmt = new TWiki::Plugins::ActionTrackerPlugin::Format("Text", "\$text", "cols", "\$text", "", "");
 
 sub set_up {
   my $this = shift;
   $this->SUPER::set_up();
 
-  ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
+  TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
 
   # All actions in a web
   BaseFixture::writeTopic("Test", "Topic1", "
@@ -43,7 +43,7 @@ EOF
 sub testAllActionsInWebTest {
   my $this = shift;
   my $attrs = new TWiki::Contrib::Attrs("topic=\".*\"");
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
   my $fmt = $textonlyfmt;
   my $chosen = $actions->formatAsString($fmt);
   
@@ -64,7 +64,7 @@ sub testAllActionsInWebTest {
 sub notestAllActionsInWebMain {
   my $this = shift;
   my $attrs = new TWiki::Contrib::Attrs();
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Main", $attrs);
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWeb("Main", $attrs);
   my $fmt = $textonlyfmt;
   my $chosen = $actions->formatAsString( $fmt );
   $this->assert_does_not_match(qr/C_open_ontime/o, $chosen);
@@ -84,7 +84,7 @@ sub notestAllActionsInWebMain {
 sub notestOpenActions {
   my $this = shift;
   my $attrs = new TWiki::Contrib::Attrs("open");
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs );
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs );
   my $fmt = $textonlyfmt;
   my $chosen = $actions->formatAsString($fmt);
   $this->assert_not_null($chosen);
@@ -103,7 +103,7 @@ sub notestOpenActions {
 sub notestLateActions {
   my $this = shift;
   my $attrs = new TWiki::Contrib::Attrs("late");
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs );
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs );
   my $fmt = $textonlyfmt;
   my $chosen = $actions->formatAsString($fmt);
   
@@ -117,7 +117,7 @@ sub notestLateActions {
 sub notestMyActions {
   my $this = shift;
   my $attrs = new TWiki::Contrib::Attrs("who=me");
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
   my $fmt = $textonlyfmt;
   my $chosen = $actions->formatAsString($fmt);
   $this->assert_not_null($chosen);
