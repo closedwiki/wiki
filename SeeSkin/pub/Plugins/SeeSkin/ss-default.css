@@ -2,7 +2,6 @@
 /* Homepage: http://twiki.org/cgi-bin/view/Plugins/SeeSkin
 /* Matt Wilkie -  2003-July-16
 
-
 /* --------- redefined html elements ---------- */
 /* for most text sizing issues, just change 'body font-size', everything else will follow suit. 
    Wierd things happen if you go less than 76% though. */
@@ -25,13 +24,11 @@ a:link {text-decoration:none;}
 a:visited {text-decoration:none;}
 a:active { }
 a:hover{text-decoration:underline;}
-
 p { text-indent: 2ex; }
 ul,ol { margin-right: 4ex; }
 code, pre { text-align: left; }
 textarea { font-family: monospace;}
 p,table,td,th,ol,ul,dl,dt,dd { font-size: 2ex; }
-
 dl{margin-left:0; padding-left:1ex; }
 dt { /*display: list-item; list-style: none;*/ 
    font-weight: bold; margin: 3ex 0 1ex 0;}
@@ -58,6 +55,7 @@ dd a:hover{ }
 #lineage { width: 15ex; position: absolute; top: 11ex; left: 1ex; text-align: left;  overflow: hidden; }
 #lineage * { color: #bbb; }
 #lineage a {  }
+
 /* the search for subdued left/right columns */
 #lineage *,#navigate *,#search a {color:#888;}
 #lineage a, #navigate a {color: #6699cc;}
@@ -72,7 +70,6 @@ dd a:hover{ }
 /* trying % instead of ex for left/right columns */
 #content { margin: 3ex 18% 6ex 18%; position:relative; }
 #navigate, #lineage { width: 15%; }
-
 #meta { text-align: center; }
 
 /* ----- menu ----- */
@@ -88,10 +85,8 @@ dd a:hover{ }
 /*
 #menu dl dt a, #menu dl dd a { padding:0.5ex 0.7ex 0.5ex 0.7ex; color: MenuText;}
 */
-
 #topicaction dl, #topicaction dt,#topicaction dd { display: inline; list-style: none; }
-
-#bugreport { position: absolute; top: 0; right: 1ex; font-style: italic;}
+#bugreport { position: fixed; top: 0; right: 1ex; font-style: italic;}
 
 /* layer order, 1 = bottom, 100 = top */
 #logochar {	z-index: 1;}
@@ -100,12 +95,14 @@ dd a:hover{ }
 #menu { z-index: 10; }
 #bugreport { z-index: 11; }
 
+
 /* =================== classes ====================== */
 .padded { padding: 3ex;}
 /* hide stuff which is only for non-css browsers */
 .nocss { display: none; }
 /* de-emphasize */
 .deem { font-size: smaller; }
+
 /* inset box , e.g. for %TOC% */
 div.inset { width: 35%; float: right; border: thin dotted Gray; margin: 2ex; padding: 1ex;}
 div.inset ul {padding-left:0; padding-right:0; margin-left:0; margin-right:0; list-style: circle; }
@@ -122,5 +119,5 @@ div.inset ul li {padding-left:-1ex; margin-left:2ex;; }
 	leave commented out, is handled by twiki.see.tmpl */
 /* a { behavior: url(/twiki/pub/Plugins/SeeSkin/akey.htc) } */
 /* ----------------------- */
-
 /* END */
+
