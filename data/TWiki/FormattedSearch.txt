@@ -1,0 +1,82 @@
+%META:TOPICINFO{author="PeterThoeny" date="1003975981" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+*Formatted Search Using ==%<nop>SEARCH{... format="..."}%== Variable*
+
+%TOC%
+
+---++ Preface
+
+By default, the format for displaying a search result is fixed, e.g. a table with rows of topic name and topic summary. Use the =format="..."= parameter to specify a customized format of the search result. The string of the format parameter is typically a bullet list or table row containing variables (i.e. =%<nop>SEARCH{ "food" format="| $topic | $summary |" }%=).
+
+---++ Syntax
+
+Two paramters can be used to specify a customized search result:
+
+1. =header="..."= parameter
+
+Use the header paramter to specify the header of a search result. It should correspond to the format of the format parameter. This parameter is optional. I.e. =header="| <nop>*Topic:*<nop> | <nop>*Summary:*<nop> |"=
+
+2. =format="..."= parameter
+
+Use the format paramter to specify the format of one search hit. I.e. =format="| $topic | $summary |"=
+
+Variables that can be used in the format string:
+
+| *Name:* | *Expands To:* |
+| =$web= | Name of the web |
+| =$topic= | Topic name |
+| =$locked= | LOCKED flag (if any) |
+| =$date= | Time stamp of last topic update |
+| =$rev= | Number of last topic revision, i.e. =1.4= |
+| =$wikiusername= | Wiki user name of last topic update, i.e. =%MAINWEB%.<nop>JohnSmith= |
+| =$summary= | Topic summary |
+| =$formfield(name)= | The field value of a form field, i.e. =$formfield(TopicClassification)= would get expanded to =PublicFAQ=. This applies only to topics that have a [[TWikiForms][TWikiForm]] |
+| =$pattern(reg-exp)= | A regular expression pattern to extract some text from a topic, i.e. =$pattern(.*?\*.*?Email\:\s*([^\n\r]+).*)= extracts the email address from a bullet of format =* Email: ...=. |
+
+__Note:__ For =$pattern(reg-exp)=, specify a RegularExpression that scans from start to end and contains the text you want to keep in parenthesis, i.e. =$pattern(.*?(from here.*?to here).*)=. You need to make sure that the integrity of a web page is not compromised, i.e. if you include a table make sure to include everything including the table end tag.
+
+---++ Examples
+
+---+++ Bullet list showing topic name and summary
+
+Write this:
+
+=%<nop>SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="	* <nop>*Topic: Summary:*" format="	* [<nop>[$topic]]: $summary" }%=
+
+To get this:
+
+%SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="	* *Topic: Summary:*" format="	* [[$topic]]: $summary" }%
+
+---+++ Table showing form field values of topics with a form
+
+Write this in the Know web:
+
+=| <nop>*Topic:*<nop> | <nop>*<nop>OperatingSystem:*<nop> | <nop>*<nop>OsVersion:*<nop> |= <br />
+=%<nop>SEARCH{ "[T]opicClassification.*?value=\"[P]ublicFAQ\"" scope="text" regex="on" nosearch="on" nototal="on" format="| [<nop>[$topic]] | $formfield(OperatingSystem) | $formfield(OsVersion) |" }%=
+
+To get this:
+
+<table border="1" cellspacing="0" cellpadding="1">
+<tr>
+ <th bgcolor="#99CCCC"> <strong>Topic:</strong> </th>
+ <th bgcolor="#99CCCC"> <strong>OperatingSystem:</strong> </th>
+ <th bgcolor="#99CCCC"> <strong>OsVersion:</strong> </th></tr>
+<tr>
+ <td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Know/IncorrectDllVersionW32PTH10DLL">IncorrectDllVersionW32PTH10DLL</a>  </td><td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Know/OsWin">OsWin</a>  </td><td>  95/98  </td></tr>
+<tr>
+ <td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Know/WinDoze95Crash">WinDoze95Crash</a>  </td>
+ <td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Know/OsWin">OsWin</a>  </td>
+ <td>  95  </td></tr>
+</table>
+
+---+++ Extract some text from a topic using regular expression
+
+Write this:
+
+=%<nop>SEARCH{ "__Back to\:__ <nop>TWikiFAQ" scope="text" regex="on" nosearch="on" nototal="on" header="TWiki FAQs:" format="	* $pattern(.*?FAQ\:[\n\r]*([^\n\r]+).*) [<nop>[$topic][Answer...]]" }%=
+
+To get this:
+
+%SEARCH{ "__Back to\:__ TWikiFAQ" scope="text" regex="on" nosearch="on" nototal="on" header="TWiki FAQs:" format="	* $pattern(.*?FAQ\:[\n\r]*([^\n\r]+).*) [[$topic][Answer...]]" }%
+
+-- Main.PeterThoeny - 24 Oct 2001 <br />

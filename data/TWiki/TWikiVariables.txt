@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000548079" format="1.0" version="1.43"}%
+%META:TOPICINFO{author="PeterThoeny" date="1003975824" format="1.0" version="1.44"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -205,8 +205,10 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
 | =regex="on"= | RegularExpression search | Literal search |
 | =reverse="on"= | Reverse the direction of the search | Ascending search |
 | =casesensitive="on"= | Case sensitive search | Ignore case |
-| =nosummary="on"= | Show topic title only | Show topic summary |
-| =bookview="on"= | BookView search, e.g. show complete topic text | Show topic summary |
+| =nosummary="on"= | Show topic title only. [3] | Show topic summary |
+| =bookview="on"= | BookView search, e.g. show complete topic text. [3] | Show topic summary. |
+| =format="..."= | Define a FormattedSearch, i.e. <br /> ="	* [<nop>[$topic]]: $summary"=. [3] | Show regular search result with topic summary |
+| =header="..."= | Specify header of FormattedSearch, i.e. <br /> ="	* <nop>*Topic: Summary:*"=. | Show regular header |
 | =nosearch="on"= | Suppress search string | Show search string |
 | =noheader="on"= | Suppress search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span> | Show search header |
 | =nototal="on"= | Do not show number of topics found | Show number |
@@ -233,6 +235,8 @@ Example: ==%<nop>METASEARCH{type="topicmoved" web="%<nop>WEB%" topic="%<nop>TOPI
 [1] __Note__: The search form uses identical names for input fields.
 
 [2] __Note__: A web can be excluded from a =web="all"= search if you define a =NOSEARCHALL=on= variable in its %WEBPREFSTOPIC%.
+
+[3] __Note__: Regular search, no summary, BookView and FormattedSearch are exclusive.
 </blockquote>
 
 ---++ Preferences Variables
