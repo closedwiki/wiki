@@ -37,7 +37,7 @@ function launchWindow( theWeb, theTopic ) {
 </head>
 <body onLoad="initForm()">
 #PageTop
-<h1>%LOGOCHAR% <span class="deem">%TMPL:P{"titleaction"}%</span> %INTURLENCODE{"%TOPIC%"}%</h1>
+%TMPL:P{"simpleheader"}%
 <form name="main" action="%SCRIPTURLPATH%/savemulti%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post" id="editcont">
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />

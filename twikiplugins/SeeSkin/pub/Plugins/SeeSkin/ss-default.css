@@ -47,7 +47,7 @@ dd a:hover{ }
 #logochar {position:absolute; top:0; left:0; font-size: 36ex; font-weight: bold; color: rgb(234, 234, 234);width: 1em;}
 #search { position: relative; top: 0; right: 2ex; /*text-align: right;*/}
 #search input { font-size: 1.6ex; border: 1px solid #bbb;}
-#search a { color: #bbb; }
+#search a:link { color: #bbb; }
 
 /* what the users read and write */
 #content { border: none; /*margin: 3ex 18ex 6ex 18ex;*/ width: auto;}
@@ -88,6 +88,9 @@ dd a:hover{ }
 /*
 #menu dl dt a, #menu dl dd a { padding:0.5ex 0.7ex 0.5ex 0.7ex; color: MenuText;}
 */
+
+#topicaction dl, #topicaction dt,#topicaction dd { display: inline; list-style: none; }
+
 #bugreport { position: absolute; top: 0; right: 1ex; font-style: italic;}
 
 /* layer order, 1 = bottom, 100 = top */
@@ -97,14 +100,16 @@ dd a:hover{ }
 #menu { z-index: 10; }
 #bugreport { z-index: 11; }
 
+/* =================== classes ====================== */
+.padded { padding: 3ex;}
 /* hide stuff which is only for non-css browsers */
 .nocss { display: none; }
 /* de-emphasize */
 .deem { font-size: smaller; }
 /* inset box , e.g. for %TOC% */
-div.inset { width: 15em; float: right; border: thin dotted Gray; margin: 2ex; padding-left: 1ex;}
-div.inset ul {padding-left:0; padding-right:0; margin-left:0; margin-right:0;}
-div.inset ul li {padding-left:2ex;}
+div.inset { width: 15em; float: right; border: thin dotted Gray; margin: 2ex; padding: 1ex;}
+div.inset ul {padding-left:0; padding-right:0; margin-left:0; margin-right:0; list-style: circle; }
+div.inset ul li {padding-left:-1ex; margin-left:2ex;; }
 
 /* ----- IE5,6/Win workarounds ----- */
 * html body { margin: 0; }
