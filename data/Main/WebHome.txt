@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1025254438" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044153791" format="1.0" version="1.20"}%
 <table><tr><td>
-*<font size="+1"> %TWIKIWEB%.WelcomeGuest: </font>* %WIKITOOLNAME% is a web-based collaboration tool, web authoring tool, document management tool and knowledge base tool. You can edit any %WIKITOOLNAME% page.
+*<font size="+1"> %TWIKIWEB%.WelcomeGuest: </font>* TWiki is a flexible, powerful, secure, yet simple web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either on an intranet or on the Internet. You can edit any TWiki page.
 </td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/twikiRobot131x64.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
 </td><td>
