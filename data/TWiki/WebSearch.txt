@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1007514285" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="PeterThoeny" date="1038026864" format="1.0" version="1.9"}%
 %META:TOPICPARENT{name="WebHome"}%
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/">
 	* <b>Simple search</b>:
@@ -48,7 +48,7 @@
 	</td><td>
 	  <input type="checkbox" name="casesensitive" /> Case sensitive
 	</td><td>
-	  <input type="checkbox" name="regex" /> %TWIKIWEB%.RegularExpression search
+	  <input type="checkbox" name="regex" /> %TWIKIWEB%.RegularExpression search (semicolon ';' for _and_)
 	</td></tr><tr><td>
 	  Don't show:
 	</td><td>
