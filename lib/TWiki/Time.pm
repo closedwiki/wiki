@@ -176,24 +176,34 @@ sub formatTime  {
     }
 
     $value = $formatString;
-    $value =~ s/\$seco?n?d?s?/sprintf("%.2u",$sec)/geoi;
-    $value =~ s/\$minu?t?e?s?/sprintf("%.2u",$min)/geoi;
-    $value =~ s/\$hour?s?/sprintf("%.2u",$hour)/geoi;
-    $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
-    my $tmp = $WEEKDAY[$wday];
-    $value =~ s/\$wday/$tmp/geoi;
-    $tmp = $ISOMONTH[$mon];
-    $value =~ s/\$mont?h?/$tmp/goi;
-    $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
-    $value =~ s/\$year?/sprintf("%.4u",$year+1900)/geoi;
-    $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
+    $value =~ s/\$seco?n?d?s?/sprintf("%.2u",$sec)/gei;
+    $value =~ s/\$minu?t?e?s?/sprintf("%.2u",$min)/gei;
+    $value =~ s/\$hour?s?/sprintf("%.2u",$hour)/gei;
+    $value =~ s/\$day/sprintf("%.2u",$day)/gei;
+    $value =~ s/\$wday/$WEEKDAY[$wday]/gi;
+    $value =~ s/\$dow/$wday/gi;
+    $value =~ s/\$week/_weekNumber($day,$mon,$year,$wday)/egi;
+    $value =~ s/\$mont?h?/$ISOMONTH[$mon]/gi;
+    $value =~ s/\$mo/sprintf("%.2u",$mon+1)/gei;
+    $value =~ s/\$year?/sprintf("%.4u",$year+1900)/gei;
+    $value =~ s/\$ye/sprintf("%.2u",$year%100)/gei;
 
-#TODO: how do we get the different timezone strings (and when we add usertime, then what?)
-    my $tz_str = "GMT";
-    $tz_str = "Local" if ( $outputTimeZone eq "servertime" );
+    # SMELL: how do we get the different timezone strings (and when
+    # we add usertime, then what?)
+    my $tz_str = ( $outputTimeZone eq "servertime" ) ? "Local" : "GMT";
     $value =~ s/\$tz/$tz_str/geoi;
 
     return $value;
+}
+
+sub _weekNumber {
+    my( $day, $mon, $year, $wday ) = @_;
+
+    # calculate the calendar week (ISO 8601)
+    my $nextThursday = timegm(0, 0, 0, $day, $mon, $year) +
+      (3 - ($wday + 6) % 7) * 24 * 60 * 60; # nearest thursday
+    my $firstFourth = timegm(0, 0, 0, 4, 0, $year); # january, 4th
+    return sprintf("%.0f", ($nextThursday - $firstFourth) / ( 7 * 86400 )) + 1;
 }
 
 1;

@@ -83,6 +83,8 @@ __Note:__ This topic is included by TWikiVariables
 	  | =$hours= | hours | 23 |
 	  | =$day= | day of month | 31 |
 	  | =$wday= | day of the Week (Sun, Mon, Tue, Wed, Thu, Fri, Sat) | Thu |
+      | =$dow= | day of the week (Sun = 0) | 2  |
+      | =$week= | number of week in year (ISO 8601) | 34 |
 	  | =$month= | month in ISO format | Dec |
 	  | =$mo= | 2 digit month | 12 |
 	  | =$year= | 4 digit year | 1999 |
