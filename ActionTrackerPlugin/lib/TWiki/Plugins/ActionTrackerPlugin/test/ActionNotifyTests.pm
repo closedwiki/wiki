@@ -72,13 +72,13 @@ use TWiki::Func;
 ");
     TWiki::TestMaker::writeTopic("Main", "WebNotify", "
    * Main.ActorFive - actor5\@correct.address
-   * Main.ActorSix - actor6\@wrong.address
+   * Main.ActorSix
 ");
     TWiki::TestMaker::writeTopic("Test", "WebNotify", "
    * Main.ActorEight - actor-8\@correct.address
 ");
     TWiki::TestMaker::writeTopic("Main", "EMailGroup", "
-   * Set GROUP = actorTwo\@another-address.net,actorfour\@yet-another-address.net
+   * Set GROUP = actorTwo\@another-address.net,ActorFour
 ");
 
     TWiki::TestMaker::writeTopic("Test", "Topic1", "
@@ -86,58 +86,61 @@ use TWiki::Func;
     TWiki::TestMaker::writeTopic("Test", "Topic2", "
 %ACTION{who=\"ActorOne,ActorTwo,ActorThree,ActorFour,ActorFive,ActorSix,actor.7\@seven.net,ActorEight\" due=\"2 Jan 02\" state=closed}% A2: closed");
     TWiki::TestMaker::writeTopic("Main", "Topic1", "
-%ACTION{who=\"ActorOne,ActorTwo,ActorThree,ActorFour,ActorFive,ActorSix,actor.7\@seven.net,ActorEight\",due=\"3 Jan 01\",state=open}% A3: late
+%ACTION{who=\"ActorOne,ActorTwo,ActorThree,ActorFour,ActorFive,ActorSix,actor.7\@seven.net,ActorEight,NonEntity\",due=\"3 Jan 01\",state=open}% A3: late
 %ACTION{who=TWikiFormGroup,due=\"4 Jan 01\",state=open}% A4: late ");
     TWiki::TestMaker::writeTopic("Main", "Topic2", "
 %ACTION{who=EMailGroup,due=\"5 Jan 01\",state=open}% A5: late
 %ACTION{who=\"ActorOne,ActorTwo,ActorThree,ActorFour,TWikiFormGroup,ActorFive,ActorSix,actor.7\@seven.net,ActorEight,EMailGroup\",due=\"6 Jan 99\",open}% A6: late");
 
     # Action changes are hard to fake because the RCS files are not there.
-    TWiki::TestMaker::writeRcsTopic("Test", "ActionChanged", "head	1.2;
+    TWiki::TestMaker::writeRcsTopic("Test", "ActionChanged",
+"head	1.2;
 access;
 symbols;
-locks
-	apache:1.2; strict;
+locks; strict;
 comment	\@# \@;
 
 
 1.2
-date	2001.12.24.17.54.53;	author guest;	state Exp;
+date	2003.05.18.11.25.38;	author crawford;	state Exp;
 branches;
 next	1.1;
 
 1.1
-date	2001.09.23.19.28.56;	author guest;	state Exp;
+date	2001.05.18.11.24.12;	author crawford;	state Exp;
 branches;
 next	;
 
 
 desc
-\@none
-\@
+\@\@
 
 
 1.2
 log
-\@none
+\@*** empty log message ***
 \@
 text
 \@%META:TOPICINFO{author=\"guest\" date=\"1032890093\" format=\"1.0\" version=\"1.2\"}%
 %ACTION{who=ActorFive,due=\"22-jun-2002\",notify=Main.ActorFive}% A7: Date change
+%ACTION{who=EMailGroup,due=\"5 Jan 01\",state=open,notify=nobody}% No change
 %ACTION{who=ActorFive,due=\"22-jun-2002\" notify=Main.ActorOne}% Stuck in
 %ACTION{who=ActorSix,due=\"22-jul-2001\",notify=\"Main.ActorSix,Main.ActorEight\"}% A8: Text change from original, late
+
 \@
 
 
 1.1
 log
-\@none
+\@Initial revision
 \@
 text
-\@d1 3
-a3 3
+\@d1 2
+a2 2
 %META:TOPICINFO{author=\"guest\" date=\"1032811587\" format=\"1.0\" version=\"1.1\"}%
 %ACTION{who=ActorFive,due=\"22-jun-2001\",notify=Main.ActorFive}% A7: Date change
+d4 3
+a6 1
 %ACTION{who=\"Main.ActorFour\",due=\"22-jul-2001\",notify=ActorFive}% A8: Text change
 \@
 ");
@@ -146,7 +149,13 @@ a3 3
   sub testANotifyLate {
     ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
     ActionTrackerPlugin::ActionNotify::actionNotify( "late" );
-    Assert::equals(scalar(@TWiki::Net::sent), 8);
+    if(scalar(@TWiki::Net::sent)!= 8) {
+      while ( $html = shift(@TWiki::Net::sent)) {
+	$html =~ m/^(To: .*)$/m;
+	print "$1\n";
+      }
+      Assert::equals(scalar(@TWiki::Net::sent), 8);
+    }
     my $html;
 
     my $ok = "";
@@ -241,9 +250,9 @@ a3 3
     my $saw = "";
     while( $html = shift(@TWiki::Net::sent) ) {
       Assert::sContains($html, "From: mailsender");
-      Assert::sContains($html, "Subject: Changes to actions on mailsender");
+      Assert::sContains($html, "Subject: Changes to actions on WIKITOOLNAME");
       if ($html=~ /To: actor5\@correct.address/) {
-	Assert::sContains($html, "Subject: Changes to actions on mailsender");
+	Assert::sContains($html, "Subject: Changes to actions on WIKITOOLNAME");
 	Assert::sContains($html, "Changes to actions since Sat Dec  1 00:00:00 2001");
 	Assert::sContains($html, "Attribute \"due\" changed, was \"Fri, 22 Jun 2001 (LATE)\", now \"Sat, 22 Jun 2002\"");
 	$saw .= "A";
@@ -305,7 +314,7 @@ a3 3
 	Assert::sContains($html, "Attribute \"text\" changed, was \"A8: Text change\", now \"A8: Text change from original, late\"");
 	$ok .= "B";
       } elsif ($html=~ /To: actor5\@correct.address/) {
-	Assert::sContains($html, "Subject: Changes to actions on mailsender");
+	Assert::sContains($html, "Subject: Changes to actions on WIKITOOLNAME");
 	Assert::sContains($html, "Changes to actions since Sat Dec  1 00:00:00 2001");
 	Assert::sContains($html, "Attribute \"due\" changed, was \"Fri, 22 Jun 2001 (LATE)\", now \"Sat, 22 Jun 2002\"");
 	$ok .= "C";
@@ -317,6 +326,48 @@ a3 3
     Assert::sContains($ok, "A");
     Assert::sContains($ok, "B");
     Assert::sContains($ok, "C");
+  }
+
+  sub testAAddressExpansion {
+    my %ma = (
+	      'Main.BonzoClown' => "bonzo\@circus.com",
+	      'Main.BimboChimp' => "bimbo\@zoo.org",
+	      'Main.PaxoHen' => "chicken\@farm.net"
+	     );
+    my $who =
+      ActionTrackerPlugin::ActionNotify::_getMailAddress("a\@b.c",\%ma);
+    Assert::sEquals($who, "a\@b.c");
+
+    $who =
+      ActionTrackerPlugin::ActionNotify::_getMailAddress("Main.BimboChimp",\%ma);
+    Assert::sEquals($who, "bimbo\@zoo.org");
+
+    $who =
+      ActionTrackerPlugin::ActionNotify::_getMailAddress("BimboChimp",\%ma);
+    Assert::sEquals($who, "bimbo\@zoo.org");
+
+    $who =
+      ActionTrackerPlugin::ActionNotify::_getMailAddress("PaxoHen,BimboChimp , BonzoClown",\%ma);
+    Assert::sEquals($who, "chicken\@farm.net,bimbo\@zoo.org,bonzo\@circus.com");
+
+    $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorOne",\%ma);
+    Assert::sEquals($who, "actor-1\@an-address.net");
+
+    $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("EMailGroup",\%ma);
+    Assert::sEquals($who, "actorTwo\@another-address.net,actorfour\@yet-another-address.net");
+    $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("TWikiFormGroup",\%ma);
+    Assert::sEquals($who, "actor3\@yet-another-address.net,actorfour\@yet-another-address.net");
+
+    $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorFive",\%ma);
+    Assert::assert(!defined($who),$who);
+    $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorEight",\%ma);
+    Assert::assert(!defined($who));
+    ActionTrackerPlugin::ActionNotify::_loadWebNotify("Main",\%ma);
+    $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorFive",\%ma);
+    Assert::sEquals($who, "actor5\@correct.address");
+    ActionTrackerPlugin::ActionNotify::_loadWebNotify("Test",\%ma);
+    $who = ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorEight",\%ma);
+    Assert::sEquals($who, "actor-8\@correct.address");
   }
 }
 

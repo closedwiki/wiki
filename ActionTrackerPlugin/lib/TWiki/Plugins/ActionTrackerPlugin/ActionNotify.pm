@@ -41,11 +41,13 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	  &TWiki::initialize( "/Main", "nobody" );
       $dummy = "";  # to suppress warning
       
+      # COVERAGE OFF
       if ( $expr =~ s/DEBUG//o ) {
 	print doNotifications( $webName, $expr, 1 ),"\n";
       } else {
 	doNotifications( $webName, $expr, 0 );
       }
+      # COVERAGE ON
   }
 
   # Entry point separated from main entry point, because we may want
@@ -112,36 +114,55 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     # mail address.
     my %actionsPerEmail;
     my %changesPerEmail;
-    foreach my $key ( keys %people ) {
+    my %notifyEmail;
+
+    foreach my $wikiname ( keys %people ) {
       # first expand the mail address(es)
-      my $mailaddr = _getMailAddress( $key, $mailAddress );
+      my $mailaddr = _getMailAddress( $wikiname, $mailAddress );
 
       if ( !defined( $mailaddr ) ) {
-	TWiki::Func::writeWarning( "No mail address found for $key" );
-	$result .= "No mail address found for $key<br />" if ( $debugMailer );
+	TWiki::Func::writeWarning( "No mail address found for $wikiname" );
+	$result .= "No mail address found for $wikiname<br />" if ( $debugMailer );
 	next;
       }
 
       # find all the actions for this wikiname
       my $myActions;
       if ( $actions ) {
-	$myActions = $actions->search("who=\"$key\"");
+	my $ats = new ActionTrackerPlugin::Attrs( "who=\"$wikiname\"" );
+	$myActions = $actions->search( $ats );
       }
 
       # now add these to the lists for each mail address
-      foreach my $actor ( split( /,/, $mailaddr )) {
-	$actionsPerEmail{$actor} = $myActions;
-	$changesPerEmail{$actor} = $notifications{$key};
+      foreach my $email ( split( /,/, $mailaddr )) {
+	if ( $myActions ) {
+	  if ( !defined( $actionsPerEmail{$email} )) {
+	    $actionsPerEmail{$email} = new ActionTrackerPlugin::ActionSet();
+	  }
+	  $actionsPerEmail{$email}->concat( $myActions );
+	  $notifyEmail{$email} = 1;
+	}
+	if ( $notifications{$wikiname} ) {
+	  if ( !defined( $changesPerEmail{$email} )) {
+	    $changesPerEmail{$email}{text} = "";
+	    $changesPerEmail{$email}{html} = "";
+	  }
+	  $changesPerEmail{$email}{text} .= $notifications{$wikiname}{text};
+	  $changesPerEmail{$email}{html} .= $notifications{$wikiname}{html};
+	  $notifyEmail{$email} = 1;
+	}
       }
     }
 
     # Finally send out the messages
-    foreach my $email ( keys %actionsPerEmail ) {
+    foreach my $email ( keys %notifyEmail ) {
       my $actionsString = "";
       my $actionsHTML = "";
       my $changesString = "";
       my $changesHTML = "";
       if ( $actionsPerEmail{$email} ) {
+	# sorted by due date
+	$actionsPerEmail{$email}->sort();
 	$actionsString = $actionsPerEmail{$email}->formatAsString( $format );
 	$actionsHTML = $actionsPerEmail{$email}->formatAsHTML( $format, "href", 0 );
       }
@@ -153,6 +174,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       my $message = _composeActionsMail($actionsString, $actionsHTML,
 					$changesString, $changesHTML,
 					$date, $email, $format );
+      # COVERAGE OFF
       if ( $debugMailer ) {
 	$result .= $message;
       } else {
@@ -162,6 +184,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	  TWiki::Func::writeWarning( $error );
 	}
       }
+      # COVERAGE ON
     }
 
     return $result;
@@ -188,19 +211,21 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub _loadWebNotify {
     my( $web, $mailAddress ) = @_;
     
+    # COVERAGE OFF
     if( ! TWiki::Func::webExists( $web ) ) {
       my $error = "ActionTrackerPlugin:ActionNotify: did not find web $web";
       TWiki::Func::writeWarning( $error );
       return;
     }
-    
+    # COVERAGE ON
+
     my $topicname = $ActionTrackerPlugin::Config::notifyTopicname;
     return undef unless TWiki::Func::topicExists( $web, $topicname );
     
     my $list = {};
     my $mainweb = TWiki::Func::getMainWebname();
     my $text = TWiki::Func::readTopicText( $web, $topicname, undef, 1 );
-    foreach my $line ( split( /\n/, $text)) {
+    foreach my $line ( split( /\r?\n/, $text)) {
       if ( $line =~ /^\s+\*\s([\w\.]+)\s+-\s+([\w\-\.\+]+\@[\w\-\.\+]+)/o ) {
 	my $who = $1;
 	my $addr = $2;
@@ -223,54 +248,59 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       return $mailAddress->{$who};
     }
 
-    if ( $who =~ m/,/o ) {
+    my $addresses;
+
+    if ( $who =~ m/^([\w\-\.\+]+\@[\w\-\.\+]+)$/o ) {
+      # Valid mail address
+      $addresses = $who;
+    } elsif ( $who =~ m/,/o ) {
       # Multiple addresses
       # (e.g. who="GenghisKhan,AttillaTheHun")
       # split on , and recursively expand
-      my $addresses = "";
-      my @persons = split( /,/, $who );
+      my @persons = split( /\s*,\s*/, $who );
       foreach my $person ( @persons ) {
-	my $addressee = _getMailAddress( $person, $mailAddress );
-	$addresses .= "," if ($addresses ne "");
-	$addresses .= $addressee;
+	$person = _getMailAddress( $person, $mailAddress );
       }
-      $mailAddress->{$who} = $addresses;
-    } elsif ( $who =~ /([\w\-\.\+]+\@[\w\-\.\+]+)/o ) {
-      # Valid mail address
-      $mailAddress->{$who} = $who;
-    } else {
+      $addresses = join( ",", @persons );
+    } elsif ( $who =~ m/^[A-Z]+[a-z]+[A-Z]+\w+$/o ) {
+      # A legal topic wikiname
       $who = ActionTrackerPlugin::Action::_canonicalName( $who );
-      $who =~ /(\w+)\.(\w+)/o;
+      $addresses = _getMailAddress( $who, $mailAddress );
+    } elsif ( $who =~ m/^(\w+)\.([A-Z]+[a-z]+[A-Z]+\w+)$/o ) {
+      # A topic in a web
       my ( $inweb, $intopic ) = ( $1, $2 );
       if ( TWiki::Func::topicExists( $inweb, $intopic ) ) {
 	my $text = TWiki::Func::readTopicText( $inweb, $intopic, undef, 1 );
-	my $addresses = "";
 
-	# If it's a Group topic, match * Set GROUP = 
 	if ( $intopic =~ m/Group$/o ) {
-	  if ( $text =~ m/^\s+\*\s+Set\s+GROUP\s*=\s*([^\r\n]*)/so ) {
-	    # define our mail address to eliminate infinite recursion
-	    $mailAddress->{$who} = "RECURSIVE GROUP DEF";
-	    foreach my $person ( split( /\s*,\s*/, $1 )) {
-	      my $addressee = _getMailAddress( $person, $mailAddress );
-	      $addresses .= "," if ( $addresses ne "" );
-	      $addresses .= $addressee;
+	  # If it's a Group topic, match * Set GROUP = 
+	  if ( $text =~ m/^\s+\*\s+Set\s+GROUP\s*=\s*([^\r\n]+)/so ) {
+	    my @people = split( /\s*,\s*/, $1 );
+	    foreach my $person ( @people ) {
+	      $person = _getMailAddress( $person, $mailAddress );
 	    }
+	    $addresses = join( ",", @people );
 	  }
 	} else {
 	  # parse Email: format lines from personal topic
-	  while ( $text =~ s/^\s+\*\s*E-?mail:\s*([^\s\r\n]*)//imo ) {
-	    $addresses .= "," if ( $addresses ne "" );
-	    $addresses .= $1;
+	  my @people;
+	  while ( $text =~ s/^\s+\*\s*E-?mail:\s*([^\s\r\n]+)//imo ) {
+	    push( @people, $1 );
 	  }
-	}
-
-	if ( defined( $addresses ) && $addresses !~ /^\s*$/o ) {
-	  $mailAddress->{$who} = $addresses;
+	  $addresses = join( ",", @people );
 	}
       }
     }
-    return $mailAddress->{$who};
+
+    if ( defined( $addresses )) {
+      if ( $addresses =~ m/^\s*$/o ) {
+	$addresses = undef;
+      } else {
+	$mailAddress->{$who} = $addresses;
+      }
+    }
+
+    return $addresses;
   }
   
   # PRIVATE Mail the contents of the action set to the given user(s)
@@ -333,9 +363,11 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my ( $theWeb, $theTopic, $date ) = @_;
     my $dataDir = TWiki::Func::getDataDir();
     my $fname = "$dataDir\/$theWeb\/$theTopic.txt";
+    # COVERAGE OFF
     if ( !-e "$fname,v") {
       return undef;
     }
+    # COVERAGE ON
     my $tmp = $ActionTrackerPlugin::Config::rlogCmd;
     $tmp =~ s/%DATE%/$date/o;
     $tmp =~ s/%FILENAME%/$fname/o;
@@ -371,22 +403,15 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     return unless defined( $oldrev );
     $oldrev =~ s/\d+\.(\d+)/$1/o;
 
+    # Recover the action set at that date
     my $text = TWiki::Func::readTopicText( $theWeb, $theTopic, $oldrev, 1 );
-    my $oldActions = new ActionTrackerPlugin::ActionSet();
-    my $actionNumber = 0;
-    while ( $text =~ s/%ACTION{([^%]*)}%([^\n\r]+)//so ) {
-      my $action = new ActionTrackerPlugin::Action( $theWeb, $theTopic, $actionNumber++, $1, $2 );
-      $oldActions->add( $action );
-    }
+    my $oldActions =
+      ActionTrackerPlugin::ActionSet::load( $theWeb, $theTopic, $text );
 
     # Recover the current action set.
     $text = TWiki::Func::readTopicText( $theWeb, $theTopic, undef, 1 );
-    my $currentActions = new ActionTrackerPlugin::ActionSet();
-    $actionNumber = 0;
-    while ( $text =~ s/%ACTION{([^%]*)}%([^\n\r]+)//so ) {
-      my $action = new ActionTrackerPlugin::Action( $theWeb, $theTopic, $actionNumber++, $1, $2 );
-      $currentActions->add( $action );
-    }
+    my $currentActions =
+      ActionTrackerPlugin::ActionSet::load( $theWeb, $theTopic, $text );
     
     # find actions that have changed between the two dates. These
     # are added as text to a hash keyed on the names of people
@@ -411,12 +436,16 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     # file.txt: ...matched text...
     my $cmd = $ActionTrackerPlugin::Config::egrepCmd;
     my $q = $ActionTrackerPlugin::Config::cmdQuote;
+    # This greb is only used to find the files containing actions.
+    # The output is thrown away. So we could use fgrep instead, but
+    # since this is run as a cron there's not much benefit.
     my $grep = `$cmd $q%ACTION\\{.*\\}%$q $dd/$theWeb/*.txt`;
 
     my $number = 0;
     my %processed;
     
-    while ( $grep =~ s/^.*\/([^\/\.\n]+)\.txt:.*%ACTION{([^\}]*)}%//m ) {
+    foreach my $line ( split( /\r?\n/, $grep )) {
+      $line =~ m/^.*\/([^\/\.\n]+)\.txt:/o;
       my $topic = $1;
       if ( !$processed{$topic} ) {
 	_findChangesInTopic( $theWeb, $topic, $theDate, $format,

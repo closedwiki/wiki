@@ -20,6 +20,8 @@
 # =========================
 package TWiki::Plugins::ActionTrackerPlugin;
 
+use strict;
+
 use TWiki::Func;
 use TWiki::Plugins::ActionTrackerPlugin::Attrs;
 use TWiki::Plugins::ActionTrackerPlugin::Action;
@@ -42,46 +44,50 @@ $pluginName = "ActionTrackerPlugin";
 
 my $actionNumber = 0;
 my %prefs;
-# =========================
+
 sub initPlugin {
   ( $topic, $web, $user, $installWeb ) = @_;
 
   # check for Plugins.pm versions
+  # COVERAGE OFF
   if( $TWiki::Plugins::VERSION < 1 ) {
     &TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION" );
     return 0;
   }
+  # COVERAGE ON
 
   # Get plugin debug flag
   $debug = &TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_DEBUG" ) ||
     0;
 
-  loadPrefsOverrides( $web );
+  _loadPrefsOverrides( $web );
 
-  $useNewWindow = getPref( "USENEWWINDOW", 0 );
+  $useNewWindow = _getPref( "USENEWWINDOW", 0 );
 
   # Colour for warning of late actions
-  $ActionTrackerPlugin::Format::latecol = getPref( "LATECOL", "yellow" );
+  $ActionTrackerPlugin::Format::latecol = _getPref( "LATECOL", "yellow" );
   # Colour for an unparseable date
-  $ActionTrackerPlugin::Format::badcol = getPref( "BADDATECOL", "red" );
+  $ActionTrackerPlugin::Format::badcol = _getPref( "BADDATECOL", "red" );
   # Colour for table header rows
-  $ActionTrackerPlugin::Format::hdrcol = getPref( "HEADERCOL", "#FFCC66" );
+  $ActionTrackerPlugin::Format::hdrcol = _getPref( "HEADERCOL", "#FFCC66" );
 
-  my $hdr      = getPref( "TABLEHEADER" );
-  my $bdy      = getPref( "TABLEFORMAT" );
-  my $textform = getPref( "TEXTFORMAT" );
-  my $orient   = getPref( "TABLEORIENT" );
-  my $changes  = getPref( "NOTIFYCHANGES" );
+  my $hdr      = _getPref( "TABLEHEADER" );
+  my $bdy      = _getPref( "TABLEFORMAT" );
+  my $textform = _getPref( "TEXTFORMAT" );
+  my $orient   = _getPref( "TABLEORIENT" );
+  my $changes  = _getPref( "NOTIFYCHANGES" );
   $defaultFormat =
     new ActionTrackerPlugin::Format( $hdr, $bdy, $textform, $changes, $orient );
 
-  my $extras = getPref( "EXTRAS" );
+  my $extras = _getPref( "EXTRAS" );
 
   if ( $extras ) {
     my $e = ActionTrackerPlugin::Action::extendTypes( $extras );
+    # COVERAGE OFF
     if ( defined( $e )) {
       TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin ERROR $e" );
     }
+    # COVERAGE ON
   }
 
   &TWiki::Func::writeDebug( "- TWiki::Plugins::ActionTrackerPlugin::initPlugin($web.$topic) is OK" ) if $debug;
@@ -90,7 +96,6 @@ sub initPlugin {
   return 1;
 }
 
-# =========================
 sub commonTagsHandler {
   ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
   
@@ -107,51 +112,90 @@ sub commonTagsHandler {
     return unless( _init_defaults() );
   }
 
-  my $javaScriptIncluded = 0;
-
   # Format actions in the topic.
   # Done this way so we get tables built up by
   # collapsing successive actions.
   my $actionNumber = 0;
   my $text = "";
   my $actionSet = undef;
-  foreach my $line ( split( /\r?\n/, $_[0] )) {
-    if ( $line =~ /^(.*)%ACTION{(.*)?}%(.*)/o ) {
-      my ( $pre, $attrs, $descr ) = ( $1, $2, $3 );
+  my $javaScriptRequired = 0;
+  my $gathering;
+  my $pre;
+  my $attrs;
+  my $descr;
+  my $processAction = 0;
 
-      if ( $pre =~ /\S/o ) {
-	if ( $actionSet ) {
-	  $text .= embedJS() .
-	    $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow ) . "\n";
+  # FORMAT DEPENDANT ACTION SCAN HERE
+  foreach my $line ( split( /\r?\n/, $_[0] )) {
+    if ( $gathering ) {
+      if ( $line =~ m/^$gathering\b.*/ ) {
+	$gathering = undef;
+	$processAction = 1;
+      } else {
+	$descr .= "$line\n";
+	next;
+      }
+    } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)/o ) {
+      ( $pre, $attrs, $descr ) = ( $1, $2, $3 );
+	
+      if ( $pre ne "" ) {
+	if ( $pre !~ m/^[ \t]*$/o && $actionSet ) {
+	  # spit out pending action table if the pre text is more
+	  # than just spaces or tabs
+	  $text .=
+	    $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow ) .
+	      "\n";
+	  $javaScriptRequired = 1;
 	  $actionSet = undef;
 	}
 	$text .= $pre;
       }
+	
+      if ( $descr =~ m/\s*<<(\w+)\s*(.*)$/o ) {
+	$descr = $2;
+	$gathering = $1;
+	next;
+      }
 
-      $descr =~ s/%ACTION{(.*)}%/%<nop>ACTION{$1}%/go;
-      my $action = new ActionTrackerPlugin::Action( $_[2], $_[1], $actionNumber++, $attrs, $descr );
-      $actionSet = new ActionTrackerPlugin::ActionSet() unless ( $actionSet );
-      $actionSet->add( $action );
-
+      $processAction = 1;
     } else {
       if ( $actionSet ) {
-	$text .= embedJS() .
-	  $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow ) . "\n";
+	$text .=
+	  $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow ) .
+	    "\n";
+	$javaScriptRequired = 1;
 	$actionSet = undef;
       }
       $text .= "$line\n";
     }
+
+    if ( $processAction ) {
+      my $action = new ActionTrackerPlugin::Action( $_[2], $_[1], $actionNumber++, $attrs, $descr );
+      if ( !defined( $actionSet )) {
+	$actionSet = new ActionTrackerPlugin::ActionSet();
+      }
+      $actionSet->add( $action );
+      $processAction = 0;
+    }
   }
   if ( $actionSet ) {
-    $text .= embedJS() .
+    $text .=
       $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow );
+    $javaScriptRequired = 1;
+  }
+  if ( $javaScriptRequired ) {
+    # do this here rather than as we emit the actions, because it can
+    # screw up the other TWiki formatting if it's embedded.
+    $text = _embedJS() . $text;
   }
   $_[0] = $text;
-  $_[0] =~ s/%ACTIONSEARCH{(.*)?}%/&handleActionSearch($web, $1)/geo;
+  $_[0] =~ s/%ACTIONSEARCH{(.*)?}%/&_handleActionSearch($web, $1)/geo;
+  # COVERAGE OFF
   if ( $debug ) {
-    $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&handleActionNotify($web, $1)/geo;
-    $_[0] =~ s/%ACTIONTRACKERPREFS%/&dumpPrefs()/geo;
+    $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&_handleActionNotify($web, $1)/geo;
+    $_[0] =~ s/%ACTIONTRACKERPREFS%/&_dumpPrefs()/geo;
   }
+  # COVERAGE ON
 }
 
 # This handler is called by the edit script just before presenting
@@ -167,6 +211,10 @@ sub beforeEditHandler {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
   return unless ( TWiki::Func::getSkin() eq "action" );
+
+  unless( $pluginInitialized ) {
+    return unless( _init_defaults() );
+  }
 
   TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
 
@@ -199,7 +247,7 @@ sub beforeEditHandler {
   # that already extracted meta-data was passed in here!
   my $oldText = TWiki::Func::readTopicText( $_[2], $_[1]);
   my $text = "";
-  foreach my $line ( split( /\n/, $oldText ) ) {
+  foreach my $line ( split( /\r?\n/, $oldText ) ) {
     if( $line =~ /^%META:([^{]+){([^}]*)}%/ ) {
       my $type = $1;
       my $args = $2;
@@ -223,20 +271,20 @@ sub beforeEditHandler {
   # to be too high.
   my $uid = $query->param( "action" );
   my ( $action, $pretext, $posttext ) =
-    ActionTrackerPlugin::Action::findActionByUID( $webName, $topic, $text, $uid );
+    ActionTrackerPlugin::Action::findActionByUID( $web, $topic, $text, $uid );
 
   $fields .= $query->hidden( -name=>'pretext', -value=>$pretext );
   $fields .= $query->hidden( -name=>'posttext', -value=>$posttext );
 
   $tmpl =~ s/%UID%/$uid/go;
   
-  my $useNewWindow = ( getPref( "USENEWWINDOW", 0 ) == 1 );
+  my $useNewWindow = ( _getPref( "USENEWWINDOW", 0 ) == 1 );
   
   my $submitCmd = "Preview";
   my $submitScript = "";
   my $cancelScript = "";
 
-  if ( getPref( "NOPREVIEW", 0 )) {
+  if ( _getPref( "NOPREVIEW", 0 )) {
     $submitCmd = "Save";
     if ( $useNewWindow ) {
       # I'd like close the subwindow here, but not sure how. Like this,
@@ -257,20 +305,20 @@ sub beforeEditHandler {
   $submitCmd = lcfirst( $submitCmd );
   $tmpl =~ s/%SUBMITCOMMAND%/$submitCmd/go;
   
-  my $hdrs = getPref( "EDITHEADER" );
-  my $body = getPref( "EDITFORMAT" );
-  my $vert = getPref( "EDITORIENT" );
+  my $hdrs = _getPref( "EDITHEADER" );
+  my $body = _getPref( "EDITFORMAT" );
+  my $vert = _getPref( "EDITORIENT" );
 
   my $fmt = new ActionTrackerPlugin::Format( $hdrs, $body, "", "", $vert );
   my $editable = $action->formatForEdit( $fmt );
   $tmpl =~ s/%EDITFIELDS%/$editable/o;
 
   my $dfltH = TWiki::Func::getPreferencesValue( 'EDITBOXHEIGHT' );
-  my $ebh = getPref( "EDITBOXHEIGHT", $dfltH );
+  my $ebh = _getPref( "EDITBOXHEIGHT", $dfltH );
   $tmpl =~ s/%EBH%/$ebh/go;
   
   my $dfltW = TWiki::Func::getPreferencesValue( 'EDITBOXWIDTH' );
-  my $ebw = getPref( "EDITBOXWIDTH", $dfltW );
+  my $ebw = _getPref( "EDITBOXWIDTH", $dfltW );
   $tmpl =~ s/%EBW%/$ebw/go;
 
   $text = $action->{text};
@@ -300,13 +348,17 @@ sub afterEditHandler {
   my $query = TWiki::Func::getCgiQuery();
   return unless ( $query->param( 'closeactioneditor' ));
 
+  unless( $pluginInitialized ) {
+    return unless( _init_defaults() );
+  }
+
   my $pretext = $query->param( 'pretext' ) || "";
   my $posttext = $query->param( 'posttext' ) || "";
 
   # count the previous actions so we get the right action number
   my $an = 0;
   my $tmp = "$pretext";
-  while ( $tmp =~ s/%ACTION{[^%]*}%//o ) {
+  while ( $tmp =~ s/%ACTION{.*?}%//o ) {
     $an++;
   }
 
@@ -331,6 +383,10 @@ sub afterEditHandler {
 sub beforeSaveHandler {
 ### my ( $text, $topic, $web ) = @_;
 
+  unless( $pluginInitialized ) {
+    return unless( _init_defaults() );
+  }
+
   my $query = TWiki::Func::getCgiQuery();
   if ( $query->param( 'closeactioneditor' )) {
     # this is a save from the action editor
@@ -341,7 +397,7 @@ sub beforeSaveHandler {
     my $postmeta = "";
     my $inpost = 0;
     my $text = "";
-    foreach my $line ( split( /\n/, $_[0] ) ) {
+    foreach my $line ( split( /\r?\n/, $_[0] ) ) {
       if( $line =~ /^(%META:[^{]+{[^}]*}%)/ ) {
 	if ( $inpost) {
 	  $postmeta .= "$1\n";
@@ -366,23 +422,53 @@ sub beforeSaveHandler {
 # PRIVATE Add missing attributes to all actions that don't have them
 sub _addMissingAttributes {
   #my ( $text, $topic, $web ) = @_;
-  # Note: correct action numbers depend on the substitute working
-  # sequentially through the topic.
-  $_[0] =~ s/%ACTION{([^%]*)}%([^\n\r]*)/&_populateFields( $_[2], $_[1], $1, $2 )/geos;
-}
+  my $text = "";
+  my $descr;
+  my $attrs;
+  my $gathering;
+  my $processAction = 0;
+  my $an = 0;
 
-# PRIVATE populate missing fields on an action
-sub _populateFields {
-  my ( $web, $topic, $attrs, $text ) = @_;
-  my $action = new ActionTrackerPlugin::Action( $web, $topic, $actionNumber++, $attrs, $text );
-  $action->populateMissingFields();
-  return $action->toString();
+  # FORMAT DEPENDANT ACTION SCAN
+  foreach my $line ( split( /\r?\n/, $_[0] )) {
+    if ( $gathering ) {
+      if ( $line =~ m/^$gathering\b.*/ ) {
+	$gathering = undef;
+	$processAction = 1;
+      } else {
+	$descr .= "$line\n";
+	next;
+      }
+    } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)$/o ) {
+      $text .= $1;
+      $attrs = $2;
+      $descr = $3;
+      if ( $descr =~ m/\s*\<\<(\w+)\s*(.*)$/o ) {
+          $descr = $2;
+	  $gathering = $1;
+	  next;
+      }
+      $processAction = 1;
+    } else {
+      $text .= "$line\n";
+    }
+
+    if ( $processAction ) {
+      my $action = new ActionTrackerPlugin::Action( $web, $topic,
+						    $an, $attrs, $descr );
+      $action->populateMissingFields();
+      $text .= $action->toString() . "\n";
+      $an++;
+      $processAction = 0;
+    }
+  }
+  $_[0] = $text;
 }
 
 # Prefs handling
 
-# Get a prefs value
-sub getPref {
+# PRIVATE Get a prefs value
+sub _getPref {
   my ( $vbl, $default ) = @_;
   my $val = $prefs{$vbl};
   if ( !defined( $val )) {
@@ -394,9 +480,9 @@ sub getPref {
   return $val;
 }
 
-# Load prefs from WebPreferences so they override the settings
+# PRIVATE Load prefs from WebPreferences so they override the settings
 # in the plugin topic.
-sub loadPrefsOverrides {
+sub _loadPrefsOverrides {
   my $web = shift;
 
   # The remaining prefs are defined in the plugin topic but may be overridden
@@ -410,30 +496,32 @@ sub loadPrefsOverrides {
   # All other plugins
   if ( TWiki::Func::topicExists( $web, "WebPreferences" )) {
     my $text = TWiki::Func::readTopicText( $web, "WebPreferences" );
-    foreach my $line ( split ( /\n/, $text )) {
-      if ( $line =~ /^\s+\* Set ACTIONTRACKERPLUGIN_(\w+)\s+=\s+([^\r\n]*)/o ) {
+    foreach my $line ( split( /\r?\n/, $text )) {
+      if ( $line =~ /^\s+\* Set ACTIONTRACKERPLUGIN_(\w+)\s+=\s+(.*)$/o ) {
 	$prefs{$1} = $2;
       }
     }
   }
 }
 
-# Generate plugin prefs in HTML
-sub dumpPrefs {
+# PRIVATE Generate plugin prefs in HTML for debugging
+# COVERAGE OFF
+sub _dumpPrefs {
   my $text = "";
   foreach my $key ( "TABLEHEADER","TABLEFORMAT","TABLEORIENT","TEXTFORMAT","LATECOL","BADDATECOL","HEADERCOL","EDITHEADER","EDITFORMAT","EDITORIENT","USENEWWINDOW","NOPREVIEW","EXTRAS","EDITBOXHEIGHT","EDITBOXWIDTH" ) {
     $text .= "\t* $key\n<verbatim>\n";
-    if ( defined( getPref($key))) {
-      $text .= getPref( $key );
+    if ( defined( _getPref($key))) {
+      $text .= _getPref( $key );
     }
     $text .= "\n</verbatim>\n";
   }
   return $text;
 }
+# COVERAGE ON
 
 # =========================
 # Perform filtered search for all actions
-sub handleActionSearch {
+sub _handleActionSearch {
   my ( $web, $expr ) = @_;
 
   my $attrs = new ActionTrackerPlugin::Attrs( $expr );
@@ -444,17 +532,9 @@ sub handleActionSearch {
   my $orient = $attrs->remove( "orient" );
   my $sort = $attrs->remove( "sort" );
   if ( defined( $fmts ) || defined( $hdrs ) || defined( $orient )) {
-    if ( !defined( $fmts ) ) {
-      # header not defined; use default
-      $fmts = $defaultFormat->getFields();
-    }
-    if ( !defined( $hdrs ) ) {
-      # header not defined; use default
-      $hdrs = $defaultFormat->getHeaders();
-    }
-    if ( !defined( $orient )) {
-      $orient = $defaultFormat->getOrientation();
-    }
+    $fmts = $defaultFormat->getFields() unless ( defined( $fmts ));
+    $hdrs = $defaultFormat->getHeaders() unless ( defined( $hdrs ));
+    $orient = $defaultFormat->getOrientation() unless ( defined( $orient ));
     $fmt = new ActionTrackerPlugin::Format( $hdrs, $fmts, $fmts, $orient );
   } else {
     $fmt = $defaultFormat;
@@ -462,14 +542,14 @@ sub handleActionSearch {
 
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs( $web, $attrs );
   $actions->sort( $sort );
-  return embedJS() . $actions->formatAsHTML( $fmt, "href", $useNewWindow );
+  return _embedJS() . $actions->formatAsHTML( $fmt, "href", $useNewWindow );
 }
 
 # =========================
 # Lazy initialize of plugin 'cause of performance
 sub _init_defaults
 {
-  $libsFound = 0;
+  my $libsFound = 0;
   eval {
     require Exporter;
     $perlTimeParseDateFound = require Time::ParseDate;
@@ -507,7 +587,8 @@ sub _init_defaults
   return $libsFound;
 }
 
-sub embedJS {
+# PRIVATE embed the JavaScript that opens an edit subwindow
+sub _embedJS {
     return "" unless ($useNewWindow && !$javaScriptIncluded);
     $javaScriptIncluded = 1;
     return "
@@ -518,14 +599,13 @@ function editWindow(url) {
   return false;
 }
 // -->
-</script>
-";
+</script>";
 }
 
-########################################
-
-# handle actions that have changed in all webs
-sub handleActionNotify {
+# PRIVATE return formatted actions that have changed in all webs
+# Debugging only
+# COVERAGE OFF
+sub _handleActionNotify {
   my ( $web, $expr ) = @_;
 
   eval {
@@ -539,6 +619,6 @@ sub handleActionNotify {
   $text =~ s/<\/?body>//gos;
   return "<!-- from an --> <pre>$text</pre> <!-- end from an -->";
 }
-
+# COVERAGE ON
 
 1;

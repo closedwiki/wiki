@@ -270,7 +270,7 @@ use integer;
   # are more useful if the table is oriented as rows.
   sub _generateHTMLTable {
     my ( $this, $rows, $anchors ) = @_;
-    my $text = "<table border=\"$border\">\n";
+    my $text = "<table border=\"$border\">";
     my $i;
 
     if ( $this->{ORIENTATION} eq "rows" ) {
@@ -284,23 +284,23 @@ use integer;
 	$text .= "<tr><th bgcolor=\"$hdrcol\">$head</th>";
         foreach my $col ( @$rows ) {
 	  my $datum = @$col[$i];
-	  $text .= "$datum\n";
+	  $text .= "$datum";
 	}
-        $text .= "</tr>\n";
+        $text .= "</tr>";
       }
     } else {
       $text .= "<tr bgcolor=\"$hdrcol\">";
       foreach $i ( @{$this->{HEADINGS}} ) {
 	$text .= "<th>$i</th>";
       }
-      $text .= "</tr>\n";
+      $text .= "</tr>";
       foreach my $row ( @$rows ) {
 	$text .= "<tr valign=\"top\">";
 	if ( defined( $anchors ) ) {
 	  my $a = shift( @$anchors );
 	  $text .= $a if ( defined( $a ) );
 	}
-	$text .= join( "\n", @$row) . "</tr>\n";
+	$text .= join( "", @$row) . "</tr>";
       }
     }
     $text .= "</table>";
@@ -330,19 +330,19 @@ use integer;
 	my ( $oldval, $c ) = _expandVar( $old, $field );
 	my ( $newval, $d ) = _expandVar( $new, $field );
 	if ( $oldval ne $newval ) {
-	  $tbl .= "<tr><td>$field</td><td>$oldval</td><td>$newval</td></tr>\n";
+	  $tbl .= "<tr><td>$field</td><td>$oldval</td><td>$newval</td></tr>";
 	}
       } elsif ( defined( $old->{$field} ) ) {
 	my ( $oldval, $c ) = _expandVar( $old, $field );
-	$tbl .= "<tr><td>$field</td><td>$oldval</td><td> *removed* </td></tr>\n";
+	$tbl .= "<tr><td>$field</td><td>$oldval</td><td> *removed* </td></tr>";
       } elsif ( defined( $new->{$field} )) {
 	my ( $newval, $c ) = _expandVar( $new, $field );
-	$tbl .= "<tr><td>$field</td><td> *missing* </td><td>$newval</td></tr>\n";
+	$tbl .= "<tr><td>$field</td><td> *missing* </td><td>$newval</td></tr>";
       }
     }
     if ( $tbl ne "" ) {
       return "<table border=\"$border\"><tr bgcolor=\"$badcol\"><th>Attribute</th>".
-	"<th>Old</th><th>New</th></tr>\n$tbl</table>";
+	"<th>Old</th><th>New</th></tr>$tbl</table>";
     }
     return $tbl;
   }
@@ -449,7 +449,7 @@ use integer;
 
     my ( $v, $c ) = _expandVar( $object, $attrname, 0 );
     if ( defined( $v ) ) {
-      return "<INPUT TYPE=\"hidden\" NAME=\"$attrname\" VALUE=\"$v\">\n";
+      return "<INPUT TYPE=\"hidden\" NAME=\"$attrname\" VALUE=\"$v\">";
     }
     return "";
   }

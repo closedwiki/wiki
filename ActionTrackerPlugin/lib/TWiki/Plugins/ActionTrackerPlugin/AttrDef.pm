@@ -32,6 +32,8 @@ use integer;
     return bless( $this, $class );
   }
 
+  # COVERAGE OFF
+  # Debug only
   sub toString {
     my $this = shift;
     my $text = "type=" . $this->{type} . " size=" . $this->{size};
@@ -42,6 +44,7 @@ use integer;
     }
     return "AttrDef($text)"
   }
+  # COVERAGE ON
 
   # PUBLIC return the first value in the select set, or undef
   sub firstSelect {

@@ -12,6 +12,8 @@
     $pwd = `pwd`;
     chop($pwd);
     purge();
+    mkdir pwd()."/testdata", 0777 unless -d pwd()."/testdata";
+    mkdir pwd()."/testdata/data", 0777 unless -d pwd()."/testdata/data";
     TWiki::testinit();
     setPreferencesValue("WIKITOOLNAME","mailsender");
     setPreferencesValue("WIKIWEBMASTER","wikiwebmaster");
@@ -70,8 +72,6 @@
 
   sub writeFile {
     my ($web, $topic, $ext, $text) = @_;
-    mkdir pwd()."/testdata", 0777 unless -d pwd()."/testdata";
-    mkdir pwd()."/testdata/data", 0777 unless -d pwd()."/testdata/data";
     mkdir pwd()."/testdata/data/$web", 0777 unless -d pwd()."/testdata/data/$web";
     my $file = pwd()."/testdata/data/$web/$topic.$ext";
     open(WF,">$file") || die;
