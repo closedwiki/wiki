@@ -1,6 +1,6 @@
 #!/usr/bin/perl -wT
 #
-# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+# TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
 #
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
@@ -17,6 +17,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
+
+# A thought on design.  Information is passed to the preview script via various form variables.
+# Much of the meta data could have been passed by an extra hidden field, instead individual items such
+# as parent information is passed by individual form variables, hopefully giving a clear "API".
 
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
@@ -48,7 +52,7 @@ sub main
     my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
     my $tmpl = "";
     my $text = "";
-    my @meta = ();
+    my $meta = "";
     my $extra = "";
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
@@ -77,7 +81,7 @@ sub main
 
     # read topic and check access permission
     if( &TWiki::Store::topicExists( $webName, $topic ) ) {
-	( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
+	( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
     }
     if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $text, $topic, $webName ) ) {
         # user has not permission to change the topic
@@ -109,6 +113,8 @@ sub main
     &TWiki::Store::lockTopic( $topic );
 
     TWiki::writeHeader( $query );
+    
+    my $formTemplate = $query->param( "formtemplate" ) || "";
 
     # get edit template, standard or a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
@@ -116,12 +122,18 @@ sub main
     if( ! &TWiki::Store::topicExists( $webName, $topic ) ) {
         my $templateTopic = $query->param( "templatetopic" ) || "";
         if( $templateTopic ) {
-	    ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $templateTopic );
+	    ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $templateTopic );
         }
         if( ! $text ) {
-            ( $text, @meta ) = &TWiki::Store::readTemplateTopic( "WebTopicEditTemplate" );
+            ( $meta, $text ) = &TWiki::Store::readTemplateTopic( "WebTopicEditTemplate" );
         }
         $extra = "(not exist)";
+
+        # If present, instantiate form
+        if( ! $formTemplate ) {
+	    my %args = $meta->findOne( "FORM" );
+	    $formTemplate = $args{"name"};
+	}
 
         my $foo = &TWiki::getLocaldate();
         $text =~ s/%DATE%/$foo/go;
@@ -131,42 +143,32 @@ sub main
     # parent setting
     my $theParent = $query->param( 'parent' ) || "";
     if( $theParent ) {
-        if( $theParent !~ /\./ ) {
-           $theParent = "$webName.$theParent";
+        if( $theParent =~ /^([^.]+)\.([^.]+)$/ ) {
+            my $parentWeb = $1;
+            if( $1 eq $webName ) {
+               $theParent = $2;
+            }
         }
-        $tmpl =~ s/%TOPICPARENT%/$theParent/go;
+        $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
     }
     $tmpl =~ s/%TOPICPARENT%/$theParent/;
     
+    # Processing of formtemplate - comes directly from query parameter formtemplate , 
+    # or indirectly fromwebtopictemplate parameter.
     my $oldargsr;
-    my $formTemplate = $query->param( "formtemplate" );
     if( $formTemplate ) {
        # FIXME temporary because potentially shared fields
        my @args = ( name => $formTemplate );
-       @meta = &TWiki::Store::metaRemove( "FORM", @meta );
+       $meta->remove( "FORM" );
        if( $formTemplate ne "none" ) {
-          @meta = &TWiki::Store::metaUpdate( "FORM", \@args, "name", @meta);
+          $meta->put( "FORM", @args );
        } else {
-          $formTemplate = "";
+          $meta->remove( "FORM" );
        }
        $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
        $text = $query->param( 'text' );
     } else {
        $tmpl =~ s/%FORMTEMPLATE%//go;
-    }
-    
-    ( $oldargsr, @meta ) = &TWiki::Store::metaExtract( "FORM", "", "", @meta );
-    my @oldargs = @$oldargsr;
-    if( @oldargs ) {
-       my %args = @oldargs;
-       my $form = $args{"name"};
-       my @fieldDefs = &TWiki::Form::getFormDef( $webName, $form );
-       my $formText = &TWiki::Form::renderForEdit( $webName, $form, \@meta, @fieldDefs );
-       my $formText = &TWiki::handleCommonTags( $formText, $topic, $webName );
-       my $formText = &TWiki::getRenderedVersion( $formText, $webName ); # FIXME need this?
-       $tmpl =~ s/%FORMFIELDS%/$formText/go;
-    } else {
-       $tmpl =~ s/%FORMFIELDS%//go;
     }
     
     if( $saveCmd ne "repRev" ) {
@@ -198,8 +200,21 @@ sub main
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+    $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
     my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
     $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
+
+    # Dont want to render form fields
+    my %form = $meta->findOne( "FORM" );
+    if( %form ) {
+       my $form = $form{"name"};
+       my @fieldDefs = &TWiki::Form::getFormDef( $webName, $form );
+       my $formText = &TWiki::Form::renderForEdit( $webName, $form, $meta, @fieldDefs );
+       $tmpl =~ s/%FORMFIELDS%/$formText/go;
+    } else {
+       $tmpl =~ s/%FORMFIELDS%//go;
+    }
+    
 
     $tmpl =~ s/%TEXT%/$text/go;
 
