@@ -1,9 +1,10 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018766870" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1025247318" format="1.0" version="1.5"}%
 This is the <b>%WIKITOOLNAME%.%WEB%</b> web. Here you can undelete topics.
 
 ---++ Site Tools of the %WEB% Web
 
 %INCLUDE{"%TWIKIWEB%.WebSiteTools"}%
+	* Place to TrashAttachments
 
 *Notes:*
 %INCLUDE{"%TWIKIWEB%.YouAreHere"}%
