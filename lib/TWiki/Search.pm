@@ -40,6 +40,15 @@ use strict;
 ##        $lsCmd $egrepCmd $fgrepCmd
 ##);
 
+# ===========================
+# Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
+sub _traceExec
+{
+   my( $cmd, $result ) = @_;
+   
+   #TWiki::writeDebug( "Search exec: $cmd -> $result" );
+}
+
 # =========================
 sub searchWeb
 {
@@ -47,7 +56,7 @@ sub searchWeb
     my ( $doInline, $theWebName, $theSearchVal, $theScope, $theOrder,
          $theRegex, $theLimit, $revSort, $caseSensitive, $noSummary,
          $noSearch, $noHeader, $noTotal, $doBookView, $doRenameView,
-         $doShowLock, @junk ) = @_;
+         $doShowLock, $noEmpty, @junk ) = @_;
 
     ## 0501 kk : vvv new option to limit results
     # process the result limit here, this is the 'global' limit for
@@ -167,6 +176,7 @@ sub searchWeb
     }
 
     my $cmd = "";
+    # FIXME need \" for Windows and ' for unix
     if( $theScope eq "topic" ) {
         $cmd = "$TWiki::lsCmd *.txt | %GREP% %SWITCHES% '$theSearchVal'";
     } else {
@@ -229,9 +239,11 @@ sub searchWeb
         if( $theSearchVal ) {
             # do grep search
             chdir( "$sDir" );
+            _traceExec( "chdir to $sDir", "" );
             $cmd =~ /(.*)/;
             $cmd = $1;       # untaint variable (NOTE: Needs a better check!)
             $tempVal = `$cmd`;
+            _traceExec( $cmd, $tempVal );
             @topicList = split( /\n/, $tempVal );
             # cut .txt extension
             my @tmpList = map { /(.*)\.txt$/; $_ = $1; } @topicList;
@@ -245,6 +257,8 @@ sub searchWeb
                 }
             }
         }
+        
+        next if ( $noEmpty && ! @topicList ); # Nothing to show for this topic
 
         # use hash tables for date and author
         my %topicRevDate = ();
@@ -290,7 +304,8 @@ sub searchWeb
             # build the hashes for date and author
             foreach( @topicList ) {
                 my $tempVal = $_;
-                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $tempVal, "", 1, $thisWebName );
+                # FIXME should be able to get data from topic
+                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $thisWebName, $tempVal, "", 1 );
                 $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
                 $topicRevNum{ $tempVal } = $revnum;
@@ -315,7 +330,7 @@ sub searchWeb
             # first we need to build the hashes for date and author
             foreach( @topicList ) {
                 $tempVal = $_;
-                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $tempVal, "", 1, $thisWebName );
+                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $thisWebName, $tempVal, "", 1 );
                 $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
                 $topicRevNum{ $tempVal } = $revnum;
@@ -382,7 +397,7 @@ sub searchWeb
                 $revNum  = $topicRevNum{$topic};
             } else {
                 # lazy query, need to do it at last
-                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $topic, "", 1, $thisWebName );
+                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $thisWebName, $topic, "", 1 );
                 $revUser = &TWiki::userToWikiName( $revuser );
                 $revDate = $revdate;
                 $revNum  = $revnum;
@@ -417,14 +432,16 @@ sub searchWeb
             if( $doRenameView ) { # added JET 19 Feb 2000
                 $topicCount++;
                 $tempVal =~ s/%TOPIC_NUMBER%/$topicCount/go;
-                $head = &TWiki::Store::readFile( "$TWiki::dataDir\/$thisWebName\/$topic.txt" );
+                $tempVal =~ s/%LABEL%/$doRenameView/go;
+                my @meta;
+                ( $head, @meta ) = &TWiki::Store::readWebTopicNew( $thisWebName, $topic );
                 # Remove lines that don't contain the topic and highlight matched string
                 my @lines = split( /\n/, $head );
                 my $reducedOutput = "";
                 my $line;
                 foreach $line ( @lines ) {
                    if( $line =~ /$theSearchVal/go ) {
-                      $line =~ s|$theSearchVal|$1<font color="red">$2</font>$3|go;
+                      $line =~ s|$theSearchVal|$1<font color="red">$2</font>&nbsp;$4|g;
                       $reducedOutput .= "$line<BR>";
                    }
                 }
@@ -433,7 +450,8 @@ sub searchWeb
                 $tempVal =~ s/%TEXTHEAD%//go;
                 $tempVal =~ s/&nbsp;//go;
             } elsif( $doBookView ) {  # added PTh 20 Jul 2000
-                $head = &TWiki::Store::readFile( "$TWiki::dataDir\/$thisWebName\/$topic.txt" );
+                my @meta;
+                ( $head, @meta ) = &TWiki::Store::readWebTopicNew( $thisWebName, $topic );
                 $head = &TWiki::handleCommonTags( $head, $topic, $thisWebName );
                 $head = &TWiki::getRenderedVersion( $head, $thisWebName );
                 $tempVal =~ s/%TEXTHEAD%/$head/go;
