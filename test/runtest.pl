@@ -29,13 +29,6 @@ chomp( $now );
 
 print "<HTML><TITLE>Running tests</TITLE><BODY>\n";
 
-unless( $args =~ /\bnoupdate\n/ ) {
-    print "<h1><code>svn update</code>\n";
-    print "<pre>\n";
-    print `svn update`;
-    print "</pre>\n";
-}
-
 unless( $args =~ /\bnodocs\b/ ) {
     print "<h1>Update docs</h1><pre>";
     print `cd ../tools && perl gendocs.pl`;
@@ -71,7 +64,7 @@ unless( $args =~ /\bnounit\b/ ) {
     print "</pre>\n";
 }
 
-unless( $args =~ /\bnopage\b/ ) {
+if( $args =~ /\btestcases\b/ ) {
     print "<h1>Automated Test Cases</h1>\n";
     my $userAgent = LWP::UserAgent->new();
     $userAgent->agent( "ntwiki Test Script " );
