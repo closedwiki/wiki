@@ -642,7 +642,7 @@ sub basicInitialize() {
 # matched within a multi-byte character cannot be used for TWiki.
 sub _invalidSiteCharset {
     # FIXME: match other problematic multi-byte character sets 
-    return ( $siteCharset =~ /^(?:iso-2022-?|hz-?|.*big5|.*shift_?jis|ms.kanji)/i );
+    return ( $siteCharset =~ /^(?:iso-?2022-?|hz-?|gb2312|gbk|gb18030|.*big5|.*shift_?jis|ms.kanji|johab|uhc)/i );
 }
 
 =pod
