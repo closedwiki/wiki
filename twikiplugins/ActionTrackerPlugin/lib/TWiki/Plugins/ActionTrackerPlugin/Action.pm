@@ -724,7 +724,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	$posttext .= "$line\n";
       } elsif ( $gathering ) {
 	if ( $line =~ m/^$gathering\b.*/ ) {
-	  $gathering = undef;
+	  #$gathering = undef; PetricFrank 1 Jul 2003
 	  $processAction = 1;
 	} else {
 	  $descr .= "$line\n";
@@ -752,7 +752,17 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	  $found = 1;
 	  $action = $anAction;
 	} else {
-	  $pretext .= "%ACTION{$attrs}%$descr\n";
+	  # >>> Fix from PetricFrank 1 Jul 2003
+	  $pretext .= "%ACTION{$attrs}%";
+	  if ( $gathering ) {
+	    $pretext .= " <<$gathering\n";
+	  }
+	  $pretext .= "$descr\n";
+	  if ( $gathering ) {
+	    $pretext .= "$gathering\n";
+	  }
+	  $gathering = undef;
+	  # <<< end of fix from PetricFrank 1 Jul 2003
 	}
 	$an++;
 	$processAction = 0;

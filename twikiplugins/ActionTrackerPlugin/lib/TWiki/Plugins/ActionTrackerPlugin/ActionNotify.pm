@@ -274,7 +274,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
 	if ( $intopic =~ m/Group$/o ) {
 	  # If it's a Group topic, match * Set GROUP = 
-	  if ( $text =~ m/^\s+\*\s+Set\s+GROUP\s*=\s*([^\r\n]+)/so ) {
+	  if ( $text =~ m/^\s+\*\s+Set\s+GROUP\s*=\s*([^\r\n]+)/mo ) {
 	    my @people = split( /\s*,\s*/, $1 );
 	    foreach my $person ( @people ) {
 	      $person = _getMailAddress( $person, $mailAddress );

@@ -280,12 +280,16 @@ sub beforeEditHandler {
   
   my $useNewWindow = ( _getPref( "USENEWWINDOW", 0 ) == 1 );
   
-  my $submitCmd = "Preview";
+  my $submitCmd = "preview";
+  my $submitCmdName = "Preview";
   my $submitScript = "";
   my $cancelScript = "";
+  my $submitCmdOpt = "";
 
   if ( _getPref( "NOPREVIEW", 0 )) {
-    $submitCmd = "Save";
+    $submitCmd = "save";
+    $submitCmdName = "Save";
+    $submitCmdOpt = "?unlock=on";
     if ( $useNewWindow ) {
       # I'd like close the subwindow here, but not sure how. Like this,
       # the ONCLICK overrides the ACTION and closes the window before
@@ -301,8 +305,8 @@ sub beforeEditHandler {
 
   $tmpl =~ s/%CANCELSCRIPT%/$cancelScript/go;
   $tmpl =~ s/%SUBMITSCRIPT%/$submitScript/go;
-  $tmpl =~ s/%SUBMITCMDNAME%/$submitCmd/go;
-  $submitCmd = lcfirst( $submitCmd );
+  $tmpl =~ s/%SUBMITCMDNAME%/$submitCmdName/go;
+  $tmpl =~ s/%SUBMITCMDOPT%/$submitCmdOpt/go;
   $tmpl =~ s/%SUBMITCOMMAND%/$submitCmd/go;
   
   my $hdrs = _getPref( "EDITHEADER" );
@@ -388,6 +392,8 @@ sub beforeSaveHandler {
   }
 
   my $query = TWiki::Func::getCgiQuery();
+  return unless ( $query ); # Fix from GarethEdwards 13 Jun 2003
+
   if ( $query->param( 'closeactioneditor' )) {
     # this is a save from the action editor
     # Strip pre and post metadata from the text
