@@ -37,17 +37,17 @@ function launchWindow( theWeb, theTopic ) {
 </head>
 <body bgcolor="%WEBBGCOLOR%" onLoad="initForm()">
 #PageTop<div id="header">%TMPL:P{"masthead"}%</div>
-<form name="main" action="%SCRIPTURLPATH%/savemulti%SCRIPTSUFFIX%/%URLENCODE{"%WEB%/%TOPIC%"}%" method="post">
+<form name="main" action="%SCRIPTURLPATH%/savemulti%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-<input type="hidden" name="cmd" value="%CMD%" />     
+<input type="hidden" name="cmd" value="%CMD%" />
 <br />
-Don't forget - if you change something, do it in 
+Don't forget - if you change something, do it in
 <a target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">GoodStyle</a>
 and follow the
 <a target="TextFormattingRules" onClick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">TextFormattingRules</a>.
-<br /> <strong>-- <nop>%WIKIUSERNAME% - %DATE%</strong> &nbsp;&nbsp;<code>&lt;==</code> 
+<br /> <strong>-- <nop>%WIKIUSERNAME% - %DATE%</strong> &nbsp;&nbsp;<code>&lt;==</code>
 This is your signature for easy copy &amp; paste operation
 %TMPL:P{"plainfooter"}%
 %FORMFIELDS%
@@ -63,27 +63,27 @@ This is your signature for easy copy &amp; paste operation
 %TMPL:DEF{"titlehelp"}% %TMPL:END%
 %TMPL:DEF{"topicaction"}%
 <fieldset><legend><span class="deem"> [[Plugins.SeeSkinAccessKeys][AccessKeys]]: S = Save, Q = Quiet Save, K = Checkpoint, P = Preview, C = Cancel</span></legend>
-	<label accesskey="s" id="save">
-		<input type="submit" name="action" value="Save" id="save">
-	</label>
-	<label accesskey="q" for="quietsave">
-		<input type="submit" name="action" value="QuietSave" id="quietsave" />
-	</label>
-	<label accesskey="k" for="checkpoint">
-		<input type="submit" name="action" value="Checkpoint" id="checkpoint" />
-	</label>
-	<label accesskey="p" for="preview">
-		<input type="submit" name="action" value="Preview" id="preview" />
-	</label>
-	<label accesskey="c" for="cancel">
-		<input type="submit" name="action" value="Cancel" id="cancel" />
-	</label>
+   <label accesskey="s" id="save">
+      <input type="submit" name="action" value="Save" id="save">
+   </label>
+   <label accesskey="q" for="quietsave">
+      <input type="submit" name="action" value="QuietSave" id="quietsave" />
+   </label>
+   <label accesskey="k" for="checkpoint">
+      <input type="submit" name="action" value="Checkpoint" id="checkpoint" />
+   </label>
+   <label accesskey="p" for="preview">
+      <input type="submit" name="action" value="Preview" id="preview" />
+   </label>
+   <label accesskey="c" for="cancel">
+      <input type="submit" name="action" value="Cancel" id="cancel" />
+   </label>
 </fieldset>
 %TMPL:END%
 %TMPL:DEF{"help"}%<ul>
-	<li><strong>Save</strong> Save topic and return to normal view
-	<li><strong>QuietSave</strong> Save but will not trigger email notification to people monitoring the page (checks the "Minor changes" checkbox) 
-	<li><strong>Checkpoint</strong> Save, and re-edit immediately
-	<li><strong>Preview</strong> Do not save yet, but show what the topic would look if saved
-	<li><strong>Cancel</strong> Discard changes and return to view mode, release lock
-	<li><strong>Do not use BACK in your browser to cancel</strong> instead, or the topic will stay locked, preventing other people to edit it for one hour</ul>%TMPL:END%
+   <li><strong>Save</strong> Save topic and return to normal view
+   <li><strong>QuietSave</strong> Save but will not trigger email notification to people monitoring the page (checks the "Minor changes" checkbox)
+   <li><strong>Checkpoint</strong> Save, and re-edit immediately
+   <li><strong>Preview</strong> Do not save yet, but show what the topic would look if saved
+   <li><strong>Cancel</strong> Discard changes and return to view mode, release lock
+   <li><strong>Do not use BACK in your browser to cancel</strong> instead, or the topic will stay locked, preventing other people to edit it for one hour</ul>%TMPL:END%
