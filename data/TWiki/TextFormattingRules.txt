@@ -1,11 +1,13 @@
-%META:TOPICINFO{author="MikeMannix" date="999757934" format="1.0" version="1.23"}%
+%META:TOPICINFO{author="MikeMannix" date="999762553" format="1.0" version="1.24"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 It is easy to collaborate: just type in your text. You don't need to know HTML at all, though you can use it if you prefer. Links to topics will be created automatically, as long as you follow these simple Text Formatting Rules. TextFormattingFAQ has answers to frequently asked questions about text formatting. This page is also available as quick reference pop-up window from a link in the Edit screen.
 
 ---++ Editing
 
-<table border="1" cellpadding="3" cellspacing="1" bgcolor="#ffffff">
+<table border="0" cellpadding="0" cellspacing="1" bgcolor="#000000">
+<tr><td>
+<table border="0" cellpadding="3" cellspacing="0" bgcolor="#ffffff">
 <tr>
 <td>
  *Formatting Command:*
@@ -359,6 +361,9 @@ Know.ReadmeFirst
 </td>
 </tr>
 </table>
+</td></tr>
+</table>
+
 
 ---++ Using HTML
 
