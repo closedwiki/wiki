@@ -1,6 +1,6 @@
 #!/usr/bin/perl -wTI.
 #
-# TWiki WikiClone (see $wikiversion in wiki.pm for version)
+# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
 # Copyright (C) 1999 Peter Thoeny, peter@thoeny.com
 #
@@ -13,7 +13,7 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
-# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+# http://www.gnu.org/copyleft/gpl.html
 
 use CGI;
 use wiki;

@@ -1,8 +1,22 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -wI.
 #
-# test utility to see if CGI is running and enabled
+# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+#
+# Copyright (C) 2000 Peter Thoeny, peter@thoeny.com
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at
+# http://www.gnu.org/copyleft/gpl.html
+#
+# DESCRIPTION: Test utility to see if CGI is running and enabled
 # for the bin directory
-#
 
 open(STDERR,'>&STDOUT'); # redirect error to browser
 $| = 1;                  # no buffering

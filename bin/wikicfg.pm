@@ -1,5 +1,5 @@
 #
-# TWiki WikiClone (see $wikiversion for version)
+# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
 # Configuration and custom extensions for wiki.pm of TWiki.
 #
@@ -14,10 +14,10 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
-# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+# http://www.gnu.org/copyleft/gpl.html
 #
 # Notes:
-# - Latest version at http://twiki.sourceforge.net/
+# - Latest version at http://twiki.org/
 # - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
 #   NOTE: Don't forget to customize also the TWiki.TWikiPreferences topic.

@@ -1,5 +1,5 @@
 #
-# TWiki WikiClone (see $wikiversion for version)
+# TWiki WikiClone ($wikiversion has version info)
 #
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
@@ -15,10 +15,10 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
-# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+# http://www.gnu.org/copyleft/gpl.html
 #
 # Notes:
-# - Latest version at http://twiki.sourceforge.net/
+# - Latest version at http://twiki.org/
 # - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
@@ -47,7 +47,7 @@
 #    $name is the name of the script, e.g. ``view''. The current
 #    TWiki version uses steps 2 and 4.
 #
-#    See http://twiki.sourceforge.net/cgi-bin/view/Codev/UniqueTopicTemplates
+#    See http://twiki.org/cgi-bin/view/Codev/UniqueTopicTemplates
 #    for further details    
 
 package wiki;
@@ -86,7 +86,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "07 Nov 2000";
+$wikiversion      = "01 Dec 2000";
 
 # ===========================
 # read the configuration part

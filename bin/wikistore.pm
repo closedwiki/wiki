@@ -1,9 +1,6 @@
 #
-# TWiki WikiClone (see $wikiversion for version)
+# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
-# Based on parts of Ward Cunninghams original Wiki and JosWiki.
-# Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
-# Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
 # Copyright (C) 1999, 2000 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
@@ -15,10 +12,10 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
-# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+# http://www.gnu.org/copyleft/gpl.html
 #
 # Notes:
-# - Latest version at http://twiki.sourceforge.net/
+# - Latest version at http://twiki.org/
 # - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
