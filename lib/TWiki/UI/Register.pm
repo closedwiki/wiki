@@ -49,9 +49,6 @@ use Error qw( :try );
 use TWiki::UI;
 use TWiki::UI::OopsException;
 
-use vars qw( $unitTestMode );
-# set unitTestMode to 1 for testing
-
 my $twikiRegistrationAgent = 'TWikiRegistrationAgent';
 
 =pod
@@ -80,9 +77,9 @@ sub register_cgi {
     if ($action eq 'register') {
         register( $session );
         if ($needVerification) {
-	  _requireVerification($session, $tempUserDir);
-	} else {
-	  finish($session);
+            _requireVerification($session, $tempUserDir);
+        } else {
+            finish($session);
         }
     }
     elsif ($action eq 'verify') {
@@ -91,12 +88,14 @@ sub register_cgi {
             throw Error::Simple("Approval code has not been written!");
         }
         finish( $session, $tempUserDir);
-
-    } elsif ($action eq 'resetPassword') {
+    }
+    elsif ($action eq 'resetPassword') {
         resetPassword( $session ); #SMELL - is this still called here, or only by passwd? 
-    } elsif ($action eq 'approve') {
+    }
+    elsif ($action eq 'approve') {
         finish($session, $tempUserDir );
-    } else {
+    }
+    else {
         # SMELL: this should be an OopsException
         throw Error::Simple("invalid action ($action) in register");
     }
@@ -130,9 +129,11 @@ sub passwd_cgi {
 
     if( $action eq 'changePassword' ) {
         changePassword( $session );
-    } elsif ( $action eq 'resetPassword' ) {
+    }
+    elsif ( $action eq 'resetPassword' ) {
         resetPassword( $session );
-    } else {
+    }
+    else {
         throw TWiki::UI::OopsException( $session->{webName},
                                         $session->{topicName},
                                         'manage');
@@ -191,7 +192,7 @@ sub bulkRegister {
     $settings{doUseHtPasswd} = $TWiki::cfg{HtpasswdFormatFamily} eq 'htpasswd';
     $settings{doEmailUserDetails} = $query->param('EmailUsersWithDetails') || 0;
 
-    unless( $unitTestMode || $session->{user}->isAdmin() ) {
+    unless( $session->{user}->isAdmin() ) {
         throw TWiki::UI::OopsException( $web, $topic, 'accessgroup',
                                         "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
     }
@@ -387,8 +388,13 @@ sub _requireVerification {
     $session->writeLog( 'regstart', "$data{webName}.$data{WikiName}",
 			$data{Email}, $data{WikiName} );
 
-    _sendEmail( session=>$session, template => 'registerconfirm', %data );
+    my $err = 
+      _sendEmail( session=>$session, template => 'registerconfirm', %data );
 
+    if ( $err ) {
+        throw TWiki::UI::OopsException
+          ($data{webName},$topic,"sendmailerr", $data{Email}.' - '.$err);
+    }
     throw TWiki::UI::OopsException( $data{webName}, $topic,
                                     'regconfirm', $data{Email} );
 }
@@ -400,48 +406,61 @@ sub _requireVerification {
 Generates a password. Mails it to them and asks them to change it. Entry
 point intended to be called from TWiki::UI::run
 
-   1 tries to locate account - uses getUserByEitherLoginOrWikiName
-   2 checks we have an email address for the user, dies otherwise.
-   3 removes any existing password
-   3 generates new password
-   4 sends it to them
-   5 redirects browser to 'resetpasswd'
-
 =cut
 
 sub resetPassword {
     my $session = shift;
     my $query = $session->{cgiQuery};
-    my $action = $query->param('action');
     my $topic = $session->{topicName};
     my $web = $session->{webName};
+    my $user = $session->{user};
 
-    my $introduction = $query->{Introduction}[0];
-    my @userNames = @{$query->{LoginName}};
-    my @wikiNames = ();
+    my @userNames = $query->param( 'LoginName' ) || ();
+    unless( @userNames ) {
+        # self abuse
+        push( @userNames, $user->login());
+    }
 
-    if ($#userNames > 0) {
-        # Only admin is able to reset more than one password.
+    my $introduction = $query->param( 'Introduction' ) || '';
+
+    # need admin priv if resetting bulk, or resetting another user
+    my $needsAdmin = ( scalar( @userNames ) > 1 );
+    $needsAdmin ||= ( scalar(@userNames) && $user->login() ne $userNames[0] );
+
+    if ( $needsAdmin ) {
+        # Only admin is able to reset more than one password or
+        # another user's password.
         unless( $session->{user}->isAdmin()) {
-            throw TWiki::UI::OopsException( $web, $topic, 'accessgroup',
-                                        "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
+            throw TWiki::UI::OopsException
+              ( $web, $topic, 'accessgroup',
+                "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
         }
     } else {
         # Anyone can reset a single password - important because by definition
         # the user cannot authenticate
     }
-    my $message;
+    # Collect all messages into one string
+    my $message = '';
     foreach my $userName (@userNames) {
-        $message = _resetUsersPassword( $session, $userName, $introduction);
+        $message .= _resetUsersPassword( $session, $userName,
+                                         $introduction ) . "\n";
     }
-    unless( $#userNames ) {
-        my $user = $session->{users}->findUser( $userNames[0] );
-        throw TWiki::UI::OopsException( undef, $user->wikiName(),
-                                        'resetpasswd',
-                                        $message, $user->login() );
+
+    my $action = '';
+    # Redirect to a page that tells what happened
+    $message =~ s/\n/<br \/>\n/g;
+    if( scalar( @userNames ) == 1 ) {
+        # one user; refine the change password link to include their
+        # username
+        $action = '?username='. $user->login();
     }
+    throw TWiki::UI::OopsException
+      ( undef, $user->wikiName(), 'resetpasswd', $message, $action );
+
 }
 
+# return a string of messages. If there was an error,
+# this string will include the substring "ERROR:".
 sub _resetUsersPassword {
     my( $session, $userName, $introduction ) = @_;
 
@@ -454,29 +473,36 @@ sub _resetUsersPassword {
     my @em = $user->emails();
     my $email = $em[0];
     unless ($email) {
-        throw TWiki::UI::OopsException
-          ( undef, $user->wikiName(), 'regemail',
-            "Can't get an email address for " . $user->stringify());
+        return "ERROR: Can't get an email address for " . $user->stringify();
     }
 
     my $message = '';
     unless( $user->passwordExists() ) {
-        $email = 'ResetPassword created new htpasswd entry for '.
-          $user->stringify()." as it was missing in .htpasswd";
+        # Not an error
+        $message = 'ResetPassword created new htpasswd entry for '.
+          $user->login()." as it was missing in .htpasswd\n";
     }
 
     my $password = $user->resetPassword();
 
-    _sendEmail( session=>$session,
-                LoginName => $user->login(),
-                WikiName => $user->wikiName(),
-                Email => $email,
-                PasswordA => $password,
-                Introduction => $introduction,
-                template => 'mailresetpassword'
-              );
+    my $err = _sendEmail( session => $session,
+                          LoginName => $user->login(),
+                          WikiName => $user->wikiName(),
+                          Email => $email,
+                          PasswordA => $password,
+                          Introduction => $introduction,
+                          template => 'mailresetpassword'
+                        );
 
-    $session->writeLog('resetpasswd', $user->login(), $user->wikiName(), $email);
+    if( $err ) {
+        $message .= 'ERROR: '.$err."\n";
+    } else {
+        $message .= 'A new *system-generated* password for '.
+          $user->login() . ' (wikiname ' .
+            $user->wikiName() . ') has been sent to '.
+              $email."\n";
+    }
+
     return $message;
 }
 
@@ -801,9 +827,10 @@ sub _emailRegistrationConfirmations {
       $session->{net}->sendEmail($email);
 
     # SMELL: This needs to log to tell the admin.
-    throw TWiki::UI::OopsException( $data{webName}, $data{WikiName},
-                                    'sendmailerr', $err )
-      if ( $err && ! $unitTestMode );
+    if ( $err ) {
+        throw TWiki::UI::OopsException( $data{webName}, $data{WikiName},
+                                        'sendmailerr', $err );
+    }
 
     # Furthermore it would be better if it returned
     # A template to give to the user.
@@ -815,9 +842,10 @@ sub _emailRegistrationConfirmations {
                               1 );
 
     $err = $session->{net}->sendEmail($email);
-    throw TWiki::UI::OopsException( $data{webName}, $data{WikiName},
-                                    'sendmailerr', $err )
-      if ( $err && ! $unitTestMode );
+    if ( $err ) {
+        throw TWiki::UI::OopsException( $data{webName}, $data{WikiName},
+                                        'sendmailerr', $err );
+    }
 }
 
 #The template dictates the to: field
@@ -941,7 +969,7 @@ sub _sendEmail {
     my %p = @_;
     my $session = $p{session};
 
-    throw Error::Simple("no template in _sendEmail ".Dumper(\%p)) unless $p{template};
+    throw Error::Simple("no template in _sendEmail ") unless $p{template};
     my $text      = $session->{templates}->readTemplate($p{template});
 
     $p{Introduction} = '' unless $p{Introduction}; # ugly? See Footnote [1]
@@ -955,13 +983,7 @@ sub _sendEmail {
     $text =~ s/%PASSWORD%/$p{PasswordA}/go;
     $text = $session->handleCommonTags( $text, $p{webName}, $p{WikiName} );
 
-    my $senderr = $session->{net}->sendEmail($text);
-    if ($senderr) {
-        $session->writeWarning("Couldn't send message:\n\n$text\n\n - $senderr");
-        throw TWiki::UI::OopsException( undef, $p{WikiName},
-                                        'sendmailerr', $senderr )
-          unless $unitTestMode;
-    }
+    return $session->{net}->sendEmail($text);
 }
 
 ##############################################################################
@@ -1066,7 +1088,7 @@ sub reloadUserContext {
     my $verificationFilename = _verificationCodeFilename($code);
     unless (-f $verificationFilename){
         throw TWiki::UI::OopsException( undef, undef, 'regcode',
-					"$code has no file '$verificationFilename'");
+					"$code has no verification file '$verificationFilename'");
     }
 
     my %data = %{ _getRegDetailsByCode($code) };

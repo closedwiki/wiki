@@ -1033,8 +1033,7 @@ sub saveFile {
 
     umask( 002 );
     unless ( open( FILE, ">$name" ) )  {
-        warn "Can't create file $name - $!\n";
-        return;
+        die "Can't create file $name - $!\n";
     }
     print FILE $text;
     close( FILE);

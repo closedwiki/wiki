@@ -28,13 +28,11 @@ use Error qw( :try );
 use File::Copy;
 use Carp;
 
-my $scriptUrl = "http://registertesttwiki.mrjc.com/twiki/bin";
-
 my $testUserWikiName = 'TestUser';
 my $testUserLoginName = 'testuser';
 my $testUserEmail = 'martin.cleaver@BCS.org.uk';
 
-my $adminLoginName = 'mrjcleaver';
+my $adminLoginName = 'testuser';
 my $guestLoginName = 'guest';
 
 my $temporaryWeb = "Temporary";
@@ -226,9 +224,6 @@ sub test_registerVerifyOk {
         $self->assert(0, "expected an oops redirect");
     };
 
-die "FOO";
-
-    print "VERIFYING...\n";
     try {
         $self->verify();
     } catch TWiki::AccessControlException with {
@@ -237,6 +232,7 @@ die "FOO";
 
     } catch TWiki::UI::OopsException with {
         my $e = shift;
+print STDERR `ls -lR '/home/twiki/DEVELOP/test/unit/tmpRegisterTestPub'`;
         $self->assert(0, $e->stringify );
     }
 }
@@ -517,7 +513,7 @@ EOM
 
     } catch TWiki::UI::OopsException with {
         my $e = shift;
-        $self->assert_matches(qr/Moved.*$logTopic/, $e->{-text});
+        $self->assert_matches(qr/Moved.*$logTopic/, $e->{-text}, $e->stringify());
 
     } catch Error::Simple with {
         my $e = shift;

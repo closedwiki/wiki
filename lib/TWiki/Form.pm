@@ -254,7 +254,7 @@ sub _link {
         $link = '<a target="'.$name.'" ' .
           'onclick="return launchWindow('."'$web','$name')\" " .
             'title="'.$tooltip.'" ' .
-              'href="'.$this->{session}->getScriptUrlPath($web, $name, 'view').
+              'href="'.$this->{session}->getScriptUrl($web, $name, 'view').
                   "\" $TWiki::cfg{NoFollow}>$name</a>";
     } elsif ( $tooltip ) {
         $link = '<span title="'.$tooltip.'">'.$name.'</span>';

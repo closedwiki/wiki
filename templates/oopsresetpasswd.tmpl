@@ -1,14 +1,14 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:DEF{"titleaction"}%(note) %TMPL:END%
 %TMPL:DEF{"webaction"}% *Note* %TMPL:END%
-%TMPL:DEF{"heading"}%Your TWiki password has been changed%TMPL:END%
+%TMPL:DEF{"heading"}%Password reset%TMPL:END%
 %TMPL:DEF{"message"}%
 
-A new *system-generated* password has been sent to *%PARAM1%*.
+%PARAM1%
 
-Please proceed to [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%.ChangePassword?username=%PARAM2%][ChangePassword]] to change it to something memorable.
+Users with automatically generated passwords should proceed immediately to [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ChangePassword%PARAM2%][change password]] to change their password to something memorable.
 
 %TMPL:END%
-%TMPL:DEF{"topicaction"}% [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%.ChangePassword?username=%PARAM2%][OK]] %TMPL:END%
+%TMPL:DEF{"topicaction"}% %TMPL:END%
 
 %TMPL:P{"oops"}%
