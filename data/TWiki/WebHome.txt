@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="JohnTalintyre" date="997201630" format="1.0beta2" version="1.14"}%
+%META:TOPICINFO{author="JohnTalintyre" date="997981653" format="1.0beta2" version="1.15"}%
 <table><tr><td>
 Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about the tool.</td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
@@ -34,6 +34,7 @@ Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management t
 			1 TWikiSkins
 			1 TWikiVariables
 			1 TWikiNotificationOfChanges
+			1 MetaDataDefinition
 			1 TWikiFormTemplate
 			1 TWikiPlugins
 			1 RenameTopic
