@@ -724,8 +724,9 @@ sub readTopicText
     $user = $TWiki::Plugins::SESSION->{user}
       unless defined( $ignorePermissions );
 
+    my $text;
     try {
-        my $text =
+        $text =
           $TWiki::Plugins::SESSION->{store}->readTopicRaw
             ( $user, $web, $topic, $rev );
     } catch TWiki::AccessControlException with {
