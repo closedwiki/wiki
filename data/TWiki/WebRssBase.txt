@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1062567542" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1066549876" format="1.0" version="1.4"}%
 ---++ How to Find out What's New?
 
 There are three ways to find out what's new in each TWiki web:
@@ -10,7 +10,7 @@ There are three ways to find out what's new in each TWiki web:
 
 	* The URL for an RSS feed is =%SCRIPTURL%/view%SCRIPTSUFFIX%/&lt;web&gt;/WebRss?skin=rss=
 	* For this %WEB% web it is %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?skin=rss (or %SCRIPTURL%/view%SCRIPTSUFFIX%/Main/WebRss?skin=rss&contenttype=text/plain for plain text RSS)
-	* You can also create a custom feed based on a search. Add a =search=value= parameter to the URL, e.g. %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?skin=rss&search=plugin= is a what's new feed about Plugins.
+	* You can also create a custom feed based on a search. Add a =search=value= parameter to the URL, e.g. %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?skin=rss&search=plugin is a what's new feed about Plugins.
 
 ---++ RSS Feed Internals
 
@@ -54,7 +54,7 @@ Below part is included by each <nop>WebRss topic:
   <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%INCLUDINGWEB%</link>
   <url>%PUBURL%/%TWIKIWEB%/TWikiLogos/twikilogo88x31.gif</url>
 </image>
-%SEARCH{"%URLPARAM{"search" default=".*" }%" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" reverse="on" nototal="on" limit="16" format="<item rdf:about=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic\">$n  <title>$topic</title>$n  <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic</link>$n  <description>$summary</description>$n  <dc:date>$isodate</dc:date>$n  <dc:contributor>$n	 <rdf:Description link=\"%SCRIPTURL%/view%SCRIPTSUFFIX%?topic=$wikiusername\">$n		<rdf:value>$username</rdf:value>$n	 </rdf:Description>$n  </dc:contributor>$n  <wiki:version>$rev</wiki:version>$n  <wiki:status>updated</wiki:status>$n  <wiki:importance>major</wiki:importance>$n  <wiki:diff>%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic</wiki:diff>$n  <wiki:history>%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic</wiki:history>$n</item>"}%
+%SEARCH{"%URLPARAM{"search" default=".*" }%" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" reverse="on" nototal="on" limit="16" format="<item rdf:about=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic\">$n  <title>$topic</title>$n  <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic?t=$isodate</link>$n  <description>$summary</description>$n  <dc:date>$isodate</dc:date>$n  <dc:contributor>$n	 <rdf:Description link=\"%SCRIPTURL%/view%SCRIPTSUFFIX%?topic=$wikiusername\">$n		<rdf:value>$username</rdf:value>$n	 </rdf:Description>$n  </dc:contributor>$n  <wiki:version>$rev</wiki:version>$n  <wiki:status>updated</wiki:status>$n  <wiki:importance>major</wiki:importance>$n  <wiki:diff>%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic</wiki:diff>$n  <wiki:history>%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic</wiki:history>$n</item>"}%
 %STOPINCLUDE%
 </verbatim>
 -----
