@@ -252,10 +252,10 @@ a5 3
     Assert::equals(scalar(@TWiki::Net::sent), 3);
     my $saw = "";
     while( $html = shift(@TWiki::Net::sent) ) {
-      Assert::sContains($html, "From: mailsender");
-      Assert::sContains($html, "Subject: Changes to actions on WIKITOOLNAME");
+      Assert::sContains($html, "From: wiki_web_master");
+      Assert::sContains($html, "Subject: Changes to actions on wiki_tool_name");
       if ($html=~ /To: actor5\@correct.address/) {
-	Assert::sContains($html, "Subject: Changes to actions on WIKITOOLNAME");
+	Assert::sContains($html, "Subject: Changes to actions on wiki_tool_name");
 	Assert::sContains($html, "Changes to actions since Sat Dec  1 00:00:00 2001");
 	Assert::sContains($html, "Attribute \"due\" changed, was \"Fri, 22 Jun 2001 (LATE)\", now \"Sat, 22 Jun 2002\"");
 	$saw .= "A";
@@ -317,7 +317,7 @@ a5 3
 	Assert::sContains($html, "Attribute \"text\" changed, was \"A8: Text change\", now \"A8: Text change from original, late\"");
 	$ok .= "B";
       } elsif ($html=~ /To: actor5\@correct.address/) {
-	Assert::sContains($html, "Subject: Changes to actions on WIKITOOLNAME");
+	Assert::sContains($html, "Subject: Changes to actions on wiki_tool_name");
 	Assert::sContains($html, "Changes to actions since Sat Dec  1 00:00:00 2001");
 	Assert::sContains($html, "Attribute \"due\" changed, was \"Fri, 22 Jun 2001 (LATE)\", now \"Sat, 22 Jun 2002\"");
 	$ok .= "C";

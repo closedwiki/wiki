@@ -320,7 +320,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my ( $actionsString, $actionsHTML, $changesString, $changesHTML,
 	 $since, $mailaddr, $format ) = @_;
     
-    my $from = TWiki::Func::getPreferencesValue("WIKITOOLNAME");
+    my $from = TWiki::Func::getPreferencesValue( "WIKIWEBMASTER" );
     
     my $text = TWiki::Func::readTemplate( "actionnotify" );
 

@@ -121,14 +121,15 @@ For example,
 
 #QueryByExample
 ---+++ Query-by-example action search
+_You should see values in all of the fields below; if they are all empty, your version of TWiki doesn't support the 'default' attribute on URLPARAM. In this case you can enter the string ".*" for empty fields (and '365' for 'Within')_
 
 <form name="searchaction" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%#QueryByExample">
-|  Who: | <input type="text" name="qwho" value="%URLPARAM{"qwho"}%" size="20" /> |
-|  Notify: | <input type="text" name="qnotify" value="%URLPARAM{"qnotify"}%" size="20" /> |
-|  State: | <select name="qstate"> <option>%URLPARAM{"qstate"}%</option> <option>open</option> <option>late</option> <option>closed</option> <option></option> </select> |
-|  Within: | <input type="text" name="qwithin" value="%URLPARAM{"qwithin"}%" size="3" /> days |
-|  Web: | <input type="text" name="qweb" value="%URLPARAM{"qweb"}%" size="20" /> |
-|  Topic: | <input type="text" name="qtopic" value="%URLPARAM{"qtopic"}%" size="20" /> |
+|  Who: | <input type="text" name="qwho" value="%URLPARAM{"qwho" default=".*"}%" size="20" /> |
+|  Notify: | <input type="text" name="qnotify" value="%URLPARAM{"qnotify" default=".*"}%" size="20" /> |
+|  State: | <select name="qstate"> <option>%URLPARAM{"qstate" default=".*"}%</option> <option>open</option> <option>late</option> <option>closed</option> <option></option> </select> |
+|  Within: | <input type="text" name="qwithin" value="%URLPARAM{"qwithin" default="1000" }%" size="3" /> days |
+|  Web: | <input type="text" name="qweb" value="%URLPARAM{"qweb" default=".*"}%" size="20" /> |
+|  Topic: | <input type="text" name="qtopic" value="%URLPARAM{"qtopic" default=".*"}%" size="20" /> |
 | | <input type="submit" value="Go" /> |
 </form>
 Result:
@@ -335,7 +336,6 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	* Make sure you have Time::ParseDate installed in your perl installation (available from www.cpan.org)
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
-	| ==%TOPIC%.xml== | Ant build file |
 	| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	| ==bin/actionnotify== | Mailer script |
 	| ==templates/actionnotify.tmpl== | Page template for notify message |
@@ -349,6 +349,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	| ==lib/TWiki/Plugins/%TOPIC%/AttrDef.pm== | Perl support module |
 	| ==lib/TWiki/Plugins/%TOPIC%/Config.pm== | Configuration module |
 	| ==lib/TWiki/Plugins/%TOPIC%/Format.pm== | Perl support module |
+	| ==lib/TWiki/Plugins/%TOPIC%/build.xml== | Ant build file |
 	| ==lib/TWiki/Plugins/%TOPIC%/test.zip== | Test scripts |
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 	* Configure lib/TWiki/Plugins/ActionTrackerPlugin/Config.pm appropriately for your installation. Several of the configuration items are the same as in lib/TWiki.cfg - you can copy your local values from there if you're not sure what you're doing. If you are using Rcs<nop>Lite, just ignore the rlogCmd; you can't use the changedsince feature with Rcs<nop>Lite anyway.

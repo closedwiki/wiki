@@ -15,8 +15,8 @@
     mkdir pwd()."/testdata", 0777 unless -d pwd()."/testdata";
     mkdir pwd()."/testdata/data", 0777 unless -d pwd()."/testdata/data";
     TWiki::testinit();
-    setPreferencesValue("WIKITOOLNAME","mailsender");
-    setPreferencesValue("WIKIWEBMASTER","wikiwebmaster");
+    setPreferencesValue("WIKITOOLNAME","wiki_tool_name");
+    setPreferencesValue("WIKIWEBMASTER","wiki_web_master");
     setPreferencesValue("SCRIPTSUFFIX",".cgi");
     setPreferencesValue("SCRIPTURLPATH","scripturl");
     loadPreferencesFor($plugin);
