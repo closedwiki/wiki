@@ -160,8 +160,9 @@ sub UpgradeTWikiConfig
 	    {	    
 		# and if it is not defined, then we need to give it the default value
 		$newValue = $$configVal{'default'};
-		printToNewConfig( "\$$$configVal{varname} = $newValue ;\n");
-		print "There wasn't a definition for \"\$$$configVal{varname}\" in the old configuration... \n ...using the default: ' $newValue} '\n";
+		my $newDef = "\$$$configVal{varname} = $newValue ;";
+		printToNewConfig("$newDef\n");
+		print "There wasn't a definition for \"\$$$configVal{varname}\" in the old configuration... \n ...using the default: ' $newValue '\n";
 		$usedADefault = 1;
 	    }
 	    else

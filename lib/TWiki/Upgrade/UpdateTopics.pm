@@ -362,7 +362,7 @@ sub patchFile
 	{
 	    # come to mama
 	    # this had better be the value in the distribution!...
-	    $diff[$i] = '<		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]';
+	    $diff[$i] = '< 		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]';
 	    last;
 	}
     }

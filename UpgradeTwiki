@@ -36,6 +36,8 @@ my $targetDir = shift or die "Usage: $0 <target directory for new wiki build>\n"
 # not sure if a relative path with be safe... better safe than sorry...
 $targetDir =~ m|^[/~]| or die "Usage: $0 <full path to target directory for new wiki build>\n"; 
 
+$targetDir =~ s|/$||;  # avoid ugly double slashes.
+
 print "OK - I'm assuming you've unpacked a TWiki distribution in this directory.
 
 That means that there should be all the normal TWiki directories here: bin, lib, pub, templates etc. right here.
@@ -199,22 +201,17 @@ Now: you need to
 
  - Move the newly created twiki directory ($targetDir) to the place where your previous version was.
 
- - Use your browser to check the whole thing: visit 
+ - Use your browser to check the whole thing: visit the 'testenv' script, which I am guessing is at:
 
       $TWikiCfg::defaultUrlHost$TWikiCfg::scriptUrlPath/testenv
 
    make sure there are no unwarranted warnings, and press the 'relockrcs' button if advised to do so,
 
-   and finally: visit...
+   and finally: visit TWikiPreferences, which I'm guessing is at:
 
-      $TWikiCfg::defaultUrlHost$TWikiCfg::scriptUrlPath$TWikiCfg::dispViewPath/TWiki/TWikiPreferences
+      $TWikiCfg::defaultUrlHost$TWikiCfg::scriptUrlPath/view$TWikiCfg::scriptSuffix/TWiki/TWikiPreferences
 
    ... it should be working, and you can edit the new WIKIWEBMASTER setting!
 
 Goodluck... :-)
 ";
-
-if ($TWikiCfg::dispViewPath) {1;}# stop perl complaining about used only once
-
-
-
