@@ -415,13 +415,13 @@ sub internalLink {
 
     # Turn spaced-out names into WikiWords - upper case first letter of
     # whole link, and first of each word. TODO: Try to turn this off,
-    # avoiding spaces being stripped elsewhere - e.g. $doPreserveSpacedOutWords 
+    # avoiding spaces being stripped elsewhere
     $theTopic =~ s/^(.)/\U$1/;
     $theTopic =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;	
 
     # Add <nop> before WikiWord inside link text to prevent double links
     $theLinkText =~ s/([\s\(])([$TWiki::regex{upperAlpha}])/$1<nop>$2/go;
- 
+
      # Allow spacing out, etc
      if (TWiki::isValidWikiWord($theLinkText)) {
         $theLinkText = $this->plugins()->renderWikiWordHandler( $theLinkText ) || $theLinkText;
@@ -930,7 +930,8 @@ sub getRenderedVersion {
         unless( $this->{NOAUTOLINK} || $insideNoAutoLink ) {
             # Handle all styles of TWiki link in one hit
             $line =~ s/([\s\(])(($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$1.$this->_handleLink($theWeb,$3,$4,$5)/geo;
-            $line =~ s/$TWiki::TranslationToken(\S.*?)$TWiki::TranslationToken/$1/go;
+#CCCC            $line =~ s/$TWiki::TranslationToken(\S.*?)$TWiki::TranslationToken/$1/go;
+ASSERT($line !~ /$TWiki::TranslationToken/);
         }
 
         $line =~ s/\n//;
@@ -971,16 +972,14 @@ sub _handleLink {
     if ( defined( $web )) {
         if ( defined( $anchor ) ) {
             # 'Web.TopicName#anchor' or 'Web.ABBREV#anchor' link
-            $text =
-              "$TWiki::TranslationToken$topic$anchor$TWiki::TranslationToken";
+            $text = "$topic$anchor";
         } else {
             $anchor = "";
             # 'Web.TopicName' or 'Web.ABBREV' link:
             if ( $topic eq $TWiki::cfg{HomeTopicName} && $web ne $this->{session}->{webName} ) {
                 $text = $web;
             } else {
-                $text =
-                  "$TWiki::TranslationToken$topic$TWiki::TranslationToken";
+                $text = $topic;
             }
             $keepWeb =
               ( $topic =~ /^$TWiki::regex{abbrevRegex}$/o );
@@ -989,8 +988,7 @@ sub _handleLink {
         $web = $theWeb;
         if ( defined( $anchor )) {
             # 'TopicName#anchor' or 'ABBREV#anchor' link:
-            $text =
-              "$TWiki::TranslationToken$topic$anchor$TWiki::TranslationToken";
+            $text = "$topic$anchor";
         } else {
             # 'TopicName' or 'ABBREV' link:
             $anchor = "";
@@ -1116,9 +1114,7 @@ sub TML2PlainText {
     $text =~ s/\&[a-z]+;/ /g;           # remove entities
     $text =~ s/%WEB%/$web/g;
     $text =~ s/%TOPIC%/$topic/g;
-    # FIXME : this _is_ happening and giving errors/warnings
-    warn "FIXME : no WikiToolName?" unless $TWiki::cfg{WikiToolName};
-    $text =~ s/%WIKITOOLNAME%/$TWiki::cfg{WikiToolName}/g;
+    $text =~ s/%(WIKITOOLNAME)%/$this->{session}->{SESSION_TAGS}{$1}/g;
     if( $opts =~ /nohead/ ) {
         # skip headings on top
         while( $text =~ s/^\s*\-\-\-+\+[^\n\r]+// ) {}; # remove heading
