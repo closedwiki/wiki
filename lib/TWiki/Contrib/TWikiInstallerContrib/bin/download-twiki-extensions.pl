@@ -134,7 +134,7 @@ sub DownloadTWikiExtension
 	    push @{ $self->{errors} }, $plugin;
 	} else {
 	    ++$self->{nDownloadedPlugins};
-	    print "| updated";
+	    print "| up-to-date";
 #?	    $pluginS->{file} = $local_file;
 	}
 	
