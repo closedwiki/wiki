@@ -106,16 +106,17 @@ sub _collateGroups {
 # Get a list of user objects from a text string containing a
 # list of user names. Used by User.pm
 sub expandUserList {
-    my( $this, $theItems, $expand ) = @_;
+    my( $this, $names, $expand ) = @_;
     ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
 
+    $names ||= '';
     # comma delimited list of users or groups
     # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
-    $theItems =~ s/(<[^>]*>)//go;     # Remove HTML tags
+    $names =~ s/(<[^>]*>)//go;     # Remove HTML tags
     # TODO: i18n fix for user name
-    $theItems =~ s/\s*([a-zA-Z0-9_\.\,\s\%]*)\s*(.*)/$1/go; # Limit list
+    $names =~ s/\s*([a-zA-Z0-9_\.\,\s\%]*)\s*(.*)/$1/go; # Limit list
 
-    my @l = map { $this->findUser( $_ ) } split( /[\,\s]+/, $theItems );
+    my @l = map { $this->findUser( $_ ) } split( /[\,\s]+/, $names );
     return \@l;
 }
 
@@ -149,7 +150,7 @@ sub findUser {
     ASSERT($name) if DEBUG;
     my $object;
 
-    $this->{session}->writeDebug("Looking for $name / $wikiname / $dontCreate");
+    #$this->{session}->writeDebug("Looking for $name / $wikiname / $dontCreate");
 
     # is it a cached login name?
     $object = $this->{login}{$name};
