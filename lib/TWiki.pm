@@ -100,6 +100,8 @@ use vars qw(
 	$singleUpperAlphaRegex $singleLowerAlphaRegex $singleUpperAlphaNumRegex
 	$singleMixedAlphaNumRegex $singleMixedNonAlphaNumRegex 
 	$singleMixedNonAlphaRegex $mixedAlphaNumRegex
+	$validAsciiStringRegex 
+	$validUtf8CharRegex $validUtf8StringRegex
     );
 
 # TWiki::Store config:
@@ -205,7 +207,7 @@ sub writeWarning {
     if( $warningFilename ) {
     my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
     my( $tmon) = $isoMonth[$mon];
-    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
+    $year = sprintf( "%.4u", $year + 1900 );
     my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
         open( FILE, ">>$warningFilename" );
         print FILE "$time $text\n";
@@ -221,7 +223,7 @@ sub writeDebug {
     
     my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
     my( $tmon) = $isoMonth[$mon];
-    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
+    $year = sprintf( "%.4u", $year + 1900 );
     my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
 
     print FILE "$time $text\n";
@@ -338,7 +340,36 @@ sub initialize
     }
     ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
 
-    ##writeDebug "raw topic is $topicName";
+    # PROTOTYPE: Auto-detect UTF-8 vs. site charset
+    writeDebug "URL web.topic is $webName.$topicName";
+    my $charEncoding;
+    my $fullTopicName = "$webName.$topicName";
+    # Detect character encoding of the full topic name from URL
+    if ( $fullTopicName =~ $validAsciiStringRegex ) {
+	$charEncoding = 'ASCII';
+    } elsif ( $fullTopicName =~ $validUtf8StringRegex ) {
+	$charEncoding = 'UTF-8';
+
+	# Convert into ISO-8859-1 if it is the site charset
+	if ( $siteCharset =~ /^iso-?8859-?1$/io ) {
+	    # ISO-8859-1 maps onto first 256 codepoints of Unicode
+	    # (conversion from 'perldoc perluniintro')
+	    $fullTopicName =~ s/ ([\xC2\xC3]) ([\x80-\xBF]) / 
+				 chr( ord($1) << 6 & 0xC0 | ord($2) & 0x3F)
+				 /egx;
+	    ($webName, $topicName) = split /\./, $fullTopicName;
+	} else {
+	    # Do nothing for non-supported conversions - would require use
+	    # of Encode.pm or similar.
+	    writeDebug "Conversion from UTF-8 to $siteCharset not supported";
+	}
+    } else {
+	# Non-ASCII and non-UTF-8 - assume in site character set
+	$charEncoding = $siteCharset;
+    }
+
+    writeDebug "URL character encoding was: $charEncoding";
+    writeDebug "Final web and topic are $webName $topicName ($siteCharset)";
 
     # Filter out dangerous or unwanted characters
     $topicName =~ s/$securityFilter//go;
@@ -491,6 +522,49 @@ sub setupRegexes {
 
     # Multi-character alpha-based regexes
     $mixedAlphaNumRegex = qr/[${mixedAlphaNum}]*/;
+
+    # Character encoding regexes
+
+    # 7-bit ASCII only
+    $validAsciiStringRegex = qr/^[\x01-\x7F]+$/;
+    
+    # Regex to match only a valid UTF-8 character, taking care to avoid overlong
+    # encodings by excluding the relevant gaps in UTF-8 encoding space - see
+    # 'perldoc perlunicode', Unicode Encodings section.
+    $validUtf8CharRegex = qr{
+				# Single byte - ASCII
+				[\0-\x7F] 
+				|
+
+				# 2 bytes
+				[\xC2-\xDF][\x80-\xBF] 
+				|
+
+				# 3 bytes
+
+				    # Refuse illegal code positions - negative
+				    # lookahead
+				    (?!\xEF\xBF[\xBE\xBF])	
+
+				    # Main regex
+				    (?:
+					([\xE0][\xA0-\xBF])|
+					([\xE1-\xEC\xEE-\xEF][\x80-\xBF])|
+					([\xED][\x80-\x9F])
+				    )
+				    [\x80-\xBF]
+				|
+
+				# 4 bytes 
+				    (?:
+					([\xF0][\x90-\xBF])|
+					([\xF1-\xF3][\x80-\xBF])|
+					([\xF4][\x80-\x8F])
+				    )
+				    [\x80-\xBF][\x80-\xBF]
+			    }x;
+
+    $validUtf8StringRegex = qr/^ (?: $validUtf8CharRegex )* $/x;
 
 }
 
@@ -952,7 +1026,7 @@ sub getTWikiLibDir
 sub getGmDate
 {
     my( $sec, $min, $hour, $mday, $mon, $year) = gmtime(time());
-    $year = sprintf("%.4u", $year + 1900);  # Y2K fix
+    $year = sprintf("%.4u", $year + 1900);
     my( $tmon) = $isoMonth[$mon];
     my $date = sprintf("%.2u ${tmon} %.2u", $mday, $year);
     return $date;
@@ -963,7 +1037,7 @@ sub getGmDate
 sub getLocaldate
 {
     my( $sec, $min, $hour, $mday, $mon, $year) = localtime(time());
-    $year = sprintf("%.4u", $year + 1900);  # Y2K fix
+    $year = sprintf("%.4u", $year + 1900);
     my( $tmon) = $isoMonth[$mon];
     my $date = sprintf("%.2u ${tmon} %.2u", $mday, $year);
     return $date;
@@ -1001,7 +1075,7 @@ sub formatGmTime
 
     # Default format, e.g. "31 Dec 2002 - 19:30"
     my( $tmon ) = $isoMonth[$mon];
-    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
+    $year = sprintf( "%.4u", $year + 1900 );
     return sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
 }
 
@@ -1161,13 +1235,14 @@ sub makeTopicSummary
     $htext =~ s/\s+[\+\-]*/ /g;       # remove newlines and special chars
 
     # limit to 162 chars 
-    # FIXME I18N: Avoid splitting within multi-byte character sets
+    # FIXME I18N: Avoid splitting within multi-byte characters
     $htext =~ s/(.{162})($mixedAlphaNumRegex)(.*?)$/$1$2 \.\.\./g;
 
     # Encode special chars into XML &#nnn; entities for use in RSS feeds
     # - no encoding for HTML pages, to avoid breaking international 
     # characters.
     if( $pageMode eq 'rss' ) {
+	# FIXME: Issue for EBCDIC/UTF-8
 	$htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
     }
 
@@ -2529,6 +2604,7 @@ sub makeAnchorName
     # URL-encoded anchors, such characters are mapped to '_'.  If this
     # causes some anchors to collide, a consistent 8-bit-to-7-bit
     # alphabetic character mapping could be defined to minimise this issue.  
+    # FIXME: Issue for EBCDIC/UTF-8
     $anchorName =~ s/([\x7f-\xff])/_/g;		# Map 8-bit chars
     ##$anchorName =~ handleUrlEncode( $anchorName );	# Was doing URL-encode 
 
