@@ -71,40 +71,21 @@ sub initPlugin
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1 ) {
+    if( $TWiki::Plugins::VERSION < 1.010 ) {
         &TWiki::Func::writeWarning( "Version mismatch between InterwikiPlugin and Plugins.pm" );
         return 0;
     }
 
     # Get plugin preferences from InterwikiPlugin topic
-    my $interFileName = &TWiki::Func::getPreferencesValue( "INTERWIKIPLUGIN_RULESTOPIC" ) 
-                        || "$installWeb.$interSiteLinkRulesTopicName";
     $suppressTooltip  = &TWiki::Func::getPreferencesFlag( "INTERWIKIPLUGIN_SUPPRESSTOOLTIP" );
     $debug            = &TWiki::Func::getPreferencesFlag( "INTERWIKIPLUGIN_DEBUG" );
 
-    # get the Interwiki site->url map topic
-    my $InterFile = '';
-    my $dataDir = &TWiki::Func::getDataDir();
-    if( $interFileName =~ m/^([^.]+)\.([^.]+)$/ ) {
-        $InterFile = "$dataDir/$1/$2.txt"; 	
-    } elsif( $interFileName =~ m/^([^.]+)$/ ) {
-        $InterFile = "$dataDir/$installWeb/$1.txt"; 
-    } else {
-        return 0;
+    my $interTopic = TWiki::Func::getPreferencesValue( "INTERWIKIPLUGIN_RULESTOPIC" )
+      || $interSiteLinkRulesTopicName;
+    if( $interTopic =~ s/^(.*)\.// ) {
+        $installWeb = $1;
     }
-
-    $InterFile =~ s/%MAINWEB%/&TWiki::Func::getMainWebname()/geo;
-    $InterFile =~ s/%TWIKIWEB%/&TWiki::Func::getTwikiWebname/geo;
-    &TWiki::Func::writeDebug( "- InterwikiPlugin, rules file: $InterFile" ) if $debug;
-
-    # FIXME: use readWebTopic
-    open(IN, "<$InterFile") or return 0;  # FIXME: Later warn?
-    my @data = <IN>;
-    close IN;
-
-#    this attempted fix results in the following error message
-#    'co: /Users/wbniv/Sites/twiki/data/TWiki/RCS/InterWikis.txt,v: No such file or directory'
-#    my @data = split( /[\n\r]+/, TWiki::Func::readTopicText( $installWeb, $interTopic, "", 1 ) );
+    my @data = split( /[\n\r]+/, TWiki::Func::readTopicText( $installWeb, $interTopic, "", 1 ) );
 
     # grep "| alias | URL | ..." table and extract into "alias", "URL" list
     # FIXME: Should be able to do this pipeline with just one regex match

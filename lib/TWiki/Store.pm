@@ -158,7 +158,7 @@ sub readTopicRaw {
 
     my $text;
 
-    unless ( defined( $version )) {
+    unless ( $version ) {
         $text = $this->readFile( "$TWiki::cfg{DataDir}/$theWeb/$theTopic.txt" );
     } else {
         my $topicHandler = $this->_getTopicHandler( $theWeb, $theTopic, undef );
