@@ -27,7 +27,7 @@ sub wikiVersionToDistributionName {
   Dec => "12"
  );
 
- $wikiVersion =~ s/\$.*//; # hack off the unique revision number 
+ $wikiVersion =~ s/ \$.*//; # hack off the unique revision number 
 # SMELL - this is probably THE most unique way to identify.
  
  if ( $wikiVersion =~ m/([0-9][0-9]) (.*) ([0-9].*)/ ) {   #CodeSmell lazy regex
