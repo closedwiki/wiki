@@ -2,17 +2,24 @@
 
 use strict;
 
+
 package Common;
 use TRTConfig;
+use Cwd;
 
-#FIXME: needs tidying.
+#FIXME: needs tidying, especially this pub monstrosity.
 
 my $pub;
 if ( defined(&TWiki::Func::getPubDir) ) {
-	$pub = TWiki::Func::getPubDir();
+    $pub = TWiki::Func::getPubDir();
+} elsif (-d "pub") {
+    $pub = cwd()."/pub";
+} else {
+    $pub = cwd()."/../../../../pub/"; #CodeSmell gross
+
 }
-else {
-	$pub = "../../../../pub/";
+unless (-d $pub) {
+    die "Couldn't find the pub (directory) '$pub' (cwd=".cwd();
 }
 
 unless ( defined $Common::md5IndexDir ) {
