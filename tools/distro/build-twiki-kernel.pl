@@ -5,10 +5,7 @@ use strict;
 use Data::Dumper qw( Dumper );
 
 # TODO:
-#   * parameter for output filename (probably eliminate outputdir completely)
-#   * remove the "smartness" from the output filename generation (use above parameter, 
-#     and just `date ...` on the command line; after all, that's all that's being done 
-#     in this script anyway)
+#   * (probably eliminate outputdir completely)
 #   * use svn export (but mirror it so 
 #   * readme.txt - needs editting, customising per build (type, etc.)
 #   * probably something else i can't remember now
@@ -29,9 +26,8 @@ my $Config = {
 # 
     tempdir => '.',
     outputdir => '.',
-    # change to out|file
-    outfile => ("TWikiKernel-" . mychomp(`head -n 1 branch` || 'MAIN') . "-" . mychomp(`date +'%Y%m%d.%H%M%S'`)),
-    agent => "TWikiKernel Builder/v0.6",
+    outfile => undef,
+    agent => "TWikiKernel Builder/v0.7",
 # 
     verbose => 0,
     debug => 0,
@@ -54,7 +50,13 @@ map { checkdirs( $Config->{$_} = rel2abs( $Config->{$_} ) ) } qw( tempdir output
 $Config->{localcache} = $Config->{tempdir} . "/.cache";
 $Config->{svn_export} = $Config->{localcache} . "/twiki";
 $Config->{install_base} = $Config->{tempdir} . "/twiki";		# the directory the official release is untarred into
+unless ( $Config->{outfile} )
+{
+    my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } `svn info` )[0] ) =~ /(\d+)$/;
+    $Config->{outfile} = "TWikiKernel-" . mychomp(`head -n 1 branch` || 'MAIN') . "-$svnRev";
+}
 map { ( mkpath $Config->{$_} or die $! ) unless -d $Config->{$_} } qw( localcache install_base );
+print STDERR Dumper( $Config ) if $Config->{debug};
 
 ################################################################################
 
@@ -69,8 +71,9 @@ if ( $Config->{verbose} )
 my $ruleDiscardRcsHistory = File::Find::Rule->file->name("*,v")->discard;
 my $ruleDiscardRcsLock = File::Find::Rule->file->name("*.lock")->discard;
 my $ruleDiscardBackup = File::Find::Rule->file->name("*~")->discard;
-my $ruleDiscardSVN = File::Find::Rule->directory->name(".svn")->prune->discard;
-my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardSVN, $ruleDiscardBackup, File::Find::Rule->file );
+#my $ruleDiscardSVN = File::Find::Rule->directory->name(".svn")->prune->discard;
+#my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardSVN, $ruleDiscardBackup, File::Find::Rule->file );
+my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardBackup, File::Find::Rule->file );
 
 ################################################################################
 
@@ -201,13 +204,14 @@ build-twiki-kernel.pl - Codev.TWikiKernel
 
 =head1 SYNOPSIS
 
-build-twiki-kernel.pl [options] [-tempdir] [-outputdir] [-agent]
+build-twiki-kernel.pl [options] [-tempdir] [-outputdir] [-outfile] [-agent]
 
 Copyright 2004 Will Norris and Sven Dowideit.  All Rights Reserved.
 
  Options:
    -tempdir [.]		where all temporary files for this build are placed
    -outputdir [.]	where the generated TWikiKernel-BRANCH-DATE.tar.gz is placed
+   -outfile		.
    -agent [$Config->{agent}]	LWP::UserAgent name (used for downloading some documentation from wiki pages on twiki.org)
    -verbose
    -debug
@@ -221,6 +225,8 @@ Copyright 2004 Will Norris and Sven Dowideit.  All Rights Reserved.
 =item B<-tempdir>
 
 =item B<-outputdir>
+
+=item B<-outfile>
 
 =item B<-agent>
 
