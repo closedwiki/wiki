@@ -15,6 +15,13 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
+# Colas (http://colas.nahaboo.net)
+# modifications from mailnotify script from Dec 2001 release:
+# - email is now optional, is fetched from the user homepage
+# - webs not beginning by a capital letter are ignored ( _default, ...)
+# - no mail is sent to TWikiGuest
+# - if user is a group, recurses through its members
+
 # Set library paths in @INC, at compile time
 BEGIN { unshift @INC, '.'; require 'setlib.cfg'; }
 
@@ -35,7 +42,7 @@ sub main
     @weblist = grep !/^\.\.?$/, readdir DIR;
     closedir DIR;
     foreach $web ( @weblist ) {
-        if( -d "$dataDir/$web" ) {
+        if( -d "$dataDir/$web" && "$web" =~ /^[A-Z]/ ) {
              processWeb( $web );
 
              # remove obsolete .lock files
@@ -60,18 +67,17 @@ sub processWeb
 	return;
     }
 
-    my @notifylist = &TWiki::getEmailNotifyList($webName);
+    my @notifylist = TWiki::getEmailNotifyList($webName);
     unless ( scalar @notifylist ) {
-	$debug && print "- Note: Notification list is empty\n";
+	$debug && print "<none>\n";
 	return;
     }
 
     my $emailbody = "";
     my $topiclist = "";
 
-    my $skin = TWiki::Prefs::getPreferencesValue( "SKIN" );
-    my $text = TWiki::Store::readTemplate( "changes", $skin );
-    my $changes= TWiki::Store::readFile( "$dataDir/$webName/.changes" );
+    my $text = &TWiki::Store::readTemplate( "changes" );
+    my $changes= &TWiki::Store::readFile( "$dataDir/$webName/.changes" );
 
     my %exclude;
 
@@ -168,7 +174,7 @@ sub processWeb
 
     my $notifylist = join ', ', @notifylist;
 
-    $text = &TWiki::Store::readTemplate( "mailnotify", $skin );
+    $text = &TWiki::Store::readTemplate( "mailnotify" );
     $text =~ s/%EMAILFROM%/$from/go;
     $text =~ s/%EMAILTO%/$notifylist/go;
     $text =~ s/%EMAILBODY%/$emailbody/go;
@@ -194,3 +200,4 @@ sub processWeb
 	$debug && print "- End Twiki.$webName, mail notification sent\n";
     }
 }
+
