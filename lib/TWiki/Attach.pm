@@ -176,9 +176,18 @@ sub getOldAttachAttr
 	( $before, $fileSize,    $after ) = split( /<(?:\/)*TwkFileSize>/, $atext );
 	if( ! $fileSize ) { $fileSize = "0"; }
 	( $before, $fileDate,    $after ) = split( /<(?:\/)*TwkFileDate>/, $atext );
-	if( ! $fileDate ) { $fileDate = ""; }
+	if( ! $fileDate ) { 
+            $fileDate = "";
+        } else {
+            $fileDate =~ s/&nbsp;/ /go;
+            $fileDate = &TWiki::revDate2EpSecs( $fileDate );
+        }
 	( $before, $fileUser,    $after ) = split( /<(?:\/)*TwkFileUser>/, $atext );
-	if( ! $fileUser ) { $fileUser = ""; }
+	if( ! $fileUser ) { 
+            $fileUser = ""; 
+        } else {
+            $fileUser = &TWiki::wikiToUserName( $fileUser );
+        }
 	$fileUser =~ s/ //go;
 	( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $atext );
 	if( ! $fileComment ) { $fileComment = ""; }
@@ -233,6 +242,24 @@ sub migrateToFileAttachmentMacro
 }
 
 
+# =========================
+sub upgradeFrom1v0beta
+{
+   my( $meta ) = @_;
+   
+   my @attach = $meta->find( "FILEATTACHMENT" );
+   foreach $att ( @attach ) {
+       my $date = $att->{"date"};
+       if( $date =~ /-/ ) {
+           $date =~ s/&nbsp;/ /go;
+           $date = TWiki::revDate2EpSecs( $date );
+       }
+       $att->{"date"} = $date;
+       $att->{"user"} = &TWiki::wikiToUserName( $att->{"user"} );
+   }
+}
+
+
 
 # =========================
 sub formFileAttachmentArgs
@@ -256,6 +283,7 @@ sub formFileAttachmentArgs
 
 
 # =========================
+# Includes required formatting and conversion
 sub extractFileAttachmentArgs
 {
     my( %attributes ) = @_;
@@ -268,6 +296,10 @@ sub extractFileAttachmentArgs
     my $attrUser    = $attributes{"user"};
     my $attrComment = $attributes{"comment"}; 
     my $attrAttr    = $attributes{"attr"};
+    
+    $attrDate = &TWiki::formatGmTime( $attrDate );
+    
+    $attrUser = &TWiki::userToWikiName( $attrUser );
 
     return ( $file, $attrVersion, $attrPath, $attrSize, $attrDate, $attrUser, 
              $attrComment, $attrAttr );
