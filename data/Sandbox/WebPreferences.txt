@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111927433" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111938186" format="1.0" version="$Rev$"}%
+
 ---++ <nop>%WEB% Web Preferences
 
 The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.TWikiGuest in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
