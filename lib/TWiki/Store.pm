@@ -280,7 +280,7 @@ sub updateReferringPages
     my $result = "";
     my $preTopic = '^|\W';		# Start of line or non-alphanumeric
     my $postTopic = '$|\W';	# End of line or non-alphanumeric
-    my $spacedTopic = TWiki::Search::spacedTopic( $oldTopic );
+    my $spacedTopic = TWiki::searchableTopic( $oldTopic );
 
     while ( @refs ) {
        my $type = shift @refs;
