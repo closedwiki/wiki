@@ -63,7 +63,7 @@ sub includeTmpl
     }
     
     if( $doInclude ) {
-        $tmpl = &TWiki::Store::readTemplate( $inc, $theTopic, $theSkin );
+        $tmpl = &TWiki::Store::readTemplate( $inc, $theSkin );
     }
     
     return $tmpl;
@@ -149,7 +149,7 @@ sub main
 
     # get edit template, standard or a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
-    $tmpl = &TWiki::Store::readTemplate( "edit", $topic, $skin );
+    $tmpl = &TWiki::Store::readTemplate( "edit", $skin );
     if( ! &TWiki::Store::topicExists( $webName, $topic ) ) {
         my $templateTopic = $query->param( "templatetopic" ) || "";
         if( $templateTopic ) {

@@ -65,7 +65,7 @@ sub main
     # called postedit
     my $changeform = $query->param( 'submitChangeForm' ) || "";
     if( $changeform ) {
-        my $tmpl = &TWiki::Store::readTemplate( "changeform", "", $skin );
+        my $tmpl = &TWiki::Store::readTemplate( "changeform", $skin );
         &TWiki::writeHeader( $query );
         $tmpl =~ s/%TEXT%/$query->param( 'text' )/goe;
         $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
@@ -97,9 +97,8 @@ sub main
         return;
     }
 
-
     # get view template, standard view or a view with a different skin
-    $tmpl = &TWiki::Store::readTemplate( "preview", "", $skin );
+    $tmpl = &TWiki::Store::readTemplate( "preview", $skin );
     my $dontNotify = $query->param( "dontnotify" ) || "";
     $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
     my $saveCmd = $query->param( "cmd" ) || "";

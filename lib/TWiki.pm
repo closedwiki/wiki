@@ -23,7 +23,7 @@
 # - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
 # - Customize variables in TWiki.cfg when installing TWiki.
 # - Optionally create a new plugin or customize DefaultPlugin.pm for
-#   custom extensions of rendering rules.
+#   custom rendering rules.
 # - Upgrading TWiki is easy as long as you only customize DefaultPlugin.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 #
@@ -35,21 +35,6 @@
 #                          sub -- &revDate2EpSecs -- for calculating the
 #                          epoch seconds from a rev date (the only way
 #                          to sort dates.)
-#
-# 15 May 2000  PeterFokkinga :
-#    With this patch each topic can have its own template. TWiki::Store::readTemplate()
-#    has been modified to search for the following templates (in this order): 
-#
-#     1.$templateDir/$webName/$name.$topic.tmpl 
-#     2.$templateDir/$webName/$name.tmpl 
-#     3.$templateDir/$name.$topic.tmpl 
-#     4.$templateDir/$name.tmpl 
-#	    
-#    $name is the name of the script, e.g. ``view''. The current
-#    TWiki version uses steps 2 and 4.
-#
-#    See http://twiki.org/cgi-bin/view/Codev/UniqueTopicTemplates
-#    for further details    
 
 package TWiki;
 
@@ -114,7 +99,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "14 Jul 2001";
+$wikiversion      = "15 Jul 2001";
 
 # ===========================
 # read the configuration part
@@ -1266,10 +1251,10 @@ sub handleInternalTags
 
 sub readHeaderFooter
 {
-    my( $theWeb, $theSkin ) = @_;
+    my( $theSkin ) = @_;
     
     if( ! %headerfooter ) {
-        my $tmpl = &TWiki::Store::readTemplate( "headerfooter", $theWeb, $theSkin );
+        my $tmpl = &TWiki::Store::readTemplate( "headerfooter", $theSkin );
         # Might want to have generalised variable rather than just sep
         my( $header, $footerstart, $footerend, $sep ) = split /%SPLIT%/, $tmpl;
     
@@ -1284,9 +1269,9 @@ sub readHeaderFooter
 # Experimental routine for header/footer
 sub handleHeader
 {
-    my( $args, $theTopic, $theSkin ) = @_;
+    my( $args, $theSkin ) = @_;
     
-    readHeaderFooter( $theTopic, $theSkin );
+    readHeaderFooter( $theSkin );
     
     my $action = extractNameValuePair( $args, "action" );
     my $description = extractNameValuePair( $args, "description" );
@@ -1302,9 +1287,9 @@ sub handleHeader
 # Experimental routine for header/footer
 sub handleFooter
 {
-    my( $start, $end, $theTopic, $theSkin  ) = @_;
+    my( $start, $end, $theSkin  ) = @_;
     
-    readHeaderFooter( $theTopic, $theSkin );
+    readHeaderFooter( $theSkin );
     
     my $ret = "";
 
@@ -1323,9 +1308,9 @@ sub handleFooter
 # Experimental routine for header/footer
 sub handleSep
 {
-    my( $theTopic, $theSkin ) = @_;
+    my( $theSkin ) = @_;
     
-    readHeaderFooter( $theTopic, $theSkin );
+    readHeaderFooter( $theSkin );
     return $headerfooter{"sep"};
 }
 

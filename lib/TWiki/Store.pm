@@ -1347,38 +1347,29 @@ sub readTemplateTopic
 # =========================
 sub readTemplate
 {
-    my( $theName, $theTopic, $theSkin ) = @_;
-    $theTopic = "" unless $theTopic; # prevent 'uninitialized value' ...
-    $theSkin  = "" unless $theSkin;  #   ... warnings
+    my( $theName, $theSkin ) = @_;
+    $theSkin = "" unless $theSkin; # prevent 'uninitialized value' warnings
 
     # CrisBailiff, PeterThoeny 13 Jun 2000: Add security
     $theName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
     $theName =~ s/\.+/\./g;                      # Filter out ".." from filename
-    $theTopic =~ s/$TWiki::securityFilter//go;   # zap anything suspicious
-    $theTopic =~ s/\.+/\./g;                     # Filter out ".." from filename
     $theSkin =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
     $theSkin =~ s/\.+/\./g;                      # Filter out ".." from filename
 
     my $tmplFile = "";
 
     # search first in twiki/templates/Web dir
-    # for file script(.topic)(.skin).tmpl
+    # for file script(.skin).tmpl
     my $tmplDir = "$TWiki::templateDir/$TWiki::webName";
     if( opendir( DIR, $tmplDir ) ) {
         # for performance use readdir, not a row of ( -e file )
         my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
         closedir DIR;
-        $tmplFile = "$theName.$theTopic.tmpl";
+        $tmplFile = "$theName.$theSkin.tmpl";
         if( ! grep { /^$tmplFile$/ } @filelist ) {
-            $tmplFile = "$theName.$theSkin.tmpl";
+            $tmplFile = "$theName.tmpl";
             if( ! grep { /^$tmplFile$/ } @filelist ) {
-                $tmplFile = "$theName.$theTopic.$theSkin.tmpl";
-                if( ! grep { /^$tmplFile$/ } @filelist ) {
-                    $tmplFile = "$theName.tmpl";
-                    if( ! grep { /^$tmplFile$/ } @filelist ) {
-                        $tmplFile = "";
-                    }
-                }
+                $tmplFile = "";
             }
         }
         if( $tmplFile ) {
@@ -1391,17 +1382,11 @@ sub readTemplate
     if( ( ! $tmplFile ) && ( opendir( DIR, $tmplDir ) ) ) {
         my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
         closedir DIR;
-        $tmplFile = "$theName.$theTopic.tmpl";
+        $tmplFile = "$theName.$theSkin.tmpl";
         if( ! grep { /^$tmplFile$/ } @filelist ) {
-            $tmplFile = "$theName.$theSkin.tmpl";
+            $tmplFile = "$theName.tmpl";
             if( ! grep { /^$tmplFile$/ } @filelist ) {
-                $tmplFile = "$theName.$theTopic.$theSkin.tmpl";
-                if( ! grep { /^$tmplFile$/ } @filelist ) {
-                    $tmplFile = "$theName.tmpl";
-                    if( ! grep { /^$tmplFile$/ } @filelist ) {
-                        $tmplFile = "";
-                    }
-                }
+                $tmplFile = "";
             }
         }
         if( $tmplFile ) {
@@ -1413,9 +1398,9 @@ sub readTemplate
     if( -e $tmplFile ) {
         my $txt = &readFile( $tmplFile );
         
-        $txt =~ s/%HEADER{([^}]*)}%/&TWiki::handleHeader( $1, $theTopic, $theSkin )/geo;
-        $txt =~ s/%(}?)FOOTER({?)%/&TWiki::handleFooter( $2, $1, $theTopic, $theSkin )/geo;
-        $txt =~ s/%SEP%/&TWiki::handleSep( $theTopic, $theSkin )/geo;
+        $txt =~ s/%HEADER{([^}]*)}%/&TWiki::handleHeader( $1, $theSkin )/geo;
+        $txt =~ s/%(}?)FOOTER({?)%/&TWiki::handleFooter( $2, $1, $theSkin )/geo;
+        $txt =~ s/%SEP%/&TWiki::handleSep( $theSkin )/geo;
 
         return $txt;
     }

@@ -97,7 +97,7 @@ sub main
 
     # get view template, standard view or a view with a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
-    $tmpl = &TWiki::Store::readTemplate( "view", $topic, $skin );
+    $tmpl = &TWiki::Store::readTemplate( "view", $skin );
     if( ! $tmpl ) {
         TWiki::writeHeader( $query );
         print "<html><body>";
