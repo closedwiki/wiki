@@ -84,7 +84,7 @@ static int checkAccessibility(const char* web,
 							  int monitor);
 
 static char* dump(DBM_DATUM d) {
-  static char dumpdata[255];
+  static char dumpdata[16384];
   strncpy(dumpdata, d.dptr, d.dsize);
   dumpdata[d.dsize] = 0;
   return dumpdata;
@@ -242,35 +242,40 @@ static int checkAccessibility(const char* web,
 
 static int isAccessible(DBM* db, const char* web, const char* topic,
 						char mode, const char* user, int monitor) {
-  char path[255];
+  static char path[16384];
 
   if ((monitor & 4) != 0)
 	fprintf(stderr, "Check %s/%s:%c for %s\n",web,topic,mode,user);
 
   strcpy(path, "P:/");
-  if (barred(path, mode, user, db, monitor))
+  if (barred(path, mode, user, db, monitor)) {
 	return 0;
-
-  if (web) {
-	sprintf(path, "P:/%s/", web);
-
-	if ((monitor & 4) != 0)
-	  fprintf(stderr, "WebCheck %s/%s:%c for %s\n",web,topic,mode,user);
-
-	if (barred(path, mode, user, db, monitor))
-	  return 0;
   }
 
-  if (web && topic) {
-	sprintf(path, "P:/%s/%s", web, topic);
+  if (web) {
+	strcat(path, web);
+	strcat(path, "/");
+
 	if ((monitor & 4) != 0)
-	  fprintf(stderr, "TopicCheck %s/%s:%c for %s\n",web,topic,mode,user);
-	if (barred(path, mode, user, db, monitor))
+	  fprintf(stderr, "WebCheck %s:%c for %s\n",path,mode,user);
+
+	if (barred(path, mode, user, db, monitor)) {
 	  return 0;
+	}
+
+	if (topic) {
+	  strcat(path, topic);
+
+	  if ((monitor & 4) != 0)
+		fprintf(stderr, "TopicCheck %s:%c for %s\n",path,mode,user);
+	  if (barred(path, mode, user, db, monitor)) {
+		return 0;
+	  }
+	}
   }
 
   if ((monitor & 4) != 0)
-	fprintf(stderr, "%s/%s:%c for %s is accessible\n",web,topic,mode,user);
+	fprintf(stderr, "%s:%c for %s is accessible\n",path,mode,user);
 
   return 1;
 }
@@ -315,15 +320,18 @@ static int barred(char* path, char mode, const char* user,
 }
 
 static DBM_DATUM getKey(const char* path, const char* ad, DBM* db) {
-  char keyn[255];
-  DBM_DATUM key;
+  char *keyn;
+  DBM_DATUM key, datum;
 
+  keyn = (char*)calloc(strlen(path) + strlen(ad) + 1, 1);
   strcpy(keyn, path);
   strcat(keyn, ad);
 
   key.dptr = keyn;
   key.dsize = strlen(keyn);
-  return DBM_FETCH(db, key);
+  datum = DBM_FETCH(db, key);
+  free(keyn);
+  return datum;
 }
 
 /**
@@ -354,7 +362,7 @@ static int isInList(DBM_DATUM list, const char* user, DBM* db, int depth) {
   const char* start = list.dptr;
   const char* stop = list.dptr + list.dsize;
   const char* end;
-  char group[255];
+  char* group;
 
   while (start != stop) {
 	start++; /* skip the | */
@@ -367,11 +375,14 @@ static int isInList(DBM_DATUM list, const char* user, DBM* db, int depth) {
 	  return 1;
 	}
 	if (strncmp(start + (end - start - 5), "Group", 5) == 0) {
+	  group = (char*)calloc(end - start + 1, 1);
 	  strncpy(group, start, end - start);
 	  group[end - start] = '\0';
 	  if (isInGroup(group, user, db, depth + 1)) {
+		free(group);
 		return 1;
 	  }
+	  free(group);
 	}
 	start = end;
   }
@@ -430,9 +441,9 @@ static char* escaped(const char* s, char* tmp) {
 }
 
 static char* compile_resource(pool* poo, twiki_resources* tr) {
-  char tmpw[255];
-  char tmpt[255];
-  char tmpa[255];
+  char tmpw[512];
+  char tmpt[512];
+  char tmpa[512];
 
   const char* basename = NULL;
   if (tr->file) {
