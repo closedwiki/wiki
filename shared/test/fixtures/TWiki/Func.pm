@@ -49,6 +49,12 @@ sub  getWikiUserName {
   return getMainWebname().".TestRunner";
 }
 
+sub userToWikiName {
+  my $n = shift;
+  return "TestRunner" if ($n && $n =~ /testrunner$/);
+  return "TWikiGuest";
+}
+
 sub  wikiToUserName {
   my $n = shift;
 
