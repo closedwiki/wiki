@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1093388335" format="1.0" version="1.51"}%
+%META:TOPICINFO{author="ArthurClemens" date="1093734203" format="1.0" version="1.53"}%
 %STARTINCLUDE%
 ---+!! Pattern skin
 
@@ -68,19 +68,17 @@ You can eiter:
    * Change the =layout.css= and =style.css= attachment files for this topic (upload updated versions)
    * In TWiki.TWikiPreferences, point the variables =TWIKILAYOUTURL= and =TWIKISTYLEURL= to other attachments, perhaps in another topic (your new skin topic?)
 
-If you want to change colors and white space of screen elements, modify =style.css=. %BR%
-If you want to change the positioning of screen elements, modify =layout.css=.
-
 See for practical details: PatternSkinCustomization %BR%
 The CSS classes that !PatternSkin uses are documented in PatternSkinCss.
 
 ---++ Customization
 
-See: PatternSkinCustomization
+See: PatternSkinCustomization, PatternSkinPalette
 
 ---++ Further reading
 
    * PatternSkinCustomization - Practical information on how to change the looks of !PatternSkin
+   * PatternSkinPalette - How to change the colors only
    * PatternSkinCss - A reference to used CSS classes
    * TWiki:Plugins/PatternSkinDev - Development page, bug reports, solutions from users
 
@@ -90,8 +88,9 @@ See: PatternSkinCustomization
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.gif"><img src="%ATTACHURL%/patternskin_screenshot.gif" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Base Name: | pattern |
 |  Skin Author: | TWiki:Main/ArthurClemens |
-|  Skin Version: | 24 Aug 2004 (v1.0.8) | 
+|  Skin Version: | 28 Aug 2004 (v1.0.9) | 
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  28 Aug 2004: | v.1.0.9 - CAIRO RELEASE VERSION - Removed twikiTopic div from attach template |
 |  24 Aug 2004: | v.1.0.8 - Fix for disabled !TablePlugin; added plain.pattern.tmpl |
 |  23 Aug 2004: | v.1.0.7 - Change to checkboxes in edit and preview screen; removed REVINFO at bottom; style changes |
 |  22 Aug 2004: | v.1.0.6b - Removed files from zip that are now part of the TWiki distribution; removed .DS_Store files |
@@ -126,10 +125,10 @@ Other skins:
 
 Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
 
--- TWiki:Main/ArthurClemens - 24 Aug 2004
+-- TWiki:Main/ArthurClemens - 28 Aug 2004
 
 %META:FILEATTACHMENT{name="layout.css" attr="" comment="Layout: positioning of page elements" date="1093388214" path="layout.css" size="1823" user="ArthurClemens" version="1.10"}%
-%META:FILEATTACHMENT{name="style.css" attr="" comment="Style: appearance: margins, fonts, colors" date="1093388264" path="style.css" size="26169" user="ArthurClemens" version="1.42"}%
+%META:FILEATTACHMENT{name="style.css" attr="" comment="Style: appearance: margins, fonts, colors" date="1093734143" path="style.css" size="26514" user="ArthurClemens" version="1.44"}%
 %META:FILEATTACHMENT{name="i_arrow_down.gif" attr="" comment="Icon: down arrow; used for Table Of Contents" date="1091277375" path="i_arrow_down.gif" size="56" user="ArthurClemens" version="1.1"}%
 %META:FILEATTACHMENT{name="patternskin_screenshot.gif" attr="h" comment="" date="1092761804" path="patternskin_screenshot.gif" size="8898" user="ArthurClemens" version="1.2"}%
 %META:FILEATTACHMENT{name="patternskin_screenshot_full.gif" attr="h" comment="" date="1092761860" path="patternskin_screenshot_full.gif" size="63480" user="ArthurClemens" version="1.1"}%
