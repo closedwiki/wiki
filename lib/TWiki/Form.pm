@@ -255,7 +255,7 @@ sub _link
             $tooltip = "Click to see details in separate window";
         }
         $link =  "<a target=\"$name\" " .
-                 "onClick=\"return launchWindow('$web','$name')\" " .
+                 "onclick=\"return launchWindow('$web','$name')\" " .
                  "title=\"$tooltip\" " .
                  "href=\"$TWiki::scriptUrlPath/view$TWiki::scriptSuffix/$web/$name\">$name</a>";
     } elsif ( $tooltip ) {
@@ -304,9 +304,9 @@ sub renderForEdit
     # FIXME could do with some of this being in template
     my $text = "<table class=\"TWikiFormsEditTable\" border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
                _link( $web, $form, "", "h", "", 2, $chooseForm ) . "</tr>\n";
-               
+
     fieldVars2Meta( $web, $query, $meta, "override" );
-    
+
     foreach my $c ( @fieldsInfo ) {
         my @fieldInfo = @$c;
         my $fieldName = shift @fieldInfo;
@@ -375,7 +375,7 @@ sub renderForEdit
                 }
                 $defaultMarker = "";
                 $item =~ s/<nop/&lt\;nop/go;
-                $val .= "   <option name=\"$item\"$selected>$item</option>";
+                $val .= "   <option$selected>$item</option>";
             }
             if( ! $matched ) {
                $val =~ s/%DEFAULTOPTION%/ selected="selected"/go;
@@ -386,8 +386,8 @@ sub renderForEdit
         } elsif( $type =~ "^checkbox" ) {
             if( $type eq "checkbox+buttons" ) {
                 my $boxes = $#fieldInfo + 1;
-                $extra = "<br />\n<input class=\"TWikiFormsEditCheckboxButton\" type=\"button\" value=\" Set \" onClick=\"checkAll(this, 2, $boxes, true)\" />&nbsp;\n" .
-                         "<input class=\"TWikiFormsEditCheckboxButton\" type=\"button\" value=\"Clear\" onClick=\"checkAll(this, 1, $boxes, false)\" />\n";
+                $extra = "<br />\n<input class=\"TWikiFormsEditCheckboxButton\" type=\"button\" value=\" Set \" onclick=\"checkAll(this, 2, $boxes, true)\" />&nbsp;\n" .
+                         "<input class=\"TWikiFormsEditCheckboxButton\" type=\"button\" value=\"Clear\" onclick=\"checkAll(this, 1, $boxes, false)\" />\n";
             }
 
             my $val ="<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
@@ -404,6 +404,7 @@ sub renderForEdit
                 }
                 $lines++;
             }
+            $val =~ s/\n<\/tr><tr>$//;
             $value = "$val\n</tr></table>\n";
         } elsif( $type eq "radio" ) {
             my $val = "<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
@@ -429,6 +430,7 @@ sub renderForEdit
             } else {
                $val =~ s/%DEFAULTOPTION%//go;
             }
+            $val =~ s/\n<\/tr><tr>$//;
             $value = "$val\n</tr></table>\n";
         } else {
             # Treat like test, make it reasonably long
