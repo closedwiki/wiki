@@ -85,7 +85,7 @@ sub createWeb
 
     # check permission, user authorized to create webs?
     my $wikiUserName = &TWiki::userToWikiName( $userName );
-    if( ! &TWiki::Access::checkAccessPermission( "createweb", $wikiUserName, "", 
+    unless( &TWiki::Access::checkAccessPermission( "manage", $wikiUserName, "", 
                                                  $topicName, $webName ) ) {
        # user has not permission to change the topic
        my $url = &TWiki::getOopsUrl( $webName, $topicName, "oopsaccesscreateweb" );
