@@ -162,6 +162,7 @@ sub main
 
     # do not allow click on link before save:
     $ptext =~ s@(href=".*?")@href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?template=oops"@goi;
+    $ptext = &TWiki::handleCommonTags( $ptext, $topic );
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
     $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, \@meta );
