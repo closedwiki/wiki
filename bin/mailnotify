@@ -108,61 +108,71 @@ sub processWeb
     my $frev = "";
 
     foreach( reverse split( /\n/, $changes ) ) {
-	@bar = split( /\t/);
-	$foo = $text;
-	if( ( ! %exclude ) || ( ! $exclude{ $bar[0] } ) ) {
-            next unless TWiki::Store::topicExists( $webName, $bar[0] );
+	# Parse lines from .changes:
+	# <topic>	<user>		<change time>	<revision>
+	# WebHome	FredBloggs	1014591347	21
+
+	my ($topicName, $userName, $changeTime, $revision) = split( /\t/);
+	$newText = $text;		# Repeating text from email template
+
+	if( ( ! %exclude ) || ( ! $exclude{ $topicName } ) ) {
+            next unless TWiki::Store::topicExists( $webName, $topicName );
 
 	    if( ! $currLastmodify ) {
 	        # newest entry
 	        $time = &TWiki::formatGmTime( $prevLastmodify );
-	        if( $prevLastmodify eq $bar[2] ) {
+	        if( $prevLastmodify eq $changeTime ) {
 	            # newest entry is same as at time of previous notification
 	            $debug && print "- Note: No topics changed since $time\n";
 	            return;
 	        }
-	        $currLastmodify = $bar[2];
+	        $currLastmodify = $changeTime;
 	        $debug && print "- Changed topics since $time: ";
 	    }
 
-	    if( $prevLastmodify >= $bar[2] ) {
+	    if( $prevLastmodify >= $changeTime ) {
 	        #print "Date: found item of last notification\n";
 	        # found item of last notification
 	        last;
 	    }
             $frev = "";
-            if( $bar[3] ) {
-                if( $bar[3] > 1 ) {
-                    $frev = "r1.$bar[3]";
+            if( $revision ) {
+                if( $revision > 1 ) {
+                    $frev = "r1.$revision";
                 } else {
                     $frev = "<b>NEW</b>";
                 }
             }
 
-	    #create entry in HTML attachment
-	    $foo = $text;
-	    $foo =~ s/%TOPICNAME%/$bar[0]/go;
-	    $wikiuser = &TWiki::userToWikiName( $bar[1] );
-	    $foo =~ s/%AUTHOR%/$wikiuser/go;
-            $foo =~ s/%LOCKED%//go;
-	    $time = &TWiki::formatGmTime( $bar[2] );
-            $foo =~ s/%TIME%/$time/go;
-            $foo =~ s/%REVISION%/$frev/go;
-	    $foo = &TWiki::getRenderedVersion( $foo );
+	    # Create entry in HTML attachment
+	    $newText = $text;
+	    $newText =~ s/%TOPICNAME%/$topicName/go;
+	    $wikiuser = &TWiki::userToWikiName( $userName );
 
-            $head = &TWiki::Store::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );
-            $head = &TWiki::makeTopicSummary( $head, $bar[0], $webName );
-            $foo =~ s/%TEXTHEAD%/$head/go;
+	    $newText =~ s/%AUTHOR%/$wikiuser/go;
+            $newText =~ s/%LOCKED%//go;
+	    $time = &TWiki::formatGmTime( $changeTime );
+            $newText =~ s/%TIME%/$time/go;
+            $newText =~ s/%REVISION%/$frev/go;
+	    $newText = &TWiki::getRenderedVersion( $newText );
 
-	    $emailbody .= $foo;
-	    $exclude{ $bar[0] } = "1";
+            $head = &TWiki::Store::readFileHead( "$dataDir\/$webName\/$topicName.txt", 16 );
+            $head = &TWiki::makeTopicSummary( $head, $topicName, $webName );
+            $newText =~ s/%TEXTHEAD%/$head/go;
 
-	    $debug && print "$bar[0] ";
+	    $emailbody .= $newText;
+	    $exclude{ $topicName } = "1";
 
-	    #add new item to topic list in email body
-	    $foo = "- $bar[0]  ($wikiuser)\n  $scriptUrl/view$scriptSuffix/$webName/$bar[0]\n";
-            $foo =~ s/Main\.//go;
-	    $topiclist = "$topiclist$foo";
+	    $debug && print "$topicName ";
+
+	    # URL-encode topic names for use of I18N topic names in plain text
+	    $webNameEnc = TWiki::urlEncode( $webName );
+	    my $topicNameEnc = TWiki::urlEncode( $topicName );
+
+	    # Create entry in plain-text email body
+	    $newText = "- $topicName  ($wikiuser)\n  $scriptUrl/view$scriptSuffix/$webNameEnc/$topicNameEnc\n";
+            $newText =~ s/Main\.//go;
+	    $topiclist = "$topiclist$newText";
 	}
     }
 
