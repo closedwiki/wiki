@@ -1854,8 +1854,9 @@ sub handleInternalTags
     # $_[1] is topic
     # $_[2] is web
 
-    # Make Edit URL unique for every edit - fix for RefreshEditPage
-    $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit$scriptSuffix/%URLENCODE{\"%WEB%/%TOPIC%\"}%\?t=" . time()!ge;
+    # Make Edit URL unique for every edit - fix for RefreshEditPage.
+    # URL encoding fixes Mozilla I18N problem (Codev.MacOSXwithI18N).
+    $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit$scriptSuffix/%INTURLENCODE{\"%WEB%/%TOPIC%\"}%\?t=" . time()!ge;
 
     $_[0] =~ s/%NOP{(.*?)}%/$1/gs;  # remove NOP tag in template topics but show content
     $_[0] =~ s/%NOP%/<nop>/g;
@@ -1868,7 +1869,8 @@ sub handleInternalTags
     $_[0] =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/ge;
 
     # Un-encoded topic and web names. Note: In form action, URL encode variables 
-    # that might have 8-bit characters with %INTURLENCODE{"%TOPIC%"}%
+    # that might have 8-bit characters with %INTURLENCODE{"%TOPIC%"}% -
+    # introduced due to Mozilla issues (Codev.MacOSXwithI18N).
     $_[0] =~ s/%TOPIC%/$_[1]/g;
     $_[0] =~ s/%BASETOPIC%/$topicName/g;
     $_[0] =~ s/%INCLUDINGTOPIC%/$includingTopicName/g;
