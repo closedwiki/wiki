@@ -1,20 +1,23 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018172520" format="1.0" version="1.63"}%
-<table><tr><td valign="top">
+%META:TOPICINFO{author="PeterThoeny" date="1018766640" format="1.0" version="1.64"}%
+<table><tr><td valign="top" rowspan="2">
 Welcome to TWiki, a flexible, powerful, and simple, secure, Web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base, or any other groupware tool, on an intranet or on the Web. <p>This is the place to learn about it, download it, and try it out for yourself...
-</td><td width="25">&nbsp;</td><td width="200" align="center" valign="top">
-<a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a> <br>
-The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
-</td></tr>
-</table>
 
-<table><tr valign="top"><td>
 #UsersGuide
 ---++ TWiki User's Guide
 
 	* *TWiki Quick Start* - the fast track approach
 		* WelcomeGuest: A fast track intro covering all the basics
-		* TWikiRegistration: Sign up so you can edit pages and select options
-
+		* TWikiRegistration: Sign up so you can edit pages and select options </td>
+<td width="25" rowspan="2">&nbsp;</td><td width="200" align="center" valign="top">
+<a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a> <br />
+The official TWiki<sup>TM</sup> <br>site is http://twiki.org/ </td>
+</tr><tr><td width="200" align="left" valign="top">
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
+<input type="text" name="search" size="22" /><br />
+<input type="submit" value="Search Docs" /><br />
+<font size="-2">More options in WebSearch</font>
+</form>
+</td></tr></table>
 	* *One-Page Primers* cover TWiki basics
 		* TWikiTutorial: A compact, 20-minute TWiki primer
 		* TWikiSite: Instant overview - first, there was Wiki
@@ -36,13 +39,6 @@ The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
 
 	* %T% It should take an hour or less to read through and customize the [[#UsersGuide][User's Guide]] to reflect the features and settings enabled on your own TWiki site.
 	* Frequent users should also browse the full [[#ReferenceManual][Reference Manual]]!
-</td><td width="25">&nbsp;</td>
-<td width="200" align="left" valign="top">
-<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
-<input type="text" name="search" size="22" /><br /><input type="submit" value="Search Docs" /><br /> 
-<font size="-2">More options in WebSearch</font>
-</form>
-</td></tr></table>
 
 #ReferenceManual
 ---++ TWiki Reference Manual
@@ -72,23 +68,16 @@ Documentation for webmasters, system administrators, project managers, team lead
 		  [[AppendixFileSystem][A. TWiki File System]]<br />
 		  [[TWikiHistory][B. TWiki Dev Timeline]]
 
----++ <nop>TWikiSiteTools
+---++ TWiki Site Tools
 
-TWikiSiteTools include utilities for navigation and for monitoriing web and site-wide activity. WebPreferences can be individually configured. 
-	* You are currently in the *[[%WEB%.%HOMETOPIC%][%WEB%]]* web.
-
-<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
-	* WebSearch: Full text search of this web<br>
-	  <input type="text" name="search" size="32" /> <input type="submit" value="Search" /> &nbsp;&nbsp; (extended options in WebSearch)
-	* WebChanges: Display recent input on the this web
-	* WebIndex: List all web topics in alphabetical order. See also the faster WebTopicList
-	* %NOTIFYTOPIC%: Subscribe to an email alert linking to the most recently changed topics in this web 
-	* %STATISTICSTOPIC%: View access statistics for this web
-</form>
-	* %WEBPREFSTOPIC%: Preference settings for the this web 
+	* TWikiSiteTools include utilities for navigation and for monitoriing web and site-wide activity.
+	* %TWIKIWEB%.SiteMap: A color-coded directory of available webs that can be easily included on any page _(below)_
 	* %WIKIPREFSTOPIC%: %WIKITOOLNAME% site-wide preferences
-	* The %TWIKIWEB%.SiteMap: A color-coded directory of available webs that can be easily included on any page _(below)_
-		* The [[%TWIKIWEB%.%HOMETOPIC%][%WEB%]] web is coded light orange for quick identification.
+%INCLUDE{"%TWIKIWEB%.WebSiteTools"}%
+
+*Notes:*
+%INCLUDE{"%TWIKIWEB%.YouAreHere"}%
+
 %INCLUDE{"%TWIKIWEB%.SiteMap"}%
 
 	* TWiki<sup>TM</sup> is a trademark of PeterThoeny
