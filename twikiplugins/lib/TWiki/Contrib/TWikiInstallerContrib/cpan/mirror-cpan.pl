@@ -1,31 +1,55 @@
 #!/usr/bin/perl -w
 use strict;
+################################################################################
+# mirror cpan (adapted from Randal Schwartz' program at ...)
+# Usage:
+#   ./mirror-cpan.pl [--configuration] [cpan modules list regex...]
+# Examples:
+# Creates local mirror from CPAN containing only the latest version of each module (~476MB 17 Oct 2004)
+#   ./mirror-cpan.pl     
+# Creates a local mirror of everything related to WWW::Mechanize
+#   ./mirror-cpan.pl WWW::Mechanize
+#   ./mirror-cpan.pl \^WWW::Mechanize      # more selective; only WWW::Mechanize tree on down, but not, eg, Test::WWW::Mechanize
+# Creates a local mirror used by twiki modules
+#   ./mirror-cpan --twiki `./calc-twiki-deps.pl`
+# and, since calc-twiki-deps.pl is just a placeholder, that would be equivalent to: (not sure about needing to escape ^ and $ on the command line)
+#   ./mirror-cpan --twiki ^Data::UUID$ ^Date::Handler$ ^CGI::Session ^File::Temp$ ^List::Permutor$ ^Text::Diff$ ^Algorithm::Diff$ ^Pod::Escapes$ ^Pod::Simple$ ^Clone$ ^Algorithm::Annotate$ ^Regexp::Shellish$ ^IO::Digest$ ^PerlIO::via::dynamic$ ^Data::Hierarchy$ ^PerlIO::via::symlink$ ^Date::Parse$ ^YAML
+################################################################################
+
 $|++;
 use Cwd qw( getcwd );
 use Data::Dumper qw( Dumper );
 
-### CONFIG
-
-my $REMOTE = "file:" . getcwd() . "/MIRROR/MINICPAN/";
-#my $REMOTE = "file:/Users/wbniv/twiki/cpan/MIRROR/MINICPAN/";
-#my $REMOTE = "http://www.cpan.org/";
-
-## warning: unknown files below this dir are deleted!
-my $LOCAL = getcwd() . "/MIRROR/TWIKI/";
-#my $LOCAL = "/Users/wbniv/twiki/cpan/MIRROR/TWIKI/";
+## warning: unknown files below the =local= dir are deleted!
+my $Config = {
+    cpan => {
+	remote => "http://www.cpan.org/",
+	local => getcwd() . "/MIRROR/MINICPAN/",
+    },
+    twiki => {
+	remote => "file:" . getcwd() . "/MIRROR/MINICPAN/",
+	local => getcwd() . "/MIRROR/TWIKI/",
+    },
+};
 
 my $TRACE = 1;
 
 ### END CONFIG
 
+my $where = 'cpan';
+if ( $ARGV[0] =~ /^--/ )
+{
+    ( $where = shift ) =~ s/^--//;
+}
+
 # pass module list on the command line
 my @modules = @ARGV ? @ARGV : q(.+);
 print Dumper( \@modules );
-#unless ( @modules )
-#{
-#    # or, read modules (one per line) from terminal or stdin
-#    chomp( @modules = <> );
-#}
+
+################################################################################
+
+my $REMOTE = $Config->{$where}->{remote};
+my $LOCAL = $Config->{$where}->{local};
 
 ## core -
 use File::Path qw(mkpath);
