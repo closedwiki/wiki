@@ -15,10 +15,6 @@ package TWiki::Func;
 use BaseFixture;
 use strict;
 
-#$TWiki::Plugins::VERSION = 1; #Beijing
-$TWiki::Plugins::VERSION = 1.020; #Cairo
-
-
 sub getDataDir {
   return "$BaseFixture::testDir/data";
 }
