@@ -28,6 +28,7 @@ BEGIN {
     # 'Use locale' for internationalisation of Perl regexes - 
     # main locale settings are done in TWiki::setupLocale
     # Do a dynamic 'use locale' for this module
+    require TWiki;
     if( $TWiki::useLocale ) {
         require locale;
 	import locale ();
@@ -37,7 +38,6 @@ BEGIN {
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use File::Copy; # FIXME remove
-use TWiki;
 
 &main();
 
@@ -380,8 +380,8 @@ sub main
 
     close $filePath if( $TWiki::OS eq "WINDOWS");
 
-    # JET need to change windows path to unix path
-    $tmpFilename =~ s@\\@/@go;
+    # Change Windows path to Unix path
+    $tmpFilename =~ s!\\!/!go;
     $tmpFilename =~ /(.*)/;
     $tmpFilename = $1;
     #&TWiki::writeDebug( "upload: tmpFilename $tmpFilename" );
@@ -417,6 +417,8 @@ sub main
 	my $nonAlphaNum = "[^${TWiki::mixedAlphaNum}" . '\._-]+';
         $fileName =~ s/${nonAlphaNum}//go;
         $fileName =~ s/$TWiki::uploadFilter/$1\.txt/goi;  # apply security filter
+
+	TWiki::writeDebug ("Upload filename after cleanup is '$fileName'");
 
 	# Update
 	my $text1 = "";

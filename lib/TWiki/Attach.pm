@@ -110,13 +110,12 @@ sub filenameToIcon
     return "<img src=\"$iconUrl/else.gif\" width=\"16\" height=\"16\" align=\"top\" alt=\"\" border=\"0\" />";
 }
 
-
-# =========================
 =pod
 
 ---++ sub formatAttachments (  $theWeb, $theTopic, $showAttr, $isTopRev, %attachment  )
 
-Not yet documented.
+This routine creates attachment links as part of attachment table etc; within
+topic text, attachment links are created using %ATTACHURL% and %ATTACHURLPATH%.
 
 =cut
 
@@ -133,8 +132,16 @@ sub formatAttachments
     if (  ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ ) ) {
         $viewableAttachmentCount++;     
         my $fileIcon = TWiki::Attach::filenameToIcon( $file );
-	# To support attachments via UTF-8 URLs, go through viewfile at all times
+
+	# I18N: To support attachments via UTF-8 URLs to attachment
+	# directories/files that use non-UTF-8 character sets, go through viewfile. 
+	# If using %PUBURL%, must URL-encode explicitly to site character set.
         my $fileUrl = "%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/$theWeb/$theTopic?rev=$attrVersion&filename=$file";
+	# Go direct to file where possible, for efficiency
+	if( $isTopRev || $attrVersion eq "1.1" ) {
+	    $fileUrl = TWiki::handleNativeUrlEncode( "%PUBURLPATH%/$theWeb/$theTopic/$file" );
+	}
+
         $attrSize = 100 if( $attrSize < 100 );
         $attrSize = sprintf( "%1.1f&nbsp;K", $attrSize / 1024 );
         $attrComment = $attrComment || "&nbsp;";

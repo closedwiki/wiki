@@ -98,18 +98,26 @@ use vars qw(
 	$pageMode
     );
 
-# Internationalisation and regex setup:
+# Internationalisation (I18N) setup:
 use vars qw(
-	$basicInitDone $useLocale $localeRegexes $siteLocale $siteCharset 
-	$siteCharsetOverride $siteLang $siteFullLang $urlCharEncoding 
+	$basicInitDone $useLocale $localeRegexes $siteLocale 
+	$siteCharset $siteCharsetEbcdic $siteCharsetOverride 
+	$siteLang $siteFullLang $urlCharEncoding 
 
+    );
+
+# Regex setup for internationalisation:
+use vars qw(
 	$upperNational $lowerNational 
 	$upperAlpha $lowerAlpha $mixedAlpha $mixedAlphaNum $lowerAlphaNum $numeric
 
-	$wikiWordRegex $webNameRegex $defaultWebNameRegex $anchorRegex $abbrevRegex $emailAddrRegex
+	$wikiWordRegex $webNameRegex $defaultWebNameRegex $anchorRegex $abbrevRegex 
+	$emailAddrRegex $filenameRegex
+
 	$singleUpperAlphaRegex $singleLowerAlphaRegex $singleUpperAlphaNumRegex
 	$singleMixedAlphaNumRegex $singleMixedNonAlphaNumRegex 
 	$singleMixedNonAlphaRegex $mixedAlphaNumRegex
+
 	$validAsciiStringRegex $validUtf8CharRegex $validUtf8StringRegex 
     );
 
@@ -369,7 +377,7 @@ sub initialize
     # to be recognised within multi-byte characters.  Only allow 'oops'
     # page to be displayed (redirect causes this code to be re-executed).
     if ( invalidSiteCharset() and $theUrl !~ m!$scriptUrlPath/oops! ) {  
-	writeWarning "Cannot use multi-byte ASCII-based encoding ('$siteCharset') as site character encoding";
+	writeWarning "Cannot use this multi-byte encoding ('$siteCharset') as site character encoding";
 	writeWarning "Please set a different character encoding in the \$siteLocale setting in TWiki.cfg.";
 
         my $url = &TWiki::getOopsUrl( $webName, $topicName, "oopsbadcharset" );
@@ -503,7 +511,8 @@ sub setupLocale {
 	# and HTTP headers
 	$siteLocale =~ m/\.([a-z0-9_-]+)$/i;
 	$siteCharset = $1 if defined $1;
-	$siteCharset =~ s/^utf8$/utf-8/;	# For convenience, avoid override
+	$siteCharset =~ s/^utf8$/utf-8/i;	# For convenience, avoid overrides
+	$siteCharset =~ s/^eucjp$/euc-jp/i;
 
 	# Override charset - used when locale charset not supported by Perl
 	# conversion modules
@@ -578,6 +587,9 @@ sub setupRegexes {
     # characters allowed
     $emailAddrRegex = qr/([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/;
 
+    # Filename regex, for attachments
+    $filenameRegex = qr/[${mixedAlphaNum}\.]+/;
+
     # Single-character alpha-based regexes
     $singleUpperAlphaRegex = qr/[$upperAlpha]/;
     $singleLowerAlphaRegex = qr/[$lowerAlpha]/;
@@ -593,7 +605,7 @@ sub setupRegexes {
     # Character encoding regexes
 
     # 7-bit ASCII only
-    $validAsciiStringRegex = qr/^[\x01-\x7F]+$/;
+    $validAsciiStringRegex = qr/^[\x00-\x7F]+$/;
     
     # Regex to match only a valid UTF-8 character, taking care to avoid
     # security holes due to overlong encodings by excluding the relevant
@@ -602,7 +614,7 @@ sub setupRegexes {
     # at http://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt.
     $validUtf8CharRegex = qr{
 				# Single byte - ASCII
-				[\0-\x7F] 
+				[\x00-\x7F] 
 				|
 
 				# 2 bytes
@@ -686,10 +698,8 @@ sub convertUtf8URLtoSiteCharset {
 				 /egx;
 	} elsif ( $siteCharset eq "utf-8" ) {
 	    # FIXME: Use 'unpack' to convert into real Unicode characters
-	    # if on Perl 5.6 or higher (Unicode aware)
-
+	    # if on Perl 5.8 or higher.
 	    writeWarning "UTF-8 not yet supported as site charset - TWiki is likely to have problems";
-	    writeDebug "UTF-8 not yet supported as site charset - TWiki is likely to have problems";
 	    writeDebug "No conversion needed from UTF-8 to $siteCharset";
 	} else {
 	    # Convert from UTF-8 into some other site charset
@@ -2529,6 +2539,7 @@ sub handleUrlParam
 # Encode to URL parameter or HTML entity
 # TODO: For non-ISO-8859-1 $siteCharset, need to convert to Unicode 
 # for use in entity, or to UTF-8 before URL encoding.
+
 =pod
 
 ---++ sub handleUrlEncode (  $theArgs, $doExtract  )
@@ -2577,50 +2588,55 @@ sub handleUrlEncode
     return $text;
 }
 
-# TODO: Routine to do URL encoding into $siteCharset, for use when
-# viewing attachments on sites running with non-UTF-8 character sets
-# and browsers that use UTF-8 URLs.
 
-# =========================
-# Encode characters with 8th bit set for use in URLs with non-UTF-8 '$siteCharset'
-# encoding by browser - mainly for older browsers with no UTF-8 support.
-# Ignored when using UTF-8 URLs or when on EBCDIC platforms.
+=pod
 
-# =pod
-# ---++ sub handleIntUrlEncode ( $theStr, $doExtract )
-# =cut
+---++ sub handleNativeUrlEncode ( $theStr, $doExtract )
 
+Perform URL encoding into native charset ($siteCharset) - for use when
+viewing attachments via browsers that generate UTF-8 URLs, on sites running
+with non-UTF-8 (Native) character sets.  Aim is to prevent UTF-8 URL
+encoding.  For mainframes, we assume that UTF-8 URLs will be translated
+by the web server to an EBCDIC character set.
 
-# =========================
-# Encode characters with 8th bit set for use in URLs with non-UTF-8 '$siteCharset'
-# encoding by browser - mainly for Mozilla-based browsers that 
-# No encoding when using UTF-8 URLs or when on EBCDIC platforms.
+=cut
+
+sub handleNativeUrlEncode {
+    my( $theStr, $doExtract ) = @_;
+
+    my $isEbcdic = ( 'A' eq chr(193) ); 	# True if Perl is using EBCDIC
+
+    if( $siteCharset eq "utf-8" or $isEbcdic ) {
+	# Just strip double quotes, no URL encoding - let browser encode to
+	# UTF-8 or EBCDIC based $siteCharset as appropriate
+	$theStr =~ s/^"(.*)"$/$1/;	
+	return $theStr;
+    } else {
+	return handleUrlEncode( $theStr, $doExtract );
+    }
+}
+
 =pod
 
 ---++ sub handleIntUrlEncode ( $theStr, $doExtract )
 
-Not yet documented.
+This routine was introduced to URL encode Mozilla's UTF-8 POST URLs in the
+TWiki Feb2003 release - encoding is no longer needed since UTF-URLs are now
+directly supported, but it is provided for backward compatibility with
+skins that may still be using the deprecated %INTURLENCODE%.
 
 =cut
 
 sub handleIntUrlEncode
 {
-    my( $theStr, $doExtract ) = @_;
+    my( $theStr ) = @_;
 
-    # Detect EBCDIC platform 
-    my $isEbcdic = ( 'A' eq chr(193) ); 
-    if( $urlCharEncoding eq 'UTF-8' or $isEbcdic ) {
-	# Just strip double quotes, no URL encoding
-	$theStr =~ s/^"(.*)"$/$1/;	
-	return $theStr;
-    } else {
-	# Normal case
-	return handleUrlEncode( $theStr, $doExtract );
-    }
-
+    # Just strip double quotes, no URL encoding - Mozilla UTF-8 URLs
+    # directly supported now
+    $theStr =~ s/^"(.*)"$/$1/;	
+    return $theStr;
 }
 
-# =========================
 =pod
 
 ---++ sub handleEnvVariable (  $theVar  )
@@ -2636,7 +2652,6 @@ sub handleEnvVariable
     return $value;
 }
 
-# =========================
 =pod
 
 ---++ sub handleTmplP (  $theParam  )
@@ -2739,13 +2754,20 @@ sub handleInternalTags
     $_[0] =~ s/%SCRIPTSUFFIX%/$scriptSuffix/g;
     $_[0] =~ s/%PUBURL%/$urlHost$pubUrlPath/g;
     $_[0] =~ s/%PUBURLPATH%/$pubUrlPath/g;
-    $_[0] =~ s!%ATTACHURL%!$urlHost$scriptUrlPath/viewfile$scriptSuffix/$_[2]/$_[1]?filename=!g;
-    $_[0] =~ s!%ATTACHURLPATH%!$scriptUrlPath/viewfile$scriptSuffix/$_[2]/$_[1]?filename=!g;
-    $_[0] =~ s/%ICON{(.*?)}%/&handleIcon($1)/geo;
+    $_[0] =~ s!%ATTACHURL%!$urlHost%ATTACHURLPATH%!g;
+    # I18N: URL-encode full web, topic and filename to the native
+    # $siteCharset for attachments viewed from browsers that use UTF-8 URL,
+    # unless we are in UTF-8 mode or working on EBCDIC mainframe.
+    # Include the filename suffixed to %ATTACHURLPATH% - a hack, but required
+    # for migration purposes
+    # FIXME: Also do this for PUBURLPATH?
+    $_[0] =~ s!%ATTACHURLPATH%/($filenameRegex)!&handleNativeUrlEncode("$pubUrlPath/$_[2]/$_[1]/$1",1)!ge;
+    $_[0] =~ s!%ATTACHURLPATH%!&handleNativeUrlEncode("$pubUrlPath/$_[2]/$_[1]",1)!ge;	# No-filename case
+    $_[0] =~ s/%ICON{(.*?)}%/&handleIcon($1)/ge;
     $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/ge;
-    $_[0] =~ s/%(URL)?ENCODE{(.*?)}%/&handleUrlEncode($2,1)/ge; # ENCODE is documented, URLENCODE is legacy
-    $_[0] =~ s/%INTURLENCODE{(.*?)}%/&handleIntUrlEncode($1,1)/ge;	# Deprecated due to UTF-8 URL support
-    $_[0] =~ s/%DATE%/&getGmDate()/ge; # deprecated, but used in signatures
+    $_[0] =~ s/%(URL)?ENCODE{(.*?)}%/&handleUrlEncode($2,1)/ge; 	# ENCODE is documented, URLENCODE is legacy
+    $_[0] =~ s/%INTURLENCODE{(.*?)}%/&handleIntUrlEncode($1)/ge;	# Deprecated - not needed with UTF-8 URL support
+    $_[0] =~ s/%DATE%/&getGmDate()/ge; 					# Deprecated, but used in signatures
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/ge;
     $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/ge;
     $_[0] =~ s/%SERVERTIME%/&handleTime("","servertime")/ge;
@@ -2792,10 +2814,10 @@ this use is something like this:
    $resultText = putBackVerbatim($renderedText, "pre", @verbatimBlocks);
 
 Note that some changes are made to verbatim blocks here: &lt; and > are replaced
-by their HTML entities &lt; and &gt;, and the actual &lt;verbatim> tags are
-replaced with &lt;pre> tags so that the text is rendered truly "verbatim" by
-a browser.  If this is not desired pass "verbatim" as the second parameter of
-putBackVerbatim instead of "pre".
+by their HTML entities &amp;lt; and &amp;gt;, and the actual &lt;verbatim>
+tags are replaced with &lt;pre> tags so that the text is rendered truly
+"verbatim" by a browser.  If this is not desired, pass "verbatim" as the
+second parameter of putBackVerbatim instead of "pre".
 
 =cut
 
@@ -3392,14 +3414,9 @@ sub makeAnchorName
     # FIXME: More efficient to match with '+' on next line:
     $anchorName =~ s/$singleMixedNonAlphaNumRegex/_/g;      # only allowed chars
     $anchorName =~ s/__+/_/g;               # remove excessive '_'
-    $anchorName =~ s/^(.{32})(.*)$/$1/;     # limit to 32 chars
+    $anchorName =~ s/^(.{32})(.*)$/$1/;     # limit to 32 chars - FIXME: Use Unicode chars before truncate
 
-    # Encode 8-bit characters in anchor - due to Mozilla problems with
-    # URL-encoded anchors, such characters are mapped to '_'.  If this
-    # causes some anchors to collide, a consistent 8-bit-to-7-bit
-    # alphabetic character mapping could be defined to minimise this issue.  
-    # FIXME: Issue for EBCDIC/UTF-8
-    # $anchorName =~ s/([\x7f-\xff])/_/g;		# Map 8-bit chars
+    # No need to encode 8-bit characters in anchor due to UTF-8 URL support
 
     return $anchorName;
 }
