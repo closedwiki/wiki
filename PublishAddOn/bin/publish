@@ -26,6 +26,16 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 
+BEGIN {
+    # Set default current working directory (needed for mod_perl)
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+}
+
 use TWiki::Contrib::Publish;
 
 TWiki::Contrib::Publish::main();

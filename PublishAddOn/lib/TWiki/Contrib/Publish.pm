@@ -174,8 +174,8 @@ sub main {
 
     # Make sure appropriate directories exist. Create them if they don't.
     if (!-d $publishDir && ! -e $publishDir) {
-        print "mkpath $publishDir\n" if ($debug);
-        mkpath($publishDir, 0, 0777);
+        print "mkdir $publishDir\n" if ($debug);
+        mkdir($publishDir, 0777);
     } elsif ( !-d $publishDir && -e $publishDir ) {
         print "FAIL: $publishDir exists but isn't a directory\n" if ($debug);
         &TWiki::redirect($query, &TWiki::getOopsUrl($web, $topic,
@@ -190,7 +190,7 @@ sub main {
         return;
     }
 
-    my $tmp = TWiki::formatGmTime(time());
+    my $tmp = TWiki::Func::formatTime(time());
     $tmp =~s/^(\d+)\s+(\w+)\s+(\d+).*/$1_$2_$3/g;
     my $zipfilename=$theRemoteUser . "_" . $web . "_" . $tmp .".zip";
 
@@ -254,7 +254,7 @@ sub chooseTopicScreen {
     $tmpl = TWiki::Func::expandCommonVariables($tmpl, $topic, $web);
     $tmpl = TWiki::Func::renderText($tmpl, $web);
     $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
-    $tmpl = TWiki::expandCommonVariables($tmpl, $topic, $web);
+    $tmpl = TWiki::Func::expandCommonVariables($tmpl, $topic, $web);
 
     print $tmpl;
 }
@@ -435,7 +435,7 @@ sub copyResource {
 sub getUnsatisfiedLinkTemplate {
     my ($web) = @_;
     my $t = "!£%^&*(){}";# must _not_ exist!
-    my $linkFmt = TWiki::internalLink("", $web, $t, "TheLink", undef, 1);
+    my $linkFmt = TWiki::Render::internalLink("", $web, $t, "TheLink", undef, 1);
     $linkFmt =~ s/\//\\\//go;
     my $pre = $linkFmt;
     $pre =~ s/TheLink.*//o;
@@ -451,7 +451,7 @@ sub getUnsatisfiedLinkTemplate {
 #  internal link. THIS IS NASTY, but I don't know how else to do it.
 sub getInternalLinkTemplate {
     my ($web, $topic) = @_;
-    my $linkFmt = &TWiki::internalLink("", $web, $topic, "TheLink", undef, 1);
+    my $linkFmt = TWiki::Render::internalLink("", $web, $topic, "TheLink", undef, 1);
     $linkFmt =~ s/$web\/$topic/$web\/([^"#]*)([^"]*)/g;
     $linkFmt =~ s/\//\\\//go;
     $linkFmt =~ s/>TheLink/([^>]*?)>(.*?)/go;

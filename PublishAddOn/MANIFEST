@@ -3,5 +3,6 @@ lib/TWiki/Contrib/Publish.pm
 lib/TWiki/Contrib/PublishAddOn/build.pl
 templates/oopsmore.tmpl
 templates/oopspublished.tmpl
+templates/oopspublisherr.tmpl
 templates/publish.tmpl
 bin/publish

@@ -42,10 +42,13 @@ The HTML is generated in a designated directory for the web; the progress messag
 This addon renders using existing skins. It will, by default, use the skin specified in WebPreferences for the published web. This can be overriden by adding the option *skin={skin name}* in the query string (same as the view script).
 
 ---+ Settings
-   * Root directory for static-published HTML [scouten 12/08/02]
-      * Set  PUBLISH_DIR = /home/httpd/path/to/published/files/
+The next two settings should be in %TWIKIWEB%.TWikiPreferences or WebPreferences
+   * Root directory for static-published HTML
+   * Set  PUBLISH_DIR = /home/httpd/path/to/published/files/
    * Root URL for static-published HTML (should point to the same dir as PUBLISH_DIR)
-      * Set PUBLISH_URL_PATH = /url/path/to/published/files/
+   * Set PUBLISH_URL_PATH = /url/path/to/published/files/
+
+Addon settings
    * Name of the perl package
       * Set STUB = %$STUB%
    * Short description
@@ -60,7 +63,7 @@ This addon renders using existing skins. It will, by default, use the skin speci
    | *File:* | *Description:* |
    %$MANIFEST%
    * Unzip ==%TOPIC%.zip== in your twiki installation directory.
-   * Edit the 'Settings' above in your version of this topic to set the paths on your server.
+   * Set the 'Settings' above in your %TWIKIWEB%.TWikiPreferences topic.
 
 ---+++ AddOn info
 | Author: | Main.EricScouten |
@@ -91,5 +94,5 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details, published at 
 http://www.gnu.org/copyleft/gpl.html
 
--- TWiki:Main/EicScouten%BR%
+-- TWiki:Main/EricScouten%BR%
 -- TWiki:Main/CrawfordCurrie - %$DATE%
