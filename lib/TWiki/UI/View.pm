@@ -238,7 +238,7 @@ sub view {
                                                            rev => $doingRev ),
                              rel => 'nofollow'
                             },
-                            " r$doingRev" );
+                            "r$doingRev" );
         }
         if ( $doingRev - $rev >= $TWiki::cfg{NumberOfRevisions} ) {
             # we started too far away, need to jump closer to $rev
@@ -255,7 +255,7 @@ sub view {
                     rev1 => $doingRev,
                     rev2 => $doingRev-1 ),
                   rel => 'nofollow' },
-                '&harr;' ) . '&nbsp;';
+                '&lt;' ) . '&nbsp;';
         }
         $doingRev--;
     }
