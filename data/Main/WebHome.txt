@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999241484" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="PeterThoeny" date="1006601742" format="1.0" version="1.16"}%
 <table><tr><td>
 *<font size="+1"> %TWIKIWEB%.WelcomeGuest: </font>* %WIKITOOLNAME% is a web-based collaboration tool, web authoring tool, document management tool and knowledge base tool. You can edit any %WIKITOOLNAME% page.
 </td><td>
@@ -19,7 +19,7 @@
 	* WebSearch: Full text search of the %WIKITOOLNAME%.%WEB% web.
 	* <input type="text" name="search" size="32" /> <input type="submit" value="Search" /> &nbsp;&nbsp; (More options in WebSearch)
 	* WebChanges: Find out recent modifications to the %WIKITOOLNAME%.%WEB% web.
-	* WebIndex: Display all %WIKITOOLNAME%.%WEB% topics in alphabetical order.
+	* WebIndex: Display all %WIKITOOLNAME%.%WEB% topics in alphabetical order. See also the faster WebTopicList 
 	* %NOTIFYTOPIC%: Subscribe to be automatically notified when something changes in the %WIKITOOLNAME%.%WEB% web.
 	* %STATISTICSTOPIC%: View access statistics of the %WIKITOOLNAME%.%WEB% web.
 	* %WEBPREFSTOPIC%: Preferences of the %WIKITOOLNAME%.%WEB% web.
