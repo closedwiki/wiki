@@ -1480,7 +1480,7 @@ sub renderFormData
     my @fields = $meta->find( "FIELD" );
     foreach my $field ( @fields ) {
         my $title = $field->{"title"};
-        next if( $title eq "UseForm" );
+        next if( $title eq "UseForm" && TWiki::Form::useFormSpecial() );
         my $value = $field->{"value"};
         $metaText .= "<tr><th bgcolor=\"#99CCCC\" align=\"right\"> $title:</th><td align=\"left\"> $value </td></tr>\n";
     }
