@@ -1,9 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:P{"htmldoctype"}%
+<html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
  <title> %WIKITOOLNAME% . %WEB% . %TOPIC% (edit)</title>
- <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_EDIT%
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+ <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_EDIT%
+</head>
 <script language="JavaScript">
 <!--HIDE
 function initForm() {
@@ -39,14 +42,16 @@ function launchWindow( theWeb, theTopic ) {
 </script>
 </head>
 <body bgcolor="#ffffff" onLoad="initForm()">
+
+%TMPL:DEF{"titleaction"}% (edit) %TMPL:END%
+%TMPL:DEF{"webaction"}% Change topic %TMPL:END%
 <form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"titleaction"}% (edit)%TMPL:END%
-%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+<link href="/twiki/pub/%TWIKIWEB%/TigerSkin/twiki.css" rel=stylesheet type=TEXT/CSS>
 %TMPL:P{"standardheader"}%
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%">%TEXT%</textarea>
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="parent" value="%TOPICPARENT%" />
+<input type="hidden" name="cmd" value="%CMD%" />     
 <br />
 Don't forget - if you change something, do it in 
 <a target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">GoodStyle</a>
@@ -56,9 +61,10 @@ and follow the
 This is your signature for easy copy & paste operation
 <br />
 %FORMFIELDS%
-%TMPL:DEF{"topicaction"}% <input type="submit" value=" &nbsp; Preview Changes &nbsp; " /> <input type="hidden" name="cmd" value="%CMD%" />     
-      &nbsp; | &nbsp; <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
+%TMPL:DEF{"topicaction"}% <input type="submit" value=" &nbsp; Preview Changes &nbsp; " />
+      %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
 %TMPL:P{"standardfooter"}%
 %WEBCOPYRIGHT%
 </form>
-</body></html>
+</body>
+</html>
