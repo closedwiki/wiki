@@ -115,9 +115,13 @@ sub main
         } else {
             # do all webs:
             my $dataDir = &TWiki::getDataDir();
-            opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
-            @weblist = grep /^[^\.\_]/, readdir DIR; # exclude webs starting with . or _
-            closedir DIR;
+            my @weblist = ();
+            if( opendir( DIR, "$dataDir" ) ) {
+                @weblist = grep /^[^\.\_]/, readdir DIR; # exclude webs starting with . or _
+                closedir DIR;
+            } else {
+                printMsg( "  *** Error: opendir $dataDir, $!" );
+            }
             foreach $web ( @weblist ) {
                 if( -d "$dataDir/$web" ) {
                     processWeb( "/$web", $theRemoteUser, $theTopic, $logMonthYear, @logList );
