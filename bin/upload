@@ -397,9 +397,8 @@ sub main
 	    return;
 	}
 
-        my $maxSize = &TWiki::Prefs::getPreferencesValue( "ATTACHFILESIZELIMIT" );
-        $maxSize =~ /([0-9]+)/;
-        $maxSize = $1 || 0;
+    my $maxSize = &TWiki::Prefs::getPreferencesValue( "ATTACHFILESIZELIMIT" );
+    $maxSize = 0 unless $maxSize =~ /([0-9]+)/;
 	if( $maxSize && $size > $maxSize * 1024 ) {
 	    handleError( $noredirect, "File exceeds size limit", 
 	           $query, $webName, $topic, "oopsuploadlimit", $fileName, $maxSize );
