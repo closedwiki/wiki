@@ -60,6 +60,11 @@ __Preferences:__
 	* http-equiv meta tags for __preview__ script:
 		* Set HTTP_EQUIV_ON_PREVIEW = 
 
+	* Users or groups allowed to change this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
+		* Set ALLOWTOPICCHANGE = 
+
+	* Site-level preferences that are *not* allowed to be overridden by WebPreferences and user preferences:
+		* Set FINALPREFERENCES = WIKIWEBMASTER, PREVIEWBGIMAGE
 
 __Notes:__
 	* A preference is defined as: <br> =6 spaces * Set NAME = value= <br> Example:
@@ -73,3 +78,4 @@ __Related Topics:__
 	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
 	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%= .
+	* %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
