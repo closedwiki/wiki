@@ -1,0 +1,79 @@
+/* a Twiki SeeSkin stylesheet, 
+   Matt Wilkie, 2002-October-30 
+   Use this one just for colour and font size/family settings
+   Most everything else should be in 'ss-layout,css''   
+   */
+
+body { /* placeholder */}
+textarea { /* placeholder */ }
+a {text-decoration: none; color: #000099;}
+a:visited { color: #000099;}
+a:hover { background-color : #FFFFCC; }
+
+#header { /* placeholder */ }
+#header img { /* placeholder */ }
+#header h1 { /* placeholder */ }
+#header h2 { /* placeholder */ }
+#header h3 { /* placeholder */ }
+#title { /* placeholder */ }
+
+#viewwrapper { /* placeholder */ }
+#wrapper { /* placeholder */ }
+
+#content {border: 1px solid #888; background: #fff;}
+#content a {color: blue;}
+#content a:visited {color: purple;}
+#content a:active {color: red;}
+
+/* this is a workaround to keep anchor headings from being displayed as hyperlinks */
+#content h1 a, #content h2 a, #content h3 a, #content h4 a, #content h5 a, #content h6 a,  #header h3 a, #menu h4 a {color:black;}
+#content h1 a:hover, #content h2 a:hover, #content h3 a:hover, #content h4 a:hover, #content h5 a:hover, #content h6 a:hover, #header h3 a:hover, #menu h4 a:hover { color:black; background-color: transparent;}
+
+
+/* for IE, which sometimes puts the menu on top of the content box */
+* html #menu {  background-image : url(contentfill.gif);   }
+
+#menu { /* placeholder */}
+#menu h4 { /* placeholder */ }
+#menu ul { /* placeholder */ }
+#topicaction { /* placeholder */ }
+#topicaction #diffs ul { font-size : x-small;  }
+#topicaction #diffs ul li {  /* placeholder */ }
+#topics { /* placeholder */}
+
+#zones { font-size : x-small;  }
+#zones h4 {	color: #676767;}
+#zones ul { /* placeholder */ }
+#zones ul li { background-color : #F8F8FF;  border : 1px solid Gray; border-bottom:none;  margin-left: 2px; margin-right: 2px;}
+#zones ul li a { /* placeholder */ }
+
+#meta { /* placeholder */}
+#footer { /* placeholder */}
+
+#standardfooter ul { /* placeholder */ }
+#standardfooter ul li { /* placeholder */ }
+
+.warn {	color : #d00;	background-color: transparent;	font-size: larger;	font-weight: bold;}
+
+/* de-emphasize */
+.deem {	font-size: smaller;}
+
+/* hide stuff which is just there for no-css browsers */
+.skiplink, #menu hr, #zones hr { display: none;}
+
+
+/* short inline quotations, as opposed to blockquotes http://diveintomark.org/archives/2002/05/04.html */
+q {quotes: '“' '”' "‘" "’";}
+q:before {content: open-quote;}
+q:after {content: close-quote;}
+q {font-style: italic;}
+p>q, li>q {font-style: normal;}
+
+/* http://diveintoaccessibility.org/day_17_defining_acronyms.html */
+acronym { border-bottom: 1px dotted black;}
+/*acronym:after {content: " (" attr(title) ")";}*/
+
+pre {background: #efefef;padding: 0.5em;}
+
+
+

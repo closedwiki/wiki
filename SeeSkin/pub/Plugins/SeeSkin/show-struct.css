@@ -1,0 +1,22 @@
+/* show structure of SeeSkin stylesheets */
+	
+/*html {  border: thin dotted #777; padding: 2px;}*/
+body {  border: thin dotted #999; padding: 2px;}
+div { border: thin dotted #8B0000; margin: 1%;}
+table {
+	border: thin dashed #444;
+}
+/*
+h1#sitemast { font-size: 115%; font-weight: bold; letter-spacing: 0.13em; line-height: 0.9em; margin: 0; padding: 0.33em 0 0;}
+h1#sitemast a { text-decoration: none; }
+h1#sitemast span { margin: 0; padding-left: 0.33em; }
+*/
+#wrapper { background: #ddd; border: thin dotted #bbb; padding: 2px; }
+#content {border: 1px solid #000; margin: 2%; padding: 2%;}
+#menu { background: #fee; border: thin dotted #fdd; padding-right: 3%;  }
+#topicaction { background: #fdd; border: thin dotted #fcc;}
+#topics { background: #fcc; border: thin dotted #fbb;}
+#zones { background: #fbb; border: thin dotted #faa;}
+#meta { background: #efe; border: thin dotted #dfd;}
+#footer {background: #dfd;  border: thin dotted #cfc;}
+

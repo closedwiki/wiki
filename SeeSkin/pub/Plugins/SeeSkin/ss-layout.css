@@ -1,0 +1,82 @@
+/* a Twiki SeeSkin stylesheet, 
+   Matt Wilkie, 2002-November-15 
+  Tthis stylesheet for basic layout 
+   'Use ss-colours.css' is for colours and font selections */
+
+/* NS6.x-specific fixes */
+*|*:-moz-list-bullet, *|*:-moz-list-number {font-size: 1em;}
+
+body {	background-image: none;}	
+
+#header { margin: 0;}
+#header img {	border: none;	float: left; z-index: 100; margin-right: 10px;}
+#header h1 {display : inline; font-size: 110%;}
+#header h2 {display : inline; font-size: 120%;}
+#header h3 { display: inline; font-size: 130%;}
+#title { display: inline; font-size: larger;}
+
+/* Modified Sinmplified Box Model Hack 
+http://www.info.com.ph/~etan/w3pantheon/style/modifiedsbmh.html 
+*/
+  /* this selector recognized by IE only */
+* html #viewwrapper {
+	width: 79%;   /* total width (only for IE5.x/Win) */
+	w\idth: 79%;  /* content width (for other IE) */
+	padding: 0;
+	margin-left: 15px;
+	}
+/* this selector for all other CSS aware browsers */
+#viewwrapper {
+	padding: 0 0 0 0;
+	width: 80%;   /* content width (for other browsers) */
+	float: left; clear: left; 
+	margin: 3px 0 0 25px;
+	}
+/* end MSMBH */
+
+/* this is to (almost) stop IE from overlapping the menu and the content div when it contains tables */
+* html  table {	width: 85%;  w\idth: 85%;}	
+
+* html wrapper {padding: 0;}
+#wrapper {clear: both;  padding: 2% 0 0 0; margin: 3px 0 0 25px;}
+
+
+#content {padding: 2%; margin-top: 0; }
+#content h1 {margin-top: 0; }
+
+* html #menu {	margin-top: -22px;}
+#menu { padding-right: 3%; text-align: left; position: absolute; left: 85%; margin-top: 2.1em;}
+#menu h4 { margin: 0em;}
+#menu ul {
+	list-style : none;
+	padding-left: 0em;
+	margin-left: 0em;
+	text-indent: 0em; 
+	margin-top: 1%;
+}
+#menu ul input {/* For Mozilla: otherwise the first few characters typed in the input text box are invisible */
+	text-indent: 0em; margin-left: 0em;}  
+* html #menu ul input { /*For IE */*margin-left: 0em;}
+
+#topicaction { /* placeholder */ }
+#topicaction #diffs ul { margin-left: 0; padding-left: 0; display: inline; } 
+#topicaction #diffs ul li { padding-left: 0; list-style: none; display: inline;}
+#topics { /* placeholder */}
+
+#zones {  position: absolute; top:0px; right:0; /*text-align:right;*/  }
+#zones h4 {	display: inline; }
+#zones ul {	margin-left: 0;	padding-left: 0; display: inline;} 
+#zones ul li {list-style: none; display: inline; }
+#zones ul li a {padding: 0 5px 0 5px;}	
+
+#meta { /* placeholder */}
+#footer { /* placeholder */}
+
+#standardfooter ul {	margin-left: 0;	padding-left: 0; display: inline;} 
+#standardfooter ul li {
+	display: inline;
+	list-style : none;
+	padding-left: 0.4em;
+	margin-left: 0.4em;
+	margin-top: 1%;
+}

@@ -1,0 +1,45 @@
+/* originally from alistapart.com
+   adapted to Twiki SeeSkin by Matt Wilkie
+	2002 June 05 */
+
+body {
+   background: white;
+   font-size: 12pt;
+   }
+#menu {
+   display: none;
+   }
+#wrapper, #main {
+   width: auto;
+   margin: 0 5%;
+   padding: 0;
+   border: 0;
+   float: none !important;
+   color: black;
+   background: transparent none;
+   }
+div#main {
+   margin-left: 10%;
+   padding-top: 1em;
+   border-top: 1px solid #930;
+   }
+div#mast {
+   margin-bottom: -8px;
+   }
+div#mast img {
+   vertical-align: bottom;
+   }
+a:link, a:visited {
+   color: #520;
+   background: transparent;
+   font-weight: bold;
+   text-decoration: underline;
+   }
+#main a:link:after, #main a:visited:after {
+   content: " (" attr(href) ") ";
+   font-size: 90%;
+   }
+#main a[href^="/"]:after {
+   content: " (http://www.twiki.org" attr(href) ") ";
+}
+
