@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="alaster" date="1106939651" format="1.0" version="1.4"}%
----++!! Calendar Plugin (version 1.014)
+---++!! Calendar Plugin (version 1.015)
 
 The <nop>CalendarPlugin handles the tag *%<nop>CALENDAR%* that inserts a monthly calendar in the page. Multiple topics can be specified as the source of the events, and these can be in any web.
 
@@ -259,8 +259,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/AndreaSterbini |
-|  Plugin Version: | V1.012 (15 Jan 2004) |
+|  Plugin Version: | V1.015 (3 Mar 2005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.015: | TWiki:Main.PatriceFournier: Added back support for preview showing unsaved events; Two loop fixes from DanielRohde |
 |  V1.014: | TWiki:Main.NathanKerr: Added start and end date support for weekly repeaters |
 |  V1.013: | TWiki:Main.MartinCleaver: Added multiple topic=web.topic parameters |
 |  V1.012: | TWiki:Main/PeterThoeny: Added missing doc of gmtoffset parameter (was deleted in V1.011) |

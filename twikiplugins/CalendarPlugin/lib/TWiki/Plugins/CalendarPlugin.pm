@@ -26,7 +26,8 @@ package TWiki::Plugins::CalendarPlugin;
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION
 	    $libsLoaded $libsError $defaultsInitialized %defaults );
-$VERSION   = '1.014';  #nk# Added support for start and end dates in weekly repeaters
+$VERSION   = '1.015';  #pf# Added back support for preview showing unsaved events; Two loop fixes from DanielRohde
+#$VERSION   = '1.014';  #nk# Added support for start and end dates in weekly repeaters
 #$VERSION   = '1.013';  #mrjc# Added support for multiple sources in topic=
 #$VERSION   = '1.012';  #PTh# Added missing doc of gmtoffset parameter (was deleted in 1.011)
 #$VERSION   = '1.011';  #PTh# fix deep recursion bug; preview shows unsaved events; performance improvements
@@ -218,7 +219,7 @@ sub fetchxmap {
 				do {
 					$ret[$d1] = 0;
 					($y1, $m1, $d1) = Add_Delta_Days($y1, $m1, $d1, 1);
-				} until ($m1 > $m || ($m1 == $m2 && $d1 > $d2));
+				} until ($m1 != $m || ($m1 == $m2 && $d1 > $d2));
 			}
 		} elsif (@dparts = $xc =~ m/$full_date_rx/) {
 			($d1, $m1, $y1) = @dparts;
@@ -346,7 +347,7 @@ sub handleCalendar
     our $weekly_rx = "E\\s+($wdays_rx)";
     our $periodic_rx = "E([0-9]+)\\s+$full_date_rx";
     our $numdaymon_rx = "([0-9L])\\s+($wdays_rx)\\s+($months_rx)";
-    $text = getTopicText(%options, $theTopic, $theWeb, $refText);
+    $text = getTopicText($theTopic, $theWeb, $refText, %options);
 
     # recursively expand includes
     # (don't rely on TWiki::Func::expandCommonVariables to avoid deep recursion)
@@ -531,15 +532,15 @@ sub handleCalendar
         }
         $mm = $months{$mm};
         if (($mm <= $m && $yy == $y) || ($yy < $y)) {
-            until ($yy == $y && $mm == $m) {
+            while ($yy < $y || ($yy == $y && $mm < $m)) {
                 ($yy, $mm, $dd) = Add_Delta_Days($yy, $mm, $dd, $p);
             }
-            do {
+            while ($yy == $y && $mm == $m) {
                 if ($xmap[$dd]) {
                     &highlightDay( $cal, $dd, $descr, %options );
                 }
                 ($yy, $mm, $dd) = Add_Delta_Days($yy, $mm, $dd, $p);
-            } while ($yy == $y && $mm == $m);
+            }
         }
     }
 	
@@ -560,42 +561,26 @@ sub handleCalendar
     return $cal->as_HTML;
 }
 sub getTopicText {
-    my (%options, $theTopic, $theWeb, $refText) = @_;
+    my ($theTopic, $theWeb, $refText, %options) = @_;
     my $topics = $options{topic};
-#   return "   * 1 Mar 2002 - foo ". $topics."\n";
+    my @topics = split /, */, $topics;
+    my $ans = "";
+    foreach my $topicpair (@topics) {
+        if ($topicpair =~ m/([^\.]+)\.([^\.]+)/) {
+           ($web, $topic) = ($1, $2);
+        } else {
+           $web = $theWeb;
+           $topic = $topicpair;
+        }
 
-# I've disabled this functionality as I was not clear what I was supposed to 
-# do with it. Check the src code of the previous version if it does not work
-# for you.
-#   if( $topics == $theTopic) {
-#       # use current text so that preview can show unsaved events
-#       my $tmpText = $$refText; # dereference topic text
-#       $text = $tmpText;        # create a copy of topic text since $text will change
-#       return $text;
-#    } 
-    return getMultipleTopicText($topics);
-
-    # e.g. return "   * 1 Mar 2002 - FOO\n";
-}
-
-sub getMultipleTopicText {
-   my ($topics) = @_;
-   my @topics = split /, */, $topics;
-   my $ans = "";
-   foreach my $topicpair (@topics) {
-#      $ans .= "   * 1 Mar 2002 - topicpair=$topicpair\n";
-      if ($topicpair =~ m/([^\.]+)\.([^\.]+)/) {
-        ($web, $topic) = ($1, $2);
-      } else {
-        $web = "";
-        $topic = $topicpair;
-      }
-
-#      $ans .= "   * 3 Mar 2002 - FOO>bar $topics";#<nop>$web.<nop>$topicpair\n";
-#      $ans .= "   * 1 Mar 2002 - web=$web topic=$topic\n";
-      $ans .= readTopicText($web, $topic);
-   }
-   return $ans;
+        if (($topic eq $theTopic) && ($web eq $theWeb)) {
+            # use current text so that preview can show unsaved events
+            $ans .= $$refText;
+        } else {
+            $ans .= readTopicText($web, $topic);
+        }
+    }
+    return $ans;
 }
 
 
@@ -615,7 +600,5 @@ sub highlightDay
 
 	$c->setcontent($day,$format);
 }
-
-#print getMultipleTopicText("Main.Foo, People.Foo");
 
 1;
