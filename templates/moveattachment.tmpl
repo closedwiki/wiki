@@ -7,6 +7,7 @@
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
 </head>
 <body bgcolor="#ffffff">
+#PageTop
 <form name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 %TMPL:DEF{"titleaction"}%(move attachment)%TMPL:END%
 %TMPL:DEF{"webaction"}% *Move file attachment* %TMPL:END%
@@ -31,4 +32,6 @@ __Note:__
  %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
 %TMPL:P{"standardfooter"}%
 </form>
+#PageBottom
 </body>
+</html>

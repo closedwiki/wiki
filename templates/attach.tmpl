@@ -22,6 +22,7 @@ function launchWindow( theWeb, theTopic ) {
 //STOP HIDING-->
 </script>
 <body bgcolor="#ffffff"  onLoad="initForm()" >
+#PageTop
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"simpleheader"}%
 ---++ Existing attachments for <nop>%TOPIC%
@@ -84,6 +85,6 @@ __Notes:__
  </tr>
 </table>
 </form>
+#PageBottom
 </body>
 </html> %TMPL:END%
-

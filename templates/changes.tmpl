@@ -8,6 +8,7 @@
 </head>
 <body bgcolor="#ffffff">
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/">
+#PageTop
 %TMPL:DEF{"titleaction"}%(changes)%TMPL:END%
 %TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
 %TMPL:P{"standardheader"}%
@@ -56,5 +57,6 @@
   </td>
  </tr>
 </table>
+#PageBottom
 </body>
 </html>

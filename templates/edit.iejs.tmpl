@@ -309,6 +309,7 @@ function writeJavaScriptNote()
 </script>
 </head>
 <body bgcolor="#ffffff" onLoad="initForm()">
+#PageTop
 <form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:DEF{"titleaction"}%(edit)%TMPL:END%
 %TMPL:DEF{"webaction"}%Change topic%TMPL:END%
@@ -349,4 +350,6 @@ writeJavaScriptNote();
   %SEP% <a class="footerlink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
 %TMPL:P{"standardfooter"}%
 </form>
-</body></html>
+#PageBottom
+</body>
+</html>

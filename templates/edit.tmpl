@@ -38,6 +38,7 @@ function launchWindow( theWeb, theTopic ) {
 </script>
 </head>
 <body bgcolor="#ffffff" onLoad="initForm()">
+#PageTop
 <form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:DEF{"titleaction"}%(edit)%TMPL:END%
 %TMPL:DEF{"titlehelp"}% %TMPL:END%
@@ -60,5 +61,6 @@ This is your signature for easy copy & paste operation
 %TMPL:P{"standardfooter"}%
 %WEBCOPYRIGHT%
 </form>
+#PageBottom
 </body>
 </html>
