@@ -1,0 +1,155 @@
+#!/usr/bin/perl
+#
+# TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
+#
+# Based on parts of Ward Cunninghams original Wiki and JosWiki.
+# Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
+# Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
+# Copyright (C) 1999-2001 Peter Thoeny, peter@thoeny.com
+# Additions by John Talintyre, jet@cheerful.com
+# Copyright (C) 2001 John Talintyre
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+
+# Change classification for a topic
+
+use CGI::Carp qw(fatalsToBrowser);
+use CGI;
+use lib ( '../lib' );
+use TWiki;
+
+use strict;
+
+use vars qw( $query );
+
+&main();
+
+sub main
+{
+    $query = new CGI;
+    
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theTopic = $query->param( 'topic' ) || "";
+    my $theUrl = $query->url;
+    
+    my $newClassification = $query->param( 'classification' ) || "";
+    
+    my $tmpl = "";
+    my $text = "";
+    my @meta = ();
+    my @classifications = ();
+
+    my ( $topic, $webName, $dummy, $userName ) = 
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+    $dummy = "";  # to suppress warning
+
+    my $wikiUserName = &TWiki::userToWikiName( $userName );
+
+    if( ! &TWiki::Store::webExists( $webName ) ) {
+        TWiki::writeHeader( $query );
+	$tmpl= &TWiki::Store::readTemplate( "noweb" );
+	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+	print $tmpl;
+        return;
+    }
+
+    # check access permission
+    if( &TWiki::Store::topicExists( $webName, $topic ) ) {
+	( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
+    }
+    if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $text, $topic, $webName ) ) {
+        # user has not permission to change the topic
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+    
+    # Get possible classifications
+    if( &TWiki::Store::topicExists( $webName, "WebTopicClassifications" ) ) {
+       my( $posText, @posMeta ) = &TWiki::Store::readWebTopicNew( $webName, "WebTopicClassifications" );
+       @classifications = getClassifications( $posText );
+    } else {
+       error( $webName, $topic, "Missing topic WebTopicClassifications", "FIXME put in detail" );
+       return;
+    }
+    
+    if( $newClassification ) {
+        my @args = ( name => $newClassification );
+        @meta = &TWiki::Store::metaUpdate( "CLASSIFICATION", \@args, "name", @meta);
+        my $error = &TWiki::Store::saveTopicNew( $webName, $topic, $text, \@meta, "", "", "" );
+        my $url = "";
+        if( $error ) {
+            $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
+        } else {
+            $url = "$TWiki::urlHost$TWiki::scriptUrlPath/edit$TWiki::scriptSuffix/$webName/$topic";
+        }
+        TWiki::redirect( $query, $url );
+        return;
+    }
+    
+    
+    # Display list of classifications
+    TWiki::writeHeader( $query );
+    $tmpl = TWiki::Store::readTemplate( "changeclassification" );
+    $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+    $tmpl = &TWiki::getRenderedVersion( $tmpl, $webName );
+    
+    my $classificationList = "";
+    foreach my $classification ( @classifications ) {
+       $classificationList .= "<option value=\"$classification\">$classification</option>";
+    }
+    $tmpl =~ s/%CLASSIFICATIONS%/$classificationList/go;
+    
+    print $tmpl;
+}
+
+
+sub getClassifications
+{
+    my( $text ) = @_;
+    
+    my @classifications = ();
+    
+    my $inBlock = 0;
+    
+    foreach( split( /\n/, $text ) ) {
+        if( /^\s*\|.*Classification scheme.*\|/ ) {
+            $inBlock = 1;
+        } else {
+	    if( /\|\s*([^\s]*)\s*\|/ ) {
+		my $classification = $1;
+		if( $inBlock ) {
+		    push @classifications, $classification;
+		}
+	    } else {
+		$inBlock = 0;
+	    }
+	}
+    }
+    
+    return @classifications;
+}
+
+sub error
+{
+    my( $web, $topic, $summary, $details ) = @_;
+    
+    TWiki::writeHeader( $query );
+    my $tmpl = &TWiki::Store::readTemplate( "oopsgeneral" );
+    $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+    $tmpl =~ s/%SUMMARY%/$summary/go;
+    $tmpl =~ s/%DETAIL%/$details/go;
+    $tmpl = &TWiki::getRenderedVersion( $tmpl, $web );
+    print $tmpl;
+    return;
+}
