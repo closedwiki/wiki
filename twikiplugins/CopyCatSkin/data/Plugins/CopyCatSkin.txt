@@ -1,0 +1,27 @@
+%META:TOPICINFO{author="guest" date="1050875143" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+ the Copy Cat Skin
+
+...is not really a skin per se, rather it is (will be)  a collection of partially built skins modelled after other popular sites on the net.
+
+%TOC%
+
+---++ Movable Type
+To kick things off, atached is a Codev.MovableType look alike: ==cc-moveabletype== .To install, 
+	* put the download archive in =$twikiroot=
+	* unzip, with directories (will put files in =templates/= , =pub/Plugins/CopyCatSkin/= , =data/Plugins/=)
+	* edit TWiki.TWikiPreferences, WebPreferences, or your personal page and set the variables
+<verbatim>
+		* Set SKIN = cc-movabletype
+		* Set CCSTYLE = mt-georgia-blue
+</verbatim>
+
+To try out the different looks available, substitute _georgia-blue_ with any of the css files in =pub/Plugins/CopyCatSkin/= . The twiki template uses the same class and id names as the default Moveable Type template. You should be able to put any MT template into /pub/Plugins/CopyCatSkin, update the CCSTYLE variable, and it will just work. No edits necessary.
+
+I built this skin as a proof of concept and don't intend to maintain or extend it. Only the view template is defined. Anybody who wants to take it over is welcome to.
+
+-- Main.MattWilkie - 20 Apr 2003
+
+---++ Blogger ...?
+
+...
