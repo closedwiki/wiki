@@ -22,5 +22,7 @@ sub help_handlers{ return smry_handlers()."\n"; }
 sub smry { return "Dumps various debug informations"; }
 sub help { return "Dumps various debug informations:\n dump config  ".help_config()." dump handlers  ".help_handlers()};
 sub run { print help(); }    
+
+
 1;
     

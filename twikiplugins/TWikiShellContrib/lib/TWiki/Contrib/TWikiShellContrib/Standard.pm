@@ -1,7 +1,6 @@
 package TWiki::Contrib::TWikiShellContrib::Standard;
 
 use FileHandle;
-
 ##############################
 # set verbosity
 ##############################
@@ -45,32 +44,61 @@ sub help_quiet { return smry_quiet()."\n";}
 sub run_use {
     my ($shell,$config,$mode) = @_;
     $config->mode($mode);
-    print "Mode set to: ".$config->mode;
+    print "Mode set to: ".$config->mode."\n";
 }
 
 sub smry_use {
-	return "experimental feature - don't use!\n";
+	return "experimetal feature - don't use!";
 }
 
-sub undefined_run {
-    print "Undefined action\n";
-}
-    
-sub undefined_smry {
-    return "undocumented - no help available";
+sub print_debug_level {
+    my $debug = shift;
+    print "Debug ";
+    if ($debug) {
+        print "On";
+    } else {
+        print "Off";
+    }
+    print "\n";
 }
 
-sub undefined_help {
-    return "No help available\n";
+sub run_debug {
+    my ($shell,$config,$mode)=@_;
+    
+    if ($mode) {
+        if (uc $mode eq "ON") {
+            $config->{debug}=1;
+        } else {
+            $config->{debug}=0;
+        }
+    }  
+    print_debug_level($config->{debug});
+    
+}
+sub smry_debug {
+    return "set debugging On and Off. Usage: debug [on/off]";
 }
 
-    
-    
+sub help_debug {
+    return smry_debug."\n";
+}
+#sub undefined_run {
+#    print "Undefined action\n";
+#}
+#    
+#sub undefined_smry {
+#    return "undocumented - no help available";
+#}
+#
+#sub undefined_help {
+#    return "No help available\n";
+#}
+
 #####################################################################
 # TODO: Reload should remove those handlers that are removed from the module to be reloaded.
+# TODO: Reload should call the onImport hook
 
 package TWiki::Contrib::TWikiShellContrib::Ext::Reload;
-
 use FileHandle;
 
 sub _reloadClass { 

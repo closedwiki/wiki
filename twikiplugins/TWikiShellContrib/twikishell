@@ -3,7 +3,7 @@
 # Support functionality for the TWiki Collaboration Platform, http://TWiki.org/
 # 
 # TWiki Shell 
-# Oct 2004 - written by Rafael Alvarez based on MartinCleaver work
+# Oct 2004 - written by Rafael Alvarez based on the work of MartinCleaver
 #
 # Assumes that the user has enough privileges to perform the required operations.
 #
@@ -76,7 +76,7 @@ package Config;
         my ($config,$text)=@_;    
         print $text unless ($config->{verbosity}==0);
     }
-    
+
     #######################################
     # Mode stuff
     #######################################
@@ -114,6 +114,8 @@ package Config;
                     $self->{verbosity}=0;
                 }elsif ($1 eq "e") {
                     $execute=1;
+                }elsif ($1 eq "d") {
+                    $self->{debug}=1;
                 }
             } elsif ($execute) {
                 $self->{execute}.=$ARGV[$n]." ";
@@ -166,12 +168,21 @@ package Config;
         return $configPath;
     }
     
-    sub save {
+    sub saveAndDispose {
         my $self=shift;
+        
         if ($self->{execute}) {
             $self->{execute}="";
         }
+        
+        $self->{debug}=0;
+        $self->save();        
+    }
+    
+    sub save {
+        my $self=shift;
         use Data::Dumper;
+        
         my $data= Data::Dumper->Dump([$self],[qw(config)]);
         open CONFIG,">".$self->{configFileName};
         print CONFIG $data;
@@ -195,25 +206,27 @@ BEGIN {
         $config->handleParams();
         $config->loadSetLibCfg();
     }
-
     $config->save();
 }
 
 # The shell starts here
 
 use TWiki::Contrib::TWikiShellContrib::TWikiShell;
+print "\n";
 my  $shell= new TWiki::Contrib::TWikiShellContrib::TWikiShell($config);
 
 if ($config->{execute}) {
     $shell->cmd($config->{execute});
 }else {
-    print "TWiki Interactive Shell v$VERSION
- Oct 2004 - written by Rafael Alvarez based on MartinCleaver work
+    print "\nTWiki Interactive Shell v$VERSION
+ Oct 2004 - written by Rafael Alvarez based on the work of MartinCleaver
  Type \"help\" for a list of available commands
  
 ";
+    $shell->prompt("twiki");
     $shell->cmdloop();
 }
-$config->save();
+
+$config->saveAndDispose();
 
 

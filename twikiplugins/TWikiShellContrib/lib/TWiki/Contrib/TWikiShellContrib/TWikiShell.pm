@@ -1,11 +1,9 @@
-
 package TWiki::Contrib::TWikiShellContrib::TWikiShell;
 
 use TWiki::Contrib::TWikiShellContrib::Standard;
 use TWiki::Contrib::TWikiShellContrib::Common;
+use TWiki::Contrib::TWikiShellContrib::Zip;
 use Data::Dumper;
-
- 
 
 #use diagnostics;
 use Cwd;
@@ -15,39 +13,61 @@ use strict;
 use base qw(Term::Shell);
 use vars qw {$config $prefix};
 
+my @standardModules =qw (TWiki::Contrib::TWikiShellContrib::Standard
+
+                  TWiki::Contrib::TWikiShellContrib::Ext::Reload    
+);
+
 
 $prefix= "TWiki::Contrib::TWikiShellContrib::Ext";
-my $standardModule= "TWiki::Contrib::TWikiShellContrib::Standard";
+my $standardModule= "";
 
 sub run_ { } #Do nothing on empty lines
 
 sub alias_exit {  return qw{q quit}; }
 
 sub new {
-  my $self=shift;
-  $config = shift;
-  my $new = $self->SUPER::new(@_);
+    my $self=shift;
+    $config = shift;
+    my $new = $self->SUPER::new(@_);
 
-    $new->init_handlers();
-  return $new;
+    $new->init_handlers($config);
+    checkUnzipMechanism($config);
+    $self->find_handlers("TWiki::Contrib::TWikiShellContrib::Zip");
+    
+    return $new;
 }
 
 sub init_handlers {
     my $self=shift;
-    $self->find_handlers($standardModule);
-    $self->find_handlers("TWiki::Contrib::TWikiShellContrib::Ext::Reload");
+	my $config=shift;
+
+    foreach my $standardModule (@standardModules) {
+        $self->find_handlers($standardModule);
+    }
     
-    #TODO: Scan directory for installed extentions
+	my @registered=keys %{$config->{register}};
+	foreach my $registeredExt (@registered) {
+		$self->cmd("import $registeredExt") if ($config->{register}{"$registeredExt"});
+	}
+    
+}
+
+my $prompt="twiki";
+sub prompt {
+	my $self=shift;
+	$prompt=shift;
 }
 
 #sub prompt_str() { return "\ntwiki> "}; 
 sub prompt_str() { 
     if ($config->mode) {
-        return "\ntwiki/".$config->mode." > "; 
+        return "\n".$prompt."/".$config->mode." > "; 
     } else {
-        return "\ntwiki > "; 
+        return "\n$prompt > "; 
     }
 }
+
 ####################### HANDLERS ##############################################
     
 # Add support for multi-level commands
@@ -99,6 +119,19 @@ sub handler {
 
 #-----------------------------------------------------------------------------
 
+sub run_handtest {
+    my $self=shift;
+    my %cmdHandlers = %{$self->{handlers}};
+    
+    foreach my $command (keys %cmdHandlers) {
+        my %actions=%{$cmdHandlers{$command}};
+        foreach my $action (keys %actions) {            
+            my $handler=$actions{$action};
+            print extractPackageFromSub($handler);
+            print "\n-------------------------------------------------------------\n";    
+        }
+    }
+}
 sub remove_handlers {
     my $self = shift;
     my $pkg = shift || $self->{API}{class};
@@ -130,7 +163,7 @@ sub find_handlers {
     # Find the handlers in the given namespace:
     {
 	    no strict 'refs';
-	    my @r = keys %{ $pkg . "::" };
+	    my @r = keys %{ $pkg . "::" };  
 	    $count=$o->add_handlers($pkg, $showHandlers , @r);
    }
 
@@ -160,6 +193,7 @@ sub add_handlers {
     my $o = shift;
     my $pkg = shift;
 	my $showHandlers= shift;
+	
 	my $count=0;
 
     for my $hnd (@_) {
@@ -169,7 +203,7 @@ sub add_handlers {
             if ($commandPrefix) {
                 $o->{handlers}{$commandPrefix}{$hnd} = $pkg."::".$hnd;
 				$count++;
-				print "$commandPrefix $hnd added.\n" if $showHandlers;
+				$config->printVeryVerbose("$commandPrefix $hnd added.\n") if $showHandlers;
             }
             next;
         }
@@ -189,7 +223,7 @@ sub add_handlers {
     	}
     	$o->{handlers}{$a}{$t} = $hnd;				
 		$count++;
-		print "$a $t added.\n" if $showHandlers;
+		$config->printVeryVerbose("$a $t added.\n") if $showHandlers;
 
     	$o->{packages}{$pkg}=$pkg;
     	
@@ -200,7 +234,7 @@ sub add_handlers {
         		$alias .= $o->cmd_suffix;
         		$o->{handlers}{$alias}{$t} = $hnd;
 				$count++;
-				print "$alias $t added.\n" if $showHandlers;
+				$config->printVeryVerbose("$alias $t added.\n") if $showHandlers;
     	    }
     	}
     }
@@ -217,18 +251,18 @@ sub add_handlers {
 # TODO: import Some::Command using "import some command "
 sub run_import {
     my $self = shift;
-    my ( $config, $cmd, @args ) = @_;
+    my ( $config, $cmd) = @_;
 	
 	my $class=$cmd;
 
     unless ($cmd =~ /TWiki::/) {
       $class=$prefix."::".ucfirst $cmd;
     }
-    print "Importing $class\n";
+    $config->printNotQuiet("Importing $class\n");
     {
         no warnings;
         local $SIG{__WARN__}=sub { $@.=$_[0];};
-		eval " require $class;";
+		eval "use $class;";
         if ($@) {
             if ($@ =~ /Can\'t locate/) {
             print "No extension for $cmd found\n";
@@ -239,14 +273,45 @@ sub run_import {
             }
         }else {
 			my $commandCount=keys %{$self->{handlers}};
-			
-
             my $handlersCount = $self->find_handlers($class,1); ;
 			$commandCount = (keys %{$self->{handlers}})-$commandCount;
-            $config->printNotQuiet("$commandCount commands ($handlersCount handlers) imported\n");
+            $config->printVeryVerbose("$commandCount commands ($handlersCount handlers) imported\n");
+            my $importHook=$class."::onImport";
+            if (defined &$importHook) {
+                &$importHook($self,$config);
+            }
             return 1;
         }
     }
+}
+
+sub run_register {
+    my $self = shift;
+    my ( $config, $cmd) = @_;
+	$self->run_import($config, $cmd);
+	$config->{register}{$cmd}=1;
+	$config->save();
+	$config->printNotQuiet("$cmd registered\n");    
+}
+
+sub smry_register {
+    return "Register an extension to be loaded at shell startup";
+}
+
+sub run_unregister {
+    my $self = shift;
+    my ( $config, $cmd) = @_;
+    if (defined $config->{register}{$cmd}) {
+	    $config->{register}{$cmd}=0 ;
+	    $config->save();
+	    $config->printNotQuiet("$cmd unregistered\n");    
+    } else {
+        $config->printNotQuiet("$cmd is not registered\n");    
+    }
+}
+
+sub smry_unregister {
+    return "Unregister an extension";
 }
 
 ############################## HOOKS ############################## 
@@ -303,6 +368,30 @@ sub precmd {
     unshift @$args,$config;
 }
 
+############################### PRINT STUFF ################################ 
+
+sub printVeryVerbose{
+    printVerbose(@_);
+}
+    
+sub printNotQuiet {
+    printTerse(@_);
+}
+
+sub printVerbose { #verbose == 1 && verbose !=0
+    my ($self,$text)=@_;    
+    print $text if ($config->{verbosity}>1);
+}
+
+sub printTerse {
+    my ($self,$text)=@_;    
+    print $text if ($config->{verbosity}>0);
+}
+
+sub printDebug {
+    my ($self,$text)=@_;    
+    print $text unless ($config->{debug} ==0);
+}
 
 ############################### CATCHERS  ################################ 
 
