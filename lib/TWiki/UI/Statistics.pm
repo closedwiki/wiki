@@ -29,20 +29,20 @@ use IO::File;
 
 =pod
 
----++ statistics( $query, $pathInfo, $remoteUser, $topic, $logDate )
-Generate statistics topic. Optional parameters passed by optional CGI query:
-| =$query= | |
-| =$pathInfo= | |
-| =$remoteUser= | |
-| =$topic= | |
-| =$logdate= | date of log to analyse, format "yyyymm" |
+---++ statistics( $session )
+Generate statistics topic.
 
 =cut
 sub statistics {
-    my ( $session, $thePathInfo, $theRemoteUser, $topic, $logDate ) = @_;
+    my ( $session, $thePathInfo, ) = @_;
+
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $userName = $session->{userName};
 
     my $tmp = "";
     my $destWeb = $TWiki::mainWebname; #web to redirect to after finishing
+    my $logDate = "".$session->{cgiQuery}->param( 'logdate' );
     $logDate =~ s/[^0-9]//g;  # remove all non numerals
     my $query;
 
@@ -136,7 +136,7 @@ sub statistics {
   # Generate WebStatistics topic update for one or more webs
   if( $thePathInfo =~ /\/./ ) {
       # do a particular web:
-      $destWeb = _processWeb( $session, $thePathInfo, $theRemoteUser, $topic,
+      $destWeb = _processWeb( $session, $thePathInfo, $userName, $topic,
                               $logMonthYear, $viewRef, $contribRef, $statViewsRef,
                               $statSavesRef, $statUploadsRef, $query, 1 );
   } else {
@@ -145,7 +145,7 @@ sub statistics {
       my $firstTime = 1;
       foreach my $web ( @weblist ) {
           if( $session->{store}->webExists( $web ) ) {
-              $destWeb = _processWeb( $session, "/$web", $theRemoteUser, $topic,
+              $destWeb = _processWeb( $session, "/$web", $userName, $topic,
                                       $logMonthYear, $viewRef, $contribRef, $statViewsRef,
                                       $statSavesRef, $statUploadsRef, $query, $firstTime );
               $firstTime = 0;

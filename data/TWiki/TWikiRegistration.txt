@@ -188,7 +188,7 @@ To register as a new user, simply fill out this form:
   <td valign="top" align="right"> Comments : <br /> (optional) &nbsp; </td>
   <td><textarea name="Twk0Comment" wrap="virtual" rows="4" cols="38"></textarea></td>
 </tr><tr>
-  <td valign="top" align="right"> &nbsp; <input type="hidden" name="TopicName" value="%TOPIC%" /><input type="hidden" name="action" value="register" /></td>
+  <td valign="top" align="right"> &nbsp; <input type="hidden" name="topic" value="%TOPIC%" /><input type="hidden" name="action" value="register" /></td>
   <td> <input type="submit" value=" Submit " /> &nbsp;&nbsp; (Fields marked =<Font color="red">**</font>= are required) </td>
 </tr>
 </table>

@@ -18,25 +18,119 @@
 
 package TWiki::UI;
 
-=pod twiki
+use strict;
+use CGI::Carp qw( fatalsToBrowser );
+use CGI;
+use TWiki;
+use Error qw( :try );
+use TWiki::UI::OopsException;
+use IO::Handle; STDOUT->blocking(0);
+use Data::Dumper;
 
----+++ oops( $web, $topic, $oopsTmplName, ...)
-Generate a relevant URL to redirect to the given oops page
+use vars qw( $enableBM );
+
+=pod
+
+---++ run( $class, $method )
+Entry point for execution of a UI function. The parameters are the
+class that contains the method, and the name of the method. This
+function handles redirection to Oops topics by catching OopsException.
 
 =cut
 
-sub oops {
-    my $session = shift;
-    my $webName = shift;
-    my $topic = shift;
-    my $script = shift;
+sub run {
+    my ( $class, $method ) = @_;
 
-    $webName = $TWiki::mainWebname unless ( $webName );
-    $topic = $TWiki::mainTopicname unless ( $topic );
+    my ( $query, $pathInfo, $user, $url, $topic );
 
-    my $url = $session->getOopsUrl( $webName, $topic, "oops$script", @_ );
+    if( $ENV{'DOCUMENT_ROOT'} ) {
+        # script is called by browser
+        $query = new CGI;
+        # SMELL: The Microsoft Internet Information Server is broken with
+        # respect to additional path information. If you use the Perl DLL
+        # library, the IIS server will attempt to execute the additional
+        # path information as a Perl script. If you use the ordinary file
+        # associations mapping, the path information will be present in the
+        # environment, but incorrect. The best thing to do is to avoid using
+        # additional path information.
+        $pathInfo = $query->path_info();
+        $user = $query->remote_user();
+        $url = $query->url;
+        $topic = $query->param( 'topic' );
+        # If the 'benchmark' parameter is set in the browser, save the
+        # query and other info to the given file on the server.
+        # To benchmark a script, put the following lines into the
+        # top level CGI script.
+        # use Benchmark qw(:all :hireswallclock);
+        # use vars qw( $begin );
+        # BEGIN{$TWiki::UI::enableBM=1;$begin=new Benchmark;}
+        # END{print STDERR "Total ".timestr(timediff(new Benchmark,$begin))."\n";}
+        if ( $enableBM ) {
+            # $enableBM must be explicitly set, otherwise a footpad could use
+            # the benchmark parameter to write a file on the server.
+            my $bm = $query->param( 'benchmark' );
+            if ( $bm ) {
+                open(OF, ">$bm") || die "Store failed";
+                print OF Dumper(\$query, $pathInfo, $user, $url);
+                close(OF);
+            }
+        }
+    } else {
+        # script is called by cron job or user
+        $query = new CGI( "" );
+        $user = "guest";
+        $url = "";
+        $topic = "";
+        $pathInfo = "";
+        foreach my $arg ( @ARGV ) {
+            if ( $arg =~ /^-user=(.*)$/o ) {
+                $user = $1;
+            }
+            # parse name=value parameter pairs
+            if ( $arg =~ /^-?([A-Za-z0-9_]+)=(.*)$/o ) {
+                $query->param( $1=>$2 );
+            } else {
+                $pathInfo = $arg;
+            }
+        }
+        if( $enableBM ) {
+            my $bm = $query->param( 'benchmark' );
+            if( $bm ) {
+                open(IF, "<$bm") || die "Benchmark query $bm retrieve failed";
+                undef $/;
+                my $blah = <IF>;
+                close(IF);
+                my ( $VAR1, $VAR2, $VAR3, $VAR4 );
+                eval $blah;
+                ( $query, $pathInfo, $user, $url ) =
+                  ( $$VAR1, $VAR2, $VAR3, $VAR4 );
+            }
+        }
+    }
 
-    redirect( $session, $url, @_ );
+    my $session = new TWiki( $pathInfo, $user, $topic, $url, $query );
+    $TWiki::T = $session;
+    $Error::Debug=1;
+    try {
+        eval "use $class";
+        my $m = "$class"."::$method";
+        no strict 'refs';
+        &$m( $session );
+        use strict 'refs';
+    } catch TWiki::UI::OopsException with {
+        my $e = shift;
+        my $url = $session->getOopsUrl( $e->{-web},
+                                        $e->{-topic},
+                                        "oops$e->{-template}",
+                                        $e->{-param1},
+                                        $e->{-param2},
+                                        $e->{-param3},
+                                        $e->{-param4} );
+        $session->redirect( undef, $url );
+    } catch Error::Simple with {
+        print "Content-type: text/plain\n\n";
+        print shift->stringify();
+    };
 }
 
 =pod twiki
@@ -66,103 +160,97 @@ sub redirect {
 
 =pod twiki
 
----+++ webExists( $web, $topic ) => boolean
-Check if the web exists, returning 1 if it does, or
-calling TWiki::UI::oops and returning 0 if it doesn't.
+---+++ checkWebExists( $web, $topic )
+Check if the web exists. If it doesn't, will throw an oops exception.
 
 =cut
 
-sub webExists {
+sub checkWebExists {
   my ( $session, $webName, $topic ) = @_;
 
-  return 1 if( $session->{store}->webExists( $webName ) );
-
-  oops( $session, $webName, $topic, "noweb", "ERROR $webName.$topic Missing Web" );
-
-  return 0;
-}
-
-=pod twiki
-
----+++ topicExists( $web, $topic, $fn ) => boolean
-Check if the given topic exists, returning 1 if it does, or
-invoking TWiki::UI::oops and returning 0 if it doesn't. $fn is
-the name of the command invoked, and will be used in composing
-the oops template name thus: oops${fn}notopic
-
-=cut
-
-sub topicExists {
-  my ( $session, $webName, $topic, $fn ) = @_;
-
-  return 1 if $session->{store}->topicExists( $webName, $topic );
-
-  oops( $session, $webName, $topic, "${fn}notopic", "ERROR $webName.$topic Missing topic" );
-
-  return 0;
-}
-
-=pod twiki
-
----+++ isMirror( $web, $topic ) => boolean
-Checks if this web is a mirror web, returning 0 if is isn't, or
-calling TWiki::UI::oops and returning 1 if it doesn't.
-
-=cut
-
-sub isMirror {
-  my ( $session, $webName, $topic ) = @_;
-
-  my( $mirrorSiteName, $mirrorViewURL ) = $session->readOnlyMirrorWeb( $webName );
-
-  return 0 unless ( $mirrorSiteName );
-
-  if ( $print ) {
-    print "ERROR: this is a mirror site\n";
-  } else {
-    oopsRedirect( $webName, $topic, "mirror",
-                  $mirrorSiteName,
-                  $mirrorViewURL );
+  unless ( $session->{store}->webExists( $webName ) ) {
+      throw
+        TWiki::UI::OopsException( $webName,
+                                  $topic,
+                                  "noweb",
+                                  "ERROR $webName.$topic web does not exist" );
   }
-  return 1;
 }
 
 =pod twiki
 
----+++ isAccessPermitted( $web, $topic, $mode, $user ) => boolean
-Check if the given mode of access by the given user to the given
-web.topic is permissible. If it is, return 1. If not, invoke an
-oops and return 0.
+---+++ topicExists( $session, $web, $topic, $op ) => boolean
+Check if the given topic exists, throwing an OopsException
+if it doesn't. $op is %PARAM1% in the "oopsnotopic" template.
 
 =cut
 
-sub isAccessPermitted {
+sub checkTopicExists {
+  my ( $session, $webName, $topic, $op ) = @_;
+
+  unless( $session->{store}->topicExists( $webName, $topic )) {
+      throw TWiki::UI::OopsException( $webName, $topic, "notopic", $op );
+  }
+}
+
+=pod twiki
+
+---+++ checkMirror( $session, $web, $topic )
+Checks if this web is a mirror web, throwing an OopsException
+if it is.
+
+=cut
+
+sub checkMirror {
+  my ( $session, $webName, $topic ) = @_;
+
+  my( $mirrorSiteName, $mirrorViewURL ) =
+    $session->readOnlyMirrorWeb( $webName );
+
+  return unless ( $mirrorSiteName );
+
+  throw TWiki::UI::OopsException( $webName, $topic,
+                                  "mirror",
+                                  $mirrorSiteName,
+                                  $mirrorViewURL );
+}
+
+=pod twiki
+
+---+++ checkAccess( $web, $topic, $mode, $user )
+Check if the given mode of access by the given user to the given
+web.topic is permissible, throwing a TWiki::UI::OopsException if not.
+
+=cut
+
+sub checkAccess {
    my ( $session, $web, $topic, $mode, $user ) = @_;
 
-   return 1 if $session->{security}->checkAccessPermission( $mode, $user, "",
-                                                        $topic, $web );
-   oops( $session, $web, $topic, "access$mode" );
-
-   return 0;
+   unless( $session->{security}->checkAccessPermission( $mode, $user, "",
+                                                        $topic, $web )) {
+       throw
+         TWiki::UI::OopsException( $web,
+                                   $topic,
+                                   "access$mode" );
+   }
 }
 
 =pod twiki
 
----+++ userIsAdmin( $web, $topic, $user ) => boolean
-Check if the user is an admin. If they are, return 1. If not, invoke an
-oops and return 0.
+---+++ checkAdmin( $web, $topic, $user ) => boolean
+Check if the user is an admin. If they are not, throw an
+OopsException.
 
 =cut
 
-sub userIsAdmin {
+sub checkAdmin {
   my ( $session, $webName, $topic, $user ) = @_;
 
-  return 1 if $session->{security}->userIsInGroup( $user, $TWiki::superAdminGroup );
-
-  oops( $session, $webName, $topic, "accessgroup",
-        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
-
-  return 0;
+  unless( $session->{security}->userIsInGroup( $user,
+                                               $TWiki::superAdminGroup )) {
+      throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
+            "$TWiki::mainWebname.$TWiki::superAdminGroup" );
+  }
 }
 
 =pod

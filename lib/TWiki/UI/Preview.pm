@@ -19,6 +19,8 @@ use strict;
 use TWiki;
 use TWiki::UI;
 use TWiki::Form;
+use Error qw( :try );
+use TWiki::UI::OopsException;
 
 sub preview {
     my $session = shift;
@@ -36,7 +38,7 @@ sub preview {
     my $formTemplate = $query->param( "formtemplate" );
     my $textparam = $query->param( "text" );
 
-    return unless TWiki::UI::webExists( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic );
 
     my $tmpl = "";
     my $text = "";
@@ -45,7 +47,7 @@ sub preview {
     my $formFields = "";
     my $wikiUserName = $session->{users}->userToWikiName( $userName );
 
-    return if TWiki::UI::isMirror( $session, $webName, $topic );
+    TWiki::UI::checkMirror( $session, $webName, $topic );
 
     # reset lock time, this is to prevent contention in case of a long edit session
     $session->{store}->lockTopic( $webName, $topic );
@@ -61,7 +63,7 @@ sub preview {
     $tmpl = $session->{templates}->readTemplate( "preview", $skin );
     $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
     if( $saveCmd ) {
-        return unless TWiki::UI::userIsAdmin( $session, $webName, $topic, $wikiUserName );
+        TWiki::UI::checkAdmin( $session, $webName, $topic, $wikiUserName );
         $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
@@ -92,8 +94,7 @@ sub preview {
         $text = $textparam;
         if( ! $text ) {
             # empty topic not allowed
-            TWiki::UI::oops( $session, $webName, $topic, "empty" );
-            return;
+            throw TWiki::UI::OopsException( $webName, $topic, "empty" );
         }
         #AS added hook for plugins that want to do heavy stuff
         TWiki::Plugins::afterEditHandler( $text, $topic, $webName );

@@ -27,6 +27,8 @@ use TWiki;
 use TWiki::Store;
 use TWiki::Prefs;
 use TWiki::UI;
+use Error qw( :try );
+use TWiki::UI::OopsException;
 
 #TODO: this needs to be exposed to plugins and whoever might want to over-ride the rendering of diffs
 #Hash, indexed by diffType (+,-,c,u,l.....)
@@ -382,7 +384,7 @@ sub diff {
     $diffType = "history" if ( ! $diffType );
     $contextLines = 3 if ( ! $contextLines );
 
-    return unless TWiki::UI::webExists( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic );
     
     my $tmpl = "";
     my $diff = "";
@@ -454,8 +456,7 @@ sub diff {
         }
     }
     if( ! $viewAccessOK ) {
-        TWiki::UI::oops( $session, $webName, $topic, "accessview" );
-        return;
+        throw TWiki::UI::OopsException( $webName, $topic, "accessview" );
     }
     
     # format "before" part

@@ -2,8 +2,6 @@
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2004 Peter Thoeny, peter@thoeny.com
-#
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,95 +14,20 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
-# The manage script is used to manage some actions like creating
-# a new web.
-#
-#usage example:
-#
-#
-#C h a n g e
-#
-#</form>
-#<form name="passwd" action="/%SCRIPTURLPATH%/passwd%SCRIPTSUFFIX%/%WEB%/">
-#Username     <input type="text" name="username" value="" size="16" /> <br />
-#Old password <input type="password" name="oldpassword" size="16" />
-#New password <input type="password" name="password" size="16" />
-#retype New password <input type="password" name="passwordA" size="16" />
-#<input type="submit" name="passwd" />
-#<input type="hidden" name="action" value="changePassword" />
-#</form>
-#
 
 BEGIN {
-    # Set default current working directory
-    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+    # See the 'view' script for a description of what this does
+    if( $ENV{"SCRIPT_FILENAME"} &&
+        $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
         chdir $1;
     }
-    # Set library paths in @INC at compile time
     unshift @INC, '.';
     require 'setlib.cfg';
+    if( $TWiki::useLocale ) {
+        require locale;
+        import locale ();
+    }
 }
 
-use CGI::Carp qw( fatalsToBrowser );
-use CGI;
-
-use TWiki::UI::Manage;
-use TWiki::UI::Register;
-
-my $query = new CGI;
-my $action = $query->param( 'action' ) || "";
-my $thePathInfo = $query->path_info();
-my $theUrl = $query->url;
-my $theRemoteUser = $query->remote_user();
-my $theTopic = $query->param( 'topic' );
-
-# initialization has to be done differently for each because it is passed
-# different parameters, oddly.
-if( $action eq "createweb" ) {
-
-    TWiki::initialize( $thePathInfo, $theRemoteUser,
-                       $theTopic, $theUrl, $query );
-
-    TWiki::UI::Manage::createWeb( $TWiki::T );
-
-} elsif( $action eq "changePassword" ) {
-
-    TWiki::initialize( $thePathInfo,
-                       $query->param( 'username' ),
-                       $query->param( 'TopicName' ),
-                       $theUrl, $query );
-
-    TWiki::UI::Register::changePassword( $TWiki::T );
-
-} elsif ($action eq 'bulkRegister') {
-    TWiki::UI::Register::bulkRegister(
-                                        query => $query,
-                                   );
-} elsif( $action eq "deleteUserAccount" ) {
-
-    my $wikiName = $query->param( 'username' );
-    my $topicName = $query->param( 'TopicName' );
-
-    TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl, $query );
-
-    TWiki::UI::Manage::removeUser( $TWiki::T );
-
-} elsif( $action ) {
-
-    TWiki::initialize( $thePathInfo, $theRemoteUser,
-                       $theTopic, $theUrl, $query );
-
-    TWiki::UI::oops( $session, "", "", "manage",
-                     TWiki::UI::Manage::_template("msg_unrecognized_action"),
-                     $action );
-
-} else {
-
-    TWiki::initialize( $thePathInfo, $theRemoteUser,
-                       $theTopic, $theUrl, $query );
-
-    TWiki::UI::oops( $session, "", "", "manage",
-                     TWiki::UI::Manage::_template("msg_missing_action") );
-}
-
-
+use TWiki::UI;
+TWiki::UI::run( "TWiki::UI::Manage", "manage" );

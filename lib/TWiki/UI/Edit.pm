@@ -32,6 +32,8 @@ use TWiki::Plugins;
 use TWiki::Prefs;
 use TWiki::Store;
 use TWiki::UI;
+use Error qw( :try );
+use TWiki::UI::OopsException;
 
 =pod
 
@@ -72,9 +74,8 @@ sub edit {
 
     my $getValuesFromFormTopic = ( ( $formTemplate ) && ( ! $ptext ) );
 
-    return unless TWiki::UI::webExists( $session, $webName, $topic );
-
-    return if TWiki::UI::isMirror( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic );
+    TWiki::UI::checkMirror( $session, $webName, $topic );
 
     my $tmpl = "";
     my $text = "";
@@ -85,8 +86,7 @@ sub edit {
     # Prevent editing existing topic?
     if( $onlyNewTopic && $topicExists ) {
         # Topic exists and user requested oops if it exists
-        TWiki::UI::oops( $session, $webName, $topic, "createnewtopic" );
-        return;
+        throw TWiki::UI::OopsException( $webName, $topic, "createnewtopic" );
     }
 
     # prevent non-Wiki names?
@@ -94,6 +94,7 @@ sub edit {
         && ( ! $topicExists )
         && ( ! TWiki::isValidTopicName( $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
+        # SMELL: this should be an oops, shouldn't it?
         TWiki::UI::redirect( $session, $session->getViewUrl( $webName, $topic ) );
         return;
     }
@@ -107,14 +108,14 @@ sub edit {
     }
 
     # If you want to edit, you have to be able to view and change.
-    return unless( TWiki::UI::isAccessPermitted( $session, $webName, $topic,
-                                                 "view", $wikiUserName )
-                   &&
-                   TWiki::UI::isAccessPermitted( $session, $webName, $topic,
-                                                 "change", $wikiUserName ));
+    TWiki::UI::checkAccess( $session, $webName, $topic,
+                            "view", $wikiUserName );
+    TWiki::UI::checkAccess( $session, $webName, $topic,
+                            "change", $wikiUserName );
 
-    # Special save command, restricted to admin use
-    return if( $saveCmd && ! TWiki::UI::userIsAdmin( $session, $webName, $topic, $wikiUserName ));
+    if( $saveCmd ) {
+        TWiki::UI::checkAdmin( $session, $webName, $topic, $wikiUserName );
+    }
 
     # Check for locks
     my( $lockUser, $lockTime ) =
@@ -125,9 +126,8 @@ sub edit {
         use integer;
         $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
         my $editLock = $TWiki::editLockTime / 60;
-        TWiki::UI::oops( $session, $webName, $topic, "locked",
-                         $lockUser, $editLock, $lockTime );
-        return;
+        throw TWiki::UI::OopsException( $webName, $topic, "locked",
+                                        $lockUser, $editLock, $lockTime );
     }
     $session->{store}->lockTopic( $webName, $topic );
 
@@ -227,8 +227,7 @@ sub edit {
         my @fieldDefs = $session->{form}->getFormDef( $templateWeb, $form );
 
         if( ! @fieldDefs ) {
-            TWiki::UI::oops( $session, $webName, $topic, "noformdef" );
-            return;
+            throw TWiki::UI::OopsException( $webName, $topic, "noformdef" );
         }
         my $formText = $session->{form}->renderForEdit( $webName, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldDefs );
         $tmpl =~ s/%FORMFIELDS%/$formText/go;

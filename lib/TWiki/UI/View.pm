@@ -44,7 +44,6 @@ The view is controlled by CGI parameters as follows:
 | =contenttype= | |
 
 =cut
-
 sub view {
     my $session = shift;
 
@@ -64,7 +63,7 @@ sub view {
     my $revdate = "";
     my $revuser = "";
 
-    return unless TWiki::UI::webExists( $session, $webName, $topicName );
+    TWiki::UI::checkWebExists( $session, $webName, $topicName );
 
     my $skin = $session->getSkin();
 
@@ -295,11 +294,11 @@ sub view {
                     $url = $session->{urlhost}.$session->{scriptUrlPath}."/$viewauthFile$pathInfo$queryString";
                 }
             }
-            TWiki::UI::redirect( $session, $url );
+            throw TWiki::UI::Redirect( $url );
         }
     }
     if( $topicExists && ! $viewAccessOK ) {
-        TWiki::UI::oops( $session, $webName, $topicName, "accessview" );
+        throw TWiki::UI::Oops( $webName, $topicName, "accessview" );
     }
 
     # Write header based on "contenttype" parameter, used to produce
@@ -344,7 +343,7 @@ sub viewfile {
 
     my $rev = $session->{store}->cleanUpRevID( $query->param( 'rev' ) );
 
-    return unless TWiki::UI::webExists( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic );
 
     my $topRev = $session->{store}->getRevisionNumber( $webName, $topic, $fileName );
 

@@ -2,10 +2,6 @@
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
-#           (C) 2001 Kevin Atkinson, kevin twiki at atkinson dhs org
-#           (C) 2004 Martin Cleaver, Martin.Cleaver@BCS.org.uk
-#
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,37 +15,19 @@
 # http://www.gnu.org/copyleft/gpl.html
 
 BEGIN {
-    # Set default current working directory
-    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+    # See the 'view' script for a description of what this does
+    if( $ENV{"SCRIPT_FILENAME"} &&
+        $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
         chdir $1;
     }
-    # Set library paths in @INC at compile time
     unshift @INC, '.';
     require 'setlib.cfg';
+    if( $TWiki::useLocale ) {
+        require locale;
+        import locale ();
+    }
 }
 
-# I18N: No locale settings necessary yet - only 7-bit ASCII due
-# to Apache limitations on userids.
+use TWiki::UI;
+TWiki::UI::run( "TWiki::UI::Register", "resetPassword" );
 
-use strict;
-use CGI::Carp qw(fatalsToBrowser);
-use CGI;
-use TWiki;
-use TWiki::UI::Register;
-use Data::Dumper;
-
-my $query = new CGI;
-
-#die Dumper(\$query);
-
-my $action = $query->param('action');
-
-if ($action eq 'resetPassword') { # better in passwd, but not authenticated so I can't.
-  TWiki::UI::Register::resetPassword(
-				     query => $query
-				    );
-    } else {
-      die "invalid action ($action) in register";
-    }
-
-1;

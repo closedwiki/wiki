@@ -25,6 +25,8 @@ package TWiki::UI::Upload;
 use strict;
 use TWiki;
 use TWiki::UI;
+use Error qw( :try );
+use TWiki::UI::OopsException;
 
 =pod
 
@@ -42,74 +44,74 @@ sub attach {
     my $topic = $session->{topicName};
     my $userName = $session->{userName};
 
-  my $fileName = $query->param( 'filename' ) || "";
-  my $skin = $session->getSkin();
+    my $fileName = $query->param( 'filename' ) || "";
+    my $skin = $session->getSkin();
 
-  return unless TWiki::UI::webExists( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic );
 
-  my $tmpl = "";
-  my $text = "";
-  my $meta = "";
-  my $atext = "";
-  my $fileUser = "";
+    my $tmpl = "";
+    my $text = "";
+    my $meta = "";
+    my $atext = "";
+    my $fileUser = "";
+    my $isHideChecked = "";
 
-  my $isHideChecked = "";
+    TWiki::UI::checkMirror( $session, $webName, $topic );
 
-  return if TWiki::UI::isMirror( $session, $webName, $topic );
+    my $wikiUserName = $session->{users}->userToWikiName( $userName );
 
-  my $wikiUserName = $session->{users}->userToWikiName( $userName );
-  return unless TWiki::UI::isAccessPermitted( $session, $webName, $topic,
-                                            "change", $wikiUserName );
+    TWiki::UI::checkAccess( $session, $webName, $topic,
+                            "change", $wikiUserName );
+    TWiki::UI::checkTopicExists( $session, $webName, $topic,
+                                 "upload files to" );
 
-  return unless TWiki::UI::topicExists( $session, $webName, $topic, "attach" );
+    ( $meta, $text ) =
+      $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 );
+    my %args = $meta->findOne( "FILEATTACHMENT", $fileName );
+    %args = (
+             name => $fileName,
+             attr => "",
+             path => "",
+             comment => ""
+            ) if( ! % args );
 
-  ( $meta, $text ) =
-    $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 );
-  my %args = $meta->findOne( "FILEATTACHMENT", $fileName );
-  %args = (
-           name => $fileName,
-           attr => "",
-           path => "",
-           comment => ""
-          ) if( ! % args );
+    if ( $args{attr} =~ /h/o ) {
+        $isHideChecked = "checked";
+    }
 
-  if ( $args{attr} =~ /h/o ) {
-      $isHideChecked = "checked";
-  }
+    # SMELL: why log attach before post is called?
+    # FIXME: Move down, log only if successful (or with error msg?)
+    # Attach is a read function, only has potential for a change
+    if( $TWiki::doLogTopicAttach ) {
+        # write log entry
+        $session->writeLog( "attach", "$webName.$topic", $fileName );
+    }
 
-  # SMELL: why log attach before post is called?
-  # FIXME: Move down, log only if successful (or with error msg?)
-  # Attach is a read function, only has potential for a change
-  if( $TWiki::doLogTopicAttach ) {
-      # write log entry
-      $session->writeLog( "attach", "$webName.$topic", $fileName );
-  }
-
-  my $fileWikiUser = "";
-  if( $fileName && %args ) {
-    $tmpl = $session->{templates}->readTemplate( "attachagain", $skin );
-    $fileWikiUser = $session->{users}->userToWikiName( $args{"user"} );
-  } else {
-      $tmpl = $session->{templates}->readTemplate( "attachnew", $skin );
-  }
-  if ( $fileName ) {
-	# must come after templates have been read
-    $atext .= $session->{attach}->formatVersions( $webName, $topic, %args );
-  }
-  $tmpl =~ s/%ATTACHTABLE%/$atext/go;
-  $tmpl =~ s/%FILEUSER%/$fileWikiUser/go;
-  $tmpl = $session->handleCommonTags( $tmpl, $topic );
-  # SMELL: The following two calls are done in the reverse order in all
-  # the other handlers. Why are they done in this order here?
-  $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
-  $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
-  $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
-  $tmpl =~ s/%FILENAME%/$fileName/go;
-  $tmpl =~ s/%FILEPATH%/$args{"path"}/go;
-  $tmpl =~ s/%FILECOMMENT%/$args{"comment"}/go;
-  $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-  $session->writeHeader( $session->{cgiQuery}, length( $tmpl ));
-  print $tmpl;
+    my $fileWikiUser = "";
+    if( $fileName && %args ) {
+        $tmpl = $session->{templates}->readTemplate( "attachagain", $skin );
+        $fileWikiUser = $session->{users}->userToWikiName( $args{"user"} );
+    } else {
+        $tmpl = $session->{templates}->readTemplate( "attachnew", $skin );
+    }
+    if ( $fileName ) {
+        # must come after templates have been read
+        $atext .= $session->{attach}->formatVersions( $webName, $topic, %args );
+    }
+    $tmpl =~ s/%ATTACHTABLE%/$atext/go;
+    $tmpl =~ s/%FILEUSER%/$fileWikiUser/go;
+    $tmpl = $session->handleCommonTags( $tmpl, $topic );
+    # SMELL: The following two calls are done in the reverse order in all
+    # the other handlers. Why are they done in this order here?
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
+    $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
+    $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
+    $tmpl =~ s/%FILENAME%/$fileName/go;
+    $tmpl =~ s/%FILEPATH%/$args{"path"}/go;
+    $tmpl =~ s/%FILECOMMENT%/$args{"comment"}/go;
+    $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
+    $session->writeHeader( $session->{cgiQuery}, length( $tmpl ));
+    print $tmpl;
 }
 
 =pod
@@ -154,11 +156,12 @@ sub upload {
     close $filePath if( $TWiki::OS eq "WINDOWS");
 
     my $wikiUserName = $session->{users}->userToWikiName( $userName );
-    return ( 0 ) unless TWiki::UI::webExists( $session, $webName, $topic );
-    return ( 0 ) if TWiki::UI::isMirror( $session, $webName, $topic );
-    return ( 0 ) unless TWiki::UI::isAccessPermitted( $session, $webName, $topic,
-                                              "change", $wikiUserName );
-    return ( 0 ) unless TWiki::UI::topicExists( $session, $webName, $topic, "upload" );
+    TWiki::UI::checkWebExists( $session, $webName, $topic );
+    TWiki::UI::checkMirror( $session, $webName, $topic );
+    TWiki::UI::checkAccess( $session, $webName, $topic,
+                            "change", $wikiUserName );
+    TWiki::UI::checkTopicExists( $session, $webName, $topic,
+                                 "attach files to" );
 
     my ( $fileSize, $fileDate, $tmpFileName );
 
@@ -186,20 +189,18 @@ sub upload {
         $fileDate = $stats[9];
 
         if( ! $fileSize ) {
-            TWiki::UI::oops( $session, $webName, $topic,
+            throw TWiki::UI::OopsException( $webName, $topic,
                              "upload",
                              "ERROR $webName.$topic File missing or zero size",
                              $fileName );
-            return;
         }
 
         my $maxSize = $session->{prefs}->getPreferencesValue( "ATTACHFILESIZELIMIT" );
         $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
 
         if( $maxSize && $fileSize > $maxSize * 1024 ) {
-            TWiki::UI::oops( $session, $webName, $topic,
+            throw TWiki::UI::OopsException( $webName, $topic,
                              "uploadlimit", $fileName, $maxSize );
-            return;
         }
     }
 
@@ -217,8 +218,8 @@ sub upload {
                                     } );
 
     if( $error ) {
-        TWiki::UI::oops( $session, $webName, $topic, "saveerr", "Save error $error" );
-        return;
+        throw TWiki::UI::OopsException( $webName, $topic, "saveerr",
+                                        "Save error $error" );
     }
 
     TWiki::UI::redirect( $session, $session->getViewUrl( $webName, $topic ) );

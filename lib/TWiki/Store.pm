@@ -123,6 +123,7 @@ sub readTopic {
     my( $this, $user, $theWeb, $theTopic, $version, $internal ) = @_;
 
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Store/;
+    die "ASSERT Insufficient parameters from ".join(",",caller) unless defined( $internal ); # temporary ASSERT
 
     my $text = $this->readTopicRaw( $user, $theWeb, $theTopic, $version, $internal );
     my $meta = $this->extractMetaData( $theWeb, $theTopic, \$text );
@@ -157,8 +158,8 @@ correct operation of View raw=debug and the "repRev" mode of Edit.
 sub readTopicRaw {
     my( $this, $user, $theWeb, $theTopic, $version, $internal ) = @_;
 
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Store/;
-    die "ASSERT Insufficient parameters" unless defined( $internal ); # temporary ASSERT
+    die "ASSERT $this from ".join(",",caller) unless $this =~ /TWiki::Store/;
+    die "ASSERT Insufficient parameters from ".join(",",caller) unless defined( $internal ); # temporary ASSERT
 
     # test if theTopic contains a webName to override $theWeb
     ( $theWeb, $theTopic ) =

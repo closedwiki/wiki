@@ -1,6 +1,5 @@
-#! perl -w
+package TestRegister;
 
-package RegisterUnitTestCase;
 use TestCaseStdOutCapturer;
 use base qw(Test::Unit::TestCase);
 use lib "../../lib";
@@ -9,15 +8,16 @@ use diagnostics;
 use TWiki::UI::Register;
 use Data::Dumper;
 use FileHandle;
+use CGI;
+use Error qw( :try );
 
-my $testcasesWeb = "TestCases";
+my $temporaryWeb = "Temporary";
 my $peopleWeb = "Main";
 my $scriptUrl = "http://registertesttwiki.mrjc.com/twiki/bin";
 my $email = 'martin.cleaver@BCS.org.uk';
 my $userEmail = 'yourtestuser@localhost';
 my $testUserWikiName = 'TestUser3';
 my $testUserLoginName = 'testuser';
-my $dataDir = "../data/";
 my $tempUserDir = "/tmp";
 
 $TWiki::UI::Register::password = "foo";
@@ -29,88 +29,81 @@ $TWiki::UI::Register::password = "foo";
 		#test_registerIllegitimateBypassApprove
                 #test_registerVerifyAndFinish
 
-our @TESTS = qw(test_registerVerifyOk 
-		test_registerBadVerify  
-
-		test_resetPasswordOkay 
-		test_resetPasswordNoSuchUser 
-		test_resetPasswordNoPassword 
-
-		test_bulkRegister 
-
-		test_missingElements 
-		test_getUserByEitherLoginOrWikiName
-		test_UnregisteredUser
-		test_userToWikiName  
-		test_buildRegistrationEmail 
-	       );
-
-
 sub new {
- my $self = shift()->SUPER::new(@_);
- # your state for fixture here
- return $self;
+    my $self = shift()->SUPER::new(@_);
+    # your state for fixture here
+    return $self;
 }
 
 sub set_up {
-  my $self = shift;
-  setupUnregistered();
-  print "--------------- ".$self->name()." ----------------------\n";
- # provide fixture
+    my $self = shift;
+    mkdir "$TWiki::dataDir/$temporaryWeb";
+    chmod 0777, "$TWiki::dataDir/$temporaryWeb";
+    mkdir "$TWiki::pubDir/$temporaryWeb";
+    chmod 0777, "$TWiki::pubDir/$temporaryWeb";
+    $Error::Debug = 1;
+    $TWiki::UI::Register::unitTestMode = 1;
+    setupUnregistered();
+    #print "--------------- ".$self->name()." ----------------------\n";
+    # provide fixture
+}
+
+sub initialise {
+    my ( $query, $remoteUser ) = @_;
+    my $topic = $query->param( 'topic' ) || $query->param( 'TopicName' ); # SMELL - why both? what order?
+    return new TWiki("Main", $remoteUser, $topic, $query->url, $query);
 }
 
 sub tear_down {
-
- # clean up after test
-  my $file = "$dataDir/$peopleWeb/$testUserWikiName.txt";
-  unlink $file;
-#  system ("ls -la ".$file);
-# print "\n== done ==\n";
+    # clean up after test
+    my $file = "$TWiki::dataDir/$peopleWeb/$testUserWikiName.txt";
+    unlink $file;
+    #  system ("ls -la ".$file);
+    # print "\n== done ==\n";
 }
 
-
-
 sub register {
-  my $self = shift;
+    my $self = shift;
 
-  my $query = new CGI ({ 
-			'TopicName' => [
-					'TWikiRegistration'
-				       ],
-			'Twk1Email' => [
-					$email
-				       ],
-			'Twk1WikiName' => [
-					   $testUserWikiName
-					  ],
-			'Twk1Name' => [
-				       'Test User'
-				      ],
-			'Twk0Comment' => [
-					  ''
-					 ],
-			'Twk1LoginName' => [
-					    $testUserLoginName
-					   ],
-			'Twk1FirstName' => [
-					    'Test'
-					   ],
-			'Twk1LastName' => [
-					   'User'
-					  ],
-			'action' => [
-				     'register'
-				    ]
-		       });
-  return Test::Unit::IO::StdoutCapture::do {
-    TWiki::UI::Register::register(query=>$query, 
-				  sendActivationCode=>1,
-				  tempUserDir=>$tempUserDir);
-  }
+    my $query = new CGI ({
+                          'TopicName' => [
+                                          'TWikiRegistration'
+                                         ],
+                          'Twk1Email' => [
+                                          $email
+                                         ],
+                          'Twk1WikiName' => [
+                                             $testUserWikiName
+                                            ],
+                          'Twk1Name' => [
+                                         'Test User'
+                                        ],
+                          'Twk0Comment' => [
+                                            ''
+                                           ],
+                          'Twk1LoginName' => [
+                                              $testUserLoginName
+                                             ],
+                          'Twk1FirstName' => [
+                                              'Test'
+                                             ],
+                          'Twk1LastName' => [
+                                             'User'
+                                            ],
+                          'action' => [
+                                       'register'
+                                      ]
+                         });
+    my $session = initialise($query, "guest");
+#    return Test::Unit::IO::StdoutCapture::do {
+    TWiki::UI::Register::register(session=>$session,
+                                      sendActivationCode=>1,
+                                      tempUserDir=>$tempUserDir);
+#    }
 }
 
 sub j {
-  return join("\r\n",@_);
+    return join("\r\n",@_);
 }
 
 =pod
@@ -119,25 +112,25 @@ sub j {
 =cut
 
 sub verify {
-  my $self = shift;
-  my $code = shift || $testUserWikiName.".foo";
-  my $query = new CGI ({ 
-			'code' => [
-				   $code
-				  ],
-			'action' => [
-				     'verify'
-				    ]
-		       });
+    my $self = shift;
+    my $code = shift || $testUserWikiName.".foo";
+    my $query = new CGI ({ 
+                          'code' => [
+                                     $code
+                                    ],
+                          'action' => [
+                                       'verify'
+                                      ]
+                         });
 
-  return Test::Unit::IO::StdoutCapture::do {  
+    my $session = initialise($query, "guest");
+
     TWiki::UI::Register::verifyEmailAddress(
-					    'code' => $code,
-					    'needApproval' => 1,
-					    'tempUserDir' => $tempUserDir,
-					    'query' => $query
-					   )
-    };
+                                            session => $session,
+                                            'code' => $code,
+                                            'needApproval' => 1,
+                                            'tempUserDir' => $tempUserDir,
+                                           );
 }
 
 =pod
@@ -147,36 +140,43 @@ Calls
 =cut 
 
 sub finish {
-  my $self = shift;
-  my $code = shift;
+    my $self = shift;
+    my $code = shift;
 
-  my $query = new CGI({
-		      'code' => [
-				 $testUserWikiName.".foo"
-				],
-		      'action' => [
-				   'verify'
-				  ]
-		     });
-  return Test::Unit::IO::StdoutCapture::do {  
-    TWiki::UI::Register::finish (
-				 'code' => $code,
-				 'needApproval' => 1,
-				 'tempUserDir' => $tempUserDir,
-				 'query' => $query
-				)
-    };
+    my $query = new CGI({
+                         'code' => [
+                                    $testUserWikiName.".foo"
+                                   ],
+                         'action' => [
+                                      'verify'
+                                     ]
+                        });
+    my $session = initialise($query, "guest");
+    try {
+        TWiki::UI::Register::finish (
+                                     session => $session,
+                                     'code' => $code,
+                                     'needApproval' => 1,
+                                     'tempUserDir' => $tempUserDir,
+                                     'query' => $query
+                                    );
+    } catch TWiki::UI::OopsException with {
+        my $e = shift;
+        $self->assert_str_equals($email, $e->{-text});
+        $self->assert_str_equals("regconfirm", $e->{-template});
+    } catch Error::Simple with {
+        my $e = shift;
+        $self->assert(0, $e->stringify);
+    } otherwise {
+        $self->assert(0, "expected an oops redirect");
+    }
 }
 
 sub registerAccount {
-  my $self = shift;
-  $self->test_registerVerifyOk();
-  $self->finish();
+    my $self = shift;
+    $self->test_registerVerifyOk();
+    $self->finish();
 }
-
-my $expectedRegisterOk = j("Status: 302 Moved", 
-		  "Location: $scriptUrl/oops/$peopleWeb/TWikiRegistration?template=oopsregconfirm&amp;param1=$email", "", "");
-
 
 =pod
 ---++ test_registerVerifyOk
@@ -186,19 +186,24 @@ Assmes the verification code is foo
 =cut
 
 sub test_registerVerifyOk {
-  my $self = shift;
+    my $self = shift;
+    try {
+        $self->register();
+    } catch TWiki::UI::OopsException with {
+        my $e = shift;
+        $self->assert_str_equals($email, $e->{-text});
+        $self->assert_str_equals("regconfirm", $e->{-template});
+    } otherwise {
+        $self->assert(0, "expected an oops redirect");
+    };
 
-  $self->assert_equals(
-		       $self->register(),
-		       $expectedRegisterOk
-		      );
-  $self->assert_equals(
-		       $self->verify(),
-		       "Status: 302 Moved\nLocation: $scriptUrl/oops/$peopleWeb/TWikiRegistration?template=oopsregcode&amp;param1=$testUserWikiName"
-		       );
-  
+    try {
+        $self->verify();
+    } catch TWiki::UI::OopsException with {
+        my $e = shift;
+        $self->assert(0, $e->stringify );
+    }
 }
-
 
 =pod 
 ---++ test_registerBadVerify()
@@ -208,119 +213,114 @@ Register a user, then give a bad verification code. It should barf.
 =cut
 
 sub test_registerBadVerify {
-  my $self = shift;
-  $self->assert_equals(
-		       $self->register(),
-		       $expectedRegisterOk
-		      );
-  my $ans = $self->verify($testUserWikiName.'.bad');
-
-  if ($ans =~ /oopsregcode/) {  # assert sigfaults on dreamhost
-    $self->assert_equals("1", "1");
-  } else {
-    $self->assert_equals("can't find  (oopsregcode)",$ans);
-  }
-
-
+    my $self = shift;
+    try {
+        $self->register();
+    } catch TWiki::UI::OopsException with {
+        my $e = shift;
+        $self->assert_str_equals($email, $e->{-text});
+        $self->assert_str_equals("regconfirm", $e->{-template});
+    } otherwise {
+        $self->assert(0, "expected an oops redirect");
+    }
+    try {
+        $self->verify($testUserWikiName.'.bad');
+    } catch TWiki::UI::OopsException with {
+    } otherwise {
+        $self->assert(0, "Expected a redirect" );
+    }
 }
-
-
 
 sub test_resetPasswordNoSuchUser {
-  my $self = shift;
+    my $self = shift;
 
-  my $query = new CGI (
-			{
-                              '.path_info' => '/.'.$peopleWeb.'/WebHome',
-                              'LoginName' => [
-                                               'RichCleaver'
-                                             ],
-                              'TopicName' => [
-                                               'ResetPassword'
-                                             ],
-                              'action' => [
-                                            'resetPassword'
-                                          ]
-                            });
+    my $query = new CGI (
+                         {
+                          '.path_info' => '/.'.$peopleWeb.'/WebHome',
+                          'LoginName' => [
+                                          'RichCleaver'
+                                         ],
+                          'TopicName' => [
+                                          'ResetPassword'
+                                         ],
+                          'action' => [
+                                       'resetPassword'
+                                      ]
+                         });
 
-  initialise($query, 'guest');
-
-  my $ans = Test::Unit::IO::StdoutCapture::do {
-    TWiki::UI::Register::resetPassword(query => $query);
-  } || "";
-
-  if ($ans =~ /oopsnotwikiuser/) {  # assert sigfaults on dreamhost
-    $self->assert_equals("1", "1");
-  } else {
-    $self->assert_equals("can't find  (oopsnotwikiuser)",$ans);
-  }
-
-
+    my $session = initialise($query, 'guest');
+    try {
+        TWiki::UI::Register::resetPassword($session);
+    } catch TWiki::UI::OopsException with {
+        my $e = shift;
+        $self->assert_str_equals("Main.TWikiAdminGroup", $e->{-text});
+        $self->assert_str_equals("accessgroup", $e->{-template});
+    } otherwise {
+        $self->assert(0, "expected an oops redirect");
+    }
 }
+
 sub test_resetPasswordNoPassword {
-  my $self = shift;
-  my $query = new CGI (
-			{
-                              '.path_info' => '/'.$peopleWeb.'/WebHome',
-                              'LoginName' => [
-                                               'TWikiGuest'
-                                             ],
-                              'TopicName' => [
-                                               'ResetPassword'
-                                             ],
-                              'action' => [
-                                            'resetPassword'
-                                          ]
-                            });
+    my $self = shift;
+    my $query = new CGI (
+                         {
+                          '.path_info' => '/'.$peopleWeb.'/WebHome',
+                          'LoginName' => [
+                                          'TWikiGuest'
+                                         ],
+                          'TopicName' => [
+                                          'ResetPassword'
+                                         ],
+                          'action' => [
+                                       'resetPassword'
+                                      ]
+                         });
 
-  initialise($query, 'guest');
-  my $ans = Test::Unit::IO::StdoutCapture::do {
-    TWiki::UI::Register::resetPassword(query => $query);
-  } || "";
-
-  if ($ans =~ /oopsregemail/) {  # assert sigfaults on dreamhost
-    $self->assert_equals("1", "1");
-  } else {
-    $self->assert_equals("can't find  (oopsregemail)",$ans);
-  }
-
+    my $session = initialise($query, 'guest');
+    try {
+        TWiki::UI::Register::resetPassword($session);
+    } catch TWiki::UI::OopsException with {
+        my $e = shift;
+        $self->assert_str_equals("Main.TWikiAdminGroup", $e->{-text});
+        $self->assert_str_equals("accessgroup", $e->{-template});
+    } otherwise {
+        $self->assert(0, "expected an oops redirect");
+    }
 }
 
 sub test_resetPasswordOkay {
-  my $self = shift;
+    my $self = shift;
 
-  ## Need to create an account (else oopsnotwikiuser)
-  ### with a known email address (else oopsregemail)
+    ## Need to create an account (else oopsnotwikiuser)
+    ### with a known email address (else oopsregemail)
 
-  $self->registerAccount();
+    $self->registerAccount();
 
+    my $query = new CGI (
+                         {
+                          '.path_info' => '/'.$peopleWeb.'/WebHome',
+                          'LoginName' => [
+                                          $testUserWikiName
+                                         ],
+                          'TopicName' => [
+                                          'ResetPassword'
+                                         ],
+                          'action' => [
+                                       'resetPassword'
+                                      ]
+                         });
 
-  my $query = new CGI (
-			{
-                              '.path_info' => '/'.$peopleWeb.'/WebHome',
-                              'LoginName' => [
-                                               $testUserWikiName
-                                             ],
-                              'TopicName' => [
-                                               'ResetPassword'
-                                             ],
-                              'action' => [
-                                            'resetPassword'
-                                          ]
-                            });
-
-  initialise($query, 'guest');
-  my $ans = Test::Unit::IO::StdoutCapture::do {
-    TWiki::UI::Register::resetPassword(query => $query);
-  } || "";
-
-  if ($ans =~ /resetpasswd/) {  # assert sigfaults on dreamhost
-    $self->assert_equals("1", "1");
-  } else {
-    $self->assert_equals("reset password (resetpassword)",$ans);
-  }
+    my $session = initialise($query, 'guest');
+    try {
+        TWiki::UI::Register::resetPassword($session);
+    } catch TWiki::UI::OopsException with {
+        my $e = shift;
+        $self->assert_str_equals($email, $e->{-text});
+        $self->assert_str_equals("resetpasswd", $e->{-template});
+    } otherwise {
+        $self->assert(0, "expected an oops redirect");
+    }
 }
-
 
 my $name;
 my $code;
@@ -328,111 +328,100 @@ my $dir;
 my %regSave;
 
 sub setupUnregistered {
- $name = "MartinCleaver";
- $code = "$name.ba";
- $dir = $tempUserDir;
+    $name = "MartinCleaver";
+    $code = "$name.ba";
+    $dir = $tempUserDir;
 
- %regSave = (doh => "homer",
-	       VerificationCode => $code,
-	       WikiName => $name
-	      );
-UnregisteredUser::setDir($dir);
+    %regSave = (doh => "homer",
+                VerificationCode => $code,
+                WikiName => $name
+               );
+    UnregisteredUser::setDir($dir);
 }
 
 sub test_UnregisteredUser {
-  my $self = shift;
-  $self->unregisteredSave($code);
-  $self->unregisteredReload($code);
-  $self->unregisteredAlreadyDeleted($code);
-}
+    my $self = shift;
 
-sub unregisteredSave {
-  my $self = shift;
-  my $code = shift;
+    UnregisteredUser::putRegDetailsByCode(\%regSave);
 
-  UnregisteredUser::putRegDetailsByCode(\%regSave);
-  
-  my %result = %{UnregisteredUser::_getRegDetailsByCode($code)};
-#  print Dumper(\%result);
-  $self->assert_equals($result{doh},
-		       "homer"
-		      );
-}
+    my %result = %{UnregisteredUser::_getRegDetailsByCode($code)};
+    $self->assert_equals("homer", $result{doh} );
 
-sub unregisteredReload {
-  my ($self, $code) =@_;
-  my %result2 = UnregisteredUser::reloadUserContext($code);
-#  print Dumper(\%result2);
-  $self->assert_deep_equals(\%result2, \%regSave);
+    my %result2 = UnregisteredUser::reloadUserContext($code);
+    $self->assert_deep_equals(\%result2, \%regSave);
+
+    UnregisteredUser::deleteUserContext( $code );
+    # if _deleteUserContext is commented out this will fail!
+    $self->assert_null( UnregisteredUser::reloadUserContext($code));
 }
 
 sub test_missingElements {
-  my ($self) = shift;
-  my @present = ("one","two","three");
-  my @required = ("one","two","six");
+    my ($self) = shift;
+    my @present = ("one","two","three");
+    my @required = ("one","two","six");
 
 
-  $self->assert_deep_equals([TWiki::UI::Register::_missingElements(\@present, \@required)], ["six"]);
-  $self->assert_deep_equals( [TWiki::UI::Register::_missingElements(\@present, \@present)], []);
+    $self->assert_deep_equals([TWiki::UI::Register::_missingElements(\@present, \@required)], ["six"]);
+    $self->assert_deep_equals( [TWiki::UI::Register::_missingElements(\@present, \@present)], []);
 }
 
 sub test_buildRegistrationEmail {
-  my ($self) = shift;
+    my ($self) = shift;
 
-  my %data = (
-	      'CompanyName' => '',
-	      'Country' => 'Saudi Arabia',
-	      'Password' => 'mypassword',
-	      'form' => [
-			 {
-			  'value' => 'Test User',
-			  'required' => '1',
-			  'name' => 'Name'
-			 },
-			 {
-			  'value' => $userEmail,
-			  'required' => '1',
-			  'name' => 'Email'
-			 },
-			 {
-			  'value' => '',
-			  'required' => '0',
-			  'name' => 'CompanyName'
-			 },
-			 {
-			  'value' => '',
-			  'required' => '0',
-			  'name' => 'CompanyURL'
-			 },
-			 {
-			  'value' => 'Saudi Arabia',
-			  'required' => '1',
-			  'name' => 'Country'
-			 },
-			 {
-			  'value' => '',
-			  'required' => '0',
-			  'name' => 'Comment'
-			 },
-			 {
-			   'value' => 'mypassword',
-			   'name' => 'Password',
-			 }
-			],
-	      'VerificationCode' => $testUserWikiName.'.foo',
-	      'Name' => 'Test User',
-	      'webName' => $peopleWeb,
-	      'WikiName' => $testUserWikiName,
-	      'Comment' => '',
-	      'CompanyURL' => '',
-	      'passwordA' => 'mypassword',
-	      'passwordB' => 'mypassword',
-	      'Email' => $userEmail,
-	      'debug' => 1,
-	      'Confirm' => 'mypassword'
-	     );
-
-  my $expected = <<EOM;
+    my %data = (
+                'CompanyName' => '',
+                'Country' => 'Saudi Arabia',
+                'Password' => 'mypassword',
+                'form' => [
+                           {
+                            'value' => 'Test User',
+                            'required' => '1',
+                            'name' => 'Name'
+                           },
+                           {
+                            'value' => $userEmail,
+                            'required' => '1',
+                            'name' => 'Email'
+                           },
+                           {
+                            'value' => '',
+                            'required' => '0',
+                            'name' => 'CompanyName'
+                           },
+                           {
+                            'value' => '',
+                            'required' => '0',
+                            'name' => 'CompanyURL'
+                           },
+                           {
+                            'value' => 'Saudi Arabia',
+                            'required' => '1',
+                            'name' => 'Country'
+                           },
+                           {
+                            'value' => '',
+                            'required' => '0',
+                            'name' => 'Comment'
+                           },
+                           {
+                            'value' => 'mypassword',
+                            'name' => 'Password',
+                           }
+                          ],
+                'VerificationCode' => $testUserWikiName.'.foo',
+                'Name' => 'Test User',
+                'webName' => $peopleWeb,
+                'WikiName' => $testUserWikiName,
+                'Comment' => '',
+                'CompanyURL' => '',
+                'passwordA' => 'mypassword',
+                'passwordB' => 'mypassword',
+                'Email' => $userEmail,
+                'debug' => 1,
+                'Confirm' => 'mypassword'
+               );
+    
+    my $expected = <<EOM;
 Test User - $testUserWikiName - $userEmail
 
    * Name: Test User
@@ -444,18 +433,12 @@ Test User - $testUserWikiName - $userEmail
    * Password: mypassword
 EOM
 
-  $self->assert_equals( TWiki::UI::Register::_buildConfirmationEmail (\%data,
-                   "%FIRSTLASTNAME% - %WIKINAME% - %EMAILADDRESS%\n\n%FORMDATA%",0), $expected);  
-
+    my $session = initialise(new CGI(""), "guest");
+    $self->assert_equals( TWiki::UI::Register::_buildConfirmationEmail ($session, \%data,
+                                                                        "%FIRSTLASTNAME% - %WIKINAME% - %EMAILADDRESS%\n\n%FORMDATA%",0), $expected);  
+    
 }
 
-
-sub unregisteredAlreadyDeleted {
-  my ($self, $code) =@_;
-  # if _deleteUserContext is commented out this will fail!
-  $self->assert_null( UnregisteredUser::reloadUserContext($code));
-#  print Dumper(\%result3);
-}
 
 my $mainweb = "$peopleWeb";
 
@@ -463,130 +446,117 @@ my $mainweb = "$peopleWeb";
 # I added a behaviour but don't want to break the old behaviour.
 
 sub test_userToWikiName {
-  my $self = shift;
-  my $query = new CGI();
-  initialise($query, 'guest');
-  $self->assert_equals(
-		        TWiki::User::userToWikiName("NoSuchUser")
-		       ,$mainweb.".NoSuchUser");
-  $self->assert_equals(
-		        TWiki::User::userToWikiName("NoSuchUser",1)
-		       ,"NoSuchUser");
-  $self->assert_null(
-		     TWiki::User::userToWikiName("NoSuchUser",2)
-		    );
+    my $self = shift;
+    my $query = new CGI();
+    my $session = initialise($query, 'guest');
+    $self->assert_equals(
+                         $session->{users}->userToWikiName("NoSuchUser")
+                         ,$mainweb.".NoSuchUser");
+    $self->assert_equals(
+                         $session->{users}->userToWikiName("NoSuchUser",1)
+                         ,"NoSuchUser");
+    $self->assert_null(
+                       $session->{users}->userToWikiName("NoSuchUser",2)
+                      );
 }
 
 sub test_getUserByEitherLoginOrWikiName {
-  my $self = shift;
-  my $query = new CGI();
-  initialise($query, 'guest');
+    my $self = shift;
+    my $query = new CGI();
+    my $session = initialise($query, 'guest');
 
-  {
-    my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName("guest");
-    $self->assert_equals($w, "TWikiGuest");
-    $self->assert_equals($l, "guest");
-  }
-  {
-    my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName("TWikiGuest");
-    $self->assert_equals($w, "TWikiGuest");
-    $self->assert_equals($l, "guest");
-  }
-  {
-    my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName("notfound");
-    $self->assert_null($w);
-    $self->assert_null($l);
-  }
-  {
-    my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName("NoSuchUser");
-    $self->assert_null($w);
-    $self->assert_null($l);
-  }
-}
-
-
-sub initialise {
- my ( $query, $remoteUser ) = @_;
- my $topic = $query->param( 'topic' ) || $query->param( 'TopicName' ); # SMELL - why both? what order?
-
- my $webName;
- ( $topic, $webName )  =
-   TWiki::initialize( $query->path_info(), $remoteUser, $topic, $query->url, $query ); # SMELL - topic input and output?
-# die "$webName.$topic";
- return ( $topic, $webName );
+    {
+        my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, "guest");
+        $self->assert_equals($w, "TWikiGuest");
+        $self->assert_equals($l, "guest");
+    }
+    {
+        my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, "TWikiGuest");
+        $self->assert_equals($w, "TWikiGuest");
+        $self->assert_equals($l, "guest");
+    }
+    {
+        my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, "notfound");
+        $self->assert_null($w);
+        $self->assert_null($l);
+    }
+    {
+        my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, "NoSuchUser");
+        $self->assert_null($w);
+        $self->assert_null($l);
+    }
 }
 
 sub test_bulkRegister {
-  my $self = shift;
+    my $self = shift;
 
-my $testReg = <<'EOM';
+    my $testReg = <<'EOM';
 | FirstName | LastName | Email | WikiName | LoginName | CustomFieldThis | SomeOtherRandomField | WhateverYouLike |
 | Test | User | Martin.Cleaver@BCS.org.uk |  TestUser | a | A | B | C |
 | Test | User2 | Martin.Cleaver@BCS.org.uk | TestUser2 | b | A | B | C |
 | Test | User3 | Martin.Cleaver@BCS.org.uk | TestUser3 | c | A | B | C |
 EOM
+    
+    my $regTopic = '/'.$temporaryWeb.'/UnprocessedRegistrations2';
+    my $logTopic = 'UnprocessedRegistrations2Log';
+    my $file = $TWiki::dataDir.$regTopic.'.txt';
+    my $fh = new FileHandle;
+    
+    die "Can't write $file" unless ($fh->open(">".$file));
+    print $fh $testReg;
+    $fh->close;
 
-  my $regTopic = '/'.$testcasesWeb.'/UnprocessedRegistrations2';
-  my $logTopic = 'UnprocessedRegistrations2Log';
-  my $file = $dataDir.$regTopic.'.txt';
-  my $fh = new FileHandle;
-
-  die "Can't write $file" unless ($fh->open(">".$file));
-  print $fh $testReg;
-  $fh->close;
-
-  my $query = new CGI ({
-			'LogTopic' => [
-				       $logTopic
-				      ],
-			'EmailUsersWithDetails' => [
-						    '0'
-						   ],
-			'OverwriteHomeTopics' => [
-						  '1'
-						 ],
-		       });
-#  $ENV{'SCRIPT_URL'} = "/bin/view";
-  $query->script_name("/bin/view");
-  $query->remote_user("mrjcleaver");
-  $query->path_info($regTopic);
-  initialise($query, 'mrjcleaver');
-
-  my $ans = Test::Unit::IO::StdoutCapture::do {
-    TWiki::UI::Register::bulkRegister(query=>$query),
-  } || "";
+    my $query = new CGI ({
+                          'LogTopic' => [
+                                         $logTopic
+                                        ],
+                          'EmailUsersWithDetails' => [
+                                                      '0'
+                                                     ],
+                          'OverwriteHomeTopics' => [
+                                                    '1'
+                                                   ],
+                         });
+    #  $ENV{'SCRIPT_URL'} = "/bin/view";
+    $query->script_name("/bin/view");
+    $query->remote_user("mrjcleaver");
+    $query->path_info($regTopic);
+    my $session = initialise($query, 'mrjcleaver');
+    
+    my $ans = Test::Unit::IO::StdoutCapture::do {
+        TWiki::UI::Register::bulkRegister($session),
+      } || "";
 
 
-  $self->assert_equals(
-		$ans,
-		"Status: 302 Moved\r\nLocation: ".$scriptUrl."/view/".$testcasesWeb."/".$logTopic."\r\n\r\n"
-		);
+    $self->assert_equals(
+                         $ans,
+                         "Status: 302 Moved\r\nLocation: ".$scriptUrl."/view/".$temporaryWeb."/".$logTopic."\r\n\r\n"
+                        );
 }
 
-
 sub Atest_works {
- my $self = shift;
- $self->assert_equals("a", "a");
+    my $self = shift;
+    $self->assert_equals("a", "a");
 }
 
 sub Atest_thisFaultsTestUnit {
- my $self = shift;
- $self->assert_equals( "1", "2" );
+    my $self = shift;
+    $self->assert_equals( "1", "2" );
 }
 
 # Test::Unit segfaults on failure for me, but this at least keeps the interface working
 sub assert_equals {
- my ( $self, $compare, $with ) = @_;
- if ( $compare eq $with ) {
-#  print "ok (\n$compare == \n$with)\n";
-  return 1;
- }
- else {
-   $compare = visible($compare);
-   $with = visible($with);
-  print "failed ('\n$compare' != '\n$with') \n";
-  return -1;
- }
+    my ( $self, $compare, $with ) = @_;
+    if ( $compare eq $with ) {
+        #  print "ok (\n$compare == \n$with)\n";
+        return 1;
+    }
+    else {
+        $compare = visible($compare);
+        $with = visible($with);
+        print "failed ('\n$compare' != '\n$with') \n";
+        return -1;
+    }
 }
 
 =pod
@@ -600,18 +570,6 @@ sub visible {
  $a =~ s/ /SP/g;
  $a;
 }
-
-###############
-package main;
-
-use Test::Unit::TestRunner;
-
-sub main {
-    my $testRunner = Test::Unit::TestRunner->new();
-    $testRunner->start("RegisterUnitTestCase");
-}
-
-main() unless defined caller;
 
 1;
 

@@ -2,8 +2,6 @@
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
-#
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,29 +15,18 @@
 # http://www.gnu.org/copyleft/gpl.html
 
 BEGIN {
-    # Set default current working directory (needed for mod_perl)
-    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+    # See the 'view' script for a description of what this does
+    if( $ENV{"SCRIPT_FILENAME"} &&
+        $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
         chdir $1;
     }
-    # Set library paths in @INC at compile time
     unshift @INC, '.';
     require 'setlib.cfg';
+    if( $TWiki::useLocale ) {
+        require locale;
+        import locale ();
+    }
 }
 
-use CGI::Carp qw(fatalsToBrowser);
-use CGI;
-use TWiki;
-use TWiki::UI::Oops;
-
-use IO::Handle; STDOUT->blocking(0); 
-
-my $query = new CGI;
-my $pathInfo = $query->path_info(); 
-my $user = $query->remote_user();
-my $topic = $query->param( 'topic' );
-my $url = $query->url;
-
-TWiki::initialize( $pathInfo, $user, $topic, $url, $query );
-
-TWiki::UI::Oops::oops_cgi( $TWiki::T );
-
+use TWiki::UI;
+TWiki::UI::run( "TWiki::UI::Oops", "oops_cgi" );

@@ -56,8 +56,3 @@ Renaming or deleting a web requires direct access to the installation files on t
 ---+++ Renaming the MAINWEB
 
 If you plan to rename the %MAINWEB% web, remember that TWiki stores user and group topics in =%<nop>MAINWEB%=, default named =Main=. That means, every WikiName signature - =Main.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout).
-
--- TWiki:Main.MikeMannix - 14 Sep 2001 %BR%
--- TWiki:Main.PeterThoeny - 07 Apr 2002 %BR%
--- TWiki:Main.GrantBow - 16 Jan 2003
-

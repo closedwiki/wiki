@@ -685,7 +685,10 @@ overridden by a plugin declaring a =redirectCgiQueryHandler=.
 sub redirect {
     my( $this, $query, $url ) = @_;
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+
+    $query = $this->{cgiQuery} unless $query;
     if( ! TWiki::Plugins::redirectCgiQueryHandler( $query, $url ) ) {
+        die "ASSERT $this from ".join(",",caller)."\n" unless $query;
         print $query->redirect( $url );
     }
 }

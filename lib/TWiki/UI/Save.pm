@@ -32,6 +32,8 @@ use strict;
 use TWiki;
 use TWiki::UI;
 use TWiki::UI::Preview;
+use Error qw( :try );
+use TWiki::UI::OopsException;
 
 =pod
 
@@ -70,110 +72,107 @@ sub _save {
     my $topic = $session->{topicName};
     my $userName = $session->{userName};
 
-  my $saveCmd = $query->param( "cmd" ) || "";
-  my $text = $query->param( "text" );
-  my $meta = "";
-  my $wikiUserName = $session->{users}->userToWikiName( $userName );
+    my $saveCmd = $query->param( "cmd" ) || "";
+    my $text = $query->param( "text" );
+    my $meta = "";
+    my $wikiUserName = $session->{users}->userToWikiName( $userName );
 
-  # A template was requested; read it, and expand URLPARAMs within the
-  # template using our CGI record
-  my $templatetopic = $query->param( "templatetopic");
-  if ($templatetopic) {
-    ($meta, $text) =
-      $session->{store}->readTopic( $wikiUserName, $webName,
-                                $templatetopic, undef, 0 );
-    $text = $session->expandVariablesOnTopicCreation( $text );
-  }
+    # A template was requested; read it, and expand URLPARAMs within the
+    # template using our CGI record
+    my $templatetopic = $query->param( "templatetopic");
+    if ($templatetopic) {
+        ($meta, $text) =
+          $session->{store}->readTopic( $wikiUserName, $webName,
+                                        $templatetopic, undef, 0 );
+        $text = $session->expandVariablesOnTopicCreation( $text );
+    }
 	
-  my $unlock = $query->param( "unlock" ) || "";
-  my $dontNotify = $query->param( "dontnotify" ) || "";
-  my $changeform = $query->param( 'submitChangeForm' ) || "";
-  my $theParent = $query->param( 'topicparent' ) || "";
-  my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
-  my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
-  my $formTemplate = $query->param( "formtemplate" );
+    my $unlock = $query->param( "unlock" ) || "";
+    my $dontNotify = $query->param( "dontnotify" ) || "";
+    my $changeform = $query->param( 'submitChangeForm' ) || "";
+    my $theParent = $query->param( 'topicparent' ) || "";
+    my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
+    my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
+    my $formTemplate = $query->param( "formtemplate" );
 
-  my $topicExists  = $session->{store}->topicExists( $webName, $topic );
+    my $topicExists  = $session->{store}->topicExists( $webName, $topic );
 
-  return 0 if TWiki::UI::isMirror( $session, $webName, $topic );
+    TWiki::UI::checkMirror( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic );
 
-  return 0 unless TWiki::UI::webExists( $session, $webName, $topic );
-
-  # Prevent saving existing topic?
-  if( $onlyNewTopic && $topicExists ) {
-    # Topic exists and user requested oops if it exists
-    TWiki::UI::oops( $session, $webName, $topic, "createnewtopic" );
-    return 0;
-  }
-
-  # prevent non-Wiki names?
-  if( ( $onlyWikiName )
-      && ( ! $topicExists )
-      && ( ! TWiki::isValidTopicName( $topic ) ) ) {
-    # do not allow non-wikinames, redirect to view topic
-    TWiki::UI::redirect( $session, $session->getViewUrl( $webName, $topic ) );
-    return 0;
-  }
-
-  return 0 unless TWiki::UI::isAccessPermitted( $session, $webName, $topic,
-                                            "change", $wikiUserName );
-
-  # check permission for undocumented cmd=... parameter
-  return 0 if ( $saveCmd &&
-              ! TWiki::UI::userIsAdmin( $session, $webName, $topic, $wikiUserName ));
-
-  if( ! ( defined $text ) ) {
-    TWiki::UI::oops( $session, $webName, $topic, "save" );
-    return 0;
-  } elsif( ! $text ) {
-    # empty topic not allowed
-    TWiki::UI::oops( $session, $webName, $topic, "empty" );
-    return 0;
-  }
-
-  if( $changeform ) {
-      $session->{form}->changeForm( $webName, $topic, $query );
-      return 0;
-  }
-
-  $text = $session->{renderer}->decodeSpecialChars( $text );
-  $text =~ s/ {3}/\t/go;
-
-  if( $saveCmd eq "repRev" ) {
-    $text =~ s/%__(.)__%/%_$1_%/go;
-    $meta = $session->{store}->extractMetaData( $webName, $topic, \$text );
-  } else {
-    # normal case: Get latest attachment from file for preview
-    my $tmp;
-	# read meta (if not already read when reading template)
-    ( $meta, $tmp ) =
-      $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 ) unless $meta;
-
-    # parent setting
-    if( $theParent eq "none" ) {
-      $meta->remove( "TOPICPARENT" );
-    } elsif( $theParent ) {
-      $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+    # Prevent saving existing topic?
+    if( $onlyNewTopic && $topicExists ) {
+        # Topic exists and user requested oops if it exists
+        throw TWiki::UI::OopsException( $webName, $topic, "createnewtopic" );
     }
 
-    if( $formTemplate ) {
-      $meta->remove( "FORM" );
-      $meta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
+    # prevent non-Wiki names?
+    if( ( $onlyWikiName )
+        && ( ! $topicExists )
+        && ( ! TWiki::isValidTopicName( $topic ) ) ) {
+        # do not allow non-wikinames, redirect to view topic
+        # SMELL: this should be an oops, shouldn't it?
+        TWiki::UI::redirect( $session, $session->getViewUrl( $webName, $topic ) );
+        return 0;
     }
 
-    use TWiki::Form;
-	# Expand field variables, unless this new page is templated
-    $session->{form}->fieldVars2Meta( $webName, $query, $meta ) unless $templatetopic;
-    $meta->updateSets( \$text );
-  }
+    TWiki::UI::checkAccess( $session, $webName, $topic,
+                            "change", $wikiUserName );
 
-  my $error = $session->{store}->saveTopic( $userName, $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
-  if( $error ) {
-    TWiki::UI::oops( $session, $webName, $topic, "saveerr", $error );
-    return 0;
-  }
+    if ( $saveCmd ) {
+         # check permission for undocumented cmd=... parameter
+        TWiki::UI::checkAdmin( $session, $webName, $topic, $wikiUserName );
+    }
 
-  return 1;
+    if( ! ( defined $text ) ) {
+        throw TWiki::UI::OopsException( $webName, $topic, "save" );
+    } elsif( ! $text ) {
+        # empty topic not allowed
+        throw TWiki::UI::OopsException( $webName, $topic, "empty" );
+    }
+
+    if( $changeform ) {
+        $session->{form}->changeForm( $webName, $topic, $query );
+        return 0;
+    }
+
+    $text = $session->{renderer}->decodeSpecialChars( $text );
+    $text =~ s/ {3}/\t/go;
+
+    if( $saveCmd eq "repRev" ) {
+        $text =~ s/%__(.)__%/%_$1_%/go;
+        $meta = $session->{store}->extractMetaData( $webName, $topic, \$text );
+    } else {
+        # normal case: Get latest attachment from file for preview
+        my $tmp;
+        # read meta (if not already read when reading template)
+        ( $meta, $tmp ) =
+          $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 ) unless $meta;
+
+        # parent setting
+        if( $theParent eq "none" ) {
+            $meta->remove( "TOPICPARENT" );
+        } elsif( $theParent ) {
+            $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+        }
+
+        if( $formTemplate ) {
+            $meta->remove( "FORM" );
+            $meta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
+        }
+
+        use TWiki::Form;
+        # Expand field variables, unless this new page is templated
+        $session->{form}->fieldVars2Meta( $webName, $query, $meta ) unless $templatetopic;
+        $meta->updateSets( \$text );
+    }
+
+    my $error = $session->{store}->saveTopic( $userName, $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
+    if( $error ) {
+        throw TWiki::UI::OopsException( $webName, $topic, "saveerr", $error );
+    }
+
+    return 1;
 }
 
 =pod
@@ -230,10 +229,10 @@ sub savemulti {
 # =========================
 sub randomURL
 {
-  my (@hc) = (qw (01 02 03 04 05 06 07 08 09 0b 0c 0d 0e 0f 10
-		  11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f));
-  #  srand; # needed only for perl < 5.004
-  return "%$hc[rand(30)]%$hc[rand(30)]%$hc[rand(30)]%$hc[rand(30)]";
+    my (@hc) = (qw (01 02 03 04 05 06 07 08 09 0b 0c 0d 0e 0f 10
+                    11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f));
+    #  srand; # needed only for perl < 5.004
+    return "%$hc[rand(30)]%$hc[rand(30)]%$hc[rand(30)]%$hc[rand(30)]";
 }
 
 1;

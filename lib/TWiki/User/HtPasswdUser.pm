@@ -58,8 +58,7 @@ BEGIN {
 }
 
 # ======================
-sub new
-{
+sub new {
    my( $class, $session ) = @_;
    my $self = bless( {}, $class );
    $self->{session} = $session;

@@ -72,7 +72,7 @@ sub _getPasswordHandler {
 
    $attachment = "" if( ! $attachment );
 
-   my $passwordHandler = $this->{IMPL}->new( );
+   my $passwordHandler = $this->{IMPL}->new( $this->{session} );
 
    return $passwordHandler;
 }

@@ -2,12 +2,6 @@
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
-#
-# Based on parts of Ward Cunninghams original Wiki and JosWiki.
-# Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
-# Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
-#
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,21 +22,15 @@ BEGIN {
     # Set library paths in @INC, at compile time
     unshift @INC, '.';
     require 'setlib.cfg';
+
+    # 'Use locale' for internationalisation of Perl regexes -
+    # main locale settings are done in TWiki::setupLocale
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::useLocale ) {
+        require locale;
+        import locale ();
+    }
 }
 
-use strict;
-use CGI::Carp qw( fatalsToBrowser );
-use CGI;
-use TWiki::UI::View;
-
-my $query = new CGI;
-
-my $pathInfo = $query->path_info();
-my $user = $query->remote_user();
-my $url = $query->url;
-my $topic = $query->param( 'topic' );
-
-TWiki::initialize( $pathInfo, $user, $topic, $url, $query );
-
-TWiki::UI::View::view( $TWiki::T );
-
+use TWiki::UI;
+TWiki::UI::run( "TWiki::UI::View", "view" );

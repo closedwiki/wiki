@@ -1,6 +1,7 @@
 # TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2001 Sven Dowideit, svenud@ozemail.com.au
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -27,10 +28,42 @@ use strict;
 use TWiki;
 use TWiki::UI;
 use TWiki::User;
+use Error qw( :try );
+use TWiki::UI::OopsException;
 
 =pod
 
----+++ removeUser( $web, $topic, $userToRemove, $query )
+---++ manage( $session )
+UI delegate designed for calling from TWiki::UI::run
+
+=cut
+
+sub manage {
+    my $session = shift;
+
+    my $action = $session->{cgiQuery}->param( 'action' );
+
+    if( $action eq "createweb" ) {
+        TWiki::UI::Manage::createWeb( $session );
+    } elsif( $action eq "changePassword" ) {
+        TWiki::UI::Register::changePassword( $session );
+    } elsif ($action eq 'bulkRegister') {
+        TWiki::UI::Register::bulkRegister( $session );
+    } elsif( $action eq "deleteUserAccount" ) {
+        TWiki::UI::Manage::removeUser( $session );
+    } elsif( $action ) {
+        throw TWiki::UI::OopsException( "", "", "manage",
+                                        _template("msg_unrecognized_action"),
+                                        $action );
+    } else {
+        throw TWiki::UI::OopsException( "", "", "manage",
+                                        _template("msg_missing_action") );
+    }
+}
+
+=pod
+
+---+++ removeUser( $session )
 Renames the user's topic (with renaming all links)
 removes user entry from passwords. CGI parameters:
 | =password= | |
@@ -49,9 +82,9 @@ sub removeUser {
 
     # check if user entry exists
     #TODO: need to handle the NoPasswdUser case (userPasswordExists will retun false here)
-    if(  ( $wikiName )  && (! $session->{users}->userPasswordExists( $wikiName ) ) ) {
-        TWiki::UI::oops( $session, $webName, $topic, "notwikiuser", $wikiName );
-        return;
+    if( $wikiName && !$session->{users}->userPasswordExists( $wikiName )) {
+        throw TWiki::UI::OopsException( $webName, $topic,
+                                        "notwikiuser", $wikiName );
     }
 
     #check to see it the user we are trying to remove is a memebr of a group.
@@ -60,15 +93,13 @@ sub removeUser {
     my @groups =  $session->{security}->getGroupsUserIsIn( $wikiName );
     my $numberOfGroups =  $#groups;
     if ( $numberOfGroups > -1 ) { 
-        TWiki::UI::oops( $session, $webName, $topic, "genericerror");
-        return;
+        throw TWiki::UI::OopsException( $webName, $topic, "genericerror");
     }
 
     my $pw = $session->{users}->checkUserPasswd( $wikiName, $password );
     if( ! $pw ) {
         # NO - wrong old password
-        TWiki::UI::oops( $session, $webName, $topic, "wrongpassword");
-        return;
+        throw TWiki::UI::OopsException( $webName, $topic, "wrongpassword");
     }
 
     #TODO: need to add GetUniqueTopicName
@@ -79,8 +110,7 @@ sub removeUser {
     #
     #   if ( $renameError ) {
     #TODO: add better error message for rname failed
-    #         TWiki::UI::oops( $session, $webName, $topic, "renameerr");
-    #         return;
+    #         throw TWiki::UI::OopsException( $webName, $topic, "renameerr");
     #     }
     #
     #    # Update references in referring pages - not applicable to attachments.
@@ -91,8 +121,8 @@ sub removeUser {
 
     $session->{users}->removeUser($wikiName);
 
-    TWiki::UI::oops( $session, $webName, $topic, "removeuserdone", $wikiName);
-    return;
+    throw TWiki::UI::OopsException( $webName, $topic, "removeuserdone",
+                                    $wikiName);
 }
 
 #changePassword is now in register (belongs in User.pm though)
@@ -107,13 +137,6 @@ sub _template {
 ---++ createWeb( $session )
 Create a new web. Parameters defining the new web are
 in the query.
-
-| =newweb= | Name of new web |
-| =baseweb= | Name of web to copy to create newweb |
-| =webbgcolor= | background color for new web |
-| =sitemapwhat= | |
-| =sitemapuseto= | |
-| =nosearchall= | |
 
 =cut
 
@@ -137,8 +160,8 @@ sub createWeb {
 
     # check permission, user authorized to create webs?
     my $wikiUserName = $session->{users}->userToWikiName( $userName );
-    return unless TWiki::UI::isAccessPermitted( $session, $webName, $topicName,
-                                                "manage", $wikiUserName );
+    TWiki::UI::checkAccess( $session, $webName, $topicName,
+                            "manage", $wikiUserName );
 
     if( $newWeb =~ /^_[a-zA-Z0-9_]+$/ ) {
         # valid template web name, untaint
@@ -149,17 +172,16 @@ sub createWeb {
         $newWeb =~ /(.*)/;
         $newWeb = $1;
     } elsif( $newWeb ) {
-        TWiki::UI::oops( $session, "", "", $oopsTmpl, _template("msg_web_name") );
-        return;
+        throw TWiki::UI::OopsException( "", "", $oopsTmpl,
+                                        _template("msg_web_name") );
     } else {
-        TWiki::UI::oops( $session, "", "", $oopsTmpl, _template("msg_web_missing") );
-        return;
+        throw TWiki::UI::OopsException( "", "", $oopsTmpl,
+                                        _template("msg_web_missing") );
     }
 
     if( $session->{store}->topicExists( $newWeb, $TWiki::mainTopicname ) ) {
-        TWiki::UI::oops( $session, "", "", $oopsTmpl,
-                         _template("msg_web_exist"), $newWeb );
-        return;
+        throw TWiki::UI::OopsException( "", "", $oopsTmpl,
+                                        _template("msg_web_exist"), $newWeb );
     }
 
     $baseWeb =~ s/$TWiki::securityFilter//go;
@@ -167,41 +189,44 @@ sub createWeb {
     $baseWeb = $1;
 
     unless( $session->{store}->topicExists( $baseWeb, $TWiki::mainTopicname ) ) {
-        TWiki::UI::oops( $session, "", "", $oopsTmpl, _template("msg_base_web"), $baseWeb );
-        return;
+        throw TWiki::UI::OopsException( "", "", $oopsTmpl,
+                                        _template("msg_base_web"), $baseWeb );
     }
 
     unless( $webBgColor =~ /\#[0-9a-f]{6}/i ) {
-        TWiki::UI::oops( $session, "", "", $oopsTmpl, _template("msg_web_color") );
-        return;
+        throw TWiki::UI::OopsException( "", "", $oopsTmpl,
+                                        _template("msg_web_color") );
     }
 
     # create the empty web
     my $err = _createEmptyWeb( $newWeb );
     if( $err ) {
-        TWiki::UI::oops( $session, "", "", $oopsTmpl, _template("msg_web_create"), $err );
-        return;
+        throw TWiki::UI::OopsException( "", "", $oopsTmpl,
+                                        _template("msg_web_create"), $err );
     }
 
     # copy needed topics from base web
     $err = _copyWebTopics( $session, $baseWeb, $newWeb );
     if( $err ) {
-        TWiki::UI::oops( $session, $newWeb, "", $oopsTmpl, _template("msg_web_copy_topics"), $err );
-        return;
+        throw TWiki::UI::OopsException( $newWeb, "", $oopsTmpl,
+                                        _template("msg_web_copy_topics"),
+                                        $err );
     }
 
     # patch WebPreferences
     $err = _patchWebPreferences( $session, $newWeb, $TWiki::webPrefsTopicname, $webBgColor,
                                  $siteMapWhat, $siteMapUseTo, $noSearchAll );
     if( $err ) {
-        TWiki::UI::oops( $session, $newWeb, $TWiki::webPrefsTopicname, $oopsTmpl, _template("msg_patch_webpreferences"), $err );
-        return;
+        throw TWiki::UI::OopsException( $newWeb, $TWiki::webPrefsTopicname,
+                                        $oopsTmpl,
+                                        _template("msg_patch_webpreferences"),
+                                        $err );
     }
 
     # everything OK, redirect to last message
     $newTopic = $TWiki::mainTopicname unless( $newTopic );
-    TWiki::UI::oops( $session, $newWeb, $newTopic, $oopsTmpl, _template("msg_create_web_ok") );
-    return;
+    throw TWiki::UI::OopsException( $newWeb, $newTopic, $oopsTmpl,
+                                    _template("msg_create_web_ok") );
 }
 
 # CODE_SMELL: Surely this should be done by Store?
@@ -278,7 +303,7 @@ sub _patchWebPreferences
 
 =pod
 
----+++ rename( $web, $topic, $user, $query )
+---+++ rename( $session )
 Rename the given topic. Details of the new topic name are passed in CGI
 paremeters:
 | =skin= | skin to use for derivative topics |
@@ -327,13 +352,37 @@ sub rename {
     # still need updating, previous update being prevented by a lock.
 
     unless ( $justChangeRefs ) {
-        return if _checkExist( $session,
-                               $oldWeb, $oldTopic, $newWeb, $newTopic,
-                               $theAttachment );
-        return unless TWiki::UI::isAccessPermitted( $session, $oldWeb, $oldTopic,
-                                                    "change", $wikiUserName );
-        return unless TWiki::UI::isAccessPermitted( $session, $oldWeb, $oldTopic,
-                                                    "rename", $wikiUserName );
+        TWiki::UI::checkWebExists( $session, $oldWeb, $oldTopic );
+        TWiki::UI::checkTopicExists( $session, $oldWeb, $oldTopic, "rename");
+        TWiki::UI::checkWebExists( $session, $newWeb, $newTopic );
+
+        if ( $theAttachment) {
+            # Does old attachment exist?
+            unless( $session->{store}->attachmentExists( $oldWeb, $oldTopic,
+                                                         $theAttachment )) {
+                throw TWiki::UI::OopsException( $oldWeb, $oldTopic,
+                                                "moveerr", $theAttachment );
+            }
+            # does new attachment already exist?
+            if( $session->{store}->attachmentExists( $newWeb, $newTopic,
+                                                     $theAttachment )) {
+                throw TWiki::UI::OopsException( $newWeb, $newTopic,
+                                                "moverr", $theAttachment );
+            }
+        } else {
+            # Check new topic doesn't exist
+            if( $newTopic &&
+                $session->{store}->topicExists( $newWeb, $newTopic)) {
+                # Unless moving an attachment, new topic should not exist
+                throw TWiki::UI::OopsException( $newWeb, $newTopic,
+                                                "topicexists" );
+            }
+        }
+
+        TWiki::UI::checkAccess( $session, $oldWeb, $oldTopic,
+                                "change", $wikiUserName );
+        TWiki::UI::checkAccess( $session, $oldWeb, $oldTopic,
+                                "rename", $wikiUserName );
     }
 
     # Has user selected new name yet?
@@ -358,24 +407,26 @@ sub rename {
                                              $userName );
 
             if( $moveError ) {
-                TWiki::UI::oops( $session, $newWeb, $newTopic, "moveerr",
-                                 $theAttachment, $moveError );
-                return;
+                throw TWiki::UI::OopsException( $newWeb, $newTopic,
+                                                "moveerr",
+                                                $theAttachment,
+                                                $moveError );
             }
         } else {
             if( ! $doAllowNonWikiWord &&
                 ! TWiki::isValidWikiWord( $newTopic ) ) {
-                TWiki::UI::oops( $session, $newWeb, $newTopic, "renamenotwikiword" );
-                return;
+                throw TWiki::UI::OopsException( $newWeb, $newTopic,
+                                                "renamenotwikiword" );
             }
 
             my $renameError =
               $session->{store}->renameTopic( $oldWeb, $oldTopic, $newWeb,
                                           $newTopic, 1, $userName );
             if( $renameError ) {
-                TWiki::UI::oops( $session, $oldWeb, $oldTopic, "renameerr",
-                                 $renameError, $newWeb, $newTopic );
-                return;
+                throw TWiki::UI::OopsException( $oldWeb, $oldTopic,
+                                                "renameerr",
+                                                $renameError, $newWeb,
+                                                $newTopic );
             }
         }
     }
@@ -422,7 +473,6 @@ sub rename {
     }
 
     TWiki::UI::redirect( $session, $new_url );
-    return;
 }
 
 =pod
@@ -465,42 +515,6 @@ sub _getReferringTopicsListFromURL {
     }
     return @result;
 }
-
-# Check that various webs and topics exist or don't exist as required
-sub _checkExist {
-    my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment ) = @_;
-
-    my $ret = 0;
-    my $query = $session->{cgiQuery};
-
-    $ret = 1 unless TWiki::UI::webExists( $session, $oldWeb, $oldTopic );
-    $ret = 1 unless TWiki::UI::webExists( $session, $newWeb, $newTopic );
-
-    if ( $theAttachment) {
-        # Does old attachment exist?
-        unless( $session->{store}->attachmentExists( $oldWeb, $oldTopic,
-                                                 $theAttachment )) {
-            TWiki::UI::oops( $session, $oldWeb, $oldTopic, "moveerr", $theAttachment );
-            $ret = 1;
-        }
-        # does new attachment already exist?
-        if( $session->{store}->attachmentExists( $newWeb, $newTopic,
-                                             $theAttachment )) {
-            TWiki::UI::oops( $session, $newWeb, $newTopic, "moverr", $theAttachment );
-            $ret = 1;
-        }
-    } else {
-        # Check new topic doesn't exist
-        if( $newTopic && $session->{store}->topicExists( $newWeb, $newTopic)) {
-            # Unless moving an attachment, new topic should not already exist
-            TWiki::UI::oops( $session, $newWeb, $newTopic, "topicexists" );
-            $ret = 1;
-        }
-    }
-
-    return $ret;
-}
-
 
 # Return 1 if can't get lock, otherwise 0
 sub _getLocks {

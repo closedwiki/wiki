@@ -37,7 +37,7 @@ sub changes {
     my $topic = $session->{topicName};
     my $userName = $session->{userName};
 
-    return unless TWiki::UI::webExists( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic );
 
     my $skin = $session->getSkin();
 

@@ -2,8 +2,6 @@
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
-#
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,28 +15,19 @@
 # http://www.gnu.org/copyleft/gpl.html
 
 BEGIN {
-    # Set default current working directory
-    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+    # See the 'view' script for a description of what this does
+    if( $ENV{"SCRIPT_FILENAME"} &&
+        $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
         chdir $1;
     }
-    # Set library paths in @INC at compile time
     unshift @INC, '.';
     require 'setlib.cfg';
+    if( $TWiki::useLocale ) {
+        require locale;
+        import locale ();
+    }
 }
 
-use CGI::Carp qw(fatalsToBrowser);
-use CGI;
-use TWiki;
-use TWiki::UI::View;
-
-my $query = new CGI;
-my $thePathInfo = $query->path_info(); 
-my $theRemoteUser = $query->remote_user();
-my $theUrl = $query->url;
-my $theTopic = $query->param( 'topic' );
-
-TWiki::initialize( $thePathInfo, $theRemoteUser,
-                   $theTopic, $theUrl, $query );
-
-TWiki::UI::View::viewfile( $TWiki::T );
+use TWiki::UI;
+TWiki::UI::run( "TWiki::UI::View", "viewfile" );
 
