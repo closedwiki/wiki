@@ -254,15 +254,17 @@ sub getRevisionNumberNew
     if( ! $theWebName ) {
         $theWebName = $TWiki::webName;
     }
+    my $extension = ",v";
     if( ! $attachment ) {
         $attachment = "";
+        $extension = ".txt,v";
     }
 
     my $tmp= $TWiki::revHistCmd;
     my $fileName = getFileName( $theWebName, $theTopic, $attachment );
     
     ##&TWiki::writeDebug( "getRevisionNumberNew: fileName: $fileName" );
-    my $rcsfilename = getFileName( $theWebName, $theTopic, $attachment, ",v" );
+    my $rcsfilename = getFileName( $theWebName, $theTopic, $attachment, $extension );
     ##&TWiki::writeDebug( "getRevisionNumberNew: rcsfilename: $rcsfilename" );
     if( ! -e $rcsfilename ) {
        return "1.1"; # FIXME Can't tell that there is no revision file
