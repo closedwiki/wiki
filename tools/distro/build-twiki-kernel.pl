@@ -49,6 +49,7 @@ print Dumper( $Config ) if $Config->{verbose};
 map { checkdirs( $Config->{$_} = rel2abs( $Config->{$_} ) ) } qw( tempdir outputdir );
 
 $Config->{localcache} = $Config->{tempdir} . "/.cache";
+$Config->{svn_export} = $Config->{localcache} . "/twiki";
 $Config->{install_base} = $Config->{tempdir} . "/twiki";		# the directory the official release is untarred into
 map { ( mkpath $Config->{$_} or die $! ) unless -d $Config->{$_} } qw( localcache install_base );
 
@@ -70,14 +71,20 @@ my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardSVN, $ruleDiscardBackup,
 
 ################################################################################
 
-my $installBase = $Config->{install_base};
+my $installBase = $Config->{install_base} or die "no install_base?";
 ( rmtree( $installBase ) or die "Unable to empty the twiki build directory: $!" ) if -e $installBase;
 mkpath( $installBase ) or die "Unable to create the new build directory: $!";
 
 ################################################################################
 
+my $svnExport = $Config->{svn_export} or die "no svn_export?";
+( rmtree( $svnExport ) or die qq{Unable to empty the svn export directory "$svnExport": $!} ) if -e $svnExport;
+execute( qq{svn export ../.. $svnExport} );  # or die $!;  -- "Inconsistent line ending style" error
+die "no svn export output?" unless -d $svnExport;
+
 my $pwdStart = cwd();
-chdir( '../..' ) or die $!;		# from tools/distro up to BRANCH (eg, trunk, DEVELOP)
+chdir( '../..' ) or die $!;            # from tools/distro up to BRANCH (eg, trunk, DEVELOP)
+#chdir( $svnExport ) or die $!;
 
 ################################################################################
 #-[lib/, templates/, data/, pub/icn, pub/TWiki, bin/]-----------------------------------
