@@ -18,7 +18,8 @@ sub test_array {
   my $array = new FormQueryPlugin::Array();
   my $i;
   for ($i = 0; $i < 100; $i++) {
-    $array->add(new FormQueryPlugin::Map("f1=$i"));
+    my $fred = new FormQueryPlugin::Map("f1=$i");
+    $array->add($fred);
   }
   my $sum = 0;
   for ($i = 0; $i < 100; $i++) {
@@ -29,8 +30,11 @@ sub test_array {
   $i = 0;
   foreach my $v ($array->getValues()) {
     $this->assert_equals($i, $v->get("f1"));
+    $this->assert_equals($i, $array->find( $v ));
     $i++;
   }
+  my $nonex = new FormQueryPlugin::Map("f1=1");
+  $this->assert_equals(-1, $array->find($nonex));
 
   $this->assert_equals(100, $array->size());
   $this->assert_equals($sum, $array->get("f1"));
@@ -47,6 +51,75 @@ sub test_array {
   for ($i = 90; $i < 100; $i++) {
     $this->assert_equals($i, $res->get($i-90)->get("f1"));
   }
+}
+
+sub test_gets {
+  my $this = shift;
+  my $array = new FormQueryPlugin::Array();
+  my $i;
+  for ($i = 0; $i < 10; $i++) {
+    my $fred = new FormQueryPlugin::Map("f1=$i");
+    $array->add($fred);
+  }
+  my $k = 0;
+  foreach $i ( $array->getValues()) {
+    $i->set("f2", $k++);
+  }
+  for ($i = 0; $i < 10; $i++) {
+    my $fred = $array->get($i);
+    $this->assert_equals($i, $fred->get("f1"));
+    $this->assert_equals($i, $fred->get("f2"));
+  }
+}
+
+sub test_contains {
+  my $this = shift;
+  my $array = new FormQueryPlugin::Array();
+  my $i;
+  for ($i = 0; $i < 10; $i++) {
+    my $fred = new FormQueryPlugin::Map("f1=$i");
+    $this->assert(!$array->contains($fred));
+    $array->add($fred);
+    $this->assert($array->contains($fred));
+  }
+}
+
+sub test_find {
+  my $this = shift;
+  my $array = new FormQueryPlugin::Array();
+  my $i;
+  for ($i = 0; $i < 10; $i++) {
+    my $fred = new FormQueryPlugin::Map("f1=$i");
+    $this->assert_equals(-1,$array->find($fred));
+    $array->add($fred);
+    $this->assert_equals($i,$array->find($fred));
+  }
+}
+
+sub test_remove {
+  my $this = shift;
+  my $array = new FormQueryPlugin::Array();
+  my $i;
+  my @nums;
+  for ($i = 0; $i < 3; $i++) {
+    my $fred = new FormQueryPlugin::Map("f1=$i");
+    push(@nums, $fred);
+    $array->add($fred);
+  }
+  # from the middle
+  my $n = $array->find($nums[1]);
+  $array->remove($n);
+  $this->assert_equals(2, $array->size());
+
+  # off the front
+  $n = $array->find($nums[0]);
+  $array->remove($n);
+  $this->assert_equals(1, $array->size());
+
+  # off the back
+  $n = $array->find($nums[2]);
+  $array->remove($n);
+  $this->assert_equals(0, $array->size());
 }
 
 sub test_sum {

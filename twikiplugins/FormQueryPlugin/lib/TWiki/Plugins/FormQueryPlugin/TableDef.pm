@@ -27,7 +27,7 @@ use TWiki::Plugins::FormQueryPlugin::Map;
     }
 
     my $attrs = new FormQueryPlugin::Map( $params );
-    my $hdrdef = $attrs->get( "header" );
+    my $hdrdef = $attrs->fastget( "header" );
     if ( !defined( $hdrdef ) || $hdrdef eq "on" ) {
       return undef;
     }

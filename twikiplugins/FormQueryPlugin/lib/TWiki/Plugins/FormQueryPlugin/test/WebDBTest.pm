@@ -40,7 +40,7 @@ sub set_up {
   TWiki::Func::TESTsetPreference("FQRELATIONS","Dir%B_%A subdir Dir%B; Dir%A_%C_%B subsubdir Dir%A_%C");
   TWiki::Func::TESTsetPreference("FQTABLES", "FileTable,DirTable");
   TWiki::Func::TESTsetPreference("FQHIGHLIGHTMAP", "PrettyPrint");
-  $FormQueryPlugin::WebDB::storable = 0;
+  #$FormQueryPlugin::WebDB::storable = 0;
   $this->{db} = new FormQueryPlugin::WebDB( "Test" );
 }
 
@@ -225,13 +225,104 @@ sub test_saveAndLoad {
   $this->assert_str_equals("Test", $this->{db}->{web});
   # There should be no cache there
   $this->assert_equals(0, $this->{db}->{loaded});
-  $this->assert_equals(0, $this->{db}->_load());
+  $this->assert_str_equals("0 14 0", $this->{db}->_load());
   $this->assert_equals(1, $this->{db}->{loaded});
+  $this->assert_str_equals("0 0 0", $this->{db}->_load());
+  my $initial = $this->{db};
+  # There's a cache there now
   $this->{db} = new FormQueryPlugin::WebDB( "Test" );
   $this->assert_equals(0, $this->{db}->{loaded});
-  $this->assert_equals(1, $this->{db}->_load());
+  $this->assert_str_equals("14 0 0", $this->{db}->_load());
   $this->assert_equals(1, $this->{db}->{loaded});
-  $this->assert_equals(2, $this->{db}->_load());
+  $this->assert_str_equals("0 0 0", $this->{db}->_load());
+  $this->checkSameAs($initial,$this->{db});
+
+  # One file in the cache has been touched
+  sleep(1);# wait for clock tick
+  my $Dir2 = TWiki::Func::readTopicText("Test","Dir2");
+  TWiki::Func::TESTwriteTopic("Test", "Dir2", $Dir2);
+  $this->{db} = new FormQueryPlugin::WebDB( "Test" );
+  $this->assert_str_equals("13 1 0", $this->{db}->_load());
+  $this->{db} = new FormQueryPlugin::WebDB( "Test" );
+  $this->assert_str_equals("14 0 0", $this->{db}->_load());
+
+  # A new file has been created
+  TWiki::Func::TESTwriteTopic("Test", "NewFile", "Blah");
+  $this->{db} = new FormQueryPlugin::WebDB( "Test" );
+  $this->assert_str_equals("14 1 0", $this->{db}->_load());
+
+  # One file in the cache has been deleted
+  my $Dir4 = TWiki::Func::readTopicText("Test","Dir4");
+  TWiki::Func::TESTdeleteTopic("Test", "Dir4");
+  $this->{db} = new FormQueryPlugin::WebDB( "Test" );
+  $this->assert_str_equals("14 0 1", $this->{db}->_load());
+
+  TWiki::Func::TESTdeleteTopic("Test", "NewFile");
+  TWiki::Func::TESTwriteTopic("Test", "Dir4", $Dir4);
+  $this->{db} = new FormQueryPlugin::WebDB( "Test" );
+  $this->assert_str_equals("13 1 1", $this->{db}->_load());
+  my $final = $this->{db};
+  $this->checkSameAs($initial, $final);
+}
+
+sub checkSameAs {
+  my ( $this, $first, $second, $cmping, $checked ) = @_;
+  
+  $cmping = "ROOT" unless ( defined($cmping ));
+  $checked = {} unless ( defined( $checked ));
+  if ( $checked->{"$first"} ) {
+    return;
+  }
+  $checked->{"$first"} = 1;
+  my $type = ref($first);
+
+  $this->assert_str_equals($type,ref($second),$cmping);
+  if ($type =~ /Map$/ || $type =~ /WebDB$/) {
+    $this->checkSameAsMap($first, $second, $cmping, $checked);
+  } elsif ($type =~ /Array$/) {
+    $this->checkSameAsArray($first, $second, $cmping, $checked);
+  } elsif ($type =~ /FileTime$/) {
+    $this->checkSameAsFileTime($first, $second, $cmping, $checked);
+  } else {
+    $this->assert(0,ref($first));
+  }
+}
+
+sub checkSameAsMap {
+  my ( $this, $first, $second, $cmping, $checked ) = @_;
+  
+  $this->assert_equals($first->size(), $second->size(), $cmping);
+  foreach my $k ($first->getKeys()) {
+    my $a = $first->get( $k );
+    my $b = $second->get( $k );
+    my $c = "$cmping.$k";
+    if (ref($a)) {
+      $this->checkSameAs($a, $b, $c, $checked );
+    } else {
+      $this->assert_str_equals($a, $b, "$c $a $b");
+    }
+  }
+}
+
+sub checkSameAsArray {
+  my ( $this, $first, $second, $cmping, $checked ) = @_;
+
+  $this->assert_equals($first->size(), $second->size(), $cmping);
+  my $i = 0;
+  foreach my $a (@{$first->{values}}) {
+    my $c = "$cmping\[$i\]";
+    my $b = $second->get($i++);
+    if ( ref( $a )) {
+      $this->checkSameAs($a, $b, $c, $checked );
+    } else {
+      $this->assert_str_equals($a, $b, "$c ($a!=$b)");
+    }
+  }
+}
+
+sub checkSameAsFileTime {
+  my ( $this, $first, $second, $cmping, $checked ) = @_;
+  $this->assert_str_equals($first->{file}, $second->{file},$cmping);
 }
 
 1;
