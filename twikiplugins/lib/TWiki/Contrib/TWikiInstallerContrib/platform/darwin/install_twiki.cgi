@@ -1,9 +1,10 @@
 #!/usr/bin/perl -w
 # $Id$
-#  Stage 2/3 of an automatic twiki install on sourceforge
+#  Stage 2/3 of an automatic twiki install on macosx darwin
 # Copyright Will Norris.  All Rights Reserved.
 # License: GPL
 
+################################################################################
 # TODO:
 #    * try to get rid of =pre-wiki.sh= and =post-wiki.sh= and therefore a completely web-based install!
 #    * make web pages to guide through an install (with options!)
@@ -22,16 +23,30 @@
 #    * the html output report has been pieced together ad hoc, and contains significant amounts of *bad html*
 #    * get it to work on MacOsX / darwin
 #    * ???
+################################################################################
+# TODO: (merged from original mac install.pl)
+#	put in package namespace
+#	compare/contrast with MS-'s installer
+#	why is root needed? (oh, for writing the apache.conf file)
+#	install plugin dependencies (ooh, add to twiki form?)
+#		(external dependencies like imagemagick and latex, not other perl modules as those will be handled automatically)
+#	install perl modules to ~user account (see CpanPerlModulesRequirement) (work in progress at bottom)
+#		CPAN:Test::Unit (CPAN:Error, CPAN:Class::Inner, CPAN:Devel::Symdump)
+#		CPAN:LWP::Simple (CPAN:URI, CPAN:HTML::Parser, CPAN:HTML::Tagset)
+#		CPAN:CGI::Session (CPAN:Digest::MD5, CPAN:Storable) (SmartSessionPlugin)
+#	find proper instructions for locking/unlocking/updating the rcs files (?, for a proper topic update)
+################################################################################
 
 use strict;
 ++$|;
 open(STDERR,'>&STDOUT'); # redirect error to browser
 use CGI qw(:all);
 use CGI::Carp qw(fatalsToBrowser);
-use File::Copy;
+use File::Copy qw( cp );
 use File::Path qw( rmtree );
 use Cwd qw( cwd getcwd );
 use Data::Dumper qw( Dumper );
+#use CPAN;
 
 my $account = "twiki";
 
@@ -117,6 +132,7 @@ close(FH) || die "Can't write to $file: $!";
 
 $htaccess =~ s|!FILE_path_to_TWiki!/data|$home/twiki/data|g;	# code smell: duplicated data from config file above
 $htaccess =~ s|!URL_path_to_TWiki!/bin|/cgi-bin/twiki|g;	# ditto
+# TODO: fix ErrorDocument 401 (what should it be set to?)
 
 open( FH, ">$file" ) or die $!;
 print FH $htaccess;
@@ -140,10 +156,10 @@ eraseBundledPlugins();
 # TODO: automatically download from http://twiki.org/cgi-bin/view/Plugins/ContributedCode
 # (%SEARCH{"Contrib$" type="regex" nosearch="on" scope="topic" noheader="on" nototal="on"}% -ish)
 print "<h1>Contrib</h1>\n";
-#DistributionContrib - syntax error at ../lib/TWiki/Contrib/DistributionContrib/Config.pm line 5, near "our @ISA "
 my @contribs = qw(
 		  AttrsContrib
 		  DBCacheContrib
+		  DistributionContrib
 		  JSCalendarContrib
 		 );
 foreach my $contrib ( @contribs )
@@ -204,6 +220,7 @@ my @availPlugins = (
 		    'ExplicitNumberingPlugin',
 		    'FindElsewherePlugin',
 		    'FormFieldListPlugin',
+		    'FormQueryPlugin',
 		    'GlobalReplacePlugin',
 		    'HiddenTextPlugin',
 		    'IncludeIndexPlugin',
@@ -216,12 +233,16 @@ my @availPlugins = (
 		    'RedirectPlugin',
 		    'RicherSyntaxPlugin',
 		    'SectionalEditPlugin',
+		    'SessionPlugin',
 		    'SingletonWikiWordPlugin',
 		    'TextSectionPlugin',
 		    'TopicVarsPlugin',
 		    'TranslateTagPlugin',
 		    'TreePlugin',
+		    'TWikiDrawPlugin',
+		    'TWikiReleaseTrackerPlugin',
 		    'VarCachePlugin',
+
 
 ################################################################################
 # not very good tests, so i can't really tell if it's working or not, but it seems to have installed correctly
@@ -242,12 +263,6 @@ my @availPlugins = (
 #SuggestLinksPlugin - need CPAN:List::Permutor ?
 #UpdateInfoPlugin - dunno
 #UserCookiePlugin - dunno
-
-# need to deal with because there's an installer
-#FormQueryPlugin -- installer issues
-#SessionPlugin - also _installer
-#TWikiDrawPlugin - _installer.pl
-#TWikiReleaseTrackerPlugin - _installer.pl
 
 # or other installation issues
 #BlackListPlugin - needs additional setup (should be renamed throttler (what did i call it before??))
@@ -356,21 +371,83 @@ foreach my $plugin ( @availPlugins )
     chdir ("../..") or warn $!;
 }
 
+
+################################################################################
+### various patches/fixes/upgrades
+my @patches = (
+	       'testenv',				# make testenv a little more useful...
+	       'create-new-web-copy-attachments',	# update "create new web" to also copy attachments, not just topics
+	       'trash-attachment-button',		# a clickable link/button to (more easily) trash attachments
+	       'preview-manage-attachment',		# provide an image preview when working with attachments
+	       'ImageGallery-fix-unrecognised-formats',	# bugfixes for ImageGalleryPlugin 
+	       'PreviewOnEditPage',			# PreviewOnEditPage
+	       'InterWikiPlugin-icons',			# InterWiki icons
+	       'prefsperf',			# cdot's preferences handling performance improvements (http://twiki.org/cgi-bin/view/Codev/PrefsPmPerformanceFixes)
+	       'WikiWord-web-names',			# fix templates use of %WEB% instead of <nop>%WEB%
+	       'force-new-revision',			# add force new revision (TWiki:Codev.ForceNewRevisionCheckBox)
+	       'AttachmentVersionsBrokenOnlyShowsLast',	# view attachment v1.1 fix
+	       );
+
+#chdir "/Users/$account/Sites";
+foreach my $patch ( @patches )
+{
+    print STDERR qq{applying patch "$patch"\n};
+    execute( "patch -p2 <tmp/install/downloads/patches/local/${patch}.patch" ) or warn $!;
+}
+#chdir $install;
+
+################################################################################
+# (NOT DONE YET, but this code was in the original mac install.pl)
+# addons
+if ( 0 ) {
+# install addons
+chdir 'twiki/bin';
+cp( qw( ../../install/downloads/xmlrpc xmlrpc ) ) or die $!;
+`chmod +x xmlrpc` and die $!;
+chdir '../..';
+}
+
+################################################################################
+# TODO: install plugins dependencies (and/or optional core dependencies)
+# MathModePlugin: sudo fink install latex2html (tetex, ...)
+# ImageGalleryPlugin: sudo fink install ImageMagick (...)
+
+
+################################################################################
+# (NOT DONE YET, but this code was in the original mac install.pl)
+# update standard webs 
+# (created with: (sudo) tar cjvf ../install/ProjectManagement.wiki.tar.bz2 data/ProjectManagement/ pub/ProjectManagement/) (pkg-webs script now)
+
+#opendir( WIKIS, "$install/downloads/webs/system" ) or die $!;
+#my @webs = grep { /\.wiki\.tar\.bz2$/ } readdir( WIKIS ) or die $!; 
+#closedir( WIKIS ) or die $!;
+#chdir 'twiki';
+#foreach my $web ( @webs )
+#{
+#    print STDERR "Updating system web [$web]\n";
+#    `tar xjvf $install/downloads/webs/system/$web` or die $!;
+#}
+#chdir $install;
+
 ################################################################################
 # install local webs
 
 chdir( "tmp/install" ) or warn $!;
 my @webs = ( 'HowToThinkLikeAComputerScientistUsingPython' );
+if ( opendir( WIKIS, "webs/local" ) )
+{
+    @webs = grep { /\.wiki\.tar\.gz$/ } readdir( WIKIS ) or warn $!; 
+    closedir( WIKIS ) or warn $!;
+}
 foreach my $web ( @webs )
 {
     print "<h3>Installing web $web</h3>\n";
-    execute("tar xzvf webs/local/$web.wiki.tar.gz") or warn $!;
+    execute("tar xzvf webs/local/$web") or warn $!;
 
     if ( -d 'data' ) { execute( "cp -rpv data $dest" ); execute( "rm -rf data" ); }
     if ( -d 'pub' ) { execute( "cp -rpv pub $tmp/twiki" ); execute( "rm -rf pub" ); }
     if ( -d 'templates' ) { execute( "cp -rpv templates $dest" ); execute( "rm -rf templates" ); }	# untested
 }
-
 chdir( "../.." ) or warn $!;
 
 ################################################################################
@@ -523,6 +600,20 @@ sub installLocalModules
     }
     
 #    print Dumper( $CPAN::Config );
+}
+
+################################################################################
+
+sub RestartApache
+{
+    `apachectl restart`;
+}
+
+# TODO: howto launch the web browser?
+sub WebBrowser
+{
+    my $url = shift or die "no url";
+    print $url, "\n";
 }
 
 ################################################################################
