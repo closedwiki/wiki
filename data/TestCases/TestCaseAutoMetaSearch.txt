@@ -1,10 +1,8 @@
-%META:TOPICINFO{author="guest" date="1104704940" format="1.0" version="1.1"}%
 Description: tests for METASEARCH tags
 ---+ Search for parents
 Expected:
 <!-- expected expand -->
 <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/RecursiveInclude"><b>RecursiveInclude</b></a>
-<!--Dummy tail-->
 <!-- /expected -->
 Actual:
 <!-- actual -->
@@ -14,7 +12,6 @@ Actual:
 Expected:
 <!-- expected expand -->
 Itwos <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/DeliberatelyMoved"><b>DeliberatelyMoved</b></a>
-<!--Dummy tail-->
 <!-- /expected -->
 Actual: 
 <!-- actual -->
@@ -24,7 +21,6 @@ Actual:
 Expected:
 <!-- expected expand -->
 <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/DeliberatelyMoved"><b>DeliberatelyMoved</b></a>
-<!--Dummy tail-->
 <!-- /expected -->
 Actual: 
 <!-- actual -->
@@ -34,7 +30,6 @@ Actual:
 Expected:
 <!-- expected -->
 Not a sausage
-<!--Dummy tail-->
 <!-- /expected -->
 Actual:
 <!-- actual -->
