@@ -5,14 +5,20 @@ use Cwd;
 # Ultimately we'd like to ask the Extension to handle this command 
 # itself. For now we just call build.pl
 
+sub upload {
+    return "Not implemented\n";
+
+}
+
 sub install {
     my ($extension) = @_;
 
     print "Installing $extension\n\n";
-    my $dir = getDirForExtension($extension);
+    my $libFrag = getLibFragmentForExtension($extension);
 
-    my $buildDotPlDir = findBuildDotPlDir($dir);
+    my $buildDotPlDir = findBuildDotPlDir($libFrag);
     my $oldPwd = cwd();
+    my $outputLog;
     if ($buildDotPlDir) {
 	chdir ($buildDotPlDir) || die "Couldn't cd to $buildDotPlDir - $!";
 	print "From $buildDotPlDir...\n";
@@ -23,12 +29,13 @@ sub install {
 	    print "\tInstalling to $home\n";
 	    $ENV{"TWIKI_HOME"} = $home;
 
-	    my $ans = `perl build.pl install`;
+	    $outputLog .= `perl build.pl install`;
 	}
     } else {
 	print "Failed to find build.pl for $extension\n";
     }
     chdir ($oldPwd); # Not strictly necessary, but...
+    return $outputLog;
 }
 
 sub getHomes {
@@ -43,26 +50,27 @@ sub findBuildDotPlDir {
 	die "No TWIKI_LIBS set?";
     }
     my $result;
+    my $lookedIn;
     foreach my $libdir (split(/:/, $ENV{TWIKI_LIBS})) {
 	my $buildDotPlDir = "$libdir/TWiki/$dir";
 	if (-f $buildDotPlDir."/build.pl") {
-#	    print "Found it\n";
+	    $lookedIn .= "\tFound it\n";
 	    return $buildDotPlDir;
 	} else {
-#	    print "Not $buildDotPlDir\n";
+	    $lookedIn .= "\tNot $buildDotPlDir\n";
 	}
     }
-    print "Didn't find it";
+    print "Didn't find it: - \n$lookedIn";
     return "";
 }
 
-sub getDirForExtension {
+sub getLibFragmentForExtension {
     my ($extension) = @_;
     my $dir;
     if ($extension =~ "Plugin") {
-	$dir = "Plugin/$extension";
+	$dir = "Plugins/$extension";
     } elsif ($extension =~ "AddOn") {
-	$dir = "Plugin/$extension";
+	$dir = "Plugins/$extension";
     } elsif ($extension =~ "Contrib") {
 	$dir = "Contrib/$extension";
     }

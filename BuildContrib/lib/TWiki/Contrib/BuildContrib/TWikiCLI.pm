@@ -12,14 +12,16 @@ sub dispatch {
  my $verboseFlag = 0;
  GetOptions( "verbose!" => \$verboseFlag );
 
- my @args =  qw(extension install DistributionContrib);# "@ARGV;
+ my @args =  @ARGV;
 
  my $class = ucfirst lc shift @args; # eg. extension => Extension 
+
+ unless ($class) {
+     return helpText();
+ }
  my $fqClass = $prefix."::".$class;
 
  dispatch2($fqClass, @args);
- 
-
  
  }
 
