@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1016001000" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1023260211" format="1.0" version="1.13"}%
 ---+ Table Plugin
 
 Gives extra control of table display:
@@ -69,7 +69,7 @@ On line before the table use =%<nop>TABLE{...}%=:
 | =initsort= | Column to sort initially (1 to number of columns) | =initsort="2"= |
 | =initdirection= | Initial sorting direction for =initsort=, set to  =up= or =down= | =initsort="down"= |
 | =headerbg= | Header cell background colour | =headerbg="#99CCCC"= |
-| =databg=	| Data cell background colour, a comma separated list | =databg="#C8CB8F,#DBDDB5"= |
+| =databg=	| Data cell background colour, a comma separated list. Specify ="none"= for no colour, that is to use the colour/background of the page the table is on. | =databg="#C8CB8F,#DBDDB5"= |
 | =tableborder= | Table border width (pixels) | =tableborder="2"= |
 | =cellpadding= | Cell padding (pixels) | =cellpadding="0"= |
 | =cellspacing= | Cell spacing (pixels) | =cellspacing="3"= |
@@ -93,6 +93,8 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="1" cellsp
 
 ---++ Plugin Installation Instructions
 
+*Note:* You do not need to install anything on the browser to use this plugin. Below installation instructions are for the administrator who needs to install this plugin on the TWiki server.
+
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
@@ -110,7 +112,15 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="1" cellsp
 
 |  Plugin Author: | %TWIKIWEB%.JohnTalintyre, %TWIKIWEB%.PeterThoeny |
 |  Plugin Version: | 13 Mar 2002 |
-|  Change History: | 13 Mar 2002 PTh: Added TWiki:Main/ShawnBradford 's initsort and initdirection <br /> 12 Mar 2002 PTh: Added valign, headeralign and dataalign; fixed bug of swapped cellpadding/cellspacing; fixed warning of uninitialized value <br /> 05 Jan 2002 PTh: Fixed sorting bug of cells with leading white space <br /> 06 Dec 2001 PTh: Fixed date sorting bug <br /> 03 Dec 2001 PTh: Fixed sort="off" bug and more <br /> 29 Nov 2001: PTh fixed Perl warnings <br /> 16 Nov 2001: PTh added table border, cell spacing, cell padding, gif files <br /> 07 Oct 2001: Initial version |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  05 Jun 2002: | PTh: Added "none" value to databg parameter (suggested by TWiki:Main/TaitCyrus); fixed sorting by stripping HTML tags, removing links and making sort ignore case (suggested by TWiki:Main/ShawnBradford) |
+|  13 Mar 2002: | PTh: Added TWiki:Main/ShawnBradford 's initsort and initdirection |
+|  12 Mar 2002: | PTh: Added valign, headeralign and dataalign; fixed bug of swapped cellpadding/cellspacing; fixed warning of uninitialized value |
+|  05 Jan 2002: | PTh: Fixed sorting bug of cells with leading white space  |
+|  06 Dec 2001: | PTh: Fixed date sorting bug <br /> 03 Dec 2001 PTh: Fixed sort="off" bug and more |
+|  29 Nov 2001: | PTh: Fixed Perl warnings |
+|  16 Nov 2001: | PTh: Added table border, cell spacing, cell padding, gif files |
+|  07 Oct 2001: | JT: Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
@@ -120,7 +130,7 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="1" cellsp
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- %TWIKIWEB%.JohnTalintyre - 07 Oct 2001 <br />
--- %TWIKIWEB%.PeterThoeny - 13 Mar 2002 <br />
+-- %TWIKIWEB%.PeterThoeny - 05 Jun 2002 <br />
 %META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1005707580" path="C:\Data\Temp\up.gif" size="876" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1005707591" path="C:\Data\Temp\down.gif" size="869" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1005707607" path="C:\Data\Temp\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
