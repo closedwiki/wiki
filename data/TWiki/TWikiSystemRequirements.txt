@@ -1,20 +1,29 @@
+%META:TOPICINFO{author="MikeMannix" date="998895765" format="1.0" version="1.6"}%
 ---## TWiki Implementation Notes
 
 ---+++ Platform
 
-TWiki is written in Perl 5 and uses also some shell commands. The current implementation runs best on a Unix machine, but it is also possible on Microsoft Windows. RCS (for revision control) must be installed on the system.
+TWiki is written in Perl 5 and also uses some shell commands. The current implementation runs best on a Unix machine, but it is also possible on Microsoft Windows. RCS (for revision control) must be installed on the system.
+
+| *Required Environment by Platform* |||
+| *Package(s):* | *Unix:* | *Windows:* |
+| Perl		 |	5.x	|	5.x  |
+| Non-standard Perl modules | | |
+| Optional Perl modules | =Net::SMTP= (or sendmail) | =Net::SMTP= | 
+| RCS		  |	5.7	|	5.7	|
+| Other external programs |	ls, fgrep, egrep  |  ?  |
+| Web server  |	Apache  |	?	 |
 
 ---+++ Directory Structure
 
 | *Directory:*		  | *Used for:* |
 | ==twiki/bin==		 | TWiki Perl scripts |
-| ==twiki/bin/TWiki== | TWiki Perl modules |
-| ==twiki/bin/TWiki/Plugins== | Plugins modules |
+| ==twiki/lib/TWiki== | TWiki Perl modules |
+| ==twiki/lib/TWiki/Plugins== | Plugins modules |
 | ==twiki/pub==		 | Public files (FileAttachments, images) |
 | ==twiki/data==		| source text |
 | ==twiki/templates== | HTML templates, used by TWiki scripts |
 
-__Note:__ You could move the ==twiki/bin/TWiki== library directory (including ==Plugins== ) to ==twiki/lib/TWiki==; the scripts look for a =="."== and =="../lib"== relative library path.
 
 ---++++ Files in twiki/bin
 
@@ -36,10 +45,14 @@ __Note:__ You could move the ==twiki/bin/TWiki== library directory (including ==
 | ==upload==		  | Script that does file upload (FileAttachment) |
 | ==view==			 | Script to view a topic ( *the* script ) |
 | ==viewfile==		| Script to view an file attachment |
+
+---++++ Files in twiki/lib
+
+| *File:*			  | *Used for:* |
 | ==TWiki.pm==		| Main TWiki library |
 | ==TWiki.cfg==	  | For initialization and configuration, used by ==TWiki.pm== |
 
----++++ Files in twiki/bin/TWiki
+---++++ Files in twiki/lib/TWiki
 
 | *File:*			| *Used for:* |
 | ==Access.pm==	| Access control |
@@ -49,10 +62,10 @@ __Note:__ You could move the ==twiki/bin/TWiki== library directory (including ==
 | ==Search.pm==	| Search engine, used by wiki.pm |
 | ==Store.pm==	 | Back-end storage, =*.txt= text file and =*.txt,v= RCS repository file handling |
 
----++++ Files in twiki/bin/TWiki/Plugins
+---++++ Files in twiki/lib/TWiki/Plugins
 
 | *File:*				  | *Used for:* |
 | ==DefaultPlugin.pm== | Default plugin |
 | ==EmptyPlugin.pm==	| Empty plugin, use to create your own |
 
--- Main.PeterThoeny - 03 Mar 2001 <br>
+-- Main.MikeMannix - 26 Aug 2001 
