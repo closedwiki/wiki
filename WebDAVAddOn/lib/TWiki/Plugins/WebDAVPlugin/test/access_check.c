@@ -15,11 +15,11 @@ int main(int argc, const char** argv) {
 	topic = NULL;
   if (strcmp(user,"-") == 0)
 	user = NULL;
-  PROT_open(db);
+  PROT_setDBpath(db);
   if (PROT_accessible(web, topic, mode, user))
 	printf("permitted\n");
   else
 	printf("denied\n");
-  PROT_close();
+
   return 0;
 }

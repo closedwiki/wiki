@@ -29,11 +29,12 @@ BEGIN {
 
 
 use strict;
+use TWiki;
 use TWiki::Plugins::WebDAVPlugin::Permissions;
 
 TWiki::initialize( "/Main", "nobody" );
 
-my $pdb = getPreferencesValue("WEBDAVPLUGIN_LOCK_DB");
-my $permDB = new TWiki::Plugins::WebDAVPlugin::Permissions( $pdb );
+my $pdb = TWiki::Prefs::getPreferencesValue("WEBDAVPLUGIN_LOCK_DB");
+my $permDB = new WebDAVPlugin::Permissions( $pdb );
 
 $permDB->recache();
