@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1064795307" format="1.0" version="1.69"}%
+%META:TOPICINFO{author="PeterThoeny" date="1067684884" format="1.0" version="1.70"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -214,7 +214,9 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
 | *Parameter:* | *Description:* | *Default:* |
 | ="text"= | Search term. Is a regular expression or literal, depending on the =regex= parameter. For regular expressions ";" is used to mean _and_ e.g. "search;agrep" will find all topic containing search _and_ agrep. | required |
 | =search="text"= | (Alternative to above) | N/A |
-| =web="Name"= <br /> =web="%MAINWEB% Know"= <br /> =web="all"= | Wiki web to search: A web, a list of webs separated by whitespace, or =all= webs. [2] | Current web |
+| =web="Name"= <br /> =web="%MAINWEB%, Know"= <br /> =web="all"= | Wiki web to search: A web, a list of webs separated by comma, or =all= webs. [2] | Current web |
+| =topic="%WEBPREFSTOPIC%"= <br /> =topic="*Bug"= | Limit search to topics: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. | All topics in a web |
+| =excludetopic="Web*"= <br /> =excludetopic="%HOMETOPIC%, <nop>WebChanges"= | Exclude topics from search: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. | None |
 | =scope="topic"= <br /> =scope="text"= | Search topic name (title) or in the text (body) of the topic | Topic text (body) |
 | =order="topic"= <br /> =order="modified"= <br /> =order="editby"= <br /> =order=<br />&nbsp;"formfield(name)"= | Sort the results of search by the topic names, last modified time, last editor, or named field of TWikiForms | Sort by topic name |
 | =limit="all"= <br /> =limit="16"= | Limit the number of results returned | All results |
