@@ -60,7 +60,7 @@ usage: UpgradeTWiki --cairo <newCfgFile> <oldCfgFile> <outputDirectory>
 does the CairoRelease upgrade (should end up incompatible with DakarRelease)
 
 usage: UpgradeTWiki --upgradeTopics <newCfgFile> <newDataDir> <oldDataDir> <outputDir>
-just tries to merge in changes in newTopics that are in the old install (does not touch the cfg files)
+just tries to merge changes from newTopics (uses patch to merge with user changes)
 
 usage: UpgradeTWiki --moveTopics <newCfgFile>
 moves topics to the new Web layout (initially for DEVELOP) 
