@@ -7,6 +7,7 @@ use File::Basename qw( basename );
 
 # TODO notes:
 # * tighten up templates directory permissions (chmod -R o-w twiki/templates)
+# * use WWW::Mechanize::TWiki;
 
 sub mychomp { chomp $_[0]; $_[0] }
 

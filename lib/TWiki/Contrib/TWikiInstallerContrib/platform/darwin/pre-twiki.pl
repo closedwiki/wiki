@@ -38,7 +38,7 @@ unless ( -e ( my $cpanConfig = "/Users/$whoami/.cpan/CPAN/MyConfig.pm" ) )
 { 
     print `mkdir -p /Users/$whoami/.cpan/CPAN; mv MyConfig.pm $cpanConfig`;
 }
-print `perl cpan/install-cpan.pl XML::Parser XML::Simple Text::Diff Algorithm::Diff HTML::Diff`;
+print `perl cpan/install-cpan.pl XML::Parser XML::Simple Text::Diff Algorithm::Diff HTML::Diff WWW::Mechanize::TWiki`;
 #print `perl cpan/install-cpan.pl'`;
 
 print `chmod -R 777 cgi-bin/tmp/`;

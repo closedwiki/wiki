@@ -2,6 +2,7 @@
 
 sub mychomp { chomp $_[0]; $_[0] }
 
+# FIXME: darwin-specific
 my $cpan = "/Users/" . mychomp(`whoami`) . "/Sites/cgi-bin/lib/CPAN";
 
 $CPAN::Config = {
