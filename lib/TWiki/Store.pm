@@ -461,7 +461,7 @@ sub updateReferringPages {
                 my $scantext =
                   $this->readTopicRaw( $wikiUserName, $itemWeb, $itemTopic,
                                        undef, 0 );
-                if( ! TWiki::security->checkAccessPermission( "change",
+                if( ! $this->security()->checkAccessPermission( "change",
                                                               $wikiUserName,
                                                               $scantext,
                                                               $itemWeb,
