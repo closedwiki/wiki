@@ -532,7 +532,11 @@ sub searchWeb
               my $pattern = $tokens[$#tokens]; # last token in an AND search
               $pattern = quotemeta( $pattern ) unless( $theRegex );
               ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic ) unless $text;
-              @multipleHitLines = reverse grep { /$pattern/ } split( /[\n\r]+/, $text );
+              if( $caseSensitive ) {
+                  @multipleHitLines = reverse grep { /$pattern/ } split( /[\n\r]+/, $text );
+              } else {
+                  @multipleHitLines = reverse grep { /$pattern/i } split( /[\n\r]+/, $text );
+              }
           }
 
           do {    # multiple=on loop
@@ -568,7 +572,7 @@ sub searchWeb
                         $text =~ s/%SEARCH{.*?}%/SEARCH{...}/go;
                     }
                     $tempVal =~ s/\$text/$text/gos;
-                    $forceRendering = 1;
+                    $forceRendering = 1 unless( $doMultiple );
                 }
             } else {
                 $tempVal = $repeatText;
