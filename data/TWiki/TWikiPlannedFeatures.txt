@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043311318" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092563740" format="1.0" version="1.5"}%
 	* Features requested, planned or under construction are listed at the TWiki development home TWiki:Codev.WebHome
 
 *Related Topics*
@@ -6,4 +6,5 @@
 	* TWikiDocumentation is the implementation documentation. 
 	* TWikiEnhancementRequests is the place where you can add your enhancement requests. 
 
--- Main.PeterThoeny - 17 Jan 2003
+-- TWiki:Main.PeterThoeny - 17 Jan 2003
+

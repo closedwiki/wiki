@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1082875802" format="1.0" version="1.18"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092563338" format="1.0" version="1.19"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%  
 %STARTINCLUDE%
@@ -42,20 +42,16 @@ A Form Template is simply a page containing your form, defined as a table where 
 	1. Save the topic _(you can later choose to [[#EnablingForms][enable/disable]] individual forms)_.
 
 <blockquote style="background-color:#f0f0f0">
-*Example:* ==<nop>WebForm==
-<verbatim>
-| *Name* | *Type* | *Size* | *Values* | *Tooltip message* |
-| Know.TopicClassification | select | 1 | Know.NoDisclosure, 
-  Know.PublicSupported, Know.PublicFAQ | blah blah... |
-| Know.OperatingSystem | checkbox | 3 | Know.OsHPUX, Know.OsLinux,
-  Know.OsSolaris, Know.OsWin | blah blah... |
-| Know.OsVersion | text | 16 | | blah blah... |
-</verbatim>
+*Example:* ==<nop>WebForm== %BR%
+=| <nop>*Name* | <nop>*Type* | <nop>*Size* | <nop>*Values* | <nop>*Tooltip message* |= %BR%
+=| !TopicClassification | select | 1 | !NoDisclosure, !PublicSupported, !PublicFAQ | blah blah... |= %BR%
+=| !OperatingSystem | checkbox | 3 | !OsHPUX, !OsLinux, !OsSolaris, !OsWin | blah blah... |= %BR%
+=| !OsVersion | text | 16 | | blah blah... |=
 
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* |
-| Know.TopicClassification | select |  1  | Know.NoDisclosure, Know.PublicSupported, Know.PublicFAQ | blah blah... |
-| Know.OperatingSystem | checkbox |  3  | Know.OsHPUX, Know.OsLinux, Know.OsSolaris, Know.OsWin | blah blah... |
-| Know.OsVersion | text |  16  | | blah blah... |
+| <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/TopicClassification"><nop>TopicClassification</a> | select |  1  | <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/NoDisclosure"><nop>NoDisclosure</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/PublicSupported"><nop>PublicSupported</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/PublicFAQ"><nop>PublicFAQ</a> | blah blah... |
+| <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OperatingSystem"><nop>OperatingSystem</a> | checkbox |  3  | <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsHPUX"><nop>OsHPUX</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsLinux"><nop>OsLinux</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsSolaris"><nop>OsSolaris</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsWin"><nop>OsWin</a> | blah blah... |
+| <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsVersion"><nop>OsVersion</a> | text |  16  | | blah blah... |
 </blockquote>
 
 ---+++ Defining a Form with Multiple Topics
@@ -68,21 +64,21 @@ Forms can also be defined by using form templates that retrieve field values fro
 <blockquote style="background-color:#f0f0f0">
 *Example: <nop>WebFormTemplate*
 
-	* Know.<nop>WebFormTemplate main definition:
+	* <nop><nop>WebFormTemplate main definition:
 	  <br /> &nbsp;
 	  | *Name* | *Type* | *Size* | *Values*  | *Tooltip message* |
-	  | Know.TopicClassification | select | 1 |	 | blah blah... |
-	  | Know.OperatingSystem | checkbox | 3 |	 | blah blah... |
-	  | Know.OsVersion | text | 16 |	 | blah blah... |
+	  | <nop>TopicClassification | select | 1 |	 | blah blah... |
+	  | <nop>OperatingSystem | checkbox | 3 |	 | blah blah... |
+	  | <nop>OsVersion | text | 16 |	 | blah blah... |
 	  <br />
 	  %X% Leave the ==Values== field *blank*.
 
-	* Know.<nop>TopicClassification field value definition:
+	* <nop><nop>TopicClassification field value definition:
 	  <br /> &nbsp;
 	  | *Name* | *Type* | *Tooltip message* |
-	  | Know.NoDisclosure | option | blah blah... |
-	  | Know.PublicSupported | option | blah blah... |
-	  | Know.PublicFAQ | option | blah blah... |
+	  | <nop>NoDisclosure | option | blah blah... |
+	  | <nop>PublicSupported | option | blah blah... |
+	  | <nop>PublicFAQ | option | blah blah... |
 </blockquote>
 
 	* *Implementation Notes:* This format allows you to define field items with or without TWiki.WikiNames, depending on your needs.
@@ -106,7 +102,7 @@ Forms are enabled on a per web basis. The ==WEBFORMS== variable in WebPreference
 
 	* Additionally a new topic can be given a Form using the =formtemplate= parameter in the URL.  Initial values can then be provided in the URLs or as form values:
 		* other than checkboxes: ==name==, ex: ==?BugPriority=1==
-		* checkbox: ==namevalue=1==, ex: ==?ColourRed=1==. <br /> 
+		* checkbox: ==namevalue=1==, ex: ==?ColorRed=1==. <br /> 
 		  Boxes with a tick must be specified.
 
 ---++ Setting Up Multiple Form Options
@@ -144,9 +140,63 @@ The new Form Template system should work with old Category Table data with no sp
 
 %T% *NOTE:* If things aren't working correctly, there may be useful entries in =data/warning.txt=.
 
+---++ Using Forms For Settings
+Example process to change your WebPreferences to use forms instead of ={3 spaces}* Set= statements:
+
+	1 create !WebPrefencesForm topic
+	2 fill it with a table like this: %BR%
+	  =| *Name*|*Type*|*Size*|*Value*|*Tooltip message*|*Attributes*|= %BR%
+	  =| WEBTOPICLIST |textarea| |	  | List of topics of the !%WEB% web |S|= %BR%
+	  =| SITEMAPLIST  |select  |3| on, | list this web in the Site Map  |S|= %BR%
+	  =| SITEMAPWHAT  |textarea| |	  | short web summary				 |S|= %BR%
+	  =| WEBBGCOLOR	|text	 |8|	  | Web specific background color |S|= %BR%
+	  etc...
+	3 Edit WebPreferences and:
+		* Add or Change the form to !WebPrefencesForm
+		* add !WebPrefencesForm to the =Set WEBFORMS= line
+		* Save
+	4 Edit WebPreferences, jump straight down to the form ignoring all the =textarea= stuff, and set as you like
+	5 if everything works as you like it, you can delete the Set statements (the form overrides set if they are both used).
+
+__Notes:__
+
+If it isn't working, double check that the ==S== attribute has been specified (S for Setting).
+If you change the form, the changes will not take affect until you edit and save the preferences' topics again.
+
+Using the TWiki:Plugins.EditTablePlugin on !WebPreferencesForm makes adding new prefedrences a breeze.
+
+A possibly unwanted side effect for using forms for the SKINS setting in their personal user topic: because the User Preferences are final you can't have different skins for different webs as the user's setting always wins. A workaround is to simply omit SKIN in the form.
+
+Another example, this one using !EditTablePlugin, source:
+
+=%<nop>EDITTABLE{ header="|*Name*|*Type*|*Size*|*Values*|*Tooltip message*|*Attributes*|" format="|text,20|text,20|text,20|text,20|text,20|text,1|" }%=
+
+Result (after some editing):
+
+%EDITTABLE{ header="|*Name*|*Type*|*Size*|*Values*|*Tooltip message*|*Attributes*|" format="|text,20|text,20|text,20|text,20|text,20|text,1|" }%
+|*Name* | *Type* | *Size* | *Values* | *tooltip message* | *Attributes*|
+|ALLOWTOPICCHANGE | textarea |  |  | Users or groups __allowed__ to change or rename this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup) | S|
+|ALLOWWEBCHANGE | textarea |  |  | Users or groups who __are__  allowed to  __change__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
+|ALLOWWEBRENAME | textarea |  | %MAINWEB%.TWikiAdminGroup | Users or groups who __are__  allowed to  __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
+|ALLOWWEBVIEW | textarea |  |  | Users or groups who __are__  allowed to __view__  topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
+|DENYWEBCHANGE | textarea |  |  | Users or groups who __are not__  allowed to  __change__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
+|DENYWEBRENAME | textarea |  |  | Users or groups who __are not__  allowed to  __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
+|DENYWEBVIEW | textarea |  |  | Users or groups who __are not__  allowed to __view__  topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
+|FINALPREFERENCES | textarea |  | "NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME" | Web preferences that are *not* allowed to be overridden by user preferences | S|
+|NOSEARCHALL | text |  | ",on" | "Exclude web from a =web=""all""= search: (Set to =on= for hidden webs)" | S|
+|SITEMAPLIST | select |  | "on, ," | List this web in the %TWIKIWEB%.SiteMap | S|
+|SITEMAPUSETO | textarea |  | ...to do something. | ...to do something. | S|
+|SITEMAPWHAT | textarea |  | Describe what this web does. | Describe what this web does. | |
+|SKIN | select |  | "twiki, free, gnu, koala, pattern, plain, tiger" | list of installed skins | S|
+|WEBBGCOLOR | select |  | lightpink, pink, crimson, lavenderblush, palevioletred, hotpink, deeppink, mediumvioletred, orchid, thistle, plum, violet, fuchsia, fuchsia, darkmagenta, purple, mediumorchid, darkviolet, darkorchid, indigo, blueviolet, mediumpurple, mediumslateblue, slateblue, darkslateblue, ghostwhite, lavender, blue, mediumblue, darkblue, navy, midnightblue, royalblue, cornflowerblue, lightsteelblue, lightslategray, slategray, dodgerblue, aliceblue, steelblue, lightskyblue, skyblue, deepskyblue, lightblue, powderblue, cadetblue, darkturquoise, azure, lightcyan, paleturquoise, aqua, aqua, darkcyan, teal, darkslategray, mediumturquoise, lightseagreen, turquoise, aquamarine, mediumaquamarine, mediumspringgreen, mintcream, springgreen, mediumseagreen, seagreen, honeydew, darkseagreen, palegreen, lightgreen, limegreen, lime, forestgreen, green, darkgreen, lawngreen, chartreuse, greenyellow, darkolivegreen, yellowgreen, olivedrab, ivory, beige, lightyellow, lightgoldenrodyellow, yellow, olive, darkkhaki, palegoldenrod, lemonchiffon, khaki, gold, cornsilk, goldenrod, darkgoldenrod, floralwhite, oldlace, wheat, orange, moccasin, papayawhip, blanchedalmond, navajowhite, antiquewhite, tan, burlywood, darkorange, bisque, linen, peru, peachpuff, sandybrown, chocolate, saddlebrown, seashell, sienna, lightsalmon, coral, orangered, darksalmon, tomato, salmon, mistyrose, lightcoral, snow, rosybrown, indianred, red, brown, firebrick, darkred, maroon, white, whitesmoke, gainsboro, lightgrey, silver, darkgray, gray, dimgray, black | Web specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors) | S|
+|WEBFORMS | textarea |  |  | %TWIKIWEB%.TWikiForms: How to enable form(s) | S|
+|WEBTOPICLIST | textarea |  | [[WebHome]], [[WebChanges][Changes]], [[WebTopicList][Topics]], [[WebIndex][Index]], [[WebSearch][Search]], Go <input type="text" name="topic" size="16" /> | the main entry point topics for this web | S|
+
+
 -- TWiki:Main.JohnTalintyre - 16 Aug 2001 %BR%
 -- TWiki:Main.MikeMannix - 05 Jan 2002 %BR%
--- TWiki:Main.PeterThoeny - 25 Apr 2004
+-- TWiki:Main.PeterThoeny - 25 Apr 2004 %BR%
+-- TWiki:Main.MattWilkie - 27 Jul 2004 %BR%
 %STOPINCLUDE%
 
 %META:TOPICMOVED{by="MikeMannix" date="1000277489" from="TWiki.TWikiFormTemplate" to="TWiki.TWikiForms"}%
