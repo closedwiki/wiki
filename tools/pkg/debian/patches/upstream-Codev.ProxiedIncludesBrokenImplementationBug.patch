@@ -4,8 +4,7 @@
      my $base64;
      my $result = '';
      $theUrl = "/" unless( $theUrl );
--    my $req = "GET $theUrl HTTP/1.1\r\n";
-+    my $req = "GET $theUrl HTTP/1.0\r\n";
+     my $req = "GET $theUrl HTTP/1.0\r\n";
 +    $req .= "User-Agent: TWiki-Net-Pm\r\n";
  
      # RNF 22 Jan 2002 Support for vhosts and user authentication.

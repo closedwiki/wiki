@@ -1,0 +1,25 @@
+diff -ur lib/TWiki/Access.pm lib/TWiki/Access.pm
+--- lib/TWiki/Access.pm	2004-11-16 17:08:01.000000000 -0500
++++ lib/TWiki/Access.pm	2004-11-16 17:29:14.000000000 -0500
+@@ -109,6 +109,10 @@
+                     @denyList = @tmpList;
+                 } else {
+                     @allowList = @tmpList;
++		    if ($2 =~ /\S/ && !@allowList) {
++		    	##&TWiki::writeDebug( "  return 0, empty ALLOWTOPIC" );
++			return 0;
++		    }
+                 }
+             }
+         }
+@@ -138,6 +142,10 @@
+                       prvGetUserList( $tmpVal );
+         ##my $tmp = join( ', ', @allowList );
+         ##&TWiki::writeDebug( "  Prefs ALLOWWEB$theAccessType: {$tmp}" );
++	if ($tmpVal && $tmpVal =~ /\S/ && !@allowList) {
++	    ##&TWiki::writeDebug( " return 0, empty ALLOWWEB" );
++	    return 0;
++	}
+     }
+ 
+     # access permission logic
