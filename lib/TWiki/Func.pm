@@ -1149,6 +1149,77 @@ sub setTopicRevisionTag
     return TWiki::Store::setTopicRevisionTag( @_ );
 }
 
+=pod
+
+---+++ checkDependencies
+
+| Description: | checks a list of Perl dependencies at runtime |
+| Parameter: =$context= | Context description e.g. name of the module being checked |
+| Parameter: =$deps= | List of hashes containing dependency information |
+| Returns: | undef if dependencies are OK, an error message otherwise |
+| Since: | TWiki::VERSION  |
+
+The dependencies are expressed as a list of hashes. Each hash contains
+the name of a package and (optionally) a boolean constraint on the VERSION
+variable in that package. It is usually used from the =initPlugin= method
+like this:
+<verbatim>
+if ( TWiki::Plugins::VERSION >= 1.030 ) {
+  my @deps = (
+    { package => 'TWiki::Plugins::CalendarPlugin', constraint => '>= 1.030' },
+    { package => 'Time::ParseDate' },
+    { package => 'Apache::VMonitor' }
+  );
+  my $err = TWiki::Func::checkDependencies( $pluginName, \@deps );
+  if ( $err ) {
+    TWiki::Func::writeWarning( $err );
+    print STDERR $err; # print to webserver log file
+    return 0; # plugin initialisation failed
+  }
+}
+</verbatim>
+
+=cut
+
+sub checkDependencies {
+  my ( $context, $deps ) = @_;
+  my $report = "";
+  my $depsOK = 1;
+  foreach my $dep ( @$deps ) {
+    my ( $ok, $ver ) = ( 1, 0 );
+	my $mess = "";
+	my $const = "";
+
+    eval "use $dep->{package}";
+    if ( $@ ) {
+	  $mess .= "it could not be found: $@";
+	  $ok = 0;
+	} else {
+	  if ( defined( $dep->{constraint} )) {
+		$const = $dep->{constraint};
+		eval "\$ver = \$$dep->{package}::VERSION;";
+		if ( $@ ) {
+		  $mess .= "the VERSION of the package could not be found: $@";
+		  $ok = 0;
+		} else {
+		  eval "\$ok = ( \$ver $const)";
+		  if ( $@ || ! $ok ) {
+			$mess .= " $ver is currently installed: $@";
+			$ok = 0;
+		  }
+		}
+	  }
+	}
+	unless ( $ok ) {
+	  $report .= "WARNING: $dep->{package}$const is required for $context, but $mess\n";
+	  $depsOK = 0;
+	}
+  }
+  return undef if ( $depsOK);
+
+  return $report;
+}
+
 # =========================
 =pod
 
