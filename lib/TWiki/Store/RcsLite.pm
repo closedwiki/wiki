@@ -436,7 +436,7 @@ sub addRevision
     $text = $self->_readFile( $self->{file} ) if( $self->{attachment} );
     my $head = $self->numRevisions();
     if( $head ) {
-        my $delta = _diffText( \$text, \$self->delta($head) );
+        my $delta = _diffText( \$text, \$self->delta($head), "" );
         ${$self->{"delta"}}[$head] = $delta;
     }   
     $head++;
@@ -569,7 +569,8 @@ sub _patch
    my $last = "";
    my $d;
    my $extra = "";
-   while( $pos <= $#${delta} ) {
+   my $max = $#$delta;
+   while( $pos <= $max ) {
        $d = $delta->[$pos];
        if( $d =~ /^([ad])(\d+)\s(\d+)\n(\n*)/ ) {
           $last = $1;
@@ -670,7 +671,7 @@ sub _diffText
 sub _lastNoEmptyItem
 {
    my( $items ) = @_;
-   my $pos = $#${items};
+   my $pos = $#$items;
    my $count = 0;
    my $item;
    while( $pos >= 0 ) {
@@ -696,8 +697,8 @@ sub _diffEnd
    
    if( $DIFFEND_DEBUG ) {
      print( "countOld, countNew, posOld, posNew, lastOld, lastNew, lenOld: " .
-            "$countOld, $countNew, $posOld, $posNew, " . $#${old} . ", " . $#${new} . 
-            "," . @${old} . "\n" );
+            "$countOld, $countNew, $posOld, $posNew, " . $#$old . ", " . $#$new . 
+            "," . @$old . "\n" );
    }
    
    $posNew++;
@@ -769,7 +770,7 @@ sub _diff
        $last = 1 if( $count == $numChunks );
        if( $last && $chunkSign eq "+" ) {
            my $endings = 0;
-           for( my $i=$#${old}; $i>=0; $i-- ) {
+           for( my $i=$#$old; $i>=0; $i-- ) {
                if( $old->[$i] ) {
                    last;
                } else {
@@ -814,7 +815,7 @@ sub _addChunk
 {
    my( $chunkSign, $out, $lines, $start, $adj, $type, $start1, $last, $newLines ) = @_;
    my $nLines = @$lines;
-   if( $lines->[$#${lines}] =~ /(\n+)$/o ) {
+   if( $lines->[$#$lines] =~ /(\n+)$/o ) {
       $nLines += ( ( length( $1 ) == 0 ) ? 0 : length( $1 ) -1 );
    }
    if( $nLines > 0 ) {
