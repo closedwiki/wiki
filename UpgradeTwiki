@@ -109,7 +109,7 @@ print "Preparing to write a new format configuration file for you...\n\n";
 
 TWikiCfg::UpgradeTWikiConfig($configPath, $targetDir);   # dies on error, without doing damage
 
-print "\n\nMerging your existing twiki data ($TWikiCfg::dataDir) with new release twiki data, putting the result in $targetDir/data...\n";
+print "\n\nMerging your existing twiki data ($TWikiCfg::dataDir) with new release twiki data...\n";
 
 my $baseDir = `pwd`;
 chomp ($baseDir);
@@ -124,11 +124,6 @@ chdir($baseDir);
     print "Now I'm giving write access to pub & data in the newly set up TWiki, so your web server can access them...\n";
 
     find( sub {chmod 0777, $File::Find::name;} , "$targetDir/pub", "$targetDir/data");
-
-print "
-Congratulations... you made it this far!
-
-";
 
 if (-f "$setlibPath/.htaccess")
 {
@@ -155,12 +150,20 @@ Couldn't see a .htaccess in $setlibPath ... so I didn't try to help in that resp
 }
 
 print "
+Congratulations... you made it this far!
+
+";
+
+print "
 
 Now: you need to 
 
- - See what kind of a mess I made merging the data, and fix accordingly (look in data/patch.log).
+ - Check the files listed above (if any) who's patches were rejected.
 
- - Check if you modified the old version of setlib.cfg: if you did,
+   For these files, you'll want to check the .rej file (in the same directory as the file)
+   and see whether there are changes in there that you need to make manually.
+
+ - Check if you modified your old version of setlib.cfg: if you did,
     then you need to do the same to the new one (which you will find in ./bin).
 
    (There are only two reasons I can think of why you might have done that:
@@ -172,26 +175,40 @@ Now: you need to
     If you are using htaccess, then check the diffs above make sense.
     If you are using some other method, you'll need to figure out what you need to do (sorry!)
 
- - If you are one of the few people who modify \@storeSettings, then you need to 
+ - Set the permissions appropriately for the new TWiki.
+
+   I have given pub and data global read and write access, so your new TWiki
+   will work, but you might want tighter controls.
+
+ - If you are one of the few people who modified \@storeSettings, then you need to 
    look in TWiki.cfg and see if you need to make changes (I installed new the default ones)
 
    If you don't know what this means, it probably doesn't apply to you.
 
- - re-install plugins you were using (?)
+ - Re-install plugins you were using (?)
 
- - re-link new webs you created (?)
+ - Copy over custom templates you put in the original templates directory
 
- - copy over custom templates you put in the original templates directory
-
- - probably heaps of other stuff I haven't thought of?
+ - anything else I haven't thought of
 
  - archive your old installation 
 
  - move the newly created twiki directory ($targetDir) to the place where your previous version was.
 
+ - Use your browser to check the whole thing: visit 
+
+      $TWikiCfg::defaultUrlHost$TWikiCfg::scriptUrlPath/testenv
+
+   make sure there are no unwarranted warnings, and press the 'relockrcs' button if advised to do so,
+
+   and finally: visit...
+
+      $TWikiCfg::defaultUrlHost$TWikiCfg::scriptUrlPath$TWikiCfg::dispViewPath
+
 Goodluck... :-)
 ";
 
+if ($TWikiCfg::dispViewPath) {1;}# stop perl complaining about used only once
 
 
 
