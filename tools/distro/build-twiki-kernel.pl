@@ -14,7 +14,7 @@ use File::Copy qw( cp );
 use File::Path qw( rmtree mkpath );
 use File::Spec::Functions qw( rel2abs );
 use File::Find::Rule;
-use File::Slurp::Tree;
+use File::Slurp::Tree qw( slurp_tree spew_tree );
 use LWP::UserAgent;
 use Getopt::Long;
 use Pod::Usage;
@@ -53,8 +53,10 @@ $Config->{install_base} = $Config->{tempdir} . "/twiki";		# the directory the of
 unless ( $Config->{outfile} )
 {
     my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } `svn info` )[0] ) =~ /(\d+)$/;
-    $Config->{outfile} = "TWikiKernel-" . mychomp(`head -n 1 branch` || 'MAIN') . "-$svnRev";
+    my $branch = mychomp(`head -n 1 branch` || 'MAIN');
+    $Config->{outfile} = "TWikiKernel-$branch-$svnRev";
 }
+# make sure output directories exist
 map { ( mkpath $Config->{$_} or die $! ) unless -d $Config->{$_} } qw( localcache install_base );
 print STDERR Dumper( $Config ) if $Config->{debug};
 
@@ -71,9 +73,8 @@ if ( $Config->{verbose} )
 my $ruleDiscardRcsHistory = File::Find::Rule->file->name("*,v")->discard;
 my $ruleDiscardRcsLock = File::Find::Rule->file->name("*.lock")->discard;
 my $ruleDiscardBackup = File::Find::Rule->file->name("*~")->discard;
-#my $ruleDiscardSVN = File::Find::Rule->directory->name(".svn")->prune->discard;
-#my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardSVN, $ruleDiscardBackup, File::Find::Rule->file );
-my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardBackup, File::Find::Rule->file );
+my $ruleDiscardSVN = File::Find::Rule->directory->name(".svn")->prune->discard;
+my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardSVN, $ruleDiscardBackup, File::Find::Rule->file );
 
 ################################################################################
 
@@ -85,7 +86,7 @@ mkpath( $installBase ) or die "Unable to create the new build directory: $!";
 
 my $pwdStart = cwd();
 
-if ( 0 ) {
+if ( 0 ) {	# SVN EXPORT concept on hold (i _want_ anonymous svn checkouts...)
     my $svnExport = $Config->{svn_export} or die "no svn_export?";
     ( rmtree( $svnExport ) or die qq{Unable to empty the svn export directory "$svnExport": $!} ) if -e $svnExport;
     execute( qq{svn export ../.. $svnExport} ) or die $!;
