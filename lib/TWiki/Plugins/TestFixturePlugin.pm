@@ -13,6 +13,12 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
+package TWiki::Plugins::TestFixturePlugin;
+
+use strict;
+use HTML::Diff;
+use TWiki::Func;
+
 # This is a test plugin designed to interact with TWiki testcases.
 # It should NOT be shipped with a release.
 # It implements all possible plugin handlers, and generates selected
@@ -34,12 +40,6 @@
 # Stubs are provided for all the published handlers so you can hack
 # the plugin to do other tests as well.
 #
-package TWiki::Plugins::TestFixturePlugin;
-
-use strict;
-use HTML::Diff;
-use TWiki::Func;
-
 use vars qw(
             $installWeb $VERSION $pluginName
             %called $topic $web $user $installWeb
@@ -62,12 +62,12 @@ sub _parse {
     my $lastTok;
     my $gathering = 1;
 
-    foreach my $tok ( split( /(<!--\s*\/?$tag\s*\S*\s*-->)/, $text ) ) {
-        if ( $tok =~ /<!--\s*$tag\s*(\S*)\s*-->/ ) {
+    foreach my $tok ( split( /(<!--\s*\/?$tag.*?-->)/, $text ) ) {
+        if ( $tok =~ /<!--\s*$tag(.*?)-->/ ) {
             $opt = $1;
             $gathering = 1;
         } elsif ( $tok =~ /<!--\s*\/$tag\s*-->/ ) {
-            throw Error::Simple("<!-- /$tag --> found without matching <!-- $tag -->")
+            throw Error::Simple("<!-- /$tag --> found without matching <!-- $tag --> $lastTok")
               unless ( $gathering );
             push( @list, { text => $lastTok, options=> $opt } );
             $gathering = 0;
@@ -107,11 +107,18 @@ sub _compareExpectedWithActual {
     for my $i ( 0..$#$actual ) {
         my $e = $expected->[$i];
         my $et = $e->{text};
-        my $at = $actual->[$i]->{text};
+        if ( $e->{options} =~ /\bagain\b/ ) {
+            my $prev = $expected->[$i-1];
+            $et = $prev->{text};
+            # inherit the text so that the next "again" will see the
+            # previous text
+            $e->{text} = $et;
+        }
         if ( $e->{options} =~ /\bexpand\b/ ) {
             $et = TWiki::Func::expandCommonVariables( $et, $topic, $web );
         }
-        $errors .= _compareResults( $et, $at, $i + 1 );
+        my $at = $actual->[$i]->{text};
+        $errors .= _compareResults( $et, $at, $i + 1, $e->{options} );
     }
 
     return $errors;
@@ -128,24 +135,48 @@ sub _tidy {
 }
 
 sub _compareResults {
-    my ( $expected, $actual, $group ) = @_;
+    my ( $expected, $actual, $group, $opts ) = @_;
 
     my $result = "";
     my $diffs = HTML::Diff::html_word_diff( $expected, $actual );
     my $failed = 0;
+    my $rex = ( $opts =~ /\brex\b/ );
 
     foreach my $diff ( @$diffs ) {
-        my $a = _tidy( $diff->[1] );
-        my $b = _tidy( $diff->[2] );
+        my $a = $diff->[1];
+        my $b = $diff->[2];
+        my $ok = 0;
 
-        if ( $diff->[0] eq 'u' || $a eq $b ) {
+        if ( $diff->[0] eq 'u' || $a eq $b || $rex && _rexeq( $a, $b )) {
+            $ok = 1;
+        }
+        $a = _tidy( $a );
+        $b = _tidy( $b );
+        if ( $ok ) {
             $result .= "<tr bgcolor='8fff8f'><td valign=top><pre>$a</pre></td><td><pre>$a</pre></td></td></tr>\n";
         } else {
             $result .= "<tr valign=top bgcolor='#ff8f8f'><td width=50%><pre>$a</pre></td><td width=50%><pre>$b</pre></td></tr>\n";
             $failed = 1;
         }
     }
-    return $failed ? "<table border=1><tr><th>Expected</th><th>Actual</th></tr>$result</table>" : "";
+    return $failed ? "<table border=1><tr><th>Expected $opts</th><th>Actual</th></tr>$result</table>" : "";
+}
+
+sub _rexeq {
+    my ( $a, $b ) = @_;
+
+    my @res;
+    while ( $a =~ s/\@REX\((.*?)\)/!REX@res!/ ) {
+        push( @res, $1 );
+    }
+    # escape regular expression chars
+    $a =~ s/([\[\]\(\)\\\?\*\+\.\/\^\$])/\\$1/g;
+    $a =~ s/\@DATE/[0-3]\\d [JFMASOND][aepuco][nbrylgptvc] [12][09]\\d\\d/g;
+    $a =~ s/\@TIME/[012]\\d:[0-5]\\d/g;
+    $a =~ s/\@WIKINAME/[A-Z]+[a-z]+[A-Z]+[a-z]+/g;
+    $a =~ s/!REX(\d+)!/$res[$1]/g;
+
+    return $b =~ /^$a$/;
 }
 
 sub initPlugin {
