@@ -1,6 +1,5 @@
 package RegisterTests;
 
-use TestCaseStdOutCapturer;
 use base qw(Test::Unit::TestCase);
 BEGIN {
     unshift @INC, '../../bin';
