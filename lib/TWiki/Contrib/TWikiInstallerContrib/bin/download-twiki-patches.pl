@@ -16,11 +16,9 @@ use diagnostics;
 use Data::Dumper qw( Dumper );
 ++$|;
 
-#my $account;
 BEGIN {
     use Cwd qw( cwd getcwd );
     use Config;
-#    chomp( $account = `whoami` );
     my $localLibBase = getcwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
 }
@@ -69,7 +67,8 @@ foreach my $patchS ( @patches )
     File::Path::mkpath( "$Config->{local_cache}/web/$topic/pub" ) or die $! unless -e "$Config->{local_cache}/web/$topic/pub";
 
     mirror( $remote_uri, "$Config->{local_cache}/web/$topic/data/$topic.txt" );
-    my $patchTopic = LWP::Simple::get( "file:$Config->{local_cache}/web/$topic/data/$topic.txt" ) or die $!;
+    my $patchTopic = LWP::Simple::get( "file:$Config->{local_cache}/web/$topic/data/$topic.txt" );
+    next unless $patchTopic;
 #    print "$patchTopic";
 
     # CODE_SMELL: hopefully won't run into a }% in any of the attributes
@@ -77,6 +76,7 @@ foreach my $patchS ( @patches )
     {
 	#name="Func.pm.patch" attr="" comment="Patch for Func.pm" date="1097756003" path="Func.pm.patch" size="478" user="JChristophFuchs" version="1.1"
 	print "Attrs=[[$1]]\n";
+	$HTML::SimpleParse::FIX_CASE = 0;
 	my $attrsAttach = { HTML::SimpleParse->parse_args( $1 ) };
 	print Data::Dumper::Dumper( $attrsAttach );
 	die "no filename for attachment?" unless $attrsAttach->{name};
@@ -133,9 +133,10 @@ sub getPatchesCatalogList
 {
     # get patches catalog page
     my $pg = 'PatchProposal';
+    my $local_catalogue = "$Config->{local_cache}/${pg}.html";
 
-    mirror( "http://twiki.org/cgi-bin/view/Codev/${pg}?skin=plain", "${pg}.html" );
-    my $patchesCatalogPage = LWP::Simple::get( "file:${pg}.html" ) 
+    mirror( "http://twiki.org/cgi-bin/view/Codev/${pg}?skin=plain", $local_catalogue );
+    my $patchesCatalogPage = LWP::Simple::get( "file:$local_catalogue" ) 
 	or die "Can't download patches catalogue: $!";
 
     # get list of patches (from the links)
@@ -151,7 +152,10 @@ sub getPatchesCatalogList
 	foreach my $row ($ts->rows) {
 	    ( my $patchPage = $row->[0] ) =~ m|href=".+/(.+?)/(.+?)"|;
 #<a class="twikiLink" href="/cgi-bin/view/Codev/LocationLocationLocation">LocationLocationLocation</a>
-	    push @patches, { web => "$1", patch => "$2" };
+	    push @patches, { 
+		name => "$2",
+		web => "$1", 
+		};
 	}
     }
 
