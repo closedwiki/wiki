@@ -326,14 +326,14 @@ sub main
     $tmpFilename =~ s@\\@/@go;
     $tmpFilename =~ /(.*)/;
     $tmpFilename = $1;
-    #&TWiki::writeDebug( "tmpFilename $tmpFilename" );
+    &TWiki::writeDebug( "upload: tmpFilename $tmpFilename" );
     
     my( $fileSize, $fileUser, $fileDate ) = "";
 
     if( $doUpload ) {
 	# check if file exists and has non zero size
 	my $size = -s $tmpFilename;
-	#&TWiki::writeDebug( "size $size" );
+	&TWiki::writeDebug( "upload: size $size" );
 	if( ! -e $tmpFilename ) {
 	    #&TWiki::writeDebug( "upload: no file" );
 	    # PTh 20 Jun 2000: changed to getOopsUrl
@@ -393,30 +393,21 @@ sub main
 
     # update topic
     $fileDate =~ s/ /&nbsp;/go;
-    my $text = "", $before="", $atext="", $after="";
-    $text = &TWiki::Store::readTopic( $topic );
-    # extract attachment section:
-    ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
-    if( ! $before ) { $before = ""; }
-    if( ! $atext  ) { $atext  = ""; }
+    my ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
 
-    if ( $atext =~ /\<TwkNextItem\>/ ) {
+    #if ( $atext =~ /\<TwkNextItem\>/ ) {
         # FIXME - move to view code, maybe not as this would cause RCS update?
-        $atext = TWiki::Attach::migrateToFileAttachmentMacro( $atext );
-    }
+    #    $atext = TWiki::Attach::migrateToFileAttachmentMacro( $atext );
+    #}
 
-    $atext = TWiki::Attach::updateAttachment( 
-                $atext, $fileVersion, $fileName, $filePath, $fileSize,
-                $fileDate, $fileUser, $fileComment, $hideFile );
+    @meta = TWiki::Attach::updateAttachment( 
+                $fileVersion, $fileName, $filePath, $fileSize,
+                $fileDate, $fileUser, $fileComment, $hideFile, @meta );
     if( $createLink ) {
-        $before = addLinkToEndOfTopic( $before, $newFile, $fileName, $fileComment );
-    }
-    $text = "$before<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
-    if( $after ) {
-        $text .= $after;
+        $text = addLinkToEndOfTopic( $text, $newFile, $fileName, $fileComment );
     }
 
-    my $error = &TWiki::Store::saveTopic( $topic, $text );
+    my $error = &TWiki::Store::saveTopicNew( $webName, $topic, $text, \@meta );
     if( $error ) {
         # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );

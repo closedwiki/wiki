@@ -29,11 +29,9 @@ use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
 
-#print "Content-type: text/html\n\n";
+use strict;
 
 my $query= new CGI;
-
-my $testing = "";
 
 &main();
 
@@ -50,6 +48,11 @@ sub main
     my $lockFailure = "";
     my $breakLock = $query->param( 'breaklock' );
     my $theAttachment = $query->param( 'attachment' );
+    my $confirm = $query->param( 'confirm' );
+    
+    if( ! $theAttachment ) {
+        $theAttachment = "";
+    }
     
     TWiki::writeDebug( "rename: theAttachment = $theAttachment" );
 
@@ -96,8 +99,8 @@ sub main
     TWiki::writeDebug( "rename: permission okay" );
 
     # Has user selected new name yet? FIXME are there too many checks above?
-    if( ! $newTopic ) {
-       newTopicScreen( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment );
+    if( ! $newTopic || $confirm ) {
+       newTopicScreen( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $confirm );
        return;    
     } 
         
@@ -313,7 +316,7 @@ sub checkExist
       # FIXME - could offer number addition to topic name that doesn't exist?
       $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
       print $tmpl;
-      TWiki::writeDebug( "rename: topic already exists" );
+      ##TWiki::writeDebug( "rename: topic already exists" );
       # FIXME error doesn't appear on user screen.
       $ret = "problem";    
    }    
@@ -380,18 +383,12 @@ sub getLocks
 # Display screen so user can decide on new web and topic.
 sub newTopicScreen
 {
-   my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment ) = @_;
+   my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $confirm ) = @_;
    
    my $tmpl = "";
    
-   $newTopic = $oldTopic;
-   if( $testing ) {
-      $oldTopic =~ /^(.*)(...)$/;
-      if ($2 eq "One") {
-	 $newTopic = "$1Two";
-      } else {
-	 $newTopic = "$1One";
-      }
+   if( ! $newTopic ) {
+       $newTopic = $oldTopic;
    }
    
    print "Content-type: text/html\n\n";
@@ -403,10 +400,17 @@ sub newTopicScreen
    }
    $tmpl =~ s/%OLD_TOPIC%/$oldTopic/go;
    $tmpl =~ s/%OLD_WEB%/$oldWeb/go;
-   $tmpl =~ s/%NEW_WEB%//go;
-   my @webs = dropListOfWebs($oldWeb);
-   $tmpl =~ s/%WEB_SELECTION%/@webs/go;
-   $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
+   if( $confirm ) {
+       $tmpl =~ s/%WEB_SELECTION%/$newWeb/go;
+       my $tmp = "$newTopic\n<input type=\"hidden\" name=\"newTopic\" value=\"$newTopic\">";
+       $tmpl =~ s/%NEW_TOPIC%/$tmp/go;
+       $tmpl =~ s/%NEW_WEB%/$newWeb/go;
+   } else {
+       $tmpl =~ s/%WEB_SELECTION%/&dropListOfWebs( $oldWeb )/geo;
+       my $tmp = "<input type=\"text\" name=\"newTopic\" size=\"16\" value=\"$newTopic\">";
+       $tmpl =~ s/%NEW_TOPIC%/$tmp/go;
+       $tmpl =~ s/%NEW_WEB%//go;
+   }
    $tmpl =~ s/%CHANGE_REFS%//go;
    $tmpl = &TWiki::handleCommonTags( $tmpl, "" );
    print $tmpl;

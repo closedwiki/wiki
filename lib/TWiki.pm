@@ -141,6 +141,11 @@ sub initialize
 {
     my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl ) = @_;
 
+    writeDebug( "\n---------------------------------" );
+    
+    $TWiki::Attach::noFooter = 0;
+    $TWiki::Attach::showAttr = 0;
+
     # Make %ENV safer for CGI
     if( $safeEnvPath ) {
         $ENV{'PATH'} = $safeEnvPath;
@@ -363,6 +368,14 @@ sub getPubDir
 sub getPubUrlPath
 {
     return $pubUrlPath;
+}
+
+# =========================
+# Topic without Web name
+sub getWikiUserTopic
+{
+    $wikiUserName =~ /([^.]+)$/;
+    return $1;
 }
 
 # =========================
@@ -865,10 +878,6 @@ sub handleCommonTags
     # Wiki Plugin Hook
     &TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb );
 
-
-    # Produce attachments table
-    &TWiki::Attach::handleTags( $text, $theWeb, $theTopic );
-
     # handle tags again because of plugin hook
     &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
@@ -876,6 +885,62 @@ sub handleCommonTags
     $text =~ s/%TOC{([^}]*)}%/&handleToc($text,$theTopic,$theWeb,$1)/geo;
     $text =~ s/%TOC%/&handleToc($text,$theTopic,$theWeb,"")/geo;
 
+    return $text;
+}
+
+# ========================
+sub renderMoved
+{
+    my( $web, $topic, $metar ) = @_;
+    
+    my @meta = @$metar;
+    my $text = "";
+    
+    my @tmp = grep { /^%META:TOPICMOVED/ } @meta;
+    
+    if( @tmp ) {
+        my $movedMeta = shift @tmp;
+        $movedMeta =~ /{([^}]*)}/;
+        my $args = $1;
+        my $from = extractNameValuePair( $args, "from" );
+        $from =~ /(.*)\.(.*)/;
+        my $fromWeb = $1;
+        my $fromTopic = $2;
+        my $to   = extractNameValuePair( $args, "to" );
+        $to =~ /(.*)\.(.*)/;
+        my $toWeb = $1;
+        my $toTopic = $2;
+        my $by   = extractNameValuePair( $args, "by" );
+        my $date = extractNameValuePair( $args, "date" );
+        $date = formatGmTime( $date );
+        
+        # Only allow put back, if current web and topic match stored to information
+        my $putBack = "";
+        if( $web eq $toWeb && $topic eq $toTopic ) {
+            $putBack  = " - <a title=\"Click to move topic back to previous location, with option to change references.\"";
+            $putBack .= " href=\"$scriptUrlPath/rename?newWeb=$fromWeb&newTopic=$fromTopic&oldWeb=$web";
+            $putBack .= "&oldTopic=$topic&confirm=yes\">put it back</a>";
+        }
+        $text = "<p><I><nop>$to moved from <nop>$from on $date by %MAINWEB%.$by</I>$putBack</p>";
+    }
+    
+    return $text;
+}
+
+# =========================
+sub renderMetaData
+{
+    my( $web, $topic, $meta ) = @_;
+
+    my $attachmentText = TWiki::Attach::renderMetaData( $web, $topic, $meta );
+    
+    my $movedText = renderMoved( $web, $topic, $meta );
+    
+    my $text = "$attachmentText\n$movedText";
+    
+    my $text = getRenderedVersion( $text, $web );
+    my $text = handleCommonTags( $text, $topic, $web );
+    
     return $text;
 }
 
@@ -999,7 +1064,6 @@ sub internalLink
     }
 
     my $text = $thePreamble;
-
     if( $exist) {
         if( $theAnchor ) {
             my $anchor = makeAnchorName( $theAnchor );

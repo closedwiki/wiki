@@ -32,6 +32,12 @@ $query= new CGI;
 
 &main();
 
+sub writeDebug
+{
+    my( $text ) = @_;
+    TWiki::writeDebug( $text );
+}
+
 sub main
 {
     my $thePathInfo = $query->path_info(); 
@@ -46,6 +52,7 @@ sub main
 
     my $tmpl = "";
     my $text = "";
+    my @meta = ();
     my $rev = $query->param( "rev" );
     my $maxrev = 1;
     my $extra = "";
@@ -80,10 +87,12 @@ sub main
         return;
     }
 
+    # Most recent topic read in even if earlier topic requested - makes code simpler and performance impact should be minimal
     my $topicExists = &TWiki::Store::topicExists( $webName, $topic );
     if( $topicExists ) {
-        # for performance assume top revision and read all revision info at once
-        ( $revdate, $revuser, $maxrev ) = &TWiki::Store::getRevisionInfo( $topic, "", 1 );
+        ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
+        ( $revdate, $revuser, $maxrev ) = &TWiki::Store::getRevisionInfoFromMeta( $webName, $topic, \@meta, "isoFormat" );
+        writeDebug( "maxrev = $maxrev" );
         if( $rev ) {
             $rev =~ s/1\.//go;  # cut major
             if( $rev < 1 )       { $rev = 1; }
@@ -92,12 +101,9 @@ sub main
             $rev = $maxrev;
         }
 
-        if( $rev >= $maxrev ) {
-            $text= &TWiki::Store::readTopic( $topic );
-
-        } else {
-            $text= &TWiki::Store::readVersion( $topic, "1.$rev" );
-            ( $revdate, $revuser ) = &TWiki::Store::getRevisionInfo( $topic, "1.$rev", 1 );
+        if( $rev < $maxrev ) {
+            ( $text, @meta ) = &TWiki::Store::readVersion( $webName, $topic, "1.$rev" );
+            ( $revdate, $revuser ) = &TWiki::Store::getRevisionInfoFromMeta( $webName, $topic, \@meta );
             $extra .= "r1.$rev";
         }
 
@@ -202,7 +208,8 @@ sub main
     }
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-    $tmpl =~ s/%TEXT%/$text/go;
+    my $metaText = &TWiki::renderMetaData( $webName, $topic, \@meta );
+    $tmpl =~ s/%TEXT%/$text\n$metaText/go;
     $tmpl =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
     print "Content-type: text/html\n\n";
     print $tmpl;

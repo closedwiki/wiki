@@ -41,6 +41,7 @@ sub main
 
     $dummy = "";  # to suppress warning
     my $text = "";
+    my @meta = ();
     my $tmp = "";
     my $atext = "";
     my $before = "";
@@ -74,11 +75,13 @@ sub main
         return;
     }
 
+    my $tmp = "";
+    my @meta = ();
     if( $saveCmd eq "repRev" ) {
         # for debug: Use $text as is, it possibly contains an attachment table
     } else {
         # normal case: Get latest attachment from file for preview
-        my $tmp = &TWiki::Store::readTopic( $topic );
+        ( $tmp, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
         my ( $tmp1, $atext, $tmp2 ) = split( /<!--TWikiAttachment-->/, $tmp );
         # combine text and attachment
         ( $before, $tmp, $after ) = split( /<!--TWikiAttachment-->/, $text );
@@ -98,7 +101,7 @@ sub main
     $text =~ s/%_A_%/&/go;
     $text =~ s/ {3}/\t/go;
 
-    my $error = &TWiki::Store::saveTopic( $topic, $text, $saveCmd, $unlock, $dontNotify );
+    my $error = &TWiki::Store::saveTopicNew( $webName, $topic, $text, \@meta, $saveCmd, $unlock, $dontNotify );
     if( $error ) {
         # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );

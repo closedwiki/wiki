@@ -31,40 +31,51 @@ use vars qw(
         $showAttr $viewableAttachmentCount $noviewableAttachmentCount $attachmentCount $noFooter
     );
 
-# =========================
-# Render the %FILEATTACHMENT...% tags to HTML
-sub handleTags
+# ======================
+sub renderMetaData
 {
-    my $theWeb = $_[1];
-    my $theTopic = $_[2];
+    my( $web, $topic, $metaP ) = @_;
+    
+    my @meta = @$metaP;
+    
+    my $metaText = "";
     
     $viewableAttachmentCount = 0;
     $noviewableAttachmentCount = 0;
     $attachmentCount = 0;
     
-    my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $_[0] );
+    $header .= "|  *[[%TWIKIWEB%.FileAttachment]]:*  |  *Action:*  |  *Size:*  |  *Date:*  |  *Who:*  |  *Comment:*  |";
+    if( $showAttr ) {
+        $header .= "  *[[%TWIKIWEB%.FileAttribute]]:*  |";
+    }
+    $header .= "\n";
     
-    if( ! $before ) { $before = ""; }
-    if( ! $atext  ) { $atext  = ""; }
-    if( ! $after  ) { $after  = ""; }
-        
-    $atext =~ s/(%FILEATTACHMENT\{)([^\}]*)(}%)/&formatAttachments( $1, $2, $3, $theWeb, $theTopic )/geo;
-
-    # FIXME allow specification of text or image for this.
+    foreach my $metaItem ( @meta ) {
+       if( $metaItem =~ /(%META:FILEATTACHMENT\{)([^\}]*)(}%)/ ) {
+           $metaText .= formatAttachments( $1, $2, $3, $web, $topic );
+       }
+    }
+    
     my $footer = "";
     if( $attachmentCount && ! $noFooter ) {
         if( $showAttr ) {
-            $footer = "<a href=\"%SCRIPTURLPATH%/view/$theWeb/$theTopic\">List ordinary attachments</a>";
+            $footer = "<a href=\"%SCRIPTURLPATH%/view/$web/$topic\">List ordinary attachments</a>";
         } else {
             if( $noviewableAttachmentCount > 0 ) {
-                $footer = "<a href=\"%SCRIPTURLPATH%/view/$theWeb/$theTopic?showAttr=hd\">View all attachments</a>";
+                $footer = "<a href=\"%SCRIPTURLPATH%/view/$web/$topic?showAttr=hd\">View all attachments</a>";
             }
         }
-        $atext =~ s/(\s)*$/\n|  $footer  |||||||$1/;
+        $footer = "|  $footer  |||||||";
     }
-    $atext =~ s/\n+/\n/go;
-        
-    $_[0] = "$before$atext$after";
+    
+    TWiki::writeDebug( "Attach: $header$metaText$footer" );
+    
+    my $text = "";
+    if( $attachmentCount ) {
+       $text = "<p>\n$header$metaText$footer\n</p>";
+    }
+    
+    return $text;
 }
 
 
@@ -103,13 +114,6 @@ sub formatAttachments
     $attachmentCount++;
     if (  ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ ) ) {
         $viewableAttachmentCount++;     
-        if( $viewableAttachmentCount == 1 ) {
-            $row .= "|  *[[%TWIKIWEB%.FileAttachment]]:*  |  *Action:*  |  *Size:*  |  *Date:*  |  *Who:*  |  *Comment:*  |";
-            if( $showAttr ) {
-                $row .= "  *[[%TWIKIWEB%.FileAttribute]]:*  |";
-            }
-            $row .= "\n";
-        }
         my $fileIcon = TWiki::Attach::filenameToIcon( $file );
         $attrComment = $attrComment || "&nbsp;";
         $row .= "| $fileIcon <a href=\"%SCRIPTURLPATH%/viewfile/$theWeb/$theTopic?rev=$attrVersion&filename=$file\">$file</a> \\\n";
@@ -119,6 +123,7 @@ sub formatAttachments
             $attrAttr = $attrAttr || " &nbsp; ";
             $row .= " $attrAttr |";
         }
+        $row .= "\n";
     }  else {
         $noviewableAttachmentCount++;
     }
@@ -159,7 +164,7 @@ sub migrateFormatForTopic
 sub getOldAttachAttr
 {
     my( $atext ) = @_;
-    my $fileName="", $filePath, $fileSize="", $fileDate="", $fileUser="", $fileComment="";
+    my $fileName="", $filePath="", $fileSize="", $fileDate="", $fileUser="", $fileComment="";
     my $before="", $item="", $after="";
 
     ( $before, $fileName, $after ) = split( /<(?:\/)*TwkFileName>/, $atext );
@@ -189,42 +194,65 @@ sub getOldAttachAttr
 # =========================
 sub migrateToFileAttachmentMacro
 {
-   my ( $atext ) = @_;
-   my $res = "\n";
+   my ( $text, @meta ) = @_;
    
-   my $line = "";
-   foreach $line ( split( /<TwkNextItem>/, $atext ) ) {
-      my( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) =
-         getOldAttachAttr( $line );
+   
+   my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
+   if( ! $before ) { $before = ""; }
+   if( ! $atext  ) { $atext  = ""; }
+   
+   if( $atext =~ /<TwkNextItem>/ ) {
+      my $line = "";
+      foreach $line ( split( /<TwkNextItem>/, $atext ) ) {
+          my( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) =
+             getOldAttachAttr( $line );
 
-      if( $fileName ) {
-         $res .= formFileAttachmentMacro( $fileName, "", $filePath, $fileSize, 
-                                          $fileDate, $fileUser, $fileComment, "" );
-         $res .= "\n";
-      }
+          if( $fileName ) {
+             my @args = formFileAttachmentArgs( $fileName, "", $filePath, $fileSize, 
+                                              $fileDate, $fileUser, $fileComment, "" );
+             @meta = TWiki::Store::metaUpdate( "FILEATTACHMENT", \@args, "name", @meta );                                 
+          }
+       }
+   } else {
+       # Format of macro that came before META:ATTACHMENT
+       my $line = "";
+       foreach $line ( split( /\n/, $atext ) ) {
+           if( $line =~ /%FILEATTACHMENT{\s"([^"]*)"([^}]*)}%/ ) {
+               my $name = $1;
+               my $rest = $2;
+               $rest =~ s/^\s*//;
+               my @values = TWiki::Store::keyValue2list( $rest );
+               unshift @values, $name;
+               unshift @values, "name";
+               @meta = TWiki::Store::metaUpdate( "FILEATTACHMENT", \@values, "name", @meta );
+           }
+       }
    }
+       
+   $text = "$before$after";
    
-   return $res;
+   return( $text, @meta );
 }
 
 
+
 # =========================
-sub formFileAttachmentMacro
+sub formFileAttachmentArgs
 {
     my( $theFile, $theVersion, $thePath, $theSize, $theDate, $theUser, 
              $theComment, $theAttr ) = @_;
-    my $macro = "%FILEATTACHMENT{ \"$theFile\" ";
-    $macro .= "version=\"$theVersion\" ";
-    $macro .= "path=\"$thePath\" ";
-    $macro .= "size=\"$theSize\" ";
-    $macro .= "date=\"$theDate\" ";
-    $macro .= "user=\"$theUser\" ";
-    $macro .= "comment=\"$theComment\" ";
-    $macro .= "attr=\"$theAttr\" ";
 
-    $macro .= "}%";
-
-    return $macro;
+    my @args = (
+       "name"    => $theFile,
+       "version" => $theVersion,
+       "path"    => $thePath,
+       "size"    => $theSize,
+       "date"    => $theDate,
+       "user"    => $theUser,
+       "comment" => $theComment,
+       "attr"    => $theAttr );
+    
+    return @args;
 }
 
 
@@ -234,7 +262,7 @@ sub extractFileAttachmentArgs
 {
     my( $attributes ) = @_;
 
-    my $file =        TWiki::extractNameValuePair( $attributes );
+    my $file =        TWiki::extractNameValuePair( $attributes, "name" );
     my $attrVersion = TWiki::extractNameValuePair( $attributes, "version" );
     my $attrPath    = TWiki::extractNameValuePair( $attributes, "path" );
     my $attrSize    = TWiki::extractNameValuePair( $attributes, "size" );
@@ -277,41 +305,35 @@ sub removeFile
 }
 
 
+
 # =========================
 # Add/update attachment for a topic
 # $text is full set of attachments, new attachments will be added to the end.
 sub updateAttachment
 {
-   my ( $atext, $fileVersion, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $hideFile ) = @_;
+    my ( $fileVersion, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $hideFile, @meta ) = @_;
 
-   my $tmpAttr = "";
-   if ( $hideFile ) {
-      $tmpAttr .= "h";
-   }
+    my $tmpAttr = "";
+    if ( $hideFile ) {
+       $tmpAttr .= "h";
+    }
+          
+    #TWiki::writeDebug( "Attach: attachArgs = @args" );
 
-   my $attachMacro = formFileAttachmentMacro(
+    if( ! $fileDate ) {
+        # Only trying to change attribute
+        
+        my @args = ( "attr" => $tmpAttr );
+        @meta = TWiki::Store::metaUpdatePartial( "FILEATTACHMENT", \@args, "name", @meta );
+        # FIXME warning if no entry?
+    } else {
+        my @args = formFileAttachmentArgs(
           $fileName, $fileVersion, $filePath, $fileSize, $fileDate, $fileUser, 
           $fileComment, $tmpAttr );
-          
-   TWiki::writeDebug( "Attach: attachMacro = $attachMacro" );
-   TWiki::writeDebug( "Attach: text = \"$atext\"" );
-
-   if( ! $atext ) {
-      $atext = "\n";
-      $atext .= "$attachMacro\n";
-   } else {
-      if( ! $fileSize ) {
-         # Only trying to change attribute
-         $atext =~ s/(%FILEATTACHMENT{[\s]*\"$fileName\"[^}]* attr=\")([^\"]*)(\"[^}]*}%)/$1$tmpAttr$3/o;
-         # FIXME warning if no entry?
-      } else {
-         # Is there already an entry for this file replace, otherwise, add to end
-         if ( ! ( $atext =~ s/%FILEATTACHMENT{[\s]*\"$fileName\"[^}]*}%/$attachMacro/o ) ) {
-             $atext =~ s/\s*$/\n$attachMacro/;
-         }
-      }
-   }
-   return $atext;
+        @meta = TWiki::Store::metaUpdate( "FILEATTACHMENT", \@args, "name", @meta );
+    }
+    
+    return @meta;
 }
 
 1;

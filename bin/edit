@@ -154,6 +154,7 @@ sub main
     my $tcat = "";
     my $icat = "";
     my $text = "";
+    my @meta = ();
     my $before = "";
     my $atext = "";
     my $ctext = "";
@@ -181,7 +182,7 @@ sub main
 
     # check access permission
     if( &TWiki::Store::topicExists( $webName, $topic ) ) {
-	$text = &TWiki::Store::readTopic( $topic );
+	( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
     }
     if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $text, $topic, $webName ) ) {
         # user has not permission to change the topic
@@ -258,6 +259,9 @@ sub main
     }
 
     if( $saveCmd ne "repRev" ) {
+        # hide meta data
+        $text =~ s/%META:.*?%\r?\n?//go;
+
         # cut attachment section if not in debug mode
         ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text );
         $text = $before;
