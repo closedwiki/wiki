@@ -12,6 +12,9 @@ list="$data/Plugins/SeeSkinToo.txt \
 	$pub/Plugins/SeeSkinToo/*.txt \
 	$bin/savemulti"
 
+# update docs in attach directory
+cp $data/Plugins/SeeSkinToo.txt $pub/Plugins/SeeSkinToo/SeeSkinToo.txt
+
 # make archive distribtion 
 zip $out $list pkg-seeskintoo.sh
 
