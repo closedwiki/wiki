@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043478569" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1047017580" format="1.0" version="1.13"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -22,6 +22,8 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 	* <img src="%ATTACHURLPATH%/searchtopic.gif" alt="searchtopic.gif"  width="16" height="16"  /> Search topic
 	* <img src="%ATTACHURLPATH%/printtopic.gif" alt="printtopic.gif"  width="16" height="16"  /> Print topic
 	* <img src="%ATTACHURLPATH%/attachfile.gif" alt="attachfile.gif"  width="16" height="16"  /> Attach file
+	* <img src="%ATTACHURLPATH%/home.gif" alt="home.gif"  width="16" height="16"  /> Home
+	* <img src="%ATTACHURLPATH%/changes.gif" alt="changes.gif"  width="16" height="16"  /> Changes
 
 -- Main.PeterThoeny - 17 Jan 2003<br />
 -- Main.MikeMannix - 16 May 2002
@@ -41,3 +43,5 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="searchtopic.gif" attr="" comment="Search topic" date="1042874143" path="C:\Data\Temp\searchtopic.gif" size="192" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="printtopic.gif" attr="" comment="Print topic" date="1042874157" path="C:\Data\Temp\printtopic.gif" size="147" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="attachfile.gif" attr="" comment="Attach file" date="1042874171" path="C:\Data\Temp\attachfile.gif" size="193" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="home.gif" attr="" comment="Home" date="1047017417" path="C:\Data\Temp\home.gif" size="172" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="changes.gif" attr="" comment="Changes" date="1047017437" path="C:\Data\Temp\changes.gif" size="167" user="PeterThoeny" version="1.1"}%
