@@ -245,7 +245,7 @@ sub main
     } elsif( $saveCmd ne "repRev" && TWiki::Prefs::getPreferencesValue( "WEBFORMS", $webName )) {
        $form = '<table width="100%"><tr><td align="right">'
              . &TWiki::Form::chooseFormButton( "Add form" )
-             . '</dt></tr></table>';
+             . '</td></tr></table>';
        $tmpl =~ s/%FORMFIELDS%/$form/go;
     } else {
        $tmpl =~ s/%FORMFIELDS%//go;
