@@ -21,10 +21,10 @@ distro : components twiki-$(PLATFORM).tar.bz2
 test-distro : components twiki-$(PLATFORM).tar
 
 minicpan :
-	cd cpan ; ./mirror-cpan.pl
+	cpan/mirror-cpan.pl
 
-twiki-cpan :
-	cd cpan ; ./mirror-cpan.pl --twiki `./calc-twiki-deps.pl`
+twiki-cpan : minicpan
+	cpan/mirror-cpan.pl --twiki `cpan/calc-twiki-deps.pl`
 
 release :
 	REL=TWiki20040902.tar.gz; OUT=downloads/releases/$$REL; [ -e $$OUT ] || wget -nc --http-user=TWikiGuest --http-passwd=guest -O $$OUT http://twiki.org/release/$$REL
