@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071473016" format="1.0" version="1.26"}%
+%META:TOPICINFO{author="PeterThoeny" date="1084862962" format="1.0" version="1.27"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Plugins
@@ -58,6 +58,10 @@ To test new Plugins on your installation before making them public, you may want
 		* *Copy* the modified files to the Production installation. You can update a TWiki installation live and users won't even notice.
 
 	* *Method 2:* List the Plugin being tested in the =DISABLEDPLUGINS= variable in %TWIKIWEB%.TWikiPreferences. Redefine the =DISABLEDPLUGINS= variable in the =Sandbox= web and do the testing there.
+
+---+++ Checking that Plugins are Working on a Live Server
+
+InstalledPlugins shows which Plugins are: 1) installed, 2) loading properly and 3) what TWiki:Codev.PluginHandlers they invoke. Any failures are shown in the Errors section.
 
 ---+++ A Note on Plugin Performance
 
@@ -301,6 +305,7 @@ sub _make_filename
 }
 </verbatim>
 
--- TWiki:Main/PeterThoeny - 11 Dec 2003 <br />
--- TWiki:Main/AndreaSterbini - 29 May 2001 <br />
+-- TWiki:Main/PeterThoeny - 18 May 2004 %BR%
+-- TWiki:Main/AndreaSterbini - 29 May 2001 %BR%
 -- TWiki:Main/MikeMannix - 03 Dec 2001	
+
