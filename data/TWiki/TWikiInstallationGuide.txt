@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044149369" format="1.0" version="1.53"}%
+%META:TOPICINFO{author="PeterThoeny" date="1045285021" format="1.0" version="1.54"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
@@ -150,7 +150,7 @@ With your new TWiki installation up and running, you can manage most aspects of 
 ---+++ Enabling Authentication of Users
 
 	* If TWiki is installed on a non-authenticated server - not using SSL - and you'd like to authenticate users:
-		1. *Rename* file =.htaccess.txt= in the =twiki/bin= directory to =.htaccess= and change it to your needs. For details, consult the HTTP server documentation (for Apache server: <a href="http://www.apache.org/docs/mod/directives.html">[1]</a>, <a href="http://www.mcs.kent.edu/system/web_help/htaccess/introduction.html">[2]</a>). In particular, the following <font color="red">red</font> part needs to be configured correctly: <br />
+		1. *Rename* file =.htaccess.txt= in the =twiki/bin= directory to =.htaccess= and change it to your needs. For details, consult the HTTP server documentation (for Apache server: <a href="http://www.apache.org/docs/mod/directives.html">[1]</a>, <a href="http://systems.mcs.kent.edu/info/web_help/htaccess/">[2]</a>). In particular, the following <font color="red">red</font> part needs to be configured correctly: <br />
 		 =Redirect <font color="red">/urlpathto/twiki/index.html</font> http<nop>://<font color="red">yourdomain.com/urlpathto/twiki/bin/</font>view= <br>
 		  =AuthUserFile <font color="red">/filepathto/twiki/data/</font>.htpasswd= <br />
 		  =ErrorDocument 401 <font color="red">/urlpathto/twiki/bin/</font>oops/TWiki/TWikiRegistration?template=oopsauth=
