@@ -1050,7 +1050,7 @@ sub saveNew
 
         # restore last topic from repository
         $rev = getRevisionNumber( $web, $topic );
-        $tmp = _readVersionNoMeta( $topic, $rev );
+        $tmp = _readVersionNoMeta( $web, $topic, $rev );
         saveFile( $name, $tmp );
         lockTopic( $topic, $doUnlock );
 
