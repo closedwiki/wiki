@@ -349,6 +349,11 @@ sub initialize1
     # append discovered plugin modules to installed plugin list
     push( @instPlugins, @discoveredPlugins );
 
+    # debug enable Plugins, for TWiki:Plugins/Benchmark
+    my $debugEnablePlugins = "";
+    $debugEnablePlugins = $TWiki::cgiQuery->param( 'debugenableplugins' ) if( $TWiki::cgiQuery );
+    @instPlugins = split( /[\, ]+/, $debugEnablePlugins ) if( $debugEnablePlugins );
+
     # for efficiency we register all possible handlers at once
     my $user = "";
     my $posUser = "";
