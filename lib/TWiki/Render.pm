@@ -561,8 +561,7 @@ sub _handleWikiWord {
     # of every TWiki.CAPITALISED TWiki.WORD
     #$keepWeb = ( $topic =~ /^$TWiki::regex{abbrevRegex}$/o );
 
-    # =$doLinkToMissingPages= boolean: false means suppress link for
-    # non-existing pages
+    # false means suppress link for non-existing pages
     $linkIfAbsent = ( $topic !~ /^$TWiki::regex{abbrevRegex}$/o );
 
     $text = $topic;
