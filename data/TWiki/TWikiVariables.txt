@@ -31,6 +31,9 @@
   <td> =%<nop>ATTACHURLPATH%= </td>
   <td> The path of the attachment URL of the current topic, is <b>%ATTACHURLPATH%</b> </td>
 </tr><tr>
+  <td> =%<nop>URLPARAM{"name"}%= </td>
+  <td> Returns the value of a URL parameter. I.e. =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b> </td>
+</tr><tr>
   <td> =%<nop>WIKITOOLNAME%= </td>
   <td> Name of wiki tool, is <b>%WIKITOOLNAME%</b> </td>
 </tr><tr>
