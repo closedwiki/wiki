@@ -62,7 +62,7 @@ use vars qw( %templateVars ); # init in TWiki.pm so okay for modPerl
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub initialize
 {
@@ -78,7 +78,7 @@ sub initialize
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _traceExec
 {
@@ -92,7 +92,7 @@ sub _traceExec
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub writeDebug
 {
@@ -105,7 +105,7 @@ sub writeDebug
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _getTopicHandler
 {
@@ -136,7 +136,7 @@ sub _getTopicHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub normalizeWebTopicName
 {
@@ -163,7 +163,7 @@ sub normalizeWebTopicName
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub erase
 {
@@ -186,7 +186,7 @@ sub erase
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub moveAttachment
 {
@@ -233,7 +233,7 @@ sub moveAttachment
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub changeRefTo
 {
@@ -304,7 +304,7 @@ sub changeRefTo
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub renameTopic
 {
@@ -350,7 +350,7 @@ sub renameTopic
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub updateReferingPages
 {
@@ -437,7 +437,7 @@ sub updateReferingPages
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub readTopicVersion
 {
@@ -458,7 +458,7 @@ sub readTopicVersion
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _readVersionNoMeta
 {
@@ -476,7 +476,7 @@ sub _readVersionNoMeta
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub readAttachmentVersion
 {
@@ -495,7 +495,7 @@ sub readAttachmentVersion
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getRevisionNumber
 {
@@ -519,7 +519,7 @@ sub getRevisionNumber
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getRevisionNumberX
 {
@@ -546,7 +546,7 @@ sub getRevisionNumberX
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getRevisionDiff
 {
@@ -570,7 +570,7 @@ sub getRevisionDiff
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getRevisionInfo
 {
@@ -602,7 +602,7 @@ sub getRevisionInfo
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub topicIsLockedBy
 {
@@ -641,7 +641,7 @@ sub topicIsLockedBy
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub keyValue2list
 {
@@ -666,7 +666,7 @@ sub keyValue2list
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub metaAddTopicData
 {
@@ -691,7 +691,7 @@ sub metaAddTopicData
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub saveTopicNew
 {
@@ -709,7 +709,7 @@ sub saveTopicNew
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub saveTopic
 {
@@ -734,7 +734,7 @@ sub saveTopic
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub saveAttachment
 {
@@ -756,7 +756,7 @@ sub saveAttachment
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub save
 {
@@ -778,7 +778,7 @@ sub save
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _addMeta
 {
@@ -803,7 +803,7 @@ sub _addMeta
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub saveNew
 {
@@ -954,7 +954,7 @@ sub saveNew
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub writeLog
 {
@@ -987,7 +987,7 @@ sub writeLog
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub saveFile
 {
@@ -1009,7 +1009,7 @@ sub saveFile
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub lockTopic
 {
@@ -1026,7 +1026,7 @@ sub lockTopic
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub lockTopicNew
 {
@@ -1045,7 +1045,7 @@ sub lockTopicNew
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub removeObsoleteTopicLocks
 {
@@ -1085,7 +1085,7 @@ sub removeObsoleteTopicLocks
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub webExists
 {
@@ -1100,7 +1100,7 @@ sub webExists
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub topicExists
 {
@@ -1118,7 +1118,7 @@ sub topicExists
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getRevisionInfoFromMeta
 {
@@ -1156,7 +1156,7 @@ sub getRevisionInfoFromMeta
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub convert2metaFormat
 {
@@ -1185,7 +1185,7 @@ sub convert2metaFormat
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _extractMetaData
 {
@@ -1226,7 +1226,7 @@ sub _extractMetaData
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getFileName
 {
@@ -1245,7 +1245,7 @@ sub getFileName
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub readTopMeta
 {
@@ -1285,7 +1285,7 @@ topic read is indicated by setting $TWiki::readTopicPermissionFailed.
 The metadata and topic text are returned separately, with the metadata in a
 TWiki::Meta object.  (The topic text is, as usual, just a string.)
 
-=cut to implementation
+=cut
 
 sub readTopic
 {
@@ -1305,7 +1305,7 @@ sub readTopic
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub readWebTopic
 {
@@ -1325,7 +1325,7 @@ If $internal is false, view access permission will be checked.  If permission
 is not granted, then an error message will be returned in $text, and set in
 $TWiki::readTopicPermissionFailed.
 
-=cut to implementation
+=cut
 
 sub readTopicRaw
 {
@@ -1365,7 +1365,7 @@ sub readTopicRaw
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub readTemplateTopic
 {
@@ -1389,7 +1389,7 @@ sub readTemplateTopic
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _readTemplateFile
 {
@@ -1454,7 +1454,7 @@ sub _readTemplateFile
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleTmplP
 {
@@ -1480,7 +1480,7 @@ sub handleTmplP
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub readTemplate
 {
@@ -1548,7 +1548,7 @@ format acceptable to the Perl open() function.  SECURITY NOTE: make sure
 any $filename coming from a user is stripped of special characters that might
 change Perl's open() semantics.
 
-=cut to implementation
+=cut
 
 sub readFile
 {
@@ -1571,7 +1571,7 @@ sub readFile
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub readFileHead
 {
@@ -1598,7 +1598,7 @@ sub readFileHead
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getTopicNames {
     my( $web ) = @_ ;
@@ -1634,7 +1634,7 @@ sub getTopicNames {
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getSubWebs {
     my( $web ) = @_ ;
@@ -1674,7 +1674,7 @@ $subWebsAllowedP = 0; # 1 = subwebs allowed, 0 = flat webs
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getAllWebs {
     # returns a list of subweb names

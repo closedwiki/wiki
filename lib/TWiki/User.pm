@@ -70,7 +70,7 @@ use vars qw( %templateVars ); # init in TWiki.pm so okay for modPerl
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub initialize
 {
@@ -86,7 +86,7 @@ sub initialize
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _traceExec
 {
@@ -101,7 +101,7 @@ sub _traceExec
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub writeDebug
 {
@@ -115,7 +115,7 @@ sub writeDebug
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _getUserHandler
 {
@@ -160,7 +160,7 @@ sub UserPasswordExists
 | Return: =$success= | "1" if success |
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 
-=cut to implementation
+=cut
 
 sub UpdateUserPassword
 {

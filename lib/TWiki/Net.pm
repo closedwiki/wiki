@@ -51,7 +51,7 @@ BEGIN {
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getUrl
 {
@@ -121,7 +121,7 @@ sub getUrl
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub sendEmail
 {
@@ -214,7 +214,7 @@ sub sendEmail
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _fixLineLength
 {
@@ -232,7 +232,7 @@ sub _fixLineLength
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _sendEmailBySendmail
 {
@@ -253,7 +253,7 @@ sub _sendEmailBySendmail
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _sendEmailByNetSMTP
 {

@@ -45,7 +45,7 @@ use vars qw(
 ---++ initializeAccess()
 | Description: | Basic module initialization, called from TWiki::initialize |
 
-=cut to implementation
+=cut
 
 sub initializeAccess
 {
@@ -62,7 +62,7 @@ sub initializeAccess
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub permissionsSet
 {
@@ -99,7 +99,7 @@ sub permissionsSet
 | Parameter: =$web=     | Web, e.g. "Know" |
 | Return:    =$ok=      | 1 if OK to access, 0 if no permission |
 
-=cut to implementation
+=cut
 
 sub checkAccessPermission
 {
@@ -205,7 +205,7 @@ sub checkAccessPermission
 | Parameter: =$group= | Group name, e.g. "Main.EngineeringGroup" |
 | Return:    =$ok=    | 1 user is in group, 0 if not |
 
-=cut to implementation
+=cut
 
 sub userIsInGroup
 {
@@ -237,7 +237,7 @@ sub userIsInGroup
 | Parameter: =$group=  | Group topic name, e.g. "Main.EngineeringGroup" |
 | Return:    =@users=  | List of users, e.g. ( "Main.JohnSmith", "Main.JaneMiller" ) |
 
-=cut to implementation
+=cut
 
 sub getUsersOfGroup
 {
@@ -253,7 +253,7 @@ sub getUsersOfGroup
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub prvGetUsersOfGroup
 {
@@ -331,7 +331,7 @@ sub prvGetUsersOfGroup
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub prvGetWebTopicName
 {
@@ -353,7 +353,7 @@ sub prvGetWebTopicName
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub prvGetUserList
 {

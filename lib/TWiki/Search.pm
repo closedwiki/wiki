@@ -60,7 +60,7 @@ BEGIN {
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _traceExec
 {
@@ -76,7 +76,7 @@ sub _traceExec
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _translateSpace
 {
@@ -92,7 +92,7 @@ sub _translateSpace
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _tokensFromSearchString
 {
@@ -135,7 +135,7 @@ sub _tokensFromSearchString
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _searchTopicsInWeb
 {
@@ -254,7 +254,7 @@ sub _searchTopicsInWeb
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _getTopicList
 {
@@ -272,7 +272,7 @@ sub _getTopicList
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _makeTopicPattern
 {
@@ -293,7 +293,7 @@ sub _makeTopicPattern
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub searchWeb
 {
@@ -994,7 +994,7 @@ sub searchWeb
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getMetaFormField
 {
@@ -1029,7 +1029,7 @@ sub getMetaFormField
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getTextPattern
 {
@@ -1050,7 +1050,7 @@ sub getTextPattern
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub wikiName
 {
@@ -1067,7 +1067,7 @@ sub wikiName
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub breakName
 {
@@ -1101,7 +1101,7 @@ sub breakName
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub spacedTopic
 {

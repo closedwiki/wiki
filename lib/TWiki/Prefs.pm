@@ -45,13 +45,15 @@ $finalPrefsName = "FINALPREFERENCES";
 
 
 # =========================
-=head2 initializePrefs( $webName )
+=pod
+
+---++ initializePrefs( $webName )
 
 Resets all preference globals (for mod_perl compatibility), and reads
 preferences from TWiki::TWikiPreferences, Main::TWikiPreferences, and
 $webName::WebPreferences.
 
-=cut to implementation
+=cut
 
 sub initializePrefs
 {
@@ -73,13 +75,15 @@ sub initializePrefs
 }
 
 # =========================
-=head2 initializeUserPrefs( $completeUserName )
+=pod
+
+---++ initializeUserPrefs( $completeUserName )
 
 Called after user is known (potentially by Plugin), this function
 reads preferences from the user's personal topic.  Note that the
 parameter is of the form "Main.JohnSmith", not just "JohnSmith".
 
-=cut to implementation
+=cut
 
 sub initializeUserPrefs
 {
@@ -100,7 +104,7 @@ sub initializeUserPrefs
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getPrefsFromTopic
 {
@@ -160,7 +164,7 @@ sub getPrefsFromTopic
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub updateSetFromForm
 {
@@ -201,7 +205,7 @@ sub updateSetFromForm
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub prvAddToPrefsList
 {
@@ -248,7 +252,7 @@ sub prvAddToPrefsList
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub prvHandlePrefsValue
 {
@@ -265,7 +269,7 @@ sub prvHandlePrefsValue
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub prvHandleWebVariable
 {
@@ -286,7 +290,7 @@ sub prvHandleWebVariable
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handlePreferencesTags
 {
@@ -311,7 +315,7 @@ sub handlePreferencesTags
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getPreferencesValue
 {
@@ -364,7 +368,7 @@ sub getPreferencesValue
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getPreferencesFlag
 {
@@ -384,6 +388,10 @@ sub getPreferencesFlag
 # =========================
 
 1;
+
+=end twiki
+
+=cut
 
 # EOF
 

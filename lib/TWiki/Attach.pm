@@ -40,7 +40,7 @@ use vars qw(
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub renderMetaData
 {
@@ -88,7 +88,7 @@ sub renderMetaData
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub filenameToIcon
 {
@@ -118,7 +118,7 @@ sub filenameToIcon
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub formatAttachments
 {
@@ -162,7 +162,7 @@ sub formatAttachments
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub migrateFormatForTopic
 {
@@ -198,7 +198,7 @@ sub migrateFormatForTopic
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getOldAttachAttr
 {
@@ -246,7 +246,7 @@ sub getOldAttachAttr
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub migrateToFileAttachmentMacro
 {
@@ -297,7 +297,7 @@ sub migrateToFileAttachmentMacro
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub upgradeFrom1v0beta
 {
@@ -324,7 +324,7 @@ sub upgradeFrom1v0beta
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub formFileAttachmentArgs
 {
@@ -354,7 +354,7 @@ sub formFileAttachmentArgs
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub extractFileAttachmentArgs
 {
@@ -385,7 +385,7 @@ sub extractFileAttachmentArgs
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub extractArgsForFile
 {
@@ -408,7 +408,7 @@ sub extractArgsForFile
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub removeFile
 {
@@ -429,7 +429,7 @@ sub removeFile
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub updateProperties
 {
@@ -451,7 +451,7 @@ sub updateProperties
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub updateAttachment
 {

@@ -74,7 +74,7 @@ $VERSION = '1.010';
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub discoverPluginPerlModules
 {
@@ -98,7 +98,7 @@ sub discoverPluginPerlModules
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub registerHandler
 {
@@ -113,7 +113,7 @@ sub registerHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub registerPlugin
 {
@@ -208,7 +208,7 @@ sub registerPlugin
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub applyHandlers
 {
@@ -242,7 +242,7 @@ sub applyHandlers
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub initialize1
 {
@@ -301,7 +301,7 @@ sub initialize1
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub initialize2
 {
@@ -326,7 +326,7 @@ sub initialize2
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handlePluginDescription
 {
@@ -351,7 +351,7 @@ sub handlePluginDescription
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleActivatedPlugins
 {
@@ -372,7 +372,7 @@ sub handleActivatedPlugins
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub initializeUserHandler
 {
@@ -396,7 +396,7 @@ sub initializeUserHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub registrationHandler
 {
@@ -413,7 +413,7 @@ sub registrationHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub commonTagsHandler
 {
@@ -432,7 +432,7 @@ sub commonTagsHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub startRenderingHandler
 {
@@ -449,7 +449,7 @@ sub startRenderingHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub outsidePREHandler
 {
@@ -466,7 +466,7 @@ sub outsidePREHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub insidePREHandler
 {
@@ -483,7 +483,7 @@ sub insidePREHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub endRenderingHandler
 {
@@ -500,7 +500,7 @@ sub endRenderingHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub beforeEditHandler
 {
@@ -517,7 +517,7 @@ sub beforeEditHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub afterEditHandler
 {
@@ -534,7 +534,7 @@ sub afterEditHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub beforeSaveHandler
 {
@@ -551,7 +551,7 @@ sub beforeSaveHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub writeHeaderHandler
 {
@@ -567,7 +567,7 @@ sub writeHeaderHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub redirectCgiQueryHandler
 {
@@ -583,7 +583,7 @@ sub redirectCgiQueryHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getSessionValueHandler
 {
@@ -599,7 +599,7 @@ sub getSessionValueHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub setSessionValueHandler
 {
@@ -615,7 +615,7 @@ sub setSessionValueHandler
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub renderFormFieldForEditHandler
 {

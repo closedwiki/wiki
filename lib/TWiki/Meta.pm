@@ -43,7 +43,7 @@ use strict;
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub new
 {
@@ -62,7 +62,7 @@ sub new
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub put
 {
@@ -108,7 +108,7 @@ sub put
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _key
 {
@@ -130,7 +130,7 @@ sub _key
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub findOne
 {
@@ -167,7 +167,7 @@ sub findOne
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub find
 {
@@ -193,7 +193,7 @@ sub find
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub remove
 {
@@ -229,7 +229,7 @@ sub remove
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub copyFrom
 {
@@ -247,7 +247,7 @@ sub copyFrom
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub count
 {
@@ -269,7 +269,7 @@ sub count
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _writeKeyValue
 {
@@ -288,7 +288,7 @@ sub _writeKeyValue
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _writeTypes
 {
@@ -337,7 +337,7 @@ sub _writeTypes
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub cleanValue
 {
@@ -360,7 +360,7 @@ sub cleanValue
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub restoreValue
 {
@@ -381,7 +381,7 @@ sub restoreValue
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _keyValue2Hash
 {
@@ -408,7 +408,7 @@ sub _keyValue2Hash
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub read
 {
@@ -438,7 +438,7 @@ sub read
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub writeStart
 {
@@ -455,7 +455,7 @@ sub writeStart
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub writeEnd
 {
@@ -475,7 +475,7 @@ sub writeEnd
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub write
 {

@@ -40,7 +40,7 @@ use strict;
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getFormDefinition
 {
@@ -105,7 +105,7 @@ sub getFormDefinition
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub _cleanField
 {
@@ -124,7 +124,7 @@ sub _cleanField
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getPossibleFieldValues
 {
@@ -164,7 +164,7 @@ sub getPossibleFieldValues
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getFormDef
 {
@@ -219,7 +219,7 @@ sub getFormDef
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub link
 {
@@ -271,7 +271,7 @@ sub link
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub chooseFormButton
 {
@@ -289,7 +289,7 @@ sub chooseFormButton
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub renderForEdit
 {
@@ -443,7 +443,7 @@ sub renderForEdit
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getFormInfoFromMeta
 {
@@ -469,7 +469,7 @@ sub getFormInfoFromMeta
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub fieldVars2Meta
 {
@@ -534,7 +534,7 @@ sub fieldVars2Meta
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getFieldParams
 {
@@ -567,7 +567,7 @@ sub getFieldParams
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub changeForm
 {
@@ -621,7 +621,7 @@ sub changeForm
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub upgradeCategoryItem
 {
@@ -713,7 +713,7 @@ sub upgradeCategoryItem
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub upgradeCategoryTable
 {

@@ -216,7 +216,7 @@ Prints date, time, and contents $text to $warningFilename, typically
 intervention.  Not using Store::writeLog; log file is more of an audit/usage
 file.  Use this for defensive programming warnings (e.g. assertions).
 
-=cut to implementation
+=cut
 
 sub writeWarning {
     my( $text ) = @_;
@@ -239,7 +239,7 @@ sub writeWarning {
 Prints date, time, and contents of $text to $debugFilename, typically
 'debug.txt'.  Use for debugging messages.
 
-=cut to implementation
+=cut
 
 sub writeDebug {
     my( $text ) = @_;
@@ -262,7 +262,7 @@ Dumps user and system time spent, with deltas from last call, followed
 by contents of $text, to debug log using writeDebug above.  Use for
 performance monitoring/debugging.
 
-=cut to implementation
+=cut
 
 sub writeDebugTimes
 {
@@ -297,7 +297,7 @@ Also parses $theTopic to determine whether it's a URI, a "Web.Topic"
 pair, a "Web." WebHome shorthand, or just a topic name.  Note that
 if $pathInfo is set, this overrides $theTopic.
 
-=cut to implementation
+=cut
 
 sub initialize
 {
@@ -464,7 +464,7 @@ that handle multiple webs (e.g. mailnotify) and need regexes or
 isWebName/isWikiName to work before the per-web initialize() is called.
 Also called from initialize() if not necessary beforehand.
 
-=cut to implementation
+=cut
 
 sub basicInitialize() {
     # Set up locale for internationalisation and pre-compile regexes
@@ -489,7 +489,7 @@ Note that 'use locale' must be done in BEGIN block for regexes and sorting to
 work properly, although regexes can still work without this in
 'non-locale regexes' mode (see setupRegexes routine).
 
-=cut to implementation
+=cut
 
 sub setupLocale {
  
@@ -536,7 +536,7 @@ unchanging variables in match should use the '/o' option, even if not in a
 loop, to help mod_perl, where the same code can be executed many times
 without recompilation.
 
-=cut to implementation
+=cut
 
 sub setupRegexes {
 
@@ -642,7 +642,7 @@ Check for unusable ASCII-based multi-byte encodings as site character set
 - anything that enables a single ASCII character such as '[' to be
 matched within a multi-byte character cannot be used for TWiki.
 
-=cut to implementation
+=cut
 
 sub invalidSiteCharset {
     # FIXME: match other problematic multi-byte character sets 
@@ -659,7 +659,7 @@ Auto-detect UTF-8 vs. site charset in URL, and convert UTF-8 into site charset.
 TODO: remove dependence on webname and topicname, i.e. generic encoding
 subroutine.
 
-=cut to implementation
+=cut
 
 sub convertUtf8URLtoSiteCharset {
     my ( $webName, $topicName ) = @_;
@@ -748,7 +748,7 @@ sub convertUtf8URLtoSiteCharset {
 Simple header setup for most scripts.  Calls writeHeaderFull, assuming
 'basic' type and 'text/html' content-type.
 
-=cut to implementation
+=cut
 
 sub writeHeader
 {
@@ -770,7 +770,7 @@ Javascript that will be added to (some) template(s)
 FIXME: This function is currently unused.  Remove on some non
 documentation-only commit, unless use is planned in future.
 
-=cut to implementation
+=cut
 
 sub addScript
 {
@@ -800,7 +800,7 @@ writeHeaderHandler in plugin to return a string of HTTP headers, CR/LF
 delimited.  Filters out headers that the core code needs to generate for
 whatever reason, and any illegal headers.
 
-=cut to implementation
+=cut
 
 sub writeHeaderFull
 {
@@ -893,7 +893,7 @@ Set page rendering mode:
    * 'rss' - encode 8-bit characters as XML entities
    * 'html' - (default) no encoding of 8-bit characters
    
-=cut to implementation
+=cut
 
 sub setPageMode
 {
@@ -909,7 +909,7 @@ Returns current page mode, 'html' unless set via setPageMode
 FIXME: This function is currently unused.  Remove on some non
 documentation-only commit, unless use is planned in future.
 
-=cut to implementation
+=cut
 
 sub getPageMode
 {
@@ -924,7 +924,7 @@ Retrun value: string $query
 Returns the CGI query portion (i.e. the bit after the '?') of the
 current request.
 
-=cut to implementation
+=cut
 
 sub getCgiQuery
 {
@@ -940,7 +940,7 @@ overridden by a plugin.  Note that this is currently only called by
 Func::redirectCgiQuery() at the request of a plugin!  All of the redirects
 done internally by TWiki are not overridable.
 
-=cut to implementation
+=cut
 
 sub redirect
 {
@@ -968,7 +968,7 @@ instead of 'Main'.  The user's email address(es) are fetched from their
 user topic (home page) as long as they are listed in the '* Email:
 fred@example.com' format.  Nested groups are supported.
 
-=cut to implementation
+=cut
 
 sub getEmailNotifyList
 {
@@ -1015,7 +1015,7 @@ list of e-mail addresses for a group.  Nested groups are supported.
 $wikiName must contain _only_ the WikiName; do *not* pass names of the
 form "Main.JohnSmith".
 
-=cut to implementation
+=cut
 
 sub getEmailOfUser
 {
@@ -1068,7 +1068,7 @@ is available.
 
 If neither are set, then it sets $remoteUser to $defaultUserName.
 
-=cut to implementation
+=cut
 
 sub initializeRemoteUser
 {
@@ -1135,7 +1135,7 @@ and WikiName (e.g. JaneSmith).  Only used for sites where authentication is
 managed by external Apache configuration, instead of via TWiki's .htpasswd
 mechanism.
 
-=cut to implementation
+=cut
 
 sub userToWikiListInit
 {
@@ -1175,7 +1175,7 @@ userToWikiListInit must be called before this function is used.
 
 Unless $dontAddWeb is set, "Main." is prepended to the returned WikiName.
 
-=cut to implementation
+=cut
 
 sub userToWikiName
 {
@@ -1201,7 +1201,7 @@ Return value: $loginUser
 Translates WikiName (e.g. JaneSmith) to an intranet username (e.g. jsmith)
 userToWikiListInit must be called before this function is used.
 
-=cut to implementation
+=cut
 
 sub wikiToUserName
 {
@@ -1218,7 +1218,7 @@ sub wikiToUserName
 
 Returns whether the current user is TWikiGuest or equivalent.
 
-=cut to implementation
+=cut
 
 sub isGuest
 {
@@ -1232,7 +1232,7 @@ sub isGuest
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getWikiUserTopic
 {
@@ -1248,7 +1248,7 @@ sub getWikiUserTopic
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub isWikiName
 {
@@ -1266,7 +1266,7 @@ sub isWikiName
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub isAbbrev
 {
@@ -1284,7 +1284,7 @@ sub isAbbrev
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub isWebName
 {
@@ -1301,7 +1301,7 @@ sub isWebName
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub readOnlyMirrorWeb
 {
@@ -1335,7 +1335,7 @@ sub readOnlyMirrorWeb
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getDataDir
 {
@@ -1349,7 +1349,7 @@ sub getDataDir
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getPubDir
 {
@@ -1363,7 +1363,7 @@ sub getPubDir
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getPubUrlPath
 {
@@ -1378,7 +1378,7 @@ If necessary, finds the full path of the directory containing TWiki.pm,
 and sets the variable $twikiLibDir so that this process is only performed
 once per invocation.  (mod_perl safe: lib dir doesn't change.)
 
-=cut to implementation
+=cut
 
 sub getTWikiLibDir
 {
@@ -1418,7 +1418,7 @@ sub getTWikiLibDir
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getGmDate
 {
@@ -1437,7 +1437,7 @@ sub getGmDate
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getLocaldate
 {
@@ -1456,7 +1456,7 @@ sub getLocaldate
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub formatGmTime
 {
@@ -1499,7 +1499,7 @@ sub formatGmTime
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub revDate2ISO
 {
@@ -1514,7 +1514,7 @@ sub revDate2ISO
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub revDate2EpSecs
 # Convert RCS revision date/time to seconds since epoch, for easier sorting 
@@ -1576,7 +1576,7 @@ sub revDate2EpSecs
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getSessionValue
 {
@@ -1591,7 +1591,7 @@ sub getSessionValue
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub setSessionValue
 {
@@ -1606,7 +1606,7 @@ sub setSessionValue
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getSkin
 {
@@ -1623,7 +1623,7 @@ sub getSkin
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getViewUrl
 {
@@ -1649,7 +1649,7 @@ Returns the absolute URL to a TWiki script, providing the wub and topic as
 "path info" parameters.  The result looks something like this:
 "http://host/twiki/bin/$script/$web/$topic"
 
-=cut to implementation
+=cut
 
 sub getScriptUrl
 {
@@ -1673,7 +1673,7 @@ specific oops template in use, and are passed in the URL as 'param1..paramN'.
 The returned URL ends up looking something like:
 "http://host/twiki/bin/oops/$web/$topic?template=$template&param1=$scriptParams[0]..."
 
-=cut to implementation
+=cut
 
 sub getOopsUrl
 {
@@ -1703,7 +1703,7 @@ sub getOopsUrl
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub makeTopicSummary
 {
@@ -1762,7 +1762,7 @@ sub makeTopicSummary
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub extractNameValuePair
 {
@@ -1807,7 +1807,7 @@ sub extractNameValuePair
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub fixN
 {
@@ -1823,7 +1823,7 @@ sub fixN
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub fixURL
 {
@@ -1853,7 +1853,7 @@ sub fixURL
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub fixIncludeLink
 {
@@ -1884,7 +1884,7 @@ sub fixIncludeLink
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleIncludeUrl
 {
@@ -1980,7 +1980,7 @@ global buffer for storing removed verbatim blocks, and @processedTopics is a
 list of topics already %<nop>INCLUDE%'ed -- these are not allowed to be included
 again to prevent infinte recursive inclusion.
 
-=cut to implementation
+=cut
 
 sub handleIncludeFile
 {
@@ -2122,7 +2122,7 @@ sub handleIncludeFile
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleMetaSearch
 {
@@ -2176,7 +2176,7 @@ sub handleMetaSearch
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleSearchWeb
 {
@@ -2219,7 +2219,7 @@ sub handleSearchWeb
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleTime
 {
@@ -2264,7 +2264,7 @@ sub handleTime
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub showError
 {
@@ -2291,7 +2291,7 @@ entered in one of the following forms:
    * $headingPatternDa : ---++... dashes section heading
    * $headingPatternHt : &lt;h[1-6]> HTML section heading &lt;/h[1-6]>
 
-=cut to implementation
+=cut
 
 sub handleToc
 {
@@ -2410,7 +2410,7 @@ sub handleToc
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getPublicWebList
 {
@@ -2440,7 +2440,7 @@ sub getPublicWebList
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleWebAndTopicList
 {
@@ -2498,7 +2498,7 @@ sub handleWebAndTopicList
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleUrlParam
 {
@@ -2530,7 +2530,7 @@ sub handleUrlParam
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleUrlEncode
 {
@@ -2582,7 +2582,7 @@ sub handleUrlEncode
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleIntUrlEncode
 {
@@ -2608,7 +2608,7 @@ sub handleIntUrlEncode
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleEnvVariable
 {
@@ -2624,7 +2624,7 @@ sub handleEnvVariable
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleTmplP
 {
@@ -2643,7 +2643,7 @@ sub handleTmplP
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleSpacedTopic
 {
@@ -2660,7 +2660,7 @@ sub handleSpacedTopic
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleIcon
 {
@@ -2678,7 +2678,7 @@ sub handleIcon
 Modifies $text in-place, replacing variables internal to TWiki with their
 values.  Some example variables: %<nop>TOPIC%, %<nop>SCRIPTURL%, %<nop>WIKINAME%, etc.
 
-=cut to implementation
+=cut
 
 sub handleInternalTags
 {
@@ -2776,7 +2776,7 @@ replaced with &lt;pre> tags so that the text is rendered truly "verbatim" by
 a browser.  If this is not desired pass "verbatim" as the second parameter of
 putBackVerbatim instead of "pre".
 
-=cut to implementation
+=cut
 
 sub takeOutVerbatim
 {
@@ -2835,7 +2835,7 @@ takeOutVerbatim for a more thorough description.
 Set $putBackType to 'verbatim' to get back original text, or to 'pre' to
 convert to HTML readable verbatim text.
 
-=cut to implementation
+=cut
 
 sub putBackVerbatim
 {
@@ -2868,7 +2868,7 @@ the process of being included.
 Returns the text of the topic, after file inclusion, variable substitution,
 table-of-contents generation, and any plugin changes from commonTagsHandler.
 
-=cut to implementation
+=cut
 
 sub handleCommonTags
 {
@@ -2915,7 +2915,7 @@ sub handleCommonTags
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub handleMetaTags
 {
@@ -2940,7 +2940,7 @@ sub handleMetaTags
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub renderParent
 {
@@ -3031,7 +3031,7 @@ sub renderParent
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub renderMoved
 {
@@ -3080,7 +3080,7 @@ sub renderMoved
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub renderFormField
 {
@@ -3100,7 +3100,7 @@ sub renderFormField
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub renderFormData
 {
@@ -3135,7 +3135,7 @@ sub renderFormData
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub encodeSpecialChars
 {
@@ -3157,7 +3157,7 @@ sub encodeSpecialChars
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub decodeSpecialChars
 {
@@ -3183,7 +3183,7 @@ sub decodeSpecialChars
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub emitList {
     my( $theType, $theElement, $theDepth, $theOlType ) = @_;
@@ -3239,7 +3239,7 @@ sub emitList {
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub emitTR {
     my ( $thePre, $theRow, $insideTABLE ) = @_;
@@ -3291,7 +3291,7 @@ sub emitTR {
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub fixedFontText
 {
@@ -3314,7 +3314,7 @@ sub fixedFontText
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub makeAnchorHeading
 {
@@ -3356,7 +3356,7 @@ sub makeAnchorHeading
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub makeAnchorName
 {
@@ -3390,7 +3390,7 @@ sub makeAnchorName
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub internalCrosswebLink
 {
@@ -3409,7 +3409,7 @@ sub internalCrosswebLink
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub internalLink {
     my( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink ) = @_;
@@ -3485,7 +3485,7 @@ sub internalLink {
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub specificLink
 {
@@ -3542,7 +3542,7 @@ sub specificLink
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub externalLink
 {
@@ -3563,7 +3563,7 @@ sub externalLink
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub mailtoLink
 {
@@ -3580,7 +3580,7 @@ sub mailtoLink
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub mailtoLinkFull
 {
@@ -3597,7 +3597,7 @@ sub mailtoLinkFull
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub mailtoLinkSimple
 {
@@ -3619,7 +3619,7 @@ sub mailtoLinkSimple
 
 Not yet documented.
 
-=cut to implementation
+=cut
 
 sub getRenderedVersion {
     my( $text, $theWeb, $meta ) = @_;
