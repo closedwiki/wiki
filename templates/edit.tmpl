@@ -7,8 +7,33 @@
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
 <script language="JavaScript">
 <!--HIDE
+ns4 = (document.layers)? true:false;
+ie4 = (document.all)? true:false;
+dom = (document.getElementById)?true:false;
+
+toShow=new Array();
+toHide=new Array();
+
 function initForm() {
   document.main.text.focus();
+  for (i = 0; i < toShow.length; i++) {
+     if(dom) {
+        document.getElementById(toShow[i]).style.display="inline";
+     } else if( ie4 ) {
+        document.all[toShow[i]].style.display="inline";
+     } else if( ns4 ) {
+        document.layers[toShow[i]].style.display="inline";
+     }
+  }
+  for ( i = 0; i < toHide.length; i++) {
+    if(dom) {
+        document.getElementById(toHide[i]).style.display="none";
+    } else if( ie4 ) {
+        document.all[toHide[i]].style.display="none";
+    } else if( ns4 ) {
+        document.layers[toHide[i]].style.display="none";
+    }
+  }
 }
 function checkAll( theButton, theButtonOffset, theNum, theCheck )
 {
@@ -34,6 +59,7 @@ function launchWindow( theWeb, theTopic ) {
   }
   return false;
 }
+%SCRIPT%
 //STOP HIDING-->
 </script>
 </head>
