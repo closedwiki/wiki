@@ -419,9 +419,9 @@ sub getRevInfo
     my( $web, $rev, $topic, $short ) = @_;
 
     my( $date, $user ) = &TWiki::Store::getRevisionInfo( $web, $topic, "1.$rev");
-    $date = TWiki::formatTime( $date );
     $user = TWiki::getRenderedVersion( TWiki::userToWikiName( $user ) );
-    if( $short ) {
+	
+    if ( $short ) {
 	    $date = TWiki::formatTime( $date, "\$day \$month \$year" );
         # eliminate white space to prevent wrap around in HR table:
         $date =~ s/ /\&nbsp\;/go;
@@ -560,7 +560,7 @@ sub main
         do {
             $diff = $difftmpl;
             $diff =~ s/%REVTITLE1%/r1\.$r1/go;
-            $rInfo = getRevInfo( $webName, $r1, $topic, 1 );
+	    $rInfo = getRevInfo( $webName, $r1, $topic, 1 );
             $diff =~ s/%REVINFO1%/$rInfo/go;
             $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1" );
             if ( $renderStyle eq "raw" ) {
