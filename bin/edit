@@ -142,7 +142,8 @@ sub main
         my $foo = &TWiki::getGmDate();
         $text =~ s/%DATE%/$foo/go;
         $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
-        $text =~ s/%NOP%//go;  # Remove filler (there to prevent search from hitting a template)
+        $text =~ s/%URLPARAM{(.*?)}%/TWiki::handleUrlParam($1)/geo;  # expand URL parameters
+        $text =~ s/%NOP%//go;  # Remove filler (use it to prevent search from hitting a template)
     }
     
     # parent setting
