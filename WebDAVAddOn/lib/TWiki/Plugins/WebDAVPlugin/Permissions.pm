@@ -75,7 +75,7 @@ sub _processWeb {
 	my %processed;
 	while ( scalar( @topics )) {
 	  my $p = "";;
-	  my $ninset = 500;
+	  my $ninset = 50;
 	  while ( scalar( @topics ) && $ninset-- ) {
 		$p .= " $dataDir/$web/" . pop( @topics ) . ".txt";
 	  }
