@@ -1,60 +1,54 @@
----+!! Form Query Plugin
+---+!! FormQueryPlugin
 
-The Form Query Plugin is designed to provide query capabilities across a database defined using forms and embedded tables in TWiki topics. It depends on the EditTablePlugin, which must be installed. If notification is required, the ActionTrackerPlugin must also be installed.
+The FormQueryPlugin provides a query interface to the TWiki:Plugins/DBCachePlugin, giving a way to present query results as formatted tables.
 
-A three sentence summary of what this plugin does:
-   1 Like %SEARCH, allows you to list topics which match a particular search criteria _(e.g. where a particular topic form field is set to a particular value)_, FormQueryPlugin allows you to list only those rows of TWiki tables which match a particular search criteria.
-   1 Kind of cross between %SEARCH and a SQL select statement and _(for those experienced with SQL)_ can be thought of as =SELECT column1, column2, etc FROM table_type WHERE column2 > 5 AND column2 < 10=.
-   1 So the 'search granularity' is finer than that of %SEARCH because whereas %SEARCH only lists topic names, the plugin lists rows _(in tables)_ in topics.
-   1 It's also _much_ faster over large data sets.
+When using the plugin each topic is treated as a container for data fields. These fields can be the fields in the form attached to the topic, or can be parsed out of the topic. The database is managed by the TWiki:Plugins/DBCachePlugin, which must be installed for this plugin to work.
 
-This plugin is a generalisation of an original requirements tracking database built by Wolfgang Eisenmann and Henning Spruth, Motorola Inc.
+The tutorial section of this topic gives an introduction to formulating and formatting queries using this plugin, and is a good place to start.
+
+%RED%
+Note: Since the last release the following macros have been deprecated. Please get compatible support by loading the appropriate plugins:
+| *Macro* | *Plugin* |
+| =CALLMACRO= | TWiki:Plugins/MacrosPlugin |
+| =SET= | TWiki:Plugins/MacrosPlugin |
+| =ARITH= | Still supported in this release, but undocumented and should be replaced by %CALC% from SpreadSheetPlugin |
+| =PROGRESS= | Deprecated in favour of GaugePlugin, though still supported because it doesn't require ay additional software to be installed (progress bars are pure HTML) |
+| =WORKDAYS= | Still supported in this release though undocumented and deprecated on the basis that it should be in %CALC% at some point |
+The =tasknotify= script has also been removed and is now shipped separately as the  TWiki:Plugins/NotifierAddon.
+
+If the appropriate anicillary plugins are loaded, this release should be fully compatible with previous releases of this plugin.
+%ENDCOLOR%
 
 %TOC%
 
 ---++ Features
 	* Perform complex queries on the database
 	* Extensive conditional formatting support
-	* Macro facility to simplify topics
 	* Automatic derivation of new topic names
 	* Recognition and special formatting of key data strings
-Reflecting its origins as a support mechanism for a requirements database, the plugin also supports a number of other useful features:
-	* Set variables to fully-expanded values within the scope of a topic
-	* Do simple arithmetic
-	* Calculate working days
-	* Display simple progress bars
-	* Sum integer values returned by queries
-	* Notifier script that can be tailored to your application
 
 ---+++ How the database gets built
-You can think of the database as a big array of all the topics in the web. Each topic is read and forms extracted. Each field in a form is read and the fields are used to create a hash table for the topic.
+The basic database is built using the DBCachePlugin. Refer to the documentation of that plugin for details of how it works.
 
-Embedded tables that follow a specific format (using the Edit<nop>TablePlugin) can also be read into the database. These tables are added to the topic they are read from, in a field named the same as the table type. Tables are added as an array of rows, each of which contains a hash keyed on the fields and mapping to the values in the table. See [[#SettingsAnchor][Settings]] for more information about how to set up tables.
+As well as the form data loaded by the DBCachePlugin, the FormQueryPlugin adds the ability to extract embedded tables from topics.
 
-Topics can be also related to each other by name. To support this, the plugin enables something called [[#TopicRelations][Topic Relations]] that allow the creation of two-way relationships between topics. Topic relations from parent topics to child topics are stored in the hash of the parent topic using the name of the relation as the key and an array of references to child topics. Reverse relations from child to parent topics are also stored. See [[#SettingsAnchor][Settings]] for more information about how to set up topic relations.
+Embedded tables that follow a specific format (defined using the Edit<nop>TablePlugin) are added to the topic as an array of rows, each of which contains a map keyed on the fields and mapping to the values in the table. This array is added to the topic as a field named the same as the table type. Where there are multiple tables of the same type in a topic, they are concatenated together into a single array. See [[#SettingsAnchor][Settings]] for more information about how to set up tables.
 
-*A crucial point*. Field names - form items and table columns - must observe the following rules:
-	* They *must not* contain '.'
-	* They *must* contain at least one alphanumeric character
-	* They must be unique *after* all the non-alphanumeric characters have been removed
-	* They *must not* conflict with any of the auto-generated relation names.
-You have been warned! Stick to alphanumeric characters for field names.
+Topics can also be automatically related to each other by name. The plugin uses something called [[#TopicRelations][Topic Relations]] that allow the creation of two-way relationships between topics. Topic relations from parent topics to child topics are stored in the map of the parent topic using _the name of the relation_ as the field name and an array of references to the maps of child topics. Reverse relations from child to parent topics are also stored. See [[#SettingsAnchor][Settings]] for more information about how to set up topic relations.
 
-For the purposes of what follows we refer to topics, and rows in embedded tables, as "hashes".
-
----+++ The cache
-To achieve best perfomance the plugin caches the database read from the TWiki topics. It creates this cache in a file in the web, <code>_Form<nop>QueryCache</code>. If any topic changes in the web this cache is automatically rebuilt. The cache file can be deleted at any point with no ill effects.
+Most of the rest of this documentation describes how to search this database and generate reports.
 
 ---
 ---++ Syntax Rules
 
----+++ <code>%FORMQUERY</code>
+---+++ Queries
+---++++ <code>%FORMQUERY</code>
 <code>%FORMQUERY</code> is the basic query mechanism. A <code>%FORMQUERY</code> works either on the whole database or, if the =query= parameter is given, the results of another query.
 | *Parameter* | *Description* |
 | =name= | Required, gives the name of the query result for use in <code>%SHOWQUERY</code> or another <code>%FORMQUERY</code> |
-| =search= | Required, the search to perform (see [[#SearchOperators][Search operators]] below)|
+| =search= | Required, the search to perform (see [[#SearchOperators][Search operators]])|
 | =query= | Optional, the name of the query to refine. If missing, defaults to the whole database |
-| =extract= | Optional, the name of a field in each of the matched hashes to flatten out into the returned list. |
+| =extract= | Optional, the name of a field in each of the matched maps to flatten out into the returned list. |
 | =moan= | Optional, if set to "off" will disable match failed message |
 
 For example,
@@ -64,7 +58,7 @@ For example,
 %<nop>FORMQUERY{name=CQuery query=BQuery search="" extract=Cooking<nop>Times}%
 %<nop>FORMQUERY{name=DQuery query=CQuery search="Time < '4'"}%
 </pre>
-will search for all topics with a form field =Owner= set to =Main.Fred=, then filter that down to those topics that have =Product= set to =Boiled Egg=. Then it will extract and flatten out the embedded table =Cooking<nop>Times= in each matched topic. By "flatten out" we mean that future queries on CQuery must refer to the fields of the Cooking<nop>Times table, not the fields of the topic, i.e. CQuery will be an array of all the rows in the embedded table. Finally it will filter down to those rows that have the column =Time= &lt; 4 minutes.
+will search for all topics with a form field =Owner= set to =Main.Fred=, then filter that down to those topics that have =Product= set to =Boiled Egg=. Then it will extract and flatten out the embedded table =Cooking<nop>Times= in each matched topic. By "flatten out" we mean that future queries on =CQuery= must refer to the fields of the =Cooking<nop>Times= table, not the fields of the topic, i.e. =CQuery= will be an array of all the rows in the embedded table. Finally it will filter down to those rows that have the column =Time= &lt; 4 minutes.
 
 Of course there is more than one way to skin a cat. A faster way to formulate the *same* query would be to say:
 <pre>
@@ -72,35 +66,13 @@ Of course there is more than one way to skin a cat. A faster way to formulate th
 %<nop>FORMQUERY{name=DQuery query=AQuery search="Time < '4'"}%
 </pre>
 
-FORMQUERY is silent i.e. it generates no output unless there is an error, in which case an error description is inserted. This error message can be disabled using the =moan= parameter which makes FORMQUERY totally silent.
+FORMQUERY is normally silent i.e. it generates no output unless there is an error, in which case an error description is inserted. This error message can be disabled using the =moan= parameter which makes =FORMQUERY= totally silent.
 
 #SearchOperators
----++++ Search operators
-Search operators work on the fields of each hash, be it a topic or an embedded table row. The fields are given by name, and the values by strings. Strings should always be surrounded by 'single-quotes'. String which are regular expressions use 'perl' re syntax (see =man perlre= for help)
+---+++++ Search operators
+The available search operators are described in the documentation for the [[DBCachePlugin#SearchOperators][DB Cache Plugin]]. Search operators work on the fields of each map, be it a topic or an embedded table row.
 
-*Warning* single and double quotes are not allowed in values!
-
-The following operators are available:
-
-| *Operator* | *LHS* | *RHS* | *Meaning* |
-| <code>=</code> | field name | regular expression | Value exactly matches this regular expression. The expression must match the whole string. |
-| <code>!=</code> | field name | regular expression | Field is not this RE. Inverse of = |
-| <code>=~</code> | field name | regular expression | Value contains this regular expression i.e. the RE is found somewhere in the field value. |
-| <code>&lt;</code> | field name | integer (string containing an integer e.g '4') | Number is < |
-| <code>&gt;</code> | field name | integer | Number is > |
-| <code>&gt;=</code> | field name | integer | Number is >= |
-| <code>&lt;=</code> | field name | integer | Number is <= |
-| <code>EARLIER_THAN</code> | field name | date (string containing a date e.g. '1 Apr 2003' | Date is earlier than the given date |
-| <code>LATER_THAN</code> | field name | date | Date is later than the given date |
-| <code>WITHIN_DAYS</code> | field name | integer | Date (which must be in the future) is within n _working_ days of todays date |
-| <code>!</code> | none | expr | Boolean NOT |
-| <code>AND</code> | expr | expr | Boolean AND |
-| <code>OR</code> | expr | expr | Boolean OR |
-| <code>()</code> | N/A | N/A | Bracketed subexpression |
-
-Field names can also include references to fields in parent topics found using [[#TopicRelations][topic relations]]. For example, if you have relation called =SubReq= you can look at the parent of a topic that has this relation using =SubReq_of= - for example, <code>search="SubReq_of.Product='Boiled Egg'"</code>.
-
-Dates for =EARLIER_THAN=, =LATER_THAN= and =WITHIN_DAYS= must be dates in the format expected by =Time::ParseDate= (like the ActionTrackerPlugin). =WITHIN_DAYS= works out the number of _working_ days (i.e. excluding Saturday and Sunday). Apologies in advance if your weekend is offset &plusmn; a day!
+Fields can be simple field names or can be more complex, and may even contain embedded searches. See [[#FieldRefs][Fields]] below for more information.
 
 At present there is no way to constrain a search on the contents of a contained table, such as an embedded table or forward relation. However there are usually ways around this; for example, a <code>%FORMQUERY</code> that uses =extract= to flatten all the sub-tables, and then use of the parent relation to complete the search. For example:
 <pre>
@@ -108,7 +80,24 @@ At present there is no way to constrain a search on the contents of a contained 
 %<nop>FORMQUERY{name=DQuery query=AQuery search="Time < '4' AND CookingTimes_of.Owner='Main\.Fred'"}%
 </pre>
 
----+++ <code>%TABLEFORMAT</code>
+#FieldRefs
+---+++++ Fields
+Field references can be as simple as the name of a field, or may be more complex expressions that can even include embedded searches. The precise interpretation of the syntax depends on the type (Map or Array) of the object being referenced.
+*Arrays*
+   * _N_ where $n is a number will get the Nth entry in the array e.g. =attachments.9=
+   * =[_N_]= where $n is a number will also get the Nth entry in the array e.g. =attachments[9]=
+   * =X= will return the sum of the subfield =X= of each entry e.g. =TaskTable.Effort= will sum the =Effort= column in a table called =TaskTable=.
+   * =[?<i>search</i>]= will perform the given search over the entries in the array. Always returns an array result, even when there is only one result. For example: <code>attachments[?name='pitcha.gif']</code> will return an array of all the entries that have their subfield =name= set to =Sam=.
+   * =[*X]= will get a new array made from field X of each entry in this array. For example =attachments[*size]= will get an array of the sizes of each attachment.
+*Maps*
+   * =X= will get the subfield named =X=. For example, =Product= will get the formfield named =Product=.
+   * =X.Y= will get the subfield =Y= of the subfield named =X=.
+   * =[X] = will get the subfield named =X= (so X[Y] and X.Y are synonymous).
+In all cases
+   * =#= means "reset to root". So =#.Y= will return the subfield =Y= of the Map at the root of the query.
+
+---+++ Reports
+---++++ <code>%TABLEFORMAT</code>
 <code>%TABLEFORMAT</code> is like the old Fortran 'format' statement, in that it provides a template for the display of values extracted from a query.
 | *Parameter* | *Description* |
 | =name= | Required, gives the name of the format for use in <code>%SHOWQUERY</code> or another <code>%FORMQUERY</code> |
@@ -165,7 +154,7 @@ or
 <code>%TABLEFORMAT</code> is silent i.e. it produces no output on the page unless there is an error, in which case a descriptive error message is output. This message can be disabled using the =moan= parameter.
 
 ---+++ <code>%SHOWQUERY</code>
-Used to show the results of a query, <code>%SHOWQUERY</code> accepts all the same parameters as <code>%TABLEFORMAT</code> (except =name=), and also the following parameter:
+Used to show the results of a query, <code>%SHOWQUERY</code> accepts all the same parameters as <code>%TABLEFORMAT</code> (except =name=), and also the following parameters:
 | *Parameter* | *Description* |
 | =query= | Required, gives the name of the query to show |
 | =row_from= | Optional, first row to display |
@@ -175,28 +164,9 @@ For example,
 %<nop>SHOWQUERY{ query=AFORMQUERY format=ATBLFMT }%
 </pre>
 *Note:* If you render your results in TWiki table format and limit the rows displayed using row_count (e.g. first 10 from 99 rows), and also use TWiki.TablePlugin to allow sorting on the headers, then only the 10 displayed rows will be sorted by TablePlugin (and not the full 99 rows in the table).
-
----+++ <code>%CALLMACRO</code>
-<code>%CALLMACRO</code> is used to include a macro defined in a topic in the current web immediately, as if it were simply typed in the topic. The macros may be parameterised and the parameters expanded in the included topic.
-
-A macro is defined by creating a topic that contains the macro body. For example, a topic named =MacroMaturity= may contain the text:
-
-<pre>
-The science of %science% is %state%
-</pre>
-
-This macro can be included in another topic using <code>%CALLMACRO</code> :
-
-<pre>
-%<nop>CALLMACRO{topic=MacroMaturity science="biology" state="mature"}%
-%<nop>CALLMACRO{topic=MacroMaturity science="nanotechnology" state="in its infancy"}%
-</pre>
-
-With fairly obvious results. Note that standard TWiki variables such as <code>%<nop>TOPIC%</code> are expanded with the values of _the calling topic_ and not the macro topic. Macro parameter expansions take precedence over any =%SET+ value for the same name.
----++++ <code>%STRIP</code>
-To support the inclusion of macros that don't generate any text (e.g. macros containing only <code>%FORMQUERY</code> and <code>%TABLEFORMAT</code>) then the special tag <code>%<nop>STRIP%</code> can be included in the macro text. If this is seen, all newlines will be stripped from the macro before it is included in the calling topic. The <code>%STRIP</code> tag only works in the context of a macro body.
-
----+++ <code>%TOPICCREATOR</code>
+---+++ Automatic topic naming
+When using relations (as described above) it is useful to be able to automatically generate new topics using the relation to define the new topic name. This tag supports this. *This section can safely be ignored* unless you want to generate topics using names derived from relations.
+---++++ <code>%TOPICCREATOR</code>
 Used to create a new topic generator button using rules defined in [[#TopicRelations][topic relations]].
 | *Parameter* | *Description* |
 | =relation= | Required, name of the relation to use to derive the next topic name |
@@ -218,40 +188,12 @@ A special hard-coded relation, =copy=, is also provided by default that will cre
 then the next topic created will be =Dir76= (or whatever the next available topic is). If the current topic does not end in a number, it's behaviour is undefined.
 
 The topic generator works by creating the topic name at the time the button is pressed i.e. you can dislay a topic containing a generator, wait a day, hit the button to create the new topic and the name of the new topic created will not conflict with other topics created by other people using the generator in the interim. To do this it uses the =autocreate= script installed in the twiki bin directory.
+---+++ Other helpful macros
+This section describes a number of other helpful macros provided by the plugin. *It can safely be ignored* unless you specifically want to use any of the functionality described here.
 
----+++ <code>%ARITH</code>
-Like <code>%CALC</code> in the SpreadSheetPlugin, this is used to calculate the results of simple arithmetic expressions, but <code>%ARITH</code> works *outside* the context of a spreadsheet. <code>%ARITH</code> takes a single parameter, which must be an arithmetic expression enclosed in double-quotes, and will return the result.
-
-For example,
-<pre>
-%<nop>ARITH{"54 * 1003.99 - 10"}%
-</pre>
-
-The operators +, -, *, / and % are supported for floating-point arithmetic. The operator =round= can be used to round floating-point numbers to the nearest integer.
-
----+++ <code>%SET</code> pseudo-tag
-<code>%SET</code> is called a pseudo-tag because it doesn't operate the same way as normal twiki tags; it generates no output, and is delimited by end-of line. It is typically used with the <code>%ARITH</code> tag.
-
-<code>%SET</code> is used to set a variable value within the context of the current topic. Variable values which are set remain in force only within the current topic, or until the variable is set to a new value. Note that variable values =%SET= within a =%CALLMACRO= are available in the calling topic.
-
-<code>%SET</code> tags *must* occur at the start of a line (no leading spaces) and are terminated by the end of line. For example,
-<pre>
-%<nop>SET X = 1000
-</pre>
-will set =%<nop>X%= to 1000 for the rest of the topic.
-
-Another difference from other tags is that the RHS of a <code>%SET</code> is fully evaluated immediately. This means that it is unlike a macro, and more like an assignment expression in a programming language. For example,
-<pre>
-%<nop>SET X = 1000
-%<nop>SET Y = 100
-%<nop>SET Z = %ARITH{"%<nop>X% / %<nop>Y%"}%
-</pre>
-will set =%<nop>Z%= to the string =10= and NOT the string <code>"%<nop>ARITH{"1000 / 10"}%"</code>. This is a critically important difference; values that are <code>%SET</code> can be used alongside plugins (such as SpreadSheetPlugin) that are excessively sensitive to format.
-
----+++ <code>%WORKDAYS</code>
+<!-- ---+++ <code>%WORKDAYS</code>
 Used to calculate the number of working days (non-weekends) between two dates.
 It takes two parameters, =start= and =end=, which must be dates in the format expected by =Time::ParseDate= (like the ActionTrackerPlugin) and returns a single number that is the number of days, excluding weekends, between two dates. Sorry, it only works for Saturday and Sunday so if your weekend is offset &plusmn; you may have to make some mental adjustments.
-
 ---+++ <code>%SUMFIELD</code>
 Used to calculate the sum of a numeric field across all the matches in a query result.
 | *Parameter* | *Description* |
@@ -265,8 +207,9 @@ Sum of ages = %<nop>SUMFIELD{query=vs field="Age"}%
 The result is a single number representing the sum of all the fields.
 
 Note that values embedded in tables can be summed using the shorthand described [[#SummingFields][above]].
+-->
 
----+++ <code>%PROGRESS</code>
+---+++ <code>%PROGRESS</code> - %RED%DEPRECATED, use TWiki:Plugins/GaugePlugin instead%ENDCOLOR%
 Used to display a three-part progress bar.
 | *Parameter* | *Description* |
 | =total= | Required, total length of the bar in arbitrary units |
@@ -285,39 +228,49 @@ If =target= is omitted, then it creates a standard two-part progress bar. If all
  </tr>
 </table>
 
----+++ A note about evaluation order
-When displaying a topic, the plugin evaluates tags on a line-by-line basis. Each tag is fully expanded before moving on to the next tag. The tags are evaluated in the following order.
-   1 First all variables set using =%SET= are substituted.
-   1 Then =%CALLMACRO= is evaluated to flatten all macro text into the topic. Macro parameters are expanded at this time.
-   1 Now new =%SET=s are done. The value of the variable is recursively expanded.
-   1 Then =%FORMQUERY=
-   1 Then =%WORKDAYS=
-   1 Then =%SUMFIELD=
-   1 Then =%ARITH=
-   1 Then =%TABLEFORMAT=
-   1 Then =%SHOWQUERY=
-   1 Then =%TOPICCREATOR=
-   1 Finally =%PROGRESS=
-If you are having trouble getting the results you expect, consider this order carefully.
----
-#NotiFication
----++ Notification
-Notification works using the companion script =tasknotify= (installed in the twiki bin directory). The parameters to this script are as follows:
-| *Parameter* | *Description* |
-| web | Name of the web to process |
-| query | Name of the topic in the web containing the query for the mail |
-The script reads the topic containing the query and uses TWiki to render the topic, performing the normal expansions. Then it parses the output to extract lines of the form:
+---+++ Tutorial
+Imagine this scenario; we have a web of topics, each of which _may_ contain a form of type =MyForm= and _may_ contain a table of attachments.
 
-_name_ =:= _text_
+The first thing we want to do is produce a summary table of all attachments in the web with size > 1024.
 
-where _name_ is the wikiname of the person to be notified (for example, "JohnDoe" or "Main.JohnDoe") and _text_ is the text of the notification for that person. For example, if we have a field =Owner= in the form of each of our interesting topics that contains the wikiname of a person, and another field =due= that is used to contain the date that the topic is due (whatever that might mean!). The query to notify when these topics are due within 4 working days from today could be:
+The web is represented as a Map (a.k.a hash, or associative array) indexed by the topic name. Within this map each topic is itself represented by a Map, within which there is always a field named =attachments=. This field contains a reference to an Array of Maps, one for each attachment. Each attachment Map is indexed by the name of a parameter of the record describing the attachment viz. =name=, =attr=, =comment=, =date=, =path=, =size=, =user=, and =version=. Pictorially:
+   * TopicOne (Map)
+      * attachments (Array)
+         1 (Map)
+            * name=pitcha.gif
+            * size=2048
+         1 (Map)
+            * name=image.jpg
+            * size=556
+   * TopicTwo (Map)
+      * attachments (Array)
+   * TopicThree
+etc.
+The first thing we want to do is extract a single table of all the attachments in all the topics.
 <pre>
-%<nop>FORMQUERY{name=NOTIFY search="due WITHIN_DAYS '4'"}%
-%<nop>SHOWQUERY{query=NOTIFY format="$Owner: $topic is due!" header=""}%
+%<nop>FORMQUERY{name=Allatts search="" extract="attachments"}%
 </pre>
-When processed this query will generate a topic containing lines of the form described. The output is parsed by the tasknotify script and the wikinames converted to e-mail addresses using the ActionTrackerPlugin. Mails are then composed (in HTML and text forms) and sent.
+An empty =search= matches all entries, so =AttQuery= will now be set to the result of this query i.e. a flat Array of all attachments. We can narrow this down to attachments with size > 1024:
+<pre>
+%<nop>FORMQUERY{name=Bigatts query=Allatts search="size>'1024'"}%
+</pre>
+Now we can generate a table of these using =SHOWQUERY=:
+<pre>
+%<nop>SHOWQUERY{query=Bigatts header="|*Topic*|*Name*|*Size*|" format="|$topic.topic|$name|$size|"}%
+</pre>
+Note that we have to refer to =$topic.topic= to get the name of the topic because each attachment entry contains a _reference_ to the topic's Map, but not the topic's name.
 
-The =tasknotify= script should be invoked by a cron job (or equivalent). Note that the cron job activation sequence should be carefully thought out to avoid spamming notification recipients!
+To extract the total size of the big attachments we can:
+<pre>
+%<nop>SUMFIELD{query=Bigatts field="size"}%
+</pre>
+Now let's say we want to extract all topics whose form attachment is of type =MyForm=, and then list all the topics referenced in the =Othertopic= field of =MyForm=.
+<pre>
+%<nop>FORMQUERY{name=formed search="form='MyForm'"}%
+%<nop>SHOWQUERY{query=formed header="|*Topic*|" format="|$Othertopic|"}%
+</pre>
+Actiually, this isn't quite enough. What we really want to do is list the 
+
 ---
 #SettingsAnchor
 ---++ <nop>%TOPIC% Settings
@@ -327,7 +280,13 @@ Set to 1 to enable internal consistency checks and other debug states.
 	* Set DEBUG = 0
 Set to 0 if you do not want to use the =Storable= module even if it is installed. The plugin is _much_ faster if =Storable= is installed and enabled.
 	* Set STORABLE = 1
+The plugin can be enabled gloablly, or on a per-web basis. If it is to be enabled globally, then the setting
+    * Set FQP_ENABLE = 1
+must appear in this topic. Otherwise the plugin can be enabled on a per-web basis by putting the =FQP_ENABLE= setting into the WebPreferences topic for the web.
 The remaining settings are defined on a per-web basis.
+   * [[#FqTables][FQTABLES]]
+   * [[#TopicRelations][FQRELATIONS]]
+   * [[#HighLightMap][HIGHLIGHTMAP]]
 
 #TopicRelations
 ---+++ Topic Relations
@@ -337,17 +296,19 @@ ReQ%Ax%B SubReq ReQ%A; TiT%An%B TestItem ReQ%A
 </pre>
 This describes two rules, the first of which says "Any topic named "ReQ&lt;something>x&lt;something>" is a Sub<nop>Req of another topic called "ReQ&lt;something>". Single upper case characters with a preceding percent sign are used to define the &lt;something>s. So, in this example, =ReQ1456= has the =SubReq= relation to =ReQ1456x7=. The reverse relation is also inserted, but appending =_of= to the relation name, so =ReQ1456x7= has the =SubReq_of= relation to =ReQ1456=.
 
-Obviously a single topic may have many topics that have the same relation to it (i.e. they are _one-to-many_), so forward relations are stored as arrays in the hashes that represent topics. Reverse relations are _many_to_one_ so they are stored as a simple field in the other topic. Relations are stored as pointers to the hashes of the other topic so they can't be printed as if they were simple names. Instead you have to use them to refer to fields within the other topic. For example, in a <code>%SHOWQUERY</code> showing =ReQReQ1456x7= you can't refer simply to =$SubReq_of= to get =ReQ1456= (the name of the related topic); you have to use =$SubReq_of.topic= instead.
+Obviously a single topic may have many topics that have the same relation to it (i.e. they are _one-to-many_), so forward relations are stored as arrays in the maps that represent topics. Reverse relations are _many_to_one_ so they are stored as a simple field in the other topic. Relations are stored as pointers to the maps of the other topic so they can't be printed as if they were simple names. Instead you have to use them to refer to fields within the other topic. For example, in a <code>%SHOWQUERY</code> showing =ReQReQ1456x7= you can't refer simply to =$SubReq_of= to get =ReQ1456= (the name of the related topic); you have to use =$SubReq_of.topic= instead.
 
 The default value of =FQRELATIONS= is <code>Re<nop>Q%Ax%B Sub<nop>Req Re<nop>Q%A; Ti<nop>T%An%B Test<nop>Item Re<nop>Q%A</code>
 
+#FqTables
 ---+++ Tables
-Tables to be read into the database must be formatted to use the Edit<nop>table plugin using the 'include=' feature that defined the format of the tables in another topic. Tables to be read are defined by setting the =FQTABLES= variable in the WebPreferences topic of the web. This is a list of the names of the topics that Edit<nop>TablePlugin uses to find it's table formats. Tables are read in as arrays of hashes, with each hash keyed on a field name generated by stripping all non-alphabetic characters from the column header. Note that the column header where the table is defined is used, not the column header in the Edit<nop>Table include= topic.
+Tables to be read into the database must be formatted to use the Edit<nop>table plugin using the 'include=' feature that defined the format of the tables in another topic. Tables to be read are defined by setting the =FQTABLES= variable in the WebPreferences topic of the web. This is a list of the names of the topics that Edit<nop>TablePlugin uses to find it's table formats. Tables are read in as arrays of maps, with each map keyed on a field name generated by stripping all non-alphabetic characters from the column header. Note that the column header where the table is defined is used, not the column header in the Edit<nop>Table include= topic.
 
-Two special hash entries are added to each table row, =topic= and the equivalent of the reverse relation described above, represented by the name of the table with "_of" appended. So if you load a table type "CookingTimes", each row will have =topic= set to the name of the topic it was loaded from and =CookingTimes_of= set to the hash of that topic. This allows you to refer to the fields of the topic that contains a table even after the table has been extracted.
+Two special map entries are added to each table row, =topic= and the equivalent of the reverse relation described above, represented by the name of the table with "_of" appended. So if you load a table type "CookingTimes", each row will have =topic= set to the name of the topic it was loaded from and =CookingTimes_of= set to the map of that topic. This allows you to refer to the fields of the topic that contains a table even after the table has been extracted.
 
 The default value of =FQTABLES= is <code>Task<nop>Table</code>
 
+#HighLightMap
 ---+++ Formatting field values
 A feature of the plugin is that special words in the fields of <code>%SHOWQUERY</code> can be recognised and formatted to your preference.
 
@@ -361,7 +322,10 @@ The /No progress/ defines the perl RE to be matched, and the HTML on the right o
 </pre>
 Only the first RE in the map matched by the string is expanded. Note that spaces between the '=' and the first non-whitespace character of the RHS are ignored. If you want a space here use <code>&amp;nbsp;</code>
 
-The default name of the map topic is =Highlight<nop>Map= though you can change this by setting the variable =FQHIGHLIGHTMAP= in Web<nop>Preferences to the name of the topic to use instead.
+The default name of the map topic is =Highlight<nop>Map= though you can change this by setting the variable =FQHIGHLIGHTMAP= in Web<nop>Preferences to the name of the topic to use instead. For example
+<pre>
+   * <nop>Set FQHIGHLIGHTMAP = MyHighlightMap
+</pre>
 
 Just about any formatting can be included on the LHS of the map; for example, you may want to leverage the SmiliesPlugin and translate "pass" to a smiley face and "fail" to a frown.
 <pre>
@@ -372,25 +336,25 @@ Just about any formatting can be included on the LHS of the map; for example, yo
 ---
 ---++ Plugin Installation Instructions
 __Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required.
-	* Make sure you have the perl module =Time::ParseDate= installed in your perl include path. To check this you can add the following line:<br><code>'Time::ParseDate'</code><br>to the testenv script in twiki/bin, in the @requiredMods list. The plugin will be significantly faster if you also have the =Storable= module installed. Both of these modules are available from www.cpan.org
+    * Make sure you have the TWiki:Plugins/SharedCode module installed
+    * Make sure you have the TWiki:Plugins/DBCachePlugin module installed
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 %$MANIFEST%
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. If you are short of disc space you can delete all the files under lib/TWiki/Plugins/FormQueryPlugin/test without breaking the plugin.
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 	* The variable %<nop>FORMQUERYPLUGIN_ENABLE% must be set either globally or in the web where you want to use it.
-	* Set ENABLE = 1
-	* By default the plugin is enabled globally (on all webs). To enable it for selected webs only, comment out the previous line (put a # in front of the word 'Set') and put the following line (without the #) into the WebPreferences topic of the web you want to enable it on:
-	* #Set FORMQUERYPLUGIN_ENABLE = 1
-
----++ Plugin Uninstallation Instructions (Unix/Linux)
-cd to =lib/TWiki/Plugins/FormQueryPlugin/= and type =make uninstall=
+		* Set ENABLE = 1
+	* By default the plugin is enabled globally (on all webs). This may have an unwelcome performance impact, as the plugin may create a cache of topics in a web where it is not intended to be used. To enable the plugin for selected webs only, comment out the previous line (put a # in front of the word 'Set') and put the following line (without the #) into the WebPreferences topic of the web you want to enable it on:
+		* #Set FORMQUERYPLUGIN_ENABLE = 1
+	* __Note:__ If you are using it, TWiki:Plugins/MacrosPlugin must appear in the Plugins evaluation order *before* FormQueryPlugin. You can ensure this by putting Macros<nop>Plugin immediately after Default<nop>Plugin in the INSTALLEDPLUGINS list in %TWIKIWEB%.TWikiPreferences.
 
 ---
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
-|  Plugin Version: | 1.201 |
-|  Change History: | 02 Apr 2004: SimonHardyFrancis bugfixes incorporated. TimSlidel patches incoporated for mod_perl, autocreate, and collapsing same-type tables in a single topic |
+|  Plugin Version: | 1.3 |
+|  Change History: | 16 Jul 2004: Split into MacrosPlugin, DBCachePlugin, and NotifierAddon |
+|  | 02 Apr 2004: SimonHardyFrancis bugfixes incorporated. TimSlidel patches incoporated for mod_perl, autocreate, and collapsing same-type tables in a single topic |
 |  | 05 Feb 2004: Bugfix version |
 |  | 11 Jul 2003: Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
@@ -403,13 +367,12 @@ cd to =lib/TWiki/Plugins/FormQueryPlugin/= and type =make uninstall=
 
 This code is based on an original development of Motorola Inc. and is protected by the following copyrights:
 	* Copyright (C) 2002-2003 Motorola. All Rights Reserved.
-
-Portions copyright (C) 2004. Crawford Currie.
+	* Portions copyright (C) 2004. Crawford Currie.
 
 ---+++ Extending or customising
 Extension or customisation is welcome, as long as all extensions are described and code provided back to the author.
 
-The module is shipped with a makefile in the root directory, which should be used for installation and testing. Testing is done using Test::Unit, and is invoked using the 'test' makefile target. Writing tests is a useful way of feeding back bugs as well. I can't encourage you enough to maintain and extend the tests!
+The module is shipped with a perl build file, which should be used for installation and testing. Testing is done using Test::Unit, and is invoked using the 'test' build target. Writing tests is a useful way of feeding back bugs as well. I can't encourage you enough to maintain and extend the tests!
 
 ---+++ License
 

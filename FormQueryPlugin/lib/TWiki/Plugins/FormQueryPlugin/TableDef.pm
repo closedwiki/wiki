@@ -4,7 +4,7 @@
 use strict;
 use integer;
 
-use TWiki::Plugins::FormQueryPlugin::Map;
+use TWiki::Plugins::SharedCode::Attrs;
 
 # A table definition object. This encapsulates the formatting of
 # a "table" object inside a topic - or at least, mostly. The
@@ -26,8 +26,8 @@ use TWiki::Plugins::FormQueryPlugin::Map;
       }
     }
 
-    my $attrs = new FormQueryPlugin::Map( $params );
-    my $hdrdef = $attrs->fastget( "header" );
+    my $attrs = new TWiki::Attrs( $params );
+    my $hdrdef = $attrs->get( "header" );
     if ( !defined( $hdrdef ) || $hdrdef eq "on" ) {
       return undef;
     }

@@ -1,11 +1,6 @@
 lib/TWiki/Plugins/FormQueryPlugin.pm  Main plugin script 
 lib/TWiki/Plugins/FormQueryPlugin/Arithmetic.pm  Arithmetic interpreter 
-lib/TWiki/Plugins/FormQueryPlugin/Archive.pm  Archiver used if Storable is not available 
-lib/TWiki/Plugins/FormQueryPlugin/Array.pm  Array class 
-lib/TWiki/Plugins/FormQueryPlugin/FileTime.pm  Cache support 
-lib/TWiki/Plugins/FormQueryPlugin/Map.pm  Map class 
-lib/TWiki/Plugins/FormQueryPlugin/build.xml  Ant build file 
-lib/TWiki/Plugins/FormQueryPlugin/Search.pm  Search class 
+lib/TWiki/Plugins/FormQueryPlugin/build.pl Build file
 lib/TWiki/Plugins/FormQueryPlugin/ColourMap.pm  Highlight map class 
 lib/TWiki/Plugins/FormQueryPlugin/TableFormat.pm  Table formatter 
 lib/TWiki/Plugins/FormQueryPlugin/TableDef.pm  Table format definition class 

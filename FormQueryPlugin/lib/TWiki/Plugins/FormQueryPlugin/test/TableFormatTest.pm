@@ -1,8 +1,8 @@
 package TableFormatTest;
 
 use TWiki::Plugins::FormQueryPlugin::TableFormat;
-use TWiki::Plugins::FormQueryPlugin::Map;
-use TWiki::Plugins::FormQueryPlugin::Array;
+use TWiki::Plugins::DBCachePlugin::Map;
+use TWiki::Plugins::DBCachePlugin::Array;
 use base qw(Test::Unit::TestCase);
 
 sub new {
@@ -23,13 +23,13 @@ sub set_up {
 sub test_1 {
   my $this = shift;
 
-  my $tf = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"X\""));
+  my $tf = new FormQueryPlugin::TableFormat(new DBCachePlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"X\""));
 
-  my $data = new FormQueryPlugin::Array();
-  $data->add(new FormQueryPlugin::Map("X=0 Y=0"));
-  $data->add(new FormQueryPlugin::Map("X=0 Y=1"));
-  $data->add(new FormQueryPlugin::Map("X=1 Y=0"));
-  $data->add(new FormQueryPlugin::Map("X=1 Y=1"));
+  my $data = new DBCachePlugin::Array();
+  $data->add(new DBCachePlugin::Map("X=0 Y=0"));
+  $data->add(new DBCachePlugin::Map("X=0 Y=1"));
+  $data->add(new DBCachePlugin::Map("X=1 Y=0"));
+  $data->add(new DBCachePlugin::Map("X=1 Y=1"));
 
   my $res = $tf->formatTable($data, $this->{cmap});
 
@@ -47,13 +47,13 @@ sub test_1 {
 sub test_1reverse {
   my $this = shift;
 
-  my $tf = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"-X\""));
+  my $tf = new FormQueryPlugin::TableFormat(new DBCachePlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"-X\""));
 
-  my $data = new FormQueryPlugin::Array();
-  $data->add(new FormQueryPlugin::Map("X=0 Y=0"));
-  $data->add(new FormQueryPlugin::Map("X=0 Y=1"));
-  $data->add(new FormQueryPlugin::Map("X=1 Y=0"));
-  $data->add(new FormQueryPlugin::Map("X=1 Y=1"));
+  my $data = new DBCachePlugin::Array();
+  $data->add(new DBCachePlugin::Map("X=0 Y=0"));
+  $data->add(new DBCachePlugin::Map("X=0 Y=1"));
+  $data->add(new DBCachePlugin::Map("X=1 Y=0"));
+  $data->add(new DBCachePlugin::Map("X=1 Y=1"));
 
   my $res = $tf->formatTable($data, $this->{cmap});
 
@@ -71,13 +71,13 @@ sub test_1reverse {
 sub test_2 {
   my $this = shift;
 
-  my $tf = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"Y,X\""));
+  my $tf = new FormQueryPlugin::TableFormat(new DBCachePlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"Y,X\""));
 
-  my $data = new FormQueryPlugin::Array();
-  $data->add(new FormQueryPlugin::Map("X=0 Y=0"));
-  $data->add(new FormQueryPlugin::Map("X=0 Y=1"));
-  $data->add(new FormQueryPlugin::Map("X=1 Y=0"));
-  $data->add(new FormQueryPlugin::Map("X=1 Y=1"));
+  my $data = new DBCachePlugin::Array();
+  $data->add(new DBCachePlugin::Map("X=0 Y=0"));
+  $data->add(new DBCachePlugin::Map("X=0 Y=1"));
+  $data->add(new DBCachePlugin::Map("X=1 Y=0"));
+  $data->add(new DBCachePlugin::Map("X=1 Y=1"));
 
   my $res = $tf->formatTable($data);
 
@@ -95,13 +95,13 @@ sub test_2 {
 sub test_2reverse {
   my $this = shift;
 
-  my $tf = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"-Y,-X\""));
+  my $tf = new FormQueryPlugin::TableFormat(new DBCachePlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"-Y,-X\""));
 
-  my $data = new FormQueryPlugin::Array();
-  $data->add(new FormQueryPlugin::Map("X=0 Y=0"));
-  $data->add(new FormQueryPlugin::Map("X=0 Y=1"));
-  $data->add(new FormQueryPlugin::Map("X=1 Y=0"));
-  $data->add(new FormQueryPlugin::Map("X=1 Y=1"));
+  my $data = new DBCachePlugin::Array();
+  $data->add(new DBCachePlugin::Map("X=0 Y=0"));
+  $data->add(new DBCachePlugin::Map("X=0 Y=1"));
+  $data->add(new DBCachePlugin::Map("X=1 Y=0"));
+  $data->add(new DBCachePlugin::Map("X=1 Y=1"));
 
   my $res = $tf->formatTable($data);
 
@@ -119,13 +119,13 @@ sub test_2reverse {
 sub test_3numeric {
   my $this = shift;
 
-  my $tf = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"#X\""));
+  my $tf = new FormQueryPlugin::TableFormat(new DBCachePlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"#X\""));
 
-  my $data = new FormQueryPlugin::Array();
-  $data->add(new FormQueryPlugin::Map("X=3 Y=0"));
-  $data->add(new FormQueryPlugin::Map("X=20 Y=1"));
-  $data->add(new FormQueryPlugin::Map("X=110 Y=0"));
-  $data->add(new FormQueryPlugin::Map("X=005 Y=1"));
+  my $data = new DBCachePlugin::Array();
+  $data->add(new DBCachePlugin::Map("X=3 Y=0"));
+  $data->add(new DBCachePlugin::Map("X=20 Y=1"));
+  $data->add(new DBCachePlugin::Map("X=110 Y=0"));
+  $data->add(new DBCachePlugin::Map("X=005 Y=1"));
 
   my $res = $tf->formatTable($data);
 
@@ -143,13 +143,13 @@ sub test_3numeric {
 sub test_4numericreverse {
   my $this = shift;
 
-  my $tf = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"-#X\""));
+  my $tf = new FormQueryPlugin::TableFormat(new DBCachePlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"-#X\""));
 
-  my $data = new FormQueryPlugin::Array();
-  $data->add(new FormQueryPlugin::Map("X=3 Y=0"));
-  $data->add(new FormQueryPlugin::Map("X=20 Y=1"));
-  $data->add(new FormQueryPlugin::Map("X=110 Y=0"));
-  $data->add(new FormQueryPlugin::Map("X=005 Y=1"));
+  my $data = new DBCachePlugin::Array();
+  $data->add(new DBCachePlugin::Map("X=3 Y=0"));
+  $data->add(new DBCachePlugin::Map("X=20 Y=1"));
+  $data->add(new DBCachePlugin::Map("X=110 Y=0"));
+  $data->add(new DBCachePlugin::Map("X=005 Y=1"));
 
   my $res = $tf->formatTable($data);
 
@@ -167,28 +167,28 @@ sub test_4numericreverse {
 sub test_5 {
   my $this = shift;
 
-  my $tfi = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"Y,X\""));
+  my $tfi = new FormQueryPlugin::TableFormat(new DBCachePlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"Y,X\""));
   $tfi->addToCache("FF");
-  my $tfa = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"X,Y\""));
+  my $tfa = new FormQueryPlugin::TableFormat(new DBCachePlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"X,Y\""));
   $tfa->addToCache("GG");
-  my $tfo = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*T1*|*T2*|\" format=\"|\$T1[format=FF]|\$T2[format=GG]|\""));
+  my $tfo = new FormQueryPlugin::TableFormat(new DBCachePlugin::Map("header=\"|*T1*|*T2*|\" format=\"|\$T1[format=FF]|\$T2[format=GG]|\""));
 
-  my $datao = new FormQueryPlugin::Array();
-  my $submap = new FormQueryPlugin::Map();
+  my $datao = new DBCachePlugin::Array();
+  my $submap = new DBCachePlugin::Map();
   $datao->add($submap);
 
-  my $dataX = new FormQueryPlugin::Array();
-  $dataX->add(new FormQueryPlugin::Map("X=0 Y=0"));
-  $dataX->add(new FormQueryPlugin::Map("X=0 Y=1"));
-  $dataX->add(new FormQueryPlugin::Map("X=1 Y=0"));
-  $dataX->add(new FormQueryPlugin::Map("X=1 Y=1"));
+  my $dataX = new DBCachePlugin::Array();
+  $dataX->add(new DBCachePlugin::Map("X=0 Y=0"));
+  $dataX->add(new DBCachePlugin::Map("X=0 Y=1"));
+  $dataX->add(new DBCachePlugin::Map("X=1 Y=0"));
+  $dataX->add(new DBCachePlugin::Map("X=1 Y=1"));
   $submap->set( "T1", $dataX );
 
-  my $dataY = new FormQueryPlugin::Array();
-  $dataY->add(new FormQueryPlugin::Map("X=2 Y=2"));
-  $dataY->add(new FormQueryPlugin::Map("X=2 Y=3"));
-  $dataY->add(new FormQueryPlugin::Map("X=3 Y=2"));
-  $dataY->add(new FormQueryPlugin::Map("X=3 Y=3"));
+  my $dataY = new DBCachePlugin::Array();
+  $dataY->add(new DBCachePlugin::Map("X=2 Y=2"));
+  $dataY->add(new DBCachePlugin::Map("X=2 Y=3"));
+  $dataY->add(new DBCachePlugin::Map("X=3 Y=2"));
+  $dataY->add(new DBCachePlugin::Map("X=3 Y=3"));
   $submap->set( "T2", $dataY );
 
   my $res = $tfo->formatTable($datao, $this->{cmap});
