@@ -4,13 +4,11 @@
 #
 use strict;
 
-use Benchmark;
-
 use TWiki::Plugins::DBCachePlugin::Archive;
 use TWiki::Plugins::DBCachePlugin::Array;
 use TWiki::Plugins::DBCachePlugin::FileTime;
 use TWiki::Plugins::DBCachePlugin::Map;
-use TWiki::Plugins::DBCachePlugin::TableDef;
+use TWiki::Plugins::SharedCode::Attrs;
 
 =begin text
 
@@ -29,7 +27,7 @@ Typical usage:
   # the DB is a hash of topics keyed on their name
   foreach my $topic ($db->getKeys()) {
      my $attachments = $topic->get("attachments");
-     # attachments is an array, like all tables read from topics
+     # attachments is an array
      foreach my $val ($attachments->getValues()) {
        my $aname = $attachments->get("name");
        my $acomment = $attachments->get("comment");
@@ -38,12 +36,6 @@ Typical usage:
      }
   }
 </verbatim>
-Each topic hash is loaded with the following standard fields:
-| =form= | Name of the form used in this topic (undef if none) |
-| =parent= | Parent topic to this topic |
-| =attachments= | Array of attachments to this topic. Each attachment is loaded into the array as a Map with the following fields: =name=, =attr=, =comment=, =date=, =path=, =size=, =user=, and =version= |
-| =text= | The body text ||
-
 As topics are loaded, the readTopicLine method gives subclasses an opportunity to apply special processing to indivual lines, for example to extract special syntax such as %ACTION lines, or embedded tables in the text. See FormQueryPlugin for an example of this.
 
 =cut
@@ -54,10 +46,13 @@ As topics are loaded, the readTopicLine method gives subclasses an opportunity t
 
   @DBCachePlugin::DBCache::ISA = ("DBCachePlugin::Map");
 
+  use vars qw( $initialised $storable $VERSION );
+
   BEGIN {
-    use vars qw( $storable $cacheMonitor );
-    $storable = eval { require Storable; };
-    $cacheMonitor = 0; # set 1 to get cache handling stats printed to stderr
+	$initialised = 0; # Not initialised until the first new
+	eval { require Storable; };
+    $storable = !defined( $@ );
+	$VERSION = 1.000;
   }
 
 =begin text
@@ -70,12 +65,11 @@ Construct a new DBCache object.
 =cut
 
   sub new {
-    my ( $class, $dataDir, $web ) = @_;
+    my ( $class, $web, $cacheName ) = @_;
     my $this = bless( $class->SUPER::new(), $class );
-
     $this->{_web} = $web;
     $this->{loaded} = 0;
-	$this->{_cachefile} = "$dataDir/_DBCache" unless ($this->{_cachefile});
+	$this->{_cachename} = $cacheName || "_DBCache";
 
     return $this;
   }
@@ -93,6 +87,24 @@ Construct a new DBCache object.
     }
   }
 
+  # PRIVATE read from cache file.
+  # May throw an exception.
+  sub _readCache {
+	my ( $this, $cache ) = @_;
+	my $data;
+
+	return undef unless ( -e $cache );
+
+	if ( $storable ) {
+	  $data = Storable::lock_retrieve( $cache );
+	} else {
+	  my $archive = new DBCachePlugin::Archive( $cache, "r" );
+	  $data = $archive->readObject();
+	  $archive->close();
+	}
+	return $data;
+  }
+
   # PRIVATE load a single topic from the given data directory. This
   # could be replaced by TWiki::Func::readTopic -> {$meta, $text) but
   # this implementation is more efficient for just now.
@@ -104,22 +116,40 @@ Construct a new DBCache object.
     open( $fh, "<$filename" )
       or die "Failed to open $dataDir/$topic.txt";
     my $meta = new DBCachePlugin::Map();
+    $meta->set( "name", $topic );
     $meta->set( "topic", $topic );
     $meta->set( ".cache_time", new DBCachePlugin::FileTime( $filename ));
 	
     my $line;
 	my $text = "";
+	my $form;
     while ( $line = <$fh> ) {
       if ( $line =~ m/%META:/o ) {
 		if ( $line =~ m/%META:FORM{name=\"([^\"]*)\"}%/o ) {
-		  $meta->set( "form", $1 );
+		  $form = new DBCachePlugin::Map() unless $form;
+		  my $name = $1;
+		  $form->set( "name", $name );
+		  $form->set( "_up", $meta );
+		  $meta->set( "form", $name );
+		  $meta->set( $name, $form );
 		} elsif ( $line =~ m/%META:TOPICPARENT{name=\"([^\"]*)\"}%/o ) {
 		  $meta->set( "parent", $1 );
+		  $meta->set( "_up", $this->get( $1 ));
+		} elsif ( $line =~ m/%META:TOPICINFO{(.*)}%/o ) {
+		  my $att = new DBCachePlugin::Map($1);
+		  $att->set( "_up", $meta );
+		  $meta->set( "info", $att );
+		} elsif ( $line =~ m/%META:TOPICMOVED{(.*)}%/o ) {
+		  my $att = new DBCachePlugin::Map($1);
+		  $att->set( "_up", $meta );
+		  $meta->set( "moved", $att );
 		} elsif ( $line =~ m/%META:FIELD{(.*)}%/o ) {
 		  my $fs = new TWiki::Attrs($1);
-		  $meta->set( $fs->get("name"), $fs->get("value"));
+		  $form = new DBCachePlugin::Map() unless $form;
+		  $form->set( $fs->get("name"), $fs->get("value"));
 		} elsif ( $line =~ m/%META:FILEATTACHMENT{(.*)}%/o ) {
 		  my $att = new DBCachePlugin::Map($1);
+		  $att->set( "_up", $meta );
 		  my $atts = $meta->get( "attachments" );
 		  if ( !defined( $atts )) {
 			$atts = new DBCachePlugin::Array();
@@ -152,15 +182,8 @@ adding them to the hash for the topic.
 =cut
 
   sub readTopicLine {
-    #my ( $this, $topic, $line, $fh ) = @_;
-  }
-
-  sub _tick {
-    my ( $time, $message ) = @_;
-    my $timenow = new Benchmark;
-    my $diff = Benchmark::timediff( $timenow, $time );
-    print STDERR "$message ", Benchmark::timestr( $diff ), "\n";
-    return $timenow;
+    #my ( $this, $topic, $meta, $line, $fh ) = @_;
+    return $_[3];
   }
 
 =begin text
@@ -192,18 +215,24 @@ cached topics that have been removed.
 
     return "0 0 0" if ( $this->{loaded} );
 
-    my $web = $this->{web};
+    my $web = $this->{_web};
     my @topics = TWiki::Func::getTopicList( $web );
     my $dataDir = TWiki::Func::getDataDir() . "/$web";
-    my $cacheFile = $this->{_cachefile};
+    my $cacheFile = $dataDir . "/" . $this->{_cachename};
 
     my $time;
-    $time = new Benchmark if ( $cacheMonitor );
 
     my $writeCache = 0;
-    my $cache = $this->_readCache( $cacheFile );
+    my $cache;
 
-    $time = _tick($time, "Cache load") if ( $cacheMonitor );
+	eval {
+	  $cache = $this->_readCache( $cacheFile );
+	};
+
+	if ( $@ ) {
+	  print STDERR "Cache read failed $@\n";
+	  $cache = undef;
+	}
 
     my $readFromCache = 0;
     my $readFromFile = 0;
@@ -216,7 +245,7 @@ cached topics that have been removed.
       };
 
       if ( $@ ) {
-		TWiki::writeWarning("DBCachePlugin: Cache read failed: $@");
+		TWiki::Func::writeWarning("DBCachePlugin: Cache read failed: $@");
 		$cache = undef;
       }
 
@@ -236,16 +265,12 @@ cached topics that have been removed.
       $writeCache = 1;
     }
 
-    $time = _tick($time, "Topic read") if ( $cacheMonitor );
     if ( $writeCache ) {
       $this->_writeCache( $cacheFile );
     }
 
     $this->{loaded} = 1;
-    if ( $cacheMonitor ) {
-      $time = _tick($time,
-				"Cache $readFromCache File $readFromFile Remove $removed\n");
-    }
+
     return "$readFromCache $readFromFile $removed";
   }
 
@@ -265,7 +290,7 @@ cached topics that have been removed.
     my @remove;
     my $readFromCache = $cache->size();
     foreach my $cached ( $cache->getValues()) {
-      $topic = $cached->fastget( "topic" );
+      $topic = $cached->fastget( "name" );
       if ( !$tophash{$topic} ) {
 		# in the cache but are missing from @topics
 		push( @remove, $topic );

@@ -91,14 +91,14 @@ Remove an entry at an index from the array.
 
 ---+++ =get($key, $root)= -> datum
    * =$k= - key
-   * $root - what ! refers to
+   * $root - what # refers to
 *Subfield syntax*
    * =get("9", $r)= where $n is a number will get the 9th entry in the array
    * =get("[9]", $r)= will also get the 9th entry
    * =get(".9", $r)= will also get the 9th entry
    * =get(".X", $r)= will return the sum of the subfield =X= of each entry
    * =get("[?<i>search</i>]", $r)= will perform the given search over the entries in the array. Always returns an array result, even when there is only one result. For example: <code>[?name='Sam']</code> will return an array of all the entries that have their subfield =name= set to =Sam=.
-   * =!= (exclamation mark) means "reset to root". So =get("![3]", $r)= will return the 4th entry of $r (assuming $r is an array!).
+   * =#= means "reset to root". So =get("#[3]", $r)= will return the 4th entry of $r (assuming $r is an array!).
    * =get("[*X]", $r)= will get a new array made from subfield X of each entry in this array.
 
 Where the result of a subfield expansion is another object (a Map or an Array) then further subfield expansions can be used. For example,
@@ -145,7 +145,7 @@ See also =DBCachePlugin::Map= for syntax that applies to maps.
 	  my $field = $this->get( $1, $root );
 	  return $field->get( $2, $root ) if ( $2 && ref( $field ));
 	  return $field;
-    } elsif ( $key =~ m/^!(.*)$/o ) {
+    } elsif ( $key =~ m/^#(.*)$/o ) {
 	  return $root->get( $1, $root );
     } else {
 	  die "ERROR: bad Array expression at $key";

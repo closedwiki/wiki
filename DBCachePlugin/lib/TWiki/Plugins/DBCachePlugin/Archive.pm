@@ -224,9 +224,7 @@ Read an object from the archive
 
   sub readObject {
     my $this = shift;
-    
     my $key; sysread( $this->{FH}, $key, 1 );
-
     if ( $key eq 'R' ) {
       my $o; sysread( $this->{FH}, $o, 4 );
       my $id = unpack( "i", $o );
