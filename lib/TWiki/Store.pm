@@ -293,6 +293,7 @@ sub changeRefTo
    my $noAutoLink = 0;
    
    foreach( split( /\n/, $text ) ) {
+       next if( /^%META:TOPIC(INFO|MOVED)/ );
 
        # change state:
        m|<pre>|i  && ( $insidePRE = 1 );
