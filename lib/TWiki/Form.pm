@@ -386,8 +386,8 @@ sub renderForEdit
         } elsif( $type =~ "^checkbox" ) {
             if( $type eq "checkbox+buttons" ) {
                 my $boxes = $#fieldInfo + 1;
-                $extra = "<br />\n<input class=\"twikiEditFormCheckboxButton\" type=\"button\" value=\" Set \" onclick=\"checkAll(this, 2, $boxes, true)\" />&nbsp;\n" .
-                         "<input class=\"twikiEditFormCheckboxButton\" type=\"button\" value=\"Clear\" onclick=\"checkAll(this, 1, $boxes, false)\" />\n";
+                $extra = "<br />\n<input class=\"twikiEditFormCheckboxButton twikiCheckbox\" type=\"button\" value=\" Set \" onclick=\"checkAll(this, 2, $boxes, true)\" />&nbsp;\n" .
+                         "<input class=\"twikiEditFormCheckboxButton twikiCheckbox\" type=\"button\" value=\"Clear\" onclick=\"checkAll(this, 1, $boxes, false)\" />\n";
             }
 
             my $val ="<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
@@ -419,7 +419,7 @@ sub renderForEdit
                    $matched = $item;
                 }
                 $defaultMarker = "";
-                $val .= "\n<td><input class=\"twikiEditFormRadioField\" type=\"radio\" name=\"$name\" value=\"$item\" $selected />$expandedItem &nbsp;&nbsp;</td>";
+                $val .= "\n<td><input class=\"twikiEditFormRadioField twikiRadioButton\" type=\"radio\" name=\"$name\" value=\"$item\" $selected />$expandedItem &nbsp;&nbsp;</td>";
                 if( $size > 0 && ($lines % $size == $size - 1 ) ) {
                    $val .= "\n</tr><tr>";
                 }
