@@ -1,6 +1,6 @@
 =begin text
 
----+ Package TWiki::Store - test fixture
+---++ Package TWiki::Store - test fixture
 A test fixture module that provides an ultra-thin implementation of the
 functions of the TWiki::Store module that are required by plugins and add-ons.
 
