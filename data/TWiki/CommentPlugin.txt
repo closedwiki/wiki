@@ -137,32 +137,14 @@ To help avoid edit conflict, a reminder to refresh the page before entering comm
 		* Set DEFAULT_TYPE = below
 		
 ---+ Plugin Installation Instructions
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	| *File:* | *Description:* |
-	| ==data/TWiki/CommentPlugin.txt== | Plugin doc page (this page)  |
-	| ==data/TWiki/CommentsTmpl.txt== | Example user templates  |
-	| ==templates/comments.tmpl== | Master comment templates  |
-	| ==lib/TWiki/Plugins/CommentPlugin.pm== | Plugin Perl module  |
-	| ==lib/TWiki/Plugins/CommentPlugin/Comment.pm== | Plugin Perl module  |
-	| ==lib/TWiki/Plugins/CommentPlugin/test.zip== | Tests  |
-	| ==lib/TWiki/Plugins/CommentPlugin/build.pl== | Build file |
-	| ==CommentPlugin_installer.pl== | Install script |
-
-	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
-	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
-	<table border=1><tr><th align="left">Name</th><th align="left">Version</th><th align="left">Description</th></tr><tr><td align="left">TWiki::Contrib::Attrs</td><td align="left">&gt;=1.000</td><td align="left">Required. Download from TWiki:Plugins/AttrsContrib and install.</td></tr><tr><td align="left">TWiki::Plugins::CairoContrib</td><td align="left"> &gt;=1.000</td><td align="left">Optional, only required if the plugin is to be run with versions of TWiki before Cairo. Available from the TWiki:Plugins/CairoContrib repository.</td></tr></table>
-	* The Plugin depends on the =viewauth= script to authenticate the user. As described in %TWIKIWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file.
-
-If installed correctly, you should see a =%COMMENT= edit box below here.
-
-%COMMENT{type="top" target="Sandbox.Comments"}%
+   * This plugin is pre-installed in your TWiki release.
 
 ---+ Plugin Info
 
 |  Plugin Author: | v1.0 TWiki:Main.DavidWeller v2.0 TWiki:Main.PeterMasiar v3.0 TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
-|  Plugin Version: | 3.008 |
 | Change History: <!-- Most recent first --> ||
+| 22 Feb 2005 | 4.000 Moved into subversion repository, Dakar release ready. The plugins repository version will be maintained for supporting older TWiki releases. |
+| 10 Feb 2005 | 3.009 Fixed a minor infraction in Comment.pm so it expands the user correctly |
 | 16 Oct 2004 | 3.008 Added the =noform= attribute to Comment - TWiki:Main.MartinCleaver |
 | 12 Oct 2004 | 3.007 Disabled comment boxes in rdiff pane. |
 | 6 Oct 2004 | 3.006 Fixed action template, which was expanded incorrectly. Upped default comment box to 70 chars default width. |
@@ -178,14 +160,9 @@ If installed correctly, you should see a =%COMMENT= edit box below here.
 | 24 Feb 2002 | added a few more user requests, made "English" text configurable |
 | 4 Dec 2001 | 1.010 release, changed name to CommentPlugin, added $button var, changed textarea WRAP setting to "soft" |
 | 30 Nov 2001 | 1.000 Initial version |
-|  Dependencies: | <table border=1><tr><th align="left">Name</th><th align="left">Version</th><th align="left">Description</th></tr><tr><td align="left">TWiki::Contrib::Attrs</td><td align="left">&gt;=1.000</td><td align="left">Required. Download from TWiki:Plugins/AttrsContrib and install.</td></tr><tr><td align="left">TWiki::Plugins::CairoContrib</td><td align="left"> &gt;=1.000</td><td align="left">Optional, only required if the plugin is to be run with versions of TWiki before Cairo. Available from the TWiki:Plugins/CairoContrib repository.</td></tr></table> |
-|  Perl Version: | 5.0 |
+|  Dependencies: | <table border=1><tr><th align="left">Name</th><th align="left">Version</th><th align="left">Description</th></tr><tr><td align="left">TWiki::Contrib::Attrs</td><td align="left">&gt;=1.000</td><td align="left">Required. Download from TWiki:Plugins/AttrsContrib and install.</td></tr><tr><td align="left">TWiki::Plugins</td><td align="left"> &gt;=1.010</td><td align="left">This plugin will not work with this TWiki version. It requires TWiki features introduced in Feb 2003 or later release.</td></tr></table> |
+|  Perl Version: | >= 5.6.1 |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main/DavidWeller - 05 Mar 2002 <br>
--- TWiki:Main/PeterMasiar - 15 Jul 2003, 23 Sep 2003<br>
--- TWiki:Main/CrawfordCurrie - 17:48:16 01 December 2004
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
