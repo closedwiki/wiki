@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = '04 Sep 2004 $Rev$';
+$wikiversion      = '16 Sep 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2358,6 +2358,7 @@ sub handleRevisionInfo
     my $cgiRev = "";
     $cgiRev = $cgiQuery->param('rev') if( $cgiQuery );
     my $revnum = $cgiRev || extractNameValuePair( $theArgs, "rev" ) || "";
+    $revnum =~ s/r?1\.//; # cut "r" and major
 
     my( $date, $user, $rev, $comment ) = TWiki::Store::getRevisionInfo( $web, $topic, $revnum );
     my $wikiName     = userToWikiName( $user, 1 );
