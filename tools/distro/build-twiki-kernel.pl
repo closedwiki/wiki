@@ -106,7 +106,7 @@ sub filterDoc {
 
     $conts =~ s/^.*%STARTINCLUDE%//s;
     $conts =~ s/%STOPINCLUDE%.*$//s;
-    $conts =~ s/^-- (TWiki:)?Main.[A-Z]+[a-z]+[A-Z]+\w+ - \d\s \s{3} \d{4}( <br \/>)?$//g;
+    $conts =~ s/^(-- (TWiki:)?Main.[A-Z]+[a-z]+[A-Z]+\w+ - \d{2} \w{3} \d{4}( <br \/>)?\s*)$/<!-- $1 -->/mg;
 
     open(FR, ">$path") || die "failed to open $path for write";;
     print FR $conts;

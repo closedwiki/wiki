@@ -4,7 +4,7 @@
 </td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/twikiRobot131x64.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
 </td><td>
-<b>The TWiki <sup>TM</sup> home is <br> at http://TWiki.org/ </b>
+<b>The TWiki&trade; home is at http://TWiki.org/ </b>
 </td></tr>
 </table>
 
