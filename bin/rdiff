@@ -67,9 +67,9 @@ sub renderRevisionDiff
             $data = renderCellData( $data, $topic );
             $result .= $data;
             $data = "";
-            s/^([0-9\,]+)d([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#FFD7D7" colspan ="2"><b> Deleted: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br />&lt;<\/td><td>/go;
-            s/^([0-9\,]+)a([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Added:   <\/b><\/td><\/tr>\n<tr><td bgcolor="#40FF40" valign="top" width="1%">&gt;<br />&gt;<\/td><td>/go;
-            s/^([0-9\,]+)c([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Changed: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br />&lt;<\/td><td>/go;
+            s/^([0-9\,]+)d([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#FFD7D7" colspan ="2"><b> Deleted: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br \/>&lt;<\/td><td>/go;
+            s/^([0-9\,]+)a([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Added:   <\/b><\/td><\/tr>\n<tr><td bgcolor="#40FF40" valign="top" width="1%">&gt;<br \/>&gt;<\/td><td>/go;
+            s/^([0-9\,]+)c([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Changed: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br \/>&lt;<\/td><td>/go;
             $result .= $_;
 
         } elsif( /^[<>]/ ) {
