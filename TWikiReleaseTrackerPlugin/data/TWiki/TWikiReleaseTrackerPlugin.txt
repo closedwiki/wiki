@@ -11,7 +11,7 @@ One line description, is shown in the TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Plugin telling you how similar your install is to past releases of TWiki 
 
 See the Parameters section for descriptions of the rest of these:
-		* Set STATUSFILTER = FSCD,FDCS
+		* Set STATUSFILTER = FSCD,FDCS,FDCM
 		* Set FROM = localInstallation
 		* Set TO = ,
 
@@ -57,16 +57,27 @@ All parameters can be sourced from one of three places:
 	2 Parameters specified on the %DIFFWIKI{} line
 	3 Parameters recognised as a CGI.pm parameter (e.g. on the URL line)
 
+---+++ Parameters to the %DIFFWIKI directive
+
 | *Parameter name* | *Values* | *Default* |
 | *Mode = listing* | listing, file | listing |
+| fscsFormat | string to show when file is FSCS | &pipe; $relativeFile &pipe; FSCS &pipe; $locations &pipe; |
+| fscdFormat | string to show when file is FSCS | &pipe; $relativeFile &pipe; FSCDCALLBACK &pipe; FSCDDIST &pipe;
+| fdcsFormat | | &pipe; $relativeFile &pipe; FDCS &pipe; $locations &pipe;
+| fdcdFormat | | &pipe; ($relativeFile name not recognised, and no content match)  &pipe; FDCD &pipe; &pipe;
+| fdcmFormat | | &pipe; $relativeFile &pipe; FSCM &pipe; $locations &pipe;
+| headerFormat | | &pipe; *File* &pipe; *Status* &pipe; *Also Occurs In* &pipe;
 | from | TWiki distribution name (e.g. TWiki20011201), or the string 'localInstallation' | localInstallation |
 | to | (see "from") | , - this says match against all distributions |
 | indexTopic | topic containing the md5 files | defaults to the plugin page |
 | debug | on, off, 2 | off |
-| statusFilter | "FSCS, FSCD, FSCM, FDCS, FDCD, all" (Filename Same/Different, Content Same/Matches (other dist)/Different) | all |
+| statusFilter | "FSCS,FSCD,FSCM,FDCS,FDCD,all" (Filename Same/Different, Content Same/Matches (other dist)/Different) | FDCD,FSCS,FDCM |
 | *Mode = file* |  ||
 | file | filename to compare | - |
-| *Mode = dumpIndex* | - | - |
+| *Mode = dumpIndex* | Shows indexes loaded | - |
+| *Mode = indexLocalDistribution* | Regenerates the localInstallation.md5 file, use after modifying files | |
+
+---+++ Parameters to the %DIFFWIKI directive
 
 ---++ Limitations
 | *Issue* | *Future Plan* | *Impact* |
@@ -76,6 +87,10 @@ All parameters can be sourced from one of three places:
 | The results are not sorted | sort them | Low - workaround available: Use table sort function |
 | The underlying data structures could do with some optimisation | Review | Low - Page load is slow in some cases |
 
+---++ Future plans
+	* Make the TRT detect inconsistent indexes and offer to regenerate the localInstallation md5 file if necessary
+	* Make test suite TWiki:Plugins.BuildContrib <nop>TestRunner compatible
+	* Make use of TWiki:Plugins.AttrsContrib
 
 ---++ Manifest
 %$MANIFEST%
