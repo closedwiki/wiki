@@ -319,6 +319,25 @@ sub getPreferencesValue
     return &TWiki::Prefs::getPreferencesValue( @_ );
 }
 
+=pod
+
+---+++ getPluginPreferencesValue( $key ) ==> $value
+
+| Description:      | Get a preferences value from your Plugin |
+| Parameter: =$key= | Plugin Preferences key w/o PLUGINNAME_ prefix. |
+| Return: =$value=  | Preferences value; empty string if not set |
+| Since:            | TWiki::Plugins::VERSION 1.020 (26 Mar 2004) |
+
+=cut
+
+sub getPluginPreferencesValue
+{
+    my( $theKey ) = @_;
+    my $package = caller;
+    $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
+    return TWiki::Prefs::getPreferencesValue( "\U$package\E_$theKey" );
+}
+
 # =========================
 =pod
 
