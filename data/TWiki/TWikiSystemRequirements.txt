@@ -1,40 +1,58 @@
-__Platform__
+---## TWiki Implementation Notes
 
-TWiki is written in Perl 5, but it uses also many shell commands. The current implementation runs best on a Unix machine, but it is also possible on Microsoft Windows. RCS (for revision control) must be installed on the system.
+---+++ Platform
 
-__Directories__
+TWiki is written in Perl 5 and uses also some shell commands. The current implementation runs best on a Unix machine, but it is also possible on Microsoft Windows. RCS (for revision control) must be installed on the system.
 
-| *Directory:*		| *Used for:* |
-| =twiki/bin=		 | TWiki Perl scripts |
-| =twiki/pub=		 | Public files (FileAttachments, images) |
-| =twiki/data=		| source text |
-| =twiki/templates= | HTML templates, used by TWiki scripts |
+---+++ Directory Structure
 
-__Files in twiki/bin__
+| *Directory:*		  | *Used for:* |
+| ==twiki/bin==		 | TWiki Perl scripts |
+| ==twiki/bin/TWiki== | TWiki Perl modules |
+| ==twiki/bin/TWiki/Plugins== | Plugins modules |
+| ==twiki/pub==		 | Public files (FileAttachments, images) |
+| ==twiki/data==		| source text |
+| ==twiki/templates== | HTML templates, used by TWiki scripts |
+
+__Note:__ You could move the ==twiki/bin/TWiki== library directory (including ==Plugins== ) to ==twiki/lib/TWiki==; the scripts look for a =="."== and =="../lib"== relative library path.
+
+---++++ Files in twiki/bin
 
 | *File:*		 | *Used for:* |
-| =.htaccess.txt= | Authentication. Rename to .htaccess and customize if used |
-| =attach=		  | Script that shows the attach file page (FileAttachment) |
-| =delete=		  | (not used yet) |
-| =edit=			 | Script to edit a topic |
-| =geturl=		  | Script to fetch URL data |
-| =mailnotify=	 | Script called by cron job to notify users of changes |
-| =oops=			 | Script that shows an OK or oops dialog |
-| =preview=		 | Script to preview topic after edit |
-| =rdiff=			| Script to see differences of topics |
-| =register=		| Script to register new users |
-| =save=			 | Script that saves a topic, called by preview |
-| =search=		  | Script that displays search results |
-| =statistics=	 | Script to create statistics topic |
-| =testenv=		 | Script to test CGI environment variables |
-| =upload=		  | Script that does file upload (FileAttachment) |
-| =view=			 | Script to view a topic ( *the* script ) |
-| =viewfile=		| Script to view an file attachment |
-| =wiki.pm=		 | main TWiki library |
-| =wikiaccess.pm= | access control |
-| =wikicfg.pm=	 | for initialization and configuration, used by wiki.pm |
-| =wikiprefs.pm=  | preferences handling |
-| =wikisearch.pm= | search engine, used by wiki.pm |
-| =wikistore.pm=  | back-end storage, =*.txt= text file and =*.txt,v= RCS repository file handling |
+| ==.htaccess.txt== | Authentication. Rename to .htaccess and customize if used |
+| ==attach==		  | Script that shows the attach file page (FileAttachment) |
+| ==delete==		  | (not used yet) |
+| ==edit==			 | Script to edit a topic |
+| ==geturl==		  | Script to fetch URL data |
+| ==mailnotify==	 | Script called by cron job to notify users of changes |
+| ==oops==			 | Script that shows an OK or oops dialog |
+| ==preview==		 | Script to preview topic after edit |
+| ==rdiff==			| Script to see differences of topics |
+| ==register==		| Script to register new users |
+| ==save==			 | Script that saves a topic, called by preview |
+| ==search==		  | Script that displays search results |
+| ==statistics==	 | Script to create statistics topic |
+| ==testenv==		 | Script to test CGI environment variables |
+| ==upload==		  | Script that does file upload (FileAttachment) |
+| ==view==			 | Script to view a topic ( *the* script ) |
+| ==viewfile==		| Script to view an file attachment |
+| ==TWiki.pm==		| Main TWiki library |
+| ==TWiki.cfg==	  | For initialization and configuration, used by ==TWiki.pm== |
 
--- Main.PeterThoeny - 02 Nov 2000 <br>
+---++++ Files in twiki/bin/TWiki
+
+| *File:*			| *Used for:* |
+| ==Access.pm==	| Access control |
+| ==Net.pm==		| SMTP mail handling |
+| ==Plugins.pm==  | Plugin handling |
+| ==Prefs.pm==	 | Preferences handling |
+| ==Search.pm==	| Search engine, used by wiki.pm |
+| ==Store.pm==	 | Back-end storage, =*.txt= text file and =*.txt,v= RCS repository file handling |
+
+---++++ Files in twiki/bin/TWiki/Plugins
+
+| *File:*				  | *Used for:* |
+| ==DefaultPlugin.pm== | Default plugin |
+| ==EmptyPlugin.pm==	| Empty plugin, use to create your own |
+
+-- Main.PeterThoeny - 03 Mar 2001 <br>
