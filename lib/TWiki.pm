@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "28 Aug 2001";
+$wikiversion      = "29 Aug 2001";
 
 # ===========================
 # read the configuration part
@@ -427,7 +427,7 @@ sub wikiToUserName
 {
     my( $wikiUser ) = @_;
     $wikiUser =~ s/^.*\.//go;
-    my $userName =  $wikiToUserList{"$wikiUser"};
+    my $userName =  $wikiToUserList{"$wikiUser"} || $wikiUser;
     #TWiki::writeDebug( "TWiki::wikiToUserName: $wikiUser->$userName" );
     return $userName;
 }
