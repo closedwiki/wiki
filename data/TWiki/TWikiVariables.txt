@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1074417117" format="1.0" version="1.73"}%
+%META:TOPICINFO{author="PeterThoeny" date="1074472194" format="1.0" version="1.74"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -47,7 +47,7 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
   <td> =%<nop>ICON{"type"}%= </td>
   <td> Small 16x16 pixel icon of common attachment types, like %ICON{"bmp"}% =bmp=, %ICON{"doc"}% =doc=, %ICON{"gif"}% =gif=, %ICON{"hlp"}% =hlp=, %ICON{"html"}% =html=, %ICON{"mp3"}% =mp3=, %ICON{"pdf"}% =pdf=, %ICON{"ppt"}% =ppt=, %ICON{"txt"}% =txt=, %ICON{"xls"}% =xls=, %ICON{"xml"}% =xml=, %ICON{"zip"}% =zip=, etc. Specify file type only, file name, or full path name. Example: =%<nop>ICON{"pdf"}%= returns %ICON{"pdf"}% </td>
 </tr><tr>
-  <td> =%<nop>PARAM{"name"}%= </td>
+  <td> =%<nop>URLPARAM{"name"}%= </td>
   <td> Returns the value of a URL parameter. Note that there is a risk that this variable could be misused for cross-scripting. Supported parameters:
 	 | *Parameter:* | *Description:* | *Default:* |
 	 | ="name"= | The name of a URL parameter | required |
@@ -55,7 +55,7 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
 	 | =newline="&lt;br /&gt;"= | Convert newlines to other delimiters | no conversion |
 	 | =encode="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;=. This is needed if text is put into an HTML form field | no encoding |
 	 | =encode="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | no encoding |
-	 Example: =%<nop>PARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%PARAM{"skin"}%</b>
+	 Example: =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b>
 </td>
 </tr><tr>
   <td> =%<nop>ENCODE{"string"}%= </td>
