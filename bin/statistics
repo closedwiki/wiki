@@ -37,6 +37,7 @@ my $cgiQuery = "";
 
 &main();
 
+# =========================
 sub main
 {
     my $tmp;
@@ -139,6 +140,7 @@ sub main
     }
 }
 
+# =========================
 sub processWeb
 {
     my( $thePathInfo, $theRemoteUser, $theTopic, $theLogMonthYear, @theLogList ) = @_;
@@ -175,17 +177,11 @@ sub processWeb
     my $statTopContributors = "";
     if( @topViews ) {
         printMsg( "  - top view: $topViews[0]" );
-        for( $x = 0; $x < @topViews; $x++ )
-        {
-            $statTopViews .= "$topViews[$x] <br>";
-        }
+        $statTopViews = join( "<br> ", @topViews );
     }
     if( @topContrib ) {
         printMsg( "  - top contributor: $topContrib[0]" );
-        for( $x = 0; $x < @topContrib; $x++ )
-        {
-            $statTopContributors .= "$topContrib[$x] <br>";
-        }
+        $statTopContributors = join( "<br> ", @topContrib );
     }
 
     my $statsFile = $TWiki::statisticsTopicname;
@@ -228,7 +224,7 @@ sub processWeb
         }
         $text = join( "\n", @lines );
         $text .= "\n";
-        &TWiki::Store::saveTopic( $statsFile, $text, "", 1, 1, 1 );
+        &TWiki::Store::saveTopic( $webName, $statsFile, $text, $meta, "", 1, 1, 1 );
         printMsg( "  - Topic $statsFile updated" );
 
     } else {
@@ -236,13 +232,13 @@ sub processWeb
     }
 }
 
-# =====================================================================
+# =========================
 sub getTopList
 {
     my( $doUser, $theMaxNum, @theList ) = @_;
 
     my %hash = ();
-    my $tmp;
+    my $tmp = "";
     foreach( @theList ) {
         $tmp = $_;
         if( $doUser ) {
@@ -253,34 +249,32 @@ sub getTopList
         if( $hash{ $tmp } ) {
             $hash{ $tmp } = $hash{ $tmp } + 1;
         } else {
-            %hash = ( %hash, $tmp, 1 );
+            $hash{ $tmp } = 1;
         }
     }
 
     my @list = ();
+    my $key = "";
+    my $value = "";
     while( ( $key, $value ) = each( %hash ) ) {
         $tmp = "     $value";
         $tmp =~ s/\s*(.{5})$/$1/go;
         $list[@list] = "$tmp $key";
     }
-    @list = reverse( sort( @list ) );
-
-    my @returnList = ();
-    my $idx = 0;
-    for( $x = 0; $x < @list; $x++ )
-    {
-        if( $x >= $theMaxNum ) {
-            return @returnList;
+    if( @list ) {
+        @list = map{ s/^([0-9][0-9][^0-9])/\&nbsp\;$1/o; $_ }
+                map{ s/^([0-9][^0-9])/\&nbsp\;\&nbsp\;$1/o; $_ }
+                map{ s/^\s*//o; $_ }
+                reverse( sort( @list ) );
+        if( $theMaxNum >= @list ) {
+            $theMaxNum = @list - 1;
         }
-        $tmp = $list[$x];
-        $tmp =~ s/^\s*(.*)/ $1/go;
-        $returnList[$x] = $tmp;
+        return @list[0..$theMaxNum];
     }
-
-    return @returnList;
+    return @list;
 }
 
-# =====================================================================
+# =========================
 sub printMsg
 {
     my( $msg ) = @_;
@@ -303,3 +297,5 @@ sub printMsg
     }
 }
 
+# =========================
+# EOF
