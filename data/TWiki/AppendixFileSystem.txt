@@ -135,7 +135,6 @@ The =pub= directory stores topic-related files, including images used by TWiki a
 
 | *File:*			| *Used for:* |
 | =favicon.ico= | ICO file |
-| =wikiHome.gif= | GIF file |
 | =icn/_filetypes.txt= | Lookup table to translate file extension to file type |
 | =icn/bat.gif= | GIF file for file type |
 | =icn/bmp.gif= | GIF file for file type |
@@ -147,7 +146,7 @@ The =pub= directory stores topic-related files, including images used by TWiki a
 | =TWiki/PreviewBackground/blankwhitebg.gif= | GIF image |
 | =TWiki/PreviewBackground/previewbg.gif= | GIF image: Preview view background |
 | =TWiki/PreviewBackground/preview2bg.gif= | GIF image: Alternate preview view background |
-| =TWiki/TWikiLogos/twikiRobot121x54.gif= | GIF image: TWiki logo |
+| =TWiki/TWikiLogos/vertTWiki.gif= | GIF image: TWiki logo |
 |  ...  |  ...  |
 | =TWiki/TWikiTemplates/testscreen.gif= | GIF image: Screen shot |
 | =TWiki/WabiSabi/wabisabi.gif= | GIF image: illustration |
@@ -489,7 +488,6 @@ drwxrwxr-x	 8 nobody  nobody		 4096 Nov 18 12:31 TWiki
 drwxrwxr-x	 2 nobody  nobody		 4096 Dec  3  2001 Trash
 -rw-rw-r--	 1 twiki	twiki		  1078 Jan 14  2000 favicon.ico
 drwxrwxr-x	 2 twiki	twiki		  4096 Nov 18 12:31 icn
--rw-rw-r--	 1 twiki	twiki		  2877 Jun  7  1999 wikiHome.gif
 </pre>
 
 Partial file list for =twiki/pub/icn/=:

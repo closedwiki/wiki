@@ -2,7 +2,7 @@
 <table><tr><td>
 *<font size="+1"> %TWIKIWEB%.WelcomeGuest: </font>* TWiki is a flexible, powerful, secure, yet simple web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either on an intranet or on the Internet. You can edit any TWiki page.
 </td><td>
-<a href="http://TWiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/twikiRobot131x64.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
+<a href="http://TWiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/horzTWikiPowered.gif" alt="Powered by TWiki" border="0" /></a>
 </td><td>
 <b>The TWiki&trade; home is at http://TWiki.org/ </b>
 </td></tr>

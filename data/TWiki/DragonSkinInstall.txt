@@ -13,8 +13,7 @@ This topic describes how to install !DragonSkin and perform some simple administ
 	3. In your templates directory, edit the file dragonmenu.dragon.tmpl to configure the left menu (see below	if you wish to read this menu from a topic).  When editing this file, keep the basic div and class structure. H2 tags are used for menu headings; HTML unordered lists are used for menus.
 	4. Set the contents of the DS_QUICKLINKS submenu.  Instructions on how to do so (or hide this submenu entirely) are in %TWIKIWEB%.DragonSkinCustomize. 
 	5. Do any other customizations (fonts, etc) as per %TWIKIWEB%.DragonSkinCustomize.
-	6. (Optional) If you are still using the default TWiki robot logo, the skin will look much better if you change it to something else, such as twikiRobot121x54.gif from TWiki:Codev.TWikiLogosDropInReplacementsWhite.
-	7. (Optional) Replace the default TWiki site map with %TWIKIWEB%.DragonSkinSiteMap.
+	6. (Optional) Replace the default TWiki site map with %TWIKIWEB%.DragonSkinSiteMap.
 ---+++ Browser issues
 !DragonSkin has been tested on IE6, Firefox, IE5.2/Mac, and fairly recent versions of Firefox, Mozilla, Opera, Safari, Camino, and Netscape, and appears to work on those browsers (Firefox and IE6 have been used the most).  It has not been tested at all on IE5/Win, and may have display problems with that browser.  Netscape 4.x should see the skin without any CSS formatting.
 ---++ Customizing the installation
