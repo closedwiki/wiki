@@ -21,7 +21,7 @@ use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
 
-$query = new CGI;
+use strict;
 
 #open(STDERR,'>&STDOUT'); # redirect error to browser
 $| = 1;                  # no buffering
@@ -40,9 +40,9 @@ sub listVersions
 
     my $found = 0;
 
-    $result = "\n|  *Version:*  |  *Action:*   |  *Date:*  |  *Who:*  |  *Comment:*  |\n";
+    my $result = "\n|  *Version:*  |  *Action:*   |  *Date:*  |  *Who:*  |  *Comment:*  |\n";
 
-    for( $version = $maxRevNum; $version >= 1; $version-- ) {
+    for( my $version = $maxRevNum; $version >= 1; $version-- ) {
 
         my $rev = "1.$version";
 
@@ -63,12 +63,13 @@ sub listVersions
 # =========================
 sub main
 {
+    my $query = new CGI;
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
     
-    ( $topic, $webName, $dummy, $userName ) = 
+    my( $topic, $webName, $dummy, $userName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
     $dummy = "";  # to suppress warning
 
@@ -77,6 +78,7 @@ sub main
     my @meta = ();
     my $atext = "";
     my $fileName = "";
+    my $fileUser = "";
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
     my $isHideChecked = "";
@@ -92,7 +94,7 @@ sub main
     # check access permission
     if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
 
