@@ -312,7 +312,7 @@ sub _imgsize {
     my( $file, $att ) = @_;
     my( $x, $y) = ( 0, 0 );
 
-    $file = TWiki::normalizeFileName( $file );
+    $file = TWiki::Sandbox::normalizeFileName( $file );
     if( defined( $file ) ) {
         # for crappy MS OSes - Win/Dos/NT use is NOT SUPPORTED
         binmode( $file );
