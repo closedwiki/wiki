@@ -57,8 +57,6 @@ sub main
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
-    my $doShowAttachmentAttr = $query->param( 'showAttr' );
-
     my( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
@@ -183,10 +181,6 @@ sub main
     }
 
     writeDebugTimes( "view - checked access permissions" );
-
-    ##&TWiki::writeDebug("view showAtt = $doShowAttachmentAttr");
-    # FIXME a rather messy way of doing things - maybe extra info to handleCommonTags?
-    $TWiki::Attach::showAttr = $doShowAttachmentAttr;
 
     if( ! $viewRaw ) {
         $text = &TWiki::handleCommonTags( $text, $topic );

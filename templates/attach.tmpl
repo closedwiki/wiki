@@ -20,21 +20,8 @@ function launchWindow( theWeb, theTopic ) {
 </HEAD>
 <BODY bgcolor="#ffffff"  onLoad="initForm()" >
 <FORM name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
-    </TD>
-    <TD>
-      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (attach)</FONT>
-    </TD>
-  </TR>
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD COLSPAN="2">
-      Attach file to topic <B>%TOPIC%</B>
-    </TD>
-  </TR>
-</TABLE>
+%HEADER{action="(Attach)", description="" }%
+%META{"attachments" all="on"}%
 %ATTACHTABLE%
 <P>
 <B>%ACTION% <code>%FILENAME%</code></B>
@@ -77,6 +64,8 @@ function launchWindow( theWeb, theTopic ) {
   </TR>
 
 </TABLE>
+<P>
+<FONT SIZE=2>
 Notes:
 <UL>
 <LI> <B>Link checkbox: </B>In case the attached file is a JPG or GIF image and you check the box, it will create an inline image (e.g. show the image) at the end of the topic.
@@ -84,30 +73,14 @@ Notes:
 <!--FIXME Codev to TWiki-->
 <LI> <B>Properties: </B>Can be changed without uploading a file; see <A target="HiddenAttachment" onClick="return launchWindow('%TWIKIWEB%','HiddenAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Codev/HiddenAttachment">HiddenAttachment</A>
 </UL>
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD valign="top">
-      Topic <B>%TOPIC%</B> . {
-      <INPUT type="submit" name="uploadButton" value=" &nbsp; Upload file &nbsp; "> &nbsp;
-      <INPUT type="submit" name="changeButton" value="Change properties"> &nbsp;
-      <A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">cancel</A>
-      }
-    </TD>
-    <TD>
-    &nbsp;<a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move attachment</a> <a href="FIXME">&nbsp;(Help)</a>
-    </TD
-  </TR>
-</TABLE>
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD valign="top">
-      &nbsp;
-    </TD>
-    <TD width="50%" valign="top">
-      %WEBCOPYRIGHT%
-    </TD>
-  </TR>
-</TABLE>
+</FONT>
+<P>
+%FOOTER{%
+      <INPUT type="submit" name="uploadButton" value=" &nbsp; Upload file &nbsp; "> %SEP%
+      <INPUT type="submit" name="changeButton" value="Change properties">  %SEP%
+      <A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">cancel</A> %SEP%
+      <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move attachment</a> <a href="FIXME">&nbsp;(Help)</a>
+%}FOOTER%
 </FORM>
 </BODY></HTML>
 

@@ -28,15 +28,21 @@
 package TWiki::Attach;
 
 use vars qw(
-        $showAttr $viewableAttachmentCount $noviewableAttachmentCount $attachmentCount $noFooter
+        $viewableAttachmentCount $noviewableAttachmentCount $attachmentCount
     );
 
 # ======================
 sub renderMetaData
 {
-    my( $web, $topic, $meta ) = @_;
+    my( $web, $topic, $meta, $args ) = @_;
         
     my $metaText = "";
+    
+    my $showAttr = "";
+    my $showAll = &TWiki::extractNameValuePair( $args, "all" );
+    if( $showAll ) {
+        $showAttr = "h";
+    }
     
     $viewableAttachmentCount = 0;
     $noviewableAttachmentCount = 0;
@@ -50,24 +56,12 @@ sub renderMetaData
     
     my @attachments = $meta->find( "FILEATTACHMENT" );
     foreach my $attachment ( @attachments ) {
-        $metaText .= formatAttachments( $web, $topic, %$attachment );
-    }
-    
-    my $footer = "";
-    if( $attachmentCount && ! $noFooter ) {
-        if( $showAttr ) {
-            $footer = "<a href=\"%SCRIPTURLPATH%/view/$web/$topic\">List ordinary attachments</a>";
-        } else {
-            if( $noviewableAttachmentCount > 0 ) {
-                $footer = "<a href=\"%SCRIPTURLPATH%/view/$web/$topic?showAttr=hd\">View all attachments</a>";
-            }
-        }
-        $footer = "|  $footer  |||||||";
+        $metaText .= formatAttachments( $web, $topic, $showAttr, %$attachment );
     }
     
     my $text = "";
-    if( $attachmentCount ) {
-       $text = "<p>\n$header$metaText$footer\n</p>";
+    if( $showAll || $viewableAttachmentCount ) {
+       $text = "<p>\n$header$metaText\n</p>";
     }
     
     $text = &TWiki::handleCommonTags( $text, $topic, $web ); # FIXME needed?
@@ -102,7 +96,7 @@ sub filenameToIcon
 # =========================
 sub formatAttachments
 {
-    my ( $theWeb, $theTopic, %attachment ) = @_;
+    my ( $theWeb, $theTopic, $showAttr, %attachment ) = @_;
 
     my $row = "";
 
