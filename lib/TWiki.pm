@@ -3182,8 +3182,9 @@ sub renderFormData
     my %form = $meta->findOne( "FORM" );
     if( %form ) {
         my $name = $form{"name"};
-        $metaText = "<div class=\"TWikiForm\">\n|*[[$name]]*||\n";
-
+        $metaText = "<div class=\"TWikiForm\">\n";
+        $metaText .= "<p><\/p>\n"; # prefix empty line
+        $metaText .= "|*[[$name]]*||\n"; # table header
         my @fields = $meta->find( "FIELD" );
         foreach my $field ( @fields ) {
             my $title = $field->{"title"};
