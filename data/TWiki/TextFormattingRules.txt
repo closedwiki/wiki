@@ -47,4 +47,10 @@ External links:
 
 *WIKI VARIABLES*
 
-%INCLUDE{"TWikiVariables.txt"}%
+Variables are names enclosed in percent signs that gets expanded on the fly.
+
+	* =%<nop>WEB%= : The current web, is <b>%WEB%</b> .
+	* =%<nop>TOPIC%= : The current topic name, is <b>%TOPIC%</b> .
+	* =%<nop>ATTACHURL%= : The attachment URL of the current topic. Example usage: If you attach a file to a topic you can refer to it as =<b>%<nop>ATTACHURL%/image.gif</b>= to show the URL of the file or the image in your text.
+	* =%<nop>INCLUDE{"file.ext"}%= : Server side include, includes the text of a file. The default directory is the current Wiki web. Example: =<b>%<nop>INCLUDE{"Know/TopicName.txt"}%</b>= </td>
+	* There are many more variables, see TWikiVariables.
