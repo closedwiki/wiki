@@ -22,6 +22,7 @@ my $Config = {
     src => "http://localhost/~twiki/cgi-bin/twiki",
     dest => "http://localhost/~twiki/cgi-bin/twiki",
     agent => basename( $0 ),
+    n => undef,
 #
 	verbose => 0,
 	debug => 0,
@@ -31,7 +32,7 @@ my $Config = {
 
 my $result = GetOptions( $Config,
 # test comparison options
-			'web=s', 'outweb=s', 'src=s', 'dest=s', 
+			'web=s', 'outweb=s', 'src=s', 'dest=s', 'n=n',
 # miscellaneous/generic options
 			'agent=s',
 			'debug', 'help', 'man', 'verbose|v',
@@ -70,11 +71,13 @@ $destMech->submit_form(
 my @topics = grep { !/^Web/ } $srcMech->getPageList( $Config->{web} );
 print Dumper( \@topics ) if $Config->{debug};
 die "no topics in $Config->{web}?" unless @topics;
-map { 
-    my $iTopic = $_;
+for ( my $i=0; $i<scalar @topics; ++$i )
+{
+    last if defined $Config->{n} and $i >= $Config->{n};
+    my $iTopic = $topics[$i];
     print STDERR "$Config->{web}.$iTopic\n" if $Config->{verbose};
     TWikiTopic2TestCase({ topic => "$Config->{web}.${iTopic}", outweb => $Config->{outweb}, topic_name_without_web => $iTopic, %$Config });
-} @topics;
+}
 
 exit 0;
 
@@ -147,7 +150,7 @@ __TEMPLATE__
 __DATA__
 =head1 NAME
 
-test.pl - ...
+TWikiTopic2TestCase.pl - ...
 
 =head1 SYNOPSIS
 
@@ -160,6 +163,7 @@ Copyright 2004 Will Norris.  All Rights Reserved.
    -outweb=         ...
    -src=              ...
    -dest=
+   -n=
    -agent=
    -verbose
    -help			this documentation
@@ -175,7 +179,7 @@ Copyright 2004 Will Norris.  All Rights Reserved.
 
 =head1 DESCRIPTION
 
-B<test.pl> will ...
+B<TWikiTopic2TestCase.pl> will ...
 
 =head2 SEE ALSO
 
