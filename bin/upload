@@ -374,6 +374,8 @@ sub main
 	    TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) );
 	}
 
+        # FIXME: Buggy code: Below is never reached! Compare with TWiki20010315beta
+
 	# get user name
 	$fileUser = $userName;
 
