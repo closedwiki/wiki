@@ -1,39 +1,41 @@
-%META:TOPICINFO{author="MikeMannix" date="999597120" format="1.0" version="1.34"}%
+%META:TOPICINFO{author="MikeMannix" date="999673322" format="1.0" version="1.35"}%
 <table><tr><td>
-<font size="3">Welcome to %WIKITOOLNAME%, a flexible, powerful, and simple Web-based collaboration platform, for intranets, extranets, and the Web. With %WIKITOOLNAME%, you can easily run a project development space, document managment system, knowledge base, and any other groupware tool. This is the place to learn about it, download it, and try it out for yourself... </font></td><td width="25">&nbsp;</td><td width="200">
+<font size="3">Welcome to %WIKITOOLNAME%, a flexible, powerful, and simple Web-based collaboration platform, for intranets, extranets, and the Web. With %WIKITOOLNAME%, you can run a project development space, document managment system, knowledge base, or any other groupware tool. This is the place to learn about it, download it, and try it out for yourself... </font></td><td width="25">&nbsp;</td><td width="200">
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a> <br>
 The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
 </td></tr>
 </table>
 
----+++ Starting points
+---+++ TWiki Quick Start
 
-	* WelcomeGuest: Start here for a %WIKITOOLNAME% crash course.
-	* TWikiRegistration: Create an %WIKITOOLNAME% account in order to edit topics and explore customization features.
+	* WelcomeGuest: A %WIKITOOLNAME% crash course covering all the basics
+	* TWikiRegistration: Be able to edit topics and customize features
 
 ---+++ TWiki User Guide
 
-	* A collection of single-page topics: clear, concise how-to guides designed for busy TWiki users. <br>
-	  (TWiki power users will also benefit from browsing the _Reference Manual_.)
+	* A collection of single-page how-to topics for busy TWiki users. <br>
+	  _Power users should also browse the [[#ReferenceManual][TWiki Reference Manual]]._
 
-		* TWikiSite: Brief %WIKITOOLNAME% backgrounder - first, there was Wiki...
-		* WikiSyntax: TWiki language basics
+		* TWikiSite: An instant overview - first, there was Wiki...
+		* WikiSyntax: TWiki shorthand basics
 		* TWikiFAQ: The first things people ask about %WIKITOOLNAME%
 		* TextFormattingFAQ: Most-requested facts about posting in TWiki
-		* TWikiTutorial: A %WIKITOOLNAME% quick start alternative
+		* TWikiTutorial: A compact %WIKITOOLNAME% primer
 		* GoodStyle: Tips for an open collaboration environment
-		* TextFormattingRules: The full power of TWiki syntax on a page
-		* TWikiVariables: Use simple text strings to place copy, graphics, menus, lots more
-		* FileAttachments: Upload files to any topic, for display or distribution
-		* WebChangesNotify: A optional email alert tells you when web pages are changed
-		* HandlingTopics: Rename, move, delete pages
+		* TextFormattingRules: The complete TWiki syntax on a easy reference page
+		* TWikiVariables: Insert text, graphics, dynamic infofeatures
+		* FileAttachments: Upload files for display or download from any page
+		* WebChangesNotify: Get email alerts with the latest page changes
+		* HandlingTopics: Rename, move, or delete TWiki pages
 
+#ReferenceManual
 ---+++ TWiki Reference Manual
 
-	* Documentation for Webmasters, system administrators, project managers, team leaders, everyone with an interest in installing a world-class TWiki Web collaboration site. 
+	* Documentation for webmasters, system administrators, project managers, team leaders -<br>
+	  anyone in the market for a world-class online collaboration tool.
 
-		* TWikiHistory: a TWiki development timeline
-		* TWikiDocumentation: complete operator's reference, comprising:
+		* TWikiHistory: the TWiki development timeline
+		* TWikiDocumentation: complete current reference...
 			1 [[TWikiImplementationNotes][TWikiOperatingEnvironment]]
 			1 TWikiInstallationGuide
 			1 TWikiUpgradeGuide
@@ -49,20 +51,26 @@ The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
 			1 ManagingTopics
 			1 ManagingWebs
 
+---+++ TWiki Site Tools
+
+Utilities for navigating and keeping up with site activity are available at the individual web level. An extensive set of preferences can be configured site-wide, or by web. You are currently in the *TWiki* web.
+
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
-	* WebSearch: Full text search of the %WIKITOOLNAME%.%WEB% web.
-	* <input type="text" name="search" size="32" /> <input type="submit" value="Search" /> &nbsp;&nbsp; (More options in WebSearch)
-	* WebChanges: Find out recent modifications to the %WIKITOOLNAME%.%WEB% web.
-	* WebIndex: Display all %WIKITOOLNAME%.%WEB% topics in alphabetical order.
-	* %NOTIFYTOPIC%: Subscribe to be automatically notified when something changes in the %WIKITOOLNAME%.%WEB% web.
-	* %STATISTICSTOPIC%: View access statistics of the %WIKITOOLNAME%.%WEB% web.
-	* %WEBPREFSTOPIC%: Preferences of the %WIKITOOLNAME%.%WEB% web.
-	* %WIKIPREFSTOPIC%: %WIKITOOLNAME% site-level preferences .
+	* WebSearch: Full text search of the %WEB% web
+	* <input type="text" name="search" size="32" /> <input type="submit" value="Search" /> &nbsp;&nbsp; (extended options in WebSearch)
+	* WebChanges: Display recent input on the %WEB% web
+	* WebIndex: List all %WEB% topics in alphabetical order
+	* %NOTIFYTOPIC%: Subscribe to automatic email notification for changes in the %WEB% web
+	* %STATISTICSTOPIC%: View access statistics for the %WEB% web
+	* %WEBPREFSTOPIC%: Preferences for the %WEB% web
+	* %WIKIPREFSTOPIC%: %WIKITOOLNAME% site-level preferences
 </form>
 
-*Notes:*
-	* You are currently in the %WIKITOOLNAME%.%WEB% web. The color code for this web is a light orange background, so you know where you are.
-	* If you are not familiar with the %WIKITOOLNAME% collaboration tool, please visit %TWIKIWEB%.WelcomeGuest first.
-	* TWiki <sup>TM</sup> is a trademark of PeterThoeny
+	* The %WEB% web is color-coded in light orange for quick identification.
+	* The TWikiWebsTable is a color code directory of available webs that can be easily inserted on any page:
 
 %INCLUDE{"TWikiWebsTable"}%
+
+	* TWiki<sup>TM</sup> is a trademark of PeterThoeny
+	* TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
+	* Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]]
