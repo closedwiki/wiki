@@ -142,63 +142,41 @@ sub extensions2uri
 __DATA__
 =head1 NAME
 
-install-remote-twiki.pl - ...
-
-=head1 SYNOPSIS
-
-test.pl [options] --distro -kernel [-web]*
-	[-install_account [twiki]] [-install_host [localhost]] [-install_dir=[~/Sites]]
-	[-plugin ...]* [-contrib ...]* [-addon ...]*
-	[-verbose] [-debug] [-help] [-man]
+install-remote-twiki.pl - fully automated network TWiki installation frontend
 
 Copyright 2004 Will Norris.  All Rights Reserved.
 
-  Install Options:
-   -distro 
-   -kernel						none currently, though perhaps it should be TWiki20040902.tar.gz
-   -web []						...
+=head1 SYNOPSIS
 
-   -install_account [twiki]
-   -install_host [localhost]
-   -install_dir [\~/Sites]
-   [-plugin ...]*
-   [-contrib ...]*
-   [-addon ...]*
-   
-   --report, --no-report		report
-
-  Miscellaneous Options:
-   -verbose
-   -debug
-   -help						this documentation
-   -man							full docs
+install-remote-twiki.pl --distro -kernel [-web ...]* [-install_account [twiki]] [-install_host [localhost]] [-install_dir=[~/Sites]] [-plugin ...]* [-contrib ...]* [-addon ...]* [-report|-noreport] [-verbose] [-debug] [-help] [-man]
 
 =head1 OPTIONS
 
 =over 8
 
-=item B<-distro [distro]>
+=item B<-distro [distro]>				TWikiDistribution filename (in .tar.bz2 format)
 
-=item B<-kernel [kernel]>
+=item B<-kernel [kernel]>				none currently, though perhaps it should be TWiki20040902.tar.gz
 
-=item B<-web [web]>
+=item B<-web [web]>					filename of web exported by TWiki:Codev.GetAWebAddOn
 
-=item B<-install_account [twiki]>
+=item B<-install_account [twiki]>			account name under which to install the wiki
 
-=item B<-install_host [localhost]>
+=item B<-install_host [localhost]>			hostname to install wiki on
 
-=item B<-install_dir [~/Sites]>
+=item B<-install_dir [~/Sites]>				TWiki:Codev.TWikiRootDirectory
 
-=item B<-plugin>
+=item B<-plugin>					name of plugin to install (eg, SpreadSheetPlugin, FindElsewherePlugin)
 
-=item B<-contrib>
+=item B<-contrib>					name of contrib module to install (eg, AttrsContrib, DistributionContrib)
 
-=item B<-addon>
+=item B<-addon>						name of addon to install (eg, GetAWebAddOn)
 
-=item B<--report>
-=item B<--no-report>
+=item B<-(no-)report>					control creation of TWiki.TWikiInstallationReport on the installed wiki
 
-=item B<-verbose>
+=item B<-verbose>					show the babblings of the machine
+
+=item B<-debug>						even more output
 
 =item B<-help>, B<-?>
 
