@@ -99,6 +99,8 @@ use vars qw(
             %regex
             %staticInternalTags
             %dynamicInternalTags
+            $prefsObject
+            $renderer
            );
 
 # Internationalisation (I18N) setup:
@@ -583,8 +585,10 @@ sub initialize {
         $urlHost = $defaultUrlHost;
     }
 
+    TWiki::Prefs::PrefsCache::resetCache(); # for mod_perl compatibility
+
     # initialize preferences, first part for site and web level
-    TWiki::Prefs::initializePrefs( $webName );
+    $prefsObject = new TWiki::Prefs( $webName );
 
     if( !$disableAllPlugins ) {
         # Early plugin initialization, allow plugins like SessionPlugin
@@ -607,9 +611,9 @@ sub initialize {
     $sessionInternalTags{SCRIPTURL} = "$urlHost$dispScriptUrlPath";
 
     # initialize preferences, second part for user level
-    TWiki::Prefs::initializeUserPrefs( $wikiUserName );
+    $prefsObject->initializeUser( $wikiUserName, $topicName );
 
-    TWiki::Render::initialize();
+    $renderer = new TWiki::Render( $prefsObject );
 
     if( !$disableAllPlugins ) {
         # Normal plugin initialization - userName is known and preferences available
@@ -619,7 +623,7 @@ sub initialize {
     # Assumes all preferences values are set by now, which may well be false!
     # It would be better to get the Prefs module to maintain this
     # hash.
-    TWiki::Prefs::loadHash( \%preferencesTags );
+    $prefsObject->loadHash( \%preferencesTags );
 
     return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
 }
@@ -955,9 +959,11 @@ sub readOnlyMirrorWeb {
 
     my @mirrorInfo = ( "", "", "", "" );
     if( $siteWebTopicName ) {
-        my $mirrorSiteName = TWiki::Prefs::getPreferencesValue( "MIRRORSITENAME", $theWeb );
+        my $mirrorSiteName =
+          $prefsObject->getValue( "MIRRORSITENAME", $theWeb );
         if( $mirrorSiteName && $mirrorSiteName ne $siteWebTopicName ) {
-            my $mirrorViewURL  = TWiki::Prefs::getPreferencesValue( "MIRRORVIEWURL", $theWeb );
+            my $mirrorViewURL  =
+              $prefsObject->getValue( "MIRRORVIEWURL", $theWeb );
             my $mirrorLink = TWiki::Store::readTemplate( "mirrorlink" );
             $mirrorLink =~ s/%MIRRORSITENAME%/$mirrorSiteName/g;
             $mirrorLink =~ s/%MIRRORVIEWURL%/$mirrorViewURL/g;
@@ -965,7 +971,7 @@ sub readOnlyMirrorWeb {
             my $mirrorNote = TWiki::Store::readTemplate( "mirrornote" );
             $mirrorNote =~ s/%MIRRORSITENAME%/$mirrorSiteName/g;
             $mirrorNote =~ s/%MIRRORVIEWURL%/$mirrorViewURL/g;
-            $mirrorNote = TWiki::Render::getRenderedVersion( $mirrorNote, $theWeb );
+            $mirrorNote = $renderer->getRenderedVersion( $mirrorNote, $theWeb );
             $mirrorNote =~ s/\s*$//g;
             @mirrorInfo = ( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote );
         }
@@ -1036,7 +1042,7 @@ Get the name of the currently requested skin
 sub getSkin {
     my $skin = "";
     $skin = $cgiQuery->param( 'skin' ) if( $cgiQuery );
-    $skin = TWiki::Prefs::getPreferencesValue( "SKIN" ) unless( $skin );
+    $skin = $prefsObject->getValue( "SKIN" ) unless( $skin );
     return $skin;
 }
 
@@ -1314,7 +1320,7 @@ sub applyPatternToIncludedText {
 }
 
 sub _handleFORMFIELD {
-    return TWiki::Render::renderFormField( @_ );
+    return $TWiki::renderer->renderFormField( @_ );
 }
 
 sub _handleTMPLP {
@@ -1323,8 +1329,13 @@ sub _handleTMPLP {
 }
 
 sub _handleVAR {
-    my $params = shift;
-    return TWiki::Prefs::getWebVariable( $params->{_DEFAULT} );
+    my( $params, $topic, $inweb ) = @_;
+    my $key = $params->{_DEFAULT};
+    my $web = $params->{web} || $inweb;
+    if( $web =~ /%[A-Z]+%/ ) { # handle %MAINWEB%-type cases 
+        handleInternalTags( $web, $inweb, $topic );
+    }
+    return $prefsObject->getValue( $key, $web );
 }
 
 sub _handlePLUGINVERSION {
@@ -1466,7 +1477,7 @@ sub _handleINCLUDE {
         last TRY if( -e $fileName );
 
         # give up, file not found
-        $warn = TWiki::Prefs::getPreferencesValue( "INCLUDEWARNING" ) unless( $warn );
+        $warn = $prefsObject->getValue( "INCLUDEWARNING" ) unless( $warn );
         if( $warn =~ /^on$/i ) {
             return _inlineError( "Warning: Can't INCLUDE <nop>$incfile, topic not found" );
         } elsif( $warn && $warn !~ /^(off|no)$/i ) {
@@ -1482,7 +1493,7 @@ sub _handleINCLUDE {
     # prevent recursive loop
     if( $theProcessedTopics->{$inFile} ) {
         # file already included
-        if( $warn || TWiki::Prefs::getPreferencesFlag( "INCLUDEWARNING" ) ) {
+        if( $warn || $prefsObject->getFlag( "INCLUDEWARNING" ) ) {
             unless( $warn =~ /^(off|no)$/i ) {
                 return _inlineError( "Warning: Can't INCLUDE <nop>$incfile twice, topic is already included" );
             }
@@ -1514,7 +1525,7 @@ sub _handleINCLUDE {
     $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 
     # handle all preferences and internal tags
-    $text = TWiki::Render::takeOutBlocks( $text, "verbatim", $verbatim );
+    $text = $renderer->takeOutBlocks( $text, "verbatim", $verbatim );
 
     # Escape rendering: Change " !%VARIABLE%" to " %<nop>VARIABLE%", for final " %VARIABLE%" output
     $text =~ s/(\s)\!\%([A-Z])/$1%<nop>$2/g;
@@ -1796,7 +1807,7 @@ sub _TOC {
                 $urlPath = "$TWiki::dispScriptUrlPath$TWiki::dispViewPath$TWiki::scriptSuffix/$webPath/$topicname";
             }
             if( ( $line ) && ( $level <= $depth ) ) {
-                $anchor = TWiki::Render::makeAnchorName( $line );
+                $anchor = $renderer->makeAnchorName( $line );
                 # cut TOC exclude '---+ heading !! exclude'
                 $line  =~ s/\s*$headerNoTOC.+$//go;
                 $line  =~ s/[\n\r]//go;
@@ -1891,7 +1902,7 @@ sub _handleSEARCH {
     $params->{baseweb} = $theTopic;
     $params->{basetopic} = $theWeb;
     $params->{search} = $params->{_DEFAULT} if( $params->{_DEFAULT} );
-    $params->{type} = TWiki::Prefs::getPreferencesValue( "SEARCHVARDEFAULTTYPE" ) unless( $params->{type} );
+    $params->{type} = $prefsObject->getValue( "SEARCHVARDEFAULTTYPE" ) unless( $params->{type} );
 
     use TWiki::Search;    # search engine
 
@@ -1917,7 +1928,7 @@ sub getPublicWebList {
         my $item = "";
         my $hidden = "";
         foreach $item ( @list ) {
-            $hidden = TWiki::Prefs::getPreferencesValue( "NOSEARCHALL", $item );
+            $hidden = $prefsObject->getValue( "NOSEARCHALL", $item );
             if( ( $item eq $TWiki::webName  ) || ( ( ! $hidden ) && ( $item =~ /^[^\.\_]/ ) ) ) {
                 push( @publicWebList, $item );
             }
@@ -2001,7 +2012,8 @@ sub _webOrTopicList {
         }
     } else {
         $web = $webName if( ! $web );
-        my $hidden = TWiki::Prefs::getPreferencesValue( "NOSEARCHALL", $web );
+        my $hidden =
+          $prefsObject->getValue( "NOSEARCHALL", $web );
         if( ( $web eq $TWiki::webName  ) || ( ! $hidden ) ) {
             @list = TWiki::Store::getTopicNames( $web );
         }
@@ -2175,7 +2187,7 @@ sub _handleICON {
 
     my $theParam = $params->{_DEFAULT};
 
-    my $value = TWiki::Render::filenameToIcon( "file.$theParam" );
+    my $value = $renderer->filenameToIcon( "file.$theParam" );
     return $value;
 }
 
@@ -2402,7 +2414,7 @@ sub handleCommonTags {
     # Plugin Hook (for cache Plugins only)
     TWiki::Plugins::beforeCommonTagsHandler( $text, $theTopic, $theWeb );
 
-    $text = TWiki::Render::takeOutBlocks( $text, "verbatim", \@verbatim );
+    $text = $renderer->takeOutBlocks( $text, "verbatim", \@verbatim );
 
     # Escape rendering: Change " !%VARIABLE%" to " %<nop>VARIABLE%", for final " %VARIABLE%" output
     $text =~ s/(\s)\!\%([A-Z])/$1%<nop>$2/g;
@@ -2434,7 +2446,7 @@ sub handleCommonTags {
     # SMELL: is this a hack? Looks like it....
     $text =~ s/^<nop>\r?\n//gm;
 
-    $text = TWiki::Render::putBackBlocks( $text, \@verbatim, "verbatim" );
+    $text = $renderer->putBackBlocks( $text, \@verbatim, "verbatim" );
 
     # TWiki Plugin Hook (for cache Plugins only)
     TWiki::Plugins::afterCommonTagsHandler( $text, $theTopic, $theWeb );

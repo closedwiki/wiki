@@ -349,7 +349,7 @@ sub extractNameValuePair
 sub getPreferencesValue
 {
 #   my( $theKey, $theWeb ) = @_;
-    return &TWiki::Prefs::getPreferencesValue( @_ );
+    return $TWiki::prefsObject->getValue( @_ );
 }
 
 =pod
@@ -368,7 +368,7 @@ sub getPluginPreferencesValue
     my( $theKey ) = @_;
     my $package = caller;
     $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
-    return TWiki::Prefs::getPreferencesValue( "\U$package\E_$theKey" );
+    return $TWiki::prefsObject->getValue( "\U$package\E_$theKey" );
 }
 
 # =========================
@@ -392,7 +392,7 @@ sub getPluginPreferencesValue
 sub getPreferencesFlag
 {
 #   my( $theKey, $theWeb ) = @_;
-    return &TWiki::Prefs::getPreferencesFlag( @_ );
+    return $TWiki::prefsObject->getFlag( @_ );
 }
 
 =pod
@@ -411,7 +411,7 @@ sub getPluginPreferencesFlag
     my( $theKey ) = @_;
     my $package = caller;
     $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
-    return TWiki::Prefs::getPreferencesFlag( "\U$package\E_$theKey" );
+    return $TWiki::prefsObject->getFlag( "\U$package\E_$theKey" );
 }
 
 # =========================
@@ -891,7 +891,7 @@ sub expandCommonVariables
 sub renderText
 {
 #   my( $text, $web ) = @_;
-    return &TWiki::Render::getRenderedVersion( @_ );
+    return $TWiki::renderer->getRenderedVersion( @_ );
 }
 
 # =========================
@@ -915,7 +915,7 @@ sub internalLink
 {
     my $pre = shift;
 #   my( $web, $topic, $label, $anchor, $anchor, $createLink ) = @_;
-    return $pre . TWiki::Render::internalLink( @_ );
+    return $pre . $TWiki::renderer->internalLink( @_ );
 }
 
 # =========================

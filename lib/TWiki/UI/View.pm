@@ -67,7 +67,7 @@ sub view {
 
     # Set page generation mode to RSS if using an RSS skin
     if( $skin =~ /^rss/ ) {
-        TWiki::Render::setRenderMode( 'rss' );
+        $TWiki::renderer->setRenderMode( 'rss' );
     }
 
     if( $unlock eq "on" ) {
@@ -143,7 +143,7 @@ sub view {
         }
     } else {
         $text = TWiki::handleCommonTags( $text, $topic );
-        $text = TWiki::Render::getRenderedVersion( $text );
+        $text = $TWiki::renderer->getRenderedVersion( $text );
     }
 
     if( $TWiki::doLogTopicView ) {
@@ -241,9 +241,9 @@ sub view {
     if( $viewRaw ) {
         $tmpl =~ s/%META{[^}]*}%//go;
     } else {
-        $tmpl = TWiki::Render::renderMetaTags( $webName, $topic, $tmpl, $meta, ( $rev == $maxrev ) );
+        $tmpl = $TWiki::renderer->renderMetaTags( $webName, $topic, $tmpl, $meta, ( $rev == $maxrev ) );
     }
-    $tmpl = TWiki::Render::getRenderedVersion( $tmpl, "", $meta ); ## better to use meta rendering?
+    $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl, "", $meta ); ## better to use meta rendering?
 
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/%MAXREV%/$maxrev/go;
@@ -252,7 +252,7 @@ sub view {
 
     # SMELL: why calculate viewAccessOK and then use readTopicPermissionFailed
     # SMELL: readTopicPermissionFailed break TWiki encapsulation
-    if( (!$topicExists) || $TWiki::readTopicPermissionFailed ) {
+    if( $TWiki::readTopicPermissionFailed ) {
         # Can't read requested topic and/or included (or other accessed topics
         # user could not be authenticated, may be not logged in yet?
         my $viewauthFile = $ENV{'SCRIPT_FILENAME'};
@@ -293,7 +293,7 @@ sub view {
             TWiki::UI::redirect( $url );
         }
     }
-    if( ! $viewAccessOK ) {
+    if( $topicExists && ! $viewAccessOK ) {
         TWiki::UI::oops( $webName, $topic, "accessview" );
     }
 

@@ -26,7 +26,7 @@
 
 =begin twiki
 
----+ TWiki::Render Module
+---+ TWiki::Render package
 
 This module provides most of the actual HTML rendering code in TWiki.
 
@@ -46,45 +46,46 @@ BEGIN {
     }
 }
 
-# Globals used in rendering
-use vars qw(
-            $newTopicFontColor $newTopicBgColor $linkToolTipInfo $noAutoLink
-            $newLinkSymbol %ffCache $renderMode
-           );
-
-$noAutoLink = 0;
-$renderMode = 'html';		# Default is to render as HTML
-
 =pod
 
----++ sub initialize ()
+---++ sub new ()
 
-Initializes global render module state from preference values (NEWTOPICBGCOLOR, NEWTOPICFONTCOLOR NEWTOPICLINKSYMBOL LINKTOOLTIPINFO NOAUTOLINK)
-
-Clears the FORMFIELD metadata cache preparatory to expanding %FORMFIELD
-tags.
+Creates a new renderer with initial state from preference values
+(NEWTOPICBGCOLOR, NEWTOPICFONTCOLOR NEWTOPICLINKSYMBOL
+ LINKTOOLTIPINFO NOAUTOLINK)
 
 =cut
 
-sub initialize
-{
-    # Add background color and font color (AlWilliams - 18 Sep 2000)
-    # PTh: Moved from internalLink to initialize ('cause of performance)
-    $newTopicBgColor   = TWiki::Prefs::getPreferencesValue("NEWTOPICBGCOLOR")   || "#FFFFCE";
-    $newTopicFontColor = TWiki::Prefs::getPreferencesValue("NEWTOPICFONTCOLOR") || "#0000FF";
-    $newLinkSymbol     = TWiki::Prefs::getPreferencesValue("NEWTOPICLINKSYMBOL") || "<sup>?</sup>";
-    # tooltip init
-    $linkToolTipInfo   = TWiki::Prefs::getPreferencesValue("LINKTOOLTIPINFO")   || "";
-    $linkToolTipInfo = '$username - $date - r$rev: $summary' if( $linkToolTipInfo =~ /^on$/ );
-    # Prevent autolink of WikiWords
-    $noAutoLink        = TWiki::Prefs::getPreferencesValue("NOAUTOLINK") || 0;
+sub new {
+    my ( $class, $prefs ) = @_;
+    my $this = bless( {}, $class );
 
-    undef %ffCache;
+    $this->{NOAUTOLINK} = 0;
+    $this->{MODE} = 'html';		# Default is to render as HTML
+    $this->{NEWTOPICBGCOLOR} =
+      $prefs->getValue("NEWTOPICBGCOLOR")
+        || "#FFFFCE";
+    $this->{NEWTOPICFONTCOLOR} =
+      $prefs->getValue("NEWTOPICFONTCOLOR")
+        || "#0000FF";
+    $this->{NEWLINKSYMBOL} =
+      $prefs->getValue("NEWTOPICLINKSYMBOL")
+        || "<sup>?</sup>";
+    # tooltip init
+    $this->{LINKTOOLTIPINFO} =
+      $prefs->getValue("LINKTOOLTIPINFO")
+        || "";
+    $this->{LINKTOOLTIPINFO} = '$username - $date - r$rev: $summary' if( $this->{LINKTOOLTIPINFO} =~ /^on$/ );
+    $this->{NOAUTOLINK} = $prefs->getValue("NOAUTOLINK")
+      || 0;
+
+    return $this;
 }
 
-sub _renderParent
-{
-    my( $web, $topic, $meta, $args ) = @_;
+sub _renderParent {
+    my( $this, $web, $topic, $meta, $args ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~ /TWiki::Render/;
+
     my %ah;
 
     if( $args ) {
@@ -131,9 +132,9 @@ sub _renderParent
     return $text;
 }
 
-sub _renderMoved
-{
-    my( $web, $topic, $meta ) = @_;
+sub _renderMoved {
+    my( $this, $web, $topic, $meta ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     my $text = "";
     my %moved = $meta->findOne( "TOPICMOVED" );
 
@@ -164,9 +165,9 @@ sub _renderMoved
 }
 
 
-sub _renderFormField
-{
-    my( $meta, $args ) = @_;
+sub _renderFormField {
+    my( $this, $meta, $args ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     my $text = "";
     if( $args ) {
         my $name = TWiki::extractNameValuePair( $args, "name" );
@@ -175,9 +176,9 @@ sub _renderFormField
     return $text;
 }
 
-sub _renderFormData
-{
-    my( $web, $topic, $meta ) = @_;
+sub _renderFormData {
+    my( $this, $web, $topic, $meta ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     my $metaText = "";
     my %form = $meta->findOne( "FORM" );
 
@@ -211,15 +212,14 @@ Presumably this is used to avoid browser interpretation
 =cut
 
 # "
-sub encodeSpecialChars
-{
-    my( $text ) = @_;
-    
+sub encodeSpecialChars {
+    my( $this, $text ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
+
     $text =~ s/&/%_A_%/g;
     $text =~ s/\"/%_Q_%/g;
     $text =~ s/>/%_G_%/g;
     $text =~ s/</%_L_%/g;
-    # PTh, JoachimDurchholz 22 Nov 2001: Fix for Codev.OperaBrowserDoublesEndOfLines
     $text =~ s/(\r*\n|\r)/%_N_%/g;
 
     return $text;
@@ -233,9 +233,9 @@ Reverse the encoding of encodeSpecialChars
 
 =cut
 
-sub decodeSpecialChars
-{
-    my( $text ) = @_;
+sub decodeSpecialChars {
+    my( $this, $text ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
 
     $text =~ s/%_N_%/\r\n/g;
     $text =~ s/%_L_%/</g;
@@ -247,58 +247,49 @@ sub decodeSpecialChars
 }
 
 
-# Render bulleted and numbered lists, including nesting.
-# Called from several places.  Accumulates @listTypes and @listElements
-# to track nested lists.
-sub _emitList {
-    my( $listTypes, $listElements, $result,
-        $theType, $theElement, $theIndent, $theOlType,
-       ) = @_;
+# Add a list item, of the given type and indent depth. The list item may
+# cause the opening or closing of lists currently being handled.
+sub _addListItem {
+    my( $this, $result, $theType, $theElement, $theIndent, $theOlType ) = @_;
 
     $theIndent =~ s/   /\t/g;
     my $depth = length( $theIndent );
 
-    # Ordered list type
-    $theOlType = "" unless( $theOlType );
-    $theOlType =~ s/^(.).*/$1/;
-    $theOlType = "" if( $theOlType eq "1" );
-
-    if( @$listTypes < $depth ) {
+    my $top = scalar( @{$this->{LISTTYPES}} );
+    if( $top < $depth ) {
         my $firstTime = 1;
-        while( @$listTypes < $depth ) {
-            push( @$listTypes, $theType );
-            push( @$listElements, $theElement );
+        while( $top < $depth ) {
+            push( @{$this->{LISTTYPES}}, $theType );
+            push( @{$this->{LISTELEMENTS}}, $theElement );
             push( @$result, "<$theElement>\n" ) unless( $firstTime );
-            if( $theOlType ) {
-                push( @$result, "<$theType type=\"$theOlType\">\n" );
-            } else {
-                push( @$result, "<$theType>\n" );
-            }
+            push( @$result, "<$theType>\n" );
             $firstTime = 0;
+            $top++;
         }
-
-    } elsif( @$listTypes > $depth ) {
-        while( @$listTypes > $depth ) {
-            local($_) = pop @$listElements;
-            push( @$result, "</$_>\n" );
-            local($_) = pop @$listTypes;
-            push( @$result, "</$_>\n" );
+    } elsif( $top > $depth ) {
+        while( $top > $depth ) {
+            push( @$result, "</".pop( @{$this->{LISTELEMENTS}} ).">\n" );
+            push( @$result, "</".pop( @{$this->{LISTTYPES}} ).">\n" );
+            $top--;
         }
-        push( @$result, "</$listElements->[$#$listElements]>\n") if( @$listElements );
-
-    } elsif( @$listElements ) {
-        push ( @$result, "</$listElements->[$#$listElements]>\n" );
+        $top = @{$this->{LISTELEMENTS}};
+        push( @$result, "</".$this->{LISTELEMENTS}->[$top].">\n") if( $top );
+    } elsif( scalar( @{$this->{LISTELEMENTS}} )) {
+        $top = $#{$this->{LISTELEMENTS}};
+        push ( @$result, "</".$this->{LISTELEMENTS}->[$top].">\n" );
     }
 
-    if( ( @$listTypes ) && ( $listTypes->[$#$listTypes] ne $theType ) ) {
-        push( @$result, "</$listTypes->[$#$listTypes]><$theType>\n" );
-        $listTypes->[$#$listTypes] = $theType;
-        $listElements->[$#$listElements] = $theElement;
+    $top = $#{$this->{LISTTYPES}};
+    my $oldt = $this->{LISTTYPES}->[$top] || "";
+    if( $top && $oldt ne $theType ) {
+        push( @$result, "</$oldt>\n<$theType>\n" );
+        $this->{LISTTYPES}->[$top] = $theType;
+        $this->{LISTELEMENTS}->[$#{$this->{LISTELEMENTS}}] = $theElement;
     }
 }
 
 sub _emitTR {
-    my ( $thePre, $theRow, $insideTABLE ) = @_;
+    my ( $this, $thePre, $theRow, $insideTABLE ) = @_;
 
     my $text = "";
     my $attr = "";
@@ -340,9 +331,9 @@ sub _emitTR {
     return $text;
 }
 
-sub _fixedFontText
-{
-    my( $theText, $theDoBold ) = @_;
+sub _fixedFontText {
+    my( $this, $theText, $theDoBold ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     # preserve white space, so replace it by "&nbsp; " patterns
     $theText =~ s/\t/   /g;
     $theText =~ s|((?:[\s]{2})+)([^\s])|'&nbsp; ' x (length($1) / 2) . "$2"|eg;
@@ -354,17 +345,17 @@ sub _fixedFontText
 }
 
 # Build an HTML &lt;Hn> element with suitable anchor for linking from %<nop>TOC%
-sub _makeAnchorHeading
-{
-    my( $theHeading, $theLevel ) = @_;
+sub _makeAnchorHeading {
+    my( $this, $theHeading, $theLevel ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
 
     # - Build '<nop><h1><a name="atext"></a> heading </h1>' markup
     # - Initial '<nop>' is needed to prevent subsequent matches.
     # - filter out $TWiki::regex{headerPatternNoTOC} ( '!!' and '%NOTOC%' )
     # CODE_SMELL: Empty anchor tags seem not to be allowed, but validators and browsers tolerate them
 
-    my $anchorName =       makeAnchorName( $theHeading, 0 );
-    my $compatAnchorName = makeAnchorName( $theHeading, 1 );
+    my $anchorName =       $this->makeAnchorName( $theHeading, 0 );
+    my $compatAnchorName = $this->makeAnchorName( $theHeading, 1 );
     # filter '!!', '%NOTOC%'
     $theHeading =~ s/$TWiki::regex{headerPatternNoTOC}//o;
     my $text = "<nop><h$theLevel>";
@@ -385,9 +376,9 @@ Build a valid HTML anchor name
 
 =cut
 
-sub makeAnchorName
-{
-    my( $anchorName, $compatibilityMode ) = @_;
+sub makeAnchorName {
+    my( $this, $anchorName, $compatibilityMode ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
 
     if ( ! $compatibilityMode && $anchorName =~ /^$TWiki::regex{anchorRegex}$/ ) {
 	# accept, already valid -- just remove leading #
@@ -426,25 +417,25 @@ sub makeAnchorName
 
 # Returns =title="..."= tooltip info in case LINKTOOLTIPINFO perferences variable is set. 
 # Warning: Slower performance if enabled.
-sub _linkToolTipInfo
-{
-    my( $theWeb, $theTopic ) = @_;
-    return "" unless( $linkToolTipInfo );
-    return "" if( $linkToolTipInfo =~ /^off$/i );
+sub _linkToolTipInfo {
+    my( $this, $theWeb, $theTopic ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
+    return "" unless( $this->{LINKTOOLTIPINFO} );
+    return "" if( $this->{LINKTOOLTIPINFO} =~ /^off$/i );
 
     # FIXME: This is slow, it can be improved by caching topic rev info and summary
     my( $date, $user, $rev ) = TWiki::Store::getRevisionInfo( $theWeb, $theTopic );
-    my $text = $linkToolTipInfo;
+    my $text = $this->{LINKTOOLTIPINFO};
     $text =~ s/\$web/<nop>$theWeb/g;
     $text =~ s/\$topic/<nop>$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
-    $text =~ s/\$date/&TWiki::formatTime( $date )/ge;
+    $text =~ s/\$date/TWiki::formatTime( $date )/ge;
     $text =~ s/\$username/<nop>$user/g;                                     # "jsmith"
-    $text =~ s/\$wikiname/"<nop>" . &TWiki::User::userToWikiName( $user, 1 )/ge;  # "JohnSmith"
-    $text =~ s/\$wikiusername/"<nop>" . &TWiki::User::userToWikiName( $user )/ge; # "Main.JohnSmith"
+    $text =~ s/\$wikiname/"<nop>" . TWiki::User::userToWikiName( $user, 1 )/ge;  # "JohnSmith"
+    $text =~ s/\$wikiusername/"<nop>" . TWiki::User::userToWikiName( $user )/ge; # "Main.JohnSmith"
     if( $text =~ /\$summary/ ) {
-        my $summary = &TWiki::Store::readFileHead( "$TWiki::dataDir/$theWeb/$theTopic.txt", 16 );
-        $summary = makeTopicSummary( $summary, $theTopic, $theWeb );
+        my $summary = TWiki::Store::readFileHead( "$TWiki::dataDir/$theWeb/$theTopic.txt", 16 );
+        $summary = $this->makeTopicSummary( $summary, $theTopic, $theWeb );
         $summary =~ s/[\"\']/<nop>/g;       # remove quotes (not allowed in title attribute)
         $text =~ s/\$summary/$summary/g;
     }
@@ -467,8 +458,9 @@ Generate a link.
 =cut
 
 sub internalLink {
-    my( $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink, $doKeepWeb ) = @_;
+    my( $this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink, $doKeepWeb ) = @_;
 
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     # Get rid of leading/trailing spaces in topic name
     $theTopic =~ s/^\s*//;
     $theTopic =~ s/\s*$//;
@@ -514,24 +506,24 @@ sub internalLink {
     my $text = "";
     if( $exist) {
         if( $theAnchor ) {
-            my $anchor = makeAnchorName( $theAnchor );
+            my $anchor = $this->makeAnchorName( $theAnchor );
             $text .= "<a class=\"twikiAnchorLink\" href=\"$TWiki::dispScriptUrlPath$TWiki::dispViewPath"
 		  .  "$TWiki::scriptSuffix/$theWeb/$theTopic\#$anchor\""
-                  .  &_linkToolTipInfo( $theWeb, $theTopic )
+                  .  $this->_linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText</a>";
             return $text;
         } else {
             $text .= "<a class=\"twikiLink\" href=\"$TWiki::dispScriptUrlPath$TWiki::dispViewPath"
 		  .  "$TWiki::scriptSuffix/$theWeb/$theTopic\""
-                  .  &_linkToolTipInfo( $theWeb, $theTopic )
+                  .  $this->_linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText</a>";
             return $text;
         }
 
     } elsif( $doLink ) {
-        $text .= "<span class=\"twikiNewLink\" style='background : $newTopicBgColor;'>"
-              .  "<font color=\"$newTopicFontColor\">$theLinkText</font>"
-              .  "<a href=\"$TWiki::dispScriptUrlPath/edit$TWiki::scriptSuffix/$theWeb/$theTopic?topicparent=$TWiki::webName.$TWiki::topicName\">$newLinkSymbol</a></span>";
+        $text .= "<span class=\"twikiNewLink\" style='background : $this->{NEWTOPICBGCOLOR};'>"
+              .  "<font color=\"$this->{NEWTOPICFONTCOLOR}\">$theLinkText</font>"
+              .  "<a href=\"$TWiki::dispScriptUrlPath/edit$TWiki::scriptSuffix/$theWeb/$theTopic?topicparent=$TWiki::webName.$TWiki::topicName\">$this->{NEWLINKSYMBOL}</a></span>";
         return $text;
 
     } elsif( $doKeepWeb ) {
@@ -547,10 +539,10 @@ sub internalLink {
 # Handle specific links of the form:
 # format: [[$theText]]
 # format: [[$theLink][$theText]]
-sub _specificLink
-{
-    my( $theWeb, $theTopic, $theText, $theLink ) = @_;
+sub _specificLink {
+    my( $this, $theWeb, $theTopic, $theText, $theLink ) = @_;
 
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     $theText = $theLink unless defined( $theText );
 
     # Current page's $theWeb and $theTopic are also used
@@ -596,12 +588,12 @@ sub _specificLink
         return $theText; # no link if no topic
     }
 
-    return internalLink( $web, $topic, $theText, $anchor, 1 );
+    return $this->internalLink( $web, $topic, $theText, $anchor, 1 );
 }
 
-sub _externalLink
-{
-    my( $pre, $url ) = @_;
+sub _externalLink {
+    my( $this, $pre, $url ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     if( $url =~ /\.(gif|jpg|jpeg|png)$/i ) {
         my $filename = $url;
         $filename =~ s@.*/([^/]*)@$1@go;
@@ -611,28 +603,27 @@ sub _externalLink
     return "$pre<a href=\"$url\" target=\"_top\">$url</a>";
 }
 
-sub _mailtoLink
-{
-    my( $theAccount, $theSubDomain, $theTopDomain ) = @_;
+sub _mailtoLink {
+    my( $this, $theAccount, $theSubDomain, $theTopDomain ) = @_;
 
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     my $addr = "$theAccount\@$theSubDomain$TWiki::noSpamPadding\.$theTopDomain";
     return "<a href=\"mailto\:$addr\">$addr</a>";
 }
 
-sub _mailtoLinkFull
-{
-    my( $theAccount, $theSubDomain, $theTopDomain, $theLinkText ) = @_;
+sub _mailtoLinkFull {
+    my( $this, $theAccount, $theSubDomain, $theTopDomain, $theLinkText ) = @_;
 
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     my $addr = "$theAccount\@$theSubDomain$TWiki::noSpamPadding\.$theTopDomain";
     return "<a href=\"mailto\:$addr\">$theLinkText</a>";
 }
 
-sub _mailtoLinkSimple
-{
+sub _mailtoLinkSimple {
     # Does not do any anti-spam padding, because address will not include '@'
-    my( $theMailtoString, $theLinkText ) = @_;	
+    my( $this, $theMailtoString, $theLinkText ) = @_;	
 
-    # Defensive coding
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     if ($theMailtoString =~ s/@//g ) {
     	writeWarning("mailtoLinkSimple called with an '\@' in string - internal TWiki error");
     }
@@ -650,16 +641,16 @@ used in TWiki::handleIcon
 
 =cut
 
-sub filenameToIcon
-{
-    my( $fileName ) = @_;
+sub filenameToIcon {
+    my( $this, $fileName ) = @_;
 
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     my @bits = ( split( /\./, $fileName ) );
     my $fileExt = lc $bits[$#bits];
 
     my $iconDir = "$TWiki::pubDir/icn";
     my $iconUrl = "$TWiki::pubUrlPath/icn";
-    my $iconList = &TWiki::Store::readFile( "$iconDir/_filetypes.txt" );
+    my $iconList = TWiki::Store::readFile( "$iconDir/_filetypes.txt" );
     foreach( split( /\n/, $iconList ) ) {
         @bits = ( split( / / ) );
 	if( $bits[0] eq $fileExt ) {
@@ -677,10 +668,10 @@ Returns the fully rendered expansion of a %FORMFIELD{}% tag.
 
 =cut
 
-sub renderFormField
-{
-    my ( $params, $topic, $web ) = @_;
+sub renderFormField {
+    my ( $this, $params, $topic, $web ) = @_;
 
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     my $formField = $params->{_DEFAULT};
     my $formTopic = $params->{topic};
     my $altText   = $params->{alttext};
@@ -711,12 +702,12 @@ sub renderFormField
         $formTopic = $topic;
     }
 
-    my $meta = $ffCache{"$formWeb.$formTopic"};
+    my $meta = $this->{ffCache}{"$formWeb.$formTopic"};
     unless ( $meta ) {
         my $dummyText;
         ( $meta, $dummyText ) =
           TWiki::Store::readTopic( $formWeb, $formTopic, undef, 0 );
-        $ffCache{"$formWeb.$formTopic"} = $meta;
+        $this->{ffCache}{"$formWeb.$formTopic"} = $meta;
     }
 
     my $text = "";
@@ -746,7 +737,7 @@ sub renderFormField
 
     return "" unless $text;
 
-    return getRenderedVersion( $text, $web );
+    return $this->getRenderedVersion( $text, $web );
 }
 
 =pod
@@ -757,9 +748,9 @@ The main rendering function.
 
 =cut
 
-sub getRenderedVersion
-{
-    my( $text, $theWeb, $meta ) = @_;
+sub getRenderedVersion {
+    my( $this, $text, $theWeb, $meta ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this  =~ /TWiki::Render/;
     my( $head, $result, $extraLines, $insidePRE, $insideTABLE, $insideNoAutoLink );
 
     return "" unless $text;  # nothing to do
@@ -778,8 +769,8 @@ sub getRenderedVersion
     $insideTABLE = 0;
     $insideNoAutoLink = 0;
 
-    my @listTypes = ();
-    my @listElements = ();
+    @{$this->{LISTTYPES}} = ();
+    @{$this->{LISTELEMENTS}} = ();
 
     # Initial cleanup
     $text =~ s/\r//g;
@@ -790,7 +781,7 @@ sub getRenderedVersion
     $text =~ s/$TWiki::TranslationToken/!/go;	
 
     my @verbatim = ();
-    $text = takeOutBlocks( $text, "verbatim", \@verbatim );
+    $text = $this->takeOutBlocks( $text, "verbatim", \@verbatim );
 
     $text =~ s/\\\n//gs;  # Join lines ending in "\"
 
@@ -832,8 +823,8 @@ sub getRenderedVersion
             # inside <PRE>
 
             # close list tags if any
-            if( @listTypes ) {
-                _emitList( \@listTypes, \@listElements, \@result, "", "", "" );
+            if( @{$this->{LISTTYPES}} ) {
+                $this->_addListItem( \@result, "", "", "" );
                 $isList = 0;
             }
 
@@ -885,7 +876,7 @@ sub getRenderedVersion
         $line =~ s/}$TWiki::TranslationToken/>/go;
 
         # standard URI
-        $line =~ s/(^|[\-\*\s\(])($TWiki::regex{linkProtocolPattern}\:([^\s\<\>\"]+[^\s\.\,\!\?\;\:\)\<]))/&_externalLink($1,$2)/geo;
+        $line =~ s/(^|[\-\*\s\(])($TWiki::regex{linkProtocolPattern}\:([^\s\<\>\"]+[^\s\.\,\!\?\;\:\)\<]))/$this->_externalLink($1,$2)/geo;
 
         # other entities
         $line =~ s/&(\w+?)\;/$TWiki::TranslationToken$1\;/g;      # "&abc;"
@@ -895,11 +886,11 @@ sub getRenderedVersion
 
         # Headings
         # '<h6>...</h6>' HTML rule
-        $line =~ s/$TWiki::regex{headerPatternHt}/&_makeAnchorHeading($2,$1)/geoi;
+        $line =~ s/$TWiki::regex{headerPatternHt}/$this->_makeAnchorHeading($2,$1)/geoi;
         # '\t+++++++' rule
-        $line =~ s/$TWiki::regex{headerPatternSp}/&_makeAnchorHeading($2,(length($1)))/geo;
+        $line =~ s/$TWiki::regex{headerPatternSp}/$this->_makeAnchorHeading($2,(length($1)))/geo;
         # '----+++++++' rule
-        $line =~ s/$TWiki::regex{headerPatternDa}/&_makeAnchorHeading($2,(length($1)))/geo;
+        $line =~ s/$TWiki::regex{headerPatternDa}/$this->_makeAnchorHeading($2,(length($1)))/geo;
 
         # Horizontal rule
         $line =~ s/^---+/<hr \/>/;
@@ -907,7 +898,7 @@ sub getRenderedVersion
         # Table: | cell | cell |
         # allow trailing white space after the last |
         if( $line =~ m/^(\s*)\|.*\|\s*$/ ) {
-            $line =~ s/^(\s*)\|(.*)/&_emitTR($1,$2,$insideTABLE)/e;
+            $line =~ s/^(\s*)\|(.*)/$this->_emitTR($1,$2,$insideTABLE)/e;
             $insideTABLE = 1;
         } elsif( $insideTABLE ) {
             push( @result, "</table>" );
@@ -925,23 +916,27 @@ sub getRenderedVersion
             $isList = 1;
             if ( $line =~ s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> /o ) {
                 # Definition list
-                _emitList( \@listTypes, \@listElements, \@result,
-                           "dl", "dd", $1 );
+                $this->_addListItem( \@result, "dl", "dd", $1, "" );
             }
             elsif ( $line =~ s/^((\t|   )+)(\S+?):\s/<dt> $3<\/dt><dd> /o ) {
                 # Definition list
-                _emitList( \@listTypes, \@listElements, \@result,
-                           "dl", "dd", $1 );
+                $this->_addListItem( \@result, "dl", "dd", $1, "" );
             }
             elsif ( $line =~ s/^((\t|   )+)\* /<li> /o ) {
                 # Unnumbered list
-                _emitList( \@listTypes, \@listElements, \@result,
-                           "ul", "li", $1 );
+                $this->_addListItem( \@result, "ul", "li", $1, "" );
             }
-            elsif ( $line =~ s/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/<li> /o ) {
+            elsif ( $line =~ m/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/ ) {
                 # Numbered list
-                _emitList( \@listTypes, \@listElements, \@result,
-                           "ol", "li", $1, $3 );
+                my $ot = $3;
+                $ot =~ s/^(.).*/$1/;
+                if( $ot !~ /^\d$/ ) {
+                    $ot = " type=\"$ot\"";
+                } else {
+                    $ot = "";
+                }
+                $line =~ s/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/<li$ot> /;
+                $this->_addListItem( \@result, "ol", "li", $1, $ot );
             }
             else {
                 $isList = 0;
@@ -950,23 +945,22 @@ sub getRenderedVersion
 
         # Finish the list
         if( ! $isList ) {
-            _emitList( \@listTypes, \@listElements, \@result,
-                       "", "", "" );
+            $this->_addListItem( \@result, "", "", "" );
             $isList = 0;
         }
 
         # '#WikiName' anchors
-        $line =~ s/^(\#)($TWiki::regex{wikiWordRegex})/ '<a name="' . &makeAnchorName( $2 ) . '"><\/a>'/geo;
+        $line =~ s/^(\#)($TWiki::regex{wikiWordRegex})/ '<a name="' . $this->makeAnchorName( $2 ) . '"><\/a>'/geo;
 
         # enclose in white space for the regex that follow
         $line =~ s/(.*)/\n$1\n/;
 
         # Emphasizing
-        $line =~ s/([\s\(])==([^\s]+?|[^\s].*?[^\s])==([\s\,\.\;\:\!\?\)])/$1 . &_fixedFontText( $2, 1 ) . $3/ge;
+        $line =~ s/([\s\(])==([^\s]+?|[^\s].*?[^\s])==([\s\,\.\;\:\!\?\)])/$1 . $this->_fixedFontText( $2, 1 ) . $3/ge;
         $line =~ s/([\s\(])__([^\s]+?|[^\s].*?[^\s])__([\s\,\.\;\:\!\?\)])/$1<strong><em>$2<\/em><\/strong>$3/g;
         $line =~ s/([\s\(])\*([^\s]+?|[^\s].*?[^\s])\*([\s\,\.\;\:\!\?\)])/$1<strong>$2<\/strong>$3/g;
         $line =~ s/([\s\(])_([^\s]+?|[^\s].*?[^\s])_([\s\,\.\;\:\!\?\)])/$1<em>$2<\/em>$3/g;
-        $line =~ s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . &_fixedFontText( $2, 0 ) . $3/ge;
+        $line =~ s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . $this->_fixedFontText( $2, 0 ) . $3/ge;
 
         # Mailto
         # Email addresses must always be 7-bit, even within I18N sites
@@ -975,23 +969,23 @@ sub getRenderedVersion
         # Explicit [[mailto:... ]] link without an '@' - hence no 
         # anti-spam padding needed.
         # '[[mailto:string display text]]' link (no '@' in 'string'):
-        $line =~ s/\[\[mailto:(.*?)\]\]/_handleMailto($1)/geo;
+        $line =~ s/\[\[mailto:(.*?)\]\]/$this->_handleMailto($1)/geo;
 
         # Normal mailto:foo@example.com ('mailto:' part optional)
         # FIXME: Should be '?' after the 'mailto:'...
-        $line =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . _mailtoLink( $2, $3, $4 )/ge;
+        $line =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . $this->_mailtoLink( $2, $3, $4 )/ge;
 
         # Handle [[][] and [[]] links
         # Escape rendering: Change " ![[..." to " [<nop>[...", for final unrendered " [[..." output
         $line =~ s/(\s)\!\[\[/$1\[<nop>\[/g;
         # Spaced-out Wiki words with alternative link text
-        $line =~ s/\[\[([^\]]+)\](\[([^\]]+)\])?\]/&_specificLink($theWeb,$theTopic,$3,$1)/ge;
+        $line =~ s/\[\[([^\]]+)\](\[([^\]]+)\])?\]/$this->_specificLink($theWeb,$theTopic,$3,$1)/ge;
 
         # do normal WikiWord link if not disabled by <noautolink> or
         # NOAUTOLINK preferences variable
-        unless( $noAutoLink || $insideNoAutoLink ) {
+        unless( $this->{NOAUTOLINK} || $insideNoAutoLink ) {
             # Handle all styles of TWiki link in one hit
-            $line =~ s/([\s\(])(($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$1._handleLink($theWeb,$3,$4,$5)/geo;
+            $line =~ s/([\s\(])(($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$1.$this->_handleLink($theWeb,$3,$4,$5)/geo;
             $line =~ s/$TWiki::TranslationToken(\S.*?)$TWiki::TranslationToken/$1/go;
         }
 
@@ -1002,7 +996,7 @@ sub getRenderedVersion
     if( $insideTABLE ) {
         push( @result, "</table>" );
     }
-    _emitList( \@listTypes, \@listElements, \@result, "", "", "" );
+    $this->_addListItem( \@result, "", "", "" );
 
     if( $insidePRE ) {
         push( @result, "</pre>" );
@@ -1015,8 +1009,8 @@ sub getRenderedVersion
     TWiki::Plugins::endRenderingHandler( $res );
 
     # replace verbatim with pre in the final output
-    $result = putBackBlocks( $res, \@verbatim, "verbatim",
-                             "pre", \&verbatimCallBack );
+    $result = $this->putBackBlocks( $res, \@verbatim, "verbatim",
+                                    "pre", \&verbatimCallBack );
 
     $result =~ s|\n?<nop>\n$||o; # clean up clutch
     return "$head$result";
@@ -1024,8 +1018,9 @@ sub getRenderedVersion
 
 # Handle the various link constructions
 sub _handleLink {
-    my ( $theWeb, $web, $topic, $anchor ) = @_;
+    my ( $this, $theWeb, $web, $topic, $anchor ) = @_;
 
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     my $linkIfAbsent = 1;
     my $keepWeb = 0;
     my $text;
@@ -1062,19 +1057,20 @@ sub _handleLink {
         }
     }
 
-    return internalLink( $web, $topic, $text,
+    return $this->internalLink( $web, $topic, $text,
                          $anchor, $linkIfAbsent, $keepWeb );
 }
 
 sub _handleMailto {
-    my ( $text ) = @_;
+    my ( $this, $text ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
     if ( $text =~ /^([^\s\@]+)\s+(.+)$/ ) {
-        return _mailtoLinkSimple( $1, $2 );
+        return $this->_mailtoLinkSimple( $1, $2 );
     } elsif ( $text =~ /^([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.(.+?)(\s+|\]\[)(.*)$/ ) {
         # Explicit [[mailto:... ]] link including '@', with anti-spam 
         # padding, so match name@subdom.dom.
         # '[[mailto:string display text]]' link
-        return _mailtoLinkFull( $1, $2, $3, $5 );
+        return $this->_mailtoLinkFull( $1, $2, $3, $5 );
     } else {
         # format not matched
         return "::mailto:$text::";
@@ -1084,7 +1080,7 @@ sub _handleMailto {
 =pod
 
 ---++ sub verbatimCallBack
-Callback for use with putBackBlocks that replaces &lt; and >
+STATIC Callback for use with putBackBlocks that replaces &lt; and >
 by their HTML entities &amp;lt; and &amp;gt;
 
 =cut
@@ -1118,22 +1114,23 @@ Used to render %META{}% tags in templates for non-active views
 =cut
 
 sub renderMetaTags {
-    my( $theWeb, $theTopic, $text, $meta, $isTopRev, $noexpand ) = @_;
+    my( $this, $theWeb, $theTopic, $text, $meta, $isTopRev, $noexpand ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
 
     if ( $noexpand ) {
         $text =~ s/%META{[^}]*}%//go;
         return $text;
     }
 
-    $text =~ s/%META{\s*"form"\s*}%/&_renderFormData( $theWeb, $theTopic, $meta )/ge;    #this renders META:FORM and META:FIELD
-    $text =~ s/%META{\s*"formfield"\s*(.*?)}%/&_renderFormField( $meta, $1 )/ge;                 #TODO: what does this do? (is this the old forms system, and so can be deleted)
-    $text =~ s/%META{\s*"attachments"\s*(.*)}%/&TWiki::Attach::renderMetaData( $theWeb,
+    $text =~ s/%META{\s*"form"\s*}%/$this->_renderFormData( $theWeb, $theTopic, $meta )/ge;    #this renders META:FORM and META:FIELD
+    $text =~ s/%META{\s*"formfield"\s*(.*?)}%/$this->_renderFormField( $meta, $1 )/ge;                 #TODO: what does this do? (is this the old forms system, and so can be deleted)
+    $text =~ s/%META{\s*"attachments"\s*(.*)}%/TWiki::Attach::renderMetaData( $theWeb,
                                                 $theTopic, $meta, $1, $isTopRev )/ge;                                       #renders attachment tables
-    $text =~ s/%META{\s*"moved"\s*}%/&_renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
-    $text =~ s/%META{\s*"parent"\s*(.*)}%/&_renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information
+    $text =~ s/%META{\s*"moved"\s*}%/$this->_renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
+    $text =~ s/%META{\s*"parent"\s*(.*)}%/$this->_renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information
 
     $text = TWiki::handleCommonTags( $text, $theTopic );
-    $text = getRenderedVersion( $text, $theWeb );
+    $text = $this->getRenderedVersion( $text, $theWeb );
 
     return $text;
 }
@@ -1146,15 +1143,15 @@ Makes a summary of the given topic by simply trimming a bit off the top.
 
 =cut
 
-sub makeTopicSummary
-{
-    my( $theText, $theTopic, $theWeb, $theFlags ) = @_;
+sub makeTopicSummary {
+    my( $this, $theText, $theTopic, $theWeb, $theFlags ) = @_;
     # called by search, mailnotify & changes after calling readFileHead
+    die "$this from ".join(",",caller)."\n" unless $this =~ /TWiki::Render/;
 
     my $htext = $theText;
     $theFlags = "" unless( $theFlags );
     # Format e-mail to add spam padding (HTML tags removed later)
-    $htext =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . _mailtoLink( $2, $3, $4 )/ge;
+    $htext =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . $this->_mailtoLink( $2, $3, $4 )/ge;
     $htext =~ s/<\!\-\-.*?\-\->//gs;  # remove all HTML comments
     $htext =~ s/<\!\-\-.*$//s;        # cut HTML comment
     $htext =~ s/<[^>]*>//g;           # remove all HTML tags
@@ -1201,7 +1198,7 @@ sub makeTopicSummary
     # characters. Only works for ISO-8859-1 sites, since the Unicode
     # encoding (&#nnn;) is identical for first 256 characters. 
     # I18N TODO: Convert to Unicode from any site character set.
-    if( $renderMode eq 'rss' and $TWiki::siteCharset =~ /^iso-?8859-?1$/i ) {
+    if( $this->{MODE} eq 'rss' and $TWiki::siteCharset =~ /^iso-?8859-?1$/i ) {
         $htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
     }
 
@@ -1227,9 +1224,10 @@ Set page rendering mode:
 
 =cut
 
-sub setRenderMode
-{
-    $renderMode = shift;
+sub setRenderMode {
+    my $this = shift;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
+    $this->{MODE} = shift;
 }
 
 =pod
@@ -1250,9 +1248,9 @@ Parameters to the open tag are recorded.
 
 =cut
 
-sub takeOutBlocks
-{
-    my( $intext, $tag, $buffer ) = @_;
+sub takeOutBlocks {
+    my( $this, $intext, $tag, $buffer ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
 
     return $intext unless ( $intext =~ m/<$tag>/ );
 
@@ -1321,9 +1319,9 @@ Cool, eh what? Jolly good show.
 
 =cut
 
-sub putBackBlocks
-{
-    my( $text, $buffer, $tag, $newtag, $callback ) = @_;
+sub putBackBlocks {
+    my( $this, $text, $buffer, $tag, $newtag, $callback ) = @_;
+    die "$this from ".join(",",caller)."\n" unless $this =~/TWiki::Render/;
 
     $newtag = $tag unless defined( $newtag );
 

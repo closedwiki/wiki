@@ -118,7 +118,7 @@ sub _tokensFromSearchString
         $theSearchVal =~ s/[\+\-]\s+//go;
 
         # build pattern of stop words
-        my $stopWords = &TWiki::Prefs::getPreferencesValue( "SEARCHSTOPWORDS" ) || "";
+        my $stopWords = $TWiki::prefsObject->getValue( "SEARCHSTOPWORDS" ) || "";
         $stopWords =~ s/[\s\,]+/\|/go;
         $stopWords =~ s/[\(\)]//go;
 
@@ -489,7 +489,7 @@ sub searchWeb
         $tmplHead = TWiki::handleCommonTags( $tmplHead, $topic );
 
         if( $callback) {
-            $tmplHead = TWiki::Render::getRenderedVersion( $tmplHead );
+            $tmplHead = $TWiki::renderer->getRenderedVersion( $tmplHead );
             $tmplHead =~ s|</*nop/*>||goi;   # remove <nop> tags
             &$callback( $tmplHead );
         } else {
@@ -509,7 +509,7 @@ sub searchWeb
         $searchStr =~ s/^\.\*$/Index/go;
         $tmplSearch =~ s/%SEARCHSTRING%/$searchStr/go;
         if( $callback) {
-            $tmplSearch = TWiki::Render::getRenderedVersion( $tmplSearch );
+            $tmplSearch = $TWiki::renderer->getRenderedVersion( $tmplSearch );
             $tmplSearch =~ s|</*nop/*>||goi;   # remove <nop> tag
             &$callback( $tmplSearch );
         } else {
@@ -535,8 +535,8 @@ sub searchWeb
 
         next unless &TWiki::Store::webExists( $thisWebName );  # can't process what ain't thar
 
-        my $thisWebBGColor     = &TWiki::Prefs::getPreferencesValue( "WEBBGCOLOR", $thisWebName ) || "\#FF00FF";
-        my $thisWebNoSearchAll = &TWiki::Prefs::getPreferencesValue( "NOSEARCHALL", $thisWebName );
+        my $thisWebBGColor     = $TWiki::prefsObject->getValue( "WEBBGCOLOR", $thisWebName ) || "\#FF00FF";
+        my $thisWebNoSearchAll = $TWiki::prefsObject->getValue( "NOSEARCHALL", $thisWebName );
 
         # make sure we can report this web on an 'all' search
         # DON'T filter out unless it's part of an 'all' search.
@@ -873,7 +873,7 @@ sub searchWeb
                 # don't callback yet because of table
                 # rendering
                 $tempVal = TWiki::handleCommonTags( $tempVal, $topic );
-                $tempVal = TWiki::Render::getRenderedVersion( $tempVal );
+                $tempVal = $TWiki::renderer->getRenderedVersion( $tempVal );
             }
 
             if( $doRenameView ) { # added JET 19 Feb 2000
@@ -946,15 +946,15 @@ sub searchWeb
                     # primitive way to prevent recursion
                     $text =~ s/%SEARCH/%<nop>SEARCH/g;
                 }
-                $text = &TWiki::handleCommonTags( $text, $topic, $thisWebName );
-                $text = &TWiki::Render::getRenderedVersion( $text, $thisWebName );
+                $text = TWiki::handleCommonTags( $text, $topic, $thisWebName );
+                $text = $TWiki::renderer->getRenderedVersion( $text, $thisWebName );
                 # FIXME: What about meta data rendering?
                 $tempVal =~ s/%TEXTHEAD%/$text/go;
 
             } elsif( $theFormat ) {
                 # free format, added PTh 10 Oct 2001
-                $tempVal =~ s/\$summary\(([^\)]*)\)/&TWiki::Render::makeTopicSummary( $text, $topic, $thisWebName, $1 )/geos;
-                $tempVal =~ s/\$summary/&TWiki::Render::makeTopicSummary( $text, $topic, $thisWebName )/geos;
+                $tempVal =~ s/\$summary\(([^\)]*)\)/$TWiki::renderer->makeTopicSummary( $text, $topic, $thisWebName, $1 )/geos;
+                $tempVal =~ s/\$summary/$TWiki::renderer->makeTopicSummary( $text, $topic, $thisWebName )/geos;
                 $tempVal =~ s/\$parent\(([^\)]*)\)/breakName( getMetaParent( $meta ), $1 )/geos;
                 $tempVal =~ s/\$parent/getMetaParent( $meta )/geos;
                 $tempVal =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
@@ -984,7 +984,7 @@ sub searchWeb
                 } else {
                     $head = &TWiki::Store::readFileHead( "$TWiki::dataDir\/$thisWebName\/$topic.txt", 16 );
                 }
-                $head = &TWiki::Render::makeTopicSummary( $head, $topic, $thisWebName );
+                $head = $TWiki::renderer->makeTopicSummary( $head, $topic, $thisWebName );
                 $tempVal =~ s/%TEXTHEAD%/$head/go;
             }
 
@@ -997,7 +997,7 @@ sub searchWeb
                                                        $topic );
                 if ( $callback) {
                     $beforeText =
-                      TWiki::Render::getRenderedVersion( $beforeText,
+                      $TWiki::renderer->getRenderedVersion( $beforeText,
                                                          $thisWebName );
                     $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
                     &$callback( $beforeText );
@@ -1009,7 +1009,7 @@ sub searchWeb
             # output topic (or line if multiple=on)
             if( !( $inline || $theFormat )) {
                 $tempVal =
-                  TWiki::Render::getRenderedVersion( $tempVal, $thisWebName );
+                  $TWiki::renderer->getRenderedVersion( $tempVal, $thisWebName );
                 $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
             }
 
@@ -1035,7 +1035,7 @@ sub searchWeb
 
             if ( $callback) {
                 $afterText = 
-                  TWiki::Render::getRenderedVersion( $afterText,
+                  $TWiki::renderer->getRenderedVersion( $afterText,
                                                      $thisWebName );
                 $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
                 &$callback( $afterText );
@@ -1051,7 +1051,7 @@ sub searchWeb
                 $thisNumber =~ s/%NTOPICS%/$ntopics/go;
                 if ( $callback) {
                     $thisNumber =
-                      TWiki::Render::getRenderedVersion( $thisNumber,
+                      $TWiki::renderer->getRenderedVersion( $thisNumber,
                                                          $thisWebName );
                     $thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
                     &$callback( $thisNumber );
@@ -1074,7 +1074,7 @@ sub searchWeb
         $tmplTail = TWiki::handleCommonTags( $tmplTail, $topic );
 
         if( $callback ) {
-            $tmplTail = TWiki::Render::getRenderedVersion( $tmplTail );
+            $tmplTail = $TWiki::renderer->getRenderedVersion( $tmplTail );
             $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
             &$callback( $tmplTail );
         } else {
@@ -1084,7 +1084,7 @@ sub searchWeb
 
     return undef if ( $callback );
     $searchResult = TWiki::handleCommonTags( $searchResult, $topic );
-    $searchResult = TWiki::Render::getRenderedVersion( $searchResult );
+    $searchResult = $TWiki::renderer->getRenderedVersion( $searchResult );
 #    $searchResult =~ s|</*nop/*>||goi;   # remove <nop> tag
     return $searchResult;
 }

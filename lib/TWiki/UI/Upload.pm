@@ -96,8 +96,8 @@ sub attach {
   $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
   # SMELL: The following two calls are done in the reverse order in all
   # the other handlers. Why are they done in this order here?
-  $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
-  $tmpl = TWiki::Render::renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
+  $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl );
+  $tmpl = $TWiki::renderer->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
   $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
   $tmpl =~ s/%FILENAME%/$fileName/go;
   $tmpl =~ s/%FILEPATH%/$args{"path"}/go;
@@ -183,7 +183,7 @@ sub upload {
             return;
         }
 
-        my $maxSize = TWiki::Prefs::getPreferencesValue( "ATTACHFILESIZELIMIT" );
+        my $maxSize = $TWiki::prefsObject->getValue( "ATTACHFILESIZELIMIT" );
         $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
 
         if( $maxSize && $fileSize > $maxSize * 1024 ) {

@@ -71,7 +71,7 @@ sub permissionsSet
     OUT: foreach my $type ( @types ) {
         foreach my $action ( @actions ) {
             my $pref = $type . "WEB" . $action;
-            my $prefValue = TWiki::Prefs::getPreferencesValue( $pref, $web ) || "";
+            my $prefValue = $TWiki::prefsObject->getValue( $pref, $web ) || "";
             if( $prefValue !~ /^\s*$/ ) {
                 $permSet = 1;
                 last OUT;
@@ -140,7 +140,7 @@ sub checkAccessPermission
     # DENYTOPIC overrides DENYWEB, even if it is empty
     unless( defined( $denyText )) {
         $denyText =
-          TWiki::Prefs::getPreferencesValue( "DENYWEB$theAccessType",
+          $TWiki::prefsObject->getValue( "DENYWEB$theAccessType",
                                              $theWebName );
     }
 
@@ -155,7 +155,7 @@ sub checkAccessPermission
     } else {
         # ALLOWTOPIC overrides ALLOWWEB, even if it is empty
         $allowText =
-          TWiki::Prefs::getPreferencesValue( "ALLOWWEB$theAccessType",
+          $TWiki::prefsObject->getValue( "ALLOWWEB$theAccessType",
                                              $theWebName );
 
         if( defined( $allowText ) && $allowText =~ /\S/ ) {

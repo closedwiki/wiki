@@ -27,75 +27,62 @@ values. Inheritance should be handled by stacking the prefs object,
 which will slow down accessing prefs values but that is a relatively
 small part of the rendering process.
 
+SMELL: inherits the "old" function interface, though it has been internally
+re-coded as OO ready for mod_perl comnpatibility.
+
 =cut
 
 package TWiki::Prefs;
 
 use TWiki::Prefs::PrefsCache;
 
-use vars qw(
-            $globalPrefs %webPrefs $requestPrefs $requestWeb
-            $formPrefPrefix
-          );
-
-$formPrefPrefix = "FORM_";
-
 =pod
 
----++ TWiki::Prefs package
+---+++ sub new( $webName )
 
-This is the external interface to the Prefs module, and is how the rest of the
-TWiki code accesses preferences.
-
----+++ sub initializePrefs( $webName )
-
-Resets all preference globals (for mod_perl compatibility), and reads
+Creates a new Prefs object, reading
 preferences from TWiki::TWikiPreferences, Main::TWikiPreferences, and
 $webName::WebPreferences.
 
 =cut
 
-sub initializePrefs {
-    my( $theWebName ) = @_;
+sub new {
+    my( $class, $web ) = @_;
 
-    TWiki::Prefs::PrefsCache::clearCache(); # for mod_perl compatibility
+    my $this = bless( {}, $class );
 
-    $requestWeb = $theWebName;
-    $globalPrefs = TWiki::Prefs::PrefsCache->new("global");
-    $webPrefs{$requestWeb} =
-      new TWiki::Prefs::PrefsCache("web", $globalPrefs, $requestWeb);
-    $requestPrefs =
-      new TWiki::Prefs::PrefsCache("copy", $webPrefs{$requestWeb});
+    $this->{WEBNAME} = $web;
+    my $globs =  new TWiki::Prefs::PrefsCache("global");
+    $this->{GLOBAL} = $globs;
+    my $webs = new TWiki::Prefs::PrefsCache("web", $globs, $web);
+    $this->{WEBS}{$web} = $webs;
+    $this->{REQUEST} = new TWiki::Prefs::PrefsCache("copy", $webs);
 
-    return;
+    return $this;
 }
-
-# =========================
 
 =pod
 
----+++ sub initializeUserPrefs( $userPrefsTopic )
+---+++ sub initializeUser( $wikiname, $usertopic )
 
-Called after user is known (potentially by Plugin), this function reads
-preferences from the user's personal topic.  The parameter is the topic to read
-user-level preferences from (Generally "Main.CurrentUserName").
+STATIC Reads preferences from the user's personal topic.  The parameter
+is the topic to read user-level preferences from (Generally
+"Main.CurrentUserName").
 
 =cut
 
-sub initializeUserPrefs {
-    my( $theWikiUserName ) = @_;
+sub initializeUser {
+    my( $this, $wikiname, $topic ) = @_;
 
-    $theWikiUserName = "Main.TWikiGuest" unless $theWikiUserName;
+    $wikiname = "Main.TWikiGuest" unless $wikiname;
 
-    if( $theWikiUserName =~ /^(.*)\.(.*)$/ ) {
-        $requestPrefs = TWiki::Prefs::PrefsCache->new("request", $webPrefs{$requestWeb}, $TWiki::topicName, $2);
+    if( $wikiname =~ /^(.*)\.(.*)$/ ) {
+        my $webPrefs = $this->{WEBS}{$this->{WEBNAME}};
+        $this->{REQUEST} =
+          new TWiki::Prefs::PrefsCache("request", $webPrefs,
+                                       $topic, $2);
     }
-
-    return;
 }
-
-
-# =========================
 
 =pod
 
@@ -107,99 +94,32 @@ Reads preferences from the topic at =$theWeb.$theTopic=, prefixes them with
 =cut
 
 sub getPrefsFromTopic {
-    my( $web, $topic, $keyPrefix ) = @_;
-    $requestPrefs->loadPrefsFromTopic( $web, $topic, $keyPrefix, 1 );
+    my( $this, $web, $topic, $keyPrefix ) = @_;
+    $this->{REQUEST}->loadPrefsFromTopic( $web, $topic, $keyPrefix, 1 );
 }
-
-# =========================
 
 =pod
 
----+++ sub updateSetFromForm( $meta, $text )
-Return value: $newText
-
-If there are any settings "Set SETTING = value" in =$text= for a setting
-that is set in form metadata in =$meta=, these are changed so that the
-value in the =$text= setting is the same as the one set in the =$meta= form.
-=$text= is not modified; rather, a new copy with these changes is returned.
+---+++ sub loadHash( \%hash )
+Loads the top level of all the preferences into the passed
+hash, in order to accelerate substitutions.
 
 =cut
-
-sub updateSetFromForm {
-    my( $meta, $text ) = @_;
-    my( $key, $value );
-
-    my %form = $meta->findOne( "FORM" );
-    if( %form ) {
-        my @fields = $meta->find( "FIELD" );
-        foreach my $field ( @fields ) {
-            $key = $field->{"name"};
-            $value = $field->{"value"};
-            my $attributes = $field->{"attributes"};
-            if( $attributes && $attributes =~ /[S]/o ) {
-                $value =~ s/\n/\\\n/o;
-                # SMELL: Worry about verbatim?  Multi-lines?
-                $text =~ s/^(\t+\*\sSet\s$key\s\=\s*).*$/$1$value/gm;
-            }
-        }
-    }
-
-    return $text;
-}
-
-# =========================
-
-=pod
-
----+++ sub expandPreferencesTags( \$text )
-
-Replaces %PREF% and %<nop>VAR{"pref"}% syntax in $text
-
-=cut
-
-sub expandPreferencesTags {
-    $requestPrefs->replacePreferencesTags( @_ );
-}
 
 sub loadHash {
-    $requestPrefs->loadHash( @_ );
+    my ( $this, $hashRef ) = @_;
+
+    $this->{REQUEST}->loadHash( $hashRef );
 }
 
-=pod
+# PACKAGE PRIVATE (called by PrefsCache)
+# Returns 1 if the =$prefValue= is "on", and 0 otherwise.  "On" means set to
+# something with a true Perl-truth-value, with the special cases that "off" and
+# "no" are forced to false.  (Both of the latter are case-insensitive.)  Note
+# also that leading and trailing whitespace on =$prefValue= will be stripped
+# prior to this conversion.
 
----+++ sub getWebVariable( $attributeString )
-
-Returns the value for a %<nop>VAR{"foo" web="bar"}% syntax, given the stuff inside the {}'s.
-
-=cut
-
-sub getWebVariable {
-    my( $attributeString ) = @_;
-
-    my $key = &TWiki::extractNameValuePair( $attributeString );
-    my $attrWeb = TWiki::extractNameValuePair( $attributeString, "web" );
-    if( $attrWeb =~ /%[A-Z]+%/ ) { # handle %MAINWEB%-type cases 
-        TWiki::handleInternalTags( $attrWeb, $requestWeb, "dummy" );
-    }
-
-    my $val = getPreferencesValue( $key, $attrWeb) || "";
-
-    return $val;
-}
-
-=pod
-
----+++ sub formatAsFlag( $prefValue )
-
-Returns 1 if the =$prefValue= is "on", and 0 otherwise.  "On" means set to
-something with a true Perl-truth-value, with the special cases that "off" and
-"no" are forced to false.  (Both of the latter are case-insensitive.)  Note
-also that leading and trailing whitespace on =$prefValue= will be stripped
-prior to this conversion.
-
-=cut
-
-sub formatAsFlag {
+sub _flag {
     my( $value ) = @_;
 
     return 0 unless ( defined( $value ));
@@ -212,8 +132,72 @@ sub formatAsFlag {
 
 =pod
 
----+++ sub formatAsNumber( $prefValue )
+---+++ sub getValue( $theKey, $theWeb )
 
+Returns the value of the preference =$theKey=.  If =$theWeb= is also specified,
+looks up the value with respect to that web instead of the current one; also,
+in this case user/topic preferences are not considered.
+
+In any case, if a plugin supports sessions and provides a value for =$theKey=,
+this value overrides all preference settings in any web.
+
+=cut
+
+sub getValue {
+    my( $this, $theKey, $theWeb ) = @_;
+
+    my $sessionValue =
+      TWiki::Plugins::getSessionValueHandler( $theKey );
+
+    if( defined( $sessionValue ) ) {
+        return $sessionValue;
+    }
+    my $val;
+    if( $theWeb ) {
+        if (!exists $this->{WEBS}{$theWeb}) {
+            $this->{WEBS}{$theWeb} =
+              new TWiki::Prefs::PrefsCache("web", $this->{GLOBAL}, $theWeb);
+        }
+        $val = $this->{WEBS}{$theWeb}->{prefs}{$theKey};
+    } else {
+        if( defined( $this->{REQUEST} )) {
+            $val = $this->{REQUEST}->{prefs}{$theKey};
+        } elsif (exists( $this->{WEBS}{$this->{WEBNAME}} )) {
+             # user/topic prefs not yet init'd
+            $val = $this->{WEBS}{$this->{WEBNAME}}->{prefs}{$theKey};
+        }
+    }
+    $val = "" unless( defined( $val ));
+    return $val;
+}
+
+=pod
+
+---+++ sub getFlag( $theKey, $theWeb )
+
+Returns the preference =$theKey= from =$theWeb= as a flag.  See
+=getValue= for the semantics of the parameters.
+Returns 1 if the pref value is "on", and 0 otherwise.  "On" means set to
+something with a true Perl-truth-value, with the special cases that "off" and
+"no" are forced to false.  (Both of the latter are case-insensitive.)  Note
+also that leading and trailing whitespace on the pref value will be stripped
+prior to this conversion.
+
+=cut
+
+sub getFlag {
+    my( $this, $theKey, $theWeb ) = @_;
+
+    my $value = $this->getValue( $theKey, $theWeb );
+    return _flag( $value );
+}
+
+=pod
+
+---+++ sub getNumber( $theKey, $theWeb )
+
+Returns the preference =$theKey= from =$theWeb= as a flag.  See
+=getValue= for the semantics of the parameters.
 Converts the string =$prefValue= to a number.  First any whitespace and commas
 are removed.  <em>L10N note: assumes thousands separator is comma and decimal
 point is period.</em>  Then, if the first character is a zero, the value is
@@ -227,107 +211,21 @@ will always return zero for these, rather than 'undef'.</strong>
 
 =cut
 
-sub formatAsNumber {
-    my( $strValue ) = @_;
-    return undef unless defined( $strValue ); 
+sub getNumber {
+    my( $this, $theKey, $theWeb ) = @_;
 
-    $strValue =~ s/[,\s]+//g;    
+    my $value = $this->getValue( $theKey, $theWeb );
 
-    if( $strValue =~ /^0/ ) {
-        return oct( $strValue ); # hex/octal/binary
-    } elsif( $strValue =~ /^(\d|\.\d )/) {
-        return $strValue;      # decimal
-    } else {
-        return 0;              # empty/non-numeric
+    return undef unless defined( $value );
+
+    $value =~ s/[,\s]+//g;
+
+    if( $value =~ /^0(\d|x|b)/i ) {
+        return oct( $value ); # octal, 0x hex, 0b binary
+    } elsif( $value =~ /^\d(\.\d+)?/) {
+        return $value;      # decimal
     }
+    return 0;              # empty/non-numeric
 }
-
-=pod
-
----+++ sub getPreferencesValue( $theKey, $theWeb )
-
-Returns the value of the preference =$theKey=.  If =$theWeb= is also specified,
-looks up the value with respect to that web instead of the current one; also,
-in this case user/topic preferences are not considered.
-
-In any case, if a plugin supports sessions and provides a value for =$theKey=,
-this value overrides all preference settings in any web.
-
-=cut
-
-sub getPreferencesValue {
-    my( $theKey, $theWeb ) = @_;
-
-    my $sessionValue =
-      TWiki::Plugins::getSessionValueHandler( $theKey );
-
-    if( defined( $sessionValue ) ) {
-        return $sessionValue;
-    }
-    my $val;
-    if( $theWeb ) {
-        if (!exists $webPrefs{$theWeb}) {
-            $webPrefs{$theWeb} =
-              new TWiki::Prefs::PrefsCache("web", $globalPrefs, $theWeb);
-        }
-        $val = $webPrefs{$theWeb}->{prefs}{$theKey};
-    } else {
-        if( defined( $requestPrefs )) {
-            $val = $requestPrefs->{prefs}{$theKey};
-        } elsif (exists( $webPrefs{$requestWeb} )) {
-             # user/topic prefs not yet init'd
-            $val = $webPrefs{$requestWeb}->{prefs}{$theKey};
-        }
-    }
-    $val = "" unless( defined( $val ));
-    return $val;
-}
-
-# =========================
-
-=pod
-
----+++ sub getPreferencesFlag( $theKey, $theWeb )
-
-Returns the preference =$theKey= from =$theWeb= as a flag.  See
-=getPreferencesValue= for the semantics of the parameters, and
-=[[#sub_formatAsFlag_prefValue][formatAsFlag]]= for the method of interpreting
-a value as a flag.
-
-=cut
-
-sub getPreferencesFlag {
-    my( $theKey, $theWeb ) = @_;
-
-    my $value = getPreferencesValue( $theKey, $theWeb );
-    return formatAsFlag( $value );
-}
-
-=pod
-
----+++ sub getPreferencesNumber( $theKey, $theWeb )
-
-Returns the preference =$theKey= from =$theWeb= as a flag.  See
-=getPreferencesValue= for the semantics of the parameters, and
-=[[#sub_formatAsNumber_prefValue][formatAsNumber]]= for the method of
-interpreting a value as a number.
-
-=cut
-
-sub getPreferencesNumber {
-    my( $theKey, $theWeb ) = @_;
-
-    my $value = getPreferencesValue( $theKey, $theWeb );
-    return formatAsNumber( $value );
-}
-
-# =========================
 
 1;
-
-=end twiki
-
-=cut
-
-# EOF
-

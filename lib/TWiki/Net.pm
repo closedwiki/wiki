@@ -79,8 +79,8 @@ sub getUrl
         $req .= "Authorization: Basic $base64";
     }
 
-    my $proxyHost = &TWiki::Prefs::getPreferencesValue("PROXYHOST");
-    my $proxyPort = &TWiki::Prefs::getPreferencesValue("PROXYPORT");
+    my $proxyHost = $TWiki::prefsObject->getValue("PROXYHOST");
+    my $proxyPort = $TWiki::prefsObject->getValue("PROXYPORT");
     if($proxyHost && $proxyPort) {
         $req = "GET http://$theHost:$thePort$theUrl HTTP/1.0\r\n";
         $theHost = $proxyHost;
@@ -134,8 +134,8 @@ sub sendEmail
     # Check if Net::SMTP is available
     if( ! $mailInitialized ) {
         $mailInitialized = 1;
-        $mailHost  = &TWiki::Prefs::getPreferencesValue( "SMTPMAILHOST" );
-        $helloHost = &TWiki::Prefs::getPreferencesValue( "SMTPSENDERHOST" );
+        $mailHost  = $TWiki::prefsObject->getValue( "SMTPMAILHOST" );
+        $helloHost = $TWiki::prefsObject->getValue( "SMTPSENDERHOST" );
         if( $mailHost ) {
 	   eval {	# May fail if Net::SMTP not installed
 	       $useNetSmtp = require Net::SMTP;

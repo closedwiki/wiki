@@ -362,4 +362,33 @@ sub getRevisionInfo {
     return( $date, $author, $rev, $comment );
 }
 
+=pod
+
+---+++ sub updateSets( \$text )
+
+If there are any settings "Set SETTING = value" in =$text= for a setting
+that is set in form metadata in =$meta=, these are changed so that the
+value in the =$text= setting is the same as the one set in the =$meta= form.
+
+=cut
+
+sub updateSets {
+    my( $this, $rtext ) = @_;
+
+    my %form = $this->findOne( "FORM" );
+    if( %form ) {
+        my @fields = $this->find( "FIELD" );
+        foreach my $field ( @fields ) {
+            my $key = $field->{"name"};
+            my $value = $field->{"value"};
+            my $attributes = $field->{"attributes"};
+            if( $attributes && $attributes =~ /[S]/o ) {
+                $value =~ s/\n/\\\n/o;
+                # SMELL: Worry about verbatim?  Multi-lines?
+                $$rtext =~ s/^(\t+\*\sSet\s$key\s\=\s*).*$/$1$value/gm;
+            }
+        }
+    }
+}
+
 1;

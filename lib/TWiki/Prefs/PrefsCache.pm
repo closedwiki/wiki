@@ -32,19 +32,28 @@ use TWiki::Prefs::TopicPrefs;
 
 =pod
 
----+++ sub clearCache()
+---+++ sub resetCache()
 
-This non-member function clears cached topic preferences, forcing all settings
+This STATIC function clears cached topic preferences, forcing all settings
 to be reread.
-
----+++ sub invalidateCache( $web, $topic )
-
-This non-member function invalidates the cache on a particular topic.
 
 =cut
 
-sub clearCache { undef %topicCache; }
-sub invalidateCache { delete $topicCache{$_[0]}{$_[1]}; }
+sub resetCache {
+    undef %topicCache;
+}
+
+=pod
+
+---+++ sub invalidateCache( $web, $topic )
+
+This STATIC function invalidates the cache on a particular topic.
+
+=cut
+
+sub invalidateCache {
+    delete $topicCache{$_[0]}{$_[1]};
+}
 
 =pod
 
@@ -140,9 +149,9 @@ sub loadPrefs {
         # request prefs - read topic and user
         my $parent = $self->{parent};
         my $topicPrefsSetting =
-          TWiki::Prefs::formatAsFlag( $parent->{prefs}{READTOPICPREFS} );
+          TWiki::Prefs::_flag( $parent->{prefs}{READTOPICPREFS} );
         my $topicPrefsOverride =
-          TWiki::Prefs::formatAsFlag( $parent->{prefs}{TOPICOVERRIDESUSER} );
+          TWiki::Prefs::_flag( $parent->{prefs}{TOPICOVERRIDESUSER} );
 
         if( $topicPrefsSetting && !$topicPrefsOverride ) {
             # topic prefs overridden by user prefs
@@ -235,24 +244,12 @@ sub inheritPrefs {
 
 =pod
 
----+++ sub replacePreferencesTags( \$text )
+---+++ sub loadHash(\%hash)
 
-Substitutes preferences values for =%PREF%= tags in =$text=, modifying that
-parameter in-place.
+Loads the passed hash with the "active" preferences. This hash can then
+be used for rapid lookups, much faster than refering back to this module.
 
 =cut
-
-sub replacePreferencesTags {
-    my( $self, $text ) = @_;
-    $$text =~ s/(%([A-Z0-9_]+)%)/$self->_exvar($1,$2)/ge;
-}
-
-sub _exvar {
-    #my( $self, $all, $vbl ) = @_
-    my $v = $_[0]->{prefs}{$_[2]};
-    return $v if( defined( $v ));
-    return $_[1];
-}
 
 sub loadHash {
     my( $self, $hash ) = @_;

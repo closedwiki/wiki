@@ -206,9 +206,7 @@ sub _registerPlugin
         return;
     }
 
-    my $h   = "";
-    my $sub = "";
-    my $prefix = "";
+    my $sub;
     if( ! $user ) {
         $sub = $p . '::earlyInitPlugin';
         if( ! defined( &$sub ) ) {
@@ -228,14 +226,14 @@ use strict 'refs';
         return;
     }
     # read plugin preferences before calling initPlugin
-    $prefix = uc( $plugin ) . "_";
-    TWiki::Prefs::getPrefsFromTopic( $installWeb, $plugin, $prefix );
+    $TWiki::prefsObject->getPrefsFromTopic( $installWeb, $plugin,
+                                                   uc( $plugin ) . "_");
 
 no strict 'refs';
     my $status = &$sub( $topic, $web, $user, $installWeb );
 use strict 'refs';
     if( $status ) {
-        foreach $h ( @registrableHandlers ) {
+        foreach my $h ( @registrableHandlers ) {
             $sub = $p.'::'.$h;
             _registerHandler( $h, $sub ) if defined( &$sub );
         }
@@ -294,10 +292,10 @@ sub initialize1
     }
 
     # Get INSTALLEDPLUGINS and DISABLEDPLUGINS variables
-    my $plugin = TWiki::Prefs::getPreferencesValue( "INSTALLEDPLUGINS" ) || "";
+    my $plugin = $TWiki::prefsObject->getValue( "INSTALLEDPLUGINS" ) || "";
     $plugin =~ s/[\n\t\s\r]+/ /go;
     my @setInstPlugins = grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
-    $plugin = TWiki::Prefs::getPreferencesValue( "DISABLEDPLUGINS" ) || "";
+    $plugin = $TWiki::prefsObject->getValue( "DISABLEDPLUGINS" ) || "";
 	foreach my $p (split( /,?\s+/ , $plugin)) {
         if ( $p =~ /^.+Plugin$/ ) {
             $p =~ s/^.*\.(.*)$/$1/;
@@ -406,7 +404,7 @@ sub _handlePLUGINDESCRIPTIONS
     my $pref = "";
     foreach my $plugin ( @activePlugins ) {
         $pref = uc( $plugin ) . "_SHORTDESCRIPTION";
-        $line = TWiki::Prefs::getPreferencesValue( $pref );
+        $line = $TWiki::prefsObject->getValue( $pref );
         if( $line ) {
             $text .= "\t\* $activePluginWebs{$plugin}.$plugin: $line\n"
         }

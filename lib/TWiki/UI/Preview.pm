@@ -107,11 +107,11 @@ sub preview {
   }
 
   my @verbatim = ();
-  $ptext = TWiki::Render::takeOutBlocks( $ptext, "verbatim", \@verbatim );
+  $ptext = $TWiki::renderer->takeOutBlocks( $ptext, "verbatim", \@verbatim );
   $ptext =~ s/ {3}/\t/go;
-  $ptext = &TWiki::Prefs::updateSetFromForm( $meta, $ptext );
-  $ptext = &TWiki::handleCommonTags( $ptext, $topic );
-  $ptext = &TWiki::Render::getRenderedVersion( $ptext );
+  $meta->updateSets( \$ptext );
+  $ptext = TWiki::handleCommonTags( $ptext, $topic );
+  $ptext = TWiki::renderer->getRenderedVersion( $ptext );
 
   # do not allow click on link before save: (mods by TedPavlic)
   my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
@@ -120,16 +120,16 @@ sub preview {
   $ptext =~ s@<form(?:|\s.*?)>@<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">@goi;
   $ptext =~ s@(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))@$1onclick="location.href='$oopsUrl\?template=oopspreview'"@goi;
 
-  $ptext = TWiki::Render::putBackBlocks( $ptext, \@verbatim,
+  $ptext = $TWiki::renderer->putBackBlocks( $ptext, \@verbatim,
                                          "verbatim", "pre",
                                          \&TWiki::Render::verbatimCallBack );
 
-  $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-  $tmpl = TWiki::Render::renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
-  $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
+  $tmpl = TWiki::handleCommonTags( $tmpl, $topic );
+  $tmpl = $TWiki::renderer->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
+  $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl );
   $tmpl =~ s/%TEXT%/$ptext/go;
 
-  $text = &TWiki::Render::encodeSpecialChars( $text );
+  $text = $TWiki::renderer->encodeSpecialChars( $text );
 
   $tmpl =~ s/%HIDDENTEXT%/$text/go;
   $tmpl =~ s/%FORMFIELDS%/$formFields/go;

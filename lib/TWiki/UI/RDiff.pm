@@ -81,7 +81,7 @@ sub _renderCellData {
         }
 
         $data = &TWiki::handleCommonTags( $data, $topic );
-        $data = &TWiki::Render::getRenderedVersion( $data );
+        $data = $TWiki::renderer->getRenderedVersion( $data );
         if( $data =~ m/<\/?(th|td|table)/i )
         {
             # data has <th> or <td>, need to fix <table>
@@ -329,7 +329,7 @@ sub getRevInfo
     my( $web, $rev, $topic, $short ) = @_;
 
     my( $date, $user ) = TWiki::Store::getRevisionInfo( $web, $topic, $rev);
-    $user = TWiki::Render::getRenderedVersion( TWiki::User::userToWikiName( $user ) );
+    $user = $TWiki::renderer->getRenderedVersion( TWiki::User::userToWikiName( $user ) );
 	
     if ( $short ) {
 	    $date = TWiki::formatTime( $date, "\$day \$month \$year" );
@@ -369,10 +369,10 @@ sub diff {
   my ( $webName, $topic, $userName, $query ) = @_;
 
   my $renderStyle = $query->param('render');
-  $renderStyle = &TWiki::Prefs::getPreferencesValue( "DIFFRENDERSTYLE" ) unless ( $renderStyle );
+  $renderStyle = $TWiki::prefsObject->getValue( "DIFFRENDERSTYLE" ) unless ( $renderStyle );
   my $diffType = $query->param('type');
   my $contextLines = $query->param('context');
-  $contextLines = &TWiki::Prefs::getPreferencesValue( "DIFFCONTEXTLINES" ) unless ( $contextLines );
+  $contextLines = $TWiki::prefsObject->getValue( "DIFFCONTEXTLINES" ) unless ( $contextLines );
   my $skin = TWiki::getSkin();
   my $rev1 = $query->param( "rev1" );
   my $rev2 = $query->param( "rev2" );
@@ -459,7 +459,7 @@ sub diff {
   $before =~ s/%REVTITLE1%/$revTitle1/go;
   $before =~ s/%REVTITLE2%/$revTitle2/go;
   $before = &TWiki::handleCommonTags( $before, $topic );
-  $before = &TWiki::Render::getRenderedVersion( $before );
+  $before = $TWiki::renderer->getRenderedVersion( $before );
   $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
   my $page = $before;
 
@@ -544,8 +544,8 @@ sub diff {
   $after =~ s/%REVTITLE2%/$revTitle2/go;
   $after =~ s/%REVINFO2%/$revInfo2/go;
   
-  $after = &TWiki::handleCommonTags( $after, $topic );
-  $after = &TWiki::Render::getRenderedVersion( $after );
+  $after = TWiki::handleCommonTags( $after, $topic );
+  $after = $TWiki::renderer->getRenderedVersion( $after );
   $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
   
   $page .= $after;

@@ -127,7 +127,7 @@ sub _save {
     return 0;
   }
 
-  $text = TWiki::Render::decodeSpecialChars( $text );
+  $text = $TWiki::renderer->decodeSpecialChars( $text );
   $text =~ s/ {3}/\t/go;
 
   if( $saveCmd eq "repRev" ) {
@@ -156,8 +156,7 @@ sub _save {
     # CODE_SMELL: this fieldVars2Meta thing should be in UI, not Meta
 	# Expand field variables, unless this new page is templated
     TWiki::Form::fieldVars2Meta( $webName, $query, $meta ) unless $templatetopic;
-    use TWiki::Prefs;
-    $text = TWiki::Prefs::updateSetFromForm( $meta, $text );
+    $meta->updateSets( \$text );
   }
 
   my $error = TWiki::Store::saveTopic( $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );

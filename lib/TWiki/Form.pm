@@ -286,7 +286,7 @@ sub renderForEdit
     my( $web, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldsInfo ) = @_;
 
     my $chooseForm = "";   
-    if( TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) ) {
+    if( $TWiki::prefsObject->getValue( "WEBFORMS", "$web" ) ) {
         $chooseForm = chooseFormButton( "Replace form..." );
     }
     
@@ -310,7 +310,7 @@ sub renderForEdit
         my $value = $field{"value"};
         if( ! defined( $value ) && $attributes =~ /S/ ) {
             # Allow initialisation based on a preference
-            $value = &TWiki::Prefs::getPreferencesValue($fieldName);
+            $value = $TWiki::prefsObject->getValue($fieldName);
         }
         if( ($getValuesFromFormTopic ) ) {
             my $tmp = $fieldInfo[0] || "";
@@ -554,12 +554,12 @@ sub changeForm
    
     my $tmpl = TWiki::Templates::readTemplate( "changeform" );
     $tmpl = TWiki::handleCommonTags( $tmpl, $theTopic );
-    $tmpl = TWiki::Render::getRenderedVersion( $tmpl );
+    $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl );
     my $text = $theQuery->param( 'text' );
-    $text = TWiki::Render::encodeSpecialChars( $text );
+    $text = $TWiki::renderer->encodeSpecialChars( $text );
     $tmpl =~ s/%TEXT%/$text/go;
 
-    my $listForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$theWeb" );
+    my $listForms = $TWiki::prefsObject->getValue( "WEBFORMS", "$theWeb" );
     $listForms =~ s/^\s*//go;
     $listForms =~ s/\s*$//go;
     my @forms = split( /\s*,\s*/, $listForms );
@@ -708,7 +708,7 @@ sub upgradeCategoryTable
             }
         }
         
-        my $listForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" );
+        my $listForms = $TWiki::prefsObject->getValue( "WEBFORMS", "$web" );
         $listForms =~ s/^\s*//go;
         $listForms =~ s/\s*$//go;
         my @formTemplates = split( /\s*,\s*/, $listForms );

@@ -107,8 +107,8 @@ sub search {
         "excludetopic"  => scalar $query->param( "excludetopic" ),
         "scope"         => scalar $query->param( "scope" ),
         "order"         => scalar $query->param( "order" ),
-        "type"          => scalar $query->param( "type" )
-                        || TWiki::Prefs::getPreferencesValue( "SEARCHDEFAULTTTYPE" ),
+        "type"          => scalar $query->param( "type" ) ||
+                             $TWiki::prefsObject->getValue( "SEARCHDEFAULTTTYPE" ),
         "regex"         => scalar $query->param( "regex" ),
         "limit"         => scalar $query->param( "limit" ),
         "reverse"       => scalar $query->param( "reverse" ),

@@ -24,7 +24,6 @@ use strict;
 use TWiki;
 use TWiki::Templates;
 use TWiki::Store;
-use TWiki::Render;
 use TWiki::User;
 use TWiki::Prefs;
 use TWiki::Meta;
@@ -173,7 +172,7 @@ sub _expandAttrs {
         return $info->{version};
     }
     elsif ( $attr eq "ICON" ) {
-        my $fileIcon = TWiki::Render::filenameToIcon( $file );
+        my $fileIcon = $TWiki::renderer->filenameToIcon( $file );
         return $fileIcon;
     }
     elsif ( $attr eq "URL" ) {
@@ -260,12 +259,12 @@ sub getAttachmentLink
         if( ( $nx > 0 ) && ( $ny > 0 ) ) {
             $imgSize = "width=\"$nx\" height=\"$ny\" ";
         }
-        $fileLink = TWiki::Prefs::getPreferencesValue( "ATTACHEDIMAGEFORMAT" )
+        $fileLink = $TWiki::prefsObject->getValue( "ATTACHEDIMAGEFORMAT" )
           || '   * $comment: <br />'
             . ' <img src="%ATTACHURLPATH%/$name" alt="$name" $size />';
     } else {
         # normal attached file
-        $fileLink = TWiki::Prefs::getPreferencesValue( "ATTACHEDFILELINKFORMAT" )
+        $fileLink = $TWiki::prefsObject->getValue( "ATTACHEDFILELINKFORMAT" )
           || '   * [[%ATTACHURL%/$name][$name]]: $comment';
     }
 

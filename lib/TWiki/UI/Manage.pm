@@ -620,7 +620,7 @@ sub _getLocks {
     $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
     $tmpl =~ s/%ATTACHMENT%/$theAttachment/go;
     $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
-    $tmpl = &TWiki::Render::getRenderedVersion( $tmpl, $oldWeb );
+    $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl, $oldWeb );
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
     # SMELL: this is a redirect!
     TWiki::writeHeader( $query, length( $tmpl ));
@@ -663,7 +663,7 @@ sub _newTopicScreen {
 
   $tmpl = _setVars( $tmpl, $oldTopic, $newWeb, $newTopic, $nonWikiWordFlag );
   $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
-  $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
+  $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl );
   if( $currentWebOnly ) {
     $tmpl =~ s/%RESEARCH\{.*?web=\"all\".*\}%/(skipped)/o; # Remove search all web search
   }
@@ -691,7 +691,7 @@ sub _moreRefsToChange {
 
   my $tmpl = TWiki::Templates::readTemplate( "renamerefs", $skin );
   $tmpl = _setVars( $tmpl, $oldTopic, $newWeb, $newTopic );
-  $tmpl = TWiki::Render::getRenderedVersion( $tmpl );
+  $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl );
   $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
   $tmpl = TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
   $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags

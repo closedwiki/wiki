@@ -47,7 +47,7 @@ sub changes {
   my $frev = "";
 
   $text = &TWiki::handleCommonTags( $text, $topic );
-  $text = &TWiki::Render::getRenderedVersion( $text );
+  $text = $TWiki::renderer->getRenderedVersion( $text );
   $text =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
   my $before = "";
@@ -78,10 +78,10 @@ sub changes {
       }
       $foo =~ s/%TIME%/$time/go;
       $foo =~ s/%REVISION%/$frev/go;
-      $foo = TWiki::Render::getRenderedVersion( $foo );
+      $foo = $TWiki::renderer->getRenderedVersion( $foo );
       
       $summary = TWiki::Store::readFileHead( "$TWiki::dataDir\/$webName\/$bar[0].txt", 16 );
-      $summary = TWiki::Render::makeTopicSummary( $summary, $bar[0], $webName );
+      $summary = $TWiki::renderer->makeTopicSummary( $summary, $bar[0], $webName );
       $foo =~ s/%TEXTHEAD%/$summary/go;
       $foo =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
       $page .= $foo;

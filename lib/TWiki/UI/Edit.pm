@@ -184,7 +184,7 @@ sub edit {
         $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
         if( defined $ptext ) {
             $text = $ptext;
-            $text = &TWiki::Render::decodeSpecialChars( $text );
+            $text = $TWiki::renderer->decodeSpecialChars( $text );
         }
     }
 
@@ -209,8 +209,8 @@ sub edit {
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-    $tmpl = &TWiki::Render::renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd eq "repRev" );
-    $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
+    $tmpl = $TWiki::renderer->renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd eq "repRev" );
+    $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl );
 
     # Don't want to render form fields, so this after getRenderedVersion
     my %formMeta = $meta->findOne( "FORM" );
@@ -225,7 +225,7 @@ sub edit {
         }
         my $formText = &TWiki::Form::renderForEdit( $webName, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldDefs );
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
-    } elsif( $saveCmd ne "repRev" && TWiki::Prefs::getPreferencesValue( "WEBFORMS", $webName )) {
+    } elsif( $saveCmd ne "repRev" && $TWiki::prefsObject->getValue( "WEBFORMS", $webName )) {
         # follows a hybrid html monster to let the 'choose form button' align at
         # the right of the page in all browsers
         $form = '<div style="text-align:right;"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder"><tr><td align="right">'

@@ -30,6 +30,8 @@ simply returns the recognized settings in the order it sees them in.
 
 package TWiki::Prefs::Parser;
 
+my $formPrefPrefix = "FORM_";
+
 =pod
 
 ---+++ sub new()
@@ -88,7 +90,7 @@ sub parseText {
 ---+++ sub parseMeta( $metaObject, $prefs )
 
 Traverses through all FIELD attributes of the meta object, creating one setting
-named with $TWiki::Prefs::formPrefPrefix . $fieldTitle for each.  If the
+named with $formPrefPrefix . $fieldTitle for each.  If the
 field's attribute list includes a 'S', it also creates an entry named with the
 field "name", which is a cleaned-up, space-removed version of the title.
 
@@ -104,7 +106,7 @@ sub parseMeta {
         my @fields = $meta->find( "FIELD" );
         foreach my $field( @fields ) {
             my $title = $field->{"title"};
-            my $prefixedTitle = $TWiki::Prefs::formPrefPrefix . $title;
+            my $prefixedTitle = $formPrefPrefix . $title;
             my $value = $field->{"value"};
             $prefs->_insertPrefsValue( $prefixedTitle, $value );
             my $attributes = $field->{"attributes"};
