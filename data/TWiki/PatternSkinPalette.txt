@@ -1,0 +1,217 @@
+%META:TOPICINFO{author="ArthurClemens" date="1093733705" format="1.0" version="1.1"}%
+---+!! !PatternSkinPalette
+
+To create a customised set of colours for TWiki.PatternSkin
+	* download [[%ATTACHURL%/PatternSkinPalette.css][PatternSkinPalette.css]]
+	* modify the CSS colours in !PatternSkinPalette.css
+	* [[%SCRIPTURL%/attach%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME% attach]] your modified !PatternSkinPalette.css to your home page 
+	* as shown below, add the =USERSTYLEURL= setting to [[%MAINWEB%.%WIKINAME%][your home page]]
+<verbatim>
+	* Plugins.PatternSkin CSS Settings (change colour palette)
+		* Set USERSTYLEURL = %PUBURL%/%MAINWEB%/%WIKINAME%/PatternSkinPalette.css
+</verbatim>
+
+Here are the colours used in TWiki.PatternSkin
+
+<table>
+<tr> <th>rgb</th> <th>colour sample</th> </tr>
+
+<tr style="height:20px" >
+  <td style="height:20px" >#000000</td>
+  <td style="height:20px; width:150px; background:#000000" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#041d3a</td>
+  <td style="height:20px; width:150px; background:#041d3a" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#05264d</td>
+  <td style="height:20px; width:150px; background:#05264d" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#333333</td>
+  <td style="height:20px; width:150px; background:#333333" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#334455</td>
+  <td style="height:20px; width:150px; background:#334455" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#880000</td>
+  <td style="height:20px; width:150px; background:#880000" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#990000</td>
+  <td style="height:20px; width:150px; background:#990000" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#844f0c</td>
+  <td style="height:20px; width:150px; background:#844f0c" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#22638c</td>
+  <td style="height:20px; width:150px; background:#22638c" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#666666</td>
+  <td style="height:20px; width:150px; background:#666666" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#3db234</td>
+  <td style="height:20px; width:150px; background:#3db234" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#1559b3</td>
+  <td style="height:20px; width:150px; background:#1559b3" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#1e5bbd</td>
+  <td style="height:20px; width:150px; background:#1e5bbd" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#808080</td>
+  <td style="height:20px; width:150px; background:#808080" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#888888</td>
+  <td style="height:20px; width:150px; background:#888888" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#e24628</td>
+  <td style="height:20px; width:150px; background:#e24628" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#698fa8</td>
+  <td style="height:20px; width:150px; background:#698fa8" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#9e9e70</td>
+  <td style="height:20px; width:150px; background:#9e9e70" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#888e9c</td>
+  <td style="height:20px; width:150px; background:#888e9c" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#8490a1</td>
+  <td style="height:20px; width:150px; background:#8490a1" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#ff0000</td>
+  <td style="height:20px; width:150px; background:#ff0000" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#ff3000</td>
+  <td style="height:20px; width:150px; background:#ff3000" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#98a2b0</td>
+  <td style="height:20px; width:150px; background:#98a2b0" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#aaaaaa</td>
+  <td style="height:20px; width:150px; background:#aaaaaa" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#bbbbbb</td>
+  <td style="height:20px; width:150px; background:#bbbbbb" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#a3bcf1</td>
+  <td style="height:20px; width:150px; background:#a3bcf1" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#cccccc</td>
+  <td style="height:20px; width:150px; background:#cccccc" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#ffff00</td>
+  <td style="height:20px; width:150px; background:#ffff00" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#b9d6fa</td>
+  <td style="height:20px; width:150px; background:#b9d6fa" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#dadada</td>
+  <td style="height:20px; width:150px; background:#dadada" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#b4d5ff</td>
+  <td style="height:20px; width:150px; background:#b4d5ff" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#dddddd</td>
+  <td style="height:20px; width:150px; background:#dddddd" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#e9e9e9</td>
+  <td style="height:20px; width:150px; background:#e9e9e9" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#e0e9f7</td>
+  <td style="height:20px; width:150px; background:#e0e9f7" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#efedea</td>
+  <td style="height:20px; width:150px; background:#efedea" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#f3ede7</td>
+  <td style="height:20px; width:150px; background:#f3ede7" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#dfedfd</td>
+  <td style="height:20px; width:150px; background:#dfedfd" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#eeeeee</td>
+  <td style="height:20px; width:150px; background:#eeeeee" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#ebf7ea</td>
+  <td style="height:20px; width:150px; background:#ebf7ea" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#efefef</td>
+  <td style="height:20px; width:150px; background:#efefef" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#ffeae5</td>
+  <td style="height:20px; width:150px; background:#ffeae5" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#e8f1f9</td>
+  <td style="height:20px; width:150px; background:#e8f1f9" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#f1f1f1</td>
+  <td style="height:20px; width:150px; background:#f1f1f1" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#f2f2f2</td>
+  <td style="height:20px; width:150px; background:#f2f2f2" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#f8f8f8</td>
+  <td style="height:20px; width:150px; background:#f8f8f8" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#f5f7fd</td>
+  <td style="height:20px; width:150px; background:#f5f7fd" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#fcfaf7</td>
+  <td style="height:20px; width:150px; background:#fcfaf7" > &nbsp; </td>
+</tr >
+<tr style="height:20px" >
+  <td style="height:20px" >#ffffff</td>
+  <td style="height:20px; width:150px; background:#ffffff" > &nbsp; </td>
+</tr ></table>
+
+
+-- Main.ArthurClemens - 28 Aug 2004
+
+%META:FILEATTACHMENT{name="PatternSkinPalette.css" attr="" comment="" date="1093733793" path="PatternSkinPalette.css" size="9554" user="ArthurClemens" version="1.1"}%
+%META:FILEATTACHMENT{name="filterColours.pl.txt" attr="" comment="" date="1093733821" path="filterColours.pl.txt" size="98" user="ArthurClemens" version="1.1"}%
+%META:FILEATTACHMENT{name="makeColourTable.pl.txt" attr="" comment="" date="1093733844" path="makeColourTable.pl.txt" size="330" user="ArthurClemens" version="1.1"}%
