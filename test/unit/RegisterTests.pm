@@ -1,4 +1,5 @@
-require 5.008;
+# This causes ntwiki to barf
+#require 5.008;
 
 package RegisterTests;
 
