@@ -394,7 +394,7 @@ sub getFormInfoFromMeta
 
 
 # =============================
-# Meta to hidden form params
+# Form parameters to meta
 # Note that existing meta information for fields is removed
 sub fieldVars2Meta
 {
