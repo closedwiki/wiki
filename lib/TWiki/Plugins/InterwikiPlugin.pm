@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ use vars qw(
         %interSiteTable $debug
     );
 
-$VERSION = '1.003'; # 18 Jan 2003
+$VERSION = '1.004'; # 16 Feb 2004
 $interSiteLinkRulesTopicName = "InterWikis";
 
 # 'Use locale' for internationalisation of Perl sorting and searching - 
@@ -135,7 +135,8 @@ sub outsidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-    $_[0] =~ s/$prefixPattern$sitePattern:$pagePattern$postfixPattern/"$1" . &handleInterwiki($2,$3)/geo;
+    $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\][\[\]])/&handleInterwiki($1,$2,$3,$4)/geo;
+    $_[0] =~ s/$prefixPattern$sitePattern:$pagePattern$postfixPattern/&handleInterwiki($1,$2,$3,"")/geo;
 }
 
 # =========================
@@ -147,7 +148,7 @@ sub DISABLE_insidePREHandler
 # =========================
 sub handleInterwiki
 {
-    my( $theSite, $theTopic ) = @_;
+    my( $thePrefix, $theSite, $theTopic, $thePostfix ) = @_;
 
     &TWiki::Func::writeDebug( "- InterwikiPlugin::handleInterwikiSiteLink: (site: $theSite), (topic: $theTopic)" ) if $debug;
 
@@ -163,12 +164,18 @@ sub handleInterwiki
         }
         &TWiki::Func::writeDebug( "  (url: $url), (help: $help)" ) if $debug;
         if( $url =~ s/\$page/$theTopic/go ) {
-            $text = "<a href=\"$url\"$title>$theSite\:$theTopic</a>";
+            $text = $url;
         } else {
-            $text = "<a href=\"$url$theTopic\"$title>$theSite\:$theTopic</a>";
+            $text = "$url$theTopic";
+        }
+        if( $thePostfix ) {
+            $text = "$thePrefix$text][";
+            $text .= "$theSite\:$theTopic]]" unless( $thePostfix eq "][" );
+        } else {
+            $text = "$thePrefix<a href=\"$text\"$title>$theSite\:$theTopic</a>";
         }
     } else {
-        $text = "$theSite\:$theTopic";
+        $text = "$thePrefix$theSite\:$theTopic$thePostfix";
     }
     return $text;
 }
