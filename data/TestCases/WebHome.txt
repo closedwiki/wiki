@@ -1,0 +1,28 @@
+%META:TOPICINFO{author="guest" date="1099483674" format="1.0" version="1.1"}%
+This is the <nop>%WEB% web. If you are here, you want to test this version of TWiki. This web is held in the TWiki Subversion repository, so:
+	1 You must manually ensure that all topics in this web are readable and writable by the apache user
+	1 You must _not_ check in ,v files. Topic histories will be maintained in Subversion.
+	1 New files in this web must be manually added to the Subversion repository.
+
+The <nop>%WEB% web is stripped down; it only contains this topic, and topics containing tests and test fixtures.
+
+The testcases are an important assistant to TWiki testing. However they should _not_ be regarded as the only required testing; manual testing, by a user interacting with TWiki, is also key.
+
+Each testcase consists of a single topic, always named <nop>TestCase<i>Something</i> where _Something_ is descriptive of the testcase. Testcases should contain a line starting with "Description: " that describes what the testcase does, for the table below. Other topics may be created to provide test fixtures, but all topics should be regarded as read-only i.e. no test should require the overwriting of any of the topics in this web. If you need to create topics in order to execute a test, please do so, but delete them after you are finished to avoid polluting future tests.
+
+Testcases that test TWiki rendering may include markers that indicate to automatic test tools what is _expected_ versus what TWiki _actually_ produces. These markers are HTML comments, thus:
+<pre>
+&lt;!-- expected -->
+&lt;!-- /expected -->
+&lt;!-- actual -->
+&lt;!-- /actual -->
+</pre>
+The =expected= markers should embrace the expected output i.e. the raw HTML this sequence is expected to generate. The =actual= markers should embrace the TWiki markup you are testing.
+	* Note that since TWiki may process the text in the =expected= markers, a visual comparison is _not_ enough to fulfil the test.
+	* If an =actual= marker is left open in the text (has no matching =/actual= ), all text up to the end of the topic will be taken as part of the test. This allows for testing markup at the end of topics.
+	* If a =/actual= tag occurs before a =actual= tag early in the text, all text from the start of the topic up to that marker is taken as the actual text. This allows for testing markup at the start of topics.
+	* =actual= and =expected= blocks can occur in any order, but there must be one =actual= for each =expected=.
+
+<table><tr><th>Testcase</th><th>Description</th></tr>
+%SEARCH{"^TestCase" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td></tr>"}%
+</table>

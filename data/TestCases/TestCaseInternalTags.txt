@@ -1,6 +1,4 @@
-%META:TOPICINFO{author="CrawfordCurrie" date="1098452272" format="1.0" version="1.3"}%
-%META:TOPICPARENT{name="KickStartingTestcaseDefinition"}%
-Test cases for internal tags *NOT INCLUDING* URLPARAM, SEARCH OR METASEARCH
+Description: Test cases for internal tags *NOT INCLUDING* URLPARAM, SEARCH OR METASEARCH
 
 Forward to TestCaseWebListTag
 
@@ -163,17 +161,3 @@ Tag tests requiring manual inspection
  <td>%WIKIVERSION%</td>
 </tr>
 </table>
-
-CategoryTestCase
-
-%META:FORM{name="WebForm"}%
-%META:FIELD{name="TopicClassification" title="TopicClassification" value="Select one..."}%
-%META:FIELD{name="TopicSummary" title="TopicSummary" value=""}%
-%META:FIELD{name="InterestedParties" title="InterestedParties" value=""}%
-%META:FIELD{name="AssignedTo" title="AssignedTo" value=""}%
-%META:FIELD{name="AssignedToCore" title="AssignedToCore" value=""}%
-%META:FIELD{name="ScheduledFor" title="ScheduledFor" value=""}%
-%META:FIELD{name="RelatedTopics" title="RelatedTopics" value=""}%
-%META:FIELD{name="SpecProgress" title="SpecProgress" value=""}%
-%META:FIELD{name="ImplProgress" title="ImplProgress" value=""}%
-%META:FIELD{name="DocProgress" title="DocProgress" value=""}%

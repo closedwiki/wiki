@@ -1,5 +1,4 @@
-%META:TOPICINFO{author="CrawfordCurrie" date="1098368728" format="1.0" version="1.1"}%
----+ Tests for handling embedded tag parameters
+Description: Tests for handling embedded tag parameters
 
 ---++ Test for embedding a URLPARAM in a SEARCH
 <verbatim>
@@ -28,18 +27,3 @@ The actual output was:
 <!-- actual -->
 The test: %URLPARAM{ "%URLPARAM{"tagname" default="failed"}%" default="failed"}%
 <!-- /actual -->
-
----
-CategoryTestCase
-
-%META:FORM{name="WebForm"}%
-%META:FIELD{name="TopicClassification" title="TopicClassification" value="Select one..."}%
-%META:FIELD{name="TopicSummary" title="TopicSummary" value=""}%
-%META:FIELD{name="InterestedParties" title="InterestedParties" value=""}%
-%META:FIELD{name="AssignedTo" title="AssignedTo" value=""}%
-%META:FIELD{name="AssignedToCore" title="AssignedToCore" value=""}%
-%META:FIELD{name="ScheduledFor" title="ScheduledFor" value=""}%
-%META:FIELD{name="RelatedTopics" title="RelatedTopics" value=""}%
-%META:FIELD{name="SpecProgress" title="SpecProgress" value=""}%
-%META:FIELD{name="ImplProgress" title="ImplProgress" value=""}%
-%META:FIELD{name="DocProgress" title="DocProgress" value=""}%

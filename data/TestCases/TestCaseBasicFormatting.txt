@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="SvenDowideit" date="1099196874" format="1.0" version="1.4"}%
+Description: Simple formatting, as described in TWiki.TextFormattingRules
 ---+ Paragraphs
 ---++ Expected
 <!-- expected -->
@@ -328,17 +328,3 @@ SunOS
 <!-- /actual -->
 
 -- Main.CrawfordCurrie - 21 Oct 2004
-
-CategoryTestCase
-
-%META:FORM{name="WebForm"}%
-%META:FIELD{name="TopicClassification" title="TopicClassification" value="Select one..."}%
-%META:FIELD{name="TopicSummary" title="TopicSummary" value=""}%
-%META:FIELD{name="InterestedParties" title="InterestedParties" value=""}%
-%META:FIELD{name="AssignedTo" title="AssignedTo" value=""}%
-%META:FIELD{name="AssignedToCore" title="AssignedToCore" value=""}%
-%META:FIELD{name="ScheduledFor" title="ScheduledFor" value=""}%
-%META:FIELD{name="RelatedTopics" title="RelatedTopics" value=""}%
-%META:FIELD{name="SpecProgress" title="SpecProgress" value=""}%
-%META:FIELD{name="ImplProgress" title="ImplProgress" value=""}%
-%META:FIELD{name="DocProgress" title="DocProgress" value=""}%
