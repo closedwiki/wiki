@@ -17,15 +17,10 @@
 # have to provide and where.
 #
 # Standard preamble
-BEGIN {
-  use File::Spec;
-  my $cwd = `dirname $0`; chop($cwd);
-  my $basedir = File::Spec->rel2abs("../../../..", $cwd);
-  die "TWIKI_SHARED not set" unless ($ENV{TWIKI_SHARED});
-  unshift @INC, "$ENV{TWIKI_SHARED}/lib";
-  unshift @INC, $basedir;
-  unshift @INC, $cwd;
-}
+BEGIN { 
+	foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) { 
+	unshift @INC, $pc; 
+} 
 use TWiki::Plugins::Build;
 
 use strict;
@@ -55,14 +50,14 @@ package TWikiReleaseTrackerPluginBuild;
 
     $this->SUPER::target_build();
 
-    target_indexLocalInstallation();
     # Do other build stuff here
   }
  
-#  sub target_install {
-#    die ("not supported");
-#
-#  }
+  sub target_install {
+    $this->SUPER::target_build();
+    target_indexLocalInstallation();
+
+  }
 
   sub target_indexLocalInstallation {
     ensureInstallationDir();
