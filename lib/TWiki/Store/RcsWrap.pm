@@ -97,7 +97,7 @@ my $cmdQuote = "'";
 #    } else {
 #        $exit = "";
 #    }
-#    TWiki::writeDebug( "Rcs: $cmd($exit): $string\n" );
+#    print STDERR "Rcs: $cmd -> ($exit) $string\n";
 #}
 
 # ======================
@@ -512,46 +512,47 @@ sub parseRevisionDiff
 }
 
 # ======================
-sub _ci
-{
+sub _ci {
     my( $self, $file, $comment, $userName ) = @_;
 
-    # Check that we can write the file being checked in. This won't check that
-    # $file,v is writable, but it _will_ trap 99% of all common errors (permissions
-    # on directory tree)
+    # Check that we can write the file being checked in. This won't check
+    # that $file,v is writable, but it _will_ trap 99% of all common
+    # errors (permissions on directory tree)
     return "$file is not writable" unless ( -w $file );
 
-    my $cmd = $self->{"ciCmd"};
+    my $ciCmd = $self->{"ciCmd"};
     my $rcsOutput = "";
-    $cmd =~ s/%USERNAME%/$userName/;
+    $ciCmd =~ s/%USERNAME%/$userName/;
     $file =~ s/$TWiki::securityFilter//go;
-    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
+    $ciCmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
     $comment = "none" unless( $comment );
     $comment =~ s/[\"\'\`\;]//go;  # security, Codev.NoShellCharacterEscapingInFileAttachComment, MikeSmith
-    $cmd =~ s/%COMMENT%/$comment/;
-    $cmd =~ /(.*)/;
-    $cmd = $1;       # safe, so untaint variable
-    $rcsOutput = `$cmd`; # capture stderr  (S.Knutson)
+    $ciCmd =~ s/%COMMENT%/$comment/;
+    $ciCmd =~ /(.*)/;
+    $ciCmd = $1;       # safe, so untaint variable
+    $rcsOutput = `$ciCmd`; # capture stderr  (S.Knutson)
 
     my $exit = $? >> 8;
-    #_traceExec( $cmd, $rcsOutput );
+    #_traceExec( $ciCmd, $rcsOutput );
     if( $exit && $rcsOutput =~ /no lock set by/ ) {
-          # Try and break lock, setting new one and doing ci again
-          my $cmd = $self->{"breakLockCmd"};
-          $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/go;
-          $cmd =~ /(.*)/;
-          my $out = `$cmd`;
-          #_traceExec( $cmd, $out );
+          # Try and break lock, setting new lock and doing ci again
+          my $blCmd = $self->{"breakLockCmd"};
+          $blCmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/go;
+          $blCmd =~ /(.*)/;
+          my $out = `$blCmd`;
           # Assume it worked, as not sure how to trap failure
-          $rcsOutput = `$cmd`; # capture stderr  (S.Knutson)
+          #_traceExec( $blCmd, $out );
+
+          # re-do the ci command
+          $rcsOutput = `$ciCmd`;
           $exit = $? >> 8;
-          #_traceExec( $cmd, $rcsOutput );
+          #_traceExec( $ciCmd, $rcsOutput );
           if( ! $exit ) {
               $rcsOutput = "";
           }
     }
     if( $exit && $rcsOutput ) { # oops, stderr was not empty, return error
-        $rcsOutput = "$cmd\n$rcsOutput";
+        $rcsOutput = "$ciCmd\n$rcsOutput";
     }
     return $rcsOutput;
 }
