@@ -372,9 +372,9 @@ sub _processWeb {
       new TWiki( $thePathInfo, $session->{userName},
                  $session->{topicName}, "", $session->{cgiQuery} );
 
-    my ( $topic, $webName, $dummy, $userName, $dataDir ) =
+    my ( $topic, $webName, $dummy, $userName ) =
       ( $session->{topicName}, $session->{webName}, $session->{scriptUrlPath},
-        $session->{userName}, $TWiki::dataDir );
+        $session->{userName} );
 
     my $wikiUserName = $session->{users}->userToWikiName( $userName );
 
