@@ -29,6 +29,7 @@ BEGIN {
 }
 
 use TWiki;
+use TWiki::Func;
 
 my $query = new CGI;
 
