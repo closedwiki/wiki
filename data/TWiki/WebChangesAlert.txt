@@ -1,5 +1,12 @@
-%META:TOPICINFO{author="MikeMannix" date="1000260771" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="MikeMannix" date="1006243410" format="1.0" version="1.12"}%
+%INCLUDE{"DocsUserNote"}%
+
 ---++ Web Changes Notification Service
 
-Each %WIKITOOLNAME% web has an automatic email notification service for recent changes. You can subscribe and unsubscribe yourself in WebNotify on each web. 
+Each TWiki web has an automatic email notification service that sends you an email with links to all of the topics modified since the last alert. 
+
+	* You can subscribe and unsubscribe yourself in WebNotify on each web. Changes are immediate.
+
+	* The frequency of alerts is set by the TWiki site administrator: it could be once a day, every hour, whatever works for the particular web.
+		* On TWiki.org, WebChangesAlerts are sent once a day. 
 %META:TOPICMOVED{by="MikeMannix" date="1000260771" from="TWiki.WebChangesNotify" to="TWiki.WebChangesAlert"}%
