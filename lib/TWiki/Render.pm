@@ -1185,6 +1185,7 @@ to that length.
 sub makeTopicSummary {
     my( $this, $theText, $theTopic, $theWeb, $theFlags ) = @_;
     ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
+    $theFlags ||= "";
     # called by search, mailnotify & changes after calling readFile
 
     my $htext = $this->TML2PlainText( $theText, $theWeb, $theTopic, $theFlags);
