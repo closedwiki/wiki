@@ -109,7 +109,7 @@ $| = 1;                  # no buffering - FIXME: mod_perl issue?
 # Load CGI modules (run-time, after checking they are accessible)
 require CGI;
 require CGI::Carp;
-# Don't do fatalsToBrowser until after module loads, to avoid errors.
+import CGI::Carp qw( fatalsToBrowser );
 
 my $query = new CGI;
 
@@ -257,6 +257,10 @@ if ( $detailedOS =~ /darwin/i or $OS ne 'UNIX' ) {
 }
 
 
+# Turn off fatalsToBrowser while checking module loads, to avoid load errors in
+# browser.
+$CGI::Carp::WRAP = 0;
+
 # Check that each of the required Perl modules can be loaded, and
 # print its version number.
 print "<tr><th align=\"right\">Required Perl modules:</th><td>";
@@ -292,7 +296,6 @@ foreach $mod (@optionalMods) {
     }
     print "</td></tr>\n";
 }
-
 
 # All module checks done, OK to enable fatalsToBrowser
 import CGI::Carp qw( fatalsToBrowser );
