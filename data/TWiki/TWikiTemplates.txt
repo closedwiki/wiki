@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1007461313" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1026976800" format="1.0" version="1.12"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -202,10 +202,10 @@ Test =topicaction=:
 
 ---+++ Sample screen shot of oopstest.tmpl
 
-With URL: ==.../bin/oops/Test/TestTopic2?template=oopstest&param1=WebHome&param2=WebNotify==
+With URL: ==.../bin/oops/Sandbox/TestTopic2?template=oopstest&param1=WebHome&param2=WebNotify==
 
 <blockquote>
-| <img src="%ATTACHURL%/testscreen.gif" width="554" height="304" alt="testscreen.gif"> |
+| <img src="%ATTACHURL%/testscreen.gif" width="589" height="304" alt="testscreen.gif"> |
 </blockquote>
 
 ---++ Known Issues
@@ -214,5 +214,5 @@ With URL: ==.../bin/oops/Test/TestTopic2?template=oopstest&param1=WebHome&param2
 
 -- PeterThoeny - 23 Jul 2001 <br />
 -- MikeMannix - 14 Sep 2001 <br />	
-%META:FILEATTACHMENT{name="testscreen.gif" attr="h" comment="Example of oopstest.tmpl rendered" date="999598142" path="C:\02_TWikiDocs\testscreen.gif" size="9460" user="MikeMannix" version="1.1"}%
+%META:FILEATTACHMENT{name="testscreen.gif" attr="h" comment="Example of oopstest.tmpl rendered" date="1026977240" path="C:\Data\Temp\testscreen.gif" size="9566" user="PeterThoeny" version="1.2"}%
 %META:TOPICMOVED{by="MikeMannix" date="1000277381" from="TWiki.TWikiTemplateSystem" to="TWiki.TWikiTemplates"}%
