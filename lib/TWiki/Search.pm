@@ -460,11 +460,9 @@ sub searchWeb
                    $tempVal =~ s/%SELECTION%.*%SELECTION%//o;
                 } else {
                    $tempVal =~ s/%SELECTION%//go;
-                   $topicCount++;
                 }
                 $tempVal =~ s/%CHANGEABLE%/$changeable/o;
 
-                $tempVal =~ s/%TOPIC_NUMBER%/$topicCount/go;
                 $tempVal =~ s/%LABEL%/$doRenameView/go;
                 my $reducedOutput = "";
                 
@@ -492,9 +490,13 @@ sub searchWeb
                    if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
                        # This can incorrectly show matches becuase of case insenstive option, required to get [[spaced Word]] to match
                        my $subs = s|$theSearchVal|$1<font color="red">$2</font>&nbsp;|ig;
-                       $reducedOutput .= "$_<br />\n" if( $subs );
+                       if( $subs ) {
+                           $topicCount++ if( ! $reducedOutput );
+                           $reducedOutput .= "$_<br />\n" if( $subs );
+                       }
                    }
                 }
+                $tempVal =~ s/%TOPIC_NUMBER%/$topicCount/go;
                 $tempVal =~ s/%TEXTHEAD%/$reducedOutput/go;
                 next if ( ! $reducedOutput );
             } elsif( $noSummary ) {
