@@ -97,7 +97,7 @@ sub _parseFormDefinition
                     $size = 1 if( ! $size );
                     $vals =~ s/^\s*//go;
                     $vals =~ s/\s*$//go;
-                    $vals =~ s/"//go; # " would break parsing off META variables
+                    $vals =~ s/"//go; # " would break parsing of META variables
                     if( $vals eq '$users' ) {
                        $vals = $TWiki::mainWebname . "." . join( ", ${TWiki::mainWebname}.", ( $this->store()->getTopicNames( $TWiki::mainWebname ) ) );
                     }
