@@ -118,7 +118,7 @@ sub emitList {
     if( ( @$types ) && ( $types->[$lastIndex] ne $theType ) ) {
         $result .= "</$types->[$lastIndex]>\n<$theType>\n";
         $types->[$lastIndex] = $theType;
-        $elements->[$#{$elements}] = $theElement;
+        $elements->[$lastIndex] = $theElement;
     }
 
     return $result;
@@ -274,7 +274,7 @@ sub linkToolTipInfo
     $text =~ s/\$web/<nop>$theWeb/g;
     $text =~ s/\$topic/<nop>$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
-    $text =~ s/\$date/&formatTime( $date )/ge;
+    $text =~ s/\$date/&TWiki::formatTime( $date )/ge;
     $text =~ s/\$username/<nop>$user/g;                                     # "jsmith"
     $text =~ s/\$wikiname/"<nop>" . &TWiki::userToWikiName( $user, 1 )/ge;  # "JohnSmith"
     $text =~ s/\$wikiusername/"<nop>" . &TWiki::userToWikiName( $user )/ge; # "Main.JohnSmith"
@@ -354,7 +354,7 @@ sub getRenderedVersion {
             # inside <PRE>
 
             # close list tags if any
-            if( @$self->{listTypes} ) {
+            if( @{ $self->{listTypes} } ) {
                 $result .= $self->emitList( "", "", 0 );
                 $isList = 0;
             }
@@ -397,7 +397,7 @@ sub getRenderedVersion {
             s/$TranslationToken(\!\-\-)/\<$1/go;
 
 # Handle embedded URLs
-            s!(^|[\-\*\s\(])($regex{linkProtocolPattern}\:([^\s\<\>\"]+[^\s\.\,\!\?\;\:\)\<]))!&externalLink($1,$2)!geo;
+            s!(^|[\-\*\s\(])($regex{linkProtocolPattern}\:([^\s\<\>\"]+[^\s\.\,\!\?\;\:\)\<]))!&TWiki::externalLink($1,$2)!geo;
 
 # Entities
             s/&(\w+?)\;/$TranslationToken$1\;/g;      # "&abc;"
@@ -407,11 +407,11 @@ sub getRenderedVersion {
 
 # Headings
             # '<h6>...</h6>' HTML rule
-            s/$regex{headerPatternHt}/&makeAnchorHeading($2,$1)/geoi;
+            s/$regex{headerPatternHt}/&TWiki::makeAnchorHeading($2,$1)/geoi;
             # '\t+++++++' rule
-            s/$regex{headerPatternSp}/&makeAnchorHeading($2,(length($1)))/geo;
+            s/$regex{headerPatternSp}/&TWiki::makeAnchorHeading($2,(length($1)))/geo;
             # '----+++++++' rule
-            s/$regex{headerPatternDa}/&makeAnchorHeading($2,(length($1)))/geo;
+            s/$regex{headerPatternDa}/&TWiki::makeAnchorHeading($2,(length($1)))/geo;
 
 # Horizontal rule
             s/^---+/<hr \/>/;
@@ -451,11 +451,11 @@ sub getRenderedVersion {
 
 # Emphasizing
             # PTh 25 Sep 2000: More relaxed rules, allow leading '(' and trailing ',.;:!?)'
-            s/([\s\(])==([^\s]+?|[^\s].*?[^\s])==([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText( $2, 1 ) . $3/ge;
+            s/([\s\(])==([^\s]+?|[^\s].*?[^\s])==([\s\,\.\;\:\!\?\)])/$1 . &TWiki::fixedFontText( $2, 1 ) . $3/ge;
             s/([\s\(])__([^\s]+?|[^\s].*?[^\s])__([\s\,\.\;\:\!\?\)])/$1<strong><em>$2<\/em><\/strong>$3/g;
             s/([\s\(])\*([^\s]+?|[^\s].*?[^\s])\*([\s\,\.\;\:\!\?\)])/$1<strong>$2<\/strong>$3/g;
             s/([\s\(])_([^\s]+?|[^\s].*?[^\s])_([\s\,\.\;\:\!\?\)])/$1<em>$2<\/em>$3/g;
-            s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText( $2, 0 ) . $3/ge;
+            s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . &TWiki::fixedFontText( $2, 0 ) . $3/ge;
 
 # Mailto
 	    # Email addresses must always be 7-bit, even within I18N sites
@@ -464,16 +464,16 @@ sub getRenderedVersion {
 	    # Explicit [[mailto:... ]] link without an '@' - hence no 
 	    # anti-spam padding needed.
             # '[[mailto:string display text]]' link (no '@' in 'string'):
-            s/\[\[mailto\:([^\s\@]+)\s+(.+?)\]\]/&mailtoLinkSimple( $1, $2 )/ge;
+            s/\[\[mailto\:([^\s\@]+)\s+(.+?)\]\]/&TWiki::mailtoLinkSimple( $1, $2 )/ge;
 
 	    # Explicit [[mailto:... ]] link including '@', with anti-spam 
 	    # padding, so match name@subdom.dom.
             # '[[mailto:string display text]]' link
-            s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.(.+?)(\s+|\]\[)(.*?)\]\]/&mailtoLinkFull( $1, $2, $3, $5 )/ge;
+            s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.(.+?)(\s+|\]\[)(.*?)\]\]/&TWiki::mailtoLinkFull( $1, $2, $3, $5 )/ge;
 
 	    # Normal mailto:foo@example.com ('mailto:' part optional)
 	    # FIXME: Should be '?' after the 'mailto:'...
-            s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &mailtoLink( $2, $3, $4 )/ge;
+            s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &TWiki::mailtoLink( $2, $3, $4 )/ge;
 
 # Make internal links
 	    # Spaced-out Wiki words with alternative link text
