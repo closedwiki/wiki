@@ -65,7 +65,6 @@ sub inputTest {
     $disabled = "disabled";
   }
 
-  $sattrs .= "\" ";
   $type = "bottom" unless ($type);
   $sattrs .= "type=\"$type\" ";
 

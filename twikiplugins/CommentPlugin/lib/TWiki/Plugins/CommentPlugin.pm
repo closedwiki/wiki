@@ -17,9 +17,12 @@ BEGIN {
 sub initPlugin {
   #my ( $topic, $web, $user, $installWeb ) = @_;
 
-  if( $TWiki::Plugins::VERSION < 1 ) {
+  if( $TWiki::Plugins::VERSION < 1.010 ) {
     TWiki::Func::writeWarning( "Version mismatch between CommentPlugin and Plugins.pm $TWiki::Plugins::VERSION" );
     return 0;
+  }
+  if( $TWiki::Plugins::VERSION < 1.020 ) {
+    TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION. Will not work without compatability module." );
   }
   $firstCall = 1;
 

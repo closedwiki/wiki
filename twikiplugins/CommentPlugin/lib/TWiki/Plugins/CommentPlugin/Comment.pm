@@ -6,7 +6,7 @@
 #
 use strict;
 
-use TWiki::Plugins::CommentPlugin::Attrs;
+use TWiki::Plugins::SharedCode;
 
 { package CommentPlugin::Comment;
 
@@ -81,7 +81,7 @@ use TWiki::Plugins::CommentPlugin::Attrs;
 	 $disable, $defaultType ) = @_;
 
     $attributes =~ s/^{(.*)}$/$1/o if ( $attributes );
-    my $attrs = new CommentPlugin::Attrs( $attributes );
+    my $attrs = new TWiki::Attrs( $attributes );
 
     my $type =
       $attrs->remove( "type" ) || $attrs->remove( "mode" ) || $defaultType;
@@ -231,7 +231,7 @@ use TWiki::Plugins::CommentPlugin::Attrs;
     # Expand common variables in the template, but don't expand other
     # tags.
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
-	  use TWiki::Plugins::CairoCompatabilityModule;
+	  use TWiki::Plugins::CairoCompatibilityModule;
 	}
 	$output = TWiki::expandVariablesOnTopicCreation($output);
 
