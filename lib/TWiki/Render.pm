@@ -41,7 +41,7 @@ use TWiki qw(:renderflags %regex $TranslationToken);
 # Globals used in rendering
 use vars qw(
 	$isList @listTypes @listElements
-        $newTopicFontColor $newTopicBgColor $linkToolTipInfo $noAutoLink
+        $newTopicFontColor $newTopicBgColor $linkToolTipInfo $noAutoLink $newLinkSymbol
     );
     
 
@@ -61,6 +61,7 @@ sub initialize
     # PTh: Moved from internalLink to initialize ('cause of performance)
     $newTopicBgColor   = TWiki::Prefs::getPreferencesValue("NEWTOPICBGCOLOR")   || "#FFFFCE";
     $newTopicFontColor = TWiki::Prefs::getPreferencesValue("NEWTOPICFONTCOLOR") || "#0000FF";
+    $newLinkSymbol     = TWiki::Prefs::getPreferencesValue("NEWTOPICLINKSYMBOL") || "<sup>?</sup>";
     # tooltip init
     $linkToolTipInfo   = TWiki::Prefs::getPreferencesValue("LINKTOOLTIPINFO")   || "";
     $linkToolTipInfo = '$username - $date - r$rev: $summary' if( $linkToolTipInfo =~ /^on$/ );
@@ -634,9 +635,9 @@ sub internalLink {
         }
 
     } elsif( $doLink ) {
-        $text .= "<span style='background : $newTopicBgColor;'>"
-              .  "<font color=\"$newTopicFontColor\">$theLinkText</font></span>"
-              .  "<a href=\"$dispScriptUrlPath/edit$scriptSuffix/$theWeb/$theTopic?topicparent=$TWiki::webName.$TWiki::topicName\">?</a>";
+        $text .= "<span class=\"TWikiNewLink\" style='background : $newTopicBgColor;'>"
+              .  "<font color=\"$newTopicFontColor\">$theLinkText</font>"
+              .  "<a href=\"$dispScriptUrlPath/edit$scriptSuffix/$theWeb/$theTopic?topicparent=$TWiki::webName.$TWiki::topicName\">$newLinkSymbol</a></span>";
         return $text;
 
     } elsif( $doKeepWeb ) {
