@@ -51,8 +51,8 @@ $VERSION = '1.024';
         'afterEditHandler',        # ( $text, $topic, $web )                 1.010
         'beforeSaveHandler',       # ( $text, $topic, $web )                 1.010
         'afterSaveHandler',        # ( $text, $topic, $web, $errors )        1.020
-        'beforeAttachmentSaveHandler',   # ( $text, $topic, $web )           1.022
-        'afterAttachmentSaveHandler',    # ( $text, $topic, $web,$error )    1.022
+        'beforeAttachmentSaveHandler', # ( $attachmentAttrHash, $topic, $web )  1.022
+        'afterAttachmentSaveHandler',  # ( $attachmentAttrHash, $topic, $web, $error )   1.022
         'writeHeaderHandler',      # ( $query )                              1.010
         'redirectCgiQueryHandler', # ( $query, $url )                        1.010
         'getSessionValueHandler',  # ( $key )                                1.010
@@ -653,9 +653,10 @@ sub afterSaveHandler
 }
 
 =pod
----++ sub beforeAttachmentSaveHandler ()
-
-Not yet documented.
+---++ sub beforeAttachmentSaveHandler  ( $attachmentAttrHash, $topic, $web ) 
+| Description: | This code provides plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other plugins. |
+| Parameters:  | |
+| Return:      | |
 
 =cut
 
@@ -668,9 +669,10 @@ sub beforeAttachmentSaveHandler
 }
 
 =pod
----++ sub afterAttachmentSaveHandler ()
-
-Not yet documented.
+---++ sub afterAttachmentSaveHandler ( $attachmentAttrHash, $topic, $web, $error ) 
+| Description: | This code provides plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other plugins. |
+| Parameters:  | |
+| Return:      | |
 
 =cut
 
