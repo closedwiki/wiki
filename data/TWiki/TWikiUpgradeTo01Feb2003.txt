@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044144360" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044335963" format="1.0" version="1.4"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -46,7 +46,7 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 			* Replace =%<nop>WIKIHOMEURL%= with =%<nop>WIKILOGOURL%=
 			* Replace img tag's =src=%<nop>PUBURLPATH%/wikiHome.gif= with =src=%<nop>WIKILOGOIMG%=
 			* Replace img tag's =alt="TWiki Home"= with =alt="%<nop>WIKILOGOALT%"=
-			* Replace meta tag's =charset=iso-8859-1"= with =charset=%CHARSET%"=
+			* Replace meta tag's =charset=iso-8859-1"= with =charset=%<nop>CHARSET%"=
 			* Add =%<nop>TOPIC%= to form action of GoBox
 			* For internationalized sites, URL encode webs and topics in all form actions, e.g. replace =.../view%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%"= with =.../view%<nop>SCRIPTSUFFIX%/%<nop>INTURLENCODE{"%<nop>WEB%/%<nop>TOPIC%"}%=
 	1. *Update script files*:
