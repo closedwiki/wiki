@@ -1,8 +1,7 @@
----## TWiki Upgrade Notes
+%META:TOPICINFO{author="PeterThoeny" date="998728738" format="1.0" version="1.12"}%
+---## TWiki Upgrade Notes for Version 01 May 2000
 
-(The following upgrade notes apply to the 01 Dec 2000 release. The upgrade notes of this Beta release is pending.)
-
-If you are coming from a version earlier than the 01 May 2000 production release, please see TWikiUpgradeTo01May2000 first.
+If you are coming from a version earlier than the 01 May 2000 production release, please see TWikiUpgradeTo01May2000 first. For the latest version read TWikiUpgradeNotes.
 
 The 01 Dec 2000 release has these changes that affect the upgrade of the 01 May 2000 version:
 
@@ -103,3 +102,4 @@ These are the steps you need to perform to upgrade the 01 May 2000 version to th
 		* Check http://TWiki.org/cgi-bin/view/Codev/KnownIssuesOfTWiki01Dec2000 for known issues of TWiki 01 Dec 2000 (production release) 
 
 -- Main.PeterThoeny - 08 Nov 2000 <br>
+%META:TOPICMOVED{by="PeterThoeny" date="998728738" from="TWiki.TWikiUpgradeTo01Dec2001" to="TWiki.TWikiUpgradeTo01Dec2000"}%
