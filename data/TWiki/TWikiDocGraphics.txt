@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042874460" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043200380" format="1.0" version="1.10"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -18,6 +18,7 @@ In this example, %TOPIC% - this topic - acts as the icon library. Graphics are u
 	* <img src="%ATTACHURLPATH%/arrowright.gif" alt="arrowright.gif"  width="16" height="16"  /> Moved to...
 	* <img src="%ATTACHURLPATH%/viewtopic.gif" alt="viewtopic.gif"  width="16" height="16"  /> View topic
 	* <img src="%ATTACHURLPATH%/edittopic.gif" alt="edittopic.gif"  width="16" height="16"  /> Edit topic
+	* <img src="%ATTACHURLPATH%/newtopic.gif" alt="newtopic.gif"  width="16" height="16"  /> New topic
 	* <img src="%ATTACHURLPATH%/searchtopic.gif" alt="searchtopic.gif"  width="16" height="16"  /> Search topic
 	* <img src="%ATTACHURLPATH%/printtopic.gif" alt="printtopic.gif"  width="16" height="16"  /> Print topic
 	* <img src="%ATTACHURLPATH%/attachfile.gif" alt="attachfile.gif"  width="16" height="16"  /> Attach file
@@ -36,6 +37,7 @@ In this example, %TOPIC% - this topic - acts as the icon library. Graphics are u
 %META:FILEATTACHMENT{name="arrowright.gif" attr="" comment="Red arrow to right" date="1018768726" path="C:\DATA\arrowright.gif" size="81" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="viewtopic.gif" attr="" comment="View topic" date="1036034850" path="C:\Data\Temp\viewtopic.gif" size="904" user="PeterThoeny" version="1.2"}%
 %META:FILEATTACHMENT{name="edittopic.gif" attr="" comment="Edit topic" date="1036034837" path="C:\Data\Temp\edittopic.gif" size="931" user="PeterThoeny" version="1.2"}%
+%META:FILEATTACHMENT{name="newtopic.gif" attr="" comment="New topic" date="1043200306" path="C:\Data\Temp\newtopic.gif" size="158" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="searchtopic.gif" attr="" comment="Search topic" date="1042874143" path="C:\Data\Temp\searchtopic.gif" size="192" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="printtopic.gif" attr="" comment="Print topic" date="1042874157" path="C:\Data\Temp\printtopic.gif" size="147" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="attachfile.gif" attr="" comment="Attach file" date="1042874171" path="C:\Data\Temp\attachfile.gif" size="193" user="PeterThoeny" version="1.1"}%
