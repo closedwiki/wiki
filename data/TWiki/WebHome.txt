@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999320021" format="1.0" version="1.28"}%
+%META:TOPICINFO{author="MikeMannix" date="999324144" format="1.0" version="1.29"}%
 <table><tr><td>
 Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about it, download it, and try it out for yourself.</td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
@@ -33,21 +33,20 @@ Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management t
 
 		* TWikiHistory: a TWiki development timeline
 		* TWikiDocumentation: complete operator's reference, comprising:
-			1 [[TWikiImplementationNotes][TWikiSoftwareEnvironment]]
+			1 [[TWikiImplementationNotes][TWikiOperatingEnvironment]]
 			1 TWikiInstallationGuide
 			1 TWikiUpgradeGuide
 			1 TWikiUserAuthentication
 			1 TWikiAccessControl
-			1 [[TWikiTemplates][TWikiTemplates OLD?]]
-			1 [[TWikiTemplatingSystem][TWikiTemplateSystem NEW?]]
+			1 [[TWikiTemplatingSystem][TWikiTemplateSystem]]
 			1 TWikiSkins
 			1 TWikiVariables
 			1 TWikiMetaData
 			1 TWikiFormTemplate
 			1 TWikiPlugins
 			1 [[TWikiNotificationOfChanges][MonitoringSiteChanges]]
-			1 [[RenameTopic][ModifyingTopics]]
-			1 [[TWikiAdministration][ModifyingWebs]]
+			1 [[RenameTopic][ManagingTopics]]
+			1 [[TWikiAdministration][ManagingWebs]]
 
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
 	* WebSearch: Full text search of the %WIKITOOLNAME%.%WEB% web.

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999320061" format="1.0" version="1.27"}%
+%META:TOPICINFO{author="MikeMannix" date="999324428" format="1.0" version="1.28"}%
 <script language="JavaScript1.2" type="text/javascript">
 function dblclick() { window.scrollTo(0,0) }
 if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
@@ -9,7 +9,7 @@ document.ondblclick=dblclick;
 
 This page contains all documentation topics as one long and complete reference sheet. Use the extended menu below to jump directly to sections. _Doubleclick anywhere on-screen to return to the top of the page._
 
-(You can also browse the TWiki reference as individual pages from the [[TWiki.WebHome][full topics menu]].)
+__(You can also browse the TWiki reference as individual pages from the [[TWiki.WebHome][full topics menu]].) CHECK__
 
 %TOC{depth="3"}%
 
@@ -31,9 +31,6 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 
 -----
 %INCLUDE{"TWikiAccessControl"}%
-
------
-%INCLUDE{"TWikiTemplates"}%
 
 -----
 %INCLUDE{"TWikiTemplatingSystem"}%
