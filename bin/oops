@@ -32,10 +32,12 @@ use TWiki;
 use TWiki::UI::Oops;
 
 my $query = new CGI;
-my $thePathInfo = $query->path_info(); 
-my $theRemoteUser = $query->remote_user();
-my $theTopic = $query->param( 'topic' );
-my $theUrl = $query->url;
+my $pathInfo = $query->path_info(); 
+my $user = $query->remote_user();
+my $topic = $query->param( 'topic' );
+my $url = $query->url;
+
+TWiki::initialize( $pathInfo, $user, $topic, $url, $query );
 
 TWiki::UI::Oops::oops_cgi( $TWiki::T );
 
