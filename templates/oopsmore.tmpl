@@ -1,21 +1,29 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:DEF{"titleaction"}%(more)%TMPL:END%
 %TMPL:DEF{"webaction"}% *Topic actions* %TMPL:END%
-%TMPL:DEF{"heading"}%More Actions on Topic %TOPIC%%TMPL:END%
+%TMPL:DEF{"heading"}%More Actions on Topic [[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"message"}%
 
-   * *Rename, move or delete <nop>%TOPIC%:*
-      * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?currentwebonly=on">Rename/move topic</a>,
-        looking for references in __%WEB% web__ only.
-      * *<a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move topic</a>*,
-        looking for references in __all public webs__. *(recommended)*
+   * *Move to Trash:*
+      * *<a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?newweb=Trash&amp;nonwikiword=on">Delete topic...</a>*
+        *(recommended)* looks for references in _all public webs_
+      * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?newweb=Trash&amp;nonwikiword=on&amp;currentwebonly=on">Delete topic...</a>
+        looks for references in _%WEB% web_ only
 
-   * *Ref-By:*
-      * <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Find topics</a>
-        in __%WEB% web__ that link to <nop>%TOPIC%.
+   * *Rename or move topic:*
+      * *<a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move topic...</a>*
+        *(recommended)* looks for references in _all public webs_
+      * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?currentwebonly=on">Rename/move topic...</a>
+        looks for references in _%WEB% web_ only
+
+   * *Back-links:*
       * <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;web=all;&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Find topics</a>
-        in __all public webs__ that link to <nop>%TOPIC%.
-      * Child topics in __%WEB% Web__: %METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" title=""}%
+        in __all public webs__ that link to <nop>%TOPIC%
+      * <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Find topics</a>
+        in __%WEB% web__ that link to <nop>%TOPIC%
+
+   * *Child topics in <nop>%WEB% web:*
+      * %METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" title=""}%
 
 <form name="main" action="%EDITURL%">
    * *Set new topic parent:*

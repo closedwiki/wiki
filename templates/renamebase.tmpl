@@ -15,13 +15,14 @@
     }
     return false;
  }
-
  function checkAll( theCheck )
  {
    // find button element index
    var j = 0;
    for( var i = 0; i < document.rename.length; i++ ) {
-     document.rename.elements[i].checked = theCheck;
+     if( document.rename.elements[i].name.match( "RENAME" ) ) {
+       document.rename.elements[i].checked = theCheck;
+     }
    }
  }
  //STOP HIDING-->
@@ -46,7 +47,8 @@
 
 %RESEARCH{ "%WEB%\.%TOPIC%" web="all" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
 
-<input type="button" value="Clear all checkboxes" onClick="checkAll(false);" />
+<input type="button" value="Set" onClick="checkAll(true);" />
+<input type="button" value="Clear" onClick="checkAll(false);" /> checkboxes of all referenced topics
 
 __Note:__
    * Get help on
