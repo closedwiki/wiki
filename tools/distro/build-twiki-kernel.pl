@@ -29,7 +29,7 @@ my $Config = {
     outfile => undef,
     agent => "TWikiKernel Builder/v0.7",
 # documentation switches
-    pdoc => 0,
+    pdoc => eval { require Pdoc::Parsers::Files::PerlModule } && $@ eq '',
 # 
     verbose => 0,
     debug => 0,
@@ -234,7 +234,7 @@ Copyright 2004 Will Norris and Sven Dowideit.  All Rights Reserved.
    -outputdir [.]	where the generated TWikiKernel-BRANCH-DATE.tar.gz is placed
    -outfile		.
    -agent [$Config->{agent}]	LWP::UserAgent name (used for downloading some documentation from wiki pages on twiki.org)
-   -pdoc		run source code through pdoc to produce html in twiki/doc/
+   -pdoc		run source code through Pdoc to produce html in twiki/doc/ (autodetects if Pdoc installed)
    -verbose
    -debug
    -help			this documentation
