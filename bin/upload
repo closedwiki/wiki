@@ -378,7 +378,7 @@ sub main
 
 	# get user name
 	$fileUser = $userName;
-	
+
 	# get time stamp and file size of uploaded file:
 	my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp9,
 	    $mtime,$tmp11,$tmp12,$tmp13 ) = "";
