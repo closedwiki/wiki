@@ -101,12 +101,61 @@ sub htpasswdAddUser
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
     my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
+    # escape + sign; SHA-passwords can have + signs
+    $oldUserEntry =~ s/\+/\\\+/g;
     $text =~ s/$oldUserEntry/$newUserEntry/;
     &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
 }
 
+# =========================
+sub htpasswdCheckPasswd
+{
+    my ( $old, $oldcrypt ) = @_;
+    my $pwd ;
 
+    # check for Windows
+    if ( $TWiki::OS eq "WINDOWS" ) {
+        $pwd = '{SHA}' . MIME::Base64::encode_base64( Digest::SHA1::sha1( $old ) );
+        # strip whitespace at end of line
+        $pwd =~ /(.*)$/ ;
+        $pwd = $1;
 
+    } else {
+        my $salt = substr( $oldcrypt, 0, 2 );
+        $pwd = crypt( $old, $salt );
+    }
+
+    # OK
+    if( $pwd eq $oldcrypt ) {
+        return "1";
+    }
+    # NO
+    return "";
+}
+ 
+ 
+# =========================
+sub htpasswdGeneratePasswd
+{
+    my ( $user, $passwd ) = @_;
+    # by David Levy, Internet Channel, 1997
+    # found at http://world.inch.com/Scripts/htpasswd.pl.html
+
+    # check for Windows and use SHA1 digest instead of crypt()
+    if( $TWiki::OS eq "WINDOWS" ) {
+        my $pwd = $user . ':{SHA}' . MIME::Base64::encode_base64( Digest::SHA1::sha1( $passwd ) ); 
+        $pwd =~ /(.*)$/;
+        $pwd = $1;
+        return $pwd
+    }
+    srand( $$|time );
+    my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
+    my $salt = $saltchars[ int( rand( $#saltchars+1 ) ) ];
+    $salt .= $saltchars[ int( rand( $#saltchars+1 ) ) ];
+    my $passwdcrypt = crypt( $passwd, $salt );
+    return "$user\:$passwdcrypt";
+}
+ 
 # =========================
 
 1;
