@@ -132,6 +132,10 @@ sub searchWeb
     my $tempVal = "";
     my $tmpl = "";
     my $topicCount = 0; # JohnTalintyre
+    my $originalSearch = $theSearchVal;
+    my $renameTopic;
+    my $renameWeb = "";
+    my $spacedTopic;
     if( $template ) {
         $tmpl = &TWiki::Store::readTemplate( "$template" );
         # FIXME replace following with this @@@
@@ -139,6 +143,16 @@ sub searchWeb
         $tmpl = &TWiki::Store::readTemplate( "searchbookview" );
     } elsif ($doRenameView ) {
         $tmpl = &TWiki::Store::readTemplate( "searchrenameview" ); # JohnTalintyre
+        # Create full search string from topic name that is passed in
+        my $renameTopic = $theSearchVal;
+        if( $renameTopic =~ /(.*)\\\.(.*)/o ) {
+            $renameWeb = $1;
+            $renameTopic = $2;
+        }
+        $spacedTopic = spacedTopic( $renameTopic );
+        $spacedTopic = $renameWeb . '\.' . $spacedTopic if( $renameWeb );
+        $theSearchVal = "(^|[^A-Za-z0-9_])$theSearchVal" . '([^A-Za-z0-9_]|$)|' .
+                        '(\[\[' . $spacedTopic . '\]\])';
     } else {
         $tmpl = &TWiki::Store::readTemplate( "search" );
     }
@@ -488,8 +502,11 @@ sub searchWeb
                    m|</noautolink>|i  && ( $noAutoLink = 0 );
 
                    if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
-                       # This can incorrectly show matches becuase of case insenstive option, required to get [[spaced Word]] to match
-                       my $subs = s|$theSearchVal|$1<font color="red">$2</font>&nbsp;|ig;
+                       # Case insenstive option is required to get [[spaced Word]] to match
+                       my $match =  "(^|[^A-Za-z0-9_.])($originalSearch)(?=[^A-Za-z0-9_]|\$)";
+                       my $subs = s|$match|$1<font color="red">$2</font>&nbsp;|g;
+                       $match = '(\[\[)' . "($spacedTopic)" . '(?=\]\])';
+                       $subs += s|$match|$1<font color="red">$2</font>&nbsp;|gi;
                        if( $subs ) {
                            $topicCount++ if( ! $reducedOutput );
                            $reducedOutput .= "$_<br />\n" if( $subs );
@@ -563,6 +580,15 @@ sub searchWeb
         print $tmplTail;
     }
     return $searchResult;
+}
+
+#=========================
+sub spacedTopic
+{
+    my( $topic ) = @_;
+    # FindMe -> Find\s*Me
+    $topic =~ s/([a-z])([A-Z])/$1 *$2/go;
+    return $topic;
 }
 
 # =========================
