@@ -3,11 +3,11 @@
 %TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
 %TMPL:DEF{"heading"}%Rename/move topic error%TMPL:END%
 %TMPL:DEF{"message"}%
-During rename of attachment %PARAM1% in %WEB%.%TOPIC% an error was found. Please notify your %WIKITOOLNAME%
+During rename of topic <nop>%WEB%.<nop>%TOPIC% to <nop>%PARAM2%.<nop>%PARAM3% an error (%PARAM1%) was found. Please notify your %WIKITOOLNAME%
 administrator.
 
 %PARAM2%
 
 %TMPL:END%
-%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][OK]] %TMPL:END%
+%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Old Topic]] %TMPL:P{"sep"}% [[%PARAM2%.%PARAM3%][New Topic]] %TMPL:END%
 %TMPL:P{"oops"}%
