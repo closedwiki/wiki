@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092471700" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="ArthurClemens" date="1092607954" format="1.0" version="1.2"}%
 %TOC%
 %STARTINCLUDE%
 ---# Appendix B: TWiki CSS
