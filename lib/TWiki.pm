@@ -595,7 +595,7 @@ sub setupRegexes {
     $regex{webNameRegex} = qr/[$regex{upperAlpha}]+[$regex{mixedAlphaNum}]*/;
     $regex{defaultWebNameRegex} = qr/_[$regex{mixedAlphaNum}_]+/;
     $regex{anchorRegex} = qr/\#[$regex{mixedAlphaNum}_]+/;
-    $regex{abbrevRegex} = qr/[$regex{upperAlpha}]{3,}/;
+    $regex{abbrevRegex} = qr/[$regex{upperAlpha}]{3,}s?\b/;
 
     # Simplistic email regex, e.g. for WebNotify processing - no i18n
     # characters allowed
