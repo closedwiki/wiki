@@ -16,10 +16,17 @@
 #
 use strict;
 use integer;
+
+use CGI;
+
 use TWiki::Func;
 
 use Text::Soundex;
 use Time::ParseDate;
+
+use TWiki::Plugins::ActionTrackerPlugin::Attrs;
+use TWiki::Plugins::ActionTrackerPlugin::AttrDef;
+use TWiki::Plugins::ActionTrackerPlugin::Format;
 
 # Object that represents a single action
 
@@ -36,75 +43,182 @@ use Time::ParseDate;
 # created       When the action was created
 # closer        Who closed the action
 # closed        When the action was closed
-
-{ package Action;
-
-  use vars qw ( $latecol $badcol $hdrcol $border );
-
-  # Colour for warning of late actions
-  $latecol = "yellow";
-  # Colour for an unparseable date
-  $badcol = "red";
-  # Colour for table header rows
-  $hdrcol = "orange";
-  # Border width for tables
-  $border = "1";
+{ package ActionTrackerPlugin::Action;
 
   my $now = time();
   my $mainweb = TWiki::Func::getMainWebname();
 
   # Options for parsedate
-  my %pdopt = ( NO_RELATIVE => 1, DATE_REQUIRED => 1, whoLE => 1 );
+  my %pdopt = ( NO_RELATIVE => 1, DATE_REQUIRED => 1, WHOLE => 1 );
 
-  # TODO: get this map from somewhere else
-  my %attrTypes = (
-		   'who'=>'names',
-		   'due'=>'date',
-		   'creator'=>'names',
-		   'created'=>'date',
-		   'closed'=>'date',
-		   'closer'=>'names',
-		   'notify'=>'names',
-		   'topic'=>'ignore',
-		   'web'=>'ignore',
-		   'ACTION_NUMBER'=>'ignore',
-		  );
-
+  # Types of standard attributes. The 'noload' type tells us
+  # not to load the hash from %ACTION attributes, and the 'nomatch' type
+  # tells us not to consider it during match operations.
+  # Types are defined as a base type and a comma-separated list of
+  # format attributes. Two meta-type components 'noload' and 'nomatch'
+  # are defined. If an attribute is defined 'noload' no attempt will
+  # be made to load a value for it when the action is created. If it
+  # is defined 'nomatch' then the attribute will be ignored in match
+  # expressions.
+  my %types =
+    (
+     changedsince =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     closed       =>
+     new ActionTrackerPlugin::AttrDef( 'date',  13, 1, 0, undef ),
+     closer       =>
+     new ActionTrackerPlugin::AttrDef( 'names', 25, 1, 0, undef ),
+     created      =>
+     new ActionTrackerPlugin::AttrDef( 'date',  13, 1, 0, undef ),
+     creator      =>
+     new ActionTrackerPlugin::AttrDef( 'names', 25, 1, 0, undef ),
+     dollar       =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     due          =>
+     new ActionTrackerPlugin::AttrDef( 'date',  13, 1, 0, undef ),
+     edit         =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     format       =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     header       =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     late         =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     n            =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     nop          =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     notify       =>
+     new ActionTrackerPlugin::AttrDef( 'names', 25, 1, 0, undef ),
+     percnt       =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     quot         =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     sort         =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     state        =>
+     new ActionTrackerPlugin::AttrDef( 'select', 1, 1, 1,
+				       [ "open","closed" ] ),
+     text         =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 1, 0, undef ),
+     topic        =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 1, 0, undef ),
+     uid          =>
+     new ActionTrackerPlugin::AttrDef( 'text',  10, 1, 0, undef ),
+     web          =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 1, 0, undef ),
+     who          =>
+     new ActionTrackerPlugin::AttrDef( 'names', 25, 1, 0, undef ),
+     within       =>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 1, 0, undef ),
+     ACTION_NUMBER=>
+     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+    );
+  
   # PUBLIC Constructor
   sub new {
     my ( $class, $web, $topic, $number, $attrs, $descr ) = @_;
     my $this = {};
-
+    
     my $attr = new ActionTrackerPlugin::Attrs( $attrs );
 
-    $this->{state} = (( $attr->get( "closed" )) ? "closed" : "open" );
+    # We always have a state, and if it's not defined in the
+    # attribute set, and the closed attribute isn't defined,
+    # then it takes the value of the first option in the
+    # enum for the state attribute. If the closed attribute is
+    # defined it takes the last enum.
+    $this->{state} = $attr->get( "state" );
+    if ( !defined( $this->{state} )) {
+      if ( $attr->get( "closed" )) {
+	$this->{state} = "closed";
+      } else {
+	$this->{state} = $types{state}->firstSelect();
+      }
+    }
 
+    # conditionally load field values, interpreting them
+    # according to their type.
     foreach my $key ( keys %$attr ) {
-      my $type = $attrTypes{$key};
+      my $type = getBaseType( $key ) || "ignore";
       my $val = $attr->get( $key );
-      if ( defined( $type ) && $type eq 'names' && defined( $val )) {
+      if ( $type eq "names" && defined( $val )) {
 	my @names = split( /[,\s]+/, $val );
 	foreach my $n ( @names ) {
 	  $n = _canonicalName( $n );
 	}
 	$this->{$key} = join( ',', @names );
-      } elsif ( defined( $type ) && $type eq 'date' && defined( $val )) {
-	$this->{$key} =
-	  Time::ParseDate::parsedate( $val, %pdopt );
-      } elsif ( !(defined( $type ) && $type eq 'ignore' )) {
-	# treat as plain string
+      } elsif ( $type eq "date" ) {
+	if ( defined( $val )) {
+	  $this->{$key} = Time::ParseDate::parsedate( $val, %pdopt );
+	}
+      } elsif ( $type ne "ignore" ) {
+	# treat as plain string; text, select
 	$this->{$key} = $attr->get( $key );
       }
     }
 
+    # do these last so they override and attribute values
     $this->{web} = $web;
     $this->{topic} = $topic;
     $this->{ACTION_NUMBER} = $number;
     $descr =~ s/^\s+//o;
     $descr =~ s/\s+$//o;
+    $descr =~ s/\n\n/<p \/>/gos;
+    $descr =~ s/\n/<br \/>/gos;
     $this->{text} = $descr;
 
     return bless( $this, $class );
+  }
+
+  # PUBLIC STATIC extend the range of types accepted by actions.
+  # Return undef if everything went OK, or error message if not.
+  # The range of types is extended statically; once extended, there's
+  # no way to unextend them.
+  # Format of a type def is described in ActionTrackerPlugin.txt
+  sub extendTypes {
+    my $defs = shift;
+    $defs =~ s/^\s*\|//o;
+    $defs =~ s/\|\s*$//o;
+    foreach my $def ( split( /\|/, $defs )) {
+      if ( $def =~ m/^\s*(\w+)\s*,\s*(\w+)\s*(,\s*(\d+)\s*)?(,\s*(.*))?$/o ) {
+	my $name = $1;
+	my $type = $2;
+	my $size = $4;
+	my $params = $6;
+	my @values;
+	my $exists = $types{$name};
+
+	if ( defined( $exists ) && !$exists->isRedefinable() ) {
+	  return "Attempt to redefine attribute '$name' in EXTRAS";
+	} elsif ( $type eq "select" ) {
+	  @values = split( /\s*,\s*/, $params );
+	  foreach my $option ( @values ) {
+	    $option =~ s/^\s*\"(.*)\"\s*$/$1/o;
+	  }
+	}
+	$types{$name} =
+	  new ActionTrackerPlugin::AttrDef( $type, $size, 1, 1, @values );
+      } else {
+	return "Bad EXTRAS definition '$def' in EXTRAS";
+      }
+    }
+    return undef;
+  }
+
+  # PUBLIC get the base type of an attribute name i.e.
+  # with the formatting attributes stripped off.
+  sub getBaseType {
+    my $vbl = shift;
+    my $type = $types{$vbl};
+    return $type->{type} if ( defined( $type ) );
+    return undef;
+  }
+
+  # PUBLIC provided as part of the contract with Format.
+  sub getType {
+    my ( $this, $name ) = @_;
+
+    return $types{$name};
   }
 
   # PUBLIC when a topic containing an action is about to be saved,
@@ -141,34 +255,40 @@ use Time::ParseDate;
     my $attrs = "";
     my $descr = "";
     foreach my $key ( keys %$this ) {
-      my $type = $attrTypes{$key};
+      my $type = $types{$key};
       if ( $key eq 'text') {
 	$descr = $this->{text};
-	$descr =~ s/^\s*(.*)\s*$/$1/o;
-      } elsif ( defined( $type ) && $type eq 'date' ) {
-	$attrs .= " $key=\"" .
-	  formatTime( $this->{$key}, "attr" ) . "\"";
-      } elsif ( !(  defined( $type ) && $type eq 'ignore' ) ) {
-	# treat as plain text
-	$attrs .= " $key=\"" . $this->{$key} . "\"";
+	$descr =~ s/^\s*(.*)\s*$/$1/os;
+      } elsif ( defined( $type )) {
+	if ( $type->{type} eq 'date' ) {
+	  $attrs .= " $key=\"" .
+	    formatTime( $this->{$key}, "attr" ) . "\"";
+	} elsif ( $type->{type} ne 'ignore' ) {
+	  # select or text; treat as plain text
+	  $attrs .= " $key=\"" . $this->{$key} . "\"";
+	}
       }
     }
     return "%ACTION{$attrs }% $descr";
   }
 
   # PRIVATE STATIC make a canonical name (including the web) for a user
+  # unless it's an email address.
   sub _canonicalName {
     my $who = shift;
 
     return undef if !defined( $who );
-    $who = TWiki::Func::getWikiName() if ( $who eq "me" );
-    $who = "$mainweb.$who" unless $who =~ /\./o;
+    if ( $who !~ /([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/ ) {
+      $who = TWiki::Func::getWikiName() if ( $who eq "me" );
+      $who = "$mainweb.$who" unless $who =~ /\./o;
+    }
     return $who;
   }
 
   # PUBLIC For testing only, force current time to a known value
   sub forceTime {
-    $now = shift;
+    my $tim = shift;
+    $now = Time::ParseDate::parsedate( $tim );
   }
 
   # PRIVATE get the anchor of this action
@@ -194,7 +314,8 @@ use Time::ParseDate;
 	$stime =~ s/(\w+)\s+(\w+)\s+(\w+)\s+([^\s]+)\s+(\w+).*/$3-$2-$5/o;
       } elsif ( $format eq "uid" ) {
 	my @els = localtime( $time );
-	$stime = "$els[5]$els[6]$els[2]$els[1]$els[0]";
+	# year yearday hour min sec
+	$stime = "$els[5]$els[7]$els[2]$els[1]$els[0]";
       } else {
         $stime = localtime( $time );
 	$stime =~ s/(\w+)\s+(\w+)\s+(\w+)\s+([^\s]+)\s+(\w+).*/$1, $3 $2 $5/o;
@@ -211,89 +332,108 @@ use Time::ParseDate;
     return formatTime( $this->{due}, "string" );
   }
 
+  # PUBLIC return number of seconds to go before due date, negative if action
+  # is late
+  sub secsToGo {
+    my $this = shift;
+    $now = time() unless ( defined( $now ) );
+    if ( defined( $this->{due} )) {
+      return $this->{due} - $now;
+    }
+    return -1;
+  }
+
   # PUBLIC return number of days to go before due date, negative if action
   # is late, 0 if it's due today
   sub daysToGo {
     my $this = shift;
-    # 60 * 60 * 24 seconds in a days
-    $now = time() unless ( defined( $now ) );
-    if ( defined( $this->{due} )) {
-	return ( $this->{due} - $now ) / (60 * 60 * 24);
+    my $delta = $this->secsToGo();
+    # if less that 24h late, make it a day late
+    if ( $delta < 0 && $delta > -(60 * 60 * 24 )) {
+      return -1;
+    } else {
+      return $delta / (60 * 60 * 24);
     }
-    return -1;
   }
 
   # PUBLIC true if due time is before now and not closed
   sub isLate {
     my $this = shift;
-    return ( ($this->{due} - $now) <= 0 && $this->{state} ne "closed" );
+    return 0 if ( $this->{state} eq "closed" );
+    return ( ($this->{due} - $now) <= 0 );
   }
 
-  # PRIVATE match the passed value against the corresponding field
-  sub _match_who {
+  # PRIVATE match the passed names against the given names type field.
+  # The match passes if any of the names passed matches any of the
+  # names in the field.
+  sub _matchType_names {
+    my ( $this, $vbl, $val ) = @_;
+    return 0 unless defined( $this->{$vbl} );
+    foreach my $name ( split( /\s*,\s*/, $val )) {
+      my $who = _canonicalName( $name );
+      $who =~ s/\./\\./go;
+      return 1 if ( $this->{$vbl} =~ /$who/ );
+    }
+    return 0;
+  }
+
+  sub _matchType_date {
+    my ( $this, $vbl, $val ) = @_;
+    my $tim = Time::ParseDate::parsedate( $val, %pdopt );
+    return ( defined( $this->{$vbl} ) && $this->{$vbl} == $tim );
+  }
+
+  # PRIVATE match if there are at least $val days to go before
+  # action falls due
+  sub _matchField_within {
     my ( $this, $val ) = @_;
-    my $who = _canonicalName( $val );
-    return ( defined( $this->{who} ) && $this->{who} =~ /$who/ );
+    return ( $this->secsToGo() <= $val * 60 * 60 * 24 );
   }
 
   # PRIVATE match the passed value against the corresponding field
-  sub _match_within {
-    my ( $this, $val ) = @_;
-    return ( $this->daysToGo() <= $val );
-  }
-
-  # PRIVATE match the passed value against the corresponding field
-  sub _match_notify {
-    my ( $this, $val ) = @_;
-    my $notify = _canonicalName( $val );
-    return ( defined($this->{notify}) &&  $this->{notify} =~ /$notify/ );
-  }
-
-  # PRIVATE match the passed value against the corresponding field
-  sub _match_closed {
+  sub _matchField_closed {
     my $this = shift;
     return ( $this->{state} eq "closed" );
   }
 
   # PRIVATE match the passed value against the corresponding field
-  sub _match_open {
+  sub _matchField_open {
     my $this = shift;
-    return ( $this->{state} eq "open" );
+    return ( $this->{state} ne "closed" );
   }
 
   # PRIVATE match the passed value against the corresponding field
-  sub _match_late {
+  sub _matchField_late {
     my $this = shift;
-      TWiki::Func::writeDebug("Match LATE ".( $this->daysToGo() < 0 && $this->{state} ne "closed" )?"MATCH":"UNMATCH");
-    return ( $this->daysToGo() < 0 && $this->{state} ne "closed" ) ? 1 : 0;
-  }
-
-  # PRIVATE this is required even though it doesn't actually do
-  # anything. This is because the existance of the attribute in the
-  # test expression would cause matches() to fail, because the action
-  # doesn't have the field.
-  sub _match_changedsince {
-    return 1;
+    return ( $this->secsToGo() < 0 && $this->{state} ne "closed" ) ? 1 : 0;
   }
 
   # PUBLIC true if the action matches the search attributes
   # The match is made either by calling a match function for the attribute
   # or by comparing the value of the field with the value of the
   # corresponding attribute, which is considered to be an RE.
+  # To match, an action must match all conditions.
   sub matches {
     my ( $this, $a ) = @_;
-    TWiki::Func::writeDebug($this->toString());
-    foreach my $key ( keys %$a ) {
-      my $expr = $a->get( $key );
-
-      TWiki::Func::writeDebug("Match $key");
-      if ( defined( &{ref( $this ) . "::_match_$key"} ) ) {
+    foreach my $attrName ( keys %$a ) {
+      my $attrVal = $a->get( $attrName );
+      my $attrType = getBaseType( $attrName );
+      my $class = ref( $this );
+      if ( defined( &{$class."::_matchField_$attrName"} ) ) {
 	# function match
-	my $fn = "_match_$key";
-	return 0 unless ( $this->$fn( $expr ));
-      } elsif ( defined( $expr ) && defined( $this->{$key} ) ) {
+	my $fn = "_matchField_$attrName";
+	return 0 unless ( $this->$fn( $attrVal ));
+      } elsif ( defined( $attrType ) &&
+		defined( &{$class."::_matchType_$attrType"} ) ) {
+	my $fn = "_matchType_$attrType";
+	return 0 unless ( $this->$fn( $attrName, $attrVal ));
+      } elsif ( defined( $attrType ) &&
+		$attrType =~ m/nomatch/o ) {
+	# do nothing
+      } elsif ( defined( $attrVal ) &&
+		defined( $this->{$attrName} ) ) {
 	# re match
-	return 0 unless ( $this->{$key} =~ m/$expr/ );
+	return 0 unless ( $this->{$attrName} =~ m/$attrVal/ );
       } else {
 	return 0;
       }
@@ -301,53 +441,24 @@ use Time::ParseDate;
     return 1;
   }
 
-  # PUBLIC action formatted as HTML table row
-  # Pass $type="name" to to get a jump to a position
-  # within the topic, "href" to get a jump. Defaults to "name".
-  # Pass $newWindow=1 to get separate browser window,
-  # $newWindow=0 to get jump in same window.
-  sub formatAsHTML {
-    my ( $this, $type, $format, $newWindow ) = @_;
-
-    my $row = $format->fillInHTML( $this, $type, $newWindow );
-
-    if ( $type eq "name" ) {
-      $row = "<a name=\"" . $this->getAnchor() . "\"></a>$row";
-    }
-
-    return $row;
-  }
-
-  # PUBLIC action formatted as a simple string
-  sub formatAsString {
-    my ( $this, $format ) = @_;
-
-    return $format->fillInString( $this );
-  }
-
-  # PRIVATE format the given field
-  sub _format_closed {
+  # PRIVATE format the given time type
+  sub _formatType_date {
     my $this = shift;
-    return ( formatTime( $this->{closed}, "string" ), 0 );
+    my $fld = shift;
+    return ( formatTime( $this->{$fld}, "string" ), 0 );
   }
 
-  # PRIVATE format the given field
-  sub _format_created {
-    my $this = shift;
-
-    return ( formatTime( $this->{created}, "string" ), 0 );
-  }
-
-  # PRIVATE format the given field
-  sub _format_due {
+  # PRIVATE format the given field (takes precedence of standard
+  # date formatting)
+  sub _formatField_due {
     my $this = shift;
     my $bgcol = 0;
     my $text = formatTime( $this->{due}, "string" );
 
     if ( !defined($this->{due}) ) {
-      $bgcol = $badcol;
+      $bgcol = $ActionTrackerPlugin::Format::badcol;
     } elsif ( $this->isLate() ) {
-      $bgcol = $latecol;
+      $bgcol = $ActionTrackerPlugin::Format::latecol;
       $text .= " (LATE)";
     }
 
@@ -355,7 +466,7 @@ use Time::ParseDate;
   }
 
   # PRIVATE format text field
-  sub _format_text {
+  sub _formatField_text {
     my ( $this, $asHTML, $type ) = @_;
     my $text = $this->{text};
 
@@ -369,27 +480,13 @@ use Time::ParseDate;
       $fline =~ s/\b([A-Z]+[a-z]+[A-Z]+\w*)\b/<nop>$1/go;
 
       $text = "[[" . $this->{web} . "." . $this->{topic} .
-	"#" . $this->getAnchor() . "][$fline]]$rest";
+	"#" . $this->getAnchor() . "][ $fline ]]$rest";
     }
     return ( $text, 0 );
   }
 
-  # PRIVATE format state field
-  sub _format_state {
-    my ( $this ) = @_;
-    my $text = $this->{state};
-
-#    if ( $this->{state} eq "closed" && $this->{closed} ) {
-#      $text .= " on " . formatTime( $this->{closed}, "string" );
-#      if ( $this->{closer} ) {
-#	$text .= " by " . $this->{closer};
-#      }
-#    }
-    return ( $text, 0 );
-  }
-
   # PRIVATE format edit field
-  sub _format_edit {
+  sub _formatField_edit {
     my ( $this, $asHTML, $type, $newWindow ) = @_;
 
     return "" unless ( $asHTML );
@@ -405,8 +502,8 @@ use Time::ParseDate;
     return ( "${text}>edit</a>", 0 );
   }
 
-  # PRIVATE format the given field
-  sub _format_uid {
+  # PRIVATE format the UID field
+  sub _formatField_uid {
     my ( $this, $asHTML ) = @_;
     my $uid = $this->{uid};
     return "<nop>$uid" if ( $asHTML );
@@ -440,7 +537,7 @@ use Time::ParseDate;
     }
     $sum += 3 if ( $this->{ACTION_NUMBER} == $old->{ACTION_NUMBER} );
     $sum += 2 if ( defined( $this->{notify} ) && defined( $old->{notify} ) &&
-		   $this->{notify} == $old->{notify} );
+		   $this->{notify} eq $old->{notify} );
     $sum += 2 if ( defined( $this->{who} ) &&
 		   $this->{who} eq $old->{who} );
     $sum += 1 if ( $this->{due} == $old->{due} );
@@ -484,12 +581,13 @@ use Time::ParseDate;
 
     return 0 if ( !$this->{notify} );
 
-    my $changes = $format->getStringChanges( $old, $this );
+    my $changes = $format->formatChangesAsString( $old, $this );
     return 0 if ( $changes eq "" );
 
-    my $plain_text = $this->formatAsString( $format ) . "\n$changes\n";
-    my $html_text = "<table>" . $this->formatAsHTML( "href", $format, 0 ) .
-      "</table>\n" . $format->getHTMLChanges( $old, $this );
+    my $plain_text = $format->formatStringTable( [ $this ] );
+    $plain_text .= "\n$changes\n";
+    my $html_text = $format->formatHTMLTable( [ $this ], "href", 0 );
+    $html_text .= $format->formatChangesAsHTML( $old, $this );
 
     # Add text to people interested in notification
     # in the hash
@@ -519,8 +617,9 @@ use Time::ParseDate;
 
     foreach my $line ( split( /[\r\n]+/, $text ) ) {
       if ( $line =~ /(.*)%ACTION{(.*?)}%\s*([^\n\r]*)/so ) {
-	my $anAction = Action->new( $web, $topic, $an, $2, $3 );
-	if ( $anAction->{uid} eq $uid || $an == $sn ) {
+	my $anAction = new ActionTrackerPlugin::Action( $web, $topic, $an, $2, $3 );
+	my $auid = $anAction->{uid};
+	if ( ( defined( $auid ) && $auid eq $uid ) || $an == $sn ) {
 	  $pretext .= $1;
 	  $found = 1;
 	  $action = $anAction;
@@ -540,6 +639,28 @@ use Time::ParseDate;
       TWiki::Func::writeDebug("Action not found $uid");
     }
     return ( $action, $pretext, $posttext );
+  }
+
+  # PUBLIC STATIC create a new action filling in attributes
+  # from a CGI query as used in the action edit.
+  sub createFromQuery {
+    my ( $web, $topic, $an, $query ) = @_;
+    my $desc = $query->param( "text" ) || "No description";
+    $desc =~ s/\r?\n\r?\n/ <p \/>/sgo;
+    $desc =~ s/\r?\n/ <br \/>/sgo;
+
+    # for each of the legal attribute types, see if the query
+    # contains a value for that attribute. If it does, fill it
+    # in. Must ignore text.
+    my $attrs = "";
+    foreach my $attrname ( keys %types ) {
+      my $type = $types{$attrname};
+      if ( $attrname ne 'text' && $type->{type} ne 'ignore' ) {
+	my $val = $query->param( $attrname );
+	$attrs .= " $attrname=\"$val\"" if ( defined( $val ));
+      }
+    }
+    return new ActionTrackerPlugin::Action( $web, $topic, $an, $attrs, $desc );
   }
 }
 

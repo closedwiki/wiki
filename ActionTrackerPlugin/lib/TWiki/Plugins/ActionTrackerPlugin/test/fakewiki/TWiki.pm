@@ -40,15 +40,17 @@ use vars qw(
         $cmdQuote $lsCmd $egrepCmd $fgrepCmd
     );
 
-  die "TWIKI_HOME not set" unless $ENV{'TWIKI_HOME'};
-  do $ENV{'TWIKI_HOME'}."/lib/TWiki.cfg";
-  TWiki::TestMaker::init();
-  $dataDir = TWiki::TestMaker::getDataDir();
-  $pubDir =  TWiki::TestMaker::getPubDir();
-  $notifyTopicname = "WebNotify";
-  $egrepCmd = "/bin/egrep";
-  $cmdQuote = "'";
-$securityFilter     = "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\x00-\x1F]";
+  sub testinit {
+    die "TWIKI_HOME not set" unless $ENV{'TWIKI_HOME'};
+    do $ENV{'TWIKI_HOME'}."/lib/TWiki.cfg";
+    $dataDir = TWiki::TestMaker::getDataDir();
+    $pubDir =  TWiki::TestMaker::getPubDir();
+    $notifyTopicname = "WebNotify";
+    $egrepCmd = "/bin/egrep";
+    $cmdQuote = "'";
+    $securityFilter     = "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\x00-\x1F]";
+  }
+
   sub initialize {
     my ( $path, $remuser, $topic, $url, $query ) = @_;
 
@@ -64,14 +66,6 @@ $securityFilter     = "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\x00-\x1F]";
             # is "bin/script/Webname?topic=SomeTopic"
             $topicName = $theTopic;
         }
-    }
-    if( $thePathInfo =~ /\/(.*)\/(.*)/ ) {
-        # is "bin/script/Webname/SomeTopic" or "bin/script/Webname/"
-        $webName   = $1 || "" if( ! $webName );
-        $topicName = $2 || "" if( ! $topicName );
-    } elsif( $thePathInfo =~ /\/(.*)/ ) {
-        # is "bin/script/Webname" or "bin/script/"
-        $webName   = $1 || "" if( ! $webName );
     }
     ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
     # filter out dangerous or unwanted characters:

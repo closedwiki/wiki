@@ -18,17 +18,41 @@ use strict;
 use integer;
 
 # Object that represents a header and fields format
+# This is where all formatting should be done; there should
+# be no HTML tags anywhere else in the code!
+# Formats objects that implement the following contract:
+# 1. They provide a "getType" method, that returns a type
+#    structure as per Action.pm
+# 2. For each of the types they provide a _format_$type
+#    method that returns the string representation of the type.
+# 3. For each of their fields that require special formatting
+#    they provide a _format_$field method that returns a string
+#    representation of the field. Field methods override type
+#    methods. The function must return a tuple of ( text, colour ).
+#    The colour may be undefined.
+{ package ActionTrackerPlugin::Format;
 
-{ package Format;
+  use vars qw ( $latecol $badcol $hdrcol $border );
+
+  # Colour for warning of late actions
+  $latecol = "yellow";
+  # Colour for an unparseable date
+  $badcol = "red";
+  # Colour for table header rows
+  $hdrcol = "orange";
+  # Border width for tables
+  $border = "1";
 
   # PUBLIC Constructor
   # $header is the format of the HTML table header representation
-  # $fields is the format of the HTML table body respresentation
+  # $fields is the format of the HTML table body representation
   # $textform is the format of the text representation
   # $changeFields is the comma-separated list of fields to detect changes
   # in.
+  # $orient is the orientation of generated tables; "rows" gives
+  # data in rows, anything else gives data in columns.
   sub new {
-    my ( $class, $header, $fields, $textform, $changeFields ) = @_;
+    my ( $class, $header, $fields, $textform, $changeFields, $orient ) = @_;
 
     my $this = {};
 
@@ -41,11 +65,11 @@ use integer;
     my @bodies = split( /\|/, $fields );
 
     while ( $#bodies < $#heads ) {
-      push( @bodies, "" );
+      push( @bodies, "&nbsp;" );
     }
 
     while ( $#heads < $#bodies ) {
-      push( @heads, "" );
+      push( @heads, "&nbsp;" );
     }
 
     @{$this->{HEADINGS}} = @heads;
@@ -53,21 +77,67 @@ use integer;
 
     $this->{TEXTFORM} = $textform;
 
-    $changeFields =~ s/\s//go;
-    $changeFields =~ s/\$//go;
-    @{$this->{CHANGEFIELDS}} = split( /,/, $changeFields );
+    if ( $changeFields ) {
+      $changeFields =~ s/\s//go;
+      $changeFields =~ s/\$//go;
+      @{$this->{CHANGEFIELDS}} = split( /,/, $changeFields );
+    }
+
+    if ( $orient && $orient eq "rows" ) {
+      $this->{ORIENTATION} = "rows";
+    } else {
+      $this->{ORIENTATION} = "cols";
+    }
 
     return bless( $this, $class );
+  }
+
+  # PUBLIC return the headers in a format suitable for feeding
+  # back to new.
+  sub getHeaders {
+    my $this = shift;
+    return "|" . join( "|", @{$this->{HEADINGS}} ) . "|";
+  }
+
+  # PUBLIC return the fields in a format suitable for feeding
+  # back to new.
+  sub getFields {
+    my $this = shift;
+    return "|" . join( "|", @{$this->{FIELDS}} ) . "|";
+  }
+
+  # PUBLIC get the text form of the format
+  sub getTextForm {
+    my $this = shift;
+    return $this->{TEXTFORM};
+  }
+
+  # PUBLIC get the change fields as a comma-separated list
+  sub getChangeFields {
+    my $this = shift;
+    if ( defined( $this->{CHANGEFIELDS} ) ) {
+      return join( ",", @{$this->{CHANGEFIELDS}} );
+    }
+    return "";
+  }
+
+  # PUBLIC get the table orientation
+  sub getOrientation {
+    my $this = shift;
+    return $this->{ORIENTATION};
   }
 
   # PUBLIC return the format as attributes
   sub toString() {
     my $this = shift;
-
-    return "header=\"|" . join( "|", @{$this->{HEADINGS}} ) . "|\" " .
-      "format=\"|" . join( "|", @{$this->{FIELDS}} ) . "|\" " .
-	"textform=\"" . $this->{TEXTFORM} . "\" ".
-	  "changefields=\"" . join( ",", @{$this->{CHANGEFIELDS}} ) . "\"";
+    my $hdrs = $this->getHeaders();
+    my $flds = $this->getFields();
+    my $tform = $this->getTextForm();
+    my $changeFields = $this->getChangeFields();
+    my $orient = $this->getOrientation();
+    return "header=\"$hdrs\" format=\"$flds\" " .
+	"textform=\"$tform\" changefields=\"$changeFields\" ".
+	  "orientation=\"$orient\"";
   }
 
   # PRIVATE expand a var using one of:
@@ -79,36 +149,55 @@ use integer;
   sub _expandVar {
     my $object = shift;
     my $vbl = shift;
-    if ( defined( &{ref( $object ) . "::_format_$vbl"} ) ) {
-      my $fn = "_format_$vbl";
+    if ( defined( &{ref( $object ) . "::_formatField_$vbl"} ) ) {
+      # special format for this field
+      my $fn = "_formatField_$vbl";
       return $object->$fn( @_ );
-    } elsif ( defined( $object->{$vbl} ) ) {
-      return ( $object->{$vbl}, 0 );
-    } else {
-      return ( "\$$vbl", 0 );
     }
+    my $type = $object->getType( $vbl );
+    my $typename = $type->{type};
+    if ( defined( &{ref( $object ) . "::_formatType_$typename"} ) ) {
+      # special format for this type
+      my $fn = "_formatType_$typename";
+      return $object->$fn( $vbl, @_ );
+    }
+
+    if ( defined( $object->{$vbl} ) ) {
+      # just expand as a string
+      return ( $object->{$vbl}, 0 );
+    }
+
+    return ( "\$$vbl", 0 );
   }
 
   # PRIVATE STATIC fill in variable expansions in simple text form
   sub _expandString {
-    my ( $t, $c ) = _expandVar( @_ );
+    my $object = shift;
+    my $var = shift;
+
+    if ( $var eq "dollar") {
+      return "\$";
+    } elsif ($var eq "nop") {
+      return "";
+    } elsif ($var eq "n") {
+      return "\n";
+    } elsif ($var eq "percnt") {
+      return "%";
+    } elsif ($var eq "quot") {
+      return "\"";
+    }
+    my ( $t, $c ) = _expandVar( $object, $var, @_ );
     return $t;
   }
 
   # PUBLIC fill in the text template using values
   # extracted from the given object
-  sub fillInString {
+  sub _formatAsString {
     my $this = shift;
     my $object = shift;
-    my $fmt = "";
 
     my $fmt = $this->{TEXTFORM};
-    $fmt =~ s/\$dollar(\(\))?\b/\$/gos;
-    $fmt =~ s/\$nop(\(\))?\b//gos;
-    $fmt =~ s/\$n(\(\))?\b/\n/gos;
-    $fmt =~ s/\$percnt(\(\))?\b/\%/gos;
-    $fmt =~ s/\$quot(\(\))?\b/\"/gos;
-    $fmt =~ s/\$(\w+)(\(\))?/&_expandString( $object, $1, 0, @_ )/geos;
+    $fmt =~ s/\$(\w+\b)(\(\))?/&_expandString( $object, $1, 0, @_ )/geos;
 
     return $fmt;
   }
@@ -117,58 +206,115 @@ use integer;
   # returns a non-zero color, then fill in the passed-by-reference color
   # variable $col with the value returned.
   sub _expandHTML {
+    my $object = shift;
+    my $var = shift;
     my $col = shift;
-    my ( $t, $c ) = _expandVar( @_ );
-    $$col = $c if ( $c );
+
+    if ( $var eq "dollar") {
+      return "\$";
+    } elsif ($var eq "nop") {
+      return "";
+    } elsif ($var eq "n") {
+      return "<br />";
+    } elsif ($var eq "percnt") {
+      return "%";
+    } elsif ($var eq "quot") {
+      return "\"";
+    }
  
+    my ( $t, $c ) = _expandVar( $object, $var, @_ );
+    $$col = $c if ( $c );
     return "$t";
   }
 
-  # PUBLIC fill in the HTML template using values
-  # extracted from the given object
-  sub fillInHTML {
+  # PUBLIC format a list of actions into a table
+  sub formatHTMLTable {
     my $this = shift;
-    my $object = shift;
+    my $data = shift;
+    my $jump = shift;
+    my $newWindow = shift;
+    my $i;
+    my @rows;
+    my @anchors;
 
-    my $fmt = "";
-    foreach my $i ( @{$this->{FIELDS}} ) {
-      my $col = $i;
-      my $c;
-      $col =~ s/\$(\w+)(\(\))?/&_expandHTML( \$c, $object, $1, 1, @_ )/geos;
-      $col =~ s/\$dollar(\(\))?\b/\$/gos;
-      $col =~ s/\$nop(\(\))?\b//gos;
-      $col =~ s/\$n(\(\))?\b/<br \/>/gos;
-      $col =~ s/\$percnt(\(\))?\b/%/gos;
-      $col =~ s/\$quot(\(\))?\b/\"/gos;
-
-      if ( $c ) {
-	$col = "<td bgcolor=\"$c\">$col</td>";
-      } else {
-	$col = "<td>$col</td>";
+    # make a 2D array of cells
+    foreach my $object ( @$data ) {
+      my @cols;
+      foreach $i ( @{$this->{FIELDS}} ) {
+	my $c;
+	my $entry = $i;
+	$entry =~ s/\$(\w+)(\(\))?/&_expandHTML( $object, $1, \$c, 1, $jump, $newWindow )/geos;
+	if ( $c ) {
+	  $entry = "<td bgcolor=\"$c\">$entry</td>";
+	} else {
+	  $entry = "<td>$entry</td>";
+	}
+	push @cols, $entry;
       }
-      $fmt .= $col;
+      if ( $jump eq "name" ) {
+	push @anchors, "<a name=\"" . $object->getAnchor() . "\"></a>";
+      }
+      push @rows, \@cols;
     }
 
-    return $fmt;
+    return $this->_generateHTMLTable( \@rows, \@anchors );
   }
 
-  # PUBLIC get the HTML formatted header row
-  sub getHTMLHeads {
-    my ( $this ) = @_;
-    my $fmt = "";
-    foreach my $i ( @{$this->{HEADINGS}} ) {
-      if ( $i ne "" ) {
-	$fmt .= "<th>$i</th>";
-      } else {
-	$fmt .= "<th>&nbsp;</th>";
+  sub _generateHTMLTable {
+    my ( $this, $rows, $anchors ) = @_;
+    my $text = "<table border=\"$border\">";
+    my $i;
+
+    if ( $this->{ORIENTATION} eq "rows" ) {
+      if ( defined( $anchors ) ) {
+	foreach $i ( @$anchors ) {
+	  $text .= $i;
+	}
+      }
+      for ( $i = 0; $i <= $#{$this->{HEADINGS}}; $i++ ) {
+	my $head = ${$this->{HEADINGS}}[$i];
+	$text .= "<tr><th bgcolor=\"$hdrcol\">$head</th>";
+        foreach my $col ( @$rows ) {
+	  my $datum = @$col[$i];
+	  $text .= $datum;
+	}
+        $text .= "</tr>";
+      }
+    } else {
+      $text .= "<tr bgcolor=\"$hdrcol\">";
+      foreach $i ( @{$this->{HEADINGS}} ) {
+	$text .= "<th>$i</th>";
+      }
+      $text .= "</tr>";
+      foreach my $row ( @$rows ) {
+	$text .= "<tr valign=\"top\">";
+	if ( defined( $anchors ) ) {
+	  my $a = shift( @$anchors );
+	  $text .= $a if ( defined( $a ) );
+	}
+	$text .= join( "", @$row) . "</tr>";
       }
     }
-    return $fmt;
+    $text .= "</table>";
+
+    return $text;
+  }
+
+  # PUBLIC format a list of actions into a table
+  sub formatStringTable {
+    my $this = shift;
+    my $data = shift;
+    my $text = "";
+    foreach my $row ( @$data ) {
+      my $horzrow = $this->_formatAsString( $row, @_ );
+      $text .= "$horzrow\n";
+    }
+    return "$text\n";
   }
 
   # PUBLIC Get the changes in the change fields between the old object and
   # the new object.
-  sub getHTMLChanges {
+  sub formatChangesAsHTML {
     my ( $this, $old, $new ) = @_;
     my $tbl = "";
     foreach my $field ( @{$this->{CHANGEFIELDS}} ) {
@@ -195,7 +341,7 @@ use integer;
 
   # PUBLIC Get the changes in the change fields between the old object and
   # the new object.
-  sub getStringChanges {
+  sub formatChangesAsString {
     my ( $this, $old, $new ) = @_;
     my $tbl = "";
     foreach my $field ( @{$this->{CHANGEFIELDS}} ) {
@@ -214,6 +360,71 @@ use integer;
       }
     }
     return $tbl;
+  }
+
+  # Format the object for editing.
+  sub formatForEdit {
+    my ( $this, $object ) = @_;
+    # for each of the fields in EDITFORMAT, create an appropriate
+    # parameter.
+    my @fields;
+    foreach my $col ( @{$this->{FIELDS}} ) {
+      my $entry = $col;
+      $entry =~ s/\$(\w+\b)(\(\))?/&_expandEditField( $this, $object, $1 )/geos;
+      $entry = "<td>$entry</td>";
+      push @fields, $entry;
+    }
+    my @rows;
+    push @rows, \@fields;
+
+    return $this->_generateHTMLTable( \@rows );
+  }
+
+  # PRIVATE STATIC fill in variable expansions. If any of the expansions
+  # returns a non-zero color, then fill in the passed-by-reference color
+  # variable $col with the value returned.
+  sub _expandEditField {
+    my ( $this, $object, $var ) = @_;
+
+    if ( $var eq "dollar") {
+      return "\$";
+    } elsif ($var eq "nop") {
+      return "";
+    } elsif ($var eq "n") {
+      return "<br />";
+    } elsif ($var eq "percnt") {
+      return "%";
+    } elsif ($var eq "quot") {
+      return "\"";
+    }
+ 
+    return $this->_formatFieldForEdit( $object, $var );
+  }
+
+  # PRIVATE format the given attribute for edit, using values given
+  # in 
+  sub _formatFieldForEdit {
+    my ( $this, $object, $attrname ) = @_;
+    my $type = $object->getType( $attrname );
+    return $attrname unless ( defined( $type ));
+    my $size = $type->{size};
+    if ( $type->{type} eq 'select' ) {
+      my $field = "<SELECT NAME=\"$attrname\" SIZE=\"$size\">";
+      foreach my $option ( @{$type->{values}} ) {
+	$field .= "<OPTION NAME=\"$option\"";
+	if ( defined( $this->{$attrname} ) &&
+	     $this->{$attrname} eq $option ) {
+	  $field .= " SELECTED";
+	}
+	$field .= ">$option</OPTION>";
+      }
+      return $field . "</SELECT>";
+    } elsif ( $type->{type} ne 'ignore' ) {
+      my ( $val, $c ) = _expandVar( $object, $attrname );
+      my $field = "<INPUT TYPE=\"text\" NAME=\"$attrname\" ";
+      return $field . "VALUE=\"$val\" SIZE=\"$size\"/>";
+    }
+    return $attrname;
   }
 }
 

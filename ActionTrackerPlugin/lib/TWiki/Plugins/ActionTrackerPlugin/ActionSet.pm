@@ -17,12 +17,14 @@
 use strict;
 use integer;
 
-use TWiki;
-use TWiki::Plugins::ActionTrackerPlugin::Attrs;
+use TWiki; # required for unpublished constants!
 use TWiki::Func;
 
+use TWiki::Plugins::ActionTrackerPlugin::Attrs;
+use TWiki::Plugins::ActionTrackerPlugin::Format;
+
 # Perl object that represents a set of actions.
-{ package ActionSet;
+{ package ActionTrackerPlugin::ActionSet;
 
   # PUBLIC constructor
   sub new {
@@ -48,7 +50,6 @@ use TWiki::Func;
   # of attributes by string value
   sub sort {
     my ( $this, $order ) = @_;
-
     if ( defined( $order ) ) {
       $order =~ s/[^\w,]//g;
       @_sortfields = split( /,/, $order );
@@ -75,11 +76,12 @@ use TWiki::Func;
 
   # PUBLIC Search the set of actions for actions that match the given
   # attributes string. Return an ActionSet.
+  # If the search expression is empty, all actions match.
   sub search {
     my ( $this, $attrs ) = @_;
     my $attr = new ActionTrackerPlugin::Attrs( $attrs );
     my $action;
-    my $chosen = ActionSet->new();
+    my $chosen = new ActionTrackerPlugin::ActionSet();
 
     foreach $action ( @{$this->{ACTIONS}} ) {
       if ( $action->matches( $attr ) ) {
@@ -90,37 +92,29 @@ use TWiki::Func;
     return $chosen;
   }
 
+  sub toString {
+    my $this = shift;
+    my $txt = "ActionSet{";
+    foreach my $action ( @{$this->{ACTIONS}} ) {
+      $txt .= "\n " . $action->toString();
+    }
+    return "$txt\n}";
+  }
+
   # PUBLIC format the action set as an HTML table
   # Pass $type="name" to to get an anchor to a position
   # within the topic, "href" to get a jump. Defaults to "name".
   # Pass $newWindow=1 to get separate browser window,
   # $newWindow=0 to get jump in same window.
   sub formatAsHTML {
-    my ( $this, $type, $format, $newWindow ) = @_;
-
-    my $text =
-      "<table border=$Action::border><tr bgcolor=\"$Action::hdrcol\">" .
-	$format->getHTMLHeads() . "</tr>";
-
-    foreach my $action ( @{$this->{ACTIONS}} ) {
-      my $row = $action->formatAsHTML( $type, $format, $newWindow );
-      $text .= "<tr valign=\"top\">$row</tr>";
-    }
-
-    return "$text</table>";
+    my ( $this, $format, $jump, $newWindow ) = @_;
+    return $format->formatHTMLTable( \@{$this->{ACTIONS}}, $jump, $newWindow );
   }
 
   # PUBLIC format the action set as a plain string
   sub formatAsString {
     my ( $this, $format ) = @_;
-    my $action;
-    my $text = "";
-
-    foreach $action ( @{$this->{ACTIONS}} ) {
-      $text .= $action->formatAsString( $format ) . "\n";
-    }
-
-    return $text;
+    return $format->formatStringTable( \@{$this->{ACTIONS}} );
   }
 
   # PUBLIC find actions that have changed.
@@ -156,9 +150,8 @@ use TWiki::Func;
   }
 
   # PUBLIC get a map of all people who have actions in this action set
-  sub getActionees() {
-    my $this = shift;
-    my $whos = {};
+  sub getActionees {
+    my ( $this, $whos ) = @_;
     my $action;
 
     foreach $action ( @{$this->{ACTIONS}} ) {
@@ -167,17 +160,17 @@ use TWiki::Func;
 	$whos->{$person} = 1;
       }
     }
-    return $whos;
   }
 
   # PUBLIC STATIC get all actions in topics in the given web that
   # match the search expression
   sub allActionsInWeb {
     my ( $web, $attrs ) = @_;
-    my $actions = ActionSet->new();
-    my $dd = TWiki::Func::getDataDir() || "..";
+    my $actions = new ActionTrackerPlugin::ActionSet();
+    my $dd = TWiki::Func::getDataDir() || "../data";
+    # "../data" because this is a cgi script executed in bin
 
-    # Known problem; if there's only one file in the web matching
+    # SMELL: if there's only one file in the web matching
     # *.txt then the file name won't be printed, at least with GNU
     # grep. The GNU -H switch, which would solve the problem, is
     # non-standard. This problem is ignored because such a web
@@ -185,20 +178,18 @@ use TWiki::Func;
     # Also assumed: the output of the egrepCmd must be of the form
     # file.txt: ...matched text...
     # SMELL: uses unpublished TWiki:: constants
-    chdir( "$dd/$web" );
-    my $grep = `${TWiki::egrepCmd} ${TWiki::cmdQuote}%ACTION\\{.*\\}%${TWiki::cmdQuote} *.txt`;
-    #&TWiki::Func::writeWarning( "Grep $dd/$web $grep" );
+    my $grep = `${TWiki::egrepCmd} ${TWiki::cmdQuote}%ACTION\\{.*\\}%${TWiki::cmdQuote} $dd/$web/*.txt`;
     my $number = 0;
     my $topics = $attrs->get( "topic" ) || "";
     my $lastTopic = "";
-    while ( $grep =~ s/^([^\._]+)\.txt:.*%ACTION{([^\}]*)}%([^\r\n]*)//m ) {
+    while ( $grep =~ s/^.*\/([^\/\.\n]+)\.txt:.*%ACTION{([^\}]*)}%([^\r\n]*)//m ) {
       my $topic = $1;
       my $sat = $2;
       my $text = $3;
       $topic =~ s/[\r\n\s]+//go;
       $number = 0 if ( $topic ne $lastTopic );
       if ( ! $topics || $topic =~ /^$topics$/ ) {
-	my $action = Action->new( $web, $topic, $number++, $sat, $text );
+	my $action = new ActionTrackerPlugin::Action( $web, $topic, $number++, $sat, $text );
 	if ( $action->matches( $attrs ) ) {
 	  $actions->add( $action )
 	}
@@ -214,7 +205,7 @@ use TWiki::Func;
   sub allActionsInWebs {
     my ( $theweb, $attrs ) = @_;
     my $webs = $attrs->get( "web" ) || $theweb;
-    my $actions = ActionSet->new();
+    my $actions = new ActionTrackerPlugin::ActionSet();
     my $dataDir = TWiki::Func::getDataDir();
     opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
     my @weblist = grep !/^[._].*$/, readdir DIR;
@@ -235,7 +226,6 @@ use TWiki::Func;
     }
     return $actions;
   }
-
 }
 
 1;

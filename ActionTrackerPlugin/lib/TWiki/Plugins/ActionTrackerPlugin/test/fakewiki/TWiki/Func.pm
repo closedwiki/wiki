@@ -1,7 +1,10 @@
 # Fake TWiki::Func for testing only
 use TWiki::TestMaker;
+require CGI;
 
 { package TWiki::Func;
+
+  use vars qw ($query);
 
   sub getMainWebname {
     return "Main";
@@ -26,6 +29,18 @@ use TWiki::TestMaker;
 
   sub getDataDir {
     return TWiki::TestMaker::getDataDir();
+  }
+
+  sub setQuery {
+    $query = shift;
+  }
+
+  sub getCgiQuery {
+    return $query;
+  }
+
+  sub getSkin {
+    return "action";
   }
 
   sub getPreferencesValue {
@@ -58,7 +73,7 @@ use TWiki::TestMaker;
 
   sub readTopicText {
     my ( $web,$topic,$rev ) = @_;
-    if ("$rev" ne "") {
+    if (defined($rev) && $rev ne "") {
       my $cmd = "/usr/bin/co -q -p -r1.$rev ".getDataDir() . "/$web/$topic.txt";
       return `$cmd`;
     }
