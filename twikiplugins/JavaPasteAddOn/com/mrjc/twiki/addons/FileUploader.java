@@ -202,7 +202,7 @@ public class FileUploader
 			else if (data instanceof String)
 			{
 				appendDelimiterToOutputStream(outStream);
-				appendToOutputStream((String)data, "clipboard.txt", outStream);
+				appendToOutputStream((String) data, "clipboard.txt", outStream);
 			}
 			// the thing on the clipboard is an image, e.g. a bitmap
 			// WE WANT TO MAKE A FILE (ASK THEM FOR THE NAME) AND upload that.
@@ -230,7 +230,7 @@ public class FileUploader
 					appendToOutputStream(f,outStream);					
 				}
 			} else {
-			    System.out.println("Can't send this, as I don't understand the type!");
+			    System.out.println("Can't send this, as I don't understand the type: " +  data.getClass().getName());
     		}
 			
 			// send comment 

@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.AbstractList;
 //import java.util.Hashtable;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
@@ -70,11 +71,19 @@ public class ClipboardHelper
 				{
 					try
 					{
-						System.out.println(flavors[i]);
+						System.out.println(flavors[i].getRepresentationClass());
 						System.out.println("in loop:2");
 						data = contents.getTransferData(flavors[i]);
 						System.out.println("in loop:3");
-						break;	
+						if ((data instanceof Reader)
+						     || (data instanceof String)
+						     || (data instanceof Image)
+						     || (data instanceof AbstractList)) {
+
+						     break;
+
+						}						
+
 					}
 					catch (UnsupportedFlavorException ufe)
 					{

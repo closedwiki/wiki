@@ -146,6 +146,10 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 		
 		addText("\nData on clipboard is "+dataOnClipboard.getClass().getName());
 
+		if (dataOnClipboard instanceof Byte) {
+			addText("\nData on clipboard is a byte array");
+		}
+
 		if (dataOnClipboard instanceof String)
 			addText("\nData on clipboard is "+DATATYPE_TEXT);
 		else if (dataOnClipboard instanceof Reader)
@@ -156,8 +160,14 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 			addText("\nData on clipboard is "+DATATYPE_FILE);
 		else addText("\n(unrecognised type)"+dataOnClipboard.getClass().getName() +"\n");
 
-		fu = new FileUploader(action);
-		fu.uploadData(dataOnClipboard, comment);
+		try {
+			fu = new FileUploader(action);
+			fu.uploadData(dataOnClipboard, comment);
+		} catch (Exception e)
+		{
+		    addText("\n\nOoops! Fatal exception: "+e.getMessage()+"\n"+e.toString());	
+		}
+		
 		redirectHTML = fu.getPOSTRequestResponse();
 		redirectURL = getBaseURL(redirectHTML);
 		if ( !(redirectURL.equals("")) )

@@ -1,8 +1,11 @@
 @echo off
 set PATH=c:\j2sdk1.4.0\bin;%PATH%
-set ECLIPSEPROJECTDIR=c:\eclipse\workspace\JavaPasteAddOn\com\mrjc\twiki\addons
+set PACKAGE=com\mrjc\twiki\addons
+set ECLIPSEPROJECTDIR=c:\eclipse\workspace\JavaPasteAddOn\%PACKAGE%
 set SOURCEFILES=%ECLIPSEPROJECTDIR%\*.class
 set JAVAPASTEDIR=c:\javapaste
+set TEMPBASEDIR=%JAVAPASTEDIR%\Temp
+set TEMPDIR=%TEMPBASEDIR%\%PACKAGE%
 set UNSIGNEDJAR=%JAVAPASTEDIR%\TWikiPasteUnsigned.jar
 set SIGNEDJAR=%JAVAPASTEDIR%\TWikiPasteSigned.jar
 set LOCALUSERPROFILEDIR=c:\WINNT\Profiles\Cmacleod
