@@ -87,13 +87,13 @@ sub _trace
 # ======================
 sub _traceExec
 {
-   my( $cmd, $string, $exit ) = @_;
-   if( $exit ) {
-       $exit = " Error: $exit";
-   } else {
-       $exit = "";
-   }
-   TWiki::writeDebug( "Rcs: $cmd($exit): $string\n" );
+   #my( $cmd, $string, $exit ) = @_;
+   #if( $exit ) {
+   #    $exit = " Error: $exit";
+   #} else {
+   #    $exit = "";
+   #}
+   #TWiki::writeDebug( "Rcs: $cmd($exit): $string\n" );
 }
 
 
