@@ -1,16 +1,17 @@
 <table><tr><td>
 %TWIKIWEB%.WelcomeGuest: %WIKITOOLNAME% is a web-based collaboration tool, web authoring tool, document management tool and knowledge base tool. You can edit any %WIKITOOLNAME% page.
 </td><td>
-<a href="http://TWiki.SourceForge.net/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
+<a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
 </td><td>
-*The TWiki home is at* <br> http://TWiki.SourceForge.net/
+<b>The TWiki home is <br> at http://TWiki.org/ </b>
 </td></tr>
 </table>
 
-%INCLUDE{"TWiki.TWikiWebsTable"}%
+%INCLUDE{"%TWIKIWEB%.TWikiWebsTable"}%
 
 *%WIKITOOLNAME%.%WEB% Web:*
 	* <b> TWikiUsers: </b> List of users of this %WIKITOOLNAME% web.
+	* TWikiGroups: List of groups.
 	* OfficeLocations: Corporate offices.
 
 <FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
