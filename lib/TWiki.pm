@@ -2290,66 +2290,36 @@ sub _processTags {
         #return _inlineError( $mess );
     }
 
-    my @queue = split( /%/, $text );
-    my $sep = "";
-    my @stack;
-    #my $tell = 0;
-    push( @stack, "" );
-    foreach my $token ( @queue ) {
-        #print  "PROCESSING $token \n" if $tell;
-        my $close = 0;
-
-        if ( $sep && $token =~ /^[A-Z][A-Z0-9_:]*{/ ) {
-            # a parameterised tag; push a new context
-            #print  "PUSHING $token\n" if $tell;
-            push( @stack, $token );
-            $close = ( $token =~ /}$/ );
-        } elsif ( $sep && $token =~ /^[A-Z][A-Z0-9_:]*$/ ) {
-            #print  "PUSHING $token\n" if $tell;
-            push( @stack, $token ); # push a new context
-            $close = 1;
-        } else {
-            #print  "ADDING $sep$token\n" if $tell;
-            $stack[$#stack] .= "$sep$token";
-            $sep = "%";
-            $close = ( $#stack && $token =~ /}$/ );
-        }
-
-        if ( $close) {
-            # close of a tag. Pop the context.
-            my $expr = pop( @stack );
-            my ( $tag, $args );
-            if( $expr =~ /^(.*?)\{(.*)\}$/s ) {
-                ( $tag, $args) = ( $1, $2 );
-            } else {
-                ( $tag, $args ) = ( $expr, undef );
-            }
-            my ( $ok, $e ) = _handleTag( $expr, $tag, $args, @_ );
-            if ( $ok ) {
-                # recursively expand what we just got
-                $e = _processTags( $e, $depth - 1,
-                                   "$expanding:$depth/$tag", @_ );
-                #print  "EXPANDED $tag -> $e\n" if $tell;
-                # no sep between this and the next token;
-                # we just ate it.
-                $sep = "";
-            } else {
-                #print  "EXPANSION OF $tag\{$expr\} FAILED\n" if $tell;
-                $e = "%$expr";
-            }
-            $stack[$#stack] .= $e;
-        }
-    }
-
-    # Run out of input. Close open tags.
-    while ( $#stack ) {
-        my $expr = pop( @stack );
-        writeWarning( "Unclosed tag $expr...");
-        $stack[$#stack] .= "%$expr";
-    }
-
-    return pop( @stack );
+    $text =~ s/%([A-Z][A-Z0-9_:]*?(?:\{.*\})?)%/_renderTag($1,$depth,$expanding,@_)/ge;
+    
+    return $text;
 }
+
+sub _renderTag {
+    my $expr=shift;
+    my $depth = shift;
+    my $expanding = shift;
+    
+    my ( $tag, $args);
+    #print STDERR $expr."\n";
+    if( $expr =~ /^(.*?)\{(.*?)\}$/s ) {
+        ( $tag, $args) = ( $1, $2 );
+    } else {
+        ( $tag, $args ) = ( $expr, undef );
+    }
+    
+    $args=_processTags($args,$depth-1,"",@_);
+    
+    my ( $ok, $e ) = _handleTag( $expr, $tag, $args, @_ );
+    if ( $ok ) {
+        $e = _processTags($e,$depth-1,"$expanding:$depth/$tag",@_);
+    } else {
+        $e="%".$expr."%";
+    }
+    
+    return $e
+}
+
 
 # Handle expansion of 'constant' tags (as against preference tags)
 # $eref is a reference to the flag that records the number of
