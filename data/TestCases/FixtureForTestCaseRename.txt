@@ -1,0 +1,24 @@
+%META:TOPICINFO{author="TWikiGuest" date="1108122636" format="1.0" version="1.2"}%
+
+make sure that all of the following are correctly renamed to the new topic name
+
+---+++ without web name
+	* SodNod
+	*   SodNods
+	* [[SodNod][asdf]]
+
+---+++ with web name
+	* SodNod
+	*   SodNods
+	* [[SodNod][asdf]]
+
+---+++ these should not be renamed (I think)
+	*   NotTestCaseRename
+	*   TestCaseRenameNot
+	*   TestCaseRenamenot
+	* !SodNod
+	* <nop>SodNod
+
+---+++ TODO:
+	* metadata, attachments, more...
+

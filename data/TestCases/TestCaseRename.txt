@@ -1,8 +1,13 @@
-%META:TOPICINFO{author="TWikiGuest" date="1108036690" format="1.0" version="1.2"}%
-%META:TOPICPARENT{name="WebHome"}%
+%META:TOPICINFO{author="TestCaseRename" date="1108036690" format="1.0" version="1.2"}%
+%META:TOPICPARENT{name="TestCaseRename"}%
 ---+!! %TOPIC%
 
-Description: Rename this Topic to check that all the references to it on TestCaseRenameFixture are correctly changed
+Description: Check for correct updating of referring topics in the same web on rename.
 
-%META:TOPICMOVED{by="TWiki::User=HASH(0x875b84c)" date="1108036690" from="TestCases.BananaPie" to="TestCases.TestCaseRename"}%
+Rename this topic
+   1 Check that all the references to it on FixtureForTestCaseRename are correctly changed.
+   1 Check the TOPICMOVED and TOPICPARENT have *not* been changed.
+   1 Check that the author in the TOPICINFO _has_ been changed.
+
+%META:TOPICMOVED{by="TestCaseRename" date="1108036690" from="TestCases.BananaPie" to="TestCases.TestCaseRename"}%
 
