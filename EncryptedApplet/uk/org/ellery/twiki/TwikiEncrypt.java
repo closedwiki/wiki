@@ -114,6 +114,9 @@ public class TwikiEncrypt extends Applet
 		}
 		catch(IOException e)
 		{
+			if (e instanceof FileNotFoundException) {
+				return "";
+			}
 			System.out.println(e);
 			System.out.println("Exception reading url");
 		}
@@ -204,6 +207,10 @@ public class TwikiEncrypt extends Applet
 	public static Properties readProperties(String encryptedProps) {	
 		
 		Properties props = new Properties();
+	
+		if (encryptedProps.length() == 0) {
+			return props;
+		}
 	
 		int currentLoc = 0;
 		
