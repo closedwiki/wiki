@@ -92,7 +92,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "30 Oct 2002";
+$wikiversion      = "09 Nov 2002";
 
 # ===========================
 # read the configuration part
@@ -2284,15 +2284,17 @@ sub getRenderedVersion
             s/(\-\-)\>/$1$TranslationToken/go;    # Allow standalone "-->"
             s/(\<\<+)/"&lt\;" x length($1)/geo;
             s/(\>\>+)/"&gt\;" x length($1)/geo;
+            s/\<nop\>/nopTOKEN/go;  # defuse <nop> inside HTML tags
             s/\<(\S.*?)\>/$TranslationToken$1$TranslationToken/go;
             s/</&lt\;/go;
             s/>/&gt\;/go;
             s/$TranslationToken(\S.*?)$TranslationToken/\<$1\>/go;
+            s/nopTOKEN/\<nop\>/go;
             s/(\-\-)$TranslationToken/$1\>/go;
             s/$TranslationToken(\!\-\-)/\<$1/go;
 
 # Handle embedded URLs
-            s!(^|[\-\*\s\(])($linkProtocolPattern\:(\S+[^\s\.\,\!\?\;\:\)]))!&externalLink($1,$2)!geo;
+            s!(^|[\-\*\s\(])($linkProtocolPattern\:([^\s\<\>\"]+[^\s\.\,\!\?\;\:\)\<]))!&externalLink($1,$2)!geo;
 
 # Entities
             s/&(\w+?)\;/$TranslationToken$1\;/go;      # "&abc;"
