@@ -1056,6 +1056,7 @@ sub _extractMetaData
         }
 
         if ( $_[2] =~ /<!--TWikiCat-->/ ) {
+            eval 'use TWiki::Form;';
             $_[2] = TWiki::Form::upgradeCategoryTable( $_[0], $_[1],
                                                        $meta, $_[2] );
         }
@@ -1064,10 +1065,11 @@ sub _extractMetaData
         if( $topicinfo{"format"} eq "1.0beta" ) {
             # This format used live at DrKW for a few months
             if( $_[2] =~ /<!--TWikiCat-->/ ) {
-               $_[2] = TWiki::Form::upgradeCategoryTable( $_[0],
-                                                          $_[1],
-                                                          $meta,
-                                                          $_[2] );
+                eval 'use TWiki::Form;';
+                $_[2] = TWiki::Form::upgradeCategoryTable( $_[0],
+                                                           $_[1],
+                                                           $meta,
+                                                           $_[2] );
             }
             TWiki::Attach::upgradeFrom1v0beta( $meta );
             if( $meta->count( "TOPICMOVED" ) ) {
