@@ -169,6 +169,11 @@ sub registerPlugin
     my $p   = 'TWiki::Plugins::'.$plugin;
 
     eval "use $p;";
+    if ($@) {
+	TWiki::writeWarning("Plugin \"$p\" could not be loaded by Perl.  Errors were:\n----\n$@----");
+	return;
+    }
+    
     my $h   = "";
     my $sub = "";
     my $prefix = "";
