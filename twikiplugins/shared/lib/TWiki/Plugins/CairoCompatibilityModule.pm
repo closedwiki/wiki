@@ -4,11 +4,37 @@
 # you should instruct users to upgrade to Cairo by preference, but this
 # module should make sure the plugin works if they can't for some reason.
 #
-# Plugin authors should feel free to check in to this module.
+# The module should NOT ne included when running alongside Cairo (plugins
+# version 1.020)
+#
+# Plugin authors should feel free to check in to this module, but please
+# be careful not to break anything.
+use TWiki;
 
+# Required by several plugins
 sub TWiki::Func::getRegularExpression {
   my $x = shift;
   eval "return \$TWiki::$x";
+}
+
+# Required by CommentPlugin
+sub TWiki::expandVariablesOnTopicCreation {
+  my ( $theText, $theUser, $theWikiName, $theWikiUserName ) = @_;
+
+  my $today = TWiki::Func::formatTime(time(), "\$day \$mon \$year", "gmtime");
+  $theUser         = $userName                     unless $theUser;
+  $theWikiName     = TWiki::Func::userToWikiName( $theUser, 1 ) unless $theWikiName;
+  $theWikiUserName = TWiki::Func::userToWikiName( $theUser )    unless $theWikiUserName;
+
+  $theText =~ s/%DATE%/$today/go;
+  $theText =~ s/%USERNAME%/$theUser/go;                     # "jdoe"
+  $theText =~ s/%WIKINAME%/$theWikiName/go;                 # "JonDoe"
+  $theText =~ s/%WIKIUSERNAME%/$theWikiUserName/go;         # "Main.JonDoe"
+  $theText =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/geo;  # expand URL parameters
+  $theText =~ s/%NOP{.*?}%//gos;  # Remove filler: Use it to remove access control at time of
+  $theText =~ s/%NOP%//go;        # topic instantiation or to prevent search from hitting a template
+
+  return $theText;
 }
 
 package CairoCompatibilityModule;

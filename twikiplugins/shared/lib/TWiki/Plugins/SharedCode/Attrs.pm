@@ -46,6 +46,7 @@ an exception (by dieing) if there is a problem.
 sub new {
   my ( $class, $string ) = @_;
   my $this = {};
+  my $orig = $string;
 
   if ( defined( $string ) ) {
 	while ( $string =~ m/\S/o ) {
@@ -73,7 +74,7 @@ sub new {
 	  elsif ( $string =~ s/^[\s,]*([a-z]\w*)\b//o ) {
 		$this->{$1} = "1";
 	  } else {
-		die "Bad attribute list at $string";
+		die "Bad attribute list at '$string' in '$orig'";
 	  }
 	}
   }
