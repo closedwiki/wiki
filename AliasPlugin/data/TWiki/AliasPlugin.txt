@@ -1,0 +1,92 @@
+%META:TOPICINFO{author="NielsKoldsø" date="1070232240" format="1.0" version="1.2"}%
+---++ Alias Plugin
+
+This plugin allows you to create Aliases for already existing topis.
+It will be easier then to link to a topic because you don't have
+to write the full path.
+
+If you write down a %TWIKIWEB%.WikiWord which is registered as an alias, it 
+will then act as a link to the topic it is assigned to.
+
+Non WikiWord may optionally be used as alias.
+
+An alias must be prefixed by one of:
+	* A white space character
+	* One of: <code> - = * # &amp; , ; . : / ( ) ] { } + _ &gt; </code>
+
+Note especially, an alias can not be prefixed by: <code> &lt;[ </code>
+
+Configuration of this plugin is done by writing your aliases and 
+the topic they should point to in the configuration table on this
+page. Note, that you have to to specify the full 'path' to the
+existing topic for making the aliases work correctly in all Webs.
+
+If you want to prevent an alias to become a link you can use the
+=&lt;nop&gt;= tag
+
+---++ Examples
+
+	* Just type '<nop>MySelf' and it will become a link to '<nop>Main.MyFullUsername' if defined as an alias
+
+---++ <nop>%TOPIC% Global Settings
+
+<noautolink>
+	* Set SHORTDESCRIPTION = Define aliases which will automatically extend to valid wiki links
+
+	* Debug: <br>
+	  See output in =data/debug.txt= <br>
+	  0 ~ No debug <br>
+	  1 ~ Normal debug <br>
+	  2 ~ Detailed debug
+		* Set DEBUG = 0
+
+	* Allow non TWiki words to become links
+		* Set ACCEPT_NON_TWIKI_WORD_ALIASES = 1
+
+	* Put your global aliases in this table:
+	|  *the alias*				|  *the topic it points to*  |
+	| AlPlug						| TWiki.AliasPlugin			 |
+	| MRX							| TWiki.AliasPlugin			 |
+	|								 |									 |
+
+</noautolink>
+
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* Test if the installation was successful:
+		* AlPlug should be a link to <nop>TWiki.AliasPlugin
+		* If you set the variable =ACCEPT_NON_TWIKI_WORD_ALIASES= on this page, 
+		  then MRX should also be a link to <nop>TWiki.AliasPlugin
+	* Developers test:
+		* -MRX =MRX= *MRX* #MRX&MRX,MRX&times;MRX.MRX:MRX/MRX(MRX)MRX{MRX}MRX+MRX_MRX<u>MRX</u>&#91;MRX]
+
+---++ Known Bugs
+	* For some reason I cannot get alias expanded if prefixed by '+'
+	  <br> -- TWiki:Main.NielsKoldso - 30 Nov 2003
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/OthelloMaurer |
+|  Plugin Version: | 1 Dec 2003 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|	1 Dec 2003: | <li>No WikiWord aliases as an option  <li>More alias prefixes allowed <br> TWiki:Main.NielsKoldso |
+|  16 Oct 2003: | Speedup |
+|  09 Oct 2003: | Initial Version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main/OthelloMaurer - 09 Oct 2003
+
