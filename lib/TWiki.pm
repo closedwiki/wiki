@@ -2027,7 +2027,7 @@ sub mailtoLinkSimple
 
     # Defensive coding
     if ($theMailtoString =~ s/@//g ) {
-    	writeDebug("mailtoLinkSimple called with an '\@' in string - internal TWiki error");
+    	writeWarning("mailtoLinkSimple called with an '\@' in string - internal TWiki error");
     }
     return "<a href=\"mailto\:$theMailtoString\">$theLinkText</a>";
 }
