@@ -68,7 +68,7 @@ my %diffColours = ( "+" => [ "#ccccff", "TWikiDiffAddedMarker"],
 | Parameter: =$topic= |  |
 | Return: =$text= | Formatted html text |
 | TODO: | this should move to Render.pm |
-| TODO: | need to fix unmatched <!---, <p>, <div> and.... |
+| TODO: | need to fix unmatched <p>, <div> and.... |
 
 =cut
 # -------------------------
@@ -113,6 +113,8 @@ sub renderCellData
                 $data = "\n<table>$data\n</table>";
             }
         }
+	#remove the <!--- type tag (i don't know how you would find the matching >)
+	$data =~ s/<!/&lt!/go;
     }
     return $data;
 }
