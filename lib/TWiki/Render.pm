@@ -244,7 +244,7 @@ sub renderFormData
     my %form = $meta->findOne( "FORM" );
     if( %form ) {
         my $name = $form{"name"};
-        $metaText = "<div class=\"TWikiForm\">\n";
+        $metaText = "<div class=\"twikiForm\">\n";
         $metaText .= "<p></p>\n"; # prefix empty line
         $metaText .= "|*[[$name]]*||\n"; # table header
         my @fields = $meta->find( "FIELD" );
@@ -610,13 +610,13 @@ sub internalLink {
     if( $exist) {
         if( $theAnchor ) {
             my $anchor = makeAnchorName( $theAnchor );
-            $text .= "<a class=\"TWikiAnchorLink\" href=\"$dispScriptUrlPath$dispViewPath"
+            $text .= "<a class=\"twikiAnchorLink\" href=\"$dispScriptUrlPath$dispViewPath"
 		  .  "$scriptSuffix/$theWeb/$theTopic\#$anchor\""
                   .  &linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText</a>";
             return $text;
         } else {
-            $text .= "<a class=\"TWikiLink\" href=\"$dispScriptUrlPath$dispViewPath"
+            $text .= "<a class=\"twikiLink\" href=\"$dispScriptUrlPath$dispViewPath"
 		  .  "$scriptSuffix/$theWeb/$theTopic\""
                   .  &linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText</a>";
@@ -624,7 +624,7 @@ sub internalLink {
         }
 
     } elsif( $doLink ) {
-        $text .= "<span class=\"TWikiNewLink\" style='background : $newTopicBgColor;'>"
+        $text .= "<span class=\"twikiNewLink\" style='background : $newTopicBgColor;'>"
               .  "<font color=\"$newTopicFontColor\">$theLinkText</font>"
               .  "<a href=\"$dispScriptUrlPath/edit$scriptSuffix/$theWeb/$theTopic?topicparent=$TWiki::webName.$TWiki::topicName\">$newLinkSymbol</a></span>";
         return $text;

@@ -20,10 +20,6 @@
         @import url("%TWIKILAYOUTURL%");
         /* Default TWiki style */
         @import url("%TWIKISTYLEURL%");
-</style>
-%TMPL:END%
-%TMPL:DEF{"userstyle"}%
-<style type="text/css" media="all">
         /* Custom overriding layout per web or per topic */
         @import url("%USERLAYOUTURL%");
         /* Custom overriding style per web or per topic */
@@ -39,7 +35,6 @@
 %HTTP_EQUIV_ON_VIEW%
 <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
 %TMPL:P{"twikistyle"}%
-%TMPL:P{"userstyle"}%
 %TMPL:P{"script"}%
 </head> %TMPL:END%
 
@@ -47,15 +42,15 @@
 
 %TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
 
-%TMPL:DEF{"topbar"}%<div class="TWikiHidden"><a href="#Content">Skip to topic</a> | <a href="#PageBottom">Skip to bottom</a><hr /></div><div class="TWikiTopBar"><div class="TWikiTopBarMainContents">%INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div>%TMPL:END%
+%TMPL:DEF{"topbar"}%<div class="twikiHidden"><a href="#Content">Skip to topic</a> | <a href="#PageBottom">Skip to bottom</a><hr /></div><div class="twikiTopBar"><div class="twikiTopBarMainContents">%INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div>%TMPL:END%
 
-%TMPL:DEF{"leftbar"}%<div class="TWikiLeftBar"><div class="TWikiLeftBarContents">
+%TMPL:DEF{"leftbar"}%<div class="twikiLeftBar"><div class="twikiLeftBarContents">
 %INCLUDE{"%TWIKIWEB%.WebLeftBar"}%</div></div>%TMPL:END%
 
-%TMPL:DEF{"bottombar"}%<div class="TWikiBottomBar"><div class="TWikiBottomBarMainContents"><span class="TWikiGrayText">%INCLUDE{"%TWIKIWEB%.WebBottomBar"}%</span></div></div>%TMPL:END%
+%TMPL:DEF{"bottombar"}%<div class="twikiBottomBar"><div class="twikiBottomBarMainContents"><span class="twikiGrayText">%INCLUDE{"%TWIKIWEB%.WebBottomBar"}%</span></div></div>%TMPL:END%
 
 %TMPL:DEF{"bodystart"}%
-<body class="TWikiViewPage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+<body class="twikiViewPage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
 
 %TMPL:DEF{"attachments"}%%TMPL:END%
 
@@ -78,8 +73,8 @@
 
 %TMPL:DEF{"main"}%
 %TMPL:P{"topbar"}%
-%TMPL:P{"sidebar"}%<div class="TWikiMain">
-<div class="TWikiTopic">
+%TMPL:P{"sidebar"}%<div class="twikiMain">
+<div class="twikiTopic">
 %TMPL:P{"webaction"}%
 <p>
 ---+ %TMPL:P{"heading"}%
