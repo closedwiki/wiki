@@ -1,19 +1,7 @@
 
-if you use the form at http://twiki.org/cgi-bin/view/Codev/TWikiOnMacOsX#Basic_Install ,
-it will customise the script shown below for your account name and project name.
-
-================================================================================
-
-in this setup scenario, there exists a user "twiki" 
-
-local~ su - twiki
-twiki~ cd Sites
-twiki~ wget http://twikiplugins.sourceforge.net/twiki-darwin.tar.bz2 
+twiki~ wget http://twikiplugins.sourceforge.net/twiki-dreamhost.tar.bz2 
 twiki~ tar xjf twiki-sourceforge.tar.bz2
-twiki~ ./pre-twiki.sh
-
-browse to http://localhost/~twiki/cgi-bin/twiki_install.cgi
-
+twiki~ ./pre-twiki.pl
+# browse to URL provided at end of pre-twiki (something along the lines of http://hostname/config/install.html)
 twiki~ ./post-twiki.sh
-
-browse to http://localhost/~twiki/cgi-bin/twiki/view/ to start using the wiki
+# browse to URL provided on HTML page at end of installation
