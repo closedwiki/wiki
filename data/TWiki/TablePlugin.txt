@@ -1,31 +1,44 @@
-%META:TOPICINFO{author="PeterThoeny" date="1005880790" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1005906204" format="1.0" version="1.4"}%
 ---+ Table Plugin
 
 Gives extra control off table display:
 	* Allows sorting
+	* Changing table properties like border width, cell spacing and cell padding
 	* Changing background color for header cells
 	* Changing background color for data cells - colors can _alternate_
 	* Behaviour can be specified for a specific table using %<nop>TABLE{...}% or with global preferences
 
----++ Global Preferences
-	* Set DEBUG to on to get debug messages in =data/debug.txt=.  Default: =off=
-		* Set DEBUG = off
+
+---++ <nop>%TOPIC% Global Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Control attributes of tables and sorting of table columns
+
+	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+		* Set DEBUG = 0
+
 	* Table border width.  Default: 1
-		* Set TABLEBORDER = 3
+		* Set TABLEBORDER = 1
+
 	* Table cell padding.  Default: 0
-		* Set CELLPADDING = 5
+		* Set CELLPADDING = 0
+
 	* Table cell spacing.  Default: 1
-		* Set CELLSPACING = 2
+		* Set CELLSPACING = 1
+
 	* Color for header cells ('*'s around text).  Default: <span style="background : #99CCCC;">#99CCCC</span>
 		* #Set HEADER_BG = red
+
 	* Background color for table rows, two alternate colors.  Default: <span style="background : #FFFFCC;">#FFFFCC</span>,<span style="background : #FFFFFF;">#FFFFFF</span>
 		* Set DATA_BG = #FFFFCC,#FFFFFF
+
 	* Make sortable:
 		* #Set SORT = attachments
 		* Set SORT = all
 		* #Set SORT = none
-	* Short description:
-		* Set SHORTDESCRIPTION = Control attributes of tables and sorting of table columns
 
 ---++ Sorting
 
@@ -38,7 +51,7 @@ Click on column heading text to sort by a column.  Initial column will be sorted
 	* number is digits, with optional decimal point
 	* otherwise treated as text
 
----++ Per table settings
+---++ Per Table Settings
 
 On line before the table use =%<nop>TABLE{...}%=:
 
@@ -54,9 +67,9 @@ All default to the global setting
 
 ---++ Examples
 
-Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="2" cellspacing="1" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%=
+Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="3" cellspacing="1" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%=
 
-%TABLE{sort="on" tableborder="0" cellpadding="3" cellspacing="0" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%
+%TABLE{sort="on" tableborder="0" cellpadding="3" cellspacing="1" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%
 | *Num* | *Status* | *Action* | *Who* | *When* | *Progress* |
 | 1 | C | Chose new colours | John | 1-Dec-02 | |
 | 2 | X | Release | John | 1-Apr-02 | |
@@ -64,8 +77,36 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="2" cellsp
 | 12 | C | Spec error handling | Jack | 1-Dec-02 | |
 | 5 |	| Abc | John | | |
 
+---+++ Plugin Installation Instructions
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==pub/TWiki/%TOPIC%/diamond.gif== | Diamond symbol |
+	  | ==pub/TWiki/%TOPIC%/down.gif== | Down arrow |
+	  | ==pub/TWiki/%TOPIC%/up.gif== | Up arrow |
+	* Test if the plugin is correctly installed:
+		* Check above example if the table renders as expected
+		* Try click on heading to sort.  Other tables should also be sortable
+
+---+++ Plugin Info
+
+|  Plugin Author: | %TWIKIWEB%.JohnTalintyre |
+|  Plugin Version: | 07 Oct 2001 |
+|  Change History: | 16 Nov 2001: PTh added table border, cell spacing, cell padding, gif files <br /> 07 Oct 2001: Initial version |
+|  CPAN Dependencies: |  |
+|  Other Dependencies: |  |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
 -- %TWIKIWEB%.JohnTalintyre - 07 Oct 2001 <br />
--- %TWIKIWEB%.PeterThoeny - 15 Nov 2001 <br />
+-- %TWIKIWEB%.PeterThoeny - 16 Nov 2001 <br>
 %META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1005707580" path="C:\Data\Temp\up.gif" size="876" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1005707591" path="C:\Data\Temp\down.gif" size="869" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1005707607" path="C:\Data\Temp\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
