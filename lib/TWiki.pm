@@ -1425,7 +1425,7 @@ sub _handleINCLUDE {
     my $rev     = $params->{rev};
     my $warn    = $params->{warn};
 
-    if( $incfile =~ /^http\:/ ) {
+    if( $incfile =~ /^https?\:/ ) {
         # include web page
         return _includeUrl( $incfile, $pattern, $theWeb, $theTopic );
     }
