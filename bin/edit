@@ -220,7 +220,7 @@ sub main
                 $catname = &wiki::getRenderedVersion( $catname );
                 $temp = $line;
                 $temp =~ s/%CATNAME%/$catname/go;
-                $temp =~ s/%CATMODIFIER%/$catmodifier/go;
+                $temp =~ s/%CATMODIFIER%/$catmod/go;
                 $temp =~ s/%CATVALUE%/$catvalue/go;
                 $ttext = "$ttext$temp";
             }
