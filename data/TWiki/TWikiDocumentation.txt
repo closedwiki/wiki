@@ -1,11 +1,12 @@
 <h3>Documentation of the TWiki Implementation (version %WIKIVERSION%)</h3>
 	* <A href="#login">(1)</A> Wiki Username vs. Login Username
-	* <A href="#variables">(2)</A> Wiki Variables
-	* <A href="#notification">(3)</A> Notification of Changes by Email
-	* <A href="#category">(4)</A> TWiki Category Table
-	* <A href="#implementation">(5)</A> Implementation Notes
-	* <A href="#installation">(6)</A> Installation Notes
-	* <A href="#upgrade20000501">(7)</A> Upgrading Earlier Versions to TWiki 01 Mai 2000
+	* <A href="#templates">(2)</A> Wiki Templates
+	* <A href="#variables">(3)</A> Wiki Variables
+	* <A href="#notification">(4)</A> Notification of Changes by Email
+	* <A href="#category">(5)</A> TWiki Category Table
+	* <A href="#implementation">(6)</A> Implementation Notes
+	* <A href="#installation">(7)</A> Installation Notes
+	* <A href="#upgrade20000501">(8)</A> Upgrading Earlier Versions to TWiki 01 Mai 2000
 
 Related Topics: TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests.
 
@@ -16,43 +17,50 @@ Related Topics: TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRe
 %INCLUDE{"TWikiUsernameVsLoginUsername.txt"}%
 
 
+<A name="templates">
+-----
+*(2) Wiki Templates*
+
+%INCLUDE{"TWikiTemplates.txt"}%
+
+
 <A name="variables">
 -----
-*(2) Wiki Variables*
+*(3) Wiki Variables*
 
 %INCLUDE{"TWikiVariables.txt"}%
 
 
 <A name="notification">
 -----
-*(3) Notification of Changes by Email*
+*(4) Notification of Changes by Email*
 
 %INCLUDE{"TWikiNotificationOfChanges.txt"}%
 
 
 <A name="category">
 -----
-*(4) TWiki Category Table*
+*(5) TWiki Category Table*
 
 %INCLUDE{"TWikiCategoryTable.txt"}%
 
 
 <A name="implementation">
 -----
-*(5) Implementation Notes*
+*(6) Implementation Notes*
 
 %INCLUDE{"TWikiImplementationNotes.txt"}%
 
 
 <A name="installation">
 -----
-*(6) Installation Notes*
+*(7) Installation Notes*
 
 %INCLUDE{"TWikiInstallationNotes.txt"}%
 
 
 <A name="upgrade20000501">
 -----
-*(7) Upgrading Earlier Versions to TWiki 01 Mai 2000*
+*(8) Upgrading Earlier Versions to TWiki 01 Mai 2000*
 
 %INCLUDE{"TWikiUpgradeTo01May2000.txt"}%
