@@ -2,7 +2,10 @@ package RegisterTests;
 
 use TestCaseStdOutCapturer;
 use base qw(Test::Unit::TestCase);
-use lib "../../lib";
+BEGIN {
+    unshift @INC, '../../bin';
+    require 'setlib.cfg';
+};
 use strict;
 use diagnostics;
 use TWiki::UI::Register;

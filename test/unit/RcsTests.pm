@@ -7,14 +7,14 @@ package RcsTests;
 
 use base qw(Test::Unit::TestCase);
 
+BEGIN {
+    unshift @INC, '../../bin';
+    require 'setlib.cfg';
+};
+
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;
-}
-
-BEGIN {
-    unshift @INC, '../../lib';
-    unshift @INC, '.';
 }
 
 use TWiki;

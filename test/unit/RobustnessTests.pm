@@ -6,9 +6,9 @@ package RobustnessTests;
 use base qw(Test::Unit::TestCase);
 
 BEGIN {
-    unshift @INC, '../../lib';
-    unshift @INC, '.';
-}
+    unshift @INC, '../../bin';
+    require 'setlib.cfg';
+};
 
 require '../../bin/setlib.cfg';
 use TWiki;

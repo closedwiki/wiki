@@ -7,9 +7,9 @@ package MetaTests;
 use base qw(Test::Unit::TestCase);
 
 BEGIN {
-    unshift @INC, '../../lib';
-    unshift @INC, '.';
-}
+    unshift @INC, '../../bin';
+    require 'setlib.cfg';
+};
 
 use TWiki;
 use TWiki::Meta;
