@@ -18,9 +18,9 @@ use File::Path qw( mkpath );
 use HTML::TokeParser;
 
 BEGIN {
-    use Cwd qw( cwd getcwd );
+    use FindBin;
     use Config;
-    my $localLibBase = getcwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
+    my $localLibBase = "$FindBin::Bin/lib/CPAN/lib/site_perl/" . $Config{version};
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
 }
 
@@ -108,7 +108,7 @@ sub DownloadTWikiExtension
 	nPlugins => 0,
 	nDownloadedPlugins => 0,
 	errors => [],
-	plugins => getCatalogList({ Config => $Config }),
+	plugins => getCatalogueList({ Config => $Config }),
     };
 
     print "| *Plugin* | *Download Status* |\n";
@@ -154,7 +154,7 @@ sub DownloadTWikiExtension
 
 ################################################################################
 
-sub getCatalogList
+sub getCatalogueList
 {
     my $p = shift;
     my $Config = $p->{Config};
@@ -162,15 +162,15 @@ sub getCatalogList
     my $urlCatalogue = qw( http://twiki.org/cgi-bin/search/Plugins/?scope=text&web=Plugins&order=topic&search= ) . $Config->{searchTerm} . qw( &casesensitive=on&regex=on&nosearch=on&nosummary=on&limit=all&skin=plain );
     my $local_catalogue = "file:$Config->{local_cache}/TWiki$Config->{ExtType}s.html";
 
-    # get (plugins) catalog page
+    # get (plugins) catalogue page
     mirror( $urlCatalogue, $local_catalogue );
     print STDERR "$urlCatalogue\n";
-    my $pluginsCatalogPage = LWP::Simple::get( $local_catalogue ) or die qq{Can't get plugins catalogue "$local_catalogue": $!};
+    my $pluginsCataloguePage = LWP::Simple::get( $local_catalogue ) or die qq{Can't get plugins catalogue "$local_catalogue": $!};
 
     # get list of plugins (from the links)
     my @plugins = qw();
 
-    my $stream = new HTML::TokeParser( \$pluginsCatalogPage ) or die $!;
+    my $stream = new HTML::TokeParser( \$pluginsCataloguePage ) or die $!;
     while ( my $tag = $stream->get_tag('a'))
     {
 	next unless $tag->[1]{href};
