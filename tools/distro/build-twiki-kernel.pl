@@ -28,6 +28,8 @@ my $Config = {
     outputdir => '.',
     outfile => undef,
     agent => "TWikiKernel Builder/v0.7",
+# documentation switches
+    pdoc => 0,
 # 
     verbose => 0,
     debug => 0,
@@ -37,6 +39,8 @@ my $Config = {
 
 my $result = GetOptions( $Config,
 			'localcache=s', 'tempdir=s', 'outputdir=s', 'outfile=s',
+# documentation switches
+			'pdoc',
 # miscellaneous/generic options
 			'agent=s', 'help', 'man', 'debug', 'verbose|v',
 			);
@@ -100,6 +104,14 @@ else {
 ###############################################################################
 # build source code docs
 execute( "cd tools && perl gendocs.pl nosmells" ) or die $!;
+
+if ( $Config->{pdoc} )
+{
+    execute( "rm -rf doc/ ; mkdir doc/ && cd tools && perl perlmod2www.pl -source ../lib/TWiki/ -target ../doc/" ) or die $!;
+    my $codeDocsTreeDir = "doc";
+    my $codeDocsTree = slurp_tree( $codeDocsTreeDir, rule => $ruleNormalFiles->start( $codeDocsTreeDir ) );
+    spew_tree( "$installBase/doc" => $codeDocsTree );
+}
 
 ################################################################################
 #-[lib/, templates/, data/, pub/icn, pub/TWiki, bin/]-----------------------------------
@@ -222,6 +234,7 @@ Copyright 2004 Will Norris and Sven Dowideit.  All Rights Reserved.
    -outputdir [.]	where the generated TWikiKernel-BRANCH-DATE.tar.gz is placed
    -outfile		.
    -agent [$Config->{agent}]	LWP::UserAgent name (used for downloading some documentation from wiki pages on twiki.org)
+   -pdoc		run source code through pdoc to produce html in twiki/doc/
    -verbose
    -debug
    -help			this documentation
@@ -238,6 +251,8 @@ Copyright 2004 Will Norris and Sven Dowideit.  All Rights Reserved.
 =item B<-outfile>
 
 =item B<-agent>
+
+=item B<-pdoc>
 
 =back
 
