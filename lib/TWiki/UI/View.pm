@@ -68,11 +68,11 @@ sub view {
     my $contentType = $query->param( 'contenttype' );
 
     my $showRev = 1;
-    my $extra = '';
+    my $logEntry = '';
     my $revdate = '';
     my $revuser = '';
 
-    TWiki::UI::checkWebExists( $session, $webName, $topicName );
+    TWiki::UI::checkWebExists( $session, $webName, $topicName, 'view' );
 
     my $skin = $session->getSkin();
 
@@ -111,7 +111,7 @@ sub view {
 
             ( $revdate, $revuser ) = $meta->getRevisionInfo();
             $revdate = TWiki::Time::formatTime( $revdate );
-            $extra .= 'r'.$rev;
+            $logEntry .= 'r'.$rev;
         } else {
             # viewing the most recent rev
             ( $text, $meta ) = ( $currText, $currMeta );
@@ -126,11 +126,11 @@ sub view {
               TWiki::UI::readTemplateTopic( $session, 'WebTopicNonWikiTemplate' );
         }
         ( $text, $meta ) = ( $currText, $currMeta );
-        $extra .= ' (not exist)';
+        $logEntry .= ' (not exist)';
     }
 
     if( $viewRaw ) {
-        $extra .= ' raw='.$viewRaw;
+        $logEntry .= ' raw='.$viewRaw;
         if( $viewRaw =~ /debug/i ) {
             $text = $session->{store}->getDebugText( $meta, $text );
         }
@@ -162,8 +162,7 @@ sub view {
     }
 
     if( $TWiki::cfg{Log}{view} ) {
-        # write log entry
-        $session->writeLog( 'view', $webName.'.'.$topicName, $extra );
+        $session->writeLog( 'view', $webName.'.'.$topicName, $logEntry );
     }
 
     # get view template, standard view or a view with a different skin
@@ -231,7 +230,7 @@ sub view {
     while( $revsToShow > 0 ) {
         $revsToShow--;
         if( $doingRev == $rev) {
-            $revs .= ' r'.$rev;
+            $revs .= 'r'.$rev;
         } else {
             $revs .= CGI::a({
                              href=>$session->getScriptUrl( $webName,
@@ -257,7 +256,7 @@ sub view {
                     rev1 => $doingRev,
                     rev2 => $doingRev-1 ),
                   rel => 'nofollow' },
-                '&gt;' ) . '&nbsp;';
+                '&harr;' ) . '&nbsp;';
         }
         $doingRev--;
     }
@@ -338,7 +337,8 @@ sub viewfile {
 
     my $rev = $session->{store}->cleanUpRevID( $query->param( 'rev' ) );
 
-    TWiki::UI::checkWebExists( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic, 'viewfile' );
+    TWiki::UI::checkTopicExists( $session, $webName, $topic, 'viewfile' );
 
     my $topRev = $session->{store}->getRevisionNumber( $webName, $topic, $fileName );
 
