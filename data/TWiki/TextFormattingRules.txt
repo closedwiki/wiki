@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1082874577" format="1.0" version="1.44"}%
+%META:TOPICINFO{author="PeterThoeny" date="1089531986" format="1.0" version="1.45"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---# TWiki Text Formatting
@@ -452,8 +452,12 @@ You can use just about any HTML tag without a problem - however, there are a few
 
 ---+++ HTML and TWiki Usability
 
-	* On collaboration pages, it's preferable NOT to use HTML, and to use [[#TWikiShorthand][TWiki shorthand]] instead - this keeps the text uncluttered and easy to edit.
-	* %X% *NOTE:* TWiki is designed to work with a wide range of browsers and computer platforms, holding to HTML 3.2 compatibility in the standard installation - adding raw HTML, particularly browser-specific tags (or any other mark-up that doesn't degrade well) will reduce compatibility.
+	* %T% *TIP:* On collaboration pages, it's preferable NOT to use HTML, and to use [[#TWikiShorthand][TWiki shorthand]] instead - this keeps the text uncluttered and easy to edit.
+	* %X% *NOTE:* TWiki is designed to work with a wide range of browsers and computer platforms, holding to HTML 4.0 and XHTML 1.0 compatibility in the standard installation - adding raw HTML, particularly browser-specific tags (or any other mark-up that doesn't degrade well) will reduce compatibility.
+	* Recommondations when using HTML:
+		* Use [[http://www.w3.org/TR/xhtml1/][XHTML 1.0 Transitional]] syntax
+		* Do not span a tag over more then one line
+		* Remove all empty lines. TWiki inserts =&lt;p /&gt;= paragraph tags on empty lines, which causes problems if done between tags that do not allow paragraph tags, like for example between table tags.
 
 ---+++ TWiki HTML Rendering
 
