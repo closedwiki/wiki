@@ -2,7 +2,7 @@
 # Copyright (C) Motorola 2003 - All rights reserved
 #
 use strict;
-use Carp;
+use POSIX;
 
 # An Arithmetic is an evaluator for simple arithmetic expressions
 { package FormQueryPlugin::Arithmetic;
@@ -19,26 +19,29 @@ use Carp;
      '-'            => 1,
     );
 
-  my $bopRE = "[\\+\\-\\*\\/%]";
+  my $bopRE = "[\\+\\-\\*\\/]";
   my $uopRE = "[\\-\\+]|round";
   my $number = "[\\d\\.]+";
 
   sub evaluate {
     my @tokens = split( /($bopRE|$uopRE|$number|\(|\))|\s+/, shift );
-    #print STDERR "Broke ",join(",",@tokens),"\n";
     @tokens = reverse( @tokens );
     my $r;
     eval { $r = _eval( \@tokens ) };
-    $r = "Arithmetic failed at " . join(" ", @tokens) . ": $@" if ( $@ );
+    if ( $@ ) {
+      $r = "Arithmetic failed at " . join(" ", @tokens) . ": $@";
+    } elsif ( !$r ) {
+      $r = 0;
+    }
+
     return $r;
   }
 
   sub _eval {
     my $tokens = shift;
     my $lastWasOper = 1;
-    my @opers;
+    my @opers = ();
     my @opands;
-    #print STDERR "Start ",join(",",@$tokens),"\n";
 
     while ( scalar( @$tokens )) {
       my $token = pop( @$tokens );
@@ -51,18 +54,14 @@ use Carp;
 		$prec{$token} < $prec{$opers[$#opers]} ) {
 	  _apply( \@opers, \@opands );
 	}
-	#print STDERR "Push oper $token\n";
 	push( @opers, $token );
 	$lastWasOper = 1;
       } elsif ( $token eq "(" ) {
-	#print STDERR "Recurse\n";
 	push( @opands, _eval( $tokens ));
-	#print STDERR "Retted\n";
 	$lastWasOper = 0;
       } elsif ( $token eq ")" ) {
 	last;
       } elsif ( $token =~ m/[\d\.]+/o ) {
-	#print STDERR "Push opand $token\n";
 	push( @opands, $token );
 	$lastWasOper = 0;
       } else {
@@ -98,7 +97,8 @@ use Carp;
     } elsif ( $o eq "*" ) {
       push( @$opands, $l * $r );
     } elsif ( $o eq "/" ) {
-      push( @$opands, $l / $r );
+      my $res = ( $r == 0 ) ? $POSIX::FLT_MAX : ( $l / $r );
+      push( @$opands, $res );
     } elsif ( $o eq "#round" ) {
       push( @$opands, int( $r + ( $r < 0 ? -0.5 : 0.5 )));
     } else {

@@ -76,15 +76,15 @@ sub commonTagsHandler {
     $_[0] =~ s/%$setname%/$setval/g;
   }
 
-  $_[0] =~ s/%ARITH{\"(.*?)\"}%/&_handleCalc($1)/geo;
-  $_[0] =~ s/%(WORKDAYS){(.*?)}%/&_handleWorkingDays($1, $2,$_[2],$_[1])/geo;
-  $_[0] =~ s/%(CALLMACRO){(.*?)}%/&_handleMacroCall($1,$2,$_[2],$_[1])/geo;
-  $_[0] =~ s/%(FORMQUERY){(.*?)}%/&_handleFormQuery($1,$2)/geo;
-  $_[0] =~ s/%(TABLEFORMAT){(.*?)}%/&_handleTableFormat($1,$2)/geo;
-  $_[0] =~ s/%(SHOWQUERY){(.*?)}%/&_handleShowQuery($1,$2)/geo;
-  $_[0] =~ s/%(TOPICCREATOR){(.*?)}%/&_handleTopicCreator($1,$2,$_[2],$_[1])/geo;
-  $_[0] =~ s/(%SUMFIELD){(.*?)}%/&_handleSumQuery($1,$2)/geo;
-  $_[0] =~ s/%(PROGRESS){(.*?)}%/&_handleProgress($1,$2,$_[2],$_[1])/geo;
+  $_[0] =~ s/%(ARITH){\"(.+?)\"}%/&_handleCalc($2)/geo;
+  $_[0] =~ s/%(WORKDAYS){(.+?)}%/&_handleWorkingDays($1, $2,$_[2],$_[1])/geo;
+  $_[0] =~ s/%(CALLMACRO){(.+?)}%/&_handleMacroCall($1,$2,$_[2],$_[1])/geo;
+  $_[0] =~ s/%(FORMQUERY){(.+?)}%/&_handleFormQuery($1,$2)/geo;
+  $_[0] =~ s/%(TABLEFORMAT){(.+?)}%/&_handleTableFormat($1,$2)/geo;
+  $_[0] =~ s/%(SHOWQUERY){(.+?)}%/&_handleShowQuery($1,$2)/geo;
+  $_[0] =~ s/%(TOPICCREATOR){(.+?)}%/&_handleTopicCreator($1,$2,$_[2],$_[1])/geo;
+  $_[0] =~ s/%(SUMFIELD){(.+?)}%/&_handleSumQuery($1,$2)/geo;
+  $_[0] =~ s/%(PROGRESS){(.+?)}%/&_handleProgress($1,$2,$_[2],$_[1])/geo;
 
   if ( $debug && --$depth == 0 && $_[0] !~ m/--Time: /o ) {
     my $bmend = new Benchmark;

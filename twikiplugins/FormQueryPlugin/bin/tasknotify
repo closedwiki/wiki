@@ -14,6 +14,7 @@ my $attrs = new FormQueryPlugin::Map( join( ' ', @ARGV ));
 
 my $web = $attrs->get( "web" );
 my $query = $attrs->get( "query" );
+my $debug = $attrs->get( "DEBUG" );
 die "web= not found on command line" unless ( defined( $web ));
 die "query= not found on command line" unless ( defined( $query ));
 
@@ -35,16 +36,25 @@ if ( !TWiki::Func::topicExists( $webName, $query )) {
 $query = TWiki::Func::readTopicText( $web, $query );
 $query =~ s/%META:\w+{.*}%//mo;
 
+# Expand the query lines
 $query = TWiki::Func::expandCommonVariables( $query, $topic, $webName );
 
 my %mails;
+my $binpath = TWiki::Func::getScriptUrlPath();
+my $binurl = TWiki::Func::getUrlHost() . $binpath;
+my $pubpath = TWiki::Func::getScriptUrlPath();
+my $puburl = TWiki::Func::getUrlHost() . $pubpath;
 
 foreach my $line ( split( /\n/, $query )) {
   if ( $line =~ s/([^:]+): (.*)$/$2/o ) {
     my $name = $1;
     $name =~ s/\s+//go;
     $name = ActionTrackerPlugin::Action::_canonicalName( $name );
-    $mails{$name} .= "\n$line";
+    my $mail = TWiki::Func::renderText( $line, $webName );
+    # make hrefs absolute
+    $mail =~ s/href=\"$binpath/href=\"$binurl/go;
+    $mail =~ s/(href|img)=\"$pubpath/$1=\"$puburl/go;
+    $mails{$name} .= $mail;
   }
 }
 
@@ -70,8 +80,9 @@ sub sendMails {
     if ( !defined( $email )) {
       $email = $name;
       print STDERR "Mail address for $name not found\n";
+    } else {
+      sendMail( $webName, $name, $email, $mails );
     }
-    sendMail( $webName, $name, $email, $mails );
   }
 }
 
@@ -79,42 +90,45 @@ sub sendMail {
   my ( $webName, $name, $email, $mails ) = @_;
 
   my $message = $mails->{$name};
-  my $mail = "From: $webName Web
+  my $sep = "=====================_64421935==_.ALT";
+  my $html = "<html><body>
+This is an automated notification from the $webName Web<p />
+
+Tasks that require your attention follow:<p />
+
+$message";
+  # Now the plain-text; remove HTML tags
+  my $plain = $html;
+  $plain =~ s/<br( \/)?>/\n/gio;
+  $plain =~ s/<p( \/)?>/\n\n/gio;
+  $plain =~ s/<[^>]*>//go;
+  my $mail = "From: ${webName}Management
 To: $email
 Subject: Outstanding tasks owned by $name
 MIME-Version: 1.0
-Content-Type: multipart/alternative; boundary=\"=====================_64421935==_.ALT\"
+Content-Type: multipart/alternative; boundary=\"$sep\"
 
-";
-  # First the HTML version
-  $mail .= "--=====================_64421935==_.ALT
+--$sep
+Content-Type: text/plain; charset=\"us-ascii\"
+
+$plain
+--$sep
 Content-Type: text/html; charset=\"us-ascii\"
 Content-Transfer-Encoding: 7bit
 
-<html><body>
-This is an automated notification from the $webName Web<p />
-Tasks that require your attention follow:<p />
-$message
-";
-  # Now the plain-text; remove HTML tags
-  $message =~ s/<[^>]*>//go;
-  $mail .= "--=====================_64421935==_.ALT
-Content-Type: text/plain; charset=\"us-ascii\"
-
-This is an automated notification from the Requirements Web
-
-Tasks that require your attention follow:
-
-$message
---=====================_64421935==_.ALT--
+$html
+--$sep--
 ";
 
-  print $mail;
- # my $error = TWiki::Net::sendEmail( $mail );
- # if ( defined( $error )) {
- #   $error = "ActionTrackerPlugin:ActionNotify: $error";
- #   TWiki::Func::writeWarning( $error );
- # }
+  if ( defined ( $debug )) {
+    print $mail;
+  } else {
+    my $error = TWiki::Net::sendEmail( $mail );
+    if ( defined( $error )) {
+      $error = "ActionTrackerPlugin:ActionNotify: $error";
+      TWiki::Func::writeWarning( $error );
+    }
+  }
 }
 
 1;

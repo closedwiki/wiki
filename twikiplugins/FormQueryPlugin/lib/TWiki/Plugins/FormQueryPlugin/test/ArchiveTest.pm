@@ -32,6 +32,8 @@ sub set_up {
   $map->set("self", $map);
   $map->set("array", $array);
   $map->set("undef", undef);
+  # make sure we don't infinite recurse in debug print
+  $map->toString();
 }
 
 sub tear_down {

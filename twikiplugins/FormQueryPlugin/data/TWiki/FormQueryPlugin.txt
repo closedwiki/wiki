@@ -46,7 +46,7 @@ To achieve best perfomance the plugin caches the database read from the TWiki to
 <code>%FORMQUERY</code> is the basic query mechanism. A <code>%FORMQUERY</code> works either on the whole database or, if the =query= parameter is given, the results of another query.
 | *Parameter* | *Description* |
 | =name= | Required, gives the name of the query result for use in <code>%SHOWQUERY</code> or another <code>%FORMQUERY</code> |
-| =search= | Required, the search to perform (see [[#SearchOperators][Search operators] below)|
+| =search= | Required, the search to perform (see [[#SearchOperators][Search operators]] below)|
 | =query= | Optional, the name of the query to refine. If missing, defaults to the whole database |
 | =extract= | Optional, the name of a field in each of the matched hashes to flatten out into the returned list. |
 | =moan= | Optional, if set to "off" will disable match failed message |
@@ -143,9 +143,9 @@ It is also possible to expand the contents of tables embedded in the topic, in t
 	* using the syntax <code>$field[format=FORMAT]</code> where =$field= is the table type, which is named the same as the table topic, and =FORMAT= is the name of a format previously defined using <code>%TABLEFORMAT</code> and suitable for expanding the sub-table.
 	* using the syntax <code>$field.subfield</code> where =subfield= is a numeric field in the contents of the embedded table (i.e. it contains a number). In this case the result will be the sum of all =subfield= values over all the rows in the table.
 
-=sort= is used to define the sort order, and is a list of field names (without $'s) separated by commas. For example,
+=sort= is used to define the sort order, and is a list of field names (without $'s) separated by commas. You can reverse the sort order for a column by prepending '-' to the field name. For example,
 
-=sort="Owner,Priority"=
+=sort="Owner,-Priority"=
 
 <code>%TABLEFORMAT</code> is silent i.e. it produces no output on the page unless there is an error, in which case a descriptive error message is output. This message can be disabled using the =moan= parameter.
 
@@ -242,7 +242,7 @@ Used to calculate the sum of a numeric field across all the matches in a query r
 For example, let's say we have a form type called "VitalStatistics" that has a field "Age" in it. We can sum all the ages in all occurences of the form using:
 <pre>
 %<nop>FORMQUERY{name=vs search="form='VitalStatistics'"}%
-%SUMFIELD{query=vs field="Age"}%
+Sum of ages = %<nop>SUMFIELD{query=vs field="Age"}%
 </pre>
 The result is a single number representing the sum of all the fields.
 
@@ -259,29 +259,11 @@ If =target= is omitted, then it creates a standard two-part progress bar. If all
 <table border=2 width=100%>
  <tr>
   <td> If actual &lt; target, e.g. <code>%<nop>PROGRESS{total=10 target=5 actual=3}%</code></td>
-  <td>
-   <table border=0 height=10 width=100%>
-    <tr>
-     <td width=30% bgcolor="#777777">&nbsp;</td>
-     <td width=20% bgcolor="#CD0000">&nbsp;</td>
-     <td width=50% bgcolor="#CCCCCC">&nbsp;</td>
-    </tr>
-   </table>
-   7 required / 5 available
-  </td>
+  <td><table border=0 cellspacing=0 width=100%><tr><td width=30% bgcolor="#999999" align=center><font color="white">&nbsp;</font></td><td width=20% bgcolor="red" align=center><font color="white">2</font></td><td width=1% bgcolor="" align=center><font color="white">&nbsp;</font></td><td width=49% bgcolor="#CCCCCC" align=center><font color="black">&nbsp;</font></td></tr></table></td>
  </tr>
  <tr>
-  <td> If actual > target, e.g. <code>%<nop>PROGRESS{total=10 target=5 actual=7}%<code>  </td>
-  <td>
-   <table border=0 height=10 width=100%>
-    <tr>
-     <td width=50% bgcolor="#777777">&nbsp;</td>
-     <td width=20% bgcolor="#00CD00">&nbsp;</td>
-     <td width=30% bgcolor="#CCCCCC">&nbsp;</td>
-    </tr>
-   </table>
-   3 required / 5 available
-  </td>
+  <td> If actual &gt; target, e.g. <code>%<nop>PROGRESS{total=10 target=5 actual=7}%<code>  </td>
+  <td><table border=0 cellspacing=0 width=100%><tr><td width=50% bgcolor="#999999" align=center><font color="white">&nbsp;</font></td><td width=1% bgcolor="black" align=center><font color="white">&nbsp;</font></td><td width=20% bgcolor="lime" align=center><font color="black">2</font></td><td width=29% bgcolor="#CCCCCC" align=center><font color="black">&nbsp;</font></td></tr></table></td>
  </tr>
 </table>
 ---

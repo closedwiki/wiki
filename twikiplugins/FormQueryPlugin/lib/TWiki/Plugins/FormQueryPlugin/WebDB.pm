@@ -187,7 +187,7 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
       # faster than using the TWiki method
       foreach my $topic ( @topics ) {
 	open( FH, "<$dataDir/$topic.txt" )
-	  or die "Failed $dataDir/$topic.txt";
+	  or die "Failed to open $dataDir/$topic.txt";
 	my $meta = undef;
 	my $line;
 	while ( $line = <FH> ) {

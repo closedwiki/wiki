@@ -44,6 +44,30 @@ sub test_1 {
   $this->assert_str_equals("1234", $res);
 }
 
+sub test_1reverse {
+  my $this = shift;
+
+  my $tf = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"-X\""));
+
+  my $data = new FormQueryPlugin::Array();
+  $data->add(new FormQueryPlugin::Map("X=0 Y=0"));
+  $data->add(new FormQueryPlugin::Map("X=0 Y=1"));
+  $data->add(new FormQueryPlugin::Map("X=1 Y=0"));
+  $data->add(new FormQueryPlugin::Map("X=1 Y=1"));
+
+  my $res = $tf->formatTable($data, $this->{cmap});
+
+  $res =~ s/<table border=2 width="100%">(.*)<\/table>/$1/so;
+  $res =~ s/<tr bgcolor=\"\#CCFF99\"><td> \*X\* <\/td><td> \*Y\* <\/td><\/tr>//o;
+  $res =~ s/<tr valign=top><td> g0g <\/td><td> g0g <\/td><\/tr>/1/o;
+  $res =~ s/<tr valign=top><td> g0g <\/td><td> r1r <\/td><\/tr>/2/o;
+  $res =~ s/<tr valign=top><td> r1r <\/td><td> g0g <\/td><\/tr>/3/o;
+  $res =~ s/<tr valign=top><td> r1r <\/td><td> r1r <\/td><\/tr>/4/o;
+  $res =~ s/\s//go;
+
+  $this->assert_str_equals("3412", $res);
+}
+
 sub test_2 {
   my $this = shift;
 
@@ -66,6 +90,30 @@ sub test_2 {
   $res =~ s/\s//go;
 
   $this->assert_str_equals("1324", $res);
+}
+
+sub test_2reverse {
+  my $this = shift;
+
+  my $tf = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"-Y,-X\""));
+
+  my $data = new FormQueryPlugin::Array();
+  $data->add(new FormQueryPlugin::Map("X=0 Y=0"));
+  $data->add(new FormQueryPlugin::Map("X=0 Y=1"));
+  $data->add(new FormQueryPlugin::Map("X=1 Y=0"));
+  $data->add(new FormQueryPlugin::Map("X=1 Y=1"));
+
+  my $res = $tf->formatTable($data);
+
+  $res =~ s/<table border=2 width="100%">(.*)<\/table>/$1/so;
+  $res =~ s/<tr bgcolor=\"\#CCFF99\"><td> \*X\* <\/td><td> \*Y\* <\/td><\/tr>//o;
+  $res =~ s/<tr valign=top><td>  0  <\/td><td>  0  <\/td><\/tr>/1/o;
+  $res =~ s/<tr valign=top><td>  0  <\/td><td>  1  <\/td><\/tr>/2/o;
+  $res =~ s/<tr valign=top><td>  1  <\/td><td>  0  <\/td><\/tr>/3/o;
+  $res =~ s/<tr valign=top><td>  1  <\/td><td>  1  <\/td><\/tr>/4/o;
+  $res =~ s/\s//go;
+
+  $this->assert_str_equals("4231", $res);
 }
 
 sub test_3 {

@@ -139,15 +139,24 @@ use TWiki::Plugins::FormQueryPlugin::Array;
 
   # PUBLIC debug print
   sub toString {
-    my $this = shift;
+    my ( $this, $strung ) = @_;
+    if ( !defined( $strung )) {
+      $strung = {};
+    } elsif ( $strung->{$this} ) {
+      return "$this\{...\}";
+    }
+    $strung->{$this} = 1;
     my $key;
-    my $ss = "{ ";
+    my $ss = "$this\{ ";
     foreach $key ( keys %{$this->{keys}} ) {
       $ss .= " $key=";
-      if ( ref( $this->{keys}{$key} )) {
-	$ss .= $this->{keys}{$key}->toString();
+      my $entry = $this->{keys}{$key};
+      if ( ref( $entry )) {
+	$ss .= $entry->toString( $strung );
+      } elsif ( defined( $entry )) {
+	$ss .= "\"$entry\"";
       } else {
-	$ss .= "\"" . $this->{keys}{$key} . "\"";
+	$ss .= "UNDEF";
       }
     }
     return $ss." }";
