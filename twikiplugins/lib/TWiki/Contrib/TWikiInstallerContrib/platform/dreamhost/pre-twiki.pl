@@ -20,9 +20,9 @@ print `mkdir -p cgi-bin/` unless -d "cgi-bin";
 print `cp install_twiki.cgi cgi-bin/ ; chmod +x cgi-bin/install_twiki.cgi` unless -e "cgi-bin/install_twiki.cgi";
 
 print `mkdir -p cgi-bin/tmp/ cgi-bin/tmp/twiki/pub/ cgi-bin/tmp/twiki/templates/ cgi-bin/tmp/install/`;
-print `cp -R downloads cgi-bin/tmp/install/`;
-print `cp -R cpan cgi-bin/tmp/install/`;
-print `cp -R webs cgi-bin/tmp/install/`;
+print `cp -R downloads/ cgi-bin/tmp/install/downloads/`;
+print `cp -R cpan/ cgi-bin/tmp/install/cpan/`;
+print `cp -R webs/ cgi-bin/tmp/install/webs/`;
 print `chmod -R 777 cgi-bin/tmp/`;
 
 print `mkdir -p cgi-bin/twiki/ ; chmod 777 cgi-bin/twiki/`;
@@ -44,6 +44,6 @@ print `perl cpan/install-cpan.pl XML::Parser XML::Simple Text::Diff Algorithm::D
 print `chmod -R 777 cgi-bin/tmp/`;
 #print `chmod -R 777 cgi-bin/lib/CPAN/`;
 
-print `find cgi-bin -print | xargs chmod go-w`;
+#print `find cgi-bin -print | xargs chmod go-w`;
 
 system( open => $INSTALL ) == 0 or print "continue installation at $INSTALL\n";
