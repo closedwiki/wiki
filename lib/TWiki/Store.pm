@@ -71,15 +71,27 @@ sub _getTopicHandler
 
 
 # =========================
-# Given a full topic name, split into Web and Topic
-# e.g. Test.TestTopic1 -> ("Test", "TestTopic1")
-sub getWebTopic
+# Normalize a Web.TopicName
+# Input:                      Return:
+#   ( "Web",  "Topic" )         ( "Web",  "Topic" )
+#   ( "",     "Topic" )         ( "Main", "Topic" )
+#   ( "",     "" )              ( "Main", "WebHome" )
+#   ( "",     "Web/Topic" )     ( "Web",  "Topic" )
+#   ( "",     "Web.Topic" )     ( "Web",  "Topic" )
+#   ( "Web1", "Web2.Topic" )    ( "Web2", "Topic" )
+# Note: Function renamed from getWebTopic
+sub normalizeWebTopicName
 {
-   my( $fullTopic ) = @_;
-   $fullTopic =~ m|^([^.]+)[./](.*)$|;
-   my $web = $1;
-   my $topic = $2;
-   return ($web, $topic );
+   my( $theWeb, $theTopic ) = @_;
+
+   if( $theTopic =~ m|^([^.]+)[\.\/](.*)$| ) {
+       $theWeb = $1;
+       $theTopic = $2;
+   }
+   $theWeb = $TWiki::webName unless( $theWeb );
+   $theTopic = $TWiki::topicName unless( $theTopic );
+
+   return( $theWeb, $theTopic );
 }
 
 
@@ -866,6 +878,10 @@ sub readWebTopic
 sub readTopicRaw
 {
     my( $theWeb, $theTopic, $theVersion, $internal ) = @_;
+
+    #SVEN - test if theTopic contains a webName to override $theWeb
+    ( $theWeb, $theTopic ) = normalizeWebTopicName( $theWeb, $theTopic );
+
     my $text = "";
     if( ! $theVersion ) {
         $text = &readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt" );

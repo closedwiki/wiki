@@ -173,7 +173,7 @@ sub updateReferingPages
     while ( @refs ) {
        my $type = shift @refs;
        my $item = shift @refs;
-       my($itemWeb, $itemTopic) = TWiki::Store::getWebTopic($item);
+       my( $itemWeb, $itemTopic ) = TWiki::Store::normalizeWebTopicName( "", $item );
        if ( &TWiki::Store::topicIsLockedBy( $itemWeb, $itemTopic ) ) {
           $lockFailure = 1;
        } else {
