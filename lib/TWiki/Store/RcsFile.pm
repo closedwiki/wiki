@@ -212,7 +212,7 @@ sub _moveAttachment
     $tempPath = $new->_makeFileDir( 1 );
     unless( -e $tempPath ) {
         umask( 0 );
-        mkdir( $tempPath, 0775 );
+        mkdir( $tempPath, 0775 ); # FIXME get from elsewhere
     }
     
     # Move attachment
