@@ -57,7 +57,7 @@ use vars qw(
         $siteWebTopicName $wikiToolName $securityFilter $uploadFilter
         $debugFilename $warningFilename $htpasswdFilename
         $logFilename $remoteUserFilename $wikiUsersTopicname
-        $userListFilename %userToWikiList %wikiToUserList
+        $userListFilename $doMapUserToWikiName %userToWikiList %wikiToUserList
         $twikiWebname $mainWebname $mainTopicname $notifyTopicname
         $wikiPrefsTopicname $webPrefsTopicname
         $statisticsTopicname $statsTopViews $statsTopContrib $doDebugStatistics
@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "01 Nov 2003";
+$wikiversion      = "08 Nov 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -853,14 +853,17 @@ sub initializeRemoteUser
 # and WikiName (e.g. JaneSmith)
 sub userToWikiListInit
 {
-    my $text = &TWiki::Store::readFile( $userListFilename );
-    my @list = split( /\n/, $text );
+    %userToWikiList = ();
+    %wikiToUserList = ();
+
+    # bail out in .htpasswd authenticated sites, fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
+    return unless( $doMapUserToWikiName );
+
+    my @list = split( /\n/, &TWiki::Store::readFile( $userListFilename ) );
 
     # Get all entries with two '-' characters on same line, i.e.
     # 'WikiName - userid - date created'
     @list = grep { /^\s*\* $wikiWordRegex\s*-\s*[^\-]*-/o } @list;
-    %userToWikiList = ();
-    %wikiToUserList = ();
     my $wUser;
     my $lUser;
     foreach( @list ) {
