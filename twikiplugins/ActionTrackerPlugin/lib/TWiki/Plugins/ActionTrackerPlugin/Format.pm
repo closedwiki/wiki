@@ -32,7 +32,7 @@ use TWiki::Func;
 #    representation of the field. Field methods override type
 #    methods. The function must return a tuple of ( text, colour ).
 #    The colour may be undefined.
-{ package ActionTrackerPlugin::Format;
+{ package TWiki::Plugins::ActionTrackerPlugin::Format;
 
   use vars qw ( $latecol $badcol $hdrcol $border );
 

@@ -17,7 +17,7 @@
 use strict;
 use integer;
 
-{ package ActionTrackerPlugin::AttrDef;
+{ package TWiki::Plugins::ActionTrackerPlugin::AttrDef;
 
   sub new {
     my ( $class, $type, $size, $match, $candef, $values ) = @_;

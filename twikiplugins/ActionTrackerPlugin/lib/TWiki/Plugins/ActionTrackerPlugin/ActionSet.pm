@@ -23,7 +23,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
 
 # Perl object that represents a set of actions.
-{ package ActionTrackerPlugin::ActionSet;
+{ package TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 
   # PUBLIC constructor
   sub new {
@@ -46,7 +46,7 @@ use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
   # ignoring the rest of the text
   sub load {
     my ( $web, $topic, $text ) = @_;
-    my $actions = new ActionTrackerPlugin::ActionSet();
+    my $actions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
 
     # FORMAT DEPENDANT ACTION SCAN
     my $actionNumber = 0;
@@ -74,7 +74,7 @@ use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
 	$processAction = 1;
       }
       if ( $processAction ) {
-	my $action = new ActionTrackerPlugin::Action( $web, $topic,
+	my $action = new TWiki::Plugins::ActionTrackerPlugin::Action( $web, $topic,
 						      $actionNumber++,
 						      $attrs, $descr );
 	$actions->add( $action );
@@ -130,7 +130,7 @@ use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
   sub search {
     my ( $this, $attrs ) = @_;
     my $action;
-    my $chosen = new ActionTrackerPlugin::ActionSet();
+    my $chosen = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
 
     foreach $action ( @{$this->{ACTIONS}} ) {
       if ( $action->matches( $attrs ) ) {
@@ -250,7 +250,7 @@ use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
   sub allActionsInWeb {
     my ( $web, $attrs, $internal ) = @_;
     $internal = 0 unless defined ( $internal );
-    my $actions = new ActionTrackerPlugin::ActionSet();
+    my $actions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
     my $dd = TWiki::Func::getDataDir() || "../data";
     # "../data" because this is a cgi script executed in bin
 
@@ -261,8 +261,8 @@ use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
     # isn't very useful in TWiki.
     # Also assumed: the output of the egrepCmd must be of the form
     # file.txt: ...matched text...
-    my $cmd = $ActionTrackerPlugin::ActionTrackerConfig::egrepCmd;
-    my $q = $ActionTrackerPlugin::ActionTrackerConfig::cmdQuote;
+    my $cmd = $TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig::egrepCmd;
+    my $q = $TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig::cmdQuote;
 	my $topics = $attrs->get( "topic" );
 	my @tops = TWiki::Func::getTopicList( $web );
 	@tops = grep( /^$topics$/, @tops ) if ( $topics );
@@ -290,7 +290,7 @@ use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
 		  $topic = $1;
 		  unless ( $topic eq $justDid ) {
 			my $text = TWiki::Func::readTopicText( $web, $topic, undef, $internal );
-			my $tacts = ActionTrackerPlugin::ActionSet::load( $web, $topic, $text );
+			my $tacts = TWiki::Plugins::ActionTrackerPlugin::ActionSet::load( $web, $topic, $text );
 			$tacts = $tacts->search( $attrs );
 			$actions->concat( $tacts );
 			$justDid = $topic;
@@ -308,7 +308,7 @@ use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
     my ( $theweb, $attrs, $internal ) = @_;
     $internal = 0 unless defined ( $internal );
     my $webs = $attrs->get( "web" ) || $theweb;
-    my $actions = new ActionTrackerPlugin::ActionSet();
+    my $actions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
     my $dataDir = TWiki::Func::getDataDir();
     # COVERAGE OFF safety net
     if ( !opendir( DIR, "$dataDir" )) {
@@ -323,7 +323,7 @@ use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
     foreach $web ( @weblist ) {
       if ( -d "$dataDir/$web" && $web =~ /^$webs$/ ) {
           # CODE_SMELL: fix the plugins API
-	$web =~ s/$ActionTrackerPlugin::ActionTrackerConfig::securityFilter//go;
+	$web =~ s/$TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig::securityFilter//go;
 	$web =~ /(.*)/; # untaint
 	$web = $1;
 	# Exclude webs flagged as NOSEARCHALL

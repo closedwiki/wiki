@@ -42,7 +42,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 # created       When the action was created
 # closer        Who closed the action
 # closed        When the action was closed
-{ package ActionTrackerPlugin::Action;
+{ package TWiki::Plugins::ActionTrackerPlugin::Action;
 
   my $now = time();
   my $mainweb = TWiki::Func::getMainWebname();
@@ -64,56 +64,56 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   my %basetypes =
     (
      changedsince =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      closed       =>
-     new ActionTrackerPlugin::AttrDef( 'date',  $dw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'date',  $dw, 1, 0, undef ),
      closer       =>
-     new ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
      created      =>
-     new ActionTrackerPlugin::AttrDef( 'date',  $dw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'date',  $dw, 1, 0, undef ),
      creator      =>
-     new ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
      dollar       =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      due          =>
-     new ActionTrackerPlugin::AttrDef( 'date',  $dw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'date',  $dw, 1, 0, undef ),
      edit         =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      format       =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      header       =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      late         =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      n            =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      nop          =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      notify       =>
-     new ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
      percnt       =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      quot         =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      sort         =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      state        =>
-     new ActionTrackerPlugin::AttrDef( 'select', 1, 1, 1,
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'select', 1, 1, 1,
 				       [ "open","closed" ] ),
      text         =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
      topic        =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
      uid          =>
-     new ActionTrackerPlugin::AttrDef( 'text',  $nw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'text',  $nw, 1, 0, undef ),
      web          =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
      who          =>
-     new ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
      within       =>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
      ACTION_NUMBER=>
-     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
+     new TWiki::Plugins::ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
     );
 
   my %types = %basetypes;
@@ -206,7 +206,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	  }
 	}
 	$types{$name} =
-	  new ActionTrackerPlugin::AttrDef( $type, $size, 1, 1, \@values );
+	  new TWiki::Plugins::ActionTrackerPlugin::AttrDef( $type, $size, 1, 1, \@values );
       } else {
 	return "Bad EXTRAS definition '$def' in EXTRAS";
       }
@@ -555,9 +555,9 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $text = formatTime( $this->{due}, "string" );
 
     if ( !defined($this->{due}) ) {
-      $bgcol = $ActionTrackerPlugin::Format::badcol;
+      $bgcol = $TWiki::Plugins::ActionTrackerPlugin::Format::badcol;
     } elsif ( $this->isLate() ) {
-      $bgcol = $ActionTrackerPlugin::Format::latecol;
+      $bgcol = $TWiki::Plugins::ActionTrackerPlugin::Format::latecol;
       if ( !$asHTML ) {
 	$text .= " (LATE)";
       }
@@ -764,7 +764,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       }
 
       if ( $processAction ) {
-	my $anAction = new ActionTrackerPlugin::Action( $web, $topic,
+	my $anAction = new TWiki::Plugins::ActionTrackerPlugin::Action( $web, $topic,
 							$an, $attrs, $descr );
 	my $auid = $anAction->{uid};
 	if ( ( defined( $auid ) && $auid eq $uid ) || $an == $sn ) {
@@ -813,7 +813,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	}
       }
     }
-    return new ActionTrackerPlugin::Action( $web, $topic, $an, $attrs, $desc );
+    return new TWiki::Plugins::ActionTrackerPlugin::Action( $web, $topic, $an, $attrs, $desc );
   }
 
   sub formatForEdit {

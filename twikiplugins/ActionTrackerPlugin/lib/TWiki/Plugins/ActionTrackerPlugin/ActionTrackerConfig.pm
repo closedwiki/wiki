@@ -23,7 +23,7 @@ use TWiki; # required for unpublished constants!
 # standard variables used by the action tracker (such as $rlogCmd).
 # They are defined here so that if they subsequently disappear
 # from TWiki:: the action tracker can easily be reconfigured.
-{ package ActionTrackerPlugin::ActionTrackerConfig;
+{ package TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
 
   use vars qw( $rlogCmd $cmdQuote $egrepCmd $securityFilter $notifyTopicname );
 

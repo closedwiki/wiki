@@ -32,7 +32,7 @@ use vars qw(
 	    $pluginName $defaultFormat $calendarIncludes
 	   );
 
-$VERSION = '2.010';
+$VERSION = '2.011';
 $initialised = 0;
 $pluginName = "ActionTrackerPlugin";
 $installWeb = "TWiki";
@@ -150,9 +150,9 @@ sub commonTagsHandler {
     }
 
     if ( $processAction ) {
-      my $action = new ActionTrackerPlugin::Action( $_[2], $_[1], $actionNumber++, $attrs, $descr );
+      my $action = new TWiki::Plugins::ActionTrackerPlugin::Action( $_[2], $_[1], $actionNumber++, $attrs, $descr );
       if ( !defined( $actionSet )) {
-	$actionSet = new ActionTrackerPlugin::ActionSet();
+	$actionSet = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
       }
       $actionSet->add( $action );
       $processAction = 0;
@@ -259,7 +259,7 @@ sub beforeEditHandler {
   # to be too high.
   my $uid = $query->param( "action" );
   my ( $action, $pretext, $posttext ) =
-    ActionTrackerPlugin::Action::findActionByUID( $web, $topic, $text, $uid );
+    TWiki::Plugins::ActionTrackerPlugin::Action::findActionByUID( $web, $topic, $text, $uid );
 
   $fields .= $query->hidden( -name=>'pretext', -value=>$pretext );
   $fields .= $query->hidden( -name=>'posttext', -value=>$posttext );
@@ -301,7 +301,7 @@ sub beforeEditHandler {
   my $body = _getPref( "EDITFORMAT" );
   my $vert = _getPref( "EDITORIENT" );
 
-  my $fmt = new ActionTrackerPlugin::Format( $hdrs, $body, $vert, "", "" );
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format( $hdrs, $body, $vert, "", "" );
   my $editable = $action->formatForEdit( $fmt );
   $tmpl =~ s/%EDITFIELDS%/$editable/o;
 
@@ -360,7 +360,7 @@ sub afterEditHandler {
   }
 
   my $action =
-    ActionTrackerPlugin::Action::createFromQuery( $_[2], $_[1], $an, $query );
+    TWiki::Plugins::ActionTrackerPlugin::Action::createFromQuery( $_[2], $_[1], $an, $query );
 
   $action->populateMissingFields();
 
@@ -450,7 +450,7 @@ sub _addMissingAttributes {
     }
 
     if ( $processAction ) {
-      my $action = new ActionTrackerPlugin::Action( $web, $topic,
+      my $action = new TWiki::Plugins::ActionTrackerPlugin::Action( $web, $topic,
 						    $an, $attrs, $descr );
       $action->populateMissingFields();
       $text .= $action->toString() . "\n";
@@ -532,12 +532,12 @@ sub _handleActionSearch {
     $fmts = $defaultFormat->getFields() unless ( defined( $fmts ));
     $hdrs = $defaultFormat->getHeaders() unless ( defined( $hdrs ));
     $orient = $defaultFormat->getOrientation() unless ( defined( $orient ));
-    $fmt = new ActionTrackerPlugin::Format( $hdrs, $fmts, $orient, "", "" );
+    $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format( $hdrs, $fmts, $orient, "", "" );
   } else {
     $fmt = $defaultFormat;
   }
 
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs( $web, $attrs );
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $web, $attrs );
   $actions->sort( $sort );
   return _embedJS() . $actions->formatAsHTML( $fmt, "href", $useNewWindow );
 }
@@ -552,16 +552,21 @@ sub _lazyInit {
 	  print STDERR $err;
 	  return 0;
 	}
+  } else {
+      eval 'use TWiki::Contrib::Attrs';
+      if ($@) { print STDERR $0; return 0; }
+      eval 'use Time::ParseDate';
+      if ($@) { print STDERR $0; return 0; }
   }
 
   eval 'use TWiki::Plugins::ActionTrackerPlugin::Action';
-  return 0 if $@;
+  if ($@) { print STDERR $0; return 0; }
   eval 'use TWiki::Plugins::ActionTrackerPlugin::ActionSet';
-  return 0 if $@;
+  if ($@) { print STDERR $0; return 0; }
   eval 'use TWiki::Plugins::ActionTrackerPlugin::Format';
-  return 0 if $@;
+  if ($@) { print STDERR $0; return 0; }
   eval 'use TWiki::Plugins::ActionTrackerPlugin::ActionNotify';
-  return 0 if $@;
+  if ($@) { print STDERR $0; return 0; }
 
   # Get plugin debug flag
   $debug = TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_DEBUG" ) || 0;
@@ -571,11 +576,11 @@ sub _lazyInit {
   $useNewWindow = _getPref( "USENEWWINDOW", 0 );
 
   # Colour for warning of late actions
-  $ActionTrackerPlugin::Format::latecol = _getPref( "LATECOL", "yellow" );
+  $TWiki::Plugins::ActionTrackerPlugin::Format::latecol = _getPref( "LATECOL", "yellow" );
   # Colour for an unparseable date
-  $ActionTrackerPlugin::Format::badcol = _getPref( "BADDATECOL", "red" );
+  $TWiki::Plugins::ActionTrackerPlugin::Format::badcol = _getPref( "BADDATECOL", "red" );
   # Colour for table header rows
-  $ActionTrackerPlugin::Format::hdrcol = _getPref( "HEADERCOL", "#FFCC66" );
+  $TWiki::Plugins::ActionTrackerPlugin::Format::hdrcol = _getPref( "HEADERCOL", "#FFCC66" );
 
   my $hdr      = _getPref( "TABLEHEADER" );
   my $bdy      = _getPref( "TABLEFORMAT" );
@@ -583,12 +588,12 @@ sub _lazyInit {
   my $orient   = _getPref( "TABLEORIENT" );
   my $changes  = _getPref( "NOTIFYCHANGES" );
   $defaultFormat =
-    new ActionTrackerPlugin::Format( $hdr, $bdy, $orient, $textform, $changes );
+    new TWiki::Plugins::ActionTrackerPlugin::Format( $hdr, $bdy, $orient, $textform, $changes );
 
   my $extras = _getPref( "EXTRAS" );
 
   if ( $extras ) {
-    my $e = ActionTrackerPlugin::Action::extendTypes( $extras );
+    my $e = TWiki::Plugins::ActionTrackerPlugin::Action::extendTypes( $extras );
     # COVERAGE OFF safety net
     if ( defined( $e )) {
       TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin ERROR $e" );
@@ -625,7 +630,7 @@ sub _handleActionNotify {
   eval 'require TWiki::Plugins::ActionTrackerPlugin::ActionNotify';
   return if $@;
 
-  my $text = ActionTrackerPlugin::ActionNotify::doNotifications( $web, $expr, 1 );
+  my $text = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::doNotifications( $web, $expr, 1 );
 
   $text =~ s/<html>/<\/pre>/gos;
   $text =~ s/<\/html>/<pre>/gos;

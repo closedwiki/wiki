@@ -35,7 +35,7 @@ use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
 
 # This module contains the functionality of the bin/actionnotify script
-{ package ActionTrackerPlugin::ActionNotify;
+{ package TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
 
   my $wikiWordRE;
 
@@ -77,7 +77,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $changes =
       TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_NOTIFYCHANGES" );
 
-    my $format = new ActionTrackerPlugin::Format( $hdr, $bdy, $vert, $textform, $changes );
+    my $format = new TWiki::Plugins::ActionTrackerPlugin::Format( $hdr, $bdy, $vert, $textform, $changes );
 
     my $result = "";
     my $webs = $attrs->get( "web" ) || ".*";
@@ -104,7 +104,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $actions;
     if ( scalar( keys %$attrs ) > 0 ) {
       # Get all the actions that match the search
-      $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs( $webs, $attrs, 1 );
+      $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $webs, $attrs, 1 );
       $actions->getActionees( \%people );
     }
 
@@ -149,7 +149,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       foreach my $email ( split( /,\s*/, $mailaddr )) {
 	if ( $myActions ) {
 	  if ( !defined( $actionsPerEmail{$email} )) {
-	    $actionsPerEmail{$email} = new ActionTrackerPlugin::ActionSet();
+	    $actionsPerEmail{$email} = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
 	  }
 	  $actionsPerEmail{$email}->concat( $myActions );
 	  $notifyEmail{$email} = 1;
@@ -231,7 +231,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     }
     # COVERAGE ON
 
-    my $topicname = $ActionTrackerPlugin::ActionTrackerConfig::notifyTopicname;
+    my $topicname = $TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig::notifyTopicname;
     return undef unless TWiki::Func::topicExists( $web, $topicname );
     
     my $list = {};
@@ -241,7 +241,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       if ( $line =~ /^\s+\*\s([\w\.]+)\s+-\s+([\w\-\.\+]+\@[\w\-\.\+]+)/o ) {
 	my $who = $1;
 	my $addr = $2;
-	$who = ActionTrackerPlugin::Action::_canonicalName( $who );
+	$who = TWiki::Plugins::ActionTrackerPlugin::Action::_canonicalName( $who );
 	if ( !defined( $mailAddress->{$who} )) {
 	  TWiki::Func::writeWarning( "ActionTrackerPlugin:ActionNotify: mail address for $who found in WebNotify" );
 	  $mailAddress->{$who} = $addr;
@@ -282,7 +282,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     }
 	elsif ( $who =~ m/^$wikiWordRE$/o ) {
       # A legal topic wikiname
-      $who = ActionTrackerPlugin::Action::_canonicalName( $who );
+      $who = TWiki::Plugins::ActionTrackerPlugin::Action::_canonicalName( $who );
       $addresses = _getMailAddress( $who, $mailAddress );
 # Replaced by NKO
 #   } elsif ( $who =~ m/^(\w+)\.([A-Z]+[a-z]+[A-Z]+\w+)$/o ) {
@@ -390,7 +390,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       return undef;
     }
     # COVERAGE ON
-    my $tmp = $ActionTrackerPlugin::ActionTrackerConfig::rlogCmd;
+    my $tmp = $TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig::rlogCmd;
     $tmp =~ s/%DATE%/$date/o;
     $tmp =~ s/%FILENAME%/$fname/o;
     $tmp =~ /(.*)/;
@@ -426,12 +426,12 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     # Recover the action set at that date
     my $text = TWiki::Func::readTopicText( $theWeb, $theTopic, $oldrev, 1 );
     my $oldActions =
-      ActionTrackerPlugin::ActionSet::load( $theWeb, $theTopic, $text );
+      TWiki::Plugins::ActionTrackerPlugin::ActionSet::load( $theWeb, $theTopic, $text );
 
     # Recover the current action set.
     $text = TWiki::Func::readTopicText( $theWeb, $theTopic, undef, 1 );
     my $currentActions =
-      ActionTrackerPlugin::ActionSet::load( $theWeb, $theTopic, $text );
+      TWiki::Plugins::ActionTrackerPlugin::ActionSet::load( $theWeb, $theTopic, $text );
 
     # find actions that have changed between the two dates. These
     # are added as text to a hash keyed on the names of people
@@ -445,7 +445,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # $theDate is a string, not an integer
   sub _findChangesInWeb {
     my ( $theWeb, $topics, $theDate, $format, $notifications ) = @_;
-    my $actions = new ActionTrackerPlugin::ActionSet();
+    my $actions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
     my $dd = TWiki::Func::getDataDir() || "..";
 
     # Known problem; if there's only one file in the web matching
@@ -455,8 +455,8 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     # isn't very useful in TWiki.
     # Also assumed: the output of the egrepCmd must be of the form
     # file.txt: ...matched text...
-    my $cmd = $ActionTrackerPlugin::ActionTrackerConfig::egrepCmd;
-    my $q = $ActionTrackerPlugin::ActionTrackerConfig::cmdQuote;
+    my $cmd = $TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig::egrepCmd;
+    my $q = $TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig::cmdQuote;
     # This grep is only used to find the files containing actions.
     # The output is thrown away. So we could use fgrep instead, but
     # since this is run as a cron there's not much benefit. If Search

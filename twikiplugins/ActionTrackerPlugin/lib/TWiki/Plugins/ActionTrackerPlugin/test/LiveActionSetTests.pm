@@ -19,7 +19,7 @@ sub set_up {
   my $this = shift;
   $this->SUPER::set_up();
   
-  ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
+  TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
   
   BaseFixture::writeTopic("Test", "Topic1", "
 %ACTION{who=Main.C,due=\"16 Dec 02\",open}% Test_Topic1_C_open_ontime");
@@ -53,8 +53,8 @@ sub set_up {
 sub test_GetAllInMain {
   my $this = shift;
   my $attrs = TWiki::Contrib::Attrs->new();
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Main", $attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWeb("Main", $attrs);
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
   $this->assert_does_not_match(qr/Test_Topic1_C_open_ontime/o, $chosen);
   $this->assert_does_not_match(qr/Test_Topic2_A_open_late/o, $chosen);
@@ -66,8 +66,8 @@ sub test_GetAllInMain {
 sub test_GetAllInTest {
   my $this = shift;
   my $attrs = TWiki::Contrib::Attrs->new();
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
   $this->assert_matches(qr/Test_Topic1_C_open_ontime/o, $chosen);
   $this->assert_matches(qr/Test_Topic2_A_open_late/o, $chosen);
@@ -79,9 +79,9 @@ sub test_GetAllInTest {
 sub test_GetAllInAllWebs {
   my $this = shift;
   my $attrs = TWiki::Contrib::Attrs->new("web=\".*\"");
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
   $actions->sort();
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
   
   $this->assert_matches(qr/Test_Topic1_C_open_ontime/o, $chosen);
@@ -103,9 +103,9 @@ sub test_GetAllInAllWebs {
 sub test_SortAllWebs {
   my $this = shift;
   my $attrs = TWiki::Contrib::Attrs->new("web=\".*\"");
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
   $actions->sort("who,state");
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
   $this->assert_matches(qr/Main_Topic2_A_closed_ontime.*Test_Topic2_A_open_late.*Main_Topic2_B_open_ontime.*Test_Topic1_C_open_ontime.*Main_Topic2_E_open_ontime/so, $chosen);
 }
@@ -113,8 +113,8 @@ sub test_SortAllWebs {
 sub test_AllInTestWebRE {
   my $this = shift;
   my $attrs = TWiki::Contrib::Attrs->new("web=\"T.*\"");
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
   
   $this->assert_matches(qr/Test_Topic1_C_open_ontime/o, $chosen);
@@ -127,8 +127,8 @@ sub test_AllInTestWebRE {
 sub test_AllInMainWebRE {
   my $this = shift;
   my $attrs = TWiki::Contrib::Attrs->new("web=\".*ain\"");
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
   
   $this->assert_does_not_match(qr/Test_Topic1_C_open_ontime/o, $chosen);
@@ -141,8 +141,8 @@ sub test_AllInMainWebRE {
 sub test_AllTopicRE {
   my $this = shift;
   my $attrs = TWiki::Contrib::Attrs->new("web=Test topic=\".*2\"");
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Test", $attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs("Test", $attrs);
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
   $this->assert_does_not_match(qr/Test_Topic1_C_open_ontime/o, $chosen);
   $this->assert_matches(qr/Test_Topic2_A_open_late/o, $chosen);
@@ -154,8 +154,8 @@ sub test_AllTopicRE {
 sub test_AllWebsTopicRE {
   my $this = shift;
   my $attrs = TWiki::Contrib::Attrs->new("web=\".*\",topic=\".*2\"");
-  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
-  my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
   $this->assert_does_not_match(qr/Test_Topic1_C_open_ontime/o, $chosen);
   $this->assert_matches(qr/Test_Topic2_A_open_late/o, $chosen);
