@@ -5,7 +5,7 @@ use strict;
 
 use TWiki::Func;
 
-use vars qw( $initialised $VERSION $firstCall $pluginName );
+use vars qw( $initialised $VERSION $firstCall $pluginName $context );
 
 BEGIN {
     $VERSION = 3.100;
@@ -13,8 +13,6 @@ BEGIN {
     $firstCall = 0;
 	$initialised = 0;
 }
-
-my $context;
 
 sub initPlugin {
     #my ( $topic, $web, $user, $installWeb ) = @_;
@@ -24,7 +22,9 @@ sub initPlugin {
     }
 
     $firstCall = 1;
-    $context = "$_[1].$_[0]";
+    my $topic = $_[0] || "";
+    my $web = $_[1] || "";
+    $context = "$web.$topic";
 
     return 1;
 }
@@ -41,6 +41,11 @@ sub commonTagsHandler {
     my $action = $query->param( 'comment_action' ) || "";
 
     if ( defined( $action ) && $action eq "save" &&
+         # Test that the current context is the context of the
+         # original query. This is needed as the common tags
+         # handler is called on other topics, such as included
+         # topics; but the save action should only happen on
+         # the queried topic.
          "$web.$topic" eq $context ) {
         # $firstCall ensures we only save once, ever.
         if ( $firstCall ) {

@@ -77,8 +77,7 @@ sub _handleInput {
          $disable, $defaultType ) = @_;
 
     $attributes =~ s/^{(.*)}$/$1/o if ( $attributes );
-    my $attrs = new TWiki::Attrs( $attributes );
-
+    my $attrs = new TWiki::Attrs( $attributes, 1 );
     my $type =
       $attrs->remove( "type" ) || $attrs->remove( "mode" ) || $defaultType;
     my $silent = $attrs->remove( "nonotify" );

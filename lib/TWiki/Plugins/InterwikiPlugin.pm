@@ -81,8 +81,8 @@ sub initPlugin {
     my $interTopic =
       TWiki::Func::getPreferencesValue( "INTERWIKIPLUGIN_RULESTOPIC" )
           || "InterWikis";
-    $interTopic =~ s/%MAINWEB%/TWiki::Func::getMainWebname()/geo;
-    $interTopic =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname/geo;
+    ( $interWeb, $interTopic ) =
+      TWiki::Func::normalizeWebTopicName( $interWeb, $interTopic );
     if( $interTopic =~ s/^(.*)\.// ) {
         $interWeb = $1;
     }
@@ -90,9 +90,18 @@ sub initPlugin {
     my $text = TWiki::Func::readTopicText( $interWeb, $interTopic, undef, 1 );
 
     # "| alias | URL | ..." table and extract into "alias", "URL" list
-    $text =~ s/^\|\s*($sitePattern)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|.*$/$interSiteTable{$1}=($2,$3);""/mego;
+    $text =~ s/^\|\s*$sitePattern\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|.*$/_map($1,$2,$3)/mego;
 
     return 1;
+}
+
+sub _map {
+    my( $site, $url, $help ) = @_;
+    if( $site ) {
+        $interSiteTable{$site}{url} = $url || "";
+        $interSiteTable{$site}{help} = $help || "";
+    }
+    return "";
 }
 
 sub startRenderingHandler {
@@ -107,7 +116,8 @@ sub _link {
 
     my $text;
     if( defined( $interSiteTable{$site} ) ) {
-        my( $url, $help ) = $interSiteTable{$site};
+        my $url = $interSiteTable{$site}{url};
+        my $help = $interSiteTable{$site}{help};
         my $title = "";
 
         unless( $suppressTooltip ) {
