@@ -385,12 +385,22 @@ sub main
     
     my( $fileSize, $fileUser, $fileDate, $fileVersion ) = "";
 
-    if( ! $doChangeProperties ) {
+    unless( $doChangeProperties ) {
 	# check if file exists and has non zero size
 	my $size = -s $tmpFilename;
+
 	if( ! -e $tmpFilename || ! $size ) {
 	    handleError( $noredirect, "File missing or zero size", 
 	           $query, $webName, $topic, "oopsupload", $fileName );
+	    return;
+	}
+
+        my $maxSize = &TWiki::Prefs::getPreferencesValue( "ATTACHFILESIZELIMIT" );
+        $maxSize =~ /([0-9]+)/;
+        $maxSize = $1 || 0;
+	if( $maxSize && $size > $maxSize * 1024 ) {
+	    handleError( $noredirect, "File exceeds size limit", 
+	           $query, $webName, $topic, "oopsuploadlimit", $fileName, $maxSize );
 	    return;
 	}
 
