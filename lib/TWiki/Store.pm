@@ -1769,9 +1769,9 @@ sub searchInWebContent {
     # - best to strip off any switches after first space in
     # EgrepCmd etc and apply those as argument 1.
     if( $type eq 'regex' ) {
-        $program = $TWiki::cfg{EgrepCmd};
+        $program = $TWiki::cfg{RCS}{EgrepCmd};
     } else {
-        $program = $TWiki::cfg{FgrepCmd};
+        $program = $TWiki::cfg{RCS}{FgrepCmd};
     }
 
     my $args = '';

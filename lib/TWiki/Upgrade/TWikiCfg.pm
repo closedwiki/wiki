@@ -143,10 +143,6 @@ sub upgradeConfig {
                       "{UseRcsDir}" );
     print CFG old2new($storeTopicImpl, "RcsWrap"
                       , "{StoreImpl}" );
-    print CFG old2new($egrepCmd, "/bin/egrep",
-                      "{EgrepCmd}" );
-    print CFG old2new($fgrepCmd, "/bin/fgrep",
-                      "{FgrepCmd}" );
     print CFG old2new($displayTimeValues, "gmtime",
                       "{DisplayTimeValues}" );
     print CFG old2new($useLocale, 0,
@@ -207,6 +203,8 @@ sub upgradeConfig {
                       "{RCS}{asciiFileSuffixes}");
     print CFG old2new($ss{dirPermission}, 0775,
                       "{RCS}{dirPermission}");
+    print CFG old2new($egrepCmd, "/bin/egrep", "{RCS}{EgrepCmd}" );
+    print CFG old2new($fgrepCmd, "/bin/fgrep", "{RCS}{FgrepCmd}" );
     print CFG old2new($ss{initBinaryCmd}, "$rcsDir/rcs  -q -i -t-none -kb %FILENAME%",
                       "{RCS}{initBinaryCmd}");
     print CFG old2new($ss{tmpBinaryCmd}, "$rcsDir/rcs  -q -kb %FILENAME%",
