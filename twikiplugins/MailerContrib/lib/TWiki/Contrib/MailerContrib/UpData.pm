@@ -18,14 +18,26 @@ use strict;
 
 use TWiki::Func;
 
-#
-# Singleton database object that lazy-scans topics to extract
-# parent relationships.
-#
-#
+=begin text
+
+---++ package TWiki::Contrib::MailerContrib::UpData
+
+Object that lazy-scans topics to extract
+parent relationships.
+
+=cut
+
 package TWiki::Contrib::MailerContrib::UpData;
 
-# Constructor
+=begin text
+
+---+++ sub new($web)
+| =$web= | Web we are building parent relationships for |
+Constructor for a web; initially empty, will lazy-load as topics
+are referenced.
+
+=cut
+
 sub new {
     my ( $class, $web ) = @_;
     my $this = bless( {}, $class );
@@ -33,7 +45,16 @@ sub new {
     return $this;
 }
 
-# SMELL: Huge assumption about topics containing meta-data.
+=begin text
+
+---+++ sub getParent($topic) -> string
+Get the name of the parent topic of the given topic
+
+SMELL: *Huge* assumption about topic files containing meta-data!! This
+should really do a Search, but there is no published API.
+
+=cut
+
 sub getParent {
     my ( $this, $topic ) = @_;
 

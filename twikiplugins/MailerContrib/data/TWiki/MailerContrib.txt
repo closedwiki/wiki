@@ -1,13 +1,13 @@
-%RED% *Not released yet; posted here as a taster only. Comments in MailerContribDev, please!* %ENDCOLOR%
-
 A replacement for the core 'mailnotify' functionality. This module brings a new level of flexibility and ease of use to notifications.
 
+%TOC%
+
 ---+ Summary of Contents
-The main part of the mailer module is a script, =bin/mailnotifier=. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard Web<nop>Notify topic. As well as providing the usual notification service, it also provides per-topic notification services. The script may be run from the command line, a cron job, or from the browser.
+The main part of the mailer module is a script, =bin/mailnotifier=. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard %NOTIFYTOPIC% topic. As well as providing the usual notification service, it also provides per-topic notification services. The script may be run from the command line, a cron job, or from the browser.
 
-The second part of the module is a code library that provides the services for other applications to modify Web<nop>Notify through a clean, well documented interface. This allows (for example) plugin developers to add a "Register me for noitification" button to their pages. The main interface is the =Web<nop>Notify= package described below.
+The second part of the module is a code library that provides the services for other applications to modify %NOTIFYTOPIC% through a clean, well documented interface. This allows (for example) plugin developers to add a "Register me for noitification" button to their pages. The main interface is the =%NOTIFYTOPIC%= package described below.
 
-The "new" format of Web<nop>Notify is a natural extension of the existing format. In the old format, subscribers are listed in "bullet lists" following one of the following formats:
+The "new" format of %NOTIFYTOPIC% is a natural extension of the existing format. In the old format, subscribers are listed in "bullet lists" following one of the following formats:
 
 _three spaces_ * [ _webname_ . ] _wikiName_ - _SMTP mail address_ %BR%
 _three spaces_ * [ _webName_ . ] _wikiName_
@@ -18,15 +18,19 @@ _three spaces_ * _SMTP mail address_ %BR%
 _three spaces_ * _SMTP mail address_ : _topics_ %BR%
 _three spaces_ * [ _webname_ . ] _wikiName_ : _topics_
 
-where _topics_ is a space-separated list of topic names (without a web specification; the topics must exist in this web). Topics may be specified using * wildcards. Each topic may optionally be followed by an integer in parentheses, indicating the depth of the tree of children below that topic. Changes in all these children will be detected and reported along with changes to the topic itself.
+where _topics_ is a space-separated list of topic names.
+	* Specify topics without and _Web._ prefix
+	* Topics must exist in this web.
+	* Topics may be specified using * wildcards.
+	* Each topic may optionally be followed by an integer in parentheses, indicating the depth of the tree of children below that topic. Changes in all these children will be detected and reported along with changes to the topic itself. _Note_ This uses the TWiki "Topic parent" feature.
 
 For example:
 <verbatim>
-   * daisy@flowers.com
-   * daisy@flowers.com: Web*
-   * DaisyCutter: Petal* (1), WeedKillers (3), Red*Phlox
+	* daisy@flowers.com
+	* daisy@flowers.com: Web*
+	* DaisyCutter: Petal* (1), WeedKillers (3), Red*Phlox
 </verbatim>
-A user may be listed many times in the Web<nop>Notify topic. The basic rule is that they are registered for "old style" notification of changes, that is what they will receive i.e. listing them with a specific topic will _not_ change how they are notified. Where a user has several lines in Web<nop>Notify that all match the same topic, they will only be notified of changes to that topic _once_.
+A user may be listed many times in the %NOTIFYTOPIC% topic. The basic rule is that they are registered for "old style" notification of changes, that is what they will receive i.e. listing them with a specific topic will _not_ change how they are notified. Where a user has several lines in %NOTIFYTOPIC% that all match the same topic, they will only be notified of changes to that topic _once_.
 
 As was the case with old =mailnotify=, if a _group_ is listed for notification, the group will be recursively expanded to the email addresses of all members.
 
@@ -47,29 +51,44 @@ from the browser the following CGI parameters are supported:
 | =sendmail= | Set to 1 to actually send mail |
 | =webs= | Comma-separated list of webs to process |
 
-<table bgcolor="light_yellow">
-%RED% The following POD documentation is provided for the use of developers only. %ENDCOLOR%. Everyone else can just ignore it.
+<table bgcolor="lightyellow"><tr><td>
+%RED% The following POD documentation is provided for the use of developers only. %ENDCOLOR%%BR%Everyone else can just ignore it.
+
+The main class is =TWiki::Contrib::MailContrib::WebNotify=, which allows you to load a notify topic and manipulate the entries. The other classes support this main class. =TWiki::Contrib::Mailer= is the implementation of =bin/mailnotifier=.
 
 %$POD%
 </table>
 
 ---++ Settings
-
-   * Name of the perl package
-      * Set STUB = %$STUB%
+	* Name of the perl package
+		* Set STUB = %$STUB%
 
 ---++ Installation Instructions
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     %$MANIFEST%
-   * Run the installer script =MailContrib_intaller.pl= or alternatively resolve all dependencies manually.
-   * To make sure the installation was successful, run the
-     =bin/mailnotifier= script from the command
-     line, with no parameters. In this case it will print out what it
-     would have done to STDOUT.
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	| *File:* | *Description:* |
+	%$MANIFEST%
+	* Run the installer script =MailContrib_intaller.pl= or alternatively resolve all dependencies manually.
+	* To make sure the installation was successful, run the
+	=bin/mailnotifier= script from the command
+	line, with no parameters. In this case it will print out what it
+	would have done to STDOUT.
+	* *Manually* modify your %TWIKIWEB%.WebChangesAlert topic from TWiki: Replace the part between the STARTINCLUDE and the STOPINCLUDE with the following text:
+<verbatim>
+Format: TWiki handles entries in bullet list (<space><space><space>*) format containing the WikiName of a user; a WikiName with e-mail address; an e-mail address only; or a TWikiGroup. Each of these may be followed by a colon and a comma separated list of topics, indicating what to subscribe to. Examples with explanation:
 
+	* Main.FredBloggs
+		send to the e-mail address specified in user's home page
+ 	* not.user@work.com
+	send to a user _not_ registered in TWiki by putting in their e-mail address
+ 	* Main.EngineeringGroup
+    	send to all members of a TWiki group
+ 	* Main.FredBloggs - secondary@home.com
+		send to an alternative e-mail address
+	* Main.FredBloggs: InterestingStuff, MeetingMinutes*, IssueTracker (2)
+		send changes to specific topics only. Wildcards * may be used. The integer in parenthesis indicates the depth of the tree of children below that topic; changes in all these children will be detected and reported along with changes to the topic itself. _Note_ This uses the TWiki "Topic parent" feature of TWiki.
+</verbatim>
 ---++ Contrib Info
 
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
@@ -78,11 +97,12 @@ from the browser the following CGI parameters are supported:
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  27 September 2004 | 1.0001 runnable as CGI script, minor bugfixes, removed dependency on DBCacheContrib |
+| 1 October 2004 | 1.002 Peter<nop>Thoeny provided additional documentation |
+|  27 September 2004 | 1.0001 runnable as CGI script, minor bugfixes, removed dependency on DB<nop>CacheContrib |
 |  8 September 2004 | 1.000 Initial version |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main/%USERNAME% - %$DATE%
+-- TWiki:Main/CrawfordCurrie - %$DATE%

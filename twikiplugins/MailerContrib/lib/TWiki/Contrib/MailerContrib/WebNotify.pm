@@ -23,8 +23,9 @@ use TWiki::Contrib::MailerContrib::Subscription;
 
 =begin text
 
+---
 ---++ package TWiki::Contrib::MailerContrib::WebNotify
-Object that represents the contents of a Web<nop>Notify topic in a TWiki web
+Object that represents the contents of a %NOTIFYTOPIC% topic in a TWiki web
 
 =cut
 
@@ -39,7 +40,7 @@ $guestUser = 'TWikiGuest';
 
 ---+++ sub new($web)
 Create a new object by parsing the content of the webnotify topic in the
-given web. This is the normal way to load a Web<nop>Notify topic. If the
+given web. This is the normal way to load a %NOTIFYTOPIC% topic. If the
 topic does not exist, it will create an empty object.
 
 =cut
@@ -64,7 +65,7 @@ sub new {
 =begin text
 
 ---+++ sub writeWebNotify()
-Write the object to the Web<nop>Notify topic it was read from.
+Write the object to the %NOTIFYTOPIC% topic it was read from.
 If there is a problem writing the topic (e.g. it is locked),
 the method will return an error message. If everything is ok
 it will return undef.
@@ -139,7 +140,7 @@ sub subscribe {
 =begin text
 
 ---+++ sub toString() -> string
-Return a string representation of this object, in Web<nop>Notify format.
+Return a string representation of this object, in %NOTIFYTOPIC% format.
 
 =cut
 
@@ -160,7 +161,7 @@ sub toString {
 
 ---+++ sub processChange($change, $db, $changeSet, $seenSet)
 | $change | ref of a TWiki::Contrib::Mailer::Change |
-| $db | Database of parent references |
+| $db | TWiki::Contrib::MailerContrib::UpData database of parent references |
 | $changeSet | ref of a hash mapping emails to sets of changes |
 | $seenSet | ref of a hash recording indices of topics already seen |
 Find all subscribers that are interested in the given change, and
@@ -196,7 +197,7 @@ sub processChange {
 =begin text
 
 ---+++ sub isEmpty() -> boolean
-Return true if there are no subscribers listed in this WebNotify
+Return true if there are no subscribers
 
 =cut
 

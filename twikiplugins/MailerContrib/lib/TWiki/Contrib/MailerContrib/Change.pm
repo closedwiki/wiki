@@ -22,6 +22,7 @@ use URI::Escape;
 
 =begin text
 
+---
 ---++ package TWiki::Contrib::MailerContrib::Change
 Object that represents a change to a topic.
 
