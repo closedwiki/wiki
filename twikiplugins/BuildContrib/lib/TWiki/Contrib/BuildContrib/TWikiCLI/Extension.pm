@@ -1,5 +1,6 @@
 package TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
 use TWiki::Contrib::DistributionContrib::DistributionFetcher;
+use TWiki::Func;
 use strict;
 use Cwd;
 my $oldPwd;
@@ -83,8 +84,7 @@ sub cli_download {
 
  my $localFile = getFilenameForDistributionDownload($extension); 	
  my $localCopy =
-   TWiki::Contrib::DistributionContrib::DistributionFetcher::fetchLatestDistributionVersion
-   ($extension, $localFile);
+   TWiki::Contrib::DistributionContrib::DistributionFetcher::fetchLatestDistributionVersion ($extension, $localFile);
  if ( $localCopy eq "" ) {
   return "Couldn't get it";
  }
