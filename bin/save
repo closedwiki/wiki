@@ -83,7 +83,15 @@ sub main
         # normal case: Get latest attachment from file for preview
         my $tmp;
         ( $tmp, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
-        @meta = &TWiki::Classification::catVars2Meta( $webName, $query, @meta );
+	my $formTemplate = $query->param( "formtemplate" );
+	if( $formTemplate ) {
+	   # FIXME temporary because potentially shared fields
+	   my @args = ( name => $formTemplate );
+	   @meta = &TWiki::Store::metaRemove( "FORM", @meta );
+	   @meta = &TWiki::Store::metaUpdate( "FORM", \@args, "name", @meta);
+	}
+
+        @meta = &TWiki::Form::fieldVars2Meta( $webName, $query, @meta );
     }
 
     # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
