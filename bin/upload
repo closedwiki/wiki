@@ -37,7 +37,6 @@ BEGIN {
 
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use File::Copy; # FIXME remove
 
 &main();
 
@@ -483,7 +482,7 @@ sub main
             my $message = ( $doChangeProperties ) ? "properties changed" : "$fileName uploaded";
             print( "OK $message\n" );
         } else {
-            TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) );
+            TWiki::redirect( $query, &TWiki::getViewUrl( $webName, $topic ) );
         }
     }
 }

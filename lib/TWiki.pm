@@ -1626,9 +1626,10 @@ sub getSkin
 # =========================
 =pod
 
----++ sub getViewUrl (  $theWeb, $theTopic  )
+---++ sub getViewUrl (  $web, $topic  )
 
-Not yet documented.
+Returns a fully-qualified URL to the specified topic, which must be normalized
+into separate specified =$web= and =$topic= parts.
 
 =cut
 
@@ -1636,15 +1637,13 @@ sub getViewUrl
 {
     my( $theWeb, $theTopic ) = @_;
     # PTh 20 Jun 2000: renamed sub viewUrl to getViewUrl, added $theWeb
-    my $web = $webName;  # current web
-    if( $theWeb ) {
-        $web = $theWeb;
-    }
+    # WM 14 Feb 2004: Removed support for old syntax not specifying $theWeb
+
     $theTopic =~ s/\s*//gs; # Illegal URL, remove space
 
     # PTh 24 May 2000: added $urlHost, needed for some environments
     # see also Codev.PageRedirectionNotWorking
-    return "$urlHost$scriptUrlPath/view$scriptSuffix/$web/$theTopic";
+    return "$urlHost$scriptUrlPath/view$scriptSuffix/$theWeb/$theTopic";
 }
 
 =pod

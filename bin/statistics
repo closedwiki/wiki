@@ -70,6 +70,8 @@ sub main
     my $theRemoteUser = "";
     my $logDate = "";
 
+    my $destWeb = $TWiki::mainWebname; #web to redirect to after finishing
+
     # determine at runtime if script is called by browser or cron job
     if( $ENV{'DOCUMENT_ROOT'} ) {
         # script is called by browser
@@ -179,9 +181,9 @@ sub main
 	# Generate WebStatistics topic update for one or more webs
         if ( $thePathInfo ) {
             # do a particular web:
-            processWeb( $thePathInfo, $theRemoteUser, $theTopic, $logMonthYear, $viewRef, $contribRef,
-                        $statViewsRef, $statSavesRef, $statUploadsRef, $cgiQuery );
-
+            $destWeb = processWeb( $thePathInfo, $theRemoteUser, $theTopic,
+		$logMonthYear, $viewRef, $contribRef, $statViewsRef,
+		$statSavesRef, $statUploadsRef, $cgiQuery );
         } else {
             # do all webs:
             my $dataDir = &TWiki::getDataDir();
@@ -193,9 +195,10 @@ sub main
                 printMsg( "  *** Error: opendir $dataDir, $!", $cgiQuery );
             }
             foreach my $web ( @weblist ) {
-                if( -d "$dataDir/$web" ) {
-                    processWeb( "/$web", $theRemoteUser, $theTopic, $logMonthYear, $viewRef, $contribRef,
-                                $statViewsRef, $statSavesRef, $statUploadsRef, $cgiQuery );
+                if( TWiki::Store::webExists($web) ) {
+                    $destWeb = processWeb( "/$web", $theRemoteUser, $theTopic,
+			$logMonthYear, $viewRef, $contribRef, $statViewsRef,
+			$statSavesRef, $statUploadsRef, $cgiQuery );
                 }
             }
         }
@@ -208,7 +211,7 @@ sub main
 
     if( $cgiQuery ) {
         $tmp = $TWiki::statisticsTopicname;
-        my $url = &TWiki::getViewUrl( "", $tmp );
+        my $url = &TWiki::getViewUrl( $destWeb, $tmp );
         printMsg( "* Go back to <a href=\"$url\">$tmp</a> topic", $cgiQuery );
         printMsg( "End creating usage statistics", $cgiQuery );
         print "</body></html>\n";
@@ -421,7 +424,7 @@ sub processWeb
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
         printMsg( "  *** Error: Web $webName does not exist", $cgiQuery );
-        return;
+        return $TWiki::mainWebname;
     }
 
     # Handle null values, print summary message to browser/stdout
@@ -504,6 +507,8 @@ sub processWeb
     } else {
 	printMsg( "  *** Warning: No updates done, topic $webName.$statsTopic does not exist", $cgiQuery );
     }
+
+    return $webName;
 }
 
 # =========================
