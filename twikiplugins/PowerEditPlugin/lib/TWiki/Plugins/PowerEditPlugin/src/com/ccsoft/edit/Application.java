@@ -5,6 +5,8 @@
 package com.ccsoft.edit;
 
 import java.awt.Frame;
+import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.net.URL;
 
 /**
@@ -17,4 +19,5 @@ interface Application {
     Frame getFrame();
     /** Do whatever you do to show the status */
     void showStatus(String s);
+    Image getImage(URL url);
 }

@@ -19,9 +19,6 @@ import com.ccsoft.edit.*;
 class AlignedList extends HorizontalList {
     protected int defaultAlignment = TagAttributes.CENTER;
 
-    public AlignedList() {
-    }
-
     protected AlignedList(XMLTokeniser t) {
 	super(t);
     }
@@ -52,6 +49,11 @@ class AlignedList extends HorizontalList {
     }
 
     public void layout(Area area, FontContext fc) {
+	if (!(getParent() instanceof VerticalList)) {
+	    super.layout(area, fc);
+	    return;
+	}
+
 	TableInfo cwidths =
 	    ((VerticalList)getParent()).getTableInfo(area.maxWidth, fc);
 	x = area.x;

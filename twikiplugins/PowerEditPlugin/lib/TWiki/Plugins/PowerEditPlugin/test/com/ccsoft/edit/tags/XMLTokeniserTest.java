@@ -13,10 +13,12 @@ public class XMLTokeniserTest extends TestCase {
 	return new TestSuite(XMLTokeniserTest.class);
     }
 
-    public void testsimpletokens() {
-	String controlText = "<macros> blah </snot>";
+    public void test1simpletokens() {
+	String controlText = "bleah <macros> blah </snot>";
 	XMLTokeniser st = new XMLTokeniser(new StringReader(controlText),
 					     controlText.length());
+	if (st.nextToken() != XMLTokeniser.WORD) assert(""+st, false);
+	if (!st.string.equals("bleah")) assert(st.string, false);
 	if (st.nextToken() != XMLTokeniser.TAG) assert(""+st, false);
 	if (!st.string.equals("macros")) assert(st.string, false);
 	if (st.nextToken() != XMLTokeniser.WORD) assert(""+st, false);
@@ -26,7 +28,7 @@ public class XMLTokeniserTest extends TestCase {
 	if (st.nextToken() != XMLTokeniser.EOF) assert(""+st, false);
     }
 
-    public void testcomments() {
+    public void test2comments() {
 	String controlText = "<! macros>A<!-- snick snick -->B<!C>";
 	XMLTokeniser st = new XMLTokeniser(new StringReader(controlText),
 					     controlText.length());
@@ -36,7 +38,7 @@ public class XMLTokeniserTest extends TestCase {
 	if (!st.string.equals("B")) assert(st.string, false);
     }
 
-    public void testtagafter() {
+    public void test3tagafter() {
 	String controlText = "<!-- snick snick --><verbatim>";
 	XMLTokeniser st = new XMLTokeniser(new StringReader(controlText),
 					     controlText.length());
@@ -44,7 +46,7 @@ public class XMLTokeniserTest extends TestCase {
 	if (!st.string.equals("verbatim")) assert(st.string, false);
     }
 
-    public void testattrvals() {
+    public void test4attrvals() {
 	String controlText = "<map name=\"action\" action=\"/home/%&lt;nop>ACTION{who=&quot;&quot; due=&quot;&quot;}% \"/>";
 	XMLTokeniser st = new XMLTokeniser(new StringReader(controlText),
 					     controlText.length());
@@ -84,7 +86,7 @@ public class XMLTokeniserTest extends TestCase {
 	return res + "\n<" + name + ">";
     }
 
-    public void testcontrols() {
+    public void test5controls() {
 	String[][] macros = new String[][] {
 	    { "action", "/home/%<nop>ACTION{who=\"\"; due=\"\"}% "},
 	    { "H", "\\n---"},

@@ -18,6 +18,7 @@ public class TWikiEditSuite extends TestCase {
 	suite.addTest(SearchableTextAreaTest.suite());
 	suite.addTest(TWikiEditTest.suite());
 	suite.addTest(ControlsTest.suite());
+	suite.addTest(EntityExpandingReaderTest.suite());
 	suite.addTest(XMLTokeniserTest.suite());
         return suite;
     }

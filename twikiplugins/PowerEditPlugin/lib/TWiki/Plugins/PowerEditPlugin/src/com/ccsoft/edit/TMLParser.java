@@ -6,15 +6,19 @@ package com.ccsoft.edit;
 
 import java.util.Stack;
 import java.util.Vector;
+import java.util.Enumeration;
 
 import java.io.*;
 
 import gnu.regexp.*;
+import uk.co.cdot.SuperString;
 
 /**
  * Simple parser to convert TWiki Markup Language (TML) to HTML
  */
 class TMLParser {
+
+    private static final String verbatimIntro = "%_VERBATIM";
 
     private static final String upperAlpha = "[:upper:]";
     private static final String lowerAlpha = "[:lower:]";
@@ -42,8 +46,10 @@ class TMLParser {
     m("([\\s\\(])_([^\\s].*?[^\\s])_([\\s\\,\\.\\;\\:\\!\\?\\)])");
     private static final RE re_CODE =
     m("([\\s\\(])=([^\\s].*?[^\\s])=([\\s\\,\\.\\;\\:\\!\\?\\)])");
-    private static final RE re_verbatim = m("^(\\s*)<verbatim>\\s*$");
+    private static final RE re_verbatim = m("^\\s*<verbatim>\\s*$");
     private static final RE re_slashverbatim = m("^\\s*</verbatim>\\s*$");
+    private static final RE re_verbatimPH = m(verbatimIntro +
+					       "([0-9]+)_([0-9]+)%");
     private static final RE re_tabplus = s("^\t(\\++|\\#+)\\s*(.+)\\s*$");
     private static final RE re_H = si("^<h([1-6])>\\s*(.+?)\\s*</h[1-6]>");
     private static final RE re_minusplus = s("^---+(\\++|\\#+)\\s*(.+)\\s*$");
@@ -78,7 +84,7 @@ class TMLParser {
     /**
      * RE for /m modifier
      */
-    private static RE m(String rex) {
+    private static final RE m(String rex) {
 	try {
 	    return new RE(rex, RE.REG_MULTILINE,
 			  RESyntax.RE_SYNTAX_PERL5);
@@ -90,7 +96,7 @@ class TMLParser {
     /**
      * RE for /mi modifiers
      */
-    private static RE mi(String rex) {
+    private static final RE mi(String rex) {
 	try {
 	    return new RE(rex, RE.REG_ICASE | RE.REG_MULTILINE,
 			  RESyntax.RE_SYNTAX_PERL5);
@@ -102,7 +108,7 @@ class TMLParser {
     /**
      * RE for /s modifier
      */
-    private static RE s(String rex) {
+    private static final RE s(String rex) {
 	try {
 	    return new RE(rex, RE.REG_DOT_NEWLINE,
 				   RESyntax.RE_SYNTAX_PERL5);
@@ -115,7 +121,7 @@ class TMLParser {
     /**
      * RE for /si modifiers
      */
-    private static RE si(String rex) {
+    private static final RE si(String rex) {
 	try {
 	    return new RE(rex, RE.REG_ICASE | RE.REG_DOT_NEWLINE,
 				   RESyntax.RE_SYNTAX_PERL5);
@@ -127,7 +133,7 @@ class TMLParser {
     /**
      * RE for no modifiers
      */
-    private static RE nomod(String rex) {
+    private static final RE nomod(String rex) {
 	try {
 	    return new RE(rex, 0, RESyntax.RE_SYNTAX_PERL5);
 	} catch (REException re) {
@@ -136,141 +142,103 @@ class TMLParser {
     }
 
     /**
-     * Returns the index within this string of the first occurrence of the
-     * specified substring, starting at the specified index. The search
-     * is case-insensitive.
+     * Exclude text inside verbatim from further processing
      */
-    private static int indexOfi(String text, String pattern, int start) {
-	int len = pattern.length();
-	int stop = text.length() - len + 1;
-	for ( ; start < stop; start++) {
-	    if (text.regionMatches(true, start, pattern, 0, len))
-		return start;
-	}
-	return -1;
-    }
-
-    /** simple replacement of a pattern string. Faster than regexp.
-     * Really wish we had StringBuffer.replace! */
-    private static String stringReplace(String text,
-					String pattern, String subs) {
-	int start = indexOfi(text, pattern, 0);
-	if (start == -1)
-	    return text;
-	int end = 0;
-	int len = pattern.length();
-	StringBuffer result = new StringBuffer(len);
-	while (start != -1) {
-	    result.append(text.substring(end, start));
-	    result.append(subs);
-	    end = start + len;
-	    start = indexOfi(text, pattern, end);
-	}
-	result.append(text.substring(end));
-	return result.toString();
-    }
-
-    /** Find next */
-    private static REMatch m_(String text, RE rex) {
-	return rex.getMatch(text);
-    }
-
-    /**
-     * Replace the results of the given match in the text
-     * @param text text that the match was performed on
-     * @param match the match
-     * @param subs substitution string, may contain $n
-     */
-    private static String replace(String text, REMatch match, String subs) {
-	String repl = match.substituteInto(subs);
-	StringBuffer result =
-	    new StringBuffer(match.getStartIndex() +
-			     repl.length() +
-			     text.length() - match.getEndIndex());
-	result.append(text.substring(0, match.getStartIndex()));
-	result.append(repl);
-	result.append(text.substring(match.getEndIndex()));
-	return result.toString();
-    }
-
     /**
      * Exclude text inside verbatim from further processing
      */
-    private static String takeOutVerbatim(String intext, Vector verbatim)
-	throws IOException {
-	REMatch match = m_(intext, re_verbatim);
-	if (match == null)
-	    return intext;
+    private static Vector takeOutVerbatim(SuperString intext)
+        throws IOException {
+
+	Vector verbatim = new Vector();
+
+        REMatch match = re_verbatim.getMatch(intext);
+        if (match == null)
+            return verbatim;
     
-	String tmp = "";
-	StringBuffer outtext = new StringBuffer();
-	int nesting = 0;
-	int verbatimCount = verbatim.size();
-	
-	BufferedReader r = new BufferedReader(new StringReader(intext));
-	String line;
-	while ((line = r.readLine()) != null) {
-	    if (Thread.currentThread().interrupted())
-		throw new Interruption();
-	    boolean process = true;
-	    if ((match = m_(line, re_verbatim)) != null) {
-		nesting++;
-		if (nesting == 1) {
-		    outtext.append(match.substituteInto("$1"));
-		    outtext.append("%_VERBATIM");
-		    outtext.append(verbatim.size());
-		    outtext.append("%\n");
-		    tmp = "";
-		    process = false;
+        SuperString tmp = new SuperString();
+        StringBuffer outtext = new StringBuffer();
+        int nesting = 0;
+        int verbatimCount = verbatim.size();
+        
+        Enumeration e = intext.lineEnumeration();
+	int tmpLines = 0;
+        while (e.hasMoreElements()) {
+	    SuperString line = (SuperString)e.nextElement();;
+            if (Thread.currentThread().interrupted())
+                throw new Interruption();
+            boolean process = true;
+            if ((match = re_verbatim.getMatch(line)) != null) {
+                nesting++;
+                if (nesting == 1) {
+		    outtext.append(verbatimIntro);
+                    outtext.append(verbatim.size());
+                    outtext.append('_');
+                    tmp = new SuperString();
+		    tmpLines = 0;
+                    process = false;
+                }
+            } else if ((match = re_slashverbatim.getMatch(line)) != null) {
+                nesting--;
+                if (nesting == 0) {
+                    outtext.append(tmpLines + 1);
+                    outtext.append("%\n");
+                    verbatim.addElement(tmp);
+                    process = false;
+                }
+            }
+            
+            if (process) {
+                if (nesting != 0) {
+                    tmp.append(line + "\n");
+		    tmpLines++;
+                } else {
+                    outtext.append(line).append('\n');
 		}
-	    } else if ((match = m_(line, re_slashverbatim)) != null) {
-		nesting--;
-		if (nesting == 0) {
-		    verbatim.addElement(tmp);
-		    process = false;
-		}
-	    }
-	    
-	    if (process) {
-		if (nesting != 0)
-		    tmp += line + "\n";
-		else
-		    outtext.append(line).append('\n');
-	    }
-	}
-	
-	// Deal with unclosed verbatim
-	if (nesting != 0) {
-	    verbatim.addElement(tmp);
-	}
-	
-	return outtext.toString();
+            }
+        }
+        
+        // Deal with unclosed verbatim
+        if (nesting != 0) {
+	    outtext.append(tmpLines + 1);
+	    outtext.append("%\n");
+            verbatim.addElement(tmp);
+        }
+        
+	intext.setLength(0);
+	intext.append(outtext);
+	return verbatim;
     }
 
     /**
      * @param type set tag=verbatim to get back original text, tag=pre
      * to convert to HTML readable verbatim text
      */
-    private static String putBackVerbatim(String text, String type,
+    private static void putBackVerbatim(SuperString text, String type,
 					  Vector verbatim) {
 	for (int i = 0; i < verbatim.size(); i++) {
-	    String val = (String)verbatim.elementAt(i);
+	    SuperString val = (SuperString)verbatim.elementAt(i);
 	    if (type.equals("pre")) {
-		val = stringReplace(val, "<", "&lt;");
-		val = stringReplace(val, ">", "&gt;");
+		val.findAndReplace("<", "&lt;");
+		val.findAndReplace(">", "&gt;");
 		// A shame to do this, but been in since day 1
-		val = stringReplace(val, "\t", "   ");
+		val.findAndReplace("\t", "   ");
 	    }
-	    text = stringReplace(text, "%_VERBATIM" + i + "%",
-		       "<" + type + ">\n" + val + "</" + type + ">");
 	}
-	
-	return text;
+
+	REMatch match;
+	while ((match = re_verbatimPH.getMatch(text)) != null) {
+	    int i = Integer.parseInt(match.substituteInto("$1"));
+	    text.replace(match,
+		    "<" + type + ">\n" +
+		    verbatim.elementAt(i) +
+		    "</" + type + ">");
+	}
     }
 
-    private static String makeHeading(String t, REMatch match,
+    private static void makeHeading(SuperString t, REMatch match,
 					    String head, int lev) {
-	return replace(t, match, "<h" + lev + ">" + head + "</h" + lev + ">");
+	t.replace(match, "<h" + lev + ">" + head + "</h" + lev + ">");
     }
 
     private static String emitList(String theType, String theElement,
@@ -308,7 +276,7 @@ class TMLParser {
 	return result.toString();
     }
 
-    private static String emitTR(String t, REMatch match,
+    private static String emitTR(SuperString t, REMatch match,
 			  String thePre, String theRow, boolean insideTABLE ) {
 	StringBuffer text = new StringBuffer(match.substituteInto(thePre));
 	theRow = match.substituteInto(theRow);
@@ -335,42 +303,48 @@ class TMLParser {
 
     /**
      * Use gnu regexp to locate and mark up TML. This is analogous to
-     * getRenderedVersion in TWiki.pm
+     * getRenderedVersion in TWiki.pm. 'text' will be destroyed.
      */
-    public static String toHTML(String text)
+    public static SuperString toHTML(SuperString text)
 	throws IOException {
 
+	REMatch match;
 	// take out carriage returns
-	text = stringReplace(text, "\r", "");
-	Vector verbatim = new Vector();
-	text = takeOutVerbatim(text, verbatim);
+	text.findAndReplace("\r", "");
+	Vector verbatim = takeOutVerbatim(text);
 	// take out line continuations
-	text = stringReplace(text, "\\\n", "");
+	text.findAndReplace("\\\n", "");
 	// change triples of spaces to tabs
-	text = stringReplace(text, "   ", "\t");
+	text.findAndReplace("   ", "\t");
 	// Strip comments
-	text = re_comment.substituteAll(text, "");
+	text.findAndReplace(re_comment, "");
+
 	boolean insidePRE = false;
 	boolean	insideTABLE = false;
 	boolean insideNoAutoLink = false;
 	boolean	isList = false;
-	StringBuffer result = new StringBuffer(text.length());
+	SuperString result = new SuperString(text.length());
 	Stack listTypes = new Stack();
 	Stack listElements = new Stack();
-
-	BufferedReader r = new BufferedReader(new StringReader(text));
-	String line;
-	while ((line = r.readLine()) != null) {
+	Enumeration e = text.lineEnumeration();
+	SuperString line = null;
+	int lineno = 0;
+	while (e.hasMoreElements()) {
 	    if (Thread.currentThread().interrupted())
 		throw new Interruption();
 
-	    if (indexOfi(line, "<pre>", 0) >= 0)
+	    if (line != null && (match = re_verbatimPH.getMatch(line)) != null)
+		lineno += Integer.parseInt(match.substituteInto("$2"));
+	    result.append("<!#" + (lineno++) + ">");
+
+	    line = (SuperString)e.nextElement();
+	    if (line.indexOfi("<pre>", 0) >= 0)
 		insidePRE = true;
-	    if (indexOfi(line, "</pre>", 0) >= 0)
+	    if (line.indexOfi("</pre>", 0) >= 0)
 		insidePRE = false;
-	    if (indexOfi(line, "<noautolink>", 0) >= 0)
+	    if (line.indexOfi("<noautolink>", 0) >= 0)
 		insideNoAutoLink = true;
-	    if (indexOfi(line, "</noautolink>", 0) >= 0)
+	    if (line.indexOfi("</noautolink>", 0) >= 0)
 		insideNoAutoLink = false;
 
 	    if (insidePRE) {
@@ -378,47 +352,38 @@ class TMLParser {
 		    result.append(emitList("", "", 0, listTypes, listElements));
 		    isList = true;
 		}
-		line = stringReplace(line, "\t", "   ");
+		line.findAndReplace("\t", "   ");
 	    } else {
-		line = re_CITE.substituteAll(line, "> <cite> $1 </cite><br>");
+		line.findAndReplace(re_CITE, "> <cite> $1 </cite><br>");
 	    }
 
 	    // '<h6>...</h6>' HTML rule
-	    REMatch match = m_(line, re_H);
+	    match = re_H.getMatch(line);
 	    if (match != null)
-		line = makeHeading(
+		makeHeading(
 		    line, match, "$2", 
 		    Integer.parseInt(match.substituteInto("$1")));
             // '\t+++++++' rule
-            match = m_(line, re_tabplus);
+            match = re_tabplus.getMatch(line);
 	    if (match != null)
-		line = makeHeading(
+		makeHeading(
 		    line, match, "$2",
 		    match.substituteInto("$1").length());
 	    // '----+++++++' rule
-            match = m_(line, re_minusplus);
+            match = re_minusplus.getMatch(line);
 	    if (match != null)
-		line = makeHeading(
+		makeHeading(
 		    line, match, "$2",
 		    match.substituteInto("$1").length());
 
-	    line = re_HR.substituteAll(line, "<hr />");
-
-	    // this takes a hell of a time to match! Could it be loading??
-	    //System.out.println("Mark 1");
-	    //RE temp = mi("^([a-zA-Z0-9]+)----*");
-	    //match = temp.getMatch(line);
-	    //System.out.println("Mark 2");
-	    //line = temp.substituteAll(
-	    //	line,
-	    //	"<table><tr><td><h2>$1</h2></td><td><hr></td></tr></table>");
-	    line = re_tablehead.substituteAll(line,
-		       "<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><hr /></td></tr></table>");
+	    line.findAndReplace(re_HR, "<hr />");
+	    line.findAndReplace(re_tablehead,
+			 "<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><hr /></td></tr></table>");
 
 	    // Table of format: | cell | cell |
-	    match = m_(line, re_tablerow);
+	    match = re_tablerow.getMatch(line);
 	    if (match != null) {
-		line = emitTR(line, match, "$1", "$2", insideTABLE) + "\n";
+		line = new SuperString(emitTR(line, match, "$1", "$2", insideTABLE) + "\n");
                 insideTABLE = true;
             } else if (insideTABLE) {
                 result.append("</table>");
@@ -426,7 +391,7 @@ class TMLParser {
             }
 
 	    // Lists and paragraphs
-            match = m_(line, re_blankline);
+            match = re_blankline.getMatch(line);
 	    if (match != null) {
 		result.append("<p />");
 		isList = false;
@@ -434,29 +399,29 @@ class TMLParser {
 	    }
 
 	    // Line not starting with spaces
-            match = m_(line, re_SatBOL);
+            match = re_SatBOL.getMatch(line);
 	    if (match != null)
 		isList = false;
 
-	    match = m_(line, re_DL);
+	    match = re_DL.getMatch(line);
 	    if (match != null) {
-		line = replace(line, match, "<dt> $2</dt><dd> ");
+		line.replace(match, "<dt> $2</dt><dd> ");
 		int len = match.substituteInto("$1").length();
 		result.append(emitList("dl", "dd", len, listTypes, listElements));
 		isList = true;
 	    }
 
-	    match = m_(line, re_UL);
+	    match = re_UL.getMatch(line);
 	    if (match != null) {
-		line = replace(line, match, "<li> ");
+		line.replace(match, "<li> ");
 		int len = match.substituteInto("$1").length();
 		result.append(emitList("ul", "li", len, listTypes, listElements));
 		isList = true;
 	    }
 
-	    match = m_(line, re_OL);
+	    match = re_OL.getMatch(line);
 	    if (match != null) {
-		line = replace(line, match, "<li> ");
+		line.replace(match, "<li> ");
 		int len = match.substituteInto("$1").length();
 		result.append(emitList("ol", "li", len, listTypes, listElements));
 		isList = true;
@@ -466,17 +431,18 @@ class TMLParser {
                 result.append(emitList("", "", 0, listTypes, listElements));
 
 	    // '#WikiName' anchors
-            line = re_ANCHOR.substituteAll(line, "");
+            line.findAndReplace(re_ANCHOR, "");
 
 	    //# enclose in white space for the regexes that follow
-            line = "\n" + line + "\n";
+	    line.insert(0, '\n');
+            line.append('\n');
 
 	    // Emphasizing
-	    line = re_BCODE.substituteAll(line, "$1<b><code>$2</code></b>$3");
-	    line = re_BI.substituteAll(line, "$1<b><i>$2</i></b>$3");
-	    line = re_B.substituteAll(line, "$1<b>$2</b>$3");
-	    line = re_I.substituteAll(line, "$1<i>$2</i>$3");
-	    line = re_CODE.substituteAll(line, "$1<code>$2</code>$3");
+	    line.findAndReplace(re_BCODE, "$1<b><code>$2</code></b>$3");
+	    line.findAndReplace(re_BI, "$1<b><i>$2</i></b>$3");
+	    line.findAndReplace(re_B, "$1<b>$2</b>$3");
+	    line.findAndReplace(re_I, "$1<i>$2</i>$3");
+	    line.findAndReplace(re_CODE, "$1<code>$2</code>$3");
 
 	    // Mailto
 	    // Email addresses must always be 7-bit, even within I18N sites
@@ -485,53 +451,49 @@ class TMLParser {
 	    // Explicit [[mailto:... ]] link without an '@' - hence no 
 	    // anti-spam padding needed.
 	    // '[[mailto:string display text]]' link (no '@' in 'string'):
-	    line = re_MAIL1.substituteAll(line, "<a href=\"$1\">$2</a>");
+	    line.findAndReplace(re_MAIL1, "<a href=\"$1\">$2</a>");
 
 	    // Explicit [[mailto:... ]] link including '@', with anti-spam 
 	    // padding, so match name@subdom.dom.
 	    // '[[mailto:string display text]]' link
-	    line = re_MAIL2.substituteAll(line,
-					  "<a href=\"$1@$2.$3\">$5</a>");
+	    line.findAndReplace(re_MAIL2, "<a href=\"$1@$2.$3\">$5</a>");
 
 	    // Normal mailto:foo@example.com ('mailto:' part optional)
 	    // FIXME: Should be '?' after the 'mailto:'...
-	    line = re_MAIL3.substituteAll(line, 
-					  "$1<a href=\"$3@$4.$5\">$5</a>$6");
+	    line.findAndReplace(re_MAIL3, "$1<a href=\"$3@$4.$5\">$5</a>$6");
 
 	    // Make internal links
 	    // Spaced-out Wiki words with alternative link text
 	    // '[[Web.odd wiki word	#anchor][display text]]' link:
-            line = re_WW1.substituteAll(line, "<a href=\"$2\">$1</a>");
+            line.findAndReplace(re_WW1, "<a href=\"$2\">$1</a>");
 	    // RD 25 Mar 02: Codev.EasierExternalLinking
 	    // '[[URL#anchor display text]]' link:
-            line = re_WW2.substituteAll(line, "<a href=\"$1\">$2</a>");
+            line.findAndReplace(re_WW2, "<a href=\"$1\">$2</a>");
 	    // Spaced-out Wiki words
 	    // '[[Web.odd wiki word#anchor]]' link:
-            line = re_WW3.substituteAll(line, "<a href=\"$1\">$1</a>");
+            line.findAndReplace(re_WW3, "<a href=\"$1\">$1</a>");
 
 	    // do normal WikiWord link if not disabled by <noautolink>
 	    if (!insideNoAutoLink) {
 		// 'Web.TopicName#anchor' link:
-                line = re_WW4.substituteAll(
-		    line, "$1<a href=\"$2.$3#$4\">$2.$3#$4</a>");
+                line.findAndReplace(re_WW4,
+			     "$1<a href=\"$2.$3#$4\">$2.$3#$4</a>");
 		// 'Web.TopicName' link:
-                line = re_WW5.substituteAll(line,
-					    "$1<a href=\"$2.$3\">$2.$3</a>");
+                line.findAndReplace(re_WW5, "$1<a href=\"$2.$3\">$2.$3</a>");
 
 		// 'TopicName#anchor' link:
-                line = re_WW6.substituteAll(line,
-					    "$1<a href=\"$2#$3\">$2#$3</a>");
+                line.findAndReplace(re_WW6, "$1<a href=\"$2#$3\">$2#$3</a>");
 
 		// 'TopicName' link:
-		line = re_WW7.substituteAll(line, "$1<a href=\"$2\">$2</a>");
+		line.findAndReplace(re_WW7, "$1<a href=\"$2\">$2</a>");
 
 		// Handle acronyms/abbreviations of three or more letters
 		// 'Web.ABBREV' link:
-                line = re_WW8.substituteAll(line,
-					    "$1<a href=\"$2.$3\">$2.$3</a>");
+                line.findAndReplace(re_WW8, "$1<a href=\"$2.$3\">$2.$3</a>");
 		// 'ABBREV' link:
-		line = re_WW9.substituteAll(line, "$1<a href=\"$2\">$2</a>");
+		line.findAndReplace(re_WW9, "$1<a href=\"$2\">$2</a>");
             }
+
 	    result.append(line);
 	}
 	if (insideTABLE)
@@ -540,10 +502,11 @@ class TMLParser {
 	if (insidePRE)
 	    result.append("</pre>");
 
-	text = result.toString();
-	text = stringReplace(text, "<nop>", "");
-	text = putBackVerbatim(text, "pre", verbatim);
+	result.findAndReplace("<nop>", "");
+	result.findAndReplace("<noautolink>", "");
+	result.findAndReplace("</noautolink>", "");
+	putBackVerbatim(result, "pre", verbatim);
 
-	return text;
+	return result;
     }
 }

@@ -5,7 +5,9 @@
 package com.ccsoft.edit;
 
 import java.io.StringReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.net.*;
 import java.util.Hashtable;
 import com.ccsoft.edit.tags.XMLTokeniser;
 
@@ -25,21 +27,44 @@ class Controls extends Hashtable {
 
 	XMLTokeniser st = new XMLTokeniser(new StringReader(controlText),
 					     controlText.length());
+
+	load(st);
+    }
+
+    private void load(XMLTokeniser st) throws IOException {
 	int t;
 	try {
-	    while ((t = st.nextToken()) == XMLTokeniser.TAG) {
-		// ignore <verbatim> and </verbatim>
-		if (st.string.equals("verbatim") ||
-		    st.string.equals("/verbatim"))
-		    continue;
-		ControlBlock b = (ControlBlock)get(st.string);
-		if (b == null)
-		    put(st.string, b = new ControlBlock());
-		b.parse(st, "/" + st.string);
+	    // This is a rather cavalier reader, in that it ignores
+	    // everything outside the few blocks it's actually interested
+	    // in.
+	    while ((t = st.nextToken()) != XMLTokeniser.EOF) {
+		if (t == XMLTokeniser.TAG &&
+		    st.string.equals("load")) {
+		    String loadfile = st.attrs.getString("url");
+		    System.out.println("Loading " + loadfile);
+		    if (loadfile != null) {
+			URL url = new URL(loadfile);
+			// assume text/html returns text...
+			XMLTokeniser sst = new XMLTokeniser(
+			    new InputStreamReader(url.openStream()), 1000);
+			load(sst);
+		    }
+		} else if (t == XMLTokeniser.TAG &&
+			   (st.string.equals("keys") ||
+			    st.string.equals("macros") ||
+			    st.string.equals("top") ||
+			    st.string.equals("bottom") ||
+			    st.string.equals("left") ||
+			    st.string.equals("right"))) {
+		    ControlBlock b = (ControlBlock)get(st.string);
+		    if (b == null)
+			put(st.string, b = new ControlBlock());
+		    b.parse(st, "/" + st.string);
+		}
+		// otherwise ignore it
 	    }
-	    if (t == XMLTokeniser.WORD)
-		throw new IOException("Unexpected word " + st.string);
 	} catch (IOException ioe) {
+	    ioe.printStackTrace();
 	    throw new IOException(ioe.getMessage() + " in controls at line " +
 				  st.getLineNumber());
 	}

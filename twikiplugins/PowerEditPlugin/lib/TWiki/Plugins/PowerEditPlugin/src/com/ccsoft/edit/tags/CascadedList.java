@@ -22,6 +22,10 @@ import com.ccsoft.edit.FontContext;
  */
 class CascadedList extends AlignedList {
 
+    public CascadedList(XMLTokeniser t) {
+	super(t);
+    }
+
     public int minimumHeight(FontContext fc) {
 	int h = 0;
 	Enumeration e = contents.elements();

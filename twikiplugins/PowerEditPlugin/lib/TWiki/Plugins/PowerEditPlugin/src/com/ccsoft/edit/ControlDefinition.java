@@ -32,12 +32,8 @@ class ControlDefinition {
 	if (image == null) {
 	    // not a preloaded image
 	    try {
-		URL url = new URL(key);
-		//System.out.println("Downloading " + url);
-		ImageProducer nm = (ImageProducer)url.getContent();
-		image = Toolkit.getDefaultToolkit().createImage(nm);
+		image = Editor.getApplication().getImage(new URL(key));
 	    } catch (MalformedURLException mfe) {
-	    } catch (IOException ioe) {
 	    }
 	}
     }

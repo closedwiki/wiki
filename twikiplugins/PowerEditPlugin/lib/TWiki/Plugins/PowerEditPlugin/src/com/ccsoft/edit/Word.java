@@ -8,6 +8,7 @@ import java.awt.*;
 import java.util.Enumeration;
 import java.util.Stack;
 import java.util.Vector;
+import com.ccsoft.edit.tags.XMLTokeniser;
 
 /**
  * The display entity for a single word (the atomic unit in output)
@@ -17,9 +18,18 @@ public class Word extends Block {
     private String text;
     /** the ascent required to get to the baseline of the word from the top */
     private int offset;
+    /** the position of the start of the word in the XHTML text */
+    private int startPos;
+    /** the position of the end of the word in the XHTML text */
+    private int endPos;
 
-    public Word(String w) {
+    public Word(String w, int pos) {
+	super(pos);
 	text = w;
+    }
+
+    public Word(XMLTokeniser t) {
+	this(t.string, t.markerTag);
     }
 
     public void layout(Area area, FontContext fc) {

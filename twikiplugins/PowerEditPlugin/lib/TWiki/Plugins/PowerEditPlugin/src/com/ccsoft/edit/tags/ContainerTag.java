@@ -32,11 +32,6 @@ abstract class ContainerTag extends TaggedBlock {
     protected static final int MIN = 0;
     protected static final int PREF = 1;
 
-    protected ContainerTag() {
-	contents = new Vector();
-	parent = null;
-    }
-
     protected ContainerTag(XMLTokeniser t) {
 	super(t);
 	contents = new Vector();
@@ -61,10 +56,6 @@ abstract class ContainerTag extends TaggedBlock {
     public void add(TaggedBlock b, XMLTokeniser t) {
 	add(b);
 	b.parse(t);
-    }
-
-    public void word(String w) {
-	contents.addElement(new Word(w));
     }
 
     /** Indented list with no tag */
@@ -201,7 +192,12 @@ abstract class ContainerTag extends TaggedBlock {
 	else if (t.string.equals("ul"))		add(new UL(t), t);
 	else if (t.string.equals("var"))	add(new I(t), t);
 	else if (!t.string.equals("/p"))
-	    word("<" + t.string + ">");
+	    contents.addElement(new Word("<" + t.string + t.attrs + ">",
+					 t.markerTag));
+    }
+
+    public void word(XMLTokeniser t) {
+	contents.addElement(new Word(t));
     }
 
     public void paint(Graphics g, int ox, int oy, FontContext fc) {
@@ -216,5 +212,21 @@ abstract class ContainerTag extends TaggedBlock {
 	    Block l = (Block)e.nextElement();
 	    l.paint(g, ox, oy, fc);
 	}
+    }
+
+    public int hitTest(int hx, int hy, int ox, int oy, FontContext fc) {
+	ox += x;
+	oy += y;
+	if (hx < ox || hx > ox + width ||
+	    hy < oy || hy > oy + height)
+	    return -1;
+	Enumeration e = contents.elements();
+	while (e.hasMoreElements()) {
+	    Block l = (Block)e.nextElement();
+	    int ht = l.hitTest(hx, hy, ox, oy, fc);
+	    if (ht >= 0)
+		return ht;
+	}
+	return -1;
     }
 }

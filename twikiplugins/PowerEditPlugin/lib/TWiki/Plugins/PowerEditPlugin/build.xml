@@ -25,12 +25,13 @@
 
     <property name="app.test" value="${plugin.lib}/test" />
     <property name="jar.file" value="${plugin.pub}/poweredit.jar" />
-    <property name="jar.lite.file" value="${plugin.pub}/powereditlite.jar" />
     <property name="src.zip" value="${plugin.lib}/source.zip" />
     <property name="release.zip" value="${ant.project.name}.zip" />
 
     <property name="applet.classes" value="${plugin.lib}/applet.classes" />
     <property name="test.classes" value="${plugin.lib}/test.classes" />
+
+    <property name="build.compiler" value="classic" />
 
     <!-- Init target -->
     <target name="init">
@@ -63,12 +64,11 @@
 
     <!-- Files that get installed in the twiki -->
     <patternset id="installed.files">
-	<include name="${ant.project.name}.xml" />
 	<include name="${lib.plugins}/PowerEditPlugin.pm" />
 	<include name="templates/*.power.tmpl" />
 	<include name="${jar.file}" />
-	<include name="${jar.lite.file}" />
 	<include name="${plugin.data}*.txt" />
+	<include name="${plugin.pub}/PowerEditControls.txt" />
 	<include name="${src.zip}" />
     </patternset>
 
@@ -108,7 +108,6 @@
             </fileset>
         </copy>
 	<delete file="${jar.file}" />
-	<delete file="${jar.lite.file}" />
 	<mkdir dir="${plugin.pub}" />
         <jar jarfile="${jar.file}" basedir="${applet.classes}" />
     </target>
@@ -120,7 +119,52 @@
 	    <zipfileset dir="${plugin.lib}">
 		<include name="**/*.java" />
 		<include name="**/*.html" />
+		<include name="build.xml" />
 	    </zipfileset>
+	</zip>
+    </target>
+
+    <!-- Check that all files in the zip are in the topic file, and
+	 vice versa -->
+    <target description="Check release package" name="completeness">
+	<exec	executable="unzip"
+		outputproperty="zip.dat">
+	    <arg line="-l ${release.zip}" />
+	</exec>
+        <exec	executable="gawk"
+		inputstring="${zip.dat}"
+		outputproperty="zip2.dat">
+	    <arg line="'/^[ \t]+[0-9]+[ \t]+[0-9]+-.*[^/]$/{print $4;}'" />
+	</exec>
+        <exec	executable="sort"
+		inputstring="${zip2.dat}"
+		output="zipcontents.dat">
+	</exec>
+        <exec	executable="gawk"
+		outputproperty="file.dat">
+	    <arg line="-F = '/^[ \t]+\|[ \t]+==.+==[ \t]+\|.+\|$/{print $3;}' ${plugin.data}.txt" />
+	</exec>
+        <exec	executable="sed"
+		inputstring="${file.dat}"
+		outputproperty="file2.dat">
+	    <arg line="'s/%TOPIC%/${ant.project.name}/g'" />
+	</exec>
+        <exec	executable="sort"
+		inputstring="${file2.dat}"
+		output="filecontents.dat">
+	</exec>
+	<exec	executable="diff" failonerror="true">
+	    <arg line="zipcontents.dat filecontents.dat" />
+	</exec>
+    </target>
+
+    <target description="Build release zip file"
+            name="zip" depends="test,src.zip">
+        <delete file="${release.zip}" />
+        <zip zipfile="${release.zip}">
+            <zipfileset dir="${basedir}">
+                <patternset refid="installed.files" />
+            </zipfileset>
 	</zip>
     </target>
 
@@ -143,16 +187,6 @@
             <test name="com.ccsoft.edit.TWikiEditSuite" />
             <classpath refid="test.class.path" />
         </junit>
-    </target>
-
-    <target description="Build release zip file"
-            name="release" depends="test,src.zip">
-        <delete file="${release.zip}" />
-        <zip zipfile="${release.zip}">
-            <zipfileset dir="${basedir}">
-                <patternset refid="installed.files" />
-            </zipfileset>
-	</zip>
     </target>
 
     <target description="Build, test, and install in local TWiki"
@@ -183,6 +217,10 @@
                 <patternset refid="installed.files" />
             </fileset>
         </delete>
+    </target>
+
+    <target description="Build and check release zip"
+            name="release" depends="zip,completeness">
     </target>
 
 </project>
