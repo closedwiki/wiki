@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043310513" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043478569" format="1.0" version="1.12"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
 
 There are other approaches as well: the TWiki:Plugins/TopicVarsPlugin lets you set variables in any topic, not just in WebPreferences, for use in the same. The TWiki:Plugins/SmiliesPlugin, using a different short hand than =<nop>%VARIABLES%=, may be worth checking out for extended use.
 
-In this example, %TOPIC% - this topic - acts as the icon library. Graphics are uploaded and displayed. Then, the paths are set in TWikiPreferences for site-wide access. You can also create individual library pages in each web. And you don't have to restrict yourself to graphics: Preferences Variables can include text and links to any type of file.
+In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics are uploaded and displayed. Then, the paths are set in [[TWiki.TWikiPreferences#DocGraphics]] for site-wide access. You can also create individual library pages in each web. And you don't have to restrict yourself to graphics: Preferences Variables can include text and links to any type of file.
 
 	* <img src="%ATTACHURLPATH%/help.gif" alt="help.gif"  width="16" height="16"  /> Help 
 	* <img src="%ATTACHURLPATH%/tip.gif" alt="tip.gif"  width="16" height="16"  /> Tip / Idea

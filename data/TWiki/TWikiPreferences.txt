@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042965706" format="1.0" version="1.45"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043478433" format="1.0" version="1.46"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -185,6 +185,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set ENDCOLOR = </font>
 			* To finish colored text
 
+#DocGraphics
 	* Graphics used in TWiki documentation - view all images in %TWIKIWEB%.TWikiDocGraphics. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
 		* Set H = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif" border="0" alt="HELP" width="16" height="16" />
 		* Set I = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/tip.gif" border="0" alt="IDEA!" width="16" height="16" />
