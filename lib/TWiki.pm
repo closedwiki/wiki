@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "11 Sep 2003";
+$wikiversion      = "14 Sep 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1690,6 +1690,7 @@ sub handleToc
                 $anchor = makeAnchorName( $line );
                 # cut TOC exclude '---+ heading !! exclude'
                 $line  =~ s/\s*$headerPatternNoTOC.+$//go;
+                $line  =~ s/[\n\r]//go;
                 next unless $line;
                 $highest = $level if( $level < $highest );
                 $tabs = "";
@@ -1717,6 +1718,7 @@ sub handleToc
             $highest--;
             $result =~ s/^\t{$highest}//gm;
         }
+        $result = "<div class='twikitoc'>$result\n</div>";
         return $result;
 
     } else {
