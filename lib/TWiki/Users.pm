@@ -144,25 +144,28 @@ exist in the TWikiUsers mapping.
 sub findUser {
     my( $this, $name, $wikiname, $dontCreate ) = @_;
     ASSERT(ref($this) eq "TWiki::Users") if DEBUG;
+    ASSERT($name || $wikiname) if DEBUG;
     my $object;
 
-    if( $name =~ /(.*)\.(.*)/ ) {
-        # must be web.wikiname
-        $object = $this->{wikiname}{$name};
+    if( $name ) {
+        if( $name =~ /(.*)\.(.*)/ ) {
+            # must be web.wikiname
+            $object = $this->{wikiname}{$name};
+            return $object if $object;
+        }
+        # is it a login name?
+        $object = $this->{login}{$name};
         return $object if $object;
+
+        # prepend the mainweb and try again in wikinames
+        $object = $this->{wikiname}{"$TWiki::cfg{UsersWebName}.$name"};
+        return $object if $object;
+
+        # not cached; assume the name was a login name
+        # and create the stub for the user. If no wikiname
+        # was given, try to infer one from the TWikiUsers topic.
+        $wikiname = $this->_lookupTWikiUsers( $name ) unless $wikiname;
     }
-    # is it a login name?
-    $object = $this->{login}{$name};
-    return $object if $object;
-
-    # prepend the mainweb and try again in wikinames
-    $object = $this->{wikiname}{"$TWiki::cfg{UsersWebName}.$name"};
-    return $object if $object;
-
-    # not cached; assume the name was a login name
-    # and create the stub for the user. If no wikiname
-    # was given, try to infer one from the TWikiUsers topic.
-    $wikiname = $this->_lookupTWikiUsers( $name ) unless $wikiname;
 
     return undef if( !$wikiname && $dontCreate );
 
