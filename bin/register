@@ -36,6 +36,7 @@ use TWiki;
 use TWiki::Net;
 use TWiki::Plugins;
 use TWiki::User;
+use TWiki::UI;
 
 &main();
 
@@ -154,7 +155,7 @@ sub main
 
     # send email confirmation
     my $skin = $query->param( "skin" ) || TWiki::Prefs::getPreferencesValue( "SKIN" );
-    $text = TWiki::Store::readTemplate( "registernotify", $skin );
+    $text = TWiki::Templates::readTemplate( "registernotify", $skin );
     $text =~ s/%FIRSTLASTNAME%/$firstLastName/go;
     $text =~ s/%WIKINAME%/$wikiName/go;
     $text =~ s/%EMAILADDRESS%/$emailAddress/go;
@@ -179,7 +180,7 @@ sub main
     if( ! &TWiki::Store::topicExists( $TWiki::mainWebname, $wikiName ) ) {
         my $meta = "";
         my $row = "";
-        ( $meta, $text ) = &TWiki::Store::readTemplateTopic( "NewUserTemplate" );
+        ( $meta, $text ) = TWiki::UI::readTemplateTopic( "NewUserTemplate" );
         $text = "%SPLIT%\n\t* %KEY%: %VALUE%%SPLIT%\n" unless $text;
         ( $before, $repeat, $after) = split( /%SPLIT%/, $text );
         for( $x = 0; $x < $formLen; $x++ ) {
