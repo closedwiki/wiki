@@ -1,6 +1,6 @@
 # Tests for TWiki::Store::RcsLite and TWiki::Store::RcsWrap
 # JohnTalintyre
-
+# Ported to Test::Unit by CrawfordCurrie
 use strict;
 
 package RcsTests;
@@ -32,33 +32,59 @@ my $attachment = "it.doc";
 
 my @storeSettings = @TWiki::storeSettings;
 
-sub readKnown {
-    my( $file ) = @_;
-    my $rcs = TWiki::Store::RcsLite->new($file);
-    print "Head = " . $rcs->numRevisions() . "\n";
-    print "Valid to = " . $rcs->validTo() . "\n";
-    print "Comment = \"" . $rcs->comment() . "\"\n";
-    print "Description = \"" . $rcs->description() . "\"\n";
-    for( my $i=$rcs->numRevisions(); $i>=$rcs->validTo(); $i-- ) {
-        print "Version = $i\n";
-        print "   Author = " . $rcs->author($i) . "\n";
-        print "   Log    = " . $rcs->log($i) . "\n";
-        print "   Text   = " . $rcs->delta($i) . "\n\n";
-    }
-    for( my $i=$rcs->numRevisions(); $i>=$rcs->validTo(); $i-- ) {
-        print "---\n Revision ";
-        print $i;
-        print "\n";
-        print $rcs->revision($i);
-        print "\n";
+# Get rid a topic and its attachments completely
+sub mug {
+    my( $self ) = @_;
+
+    my $web = $self->{web};
+    my $topic = $self->{topic};
+
+    my $rcsDirFile = $self->{dataDir} . "/$web/RCS/$topic,v";
+    my @files = ( $self->file(), $self->rcsFile(), $rcsDirFile );
+    unlink( @files );
+    $self->_init();
+    $self->{"head"} = 0;
+
+    return if ( $self->{attachment} );
+
+    # Delete all attachments and the attachment directory
+    my $attDir = $self->_makeFileDir( 1, "" );
+    if( -e $attDir ) {
+        opendir( DIR, $attDir );
+        my @attachments = readdir( DIR );
+        closedir( DIR );
+        my $attachment;
+        foreach $attachment ( @attachments ) {
+            if( ! -d "$attDir/$attachment" ) {
+                unlink( "$attDir/$attachment" );
+                if( $attachment !~ /,v$/ ) {
+                    #writeLog( "erase", "$web.$topic.$attachment" );
+                }
+            }
+        }
+
+        # Deal with RCS dir if it exists
+        my $attRcsDir = "$attDir/RCS";
+        if( -e $attRcsDir ) {
+            opendir( DIR, $attRcsDir );
+            my @attachments = readdir( DIR );
+            closedir( DIR );
+            my $attachment;
+            foreach $attachment ( @attachments ) {
+                if( ! -d "$attRcsDir/$attachment" ) {
+                    unlink( "$attRcsDir/$attachment" );
+                }
+            }
+            rmdir( $attRcsDir ) || die $attRcsDir;
+        }
+        rmdir( $attDir ) || die $attDir;
     }
 }
-
 
 # save attachment and topic differently
 sub addRevision {
     my( $handler, $attachment, $text, $comment, $who ) = @_;
-    
+
     if( $attachment ) {
         if(  $attachment eq "usefile.tmp" ) {
         } else {
@@ -79,7 +105,7 @@ sub checkRead {
     my( $this, $topic, $attachment, @vals ) = @_;
     my $web = "Test";
     my $rcs = TWiki::Store::RcsWrap->new( $web, $topic, $attachment, @storeSettings );
-    $rcs->delete();
+    mug($rcs);
     my $numRevs = $#vals + 1;
     for( my $i=0; $i<$numRevs; $i++ ) {
         addRevision( $rcs, $attachment, $vals[$i], "comment " . $i, "JohnTalintyre" );
@@ -100,7 +126,7 @@ sub test_repRev {
     my $topic = "RcsLiteRepRev";
     #print "Test Rep Rev\n";
     my $rcsLite = TWiki::Store::RcsLite->new( $web, $topic, "", @storeSettings );
-    $rcsLite->delete();
+    mug($rcsLite);
     $rcsLite->addRevision( "there was a man\n\n", "in once", "JohnTalintyre" );
     $rcsLite->replaceRevision( "there was a cat\n", "1st replace", "NotJohnTalintyre", time() );
     my $rcs = TWiki::Store::RcsWrap->new( $web, $topic, "", @storeSettings );
@@ -113,7 +139,7 @@ sub test_repRev {
     $this->assert_equals( 2, $rcs->numRevisions );
     $this->assert_equals( "there was a cat\n", $rcs->getRevision(1) );
     $this->assert_equals( "then this", $rcs->getRevision(2) );
-    $rcs->delete();
+    mug($rcs);
     $rcs->addRevision( "there was a man\n\n", "in once", "JohnTalintyre" );
     $rcs->replaceRevision( "there was a cat\n", "1st replace", "NotJohnTalintyre", time() );
     $rcsLite = TWiki::Store::RcsLite->new( $web, $topic, "", @storeSettings );
@@ -134,7 +160,7 @@ sub writeTest {
     my $web = "Test";
     my $rcsLite = TWiki::Store::RcsLite->new( $web, $topic, $attachment,
                                               @storeSettings );
-    $rcsLite->delete();
+    mug($rcsLite);
     my $numRevs = $#vals + 1;
     for( my $i=0; $i<$numRevs; $i++ ) {
         addRevision( $rcsLite, $attachment, $vals[$i], "comment " . $i,
@@ -155,7 +181,7 @@ sub refDelta {
     my $web = "Test";
     my $topic = "RefDelta";
     my $rcs = TWiki::Store::RcsWrap->new( $web, $topic, "", @storeSettings );
-    $rcs->delete();
+    mug($rcs);
     $rcs->addRevision( $old, "old comment", "JohnTalintyre" );   
     $rcs->addRevision( $new, "old comment", "JohnTalintyre" );   
     my $rcsLite = TWiki::Store::RcsLite->new( $web, $topic, "", @storeSettings );
@@ -170,33 +196,23 @@ sub rcsDiffOne {
     my $topic = "RcsDiffTest";
     my $web = "Test";
     my $rcs = TWiki::Store::RcsWrap->new( $web, $topic, "", @storeSettings );
-    $rcs->delete();
+    mug($rcs);
     #print "Rcs Diff test $num\n";
     $rcs->addRevision( $vals[0], "num 0", "JohnTalintyre" );
     $rcs->addRevision( $vals[1], "num 1", "JohnTalintyre" );
     my $diff = $rcs->revisionDiff( 1, 2 );
-    #print "--$diff--\n";
     my $rcsLite = TWiki::Store::RcsLite->new( $web, $topic, "", @storeSettings );
     my $diffLite = $rcsLite->revisionDiff( 1, 2 );
-    #print "++$diffLite++\n";
 
-    $this->assert_deep_equals( $diffLite, $diff );
-}
+    my $i = 0;
+    while ( $i <= $#$diffLite && $i <= $#$diff ) {
+        my $a = $i.": ".join("\t", @{$diffLite->[$i]});
+        my $b = $i.": ".join("\t", @{$diff->[$i]});
 
-sub writeDelta {
-    my( $count, $topic, $old, $new ) = @_;
-    refDelta( $old, $new );
-    testWrite( $count, $topic, $old, 0, $new );
-}
-
-sub refDeltas {
-    refDelta( "one", "one\n" );
-    refDelta( "one", "one\ntwo\n" );
-    refDelta( "a\n", "b" );
-    refDelta( "one\n", "one" );
-    #refDelta( "one\n\n", "one" );
-    #refDelta( "a\none\n\n", "b\none" );
-    #refDelta( "one", "one\n" );
+        $this->assert_str_equals( $b, $a );
+        $i++;
+    }
+    $this->assert_equals( $#$diffLite, $#$diff );
 }
 
 sub test_wt1 {
@@ -231,7 +247,7 @@ sub test_wt6 {
 
 sub test_wt7 {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "one", "one\ntwo\n" ) );
+    $this->writeTest( $wTopic, "", ( "one\n", "one\ntwo\n" ) );
 }
 
 sub test_wt8 {
@@ -331,7 +347,7 @@ sub test_wa6 {
 
 sub test_wa7 {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "one", "one\ntwo\n" ) );
+    $this->writeTest( $wTopic, "it.doc", ( "one\n", "one\ntwo\n" ) );
 }
 
 sub test_wa8 {
@@ -664,7 +680,7 @@ sub genTest {
     print "Test Generic ($attachment) $ident\n" if( $ident );
     my $web = "Test";
     my $writer = $write->new( $web, $topic, $attachment, @storeSettings );
-    $writer->delete();
+    mug($writer);
     my $numRevs = @vals;
     for( my $i=0; $i<$numRevs; $i++ ) {
         addRevision( $writer, $attachment, $vals[$i], "comment " . $i, "JohnTalintyre" );
@@ -678,6 +694,31 @@ sub genTest {
         }
     }
     return $okay;
+}
+
+sub test_ciLocked {
+    my $this = shift;
+    my $web = "Test";
+    my $topic = "CiLocked";
+
+    # create the fixture
+    my $rcs = TWiki::Store::RcsWrap->new( $web, $topic, "", @storeSettings );
+    $rcs->addRevision( "Shooby Dooby", "original", "BungditDin" );
+    # hack the lock so someone else has it
+    my $user = `whoami`;
+    chop($user);
+    my $vfile = $rcs->file().",v";
+    my $txt = $rcs->_readFile($vfile);
+    $txt =~ s/$user/blocker_socker/g;
+    `chmod 777 $vfile`;
+    $rcs->_saveFile( $vfile, $txt);
+    # file is now locked by blocker_socker, save some new text
+    $rcs->_saveFile( $rcs->file(), "Shimmy Dimmy" );
+    # check it in
+    $rcs->_ci( $rcs->file(), "Gotcha", "SheikAlot" );
+    $txt = $rcs->_readFile($vfile);
+    # make sure the lock is right
+    $this->assert_matches(qr/locks\n\s+$user:1\./s, $txt);
 }
 
 1;
