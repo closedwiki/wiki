@@ -25,10 +25,9 @@ mkpath( $outputDir, 1 );
 ################################################################################
 # build the twiki-kernel
 execute ( "cd distro/ ; ./build-twiki-kernel.pl --tempdir=/tmp --outputdir=$outputDir" ) or die $!;
-print "<HR />\n";
-
 
 print "</verbatim>\n";
+print "<HR />\n";
 print "</BODY></HTML>";
 exit 0;
 
