@@ -92,7 +92,10 @@ sub htpasswdGeneratePasswd
 {
     my ( $this, $user, $passwd , $useOldSalt ) = @_;
 
-	my $encodedPassword = '';
+    my $encodedPassword = '';
+    $useOldSalt = 0 unless $useOldSalt;
+    ASSERT(defined($user)) if DEBUG; #SMELL - effective?
+    ASSERT(defined($passwd)) if DEBUG;
 
     if( 'sha1' eq $TWiki::htpasswdEncoding ) {
 
