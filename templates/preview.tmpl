@@ -22,9 +22,9 @@ function launchWindow( theWeb, theTopic ) {
 %TMPL:DEF{"titleaction"}%(preview)%TMPL:END%
 %TMPL:DEF{"headerhelp"}% <font size="-2">
   <ul>
-  <li> To <b>save</b> changes: Press the [Save Changes] button.
-  <li> To make <b>more changes</b>: Go back in your browser.
-  <li> To <b>cancel</b>: Go back twice.
+  <li> To <b>save</b> changes: Press the [Save Changes] button.</li>
+  <li> To make <b>more changes</b>: Go back in your browser.</li>
+  <li> To <b>cancel</b>: Go back twice.</li>
   </ul>
   </font> %TMPL:END%
 %TMPL:DEF{"webaction"}%
@@ -53,7 +53,7 @@ function launchWindow( theWeb, theTopic ) {
    <font size="-1">(<a target="UnlockTopic" onClick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font> <br />
    &nbsp; &nbsp;
    <input type="checkbox" name="dontnotify" %DONTNOTIFYCHECKBOX% /> Minor changes, don't notify
-   <font size="-1">(<a target=DontNotify" onClick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>)</font>
+   <font size="-1">(<a target="DontNotify" onClick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>)</font>
   </td>
   <td width="50%" valign="top">
    %WEBCOPYRIGHT%
