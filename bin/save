@@ -62,6 +62,7 @@ sub main
     $text = $query->param( "text" );
     my $unlock = $query->param( "unlock" ) || "";
     my $saveCmd = $query->param( "cmd" ) || "";
+    my $dontNotify = $query->param( "dontnotify" ) || "";
 
     # PTh 06 Nov 2000: check if proper use of save script
     if( ! ( defined $text ) ) {
@@ -94,7 +95,7 @@ sub main
     $text =~ s/%_A_%/&/go;
     $text =~ s/ {3}/\t/go;
 
-    my $error = &wiki::saveTopic( $topic, $text, $saveCmd, "", $unlock );
+    my $error = &wiki::saveTopic( $topic, $text, $saveCmd, $dontNotify, $unlock );
     if( $error ) {
         # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
         # PTh 07 Jan 2001: escape error for HTML

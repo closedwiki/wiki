@@ -134,6 +134,8 @@ sub main
     my $skin = $query->param( "skin" ) || &wiki::getPreferencesValue( "SKIN" );
     $tmpl = &wiki::readTemplate( "preview", "", $skin );
     $icat = &wiki::readTemplate( "twikicatitems" );
+    my $dontNotify = $query->param( "dontnotify" ) || "";
+    $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
     my $saveCmd = $query->param( "cmd" ) || "";
     if( $saveCmd ) {
         $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;

@@ -162,7 +162,7 @@ sub getRevisionInfo
 
 sub saveTopic
 {
-    my( $topic, $text, $saveCmd, $doNotLogChanges, $doUnlock ) = @_;
+    my( $topic, $text, $saveCmd, $dontNotify, $doUnlock ) = @_;
     my $name = "$dataDir/$webName/$topic.txt";
     my $time = time();
     my $tmp = "";
@@ -213,7 +213,7 @@ sub saveTopic
                 return $rcsError;
             }
 
-            if( ! $doNotLogChanges ) {
+            if( ! $dontNotify ) {
                 # update .changes
                 my( $fdate, $fuser, $frev ) = getRevisionInfo( $topic, "" );
                 $fdate = ""; # suppress warning
@@ -290,7 +290,7 @@ sub saveTopic
             return $rcsError;
         }
 
-        if( ( $doLogTopicSave ) && ( ! $doNotLogChanges ) ) {
+        if( ( $doLogTopicSave ) && ( ! $dontNotify ) ) {
             # write log entry
             $tmp  = userToWikiName( $user );
             writeLog( "save", "$webName.$topic", "repRev $rev $tmp $date" );
