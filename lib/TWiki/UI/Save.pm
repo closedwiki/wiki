@@ -185,6 +185,7 @@ sub savemulti {
     return;
   }
 
+  # save called by preview
   if ( _save( $webName, $topic, $userName, $query )) {
     TWiki::redirect( $query, $redirecturl );
   }
