@@ -60,6 +60,7 @@ BEGIN {
 ### various patches/fixes/upgrades
     @patches = (
 	       'macosx',				# fixes paths for gnu tools (e|f)grep
+	       'LocalSite.cfg',				# 
 #	       'SetMultipleDirsInSetlibDotCfg',		# TODO: make into a branch
 #	       'testenv',				# make testenv a little more useful...
 #	       'create-new-web-copy-attachments',	# update "create new web" to also copy attachments, not just topics
@@ -234,6 +235,8 @@ my $file = "$lib/LocalSite.cfg";
 open(FH, ">$file") or die "Can't open $file: $!";
 print FH $localDirConfig;
 close(FH) or die "Can't write to $file: $!";
+
+
 
 ################################################################################
 # authentication
