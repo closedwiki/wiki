@@ -925,7 +925,8 @@ sub formatGmTime
 {
 #   my ( $epSecs, $format ) = @_;
 
-    writeWarning( "deprecated use of Func::formatGmTime" );
+    # FIXME: Write warning based on flag (disabled for now); indicate who is calling this function
+    ## writeWarning( "deprecated use of Func::formatGmTime" );
 
     return &formatTime( @_, "gmtime" );
 }
@@ -983,7 +984,8 @@ sub readTopic
 {
 #   my( $web, $topic ) = @_;
 
-    writeWarning( "deprecated use of Func::readTopic" );
+    # FIXME: Write warning based on flag (disabled for now); indicate who is calling this function
+    ## writeWarning( "deprecated use of Func::readTopic" );
 
     return &TWiki::Store::readTopic( @_ );
 }
