@@ -1,4 +1,13 @@
-lib/TWiki/Plugins/Attrs.pm
+data/TWiki/SharedCode.txt
 lib/TWiki/Plugins/Build.pm
+lib/TWiki/Plugins/CairoCompatibilityModule.pm
+lib/TWiki/Plugins/SharedCode/Attrs.pm
 lib/TWiki/Plugins/SharedCode/build.pl
+lib/TWiki/Plugins/SharedCode/test.zip
 tools/conformance_analyser.pl
+test/TestRunner.pl
+test/fixtures/BaseFixture.pm
+test/fixtures/TWiki.pm
+test/fixtures/TWiki/Func.pm
+test/fixtures/TWiki/Store.pm
+test/fixtures/TWiki/Net.pm
