@@ -10,6 +10,8 @@ sub upload {
 
 }
 
+sub cvs
+
 sub install {
     my ($extension) = @_;
 

@@ -14,7 +14,7 @@ sub dispatch {
 
  my @args =  @ARGV;
 
- my $class = ucfirst lc shift @args; # eg. extension => Extension 
+ my $class = ucfirst shift @args; # eg. extension => Extension 
 
  unless ($class) {
      return helpText();
