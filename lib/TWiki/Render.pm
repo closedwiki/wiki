@@ -640,6 +640,25 @@ sub internalLink {
 }
 
 # =========================
+=pod
+
+---++ sub internalCrosswebLink (  $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink  )
+
+Not yet documented.
+
+=cut
+
+sub internalCrosswebLink
+{
+    my( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink ) = @_;
+    if ( $theTopic eq $TWiki::mainTopicname && $theWeb ne $TWiki::webName ) {
+        return internalLink( $thePreamble, $theWeb, $theTopic, $theWeb, $theAnchor, $doLink );
+    } else {
+        return internalLink( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink );
+    }
+}
+
+# =========================
 # Handle most internal and external links
 =pod
 
@@ -1063,7 +1082,7 @@ sub getRenderedVersion
                 # 'Web.TopicName#anchor' link:
                 s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})($regex{anchorRegex})/&internalLink($1,$2,$3,"$TranslationToken$3$4$TranslationToken",$4,1)/geo;
                 # 'Web.TopicName' link:
-                s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/&internalLink($1,$2,$3,"$TranslationToken$3$TranslationToken","",1)/geo;
+                s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/&internalCrosswebLink($1,$2,$3,"$TranslationToken$3$TranslationToken","",1)/geo;
 
                 # 'TopicName#anchor' link:
                 s/([\s\(])($regex{wikiWordRegex})($regex{anchorRegex})/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/geo;
