@@ -964,7 +964,7 @@ sub new {
 
 	if ( # (-e $TWiki::cfg{HtpasswdFileName} ) && #<<< maybe
 		( $TWiki::cfg{HtpasswdFormatFamily} eq 'htpasswd' ) ) {
-        $this->{users} = new TWiki::Users( $this, 'HtPasswdUser' );
+        $this->{users} = new TWiki::Users( $this, 'ProxyPasswdUser' );
 #	} elseif ($TWiki::cfg{HtpasswdFormatFamily} eq 'something?') {
 #        $this->{users} = new TWiki::Users( $this, 'SomethingUser' );
 	} else {
