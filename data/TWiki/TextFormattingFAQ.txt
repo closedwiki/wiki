@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000108590" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000370644" format="1.0" version="1.8"}%
 <font size="+3"><b>Text Formatting FAQ</b></font>
 
 	* The most frequently asked questions about text formatting are answered here. 
@@ -15,7 +15,7 @@ You can make a horizontal separator by writing three or more dashes at the begin
 ---
 ---+++ How do I create a heading?
 
-You can create six sizes of headings - &lt;H1&gt;...&lt;H6&gt; in HTML - by typing, from the beginning of a line, three dashes (-), from one to six plus signs (+), a space, and your heading text. The FAQ questions on this page are created with: =---+++ Have a question?=.
+You can create six sizes of headings - &lt;h1&gt;...&lt;h6&gt; in HTML - by typing, from the beginning of a line, three dashes (-), from one to six plus signs (+), a space, and your heading text. The FAQ questions on this page are created with: =---+++ Have a question?=.
 	* You can insert a nested table of contents, generated from headings, by placing =%<nop>TOC%= wherever you like on a page (see %TWIKIWEB%.TWikiVariables for more =%<nop>TOC%= options).
 
 -----
@@ -44,21 +44,21 @@ To prevent auto-linking - you may simply want to enter a word like <nop>JavaScri
 Enclose text in "=" equal signs:
 
 	* =Proportional text, <nop>=fixed font text=<nop>, proportional again.= appears as...
-	  <br> Proportional text, =fixed font text= , proportional again.
+	  <br /> Proportional text, =fixed font text= , proportional again.
 
 Alternatively you could also use preformatted text, see next question for details.
 
 ---
 ---+++ Text I enter gets wrapped around. How can I keep the formatting as it is?
 
-TWiki interprets text as HTML. It is possible to use preformatted text to workaround this. Use the preformatted HTML tags to keep the new line of text as it is. Do so by enclosing text in either &lt;pre&gt; &lt;/pre&gt; or &lt;verbatim&gt; &lt;verbatim&gt; tags:
+TWiki interprets text as HTML. It is possible to use preformatted text to workaround this. Use the preformatted HTML tags to keep the new line of text as it is. Do so by enclosing text in either &lt;pre&gt; &lt;/pre&gt; or &lt;verbatim&gt; &lt;/verbatim&gt; tags:
 <pre>
 This text will keep its format as it is:
-&lt;pre&gt;
+&lt;verbatim&gt;
   Unit	  Price	Qty  Cost
   -------  ------  ---  ------
   aaa		 12.00	 3	36.00
-&lt;/pre&gt;
+&lt;/verbatim&gt;
 </pre>
 
 The =pre= tag is standard HTML; =verbatim= is a special TWiki tag that also forces text to fixed font mode, and also prevents other tags and TWiki shortcuts from being expanded.
@@ -69,9 +69,9 @@ The =pre= tag is standard HTML; =verbatim= is a special TWiki tag that also forc
 There are three possibilities:
 	1 Use Wiki rule with "|" vertical bars.
 	2 Use HTML tables with &lt;table&gt;, &lt;tr&gt;, &lt;td&gt; tags.
-	3 Use preformatted text with &lt;PRE&gt; tags.
+	3 Use preformatted text with &lt;verbatim&gt; tags.
 
-*_1. Use Wiki rule with "|" vertical bars_*
+__1. Use Wiki rule with "|" vertical bars__
 
 	* Example text: <br>
 	  =| cell A1 | cell B1 | cell C1 |= <br>
@@ -80,96 +80,97 @@ There are three possibilities:
 	  | cell A1 | cell B1 | cell C1 |
 	  | cell A2 | cell B2 | cell C2 |
 
-*_2. Use HTML tables with &lt;TABLE&gt;, &lt;TR&gt;, &lt;TD&gt; tags_*
+__2. Use HTML tables with &lt;table&gt;, &lt;tr&gt;, &lt;td&gt; tags__
 
 This is a manual process using HTML commands. Here is an example. If you enter this:
 
 <pre>
-&lt;TABLE BORDER=1&gt;
-  &lt;TR&gt;
-	 &lt;TH&gt; Head A  &lt;/TH&gt; &lt;TH&gt; Head B  &lt;/TH&gt;
-  &lt;/TR&gt;&lt;TR&gt;
-	 &lt;TD&gt; Cell A2 &lt;/TD&gt; &lt;TD&gt; Cell B2 &lt;/TD&gt;
-  &lt;/TR&gt;&lt;TR&gt;
-	 &lt;TD&gt; Cell A3 &lt;/TD&gt; &lt;TD&gt; Cell B3 &lt;/TD&gt;
-  &lt;/TR&gt;
-&lt;/TABLE&gt;
+&lt;table border="1"&gt;
+  &lt;tr&gt;
+	 &lt;th&gt; Head A  &lt;/th&gt; &lt;th&gt; Head B  &lt;/th&gt;
+  &lt;/tr&gt;&lt;tr&gt;
+	 &lt;td&gt; Cell A2 &lt;/td&gt; &lt;td&gt; Cell B2 &lt;/td&gt;
+  &lt;/tr&gt;&lt;tr&gt;
+	 &lt;td&gt; Cell A3 &lt;/td&gt; &lt;td&gt; Cell B3 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
 </pre>
 
 It is displayed as a table like this:
 
-<TABLE BORDER=1>
-  <TR>
-	 <TH> Head A  </TH> <TH> Head B  </TH>
-  </TR><TR>
-	 <TD> Cell A2 </TD> <TD> Cell B2 </TD>
-  </TR><TR>
-	 <TD> Cell A3 </TD> <TD> Cell B3 </TD>
-  </TR>
-</TABLE>
+<table border="1">
+  <tr>
+	 <th> Head A  </th> <th> Head B  </th>
+  </tr><tr>
+	 <td> Cell A2 </td> <td> Cell B2 </td>
+  </tr><tr>
+	 <td> Cell A3 </td> <td> Cell B3 </td>
+  </tr>
+</table>
 
-*_3. Use preformatted text with &lt;PRE&gt; tags_*
+__3. Use preformatted text with &lt;verbatim&gt; tags__
 
 Text I enter gets wrapped around. How can I keep the formatting as it is? See [[#TextEnclosed]["Text enclosed..."]] 
 
 ---
 ---+++ Can I include images and pictures?
 
-Yes, this is possible. The easiest way of including images is to attach a GIF or JPG file to a topic and then to include it with text =%<nop>ATTACHURL%/myImage.gif= . FileAttachment has more.
+Yes, this is possible. The easiest way of including images is to attach a GIF, JPG or PNG file to a topic and then to include it with text =%<nop>ATTACHURL%/myImage.gif= . FileAttachment has more.
 
 There are actually two ways of including inline images.
 
-*_1. Using URL ending in .gif, .jpg, .jpeg_*
+__1. Using URL ending in .gif, .jpg, .jpeg, .png__
 
 This is a simple and automatic way of including inline images. Simply write the URL of the image file, this will create the inline image for you. *Note:* The images must be accessible as a URL.
 
-	* Example text: <br> <code> TWiki <nop>%PUBURL%/wikiHome.gif logo.</code>
-	* Example output: <br> TWiki %PUBURL%/wikiHome.gif logo.
+	* Example text: <br /> <code> TWiki <nop>%PUBURL%/wikiHome.gif logo.</code>
+	* Example output: <br /> TWiki %PUBURL%/wikiHome.gif logo.
 
-*_2. Using &lt;IMG&gt; tag_*
+__2. Using &lt;img&gt; tag__
 
-This is a manual process where you have more control over the rendering of the image. Use the &lt;IMG&gt; tag of HTML to include JPEG and GIF files. *Note:* The display of the topic is faster if you include the WIDTH and HEIGHT parameters that have the actual image size. http://www.htmlhelp.com/reference/wilbur/special/img.html has more on inline images.
+This is a manual process where you have more control over the rendering of the image. Use the &lt;img&gt; tag of HTML to include GIF, JPG and PNG files. *Note:* The display of the topic is faster if you include the WIDTH and HEIGHT parameters that have the actual image size. http://www.htmlhelp.com/reference/wilbur/special/img.html has more on inline images.
 
-	* Example text: <br> <code>TWiki &lt;IMG SRC="%PUBURL%/wikiHome.gif" WIDTH=46 HEIGHT=50&gt; logo.</code>
-	* Example output: <br> TWiki <IMG SRC="%PUBURL%/wikiHome.gif" WIDTH=46 HEIGHT=50> logo.
+	* Example text: <br /> <code>TWiki &lt;img src="%PUBURL%/wikiHome.gif" width="46" height="50" /&gt; logo.</code>
+	* Example output: <br /> TWiki <img src="%PUBURL%/wikiHome.gif" width="46" height="50" /> logo.
 
 -----
 ---+++ Can I write colored text?
 
-Place text you would like to specify a color inside &lt;FONT COLOR="colorCode"&gt; and &lt;/FONT&gt; tags. 
+Place text you would like to specify a color inside &lt;font color="colorCode"&gt; and &lt;/font&gt; tags. 
 
 "colorCode" is the hexadecimal RGB color code. The color is composed
 by specifying the red, green and blue components of the color in
-hexadecimal notation. For example, to specify white, the red, green and blue components are 255, 255, 255, so you would use "#FFFFFF". You can use StandardColors or common color codes:
+hexadecimal notation. For example, to specify white, the red, green and blue components are 255, 255, 255, so you would use ="#ffffff=". You can use StandardColors or common color codes:
 
-<TABLE>
-<TR BGCOLOR="#E0E0E0">
-  <TD><FONT COLOR="#000000"> *Black:* </FONT></TD><TD>"#000000" </TD>
-  <TD><FONT COLOR="#008000"> *Green:* </FONT></TD><TD>"#008000" </TD> 
-  <TD><FONT COLOR="#C0C0C0"> *Silver:* </FONT></TD><TD>"#C0C0C0" </TD>
-  <TD><FONT COLOR="#00FF00"> *Lime:* </FONT></TD><TD>"#00FF00" </TD>
-</TR><TR BGCOLOR="#C0C0C0">
-  <TD><FONT COLOR="#808080"> *Gray:* </FONT></TD><TD>"#808080" </TD>
-  <TD><FONT COLOR="#808000"> *Olive:* </FONT></TD><TD>"#808000" </TD>
-  <TD><FONT COLOR="#FFFFFF"> *White:* </FONT></TD><TD>"#FFFFFF" </TD>
-  <TD><FONT COLOR="#FFFF00"> *Yellow:* </FONT></TD><TD>"#FFFF00" </TD>
-</TR><TR BGCOLOR="#E0E0E0">
-  <TD><FONT COLOR="#800000"> *Maroon:* </FONT></TD><TD>"#800000" </TD>
-  <TD><FONT COLOR="#000080"> *Navy:* </FONT></TD><TD>"#000080" </TD>
-  <TD><FONT COLOR="#FF0000"> *Red:* </FONT></TD><TD>"#FF0000" </TD>
-  <TD><FONT COLOR="#0000FF"> *Blue:* </FONT></TD><TD>"#0000FF" </TD>
-</TR><TR BGCOLOR="#C0C0C0">
-  <TD><FONT COLOR="#800080"> *Purple:* </FONT></TD><TD>"#800080" </TD>
-  <TD><FONT COLOR="#008080"> *Teal:* </FONT></TD><TD>"#008080" </TD>
-  <TD><FONT COLOR="#FF00FF"> *Fuchsia:* </FONT></TD><TD>"#FF00FF"</TD>
-  <TD><FONT COLOR="#00FFFF"> *Aqua:* </FONT></TD><TD>"#00FFFF" </TD>
-</TR>
-</TABLE>
+<table>
+<tr bgcolor="#e0e0e0">
+  <td><font color="#000000"> *Black:* </font></td><td> ="#000000"= </td>
+  <td><font color="#008000"> *Green:* </font></td><td> ="#008000"= </td>
+  <td><font color="#c0c0c0"> *Silver:* </font></td><td> ="#c0c0c0"= </td>
+  <td><font color="#00ff00"> *Lime:* </font></td><td> ="#00ff00"= </td>
+</tr><tr bgcolor="#c0c0c0">
+  <td><font color="#808080"> *Gray:* </font></td><td> ="#808080"= </td>
+  <td><font color="#808000"> *Olive:* </font></td><td> ="#808000"= </td>
+  <td><font color="#ffffff"> *White:* </font></td><td> ="#ffffff"= </td>
+  <td><font color="#ffff00"> *Yellow:* </font></td><td> ="#ffff00"= </td>
+</tr><tr bgcolor="#e0e0e0">
+  <td><font color="#800000"> *Maroon:* </font></td><td> ="#800000"= </td>
+  <td><font color="#000080"> *Navy:* </font></td><td> ="#000080"= </td>
+  <td><font color="#ff0000"> *Red:* </font></td><td> ="#ff0000"= </td>
+  <td><font color="#0000ff"> *Blue:* </font></td><td> ="#0000ff"= </td>
+</tr><tr bgcolor="#c0c0c0">
+  <td><font color="#800080"> *Purple:* </font></td><td>="#800080"= </td>
+  <td><font color="#008080"> *Teal:* </font></td><td> ="#008080"= </td>
+  <td><font color="#ff00ff"> *Fuchsia:* </font></td><td> ="#ff00ff"= </td>
+  <td><font color="#00ffff"> *Aqua:* </font></td><td> ="#00ffff"= </td>
+</tr>
+</table>
 
-	* Example text: <br> <code> &lt;FONT COLOR="#FF0000"&gt; Red color &lt;/FONT&gt; draws attention. </code>
-	* Example output: <br> <FONT COLOR="#FF0000"> Red color </FONT> draws attention.
+	* Example text: <br /> <code> &lt;font color="#ff0000"&gt; Red color &lt;/font&gt; draws attention. </code>
+	* Example output: <br /> <font color="#ff0000"> Red color </font> draws attention.
 
 -----
 </blockquote>
 
 -- Main.MikeMannix - 10 Sep 2001 <br />
+-- Main.PeterThoeny - 13 Sep 2001 <br />
