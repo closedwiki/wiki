@@ -1,0 +1,12 @@
+%META:TOPICINFO{author="TWikiGuest" date="1108479810" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="ClassMethod"}%
+A StaticMethod is a method in a package that can be called without reference to an object of the package type. For example,
+
+---+ package Telecoms
+---++ StaticMethod defaultColour()
+
+<verbatim>
+
+my $colour = Telecoms::defaultColour()
+
+See also: ClassMethod, ObjectMethod
