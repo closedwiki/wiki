@@ -1,6 +1,11 @@
 #!/usr/bin/perl -wT
+#use strict;
+my $debuganon = 0;
+my $debugauth = 0;
+use CGI::Carp qw(fatalsToBrowser);
 #
 # TWiki Collaboration Platform, http://TWiki.org/
+#  (C) Martin at Cleaver.org 2005
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -24,14 +29,10 @@ op. (op was named verb in my original proposal). It then looks up
 the op using the table below to work out which TWiki::UI:: method to call,
 and delegates control.
 
-This implementation eliminates the directory entirely but another suggestion
-was to make it take the place of each of the cgi scripts in
-the bin directory.  (i.e. if you want separate files, they can be sym-
-linked to the same implementations)
-
-Re: authentication - I suspect files are either authenticated or they are not.
-This necessitates TWO scripts - 'twikianon' and 'twikiauth', not a new one 
-everytime we want another type of action.
+This implementation eliminates all the bin scripts: the URL changes from
+    * bin/view to bin/twiki/view and
+    * bin/edit to bin/twiki/edit . This redirects to:  
+       * bin/edit to bin/twikiauth/edit 
 
 This leads the way for a general method for e.g. plugins requiring bin
 
@@ -43,8 +44,8 @@ I have not yet considered what to do about setlib.cfg, etc.
 =cut
 
 
-use CGI::Carp qw(fatalsToBrowser);
-#print "Content-type: text/html\n\n";
+
+
 
 BEGIN {
     # Set default current working directory (needed for mod_perl)
@@ -66,35 +67,66 @@ BEGIN {
 use TWiki::UI;
 
 my %ops = (
-	     attach => [ "TWiki::UI::Upload", "attach" ],
-	     changes => [ "TWiki::UI::Changes", "changes" ],
-	     edit => [ "TWiki::UI::Edit", "edit" ],
-	     manage => [ "TWiki::UI::Manage", "manage" ],
-	     oops => [ "TWiki::UI::Oops", "oops_cgi" ],
-	     passwd => [ "TWiki::UI::Register", "passwd_cgi" ],
-	     preview => [ "TWiki::UI::Preview", "preview" ],
-	     rdiff => [ "TWiki::UI::RDiff", "diff" ],
-	     register => [ "TWiki::UI::Register", "register_cgi" ],
-	     rename => [ "TWiki::UI::Manage", "rename" ],
-	     resetpasswd => [ "TWiki::UI::Register", "resetPassword" ],
-	     save => [ "TWiki::UI::Save", "save" ],
-	     search => [ "TWiki::UI::Search", "search" ],
-	     statistics => [ "TWiki::UI::Statistics", "statistics" ],
-	     upload => [ "TWiki::UI::Upload", "upload" ],
-	     view => [ "TWiki::UI::View", "view" ],
-	     viewfile => [ "TWiki::UI::View", "viewfile" ]
+	     'attach' => [ "TWiki::UI::Upload", "attach", 1 ],
+	     'changes' => [ "TWiki::UI::Changes", "changes", 0 ],
+	     'edit' => [ "TWiki::UI::Edit", "edit", 1 ],
+	     'manage' => [ "TWiki::UI::Manage", "manage", 1 ],
+	     'oops' => [ "TWiki::UI::Oops", "oops_cgi", 0 ],
+	     'passwd' => [ "TWiki::UI::Register", "passwd_cgi", 0 ],
+	     'preview' => [ "TWiki::UI::Preview", "preview", 0 ],
+	     'rdiff' => [ "TWiki::UI::RDiff", "diff", 0 ],
+	     'register' => [ "TWiki::UI::Register", "register_cgi", 0 ],
+	     'rename' => [ "TWiki::UI::Manage", "rename", 1 ],
+	     'resetpasswd' => [ "TWiki::UI::Register", "resetPassword", 0 ],
+	     'save' => [ "TWiki::UI::Save", "save", 1 ],
+	     'search' => [ "TWiki::UI::Search", "search", 0 ],
+	     'statistics' => [ "TWiki::UI::Statistics", "statistics", 0 ],
+	     'upload' => [ "TWiki::UI::Upload", "upload", 1 ],
+	     'view' => [ "TWiki::UI::View", "view", 0 ],
+	     'viewfile' => [ "TWiki::UI::View", "viewfile", 1 ]
 	   );
 
+my $op;
+my $originalpathinfo = $ENV{PATH_INFO};
 ($ENV{PATH_INFO}, $op) = take_op($ENV{PATH_INFO});
-my ($lib, $entrypoint) = find_op($op);
+my ($lib, $entrypoint, $needauth) = find_op($op);
 #print "E: $entrypoint\n";
 
+my $script = $ENV{SCRIPT_URI};
+my $inauth = $script =~ m!bin/twikiauth!;
+my $debug = $inauth ? $debugauth : $debuganon;
+my $remoteuser = $ENV{REMOTE_USER};
+
+print "Content-type: text/html\n\n" if $debug;
 if ($entrypoint eq "") {
     html_error();
 } else {
-#    print "<H1> For '$op'- running lib::$entrypoint</H1>";
-#    print "<h2>".join("\n<LI>",@INC)."</h2>";
-    eval "TWiki::UI::run($lib, $entrypoint)";
+    html_diagnose($op, $lib, $entrypoint, $needauth, %ENV) if $debug; 
+    print "<LI>needauth = $needauth; inauth = $inauth; remoteuser = $remoteuser\n" if $debug;
+
+    if ($needauth) {
+	if (!$inauth) {
+	    if (!defined($remoteuser)) {
+		print "<LI>remoteuser: ".$remoteuser if $debug;
+		my $authscript = $script;
+		$authscript =~ s!bin/twiki/!bin/twikiauth/!;
+#	    $authscript .= $originalpathinfo; # "/".$op."&path=".$ENV{PATH_INFO};
+		print "<h2>Redirecting to $authscript</h2>\n" if $debug;
+		use CGI;
+		my $query = new CGI;
+		print $query->redirect($authscript);
+		exit 0;
+	    }
+	}
+    }
+
+    {
+	no strict 'subs';
+	eval "TWiki::UI::run(\'$lib\', \'$entrypoint\')"; # unless $debug;
+    };
+    if ($@) {
+	die "couldn't run ${lib}::${entrypoint} $debug\n\t$@";
+    }
 }
 
 =pod
@@ -109,9 +141,9 @@ Now we just need to determine how to carve out the ops namespace.
 sub find_op {
     my $op = shift;
     my $ref = $ops{$op};
-    my ($lib, $entrypoint) = @$ref;
-#    print "A: $lib, $entrypoint\n";
-    return ($lib, $entrypoint);
+    my ($lib, $entrypoint, $needauth) = @$ref;
+    print "A: $lib, $entrypoint, $needauth\n" if $debug;
+    return ($lib, $entrypoint, $needauth);
 }
 
 sub take_op {
@@ -119,7 +151,6 @@ sub take_op {
     $path =~ m!/(.*?)/.*!;
     my $op = $1;
     $path =~ s!/$op!!;
-    
     #$op =~ s!/.*?!!;
     #print "P: ".$path."\n";
     #print "O: $op\n";
@@ -132,6 +163,17 @@ sub html_error {
     print "<h1>".$op." is not valid</h1>\n";
     print "<LI>".show_ops("\n<LI>");
     print "</body></html>\n";
+}
+
+sub html_diagnose {
+    my ($op, $lib, $entrypoint, $needauth, %ENV) = @_;
+
+    print "<H1> For '$op'- running ${lib}::${entrypoint}</H1>";
+    print "<h2>".join("\n<LI>",@INC)."</h2>";
+    print "<h2>auth=$needauth</h2>\n";
+    foreach my $key (sort keys %ENV) {
+	print "<LI> $key = $ENV{$key}\n";
+    }
 }
 
 sub show_ops {
