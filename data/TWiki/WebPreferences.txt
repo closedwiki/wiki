@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="997249139" format="1.0beta2" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000023630" format="1.0" version="1.8"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ %WIKITOOLNAME%.%WEB% Web Preferences
 
@@ -16,6 +16,11 @@ __Preferences:__
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs)
 		* Set NOSEARCHALL = 
 
+	* Default template for new topics and form(s) for this web:
+		* WebTopicEditTemplate: Site-level default template for new topics
+		* TWikiFormTemplate: How to enable form(s)
+		* Set WEBFORMS = 
+
 	* Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the %WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
 		* Set DENYWEBVIEW = 
 		* Set ALLOWWEBVIEW = 
@@ -24,8 +29,9 @@ __Preferences:__
 		* Set DENYWEBRENAME = 
 		* Set ALLOWWEBRENAME = 
 
-	* Users or groups allowed to change this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
+	* Users or groups allowed to change or rename this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
 		* Set ALLOWTOPICCHANGE = 
+		* Set ALLOWTOPICRENAME = 
 
 	* Web preferences that are *not* allowed to be overridden by user preferences:
 		* Set FINALPREFERENCES = WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999328830" format="1.0" version="1.17"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000022749" format="1.0" version="1.18"}%
 *%WIKITOOLNAME% Site-Level Preferences*
 
 The following settings are __site-level preferences__ , e.g. affecting all users in all %WIKITOOLNAME% webs. These preferences can be overwritten by __web preferences__ (topic %WEBPREFSTOPIC% in each %WIKITOOLNAME% web) and __user preferences__ (your personal topic, i.e. Main.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
@@ -81,11 +81,9 @@ __Preferences:__
 		* Set HTTP_EQUIV_ON_PREVIEW = 
 </verbatim>
 
-	* Users or groups allowed to change this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
+	* Users or groups allowed to change or rename this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
 		* Set ALLOWTOPICCHANGE = 
-
-	* Users or groups allow to rename this <nop>%TOPIC% topic:
-		* #Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+		* Set ALLOWTOPICRENAME = 
 
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
 		* Set FINALPREFERENCES = PREVIEWBGIMAGE, WIKIWEBMASTER, MAILHOST
