@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="995355832" format="1.0beta2" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="995875071" format="1.0beta2" version="1.7"}%
 *%WIKITOOLNAME%.%WEB% Web Preferences*
 
 The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
@@ -7,16 +7,7 @@ The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. 
 __Preferences:__
 
 	* List of topics of the %WIKITOOLNAME%.%WEB% web:
-		* Set WEBTOPICLIST = %WEB% . {
-				[[%HOMETOPIC%][Home]]
-			 | [[%WIKIUSERSTOPIC%][Users]]
-			 | [[TWikiGroups][Groups]]
-			 | [[OfficeLocations][Offices]]
-			 | [[WebChanges][Changes]]
-			 | [[WebIndex][Index]]
-			 | [[WebSearch][Search]]
-			 | Go <input type="text" name="topic" size="16" />
-		  }
+		* Set WEBTOPICLIST = [[%HOMETOPIC%][Home]] %SEP% [[%WIKIUSERSTOPIC%][Users]] %SEP% [[TWikiGroups][Groups]] %SEP% [[OfficeLocations][Offices]] %SEP% [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
 
 	* Web specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors)
 		* Set WEBBGCOLOR = #FFFFC0
