@@ -1,23 +1,27 @@
+%META:TOPICINFO{author="guest" date="1101314093" format="1.0" version="1.1"}%
 Description: verbatim tags should be nestable to at least two levels.
 
 	* Set EGG = font color="blue"
 	* Set BACON = font color="purple"
 	* Set ENDBREAKFAST = /font
+
+Manual test; THIS TESTCASE CANNOT BE AUTOMATED because the end rendering handler used by the !TestFixturePlugin is invoked before verbatim text is replaced in the output.
+
 <table>
 <tr><th>Expected (TWiki will munge this when viewing the topic, so view raw)</th><th>Actual</th></tr>
 <tr><td>
 <!-- expected -->
 <font color="purple"> Before Verbatim </font>
 <pre>
-&lt;%EGG%&gt; In outer verbatim &lt;%ENDBREAKFAST%&gt;
-
+&lt;&#37;EGG%&gt; In outer verbatim &lt;%ENDBREAKFAST%&gt;
 &lt;verbatim&gt;
 In inner verbatim with &lt;text in angle braces&gt;
 &lt;/verbatim&gt;
-&lt;%EGG%&gt; In outer verbatim again &lt;%ENDBREAKFAST%&gt;
+&lt;&#37;EGG%&gt; In outer verbatim again &lt;%ENDBREAKFAST%&gt;
 </pre>
 <font color="purple"> After Verbatim </font>
 <!-- /expected -->
+</verbatim>
 </td><td>
 <!-- actual -->
 <%BACON%> Before Verbatim <%ENDBREAKFAST%>
@@ -46,7 +50,7 @@ Usage:
 Lorem ipsum is pig latin for "that's my lorry, that is".
 <p />
 -- <font color="#0000ff">AlexanderTheGeek</font> - 01 Nov 2004
-<!-- expected -->
+<!-- /expected -->
 ---++ Actual at end of topic
 <!-- actual -->
 Function is

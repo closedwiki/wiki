@@ -1,11 +1,13 @@
+%META:TOPICINFO{author="guest" date="1101313641" format="1.0" version="1.1"}%
 Description: Search results can contain tags. These tags must be correctly expanded in the output.
 <!--
 TAGME %MAINWEB%
 -->
-<table border=1<tr><th>Expected<th>Actual
+<table border=1>
+<tr><th>Expected</th><th>Actual</th></tr>
 <tr><td>
-<!-- expected -->
-Main
+<!-- expected expand -->
+%MAINWEB%
 <!-- /expected -->
 <td>
 <!-- actual -->
