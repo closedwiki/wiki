@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999857462" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000461351" format="1.0" version="1.13"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Plugins
@@ -13,7 +13,7 @@ You can add Plugins to greatly extend TWiki's functionality, without alering the
 	* heavily customize an installation and still do clean updates to new versions of TWiki;
 	* rapidly develop new TWiki functions in Perl using the Plugin API.
 
-Everything to do with TWiki Plugins - demos, new releases, downloads, development, general discussion - is available at TWiki.org, in the *[[TWiki:Plugins][TWiki.org Plugins web]]*.
+Everything to do with TWiki Plugins - demos, new releases, downloads, development, general discussion - is available at TWiki.org, in the *[[TWiki:Plugins]] web*.
 
 ---++ Preinstalled Plugins
 
@@ -21,7 +21,7 @@ TWiki comes with three Plugins as part of the standard installation.
 
 	* *<nop>DefaultPlugin* handles some legacy TWiki variables that may be present in long-established sites. This option can be controlled from %TWIKIWEB%.TWikiPreferences. (Perl programmers can also [[#Customize_the_DefaultPlugin][add rules]] for simple custom processing.)
 
-	* *<nop>EmptyPlug* is a fully functional module, minus active code; it does nothing and serves as a template for new Plugin development. 
+	* *<nop>EmptyPlugin* is a fully functional module, minus active code; it does nothing and serves as a template for new Plugin development. 
 
 	* *InterwikiPlugin* is preinstalled but can be disabled or removed. Use it for quick linking to to remote sites: ==TWiki:Plugins== expands to TWiki:Plugins on TWiki.org. You can add your own shortcuts and URLs to the existing directory of Wiki-related and other probably useful sites.
 
@@ -83,10 +83,10 @@ Plugin status variables let you list all active Plugins wherever needed. There a
 <blockquote style="background-color:#f0f0f0">
 <span style="color:#0000ff"> *DEMO: Active Plugin Variables* </span>
 
-==%<nop>ACTIVATEDPLUGINS%== <br>
+==%<nop>ACTIVATEDPLUGINS%== <br />
 On this TWiki site, the active Plugins are: %ACTIVATEDPLUGINS%.
 
-==%<no>PLUGINDESCRIPTIONS%== <br>
+==%<no>PLUGINDESCRIPTIONS%== <br />
 You can use any of these active TWiki Plugins:
 %PLUGINDESCRIPTIONS%
 </blockquote>
@@ -94,7 +94,7 @@ You can use any of these active TWiki Plugins:
 #PluginAPI
 ---++ The TWiki Plugin API
 
-The Application Programming Interface (API) for <nop>TWikiPlugins provides the specifications for hooking into the core TWiki code from your external Perl Plugin module. The Plugin API is new to the Production version of TWiki with the <nop>TWikiReleaseSpring2001.
+The Application Programming Interface (API) for <nop>TWikiPlugins provides the specifications for hooking into the core TWiki code from your external Perl Plugin module. The Plugin API is new to the Production version of TWiki with the 01-Sep-2001 release.
 
 ---+++ Available Core Functions
 
@@ -128,30 +128,30 @@ With a reasonable knowledge of the Perl scripting language, you can create new P
 
 ---+++ The <nop>DefaultPlugin Alternative
 
-	* *<nop>DefaultPlugin* can handle some outdated TWiki variables, found, for example, in sites recently updated from an old version. Settings are in %TWIKIWEB%.TWikiPreferences. You can also add your own simple custom processing rules here, though in all but very simple cases, writing a new Plugin is preferable.
+	* *<nop>DefaultPlugin* can handle some outdated TWiki variables, found, for example, in sites recently updated from an old version. Settings are in DefaultPlugin topic. You can also add your own simple custom processing rules here, though in all but very simple cases, writing a new Plugin is preferable.
 
 ---+++ Anatomy of a Plugin
 
 A basic TWiki Plugin consists of two elements:
 
-	* a Perl module, ex: ==YourPlugin.pm==
-	* a documentation topic, ex: ==YourPlugin.txt==
+	* a Perl module, ex: ==MyFirstPlugin.pm==
+	* a documentation topic, ex: ==MyFirstPlugin.txt==
 
 The Perl module can be a block of code that connects with TWiki alone, or it can include other elements, like other Perl modules (including other Plugins), graphics, TWiki templates, external applications (ex: a Java applet), or just about anything else it can call.
-In particular, files that should be web-accessible (graphics, Java applets ...) are best placed as attachments of the ==YourPlugin== topic. Other needed Perl code is best placed in a ==lib/TWiki/Plugins/YourPlugin/== directory.
+In particular, files that should be web-accessible (graphics, Java applets ...) are best placed as attachments of the ==MyFirstPlugin== topic. Other needed Perl code is best placed in a ==lib/TWiki/Plugins/MyFirstPlugin/== directory.
 
 The Plugin API handles the details of connecting your Perl module with main TWiki code. When you're familiar with the [[#PluginAPI][Plugin API]], you're ready to develop Plugins.
 
 ---+++ Creating the Perl Module 
 
-Copy file ([[http://twiki.org/lib/TWiki/Plugins/EmptyPlugin.pm][<code>EmptyPlugin.pm</code>]] to ==&lt;name&gt;Plugin.pm== ==EmptyPlugin.pm== contains no executable code, so it does nothing, but it's ready to be used. Customize it. Refer to the [[#PluginAPI][Plugin API]] specs for more information.
+Copy file =lib/TWiki/Plugins/EmptyPlugin.pm= to ==&lt;name&gt;Plugin.pm==. ==EmptyPlugin.pm== contains no executable code, so it does nothing, but it's ready to be used. Customize it. Refer to the [[#PluginAPI][Plugin API]] specs for more information.
 
 #CreatePluginTopic
 ---+++ Writing the Documentation Topic
 
 The Plugin documentation topic contains usage instructions and version details. It serves the Plugin files as %TWIKIWEB%.FileAttachments for downloading. (The doc topic is also included _in_ the [[#CreatePluginPackage][distribution package]].) To create a documentation topic:
 
-	1. *Copy* the Plugin topic template from http://TWiki.org/cgi-bin/view/TWiki/EmptyPlugin. To copy the text, go to the page and:
+	1. *Copy* the Plugin topic template from EmptyPlugin. To copy the text, go to the page and:
 		* click Edit
 		* select all in the Edit box & copy 
 		* Cancel the edit
@@ -161,11 +161,11 @@ The Plugin documentation topic contains usage instructions and version details. 
 
 <blockquote style="background-color:#f0f0f0">
 <span style="color:#0000ff"><b>OUTLINE:</b> Doc Topic Contents </span><br>
-Check [[%TWIKIWEB%.EmptyPlugin][EmptyPlugin]] on TWiki.org for the latest Plugin doc topic template. Here's a quick overview of what's covered:
+Check EmptyPlugin on TWiki.org for the latest Plugin doc topic template. Here's a quick overview of what's covered:
 
 *Syntax Rules:* Describe any special text formatting that will be rendered. 
 
-*<nop>YourPlugin Settings:* Description and settings for your custom Plugin %VARIABLES%, and those required by TWiki.
+*<nop>MyFirstPlugin Settings:* Description and settings for custom Plugin %VARIABLES%, and those required by TWiki.
 
 Plugins Preferences work exactly like %TWIKIWEB%.TWikiPreferences and WebPreferences: six (6) spaces and then:
 		* Set EXAMPLE = got it! 
@@ -180,16 +180,16 @@ Plugins Preferences work exactly like %TWIKIWEB%.TWikiPreferences and WebPrefere
 #CreatePluginPackage
 ---+++ Packaging for Distribution
 
-A minimum Plugin release consists of a Perl module with a TWiki.WikiName that ends in ==Plugin==, ex: ==YourPlugin.pm==, and a documentation page with the same name(==YourPlugin.txt==).
+A minimum Plugin release consists of a Perl module with a WikiName that ends in ==Plugin==, ex: ==MyFirstPlugin.pm==, and a documentation page with the same name(==MyFirstPlugin.txt==).
 
-	1. Distribute your Plugin files in a directory structure that mirrors TWiki. If your Plugin uses additional files, include them ALL:
-		* ==lib/TWiki/Plugins/YourPlugin.pm==
-		* ==data/TWiki/YourPlugin.txt==
-		* ==pub/TWiki/YourPlugin/uparrow.gif== [a required graphic]
-	2. Create a zip archive with the Plugin name (==YourPlugin.zip==) and add the entire directory structure from Step 1. Your archive should look like this:
-		* ==lib/TWiki/Plugins/YourPlugin.pm==
-		* ==data/TWiki/YourPlugin.txt==
-		* ==pub/TWiki/YourPlugin/uparrow.gif==
+	1. Distribute the Plugin files in a directory structure that mirrors TWiki. If your Plugin uses additional files, include them ALL:
+		* ==lib/TWiki/Plugins/MyFirstPlugin.pm==
+		* ==data/TWiki/MyFirstPlugin.txt==
+		* ==pub/TWiki/MyFirstPlugin/uparrow.gif== [a required graphic]
+	2. Create a zip archive with the Plugin name (==MyFirstPlugin.zip==) and add the entire directory structure from Step 1. The archive should look like this:
+		* ==lib/TWiki/Plugins/MyFirstPlugin.pm==
+		* ==data/TWiki/MyFirstPlugin.txt==
+		* ==pub/TWiki/MyFirstPlugin/uparrow.gif==
 
 #PublishPlugin
 ---+++ Publishing for Public Use
@@ -197,10 +197,11 @@ A minimum Plugin release consists of a Perl module with a TWiki.WikiName that en
 You can release your tested, packaged Plugin to the TWiki community through the TWiki:Plugins web, where all Plugins submitted to TWiki.org are available for download and further development discussion. Publish your Plugin in three steps:
 
 	1. *Post* the Plugin documentation topic in the TWiki:Plugins web:
-		* create a new topic using the Plugin name, ex: ==YourPlugin.txt==;
+		* create a new topic using the Plugin name, ex: ==MyFirstPlugin.txt==;
 		* paste in the topic text from [[#CreatePluginTopic][Creating Plugin Documentation]] and Save.
-	1. *Attach* the distribution zip file to the topic, ex: ==YourPlugin.zip==.
-	1. *Link* from the doc page to a new, blank page named after the Plugin, and ending in ==Dev==, ex: ==YourPluginDev==. This is the discussion page for future development. (User support for Plugins is handled in TWiki:Support.)
+	1. *Attach* the distribution zip file to the topic, ex: ==MyFirstPlugin.zip==.
+	1. *Link* from the doc page to a new, blank page named after the Plugin, and ending in ==Dev==, ex: ==MyFirstPluginDev==. This is the discussion page for future development. (User support for Plugins is handled in TWiki:Support.)
 
--- AndreaSterbini - 29 May 2001 <br>
--- MikeMannix - 01 Sep 2001
+-- AndreaSterbini - 29 May 2001 <br />
+-- MikeMannix - 01 Sep 2001 <br />
+-- Main.PeterThoeny - 14 Sep 2001 <br />
