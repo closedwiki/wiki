@@ -20,6 +20,7 @@
 
 package TWiki::Store::RcsWrap;
 
+use File::Copy;
 use TWiki::Store::RcsFile;
 @ISA = qw(TWiki::Store::RcsFile);
 
@@ -63,6 +64,7 @@ sub _settings
 {
     my( $self, %settings ) = @_;
     $self->{initBinaryCmd} = $settings{initBinaryCmd};
+    $self->{tmpBinaryCmd}  = $settings{tmpBinaryCmd};
     $self->{ciCmd}        = $settings{ciCmd};
     $self->{coCmd}        = $settings{coCmd};
     $self->{histCmd}      = $settings{histCmd};
@@ -234,24 +236,34 @@ sub getRevision
     my( $self, $version ) = @_;
     
     my $tmpfile = "";
+    my $tmpRevFile = "";
     my $cmd = $self->{"coCmd"};
-    $cmd =~ s/%REVISION%/1.$version/;
     my $file = $self->file();
-    $cmd =~ s/%FILENAME%/$file/;
     if( $TWiki::OS eq "WINDOWS" ) {
+        # Need to take temporary copy of topic, check it out to file, then read that
+        # Need to put RCS into binary mode to avoid extra \r appearing and
+        # read from binmode file rather than stdout to avoid early file read termination
         $tmpfile = $self->_mkTmpFilename();
-        $cmd .= " > $tmpfile";
+        $tmpRevFile = "$tmpfile,v";
+        copy( $self->rcsFile(), $tmpRevFile );
+        my $cmd1 = $self->{tmpBinaryCmd};
+        $cmd1 =~ s/%FILENAME%/$tmpRevFile/;
+        $cmd1 =~ /(.*)/;
+        $cmd1 = "$1";
+        my $tmp = `$cmd1`;
+        _traceExec( $cmd1, $tmp );
+        $file = $tmpfile;
+        $cmd =~ s/-p%REVISION%/-r%REVISION%/;
     }    
+    $cmd =~ s/%REVISION%/1.$version/;
+    $cmd =~ s/%FILENAME%/$file/;
     $cmd =~ /(.*)/;
     $cmd = "$1"; # untaint
     my $text = `$cmd`;
     if( $tmpfile ) {
         $text = $self->_readFile( $tmpfile );
-        TWiki::writeDebug( "tmpfile: $tmpfile" );
-        TWiki::writeDebug( "len = " . length($text ) );
-	$tmpfile =~ /(.*)/;
-	$tmpfile = "$1"; # untaint
         unlink $tmpfile;
+        unlink $tmpRevFile;
     }
     _traceExec( $cmd, $text );
     return $text;
