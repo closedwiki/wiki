@@ -81,11 +81,11 @@ sub main
     my $nosummary     = $query->param( "nosummary" )  || "";
     my $nosearch      = $query->param( "nosearch" )  || "";
     my $nototal       = $query->param( "nototal" )  || "";
-
+    my $bookView      = $query->param( "bookview" )  || ""; # PTh 20 Jul 2000
 
     &wiki::searchWikiWeb( "0", $websStr, $search, $scope, $order, $regex,
                           $limit, $revSort, $caseSensitive, $nosummary,
-                          $nosearch, $nototal );
+                          $nosearch, $nototal, $bookView );
 
 # Had to move this to wikisearch to cope with new process.
 #    if( $wiki::doLogTopicSearch ) {

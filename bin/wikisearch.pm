@@ -38,7 +38,7 @@ sub searchWikiWeb
     ## 0501 kk : vvv Added params
     my ( $doInline, $theWebName, $theSearchVal, $theScope, $theOrder,
          $theRegex, $theLimit, $revSort, $caseSensitive, $noSummary,
-         $noSearch, $noTotal, @junk ) = @_;
+         $noSearch, $noTotal, $doBookView, @junk ) = @_;
 
     ## 0501 kk : vvv new option to limit results
     # process the result limit here, this is the 'global' limit for
@@ -110,7 +110,12 @@ sub searchWikiWeb
     ## ##############
 
     my $tempVal = "";
-    my $tmpl = readTemplate( "search" );
+    my $tmpl = "";
+    if( $doBookView ) {
+        $tmpl = readTemplate( "searchbookview" );
+    } else {
+        $tmpl = readTemplate( "search" );
+    }
     my( $tmplHead, $tmplSearch,
 	$tmplTable, $tmplNumber, $tmplTail ) = split( /%SPLIT%/, $tmpl );
     $tmplHead = handleCommonTags( $tmplHead, $topic );
@@ -259,6 +264,11 @@ sub searchWikiWeb
                 if( $noSummary ) {
                     $tempVal =~ s/%TEXTHEAD%//go;
                     $tempVal =~ s/&nbsp;//go;
+                } elsif( $doBookView ) {  # added PTh 20 Jul 2000
+                    $head = readFile( "$dataDir\/$thisWebName\/$filename.txt" );
+                    $head = handleCommonTags( $head, $filename, $thisWebName );
+                    $head = getRenderedVersion( $head, $thisWebName );
+                    $tempVal =~ s/%TEXTHEAD%/$head/go;
                 } else {
                     $head = readFileHead( "$dataDir\/$thisWebName\/$filename.txt", 12 );
                     $head =~ s/<[^>]*>//go;         # remove all HTML tags

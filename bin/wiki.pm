@@ -19,7 +19,7 @@
 # http://www.gnu.ai.mit.edu/copyleft/gpl.html 
 #
 # Notes:
-# - Latest version at http://www.mindspring.net/~peterthoeny/twiki/index.html
+# - Latest version at http://twiki.sourceforge.net/
 # - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
@@ -85,7 +85,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "21 Jun 2000";
+$wikiversion      = "23 Jul 2000";
 
 # ===========================
 # read the configuration part
@@ -916,11 +916,33 @@ sub handleIncludeFile
         $incfile =~ s/\.+/\./g;
     }
 
-    my $fileName = "$dataDir/$webName/$incfile";
-    if( -e $fileName ) {
-        return &readFile( $fileName );
+    # test for different usage
+    my $fileName = "$dataDir/$webName/$incfile";       # TopicName.txt
+    if( ! -e $fileName ) {
+        $fileName = "$dataDir/$webName/$incfile.txt";  # TopicName
+        if( ! -e $fileName ) {
+            $fileName = "$dataDir/$incfile";           # Web/TopicName.txt
+            if( ! -e $fileName ) {
+                $incfile =~ s/\.([^\.]*)$/\/$1/go;
+                $fileName = "$dataDir/$incfile.txt";   # Web.TopicName
+                if( ! -e $fileName ) {
+                    return "";
+                }
+            }
+        }
     }
-    return &readFile( "$dataDir/$incfile" );
+    my $text = &readFile( $fileName );
+
+    $fileName =~ s/\/([^\/]*)\/([^\/]*)(\.txt)$/$1/go;
+    if( $3 ) {
+        # identified "/Web/TopicName.txt" filename
+        my $incWeb = $1;
+        # Change all "TopicName" to "Web.TopicName" in text
+        $text =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/$1$incWeb\.$2/go;
+        $text =~ s/%WEB%/$incWeb/go;
+    }
+
+    return $text;
 }
 
 # =========================
@@ -934,18 +956,22 @@ sub handleSearchWeb
         $searchVal = extractNameValuePair( $attributes, "search" );
     }
 
-    return &searchWikiWeb( "1",
-       extractNameValuePair( $attributes, "web" ),
-       $searchVal, 
-       extractNameValuePair( $attributes, "scope" ),
-       extractNameValuePair( $attributes, "order" ),
-       extractNameValuePair( $attributes, "regex" ),
-       extractNameValuePair( $attributes, "limit" ),
-       extractNameValuePair( $attributes, "reverse" ),
-       extractNameValuePair( $attributes, "casesensitive" ),
-       extractNameValuePair( $attributes, "nosummary" ),
-       extractNameValuePair( $attributes, "nosearch" ),
-       extractNameValuePair( $attributes, "nototal" ),
+    my $attrWeb = extractNameValuePair( $attributes, "web" );
+    my $attrScope = extractNameValuePair( $attributes, "scope" );
+    my $attrOrder = extractNameValuePair( $attributes, "order" );
+    my $attrRegex = extractNameValuePair( $attributes, "regex" );
+    my $attrLimit = extractNameValuePair( $attributes, "limit" );
+    my $attrReverse = extractNameValuePair( $attributes, "reverse" );
+    my $attrCasesensitive = extractNameValuePair( $attributes, "casesensitive" );
+    my $attrNosummary = extractNameValuePair( $attributes, "nosummary" );
+    my $attrNosearch = extractNameValuePair( $attributes, "nosearch" );
+    my $attrNototal = extractNameValuePair( $attributes, "nototal" );
+    my $attrBookview = extractNameValuePair( $attributes, "bookview" );
+
+    return &searchWikiWeb( "1", $attrWeb, $searchVal, $attrScope,
+       $attrOrder, $attrRegex, $attrLimit, $attrReverse,
+       $attrCasesensitive, $attrNosummary, $attrNosearch,
+       $attrNototal, $attrBookview
     );
 }
 
@@ -968,12 +994,18 @@ sub handleEnvVariable
 # =========================
 sub handleCommonTags
 {
-    my( $text, $topic ) = @_;
+    my( $text, $topic, $theWeb ) = @_;
+
+    # PTh 22 Jul 2000: added $theWeb for correct handling of %INCLUDE%, %SEARCH%
+    if( !$theWeb ) {
+        $theWeb = $webName;
+    }
+
     $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1)/geo;
     $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1)/geo;  # allow two level includes
 
     # Wiki extended rules
-    $text = extendHandleCommonTags( $text, $topic );
+    $text = extendHandleCommonTags( $text, $topic, $theWeb );
 
     my $x;
     my $cmd;
@@ -987,15 +1019,15 @@ sub handleCommonTags
     $text =~ s/%REMOTE_PORT%/&handleEnvVariable('REMOTE_PORT')/geo;
     $text =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/geo;
     $text =~ s/%TOPIC%/$topic/go;
-    $text =~ s/%WEB%/$webName/go;
+    $text =~ s/%WEB%/$theWeb/go;
     $text =~ s/%WIKIHOMEURL%/$wikiHomeUrl/go;
     $text =~ s/%SCRIPTURL%/$urlHost$scriptUrlPath/go;
     $text =~ s/%SCRIPTURLPATH%/$scriptUrlPath/go;
     $text =~ s/%SCRIPTSUFFIX%/$scriptSuffix/go;
     $text =~ s/%PUBURL%/$urlHost$pubUrlPath/go;
     $text =~ s/%PUBURLPATH%/$pubUrlPath/go;
-    $text =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$webName\/$topic/go;
-    $text =~ s/%ATTACHURLPATH%/$pubUrlPath\/$webName\/$topic/go;
+    $text =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$theWeb\/$topic/go;
+    $text =~ s/%ATTACHURLPATH%/$pubUrlPath\/$theWeb\/$topic/go;
     $text =~ s/%DATE%/&getLocaldate()/geo;
     $text =~ s/%GMTIME%/&formatGmTime(time())/geo;
     $text =~ s/%WIKIVERSION%/$wikiversion/go;
@@ -1068,9 +1100,11 @@ sub internalLink
         }
     }
 
+    # PTh 22 Jul 2000: Added <nop> before topic with question link
+    # (prevent double question when rendered twice by inline search)
     topicExists( $web, $page) ?
         "$bar<A href=\"$scriptUrlPath/view$scriptSuffix/$web/$page\">$text<\/A>"
-        : $foo?"$bar$text<A href=\"$scriptUrlPath/edit$scriptSuffix/$web/$page\">?</A>"
+        : $foo?"$bar<nop>$text<A href=\"$scriptUrlPath/edit$scriptSuffix/$web/$page\">?</A>"
             : "$bar$text";
 }
 
@@ -1100,9 +1134,13 @@ sub isWikiName
 # =========================
 sub getRenderedVersion
 {
-    my( $text ) = @_;
+    my( $text, $theWeb ) = @_;
     my( $result, $insidePRE, $insideTABLE, $blockquote );
 
+    # PTh 22 Jul 2000: added $theWeb for correct handling of %INCLUDE%, %SEARCH%
+    if( !$theWeb ) {
+        $theWeb = $webName;
+    }
     $result = "";
     $insidePRE = 0;
     $insideTABLE = 0;
@@ -1117,7 +1155,7 @@ sub getRenderedVersion
         if( $insidePRE==0) {
 
 # Wiki extended rules
-            $_ = extendGetRenderedVersionOutsidePRE( $_ );
+            $_ = extendGetRenderedVersionOutsidePRE( $_, $theWeb );
 
 #Blockquote
             s/^>(.*?)$/> <cite> $1 <\/cite><BR>/go;
@@ -1176,11 +1214,11 @@ sub getRenderedVersion
             ## add Web.TopicName internal link -- PeterThoeny:
             ## allow 'AaA1' type format, but not 'Aa1' type -- PeterThoeny:
             s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($2,$3,"$TranslationToken$3$TranslationToken",$1,1)/geo;
-            s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($webName,$2,$2,$1,1)/geo;
+            s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($theWeb,$2,$2,$1,1)/geo;
             s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
 
-            s/([\*\s][\-\*\s]*)([A-Z]{3,})/&internalLink($webName,$2,$2,$1,0)/geo;
-            s/<link>(.*?)<\/link>/&internalLink($webName,$1,$1,"",1)/geo;
+            s/([\*\s][\-\*\s]*)([A-Z]{3,})/&internalLink($theWeb,$2,$2,$1,0)/geo;
+            s/<link>(.*?)<\/link>/&internalLink($theWeb,$1,$1,"",1)/geo;
 
             s/^\n//o;
 
@@ -1188,7 +1226,7 @@ sub getRenderedVersion
             # inside <PRE>
 
 # Wiki extended rules
-            $_ = extendGetRenderedVersionInsidePRE( $_ );
+            $_ = extendGetRenderedVersionInsidePRE( $_, $theWeb );
 
             s/(.*)/$1\n/o;
         }
