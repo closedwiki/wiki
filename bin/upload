@@ -376,7 +376,7 @@ sub main
 	my $text1 = "";
 	my $saveCmd = "";
 	my $doNotLogChanges = 1;
-	my $doUnlock = 1;
+	my $doUnlock = 0;
 	my $dontNotify = "";
 	my $error = &TWiki::Store::saveAttachment( $webName, $topic, $text1, $saveCmd,
                                                    $fileName, $doNotLogChanges, $doUnlock, 
