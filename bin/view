@@ -18,10 +18,11 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
+# Set library paths in @INC, at compile time
+BEGIN { require './setlib.cfg'; }
+
 use CGI::Carp qw( fatalsToBrowser );
 use CGI;
-use lib ( '.' );
-use lib ( '../lib' );
 use TWiki;
 
 use strict;
@@ -33,6 +34,7 @@ use strict;
 
 &main();
 
+# Uncomment the body of either routine to enable debugging
 sub writeDebug
 {
     my( $text ) = @_;
