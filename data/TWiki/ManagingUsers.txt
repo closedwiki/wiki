@@ -1,0 +1,36 @@
+%META:TOPICINFO{author="PeterThoeny" date="1092557660" format="1.0" version="1.1"}%
+%TOC%
+%STARTINCLUDE%
+---# Manage Users
+_Register users on your TWiki site; change/reset/install passwords; remove user accounts_
+
+---++ Authentication and Access Control
+
+	* TWikiUserAuthentication describes options of user authentication
+	* TWikiAccessControl describes how to define groups and how to restrict access to content
+
+---++ Register User
+
+	* TWikiRegistration is for users to fill out a form
+	* NewUserTemplate can be changed to customize user home pages
+
+---++ Change, Reset and Install Passwords
+
+	* ChangePassword is for users who remember their password
+	* ResetPassword is for users who do _not_ remember their password; they are asked to send a request to the site administrator to install a new password
+	* InstallPassword is for the site administrator to install a password
+
+---++ Removing User Accounts
+
+To remove a user account:
+
+	1 Edit the =data/.htpasswd= file to delete their entry (only applies if you are using a .htpasswd file)
+	2 Remove the =FredQuimby= line from the <nop>%MAINWEB%.TWikiUsers topic
+	3 Remove user from all groups and from all the =ALLOWWEB/ALLOWTOPIC...= declarations, if any.%BR% __Note:__ Otherwise this is a security hole as the first one to re-register with this name will be granted the permissions of the previous user.
+	4 _[optional]_ Remove their topic files: =data/%MAINWEB%/FredQuimby.txt= and =data/%MAINWEB%/FredQuimby.txt,v=
+
+__Note:__ Consider leaving the user topic file in place so their past signatures and revision author entries don't end up looking like AnUncreatedTopic. If you want to make it clear the user is inactive on your site (e.g. %MAINWEB%.PeterThoeny) or has been banished add a note to that effect and write protect the page (TWikiAccessControl). The existance of the <nop>UserName topic prevent that user name from being re-used.
+
+-- TWiki:Main.MattWilkie - 21 Jul 2003 %BR%
+-- TWiki:Main.PeterThoeny - 15 Aug 2004
+

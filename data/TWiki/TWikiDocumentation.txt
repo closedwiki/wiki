@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092472815" format="1.0" version="1.45"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092557744" format="1.0" version="1.46"}%
 ---+!! TWiki Reference Manual (%WIKIVERSION%)
 
 <script type="text/javascript">
@@ -77,6 +77,9 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 
 -----
 %INCLUDE{"ManagingWebs"}%
+
+-----
+%INCLUDE{"ManagingUsers"}%
 
 -----
 %INCLUDE{"AppendixFileSystem"}%
