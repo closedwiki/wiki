@@ -180,7 +180,15 @@ sub main
 	$text = &wiki::readTopic( $topic );
     }
     if( ! &wiki::checkAccessPermission( "change", $wikiUserName, $text, $topic, $webName ) ) {
+        # user has not permission to change the topic
         my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
+        print $query->redirect( $url );
+        return;
+    }
+    if( ( $saveCmd ) &&
+        ( ! &wiki::userIsInGroup( $wikiUserName, "TWikiAdminGroup" ) ) ) {
+        # user has no permission to execute undocumented cmd=... parameter
+        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$wiki::mainWebname.TWikiAdminGroup" );
         print $query->redirect( $url );
         return;
     }

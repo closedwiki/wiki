@@ -117,6 +117,29 @@ sub checkAccessPermission
 }
 
 # =========================
+sub userIsInGroup
+{
+    my( $theUserName, $theGroupTopicName ) = @_;
+
+    my $usrTopic = prvGetWebTopicName( $wiki::mainWebname, $theUserName );
+    my $grpTopic = prvGetWebTopicName( $wiki::mainWebname, $theGroupTopicName );
+    my @grpMembers = ();
+
+    if( $grpTopic !~ /.*Group$/ ) {
+        # not a group, so compare user to user
+        push( @grpMembers, $grpTopic );
+    } elsif( ( %allGroups ) && ( exists $allGroups{ $grpTopic } ) ) {
+        # group is allready known
+        @grpMembers = @{ $allGroups{ $grpTopic } };
+    } else {
+        @grpMembers = prvGetUsersOfGroup( $grpTopic, 1 );
+    }
+
+    my $isInGroup = grep { /^$usrTopic$/ } @grpMembers;
+    return $isInGroup;
+}
+
+# =========================
 sub getUsersOfGroup
 {
     my( $theGroupTopicName ) = @_;
