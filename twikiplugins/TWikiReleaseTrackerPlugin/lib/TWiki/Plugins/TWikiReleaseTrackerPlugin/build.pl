@@ -58,8 +58,8 @@ sub target_build {
 
 sub target_install {
 	my $this = shift;
-	$this->SUPER::target_build();
-	target_indexLocalInstallation();
+	$this->SUPER::target_install();
+#	target_indexLocalInstallation();
 
 }
 
