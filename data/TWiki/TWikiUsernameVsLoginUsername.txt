@@ -1,17 +1,17 @@
-%META:TOPICINFO{author="MikeMannix" date="999058596" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043915769" format="1.0" version="1.7"}%
 ---## TWiki Username vs. Login Username
 
 This section applies only if your %WIKITOOLNAME% is installed on a server that is both *authenticated* and on an *intranet*.
 
 %WIKITOOLNAME% internally manages two usernames: Login username and TWiki username.
 
-	* *Login username:* When you login to the intranet, you use your existing login username, ex: ==pthoeny==. This name is normally passed to %WIKITOOLNAME% by the ==REMOTE_USER== environment variable. %WIKITOOLNAME% uses this name internally to log topic changes. Login usernames are maintained by your system administrator.
-	* *TWiki username:* This is your name in WikiNotation, ex: ==PeterThoeny==, recorded when you register in TWikiRegistration; doing so also generates your personal home page in the %MAINWEB% web of your TWiki site.
+	* *Login username:* When you login to the intranet, you use your existing login username, for example ==pthoeny==. This name is normally passed to %WIKITOOLNAME% by the ==REMOTE_USER== environment variable. %WIKITOOLNAME% uses this name internally to log topic changes. Login usernames are maintained by your system administrator.
+	* *TWiki username:* This is your name in WikiNotation, for example ==PeterThoeny==, recorded when you register in TWikiRegistration; doing so also generates your personal home page in the %MAINWEB% web of your TWiki site.
 
 %WIKITOOLNAME% can map the intranet username to the Wiki username automatically, provided that the Login username and Wiki username pair has been entered in the %MAINWEB%.%WIKIUSERSTOPIC% topic. This happens automatically when you register.
 
 <blockquote>
-__NOTE:__ *To correctly enter a WikiName* - your own or someone else's - be sure to specify the %MAINWEB% web in front of the Wiki username: write ==%MAINWEB%.<nop>WikiUsername== or ==%<nop>MAINWEB%.<nop>WikiUsername==. This assures that the name will be linked automatically to the %WIKITOOLNAME%.%MAINWEB% web, where user registration pages are stored, even if the text is entered in a different %WIKITOOLNAME% web.
+__NOTE:__ *To correctly enter a WikiName* - your own or someone else's - be sure to specify the %MAINWEB% web in front of the Wiki username: write ==%MAINWEB%.<nop>WikiUsername== or ==%<nop>MAINWEB%.<nop>WikiUsername==. This assures that the name will be linked automatically to the %MAINWEB% web, where user home pages are stored, even if the text is entered in a different web.
 </blockquote>
 
--- PeterThoeny - 16 May 2001 <br>
+-- PeterThoeny - 30 Jan 2003
