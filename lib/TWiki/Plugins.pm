@@ -28,7 +28,7 @@ package TWiki::Plugins;
 ##use strict;
 
 use vars qw(
-        @activePluginWebs @activePluginTopics @instPlugins
+        @activePluginWebs @activePluginTopics @instPlugins @disabledPlugins
         @registrableHandlers %registeredHandlers %onlyOnceHandlers
 	$VERSION $initialisationErrors
     );
@@ -126,7 +126,7 @@ sub initialisationError
 }
 
 =pod
----++ sub registerPlugin (  $plugin, $topic, $web, $user, $theLoginName, $theUrl, $thePathInfo  )
+---++ sub registerPlugin ( $plugin, $topic, $web, $user, $theLoginName, $theUrl, $thePathInfo  )
 
 Not yet documented.
 
@@ -288,8 +288,9 @@ sub initialize1
     @instPlugins = grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
     $plugin = &TWiki::Prefs::getPreferencesValue( "DISABLEDPLUGINS" ) || "";
     $plugin =~ s/[\n\t\s\r]+/ /go;
-    my @disabledPlugins = map{ s/^.*\.(.*)$/$1/o; $_ }
-                          grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
+    @disabledPlugins = map{ s/^.*\.(.*)$/$1/o; $_ }
+                       grep { /^.+Plugin$/ }
+                       split( /,?\s+/ , $plugin );
 
     # append discovered plugin modules to installed plugin list
     push( @instPlugins, discoverPluginPerlModules() );
@@ -297,13 +298,12 @@ sub initialize1
     # for efficiency we register all possible handlers at once
     my $user = "";
     my $p = "";
-    my $noUser = "";
+    my $posUser = "";
     foreach $plugin ( @instPlugins ) {
         $p = $plugin;
         $p =~ s/^.*\.(.*)$/$1/o; # cut web
-        if( ! ( grep { /^$p$/ } @disabledPlugins ) ) {
-            my $posUser = 
-               &registerPlugin( $plugin, $theTopicName, $theWebName, $noUser, $theLoginName, $theUrl, $thePathInfo );
+        unless( grep { /^$p$/ } @disabledPlugins ) {
+            $posUser = registerPlugin( $plugin, $theTopicName, $theWebName, "", $theLoginName, $theUrl, $thePathInfo );
             if( $posUser ) {
                $user = $posUser;
             }
@@ -332,12 +332,12 @@ sub initialize2
 
     # for efficiency we register all possible handlers at once
     my $p = "";
-    my $noUser = "";
+    my $plugin = "";
     foreach $plugin ( @instPlugins ) {
         $p = $plugin;
         $p =~ s/^.*\.(.*)$/$1/o; # cut web
-        if( ! ( grep { /^$p$/ } @disabledPlugins ) ) {
-            &registerPlugin( $plugin, @_, $theWebName, $theUser );
+        unless( grep { /^$p$/ } @disabledPlugins ) {
+            registerPlugin( $plugin, @_, $theWebName, $theUser );
         }
     }
 }
