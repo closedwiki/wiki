@@ -1460,30 +1460,30 @@ sub _readTemplateFile
     # See if it is a user topic. Search first in current web
     # twiki web. Note that neither web nor topic may be variables when used in a template.
     if ( ! $tmplFile ) {
-      if ( $theSkin ne "" ) {
-	$theSkin = ucfirst( $theSkin ) . "Skin";
-      }
-
-      my $theTopic;
-      my $theWeb;
-
-      if ( $theName =~ /^(\w+)\.(\w+)$/ ) {
-	$theWeb = ucfirst( $1 );
-	$theTopic = ucfirst( $2 );
-      } else {
-	$theWeb = $TWiki::webName;
-	$theTopic = $theSkin . ucfirst( $theName ) . "Template";
-	if ( !TWiki::Store::topicExists( $theWeb, $theTopic )) {
-	  $theWeb = $TWiki::twikiWebname;
+	if ( $theSkin ne "" ) {
+	    $theSkin = ucfirst( $theSkin ) . "Skin";
 	}
-      }
 
-      if ( TWiki::Store::topicExists( $theWeb, $theTopic ) &&
-	   TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, "",
-						 $theTopic, $theWeb )) {
-	  my ( $meta, $text ) = TWiki::Store::readTopic( $theWeb, $theTopic, 1 );
-	  return $text;
-      }
+	my $theTopic;
+	my $theWeb;
+
+	if ( $theName =~ /^(\w+)\.(\w+)$/ ) {
+	    $theWeb = ucfirst( $1 );
+	    $theTopic = ucfirst( $2 );
+	} else {
+	    $theWeb = $TWiki::webName;
+	    $theTopic = $theSkin . ucfirst( $theName ) . "Template";
+	    if ( !TWiki::Store::topicExists( $theWeb, $theTopic )) {
+		$theWeb = $TWiki::twikiWebname;
+	    }
+	}
+
+	if ( TWiki::Store::topicExists( $theWeb, $theTopic ) &&
+		TWiki::Access::checkAccessPermission( "view",
+		    $TWiki::wikiUserName, "", $theTopic, $theWeb )) {
+	    my ( $meta, $text ) = TWiki::Store::readTopic( $theWeb, $theTopic, 1 );
+	    return $text;
+	}
     }
 
     # read the template file
