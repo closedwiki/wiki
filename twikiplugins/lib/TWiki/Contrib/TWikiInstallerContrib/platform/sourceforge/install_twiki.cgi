@@ -6,7 +6,6 @@
 
 # TODO:
 #    * try to get rid of =pre-wiki.sh= and =post-wiki.sh= and therefore a completely web-based install!
-#    * tackle BuildContrib (or whatever it is) -based plugins installation
 #    * make web pages to guide through an install (with options!)
 #       * and patches, too!
 #          * for contributors who submitted the patches (so that they can continue running their changes)
@@ -31,13 +30,14 @@ use CGI::Carp qw(fatalsToBrowser);
 use File::Copy;
 use File::Path qw( rmtree );
 use Cwd qw( cwd getcwd );
+use Data::Dumper qw( Dumper );
 
 import_names();
 my $cgibin      = getcwd();
 my $project	= [ split( '/', $cgibin ) ]->[-2];	# (this script runs from cgi-bin; see what's above)
 my $tar		= $Q::tar	|| 'TWiki20040901.tar.gz';
 my $home	= '/home/groups/' . substr($project, 0, 1) . '/' . substr($project, 0, 2) . '/' . $project;
-my $tmp		= $Q::tmp	|| "$cgibin/tmp";
+my $tmp		= "$cgibin/tmp";
 my $htdocs	= $home . '/htdocs';
 my $dest	= $home . '/twiki';
 my $pub		= $htdocs . '/twiki';
@@ -66,7 +66,7 @@ checkdir($cpan);
 
 execute("tar xzf $tar -C $tmp");
 execute("cp -pr $tmp/twiki/data $dest"); execute("chmod -R 777 $dest");
-execute("cp -r $tmp/twiki/bin/* $bin");  execute("chmod -R 777 $bin");
+execute("cp -r $tmp/twiki/bin/* $bin; cp $tmp/twiki/bin/.htaccess.txt $bin");  execute("chmod -R 777 $bin");
 execute("cp -r $tmp/twiki/lib/* $lib");  execute("chmod -R 777 $lib");
 
 ################################################################################
@@ -102,51 +102,47 @@ print FH $config;
 close(FH) || die "Can't write to $file: $!";
 
 ################################################################################
-#--------------------------------------------------------------------------------
-# enable/setup authentication (only partially completed atm)
+
+print "<h1>enabling public authentication scheme</h1>\n";
 
 execute( "mv $bin/.htaccess.txt $bin/.htaccess" );
 
-my $file = "$bin/.htaccess";
+$file = "$bin/.htaccess";
 open(FH, "<$file") or die "Can't open $file: $!";
 my $htaccess = join( "", <FH> );
 close(FH) || die "Can't write to $file: $!";
 
-$htaccess =~ s|!FILE_path_to_TWiki!/data|$dataDir|g;
-$htaccess =~ s|!URL_path_to_TWiki!|$scriptUrlPath|g;
+$htaccess =~ s|!FILE_path_to_TWiki!/data|$home/twiki/data|g;	# code smell: duplicated data from config file above
+$htaccess =~ s|!URL_path_to_TWiki!/bin|/cgi-bin/twiki|g;	# ditto
 
-	      if ( 0 ) {
-# use inclusive topic registration
-# TODO: remove some junk from the page (eg, OfficeLocation)
-(-d 'orig' || mkdir 'orig') or die $!;
-if ( -e 'TWikiRegistration.txt' )
-{ 
-    `mv TWikiRegistration.txt orig/` and die $!;
-    `mv TWikiRegistration.txt,v orig/` and die $!;
-}
-`mv TWikiRegistrationPub.txt TWikiRegistration.txt` and die $!;
-`mv TWikiRegistrationPub.txt,v TWikiRegistration.txt,v` and die $!;
-}
+open( FH, ">$file" ) or die $!;
+print FH $htaccess;
+close( FH ) or die $!;
+
+execute( "rm $dest/data/TWiki/TWikiRegistration.txt $dest/data/TWiki/TWikiRegistration.txt,v" ) or warn $!;
+execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt $dest/data/TWiki/TWikiRegistration.txt") or warn $!;
+execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt,v $dest/data/TWiki/TWikiRegistration.txt,v") or warn $!;
 
 ################################################################################
 
 eraseBundledPlugins();
 
-installLocalModules({
-    modules => [ qw( Data::UUID ) ],
-    dir => q[],
-});
+#installLocalModules({
+#    modules => [ qw( Data::UUID Date::Handler Safe Language::Prolog CGI::Session File::Temp List::Permutor File::Temp ) ],
+#    dir => $cpan,
+#});
 
 ################################################################################
 # install contrib
 # TODO: automatically download from http://twiki.org/cgi-bin/view/Plugins/ContributedCode
 # (%SEARCH{"Contrib$" type="regex" nosearch="on" scope="topic" noheader="on" nototal="on"}% -ish)
 print "<h1>Contrib</h1>\n";
+#DistributionContrib - syntax error at ../lib/TWiki/Contrib/DistributionContrib/Config.pm line 5, near "our @ISA "
 my @contribs = qw(
 		  AttrsContrib
+		  DBCacheContrib
 		  JSCalendarContrib
 		 );
-#	      DBCacheContrib -- need to work out installer (local libraries, i think, or just twiki libraries?)
 foreach my $contrib ( @contribs )
 {
     chdir( "tmp/install" ) or warn $!;
@@ -158,6 +154,7 @@ foreach my $contrib ( @contribs )
     # TODO: find perl move directory tree code
     if ( -d 'data/Plugins' ) { execute( "cp -rpv data/Plugins/* $dest/data/TWiki" ); execute( "rm -rf data/Plugins" ); }
     if ( -d 'data' ) { execute( "cp -rpv data $dest" ); execute( "rm -rf data" ); }
+    # TODO: filter out ,v files (right???)
     if ( -d 'lib' ) { execute( "cp -rpv lib/* $lib" ); execute( "rm -rf lib" ); }
     if ( -d 'bin' ) { execute( "cp -rpv bin/* $bin" ); execute( "rm -rf bin" ); }
     if ( -d 'pub' ) { execute( "cp -rpv pub $tmp/twiki" ); execute( "rm -rf pub" ); }
@@ -170,187 +167,6 @@ foreach my $contrib ( @contribs )
 
 ################################################################################
 # install plugins
-
-print "<h1>Plugins</h1>\n";
-foreach my $plugin ( @availPlugins )
-{
-    next if $plugin =~ /^#/;	# skip commented out plugins
-    next if $plugin =~ /^\s*$/; # skip blank lines
-    $plugin =~ s/#//g;
-
-#    print getcwd() . "<br/>";
-    chdir( "tmp/install" ) or warn $!;
-#    print getcwd() . "<br/>";
-
-    print "<h3>Installing $plugin</h3>\n";
-    execute("tar xzvf downloads/plugins/$plugin.tar.gz") or warn $!;
-    # TODO: run an standard-named install script (if included)
-    my $installer = $plugin . '_installer.pl';
-#    print "<b>$installer</b><br/>\n";
-#    eval { execute( "cd tmp/install ; perl $installer" ) if -e $installer; };  # -a doesn't prompt
-#    print "installer error: $@, ($!)\n" if $@;
-
-    # TODO: find perl move directory tree code
-    if ( -d 'data/Plugins' ) { execute( "cp -rpv data/Plugins/* $dest/data/TWiki" ); execute( "rm -rf data/Plugins" ); }
-    if ( -d 'data' ) { execute( "cp -rpv data $dest" ); execute( "rm -rf data" ); }
-    if ( -d 'lib' ) { execute( "cp -rpv lib/* $lib" ); execute( "rm -rf lib" ); }
-    if ( -d 'bin' ) { execute( "cp -rpv bin/* $bin" ); execute( "rm -rf bin" ); }
-    if ( -d 'pub' ) { execute( "cp -rpv pub $tmp/twiki" ); execute( "rm -rf pub" ); }
-    if ( -d 'templates' ) { execute( "cp -rpv templates $tmp/twiki/templates" ); execute( "rm -rf templates" ); }
-
-    # TODO: assert( isDirectoryEmpty() );
-
-    chdir ("../..") or warn $!;
-}
-execute( "ls -lR tmp/install" );
-
-################################################################################
-# 
-
-execute("chmod -R 777 $dest");
-execute("chmod -R 777 $bin");
-execute("chmod -R 777 $lib");
-
-execute("chmod -R 777 $tmp");
-
-# a handy link to the place to go *after* the next step
-print qq{do a <tt>post-wiki.sh</tt> and then <br/><a href="http://$project.sourceforge.net/cgi-bin/twiki/view/TWiki/">continue to wiki</a><br/>\n};
-
-print end_html();
-
-################################################################################
-################################################################################
-
-sub mode {
-	my ($file) = @_;
-	my ($dev, $ino, $mode) = stat $file;
-	return $mode;
-}
-
-sub checkdir {
-	my ($dir) = @_;
-	unless (-d $dir) {
-	    print "Directory not found: $dir";
-	    exit 1;
-	}
-	unless (mode($dir) & 0x2) {
-	    print "Directory $dir is not world writable";
-	    exit 1;
-	}
-}
-
-sub execute {
-	my ($cmd) = @_;
-
-	chomp( my $output = `$cmd` );
-	my ( $clrCommand, $clrError ) = ( ( my $error = $? ) ? qw( black red ) : qw( gray gray ) );
-
-	print "<font color=gray>\n";
-	print "Executing [<font color=$clrError>$error</font>]\n";
-	print "<font color=$clrCommand>", pre($cmd), "</font>\n";
-	print pre( $output ) . "\n";
-	print "</font>\n\n";
-}
-
-#--------------------------------------------------------------------------------
-
-sub eraseBundledPlugins
-{ # (remove plugins that ship with twiki)
-    foreach my $plugin qw( CommentPlugin DefaultPlugin EditTablePlugin EmptyPlugin InterwikiPlugin RenderListPlugin SlideShowPlugin SmiliesPlugin SpreadSheetPlugin TablePlugin )
-    {
-	erasePlugin( $plugin );
-    }
-}
-
-sub erasePlugin
-{
-    my ( $plugin ) = @_;
-
-    print "erasing [$plugin]; pwd = [" . getcwd() . "]\n";
-    # removing the code should be good enough (but not totally clean)
-    # do this instead of modifying the standard TWiki20040901.tar.gz distribution file
-    # when TWiki:Codev.AutomatedBuild is done, this won't be necessary 
-    # (because specific distribution/release files will be able to be generated?)
-    execute( "rm lib/TWiki/Plugins/${plugin}.pm" );
-#    rm -r twiki/lib/Twiki/Plugins/${plugin}
-#    rm twiki/data/TWiki/${plugin}.txt*
-#    rm -r twiki/pub/TWiki/${plugin}
-
-}
-
-use CPAN;
-
-sub installLocalModules
-{
-    my $parm = shift;
-    my $cpan = $parm->{dir};
-
-    CPAN::Shell->reload( qw( index ) ); # or die $!;
-#      CPAN::Shell->o( qw( debug all ) );
-#      CPAN::Shell->expand("Module","/TWiki/");
-
-#    ( mkdir $cpan or die $! ) unless -d $cpan;
-
-    # some modules refuse to work if PREFIX is set, and some refuse to work if it is not. ???
-    $CPAN::Config->{'makepl_arg'} = "PREFIX=$cpan";
-    # TODO: try other setup of config if install fails?  PREFIX seems like the preferred method, so try that first
-#    $CPAN::Config->{'make_arg'} = "-I$cpan/";
-#    $CPAN::Config->{'make_install_arg'} = "-I$cpan/";
-#    $CPAN::Config->{'makepl_arg'} = "LIB=$cpan/lib INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3";
-
-    $CPAN::Config->{'build_dir'} = "$cpan/.cpan/build";
-    $CPAN::Config->{'cpan_home'} = "$cpan/.cpan";
-
-#    'histfile' => q[/Users/wbniv/Sites/twiki/.cpan/histfile],
-    $CPAN::Config->{'histsize'} = 0;
-
-    $CPAN::Config->{'keep_source_where'} = "$cpan/.cpan/sources";
-
-    $CPAN::Config->{'prerequisites_policy'} = 'follow';
-
-#[using default ok for start]  'urllist' => [q[file:/Users/wbniv/twiki/cpan/MIRROR/MINICPAN/]],
-    $CPAN::Config->{'build_cache'} = q[0];
-#  'cache_metadata' => q[1],
-
-#$CPAN::Config = {
-#  'ftp' => q[/usr/bin/ftp],
-#  'ftp_proxy' => q[],
-#  'getcwd' => q[cwd],
-#  'gpg' => q[],
-#  'gzip' => q[/sw/bin/gzip],
-#  'http_proxy' => q[],
-#  'inactivity_timeout' => q[0],
-#  'index_expire' => q[1],
-#  'inhibit_startup_message' => q[0],
-#  'lynx' => q[],
-#  'make' => q[/usr/bin/make],
-#  'ncftp' => q[],
-#  'ncftpget' => q[],
-#  'no_proxy' => q[],
-#  'pager' => q[/usr/bin/less],
-#?  'scan_cache' => q[atstart],
-#  'shell' => q[/bin/bash],
-#  'tar' => q[/sw/bin/tar],
-#  'term_is_latin' => q[1],
-#  'unzip' => q[/sw/bin/unzip],
-#  'wget' => q[/sw/bin/wget],
-#};
-
-#print Dumper( $CPAN::Config );
-
-    my @modules = @{$parm->{modules}};
-    print Dumper( \@modules );
-    foreach my $module ( @modules )
-    {
-	my $obj = CPAN::Shell->expand( Module => $module ) or warn $!;
-	next unless $obj;
-	$obj->install; # or warn "Error installing $module\n"; 
-    }
-    
-#    print Dumper( $CPAN::Config );
-}
-
-################################################################################
 
 my @availPlugins = (
 ################################################################################
@@ -503,3 +319,203 @@ my @availPlugins = (
 #SpellCheckerPlugin - more like an addon; has bin/ directory
 		    );
 
+################################################################################
+
+print "<h1>Plugins</h1>\n";
+foreach my $plugin ( @availPlugins )
+{
+    next if $plugin =~ /^#/;	# skip commented out plugins
+    next if $plugin =~ /^\s*$/; # skip blank lines
+    $plugin =~ s/#//g;
+
+#    print getcwd() . "<br/>";
+    chdir( "tmp/install" ) or warn $!;
+#    print getcwd() . "<br/>";
+
+    print "<h3>Installing $plugin</h3>\n";
+    execute("tar xzvf downloads/plugins/$plugin.tar.gz") or warn $!;
+    # TODO: run an standard-named install script (if included)
+    my $installer = $plugin . '_installer.pl';
+#    print "<b>$installer</b><br/>\n";
+#    eval { execute( "cd tmp/install ; perl $installer" ) if -e $installer; };  # -a doesn't prompt
+#    print "installer error: $@, ($!)\n" if $@;
+
+    # TODO: find perl move directory tree code
+    if ( -d 'data/Plugins' ) { execute( "cp -rpv data/Plugins/* $dest/data/TWiki" ); execute( "rm -rf data/Plugins" ); }
+    if ( -d 'data' ) { execute( "cp -rpv data $dest" ); execute( "rm -rf data" ); }
+    if ( -d 'lib' ) { execute( "cp -rpv lib/* $lib" ); execute( "rm -rf lib" ); }
+    if ( -d 'bin' ) { execute( "cp -rpv bin/* $bin" ); execute( "rm -rf bin" ); }
+    if ( -d 'pub' ) { execute( "cp -rpv pub $tmp/twiki" ); execute( "rm -rf pub" ); }
+    if ( -d 'templates' ) { execute( "cp -rpv templates $tmp/twiki/templates" ); execute( "rm -rf templates" ); }
+
+    # TODO: assert( isDirectoryEmpty() );
+
+    chdir ("../..") or warn $!;
+}
+
+################################################################################
+# install local webs
+
+chdir( "tmp/install" ) or warn $!;
+my @webs = ( 'HowToThinkLikeAComputerScientistUsingPython' );
+foreach my $web ( @webs )
+{
+    print "<h3>Installing web $web</h3>\n";
+    execute("tar xzvf webs/local/$web.wiki.tar.gz") or warn $!;
+
+    if ( -d 'data' ) { execute( "cp -rpv data $dest" ); execute( "rm -rf data" ); }
+    if ( -d 'pub' ) { execute( "cp -rpv pub $tmp/twiki" ); execute( "rm -rf pub" ); }
+}
+
+chdir( "../.." ) or warn $!;
+
+################################################################################
+#  cleanup / permissions
+
+execute( "ls -lR tmp/install" );
+
+execute("chmod -R 777 $dest");
+execute("chmod -R 777 $bin");
+execute("chmod -R 777 $lib");
+
+execute("chmod -R 777 $tmp");
+
+# a handy link to the place to go *after* the next step
+print qq{do a <tt>post-wiki.sh</tt> and then <br/><a href="http://$project.sourceforge.net/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
+
+print end_html();
+
+################################################################################
+################################################################################
+
+sub mode {
+	my ($file) = @_;
+	my ($dev, $ino, $mode) = stat $file;
+	return $mode;
+}
+
+sub checkdir {
+	my ($dir) = @_;
+	unless (-d $dir) {
+	    print "Directory not found: $dir";
+	    exit 1;
+	}
+	unless (mode($dir) & 0x2) {
+	    print "Directory $dir is not world writable";
+	    exit 1;
+	}
+}
+
+sub execute {
+	my ($cmd) = @_;
+
+	chomp( my $output = `$cmd` );
+	my ( $clrCommand, $clrError ) = ( ( my $error = $? ) ? qw( black red ) : qw( gray gray ) );
+
+	print "<font color=gray>\n";
+	print "Executing [<font color=$clrError>$error</font>]\n";
+	print "<font color=$clrCommand>", pre($cmd), "</font>\n";
+	print pre( $output ) . "\n";
+	print "</font>\n\n";
+}
+
+#--------------------------------------------------------------------------------
+
+sub eraseBundledPlugins
+{ # (remove plugins that ship with twiki)
+    # TODO: fix errors when removing DefaultPlugin
+    foreach my $plugin qw( CommentPlugin EditTablePlugin EmptyPlugin InterwikiPlugin RenderListPlugin SlideShowPlugin SmiliesPlugin SpreadSheetPlugin TablePlugin )
+    {
+	erasePlugin( $plugin );
+    }
+}
+
+sub erasePlugin
+{
+    my ( $plugin ) = @_;
+
+    print "erasing [$plugin]; pwd = [" . getcwd() . "]\n";
+    # removing the code should be good enough (but not totally clean)
+    # do this instead of modifying the standard TWiki20040901.tar.gz distribution file
+    # when TWiki:Codev.AutomatedBuild is done, this won't be necessary 
+    # (because specific distribution/release files will be able to be generated?)
+    execute( "rm lib/TWiki/Plugins/${plugin}.pm" );
+#    rm -r twiki/lib/Twiki/Plugins/${plugin}
+#    rm twiki/data/TWiki/${plugin}.txt*
+#    rm -r twiki/pub/TWiki/${plugin}
+
+}
+
+use CPAN;
+
+sub installLocalModules
+{
+    my $parm = shift;
+    my $cpan = $parm->{dir};
+
+    CPAN::Shell->reload( qw( index ) ); # or die $!;
+#      CPAN::Shell->o( qw( debug all ) );
+#      CPAN::Shell->expand("Module","/TWiki/");
+
+#    ( mkdir $cpan or die $! ) unless -d $cpan;
+
+    # some modules refuse to work if PREFIX is set, and some refuse to work if it is not. ???
+    $CPAN::Config->{'makepl_arg'} = "PREFIX=$cpan";
+    # TODO: try other setup of config if install fails?  PREFIX seems like the preferred method, so try that first
+#    $CPAN::Config->{'make_arg'} = "-I$cpan/";
+#    $CPAN::Config->{'make_install_arg'} = "-I$cpan/";
+#    $CPAN::Config->{'makepl_arg'} = "LIB=$cpan/lib INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3";
+
+    $CPAN::Config->{'build_dir'} = "$cpan/.cpan/build";
+    $CPAN::Config->{'cpan_home'} = "$cpan/.cpan";
+
+#    'histfile' => q[/Users/wbniv/Sites/twiki/.cpan/histfile],
+    $CPAN::Config->{'histsize'} = 0;
+
+    $CPAN::Config->{'keep_source_where'} = "$cpan/.cpan/sources";
+
+    $CPAN::Config->{'prerequisites_policy'} = 'follow';
+
+#[using default ok for start]  'urllist' => [q[file:/Users/wbniv/twiki/cpan/MIRROR/MINICPAN/]],
+    $CPAN::Config->{'build_cache'} = q[0];
+#  'cache_metadata' => q[1],
+
+#$CPAN::Config = {
+#  'ftp' => q[/usr/bin/ftp],
+#  'ftp_proxy' => q[],
+#  'getcwd' => q[cwd],
+#  'gpg' => q[],
+#  'gzip' => q[/sw/bin/gzip],
+#  'http_proxy' => q[],
+#  'inactivity_timeout' => q[0],
+#  'index_expire' => q[1],
+#  'inhibit_startup_message' => q[0],
+#  'lynx' => q[],
+#  'make' => q[/usr/bin/make],
+#  'ncftp' => q[],
+#  'ncftpget' => q[],
+#  'no_proxy' => q[],
+#  'pager' => q[/usr/bin/less],
+#?  'scan_cache' => q[atstart],
+#  'shell' => q[/bin/bash],
+#  'tar' => q[/sw/bin/tar],
+#  'term_is_latin' => q[1],
+#  'unzip' => q[/sw/bin/unzip],
+#  'wget' => q[/sw/bin/wget],
+#};
+
+#print Dumper( $CPAN::Config );
+
+    my @modules = @{$parm->{modules}};
+    print Dumper( \@modules );
+    foreach my $module ( @modules )
+    {
+	my $obj = CPAN::Shell->expand( Module => $module ) or warn $!;
+	next unless $obj;
+	$obj->install; # or warn "Error installing $module\n"; 
+    }
+    
+#    print Dumper( $CPAN::Config );
+}
+
+################################################################################
