@@ -1,0 +1,32 @@
+<HTML>
+<HEAD>
+  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (edit)</TITLE>
+  <META NAME="ROBOTS" CONTENT="NOINDEX"> %HTTP_EQUIV_ON_EDIT%
+</HEAD>
+<BODY bgcolor="#ffffff">
+
+<FORM name="main" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+
+%HEADER{action="(change form)" description="Change form template - use with CARE"}%
+
+Choose a new form template.  Notes:
+<UL>
+	<li><font color="red">Existing form data is lost! (still available in old version)</font>
+	<li>Any change you made to topic before coming to this page are preserved.
+</UL>
+<br>
+
+<table border="0" cellspacing="0" cellpadding="0">
+   <tr><th>Possible form templates:</th><td></td></tr>
+   <tr><td></td><td>%FORMLIST%</td></tr>
+</table>
+
+<input type="hidden" name="text" value="%TEXT%">
+
+%FOOTER:START%
+      <INPUT type="submit" name="submit" value=" &nbsp; Change form &nbsp; ">
+      %SEP%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> change form FIXME
+%FOOTER:END%
+
+</FORM>
+</BODY></HTML>
