@@ -296,6 +296,8 @@ sub handleActivatedPlugins
 }
 
 # =========================
+# FIXME: This function no longer used: superseded by initialize1.
+# remove on non documentation-only commit.
 sub initializeUserHandler
 {
     # Called by TWiki::initialize

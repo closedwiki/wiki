@@ -37,6 +37,15 @@
 #                          epoch seconds from a rev date (the only way
 #                          to sort dates.)
 
+=begin twiki
+
+---+ TWiki Package
+This package stores all TWiki subroutines that haven't been modularized
+into any of the others.
+
+=cut
+
+
 package TWiki;
 
 use strict;
@@ -198,14 +207,17 @@ $basicInitDone = 0;		# basicInitialize not yet done
 $pageMode = 'html';		# Default is to render as HTML
 
 
-# =========================
-=head2 writeWarning( $text )
+=pod
+
+---++ writeWarning( $text )
 
 Prints date, time, and contents $text to $warningFilename, typically
 'warnings.txt'.  Use for warnings and errors that may require admin
 intervention.  Not using Store::writeLog; log file is more of an audit/usage
 file.  Use this for defensive programming warnings (e.g. assertions).
+
 =cut to implementation
+
 sub writeWarning {
     my( $text ) = @_;
     if( $warningFilename ) {
@@ -220,12 +232,15 @@ sub writeWarning {
     }
 }
 
-# =========================
-=head2 writeDebug( $text )
+=pod
+
+---++ writeDebug( $text )
 
 Prints date, time, and contents of $text to $debugFilename, typically
 'debug.txt'.  Use for debugging messages.
+
 =cut to implementation
+
 sub writeDebug {
     my( $text ) = @_;
     open( FILE, ">>$debugFilename" );
@@ -239,13 +254,16 @@ sub writeDebug {
     close(FILE);
 }
 
-# =========================
-=head2 writeDebugTimes( $text )
+=pod
+
+---++ writeDebugTimes( $text )
 
 Dumps user and system time spent, with deltas from last call, followed
 by contents of $text, to debug log using writeDebug above.  Use for
 performance monitoring/debugging.
+
 =cut to implementation
+
 sub writeDebugTimes
 {
     my( $text ) = @_;
@@ -264,8 +282,9 @@ sub writeDebugTimes
     writeDebug( "==> $times,  $text" );
 }
 
-# =========================
-=head2 initaliaze( $pathInfo, $remoteUser, $topic, $url, $query )
+=pod
+
+---++ initaliaze( $pathInfo, $remoteUser, $topic, $url, $query )
 Return value: ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir )
 
 Per-web initialization of all aspects of TWiki.  Initializes the
@@ -279,6 +298,7 @@ pair, a "Web." WebHome shorthand, or just a topic name.  Note that
 if $pathInfo is set, this overrides $theTopic.
 
 =cut to implementation
+
 sub initialize
 {
     my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $theQuery ) = @_;
@@ -435,13 +455,17 @@ sub initialize
     return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
 }
 
-=head2 basicInitialize()
+=pod
+
+---++ basicInitialize()
 
 Sets up POSIX locale and precompiled regexes - for use from scripts
 that handle multiple webs (e.g. mailnotify) and need regexes or
 isWebName/isWikiName to work before the per-web initialize() is called.
 Also called from initialize() if not necessary beforehand.
+
 =cut to implementation
+
 sub basicInitialize() {
     # Set up locale for internationalisation and pre-compile regexes
     setupLocale();
@@ -450,8 +474,9 @@ sub basicInitialize() {
     $basicInitDone = 1;
 }
 
-# =========================
-=head2 setupLocale()
+=pod
+
+---++ setupLocale()
 
 Run-time locale setup - If $useLocale is set, this function parses $siteLocale
 from TWiki.cfg and passes it to the POSIX::setLocale function to change TWiki's
@@ -463,7 +488,9 @@ with the Apache process's locale settings too?  What effects would this have?
 Note that 'use locale' must be done in BEGIN block for regexes and sorting to
 work properly, although regexes can still work without this in
 'non-locale regexes' mode (see setupRegexes routine).
+
 =cut to implementation
+
 sub setupLocale {
  
     $siteCharset = 'ISO-8859-1';	# Default values if locale mis-configured
@@ -500,14 +527,17 @@ sub setupLocale {
     }
 }
 
-# =========================
-=head2 setupRegexes()
+=pod
+
+---++ setupRegexes()
 
 Set up pre-compiled regexes for use in rendering.  All regexes with
 unchanging variables in match should use the '/o' option, even if not in a
 loop, to help mod_perl, where the same code can be executed many times
 without recompilation.
+
 =cut to implementation
+
 sub setupRegexes {
 
     # Build up character class components for use in regexes.
@@ -603,26 +633,34 @@ sub setupRegexes {
 
 }
 
-=head2 invalidSiteCharset()
+=pod
+
+---++ invalidSiteCharset()
 Return value: boolean $isCharsetInvalid
 
 Check for unusable ASCII-based multi-byte encodings as site character set
 - anything that enables a single ASCII character such as '[' to be
 matched within a multi-byte character cannot be used for TWiki.
+
 =cut to implementation
+
 sub invalidSiteCharset {
     # FIXME: match other problematic multi-byte character sets 
     return ( $siteCharset =~ /^(?:iso-2022-?|hz-?)/i );
 }
 
 
-=head2 convertUtf8URLtoSiteCharset( $webName, $topicName )
+=pod
+
+---++ convertUtf8URLtoSiteCharset( $webName, $topicName )
 Return value: ( string $convertedWebName, string $convertedTopicName)
 Auto-detect UTF-8 vs. site charset in URL, and convert UTF-8 into site charset.
 
 TODO: remove dependence on webname and topicname, i.e. generic encoding
 subroutine.
+
 =cut to implementation
+
 sub convertUtf8URLtoSiteCharset {
     my ( $webName, $topicName ) = @_;
 
@@ -703,8 +741,15 @@ sub convertUtf8URLtoSiteCharset {
     return ($webName, $topicName);
 }
 
-# =========================
-# writeHeader: simple header setup for most scripts
+=pod
+
+---++ writeHeader ( $query )
+
+Simple header setup for most scripts.  Calls writeHeaderFull, assuming
+'basic' type and 'text/html' content-type.
+
+=cut to implementation
+
 sub writeHeader
 {
     my( $query ) = @_;
@@ -717,8 +762,16 @@ sub writeHeader
     writeHeaderFull( $query, 'basic', 'text/html', 0);
 }
 
-# =========================
-# Javascript that will be added to (some) template(s)
+=pod
+
+---++ addScript( $extraScript )
+
+Javascript that will be added to (some) template(s)
+FIXME: This function is currently unused.  Remove on some non
+documentation-only commit, unless use is planned in future.
+
+=cut to implementation
+
 sub addScript
 {
     my( $extraScript ) = @_;
@@ -726,17 +779,29 @@ sub addScript
 }
 
 
-# =========================
-# writeHeaderFull: full header setup for Edit page; will be used
-# to improve cacheability for other pages in future.  Setting
-# cache headers on Edit page fixes the Codev.BackFromPreviewLosesText
-# bug, which caused data loss with IE5 and IE6.
-#
-# Implements the post-Dec2001 release plugin API, which
-# requires the writeHeaderHandler in plugin to return a string of
-# HTTP headers, CR/LF delimited.  Filters out headers that the
-# core code needs to generate for whatever reason, and any illegal
-# headers.
+=pod
+
+---++ writeHeaderFull( $query, $pageType, $contentType, $contentLength )
+
+Builds and outputs HTTP headers.  $pageType should (currently) be either
+"edit" or "basic".  $query is the object from the CGI module, not the actual
+query string.
+
+"edit" will cause headers to be generated that force caching for 24 hours, to
+prevent Codev.BackFromPreviewLosesText bug, which caused data loss with IE5 and
+IE6.
+
+"basic" will cause only the Content-Type header to be set (from the
+parameter), plus any headers set by plugins.  Hopefully, further types will
+be used to improve cacheability for other pages in future.
+
+Implements the post-Dec2001 release plugin API, which requires the
+writeHeaderHandler in plugin to return a string of HTTP headers, CR/LF
+delimited.  Filters out headers that the core code needs to generate for
+whatever reason, and any illegal headers.
+
+=cut to implementation
+
 sub writeHeaderFull
 {
     my( $query, $pageType, $contentType, $contentLength ) = @_;
@@ -820,28 +885,63 @@ sub writeHeaderFull
 
 }
 
-# =========================
-# Set page mode:
-#   - 'rss' - encode 8-bit characters as XML entities
-#   - 'html' - no encoding of 8-bit characters
+=pod
+
+---++ setPageMode( $mode )
+
+Set page rendering mode:
+   * 'rss' - encode 8-bit characters as XML entities
+   * 'html' - (default) no encoding of 8-bit characters
+   
+=cut to implementation
+
 sub setPageMode
 {
     $pageMode = shift;
 }
 
-# =========================
+=pod
+
+---++ getPageMode()
+Return value: string $mode
+
+Returns current page mode, 'html' unless set via setPageMode
+FIXME: This function is currently unused.  Remove on some non
+documentation-only commit, unless use is planned in future.
+
+=cut to implementation
+
 sub getPageMode
 {
     return $pageMode;
 }
 
-# =========================
+=pod
+
+---++ getCgiQuery()
+Retrun value: string $query
+
+Returns the CGI query portion (i.e. the bit after the '?') of the
+current request.
+
+=cut to implementation
+
 sub getCgiQuery
 {
     return $cgiQuery;
 }
 
-# =========================
+=pod
+
+---++ redirect( $query, $url )
+
+Redirects the request to $url, via the CGI module object $query unless
+overridden by a plugin.  Note that this is currently only called by
+Func::redirectCgiQuery() at the request of a plugin!  All of the redirects
+done internally by TWiki are not overridable.
+
+=cut to implementation
+
 sub redirect
 {
     my( $query, $url ) = @_;
@@ -851,18 +951,25 @@ sub redirect
 }
 
 
-# =========================
-# Get email list from WebNotify page - this now handles entries of the form:
-#    * Main.UserName 
-#    * UserName 
-#    * Main.GroupName
-#    * GroupName
-# The 'UserName' format (i.e. no Main webname) is supported in any web, but
-# is not recommended since this may make future data conversions more
-# complicated, especially if used outside the Main web.  %MAINWEB% is OK
-# instead of 'Main'.  The user's email address(es) are fetched from their
-# user topic (home page) as long as they are listed in the '* Email:
-# fred@example.com' format.  Nested groups are supported.
+=pod
+
+---++ getEmailNotifyList( $webName, $topicName )
+Return value: @emailNotifyList
+
+Get email list from WebNotify page - this now handles entries of the form:
+   * Main.UserName 
+   * UserName 
+   * Main.GroupName
+   * GroupName
+The 'UserName' format (i.e. no Main webname) is supported in any web, but
+is not recommended since this may make future data conversions more
+complicated, especially if used outside the Main web.  %MAINWEB% is OK
+instead of 'Main'.  The user's email address(es) are fetched from their
+user topic (home page) as long as they are listed in the '* Email:
+fred@example.com' format.  Nested groups are supported.
+
+=cut to implementation
+
 sub getEmailNotifyList
 {
     my( $web, $topicname ) = @_;
@@ -898,7 +1005,18 @@ sub getEmailNotifyList
     return( @list);
 }
 
-# Get email address for a given WikiName or group, from the user's home page
+=pod
+
+---++ getEmailOfUser( $wikiName )
+Return value: ( $userEmail ) or @groupEmailList
+
+Get e-mail address for a given WikiName from the user's home page, or
+list of e-mail addresses for a group.  Nested groups are supported.
+$wikiName must contain _only_ the WikiName; do *not* pass names of the
+form "Main.JohnSmith".
+
+=cut to implementation
+
 sub getEmailOfUser
 {
     my ($wikiName) = @_;		# WikiName without web prefix
@@ -932,7 +1050,26 @@ sub getEmailOfUser
     return (@list);
 }
 
-# =========================
+=pod
+
+---++ initializeRemoteUser( $remoteUser )
+Return value: $remoteUser
+
+Acts as a filter for $remoteUser.  If set, $remoteUser is filtered for
+insecure characters and untainted.
+
+If $doRememberRemoteUser and $remoteUser are both set, it also caches
+$remoteUser as belonging to the IP address of the current request.
+
+If $doRememberRemoteUser is set and $remoteUser is not, then it sets
+$remoteUser to the last authenticated user to make a request with the
+current request's IP address, or $defaultUserName if no cached name
+is available.
+
+If neither are set, then it sets $remoteUser to $defaultUserName.
+
+=cut to implementation
+
 sub initializeRemoteUser
 {
     my( $theRemoteUser ) = @_;
@@ -989,14 +1126,17 @@ sub initializeRemoteUser
     return $remoteUser;
 }
 
-# =========================
-=head2 userToWikiListInit()
+=pod
+
+---++ userToWikiListInit()
 
 Build hashes to translate in both directions between username (e.g. jsmith) 
 and WikiName (e.g. JaneSmith).  Only used for sites where authentication is
 managed by external Apache configuration, instead of via TWiki's .htpasswd
 mechanism.
+
 =cut to implementation
+
 sub userToWikiListInit
 {
     %userToWikiList = ();
@@ -1140,13 +1280,16 @@ sub getPubUrlPath
     return $pubUrlPath;
 }
 
-# =========================
-=head2 getTWikiLibDir()
+=pod
+
+---++ getTWikiLibDir()
 
 If necessary, finds the full path of the directory containing TWiki.pm,
 and sets the variable $twikiLibDir so that this process is only performed
 once per invocation.  (mod_perl safe: lib dir doesn't change.)
+
 =cut to implementation
+
 sub getTWikiLibDir
 {
     if( $twikiLibDir ) {
@@ -3148,5 +3291,9 @@ sub getRenderedVersion {
     $result =~ s|\n?<nop>\n$||o; # clean up clutch
     return "$head$result";
 }
+
+=end twiki
+
+=cut
 
 1;
