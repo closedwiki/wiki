@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999142499" format="1.0" version="1.18"}%
+%META:TOPICINFO{author="MikeMannix" date="999151762" format="1.0" version="1.19"}%
 <table><tr><td>
 Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about the tool.</td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
@@ -28,19 +28,18 @@ Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management t
 
 ---+++ Webmaster Reference
 
-	* Complete documentation for Webmasters, system administrators, anyone interested in installing and fine-tuning a TWiki site. TWiki power users as well will benefit from browsing this collection.
-	* NOTE: While TWiki is a sophisticated software package, designed to meet *corporate intranet standards*, it is an extremely flexible and accessible by nature. Anyone with diligence, basic Web site skills and a virtual ISP account should be able to install TWiki and configure a exceptional interactive environment.
+	* Documentation for Webmasters, system administrators, anyone interested in installing and fine-tuning a TWiki site. TWiki power users will also benefit from browsing this collection.
 
 		* TWikiHistory: a TWiki development timeline
-		* TWikiDocumentation: the complete administrator's reference, comprising:
+		* TWikiDocumentation: complete operator's reference, comprising:
 			1 [[TWikiImplementationNotes][TWikiSystemRequirements]]
 			1 [[TWikiInstallationNotes][TWikiInstallationGuide]] 
 			1 [[TWikiUpgradeNotes][TWikiUpgradeGuide]]
 			1 [[TWikiAuthentication][TWikiUserAuthentication]]
 			1 TWikiAccessControl
 			1 TWikiVariables
-			1 TWikiFormTemplate
 			1 TWikiTemplates
+			1 TWikiFormTemplate
 			1 TWikiSkins
 			1 TWikiPlugins
 			1 MetaDataDefinition
