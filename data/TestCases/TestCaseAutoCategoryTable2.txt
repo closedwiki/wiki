@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="guest" date="1099569536" format="1.0beta" version="1.1"}%
+Description: Test for category table and attachment upgrading from 1.0beta
+
+This topic has 1.0beta TOPICINFO meta-data, to force an upgradeCategoryTable action. The test is inadequate; it doesn't check that it actually worked, only that it was didn't crash.
+
+<verbatim>
+<!--TWikiCat-->
+
+</verbatim>
+
+If this topic is displayed, the test passed.
