@@ -1,5 +1,5 @@
 <table><tr><td>
-Welcome to %WIKITOOLNAME%, a web based collaboration tool, document management tool and knowledge base tool. This is the place to learn about the tool.</td><td>
+Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management tool and knowledge base tool. This is the place to learn about the tool.</td><td>
 <a href="http://TWiki.SourceForge.net/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
 </td><td>
 <b>The TWiki home is at <br> http://TWiki.SourceForge.net/ </b>
@@ -12,14 +12,14 @@ Welcome to %WIKITOOLNAME%, a web based collaboration tool, document management t
 	* TWikiRegistration: Create your %WIKITOOLNAME% account in order to edit topics.
 	* TWikiTutorial: Get a jump start on %WIKITOOLNAME%.
 	* GoodStyle: Things to consider when changing text.
-	* WikiSyntax, TextFormattingRules: Easy to learn rules when editing text.
+	* WikiSyntax, TextFormattingRules: Easy to learn rules for editing text.
 	* TextFormattingFAQ: Answers to frequently asked questions about text formatting.
 
 <FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
-	* <A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=.*">Topic index</A>: List up all %WIKITOOLNAME%.%WEB% topics in alphabetical order.
-	* <A HREF="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/WebSearch">Search</A>: Full text search of the %WIKITOOLNAME%.%WEB% web.
+	* WebSearch: Full text search of the %WIKITOOLNAME%.%WEB% web.
 	* <INPUT type="text" name="search" size="32"> <INPUT type="submit" value="Search"> &nbsp;&nbsp; (More options in WebSearch)
 	* WebChanges: Find out recent changes of the %WIKITOOLNAME%.%WEB% web.
+	* WebIndex: Display all %WIKITOOLNAME%.%WEB% topics in alphabetical order.
 	* %NOTIFYTOPIC%: Subscribe to be automatically notified when something changes in the %WIKITOOLNAME%.%WEB% web.
 	* %STATISTICSTOPIC%: View access statistics of the %WIKITOOLNAME%.%WEB% web.
 	* %WEBPREFSTOPIC%: Preferences of the %WIKITOOLNAME%.%WEB% web.
@@ -28,7 +28,6 @@ Welcome to %WIKITOOLNAME%, a web based collaboration tool, document management t
 
 *Notes:*
 	* You are currently in the %WIKITOOLNAME%.%WEB% web. The color code for this web is a light orange background, so you know where you are.
-
-----
+	* If you are not familiar with the %WIKITOOLNAME% collaboration tool, please visit %TWIKIWEB%.WelcomeGuest first.
 
 %INCLUDE{"TWikiWebsTable"}%
