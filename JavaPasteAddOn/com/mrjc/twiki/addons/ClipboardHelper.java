@@ -1,4 +1,4 @@
-package com.mrjc.twiki.addons;
+`package com.mrjc.twiki.addons;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -172,6 +172,7 @@ public class ClipboardHelper
 	 */
 	public static void writeFileContentsToOutputStream(File file, DataOutputStream outStream)
 	{
+		outStream.
 		byte[] buff = new byte[1024];
 		
 		try
