@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "05 Jan 2004";
+$wikiversion      = "08 Jan 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1732,8 +1732,8 @@ sub handleToc
     my $depth = extractNameValuePair( $_[3], "depth" ) || 6;
 
     #get the title attribute
-    my $title = extractNameValuePair( $_[3], "title" );
-    $title = "\n$title" if( $title );
+    my $title = extractNameValuePair( $_[3], "title" ) || "";
+    $title = "\n<span class=\"title\">$title</span>" if( $title );
 
     my $result  = "";
     my $line  = "";
@@ -1816,7 +1816,7 @@ sub handleToc
             $highest--;
             $result =~ s/^\t{$highest}//gm;
         }
-        $result = "<div class='twikitoc'>$title$result\n</div>";
+        $result = "<div id=\"twikitoc\">$title$result\n</div>";
         return $result;
 
     } else {
