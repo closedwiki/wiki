@@ -85,7 +85,7 @@ use vars qw(
 # The singleton "twiki" object instance and exporter bits
 use vars qw( $T );
 
-$wikiversion = '20 Oct 2004 $Rev$';
+$wikiversion = '12 Dec 2004 $Rev$';
 
 # (new variables must be declared in "use vars qw(..)" above)
 @isoMonth = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
@@ -102,7 +102,7 @@ $TranslationToken= "\0";	# Null not allowed in charsets used with TWiki
 $formatVersion = "1.0";
 
 # STATIC locale setup - If $useLocale is set, this function parses
-# $siteLocale from TWiki.cfg and passes it to the POSIX::setLocale
+# $siteLocale from TWiki.cfg and passes it to the POSIX::setlocale
 #  function to change TWiki's operating environment.
 #
 # SMELL: mod_perl compatibility note: If TWiki is running under Apache,
@@ -146,9 +146,11 @@ sub _setupLocale {
 
         # Load POSIX for I18N support. Eval because otherwise
         # it gets compiled even if we don't have a locale
+        # SMELL: eval should not be necessary for require+import!
         eval 'require POSIX; import POSIX qw( locale_h LC_CTYPE );';
 
-        # Set new locale
+        # Set new locale - deliberately not checked since tested
+        # in testenv
         my $locale = setlocale(&LC_CTYPE, $siteLocale);
     }
     $staticInternalTags{CHARSET} = $siteCharset;
@@ -159,6 +161,7 @@ sub _setupLocale {
 # STATIC Set up pre-compiled regexes for use in rendering.  All regexes with
 # unchanging variables in match should use the '/o' option, even if not in a
 # loop.
+# SMELL: use of $ua etc makes this routine longer and less readable - done for performance?
 sub _setupRegexes {
     $regex{linkProtocolPattern} = "(file|ftp|gopher|https|http|irc|news|nntp|telnet)";
 
@@ -178,7 +181,7 @@ sub _setupRegexes {
     # whether locale-based regexes are turned off.
     my ( $ua, $la, $num, $ma );
     if ( not $useLocale or $] < 5.006 or not $localeRegexes ) {
-        # No locales needed/working, or Perl 5.005_03 or lower, so just use
+        # No locales needed/working, or Perl 5.005, so just use
         # any additional national characters defined in TWiki.cfg
         $ua = "A-Z$upperNational";
         $la = "a-z$lowerNational";
