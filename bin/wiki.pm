@@ -85,7 +85,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "23 Jul 2000";
+$wikiversion      = "28 Jul 2000";
 
 # ===========================
 # read the configuration part
@@ -976,6 +976,47 @@ sub handleSearchWeb
 }
 
 # =========================
+sub handleTime
+{
+    my( $theAttributes, $theZone ) = @_;
+    # format example: 28 Jul 2000 15:33 is "day month year hour:min:sec"
+
+    my $format = extractNameValuePair( $theAttributes );
+
+    my $value = "";
+    my $time = time();
+    if( $format ) {
+        if( $theZone eq "gmtime" ) {
+            my( $sec, $min, $hour, $day, $mon, $year) = gmtime( $time );
+            $value = $format;
+            $value =~ s/sec[a-z]*/sprintf("%.2u",$sec)/geoi;
+            $value =~ s/min[a-z]*/sprintf("%.2u",$min)/geoi;
+            $value =~ s/hou[a-z]*/sprintf("%.2u",$hour)/geoi;
+            $value =~ s/day[a-z]*/sprintf("%.2u",$day)/geoi;
+            $value =~ s/mon[a-z]*/$isoMonth[$mon]/goi;
+            $value =~ s/yea[a-z]*/sprintf("%.4u",$year+1900)/geoi;
+        } elsif( $theZone eq "servertime" ) {
+            my( $sec, $min, $hour, $day, $mon, $year) = localtime( $time
+);
+            $value = $format;
+            $value =~ s/sec[a-z]*/sprintf("%.2u",$sec)/geoi;
+            $value =~ s/min[a-z]*/sprintf("%.2u",$min)/geoi;
+            $value =~ s/hou[a-z]*/sprintf("%.2u",$hour)/geoi;
+            $value =~ s/day[a-z]*/sprintf("%.2u",$day)/geoi;
+            $value =~ s/mon[a-z]*/$isoMonth[$mon]/goi;
+            $value =~ s/yea[a-z]*/sprintf("%.4u",$year+1900)/geoi;
+        }
+    } else {
+        if( $theZone eq "gmtime" ) {
+            $value = gmtime( $time );
+        } elsif( $theZone eq "servertime" ) {
+            $value = localtime( $time );
+        }
+    }
+    return $value;
+}
+
+# =========================
 sub handlePrefsValue
 {
     my( $theIdx ) = @_;
@@ -1028,8 +1069,11 @@ sub handleCommonTags
     $text =~ s/%PUBURLPATH%/$pubUrlPath/go;
     $text =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$theWeb\/$topic/go;
     $text =~ s/%ATTACHURLPATH%/$pubUrlPath\/$theWeb\/$topic/go;
-    $text =~ s/%DATE%/&getLocaldate()/geo;
-    $text =~ s/%GMTIME%/&formatGmTime(time())/geo;
+    $text =~ s/%DATE%/&getLocaldate()/geo; # depreciated
+    $text =~ s/%GMTIME%/&handleTime("","gmtime")/geo;
+    $text =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/geo;
+    $text =~ s/%SERVERTIME%/&handleTime("","servertime")/geo;
+    $text =~ s/%SERVERTIME{(.*?)}%/&handleTime($1,"servertime")/geo;
     $text =~ s/%WIKIVERSION%/$wikiversion/go;
     $text =~ s/%USERNAME%/$userName/go;
     $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
