@@ -11,7 +11,7 @@ package RegisterTests;
                 #test_registerVerifyAndFinish
 
 #Uncomment to isolate 
-#our @TESTS = qw(test_registerVerifyOk); #test_UnregisteredUser);
+our @TESTS = qw(test_registerVerifyOk); #test_UnregisteredUser);
 
 use base qw(Test::Unit::TestCase);
 BEGIN {
@@ -50,6 +50,7 @@ sub new {
 }
 
 my $myDataDir;
+my $approvalsDir;
 my $myPubDir;
 my $saveDD;
 my $savePD;
@@ -72,7 +73,7 @@ sub set_up {
     $TWiki::cfg{HtpasswdFileName} = "$myDataDir/htpasswd";
 
     $tempUserDir = $TWiki::cfg{PubDir};
-    my $approvalsDir = $tempUserDir.'/TWiki/RegistrationApprovals';
+    $approvalsDir = $tempUserDir.'/TWiki/RegistrationApprovals';
     $SIG{__DIE__} = sub { confess $_[0] };
 
     mkdir $myDataDir;
@@ -232,7 +233,7 @@ sub test_registerVerifyOk {
 
     } catch TWiki::UI::OopsException with {
         my $e = shift;
-print STDERR `ls -lR '/home/twiki/DEVELOP/test/unit/tmpRegisterTestPub'`;
+        print STDERR "PUB DIR: ".`ls -lR $approvalsDir`;
         $self->assert(0, $e->stringify );
     }
 }
