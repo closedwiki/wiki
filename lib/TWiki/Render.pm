@@ -180,7 +180,7 @@ sub renderMoved
         my $toWeb = $1;
         my $toTopic = $2;
         my $by   = $moved{"by"};
-        $by = userToWikiName( $by );
+        $by = TWiki::userToWikiName( $by );
         my $date = $moved{"date"};
         $date = TWiki::formatTime( $date, , "gmtime" );
         
@@ -212,7 +212,7 @@ sub renderFormField
     my( $meta, $args ) = @_;
     my $text = "";
     if( $args ) {
-        my $name = extractNameValuePair( $args, "name" );
+        my $name = TWiki::extractNameValuePair( $args, "name" );
         $text = TWiki::Search::getMetaFormField( $meta, $name ) if( $name );
     }
     return $text;
@@ -782,7 +782,7 @@ sub mailtoLinkSimple
 
 ---++ sub getFormField ( $web, $topic, $args )
 
-Handles %FORMFIELD{}% tags in topics, used in handleInternalTags
+Handles %FORMFIELD{}% tags in topics, used in TWiki::handleInternalTags
 
 TODO: use Prefs subsystem to read form info, instead of rereadeing
 topic every time a form field value is requested.
@@ -808,7 +808,7 @@ sub getFormField
        if ($topic =~ /^([^.]+)\.([^.]+)/o) {
 	   ( $formTopicWeb, $topic ) = ( $1, $2 );
        } else {
-	   $formTopicWeb = extractNameValuePair( $args, "web" );
+	   $formTopicWeb = TWiki::extractNameValuePair( $args, "web" );
        }
        $formTopicWeb = $web unless defined $formTopicWeb;
        ( $meta, my $dummyText ) = &TWiki::Store::readTopic( $formTopicWeb, $formTopic );
