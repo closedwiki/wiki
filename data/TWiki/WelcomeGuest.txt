@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007276580" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="PeterThoeny" date="1008347543" format="1.0" version="1.14"}%
 Welcome %WIKIUSERNAME%,
 
 You have reached a TWikiSite (pronounced twee-kee site). TWiki is a meeting place where people collaborate on common interests. Anyone can contribute using a regular Web browser. TWiki looks like a normal Web site, but it allows (and ecourages) everyone to *edit the web pages* and contribute their questions and input. It really is very simple to learn and use, and provides possibly the most powerful way to exchange and develop ideas online, in an open, uncomplicated environment.
@@ -25,7 +25,7 @@ You have reached a TWikiSite (pronounced twee-kee site). TWiki is a meeting plac
 		* To create a free-floating topic - a topic that is not linked from anywhere - type its WikiWord in the entry field at the top of any page. If the topic already exists you'll then be taken to it. If it doesn't exist, you'll then have the option to create it.
 	1. *See the history of a topic:* Click the ==Diffs== link on the control strip at the bottom of every page to see a complete history of edits for that topic.
 	1. *Attach files:* Use your browser to upload and attach any type of file to a topic using the ==Attach== link at the bottom of the page.
-	1. *Organize:* Use TWikiForms to include specific information wiht individual topics - for example, classify pages by subject, status, or date.
+	1. *Organize:* Use TWikiForms to include specific information with individual topics - for example, classify pages by subject, status, or date.
 	1. *Learn more*: TWikiTutorial takes you on a 20-minute tour of the TWiki essentials. WikiReferences has links to articles and books about online collaboration and Wiki technology in particular.
 
 *Main Features of TWiki*
