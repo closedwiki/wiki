@@ -1,8 +1,8 @@
 <table><tr><td>
 Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management tool and knowledge base tool. This is the place to learn about the tool.</td><td>
-<a href="http://TWiki.SourceForge.net/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
+<a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
 </td><td>
-<b>The TWiki home is at <br> http://TWiki.SourceForge.net/ </b>
+<b>The TWiki home is <br> at http://TWiki.org/ </b>
 </td></tr>
 </table>
 
@@ -45,4 +45,4 @@ Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management t
 	* You are currently in the %WIKITOOLNAME%.%WEB% web. The color code for this web is a light orange background, so you know where you are.
 	* If you are not familiar with the %WIKITOOLNAME% collaboration tool, please visit %TWIKIWEB%.WelcomeGuest first.
 
-%INCLUDE{"TWikiWebsTable"}%
+%INCLUDE{"%TWIKIWEB%.TWikiWebsTable"}%

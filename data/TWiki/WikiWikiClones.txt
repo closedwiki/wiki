@@ -1,5 +1,5 @@
-TWiki is a Wiki Wiki clone and has its root in JOS Wiki.
+%WIKITOOLNAME% is a Wiki Wiki clone and has its root in JOS Wiki.
 
-	* TWiki's home is at http://TWiki.SourceForge.net/
+	* TWiki's home is at http://TWiki.org/
 	* TWiki takes a lot of ideas from <A HREF="http://c2.com/~ward/">Ward Cunningham</A>'s remarkable <A HREF="http://c2.com/cgi/wiki?WikiWikiWeb"> Wiki Wiki Web</A> invention. 
 	* A list of Wiki Wiki clones can be found at http://c2.com/cgi/wiki?WikiWikiClones

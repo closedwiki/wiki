@@ -169,7 +169,7 @@ Place text you would like to specify a color inside &lt;FONT COLOR="colorCode"&g
 
 "colorCode" is the hexadecimal RGB color code. The color is composed
 by specifying the red, green and blue components of the color in
-hexadecimal notation. For example, to specify white, the red, green and blue components are 255, 255, 255, so you would use "#FFFFFF". Common color codes are:
+hexadecimal notation. For example, to specify white, the red, green and blue components are 255, 255, 255, so you would use "#FFFFFF". You can use StandardColors or common color codes:
 
 <TABLE>
 <TR BGCOLOR="#E0E0E0">
