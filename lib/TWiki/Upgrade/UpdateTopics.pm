@@ -41,7 +41,7 @@ sub UpdateTopics
     chomp ($BaseDir);
 
 #Set if you want to see the debug output
-$debug = "yes";
+#$debug = "yes";
 
     if ($debug) {print "$CurrentDataDir, $NewReleaseDataDir\n"; }
 

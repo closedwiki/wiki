@@ -7,11 +7,6 @@
 #
 # Jul 2004 - written by Martin Gregory, martin@gregories.net
 
-# **** NOTE: UpdateTopics directs STDERR to rcs.log
-
-# I haven't been able to tidy this up, so if you're missing some
-# error messages, look there!
-
 =begin twiki
 
 ---+ UpgradeTwiki
@@ -28,10 +23,13 @@ BEGIN {
 unshift @INC, "./lib";  # have to find Text::Diff, UpdateTopics, TWikiCfg which are bundled with TWiki.
 }
 
+use strict;
+
 use TWiki::Upgrade::TWikiCfg;
 use TWiki::Upgrade::UpdateTopics;
 use File::Copy;
 use Text::Diff;
+use File::Find;
 
 my $targetDir = shift or die "Usage: $0 <target directory for new wiki build>\n";
 
@@ -49,11 +47,46 @@ Here's what's about to happen:
 3) I'm going to merge the new TWiki data files from the release with all your existing information 
 4) I'm going to tell you what you need to do next!
 
-Here goes...
+First, you need to tell me where I can get config info about your existing TWiki.
 
+Please tell me a path to either the setlib.cfg (preferred) or the TWiki.cfg...
 ";
 
-print "Creating $targetDir structures...\n";
+my ($configPath, $setlibPath, $libPath);
+
+do
+{
+    chomp ($configPath = <STDIN>) ;
+}
+until ((-f "$configPath/setlib.cfg" || -f "$configPath/TWiki.cfg") ? 1 :
+       (print("Hmmm - I can't see setlib.cfg or Twiki.cfg at $configPath ... please check and try again\n"), 0) 
+       );
+
+if (-f "$configPath/TWiki.cfg")
+{
+    $libPath = $configPath;
+
+    print "OK - found TWiki.cfg.  Now I need you to tell me where the existing TWiki bin directory is:\n";
+
+    # this will only be used to find .htaccess at this point.   
+    # should also be used to fix up bin scripts with $scriptSuffix: TBD!
+    do
+    {
+	chomp ($setlibPath = <STDIN>) ;
+    }
+    until ((-d $setlibPath) ? 1 :
+	   (print("Hmmm -  $setlibPath doesn't even look like a directory!... please check and try again\n"), 0)
+	   );
+}
+else
+{
+    $libPath = "";
+    $setlibPath = $configPath;
+}
+
+# Now, should have finished asking the user questions...
+
+print "First, creating $targetDir structures...\n";
 
 opendir(HERE , ".");
 
@@ -66,16 +99,17 @@ foreach $file (readdir(HERE))
     next if ($file eq '.');
     next if ($file eq '..');
     next if ($file =~ /.zip$/);
+    next if ($file =~ /^data$/); # UpgradeTopics will copy the data as appropriate.
 
     print "$file\n";
     system("cp -R $file $targetDir");
 }
 
-use vars '$TWikiCfg::dataDir';  # gets defined in TWikiCfg by reading the old TWiki.cfg...
+print "Preparing to write a new format configuration file for you...\n\n";
 
-my $existingScriptDir = TWikiCfg::UpgradeTWikiConfig("$targetDir");   # dies on error, without doing damage
+TWikiCfg::UpgradeTWikiConfig($configPath, $targetDir);   # dies on error, without doing damage
 
-print "\n\nMerging your existing twiki data with new release twiki data, putting the result in $targetDir/data...\n";
+print "\n\nMerging your existing twiki data ($TWikiCfg::dataDir) with new release twiki data, putting the result in $targetDir/data...\n";
 
 my $baseDir = `pwd`;
 chomp ($baseDir);
@@ -85,16 +119,20 @@ UpdateTopics::UpdateTopics($TWikiCfg::dataDir, "$baseDir/data", "$targetDir/data
 #make sure we're in the right place still
 chdir($baseDir);
 
-print "OK - the merge process completed successfully...\n";
+    print "OK - the merge process completed successfully...\n";
+
+    print "Now I'm giving write access to pub & data in the newly set up TWiki, so your web server can access them...\n";
+
+    find( sub {chmod 0777, $File::Find::name;} , "$targetDir/pub", "$targetDir/data");
 
 print "
 Congratulations... you made it this far!
 
 ";
 
-if (-f "$existingScriptDir/.htaccess")
+if (-f "$setlibPath/.htaccess")
 {
-    if (copy("$existingScriptDir/.htaccess", "$targetDir/bin/.htaccess"))
+    if (copy("$setlibPath/.htaccess", "$targetDir/bin/.htaccess"))
     {
 	print "
 I copied in your existing .htaccess into $targetDir/bin.
@@ -107,13 +145,13 @@ I copied in your existing .htaccess into $targetDir/bin.
     else
     {
 	warn "
-I couldn't copy in your existing .htaccess file from $existingScriptDir to $targetDir/bin: $!\n";
+I couldn't copy in your existing .htaccess file from $setlibPath to $targetDir/bin: $!\n";
     }
 }
 else
 {
     warn "
-Couldn't see a .htaccess in $existingScriptDir ... so I didn't try to help in that respect\n";
+Couldn't see a .htaccess in $setlibPath ... so I didn't try to help in that respect\n";
 }
 
 print "

@@ -76,38 +76,44 @@ Dialogs with the user on STDIN/STDOUT.
 
 sub UpgradeTWikiConfig
 {
+
+    my $existingConfigInfo = shift or die "UpgradeTWikiConfig not passed any arguments!\n";
+
     my $targetDir = (shift or '.');
 
     my $newConfigFile = "$targetDir/lib/TWiki.cfg";
 
-    my ($setlibPath);
+    my $twikiCfgFile;
 
-    print "Preparing to write a new format configuration file for you...\n\n";
-    print "Where is the current setlib.cfg located?\n";
-
-    do
+    if (-f "$existingConfigInfo/setlib.cfg")
     {
-	chomp ($setlibPath = <STDIN>) ;
+	my ($setlibPath) = $existingConfigInfo;
+
+        # Find out from there where TWiki.cfg is
+	
+	require "$setlibPath/setlib.cfg";
+	
+	print "\nGreat - found it OK, and it tells me that the rest of the config is in $twikiLibPath,\n";
+	print "so that's where I'll be looking!\n\n";
+
+	print "First, making a new copy of setlib.cfg in your new installation...\n";
+	copy("$setlibPath/setlib.cfg", "$targetDir/bin/setlib.cfg") or 
+	    die "Whoa - error copying $setlibPath/setlib.cfg to $targetDir/bin/setlib.cfg! $!\n";
+
+	print "...$setlibPath/setlib.cfg has been copied into $targetDir/bin\n";
+
+	print "Now reading the old TWiki.cfg  and generating the new...\n\n";
+
+	$twikiCfgFile = "$twikiLibPath/TWiki.cfg";
     }
-    until (-f "$setlibPath/setlib.cfg" ? 1 :
-	   (print("Hmmm - I can't see setlib.cfg at $setlibPath/ ... please check and try again\n"), 0) 
-	   );
-
-# Find out from there where TWiki.cfg is
-    
-    require "$setlibPath/setlib.cfg";
-    
-    print "\nGreat - found it OK, and it tells me that the rest of the config is in $twikiLibPath,\n";
-    print "so that's where I'll be looking!\n\n";
-    print "... reading the old config and generating the new...\n\n";
-
-# Read it in, form the new configuration...
-
-    my($twikiCfgFile) = "$twikiLibPath/TWiki.cfg";
+    elsif (-f "$existingConfigInfo/TWiki.cfg")
+    {
+	$twikiCfgFile = "$existingConfigInfo/TWiki.cfg";
+    }
 
     # read 'em in...
     require $twikiCfgFile;
-
+    
     # and now we have the old definitions...
     # ...  write those out where we can, or new defaults where we can't
 
@@ -205,13 +211,6 @@ sub UpgradeTWikiConfig
     }
 
     print "$targetDir/lib/TWiki.cfg created...\n";
-
-    copy("$setlibPath/setlib.cfg", "$targetDir/bin/setlib.cfg") or 
-	die "Whoa - error copying $setlibPath/setlib.cfg to $targetDir/bin/setlib.cfg! $!\n";
-
-    print "... and $setlibPath/setlib.cfg has been copied into $targetDir/bin\n";
-
-    return $setlibPath;
 }
 
 # Here follow the default contents of TWiki.cfg
