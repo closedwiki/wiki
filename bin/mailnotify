@@ -74,7 +74,14 @@ sub processWeb
     my %exclude;
 
     $text = &TWiki::handleCommonTags($text, $topic);
-    $text =~ s/<img src=.*?[^>]>/[IMG]/goi;  # remove all images
+    $text =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
+
+    if( $TWiki::doRemoveImgInMailnotify ) {
+        # change images to [alt] text if there, else remove image
+        $text =~ s/<img src=.*?alt=\"([^\"]+)[^>]*>/[$1]/goi;
+        $text =~ s/<img src=.*?[^>]>//goi;
+    }
+
     my $before = "";
     my $after = "";
     ( $before, $text, $after) = split( /%REPEAT%/, $text );
