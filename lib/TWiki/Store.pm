@@ -87,7 +87,7 @@ sub _getTopicHandler {
 
     $attachment = "" if( ! $attachment );
 
-    ASSERT($TWiki::cfg{StoreImpl});
+    ASSERT($TWiki::cfg{StoreImpl}) if DEBUG;
     my $handlerName = "TWiki::Store::$TWiki::cfg{StoreImpl}";
 
     return $this->{IMPL}->new( $this->{session}, $web, $topic,
@@ -226,8 +226,8 @@ sub moveAttachment {
         return $error;
     }
 
-    my %fileAttachment =
-      $ometa->findOne( "FILEATTACHMENT", $theAttachment );
+    my $fileAttachment =
+      $ometa->get( "FILEATTACHMENT", $theAttachment );
     $ometa->remove( "FILEATTACHMENT", $theAttachment );
     $error = $this->_noHandlersSave( $user, $oldWeb, $oldTopic,
                                      $otext, $ometa,
@@ -240,11 +240,11 @@ sub moveAttachment {
     }
 
     # Add file attachment to new topic
-    $fileAttachment{"movefrom"} = "$oldWeb.$oldTopic";
-    $fileAttachment{"moveby"}   = $user->webDotWikiName();
-    $fileAttachment{"movedto"}  = "$newWeb.$newTopic";
-    $fileAttachment{"movedwhen"} = time();
-    $nmeta->put( "FILEATTACHMENT", %fileAttachment );
+    $fileAttachment->{"movefrom"} = "$oldWeb.$oldTopic";
+    $fileAttachment->{"moveby"}   = $user->webDotWikiName();
+    $fileAttachment->{"movedto"}  = "$newWeb.$newTopic";
+    $fileAttachment->{"movedwhen"} = time();
+    $nmeta->put( "FILEATTACHMENT", $fileAttachment );
 
     $error = $this->_noHandlersSave( $user, $newWeb, $newTopic, $ntext,
                                       $nmeta, { notify => 0,
@@ -427,18 +427,19 @@ sub renameTopic {
 
     if( ! $error ) {
         my $time = time();
-        my @args = (
-                    "from" => "$oldWeb.$oldTopic",
-                    "to"   => "$newWeb.$newTopic",
-                    "date" => "$time",
-                    # SMELL: surely this should be wikiUserName?
-                    "by"   => $user->wikiName() );
         my $text = $this->readTopicRaw( undef, $newWeb, $newTopic, undef );
         if( ( $oldWeb ne $newWeb ) && $doChangeRefTo ) {
             $text = $this->_changeRefTo( $text, $oldWeb, $oldTopic );
         }
         my $meta = $this->extractMetaData( $newWeb, $newTopic, \$text );
-        $meta->put( "TOPICMOVED", @args );
+        $meta->put( "TOPICMOVED",
+                    {
+                     from => "$oldWeb.$oldTopic",
+                     to   => "$newWeb.$newTopic",
+                     date => "$time",
+                     # SMELL: surely this should be wikiUserName?
+                     by   => $user->wikiName(),
+                    } );
 
         $this->_noHandlersSave( $user, $newWeb, $newTopic, $text, $meta,
                                 { comment => "renamed" } );
@@ -668,10 +669,9 @@ sub getRevisionInfo {
 # STATIC Build a hash by parsing name=value comma separated pairs
 # SMELL: duplication of TWiki::extractParameters, using a different
 # system of escapes :-(
-sub _readKeyValue
-{
+sub _readKeyValue {
     my( $args ) = @_;
-    my %res = ();
+    my $res = {};
 
     # Format of data is name="value" name1="value1" [...]
     while( $args =~ s/\s*([^=]+)=\"([^"]*)\"//o ) {
@@ -681,9 +681,9 @@ sub _readKeyValue
         $value =~ s/%_N_%/\n/g;
         $value =~ s/%_Q_%/\"/g;
         $value =~ s/%_P_%/%/g;
-        $res{$key} = $value;
+        $res->{$key} = $value;
     }
-    return %res;
+    return $res;
 }
 
 =pod
@@ -787,39 +787,38 @@ sub saveAttachment {
                                                     $attachment );
         $action = "upload";
 
-        my %attrs =
-          (
+        my $attrs =
+          {
            attachment => $attachment,
            tmpFilename => $opts->{file},
            comment => $opts->{comment},
            user => $user->webDotWikiName()
-          );
+          };
 
         my $topicHandler = $this->_getTopicHandler( $web, $topic, $attachment );
-        $this->plugins()->beforeAttachmentSaveHandler( \%attrs,
-                                                       $topic, $web );
+        $this->plugins()->beforeAttachmentSaveHandler( $attrs, $topic, $web );
         my $error = $topicHandler->addRevision( $opts->{file},
                                                 $opts->{comment},
                                                 $user->wikiName() );
 
-        $this->plugins()->afterAttachmentSaveHandler( \%attrs,
+        $this->plugins()->afterAttachmentSaveHandler( $attrs,
                                                       $topic, $web, $error );
 
         return "attachment save failed: $error" if $error;
 
-        $attrs{name} = $attachment;
-        $attrs{version} = $fileVersion;
-        $attrs{path} = $opts->{filepath},;
-        $attrs{size} = $opts->{filesize};
-        $attrs{date} = $opts->{filedate};
-        $attrs{attr} = ( $opts->{hide} ) ? "h" : "";
+        $attrs->{name} = $attachment;
+        $attrs->{version} = $fileVersion;
+        $attrs->{path} = $opts->{filepath},;
+        $attrs->{size} = $opts->{filesize};
+        $attrs->{date} = $opts->{filedate};
+        $attrs->{attr} = ( $opts->{hide} ) ? "h" : "";
 
-        $meta->put( "FILEATTACHMENT", %attrs );
+        $meta->put( "FILEATTACHMENT", $attrs );
     } else {
-        my %attrs = $meta->findOne( "FILEATTACHMENT", $attachment );
-        $attrs{attr} = ( $opts->{hide} ) ? "h" : "";
-        $attrs{comment} = $opts->{comment};
-        $meta->put( "FILEATTACHMENT", %attrs );
+        my $attrs = $meta->get( "FILEATTACHMENT", $attachment );
+        $attrs->{attr} = ( $opts->{hide} ) ? "h" : "";
+        $attrs->{comment} = $opts->{comment};
+        $meta->put( "FILEATTACHMENT", $attrs );
     }
 
     if( $opts->{createlink} ) {
@@ -1169,8 +1168,8 @@ sub extractMetaData {
                                                          $meta, $$rtext );
         }
     } else {
-        my %topicinfo = $meta->findOne( "TOPICINFO" );
-        if( $topicinfo{"format"} eq "1.0beta" ) {
+        my $topicinfo = $meta->get( "TOPICINFO" );
+        if( $topicinfo->{"format"} eq "1.0beta" ) {
             # This format used live at DrKW for a few months
             if( $$rtext =~ /<!--TWikiCat-->/ ) {
                 $$rtext = $this->form()->upgradeCategoryTable( $web, $topic,
@@ -1179,10 +1178,10 @@ sub extractMetaData {
             }
             $this->attach()->upgradeFrom1v0beta( $meta );
             if( $meta->count( "TOPICMOVED" ) ) {
-                 my %moved = $meta->findOne( "TOPICMOVED" );
-                 my $u = $this->users()->findUser( $moved{"by"} );
-                 $moved{"by"} = $u->login() if $u;
-                 $meta->put( "TOPICMOVED", %moved );
+                 my $moved = $meta->get( "TOPICMOVED" );
+                 my $u = $this->users()->findUser( $moved->{by} );
+                 $moved->{by} = $u->login() if $u;
+                 $meta->put( "TOPICMOVED", $moved );
             }
         }
     }
@@ -1226,8 +1225,8 @@ sub getTopicParent {
     close( IN_FILE );
 
     my $meta = $this->extractMetaData( $theWeb, $theTopic, \$data );
-    my %parentMeta = $meta->findOne( "TOPICPARENT" );
-    return $parentMeta{name} if %parentMeta;
+    my $parentMeta = $meta->get( "TOPICPARENT" );
+    return $parentMeta->{name} if $parentMeta;
     return undef;
 }
 

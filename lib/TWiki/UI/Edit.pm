@@ -144,8 +144,8 @@ sub edit {
 
         # If present, instantiate form
         if( ! $formTemplate ) {
-            my %args = $meta->findOne( "FORM" );
-            $formTemplate = $args{"name"};
+            my $form = $meta->get( "FORM" );
+            $formTemplate = $form->{"name"} if $form;
         }
 
         $text = $session->expandVariablesOnTopicCreation( $text, $user );
@@ -170,7 +170,7 @@ sub edit {
                 $theParent = $2;
             }
         }
-        $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+        $meta->put( "TOPICPARENT", { "name" => $theParent } );
     }
     $tmpl =~ s/%TOPICPARENT%/$theParent/;
 
@@ -178,10 +178,9 @@ sub edit {
     # or indirectly from webtopictemplate parameter.
     my $oldargsr;
     if( $formTemplate ) {
-        my @args = ( name => $formTemplate );
         $meta->remove( "FORM" );
         if( $formTemplate ne "none" ) {
-            $meta->put( "FORM", @args );
+            $meta->put( "FORM", { name => $formTemplate } );
         } else {
             $meta->remove( "FORM" );
         }
@@ -215,9 +214,9 @@ sub edit {
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
 
     # Don't want to render form fields, so this after getRenderedVersion
-    my %formMeta = $meta->findOne( "FORM" );
+    my $formMeta = $meta->get( "FORM" );
     my $form = "";
-    $form = $formMeta{"name"} if( %formMeta );
+    $form = $formMeta->{"name"} if( $formMeta );
     if( $form && !$saveCmd ) {
         my @fieldDefs = $session->{form}->getFormDef( $templateWeb, $form );
 

@@ -69,15 +69,15 @@ sub attach {
 
     ( $meta, $text ) =
       $session->{store}->readTopic( $session->{user}, $webName, $topic, undef );
-    my %args = $meta->findOne( "FILEATTACHMENT", $fileName );
-    %args = (
+    my $args = $meta->get( "FILEATTACHMENT", $fileName );
+    $args = {
              name => $fileName,
              attr => "",
              path => "",
              comment => ""
-            ) if( ! % args );
+            } unless( $args );
 
-    if ( $args{attr} =~ /h/o ) {
+    if ( $args->{attr} =~ /h/o ) {
         $isHideChecked = "checked";
     }
 
@@ -90,16 +90,16 @@ sub attach {
     }
 
     my $fileWikiUser = "";
-    if( $fileName && %args ) {
+    if( $fileName ) {
         $tmpl = $session->{templates}->readTemplate( "attachagain", $skin );
-        my $u = $session->{users}->findUser( $args{"user"} );
+        my $u = $session->{users}->findUser( $args->{"user"} );
         $fileWikiUser = $u->webDotWikiName() if $u;
     } else {
         $tmpl = $session->{templates}->readTemplate( "attachnew", $skin );
     }
     if ( $fileName ) {
         # must come after templates have been read
-        $atext .= $session->{attach}->formatVersions( $webName, $topic, %args );
+        $atext .= $session->{attach}->formatVersions( $webName, $topic, %$args );
     }
     $tmpl =~ s/%ATTACHTABLE%/$atext/go;
     $tmpl =~ s/%FILEUSER%/$fileWikiUser/go;
@@ -110,8 +110,8 @@ sub attach {
     $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
     $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
     $tmpl =~ s/%FILENAME%/$fileName/go;
-    $tmpl =~ s/%FILEPATH%/$args{"path"}/go;
-    $tmpl =~ s/%FILECOMMENT%/$args{"comment"}/go;
+    $tmpl =~ s/%FILEPATH%/$args->{"path"}/go;
+    $tmpl =~ s/%FILECOMMENT%/$args->{"comment"}/go;
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
     $session->writeCompletePage( $tmpl );

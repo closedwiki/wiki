@@ -223,7 +223,7 @@ sub bulkRegister {
 
     #-- Save the LogFile as designated, link back to the source topic 
 
-    $meta->put( "TOPICPARENT", ( "name" => $topic ) );
+    $meta->put( "TOPICPARENT", { "name" => $topic } );
 
     my $err = $session->{store}->saveTopic($user, $web, $logTopic, $log, $meta );
 
@@ -684,13 +684,12 @@ sub _writeRegistrationDetailsToTopic {
 
     # TODO - there should be some way of overwriting meta without blatting the content.
 
-    my $form = $meta->findOne("FORM");
     $text = "%SPLIT%\n\t* %KEY%: %VALUE%%SPLIT%\n" unless $text;
     my ( $before, $repeat, $after ) = split( /%SPLIT%/, $text );
 
     my $log;
     my $addText;
-    if ($form) {
+    if ($meta->get("FORM")) {
         ( $meta, $addText ) = _getRegFormAsTopicForm( $meta, \%data );
         $log = "Using Form Fields";
     } else {
@@ -705,7 +704,7 @@ sub _writeRegistrationDetailsToTopic {
       $session->expandVariablesOnTopicCreation( $text, $user, $data{WikiName},
                                              "$data{webName}.$data{WikiName}" );
 
-    $meta->put( "TOPICPARENT", ( "name" => $TWiki::cfg{UsersTopicName} ) );
+    $meta->put( "TOPICPARENT", { "name" => $TWiki::cfg{UsersTopicName}} );
 
     $session->{store}->saveTopic($user, $data{webName}, $data{WikiName}, $text, $meta );
     return $log;
@@ -741,7 +740,8 @@ sub _getKeyValuePairsAsTopicForm {
         
         #### SMELL I want to write:
         #     if (field is on form) {
-        #	$meta->put("FIELD", ( "name" => $name, "value" => $value, "title" =>$title));
+        #	$meta->put("FIELD",
+        # { "name" => $name, "value" => $value, "title" =>$title});
         #     } else {
         # accumulate it in $leftoverText
         #     }
@@ -752,7 +752,7 @@ sub _getKeyValuePairsAsTopicForm {
             $leftoverText .= "\t* $name: $value\n"; #SMELL - tab not 3 spaces
         } else {
             $meta->put( "FIELD",
-                        ( "name" => $name, "value" => $value, "title" => $title ) );
+                        { name => $name, value => $value, title => $title } );
         }
         #### end workaround SMELL
     }
@@ -1238,18 +1238,17 @@ sub addPhotoToTopic {
 
         my @stats = stat $fileName;
 
-        my %attrs = (
-                     "name"    => $fileName,
-                     "version" => "", # WHERE DOES $fileVersion COME FROM?
-                     "path"    => $p{photo},
-                     "size"    => $stats[7],
-                     "date"    => $stats[9],
-                     "user"    => "$p{user}",
-                     "comment" => "",
-                     "attr"    => "",
-                    );
-
-        $meta->put( "FILEATTACHMENT", %attrs );
+        $meta->put( "FILEATTACHMENT",
+                    {
+                     name    => $fileName,
+                     version => "", # WHERE DOES $fileVersion COME FROM?
+                     path    => $p{photo},
+                     size    => $stats[7],
+                     date    => $stats[9],
+                     user    => "$p{user}",
+                     comment => "",
+                     attr    => "",
+                    } );
     }
     # $session->{store}->saveTopic($p{web}, $p{user}, $text, $meta );
     return $meta;

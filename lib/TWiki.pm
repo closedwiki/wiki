@@ -49,31 +49,129 @@ use vars qw( %cfg );
 
 # Other computed constants
 use vars qw(
-            $TranslationToken $twikiLibDir
+            $TranslationToken
+            $twikiLibDir
             %regex
             %constantTags
             %functionTags
-            $siteCharset $siteLang $siteFullLang $urlCharEncoding
-            $langAlphabetic $VERSION
+            $siteCharset
+            $siteLang
+            $siteFullLang
+            $urlCharEncoding
+            $langAlphabetic
+            $VERSION
            );
 
 # Token character that must not occur in any normal text - converted
 # to a flag character if it ever does occur (very unlikely)
 $TranslationToken= "\0";	# Null not allowed in charsets used with TWiki
 
-# STATIC locale setup - If $TWiki::cfg{UseLocale} is set, this
-# function parses $TWiki::cfg{SiteLocale} from TWiki.cfg and passes it to the
-# POSIX::setlocale function to change TWiki's operating environment.
-#
-# SMELL: mod_perl compatibility note: If TWiki is running under Apache,
-# won't this play with the Apache process's locale settings too?
-# What effects would this have?
-#
-# Note that 'use locale' must be done in BEGIN block for regexes and sorting to
-# work properly, although regexes can still work without this in
-# 'non-locale regexes' mode (see _setupRegexes).
+BEGIN {
+    # automatically expanded on checkin of this module
+    $VERSION = '$Date$ $Rev$ ';
+    $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$1 build $2/;
 
-sub _setupLocale {
+    # Default handlers for different %TAGS%
+    %functionTags = (
+                     ATTACHURLPATH     => \&_ATTACHURLPATH,
+                     DATE              => \&_DATE,
+                     DISPLAYTIME       => \&_DISPLAYTIME,
+                     ENCODE            => \&_ENCODE,
+                     FORMFIELD         => \&_FORMFIELD,
+                     GMTIME            => \&_GMTIME,
+                     HTTP_HOST         => \&_HTTP_HOST,
+                     ICON              => \&_ICON,
+                     INCLUDE           => \&_INCLUDE,
+                     INTURLENCODE      => \&_INTURLENCODE,
+                     METASEARCH        => \&_METASEARCH,
+                     PLUGINVERSION     => \&_PLUGINVERSION,
+                     RELATIVETOPICPATH => \&_RELATIVETOPICPATH,
+                     REMOTE_ADDR       => \&_REMOTE_ADDR,
+                     REMOTE_PORT       => \&_REMOTE_PORT,
+                     REMOTE_USER       => \&_REMOTE_USER,
+                     REVINFO           => \&_REVINFO,
+                     SCRIPTNAME        => \&_SCRIPTNAME,
+                     SEARCH            => \&_SEARCH,
+                     SERVERTIME        => \&_SERVERTIME,
+                     SPACEDTOPIC       => \&_SPACEDTOPIC,
+                     "TMPL:P"          => \&_TMPLP,
+                     TOPICLIST         => \&_TOPICLIST,
+                     URLENCODE         => \&_ENCODE,
+                     URLPARAM          => \&_URLPARAM,
+                     VAR               => \&_VAR,
+                     WEBLIST           => \&_WEBLIST,
+                    );
+
+    # Constant tag strings _not_ dependent on config
+    %constantTags = (
+                     ENDSECTION      => "",
+                     WIKIVERSION     => $VERSION,
+                     SECTION         => "",
+                     STARTINCLUDE    => "",
+                     STOPINCLUDE     => "",
+                    );
+
+    unless( ( $TWiki::cfg{DetailedOS} = $^O ) ) {
+        require Config;
+        $TWiki::cfg{DetailedOS} = $Config::Config{'osname'};
+    }
+    $TWiki::cfg{OS} = 'UNIX';
+    if ($TWiki::cfg{DetailedOS} =~ /darwin/i) { # MacOS X
+        $TWiki::cfg{OS} = 'UNIX';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /Win/i) {
+        $TWiki::cfg{OS} = 'WINDOWS';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /vms/i) {
+        $TWiki::cfg{OS} = 'VMS';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /bsdos/i) {
+        $TWiki::cfg{OS} = 'UNIX';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /dos/i) {
+        $TWiki::cfg{OS} = 'DOS';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /^MacOS$/i) { # MacOS 9 or earlier
+        $TWiki::cfg{OS} = 'MACINTOSH';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /os2/i) {
+        $TWiki::cfg{OS} = 'OS2';
+    }
+
+    do "TWiki.cfg";
+    die "Cannot read TWiki.cfg: $!" if $!;
+    die "Bad configuration: $@" if $@;
+    do "LocalSite.cfg";
+    die "Bad configuration: $@" if $@;
+
+    if( $TWiki::cfg{UseLocale} ) {
+        eval 'require locale; import locale ();';
+    }
+
+    $TWiki::cfg{DispScriptUrlPath} = $TWiki::cfg{ScriptUrlPath}
+      unless defined( $TWiki::cfg{DispScriptUrlPath} );
+
+    # Constant tags dependent on the config
+    $constantTags{HOMETOPIC}       = $TWiki::cfg{HomeTopicName};
+    $constantTags{MAINWEB}         = $TWiki::cfg{UsersWebName};
+    $constantTags{NOTIFYTOPIC}     = $TWiki::cfg{NotifyTopicName};
+    $constantTags{PUBURLPATH}      = $TWiki::cfg{PubUrlPath};
+    $constantTags{SCRIPTSUFFIX}    = $TWiki::cfg{ScriptSuffix};
+    $constantTags{SCRIPTURLPATH}   = $TWiki::cfg{DispScriptUrlPath};
+    $constantTags{STATISTICSTOPIC} = $TWiki::cfg{Stats}{TopicName};
+    $constantTags{TWIKIWEB}        = $TWiki::cfg{SystemWebName};
+    $constantTags{WEBPREFSTOPIC}   = $TWiki::cfg{WebPrefsTopicName};
+    $constantTags{WIKIHOMEURL}     =
+      $TWiki::cfg{DefaultUrlHost} .
+        "/" . $TWiki::cfg{ScriptUrlPath} . "/view" .
+          $TWiki::cfg{ScriptSuffix};
+    $constantTags{WIKIPREFSTOPIC}  = $TWiki::cfg{SitePrefsTopicName};
+    $constantTags{WIKIUSERSTOPIC}  = $TWiki::cfg{UsersTopicName};
+
+    # locale setup
+    #
+    # SMELL: mod_perl compatibility note: If TWiki is running under Apache,
+    # won't this play with the Apache process's locale settings too?
+    # What effects would this have?
+    #
+    # Note that 'use locale' must be done in BEGIN block for regexes and
+    # sorting to
+    # work properly, although regexes can still work without this in
+    # 'non-locale regexes' mode.
     $siteCharset = 'ISO-8859-1';	# Default values if locale mis-configured
     $siteLang = 'en';
     $siteFullLang = 'en-us';
@@ -83,8 +181,10 @@ sub _setupLocale {
     $langAlphabetic = 1 if not defined $langAlphabetic;      # Default is 1 if not configured
 
     if ( $TWiki::cfg{UseLocale} ) {
-        if ( not defined $TWiki::cfg{SiteLocale} or $TWiki::cfg{SiteLocale} !~ /[a-z]/i ) {
-            die "\$TWiki::cfg{UseLocale} set but \$TWiki::cfg{SiteLocale} $TWiki::cfg{SiteLocale} unset or has no alphabetic characters";
+        if ( ! defined $TWiki::cfg{SiteLocale} ||
+             $TWiki::cfg{SiteLocale} !~ /[a-z]/i ) {
+
+            die "UseLocale set but SiteLocale $TWiki::cfg{SiteLocale} unset or has no alphabetic characters";
         }
         # Extract the character set from locale and use in HTML templates
         # and HTTP headers
@@ -117,80 +217,89 @@ sub _setupLocale {
         # in testenv
         my $locale = setlocale(&LC_CTYPE, $TWiki::cfg{SiteLocale});
     }
+
+    # Check for unusable multi-byte encodings as site character set
+    # - anything that enables a single ASCII character such as '[' to be
+    # matched within a multi-byte character cannot be used for TWiki.
+
+    # Refuse to work with character sets that allow TWiki syntax
+    # to be recognised within multi-byte characters.
+
+    # FIXME: match other problematic multi-byte character sets
+    if( $siteCharset =~ /^(?:iso-?2022-?|hz-?|gb2312|gbk|gb18030|.*big5|.*shift_?jis|ms.kanji|johab|uhc)/i ) {
+
+        die "Cannot use this multi-byte encoding ('$siteCharset') as site character encoding\nPlease set a different character encoding in the SiteLocale setting.";
+    }
+
     $constantTags{CHARSET} = $siteCharset;
     $constantTags{SHORTLANG} = $siteLang;
     $constantTags{LANG} = $siteFullLang;
-}
 
-# STATIC Set up pre-compiled regexes for use in rendering.  All regexes with
-# unchanging variables in match should use the '/o' option, even if not in a
-# loop.
-# SMELL: use of $ua etc makes this routine longer and less readable - done for performance?
-sub _setupRegexes {
-    $regex{linkProtocolPattern} = "(file|ftp|gopher|https|http|irc|news|nntp|telnet)";
+    # Set up pre-compiled regexes for use in rendering.  All regexes with
+    # unchanging variables in match should use the '/o' option.
+    # In the regex hash, all precompiled REs have "Regex" at the
+    # end of the name. Anything else is a string, either intended
+    # for use as a character class, or as a sub-expression in
+    # another compiled RE.
+
+    # Build up character class components for use in regexes.
+    # Depends on locale mode and Perl version, and finally on
+    # whether locale-based regexes are turned off.
+    if ( not $TWiki::cfg{UseLocale} or $] < 5.006
+         or not $TWiki::cfg{LocaleRegexes} ) {
+
+        # No locales needed/working, or Perl 5.005, so just use
+        # any additional national characters defined in TWiki.cfg
+        $regex{upperAlpha} = "A-Z$TWiki::cfg{UpperNational}";
+        $regex{lowerAlpha} = "a-z$TWiki::cfg{LowerNational}";
+        $regex{numeric}    = '\d';
+        $regex{mixedAlpha} = "$regex{upperAlpha}$regex{lowerAlpha}";
+    } else {
+        # Perl 5.006 or higher with working locales
+        $regex{upperAlpha} = "[:upper:]";
+        $regex{lowerAlpha} = "[:lower:]";
+        $regex{numeric}    = "[:digit:]";
+        $regex{mixedAlpha} = "[:alpha:]";
+    }
+    $regex{mixedAlphaNum} = "$regex{mixedAlpha}$regex{numeric}";
+    $regex{lowerAlphaNum} = "$regex{lowerAlpha}$regex{numeric}";
+    $regex{upperAlphaNum} = "$regex{upperAlpha}$regex{numeric}";
+
+    # Compile regexes for efficiency and ease of use
+    # Note: qr// locks in regex modes (i.e. '-xism' here) - see Friedl
+    # book at http://regex.info/. 
+
+    $regex{linkProtocolPattern} =
+      "(file|ftp|gopher|https|http|irc|news|nntp|telnet)";
 
     # Header patterns based on '+++'. The '###' are reserved for numbered
     # headers
     # '---++ Header', '---## Header'
     $regex{headerPatternDa} = '^---+(\++|\#+)\s*(.+)\s*$';
     # '   ++ Header', '   + Header'
-    # SMELL: is this ever used? It's not documented....
+    # SMELL: is this ever used? It's not documented AFAICT
     $regex{headerPatternSp} = '^\t(\++|\#+)\s*(.+)\s*$';
     # '<h6>Header</h6>
     $regex{headerPatternHt} = '^<h([1-6])>\s*(.+?)\s*</h[1-6]>';
     # '---++!! Header' or '---++ Header %NOTOC% ^top'
     $regex{headerPatternNoTOC} = '(\!\!+|%NOTOC%)';
 
-    # Build up character class components for use in regexes.
-    # Depends on locale mode and Perl version, and finally on
-    # whether locale-based regexes are turned off.
-    my ( $ua, $la, $num, $ma );
-    if ( not $TWiki::cfg{UseLocale} or $] < 5.006 or not $TWiki::cfg{LocaleRegexes} ) {
-        # No locales needed/working, or Perl 5.005, so just use
-        # any additional national characters defined in TWiki.cfg
-        $ua = "A-Z$TWiki::cfg{UpperNational}";
-        $la = "a-z$TWiki::cfg{LowerNational}";
-        $num = '\d';
-        $ma = "$ua$la";
-    } else {
-        # Perl 5.006 or higher with working locales
-        $ua = "[:upper:]";
-        $la = "[:lower:]";
-        $num = "[:digit:]";
-        $ma = "[:alpha:]";
-    }
-    $regex{upperAlpha} = $ua;
-    $regex{lowerAlpha} = $la;
-    $regex{numeric} = $num;
-    $regex{mixedAlpha} = $ma;
-
-    my $man = "$ma$num";
-    $regex{mixedAlphaNum} = $man;
-    my $lan = "$la$num";
-    $regex{lowerAlphaNum} = $lan;
-    my $uan = "$ua$num";
-    $regex{upperAlphaNum} = $uan;
-
-    # Compile regexes for efficiency and ease of use
-    # Note: qr// locks in regex modes (i.e. '-xism' here) - see Friedl
-    # book at http://regex.info/. 
-
     # TWiki concept regexes
-    $regex{wikiWordRegex} = qr/[$ua]+[$la]+[$ua]+[$man]*/o;
-    $regex{webNameRegex} = qr/[$ua]+[$man]*/o;
-    $regex{defaultWebNameRegex} = qr/_[${man}_]+/o;
-    $regex{anchorRegex} = qr/\#[${man}_]+/o;
-    $regex{abbrevRegex} = qr/[$ua]{3,}s?\b/o;
+    $regex{wikiWordRegex} = qr/[$regex{upperAlpha}]+[$regex{lowerAlpha}]+[$regex{upperAlpha}]+[$regex{mixedAlphaNum}]*/o;
+    $regex{webNameRegex} = qr/[$regex{upperAlpha}]+[$regex{mixedAlphaNum}]*/o;
+    $regex{defaultWebNameRegex} = qr/_[$regex{mixedAlphaNum}_]+/o;
+    $regex{anchorRegex} = qr/\#[$regex{mixedAlphaNum}_]+/o;
+    $regex{abbrevRegex} = qr/[$regex{upperAlpha}]{3,}s?\b/o;
 
     # Simplistic email regex, e.g. for WebNotify processing - no i18n
     # characters allowed
     $regex{emailAddrRegex} = qr/([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/;
 
     # Filename regex, for attachments
-    $regex{filenameRegex} = qr/[$man\.]+/o;
+    $regex{filenameRegex} = qr/[$regex{mixedAlphaNum}\.]+/o;
 
     # Multi-character alpha-based regexes
-    $regex{mixedAlphaNumRegex} = qr/[$man]*/o;
+    $regex{mixedAlphaNumRegex} = qr/[$regex{mixedAlphaNum}]*/o;
 
     # Character encoding regexes
 
@@ -236,162 +345,7 @@ sub _setupRegexes {
 
     $regex{validUtf8StringRegex} =
       qr/^ (?: $regex{validUtf8CharRegex} )+ $/xo;
-
-}
-
-# STATIC When _expandAllTags matches a tag it looks up the
-# tag in the tables below, and either does a literal
-# expansion or calls the relevant handler method for
-# the tag.
-sub _setupHandlerMaps {
-
-    # Note; done like this rather than assigning the whole hash because
-    # someone might have added a new handler in the LocalSite.cfg
-    $constantTags{ENDSECTION}      = "";
-    $constantTags{HOMETOPIC}       = $TWiki::cfg{HomeTopicName};
-    $constantTags{MAINWEB}         = $TWiki::cfg{UsersWebName};
-    $constantTags{NOTIFYTOPIC}     = $TWiki::cfg{NotifyTopicName};
-    $constantTags{PUBURLPATH}      = $TWiki::cfg{PubUrlPath};
-    $constantTags{SCRIPTSUFFIX}    = $TWiki::cfg{ScriptSuffix};
-    $constantTags{SCRIPTURLPATH}   = $TWiki::cfg{DispScriptUrlPath};
-    $constantTags{SECTION}         = "";
-    $constantTags{STARTINCLUDE}    = "";
-    $constantTags{STATISTICSTOPIC} = $TWiki::cfg{Stats}{TopicName};
-    $constantTags{STOPINCLUDE}     = "";
-    $constantTags{TWIKIWEB}        = $TWiki::cfg{SystemWebName};
-    $constantTags{WEBPREFSTOPIC}   = $TWiki::cfg{WebPrefsTopicName};
-    $constantTags{WIKIHOMEURL}     = "$TWiki::cfg{DefaultUrlHost}/$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}";
-    $constantTags{WIKIPREFSTOPIC}  = $TWiki::cfg{SitePrefsTopicName};
-    $constantTags{WIKIUSERSTOPIC}  = $TWiki::cfg{UsersTopicName};
-    $constantTags{WIKIVERSION}     = $VERSION;
-
-    $functionTags{ATTACHURLPATH}     = \&_ATTACHURLPATH;
-    $functionTags{DATE}              = \&_DATE;
-    $functionTags{DISPLAYTIME}       = \&_DISPLAYTIME;
-    $functionTags{ENCODE}            = \&_ENCODE;
-    $functionTags{FORMFIELD}         = \&_FORMFIELD;
-    $functionTags{GMTIME}            = \&_GMTIME;
-    $functionTags{HTTP_HOST}         = \&_HTTP_HOST;
-    $functionTags{ICON}              = \&_ICON;
-    $functionTags{INCLUDE}           = \&_INCLUDE;
-    $functionTags{INTURLENCODE}      = \&_INTURLENCODE;
-    $functionTags{METASEARCH}        = \&_METASEARCH;
-    $functionTags{PLUGINVERSION}     = \&_PLUGINVERSION;
-    $functionTags{RELATIVETOPICPATH} = \&_RELATIVETOPICPATH;
-    $functionTags{REMOTE_ADDR}       = \&_REMOTE_ADDR;
-    $functionTags{REMOTE_PORT}       = \&_REMOTE_PORT;
-    $functionTags{REMOTE_USER}       = \&_REMOTE_USER;
-    $functionTags{REVINFO}           = \&_REVINFO;
-    $functionTags{SCRIPTNAME}        = \&_SCRIPTNAME;
-    $functionTags{SEARCH}            = \&_SEARCH;
-    $functionTags{SERVERTIME}        = \&_SERVERTIME;
-    $functionTags{SPACEDTOPIC}       = \&_SPACEDTOPIC;
-    $functionTags{"TMPL:P"}          = \&_TMPLP;
-    $functionTags{TOPICLIST}         = \&_TOPICLIST;
-    $functionTags{URLENCODE}         = \&_ENCODE;
-    $functionTags{URLPARAM}          = \&_URLPARAM;
-    $functionTags{VAR}               = \&_VAR;
-    $functionTags{WEBLIST}           = \&_WEBLIST;
-}
-
-BEGIN {
-    $VERSION = '$Date$ $Rev$ ';
-    $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$1 build $2/;
-
-    unless( ( $TWiki::cfg{DetailedOS} = $^O ) ) {
-        require Config;
-        $TWiki::cfg{DetailedOS} = $Config::Config{'osname'};
-    }
-    $TWiki::cfg{OS} = 'UNIX';
-    if ($TWiki::cfg{DetailedOS} =~ /darwin/i) { # MacOS X
-        $TWiki::cfg{OS} = 'UNIX';
-    } elsif ($TWiki::cfg{DetailedOS} =~ /Win/i) {
-        $TWiki::cfg{OS} = 'WINDOWS';
-    } elsif ($TWiki::cfg{DetailedOS} =~ /vms/i) {
-        $TWiki::cfg{OS} = 'VMS';
-    } elsif ($TWiki::cfg{DetailedOS} =~ /bsdos/i) {
-        $TWiki::cfg{OS} = 'UNIX';
-    } elsif ($TWiki::cfg{DetailedOS} =~ /dos/i) {
-        $TWiki::cfg{OS} = 'DOS';
-    } elsif ($TWiki::cfg{DetailedOS} =~ /^MacOS$/i) { # MacOS 9 or earlier
-        $TWiki::cfg{OS} = 'MACINTOSH';
-    } elsif ($TWiki::cfg{DetailedOS} =~ /os2/i) {
-        $TWiki::cfg{OS} = 'OS2';
-    }
-
-    do "TWiki.cfg";
-    die "Cannot read TWiki.cfg: $!" if $!;
-    die "Bad configuration: $@" if $@;
-    do "LocalSite.cfg";
-    die "Bad configuration: $@" if $@;
-
-    if( $TWiki::cfg{UseLocale} ) {
-        eval 'require locale; import locale ();';
-    }
-
-    ASSERT( defined $TWiki::cfg{DefaultUserLogin} );
-    ASSERT( defined $TWiki::cfg{DefaultUserWikiName} );
-    ASSERT( defined $TWiki::cfg{DefaultUrlHost} );
-    ASSERT( defined $TWiki::cfg{ScriptUrlPath} );
-    ASSERT( defined $TWiki::cfg{PubUrlPath} );
-    ASSERT( defined $TWiki::cfg{PubDir} );
-    ASSERT( defined $TWiki::cfg{TemplateDir} );
-    ASSERT( defined $TWiki::cfg{DataDir} );
-    ASSERT( defined $TWiki::cfg{SiteWebTopicName} );
-    ASSERT( defined $TWiki::cfg{NameFilter} );
-    ASSERT( defined $TWiki::cfg{UploadFilter} );
-    ASSERT( defined $TWiki::cfg{DebugFileName} );
-    ASSERT( defined $TWiki::cfg{WarningFileName} );
-    ASSERT( defined $TWiki::cfg{HtpasswdFileName} );
-    ASSERT( defined $TWiki::cfg{LogFileName} );
-    ASSERT( defined $TWiki::cfg{RemoteUserFileName} );
-    ASSERT( defined $TWiki::cfg{UsersTopicName} );
-    ASSERT( defined $TWiki::cfg{MapUserToWikiName} );
-    ASSERT( defined $TWiki::cfg{SystemWebName} );
-    ASSERT( defined $TWiki::cfg{UsersWebName} );
-    ASSERT( defined $TWiki::cfg{HomeTopicName} );
-    ASSERT( defined $TWiki::cfg{NotifyTopicName} );
-    ASSERT( defined $TWiki::cfg{SitePrefsTopicName} );
-    ASSERT( defined $TWiki::cfg{WebPrefsTopicName} );
-    ASSERT( defined $TWiki::cfg{NumberOfRevisions} );
-    ASSERT( defined $TWiki::cfg{ScriptSuffix} );
-    ASSERT( defined $TWiki::cfg{SafeEnvPath} );
-    ASSERT( defined $TWiki::cfg{MailProgram} );
-    ASSERT( defined $TWiki::cfg{NoSpamPadding} );
-    ASSERT( defined $TWiki::cfg{MimeTypesFileName} );
-    ASSERT( defined $TWiki::cfg{GetScriptUrlFromCgi} );
-    ASSERT( defined $TWiki::cfg{RemovePortNumber} );
-    ASSERT( defined $TWiki::cfg{RemoveImgInMailnotify} );
-    ASSERT( defined $TWiki::cfg{RememberUserIPAddress} );
-    ASSERT( defined $TWiki::cfg{PluralToSingular} );
-    ASSERT( defined $TWiki::cfg{HidePasswdInRegistration} );
-    ASSERT( defined $TWiki::cfg{DenyDotDotInclude} );
-    ASSERT( defined $TWiki::cfg{SuperAdminGroup} );
-    ASSERT( defined $TWiki::cfg{OS} );
-    ASSERT( defined $TWiki::cfg{DetailedOS} );
-    ASSERT( defined $TWiki::cfg{DisableAllPlugins} );
-    ASSERT( defined $TWiki::cfg{DisplayTimeValues} );
-    ASSERT( defined $TWiki::cfg{EgrepCmd} );
-    ASSERT( defined $TWiki::cfg{FgrepCmd} );
-    ASSERT( defined $TWiki::cfg{ForceUnsafeRegexes} );
-    ASSERT( defined $TWiki::cfg{UseLocale} );
-    ASSERT( defined $TWiki::cfg{UpperNational} );
-    ASSERT( defined $TWiki::cfg{LowerNational} );
-    ASSERT( defined $TWiki::cfg{LocaleRegexes} );
-    ASSERT( defined $TWiki::cfg{SiteLocale} );
-    ASSERT( defined $TWiki::cfg{SiteCharsetOverride} );
-    ASSERT( defined $TWiki::cfg{Stats} );
-    ASSERT( defined $TWiki::cfg{Log} );
-    ASSERT( defined $TWiki::cfg{RCS} );
-    ASSERT( defined $TWiki::cfg{ReplaceIfEditedAgainWithin} );
-
-    $TWiki::cfg{DispScriptUrlPath} = $TWiki::cfg{ScriptUrlPath}
-      unless defined( $TWiki::cfg{DispScriptUrlPath} );
-
-    _setupHandlerMaps();
-    _setupLocale();
-    _setupRegexes();
-}
+};
 
 use TWiki::Sandbox;   # system command sandbox
 use TWiki::Store;     # file I/O and rcs related functions
@@ -405,98 +359,6 @@ use TWiki::Render;    # HTML generation
 use TWiki::Templates; # TWiki template language
 use TWiki::Net;       # SMTP, get URL
 use TWiki::Time;      # date/time conversions
-
-# Concatenates date, time, and $text to a log file.
-# The logfilename can optionally use a %DATE% variable to support
-# logs that are rotated once a month.
-# | =$log= | Base filename for log file |
-# | =$message= | Message to print |
-sub _writeReport {
-    my ( $this, $log, $message ) = @_;
-
-    if ( $log ) {
-        my $time =
-          TWiki::Time::formatTime( time(), "\$year\$mo", "servertime");
-        $log =~ s/%DATE%/$time/go;
-        $time = TWiki::Time::formatTime( time(), undef, "servertime" );
-
-        if( open( FILE, ">>$log" ) ) {
-            print FILE "| $time | $message\n";
-            close( FILE );
-        } else {
-            print STDERR "Couldn't write \"$message\" to $log: $!\n";
-        }
-    }
-}
-
-=pod
-
----++ ObjectMethod writeLog (  $action, $webTopic, $extra, $user  )
-   * =$action= - what happened, e.g. view, save, rename
-   * =$wbTopic= - what it happened to
-   * =$extra= - extra info, such as minor flag
-   * =$user= - user who did the saving (user object or string user name)
-Write the log for an event to the logfile
-
-=cut
-
-sub writeLog {
-    my $this = shift;
-    ASSERT(ref($this) eq "TWiki") if DEBUG;
-    my $action = shift || "";
-    my $webTopic = shift || "";
-    my $extra = shift || "";
-    my $user = shift;
-
-    $user = $this->{user} unless $user;
-    if(ref($user) eq "TWiki::User") {
-        $user = $user->wikiName();
-    }
-    my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
-    my $text = "| $user | $action | $webTopic | $extra | $remoteAddr |";
-
-    $this->_writeReport( $TWiki::cfg{LogFileName}, $text );
-}
-
-=pod
-
----++ ObjectMethod writeWarning( $text )
-
-Prints date, time, and contents $text to $TWiki::cfg{WarningFileName}, typically
-'warnings.txt'. Use for warnings and errors that may require admin
-intervention. Use this for defensive programming warnings (e.g. assertions).
-
-=cut
-
-sub writeWarning {
-    my $this = shift;
-    ASSERT(ref($this) eq "TWiki") if DEBUG;
-    $this->_writeReport( $TWiki::cfg{WarningFileName}, @_ );
-}
-
-=pod
-
----++ ObjectMethod writeDebug( $text )
-
-Prints date, time, and contents of $text to $TWiki::cfg{DebugFileName}, typically
-'debug.txt'.  Use for debugging messages.
-
-=cut
-
-sub writeDebug {
-    my $this = shift;
-    ASSERT(ref($this) eq "TWiki") if DEBUG;
-    $this->_writeReport( $TWiki::cfg{DebugFileName}, @_ );
-}
-
-# Return value: boolean $isCharsetInvalid
-# Check for unusable multi-byte encodings as site character set
-# - anything that enables a single ASCII character such as '[' to be
-# matched within a multi-byte character cannot be used for TWiki.
-sub _invalidSiteCharset {
-    # FIXME: match other problematic multi-byte character sets 
-    return ( $siteCharset =~ /^(?:iso-?2022-?|hz-?|gb2312|gbk|gb18030|.*big5|.*shift_?jis|ms.kanji|johab|uhc)/i );
-}
 
 # Auto-detect UTF-8 vs. site charset in URL, and convert UTF-8 into site charset.
 # TODO: remove dependence on webname and topicname.
@@ -894,12 +756,36 @@ sub getScriptUrl {
 
     ASSERT(ref($this) eq "TWiki") if DEBUG;
 
+    $theTopic ||= "";
+    $theWeb ||= "";
+
     # SMELL: topics and webs that contain spaces?
 
     # $this->{urlHost} is needed, see Codev.PageRedirectionNotWorking
-    my $url = "$this->{urlHost}$TWiki::cfg{DispScriptUrlPath}/$theScript$TWiki::cfg{ScriptSuffix}/$theWeb/$theTopic";
-    # FIXME consider a plugin call here - useful for certificated logon environment
+    my $url = $this->{urlHost};
+    $url .= $TWiki::cfg{DispScriptUrlPath} . "/$theScript";
+    $url .= $TWiki::cfg{ScriptSuffix};
+    $url .= "/$theWeb/$theTopic";
+    # FIXME consider a plugin call here - useful for certificated
+    # logon environment
     return $url;
+}
+
+=pod
+
+---++ ObjectMethod getUniqueScriptURL( $web, $topic, $script ) -> $absoluteScriptURL
+
+Returns the absolute URL to a TWiki script, providing the web and topic as
+"path info" parameters.  Add a "t" parameter that makes the URL unique to
+defeat browser cacheing. The result looks something like this:
+"http://host/twiki/bin/$script/$web/$topic?t=123456"
+
+=cut
+
+sub getUniqueScriptUrl {
+    my( $this, $web, $topic, $script ) = @_;
+
+    return $this->getScriptUrl( $web, $topic, $script) . "?t=" . time();
 }
 
 =pod
@@ -1083,17 +969,6 @@ sub new {
         $topic = $this->{mainTopicname};
     }
 
-    # Refuse to work with character sets that allow TWiki syntax
-    # to be recognised within multi-byte characters.  Only allow 'oops'
-    # page to be displayed (redirect causes this code to be re-executed).
-    if ( _invalidSiteCharset() and $url !~ m!$TWiki::cfg{ScriptUrlPath}/oops! ) {
-        $this->writeWarning( "Cannot use this multi-byte encoding ('$siteCharset') as site character encoding" );
-        $this->writeWarning( "Please set a different character encoding in the \$TWiki::cfg{SiteLocale} setting in TWiki.cfg." );
-        $url = $this->getOopsUrl( $web, $topic, "oopsbadcharset" );
-        print $this->redirect( $url );
-        return;
-    }
-
     $topic =~ s/$TWiki::cfg{NameFilter}//go;
     $topic = $TWiki::cfg{HomeTopicName} unless $topic;
     $this->{topicName} = $topic;
@@ -1169,6 +1044,89 @@ sub new {
 
 # Uncomment when enabling AutoLoader
 #__END__
+
+=pod
+
+---++ ObjectMethod writeLog (  $action, $webTopic, $extra, $user  )
+   * =$action= - what happened, e.g. view, save, rename
+   * =$wbTopic= - what it happened to
+   * =$extra= - extra info, such as minor flag
+   * =$user= - user who did the saving (user object or string user name)
+Write the log for an event to the logfile
+
+=cut
+
+sub writeLog {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
+    my $action = shift || "";
+    my $webTopic = shift || "";
+    my $extra = shift || "";
+    my $user = shift;
+
+    $user = $this->{user} unless $user;
+    if(ref($user) eq "TWiki::User") {
+        $user = $user->wikiName();
+    }
+    my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
+    my $text = "| $user | $action | $webTopic | $extra | $remoteAddr |";
+
+    $this->_writeReport( $TWiki::cfg{LogFileName}, $text );
+}
+
+=pod
+
+---++ ObjectMethod writeWarning( $text )
+
+Prints date, time, and contents $text to $TWiki::cfg{WarningFileName}, typically
+'warnings.txt'. Use for warnings and errors that may require admin
+intervention. Use this for defensive programming warnings (e.g. assertions).
+
+=cut
+
+sub writeWarning {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
+    $this->_writeReport( $TWiki::cfg{WarningFileName}, @_ );
+}
+
+=pod
+
+---++ ObjectMethod writeDebug( $text )
+
+Prints date, time, and contents of $text to $TWiki::cfg{DebugFileName}, typically
+'debug.txt'.  Use for debugging messages.
+
+=cut
+
+sub writeDebug {
+    my $this = shift;
+    ASSERT(ref($this) eq "TWiki") if DEBUG;
+    $this->_writeReport( $TWiki::cfg{DebugFileName}, @_ );
+}
+
+# Concatenates date, time, and $text to a log file.
+# The logfilename can optionally use a %DATE% variable to support
+# logs that are rotated once a month.
+# | =$log= | Base filename for log file |
+# | =$message= | Message to print |
+sub _writeReport {
+    my ( $this, $log, $message ) = @_;
+
+    if ( $log ) {
+        my $time =
+          TWiki::Time::formatTime( time(), "\$year\$mo", "servertime");
+        $log =~ s/%DATE%/$time/go;
+        $time = TWiki::Time::formatTime( time(), undef, "servertime" );
+
+        if( open( FILE, ">>$log" ) ) {
+            print FILE "| $time | $message\n";
+            close( FILE );
+        } else {
+            print STDERR "Couldn't write \"$message\" to $log: $!\n";
+        }
+    }
+}
 
 =pod
 
@@ -1464,10 +1422,6 @@ sub _TOC {
     my $title = $params->{title} || "";
     $title = "\n<span class=\"twikiTocTitle\">$title</span>" if( $title );
 
-    my $result  = "";
-    my $line  = "";
-    my $level = "";
-
     if( "$web.$topic" ne "$defaultWeb.$defaultTopic" ) {
         unless( $this->{security}->checkAccessPermission
                 ( "view", $this->{user}, "", $topic, $web ) ) {
@@ -1478,25 +1432,13 @@ sub _TOC {
           $this->{store}->readTopic( $this->{user}, $web, $topic );
     }
 
-    my $headerDaRE =  $regex{headerPatternDa};
-    my $headerSpRE =  $regex{headerPatternSp};
-    my $headerHtRE =  $regex{headerPatternHt};
-    my $webnameRE =   $regex{webNameRegex};
-    my $wikiwordRE =  $regex{wikiWordRegex};
-    my $abbrevRE =    $regex{abbrevRegex};
-    my $headerNoTOC = $regex{headerPatternNoTOC};
-    my @list =
-      grep { /(<\/?pre>)|($headerDaRE)|($headerSpRE)|($headerHtRE)/o }
-        split( /\n/, $text );
-
     my $insidePre = 0;
     my $insideVerbatim = 0;
-    my $i = 0;
-    my $tabs = "";
-    my $anchor = "";
     my $highest = 99;
+    my $result  = "";
+
     # SMELL: this handling of <pre> is archaic.
-    foreach $line ( @list ) {
+    foreach my $line ( split( /\r?\n/, $text ) ) {
         if( $line =~ /^.*<pre>.*$/io ) {
             $insidePre++;
             next;
@@ -1513,52 +1455,45 @@ sub _TOC {
             $insideVerbatim--;
             next;
         }
-        if (!$insidePre && !$insideVerbatim) {
-            $level = $line ;
-            if ( $line =~  /$headerDaRE/o ) {
-                $level =~ s/$headerDaRE/$1/go;
-                $level = length $level;
-                $line  =~ s/$headerDaRE/$2/go;
-            } elsif
-               ( $line =~  /$headerSpRE/o ) {
-                $level =~ s/$headerSpRE/$1/go;
-                $level = length $level;
-                $line  =~ s/$headerSpRE/$2/go;
-            } elsif
-               ( $line =~  /$headerHtRE/io ) {
-                $level =~ s/$headerHtRE/$1/gio;
-                $line  =~ s/$headerHtRE/$2/gio;
-            }
-            my $urlPath = "";
-            if( "$web.$topic" ne "$defaultWeb.$defaultTopic" ) {
-                # not current topic, can't omit URL
-                $urlPath = $this->getScriptUrl($webPath, $topic, "view");
-            }
-            if( ( $line ) && ( $level <= $depth ) ) {
-                $anchor = $this->{renderer}->makeAnchorName( $line );
-                # cut TOC exclude '---+ heading !! exclude'
-                $line  =~ s/\s*$headerNoTOC.+$//go;
-                $line  =~ s/[\n\r]//go;
-                next unless $line;
-                $highest = $level if( $level < $highest );
-                $tabs = "";
-                for( $i=0 ; $i<$level ; $i++ ) {
-                    $tabs = "\t$tabs";
-                }
-                # Remove *bold*, _italic_ and =fixed= formatting
-                $line =~ s/(^|[\s\(])\*([^\s]+?|[^\s].*?[^\s])\*($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
-                $line =~ s/(^|[\s\(])_+([^\s]+?|[^\s].*?[^\s])_+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
-                $line =~ s/(^|[\s\(])=+([^\s]+?|[^\s].*?[^\s])=+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
-                # Prevent WikiLinks
-                $line =~ s/\[\[.*?\]\[(.*?)\]\]/$1/g;  # '[[...][...]]'
-                $line =~ s/\[\[(.*?)\]\]/$1/ge;        # '[[...]]'
-                $line =~ s/([\s\(])($webnameRE)\.($wikiwordRE)/$1<nop>$3/go;  # 'Web.TopicName'
-                $line =~ s/([\s\(])($wikiwordRE)/$1<nop>$2/go;  # 'TopicName'
-                $line =~ s/([\s\(])($abbrevRE)/$1<nop>$2/go;    # 'TLA'
-                # create linked bullet item, using a relative link to anchor
-                $line = "$tabs* <a href=\"$urlPath#$anchor\">$line</a>";
-                $result .= "\n$line";
-            }
+        next if ($insidePre || $insideVerbatim);
+        my $level;
+        if ( $line =~ m/$regex{headerPatternDa}/o ) {
+            $line = $2;
+            $level = length $1;
+        } elsif ( $line =~ m/$regex{headerPatternSp}/ ) {
+            $line = $2;
+            $level = length $1;
+        } elsif ( $line =~ m/$regex{headerPatternHt}/io ) {
+            $line = $2;
+            $level = $1;
+        } else {
+            next;
+        }
+        my $urlPath = "";
+        if( "$web.$topic" ne "$defaultWeb.$defaultTopic" ) {
+            # not current topic, can't omit URL
+            $urlPath = $this->getScriptUrl($webPath, $topic, "view");
+        }
+        if( $line && $level <= $depth ) {
+            # cut TOC exclude '---+ heading !! exclude this bit'
+            $line =~ s/\s*$regex{headerPatternNoTOC}.+$//go;
+            next unless $line;
+            my $anchor = $this->{renderer}->makeAnchorName( $line );
+            $highest = $level if( $level < $highest );
+            my $tabs = "\t" x $level;
+            # Remove *bold*, _italic_ and =fixed= formatting
+            $line =~ s/(^|[\s\(])\*([^\s]+?|[^\s].*?[^\s])\*($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+            $line =~ s/(^|[\s\(])_+([^\s]+?|[^\s].*?[^\s])_+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+            $line =~ s/(^|[\s\(])=+([^\s]+?|[^\s].*?[^\s])=+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+            # Prevent WikiLinks
+            $line =~ s/\[\[.*?\]\[(.*?)\]\]/$1/g;  # '[[...][...]]'
+            $line =~ s/\[\[(.*?)\]\]/$1/ge;        # '[[...]]'
+            $line =~ s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/$1<nop>$3/go;  # 'Web.TopicName'
+            $line =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/go;  # 'TopicName'
+            $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/go;    # 'TLA'
+            # create linked bullet item, using a relative link to anchor
+            $line = "$tabs* <a href=\"$urlPath#$anchor\">$line</a>";
+            $result .= "\n$line";
         }
     }
     if( $result ) {
@@ -1832,9 +1767,8 @@ sub _expandAllTags {
 
     $this->{SESSION_TAGS}{TOPIC}   = $topic;
     $this->{SESSION_TAGS}{WEB}     = $web;
-    # Make Edit URL unique - fix for RefreshEditPage.
     $this->{SESSION_TAGS}{EDITURL} =
-      "$TWiki::cfg{DispScriptUrlPath}/edit$TWiki::cfg{ScriptSuffix}/$web/$topic\?t=" . time();
+      $this->getUniqueScriptUrl( $web, $topic, "edit" );
 
     # SMELL: why is this done every time, and not statically during
     # template loading?
@@ -2286,42 +2220,15 @@ sub _DISPLAYTIME {
 #| $formatString | twiki format string (like in search) |
 sub _REVINFO {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
-    my $format = $params->{_DEFAULT} || $params->{format}
-                 || "\$rev - \$date - \$wikiusername";
+    my $format = $params->{_DEFAULT} || $params->{format};
     my $web    = $params->{web} || $theWeb;
     my $topic  = $params->{topic} || $theTopic;
     my $cgiQuery = $this->{cgiQuery};
     my $cgiRev = "";
     $cgiRev = $cgiQuery->param("rev") if( $cgiQuery );
-    my $revnum = $cgiRev || $params->{rev} || "";
-    $revnum = $this->{store}->cleanUpRevID( $revnum );
+    my $rev = $cgiRev || $params->{rev} || "";
 
-    my $value = $format;
-
-    # SMELL: if there is no RCS topic, this will be blank.
-    # should get this from meta. Oh, for a topic object!!
-    my( $date, $user, $rev, $comment ) =
-      $this->{store}->getRevisionInfo( $web, $topic, $revnum );
-
-    my $wun = "";
-    my $wn = "";
-    my $un = "";
-    if( $user ) {
-        $wun = $user->webDotWikiName();
-        $wn = $user->wikiName();
-        $un = $user->login();
-    }
-
-    $value =~ s/\$web/$web/goi;
-    $value =~ s/\$topic/$topic/goi;
-    $value =~ s/\$rev/r$rev/goi;
-    $value =~ s/\$date/TWiki::Time::formatTime($date)/geoi;
-    $value =~ s/\$comment/$comment/goi;
-    $value =~ s/\$username/$un/geoi;
-    $value =~ s/\$wikiname/$wn/geoi;
-    $value =~ s/\$wikiusername/$wun/geoi;
-
-    return $value;
+    return $this->{renderer}->renderRevisionInfo( $web, $topic, $rev, $format );
 }
 
 sub _ENCODE {

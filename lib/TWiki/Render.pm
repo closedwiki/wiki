@@ -103,9 +103,9 @@ sub _renderParent {
     my $sep = "";
     my $pWeb = $web;
     my $text = "";
-    my %parentMeta = $meta->findOne( "TOPICPARENT" );
+    my $parentMeta = $meta->get( "TOPICPARENT" );
     my $parent;
-    $parent = $parentMeta{name} if %parentMeta;
+    $parent = $parentMeta->{name} if $parentMeta;
     my @stack;
 
     while( $parent ) {
@@ -135,21 +135,21 @@ sub _renderParent {
 sub _renderMoved {
     my( $this, $web, $topic, $meta ) = @_;
     my $text = "";
-    my %moved = $meta->findOne( "TOPICMOVED" );
+    my $moved = $meta->get( "TOPICMOVED" );
 
-    if( %moved ) {
-        my $from = $moved{"from"};
+    if( $moved ) {
+        my $from = $moved->{"from"};
         $from =~ /(.*)\.(.*)/;
         my $fromWeb = $1;
         my $fromTopic = $2;
-        my $to   = $moved{"to"};
+        my $to   = $moved->{"to"};
         $to =~ /(.*)\.(.*)/;
         my $toWeb = $1;
         my $toTopic = $2;
-        my $by   = $moved{"by"};
+        my $by   = $moved->{"by"};
         my $u = $this->users()->findUser( $by );
         $by = $u->webDotWikiName() if $u;
-        my $date = $moved{"date"};
+        my $date = $moved->{"date"};
         $date = TWiki::Time::formatTime( $date, "", "gmtime" );
 
         # Only allow put back if current web and topic match stored information
@@ -178,10 +178,10 @@ sub _renderFormField {
 sub _renderFormData {
     my( $this, $web, $topic, $meta ) = @_;
     my $metaText = "";
-    my %form = $meta->findOne( "FORM" );
+    my $form = $meta->get( "FORM" );
 
-    if( %form ) {
-        my $name = $form{"name"};
+    if( $form ) {
+        my $name = $form->{name};
         $metaText = "<div class=\"twikiForm\">\n";
         $metaText .= "<p></p>\n"; # prefix empty line
         $metaText .= "|*[[$name]]*||\n"; # table header
@@ -1033,9 +1033,6 @@ sub getRenderedVersion {
             # Handle WikiWords 
             # " WebName.TopicName#anchor" or (WebName.TopicName#anchor) -> currentWeb, explicit web, topic, anchor
             $line =~ s/([\s\(])(($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$1.$this->_handleWikiWord($theWeb,$3,$4,$5)/geo;
-            # SMELL - what's the rule for inserting TranslationTokens in the code?
-#CCCC            $line =~ s/$TWiki::TranslationToken(\S.*?)$TWiki::TranslationToken/$1/go;
-ASSERT($line !~ /$TWiki::TranslationToken/);
         }
 
         $line =~ s/\n//;
@@ -1393,8 +1390,61 @@ sub putBackBlocks {
     return $text;
 }
 
-=end twiki
+=pod
+
+---++ ObjectMethod renderRevisionInfo($web, $topic, $rev, $format) -> $string
+
+Obtain and render revision info for a topic.
+   * =$web= - the web of the topic
+   * =$topic= - the topic
+   * =$rev= - the rev number, defaults to latest rev
+   * =$format= - the render format, defaults to =$rev - $time - $wikiusername=
+=$format= can contain the following keys for expansion:
+   | =$web= | the web name |
+   | =$topic= | the topic name |
+   | =$rev= | the rev number |
+   | =$date= | the date of the rev (no time) |
+   | =$time= | the full date and time of the rev |
+   | =$comment= | the comment |
+   | =$username= | the login of the saving user |
+   | =$wikiname= | the wikiname of the saving user |
+   | =$wikiusername= | the web.wikiname of the saving user |
 
 =cut
+
+sub renderRevisionInfo {
+    my( $this, $web, $topic, $rev, $format ) = @_;
+
+    if( $rev ) {
+        $rev = $this->store()->cleanUpRevID( $rev );
+    }
+
+    my( $meta, $text ) = $this->store()->readTopic( undef, $web, $topic, $rev );
+
+    my( $date, $user, $rev, $comment ) =
+      $meta->getRevisionInfo( $web, $topic, $rev );
+
+    my $wun = "";
+    my $wn = "";
+    my $un = "";
+    if( $user ) {
+        $wun = $user->webDotWikiName();
+        $wn = $user->wikiName();
+        $un = $user->login();
+    }
+
+    my $value = $format || "\$rev - \$time - \$wikiusername";
+    $value =~ s/\$web/$web/gi;
+    $value =~ s/\$topic/$topic/gi;
+    $value =~ s/\$rev/r$rev/gi;
+    $value =~ s/\$time/TWiki::Time::formatTime($date)/gei;
+    $value =~ s/\$date/TWiki::Time::formatTime($date, "\$day \$mon \$year")/gei;
+    $value =~ s/\$comment/$comment/gi;
+    $value =~ s/\$username/$un/gi;
+    $value =~ s/\$wikiname/$wn/gi;
+    $value =~ s/\$wikiusername/$wun/gi;
+
+    return $value;
+}
 
 1;

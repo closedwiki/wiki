@@ -1,5 +1,4 @@
-%META:TOPICINFO{author="TWikiGuest" date="1108666086" format="1.0" version="1.10"}%
-Description: tests for TOCs included from other topics and with multiple headings the same.
+Description: tests for TOCs included from other topics and with funny deprecated syntaxes.
 
 <table><tr><th>Expected</th><th>Actual</th></tr>
 <tr><td>
@@ -30,17 +29,45 @@ Description: tests for TOCs included from other topics and with multiple heading
 <div class="twikiToc">
 <span class="twikiTocTitle">The Top</span>
 <ul>
-<li> <a href="#Heading">Heading</a>
+<li> <a href="#H1_1">H1 <!--1--></a>
 <ul>
-<li> <a href="#Another_heading">Another heading</a>
+<li> <a href="#H2">H2</a>
 </li>
 </ul>
 </li>
-<li> <a href="#Oh_no_not_more">Oh no not more</a>
+<li> <a href="#H1_2">H1 <!--2--></a>
 <ul>
-<li> <a href="#Another_heading">Another heading</a>
+<li> <a href="#H2">H2</a>
+<ul>
+<li>
+<ul>
+<li> <a href="#Don_t_ignore">Don't ignore</a>
 </li>
 </ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li> <a href="#hash_H1">hash H1</a>
+<ul>
+<li> <a href="#H2">H2</a>
+</li>
+</ul>
+</li>
+<li> <a href="#hash_H1">hash H1</a>
+<ul>
+<li> <a href="#normal_H2">normal H2</a>
+</li>
+</ul>
+</li>
+<li> <a href="#space_H1">space H1</a>
+<ul>
+<li> <a href="#H2">H2</a>
+</li>
+</ul>
+</li>
+<li> <a href="#H1">H1</a>
 </li>
 </ul>
 </div>
@@ -50,11 +77,34 @@ Description: tests for TOCs included from other topics and with multiple heading
 %TOC{title="The Top" web="%WEB%" topic="%TOPIC%}%
 <!-- /actual -->
 </td></tr></table>
----+ Heading
+---+!! Ignore me H1
+---++++%NOTOC% Ignore me as well heading
+---+ H1 <!--1-->
 Some text
----++ Another heading
+---++ H2
 Some more text
----+ Oh no not more
+---+ H1 <!--2-->
 text
----++ Another heading
+---++ H2
 The rest
+
+---#!! Ignore me H1
+---#### Don't ignore %NOTOC% except this
+---# hash H1
+Some text
+---## H2
+Some more text
+---# hash H1
+text
+<h2>normal H2</H2>
+<h3>!! notoc H3</H3>
+The rest
+
+	#!! Ignore me H1
+	####%NOTOC% Ignore me as well heading
+	# space H1
+Some text
+	## H2
+Some more text
+	# H1
+text

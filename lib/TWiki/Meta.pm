@@ -68,8 +68,8 @@ sub new {
     # fields will be assumed to be meta-data.
     $self->{_session} = $session;
 
-    throw Error::Simple("ASSERT: no web") unless $web;
-    throw Error::Simple("ASSERT: no topic") unless $topic;
+    ASSERT($web) if DEBUG;
+    ASSERT($topic) if DEBUG;
 
     $self->{_web} = $web;
     $self->{_topic} = $topic;
@@ -82,7 +82,7 @@ sub users { my $this = shift; return $this->{_session}->{users}; }
 
 =pod
 
----++ ObjectMethod put($type, %args)
+---++ ObjectMethod put($type, \%args)
 
 Put a hash of key=value pairs into the given type set in this meta.
 
@@ -92,7 +92,7 @@ represented.
 =cut
 
 sub put {
-    my( $self, $type, %args ) = @_;
+    my( $self, $type, $args ) = @_;
     ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
 
     my $data = $self->{$type};
@@ -101,7 +101,7 @@ sub put {
     if( $data ) {
         if( $key ) {
             my $found = "";
-            my $keyName = $args{$key};
+            my $keyName = $args->{$key};
             my @data = @$data;
             unless( $keyName ) {
                 $self->{_session}->writeWarning( "Meta: Required $key parameter is missing for META:$type" );
@@ -109,19 +109,19 @@ sub put {
             }
             for( my $i = 0; $i < scalar( @$data ); $i++ ) {
                 if( $data[$i]->{$key} eq $keyName ) {
-                    $data->[$i] = \%args;
+                    $data->[$i] = $args;
                     $found = 1;
                     last;
                 }
             }
             unless( $found ) {
-                push @$data, \%args;
+                push @$data, $args;
             }
         } else {
-            $data->[0] = \%args; 
+            $data->[0] = $args;
         }
     } else {
-        my @data = ( \%args );
+        my @data = ( $args );
         $self->{$type} = \@data;
     }
 }
@@ -140,21 +140,19 @@ sub _key {
 # ===========================
 =pod
 
----++ ObjectMethod findOne( $type, $key  ) -> $string
+---++ ObjectMethod get( $type, $key ) -> \%hash
 
 Find the value of a meta-datum in the map. If the type is FIELD or
 FILEATTACHMENT, the $key parameter is required to say _which_
 entry you want. Otherwise it can be undef.
 
-SMELL: This method would be better named "lookup" or "get".
+The result is a reference to the hash for the item.
 
 =cut
 
-sub findOne {
+sub get {
     my( $self, $type, $keyValue ) = @_;
     ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
-
-    my %args = ();
 
     my $data = $self->{$type};
     my $key = _key( $type );
@@ -163,17 +161,15 @@ sub findOne {
         if( $key ) {
             foreach my $item ( @$data ) {
                 if( $item->{$key} eq $keyValue ) {
-                    %args = %$item;
-                    last;
+                    return $item;
                 }
             }
         } else {
-            my $item = $data->[0];
-            %args = %$item;
+            return $data->[0];
         }
     }
 
-    return %args;
+    return undef;
 }
 
 =pod
@@ -297,16 +293,16 @@ sub addTOPICINFO {
 
     $rev = 1 unless $rev;
 
-    my @args =
-      (
-       # compatibility; older versions of the code use RCS rev numbers
-       # save with them so old code can read these topics
-       version => "1.$rev",
-       date    => $time,
-       author  => $user->wikiName(),
-       format  => $formatVersion
-      );
-    $self->put( "TOPICINFO", @args );
+    $self->put( "TOPICINFO",
+                {
+                 # compatibility; older versions of the code use
+                 # RCS rev numbers save with them so old code can
+                 # read these topics
+                 version => "1.$rev",
+                 date    => $time,
+                 author  => $user->wikiName(),
+                 format  => $formatVersion
+                } );
 }
 
 =pod
@@ -326,13 +322,13 @@ sub getRevisionInfo {
     my $self = shift;
     ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
 
-    my %topicinfo = $self->findOne( "TOPICINFO" );
+    my $topicinfo = $self->get( "TOPICINFO" );
 
     my( $date, $author, $rev, $comment );
-    if( %topicinfo ) {
-       $date = $topicinfo{"date"} ;
-       $author = $self->users()->findUser($topicinfo{"author"});
-       $rev = $topicinfo{"version"};
+    if( $topicinfo ) {
+       $date = $topicinfo->{"date"} ;
+       $author = $self->users()->findUser($topicinfo->{"author"});
+       $rev = $topicinfo->{"version"};
        $rev =~ s/^\d+\.//;
        $comment = "";
     } else {
@@ -358,8 +354,8 @@ sub updateSets {
     my( $this, $rtext ) = @_;
     ASSERT(ref($this) eq "TWiki::Meta") if DEBUG;
 
-    my %form = $this->findOne( "FORM" );
-    if( %form ) {
+    my $form = $this->get( "FORM" );
+    if( $form ) {
         my @fields = $this->find( "FIELD" );
         foreach my $field ( @fields ) {
             my $key = $field->{"name"};
@@ -396,7 +392,7 @@ sub merge {
     my $data = $other->{FIELD};
     if( $data ) {
         foreach my $otherD ( @$data ) {
-            my $thisD = $this->findOne( "FIELD", $otherD->{name} );
+            my $thisD = $this->get( "FIELD", $otherD->{name} );
             if ( $thisD && $thisD->{value} ne $otherD->{value} ) {
                 my $merged = TWiki::Merge::merge( $otherD->{value},
                                                   $thisD->{value},
@@ -404,7 +400,7 @@ sub merge {
                 # SMELL: we don't merge attributes or title
                 $thisD->{value} = $merged;
             } elsif ( !$thisD ) {
-                $this->put("FIELD", %$otherD );
+                $this->put("FIELD", $otherD );
             }
         }
     }
@@ -412,9 +408,9 @@ sub merge {
     $data = $other->{FILEATTACHMENT};
     if( $data ) {
         foreach my $otherD ( @$data ) {
-            my $thisD = $this->findOne( "FILEATTACHMENT", $otherD->{name} );
+            my $thisD = $this->get( "FILEATTACHMENT", $otherD->{name} );
             if ( !$thisD ) {
-                $this->put("FILEATTACHMENT", %$otherD );
+                $this->put("FILEATTACHMENT", $otherD );
             }
         }
     }

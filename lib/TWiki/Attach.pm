@@ -256,8 +256,8 @@ sub getAttachmentLink {
     my ( $this, $user, $web, $topic, $attName, $meta ) = @_;
     ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
 
-    my %att = $meta->findOne( "FILEATTACHMENT", $attName );
-    my $fileComment = $att{comment};
+    my $att = $meta->get( "FILEATTACHMENT", $attName );
+    my $fileComment = $att->{comment};
     $fileComment = $attName unless ( $fileComment );
 
     my $fileLink = "";
@@ -558,20 +558,17 @@ sub _getOldAttachAttr {
     return ( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
 }
 
-# Convert a key=value list to a list of key,value,key,value.....
-sub _keyValue2list
-{
+# Convert a key=value list to a hash
+# SMELL: almost exactly duplicates TWiki::extractNameValuePairs
+sub _parseKeyValues {
     my( $args ) = @_;
-    
-    my @res = ();
-    
+    my $res = {};
+
     # Format of data is name="value" name1="value1" [...]
     while( $args =~ s/\s*([^=]+)=\"([^"]*)\"//o ) { #" avoid confusing syntax highlighters
-        push @res, $1;
-        push @res, $2;
+        $res->{$1} = $2;
     }
-    
-    return @res;
+    return $res
 }
 
 # =========================
@@ -600,17 +597,17 @@ sub migrateToFileAttachmentMacro {
               $this->_getOldAttachAttr( $line );
 
             if( $fileName ) {
-                my @attrs = (
-                             "name"    => $fileName,
-                             "version" => "",
-                             "path"    => $filePath,
-                             "size"    => $fileSize,
-                             "date"    => $fileDate,
-                             "user"    => $fileUser,
-                             "comment" => $fileComment,
-                             "attr"    => ""
-                            );
-                $meta->put( "FILEATTACHMENT", @attrs );
+                $meta->put( "FILEATTACHMENT",
+                            {
+                             name    => $fileName,
+                             version => "",
+                             path    => $filePath,
+                             size    => $fileSize,
+                             date    => $fileDate,
+                             user    => $fileUser,
+                             comment => $fileComment,
+                             attr    => ""
+                            });
             }
         }
     } else {
@@ -621,10 +618,9 @@ sub migrateToFileAttachmentMacro {
                 my $name = $1;
                 my $rest = $2;
                 $rest =~ s/^\s*//;
-                my @values = _keyValue2list( $rest );
-                unshift @values, $name;
-                unshift @values, "name";
-                $meta->put( "FILEATTACHMENT", @values );
+                my $values = _parseKeyValues( $rest );
+                $values->{name} = $name;
+                $meta->put( "FILEATTACHMENT", $values );
             }
         }
     }

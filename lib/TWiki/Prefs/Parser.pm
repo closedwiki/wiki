@@ -100,8 +100,7 @@ Settings are added to the $prefs passed.
 sub parseMeta {
     my( $self, $meta, $prefs ) = @_;
 
-    my %form = $meta->findOne( "FORM" );
-    if( %form ) {
+    if( $meta->get( "FORM" ) ) {
         my @fields = $meta->find( "FIELD" );
         foreach my $field( @fields ) {
             my $title = $field->{"title"};

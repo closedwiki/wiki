@@ -367,14 +367,14 @@ sub rename {
             my $text = "";
             ( $meta, $text ) =
               $session->{store}->readTopic( undef, $newWeb, $newTopic, undef );
-            my %parent = $meta->findOne( "TOPICPARENT" );
-            if( %parent && $parent{"name"} &&
-                $parent{"name"} ne $oldTopic ) {
-                if ( $parent{"name"} =~ /([^.]+)[.]([^.]+)/ ) {
+            my $parent = $meta->get( "TOPICPARENT" );
+            if( $parent && $parent->{"name"} &&
+                $parent->{"name"} ne $oldTopic ) {
+                if ( $parent->{"name"} =~ /([^.]+)[.]([^.]+)/ ) {
                     $new_url = $session->getScriptUrl( $1, $2, "view" );
                 } else {
                     $new_url =
-                      $session->getScriptUrl( $oldWeb, $parent{"name"}, "view" );
+                      $session->getScriptUrl( $oldWeb, $parent->{"name"}, "view" );
                 }
             } else {
                 $new_url = $session->getScriptUrl( $oldWeb, $TWiki::cfg{HomeTopicName}, "view" );

@@ -270,35 +270,6 @@ sub _renderRevisionDiff
     return "$result\n<\/table>";
 }
 
-#| Description: | gets a displayable date and user string |
-#| Parameter: =$web= | topic webname |
-#| Parameter: =$rev= | revision number of the topic |
-#| Parameter: =$topic= | topic name |
-#| Parameter: =$short= | use a shortened version of the date string |
-#| Return: =$text= | date - user |
-#| TODO: | move to Render.pm |
-sub _getRevInfo
-{
-    my( $session, $web, $rev, $topic, $short ) = @_;
-
-    my( $date, $user ) = $session->{store}->getRevisionInfo( $web, $topic, $rev);
-    my $wikiname =
-      $session->{renderer}->getRenderedVersion( $user->wikiName() );
-	
-    if ( $short ) {
-	    $date = TWiki::Time::formatTime( $date, "\$day \$month \$year" );
-        # eliminate white space to prevent wrap around in HR table:
-        $date =~ s/ /\&nbsp\;/go;
-    } else {
-        $date = TWiki::Time::formatTime( $date );
-	}
-
-    my $revInfo = "$date - $wikiname";
-    $revInfo =~ s/[\n\r]*//go;
-    return $revInfo;
-}
-
-
 =pod
 
 ---++ StaticMethod diff( $session, $web, $topic, $query )
@@ -378,10 +349,10 @@ sub diff {
             $rev2 = $maxrev-1;
         }
         $revTitle1 = $rev1;
-        $revInfo1 = _getRevInfo( $session, $webName, $rev1, $topic );
+        $revInfo1 = $session->{renderer}->renderRevisionInfo( $webName, $topic, $rev1, undef );
         if( $rev1 != $rev2 ) {
             $revTitle2 = $rev2;
-            $revInfo2 = _getRevInfo( $session, $webName, $rev2, $topic );
+            $revInfo2 = $session->{renderer}->renderRevisionInfo( $webName, $topic, $rev2, undef );
         }
     } else {
         $rev1 = 1;
@@ -409,7 +380,9 @@ sub diff {
         do {
             $diff = $difftmpl;
             $diff =~ s/%REVTITLE1%/r1\.$r1/go;
-            $rInfo = _getRevInfo( $session, $webName, $r1, $topic, 1 );
+            $rInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $r1, "\$date - \$wikiusername" );
+            # eliminate white space to prevent wrap around in HR table:
+            $rInfo =~ s/\s+/&nbsp;/g;
             $diff =~ s/%REVINFO1%/$rInfo/go;
             my $diffArrayRef = $session->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
             # $text = $session->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
@@ -426,7 +399,7 @@ sub diff {
             $r2 = $r2 - 1;
             if( $r2 < 1 ) { $r2 = 1; }
         } while( ( $diffType eq "history") && (( $r1 > $rev2 ) || ( $r1 == 1 )) );
-        
+
     } else {
         $diff = $difftmpl;
         $diff =~ s/%REVTITLE1%/$revTitle1/go;
@@ -435,12 +408,12 @@ sub diff {
         $diff =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
         $page .= $diff;
     }
-    
+
     if( $TWiki::cfg{Log}{rdiff} ) {
         # write log entry
         $session->writeLog( "rdiff", "$webName.$topic", "$rev1 $rev2" );
     }
-    
+
     # format "after" part
     $i = $maxrev;
     $j = $maxrev;
@@ -449,7 +422,7 @@ sub diff {
     if( ( $TWiki::cfg{NumberOfRevisions} > 0 ) && ( $TWiki::cfg{NumberOfRevisions} < $maxrev ) ) {
         $breakRev = $maxrev - $TWiki::cfg{NumberOfRevisions} + 1;
     }
-    
+
     while( $i > 0 ) {
         $revisions .= " | <a href=\"$session->{scriptUrlPath}/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\">$i</a>";
         if( $i != 1 ) {

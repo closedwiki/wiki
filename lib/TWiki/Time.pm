@@ -131,6 +131,18 @@ sub parseTime {
    * =$epochSeconds= epochSecs GMT
    * =$formatString= twiki time date format
    * =$outputTimeZone= timezone to display ("gmtime" or "servertime", default "gmtime")
+=$formatString= supports:
+   | $seconds | secs |
+   | $minutes | mins |
+   | $hours | hours |
+   | $day | date |
+   | $wday | weekday name |
+   | $dow | day number (0 = Sunday) |
+   | $week | week number |
+   | $month | month name |
+   | $mo | month number |
+   | $year | 4-digit year |
+   | $ye | 2-digit year |
 
 =cut
 

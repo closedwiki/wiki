@@ -310,8 +310,8 @@ sub renderForEdit {
         my $tooltip = shift @fieldInfo;
         my $attributes = shift @fieldInfo;
 
-        my %field = $meta->findOne( "FIELD", $fieldName );
-        my $value = $field{"value"};
+        my $field = $meta->get( "FIELD", $fieldName );
+        my $value = $field->{"value"};
         if( ! defined( $value ) && $attributes =~ /S/ ) {
             # Allow initialisation based on a preference
             $value = $this->prefs()->getPreferencesValue($fieldName);
@@ -462,9 +462,9 @@ sub fieldVars2Meta {
     #$this->{session}->writeDebug( "Form::fieldVars2Meta " . $query->query_string );
 
     my @fieldsInfo = ();
-    my %form = $meta->findOne( "FORM" );
-    if( %form ) {
-        @fieldsInfo = $this->getFormDef( $webName, $form{"name"} );
+    my $form = $meta->get( "FORM" );
+    if( $form ) {
+        @fieldsInfo = $this->getFormDef( $webName, $form->{"name"} );
     }
 
    foreach my $fieldInfop ( @fieldsInfo ) {
@@ -501,12 +501,14 @@ sub fieldVars2Meta {
        # Have title and name stored so that topic can be viewed without reading in form definition
        $value = "" if( ! defined( $value ) && ! $justOverride );
        if( defined( $value ) ) {
-           my @args = ( "name" =>  $fieldName,
-                        "title" => $title,
-                        "value" => $value );
-           push @args, ( "attributes" => $attributes ) if( $attributes );
-
-           $meta->put( "FIELD", @args );
+           my $args =
+             {
+              name =>  $fieldName,
+              title => $title,
+              value => $value,
+              attributes => $attributes,
+             };
+           $meta->put( "FIELD", $args );
        }
    }
 
@@ -576,8 +578,8 @@ sub changeForm {
       $this->store()->readTopic( $this->{session}->{user}, $theWeb, $theTopic, undef );
     my $formName = $q->param( 'formtemplate' ) || "";
     if( ! $formName ) {
-        my %form = $metat->findOne( "FORM" );
-        $formName = $form{"name"};
+        my $form = $metat->get( "FORM" );
+        $formName = $form->{"name"} if $form;
     }
     $formName = "" if( !$formName || $formName eq "none" );
 
@@ -726,14 +728,18 @@ sub upgradeCategoryTable {
             foreach my $oldCat ( @items ) {
                 my $name = $oldCat->[0];
                 my $value = $oldCat->[2];
-                $meta->put( "FORM", ( "name" => "" ) );
-                $meta->put( "FIELD", ( "name" => $name, "title" => $name, "value" => $value ) );
+                $meta->put( "FORM", { name => "" } );
+                $meta->put( "FIELD",
+                            { name => $name,
+                              title => $name,
+                              value => $value
+                            } );
             }
             return;
         }
 
         my @fieldsInfo = $this->getFormDef( $web, $defaultFormTemplate );
-        $meta->put( "FORM", ( name => $defaultFormTemplate ) );
+        $meta->put( "FORM", { name => $defaultFormTemplate } );
 
         foreach my $catInfop ( @fieldsInfo ) {
            my @catInfo = @$catInfop;
@@ -747,10 +753,12 @@ sub upgradeCategoryTable {
                   last;
                }
            }
-           my @args = ( "name" => $fieldName,
-                        "title" => $title,
-                        "value" => $value );
-           $meta->put( "FIELD", @args );
+           $meta->put( "FIELD",
+                     {
+                      name => $fieldName,
+                      title => $title,
+                      value => $value,
+                     } );
         }
 
     } else {

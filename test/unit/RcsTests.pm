@@ -37,6 +37,8 @@ my $saveWF;
 
 sub set_up {
     my $this = shift;
+    die unless (defined $TWiki::cfg{PubUrlPath});
+    die unless (defined $TWiki::cfg{ScriptSuffix});
     $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl );
     $saveWF = $TWiki::cfg{WarningFileName};
     $TWiki::cfg{WarningFileName} = "/tmp/junk";
@@ -1133,16 +1135,17 @@ sub test_ciLocked {
     my $user = `whoami`;
     chop($user);
     my $vfile = $rcs->{file}.",v";
-    my $txt = $rcs->_readFile($vfile);
-    $txt =~ s/$user/blocker_socker/g;
-    `chmod 777 $vfile`;
-    $rcs->_saveFile( $vfile, $txt);
+    `co -f -q -l $vfile`;
+
     # file is now locked by blocker_socker, save some new text
     $rcs->_saveFile( $rcs->{file}, "Shimmy Dimmy" );
     # check it in
-    $rcs->_ci( $rcs->{file}, "Gotcha", "SheikAlot" );
-    $txt = $rcs->_readFile($vfile);
+    $rcs->_ci( "Gotcha", "SheikAlot" );
+    my $txt = $rcs->_readFile($vfile);
     $this->assert_matches(qr/Gotcha/s, $txt);
+    $this->assert_matches(qr/BungditDin/s, $txt);
+    $this->assert_matches(qr/Shimmy Dimmy/, $txt);
+    $this->assert_matches(qr/Shooby Dooby/, $txt);
     $this->assert_matches(qr/SheikAlot/s, $txt);
 }
 

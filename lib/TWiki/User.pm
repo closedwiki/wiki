@@ -328,9 +328,9 @@ sub _getEmailsFromUserTopic {
       $this->store()->readTopic( undef,
                                  $this->{web}, $this->{wikiname}, undef );
     my @fieldValues;
-    my %entry = $meta->findOne("FIELD", "Email");
-    if (keys %entry) {
-        push(@fieldValues, $entry{value});
+    my $entry = $meta->get("FIELD", "Email");
+    if ($entry) {
+        push(@fieldValues, $entry->{value});
     } else {
         foreach my $l (split ( /\r?\n/, $text  )) {
             if ($l =~ /^\s+\*\s+E-?mail:\s+([\w\-\.\+]+\@[\w\-\.\+]+)/i) {

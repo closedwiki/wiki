@@ -1019,7 +1019,7 @@ sub _extractTopicInfo {
 
     my ( $revdate, $revuser, $revnum ) =
       $meta->getRevisionInfo( $web, $topic );
-    $info->{editby}     = $revuser ? $revuser->wikiName() : "";
+    $info->{editby}     = $revuser ? $revuser->webDotWikiName() : "";
     $info->{modified}   = $revdate;
     $info->{revNum}     = $revnum;
 
@@ -1096,8 +1096,8 @@ sub _getMetaParent
     my( $theMeta ) = @_;
 
     my $value = "";
-    my %parent = $theMeta->findOne( "TOPICPARENT" );
-    $value = $parent{"name"} if( %parent );
+    my $parent = $theMeta->get( "TOPICPARENT" );
+    $value = $parent->{"name"} if( $parent );
     return $value;
 }
 
@@ -1139,9 +1139,9 @@ sub _getMetaFormName
 {
     my( $theMeta ) = @_;
 
-    my %aForm = $theMeta->findOne( "FORM" );
-    if( %aForm ) {
-        return $aForm{"name"};
+    my $aForm = $theMeta->get( "FORM" );
+    if( $aForm ) {
+        return $aForm->{"name"};
     }
     return "";
 }

@@ -153,13 +153,13 @@ sub _save {
     if( $theParent eq "none" ) {
         $newMeta->remove( "TOPICPARENT" );
     } elsif( $theParent ) {
-        $newMeta->put( "TOPICPARENT", ( "name" => $theParent ) );
+        $newMeta->put( "TOPICPARENT", { "name" => $theParent } );
     }
 
     my $formTemplate = $query->param( "formtemplate" );
     if( $formTemplate ) {
         $newMeta->remove( "FORM" );
-        $newMeta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
+        $newMeta->put( "FORM", { name => $formTemplate } ) if( $formTemplate ne "none" );
     }
 
     # Expand field variables, unless this new page is templated

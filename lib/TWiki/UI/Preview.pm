@@ -78,13 +78,14 @@ sub preview {
         if( $theParent eq "none" ) {
             $meta->remove( "TOPICPARENT" );
         } elsif( $theParent ) {
-            $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+            $meta->put( "TOPICPARENT", { "name" => $theParent } );
         }
         $tmpl =~ s/%TOPICPARENT%/$theParent/go;
 
         if( $formTemplate ) {
             $meta->remove( "FORM" );
-            $meta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
+            $meta->put( "FORM", { name => $formTemplate } )
+              if( $formTemplate ne "none" );
             $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
         } else {
             $tmpl =~ s/%FORMTEMPLATE%//go;

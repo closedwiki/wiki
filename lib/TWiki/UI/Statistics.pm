@@ -75,9 +75,9 @@ sub statistics {
 
     my $logMonth;
     my $logYear;
-    if ( $logDate = /^(\d{4})(\d{2})%/ ) {
+    if ( $logDate =~ /^(\d\d\d\d)(\d\d)$/ ) {
         $logYear = $1;
-        $logMonth = $TWiki::Time::ISOMONTH[$2 % 12]
+        $logMonth = $TWiki::Time::ISOMONTH[ ( $2 % 12 ) - 1 ];
     } else {
         _printMsg( "!Error in date $logDate - must be YYYYMM", $session );
         return;

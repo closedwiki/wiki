@@ -231,7 +231,6 @@ sub buildCommandLine {
                             if ( $param =~ /^([0-9A-Za-z.+_\-]{0,30})$/ ) {
                                 push @targs, $1;
                             } else {
-ASSERT(0);
                                 throw Error::Simple( "invalid string argument" );
                             }
                         } elsif ($flag =~ /D/) {

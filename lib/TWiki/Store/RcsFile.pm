@@ -76,13 +76,13 @@ sub init {
         my $tempPath = $TWiki::cfg{DataDir} . "/" . $self->{web};
         unless( -e $tempPath ) {
             umask( 0 );
-            mkdir( TWiki::Sandbox::untaintUnchecked( $tempPath ),
+            mkdir( $tempPath,
                    $TWiki::cfg{RCS}{dirPermission} );
         }
         $tempPath = $self->_makeFileDir( 1, ",v" );
         unless( -e $tempPath ) {
             umask( 0 );
-            mkdir( TWiki::Sandbox::untaintUnchecked( $tempPath ),
+            mkdir( $tempPath,
                    $TWiki::cfg{RCS}{dirPermission} );
         }
     }
@@ -173,16 +173,13 @@ sub _moveTopic {
    # Change data file
    my $new = new TWiki::Store::RcsFile( $self->{session},
                                         $newWeb, $newTopic, "" );
-   my $from = $self->{file};
-   my $to =  $new->{file};
-   unless( move( $from, $to ) ) {
+   unless( move( $self->{file}, $new->{file} ) ) {
        return "data file move failed.";
    }
 
    # Change data file history
-   my $oldHistory = $self->{rcsFile};
-   if( -e $oldHistory ) {
-       unless( move( $oldHistory, $new->{rcsFile} ) ) {
+   if( -e $self->{rcsFile} ) {
+       unless( move( $self->{rcsFile}, $new->{rcsFile} )) {
            return "history file move failed.";
        }
    }
@@ -191,7 +188,7 @@ sub _moveTopic {
    my $newPubWebDir = $new->_makePubWebDir( $newWeb );
    unless( -e $newPubWebDir ) {
        umask( 0 );
-       mkdir( TWiki::Sandbox::untaintUnchecked( $newPubWebDir ),
+       mkdir( $newPubWebDir,
               $TWiki::cfg{RCS}{dirPermission} )
          or return "mkdir $newPubWebDir failed";;
    }
@@ -200,7 +197,10 @@ sub _moveTopic {
    my $oldAttachDir = $self->_makeFileDir( 1, "" );
    my $newAttachDir = $new->_makeFileDir( 1, "");
    if( -e $oldAttachDir ) {
-       unless( move( $oldAttachDir, $newAttachDir ) ) {
+       unless( move(
+                    $oldAttachDir,
+                    $newAttachDir
+                   ) ) {
            return "attach move failed";
        }
    }
@@ -230,20 +230,23 @@ sub _moveAttachment {
     my $tempPath = $new->_makePubWebDir();
     unless( -e $tempPath ) {
         umask( 0 );
-        mkdir( TWiki::Sandbox::untaintUnchecked( $tempPath ), 0775 )
+        mkdir( $tempPath, 0775 )
           or return "mkdir $tempPath failed";
     }
     $tempPath = $new->_makeFileDir( 1 );
     unless( -e $tempPath ) {
         umask( 0 );
-        mkdir( TWiki::Sandbox::untaintUnchecked( $tempPath ), 0775 )
+        mkdir( $tempPath, 0775 )
           or return "mkdir $tempPath failed: $!";
     }
 
     # Move attachment
     my $oldAttachment = $self->{file};
     my $newAttachment = $new->{file};
-    unless( move( $oldAttachment, $newAttachment ) ) {
+    unless( move(
+                 $oldAttachment,
+                 $newAttachment
+                ) ) {
         return "Failed to move attachment; $what ($!)";
     }
 
@@ -251,7 +254,7 @@ sub _moveAttachment {
     my $newRcsDir = $new->_makeFileDir( 1, ",v" );
     if ( ! -e $newRcsDir ) {
         umask( 0 );
-        mkdir( TWiki::Sandbox::untaintUnchecked( $newRcsDir ),
+        mkdir( $newRcsDir,
                $TWiki::cfg{RCS}{dirPermission} )
           or return "mkdir $newRcsDir failed: $!";
     }
@@ -260,7 +263,10 @@ sub _moveAttachment {
     my $oldAttachmentRcs = $self->{rcsFile};
     my $newAttachmentRcs = $new->{rcsFile};
     if( -e $oldAttachmentRcs ) {
-        unless( move( $oldAttachmentRcs, $newAttachmentRcs ) ) {
+        unless( move(
+                     $oldAttachmentRcs,
+                     $newAttachmentRcs
+                    ) ) {
             return "Failed to move attachment history; $what ($!)";
         }
     }
@@ -365,14 +371,14 @@ sub _saveAttachment {
     my $tempPath = $self->_makePubWebDir();
     if( ! -e $tempPath ) {
         umask( 0 );
-        mkdir( TWiki::Sandbox::untaintUnchecked( $tempPath ),
+        mkdir( $tempPath,
                $TWiki::cfg{RCS}{dirPermission} )
           or return "mkdir failed: $!";
     }
     $tempPath = $self->_makeFileDir( 1 );
     if( ! -e $tempPath ) {
         umask( 0 );
-        mkdir( TWiki::Sandbox::untaintUnchecked( $tempPath ), 0775 )
+        mkdir( $tempPath, 0775 )
           or return "mkdir failed: $!";
     }
 
@@ -476,7 +482,7 @@ sub _makeFileName {
         $file = "$TWiki::cfg{DataDir}/$web$extra/$topic$extension";
     }
 
-    return $file;
+    return TWiki::Sandbox::untaintUnchecked( $file );
 }
 
 # Get directory that topic or attachment lives in
@@ -507,7 +513,7 @@ sub _makeFileDir {
         $dir = "$TWiki::cfg{PubDir}/$web/$topic$suffix";
     }
 
-    return $dir;
+    return TWiki::Sandbox::untaintUnchecked( $dir );
 }
 
 sub _makePubWebDir {
@@ -515,7 +521,7 @@ sub _makePubWebDir {
 
     my $dir = $TWiki::cfg{PubDir} . "/" . $self->{web};
 
-    return $dir;
+    return TWiki::Sandbox::untaintUnchecked( $dir );
 }
 
 sub _mkTmpFilename {
@@ -534,7 +540,7 @@ sub _mktemp {
     ($template,$dir,$ext) = @_;
     @template = split //, $template;
 
-    ASSERT(substr($template, -6, 6) ne 'XXXXXX');
+    ASSERT(substr($template, -6, 6) ne 'XXXXXX') if DEBUG;
 
     if ($dir){
         ASSERT(-e $dir) if DEBUG;
