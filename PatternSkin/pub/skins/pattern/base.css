@@ -46,7 +46,7 @@ p {
 }
 :link:hover, :visited:hover {
 	text-decoration:underline;
-	background-color: #daeaff;
+	background-color: #b4d5ff;
 }
 
 a:link img, a:visited img, a:hover img, a:active img { 
@@ -120,7 +120,7 @@ div#TWikiTopic {
 div#TWikiMain {
 	font-size: 100%;
 	margin: 0 0 0 18em;
-	padding: 0 2em 1em 2em;
+	padding: 0 2em 2em 2em;
 }
 div#TWikiTopBar {
 	height: 60px;
@@ -180,15 +180,18 @@ div#TWikiTopBar {
 div#TWikiLeftBar {
 	border-top: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
-	padding-bottom: 1em;
-	padding-top: 0;
+	/*
+	border-bottom: 2px solid #98a2b0;
+	*/
 	color: #666;
-	background-color: #fbfbfb;
+	background-color: #b4d5ff;
 }
 div#TWikiLeftBar div.TWikiLeftBarContents {
 	font-size: 95%;
 	line-height: 130%;
-	margin: 1em 0 1em 2em;
+	background-color: #fbfbfb;
+	margin: 0 0 0 0.8em;
+	padding: 1em 0 1.7em 2em;
 }
 div#TWikiLeftBar .TWikiLeftBarContents ul {
 	padding: 0;
@@ -216,7 +219,7 @@ div#TWikiBottomBar {
 	border-top: 1px solid #ddd;
 	/* align with TWikiMain content */
 	margin: 0 0 0 18em;
-	padding: 0.25em 2em 0.5em 2em;
+	padding: 0.25em 2em 1em 2em;
 }
 
 /* CONTENT ELEMENTS */
@@ -230,7 +233,7 @@ div#TWikiBottomBar {
 	
 }
 .TWikiBottomBarMainContents {
-	font-size: 90%;
+	font-size: 80%;
 	line-height: 140%;
 }
 
@@ -410,14 +413,14 @@ div.TWikiToolBar ul {
 	width: 100%;
 	font-size: 95%;
 	color: #666;
-	background-color: #98A2B0;
+	background-color: #98a2b0;
 }
 div.TWikiToolBar ul li {
 	display: inline;
 }
 div.TWikiToolBar ul li a:link,
 div.TWikiToolBar ul li a:visited {
-	padding: 0.25em 0.75em;
+	padding: 0.25em 0.85em;
 	text-decoration: none;
 	float: left;
 	color: white;
@@ -426,8 +429,8 @@ div.TWikiToolBar ul li a:visited {
 	margin-right: 1px;
 }
 div.TWikiToolBar ul li a:hover {
-	background-color: #daeaff;
-	color: #2c57c2;
+	background-color: #b4d5ff;
+	color: white;
 	text-decoration: underline;
 }
 div.TWikiToolBar input {
