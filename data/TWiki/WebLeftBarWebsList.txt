@@ -1,0 +1,7 @@
+%META:TOPICINFO{author="TWikiGuest" date="1107842829" format="1.0" version="1.1"}%
+<!--
+---+ Webs
+-->
+	* *Webs*
+%WEBLIST{"<span style="background-color: %$markerVAR{\"WEBBGCOLOR\" web=$qname}$marker%\">  </span> <b><a href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$name/%HOMETOPIC%\">$name</a></b><br/>"}%
+
