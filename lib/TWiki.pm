@@ -63,7 +63,7 @@ use vars qw(
         $webName $topicName $includingWebName $includingTopicName
         $defaultUserName $userName $wikiUserName 
         $wikiHomeUrl $defaultUrlHost $urlHost
-        $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir $libsDir
+        $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir
         $wikiToolName $securityFilter $uploadFilter
         $debugFilename $htpasswdFilename
         $logFilename $remoteUserFilename $wikiUsersTopicname
