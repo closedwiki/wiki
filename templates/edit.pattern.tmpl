@@ -3,8 +3,26 @@
 %TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
 %TMPL:DEF{"titlehelp"}% %TMPL:END%
 %TMPL:DEF{"webaction"}%Change topic%TMPL:END%
-%TMPL:DEF{"topicaction"}% <input type="submit" value=" &nbsp; Preview Changes &nbsp; " />
-  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
+
+%TMPL:DEF{"topicaction"}%
+<fieldset><legend><span class="deem"> [[%TWIKIWEB%.AccessKeys][AccessKeys]]: S = Save, Q = Quiet Save, K = Checkpoint, P = Preview, C = Cancel</span></legend>
+   <label accesskey="s" for="save">
+       <input type="submit" name="action" value="Save" />
+   </label>
+   <label accesskey="q" for="quietsave">
+       <input type="submit" name="action" value="QuietSave" />
+   </label>
+   <label accesskey="k" for="checkpoint">
+        <input type="submit" name="action" value="Checkpoint" />
+   </label>
+   <label accesskey="p" for="preview">
+        <input type="submit" name="action" value="Preview" />
+   </label>
+   <label accesskey="c" for="cancel">
+        <input type="submit" name="action" value="Cancel" />
+   </label>
+</fieldset>%TMPL:END%
+
 %TMPL:DEF{"script"}%
 <script language="JavaScript">
 <!--HIDE
@@ -71,7 +89,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 <body id="editpage" onload="initForm()"><a name="PageTop"></a>%TMPL:END%
 
 %TMPL:DEF{"main"}%
-<form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"topbar"}%
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea><br />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
