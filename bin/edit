@@ -74,12 +74,12 @@ sub main
         ( ! &TWiki::Store::topicExists( $webName, $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         TWiki::redirect( $query, &TWiki::getViewUrl( $webName, $topic ) );
-	return;
+        return;
     }
 
     # read topic and check access permission
     if( &TWiki::Store::topicExists( $webName, $topic ) ) {
-	( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+        ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
     }
     if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $text, $topic, $webName ) ) {
         # user has not permission to change the topic
@@ -106,7 +106,7 @@ sub main
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopslocked",
             $lockUser, $editLock, $lockTime );
         TWiki::redirect( $query, $url );
-	return;
+        return;
     }
     &TWiki::Store::lockTopic( $topic );
 
@@ -118,7 +118,7 @@ sub main
     if( ! &TWiki::Store::topicExists( $webName, $topic ) ) {
         my $templateTopic = $query->param( "templatetopic" ) || "";
         if( $templateTopic ) {
-	    ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $templateTopic );
+            ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $templateTopic );
         }
         if( ! $text ) {
             ( $meta, $text ) = &TWiki::Store::readTemplateTopic( "WebTopicEditTemplate" );
@@ -127,9 +127,9 @@ sub main
 
         # If present, instantiate form
         if( ! $formTemplate ) {
-	    my %args = $meta->findOne( "FORM" );
-	    $formTemplate = $args{"name"};
-	}
+            my %args = $meta->findOne( "FORM" );
+            $formTemplate = $args{"name"};
+        }
 
         my $foo = &TWiki::getLocaldate();
         $text =~ s/%DATE%/$foo/go;
@@ -165,7 +165,7 @@ sub main
        if( defined $ptext ) {
            $text = $ptext;
            $text = &TWiki::decodeSpecialChars( $text );
-    }
+       }
     }
     
     if( $saveCmd eq "repRev" ) {
