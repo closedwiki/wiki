@@ -165,11 +165,13 @@ print "<tr><th align=\"right\">\$rcsDir:</th><td>$rcsDir</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is the directory where RCS is located.";
 print "</td></tr>\n";
+# FIXME should look for ci.exe in Windows
 if( ! ( -e "$rcsDir/ci" ) ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
     print "RCS program <tt>$rcsDir/ci</tt> not found. Check the path.";
     print "</td></tr>\n";
 }
+# FIXME check that diff command is in path, required by ci
 
 print "<tr><th align=\"right\">\$lsCmd:</th><td>$lsCmd</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
