@@ -767,7 +767,7 @@ sub searchWeb {
                 $out =~ s/%TIME%/$revDate/o;
                 my $revNumText;
                 if( $revNum > 1 ) {
-                    $revNumText = $revNum;
+                    $revNumText = "r$revNum";
                 } else {
                     $revNumText = "<span class=\"twikiNew\"><b>NEW</b></span>";
                 }
