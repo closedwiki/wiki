@@ -199,9 +199,9 @@ sub searchWeb
 
     my $cmd = "";
     if( $theScope eq "topic" ) {
-        $cmd = "$TWiki::lsCmd %FILES% | %GREP% %SWITCHES% $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote";
+        $cmd = "$TWiki::lsCmd %FILES% | %GREP% %SWITCHES% -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote";
     } else {
-        $cmd = "%GREP% %SWITCHES% -l $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote %FILES%";
+        $cmd = "%GREP% %SWITCHES% -l -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote %FILES%";
     }
 
     if( $caseSensitive ) {
