@@ -2,6 +2,27 @@
 %TMPL:DEF{"htmldoctype"}%
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%"> %TMPL:END%
+%TMPL:DEF{"script"}%%TMPL:END%
+%TMPL:DEF{"head"}%
+<head>
+ <title>%TMPL:P{"titleaction"}%%TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+ <style type="text/css" media="all">
+ 	/* NOTE: THESE LINES WILL BE REMOVED FROM THE CURRENT TEMPLATE WITH CAIRO RELEASE */
+ 	/* FOR TESTING PURPOSES ONLY */
+	/* Default TWiki layout */
+	@import url("%RELATIVETOPICPATH{%TWIKILAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css");
+	/* Default TWiki style */
+	@import url("%RELATIVETOPICPATH{%TWIKISTYLETOPIC%}%?skin=text&amp;contenttype=text/css");
+	/* Custom overriding layout */
+	@import url("%RELATIVETOPICPATH{%LAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css");
+	/* Custom overriding style */
+	@import url("%RELATIVETOPICPATH{%STYLETOPIC%}%?skin=text&amp;contenttype=text/css");
+ </style>
+ %TMPL:P{"script"}%
+</head>
+%TMPL:END%
 %TMPL:DEF{"standardheader"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
@@ -55,12 +76,7 @@
 </table> %TMPL:END%
 %TMPL:DEF{"oops"}%
 %TMPL:P{"htmldoctype"}%
-<head>
- <title>%TMPL:P{"titleaction"}%%TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>
- <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
- <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
- <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
-</head>
+%TMPL:P{"head"}%
 <body bgcolor="#ffffff">
 #PageTop
 %TMPL:P{"simpleheader"}%

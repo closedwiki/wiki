@@ -1,11 +1,6 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"rename"}%
-%TMPL:P{"htmldoctype"}%
-<head>
- <title>%TMPL:P{"titleaction"}%%TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>
- <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
- <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
- <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+
+%TMPL:DEF{"script"}%
  <script language="JavaScript">
  <!--HIDE
   function launchWindow( theWeb, theTopic ) {
@@ -27,7 +22,11 @@
  }
  //STOP HIDING-->
  </script>
-</head>
+%TMPL:END%
+
+%TMPL:DEF{"rename"}%
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
 <body bgcolor="#ffffff">
 #PageTop
 <form method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">

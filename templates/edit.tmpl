@@ -1,10 +1,6 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:P{"htmldoctype"}%
-<head>
- <title> %TMPL:P{"titleaction"}%%TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>
- <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
- <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_EDIT%
- <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+
+%TMPL:DEF{"script"}%
 <script language="JavaScript">
 <!--HIDE
 ns4 = (document.layers)? true:false;
@@ -64,7 +60,11 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 }
 //STOP HIDING-->
 </script>
-</head>
+%TMPL:END%
+
+
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
 <body bgcolor="#ffffff" onLoad="initForm()">
 #PageTop
 <form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
