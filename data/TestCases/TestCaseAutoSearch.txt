@@ -1,74 +1,285 @@
-Description: Automated search function tests
+Description: Automated search function tests.
 
-Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "classic" skin.
+Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "pattern" skin and standard search templates.
 
+---+ Search _default
+---++ Expected
+<!-- expected expand rex DEFAULT -->
+<div class="twikiSearchString">Searched: <b>hit me with your rhythm stick</b></div><div class="twikiSearchResultsBegin"></div>
+<div class="twikiSearchResultsHeader" style="background-color:yellow">Results from TestCases web</div><div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText">Description: Automated search function tests. Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "pattern ...</div></div></div><div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText">This is a test fixture topic, used in TestCaseAutoSearch hit me with your rhythm stick hit me! hit me! schmerz ist gut, ich liebe dich hit me! hit me! hit me! includer ...</div></div></div>
+<div class="twikiSearchResultCount">Number of topics: <b>2</b></div>
+<!-- /expected -->
 ---++ Actual
+<!-- actual -->
 %SEARCH{ "hit me with your rhythm stick" }%
+<!-- /actual -->
 
+---+ Search with search parameter
+---++ Expected (again)
+<!-- expected again expand rex SEARCHPARAMETER -->
+Same as last test
+<!-- /expected -->
 ---++ Actual
+<!-- actual -->
 %SEARCH{ search="hit me with your rhythm stick" }%
+<!-- /actual -->
 
+---+ Search with _default *and* search parameter
+---++ Expected (again)
+<!-- expected again expand rex DEFAULTANDSEARCH -->
+Same as last test
+<!-- /expected -->
 ---++ Actual
-%SEARCH{ "sausages" search="hit me with your rhythm stick" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- actual -->
+%SEARCH{ "hit me with your rhythm stick" search="sausages and mash" }%
+<!-- /actual -->
 
+---+ Topic search with two webs specified, all summary fields disabled
+---++ Expected
+<!-- expected expand rex TWOWEBS -->
+<div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WebPreferences"><b>WebPreferences</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WebPreferences">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TWiki/WebPreferences"><b>WebPreferences</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">WillNorris</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/Main/WillNorris?topicparent=TestCases.TestCaseAutoSearch"><sup>?</sup></a></span>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TWiki/WebPreferences">20 Nov 2004 - 18:14</a> - 2</div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div>
+<!-- /expected -->
 ---++ Actual
-%SEARCH{ "WhatIsWikiWiki" scope="topic" web="TestCases, TWiki" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- actual -->
+%SEARCH{ "WebPreferences" scope="topic" web="TestCases, TWiki" nosummary="on" nosearch="on" noheader="on" nototal="on" order="topic" }%
+<!-- /actual -->
 
+---+ Topic search with all webs specified
+---++ Expected
+<!-- expected expand rex ALLWEBS -->
+<div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TWiki/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TWiki/WhatIsWikiWiki">@DATE - @TIME</a> - 4</div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div>
+<!-- /expected -->
 ---++ Actual
-%SEARCH{ "WhatIsWikiWiki" web="all" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- actual -->
+%SEARCH{ "WhatIsWikiWiki" scope="topic" web="all" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- /actual -->
 
+---+ Text search with topic parameter
+---++ Expected
+<!-- expected expand rex TOPICPARAMETER -->
+<div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div>
+<!-- /expected -->
 ---++ Actual
-%SEARCH{ "hit me with" topic="TWiki*" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- actual -->
+%SEARCH{ "hit me with" topic="TestCaseAuto*" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- /actual -->
 
+---+ Text search with excludetopic parameter set to a topic
+---++ Expected
+<!-- expected rex expand EXCLUDETOPICTOPIC -->
+<div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div>
+<!-- /expected -->
 ---++ Actual
-%SEARCH{ "your rythm" topic="TestCase*" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- actual -->
+%SEARCH{ "your rhythm" excludetopic="TestCaseAutoSearch" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- /actual -->
 
+---+ Text search with excludetopic parameter set to a wildcard
+---++ Expected (again)
+<!-- expected again rex expand EXCLUDETOPICWILDCARD -->
+<!-- /expected -->
 ---++ Actual
-%SEARCH{ "your rythm" excludetopic="TestCaseAutoSearch" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- actual -->
+%SEARCH{ "your rhythm" excludetopic="TestCaseAuto*" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- /actual -->
 
+---+ Keyword search
+---++ Expected (again)
+<!-- expected again rex expand KEYWORDSEARCH -->
+<!-- /expected -->
 ---++ Actual
-%SEARCH{ "your rythm" excludetopic="TestCaseAuto*" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- actual -->
+%SEARCH{ "includer -excluder" web="TestCases" type="keyword" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- /actual -->
 
+---+ Text search with excludetopic set to a list of topics
+---++ Expected (empty)
+<!-- expected EXCLUDETOPICLIST -->
+<p />
+<!-- /expected -->
 ---++ Actual
-%SEARCH{ "hit me" excludetopic="TestCaseAutoSearch, WhatIsWikiWiki" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- actual -->
+%SEARCH{ "hit me with" excludetopic="TestCaseAutoSearch, WhatIsWikiWiki" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- /actual -->
 
+---+ Text search with multiple set
+---++ Expected
+<!-- expected expand rex MULTIPLE -->
+<div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> <span class="twikiAlert"></span></div>
+
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div>
+<!-- /expected -->
 ---++ Actual
-%SEARCH{ "hit me" web="TestCases" multiple="on" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- actual -->
+%SEARCH{ "hit me" web="TestCases" multiple="on" reverse="on" limit="1" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- /actual -->
 
+---+ Regex search
+---++ Expected
+<!-- expected expand rex REGEX -->
+<div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div>
+<!-- /expected -->
 ---++ Actual
-%SEARCH{ "hit\s*me" web="TestCases" type="regex" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- actual -->
+%SEARCH{ "hit *me" type="regex" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- /actual -->
 
+---+ scope="all" search
+---++ Expected
+<!-- expected expand rex SCOPEALL -->
+<div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div>
+<!-- /expected -->
 ---++ Actual
-%SEARCH{ "hit me -schmerz" web="TestCases" type="keyword" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- actual -->
+%SEARCH{ "WhatIsWikiWiki" web="TestCases" scope="all" nosummary="on" nosearch="on" noheader="on" nototal="on" reverse="on"}%
+<!-- /actual -->
 
+---+ casesensitive="on"
+---++ Expected
+<!-- expected rex expand CASESENSITIVE -->
+<div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiRight twikiSRAuthor">
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
+</div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div>
+<!-- /expected -->
 ---++ Actual
-%SEARCH{ "What" web="TestCases" scope="topic" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+<!-- actual -->
+%SEARCH{ "Rhythm" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" casesensitive="on" }%
+<!-- /actual -->
 
----++ Actual
-%SEARCH{ "WhatIsWikiWiki" web="TestCases" scope="all" nosummary="on" nosearch="on" noheader="on" nototal="on" }%
+---+ order="created"
+---+ order="modified"
+---+ order="editby"
+---+ order="formfield(name)"
 
-      order="topic" (default)
-      order="created"
-      order="modified"
-      order="editby"
-      order="formfield(name)"
+---+ bookview="on"
 
-      limit="all" (default, no limit)
-      limit="16"
+---+ expandvariables="on"
 
-      reverse="on"
-      casesensitive="on"
-      nosummary="on"
-      bookview="on"
-      nosearch="on"
-      noheader="on"
-      nototal="on"
-      header="..."
-      format="..."
-
-      expandvariables="on"
-
-
-      separator=", " (default newline)
-
-      newline="%BR%" 	Line separator within a search hit, effective only in FormattedSearch.
+---+ header="..."
+---+ format="..."
+---+ separator=", " (default newline)
+---+ newline="%BR%" 	Line separator within a search hit, effective only in FormattedSearch.
