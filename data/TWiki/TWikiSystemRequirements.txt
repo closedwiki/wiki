@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="MikeMannix" date="999132184" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="MikeMannix" date="999259487" format="1.0" version="1.10"}%
 %TOC%
 %STARTINCLUDE%
----## TWiki Implementation Notes
+---## TWiki Software Environment
 
----+++ Platforms and System Requirements 
+---+++ System Requirements
 
-TWiki is written in *Perl 5* and also uses some *shell commands*. The current implementation runs best on a Unix machine, but it is also possible on Microsoft Windows. *RCS* (for revision control) must be installed on the system. [ __MM: Locate elsewhere and/or include one-liner and link for RCS...__ ]
+TWiki is written in *Perl 5* and also uses some *shell commands*. It also requires that *GNU RCS* (Revision Control System) is installed on the same system. The current implementation runs best on a Linux machine, but it can also run with Microsoft Windows. 
 
 | *Required Environment by Platform* |||
 | *Packages:* | *Linux/Unix:* | *Windows:* |
@@ -17,21 +17,23 @@ TWiki is written in *Perl 5* and also uses some *shell commands*. The current im
 | Web server  |	Apache  |	Apache, IIS	|
 | _OS versions_ |  __Linux, Unix...__  |  __every last Win?!__  |
 
----+++ Directory Structure
+---+++ TWiki Directory Structure
 
-You can easily rename the root TWiki directory - ==twiki== - to whatever you like by changing it in the ==twiki.cfg== configuration file. However, to keep the current installation and future upgrades simple, you should leave the subdirectory structure - the folder names and locations - exactly as is:
+You can easily rename the root TWiki directory - ==twiki== - to whatever you like by changing it in the ==twiki.cfg== configuration file. However, to keep the current installation and future upgrades simple, you should leave the subdirectory structure intact:
 
 | *Directory:*		  | *Files:*		 | *Used for:* |
 | ==twiki==			  |  [[#TWikiFiles][list]]  | Start-up info |
 | ==twiki/bin==		 |  [[#BinFiles][list]]  | Perl scripts  |
 | ==twiki/lib==		 |  [[#LibFiles][list]]  | Configuration file &amp; main library |
-| ==twiki/lib/TWiki== |  [[#LibTWiki][list]]  | Perl modules |
-| ==twiki/lib/TWiki/Plugins== |  [[#libtwikiplugins][list]]  | TWikiPlugins Perl modules |
+| ==twiki/lib/TWiki== |  [[#LibFiles][list]]  | Perl modules |
+| ==twiki/lib/TWiki/Plugins== |  [[#LibFiles][list]]  | TWikiPlugins Perl modules |
 | ==twiki/pub==		 |  [[#PubFiles][list]]  | Public support files (ex: FileAttachments, images) and RCS histories) |
 | ==twiki/data==		|  [[#DataFiles][list]]  | Topic text (page content) and RCS histories; |
 | ==twiki/templates== |  [[#TemplatesFiles][list]]  | HTML templates, used by TWiki scripts |
 
-__Note: about the additional directories in data, elsewhere__
+---+++ File Descriptions
+
+A rundown of the individual files in the current %VERSION% distribution, organized by TWiki root directories. Note that there may be minor differences in the start-up ==data== files.
 
 #TWikiFiles
 ---++++ Files in <code>twiki</code>
@@ -67,38 +69,27 @@ __Note: about the additional directories in data, elsewhere__
 | ==viewfile==		| Script to view an file attachment |
 
 #LibFiles
----++++ Files in <code>twiki/lib</code>
+---++++ Files under <code>twiki/lib</code>
 
 | *File:*			  | *Used for:* |
 | ==TWiki.pm==		| Main TWiki library |
 | ==TWiki.cfg==	  | For configuration, used by ==TWiki.pm== |
-
-#LibTWiki
----++++ Files in <code>twiki/lib/TWiki</code>
-
-| *File:*			| *Used for:* |
-| ==Access.pm==	| Access control |
-| ==Attach.pm==	| Attachment handling |
-| ==Meta.pm==	  | Meta data in topics |
-| ==Net.pm==		| SMTP mail handling |
-| ==Plugins.pm==  | Plugin handling |
-| ==Prefs.pm==	 | Preferences handling |
-| ==Search.pm==	| Search engine, used by wiki.pm |
-| ==Store.pm==	 | Back-end storage, =*.txt= text file and =*.txt,v= RCS repository file handling |
-
-#LibTWikiPlugins
----++++ Files in <code>twiki/lib/TWiki/Plugins</code>
-
-| *File:*				  | *Used for:* |
-| ==DefaultPlugin.pm== | Default plugin |
-| ==EmptyPlugin.pm==	| Empty plugin, use to create your own |
-| ==InterwikiPlugin.pm== | Refer to external Wikis and other Web sites |
+| ==TWiki/Access.pm==	| Access control |
+| ==TWiki/Attach.pm==	| Attachment handling |
+| ==TWiki/Meta.pm==	  | Meta data in topics |
+| ==TWiki/Net.pm==		| SMTP mail handling |
+| ==TWiki/Plugins.pm==  | Plugin handling |
+| ==TWiki/Prefs.pm==	 | Preferences handling |
+| ==TWiki/Search.pm==	| Search engine, used by wiki.pm |
+| ==TWiki/Store.pm==	 | Back-end storage, =*.txt= text file and =*.txt,v= RCS repository file handling |
+| ==TWiki/Plugins/DefaultPlugin.pm== | Default plugin |
+| ==TWiki/Plugins/EmptyPlugin.pm==	| Empty plugin, use to create your own |
+| ==TWiki/Plugins/InterwikiPlugin.pm== | Refer to external Wikis and other Web sites |
 
 #PubFiles
----++++ Files in <code>twiki/pub</code>
+---++++ Files under <code>twiki/pub</code>
 
 | *File:*			| *Used for:* |
-
 | ==favicon.ico== | xxxx |
 | ==twikilogo.gif== | xxxx |
 | ==twikilogo1.gif== | xxxx |
@@ -144,7 +135,7 @@ __Note: about the additional directories in data, elsewhere__
 | ==TWiki/WabiSabi/wabisabi.gif== | xxxx |
 
 #DataFiles
----++++ Files in <code>twiki/data</code>
+---++++ Files under <code>twiki/data</code> 
 
 | *File:*			| *Used for:* |
 | ==.htpasswd== | xxxx |
