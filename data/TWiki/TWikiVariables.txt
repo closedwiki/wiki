@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1021445972" format="1.0" version="1.53"}%
+%META:TOPICINFO{author="PeterThoeny" date="1021679280" format="1.0" version="1.54"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -33,7 +33,7 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
   <td> The script suffix, ex: =.pl=, =.cgi= is <b>%SCRIPTSUFFIX%</b></td>
 </tr><tr>
   <td> =%<nop>PUBURL%= </td>
-  <td> The public URL of TWiki, is <b>%PUBURL%</b> </td>
+  <td> The public URL of TWiki, is <b>%PUBURL%</b> <br /> Example: You can refer to a file attached to another topic as =<b>%<nop>PUBURL%/%<nop>WEB%/OtherTopic/image.gif</b>=  </td>
 </tr><tr>
   <td> =%<nop>PUBURLPATH%= </td>
   <td> The path of the public URL of %WIKITOOLNAME%, is <b>%PUBURLPATH%</b> </td>
@@ -46,6 +46,9 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
 </tr><tr>
   <td> =%<nop>URLPARAM{"name"}%= </td>
   <td> Returns the value of a URL parameter. Ex: =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b> </td>
+</tr><tr>
+  <td> =%<nop>URLENCODE{"string"}%= </td>
+  <td> Encodes a string for use as a URL parameter. Ex: =%<nop>URLENCODE{"spaced name"}%= returns <b>%URLENCODE{"spaced name"}%</b> </td>
 </tr><tr>
   <td> =%<nop>WIKITOOLNAME%= </td>
   <td> The name of your TWiki site - <b>%WIKITOOLNAME%</b> </td>
