@@ -504,7 +504,6 @@ sub upgradeCategoryItem
         for( $i = 3; $i < $len; $i++ ) {
             my $value = $cmd[$i];
             my $svalue = $value;
-            $svalue =~ s/[^a-zA-Z0-9]//g;
             if( $src =~ /$value/ ) {
                $catvalue = "$svalue";
             }
@@ -522,7 +521,6 @@ sub upgradeCategoryItem
         for( $i = 4; $i < $len; $i++ ) {
             my $value = $cmd[$i];
             my $svalue = $value;
-            $svalue =~ s/[^a-zA-Z0-9]//g;
             if( $src =~ /$value[^a-zA-Z0-9\.]/ ) {
                 $catvalue .= ", " if( $catvalue );
                 $catvalue .= $svalue;
