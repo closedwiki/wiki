@@ -170,6 +170,7 @@ sub main
         $text = "$before$after";
         $text =~ s/ {3}/\t/go;
         my $meta = TWiki::Meta->new();
+        $meta->put( "TOPICPARENT", ( "name" => $TWiki::wikiUsersTopicname ) );
         &TWiki::Store::saveTopic( $webName, $wikiName, $text, $meta, "", 1 );
     }
 
@@ -237,8 +238,7 @@ sub addUserToTWikiUsersTopic
 {
     my ( $wikiName, $remoteUser ) = @_;
     my $today = &TWiki::getLocaldate();
-    my $topicName = $TWiki::userListFilename;
-    $topicName =~ s/(.*[^\/])\/([a-zA-Z0-9]*)\.txt$/$2/go;
+    my $topicName = $TWiki::wikiUsersTopicname;
     my( $meta, $text )  = &TWiki::Store::readTopic( $TWiki::mainWebname, $topicName );
     my $result = "";
     my $status = "0";
