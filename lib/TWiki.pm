@@ -124,13 +124,13 @@ use vars qw(
         $webName $topicName $includingWebName $includingTopicName
 	$userName $wikiName $wikiUserName $urlHost $isList @listTypes
 	@listElements $debugUserTime $debugSystemTime $script
-        $newTopicFontColor $newTopicBgColor $noAutoLink
+        $newTopicFontColor $newTopicBgColor $linkToolTipInfo $noAutoLink
 	$pageMode $readTopicPermissionFailed $cgiQuery $basicInitDone
     );
 
 # ===========================
 # TWiki version:
-$wikiversion      = "8 Feb 2004";
+$wikiversion      = "25 Feb 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -441,6 +441,7 @@ sub initialize
     # PTh: Moved from internalLink to initialize ('cause of performance)
     $newTopicBgColor   = TWiki::Prefs::getPreferencesValue("NEWTOPICBGCOLOR")   || "#FFFFCE";
     $newTopicFontColor = TWiki::Prefs::getPreferencesValue("NEWTOPICFONTCOLOR") || "#0000FF";
+    $linkToolTipInfo   = TWiki::Prefs::getPreferencesValue("LINKTOOLTIPINFO")   || "";
     # Prevent autolink of WikiWords
     $noAutoLink        = TWiki::Prefs::getPreferencesValue("NOAUTOLINK") || 0;
 
@@ -3559,6 +3560,38 @@ sub internalCrosswebLink
 # =========================
 =pod
 
+---++ sub linkToolTipInfo ( $theWeb, $theTopic )
+
+Returns =title="..."= tooltip info in case LINKTOOLTIPINFO perferences variable is set. 
+Warning: Slower performance if enabled.
+
+=cut
+
+sub linkToolTipInfo
+{
+    my( $theWeb, $theTopic ) = @_;
+    return unless( $linkToolTipInfo );
+
+    my( $date, $user, $rev ) = TWiki::Store::getRevisionInfo( $theWeb, $theTopic );
+    my $text = $linkToolTipInfo;
+    $text =~ s/\$web/<nop>$theWeb/g;
+    $text =~ s/\$topic/<nop>$theTopic/g;
+    $text =~ s/\$rev/1.$rev/g;
+    $text =~ s/\$date/&formatDisplayTime( $date )/ge;
+    $text =~ s/\$username/<nop>$user/g;                                     # "jsmith"
+    $text =~ s/\$wikiname/"<nop>" . &TWiki::userToWikiName( $user, 1 )/ge;  # "JohnSmith"
+    $text =~ s/\$wikiusername/"<nop>" . &TWiki::userToWikiName( $user )/ge; # "Main.JohnSmith"
+    if( $text =~ /\$summary/ ) {
+        my $summary = &TWiki::Store::readFileHead( "$TWiki::dataDir\/$theWeb\/$theTopic.txt", 16 );
+        $summary = &TWiki::makeTopicSummary( $summary, $theTopic, $theWeb );
+        $text =~ s/\$summary/$summary/g;
+    }
+    return " title=\"$text\"";
+}
+
+# =========================
+=pod
+
 ---++ sub internalLink (  $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink  )
 
 Not yet documented.
@@ -3610,12 +3643,14 @@ sub internalLink {
     if( $exist) {
         if( $theAnchor ) {
             my $anchor = makeAnchorName( $theAnchor );
-            $text .= "<a href=\"$scriptUrlPath/view$scriptSuffix/"
-                  .  "$theWeb/$theTopic\#$anchor\">$theLinkText<\/a>";
+            $text .= "<a href=\"$scriptUrlPath/view$scriptSuffix/$theWeb/$theTopic\#$anchor\""
+                  .  &linkToolTipInfo( $theWeb, $theTopic )
+                  .  ">$theLinkText<\/a>";
             return $text;
         } else {
-            $text .= "<a href=\"$scriptUrlPath/view$scriptSuffix/"
-                  .  "$theWeb/$theTopic\">$theLinkText<\/a>";
+            $text .= "<a href=\"$scriptUrlPath/view$scriptSuffix/$theWeb/$theTopic\""
+                  .  &linkToolTipInfo( $theWeb, $theTopic )
+                  .  ">$theLinkText<\/a>";
             return $text;
         }
 
