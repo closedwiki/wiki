@@ -1,5 +1,4 @@
 %TMPL:INCLUDE{"twiki"}%
-
 %TMPL:DEF{"script"}%
  <script language="JavaScript">
  <!--HIDE
@@ -21,9 +20,7 @@
    }
  }
  //STOP HIDING-->
- </script>
-%TMPL:END%
-
+ </script>%TMPL:END%
 %TMPL:DEF{"rename"}%
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
@@ -46,8 +43,8 @@
 
 %RESEARCH{ "%WEB%\.%TOPIC%" web="all" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
 
-<input type="button" value="Set" onClick="checkAll(true);" />
-<input type="button" value="Clear" onClick="checkAll(false);" /> checkboxes of all referenced topics
+<input type="button" value="Select all" onClick="checkAll(true);" />
+<input type="button" value="Clear" onClick="checkAll(false);" /> checkboxes of referenced topics
 
 __Note:__
    * Get help on
