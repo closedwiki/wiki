@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1091171092" format="1.0" version="1.66"}%
+%META:TOPICINFO{author="PeterThoeny" date="1091259692" format="1.0" version="1.67"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), __topic level__ (the topic being rendered), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -160,20 +160,37 @@ The following are __site-level__ settings that affect all users in all webs on t
 ---++ Skin Settings
 
 	* Skin overriding the default TWiki templates: (can be overwritten by WebPreferences and user preferences) 
-		* Set SKIN = 
+		* #Set SKIN = pattern
 
-	* Default TWiki CSS styling topics where layout and style are are defined:
-		* #Set TWIKILAYOUTTOPIC = %TWIKIWEB%.TWikiLayout
-		* #Set TWIKISTYLETOPIC = %TWIKIWEB%.TWikiStyle
-	* CSS styling topics to be defined in local webs or in user topics (these can complement or override default TWiki style topics):
-		* Set LAYOUTTOPIC = 
-		* Set STYLETOPIC = 
+	* __Note:__ See TWikiSkinBrowser for currently installed skins
 
-	* Use the CSS TOPIC setting above to build the URLS used in the templates
-		* #Set TWIKILAYOUTURL = %RELATIVETOPICPATH{%TWIKILAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css
-		* #Set TWIKISTYLEURL = %RELATIVETOPICPATH{%TWIKISTYLETOPIC%}%?skin=text&amp;contenttype=text/css
-		* #Set USERLAYOUTURL = %RELATIVETOPICPATH{%USERLAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css
-		* #Set USERSTYLEURL = %RELATIVETOPICPATH{%USERSTYLETOPIC%}%?skin=text&amp;contenttype=text/css
+---+++ PatternSkin
+
+	* Using attachments for styles 
+		* #Set TWIKILAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/layout.css
+		* #Set TWIKISTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/style.css
+
+	* Using topics to define styles - these settings will override attachment style settings above -
+		* Default TWiki CSS styling topics where layout and style are are defined:
+			* #Set TWIKILAYOUTTOPIC = %TWIKIWEB%.TWikiLayout
+			* #Set TWIKISTYLETOPIC = %TWIKIWEB%.TWikiStyle
+		* CSS styling topics to be defined in local webs or in user topics (these can complement or override default TWiki style topics):
+			* Set LAYOUTTOPIC = 
+			* Set STYLETOPIC = 
+		* Use the CSS TOPIC setting above to build the URLS used in the templates
+			* #Set TWIKILAYOUTURL = %RELATIVETOPICPATH{%TWIKILAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css
+			* #Set TWIKISTYLEURL = %RELATIVETOPICPATH{%TWIKISTYLETOPIC%}%?skin=text&amp;contenttype=text/css
+			* #Set USERLAYOUTURL = %RELATIVETOPICPATH{%USERLAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css
+			* #Set USERSTYLEURL = %RELATIVETOPICPATH{%USERSTYLETOPIC%}%?skin=text&amp;contenttype=text/css
+
+---+++ DragonSkin
+
+	* Theme: (gray, monochrome, tabstyle)
+		* Set DS_THEME = gray
+	* Quicklinks headings:
+		* Set DS_QUICKLINKSHEADING = 
+	* Quicklinks submenu:
+		* Set DS_QUICKLINKS = 
 
 
 ---++ Plugins Settings
