@@ -109,13 +109,19 @@ case "$1" in
 	fi
 	. /usr/share/wwwconfig-common/restart.sh
 	# create initial htpasswd, if needed
-	#mmmm whats the equivalent in apache2?
-	if [ -e /usr/bin/htpasswd ]; then
-		if [ -e /var/lib/twiki/data ]; then	
+	if [ -e /var/lib/twiki/data ]; then	
+		#for now prefer apache 1 config, I don't know how to detect which one is prefered
+		if [ -e /usr/bin/htpasswd2 ]; then
+			HTPASSWDCMD="/usr/bin/htpasswd2";
+		fi
+		if [ -e /usr/bin/htpasswd ]; then
+			HTPASSWDCMD="/usr/bin/htpasswd";
+		fi
+		if [ -e $HTPASSWDCMD ]; then
 			#if the user has installed without initial universe then we can't do this
 			if [ ! -e /var/lib/twiki/data/.htpasswd ]; then
 			    touch /var/lib/twiki/data/.htpasswd
-		       	htpasswd -b /var/lib/twiki/data/.htpasswd TWikiGuest guest
+		       	    $HTPASSWDCMD -b /var/lib/twiki/data/.htpasswd TWikiGuest guest
 			    chown $TWIKI_OWNER.www-data /var/lib/twiki/data/.htpasswd
 			    chmod og=rw /var/lib/twiki/data/.htpasswd
 			fi
