@@ -20,6 +20,7 @@
 #       * now, there's also duplicated code installing Contrib modules (which can _definitely_ be the same code as installing plugins)
 #    * error checking is pretty good, but error recovery might not be
 #    * the html output report has been pieced together ad hoc, and contains significant amounts of *bad html*
+#    * get it to work on MacOsX / darwin
 #    * ???
 
 use strict;
@@ -32,11 +33,13 @@ use File::Path qw( rmtree );
 use Cwd qw( cwd getcwd );
 use Data::Dumper qw( Dumper );
 
+my $account = "twiki";
+
 import_names();
 my $cgibin      = getcwd();
 my $project	= [ split( '/', $cgibin ) ]->[-2];	# (this script runs from cgi-bin; see what's above)
 my $tar		= $Q::tar	|| 'TWiki20040901.tar.gz';
-my $home	= '/home/groups/' . substr($project, 0, 1) . '/' . substr($project, 0, 2) . '/' . $project;
+my $home        = "/Users/$account/Sites";
 my $tmp		= "$cgibin/tmp";
 my $htdocs	= $home . '/htdocs';
 my $dest	= $home . '/twiki';
@@ -77,18 +80,18 @@ open(FH, "<$file") or die "Can't open $file: $!";
 my $config = join( "", <FH> );
 close(FH) || die "Can't write to $file: $!";
 
-my $sourceForgeConfig = qq~
+my $sourceForgeConfig = qq{
 
-\$defaultUrlHost   = "http://$project.sourceforge.net"; 
-\$scriptUrlPath    = "/cgi-bin/twiki"; 
+\$defaultUrlHost   = "http://localhost";
+\$scriptUrlPath    = "/~$account/cgi-bin/twiki";
 \$dispScriptUrlPath = \$scriptUrlPath;
-\$pubUrlPath       = "/twiki"; 
+\$pubUrlPath       = "/~$account/htdocs/twiki";
 \$pubDir           = "$home/htdocs/twiki"; 
 \$templateDir      = "$home/twiki/templates"; 
 \$dataDir          = "$home/twiki/data"; 
 \$logDir           = \$dataDir;
 
-~;
+};
 
 #\$templateDir      = "$home/twiki/templates"; => "$dest/templates" ???
 #\$dataDir          = "$home/twiki/data"; => "$dest/data" ???
@@ -382,7 +385,8 @@ execute("chmod -R 777 $lib");
 execute("chmod -R 777 $tmp");
 
 # a handy link to the place to go *after* the next step
-print qq{do a <tt>post-wiki.sh</tt> and then <br/><a href="http://$project.sourceforge.net/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
+#print qq{do a <tt>post-wiki.sh</tt> and then <br/><a href="http://$project.sourceforge.net/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
+print qq{do a <tt>post-wiki.sh</tt> and then <br/><a href="http://localhost/~twiki/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
 
 print end_html();
 
