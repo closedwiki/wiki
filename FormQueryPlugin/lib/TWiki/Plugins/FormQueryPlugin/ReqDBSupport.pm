@@ -14,6 +14,7 @@ use TWiki::Plugins::FormQueryPlugin::Map;
 { package FormQueryPlugin::ReqDBSupport;
 
   my %macros;
+  my %macro_times; # TimSlidel 1/4/04
 
   # PUBLIC STATIC
   # Expand a macro. The macro is identified by the 'topic' parameter
@@ -23,14 +24,18 @@ use TWiki::Plugins::FormQueryPlugin::Map;
   sub callMacro {
     my ( $macro, $params, $web, $topic ) = @_;
     my $attrs = new FormQueryPlugin::Map( $params );
+    my $dataDir = TWiki::Func::getDataDir() . "/$web"; #TimSlidel 1/4/04
 
     my $mtop = $attrs->fastget( "topic" );
+    my $filename = "$dataDir/$mtop.txt"; # TimSlidel 1/4/04
 
-    if ( !defined( $macros{$mtop} )) {
+    if ( !defined( $macros{$mtop} ) ||
+       !$macro_times{$mtop}->uptodat() ) { # TimSlidel 1/4/04
       if ( !TWiki::Func::topicExists( $web, $mtop )) {
 	return FormQueryPlugin::WebDB::moan( $macro, $params, "No such macro $mtop ", "" );
       }
       my $text = TWiki::Func::readTopicText( $web, $mtop );
+      $macro_times{$mtop} = new FormQueryPlugin::FileTime( $filename );
       $text =~ s/%META:\w+{.*?}%//go;
       $macros{$mtop} = $text;
     }

@@ -158,7 +158,13 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
 	my $tablename = $1;
 	my $ttype = $tables{$tablename};
 	if ( defined( $ttype )) {
-	  my $table = new FormQueryPlugin::Array();
+	  # TimSlidel: collapse multiple instances
+	  # of the same table type into a single table
+	  # my $table = new FormQueryPlugin::Array();
+	  my $table = $meta->fastget( $tablename );
+	  if ( !defined( $table )) {
+	    $table = new FormQueryPlugin::Array();
+	  }
 	  my $lc = 0;
 	  my $row = "";
 	  while ( $line = <FH> ) {

@@ -38,11 +38,13 @@ closedir( DH );
 $max++;
 $nt =~ s/\n/$max/o;
 
-my $dir = TWiki::Func::getScriptUrl( $webName, $nt, "edit")."?";
-my $p = $query->param( "formtemplate" );
-$dir .= "formtemplate=$p;" if ( $p );
-$p = $query->param( "templatetopic" );
-$dir .= "templatetopic=$p;" if ( $p );
+#my $dir = TWiki::Func::getScriptUrl( $webName, $nt, "edit")."?";
+#my $p = $query->param( "formtemplate" );
+#$dir .= "formtemplate=$p;" if ( $p );
+#$p = $query->param( "templatetopic" );
+#$dir .= "templatetopic=$p;" if ( $p );
+my $dir = TWiki::Func::getScriptUrl( $webName, $nt, "edit")."?".$query->query_string();
+ print $query->redirect( $dir );
 
 print $query->redirect( $dir );
 

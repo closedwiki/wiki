@@ -16,7 +16,7 @@ use vars qw(
 	    $debug $db $bming
 	   );
 
-$VERSION = '1.200';
+$VERSION = '1.201';
 $pluginName = 'FormQueryPlugin';
 #$bming = 0;
 
@@ -99,6 +99,8 @@ sub commonTagsHandler {
       $text .= "$line\n";
     }
   }
+
+  # Patch provided to fix Mozilla bug
   chop( $text ) if ( $text =~ m/\n$/so ); # remove trailing NL
 
   $_[0] =~ s/^.*$/$text/s;
