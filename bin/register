@@ -269,7 +269,7 @@ sub htpasswdAddUser
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
     my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
-    TWiki::writeDebug "User entry is :$userEntry: before newline";
+    ##TWiki::writeDebug "User entry is :$userEntry: before newline";
     $text .= "$userEntry\n";
     &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
 }
