@@ -1,0 +1,242 @@
+# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2004 Antonio Terceiro, asaterceiro@inf.ufrgs.br
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+#
+# =========================
+#
+# This is an empty TWiki plugin. Use it as a template
+# for your own plugins; see TWiki.TWikiPlugins for details.
+#
+# Each plugin is a package that may contain these functions:        VERSION:
+#
+#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
+#   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
+#   registrationHandler     ( $web, $wikiName, $loginName )         1.010
+#   commonTagsHandler       ( $text, $topic, $web )                 1.000
+#   startRenderingHandler   ( $text, $web )                         1.000
+#   outsidePREHandler       ( $text )                               1.000
+#   insidePREHandler        ( $text )                               1.000
+#   endRenderingHandler     ( $text )                               1.000
+#   beforeEditHandler       ( $text, $topic, $web )                 1.010
+#   afterEditHandler        ( $text, $topic, $web )                 1.010
+#   beforeSaveHandler       ( $text, $topic, $web )                 1.010
+#   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
+#   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
+#   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
+#   setSessionValueHandler  ( $key, $value )                        1.010  Use only in one Plugin
+#
+# initPlugin is required, all other are optional. 
+# For increased performance, all handlers except initPlugin are
+# disabled. To enable a handler remove the leading DISABLE_ from
+# the function name. Remove disabled handlers you do not need.
+#
+# NOTE: To interact with TWiki use the official TWiki functions 
+# in the TWiki::Func module. Do not reference any functions or
+# variables elsewhere in TWiki!!
+
+
+# =========================
+package TWiki::Plugins::BibliographyPlugin;    # change the package name and $pluginName!!!
+
+# =========================
+use vars qw(
+        $web $topic $user $installWeb $VERSION $pluginName
+        $debug 
+    );
+
+$VERSION = '1.010';
+$pluginName = 'BibliographyPlugin';  # Name of this Plugin
+
+# =========================
+sub initPlugin
+{
+    ( $topic, $web, $user, $installWeb ) = @_;
+
+    # check for Plugins.pm versions
+    if( $TWiki::Plugins::VERSION < 1 ) {
+        TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
+        return 0;
+    }
+
+    # Get plugin debug flag
+    $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
+
+    # Plugin correctly initialized
+    TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
+    return 1;
+}
+ 
+sub readBibliography
+{
+  # read the references topic:
+  my $referencesTopic = $_[0];
+
+  my %bibliography;
+  my ($key, $value);
+  $_ = TWiki::Func::readTopicText("", $referencesTopic, "", 1);
+  while (m/^\|([^\|]*)\|([^\|]*)\|/gm)
+  {
+    ($key,$value) = ($1,$2);
+    
+    # remove leading and trailing whitespaces from $key and from $value
+    $key   =~ s/^\s+|\s+$//g; 
+    $value =~ s/^\s+|\s+$//g;
+
+    $bibliography{$key} = {  "name" => $value,
+                            "cited" => 0,
+                            "order" => 0
+                          };
+  }
+
+  return %bibliography;
+}
+
+sub bibliographyAlphaSort
+{
+  return lc($bibliography{$a}{"name"}) cmp lc($bibliography{$b}{"name"});
+}
+
+sub bibliographyOrderSort
+{
+  return $bibliography{$a}{"order"} <=> $bibliography{$b}{"order"};
+}
+
+sub generateBibliography
+{
+  my ($header, %bibliography) = @_;
+
+  my $list = "<ol> \n";
+  foreach $key (sort bibliographyOrderSort (keys %bibliography))
+  {
+    my $name = $bibliography{$key}{"name"};
+    $list .= "<li> $name </li> \n";
+  }
+  $list .= "</ol> \n";
+ 
+  return TWiki::Func::renderText($header) . "\n" . $list;
+}
+
+sub parseArgs
+{
+  my $args = $_[0];
+
+  # get the typed header. Defaults to the BIBLIOGRAPHYPLUGIN_DEFAULTHEADER setting.
+  my $header = &TWiki::Func::getPreferencesValue("BIBLIOGRAPHYPLUGIN_DEFAULTHEADER");
+  if ($args =~ m/header="([^"]*)"/)
+  {
+    $header = $1;
+  }
+
+  #get the typed references topic. Defaults do the BIBLIOGRAPHYPLUGIN_DEFAULTBIBLIOGRAPHYTOPIC.
+  my $referencesTopic = &TWiki::Func::getPreferencesValue("BIBLIOGRAPHYPLUGIN_DEFAULTBIBLIOGRAPHYTOPIC");
+  if ($args =~ m/referencesTopic="([^"]*)"/)
+  {
+    $referencesTopic = $1;
+  }
+
+  # get the typed order. Defaults to BIBLIOGRAPHYPLUGIN_DEFAULTSORTING setting.
+  my $order = &TWiki::Func::getPreferencesValue("BIBLIOGRAPHYPLUGIN_DEFAULTSORTING");
+  if ($args =~ m/order="([^"]*)"/)
+  {
+    $order = $1;
+  }
+
+  &TWiki::Func::writeDebug("header=$header");
+  &TWiki::Func::writeDebug("referencesTopic=$referencesTopic");
+  &TWiki::Func::writeDebug("order=$order");
+
+  return ($header, $referencesTopic, $order);
+}
+
+
+sub handleCitation
+{
+  my ($cit, %bibliography) = @_;
+  if (exists $bibliography{$cit})
+  {
+    return "[" . $bibliography{$cit}{"order"}. "]";
+  }
+  else
+  {
+    return "[??]";
+  }
+}
+
+# ==================================
+# Plugin HOOK: startRenderingHandler
+# ==================================
+sub startRenderingHandler
+{
+### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::startRenderingHandler( $_[1] )" ) if $debug;
+
+    # This handler is called by getRenderedVersion just before the line loop
+
+    # do custom extension rule, like for example:
+    # $_[0] =~ s/old/new/g;
+    
+    my ($header, $referencesTopic, $order);
+    if ($_[0] =~ m/%BIBLIOGRAPHY{([^}]*)}%/mg)
+    {
+      ($header, $referencesTopic, $order) = parseArgs ($1);
+      %bibliography = readBibliography ($referencesTopic);
+    }
+    else
+    {
+      return;
+    }
+
+    ######################################################
+
+    # mark cited entries:
+
+    my $i = 1;
+    $_ = $_[0];
+    while (m/%CITE{([^}]*)}%/mg)
+    {
+      if (exists $bibliography{$1})
+      {
+        if (not $bibliography{$1}{"cited"})
+        {
+          $bibliography{$1}{"cited"} = 1;
+          $bibliography{$1}{"order"} = $i++; # citation order
+        }
+      }
+    }
+
+    # delete non-cited entries:
+    foreach $key (keys %bibliography)
+    {
+      if (not $bibliography{$key}{"cited"})
+      {
+        delete $bibliography{$key};
+      }
+    }
+
+    #if needed, resort the cited entries for generating the numeration
+    if ($order eq "alpha")
+    {
+      my $i = 1;
+      foreach $key (sort bibliographyAlphaSort (keys %bibliography))
+      {
+        $bibliography{$key}{"order"} = $i++;
+      }
+    }
+    
+    $_[0] =~ s/%CITE{([^}]*)}%/&handleCitation($1,%bibliography)/ge;
+    $_[0] =~ s/%BIBLIOGRAPHY{([^}]*)}%/&generateBibliography($header, %bibliography)/ge;
+}
+
+1;
