@@ -19,7 +19,6 @@
 # - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
-# - Files wiki[a-z]+.pm are included by wiki.pm
 # - Upgrading TWiki is easy as long as you only customize wikicfg.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 
@@ -287,6 +286,7 @@ sub prvGetUserList
     # comma delimited list of users or groups
     # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
     $theItems =~ s/(<[^>]*>)//go;     # Remove HTML tags
+    # TODO: i18n fix for user name
     $theItems =~ s/\s*([a-zA-Z0-9_\.\,\s\%]*)\s*(.*)/$1/go; # Limit list
     my @list = map { prvGetWebTopicName( $TWiki::mainWebname, $_ ) }
                split( /[\,\s]+/, $theItems );

@@ -132,6 +132,7 @@ BEGIN {
     # Do a dynamic 'use locale' for this module
     if( $useLocale ) {
         require locale;
+	import locale ();
     }
 }
 
@@ -402,7 +403,9 @@ sub setupLocale {
 	$siteLang = $1 if defined $1;
 	##writeDebug "Language is now $siteLang";
 
-	# Set environment variables for grep, ls, etc.
+	# Set environment variables for grep 
+	# FIXME: collate probably not necessary since all sorting is done
+	# in Perl
 	$ENV{'LC_CTYPE'}= $siteLocale;
 	$ENV{'LC_COLLATE'}= $siteLocale;
 
