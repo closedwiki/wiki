@@ -251,9 +251,9 @@ sub CheckUserPasswd
     my $currentEncryptedPasswordEntry = $this->htpasswdReadPasswd( $user );
 
     my $encryptedPassword = $this->htpasswdGeneratePasswd($user, $password , 1);
-
     # OK
-    if( $encryptedPassword eq $currentEncryptedPasswordEntry ) {
+    if( $encryptedPassword &&
+        $encryptedPassword eq $currentEncryptedPasswordEntry ) {
         return '1';
     }
     # NO
