@@ -349,6 +349,19 @@ writeJavaScriptNote();
 %TMPL:DEF{"topicaction"}% <input type="submit" value=" &nbsp; Preview Changes &nbsp; " />
   %SEP% <a class="footerlink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
 %TMPL:P{"standardfooter"}%
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+ <tr>
+  <td valign="top">
+<font size="-1"> __NOTE:__ There is a *bug* in Internet Explorer. If you
+*<nobr>Preview Changes</nobr>*, then go Back and your changes have disappeared,
+use the browser's *Forward* button (*not* Preview again), then Save. Your
+changes will be fine, and you can Edit again.</font>
+  </td>
+  <td width="40%" valign="top">
+   %WEBCOPYRIGHT%
+  </td>
+ </tr>
+</table>
 </form>
 #PageBottom
 </body>
