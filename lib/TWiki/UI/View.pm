@@ -138,6 +138,7 @@ sub view {
         if( $skin !~ /^text/ ) {
             my $vtext = "<form><textarea readonly=\"readonly\" " .
               "wrap=\"virtual\" rows=\"\%EDITBOXHEIGHT%\" " .
+	        "style=\"\%EDITBOXSTYLE%\" " .
                 "cols=\"\%EDITBOXWIDTH%\">";
             $vtext = $session->handleCommonTags( $vtext, $topicName );
             $text = TWiki::entityEncode( $text );
