@@ -1,0 +1,166 @@
+#!/usr/bin/perl -wT
+#
+# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+#
+# Copyright (C) 1999-2002 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2002 Motorola - all rights reserved
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+
+use CGI::Carp qw(fatalsToBrowser);
+use CGI;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
+use TWiki::Plugins::ActionTrackerPlugin::Action;
+
+use strict;
+
+use vars qw( $query );
+
+$query = new CGI;
+
+&main();
+
+sub main
+{
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theTopic = $query->param( 'topic' ) || "";
+    my $theUrl = $query->url;
+
+    my( $topic, $webName, $dummy, $userName ) = 
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+    $dummy = "";  # to suppress warning
+
+    my $breakLock = $query->param( 'breaklock' ) || "";
+    my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
+    my $tmpl = "";
+    my $text = "";
+    my $meta = "";
+    my $extra = "";
+    my $wikiUserName = &TWiki::userToWikiName( $userName );
+
+    if( ! &TWiki::Store::webExists( $webName ) ) {
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+
+    my( $mirrorSiteName, $mirrorViewURL ) = &TWiki::readOnlyMirrorWeb( $webName );
+    if( $mirrorSiteName ) {
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsmirror", $mirrorSiteName, $mirrorViewURL );
+        print $query->redirect( $url );
+        return;
+    }
+
+    # read topic and check access permission
+    if( &TWiki::Store::topicExists( $webName, $topic ) ) {
+        ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+    }
+    if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $text, $topic, $webName ) ) {
+        # user has not permission to change the topic
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+
+    my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $webName, $topic );
+    if( ( ! $breakLock ) && ( $lockUser ) ) {
+        # warn user that other person is editing this topic
+        $lockUser = &TWiki::userToWikiName( $lockUser );
+        use integer;
+        $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
+        my $editLock = $TWiki::editLockTime / 60;
+        # PTh 20 Jun 2000: changed to getOopsUrl
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopslocked",
+            $lockUser, $editLock, $lockTime );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+    &TWiki::Store::lockTopic( $topic );
+
+    # get edit template, standard or a different skin
+    my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
+    my $tmpl = &TWiki::Store::readTemplate( "editaction", $skin );
+
+    if( $TWiki::doLogTopicEdit ) {
+        # write log entry
+        &TWiki::Store::writeLog( "editaction", "$webName.$topic" );
+    }
+
+    $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+    $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
+    $tmpl = &TWiki::getRenderedVersion( $tmpl );
+
+    TWiki::writeHeader( $query );
+
+    # Most of the script above this point is identical to 'edit'
+    # Now we do the action-specific stuff
+    # Find the Nth action
+    my $actionIndex = $query->param( 'action' ) || 0;
+    my ( $action, $pretext, $posttext ) =
+      Action::findNthAction( $webName, $topic, $text, $actionIndex );
+    $pretext =~ s/&/&amp\;/go;
+    $pretext =~ s/</&lt\;/go;
+    $pretext =~ s/>/&gt\;/go;
+    $pretext =~ s/\t/   /go;
+    $pretext =~ s/\"/&quot;/g;
+    $posttext =~ s/&/&amp\;/go;
+    $posttext =~ s/</&lt\;/go;
+    $posttext =~ s/>/&gt\;/go;
+    $posttext =~ s/\t/   /go;
+    $posttext =~ s/\"/&quot;/go;
+
+    # Clean up the text so it's nice to go into a parameter
+    $text = $action->text();
+    $text =~ s/\s*<p ?\/?>/\n\n/go;
+    $text =~ s/\s*<br ?\/?>/\n/go;
+    $text =~ s/&/&amp\;/go;
+    $text =~ s/</&lt\;/go;
+    $text =~ s/>/&gt\;/go;
+    $text =~ s/\"/&quot;/go;
+    $text =~ s/\n\t/\n   /go;
+
+    my $who = $action->who();
+    my $due = $action->dueString();
+    my $state = $action->state();
+    my $openselect;
+    my $closedselect;
+    $openselect = "SELECTED" if ( $state eq "open" );
+    $closedselect = "SELECTED" if ( $state eq "closed" );
+
+    my $an = $action->actionNumber();
+    my $ebw = TWiki::Prefs::getPreferencesValue( 'ACTIONTRACKERPLUGIN_EDITBOXWIDTH');
+    if (!$ebw) {
+      $ebw = TWiki::Prefs::getPreferencesValue( 'EDITBOXWIDTH');
+    }
+    my $ebh = TWiki::Prefs::getPreferencesValue( 'ACTIONTRACKERPLUGIN_EDITBOXHEIGHT' );
+    if ( !$ebh ) {
+      $ebh = TWiki::Prefs::getPreferencesValue( 'EDITBOXHEIGHT');
+    }
+
+    $tmpl =~ s/%PRETEXT%/$pretext/go;
+    $tmpl =~ s/%POSTTEXT%/$posttext/go;
+    $tmpl =~ s/%WHO%/$who/go;
+    $tmpl =~ s/%DUE%/$due/go;
+    $tmpl =~ s/%OPENSELECT%/$openselect/go;
+    $tmpl =~ s/%CLOSEDSELECT%/$closedselect/go;
+    $tmpl =~ s/%ACTION_NUMBER%/$an/go;
+    $tmpl =~ s/%TEXT%/$text/go;
+    $tmpl =~ s/%EBH%/$ebh/go;
+    $tmpl =~ s/%EBW%/$ebw/go;
+
+    print $tmpl;
+}
+
+1;
