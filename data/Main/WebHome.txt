@@ -1,13 +1,13 @@
-Welcome to the home of %WIKITOOLNAME%.%WEB%. This is a web based collaboration area to get to know the %WIKITOOLNAME% tool.
-
 <table><tr><td>
-<a href="http://www.mindspring.com/~peterthoeny/twiki/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
+Welcome to the home of %WIKITOOLNAME%.%WEB%. This is a web based collaboration area to get to know the %WIKITOOLNAME% tool.
 </td><td>
-<b>The TWiki home is at <br> http://www.mindspring.com/~peterthoeny/twiki/ </b>
+<a href="http://TWiki.SourceForge.net/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
+</td><td>
+<b>The TWiki home is at <br> http://TWiki.SourceForge.net/ </b>
 </td></tr>
 </table>
 
-Good *starting points* at the %WIKITOOLNAME%.%WEB% web are:
+Good *starting points* at the %WIKITOOLNAME%.%WEB% web are listed below:
 	* WelcomeGuest: Look here first to get you rolling on %WIKITOOLNAME%.
 	* TWikiWeb: Explains what a %WIKITOOLNAME% web is.
 	* <b> TWikiUsers: </b> List of visitors to this %WIKITOOLNAME% web.
