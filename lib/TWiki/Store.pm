@@ -723,8 +723,9 @@ sub webExists
 # =========================
 sub topicExists
 {
-    my( $theWeb, $theName ) = @_;
-    return -e "$TWiki::dataDir/$theWeb/$theName.txt";
+    my( $theWeb, $theTopic ) = @_;
+    ( $theWeb, $theTopic ) = normalizeWebTopicName( $theWeb, $theTopic );
+    return -e "$TWiki::dataDir/$theWeb/$theTopic.txt";
 }
 
 # =========================
