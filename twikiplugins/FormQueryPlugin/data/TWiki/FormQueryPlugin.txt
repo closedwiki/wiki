@@ -148,6 +148,14 @@ It is also possible to expand the contents of tables embedded in the topic, in t
 
 =sort="Owner,-Priority"=
 
+The default sort method is string comparison. If the field data is numeric, then you can put a '#' in front of the field name to force the sort to be numeric. For example,
+
+=sort="Owner,#Priority"=
+
+or
+
+=sort="Owner,-#Priority"=
+
 <code>%TABLEFORMAT</code> is silent i.e. it produces no output on the page unless there is an error, in which case a descriptive error message is output. This message can be disabled using the =moan= parameter.
 
 ---+++ <code>%SHOWQUERY</code>
@@ -364,6 +372,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	| ==lib/TWiki/Plugins/FormQueryPlugin/Array.pm== | Array class |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/FileTime.pm== | Cache support |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/Map.pm== | Map class |
+	| ==lib/TWiki/Plugins/FormQueryPlugin/build.xml== | Ant build file |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/Search.pm== | Search class |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/ColourMap.pm== | Highlight map class |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/TableFormat.pm== | Table formatter |
@@ -371,31 +380,22 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	| ==lib/TWiki/Plugins/FormQueryPlugin/Relation.pm== | Topic relation class |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/ReqDBSupport.pm== | Extra features |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/WebDB.pm== | Subclass of Map for a whole web |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/ArchiveTest.pm== | Test::Unit module |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/ArithmeticTest.pm== | Test::Unit module |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/ArrayTest.pm== | Test::Unit module |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/FileTimeTest.pm== | Test::Unit module |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/FuncFixture.pm== | Test::Unit module |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/TableDefTest.pm== | Test::Unit module |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/testDB.dat== | Test data |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/MapTest.pm== | Test::Unit module |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/TableFormatTest.pm== | Test::Unit module |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/ColourMapTest.pm== | Test::Unit module |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/RelationTest.pm== | Test::Unit module |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/FormQuerySuite.pm== | Test::Unit module |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/SearchTest.pm== | Test::Unit module |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test/WebDBTest.pm== | Test::Unit module |
+	| ==lib/TWiki/Plugins/FormQueryPlugin/test.zip== | Test::Unit tests |
 	| ==data/TWiki/FormQueryPlugin.txt== | Plugin topic |
 	| ==bin/autocreate== | Topic creation script |
 	| ==bin/tasknotify== | Mailer script |
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. If you are short of disc space you can delete all the files under lib/TWiki/Plugins/FormQueryPlugin/test without breaking the plugin.
 
+---++ Plugin Uninstallation Instructions (Unix/Linux)
+cd to =lib/TWiki/Plugins/FormQueryPlugin/= and type =make uninstall=
+
 ---
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
-|  Plugin Version: | 1.0 |
+|  Plugin Version: | 1.1 |
 |  Change History: | 11 Jul 2003: Initial version |
+|  | 22 Jan 2004: Bugfix version |
 |  CPAN Dependencies: | Time::Parse<nop>Date, Storable |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -403,9 +403,10 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 
 ---+++ Copyright
 
-This code is a development of Motorola Inc. and is protected by the following
-copyrights:
+This code is based on an original development of Motorola Inc. and is protected by the following copyrights:
 	* Copyright (C) 2002-2003 Motorola. All Rights Reserved.
+
+Portions copyright (C) 2004. Crawford Currie.
 
 ---+++ Extending or customising
 Extension or customisation is welcome, as long as all extensions are described and code provided back to the author.

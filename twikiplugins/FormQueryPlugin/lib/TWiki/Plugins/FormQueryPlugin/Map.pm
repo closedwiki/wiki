@@ -145,27 +145,33 @@ use TWiki::Plugins::FormQueryPlugin::Array;
 
   # PUBLIC debug print
   sub toString {
-    my ( $this, $strung ) = @_;
+    my ( $this, $limit, $level, $strung ) = @_;
     if ( !defined( $strung )) {
       $strung = {};
     } elsif ( $strung->{$this} ) {
-      return "$this\{...\}";
+      return "$this";
+    }
+    $level = 0 unless (defined($level));
+    $limit = 2 unless (defined($limit));
+    if ( $level == $limit ) {
+      return "$this.....";
     }
     $strung->{$this} = 1;
     my $key;
-    my $ss = "$this\{ ";
+    my $ss = "$this<ul>";
     foreach $key ( keys %{$this->{keys}} ) {
-      $ss .= " $key=";
+      $ss .= "<li>$key = ";
       my $entry = $this->{keys}{$key};
       if ( ref( $entry )) {
-	$ss .= $entry->toString( $strung );
+	$ss .= $entry->toString( $limit, $level + 1, $strung );
       } elsif ( defined( $entry )) {
 	$ss .= "\"$entry\"";
       } else {
 	$ss .= "UNDEF";
       }
+      $ss .= "</li>";
     }
-    return $ss." }";
+    return "$ss</ul>";
   }
 
   sub write {

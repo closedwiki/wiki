@@ -116,7 +116,55 @@ sub test_2reverse {
   $this->assert_str_equals("4231", $res);
 }
 
-sub test_3 {
+sub test_3numeric {
+  my $this = shift;
+
+  my $tf = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"#X\""));
+
+  my $data = new FormQueryPlugin::Array();
+  $data->add(new FormQueryPlugin::Map("X=3 Y=0"));
+  $data->add(new FormQueryPlugin::Map("X=20 Y=1"));
+  $data->add(new FormQueryPlugin::Map("X=110 Y=0"));
+  $data->add(new FormQueryPlugin::Map("X=005 Y=1"));
+
+  my $res = $tf->formatTable($data);
+
+  $res =~ s/<table border=2 width="100%">(.*)<\/table>/$1/so;
+  $res =~ s/<tr bgcolor=\"\#CCFF99\"><td> \*X\* <\/td><td> \*Y\* <\/td><\/tr>//o;
+  $res =~ s/<tr valign=top><td>  3  <\/td><td>  0  <\/td><\/tr>/1/o;
+  $res =~ s/<tr valign=top><td>  005  <\/td><td>  1  <\/td><\/tr>/2/o;
+  $res =~ s/<tr valign=top><td>  20  <\/td><td>  1  <\/td><\/tr>/3/o;
+  $res =~ s/<tr valign=top><td>  110  <\/td><td>  0  <\/td><\/tr>/4/o;
+  $res =~ s/\s//go;
+
+  $this->assert_str_equals("1234", $res);
+}
+
+sub test_4numericreverse {
+  my $this = shift;
+
+  my $tf = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"-#X\""));
+
+  my $data = new FormQueryPlugin::Array();
+  $data->add(new FormQueryPlugin::Map("X=3 Y=0"));
+  $data->add(new FormQueryPlugin::Map("X=20 Y=1"));
+  $data->add(new FormQueryPlugin::Map("X=110 Y=0"));
+  $data->add(new FormQueryPlugin::Map("X=005 Y=1"));
+
+  my $res = $tf->formatTable($data);
+
+  $res =~ s/<table border=2 width="100%">(.*)<\/table>/$1/so;
+  $res =~ s/<tr bgcolor=\"\#CCFF99\"><td> \*X\* <\/td><td> \*Y\* <\/td><\/tr>//o;
+  $res =~ s/<tr valign=top><td>  3  <\/td><td>  0  <\/td><\/tr>/1/o;
+  $res =~ s/<tr valign=top><td>  005  <\/td><td>  1  <\/td><\/tr>/2/o;
+  $res =~ s/<tr valign=top><td>  20  <\/td><td>  1  <\/td><\/tr>/3/o;
+  $res =~ s/<tr valign=top><td>  110  <\/td><td>  0  <\/td><\/tr>/4/o;
+  $res =~ s/\s//go;
+
+  $this->assert_str_equals("4321", $res);
+}
+
+sub test_5 {
   my $this = shift;
 
   my $tfi = new FormQueryPlugin::TableFormat(new FormQueryPlugin::Map("header=\"|*X*|*Y*|\" format=\"|\$X|\$Y|\" sort=\"Y,X\""));

@@ -223,10 +223,6 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
 
     return "0 0 0" if ( $this->{loaded} );
 
-    my $readFromCache = 0;
-    my $readFromFile = 0;
-    my $removed = 0;
-
     my $web = $this->{web};
     my @topics = TWiki::Func::getTopicList( $web );
     my $dataDir = TWiki::Func::getDataDir() . "/$web";
@@ -240,59 +236,40 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
 
     $time = _tick($time, "Cache load") if ( $cacheMonitor );
 
+    my $readFromCache = 0;
+    my $readFromFile = 0;
+    my $removed = 0;
+
     if ( $cache ) {
-      # Managed to load a cache.
-      my $topic;
-      my %tophash;
-      foreach $topic ( @topics ) {
-	$tophash{$topic} = 1;
-      }
-      my @remove;
-      $readFromCache = $cache->size();
-      foreach my $cached ( $cache->getValues()) {
-	$topic = $cached->fastget( "topic" );
-	if ( !$tophash{$topic} ) {
-	  # in the cache but are missing from @topics
-	  push( @remove, $topic );
-	  $writeCache = 1;
-	  $removed++;
-	} elsif ( !$cached->fastget( ".cache_time" )->uptodate() ) {
-	  push( @remove, $topic );
-	  $writeCache = 1;
-	}
+      eval {
+	( $readFromCache, $readFromFile, $removed ) =
+	  $this->_updateCache( $cache, $dataDir, \@topics );
+      };
+
+      if ( $@ ) {
+	TWiki::writeWarning("Cache read failed: $@");
+	$cache = undef;
       }
 
-      # remove bad topics
-      foreach $topic ( @remove ) {
-	$cache->_removeTopic( $topic );
+      if ( $readFromFile || $removed ) {
 	$writeCache = 1;
-	$readFromCache--;
       }
+    }
 
-      $time = _tick($time, "Adjustment") if ( $cacheMonitor );
-
-      # load topics that are missing from the cache
-      foreach $topic ( @topics ) {
-	if ( !defined( $cache->fastget( $topic ))) {
-	  $cache->_loadTopic( $dataDir, $topic );
-	  $writeCache = 1;
-	  $readFromFile++;
-	}
-      }
-      $this->{keys} = $cache->{keys};
-    } else {
+    if ( !$cache ) {
       foreach my $topic ( @topics ) {
 	$this->_loadTopic( $dataDir, $topic );
 	$readFromFile++;
       }
+      $this->_extractRelations();
       $writeCache = 1;
     }
+
     $time = _tick($time, "Topic read") if ( $cacheMonitor );
     if ( $writeCache ) {
-      # refresh relations
-      $this->_extractRelations();
       $this->_writeCache( $cacheFile );
     }
+
     $this->{loaded} = 1;
     if ( $cacheMonitor ) {
       $time = _tick($time,
@@ -301,7 +278,57 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
     return "$readFromCache $readFromFile $removed";
   }
 
-  # Remove a topic from the db, unlinking all the relations
+  # PRIVATE update the cache from files
+  # return the number of files changed in a tuple
+  sub _updateCache {
+    my ( $this, $cache, $dataDir, $topics ) = @_;
+
+    my $topic;
+    my %tophash;
+
+    foreach $topic ( @$topics ) {
+      $tophash{$topic} = 1;
+    }
+
+    my $removed = 0;
+    my @remove;
+    my $readFromCache = $cache->size();
+    foreach my $cached ( $cache->getValues()) {
+      $topic = $cached->fastget( "topic" );
+      if ( !$tophash{$topic} ) {
+	# in the cache but are missing from @topics
+	push( @remove, $topic );
+	$removed++;
+      } elsif ( !$cached->fastget( ".cache_time" )->uptodate() ) {
+	push( @remove, $topic );
+      }
+    }
+    
+    # remove bad topics
+    foreach $topic ( @remove ) {
+      $cache->_removeTopic( $topic );
+      $readFromCache--;
+    }
+    
+    my $readFromFile = 0;
+    # load topics that are missing from the cache
+    foreach $topic ( @$topics ) {
+      if ( !defined( $cache->fastget( $topic ))) {
+	$cache->_loadTopic( $dataDir, $topic );
+	$readFromFile++;
+      }
+    }
+    $this->{keys} = $cache->{keys};
+    
+    if ( $readFromFile || $removed ) {
+      # refresh relations
+      $this->_extractRelations();
+    }
+
+    return ( $readFromCache, $readFromFile, $removed );
+  }
+
+  # PRIVATE Remove a topic from the db, unlinking all the relations
   sub _removeTopic {
     my ( $this, $topic ) = @_;
     my $meta = $this->remove( $topic );
@@ -315,7 +342,7 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
 	$bp->remove( $i ) if ( $i >= 0 );
       }
       my $rlist = $meta->fastget( $relation->parentToChild() );
-      if ( defined( $rlist )) {
+      if ( defined( $rlist ) && $rlist->size() > 0 ) {
 	foreach my $child ( $rlist->getValues() ) {
 	  $child->set( $relation->childToParent(), undef );
 	}
@@ -354,7 +381,7 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
   # PUBLIC debug print
   sub toString {
     my $this = shift;
-    my $text = "WebDB/" . $this->{web};
+    my $text = "WebDB for web " . $this->{web};
 
     $text .= $this->SUPER::toString();
 
@@ -607,6 +634,24 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
     $this->SUPER::read( $archive );
   }
 
+  sub getInfo {
+    my ( $this, $params ) = @_;
+
+    my $attrs = new FormQueryPlugin::Map( $params );
+
+    $this->_load();
+    my $topic = $attrs->get("topic");
+
+    if (!defined($topic) || $topic eq "") {
+      return $this->toString();
+    } else {
+      my $ti = $this->get( $topic );
+      if (defined($ti)) {
+	return $ti->toString($attrs->get("limit"));
+      }
+      return "<font color=red>$topic not known</font>"
+    }
+  }
 }
 
 1;
