@@ -17,8 +17,6 @@ sub handleTags
     $viewableAttachmentCount = 0;
     $noviewableAttachmentCount = 0;
 
-    # FIXME Switch to using templates
-
     # First do rows of attachment table
     $_[0] =~ s/(%FILEATTACHMENT\{)([^\}]*)(}%)/&formatAttachments( $1, $2, $3, "", $theWeb, $theTopic )/geo;
 
@@ -72,16 +70,13 @@ sub formatAttachments
         
         if ( $attrCmd eq "Start" && $viewableAttachmentCount > 0 ) {
            $showAttr = TWiki::extractNameValuePair( $attributes, "view" );
-           $row .= "<br>\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"4\">\n";
-           $row .= "    <tr BGCOLOR=\"#=99CCCC\"><th>FileAttachment:</th><th>Action:</th><th>Size:</th><th>Date:</th>";
-           $row .= "    <th>Who:</th><th>Comment:</th>";
+           $row .= "|  *FileAttachment:*  |  *Action:*  |  *Size:*  |  *Date:*  |  *Who:*  |  *Comment:*  |";
            if ( $showAttr ) {
-               $row .= "    <th title=\"h : hidden, d : deleted, - none\">Attrib:</th>";
+               #$row .= "    <th title=\"h : hidden, d : deleted, - none\">Attrib:</th>";
+               $row .= "  *Attrib:*  |";
            }
-           $row .= "    </tr>\n";
         } elsif ( $attrCmd eq "End" ) {
            if ( $viewableAttachmentCount > 0 ) {
-               $row .= "</table>\n";
            }
            if ( $showAttr ) {
               # FIXME move to a template
@@ -100,20 +95,15 @@ sub formatAttachments
 
         if (  ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ ) ) {
             $viewableAttachmentCount++;
-            $row .= "<tr>\n";
             my $fileIcon = TWiki::Attach::filenameToIcon( $file );
-            $row .= "    <td>$fileIcon <a href=\"%SCRIPTURL%/viewfile/$theWeb/$theTopic?rev=$attrVersion&filename=$file\">$file</a></td>\n";
-            $row .= "    <td><a href=\"%SCRIPTURL%/attach/$theWeb/$theTopic?filename=$file&revInfo=1\">action</a></td>\n";
-            $row .= "    <td> $attrSize </td>\n";
-            $row .= "    <td> $attrDate </td>\n";
-            $row .= "    <td> $attrUser </td>\n";
             $attrComment = $attrComment || "&nbsp;";
-            $row .= "    <td> $attrComment </td>\n";
+            $row .= "| $fileIcon <a href=\"%SCRIPTURL%/viewfile/$theWeb/$theTopic?rev=$attrVersion&filename=$file\">$file</a> \\\n";
+            $row .= "   | <a href=\"%SCRIPTURL%/attach/$theWeb/$theTopic?filename=$file&revInfo=1\">action</a> \\\n";
+            $row .= "   | $attrSize | $attrDate | $attrUser | $attrComment |";
             if ( $showAttr ) {
                 $attrAttr = $attrAttr || "-";
-                $row .= "    <td>$attrAttr</td>\n";
+                $row .= " $attrAttr |";
             }
-            $row .= "</tr>\n";
         }  else {
             $noviewableAttachmentCount++;
         }
