@@ -236,18 +236,27 @@ sub test_get {
   $this->davcheck(!$dav->get("Attest/$t.txt"), $dav);
 
   my $tt = $this->_createProtectedTopic("Attest", "DavTest", 4, 2);
+
+  # change denied, but view permitted
   $dav = $this->davopen(0, $davDataURL);
   $this->davcheck($dav->get("Attest/$tt.txt"), $dav);
+
+  # change permitted, but view denied
   $dav = $this->davopen(1, $davDataURL);
   $this->davcheck(!$dav->get("Attest/$tt.txt"), $dav);
 
   $tt = $this->_createProtectedTopic("Attest", "DavTest", 4, 1);
+
+  # rename denied, but view permitted
   $dav = $this->davopen(0, $davDataURL);
   $this->davcheck($dav->get("Attest/$tt.txt"), $dav);
+
+  # rename permitted, but view denied
   $dav = $this->davopen(1, $davDataURL);
   $this->davcheck(!$dav->get("Attest/$tt.txt"), $dav);
 
-  # Attachments
+  # Attachments should mirror topic permissions. Just need to check
+  # that allow/deny works for attachments.
   $this->saveattachment(0,"Attest",$t,$testAttName);
 
   # view access permitted
@@ -274,14 +283,14 @@ sub test_put {
 							-url=>"Davtestweb"), $dav);
   $this->assert(!-e "$pubDir/Davtestweb");
 
-  # create new topic is no problem
+  # create new topic in data area is no problem
   $dav = $this->davopen(0, $davDataURL);
   $this->davcheck($dav->put(-local=>$testAttPath,
 							-url=>"Attest/$t.txt"), $dav);
   $this->assert(-e "$dataDir/Attest/$t.txt");
   $this->assert(-e "$dataDir/Attest/$t.txt,v");
 
-  #
+  # create new topic in pub area is a problem
   $dav = $this->davopen(0, $davPubURL);
   $this->davcheck(!$dav->put(-local=>$testAttPath,
 							 -url=>"Attest/TestTopicTwo.txt"), $dav);
@@ -350,7 +359,7 @@ sub test_delete {
   $this->davcheck(!$dav->delete("Attest"), $dav);
   $this->checkatt(1, "Attest",$t, $testAttName);
 
-  # delete attachment only
+  # delete attachment only. user 1 has no change permission
   $dav = $this->davopen(1, $davPubURL);
   $this->davcheck(!$dav->delete("Attest/$t/$testAttName"), $dav);
   $this->checkatt(1, "Attest",$t, $testAttName);
