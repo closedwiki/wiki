@@ -121,10 +121,6 @@ sub _save {
         $newText = $query->param( "text" );
     }
 	
-    if( ! ( defined $newText ) ) {
-        throw TWiki::UI::OopsException( $webName, $topic, "save" );
-    }
-
     $newText = TWiki::decodeSpecialChars( $newText );
 
     my $saveOpts = {};
