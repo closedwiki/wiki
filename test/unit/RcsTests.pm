@@ -136,6 +136,8 @@ sub verifyWrap {
         my $text = $rcs->getRevision( $i );
         $this->assert_equals( $vals[$i-1], $text );
     }
+
+    return $rcs;
 }
 
 sub verifyLite {
@@ -151,6 +153,7 @@ sub verifyLite {
         my $text = $rcs->getRevision( $i );
         $this->assert_equals( $vals[$i-1], $text );
     }
+    return $rcs;
 }
 
 sub test_repRevRcs {
@@ -317,12 +320,23 @@ sub test_wt10Wrap {
 
 sub test_wt11Lite {
     my $this = shift;
-    $this->verifyLite( $wTopic, "", ( 'john.talintyre@drkw.com\n' ) ); # TODO: broken!
+    $this->verifyLite( $wTopic, "", ( 'john.talintyre@drkw.com\n' ) );
 }
 
 sub test_wt11Wrap {
     my $this = shift;
-    $this->verifyWrap( $wTopic, "", ( 'john.talintyre@drkw.com\n' ) ); # TODO: broken!
+    $this->verifyWrap( $wTopic, "", ( 'john.talintyre@drkw.com\n' ) );
+}
+
+# ensure RCS keywords are not expanded in the checked-out version
+sub test_rcsKeywordsWrap {
+    my $this = shift;
+    my $check = '$Author$ $Date$ $Header$ $Id$ $Locker$ $Log$ $Name$ $RCSfile$ $Revision$ $Source$ $State$';
+    my $rcs = $this->verifyWrap( $wTopic, "", ( $check ) );
+    open(F,"<$rcs->{file}");
+    undef $/;
+    $this->assert_str_equals($check, <F>);
+    close(F);
 }
 
 sub test_wt12Lite {
@@ -608,6 +622,17 @@ sub test_wa19Wrap {
 sub test_wa20Lite {
     my $this = shift;
     $this->verifyLite( $wTopic, "it.doc", ( "a\nb\n", "a\nb\nc\n", "a\nb\nc\n" . chr(0xFF) . "\n" ) );
+}
+
+# ensure RCS keywords are not expanded in the checked-out version
+sub test_rcsKeywordsLite {
+    my $this = shift;
+    my $check = '$Author$ $Date$ $Header$ $Id$ $Locker$ $Log$ $Name$ $RCSfile$ $Revision$ $Source$ $State$';
+    my $rcs = $this->verifyLite( $wTopic, "", ( $check ) );
+    open(F,"<$rcs->{file}");
+    undef $/;
+    $this->assert_str_equals($check, <F>);
+    close(F);
 }
 
 sub test_wa20Wrap {
