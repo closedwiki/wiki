@@ -1509,9 +1509,15 @@ sub _TOC {
     my $line  = "";
     my $level = "";
 
-    if( "$web.$topicname" ne "$defaultWeb.$defaultTopic" ) {
-        my %p = ( _DEFAULT => "$web.$topicname" );
-        $text = $this->_handleINCLUDE( \%p, $defaultWeb, $defaultTopic );
+    # If a topic name is explicitly defined, make sure we read it.
+    # Otherwise if we think the text being expanded is the text of the topic,
+    # don't try to read.
+    # SMELL: this is a hack, that overcomes muddy thinking in the
+    # code where handleCommonTags is called.
+    if( defined( $params->{_DEFAULT} ) ||
+        "$web.$topicname" ne "$defaultWeb.$defaultTopic" ) {
+        my $params = { _DEFAULT => "$web.$topicname" };
+        $text = $this->_handleINCLUDE( $params, $defaultWeb, $defaultTopic );
     }
 
     my $headerDaRE =  $regex{headerPatternDa};
