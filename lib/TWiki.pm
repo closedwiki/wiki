@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "16 May 2002";
+$wikiversion      = "17 May 2002";
 
 # ===========================
 # read the configuration part
@@ -813,39 +813,11 @@ sub getOopsUrl
     # $urlHost is needed, see Codev.PageRedirectionNotWorking
     $url = getScriptUrl( $web, $theTopic, "oops" );
     $url .= "\?template=$theTemplate";
-    if( $theParam1 ) {
-        # PTh, Stanley Knutson 03 Feb 2001: Proper URL encoding
-        $theParam1 =~ s/[\n\r]/\%3Cbr\%3E/go;
-        $theParam1 =~ s/\s+/\%20/go;
-        $theParam1 =~ s/\&/\%26/go;
-        $theParam1 =~ s/\</\%3C/go;
-        $theParam1 =~ s/\>/\%3E/go;
-        $url .= "\&param1=$theParam1";
-    }
-    if( $theParam2 ) {
-        $theParam2 =~ s/[\n\r]/\%3Cbr\%3E/go;
-        $theParam2 =~ s/\s+/\%20/go;
-        $theParam2 =~ s/\&/\%26/go;
-        $theParam2 =~ s/\</\%3C/go;
-        $theParam2 =~ s/\>/\%3E/go;
-        $url .= "\&param2=$theParam2";
-    }
-    if( $theParam3 ) {
-        $theParam3 =~ s/[\n\r]/\%3Cbr\%3E/go;
-        $theParam3 =~ s/\s+/\%20/go;
-        $theParam3 =~ s/\&/\%26/go;
-        $theParam3 =~ s/\</\%3C/go;
-        $theParam3 =~ s/\>/\%3E/go;
-        $url .= "\&param3=$theParam3";
-    }
-    if( $theParam4 ) {
-        $theParam4 =~ s/[\n\r]/\%3Cbr\%3E/go;
-        $theParam4 =~ s/\s+/\%20/go;
-        $theParam4 =~ s/\&/\%26/go;
-        $theParam4 =~ s/\</\%3C/go;
-        $theParam4 =~ s/\>/\%3E/go;
-        $url .= "\&param4=$theParam4";
-    }
+    $url .= "\&amp;param1=" . handleUrlEncode( $theParam1 ) if ( $theParam1 );
+    $url .= "\&amp;param2=" . handleUrlEncode( $theParam2 ) if ( $theParam2 );
+    $url .= "\&amp;param3=" . handleUrlEncode( $theParam3 ) if ( $theParam3 );
+    $url .= "\&amp;param4=" . handleUrlEncode( $theParam4 ) if ( $theParam4 );
+
     return $url;
 }
 
@@ -1430,6 +1402,21 @@ sub handleUrlParam
 }
 
 # =========================
+sub handleUrlEncode
+{
+    my( $theStr, $doExtract ) = @_;
+
+    $theStr = extractNameValuePair( $theStr ) if( $doExtract );
+    $theStr =~ s/[\n\r]/\%3Cbr\%20\%3E/go;
+    $theStr =~ s/\s+/\%20/go;
+    $theStr =~ s/\&/\%26/go;
+    $theStr =~ s/\</\%3C/go;
+    $theStr =~ s/\>/\%3E/go;
+
+    return $theStr;
+}
+
+# =========================
 sub handleEnvVariable
 {
     my( $theVar ) = @_;
@@ -1492,6 +1479,7 @@ sub handleInternalTags
     $_[0] =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$_[2]\/$_[1]/go;
     $_[0] =~ s/%ATTACHURLPATH%/$pubUrlPath\/$_[2]\/$_[1]/go;
     $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/geo;
+    $_[0] =~ s/%URLENCODE{(.*?)}%/&handleUrlEncode($1,1)/geo;
     $_[0] =~ s/%DATE%/&getGmDate()/geo; # deprecated, but used in signatures
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/geo;
     $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/geo;
