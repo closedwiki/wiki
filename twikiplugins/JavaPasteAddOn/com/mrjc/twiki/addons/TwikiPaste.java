@@ -49,7 +49,7 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 	private String action;
 	private String redirectHTML;
 	private String redirectURL;
-
+    public static String javaPasteCvsRevision = "$Revision$";
 	
 	public TwikiPaste() {
 
@@ -88,9 +88,9 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 			addText("for instance, <APPLET CODE = \"...>\"\n"+ 
 				"<PARAM NAME=\"action\" VALUE=\"http://localhost:8123/twiki/bin/upload.pl/Main/CatherineMacleod>\"\n");
 		} else {
-			System.out.println("$Version:$ ACTION='"+action+"'");
-		    System.out.println("ACTION='"+action+"'");
-		    addText("TWiki Paste initiated\n\n");
+			
+		    System.out.println(javaPasteCvsRevision + " ACTION='"+action+"'");
+		    addText("TWiki "+ javaPasteCvsRevision + "Paste initiated\n\n");
 		    addText("With this utility, you can paste capture pictures or files\n placed on the Clipboard.\n");
 			addText("For conversation on this tool, please see:\n http://javapaste.mrjc.com/JavaPaste.htm\n");
 		}
