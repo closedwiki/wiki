@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007383980" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="MikeMannix" date="1010877833" format="1.0" version="1.10"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -134,21 +134,21 @@ Meta Data is rendered with the %<nop>META% variable. This is mostly used in the 
 Current support covers:
 
   | *Variable usage:*	| *Comment:*  |
-  | %<nop>META{"form"}% | Show form data, see TWikiForms |
-  | %<nop>META{"attachments"}% | Show attachments, exclude hidden |
-  | Options for [[FileAttachments][Attachments]]: | |
-  | all="on" | Show ALL attachments (including hidden) |
-  | %<nop>META{"moved"}% | Details of any topic moves |
-  | %<nop>META{"parent [options]"}% | Show topic parent |
-  | Options for parent: | |
-  | dontrecurse="on" | By default recurses up tree, at some cost |
-  | prefix="..." | Prefix for parents, only if there are parents; default "" |
-  | suffix="..." | Suffix, only appears if there are parents; default "" |
-  | separator="..." | Separator between parents, default is " > " |
+  | =%<nop>META{"form"}%= | Show form data, see TWikiForms. |
+  | =%<nop>META{"attachments"}%= | Show attachments, except for hidden ones. Options: <br > \
+	 ==all="on"==: Show all attachments, including hidden ones. |
+  | =%<nop>META{"moved"}%= | Details of any topic moves. |
+  | =%<nop>META{"parent"}%= | Show topic parent. Options: <br /> \
+	 ==dontrecurse="on"==: By default recurses up tree, at some cost. <br /> \
+	 ==nowebhome="on"==: Suppress <nop>%HOMETOPIC%. <br /> \
+	 ==prefix="..."==: Prefix for parents, only if there are parents, default =""=. <br /> \
+	 ==suffix="..."==: Suffix, only appears if there are parents, default =""=. <br /> \
+	 ==separator="..."==: Separator between parents, default is =" &gt; "=. |
 
 ---++ Known Issues
 
 At present, there is no Meta Data support for Plugins. However, the format is readily extendable and the =Meta.pm= code that supports the format needs only minor alteration.
 
 -- JohnTalintyre - 29 Aug 2001 <br />
--- MikeMannix - 03 Dec 2001	
+-- MikeMannix - 03 Dec 2001 <br />
+-- Main.PeterThoeny - 10 Jan 2002
