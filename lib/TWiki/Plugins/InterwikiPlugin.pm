@@ -37,7 +37,7 @@ use vars qw(
         %interSiteTable $debug
     );
 
-$VERSION = '1.004'; # 16 Feb 2004
+$VERSION = '1.005'; # 16 Feb 2004
 $interSiteLinkRulesTopicName = "InterWikis";
 
 # 'Use locale' for internationalisation of Perl sorting and searching - 
@@ -140,7 +140,7 @@ sub outsidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-    $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\][\[\]])/&handleInterwiki($1,$2,$3,$4)/geo;
+    $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\]\]|\]\[| )/&handleInterwiki($1,$2,$3,$4)/geo;
     $_[0] =~ s/$prefixPattern$sitePattern:$pagePattern$postfixPattern/&handleInterwiki($1,$2,$3,"")/geo;
 }
 
@@ -175,7 +175,7 @@ sub handleInterwiki
         }
         if( $thePostfix ) {
             $text = "$thePrefix$text][";
-            $text .= "$theSite\:$theTopic]]" unless( $thePostfix eq "][" );
+            $text .= "$theSite\:$theTopic]]" if( $thePostfix eq "]]" );
         } else {
             $text = "$thePrefix<a href=\"$text\"$title>$theSite\:$theTopic</a>";
         }
