@@ -27,7 +27,7 @@
 
 ---++ Description
 
-This module defines official funtions that [[TWiki.TWikiPlugins][Plugins]] and add-on 
+This module defines official funtions that [[%TWIKIWEB%.TWikiPlugins][Plugins]] and add-on 
 scripts can use to interact with the TWiki engine and content.
 
 Plugins should *only* use functions published in this module. If you use
@@ -489,8 +489,8 @@ sub permissionsSet
 
 ---+++ checkAccessPermission( $type, $user, $text, $topic, $web ) ==> $flag
 
-| Description: | Check access permission for a topic based on the [[TWikiAccessControl]] rules |
-| Parameter: =$type= | Access type, e.g. ="VIEW"=, ="CHANGE"=, ="CREATE=" |
+| Description: | Check access permission for a topic based on the [[%TWIKIWEB%.TWikiAccessControl]] rules |
+| Parameter: =$type= | Access type, e.g. ="VIEW"=, ="CHANGE"=, ="CREATE"= |
 | Parameter: =$user= | WikiName of remote user, i.e. ="Main.PeterThoeny"= |
 | Parameter: =$text= | Topic text, optional. If empty, topic =$web.$topic= is consulted |
 | Parameter: =$topic= | Topic name, required, e.g. ="PrivateStuff"= |
@@ -557,7 +557,149 @@ sub topicExists
 sub getRevisionInfo
 {
 #   my( $web, $topic );
-    return &TWiki::Store::getRevisionInfoFromMeta( @_ );
+    return TWiki::Store::getRevisionInfoFromMeta( @_ );
+}
+
+# =========================
+=pod
+
+---+++ checkTopicEditLock( $web, $topic ) ==> ( $oopsUrl, $loginName, $unlockTime )
+
+| Description: | Check if topic has an edit lock by a user |
+| Parameter: =$web= | Web name, e.g. ="Main"=, or empty |
+| Parameter: =$topic= | Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"= |
+| Return: =( $oopsUrl, $loginName, $unlockTime )= | The =$oopsUrl= for calling redirectCgiQuery(), user's =$loginName=, and estimated =$unlockTime= in minutes. The =$oopsUrl= and =$loginName= is empty if topic has no edit lock. |
+
+=cut
+# -------------------------
+sub checkTopicEditLock
+{
+    my( $web, $topic ) = @_;
+    my( $loginName, $lockTime ) = TWiki::Store::topicIsLockedBy( $web, $topic );
+    my $oopsUrl = "";
+    if( $loginName ) {
+        use integer;
+        $lockTime = ( $lockTime / 60 ) + 1;           # convert to minutes
+        my $editLockTime = $TWiki::editLockTime / 60; # max lock time
+        my $wikiUser = TWiki::Func::userToWikiName( $loginName );
+        $oopsUrl = &TWiki::Func::getOopsUrl( $web, $topic, "oopslocked", $wikiUser, $editLockTime, $lockTime );
+    }
+    return( $oopsUrl, $loginName, $lockTime );
+}
+
+# =========================
+=pod
+
+---+++ setTopicEditLock( $web, $topic, $lock ) ==> $oopsUrl
+
+| Description: | Lock topic for editing, or unlock when done |
+| Parameter: =$web= | Web name, e.g. ="Main"=, or empty |
+| Parameter: =$topic= | Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"= |
+| Parameter: =$lock= | Set to =1= to lock topic, =0= to unlock |
+| Return: =$oopsUrl= | Empty string if OK; the =$oopsUrl= for calling redirectCgiQuery() in case lock is already taken when trying to lock topic |
+
+=cut
+# -------------------------
+sub setTopicEditLock
+{
+    my( $web, $topic, $lock ) = @_;
+    if( $lock ) {
+        my( $oopsUrl ) = checkTopicEditLock( $web, $topic );
+        return $oopsUrl if( $oopsUrl );
+    }
+    TWiki::Store::lockTopicNew( $web, $topic, ! $lock );    # reverse $lock parameter is correct!
+    return "";
+}
+
+# =========================
+=pod
+
+---+++ readTopicText( $web, $topic, $rev, $ignorePermissions ) ==> $text
+
+| Description: | Read topic text, including meta data |
+| Parameter: =$web= | Web name, e.g. ="Main"=, or empty |
+| Parameter: =$topic= | Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"= |
+| Parameter: =$rev= | Topic revision to read, optional. Specify the minor part of the revision, e.g. ="5"=, not ="1.5"=; the top revision is returned if omitted or empty. |
+| Parameter: =$ignorePermissions=  | Set to ="1"= if checkAccessPermission() is already performed and OK; an oops URL is returned if user has no permission |
+| Return: =$text= | Topic text with embedded meta data; an oops URL for calling redirectCgiQuery() is returned in case of an error |
+
+=cut
+# -------------------------
+sub readTopicText
+{
+    my( $web, $topic, $rev, $ignorePermissions ) = @_;
+
+    my $text = TWiki::Store::readTopicRaw( $web, $topic, $rev, $ignorePermissions );
+    # FIXME: The following breaks if spec of readTopicRaw() changes
+    if( $text =~ /^No permission to read topic/ ) {
+        $text = TWiki::getOopsUrl( $web, $topic, "oopsaccessview" );
+    }
+    return $text;
+}
+
+# =========================
+=pod
+
+---+++ saveTopicText( $web, $topic, $text, $ignorePermissions, $dontNotify ) ==> $oopsUrl
+
+| Description: | Save topic text, typically obtained by readTopicText(). Topic data usually includes meta data; the file attachment meta data is replaced by the meta data from the topic file if it exists. |
+| Parameter: =$web= | Web name, e.g. ="Main"=, or empty |
+| Parameter: =$topic= | Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"= |
+| Parameter: =$text= | Topic text to save, assumed to include meta data |
+| Parameter: =$ignorePermissions=  | Set to ="1"= if checkAccessPermission() is already performed and OK |
+| Parameter: =$dontNotify= | Set to ="1"= if not to notify users of the change |
+| Return: =$oopsUrl= | Empty string if OK; the =$oopsUrl= for calling redirectCgiQuery() in case of error |
+
+   * Example: <br />
+     =my $oopsUrl = TWiki::Func::setTopicEditLock( $web, $topic, 1 );= <br />
+     =if( $oopsUrl ) {= <br />
+     =&nbsp;   TWiki::Func::redirectCgiQuery( $query, $oopsUrl );   # assuming valid query= <br />
+     =&nbsp;   return;= <br />
+     =}= <br />
+     =my $text = TWiki::Func::readTopicText( $web, $topic );        # read topic text= <br />
+     =# check for oops URL in case of error:= <br />
+     =if( $text =~ /^http.*?\/oops/ ) {= <br />
+     =&nbsp;   TWiki::Func::redirectCgiQuery( $query, $text );= <br />
+     =&nbsp;   return;= <br />
+     =}= <br />
+     =# do topic manipulation like:= <br />
+     =$text =~ s/old/new/g;= <br />
+     =$oopsUrl = TWiki::Func::saveTopicText( $web, $topic, $text ); # save topic text= <br />
+     =TWiki::Func::setTopicEditLock( $web, $topic, 0 );             # unlock topic= <br />
+     =if( $oopsUrl ) {= <br />
+     =&nbsp;   TWiki::Func::redirectCgiQuery( $query, $oopsUrl );= <br />
+     =&nbsp;   return;= <br />
+     =}=
+
+=cut
+# -------------------------
+sub saveTopicText
+{
+    my( $web, $topic, $text, $ignorePermissions, $dontNotify ) = @_;
+
+    my( $mirrorSite, $mirrorViewURL ) = TWiki::readOnlyMirrorWeb( $web );
+    return TWiki::getOopsUrl( $web, $topic, "oopsmirror", $mirrorSite, $mirrorViewURL ) if( $mirrorSite );
+
+    # check access permission
+    unless( $ignorePermissions ||
+            TWiki::Access::checkAccessPermission( "change", $TWiki::wikiUserName, "", $topic, $web )
+          ) {
+        return TWiki::getOopsUrl( $web, $topic, "oopsaccesschange" );
+    }
+
+    return TWiki::getOopsUrl( $web, $topic, "oopssave" )  unless( defined $text );
+    return TWiki::getOopsUrl( $web, $topic, "oopsempty" ) unless( $text ); # empty topic not allowed
+
+    # extract meta data and merge old attachment meta data
+    my $meta = "";
+    ( $meta, $text ) = TWiki::Store::_extractMetaData( $web, $topic, $text );
+    my( $oldMeta, $oldText ) = TWiki::Store::readTopic( $web, $topic );
+    $meta->copyFrom( $oldMeta, "FILEATTACHMENT" );
+
+    # save topic
+    my $error = TWiki::Store::saveTopic( $web, $topic, $text, $meta, "", 0, $dontNotify );
+    return TWiki::getOopsUrl( $web, $topic, "oopssaveerr", $error ) if( $error );
+    return "";
 }
 
 # =========================
@@ -618,7 +760,7 @@ sub expandCommonVariables
 
 ---+++ renderText( $text, $web ) ==> $text
 
-| Description: | Render text from TWiki markup into XHTML as defined in [[TextFormattingRules]] |
+| Description: | Render text from TWiki markup into XHTML as defined in [[%TWIKIWEB%.TextFormattingRules]] |
 | Parameter: =$text= | Text to render, e.g. ="*bold* text and =fixed font="= |
 | Parameter: =$web= | Web name, optional, e.g. ="Main"=. The current web is taken if missing |
 | Return: =$text= | XHTML text, e.g. ="&lt;b>bold&lt;/b> and &lt;code>fixed font&lt;/code>"= |
@@ -660,7 +802,7 @@ sub internalLink
 
 | Description: | This is not a function, just a how-to note. Use: =expandCommonVariables("%<nop>SEARCH{...}%" );= |
 | Parameter: =$text= | Search variable |
-| Return: ="$text"= | Search result in [[FormattedSearch]] format |
+| Return: ="$text"= | Search result in [[%TWIKIWEB%.FormattedSearch]] format |
 
 =cut
 
@@ -715,16 +857,12 @@ sub getPubDir
 }
 
 # =========================
-=pod
-
----+++ readTopic( $web, $opic ) ==> ( $meta, $text )
-
-| Description: | Read topic text and meta data, regardless of access permissions. NOTE: This function will be deprecated in a future release when meta data handling is changed |
-| Parameter: =$web= | Web name, required, e.g. ="Main"= |
-| Parameter: =$topic= | Topic name, required, e.g. ="TokyoOffice"= |
-| Return: =( $meta, $text )= | Meta data object and topic text |
-
-=cut
+# NOTE: The following function is deprecated and should not be used. Use readTopicText() instead
+# ---+++ readTopic( $web, $topic ) ==> ( $meta, $text )
+# | Description: | Read topic text and meta data, regardless of access permissions. |
+# | Parameter: =$web= | Web name, required, e.g. ="Main"= |
+# | Parameter: =$topic= | Topic name, required, e.g. ="TokyoOffice"= |
+# | Return: =( $meta, $text )= | Meta data object and topic text |
 # -------------------------
 sub readTopic
 {
@@ -737,7 +875,7 @@ sub readTopic
 
 ---+++ readTemplate( $name, $skin ) ==> $text
 
-| Description: | Read a template or skin file. Embedded [[TWikiTemplates]] directives get expanded |
+| Description: | Read a template or skin file. Embedded [[%TWIKIWEB%.TWikiTemplates][template directives]] get expanded |
 | Parameter: =$name= | Template name, e.g. ="view"= |
 | Parameter: =$skin= | Skin name, optional, e.g. ="print"= |
 | Return: =$text= | Template text |
@@ -755,7 +893,7 @@ sub readTemplate
 
 ---+++ readFile( $filename ) ==> $text
 
-| Description: | Read text file, low level |
+| Description: | Read text file, low level. NOTE: For topics use readTopicText() |
 | Parameter: =$filename= | Full path name of file |
 | Return: =$text= | Content of file |
 
@@ -772,7 +910,7 @@ sub readFile
 
 ---+++ saveFile( $filename, $text )
 
-| Description: | Save text file, low level |
+| Description: | Save text file, low level. NOTE: For topics use saveTopicText() |
 | Parameter: =$filename= | Full path name of file |
 | Parameter: =$text= | Text to save |
 | Return: | none |

@@ -918,6 +918,7 @@ sub readTopicRaw
     }
     
     unless( $viewAccessOK ) {
+        # FIXME: TWiki::Func::readTopicText will break if the following text changes
         $text = "No permission to read topic $theWeb.$theTopic\n";
         # Could note inability to read so can divert to viewauth or similar
         $TWiki::readTopicPermissionFailed = "$TWiki::readTopicPermissionFailed $theWeb.$theTopic";
