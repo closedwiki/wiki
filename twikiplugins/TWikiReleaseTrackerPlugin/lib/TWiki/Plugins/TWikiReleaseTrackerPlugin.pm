@@ -560,6 +560,10 @@ sub getLocalVersion {
 	return "../../" . $_[0];
 }
 
+=pod
+Pick up from CVS if before XXXX/2004, else look in SVN.
+
+=cut
 sub getDistributionVersion {
 	my ( $file, $distribution ) = @_;
 	$file =~ s!^twiki/!!;
