@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093682616" format="1.0" version="1.64"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093769177" format="1.0" version="1.65"}%
 %TOC%
 %STARTINCLUDE%
 ---# Appendix D: TWiki Development Timeline
@@ -14,7 +14,7 @@ __Major New Features__
 	* Improved support for internationalisation
 	* Better topic management screens
 	* More pre-installed Plugins: !CommentPlugin, !EditTablePlugin, !RenderListPlugin, !SlideShowPlugin, !SmiliesPlugin, !SpreadSheetPlugin, !TablePlugin
-	* More callbacks for Plugins
+	* Improved Plugins API and more Plugin callbacks
 	* Better support for different authentication methods
 	* Many user interface and usability improvements
 	* And many, many more enhancements
@@ -69,7 +69,7 @@ __Major New Features__
 | Search: Remove limitation on number of topics to search in a web. [[http://TWiki.org/cgi-bin/view/Codev/ArgumentListIsTooLongForSearch][Details]] | TWiki:Main.PeterThoeny |
 | Search: Exclude topics from search with an excludetopic parameter. [[http://TWiki.org/cgi-bin/view/Codev/ExcludeWebTopicsFromSearch][Details]] | TWiki:Main.PeterThoeny |
 | Search: Expand Variables on Formatted Search with expandvariables Flag. [[http://TWiki.org/cgi-bin/view/Codev/ExpandVariablesOnFormattedSearch][Details]] | TWiki:Main.PeterThoeny |
-| Search: Formatted Search with WebForm variable to retrieve the name of the form attached to a topic. [[http://TWiki.org/cgi-bin/view/Codev/FormattedSearchFormnameVariable][Details]] | TWiki:Main.FrankSmith TWiki:Main.PeterThoeny |
+| Search: Formatted Search with Web Form variable to retrieve the name of the form attached to a topic. [[http://TWiki.org/cgi-bin/view/Codev/FormattedSearchFormnameVariable][Details]] | TWiki:Main.FrankSmith TWiki:Main.PeterThoeny |
 | Search: Formatted Search with Conditional Output. [[http://TWiki.org/cgi-bin/view/Codev/FormattedSearchWithConditionalOutput][Details]] | TWiki:Main.PeterThoeny |
 | Search: Formatted Search with $parent token to get the parent topic. [[http://TWiki.org/cgi-bin/view/Codev/FormattedSearchWithParentTopic][Details]] | TWiki:Main.PeterThoeny |
 | Search: New separator parameter to SEARCH supports better SEARCH embedding. [[http://TWiki.org/cgi-bin/view/Codev/FormattedSearchWithSeparatorParameter][Details]] | TWiki:Main.PeterThoeny |
@@ -87,7 +87,11 @@ __Major New Features__
 | Plugins: New callbacks =beforeCommonTagsHandler= and =afterCommonTagsHandler=. [[http://TWiki.org/cgi-bin/view/Codev/BeforeCommonTagsHandler][Details]] | TWiki:Main.PeterThoeny |
 | Plugins: New callback =renderFormFieldForEditHandler= to render form field for edit. [[http://TWiki.org/cgi-bin/view/Codev/RenderFormFieldForEditHandler][Details]] | TWiki:Main.JohnTalintyre |
 | Plugins: New callback =renderWikiWordHandler= to custom render links. [[http://TWiki.org/cgi-bin/view/Codev/RenderedWikiWordHandler][Details]] | TWiki:Main.MartinCleaver TWiki:Main.WalterMundt |
-| Plugins: Adds new dependency checking function TWiki::Func::checkDependencies for Plugins. [[http://TWiki.org/cgi-bin/view/Codev/PluginDependencies][Details]] | TWiki:Main.CrawfordCurrie TWiki:Main.SvenDowideit |
+| Plugins: New function =TWiki::Func::formatTime= to format time into a string. [[http://TWiki.org/cgi-bin/view/Codev/FormatTime][Details]] | TWiki:Main.SvenDowideit |
+| Plugins: New function =TWiki::Func::getRegularExpression= to get predefined regular expressions. [[http://TWiki.org/cgi-bin/view/Codev/GetRegularExpression][Details]] | TWiki:Main.RichardDonkin |
+| Plugins: New functions =TWiki::Func::getPluginPreferences*= to get Plugin preferences. [[http://TWiki.org/cgi-bin/view/Codev/GetPluginPreferences][Details]] | TWiki:Main.WalterMundt |
+| Plugins: New function =TWiki::Func::extractParameters= to extract all parameters from a variable string. [[http://TWiki.org/cgi-bin/view/Codev/ExtractParameters][Details]] | TWiki:Main.PeterThoeny |
+| Plugins: New function =TWiki::Func::checkDependencies= to check for module dependency. [[http://TWiki.org/cgi-bin/view/Codev/PluginDependencies][Details]] | TWiki:Main.CrawfordCurrie TWiki:Main.SvenDowideit |
 | Plugins: A recommendation for where a Plugin can store its data. [[http://TWiki.org/cgi-bin/view/Codev/RecommendedStorageOfPluginData][Details]] | TWiki:Main.PeterThoeny |
 | UI: Show tool-tip topic info on WikiWord links. [[http://TWiki.org/cgi-bin/view/Codev/ToolTipTopicInfoOnWikiWordLinks][Details]] | TWiki:Main.PeterThoeny |
 | UI: Save topic and continue edit feature. [[http://TWiki.org/cgi-bin/view/Codev/CheckpointSave][Details]] | TWiki:Main.ColasNahaboo |

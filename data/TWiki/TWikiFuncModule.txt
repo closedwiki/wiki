@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092463824" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093769327" format="1.0" version="1.6"}%
 %META:TOPICPARENT{name="TWikiPlugins"}%
 %TOC%
 %STARTINCLUDE%
@@ -114,9 +114,27 @@ refers to the VERSION number and the date that the function was addded.
 
 ---++ Functions: Preferences
 
+---+++ extractParameters( $attr ) ==> %params
+
+| Description:		 | Extract all parameters from a variable string and returns a hash of parameters |
+| Parameter: =$attr= | Attribute string |
+| Return: =%params=  | Hash containing all parameters. The nameless parameter is stored in key =_DEFAULT= |
+| Since:				 | TWiki::Plugins::VERSION 1.025 (26 Aug 2004) |
+
+	* Example:
+		* Variable: =%<nop>TEST{ "nameless" name1="val1" name2="val2" }%=
+		* First extract text between ={...}= to get: ="nameless" name1="val1" name2="val2"=
+		* Then call this on the text: <br />
+		=my %params = TWiki::Func::extractParameters( $text );=
+		* The =%params= hash contains now: <br />
+		=_DEFAULT => "nameless"= <br />
+		=name1 => "val1"= <br />
+		=name2 => "val2"=
+
 ---+++ extractNameValuePair( $attr, $name ) ==> $value
 
 | Description:		 | Extract a named or unnamed value from a variable parameter string |
+| Note:				  | Function TWiki::Func::extractParameters is more efficient for extracting several parameters |
 | Parameter: =$attr= | Attribute string |
 | Parameter: =$name= | Name, optional |
 | Return: =$value=	| Extracted value |
@@ -404,7 +422,7 @@ refers to the VERSION number and the date that the function was addded.
 
 ---+++ formatGmTime( $time, $format ) ==> $text
 
-| NOTE:					 | <b>The following function is deprecated and should not be used. Use formatTime() instead</b> |
+| NOTE:					 | <b>This function is deprecated and should not be used. Use formatTime() instead</b> |
 | Description:			| Format the time to GM time |
 | Parameter: =$time=	| Time in epoc seconds |
 | Parameter: =$format= | Format type, optional. Default e.g. ="31 Dec 2002 - 19:30"=, can be ="iso"= (e.g. ="2002-12-31T19:30Z"=), ="rcs"= (e.g. ="2001/12/31 23:59:59"=, ="http"= for HTTP header format (e.g. ="Thu, 23 Jul 1998 07:21:56 GMT"=) |
@@ -472,7 +490,7 @@ refers to the VERSION number and the date that the function was addded.
 | Return:				| none |
 | Since:				 | TWiki::Plugins::VERSION 1.020 (16 Feb 2004) |
 
----++ Functions: I18N related
+---++ Functions: System and I18N related
 
 ---+++ getRegularExpression( $regexName ) ==> $pattern
 
@@ -501,23 +519,12 @@ Example:
 	my $capitalized = qr/[$upper][$alpha]+/;
 </pre>
 
----+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
+---+++ checkDependencies( $moduleName, $dependenciesRef ) ==> $error
 
-| Description: | sets a names tag on the specified revision |
-| Parameter: =$web= | webname |
-| Parameter: =$topic= | topic name |
-| Parameter: =$rev= | the revision we are taging |
-| Parameter: =$tag= | the string to tag with |
-| Return: =$success= |  |
-| TODO: | we _need_ an error mechanism! |
-| Since: | TWiki::Plugins::VERSION 1.022 (20 April 2004) |
-
----+++ checkDependencies
-
-| Description: | checks a list of Perl dependencies at runtime |
-| Parameter: =$context= | Context description e.g. name of the module being checked |
-| Parameter: =$deps= | List of hashes containing dependency information |
-| Returns: | undef if dependencies are OK, an error message otherwise |
+| Description: | Checks a list of Perl dependencies at runtime |
+| Parameter: =$moduleName= | Context description e.g. name of the module being checked |
+| Parameter: =$dependenciesRef= | Reference of list of hashes containing dependency information; see notes below |
+| Return: =$error= | undef if dependencies are OK, an error message otherwise |
 | Since: | TWiki::Plugins::VERSION 1.025 (01 Aug 2004) |
 
 The dependencies are expressed as a list of hashes. Each hash contains
