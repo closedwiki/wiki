@@ -56,6 +56,8 @@ sub searchWikiWeb
     ##               fixed now.
     if ($theLimit =~ /(^\d+$)/o) { # only digits, all else is the same as
         $theLimit = $1;            # an empty string.  "+10" won't work.
+    } else {
+        $theLimit = 0;             # change "all" to 0, then to big number
     }
     if (! $theLimit ) {            # PTh 03 Nov 2000:
         $theLimit = 32000;         # Big number, needed for performance improvements
