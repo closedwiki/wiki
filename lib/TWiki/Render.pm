@@ -163,7 +163,7 @@ sub _renderMoved {
         my $putBack = "";
         if( $web eq $toWeb && $topic eq $toTopic ) {
             $putBack  = " - <a title=\"Click to move topic back to previous location, with option to change references.\"";
-            $putBack .= " href=\"".$TWiki::T->getScriptUrl($web, $topic, 'rename')."?newweb=$fromWeb&newtopic=$fromTopic&";
+            $putBack .= " href=\"".$this->{session}->getScriptUrl($web, $topic, 'rename')."?newweb=$fromWeb&newtopic=$fromTopic&";
             $putBack .= "confirm=on\">put it back</a>";
         }
         $text = "<i><nop>$to moved from <nop>$from on $date by $by </i>$putBack";
@@ -516,13 +516,13 @@ sub internalLink {
         if( $theAnchor ) {
             my $anchor = $this->makeAnchorName( $theAnchor );
             $text .= "<a class=\"twikiAnchorLink\" href=\"".
-				$TWiki::T->getScriptUrl($theWeb, $theTopic, 'view')."\#$anchor\""
+				$this->{session}->getScriptUrl($theWeb, $theTopic, 'view')."\#$anchor\""
                   .  $this->_linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText</a>";
             return $text;
         } else {
             $text .= "<a class=\"twikiLink\" href=\""
-				  .	$TWiki::T->getScriptUrl($theWeb, $theTopic, 'view') ."\""
+				  .	$this->{session}->getScriptUrl($theWeb, $theTopic, 'view') ."\""
                   .  $this->_linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText</a>";
             return $text;
@@ -532,7 +532,7 @@ sub internalLink {
         $text .= "<span class=\"twikiNewLink\" style='background : $this->{NEWTOPICBGCOLOR};'>"
               .  "<font color=\"$this->{NEWTOPICFONTCOLOR}\">$theLinkText</font>"
               .  "<a href=\"".
-				$TWiki::T->getScriptUrl($theWeb, $theTopic, 'edit')."?topicparent="
+				$this->{session}->getScriptUrl($theWeb, $theTopic, 'edit')."?topicparent="
                 .$this->{session}->{webName}.".".$this->{session}->{topicName}."\">$this->{NEWLINKSYMBOL}</a></span>";
         return $text;
 
