@@ -141,8 +141,8 @@ sub preview {
                                          "verbatim", "pre",
                                          \&TWiki::Render::verbatimCallBack );
 
+    $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0, 0 );
     $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
-    $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
     $tmpl =~ s/%TEXT%/$ptext/go;
 

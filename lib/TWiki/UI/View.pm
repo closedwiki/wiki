@@ -263,14 +263,10 @@ sub view {
 
     $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;
 
+    $tmpl = $session->{renderer}->renderMetaTags
+      ( $webName, $topicName, $tmpl, $meta, ( $rev == $showRev ), $viewRaw );
+
     $tmpl = $session->handleCommonTags( $tmpl, $webName, $topicName );
-
-    if( $viewRaw ) {
-        $tmpl =~ s/%META{[^}]*}%//go;
-    } else {
-        $tmpl = $session->{renderer}->renderMetaTags( $webName, $topicName, $tmpl, $meta, ( $rev == $showRev ) );
-    }
-
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topicName );
 
     $tmpl =~ s/%TEXT%/$text/go;

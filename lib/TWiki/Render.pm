@@ -823,7 +823,7 @@ sub getRenderedVersion {
 
     my $removed = {};    # Map of placeholders to tag parameters and text
 
-    $text =~ s/(<!DOCTYPE.*?>)//is;
+    $text =~ s/(\s*<!DOCTYPE.*?>\s*)//is;
     my $doctype = $1 || "";
 
     $text = $this->takeOutBlocks( $text, "verbatim", $removed );
@@ -1116,7 +1116,6 @@ sub renderMetaTags {
     ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
 
     if ( $noexpand ) {
-        # SMELL - should the {} in the following be \} ?
         $text =~ s/%META{[^}]*}%//go;
         return $text;
     }
@@ -1127,9 +1126,6 @@ sub renderMetaTags {
                                                 $theTopic, $meta, $1, $isTopRev )/ge;                                       #renders attachment tables
     $text =~ s/%META{\s*"moved"\s*}%/$this->_renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
     $text =~ s/%META{\s*"parent"\s*(.*)}%/$this->_renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information
-
-    $text = $this->{session}->handleCommonTags( $text, $theWeb, $theTopic );
-    $text = $this->getRenderedVersion( $text, $theWeb, $theTopic );
 
     return $text;
 }

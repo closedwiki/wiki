@@ -110,11 +110,9 @@ sub attach {
     }
     $tmpl =~ s/%ATTACHTABLE%/$atext/go;
     $tmpl =~ s/%FILEUSER%/$fileWikiUser/go;
+    $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0, 0 );
     $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
-    # SMELL: The following two calls are done in the reverse order in all
-    # the other handlers. Why are they done in this order here?
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
-    $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
     $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
     $tmpl =~ s/%FILENAME%/$fileName/go;
     $tmpl =~ s/%FILEPATH%/$args->{"path"}/go;

@@ -206,8 +206,8 @@ sub edit {
     $tmpl =~ s/\(edit\)/\(edit cmd=$saveCmd\)/go if $saveCmd;
 
     $tmpl =~ s/%CMD%/$saveCmd/go;
+    $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd, 0 );
     $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
-    $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
 
     # Don't want to render form fields, so this after getRenderedVersion
