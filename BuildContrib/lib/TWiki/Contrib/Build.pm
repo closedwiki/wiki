@@ -507,6 +507,7 @@ sub target_release {
   $this->sys_action("mv $tmpdir/$project.zip $basedir/$project.zip");
   print "Release ZIP is $basedir/$project.zip\n";
   print "Release TOPIC is $basedir/$project.txt\n";
+
   $this->sys_action("rm -rf $tmpdir");
 }
 

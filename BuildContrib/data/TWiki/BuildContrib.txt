@@ -29,13 +29,13 @@ Purpose:
 	1 To replace all twiki command line scripts with a single interface script environment
 
 Its purpose is to seek out classes in the path that can do its bidding. Only one class is provided
-at present: TWikiCLI::Extension
+at present: TWikiCLI::Extension, so only the "twikicli extension" currently does anything.
 
 Usage:
 	1 Add BuildContrib/contrib/bin to your PATH. This contains one uber-command:
 		* twikicli
 
-You can use "twikicli extension install &lt;TWiki:Plugins.TWikiExtension&gt;
+You can use "twikicli extension install TWiki:Plugins.TWikiExtension "
 	* e.g.:
 		* twikicli extension install DistributionContrib
 		* twikicli extension install TWikiReleaseTrackerPlugin
@@ -47,8 +47,8 @@ Prerequisite environment, assuming
 <verbatim>
 export TWIKI_HOMES="athens.twiki.com/twiki beijing.twiki.com/twiki beta.twiki.com/twiki bleeding.twiki.com"
 export TWIKI_LIBSDIR=$HOME/twikiplugindev/twikiplugins/
-export TWIKI_LIBS=`echo $TWIKI_LIBSDIR*/lib/ | tr " " ":"`:$TWIKI_RUNTIMELIB
 export TWIKI_RUNTIMELIB=/usr/local/twiki/bleeding/twiki/lib
+export TWIKI_LIBS=`echo $TWIKI_LIBSDIR*/lib/ | tr " " ":"`:$TWIKI_RUNTIMELIB
 </verbatim>
 	
 Development notes:
