@@ -665,9 +665,10 @@ sub formatGmTime
             # RCS format, example: "2001/12/31 23:59:59"
             return sprintf( "%.4u/%.2u/%.2u %.2u:%.2u:%.2u", 
                             $year, $mon+1, $mday, $hour, $min, $sec );
-        } elsif ( $theFormat =~ /http/i ) {
+        } elsif ( $theFormat =~ /http|email/i ) {
             # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 GMT"
-	    # - based on RFC 2616/1123 and HTTP::Date
+	    # - based on RFC 2616/1123 and HTTP::Date; also used
+	    # by TWiki::Net for Date header in emails.
 	    return sprintf( "%s, %02d %s %04d %02d:%02d:%02d GMT", 
 			$weekDay[$wday], $mday, $isoMonth[$mon], $year, 
 			$hour, $min, $sec );
