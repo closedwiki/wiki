@@ -24,7 +24,7 @@ function launchWindow( theWeb, theTopic ) {
 <body bgcolor="#ffffff"  onLoad="initForm()" >
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"simpleheader"}%
----++ All existing attachments
+---++ Existing attachments for <nop>%TOPIC%
 %META{"attachments" all="on"}%
 %TMPL:P{"previousdetails"}%
 <table width="100%">
@@ -62,10 +62,11 @@ function launchWindow( theWeb, theTopic ) {
 
 __Notes:__
 
-	* *Link checkbox:* In case the attached file is a JPG, GIF or PNG image and you check the box, it will create an
-     inline image (e.g. show the image) at the end of the topic.  For other file types a simple link will be created.
-	* *Bug:* There is a bug with Internet Explorer. In case you get an "Internal Server Error" message when you
-     upload a file, you need to try again. It works the second time.
+   * *Link checkbox:* In case the attached file is a JPG, GIF or PNG image and you check the box, 
+     it will create an inline image (e.g. show the image) at the end of the topic.  For other
+     file types a simple link will be created.
+   * *Bug:* There is a bug with Internet Explorer. In case you get an "Internal Server Error"
+     message when you upload a file, you need to try again. It works the second time.
 %TMPL:P{"extranotes"}%
 
 %TMPL:P{"standardfooter"}%
