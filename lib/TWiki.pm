@@ -93,7 +93,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "12 Aug 2001";
+$wikiversion      = "17 Aug 2001";
 
 # ===========================
 # read the configuration part
