@@ -42,6 +42,7 @@ The following targets will always exist:
 | pod | build POD documentation |
 | release | build, pod and package a release zip |
 | upload | build, pod, package and upload to twiki.org |
+| manifest | print to STDOUT a default manifest file |
 Note: if you override any of these targets it is generally wise to call the SUPER version of the target!
 ---+++ Standard directory structure
 The standard module directory structure mirrors the TWiki installation directory structure, so each file in the development directory structure is in the place it will be in in the actual installation. From the root, these are the key files:
@@ -703,5 +704,21 @@ sub build {
   }
 }
 use strict "refs";
+
+=pod
+---++ manifest
+Generate and print to STDOUT a rough guess at the MANIFEST listing
+
+=cut
+
+sub target_manifest {
+  my $this = shift;
+  my $target = shift;
+  print STDERR "Here's a rough guess at your MANIFEST list (from $basedir)\n";
+  chdir("$basedir") || die "can't cd to $basedir - $!";
+  print `find . -type f | grep -v CVS | grep -v '~'`;
+}
+
+
 
 1;
