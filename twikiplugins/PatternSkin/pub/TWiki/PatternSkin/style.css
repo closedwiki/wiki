@@ -668,6 +668,10 @@ html>body .twikiToc li a {
 	margin-bottom:1em;
 }
 
+/* Moved message */
+
+.twikiMoved {}
+
 /* search box */
 
 .twikiSearchBox {
