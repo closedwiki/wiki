@@ -428,7 +428,7 @@ sub diff {
   # check access permission
   my $wikiUserName = &TWiki::userToWikiName( $userName );
   my $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $wikiUserName, "", $topic, $webName );
-  if( $TWiki::readTopicPermissionFailed ) {
+  if( $TWiki::readTopicPermissionFailed ne "" ) {
     # Can't read requested topic and/or included (or other accessed topics)
     # user could not be authenticated, may be not logged in yet?
     my $rdiffauthFile = $ENV{'SCRIPT_FILENAME'};
