@@ -62,10 +62,19 @@ sub main
         return;
     }
 
+    # check permission for undocumented cmd=... parameter
+    my $saveCmd = $query->param( "cmd" ) || "";
+    if( ( $saveCmd ) &&
+        ( ! &TWiki::Access::userIsInGroup( $wikiUserName, $TWiki::superAdminGroup ) ) ) {
+        # user has no permission to execute undocumented cmd=... parameter
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$TWiki::mainWebname.$TWiki::superAdminGroup" );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+
     # get text and other parameters
     my $text = $query->param( "text" );
     my $unlock = $query->param( "unlock" ) || "";
-    my $saveCmd = $query->param( "cmd" ) || "";
     my $dontNotify = $query->param( "dontnotify" ) || "";
 
     # PTh 06 Nov 2000: check if proper use of save script
@@ -79,6 +88,7 @@ sub main
         print $query->redirect( $url );
         return;
     }
+
     
     # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
     $text =~ s/%_N_%/\r\n/go;
@@ -99,7 +109,7 @@ sub main
 	# parent setting
 	my $theParent = $query->param( 'parent' ) || "";
 	if( $theParent ) {
-	    $tmpl =~ s/%TOPICPARENT%/$theParent/go;
+	    $tmp =~ s/%TOPICPARENT%/$theParent/go;
 	    $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
 	}
         

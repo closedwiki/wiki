@@ -52,14 +52,16 @@ sub main
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
-    my( $topic, $webName ) = 
-    &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+    my( $topic, $webName, $dummy, $userName ) = 
+       &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+    $dummy = "";  # to suppress warning
 
     my $tmpl = ""; 
     my $text = "";
     my $ptext = "";
     my $meta = "";
     my $formFields = "";
+    my $wikiUserName = &TWiki::userToWikiName( $userName );
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
@@ -126,6 +128,12 @@ sub main
     $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
     my $saveCmd = $query->param( "cmd" ) || "";
     if( $saveCmd ) {
+        if( ! &TWiki::Access::userIsInGroup( $wikiUserName, $TWiki::superAdminGroup ) ) {
+            # user has no permission to execute undocumented cmd=... parameter
+            my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$TWiki::mainWebname.$TWiki::superAdminGroup" );
+            TWiki::redirect( $query, $url );
+            return;
+        }
         $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
