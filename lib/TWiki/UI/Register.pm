@@ -480,9 +480,11 @@ sub _resetUsersPassword {
     my $message = '';
     unless( $user->passwordExists() ) {
         # Not an error.
-        $message = 'ResetPassword created new htpasswd entry for '.
+        $message = 'TWiki.ResetPassword notes the passwd entry for '.
 	  '<nop>'.$user->login().
-	    " as it was missing in .htpasswd\n";
+	    " was missing in .htpasswd";
+	$session->writeWarning($message);
+	$message .= "\n";
     }
 
     my $password = $user->resetPassword();
@@ -501,7 +503,7 @@ sub _resetUsersPassword {
     } else {
         $message .= 'A new *system-generated* password for '.
           '<nop>'.$user->login() . ' (wikiname ' .
-            '%MAINWEB%'.$user->wikiName() . ') has been sent to '.
+            '%MAINWEB%.'.$user->wikiName() . ') has been sent to '.
               $email."\n";
     }
 
