@@ -225,7 +225,7 @@ sub view {
     my $revsToShow = $TWiki::cfg{NumberOfRevisions} + 1;
     $revsToShow = $showRev if $showRev < $revsToShow;
     my $doingRev = $showRev;
-    my $revs;
+    my $revs = '';
     while( $revsToShow > 0 ) {
         $revsToShow--;
         if( $doingRev == $rev) {
