@@ -62,11 +62,11 @@ All parameters can be sourced from one of three places:
 | *Parameter name* | *Values* | *Default* |
 | *Mode = listing* | listing, file | listing |
 | fscsFormat | string to show when file is FSCS | &pipe; $relativeFile &pipe; FSCS &pipe; $locations &pipe; |
-| fscdFormat | string to show when file is FSCS | &pipe; $relativeFile &pipe; FSCDCALLBACK &pipe; FSCDDIST &pipe;
-| fdcsFormat | | &pipe; $relativeFile &pipe; FDCS &pipe; $locations &pipe;
-| fdcdFormat | | &pipe; ($relativeFile name not recognised, and no content match)  &pipe; FDCD &pipe; &pipe;
-| fdcmFormat | | &pipe; $relativeFile &pipe; FSCM &pipe; $locations &pipe;
-| headerFormat | | &pipe; *File* &pipe; *Status* &pipe; *Also Occurs In* &pipe;
+| fscdFormat | string to show when file is FSCS | &pipe; $relativeFile &pipe; FSCDCALLBACK &pipe; FSCDDIST &pipe; |
+| fdcsFormat | | &pipe; $relativeFile &pipe; FDCS &pipe; $locations &pipe; |
+| fdcdFormat | | &pipe; ($relativeFile name not recognised, and no content match)  &pipe; FDCD &pipe; &pipe; |
+| fdcmFormat | | &pipe; $relativeFile &pipe; FSCM &pipe; $locations &pipe; |
+| headerFormat | | &pipe; *File* &pipe; *Status* &pipe; *Also Occurs In* &pipe; |
 | from | TWiki distribution name (e.g. TWiki20011201), or the string 'localInstallation' | localInstallation |
 | to | (see "from") | , - this says match against all distributions |
 | indexTopic | topic containing the md5 files | defaults to the plugin page |
