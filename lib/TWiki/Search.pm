@@ -457,13 +457,16 @@ sub searchWeb
 
             if( $theFormat ) {
                 $tempVal = $theFormat;
-                $tempVal =~ s/([^\n])$/$1\n/gos;
+                $tempVal =~ s/([^\n])$/$1\n/gos;    # cut last trailing new line
+                $tempVal =~ s/\\n/\n/gos;           # expand "\n" to new line
                 $tempVal =~ s/\$web/$thisWebName/gos;
                 $tempVal =~ s/\$topic/$topic/gos;
                 $tempVal =~ s/\$locked/$locked/gos;
                 $tempVal =~ s/\$date/$revDate/gos;
+                $tempVal =~ s/\$isodate/&TWiki::revDate2ISO($revDate)/geos;
                 $tempVal =~ s/\$rev/1.$revNum/gos;
                 $tempVal =~ s/\$wikiusername/$revUser/gos;
+                $tempVal =~ s/\$username/&TWiki::wikiToUserName($revUser)/geos;
 
             } else {
                 $tempVal = $repeatText;
