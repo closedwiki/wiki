@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092718912" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="ArthurClemens" date="1092740047" format="1.0" version="1.6"}%
 ---+!! Pattern skin
 
 *<nop>PatternSkin is developed to provide a CSS based default look and feel for TWiki - flexible and W3C-compliant.* Its layout and color scheme are designed to provide a nice, clean and productive _editing environment_. For use in corporate or perhaps in personal websites it should be fairly easy to tune the looks or even create a !PatternSkin-based new skin.
@@ -89,8 +89,8 @@ See: PatternSkinCustomization
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.gif" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Base Name: | pattern |
 |  Skin Author: | TWiki:Main/ArthurClemens |
-|  Skin Version: | 08 Aug 2004 (v1.000) |
-|  Download&nbsp;<nop>PatternSkin: | [[%ATTACHURL%/PatternSkin.zip][PatternSkin.zip]]<br /> *Note:* the CSS files in this topic may be more recent than the version in the zip file | 
+|  Skin Version: | 16 Aug 2004 (v1.0.4) |
+|  Download&nbsp;<nop>PatternSkin: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% | 
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  16 Aug 2004: | v.1.0.4 - Fixes search results layout with noheader="on" |
 |  14 Aug 2004: | v.1.0.3 - Update to attach template, css fix to edit template |
