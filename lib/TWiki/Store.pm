@@ -25,7 +25,7 @@
 # 20000917 - NicholasLee : Split file/storage related functions from wiki.pm
 # 200105   - JohnTalintyre : AttachmentsUnderRevisionControl & meta data in topics
 # 200106   - JohnTalintyre : Added Form capability (replaces Category tables)
-
+# 200401   - RafaelAlvarez : Added a new Plugin callback (afterSaveHandler)
 =begin twiki
 
 ---+ TWiki::Store Module
@@ -694,7 +694,8 @@ sub saveTopic
     $meta = TWiki::Meta->remove();  # remove all meta data
     $text = $meta->read( $text );   # restore meta data
 
-    my$error = saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $comment, $forceDate );
+    my $error = saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $comment, $forceDate );
+    TWiki::Plugins::afterSaveHandler( $text, $topic, $web, $error );
     return $error;
 }
 

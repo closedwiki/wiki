@@ -14,7 +14,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-
+# 2004-01-13 RafaelAlvarez Added a new Plugin callback handler (afterSaveHandler)
 =begin twiki
 
 ---+ TWiki:: Module
@@ -48,6 +48,7 @@ $VERSION = '1.020';
         'beforeEditHandler',       # ( $text, $topic, $web )                 1.010
         'afterEditHandler',        # ( $text, $topic, $web )                 1.010
         'beforeSaveHandler',       # ( $text, $topic, $web )                 1.010
+        'afterSaveHandler',        # ( $text, $topic, $web, $errors )        1.020
         'writeHeaderHandler',      # ( $query )                              1.010
         'redirectCgiQueryHandler', # ( $query, $url )                        1.010
         'getSessionValueHandler',  # ( $key )                                1.010
@@ -549,6 +550,15 @@ sub beforeSaveHandler
     &applyHandlers;
 }
 
+### RafaelAlvarez 2004-01-13 
+sub afterSaveHandler
+{
+# Called by TWiki::Store::saveTopic after the save action
+#    my ( $theText, $theTopic, $theWeb ) = @_;
+    unshift @_, ( 'afterSaveHandler' );
+    &applyHandlers;
+}
+### RafaelAlvarez 2004-01-13 
 # =========================
 =pod
 
