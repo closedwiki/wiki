@@ -639,7 +639,7 @@ sub metaUpdate
        $sep = " ";
     }
     
-    @meta = grep( !/^%META:$metaDataType\{$identifier/, @meta );
+    @meta = grep( !/^%META:$metaDataType\{(.*\s)?$identifier/, @meta );
 
     push @meta, "%META:$metaDataType\{$metaDataArgs}%";
     return sort @meta;
@@ -1458,17 +1458,6 @@ sub readTemplate
         $txt =~ s/%FOOTER(:[A-Z]*)?%/&TWiki::handleFooter( $1, $theTopic, $theSkin )/geo;
         $txt =~ s/%SEP%/&TWiki::handleSep( $theTopic, $theSkin )/geo;
 
-        # Modify views for DrKW style
-        if ( -e "$tmplDir/drkwtop.tmpl" && $tmplFile !~ m|/view.| ) {
-            my $top = &readFile( "$tmplDir/drkwtop.tmpl" );
-            my $bottom = &readFile( "$tmplDir/drkwbottom.tmpl" );
-            $txt =~ s|<TD[^>]*>.*?wikiHome.gif.*?</TD>||smio;
-            $txt =~ s|%WEBBGCOLOR%|#e3f0e3|go;
-            $txt =~ s|<BASE.*>(.*)|$1|;
-            $txt =~ s+<TITLE>+<LINK href="/twiki/pub/skins/drkwleftnav/twiki.css" rel=stylesheet type=TEXT/CSS>\n<TITLE>+smio;
-            $txt =~ s+\s*(<TABLE[^>]*>.*?</TABLE>)(.*)(<TABLE[^>]*>.*?</TABLE>\s*(%WEBCOPYRIGHT%)?\s*(</FORM>)?)\s*</BODY>+$top$1$2$3$bottom</BODY>+smio;
-
-        }
         return $txt;
     }
     return "";
