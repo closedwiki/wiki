@@ -46,7 +46,7 @@ sub searchWeb
     ## 0501 kk : vvv Added params
     my ( $doInline, $theWebName, $theSearchVal, $theScope, $theOrder,
          $theRegex, $theLimit, $revSort, $caseSensitive, $noSummary,
-         $noSearch, $noHeader, $noTotal, $doBookView, @junk ) = @_;
+         $noSearch, $noHeader, $noTotal, $doBookView, $doRenameView, @junk ) = @_;
 
     ## 0501 kk : vvv new option to limit results
     # process the result limit here, this is the 'global' limit for
@@ -121,8 +121,11 @@ sub searchWeb
 
     my $tempVal = "";
     my $tmpl = "";
+    my $topicCount = 0; # JohnTalintyre
     if( $doBookView ) {
         $tmpl = &TWiki::Store::readTemplate( "searchbookview" );
+    } elsif ($doRenameView ) {
+        $tmpl = &TWiki::Store::readTemplate( "searchrenameview" ); # JohnTalintyre
     } else {
         $tmpl = &TWiki::Store::readTemplate( "search" );
     }
@@ -396,7 +399,22 @@ sub searchWeb
             $tempVal = &TWiki::handleCommonTags( $tempVal, $topic );
             $tempVal = &TWiki::getRenderedVersion( $tempVal );
 
-            if( $noSummary ) {
+            if( $doRenameView ) { # added JET 19 Feb 2000
+                $topicCount++;
+                $tempVal =~ s/%TOPIC_NUMBER%/$topicCount/go;
+                $head = &TWiki::Store::readFile( "$TWiki::dataDir\/$thisWebName\/$topic.txt" );
+                # Remove lines that don't contain the topic and highlight matched string
+                my @lines = split( /\n/, $head );
+                my $reducedOutput = "";
+                my $line;
+                foreach $line ( @lines ) {
+                   if( $line =~ /$theSearchVal/go ) {
+                      $line =~ s|$theSearchVal|$1<font color="red">$2</font>$3|go;
+                      $reducedOutput .= "$line<BR>";
+                   }
+                }
+                $tempVal =~ s/%TEXTHEAD%/$reducedOutput/go;
+            } elsif( $noSummary ) {
                 $tempVal =~ s/%TEXTHEAD%//go;
                 $tempVal =~ s/&nbsp;//go;
             } elsif( $doBookView ) {  # added PTh 20 Jul 2000
