@@ -5,56 +5,48 @@
 # NOTE TO THE DEVELOPER: THIS FILE IS GENERATED AUTOMATICALLY
 # BY THE BUILD PROCESS DO NOT EDIT IT - IT WILL BE OVERWRITTEN
 #
-use Socket;
 use strict;
 
 my $noconfirm = 0;
+my $webGet;
+my $twikipub = "http://twiki.org/p/pub";
 
-# Borrowed from geturl
-# Copyright (C) 1999 Jon Udell, BYTE
-# Copyright (C) 2000-2003 Peter Thoeny, peter@thoeny.com
-sub getUrl
-{
-    my ( $localFile, $theHost, $thePort, $theUrl, $theHeader ) = @_;
-    my $result = '';
-    my $req = "GET $theUrl HTTP/1.0\r\n$theHeader\r\n\r\n";
-    my ( $iaddr, $paddr, $proto );
-    $iaddr   = inet_aton( $theHost );
-    $paddr   = sockaddr_in( $thePort, $iaddr );
-    $proto   = getprotobyname( 'tcp' );
-    socket( SOCK, PF_INET, SOCK_STREAM, $proto )  or die "socket: $!";
-    connect( SOCK, $paddr ) or die "connect: $!";
-    select SOCK;
-    $| = 1;
-    print SOCK $req;
-    while( <SOCK> ) {
-        print $localFile $_;
-    }
-    close( SOCK )  or die "close: $!";
-    select STDOUT;
-}
-
-# Satisfy dependencies
+# Satisfy dependencies on modules, by checking:
+# 1. If the module is a perl module, then:
+#    1. If the module is loadable in the current environment
+#    2. If the dependency has specified a version constraint, then
+#       the module must have a top-level variable VERSION which satisfies
+#       the constraint.
+#       Note that all TWiki modules are perl modules - even non-perl
+#       distributions have a perl "stub" module that carries the version info.
+# 2. If the module is _not_ perl, then we can't check it.
 sub satisfy {
     my $dep = shift;
     my $msg = "";
     my $ok = 1;
+    my $result = 1;
+
     print "Checking dependency on $dep->{name}....\n";
-    if ($dep->{type} eq "perl") {
+    if( $dep->{type} eq "perl" ) {
+        # Try to 'use' the perl module
         eval "use $dep->{name}";
-        if ( $@ ) {
+        if( $@ ) {
             $msg .= $@;
             $ok = 0;
         } else {
-            if ( defined( $dep->{version} ) ) {
+            # OK, it was loaded. See if a version constraint is specified
+            if( defined( $dep->{version} ) ) {
                 my $ver;
+                # check the $VERSION variable in the loaded module
                 eval "\$ver = \$$dep->{name}::VERSION;";
-                if ( $@ ) {
+                if( $@ ) {
                     $msg .= "The VERSION of the package could not be found: $@";
                     $ok = 0;
                 } else {
+                    # The version variable exists
                     eval "\$ok = ( \$ver $dep->{version} )";
-                    if ( $@ || ! $ok ) {
+                    if( $@ || ! $ok ) {
+                        # The version variable fails the constraint
                         $msg .= " $ver is currently installed: $@";
                         $ok = 0;
                     }
@@ -62,55 +54,95 @@ sub satisfy {
             }
         }
     } else {
+        # This module has no perl interface, and can't be checked
         $ok = 0;
-        $msg = "Module is type $dep->{type}, and cannot be automatically checked.\n";
+        $msg = "Module is type $dep->{type}, and cannot be automatically checked.\nPlease check it manually and install if necessary.\n";
     }
 
-    unless ($ok) {
+    unless ( $ok ) {
         print "%$MODULE% depends on package $dep->{name} $dep->{version},\n";
-        print "which is described as \"$dep->{description}\"\nBut when I tried to find it I found this error: $msg\n";
+        print "which is described as \"$dep->{description}\"\n";
+        print "But when I tried to find it I got this error: $msg\n";
+        $result = 0;
     }
 
-    if (!$ok && $dep->{name} =~ /^TWiki::(Contrib|Plugins)::(\w*)/) {
+    if( !$ok && $dep->{name} =~ m/^TWiki::(Contrib|Plugins)::(\w*)/ ) {
         my $pack = $1;
         my $packname = $2;
         my $reply = "y";
-        $packname .= $pack if ($pack eq "Contrib");
-        unless ($noconfirm) {
-            print "Would you like me to try to download and install the correct version of $packname from twiki.org? [y/n] ";
-            while (($reply = <STDIN>) !~ /^[yn]/i) {
+        $packname .= $pack if( $pack eq "Contrib" );
+        unless ( $noconfirm ) {
+            print "Would you like me to try to download and install the latest version of $packname from twiki.org? [y/n] ";
+            while ( ( $reply = <STDIN> ) !~ /^[yn]/i ) {
                 print "Please answer yes or no\n";
             }
         }
-        if ($reply =~ /^y/i) {
-            my $zip;
-            eval {
-                my $zip;
-                open($zip, ">$packname.zip") or
-                  die "Could not open $packname.zip for write";
-                getUrl($zip, "twiki.org","cgi-bin/view/Plugins/$packname/$packname.zip");
-                close($zip) or
-                  die "Failed to close $packname.zip";
-            };
-            if ($@) {
-                print "Download failed: $@\n";
-            } else {
-                print `unzip $zip`;
-                unless ($?) {
-                    if ( -e "${packname}_installer.pl" ) {
-                        print `perl ${packname}_installer.pl install`;
-                        unless ($?) {
-                            print STDERR "Installation of $packname failed\n";
-                        }
-                    }
-                } else {
-                    print STDERR "Unzip of $zip failed\n";
-                }
-            }
-        } else {
-            print "You can re-run this installer at any time to revisit this decision\n\n";
+        if( $reply =~ /^y/i ) {
+            $result = download( $packname );
         }
     }
+
+    unless ( $result ) {
+        print "You can re-run this installer at any time\n\n";
+    }
+
+    return $result;
+}
+
+# Download the zip file for the given package from twiki.org.
+sub download {
+    my $packname = shift;
+    my $zip = "$packname.zip";
+
+    eval 'use LWP';
+    if ( $@ ) {
+        print STDERR "LWP is not installed; cannot download\n";
+        return 0;
+    }
+    eval 'use Archive::Zip';
+    if ( $@ ) {
+        print STDERR "Archive::Zip is not installed; cannot download\n";
+        return 0;
+    }
+
+    $webGet = new LWP::UserAgent() unless ( $webGet );
+    eval {
+        $webGet->get( "$twikipub/Plugins/$packname/$zip",
+                      ':content_file' => $zip );
+    };
+    if( $@ || ! -e $zip ) {
+        print STDERR "Download of $zip failed: $@\n";
+        return 0;
+    }
+
+    my $zip = new Archive::Zip( $zip );
+    unless ( $zip ) {
+        print STDERR "Could not open downloaded file $zip\n";
+        return 0;
+    }
+
+    my @members = $zip->members();
+    foreach my $file ( @members ) {
+        my $err = $zip->extractMember( $file );
+        if ( $err ) {
+            print STDERR "Failed to read zip file $zip. Archive may be corrupt.\n";
+            return 0;
+        } else {
+            print "\t".$file->fileName()."\n";
+        }
+    }
+
+    if( -e "${packname}_installer.pl" ) {
+        print `perl ${packname}_installer.pl install`;
+        if ( $? ) {
+            print STDERR "Installation of $packname failed\n";
+            return 0;
+        }
+    }
+
+    # Tidy up
+    unlink( $zip );
+    return 1;
 }
 
 sub usage {
@@ -122,20 +154,20 @@ sub usage {
     print "\t-a Don't prompt for confirmations\n";
 }
 
-unshift(@INC, "lib");
+unshift( @INC, "lib" );
 
-print "%$MODULE% Installer\n\n";
+print "\n### %$MODULE% Installer ###\n\n";
 my $n = 0;
 my $install = 1;
-while ($n < scalar(@ARGV)) {
-    if ($ARGV[$n] eq "-a") {
+while ( $n < scalar( @ARGV ) ) {
+    if( $ARGV[$n] eq "-a" ) {
         $noconfirm = 1;
-    } elsif ($ARGV[$n] eq "install") {
+    } elsif( $ARGV[$n] eq "install" ) {
         $install = 1;
-    } elsif ($ARGV[$n] eq "uninstall") {
+    } elsif( $ARGV[$n] eq "uninstall" ) {
         $install = 0;
     } else {
-        usage();
+        usage( );
         die "Bad parameter $ARGV[$n]";
     }
     $n++;
@@ -144,7 +176,7 @@ while ($n < scalar(@ARGV)) {
 print "This installer must be run from the root directory of your TWiki\n";
 print "installation. It can also be run from another directory, but it will\n";
 print "not detect previously installed dependencies if it is.\n";
-if ($install && !$noconfirm) {
+if( $install && !$noconfirm ) {
     print "\t* The script will not do anything without asking you for\n";
     print "\t  confirmation first.\n";
 }
@@ -152,38 +184,43 @@ print "\t* You can abort the script at any point and re-run it later\n";
 print "\t* If you answer 'no' to any questions you can always re-run\n";
 print "\t  the script again later\n";
 
-if ($install) {
-    unless ($noconfirm) {
+if( $install ) {
+    unless ( $noconfirm ) {
         print "Hit <Enter> to proceed with installation\n";
     }
     <STDIN>;
+    my $unsatisfied = 0;
     foreach my $dep ( ( %$DEPENDENCIES% ) ) {
-        satisfy($dep);
+        unless ( satisfy( $dep ) ) {
+            $unsatisfied++;
+        }
     }
-    print "%$MODULE% installed\n";
+    print "\n### %$MODULE% installed";
+    print " with $unsatisfied unsatisfied dependencies" if ( $unsatisfied );
+    print " ###\n";
 } else {
     my @manifest = ( %$MANIFEST% );
     my $file;
     my @dead;
     foreach $file ( @manifest ) {
-        if ( -e $file ) {
-           push(@dead, $file);
+        if( -e $file ) {
+           push( @dead, $file );
         }
     }
-    unless ($#dead > 1) {
+    unless ( $#dead > 1 ) {
         die "No part of %$MODULE% is installed";
     }
     print "To uninstall %$MODULE%, the following files will be deleted:\n";
-    print join(", ", @dead);
+    print join( ", ", @dead );
     my $reply;
-    print "Are you SURE you want to uninstall %$MODULE%? [y/n] ";
-    while (($reply = <STDIN>) !~ /^[yn]/i) {
+    print "\nAre you SURE you want to uninstall %$MODULE%? [y/n] ";
+    while ( ( $reply = <STDIN> ) !~ /^[yn]/i ) {
         print "Please answer yes or no\n";
     }
-    if ($reply =~ /^y/i) {
+    if( $reply =~ /^y/i ) {
         foreach $file ( @manifest ) {
-            if ( -e $file ) {
-                unlink($file);
+            if( -e $file ) {
+                unlink( $file );
             }
         }
     }
