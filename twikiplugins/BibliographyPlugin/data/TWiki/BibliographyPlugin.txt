@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="AntonioTerceiro" date="1093299089" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="AntonioTerceiro" date="1093299300" format="1.0" version="1.2"}%
 ---+ <nop/>%TOPIC%
 
 BibliographyPlugin manages citations inside a TWiki topic, and can generate an References List at the end of the topic. This should be every usefull for writing conference papers, journal articles, ellaborated news, etc.
@@ -89,8 +89,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/AntonioTerceiro |
-|  Plugin Version: | 14 Jun 2004 (V1.000) |
+|  Plugin Version: | 23 Aug 2004  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  23 Aug 2004: | Added multiple references sources support |
 |  17 Jun 2004: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
