@@ -30,18 +30,18 @@ __USAGE__
 
 
 $|++;
-use Cwd qw( cwd );
+use FindBin;
 use Data::Dumper qw( Dumper );
 
 ## warning: unknown files below the =local= dir are deleted!
 $Config = {
     cpan => {
 	remote => "http://www.cpan.org/",
-	local => cwd() . "/MIRROR/MINICPAN/",
+	local => "$FindBin::Bin/MIRROR/MINICPAN/",
     },
     twiki => {
-	remote => "file:" . cwd() . "/MIRROR/MINICPAN/",
-	local => cwd() . "/MIRROR/TWIKI/",
+	remote => "file:$FindBin::Bin/MIRROR/MINICPAN/",
+	local => "$FindBin::Bin/MIRROR/TWIKI/",
     },
 };
 
