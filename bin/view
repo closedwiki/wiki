@@ -222,12 +222,14 @@ sub main
 	$tmpl =~ s/<meta name="robots"[^>]*>//goi;
 	my $editAction = $topicExists ? 'Edit' : 'Create';
 
-	# Make Edit URL unique for every edit - fix for RefreshEditPage,
-	# also creates new %EDITURL% variable for use in non-default skins.
 	# Special case for 'view' to handle %EDITTOPIC% and Edit vs. Create.
-	my $timestring = time();	# Time in seconds since 1970
+	# New %EDITURL% variable is implemented by handleCommonTags, suffixes
+	# '?t=NNNN' to ensure that every Edit link is unique, fixing
+	# Codev.RefreshEditPage bug relating to caching of Edit page.
 	$tmpl =~ s!%EDITTOPIC%!<a href=\"%EDITURL%\"><b>$editAction</b></a>!go;
-	$tmpl =~ s!%EDITURL%!$scriptUrlPath/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?t=$timestring!go;
+
+	# FIXME: Implement ColasNahaboo's suggested %EDITLINK% along the 
+	# same lines, within handleCommonTags
 
         $tmpl =~ s/%REVTITLE%//go;
         $tmpl =~ s/%REVARG%//go;
