@@ -1,29 +1,47 @@
-%META:TOPICINFO{author="PeterThoeny" date="998728817" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="MikeMannix" date="998886734" format="1.0" version="1.2"}%
 %META:TOPICPARENT{name="TWikiDocumentation"}%
+%TOC%
+%STARTINCLUDE%
 ---## TWiki Upgrade Notes
 
-If you are coming from a version earlier than the 01 Dec 2000 production release, please see TWikiUpgradeTo01Dec2000 first.
+---+++ Upgrading to TWiki 01-Sep-2001 
+
+Upgrade from your 01-Dec-2000 edition to the new, next generation *01-Sep-2001* TWiki Production Release in a few straightforward steps.
+<blockquote>
+	* *BUT FIRST!* Check these to make sure you're on the right page:
+		* If you've updated, replaced, or even added files from any of this year's Beta test releases of the new TWiki, head here: %TWIKIWEB%.TWikiBetaUpgradeNotes.
+		* To upgrade from a pre-01-Dec-2000 TWiki, make this your first stop: %TWIKIWEB%.TWikiUpgradeTo01Dec2000.
+</blockquote>
+
+---+++ Major Changes from Dec 2000
 
 The 01 Sep 2001 release has these changes that affect the upgrade of the 01 Dec 2000 version:
 
-	* 
+	* Everything's been rewritten - you won't recognize a thing! (not)
 
-These are the steps you need to perform to upgrade the 01 Dec 2000 version to the 01 Sep 2001 release: [ We assume =export TWIKIROOT=/some/dir/= ]
+---+++ Upgrading the Site
 
-	* __Backup__ all existing TWiki directories ( =bin=, =pub=, =data=, =templates= )
+Follow this step-by-step guide to upgrade the 01 Dec 2000 version to the 01 Sep 2001 release, and transfer all of your original data: [ We assume =export TWIKIROOT=/some/dir/= ]
+
+<blockquote>
+---++++ Step 1: Backup & Unpack
+
+	1 __Backup__ all existing TWiki directories ( =bin=, =pub=, =data=, =templates= )
 
 	* __Unpack the zip file__ into some working directory:
 	  <br> =mkdir -p ~/tmp/=
 	  <br> =cd ~/tmp=
 	  <br> =unzip ~/TWiki20001201.zip=
 
-	* __Upgrade the TWiki document files__ ( =twiki= )
-		* Move the document files to your TWiki root, i.e.
+---++++ Step 2: Upgrade TWiki document files 
+
+		* Move the document files to your TWiki root: ( =twiki= )
 		  <br> =mv ~/tmp/TWiki*.html $TWIKIROOT=
 		  <br> =mv ~/tmp/readme.txt $TWIKIROOT=
 
-	* __Upgrade cgi-bin scripts__ ( =twiki/bin= )
-		* Rename your original =twiki/bin= directory, i.e.
+---++++ Step 3: Upgrade cgi-bin scripts
+
+		* Rename your original =twiki/bin= directory: ( =twiki/bin= )
 		  <br> =mv $TWIKIROOT/bin $TWIKIROOT/bin.old=
 		* Move the new scripts to your original =twiki/bin= location, i.e.
 		  <br> =mv ~/tmp/bin $TWIKIROOT/bin=
@@ -38,8 +56,9 @@ These are the steps you need to perform to upgrade the 01 Dec 2000 version to th
 		* Pay attention to the file and directory permissions (security issue)
 		* Test your TWiki installation if you can view topics. (Ignore the =%<nop>HTTP_EQUIV_ON_VIEW%= you see on top of the topic; this will disappear after upgrading the template files.
 
-	* __Upgrade template files__ ( =twiki/templates= )
-		* Rename your original =twiki/templates= directory, i.e.
+---++++ Step 4: Upgrade template files 
+
+		* Rename your original =twiki/templates= directory: ( =twiki/templates= )
 		  <br> =mv $TWIKIROOT/templates $TWIKIROOT/templates.old=
 		* Move the new templates to your original =twiki/templates= location, i.e.
 		  <br> =mv ~/tmp/templates $TWIKIROOT/templates=
@@ -48,15 +67,15 @@ These are the steps you need to perform to upgrade the 01 Dec 2000 version to th
 		* Restore any additional template subdirectories of your TWiki webs you might have and merge the changes.
 		* Test your TWiki installation if you can view topics.
 
-	* __Upgrade public files__ ( =twiki/pub= )
-		* Move the new =twiki/pub/TWiki= directory to your installation, i.e.
+---++++ Step 5: Upgrade public files 
+		* Move the new =twiki/pub/TWiki= directory to your installation: ( =twiki/pub= )
 		  <br> =mv ~/tmp/pub/TWiki $TWIKIROOT/pub/=
 		* Pay attention to the file permissions of the =TWiki= directory and its subdirectory and files. The files must be writable by the cgi-scripts (usually user "nobody")
 		* Move the new =twiki/pub/twikilogo*= image files to your installation, i.e.
 		  <br> =mv ~/tmp/pub/twikilogo* $TWIKIROOT/pub/=
 
-	* __Upgrade data files__ ( =twiki/data= )
-		* Move the new =twiki/data/TWiki= directory to your installation, i.e.
+---++++ Step 6: Upgrade data files 
+		* Move the new =twiki/data/TWiki= directory to your installation: ( =twiki/data= )
 		  <br> =mv ~/tmp/data/TWiki $TWIKIROOT/data/=
 		  <br> Pay attention to the file permissions of the =TWiki= directory and its files. The files must be writable by the cgi-scripts (usually user "nobody")
 		* Optionally move the new =twiki/data/Test= directory to your installation, i.e.
@@ -92,10 +111,12 @@ These are the steps you need to perform to upgrade the 01 Dec 2000 version to th
 			* Change topics: =TWikiUsers= , =WebNotify= , =WebHome=
 			* With links to: =TWikiPreferences= , =TWikiVariables= , =TWikiUsers= , =TWikiWebsTable= and =WelcomeGuest=
 
-	* __TWiki Access Control__
+---+++ TWiki Access Control
+
 		* Read TWikiAccessControl, in case you want to use the new authorization feature based on groups.
 
-	* __Known Issues__
-		* Check http://TWiki.org/cgi-bin/view/Codev/KnownIssuesOfTWiki01Sep2001 for known issues of TWiki 01 Sep 2001 (production release) 
+---+++ Known Issues
 
--- PeterThoeny - 25 Aug 2001 <br />
+		* Check http://TWiki.org/cgi-bin/view/Codev/KnownIssuesOfTWiki01Sep2001 for known issues of TWiki 01 Sep 2001 (production release)
+</blockquote>
+-- MikeMannix - 26 Aug 2001 <br>
