@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="MikeMannix" date="1000431941" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="MikeMannix" date="1000440701" format="1.0" version="1.5"}%
 ---+ Frequently Asked Questions About %WIKITOOLNAME%
 
-This is a real FAQ, and also a demo of one easily implemented knowledge base solution.
+This is a real FAQ, and also a demo of one easily implemented knowledge base solution. See how it's done, click ==[Edit]==.
 
 %SEARCH{ "\-\-\-\+\+ FAQ\:" casesensitive="on" regex="on" nosearch="on" nototal="on"}%
 
