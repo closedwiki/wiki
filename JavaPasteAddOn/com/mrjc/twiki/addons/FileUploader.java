@@ -150,7 +150,7 @@ public class FileUploader
 	{
 		String fileName = file.getName();		
 		appendDispositionToOutputStream(outStream, fileName);
-		outStream.writeBytes(ClipboardHelper.readFileContents(file));
+		ClipboardHelper.writeFileContentsToOutputStream(file, outStream);
 	}
 	
 	public void appendDelimiterToOutputStream(DataOutputStream outStream) throws IOException

@@ -8,6 +8,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -109,7 +110,7 @@ public class ClipboardHelper
 	 * @author	Catherine Macleod
 	 * @param	o object containing data from clipboard 
 	 * @return	file containing clipboard contents  
-	 */
+	 *
 	public File saveClipboardContentsToFile(Object o)
 	{
 		File file = null;
@@ -160,6 +161,7 @@ public class ClipboardHelper
 		}
 		return file;
 	}
+	*/
 	
 	/**
 	 * Reads contents of a file.
@@ -168,10 +170,10 @@ public class ClipboardHelper
 	 * @param	file file from which content is to be read 
 	 * @return	file contents  
 	 */
-	public static String readFileContents(File file)
+	public static void writeFileContentsToOutputStream(File file, DataOutputStream outStream)
 	{
 		byte[] buff = new byte[1024];
-		StringBuffer str = new StringBuffer();
+		
 		try
 		{
 			FileInputStream fis = new FileInputStream(file);
@@ -179,8 +181,10 @@ public class ClipboardHelper
 			int len;
 			while (bis.available() != 0)
 			{
-				len = bis.read(buff);
-				str.append(new String(buff));
+				
+				/* WE are working on this  */
+				fis.read();
+				outStream.write();
 			}
 		
 			fis.close();
