@@ -79,12 +79,14 @@ dd a:hover{ }
 /*
 #menu dl dt a, #menu dl dd a { padding:0.5ex 0.7ex 0.5ex 0.7ex; color: MenuText;}
 */
+#bugreport { position: absolute; top: 0; right: 1ex; font-style: italic;}
 
 /* layer order */
 #logochar {	z-index: 1;}
 #lineage, #navigate { z-index: 5; }
 #content { z-index: 9; }
 #menu { z-index: 10; }
+#bugreport { z-index: 11; }
 
 /* hide stuff which is only for non-css browsers */
 .nocss { display: none; }

@@ -50,9 +50,11 @@
 %TMPL:END%
 %TMPL:DEF{"standardfooter"}%
 	Topic <strong>%TOPIC%</strong> . { %TMPL:P{"topicaction"}% }
+	<span id="bugreport">%TMPL:P{"bugreport"}%</span>
 %TMPL:END%
 %TMPL:DEF{"plainfooter"}%
 	%TMPL:P{"topicaction"}%
+	<span id="bugreport">%TMPL:P{"bugreport"}%</span>
 %TMPL:END%
 %TMPL:DEF{"oops"}%
 %TMPL:P{"htmldoctype"}%
@@ -67,8 +69,10 @@
 %TMPL:P{"message"}%
 <p />
 %TMPL:P{"standardfooter"}%
+<span id="bugreport">%TMPL:P{"bugreport"}%</span>
 #PageBottom
 </body>
 </html> %TMPL:END%
 %TMPL:DEF{"sep"}%<dd>%TMPL:END%
 %TMPL:DEF{"weblabel"}%Section%TMPL:END%
+%TMPL:DEF{"bugreport"}%<a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/Feedback/%TOPIC%_%GMTIME{"$year$month$day$hours$minutes$seconds"}%?topicparent=%WEB%.%TOPIC%">feedback</a>%TMPL:END%
