@@ -247,7 +247,7 @@ sub view {
   # check access permission
   my $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );
 
-  if( (!$topicExists) || $TWiki::readTopicPermissionFailed ne "") {
+  if( (!$topicExists) || $TWiki::readTopicPermissionFailed ) {
     # Can't read requested topic and/or included (or other accessed topics
     # user could not be authenticated, may be not logged in yet?
     my $viewauthFile = $ENV{'SCRIPT_FILENAME'};
