@@ -219,8 +219,8 @@ sub changeRefTo
 
 
 # =========================
-# Rename a Web, allow for transfer between Webs
-# It is the responsibility of the caller to check: exstance webs & topics, lock taken for topic
+# Rename a topic, allow for transfer between Webs
+# It is the responsibility of the caller to check: exstance webs, topics & lock taken for topic
 sub renameTopic
 {
    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo ) = @_;
