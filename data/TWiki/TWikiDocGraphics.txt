@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1069116360" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="PeterThoeny" date="1069728780" format="1.0" version="1.20"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -33,6 +33,28 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 	* <img src="%ATTACHURLPATH%/changes.gif" alt="changes.gif"  width="16" height="16"  /> Changes
 	* <img src="%ATTACHURLPATH%/notify.gif" alt="notify.gif"  width="16" height="16"  /> Notify
 	* <img src="%ATTACHURLPATH%/empty.gif" alt="empty.gif"  width="16" height="16"  /> Empty transparent 16x16 spacer
+	* <img src="%ATTACHURLPATH%/line_ud.gif" alt="line_ud.gif"  width="16" height="16"  /> Line graph up-down
+	* <img src="%ATTACHURLPATH%/line_lr.gif" alt="line_lr.gif"  width="16" height="16"  /> Line graph left-right
+	* <img src="%ATTACHURLPATH%/line_udlr.gif" alt="line_udlr.gif"  width="16" height="16"  /> Line graph up-down-left-right
+	* <img src="%ATTACHURLPATH%/line_ur.gif" alt="line_ur.gif"  width="16" height="16"  /> Line graph up-right
+	* <img src="%ATTACHURLPATH%/line_rd.gif" alt="line_rd.gif"  width="16" height="16"  /> Line graph right-down
+	* <img src="%ATTACHURLPATH%/line_ld.gif" alt="line_ld.gif"  width="16" height="16"  /> Line graph left-down
+	* <img src="%ATTACHURLPATH%/line_ul.gif" alt="line_ul.gif"  width="16" height="16"  /> Line graph up-left
+	* <img src="%ATTACHURLPATH%/line_udr.gif" alt="line_udr.gif"  width="16" height="16"  /> Line graph up-down-right
+	* <img src="%ATTACHURLPATH%/line_lrd.gif" alt="line_lrd.gif"  width="16" height="16"  /> Line graph left-right-down
+	* <img src="%ATTACHURLPATH%/line_udl.gif" alt="line_udl.gif"  width="16" height="16"  /> Line graph up-down-left
+	* <img src="%ATTACHURLPATH%/line_ulr.gif" alt="line_ulr.gif"  width="16" height="16"  /> Line graph up-left-right
+	* <img src="%ATTACHURLPATH%/dot_ud.gif" alt="dot_ud.gif"  width="16" height="16"  /> Dot graph up-down
+	* <img src="%ATTACHURLPATH%/dot_lr.gif" alt="dot_lr.gif"  width="16" height="16"  /> Dot graph left-right
+	* <img src="%ATTACHURLPATH%/dot_udlr.gif" alt="dot_udlr.gif"  width="16" height="16"  /> Dot graph up-down-left-right
+	* <img src="%ATTACHURLPATH%/dot_ur.gif" alt="dot_ur.gif"  width="16" height="16"  /> Dot graph up-right
+	* <img src="%ATTACHURLPATH%/dot_rd.gif" alt="dot_rd.gif"  width="16" height="16"  /> Dot graph right-down
+	* <img src="%ATTACHURLPATH%/dot_ld.gif" alt="dot_ld.gif"  width="16" height="16"  /> Dot graph left-down
+	* <img src="%ATTACHURLPATH%/dot_ul.gif" alt="dot_ul.gif"  width="16" height="16"  /> Dot graph up-left
+	* <img src="%ATTACHURLPATH%/dot_udr.gif" alt="dot_udr.gif"  width="16" height="16"  /> Dot graph up-down-right
+	* <img src="%ATTACHURLPATH%/dot_lrd.gif" alt="dot_lrd.gif"  width="16" height="16"  /> Dot graph left-right-down
+	* <img src="%ATTACHURLPATH%/dot_udl.gif" alt="dot_udl.gif"  width="16" height="16"  /> Dot graph up-down-left
+	* <img src="%ATTACHURLPATH%/dot_ulr.gif" alt="dot_ulr.gif"  width="16" height="16"  /> Dot graph up-left-right
 
 -- Main.PeterThoeny - 17 Jan 2003<br />
 -- Main.MikeMannix - 16 May 2002
@@ -63,3 +85,25 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="hourglass.gif" attr="" comment="Hour glass" date="1055022919" path="C:\Data\Temp\hourglass.gif" size="128" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="stargold.gif" attr="" comment="Favorites" date="1064988628" path="C:\Data\Temp\stargold.gif" size="180" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="empty.gif" attr="" comment="Empty transparent 16x16 spacer" date="1069116309" path="C:\Data\Temp\empty.gif" size="100" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line_ud.gif" attr="" comment="Line graph up-down" date="1069726077" path="line_ud.gif" size="114" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line_lr.gif" attr="" comment="Line graph left-right" date="1069726092" path="line_lr.gif" size="105" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line_udlr.gif" attr="" comment="Line graph up-down-left-right" date="1069726105" path="line_udlr.gif" size="116" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line_ur.gif" attr="" comment="Line graph up-right" date="1069726118" path="line_ur.gif" size="111" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line_rd.gif" attr="" comment="Line graph right-down" date="1069726136" path="line_rd.gif" size="106" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line_ld.gif" attr="" comment="Line graph left-down" date="1069726148" path="line_ld.gif" size="106" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line_ul.gif" attr="" comment="Line graph up-left" date="1069726161" path="line_ul.gif" size="111" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line_udr.gif" attr="" comment="Line graph up-down-right" date="1069726180" path="line_udr.gif" size="115" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line_lrd.gif" attr="" comment="Line graph left-right-down" date="1069726206" path="line_lrd.gif" size="111" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line_udl.gif" attr="" comment="Line graph up-down-left" date="1069726219" path="line_udl.gif" size="116" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line_ulr.gif" attr="" comment="Line graph up-left-right" date="1069726231" path="line_ulr.gif" size="112" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="dot_ud.gif" attr="" comment="Dot graph up-down" date="1069727650" path="dot_ud.gif" size="108" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="dot_lr.gif" attr="" comment="Dot graph left-right" date="1069727663" path="dot_lr.gif" size="105" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="dot_udlr.gif" attr="" comment="Dot graph up-down-left-right" date="1069727679" path="dot_udlr.gif" size="111" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="dot_ur.gif" attr="" comment="Dot graph up-right" date="1069727692" path="dot_ur.gif" size="106" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="dot_rd.gif" attr="" comment="Dot graph right-down" date="1069727705" path="dot_rd.gif" size="107" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="dot_ld.gif" attr="" comment="Dot graph left-down" date="1069727718" path="dot_ld.gif" size="106" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="dot_ul.gif" attr="" comment="Dot graph up-left" date="1069727729" path="dot_ul.gif" size="106" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="dot_udr.gif" attr="" comment="Dot graph up-down-right" date="1069727744" path="dot_udr.gif" size="109" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="dot_lrd.gif" attr="" comment="Dot graph left-right-down" date="1069727756" path="dot_lrd.gif" size="108" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="dot_udl.gif" attr="" comment="Dot graph up-down-left" date="1069727770" path="dot_udl.gif" size="109" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="dot_ulr.gif" attr="" comment="Dot graph up-left-right" date="1069727783" path="dot_ulr.gif" size="108" user="PeterThoeny" version="1.1"}%
