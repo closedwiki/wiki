@@ -438,9 +438,12 @@ create a div based solution instead of tables */
 .twikiTopicAction a:link,
 .twikiTopicAction a:visited {
 	color:white;
+	border-bottom:1px solid #698FA8;
+	text-decoration:none;
 }
 .twikiTopicAction a:hover {
 	color:#1559B3;
+	border-bottom:1px solid #b4d5ff;
 }
 .twikiTopicAction td {
 	height:2em;
@@ -477,6 +480,10 @@ create a div based solution instead of tables */
 	padding:0.3em 0.5em 0.3em 1em;
 	background-color:white;
 }
+.twikiTopicAction a:hover {
+	color:#1559B3;
+	border-bottom:1px solid #b4d5ff;
+}
 .twikiTopicActionSecondary {
 	background-color:#DFEDFD;
 	color:#22638c;
@@ -485,6 +492,16 @@ create a div based solution instead of tables */
 .twikiTopicActionSecondary a:link,
 .twikiTopicActionSecondary a:visited {
 	color:#1e5bbd;
+	border-bottom:1px solid #A3BCF1;
+	text-decoration:none;
+}
+.twikiTopicActionSecondary a:hover {
+	color:#1e5bbd;
+	border-bottom:1px solid #b4d5ff;
+}
+.twikiTopicActionHelp a:link,
+.twikiTopicActionHelp a:visited  {
+	border-bottom:0px;
 }
 .twikiTopicAction .twikiSeparator {
 	display:inline;
