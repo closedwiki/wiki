@@ -261,49 +261,99 @@ sub initialize
 sub writeHeader
 {
     my( $query ) = @_;
-    if( ! &TWiki::Plugins::writeHeaderHandler( $query ) ) {
-        print $query->header();
-    }
+
+    # FIXME: Pass real content-length to make persistent connections work
+    # in HTTP/1.1 (performance improvement for browsers and servers). 
+    # Requires significant but easy changes in various places.
+
+    # Just write a basic content-type header for text/html
+    writeHeaderFull( $query, 'basic', 'text/html', 0);
 }
 
 # =========================
-# writeHeaderFull: full header setup for Edit page; can be used
+# writeHeaderFull: full header setup for Edit page; will be used
 # to improve cacheability for other pages in future.  Setting
-# cache headers on Edit page fixes the BackFromPreviewLosesText
+# cache headers on Edit page fixes the Codev.BackFromPreviewLosesText
 # bug, which caused data loss with IE5 and IE6.
+#
+# Implements the post-Dec2001 release plugin API, which
+# requires the writeHeaderHandler in plugin to return a string of
+# HTTP headers, CR/LF delimited.  Filters out headers that the
+# core code needs to generate for whatever reason, and any illegal
+# headers.
 sub writeHeaderFull
 {
-    my( $query, $contentLength, $contentType, $pageType ) = @_;
+    my( $query, $pageType, $contentType, $contentLength ) = @_;
 
-    # In this version, $pageType is "edit" only - will extend to caching
-    # of other types of page, with expiry driven by page type.
+    # Handle Edit pages - future versions will extend to caching
+    # of other types of page, with expiry time driven by page type.
+    my( $pluginHeaders, $coreHeaders );
 
-    if( ! &TWiki::Plugins::writeHeaderHandler( $query ) ) {
-        # FIXME: Need to merge any headers supplied by plugin
-        # FIXME: Disable this plugin for now, for full header setup
-        # print $query->header();
+    if ($pageType eq 'edit') {
+	# Get time now in HTTP header format
+	my $lastModifiedString = formatGmTime(time, 'http');
+
+	# Expiry time is set high to avoid any data loss.  Each instance of 
+	# Edit page has a unique URL with time-string suffix (fix for 
+	# RefreshEditPage), so this long expiry time simply means that the 
+	# browser Back button always works.  The next Edit on this page 
+	# will use another URL and therefore won't use any cached 
+	# version of this Edit page.
+	my $expireHours = 24;
+	my $expireSeconds = $expireHours * 60 * 60;
+
+	# Set content length, to enable HTTP/1.1 persistent connections 
+	# (aka HTTP keepalive), and cache control headers, to ensure edit page 
+	# is cached until required expiry time.
+	$coreHeaders = $query->header( -content_type => $contentType,
+			     -content_length => $contentLength,
+			     -last_modified => $lastModifiedString,
+			     -expires => "+${expireHours}h",
+			     -cache_control => "max-age=$expireSeconds"
+			 );
+    } elsif ($pageType eq 'basic') {
+	$coreHeaders = $query->header(-content_type => $contentType);
+    } else {
+	writeWarning( "===== invalid page type in TWiki.pm, writeHeaderFull(): $pageType" );
     }
 
-    # Get time now in HTTP header format
-    my $lastModifiedString = formatGmTime(time, 'http');
+    # Delete extra CR/LF to allow suffixing more headers
+    $coreHeaders =~ s/\r\n\r\n$/\r\n/so;
+    ##writeDebug( "===== After trim, Headers are:\n$coreHeaders" );
 
-    # Expiry time is set high to avoid any data loss.  Each instance of Edit 
-    # page has a unique URL with time-string suffix (fix for RefreshEditPage),
-    # so this long expiry time simply means that the browser Back button
-    # always works.  The next Edit on this page will use another URL and 
-    # therefore won't use any cached version of this Edit page.
-    my $expireHours = 24;
-    my $expireSeconds = $expireHours * 60 * 60;
+    # Wiki Plugin Hook - get additional headers from plugin
+    $pluginHeaders = &TWiki::Plugins::writeHeaderHandler( $query );
 
-    # Set content length, to enable HTTP/1.1 persistent connections 
-    # (aka HTTP keepalive), and cache control headers, to ensure edit page is 
-    # cached until required expiry time.
-    print $query->header(-content_type => $contentType,
-                         -content_length => $contentLength,
-                         -last_modified => $lastModifiedString,
-                         -expires => "+${expireHours}h",
-                         -cache_control => "max-age=$expireSeconds"
-             );
+    # Delete any trailing blank line
+    $pluginHeaders =~ s/\r\n\r\n$/\r\n/so;
+
+    # Add headers supplied by plugin, omitting any already in core headers
+    my $finalHeaders = $coreHeaders;
+    if( defined $pluginHeaders ) {
+	# Build hash of all core header names, lower-cased
+	my ($headerLine, $headerName, %coreHeaderSeen);
+	for $headerLine (split /\r\n/, $coreHeaders) {
+	    $headerLine =~ m/^([^ ]+): /i;		# Get header name
+	    $headerName = lc($1);
+	    ##writeDebug("==== core header name $headerName");
+	    $coreHeaderSeen{$headerName}++;
+	}
+	# Append plugin headers if legal and not seen in core headers
+	for $headerLine (split /\r\n/, $pluginHeaders) {
+	    $headerLine =~ m/^([^ ]+): /io;		# Get header name
+	    $headerName = lc($1);
+	    if ( $headerName =~ m/[\-a-z]+/io ) {	# Skip bad headers
+		##writeDebug("==== plugin header name $headerName");
+		##writeDebug("Saw $headerName already ") if $coreHeaderSeen{$headerName};
+		$finalHeaders .= $headerLine . "\r\n"
+		    unless $coreHeaderSeen{$headerName};
+	    }
+
+	}
+    }
+    $finalHeaders .= "\r\n";		
+    ##writeDebug( "===== Final Headers are:\n$finalHeaders" );
+    print $finalHeaders;
 
 }
 
@@ -2130,7 +2180,7 @@ sub getRenderedVersion
 # Wiki Plugin Hook
           &TWiki::Plugins::outsidePREHandler( $_ );
           $extraLines = undef;   # Plugins might introduce extra lines
-          do {
+          do {                   # Loop over extra lines added by plugins
             $_ = $extraLines if( defined $extraLines );
             s/^(.*?)\n(.*)$/$1/os;
             $extraLines = $2;    # Save extra lines, need to parse each separately
@@ -2197,7 +2247,7 @@ sub getRenderedVersion
              s/(.*)/\n$1\n/o;
 
 # Emphasizing
-            # PTh 25 Sep 2000: More relaxing rules, allow leading '(' and trailing ',.;:!?)'
+            # PTh 25 Sep 2000: More relaxed rules, allow leading '(' and trailing ',.;:!?)'
             s/([\s\(])==([^\s]+?|[^\s].*?[^\s])==([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText( $2, 1 ) . $3/geo;
             s/([\s\(])__([^\s]+?|[^\s].*?[^\s])__([\s\,\.\;\:\!\?\)])/$1<strong><em>$2<\/em><\/strong>$3/go;
             s/([\s\(])\*([^\s]+?|[^\s].*?[^\s])\*([\s\,\.\;\:\!\?\)])/$1<strong>$2<\/strong>$3/go;
