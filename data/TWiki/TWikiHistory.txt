@@ -1,7 +1,12 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000580687" format="1.0" version="1.51"}%
+%META:TOPICINFO{author="PeterThoeny" date="1006317493" format="1.0" version="1.52"}%
 <font size="+3"> *TWiki History: The Dev Timeline* </font>
 
 %TOC%
+
+---++ Work-in-progress
+
+	* *25 Oct 2001* - PeterThoeny
+		* Added FormattedSearch to =%<nop>SEARCH{}%= variable for database like reporting.
 
 ---++ 01-Sep-2001 Release
 
