@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1002006038" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PeterThoeny" date="1010219580" format="1.0" version="1.3"}%
 <H1><nop>%TOPIC%</H1>
 
 The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on aliases defined in the %TWIKIWEB%.InterWikis topic. This plugin is inspired by <nop>UseMod Wiki's inter-wiki links, http://www.usemod.com/cgi-bin/wiki.pl?InterWiki.
@@ -16,9 +16,9 @@ The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on ali
 ---++ <nop>%TOPIC% Settings
 
 Plugin settings are stored as Preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-	* One-line description is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* One-line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Link ==ExternalSite:Page== text to external sites based on aliases defined in the InterWikis topic.
 
 	* Link rules topic name: (default is %TWIKIWEB%.InterWikis)
@@ -55,6 +55,6 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>I
 
 __Related Topics:__ %TWIKIWEB%.InterWikis, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- %TWIKIWEB%.AndreaSterbini - 20 Oct 2000 <br>
--- %TWIKIWEB%.PeterThoeny - 27 Jul 2001 <br>
+-- %TWIKIWEB%.AndreaSterbini - 20 Oct 2000 <br />
+-- %TWIKIWEB%.PeterThoeny - 27 Jul 2001 <br />
 -- %TWIKIWEB%.MikeMannix - 01 Oct 2001 <br />	
