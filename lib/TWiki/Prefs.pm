@@ -178,6 +178,11 @@ sub getPreferencesValue
     my ( $theKey, $theWeb ) = @_;
 
     my $x;
+    
+    my $sessionValue = &TWiki::getSessionValue( $theKey );
+    if( defined( $sessionValue ) ) {
+        return $sessionValue;
+    }
 
     if( ( ! $theWeb ) || ( $theWeb eq $defaultWebName ) ) {
         # search the default web
