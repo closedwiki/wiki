@@ -246,6 +246,7 @@ sub renderForEdit
         my $extra = "";
         
         if( $type eq "text" ) {
+            $value =~ s/"/&#34/go; # Make sure double quote don't kill us
             $value = "<input name=\"$name\" size=\"$size\" type=\"input\" value=\"$value\" />";
         } elsif( $type eq "textarea" ) {
             my $cols = 40;
