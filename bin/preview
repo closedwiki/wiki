@@ -162,7 +162,7 @@ sub main
     $ptext = &TWiki::getRenderedVersion( $ptext );
 
     # do not allow click on link before save:
-    $ptext =~ s@(href=".*?")@href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?template=oops"@goi;
+    $ptext =~ s@(href=".*?")@href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?template=oopspreview"@goi;
     $ptext = &TWiki::handleCommonTags( $ptext, $topic );
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
