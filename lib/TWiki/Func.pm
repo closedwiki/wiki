@@ -1039,16 +1039,6 @@ sub internalLink {
 
 =pod
 
----+++ search text( $text ) -> $text
-
-This is not a function, just a how-to note. Use: =expandCommonVariables('%<nop>SEARCH{...}%' );=
-   * =$text= - Search variable
-Return: =$text=  Search result in [[%TWIKIWEB%.FormattedSearch]] format
-
-=cut
-
-=pod
-
 ---+++ formatTime( $time, $format, $timezone ) -> $text
 
 Format the time in seconds into the desired time string
@@ -1459,14 +1449,16 @@ sub normalizeWebTopicName {
 
 =pod
 
----+++ searchInWebContent($searchString, $web, $type, $caseSensitive, $justTopics, \@topics ) -> \%map
+---+++ searchInWebContent($searchString, $web, \@topics, \%options ) -> \%map
 Search for a string in the content of a web. The search is over all content, including meta-data. Meta-data matches will be returned as formatted lines within the topic content (meta-data matches are returned as lines of the format %META:\w+{.*}%)
    * =$searchString= - the search string, in egrep format
    * =$web= - The web to search in
-   * =$type= - =regex= or something else
-   * =$caseSensitive= - obvious
-   * =$justTopics= - if specified, it will return on the first match in each topic (i.e. it will return only one match per topic, and will not return matching lines).
    * =\@topics= - reference to a list of topics to search
+   * =\%option= - reference to an options hash
+The =\%options= hash may contain the following options:
+   * =type= - if =regex= will perform a egrep-syntax RE search (default '')
+   * =casesensitive= - false to ignore case (defaulkt true)
+   * =files_without_match= - true to return files only (default false). If =files_without_match= is specified, it will return on the first match in each topic (i.e. it will return only one match per topic, and will not return matching lines).
 
 The return value is a reference to a hash which maps each matching topic
 name to a list of the lines in that topic that matched the search,
@@ -1474,15 +1466,16 @@ as would be returned by 'grep'.
 
 To iterate over the returned topics use:
 <verbatim>
-my $result = TWiki::Func::searchInWebContent( "Slimy Toad", $web, "regex", 0, 0, \@topics );
+my $result = TWiki::Func::searchInWebContent( "Slimy Toad", $web, \@topics,
+   { casesensitive => 0, files_without_match => 0 } );
 foreach my $topic (keys %$result ) {
    foreach my $matching_line ( @{$result->{$topic}} ) {
-...etc
+      ...etc
 </verbatim>
 =cut
 
 sub searchInWebContent {
-    #my( $searchString, $web, $type, $caseSensitive, $justTopics, $topics ) = @_;
+    #my( $searchString, $web, $topics, $options ) = @_;
 
     return $TWiki::Plugins::SESSION->{store}->searchInWebContent( @_ );
 }

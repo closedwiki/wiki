@@ -277,7 +277,10 @@ sub _searchTopicsInWeb
         unless( $theScope eq 'topic' ) {
             # search only for the topic name, ignoring matching lines.
             # We will make a mess of reporting the matches later on.
-            my $matches = $store->searchInWebContent( $token, $theWeb, $theType, $caseSensitive, 1, \@topicList );
+            my $matches = $store->searchInWebContent
+              ( $token, $theWeb, \@topicList,
+                { type => $theType, casesensitive => $caseSensitive,
+                  files_without_match => 1 } );
             @scopeTextList = keys %$matches;
         }
 

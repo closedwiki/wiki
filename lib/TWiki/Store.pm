@@ -1732,7 +1732,7 @@ sub _collate {
 
 =pod
 
----++ ObjectMethod searchInWebContent($searchString, $web, $type, $caseSensitive, $justTopics, \@topics ) -> \%map
+---++ ObjectMethod searchInWebContent($searchString, $web, \@topics, \%options ) -> \%map
 
 Search for a string in the content of a web. The search must be over all
 content and all formatted meta-data, though the latter search type is
@@ -1740,19 +1740,27 @@ deprecated (use searchMetaData instead).
 
    * =$searchString= - the search string, in egrep format if regex
    * =$web= - The web to search in
-   * =$type= - 'regex' or something else
    * =\@topics= - reference to a list of topics to search
+   * =\%options= - reference to an options hash
+The =\%options= hash may contain the following options:
+   * =type= - if =regex= will perform a egrep-syntax RE search (default '')
+   * =casesensitive= - false to ignore case (defaulkt true)
+   * =files_without_match= - true to return files only (default false)
 
 The return value is a reference to a hash which maps each matching topic
 name to a list of the lines in that topic that matched the search,
-as would be returned by 'grep'. If $justTopics is specified, it will
+as would be returned by 'grep'. If =files_without_match= is specified, it will
 return on the first match in each topic (i.e. it will return only one
 match per topic, and will not return matching lines).
 
 =cut
 
 sub searchInWebContent {
-    my( $this, $searchString, $web, $type, $caseSensitive, $justTopics, $topics ) = @_;
+    my( $this, $searchString, $web, $topics, $options ) = @_;
+
+    my $type = $options->{type} || '';
+    my $caseSensitive = $options->{casesensitive} || 1;
+    my $justTopics = $options->{files_without_match} || 0;
 
     # I18N: 'grep' must use locales if needed,
     # for case-insensitive searching.  See TWiki::setupLocale.
@@ -1761,10 +1769,8 @@ sub searchInWebContent {
     # - best to strip off any switches after first space in
     # EgrepCmd etc and apply those as argument 1.
     if( $type eq 'regex' ) {
-        # SMELL: this should be specific to the store implementation
         $program = $TWiki::cfg{EgrepCmd};
     } else {
-        # SMELL: this should be specific to the store implementation
         $program = $TWiki::cfg{FgrepCmd};
     }
 
@@ -1799,24 +1805,25 @@ sub searchInWebContent {
 
 =pod
 
-getReferingTopics($oldWeb, $oldTopic);
+getReferringTopics($oldWeb, $oldTopic);
 
 SMELL: this does not hide NONSEARCHABLE webs or do any of the security things at the moment.
 
 =cut
-sub getReferingTopics {
+sub getReferringTopics {
     my ($this, $oldWeb, $oldTopic, $newWeb) = @_;
-
-    my $searchString = $oldTopic;#BUGGO - this is only true in the oldWeb, otherwise need to qualify
-
     my @results;
-
     my ($web, $topic);
 
     foreach $web ($this->getListOfWebs()) {
         my @topicList = $this->getTopicNames( $web );
+        my $searchString = $oldTopic;
+        $searchString = $web.'.'.$searchString unless $web eq $oldWeb;
 
-        my $matches = $this->searchInWebContent( $searchString, $web, '', '', 1, \@topicList );
+        my $matches = $this->searchInWebContent
+          ( $searchString, $web, \@topicList,
+            { casesensitive => 0, files_without_match => 1 } );
+
         foreach $topic (keys %$matches) {
             if ( $web eq $newWeb ) {
                 push (@results, 'global');
