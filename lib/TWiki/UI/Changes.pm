@@ -34,10 +34,9 @@ sub changes {
 
   return unless TWiki::UI::webExists( $webName, $topic );
 
-  my $skin = $query->param( "skin" );
-  $skin = TWiki::Prefs::getPreferencesValue( "SKIN" ) unless ( $skin );
+  my $skin = TWiki::getSkin();
 
-  my $text = TWiki::Store::readTemplate( "changes", $skin );
+  my $text = TWiki::Templates::readTemplate( "changes", $skin );
   my $changes= TWiki::Store::readFile( "$TWiki::dataDir/$webName/.changes" );
 
   my @bar = ();
@@ -54,9 +53,10 @@ sub changes {
   my $before = "";
   my $after = "";
   ( $before, $text, $after) = split( /%REPEAT%/, $text );
-  &TWiki::writeHeader( $query );
+
   $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;  # remove <nop> and <noautolink> tags
-  print $before;
+
+  my $page = $before;
 
   foreach( reverse split( /\n/, $changes ) ) {
     @bar = split( /\t/ );
@@ -64,7 +64,7 @@ sub changes {
       next unless TWiki::Store::topicExists( $webName, $bar[0] );
       $foo = $text;
       $foo =~ s/%TOPICNAME%/$bar[0]/go;
-      my $wikiuser = &TWiki::userToWikiName( $bar[1] );
+      my $wikiuser = &TWiki::User::userToWikiName( $bar[1] );
       $foo =~ s/%AUTHOR%/$wikiuser/go;
       $foo =~ s/%LOCKED%//go;
       $time = &TWiki::formatTime( $bar[2] );
@@ -78,24 +78,27 @@ sub changes {
       }
       $foo =~ s/%TIME%/$time/go;
       $foo =~ s/%REVISION%/$frev/go;
-      $foo = &TWiki::Render::getRenderedVersion( $foo );
+      $foo = TWiki::Render::getRenderedVersion( $foo );
       
-      $summary = &TWiki::Store::readFileHead( "$TWiki::dataDir\/$webName\/$bar[0].txt", 16 );
-      $summary = &TWiki::makeTopicSummary( $summary, $bar[0], $webName );
+      $summary = TWiki::Store::readFileHead( "$TWiki::dataDir\/$webName\/$bar[0].txt", 16 );
+      $summary = TWiki::Render::makeTopicSummary( $summary, $bar[0], $webName );
       $foo =~ s/%TEXTHEAD%/$summary/go;
       $foo =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-      print $foo;
+      $page .= $foo;
       $exclude{ $bar[0] } = "1";
     }
   }
   
   if( $TWiki::doLogTopicChanges ) {
     # write log entry
-    &TWiki::Store::writeLog( "changes", $webName, "" );
+    TWiki::writeLog( "changes", $webName, "" );
   }
   
   $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-  print $after;
+  $page .= $after;
+
+  TWiki::writeHeader( $query, length( $page ));
+  print $page;
 }
 
 1;

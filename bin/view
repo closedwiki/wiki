@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wT
+#!/usr/bin/perl
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #

@@ -35,44 +35,39 @@ package TWiki::Access;
 
 use strict;
 
-use vars qw(
-    %allGroups @processedGroups
-);
+# hash (indexed on group name) of hashes (indexed on users)
+use vars qw( %allGroups );
 
-# =========================
 =pod
 
 ---++ initializeAccess()
-| Description: | Basic module initialization, called from TWiki::initialize |
+Basic module initialization, called from TWiki::initialize
 
 =cut
 
 sub initializeAccess
 {
     %allGroups = ();
-    @processedGroups = ();
 }
 
-# =========================
-# Are there any security restrictions for this Web
-# (ignoring settings on individual pages).
 =pod
 
 ---++ sub permissionsSet (  $web  )
 
-Not yet documented.
+Are there any security restrictions for this Web
+(ignoring settings on individual pages).
 
 =cut
 
 sub permissionsSet
 {
     my( $web ) = @_;
-    
+
     my $permSet = 0;
-    
+
     my @types = qw/ALLOW DENY/;
     my @actions = qw/CHANGE VIEW RENAME/;
-    
+
     OUT: foreach my $type ( @types ) {
         foreach my $action ( @actions ) {
             my $pref = $type . "WEB" . $action;
@@ -83,11 +78,10 @@ sub permissionsSet
             }
         }
     }
-    
+
     return $permSet;
 }
 
-# =========================
 =pod
 
 ---++ checkAccessPermission( $action, $user, $text, $topic, $web ) ==> $ok
@@ -106,14 +100,12 @@ sub checkAccessPermission
     my( $theAccessType, $theUserName,
         $theTopicText, $theTopicName, $theWebName ) = @_;
 
-#AS 2001-11-04 see Codev.UnchangeableTopicBug
     if ( $TWiki::doSuperAdminGroup && 
-	 $TWiki::superAdminGroup ) {
-	if ( &userIsInGroup( $theUserName, $TWiki::superAdminGroup ) ) {
-	    return 1;
-	}
+         $TWiki::superAdminGroup ) {
+        if ( userIsInGroup( $theUserName, $TWiki::superAdminGroup )) {
+            return 1;
+        }
     }
-#/AS
 
     $theAccessType = uc( $theAccessType );  # upper case
     if( ! $theWebName ) {
@@ -121,67 +113,46 @@ sub checkAccessPermission
     }
     if( ! $theTopicText ) {
         # text not supplied as parameter, so read topic
-        $theTopicText = &TWiki::Store::readWebTopic( $theWebName, $theTopicName );
+        $theTopicText = TWiki::Store::readWebTopic( $theWebName, $theTopicName );
     }
-    ##&TWiki::writeDebug( "checkAccessPermission: Type $theAccessType, user $theUserName, topic $theTopicName" );
 
     # parse the " * Set (ALLOWTOPIC|DENYTOPIC)$theAccessType = " in body text
-    my @denyList = ();
-    my @allowList = ();
+    my %deny;
+    my %allow;
     foreach( split( /\n/, $theTopicText ) ) {
         if( /^\s+\*\sSet\s(ALLOWTOPIC|DENYTOPIC)$theAccessType\s*\=\s*(.*)/ ) {
             if( $2 ) {
                 my $allowOrDeny = $1;        # "ALLOWTOPIC" or "DENYTOPIC"
-                my @tmpList = map { getUsersOfGroup( $_ ) }
-                              prvGetUserList( $2 );
-                ##my $tmp = join( ', ', @tmpList );
-                ##&TWiki::writeDebug( "  Topic $allowOrDeny$theAccessType: {$tmp}" );
+                my %tmp = _parseUserList( $2, 1 );
                 if( $allowOrDeny eq "DENYTOPIC" ) {
-                    @denyList = @tmpList;
+                    %deny = %tmp;
                 } else {
-                    @allowList = @tmpList;
+                    %allow = %tmp;
                 }
             }
         }
     }
-    
+
     # if empty, get access permissions from preferences
-    if( ! @denyList ) {
-        my $tmpVal = &TWiki::Prefs::getPreferencesValue( "DENYWEB$theAccessType", $theWebName );
-        @denyList  = map { getUsersOfGroup( $_ ) }
-                     prvGetUserList( $tmpVal );
-        ##my $tmp = join( ', ', @denyList );
-        ##&TWiki::writeDebug( "  Prefs DENYWEB$theAccessType: {$tmp}" );
-    }
-    if( ! @allowList ) {
-        my $tmpVal = &TWiki::Prefs::getPreferencesValue( "ALLOWWEB$theAccessType", $theWebName );
-        @allowList  = map { getUsersOfGroup( $_ ) }
-                      prvGetUserList( $tmpVal );
-        ##my $tmp = join( ', ', @allowList );
-        ##&TWiki::writeDebug( "  Prefs ALLOWWEB$theAccessType: {$tmp}" );
+    unless( %deny ) {
+        my $tmpVal =
+          TWiki::Prefs::getPreferencesValue( "DENYWEB$theAccessType",
+                                             $theWebName );
+        %deny = _parseUserList( $tmpVal, 1 );
     }
 
-    # access permission logic
-    if( @denyList ) {
-        if( grep { /^$theUserName$/ } @denyList  ) {
-            # user is on deny list
-            ##&TWiki::writeDebug( "  return 0, user is on deny list" );
-            return 0;
-        }
+    unless( %allow ) {
+        my $tmpVal =
+          TWiki::Prefs::getPreferencesValue( "ALLOWWEB$theAccessType",
+                                             $theWebName );
+        %allow  = _parseUserList( $tmpVal, 1 );
     }
-    if( @allowList ) {
-        if( grep { /^$theUserName$/ } @allowList  ) {
-            # user is on allow list
-            ##&TWiki::writeDebug( "  return 1, user is on allow list" );
-            return 1;
-        } else {
-            # user is not on allow list
-            ##&TWiki::writeDebug( "  return 0, user is not on allow list" );
-            return 0;
-        }
-    }
+
+    return 0 if( %deny && $deny{$theUserName}  );
+
+    return $allow{$theUserName} if ( %allow );
+
     # allow is undefined, so grant access
-    ##&TWiki::writeDebug( "  return 1, allow is undefined" );
     return 1;
 }
 
@@ -196,19 +167,22 @@ sub checkAccessPermission
 
 sub getListOfGroups
 {
-    my $text = &TWiki::Search::searchWeb(
-         "inline"        => "1",
-         "search"        => "Set GROUP =",
-         "web"           => "all",
-         "topic"         => "*Group",
-         "type"          => "regex",
-         "nosummary"     => "on",
-         "nosearch"      => "on",
-         "noheader"      => "on",
-         "nototal"       => "on",
-         "noempty"       => "on",
-	 "format"	 => "\$web.\$topic",
-     );
+    my $text =
+      TWiki::Search::searchWeb
+          (
+           #_callback      => undef,
+           inline          => 1,
+           "search"        => "Set GROUP =",
+           "web"           => "all",
+           "topic"         => "*Group",
+           "type"          => "regex",
+           "nosummary"     => "on",
+           "nosearch"      => "on",
+           "noheader"      => "on",
+           "nototal"       => "on",
+           "noempty"       => "on",
+           "format"	 => "\$web.\$topic",
+          );
 
     my ( @list ) =  split ( /\n/, $text );	
     return @list;
@@ -228,12 +202,11 @@ sub getGroupsUserIsIn
 {
     my( $theUserName ) = @_;
 
-    my $userTopic = prvGetWebTopicName( $TWiki::mainWebname, $theUserName );
+    my $userTopic = _getWebTopicName( $TWiki::mainWebname, $theUserName );
     my @grpMembers = ();
     my @listOfGroups = getListOfGroups();
     my $group;
 
-	&TWiki::writeDebug("Checking [$userTopic]");
     foreach $group ( @listOfGroups) {
         if ( userIsInGroup ( $userTopic, $group )) {
 	    	push ( @grpMembers, $group );
@@ -247,12 +220,11 @@ sub getGroupsUserIsIn
 =pod
 
 ---++ userIsInGroup( $user, $group ) ==> $ok
-| Description:        | Check if user is a member of a group |
+Check if user is a member of a group. If a topic which is
+not a group is specified, checks if it is the users topic.
 | Parameter: =$user=  | Remote WikiName, e.g. "Main.PeterThoeny" |
 | Parameter: =$group= | Group name, e.g. "Main.EngineeringGroup" |
 | Return:    =$ok=    | 1 user is in group, 0 if not |
-| TODO: | what are we checking if we are not specifying a Group? |
-| | more detailed documentation@! |
 
 =cut
 
@@ -260,53 +232,36 @@ sub userIsInGroup
 {
     my( $theUserName, $theGroupTopicName ) = @_;
 
-    my $usrTopic = prvGetWebTopicName( $TWiki::mainWebname, $theUserName );
-    my $grpTopic = prvGetWebTopicName( $TWiki::mainWebname, $theGroupTopicName );
+    my $usrTopic = _getWebTopicName( $TWiki::mainWebname, $theUserName );
+    my $grpTopic = _getWebTopicName( $TWiki::mainWebname, $theGroupTopicName );
     my @grpMembers = ();
 
     if( $grpTopic !~ /.*Group$/ ) {
         # not a group, so compare user to user
-        push( @grpMembers, $grpTopic );
-    } elsif( ( %allGroups ) && ( exists $allGroups{ $grpTopic } ) ) {
-        # group is allready known
-        @grpMembers = @{ $allGroups{ $grpTopic } };
-    } else {
-        @grpMembers = prvGetUsersOfGroup( $grpTopic, 1 );
+        return ( $grpTopic eq $usrTopic );
+    }
+    unless ( exists $allGroups{$grpTopic} ) {
+        getUsersOfGroup( $grpTopic );
     }
 
-    my $isInGroup = grep { /^$usrTopic$/ } @grpMembers;
-    return $isInGroup;
+    return 0 unless exists( $allGroups{$grpTopic} );
+
+    return $allGroups{$grpTopic}{$usrTopic};
 }
 
-# =========================
 =pod
 
 ---++ getUsersOfGroup( $group ) ==> @users
-| Description:         | Get all members of a group; groups are expanded recursively |
-| Parameter: =$group=  | Group topic name, e.g. "Main.EngineeringGroup" |
-| Return:    =@users=  | List of users, e.g. ( "Main.JohnSmith", "Main.JaneMiller" ) |
+Get all members of a group; groups are expanded recursively
+Return list of users, e.g. ( "Main.JohnSmith", "Main.JaneMiller" )
+| =$group=  | Group topic name, e.g. "Main.EngineeringGroup" |
+| =$processedGroups= | Internal use only; pass undef |
 
 =cut
 
 sub getUsersOfGroup
 {
-    my( $theGroupTopicName ) = @_;
-    ##TWiki::writeDebug( "group is $theGroupTopicName" );
-    return prvGetUsersOfGroup( $theGroupTopicName, 1 );
-}
-
-# =========================
-=pod
-
----++ sub prvGetUsersOfGroup (  $theGroupTopicName, $theFirstCall  )
-
-Not yet documented.
-
-=cut
-
-sub prvGetUsersOfGroup
-{
-    my( $theGroupTopicName, $theFirstCall ) = @_;
+    my( $theGroupTopicName, $processedGroups ) = @_;
 
     my @resultList = ();
     # extract web and topic name
@@ -317,7 +272,6 @@ sub prvGetUsersOfGroup
         $web = $1;
         $topic = $2;
     }
-    ##TWiki::writeDebug( "Web is $web, topic is $topic" );
 
     if( $topic !~ /.*Group$/ ) {
         # return user, is not a group
@@ -325,66 +279,56 @@ sub prvGetUsersOfGroup
     }
 
     # check if group topic is already processed
-    if( $theFirstCall ) {
-        # FIXME: Get rid of this global variable
-        @processedGroups = ();
-    } elsif( grep { /^$web\.$topic$/ } @processedGroups ) {
-        # do nothing, already processed
+    if( !defined( $processedGroups )) {
+        $processedGroups = {};
+    } elsif( $processedGroups->{"$web.$topic"} ) {
         return ();
     }
-    push( @processedGroups, "$web\.$topic" );
+    $processedGroups->{"$web.$topic"} = 1;
 
     # read topic
-    my $text = &TWiki::Store::readWebTopic( $web, $topic );
+    my $text = TWiki::Store::readWebTopic( $web, $topic );
 
+    # SMELL: what the blazes is this? Comment it out, and
+    # see what breaks.... DFP rules.
     # reset variables, defensive coding needed for recursion
-    (my $baz = "foo") =~ s/foo//;
+    #(my $baz = "foo") =~ s/foo//;
 
     # extract users
     my $user = "";
-    my @glist = ();
+    my %glist;
     foreach( split( /\n/, $text ) ) {
-        if( /^\s+\*\sSet\sGROUP\s*\=\s*(.*)/ ) {
-            if( $1 ) {
-                @glist = prvGetUserList( $1 );
-            }
+        if( /^\s+\*\sSet\sGROUP\s*\=\s*(.+)$/ ) {
+            # Note: if there are multiple GROUP assignments in the
+            # topic, the last will be taken.
+            %glist = _parseUserList( $1, 0 );
         }
     }
-    foreach( @glist ) {
+    foreach ( keys %glist ) {
         if( /.*Group$/ ) {
             # $user is actually a group
             my $group = $_;
             if( ( %allGroups ) && ( exists $allGroups{ $group } ) ) {
-                # allready known, so add to list
-                push( @resultList, @{ $allGroups{ $group } } );
+                # already known, so add to list
+                push( @resultList, keys %{$allGroups{$group}} );
             } else {
                 # call recursively
-                my @userList = prvGetUsersOfGroup( $group, 0 );
-                # add group to allGroups hash
-                $allGroups{ $group } = [ @userList ];
-                push( @resultList, @userList );
+                push( @resultList,
+                      map { $allGroups{$group}{$_} = 1; }
+                      getUsersOfGroup( $group, $processedGroups ));
             }
         } else {
             # add user to list
             push( @resultList, $_ );
         }
     }
-    ##TWiki::writeDebug( "Returning group member list of @resultList" );
     return @resultList;
 }
 
-# =========================
-=pod
-
----++ sub prvGetWebTopicName (  $theWebName, $theTopicName  )
-
-Not yet documented.
-
-=cut
-
-sub prvGetWebTopicName
+sub _getWebTopicName
 {
     my( $theWebName, $theTopicName ) = @_;
+    # SMELL: this is a hack, isn't it? What should really be going on here?
     $theTopicName =~ s/%MAINWEB%/$theWebName/go;
     $theTopicName =~ s/%TWIKIWEB%/$theWebName/go;
     if( $theTopicName =~ /[\.]/ ) {
@@ -395,26 +339,27 @@ sub prvGetWebTopicName
     return $theTopicName;
 }
 
-# =========================
-=pod
-
----++ sub prvGetUserList (  $theItems  )
-
-Not yet documented.
-
-=cut
-
-sub prvGetUserList
+# Get a hash indexed by the users in a list. If expand is
+# true, recursively expand groups defined in the list to create
+# a flat has of users.
+sub _parseUserList
 {
-    my( $theItems ) = @_;
+    my( $theItems, $expand ) = @_;
     # comma delimited list of users or groups
     # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
     $theItems =~ s/(<[^>]*>)//go;     # Remove HTML tags
     # TODO: i18n fix for user name
     $theItems =~ s/\s*([a-zA-Z0-9_\.\,\s\%]*)\s*(.*)/$1/go; # Limit list
-    my @list = map { prvGetWebTopicName( $TWiki::mainWebname, $_ ) }
-               split( /[\,\s]+/, $theItems );
-    return @list;
+    my %list;
+    foreach( split( /[\,\s]+/, $theItems )) {
+        my $e = _getWebTopicName( $TWiki::mainWebname, $_ );
+        if ( $expand ) {
+            map { $list{$_} = 1; } getUsersOfGroup( $e );
+        } else {
+            $list{$e} = 1;
+        }
+    }
+    return %list;
 }
 
 # =========================

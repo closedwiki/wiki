@@ -50,9 +50,11 @@ sub statistics {
 
     if( $query ) {
       # running from CGI
-      TWiki::writeHeader( $query );
-      print "<html>\n<head>\n<title>TWiki: Create Usage Statistics</title>\n";
-      print "</head>\n<body>\n";
+        my $mess =
+          "<html>\n<head>\n<title>TWiki: Create Usage Statistics</title>\n" .
+            "</head>\n<body>\n";
+        TWiki::writeHeader( $query, length( $mess ));
+        print $mess;
     }
 
     # Initial messages
@@ -368,7 +370,7 @@ sub _processWeb
     $dummy = "";  # to suppress warning
 
     if( $isFirstTime ) {
-        my $tmp = &TWiki::userToWikiName( $userName, 1 );
+        my $tmp = &TWiki::User::userToWikiName( $userName, 1 );
         $tmp .= " as shell script" unless( $query );
         _printMsg( "* Executed by $tmp", $query );
     }

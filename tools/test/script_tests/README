@@ -1,6 +1,9 @@
 Script Tests
 ============
 
+- YOU MUST CONFIGURE THE PATHS IN ScriptTestFixture.pm FOR YOUR CONFIGURATION
+- the command is perl TestRunner.pl CGIScriptSuite.pm
+
 The test suite CGIScriptsSuite.pm is a Test::Unit suite designed to exercise the CGI scripts in TWiki, and is intended primarily to support refactorings. It does this by comparing script results from one server with results from the same script on another, on the assumption that the two servers are standard TWiki installations and both have identical data and pub areas (they can even share the same data and pub if necessary).
 
 The general idea is that you create two CVS checkout areas, keeping one on the latest proven code and the other on bleeding edge code. Running the suite will tell you what you have changed in the system from a user perspective. Ultimately there should be an automatic script that maintains these areas, runs the tests, and mails the results to the core team.
@@ -23,15 +26,3 @@ rm -f <path to data>/Sandbox/AutoCreated*.*
 rm -rf <path to pub>/Sandbox/AutoCreated*.*
 
 for both old and new installations. Please don't complain at me until you've tried this and re-run the tests.
-
-Test Status
------------
-The following tests are known to FAIL in some respect:
-
-viewfile - fails in old code as well
-save - fails in old code as well
-upload - fails in old code as well
-
-In each case these failures are due to script errors that existed before the refactorings - and therefore the tests - were done. AFAICT they are genuine errors.
-
-It will take time before all the tests pass reliably.

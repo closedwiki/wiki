@@ -49,7 +49,7 @@ BEGIN {
 
 ---++ sub getUrl (  $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader  )
 
-Not yet documented.
+Get the text at the other end of a URL
 
 =cut
 
@@ -119,7 +119,7 @@ sub getUrl
 
 ---++ sub sendEmail (  $theText  )
 
-Not yet documented.
+Send an email specified as MIME format content.
 
 =cut
 
@@ -208,15 +208,6 @@ sub sendEmail
     return $error;
 }
 
-# =========================
-=pod
-
----++ sub _fixLineLength (  $theAddrs  )
-
-Not yet documented.
-
-=cut
-
 sub _fixLineLength
 {
     my( $theAddrs ) = @_;
@@ -225,15 +216,6 @@ sub _fixLineLength
     $theAddrs =~ s/\n\s*$//gos;
     return $theAddrs;
 }
-
-# =========================
-=pod
-
----++ sub _sendEmailBySendmail (  $theText  )
-
-Not yet documented.
-
-=cut
 
 sub _sendEmailBySendmail
 {
@@ -246,15 +228,6 @@ sub _sendEmailBySendmail
     }
     return "ERROR: Can't send mail using TWiki::mailProgram";
 }
-
-# =========================
-=pod
-
----++ sub _sendEmailByNetSMTP (  $from, $toref, $data  )
-
-Not yet documented.
-
-=cut
 
 sub _sendEmailByNetSMTP
 {

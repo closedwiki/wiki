@@ -329,7 +329,7 @@ sub getRevInfo
     my( $web, $rev, $topic, $short ) = @_;
 
     my( $date, $user ) = &TWiki::Store::getRevisionInfo( $web, $topic, "1.$rev");
-    $user = TWiki::Render::getRenderedVersion( TWiki::userToWikiName( $user ) );
+    $user = TWiki::Render::getRenderedVersion( TWiki::User::userToWikiName( $user ) );
 	
     if ( $short ) {
 	    $date = TWiki::formatTime( $date, "\$day \$month \$year" );
@@ -373,8 +373,7 @@ sub diff {
   my $diffType = $query->param('type');
   my $contextLines = $query->param('context');
   $contextLines = &TWiki::Prefs::getPreferencesValue( "DIFFCONTEXTLINES" ) unless ( $contextLines );
-  my $skin = $query->param( "skin" );
-  $skin = &TWiki::Prefs::getPreferencesValue( "SKIN" ) unless ( $skin );
+  my $skin = TWiki::getSkin();
   my $rev1 = $query->param( "rev1" );
   my $rev2 = $query->param( "rev2" );
 
@@ -396,7 +395,7 @@ sub diff {
   my $isMultipleDiff = 0;
   my $scriptUrlPath = $TWiki::scriptUrlPath;
 
-  $tmpl = &TWiki::Store::readTemplate( "rdiff", $skin );
+  $tmpl = TWiki::Templates::readTemplate( "rdiff", $skin );
   $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
   my( $before, $difftmpl, $after) = split( /%REPEAT%/, $tmpl);
@@ -429,7 +428,7 @@ sub diff {
   }
 
   # check access permission
-  my $wikiUserName = &TWiki::userToWikiName( $userName );
+  my $wikiUserName = &TWiki::User::userToWikiName( $userName );
   my $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $wikiUserName, "", $topic, $webName );
   if( $TWiki::readTopicPermissionFailed ) {
     # Can't read requested topic and/or included (or other accessed topics)
@@ -462,8 +461,7 @@ sub diff {
   $before = &TWiki::handleCommonTags( $before, $topic );
   $before = &TWiki::Render::getRenderedVersion( $before );
   $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-  &TWiki::writeHeader( $query );
-  print $before;
+  my $page = $before;
 
   # do one or more diffs
   $difftmpl = &TWiki::handleCommonTags( $difftmpl, $topic );
@@ -490,7 +488,7 @@ sub diff {
       #            }
       $diff =~ s/%TEXT%/$text/go;
       $diff =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-      print $diff;
+      $page .= $diff;
       $r1 = $r1 - 1;
       $r2 = $r2 - 1;
       if( $r2 < 1 ) { $r2 = 1; }
@@ -502,12 +500,12 @@ sub diff {
     $diff =~ s/%REVTITLE2%/$revTitle2/go;
     $diff =~ s/%TEXT%//go;
     $diff =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-    print $diff;
+    $page .= $diff;
   }
   
   if( $TWiki::doLogTopicRdiff ) {
     # write log entry
-    &TWiki::Store::writeLog( "rdiff", "$webName.$topic", "r1.$rev1 r1.$rev2" );
+    TWiki::writeLog( "rdiff", "$webName.$topic", "r1.$rev1 r1.$rev2" );
   }
   
   # format "after" part
@@ -550,7 +548,10 @@ sub diff {
   $after = &TWiki::Render::getRenderedVersion( $after );
   $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
   
-  print $after;
+  $page .= $after;
+
+  TWiki::writeHeader( $query, length( $page ));
+  print $page;
 }
 
 1;

@@ -147,7 +147,7 @@ sub installEncryptedPasswd
 {
     my  ($webName, $topic, $userName) = @_;
 
-    my $wikiUserName = &TWiki::userToWikiName( $userName );
+    my $wikiUserName = &TWiki::User::userToWikiName( $userName );
 
     if( ! &TWiki::Access::userIsInGroup( $wikiUserName, $TWiki::superAdminGroup ) ) {
     	# user has no permission to install the password

@@ -66,7 +66,7 @@ sub view {
   # Convert only if html file does not yet exist
   # for now, show the original document:
 
-  my $pubUrlPath = &TWiki::getPubUrlPath();
+  my $pubUrlPath = $TWiki::pubUrlPath;
   my $host = $TWiki::urlHost;
   TWiki::UI::redirect( "$host$pubUrlPath/$webName/$topic/$fileName" );
 }

@@ -28,21 +28,14 @@ package TWiki::Form;
 
 use strict;
 
+use TWiki::Templates;
 
 # ============================
 # Get definition from supplied topic text
 # Returns array of arrays
 #   1st - list fields
 #   2nd - name, title, type, size, vals, tooltip, setting
-=pod
-
----++ sub getFormDefinition (  $text  )
-
-Not yet documented.
-
-=cut
-
-sub getFormDefinition
+sub _parseFormDefinition
 {
     my( $text ) = @_;
 
@@ -117,13 +110,11 @@ sub _cleanField
 }
 
 
-# ============================
-# Possible field values for select, checkbox, radio from supplied topic text
 =pod
 
 ---++ sub getPossibleFieldValues (  $text  )
 
-Not yet documented.
+Possible field values for select, checkbox, radio from supplied topic text
 
 =cut
 
@@ -156,14 +147,12 @@ sub getPossibleFieldValues
 }
 
 
-# ============================
-# Get array of field definition, given form name
-# If form contains Web this overrides webName
 =pod
 
 ---++ sub getFormDef (  $webName, $form  )
 
-Not yet documented.
+Get array of field definition, given form name
+If form contains Web this overrides webName
 
 =cut
 
@@ -181,7 +170,7 @@ sub getFormDef
     # Read topic that defines the form
     if( &TWiki::Store::topicExists( $webName, $form ) ) {
         my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $form );
-        @fieldDefs = getFormDefinition( $text );
+        @fieldDefs = _parseFormDefinition( $text );
     } else {
         # FIXME - do what if there is an error?
     }
@@ -250,7 +239,7 @@ sub _link
     my $link = "$name";
     
     if( &TWiki::Store::topicExists( $web, $name ) ) {
-        ( $web, $name ) = &TWiki::Store::normalizeWebTopicName( $web, $name );
+        ( $web, $name ) = TWiki::normalizeWebTopicName( $web, $name );
         if( ! $tooltip ) {
             $tooltip = "Click to see details in separate window";
         }
@@ -282,13 +271,11 @@ sub chooseFormButton
 }
 
 
-# ============================
-# Render form information 
 =pod
 
 ---++ sub renderForEdit (  $web, $topic, $form, $meta, $query, $getValuesFromFormTopic,  @fieldsInfo  )
 
-Not yet documented.
+Render form information 
 
 =cut
 
@@ -304,7 +291,7 @@ sub renderForEdit
     # FIXME could do with some of this being in template
     my $text = "<div class=\"twikiForm twikiEditForm\"><table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
                _link( $web, $form, "", "h", "", 2, $chooseForm ) . "</tr>\n";
-               
+    
     fieldVars2Meta( $web, $query, $meta, "override" );
     
     foreach my $c ( @fieldsInfo ) {
@@ -449,50 +436,29 @@ sub renderForEdit
 }
 
 
-# =============================
 =pod
 
----++ sub getFormInfoFromMeta (  $webName, $meta  )
+---++ sub fieldVars2Meta
+Extract new values of form fields from a query.
 
-Not yet documented.
-
-=cut
-
-sub getFormInfoFromMeta
-{
-    my( $webName, $meta ) = @_;
-    
-    my @fieldsInfo = ();
-    
-    my %form = $meta->findOne( "FORM" );
-    if( %form ) {
-       @fieldsInfo = getFormDef( $webName, $form{"name"} );
-    }
-    
-    return @fieldsInfo;
-}
-
-
-# =============================
-# Form parameters to meta
-# Note that existing meta information for fields is removed unless $justOverride is true
-=pod
-
----++ sub fieldVars2Meta (  $webName, $query, $meta, $justOverride  )
-
-Not yet documented.
+Note that existing meta information for fields is removed unless $justOverride is true
 
 =cut
 
 sub fieldVars2Meta
 {
-   my( $webName, $query, $meta, $justOverride ) = @_;
+    my( $webName, $query, $meta, $justOverride ) = @_;
    
-   $meta->remove( "FIELD" ) if( ! $justOverride );
+    $meta->remove( "FIELD" ) if( ! $justOverride );
    
-   #TWiki::writeDebug( "Form::fieldVars2Meta " . $query->query_string );
+    #TWiki::writeDebug( "Form::fieldVars2Meta " . $query->query_string );
    
-   my @fieldsInfo = getFormInfoFromMeta( $webName, $meta );
+    my @fieldsInfo = ();
+    my %form = $meta->findOne( "FORM" );
+    if( %form ) {
+        @fieldsInfo = getFormDef( $webName, $form{"name"} );
+    }
+
    foreach my $fieldInfop ( @fieldsInfo ) {
        my @fieldInfo = @$fieldInfop;
        my $fieldName = shift @fieldInfo;
@@ -572,13 +538,11 @@ sub getFieldParams
 
 }
 
-# =============================
-# Called by script to change the form for a topic
 =pod
 
 ---++ sub changeForm (  $theWeb, $theTopic, $theQuery  )
 
-Not yet documented.
+Called by script to change the form for a topic
 
 =cut
 
@@ -586,12 +550,11 @@ sub changeForm
 {
     my( $theWeb, $theTopic, $theQuery ) = @_;
    
-    my $tmpl = &TWiki::Store::readTemplate( "changeform" );
-    &TWiki::writeHeader( $theQuery );
-    $tmpl = &TWiki::handleCommonTags( $tmpl, $theTopic );
-    $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
+    my $tmpl = TWiki::Templates::readTemplate( "changeform" );
+    $tmpl = TWiki::handleCommonTags( $tmpl, $theTopic );
+    $tmpl = TWiki::Render::getRenderedVersion( $tmpl );
     my $text = $theQuery->param( 'text' );
-    $text = &TWiki::Render::encodeSpecialChars( $text );
+    $text = TWiki::Render::encodeSpecialChars( $text );
     $tmpl =~ s/%TEXT%/$text/go;
 
     my $listForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$theWeb" );
@@ -599,7 +562,7 @@ sub changeForm
     $listForms =~ s/\s*$//go;
     my @forms = split( /\s*,\s*/, $listForms );
     unshift @forms, "";
-    my( $metat, $tmp ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
+    my( $metat, $tmp ) = TWiki::Store::readTopic( $theWeb, $theTopic );
     my $formName = $theQuery->param( 'formtemplate' ) || "";
     if( ! $formName ) {
         my %form = $metat->findOne( "FORM" );
@@ -622,21 +585,14 @@ sub changeForm
 
     $tmpl =~ s|</*nop/*>||goi;
 
+    TWiki::writeHeader( $theQuery, length( $tmpl ));
     print $tmpl;
 }
 
 
 # ============================
 # load old style category table item
-=pod
-
----++ sub upgradeCategoryItem (  $catitems, $ctext  )
-
-Not yet documented.
-
-=cut
-
-sub upgradeCategoryItem
+sub _upgradeCategoryItem
 {
     my ( $catitems, $ctext ) = @_;
     my $catname = "";
@@ -716,15 +672,11 @@ sub upgradeCategoryItem
     return ( $catname, $catmodifier, $catvalue )
 }
 
-
-
-# ============================
-# load old style category table
 =pod
 
 ---++ sub upgradeCategoryTable (  $web, $topic, $meta, $text  )
 
-Not yet documented.
+load old style category table
 
 =cut
 
@@ -732,7 +684,7 @@ sub upgradeCategoryTable
 {
     my( $web, $topic, $meta, $text ) = @_;
     
-    my $icat = &TWiki::Store::readTemplate( "twikicatitems" );
+    my $icat = TWiki::Templates::readTemplate( "twikicatitems" );
     
     if( $icat ) {
         my @items = ();
@@ -746,7 +698,7 @@ sub upgradeCategoryTable
 
         my $ttext = "";
         foreach( split( /\n/, $icat ) ) {
-            my( $catname, $catmod, $catvalue ) = upgradeCategoryItem( $_, $ctext );
+            my( $catname, $catmod, $catvalue ) = _upgradeCategoryItem( $_, $ctext );
             #TWiki::writeDebug( "Form: name, mod, value: $catname, $catmod, $catvalue" );
             if( $catname ) {
                 push @items, ( [$catname, $catmod, $catvalue] );
@@ -761,7 +713,7 @@ sub upgradeCategoryTable
         $defaultFormTemplate = $formTemplates[0] if ( @formTemplates );
         
         if( ! $defaultFormTemplate ) {
-            &TWiki::writeWarning( "Form: can't get form definition to convert category table " .
+            TWiki::writeWarning( "Form: can't get form definition to convert category table " .
                                   " for topic $web.$topic" );
                                   
             foreach my $oldCat ( @items ) {
@@ -796,7 +748,7 @@ sub upgradeCategoryTable
         }
 
     } else {
-        &TWiki::writeWarning( "Form: get find category template twikicatitems for Web $web" );
+        TWiki::writeWarning( "Form: get find category template twikicatitems for Web $web" );
     }
     
     return $text;

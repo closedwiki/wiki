@@ -28,8 +28,24 @@
 
 ---+ TWiki::Meta Module
 
-This module reads/writes meta data that describes a topic.
-Data is held as META:FIELD TWiki variables at the start and end of each topic.
+Meta-data handling.
+
+A meta-data object is a hash of different types of meta-data (keyed on
+the type, such as "FIELD" and "TOPICINFO").
+
+Each entry in the hash is an array, where each entry in the array
+contains another hash of the key=value pairs, corresponding to a
+single meta-datum.
+
+If there may be multiple entries of the same top-level type (i.e. for FIELD
+and FILEATTACHMENT) then the array hash multiple entries. Otherwise
+the array has only one entry.
+
+The module knows nothing about how meta-data is stored. That is entirely the
+responsibility of the Store module.
+
+Meta-data objects are created by the Store engine when topics are read. They
+are populated using the =put= method.
 
 =cut
 
@@ -41,26 +57,35 @@ use strict;
 
 ---++ sub new ()
 
-Not yet documented.
+Construct a new, empty Meta collection.
 
 =cut
 
-sub new
-{
-   my $self = {};
-   bless $self;   
-   return $self;
+sub new {
+    my ( $class, $web, $topic ) = @_;
+    my $self = {};
+    die join(" ", caller) unless $web;
+    die join(" ", caller) unless $topic;
+    $self->{_web} = $web;
+    $self->{_topic} = $topic;
+    bless( $self, $class );
+    return $self;
 }
+
+=pod
 
 # ===========================
 # Replace data for this type.  If type is keyed then only the entry where
-# key matches relavent field is replaced
+# key matches relevant field is replaced
 # Order that args sets are put in is maintained
 =pod
 
 ---++ sub put (  $self, $type, %args  )
 
-Not yet documented.
+Put a hash of key=value pairs into the given type set in this meta.
+
+See the main comment for this package to understand how meta-data is
+represented.
 
 =cut
 
@@ -80,7 +105,7 @@ sub put
                TWiki::writeWarning( "Meta: Required $key parameter is missing for META:$type" );
                return;
            }
-           for( my $i=0; $i<scalar @$data; $i++ ) {
+           for( my $i = 0; $i < scalar( @$data ); $i++ ) {
                if( $data[$i]->{$key} eq $keyName ) {
                    $data->[$i] = \%args;
                    $found = 1;
@@ -102,33 +127,26 @@ sub put
 
 # ===========================
 # Give the key field for a type, "" if no key
-=pod
-
----++ sub _key (  $type  )
-
-Not yet documented.
-
-=cut
 
 sub _key
 {
-   my( $type ) = @_;
-   
-   my $key = "";
-   
-   if( $type eq "FIELD" || $type eq "FILEATTACHMENT" ) {
-       $key = "name";
-   }
+   my $type = shift;
+
+   return "name" if( $type eq "FIELD" || $type eq "FILEATTACHMENT" );
+
+   return undef;
 }
 
 # ===========================
-# Find one meta data item
-# Key needed for some types (see _key)
 =pod
 
----++ sub findOne (  $self, $type, $keyValue  )
+---++ sub findOne (  $self, $type, $key  )
 
-Not yet documented.
+Find the value of a meta-datum in the map. If the type is FIELD or
+FILEATTACHMENT, the $key parameter is required to say _which_
+entry you want. Otherwise it can be undef.
+
+SMELL: This method would be better named "lookup" or "get".
 
 =cut
 
@@ -158,14 +176,13 @@ sub findOne
    return %args;
 }
 
-# ===========================
-# Get all meta data for a specific type
-# Returns array, zero length if no items
 =pod
 
 ---++ sub find (  $self, $type  )
 
-Not yet documented.
+Get all meta data for a specific type
+Returns the array stored for the type. This will be zero length
+if there are no entries.
 
 =cut
 
@@ -183,15 +200,15 @@ sub find
     return @items;
 }
 
-# ===========================
-# If no keyValue, remove all types, otherwise for types
-# with key, just remove specified item. Remove all types
-# if $type is empty.
 =pod
 
----++ sub remove (  $self, $type, $keyValue  )
+---++ sub remove ( $self, $type, $key )
 
-Not yet documented.
+With no type, will remove all the contents of the object.
+
+With a $type but no $key, will remove _all_ items of that type (so for example if $type were FILEATTACHMENT it would remove all of them)
+
+With a $type and a $key it will remove only the specific item.
 
 =cut
 
@@ -220,14 +237,16 @@ sub remove
     }
 }
 
-# ===========================
-# Copy all entries of a type from another meta data set to self,
-# overwriting the own set
 =pod
 
 ---++ sub copyFrom (  $self, $otherMeta, $type  )
 
-Not yet documented.
+Copy all entries of a type from another meta data set. This
+will destroy the old values for that type, unless the
+copied object doesn't contain entries for that type, in which
+case it will retain the old values.
+
+SMELL: That spec absolutely _STINKS_ !!
 
 =cut
 
@@ -239,126 +258,33 @@ sub copyFrom
     $self->{$type} = $data if( $data );
 }
 
-# ===========================
-# Number of entries of a given type
 =pod
 
 ---++ sub count (  $self, $type  )
 
-Not yet documented.
+Return the number of entries of the given type that are in this meta set
 
 =cut
 
 sub count
 {
     my( $self, $type ) = @_;
-    
-    my $count = 0;
-    
     my $data = $self->{$type};
-    if( $data ) {
-       $count = scalar @$data;
-    }
-    
-    return $count;
-}
 
-=pod
+    return scalar @$data if( defined( $data ));
 
----++ sub _writeKeyValue (  $key, $value  )
-
-Not yet documented.
-
-=cut
-
-sub _writeKeyValue
-{
-    my( $key, $value ) = @_;
-    
-    $value = cleanValue( $value );
-    
-    my $text = "$key=\"$value\"";
-    
-    return $text;
-}
-
-=pod
-
----++ sub _writeTypes (  $self, @types  )
-
-Not yet documented.
-
-=cut
-
-sub _writeTypes
-{
-    my( $self, @types ) = @_;
-    
-    my $text = "";
-
-    if( $types[0] eq "not" ) {
-        # write all types that are not in the list
-        my %seen;
-        @seen{ @types } = ();
-        @types = ();  # empty "not in list"
-        foreach my $key ( keys %$self ) {
-            push( @types, $key ) unless exists $seen{ $key };
-        }
-    }
-    
-    foreach my $type ( @types ) {
-        my $data = $self->{$type};
-        foreach my $item ( @$data ) {
-            my $sep = "";
-            $text .= "%META:$type\{";
-            my $name = $item->{"name"};
-            if( $name ) {
-                # If there's a name field, put first to make regexp based searching easier
-                $text .= _writeKeyValue( "name", $item->{"name"} );
-                $sep = " ";
-            }
-            foreach my $key ( sort keys %$item ) {
-                if( $key ne "name" ) {
-                    $text .= $sep;
-                    $text .= _writeKeyValue( $key, $item->{$key} );
-                    $sep = " ";
-                }
-            }
-            $text .= "\}%\n";
-         }
-    }
-
-    return $text;
-}
-
-=pod
-
----++ sub cleanValue (  $value  )
-
-Not yet documented.
-
-=cut
-
-sub cleanValue
-{
-    my( $value ) = @_;
-
-    $value =~ s/\r\r\n/%_N_%/go;
-    $value =~ s/\r\n/%_N_%/go;
-    $value =~ s/\n\r/%_N_%/go;
-    $value =~ s/\r\n/%_N_%/go; # Deal with doubles or \n\r
-    $value =~ s/\r/\n/go;
-    $value =~ s/\n/%_N_%/go;
-    $value =~ s/"/%_Q_%/go;
-
-    return $value;
+    return 0;
 }
 
 =pod
 
 ---++ sub restoreValue (  $value  )
 
-Not yet documented.
+Converts %_N_% to a newline and %_Q_% to a " in the string. This is
+part of Meta because it is an operation that is frequently associated
+with meta-data values.
+
+SMELL: That isn't a good enough reason!
 
 =cut
 
@@ -372,124 +298,61 @@ sub restoreValue
     return $value;
 }
 
-
-
-# ======================
 =pod
 
----++ sub _keyValue2Hash (  $args  )
+---++ sub addTopicInfo (  $web, $topic, $rev, $meta, $forceDate, $forceUser  )
 
-Not yet documented.
+Add TOPICINFO type data to the object, as specified by the parameters.
 
 =cut
 
-sub _keyValue2Hash
-{
-    my( $args ) = @_;
-    
-    my %res = ();
-    
-    # Format of data is name="value" name1="value1" [...]
-    while( $args =~ s/\s*([^=]+)=\"([^"]*)\"//o ) {
-        my $key = $1;
-        my $value = $2;
-        $value = restoreValue( $value );
-        $res{$key} = $value;
+sub addTopicInfo {
+    my( $self, $web, $topic, $rev, $forceDate, $forceUser ) = @_;
+
+    my $time = $forceDate || time();
+    my $user = $forceUser || $TWiki::userName;
+
+    my @args = (
+       "version" => "$rev",
+       "date"    => "$time",
+       "author"  => "$user",
+       "format"  => $TWiki::formatVersion );
+    $self->put( "TOPICINFO", @args );
+}
+
+=pod
+
+---++ sub getRevisionInfo ( )
+
+Try and get revision info from the meta information, or, if it is not
+present, kick down to the Store module for the same information.
+
+Returns ( $revDate, $author, $rev )
+
+Note there is no "1." prefix to the revision number returned.
+
+=cut
+
+sub getRevisionInfo {
+    my $self = shift;
+
+    my %topicinfo = $self->findOne( "TOPICINFO" );
+
+    my( $date, $author, $rev );
+    if( %topicinfo ) {
+       $date = $topicinfo{"date"} ;
+       $author = $topicinfo{"author"};
+       my $tmp = $topicinfo{"version"};
+       $tmp =~ /1\.(.*)/o;
+       $rev = $1;
+    } else {
+       # Get data from Store
+       ( $date, $author, $rev ) =
+         TWiki::Store::getRevisionInfo( $self->{_web}, $self->{_topic}, "" );
     }
-    
-    return %res;
+    # writeDebug( "rev = $rev" );
+
+    return( $date, $author, $rev );
 }
-
-# ===========================
-# Returns text with meta stripped out
-=pod
-
----++ sub read (  $self, $text  )
-
-Not yet documented.
-
-=cut
-
-sub read
-{
-    my( $self, $text ) = @_;
-    
-    my $newText = "";
-
-    foreach ( split( /\r?\n/, $text ) ) {
-        if( /^%META:([^{]+){(.*)}%$/ ) {   # greedy match for ending "}%"
-            my $type = $1;
-            my $args = $2;
-            my %list = _keyValue2Hash( $args );
-            $self->put( $type, %list );
-        } else {
-            $newText .= "$_\n";
-        }
-    }
-    
-    return $newText;
-}
-
-# ===========================
-# Meta data for start of topic
-=pod
-
----++ sub writeStart (  $self  )
-
-Not yet documented.
-
-=cut
-
-sub writeStart
-{
-    my( $self ) = @_;
-    
-    return $self->_writeTypes( qw/TOPICINFO TOPICPARENT/ );
-}
-
-# ===========================
-# Meta data for end of topic
-=pod
-
----++ sub writeEnd (  $self  )
-
-Not yet documented.
-
-=cut
-
-sub writeEnd
-{
-    my( $self ) = @_;
-    
-    my $text = $self->_writeTypes( qw/FORM FIELD FILEATTACHMENT TOPICMOVED/ );
-    # append remaining meta data
-    $text .= $self->_writeTypes( qw/not TOPICINFO TOPICPARENT FORM FIELD FILEATTACHMENT TOPICMOVED/ );
-    return $text;
-}
-
-# ===========================
-# Prepend/append meta data to topic
-=pod
-
----++ sub write (  $self, $text  )
-
-Not yet documented.
-
-=cut
-
-sub write
-{
-    my( $self, $text ) = @_;
-    
-    my $start = $self->writeStart();
-    my $end = $self->writeEnd();
-    $text = $start . "$text";
-    $text =~ s/([^\n\r])$/$1\n/;     # new line is required at end
-    $text .= $end;
-    
-    return $text;
-}
-
-
 
 1;

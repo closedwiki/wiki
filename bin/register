@@ -212,7 +212,7 @@ sub main
 
     # write log entry
     if( $TWiki::doLogRegistration ) {
-        &TWiki::Store::writeLog( "register", "$webName.$wikiName", $emailAddress, $wikiName );
+        TWiki::writeLog( "register", "$webName.$wikiName", $emailAddress, $wikiName );
     }
 
     if( $senderr ) {

@@ -56,15 +56,6 @@ use strict;
 # attachAsciiPath         Defines which attachments will be automatically treated as ASCII in RCS
 # dirPermission           File security for new directories
 
-# ======================
-=pod
-
----++ sub new (  $proto, $web, $topic, $attachment, %settings  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub new
 {
    my( $proto, $web, $topic, $attachment, %settings ) = @_;
@@ -75,15 +66,6 @@ sub new
    $self->_init();
    return $self;
 }
-
-# ======================
-=pod
-
----++ sub _settings (  $self, %settings  )
-
-Not yet documented.
-
-=cut to implementation
 
 sub _settings
 {
@@ -106,52 +88,20 @@ sub _settings
 #TODO set from TWiki.cfg
 my $cmdQuote = "'";
 
-# ======================
-=pod
-
----++ sub _trace ()
-
-Not yet documented.
-
-=cut to implementation
-
-sub _trace
-{
-   #my( $text ) = @_;
-   #print $text;
-}
-
-# ======================
-=pod
-
----++ sub _traceExec ()
-
-Not yet documented.
-
-=cut to implementation
-
-sub _traceExec
-{
-   #my( $cmd, $string, $exit ) = @_;
-   #if( $exit ) {
-   #    $exit = " Error: $exit";
-   #} else {
-   #    $exit = "";
-   #}
-   #TWiki::writeDebug( "Rcs: $cmd($exit): $string\n" );
-}
-
+# Remember to uncomment the calls as well
+#sub _traceExec
+#{
+#    my( $cmd, $string, $exit ) = @_;
+#    if( $exit ) {
+#        $exit = " Error: $exit";
+#    } else {
+#        $exit = "";
+#    }
+#    TWiki::writeDebug( "Rcs: $cmd($exit): $string\n" );
+#}
 
 # ======================
 # Returns false if okay, otherwise an error string
-=pod
-
----++ sub _binaryChange (  $self  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _binaryChange
 {
     my( $self ) = @_;
@@ -164,7 +114,7 @@ sub _binaryChange
         $cmd = "$1";       # safe, so untaint variable
         my $rcsOutput = `$cmd`;
         my $exit = $? >> 8;
-        _traceExec( $cmd, $rcsOutput, $exit );
+        #_traceExec( $cmd, $rcsOutput, $exit );
         if( $exit && $rcsOutput ) {
            $rcsOutput = "$cmd\n$rcsOutput";
            return $rcsOutput;
@@ -183,15 +133,14 @@ sub _binaryChange
 
 ---++ sub addRevision (  $self, $text, $comment, $userName  )
 
-Not yet documented.
+Add new revision. Replace file (if exists) with text
 
-=cut to implementation
+=cut
 
 sub addRevision
 {
     my( $self, $text, $comment, $userName ) = @_;
     
-    # Replace file (if exists) with text
     $self->_save( $self->file(), \$text );
     return $self->_ci( $self->file(), $comment, $userName );
 }
@@ -201,12 +150,11 @@ sub addRevision
 
 ---++ sub replaceRevision (  $self, $text, $comment, $user, $date  )
 
-Not yet documented.
-# Replace the top revision
-# Return non empty string with error message if there is a problem
+Replace the top revision
+Return non empty string with error message if there is a problem
 | $date | is on epoch seconds |
 
-=cut to implementation
+=cut
 
 sub replaceRevision
 {
@@ -237,7 +185,7 @@ sub replaceRevision
     $cmd = $1;       # safe, so untaint variable
     $rcsOut = `$cmd`;
     my $exit = $? >> 8;
-    _traceExec( $cmd, $rcsOut, $exit );
+    #_traceExec( $cmd, $rcsOut, $exit );
     #$rcsOut =~ s/^Warning\: missing newline.*//os; # forget warning
     if( $exit ) {
         $rcsOut = "$cmd\n$rcsOut";
@@ -247,14 +195,13 @@ sub replaceRevision
 }
 
 # ======================
-# Return with empty string if only one revision
 =pod
 
 ---++ sub deleteRevision (  $self  )
 
-Not yet documented.
+Return with empty string if only one revision
 
-=cut to implementation
+=cut
 
 sub deleteRevision
 {
@@ -265,14 +212,6 @@ sub deleteRevision
 }
 
 # ======================
-=pod
-
----++ sub _deleteRevision (  $self, $rev  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _deleteRevision
 {
     my( $self, $rev ) = @_;
@@ -286,7 +225,7 @@ sub _deleteRevision
     $cmd = $1;       # safe, so untaint
     my $rcsOut = `$cmd`; # capture stderr
     my $exit = $? >> 8;
-    _traceExec( $cmd, $rcsOut, $exit );
+    #_traceExec( $cmd, $rcsOut, $exit );
     #$rcsOut =~ s/^Warning\: missing newline.*//os; # forget warning
     if( $exit ) {
         $rcsOut = "$cmd\n$rcsOut";
@@ -299,7 +238,7 @@ sub _deleteRevision
     $cmd = $1;       # safe, so untaint variable
     $rcsOut = `$cmd`;
     $exit = $? >> 8;
-    _traceExec( $cmd, $rcsOut, $exit );
+    #_traceExec( $cmd, $rcsOut, $exit );
     #$rcsOut =~ s/^Warning\: missing newline.*//os; # forget warning
     if( $exit ) {
         $rcsOut = "$cmd\n$rcsOut";
@@ -311,7 +250,7 @@ sub _deleteRevision
     $cmd =~ /(.*)/;
     $cmd = $1;       # safe, so untaint variable
     $rcsOut = `$cmd`;
-    _traceExec( $cmd, $rcsOut, $exit );
+    #_traceExec( $cmd, $rcsOut, $exit );
     #$rcsOut =~ s/^Warning\: missing newline.*//os; # forget warning
     if( $exit ) {
         $rcsOut = "$cmd\n$rcsOut";
@@ -324,9 +263,9 @@ sub _deleteRevision
 
 ---++ sub getRevision (  $self, $version  )
 
-Not yet documented.
+Get the text for a given revision
 
-=cut to implementation
+=cut
 
 sub getRevision
 {
@@ -348,7 +287,7 @@ sub getRevision
         $cmd1 =~ /(.*)/;
         $cmd1 = "$1";
         my $tmp = `$cmd1`;
-        _traceExec( $cmd1, $tmp );
+        #_traceExec( $cmd1, $tmp );
         $file = $tmpfile;
         $cmd =~ s/-p%REVISION%/-r%REVISION%/;
     }    
@@ -366,7 +305,7 @@ sub getRevision
         $tmpRevFile = "$1"; # untaint		
         unlink $tmpRevFile;
     }
-    _traceExec( $cmd, $text );
+    #_traceExec( $cmd, $text );
     return $text;
 }
 
@@ -375,9 +314,9 @@ sub getRevision
 
 ---++ sub numRevisions (  $self  )
 
-Not yet documented.
+Find out how many.
 
-=cut to implementation
+=cut
 
 sub numRevisions
 {
@@ -392,7 +331,7 @@ sub numRevisions
     $cmd =~ /(.*)/;
     $cmd = $1;       # now safe, so untaint variable
     my $rcsOutput = `$cmd`;
-    _traceExec( $cmd, $rcsOutput );
+    #_traceExec( $cmd, $rcsOutput );
     if( $rcsOutput =~ /head:\s+\d+\.(\d+)\n/ ) {
         return $1;
     } else {
@@ -406,11 +345,10 @@ sub numRevisions
 ---++ sub getRevisionInfo (  $self, $version  )
 
 | FIXME | there is an inconguity here. if you ask for a revisino that does not exist, getRevisionInfo gives you 1.1, but readTopic gives you the last version |
-Not yet documented.
 # Date return in epoch seconds
 # If revision file is missing, information based on actual file is returned.
 
-=cut to implementation
+=cut
 
 sub getRevisionInfo
 {
@@ -438,7 +376,7 @@ sub getRevisionInfo
        $cmd =~ /(.*)/; $cmd = $1;       # Untaint
        my $rcsOut = `$cmd`;
        my $exit = $? >> 8;
-       _traceExec( $cmd, $cmd, $exit );
+       #_traceExec( $cmd, $cmd, $exit );
        $rcsError = "Error with $cmd, output: $rcsOut" if( $exit );
        if( ! $rcsError ) {
             $rcsOut =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/;
@@ -460,15 +398,14 @@ sub getRevisionInfo
 }
 
 # ======================
-# rev2 newer than rev1
 =pod
 
 ---++ sub revisionDiff (  $self, $rev1, $rev2, $contextLines  )
+# rev2 newer than rev1
 
-Not yet documented.
 | Return: =\@diffArray= | reference to an array of [ diffType, $right, $left ] |
 
-=cut to implementation
+=cut
 
 sub revisionDiff
 {
@@ -496,8 +433,7 @@ sub revisionDiff
         $tmp = `$cmd`;
         my $exit = $? >> 8;
         $error = "Error $exit when runing $cmd";
-        _traceExec( $cmd, $tmp, $exit );       
-        _trace( "and now $tmp" );
+        #_traceExec( $cmd, $tmp, $exit );
         # Avoid showing change in revision number!
         # I'm not too happy with this implementation, I think it may be better to filter before sending to diff command,
         # possibly using Algorithm::Diff from CPAN.
@@ -575,14 +511,6 @@ sub parseRevisionDiff
 }
 
 # ======================
-=pod
-
----++ sub _ci (  $self, $file, $comment, $userName  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _ci
 {
     my( $self, $file, $comment, $userName ) = @_;
@@ -603,19 +531,20 @@ sub _ci
     $cmd =~ /(.*)/;
     $cmd = $1;       # safe, so untaint variable
     $rcsOutput = `$cmd`; # capture stderr  (S.Knutson)
+
     my $exit = $? >> 8;
-    _traceExec( $cmd, $rcsOutput );
+    #_traceExec( $cmd, $rcsOutput );
     if( $exit && $rcsOutput =~ /no lock set by/ ) {
           # Try and break lock, setting new one and doing ci again
           my $cmd = $self->{"breakLockCmd"};
           $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/go;
           $cmd =~ /(.*)/;
           my $out = `$cmd`;
-          _traceExec( $cmd, $out );
+          #_traceExec( $cmd, $out );
           # Assume it worked, as not sure how to trap failure
           $rcsOutput = `$cmd`; # capture stderr  (S.Knutson)
           $exit = $? >> 8;
-          _traceExec( $cmd, $rcsOutput );
+          #_traceExec( $cmd, $rcsOutput );
           if( ! $exit ) {
               $rcsOutput = "";
           }
@@ -648,23 +577,23 @@ sub setTopicRevisionTag
 
     my $file = $self->{file};
     if ( -e $file ) {
-       my $cmd= $self->{tagCmd};
-       $cmd =~ s/%REVISION%/$rev/;
-       $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
-       $cmd =~ s/%TAG%/$tag/;
-	   $cmd = $cmd."  2>> $TWiki::warningFilename";
-       $cmd =~ /(.*)/; $cmd = $1;       # Untaint
-       my $rcsOut = `$cmd`;
-       my $exit = $? >> 8;
-       _traceExec( $cmd, $cmd, $exit );
+        my $cmd= $self->{tagCmd};
+        $cmd =~ s/%REVISION%/$rev/;
+        $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
+        $cmd =~ s/%TAG%/$tag/;
+        $cmd = $cmd."  2>> $TWiki::warningFilename";
+        $cmd =~ /(.*)/; $cmd = $1;       # Untaint
+        my $rcsOut = `$cmd`;
+        my $exit = $? >> 8;
+        #_traceExec( $cmd, $cmd, $exit );
 		if( $exit && $rcsOut ) { # oops, stderr was not empty, return error
 			$rcsOut = "$cmd\n$$rcsOut";
 			TWiki:writeDebug("RCSWrap::setTopicRevisionTag error - $rcsOut");
-			return;
+			return 0;
 		}
    }
-	   
-	return 1;#success 
+
+	return 1;
 }
 
 1;

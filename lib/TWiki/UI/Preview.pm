@@ -18,11 +18,12 @@ package TWiki::UI::Preview;
 use strict;
 use TWiki;
 use TWiki::UI;
+use TWiki::Templates;
 
 sub preview {
   my ( $webName, $topic, $userName, $query ) = @_;
 
-  my $skin = $query->param( "skin" );
+  my $skin = TWiki::getSkin();
   my $changeform = $query->param( 'submitChangeForm' ) || "";
   my $dontNotify = $query->param( "dontnotify" ) || "";
   my $saveCmd = $query->param( "cmd" ) || "";
@@ -37,15 +38,13 @@ sub preview {
   my $ptext = "";
   my $meta = "";
   my $formFields = "";
-  my $wikiUserName = &TWiki::userToWikiName( $userName );
+  my $wikiUserName = TWiki::User::userToWikiName( $userName );
   
   return if TWiki::UI::isMirror( $webName, $topic );
 
   # reset lock time, this is to prevent contention in case of a long edit session
-  &TWiki::Store::lockTopic( $topic );
+  TWiki::Store::lockTopic( $webName, $topic );
 
-  $skin = &TWiki::Prefs::getPreferencesValue( "SKIN" ) unless( $skin );
-  
   # Is user looking to change the form used?  Sits oddly in preview, but 
   # to avoid Javascript and pick up text on edit page it has to be in preview.
   if( $changeform ) {
@@ -54,7 +53,7 @@ sub preview {
   }
 
   # get view template, standard view or a view with a different skin
-  $tmpl = &TWiki::Store::readTemplate( "preview", $skin );
+  $tmpl = &TWiki::Templates::readTemplate( "preview", $skin );
   $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
   if( $saveCmd ) {
     return unless TWiki::UI::userIsAdmin( $webName, $topic, $wikiUserName );
@@ -105,7 +104,7 @@ sub preview {
   }
 
   my @verbatim = ();
-  $ptext = &TWiki::takeOutVerbatim( $ptext, \@verbatim );
+  $ptext = TWiki::Render::takeOutBlocks( $ptext, "verbatim", \@verbatim );
   $ptext =~ s/ {3}/\t/go;
   $ptext = &TWiki::Prefs::updateSetFromForm( $meta, $ptext );
   $ptext = &TWiki::handleCommonTags( $ptext, $topic );
@@ -118,10 +117,12 @@ sub preview {
   $ptext =~ s@<form(?:|\s.*?)>@<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">@goi;
   $ptext =~ s@(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))@$1onclick="location.href='$oopsUrl\?template=oopspreview'"@goi;
 
-  $ptext = &TWiki::putBackVerbatim( $ptext, "pre", @verbatim );
+  $ptext = TWiki::Render::putBackBlocks( $ptext, \@verbatim,
+                                         "verbatim", "pre",
+                                         \&TWiki::Render::verbatimCallBack );
 
   $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-  $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
+  $tmpl = TWiki::Render::renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
   $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
   $tmpl =~ s/%TEXT%/$ptext/go;
 
@@ -131,7 +132,7 @@ sub preview {
   $tmpl =~ s/%FORMFIELDS%/$formFields/go;
   $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
-  &TWiki::writeHeader( $query );
+  TWiki::writeHeader( $query, length( $tmpl ));
   print $tmpl;
 }
 

@@ -43,19 +43,29 @@ sub new {
 #  $this->SUPER::tear_down();
 #}
 
-sub test_simple {
+sub test_simple1 {
   my $this = shift;
-  $this->compareOldAndNew("view", "TWiki", "TextFormattingRules", undef);
+  $this->compareOldAndNew("view", "TWiki", "WhatIsWikiWiki", undef, 1);
 }
 
-sub test_raw {
+sub test_simple2 {
   my $this = shift;
-  $this->compareOldAndNew("view", "TWiki", "TextFormattingFAQ", "raw=on");
+  $this->compareOldAndNew("view", "TWiki", "TextFormattingRules", undef, 1);
 }
 
-sub test_skinned {
+sub ntest_raw {
   my $this = shift;
-  $this->compareOldAndNew("view", "TWiki", "TextFormattingRules", "skin=print");
+  $this->compareOldAndNew("view", "TWiki", "TextFormattingFAQ", "raw=on", 0);
+}
+
+sub test_print_skinned {
+  my $this = shift;
+  $this->compareOldAndNew("view", "TWiki", "TextFormattingRules", "skin=print", 1);
+}
+
+sub test_dragon_skinned {
+  my $this = shift;
+  $this->compareOldAndNew("view", "TWiki", "TextFormattingRules", "skin=dragon", 1);
 }
 
 # Should test other view parameters

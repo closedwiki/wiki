@@ -52,7 +52,7 @@ duties.
 sub save {
   my( $webName, $topic, $userName, $query ) = @_;
   if ( _save( @_ )) {
-    TWiki::redirect( $query, TWiki::getViewUrl( TWiki::Store::normalizeWebTopicName($webName, $topic)) );
+    TWiki::redirect( $query, TWiki::getViewUrl( TWiki::normalizeWebTopicName($webName, $topic)) );
   }
 }
 
@@ -82,9 +82,9 @@ sub _save {
 
   my $topicExists  = TWiki::Store::topicExists( $webName, $topic );
 
-  return 0 unless TWiki::UI::webExists( $webName, $topic );
-
   return 0 if TWiki::UI::isMirror( $webName, $topic );
+
+  return 0 unless TWiki::UI::webExists( $webName, $topic );
 
   # Prevent saving existing topic?
   if( $onlyNewTopic && $topicExists ) {
@@ -96,13 +96,13 @@ sub _save {
   # prevent non-Wiki names?
   if( ( $onlyWikiName )
       && ( ! $topicExists )
-      && ( ! ( &TWiki::isWikiName( $topic ) || &TWiki::isAbbrev( $topic ) ) ) ) {
+      && ( ! TWiki::isValidTopicName( $topic ) ) ) {
     # do not allow non-wikinames, redirect to view topic
     TWiki::UI::redirect( TWiki::getViewUrl( $webName, $topic ) );
     return 0;
   }
 
-  my $wikiUserName = TWiki::userToWikiName( $userName );
+  my $wikiUserName = TWiki::User::userToWikiName( $userName );
   return 0 unless TWiki::UI::isAccessPermitted( $webName, $topic,
                                             "change", $wikiUserName );
 
@@ -185,7 +185,7 @@ This function can replace "save" eventually.
 sub savemulti {
   my( $webName, $topic, $userName, $query ) = @_;
 
-  my $redirecturl = TWiki::getViewUrl( TWiki::Store::normalizeWebTopicName($webName, $topic));
+  my $redirecturl = TWiki::getViewUrl( TWiki::normalizeWebTopicName($webName, $topic));
 
   my $saveaction = lc($query->param( 'action' ));
   if ( $saveaction eq "checkpoint" ) {

@@ -15,8 +15,6 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 #
-# Functions used by both Rcs and RcsFile - they both inherit from this Class
-#
 # Simple interface to RCS.  Doesn't support:
 #    branches
 #    locking
@@ -50,7 +48,7 @@ use Algorithm::Diff;
 use FileHandle;
 use TWiki;
 
-TWiki::writeDebug("Diff version $Algorithm::Diff::VERSION\n");
+#TWiki::writeDebug("Diff version $Algorithm::Diff::VERSION\n");
 
 my $DIFF_DEBUG = 0;
 my $DIFFEND_DEBUG = 0;
@@ -60,7 +58,7 @@ my $DIFFEND_DEBUG = 0;
 
 ---++ sub new (  $proto, $web, $topic, $attachment, %settings  )
 
-Not yet documented.
+Construct new file
 
 =cut to implementation
 
@@ -74,22 +72,6 @@ sub new
    $self->{head} = 0;
    return $self;
 }
-
-# ======================
-=pod
-
----++ sub _trace ()
-
-Not yet documented.
-
-=cut to implementation
-
-sub _trace
-{
-#   my( $text ) = @_;
-#   TWiki::writeDebug( "RcsLite $text" );
-}
-
 
 # Process an RCS file
 
@@ -141,14 +123,6 @@ sub _trace
 # of RCS files. No newphrase will begin with any keyword already in use. 
 
 # ======================
-=pod
-
----++ sub _readTo (  $file, $char  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _readTo
 {
     my( $file, $char ) = @_;
@@ -205,14 +179,6 @@ sub _readTo
 
 # ======================
 # Called by routines that must make sure RCS file has been read in
-=pod
-
----++ sub _ensureProcessed (  $self  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _ensureProcessed
 {
     my( $self ) = @_;
@@ -223,14 +189,6 @@ sub _ensureProcessed
 
 # ======================
 # Read in the whole RCS file
-=pod
-
----++ sub _process (  $self  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _process
 {
     my( $self ) = @_;
@@ -356,14 +314,6 @@ sub _process
 }
 
 # ======================
-=pod
-
----++ sub _formatString (  $str  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _formatString
 {
     my( $str ) = @_;
@@ -373,14 +323,6 @@ sub _formatString
 
 # ======================
 # Write content of the RCS file
-=pod
-
----++ sub _write (  $self, $file  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _write
 {
     my( $self, $file ) = @_;
@@ -415,14 +357,6 @@ sub _write
 }
 
 # ======================
-=pod
-
----++ sub _binaryChange (  $self  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _binaryChange
 {
    my( $self ) = @_;
@@ -436,7 +370,7 @@ sub _binaryChange
 
 ---++ sub numRevisions (  $self  )
 
-Not yet documented.
+Get number of revs
 
 =cut to implementation
 
@@ -468,7 +402,7 @@ sub access
 
 ---++ sub comment (  $self  )
 
-Not yet documented.
+Get the comment
 
 =cut to implementation
 
@@ -484,7 +418,6 @@ sub comment
 
 ---++ sub date (  $self, $version  )
 
-Not yet documented.
 | $date | in epoch seconds |
 
 =cut to implementation
@@ -507,7 +440,7 @@ sub date
 
 ---++ sub description (  $self  )
 
-Not yet documented.
+Get description
 
 =cut to implementation
 
@@ -523,7 +456,7 @@ sub description
 
 ---++ sub author (  $self, $version  )
 
-Not yet documented.
+Get author
 
 =cut to implementation
 
@@ -539,7 +472,7 @@ sub author
 
 ---++ sub log (  $self, $version  )
 
-Not yet documented.
+Get log
 
 =cut to implementation
 
@@ -555,7 +488,7 @@ sub log
 
 ---++ sub delta (  $self, $version  )
 
-Not yet documented.
+get delta to rev
 
 =cut to implementation
 
@@ -571,7 +504,6 @@ sub delta
 
 ---++ sub addRevision (  $self, $text, $log, $author, $date  )
 
-Not yet documented.
 | $date | in epoch seconds |
 
 =cut to implementation
@@ -579,7 +511,6 @@ Not yet documented.
 sub addRevision
 {
     my( $self, $text, $log, $author, $date ) = @_;
-    _trace( "::addRevision date=\"$date\"" );
     $self->_ensureProcessed();
     
     $self->_save( $self->file(), \$text );
@@ -602,21 +533,12 @@ sub addRevision
 #    $date = TWiki::Store::RcsFile::_epochToRcsDateTime( $date );
 
 
-    _trace("::addRevision date now=\"$date\"" );
     ${$self->{"date"}}[$head] = $date;
 
     return $self->_writeMe();
 }
 
 # ======================
-=pod
-
----++ sub _writeMe (  $self  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _writeMe
 {
     my( $self ) = @_;
@@ -640,9 +562,8 @@ sub _writeMe
 
 ---++ sub replaceRevision (  $self, $text, $comment, $user, $date  )
 
-Not yet documented.
-# Replace the top revision
-# Return non empty string with error message if there is a problem
+Replace the top revision
+Return non empty string with error message if there is a problem
 | $date | is on epoch seconds |
 
 =cut to implementation
@@ -650,19 +571,17 @@ Not yet documented.
 sub replaceRevision
 {
     my( $self, $text, $comment, $user, $date ) = @_;
-    _trace( "::replaceRevision date=\"$date\"" );
     $self->_ensureProcessed();
     $self->_delLastRevision();
     $self->addRevision( $text, $comment, $user, $date );    
 }
 
 # ======================
-# Delete the last revision - do nothing if there is only one revision
 =pod
 
 ---++ sub deleteRevision (  $self  )
 
-Not yet documented.
+Delete the last revision - do nothing if there is only one revision
 
 =cut to implementation
 
@@ -676,14 +595,6 @@ sub deleteRevision
 }
 
 # ======================
-=pod
-
----++ sub _delLastRevision (  $self  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _delLastRevision
 {
     my( $self ) = @_;
@@ -703,8 +614,6 @@ sub _delLastRevision
 =pod
 
 ---++ sub revisionDiff (  $self, $rev1, $rev2, $contextLines  )
-
-Not yet documented.
 | TODO: | so why does this read the rcs file, re-create each of the 2 revisions and then diff them? isn't the delta in the rcs file good enough? (until you want context?) |
 =cut to implementation
 
@@ -761,7 +670,7 @@ sub setTopicRevisionTag
 
 ---++ sub getRevision (  $self, $version  )
 
-Not yet documented.
+Get a rev
 
 =cut to implementation
 
@@ -780,13 +689,12 @@ sub getRevision
 }
 
 # ======================
-# If revision file is missing, information based on actual file is returned.
-# Date is in epoch based seconds
 =pod
 
 ---++ sub getRevisionInfo (  $self, $version  )
 
-Not yet documented.
+If revision file is missing, information based on actual file is returned.
+Date is in epoch based seconds
 
 =cut to implementation
 
@@ -815,14 +723,6 @@ sub getRevisionInfo
 # is patched to produce text for revision x-1.
 # It is fiddly dealing with differences in number of line breaks after the end of the
 # text.
-=pod
-
----++ sub _patch (  $text, $delta  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _patch
 {
    # Both params are references to arrays
@@ -867,14 +767,6 @@ sub _patch
 
 
 # ======================
-=pod
-
----++ sub _patchN (  $self, $text, $version, $target  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _patchN
 {
     my( $self, $text, $version, $target ) = @_;
@@ -891,14 +783,6 @@ sub _patchN
 
 # ======================
 # Split and make sure we have trailing carriage returns
-=pod
-
----++ sub _mySplit (  $text, $addEntries  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _mySplit
 {
     my( $text, $addEntries ) = @_;
@@ -938,14 +822,6 @@ sub _mySplit
 
 # ======================
 # Way of dealing with trailing \ns feels clumsy
-=pod
-
----++ sub _diffText (  $new, $old, $type, $contextLines  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _diffText
 {
     my( $new, $old, $type, $contextLines ) = @_;
@@ -956,14 +832,6 @@ sub _diffText
 }
 
 # ======================
-=pod
-
----++ sub _lastNoEmptyItem (  $items  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _lastNoEmptyItem
 {
    my( $items ) = @_;
@@ -981,14 +849,6 @@ sub _lastNoEmptyItem
 
 # ======================
 # Deal with trailing carriage returns - Algorithm doesn't give output that RCS format is too happy with
-=pod
-
----++ sub _diffEnd (  $new, $old, $type  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _diffEnd
 {
    my( $new, $old, $type ) = @_;
@@ -1026,16 +886,6 @@ sub _diffEnd
 
 # ======================
 # no type means diff for putting in rcs file, diff means normal diff output
-=pod
-
----++ sub _diff (  $new, $old, $type, $contextLines  )
-
-Not yet documented.
-
-TODO need to add functionality to use $contextLines
-
-=cut to implementation
-
 sub _diff
 {
     my( $new, $old, $type, $contextLines ) = @_;
@@ -1114,14 +964,6 @@ sub _diff
 
 
 # ======================
-=pod
-
----++ sub _range (  $start, $end  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _range
 {
    my( $start, $end ) = @_;
@@ -1133,14 +975,6 @@ sub _range
 }
 
 # ======================
-=pod
-
----++ sub _addChunk (  $chunkSign, $out, $lines, $start, $adj, $type, $start1, $last, $newLines  )
-
-Not yet documented.
-
-=cut to implementation
-
 sub _addChunk
 {
    my( $chunkSign, $out, $lines, $start, $adj, $type, $start1, $last, $newLines ) = @_;
@@ -1191,24 +1025,6 @@ sub _addChunk
        @$lines = ();
    }
    return $nLines;
-}
-
-
-
-# ======================
-=pod
-
----++ sub validTo (  $self  )
-
-Not yet documented.
-
-=cut to implementation
-
-sub validTo
-{
-    my( $self ) = @_;
-    $self->_ensureProcessed();
-    return $self->{"status"};
 }
 
 1;

@@ -42,33 +42,32 @@ sub oops_cgi {
   my ( $web, $topic, $user, $query ) = @_;
 
   my $tmplName = $query->param( 'template' ) || "oops";
-  my $skin = $query->param( "skin" ) || TWiki::Prefs::getPreferencesValue( "SKIN" );
-  my $tmplData = TWiki::Store::readTemplate( $tmplName, $skin );
+  my $skin = TWiki::getSkin();
+
+  my $tmplData = TWiki::Templates::readTemplate( $tmplName, $skin );
   if( ! $tmplData ) {
-    TWiki::writeHeader( $query );
-    print "<html><body>\n"
-      . "<h1>TWiki Installation Error</h1>\n"
-        . "Template file $tmplName.tmpl not found or template directory \n"
-          . "$TWiki::templateDir not found.<p />\n"
-            . "Check the \$templateDir variable in TWiki.cfg.\n"
-              . "</body></html>\n";
-    return;
+      $tmplData = "<html><body>\n"
+        . "<h1>TWiki Installation Error</h1>\n"
+          . "Template file $tmplName.tmpl not found or template directory \n"
+            . "$TWiki::templateDir not found.<p />\n"
+              . "Check the \$templateDir variable in TWiki.cfg.\n"
+                . "</body></html>\n";
+  } else {
+      my $param = $query->param( 'param1' ) || "";
+      $tmplData =~ s/%PARAM1%/$param/go;
+      $param = $query->param( 'param2' ) || "";
+      $tmplData =~ s/%PARAM2%/$param/go;
+      $param = $query->param( 'param3' ) || "";
+      $tmplData =~ s/%PARAM3%/$param/go;
+      $param = $query->param( 'param4' ) || "";
+      $tmplData =~ s/%PARAM4%/$param/go;
+
+      $tmplData = TWiki::handleCommonTags( $tmplData, $topic );
+      $tmplData = TWiki::Render::getRenderedVersion( $tmplData );
+      $tmplData =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
   }
 
-  my $param = $query->param( 'param1' ) || "";
-  $tmplData =~ s/%PARAM1%/$param/go;
-  $param = $query->param( 'param2' ) || "";
-  $tmplData =~ s/%PARAM2%/$param/go;
-  $param = $query->param( 'param3' ) || "";
-  $tmplData =~ s/%PARAM3%/$param/go;
-  $param = $query->param( 'param4' ) || "";
-  $tmplData =~ s/%PARAM4%/$param/go;
-
-  $tmplData = &TWiki::handleCommonTags( $tmplData, $topic );
-  $tmplData = &TWiki::Render::getRenderedVersion( $tmplData );
-  $tmplData =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-
-  TWiki::writeHeader( $query );
+  TWiki::writeHeader( $query, length( $tmplData ));
   print $tmplData;
 }
 

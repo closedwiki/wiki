@@ -63,7 +63,8 @@ use strict;
 sub getSessionValue
 {
 #   my( $theKey ) = @_;
-    return &TWiki::getSessionValue( @_ );
+
+    return TWiki::Plugins::getSessionValueHandler( @_ );
 }
 
 
@@ -83,7 +84,7 @@ sub getSessionValue
 sub setSessionValue
 {
 #   my( $theKey, $theValue ) = @_;
-    &TWiki::setSessionValue( @_ );
+    TWiki::Plugins::setSessionValueHandler( @_ );
 }
 
 # =========================
@@ -208,7 +209,7 @@ sub getOopsUrl
 # -------------------------
 sub getPubUrlPath
 {
-    return &TWiki::getPubUrlPath();
+    return $TWiki::pubUrlPath;
 }
 
 # =========================
@@ -230,10 +231,11 @@ sub getCgiQuery
 # =========================
 =pod
 
----+++ writeHeader( $query )
+---+++ writeHeader( $query, $contentLength )
 
 | Description:        | Prints a basic content-type HTML header for text/html to standard out |
 | Parameter: =$query= | CGI query object |
+  | Parameter: =$contentLength= | Length of content |
 | Return:             | none |
 | Since:              | TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
@@ -242,7 +244,7 @@ sub getCgiQuery
 sub writeHeader
 {
 #   my( $theQuery ) = @_;
-    return &TWiki::writeHeader( @_ );
+    return TWiki::writeHeader( @_ );
 }
 
 # =========================
@@ -525,7 +527,7 @@ sub getWikiUserName
 sub wikiToUserName
 {
 #   my( $wiki ) = @_;
-    return &TWiki::wikiToUserName( @_ );
+    return TWiki::User::wikiToUserName( @_ );
 }
 
 # =========================
@@ -544,7 +546,7 @@ sub wikiToUserName
 sub userToWikiName
 {
 #   my( $loginName, $dontAddWeb ) = @_;
-    return &TWiki::userToWikiName( @_ );
+    return &TWiki::User::userToWikiName( @_ );
 }
 
 # =========================
@@ -560,7 +562,7 @@ sub userToWikiName
 # -------------------------
 sub isGuest
 {
-    return &TWiki::isGuest();
+    return ( $TWiki::userName eq $TWiki::defaultUserName );
 }
 
 # =========================
@@ -714,7 +716,7 @@ sub setTopicEditLock
         my( $oopsUrl ) = checkTopicEditLock( $web, $topic );
         return $oopsUrl if( $oopsUrl );
     }
-    TWiki::Store::lockTopicNew( $web, $topic, ! $lock );    # reverse $lock parameter is correct!
+    TWiki::Store::lockTopic( $web, $topic, ! $lock );    # reverse $lock parameter is correct!
     return "";
 }
 
@@ -930,8 +932,9 @@ sub renderText
 # -------------------------
 sub internalLink
 {
-#   my( $pre, $web, $topic, $label, $anchor, $anchor, $createLink ) = @_;
-    return TWiki::Render::internalLink( @_ );
+    my $pre = shift;
+#   my( $web, $topic, $label, $anchor, $anchor, $createLink ) = @_;
+    return $pre . TWiki::Render::internalLink( @_ );
 }
 
 # =========================
@@ -1006,7 +1009,7 @@ sub formatGmTime
 # -------------------------
 sub getDataDir
 {
-    return &TWiki::getDataDir();
+    return $TWiki::dataDir;
 }
 
 # =========================
@@ -1022,7 +1025,7 @@ sub getDataDir
 # -------------------------
 sub getPubDir
 {
-    return &TWiki::getPubDir();
+    return $TWiki::pubDir;
 }
 
 # =========================

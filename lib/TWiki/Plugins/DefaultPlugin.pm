@@ -55,16 +55,19 @@
 # =========================
 package TWiki::Plugins::DefaultPlugin;
 
+use TWiki::Func;
+
+use strict;
+
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName
         $debug $doOldInclude $renderingWeb
     );
 
-$VERSION = '1.021';
+$VERSION = '1.030';
 $pluginName = 'DefaultPlugin';  # Name of this Plugin
 
-# =========================
 sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
@@ -88,85 +91,37 @@ sub initPlugin
     return 1;
 }
 
-# =========================
-sub DISABLE_earlyInitPlugin
-{
-### Remove DISABLE_ for a plugin that requires early initialization, that is expects to have
-### initializeUserHandler called before initPlugin, giving the plugin a chance to set the user
-### See SessionPlugin for an example of this.
-    return 1;
-}
-
-
-# =========================
-sub DISABLE_initializeUserHandler
-{
-### my ( $loginName, $url, $pathInfo ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::initializeUserHandler( $_[0], $_[1] )" ) if $debug;
-
-    # Allows a plugin to set the username based on cookies. Called by TWiki::initialize.
-    # Return the user name, or "guest" if not logged in.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_registrationHandler
-{
-### my ( $web, $wikiName, $loginName ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::registrationHandler( $_[0], $_[1] )" ) if $debug;
-
-    # Allows a plugin to set a cookie at time of user registration.
-    # Called by the register script.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_beforeCommonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # Called at the beginning of TWiki::handleCommonTags (for cache Plugins use only)
-}
-
-# =========================
 sub commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
-    # This is the place to define customized tags and variables
-    # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
-
     # for compatibility for earlier TWiki versions:
+
+    ######################
+    # Old INCLUDE syntax
     if( $doOldInclude ) {
         # allow two level includes
-        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/TWiki::handleIncludeFile( $1, $_[1], $_[2], "" )/geo;
-        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/TWiki::handleIncludeFile( $1, $_[1], $_[2], "" )/geo;
+        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/TWiki::_handleINCLUDE( TWiki::extractParameters( $1 ), $_[1], $_[2], "" )/geo;
+        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/TWiki::_handleINCLUDE( TWiki::extractParameters( $1 ), $_[1], $_[2], "" )/geo;
     }
 
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
+    ######################
+    # Full attachment filename
+    # Process the filename suffixed to %ATTACHURLPATH%
+    # Required for migration purposes
+    my $pubUrlPath = TWiki::Func::getPubUrlPath();
+    my $attfexpr = TWiki::nativeUrlEncode( "$pubUrlPath/$_[2]/$_[1]" );
+    my $fnRE =  TWiki::Func::getRegularExpression( "filenameRegex" );
+    $_[0] =~ s!$attfexpr/($fnRE)!"$attfexpr/".&TWiki::nativeUrlEncode($1)!ge;
+
+    ######################
+    # TOC handling
+    # SMELL: this should be in its own plugin
+    $_[0] =~ s/%TOC({([^}]*)})?%/&_handleTOC($2, @_)/ge;
 }
 
-# =========================
-sub DISABLE_afterCommonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::afterCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # Called at the end of TWiki::handleCommonTags (for cache Plugins use only)
-}
-
-# =========================
 sub startRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
@@ -178,7 +133,6 @@ sub startRenderingHandler
     $renderingWeb = $_[1];
 }
 
-# =========================
 sub outsidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
@@ -213,152 +167,154 @@ sub outsidePREHandler
 #   $_[0] =~ s/<link>(.*?)<\/link>/&TWiki::internalLink("",$web,$1,$1,"",1)/geo;
 }
 
-# =========================
-sub DISABLE_insidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
+# Parameters:
+#    * $text          : the text of the current topic
+#    * $topic         : the topic we are in
+#    * $web           : the web we are in
+#    * $tocAttributes : "Topic" [web="Web"] [depth="N"]
+# Return value: $tableOfContents
+# Andrea Sterbini 22-08-00 / PTh 28 Feb 2001
+# Handles %<nop>TOC{...}% syntax.  Creates a table of contents using TWiki bulleted
+# list markup, linked to the section headings of a topic. A section heading is
+# entered in one of the following forms:
+#    * $headingPatternSp : \t++... spaces section heading
+#    * $headingPatternDa : ---++... dashes section heading
+#    * $headingPatternHt : &lt;h[1-6]> HTML section heading &lt;/h[1-6]>
+sub _handleTOC {
+    my $args = shift;
+    my %params = TWiki::Func::extractParameters( $args );
 
-    ##TWiki::Func::writeDebug( "- ${pluginName}::insidePREHandler( $web.$topic )" ) if $debug;
+    ##     $_[0]     $_[1]      $_[2]    $_[3]
+    ## my( $theText, $theTopic, $theWeb, $attributes ) = @_;
+    my $topicName = $_[1];
+    my $webName = $_[2];
 
-    # This handler is called by getRenderedVersion, once per line, before any changes,
-    # for lines inside <pre> and <verbatim> tags. 
-    # Use it to define customized rendering rules
+    # get the topic name attribute
+    my $topicname = $params{_DEFAULT}  || $_[1];
 
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/go;
+    # get the web name attribute
+    my $web = $params{web} || $_[2];
+    $web =~ s/\//\./g;
+    my $webPath = $web;
+    $webPath =~ s/\./\//g;
+
+    # get the depth limit attribute
+    my $depth = $params{depth} || 6;
+
+    #get the title attribute
+    my $title = $params{title} || "";
+    $title = "\n<span class=\"twikiTocTitle\">$title</span>" if( $title );
+
+    my $result  = "";
+    my $line  = "";
+    my $level = "";
+    my @list  = ();
+my $debug = "";
+    if( "$web.$topicname" eq "$_[2].$_[1]" ) {
+        # use text from parameter
+        @list = split( /\n/, $_[0] );
+
+    } else {
+        # read text from file
+        if ( ! TWiki::Func::topicExists( $web, $topicname ) ) {
+            return _inlineError( "TOC: Cannot find topic \"$web.$topicname\"" );
+        }
+        my $t = TWiki::Func::readWebTopic( $web, $topicname );
+        $t =~ s/.*?%STARTINCLUDE%//s;
+        $t =~ s/%STOPINCLUDE%.*//s;
+        @list = split( /\n/, TWiki::Func::expandCommonVariables( $t, $topicname, $web ) );
+    }
+
+    my $headerDaRE =  TWiki::Func::getRegularExpression( "headerPatternDa" );
+    my $headerSpRE =  TWiki::Func::getRegularExpression( "headerPatternSp" );
+    my $headerHtRE =  TWiki::Func::getRegularExpression( "headerPatternHt" );
+    my $webnameRE =   TWiki::Func::getRegularExpression( "webNameRegex" );
+    my $wikiwordRE =  TWiki::Func::getRegularExpression( "wikiWordRegex" );
+    my $abbrevRE =    TWiki::Func::getRegularExpression( "abbrevRegex" );
+    my $headerNoTOC = TWiki::Func::getRegularExpression( "headerPatternNoTOC" );
+    @list = grep { /(<\/?pre>)|($headerDaRE)|($headerSpRE)|($headerHtRE)/o } @list;
+    my $insidePre = 0;
+    my $i = 0;
+    my $tabs = "";
+    my $anchor = "";
+    my $highest = 99;
+    # SMELL: this handling of <pre> is archaic. Surely this should be
+    # done using the outsidePreHandler?
+    foreach $line ( @list ) {
+        if( $line =~ /^.*<pre>.*$/io ) {
+            $insidePre = 1;
+            $line = "";
+        }
+        if( $line =~ /^.*<\/pre>.*$/io ) {
+            $insidePre = 0;
+            $line = "";
+        }
+        if (!$insidePre) {
+            $level = $line ;
+            if ( $line =~  /$headerDaRE/o ) {
+                $level =~ s/$headerDaRE/$1/go;
+                $level = length $level;
+                $line  =~ s/$headerDaRE/$2/go;
+            } elsif
+               ( $line =~  /$headerSpRE/o ) {
+                $level =~ s/$headerSpRE/$1/go;
+                $level = length $level;
+                $line  =~ s/$headerSpRE/$2/go;
+            } elsif
+               ( $line =~  /$headerHtRE/io ) {
+                $level =~ s/$headerHtRE/$1/gio;
+                $line  =~ s/$headerHtRE/$2/gio;
+            }
+            my $urlPath = "";
+            if( "$web.$topicname" ne "$webName.$topicName" ) {
+                # not current topic, can't omit URL
+                $urlPath = "$TWiki::dispScriptUrlPath$TWiki::dispViewPath$TWiki::scriptSuffix/$webPath/$topicname";
+            }
+            if( ( $line ) && ( $level <= $depth ) ) {
+                $anchor = TWiki::Render::makeAnchorName( $line );
+                # cut TOC exclude '---+ heading !! exclude'
+                $line  =~ s/\s*$headerNoTOC.+$//go;
+                $line  =~ s/[\n\r]//go;
+                next unless $line;
+                $highest = $level if( $level < $highest );
+                $tabs = "";
+                for( $i=0 ; $i<$level ; $i++ ) {
+                    $tabs = "\t$tabs";
+                }
+                # Remove *bold*, _italic_ and =fixed= formatting
+                $line =~ s/(^|[\s\(])\*([^\s]+?|[^\s].*?[^\s])\*($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+                $line =~ s/(^|[\s\(])_+([^\s]+?|[^\s].*?[^\s])_+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+                $line =~ s/(^|[\s\(])=+([^\s]+?|[^\s].*?[^\s])=+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+                # Prevent WikiLinks
+                $line =~ s/\[\[.*?\]\[(.*?)\]\]/$1/g;  # '[[...][...]]'
+                $line =~ s/\[\[(.*?)\]\]/$1/ge;        # '[[...]]'
+                $line =~ s/([\s\(])($webnameRE)\.($wikiwordRE)/$1<nop>$3/g;  # 'Web.TopicName'
+                $line =~ s/([\s\(])($wikiwordRE)/$1<nop>$2/g;  # 'TopicName'
+                $line =~ s/([\s\(])($abbrevRE)/$1<nop>$2/g;    # 'TLA'
+                # create linked bullet item, using a relative link to anchor
+                $line = "$tabs* <a href=\"$urlPath#$anchor\">$line</a>";
+                $result .= "\n$line";
+            }
+        }
+    }
+    if( $result ) {
+        if( $highest > 1 ) {
+            # left shift TOC
+            $highest--;
+            $result =~ s/^\t{$highest}//gm;
+        }
+        $result = "<div class=\"twikiToc\">$title$result\n</div>";
+        return $result;
+
+    } else {
+        return _inlineError("TOC: No TOC in \"$web.$topicname\" $debug");
+    }
 }
 
-# =========================
-sub DISABLE_endRenderingHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::endRenderingHandler( $web.$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just after the line loop, that is,
-    # after almost all XHTML rendering of a topic. <nop> tags are removed after this.
-
+# Format an error for inline inclusion in HTML
+sub _inlineError {
+    my( $errormessage ) = @_;
+    return "<font size=\"-1\" class=\"twikiAlert\" color=\"#FF0000\">$errormessage</font>" ;
 }
-
-# =========================
-sub DISABLE_beforeEditHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This handler is called by the edit script just before presenting the edit text
-    # in the edit box. Use it to process the text before editing.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_afterEditHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::afterEditHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This handler is called by the preview script just before presenting the text.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_beforeSaveHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This handler is called by TWiki::Store::saveTopic just before the save action.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_afterSaveHandler
-{
-### my ( $text, $topic, $web, $error ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This handler is called by TWiki::Store::saveTopic just after the save action.
-    # New hook in TWiki::Plugins $VERSION = '1.020'
-
-}
-
-# =========================
-sub DISABLE_writeHeaderHandler
-{
-### my ( $query ) = @_;   # do not uncomment, use $_[0] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::writeHeaderHandler( query )" ) if $debug;
-
-    # This handler is called by TWiki::writeHeader, just prior to writing header. 
-    # Return a single result: A string containing HTTP headers, delimited by CR/LF
-    # and with no blank lines. Plugin generated headers may be modified by core
-    # code before they are output, to fix bugs or manage caching. Plugins should no
-    # longer write headers to standard output.
-    # Use only in one Plugin.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_redirectCgiQueryHandler
-{
-### my ( $query, $url ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::redirectCgiQueryHandler( query, $_[1] )" ) if $debug;
-
-    # This handler is called by TWiki::redirect. Use it to overload TWiki's internal redirect.
-    # Use only in one Plugin.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_getSessionValueHandler
-{
-### my ( $key ) = @_;   # do not uncomment, use $_[0] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::getSessionValueHandler( $_[0] )" ) if $debug;
-
-    # This handler is called by TWiki::getSessionValue. Return the value of a key.
-    # Use only in one Plugin.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_setSessionValueHandler
-{
-### my ( $key, $value ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::setSessionValueHandler( $_[0], $_[1] )" ) if $debug;
-
-    # This handler is called by TWiki::setSessionValue. 
-    # Use only in one Plugin.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_renderFormFieldForEditHandler
-{
-    my ( $name, $type, $size, $value, $attributes, $possibleValues ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::renderFormFieldForEditHandler( $web.$topic )" ) if $debug;
-
-    # This handler is called by Form.renderForEdit, before built in types are considered
-    
-    my $ret = "";
-    # Set ret to html, leave empty if plugin doesn't want to render this field
-    return $ret;
-}
-
-# =========================
 
 1;

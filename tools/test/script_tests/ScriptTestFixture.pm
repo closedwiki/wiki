@@ -8,7 +8,8 @@ use strict;
 package ScriptTestFixture;
 
 use base qw(Test::Unit::TestCase);
-use vars qw($urlroot $old $new $olddata $newdata $oldpub $newpub);
+use vars qw($urlroot $old $new $olddata $newdata
+			$oldpub $newpub $user $pass $wget $ab);
 
 BEGIN {
 ##############################################################
@@ -16,12 +17,16 @@ BEGIN {
 # Note that for correct operation, the runner has to be able to delete
 # files from the data areas belonging to the two test installations
 $urlroot = "http://localhost";
-$old = "twiki";
-$new = "alphaplus";
+$old = "svn";
+$new = "mine";
 $olddata = "/windows/C/twiki/data";
 $newdata = $olddata;
 $oldpub = "/windows/C/twiki/pub";
 $newpub = $oldpub;
+$user = "TWikiGuest";
+$pass = "";
+$wget = "/usr/bin/wget";
+$ab = "/usr/sbin/ab";
 #############################################################
 
   print STDERR "Sanitising fixtures.....\n";
@@ -46,8 +51,12 @@ sub getUrl {
     $opts = "";
   }
   #print "WGet $urlroot/$install/bin/$func/$web/$topic$opts\n";
-  my $result = `wget -q -O - $urlroot/$install/bin/$func/$web/$topic$opts`;
+  my $result = `$wget -q -O - $urlroot/$install/bin/$func/$web/$topic$opts`;
   $this->assert(!$?, "WGet $urlroot/$install/bin/$func/$web/$topic$opts failed, $result");
+  if ( $func ne "oops" ) {
+      $this->assert_does_not_match(qr/\(oops\)/, $result, "FAILED RESULT\n$result");
+  }
+
   $result =~ s/\/$install\//\/URL\//g;
   $result =~ s/\?t=[0-9]+\b/?t=0/go;
   $result =~ s/-\s+\d+:\d+\s+-/- DATE -/go;
@@ -68,10 +77,10 @@ sub getNew {
 
 # Compare the results of the same URL in old and new
 sub compareOldAndNew {
-  my ($this, $func, $web, $topic, $opts) = @_;
+  my ($this, $func, $web, $topic, $opts, $ignorenl) = @_;
   my $old = $this->getOld($func, $web, $topic, $opts);
   my $new = $this->getNew($func, $web, $topic, $opts);
-  $this->diff($old, $new);
+  $this->diff($old, $new, $ignorenl);
 }
 
 sub oldLocked {
@@ -86,11 +95,13 @@ sub newLocked {
 
 # Diff two blocks of text
 sub diff {
-  my ($this, $old, $new) = @_;
+  my ($this, $old, $new, $ignorenl) = @_;
   open(WF,">/tmp/old") || die;
+  $old =~ s/\n/ /g if ( $ignorenl );
   print WF $old;
   close(WF) || die;
   open(WF,">/tmp/new") || die;
+  $new =~ s/\n/ /g if ( $ignorenl );
   print WF $new;
   close(WF) || die;
   print STDERR `diff -b -B -w -u /tmp/old /tmp/new`;

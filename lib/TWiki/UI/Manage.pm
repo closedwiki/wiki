@@ -28,6 +28,7 @@ use File::Copy;
 use TWiki;
 use TWiki::UI;
 use TWiki::User;
+use TWiki::Templates;
 
 =pod
 
@@ -83,7 +84,7 @@ sub removeUser {
   #    my @refs = &TWiki::Store::findReferringPages( $oldWeb, $oldTopic );
   #    my $problems;
   #    ( $lockFailure, $problems ) = 
-  #       &TWiki::Store::updateReferingPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
+  #       &TWiki::Store::updateReferringPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
 
   TWiki::User::RemoveUser($wikiName);
 
@@ -188,7 +189,7 @@ sub createWeb {
   my $oopsTmpl = "mngcreateweb";
 
   # check permission, user authorized to create webs?
-  my $wikiUserName = TWiki::userToWikiName( $userName );
+  my $wikiUserName = TWiki::User::userToWikiName( $userName );
   return unless TWiki::UI::isAccessPermitted( $webName, $topicName,
                                               "manage", $wikiUserName );
 
@@ -196,7 +197,7 @@ sub createWeb {
     # valid template web name, untaint
     $newWeb =~ /(.*)/;
     $newWeb = $1;
-  } elsif( TWiki::isWebName( $newWeb ) ) {
+  } elsif( TWiki::isValidWebName( $newWeb ) ) {
     # valid web name, untaint
     $newWeb =~ /(.*)/;
     $newWeb = $1;
@@ -391,7 +392,7 @@ sub rename {
   my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || "";
   my $justChangeRefs = $query->param( 'changeRefs' ) || "";
 
-  my $skin = $query->param( "skin" ) || TWiki::Prefs::getPreferencesValue( "SKIN" );
+  my $skin = TWiki::getSkin();
 
   $newTopic =~ s/\s//go;
   $newTopic =~ s/$TWiki::securityFilter//go;
@@ -400,17 +401,13 @@ sub rename {
     $theAttachment = "";
   }
 
-  my $wikiUserName = &TWiki::userToWikiName( $userName );
+  my $wikiUserName = &TWiki::User::userToWikiName( $userName );
 
   # justChangeRefs will be true when some topics that had links to $oldTopic
   # still need updating, previous update being prevented by a lock.
 
-  my $fileName = &TWiki::Store::getFileName( $oldWeb, $oldTopic );
-  my $newName;
-  $newName = &TWiki::Store::getFileName( $newWeb, $newTopic ) if( $newWeb );
-
   if( ! $justChangeRefs ) {
-    if( _checkExist( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $fileName, $newName ) ) {
+    if( _checkExist( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment )) {
       return;
     }
 
@@ -435,14 +432,46 @@ sub rename {
   if( ! $justChangeRefs ) {
     if( $theAttachment ) {
       my $moveError = 
-        &TWiki::Store::moveAttachment( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment );
+        TWiki::Store::moveAttachment( $oldWeb, $oldTopic,
+                                      $newWeb, $newTopic,
+                                      $theAttachment );
+
+      my( $meta, $text ) = readTopic( $oldWeb, $oldTopic );
+      my %fileAttachment =
+        $meta->findOne( "FILEATTACHMENT", $theAttachment );
+      $meta->remove( "FILEATTACHMENT", $theAttachment );
+      $moveError .=
+        TWiki::Store::noHandlersSave( $oldWeb, $oldTopic, $text, $meta,
+                                          "", "", "", "doUnlock",
+                                          "dont notify", "" ); 
+      # Remove lock
+      lockTopic( $oldWeb, $oldTopic, 1 );
+
+      # Add file attachment to new topic
+      ( $meta, $text ) = readTopic( $newWeb, $newTopic );
+      $fileAttachment{"movefrom"} = "$oldWeb.$oldTopic";
+      $fileAttachment{"moveby"}   = $TWiki::userName;
+      $fileAttachment{"movedto"}  = "$newWeb.$newTopic";
+      $fileAttachment{"movedwhen"} = time();
+      $meta->put( "FILEATTACHMENT", %fileAttachment );
+
+      $moveError .=
+        TWiki::Store::noHandlersSave( $newWeb, $newTopic, $text, $meta,
+                                          "", "", "", "doUnlock",
+                                          "dont notify", "" ); 
+      # Remove lock file.
+      lockTopic( $newWeb, $newTopic, 1 );
+
+      TWiki::writeLog( "move", "$oldWeb.$oldTopic",
+                "Attachment $theAttachment moved to $newWeb.$newTopic" );
+
       if( $moveError ) {
         TWiki::UI::oops( $newWeb, $newTopic, "moveerr",
                          $theAttachment, $moveError );
         return;
       }
     } else {
-      if( ! $doAllowNonWikiWord && ! &TWiki::isWikiName( $newTopic ) ) {
+      if( ! $doAllowNonWikiWord && ! TWiki::isValidWikiWord( $newTopic ) ) {
         TWiki::UI::oops( $newWeb, $newTopic, "renamenotwikiword" );
         return;
       }
@@ -462,7 +491,7 @@ sub rename {
 
     my $problems;
     ( $lockFailure, $problems ) = 
-      &TWiki::Store::updateReferingPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
+      &TWiki::Store::updateReferringPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
   }
 
   my $new_url = "";
@@ -610,7 +639,7 @@ sub _checkPermissions {
 #==========================================
 # Check that various webs and topics exist or don't exist as required
 sub _checkExist {
-  my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $oldFileName, $newFileName ) = @_;
+  my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment ) = @_;
 
   my $ret = 0;
   my $query = TWiki::getCgiQuery();
@@ -618,22 +647,26 @@ sub _checkExist {
   $ret = 1 unless TWiki::UI::webExists( $oldWeb, $oldTopic );
   $ret = 1 unless TWiki::UI::webExists( $newWeb, $newTopic );
 
-  # Does old attachment exist?
-  if( ! -e $oldFileName) {
-    TWiki::UI::oops( $oldWeb, $oldTopic, "missing" );
-    $ret = 1;
-  }
-
-  # Check new topic doesn't exist (opposite if we've moving an attachment)
-  if( defined( $newFileName ) && -e $newFileName && ! $theAttachment ) {
-    # Unless moving an attachment, new topic should not already exist
-    TWiki::UI::oops( $newWeb, $newTopic, "topicexists" );
-    $ret = 1;
-  }
-
-  if( defined( $newFileName ) && $theAttachment && ! -e $newFileName ) {
-    TWiki::UI::oops( $newWeb, $newTopic, "missing" );
-    $ret = 1;
+  if ( $theAttachment) {
+      # Does old attachment exist?
+      unless( TWiki::Store::attachmentExists( $oldWeb, $oldTopic,
+                                              $theAttachment )) {
+          TWiki::UI::oops( $oldWeb, $oldTopic, "moveerr", $theAttachment );
+          $ret = 1;
+      }
+      # does new attachment already exist?
+      if( TWiki::Store::attachmentExists( $newWeb, $newTopic,
+                                          $theAttachment )) {
+          TWiki::UI::oops( $newWeb, $newTopic, "moverr", $theAttachment );
+          $ret = 1;
+      }
+  } else {
+      # Check new topic doesn't exist
+      if( TWiki::Store::topicExists( $newWeb, $newTopic)) {
+          # Unless moving an attachment, new topic should not already exist
+          TWiki::UI::oops( $newWeb, $newTopic, "topicexists" );
+          $ret = 1;
+      }
   }
 
   return $ret;
@@ -641,7 +674,7 @@ sub _checkExist {
 
 
 #============================
-#Return "" if can't get lock, otherwise "okay"
+# Return 1 if can't get lock, otherwise 0
 sub _getLocks {
   my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock, $skin ) = @_;
   
@@ -652,7 +685,7 @@ sub _getLocks {
     # Check for lock - at present the lock can't be broken
     ( $oldLockUser, $oldLockTime ) = &TWiki::Store::topicIsLockedBy( $oldWeb, $oldTopic );
     if( $oldLockUser ) {
-      $oldLockUser = &TWiki::userToWikiName( $oldLockUser );
+      $oldLockUser = &TWiki::User::userToWikiName( $oldLockUser );
       use integer;
       $oldLockTime = ( $oldLockTime / 60 ) + 1; # convert to minutes
     }
@@ -660,7 +693,7 @@ sub _getLocks {
     if( $theAttachment ) {
       ( $newLockUser, $newLockTime ) = &TWiki::Store::topicIsLockedBy( $newWeb, $newTopic );
       if( $newLockUser ) {
-        $newLockUser = &TWiki::userToWikiName( $newLockUser );
+        $newLockUser = &TWiki::User::userToWikiName( $newLockUser );
         use integer;
         $newLockTime = ( $newLockTime / 60 ) + 1; # convert to minutes
         my $editLock = $TWiki::editLockTime / 60;
@@ -669,7 +702,7 @@ sub _getLocks {
   }
 
   if( $oldLockUser || $newLockUser ) {
-    my $tmpl = &TWiki::Store::readTemplate( "oopslockedrename", $skin );
+    my $tmpl = TWiki::Templates::readTemplate( "oopslockedrename", $skin );
     my $editLock = $TWiki::editLockTime / 60;
     if( $oldLockUser ) {
       $tmpl =~ s/%OLD_LOCK%/Source topic $oldWeb.$oldTopic is locked by $oldLockUser, lock expires in $oldLockTime minutes.<br \/>/go;
@@ -687,17 +720,18 @@ sub _getLocks {
     $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
     $tmpl = &TWiki::Render::getRenderedVersion( $tmpl, $oldWeb );
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-    TWiki::writeHeader( $query );
+    # SMELL: this is a redirect!
+    TWiki::writeHeader( $query, length( $tmpl ));
     print $tmpl;
-    return "";
+    return 0;
   } else {
-    &TWiki::Store::lockTopicNew( $oldWeb, $oldTopic );
+    TWiki::Store::lockTopic( $oldWeb, $oldTopic );
     if( $theAttachment ) {
-      &TWiki::Store::lockTopicNew( $newWeb, $newTopic );
+      TWiki::Store::lockTopic( $newWeb, $newTopic );
     }
   }
 
-  return "okay";
+  return 1;
 }
 
 #============================
@@ -714,16 +748,15 @@ sub _newTopicScreen {
   my $nonWikiWordFlag = "";
   $nonWikiWordFlag = 'checked="checked"' if( $doAllowNonWikiWord );
 
-  TWiki::writeHeader( $query );
   if( $theAttachment ) {
-    $tmpl = TWiki::Store::readTemplate( "moveattachment", $skin );
+    $tmpl = TWiki::Templates::readTemplate( "moveattachment", $skin );
     $tmpl =~ s/%FILENAME%/$theAttachment/go;
   } elsif( $confirm ) {
-    $tmpl = TWiki::Store::readTemplate( "renameconfirm", $skin );
+    $tmpl = TWiki::Templates::readTemplate( "renameconfirm", $skin );
   } elsif( $newWeb eq "Trash" ) {
-    $tmpl = TWiki::Store::readTemplate( "renamedelete", $skin );
+    $tmpl = TWiki::Templates::readTemplate( "renamedelete", $skin );
   } else {
-    $tmpl = &TWiki::Store::readTemplate( "rename", $skin );
+    $tmpl = TWiki::Templates::readTemplate( "rename", $skin );
   }
 
   $tmpl = _setVars( $tmpl, $oldTopic, $newWeb, $newTopic, $nonWikiWordFlag );
@@ -735,6 +768,8 @@ sub _newTopicScreen {
   $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
   $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );   
   $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
+
+  TWiki::writeHeader( $query, length( $tmpl ));
   print $tmpl;
 }
 
@@ -752,13 +787,14 @@ sub _moreRefsToChange {
   my( $oldWeb, $oldTopic, $newWeb, $newTopic, $skin ) = @_;
   my $query = TWiki::getCgiQuery();
 
-  TWiki::writeHeader( $query );
-  my $tmpl = TWiki::Store::readTemplate( "renamerefs", $skin );
+  my $tmpl = TWiki::Templates::readTemplate( "renamerefs", $skin );
   $tmpl = _setVars( $tmpl, $oldTopic, $newWeb, $newTopic );
   $tmpl = TWiki::Render::getRenderedVersion( $tmpl );
   $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
   $tmpl = TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
   $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
+
+  TWiki::writeHeader( $query, length( $tmpl ));
   print $tmpl;
 }
 

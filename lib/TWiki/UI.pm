@@ -54,13 +54,12 @@ sub redirect {
   my $query = TWiki::getCgiQuery();
 
   if ( $query && $query->param( 'noredirect' )) {
-    TWiki::writeHeader( $query );
+      my $content = join(" ", @_) . " \n";
+      TWiki::writeHeader( $query, length( $content ) );
+      print $content;
   } elsif ( $query ) {
     TWiki::redirect( $query, $url );
-    return; # no print to STDOUT
   }
-
-  print join(" ", @_) . " \n";
 }
 
 =pod twiki
@@ -83,7 +82,7 @@ sub webExists {
 
 =pod twiki
 
----+++ webExists( $web, $topic, $fn ) => boolean
+---+++ topicExists( $web, $topic, $fn ) => boolean
 Check if the given topic exists, returning 1 if it does, or
 invoking TWiki::UI::oops and returning 0 if it doesn't. $fn is
 the name of the command invoked, and will be used in composing
@@ -93,7 +92,7 @@ the oops template name thus: oops${fn}notopic
 
 sub topicExists {
   my ( $webName, $topic, $fn ) = @_;
-
+die "ARGH ", join(",",caller);
   return 1 if TWiki::Store::topicExists( $webName, $topic );
 
   oops( $webName, $topic, "${fn}notopic", "ERROR $webName.$topic Missing topic" );
@@ -125,8 +124,6 @@ sub isMirror {
   }
   return 1;
 }
-
-=cut
 
 =pod twiki
 
@@ -168,17 +165,28 @@ sub userIsAdmin {
   return 0;
 }
 
-=pod twiki
+=pod
 
----+++ writeDebugTimes( $message )
-Write a debugging message indicating the time at which this function
-was called. Used for benchmarking.
+---++ sub readTemplateTopic (  $theTopicName  )
+
+Read a topic from the TWiki web, or if that fails from the current
+web.
 
 =cut
 
-sub writeDebugTimes {
-  my $mess = shift;
-  # TWiki::writeDebug();
+sub readTemplateTopic
+{
+    my( $theTopicName ) = @_;
+
+    $theTopicName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
+
+    # try to read in current web, if not read from TWiki web
+
+    my $web = $TWiki::twikiWebname;
+    if( TWiki::Store::topicExists( $TWiki::webName, $theTopicName ) ) {
+        $web = $TWiki::webName;
+    }
+    return TWiki::Store::readTopic( $web, $theTopicName );
 }
 
 1;

@@ -21,6 +21,14 @@
 
 use strict;
 
+use TWiki;
+use TWiki::Templates;
+use TWiki::Store;
+use TWiki::Render;
+use TWiki::User;
+use TWiki::Prefs;
+use TWiki::Meta;
+
 =begin twiki
 
 ---+ TWiki::Attach Module
@@ -30,8 +38,6 @@ This package contains routines for dealing with attachments to topics.
 =cut
 
 package TWiki::Attach;
-
-use vars qw( %templateVars );
 
 # ======================
 =pod
@@ -64,15 +70,9 @@ sub renderMetaData
 	  my $attrAttr = $attachment->{attr};
 
 	  if( ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ )) {
-		$rows .= _formatRow( $web,
-							 $topic,
-							 $attachment->{name},
-							 $attachment->{version},
-							 $isTopTopicRev,
-							 $attachment->{date},
-							 $attachment->{user},
-							 $attachment->{comment},
+		$rows .= _formatRow( $web, $topic,
 							 $attachment,
+							 $isTopTopicRev,
 							 $row );
 	  }
     }
@@ -93,30 +93,29 @@ sub renderMetaData
 sub _getTemplate {
   my $template = shift;
 
-  if ( ! defined( $templateVars{$template} )) {
-	TWiki::Store::readTemplate("attachtables");
-  }
+  TWiki::Templates::readTemplate("attachtables") unless
+      TWiki::Templates::haveTemplate( $template );
 
-  return TWiki::Store::handleTmplP($template);
+  return TWiki::Templates::expandTemplate( $template );
 }
 
 #=========================
 =pod
 
----++ sub formatVersions (  $theWeb, $theTopic, $attachment, $attrs )
+---++ sub formatVersions (  $theWeb, $theTopic, $attrs )
 
 Generate a version history table for a single attachment
 | =$web= | the web |
 | =$topic= | the topic |
-| =$attachment= | basename of attachment |
 | =$attrs= | Hash of meta-data attributes |
 
 =cut
 
 sub formatVersions {
-  my( $web, $topic, $attachment, $attrs ) = @_;
+  my( $web, $topic, %attrs ) = @_;
 
-  my $latestRev = TWiki::Store::getRevisionNumber( $web, $topic, $attachment );
+  my $latestRev =
+    TWiki::Store::getRevisionNumber( $web, $topic, $attrs{name} );
   $latestRev =~ m/\.(.*)/o;
   my $maxRevNum = $1;
 
@@ -130,15 +129,18 @@ sub formatVersions {
     my $rev = "1.$version";
 
 	my( $date, $userName, $minorRev, $comment ) = 
-	  TWiki::Store::getRevisionInfo( $web, $topic, $rev, $attachment );
+	  TWiki::Store::getRevisionInfo( $web, $topic, $rev, $attrs{name} );
 	$rows .= _formatRow( $web, $topic,
-						 $attachment,
-						 $rev,
+						 {
+                          name    => $attrs{name},
+                          version => $rev,
+                          date    => $date,
+                          user    => $userName,
+                          comment => $comment,
+                          attr    => $attrs{attr},
+                          size    => $attrs{size}
+                         },
 						 ( $rev eq $latestRev),
-						 $date,
-						 $userName,
-						 $comment,
-						 $attrs,
 						 $row );
   }
 
@@ -148,137 +150,116 @@ sub formatVersions {
 #=========================
 =pod
 
----++ sub _formatRow ( $web, $topic, $file, $rev, $topRev, $date, $userName, $comment, $attrs, $tmpl )
+---++ sub _formatRow ( $web, $topic, $info, $topRev, $attrs, $tmpl )
 
 Format a single row in an attachment table by expanding a template.
 | =$web= | the web |
 | =$topic= | the topic |
-| =$file= | the attachment file name |
-| =$rev= | the required revision; required to be a full (major.minor) revision number |
+| =$info= | hash containing fields name, user (user (not wikiname) who uploaded this revision), date (date of _this revision_ of the attachment), command and version  (the required revision; required to be a full (major.minor) revision number) |
 | =$topRev= | boolean indicating if this revision is the most recent revision |
-| =$date= | date of _this revision_ of the attachment |
-| =$userName= | user (not wikiname) who uploaded this revision |
-| =$comment= | comment against this revision |
-| =$attrs= | reference to a hash of other meta-data attributes for the attachment |
+| =$tmpl= | The template of a row |
 
 =cut
 
 sub _formatRow {
-  my ( $web, $topic, $file, $rev, $topRev,
-	   $date, $userName, $comment, $attrs, $tmpl ) = @_;
+  my ( $web, $topic, $info, $topRev, $tmpl ) = @_;
 
   my $row = $tmpl;
 
-  $row =~ s/%A_REV%/$rev/go;
-
-  if ( $row =~ /%A_ICON%/o ) {
-	my $fileIcon = filenameToIcon( $file );
-	$row =~ s/%A_ICON%/$fileIcon/go;
-  }
-
-  if ( $row =~ /%A_URL%/o ) {
-	my $url;
-
-	if ( $topRev ) {
-	  # I18N: To support attachments via UTF-8 URLs to attachment
-	  # directories/files that use non-UTF-8 character sets, go through viewfile. 
-	  # If using %PUBURL%, must URL-encode explicitly to site character set.
-	  $url = TWiki::handleNativeUrlEncode( "%PUBURLPATH%/$web/$topic/$file" );
-	} else {
-	  $url = "%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/".
-		"$web/$topic?rev=$rev&filename=$file";
-	}
-	$row =~ s/%A_URL%/$url/go;
-  }
-
-  if ( $row =~ /%A_SIZE%/o && $attrs ) {
-    my $attrSize = $attrs->{size};
-	$attrSize = 100 if( $attrSize < 100 );
-	$attrSize = sprintf( "%1.1f&nbsp;K", $attrSize / 1024 );
-	$row =~ s/%A_SIZE%/$attrSize/go;
-  }
-
-  $comment =~ s/\|/&#124;/g;
-  $comment = "&nbsp;" unless ( $comment );
-  $row =~ s/%A_COMMENT%/$comment/go;
-
-  if ( $row =~ /%A_ATTRS%/o && $attrs ) {
-	my $attrAttr = $attrs->{attr};
-	$attrAttr = $attrAttr || "&nbsp;";
-	$row =~ s/%A_ATTRS%/$attrAttr/go;
-  }
-
-  $row =~ s/%A_FILE%/$file/go;
-
-  $date = TWiki::formatTime( $date );
-  $row =~ s/%A_DATE%/$date/go;
-
-  my $wikiUserName = TWiki::userToWikiName( $userName );
-  $row =~ s/%A_USER%/$wikiUserName/go;
+  $row =~ s/%A_(\w+)%/&_expandAttrs($1,$web,$topic,$info,$topRev)/ge;
+  $row =~ s/\0/%/g;
 
   return $row;
 }
 
-# =========================
-=pod
+sub _expandAttrs {
+    my ( $attr, $web, $topic, $info, $topRev ) = @_;
+    my $file = $info->{name};
 
----++ sub filenameToIcon (  $fileName  )
+    if ( $attr eq "REV" ) {
+        return $info->{version};
+    }
+    elsif ( $attr eq "ICON" ) {
+        my $fileIcon = TWiki::Render::filenameToIcon( $file );
+        return $fileIcon;
+    }
+    elsif ( $attr eq "URL" ) {
+        my $url;
 
-Produce an image tailored to the type of the file, guessed from
-it's extension.
-
-used in TWiki::handleIcon
-
-=cut
-
-sub filenameToIcon
-{
-    my( $fileName ) = @_;
-
-    my @bits = ( split( /\./, $fileName ) );
-    my $fileExt = lc $bits[$#bits];
-
-    my $tmp = &TWiki::getPubDir();
-    my $iconDir = "$tmp/icn";
-    my $iconUrl = "$TWiki::pubUrlPath/icn";
-    my $iconList = &TWiki::Store::readFile( "$iconDir/_filetypes.txt" );
-    foreach( split( /\n/, $iconList ) ) {
-        @bits = ( split( / / ) );
-	if( $bits[0] eq $fileExt ) {
-            return "<img src=\"$iconUrl/$bits[1].gif\" width=\"16\" height=\"16\" align=\"top\" alt=\"\" border=\"0\" />";
+        if ( $topRev ) {
+            # I18N: To support attachments via UTF-8 URLs to attachment
+            # directories/files that use non-UTF-8 character sets, go
+            # through viewfile.
+            # If using %PUBURL%, must URL-encode explicitly to site
+            # character set.
+            $url = TWiki::nativeUrlEncode( "%PUBURLPATH%/$web/$topic/$file" );
+        } else {
+            $url = "%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/".
+              "$web/$topic?rev=$info->{version}&filename=$file";
         }
+        return $url;
     }
-    return "<img src=\"$iconUrl/else.gif\" width=\"16\" height=\"16\" align=\"top\" alt=\"\" border=\"0\" />";
+    elsif ( $attr eq "SIZE" ) {
+        my $attrSize = $info->{size};
+        $attrSize = 100 if( $attrSize < 100 );
+        return sprintf( "%1.1f&nbsp;K", $attrSize / 1024 );
+    }
+    elsif ( $attr eq "COMMENT" ) {
+        my $comment = $info->{comment};
+        if ( $comment) {
+            $comment =~ s/\|/&#124;/g;
+        } else {
+            $comment = "&nbsp;";
+        }
+        return $comment;
+    }
+    elsif ( $attr eq "ATTRS" ) {
+        return $info->{attr} or "&nbsp;";
+    }
+    elsif ( $attr eq "FILE" ) {
+        return $file;
+    }
+    elsif ( $attr eq "DATE" ) {
+        return TWiki::formatTime( $info->{date} );
+    }
+    elsif ( $attr eq "USER" ) {
+        return TWiki::User::userToWikiName( $info->{user} );
+    }
+    else {
+        return "\0A_$attr\0";
+    }
 }
+
 
 # =========================
-=pod
-
----++ sub removeFile ()
-
-Remove attachment macro for specified file from topic
-return "", or error string
-
-=cut
-
-sub removeFile
-{
-    my $theFile = $_[1];
-    my $error = "";
-    
-    # %FILEATTACHMENT{[\s]*"$theFile"[^}]*}%
-    if( ! ( $_[0] =~ s/%FILEATTACHMENT{[\s]*"$theFile"[^}]*}%//) ) {
-       $error = "Failed to remove attachment $theFile";
-    }
-    return $error;
-}
+#=pod
+#
+#---++ sub removeFile ()
+#
+#Remove attachment macro for specified file from topic
+#return "", or error string
+#
+#=cut
+#
+#sub removeFile
+#{
+#    my $theFile = $_[1];
+#    my $error = "";
+#    
+#    # %FILEATTACHMENT{[\s]*"$theFile"[^}]*}%
+#    if( ! ( $_[0] =~ s/%FILEATTACHMENT{[\s]*"$theFile"[^}]*}%//) ) {
+#       $error = "Failed to remove attachment $theFile";
+#    }
+#    return $error;
+#}
 
 # =========================
 =pod
 
 ---++ sub updateProperties (  $fileName, $hideFile, $fileComment, $meta  )
 
-Not yet documented.
+Update the properties for the given attachment in the given
+meta object.
 
 =cut
 
@@ -326,12 +307,297 @@ sub updateAttachment
     $meta->put( "FILEATTACHMENT", @attrs );
 }
 
+# =========================
+
+=pod
+
+---++ sub getAttachmentLink( $web, $topic, $name, $meta )
+| =$web= | Name of the web |
+| =$topic= | Name of the topic |
+| =$name= | Name of the attachment |
+| =$meta= | Meta object that contains the meta info |
+Build a link to the attachment, suitable for insertion in the topic.
+
+=cut
+
+sub getAttachmentLink
+{
+    my ( $web, $topic, $attName, $meta ) = @_;
+
+    my %att = $meta->findOne( "FILEATTACHMENT", $attName );
+    my $fileComment = $att{comment};
+    $fileComment = $attName unless ( $fileComment );
+
+    my $fileLink = "";
+    my $imgSize = "";
+
+    if( $attName =~ /\.(gif|jpg|jpeg|png)$/i ) {
+        # inline image
+
+        # The pixel size calculation is done for performance reasons
+        # Some browsers wait with rendering a page until the size of
+        # embedded images is known, e.g. after all images of a page are
+        # downloaded. When you upload an image to TWiki and checkmark
+        # the link checkbox, TWiki will generate the width and height
+        # img parameters, speeding up the page rendering.
+        my $stream =  TWiki::Store::getAttachmentStream( $web, $topic, $attName );
+        my( $nx, $ny ) = &_imgsize( $stream, $attName );
+
+        if( ( $nx > 0 ) && ( $ny > 0 ) ) {
+            $imgSize = "width=\"$nx\" height=\"$ny\" ";
+        }
+        $fileLink = TWiki::Prefs::getPreferencesValue( "ATTACHEDIMAGEFORMAT" )
+          || '   * $comment: <br />'
+            . ' <img src="%ATTACHURLPATH%/$name" alt="$name" $size />';
+    } else {
+        # normal attached file
+        $fileLink = TWiki::Prefs::getPreferencesValue( "ATTACHEDFILELINKFORMAT" )
+          || '   * [[%ATTACHURL%/$name][$name]]: $comment';
+    }
+
+    $fileLink =~ s/^      /\t\t/go;
+    $fileLink =~ s/^   /\t/go;
+    $fileLink =~ s/\$name/$attName/g;
+    $fileLink =~ s/\$comment/$fileComment/g;
+    $fileLink =~ s/\$size/$imgSize/g;
+    $fileLink =~ s/\\t/\t/go;
+    $fileLink =~ s/\\n/\n/go;
+    $fileLink =~ s/([^\n])$/$1\n/;
+
+    return $fileLink;
+}
+
+# =========================
+# code fragment to extract pixel size from images
+# taken from http://www.tardis.ed.ac.uk/~ark/wwwis/
+# subroutines: _imgsize, _gifsize, _OLDgifsize, _gif_blockskip,
+#              _NEWgifsize, _jpegsize
+#
+
+# =========================
+sub _imgsize {
+  my( $file, $att ) = @_;
+  my( $x, $y) = ( 0, 0 );
+
+  if( defined( $file ) ) {
+    binmode( $file ); # for crappy MS OSes - Win/Dos/NT use is NOT SUPPORTED
+    my $s;
+    return ( 0, 0 ) unless ( read( $file, $s, 4 ) == 4 );
+    seek( $file, 0, 0 );
+    if ( $s eq "GIF8" ) {
+        #  GIF 47 49 46 38
+        ( $x, $y ) = _gifsize( $file );
+    } else {
+        my ( $a, $b, $c, $d ) = unpack( 'C4', $s );
+        if ( $a == 0x89 && $b == 0x50 &&
+             $c == 0x4E && $d == 0x47 ) {
+            #  PNG 89 50 4e 47
+            ( $x, $y ) = _pngsize( $file );
+        } elsif ( $a == 0xFF && $b == 0xD8 &&
+                  $c == 0xFF && $d == 0xE0 ) {
+            #  JPG ff d8 ff e0
+            ( $x, $y ) = _jpegsize( $file );
+        }
+    }
+    close( $file );
+  }
+  return( $x, $y );
+}
+
+
+# =========================
+sub _gifsize
+{
+  my( $GIF ) = @_;
+  if( 0 ) {
+    return &_NEWgifsize( $GIF );
+  } else {
+    return &_OLDgifsize( $GIF );
+  }
+}
+
+
+# =========================
+sub _OLDgifsize {
+  my( $GIF ) = @_;
+  my( $type, $a, $b, $c, $d, $s ) = ( 0, 0, 0, 0, 0, 0 );
+
+  if( defined( $GIF )              &&
+      read( $GIF, $type, 6 )       &&
+      $type =~ /GIF8[7,9]a/        &&
+      read( $GIF, $s, 4 ) == 4     ) {
+    ( $a, $b, $c, $d ) = unpack( "C"x4, $s );
+    return( $b<<8|$a, $d<<8|$c );
+  }
+  return( 0, 0 );
+}
+
+
+# =========================
+# part of _NEWgifsize
+sub _gif_blockskip {
+  my ( $GIF, $skip, $type ) = @_;
+  my ( $s ) = 0;
+  my ( $dummy ) = '';
+
+  read( $GIF, $dummy, $skip );       # Skip header (if any)
+  while( 1 ) {
+    if( eof( $GIF ) ) {
+      #warn "Invalid/Corrupted GIF (at EOF in GIF $type)\n";
+      return "";
+    }
+    read( $GIF, $s, 1 );             # Block size
+    last if ord( $s ) == 0;          # Block terminator
+    read( $GIF, $dummy, ord( $s ) ); # Skip data
+  }
+}
+
+
+# =========================
+# this code by "Daniel V. Klein" <dvk@lonewolf.com>
+sub _NEWgifsize {
+  my( $GIF ) = @_;
+  my( $cmapsize, $a, $b, $c, $d, $e ) = 0;
+  my( $type, $s ) = ( 0, 0 );
+  my( $x, $y ) = ( 0, 0 );
+  my( $dummy ) = '';
+
+  return( $x,$y ) if( !defined $GIF );
+
+  read( $GIF, $type, 6 );
+  if( $type !~ /GIF8[7,9]a/ || read( $GIF, $s, 7 ) != 7 ) {
+    #warn "Invalid/Corrupted GIF (bad header)\n";
+    return( $x, $y );
+  }
+  ( $e ) = unpack( "x4 C", $s );
+  if( $e & 0x80 ) {
+    $cmapsize = 3 * 2**(($e & 0x07) + 1);
+    if( !read( $GIF, $dummy, $cmapsize ) ) {
+      #warn "Invalid/Corrupted GIF (global color map too small?)\n";
+      return( $x, $y );
+    }
+  }
+ FINDIMAGE:
+  while( 1 ) {
+    if( eof( $GIF ) ) {
+      #warn "Invalid/Corrupted GIF (at EOF w/o Image Descriptors)\n";
+      return( $x, $y );
+    }
+    read( $GIF, $s, 1 );
+    ( $e ) = unpack( "C", $s );
+    if( $e == 0x2c ) {           # Image Descriptor (GIF87a, GIF89a 20.c.i)
+      if( read( $GIF, $s, 8 ) != 8 ) {
+        #warn "Invalid/Corrupted GIF (missing image header?)\n";
+        return( $x, $y );
+      }
+      ( $a, $b, $c, $d ) = unpack( "x4 C4", $s );
+      $x = $b<<8|$a;
+      $y = $d<<8|$c;
+      return( $x, $y );
+    }
+    if( $type eq "GIF89a" ) {
+      if( $e == 0x21 ) {         # Extension Introducer (GIF89a 23.c.i)
+        read( $GIF, $s, 1 );
+        ( $e ) = unpack( "C", $s );
+        if( $e == 0xF9 ) {       # Graphic Control Extension (GIF89a 23.c.ii)
+          read( $GIF, $dummy, 6 );        # Skip it
+          next FINDIMAGE;       # Look again for Image Descriptor
+        } elsif( $e == 0xFE ) {  # Comment Extension (GIF89a 24.c.ii)
+          &_gif_blockskip( $GIF, 0, "Comment" );
+          next FINDIMAGE;       # Look again for Image Descriptor
+        } elsif( $e == 0x01 ) {  # Plain Text Label (GIF89a 25.c.ii)
+          &_gif_blockskip( $GIF, 12, "text data" );
+          next FINDIMAGE;       # Look again for Image Descriptor
+        } elsif( $e == 0xFF ) {  # Application Extension Label (GIF89a 26.c.ii)
+          &_gif_blockskip( $GIF, 11, "application data" );
+          next FINDIMAGE;       # Look again for Image Descriptor
+        } else {
+          #printf STDERR "Invalid/Corrupted GIF (Unknown extension %#x)\n", $e;
+          return( $x, $y );
+        }
+      } else {
+        #printf STDERR "Invalid/Corrupted GIF (Unknown code %#x)\n", $e;
+        return( $x, $y );
+      }
+    } else {
+      #warn "Invalid/Corrupted GIF (missing GIF87a Image Descriptor)\n";
+      return( $x, $y );
+    }
+  }
+}
+
+# =========================
+# _jpegsize : gets the width and height (in pixels) of a jpeg file
+# Andrew Tong, werdna@ugcs.caltech.edu           February 14, 1995
+# modified slightly by alex@ed.ac.uk
+sub _jpegsize {
+  my( $JPEG ) = @_;
+  my( $done ) = 0;
+  my( $c1, $c2, $ch, $s, $length, $dummy ) = ( 0, 0, 0, 0, 0, 0 );
+  my( $a, $b, $c, $d );
+
+  if( defined( $JPEG )             &&
+      read( $JPEG, $c1, 1 )        &&
+      read( $JPEG, $c2, 1 )        &&
+      ord( $c1 ) == 0xFF           &&
+      ord( $c2 ) == 0xD8           ) {
+    while ( ord( $ch ) != 0xDA && !$done ) {
+      # Find next marker (JPEG markers begin with 0xFF)
+      # This can hang the program!!
+      while( ord( $ch ) != 0xFF ) {
+        return( 0, 0 ) unless read( $JPEG, $ch, 1 );
+      }
+      # JPEG markers can be padded with unlimited 0xFF's
+      while( ord( $ch ) == 0xFF ) {
+        return( 0, 0 ) unless read( $JPEG, $ch, 1 );
+      }
+      # Now, $ch contains the value of the marker.
+      if( ( ord( $ch ) >= 0xC0 ) && ( ord( $ch ) <= 0xC3 ) ) {
+        return( 0, 0 ) unless read( $JPEG, $dummy, 3 );
+        return( 0, 0 ) unless read( $JPEG, $s, 4 );
+        ( $a, $b, $c, $d ) = unpack( "C"x4, $s );
+        return( $c<<8|$d, $a<<8|$b );
+      } else {
+        # We **MUST** skip variables, since FF's within variable names are
+        # NOT valid JPEG markers
+        return( 0, 0 ) unless read( $JPEG, $s, 2 );
+        ( $c1, $c2 ) = unpack( "C"x2, $s );
+        $length = $c1<<8|$c2;
+        last if( !defined( $length ) || $length < 2 );
+        read( $JPEG, $dummy, $length-2 );
+      }
+    }
+  }
+  return( 0, 0 );
+}
+
+# =========================
+#  _pngsize : gets the width & height (in pixels) of a png file
+#  cor this program is on the cutting edge of technology! (pity it's blunt!)
+#  GRR 970619:  fixed bytesex assumption
+#  source: http://www.la-grange.net/2000/05/04-png.html
+sub _pngsize {
+  my ($PNG) = @_;
+  my ($head) = "";
+  my($a, $b, $c, $d, $e, $f, $g, $h)=0;
+  if(defined($PNG)                              &&
+     read( $PNG, $head, 8 ) == 8                &&
+     $head eq "\x89\x50\x4e\x47\x0d\x0a\x1a\x0a" &&
+     read($PNG, $head, 4) == 4                  &&
+     read($PNG, $head, 4) == 4                  &&
+     $head eq "IHDR"                            &&
+     read($PNG, $head, 8) == 8                  ){
+    ($a,$b,$c,$d,$e,$f,$g,$h)=unpack("C"x8,$head);
+    return ($a<<24|$b<<16|$c<<8|$d, $e<<24|$f<<16|$g<<8|$h);
+  }
+  return (0,0);
+}
+
 #=========================
 =pod
 
 ---++ sub migrateFormatForTopic (  $theWeb, $theTopic, $doLogToStdOut  )
 
-Not yet documented.
 CODE_SMELL: Is this really necessary? migrateFormatForTopic?
 
 =cut
@@ -351,7 +617,8 @@ sub migrateFormatForTopic
       $text = "$before<!--TWikiAttachment-->$newtext<!--TWikiAttachment-->";
 
       my ( $dontLogSave, $doUnlock, $dontNotify ) = ( "", "1", "1" );
-      my $error = TWiki::Store::save( $theWeb, $theTopic, $text, "", $dontLogSave, $doUnlock, $dontNotify, "upgraded attachment format" );
+      my $meta = TWiki::Meta->new();
+      my $error = TWiki::Store::noHandlersSave( $theWeb, $theTopic, $text, $meta, "", $dontLogSave, $doUnlock, $dontNotify, "upgraded attachment format" );
       if ( $error ) {
          print "Attach: error from save: $error\n";
       }
@@ -399,14 +666,16 @@ sub getOldAttachAttr
 	if( ! $fileDate ) { 
             $fileDate = "";
         } else {
+            # SMELL: violates Store encapsulation!
+            eval 'use TWiki::Store::RcsFile;';
             $fileDate =~ s/&nbsp;/ /go;
-            $fileDate = &TWiki::revDate2EpSecs( $fileDate );
+            $fileDate = TWiki::Store::RcsFile::revDate2EpSecs( $fileDate );
         }
 	( $before, $fileUser,    $after ) = split( /<(?:\/)*TwkFileUser>/, $atext );
 	if( ! $fileUser ) { 
             $fileUser = ""; 
         } else {
-            $fileUser = &TWiki::wikiToUserName( $fileUser );
+            $fileUser = TWiki::User::wikiToUserName( $fileUser );
         }
 	$fileUser =~ s/ //go;
 	( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $atext );
@@ -414,6 +683,22 @@ sub getOldAttachAttr
     }
 
     return ( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
+}
+
+# Convert a key=value list to a list of key,value,key,value.....
+sub _keyValue2list
+{
+    my( $args ) = @_;
+    
+    my @res = ();
+    
+    # Format of data is name="value" name1="value1" [...]
+    while( $args =~ s/\s*([^=]+)=\"([^"]*)\"//o ) { #" avoid confusing syntax highlighters
+        push @res, $1;
+        push @res, $2;
+    }
+    
+    return @res;
 }
 
 # =========================
@@ -465,7 +750,7 @@ sub migrateToFileAttachmentMacro
                my $name = $1;
                my $rest = $2;
                $rest =~ s/^\s*//;
-               my @values = TWiki::Store::keyValue2list( $rest );
+               my @values = _keyValue2list( $rest );
                unshift @values, $name;
                unshift @values, "name";
                $meta->put( "FILEATTACHMENT", @values );
@@ -494,11 +779,12 @@ sub upgradeFrom1v0beta
    foreach my $att ( @attach ) {
        my $date = $att->{"date"};
        if( $date =~ /-/ ) {
+           use TWiki::Store::RcsFile;
            $date =~ s/&nbsp;/ /go;
-           $date = TWiki::revDate2EpSecs( $date );
+           $date = TWiki::Store::RcsFile::revDate2EpSecs( $date );
        }
        $att->{"date"} = $date;
-       $att->{"user"} = &TWiki::wikiToUserName( $att->{"user"} );
+       $att->{"user"} = TWiki::User::wikiToUserName( $att->{"user"} );
    }
 }
 

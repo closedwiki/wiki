@@ -32,6 +32,7 @@ use TWiki::Plugins;
 use TWiki::Prefs;
 use TWiki::Store;
 use TWiki::UI;
+use TWiki::Templates;
 
 =pod
 
@@ -60,7 +61,7 @@ sub edit {
   my $templateTopic = $query->param( "templatetopic" ) || "";
   # apptype is undocumented legacy
   my $cgiAppType = $query->param( 'contenttype' ) || $query->param( 'apptype' ) || "text/html";
-  my $skin = $query->param( "skin" );
+  my $skin = TWiki::getSkin();
   my $theParent = $query->param( 'topicparent' ) || "";
   my $ptext = $query->param( 'text' );
 
@@ -69,7 +70,7 @@ sub edit {
   return unless TWiki::UI::webExists( $webName, $topic );
 
   return if TWiki::UI::isMirror( $webName, $topic );
-
+print STDERR "One\n";
   my $tmpl = "";
   my $text = "";
   my $meta = "";
@@ -86,7 +87,7 @@ sub edit {
   # prevent non-Wiki names?
   if( ( $onlyWikiName )
       && ( ! $topicExists )
-      && ( ! ( &TWiki::isWikiName( $topic ) || &TWiki::isAbbrev( $topic ) ) ) ) {
+      && ( ! TWiki::isValidTopicName( $topic ) ) ) {
     # do not allow non-wikinames, redirect to view topic
     TWiki::UI::redirect( TWiki::getViewUrl( $webName, $topic ) );
     return;
@@ -97,7 +98,7 @@ sub edit {
     ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
   }
 
-  my $wikiUserName = &TWiki::userToWikiName( $userName );
+  my $wikiUserName = &TWiki::User::userToWikiName( $userName );
   return unless TWiki::UI::isAccessPermitted( $webName, $topic,
                                             "change", $wikiUserName );
 
@@ -108,7 +109,7 @@ sub edit {
   my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $webName, $topic );
   if( ( ! $breakLock ) && ( $lockUser ) ) {
     # warn user that other person is editing this topic
-    $lockUser = &TWiki::userToWikiName( $lockUser );
+    $lockUser = &TWiki::User::userToWikiName( $lockUser );
     use integer;
     $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
     my $editLock = $TWiki::editLockTime / 60;
@@ -116,13 +117,13 @@ sub edit {
                      $lockUser, $editLock, $lockTime );
     return;
   }
-  &TWiki::Store::lockTopic( $topic );
+  TWiki::Store::lockTopic( $webName, $topic );
 
   my $templateWeb = $webName;
 
+print STDERR "Two\n";
   # Get edit template, standard or a different skin
-  $skin = TWiki::Prefs::getPreferencesValue( "SKIN" ) unless ( $skin );
-  $tmpl = &TWiki::Store::readTemplate( "edit", $skin );
+  $tmpl = &TWiki::Templates::readTemplate( "edit", $skin );
   unless( $topicExists ) {
     if( $templateTopic ) {
       if( $templateTopic =~ /^(.+)\.(.+)$/ ) {
@@ -131,10 +132,10 @@ sub edit {
         $templateTopic = $2;
       }
 
-      ( $meta, $text ) = &TWiki::Store::readTopic( $templateWeb, $templateTopic );
+      ( $meta, $text ) = TWiki::Templates::readTopic( $templateWeb, $templateTopic );
     }
     unless( $text ) {
-      ( $meta, $text ) = &TWiki::Store::readTemplateTopic( "WebTopicEditTemplate" );
+      ( $meta, $text ) = TWiki::UI::readTemplateTopic( "WebTopicEditTemplate" );
     }
     $extra = "(not exist)";
 
@@ -179,6 +180,7 @@ sub edit {
     }
   }
 
+print STDERR "Three\n";
   if( $saveCmd eq "repRev" ) {
     $text = TWiki::Store::readTopicRaw( $webName, $topic );
   }
@@ -194,7 +196,7 @@ sub edit {
 
   if( $TWiki::doLogTopicEdit ) {
     # write log entry
-    &TWiki::Store::writeLog( "edit", "$webName.$topic", $extra );
+    TWiki::writeLog( "edit", "$webName.$topic", $extra );
   }
 
   if( $saveCmd ) {
@@ -202,11 +204,7 @@ sub edit {
   }
   $tmpl =~ s/%CMD%/$saveCmd/go;
   $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-  if( $saveCmd ne "repRev" ) {
-    $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
-  } else {
-    $tmpl =~ s/%META{[^}]*}%//go;
-  }
+  $tmpl = &TWiki::Render::renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd eq "repRev" );
   $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
 
   # Don't want to render form fields, so this after getRenderedVersion
@@ -233,6 +231,7 @@ sub edit {
     $tmpl =~ s/%FORMFIELDS%//go;
   }
 
+print STDERR "Four\n";
   $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
   $tmpl =~ s/%TEXT%/$text/go;
   $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags

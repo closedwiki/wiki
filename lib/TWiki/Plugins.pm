@@ -91,7 +91,7 @@ be found or is not active, 0 is returned.
 sub getPluginVersion
 {
     my ( $thePlugin ) = @_;
-    $thePlugin = TWiki::extractNameValuePair( $thePlugin );
+
     my $version = 0;
     if( $thePlugin ) {
         foreach my $plugin ( @activePlugins ) {
@@ -105,18 +105,10 @@ sub getPluginVersion
     return $version;
 }
 
-# =========================
-=pod
-
----++ sub discoverPluginPerlModules ()
-
-Not yet documented.
-
-=cut
-
-sub discoverPluginPerlModules
+# Locate and register all plugins.
+sub _discoverPluginPerlModules
 {
-    my $libDir = &TWiki::getTWikiLibDir();
+    my $libDir = TWiki::getTWikiLibDir();
     my @plugins = ();
     my @modules = ();
     if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
@@ -129,49 +121,25 @@ sub discoverPluginPerlModules
     return @plugins;
 }
 
-# =========================
-=pod
-
----++ sub registerHandler (  $handlerName, $theHandler  )
-
-Not yet documented.
-
-=cut
-
-sub registerHandler
+# Register a plugin handler
+sub _registerHandler
 {
     my ( $handlerName, $theHandler ) = @_;
     push @{$registeredHandlers{$handlerName}}, ( $theHandler );
 }
 
-# =========================
-=pod
-
----++ sub initialisationError 
-
-Internal routine called every time a plugin fails to load
-
-=cut
-
-sub initialisationError 
-{
+# Internal routine called every time a plugin fails to load
+sub _initialisationError {
    my( $error ) = @_;
    $initialisationErrors .= $error."\n";
-   &TWiki::writeWarning( $error );
+   TWiki::writeWarning( $error );
 }
 
-=pod
----++ sub registerPlugin ( $plugin, $topic, $web, $user, $theLoginName, $theUrl, $thePathInfo  )
-
-Not yet documented.
-
-=cut
-
-sub registerPlugin
+# FIXME: make all this sub more robust
+# parameters: ( $plugin, $topic, $web, $user )
+# If $user is empty this is preInitPlugin call - used to establish the user
+sub _registerPlugin
 {
-    #FIXME make all this sub more robust
-    # parameters: ( $plugin, $topic, $web, $user )
-    # If $user is empty this is preInitPlugin call - used to establish the user
     my ( $plugin, $topic, $web, $user, $theLoginName, $theUrl, $thePathInfo ) = @_;
 
     # look for the plugin installation web (needed for attached files)
@@ -183,7 +151,7 @@ sub registerPlugin
 
     # Ignore an empty plugin name (should not happen, fix the calling function!).
 	if ( ! $plugin ) {
-      initialisationError( "Plugins: undefined or empty plugin name" );
+      _initialisationError( "Plugins: undefined or empty plugin name" );
 	  return;
     }
 
@@ -200,18 +168,18 @@ sub registerPlugin
     }
 
     if( ! $installWeb ) {
-        if ( &TWiki::Store::topicExists( $TWiki::twikiWebname, $plugin ) ) {
+        if ( TWiki::Store::topicExists( $TWiki::twikiWebname, $plugin ) ) {
             # found plugin in TWiki web
             $installWeb = $TWiki::twikiWebname;
-        } elsif ( &TWiki::Store::topicExists( "Plugins", $plugin ) ) {
+        } elsif ( TWiki::Store::topicExists( "Plugins", $plugin ) ) {
             # found plugin in Plugins web
             $installWeb = "Plugins";
-        } elsif ( &TWiki::Store::topicExists( $web, $plugin ) ) {
+        } elsif ( TWiki::Store::topicExists( $web, $plugin ) ) {
             # found plugin in current web
             $installWeb = $web;
         } else {
             # not found
-            initialisationError( "Plugins: couldn't register $plugin, no plugin topic" );
+            _initialisationError( "Plugins: couldn't register $plugin, no plugin topic" );
             return;
         }
     }
@@ -220,7 +188,7 @@ sub registerPlugin
     if ( $plugin =~ m/^([A-Za-z0-9_]+Plugin)$/ ) {
         $plugin = $1; 
     } else {
-        initialisationError("$plugin - invalid topic name for plugin");
+        _initialisationError("$plugin - invalid topic name for plugin");
         return;
     }
 
@@ -229,7 +197,7 @@ sub registerPlugin
     eval "use $p;";
 
     if ($@) {
-	initialisationError("Plugin \"$p\" could not be loaded by Perl.  Errors were:\n----\n$@----");
+	_initialisationError("Plugin \"$p\" could not be loaded by Perl.  Errors were:\n----\n$@----");
 	return;
     }
     
@@ -249,33 +217,24 @@ sub registerPlugin
     $sub = $p.'::initPlugin';
     # we register a plugin ONLY if it defines initPlugin AND it returns true 
     if( ! defined( &$sub ) ) {
-        initialisationError("Plugin $p iniPlugin did not return true");
+        _initialisationError("Plugin $p iniPlugin did not return true");
         return;
     }
     # read plugin preferences before calling initPlugin
     $prefix = uc( $plugin ) . "_";
-    &TWiki::Prefs::getPrefsFromTopic( $installWeb, $plugin, $prefix );
+    TWiki::Prefs::getPrefsFromTopic( $installWeb, $plugin, $prefix );
 
     if( &$sub( $topic, $web, $user, $installWeb ) ) {
         foreach $h ( @registrableHandlers ) {
             $sub = $p.'::'.$h;
-            &registerHandler( $h, $sub ) if defined( &$sub );
+            _registerHandler( $h, $sub ) if defined( &$sub );
         }
         $activePluginWebs{$plugin} = $installWeb;
         push( @activePlugins, $plugin );;
     }
 }
 
-# =========================
-=pod
-
----++ sub applyHandlers ()
-
-Not yet documented.
-
-=cut
-
-sub applyHandlers
+sub _applyHandlers
 {
     my $handlerName = shift;
     my $theHandler;
@@ -297,15 +256,13 @@ sub applyHandlers
     return undef;
 }
 
-# =========================
-# Initialisation that is done is done before the user is known
-# Can return a user e.g. if a plugin like SessionPlugin sets the user
-# using initializeUserHandler.
 =pod
 
 ---++ sub initialize1 (  $theTopicName, $theWebName, $theLoginName, $theUrl, $thePathInfo  )
 
-Not yet documented.
+ Initialisation that is done is done before the user is known
+ Can return a user e.g. if a plugin like SessionPlugin sets the user
+ using initializeUserHandler.
 
 =cut
 
@@ -326,10 +283,10 @@ sub initialize1
     }
 
     # Get INSTALLEDPLUGINS and DISABLEDPLUGINS variables
-    my $plugin = &TWiki::Prefs::getPreferencesValue( "INSTALLEDPLUGINS" ) || "";
+    my $plugin = TWiki::Prefs::getPreferencesValue( "INSTALLEDPLUGINS" ) || "";
     $plugin =~ s/[\n\t\s\r]+/ /go;
     my @setInstPlugins = grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
-    $plugin = &TWiki::Prefs::getPreferencesValue( "DISABLEDPLUGINS" ) || "";
+    $plugin = TWiki::Prefs::getPreferencesValue( "DISABLEDPLUGINS" ) || "";
 	foreach my $p (split( /,?\s+/ , $plugin)) {
 	  if ( $p =~ /^.+Plugin$/ ) {
 		$p =~ s/^.*\.(.*)$/$1/;
@@ -337,7 +294,7 @@ sub initialize1
 	  }
 	}
 
-    my @discoveredPlugins = discoverPluginPerlModules();
+    my @discoveredPlugins = _discoverPluginPerlModules();
     my $p = "";
     foreach $plugin ( @setInstPlugins ) {
 	  $p = $plugin;
@@ -356,26 +313,23 @@ sub initialize1
 	  $p = $plugin;
 	  $p =~ s/^.*\.(.*)$/$1/o; # cut web
 	  unless( $disabledPlugins{$p} ) {
-		$posUser = registerPlugin( $plugin, $theTopicName, $theWebName, "", $theLoginName, $theUrl, $thePathInfo );
+		$posUser = _registerPlugin( $plugin, $theTopicName, $theWebName, "", $theLoginName, $theUrl, $thePathInfo );
 		if( $posUser ) {
 		  $user = $posUser;
 		}
 	  }
     }
     unless( $user ) {
-        $user = &TWiki::initializeRemoteUser( $theLoginName );
+        $user = TWiki::User::initializeRemoteUser( $theLoginName );
     }
     return $user;
 }
 
 
-# =========================
-# Initialisation that is done is done after the user is known
 =pod
 
 ---++ sub initialize2 (  $theTopicName, $theWebName, $theUser  )
-
-Not yet documented.
+Initialisation that is done is done after the user is known
 
 =cut
 
@@ -390,22 +344,13 @@ sub initialize2
         $p = $plugin;
         $p =~ s/^.*\.(.*)$/$1/o; # cut web
         unless( $disabledPlugins{$p} ) {
-            registerPlugin( $plugin, @_, $theWebName, $theUser );
+            _registerPlugin( $plugin, @_, $theWebName, $theUser );
         }
     }
 }
 
-# =========================
-=pod
-
-
---++ sub handleFailedPlugins ()
-
-%FAILEDPLUGINS reports reasons why plugins failed to load
-
-=cut
-
-sub handleFailedPlugins
+# %FAILEDPLUGINS reports reasons why plugins failed to load
+sub _handleFAILEDPLUGINS
 {
    my $text;
 
@@ -433,21 +378,14 @@ sub handleFailedPlugins
    return $text;
 }
 
-=pod
----++ sub handlePluginDescription ()
-
-Not yet documented.
-
-=cut
-
-sub handlePluginDescription
+sub _handlePLUGINDESCRIPTIONS
 {
     my $text = "";
     my $line = "";
     my $pref = "";
     foreach my $plugin ( @activePlugins ) {
         $pref = uc( $plugin ) . "_SHORTDESCRIPTION";
-        $line = &TWiki::Prefs::getPreferencesValue( $pref );
+        $line = TWiki::Prefs::getPreferencesValue( $pref );
         if( $line ) {
             $text .= "\t\* $activePluginWebs{$plugin}.$plugin: $line\n"
         }
@@ -456,16 +394,7 @@ sub handlePluginDescription
     return $text;
 }
 
-# =========================
-=pod
-
----++ sub handleActivatedPlugins ()
-
-Not yet documented.
-
-=cut
-
-sub handleActivatedPlugins
+sub _handleACTIVATEDPLUGINS
 {
     my $text = "";
     foreach my $plugin ( @activePlugins ) {
@@ -475,84 +404,49 @@ sub handleActivatedPlugins
     return $text;
 }
 
-# =========================
-# FIXME: This function no longer used: superseded by initialize1.
-# remove on non documentation-only commit.
-=pod
-
----++ sub initializeUserHandler ()
-
-Not yet documented.
-
-=cut
-
-sub initializeUserHandler
-{
-    # Called by TWiki::initialize
-#   my( $theLoginName, $theUrl, $thePathInfo ) = @_;
-
-    unshift @_, ( 'initializeUserHandler' );
-    my $user = &applyHandlers;
-
-    if( ! defined( $user ) ) {
-        $user = &TWiki::initializeRemoteUser( $_[0] );
-    }
-
-    return $user;
-}
-
-# =========================
 =pod
 
 ---++ sub registrationHandler ()
 
-Not yet documented.
+Called by the register script
 
 =cut
 
 sub registrationHandler
 {
-    # Called by the register script
 #    my( $web, $wikiName, $loginName ) = @_;
-    unshift @_, ( 'registrationHandler' );
-    &applyHandlers;
+    _applyHandlers( 'registrationHandler', @_ );
 }
 
-# =========================
 =pod
 
 ---++ sub beforeCommonTagsHandler ()
 
-Not yet documented.
+Called by sub handleCommonTags at the beginning (for cache Plugins only)
 
 =cut
 
 sub beforeCommonTagsHandler
 {
-    # Called by sub handleCommonTags at the beginning (for cache Plugins only)
 #    my( $text, $topic, $theWeb ) = @_;
-    unshift @_, ( 'beforeCommonTagsHandler' );
-    &applyHandlers;
+    _applyHandlers( 'beforeCommonTagsHandler', @_ );
 }
 
-# =========================
 =pod
 
 ---++ sub commonTagsHandler ()
 
-Not yet documented.
+Called by sub handleCommonTags, after %INCLUDE:"..."%
 
 =cut
 
 sub commonTagsHandler
 {
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
 #    my( $text, $topic, $theWeb ) = @_;
-    unshift @_, ( 'commonTagsHandler' );
-    &applyHandlers;
-    $_[0] =~ s/%PLUGINDESCRIPTIONS%/&handlePluginDescription()/geo;
-    $_[0] =~ s/%ACTIVATEDPLUGINS%/&handleActivatedPlugins()/geo;
-    $_[0] =~ s/%FAILEDPLUGINS%/&handleFailedPlugins()/geo;
+    _applyHandlers( 'commonTagsHandler', @_ );
+    $_[0] =~ s/%PLUGINDESCRIPTIONS%/&_handlePLUGINDESCRIPTIONS()/geo;
+    $_[0] =~ s/%ACTIVATEDPLUGINS%/&_handleACTIVATEDPLUGINS()/geo;
+    $_[0] =~ s/%FAILEDPLUGINS%/&_handleFAILEDPLUGINS()/geo;
 }
 
 # =========================
@@ -560,16 +454,14 @@ sub commonTagsHandler
 
 ---++ sub afterCommonTagsHandler ()
 
-Not yet documented.
+Called by sub handleCommonTags at the end (for cache Plugins only)
 
 =cut
 
 sub afterCommonTagsHandler
 {
-    # Called by sub handleCommonTags at the end (for cache Plugins only)
 #    my( $text, $topic, $theWeb ) = @_;
-    unshift @_, ( 'afterCommonTagsHandler' );
-    &applyHandlers;
+    _applyHandlers( 'afterCommonTagsHandler', @_ );
 }
 
 # =========================
@@ -577,16 +469,14 @@ sub afterCommonTagsHandler
 
 ---++ sub startRenderingHandler ()
 
-Not yet documented.
+Called by getRenderedVersion just before the line loop
 
 =cut
 
 sub startRenderingHandler
 {
-    # Called by getRenderedVersion just before the line loop
 #    my ( $text, $web ) = @_;
-    unshift @_, ( 'startRenderingHandler' );
-    &applyHandlers;
+    _applyHandlers( 'startRenderingHandler', @_ );
 }
 
 # =========================
@@ -594,16 +484,14 @@ sub startRenderingHandler
 
 ---++ sub outsidePREHandler ()
 
-Not yet documented.
+Called by sub getRenderedVersion, in loop outside of <PRE> tag
 
 =cut
 
 sub outsidePREHandler
 {
-    # Called by sub getRenderedVersion, in loop outside of <PRE> tag
 #    my( $text ) = @_;
-    unshift @_, ( 'outsidePREHandler' );
-    &applyHandlers;
+    _applyHandlers( 'outsidePREHandler', @_ );
 }
 
 # =========================
@@ -611,16 +499,14 @@ sub outsidePREHandler
 
 ---++ sub insidePREHandler ()
 
-Not yet documented.
+Called by sub getRenderedVersion, in loop inside of <PRE> tag
 
 =cut
 
 sub insidePREHandler
 {
-    # Called by sub getRenderedVersion, in loop inside of <PRE> tag
 #    my( $text ) = @_;
-    unshift @_, ( 'insidePREHandler' );
-    &applyHandlers;
+    _applyHandlers( 'insidePREHandler', @_ );
 }
 
 # =========================
@@ -628,16 +514,14 @@ sub insidePREHandler
 
 ---++ sub endRenderingHandler ()
 
-Not yet documented.
+Called by getRenderedVersion just after the line loop
 
 =cut
 
 sub endRenderingHandler
 {
-    # Called by getRenderedVersion just after the line loop
 #    my ( $text ) = @_;
-    unshift @_, ( 'endRenderingHandler' );
-    &applyHandlers;
+    _applyHandlers( 'endRenderingHandler', @_ );
 }
 
 # =========================
@@ -645,16 +529,14 @@ sub endRenderingHandler
 
 ---++ sub beforeEditHandler ()
 
-Not yet documented.
+Called by edit
 
 =cut
 
 sub beforeEditHandler
 {
-    # Called by edit
 #    my( $text, $topic, $web ) = @_;
-    unshift @_, ( 'beforeEditHandler' );
-    &applyHandlers;
+    _applyHandlers( 'beforeEditHandler', @_ );
 }
 
 # =========================
@@ -662,16 +544,14 @@ sub beforeEditHandler
 
 ---++ sub afterEditHandler ()
 
-Not yet documented.
+Called by edit
 
 =cut
 
 sub afterEditHandler
 {
-    # Called by edit
 #    my( $text, $topic, $web ) = @_;
-    unshift @_, ( 'afterEditHandler' );
-    &applyHandlers;
+    _applyHandlers( 'afterEditHandler', @_ );
 }
 
 # =========================
@@ -679,31 +559,28 @@ sub afterEditHandler
 
 ---++ sub beforeSaveHandler ()
 
-Not yet documented.
+Called by TWiki::Store::saveTopic before the save action
 
 =cut
 
 sub beforeSaveHandler
 {
-    # Called by TWiki::Store::saveTopic before the save action
 #    my ( $theText, $theTopic, $theWeb ) = @_;
-    unshift @_, ( 'beforeSaveHandler' );
-    &applyHandlers;
+    _applyHandlers( 'beforeSaveHandler', @_ );
 }
 
 =pod
+
 ---++ sub afterSaveHandler ()
 
-Not yet documented.
+Called by TWiki::Store::saveTopic after the save action
 
 =cut
 
 sub afterSaveHandler
 {
-# Called by TWiki::Store::saveTopic after the save action
 #    my ( $theText, $theTopic, $theWeb ) = @_;
-    unshift @_, ( 'afterSaveHandler' );
-    &applyHandlers;
+    _applyHandlers( 'afterSaveHandler', @_ );
 }
 
 =pod
@@ -738,8 +615,7 @@ sub beforeAttachmentSaveHandler
 {
     # Called by TWiki::Store::saveAttachment before the save action
 #    my ( $theAttrHash, $theTopic, $theWeb ) = @_;
-    unshift @_, ( 'beforeAttachmentSaveHandler' );
-    &applyHandlers;
+    _applyHandlers( 'beforeAttachmentSaveHandler', @_ );
 }
 
 =pod
@@ -769,8 +645,7 @@ sub afterAttachmentSaveHandler
 {
 # Called by TWiki::Store::saveAttachment after the save action
 #    my ( $theText, $theTopic, $theWeb ) = @_;
-    unshift @_, ( 'afterAttachmentSaveHandler' );
-    &applyHandlers;
+    _applyHandlers( 'afterAttachmentSaveHandler', @_ );
 }
 
 
@@ -779,15 +654,13 @@ sub afterAttachmentSaveHandler
 
 ---++ sub writeHeaderHandler ()
 
-Not yet documented.
+Called by TWiki::writeHeader
 
 =cut
 
 sub writeHeaderHandler
 {
-    # Called by TWiki::writeHeader
-    unshift @_, ( 'writeHeaderHandler' );
-    return &applyHandlers;
+    return _applyHandlers( 'writeHeaderHandler', @_ );
 }
 
 # =========================
@@ -795,15 +668,13 @@ sub writeHeaderHandler
 
 ---++ sub redirectCgiQueryHandler ()
 
-Not yet documented.
+Called by TWiki::redirect
 
 =cut
 
 sub redirectCgiQueryHandler
 {
-    # Called by TWiki::redirect
-    unshift @_, ( 'redirectCgiQueryHandler' );
-    return &applyHandlers;
+    return _applyHandlers( 'redirectCgiQueryHandler', @_ );
 }
 
 # =========================
@@ -811,15 +682,13 @@ sub redirectCgiQueryHandler
 
 ---++ sub getSessionValueHandler ()
 
-Not yet documented.
+Called by TWiki::getSessionValue
 
 =cut
 
 sub getSessionValueHandler
 {
-    # Called by TWiki::getSessionValue
-    unshift @_, ( 'getSessionValueHandler' );
-    return &applyHandlers;
+    return _applyHandlers( 'getSessionValueHandler', @_ );
 }
 
 # =========================
@@ -827,15 +696,13 @@ sub getSessionValueHandler
 
 ---++ sub setSessionValueHandler ()
 
-Not yet documented.
+Called by TWiki::setSessionValue
 
 =cut
 
 sub setSessionValueHandler
 {
-    # Called by TWiki::setSessionValue
-    unshift @_, ( 'setSessionValueHandler' );
-    return &applyHandlers;
+    return _applyHandlers( 'setSessionValueHandler', @_ );
 }
 
 # ========================
@@ -876,9 +743,7 @@ times throughout the page.
 
 sub renderFormFieldForEditHandler
 {
-    # Called by Form.TODO
-    unshift @_, ( 'renderFormFieldForEditHandler' );
-    return &applyHandlers;
+    return _applyHandlers( 'renderFormFieldForEditHandler', @_ );
 }
 
 =pod
@@ -893,8 +758,7 @@ Originated from the TWiki:Plugins.SpacedWikiWordPlugin hack
 
 sub renderWikiWordHandler
 {
-    unshift @_, ( 'renderWikiWordHandler' );
-    return &applyHandlers;
+    return _applyHandlers( 'renderWikiWordHandler', @_ );
 }
 
 

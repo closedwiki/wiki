@@ -30,7 +30,10 @@
 
 ---+ TWiki::Store Module
 
-This module hosts the generic storage backend.
+This module hosts the generic storage backend. This module should be the
+only module, anywhere, that knows that meta-data is stored interleaved
+in the topic text. This is so it can be easily replaced by alternative
+store implementations.
 
 =cut
 
@@ -38,6 +41,7 @@ package TWiki::Store;
 
 use File::Copy;
 use Time::Local;
+use TWiki::Meta;
 
 use strict;
 
@@ -46,65 +50,27 @@ use strict;
 BEGIN {
     # Do a dynamic 'use locale' for this module
     if( $TWiki::useLocale ) {
-        require locale;
-	import locale ();
+        eval 'require locale; import locale ();';
     }
 }
-
-# FIXME: Move elsewhere?
-# template variable hash: (built from %TMPL:DEF{"key"}% ... %TMPL:END%)
-use vars qw( %templateVars ); # init in TWiki.pm so okay for modPerl
 
 # ===========================
 =pod
 
 ---++ sub initialize ()
 
-Not yet documented.
+Initialise the Store module, linking in the chosen implementation.
 
 =cut
 
 sub initialize
 {
-    %templateVars = ();
     eval "use TWiki::Store::$TWiki::storeTopicImpl;";
 }
 
-=pod
-
----++ sub _traceExec ()
-
-Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
-
-=cut
-
-sub _traceExec
-{
-   #my( $cmd, $result ) = @_;
-   #TWiki::writeDebug( "Store exec: $cmd -> $result" );
-}
-
-=pod
-
----++ sub writeDebug ()
-
-Not yet documented.
-
-=cut
-
-sub writeDebug
-{
-   #TWiki::writeDebug( "Store: $_[0]" );
-}
-
-=pod
-
----++ sub _getTopicHandler (  $web, $topic, $attachment  )
-
-Not yet documented.
-
-=cut
-
+# PRIVATE sub _getTopicHandler (  $web, $topic, $attachment  )
+# Get the handler for the current store implementation, either RcsFile
+# or RcsLite
 sub _getTopicHandler
 {
    my( $web, $topic, $attachment ) = @_;
@@ -117,66 +83,15 @@ sub _getTopicHandler
    return $handler;
 }
 
-
-=pod
-
----++ sub normalizeWebTopicName (  $theWeb, $theTopic  )
-
-Normalize a Web.TopicName
-<pre>
-Input:                      Return:
-  ( "Web",  "Topic" )         ( "Web",  "Topic" )
-  ( "",     "Topic" )         ( "Main", "Topic" )
-  ( "",     "" )              ( "Main", "WebHome" )
-  ( "",     "Web/Topic" )     ( "Web",  "Topic" )
-  ( "",     "Web.Topic" )     ( "Web",  "Topic" )
-  ( "Web1", "Web2.Topic" )    ( "Web2", "Topic" )
-</pre>
-Note: Function renamed from getWebTopic
-
-=cut
-
-sub normalizeWebTopicName
-{
-   my( $theWeb, $theTopic ) = @_;
-
-   if( $theTopic =~ m|^([^.]+)[\.\/](.*)$| ) {
-       $theWeb = $1;
-       $theTopic = $2;
-   }
-   $theWeb = $TWiki::webName unless( $theWeb );
-   $theTopic = $TWiki::topicName unless( $theTopic );
-
-   return( $theWeb, $theTopic );
-}
-
-
-=pod
-
----++ sub erase (  $web, $topic  )
-
-Get rid of a topic and its attachments completely
-Intended for TEST purposes.
-Use with GREAT CARE as file will be gone, including RCS history
-
-=cut
-
-sub erase
-{
-    my( $web, $topic ) = @_;
-
-    my $topicHandler = _getTopicHandler( $web, $topic );
-    $topicHandler->_delete();
-
-    writeLog( "erase", "$web.$topic", "" );
-}
-
 =pod
 
 ---++ sub moveAttachment (  $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment  )
 
-Move an attachment from one topic to another.
+Move an attachment from one topic to another. Meta-data is _not_ adjusted,
+this literally just moves the attachment.
+
 If there is a problem an error string is returned.
+
 The caller to this routine should check that all topics are valid and
 do lock on the topics.
 
@@ -185,49 +100,60 @@ do lock on the topics.
 sub moveAttachment
 {
     my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment ) = @_;
-    
+
+    # Remove file attachment from old topic
     my $topicHandler = _getTopicHandler( $oldWeb, $oldTopic, $theAttachment );
     my $error = $topicHandler->moveMe( $newWeb, $newTopic );
     return $error if( $error );
-
-    # Remove file attachment from old topic
-    my( $meta, $text ) = readTopic( $oldWeb, $oldTopic );
-    my %fileAttachment = $meta->findOne( "FILEATTACHMENT", $theAttachment );
-    $meta->remove( "FILEATTACHMENT", $theAttachment );
-    $error .= saveNew( $oldWeb, $oldTopic, $text, $meta, "", "", "", "doUnlock", "dont notify", "" ); 
-    
-    # Remove lock file
-    $topicHandler->setLock( "" );
-    
-    # Add file attachment to new topic
-    ( $meta, $text ) = readTopic( $newWeb, $newTopic );
-
-    $fileAttachment{"movefrom"} = "$oldWeb.$oldTopic";
-    $fileAttachment{"moveby"}   = $TWiki::userName;
-    $fileAttachment{"movedto"}  = "$newWeb.$newTopic";
-    $fileAttachment{"movedwhen"} = time();
-    $meta->put( "FILEATTACHMENT", %fileAttachment );    
-    
-    $error .= saveNew( $newWeb, $newTopic, $text, $meta, "", "", "", "doUnlock", "dont notify", "" ); 
-    # Remove lock file.
-    my $newTopicHandler = _getTopicHandler( $newWeb, $newTopic, $theAttachment );
-    $newTopicHandler->setLock( "" );
-    
-    writeLog( "move", "$oldWeb.$oldTopic", "Attachment $theAttachment moved to $newWeb.$newTopic" );
-
-    return $error;
 }
 
 =pod
 
----++ sub changeRefTo (  $text, $oldWeb, $oldTopic  )
-
-When moving a topic to another web, change within-web refs from this topic so that they'll work
-when the topic is in the new web. I have a feeling this shouldn't be in Store.pm.
+---++ sub getAttachmentStream( $web, $topic, $attName )
+| =$web= | The web |
+| =$topic= | The topic |
+| =$attName= | Name of the attachment |
+Open a standard input stream from an attachment. Will return undef
+if the stream could not be opened (permissions, or nonexistant etc)
 
 =cut
 
-sub changeRefTo
+sub getAttachmentStream {
+    #my ( $web, $topic, $att ) = @_;
+    my $topicHandler = _getTopicHandler( @_ );
+    my $strm;
+    my $fp = $topicHandler->{file};
+    if ( $fp ) {
+        unless ( open( $strm, "<$fp" )) {
+            TWiki::writeWarning( "File $fp open failed: error $!" );
+        }
+    }
+    return $strm;
+}
+
+=pod
+
+---++ sub attachmentExists( $web, $topic, $att ) -> boolean
+
+Determine if the attachment already exists on the given topic
+
+=cut
+
+sub attachmentExists {
+    #my ( $web, $topic, $att ) = @_;
+    my $topicHandler = _getTopicHandler( @_ );
+    return -e $topicHandler->{file};
+}
+
+# PRIVATE sub _changeRefTo (  $text, $oldWeb, $oldTopic  )
+# 
+# When moving a topic to another web, change within-web refs from
+# this topic so that they'll work when the topic is in the new web.
+# I have a feeling this shouldn't be in Store.pm.
+#
+# SMELL: It has to be - it knows about %META in topics. If you can
+# eliminate that dependency, then it could move somewhere else.
+sub _changeRefTo
 {
    my( $text, $oldWeb, $oldTopic ) = @_;
 
@@ -292,7 +218,10 @@ sub changeRefTo
 
 ---++ sub renameTopic (  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  )
 
-Rename a topic, allowing for transfer between Webs
+Rename a topic, allowing for transfer between Webs. This method will change
+all references _from_ this topic to other topics _within the old web_
+so they still work after it has been moved to a new web.
+
 It is the responsibility of the caller to check for existence of webs,
 topics & lock taken for topic
 
@@ -313,18 +242,18 @@ sub renameTopic
          "to"   => "$newWeb.$newTopic",
          "date" => "$time",
          "by"   => "$user" );
-      my $fullText = readTopicRaw( $newWeb, $newTopic );
+      my $text = readTopicRaw( $newWeb, $newTopic );
       if( ( $oldWeb ne $newWeb ) && $doChangeRefTo ) {
-         $fullText = changeRefTo( $fullText, $oldWeb, $oldTopic );
+         $text = _changeRefTo( $text, $oldWeb, $oldTopic );
       }
-      my ( $meta, $text ) = _extractMetaData( $newWeb, $newTopic, $fullText );
+      my $meta = _extractMetaData( $newWeb, $newTopic, $text );
       $meta->put( "TOPICMOVED", @args );
-      saveNew( $newWeb, $newTopic, $text, $meta, "", "", "", "unlock" );
+      noHandlersSave( $newWeb, $newTopic, $text, $meta, "", "", "", "unlock" );
    }
    
    # Log rename
    if( $TWiki::doLogRename ) {
-      writeLog( "rename", "$oldWeb.$oldTopic", "moved to $newWeb.$newTopic $error" );
+      TWiki::writeLog( "rename", "$oldWeb.$oldTopic", "moved to $newWeb.$newTopic $error" );
    }
    
    # Remove old lock file
@@ -336,13 +265,13 @@ sub renameTopic
 
 =pod
 
----++ sub updateReferingPages (  $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs  )
+---++ sub updateReferringPages (  $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs  )
 
-Update pages that refer to the one being renamed/moved.
+Update pages that refer to a page that is being renamed/moved.
 
 =cut
 
-sub updateReferingPages
+sub updateReferringPages
 {
     my ( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs ) = @_;
 
@@ -356,19 +285,19 @@ sub updateReferingPages
     while ( @refs ) {
        my $type = shift @refs;
        my $item = shift @refs;
-       my( $itemWeb, $itemTopic ) = TWiki::Store::normalizeWebTopicName( "", $item );
-       if ( &TWiki::Store::topicIsLockedBy( $itemWeb, $itemTopic ) ) {
+       my( $itemWeb, $itemTopic ) = TWiki::normalizeWebTopicName( "", $item );
+       if ( TWiki::Store::topicIsLockedBy( $itemWeb, $itemTopic ) ) {
           $lockFailure = 1;
        } else {
           my $resultText = "";
           $result .= ":$item: , "; 
           #open each file, replace $topic with $newTopic
-          if ( &TWiki::Store::topicExists($itemWeb, $itemTopic) ) { 
-             my $scantext = &TWiki::Store::readTopicRaw($itemWeb, $itemTopic);
-             if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $scantext,
+          if ( TWiki::Store::topicExists($itemWeb, $itemTopic) ) { 
+             my $scantext = TWiki::Store::readTopicRaw($itemWeb, $itemTopic);
+             if( ! TWiki::Access::checkAccessPermission( "change", $wikiUserName, $scantext,
                     $itemWeb, $itemTopic ) ) {
                  # This shouldn't happen, as search will not return, but check to be on the safe side
-                 &TWiki::writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
+                 TWiki::writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
                  next;
              }
 	     my $insidePRE = 0;
@@ -407,8 +336,8 @@ sub updateReferingPages
 		}
 	        $resultText .= "$_\n";
 	     }
-	     my ( $meta, $text ) = &TWiki::Store::_extractMetaData( $itemWeb, $itemTopic, $resultText );
-	     &TWiki::Store::saveTopic( $itemWeb, $itemTopic, $text, $meta, "", "unlock", "dontNotify", "" );
+	     my $meta = _extractMetaData( $itemWeb, $itemTopic, $resultText );
+         saveTopic( $itemWeb, $itemTopic, $resultText, $meta, "", "unlock", "dontNotify", "" );
           } else {
 	    $result .= ";$item does not exist;";
           }
@@ -423,7 +352,7 @@ sub updateReferingPages
 ---++ sub readTopicVersion (  $theWeb, $theTopic, $theRev  )
 
 Read a specific version of a topic
-<pre>view:     $text= &TWiki::Store::readTopicVersion( $topic, "1.$rev" );</pre>
+<pre>view:     $text= TWiki::Store::readTopicVersion( $topic, "1.$rev" );</pre>
 
 =cut
 
@@ -431,20 +360,11 @@ sub readTopicVersion
 {
     my( $theWeb, $theTopic, $theRev ) = @_;
     my $text = _readVersionNoMeta( $theWeb, $theTopic, $theRev );
-    my $meta = "";
-   
-    ( $meta, $text ) = _extractMetaData( $theWeb, $theTopic, $text );
-        
+    my $meta = _extractMetaData( $theWeb, $theTopic, $text );
     return( $meta, $text );
 }
 
-=pod
-
----++ sub _readVersionNoMeta (  $theWeb, $theTopic, $theRev  )
-
-Read a specific version of a topic
-
-=cut
+# Read a specific version of a topic
 
 sub _readVersionNoMeta
 {
@@ -459,7 +379,7 @@ sub _readVersionNoMeta
 
 ---++ sub readAttachmentVersion (  $theWeb, $theTopic, $theAttachment, $theRev  )
 
-Not yet documented.
+Read the given version of an attachment, returning the content.
 
 =cut
 
@@ -476,14 +396,16 @@ sub readAttachmentVersion
 
 ---++ sub getRevisionNumber (  $theWebName, $theTopic, $attachment  )
 
-Use meta information if available ...
+Get the revision number of the most recent revision.
+
+WORKS FOR ATTACHMENTS AS WELL AS TOPICS
 
 =cut
 
 sub getRevisionNumber
 {
     my( $theWebName, $theTopic, $attachment ) = @_;
-    my $ret = getRevisionNumberX( $theWebName, $theTopic, $attachment );
+    my $ret = _getMostRecentRevision( $theWebName, $theTopic, $attachment );
     ##TWiki::writeDebug( "Store: rev = $ret" );
     if( ! $ret ) {
        $ret = "1.1"; # Temporary
@@ -492,18 +414,13 @@ sub getRevisionNumber
     return $ret;
 }
 
-
-=pod
-
----++ sub getRevisionNumberX (  $theWebName, $theTopic, $attachment  )
-
-Latest revision number. <br/>
-Returns "" if there is no revision.
-
-=cut
-
-sub getRevisionNumberX
-{
+# PRIVATE sub _getMostRecentRevision (  $theWebName, $theTopic, $attachment  )
+#
+# Latest revision number. <br/>
+# Returns "" if there is no revision.
+#
+# WORKS FOR ATTACHMENTS AS WELL AS TOPICS
+sub _getMostRecentRevision {
     my( $theWebName, $theTopic, $attachment ) = @_;
     if( ! $theWebName ) {
         $theWebName = $TWiki::webName;
@@ -511,7 +428,7 @@ sub getRevisionNumberX
     if( ! $attachment ) {
         $attachment = "";
     }
-    
+
     my $topicHandler = _getTopicHandler( $theWebName, $theTopic, $attachment );
     my $revs = $topicHandler->numRevisions();
     $revs = "1.$revs" if( $revs );
@@ -524,7 +441,7 @@ sub getRevisionNumberX
 ---++ sub getRevisionDiff (  $web, $topic, $rev1, $rev2, $contextLines  )
 
 <pre>
-rdiff:            $diffArray = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1", 3 );
+rdiff:            $diffArray = TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1", 3 );
 </pre>
 | Return: =\@diffArray= | reference to an array of [ diffType, $right, $left ] |
 
@@ -543,7 +460,6 @@ sub getRevisionDiff
 
 
 # =========================
-# Call getRevisionInfoFromMeta for faster response for topics
 # FIXME try and get rid of this it's a mess
 # In direct calls changeToIsoDate always seems to be 1
 
@@ -596,7 +512,7 @@ sub topicIsLockedBy
     # pragmatic approach: Warn user if somebody else pressed the
     # edit link within a time limit e.g. 1 hour
 
-    ( $theWeb, $theTopic ) = normalizeWebTopicName( $theWeb, $theTopic );
+    ( $theWeb, $theTopic ) = TWiki::normalizeWebTopicName( $theWeb, $theTopic );
 
     my $lockFilename = "$TWiki::dataDir/$theWeb/$theTopic.lock";
     if( ( -e "$lockFilename" ) && ( $TWiki::editLockTime > 0 ) ) {
@@ -616,77 +532,58 @@ sub topicIsLockedBy
     return( "", 0 );
 }
 
+# ======================
+# Build a hash by parsing name=value comma separated pairs
 
-=pod
-
----++ sub keyValue2list (  $args  )
-
-Not yet documented.
-
-=cut
-
-sub keyValue2list
+sub _keyValue2Hash
 {
     my( $args ) = @_;
     
-    my @res = ();
+    my %res = ();
     
     # Format of data is name="value" name1="value1" [...]
-    while( $args =~ s/\s*([^=]+)=\"([^"]*)\"//o ) { #" avoid confusing syntax highlighters
-        push @res, $1;
-        push @res, $2;
+    while( $args =~ s/\s*([^=]+)=\"([^"]*)\"//o ) {
+        my $key = $1;
+        my $value = $2;
+        $value = TWiki::Meta::restoreValue( $value );
+        $res{$key} = $value;
     }
     
-    return @res;
+    return %res;
 }
 
 
-=pod
-
----++ sub metaAddTopicData (  $web, $topic, $rev, $meta, $forceDate, $forceUser  )
-
-Not yet documented.
-
-=cut
-
-sub metaAddTopicData
-{
-    my( $web, $topic, $rev, $meta, $forceDate, $forceUser ) = @_;
-
-    my $time = $forceDate || time();
-    my $user = $forceUser || $TWiki::userName;
-
-    my @args = (
-       "version" => "$rev",
-       "date"    => "$time",
-       "author"  => "$user",
-       "format"  => $TWiki::formatVersion );
-    $meta->put( "TOPICINFO", @args );
-}
-
-
-=pod
-
----++ sub saveTopicNew (  $web, $topic, $text, $metaData, $saveCmd, $doUnlock, $dontNotify, $dontLogSave  )
-
-Not yet documented.
-
-=cut
-
-sub saveTopicNew
-{
-    my( $web, $topic, $text, $metaData, $saveCmd, $doUnlock, $dontNotify, $dontLogSave ) = @_;
-    my $attachment = "";
-    my $meta = TWiki::Meta->new();
-    $meta->readArray( @$metaData );
-    saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify );
-}
+# =pod
+# 
+# ---++ sub saveTopicNew (  $web, $topic, $text, $metaData, $saveCmd, $doUnlock, $dontNotify, $dontLogSave  )
+# 
+# Never called.
+# 
+# =cut
+# 
+# sub saveTopicNew
+# {
+#     my( $web, $topic, $text, $metaData, $saveCmd, $doUnlock, $dontNotify, $dontLogSave ) = @_;
+#     my $attachment = "";
+#     my $meta = TWiki::Meta->new();
+#     $meta->readArray( @$metaData );
+#     noHandlersSave( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify );
+# }
 
 =pod
 
 ---++ sub saveTopic (  $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave, $forceDate  )
+| =$web= | |
+| =$topic= | |
+| =$text= | |
+| =$meta= | |
+| =$saveCmd= | |
+| =$doUnlock= | |
+| =$dontNotify= | |
+| =$dontLogSave= | |
+| =$forceDate= | |
 
-Not yet documented.
+Save a new revision of the topic, calling plugins handlers as appropriate.
 
 =cut
 
@@ -696,23 +593,38 @@ sub saveTopic
     my $attachment = "";
     my $comment = "";
 
-    # FIXME: Inefficient code that hides meta data from Plugin callback
-    $text = $meta->write( $text );  # add meta data for Plugin callback
+    # SMELL: Staggeringly inefficient code that adds meta-data for
+    # Plugin callback. Why not simply pass the meta in? It would be far
+    # more sensible.
+    $text = _writeMeta( $meta, $text );  # add meta data for Plugin callback
     TWiki::Plugins::beforeSaveHandler( $text, $topic, $web );
-    $meta = TWiki::Meta->remove();  # remove all meta data
-    $text = $meta->read( $text );   # restore meta data
+    # remove meta data again!
+    $meta = _extractMetaData( $web, $topic, $text );
 
-    my $error = saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $comment, $forceDate );
-    $text = $meta->write( $text );  # add meta data for Plugin callback
+    my $error = noHandlersSave( $web, $topic, $text, $meta, $saveCmd,
+                                $attachment, $dontLogSave, $doUnlock,
+                                $dontNotify, $comment, $forceDate );
+    $text = _writeMeta( $meta, $text );  # add meta data for Plugin callback
     TWiki::Plugins::afterSaveHandler( $text, $topic, $web, $error );
     return $error;
 }
 
 =pod
 
----++ sub saveAttachment ()
-
-Not yet documented.
+---++ sub saveAttachment ($web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $theTmpFilename,
+        $forceDate)
+| =$web= | |
+| =$topic= | |
+| =$saveCmd= | |
+| =$attachment= | |
+| =$dontLogSave= | |
+| =$doUnlock= | |
+| =$dontNotify= | |
+| =$theComment= | |
+| =$theTmpFilename= | |
+| =$forceDate= | |
+Saves a new revision of the attachment, invoking plugin handlers as
+appropriate.
 
 =cut
 
@@ -721,7 +633,7 @@ sub saveAttachment
     my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $theTmpFilename,
         $forceDate) = @_;
 
-    writeDebug("saveAttachment");
+    #TWiki::writeDebug("saveAttachment");
     my %attachmentAtt = ( attachment => $attachment,
                            tmpFilename => $theTmpFilename,
                            comment => $theComment,
@@ -731,6 +643,7 @@ sub saveAttachment
     my $topicHandler = _getTopicHandler( $web, $topic, $attachment );
     TWiki::Plugins::beforeAttachmentSaveHandler( \%attachmentAtt, $topic, $web );
 
+    # SMELL: Not clear why this is so radically different to a topic save
     $theComment = $attachmentAtt{comment};
     my $error = $topicHandler->addRevision( $theTmpFilename, $theComment, $TWiki::userName );
     TWiki::Plugins::afterAttachmentSaveHandler( \%attachmentAtt, $topic, $web, $error );
@@ -741,58 +654,46 @@ sub saveAttachment
 }
 
 
-=pod
-
----++ sub save (  $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate  )
-
-Not yet documented.
-
-=cut
-
-sub save
-{
-    my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate ) = @_;
-    
-    # FIXME get rid of this routine
-    
-    my $meta = TWiki::Meta->new();
-    
-    return saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate );
-}
-
-
-=pod
-
----++ sub _addMeta (  $web, $topic, $text, $attachment, $nextRev, $meta, $forceDate, $forceUser  )
-
-Add meta data to the topic.
-
-=cut
-
+# PRIVATE sub _addMeta (  $web, $topic, $text, $attachment, $nextRev, $meta, $forceDate, $forceUser  )
+#
+# Add meta data to the topic.
 sub _addMeta
 {
     my( $web, $topic, $text, $attachment, $nextRev, $meta, $forceDate, $forceUser ) = @_;
-    
+
     if( ! $attachment ) {
         $nextRev = "1.1" if( ! $nextRev );
-        metaAddTopicData(  $web, $topic, $nextRev, $meta, $forceDate, $forceUser );
-        $text = $meta->write( $text );        
+        $meta->addTopicInfo(  $web, $topic, $nextRev, $forceDate, $forceUser );
+        $text = _writeMeta( $meta, $text );
     }
-    
+
     return $text;
 }
 
-
 =pod
 
----++ sub saveNew (  $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate  )
+---++ sub noHandlersSave (  $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate  )
+| =$web= | |
+| =$topic= | |
+| =$text= | |
+| =$meta= | |
+| =$saveCmd= | |
+| =$attachment= | |
+| =$dontLogSave= | |
+| =$doUnlock= | |
+| =$dontNotify= | |
+| =$theComment= | |
+| =$forceDate= | |
 
-Return non-null string if there is an (RCS) error. <br/>
+Save a topic or attachment _without_ invoking plugin handlers.
+
+Return non-null string if there is an (RCS) error.
+
 FIXME: does rev info from meta work if user saves a topic with no change?
 
 =cut
 
-sub saveNew
+sub noHandlersSave
 {
     my( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate ) = @_;
     my $time = time();
@@ -817,7 +718,7 @@ sub saveNew
         # so add newline if needed
         $text =~ s/([^\n\r])$/$1\n/os;
     }
-    
+
     if( ! $theComment ) {
        $theComment = "none";
     }
@@ -859,7 +760,7 @@ sub saveNew
                 $fdate = ""; # suppress warning
                 $fuser = ""; # suppress warning
 
-                my @foo = split( /\n/, &readFile( "$TWiki::dataDir/$TWiki::webName/.changes" ) );
+                my @foo = split( /\n/, readFile( "$TWiki::dataDir/$TWiki::webName/.changes" ) );
                 if( $#foo > 100 ) {
                     shift( @foo);
                 }
@@ -873,7 +774,7 @@ sub saveNew
                 # write log entry
                 my $extra = "";
                 $extra   .= "dontNotify" if( $dontNotify );
-                writeLog( "save", "$TWiki::webName.$topic", $extra );
+                TWiki::writeLog( "save", "$TWiki::webName.$topic", $extra );
             }
         }
     }
@@ -899,11 +800,11 @@ sub saveNew
         if( ( $TWiki::doLogTopicSave ) && ! ( $dontLogSave ) ) {
             # write log entry
             my $extra = "repRev $rev ";
-            $extra   .= &TWiki::userToWikiName( $user );
-            $date = &TWiki::formatTime( $epochSec, "rcs", "gmtime" );
+            $extra   .= TWiki::User::userToWikiName( $user );
+            $date = TWiki::formatTime( $epochSec, "rcs", "gmtime" );
             $extra   .= " $date";
             $extra   .= " dontNotify" if( $dontNotify );
-            writeLog( "save", "$TWiki::webName.$topic", $extra );
+            TWiki::writeLog( "save", "$TWiki::webName.$topic", $extra );
         }
     }
 
@@ -928,7 +829,7 @@ sub saveNew
 
         if( $TWiki::doLogTopicSave ) {
             # write log entry
-            writeLog( "cmd", "$TWiki::webName.$topic", "delRev $rev" );
+            TWiki::writeLog( "cmd", "$TWiki::webName.$topic", "delRev $rev" );
         }
     }
     return ""; # all is well
@@ -936,45 +837,11 @@ sub saveNew
 
 =pod
 
----++ sub writeLog (  $action, $webTopic, $extra, $user  )
-
-Not yet documented.
-
-=cut
-
-sub writeLog
-{
-    my( $action, $webTopic, $extra, $user ) = @_;
-
-    # use local time for log, not UTC (gmtime)
-
-    my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
-    my( $tmon) = $TWiki::isoMonth[$mon];
-    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
-    my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
-    my $yearmonth = sprintf( "%.4u%.2u", $year, $mon+1 );
-
-    my $wuserName = $user || $TWiki::userName;
-    $wuserName = &TWiki::userToWikiName( $wuserName );
-    my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
-    my $text = "| $time | $wuserName | $action | $webTopic | $extra | $remoteAddr |";
-
-    my $filename = $TWiki::logFilename;
-    $filename =~ s/%DATE%/$yearmonth/go;
-
-    if( open( FILE, ">>$filename" ) ) {
-         print FILE "$text\n";
-         close( FILE );
-    } else {
-         print STDERR "Couldn't write \"$text\" to $filename: $!\n";
-    }
-}
-
-=pod
-
 ---++ sub saveFile (  $name, $text  )
 
-Not yet documented.
+Save an arbitrary file
+
+SMELL: Breaks Store encapsulation.
 
 =cut
 
@@ -993,33 +860,17 @@ sub saveFile
 
 =pod
 
----++ sub lockTopic (  $name, $doUnlock  )
+---++ sub lockTopic (  $theWeb, $theTopic, $doUnlock  )
 
-Not yet documented.
+Get a lock on the given topic.
 
 =cut
 
 sub lockTopic
 {
-   my ( $name, $doUnlock ) = @_;
-
-   lockTopicNew( $TWiki::webName, $name, $doUnlock );
-}
-
-=pod
-
----++ sub lockTopicNew (  $theWeb, $theTopic, $doUnlock  )
-
-Not yet documented. <br/>
-Called from rename and =TWiki::Func=
-
-=cut
-
-sub lockTopicNew
-{
     my( $theWeb, $theTopic, $doUnlock ) = @_;
 
-    ( $theWeb, $theTopic ) = normalizeWebTopicName( $theWeb, $theTopic );
+    ( $theWeb, $theTopic ) = TWiki::normalizeWebTopicName( $theWeb, $theTopic );
     
     my $topicHandler = _getTopicHandler( $theWeb, $theTopic );
     $topicHandler->setLock( ! $doUnlock );
@@ -1029,16 +880,16 @@ sub lockTopicNew
 
 ---++ sub removeObsoleteTopicLocks (  $web  )
 
-Not yet documented.
+Clean all obsolete .lock files in a web.
+This should be called regularly, best from a cron job
+(called from mailnotify). Only required for file database
+implementations of Store.
 
 =cut
 
 sub removeObsoleteTopicLocks
 {
     my( $web ) = @_;
-
-    # Clean all obsolete .lock files in a web.
-    # This should be called regularly, best from a cron job (called from mailnotify)
 
     my $webDir = "$TWiki::dataDir/$web";
     opendir( DIR, "$webDir" );
@@ -1096,148 +947,79 @@ sub webExists
 sub topicExists
 {
     my( $theWeb, $theTopic ) = @_;
-    ( $theWeb, $theTopic ) = normalizeWebTopicName( $theWeb, $theTopic );
+    ( $theWeb, $theTopic ) = TWiki::normalizeWebTopicName( $theWeb, $theTopic );
     return -e "$TWiki::dataDir/$theWeb/$theTopic.txt";
 }
 
-=pod
-
----++ sub getRevisionInfoFromMeta (  $web, $topic, $meta  )
-
-Try and get from meta information in topic, if this can't be done then use RCS.
-Note there is no "1." prefix to this data
-
-=cut
-
-sub getRevisionInfoFromMeta
-{
-    my( $web, $topic, $meta ) = @_;
-    
-    my( $date, $author, $rev );
-    my %topicinfo = ();
-    
-    if( $meta ) {
-        %topicinfo = $meta->findOne( "TOPICINFO" );
-    }
-        
-    if( %topicinfo ) {
-       # Stored as meta data in topic for faster access
-       $date = $topicinfo{"date"} ;
-       $author = $topicinfo{"author"};
-       my $tmp = $topicinfo{"version"};
-       $tmp =~ /1\.(.*)/o;
-       $rev = $1;
-    } else {
-       # Get data from RCS
-       ( $date, $author, $rev ) = getRevisionInfo( $web, $topic, "" );
-    }
-    
-    # writeDebug( "rev = $rev" );
-    
-    return( $date, $author, $rev );
+# PRIVATE parse and add a meta-datum. Returns "" so it can be used in s///e
+sub _addMetaDatum {
+    #my ( $meta, $type, $args ) = @_;
+    $_[0]->put( $_[1], _keyValue2Hash( $_[2] ));
+    return ""; # so it can be used in s///e
 }
 
-=pod
-
----++ sub convert2metaFormat (  $web, $topic, $text  )
-
-Not yet documented.
-
-=cut
-
-sub convert2metaFormat
-{
-    my( $web, $topic, $text ) = @_;
-    
-    my $meta = TWiki::Meta->new();
-    $text = $meta->read( $text );
-     
-    if ( $text =~ /<!--TWikiAttachment-->/ ) {
-       $text = TWiki::Attach::migrateToFileAttachmentMacro( $meta, $text );
-    }
-    
-    if ( $text =~ /<!--TWikiCat-->/ ) {
-       $text = TWiki::Form::upgradeCategoryTable( $web, $topic, $meta, $text );    
-    }
-    
-    return( $meta, $text );
-}
-
-=pod
-
----++ sub _extractMetaData (  $web, $topic, $fulltext  )
-
-Expect meta data at top of file, but willing to accept it anywhere.
-If we have an old file format without meta data, then convert.
-
-=cut
-
+# Expect meta data at top of file, but willing to accept it anywhere.
+# If we have an old file format without meta data, then convert.
+#
+# *WARNING: SIDE-EFFECTING FUNCTION* meta-data is stripped from the $text
 sub _extractMetaData
 {
-    my( $web, $topic, $fulltext ) = @_;
-    
-    my $meta = TWiki::Meta->new();
-    my $text = $meta->read( $fulltext );
+    #my( $web, $topic, $text ) = @_;
 
-    
-    # If there is no meta data then convert
+    my $meta = TWiki::Meta->new( $_[0], $_[1] );
+    $_[2] =~ s/^%META:([^{]+){(.*)}%\r?\n/&_addMetaDatum($meta,$1,$2)/gem;
+
+    # If there is no meta data then convert from old format
     if( ! $meta->count( "TOPICINFO" ) ) {
-        ( $meta, $text ) = convert2metaFormat( $web, $topic, $text );
+        if ( $_[2] =~ /<!--TWikiAttachment-->/ ) {
+            $_[2] = TWiki::Attach::migrateToFileAttachmentMacro( $meta,
+                                                                 $_[2] );
+        }
+
+        if ( $_[2] =~ /<!--TWikiCat-->/ ) {
+            $_[2] = TWiki::Form::upgradeCategoryTable( $_[0], $_[1],
+                                                       $meta, $_[2] );
+        }
     } else {
         my %topicinfo = $meta->findOne( "TOPICINFO" );
         if( $topicinfo{"format"} eq "1.0beta" ) {
             # This format used live at DrKW for a few months
-            if( $text =~ /<!--TWikiCat-->/ ) {
-               $text = TWiki::Form::upgradeCategoryTable( $web, $topic, $meta, $text );
+            if( $_[2] =~ /<!--TWikiCat-->/ ) {
+               $_[2] = TWiki::Form::upgradeCategoryTable( $_[0],
+                                                          $_[1],
+                                                          $meta,
+                                                          $_[2] );
             }
-            
             TWiki::Attach::upgradeFrom1v0beta( $meta );
-            
             if( $meta->count( "TOPICMOVED" ) ) {
                  my %moved = $meta->findOne( "TOPICMOVED" );
-                 $moved{"by"} = TWiki::wikiToUserName( $moved{"by"} );
+                 $moved{"by"} = TWiki::User::wikiToUserName( $moved{"by"} );
                  $meta->put( "TOPICMOVED", %moved );
             }
         }
     }
-    
-    return( $meta, $text );
+
+    return $meta;
 }
 
 =pod
 
----++ sub getFileName (  $theWeb, $theTopic, $theAttachment  )
+---++ sub getMinimalMeta (  $theWeb, $theTopic  ) -> $meta
 
-Not yet documented. <br/>
-*FIXME - get rid of this because uses private part of handler*
-
-=cut
-
-sub getFileName
-{
-    my( $theWeb, $theTopic, $theAttachment ) = @_;
-
-    my $topicHandler = _getTopicHandler( $theWeb, $theTopic, $theAttachment );
-    return $topicHandler->{file};
-}
-
-=pod
-
----++ sub readTopMeta (  $theWeb, $theTopic  )
-
-Just read the meta data at the top of the topic. <br/>
-Generalise for Codev.DataFramework, but needs to be fast because
-of use by view script.
+Get the minimum amount of meta-data necessary to find the
+topic parent.
+Generalised for Codev.DataFramework. Needs to be fast because
+of use by Render.pm.
 
 =cut
 
-sub readTopMeta
+sub getMinimalMeta
 {
     my( $theWeb, $theTopic ) = @_;
-    
+
     my $topicHandler = _getTopicHandler( $theWeb, $theTopic );
-    my $filename = getFileName( $theWeb, $theTopic );
-    
+    my $filename = $topicHandler->{file};
+
     my $data = "";
     my $line;
     $/ = "\n";     # read line by line
@@ -1249,12 +1031,9 @@ sub readTopMeta
            $data .= $line;
         }
     }
-    
-    my( $meta, $text ) = _extractMetaData( $theWeb, $theTopic, $data );
-    
     close( IN_FILE );
 
-    return $meta;
+    return _extractMetaData( $theWeb, $theTopic, $data );
 }
 
 =pod
@@ -1274,11 +1053,10 @@ TWiki::Meta object.  (The topic text is, as usual, just a string.)
 sub readTopic
 {
     my( $theWeb, $theTopic, $internal ) = @_;
-    
-    my $fullText = readTopicRaw( $theWeb, $theTopic, "", $internal );
-    
-    my ( $meta, $text ) = _extractMetaData( $theWeb, $theTopic, $fullText );
-    
+
+    my $text = readTopicRaw( $theWeb, $theTopic, "", $internal );
+    my $meta = _extractMetaData( $theWeb, $theTopic, $text );
+    die "Internal error |$theWeb|$theTopic|" unless $meta;
     return( $meta, $text );
 }
 
@@ -1286,14 +1064,16 @@ sub readTopic
 
 ---++ sub readWebTopic (  $theWeb, $theName  )
 
-Not yet documented.
+Reads and returns the raw text of a topic.
+
+SMELL: since the text returned contains META this method breaks the encapsulation of the Store. The only argument for this method is that it skips the extraction of meta-data from topics, which may be fractionally faster. I _believe_ it can be safely implemented to just return the topic text with no META.
 
 =cut
 
 sub readWebTopic
 {
     my( $theWeb, $theName ) = @_;
-    my $text = &readFile( "$TWiki::dataDir/$theWeb/$theName.txt" );
+    my $text = readFile( "$TWiki::dataDir/$theWeb/$theName.txt" );
     
     return $text;
 }
@@ -1308,6 +1088,8 @@ If $internal is false, view access permission will be checked.  If permission
 is not granted, then an error message will be returned in $text, and set in
 $TWiki::readTopicPermissionFailed.
 
+SMELL: breaks encapsulation of the store, as it assumes meta is stored embedded in the text, and clients use this. Other implementors of store will be forced to insert meta-data to ensure correct operation of View raw=debug and the "repRev" mode of Edit.
+
 =cut
 
 sub readTopicRaw
@@ -1315,18 +1097,18 @@ sub readTopicRaw
     my( $theWeb, $theTopic, $theVersion, $internal ) = @_;
 
     #SVEN - test if theTopic contains a webName to override $theWeb
-    ( $theWeb, $theTopic ) = normalizeWebTopicName( $theWeb, $theTopic );
+    ( $theWeb, $theTopic ) = TWiki::normalizeWebTopicName( $theWeb, $theTopic );
 
     my $text = "";
     if( ! $theVersion ) {
-        $text = &readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt" );
+        $text = readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt" );
     } else {
         $text = _readVersionNoMeta( $theWeb, $theTopic, $theVersion);
     }
 
     my $viewAccessOK = 1;
     unless( $internal ) {
-        $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $theTopic, $theWeb );
+        $viewAccessOK = TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $theTopic, $theWeb );
         # TWiki::writeDebug( "readTopicRaw $viewAccessOK $TWiki::wikiUserName $theWeb $theTopic" );
     }
     
@@ -1343,238 +1125,6 @@ sub readTopicRaw
 
 =pod
 
----++ sub readTemplateTopic (  $theTopicName  )
-
-Not yet documented.
-
-=cut
-
-sub readTemplateTopic
-{
-    my( $theTopicName ) = @_;
-
-    $theTopicName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
-
-    # try to read in current web, if not read from TWiki web
-
-    my $web = $TWiki::twikiWebname;
-    if( topicExists( $TWiki::webName, $theTopicName ) ) {
-        $web = $TWiki::webName;
-    }
-    return readTopic( $web, $theTopicName );
-}
-
-=pod
-
----++ _readTemplateFile (  $theName, $theSkin  )
-Return value: raw template text, or "" if read fails
-
-WARNING! THIS FUNCTION DEPENDS ON GLOBAL VARIABLES
-
-PRIVATE Reads a template, constructing a candidate name for the template thus: $name.$skin.tmpl,
-and looking for a file of that name first in templates/$web and then if that fails in templates/.
-If a template is not found, tries to parse $name into a web name and a topic name, and
-read topic $Web.${Skin}Skin${Topic}Template. If $name does not contain a web specifier,
-$Web defaults to TWiki::twikiWebname. If no skin is specified, topic is ${Topic}Template.
-If the topic exists, checks access permissions and reads the topic
-without meta-data. In the event that the read fails (template not found, access permissions fail)
-returns the empty string "". skin, web and topic names are forced to an upper-case first character
-when composing user topic names.
-
-=cut
-
-sub _readTemplateFile
-{
-    my( $theName, $theSkin, $theWeb ) = @_;
-    $theSkin = "" unless $theSkin; # prevent 'uninitialized value' warnings
-
-    # CrisBailiff, PeterThoeny 13 Jun 2000: Add security
-    $theName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
-    $theName =~ s/\.+/\./g;                      # Filter out ".." from filename
-    $theSkin =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
-    $theSkin =~ s/\.+/\./g;                      # Filter out ".." from filename
-
-    my $tmplFile = "";
-
-    # search first in twiki/templates/Web dir
-    # for file script(.skin).tmpl
-    my $tmplDir = "$TWiki::templateDir/$theWeb";
-    if( opendir( DIR, $tmplDir ) ) {
-        # for performance use readdir, not a row of ( -e file )
-        my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
-        closedir DIR;
-        $tmplFile = "$theName.$theSkin.tmpl";
-        if( ! grep { /^$tmplFile$/ } @filelist ) {
-            $tmplFile = "$theName.tmpl";
-            if( ! grep { /^$tmplFile$/ } @filelist ) {
-                $tmplFile = "";
-            }
-        }
-        if( $tmplFile ) {
-            $tmplFile = "$tmplDir/$tmplFile";
-        }
-    }
-
-    # if not found, search in twiki/templates dir
-    $tmplDir = $TWiki::templateDir;
-    if( ( ! $tmplFile ) && ( opendir( DIR, $tmplDir ) ) ) {
-        my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
-        closedir DIR;
-        $tmplFile = "$theName.$theSkin.tmpl";
-        if( ! grep { /^$tmplFile$/ } @filelist ) {
-            $tmplFile = "$theName.tmpl";
-            if( ! grep { /^$tmplFile$/ } @filelist ) {
-                $tmplFile = "";
-            }
-        }
-        if( $tmplFile ) {
-            $tmplFile = "$tmplDir/$tmplFile";
-        }
-    }
-
-    # See if it is a user topic. Search first in current web
-    # twiki web. Note that neither web nor topic may be variables when used in a template.
-    if ( ! $tmplFile ) {
-	if ( $theSkin ne "" ) {
-	    $theSkin = ucfirst( $theSkin ) . "Skin";
-	}
-
-	my $theTopic;
-	my $theWeb;
-
-	if ( $theName =~ /^(\w+)\.(\w+)$/ ) {
-	    $theWeb = ucfirst( $1 );
-	    $theTopic = ucfirst( $2 );
-	} else {
-	    $theWeb = $TWiki::webName;
-	    $theTopic = $theSkin . ucfirst( $theName ) . "Template";
-	    if ( !TWiki::Store::topicExists( $theWeb, $theTopic )) {
-		$theWeb = $TWiki::twikiWebname;
-	    }
-	}
-
-	if ( TWiki::Store::topicExists( $theWeb, $theTopic ) &&
-		TWiki::Access::checkAccessPermission( "view",
-		    $TWiki::wikiUserName, "", $theTopic, $theWeb )) {
-	    my ( $meta, $text ) = TWiki::Store::readTopic( $theWeb, $theTopic, 1 );
-	    return $text;
-	}
-    }
-
-    # read the template file
-    if( -e $tmplFile ) {
-        return &readFile( $tmplFile );
-    }
-    return "";
-}
-
-=pod
-
----++ sub handleTmplP (  $theVar  )
-Return value: expanded text of the named template, as found from looking in the global register of template definitions.
-
-WARNING! THIS FUNCTION DEPENDS ON GLOBAL VARIABLES
-
-If $theVar is the name of a previously defined template, returns the text of
-that template after recursive expansion of any TMPL:P tags it contains.
-
-=cut
-
-sub handleTmplP
-{
-    # Print template variable, called by %TMPL:P{"$theVar"}%
-    my( $theVar ) = @_;
-
-    my $val = "";
-    if( ( %templateVars ) && ( exists $templateVars{ $theVar } ) ) {
-        $val = $templateVars{ $theVar };
-        $val =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/&handleTmplP($1)/geo;  # recursion
-    }
-    if( ( $theVar eq "sep" ) && ( ! $val ) ) {
-        # set separator explicitely if not set
-        $val = " | ";
-    }
-    return $val;
-}
-
-=pod
-
----++ sub readTemplate ( $theName, $theSkin, $theWeb )
-Return value: expanded template text
-
-WARNING! THIS IS A SIDE-EFFECTING FUNCTION
-
-PUBLIC Reads a template, constructing a candidate name for the template as described in
-_readTemplateFile.
-
-If template text is found, extracts include statements and fully expands them.
-Also extracts template definitions and adds them to the
-global templateVars hash, overwriting any previous definition.
-
-=cut
-
-sub readTemplate
-{
-    my( $theName, $theSkin, $theWeb ) = @_;
-
-    if( ! defined($theSkin) ) {
-        $theSkin = &TWiki::getSkin();
-    }
-
-    if( ! defined( $theWeb ) ) {
-      $theWeb = $TWiki::webName;
-    }
-
-    # recursively read template file(s)
-    my $text = _readTemplateFile( $theName, $theSkin, $theWeb );
-    while( $text =~ /%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/s ) {
-        $text =~ s/%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/&_readTemplateFile( $1, $theSkin, $theWeb )/geo;
-    }
-
-    if( ! ( $text =~ /%TMPL\:/s ) ) {
-        # no template processing
-        $text =~ s|^(( {3})+)|"\t" x (length($1)/3)|geom;  # leading spaces to tabs
-        return $text;
-    }
-
-    my $result = "";
-    my $key  = "";
-    my $val  = "";
-    my $delim = "";
-    foreach( split( /(%TMPL\:)/, $text ) ) {
-        if( /^(%TMPL\:)$/ ) {
-            $delim = $1;
-        } elsif( ( /^DEF{[\s\"]*(.*?)[\"\s]*}%[\n\r]*(.*)/s ) && ( $1 ) ) {
-            # handle %TMPL:DEF{"key"}%
-            if( $key ) {
-                $templateVars{ $key } = $val;
-            }
-            $key = $1;
-            $val = $2 || "";
-
-        } elsif( /^END%[\n\r]*(.*)/s ) {
-            # handle %TMPL:END%
-            $templateVars{ $key } = $val;
-            $key = "";
-            $val = "";
-            $result .= $1 || "";
-
-        } elsif( $key ) {
-            $val    .= "$delim$_";
-
-        } else {
-            $result .= "$delim$_";
-        }
-    }
-
-    # handle %TMPL:P{"..."}% recursively
-    $result =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/&handleTmplP($1)/geo;
-    $result =~ s|^(( {3})+)|"\t" x (length($1)/3)|geom;  # leading spaces to tabs
-    return $result;
-}
-
-=pod
-
 ---++ readFile( $filename )
 Return value: $fileContents
 
@@ -1582,6 +1132,10 @@ Returns the entire contents of the given file, which can be specified in any
 format acceptable to the Perl open() function.  SECURITY NOTE: make sure
 any $filename coming from a user is stripped of special characters that might
 change Perl's open() semantics.
+
+Used for reading side-files of meta-data, such as fileTypes, changes, etc.
+
+SMELL: Breaks Store encapsulation, if it is used to read files other than the standard meta-files (e.g. if it is used to read topic files)
 
 =cut
 
@@ -1603,7 +1157,9 @@ sub readFile
 
 ---++ sub readFileHead (  $name, $maxLines  )
 
-Not yet documented.
+Returns $maxLines of content from the head of the given file-system file.
+
+SMELL: breaks Store encapsulation, if it is used to access topics or attachments under the control of Store.
 
 =cut
 
@@ -1622,9 +1178,6 @@ sub readFileHead
     close( IN_FILE );
     return $data;
 }
-
-
-#AS 5 Dec 2000 collect all Web's topic names
 
 =pod
 
@@ -1651,24 +1204,24 @@ sub getTopicNames {
     closedir( DIR );
     return @topicList ;    
 }
-#/AS
-
-
-#AS 5 Dec 2000 collect immediate subWeb names
 
 =pod
 
 ---++ sub getSubWebs (  $web  )
 
-Not yet documented.
+gets a list of sub-webs contained in the given named web. If the
+web is null, it gets a list of all top-level webs. $web may
+be a pathname at any level of the hierarchy; for example, it may be
+Dadweb/Kidweb/Petweb. Includes hidden webs (those starting with
+non-alphanumeric characters).
 
 =cut
 
 sub getSubWebs {
     my( $web ) = @_ ;
-    
+
     if( !defined $web ) {
-	$web="";
+        $web="";
     }
 
     #FIXME untaint web name?
@@ -1680,52 +1233,53 @@ sub getSubWebs {
 
     # this is not magic, it just looks like it.
     my @webList = sort
-        grep { s#^.+/([^/]+)$#$1# }
-        grep { -d }
-        map  { "$TWiki::dataDir/$web/$_" }
-        grep { ! /^\.\.?$/ } @tmpList;
+      grep { !/^\.\.?$/ && -d "$TWiki::dataDir/$web/$_" }
+        @tmpList;
 
     return @webList ;
 }
-#/AS
 
 
 # =========================
-#AS 26 Dec 2000 recursively collects all Web names
-#FIXME: move var to TWiki.cfg ?
-use vars qw ($subWebsAllowedP);
+# CC: removed - useless.
+#use vars qw ($subWebsAllowedP);
 
-$subWebsAllowedP = 0; # 1 = subwebs allowed, 0 = flat webs
+#$subWebsAllowedP = 0; # 1 = subwebs allowed, 0 = flat webs
 
 =pod
 
----++ sub getAllWebs (  $web  )
+---++ sub getAllWebs() -> list of web names
 
-Not yet documented.
+Gets a list of webnames, of webs contained within the given
+web. Potentially able to expand recursively, but this is
+commented out as support is lacking for subwebs almost everywhere
+else.
 
 =cut
 
 sub getAllWebs {
     # returns a list of subweb names
     my( $web ) = @_ ;
-    
+
     if( !defined $web ) {
-	$web="";
+        $web="";
     }
-    my @webList =   map { s/^\///o; $_ }
-		    map { "$web/$_" }
-		    &getSubWebs( $web );
-    my $subWeb = "";
-    if( $subWebsAllowedP ) {
-        my @subWebs = @webList;
-	foreach $subWeb ( @webList ) {
-	    push @subWebs, &getAllWebs( $subWeb );
-	}
-	return @subWebs;
-    }
+
+    my @webList =
+      map { s/^\///o; $_ } # remove leading /
+        map { "$web/$_" }
+          &getSubWebs( $web );
+
+#cc    my $subWeb = "";
+#cc    if( $subWebsAllowedP ) {
+#cc        my @subWebs = @webList;
+#cc        foreach $subWeb ( @webList ) {
+#cc            push @subWebs, &getAllWebs( $subWeb );
+#cc        }
+#cc        return @subWebs;
+#cc    }
     return @webList ;
 }
-#/AS
 
 =pod
 
@@ -1751,10 +1305,114 @@ sub setTopicRevisionTag
     return $topicHandler->setTopicRevisionTag( $web, $topic, $rev, $tag );
 }
 
+# Write a meta-data key=value pair
+sub _writeKeyValue {
+    my( $key, $value ) = @_;
 
+    $value =~ s/\r\r\n/%_N_%/go;
+    $value =~ s/\r\n/%_N_%/go;
+    $value =~ s/\n\r/%_N_%/go;
+    $value =~ s/\r\n/%_N_%/go; # Deal with doubles or \n\r
+    $value =~ s/\r/\n/go;
+    $value =~ s/\n/%_N_%/go;
+    $value =~ s/"/%_Q_%/go;
+
+    return "$key=\"$value\"";
+}
+
+# Write all the key=value pairs for the types listed
+sub _writeTypes {
+    my( $meta, @types ) = @_;
+    
+    my $text = "";
+
+    if( $types[0] eq "not" ) {
+        # write all types that are not in the list
+        my %seen;
+        @seen{ @types } = ();
+        @types = ();  # empty "not in list"
+        foreach my $key ( keys %$meta ) {
+            push( @types, $key ) unless
+              (exists $seen{ $key } || $key =~ /^_/);
+        }
+    }
+    
+    foreach my $type ( @types ) {
+        my $data = $meta->{$type};
+        foreach my $item ( @$data ) {
+            my $sep = "";
+            $text .= "%META:$type\{";
+            my $name = $item->{"name"};
+            if( $name ) {
+                # If there's a name field, put first to make regexp based searching easier
+                $text .= _writeKeyValue( "name", $item->{"name"} );
+                $sep = " ";
+            }
+            foreach my $key ( sort keys %$item ) {
+                if( $key ne "name" ) {
+                    $text .= $sep;
+                    $text .= _writeKeyValue( $key, $item->{$key} );
+                    $sep = " ";
+                }
+            }
+            $text .= "\}%\n";
+         }
+    }
+
+    return $text;
+}
+
+# Meta data for start of topic
+sub _writeStart
+{
+    my( $meta ) = @_;
+    
+    return _writeTypes( $meta, qw/TOPICINFO TOPICPARENT/ );
+}
+
+# Meta data for end of topic
+sub _writeEnd
+{
+    my( $meta ) = @_;
+
+    my $text = _writeTypes($meta, qw/FORM FIELD FILEATTACHMENT TOPICMOVED/ );
+    # append remaining meta data
+    $text .= _writeTypes( $meta, qw/not TOPICINFO TOPICPARENT FORM FIELD FILEATTACHMENT TOPICMOVED/ );
+    return $text;
+}
+
+# ===========================
+# Prepend/append meta data to topic
+sub _writeMeta
+{
+    my( $meta, $text ) = @_;
+    
+    my $start = _writeStart( $meta );
+    my $end = _writeEnd( $meta );
+    $text = $start . "$text";
+    $text =~ s/([^\n\r])$/$1\n/;     # new line is required at end
+    $text .= $end;
+    
+    return $text;
+}
+
+=pod
+
+---++ sub getDebugText($meta, $text) -> $text
+Generate a debug text form of the text/meta, for use in debug displays,
+by annotating the text with meta informtion.
+
+=cut
+
+sub getDebugText {
+    my ( $meta, $text ) = @_;
+
+    return _writeMeta( $meta, $text );
+}
 
 # =========================
 
 1;
 
 # EOF
+

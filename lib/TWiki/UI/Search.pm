@@ -26,6 +26,7 @@ package TWiki::UI::Search;
 use strict;
 use TWiki;
 use TWiki::UI;
+use TWiki::Templates;
 
 =pod
 
@@ -83,7 +84,7 @@ sub search {
     # correct string, but so what?  The pipline is the second
     # parameter to the join, and consists of the last two lines.  The
     # join takes the results of the pipeline and strings them back
-    # together, space delimited, which is exactly what &searchWikiWeb
+    # together, space delimited, which is exactly what &searchWeb
     # needs.
     # Note that mod_perl/cgi appears to use ';' as separator, whereas plain cgi uses '&'
 
@@ -95,9 +96,11 @@ sub search {
     $attrWeb =~ tr/+/ /;       # pluses become spaces
     $attrWeb =~ s/%([0-9a-fA-F]{2})/pack("c",hex($1))/ge;  # %20 becomes space
 
-    &TWiki::writeHeader( $query );
-    &TWiki::Search::searchWeb(
-        "inline"        => "0",
+    TWiki::writeHeader( $query, 0);
+
+    TWiki::Search::searchWeb(
+        _callback       => \&_contentCallback,
+        inline          => 0,
         "search"        => scalar $query->param( "search" ),
         "web"           => $attrWeb,
         "topic"         => scalar $query->param( "topic" ),
@@ -125,6 +128,10 @@ sub search {
         "multiple"      => scalar $query->param( "multiple" ),
         "separator"     => scalar $query->param( "separator" ),
     );
+}
+
+sub _contentCallback {
+    print @_;
 }
 
 1;
