@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043916963" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="PeterThoeny" date="1045347721" format="1.0" version="1.10"}%
 To edit pages on this TWikiSite, you must have a registered user name and password. 
 
 	* %H% *NOTE:* You can also login anonymously as user *TWikiGuest* with password *guest*. 
@@ -60,6 +60,7 @@ To register as a new user, simply fill out this form:
   <option>Azerbaijan</option>
   <option>Bahrain</option>
   <option>Bangladesh</option>
+  <option>Belarus</option>
   <option>Belgium</option>
   <option>Belize</option>
   <option>Benin</option>
