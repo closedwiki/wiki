@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="MikeMannix" date="999139447" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="MikeMannix" date="999208953" format="1.0" version="1.8"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
----## Add, Name, or Delete Webs
+---## Modifying Webs
 
 To work with entire TWiki webs, you need direct access to the installation files on the host server. Connecting by Telnet or FTP is the usual approach. Before making changes to a web, you can move individual topics through your browser (see [[TWiki.RenameTopic][ModifyTopics]]). No similar web controls are available through the browser interface.
 
