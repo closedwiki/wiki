@@ -621,13 +621,13 @@ sub internalLink {
     if( $exist) {
         if( $theAnchor ) {
             my $anchor = makeAnchorName( $theAnchor );
-            $text .= "<a href=\"$dispScriptUrlPath$dispViewPath"
+            $text .= "<a class=\"TWikiAnchorLink\" href=\"$dispScriptUrlPath$dispViewPath"
 		  .  "$scriptSuffix/$theWeb/$theTopic\#$anchor\""
                   .  &linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText</a>";
             return $text;
         } else {
-            $text .= "<a href=\"$dispScriptUrlPath$dispViewPath"
+            $text .= "<a class=\"TWikiLink\" href=\"$dispScriptUrlPath$dispViewPath"
 		  .  "$scriptSuffix/$theWeb/$theTopic\""
                   .  &linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText</a>";
