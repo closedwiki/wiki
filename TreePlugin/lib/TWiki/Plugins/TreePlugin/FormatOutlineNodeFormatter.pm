@@ -21,6 +21,8 @@ use base qw(TWiki::Plugins::TreePlugin::OutlineNodeFormatter);
 use TWiki::Plugins::TreePlugin::FormatHelper qw(spaceTopic loopReplaceRefData);
 
 
+use TWiki::Func;
+
 # class to format the nodes in a tree in a formatted outline
 #
 
@@ -30,54 +32,48 @@ sub new {
     my $this = {};
     bless($this, $class);
     $this->data("format", $format);
+
+#Twiki:Func::writeDebug("foramt: ".$);
+
     return $this;
 }
 
 ###########
 
-# let subclasses overwrite if they want
+# let subclasses override if they want
 sub formatLevel { return $_[1] + 1 ;} # humans start counting at 1
 
-# let subclasses overwrite if they want
-sub formatCount { return $_[1] + 1;} # humans start counting at 1
+# let subclasses override if they want
+sub formatCount { return $_[1] ;}
 
 sub formatNode {
 	my ($this, $node, $count, $level) = @_;	
 	my $res = $this->data("format");
-	return $node->name() unless ($res);
 
-	# default if there's no format to do
-#	return $this->SUPER::formatNode($this, $node, $count, $level)
-#		unless ($res);
+	return $node->name() unless ($res);
 		
 	# special substituions
-	
+
 	$res =~ s/\$topic/$node->name()/geo;
 	$res =~ s/\$spacetopic/&TWiki::Plugins::TreePlugin::FormatHelper::spaceTopic($node->name())/ge;
 	$res =~ s/\$outnum/$this->formatOutNum($node)/geo;
 	$res =~ s/\$count/$this->formatCount($count)/geo;
 	$res =~ s/\$level/$this->formatLevel($level)/geo;
-
+	$res =~ s/\$n/\n/go;
+	
 	# node data substitutions
 	$res = &TWiki::Plugins::TreePlugin::FormatHelper::loopReplaceRefData(
 		$res, $node, qw(modTime author web));
+
 	# formatter data substitutions
 	$res = &TWiki::Plugins::TreePlugin::FormatHelper::loopReplaceRefData(
 		$res, $this, qw(url));
-	
-#	$res =~ s/\$modTime/$node->data("modTime")/ge;
-#	$res =~ s/\$author/$node->data("author")/ge;
-#	$res =~ s/\$url/$this->data("url")/ge;
-#	$res =~ s/\$web/$node->data("web")/ge;
 	
 	# only do this if we are in full substituiton mode
 	if ( $this->data("fullSubs") ) {
 		$res = &TWiki::Plugins::TreePlugin::FormatHelper::loopReplaceRefData(
 			$res, $node, qw(text summary));
-
-#		$res =~ s/\$summary/$node->data("summary")/ge;
-#		$res =~ s/\$text/$node->data("text")/ge;
-	
+			
 		# some meta substitutions go here
 	}	
 	return $res;

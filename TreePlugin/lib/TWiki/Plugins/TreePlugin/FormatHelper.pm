@@ -34,10 +34,12 @@ sub loopReplaceRefData {
 	return $text;
 }
 
+ # s/\$(\w+)/$ref->data($1)/ge;
+
 sub replaceByRefData {
 	my ($text, $ref, $label, $paramname) = @_;
 	$paramname = $label unless ($paramname);
-	$text =~ s/\$$label/$ref->data($paramname)/ge; # geo for cgi
+	$text =~ s/\$$label/$ref->data($paramname)/ge;  # geo for cgi
 	return $text;
 }
 

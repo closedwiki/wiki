@@ -28,6 +28,7 @@ use TWiki::Plugins::TreePlugin::ListNodeFormatter;
 use TWiki::Plugins::TreePlugin::ColorNodeFormatter;
 use TWiki::Plugins::TreePlugin::FormatOutlineNodeFormatter;
 use TWiki::Plugins::TreePlugin::HOutlineNodeFormatter;
+use TWiki::Plugins::TreePlugin::ImgNodeFormatter;
 
 # =========================
 use vars qw(
@@ -35,7 +36,7 @@ use vars qw(
         %FormatMap %TreeTopics $RootLabel $CgiQuery $CurrUrl
     );
 
-$VERSION = '0.200';
+$VERSION = '0.250';
 
 $RootLabel = "_"; # what we use to label the root of a tree if not a topic
 
@@ -51,6 +52,8 @@ sub initPlugin
         return 0;
     }
 
+    &TWiki::Func::writeDebug( "installWeb: $installWeb" );
+    
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
     # $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "TreePlugin_EXAMPLE" ) || "default";
 
@@ -126,13 +129,15 @@ sub _getSearchString {
 
 sub handleTreeView {
 	my ($topic, $web, $attributes) = @_;
+	
 
+	
     my $attrWeb   = TWiki::Func::extractNameValuePair( $attributes, "web" ) || $web || "";
     my $attrTopic = TWiki::Func::extractNameValuePair( $attributes, "topic" ) || $RootLabel; # ie, do all web, needs to be nonempty
 	cgiOverride(\$attrWeb, "treeweb");
 	cgiOverride(\$attrTopic, "treetopic");
-	#TWiki::Func::writeDebug("tree topic: $topic");
-
+	cgiOverride(\$attrFormatting, "formatting");
+	
 	# we've expanded TRESEARCH on this topic before, we won't repeat
 	return "<!-- Self-recursion -->"
     	if ($TreeTopics{$topic});
@@ -149,7 +154,9 @@ sub handleTreeView {
     my $attrFormatting = TWiki::Func::extractNameValuePair( $attributes, "formatting" ) || "";
     my $attrStoplevel = TWiki::Func::extractNameValuePair( $attributes, "stoplevel" ) || 999;
     my $doBookView = TWiki::Func::extractNameValuePair( $attributes, "bookview" ) || "";
-        
+	
+	cgiOverride(\$attrFormatting, "formatting");
+	
     # set the type of formatting
     my $formatter = setFormatter($attrFormatting);
 
@@ -212,6 +219,7 @@ sub handleTreeView {
 
 
 # lazy variable init
+# ned to abstract this at some point
 
 sub setFormatter {
     my ($name) = @_;
@@ -226,6 +234,10 @@ sub setFormatter {
     	my $attrs = $1;
     	$attrs =~ s/^://;
         $formatter = new TWiki::Plugins::TreePlugin::ColorNodeFormatter($attrs);    
+    } elsif ($name =~ m/imageoutline(.*)/ ) {
+    	my $attrs = $1;
+    	$attrs =~ s/^://;
+        $formatter = new TWiki::Plugins::TreePlugin::ImgNodeFormatter(split(/:/,$attrs));
     } elsif ($name eq "ollist") {
         $formatter = new TWiki::Plugins::TreePlugin::ListNodeFormatter("<ol> ", " </ol>");
     } elsif ($name eq "hlist") {
@@ -264,6 +276,10 @@ sub cgiOverride {
     $$variable = $tmp if( $tmp );
 }
 
+# allow other classes to see the installation web
+sub installWeb {
+    return $installWeb;
+}
 
 sub handleCreateChildInput {
 	my ($args, $web) = @_;

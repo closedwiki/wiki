@@ -55,11 +55,11 @@ sub initNode {
 sub setOutNum {
       my ($this, $node, $count) = @_;
       my $onum;
-      $count++;
+      #$count++;
       if (ref $node->parent()){
       		$onum = $node->parent()->onum();
       		$onum .= $OnumDelim if ($onum); # add delimiter only if there's a real parent outNum
-      		$onum .= "$count"; # add number only if 
+      		$onum .= "$count" if ($count); # add number only if something there
       } else {
 		$onum = "";
       }      
