@@ -3182,7 +3182,7 @@ sub renderFormData
     my %form = $meta->findOne( "FORM" );
     if( %form ) {
         my $name = $form{"name"};
-        $metaText = "\n|*[[$name]]*||\n";
+        $metaText = "<div class=\"TWikiForm\">\n|*[[$name]]*||\n";
         
         my @fields = $meta->find( "FIELD" );
         foreach my $field ( @fields ) {
@@ -3191,7 +3191,7 @@ sub renderFormData
             $value =~ s/\n/<br \/>/g;      # undo expansion
             $metaText .= "|  $title:|$value  |\n";
         }
-
+		$metaText .= "<\/div>";
         $metaText = getRenderedVersion( $metaText, $web );
     }
 
