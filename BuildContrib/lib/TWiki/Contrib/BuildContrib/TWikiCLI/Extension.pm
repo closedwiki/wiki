@@ -80,6 +80,7 @@ sub cli_install_download {
  print "$localFile\n";
 
  my $dirInInstallation = getDistributionTopicDir();
+ print "from $dirInInstallation.... \n";
  chdir ($dirInInstallation) || die "Can't cd to $dirInInstallation";
 # TODO : Find out whether we can get rid of the need to be in here
 # TODO : Find out why its called both Build and BuildContrib...
