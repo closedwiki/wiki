@@ -298,12 +298,12 @@ sub writeDebugTimes
     my( $text ) = @_;
 
     if( ! $debugUserTime ) {
-        writeDebug( "=====       sec:  (delta:)         sec:  (delta:)  function:" );
+        writeDebug( "=====       sec: (delta:)        sec: (delta:) function:" );
     }
     my( $puser, $psystem, $cuser, $csystem ) = times();
     my $duser = $puser - $debugUserTime;
     my $dsystem = $psystem - $debugSystemTime;
-    my $times = sprintf( "user: %1.3f (%1.3f), system: %1.3f (%1.3f)",
+    my $times = sprintf( "user: %1.2f (%1.2f), system: %1.2f (%1.2f)",
                   $puser, $duser, $psystem, $dsystem );
     $debugUserTime   = $puser;
     $debugSystemTime = $psystem;
@@ -1507,7 +1507,7 @@ sub internalLink
     } elsif( $doLink ) {
         $text .= "<span style='background : $newTopicBgColor;'>"
               .  "<font color=\"$newTopicFontColor\">$theLinkText</font></span>"
-              .  "<a href=\"$scriptUrlPath/edit$scriptSuffix/$theWeb/$theTopic\">?</a>";
+              .  "<a href=\"$scriptUrlPath/edit$scriptSuffix/$theWeb/$theTopic?parent=$webName.$topicName\">?</a>";
         return $text;
 
     } else {
