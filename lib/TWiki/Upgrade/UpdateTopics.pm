@@ -4,12 +4,13 @@
 # Jul 2004 - copied almost completely from Sven's updateTopics.pl script:
 #            put in a package and made a subroutine to work with UpgradeTWiki 
 #             by Martin "GreenAsJade" Gregory.
+# Apr 2005 - Sven's hacking to use for debian & DevelopBranch
 
 # This version ignores symlinks in the existing wiki data: it creates a new 
 # wiki data tree updating the topics in the existing wiki data, even the
 # linked-in topics, but does not create new links like the old ones.
 
-package UpdateTopics;
+package TWiki::Upgrade::UpdateTopics;
 
 use strict;
 
@@ -20,15 +21,15 @@ use Text::Diff;
 
 # Try to upgrade an installation's TWikiTopics using the rcs info in it.
 
-use vars qw($CurrentDataDir $NewReleaseDataDir $DestinationDataDir $BaseDir $debug @DefaultWebTopics %LinkedDirPathsInWiki $RcsLogFile $TempDir);
+use vars qw($CurrentDataDir $NewReleaseDataDir $DestinationDataDir $BaseDir $debug $RcsLogFile $TempDir);
+#					@DefaultWebTopics %LinkedDirPathsInWiki);
 
 sub UpdateTopics 
 {
+	$debug = 0;
     $CurrentDataDir = shift or die "UpdateTopics not provided with existing data directory!\n";
-
     $NewReleaseDataDir = shift or die "UpdateTopics not provided with new data directory!\n";
-
-    $DestinationDataDir = (shift or "$BaseDir/newData");
+    $DestinationDataDir = shift or die "DestinationDataDir not provided\n";
 
     my $whoCares = `which rcsdiff`;   # we should use File::Which to do this, except that would mean
                                       # getting yet another .pm into lib, which seems like hard work?
@@ -52,11 +53,6 @@ sub UpdateTopics
 
     if ($debug) {print "$CurrentDataDir, $NewReleaseDataDir\n"; }
 
-    if ((! -d $CurrentDataDir ) || (! -d $NewReleaseDataDir)) {
-	print "\nUsage: UpdateTopics <CurrentDataDir> <NewReleaseDataDir> [<DestinationDataDir]>\n";
-	exit;
-    }
-
     print "\n";
     print "\t...new upgraded data will be put in $DestinationDataDir\n";
     print "\t   there will be no changes made to either the source data directory or $NewReleaseDataDir.\n\n"; 
@@ -74,13 +70,11 @@ sub UpdateTopics
     print "\t although many of these rejected chages will be discardable, 
 \t please check them to see if your configuration is still ok\n\n";
 
-    sussoutDefaultWebTopics();
-
     mkdir $DestinationDataDir;
 
 #redirect stderr into a file (rcs dumps out heaps of info)
 
-    $RcsLogFile = $BaseDir."/rcs.log";
+    my $RcsLogFile = $BaseDir."/rcs.log";
 
     unlink($RcsLogFile);  # let's have just the messages from this session!
 
@@ -311,18 +305,12 @@ sub isFromDefaultWeb
 {
     my ($filename) = @_;
 
+    opendir(DEFAULTWEB, './data/_default') or die "Yikes - couldn't open ./data/_default: $! ... not safe to proceed!\n";
+    my @DefaultWebTopics = grep(/.txt$/, readdir(DEFAULTWEB));
+    if ($debug) { print "_default topics in new distro: @DefaultWebTopics\n"; }
+
     my $topic = basename($filename);
     return $topic if grep(/^$topic$/, @DefaultWebTopics);
-}
-
-sub sussoutDefaultWebTopics
-{
-    opendir(DEFAULTWEB, './data/_default') or die "Yikes - couldn't open ./data/_default: $! ... not safe to proceed!\n";
-    @DefaultWebTopics = grep(/.txt$/, readdir(DEFAULTWEB));
-    if ($debug) 
-    {
-	print "_default topics in new distro: @DefaultWebTopics\n";
-    }
 }
 
 # ==============================================

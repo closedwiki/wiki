@@ -35,6 +35,11 @@ if ( $#ARGV > -1 ) {
 
 if ( ( $#ARGV >= 1 ) && ($mode eq 'moveTopics') ) { # must be 2 parameters
         $newCfgFile = $ARGV[1] || die "missing parameter1\n\n"; 
+} elseif ( ($mode eq 'upgradeTopics') && ($#ARGV == 4)) {
+        $newCfgFile = $ARGV[1] || die "missing newCfgFile\n\n"; 
+        $newDataDir = $ARGV[2] || die "missing newDataDir\n\n"; 
+        $oldDataDir = $ARGV[3] || die "missing oldDataDir\n\n"; 
+        $outputDir = $ARGV[4] || die "missing outputDir\n\n"; 
 } elsif ( ( $#ARGV == 2 ) || ( $#ARGV == 3 ) ) { # 3or4 arguments
         $newCfgFile = $ARGV[0 + ($mode eq ''?0:1)] || die "missing parameter2\n\n"; 
         $oldCfgFile = $ARGV[1 + ($mode eq ''?0:1)] || die "missing parameter3\n\n"; 
@@ -50,9 +55,9 @@ usage: UpgradeTWiki <newCfgFile> <oldCfgFile> <outputDirectory>
 this tries to figure out from the old & new cfg files, what it can do, an puts the resultant twiki files into the outputDir, ready for you to use
 
 usage: UpgradeTWiki --cairo <newCfgFile> <oldCfgFile> <outputDirectory>
-does the above assuming that you are working from Cairo
+does the CairoRelease upgrade (should end up incompatible with DakarRelease)
 
-usage: UpgradeTWiki --upgradeTopics <newCfgFile> <oldCfgFile> <outputDirectory>
+usage: UpgradeTWiki --upgradeTopics <newCfgFile> <newDataDir> <oldDataDir> <outputDir>
 just tries to merge in changes in newTopics that are in the old install (does not touch the cfg files)
 
 usage: UpgradeTWiki --moveTopics <newCfgFile>
@@ -86,9 +91,15 @@ if ( $mode eq '' ) {
 	eval 'use TWiki::Upgrade::UpgradeToDakar';
 	TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($newCfgFile, $oldCfgFile, $outputDir);
 } elsif ( $mode eq 'cairo' ) {
+    if ((! -d $CurrentDataDir ) || (! -d $NewReleaseDataDir)) {
+	print "\nnewDataDir & oldDataDir must exist\n";
+	exit;
+    }
 	eval 'use TWiki::Upgrade::UpgradeToCairo';
 	TWiki::Upgrade::UpgradeToCairo::doAllCairoUpgrades($newCfgFile, $oldCfgFile, $outputDir);
 } elsif ( $mode eq 'upgradeTopics' ) {
+	eval 'use TWiki::Upgrade::UpdateTopics';
+	TWiki::Upgrade::UpdateTopics::UpdateTopics($newDataDir, $oldDataDir, $outputDir);
 } elsif ( $mode eq 'moveTopics' ) {
 	eval 'use TWiki::Upgrade::MoveTopics';
 
