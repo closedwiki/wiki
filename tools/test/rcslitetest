@@ -1,6 +1,6 @@
+#!/usr/bin/perl
 # Tests for TWiki::Store::RcsLite and TWiki::Store::RcsWrap
 
-#!/usr/bin/perl
 
 use lib ( '../../lib' );
 use lib ( '.' );
