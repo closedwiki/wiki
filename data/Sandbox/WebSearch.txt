@@ -1,6 +1,6 @@
 <FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
 	* <B>Simple search</B>:
-	<TABLE><TR><TD>
+	<TABLE border="0" cellspacing="0" cellpadding="0"><TR><TD>
 	  <INPUT type="radio" name="scope" value="text" checked> Topic text (body) &nbsp; &nbsp;
 	</TD><TD>
 	  <INPUT type="checkbox" name="web"> All webs (not only %WIKITOOLNAME%.%WEB% web)
@@ -15,7 +15,7 @@
 
 <FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
 	* <B>Advanced search</B>:
-	<TABLE><TR><TD>
+	<TABLE border="0" cellspacing="0" cellpadding="0"><TR><TD>
 	  <INPUT type="radio" name="scope" value="text" checked> Topic text (body) &nbsp; &nbsp;
 	</TD><TD>
 	  Search
