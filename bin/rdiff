@@ -170,7 +170,7 @@ sub main
     $before =~ s/%REVTITLE2%/$revTitle2/go;
     $before = &TWiki::handleCommonTags( $before, $topic );
     $before = &TWiki::getRenderedVersion( $before );
-    $before =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
+    $before =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags (PTh 06 Nov 2000)
     &TWiki::writeHeader( $query );
     print $before;
 
@@ -190,7 +190,7 @@ sub main
             $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1" );
             $text = renderRevisionDiff( $text, $topic );
             $diff =~ s/%TEXT%/$text/go;
-            $diff =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
+            $diff =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags (PTh 06 Nov 2000)
             print $diff;
             $r1 = $r1 - 1;
             $r2 = $r2 - 1;
@@ -202,7 +202,7 @@ sub main
         $diff =~ s/%REVTITLE1%/$revTitle1/go;
         $diff =~ s/%REVTITLE2%/$revTitle2/go;
         $diff =~ s/%TEXT%//go;
-        $diff =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
+        $diff =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags (PTh 06 Nov 2000)
         print $diff;
     }
 
@@ -249,7 +249,7 @@ sub main
 
     $after = &TWiki::handleCommonTags( $after, $topic );
     $after = &TWiki::getRenderedVersion( $after );
-    $after =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
+    $after =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags (PTh 06 Nov 2000)
 
     print $after;
 }
