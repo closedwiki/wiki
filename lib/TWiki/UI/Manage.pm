@@ -52,7 +52,7 @@ sub removeUser {
   }
 
   #check to see it the user we are trying to remove is a memebr of a group.
-  #initinally we refuse to delte the user
+  #initially we refuse to delete the user
   #in a later implementation we will remove the from the group (if Access.pm implements it..)
   my @groups =  TWiki::Access::getGroupsUserIsIn( $wikiName );
   my $numberOfGroups =  $#groups;
