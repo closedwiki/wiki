@@ -638,15 +638,15 @@ sub setupRegexes {
 ---++ invalidSiteCharset()
 Return value: boolean $isCharsetInvalid
 
-Check for unusable ASCII-based multi-byte encodings as site character set
+Check for unusable multi-byte encodings as site character set
 - anything that enables a single ASCII character such as '[' to be
 matched within a multi-byte character cannot be used for TWiki.
 
 =cut
 
 sub invalidSiteCharset {
-    # FIXME: match other problematic multi-byte character sets 
-    return ( $siteCharset =~ /^(?:iso-2022-?|hz-?)/i );
+    # FIXME: match other problematic multi-byte character sets - Shift-JIS?
+    return ( $siteCharset =~ /^(?:iso-2022-?|hz-?|.*big5)/i );
 }
 
 
