@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000457002" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="MikeMannix" date="1000619467" format="1.0" version="1.8"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Skins
 
-_Overlay regular templates with alternate header/footer layouts_
+_Skins overlay regular templates with alternate header/footer layouts; topic text is not affected_
 
 ---++ Overview
 
