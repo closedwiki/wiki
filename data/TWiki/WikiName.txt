@@ -1,5 +1,6 @@
+%META:TOPICINFO{author="PeterThoeny" date="1042332060" format="1.0" version="1.2"}%
 Your name in WikiNotation. Usually your first and last name connected togther.
 
-For example, Bill Clinton's <nop>WikiName is BillClinton.
+For example, Tim Berners-Lee's <nop>WikiName is TimBernersLee.
 
-__Note:__ All users are in the %WIKITOOLNAME%.%MAINWEB% web. Prepend the "%MAINWEB%" name if you write a username in a topic, i.e. write =%MAINWEB%<nop>.TWikiGuest= to link to %MAINWEB%.TWikiGuest.
+%H% The home pages of registered users on this site are stored in the *%MAINWEB%* web. Prepend&nbsp; ==%MAINWEB%.== when you sign your username in a topic - write ==%MAINWEB%.%USERNAME%== to link to %MAINWEB%.%USERNAME%.
