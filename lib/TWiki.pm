@@ -400,7 +400,7 @@ sub initialize
     $wikiUserName = userToWikiName( $userName );         # i.e. "Main.JonDoe"
 
     # initialize preferences, second part for user level
-    &TWiki::Prefs::initializePrefs( $wikiUserName );
+    &TWiki::Prefs::initializeUserPrefs( $wikiUserName );
 
     # some remaining init
     $viewScript = "view";
