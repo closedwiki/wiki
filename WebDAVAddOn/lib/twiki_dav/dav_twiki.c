@@ -434,19 +434,25 @@ static char* compile_resource(pool* poo, twiki_resources* tr) {
   char tmpt[255];
   char tmpa[255];
 
-  const char* a = NULL;
+  const char* basename = NULL;
   if (tr->file) {
-	a = tr->file + strlen(tr->file);
-	while (a > tr->file && *a != '\\' && *a != '/')
-	  a--;
-	if (*a == '/' || *a == '\\')
-	  a++;
+	basename = tr->file + strlen(tr->file);
+	while (basename > tr->file && *basename != '\\' && *basename != '/')
+	  basename--;
+	if (basename > tr->file)
+	  basename++;
   }
-  return ap_psprintf(poo,
-					 "\"%s/%s/%s\"",
-					 escaped(tr->web, tmpw),
-					 escaped(tr->topic, tmpt),
-					 a ? escaped(a, tmpa) : "");
+  if (tr->type == TWIKI_DATA)
+	return ap_psprintf(poo,
+					   "%s/%s",
+					   escaped(tr->web, tmpw),
+					   basename ? escaped(basename, tmpa) : "");
+  else
+	return ap_psprintf(poo,
+					   "%s/%s/%s",
+					   escaped(tr->web, tmpw),
+					   escaped(tr->topic, tmpt),
+					   basename ? escaped(basename, tmpa) : "");
 }
 
 const char* dav_twiki_make_tmp_filename(pool* p) {
@@ -459,19 +465,18 @@ static dav_error* invoke_command(const char* action,
 								 const dav_resource* r,
 								 const char* path) {
   pool* p = dav_fs_pool(r);
-  char tmp[512];
   const char* cmd;
   twiki_resources* tr = r->twiki;
   const char* response_file = dav_twiki_make_tmp_filename(p);
 
   cmd = ap_psprintf(p,
-					"%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\"",
+					"%s %s %s %s %s %s",
 					tr->script,
 					response_file,
 					tr->user ? tr->user : "guest",
 					action,
 					compile_resource(p, r->twiki),
-					escaped(path, tmp));
+					path);
 
   if (system(cmd)) {
 	FILE* f = fopen(response_file, "r");
@@ -498,13 +503,14 @@ dav_error* dav_twiki_delete(const dav_resource* r) {
 }
 
 dav_error* dav_twiki_commit(const dav_resource* r, const char* path) {
-   return invoke_command("commit_pub", r, path);
+  char tmp[512];
+  return invoke_command("attach", r, escaped(path, tmp));
 }
 
 const char * dav_twiki_detach_metadata(const dav_resource *resource)
 {
   const char* tmp = dav_twiki_make_tmp_filename(dav_fs_pool(resource));
-  dav_error* e = invoke_command("detach", resource, tmp);
+  dav_error* e = invoke_command("unmeta", resource, tmp);
 
   if (e) {
 	remove(tmp);
@@ -516,7 +522,11 @@ const char * dav_twiki_detach_metadata(const dav_resource *resource)
 dav_error* dav_twiki_reattach_metadata(const char *alt,
 									   const dav_resource *resource)
 {
-  return invoke_command("reattach", resource, alt);
+  return invoke_command("remeta", resource, alt);
+}
+
+dav_error* dav_twiki_move(const dav_resource* s, const dav_resource* d) {
+  return invoke_command("move", s, compile_resource(dav_fs_pool(s), d->twiki));
 }
 
 #endif

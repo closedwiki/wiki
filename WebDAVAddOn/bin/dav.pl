@@ -14,12 +14,11 @@ use TWiki::Store;
 use TWiki::UI::Upload;
 use File::Copy;
 
-my $jWeb = "Trash";
-my $jTopic = "TrashAttachment";
+# default junk web and topic
+my $defJWeb = "Trash";
+my $defJTopic = "TrashAttachment";
 
-#open(EF, ">>/tmp/vsnlog");
-#print EF "<".join(" ",@ARGV).">\n";
-
+print STDERR "Firing " . join(" ", @ARGV)."\n";
 my $rf = $ARGV[0];
 die "ERROR: No response file" unless $rf;
 
@@ -41,19 +40,9 @@ my $user = $ARGV[1];
 fail("No user") unless $user;
 my $function = $ARGV[2];
 fail("No function") unless $function;
-my $theResource = $ARGV[3];
-my $path = $ARGV[4];
-$path =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo if ( $path );
 
-unless ( $theResource =~ m/(\w+)\/(\w+)(\/.*)?$/o) {
-  fail("Bad resource $theResource");
-}
-my ( $web, $topic, $att ) = ($1, $2, $3);
-fail("No web in $theResource") unless ($web);
-fail("No topic in $theResource") unless ($topic);
-
-$web =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
-$topic =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
+my ( $web, $topic, $att ) = _parseResource( $ARGV[3] || "" );
+fail("No topic in resource") unless ($topic);
 
 # Delete environment variables that would cause RCS to
 # take the lock as the named user rather than as the Apache user.
@@ -65,42 +54,42 @@ my $dummy;
 ( $topic, $web, $dummy, $user ) = TWiki::initialize( "/$web/$topic", $user );
 
 if ( $function eq "delete" ) {
-  # This has to be done by an attachment move. We assume the standard
-  # target for the move.
-  # Need to lock src and dest
+  # This has to be done by a move.
+  my $jWeb = $defJWeb;
+  my $jTopic = $defJTopic;
 
-  fail("No attachment in $theResource") unless ($att);
-  $att =~ s/^\///o;
-  $att =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
-
-  # CODE_SMELL: If there is no filename, moveAttachment tries to move
-  # the f***ing topic!
-
-  _standardChecks( "change", $web, $topic, $user );
-
-  my $error = _lockTopic( $jWeb, $jTopic, $user );
-  if ( !( $error )) {
-	$error = _lockTopic( $web, $topic, $user );
-	if ( !( $error )) {
-	  $error = TWiki::Store::moveAttachment( $web, $topic,
-											 $jWeb, $jTopic,
-											 $att );
-	  TWiki::Store::lockTopicNew( $web, $topic, 1 );
+  if (!$att) {
+	fail("Cannot delete TWiki topic");
+	# If we were going to, here's how:
+	# Make up a suitable non-existant target
+	my $n = 1;
+	$jTopic = $topic;
+	while (-e "$TWiki::pubDir/$defJWeb/$jTopic") {
+	  $jTopic = "$topic$n";
+	  $n++;
 	}
-	TWiki::Store::lockTopicNew( $jWeb, $jTopic, 1 );
   }
 
-  fail( $error ) if ( $error );
+  _move( $web, $topic, $att, $jWeb, $jTopic, $user );
 
-} elsif ( $function eq "commit_pub" ) {
-  print STDERR "Commit ".join(" ",@ARGV);
+} elsif ( $function eq "move" ) {
+
+  my ( $web2, $topic2, $att2 ) = _parseResource( $ARGV[4] );
+  fail("No topic in $ARGV[4]") unless ($topic);
+
+  _move( $web, $topic, undef, $web2, $topic2, $user );
+
+} elsif ( $function eq "attach" ) {
+
   _standardChecks( "change", $web, $topic, $user );
 
-  fail("No attachment in $theResource") unless ($att);
+  fail("No attachment") unless ($att);
   $att =~ s/^\///o;
   $att =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
 
+  my $path = $ARGV[4];
   fail("No path") unless ($path);
+  $path =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
   fail( "$path does not exist") unless (-e $path);
 
   # copy to temp file to avoid conflict over the actual file
@@ -150,10 +139,11 @@ if ( $function eq "delete" ) {
 	fail("Update failed $error[0]");
   }
 
-} elsif ($function eq "detach") {
+} elsif ($function eq "unmeta") {
 
   # Get a topic, stripping meta-data, and write it to the path given
   # in $ARGV[4]
+  my $path = $ARGV[4];
   fail("No path") unless ($path);
 
   # Put a topic, re-adding meta-data. The new text is passed in
@@ -161,14 +151,16 @@ if ( $function eq "delete" ) {
 
   my ( $meta, $text ) = TWiki::Store::readTopic( $web, $topic );
 
+  $path =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
   open(TXT, ">$path") or fail("Could not open $path");
   print TXT $text;
   close(TXT);
 
-} elsif ($function eq "reattach") {
+} elsif ($function eq "remeta") {
 
   # Put a topic, re-adding previous meta-data. The new text is passed in
   # the given pathname.
+  my $path = $ARGV[4];
   fail( "No path" ) unless ($path);
 
   _standardChecks( "change", $web, $topic, $user );
@@ -179,6 +171,7 @@ if ( $function eq "delete" ) {
   my ( $meta, $text ) = TWiki::Store::readTopic( $web, $topic );
 
   $text = "";
+  $path =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
   open(TXT, "<$path") or fail("Could not open $path");
   while (<TXT>) {
 	$text .= $_;
@@ -192,7 +185,7 @@ if ( $function eq "delete" ) {
   fail( $error ) if ( $error );
 
 } else {
-  fail("Bad function $function");
+  fail("Bad function $function in ".join(" ", @ARGV));
 }
 
 sub _decode {
@@ -222,6 +215,63 @@ sub _standardChecks {
   fail("Access to $access $web/$topic denied") unless
 	TWiki::UI::isAccessPermitted( $web, $topic,
 								  $access, $wikiUserName );
+}
+
+sub _parseResource {
+  my $path = shift;
+  my ( $web, $topic, $att );
+
+  $path =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
+
+  if ( $path =~ m/^\/?(\w+)\/(\w+)\/([^\/]+)$/o ) {
+
+	( $web, $topic, $att ) = ( $1, $2, $3 );
+	$att =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
+
+  } elsif ( $path =~ m/^\/?(\w+)\/([^\/]+)\.txt$/o ) {
+
+	( $web, $topic ) = ( $1, $2 );
+
+  } else {
+
+	fail("Bad resource $path");
+
+  }
+  fail("No web in $path") unless ($web);
+
+  return ( $web, $topic, $att );
+}
+
+sub _move {
+  my ( $srcWeb, $srcTopic, $srcAtt, $dstWeb, $dstTopic, $user ) = @_;
+
+  _standardChecks( "change", $srcWeb, $srcTopic, $user );
+  _standardChecks( "change", $dstWeb, $dstTopic, $user );
+
+  my $error = _lockTopic( $dstWeb, $dstTopic, $user );
+  if ( !( $error )) {
+	$error = _lockTopic( $srcWeb, $srcTopic, $user );
+	if ( !( $error )) {
+	  if ($srcAtt) {
+		# CODE_SMELL: If there is no filename, moveAttachment tries to move
+		# the f***ing topic!
+		# CODE_SMELL: if there is no file, fails silently, even when there
+		# is meta-data in the topic.
+		$error = TWiki::Store::moveAttachment( $srcWeb, $srcTopic,
+											   $dstWeb, $dstTopic,
+											   $srcAtt );
+	  } else {
+		# NOTE: DOES NOT CHANGE REFS TO THE TOPIC
+		$error = TWiki::Store::renameTopic( $srcWeb, $srcTopic,
+											$dstWeb, $dstTopic,
+											0 );
+	  }
+	  TWiki::Store::lockTopicNew( $srcWeb, $srcTopic, 1 );
+	}
+	TWiki::Store::lockTopicNew( $dstWeb, $dstTopic, 1 );
+  }
+
+  fail( $error ) if ( $error );
 }
 
 1;
