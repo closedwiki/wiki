@@ -205,8 +205,8 @@ checkdir( $cpan );
 
 # grr, can't get this working from *within* cgi... :*(
 #installLocalModules({
-#    modules => [ qw( Data::UUID Date::Handler Safe Language::Prolog CGI::Session File::Temp List::Permutor XML::Simple ) ],
 #    dir => $cpan,
+#    modules => [ qw( Data::UUID Date::Handler Safe Language::Prolog CGI::Session File::Temp List::Permutor XML::Simple ) ],
 #});
 
 ################################################################################
@@ -255,9 +255,12 @@ open( FH, ">$file" ) or die $!;
 print FH $htaccess;
 close( FH ) or die $!;
 
-execute( "rm $dest/data/TWiki/TWikiRegistration.txt $dest/data/TWiki/TWikiRegistration.txt,v" ) or warn $!;
+execute( "rm $dest/data/TWiki/TWikiRegistration.txt" ) or warn $!;
+my $reg = "$dest/data/TWiki/TWikiRegistration.txt,v";
+if ( -e $reg ) { execute( "rm $reg" ) or warn $!; }
 execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt $dest/data/TWiki/TWikiRegistration.txt") or warn $!;
-execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt,v $dest/data/TWiki/TWikiRegistration.txt,v") or warn $!;
+my $pubreg = "$dest/data/TWiki/TWikiRegistrationPub.txt,v";
+if ( -e $pubreg ) { execute( "mv $pubreg $reg") or warn $!; }
 
 # TODO: setup data/.htpasswd (default file contains TWikiGuest/guest)
 
