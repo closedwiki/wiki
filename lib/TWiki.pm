@@ -984,30 +984,20 @@ sub handleTime
 
     my $value = "";
     my $time = time();
+
     if( $format ) {
-        if( $theZone eq "gmtime" ) {
-            my( $sec, $min, $hour, $day, $mon, $year) = gmtime( $time );
-            $value = $format;
-            $value =~ s/\$sec[a-z]*/sprintf("%.2u",$sec)/geoi;
-            $value =~ s/\$min[a-z]*/sprintf("%.2u",$min)/geoi;
-            $value =~ s/\$hou[a-z]*/sprintf("%.2u",$hour)/geoi;
-            $value =~ s/\$day[a-z]*/sprintf("%.2u",$day)/geoi;
-            $value =~ s/\$yea[a-z]*/sprintf("%.4u",$year+1900)/geoi;
-            $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
-            $value =~ s/\$mon[a-z]*/$isoMonth[$mon]/goi;
-            $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
-        } elsif( $theZone eq "servertime" ) {
-            my( $sec, $min, $hour, $day, $mon, $year) = localtime( $time );
-            $value = $format;
-            $value =~ s/\$sec[a-z]*/sprintf("%.2u",$sec)/geoi;
-            $value =~ s/\$min[a-z]*/sprintf("%.2u",$min)/geoi;
-            $value =~ s/\$hou[a-z]*/sprintf("%.2u",$hour)/geoi;
-            $value =~ s/\$day[a-z]*/sprintf("%.2u",$day)/geoi;
-            $value =~ s/\$yea[a-z]*/sprintf("%.4u",$year+1900)/geoi;
-            $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
-            $value =~ s/\$mon[a-z]*/$isoMonth[$mon]/goi;
-            $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
-        }
+        my( $sec, $min, $hour, $day, $mon, $year ) = gmtime( $time );
+          ( $sec, $min, $hour, $day, $mon, $year ) = localtime( $time ) if( $theZone eq "servertime" );
+        $value = $format;
+        $value =~ s/\$sec[o]?[n]?[d]?[s]?/sprintf("%.2u",$sec)/geoi;
+        $value =~ s/\$min[u]?[t]?[e]?[s]?/sprintf("%.2u",$min)/geoi;
+        $value =~ s/\$hou[r]?[s]?/sprintf("%.2u",$hour)/geoi;
+        $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
+        $value =~ s/\$mon[t]?[h]?/$isoMonth[$mon]/goi;
+        $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
+        $value =~ s/\$yea[r]?/sprintf("%.4u",$year+1900)/geoi;
+        $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
+
     } else {
         if( $theZone eq "gmtime" ) {
             $value = gmtime( $time );
