@@ -1,35 +1,24 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042010630" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1089961961" format="1.0" version="1.7"}%
 ---++ NOTE: This Wiki topic does not exist yet
-
----+++ If you would like to create this page:
-
-<blockquote>
-Simply click on the <A href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%"><B>Create</B></A>
-link at the bottom of this page.
-</blockquote>
-
-
----+++ If you intend to do a full text search:
-
-<blockquote>
-<form name="search" action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
-Use the <a href="WebSearch">Search</a> link on top of this page, or do a simple <br>
-<input type="text" name="search" size="32" value="%TOPIC%">
-<input type="submit" value="Search">
-<input type="hidden" name="scope" value="text">
-<input type="hidden" name="ignorecase" value="on">
-&nbsp;&nbsp; (More options in WebSearch)
-</form>
-</blockquote>
-
 
 ---+++ If you used the "Go" feature to jump to this page:
 
-<blockquote>
-Make sure you spelled the %TWIKIWEB%.WikiWord correctly and try again.
-Remember, a <nop>WikiWord is case sensitive.
-
+	* Make sure you spelled the %TWIKIWEB%.WikiWord correctly and try again. Remember, a <nop>WikiWord is case sensitive
 	* Similar topics in this web (if any): %SEARCH{ "%TOPIC%" limit="16" scope="topic" nosearch="on" nototal="on" format="	  [[$topic]], " }% [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&amp;nosummary=on&amp;nototal=on&amp;search=%TOPIC%][...]]
+	* [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%WEB%/?web=all&amp;scope=topic&amp;nosummary=on&amp;nototal=on&amp;search=%TOPIC%][Search]] for similar topics in all public webs
 
-	* [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%WEB%/?web=all&amp;scope=topic&amp;nosummary=on&amp;nototal=on&amp;search=%TOPIC%][Search]] for similar topics in all public webs.
-</blockquote>
+---+++ If you intend to do a full text search:
+
+<form name="search" action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
+	* Use the <a href="WebSearch">Search</a> link on top of this page, or do a simple
+	* <input type="text" name="search" size="32" value="%TOPIC%" />
+	  <input type="submit" value="Search" />
+	  <input type="hidden" name="scope" value="text" />
+	  <input type="hidden" name="ignorecase" value="on" />
+	  &nbsp;&nbsp; (More options in WebSearch)
+</form>
+
+---+++ If you would like to create this page:
+
+	* Simply click on the <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%"><b>Create</b></a> link at the bottom of this page
+
