@@ -70,8 +70,13 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
  </div>
 %TMPL:END%
 
-%TMPL:DEF{"topicaction"}% <input type="submit" value=" &nbsp; Preview Changes &nbsp; " />
-  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
+%TMPL:DEF{"topicaction"}%
+      <input type="submit" name="action" value="Save" id="save" />
+      <input type="submit" name="action" value="QuietSave" id="quietsave" />
+      <input type="submit" name="action" value="Checkpoint" id="checkpoint" />
+      <input type="submit" name="action" value="Preview" id="preview" />
+      <input type="submit" name="action" value="Cancel" id="cancel" />
+%TMPL:END%
 
 %TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
 %TMPL:DEF{"titlehelp"}% %TMPL:END%
@@ -82,7 +87,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 %TMPL:P{"head"}%
 <body bgcolor="#ffffff" onLoad="initForm()">
 #PageTop
-<form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"simpleheader"}%
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea><br />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
