@@ -1,17 +1,16 @@
-%META:TOPICINFO{author="JohnTalintyre" date="997982189" format="1.0beta2" version="1.1"}%
+%META:TOPICINFO{author="JohnTalintyre" date="999103330" format="1.0" version="1.2"}%
 %META:TOPICPARENT{name="WebHome"}%
+%TOC%
+%STARTINCLUDE%
 ---## Meta Data Definition
 
-See MetaDataRendering for display of meta data
+See [[TWikiDocumentation#Meta_Data_Rendering][Meta Data Rendering]] for variables used to display meta data.
 
 Current version: *1.0*
 
-Table of contents:
-%TOC%
-
 ---+++ Example of format
 
-<pre>
+<verbatim>
 %<nop>META:TOPICINFO{version="1.6" date="976762663" author="PeterThoeny" format="1.0"}%
 	text of the topic
 %<nop>META:TOPICMOVED{from="Codev.OldName" to="CoDev.NewName" by="JohnTalintyre" date="976762680"}%
@@ -21,11 +20,11 @@ Table of contents:
 %<nop>META:FORM{name="WebFormTemplate"}%
 %<nop>META:FIELD{name="OperatingSystem" value="OsWin"}%
 %<nop>META:FIELD{name="TopicClassification" value="PublicFAQ"}%
-</pre>
+</verbatim>
 
 ---+++ General notes
 
-	* Format is as for %TWIKIWEB%.TWikiVariables, except all fields have a key.
+	* Format is as for [[TWikiDocumentation#TWiki_Variables, except all fields have a key.
 		* %<nop>META:&lt;type&gt;{key1="value1" [key2="value2" [...]]}%
 	* Order of fields within the meta variables is not defined, except that if there is a field with key =name=, this appears first for easier searching (note the order of the variables themselves is defined)
 	* Each meta variable is on one line
@@ -103,15 +102,15 @@ Extra field that are added if an attachment is moved:
 ---++++ FORM
 
 	| *Key*	| *Comment* |
-	| name	 | A topic name - the topic is a TWikiFormTemplate.  Can optionally include the web name i.e. web.topic, but doesn't normally |
+	| name	 | A topic name - the topic is a [[TWikiDocumentation#Form_Template][Form Template]].  Can optionally include the web name i.e. web.topic, but doesn't normally |
 
 ---++++ FIELD
 
 Should only be present if there is a FORM entry.  Note that this data is used when viewing a topic, the form template definition is not read.
 
 	| *Key*	| *Name*	|
-	| name	 | Ties to entry in TWikiFormTemplate, is title with all bar alphanumerics and . removed |
-	| title	| Full text from TWikiFormTemplate |
+	| name	 | Ties to entry in [[TWikiDocumentation#Form_Template][Form Template]], is title with all bar alphanumerics and . removed |
+	| title	| Full text from [[TWikiDocumentation#Form_Template][Form Template]] |
 	| value	| Value user has supplied via form |
 
 ---+++ Viewing meta data
@@ -122,4 +121,4 @@ When viewing a topic the =Raw Text= link can be clicked to show the text of a to
 
 There is currently no support for meta data for Plugins.  However, the format is readily extendable and the =Meta.pm= code that supports the format only needs minor alteration.
 
--- Main.JohnTalintyre - 16 Aug 2001 <br>
+-- JohnTalintyre - 16 Aug 2001 <br>
