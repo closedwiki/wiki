@@ -1,13 +1,13 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018768013" format="1.0" version="1.13"}%
----++ %WIKITOOLNAME%.%WEB% Web Preferences
+%META:TOPICINFO{author="MikeMannix" date="1021183560" format="1.0" version="1.14"}%
+---++ %WEB% Web Preferences
 
-The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
+The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.TWikiGuest in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
 
 
 __Preferences:__
 
 	* List of topics of the %WIKITOOLNAME%.%WEB% web:
-		* Set WEBTOPICLIST = [[%HOMETOPIC%][Home]] %SEP% [[WelcomeGuest][Welcome]] %SEP% [[TWikiRegistration][Register]] %SEP% [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
+		* Set WEBTOPICLIST = [[%HOMETOPIC%][Home]] %SEP% [[WelcomeGuest][Welcome]] %SEP% [[TWikiRegistration][Register]] %SEP% [[WebChanges][Changes]] %SEP% [[WebTopicList][Topics]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
 
 	* List this web in the %TWIKIWEB%.SiteMap:
 		* If yes, Set SITEMAPLIST = =on=, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. %WEB%.Topic links.
