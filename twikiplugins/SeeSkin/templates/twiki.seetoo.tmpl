@@ -1,0 +1,80 @@
+%TMPL:DEF{"htmldoctype"}%
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> %TMPL:END%
+%TMPL:DEF{"heada"}%
+ <title> %TOPIC% %TMPL:P{"titleaction"}% &#171; %WEB% &#171; %WIKITOOLNAME%</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
+ <meta name="robots" content="noindex" />
+ <meta name="MSSmartTagsPreventParsing" content="true" />
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />%TMPL:END%
+%TMPL:DEF{"headview"}%
+ %TMPL:P{"heada"}%
+ %HTTP_EQUIV_ON_VIEW% %TMPL:END%
+%TMPL:DEF{"headedit"}%
+ %TMPL:P{"heada"}%
+ %HTTP_EQUIV_ON_EDIT% %TMPL:END%
+%TMPL:DEF{"headpreview"}%
+ %TMPL:P{"heada"}%
+ %HTTP_EQUIV_ON_PREVIEW% %TMPL:END%
+%TMPL:DEF{"css"}%
+%STYLESHEETS%
+<style type="text/css"><!--
+%INLINESTYLE%
+--></style>
+%TMPL:END%
+%TMPL:DEF{"masthead"}%
+<div id="title">
+	<a href="%WIKIHOMEURL%" title="Site Homepage"><img src="%WIKILOGOIMG%" border="0" alt="Site Home" /></a>
+	<h1><a href="%WIKIHOMEURL%" title="homepage for TWiki.org">TWiki.org</a></h1>
+	<h2>/ <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%" title='Homepage for %TMPL:P{"weblabel"}%'>%WEB%</a> / %TOPIC% %TMPL:P{"titleaction"}%</h2>
+</div>
+<div id="search">
+	<form><input type="text" name="topic" size="10" title="type topic name to search for and press [Enter]" /> <a href="/twiki/bin/view/Main/WebSearch" title="Go to advanced search form">Search</a></form>
+</div>
+%TMPL:END%
+%TMPL:DEF{"standardheader"}%
+<div id="title">
+	<a href="%WIKIHOMEURL%" title="Site Homepage"><img src="%WIKILOGOIMG%" border="0" alt="Site Home" /></a>
+	<h1><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/%HOMETOPIC%">%WIKITOOLNAME%</a></h1>
+	<h2>/ <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a> / %TOPIC% %TMPL:P{"titleaction"}%</h2>
+</div>
+%TMPL:END%
+%TMPL:DEF{"plainheader"}%
+<div id="title">
+	<h1><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/%HOMETOPIC%">%WIKITOOLNAME%</a></h1>
+	<h2>/ %WEB% / %TOPIC% %TMPL:P{"titleaction"}%</h2>
+</div>
+%TMPL:END%
+%TMPL:DEF{"simpleheader"}%
+<h1> %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</h1>
+%TMPL:P{"headerhelp"}%
+%TMPL:P{"webaction"}%
+%TMPL:END%
+%TMPL:DEF{"menu"}%
+%TMPL:P{"webaction"}%
+%TMPL:END%
+%TMPL:DEF{"standardfooter"}%
+	Topic <strong>%TOPIC%</strong> . { %TMPL:P{"topicaction"}% }
+%TMPL:END%
+%TMPL:DEF{"plainfooter"}%
+	%TMPL:P{"topicaction"}%
+%TMPL:END%
+%TMPL:DEF{"oops"}%
+%TMPL:P{"htmldoctype"}%
+<head>
+ %TMPL:P{"headview"}%
+ %TMPL:P{"css"}%
+</head>
+<body>
+#PageTop
+%TMPL:P{"simpleheader"}%
+---+ %TMPL:P{"heading"}%
+%TMPL:P{"message"}%
+<p />
+%TMPL:P{"standardfooter"}%
+#PageBottom
+</body>
+</html> %TMPL:END%
+%TMPL:DEF{"sep"}%<li>%TMPL:END%
+%TMPL:DEF{"weblabel"}%Section%TMPL:END%
