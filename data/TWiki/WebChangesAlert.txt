@@ -1,15 +1,29 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092608204" format="1.0" version="1.14"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093677491" format="1.0" version="1.15"}%
 ---++ Web Changes Notification Service
 
-Each %WIKITOOLNAME% web has an automatic email notification service that sends you an email with links to all of the topics modified since the last alert. 
+Each TWiki web has an automatic email notification service that sends you an email with links to all of the topics modified since the last alert. 
 
-	* You can subscribe and unsubscribe yourself in WebNotify on each web. Changes are immediate.
+---+++ Subscription
+You can subscribe and unsubscribe yourself in %NOTIFYTOPIC% on each web. Please keep the list in alphabetical order so that names can be found easily.
 
-	* The frequency of alerts is set by the TWiki site administrator: it could be once a day, every hour, whatever works for the particular web.
-		* On TWiki.org, alerts are sent once a day.
+%STARTINCLUDE%
+__Format:__ TWiki handles entries in bullet list (=&lt;space&gt;&lt;space&gt;&lt;space&gt;*=) format containing the WikiName of a user; a !WikiName with e-mail address; or a [[%MAINWEB%.TWikiGroups][TWikiGroup]]. Examples:
+
+	* =%MAINWEB%.FredBloggs=
+	* =%MAINWEB%.FredBloggs - <nop>secondary@home.com=
+	* =%MAINWEB%.EngineeringGroup=
+
+The first entry is the default form, the notification gets sent to the e-mail address specified in the user's home page. The second entry lists an alternative e-mail address. The third entry specifies a group, the notification gets sent to each member of the group.
+
+%STOPINCLUDE%
+
+---+++ E-mail Alerts
+
+The frequency of alerts is set by the TWiki site administrator: It could be once a day, every hour, whatever works for the particular web. On TWiki.org, alerts are sent once a day.
 
 See TWikiSiteTools for information on how to setup the alerts.
 
--- TWiki:Main.MikeMannix - 20 Nov 2001
+-- TWiki:Main.MikeMannix - 20 Nov 2001 %BR%
+-- Main.PeterThoeny - 28 Aug 2004
 
 %META:TOPICMOVED{by="MikeMannix" date="1000260771" from="TWiki.WebChangesNotify" to="TWiki.WebChangesAlert"}%

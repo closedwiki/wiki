@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1082851827" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093677752" format="1.0" version="1.9"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Site Tools
@@ -13,14 +13,7 @@ Each TWiki web has an automatic email alert service that sends a list of recent 
 
 	* You can create a WebNotify link using TWikiVariables with ==%<nop>NOTIFYTOPIC%==
 
-TWiki handles <nop>%NOTIFYTOPIC% entries that include the WikiName of a user or a [[%MAINWEB%.TWikiGroups][TWikiGroup]] and an optional e-mail address. Example entries in <nop>%NOTIFYTOPIC%:
-<pre>
-	 * %MAINWEB%.FredBloggs
-	 * %MAINWEB%.FredBloggs - secondary@home.com
-	 * %MAINWEB%.EngineeringGroup
-</pre>
-
-The first entry is the default form, the notification gets sent to the e-mail address specified in the user's home page. The second entry lists an alternative e-mail address. The third entry specifies a group, the notification gets sent to each member of the group.
+%INCLUDE{"WebChangesAlert"}%
 
 You can also use =%<nop>MAINWEB%= instead of =Main=, but this is not necessary even if you have renamed the main web by configuring =$mainWebname= in =TWiki.cfg=.  
 
@@ -135,5 +128,5 @@ WebIndex lists all web topics in alphabetical order, with the first couple of li
 </blockquote>
 
 -- TWiki:Main.MikeMannix - 01 Dec 2001 %BR%
--- TWiki:Main.PeterThoeny - 24 Apr 2004
+-- TWiki:Main.PeterThoeny - 28 Aug 2004
 
