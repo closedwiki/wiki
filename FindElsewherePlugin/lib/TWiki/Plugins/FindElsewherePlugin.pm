@@ -48,7 +48,7 @@ use vars qw(
         $doPluralToSingular
     );
 
-$VERSION = '1.001';
+$VERSION = '1.000';
 
 # =========================
 sub initPlugin
@@ -65,7 +65,7 @@ sub initPlugin
    $debug = &TWiki::Func::getPreferencesFlag( "FINDELSEWHEREPLUGIN_DEBUG" );
    
    $otherWebMulti =  &TWiki::Func::getPreferencesValue( "FINDELSEWHEREPLUGIN_LOOKELSEWHERE" ) || "";
-   $showWebName = &TWiki::Func::getPreferencesFlag(   "FINDELSEWHEREPLUGIN_SHOWWEBNAME" ) || "";
+   $otherWebMulti = &TWiki::Func::expandCommonVariables($otherWebMulti);
    @webList = split( /[\,\s]+/, $otherWebMulti );
    &TWiki::Func::writeDebug( "- TWiki::Plugins::FindElsewherePlugin will look in @webList" ) if $debug;
 
@@ -89,7 +89,13 @@ sub startRenderingHandler
    # If the WikiWord is found in theWeb, put the word back unchanged
    # If the WikiWord is found in the otherWeb, link to it via [[otherWeb.WikiWord]]
    # If it isn't found there either, put the word back unchnaged
-   $_[0] =~ s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&findTopicElsewhere($_[1],$1,$2,$2,"")/geo;
+   $_[0] =~ s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&findTopicElsewhere($_[1],$1,$2,$2,"")/ge;
+}
+
+sub makeTopicLink
+{
+  ##my($otherWeb, $theTopic) = @_;
+  return "[[$_[0].$_[1]][$_[0]]]";
 }
 
 # =========================
@@ -100,10 +106,10 @@ sub findTopicElsewhere
    my( $theWeb, $thePreamble, $theTopic, $theLinkText, $theAnchor ) = @_;
 
    # kill spaces and Wikify page name (ManpreetSingh - 15 Sep 2000)
-   $theTopic =~ s/^\s*//;
-   $theTopic =~ s/\s*$//;
-   $theTopic =~ s/^(.)/\U$1/;
-   $theTopic =~ s/\s([a-zA-Z0-9])/\U$1/g;
+   $theTopic =~ s/^\s*//o;
+   $theTopic =~ s/\s*$//o;
+   $theTopic =~ s/^(.)/\U$1/o;
+   $theTopic =~ s/\s([a-zA-Z0-9])/\U$1/go;
    # Add <nop> before WikiWord inside text to prevent double links
    $theLinkText =~ s/([\s\(])([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
 
@@ -113,7 +119,7 @@ sub findTopicElsewhere
    # Look in the current web, return when found
    my $exist = &TWiki::Func::topicExists( $theWeb, $theTopic );
    if ( ! $exist ) {
-      if ( ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) ) {
+      if ( ( $doPluralToSingular ) && ( $theTopic =~ /s$/o ) ) {
          my $theTopicSingular = &makeSingular( $theTopic );
          if( &TWiki::Func::topicExists( $theWeb, $theTopicSingular ) ) {
             &TWiki::Func::writeDebug( "- $theTopicSingular was found in $theWeb." ) if $debug;
@@ -129,35 +135,35 @@ sub findTopicElsewhere
    }
    
    # Look in the other webs, return when found
+   my @topicLinks;
    foreach ( @webList ) {
       my $otherWeb = $_;
       my $exist = &TWiki::Func::topicExists( $otherWeb, $theTopic );
       if ( ! $exist ) {
-         if ( ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) ) {
+         if ( ( $doPluralToSingular ) && ( $theTopic =~ /s$/o ) ) {
             my $theTopicSingular = &makeSingular( $theTopic );
             if( &TWiki::Func::topicExists( $otherWeb, $theTopicSingular ) ) {
                &TWiki::Func::writeDebug( "- $theTopicSingular was found in $otherWeb." ) if $debug;
-                if ($showWebName) {
-               $text .= "[[$otherWeb.$theTopic]]"; # leave it as we found it
-                } else {
-                   $text .= "$otherWeb.$theTopic"; # leave it as we found it
-                }
-               return $text;
+               push(@topicLinks, makeTopicLink($otherWeb,$theTopic));
             }
          }
       }
       else  {
          &TWiki::Func::writeDebug( "- $theTopic was found in $otherWeb." ) if $debug;
-         if ($showWebName) {
-           $text .= "[[$otherWeb.$theTopic]]"; # leave it as we found it
-         } else {
-            $text .= "$otherWeb.$theTopic"; # leave it as we found it
-         }
-         return $text;
+         push(@topicLinks, makeTopicLink($otherWeb,$theTopic));
       }
    }
-   &TWiki::Func::writeDebug( "- $theTopic is not in any of these webs: @webList." ) if $debug;
-   $text .= $theLinkText;
+
+   if ($#topicLinks >= 0)
+   { # topic found elsewhere
+     $text .= "<nop>$theTopic<sup>(".join(",", @topicLinks ).")</sup>" ;
+   }
+   else
+   {
+     &TWiki::Func::writeDebug( "- $theTopic is not in any of these webs: @webList." ) if $debug;
+     $text .= $theLinkText;
+   }
+
    return $text;
 }
 
@@ -166,10 +172,10 @@ sub makeSingular
 {
    my ($theWord) = @_;
 
-   $theWord =~ s/ies$/y/;       # plurals like policy / policies
-   $theWord =~ s/sses$/ss/;     # plurals like address / addresses
-   $theWord =~ s/([Xx])es$/$1/; # plurals like box / boxes
-   $theWord =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
+   $theWord =~ s/ies$/y/o;       # plurals like policy / policies
+   $theWord =~ s/sses$/ss/o;     # plurals like address / addresses
+   $theWord =~ s/([Xx])es$/$1/o; # plurals like box / boxes
+   $theWord =~ s/([A-Za-rt-z])s$/$1/o; # others, excluding ending ss like address(es)
    return $theWord;
 }
 
