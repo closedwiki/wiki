@@ -115,9 +115,9 @@ sub main
           $isHideChecked = "checked";
     }
 
-    # FIXME too simplistic - different template for general upload and one to specific file?
-    if ( $fileName ) { $atext = listVersions( $webName, $topic, $fileName ); }
-
+    if ( $fileName ) { 
+        $atext = listVersions( $webName, $topic, $fileName );
+    }
 
     # why log attach before post is called?
     # FIXME: Move down, log only if successful (or with error msg?)
@@ -127,29 +127,20 @@ sub main
         &TWiki::Store::writeLog( "attach", "$webName.$topic", $fileName );
     }
 
-    # get view template, standard view or a view with a different skin
-    my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
-    $tmpl = &TWiki::Store::readTemplate( "attach", $skin );
+    my $fileWikiUser = "";
+    if( $fileName ) {
+        $tmpl = &TWiki::Store::readTemplate( "attachagain" );
+        $fileWikiUser = &TWiki::userToWikiName( $args{"user"} );
+    } else {
+        $tmpl = &TWiki::Store::readTemplate( "attachnew" );
+    }
+    $tmpl =~ s/%ATTACHTABLE%/$atext/go;
+    $tmpl =~ s/%FILEUSER%/$fileWikiUser/go;
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
     $tmpl = &TWiki::getRenderedVersion( $tmpl );
-    $atext = &TWiki::handleCommonTags( $atext, $topic );
-    $atext = &TWiki::getRenderedVersion( $atext );
     $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
-    $tmpl =~ s/%ATTACHTABLE%/$atext/go;
-    if( $fileName ) {
-        $tmpl =~ s/%FILENAME%/$fileName/go;
-        $tmpl =~ s/%ACTION%/Update file:/go;
-        $tmpl =~ s/%PREVIOUS%/Previous <br> upload:/go;
-        $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
-        $fileUser = &TWiki::getRenderedVersion( $TWiki::mainWebname . "." . $args{"user"} );
-        $fileUser =~ s/\n//go;
-        $tmpl =~ s/%FILEUSER%/\($fileUser\)/go;
-    } else {
-        $tmpl =~ s/%FILENAME%//go;
-        $tmpl =~ s/%ACTION%/Attach new file/go;
-        $tmpl =~ s/%PREVIOUS%//go;
-        $tmpl =~ s/%FILEUSER%/$fileUser/go;
-    }
+    $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
+    $tmpl =~ s/%FILENAME%/$fileName/go;
     $tmpl =~ s/%FILEPATH%/$args{"path"}/go;
     $tmpl =~ s/%FILECOMMENT%/$args{"comment"}/go;
     TWiki::writeHeader( $query );
