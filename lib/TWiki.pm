@@ -254,13 +254,56 @@ sub initialize
 }
 
 # =========================
-# Can save cookies if required
+# writeHeader: simple header setup for most scripts
 sub writeHeader
 {
     my( $query ) = @_;
     if( ! &TWiki::Plugins::writeHeaderHandler( $query ) ) {
         print $query->header();
     }
+}
+
+# =========================
+# writeHeaderFull: full header setup for Edit page; can be used
+# to improve cacheability for other pages in future.  Setting
+# cache headers on Edit page fixes the BackFromPreviewLosesText
+# bug, which caused data loss with IE5 and IE6.
+sub writeHeaderFull
+{
+    my( $query, $contentLength, $contentType, $pageType ) = @_;
+
+    # In this version, $pageType is "edit" only - will extend to caching
+    # of other types of page, with expiry driven by page type.
+
+    if( ! &TWiki::Plugins::writeHeaderHandler( $query ) ) {
+	# FIXME: Need to merge any headers supplied by plugin
+	# FIXME: Disable this plugin for now, for full header setup
+        # print $query->header();
+    }
+
+    # Generate date of format 'Thu, 23 Jul 1998 07:21:56 GMT'
+    my $lastModifiedString = gmtime();
+    $lastModifiedString =~ s/ /, /;		# Comma after the day
+    $lastModifiedString =~ s/$/ GMT/;
+
+    # Expiry time is set high to avoid any data loss.  Each instance of Edit 
+    # page has a unique URL with time-string suffix (fix for RefreshEditPage),
+    # so this long expiry time simply means that the browser Back button
+    # always works.  The next Edit on this page will use another URL and 
+    # therefore won't use any cached version of this Edit page.
+    my $expireHours = 24;
+    my $expireSeconds = $expireHours * 60 * 60;
+
+    # Set content length to enable HTTP/1.1 persistent connections 
+    # (aka HTTP keepalive), and other headers to ensure edit page is 
+    # cached until required expiry time.
+    print $query->header(-content_type => $contentType,
+			 -content_length => $contentLength,
+			 -last_modified => $lastModifiedString,
+			 -expires => "+${expireHours}h",
+			 -cache_control => "max-age=$expireSeconds"
+			 );
+
 }
 
 # =========================

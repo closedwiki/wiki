@@ -215,13 +215,16 @@ sub main
         $tmpl =~ s/%REVTITLE%/\(r1.$rev\)/go;
         $tmpl =~ s/%REVARG%/&rev=1.$rev/go;
     } else {
+	# RD: time string on Edit URL - fix for RefreshEditPage
+	my $timestring = time();	# Time in seconds since 1970
         if( $topicExists ) {
-            $tmpl =~ s/%EDITTOPIC%/<a href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><b>Edit<\/b><\/a>/go;
+	    $tmpl =~ s!%EDITTOPIC%!<a href=\"$scriptUrlPath/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?t=$timestring\"><b>Edit</b></a>!go;
             # remove the NOINDEX meta tag
             $tmpl =~ s/<meta name="robots"[^>]*>//goi;
         } else {
-            $tmpl =~ s/%EDITTOPIC%/<a href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><b>Create<\/b><\/a>/go;
-
+	    # FIXME: If we remove the NOINDEX tag from Create-mode view,
+	    # we can simplify this code.
+            $tmpl =~ s!%EDITTOPIC%!<a href=\"$scriptUrlPath/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?t=$timestring\"><b>Create</b></a>!go;
         }
         $tmpl =~ s/%REVTITLE%//go;
         $tmpl =~ s/%REVARG%//go;
