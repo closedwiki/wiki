@@ -51,12 +51,12 @@ There are two work arounds if you want to display angle brackets:
 <A NAME="ques">Q:</A>
 *Some words (like WinAPI) have an unwanted question mark at the end. How can I prevent that?*
 
-A question mark after a word is a link to a not yet existing topic. For example, WinAPI is a valid WikiTopic name in WikiNotation, but the actual topic _WinAPI_ does not exist.
+A question mark after a word is a link to a not yet existing topic. For example, WinAPI is a valid WikiName, but the actual topic _WinAPI_ does not exist.
 
-If you do not intend to create a topic for a valid TWiki topic name, you can prevent it being linked by putting an HTML tag in front of it. I usually use &lt;NOP&gt;. This is a non existing HTML tag, so a browser just ignores it.
+If you do not intend to create a topic for a valid WikiWord, you can prevent it being linked by putting an HTML tag in front of it. I usually use &lt;nop&gt;. This is a non existing HTML tag, so a browser just ignores it.
 
-	* Example text: <br> <code><nop>WinAPI as it is, &lt;NOP&gt;WinAPI with preceeding NOP.</code>
-	* Example output: <br> WinAPI as it is, <NOP>WinAPI with preceeding NOP.
+	* Example text: <br> <code><nop>WinAPI as it is, &lt;nop&gt;WinAPI with preceeding NOP.</code>
+	* Example output: <br> WinAPI as it is, <nop>WinAPI with preceeding NOP.
 
 -----
 <A NAME="fixe">Q:</A>
@@ -200,4 +200,4 @@ hexadecimal notation. For example, to specify white, the red, green and blue com
 
 -----
 
--- Main.PeterThoeny - 08 Aug 1999
+-- Main.PeterThoeny - 18 Aug 2000
