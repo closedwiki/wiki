@@ -31,13 +31,14 @@ use strict;
 
 use vars qw(
 	$webName $topicName $defaultUserName $userName 
-	$wikiToolName $wikiHomeUrl $defaultRootUrl $pubUrl $wikiDir $templateDir 
+	$wikiToolName $wikiHomeUrl $defaultScriptUrl $pubUrl $templateDir 
 	$dataDir $pubDir $debugFilename $logDateCmd $htpasswdFilename 
 	$logFilename $userListFilename 
 	$mainWebname $mainTopicname $notifyTopicname $mailProgram $wikiwebmaster 
 	$wikiversion $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
 	$revDiffCmd $revDelRevCmd $revDelRepCmd $headCmd $rmFileCmd 
-	$doRemovePortNumber $doLogTopicView $doLogTopicEdit $doLogTopicSave
+	$doRemovePortNumber $doPluralToSingular
+	$doLogTopicView $doLogTopicEdit $doLogTopicSave
 	$doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
 	$doLogTopicChanges $doLogTopicSearch $doLogRegistration
 	@isoMonth $TranslationToken $code @code $depth $scriptUrl );
@@ -45,7 +46,7 @@ use vars qw(
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "08 Aug 1999";
+$wikiversion      = "01 Sep 1999";
 
 @isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 
@@ -105,7 +106,7 @@ sub initialize
     }
     else
     {
-        $scriptUrl = $defaultRootUrl;
+        $scriptUrl = $defaultScriptUrl;
     }
 
     $TranslationToken= "\263";
@@ -198,12 +199,6 @@ sub userToWikiName
 }
 
 # =========================
-sub getWikiBaseDir
-{
-    return $wikiDir;
-}
-
-# =========================
 sub getDataDir
 {
     return $dataDir;
@@ -226,14 +221,7 @@ sub getPubUrl
 sub getLocaldate
 {
     my( $sec, $min, $hour, $mday, $mon, $year) = localtime(time());
-    if( $year < 50)
-    {
-        $year = sprintf("20%.2u", $year);
-    }
-    elsif( $year < 100)
-    {
-        $year = sprintf("19%.2u", $year);
-    }
+    $year = sprintf("%.4u", $year + 1900);  # Y2K fix
     my( $tmon) = $isoMonth[$mon];
     my $date = sprintf("%.2u ${tmon} %.2u", $mday, $year);
     return $date;
@@ -253,14 +241,7 @@ sub formatGmTime
 
     my ( $sec, $min, $hour, $mday, $mon, $year) = gmtime($time);
     my( $tmon) = $isoMonth[$mon];
-    if( $year < 50)
-    {
-        $year = sprintf("20%.2u", $year);
-    }
-    elsif( $year < 100)
-    {
-        $year = sprintf("19%.2u", $year);
-    }
+    $year = sprintf("%.4u", $year + 1900);  # Y2K fix
     $time = sprintf("%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min);
     return $time;
 }
@@ -721,13 +702,18 @@ sub internalLink
 
     $page =~ s/\s/_/;
 
-    if( $page =~ /s$/ && ! topicExists( $web, $page) )
+    if( $doPluralToSingular && $page =~ /s$/ && ! topicExists( $web, $page) )
     {
         # page is a non-existing plural
-	$page =~ s/ies$/y/;	# plurals like policy / policies
-	$page =~ s/sses$/ss/;	# plurals like address / addresses
-	$page =~ s/xes$/x/;	# plurals like box / boxes
-	$page =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
+        my $tmp = $page;
+	$tmp =~ s/ies$/y/;	# plurals like policy / policies
+	$tmp =~ s/sses$/ss/;	# plurals like address / addresses
+	$tmp =~ s/xes$/x/;	# plurals like box / boxes
+	$tmp =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
+        if( topicExists( $web, $tmp ) )
+        {
+            $page = $tmp;
+        }
     }
 
     topicExists( $web, $page) ?

@@ -78,8 +78,10 @@ sub main
 	    $head = &wiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 12 );
             $head =~ s/\n/ /go;
             $head =~ s/<[^>]*>//go;
-            $head =~ s/[\*\|]/ /go;
-            $head =~ s/(..................................................................................................................................................................)([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
+            $head =~ s/[\*\|=_]/ /go;
+            $head =~ s/%INCLUDE[^%]*%/ /go;
+            $head = &wiki::handleCommonTags( $head, $bar[0] );
+            $head =~ s/(.{162})([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
             $foo =~ s/%TEXTHEAD%/$head/go;
 
 	    print $foo;

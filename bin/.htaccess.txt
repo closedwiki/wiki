@@ -1,12 +1,12 @@
 Redirect /urlpath/to/TWiki/index.html http://your.domain.com/urlpath/to/TWiki/bin/view
 
-AuthUserFile /filepath/to/TWiki/distrib/bin/data/.htpasswd
+AuthUserFile /filepath/to/TWiki/data/.htpasswd
 AuthName ByPassword
 AuthType Basic
 
 SetHandler cgi-script
 
-ErrorDocument 401 /urlpath/to/TWiki/distrib/bin/view/Main/TWikiRegistration
+ErrorDocument 401 /urlpath/to/TWiki/bin/view/Main/TWikiRegistration
 
 <Files ~ "[^/]*\.html$">
        SetHandler blabla

@@ -109,6 +109,8 @@ sub main
         if( $topicExists )
         {
             $tmpl =~ s/%EDITTOPIC%/<A href=\"%SCRIPTURL%\/edit\/%WEB%\/%TOPIC%\"><B>Edit<\/B><\/A>/go; 
+            # remove the NOINDEX meta tag
+            $tmpl =~ s/<META NAME="ROBOTS"[^>]*>//goi;
         }
         else
         {

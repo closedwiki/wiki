@@ -44,11 +44,15 @@
 #                   %WIKIHOMEURL% : link of TWiki icon in upper left corner :
 $wikiHomeUrl      = "http://your.domain.com/twiki";
 #                   %SCRIPTURL% : cgi-bin URL of TWiki :
-$defaultRootUrl   = "http://your.domain.com/twiki/bin";
+$defaultScriptUrl = "http://your.domain.com/twiki/bin";
 #                   %PUBURL% : public data URL (root of attachments) :
-$pubUrl           = "http://your.domain.com/twiki/pub";   # must match $pubDir
-#                   TWiki root directory :
-$wikiDir          = "/home/httpd/twiki";
+$pubUrl           = "http://your.domain.com/twiki/pub";
+#                   Public data directory (root of attachments), must match $pubUrl :
+$pubDir           = "/home/httpd/twiki/pub";
+#                   Template directory :
+$templateDir      = "/home/httpd/twiki/templates";
+#                   Data (topic files) root directory :
+$dataDir          = "/home/httpd/twiki/data";
 #                   %WIKIWEBMASTER% : webmaster ("From:" in email notification) :
 $wikiwebmaster    = "yourname\@your.domain.com";
 
@@ -84,15 +88,9 @@ $rmFileCmd        = "rm -f %FILENAME%";
 # variables that probably do not change:
 # ==================================================================
 #                   %WIKITOOLNAME% : TWiki tool name :
-$wikiToolName     = "TWikibeta";
-#                   Template directory :
-$templateDir      = "$wikiDir/bin/templates";
-#                   Data (topic files) root directory :
-$dataDir          = "$wikiDir/bin/data";
-#                   Public data directory (root of attachments), must match $pubUrl :
-$pubDir           = "$wikiDir/pub";
+$wikiToolName     = "TWiki";
 #                   Pathname of debug file :
-$debugFilename    = "$wikiDir/bin/debug.txt";
+$debugFilename    = "$dataDir/debug.txt";
 #                   Pathname of user name/password file for authentication :
 $htpasswdFilename = "$dataDir/.htpasswd";
 #                   Pathname of log file :
@@ -113,6 +111,9 @@ $notifyTopicname    = "WebNotify";
 # values are "0" for no, or "1" for yes
 #                   Remove port number from URL. Default "0"
 $doRemovePortNumber = "0";
+#                   Change non existing plural topic name to singular,
+#                   e.g. TestPolicies to TestPolicy. Default "1"
+$doPluralToSingular = "1";
 #                   Log topic views to $logFilename. Default "0"
 $doLogTopicView     = "0";
 #                   Log topic saves to $logFilename. Default "0"

@@ -79,8 +79,10 @@ sub main
     # generate user entry and add to .htpasswd file
     htpasswdAddUser( htpasswdGeneratePasswd( $wikiName, $passwordA ) );
 
-    # send email to Wikiwebmaster
+    # send email confirmation
     $text= &wiki::readTemplate( "registernotify" );
+    $text =~ s/%WIKINAME%/$wikiName/go;
+    $text =~ s/%PASSWORD%/$passwordA/go;
     $text =~ s/%FIRSTLASTNAME%/$firstLastName/go;
     $text =~ s/%EMAILADDRESS%/$emailAddress/go;
     $text =~ s/%COMPANYNAME%/$companyName/go;
@@ -88,7 +90,7 @@ sub main
     $text =~ s/%COUNTRYNAME%/$countryName/go;
     $text =~ s/%HEARFROM%/$hearFrom/go;
     $text =~ s/%COMMENTTEXT%/$commentText/go;
-    $text =~ &wiki::handleCommonTags( );
+    $text = &wiki::handleCommonTags( $text, $wikiName );
     &wiki::sendEmail( $text );
 
     # create user topic if not exist
@@ -118,8 +120,8 @@ sub main
         &wiki::writeLog( "| $time | $text | register | $webName.$userTopic | $emailAddress |" );
     }
 
-    # and finally display user topic
-    print $query->redirect( &wiki::viewUrl( $userTopic ) );
+    # and finally display thank you page
+    print $query->redirect( "$scriptUrl/oops/$webName/$wikiName?template=oopsregthanks&param1=$emailAddress" );
 }
 
 sub htpasswdGeneratePasswd

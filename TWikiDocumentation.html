@@ -56,7 +56,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> Name of wiki tool, is <b>TWikibeta</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WIKIVERSION%</CODE> </td>
-  <td> Wiki tool version, is <b>08 Aug 1999</b> </td>
+  <td> Wiki tool version, is <b>01 Sep 1999</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>USERNAME%</CODE> </td>
   <td> Your login username, is <b>guest</b> </td>
@@ -71,7 +71,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> The current topic name, is <b>TWikiDocumentation</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>DATE%</CODE> </td>
-  <td> Todays date, is <b>09 Aug 1999</b> </td>
+  <td> Todays date, is <b>02 Sep 1999</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>INCLUDE:"file.ext"%</CODE> </td>
   <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: <CODE><b>%<nop>INCLUDE:"../Know/TopicName.txt"%</b></CODE> </td>
@@ -98,7 +98,7 @@ The above line will call mailnotify at 15 minutes and 45 minutes passed every ho
 <p> 
 It is possible to add a category table to a TWiki web. This permits storing and searching for more structured information. Editing a topic shows a HTML form with the usual text area and a table with selectors, checkboxes, radio buttons and text fields. The category table is shown at the end of a topic. The format of the category table can be defined per TWiki web.
 <p> 
-If you want to use a Category Table in a TWiki web you need to have the following three files in the wiki/bin/templates/{Yourweb} directory:
+If you want to use a Category Table in a TWiki web you need to have the following three files in the twiki/templates/{Yourweb} directory:
 <UL>
 <LI> twikicatitems.tmpl : Defines the items in the table
 <LI> twikicatedit.tmpl : Defines the look of the table when editing a topic
@@ -209,28 +209,40 @@ Above template files will result in the following table when <STRONG><EM>editing
 <HR>
 <STRONG>(5) Implementation Notes</STRONG>
 <p> 
-(under construction)
-<p> 
 <STRONG><EM>Platform</EM></STRONG>
 <p> 
-TWiki is written in PERL, but it uses many shell command. The current implementation runs only on a Unix machine. RCS for revision control must be installed on the system.
+TWiki is written in PERL 5, but it uses also many shell command. The current implementation runs only on a Unix machine. RCS for revision control must be installed on the system.
 <p> 
-<STRONG><EM>Files</EM></STRONG>
+<STRONG><EM>Directories</EM></STRONG>
 <p> 
-<pre>
-.htaccess
-changes
-debug.txt
-edit
-error401.html
-mailnotify      automatic email notification, called by a cron job
-preview         preview topic, Perl script
-save
-search
-view
-wiki.pm
-wikicfg.pm
-</pre>
+<TABLE border="1"><TR><TD> <STRONG>Directory:</STRONG>     </TD><TD>  <STRONG>Used for:</STRONG>  </TD></TR>
+<TR><TD> twiki/bin        </TD><TD>  TWiki PERL scripts  </TD></TR>
+<TR><TD> twiki/pub        </TD><TD>  Public files (<A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/FileAttachment">FileAttachments</A>, images)  </TD></TR>
+<TR><TD> twiki/data       </TD><TD>  source text  </TD></TR>
+<TR><TD> twiki/templates  </TD><TD>  HTML templates, used by TWiki scripts  </TD></TR>
+</TABLE>
+<p> 
+<STRONG><EM>Files in twiki/bin</EM></STRONG>
+<p> 
+<TABLE border="1"><TR><TD> <STRONG>File:</STRONG>        </TD><TD>  <STRONG>Used for:</STRONG>  </TD></TR>
+<TR><TD> .htaccess.txt  </TD><TD>  Authentication. Rename to .htaccess and customize if used  </TD></TR>
+<TR><TD> attach         </TD><TD>  Script that shows the attach file page (<A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/FileAttachment">FileAttachment</A>)  </TD></TR>
+<TR><TD> changes        </TD><TD>  Script that shows recent changes  </TD></TR>
+<TR><TD> delete         </TD><TD>  (not used yet)  </TD></TR>
+<TR><TD> edit           </TD><TD>  Script to edit a topic  </TD></TR>
+<TR><TD> mailnotify     </TD><TD>  Script called by cron job to notify users of changes  </TD></TR>
+<TR><TD> oops           </TD><TD>  Script that shows a OK or oops dialog  </TD></TR>
+<TR><TD> preview        </TD><TD>  Script to preview topic after edit  </TD></TR>
+<TR><TD> rdiff          </TD><TD>  Script to see differences of topics  </TD></TR>
+<TR><TD> register       </TD><TD>  Script to register new users  </TD></TR>
+<TR><TD> save           </TD><TD>  Script that saves a topic, called by preview  </TD></TR>
+<TR><TD> search         </TD><TD>  Script that displays search results  </TD></TR>
+<TR><TD> upload         </TD><TD>  Script that does file upload (<A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/FileAttachment">FileAttachment</A>)  </TD></TR>
+<TR><TD> view           </TD><TD>  Script to view a topic ( <STRONG>the</STRONG> script )  </TD></TR>
+<TR><TD> viewfile       </TD><TD>  Script to view an file attachment  </TD></TR>
+<TR><TD> wiki.pm        </TD><TD>  main TWiki library  </TD></TR>
+<TR><TD> wikicfg.pm     </TD><TD>  for initialization and configuration, used by wiki.pm  </TD></TR>
+</TABLE>
 <p> 
 <p> 
 <A name="installation">
@@ -250,13 +262,13 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 <LI> Make sure PERL and the PERL CGI library is installed on your system. Default location of PERL executable is <CODE>/usr/bin/perl</CODE> . In case PERL is installed in a different location, the first line of all perl scripts in the <CODE>twiki/bin</CODE> directory need to be changed (alternatively you can create a symbolic link from <CODE>/usr/bin/perl</CODE> ).
 <LI> To be able to edit the perl scripts and .tmpl files it is necessary to <CODE>chown</CODE> and <CODE>chgrp -R twiki</CODE> so all the files have the owner you want.
 <LI> The scripts execute as <CODE>nobody</CODE> . Set the file permission of all Perl scripts in the <CODE>twiki/bin</CODE> directory as executable to <CODE>-rw-r-xr-x</CODE> .
-<LI> Set the file permission of all files below <CODE>twiki/bin/data</CODE> to 666 ( <CODE>-rw-rw-rw-</CODE> ).
-<LI> Set the file permission of the <CODE>twiki/bin/data</CODE> directory and all its subdirectories to 777 ( <CODE>drwxrwxrwx</CODE> ).
+<LI> Set the file permission of all files below <CODE>twiki/data</CODE> to 666 ( <CODE>-rw-rw-rw-</CODE> ).
+<LI> Set the file permission of the <CODE>twiki/data</CODE> directory and all its subdirectories to 777 ( <CODE>drwxrwxrwx</CODE> ).
 <LI> Set the file permission of the <CODE>twiki/pub</CODE> directory to 777 ( <CODE>drwxrwxrwx</CODE> ).
 <LI> Edit the file <CODE>twiki/bin/wikicfg.pm</CODE> and set the variables at the beginning of the file to your needs.
 <LI> Make sure RCS is installed. In case RCS is not in the <CODE>path</CODE> environment variable, add it to <CODE>path</CODE> . Alternatively, add the full path name to the <CODE>rcs, ci, co, rlog, rcsdiff</CODE> commands in the variables of <CODE>twiki/bin/wikicfg.pm</CODE> .
 <LI> Point your browser at <A href="http://your.domain.com/twiki/bin/view" target="_top">http://your.domain.com/twiki/bin/view</A> and start wiki-ing away! 
-<LI> Security issue: Directories <CODE>twiki/bin/data</CODE> , <CODE>twiki/bin/templates</CODE> and all its subdirectories should be set so that they are <STRONG>not</STRONG> visible as a URL. (Alternatively, move the directries to a place where they are not visible, and change the variables in <CODE>twiki/bin/wikicfg.pm</CODE> accordingly)
+<LI> Security issue: Directories <CODE>twiki/data</CODE> , <CODE>twiki/templates</CODE> and all its subdirectories should be set so that they are <STRONG>not</STRONG> visible as a URL. (Alternatively, move the directries to a place where they are not visible, and change the variables in <CODE>twiki/bin/wikicfg.pm</CODE> accordingly)
 <LI> Optional: You can add new rendering rules or new %variables%. To insure an easy upgrade of TWiki it is recommended to do this customization in <CODE>twiki/bin/wikicfg.pm</CODE> , not <CODE>twiki/bin/wiki.pm</CODE> .
 <LI> Optional: If you are on a public server and you would like to authenticate users you need to rename file <CODE>.htaccess.txt</CODE> in the <CODE>twiki/bin</CODE> directory to <CODE>.htaccess</CODE> and change it to your needs. Consult the HTTP server documentation for details.
 </UL>
@@ -265,13 +277,13 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 <LI> To create a new web:
 <UL>
 <LI> Use a topic name consisting of characters <CODE>A..Z</CODE> , <CODE>a..z</CODE> but <STRONG>not</STRONG> in <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WikiNotation">WikiNotation</A>.
-<LI> Create a new template directory under <CODE>twiki/bin/templates</CODE> .
-<LI> Create a new data directory under <CODE>twiki/bin/data</CODE> .
-<LI> Copy the files <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/TWikiUsers">TWikiUsers</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebHome">WebHome</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebNotify">WebNotify</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebSearch">WebSearch</A>.txt, webcolor.inc, and weblist.inc from the <CODE>twiki/bin/data/Main</CODE> directory to the new data directory.
+<LI> Create a new template directory under <CODE>twiki/templates</CODE> .
+<LI> Create a new data directory under <CODE>twiki/data</CODE> .
+<LI> Copy the files <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/TWikiUsers">TWikiUsers</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebHome">WebHome</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebNotify">WebNotify</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebSearch">WebSearch</A>.txt, webcolor.inc, and weblist.inc from the <CODE>twiki/data/Main</CODE> directory to the new data directory.
 <LI> Make changes to webcolor.inc (unique color for web), and possibly also weblist.inc (web specific links on top).
-<LI> In case you need a web specific copyright notice (at the bottom), copy file webcopyright.inc from the <CODE>twiki/bin/data</CODE> directory to the new data directory, and customize it.
-<LI> If needed, create customized templates in the new templates directory. (Non existing templates are inherited from <CODE>twiki/bin/templates</CODE> )
-<LI> If you want to use a category table, copy the three files twikicatitems.tmpl, twikicatedit.tmpl and twikicatview.tmpl from the <CODE>twiki/bin/templates/Know</CODE> directory to the new templates directory, and customize it. The TWiki Category Table section has more.
+<LI> In case you need a web specific copyright notice (at the bottom), copy file webcopyright.inc from the <CODE>twiki/data</CODE> directory to the new data directory, and customize it.
+<LI> If needed, create customized templates in the new templates directory. (Non existing templates are inherited from <CODE>twiki/templates</CODE> )
+<LI> If you want to use a category table, copy the three files twikicatitems.tmpl, twikicatedit.tmpl and twikicatview.tmpl from the <CODE>twiki/templates/Know</CODE> directory to the new templates directory, and customize it. The TWiki Category Table section has more.
 </UL>
 </UL>
 <p> 
@@ -287,7 +299,6 @@ drwxr-xr-x   6 twiki    t5            512 Nov  4 20:34 templates
 -rw-r--r--   1 twiki    t5            430 Oct 21 18:51 .htaccess
 -rwxrwxrwx   1 twiki    t5           3752 Mar 27 02:21 attach
 -rwxr-xr-x   1 twiki    t5           2810 Oct 21 18:51 changes
--rw-rw-rw-   1 twiki    t5           1091 Nov  6 04:15 debug.txt
 -rwxrwxrwx   1 twiki    t5           1244 Mar 27 02:21 delete
 -rw-r-xr-x   1 twiki    t5           2589 Nov  6 03:05 edit
 -rwxr-xr-x   1 twiki    t5           4614 Oct 21 18:52 mailnotify
@@ -304,7 +315,7 @@ drwxr-xr-x   6 twiki    t5            512 Nov  4 20:34 templates
 -rw-r-xr-x   1 twiki    t5           3945 Jun 23 01:24 wikicfg.pm
 </pre>
 <p> 
-directory <CODE>twiki/bin/templates/</CODE> :
+directory <CODE>twiki/templates/</CODE> :
 <p> 
 <pre>
 drwxr-xr-x   6 twiki    t5            512 Nov  4 20:34 .
@@ -335,7 +346,7 @@ drwxr-xr-x   2 twiki    t5            512 Nov  4 20:35 Main
 -rw-r--r--   1 twiki    t5           1541 Oct 26 21:07 view.tmpl
 </pre>
 <p> 
-directory <CODE>twiki/bin/templates/Main</CODE> :
+directory <CODE>twiki/templates/Main</CODE> :
 <p> 
 <pre>
 drwxr-xr-x   2 twiki    t5            512 Nov  4 20:35 .
@@ -343,7 +354,7 @@ drwxr-xr-x   6 twiki    t5            512 Nov  4 20:34 ..
 -rw-r--r--   1 twiki    t5           2328 Nov  6 03:03 edit.tmpl
 </pre>
 <p> 
-directory <CODE>twiki/bin/templates/Know</CODE> (has a TWiki Category Table) :
+directory <CODE>twiki/templates/Know</CODE> (has a TWiki Category Table) :
 <p> 
 <pre>
 drwxr-xr-x   2 twiki    t5            512 Nov  4 20:35 .
@@ -354,7 +365,7 @@ drwxr-xr-x   6 twiki    t5            512 Nov  4 20:34 ..
 -rw-r--r--   1 twiki    t5            245 Dec 24 23:27 twikicatview.tmpl
 </pre>
 <p> 
-directory <CODE>twiki/bin/data/</CODE> :
+directory <CODE>twiki/data/</CODE> :
 <p> 
 <pre>
 drwxrwxrwx   6 twiki    t5            512 Nov 19 01:01 .
@@ -362,6 +373,7 @@ drwxr-xr-x   5 twiki    t5            512 Nov 11 02:52 ..
 drwxrwxrwx   2 twiki    t5           9216 Nov 13 13:55 Know
 drwxrwxrwx   2 twiki    t5           4608 Nov 15 21:42 Main
 -rw-r--r--   1 nobody   65535          53 Aug 03 08:31 .htpasswd
+-rw-rw-rw-   1 twiki    t5           1091 Nov  6 04:15 debug.txt
 -rw-r--r--   1 nobody   65535        4153 Nov 19 01:01 log199810.txt
 -rw-r--r--   1 nobody   65535        7189 Nov 19 01:01 log199811.txt
 -rw-r--r--   1 twiki    t5           2356 Oct 22 00:56 webcopyright.inc
@@ -369,7 +381,7 @@ drwxrwxrwx   2 twiki    t5           4608 Nov 15 21:42 Main
 -rw-r--r--   1 twiki    t5           1484 Oct 22 01:11 wikiwebtable.inc
 </pre>
 <p> 
-part of directory <CODE>twiki/bin/data/Main</CODE> :
+part of directory <CODE>twiki/data/Main</CODE> :
 <p> 
 <pre>
 drwxrwxrwx   2 twiki    t5           4608 Nov 19 00:56 .
@@ -448,5 +460,6 @@ drwxrwxrwx   4 twiki    t5           1024 Mar 27 02:58 ..
 -- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 02 Jun 1999 <br>
 -- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 14 Jun 1999 <br>
 -- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 23 Jun 1999 <br>
+-- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 01 Sep 1999 <br>
 <p> 
 </body></html>

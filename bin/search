@@ -107,11 +107,13 @@ sub main
             $foo =~ s/%AUTHOR%/$revuser/go;
 	    $foo = &wiki::getRenderedVersion( $foo );
 
-	    $head = &wiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 12 );
+	    $head = &wiki::readFileHead( "$dataDir\/$webName\/$filename.txt", 12 );
             $head =~ s/\n/ /go;
             $head =~ s/<[^>]*>//go;
-            $head =~ s/[\*\|]/ /go;
-            $head =~ s/(..................................................................................................................................................................)([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
+            $head =~ s/[\*\|=_]/ /go;
+            $head =~ s/%INCLUDE[^%]*%/ /go;
+            $head = &wiki::handleCommonTags( $head, $filename );
+            $head =~ s/(.{162})([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
             $foo =~ s/%TEXTHEAD%/$head/go;
             $foo =~ s/%%/%/go;
             print $foo;
