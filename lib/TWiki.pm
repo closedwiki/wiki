@@ -1,3 +1,4 @@
+
 #
 # TWiki WikiClone ($wikiversion has version info)
 #
@@ -631,6 +632,36 @@ sub extractNameValuePair
 }
 
 # =========================
+sub fixN
+{
+    my( $theTag ) = @_;
+    $theTag =~ s/[\r\n]+//gos;
+    return $theTag;
+}
+
+# =========================
+sub fixURL
+{
+    my( $theHost, $theAbsPath, $theUrl ) = @_;
+
+    my $url = $theUrl;
+    if( $url =~ /^\// ) {
+        # fix absolute URL
+        $url = "$theHost$url";
+    } elsif( $url =~ /^\./ ) {
+        # fix relative URL
+        $url = "$theHost/$theAbsPath$url";
+    } elsif( $url =~ /^(http|ftp|gopher|news|file|https)\:/ ) {
+        # full qualified URL, do nothing
+    } elsif( $url ) {
+        # FIXME: is this test enough to detect relative URLs?
+        $url = "$theHost/$theAbsPath$url";
+    }
+
+    return $url;
+}
+
+# =========================
 sub handleIncludeUrl
 {
     my( $theUrl, $thePattern ) = @_;
@@ -654,16 +685,32 @@ sub handleIncludeUrl
     }
 
     $text = &TWiki::Net::getUrl( $host, $port, $path );
-    $text =~ s/^.*?Content\-Type\:\s*([^\n\r]*)[\n\r]*(.*)/$2/os;
-    my $contentType = $1;
-    if( $contentType eq "text/html" ) {
+    $text =~ s/\r\n/\n/gos;
+    $text =~ s/\r/\n/gos;
+    $text =~ s/^(.*?\n)\n(.*)/$2/os;
+    my $httpHeader = $1;
+    my $contentType = "";
+    if( $httpHeader =~ /content\-type\:\s*([^\n]*)/ois ) {
+        $contentType = $1;
+    }
+    if( $contentType =~ /^text\/html/ ) {
+        $path =~ s/(.*)\/.*/$1/o; # build path for relative address
+        $host = "http://$host";   # build host for absolute address
+        if( $port != 80 ) {
+            $host .= ":$port";
+        }
+
+        # FIXME: Make aware of <base> tag
+
         $text =~ s/^.*?<\/head>//ois;            # remove all HEAD
         $text =~ s/<script.*?<\/script>//gois;   # remove all SCRIPTs
         $text =~ s/^.*?<body[^>]*>//ois;         # remove all to <BODY>
         $text =~ s/<\/body>.*//ois;              # remove </BODY> to end
         $text =~ s/<\/html>.*//ois;              # remove </HTML> to end
+        $text =~ s/(<[^>]*>)/&fixN($1)/geos;     # join tags to one line each
+        $text =~ s/(\s(href|src|action)\=\"?)([^\"\>\s]*)/$1 . &fixURL( $host, $path, $3 )/geois;
 
-    } elsif( $contentType eq "text/plain" ) {
+    } elsif( $contentType =~ /^text\/plain/ ) {
         # do nothing
 
     } else {
@@ -1263,9 +1310,7 @@ sub renderParent
     my( $web, $topic, $metar ) = @_;
     
     my $text = "";
-    
     my @meta = @$metar;
-    my $text = "";
     
     my @tmp = grep { /^%META:TOPICPARENT/ } @meta;
     if( @tmp ) {
