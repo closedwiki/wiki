@@ -2,8 +2,7 @@
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
-# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
-# TakeFive Software Inc.
+# Copyright (C) 1999-2000 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,11 +17,14 @@
 
 use wiki;
 
+my $debug = ! ( @ARGV && $ARGV[0] eq "-q" );
+
 &main();
 
 sub main
 {
-    print "TWiki mail notification\n";
+    $debug && print "TWiki mail notification\n";
+    $debug && print "- to suppress all normal output: mailnotify -q\n";
 
     my $dataDir = &wiki::getDataDir();
     opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
@@ -36,7 +38,7 @@ sub main
              &wiki::removeObsoleteTopicLocks( $web );
         }
     }
-    print "End Twiki mail notification\n";
+    $debug && print "End Twiki mail notification\n";
 }
 
 sub processWeb
@@ -47,16 +49,16 @@ sub processWeb
 	&wiki::initialize( "/$web", "nobody" );
     $dummy = "";  # to suppress warning
 
-    print "Checking TWiki.$webName\n";
+    $debug && print "Checking TWiki.$webName\n";
 
     if( ! &wiki::webExists( $webName ) ) {
-	print "* Error: Web $webName does not exist\n";
+	print STDERR "* Error: TWiki mailnotify does not find web $webName\n";
 	return;
     }
 
     my $notifylist = &wiki::getEmailNotifyList($webName);
     if( ! $notifylist ) {
-	print "- Note: Notification list is empty\n";
+	$debug && print "- Note: Notification list is empty\n";
 	return;
     }
 
@@ -89,11 +91,11 @@ sub processWeb
 	        $time = &wiki::formatGmTime( $prevLastmodify );
 	        if( $prevLastmodify eq $bar[2] ) {
 	            # newest entry is same as at time of previous notification
-	            print "- Note: No topics changed since $time\n";
+	            $debug && print "- Note: No topics changed since $time\n";
 	            return;
 	        }
 	        $currLastmodify = $bar[2];
-	        print "- Changed topics since $time: ";
+	        $debug && print "- Changed topics since $time: ";
 	    }
 
 	    if( $prevLastmodify >= $bar[2] ) {
@@ -118,7 +120,7 @@ sub processWeb
 	    $emailbody = "$emailbody$foo";
 	    $exclude{ $bar[0] } = "1";
 
-	    print "$bar[0] ";
+	    $debug && print "$bar[0] ";
 
 	    #add new item to topic list in email body
 	    $foo = "- $bar[0]  ($wikiuser)\n  $scriptUrl/view$scriptSuffix/$webName/$bar[0]\n";
@@ -128,10 +130,10 @@ sub processWeb
     }
 
     if( $topiclist eq "" ) {
-	print "- Note: Topic list is empty\n";
+	$debug && print "- Note: Topic list is empty\n";
 	return;
     }
-    print "\n";
+    $debug && print "\n";
 
     &wiki::saveFile( "$dataDir/$webName/.mailnotify", $currLastmodify );
 
@@ -149,11 +151,12 @@ sub processWeb
     $text =~ s/(href=\")$scriptUrlPath/$1..\/../goi;
     $text =~ s/(action=\")$scriptUrlPath/$1..\/../goi;
 
-    print "- Sending mail notification to: $notifylist\n";
+    $debug && print "- Sending mail notification to: $notifylist\n";
 
     if( ! &wiki::sendEmail( $text ) ) {
-	print "- ERROR: Can't send mail\n- End Twiki.$webName\n";
+	print STDERR "- ERROR: TWiki mailnotify can't send mail\n";
+        $debug && print "- End Twiki.$webName\n";
     } else {
-	print "- End Twiki.$webName, mail notification sent\n";
+	$debug && print "- End Twiki.$webName, mail notification sent\n";
     }
 }
