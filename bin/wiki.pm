@@ -85,7 +85,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "02 Feb 2001";
+$wikiversion      = "03 Feb 2001";
 
 # ===========================
 # read the configuration part
@@ -564,15 +564,36 @@ sub getOopsUrl
     my $url = "$urlHost$scriptUrlPath/oops$scriptSuffix/$web/$theTopic";
     $url .= "\?template=$theTemplate";
     if( $theParam1 ) {
+        # PTh, Stanley Knutson 03 Feb 2001: Proper URL encoding
+        $theParam1 =~ s/[\n\r]/\%3Cbr\%3E/go;
+        $theParam1 =~ s/\s+/\%20/go;
+        $theParam1 =~ s/\&/\%26/go;
+        $theParam1 =~ s/\</\%3C/go;
+        $theParam1 =~ s/\>/\%3E/go;
         $url .= "\&param1=$theParam1";
     }
     if( $theParam2 ) {
+        $theParam2 =~ s/[\n\r]/\%3Cbr\%3E/go;
+        $theParam2 =~ s/\s+/\%20/go;
+        $theParam2 =~ s/\&/\%26/go;
+        $theParam2 =~ s/\</\%3C/go;
+        $theParam2 =~ s/\>/\%3E/go;
         $url .= "\&param2=$theParam2";
     }
     if( $theParam3 ) {
+        $theParam3 =~ s/[\n\r]/\%3Cbr\%3E/go;
+        $theParam3 =~ s/\s+/\%20/go;
+        $theParam3 =~ s/\&/\%26/go;
+        $theParam3 =~ s/\</\%3C/go;
+        $theParam3 =~ s/\>/\%3E/go;
         $url .= "\&param3=$theParam3";
     }
     if( $theParam4 ) {
+        $theParam4 =~ s/[\n\r]/\%3Cbr\%3E/go;
+        $theParam4 =~ s/\s+/\%20/go;
+        $theParam4 =~ s/\&/\%26/go;
+        $theParam4 =~ s/\</\%3C/go;
+        $theParam4 =~ s/\>/\%3E/go;
         $url .= "\&param4=$theParam4";
     }
     return $url;
