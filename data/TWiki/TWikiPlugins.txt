@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071215820" format="1.0" version="1.25"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071473016" format="1.0" version="1.26"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Plugins
@@ -204,7 +204,7 @@ Check the Plugins web on TWiki.org for the latest Plugin doc topic template. Her
 
 *Example:* &lt;<i>Include an example of the Plugin in action. Possibly include a static HTML version of the example to compare if the installation was a success!</i>&gt;"
 
-*Plugin Global Settings:* &lt;<i>Description and settings for custom Plugin %<nop>VARIABLES%, and those required by TWiki.</i>&gt;"
+*Plugin Settings:* &lt;<i>Description and settings for custom Plugin %<nop>VARIABLES%, and those required by TWiki.</i>&gt;"
 
 	* *Plugins Preferences* &lt;<i>If user settings are needed, explain... Entering values works exactly like %TWIKIWEB%.TWikiPreferences and WebPreferences: six (6) spaces and then:</i>&gt;"
 		* *Set &lt;<i>EXAMPLE = value added</i>&gt;*
@@ -231,14 +231,76 @@ A minimum Plugin release consists of a Perl module with a WikiName that ends in 
 #PublishPlugin
 ---+++ Publishing for Public Use
 
-You can release your tested, packaged Plugin to the TWiki community through the TWiki:Plugins web. All Plugins submitted to TWiki.org are available for download and further development in TWiki:Plugins. Publish your Plugin in three steps:
+You can release your tested, packaged Plugin to the TWiki community through the TWiki:Plugins web. All Plugins submitted to TWiki.org are available for download and further development in TWiki:Plugins/PluginPackage. Publish your Plugin in these steps:
 
-	1. *Post* the Plugin documentation topic in the TWiki:Plugins web:
-		* create a new topic using the Plugin name, ex: =MyFirstPlugin.txt=
+	1. *Post* the Plugin documentation topic in the TWiki:Plugins/PluginPackage:
+		* enter the Plugin name in the "How to Create a Plugin" section, for example =MyFirstPlugin=
 		* paste in the topic text from [[#CreatePluginTopic][Creating Plugin Documentation]] and save
 	1. *Attach* the distribution zip file to the topic, ex: =MyFirstPlugin.zip=
 	1. *Link* from the doc page to a new, blank page named after the Plugin, and ending in =Dev=, ex: =MyFirstPluginDev=. This is the discussion page for future development. (User support for Plugins is handled in TWiki:Support.)
+	1. *Put* the Plugin into the CVS repository, see TWiki:Plugins/ReadmeFirst (optional)
 
--- AndreaSterbini - 29 May 2001 <br />
--- PeterThoeny - 11 Dec 2003 <br />
--- MikeMannix - 03 Dec 2001	
+Thank you very much for sharing your Plugin with the TWiki community :-)
+
+#RecommendedStorageOfPluginData
+---++ Recommended Storage of Plugin Data
+
+Plugins sometimes need to store data. This can be Plugin internal data like cache data, or generated data for the browser like images. The following is a recommendation where to store the data.
+
+---+++ Where to store Plugin Internal Data
+
+In case the Plugin generates data just for internal use, or data which is not specific to a topic, store it in the Plugin's attachment directory.
+
+	* The Plugin's attachment directory is =pubdir/Installweb/FooBarPlugin=
+		* =Installweb= refers to the name of the web where the Plugin is installed
+	* The Plugin's attachment URL is =%<nop>PUBURL%/Installweb/FooBarPlugin=
+	* The filename should start with an underscore, followed by an identifier, e.g. =_any_name.ext=
+		* The leading underscore avoids a nameclash with files attached to the Plugin topic
+		* Use only alphanumeric characters, underscores and periods to avoid platform dependency issues and URL issues
+		* Do not use subdirectories (rename and delete would fail)
+	* Use Plugin API functions documented in TWikiFuncModule to ensure portability:
+		* Use =getPubDir()= to get the attachment root directory
+		* Use =getUrlHost()= and =getPubUrlPath()= to build the URL in case you create content for the browser
+		* Use =$installWeb= to get the name of the web where the Plugin is installed
+		* Create the web directory and topic attachment directory if needed
+	* Hint: Package the Plugin at least with one file attachment. This ensures that the attachment directory already exists
+
+---+++ Where to Store Data for Topics using the Plugin
+
+In case the Plugin generates data which is specific to a topic, store it in the topic's attachment directory.
+
+	* The topic's attachment directory is =pubdir/Webname/TopicName=
+	* The topic's attachment URL is =%<nop>PUBURL%/Webname/TopicName=
+	* The filename should start with an underscore, followed by the Plugin name, an underscore and an identifier, e.g. =_FooBarPlugin_any_name.ext=
+		* The leading underscore avoids a nameclash with files attached to the same topic
+		* Use only alphanumeric characters, underscores and periods to avoid platform dependency issues and URL issues
+		* Do not use subdirectories (rename and delete would fail)
+	* Use Plugin API functions documented in TWiki.TWikiFuncModule to ensure portability:
+		* Use =getPubDir()= to get the attachment root directory
+		* Use =getUrlHost()= and =getPubUrlPath()= to build the URL in case you create content for the browser
+
+Example code to build the file name:
+<verbatim>
+sub _make_filename
+{
+	 my ( $web, $topic, $name ) = @_;
+
+	 # Create web directory "pub/$web" if needed
+	 my $dir = TWiki::Func::getPubDir() . "/$web";
+	 unless( -e "$dir" ) {
+		  umask( 002 );
+		  mkdir( $dir, 0775 );
+	 }
+	 # Create topic directory "pub/$web/$topic" if needed
+	 $dir .= "/$topic";
+	 unless( -e "$dir" ) {
+		  umask( 002 );
+		  mkdir( $dir, 0775 );
+	 }
+	 return "$dir/_FooBarPlugin_$name";
+}
+</verbatim>
+
+-- TWiki:Main/PeterThoeny - 11 Dec 2003 <br />
+-- TWiki:Main/AndreaSterbini - 29 May 2001 <br />
+-- TWiki:Main/MikeMannix - 03 Dec 2001	
