@@ -65,8 +65,8 @@ sub registerPlugin
 
     # look for the plugin installation web (needed for attached files)
     # in the order:
-    # 	1 fully specified web.plugin
-    #	2 twiki.plugin
+    #   1 fully specified web.plugin
+    #   2 twiki.plugin
     #   3 thisweb.plugin
     #   4 main.plugin
 
@@ -78,24 +78,27 @@ sub registerPlugin
 	$installWeb = $1;
     } 
     # then, we hope the plugin is in the TWiki web
-    elsif ( &TWiki::Store::topicExists( $TWiki::twikiWebname, $topic ) ) {
+    elsif ( &TWiki::Store::topicExists( $TWiki::twikiWebname, $plugin ) ) {
 	$installWeb = $TWiki::twikiWebname;
     }
     # then, we hope the plugin is in the current web
-    elsif ( &TWiki::Store::topicExists( $web, $topic ) ) {
+    elsif ( &TWiki::Store::topicExists( $web, $plugin ) ) {
 	$installWeb = $web;
     }
     # finally, we hope the plugin is in the Main web
-    elsif ( &TWiki::Store::topicExists( $TWiki::mainWebname, $topic ) ) {
+    elsif ( &TWiki::Store::topicExists( $TWiki::mainWebname, $plugin ) ) {
 	$installWeb = $TWiki::mainWebname;
     }
     # else not found ...
     else { return; }
 
+    # clean up the dirty laundry ....
+    if ( $plugin =~ m/^([^\.]+Plugin)$/ ) {
+	$plugin = $1; 
+    } else { return; }
+
     my $p   = 'TWiki::Plugins::'.$plugin;
 
-    #FIXME: something wrong with an insecure dependency if the plugin
-    #       is not <web>.<plugin> ... no idea why !!!
     eval "use $p;";
     my $h   = "";
     my $sub = "";
