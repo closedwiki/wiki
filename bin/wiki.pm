@@ -85,7 +85,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "28 Jul 2000";
+$wikiversion      = "18 Aug 2000";
 
 # ===========================
 # read the configuration part
@@ -686,25 +686,40 @@ sub getRevisionInfo
     }
     my $tmp= $revInfoCmd;
     $theRev =~ s/$securityFilter//go;
+    $theRev =~ /(.*)/;
+    $theRev = $1;       # now safe, so untaint variable
     $tmp =~ s/%REVISION%/$theRev/;
     my $fileName = "$dataDir/$theWebName/$theTopic.txt";
     $fileName =~ s/$securityFilter//go;
+    $fileName =~ /(.*)/;
+    $fileName = $1;       # now safe, so untaint variable
     $tmp =~ s/%FILENAME%/$fileName/;
-    $tmp =~ /(.*)/;
-    $tmp = $1;       # now safe, so untaint variable
     $tmp = `$tmp`;
     $tmp =~ /date: (.*?);  author: (.*?);/;
     my $date = $1;
     my $user = $2;
     if( ! $user ) {
-        return ( "", "" );
+        # repository file is missing or corrupt, use file timestamp
+        $user = $defaultUserName;
+        $date = (stat "$fileName")[9];
+        my @arr = gmtime( $date );
+        # format to RCS date "2000.12.31.23.59.59"
+        $date = sprintf( "%.4u.%.2u.%.2u.%.2u.%.2u.%.2u", $arr[5] + 1900,
+                         $arr[4] + 1, $arr[3], $arr[2], $arr[1], $arr[0] );
     }
     if( $changeToIsoDate ) {
         # change date to ISO format
-        $tmp = $1;
-        $tmp =~ /(.*?)\/(.*?)\/(.*?) (.*?):[0-9][0-9]$/;
-        if( $4 ) {
-           $date = "$3 $isoMonth[$2-1] $1 - $4";
+        $tmp = $date;
+        # try "2000.12.31.23.59.59" format
+        $tmp =~ /(.*?)\.(.*?)\.(.*?)\.(.*?)\.(.*?)\.[0-9]/;
+        if( $5 ) {
+            $date = "$3 $isoMonth[$2-1] $1 - $4:$5";
+        } else {
+            # try "2000/12/31 23:59:59" format
+            $tmp =~ /(.*?)\/(.*?)\/(.*?) (.*?):[0-9][0-9]$/;
+            if( $4 ) {
+                $date = "$3 $isoMonth[$2-1] $1 - $4";
+            }
         }
     }
     return ( $date, $user );
