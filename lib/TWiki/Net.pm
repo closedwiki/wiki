@@ -119,7 +119,9 @@ sub getUrl {
 
 =pod
 
----++ ObjectMethod sendEmail ( $theText ) -> $error
+---++ ObjectMethod sendEmail ( $theText, $retries ) -> $error
+   * =$theText= - text of the mail, including MIME headers
+   * =$retries= - number of times to retry the send (default 1)
 
 Send an email specified as MIME format content.
 

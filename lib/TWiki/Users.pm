@@ -128,9 +128,8 @@ sub expandUserList {
 ---++ ObjectMethod findUser( $name [, $wikiname] [, $nocreate ] ) -> $userObject
 
 Find the user object corresponding to a name, either a
-login name or a wiki name. If now user object is found,
-the name is assumed to be a login name and a new user
-object is created.
+login name or a wiki name. If no user object is found,
+and a wikiname is given, a new user object is created.
 
 If the $wikiname is specified, it is used as the wikiname
 of the user, overriding whatever may be in the username
@@ -167,7 +166,7 @@ sub findUser {
         $wikiname = $this->_lookupTWikiUsers( $name ) unless $wikiname;
     }
 
-    return undef if( !$wikiname && $dontCreate );
+    return undef if( !$wikiname || $dontCreate );
 
     $wikiname = $name unless $wikiname;
     $object = new TWiki::User( $this->{session}, $name, $wikiname );
