@@ -27,7 +27,7 @@ my $Config = {
     tempdir => '.',
     outputdir => '.',
     outfile => undef,
-    agent => "TWikiKernel Builder/v0.7.1",
+    agent => "TWikiKernel Builder/v0.7.2",
 # documentation switches
     pdoc => eval { require Pdoc::Parsers::Files::PerlModule } && $@ eq '',
     gendocs => 1,
@@ -160,7 +160,7 @@ qw (
       index.html UpgradeTwiki
       AUTHORS COPYING COPYRIGHT LICENSE readme.txt 
     );
-cp( "$installBase/AUTHORS", "$installBase/pub/TWiki/TWikiContributor/AUTHORS" ) )
+cp( "$installBase/AUTHORS", "$installBase/pub/TWiki/TWikiContributor/AUTHORS" );
 
 my $ua = LWP::UserAgent::TWiki::TWikiGuest->new( agent => $Config->{agent} ) or die $!;
 foreach my $doc qw( TWikiDocumentation TWikiHistory )
