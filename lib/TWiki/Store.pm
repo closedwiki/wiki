@@ -70,13 +70,11 @@ sub initialize
     eval "use TWiki::Store::$TWiki::storeTopicImpl;";
 }
 
-# ===========================
-# Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
 =pod
 
 ---++ sub _traceExec ()
 
-Not yet documented.
+Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
 
 =cut
 
@@ -120,21 +118,21 @@ sub _getTopicHandler
 }
 
 
-# =========================
-# Normalize a Web.TopicName
-# Input:                      Return:
-#   ( "Web",  "Topic" )         ( "Web",  "Topic" )
-#   ( "",     "Topic" )         ( "Main", "Topic" )
-#   ( "",     "" )              ( "Main", "WebHome" )
-#   ( "",     "Web/Topic" )     ( "Web",  "Topic" )
-#   ( "",     "Web.Topic" )     ( "Web",  "Topic" )
-#   ( "Web1", "Web2.Topic" )    ( "Web2", "Topic" )
-# Note: Function renamed from getWebTopic
 =pod
 
 ---++ sub normalizeWebTopicName (  $theWeb, $theTopic  )
 
-Not yet documented.
+Normalize a Web.TopicName
+<pre>
+Input:                      Return:
+  ( "Web",  "Topic" )         ( "Web",  "Topic" )
+  ( "",     "Topic" )         ( "Main", "Topic" )
+  ( "",     "" )              ( "Main", "WebHome" )
+  ( "",     "Web/Topic" )     ( "Web",  "Topic" )
+  ( "",     "Web.Topic" )     ( "Web",  "Topic" )
+  ( "Web1", "Web2.Topic" )    ( "Web2", "Topic" )
+</pre>
+Note: Function renamed from getWebTopic
 
 =cut
 
@@ -153,15 +151,13 @@ sub normalizeWebTopicName
 }
 
 
-# =========================
-# Get rid of a topic and its attachments completely
-# Intended for TEST purposes.
-# Use with GREAT CARE as file will be gone, including RCS history
 =pod
 
 ---++ sub erase (  $web, $topic  )
 
-Not yet documented.
+Get rid of a topic and its attachments completely
+Intended for TEST purposes.
+Use with GREAT CARE as file will be gone, including RCS history
 
 =cut
 
@@ -175,16 +171,14 @@ sub erase
     writeLog( "erase", "$web.$topic", "" );
 }
 
-# =========================
-# Move an attachment from one topic to another.
-# If there is a problem an error string is returned.
-# The caller to this routine should check that all topics are valid and
-# do lock on the topics.
 =pod
 
 ---++ sub moveAttachment (  $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment  )
 
-Not yet documented.
+Move an attachment from one topic to another.
+If there is a problem an error string is returned.
+The caller to this routine should check that all topics are valid and
+do lock on the topics.
 
 =cut
 
@@ -224,14 +218,12 @@ sub moveAttachment
     return $error;
 }
 
-# =========================
-# When moving a topic to another web, change within-web refs from this topic so that they'll work
-# when the topic is in the new web. I have a feeling this shouldn't be in Store.pm.
 =pod
 
 ---++ sub changeRefTo (  $text, $oldWeb, $oldTopic  )
 
-Not yet documented.
+When moving a topic to another web, change within-web refs from this topic so that they'll work
+when the topic is in the new web. I have a feeling this shouldn't be in Store.pm.
 
 =cut
 
@@ -293,16 +285,13 @@ sub changeRefTo
 }
 
 
-
-# =========================
-# Rename a topic, allowing for transfer between Webs
-# It is the responsibility of the caller to check for existence of webs,
-# topics & lock taken for topic
 =pod
 
 ---++ sub renameTopic (  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  )
 
-Not yet documented.
+Rename a topic, allowing for transfer between Webs
+It is the responsibility of the caller to check for existence of webs,
+topics & lock taken for topic
 
 =cut
 
@@ -342,13 +331,11 @@ sub renameTopic
 }
 
 
-#==================================
-# update pages that refer to the one being renamed/moved
 =pod
 
 ---++ sub updateReferingPages (  $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs  )
 
-Not yet documented.
+Update pages that refer to the one being renamed/moved.
 
 =cut
 
@@ -428,14 +415,12 @@ sub updateReferingPages
 }
 
 
-# =========================
-# Read a specific version of a topic
-# view:     $text= &TWiki::Store::readTopicVersion( $topic, "1.$rev" );
 =pod
 
 ---++ sub readTopicVersion (  $theWeb, $theTopic, $theRev  )
 
-Not yet documented.
+Read a specific version of a topic
+<pre>view:     $text= &TWiki::Store::readTopicVersion( $topic, "1.$rev" );</pre>
 
 =cut
 
@@ -450,13 +435,11 @@ sub readTopicVersion
     return( $meta, $text );
 }
 
-# =========================
-# Read a specific version of a topic
 =pod
 
 ---++ sub _readVersionNoMeta (  $theWeb, $theTopic, $theRev  )
 
-Not yet documented.
+Read a specific version of a topic
 
 =cut
 
@@ -469,7 +452,6 @@ sub _readVersionNoMeta
     return $topicHandler->getRevision( $theRev );
 }
 
-# =========================
 =pod
 
 ---++ sub readAttachmentVersion (  $theWeb, $theTopic, $theAttachment, $theRev  )
@@ -487,13 +469,11 @@ sub readAttachmentVersion
    return $topicHandler->getRevision( $theRev );
 }
 
-# =========================
-# Use meta information if available ...
 =pod
 
 ---++ sub getRevisionNumber (  $theWebName, $theTopic, $attachment  )
 
-Not yet documented.
+Use meta information if available ...
 
 =cut
 
@@ -510,14 +490,12 @@ sub getRevisionNumber
 }
 
 
-# =========================
-# Latest revision number
-# Returns "" if there is no revision
 =pod
 
 ---++ sub getRevisionNumberX (  $theWebName, $theTopic, $attachment  )
 
-Not yet documented.
+Latest revision number. <br/>
+Returns "" if there is no revision.
 
 =cut
 
@@ -538,13 +516,13 @@ sub getRevisionNumberX
 }
 
 
-# =========================
-# rdiff:            $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1" );
 =pod
 
 ---++ sub getRevisionDiff (  $web, $topic, $rev1, $rev2  )
 
-Not yet documented.
+<pre>
+rdiff:            $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1" );
+</pre>
 
 =cut
 
@@ -564,6 +542,7 @@ sub getRevisionDiff
 # Call getRevisionInfoFromMeta for faster response for topics
 # FIXME try and get rid of this it's a mess
 # In direct calls changeToIsoDate always seems to be 1
+
 =pod
 
 ---+++ getRevisionInfo($theWebName, $theTopic, $theRev, $attachment, $topicHandler) ==> ( $theWebName, $theTopic, $theRev, $attachment, $topicHandler ) 
@@ -594,7 +573,6 @@ sub getRevisionInfo
 }
 
 
-# =========================
 =pod
 
 ---++ sub topicIsLockedBy (  $theWeb, $theTopic  )
@@ -631,9 +609,6 @@ sub topicIsLockedBy
 }
 
 
-
-
-# ======================
 =pod
 
 ---++ sub keyValue2list (  $args  )
@@ -658,7 +633,6 @@ sub keyValue2list
 }
 
 
-# ========================
 =pod
 
 ---++ sub metaAddTopicData (  $web, $topic, $rev, $meta, $forceDate, $forceUser  )
@@ -683,7 +657,6 @@ sub metaAddTopicData
 }
 
 
-# =========================
 =pod
 
 ---++ sub saveTopicNew (  $web, $topic, $text, $metaData, $saveCmd, $doUnlock, $dontNotify, $dontLogSave  )
@@ -701,7 +674,6 @@ sub saveTopicNew
     saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify );
 }
 
-# =========================
 =pod
 
 ---++ sub saveTopic (  $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave, $forceDate  )
@@ -726,7 +698,6 @@ sub saveTopic
     return $error;
 }
 
-# =========================
 =pod
 
 ---++ sub saveAttachment ()
@@ -748,7 +719,6 @@ sub saveAttachment
 }
 
 
-# =========================
 =pod
 
 ---++ sub save (  $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate  )
@@ -769,13 +739,11 @@ sub save
 }
 
 
-# =========================
-# Add meta data to the topic
 =pod
 
 ---++ sub _addMeta (  $web, $topic, $text, $attachment, $nextRev, $meta, $forceDate, $forceUser  )
 
-Not yet documented.
+Add meta data to the topic.
 
 =cut
 
@@ -793,14 +761,12 @@ sub _addMeta
 }
 
 
-# =========================
-# return non-null string if there is an (RCS) error.
-# FIXME: does rev info from meta work if user saves a topic with no change?
 =pod
 
 ---++ sub saveNew (  $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate  )
 
-Not yet documented.
+Return non-null string if there is an (RCS) error. <br/>
+FIXME: does rev info from meta work if user saves a topic with no change?
 
 =cut
 
@@ -946,7 +912,6 @@ sub saveNew
     return ""; # all is well
 }
 
-# =========================
 =pod
 
 ---++ sub writeLog (  $action, $webTopic, $extra, $user  )
@@ -979,7 +944,6 @@ sub writeLog
     close( FILE);
 }
 
-# =========================
 =pod
 
 ---++ sub saveFile (  $name, $text  )
@@ -1001,7 +965,6 @@ sub saveFile
     close( FILE);
 }
 
-# =========================
 =pod
 
 ---++ sub lockTopic (  $name, $doUnlock  )
@@ -1017,13 +980,12 @@ sub lockTopic
    lockTopicNew( $TWiki::webName, $name, $doUnlock );
 }
 
-# =========================
-# Called from rename and TWiki::Func
 =pod
 
 ---++ sub lockTopicNew (  $theWeb, $theTopic, $doUnlock  )
 
-Not yet documented.
+Not yet documented. <br/>
+Called from rename and =TWiki::Func=
 
 =cut
 
@@ -1037,7 +999,6 @@ sub lockTopicNew
     $topicHandler->setLock( ! $doUnlock );
 }
 
-# =========================
 =pod
 
 ---++ sub removeObsoleteTopicLocks (  $web  )
@@ -1077,7 +1038,6 @@ sub removeObsoleteTopicLocks
     }
 }
 
-# =========================
 =pod
 
 ---++ Functions: Content Handling
@@ -1096,7 +1056,6 @@ sub webExists
     return -e "$TWiki::dataDir/$theWeb";
 }
 
-# =========================
 =pod
 
 ---+++ topicExists( $web, $topic ) ==> $flag
@@ -1115,14 +1074,12 @@ sub topicExists
     return -e "$TWiki::dataDir/$theWeb/$theTopic.txt";
 }
 
-# =========================
-# Try and get from meta information in topic, if this can't be done then use RCS
-# Note there is no "1." prefix to this data
 =pod
 
 ---++ sub getRevisionInfoFromMeta (  $web, $topic, $meta  )
 
-Not yet documented.
+Try and get from meta information in topic, if this can't be done then use RCS.
+Note there is no "1." prefix to this data
 
 =cut
 
@@ -1154,8 +1111,6 @@ sub getRevisionInfoFromMeta
     return( $date, $author, $rev );
 }
 
-
-# =========================
 =pod
 
 ---++ sub convert2metaFormat (  $web, $topic, $text  )
@@ -1182,14 +1137,12 @@ sub convert2metaFormat
     return( $meta, $text );
 }
 
-# =========================
-# Expect meta data at top of file, but willing to accept it anywhere
-# If we have an old file format without meta data, then convert
 =pod
 
 ---++ sub _extractMetaData (  $web, $topic, $fulltext  )
 
-Not yet documented.
+Expect meta data at top of file, but willing to accept it anywhere.
+If we have an old file format without meta data, then convert.
 
 =cut
 
@@ -1225,12 +1178,12 @@ sub _extractMetaData
     return( $meta, $text );
 }
 
-# FIXME - get rid of this because uses private part of handler
 =pod
 
 ---++ sub getFileName (  $theWeb, $theTopic, $theAttachment  )
 
-Not yet documented.
+Not yet documented. <br/>
+*FIXME - get rid of this because uses private part of handler*
 
 =cut
 
@@ -1242,14 +1195,13 @@ sub getFileName
     return $topicHandler->{file};
 }
 
-# ======================
-# Just read the meta data at the top of the topic
-# Generalise for Codev.DataFramework, but needs to be fast because of use by view script
 =pod
 
 ---++ sub readTopMeta (  $theWeb, $theTopic  )
 
-Not yet documented.
+Just read the meta data at the top of the topic. <br/>
+Generalise for Codev.DataFramework, but needs to be fast because
+of use by view script.
 
 =cut
 
@@ -1304,7 +1256,6 @@ sub readTopic
     return( $meta, $text );
 }
 
-# =========================
 =pod
 
 ---++ sub readWebTopic (  $theWeb, $theName  )
@@ -1364,7 +1315,6 @@ sub readTopicRaw
 }
 
 
-# =========================
 =pod
 
 ---++ sub readTemplateTopic (  $theTopicName  )
@@ -1388,7 +1338,6 @@ sub readTemplateTopic
     return readTopic( $web, $theTopicName );
 }
 
-# =========================
 =pod
 
 ---++ _readTemplateFile (  $theName, $theSkin  )
@@ -1493,7 +1442,6 @@ sub _readTemplateFile
     return "";
 }
 
-# =========================
 =pod
 
 ---++ sub handleTmplP (  $theVar  )
@@ -1523,7 +1471,6 @@ sub handleTmplP
     return $val;
 }
 
-# =========================
 =pod
 
 ---++ sub readTemplate ( $theName, $theSkin, $theWeb )
@@ -1626,7 +1573,6 @@ sub readFile
 }
 
 
-# =========================
 =pod
 
 ---++ sub readFileHead (  $name, $maxLines  )
@@ -1652,8 +1598,8 @@ sub readFileHead
 }
 
 
-# =========================
 #AS 5 Dec 2000 collect all Web's topic names
+
 =pod
 
 ---+++ getTopicNames( $web ) ==> @topics
@@ -1690,8 +1636,8 @@ sub getTopicNames {
 #/AS
 
 
-# =========================
 #AS 5 Dec 2000 collect immediate subWeb names
+
 =pod
 
 ---++ sub getSubWebs (  $web  )
@@ -1730,6 +1676,7 @@ sub getSubWebs {
 #AS 26 Dec 2000 recursively collects all Web names
 #FIXME: move var to TWiki.cfg ?
 use vars qw ($subWebsAllowedP);
+
 $subWebsAllowedP = 0; # 1 = subwebs allowed, 0 = flat webs
 
 =pod
