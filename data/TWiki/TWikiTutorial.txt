@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1019369272" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1035268976" format="1.0" version="1.12"}%
 %TOC%
 %STARTINCLUDE%
 ---# 20-Minute TWiki
@@ -28,7 +28,7 @@ To edit topics, you need to have a TWiki account.
 
 ---++ 5. Test the page controls...
 Go to the [[#PageBottom][bottom of the page]] to see what you can do. The color-coded control strip has a collection of action links:
-	* ==[[Edit]== - add to or edit the topic (discussed later)
+	* ==[Edit]== - add to or edit the topic (discussed later)
 	* ==[Attach]== - attach files to a topic (discussed later)
 	* ==[Ref-By]== - find out what other topics link to this topic (reverse link)
 	* ==[Printable]== - goes to a stripped down version of the page, good for printing
