@@ -289,19 +289,27 @@ sub initialize1
     # Get INSTALLEDPLUGINS and DISABLEDPLUGINS variables
     my $plugin = &TWiki::Prefs::getPreferencesValue( "INSTALLEDPLUGINS" ) || "";
     $plugin =~ s/[\n\t\s\r]+/ /go;
-    @instPlugins = grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
+    my @setInstPlugins = grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
     $plugin = &TWiki::Prefs::getPreferencesValue( "DISABLEDPLUGINS" ) || "";
     $plugin =~ s/[\n\t\s\r]+/ /go;
     @disabledPlugins = map{ s/^.*\.(.*)$/$1/o; $_ }
                        grep { /^.+Plugin$/ }
                        split( /,?\s+/ , $plugin );
 
+    my @discoveredPlugins = discoverPluginPerlModules();
+    my $p = "";
+    foreach $plugin ( @setInstPlugins ) {
+        $p = $plugin;
+        $p =~ s/^.*\.(.*)$/$1/o; # cut web
+        unless( grep { /^$p$/ } @disabledPlugins ) {
+            push( @instPlugins, $plugins );
+        }
+    }
     # append discovered plugin modules to installed plugin list
-    push( @instPlugins, discoverPluginPerlModules() );
-
+    push( @instPlugins, @discoveredPlugins );
+    
     # for efficiency we register all possible handlers at once
     my $user = "";
-    my $p = "";
     my $posUser = "";
     foreach $plugin ( @instPlugins ) {
         $p = $plugin;
