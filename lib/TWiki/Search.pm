@@ -54,14 +54,134 @@ sub _traceExec
 }
 
 # =========================
+sub _searchTopicsInWeb
+{
+    my( $theWeb, $theTopic, $theScope, $theRegex, $caseSensitive, @theTokens ) = @_;
+
+    my @topicList = ();
+    return @topicList unless( @theTokens );                        # bail out if no search string
+    @topicList = _getTopicList( $theWeb );                         # get all topics in web
+    if( $theTopic ) {
+        if( $caseSensitive ) {
+            @topicList = grep( /$theTopic/, @topicList );          # limit by topic name,
+        } else {                                                   # Codev.SearchTopicNameAndTopicText
+            @topicList = grep( /$theTopic/i, @topicList );
+        }
+    }
+    return @topicList unless( @topicList );                        # bail out if no topics
+
+    if( $theScope eq "topic" ) {                                   # Perl search on topic name,
+        if( $caseSensitive ) {                                     # fix for Codev.SearchWithNoPipe
+            foreach my $token ( @theTokens ) {
+                $token = quotemeta( $token ) unless( $theRegex );  # FIXME I18N
+                @topicList = grep( /$token/, @topicList );         # search for token
+                last unless( @topicList );
+            }
+        } else {
+            foreach my $token ( @theTokens ) {
+                $token = quotemeta( $token ) unless( $theRegex );  # FIXME I18N
+                @topicList = grep( /$token/i, @topicList );
+                last unless( @topicList );
+            }
+        }
+
+    } else {                                                       # grep search on topics
+
+        # Construct command line with 'grep'.  I18N: 'grep' must use locales if needed,
+        # for case-insensitive searching.  See TWiki::setupLocale.
+        my $cmd = "";
+        $cmd .= $TWiki::egrepCmd if( $theRegex );
+        $cmd .= $TWiki::fgrepCmd unless( $theRegex );
+        $cmd .= " -i" unless( $caseSensitive );
+        $cmd .= " -l -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote %FILES%";
+
+        my $result = "";
+        my $sDir = "$TWiki::dataDir/$theWeb";
+        chdir( "$sDir" );
+        _traceExec( "chdir to $sDir", "" );
+
+        # process topics in sets,  fix for Codev.ArgumentListIsTooLongForSearch
+        my $maxTopicsInSet = 512;                                  # max number of topics for a grep call
+        my @set = splice( @topicList, 0, $maxTopicsInSet );
+        my @found = ();
+        while( @set ) {
+            @set = map { "$_.txt" } @set;                          # add ".txt" extension to topic names
+            foreach my $token ( @theTokens ) {
+                my $acmd = $cmd;
+                $acmd =~ s/%TOKEN%/$token/o;
+                $acmd =~ s/%FILES%/@set/o;
+                $acmd =~ /(.*)/;
+                $acmd = "$1";                                      # untaint variable (FIXME: Needs a better check!)
+                $result = `$acmd`;
+                _traceExec( $acmd, $result );
+                @set = split( /\n/, $result );
+                last if( ! @set );
+            }
+            @set = map { /(.*)\.txt$/; $_ = $1; } @set;            # cut ".txt" extension
+            my %seen = ();
+            foreach my $topic ( @set ) {
+                $seen{$topic}++;                                   # make topic unique
+            }
+            push( @found, sort keys %seen );                       # add hits to found list
+            @set = splice( @topicList, 0, $maxTopicsInSet );
+        }
+        @topicList = @found;
+    }
+    return @topicList;
+}
+
+# =========================
+sub _getTopicList
+{
+    my( $web ) = @_ ;
+    opendir DIR, "$TWiki::dataDir/$web" ;
+    my @topicList = sort map { s/\.txt$//o; $_ } grep { /\.txt$/ } readdir( DIR );
+    closedir( DIR );
+    return @topicList;
+}
+
+# =========================
+sub _makeTopicPattern
+{
+    my( $theTopic ) = @_ ;
+    return "" unless( $theTopic );
+    # "Web*, FooBar" ==> ( "Web*", "FooBar" ) ==> ( "Web.*", "FooBar" )
+    my @arr = map { s/[^\*\_$TWiki::mixedAlphaNum]//go; s/\*/\.\*/go; $_ }
+              split( /,\s*/, $theTopic );
+    return "" unless( @arr );
+    # ( "Web.*", "FooBar" ) ==> "^(Web.*|FooBar)$"
+    return '^(' . join( "|", @arr ) . ')$';
+}
+
+# =========================
 sub searchWeb
 {
-    ## 0501 kk : vvv Added params
-    my ( $doInline, $theWebName, $theSearchVal, $theScope, $theOrder,
-         $theRegex, $theLimit, $revSort, $caseSensitive, $noSummary,
-         $noSearch, $noHeader, $noTotal, $doBookView, $doRenameView,
-         $doShowLock, $noEmpty, $theTemplate, $theHeader, $theFormat,
-         $doMultiple, $theSeparator, @junk ) = @_;
+    my %params = @_;
+    my $doInline =      $params{"inline"} || 0;
+    my $emptySearch =   "something.Very/unLikelyTo+search-for;-)";
+    my $theSearchVal =  $params{"search"} || $emptySearch;
+    my $theWebName =    $params{"web"} || "";
+    my $theTopic =      $params{"topic"} || "";
+    my $theExclude =    $params{"excludetopic"} || "";
+    my $theScope =      $params{"scope"} || "";
+    my $theOrder =      $params{"order"} || "";
+    my $theRegex =      $params{"regex"} || "";
+    my $theLimit =      $params{"limit"} || "";
+    my $revSort =       $params{"reverse"} || "";
+    my $caseSensitive = $params{"casesensitive"} || "";
+    my $noSummary =     $params{"nosummary"} || "";
+    my $noSearch =      $params{"nosearch"} || "";
+    my $noHeader =      $params{"noheader"} || "";
+    my $noTotal =       $params{"nototal"} || "";
+    my $doBookView =    $params{"bookview"} || "";
+    my $doRenameView =  $params{"renameview"} || "";
+    my $doShowLock =    $params{"showlock"} || "";
+    my $noEmpty =       $params{"noempty"} || "";
+    my $theTemplate =   $params{"template"} || "";
+    my $theHeader =     $params{"header"} || "";
+    my $theFormat =     $params{"format"} || "";
+    my $doMultiple =    $params{"multiple"} || "";
+    my $theSeparator =  $params{"separator"} || "";
 
     ##TWiki::writeDebug "Search locale is $TWiki::siteLocale";
 
@@ -137,6 +257,9 @@ sub searchWeb
         push @webList, $TWiki::webName;
     }
 
+    $theTopic   = _makeTopicPattern( $theTopic );    # E.g. "Bug*, *Patch" ==> "^(Bug.*|.*Patch)$"
+    $theExclude = _makeTopicPattern( $theExclude );  # E.g. "Web*, FooBar" ==> "^(Web.*|FooBar)$"
+
     my $tempVal = "";
     my $tmpl = "";
     my $topicCount = 0; # JohnTalintyre
@@ -202,12 +325,13 @@ sub searchWeb
 
     if( ! $noSearch ) {
         # print "Search:" part
-#FIXME: The following regex changes the actual search string!
-        $theSearchVal =~ s/&/&amp;/go;
-        $theSearchVal =~ s/</&lt;/go;
-        $theSearchVal =~ s/>/&gt;/go;
-        $theSearchVal =~ s/^\.\*$/Index/go;
-        $tmplSearch =~ s/%SEARCHSTRING%/$theSearchVal/go;
+        my $searchStr = $theSearchVal;
+        $searchStr = "" if( $theSearchVal eq $emptySearch );
+        $searchStr =~ s/&/&amp;/go;
+        $searchStr =~ s/</&lt;/go;
+        $searchStr =~ s/>/&gt;/go;
+        $searchStr =~ s/^\.\*$/Index/go;
+        $tmplSearch =~ s/%SEARCHSTRING%/$searchStr/go;
         if( $doInline ) {
             $searchResult .= $tmplSearch;
         } else {
@@ -217,39 +341,12 @@ sub searchWeb
         }
     }
 
-    # Construct command line with 'ls' and 'grep.  I18N: 'ls' does not
-    # need to be locale-aware as long as it does not transform filenames -
-    # all results are sorted by Perl 'sort'.  However, 'grep' must use
-    # locales if needed, for case-insensitive searching.  See
-    # TWiki::setupLocale.
-    my $cmd = "";
-    if( $theScope eq "topic" ) {
-        $cmd = "$TWiki::lsCmd %FILES% | %GREP% %SWITCHES% -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote";
-    } else {
-        $cmd = "%GREP% %SWITCHES% -l -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote %FILES%";
-    }
-
-    if( $caseSensitive ) {
-        $tempVal = "";
-    } else {
-        $tempVal = "-i";
-    }
-    $cmd =~ s/%SWITCHES%/$tempVal/go;
-
     my @tokens;
     if( $theRegex ) {
-        $tempVal = $TWiki::egrepCmd;
         @tokens = split( /;/, $theSearchVal );
-        if( $theScope eq "topic" ) {
-            # Fix for Codev.CantAnchorSearchREToEnd
-            @tokens = map { s/\$$/\\\.txt\$/o; $_ } @tokens;
-        }
-
     } else {
-        $tempVal = $TWiki::fgrepCmd;
         @tokens = $theSearchVal;
     }
-    $cmd =~ s/%GREP%/$tempVal/go;
 
     # write log entry
     # FIXME: Move log entry further down to log actual webs searched
@@ -262,12 +359,8 @@ sub searchWeb
         &TWiki::Store::writeLog( "search", $tempVal, $theSearchVal );
     }
 
-    ## #############
-    ## 0501 kk : vvv New web processing loop, does what the old straight
-    ##               code did for each web the user requested.  Note that
-    ##               '$theWebName' is mostly replaced by '$thisWebName'
-
-    foreach my $thisWebName (@webList) {
+    # loop through webs
+    foreach my $thisWebName ( @webList ) {
 
         # PTh 03 Nov 2000: Add security check
         $thisWebName =~ s/$TWiki::securityFilter//go;
@@ -286,41 +379,16 @@ sub searchWeb
                  && ( ( $thisWebNoSearchAll =~ /on/i ) || ( $thisWebName =~ /^[\.\_]/ ) )
                  && ( $thisWebName ne $TWiki::webName ) );
 
-        (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding
+        # search topics in this web
+        my @topicList = _searchTopicsInWeb( $thisWebName, $theTopic, $theScope, $theRegex, $caseSensitive, @tokens );
 
-        # 0501 kjk : vvv New var for accessing web dirs.
-        my $sDir = "$TWiki::dataDir/$thisWebName";
-        my @topicList = "";
-        if( $theSearchVal ) {
-            # do grep search
-            chdir( "$sDir" );
-            _traceExec( "chdir to $sDir", "" );
-            @topicList = ( "*.txt" );
-            foreach my $token ( @tokens ) {
-                my $acmd = $cmd;
-                $acmd =~ s/%TOKEN%/$token/o;
-                $acmd =~ s/%FILES%/@topicList/;
-                $acmd =~ /(.*)/;
-                $acmd = "$1";       # untaint variable (FIXME: Needs a better check!)
-                $tempVal = `$acmd`;
-                _traceExec( $acmd, $tempVal );
-                @topicList = split( /\n/, $tempVal );
-                last if( ! @topicList );
-            }
-            # cut .txt extension
-            my @tmpList = map { /(.*)\.txt$/; $_ = $1; } @topicList;
-            @topicList = ();
-            my $lastTopic = "";
-            foreach( @tmpList ) {
-                $tempVal = $_;
-                # make topic unique
-                if( $tempVal ne $lastTopic ) {
-                    push @topicList, $tempVal;
-                }
-            }
+        # exclude topics, Codev.ExcludeWebTopicsFromSearch
+        if( $caseSensitive ) {
+            @topicList = grep( !/$theExclude/, @topicList ) if( $theExclude );
+        } else {
+            @topicList = grep( !/$theExclude/i, @topicList ) if( $theExclude );
         }
-        
-        next if ( $noEmpty && ! @topicList ); # Nothing to show for this topic
+        next if( $noEmpty && ! @topicList ); # Nothing to show for this web
 
         # use hash tables for date, author, rev number and view permission
         my %topicRevDate = ();

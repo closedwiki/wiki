@@ -79,42 +79,40 @@ sub main
     # needs.
     # Note that mod_perl/cgi appears to use ';' as separator, whereas plain cgi uses '&'
 
-    my $websStr       = join ' ',
+    my $attrWeb       = join ' ',
                         grep { s/^web=(.*)$/$1/ }
                         split(/[&;]/, $query->query_string);
     # need to unescape URL-encoded data since we use the raw query_string
     # suggested by JeromeBouvattier
-    $websStr =~ tr/+/ /;       # pluses become spaces
-    $websStr =~ s/%([0-9a-fA-F]{2})/pack("c",hex($1))/ge;  # %20 becomes space
-
-    my $search        = $query->param( "search" ) || "";
-    my $scope         = $query->param( "scope" )  || "";
-    my $order         = $query->param( "order" )  || "";
-    my $revSort       = $query->param( "reverse" )  || "";
-    my $caseSensitive = $query->param( "casesensitive" ) || "";
-    my $regex         = $query->param( "regex" )  || "";
-    my $limit         = $query->param( "limit" )  || "";
-    my $nosummary     = $query->param( "nosummary" )  || "";
-    my $nosearch      = $query->param( "nosearch" )  || "";
-    my $noheader      = $query->param( "noheader" )  || "";
-    my $nototal       = $query->param( "nototal" ) || "";
-    my $bookView      = $query->param( "bookview" )  || ""; # PTh 20 Jul 2000
-    my $renameView    = $query->param( "renameview" )  || "";
-    my $showlock      = $query->param( "showlock" ) || "";
-    my $noempty       = $query->param( "noempty" ) || "";
-    my $attrTemplate  = $query->param( "template" ) || "";  # undocumented
-    my $attrHeader    = $query->param( "header" ) || "";
-    my $attrFormat    = $query->param( "format" ) || "";
-    my $attrMultiple  = $query->param( "multiple" ) || "";
-    my $attrSeparator = $query->param( "separator" ) || "";
+    $attrWeb =~ tr/+/ /;       # pluses become spaces
+    $attrWeb =~ s/%([0-9a-fA-F]{2})/pack("c",hex($1))/ge;  # %20 becomes space
 
     &TWiki::writeHeader( $query );
-    &TWiki::Search::searchWeb( "0",
-        $websStr, $search, $scope, $order, $regex,
-        $limit, $revSort, $caseSensitive, $nosummary,
-        $nosearch, $noheader, $nototal, $bookView, $renameView,
-        $showlock, $noempty, $attrTemplate, $attrHeader, $attrFormat,
-        $attrMultiple, $attrSeparator
+    &TWiki::Search::searchWeb(
+        "inline"        => "0",
+        "search"        => scalar $query->param( "search" ),
+        "web"           => $attrWeb,
+        "topic"         => scalar $query->param( "topic" ),
+        "excludetopic"  => scalar $query->param( "excludetopic" ),
+        "scope"         => scalar $query->param( "scope" ),
+        "order"         => scalar $query->param( "order" ),
+        "regex"         => scalar $query->param( "regex" ),
+        "limit"         => scalar $query->param( "limit" ),
+        "reverse"       => scalar $query->param( "reverse" ),
+        "casesensitive" => scalar $query->param( "casesensitive" ),
+        "nosummary"     => scalar $query->param( "nosummary" ),
+        "nosearch"      => scalar $query->param( "nosearch" ),
+        "noheader"      => scalar $query->param( "noheader" ),
+        "nototal"       => scalar $query->param( "nototal" ),
+        "bookview"      => scalar $query->param( "bookview" ),
+        "renameview"    => scalar $query->param( "renameview" ),
+        "showlock"      => scalar $query->param( "showlock" ),
+        "noempty"       => scalar $query->param( "noempty" ),
+        "template"      => scalar $query->param( "template" ),
+        "header"        => scalar $query->param( "header" ),
+        "format"        => scalar $query->param( "format" ),
+        "multiple"      => scalar $query->param( "multiple" ),
+        "separator"     => scalar $query->param( "separator" ),
     );
 }
 

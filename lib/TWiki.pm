@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "25 Oct 2003";
+$wikiversion      = "01 Nov 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1586,11 +1586,17 @@ sub handleMetaSearch
        $searchVal = "%META:TOPICPARENT[{].*name=\\\"($attrWeb\\.)?$attrTopic\\\".*[}]%";
     }
     
-    my $text = &TWiki::Search::searchWeb( "1", $searchWeb, $searchVal, "",
-       "", "on", "", "",
-       "", "on", "on",
-       "on", "on", "", "",
-       "", "on", "searchmeta"
+    my $text = &TWiki::Search::searchWeb(
+        "inline"        => "1",
+        "search"        => $searchVal,
+        "web"           => $searchWeb,
+        "regex"         => "on",
+        "nosummary"     => "on",
+        "nosearch"      => "on",
+        "noheader"      => "on",
+        "nototal"       => "on",
+        "noempty"       => "on",
+        "template"      => "searchmeta",
     );    
     
     if( $text !~ /^\s*$/ ) {
@@ -1604,40 +1610,32 @@ sub handleMetaSearch
 sub handleSearchWeb
 {
     my( $attributes ) = @_;
-    my $searchVal = extractNameValuePair( $attributes );
-    if( ! $searchVal ) {
-        # %SEARCH{"string" ...} not found, try
-        # %SEARCH{search="string" ...}
-        $searchVal = extractNameValuePair( $attributes, "search" );
-    }
 
-    my $attrWeb           = extractNameValuePair( $attributes, "web" );
-    my $attrScope         = extractNameValuePair( $attributes, "scope" );
-    my $attrOrder         = extractNameValuePair( $attributes, "order" );
-    my $attrRegex         = extractNameValuePair( $attributes, "regex" );
-    my $attrLimit         = extractNameValuePair( $attributes, "limit" );
-    my $attrReverse       = extractNameValuePair( $attributes, "reverse" );
-    my $attrCasesensitive = extractNameValuePair( $attributes, "casesensitive" );
-    my $attrNosummary     = extractNameValuePair( $attributes, "nosummary" );
-    my $attrNosearch      = extractNameValuePair( $attributes, "nosearch" );
-    my $attrNoheader      = extractNameValuePair( $attributes, "noheader" );
-    my $attrNototal       = extractNameValuePair( $attributes, "nototal" );
-    my $attrBookview      = extractNameValuePair( $attributes, "bookview" );
-    my $attrRenameview    = extractNameValuePair( $attributes, "renameview" );
-    my $attrShowlock      = extractNameValuePair( $attributes, "showlock" );
-    my $attrNoEmpty       = extractNameValuePair( $attributes, "noempty" );
-    my $attrTemplate      = extractNameValuePair( $attributes, "template" ); # undocumented
-    my $attrHeader        = extractNameValuePair( $attributes, "header" );
-    my $attrFormat        = extractNameValuePair( $attributes, "format" );
-    my $attrMultiple      = extractNameValuePair( $attributes, "multiple" );
-    my $attrSeparator     = extractNameValuePair( $attributes, "separator" );
-
-    return &TWiki::Search::searchWeb( "1", $attrWeb, $searchVal, $attrScope,
-       $attrOrder, $attrRegex, $attrLimit, $attrReverse,
-       $attrCasesensitive, $attrNosummary, $attrNosearch,
-       $attrNoheader, $attrNototal, $attrBookview, $attrRenameview,
-       $attrShowlock, $attrNoEmpty, $attrTemplate, $attrHeader, $attrFormat,
-       $attrMultiple, $attrSeparator
+    return &TWiki::Search::searchWeb(
+        "inline"        => "1",
+        "search"        => extractNameValuePair( $attributes ) || extractNameValuePair( $attributes, "search" ),
+        "web"           => extractNameValuePair( $attributes, "web" ),
+        "topic"         => extractNameValuePair( $attributes, "topic" ),
+        "excludetopic"  => extractNameValuePair( $attributes, "excludetopic" ),
+        "scope"         => extractNameValuePair( $attributes, "scope" ),
+        "order"         => extractNameValuePair( $attributes, "order" ),
+        "regex"         => extractNameValuePair( $attributes, "regex" ),
+        "limit"         => extractNameValuePair( $attributes, "limit" ),
+        "reverse"       => extractNameValuePair( $attributes, "reverse" ),
+        "casesensitive" => extractNameValuePair( $attributes, "casesensitive" ),
+        "nosummary"     => extractNameValuePair( $attributes, "nosummary" ),
+        "nosearch"      => extractNameValuePair( $attributes, "nosearch" ),
+        "noheader"      => extractNameValuePair( $attributes, "noheader" ),
+        "nototal"       => extractNameValuePair( $attributes, "nototal" ),
+        "bookview"      => extractNameValuePair( $attributes, "bookview" ),
+        "renameview"    => extractNameValuePair( $attributes, "renameview" ),
+        "showlock"      => extractNameValuePair( $attributes, "showlock" ),
+        "noempty"       => extractNameValuePair( $attributes, "noempty" ),
+        "template"      => extractNameValuePair( $attributes, "template" ),
+        "header"        => extractNameValuePair( $attributes, "header" ),
+        "format"        => extractNameValuePair( $attributes, "format" ),
+        "multiple"      => extractNameValuePair( $attributes, "multiple" ),
+        "separator"     => extractNameValuePair( $attributes, "separator" ),
     );
 }
 
