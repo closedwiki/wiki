@@ -15,8 +15,17 @@ then
    exit
 fi
 
+if [ "$TWIKIROOT" == "" ]
+then
+   echo "Base TWiki directory '$TWIKIROOT' is not defined"
+   echo "set and export shell variable TWIKIROOT to where you want to"
+   echo "do development. e.g.:"
+   echo " export TWIKIROOT=~/www/mytwikisite/twiki"
+   exit
+fi
+
 if [ ! -d "$TWIKISTAGE" ]
 then
-   print "Stage directory '$TWIKISTAGE' does not exist"
+   echo "Stage directory '$TWIKISTAGE' does not exist"
    exit
 fi
