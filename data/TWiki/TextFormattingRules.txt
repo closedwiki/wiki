@@ -16,29 +16,303 @@ __External links:__
 
 *EDITING*
 
-	* <NOP>CapitalizedWordsStuckTogether (or WikiWords) will produce a link automatically. In case you want to link to a topic in a different %WIKITOOLNAME% web write =Web.TopicName=, i.e. write =Know.ReadmeFirst= to link to Know.ReadmeFirst located in the Know web.
-	* You can create a forced internal link by enclosing words in double square brackets, i.e. write =[<nop>[text formatting FAQ]]= to get [[text formatting FAQ]] that links to topic TextFormattingFAQ. Text within the brackets may contain optional spaces; the topic name is formed by capitalizing the initial letter and by removing the spaces. You can also refer to a different web, i.e. =[<nop>[%MAINWEB%.TWiki users]]= points to %MAINWEB%.TWikiUsers in the %MAINWEB% web. 
-	* Blank lines will create new paragraphs. 
-	* Words get *bold* by enclosing them in <b>*</b> asterisks
-	* Words get _italic_ by enclosing them in <b>_</b> underscores
-	* Words get __bold italic__ by enclosing them in <b>__</b> double-underscores
-	* Words get shown in =fixed font= by enclosing them in <b>=</b> equal signs
-	* Words get shown in ==bold fixed font== by enclosing them in <b>==</b> double equal signs
-	* Note for *bold* , _italic_ , __bold italic__ and =fixed font= text:
-		* Make sure to "stick" the =* _ == signs to the characters, e.g.
-			* _This works_ 
-			* _This does not get italic because there is a space between the last word and the underline character _
-		* Example text to enter:
-			* Writing <nop>*bold text* , <nop>_italic text_ and <nop>=fixed== monospaced text
-		* Example text gets rendered as:
-			* Writing *bold text* , _italic text_ and =fixed== monospaced text
-	* Separator: at least four dashes at the beginning of a line: &lt;--------&gt;
-	* List Item: 3 spaces and an asterisk: &lt;&nbsp;&nbsp;&nbsp;*&gt;
-	* Nested Item: 6 spaces and an asterisk:  &lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&gt;
-	* Ordered List: 3 spaces and a number: &lt;&nbsp;&nbsp;&nbsp;1&gt;
-	* Definition:  3 spaces, the term, a colon, followed by the definition: &lt;&nbsp;&nbsp;&nbsp;term:&nbsp;definition&gt; <br>
-	  Note that terms with spaces are not supported. In case you do have a term with more then one word, separate the words with dashes or with the non-breaking-space entity, i.e. write =Character&amp;nbsp;Set:= to get =Character&nbsp;Set:=.
-	* Table: Optional spaces followed by the cells enclosed in vertical bars: &lt;&nbsp;&nbsp;&nbsp;|&nbsp;cell&nbsp;1&nbsp;|&nbsp;cell&nbsp;2&nbsp;|&nbsp;cell&nbsp;3&nbsp;|&nbsp;...&nbsp;|&gt;
+<table border="3" cellpadding="2" cellspacing="2">
+<tr>
+<td>
+ *Formatting Command:*
+</td><td>
+ *Example: You write:*
+</td><td>
+ *You get:*
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Paragraphs:* <br>
+ Blank lines will create new paragraphs.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+ 1st paragraph
+
+ 2nd paragraph
+</pre>
+</font></span>
+</td><td valign="top">
+ 1st paragraph
+
+ 2nd paragraph
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Bold Text:* <br>
+ Words get *bold* by enclosing them in =*= asterisks.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+ *Bold*
+</pre>
+</font></span>
+</td><td valign="top">
+ *Bold*
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Italic Text:* <br>
+ Words get _italic_ by enclosing them in =_= underscores.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+ _Italic_
+</pre>
+</font></span>
+</td><td valign="top">
+ _Italic_
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Bold Italic:* <br>
+ Words get __bold italic_ by enclosing them in =_= double-underscores.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+ __Bold italic__
+</pre>
+</font></span>
+</td><td valign="top">
+ __Bold italic__
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Fixed Font:* <br>
+ Words get shown in =fixed font= by enclosing them in =<nop>=<nop>= equal signs.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+ =Fixed font=
+</pre>
+</font></span>
+</td><td valign="top">
+ =Fixed font=
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Bold Fixed Font:* <br>
+ Words get shown in ==bold fixed font== by enclosing them in ==<nop>== double equal signs.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+ ==Bold fixed==
+</pre>
+</font></span>
+</td><td valign="top">
+ ==Bold fixed==
+</td>
+</tr>
+<tr>
+<td valign="top">
+ __Note:__ Make sure to "stick" the =* _ = <nop>==<nop>= signs to the words, e.g. take away spaces.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+ _This works_,
+ _this not _
+</pre>
+</font></span>
+</td><td valign="top">
+ _This works_,
+ _this not _
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Verbatim Mode:* <br>
+ Surround code excerpts and other formatted text with =&lt;verbatim&gt;= and =&lt;/verbatim&gt;= tags. <br> __Note:__ Use =&lt;pre&gt;= and =&lt;/pre&gt;= tags instead if you want that HTML code is interpreted. <br> __Note:__ Each tag must be on a line by itself.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+&lt;verbatim&gt;
+class CatAnimal {
+  void purr() {
+	 &lt;code here&gt;
+  }
+}
+&lt;/verbatim&gt;
+</pre>
+</font></span>
+</td><td valign="top">
+<verbatim>
+class CatAnimal {
+  void purr() {
+	 <code here>
+  }
+}
+</verbatim>
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Separator:* <br>
+ At least four dashes at the beginning of a line.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+-------
+</pre>
+</font></span>
+</td><td valign="top">
+-------
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *List Item:* <br>
+ Three spaces and an asterisk.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+	* bullet item
+</pre>
+</font></span>
+</td><td valign="top">
+	* bullet item
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Nested List Item:* <br>
+ Six, nine, ... spaces and an asterisk.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+		* nested stuff
+</pre>
+</font></span>
+</td><td valign="top">
+		* nested stuff
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Ordered List:* <br>
+ Three spaces and a number.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+	1 Sushi
+	1 Dim Sum
+</pre>
+</font></span>
+</td><td valign="top">
+	1 Sushi
+	1 Dim Sum
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Definition List:* <br>
+ Three spaces, the term, a colon, followed by the definition. <br>
+__Note:__ Terms with spaces are not supported. In case you do have a term with more then one word, separate the words with dashes or with the =&amp;nbsp;= non-breaking-space entity.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+	Sushi: Japan
+	Dim&amp;nbsp;Sum: S.F.
+</pre>
+</font></span>
+</td><td valign="top">
+	Sushi: Japan
+	Dim&nbsp;Sum: S.F.
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Table:* <br>
+ Optional spaces followed by the cells enclosed in vertical bars.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+| A1 | B1 | C1 |
+| A2 | B2 | C2 |
+</pre>
+</font></span>
+</td><td valign="top">
+| A1 | B1 | C1 |
+| A2 | B2 | C2 |
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *<nop>WikiWord Links:* <br>
+ <nop>CapitalizedWordsStuckTogether (or WikiWords) will produce a link automatically. <br> __Note:__ In case you want to link to a topic in a different %WIKITOOLNAME% web write =Webname.TopicName=.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+ WebNotify,
+ Know.ReadmeFirst
+</pre>
+</font></span>
+</td><td valign="top">
+ WebNotify,
+ Know.ReadmeFirst
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Forced Links:* <br>
+ You can create a forced internal link by enclosing words in double square brackets. <br> __Note:__ Text within the brackets may contain optional spaces; the topic name is formed by capitalizing the initial letter and by removing the spaces; i.e. =[<nop>[text formatting FAQ]]= links to topic TextFormattingFAQ.  You can also refer to a different web.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+ [[wiki syntax]],
+ [[%MAINWEB%.TWiki users]]
+</pre>
+</font></span>
+</td><td valign="top">
+ [[wiki syntax]],
+ [[%MAINWEB%.TWiki users]]
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Prevent a Link:* <br>
+ Prevent a WikiWord from being linked by prepending it with the =&lt;nop&gt;= tag.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+ &lt;nop&gt;SunOS
+</pre>
+</font></span>
+</td><td valign="top">
+ <nop>SunOS
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Disable Links:* <br>
+ You can disable automatic linking of WikiWords by surround text with =&lt;noautolink&gt;= and =&lt;/noautolink&gt;= tags. <br> __Note:__ Each tag must be on a line by itself.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<verbatim>
+ <noautolink>
+ RedHat &
+ SuSE
+ </noautolink>
+</verbatim>
+</font></span>
+</td><td valign="top">
+ <noautolink>
+ RedHat &
+ SuSE
+ </noautolink>
+</td>
+</tr>
+</table>
 
 
 *HTML*
