@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042962180" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043653274" format="1.0" version="1.6"}%
 ---+!! Interwiki Plugin
 
 The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on aliases defined in the %TWIKIWEB%.InterWikis topic. This plugin is inspired by <nop>UseMod Wiki's inter-wiki links, http://www.usemod.com/cgi-bin/wiki.pl?InterWiki.
@@ -11,7 +11,8 @@ The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on ali
 	* All ==ExternalSite== aliases are defined in the %TWIKIWEB%.InterWikis topic.
 	* Add and edit aliases in %TWIKIWEB%.InterWikis.
 	* %H% For TWiki sites, both the *web* and the *topic* have to be specified: ==<nop>TWikisite:Webname/<nop>SomePage==
-		* TWiki:Plugins/InterwikiPlugin
+		* TWiki:Plugins/InterwikiPlugin, or
+		* TWiki:Plugins.InterwikiPlugin
 
 ---++ <nop>%TOPIC% Settings
 
