@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "30 Dec 2002";
+$wikiversion      = "18 Jan 2003";  # Peter's happy birthday
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -303,12 +303,12 @@ sub initialize
             # redirect to URI
             print $cgiQuery->redirect( $theTopic );
             return; # should never return here
-        } elsif( $theTopic =~ /(.*)\.(.*)/ ) {
+        } elsif( $theTopic =~ /(.*)[\.\/](.*)/ ) {
             # is "bin/script?topic=Webname.SomeTopic"
             $webName   = $1 || "";
             $topicName = $2 || "";
         } else {
-            # is "bin/script/Webname?topic=SomeTopic"
+            # assume "bin/script/Webname?topic=SomeTopic"
             $topicName = $theTopic;
         }
     }
