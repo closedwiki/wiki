@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = "04 May 2004";
+$wikiversion      = "07 May 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1148,11 +1148,11 @@ sub userToWikiListInit
     %wikiToUserList = ();
     my @list = ();
     if( $doMapUserToWikiName ) {
+        @list = split( /\n/, TWiki::Store::readFile( $userListFilename ) );
+    } else {
         # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
         # for .htpasswd authenticated sites ignore user list, but map only guest to TWikiGuest
         @list = ( "\t* TWikiGuest - guest - " ); # CODE_SMELL on localization
-    } else {
-        @list = split( /\n/, &TWiki::Store::readFile( $userListFilename ) );
     }
 
     # Get all entries with two '-' characters on same line, i.e.
