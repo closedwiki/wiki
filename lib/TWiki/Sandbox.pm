@@ -231,14 +231,14 @@ sub buildCommandLine {
                             if ( $param =~ /^([0-9A-Za-z.+_\-]{0,30})$/ ) {
                                 push @targs, $1;
                             } else {
-                                throw Error::Simple( "invalid string argument" );
+                                throw Error::Simple( "invalid string argument '$param'" );
                             }
                         } elsif ($flag =~ /D/) {
                             # RCS date.
                             if ( $param =~ m|^(\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d)$| ) {
                                 push @targs, $1;
                             } else {
-                                throw Error::Simple( "invalid date argument $param" );
+                                throw Error::Simple( "invalid date argument '$param'" );
                             }
                         } else {
                             throw Error::Simple( "illegal flag in $t" );
