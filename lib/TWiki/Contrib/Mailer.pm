@@ -105,13 +105,13 @@ sub _processChanges {
     my ( $twiki, $web, $notify, $db ) = @_;
 
     my $wroot =  $TWiki::cfg{DataDir} . "/$web";
-    my $prevLastmodify =
+    my $timeOfLastNotify =
       $twiki->{store}->readMetaData( $web, "mailnotify" ) || 0;
-    my $currLastmodify = "";
+    my $timeOfLastChange = "";
 
     if ( $verbose ) {
         print "\tLast notification was at " .
-          TWiki::Time::formatTime( $prevLastmodify ). "\n";
+          TWiki::Time::formatTime( $timeOfLastNotify ). "\n";
     }
 
     # hash indexed on email address, each entry of which contains an
@@ -128,7 +128,7 @@ sub _processChanges {
 
     unless ( $changes ) {
         print "No changes\n" if ( $verbose );
-        return;
+        return "";
     }
 
     foreach my $line ( reverse split( /\n/, $changes ) ) {
@@ -141,33 +141,17 @@ sub _processChanges {
 
         next unless $twiki->{store}->topicExists( $web, $topicName );
 
-        # First formulate a change record, irrespective of
-        # whether any subscriber is interested
-        if( ! $currLastmodify ) {
-            if( $prevLastmodify eq $changeTime ) {
-                # newest entry is same as at time of previous notification
-                return;
-            }
-            $currLastmodify = $changeTime;
-        }
+        $timeOfLastChange = $changeTime unless( $timeOfLastChange );
 
-        if( $prevLastmodify >= $changeTime ) {
-            # found last notification
-            last;
-        }
-        my $frev = "";
-        if( $revision ) {
-            if( $revision > 1 ) {
-                $frev = "r1.$revision";
-            } else {
-                $frev = "<b>NEW</b>";
-            }
-        }
+        # found last interesting change?
+        last if( $changeTime <= $timeOfLastNotify );
 
         print "\tFound change to $topicName\n" if ( $verbose );
 
+        # Formulate a change record, irrespective of
+        # whether any subscriber is interested
         my $change = new TWiki::Contrib::MailerContrib::Change
-          ( $twiki, $web, $topicName, $userName, $changeTime, $frev );
+          ( $twiki, $web, $topicName, $userName, $changeTime, $revision );
 
         # Now, find subscribers to this change and extend the change set
         $notify->processChange( $change, $db, \%changeset, \%seenset );
@@ -176,11 +160,11 @@ sub _processChanges {
     # Now generate emails for each recipient
     my $report = _generateEmails( $twiki, $web,
                                   \%changeset,
-                                  TWiki::Time::formatTime($prevLastmodify) );
+                                  TWiki::Time::formatTime($timeOfLastNotify) );
 
     # Only update the memory topic if mails were sent
     if ( $sendmail ) {
-        $twiki->{store}->saveMetaData( $web, "mailnotify", $currLastmodify );
+        $twiki->{store}->saveMetaData( $web, "mailnotify", $timeOfLastChange );
     }
     return $report;
 }

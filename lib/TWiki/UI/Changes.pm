@@ -44,8 +44,6 @@ sub changes {
 
     my $text = $session->{templates}->readTemplate( "changes", $skin );
 
-    my $summary = "";
-
     $text = $session->handleCommonTags( $text, $webName, $topic );
     $text = $session->{renderer}->getRenderedVersion( $text, $webName, $topic );
     $text =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
@@ -80,28 +78,10 @@ sub changes {
             $thisChange = $session->{renderer}->getRenderedVersion
               ( $thisChange, $webName, $changedTopic );
 
-            my( $meta, $text ) = $session->{store}->readTopic
-              ( $query->{user}, $webName, $changedTopic, undef );
-            if( $rev > 1 ) {
-                # there was a prior version. Diff it.
-                my( $ometa, $otext ) =
-                  $session->{store}->readTopic
-                    ( $query->{user}, $webName, $changedTopic, $rev - 1 );
-                $text = $session->{renderer}->TML2PlainText
-                  ( $text, $webName, $changedTopic, "nonop" );
-                $text = substr( $text, 0, 162 )."..."
-                  if ( length($text) > 162);
-                $otext = $session->{renderer}->TML2PlainText
-                  ( $otext, $webName, $changedTopic, "nonop" );
-                $otext = substr( $otext, 0, 162 )."..."
-                  if ( length($otext) > 162);
-                $summary = TWiki::Merge::merge( $otext, $text, qr/\s+/ );
-                $summary = $session->{renderer}->protectPlainText( $summary );
-            } else {
-                # only one version, show summary
-                $summary = $session->{renderer}->makeTopicSummary
-                  ( $text, $changedTopic, $webName );
-            }
+            my $summary = 
+              $session->{renderer}->summariseChanges( $query->{user},
+                                                      $webName, $changedTopic,
+                                                      $rev - 1, $rev, 1 );
             $thisChange =~ s/%TEXTHEAD%/$summary/go;
 
             $page .= $thisChange;

@@ -1140,7 +1140,7 @@ subsequent rendering; nops get removed at the very end.
 Defuses TML.
 
 $opts:
-   * showvar - shows !%VAR% names
+   * showvar - shows !%VAR% names if not expanded
    * expandvar - expands !%VARS%
    * nohead - strips ---+ headings at the top of the text
 
@@ -1149,41 +1149,39 @@ $opts:
 sub TML2PlainText {
     my( $this, $text, $web, $topic, $opts ) = @_;
     ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
+    $opts ||= "";
 
-    $opts = "" unless( $opts );
+    $text =~ s/\r//g;  # SMELL, what about OS10?
+    $text =~ s/%META:[A-Z].*?}%//g;  # remove meta data SMELL
+
     if( $opts =~ /expandvar/ ) {
         $text =~ s/(\%)(SEARCH){/$1<nop>$2/g; # prevent recursion
         $text = $this->{session}->handleCommonTags( $text, $web, $topic );
+    } else {
+        $text =~ s/%WEB%/$web/g;
+        $text =~ s/%TOPIC%/$topic/g;
+        $text =~ s/%(WIKITOOLNAME)%/$this->{session}->{SESSION_TAGS}{$1}/g;
+        if( $opts =~ /showvar/ ) {
+            $text =~ s/%(\w+({.*?}))%/\%$1/g; # defuse
+        } else {
+            $text =~ s/%[A-Z_]+({.*?})?%//g;  # remove
+        }
     }
-    $text =~ s/\r//g;  # SMELL, what about OS10?
-    $text =~ s/%META:[A-Z].*?}%//g;  # remove meta data SMELL
 
     # Format e-mail to add spam padding (HTML tags removed later)
     $text =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . $this->_mailtoLink( $2, $3, $4 )/ge;
     $text =~ s/<\!\-\-.*?\-\->//gs;     # remove all HTML comments
-    $text =~ s/<\!\-\-.*$//s;           # cut HTML comment
-    $text =~ s/<\/?nop *\/?>/${TWiki::TranslationToken}NOP/g; # save <nop>
     $text =~ s/<[^>]*>//g;              # remove all HTML tags
     $text =~ s/\&[a-z]+;/ /g;           # remove entities
-    $text =~ s/%WEB%/$web/g;
-    $text =~ s/%TOPIC%/$topic/g;
-    $text =~ s/%(WIKITOOLNAME)%/$this->{session}->{SESSION_TAGS}{$1}/g;
     if( $opts =~ /nohead/ ) {
         # skip headings on top
         while( $text =~ s/^\s*\-\-\-+\+[^\n\r]+// ) {}; # remove heading
     }
-    unless( $opts =~ /showvar/ ) {
-        # remove variables
-        $text =~ s/%[A-Z_]+%//g;        # remove %VARS%
-        $text =~ s/%[A-Z_]+{.*?}%//g;   # remove %VARS{}%
-    }
-    $text =~ s/\[\[([^\]]*\]\[|[^\s]*\s)(.*?)\]\]/$2/g; # keep only link text of [[][]]
+    # keep only link text of [[][]]
+    $text =~ s/\[\[([^\]]*\]\[|[^\s]*\s)(.*?)\]\]/$2/g;
     $text =~ s/[\[\]\*\|=_\&\<\>]/ /g;  # remove Wiki formatting chars
-    $text =~ s/${TWiki::TranslationToken}NOP/<nop>/g;  # restore <nop>
-    $text =~ s/\%(\w)/\%<nop>$1/g;      # defuse %VARS%
-    $text =~ s/\!(\w)/<nop>$1/g;        # escape !WikiWord escapes
-    $text =~ s/\-\-\-+\+*\s*\!*/ /g;    # remove heading formatting
-    $text =~ s/\s+[\+\-]*/ /g;          # remove newlines and special chars
+    $text =~ s/^\-\-\-+\+*\s*\!*/ /gm;  # remove heading formatting and hbar
+    $text =~ s/[\+\-]+/ /g;             # remove special chars
     $text =~ s/^\s+//;                  # remove leading whitespace
     $text =~ s/\s+$//;                  # remove trailing whitespace
 
@@ -1446,6 +1444,62 @@ sub renderRevisionInfo {
     $value =~ s/\$wikiusername/$wun/gi;
 
     return $value;
+}
+
+=pod
+
+---++ ObjectMethod summariseChanges($user, $web, $topic, $orev, $nrev, $plain) -> $text
+   * =$user= - user (null to ignore permissions)
+   * =$web= - web
+   * =$topic= - topic
+   * =$orev= - older rev
+   * =$nrev= - later rev
+   * =$tml= - if true will generate renderable TML (i.e. HTML with NOPs. if false will generate a summary suitable for use in plain text (mail, for example)
+Generate a (max 3 line) summary of the differences between the revs.
+
+If there is only one rev, a topic summary will be returned.
+
+If =$plain= is set, all HTML will be removed.
+
+In plain, lines are truncated to 70 characters. Differences are shown using + and - to indicate added and removed text.
+
+=cut
+
+sub summariseChanges {
+    my( $this, $user, $web, $topic, $orev, $nrev, $tml ) = @_;
+    my $summary = "";
+
+    my( $nmeta, $ntext ) =
+      $this->store()->readTopic( $user, $web, $topic, $nrev );
+
+    if( $nrev > 1 && $orev ne $nrev ) {
+        # there was a prior version. Diff it.
+        $ntext = $this->TML2PlainText( $ntext, $web, $topic, "nonop" );
+
+        my( $ometa, $otext ) =
+          $this->store()->readTopic( $user, $web, $topic, $orev );
+        $otext = $this->TML2PlainText( $otext, $web, $topic, "nonop" );
+
+        my $blocks = TWiki::Merge::simpleMerge( $otext, $ntext, qr/[\r\n]+/ );
+        my $n = 6; # max number of lines
+        foreach ( @$blocks ) {
+            $_ =~ s/^(.{67}).*$/$1.../ if( length($_) > 70 );
+            if( $tml ) {
+                $_ =~ s/^\+(.*)$/<ins>$1<\/ins>/s;
+                $_ =~ s/^-(.*)$/<br><del>$1<\/del>/s;
+            }
+        }
+        $summary = join("\n", @$blocks );
+    }
+
+    unless( $summary ) {
+        $summary = $this->makeTopicSummary( $ntext, $topic, $web );
+    }
+
+    if( $tml ) {
+        $summary = $this->protectPlainText( $summary );
+    }
+    return $summary;
 }
 
 1;

@@ -174,7 +174,7 @@ sub _save {
         my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
         # If the last save was by me, don't merge
         if ( $rev ne $originalrev && !$author->equals( $user )) {
-            $newText = TWiki::Merge::merge( $currText, $newText, "\\r?\\n" );
+            $newText = TWiki::Merge::insDelMerge( $currText, $newText, "\\r?\\n" );
             $newMeta->merge( $currMeta );
             $newText .= "\n\nMERGED " . $author->stringify() .
               " and " . $user->stringify() . " original $originalrev current $rev\n";

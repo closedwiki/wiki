@@ -1443,18 +1443,6 @@ sub createWeb {
         }
     }
 
-    unless( open( FILE, ">$dir/.changes" ) ) {
-        return "Could not create changes file $dir/.changes, error: $!";
-    }
-    print FILE "";  # empty file
-    close( FILE );
-
-    unless( open( FILE, ">$dir/.mailnotify" ) ) {
-        return "Could not create mailnotify timestamp file $dir/.mailnotify, error: $!";
-    }
-    print FILE "";
-    close( FILE );
-
     # copy topics from base web
     my @topicList = $this->getTopicNames( $baseWeb );
     unless( $baseWeb =~ /^_/ ) {
@@ -1468,6 +1456,10 @@ sub createWeb {
                                              $topic, $newWeb );
         return( $err ) if( $err );
     }
+
+    # create meta-data files
+    $this->saveMetaData( $newWeb, "changes", "");
+    $this->saveMetaData( $newWeb, "mailnotify", "");
 
     # patch WebPreferences in new web
     my $wpt = $TWiki::cfg{WebPrefsTopicName};

@@ -201,7 +201,7 @@ sub processChange {
                 foreach my $email ( @$emails ) {
                     my $at = $seenSet->{$email}{$topic};
                     if ( $at ) {
-                        $changeSet->{$email}[$at - 1] = $change;
+                        $changeSet->{$email}[$at - 1]->merge( $change );
                     } else {
                         $seenSet->{$email}{$topic} =
                           push( @{$changeSet->{$email}}, $change );

@@ -407,9 +407,9 @@ sub merge {
         foreach my $otherD ( @$data ) {
             my $thisD = $this->get( "FIELD", $otherD->{name} );
             if ( $thisD && $thisD->{value} ne $otherD->{value} ) {
-                my $merged = TWiki::Merge::merge( $otherD->{value},
-                                                  $thisD->{value},
-                                                  qr/(\s+)/ );
+                my $merged = TWiki::Merge::insDelMerge( $otherD->{value},
+                                                        $thisD->{value},
+                                                        qr/(\s+)/ );
                 # SMELL: we don't merge attributes or title
                 $thisD->{value} = $merged;
             } elsif ( !$thisD ) {
