@@ -423,9 +423,12 @@ sub makeAnchorName
     $anchorName =~ s/\&//g;                 # remove &
     $anchorName =~ s/^(.+?)\s*$TWiki::regex{headerPatternNoTOC}.*/$1/o; # filter TOC excludes if not at beginning
     $anchorName =~ s/$TWiki::regex{headerPatternNoTOC}//o; # filter '!!', '%NOTOC%'
-    # FIXME: More efficient to match with '+' on next line:
-    $anchorName =~ s/[^$TWiki::regex{mixedAlphaNum}]/_/g;      # only allowed chars
-    $anchorName =~ s/__+/_/g;               # remove excessive '_'
+
+    # For most common alphabetic-only character encodings (i.e. iso-8859-*), remove non-alpha characters 
+    if( $TWiki::siteCharset =~ /^iso-?8859-?/i ) {
+        $anchorName =~ s/[^$TWiki::regex{mixedAlphaNum}]+/_/g;
+    }
+    $anchorName =~ s/__+/_/g;               # remove excessive '_' chars
     if ( !$compatibilityMode ) {
         $anchorName =~ s/^[\s\#\_]*//;      # no leading space nor '#', '_'
     }
