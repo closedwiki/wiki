@@ -72,7 +72,7 @@ sub renderMetaData
     
     my $text = "";
     if( $showAll || $viewableAttachmentCount ) {
-       $text = "$header$metaText</div>\n"; # removed 2 newlines here
+		$text = "$header$metaText\n<\/div>";
     }
     
     $text = &TWiki::handleCommonTags( $text, $topic, $web ); # FIXME needed?
