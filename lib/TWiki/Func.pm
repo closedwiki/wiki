@@ -327,12 +327,7 @@ sub extractParameters
 # -------------------------
 sub extractNameValuePair
 {
-    my( $theAttr, $theName ) = @_;
-    $theName ||= "_DEFAULT";
-
-    my $attrs = new TWiki::Attrs( $theAttr );
-    my $val = $attrs->{$theName} || "";
-    return $val;
+    return TWiki::Attrs::extractValue( @_ );
 }
 
 # =========================
@@ -903,8 +898,10 @@ See also: expandVariablesOnTopicCreation
 # -------------------------
 sub expandCommonVariables
 {
-#   my( $text, $topic, $web ) = @_;
-    return $TWiki::Plugins::SESSION->handleCommonTags( @_ );
+    my( $text, $topic, $web ) = @_;
+    $topic ||= $TWiki::Plugins::SESSION->{topicName};
+    $web ||= $TWiki::Plugins::SESSION->{webName};
+    return $TWiki::Plugins::SESSION->handleCommonTags( $text, $web, $topic );
 }
 
 # =========================

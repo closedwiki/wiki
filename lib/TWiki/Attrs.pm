@@ -51,77 +51,90 @@ my $DEFAULTKEY = "_DEFAULT";
 
 =pod
 
----++ ClassMethod new ($string, $strict) => \%attrsObjectRef
+---++ ClassMethod new ($string, $friendly) => \%attrsObjectRef
    * =$string= - String containing attribute specification
-   * =$strict= - if true, the parse will be strict as per traditional TWiki syntax.
+   * =$friendly= - if true, the parse will be according to the extended syntax pioneered by the original Contrib::Attrs. Otherwise it will be strict as per traditional TWiki syntax.
 
 Parse a standard attribute string containing name=value pairs and create a new
 attributes object. The value may be a word or a quoted string. If there is an
 error during parsing, the parse will complete but $attrs->{_ERROR} will be
 set in the new object.
 
-Example:
+Extended syntax example:
 <verbatim>
-
-my $attrs = new TWiki::Attrs('the="time has come", "the walrus" said to=speak of='many things', 1);
+my $attrs = new TWiki::Attrs('the="time \\"has come", "the walrus" said to=speak of=\'many \\'things\', 1);
 </verbatim>
 In this example:
-   * =the= will be =time has come=
+   * =the= will be =time "has come=
    * <code>_<nop>_<nop>default__</code> will be =the walrus=
    * =said= will be =on=
    * =to= will be =speak=
-   * =of= will be =many things=
+   * =of= will be =many 'things=
+
+Only " and ' are escaped.
+
+Traditional syntax is as old TWiki, except that the whole string is parsed
+(the old parser would only recognise default values in position 1, nowhere
+else)
 
 =cut
 
 sub new {
-    my ( $class, $string, $strict ) = @_;
+    my ( $class, $string, $friendly ) = @_;
     my $this = bless( {}, $class );
 
     return $this unless defined( $string );
 
     $string =~ s/\\(["'])/"\0".sprintf("%.2u", ord($1))/ge;  # escapes
 
-    my $sep = ( $strict ? "\\s" : "[\\s,]" );
+    my $sep = ( $friendly ? "[\\s,]" : "\\s" );
+    my $first = 1;
+
+    if( !$friendly && $string =~ s/^\s*\"(.*?)\"\s*(\w+\s*=\s*\"|$)/$2/ ) {
+        $this->{$DEFAULTKEY} = $1
+    }
 
     while ( $string =~ m/\S/ ) {
         # name="value" pairs
         if ( $string =~ s/^$sep*(\w+)\s*=\s*\"(.*?)\"//i ) {
             $this->{$1} = $2;
-        }
-        # name='value' pairs
-        elsif ( !$strict &&
-                $string =~ s/^$sep*(\w+)\s*=\s*'(.*?)'//i ) {
-            $this->{$1} = $2;
-        }
-        # name=value pairs
-        elsif ( !$strict &&
-                $string =~ s/^$sep*(\w+)\s*=\s*([^\s,\}\'\"]*)//i ) {
-            $this->{$1} = $2;
+            $first = 0;
         }
         # simple double-quoted value with no name, sets the default
         elsif ( $string =~ s/^$sep*\"(.*?)\"//o ) {
             $this->{$DEFAULTKEY} = $1
               unless defined( $this->{$DEFAULTKEY} );
+            $first = 0;
         }
-        # simple single-quoted value with no name, sets the default
-        elsif ( !$strict &&
-                $string =~ s/^$sep*'(.*?)'//o ) {
-            $this->{$DEFAULTKEY} = $1
-              unless defined( $this->{$DEFAULTKEY} );
-        }
-        # simple name with no value (boolean, or _DEFAULT)
-        elsif ( !$strict &&
-                $string =~ s/^$sep*([a-z]\w*)\b// ) {
-            $this->{$1} = "1";
-            $this->{$DEFAULTKEY} = $1
-              unless defined( $this->{$DEFAULTKEY} );
-        }
-        # otherwise the whole string - sans padding - is the default
-        else {
+        elsif ( $friendly ) {
+            # name='value' pairs
+            if ( $string =~ s/^$sep*(\w+)\s*=\s*'(.*?)'//i ) {
+                $this->{$1} = $2;
+            }
+            # name=value pairs
+            elsif ( $string =~ s/^$sep*(\w+)\s*=\s*([^\s,\}\'\"]*)//i ) {
+                $this->{$1} = $2;
+            }
+            # simple single-quoted value with no name, sets the default
+            elsif ( $string =~ s/^$sep*'(.*?)'//o ) {
+                $this->{$DEFAULTKEY} = $1
+                  unless defined( $this->{$DEFAULTKEY} );
+            }
+            # simple name with no value (boolean, or _DEFAULT)
+            elsif ( $string =~ s/^$sep*([a-z]\w*)\b// ) {
+                my $key = $1;
+                $this->{$key} = 1;
+            }
+            # otherwise the whole string - sans padding - is the default
+            else {
+                $string =~ s/^\s*(.*?)\s*$/$1/;
+                $this->{$DEFAULTKEY} = $string
+                  unless defined( $this->{$DEFAULTKEY} );
+                last;
+            }
+        } else {
             $string =~ s/^\s*(.*?)\s*$/$1/;
-            $this->{$DEFAULTKEY} = $string
-              unless defined( $this->{$DEFAULTKEY} );
+            $this->{$DEFAULTKEY} = $string if( $first );
             last;
         }
     }
@@ -177,7 +190,7 @@ sub stringify {
   ASSERT( ref( $this ) eq "TWiki::Attrs" ) if DEBUG;
   my $key;
   my @ss;
-  foreach $key ( keys %$this ) {
+  foreach $key ( sort keys %$this ) {
 	if ( $key ne $ERRORKEY ) {
 	  my $es = ( $key eq $DEFAULTKEY ) ? "" : "$key=";
 	  my $val = $this->{$key};
@@ -186,6 +199,57 @@ sub stringify {
 	}
   }
   return join( " ", @ss );
+}
+
+
+=pod
+
+---++ StaticMethod extractValue() -> $string
+Legacy support, formerly known as extractNameValuePair. This
+static method uses context information to determine how a value
+string is to be parsed. For example, if you have an attribute string
+like this:
+
+"abc def="ghi" jkl" def="qqq"
+
+then call extractValue( "def" ), it will return "ghi".
+
+
+=cut
+
+sub extractValue {
+    my( $str, $name ) = @_;
+
+    my $value = "";
+    return $value unless( $str );
+    $str =~ s/\\\"/\\\0/g;  # escape \"
+
+    if( $name ) {
+        # format is: %VAR{ ... name = "value" }%
+        if( $str =~ /(^|[^\S])$name\s*=\s*\"([^\"]*)\"/ ) {
+            $value = $2 if defined $2;  # distinguish between "" and "0"
+        }
+
+    } else {
+        # test if format: { "value" ... }
+        if( $str =~ /(^|\=\s*\"[^\"]*\")\s*\"(.*?)\"\s*(\w+\s*=\s*\"|$)/ ) {
+            # is: %VAR{ "value" }%
+            # or: %VAR{ "value" param="etc" ... }%
+            # or: %VAR{ ... = "..." "value" ... }%
+            # Note: "value" may contain embedded double quotes
+            $value = $2 if defined $2;  # distinguish between "" and "0";
+
+        } elsif( ( $str =~ /^\s*\w+\s*=\s*\"([^\"]*)/ ) && ( $1 ) ) {
+            # is: %VAR{ name = "value" }%
+            # do nothing, is not a standalone var
+
+        } else {
+            # format is: %VAR{ value }%
+            $value = $str;
+        }
+    }
+    $value =~ s/\\\0/\"/go;  # resolve \"
+    return $value;
 }
 
 1;
