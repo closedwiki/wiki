@@ -19,16 +19,16 @@ Installation steps:
 	* Now add =ScriptAlias= for =/twiki/bin= and =Alias= for =/twiki= to file =httpd.conf= .
 	  <br> __Note:__ The =ScriptAlias=  *must* come before the =Alias= in Apache, otherwise it will fail to correctly set up =/twiki/bin/= , due to the fact that it sees that as being just another subdirectory of the =/twiki/= alias. <br>
 	* Here are example =httpd.conf= entries:
- <pre> ScriptAlias /twiki/bin/ "/home/httpd/twiki/bin/"
- Alias /twiki/ "/home/httpd/twiki/pub/"
+ <pre> Script<nop>Alias /twiki/bin/ "/home/httpd/twiki/bin/"
+ Alias /twiki/ "/home/httpd/twiki"
  &lt;Directory "/home/httpd/twiki/bin"&gt;
 	 Options +ExecCGI
-	 SetHandler cgi-script
+	 Set<nop>Handler cgi-script
 	 Allow from all
  &lt;/Directory&gt;
  &lt;Directory "/home/httpd/twiki/pub"&gt;
-	 Options FollowSymLinks +Includes
-	 AllowOverride None
+	 Options Follow<nop>Sym<nop>Links +Includes
+	 Allow<nop>Override None
 	 Allow from all
  &lt;/Directory&gt;</pre>
 	* Restart Apache by =/etc/rc.d/rc5.d/S85httpd restart= .
@@ -269,4 +269,4 @@ drwxrwxrwx	6 nobody  nobody  4096 Aug  3 01:21 ..
 -rw-rw-r--	1 twiki	twiki	 144 Mar  9  1999 zip.gif
 </pre>
 
--- Main.PeterThoeny - 13 Nov 2000 <br>
+-- Main.PeterThoeny - 24 Nov 2000 <br>
