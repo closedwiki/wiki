@@ -1,15 +1,4 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"titleaction"}% %REVTITLE% %TMPL:END%
-%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
-%TMPL:DEF{"topicaction"}%
-  %EDITTOPIC%
-  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach</a>
-  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a>
-  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&web=all&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Ref-By</a>
-  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print">Printable</a>
-  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on" title="View the raw text i.e. as you would see text when editing, plus meta variables">Raw text</a>
-  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a>
-  %REVISIONS% %TMPL:END%
 %TMPL:P{"htmldoctype"}%
 <head>
  <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
@@ -19,6 +8,8 @@
 </head>
 <body bgcolor="#ffffff">
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/">
+%TMPL:DEF{"titleaction"}% %REVTITLE% %TMPL:END%
+%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
 %TMPL:P{"standardheader"}%
 </form>
 %META{"parent" prefix="Parents: "}%<br>
@@ -27,6 +18,15 @@
 %META{"attachments"}%
 <!-- This search for children is relatively expensive, you may wish to remove-->
 <!--%<nop>METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" title="Children: "}% -->
+%TMPL:DEF{"topicaction"}%
+  %EDITTOPIC%
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach</a>
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a>
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&web=all&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Ref-By</a>
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print">Printable</a>
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on" title="View the raw text i.e. as you would see text when editing, plus meta variables">Raw text</a>
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a>
+  %REVISIONS% %TMPL:END%
 %TMPL:P{"standardfooter"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
