@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1072404840" format="1.0" version="1.58"}%
+%META:TOPICINFO{author="PeterThoeny" date="1073193360" format="1.0" version="1.59"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -6,7 +6,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 %TOC%
 
 
----++ Web Preferences
+---++ Default Web Preferences
 
 %X% *NOTE:* They are typically redefined in individual <nop>WebPreferences topics
 
@@ -30,7 +30,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set INCLUDEWARNING = %RED% __Note:__ %ENDCOLOR% Included topic [[$topic]] does not exist yet
 
 
----++ User Settings
+---++ Default User Settings
 
 %X% *NOTE:* They are typically redefined in topics of individual %MAINWEB%.TWikiUsers
 
@@ -91,7 +91,16 @@ The following are __site-level__ settings that affect all users in all webs on t
 	* Maximum size of %TWIKIWEB%.FileAttachments in KB, 0 for no limit:
 		* Set ATTACHFILESIZELIMIT = 10000
 
----++ Email and Proxy Server Settings
+---+++ Search Settings
+
+	* Default type for search, one of: keyword (for search engine like syntax), regex (for RegularExpression search), or literal (for verbatim search)
+		* Set SEARCHDEFAULTTTYPE = keyword
+	* Default for =%<nop>SEARCH{}%= variable, one of: keyword, regex, or literal
+		* Set SEARCHVARDEFAULTTYPE = literal
+	* Stop words, e.g., common words and characters to exclude from a keyword search:
+		* Set SEARCHSTOPWORDS = a, all, am, an, and, any, as, at, b, be, by, c, d, e, for, from, g, h, how, i, i'm, i.e., in, is, isn't, it, it's, its, j, k, l, m, n, o, of, on, or, p, q, r, s, t, that, that's, the, this, to, u, v, w, was, wasn't, what, what's, when, where, who, who's, will, with, x, y, z
+
+---+++ Email and Proxy Server Settings
 
 	* TWiki webmaster email address:
 		* Set WIKIWEBMASTER = webmaster@your.company
@@ -122,17 +131,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set TOPICURL = %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%BASETOPIC%
 
 
----++ Plugins Settings
-
-	* TWikiPlugins configuration: All plugin modules that exist in the =lib/TWiki/Plugins= directory are activated automatically unless disabled by DISABLEDPLUGINS. You can optionally list the installed plugins in INSTALLEDPLUGINS. This is useful to define the sequence of plugin execution, or to specify other webs then the %TWIKIWEB% web for the plugin topics. Specify plugins as a comma separated list of topics.
-		* Set INSTALLEDPLUGINS = TWiki.DefaultPlugin, SpreadSheetPlugin
-		* Set DISABLEDPLUGINS = EmptyPlugin
-		* Currently activated plugins: %ACTIVATEDPLUGINS%
-		* %T% *NOTE:* You can enable/disable all plugins with the ==$disableAllPlugins== flag in the ==lib/TWiki.cfg== file.
-
-
----++ HTTP-<nop>EQUIV Settings
-
+---+++ HTTP-<nop>EQUIV Settings
 
 	* %T% *NOTE:* Changing cache behaviour with these settings should not be necessary and may cause cache-related problems (e.g. TWiki:Codev/BackFromPreviewLosesText or TWiki:Codev/RefreshEditPage). These settings do not affect proxy caches.
 
@@ -150,6 +149,15 @@ The following are __site-level__ settings that affect all users in all webs on t
 <verbatim>
 		* Set HTTP_EQUIV_ON_PREVIEW = 
 </verbatim>
+
+
+---++ Plugins Settings
+
+	* TWikiPlugins configuration: All plugin modules that exist in the =lib/TWiki/Plugins= directory are activated automatically unless disabled by DISABLEDPLUGINS. You can optionally list the installed plugins in INSTALLEDPLUGINS. This is useful to define the sequence of plugin execution, or to specify other webs then the %TWIKIWEB% web for the plugin topics. Specify plugins as a comma separated list of topics.
+		* Set INSTALLEDPLUGINS = TWiki.DefaultPlugin, SpreadSheetPlugin
+		* Set DISABLEDPLUGINS = EmptyPlugin
+		* Currently activated plugins: %ACTIVATEDPLUGINS%
+		* %T% *NOTE:* You can enable/disable all plugins with the ==$disableAllPlugins== flag in the ==lib/TWiki.cfg== file.
 
 
 ---++ Miscellaneous Settings
@@ -244,7 +252,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
 
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
-		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST , SMTPSENDERHOST, ALLOWWEBMANAGE
+		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE
 
 
 ---++ Creating New Preference Variables
