@@ -487,7 +487,7 @@ sub searchWeb
 
     if( ! $doInline ) {
         # print first part of full HTML page
-        $tmplHead = &TWiki::getRenderedVersion( $tmplHead );
+        $tmplHead = &TWiki::Render::getRenderedVersion( $tmplHead );
         $tmplHead =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
         print $tmplHead;
     }
@@ -504,7 +504,7 @@ sub searchWeb
         if( $doInline ) {
             $searchResult .= $tmplSearch;
         } else {
-            $tmplSearch = &TWiki::getRenderedVersion( $tmplSearch );
+            $tmplSearch = &TWiki::Render::getRenderedVersion( $tmplSearch );
             $tmplSearch =~ s|</*nop/*>||goi;   # remove <nop> tag
             print $tmplSearch;
         }
@@ -880,7 +880,7 @@ sub searchWeb
                 # do nothing
             } else {
                 $tempVal = &TWiki::handleCommonTags( $tempVal, $topic );
-                $tempVal = &TWiki::getRenderedVersion( $tempVal );
+                $tempVal = &TWiki::Render::getRenderedVersion( $tempVal );
             }
 
             if( $doRenameView ) { # added JET 19 Feb 2000
@@ -950,7 +950,7 @@ sub searchWeb
                 }
 
                 $text = &TWiki::handleCommonTags( $text, $topic, $thisWebName );
-                $text = &TWiki::getRenderedVersion( $text, $thisWebName );
+                $text = &TWiki::Render::getRenderedVersion( $text, $thisWebName );
                 # FIXME: What about meta data rendering?
                 $tempVal =~ s/%TEXTHEAD%/$text/go;
 
@@ -990,7 +990,7 @@ sub searchWeb
                     # print at the end if formatted search because of table rendering
                     $searchResult .= $beforeText;
                 } else {
-                    $beforeText = &TWiki::getRenderedVersion( $beforeText, $thisWebName );
+                    $beforeText = &TWiki::Render::getRenderedVersion( $beforeText, $thisWebName );
                     $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
                     print $beforeText;
                 }
@@ -1001,7 +1001,7 @@ sub searchWeb
                 # print at the end if formatted search because of table rendering
                 $searchResult .= $tempVal;
             } else {
-                $tempVal = &TWiki::getRenderedVersion( $tempVal, $thisWebName );
+                $tempVal = &TWiki::Render::getRenderedVersion( $tempVal, $thisWebName );
                 $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
                 print $tempVal;
             }
@@ -1021,7 +1021,7 @@ sub searchWeb
                 $afterText =~ s/\n$//os;  # remove trailing new line
                 $searchResult .= $afterText;
             } else {
-                $afterText = &TWiki::getRenderedVersion( $afterText, $thisWebName );
+                $afterText = &TWiki::Render::getRenderedVersion( $afterText, $thisWebName );
                 $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
                 print $afterText;
             }
@@ -1036,7 +1036,7 @@ sub searchWeb
                     # print at the end if formatted search because of table rendering
                     $searchResult .= $thisNumber;
                 } else {
-                    $thisNumber = &TWiki::getRenderedVersion( $thisNumber, $thisWebName );
+                    $thisNumber = &TWiki::Render::getRenderedVersion( $thisNumber, $thisWebName );
                     $thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
                     print $thisNumber;
                 }
@@ -1062,7 +1062,7 @@ sub searchWeb
         }
 
         # print last part of full HTML page
-        $tmplTail = &TWiki::getRenderedVersion( $tmplTail );
+        $tmplTail = &TWiki::Render::getRenderedVersion( $tmplTail );
         $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
         print $tmplTail;
     }

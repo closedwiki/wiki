@@ -48,7 +48,7 @@ sub changes {
   my $frev = "";
 
   $text = &TWiki::handleCommonTags( $text, $topic );
-  $text = &TWiki::getRenderedVersion( $text );
+  $text = &TWiki::Render::getRenderedVersion( $text );
   $text =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
   my $before = "";
@@ -78,7 +78,7 @@ sub changes {
       }
       $foo =~ s/%TIME%/$time/go;
       $foo =~ s/%REVISION%/$frev/go;
-      $foo = &TWiki::getRenderedVersion( $foo );
+      $foo = &TWiki::Render::getRenderedVersion( $foo );
       
       $summary = &TWiki::Store::readFileHead( "$TWiki::dataDir\/$webName\/$bar[0].txt", 16 );
       $summary = &TWiki::makeTopicSummary( $summary, $bar[0], $webName );

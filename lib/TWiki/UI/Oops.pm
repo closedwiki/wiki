@@ -65,7 +65,7 @@ sub oops_cgi {
   $tmplData =~ s/%PARAM4%/$param/go;
 
   $tmplData = &TWiki::handleCommonTags( $tmplData, $topic );
-  $tmplData = &TWiki::getRenderedVersion( $tmplData );
+  $tmplData = &TWiki::Render::getRenderedVersion( $tmplData );
   $tmplData =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
   TWiki::writeHeader( $query );

@@ -154,7 +154,7 @@ sub view {
   if( ! $viewRaw ) {
     $text = &TWiki::handleCommonTags( $text, $topic );
     TWiki::UI::writeDebugTimes( "view - handleCommonTags done" );
-    $text = &TWiki::getRenderedVersion( $text );
+    $text = &TWiki::Render::getRenderedVersion( $text );
     TWiki::UI::writeDebugTimes( "view - getRendereredVersion done" );
   }
 
@@ -229,7 +229,7 @@ sub view {
 
   if( $topicExists ) {
     $revuser = &TWiki::userToWikiName( $revuser );
-    my $temp = &TWiki::getRenderedVersion( "r1.$rev - $revdate - $revuser" );
+    my $temp = &TWiki::Render::getRenderedVersion( "r1.$rev - $revdate - $revuser" );
     $tmpl =~ s/%REVINFO%/$temp$mirrorNote/go;
   } else {
     $tmpl =~ s/%REVINFO%/$mirrorNote/go;
@@ -242,7 +242,7 @@ sub view {
     $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta, ( $rev == $maxrev ) );
   }
   TWiki::UI::writeDebugTimes( "view - handleCommonTags for template done" );
-  $tmpl = &TWiki::getRenderedVersion( $tmpl, "", $meta ); ## better to use meta rendering?
+  $tmpl = &TWiki::Render::getRenderedVersion( $tmpl, "", $meta ); ## better to use meta rendering?
   $tmpl =~ s/%TEXT%/$text/go;
   $tmpl =~ s/%MAXREV%/1.$maxrev/go;
   $tmpl =~ s/%CURRREV%/1.$rev/go;

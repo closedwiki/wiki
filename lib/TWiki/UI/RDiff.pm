@@ -81,7 +81,7 @@ sub _renderCellData {
         }
 
         $data = &TWiki::handleCommonTags( $data, $topic );
-        $data = &TWiki::getRenderedVersion( $data );
+        $data = &TWiki::Render::getRenderedVersion( $data );
         if( $data =~ m/<\/?(th|td|table)/i )
         {
             # data has <th> or <td>, need to fix <table>
@@ -326,7 +326,7 @@ sub getRevInfo
     my( $web, $rev, $topic, $short ) = @_;
 
     my( $date, $user ) = &TWiki::Store::getRevisionInfo( $web, $topic, "1.$rev");
-    $user = TWiki::getRenderedVersion( TWiki::userToWikiName( $user ) );
+    $user = TWiki::Render::getRenderedVersion( TWiki::userToWikiName( $user ) );
 	
     if ( $short ) {
 	    $date = TWiki::formatTime( $date, "\$day \$month \$year" );
@@ -456,7 +456,7 @@ sub diff {
   $before =~ s/%REVTITLE1%/$revTitle1/go;
   $before =~ s/%REVTITLE2%/$revTitle2/go;
   $before = &TWiki::handleCommonTags( $before, $topic );
-  $before = &TWiki::getRenderedVersion( $before );
+  $before = &TWiki::Render::getRenderedVersion( $before );
   $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
   &TWiki::writeHeader( $query );
   print $before;
@@ -543,7 +543,7 @@ sub diff {
   $after =~ s/%REVINFO2%/$revInfo2/go;
   
   $after = &TWiki::handleCommonTags( $after, $topic );
-  $after = &TWiki::getRenderedVersion( $after );
+  $after = &TWiki::Render::getRenderedVersion( $after );
   $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
   
   print $after;

@@ -89,7 +89,7 @@ sub attach {
   $tmpl =~ s/%ATTACHTABLE%/$atext/go;
   $tmpl =~ s/%FILEUSER%/$fileWikiUser/go;
   $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-  $tmpl = &TWiki::getRenderedVersion( $tmpl );
+  $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
   $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
   $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
   $tmpl =~ s/%FILENAME%/$fileName/go;

@@ -577,7 +577,7 @@ sub changeForm
     my $tmpl = &TWiki::Store::readTemplate( "changeform" );
     &TWiki::writeHeader( $theQuery );
     $tmpl = &TWiki::handleCommonTags( $tmpl, $theTopic );
-    $tmpl = &TWiki::getRenderedVersion( $tmpl );
+    $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
     my $text = $theQuery->param( 'text' );
     $text = &TWiki::encodeSpecialChars( $text );
     $tmpl =~ s/%TEXT%/$text/go;

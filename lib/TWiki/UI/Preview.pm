@@ -109,7 +109,7 @@ sub preview {
   $ptext =~ s/ {3}/\t/go;
   $ptext = &TWiki::Prefs::updateSetFromForm( $meta, $ptext );
   $ptext = &TWiki::handleCommonTags( $ptext, $topic );
-  $ptext = &TWiki::getRenderedVersion( $ptext );
+  $ptext = &TWiki::Render::getRenderedVersion( $ptext );
 
   # do not allow click on link before save: (mods by TedPavlic)
   my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
@@ -122,7 +122,7 @@ sub preview {
 
   $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
   $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
-  $tmpl = &TWiki::getRenderedVersion( $tmpl );
+  $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
   $tmpl =~ s/%TEXT%/$ptext/go;
 
   $text = &TWiki::encodeSpecialChars( $text );

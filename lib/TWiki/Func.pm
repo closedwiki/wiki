@@ -853,7 +853,7 @@ sub expandCommonVariables
 sub renderText
 {
 #   my( $text, $web ) = @_;
-    return &TWiki::getRenderedVersion( @_ );
+    return &TWiki::Render::getRenderedVersion( @_ );
 }
 
 # =========================

@@ -201,7 +201,7 @@ sub edit {
   } else {
     $tmpl =~ s/%META{[^}]*}%//go;
   }
-  $tmpl = &TWiki::getRenderedVersion( $tmpl );
+  $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
 
   # Don't want to render form fields, so this after getRenderedVersion
   my %formMeta = $meta->findOne( "FORM" );
