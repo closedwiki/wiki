@@ -4,7 +4,7 @@ To register as a new user, simply fill out this form:
 
 <!-- IMPORTANT NOTE if you want to customize this form: You can delete or add new input variables in this form. Use the topic TWikiRegistrationPub in case this installation is on a public server (just copy the content over to the TWikiRegistration topic). The name="" parameter of the input tags must start with: "Twk0..." (if this is an optional entry), "Twk1..." (if this is a required entry). This will ensure that the fields are processed correctly. -->
 
-<form action="%SCRIPTURL%/register%SCRIPTSUFFIX%" method="post">
+<form action="%SCRIPTURL%/register%SCRIPTSUFFIX%/%MAINWEB%/%HOMETOPIC%" method="post">
 <table border="1">
 <tr>
   <td align="right"> First & last name: </td>
@@ -46,8 +46,8 @@ To register as a new user, simply fill out this form:
 
 __Submitting the form will automatically:__ 
 	* Create an account for you, so that you can start editing pages using your WikiName.
-	* Create your personal TWiki topic using your WikiName as topic name, and add the data you submitted to the topic.
-	* Add your name to the list of users in the TWikiUsers topic.
+	* Create your personal %WIKITOOLNAME% topic using your WikiName as topic name, and add the data you submitted to the topic.
+	* Add your name to the list of users in the %MAINWEB%.%WIKIUSERSTOPIC% topic in the %WIKITOOLNAME%.%MAINWEB% web.
 	* Send you a confirmation of your registration by email.
 
 
