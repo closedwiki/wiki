@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007361807" format="1.0" version="1.38"}%
+%META:TOPICINFO{author="MikeMannix" date="1007383132" format="1.0" version="1.39"}%
 <script language="JavaScript1.2" type="text/javascript">
 function dblclick() { window.scrollTo(0,0) }
 if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
@@ -37,19 +37,22 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 %INCLUDE{"TWikiVariables"}%
 
 ------
-%INCLUDE{"FormattedSearch"}%
+%INCLUDE{"FileAttachment"}%
 
 ------
 %INCLUDE{"TWikiForms"}%
-
-------
-%INCLUDE{"FileAttachment"}%
 
 ------
 %INCLUDE{"TWikiTemplates"}%
 
 ------
 %INCLUDE{"TWikiSkins"}%
+
+------
+%INCLUDE{"FormattedSearch"}%
+
+-----
+%INCLUDE{"TWikiMetaData"}%
 
 ------
 %INCLUDE{"TWikiPlugins"}%
@@ -65,9 +68,6 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 
 -----
 %INCLUDE{"AppendixFileSystem"}%
-
------
-%INCLUDE{"TWikiMetaData"}%
 
 -----
 %INCLUDE{"TWikiHistory"}%
