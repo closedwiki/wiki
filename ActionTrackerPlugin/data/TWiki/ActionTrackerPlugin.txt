@@ -342,12 +342,14 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 
 __Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required. *This plugin makes extensive use of new features added to TWiki in the Feb 2003 release*. Earlier versions lack all the features described here. Make sure you install using the zip appropriate to your TWiki installation. If you install an earlier version of the plugin with the Feb 2003 release, note that change notification will not function correctly. For best overall performance, please upgrade your TWiki to the latest released version.
 
-	* Make sure the dependencies listed in the table below are resolved.
-	%$DEPENDENCIES%
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 %$MANIFEST%
 	* Unzip ==ActionTrackerPlugin.zip== in your twiki installation directory.
+	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
+	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
+	%$DEPENDENCIES%
+
 	* Configure lib/TWiki/Plugins/ActionTrackerPlugin/Config.pm appropriately for your installation. Several of the configuration items are the same as in lib/TWiki.cfg - you can copy your local values from there if you're not sure what you're doing. If you are using Rcs<nop>Lite, just ignore the rlogCmd; you can't use the changedsince feature with Rcs<nop>Lite anyway.
 	* If the plugin is installed and enabled correctly you should see a formatted action below: %ACTION{who=TWikiGuest,due="1 Jan 2003",open}% Example action
 	* ... and the result of a formatted search below: %ACTIONSEARCH{topic=ActionTrackerPlugin who=TWikiGuest header="|Who|Due|State|Description|" format="| $who |$due|$state|$text|" orient="rows" }%

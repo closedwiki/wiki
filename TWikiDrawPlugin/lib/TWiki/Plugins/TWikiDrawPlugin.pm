@@ -52,25 +52,29 @@ sub handleDrawing {
 
   if ( -e $mapFile ) {
 	my $mapname = $nameVal;
-	$mapname =~ s/^.*\/([^\/]+)$/$1/o;
+	$mapname =~ s/^.*\/([^\/]+)$/$1/;
 	$img .= " usemap=\"#$mapname\"";
 	my $map = TWiki::Func::readFile($mapFile);
 	$map = TWiki::Func::expandCommonVariables( $map, $topic );
-	$map =~ s/%MAPNAME%/$mapname/go;
-	$map =~ s/%TWIKIDRAW%/$editUrl/go;
-	$map =~ s/%EDITTEXT%/$edittext/go;
-	$map =~ s/%HOVER%/$hover/go;
-	
+	$map =~ s/%MAPNAME%/$mapname/g;
+	$map =~ s/%TWIKIDRAW%/$editUrl/g;
+	$map =~ s/%EDITTEXT%/$edittext/g;
+	$map =~ s/%HOVER%/$hover/g;
+	$map =~ s/[\r\n]+//g;
+
 	# Add an edit link just above the image if required
 	$imgText = "<br /><a href=\"$editUrl\" $hover>".
-          "$edittext</a><br />" if ( $editButton == 1 );
-	
+          "Edit</a><br />" if ( $editButton == 1 );
+#	$imgText = "<br /><button onclick=\"window.location='$editUrl'\" $hover>".
+#          "Edit</button><br />" if ( $editButton == 1 );
 	$imgText .= "<img $img>$map";
   } else {
 	# insensitive drawing; the whole image gets a rather more
 	# decorative version of the edit URL
 	$imgText = "<a href=\"$editUrl\" $hover>".
-          "<img $img alt=\"$edittext\" title=\"$edittext\" /></a>";
+          "<img $img $hover alt=\"$edittext\" title=\"$edittext\" /></a>";
+#	$imgText = "<br /><button onclick=\"window.location='$editUrl'\" $hover>".
+#          "$edittext</button><br />" if ( $editButton == 1 );
   }
   return $imgText;
 }
