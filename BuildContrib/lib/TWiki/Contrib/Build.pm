@@ -708,12 +708,17 @@ sub target_upload {
     print "Uploading zip\n";
     $response =
       $userAgent->post( "http://twiki.org/cgi-bin/upload/Plugins/$to",
-                        { 'filename' => "$to.zip" },
-                        ':content_file' => "$basedir/$to.zip" );
+                        [
+                         'filename' => "$to.zip",
+                         'filepath' => [ "$basedir/$to.zip" ],
+                         'filecomment' => "Unzip in the root directory of your TWiki installation"
+                        ],
+                        'Content_Type' => "form-data" );
 
     die "Update of zip failed ", $response->request->uri,
-      " -- ", $response->status_line, "\nAborting"
-        unless $response->is_redirect;
+      " -- ", $response->status_line, "\nAborting\n", $response->as_string
+        unless $response->is_redirect &&
+          $response->headers->header('Location') =~ /view([\.\w]*)\/Plugins\/$to/;
 }
 
 sub _unhtml {

@@ -70,7 +70,7 @@ sub satisfy {
         my $pack = $1;
         my $packname = $2;
         my $reply = "y";
-        $packname .= $pack if( $pack eq "Contrib" );
+        $packname .= $pack if( $pack eq "Contrib" && $packname !~ /Contrib$/);
         unless ( $noconfirm ) {
             print "Would you like me to try to download and install the latest version of $packname from twiki.org? [y/n] ";
             while ( ( $reply = <STDIN> ) !~ /^[yn]/i ) {
