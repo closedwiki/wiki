@@ -30,7 +30,7 @@ use vars qw(
   $debug $phpAdsNewBase;
 );
 
-$VERSION    = '0.1';
+$VERSION    = '1.0';
 $pluginName = 'AdvertsPlugin';    # Name of this Plugin
 
 # =========================
@@ -48,8 +48,7 @@ sub initPlugin {
 # $debug = TWiki::Func::getPluginPreferencesFlag("DEBUG");
 
  # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-# $phpAdsNewBase = TWiki::Func::getPluginPreferencesValue("ADVERTSCRIPTBASE")
-#   || "http://testwiki.mrjc.com/phpAdsNew-2.0/";
+ $phpAdsNewBase = TWiki::Func::getPreferencesValue("ADVERTSPLUGIN_ADVERTSCRIPTBASE");
 
  # Plugin correctly initialized
  TWiki::Func::writeDebug(
@@ -125,8 +124,8 @@ sub handleAdvertRIJS {
     my ($param) = @_;
     my $ans = getTemplateAdvertRemoteInvocationJavaScript();
     $what          = $param || "";
-    $random        = "ad13xc123";
-    $serverUrlBase = "http://testwiki.mrjc.com/phpAdsNew-2.0";
+    $random        = "ad13xc123"; # TODO fix this
+    $serverUrlBase = $phpAdsNewBase;
     
     $ans =~ s/%WHAT%/$what/g;
     $ans =~ s/%RANDOM%/$random/g;
