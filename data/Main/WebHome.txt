@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1006601742" format="1.0" version="1.16"}%
+%META:TOPICINFO{author="PeterThoeny" date="1018174980" format="1.0" version="1.17"}%
 <table><tr><td>
 *<font size="+1"> %TWIKIWEB%.WelcomeGuest: </font>* %WIKITOOLNAME% is a web-based collaboration tool, web authoring tool, document management tool and knowledge base tool. You can edit any %WIKITOOLNAME% page.
 </td><td>
@@ -8,7 +8,7 @@
 </td></tr>
 </table>
 
-%INCLUDE{"%TWIKIWEB%.TWikiWebsTable"}%
+%INCLUDE{"%TWIKIWEB%.SiteMap"}%
 
 *%WIKITOOLNAME%.%WEB% Web:*
 	* <b> %WIKIUSERSTOPIC%: </b> List of users of this %WIKITOOLNAME% web.
