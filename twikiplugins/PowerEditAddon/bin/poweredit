@@ -1,5 +1,4 @@
-#!/usr/bin/perl -w
-# Can't -T because of the eval, below.
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
 #
@@ -8,7 +7,7 @@
 # Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
 # Copyright (C) 1999-2000 Peter Thoeny, peter@thoeny.com
 #
-# This script Copyright (C) 2001 Motorola - All Rights Reserved
+# This script Copyright (C) 2003 Motorola - All Rights Reserved
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -38,84 +37,11 @@ use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use lib ( '.' );
 use lib ( '../lib' );
-use TWiki;
+use TWiki::Plugins::PowerEditAddon::PowerEdit;
 
-#use strict;
+use strict;
 
-use vars qw( $query );
+PowerEditAddon::PowerEdit::serverCommand( new CGI );
 
-$query = new CGI;
+1;
 
-&main();
-
-sub main
-{
-    my $action = $query->param( 'action' );
-    my $meta;
-    my $text;
-
-    my $thePathInfo = $query->path_info(); 
-    my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param( 'topic' ) || "";
-    my $theUrl = $query->url;
-
-    my( $topic, $webName, $scriptUrlPath, $userName ) = 
-      &TWiki::initialize( $thePathInfo, $theRemoteUser,
-			  $theTopic, $theUrl, $query );
-
-    if ( $action eq "get" ) {
-
-      # Pass the raw topic back to the client
-      # Security note: This is not safe; it does no security checks. If
-      # a browser invokes
-      # http://server/twiki/bin/poweredit/Web/Topic?action=get
-      # they will receive back the file contents unadulterated.
-      if( &TWiki::Store::topicExists( $webName, $topic ) ) {
-        ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
-	# Hmmm - what should we do with meta?
-	$text =~ s/\t/   /go;
-      }
-      print $query->header( -type=>'text/plain', -expires=>'+1s' ),
-      $text;
-
-    } elsif ( $action eq "save" ) {
-
-      # Cache the new text provided from the client
-      # Security note: This is safe insofar as it doesn't write back to
-      # the DB, just to a temp file.
-      TWiki::Store::savePreview( $webName, $topic,
-				 $query->param( 'text' ));
-      # and write the url required to access it
-      print $query->header( -type=>'text/plain', -expires=>'+1s' ),
-      "$scriptUrlPath/poweredit?action=commit",
-      "&topic=$webName.$topic";
-
-    } elsif ( $action eq "commit" ) {
-
-      # Commit the cached text by passing to the preview script
-      # Security: This is safe because the preview script is
-      # responsible for the actual save, and the client never sees it.
-      my $text = TWiki::Store::readRemovePreview( $webName, $topic );
-
-      # truly nasty - edit the preview script. I really want to call
-      # the 'preview function', but just can't figure a way.
-      my $preview = TWiki::Store::readFile( "preview" . $TWiki::scriptSuffix );
-      # edit off the offensive bits
-      $preview =~ s/^\w*#.*$//gom;
-      $preview =~ s/\&main.*$//om;
-      $preview =~ s/sub main/sub preview/om;
-      $preview =~ s/new CGI/shift/o;
-      eval "$preview";
-
-      # Take a copy of the query so we can add to it...
-      my $query2 = new CGI( $query );
-      $query2->param( -name=>'text', -value=>$text );
-      # invoke the edited preview script on the edited query
-      preview( $query2 );
-
-    } else {
-      # error message
-      TWiki::writeDebug( "Unknown server command $action" );
-      # Can't do much more because context is unknown.
-    }
-}
