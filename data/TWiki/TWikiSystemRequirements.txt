@@ -1,28 +1,27 @@
-%META:TOPICINFO{author="MikeMannix" date="1010549853" format="1.0" version="1.23"}%
+%META:TOPICINFO{author="MikeMannix" date="1010881901" format="1.0" version="1.24"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki System Requirements
 
-_Server and client system requirements for TWiki 01-Dec-2001_
+_Server and client requirements for TWiki 01-Dec-2001_
 
----++ Overview
-
-Maintaining minimum client and server requirements is necessary to keep TWiki deployment as broad as possible.
+Low client and server requirements are core features that keep TWiki widely deployable, particularly across a range of browser platforms and versions.
 
 ---++ Server Requirements
 
-TWiki is written in Perl 5, uses a number of shell commands, and requires [[http://www.gnu.org/software/rcs/rcs.html][RCS (Revision Control System)]], a GNU Free Software package. TWiki is developed in a basic Linux/Apache environment. It also works with Microsoft Windows, and should have no problem on any other platform that meets the requirements:
+TWiki is written in Perl 5, uses a number of shell commands, and requires [[http://www.gnu.org/software/rcs/rcs.html][RCS (Revision Control System)]], a GNU Free Software package. TWiki is developed in a basic Linux/Apache environment. It also works with Microsoft Windows, and should have no problem on any other platform that meets the requirements.
 
 | *Required Server Environment* |||
-| *Resource* | *Unix* | *Windows* |
+| *Resource* | *Unix* | *Windows** |
 | Perl |  5.005_03 or higher  ||
-| Non standard Perl modules |  =Net::SMTP= (or =sendmail=)  |  =Net::SMTP=, =MIME::Base64=, =Digest::SHA1=  |
+| Non-standard Perl modules |  =Net::SMTP= (or =sendmail=)  |  =Net::SMTP=, =MIME::Base64=, =Digest::SHA1=  |
 | RCS |  5.7 or higher  ||
 | Other external programs |  =ls, fgrep, egrep=  ||
-| Web server |  Apache; others (with support for CGI, authentication, extended path) ***  ||
+| Web server |  Apache; others (with CGI support, authentication, extended path) ||
 
-Current documentation covers Linux only. A [[http://twiki.org/cgi-bin/view/Codev/TWikiOnWindows][TWikiOnWindows]] installation guide is next. 
+%X% *** _Current documentation covers Linux/Apache only. See TWiki:Codev/TWikiOnWindows for work-to-date on a Windows installation guide._
 
+#ClientRequirements
 ---++ Client Requirements
 
 The TWiki [[TWikiInstallationGuide][standard installation]] has extremely low browser requirements:
@@ -33,10 +32,11 @@ The TWiki [[TWikiInstallationGuide][standard installation]] has extremely low br
 	* no cookies
 	* no CSS
 
-You can easily add capabilities, through customizing the templates, for one, while tailoring the browser requirements to your situation. 
+You can easily add functionality, by customizing TWikiTemplates, for one, while tailoring the browser requirements to your situation. 
 
 ---++ Known Issues
 
-	* The new TWikiPlugins feature currently does not have compatibility guidelines for developers. Plugins can require just about anything: browser-specific functions, stylesheets (CSS), DHTML, Java applets, cookies.
-
--- MikeMannix - 08 Jan 2002
+	* The new TWikiPlugins feature currently does not have compatibility guidelines for developers. Plugins can require just about anything -  browser-specific functions, stylesheets (CSS), Java applets, cookies, specific Perl modules,... - check the individual Plugin specs.
+		* %H% Plugins included in the TWiki distribution do not add requirements.
+ 
+-- MikeMannix - 12 Jan 2002
