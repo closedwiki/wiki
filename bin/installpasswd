@@ -76,6 +76,8 @@ sub main
         return;
     }
 	
+    # TODO: I18N fix here once basic auth problem with 8-bit user names is
+    # solved
     if ( $theCryptPassword =~ m/^([A-Z][a-zA-Z]+[A-Z][a-zA-Z]*)\:.{13}$/ ) {
 	$wikiName = $1;
     } else {

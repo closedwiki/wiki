@@ -54,6 +54,7 @@ sub main
             $value = $query->param( "$1$2$3" );
             $formDataRequired[@formDataRequired] = $2;
             $name = $3;
+	    # TODO: I18N fix here ???
             $name =~ s/([a-z0-9])([A-Z0-9])/$1 $2/go; # Space the names
             $name =~ s/(AIM)(Screen)/$1 $2/go;  # Horrible hack to space AIMScreen
             $formDataName[@formDataName] = $name;
@@ -260,6 +261,8 @@ sub addUserToTWikiUsersTopic
     # add name alphabetically to list
     foreach( split( /\n/, $text) ) {
         $line = $_;
+	# TODO: I18N fix here once basic auth problem with 8-bit user names is
+	# solved
         $isList = ( $line =~ /^\t\*\s[A-Z][a-zA-Z0-9]*\s\-/go );
         if( ( $status == "0" ) && ( $isList ) ) {
             $status = "1";
