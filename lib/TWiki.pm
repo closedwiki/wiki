@@ -1464,10 +1464,10 @@ sub takeOutVerbatim
     my $verbatimCount = $#{$verbatim} + 1;
     
     foreach( split( /\n/, $intext ) ) {
-        if( /^\s*<verbatim>\s*$/oi ) {
+        if( /^(\s*)<verbatim>\s*$/oi ) {
             $nesting++;
             if( $nesting == 1 ) {
-                $outtext .= "%_VERBATIM$verbatimCount%\n";
+                $outtext .= "$1%_VERBATIM$verbatimCount%\n";
                 $tmp = "";
                 next;
             }
@@ -1484,6 +1484,11 @@ sub takeOutVerbatim
         } else {
             $outtext .= "$_\n";
         }
+    }
+    
+    # Deal with unclosed verbatim
+    if( $nesting ) {
+        $verbatim->[$verbatimCount] = $tmp;
     }
        
     return $outtext;
