@@ -54,6 +54,8 @@ sub main
     my $thePathInfo = ""; 
     my $theRemoteUser = "";
     my $logDate = "";
+    $isCgi = "";
+    $cgiQuery = "";
 
     # determine at runtime if script is called by browser or cron job
     if( $ENV{'DOCUMENT_ROOT'} ) {
