@@ -18,12 +18,12 @@
 # http://www.gnu.ai.mit.edu/copyleft/gpl.html 
 #
 # Notes:
-# - Latest version at http://www.mindspring.net/~peterthoeny/twiki/
-# - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
+# - Latest version at http://twiki.sourceforge.net/
+# - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
-#   NOTE: Don't forget to customize also the Main.TWikiPreferences topic.
+#   NOTE: Don't forget to customize also the TWiki.TWikiPreferences topic.
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
-# - Files wikifcg.pm and wikisearch.pm are included by wiki.pm
+# - Files wikifcg.pm, wikistore.pm and wikisearch.pm are included by wiki.pm
 # - Upgrading TWiki is easy as long as you do not customize wiki.pm.
 # - Variables that can be accessed from topics (see details in
 #   TWikiDocumentation.html) :
@@ -161,25 +161,25 @@ $doPluralToSingular = "1";
 #                   prevent includes of "../../file". Default "1"
 $doSecureInclude    = "1";
 #                   Log topic views to $logFilename. Default "0"
-$doLogTopicView     = "1";
-#                   Log topic saves to $logFilename. Default "0"
+$doLogTopicView     = "0";
+#                   Log topic edits to $logFilename. Default "1"
 $doLogTopicEdit     = "1";
 #                   Log topic saves to $logFilename. Default "1"
 $doLogTopicSave     = "1";
-#                   Log view attach to $logFilename. Default "0"
+#                   Log view attach to $logFilename. Default "1"
 $doLogTopicAttach   = "1";
 #                   Log file upload to $logFilename. Default "1"
 $doLogTopicUpload   = "1";
 #                   Log topic rdiffs to $logFilename. Default "0"
-$doLogTopicRdiff    = "1";
+$doLogTopicRdiff    = "0";
 #                   Log view changes to $logFilename. Default "0"
-$doLogTopicChanges  = "1";
+$doLogTopicChanges  = "0";
 #                   Log view changes to $logFilename. Default "0"
-$doLogTopicSearch   = "1";
+$doLogTopicSearch   = "0";
 #                   Log user registration to $logFilename. Default "1"
 $doLogRegistration  = "1";
 
-# NOTE: Don't forget to customize also the Main.TWikiPreferences topic.
+# NOTE: Don't forget to customize also the TWiki.TWikiPreferences topic.
 
 
 # =========================

@@ -20,10 +20,10 @@
 #
 # Notes:
 # - Latest version at http://twiki.sourceforge.net/
-# - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
+# - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
-# - Files wikifcg.pm and wikisearch.pm are included by wiki.pm
+# - Files wikifcg.pm, wikistore.pm and wikisearch.pm are included by wiki.pm
 # - Upgrading TWiki is easy as long as you do not customize wiki.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 #
@@ -83,7 +83,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "18 Aug 2000";
+$wikiversion      = "18 Sep 2000";
 
 # ===========================
 # read the configuration part
@@ -782,6 +782,15 @@ sub handleEnvVariable
 }
 
 # =========================
+sub handleSpacedTopic
+{
+    my( $theTopic ) = @_;
+    my $spacedTopic = $theTopic;
+    $spacedTopic =~ s/([a-z]+)([A-Z0-9]+)/$1%20*$2/go;   # "%20*" is " *"
+    return $spacedTopic;
+}
+
+# =========================
 sub handleCommonTags
 {
     my( $text, $topic, $theWeb ) = @_;
@@ -809,6 +818,7 @@ sub handleCommonTags
     $text =~ s/%REMOTE_PORT%/&handleEnvVariable('REMOTE_PORT')/geo;
     $text =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/geo;
     $text =~ s/%TOPIC%/$topic/go;
+    $text =~ s/%SPACEDTOPIC%/&handleSpacedTopic($topic)/geo;
     $text =~ s/%WEB%/$theWeb/go;
     $text =~ s/%WIKIHOMEURL%/$wikiHomeUrl/go;
     $text =~ s/%SCRIPTURL%/$urlHost$scriptUrlPath/go;
@@ -879,7 +889,15 @@ sub internalLink
     # bar is heading space
     # foo is boolean, false suppress link for non-existing pages
 
-    $page =~ s/\s/_/;
+    if( $page =~ /\s/ ) {
+        # kill spaces and Wikify page name (ManpreetSingh - 15 Sep 2000)
+        $page =~ s/^\s*//;
+        $page =~ s/\s*$//;
+        $page =~ s/^(.)/\U$1/;
+        $page =~ s/\s([a-zA-Z0-9])/\U$1/g;
+        # Add <nop> before WikiWord inside text to prevent double links
+        $text =~ s/(\s)([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
+    }
 
     if( $doPluralToSingular && $page =~ /s$/ && ! topicExists( $web, $page) ) {
         # page is a non-existing plural
@@ -893,11 +911,10 @@ sub internalLink
         }
     }
 
-    # PTh 22 Jul 2000: Added <nop> before topic with question link
-    # (prevent double question when rendered twice by inline search)
+    # Add background color and font color (AlWilliams - 18 Sep 2000)
     topicExists( $web, $page) ?
         "$bar<A href=\"$scriptUrlPath/view$scriptSuffix/$web/$page\">$text<\/A>"
-        : $foo?"$bar<nop>$text<A href=\"$scriptUrlPath/edit$scriptSuffix/$web/$page\">?</A>"
+        : $foo?"$bar<SPAN STYLE='background : cornsilk;'><font color=#0000FF>$text</font></SPAN><A href=\"$scriptUrlPath/edit$scriptSuffix/$web/$page\">?</A>"
             : "$bar$text";
 }
 
@@ -1004,6 +1021,10 @@ sub getRenderedVersion
             s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+)(?=[\s\)]|$)#$1<A href=\"mailto\:$2">$2</A>#go;
 
 # Make internal links
+            # allow [[Odd Wiki Word]] links and [[Web.Odd Wiki Name]]
+            s/([\*\s][\(\-\*\s]*)\[\[([A-Z]+[a-z]*)\.([\w\s]+)\]\]/&internalLink($2,$3,"$TranslationToken$3$TranslationToken",$1,1)/geo;
+            s/([\*\s][\(\-\*\s]*)\[\[([\w\s]+)\]\]/&internalLink($webName,$2,$2,$1,1)/geo;
+
             ## add Web.TopicName internal link -- PeterThoeny:
             ## allow 'AaA1' type format, but not 'Aa1' type -- PeterThoeny:
             s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($2,$3,"$TranslationToken$3$TranslationToken",$1,1)/geo;
