@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042338660" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092558724" format="1.0" version="1.5"}%
 Peter Thoeny is the author of TWiki and therefore a TWiki:Codev/CoreTeam member and a TWikiContributor.
 
-See home page at TWiki:Main/%TOPIC% and %MAINWEB%.PeterThoeny
+See home page at TWiki:Main/%TOPIC%
+

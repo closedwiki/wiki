@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1050304762" format="1.0" version="1.28"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092559631" format="1.0" version="1.29"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -205,7 +205,8 @@ $superAdminGroup = "TWikiAdminGroup";
 </blockquote>
 	* The default setting is not to have superusers.
 
--- Main.PeterThoeny - 04 May 2002<br />
--- Main.MikeMannix - 12 May 2002 
+-- TWiki:Main.PeterThoeny - 04 May 2002 %BR%
+-- TWiki:Main.MikeMannix - 12 May 2002 
 
 %STOPINCLUDE%
+

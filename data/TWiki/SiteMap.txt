@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092536309" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092559368" format="1.0" version="1.8"}%
 ---+ %WIKITOOLNAME% Site Map
 %STARTINCLUDE%
 <table width="100%" border="0" cellspacing="2" bgcolor="#000000" cellpadding="3">
-  <tr bgcolor="#ffffff">
+  <tr bgcolor="#eeeeee">
 	 <th>
 	  Web
 	 </th><th>
@@ -11,9 +11,9 @@
 		Use to...
 	 </th>
   </tr>
-%SEARCH{ "\* Set SITEMAPLIST \= on" regex="on" web="%MAINWEB%, %TWIKIWEB%, all" topic="%WEBPREFSTOPIC%" nototal="on" nosearch="on" format=" <tr bgcolor=\"$pattern(.*?\* Set WEBBGCOLOR\s*=\s*([^\s]*).*)\">$n <td align=\"right\"> <b>[[$web.%HOMETOPIC%][$web]]</b>&nbsp;[[$web.%HOMETOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/home.gif\" alt=\"Home of $web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebSearch][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/searchtopic.gif\" alt=\"Search $web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebChanges][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/recentchanges.gif\" alt=\"Recent changes in the $web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%NOTIFYTOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/notify.gif\" alt=\"Get notified of changes to the $web web\" width=\"16\" height=\"16\" border=\"0\">]]</td>$n <td> $pattern(.*?\* Set SITEMAPWHAT\s*=([^\n\r]*).*) </td><td> $pattern(.*?\* Set SITEMAPUSETO\s*=([^\n\r]*).*) </td> </tr>" }%
+%SEARCH{ "\* Set SITEMAPLIST \= on" regex="on" web="%MAINWEB%, %TWIKIWEB%, all" topic="%WEBPREFSTOPIC%" nototal="on" nosearch="on" format=" <tr bgcolor=\"$pattern(.*?\* Set WEBBGCOLOR\s*=\s*([^\s]*).*)\">$n <td align=\"right\"> <b>[[$web.%HOMETOPIC%][$web]]</b>&nbsp;[[$web.%HOMETOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/home.gif\" alt=\"Home of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebSearch][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/searchtopic.gif\" alt=\"Search <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebChanges][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/recentchanges.gif\" alt=\"Recent changes in the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%NOTIFYTOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/notify.gif\" alt=\"Get notified of changes to the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]</td>$n <td> $pattern(.*?\* Set SITEMAPWHAT\s*=([^\n\r]*).*) </td><td> $pattern(.*?\* Set SITEMAPUSETO\s*=([^\n\r]*).*) </td> </tr>" }%
   <tr bgcolor="#ffffff">
-	 <td colspan="3"><font size="-1">You can use color coding by web for identification and reference. This table is updated automatically based on <nop>WebPreferences settings of the individual webs. Contact %WIKIWEBMASTER% if you need a separate collaboration web for your team. </font></td>
+	 <td colspan="3"><font size="-1">You can use color coding by web for identification and reference. This table is updated automatically based on <nop>WebPreferences settings of the individual webs. Contact %WIKIWEBMASTER% if you need a separate collaboration web for your team. See also AdminTools. </font></td>
   </tr>
 </table>
 <table border="0" cellspacing="2" cellpadding="3">

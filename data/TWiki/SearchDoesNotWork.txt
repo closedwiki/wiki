@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="999303692" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092559089" format="1.0" version="1.3"}%
 ---++ FAQ:
 
 I've problems with the <nop>WebSearch</nop>. There is no Search Result on any inquiry. By clicking the Index topic it's the same problem.
@@ -9,4 +9,5 @@ That is an indication that %WIKITOOLNAME% can't find the =egrep= and =fgrep= com
 
 __Back to:__ TWikiFAQ
 
--- Main.PeterThoeny - 26 Jan 2001 <br>
+-- TWiki:Main.PeterThoeny - 26 Jan 2001 <br>
+
