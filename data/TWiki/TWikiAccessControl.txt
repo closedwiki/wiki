@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1041128291" format="1.0" version="1.27"}%
+%META:TOPICINFO{author="PeterThoeny" date="1050304762" format="1.0" version="1.28"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -24,6 +24,12 @@ As a *collaboration guideline*:
 
 	* Create broad-based Groups (for more and varied input), and...
 	* Avoid creating view-only Users (if you can read it, you should be able to contribute to it).
+
+---++ Authentication vs. Access Control
+
+*Authentication:* Identifies who a user is based on a login procedure. See TWikiUserAuthentication.
+
+*Access control:* Restrict access to content based on users and groups once a user is identified.
 
 ---++ Users and Groups
 
