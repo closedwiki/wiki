@@ -8,7 +8,8 @@ my @davuser;
 # Requres a correctly installed server and a twiki    #
 #######################################################
 my $twikicfg = "/home/twiki/alpha/lib/TWiki.cfg";
-my $davpath  = "twiki/dav";
+my $pubdavpath  = "twiki/pub";
+my $datadavpath  = "twiki/data";
 my $lockpath = "/var/lock/webdav";
 my $bindir = "/home/twiki/alpha/bin";
 $davuser[0] = {
@@ -58,7 +59,8 @@ use vars qw( $defaultUrlHost $scriptUrlPath $dispScriptUrlPath $dispViewPath
 
 require "$twikicfg";
 my $twikiurl = "$defaultUrlHost/$scriptUrlPath";
-my $davurl = "$defaultUrlHost/$davpath";
+my $davpuburl = "$defaultUrlHost/$pubdavpath";
+my $davdataurl = "$defaultUrlHost/$datadavpath";
 my $binurl = "$defaultUrlHost/$scriptUrlPath";
 
 my $tmpfile = "/tmp/SugarKane.txt";
@@ -146,10 +148,10 @@ sub davopen {
   my $dav = new HTTP::DAV;
   $dav->credentials(-user=>$davuser[$user]{username},
 					-pass=>$davuser[$user]{password},
-					-url=>$davurl);
+					-url=>$davpuburl);
 
-  $dav->open(-url=>$davurl)
-	or die "Failed to open $davurl ".$dav->message." at ".join(":",caller);
+  $dav->open(-url=>$davpuburl)
+	or die "Failed to open $davpuburl ".$dav->message." at ".join(":",caller);
 
   return $dav;
 }
@@ -208,7 +210,7 @@ sub copymovefixture {
   $this->checkatt(0, "Davtest","DavTest0", "MarilynMonroe.dat");
 }
 
-sub test_copyWithinTopic {
+sub test_copyAttachmentWithinTopic {
   my $this=shift;
   $this->copymovefixture();
 
@@ -221,7 +223,7 @@ sub test_copyWithinTopic {
   $this->checkatt(1, "Davtest","DavTest0", "MarilynMonroe.dat");
 }
 
-sub test_copyWithinTopicDenied {
+sub test_copyAttachmentWithinTopicDenied {
   my $this=shift;
   $this->copymovefixture();
 
@@ -231,7 +233,7 @@ sub test_copyWithinTopicDenied {
 							  "Davtest/DavTest0/MrsKennedy.txt"), $dav);
 }
 
-sub test_copyCollection {
+sub test_copyPubCollection {
   my $this=shift;
 
   # copy collection
@@ -240,7 +242,7 @@ sub test_copyCollection {
 							  "Davtest/SmeaGol"), $dav);
 }
 
-sub test_copyToDenied {
+sub test_copyAttacmnetToDenied {
   my $this=shift;
   $this->copymovefixture();
 
@@ -250,7 +252,7 @@ sub test_copyToDenied {
 							  "Davtest/DavTest1/SugarKane.txt"), $dav);
 }
 
-sub test_delete {
+sub test_deleteAttachment {
   my $this=shift;
   my $dav = $this->davopen(0);
 
@@ -271,7 +273,7 @@ sub test_delete {
 }
 
 # make sure of permissions
-sub test_get {
+sub test_getAttachment {
   my $this=shift;
   my $dav;
 
@@ -324,7 +326,7 @@ sub test_moveWithinTopic {
   $this->checkatt(1, "Davtest","DavTest0", "MarilynMonroe.dat");
 }
 
-sub test_moveLeafNoRead {
+sub test_moveAttachmentNoRead {
   my $this=shift;
   $this->copymovefixture();
 
@@ -334,7 +336,7 @@ sub test_moveLeafNoRead {
 }
 
 # move leaf access permitted between topics
-sub test_moveBetweenTopics {
+sub test_moveAttachmentBetweenTopics {
   my $this=shift;
   $this->copymovefixture();
   my $dav = $this->davopen(0);
@@ -357,7 +359,7 @@ sub test_moveToDenied {
 							  "Davtest/DavTest1/MarilynMonroe.dat"),$dav);
 }
 
-sub test_moveRenameDenied {
+sub test_moveRenameAttachmentDenied {
   my $this=shift;
   $this->copymovefixture();
   my $dav = $this->davopen(0);
@@ -367,7 +369,7 @@ sub test_moveRenameDenied {
 							  "Davtest/DavTest0/MarilynMonroe.dat"), $dav);
 }
 
-sub test_moveToWebLevel {
+sub test_moveAttachmentToWebLevel {
   my $this=shift;
   $this->copymovefixture();
   my $dav = $this->davopen(0);
@@ -403,7 +405,7 @@ sub DISABLEtest_options {
 
 # put into various directories
 # this is what drag and drop does
-sub test_put {
+sub test_putAttachment {
   my $this=shift;
 
   my $dav = $this->davopen(0);
@@ -481,7 +483,7 @@ sub test_recache_command_line {
   $this->assert_does_not_match(qr/Processed \d+ topics from \w+/, $monitor);
 }
 
-sub test_query {
+sub test_recache_query {
   my $this = shift;
   unlink("$lockpath/TWiki") || die "Failed";
   my $monitor = `curl -s -S $binurl/dav_recache/$scriptSuffix`;

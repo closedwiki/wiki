@@ -1042,6 +1042,7 @@ static int dav_method_get(request_rec *r)
   ** 2) open_stream and read_stream.
   */
   if (resource->hooks->get_pathname != NULL) {
+	/* CC: this is not used in standard mod_dav, except in debugging */
 	const char *pathname;
 	void *fhandle;
 	request_rec *new_req;
@@ -1082,7 +1083,7 @@ static int dav_method_get(request_rec *r)
   else {
 	dav_stream_mode mode;
 	dav_stream *stream;
-	dav_error *err;
+	dav_error *err, *err2;
 	int has_range;
 	
 	/* set up the HTTP headers for the response */
@@ -1154,6 +1155,11 @@ static int dav_method_get(request_rec *r)
 	/* Done with the request; clear its timeout */
 	ap_kill_timeout(r);
 	
+	err2 = (*resource->hooks->close_stream)(stream, 1);
+	if (err2 != NULL && err == NULL) {
+	  err = err2;
+	}
+  
 	if (err != NULL) {
 	  /* ### if we already sent content, this is wrong */
 	  return dav_handle_err(r, err, NULL);
@@ -1741,13 +1747,9 @@ static dav_error * dav_propfind_walker(dav_walker_ctx *ctx, int calltype)
   dav_propdb *propdb;
   dav_get_props_result propstats = { 0 };
   
-  if (ctx->resource->twiki) {
-	/* a twiki resource; ignore ,v files */
-	const char* file = ctx->resource->uri;
-	if (file && strcmp(file + strlen(file) - 2, ",v") == 0) {
-	  return NULL;
-	}
-  }
+  if (ctx->resource->twiki &&
+	  dav_twiki_ignore_file( ctx->resource->uri ))
+	return NULL;
 
   /*
   ** Note: ctx->doc can only be NULL for DAV_PROPFIND_IS_ALLPROP. Since

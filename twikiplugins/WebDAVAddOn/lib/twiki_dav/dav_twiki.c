@@ -160,8 +160,27 @@ int dav_twiki_accessible(const request_rec *r, const dav_resource* dr,
 
   return 1;
 }
+
 #endif
 
+/* Ignore ,v and .lock files in twiki resources at all times */
+int dav_twiki_ignore_file(const char* file) {
+  if (!file || strlen(file) < 2)
+	return 0;
+
+  if (strcmp(file + strlen(file) - 2, ",v") == 0)
+	return 1;
+
+  if (strlen(file) < 5)
+	return 0;
+
+  if (strcmp(file + strlen(file) - 5, ".lock") == 0)
+	return 1;
+
+  return 0;
+}
+
+/* Return 1 if accessible */
 static int checkAccessibility(const char* web,
   const char* topic,
   const char* file,
@@ -172,17 +191,17 @@ static int checkAccessibility(const char* web,
   DBM* db = NULL;
   int ret;
 
-  /* ,v file access is always denied, in all modes */
-  if (file && strcmp(file + strlen(file) - 2, ",v") == 0) {
-	return 1;
-  }
-
   /* Do collection checks before opening protections DB */
   if (mode != 'V') {
 	/* disallow change ops on directories */
 	if (file == NULL || topic == NULL || web == NULL) {
 	  return 0;
 	}
+  }
+
+  /* ,v and .lock file access is always denied, in all modes */
+  if (dav_twiki_ignore_file(file)) {
+	return 0;
   }
 
   if ((monitor & 4) != 0)
@@ -430,18 +449,21 @@ static char* compile_resource(pool* poo, twiki_resources* tr) {
 					 a ? escaped(a, tmpa) : "");
 }
 
+const char* dav_twiki_make_tmp_filename(pool* p) {
+  char* s = ap_psprintf(p, "%s/davXXXXXX", P_tmpdir);
+  mkstemp(s);
+  return s;
+}
+
 static dav_error* invoke_command(const char* action,
 								 const dav_resource* r,
 								 const char* path) {
   pool* p = dav_fs_pool(r);
-  char response_file[255];
   char tmp[512];
   const char* cmd;
   twiki_resources* tr = r->twiki;
+  const char* response_file = dav_twiki_make_tmp_filename(p);
 
-  strcpy(response_file, P_tmpdir);
-  strcat(response_file, "/davXXXXXX");
-  mkstemp(response_file);
   cmd = ap_psprintf(p,
 					"%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\"",
 					tr->script,
@@ -476,7 +498,25 @@ dav_error* dav_twiki_delete(const dav_resource* r) {
 }
 
 dav_error* dav_twiki_commit(const dav_resource* r, const char* path) {
-  return invoke_command("commit", r, path);
+   return invoke_command("commit_pub", r, path);
+}
+
+const char * dav_twiki_detach_metadata(const dav_resource *resource)
+{
+  const char* tmp = dav_twiki_make_tmp_filename(dav_fs_pool(resource));
+  dav_error* e = invoke_command("detach", resource, tmp);
+
+  if (e) {
+	remove(tmp);
+	return NULL;
+  }
+  return tmp;
+}
+
+dav_error* dav_twiki_reattach_metadata(const char *alt,
+									   const dav_resource *resource)
+{
+  return invoke_command("reattach", resource, alt);
 }
 
 #endif
