@@ -1,5 +1,4 @@
 %TMPL:INCLUDE{"twiki"}%
-
 %TMPL:DEF{"script"}%
 <script language="JavaScript">
 <!--HIDE
@@ -59,30 +58,22 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
   return false;
 }
 //STOP HIDING-->
-</script>
-%TMPL:END%
-
+</script>%TMPL:END%
 %TMPL:DEF{"footernote"}%
 <div class="TWikiFooterNote">
 <font color="#333333" size="-1">
 %INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%
 </font>
- </div>
-%TMPL:END%
-
+ </div>%TMPL:END%
 %TMPL:DEF{"topicaction"}%
-      <input type="submit" name="action" value="Save" id="save" />
-      <input type="submit" name="action" value="QuietSave" id="quietsave" />
-      <input type="submit" name="action" value="Checkpoint" id="checkpoint" />
-      <input type="submit" name="action" value="Preview" id="preview" />
-      <input type="submit" name="action" value="Cancel" id="cancel" />
-%TMPL:END%
-
+    <input type="submit" name="action" value="Save" id="save" />
+    <input type="submit" name="action" value="QuietSave" id="quietsave" />
+    <input type="submit" name="action" value="Checkpoint" id="checkpoint" />
+    <input type="submit" name="action" value="Preview" id="preview" />
+    <input type="submit" name="action" value="Cancel" id="cancel" />%TMPL:END%
 %TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
 %TMPL:DEF{"titlehelp"}% %TMPL:END%
 %TMPL:DEF{"webaction"}%Change topic%TMPL:END%
-
-
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 <body bgcolor="#ffffff" onLoad="initForm()">
