@@ -34,7 +34,7 @@ use vars qw(
 # ======================
 sub renderMetaData
 {
-    my( $web, $topic, $meta, $args ) = @_;
+    my( $web, $topic, $meta, $args, $isTopRev ) = @_;
         
     my $metaText = "";
     
@@ -56,7 +56,7 @@ sub renderMetaData
     
     my @attachments = $meta->find( "FILEATTACHMENT" );
     foreach my $attachment ( @attachments ) {
-        $metaText .= formatAttachments( $web, $topic, $showAttr, %$attachment );
+        $metaText .= formatAttachments( $web, $topic, $showAttr, $isTopRev, %$attachment );
     }
     
     my $text = "";
@@ -96,7 +96,7 @@ sub filenameToIcon
 # =========================
 sub formatAttachments
 {
-    my ( $theWeb, $theTopic, $showAttr, %attachment ) = @_;
+    my ( $theWeb, $theTopic, $showAttr, $isTopRev, %attachment ) = @_;
 
     my $row = "";
 
@@ -107,8 +107,10 @@ sub formatAttachments
     if (  ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ ) ) {
         $viewableAttachmentCount++;     
         my $fileIcon = TWiki::Attach::filenameToIcon( $file );
+        my $fileUrl = "%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/$theWeb/$theTopic?rev=$attrVersion&filename=$file";
+        $fileUrl = "%PUBURLPATH%/$theWeb/$theTopic/$file" if( $isTopRev || $attrVersion eq "1.1" );
         $attrComment = $attrComment || "&nbsp;";
-        $row .= "| $fileIcon <a href=\"%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/$theWeb/$theTopic?rev=$attrVersion&filename=$file\">$file</a> \\\n";
+        $row .= "| $fileIcon <a href=\"$fileUrl\">$file</a> \\\n";
         $row .= "   | <a href=\"%SCRIPTURL%/attach%SCRIPTSUFFIX%/$theWeb/$theTopic?filename=$file&revInfo=1\">action</a> \\\n";
         $row .= "   | $attrSize | $attrDate | $attrUser | $attrComment |";
         if ( $showAttr ) {
