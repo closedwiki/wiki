@@ -65,8 +65,10 @@ sub main
     if( $changeform ) {
         my $tmpl = &TWiki::Store::readTemplate( "changeform", $skin );
         &TWiki::writeHeader( $query );
-        $tmpl =~ s/%TEXT%/$query->param( 'text' )/goe;
         $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+        $tmpl = &TWiki::getRenderedVersion( $tmpl );
+        $tmpl =~ s/%TEXT%/$query->param( 'text' )/goe;
+
         my $listForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$webName" );
 	my @forms = split( /,\s*/, $listForms );	    
 	unshift @forms, "";
@@ -90,7 +92,6 @@ sub main
         my $parent = $query->param( 'parent' ) || "";
         $tmpl =~ s/%PARENT%/$parent/go;
     
-        #$tmpl = &TWiki::getRenderedVersion( $tmpl );
         print $tmpl;
         return;
     }
