@@ -156,6 +156,9 @@ $doRemovePortNumber = "0";
 #                   Change non existing plural topic name to singular,
 #                   e.g. TestPolicies to TestPolicy. Default "1"
 $doPluralToSingular = "1";
+#                   Remove ".." from %INCLUDE{""}% filename, to
+#                   prevent includes of "../../file". Default "1"
+$doSecureInclude    = "1";
 #                   Log topic views to $logFilename. Default "0"
 $doLogTopicView     = "1";
 #                   Log topic saves to $logFilename. Default "0"
