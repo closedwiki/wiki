@@ -3,17 +3,20 @@
 
 Description: Tags composed from the expansion of other tags. Example: is * Set A=Some and * Set B=Tag, then <nop>%%A<nop>%<nop>%B<nop>%% must expand to whatever is the expansion of %SomeTag%
 
-	* Set EGGSAMPLE = Egg sample
-	* Set A = EGG
-	* Set B = SAMPLE
+        * Set EGGSAMPLE = Egg sample
+        * Set A = EGG
+        * Set B = SAMPLE
 
-	* Set C = %%A%
-	* Set D = %B%%
+        * Set C = %%A%
+        * Set D = %B%%
 
-	* Set E = %EGG
-	* Set F = SAMPLE%
+        * Set E = %EGG
+        * Set F = SAMPLE%
+   
+        * Set PA = A
+        * Set SB = B
 
-	* A: = %A%
+  	* A: = %A%
 	* B: = %B%
 	* C: = %C%
 	* D: = %D%
@@ -73,3 +76,14 @@ saw:
 <!-- actual -->
 %%XA%%XB%{}%
 <!-- /actual -->
+
+--++ <nop>%<nop>%<nop>%PA<nop>%<nop>%<nop>%<nop>%SB{}<nop>%<nop>%<nop>%
+Expected:
+<!-- expected expand -->
+%EGGSAMPLE%
+<!-- /expected -->
+saw:
+<!-- actual -->
+%%%PA%%%%SB{}%%%
+<!-- /actual -->
+
