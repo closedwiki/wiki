@@ -2348,7 +2348,7 @@ sub handleToc
             $highest--;
             $result =~ s/^\t{$highest}//gm;
         }
-        $result = "<div id=\"twikitoc\">$title$result\n</div>";
+        $result = "<div class=\"TWikiToc\">$title$result\n</div>";
         return $result;
 
     } else {
