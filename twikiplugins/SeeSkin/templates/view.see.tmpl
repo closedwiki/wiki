@@ -33,14 +33,14 @@
 </div>
 
 <div id="topics">
- <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%URLENCODE{"%WEB%"}%/">
- <!-- <form name="photonsearch" action="%SCRIPTURLPATH%/photonsearch%SCRIPTSUFFIX%/%URLENCODE{"%WEB%"}%" method="post"> -->
+ <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
+ <!-- <form name="photonsearch" action="%SCRIPTURLPATH%/photonsearch%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%" method="post"> -->
 ---++++ Navigate
  <ul>
- <li>%WEBTOPICLIST% 
+ <li>%WEBTOPICLIST%
  </ul>
  </form>
-<!-- <span class="deem">Experimental: <br /> 
+<!-- <span class="deem">Experimental: <br />
 <ul>
 <li><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=tg&contenttype=application/x-touchgraph-launch" title="An experimemtal method of viewing topic relationships">Graph</a>
 </span>
@@ -50,7 +50,7 @@
 <div id="zones">
 ---++++ %TMPL:P{"weblabel"}%s:
 <ul>
-	<li>%WIKIWEBLIST%
+   <li>%WIKIWEBLIST%
 </ul>
 ---
 </div>
@@ -66,4 +66,4 @@
   %TMPL:P{"sep"}% <div id="diffs"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%" accesskey="i" title="View previous versions of this page">H<u>i</u>story</a> <ul>{ %REVISIONS% }</ul></div>
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" accesskey="m" title="advanced actions: rename/move, parentage, compare revisions, etc."><u>M</u>ore</a>%TMPL:END%
 
-  
+

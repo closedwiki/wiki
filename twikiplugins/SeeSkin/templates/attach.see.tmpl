@@ -24,7 +24,7 @@ function launchWindow( theWeb, theTopic ) {
 <div id="header">%TMPL:P{"masthead"}%</div>
 <div id="wrapper">
 <div id="content">
-<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%URLENCODE{"%WEB%/%TOPIC%"}%" method="post">
+<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 ---++ Existing attachments for <nop>%TOPIC%
 %META{"attachments" all="on"}%
 %TMPL:P{"previousdetails"}%
@@ -67,7 +67,7 @@ function launchWindow( theWeb, theTopic ) {
 
 __Notes:__
 
-   * *Link checkbox:* In case the attached file is a JPG, GIF or PNG image and you check the box, 
+   * *Link checkbox:* In case the attached file is a JPG, GIF or PNG image and you check the box,
      it will create an inline image (e.g. show the image) at the end of the topic.  For other
      file types a simple link will be created.
    * *Bug:* Internet Explorer 4.0 or earlier: If you get an "Internal Server Error"
