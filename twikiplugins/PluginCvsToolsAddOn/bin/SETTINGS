@@ -6,11 +6,9 @@ export PLUGINNAME=$1
 
 export TWIKISTAGE=$TWIKIROOT/stage
 
-# As of 14-Jan-03, Sourceforge's pserver is down. So, we can only check out
-as
+# As of 14-Jan-03, Sourceforge's pserver is down. So, we can only check out ssh
 export CVS_RSH=ssh
-export
-CVSROOT=$CVSUSER@cvs.twikiplugins.sourceforge.net:/cvsroot/twikiplugins
+export CVSROOT=$CVSUSER@cvs.twikiplugins.sourceforge.net:/cvsroot/twikiplugins
 
 if [ ! "$PLUGINNAME" ]
 then
