@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="996219021" format="1.0beta2" version="1.9"}%
+%META:TOPICINFO{author="MikeMannix" date="999242309" format="1.0" version="1.10"}%
 Welcome %WIKIUSERNAME%,
 
-you have reached the TWikiWeb (pronounced twee-kee web). %WIKITOOLNAME% is a meeting place to collaborate on common interests. Everybody can contribute by just using a web browser. It looks like a normal web site, but then... everybody can (and is encouraged to) *edit the web pages* here and to contribute their questions and what they know. It really is very simple to learn and use. 
+You have reached a TWikiSite (pronounced twee-kee site). %WIKITOOLNAME% is a meeting place to collaborate on common interests. Everybody can contribute by just using a Web browser. It looks like a normal Web site, but then... everybody can (and is encouraged to) *edit the web pages* here and to contribute their questions and what they know. It really is very simple to learn and use. 
 
 *How %WIKITOOLNAME% Works*
 
@@ -42,11 +42,11 @@ you have reached the TWikiWeb (pronounced twee-kee web). %WIKITOOLNAME% is a mee
 	* __Read more__ about the tool at http://TWiki.org/ .
 
 
-*Starting Points in the %WIKITOOLNAME%.%WEB% Web*
+*Starting Points in the %WIKITOOLNAME%.%WEB% web*
 
 	* <b> TWikiTutorial </b>: Familiarize yourself with %WIKITOOLNAME% before you start editing content.
 	* %HOMETOPIC%: Entry point of this %WIKITOOLNAME% web.
-	* TWikiWeb: Explains what a %WIKITOOLNAME% web is.
+	* TWikiSite: Explains what a %WIKITOOLNAME% site is.
 	* GoodStyle: Things to consider when changing text.
 	* WikiSyntax: Easy to learn rules when editing text.
 	* WebChanges: Recent changes to the %WIKITOOLNAME%.%WEB% web.
