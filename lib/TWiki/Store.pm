@@ -595,6 +595,89 @@ sub readFileHead
 
 # =========================
 
+#AS 5 Dec 2000 collect all Web's topic names
+sub getTopicNames {
+    my ($web) = @_ ;
+
+    if (!defined $web) {
+	$web="";
+    }
+
+    #FIXME untaint web name?
+
+    # get list of all topics by scanning $dataDir
+    opendir DIR, "$TWiki::dataDir/$web" ;
+    my @tmpList = readdir(DIR);
+    closedir(DIR);
+
+    # this is not magic, it just looks like it.
+    my @topicList = sort
+        grep { s#^.+/([^/]+)\.txt$#$1# }
+        grep { ! -d }
+        map  { "$TWiki::dataDir/$web/$_" }
+        grep { ! /^\.\.?$/ } @tmpList;
+
+    return @topicList ;    
+}
+#/AS
+
+# =========================
+#AS 5 Dec 2000 collect immediate subWeb names
+sub getSubWebs {
+    my ($web) = @_ ;
+    
+    if (!defined $web) {
+	$web="";
+    }
+
+    #FIXME untaint web name?
+
+    # get list of all subwebs by scanning $dataDir
+    opendir DIR, "$TWiki::dataDir/$web" ;
+    my @tmpList = readdir(DIR);
+    closedir(DIR);
+
+    # this is not magic, it just looks like it.
+    my @webList = sort
+        grep { s#^.+/([^/]+)$#$1# }
+        grep { -d }
+        map  { "$TWiki::dataDir/$web/$_" }
+        grep { ! /^\.\.?$/ } @tmpList;
+
+    return @webList ;
+}
+#/AS
+
+# =========================
+#AS 26 Dec 2000 recursively collects all Web names
+
+#FIXME: move var to TWiki.cfg ?
+use vars qw ($subWebsAllowedP);
+$subWebsAllowedP = 0; # 1 = subwebs allowed, 0 = flat webs
+
+sub getAllWebs {
+    # returns a list of subweb names
+    my ($web) = @_ ;
+    
+    if (!defined $web) {
+	$web="";
+    }
+    my @webList =   map { s/^\///o }
+		    map { "$web/$_" }
+		    &getSubWebs($web);
+    my $subWeb = "";
+    if ($subWebsAllowedP) {
+        my @subWebs = @webList;
+	foreach $subWeb (@webList) {
+	    push @subWebs, &getAllWebs("$subWeb");
+	}
+	return @subWebs;
+    }
+    return @webList ;
+}
+#/AS
+# =========================
+
 1;
 
 # EOF
