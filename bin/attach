@@ -34,7 +34,7 @@ sub listVersions
 {
     my( $web, $topic, $attachment ) = @_;
 
-    my $latestRev = TWiki::Store::getRevisionNumberNew( $web, $topic, $attachment );
+    my $latestRev = TWiki::Store::getRevisionNumber( $web, $topic, $attachment );
     $latestRev =~ /\.(.*)/;
     my $maxRevNum = $1;
 
@@ -48,14 +48,14 @@ sub listVersions
 
         my $changeToIsoDate = 0;
         my( $date, $userName, $dummy, $comment ) = 
-           TWiki::Store::getRevisionInfoNew( $topic, $rev, $changeToIsoDate, $web, $attachment );
+           TWiki::Store::getRevisionInfo( $web, $topic, $rev, $changeToIsoDate, $attachment );
         my $wikiUserName = &TWiki::userToWikiName( $userName );
 
         my $viewAction = "<a href=\"%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$rev&filename=$attachment\">view</a>";
         $result .= "| 1.$version  | $viewAction | $date | $wikiUserName | $comment |\n";
     }
 
-    $result = "$result$atTableAfter";
+    $result = "$result";
     return $result;
 }
 
@@ -74,6 +74,7 @@ sub main
 
     my $tmpl = "";
     my $text = "";
+    my @meta = ();
     my $atext = "";
     my $fileName = "";
     my $wikiUserName = &TWiki::userToWikiName( $userName );
@@ -98,22 +99,15 @@ sub main
     $fileName = $query->param( 'filename' ) || "";
 
     if( &TWiki::Store::topicExists( $webName, $topic ) ) {
-        $text = &TWiki::Store::readTopic( $topic );
-        # extract attachment section
-        my $before="", $after="";
-        ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
-        if( ! $atext ) { $atext = ""; }
+        ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
     }
+    
+    my @identifier = ("name" => $fileName );
+    my( $argsr, @dummy ) = &TWiki::Store::metaExtract( "FILEATTACHMENT", \@identifier, "", @meta );
+    my @argsa = @$argsr;
+    my %args = @argsa;
 
-    if ( $atext =~ /\<TwkNextItem\>/ ) {
-       # Process old style attachment table
-       # FIXME just doing an in memory update for now, upload will cause replacement
-       $atext = TWiki::Attach::migrateToFileAttachmentMacro( $atext );
-    }
-    $atext =~ /%FILEATTACHMENT{([\s]*\"$fileName\"[^}]*)}%/;
-    my( $tmpFile, $tmpVersion, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, 
-        $tmpAttr ) = TWiki::Attach::extractFileAttachmentArgs( $1 );
-    if ( $tmpAttr =~ /h/o ) {
+    if ( $args{"attr"} =~ /h/o ) {
           $isHideChecked = "checked";
     }
 
@@ -132,7 +126,6 @@ sub main
     # get view template, standard view or a view with a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
     $tmpl = &TWiki::Store::readTemplate( "attach", "", $skin );
-    $atext = "<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
     $TWiki::Attach::noFooter = 1; # FIXME naff
     $TWiki::Attach::showAttr = "hd";
@@ -144,7 +137,7 @@ sub main
         $tmpl =~ s/%ACTION%/Update file:/go;
         $tmpl =~ s/%PREVIOUS%/Previous <br> upload:/go;
         $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
-        $fileUser = &TWiki::getRenderedVersion( $fileUser );
+        $fileUser = &TWiki::getRenderedVersion( $args{"user"} );
         $fileUser =~ s/\n//go;
         $tmpl =~ s/%FILEUSER%/\($fileUser\)/go;
     } else {
@@ -153,9 +146,9 @@ sub main
         $tmpl =~ s/%PREVIOUS%//go;
         $tmpl =~ s/%FILEUSER%/$fileUser/go;
     }
-    $tmpl =~ s/%FILEPATH%/$filePath/go;
-    $tmpl =~ s/%FILECOMMENT%/$fileComment/go;
-    print "Content-type: text/html\n\n";
+    $tmpl =~ s/%FILEPATH%/$args{"path"}/go;
+    $tmpl =~ s/%FILECOMMENT%/$args{"comment"}/go;
+    TWiki::writeHeader( $query );
     print $tmpl;
 }
 
