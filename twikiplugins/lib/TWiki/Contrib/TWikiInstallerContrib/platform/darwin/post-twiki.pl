@@ -12,10 +12,9 @@ BEGIN {
     # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
 };
 
-system( "mkdir -p htdocs/twiki/" );
-system( "mv cgi-bin/tmp/twiki/pub/* htdocs/twiki/" );
-system( "mkdir twiki/templates" );
-system( "cp cgi-bin/tmp/twiki/templates/* twiki/templates/" );
+system( "mkdir htdocs/" );
+system( "mv cgi-bin/tmp/twiki/pub htdocs/twiki/" );
+system( "mv cgi-bin/tmp/twiki/templates twiki/" );
 
 my $agent = "TWikiInstaller: " . basename( $0 );
 my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;
@@ -50,14 +49,13 @@ if ( -e "TWikiInstallationReport.html" )
     
     $mech->follow_link( text => 'Attach' );
     if ( $mech->submit_form(
-			    form_name => 'main',
 			    fields    => { 
-				filepath => cwd() . "/$topic.html",
-				filecomment => `date`,
-				hidefile => undef,
+					filepath => cwd() . "/$topic.html",
+					filecomment => `date`,
+					hidefile => undef,
 			    },
-			    ) 
-	 ) { unlink "${topic}.html" }
+	) ) { #unlink "${topic}.html" 
+	}
 }
 
 ################################################################################
