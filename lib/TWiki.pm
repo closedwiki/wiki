@@ -131,7 +131,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "21 Mar 2004";
+$wikiversion      = "25 Mar 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1984,6 +1984,10 @@ sub handleIncludeFile
     # handle all preferences and internal tags (for speed: call by reference)
     $text = takeOutVerbatim( $text, $verbatim );
 
+    # Escape rendering: Change "!%VARIABLE%" to "%<nop>VARIABLE%", for final "%VARIABLE%" output
+    # Special case: Do not escape if preceeded by ";" for "this;that;!%TOPIC%" AND NOT regex search
+    $text =~ s/(^|[^\;])\!\%([A-Z])/$1%<nop>$2/g;
+
     # handle all preferences and internal tags
     &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
@@ -2967,6 +2971,10 @@ sub handleCommonTags
     my @verbatim = ();
     $text = takeOutVerbatim( $text, \@verbatim );
 
+    # Escape rendering: Change "!%VARIABLE%" to "%<nop>VARIABLE%", for final "%VARIABLE%" output
+    # Special case: Do not escape if preceeded by ";" for "this;that;!%TOPIC%" AND NOT regex search
+    $text =~ s/(^|[^\;])\!\%([A-Z])/$1%<nop>$2/g;
+
     # handle all preferences and internal tags (for speed: call by reference)
     $includingWebName = $theWeb;
     $includingTopicName = $theTopic;
@@ -3914,7 +3922,7 @@ sub getRenderedVersion {
             $extraLines = $2;    # Save extra lines, need to parse each separately
 
 # Escape rendering: Change " !AnyWord" to " <nop>AnyWord", for final " AnyWord" output
-            s/([\s\(])\!(?=\w)/$1<nop>/g;
+            s/(^|[\s\(])\!(?=[\w\*\=])/$1<nop>/g;
 
 # Blockquoted email (indented with '> ')
             s/^>(.*?)$/> <cite> $1 <\/cite><br \/>/g;
