@@ -1,62 +1,101 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"script"}%
- <script type="text/javascript">
- <!--HIDE
-  function launchWindow( theWeb, theTopic ) {
-    win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-    if( win ) {
-      win.focus();
-    }
-    return false;
- }
- function checkAll( theCheck )
- {
-   // find button element index
-   var j = 0;
-   for( var i = 0; i < document.rename.length; i++ ) {
-     if( document.rename.elements[i].name.match( "RENAME" ) ) {
-       document.rename.elements[i].checked = theCheck;
-     }
-   }
- }
- //STOP HIDING-->
- </script>%TMPL:END%
-%TMPL:DEF{"bodystart"}%
-<body id="renamepage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
-%TMPL:DEF{"rename"}%
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-<form method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-%TMPL:P{"topbar"}%
----+ %TMPL:P{"webaction"}% <code>%TOPIC%</code>
 
-| |  *Web:* | *&nbsp;Topic:* |
-|  *From:* |    <nop>%WEB%. | &nbsp;%TOPIC% |
-|  *To:* |  %TMPL:P{"newweb"}%. | %TMPL:P{"newtopic"}% |
-%TMPL:P{"notes"}%
+
+
+%TMPL:DEF{"script"}%
+<script type="text/javascript">
+<!--HIDE
+	function initPage() { }
+	function launchWindow( theWeb, theTopic ) {
+		win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+		if( win ) {
+			win.focus();
+		}
+		return false;
+	}
+	function checkAll( theCheck ) {
+		// find button element index
+		var j = 0;
+		for( var i = 0; i < document.rename.length; i++ ) {
+			if( document.rename.elements[i].name.match( "RENAME" ) ) {
+				document.rename.elements[i].checked = theCheck;
+			}
+		}
+	}
+//STOP HIDING-->
+</script>%TMPL:END%
+
+
+
+%TMPL:DEF{"bodystart"}%
+<body class="twikiNoViewPage twikiRenamePage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+
+
+
+%TMPL:DEF{"content"}%
+<form method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+---+ %TMPL:P{"webaction"}% %TOPIC%
+<div class="twikiVersatileTable">
+<table>
+<tr>
+<th>Move from:</th>
+<td align="right"><nop>%WEB%.</td>
+<td class="nameCol">%TOPIC%</td>
+<td></td>
+</tr>
+<tr>
+<th>To:</th>
+<td class="twikiMainCol" align="right">%TMPL:P{"newweb"}%.</td>
+<td class="twikiMainCol">%TMPL:P{"newtopic"}%</td>
+<td class="nameCol">%TMPL:P{"namehelp"}%</td>
+</tr>
+<tr>
+<th class="lastRow"></th>
+<td colspan="2" class="twikiMainCol lastRow">%TMPL:P{"allownonwikiword"}%</td>
+<td class="lastRow"></td>
+</tr>
+</table>
+</div>
 
 ---++ Change links in topics that refer to <nop>%TOPIC% in the <nop>%WEB% Web:
 
+<div class="twikiRenameList">
 %RESEARCH{ "%TOPIC%" web="%WEB%" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
+</div>
 
 ---++ Change links in topics that refer to <nop>%WEB%.<nop>%TOPIC% in any Web:
 
+<div class="twikiRenameList">
 %RESEARCH{ "%WEB%\.%TOPIC%" web="all" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
+</div>
 
-<input type="button" value="Select all" onclick="checkAll(true);" />
-<input type="button" value="Clear" onclick="checkAll(false);" /> checkboxes of referenced topics
-
-__Note:__
+<input type="button" class="twikiButton" value="Select all" onclick="checkAll(true);" />
+<input type="button" class="twikiButton" value="Clear" onclick="checkAll(false);" /> checkboxes of referenced topics
+<div class="twikiHelp">
+*Note:*
    * Get help on
      <a target="ManagingTopics" onclick="return launchWindow('%TWIKIWEB%','ManagingTopics')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingTopics">Renaming and moving topics</a>.
    * Select the Trash Web to delete the topic.
    * The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)
-
- %TMPL:P{"topicaction"}%
-
+</div>
+%TMPL:P{"topicaction"}%
 %TMPL:P{"hidden"}%
-%TMPL:P{"standardfooter"}%
 </form>
+%TMPL:END%
+
+
+
+%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">%TMPL:P{"content"}%</div></div>%TMPL:END%
+
+
+
+%TMPL:DEF{"rename"}%
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
 %TMPL:P{"bodyend"}%
 %TMPL:END%
+
+
+

@@ -53,7 +53,8 @@
 <div class="twikiTopic">
 %TMPL:P{"previousdetails"}%
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
-<table class="twikiVersatileTable" width="100%">%TMPL:P{"previous"}% 
+<div class="twikiVersatileTable">
+<table width="100%">%TMPL:P{"previous"}% 
 	<tr>
 		<th class="twikiMainCol">
 			Local file 
@@ -95,6 +96,7 @@ Images will be displayed, for other attachments a link will be created.
 		<td class="help">Attachments will not be shown in topic view page.</td>
 	</tr>
 </table>
+</div>
 <div class="twikiNotes twikiGrayText">
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%</div></div>
