@@ -57,11 +57,12 @@ install: build
 
 	cp bin/.htaccess.txt debian/twiki/etc/twiki/.htaccess
 	#fix up the paths  in the .htaccess file
-
 	perl -pi~ -e 's|^(AuthUserFile).*|\1 /var/lib/twiki/data/\.htpasswd|;' debian/twiki/etc/twiki/.htaccess
 	perl -pi~ -e 's|^(ErrorDocument 401).*|\1 /cgi-bin/twiki/oops/TWiki/TWikiRegistration?template=oopsauth$2|;' debian/twiki/etc/twiki/.htaccess
 	rm debian/twiki/etc/twiki/.htaccess~
-	#ln -s debian/twiki/usr/lib/cgi-bin/twiki/.htaccess~
+
+	#create viewauth (soft link won't work for apache - nolink)
+	cp debian/twiki/usr/lib/cgi-bin/twiki/view debian/twiki/usr/lib/cgi-bin/twiki/viewauth
 
 	# not needed, with statoverride?
 	chmod 755 debian/twiki/usr/lib/cgi-bin/twiki/*

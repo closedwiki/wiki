@@ -56,8 +56,6 @@ db_get twiki/wikiwebmaster
 # do rcs checkout first?
 perl -pi~ -e '$U=q{'"$RET"'}; s/^(\s*\*\s*Set\s*WIKIWEBMASTER\s*=\s*).*(\r\n)$/$1$U$2/;' /var/lib/twiki/data/TWiki/TWikiPreferences.txt
 
-
-
 # prevent further confusion: done with debconfig
 
 # regrettably, this doesn't actually permit us to do further I/O.
@@ -110,11 +108,11 @@ case "$1" in
 	# create initial htpasswd, if needed
 	#mmmm whats the equivalent in apache2?
 	if [ -e /usr/bin/htpasswd ]; then
-		if [ -e /usr/lib/twiki/data ]; then	
+		if [ -e /var/lib/twiki/data ]; then	
 			#if the user has installed without initial universe then we can't do this
-			if [ ! -r /var/lib/twiki/data/.htpasswd ]; then
+			if [ ! -e /var/lib/twiki/data/.htpasswd ]; then
 			    touch /var/lib/twiki/data/.htpasswd
-		       	    htpasswd -b /var/lib/twiki/data/.htpasswd TWikiGuest guest
+		       	htpasswd -b /var/lib/twiki/data/.htpasswd TWikiGuest guest
 			    chown $TWIKI_OWNER.www-data /var/lib/twiki/data/.htpasswd
 			    chmod og=rw /var/lib/twiki/data/.htpasswd
 			fi
@@ -127,7 +125,9 @@ case "$1" in
 
 	if [ ! -e /usr/lib/cgi-bin/twiki/.htaccess.old ]; then
 		#remove the old .htaccess file (from 2003-4 its a conffile in /etc/twiki)
-		mv /usr/lib/cgi-bin/twiki/.htaccess /usr/lib/cgi-bin/twiki/.htaccess.old
+    	if [ -e /usr/lib/cgi-bin/twiki/.htaccess ]; then
+    		mv /usr/lib/cgi-bin/twiki/.htaccess /usr/lib/cgi-bin/twiki/.htaccess.old
+    	fi
 	fi
 	if [ ! -e /usr/lib/cgi-bin/twiki/.htaccess ]; then
 		ln -s /etc/twiki/.htaccess /usr/lib/cgi-bin/twiki/.htaccess
@@ -146,7 +146,7 @@ case "$1" in
 	if [ ! -e /var/lib/twiki/log ]; then
 		ln -s /var/log/twiki /var/lib/twiki/log
 	fi
-
+	
 	chown -R $TWIKI_OWNER.www-data /var/log/twiki
 	chmod -R og=rw /var/log/twiki
     ;;
