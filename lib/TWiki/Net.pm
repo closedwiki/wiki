@@ -109,16 +109,21 @@ sub sendEmail
     my $dateStr = &TWiki::formatGmTime(time, 'email');
     $theText = "Date: " . $dateStr . "\n" . $theText;
 
+    # Check if Net::SMTP is available
     if( ! $mailInitialized ) {
         $mailInitialized = 1;
         $mailHost  = &TWiki::Prefs::getPreferencesValue( "SMTPMAILHOST" );
         $helloHost = &TWiki::Prefs::getPreferencesValue( "SMTPSENDERHOST" );
         if( $mailHost ) {
-	   $useNetSmtp = require Net::SMTP;
+	   eval {	# May fail if Net::SMTP not installed
+	       $useNetSmtp = require Net::SMTP;
+	   }
         }
     }
 
     my $error = "";
+    # Send the email.  Use Net::SMTP if it's installed, otherwise use a
+    # sendmail type program.
     if( $useNetSmtp ) {
         my ( $header, $body ) = split( "\n\n", $theText, 2 );
         my @headerlines = split( /\n/, $header );
