@@ -6,11 +6,12 @@
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-   <a href="%WIKIHOMEURL%"><img src="%PUBURLPATH%/wikiHome.gif" border="0" alt="TWiki Home" /></a>
+   <a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%" /></a>
   </td><td>
-   <b><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/%HOMETOPIC%">%WIKITOOLNAME%</a>
-   . <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a>
-   . </b><font size="+2"><b>%TOPIC%</b> %TMPL:P{"titleaction"}%</font>
+   <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/%HOMETOPIC%">%WIKITOOLNAME%</a>
+   &gt; <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a>
+   &gt; %META{"parent" nowebhome="on" suffix=" &gt;"}%
+   <font size="+1"><b>%TOPIC%</b> %TMPL:P{"titleaction"}%</font>
   </td><td align="right">
    <font size="-2">%WIKITOOLNAME% webs: <br />
    %WIKIWEBLIST% </font>
@@ -26,7 +27,7 @@
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-   <a href="%WIKIHOMEURL%"><img src="%PUBURLPATH%/wikiHome.gif" border="0" alt="TWiki Home" /></a>
+   <img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%" />
   </td><td>
    <b>%WIKITOOLNAME% .&nbsp;%WEB% .&nbsp;</b><font size="+2"><b>%TOPIC%</b> %TMPL:P{"titleaction"}%</font>
   </td><td> %TMPL:P{"headerhelp"}%
