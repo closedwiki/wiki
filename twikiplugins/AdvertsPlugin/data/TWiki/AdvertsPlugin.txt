@@ -39,7 +39,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 	
-		* Set SHORTDESCRIPTION = This plugin provides a convenient interfacet to the functionality in <nop>PhpAdsNew
+		* Set SHORTDESCRIPTION = This plugin provides a convenient interface to the functionality in <nop>PhpAdsNew
 
 	* The root address of the the ads software.
 	* If the i.e. admin interface is at http://server.../phpAdsNew/admin/index.php then ADVERTSCRIPTBASE is //server.../phpAdsNew (no trailing /)
