@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "13 Jun 2002";
+$wikiversion      = "11 Jul 2002";
 
 # ===========================
 # read the configuration part
@@ -865,6 +865,7 @@ sub extractNameValuePair
     my( $str, $name ) = @_;
 
     my $value = "";
+    return $value unless( $str );
     $str =~ s/\\\"/\\$TranslationToken/go;  # escape \"
 
     if( $name ) {
@@ -1975,7 +1976,7 @@ sub internalLink
     $theTopic =~ s/^(.)/\U$1/;
     $theTopic =~ s/\s([a-zA-Z0-9])/\U$1/g;
     # Add <nop> before WikiWord inside text to prevent double links
-    $theLinkText =~ s/([\s\(])([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
+    $theLinkText =~ s/([\s\(])([A-Z])/$1<nop>$2/go;
 
     my $exist = &TWiki::Store::topicExists( $theWeb, $theTopic );
     if(  ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) && ! ( $exist ) ) {
@@ -2022,7 +2023,7 @@ sub specificLink
     my( $thePreamble, $theWeb, $theTopic, $theText, $theLink ) = @_;
 
     # format: $thePreamble[[$theText]]
-    # format: $thePreamble[[$theText][$theLink]]
+    # format: $thePreamble[[$theLink][$theText]]
 
     $theLink =~ s/^\s*//o;
     $theLink =~ s/\s*$//o;
@@ -2030,8 +2031,7 @@ sub specificLink
     if( $theLink =~ /^$linkProtocolPattern\:/ ) {
         # Found external link, add <nop> before WikiWord and ABBREV 
 	# inside link text, to prevent double links
-	$theText =~ s/([\s\(])([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
-	$theText =~ s/([\s\(])([A-Z]{3,})/$1<nop>$2/go;
+	$theText =~ s/([\s\(])([A-Z])/$1<nop>$2/go;
         return "$thePreamble<a href=\"$theLink\" target=\"_top\">$theText</a>";
     }
 
