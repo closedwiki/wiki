@@ -1,7 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1007461520" format="1.0" version="1.55"}%
-%TOC%
-%STARTINCLUDE%
+%META:TOPICINFO{author="MikeMannix" date="1007886120" format="1.0" version="1.56"}%
 ---# Appendix B: TWiki Development Timeline
+%TOC%
 
 ---++ 01-Dec-2001 Release (Athens)
 
@@ -122,7 +121,7 @@
 	* *28 May 2000* - PeterThoeny
 		* Lock warning shows remaining lock time in minutes. 
 	* *15 May 2000* - PeterFokkinga
-		* Each topic can have its own template file. TWikiTemplatesVer1 has more. 
+		* Each topic can have its own template file. TWikiTemplates has more. 
 	* *02 May 2000* - KevinKinnell, PeterThoeny
 		* Advanced search features like search multiple webs; sort by topic name / modified time / author; limit the number of results returned. More in TWikiVariables. 
 
