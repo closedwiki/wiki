@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "19 Oct 2003";
+$wikiversion      = "25 Oct 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1906,6 +1906,7 @@ sub handleUrlEncode
     $theStr = extractNameValuePair( $theStr ) if( $doExtract );
     $theStr =~ s/[\n\r]/\%3Cbr\%20\%3E/g;
     $theStr =~ s/\s+/\%20/g;
+    $theStr =~ s/\"/\%22/g;
     $theStr =~ s/\&/\%26/g;
     $theStr =~ s/\</\%3C/g;
     $theStr =~ s/\>/\%3E/g;
