@@ -1,7 +1,7 @@
 package com.ccsoft.edit;
 
 //import java.applet.*;
-//import java.awt.*;
+import java.awt.*;
 //import java.net.*;
 //import java.util.Enumeration;
 import junit.framework.*;
@@ -25,12 +25,15 @@ public class ControlsTest extends TestCase {
 	    str += (char)c;
 	fr.close();
 	Controls controls = new Controls(str);
+	assert(str,controls != null);
 	ControlBlock cb = controls.getBlock("macros");
+	assert(""+controls,cb != null);
 	assertEquals("/home/%<nop>ACTION{who=\"\" due=\"\"}% ",
 		     cb.getDefinition("action").getValue());
 	assertEquals("\n---", cb.getDefinition("H").getValue());
 
 	cb = controls.getBlock("keys");
+	assert(""+controls,cb != null);
 	assertEquals("/redo/", cb.getDefinition("^A").getValue());
 	assertEquals("/copy/", cb.getDefinition("^C").getValue());
 	assertEquals("/refind/", cb.getDefinition("^F").getValue());
@@ -41,34 +44,35 @@ public class ControlsTest extends TestCase {
 	assertEquals("/cut/", cb.getDefinition("^X").getValue());
 
 	cb = controls.getBlock("top");
-	assertEquals("/undo/", cb.getDefinition("Undo").getValue());
+	assert(""+controls,cb != null);
+	assertEquals("/undo/", cb.getDefinition("UNDO").getValue());
 
-	assertEquals("/find/", cb.getDefinition("Find...").getValue());
-	assertEquals("/replace/", cb.getDefinition("Replace...").getValue());
-	assertEquals("/redo/",  cb.getDefinition("Again").getValue());
- 	assertEquals("/convert/", cb.getDefinition("HTML2Wiki").getValue());
+	assertEquals("/find/", cb.getDefinition("FIND").getValue());
+	assertEquals("/replace/", cb.getDefinition("REPLACE").getValue());
+	assertEquals("/redo/",  cb.getDefinition("REDO").getValue());
 
 	cb = controls.getBlock("bottom");
+	assert(""+controls,cb != null);
 	assertEquals("/cut/ %RED% /paste/ %ENDCOLOR%",
 		     cb.getDefinition("Red").getValue());
 	assertEquals("/cut/ %GREEN% /paste/ %ENDCOLOR%",
 		     cb.getDefinition("Green").getValue());
 
 	cb = controls.getBlock("left");
+	assert(""+controls,cb != null);
 	assertEquals("/cut/ */paste/* ",
-		     cb.getDefinition("Bold").getValue());
+		     cb.getDefinition("BOLD").getValue());
 	assertEquals("/cut/ _/paste/_ ",
-		     cb.getDefinition("Italic").getValue());
+		     cb.getDefinition("ITALIC").getValue());
 	assertEquals("/cut/ =/paste/= ",
 		     cb.getDefinition("TT").getValue());
 	assertEquals("/home/   * /cut/",
-		     cb.getDefinition("*...").getValue());
+		     cb.getDefinition("UL").getValue());
 	assertEquals("/home/   1 /cut/",
-		     cb.getDefinition("1...").getValue());
-	assertEquals("/action/",
-		     cb.getDefinition("Action").getValue());
+		     cb.getDefinition("OL").getValue());
 
 	cb = controls.getBlock("right");
+	assert(""+controls,cb != null);
 	assertEquals("/home//H/+ ", cb.getDefinition("H1").getValue());
 	assertEquals("/home//H/++ ", cb.getDefinition("H2").getValue());
 	assertEquals("/home//H/+++ ", cb.getDefinition("H3").getValue());
@@ -87,19 +91,19 @@ public class ControlsTest extends TestCase {
 	fr.close();
 	Controls controls = new Controls(str);
 	ControlBlock b = controls.getBlock("top");
-	assert(b != null);
-	java.awt.Panel p = b.makePanel(true, null);
+	assert(""+b, b != null);
+	java.awt.Panel p = b.makePanel(new FlowLayout(), null);
 
 	b = controls.getBlock("bottom");
 	assert(b != null);
-	p = b.makePanel(true, null);
+	p = b.makePanel(new FlowLayout(), null);
 
 	b = controls.getBlock("left");
 	assert(b != null);
-	p = b.makePanel(false, null);
+	p = b.makePanel(new FlowLayout(), null);
 
 	b = controls.getBlock("right");
 	assert(b != null);
-	p = b.makePanel(false, null);
+	p = b.makePanel(new FlowLayout(), null);
     }
 }
