@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="MikeMannix" date="1000440701" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1005372399" format="1.0" version="1.6"}%
 ---+ Frequently Asked Questions About %WIKITOOLNAME%
 
 This is a real FAQ, and also a demo of one easily implemented knowledge base solution. See how it's done, click ==[Edit]==.
 
-%SEARCH{ "\-\-\-\+\+ FAQ\:" casesensitive="on" regex="on" nosearch="on" nototal="on"}%
+%SEARCH{ "Back to\:__ TWikiFAQ" casesensitive="on" regex="on" nosearch="on" nototal="on"}%
 
 __NOTE:__ The most recent version of this FAQ is at TWiki:TWiki/TWikiFAQ.
 
