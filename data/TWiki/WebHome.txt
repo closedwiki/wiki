@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043658747" format="1.0" version="1.76"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043996820" format="1.0" version="1.77"}%
 <table><tr><td valign="top">
-Welcome to TWiki: a flexible, powerful, secure, simple, Web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either on an intranet or on the Internet.
+*Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either on an intranet or on the Internet.
 
 This is the place to learn about TWiki features, find where to download it, and try it out for yourself...
 </td><td width="25">&nbsp;</td><td width="200" align="center" valign="top">
@@ -12,6 +12,8 @@ The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
 <table><tr valign="top"><td>
 #UsersGuide
 ---++ TWiki User's Guide
+
+_Documentation for TWiki users._
 
 	* *TWiki Quick Start* - the fast track approach
 		* WelcomeGuest: A fast track intro covering all the basics
@@ -47,36 +49,38 @@ The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
 %PLUGINDESCRIPTIONS%
 </blockquote>
 
-	* %T% *ADMINS:* In less than an hour, you can read through and customize the [[#UsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. 
+	* %T% *ADMINS:* In less than an hour, you can read through and customize the [[#UsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. See also other enhancement pages: 
+		* TWikiAdminCookBook: Some tips that can be applied *before installation*
+		* InstantEnhancements: Simple tips (using just browser, no install needed) and quick (max couple of minutes).
 
 #ReferenceManual
 ---++ TWiki Reference Manual
 
-Documentation for webmasters, system administrators, project managers, team <br />
-leaders, and all other users of the TWiki advanced online collaboration tool.
+_Documentation for webmasters, system administrators, project managers, team leaders, and all other users of the TWiki advanced online collaboration platform._
 
 	* *[[TWikiDocumentation]]*: All manual sections in one file...
-		1. [[TWikiSystemRequirements][System Requirements]]
-		1. [[TWikiInstallationGuide][Installation Guide]]
-		1. [[TWikiUpgradeGuide][Upgrade Guide]] 
-		1. [[TWikiUserAuthentication][User Authentication]] 
-		1. [[TWikiAccessControl][Access Control]]
-		1. [[TextFormattingRules][TWiki Text Formatting]]
-		1. TWikiVariables
-		1. [[FileAttachment][TWikiAttachments]]
-		1. TWikiForms
-		1. TWikiTemplates
-		1. TWikiSkins
-		1. [[FormattedSearch][TWiki Search Formatting]]
-		1. TWikiMetaData
-		1. TWikiPlugins
+		1. [[TWiki System Requirements]]
+		1. [[TWiki Installation Guide]]
+		1. [[Windows Install Cookbook]]
+		1. [[TWiki Upgrade Guide]]
+		1. [[TWiki User Authentication]]
+		1. [[TWiki Access Control]]
+		1. [[Text Formatting Rules]]
+		1. [[TWiki Variables]]
+		1. [[File Attachment]]
+		1. [[TWiki Forms]]
+		1. [[TWiki Templates]]
+		1. [[TWiki Skins]]
+		1. [[Formatted Search]]
+		1. [[TWiki MetaData]]
+		1. [[TWiki Plugins]]
 		1. [[TWikiFuncModule][TWiki::Func Module Documentation]]
-		1. TWikiSiteTools 
+		1. [[TWiki Site Tools]] 
 		1. [[ManagingTopics][Managing Topics]] 
-		1. [[ManagingWebs][Managing Webs]] <br />
-	*Appendices* <br />
-	  [[AppendixFileSystem][A. TWiki File System]]<br />
-	  [[TWikiHistory][B. TWiki Development Timeline]]
+		1. [[ManagingWebs][Managing Webs]]
+		* *Appendices*
+			* [[AppendixFileSystem][A. TWiki File System]]
+			* [[TWikiHistory][B. TWiki Development Timeline]]
 
 ---++ <nop>TWikiSiteTools
 
