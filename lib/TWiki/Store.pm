@@ -1370,6 +1370,22 @@ sub readWebTopicNew
 }
 
 # =========================
+sub readTemplateTopic
+{
+    my( $theTopicName ) = @_;
+
+    $theTopicName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
+
+    # try to read in current web, if not read from TWiki web
+
+    my $web = $TWiki::twikiWebname;
+    if( topicExists( $TWiki::webName, $theTopicName ) ) {
+        $web = $TWiki::webName;
+    }
+    return readWebTopicNew( $web, $theTopicName );
+}
+
+# =========================
 sub readTemplate
 {
     my( $theName, $theTopic, $theSkin ) = @_;
