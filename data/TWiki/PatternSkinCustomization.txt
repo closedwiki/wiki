@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1092634575" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092717888" format="1.0" version="1.2"}%
 ---+!! Customization of !PatternSkin
 
 This page describes ways to change the layout, fonts and colors of PatternSkin.
@@ -108,5 +108,5 @@ html body {
 </verbatim>
 <!-- */ -->
 
--- Main.ArthurClemens - 15 Aug 2004
+-- TWiki:Main.ArthurClemens - 15 Aug 2004
 
