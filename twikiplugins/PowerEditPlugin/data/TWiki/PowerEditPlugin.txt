@@ -19,9 +19,11 @@ The applet provides the same editing capabilities as a standard browser text are
 
 ---+++ Configuring the Buttons and Hot keys
 
-Buttons and hotkeys are all created by reading a user-defined topic which is set by the POWEREDIT_CONTROLS variable (see TWiki.TWikiVariables). If the variable is not set, the topic TWiki<nop>.PowerEditControls is read instead. This allows administrators to set default buttons and keys for the whole installation, for each web, and users can to set up their own controls for the editor by defining this variable in their personal topics. The variable must be set to the *full name* (including the web) of the topic that contains the control definitions; for example,
+Buttons and hotkeys are all created by reading a user-defined topic which is set by the %<nop>POWEREDIT_CONTROLS% variable (see TWiki.TWikiVariables, "Creating Custom Variables"). If the variable is not set, the topic TWiki<nop>.PowerEditControls is read instead. This allows administrators to set default buttons and keys for the whole installation, for each web, and users can to set up their own controls for the editor by defining this variable in their personal topics.
+
+If set, the variable must be set to the *full name* (including the web) of the topic that contains the control definitions; for example,
 <pre>
-      * <nop>Set POWEREDIT_CONTROLS = Main<nop>.My<nop>Power<nop>Edit<nop>Controls
+      * <nop>Set POWEREDIT_CONTROLS = Main<nop>.AlanTuringControls
 </pre>
 The control file contains a set of button panel and macro definitions. For example:
 <pre>
@@ -44,11 +46,11 @@ In this example the first button in the top panel will be labelled "Tele type" a
 	* The command string is a mixture of basic editor commands (see below) and text to be inserted.
 	* The usual 'C' escapes are available in names and macro definitions i.e. prepending the character '\' will cause the next character to be interpreted literally. Note that '\/' will still be interpreted as '/' - to escape a '/' in the text, use a double-slash '//'.
 	* Single-line comments can be inserted into the file by starting a line with the '<' character. Thus HTML tags on a line of their own will be ignored.
-	* For some unexplained reason it isn't possible to use the <nop>%TOPIC% on the PowerEditControls file.
+	* For some unexplained reason, probably due to synchronous access, it isn't possible to use the <nop>%TOPIC% on the PowerEditControls file.
 
 The default control definitions for this installation may be viewed <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/PowerEditControls?raw=on">here</a>.
 
----+++ Commands</h3>
+---+++ Commands
 The following commands are basic to the editor and can be used in button definitions:
 | *Name* | *Description* |
 | /copy/ | Copy the currently selected text to the internal cut buffer |
@@ -70,14 +72,13 @@ The following commands are basic to the editor and can be used in button definit
 | text | text | The text to edit. |
 | controls | text | The control setup |
 
-It is a condition of use that any useful customisations are fed back to the TWiki:Plugins.%TOPIC%Dev page at http://www.twiki.org !
-
 ---++ <nop>%TOPIC% Global Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>POWEREDITPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Extend TWiki with a Java 1.1 Applet based text editor.
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Extend TWiki with a Java 1.1 Applet based text editor.
+	* __Note__ The %<nop>POWEREDIT_CONTROLS% variable is *not* a plugin variable but a global variable. As such you have to set it in TWiki.TWikiPreferences if you want to override the default. See TWiki.TWikiVariables "Creating Custom Variables".
 
 ---+++ Installation Instructions
 
@@ -88,13 +89,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	| ==%TOPIC%.xml== | Ant build file |
 	| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	| ==data/TWiki/PowerEditControls.txt== | Sample control configuration |
-	| ==templates/edit.power.tmpl== | Specialised skin |
-	| ==templates/applet.power.tmpl== | Specialised skin |
+	| ==templates/edit.power.tmpl== | Specialised skin. The difference to edit.tmpl are minimal, so deriving a local skin should be trivial. |
+	| ==templates/applet.power.tmpl== | Sub-template use for the applet tag. Done as a sub-skin to short-circuit default TWiki expansions. |
 	| ==pub/TWiki/%TOPIC%/poweredit.jar== | JAR file |
 	| ==lib/TWiki/Plugins/%TOPIC%/source.zip== | Source and test code |
 	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin script |
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
-
 	* A command to invoke the editor can by added to the normal topic view by putting the following line into your =bin/view= template, immediately after the line reading %<nop>EDITTOPIC%:
 	<pre>
 	%<nop>TMPL:P{"sep"}% &lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=power">PowerEdit&lt;/a>
@@ -114,9 +114,18 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
----++ Customisation
+---++ Known Problems
+
+---+++ Clipboard Access
+In order to access the clipboard on the client machine, an applet has to be signed. By default PowerEdit is shipped _unsigned_. This is because (1) proper certificates cost money and (2) certificates you generate yourself have extremely limited lifetimes. So unless you sign the jar (after adding appropriate security API calls to the code!) you won't get clipboard access. This generally isn't much of a problem on UNIX and Linux because of the middle-button copy and paste capability. 
+
+---++ Customisation and Further Development
 
 All the sources and unit tests are provided with the distribution, together with an Ant build file (see http://www.jakarta.org) should further customisation be required. The source.zip is shipped in the =lib/TWiki/Plugins/%TOPIC%= directory and when unzipped creates source, packages and test subdirectories. The =src= directory contains the applet sources, the =test= directory contains JUnit unit tests, and the =packages= directory contains the GNU 'regexp' package, which is used by search and replace, and a stripped-down version of the HTML parser from the Sourceforge HTMLParser project.
+
+It is a condition of use that any useful customisations are fed back to the TWiki:Plugins.%TOPIC%Dev page at http://www.twiki.org !
+
+Further development of this plugin is welcomed. The sources are all checked in to the TWiki CVS repository. If you make extensions to the plugin, please, please, _please_ maintain and extend the tests!
 
 ---++ Copyright
 
