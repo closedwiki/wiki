@@ -14,11 +14,11 @@ twiki-$(PLATFORM).tar :
 	tar -r $(TAR_EXCLUDE) --exclude "downloads/*/*.zip" -f twiki-$(PLATFORM).tar bin/* cpan/*.pl downloads/ config/ cpan/MIRROR/TWIKI/
 	tar -r $(TAR_EXCLUDE) -f twiki-$(PLATFORM).tar 
 
-components : twiki-cpan plugins contribs addons release 
+extensions : twiki-cpan plugins contribs addons release 
 
-distro : components twiki-$(PLATFORM).tar.bz2 
+distro : extensions twiki-$(PLATFORM).tar.bz2 
 
-test-distro : components twiki-$(PLATFORM).tar
+test-distro : extensions twiki-$(PLATFORM).tar
 
 minicpan :
 	cpan/mirror-cpan.pl
@@ -60,6 +60,7 @@ help : print
 	@echo make test-distro - download and bundle extensions + kernel
 	@echo make distro - test-distro + bzip2 compression
 	@echo 
+	@echo "make extensions - download and convert extensions (all of plugins, contribs, addons)"
 	@echo make plugins contribs addons - download and convert extensions
 	@echo 
 	@echo make minicpan - mirror latest version of cpan
