@@ -2,40 +2,24 @@ use strict;
 
 package CReadTest;
 
+use base qw(BaseFixture);
+
 use TWiki::Plugins::WebDAVPlugin;
 use TWiki::Plugins::WebDAVPlugin::Permissions;
-
-require 'FuncFixture.pm';
-require 'StoreFixture.pm';
-import TWiki::Func;
-import TWiki::Store;
-
-# Base ourselves on the "Func" fixture. This makes set-up and
-# tear-down easier - though we could equally create and use a
-# FuncFixture object to do the same thing.
-use base qw(TWiki::Func);
-my $query;
 
 sub new {
   my $self = shift()->SUPER::new(@_);
   return $self;
 }
 
-my $tmpdir = "/tmp/$$";
+my $tmpdir;
 
 # Set up the test fixture
 sub set_up {
   my $this = shift;
-
   $this->SUPER::set_up();
+  $tmpdir = "$BaseFixture::testDir/$$";
   mkdir($tmpdir);
-}
-
-sub tear_down {
-  my $this = shift;
-
-  $this->SUPER::set_up();
-  `rm -rf $tmpdir`;
 }
 
 my $dv = "   IdiotChild";
@@ -48,7 +32,7 @@ my $dttest = "|BrainlessGit|Thicko|";
 sub check {
   my ( $this, $check, $exp ) = @_;
 
-print STDERR "./accesscheck $check $tmpdir\n";
+  #print STDERR "./accesscheck $check $tmpdir\n";
   my $status = `./accesscheck $check $tmpdir`;
   if ($status !~ /$exp\s*$/) {
 	print STDERR "WHOOOOPS: $status\n";

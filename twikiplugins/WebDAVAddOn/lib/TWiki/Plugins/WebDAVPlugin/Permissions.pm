@@ -15,6 +15,8 @@
 use strict;
 use TDB_File;
 use Fcntl;
+use TWiki;
+use TWiki::Func;
 
 # Permissions DB object. Processes protections info out of topic text
 # and maintains a database of protections, using TDB. TDB is used because
