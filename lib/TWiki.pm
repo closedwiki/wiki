@@ -1809,7 +1809,7 @@ sub fixIncludeLink
 # =========================
 =pod
 
----++ sub cleanupIncludedHTML ( $text, $path, $host )
+---++ sub cleanupIncludedHTML ( $text, $host, $path )
 
 Clean-up HTML text so that it can be shown embedded in a topic
 
@@ -1817,7 +1817,7 @@ Clean-up HTML text so that it can be shown embedded in a topic
 
 sub cleanupIncludedHTML
 {
-    my( $text, $path, $host ) = @_;
+    my( $text, $host, $path ) = @_;
 
     # FIXME: Make aware of <base> tag
 
