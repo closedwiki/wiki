@@ -1,3 +1,5 @@
+# Tests for TWiki::Store::RcsLite and TWiki::Store::RcsWrap
+
 #!/usr/bin/perl
 
 use lib ( '../../lib' );
@@ -8,38 +10,7 @@ use TWiki::Store::RcsLite;
 use TWiki::Store::RcsWrap;
 use TestUtil;
 
-#FIXME change references to TWiki::
-
-$OS = "WINDOWS";
-
-$rcsDir           = "/apps/rcs/bin";
-#                   Initialise RCS file, ignored if empty string,
-#                   needed on Windows for binary files. Added JET 22-Feb-01
-$rcsArg           = "";
-$rcsArg = "-x,v" if( $OS eq "WINDOWS" );
-$useRcsDir        = "0";
-#                   Command quote ' for unix, \" for Windows
-$cmdQuote         = "'";
-$cmdQuote         = "\"" if( $OS eq "WINDOWS" );
-
-# Data (storage) implementation
-@storeSettings =
-  ( dataDir       => $TWiki::dataDir,
-    pubDir        => $TWiki::pubDir,
-    initBinaryCmd => "$rcsDir/rcs $rcsArg -q -i -t-none -kb %FILENAME%",
-    ciCmd         => "$rcsDir/ci $rcsArg -q -l -m$cmdQuote%COMMENT%$cmdQuote -t-none -w$cmdQuote%USERNAME%$cmdQuote %FILENAME%",
-    coCmd         => "$rcsDir/co $rcsArg -q -p%REVISION% %FILENAME%",
-    histCmd       => "$rcsDir/rlog $rcsArg -h %FILENAME%",
-    infoCmd       => "$rcsDir/rlog $rcsArg -r%REVISION% %FILENAME%",
-    diffCmd       => "$rcsDir/rcsdiff $rcsArg -q -w -B -r%REVISION1% -r%REVISION2% %FILENAME%",
-    breakLockCmd  => "$rcsDir/rcs $rcsArg -q -l -M %FILENAME%",
-    ciDateCmd     => "$rcsDir/ci -l $rcsArg -q -mnone -t-none -d$cmdQuote%DATE%$cmdQuote -w$cmdQuote%USERNAME%$cmdQuote %FILENAME%",
-	delRevCmd     => "$rcsDir/rcs $rcsArg -q -o%REVISION% %FILENAME%",
-	unlockCmd     => "$rcsDir/rcs $rcsArg -q -u %FILENAME%",
-	lockCmd       => "$rcsDir/rcs $rcsArg -q -l %FILENAME%",
-    attachAsciiPath => "\.(txt|html|xml|pl)\$",
-    dirPermission => 0775
-  );
+@storeSettings = @TWiki::storeSettings;
 
 
 sub readKnown
@@ -196,6 +167,7 @@ sub testWrite
     }
 }
 
+# Outputs delta for helping to work out how to do things
 sub refDelta
 {
     my( $old, $new ) = @_;
@@ -255,10 +227,10 @@ sub writeDelta
 
 sub refDeltas
 {
-   #refDelta( "one", "one\n" );
+   refDelta( "one", "one\n" );
    refDelta( "one", "one\ntwo\n" );
    refDelta( "a\n", "b" );
-   #refDelta( "one\n", "one" );
+   refDelta( "one\n", "one" );
    #refDelta( "one\n\n", "one" );
    #refDelta( "a\none\n\n", "b\none" );
    #refDelta( "one", "one\n" );
@@ -276,10 +248,7 @@ sub doWriteTests
 	testWrite( 4, $wTopic, $attachment, ( "a\n", "b" ) );
 	testWrite( 5, $wTopic, $attachment, ( "a\n", "a\n\n" ) );
 	testWrite( 6, $wTopic, $attachment, ( "a\nb\n", "a\nc\n" ) );
-
-	testWrite( 7, $wTopic, $attachment, ( "one", "one\ntwo\n" ) ); # TODO: broken - if no carriage return on last line
-							 # in a revision, last line must be deleted and new inserted
-
+	testWrite( 7, $wTopic, $attachment, ( "one", "one\ntwo\n" ) );
 	testWrite( 8, $wTopic, $attachment, ( "one\n", "one\ntwo\n" ) ); # TODO: badly broken
 	testWrite( 9, $wTopic, $attachment, ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
 	testWrite( 10, $wTopic, $attachment, ( "three\nfour\n", "one\ntwo\nthree\n" ) );
@@ -295,34 +264,57 @@ sub doReadTests
 {
     my( $rTopic, $attachment ) = @_;
     
-	# testRead( $file,  $attachment, ( "" ) );  This doesn't work
 	testRead( 1, $rTopic, $attachment, ( "a" ) );
 	testRead( 2, $rTopic, $attachment, ( "a\n" ) );
 	testRead( 3, $rTopic, $attachment, ( "a\n", "b\n" ) );
-	#testRead( 4, $rTopic, $attachment, ( "a\n", "b" ) ); FIXME
-	testRead( 5, $rTopic, $attachment, ( "a\n", "a\n\n" ) ); # TODO: broken on some Windows machines
+	testRead( 4, $rTopic, $attachment, ( "a\n", "b" ) );
+	testRead( "4a", $rTopic, $attachment, ( "a", "b\n" ) );
+	testRead( 5, $rTopic, $attachment, ( "a\n", "a\n\n" ) );
 	testRead( 6, $rTopic, $attachment, ( "a\nb\n", "a\nc\n" ) );
-	#testRead( 7, $rTopic, $attachment, ( "one", "one\ntwo\n" ) ); # FIMXE
-	testRead( 8, $rTopic, $attachment, ( "one\n", "one\ntwo\n" ) ); # TODO: broken on some Windows machines
+	testRead( 7, $rTopic, $attachment, ( "one", "one\ntwo\n" ) );
+	testRead( 8, $rTopic, $attachment, ( "one\n", "one\ntwo\n" ) );
 	testRead( 9, $rTopic, $attachment, ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
 	testRead( 10, $rTopic, $attachment, ( "three\nfour\n", "one\ntwo\nthree\n" ) );
     testRead( 11, $rTopic, $attachment, ( 'john.talintyre@drkw.com\n' ) );
+    testRead( 12, $rTopic, $attachment, ( "" ) );
 	
 	if( $attachment ) {
 	   testRead( 101, $rTopic, $attachment, ( "a\nb\n", "a\nb\nc\n", "a\nb\nc\n" . chr(0xFF) . "\n" ) );
 	}
 }
 
+sub randTest
+{
+   my $web = "Test";
+   my $topic = "RcsLiteRandom";
+   
+   for( my $i = 0; $i < 100; $i++ ) {
+      my $length = int( rand(10) + 1.5 );
+      print "$length\n";
+   }
+
+}
+
+#randTest();
+#exit 0;
+
+#$tnew = "Hi John";
+#$told = "Hi Jon";
+#my @new = split( //, $tnew );
+#my @old = split( //, $told );
+#my @altered = Algorithm::Diff::diff( \@new, \@old );
+#exit 0;
+
+#refDeltas();
+#exit 0;
+
 my $rTopic = "RcsLiteRTest";
 my $wTopic = "RcsLiteWTest";
 
 testRepRev();
-#exit 0;
-
 
 doReadTests( $rTopic, "it.doc" );
 doWriteTests( $wTopic, "it.doc" );
-#exit 0;
 
 doReadTests( $rTopic, "" );
 doWriteTests( $wTopic, "" );
@@ -335,7 +327,7 @@ doWriteTests( $wTopic, "" );
 #writeDelta( 4, $wTopic, ( "a\n", "b" ) );
 #exit 0;
 
-#testRcsDiff(1, "1\n", "\n" ); FIXME
+#testRcsDiff(1, "1\n", "\n" ); #FIXME
 testRcsDiff(2, "1\n", "2\n" );
 testRcsDiff(3, "1\n2\n3\n", "a\n1\n2\n3\nb\n" );
 testRcsDiff(4, "1\n2\n3\n", "a\nb\n1\n2\n3\nb\nb\n" );
