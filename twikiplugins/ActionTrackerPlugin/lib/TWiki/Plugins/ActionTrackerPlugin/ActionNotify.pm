@@ -142,7 +142,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       }
 
       # now add these to the lists for each mail address
-      foreach my $email ( split( /,/, $mailaddr )) {
+      foreach my $email ( split( /,\s*/, $mailaddr )) {
 	if ( $myActions ) {
 	  if ( !defined( $actionsPerEmail{$email} )) {
 	    $actionsPerEmail{$email} = new ActionTrackerPlugin::ActionSet();
@@ -261,7 +261,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     if ( $who =~ m/^([\w\-\.\+]+\@[\w\-\.\+]+)$/o ) {
       # Valid mail address
       $addresses = $who;
-    } elsif ( $who =~ m/,/o ) {
+    } elsif ( $who =~ m/,\s*/o ) {
       # Multiple addresses
       # (e.g. who="GenghisKhan,AttillaTheHun")
       # split on , and recursively expand

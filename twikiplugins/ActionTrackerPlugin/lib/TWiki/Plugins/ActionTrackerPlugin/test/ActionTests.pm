@@ -71,9 +71,9 @@ require CGI;
   sub testCommas {
     my $action =
       new ActionTrackerPlugin::Action( "Test", "Topic", 0,
-				       "who=\"JohnDoe,SlyStallone\",due=\"2 Jun 02\",notify=\"SamPeckinpah,QuentinTarantino\",creator=\"ThomasMoore\"", "Sod");
-    Assert::sEquals($action->{who},"Main.JohnDoe,Main.SlyStallone");
-    Assert::sEquals($action->{notify},"Main.SamPeckinpah,Main.QuentinTarantino");
+				       "who=\"JohnDoe, SlyStallone\",due=\"2 Jun 02\",notify=\"SamPeckinpah, QuentinTarantino\",creator=\"ThomasMoore\"", "Sod");
+    Assert::sEquals($action->{who},"Main.JohnDoe, Main.SlyStallone");
+    Assert::sEquals($action->{notify},"Main.SamPeckinpah, Main.QuentinTarantino");
   }
 
   sub testMatches {
@@ -194,7 +194,7 @@ require CGI;
     Assert::sEquals($s, "State: open\n\n");
     $fmt = new ActionTrackerPlugin::Format("","", "","Notify: \$notify\n");
     $s = $fmt->formatStringTable([$action]);
-    Assert::sEquals($s, "Notify: Main.SamPeckinpah,Main.QuentinTarantino\n\n");
+    Assert::sEquals($s, "Notify: Main.SamPeckinpah, Main.QuentinTarantino\n\n");
     $fmt = new ActionTrackerPlugin::Format("","", "", "\$creator");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "Main.ThomasMoore\n");
@@ -265,7 +265,7 @@ require CGI;
 
     $fmt = new ActionTrackerPlugin::Format("", "| \$notify |");
     $s = $fmt->formatHTMLTable([$action], "href", 0);
-    Assert::sContains($s, "<td> Main.SamPeckinpah,Main.QuentinTarantino </td>");
+    Assert::sContains($s, "<td> Main.SamPeckinpah, Main.QuentinTarantino </td>");
 
     $fmt = new ActionTrackerPlugin::Format("", "| \$uid |");
     $s = $fmt->formatHTMLTable([$action], "href", 0);
@@ -455,7 +455,7 @@ EOF";
     $s =~ s/ A court action//o;
     $s =~ s/ state=\"open\"//o;
     $s =~ s/ due=\"2-Jun-2002\"//o; 
-    $s =~ s/ plaintiffs=\"fred.bloggs\@limp.net,Main.JoeShmoe\"//o;
+    $s =~ s/ plaintiffs=\"fred.bloggs\@limp.net, Main.JoeShmoe\"//o;
     $s =~ s/ decision=\"cut off their heads\"//o;
     $s =~ s/ who=\"Main\.TestRunner\"//o;
     $s =~ s/ sentencing=\"2-Mar-2006\"//o;
@@ -464,9 +464,9 @@ EOF";
 
     my $fmt = new ActionTrackerPlugin::Format("", "|\$plaintiffs|","","\$plaintiffs");
     $s = $fmt->formatStringTable([$action]);
-    Assert::sEquals($s, "fred.bloggs\@limp.net,Main.JoeShmoe\n");
+    Assert::sEquals($s, "fred.bloggs\@limp.net, Main.JoeShmoe\n");
     $s = $fmt->formatHTMLTable([$action], "href", 0);
-    Assert::sContains($s, "<td>fred.bloggs\@limp.net,Main.JoeShmoe</td>");
+    Assert::sContains($s, "<td>fred.bloggs\@limp.net, Main.JoeShmoe</td>");
     
     $fmt = new ActionTrackerPlugin::Format("", "|\$decision|","","\$decision");
     $s = $fmt->formatStringTable([$action]);
