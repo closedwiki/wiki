@@ -134,9 +134,9 @@ sub new {
 	die "$manifest missing";
   my $line;
   while ($line = <PF>) {
-	if ( $line =~ /^(\S+)\s+(\S.*)$/o ) {
+	if ( $line =~ /^(\S+)(\s+\S.*)?$/o ) {
 	  push(@{$this->{files}},
-		   { name => $1, description => $2 });
+		   { name => $1, description => ($2 || "") });
 	}
   }
   close(PF);
@@ -207,7 +207,7 @@ sub rm {
 	print "rm $file\n";
   }
   unless ($this->{-n}) {
-	unlink($file) || warn "Failed to delete $file";
+	unlink($file) || warn "Warning: Failed to delete $file";
   }
 }
 
@@ -231,10 +231,10 @@ sub makepath {
 	  print "mkdir $to\n";
 	}
 	unless ($this->{-n}) {
-	  mkdir($to) || warn "Failed to make $to: $!";
+	  mkdir($to) || warn "Warning: Failed to make $to: $!";
 	}
   } else {
-	warn "$to exists and is not a directory; cannot create a dir over it";
+	warn "Warning: $to exists and is not a directory; cannot create a dir over it";
   }
 }
 
@@ -255,10 +255,10 @@ sub cp {
   }
   unless ($this->{-n}) {
 	if ( -d $from ) {
-	  mkdir($to) || warn "Failed to make $to: $!";;
+	  mkdir($to) || warn "Warning: Failed to make $to: $!";;
 	} else {
 	  File::Copy::copy($from, $to) ||
-		warn "Failed to copy $from to $to: $!";
+		warn "Warning: Failed to copy $from to $to: $!";
 	}
   }
 }
@@ -344,6 +344,8 @@ Expand tokens in a documentation topic.Four tokens are supported:
 
 sub filter {
   my ($this, $from, $to) = @_;
+
+  return unless (-f $from);
 
   open(IF, "<$from") || die "No source topic $from for filter";
   unless ($this->{-n}) {
@@ -457,7 +459,9 @@ sub target_tests_zip {
 
   $this->cd("$basedir/".$this->{plugin_libdir});
   $this->rm("test.zip");
-  $this->sys_action("zip -r test.zip test -x '*~' -x '*/CVS*' -x '*/testdata*' -x \*/accesscheck");
+  if (-d 'test') {
+	$this->sys_action("zip -r test.zip test -x '*~' -x '*/CVS*' -x '*/testdata*'");
+  }
 }
 
 =pod
