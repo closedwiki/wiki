@@ -1647,16 +1647,8 @@ sub getTopicNames {
 
     # get list of all topics by scanning $dataDir
     opendir DIR, "$TWiki::dataDir/$web" ;
-    my @tmpList = readdir( DIR );
+    my @topicList = sort grep { s/\.txt$// } readdir( DIR );
     closedir( DIR );
-
-    # this is not magic, it just looks like it.
-    my @topicList = sort
-        grep { s#^.+/([^/]+)\.txt$#$1# }
-        grep { ! -d }
-        map  { "$TWiki::dataDir/$web/$_" }
-        grep { ! /^\.\.?$/ } @tmpList;
-
     return @topicList ;    
 }
 #/AS
