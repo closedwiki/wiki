@@ -542,10 +542,10 @@ EOM
 
 sub deleteUsers {
   my (@users) = @_;
-  print "Cleaning up: ".join(", ", @users);
+#  print "Cleaning up: ".join(", ", @users);
   foreach my $user (@users) {
     my $file = $TWiki::dataDir.'/'.$peopleWeb.'/'.$user.'.txt';
-    print "deleting '$file'\n";
+#    print "deleting '$file'\n";
     unlink $file || die "Can't delete $file";
   }
 }
