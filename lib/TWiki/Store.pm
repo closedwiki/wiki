@@ -588,9 +588,9 @@ sub saveAttachment
 # FIXME use properties
 sub isBinary
 {
-   my( $filename ) = @_;
+   my( $filename, $theWeb ) = @_;
    
-   if( $filename =~ /\.txt$/ ) {
+   if( $filename =~ /$TWiki::attachAsciiPath/ ) {
       return "";
    } else {
       return "binary";
