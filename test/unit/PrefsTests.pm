@@ -111,9 +111,9 @@ sub tear_down {
         }
     }
     my $s = `rm -rf $TWiki::cfg{DataDir}/$web`;
-    die "Could not clean fixture $s: $!" if $!;
+    die "Could not clean fixture $s: $?" if $?;
     $s = `rm -rf $TWiki::cfg{PubDir}/$web`;
-    die "Could not clean fixture $s: $!" if $!;
+    die "Could not clean fixture $s: $?" if $?;
 }
 
 sub test_system {
