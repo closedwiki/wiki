@@ -514,18 +514,12 @@ sub searchWeb
             }
 
         } else {
-            # sort by filename, Schwartzian Transform
+            # simple sort, suggested by RaymondLutz in Codev.SchwartzianTransformMisused
 	    ##TWiki::writeDebug "Topic list before sort = @topicList";
             if( $revSort ) {
-                @topicList = map { $_->[1] }
-                             sort {$b->[0] cmp $a->[0] }
-                             map { [ $_, $_ ] }
-                             @topicList;
+                @topicList = sort {$b cmp $a} @topicList;
             } else {
-                @topicList = map { $_->[1] }
-                             sort {$a->[0] cmp $b->[0] }
-                             map { [ $_, $_ ] }
-                             @topicList;
+                @topicList = sort {$a cmp $b} @topicList;
             }
 	    ##TWiki::writeDebug "Topic list after sort = @topicList";
         }
