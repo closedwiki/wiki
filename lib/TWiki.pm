@@ -1190,6 +1190,11 @@ userToWikiListInit must be called before this function is used.
 
 Unless $dontAddWeb is set, "Main." is prepended to the returned WikiName.
 
+if you give an invalid username, we just return that (no appending Main. blindy)
+
+SMELL: the userToWikiList cache should really contain the WebName so its possible 
+		to have userTopics in more than just the MainWeb (what if you move a user topic?)
+
 =cut
 
 sub userToWikiName
@@ -1201,11 +1206,14 @@ sub userToWikiName
     }
 
     $loginUser =~ s/$securityFilter//go;
-    my $wUser = $userToWikiList{ $loginUser } || $loginUser;
-    if( $dontAddWeb ) {
-        return $wUser;
-    }
-    return "$mainWebname.$wUser";
+    my $wUser = $userToWikiList{ $loginUser };  # || $loginUser;
+	if ( $wUser ) {
+       if( $dontAddWeb ) {
+           return $wUser;
+       }
+       return "$mainWebname.$wUser";
+	}
+	return $loginUser;
 }
 
 =pod
