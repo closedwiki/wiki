@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1030259095" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043308560" format="1.0" version="1.4"}%
 *Background Image for Preview*
 
 Preview looks like the real page, but the links leed to an oops dialog warning users of not yet saved topics. In addition, a background with a "PREVIEW" watermark is shown to have visual clue that you are previewing a topic. You can change the background image by specifying the name of an attached background image file in the PREVIEWBGIMAGE variable in the %WIKIPREFSTOPIC%.
@@ -8,9 +8,9 @@ Remarks:
 	* You also could attach a new image file to this topic.
 	* You can override the PREVIEWBGIMAGE preference variable in your personal home page.
 
--- Main.PeterThoeny - 02 Oct 2000 <br>
+-- Main.PeterThoeny - 02 Oct 2000
 
 %META:FILEATTACHMENT{name="blankltgraybg.gif" attr="" comment="Blank white background" date="970534080" path="D:\Data\Temp\blankltgraybg.gif" size="878" user="PeterThoeny" version=""}%
 %META:FILEATTACHMENT{name="blankwhitebg.gif" attr="" comment="Blank white background" date="970534080" path="D:\Data\Temp\blankwhitebg.gif" size="878" user="PeterThoeny" version=""}%
 %META:FILEATTACHMENT{name="previewbg.gif" attr="" comment="Slanted PREVIEW watermark" date="970533960" path="D:\Data\Temp\previewbg.gif" size="1821" user="PeterThoeny" version=""}%
-%META:FILEATTACHMENT{name="preview2bg.gif" attr="" comment=" Slanted PREVIEW, 3D" date="1030259095" path="preview2bg.gif" size="1881" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="preview2bg.gif" attr="" comment="Slanted PREVIEW, 3D" date="1030259095" path="preview2bg.gif" size="1881" user="PeterThoeny" version="1.1"}%
