@@ -358,7 +358,7 @@ sub getFormInfoFromMeta
 
 # =============================
 # Form parameters to meta
-# Note that existing meta information for fields is removed
+# Note that existing meta information for fields is removed unless $justOverride is true
 sub fieldVars2Meta
 {
    my( $webName, $query, $meta, $justOverride ) = @_;
@@ -376,7 +376,7 @@ sub fieldVars2Meta
        my $cvalue    = "";
        
        if( $fieldName eq "UseForm" && useFormSpecial() ) {
-          if( lc $value ne "yes" ) {
+          if( $value && lc $value ne "yes" ) {
               $meta->remove( "FORM" );
               $meta->remove( "FIELD" );
               return $meta;
@@ -562,7 +562,7 @@ sub upgradeCategoryTable
         foreach( split( /\n/, $icat ) ) {
             my( $catname, $catmod, $catvalue ) = upgradeCategoryItem( $_, $ctext );
             #TWiki::writeDebug( "Form: name, mod, value: $catname, $catmod, $catvalue" );
-            if( $catname && $catname ne "UseCategory" ) {
+            if( $catname ) {
                 push @items, ( [$catname, $catmod, $catvalue] );
             }
         }
@@ -598,6 +598,7 @@ sub upgradeCategoryTable
                   last;
                }
            }
+           $value = "yes" if( $fieldName eq "UseForm" && useFormSpecial() );
            my @args = ( "name" => $fieldName,
                         "title" => $title,
                         "value" => $value );

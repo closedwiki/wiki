@@ -117,13 +117,20 @@ sub main
 	my $noForm = "";
 	if( $formTemplate ) {
 	   $meta->remove( "FORM" );
+	   if( &TWiki::Form::useFormSpecial() ) {
 	   my $useForm = lc $query->param( 'UseFormFLD' );
-	   if( $useForm && $useForm ne "yes" ) {
+	       if( ! $useForm || $useForm ne "yes" ) {
 	       $noForm = 1;
 	   }
+	   }
 	   if( $formTemplate ne "none" && ! $noForm ) {
-	       # FIXME temporary because potentially shared fields
 	       $meta->put( "FORM", ( name => $formTemplate ) );
+	   }
+	} elsif ( &TWiki::Form::useFormSpecial() ) {
+	   my $useForm = lc $query->param( 'UseFormFLD' );
+	   if( ! $useForm || $useForm ne "yes" ) {
+	       $meta->remove( "FORM" );
+	       $meta->remove( "FIELD" );
 	   }
 	}
 
