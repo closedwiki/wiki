@@ -15,8 +15,8 @@ if  ( $#ARGV == 0 ) {
 	exit(1);
 }
 
-print "<HTML><TITLE>Building Distros</TITLE><BODY>\n";
-print "<H2>building distros</H2>\n";
+print "<HTML><TITLE>Building Kernels</TITLE><BODY>\n";
+print "<H2>building kernels</H2>\n";
 print "results will be in $outputDir\n";
 
 print "<verbatim>\n";
@@ -28,6 +28,31 @@ my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } `svn info .` )[0] ) =~ /(\d+
 execute ( "cd distro/ ; ./build-twiki-kernel.pl --tempdir=/tmp --outputdir=$outputDir --outfile=TWikiKernel-`head -n 1 branch`-$svnRev" ) or die $!;
 
 print "</verbatim>\n";
+print "<HR />\n";
+
+################################################################################
+# kernels filenames download/discussion list
+my @dirReleases = ();
+if ( opendir( RELEASES, $outputDir ) )
+{
+    @dirReleases = grep { /^TWiki.+\.tar\.gz/ } readdir( RELEASES );  #or warn $!;
+    closedir( RELEASES ) or warn $!;
+}
+foreach my $kernel ( @dirReleases )
+{
+    ( my $rel = $kernel ) =~ s/\.tar\.gz$//;
+    my ( $label, undef, $branch, $revInfo ) = $rel =~ m/TWiki(Kernel)?(-([^-]+)-)?(.+)?/;
+    warn "Skipping $kernel\n" unless $branch && $revInfo;
+    # CODE_SMELL: hardcoded to twiki.org (would need some sort of super project configuration file)
+    my $homepage = "http://twiki.org/cgi-bin/view/Codev/TWikiKernel$branch$revInfo";
+    # CODE_SMELL: hardcoded to ntwiki (can be fixed using hostname and ...?)
+    my $download = "http://ntwiki.ethermage.net/users/develop/pub/BuildDistros/$kernel";
+    print qq{<b>$rel</b> };
+    print qq{<a href="$download" >download</a>\n};
+    print qq{<a href="$homepage" >discussion</a>\n};
+    print qq{\n\n};  
+} 
+
 print "<HR />\n";
 print "</BODY></HTML>";
 exit 0;
