@@ -76,9 +76,6 @@ sub renderMetaData
 		$text = "$header$metaText<\/div>";
     }
     
-    $text = &TWiki::handleCommonTags( $text, $topic, $web ); # FIXME needed?
-    $text = &TWiki::getRenderedVersion( $text, $web );
-    
     return $text;
 }
 

@@ -3034,6 +3034,8 @@ sub handleCommonTags
 
 ---++ sub handleMetaTags (  $theWeb, $theTopic, $text, $meta, $isTopRev  )
 
+| TODO | move to Render.pm or Meta.pm of Forms.pm |
+| | used to render the non-active modes of META data (view, preview ...) |
 Not yet documented.
 
 =cut
@@ -3042,14 +3044,15 @@ sub handleMetaTags
 {
     my( $theWeb, $theTopic, $text, $meta, $isTopRev ) = @_;
 
-    $text =~ s/%META{\s*"form"\s*}%/&renderFormData( $theWeb, $theTopic, $meta )/ge;
-    $text =~ s/%META{\s*"formfield"\s*(.*?)}%/&renderFormField( $meta, $1 )/ge;
+    $text =~ s/%META{\s*"form"\s*}%/&renderFormData( $theWeb, $theTopic, $meta )/ge;    #this renders META:FORM and META:FIELD
+    $text =~ s/%META{\s*"formfield"\s*(.*?)}%/&renderFormField( $meta, $1 )/ge;                 #TODO: what does this do? (is this the old forms system, and so can be deleted)
     $text =~ s/%META{\s*"attachments"\s*(.*)}%/&TWiki::Attach::renderMetaData( $theWeb,
-                                                $theTopic, $meta, $1, $isTopRev )/ge;
-    $text =~ s/%META{\s*"moved"\s*}%/&renderMoved( $theWeb, $theTopic, $meta )/ge;
-    $text =~ s/%META{\s*"parent"\s*(.*)}%/&renderParent( $theWeb, $theTopic, $meta, $1 )/ge;
+                                                $theTopic, $meta, $1, $isTopRev )/ge;                                       #renders attachment tables
+    $text =~ s/%META{\s*"moved"\s*}%/&renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
+    $text =~ s/%META{\s*"parent"\s*(.*)}%/&renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information
 
-    $text = &TWiki::handleCommonTags( $text, $theTopic );
+  $text = getRenderedVersion( $text, $theWeb );
+  $text = handleCommonTags( $text, $theTopic );
 
     return $text;
 }
@@ -3137,11 +3140,6 @@ sub renderParent
        $text .= $suffix;
     }
 
-    if( $text ) {
-        $text = handleCommonTags( $text, $topic, $web );
-        $text = getRenderedVersion( $text, $web );
-    }
-
     return $text;
 }
 
@@ -3185,10 +3183,6 @@ sub renderMoved
         }
         $text = "<i><nop>$to moved from <nop>$from on $date by $by </i>$putBack";
     }
-    
-    $text = handleCommonTags( $text, $topic, $web );
-    $text = getRenderedVersion( $text, $web );
-
     
     return $text;
 }
@@ -3243,7 +3237,6 @@ sub renderFormData
             $metaText .= "|  $title:|$value  |\n";
         }
         $metaText .= "\n</div>";
-        $metaText = getRenderedVersion( $metaText, $web );
     }
 
     return $metaText;
