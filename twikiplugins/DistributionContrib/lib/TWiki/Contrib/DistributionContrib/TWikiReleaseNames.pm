@@ -1,4 +1,4 @@
-package TWiki::Contrib::TWikiReleaseNames;
+package TWiki::Contrib::DistributionContrib::TWikiReleaseNames;
 use strict;
 use diagnostics;
 
