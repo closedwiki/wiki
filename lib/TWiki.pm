@@ -433,6 +433,16 @@ sub userToWikiName
 }
 
 # =========================
+sub wikiToUserName
+{
+    my( $wikiUser ) = @_;
+    $wikiUser =~ s/^.*\.//go;
+    my $userName =  $wikiToUserList{"$wikiUser"};
+    #TWiki::writeDebug( "TWiki::wikiToUserName: $wikiUser->$userName" );
+    return $userName;
+}
+
+# =========================
 sub readOnlyMirrorWeb
 {
     my( $theWeb ) = @_;
@@ -457,16 +467,6 @@ sub readOnlyMirrorWeb
     return @mirrorInfo;
 }
 
-
-# =========================
-sub wikiToUserName
-{
-    my( $wikiUser ) = @_;
-    $wikiUser =~ s/^.*\.//go;
-    my $userName =  $wikiToUserList{"$wikiUser"};
-    #TWiki::writeDebug( "TWiki::wikiToUserName: $wikiUser->$userName" );
-    return $userName;
-}
 
 # =========================
 sub getDataDir
@@ -1433,6 +1433,7 @@ sub renderMoved
         my $toWeb = $1;
         my $toTopic = $2;
         my $by   = $moved{"by"};
+        $by = userToWikiName( $by );
         my $date = $moved{"date"};
         $date = formatGmTime( $date );
         
@@ -1443,7 +1444,7 @@ sub renderMoved
             $putBack .= " href=\"$scriptUrlPath/rename?newWeb=$fromWeb&newTopic=$fromTopic&oldWeb=$web";
             $putBack .= "&oldTopic=$topic&confirm=yes\">put it back</a>";
         }
-        $text = "<p><i><nop>$to moved from <nop>$from on $date by %MAINWEB%.$by </i>$putBack</p>";
+        $text = "<p><i><nop>$to moved from <nop>$from on $date by $by </i>$putBack</p>";
     }
     
     $text = handleCommonTags( $text, $topic, $web );
