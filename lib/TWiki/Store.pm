@@ -566,9 +566,13 @@ sub getRevisionDiff
 # In direct calls changeToIsoDate always seems to be 1
 =pod
 
----++ sub getRevisionInfo (  $theWebName, $theTopic, $theRev, $changeToIsoDate, $attachment, $topicHandler  )
+---+++ getRevisionInfo( $web, $topic ) ==> ( $date, $loginName, $rev )
 
-Not yet documented.
+| Description: | Get revision info of a topic |
+| Parameter: =$web= | Web name, optional, e.g. ="Main"= |
+| Parameter: =$topic= | Topic name, required, e.g. ="TokyoOffice"= |
+| Return: =( $date, $loginName, $rev )= | List with: ( last update date, login name of last user, minor part of top revision number ), e.g. =( "01 Jan 2003", "phoeny", "5" )= |
+| TODO: | is it possible to remove teh Display formatting from this code? (ie use the adte as a number) |
 
 =cut
 
@@ -1081,9 +1085,13 @@ sub removeObsoleteTopicLocks
 # =========================
 =pod
 
----++ sub webExists (  $theWeb  )
+---++ Functions: Content Handling
 
-Not yet documented.
+---+++ webExists( $web ) ==> $flag
+
+| Description: | Test if web exists |
+| Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
+| Return: =$flag= | ="1"= if web exists, ="0"= if not |
 
 =cut
 
@@ -1096,9 +1104,12 @@ sub webExists
 # =========================
 =pod
 
----++ sub topicExists (  $theWeb, $theTopic  )
+---+++ topicExists( $web, $topic ) ==> $flag
 
-Not yet documented.
+| Description: | Test if topic exists |
+| Parameter: =$web= | Web name, optional, e.g. ="Main"= |
+| Parameter: =$topic= | Topic name, required, e.g. ="TokyoOffice"=, or ="Main.TokyoOffice"= |
+| Return: =$flag= | ="1"= if topic exists, ="0"= if not |
 
 =cut
 
@@ -1594,9 +1605,11 @@ sub readFileHead
 #AS 5 Dec 2000 collect all Web's topic names
 =pod
 
----++ sub getTopicNames (  $web  )
+---+++ getTopicNames( $web ) ==> @topics
 
-Not yet documented.
+| Description: | Get list of all topics in a web |
+| Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
+| Return: =@topics= | Topic list, e.g. =( "WebChanges",  "WebHome", "WebIndex", "WebNotify" )= |
 
 =cut
 
