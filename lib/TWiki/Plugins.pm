@@ -80,6 +80,10 @@ sub applyHandlers
 {
     my $handlerName = shift;
     my $theHandler;
+
+    if( $TWiki::disableAllPlugins ) {
+        return;
+    }
     foreach $theHandler ( @{$registeredHandlers{$handlerName}} ) {
         # apply handler on the remaining list of args
         &$theHandler;
