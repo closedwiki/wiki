@@ -42,7 +42,8 @@ sub cli_cvsupdate {
 sub cli_install_download {
    my ($extension) = @_;
    
-   my $localFile = getFilenameForDistributionDownload($extension);
+   my $attachmentPath = getFilenameForDistributionDownload($extension);
+   my $localFile = getFilenameForDistributionDownload($extension, $attachmentPath);
    print "$localFile\n";
 
 }
