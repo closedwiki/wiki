@@ -1851,7 +1851,7 @@ sub getRenderedVersion
             &TWiki::Plugins::outsidePREHandler( $_ );
 
 # Blockquote
-            s/^>(.*?)$/> <cite> $1 <\/cite><br>/go;
+            s/^>(.*?)$/> <cite> $1 <\/cite><br />/go;
 
 # Embedded HTML
             s/\<(\!\-\-)/$TranslationToken$1/go;  # Allow standalone "<!--"
@@ -1882,7 +1882,7 @@ sub getRenderedVersion
 
 # Horizontal rule
             s/^---+/<hr \/>/o;
-            s@^([a-zA-Z0-9]+)----*@<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><HR></td></tr></table>@o;
+            s@^([a-zA-Z0-9]+)----*@<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><hr /></td></tr></table>@o;
 
 # Table of format: | cell | cell |
             # PTh 25 Jan 2001: Forgiving syntax, allow trailing white space
