@@ -957,6 +957,8 @@ sub searchWeb
             } elsif( $theFormat ) {
                 # free format, added PTh 10 Oct 2001
                 $tempVal =~ s/\$summary/&TWiki::makeTopicSummary( $text, $topic, $thisWebName )/geos;
+                $tempVal =~ s/\$parent\(([^\)]*)\)/breakName( getMetaParent( $meta ), $1 )/geos;
+                $tempVal =~ s/\$parent/getMetaParent( $meta )/geos;
                 $tempVal =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
                 $tempVal =~ s/\$formname/_getMetaFormName( $meta )/geos;
                 $tempVal =~ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/geos;
@@ -1102,6 +1104,25 @@ sub _getRev1Info
     }
     # else assume attr "key"
     return "1.1";
+}
+
+#=========================
+=pod
+
+---++ sub getMetaParent( $theMeta )
+
+Not yet documented.
+
+=cut
+
+sub getMetaParent
+{
+    my( $theMeta ) = @_;
+
+    my $value = "";
+    my %parent = $theMeta->findOne( "TOPICPARENT" );
+    $value = $parent{"name"} if( %parent );
+    return $value;
 }
 
 #=========================
