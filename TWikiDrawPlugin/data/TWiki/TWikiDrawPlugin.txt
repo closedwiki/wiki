@@ -6,7 +6,7 @@ This plugin encapsulates the <nop>TWikiDraw Java Applet first developed by TWiki
 
 <nop>JHotDraw is a simple drawing editor that supports drawing in a style similar to that found in MS Powerpoint and MS Word. Various shaped figures can be placed in the drawing and text annotations joined to them.
 
-Unique to TWikiDraw, a drawing can also have a "map" which makes figures in the drawing sensitive to the mouse cursor. A map is automatically added to an image when a URL is attached to any of the figures.
+Unique to %TOPIC%, a drawing can also have a "map" which makes figures in the drawing sensitive to the mouse cursor. A map is automatically added to an image when a URL is attached to any of the figures.
 
 How you edit a drawing depends on whether the drawing has a map and the setting of the "EDIT_BUTTON" option. A drawing with no map can be edited simply by clicking on the drawing. A drawing with a map can be edited by clicking the edit button or, failing that, on the boundary of the image.
 
@@ -66,8 +66,7 @@ Set to 1 if an "Edit" button is to be generated attached to the image. You will 
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 %$MANIFEST%
-	* Unzip ==TWikiDrawPlugin.zip== in your twiki installation directory.
-	* Add ==Plugins.TWikiDrawPlugin== to the ==INSTALLEDPLUGINS== variable in %TWIKIWEB%.TWikiPreferences (or any WebPreferences topic).
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 	* To test if the plugin is correctly installed, view this topic in the installation and you should see a placeholder box below. Click on it.<br />
 	%DRAWING{example}%
 
@@ -80,34 +79,28 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
 | | 16 Aug 2004: Map support finally released |
-| | 17 Feb 2003: Bug fixes; incoporated BertrandDelacretaz's fix for too many colours in GIF. |
+| | 17 Feb 2003: Bug fixes; incoporated TWiki:Main/BertrandDelacretaz's fix for too many colours in GIF. He had problems when saving images from macosx / JDK 1.3.1 and modified the applet to reduce the number of colors before converting to GIF, if needed. Without this he would sometimes get the "too many colors for a GIF" error when saving drawings. |
+|
 | | 30 Sep 2002: Add support for URLs, EXTRA_COLORS, fixed a number of outstanding bugs |
 | | 20 Feb 2002: Merged TWiki:Main/RobWalker's fixes for text attached to figures |
 | | 1 Oct 2001: Updated this text |
 | | 23 Sep 2001: Initial version |
 |  Dependencies: | Java 1.1 enabled browser<br />%$DEPENDENCIES% |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/TWikiDrawPlugin |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/TWikiDrawPluginDev |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
-	* TWikiDraw is based on Erich Gamma's <nop>JHotDraw 5.1. (<nop>JHotDraw is copyright 1996, 1997 by <a href="http://www.ifa.ch/">IFA Informatik</a> and Erich Gamma, erich_gamma@acm.org . _It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies._ )
-	* TWikiDraw uses <a href="http://www.acme.com/java/">ACME Labs</a>' <nop>GifEncoder to convert a drawing into a GIF file format. (<nop>GifEncoder is Copyright &copy;1996,1998 by Jef Poskanzer, jef@acme.com . All rights reserved. _<font size="-6"> THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. )</font>_
-	* TWikiDraw uses some ideas of <a href="http://www.eng.untech.com/serg/bin/KmWiki?Load=FrontPage">KmWiki</a> drawing applet.
-	* TWikiDraw: Copyright 2000 by Peter Thoeny, Peter@Thoeny.com. It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies.
-	* TWiki:Main/PeterThoeny created <nop>TWikiDraw based on above software:
+	* %TOPIC% is based on Erich Gamma's <nop>JHotDraw 5.1. (<nop>JHotDraw is copyright 1996, 1997 by <a href="http://www.ifa.ch/">IFA Informatik</a> and Erich Gamma, erich_gamma@acm.org . _It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies._ )
+	* %TOPIC% uses <a href="http://www.acme.com/java/">ACME Labs</a>' <nop>GifEncoder to convert a drawing into a GIF file format. (<nop>GifEncoder is Copyright &copy;1996,1998 by Jef Poskanzer, jef@acme.com . All rights reserved. _<font size="-6"> THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. )</font>_
+	* %TOPIC% uses some ideas of <a href="http://www.eng.untech.com/serg/bin/KmWiki?Load=FrontPage">KmWiki</a> drawing applet.
+	* %TOPIC%: Copyright 2000 by Peter Thoeny, Peter@Thoeny.com. It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies.
+	* TWiki:Main/PeterThoeny created %TOPIC% based on above software:
 		* <nop>TWikiDraw applet that allows you to save a drawing as a =.draw= and a =.gif= file. (Save calls the TWiki =upload= script)
 		* New =%<nop>DRAWING%= variable to insert a drawing into any TWiki topic. (defined in =wikicfg.pm= )
-		* New =oopstwikidraw.tmpl= template that contains the <nop>TWikiDraw applet.
+		* New =oopstwikidraw.tmpl= template that contains the <nop>%TOPIC% applet.
 	* Modifications Copyright &copy; 2001 Motorola. All Rights Reserved.
 	* TWiki:Main/CrawfordCurrie made a number of improvements, including porting to the 2001 release.
-	* Modifications Copyright Crawford Currie &copy; 2003-2004
-	* TWiki:Main/RobWalker fixed a couple of related bugs noted below. The approach to these seems correct, although the fix implementation could possibly be done better
-	   * if a connected text figure were added to a shape figure, and the pair were then duplicated, the text figure in the copy did not appear in same relative location as the original
-	   * if a selection of figures included both the shape and it's connected text, moving by cursor key or drag cause the relative text location to change incorrectly
-	   * if a composite figure included a shape and it's connected text, moving the composite figure cause the relative text location to move incorrectly
-       * also added a "clean" and "run" step to the Ant build to aid in development
-       * TWiki:Main/BertrandDelacretaz had problems when saving images from macosx / JDK 1.3.1 and modified the applet to reduce the number of colors before converting to GIF, if needed. Without this he would sometimes get the "too many colors for a GIF" error when saving drawings.
-       * TWiki:Main/CrawfordCurrie corrected behaviour in Konqueror
+	* Modifications &copy; 2003-2004 Copyright Crawford Currie http://www.c-dot.co.uk
  
 -- TWiki:Main/CrawfordCurrie - %$DATE%
