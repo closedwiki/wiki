@@ -7,6 +7,9 @@ TWIKIDEV ?= ~/twiki
 PLATFORM ?= $(TWIKITARGET)
 TWIKI_TAR_CACHE_DIR ?= .twiki
 
+DISTRO_NAME = twiki-$(PLATFORM).tar
+DISTRO_PATH = $(TWIKIDEV)/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib
+DISTRO = $(DISTRO_PATH)/$(DISTRO_NAME)
 DISTRO_LIST = twiki-$(PLATFORM).list
 
 all : help
@@ -16,15 +19,21 @@ twiki.list : twiki.list.in
 
 twiki.list.in : $(DISTRO_LIST)
 
-pkg : twiki.list
+pkg : twiki.list COPYING README
 	epm -v -f native twiki
 #	epm -v -f portable twiki
 
-$(TWIKIDEV)/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/twiki-$(PLATFORM).tar : 
-	( cd $(TWIKIDEV)/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/ && make twiki-$(PLATFORM).tar )
+#COPYING : $(DISTRO)
+#	tar --extract --to-stdout --file $(DISTRO) twiki/COPYING >COPYING
 
-$(TWIKI_TAR_CACHE_DIR)/README : $(TWIKIDEV)/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/twiki-$(PLATFORM).tar
-	rm -rf $(TWIKI_TAR_CACHE_DIR) && mkdir $(TWIKI_TAR_CACHE_DIR) && tar --extract --directory $(TWIKI_TAR_CACHE_DIR) --file $(TWIKIDEV)/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/twiki-$(PLATFORM).tar
+#README : $(DISTRO)
+#	tar --extract --to-stdout --file $(DISTRO) twiki/README >README
+
+$(DISTRO) :
+	( cd $(DISTRO_PATH)/ && make $(DISTRO_NAME) )
+
+$(TWIKI_TAR_CACHE_DIR)/README : $(DISTRO)
+	rm -rf $(TWIKI_TAR_CACHE_DIR) && mkdir $(TWIKI_TAR_CACHE_DIR) && tar --extract --directory $(TWIKI_TAR_CACHE_DIR) --file $(DISTRO)
 	touch $(TWIKI_TAR_CACHE_DIR)/README
 
 $(DISTRO_LIST) : $(TWIKI_TAR_CACHE_DIR)/README
@@ -40,6 +49,8 @@ help : print
 	@echo make pkg
 	@echo make twiki.list
 	@echo make $(DISTRO_LIST)
+#	@echo make README
+#	@echo make COPYING
 	@echo make print
 	@echo make clean
 	@echo make help
@@ -49,6 +60,9 @@ print :
 	@echo ===============================================================================
 	@echo PLATFORM=$(PLATFORM)
 	@echo TWIKIDEV=$(TWIKIDEV)
+	@echo DISTRO_NAME=$(DISTRO_NAME)
+	@echo DISTRO_PATH=$(DISTRO_PATH)
+	@echo DISTRO=$(DISTRO)
 	@echo DISTRO_LIST=$(DISTRO_LIST)
 	@echo TWIKI_TAR_CACHE_DIR = $(TWIKI_TAR_CACHE_DIR)
 	@echo 
