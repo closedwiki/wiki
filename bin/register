@@ -146,6 +146,7 @@ sub main
     }
     $text = "$before$after";
     $text = &TWiki::handleCommonTags( $text, $wikiName );
+    $text =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags
 
     my $senderr = &TWiki::Net::sendEmail( $text );
 
