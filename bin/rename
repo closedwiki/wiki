@@ -70,14 +70,11 @@ sub main
        }
     
        if( ! checkPermissions( $oldWeb, $oldTopic, $wikiUserName ) ) {
-           # FIXME: This produces Internal Server Error if oldWeb does not exist
            return;
        }
-       
-       # FIXME no point old and new topics being same (if in same WEB)
     }
 
-    # Has user selected new name yet? FIXME are there too many checks above?
+    # Has user selected new name yet?
     if( ! $newTopic || $confirm ) {
        newTopicScreen( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $confirm );
        return;    
@@ -89,8 +86,8 @@ sub main
         }
     }
             
-    # FIXME should warn if newname is not a wiki name
-    # FIXME to do after move?
+    # FIXME Might be good to insure that new topic is a WikiWord or that user is intentionally picking a non-WikiWord.
+    # At present we just have a note in the template.
     if( ! $theAttachment ) {
         my @refs = findReferingPages( $oldWeb, $oldTopic );
         my $problems;
@@ -102,7 +99,6 @@ sub main
        if( $theAttachment ) {
 	  my $moveError = 
 	     &TWiki::Store::moveAttachment( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment );
-	  # FIXME change to doing as one call
 	  if( $moveError ) {
               TWiki::redirect( $query, &TWiki::getOopsUrl( $newWeb, $newTopic, "oopsmoveerr", $theAttachment, $moveError ) );
               return;
@@ -129,6 +125,15 @@ sub main
     return;
 }
 
+
+#=========================
+sub spacedTopic
+{
+    my( $topic ) = @_;
+    # FindMe -> Find\s*Me
+    $topic =~ s/([a-z])([A-Z])/$1 *$2/go;
+    return $topic;
+}
 
 #=========================
 sub findReferingPages
@@ -161,8 +166,9 @@ sub updateReferingPages
     my $lockFailure = 0;
 
     my $result = "";
-    my $preTopic = '^|[\*\s\[][\(-\s]*';
+    my $preTopic = '^|[^A-Za-z0-9_]';
     my $postTopic = '$|[^A-Za-z0-9_]';
+    my $spacedTopic = spacedTopic( $oldTopic );
 
     while ( @refs ) {
        my $type = shift @refs;
@@ -175,7 +181,7 @@ sub updateReferingPages
           $result .= ":$item: , "; 
           #open each file, replace $topic with $newTopic
           if ( &TWiki::Store::topicExists($itemWeb, $itemTopic) ) { 
-             my( $meta, $scantext ) = &TWiki::Store::readTopic($itemWeb, $itemTopic);
+             my $scantext = &TWiki::Store::readTopicRaw($itemWeb, $itemTopic);
              if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $scantext,
                     $itemWeb, $itemTopic ) ) {
                  # This shouldn't happen, as search will not return, but check to be on the safe side
@@ -186,7 +192,8 @@ sub updateReferingPages
 	     my $insideVERBATIM = 0;
              my $noAutoLink = 0;
 	     foreach( split( /\n/, $scantext ) ) {
-		# This code is in far too many places
+	        next if( /^%META:TOPIC(INFO|MOVED)/ );
+		# FIXME This code is in far too many places - also in Search.pm and Store.pm
 		m|<pre>|i  && ( $insidePRE = 1 );
 		m|</pre>|i && ( $insidePRE = 0 );
 		if( m|<verbatim>|i ) {
@@ -208,14 +215,16 @@ sub updateReferingPages
 			if( $oldWeb eq $itemWeb ) {
 			    my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
 			    s/($preTopic)\Q$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
+			    s/\[\[($spacedTopic)\]\]/[[$newTopic][$1]]/gi;
 			}
 		    }
 		}
 	        $resultText .= "$_\n";
 	     }
-	     &TWiki::Store::saveTopic( $itemWeb, $itemTopic, $resultText, $meta, "", "unlock", "dontNotify", "" );
+	     my ( $meta, $text ) = &TWiki::Store::_extractMetaData( $itemWeb, $itemTopic, $resultText );
+	     &TWiki::Store::saveTopic( $itemWeb, $itemTopic, $text, $meta, "", "unlock", "dontNotify", "" );
           } else {
-	    $result .= ";$item does not exist;"; # FIXME is this needed?
+	    $result .= ";$item does not exist;";
           }
        }
     }
@@ -378,18 +387,23 @@ sub newTopicScreen
      $tmpl = &TWiki::Store::readTemplate( "rename" );
    }
    
-   $tmpl = setVars( $tmpl, $newWeb, $newTopic );
+   $tmpl = setVars( $tmpl, $oldTopic, $newWeb, $newTopic );
    $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
    $tmpl = &TWiki::getRenderedVersion( $tmpl );
+   $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
+   $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );   
    print $tmpl;
  }
  
  #=========================
  sub setVars
  {
-     my( $tmpl, $newWeb, $newTopic ) = @_;
+     my( $tmpl, $oldTopic, $newWeb, $newTopic ) = @_;
      $tmpl =~ s/%NEW_WEB%/$newWeb/go;
      $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
+     my $spacedTopic = '\[' . &spacedTopic( $oldTopic ) . '\]';
+     $tmpl =~ s/%RESPACEDTOPIC%/$spacedTopic/geo;
+     
      return $tmpl;
  }
  
@@ -400,7 +414,7 @@ sub newTopicScreen
     
     TWiki::writeHeader( $query );
     my $tmpl = &TWiki::Store::readTemplate( "renamerefs" );
-    $tmpl = setVars( $tmpl, $newWeb, $newTopic );
+    $tmpl = setVars( $tmpl, $oldTopic, $newWeb, $newTopic );
     $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
     $tmpl = &TWiki::getRenderedVersion( $tmpl );
     print $tmpl;
