@@ -143,8 +143,8 @@ To help avoid edit conflict, a reminder to refresh the page before entering comm
 
 |  Plugin Author: | v1.0 TWiki:Main.DavidWeller v2.0 TWiki:Main.PeterMasiar v3.0 TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
 | Change History: <!-- Most recent first --> ||
-| 22 Feb 2005 | 4.000 Moved into subversion repository, Dakar release ready. The plugins repository version will be maintained for supporting older TWiki releases. |
-| 10 Feb 2005 | 3.009 Fixed a minor infraction in Comment.pm so it expands the user correctly |
+| 22 Feb 2005 | 4.000 Moved into subversion repository, Dakar release ready. The plugins repository version will be maintained for supporting older TWiki releases, and possibly for patching. |
+| 25 Feb 2005 | 3.009 Added Olivier Berger's fix for anchors and Jacob Eisinger's fix for variable expansion |
 | 16 Oct 2004 | 3.008 Added the =noform= attribute to Comment - TWiki:Main.MartinCleaver |
 | 12 Oct 2004 | 3.007 Disabled comment boxes in rdiff pane. |
 | 6 Oct 2004 | 3.006 Fixed action template, which was expanded incorrectly. Upped default comment box to 70 chars default width. |
