@@ -76,7 +76,7 @@ sub _save {
     my $saveCmd = $query->param( "cmd" ) || 0;
     if ( $saveCmd && ! $session->{user}->isAdmin()) {
         throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
-                                        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
+                                        "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
     }
 
     if( $saveCmd eq "delRev" ) {

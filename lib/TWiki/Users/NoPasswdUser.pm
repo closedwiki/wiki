@@ -44,7 +44,7 @@ use strict;
 # and other routines - main locale settings are done in TWiki::setupLocale
 BEGIN {
     # Do a dynamic 'use locale' for this module
-    if( $TWiki::useLocale ) {
+    if( $TWiki::cfg{UseLocale} ) {
         require locale;
 	import locale ();
     }

@@ -120,17 +120,17 @@ sub loadPrefs {
 
     if( $self->{type} eq "global" ) {
         # global prefs
-        $self->loadPrefsFromTopic( $TWiki::twikiWebname,
-                                   $TWiki::wikiPrefsTopicname,
+        $self->loadPrefsFromTopic( $TWiki::cfg{SystemWebName},
+                                   $TWiki::cfg{SitePrefsTopicName},
                                    "", $allowCache );
-        $self->loadPrefsFromTopic( $TWiki::mainWebname,
-                                   $TWiki::wikiPrefsTopicname,
+        $self->loadPrefsFromTopic( $TWiki::cfg{UsersWebName},
+                                   $TWiki::cfg{SitePrefsTopicName},
                                    "", $allowCache );
 
     } elsif( $self->{type} eq "web" ) {
         # web prefs
         $self->loadPrefsFromTopic( $self->{web},
-                                   $TWiki::webPrefsTopicname,
+                                   $TWiki::cfg{WebPrefsTopicName},
                                    "", $allowCache);
 
     } elsif( $self->{type} eq "request" ) {
@@ -147,7 +147,7 @@ sub loadPrefs {
                                        $self->{topic},
                                        "", $allowCache);
         }
-        $self->loadPrefsFromTopic( $TWiki::mainWebname,
+        $self->loadPrefsFromTopic( $TWiki::cfg{UsersWebName},
                                    $self->{user}->wikiName(),
                                    "", $allowCache );
         if( $topicPrefsSetting && $topicPrefsOverride ) {

@@ -57,7 +57,7 @@ Construct a new user object for the given login name, wiki name.
 The wiki name can either be a wiki word or it can be a web-
 qualified wiki word. If the wiki name is not web qualified, the
 user is assumed to have their home topic in the
-$TWiki::mainWebname web.
+$TWiki::cfg{UsersWebName} web.
 
 =cut
 
@@ -71,7 +71,7 @@ sub new {
     $this->{session} = $session;
 
     $this->{login} = $name;
-    my $web = $TWiki::mainWebname;
+    my $web = $TWiki::cfg{UsersWebName};
     if(  $wikiname =~ /^(.*)\.(.*)$/ ) {
         $web = $1;
         $wikiname = $2;
@@ -345,7 +345,7 @@ sub _getEmailsFromUserTopic {
 
 ---++ isAdmin()
 
-True if the user is an admin (is a member of the $TWiki::superAdminGroup)
+True if the user is an admin (is a member of the $TWiki::cfg{SuperAdminGroup})
 
 =cut
 
@@ -353,7 +353,7 @@ sub isAdmin {
     my $this = shift;
     ASSERT(ref($this) eq "TWiki::User") if DEBUG;
 
-    my $sag = $this->users()->findUser( $TWiki::superAdminGroup );
+    my $sag = $this->users()->findUser( $TWiki::cfg{SuperAdminGroup} );
     return $this->isInList( $sag->groupMembers());
 }
 

@@ -238,12 +238,12 @@ sub _fixLineLength {
 sub _sendEmailBySendmail {
     my( $this, $theText ) = @_;
 
-    if( open( MAIL, "|-" ) || exec "$TWiki::mailProgram" ) {
+    if( open( MAIL, "|-" ) || exec "$TWiki::cfg{MailProgram}" ) {
         print MAIL $theText;
         close( MAIL );
         return "";
     }
-    return "ERROR: Can't send mail using TWiki::mailProgram";
+    return "ERROR: Can't send mail using TWiki::cfg{MailProgram}";
 }
 
 sub _sendEmailByNetSMTP {

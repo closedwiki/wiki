@@ -50,7 +50,7 @@ Body of 'register' script
 sub register_cgi {
     my $session = shift;
 
-    my $tempUserDir = $TWiki::pubDir."/TWiki/RegistrationApprovals";
+    my $tempUserDir = $TWiki::cfg{PubDir}."/TWiki/RegistrationApprovals";
     # SMELL hacked name, and stores in binary format!
     my $sendActivationCode = 1;
     my $needApproval = 1;
@@ -162,7 +162,7 @@ sub bulkRegister {
     my $user = $session->{user};
     my $topic = $session->{topicName};
     my $web = $session->{webName};
-    my $userweb = $TWiki::mainWebname;
+    my $userweb = $TWiki::cfg{UsersWebName};
     my $query = $session->{cgiQuery};
 
     my %settings = ();
@@ -172,7 +172,7 @@ sub bulkRegister {
 
     unless( $unitTestMode || $session->{user}->isAdmin() ) {
         throw TWiki::UI::OopsException( $web, $topic, "accessgroup",
-                                        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
+                                        "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
     }
 
     #-- Read the topic containing a table of people to be registered
@@ -404,7 +404,7 @@ sub resetPassword {
         # Only admin is able to reset more than one password.
         unless( $session->{user}->isAdmin()) {
             throw TWiki::UI::OopsException( $web, $topic, "accessgroup",
-                                        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
+                                        "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
         }
     } else {
         # Anyone can reset a single password - important because by definition
@@ -610,13 +610,13 @@ sub finish {
     }
 
     # create user topic if it does not exist
-    #    unless( TWiki::Store::topicExists( $TWiki::mainWebname, $data{WikiName} ) ) {
+    #    unless( TWiki::Store::topicExists( $TWiki::cfg{UsersWebName}, $data{WikiName} ) ) {
     my $log = _newUserFromTemplate($session, "NewUserTemplate", \%data);
 
     #  }
 
     # SMELL - needs generalising to password delegate - what does it mean if you register when Basicauth is not used?
-    if ( $TWiki::htpasswdFormatFamily eq "htpasswd" ) {
+    if ( $TWiki::cfg{HtpasswdFormatFamily} eq "htpasswd" ) {
         my $success = _addUserToPasswordSystem( session=>$session, %data );
         # SMELL - error condition? surely need a way to flag an error?
         unless ( $success ) {
@@ -638,7 +638,7 @@ sub finish {
                                                    $session->{user} );
 
     # write log entry
-    if ($TWiki::doLogRegistration) {
+    if ($TWiki::cfg{Log}{register}) {
         $session->writeLog( "register", "$data{webName}.$data{WikiName}",
                          $data{Email}, $data{WikiName} );
     }
@@ -713,7 +713,7 @@ sub _writeRegistrationDetailsToTopic {
       $session->expandVariablesOnTopicCreation( $text, $user, $data{WikiName},
                                              "$data{webName}.$data{WikiName}" );
 
-    $meta->put( "TOPICPARENT", ( "name" => $TWiki::wikiUsersTopicname ) );
+    $meta->put( "TOPICPARENT", ( "name" => $TWiki::cfg{UsersTopicName} ) );
 
     $session->{store}->saveTopic($user, $data{webName}, $data{WikiName}, $text, $meta );
     return $log;
@@ -820,7 +820,7 @@ sub _emailRegistrationConfirmations {
       _buildConfirmationEmail( $session,
                               \%data,
                               $session->{templates}->readTemplate( "registernotify", $skin ),
-                              $TWiki::doHidePasswdInRegistration
+                              $TWiki::cfg{HidePasswdInRegistration}
                              );
 
     my $err = 

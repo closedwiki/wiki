@@ -14,28 +14,29 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-#
-# Simple interface to RCS.  Doesn't support:
-#    branches
-#    locking
-#
-# This modules doesn't know anything about the content of the topic e.g. it doesn't know
-# about the meta data.
-#
-# FIXME:
-#  - need to tidy up dealing with \n for differences
-#  - still have difficulty on line ending at end of sequences, consequence of doing a line based diff
-#  - most serious is when having multiple line ends on one seq but not other - this needs fixing
-#  - cleaner dealing with errors/warnings
 
-=begin twiki
+=pod
 
----+ TWiki::Store::RcsLite Module
+---+ package TWiki::Store::RcsLite
 
-This module implements rcs (without calling it)
+Simple replacement for RCS.  Doesn't support:
+   * branches
+   * locking
+
+This module doesn't know anything about the content of the topic
+
+There is one of these object for each file stored under RCSLite.
+
+This object is PACKAGE PRIVATE to Store, and should never be
+used from anywhere else.
+
+FIXME:
+   * need to tidy up dealing with \n for differences
+   * still have difficulty on line ending at end of sequences, consequence of doing a line based diff
+   * most serious is when having multiple line ends on one seq but not other - this needs fixing
+   * cleaner dealing with errors/warnings
 
 =cut
-
 package TWiki::Store::RcsLite;
 
 use TWiki::Store::RcsFile;
@@ -195,14 +196,14 @@ sub _ensureProcessed
 # Read in the whole RCS file
 sub _process {
     my( $self ) = @_;
-    my $rcsFile = TWiki::Sandbox::normalizeFileName( $self->rcsFile() );
+    my $rcsFile = TWiki::Sandbox::normalizeFileName( $self->{rcsFile} );
     if( ! -e $rcsFile ) {
         $self->{where} = "nofile";
         return;
     }
     my $fh = new FileHandle;
     if( ! $fh->open( $rcsFile ) ) {
-        $self->_warn( "Couldn't open file $rcsFile" );
+        $self->{session}->writeWarning( "Couldn't open file $rcsFile" );
         $self->{where} = "nofile";
         return;
     }
@@ -284,7 +285,7 @@ sub _process {
           }
        } elsif( $where eq "desc" ) {
           if( /desc\s*$/o ) {
-             $self->{"description"} = $string;
+             $self->{description} = $string;
              $where = "deltatext.log";
           }
        } elsif( $where eq "deltatext.log" ) {
@@ -305,12 +306,12 @@ sub _process {
        }
     }
     
-    $self->{"head"} = $headNum;
-    $self->{"author"} = \@author;
-    $self->{"date"} = \@date;   #TODO: i hitnk i need to make this into epochSecs
-    $self->{"log"} = \@log;
-    $self->{"delta"} = \@text;
-    $self->{"status"} = $dnum;
+    $self->{head} = $headNum;
+    $self->{author} = \@author;
+    $self->{date} = \@date;   #TODO: i hitnk i need to make this into epochSecs
+    $self->{log} = \@log;
+    $self->{delta} = \@text;
+    $self->{status} = $dnum;
     $self->{where} = $where;
     
     close( $fh );
@@ -381,7 +382,7 @@ sub numRevisions
 {
     my( $self ) = @_;
     $self->_ensureProcessed();
-    return $self->{"head"};
+    return $self->{head};
 }
 
 # ======================
@@ -429,7 +430,7 @@ sub date
 {
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
-    my $date = ${$self->{"date"}}[$version];
+    my $date = ${$self->{date}}[$version];
     if( $date ) {
 #        $date = TWiki::Store::RcsFile::_rcsDateTimeToEpoch( $date );
     } else {
@@ -451,7 +452,7 @@ sub description
 {
     my( $self ) = @_;
     $self->_ensureProcessed();
-    return $self->{"description"};
+    return $self->{description};
 }
 
 # ======================
@@ -467,7 +468,7 @@ sub author
 {
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
-    return ${$self->{"author"}}[$version];
+    return ${$self->{author}}[$version];
 }
 
 # ======================
@@ -483,7 +484,7 @@ sub log
 {
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
-    return ${$self->{"log"}}[$version];
+    return ${$self->{log}}[$version];
 }
 
 # ======================
@@ -499,7 +500,7 @@ sub delta
 {
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
-    return ${$self->{"delta"}}[$version];
+    return ${$self->{delta}}[$version];
 }
 
 # ======================
@@ -516,18 +517,18 @@ sub addRevision
     my( $self, $text, $log, $author, $date ) = @_;
     $self->_ensureProcessed();
     
-    $self->_save( $self->file(), \$text );
+    $self->_save( $self->{file}, \$text );
     $text = $self->_readFile( $self->{file} ) if( $self->{attachment} );
     my $head = $self->numRevisions();
     if( $head ) {
         my $delta = _diffText( \$text, \$self->delta($head), "", 0 );
-        ${$self->{"delta"}}[$head] = $delta;
+        ${$self->{delta}}[$head] = $delta;
     }   
     $head++;
-    ${$self->{"delta"}}[$head] = $text;
-    $self->{"head"} = $head;
-    ${$self->{"log"}}[$head] = $log;
-    ${$self->{"author"}}[$head] = $author;
+    ${$self->{delta}}[$head] = $text;
+    $self->{head} = $head;
+    ${$self->{log}}[$head] = $log;
+    ${$self->{author}}[$head] = $author;
     if( $date ) {
  #       $date =~ s/[ \/\:]/\./go;
     } else {
@@ -536,7 +537,7 @@ sub addRevision
 #    $date = TWiki::Store::RcsFile::_epochToRcsDateTime( $date );
 
 
-    ${$self->{"date"}}[$head] = $date;
+    ${$self->{date}}[$head] = $date;
 
     return $self->_writeMe();
 }
@@ -549,15 +550,15 @@ sub _writeMe
     my $out = new FileHandle;
 
     # FIXME move permission to config or similar
-    chmod( 0644, $self->rcsFile()  );
-    if( ! $out->open( "> " . TWiki::Sandbox::normalizeFileName( $self->rcsFile() ))) {
-       $dataError = "Problem opening " . $self->rcsFile() . " for writing";
+    chmod( 0644, $self->{rcsFile} );
+    if( ! $out->open( "> " . TWiki::Sandbox::normalizeFileName( $self->{rcsFile} ))) {
+       $dataError = "Problem opening " . $self->{rcsFile} . " for writing";
     } else {
        binmode( $out );
        $self->_write( $out );
        close( $out );
     }
-    chmod( 0444, $self->rcsFile()  ); # FIXME as above
+    chmod( 0444, $self->{rcsFile} ); # FIXME as above
     return $dataError;    
 }
 
@@ -607,7 +608,7 @@ sub _delLastRevision
         # Need to recover text for last revision
         my $lastText = $self->getRevision( $numRevisions - 1 );
         $numRevisions--;
-        $self->{"delta"}->[$numRevisions] = $lastText;
+        $self->{delta}->[$numRevisions] = $lastText;
     } else {
         $numRevisions--;
     }

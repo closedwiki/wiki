@@ -144,14 +144,17 @@ sub formatVersions {
     my $rows ="";
 
     for( my $rev = $latestRev; $rev >= 1; $rev-- ) {
+        # SMELL: should get revision info from meta
         my( $date, $user, $minorRev, $comment ) =
           $this->store()->getRevisionInfo( $web, $topic, $rev, $attrs{name} );
+        $user = $user->webDotWikiName() if( $user );
+
         $rows .= $this->_formatRow( $web, $topic,
                              {
                               name    => $attrs{name},
                               version => $rev,
                               date    => $date,
-                              user    => $user->login(),
+                              user    => $user,
                               comment => $comment,
                               attr    => $attrs{attr},
                               size    => $attrs{size}
@@ -238,10 +241,7 @@ sub _expandAttrs {
         return TWiki::formatTime( $info->{date} );
     }
     elsif ( $attr eq "USER" ) {
-        my $s = $info->{user};
-        my $u = $this->users()->findUser( $s );
-        $s = $u->webDotWikiName() if $u;
-        return $s
+        return $info->{user};
     }
     else {
         return "\0A_$attr\0";

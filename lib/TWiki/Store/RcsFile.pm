@@ -16,13 +16,18 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 #
-# Functions used by both Rcs and RcsFile - they both inherit from this Class
 
 =begin twiki
 
 ---+ TWiki::Store::RcsFile Module
 
-This module is contains the shared Rcs code.
+Superclass of RcsWrap and RcsLite, encapsulating common functionality.
+
+This class is PACKAGE PRIVATE to Store, and should never be
+used from anywhere else.
+
+The documentation is extremely sparse. Refer to STore.pm for models
+of usage.
 
 =cut
 
@@ -36,39 +41,25 @@ use Time::Local;	# Added for revDate2EpSecs
 use TWiki::Sandbox;
 use Assert;
 
-# ======================
 =pod
 
----++ sub new (  $proto, $web, $topic, $attachment, $settings  )
+---++ sub new (  $proto, $web, $topic, $attachment )
 
 =cut to implementation
 
-sub new
-{
-    my( $class, $session, $web, $topic, $attachment, $settings ) = @_;
+sub new {
+    my( $class, $session, $web, $topic, $attachment ) = @_;
     ASSERT(ref($session) eq "TWiki") if DEBUG;
     my $self = bless( {}, $class );
     $self->{session} = $session;
-    $self->{"web"} = $web;
-    $self->{"topic"} = $topic;
-    $self->{"attachment"} = $attachment || "";
-    foreach my $key ( "useRcsDir", "dataDir", "pubDir", "binary",
-                      "attachAsciiPath", "dirPermission" ) {
-        $self->{$key} = $settings->{$key};
-    }
-    $self->{"file"} = $self->_makeFileName();
-    $self->{"rcsFile"} = $self->_makeFileName( ",v" );
+    $self->{web} = $web;
+    $self->{topic} = $topic;
+    $self->{attachment} = $attachment || "";
+    $self->{file} = $self->_makeFileName();
+    $self->{rcsFile} = $self->_makeFileName( ",v" );
 
     return $self;
 }
-
-sub users { my $this = shift; return $this->{session}->{users}; }
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
-sub store { my $this = shift; return $this->{session}->{store}; }
-sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
-sub security { my $this = shift; return $this->{session}->{security}; }
-sub templates { my $this = shift; return $this->{session}->{templates}; }
-sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 # Call only after all settings initialised
 sub init {
@@ -78,27 +69,26 @@ sub init {
     if( $self->{attachment} ) {
         # Make sure directory for rcs history file exists
         my $rcsDir = $self->_makeFileDir( 1, ",v" );
-        my $tempPath = $self->{dataDir} . "/" . $self->{web};
+        # SMELL: surely this should be PubDir??
+        my $tempPath = $TWiki::cfg{DataDir} . "/" . $self->{web};
         if( ! -e $tempPath ) {
             umask( 0 );
-            mkdir( $tempPath, $self->{dirPermission} );
+            mkdir( $tempPath, $TWiki::cfg{RCS}{dirPermission} );
         }
         $tempPath = $rcsDir;
         if( ! -e $tempPath ) {
             umask( 0 );
-            mkdir( $tempPath, $self->{dirPermission} );
+            mkdir( $tempPath, $TWiki::cfg{RCS}{dirPermission} );
         }
     }
 
     if( $self->{attachment} &&
-        ! -e $self->{"rcsFile"} && 
+        ! -e $self->{rcsFile} && 
         ! $self->isAsciiDefault() ) {
         $self->setBinary( 1 );
     }
 }
 
-
-# ======================
 =pod
 
 ---++ sub revisionFileExists (  $self  )
@@ -107,22 +97,18 @@ Not yet documented.
 
 =cut to implementation
 
-sub revisionFileExists
-{
+sub revisionFileExists {
     my( $self ) = @_;
     return ( -e $self->{rcsFile} );
 }
 
-# ======================
 # Psuedo revision information - useful when there is no revision file
-sub _getRevisionInfoDefault
-{
+sub _getRevisionInfoDefault {
     my( $self ) = @_;
     my $fileDate = $self->getTimestamp();
     return ( "", 1, $fileDate, $TWiki::defaultUser, "Default revision information - no revision file" );
 }
 
-# ======================
 =pod
 
 ---++ sub getTimestamp (  $self  )
@@ -132,8 +118,7 @@ Returns 0 if no file, otherwise epoch seconds
 
 =cut to implementation
 
-sub getTimestamp
-{
+sub getTimestamp {
     my( $self ) = @_;
     my $date = 0;
     if( -e $self->{file} ) {
@@ -143,7 +128,6 @@ sub getTimestamp
     return $date;
 }
 
-# ======================
 =pod
 
 ---++ sub restoreLatestRevision (  $self  )
@@ -152,17 +136,14 @@ Not yet documented.
 
 =cut to implementation
 
-sub restoreLatestRevision
-{
+sub restoreLatestRevision {
     my( $self ) = @_;
-    
+
     my $rev = $self->numRevisions();
     my $text = $self->getRevision( $rev );
     $self->_saveFile( $self->{file}, $text );
 }
 
-
-# ======================
 =pod
 
 ---++ sub moveMe (  $self, $newWeb, $newTopic, $attachment  )
@@ -171,10 +152,9 @@ Not yet documented.
 
 =cut to implementation
 
-sub moveMe
-{
+sub moveMe {
     my( $self, $newWeb, $newTopic, $attachment ) = @_;
-    
+
     if( $self->{attachment} ) {
         $self->_moveAttachment( $newWeb, $newTopic, $self->{attachment} );
     } else {
@@ -182,12 +162,9 @@ sub moveMe
     }
 }
 
-
-# =========================
 # Move/rename a topic, allow for transfer between Webs
 # It is the responsibility of the caller to check: exstance webs & topics, lock taken for topic
-sub _moveTopic
-{
+sub _moveTopic {
    my( $self, $newWeb, $newTopic ) = @_;
 
    my $oldWeb = $self->{web};
@@ -195,9 +172,7 @@ sub _moveTopic
    my $error = "";
 
    # Change data file
-   my %sets = ( pubDir =>$self->{pubDir}, dataDir => $self->{dataDir} );
-   my $new = TWiki::Store::RcsFile->new( $self->{session}, $newWeb, $newTopic, "",
-                                       \%sets);
+   my $new = TWiki::Store::RcsFile->new( $self->{session}, $newWeb, $newTopic, "" );
    my $from = $self->{file};
    my $to =  $new->{file};
    if( ! move( $from, $to ) ) {
@@ -220,7 +195,7 @@ sub _moveTopic
        my $newPubWebDir = $new->_makePubWebDir( $newWeb );
        if ( ! -e $newPubWebDir ) {
            umask( 0 );
-           mkdir( $newPubWebDir, $self->{dirPermission} );
+           mkdir( $newPubWebDir, $TWiki::cfg{RCS}{dirPermission} );
        }
 
        # Rename the attachment directory if there is one
@@ -237,13 +212,11 @@ sub _moveTopic
 }
 
 
-# =========================
 # Move an attachment from one topic to another.
 # If there is a problem an error string is returned.
 # The caller to this routine should check that all topics are valid and
 # do lock on the topics.
-sub _moveAttachment
-{
+sub _moveAttachment {
     my( $self, $newWeb, $newTopic ) = @_;
 
     my $oldWeb = $self->{web};
@@ -255,8 +228,7 @@ sub _moveAttachment
 
     # FIXME might want to delete old directories if empty
 
-    my $new = TWiki::Store::RcsFile->new( $self->{session}, $newWeb, $newTopic, $attachment,
-        ( pubDir => $self->{pubDir} ) );
+    my $new = TWiki::Store::RcsFile->new( $self->{session}, $newWeb, $newTopic, $attachment );
 
     # before save, create directories if they don't exist
     my $tempPath = $new->_makePubWebDir();
@@ -282,7 +254,7 @@ sub _moveAttachment
     my $newRcsDir = $new->_makeFileDir( 1, ",v" );
     if ( ! -e $newRcsDir ) {
         umask( 0 );
-        mkdir( $newRcsDir, $self->{dirPermission} );
+        mkdir( $newRcsDir, $TWiki::cfg{RCS}{dirPermission} );
     }
 
     # Move attachment history
@@ -298,9 +270,7 @@ sub _moveAttachment
     return $error;
 }
 
-# ======================
-sub _epochToRcsDateTime
-{
+sub _epochToRcsDateTime {
    my( $dateTime ) = @_;
    # TODO: should this be gmtime or local time?
    my( $sec,$min,$hour,$mday,$mon,$year,$wday,$yday ) = gmtime( $dateTime );
@@ -309,60 +279,12 @@ sub _epochToRcsDateTime
    return $rcsDateTime;
 }
 
-# ======================
 # Suitable for rcs format stored in files (and that returned by rcs executables ???)
-sub _rcsDateTimeToEpoch
-{
+sub _rcsDateTimeToEpoch {
     my( $rcsDate ) = @_;    
     return revDate2EpSecs( $rcsDate );
 }
 
-# ======================
-=pod
-
----++ sub file (  $self  )
-
-Not yet documented.
-
-=cut to implementation
-
-sub file
-{
-    my( $self ) = @_;
-    return $self->{"file"};
-}
-
-# ======================
-=pod
-
----++ sub rcsFile (  $self  )
-
-Not yet documented.
-
-=cut to implementation
-
-sub rcsFile
-{
-    my( $self ) = @_;
-    return $self->{"rcsFile"};
-}
-
-# ======================
-=pod
-
----++ sub useRcsDir (  $self  )
-
-Not yet documented.
-
-=cut to implementation
-
-sub useRcsDir
-{
-    my( $self ) = @_;
-    return $self->{"useRcsDir"};
-}
-
-# ======================
 =pod
 
 ---++ sub isAsciiDefault (  $self  )
@@ -371,21 +293,16 @@ Not yet documented.
 
 =cut to implementation
 
-sub isAsciiDefault
-{
+sub isAsciiDefault {
    my( $self ) = @_;
-   
-   my $attachAsciiPath = $self->{"attachAsciiPath"};
-   my $filename = $self->{"attachment"};
 
-   if( $filename =~ /$attachAsciiPath/ ) {
+   if( $self->{attachment} =~ /$TWiki::cfg{RCS}{asciiFileSuffixes}/ ) {
       return "ascii";
    } else {
       return "";
    }
 }
 
-# ======================
 =pod
 
 ---++ sub setBinary (  $self, $binary  )
@@ -394,38 +311,14 @@ Not yet documented.
 
 =cut to implementation
 
-sub setBinary
-{
+sub setBinary {
     my( $self, $binary ) = @_;
-    my $oldSetting = $self->{"binary"};
+    my $oldSetting = $self->{binary};
     $binary = "" if( ! $binary );
-    $self->{"binary"} = $binary;
+    $self->{binary} = $binary;
     $self->_binaryChange() if( (! $oldSetting && $binary) || ($oldSetting && ! $binary) );
 }
 
-# ======================
-=pod
-
----++ sub getBinary (  $self  )
-
-Not yet documented.
-
-=cut to implementation
-
-sub getBinary
-{
-    my( $self ) = @_;
-    return $self->{"binary"};
-}
-
-# ======================
-sub _warn
-{
-    my( $self, $message ) = @_;
-    print "Warning: $message\n";
-}
-
-# ======================
 =pod
 
 ---++ sub setLock (  $self, $lock, $user  )
@@ -435,8 +328,7 @@ $user is a wikiname.
 
 =cut to implementation
 
-sub setLock
-{
+sub setLock {
     my( $self, $lock, $user ) = @_;
 
     $user = $self->{session}->{user} unless $user;
@@ -458,8 +350,7 @@ See if a twiki lock exists. Return the lock user and lock time if it does.
 
 =cut to implementation
 
-sub isLocked
-{
+sub isLocked {
     my( $self ) = @_;
 
     my $lockFilename = $self->_makeFileName( ".lock" );
@@ -470,16 +361,14 @@ sub isLocked
     return ( undef, undef );
 }
 
-# =========================
-sub _saveAttachment
-{
+sub _saveAttachment {
     my( $self, $theTmpFilename ) = @_;
 
     # before save, create directories if they don't exist
     my $tempPath = $self->_makePubWebDir();
     if( ! -e $tempPath ) {
         umask( 0 );
-        mkdir( $tempPath, $self->{dirPermission} );
+        mkdir( $tempPath, $TWiki::cfg{RCS}{dirPermission} );
     }
     $tempPath = $self->_makeFileDir( 1 );
     if( ! -e $tempPath ) {
@@ -497,10 +386,8 @@ sub _saveAttachment
     chmod( 0644, $newFile ); # FIXME config permission for new attachment
 }
 
-# ======================
 # This is really saveTopic
-sub _saveFile
-{
+sub _saveFile {
     my( $self, $name, $text ) = @_;
 
     umask( 002 );
@@ -513,13 +400,11 @@ sub _saveFile
     close( FILE);
 }
 
-# ======================
 # Deal differently with topics and attachments
 # text is a reference for efficiency
-sub _save
-{
+sub _save {
     my( $self, $filename, $text ) = @_;
-    
+
     if( $self->{attachment} ) {
         my $tmpFilename = $$text;
         $self->_saveAttachment( $tmpFilename );
@@ -528,9 +413,7 @@ sub _save
     }
 }
 
-# ======================
-sub _readFile
-{
+sub _readFile {
     my( $self, $name ) = @_;
     my $data = "";
     undef $/; # set to read to EOF
@@ -544,7 +427,6 @@ sub _readFile
 }
 
 
-# =========================
 # Get full filename for attachment or topic, untaint
 # Extension can be:
 # If $attachment is blank
@@ -554,8 +436,7 @@ sub _readFile
 # If $attachment
 #    blank         - attachment file
 #    ,v            - attachment history file
-sub _makeFileName
-{
+sub _makeFileName {
    my( $self, $extension ) = @_;
 
    if( ! $extension ) {
@@ -564,17 +445,17 @@ sub _makeFileName
 
    my $file = "";
    my $extra = "";
-   my $web = $self->{"web"};
-   my $topic = $self->{"topic"};
-   my $attachment = $self->{"attachment"};
-   my $dataDir = $self->{"dataDir"};
-   my $pubDir  = $self->{"pubDir"};
+   my $web = $self->{web};
+   my $topic = $self->{topic};
+   my $attachment = $self->{attachment};
+   my $dataDir = $TWiki::cfg{DataDir};
+   my $pubDir  = $TWiki::cfg{PubDir};
 
    if( $extension eq ".lock" ) {
       $file = "$dataDir/$web/$topic$extension";
 
    } elsif( $attachment ) {
-      if ( $extension eq ",v" && $self->{"useRcsDir"} && -d "$dataDir/$web/RCS" ) {
+      if ( $extension eq ",v" && $TWiki::cfg{RCS}{useSubDir} && -d "$dataDir/$web/RCS" ) {
          $extra = "/RCS";
       }
 
@@ -585,7 +466,7 @@ sub _makeFileName
       } else {
          if( $extension eq ",v" ) {
             $extension = ".txt$extension";
-            if( $self->useRcsDir() && -d "$dataDir/$web/RCS" ) {
+            if( $TWiki::cfg{RCS}{useSubDir} && -d "$dataDir/$web/RCS" ) {
                $extra = "/RCS";
             }
          }
@@ -597,32 +478,30 @@ sub _makeFileName
    return TWiki::Sandbox::untaintUnchecked( $file );
 }
 
-# =========================
 # Get directory that topic or attachment lives in
 #    Leave topic blank if you want the web directory rather than the topic directory
 #    should simply this with _makeFileName
-sub _makeFileDir
-{
+sub _makeFileDir {
    my( $self, $attachment, $extension) = @_;
-   
+
    $extension = "" if( ! $extension );
-   
-   my $dataDir = $self->{"dataDir"};
-   my $pubDir  = $self->{"pubDir"};
-   
+
+   my $dataDir = $TWiki::cfg{DataDir};
+   my $pubDir  = $TWiki::cfg{PubDir};
+
    my $web = $self->{web};
    my $topic = $self->{topic};
-   
+
    my $dir = "";
    if( ! $attachment ) {
-      if( $extension eq ",v" && $self->{"useRcsDir"} && -d "$dataDir/$web/RCS" ) {
+      if( $extension eq ",v" && $TWiki::cfg{RCS}{useSubDir} && -d "$dataDir/$web/RCS" ) {
          $dir = "$dataDir/$web/RCS";
       } else {
          $dir = "$dataDir/$web";
       }
    } else {
       my $suffix = "";
-      if ( $extension eq ",v" && $self->{"useRcsDir"} && -d "$dataDir/$web/RCS" ) {
+      if ( $extension eq ",v" && $TWiki::cfg{RCS}{useSubDir} && -d "$dataDir/$web/RCS" ) {
          $suffix = "/RCS";
       }
       $dir = "$pubDir/$web/$topic$suffix";
@@ -632,19 +511,16 @@ sub _makeFileDir
    return TWiki::Sandbox::untaintUnchecked( $dir );
 }
 
-# ======================
-sub _makePubWebDir
-{
+sub _makePubWebDir {
     my( $self ) = @_;
 
-    my $dir = $self->{pubDir} . "/" . $self->{web};
+    my $dir = $TWiki::cfg{PubDir} . "/" . $self->{web};
 
     # FIXME: Dangerous, need to make sure that parameters are not tainted
     return TWiki::Sandbox::untaintUnchecked( $dir );
 }
 
-sub _mkTmpFilename
-{
+sub _mkTmpFilename {
     my $tmpdir = File::Spec->tmpdir();
     my $file = _mktemp( "twikiAttachmentXXXXXX", $tmpdir );
     return File::Spec->catfile($tmpdir, $file);
@@ -711,7 +587,6 @@ use constant MON2NUM => {
     Dec => 11
 };
 
-# =========================
 =pod
 
 ---++ sub revDate2EpSecs ()
@@ -720,8 +595,7 @@ Convert RCS revision date/time to seconds since epoch, for easier sorting
 
 =cut
 
-sub revDate2EpSecs
-{
+sub revDate2EpSecs {
     my( $date ) = @_;
     # NOTE: This routine *will break* if input is not one of below formats!
     

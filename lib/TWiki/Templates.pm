@@ -144,7 +144,7 @@ Reads a template, constructing a candidate name for the template thus
       * to parse $name into a web name and a topic name, and
       * read topic $Web.${Skin}Skin${Topic}Template. 
    * If $name does not contain a web specifier, $Web defaults to
-     TWiki::twikiWebname.
+     TWiki::cfg{SystemWebName}.
    * If no skin is specified, topic is ${Topic}Template.
 In the event that the read fails (template not found, access permissions fail)
 returns the empty string "".
@@ -248,16 +248,16 @@ sub _readTemplateFile {
     my( $this, $theName, $theSkin, $theWeb ) = @_;
     $theSkin = "" unless $theSkin; # prevent 'uninitialized value' warnings
 
-    $theName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
+    $theName =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
     $theName =~ s/\.+/\./g;                      # Filter out ".." from filename
-    $theSkin =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
+    $theSkin =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
     $theSkin =~ s/\.+/\./g;                      # Filter out ".." from filename
 
     my $tmplFile = "";
 
     # search first in twiki/templates/Web dir
     # for file script(.skin).tmpl
-    my $tmplDir = "$TWiki::templateDir/$theWeb";
+    my $tmplDir = "$TWiki::cfg{TemplateDir}/$theWeb";
     if( opendir( DIR, $tmplDir ) ) {
         # for performance use readdir, not a row of ( -e file )
         my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
@@ -275,7 +275,7 @@ sub _readTemplateFile {
     }
 
     # if not found, search in twiki/templates dir
-    $tmplDir = $TWiki::templateDir;
+    $tmplDir = $TWiki::cfg{TemplateDir};
     if( ( ! $tmplFile ) && ( opendir( DIR, $tmplDir ) ) ) {
         my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
         closedir DIR;
@@ -312,7 +312,7 @@ sub _readTemplateFile {
         $theWeb = $this->{session}->{webName};
         $theTopic = $theSkin . ucfirst( $theName ) . "Template";
         if ( !$this->store()->topicExists( $theWeb, $theTopic )) {
-            $theWeb = $TWiki::twikiWebname;
+            $theWeb = $TWiki::cfg{SystemWebName};
         }
     }
 

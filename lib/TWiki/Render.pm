@@ -41,7 +41,7 @@ use TWiki::Attach;
 
 BEGIN {
     # Do a dynamic 'use locale' for this module
-    if( $TWiki::useLocale ) {
+    if( $TWiki::cfg{UseLocale} ) {
         eval 'require locale; import locale ();';
     }
 }
@@ -124,7 +124,7 @@ sub _renderParent {
             $pTopic = $2;
         }
         $parent = "$pWeb.$pTopic";
-        last if( $noWebHome && ( $pTopic eq $TWiki::mainTopicname ) ||
+        last if( $noWebHome && ( $pTopic eq $TWiki::cfg{HomeTopicName} ) ||
                  $dontRecurse ||
                  $visited{$parent} );
         $visited{$parent} = 1;
@@ -443,9 +443,9 @@ sub internalLink {
     # if a built-in English-language web (Main, TWiki or Plugins).  Plurals
     # apply to names ending in 's', where topic doesn't exist with plural
     # name.
-    if(  ( $TWiki::doPluralToSingular ) and ( $TWiki::siteLang eq 'en' 
-					or $theWeb eq $TWiki::mainWebname
-					or $theWeb eq $TWiki::twikiWebname
+    if(  ( $TWiki::cfg{PluralToSingular} ) and ( $TWiki::siteLang eq 'en' 
+					or $theWeb eq $TWiki::cfg{UsersWebName}
+					or $theWeb eq $TWiki::cfg{SystemWebName}
 					or $theWeb eq 'Plugins' 
 				     ) 
 	    and ( $theTopic =~ /s$/ ) and not ( $exist ) ) {
@@ -542,7 +542,7 @@ sub _specificLink {
     $topic =~ s/\&[a-z]+\;//gi;        # filter out &any; entities
     $topic =~ s/\&\#[0-9]+\;//g;       # filter out &#123; entities
     $topic =~ s/[\\\/\#\&\(\)\{\}\[\]\<\>\!\=\:\,\.]//g;
-    $topic =~ s/$TWiki::securityFilter//go;    # filter out suspicious chars
+    $topic =~ s/$TWiki::cfg{NameFilter}//go;    # filter out suspicious chars
     if( ! $topic ) {
         return $theText; # no link if no topic
     }
@@ -564,14 +564,14 @@ sub _externalLink {
 sub _mailtoLink {
     my( $this, $theAccount, $theSubDomain, $theTopDomain ) = @_;
 
-    my $addr = "$theAccount\@$theSubDomain$TWiki::noSpamPadding\.$theTopDomain";
+    my $addr = "$theAccount\@$theSubDomain$TWiki::cfg{NoSpamPadding}\.$theTopDomain";
     return "<a href=\"mailto\:$addr\">$addr</a>";
 }
 
 sub _mailtoLinkFull {
     my( $this, $theAccount, $theSubDomain, $theTopDomain, $theLinkText ) = @_;
 
-    my $addr = "$theAccount\@$theSubDomain$TWiki::noSpamPadding\.$theTopDomain";
+    my $addr = "$theAccount\@$theSubDomain$TWiki::cfg{NoSpamPadding}\.$theTopDomain";
     return "<a href=\"mailto\:$addr\">$theLinkText</a>";
 }
 
@@ -603,8 +603,8 @@ sub filenameToIcon {
     my @bits = ( split( /\./, $fileName ) );
     my $fileExt = lc $bits[$#bits];
 
-    my $iconDir = "$TWiki::pubDir/icn";
-    my $iconUrl = "$TWiki::pubUrlPath/icn";
+    my $iconDir = "$TWiki::cfg{PubDir}/icn";
+    my $iconUrl = "$TWiki::cfg{PubUrlPath}/icn";
     my $iconList = $this->store()->readFile( "$iconDir/_filetypes.txt" );
     foreach( split( /\n/, $iconList ) ) {
         @bits = ( split( / / ) );
@@ -986,7 +986,7 @@ sub _handleLink {
         } else {
             $anchor = "";
             # 'Web.TopicName' or 'Web.ABBREV' link:
-            if ( $topic eq $TWiki::mainTopicname && $web ne $this->{session}->{webName} ) {
+            if ( $topic eq $TWiki::cfg{HomeTopicName} && $web ne $this->{session}->{webName} ) {
                 $text = $web;
             } else {
                 $text =
@@ -1120,7 +1120,7 @@ sub TML2PlainText {
     $text =~ s/\&[a-z]+;/ /g;        # remove entities
     $text =~ s/%WEB%/$web/g;
     $text =~ s/%TOPIC%/$topic/g;
-    $text =~ s/%WIKITOOLNAME%/$TWiki::wikiToolName/g;
+    $text =~ s/%WIKITOOLNAME%/$TWiki::cfg{WikiToolName}/g;
     if( $opts =~ /nohead/ ) {
         # skip headings on top
         while( $text =~ s/^\s*\-\-\-+\+[^\n\r]+// ) {}; # remove heading

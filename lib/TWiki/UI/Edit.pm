@@ -112,7 +112,7 @@ sub edit {
 
     if( $saveCmd && ! $session->{user}->isAdmin()) {
         throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
-                                        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
+                                        "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
     }
 
     my $templateWeb = $webName;
@@ -198,7 +198,7 @@ sub edit {
 
     $session->{plugins}->beforeEditHandler( $text, $topic, $webName ) unless( $saveCmd );
 
-    if( $TWiki::doLogTopicEdit ) {
+    if( $TWiki::cfg{Log}{edit} ) {
         # write log entry
         $session->writeLog( "edit", "$webName.$topic", $extra );
     }

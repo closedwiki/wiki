@@ -33,7 +33,7 @@ use TWiki::User;
 # and other routines - main locale settings are done in TWiki::setupLocale
 BEGIN {
     # Do a dynamic 'use locale' for this module
-    if( $TWiki::useLocale ) {
+    if( $TWiki::cfg{UseLocale} ) {
         eval 'require locale; import locale ();';
     }
 }
@@ -60,7 +60,7 @@ sub new {
     }
 
     # create the guest user
-    $this->findUser( $TWiki::defaultUserName, $TWiki::defaultWikiName );
+    $this->findUser( $TWiki::cfg{DefaultUserLogin}, $TWiki::cfg{DefaultUserWikiName} );
 
     return $this;
 }
@@ -155,7 +155,7 @@ sub findUser {
     return $object if $object;
 
     # prepend the mainweb and try again in wikinames
-    $object = $this->{wikiname}{"$TWiki::mainWebname.$name"};
+    $object = $this->{wikiname}{"$TWiki::cfg{UsersWebName}.$name"};
     return $object if $object;
 
     # not cached; assume the name was a login name
@@ -171,7 +171,7 @@ sub findUser {
     ASSERT($object->wikiName()) if DEBUG;
     ASSERT($object->webDotWikiName()) if DEBUG;
     $this->{login}{$name} = $object;
-    $this->{wikiname}{$object->wikiName()} = $object;
+    $this->{wikiname}{$object->webDotWikiName()} = $object;
 
     return $object;
 }
@@ -205,12 +205,12 @@ sub addUserToTWikiUsersTopic {
     ASSERT(ref($me) eq "TWiki::User") if DEBUG;
 
     my( $meta, $text ) =
-      $this->store()->readTopic( undef, $TWiki::mainWebname,
-                                 $TWiki::wikiUsersTopicname, undef );
+      $this->store()->readTopic( undef, $TWiki::cfg{UsersWebName},
+                                 $TWiki::cfg{UsersTopicName}, undef );
     my $result = "";
     my $entry = "\t* ";
     $entry .= $user->web()."."
-      unless $user->web() eq $TWiki::mainWebname;
+      unless $user->web() eq $TWiki::cfg{UsersWebName};
     $entry .= $user->wikiName()." - ";
     $entry .= $user->login() . " - " if $user->login();
     my $today = TWiki::formatTime(time(), "\$day \$mon \$year", "gmtime");
@@ -223,7 +223,7 @@ sub addUserToTWikiUsersTopic {
         # TODO: I18N fix here once basic auth problem with 8-bit user names is
         # solved
         if ( $entry && $line =~ /\t\*\s($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s\-\s(.*)/ ) {
-            my $web = $1 || $TWiki::mainWebname;
+            my $web = $1 || $TWiki::cfg{UsersWebName};
             my $name = $2;
             my $odate = $3;
             if( $user->wikiName() le $name ) {
@@ -236,7 +236,7 @@ sub addUserToTWikiUsersTopic {
                     $entry .= $today;
                 }
                 # don't adjust if unchanged
-                return $TWiki::wikiUsersTopicname if( $entry eq $line );
+                return $TWiki::cfg{UsersTopicName} if( $entry eq $line );
                 $result .= "$entry\n";
                 $entry = "";
                 # don't add existing user entry twice
@@ -250,11 +250,11 @@ sub addUserToTWikiUsersTopic {
         # brand new file - add to end
         $result .= "$entry$today\n";
     }
-    $this->store()->saveTopic( $me, $TWiki::mainWebname,
-                               $TWiki::wikiUsersTopicname,
+    $this->store()->saveTopic( $me, $TWiki::cfg{UsersWebName},
+                               $TWiki::cfg{UsersTopicName},
                                $result, $meta );
 
-    return $TWiki::wikiUsersTopicname;
+    return $TWiki::cfg{UsersTopicName};
 }
 
 # Build hash to translate between username (e.g. jsmith)
@@ -270,16 +270,16 @@ sub _cacheTWikiUsersTopic {
 
     %{$this->{U2W}} = ();
     my @list = ();
-    if( $TWiki::doMapUserToWikiName ) {
-        my $text = $this->store()->readTopicRaw( undef, $TWiki::mainWebname,
-                                                 $TWiki::wikiUsersTopicname,
+    if( $TWiki::cfg{MapUserToWikiName} ) {
+        my $text = $this->store()->readTopicRaw( undef, $TWiki::cfg{UsersWebName},
+                                                 $TWiki::cfg{UsersTopicName},
                                                  undef );
         @list = split( /\n/, $text );
     } else {
         # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
         # for .htpasswd authenticated sites ignore user list, but map only
         #guest to TWikiGuest. CODE_SMELL on localization
-        @list = ( "\t* $TWiki::defaultWikiName - $TWiki::defaultUserName - " );
+        @list = ( "\t* $TWiki::cfg{DefaultUserWikiName} - $TWiki::cfg{DefaultUserLogin} - " );
     }
 
     my $wUser;
@@ -288,10 +288,10 @@ sub _cacheTWikiUsersTopic {
 	# Get the WikiName and userid, and build hashes in both directions
         if(  ( /^\s*\* ($TWiki::regex{webNameRegex}\.)?(\S+)\s*\-\s*([^\s]*).*/o ) && $2 ) {
             my $web = $1;
-            $web = $TWiki::mainWebname unless $web;
+            $web = $TWiki::cfg{UsersWebName} unless $web;
             $wUser = $2;	# WikiName
             $lUser = $3;	# userid
-            $lUser =~ s/$TWiki::securityFilter//go;	# FIXME: Should filter in for security...
+            $lUser =~ s/$TWiki::cfg{NameFilter}//go;	# FIXME: Should filter in for security...
             $this->{U2W}{ $lUser } = "$web.$wUser";
         }
     }
@@ -329,8 +329,8 @@ friendly) to use cookies.
 sub initializeRemoteUser {
     my( $this, $theRemoteUser ) = @_;
 
-    my $remoteUser = $theRemoteUser || $TWiki::defaultUserName;
-    $remoteUser =~ s/$TWiki::securityFilter//go;
+    my $remoteUser = $theRemoteUser || $TWiki::cfg{DefaultUserLogin};
+    $remoteUser =~ s/$TWiki::cfg{NameFilter}//go;
     $remoteUser = TWiki::Sandbox::untaintUnchecked( $remoteUser );
 
     my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
@@ -340,12 +340,12 @@ sub initializeRemoteUser {
         $remoteAddr = "";
     }
 
-    if( ( ! $TWiki::doRememberRemoteUser ) || ( ! $remoteAddr ) ) {
+    if( ( ! $TWiki::cfg{RememberUserIPAddress} ) || ( ! $remoteAddr ) ) {
         # do not remember IP address
         return $remoteUser;
     }
 
-    my $text = $this->store()->readFile( $TWiki::remoteUserFilename );
+    my $text = $this->store()->readFile( $TWiki::cfg{RemoteUserFileName} );
     # Assume no I18N characters in userids, as for email addresses
     # FIXME: Needs fixing for IPv6?
     my %AddrToName = map { split( /\|/, $_ ) }
@@ -370,11 +370,11 @@ sub initializeRemoteUser {
                     $text .= "$usrAddr|$usrName|\n";
                 }
             }
-            $this->store()->saveFile( $TWiki::remoteUserFilename, $text );
+            $this->store()->saveFile( $TWiki::cfg{RemoteUserFileName}, $text );
         }
     } else {
         # get user name from AddrToName table
-        $remoteUser = $rememberedUser || $TWiki::defaultUserName;
+        $remoteUser = $rememberedUser || $TWiki::cfg{DefaultUserLogin};
     }
 
     return $remoteUser;
@@ -397,7 +397,7 @@ sub _lookupTWikiUsers {
 
     $this->_cacheTWikiUsersTopic();
 
-    $loginUser =~ s/$TWiki::securityFilter//go;
+    $loginUser =~ s/$TWiki::cfg{NameFilter}//go;
     my $wUser = $this->{U2W}{ $loginUser };
 
     return $wUser;

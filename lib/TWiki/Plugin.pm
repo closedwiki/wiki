@@ -92,9 +92,9 @@ sub load {
     #   4 thisweb.plugin
 
     my $web;
-    if ( $this->store()->topicExists( $TWiki::twikiWebname, $this->{name} ) ) {
+    if ( $this->store()->topicExists( $TWiki::cfg{SystemWebName}, $this->{name} ) ) {
         # found plugin in TWiki web
-        $web = $TWiki::twikiWebname;
+        $web = $TWiki::cfg{SystemWebName};
     } elsif ( $this->store()->topicExists( "Plugins", $this->{name} ) ) {
         # found plugin in Plugins web (compatibility, deprecated)
         $web = "Plugins";

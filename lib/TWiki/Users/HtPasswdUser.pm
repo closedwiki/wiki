@@ -52,7 +52,7 @@ use Assert;
 # and other routines - main locale settings are done in TWiki::setupLocale
 BEGIN {
     # Do a dynamic 'use locale' for this module
-    if( $TWiki::useLocale ) {
+    if( $TWiki::cfg{UseLocale} ) {
         require locale;
 	import locale ();
     }
@@ -150,7 +150,7 @@ sub htpasswdReadPasswd
         return "";
     }
 
-    my $text = $this->store()->readFile( $TWiki::htpasswdFilename );
+    my $text = $this->store()->readFile( $TWiki::cfg{HtpasswdFileName} );
     if( $text =~ /$user\:(\S+)/ ) {
         return $1;
     }
@@ -174,7 +174,7 @@ sub UserPasswordExists
         return "";
     }
 
-    my $text = $self->store()->readFile( $TWiki::htpasswdFilename );
+    my $text = $self->store()->readFile( $TWiki::cfg{HtpasswdFileName} );
     if( $text =~ /^${user}:/gm ) {	# mod_perl: don't use /o
         return 1;
     }
@@ -202,11 +202,11 @@ sub UpdateUserPassword
  
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = $self->store()->readFile( $TWiki::htpasswdFilename );
+    my $text = $self->store()->readFile( $TWiki::cfg{HtpasswdFileName} );
     # escape + sign; SHA-passwords can have + signs
     $oldUserEntry =~ s/\+/\\\+/g;
     $text =~ s/$user:$oldUserEntry/$user:$newUserEntry/;
-    $self->store()->saveFile( $TWiki::htpasswdFilename, $text );
+    $self->store()->saveFile( $TWiki::cfg{HtpasswdFileName}, $text );
 
     return "1";
 }
@@ -230,11 +230,11 @@ sub htpasswdUpdateUser
 
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = $self->store()->readFile( $TWiki::htpasswdFilename );
+    my $text = $self->store()->readFile( $TWiki::cfg{HtpasswdFileName} );
     # escape + sign; SHA-passwords can have + signs
     $oldEncryptedUserPassword =~ s/\+/\\\+/g;
     $text =~ s/$oldEncryptedUserPassword/$newEncryptedUserPassword/;
-    $self->store()->saveFile( $TWiki::htpasswdFilename, $text );
+    $self->store()->saveFile( $TWiki::cfg{HtpasswdFileName}, $text );
 
     return "1";
 }
@@ -257,10 +257,10 @@ sub AddUserPassword
 
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = $self->store()->readFile( $TWiki::htpasswdFilename );
+    my $text = $self->store()->readFile( $TWiki::cfg{HtpasswdFileName} );
     ##$self->{session}->writeDebug "User entry is :$userEntry: before newline";
     $text .= "$userEntry\n";
-    $self->store()->saveFile( $TWiki::htpasswdFilename, $text );
+    $self->store()->saveFile( $TWiki::cfg{HtpasswdFileName}, $text );
 
 	return "1";
 }

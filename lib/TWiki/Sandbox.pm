@@ -470,9 +470,9 @@ sub readFromProcess {
         # earlier, see perlipc(1)
         my $cmdQuote = $this->{CMDQUOTE}; 
 
-        my $cmd = shift( @args ) . " $TWiki::cmdQuote";
+        my $cmd = shift( @args ) . " $TWiki::cfg{CmdQuote}";
         $cmd .= join( "$cmdQuote $cmdQuote", @args ) .  $cmdQuote;
-        $cmd .= " 2>&1" if( $TWiki::OS eq "UNIX" );
+        $cmd .= " 2>&1" if( $TWiki::cfg{OS} eq "UNIX" );
         $data = `$cmd`;
         $exit = ( $? >> 8 );
     }

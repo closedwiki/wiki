@@ -480,7 +480,7 @@ sub diff {
         $page .= $diff;
     }
     
-    if( $TWiki::doLogTopicRdiff ) {
+    if( $TWiki::cfg{Log}{rdiff} ) {
         # write log entry
         $session->writeLog( "rdiff", "$webName.$topic", "$rev1 $rev2" );
     }
@@ -490,8 +490,8 @@ sub diff {
     $j = $maxrev;
     my $revisions = "";
     my $breakRev = 0;
-    if( ( $TWiki::numberOfRevisions > 0 ) && ( $TWiki::numberOfRevisions < $maxrev ) ) {
-        $breakRev = $maxrev - $TWiki::numberOfRevisions + 1;
+    if( ( $TWiki::cfg{NumberOfRevisions} > 0 ) && ( $TWiki::cfg{NumberOfRevisions} < $maxrev ) ) {
+        $breakRev = $maxrev - $TWiki::cfg{NumberOfRevisions} + 1;
     }
     
     while( $i > 0 ) {

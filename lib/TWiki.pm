@@ -38,53 +38,20 @@ use Assert;
 
 require 5.005;		# For regex objects and internationalisation
 
-# TWiki config variables from TWiki.cfg. These should be regarded as
-# as CONSTANTS.
-use vars qw(
-            $defaultUserName $defaultWikiName
-            $wikiHomeUrl $defaultUrlHost
-            $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir $logDir
-            $siteWebTopicName $wikiToolName $securityFilter $uploadFilter
-            $debugFilename $warningFilename $htpasswdFilename
-            $logFilename $remoteUserFilename $wikiUsersTopicname
-            $userListFilename $doMapUserToWikiName
-            $twikiWebname $mainWebname $mainTopicname $notifyTopicname
-            $wikiPrefsTopicname $webPrefsTopicname
-            $statisticsTopicname $statsTopViews $statsTopContrib
-            $doDebugStatistics
-            $numberOfRevisions $editLockTime $scriptSuffix
-            $safeEnvPath $mailProgram $noSpamPadding $mimeTypesFilename
-            $doKeepRevIfEditLock $doGetScriptUrlFromCgi $doRemovePortNumber
-            $doRemoveImgInMailnotify $doRememberRemoteUser $doPluralToSingular
-            $doHidePasswdInRegistration $doSecureInclude
-            $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
-            $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
-            $doLogTopicChanges $doLogTopicSearch $doLogRegistration
-            $superAdminGroup $doSuperAdminGroup $OS $detailedOS
-            $disableAllPlugins $attachAsciiPath $displayTimeValues
-            $dispScriptUrlPath
-            $useLocale
-            $rcsDir $rcsArg $nullDev $endRcsCmd $storeTopicImpl $keywordMode
-            @storeSettings
-            $cmdQuote $lsCmd $egrepCmd $fgrepCmd $forceUnsafeRegexes
-           );
+# Site configuration constants
+use vars qw( %cfg );
 
-# Other constants
+# Other computed constants
 use vars qw(
-            $localeRegexes $siteLocale $siteCharsetOverride
-            $upperNational $lowerNational
             $TranslationToken $twikiLibDir
             %regex
-            %staticInternalTags
-            %dynamicInternalTags
+            %constantTags
+            %functionTags
             $siteCharset $siteLang $siteFullLang $urlCharEncoding
             $langAlphabetic $VERSION
            );
 
-# SMELL: should this be part of the config?
-$defaultWikiName = "TWikiGuest";
-
-# (new variables must be declared in "use vars qw(..)" above)
+# Other constant constants
 use constant ISOMONTH => qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 use constant WEEKDAY => qw( Sun Mon Tue Wed Thu Fri Sat );
 
@@ -92,9 +59,9 @@ use constant WEEKDAY => qw( Sun Mon Tue Wed Thu Fri Sat );
 # to a flag character if it ever does occur (very unlikely)
 $TranslationToken= "\0";	# Null not allowed in charsets used with TWiki
 
-# STATIC locale setup - If $useLocale is set, this function parses
-# $siteLocale from TWiki.cfg and passes it to the POSIX::setlocale
-#  function to change TWiki's operating environment.
+# STATIC locale setup - If $TWiki::cfg{UseLocale} is set, this
+# function parses $TWiki::cfg{SiteLocale} from TWiki.cfg and passes it to the
+# POSIX::setlocale function to change TWiki's operating environment.
 #
 # SMELL: mod_perl compatibility note: If TWiki is running under Apache,
 # won't this play with the Apache process's locale settings too?
@@ -113,31 +80,31 @@ sub _setupLocale {
     # turn on filtering-in of valid characters in user input 
     $langAlphabetic = 1 if not defined $langAlphabetic;      # Default is 1 if not configured
 
-    if ( $useLocale ) {
-        if ( not defined $siteLocale or $siteLocale !~ /[a-z]/i ) {
-            die "\$useLocale set but \$siteLocale $siteLocale unset or has no alphabetic characters";
+    if ( $TWiki::cfg{UseLocale} ) {
+        if ( not defined $TWiki::cfg{SiteLocale} or $TWiki::cfg{SiteLocale} !~ /[a-z]/i ) {
+            die "\$TWiki::cfg{UseLocale} set but \$TWiki::cfg{SiteLocale} $TWiki::cfg{SiteLocale} unset or has no alphabetic characters";
         }
         # Extract the character set from locale and use in HTML templates
         # and HTTP headers
-        $siteLocale =~ m/\.([a-z0-9_-]+)$/i;
+        $TWiki::cfg{SiteLocale} =~ m/\.([a-z0-9_-]+)$/i;
         $siteCharset = $1 if defined $1;
         $siteCharset =~ s/^utf8$/utf-8/i;	# For convenience, avoid overrides
         $siteCharset =~ s/^eucjp$/euc-jp/i;
 
         # Override charset - used when locale charset not supported by Perl
         # conversion modules
-        $siteCharset = $siteCharsetOverride || $siteCharset;
+        $siteCharset = $TWiki::cfg{SiteCharsetOverride} || $siteCharset;
         $siteCharset = lc $siteCharset;
 
         # Extract the default site language - ignores '@euro' part of
         # 'fr_BE@euro' type locales.
-        $siteLocale =~ m/^([a-z]+)_([a-z]+)/i;
+        $TWiki::cfg{SiteLocale} =~ m/^([a-z]+)_([a-z]+)/i;
         $siteLang = (lc $1) if defined $1;	# Not including country part
         $siteFullLang = (lc "$1-$2" ) 		# Including country part
           if defined $1 and defined $2;
 
         # Set environment variables for grep 
-        $ENV{'LC_CTYPE'}= $siteLocale;
+        $ENV{'LC_CTYPE'}= $TWiki::cfg{SiteLocale};
 
         # Load POSIX for I18N support. Eval because otherwise
         # it gets compiled even if we don't have a locale
@@ -146,11 +113,11 @@ sub _setupLocale {
 
         # Set new locale - deliberately not checked since tested
         # in testenv
-        my $locale = setlocale(&LC_CTYPE, $siteLocale);
+        my $locale = setlocale(&LC_CTYPE, $TWiki::cfg{SiteLocale});
     }
-    $staticInternalTags{CHARSET} = $siteCharset;
-    $staticInternalTags{SHORTLANG} = $siteLang;
-    $staticInternalTags{LANG} = $siteFullLang;
+    $constantTags{CHARSET} = $siteCharset;
+    $constantTags{SHORTLANG} = $siteLang;
+    $constantTags{LANG} = $siteFullLang;
 }
 
 # STATIC Set up pre-compiled regexes for use in rendering.  All regexes with
@@ -175,11 +142,11 @@ sub _setupRegexes {
     # Depends on locale mode and Perl version, and finally on
     # whether locale-based regexes are turned off.
     my ( $ua, $la, $num, $ma );
-    if ( not $useLocale or $] < 5.006 or not $localeRegexes ) {
+    if ( not $TWiki::cfg{UseLocale} or $] < 5.006 or not $TWiki::cfg{LocaleRegexes} ) {
         # No locales needed/working, or Perl 5.005, so just use
         # any additional national characters defined in TWiki.cfg
-        $ua = "A-Z$upperNational";
-        $la = "a-z$lowerNational";
+        $ua = "A-Z$TWiki::cfg{UpperNational}";
+        $la = "a-z$TWiki::cfg{LowerNational}";
         $num = '\d';
         $ma = "$ua$la";
     } else {
@@ -274,69 +241,147 @@ sub _setupRegexes {
 # expansion or calls the relevant _handle method for
 # the tag.
 sub _setupHandlerMaps {
-    $VERSION = '$Date$ $Rev$ ';
-    $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$1 build $2/;
 
-    %staticInternalTags =
-      (
-       ENDSECTION      => "",
-       HOMETOPIC       => $mainTopicname,
-       MAINWEB         => $mainWebname,
-       NOTIFYTOPIC     => $notifyTopicname,
-       PUBURLPATH      => $pubUrlPath,
-       SCRIPTSUFFIX    => $scriptSuffix,
-       SCRIPTURLPATH   => $dispScriptUrlPath,
-       SECTION         => "",
-       STARTINCLUDE    => "",
-       STATISTICSTOPIC => $statisticsTopicname,
-       STOPINCLUDE     => "",
-       TWIKIWEB        => $twikiWebname,
-       WEBPREFSTOPIC   => $webPrefsTopicname,
-       WIKIHOMEURL     => "$defaultUrlHost/$scriptUrlPath/view$scriptSuffix",
-       WIKIPREFSTOPIC  => $wikiPrefsTopicname,
-       WIKITOOLNAME    => $wikiToolName,
-       WIKIUSERSTOPIC  => $wikiUsersTopicname,
-       WIKIVERSION     => $VERSION,
-      );
+    # Note; done like this rather than assigning the whole hash because
+    # someone might have added a new handler in the LocalSite.cfg
+    $constantTags{ENDSECTION}      = "";
+    $constantTags{HOMETOPIC}       = $TWiki::cfg{HomeTopicName};
+    $constantTags{MAINWEB}         = $TWiki::cfg{UsersWebName};
+    $constantTags{NOTIFYTOPIC}     = $TWiki::cfg{NotifyTopicName};
+    $constantTags{PUBURLPATH}      = $TWiki::cfg{PubUrlPath};
+    $constantTags{SCRIPTSUFFIX}    = $TWiki::cfg{ScriptSuffix};
+    $constantTags{SCRIPTURLPATH}   = $TWiki::cfg{DispScriptUrlPath};
+    $constantTags{SECTION}         = "";
+    $constantTags{STARTINCLUDE}    = "";
+    $constantTags{STATISTICSTOPIC} = $TWiki::cfg{Stats}{TopicName};
+    $constantTags{STOPINCLUDE}     = "";
+    $constantTags{TWIKIWEB}        = $TWiki::cfg{SystemWebName};
+    $constantTags{WEBPREFSTOPIC}   = $TWiki::cfg{WebPrefsTopicName};
+    $constantTags{WIKIHOMEURL}     = "$TWiki::cfg{DefaultUrlHost}/$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}";
+    $constantTags{WIKIPREFSTOPIC}  = $TWiki::cfg{SitePrefsTopicName};
+    $constantTags{WIKIUSERSTOPIC}  = $TWiki::cfg{UsersTopicName};
+    $constantTags{WIKIVERSION}     = $VERSION;
 
-    %dynamicInternalTags =
-      (
-       ATTACHURLPATH     => \&_handleATTACHURLPATH,
-       DATE              => \&_handleDATE,
-       DISPLAYTIME       => \&_handleDISPLAYTIME,
-       ENCODE            => \&_handleENCODE,
-       FORMFIELD         => \&_handleFORMFIELD,
-       GMTIME            => \&_handleGMTIME,
-       HTTP_HOST         => \&_handleHTTP_HOST,
-       ICON              => \&_handleICON,
-       INCLUDE           => \&_handleINCLUDE,
-       INTURLENCODE      => \&_handleINTURLENCODE,
-       METASEARCH        => \&_handleMETASEARCH,
-       PLUGINVERSION     => \&_handlePLUGINVERSION,
-       RELATIVETOPICPATH => \&_handleRELATIVETOPICPATH,
-       REMOTE_ADDR       => \&_handleREMOTE_ADDR,
-       REMOTE_PORT       => \&_handleREMOTE_PORT,
-       REMOTE_USER       => \&_handleREMOTE_USER,
-       REVINFO           => \&_handleREVINFO,
-       SEARCH            => \&_handleSEARCH,
-       SERVERTIME        => \&_handleSERVERTIME,
-       SPACEDTOPIC       => \&_handleSPACEDTOPIC,
-       "TMPL:P"          => \&_handleTMPLP,,
-       TOPICLIST         => \&_handleTOPICLIST,
-       URLENCODE         => \&_handleENCODE,
-       URLPARAM          => \&_handleURLPARAM,
-       VAR               => \&_handleVAR,
-       WEBLIST           => \&_handleWEBLIST,
-      );
+    $functionTags{ATTACHURLPATH}     = \&_handleATTACHURLPATH;
+    $functionTags{DATE}              = \&_handleDATE;
+    $functionTags{DISPLAYTIME}       = \&_handleDISPLAYTIME;
+    $functionTags{ENCODE}            = \&_handleENCODE;
+    $functionTags{FORMFIELD}         = \&_handleFORMFIELD;
+    $functionTags{GMTIME}            = \&_handleGMTIME;
+    $functionTags{HTTP_HOST}         = \&_handleHTTP_HOST;
+    $functionTags{ICON}              = \&_handleICON;
+    $functionTags{INCLUDE}           = \&_handleINCLUDE;
+    $functionTags{INTURLENCODE}      = \&_handleINTURLENCODE;
+    $functionTags{METASEARCH}        = \&_handleMETASEARCH;
+    $functionTags{PLUGINVERSION}     = \&_handlePLUGINVERSION;
+    $functionTags{RELATIVETOPICPATH} = \&_handleRELATIVETOPICPATH;
+    $functionTags{REMOTE_ADDR}       = \&_handleREMOTE_ADDR;
+    $functionTags{REMOTE_PORT}       = \&_handleREMOTE_PORT;
+    $functionTags{REMOTE_USER}       = \&_handleREMOTE_USER;
+    $functionTags{REVINFO}           = \&_handleREVINFO;
+    $functionTags{SEARCH}            = \&_handleSEARCH;
+    $functionTags{SERVERTIME}        = \&_handleSERVERTIME;
+    $functionTags{SPACEDTOPIC}       = \&_handleSPACEDTOPIC;
+    $functionTags{"TMPL:P"}          = \&_handleTMPLP;
+    $functionTags{TOPICLIST}         = \&_handleTOPICLIST;
+    $functionTags{URLENCODE}         = \&_handleENCODE;
+    $functionTags{URLPARAM}          = \&_handleURLPARAM;
+    $functionTags{VAR}               = \&_handleVAR;
+    $functionTags{WEBLIST}           = \&_handleWEBLIST;
 }
 
 BEGIN {
-    # Read the configuration files at compile time in order to set locale
-    do "TWiki.cfg";
+    $VERSION = '$Date$ $Rev$ ';
+    $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$1 build $2/;
 
-    if( $useLocale ) {
+    unless( ( $TWiki::cfg{DetailedOS} = $^O ) ) {
+        require Config;
+        $TWiki::cfg{DetailedOS} = $Config::Config{'osname'};
+    }
+    $TWiki::cfg{OS} = 'UNIX';
+    if ($TWiki::cfg{DetailedOS} =~ /darwin/i) { # MacOS X
+        $TWiki::cfg{OS} = 'UNIX';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /Win/i) {
+        $TWiki::cfg{OS} = 'WINDOWS';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /vms/i) {
+        $TWiki::cfg{OS} = 'VMS';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /bsdos/i) {
+        $TWiki::cfg{OS} = 'UNIX';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /dos/i) {
+        $TWiki::cfg{OS} = 'DOS';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /^MacOS$/i) { # MacOS 9 or earlier
+        $TWiki::cfg{OS} = 'MACINTOSH';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /os2/i) {
+        $TWiki::cfg{OS} = 'OS2';
+    }
+
+    do "TWiki.cfg";
+    eval 'do "LocalSite.cfg"';
+
+    unless( defined $TWiki::cfg{CmdQuote} ) {
+        $TWiki::cfg{CmdQuote} = ( $TWiki::cfg{OS} eq "WINDOWS" ) ? '"' : "'";
+    }
+
+    if( $TWiki::cfg{UseLocale} ) {
         eval 'require locale; import locale ();';
     }
+
+    ASSERT( defined $TWiki::cfg{DefaultUserLogin} );
+    ASSERT( defined $TWiki::cfg{DefaultUserWikiName} );
+    ASSERT( defined $TWiki::cfg{DefaultUrlHost} );
+    ASSERT( defined $TWiki::cfg{ScriptUrlPath} );
+    ASSERT( defined $TWiki::cfg{PubUrlPath} );
+    ASSERT( defined $TWiki::cfg{PubDir} );
+    ASSERT( defined $TWiki::cfg{TemplateDir} );
+    ASSERT( defined $TWiki::cfg{DataDir} );
+    ASSERT( defined $TWiki::cfg{SiteWebTopicName} );
+    ASSERT( defined $TWiki::cfg{NameFilter} );
+    ASSERT( defined $TWiki::cfg{UploadFilter} );
+    ASSERT( defined $TWiki::cfg{DebugFileName} );
+    ASSERT( defined $TWiki::cfg{WarningFileName} );
+    ASSERT( defined $TWiki::cfg{HtpasswdFileName} );
+    ASSERT( defined $TWiki::cfg{LogFileName} );
+    ASSERT( defined $TWiki::cfg{RemoteUserFileName} );
+    ASSERT( defined $TWiki::cfg{UsersTopicName} );
+    ASSERT( defined $TWiki::cfg{MapUserToWikiName} );
+    ASSERT( defined $TWiki::cfg{SystemWebName} );
+    ASSERT( defined $TWiki::cfg{UsersWebName} );
+    ASSERT( defined $TWiki::cfg{HomeTopicName} );
+    ASSERT( defined $TWiki::cfg{NotifyTopicName} );
+    ASSERT( defined $TWiki::cfg{SitePrefsTopicName} );
+    ASSERT( defined $TWiki::cfg{WebPrefsTopicName} );
+    ASSERT( defined $TWiki::cfg{NumberOfRevisions} );
+    ASSERT( defined $TWiki::cfg{ScriptSuffix} );
+    ASSERT( defined $TWiki::cfg{SafeEnvPath} );
+    ASSERT( defined $TWiki::cfg{MailProgram} );
+    ASSERT( defined $TWiki::cfg{NoSpamPadding} );
+    ASSERT( defined $TWiki::cfg{MimeTypesFileName} );
+    ASSERT( defined $TWiki::cfg{GetScriptUrlFromCgi} );
+    ASSERT( defined $TWiki::cfg{RemovePortNumber} );
+    ASSERT( defined $TWiki::cfg{RemoveImgInMailnotify} );
+    ASSERT( defined $TWiki::cfg{RememberUserIPAddress} );
+    ASSERT( defined $TWiki::cfg{PluralToSingular} );
+    ASSERT( defined $TWiki::cfg{HidePasswdInRegistration} );
+    ASSERT( defined $TWiki::cfg{DenyDotDotInclude} );
+    ASSERT( defined $TWiki::cfg{SuperAdminGroup} );
+    ASSERT( defined $TWiki::cfg{OS} );
+    ASSERT( defined $TWiki::cfg{DetailedOS} );
+    ASSERT( defined $TWiki::cfg{DisableAllPlugins} );
+    ASSERT( defined $TWiki::cfg{DisplayTimeValues} );
+    ASSERT( defined $TWiki::cfg{DispScriptUrlPath} );
+    ASSERT( defined $TWiki::cfg{CmdQuote} );
+    ASSERT( defined $TWiki::cfg{EgrepCmd} );
+    ASSERT( defined $TWiki::cfg{FgrepCmd} );
+    ASSERT( defined $TWiki::cfg{ForceUnsafeRegexes} );
+    ASSERT( defined $TWiki::cfg{UseLocale} );
+    ASSERT( defined $TWiki::cfg{UpperNational} );
+    ASSERT( defined $TWiki::cfg{LowerNational} );
+    ASSERT( defined $TWiki::cfg{LocaleRegexes} );
+    ASSERT( defined $TWiki::cfg{SiteLocale} );
+    ASSERT( defined $TWiki::cfg{SiteCharsetOverride} );
+    ASSERT( defined $TWiki::cfg{Stats} );
+    ASSERT( defined $TWiki::cfg{Log} );
+    ASSERT( defined $TWiki::cfg{RCS} );
 
     _setupHandlerMaps();
     _setupLocale();
@@ -405,14 +450,14 @@ sub writeLog {
     my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
     my $text = "| $user | $action | $webTopic | $extra | $remoteAddr |";
 
-    $this->_writeReport( $logFilename, $text );
+    $this->_writeReport( $TWiki::cfg{LogFileName}, $text );
 }
 
 =pod
 
 ---++ writeWarning( $text )
 
-Prints date, time, and contents $text to $warningFilename, typically
+Prints date, time, and contents $text to $TWiki::cfg{WarningFileName}, typically
 'warnings.txt'. Use for warnings and errors that may require admin
 intervention. Use this for defensive programming warnings (e.g. assertions).
 
@@ -421,14 +466,14 @@ intervention. Use this for defensive programming warnings (e.g. assertions).
 sub writeWarning {
     my $this = shift;
     ASSERT(ref($this) eq "TWiki") if DEBUG;
-    $this->_writeReport( $warningFilename, @_ );
+    $this->_writeReport( $TWiki::cfg{WarningFileName}, @_ );
 }
 
 =pod
 
 ---++ writeDebug( $text )
 
-Prints date, time, and contents of $text to $debugFilename, typically
+Prints date, time, and contents of $text to $TWiki::cfg{DebugFileName}, typically
 'debug.txt'.  Use for debugging messages.
 
 =cut
@@ -436,13 +481,13 @@ Prints date, time, and contents of $text to $debugFilename, typically
 sub writeDebug {
     my $this = shift;
     ASSERT(ref($this) eq "TWiki") if DEBUG;
-    $this->_writeReport( $debugFilename, @_ );
+    $this->_writeReport( $TWiki::cfg{DebugFileName}, @_ );
 }
 
 =pod
 
 ---++ initialize( $pathInfo, $remoteUser, $topic, $url, $query )
-Return value: ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir )
+Return value: ( $topicName, $webName, $TWiki::cfg{ScriptUrlPath}, $userName, $TWiki::cfg{DataDir} )
 
 Static method to construct a new singleton session instance.
 It creates a new TWiki and sets the Plugins $SESSION variable to
@@ -461,7 +506,7 @@ sub initialize {
     $TWiki::Plugins::SESSION = $twiki;
 
     return ( $twiki->{topicName}, $twiki->{webName}, $twiki->{scriptUrlPath},
-             $twiki->{userName}, $dataDir );
+             $twiki->{userName}, $TWiki::cfg{DataDir} );
 }
 
 # Return value: boolean $isCharsetInvalid
@@ -761,10 +806,10 @@ sub readOnlyMirrorWeb {
     ASSERT(ref($this) eq "TWiki") if DEBUG;
 
     my @mirrorInfo = ( "", "", "", "" );
-    if( $siteWebTopicName ) {
+    if( $TWiki::cfg{SiteWebTopicName} ) {
         my $mirrorSiteName =
           $this->{prefs}->getPreferencesValue( "MIRRORSITENAME", $theWeb );
-        if( $mirrorSiteName && $mirrorSiteName ne $siteWebTopicName ) {
+        if( $mirrorSiteName && $mirrorSiteName ne $TWiki::cfg{SiteWebTopicName} ) {
             my $mirrorViewURL  =
               $this->{prefs}->getPreferencesValue( "MIRRORVIEWURL", $theWeb );
             my $mirrorLink = $this->{templates}->readTemplate( "mirrorlink" );
@@ -871,7 +916,7 @@ sub getScriptUrl {
     # SMELL: topics and webs that contain spaces?
 
     # $this->{urlHost} is needed, see Codev.PageRedirectionNotWorking
-    my $url = "$this->{urlHost}$dispScriptUrlPath/$theScript$scriptSuffix/$theWeb/$theTopic";
+    my $url = "$this->{urlHost}$TWiki::cfg{DispScriptUrlPath}/$theScript$TWiki::cfg{ScriptSuffix}/$theWeb/$theTopic";
     # FIXME consider a plugin call here - useful for certificated logon environment
     return $url;
 }
@@ -1159,10 +1204,10 @@ sub _includeUrl {
     my $pass = "";
 
     # For speed, read file directly if URL matches an attachment directory
-    if( $theUrl =~ /^$this->{urlHost}$pubUrlPath\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
+    if( $theUrl =~ /^$this->{urlHost}$TWiki::cfg{PubUrlPath}\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
         my $web = $1;
         my $topic = $2;
-        my $fileName = "$pubDir/$web/$topic/$3";
+        my $fileName = "$TWiki::cfg{PubDir}/$web/$topic/$3";
         if( $fileName =~ m/\.(txt|html?)$/i ) {       # FIXME: Check for MIME type, not file suffix
             unless( -e $fileName ) {
                 return _inlineError( "Error: File attachment at $theUrl does not exist" );
@@ -1177,7 +1222,7 @@ sub _includeUrl {
                 }
             }
             $text = $this->{store}->readFile( $fileName );
-            $text = _cleanupIncludedHTML( $text, $this->{urlHost}, $pubUrlPath );
+            $text = _cleanupIncludedHTML( $text, $this->{urlHost}, $TWiki::cfg{PubUrlPath} );
             $text = applyPatternToIncludedText( $text, $thePattern ) if( $thePattern );
             return $text;
         }
@@ -1243,8 +1288,8 @@ sub _handleINCLUDE {
         return $this->_includeUrl( $path, $pattern, $theWeb, $theTopic );
     }
 
-    $path =~ s/$securityFilter//go;    # zap anything suspicious
-    if( $doSecureInclude ) {
+    $path =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
+    if( $TWiki::cfg{DenyDotDotInclude} ) {
         # Filter out ".." from filename, this is to
         # prevent includes of "../../file"
         $path =~ s/\.+/\./g;
@@ -1407,7 +1452,7 @@ sub _handleSERVERTIME {
 
 sub _handleDISPLAYTIME {
     my( $this, $params ) = @_;
-    return formatTime( time(), $params->{_DEFAULT} || "", $displayTimeValues );
+    return formatTime( time(), $params->{_DEFAULT} || "", $TWiki::cfg{DisplayTimeValues} );
 }
 
 =pod
@@ -1424,7 +1469,7 @@ sub formatTime  {
 
     # use default TWiki format "31 Dec 1999 - 23:59" unless specified
     $formatString = "\$day \$month \$year - \$hour:\$min" unless( $formatString );
-    $outputTimeZone = $displayTimeValues unless( $outputTimeZone );
+    $outputTimeZone = $TWiki::cfg{DisplayTimeValues} unless( $outputTimeZone );
 
     my( $sec, $min, $hour, $day, $mon, $year, $wday) = gmtime( $epochSeconds );
       ( $sec, $min, $hour, $day, $mon, $year, $wday ) = localtime( $epochSeconds ) if( $outputTimeZone eq "servertime" );
@@ -2040,7 +2085,7 @@ sub _handleRELATIVETOPICPATH {
 
 sub _handleATTACHURLPATH {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
-    return nativeUrlEncode( "$pubUrlPath/$theWeb/$theTopic" );
+    return nativeUrlEncode( "$TWiki::cfg{PubUrlPath}/$theWeb/$theTopic" );
 }
 
 # Expands variables by replacing the variables with their
@@ -2070,7 +2115,7 @@ sub _expandAllTags {
     $this->{SESSION_TAGS}{WEB}     = $web;
     # Make Edit URL unique - fix for RefreshEditPage.
     $this->{SESSION_TAGS}{EDITURL} =
-      "$dispScriptUrlPath/edit$scriptSuffix/$web/$topic\?t=" . time();
+      "$TWiki::cfg{DispScriptUrlPath}/edit$TWiki::cfg{ScriptSuffix}/$web/$topic\?t=" . time();
 
     # SMELL: why is this done every time, and not statically during
     # template loading?
@@ -2197,11 +2242,11 @@ sub _expandTag {
 
     if ( defined( $this->{SESSION_TAGS}{$tag} )) {
         $res = $this->{SESSION_TAGS}{$tag};
-    } elsif ( defined( $staticInternalTags{$tag} )) {
-        $res = $staticInternalTags{$tag};
-    } elsif ( defined( $dynamicInternalTags{$tag} )) {
+    } elsif ( defined( $constantTags{$tag} )) {
+        $res = $constantTags{$tag};
+    } elsif ( defined( $functionTags{$tag} )) {
         my $params = extractParameters( $args );
-        $res = &{$dynamicInternalTags{$tag}}( $this, $params, @_ );
+        $res = &{$functionTags{$tag}}( $this, $params, @_ );
     }
 
     return ( defined( $res ), $res );
@@ -2219,7 +2264,7 @@ STATIC Add a tag handler to the function tag handlers.
 
 sub registerTagHandler {
     my ( $tag, $fnref ) = @_;
-    $TWiki::dynamicInternalTags{$tag} = \&$fnref;
+    $TWiki::functionTags{$tag} = \&$fnref;
 }
 
 =pod
@@ -2311,12 +2356,11 @@ sub new {
 
     # create the various sub-objects
     $this->{sandbox} = new TWiki::Sandbox( $this,
-                                           $TWiki::OS, $TWiki::detailedOS );
+                                           $TWiki::cfg{OS}, $TWiki::cfg{DetailedOS} );
 
     $this->{plugins} = new TWiki::Plugins( $this );
     $this->{net} = new TWiki::Net( $this );
-    my %ss = @storeSettings;
-    $this->{store} = new TWiki::Store( $this, $storeTopicImpl, \%ss );
+    $this->{store} = new TWiki::Store( $this );
     $this->{search} = new TWiki::Search( $this );
     $this->{templates} = new TWiki::Templates( $this );
     $this->{attach} = new TWiki::Attach( $this );
@@ -2330,10 +2374,10 @@ sub new {
 
     @{$this->{publicWebList}} = ();
 
-	if ( # (-e $TWiki::htpasswdFilename ) && #<<< maybe
-		( $TWiki::htpasswdFormatFamily eq "htpasswd" ) ) {
+	if ( # (-e $TWiki::cfg{HtpasswdFileName} ) && #<<< maybe
+		( $TWiki::cfg{HtpasswdFormatFamily} eq "htpasswd" ) ) {
         $this->{users} = new TWiki::Users( $this, "HtPasswdUser" );
-#	} elseif ($TWiki::htpasswdFormatFamily eq "something?") {
+#	} elseif ($TWiki::cfg{HtpasswdFormatFamily} eq "something?") {
 #        $this->{users} = new TWiki::Users( $this, "SomethingUser" );
 	} else {
         $this->{users} = new TWiki::Users( $this, "NoPasswdUser" );
@@ -2342,14 +2386,14 @@ sub new {
     # Make %ENV safer, preventing hijack of the search path
     # SMELL: can this be done in a BEGIN block? Or is the environment
     # set per-query?
-    if( $safeEnvPath ) {
-        $ENV{'PATH'} = $safeEnvPath;
+    if( $TWiki::cfg{SafeEnvPath} ) {
+        $ENV{'PATH'} = $TWiki::cfg{SafeEnvPath};
     }
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
     # Check for unsafe search regex mode (affects filtering in) - default
     # to safe mode
-    $TWiki::forceUnsafeRegexes = 0 unless defined $TWiki::forceUnsafeRegexes;
+    $TWiki::cfg{ForceUnsafeRegexes} = 0 unless defined $TWiki::cfg{ForceUnsafeRegexes};
 
     # initialize lib directory early because of later 'cd's
     getTWikiLibDir();
@@ -2368,7 +2412,7 @@ sub new {
             $web   = $1 || "";
             $topic = $2 || "";
             # jump to WebHome if "bin/script?topic=Webname."
-            $topic = $mainTopicname if( $web && ! $topic );
+            $topic = $TWiki::cfg{HomeTopicName} if( $web && ! $topic );
         }
         # otherwise assume "bin/script/Webname?topic=SomeTopic"
     } else {
@@ -2398,40 +2442,40 @@ sub new {
     # Refuse to work with character sets that allow TWiki syntax
     # to be recognised within multi-byte characters.  Only allow 'oops'
     # page to be displayed (redirect causes this code to be re-executed).
-    if ( _invalidSiteCharset() and $url !~ m!$scriptUrlPath/oops! ) {
+    if ( _invalidSiteCharset() and $url !~ m!$TWiki::cfg{ScriptUrlPath}/oops! ) {
         $this->writeWarning( "Cannot use this multi-byte encoding ('$siteCharset') as site character encoding" );
-        $this->writeWarning( "Please set a different character encoding in the \$siteLocale setting in TWiki.cfg." );
+        $this->writeWarning( "Please set a different character encoding in the \$TWiki::cfg{SiteLocale} setting in TWiki.cfg." );
         $url = $this->getOopsUrl( $web, $topic, "oopsbadcharset" );
         print $this->redirect( $url );
         return;
     }
 
-    $topic =~ s/$securityFilter//go;
-    $topic = $mainTopicname unless $topic;
+    $topic =~ s/$TWiki::cfg{NameFilter}//go;
+    $topic = $TWiki::cfg{HomeTopicName} unless $topic;
     $this->{topicName} = $topic;
-    $web   =~ s/$securityFilter//go;
-    $web = $mainWebname unless $web;
+    $web   =~ s/$TWiki::cfg{NameFilter}//go;
+    $web = $TWiki::cfg{UsersWebName} unless $web;
     $this->{webName} = $web;
 
     # Convert UTF-8 web and topic name from URL into site charset 
     # if necessary - no effect if URL is not in UTF-8
     $this->_convertUtf8URLtoSiteCharset();
 
-    $this->{scriptUrlPath} = $scriptUrlPath;
+    $this->{scriptUrlPath} = $TWiki::cfg{ScriptUrlPath};
 
-    # initialize $urlHost and $scriptUrlPath 
+    # initialize $urlHost and $TWiki::cfg{ScriptUrlPath} 
     if( $url && $url =~ m!^([^:]*://[^/]*)(.*)/.*$! && $2 ) {
-        if( $doGetScriptUrlFromCgi ) {
+        if( $TWiki::cfg{GetScriptUrlFromCgi} ) {
             # SMELL: this is a really dangerous hack. It will fail
             # spectacularly with mod_perl.
             $this->{scriptUrlPath} = $2;
         }
         $this->{urlHost} = $1;
-        if( $doRemovePortNumber ) {
+        if( $TWiki::cfg{RemovePortNumber} ) {
             $this->{urlHost} =~ s/\:[0-9]+$//;
         }
     } else {
-        $this->{urlHost} = $defaultUrlHost;
+        $this->{urlHost} = $TWiki::cfg{DefaultUrlHost};
     }
 
     # initialize preferences, first part for site and web level
@@ -2439,7 +2483,7 @@ sub new {
 
     # SMELL: there should be a way for the plugin to specify
     # the WikiName of the user as well as the login.
-    my $login = $this->{plugins}->load( $disableAllPlugins );
+    my $login = $this->{plugins}->load( $TWiki::cfg{DisableAllPlugins} );
     unless( $login ) {
         $login = $this->{users}->initializeRemoteUser( $remoteUser );
     }
@@ -2460,8 +2504,8 @@ sub new {
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGWEB}   = $this->{webName};
     $this->{SESSION_TAGS}{ATTACHURL}      = "$this->{urlHost}%ATTACHURLPATH%";
-    $this->{SESSION_TAGS}{PUBURL}         = $this->{urlHost}.$pubUrlPath;
-    $this->{SESSION_TAGS}{SCRIPTURL}      = $this->{urlHost}.$dispScriptUrlPath;
+    $this->{SESSION_TAGS}{PUBURL}         = $this->{urlHost}.$TWiki::cfg{PubUrlPath};
+    $this->{SESSION_TAGS}{SCRIPTURL}      = $this->{urlHost}.$TWiki::cfg{DispScriptUrlPath};
 
     # initialize user preferences
     $this->{prefs}->initializeUser( $user, $this->{topicName} );

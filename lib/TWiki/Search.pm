@@ -35,7 +35,7 @@ use TWiki::Sandbox;
 # main locale settings are done in TWiki::setupLocale
 BEGIN {
     # Do a dynamic 'use locale' for this module
-    if( $TWiki::useLocale ) {
+    if( $TWiki::cfg{UseLocale} ) {
         eval 'require locale; import locale ();';
     }
 }
@@ -93,7 +93,7 @@ sub _filterSearchString {
     my $unsafePlatform = ( not ($this->sandbox()->{SAFE} ) );
 
     # FIXME: Use of new global
-    my $useFilterIn = ($unsafePlatform and not $TWiki::forceUnsafeRegexes);
+    my $useFilterIn = ($unsafePlatform and not $TWiki::cfg{ForceUnsafeRegexes});
 
     #$this->writeDebug("unsafePlatform = $unsafePlatform");
     #$this->writeDebug("useFilterIn = $useFilterIn");
@@ -432,7 +432,7 @@ sub searchWeb {
     my $theType =       $params{type} || "";
     my $theWebName =    $params{web} || "";
 
-    ##$this->writeDebug "Search locale is $TWiki::siteLocale";
+    ##$this->writeDebug "Search locale is $TWiki::cfg{SiteLocale}";
 
     # Limit search results
     if ($theLimit =~ /(^\d+$)/o) { # only digits, all else is the same as
@@ -460,7 +460,7 @@ sub searchWeb {
     }
 
     my $searchResult = "";
-    my $topic = $TWiki::mainTopicname;
+    my $topic = $TWiki::cfg{HomeTopicName};
 
     my @webList = ();
 
@@ -605,14 +605,14 @@ sub searchWeb {
 
     # Write log entry
     # FIXME: Move log entry further down to log actual webs searched
-    if( ( $TWiki::doLogTopicSearch ) && ( ! $inline ) ) {
+    if( ( $TWiki::cfg{Log}{search} ) && ( ! $inline ) ) {
         my $t = join( ' ', @webList );
         $this->{session}->writeLog( "search", $t, $theSearchVal );
     }
 
     # Loop through webs
     foreach my $web ( @webList ) {
-        $web =~ s/$TWiki::securityFilter//go;
+        $web =~ s/$TWiki::cfg{NameFilter}//go;
         $web = TWiki::Sandbox::untaintUnchecked( $web );
 
         next unless $this->store()->webExists( $web );  # can't process what ain't thar
@@ -1022,6 +1022,7 @@ sub searchWeb {
     
     $searchResult = $this->{session}->handleCommonTags( $searchResult, $topic );
     $searchResult = $this->renderer()->getRenderedVersion( $searchResult );
+
     return $searchResult;
 }
 
@@ -1072,6 +1073,8 @@ sub _extractTopicInfo {
                                $this->{session}->{user},
                                $text, $topic,
                                $web );
+
+    return $info unless $sortfield;
 
     if ( $sortfield =~ /^creat/ ) {
         ( $info->{$sortfield} ) = $this->store()->getRevisionInfo( $web, $topic, 1 );

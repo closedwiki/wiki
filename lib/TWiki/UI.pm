@@ -135,10 +135,10 @@ sub run {
         # of this script, may be a result of not being logged in.
         my $url;
         my $script = $ENV{'SCRIPT_FILENAME'};
-        $script =~ s/^(.*\/)([^\/]+)($TWiki::scriptSuffix)?$/$1/;
+        $script =~ s/^(.*\/)([^\/]+)($TWiki::cfg{ScriptSuffix})?$/$1/;
         my $scriptPath = $1;
         my $scriptName = $2;
-        $script .= "$scriptPath${scriptName}auth$TWiki::scriptSuffix";
+        $script .= "$scriptPath${scriptName}auth$TWiki::cfg{ScriptSuffix}";
         if( ! $query->remote_user() && -e $script ) {
             $url = $ENV{"REQUEST_URI"};
             if( $url && $url =~ s/\/$scriptName/\/${scriptName}auth/ ) {
@@ -164,7 +164,7 @@ sub run {
                     # If SCRIPT_NAME does not contain the script name
                     # the last hope is to try building up the URL using
                     # the SCRIPT_FILENAME.
-                    $url = "$session->{urlhost}$session->{scriptUrlPath}/${scriptName}$TWiki::scriptSuffix$pathInfo$queryString";
+                    $url = "$session->{urlhost}$session->{scriptUrlPath}/${scriptName}$TWiki::cfg{ScriptSuffix}$pathInfo$queryString";
                 }
             }
             $session->redirect( $url );
@@ -281,11 +281,11 @@ sub readTemplateTopic {
     my( $session, $theTopicName ) = @_;
     ASSERT(ref($session) eq "TWiki") if DEBUG;
 
-    $theTopicName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
+    $theTopicName =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
 
     # try to read in current web, if not read from TWiki web
 
-    my $web = $TWiki::twikiWebname;
+    my $web = $TWiki::cfg{SystemWebName};
     if( $session->{store}->topicExists( $session->{webName}, $theTopicName ) ) {
         $web = $session->{webName};
     }

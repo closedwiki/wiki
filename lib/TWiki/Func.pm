@@ -207,7 +207,7 @@ sub getOopsUrl
 # -------------------------
 sub getPubUrlPath
 {
-    return $TWiki::pubUrlPath;
+    return $TWiki::cfg{PubUrlPath};
 }
 
 # =========================
@@ -426,7 +426,7 @@ sub getPluginPreferencesFlag
 # -------------------------
 sub getWikiToolName
 {
-    return $TWiki::wikiToolName;
+    return $TWiki::cfg{WikiToolName};
 }
 
 # =========================
@@ -442,7 +442,7 @@ sub getWikiToolName
 # -------------------------
 sub getMainWebname
 {
-    return $TWiki::mainWebname;
+    return $TWiki::cfg{UsersWebName};
 }
 
 # =========================
@@ -458,7 +458,7 @@ sub getMainWebname
 # -------------------------
 sub getTwikiWebname
 {
-    return $TWiki::twikiWebname;
+    return $TWiki::cfg{SystemWebName};
 }
 
 # =========================
@@ -476,7 +476,7 @@ sub getTwikiWebname
 # -------------------------
 sub getDefaultUserName
 {
-    return $TWiki::defaultUserName;
+    return $TWiki::cfg{DefaultUserLogin};
 }
 
 # =========================
@@ -973,7 +973,7 @@ wherever possible!
 # -------------------------
 sub getDataDir
 {
-    return $TWiki::dataDir;
+    return $TWiki::cfg{DataDir};
 }
 
 # =========================
@@ -992,7 +992,7 @@ wherever possible!
 # -------------------------
 sub getPubDir
 {
-    return $TWiki::pubDir;
+    return $TWiki::cfg{PubDir};
 }
 
 # =========================

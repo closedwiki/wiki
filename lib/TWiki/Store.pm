@@ -47,7 +47,7 @@ use strict;
 # and other routines - main locale settings are done in TWiki::setupLocale
 BEGIN {
     # Do a dynamic 'use locale' for this module
-    if( $TWiki::useLocale ) {
+    if( $TWiki::cfg{UseLocale} ) {
         eval 'require locale; import locale ();';
     }
 }
@@ -56,23 +56,22 @@ BEGIN {
 
 ---++ sub new()
 
-Construct a Store module, linking in the chosen implementation.
+Construct a Store module, linking in the chosen sub-implementation.
 
 =cut
 
 sub new {
-    my ( $class, $session, $impl, $storeSettings ) = @_;
+    my ( $class, $session ) = @_;
     ASSERT(ref($session) eq "TWiki") if DEBUG;
     my $this = bless( {}, $class );
 
     $this->{session} = $session;
 
-    $this->{IMPL} = "TWiki::Store::$impl";
+    $this->{IMPL} = "TWiki::Store::".$TWiki::cfg{StoreImpl};
     eval "use $this->{IMPL}";
     if( $@ ) {
         die "$this->{IMPL} compile failed $@";
     }
-    $this->{STORESETTINGS} = $storeSettings;
 
     return $this;
 }
@@ -92,10 +91,10 @@ sub _getTopicHandler {
 
     $attachment = "" if( ! $attachment );
 
-    my $handlerName = "TWiki::Store::$TWiki::storeTopicImpl";
+    my $handlerName = "TWiki::Store::$TWiki::cfg{RCS}{impl}";
 
     return $this->{IMPL}->new( $this->{session}, $web, $topic,
-                               $attachment, $this->{STORESETTINGS} );
+                               $attachment );
 }
 
 =pod
@@ -163,7 +162,7 @@ sub readTopicRaw {
     my $text;
 
     unless ( defined( $version )) {
-        $text = $this->readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt" );
+        $text = $this->readFile( "$TWiki::cfg{DataDir}/$theWeb/$theTopic.txt" );
     } else {
         my $topicHandler = $this->_getTopicHandler( $theWeb, $theTopic, undef );
         $text = $topicHandler->getRevision( $version );
@@ -243,7 +242,7 @@ sub moveAttachment {
 
     # Add file attachment to new topic
     $fileAttachment{"movefrom"} = "$oldWeb.$oldTopic";
-    $fileAttachment{"moveby"}   = $user;
+    $fileAttachment{"moveby"}   = $user->webDotWikiName();
     $fileAttachment{"movedto"}  = "$newWeb.$newTopic";
     $fileAttachment{"movedwhen"} = time();
     $nmeta->put( "FILEATTACHMENT", %fileAttachment );
@@ -448,7 +447,7 @@ sub renameTopic {
     $this->unlockTopic( $user, $oldWeb, $oldTopic );
 
     # Log rename
-    if( $TWiki::doLogRename ) {
+    if( $TWiki::cfg{Log}{rename} ) {
         $this->{session}->writeLog( "rename", "$oldWeb.$oldTopic", "moved to $newWeb.$newTopic $error" );
     }
 
@@ -644,18 +643,17 @@ sub getRevisionDiff {
 =cut
 
 sub getRevisionInfo {
-    my( $this, $theWebName, $theTopic, $theRev, $attachment, $topicHandler ) = @_;
+    my( $this, $web, $topic, $theRev, $attachment, $topicHandler ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     $theRev = 0 unless( $theRev );
 
     unless( $topicHandler ) {
         $topicHandler =
-          $this->_getTopicHandler( $theWebName, $theTopic, $attachment );
+          $this->_getTopicHandler( $web, $topic, $attachment );
     }
     my( $rcsOut, $rev, $date, $user, $comment ) =
       $topicHandler->getRevisionInfo( $theRev );
-
     $user = $this->users()->findUser( $user ) if $user;
 
     return ( $date, $user, $rev, $comment );
@@ -737,10 +735,10 @@ sub saveTopic {
 
 =pod
 
----++ sub saveAttachment ($web, $topic, $attachment, $opts )
+---++ sub saveAttachment ($web, $topic, $attachment, $user, $opts )
+| =$user= | user doing the saving |
 | =$web= | web for topic |
 | =$topic= | topic to atach to |
-| =$user= | user doing the saving |
 | =$attachment= | name of the attachment |
 | =$opts= | Ref to hash of options |
 =$opts= may include:
@@ -786,7 +784,7 @@ sub saveAttachment {
            attachment => $attachment,
            tmpFilename => $opts->{file},
            comment => $opts->{comment},
-           user => $user
+           user => $user->webDotWikiName()
           );
 
         my $topicHandler = $this->_getTopicHandler( $web, $topic, $attachment );
@@ -891,7 +889,7 @@ sub _noHandlersSave {
         close(FILE);
     }
 
-    if( ( $TWiki::doLogTopicSave ) && ! ( $options->{dontlog} ) ) {
+    if( ( $TWiki::cfg{Log}{save} ) && ! ( $options->{dontlog} ) ) {
         # write log entry
         my $extra = "";
         $extra   .= "dontNotify" if( $options->{dontnotify} );
@@ -946,7 +944,7 @@ sub repRev {
 
     $this->unlockTopic( $user, $web, $topic );
 
-    if( ( $TWiki::doLogTopicSave ) && ! ( $options->{dontlog} ) ) {
+    if( ( $TWiki::cfg{Log}{save} ) && ! ( $options->{dontlog} ) ) {
         # write log entry
         my $extra = "repRev by ".$user->login().": $rev " .
           $revuser->login().
@@ -1106,7 +1104,7 @@ sub webExists {
     ASSERT(defined($theWeb)) if DEBUG;
 
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-    return -e "$TWiki::dataDir/$theWeb";
+    return -e "$TWiki::cfg{DataDir}/$theWeb";
 }
 
 =pod
@@ -1125,7 +1123,7 @@ sub topicExists {
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
     ASSERT(defined($theTopic)) if DEBUG;
 
-    return -e "$TWiki::dataDir/$theWeb/$theTopic.txt";
+    return -e "$TWiki::cfg{DataDir}/$theWeb/$theTopic.txt";
 }
 
 # PRIVATE parse and add a meta-datum. Returns "" so it can be used in s///e
@@ -1237,7 +1235,7 @@ is used to optimise searching. Needs to be as fast as possible.
 sub getTopicLatestRevTime {
     my ( $this, $web, $topic ) = @_;
 
-    return (stat "$TWiki::dataDir\/$web\/$topic.txt")[9];
+    return (stat "$TWiki::cfg{DataDir}\/$web\/$topic.txt")[9];
 }
 
 =pod
@@ -1283,7 +1281,7 @@ sub readMetaData {
     my ( $this, $web, $name ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
-    my $file = "$TWiki::dataDir/";
+    my $file = "$TWiki::cfg{DataDir}/";
     $file .= "$web/" if $web;
     $file .= ".$name";
 
@@ -1304,7 +1302,7 @@ sub saveMetaData {
     my ( $this, $web, $name, $text ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
-    my $file = "$TWiki::dataDir/";
+    my $file = "$TWiki::cfg{DataDir}/";
     $file .= "$web/" if $web;
     $file .= ".$name";
 
@@ -1328,7 +1326,7 @@ sub getTopicNames {
     $web = "" unless( defined $web );
 
     # get list of all topics by scanning $dataDir
-    opendir DIR, "$TWiki::dataDir/$web" ;
+    opendir DIR, "$TWiki::cfg{DataDir}/$web" ;
     my @topicList = sort grep { s/\.txt$// } readdir( DIR );
     closedir( DIR );
     return @topicList;
@@ -1343,13 +1341,13 @@ sub _getSubWebs {
     my( $this, $web ) = @_ ;
 
     # get list of all subwebs by scanning $dataDir
-    opendir DIR, "$TWiki::dataDir/$web" ;
+    opendir DIR, "$TWiki::cfg{DataDir}/$web" ;
     my @tmpList = readdir( DIR );
     closedir( DIR );
 
     # this is not magic, it just looks like it.
     my @webList = sort
-      grep { !/^\.\.?$/ && -d "$TWiki::dataDir/$web/$_" }
+      grep { !/^\.\.?$/ && -d "$TWiki::cfg{DataDir}/$web/$_" }
         @tmpList;
 
     return @webList ;
@@ -1400,13 +1398,13 @@ string if it fails.
 sub createWeb {
     my ( $this, $theWeb ) = @_;
 
-    my $dir = "$TWiki::dataDir/$theWeb";
+    my $dir = "$TWiki::cfg{DataDir}/$theWeb";
     umask( 0 );
     unless( mkdir( $dir, 0775 ) ) {
         return "Could not create $dir, error: $!";
     }
 
-    if ( $TWiki::useRcsDir ) {
+    if ( $TWiki::cfg{RCS}{useSubDir} ) {
         unless( mkdir( "$dir/RCS", 0775 ) ) {
             return "Could not create $dir/RCS, error: $!";
         }
@@ -1571,8 +1569,8 @@ sub copyTopicBetweenWebs {
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     # copy topic file
-    my $from = "$TWiki::dataDir/$theFromWeb/$theTopic.txt";
-    my $to = "$TWiki::dataDir/$theToWeb/$theTopic.txt";
+    my $from = "$TWiki::cfg{DataDir}/$theFromWeb/$theTopic.txt";
+    my $to = "$TWiki::cfg{DataDir}/$theToWeb/$theTopic.txt";
     unless( copy( $from, $to ) ) {
         return( "Copy file ( $from, $to ) failed, error: $!" );
     }
@@ -1707,10 +1705,10 @@ sub searchInWebContent {
     # $egrepCmd etc and apply those as argument 1.
     if( $type eq "regex" ) {
         # SMELL: this should be specific to the store implementation
-        $program = $TWiki::egrepCmd;
+        $program = $TWiki::cfg{EgrepCmd};
     } else {
         # SMELL: this should be specific to the store implementation
-        $program = $TWiki::fgrepCmd;
+        $program = $TWiki::cfg{FgrepCmd};
     }
 
     my $args = '';
@@ -1718,7 +1716,7 @@ sub searchInWebContent {
     $args .= ' -l' if $justTopics;
     $args .= ' -- %TOKEN|U% %FILES|F%';
 
-    my $sDir = "$TWiki::dataDir/$web/";
+    my $sDir = "$TWiki::cfg{DataDir}/$web/";
     my $seen = {};
     # process topics in sets, fix for Codev.ArgumentListIsTooLongForSearch
     my $maxTopicsInSet = 512; # max number of topics for a grep call

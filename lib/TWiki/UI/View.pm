@@ -143,7 +143,7 @@ sub view {
         $text = $session->{renderer}->getRenderedVersion( $text );
     }
 
-    if( $TWiki::doLogTopicView ) {
+    if( $TWiki::cfg{Log}{view} ) {
         # write log entry
         $session->writeLog( "view", "$webName.$topicName", $extra );
     }
@@ -154,7 +154,7 @@ sub view {
         my $mess = "<html><body>\n"
           . "<h1>TWiki Installation Error</h1>\n"
             . "Template file view.tmpl not found or template directory \n"
-              . "$TWiki::templateDir not found.<p />\n"
+              . "$TWiki::cfg{TemplateDir} not found.<p />\n"
                 . "Check the \$templateDir variable in TWiki.cfg.\n"
                   . "</body></html>\n";
         $session->writeCompletePage( $mess );
@@ -210,9 +210,9 @@ sub view {
     my $j = $maxrev;
     my $revisions = "";
     my $breakRev = 0;
-    if( ( $TWiki::numberOfRevisions > 0 ) &&
-        ( $TWiki::numberOfRevisions < $maxrev ) ) {
-        $breakRev = $maxrev - $TWiki::numberOfRevisions + 1;
+    if( ( $TWiki::cfg{NumberOfRevisions} > 0 ) &&
+        ( $TWiki::cfg{NumberOfRevisions} < $maxrev ) ) {
+        $breakRev = $maxrev - $TWiki::cfg{NumberOfRevisions} + 1;
     }
     while( $i > 0 ) {
         if( $i == $rev) {
@@ -293,7 +293,7 @@ sub viewfile {
 
     my $topRev = $session->{store}->getRevisionNumber( $webName, $topic, $fileName );
 
-    if( ( $rev ) && ( $rev ne $topRev ) ) {
+    if( $rev && $rev ne $topRev ) {
         my $fileContent =
           $session->{store}->readAttachment( $session->{user}, $webName, $topic,
                                              $fileName, $rev );
@@ -313,7 +313,7 @@ sub viewfile {
     # Convert only if html file does not yet exist
     # for now, show the original document:
 
-    my $pubUrlPath = $TWiki::pubUrlPath;
+    my $pubUrlPath = $TWiki::cfg{PubUrlPath};
     my $host = $session->{urlHost};
     $session->redirect( "$host$pubUrlPath/$webName/$topic/$fileName" );
 }
@@ -326,7 +326,7 @@ sub _suffixToMimeType {
         my $suffix = $1;
         my @types = grep{ s/^\s*([^\s]+).*?\s$suffix\s.*$/$1/i }
           map{ "$_ " }
-            split( /[\n\r]/, $session->{store}->readFile( $TWiki::mimeTypesFilename ) );
+            split( /[\n\r]/, $session->{store}->readFile( $TWiki::cfg{MimeTypesFileName} ) );
         $mimeType = $types[0] if( @types );
     }
     return $mimeType;

@@ -106,7 +106,7 @@ sub changes {
             $done{$changedTopic} = 1;
         }
     }
-    if( $TWiki::doLogTopicChanges ) {
+    if( $TWiki::cfg{Log}{changes} ) {
         # write log entry
         $session->writeLog( "changes", $webName, "" );
     }

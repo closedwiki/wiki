@@ -79,7 +79,7 @@ sub attach {
     # SMELL: why log attach before post is called?
     # FIXME: Move down, log only if successful (or with error msg?)
     # Attach is a read function, only has potential for a change
-    if( $TWiki::doLogTopicAttach ) {
+    if( $TWiki::cfg{Log}{attach} ) {
         # write log entry
         $session->writeLog( "attach", "$webName.$topic", $fileName );
     }
@@ -151,7 +151,7 @@ sub upload {
     $fileComment =~ s/^\s*//o;
     $fileComment =~ s/\s*$//o;
 
-    close $filePath if( $TWiki::OS eq "WINDOWS");
+    close $filePath if( $TWiki::cfg{OS} eq "WINDOWS");
 
     TWiki::UI::checkWebExists( $session, $webName, $topic );
     TWiki::UI::checkMirror( $session, $webName, $topic );
@@ -173,7 +173,7 @@ sub upload {
         my $nonAlphaNum = "[^$TWiki::regex{mixedAlphaNum}" . '\._-]+';
         $fileName =~ s/${nonAlphaNum}//go;
         # apply security filter
-        $fileName =~ s/$TWiki::uploadFilter/$1\.txt/goi;
+        $fileName =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;
         $fileName = TWiki::Sandbox::untaintUnchecked( $fileName );
 
         ##$session->writeDebug ("Upload filename after cleanup is '$fileName'");
@@ -202,7 +202,7 @@ sub upload {
 
     my $error =
       $session->{store}->saveAttachment( $webName, $topic, $fileName, $user,
-                                    { dontlog => !$TWiki::doLogTopicUpload,
+                                    { dontlog => !$TWiki::cfg{Log}{upload},
                                       comment => $fileComment,
                                       hide => $hideFile,
                                       createlink => $createLink,

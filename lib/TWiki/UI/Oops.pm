@@ -52,7 +52,7 @@ sub oops_cgi {
         $tmplData = "<html><body>\n"
           . "<h1>TWiki Installation Error</h1>\n"
             . "Template file $tmplName.tmpl not found or template directory \n"
-              . "$TWiki::templateDir not found.<p />\n"
+              . "$TWiki::cfg{TemplateDir} not found.<p />\n"
                 . "Check the \$templateDir variable in TWiki.cfg.\n"
                   . "</body></html>\n";
     } else {

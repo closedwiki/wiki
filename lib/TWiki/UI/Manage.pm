@@ -105,7 +105,7 @@ sub removeUser {
     #   # appends a unique number to the requested topicname
     #    my $newTopicName = TWiki::getUniqueTopicName("AnonymousContributor");
     #
-    #   my $renameError = $session->{store}->renameTopic( $TWiki::mainWebname, $wikiName, $TWiki::mainWebname, $newTopicName, "relink" );
+    #   my $renameError = $session->{store}->renameTopic( $TWiki::cfg{UsersWebName}, $wikiName, $TWiki::cfg{UsersWebName}, $newTopicName, "relink" );
     #
     #   if ( $renameError ) {
     #TODO: add better error message for rname failed
@@ -170,15 +170,15 @@ sub createWeb {
           ( "", "", $oopsTmpl, _template( "msg_web_name" ));
     }
 
-    if( $session->{store}->topicExists( $newWeb, $TWiki::mainTopicname ) ) {
+    if( $session->{store}->topicExists( $newWeb, $TWiki::cfg{HomeTopicName} ) ) {
         throw TWiki::UI::OopsException( "", "", $oopsTmpl,
                                         _template("msg_web_exist"), $newWeb );
     }
 
-    $baseWeb =~ s/$TWiki::securityFilter//go;
+    $baseWeb =~ s/$TWiki::cfg{NameFilter}//go;
     $baseWeb = TWiki::Sandbox::untaintUnchecked( $baseWeb );
 
-    unless( $session->{store}->topicExists( $baseWeb, $TWiki::mainTopicname ) ) {
+    unless( $session->{store}->topicExists( $baseWeb, $TWiki::cfg{HomeTopicName} ) ) {
         throw TWiki::UI::OopsException( "", "", $oopsTmpl,
                                         _template("msg_base_web"), $baseWeb );
     }
@@ -204,17 +204,17 @@ sub createWeb {
     }
 
     # patch WebPreferences
-    $err = _patchWebPreferences( $session, $newWeb, $TWiki::webPrefsTopicname, $webBgColor,
+    $err = _patchWebPreferences( $session, $newWeb, $TWiki::cfg{WebPrefsTopicName}, $webBgColor,
                                  $siteMapWhat, $siteMapUseTo, $noSearchAll );
     if( $err ) {
-        throw TWiki::UI::OopsException( $newWeb, $TWiki::webPrefsTopicname,
+        throw TWiki::UI::OopsException( $newWeb, $TWiki::cfg{WebPrefsTopicName},
                                         $oopsTmpl,
                                         _template("msg_patch_webpreferences"),
                                         $err );
     }
 
     # everything OK, redirect to last message
-    $newTopic = $TWiki::mainTopicname unless( $newTopic );
+    $newTopic = $TWiki::cfg{HomeTopicName} unless( $newTopic );
     throw TWiki::UI::OopsException( $newWeb, $newTopic, $oopsTmpl,
                                     _template("msg_create_web_ok") );
 }
@@ -229,7 +229,7 @@ sub _copyWebTopics {
         @topicList = grep { /^Web/ } @topicList;
     }
     foreach my $topic ( @topicList ) {
-        $topic =~ s/$TWiki::securityFilter//go;
+        $topic =~ s/$TWiki::cfg{NameFilter}//go;
         $topic = TWiki::Sandbox::untaintUnchecked( $topic );
         $err = $session->{store}->copyTopicBetweenWebs( $theBaseWeb,
                                                     $topic, $theNewWeb );
@@ -295,7 +295,7 @@ sub rename {
     my $skin = $session->getSkin();
 
     $newTopic =~ s/\s//go;
-    $newTopic =~ s/$TWiki::securityFilter//go;
+    $newTopic =~ s/$TWiki::cfg{NameFilter}//go;
 
     if( ! $theAttachment ) {
         $theAttachment = "";
@@ -332,8 +332,6 @@ sub rename {
             }
         }
 
-        TWiki::UI::checkAccess( $session, $oldWeb, $oldTopic,
-                                "change", $session->{user} );
         TWiki::UI::checkAccess( $session, $oldWeb, $oldTopic,
                                 "rename", $session->{user} );
     }
@@ -408,7 +406,7 @@ sub rename {
                       $session->getScriptUrl( $oldWeb, $parent{"name"}, "view" );
                 }
             } else {
-                $new_url = $session->getScriptUrl( $oldWeb, $TWiki::mainTopicname, "view" );
+                $new_url = $session->getScriptUrl( $oldWeb, $TWiki::cfg{HomeTopicName}, "view" );
             }
         }
     } else {
@@ -485,7 +483,6 @@ sub _newTopicScreen {
     }
 
     $tmpl = _setVars( $tmpl, $oldTopic, $newWeb, $newTopic, $nonWikiWordFlag );
-    $tmpl = $session->handleCommonTags( $tmpl, $oldTopic, $oldWeb );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
     if( $currentWebOnly ) {
         $tmpl =~ s/%RESEARCH\{.*?web=\"all\".*\}%/(skipped)/o; # Remove search all web search

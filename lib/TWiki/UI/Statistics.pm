@@ -30,6 +30,8 @@ use Error qw( :try );
 
 use constant ISOMONTH => qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 
+my $debug = 0;
+
 =pod
 
 ---++ statistics( $session )
@@ -44,9 +46,10 @@ sub statistics {
     my $webName = $session->{webName};
 
     my $tmp = "";
-    my $destWeb = $TWiki::mainWebname; #web to redirect to after finishing
+    my $destWeb = $TWiki::cfg{UsersWebName}; #web to redirect to after finishing
     my $logDate = "".$session->{cgiQuery}->param( 'logdate' );
     $logDate =~ s/[^0-9]//g;  # remove all non numerals
+    $debug = $session->{cgiQuery}->param( 'debug' );
 
     if( !$session->{scripted} ) {
         # running from CGI
@@ -84,7 +87,7 @@ sub statistics {
     my $logMonthYear = "$logMonth $logYear";
     _printMsg( "* Statistics for $logMonthYear", $session );
 
-    my $logFile = $TWiki::logFilename;
+    my $logFile = $TWiki::cfg{LogFileName};
     $logFile =~ s/%DATE%/$logDate/g;
 
     unless( -e $logFile ) {
@@ -96,9 +99,9 @@ sub statistics {
 
     # FIXME move the temp dir stuff to TWiki.cfg
     my $tmpDir;
-    if ( $TWiki::OS eq "UNIX" ) { 
+    if ( $TWiki::cfg{OS} eq "UNIX" ) { 
         $tmpDir = $ENV{'TEMP'} || "/tmp"; 
-    } elsif ( $TWiki::OS eq "WINDOWS" ) {
+    } elsif ( $TWiki::cfg{OS} eq "WINDOWS" ) {
         $tmpDir = $ENV{'TEMP'} || "c:/"; 
     } else {
         # FIXME handle other OSs properly - assume Unix for now.
@@ -166,7 +169,7 @@ sub statistics {
     # usage to ensure deleted on crash?
 
     if( !$session->{scripted} ) {
-        $tmp = $TWiki::statisticsTopicname;
+        $tmp = $TWiki::cfg{Stats}{TopicName};
         my $url = $session->getScriptUrl( $destWeb, $tmp, "view" );
         _printMsg( "* Go back to <a href=\"$url\">$tmp</a> topic", $session );
     }
@@ -256,7 +259,7 @@ sub _collectLogData
 
         # Skip bad logfile lines and warn if necessary
         unless ($userName && $opName && $webName) {
-            if( $TWiki::doDebugStatistics ) {
+            if( $debug ) {
                 $session->writeDebug("Invalid log file line = '$line'");
                 $session->writeDebug("userName = '$userName'");
                 $session->writeDebug("opName = '$opName'");
@@ -275,7 +278,7 @@ sub _collectLogData
             my $noSuchTopic = $5 || "";		# Set if '(not exist)' matched
 
             unless( $topicName ) {
-                if( $TWiki::doDebugStatistics ) {
+                if( $debug ) {
                     $session->writeDebug("Invalid log file line = '$line'");
                     $session->writeDebug("userName = '$userName'");
                     $session->writeDebug("opName = '$opName'");
@@ -310,7 +313,7 @@ sub _collectLogData
             ## session->writeDebug("$topicName renamed to $newTopicWeb.$newTopicName");
 
             unless ($topicName && $newTopicWeb && $newTopicName) {
-                if( $TWiki::doDebugStatistics ) {
+                if( $debug ) {
                     $session->writeDebug("Invalid log file line (rename) = '$line'");
                     $session->writeDebug("userName = '$userName'");
                     $session->writeDebug("opName = '$opName'");
@@ -383,7 +386,7 @@ sub _processWeb {
 
     if( ! $session->{store}->webExists( $webName ) ) {
         _printMsg( "! Error: Web $webName does not exist", $session );
-        return $TWiki::mainWebname;
+        return $TWiki::cfg{UsersWebName};
     }
 
     # Handle null values, print summary message to browser/stdout
@@ -397,8 +400,8 @@ sub _processWeb {
 
     
     # Get the top N views and contribs in this web
-    my (@topViews) = _getTopList( $TWiki::statsTopViews, $webName, $viewRef );
-    my (@topContribs) = _getTopList( $TWiki::statsTopContrib, $webName, $contribRef );
+    my (@topViews) = _getTopList( $TWiki::cfg{Stats}{TopViews}, $webName, $viewRef );
+    my (@topContribs) = _getTopList( $TWiki::cfg{Stats}{TopContrib}, $webName, $contribRef );
 
     # Print information to stdout
     my $statTopViews = "";
@@ -416,7 +419,7 @@ sub _processWeb {
     # Update the WebStatistics topic
 
     my $tmp;
-    my $statsTopic = $TWiki::statisticsTopicname;
+    my $statsTopic = $TWiki::cfg{Stats}{TopicName};
     # DEBUG
     # $statsTopic = "TestStatistics";		# Create this by hand
     if( $session->{store}->topicExists( $webName, $statsTopic ) ) {

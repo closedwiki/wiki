@@ -99,7 +99,7 @@ sub _parseFormDefinition
                     $vals =~ s/\s*$//go;
                     $vals =~ s/"//go; # " would break parsing of META variables
                     if( $vals eq '$users' ) {
-                       $vals = $TWiki::mainWebname . "." . join( ", ${TWiki::mainWebname}.", ( $this->store()->getTopicNames( $TWiki::mainWebname ) ) );
+                       $vals = $TWiki::cfg{UsersWebName} . "." . join( ", ${TWiki::cfg{UsersWebName}}.", ( $this->store()->getTopicNames( $TWiki::cfg{UsersWebName} ) ) );
                     }
                     $tooltip =~ s/^\s*//go;
                     $tooltip =~ s/\s*$//go;
@@ -252,7 +252,7 @@ sub _link {
         $link =  "<a target=\"$name\" " .
                  "onclick=\"return launchWindow('$web','$name')\" " .
                  "title=\"$tooltip\" " .
-                 "href=\"".$this->{session}->{scriptUrlPath}."/view$TWiki::scriptSuffix/$web/$name\">$name</a>";
+                 "href=\"".$this->{session}->{scriptUrlPath}."/view$TWiki::cfg{ScriptSuffix}/$web/$name\">$name</a>";
     } elsif ( $tooltip ) {
         $link = "<span title=\"$tooltip\">$name</span>";
     }

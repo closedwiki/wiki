@@ -61,7 +61,7 @@ sub preview {
     if( $saveCmd ) {
         unless( $user->isAdmin()) {
             throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
-                                        "$TWiki::mainWebname.$TWiki::superAdminGroup" );
+                                        "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
         }
         $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;
     }
