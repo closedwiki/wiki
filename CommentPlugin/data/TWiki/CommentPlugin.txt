@@ -7,48 +7,53 @@ _( Discussion in TWiki:Plugins/CommentPluginDev )_
 %TOC%
 ---+ Features
 
-Inserts an edit box into the page that allows users to type in and save comments. Comments can be made:
-	* in different formats (as defined by a template). 
-	* in both forward and reverse chronological order.  
-	* signed or unsigned, dated or undated (as defined by a template).
-	* In other topics, or other positions within the current topic, as specified by a standard TWiki anchor.
+Inserts an edit box into the page that allows users to type in and save comments. Comments can be made
+	* in different formats (as defined by a template),
+	* in both forward and reverse chronological order,  
+	* signed or unsigned, dated or undated (as defined by a template),
+	* in other topics, or other positions within the current topic.
 
 ---+ Syntax Rules
 
 Write the command =%<nop>COMMENT{= _attributes_ =}%= anywhere in a TWiki topic.
 
-Only three attributes are [[#MoreAttrs][recognised]]
+#StandardAttrs
+The following attributes are [[#MoreAttrs][recognised]]
 	| *Name* | *Description* |
-	| =target= | (Optional) Name of the topic to add the comment to. Defaults to the current topic. |
-	| =type= | This is the name of the template to use for this comment. Comment templates are defined in a TWiki template - see [[#TemPlates][Customisation]], below. If this attribute is not defined, the type is whatever is defined by COMMENTPLUGIN_DEFAULT_TYPE, either in this topic or in your WebPreferences. By default this is 'bottom'. |
-	| =location= | (Optional) Regular expression specifying the comment location in the target topic. Read _carefully_ below! |
+	| =type= | (Required) This is the name of the template to use for this comment. Comment templates are defined in a TWiki template - see [[#TemPlates][Customisation]], below. If this attribute is not defined, the type is whatever is defined by COMMENTPLUGIN_DEFAULT_TYPE, either in this topic or in your WebPreferences. By default this is 'bottom'. |
+	| =target= | Name of the topic to add the comment to. Defaults to the current topic. |
+	| =location= | Regular expression specifying the comment location in the target topic. Read _carefully_ below! |
+	| =mode= | For compatability with older versions only, synonymous with =type= |
 
----++ Locating the comment
+---++ Positioning the comment
 =%COMMENT= supports several ways to specify _where_ a comment should be inserted in the target topic. This is referred to as the _location_ of the comment.
 
+---+++ Location relative to <code>%COMMENT</code> tag
 The default _location_ is the =%COMMENT= tag itself. For example:
 <verbatim>
 %COMMENT{type="below"}%
 </verbatim>
-will add comments in the current topic, directly below the COMMENT tag.
+will add comments in the current topic, directly below the =%COMMENT= tag.
 
+---+++ Location relative to a TWiki anchor
 The =target= attribute may specify a web, and may also specify an anchor within the target topic; for example, 
 <verbatim>
 %COMMENT{type="above" target="%MAINWEB%.PersonalRemarks#InsertHere"}%
 </verbatim>
 This uses a standard TWiki in-topic anchor as the insertion location. See %TWIKIWEB%.TextFormattingRules for more about TWiki anchors.
 
-Getting more sophisticated, you can also specify a regular expression for the target location using the =location+ parameter. The regular expression is searched for in the target topic, and the comment inserted relative to the string that the RE matched. For example,
+---+++ Location relative to an arbitrary text string
+Getting more sophisticated, you can also specify a regular expression for the target location using the =location= parameter. The target topic is searched for the regular expression, and the comment inserted relative to the string that the search matched. For example,
 <verbatim>
 %COMMENT{type="above" location="Flights of Fancy"}%
 </verbatim>
-will place comments above the first occurence of the string =Flights of Fancy" in the current topic. *Warning* of course, if a user's comment contains the string "Flights of Fancy" they will and up _changing the location_ for the next comment, so be careful how you specify locations! The RE is matched using perl "multiple line" mode, so ^ and $ match the start of a line and the end of a line respectively.
+will place comments above the first occurence of the string =Flights of Fancy= in the current topic.
 
-If you specify an anchor _and_ a =location_, the anchor will be ignored.
+*Warning* of course, if a user's comment contains the string "Flights of Fancy" they may and up _changing the location_ for the next comment! Also, if you use a tag in the location, then you've just inserted another tag in the page that contains the =%COMMENT=! So be very careful how you specify the RE for =location=. Note that the RE is matched using perl "multiple line" mode, so ^ and $ match the start of a line and the end of a line respectively.
 
-*Note* remember if you use a tag in the location, then you've just inserted another tag in your page. So only reference a portion of the tag -- instead of referencing "< sectionedit >", reference just "< sectioned".
+If you specify an anchor _and_ a =location=, the anchor will be ignored.
 
---++ Default templates
+---++ Default templates
 A set of default comment templates are shipped with the plugin. These are:
 | *Template type* | *Description* |
 | =top= | Comments, signed and dated, added at top of the topic (the anchor is ignored) |
@@ -56,55 +61,58 @@ A set of default comment templates are shipped with the plugin. These are:
 | =above= | Comments, signed and dated, added immediately before the target anchor, or the =%COMMENT= if no anchor is specified |
 | =below= | Comments, signed and dated, added immediately below the target anchor, or the =%COMMENT= if no anchor is specified |
 | =tableprepend= | Comments, signed and dated, formatted as an HTML table row, added below the anchor (which must be in an HTML &lt;table>) |
-| =tableappend= | Comments, signed and dated, formatted as an HTML table row, added above the anchor (which must be in an HTML &lt;table)) |
+| =tableappend= | Comments, signed and dated, formatted as an HTML table row, added above the anchor (which must be in an HTML &lt;table>) |
 
-*Note* that the =above= and =below= templates normally place comments relative to the anchor specified in the %COMMENT. If specified, the anchor *must* exist in the target topic, or the comment will be ignored. If no anchor is specified in the %COMMENT, and the comment is being posted to the current topic, the comment will be placed relative to the %COMMENT. If no anchor is defined, and the comment is being posted to another topic, it is *undefined* where the comments will end up!
-
-Your local installation may add more template types as well - see 'Customisation', below.
-
-*Note* that if the =target= parameter is used, and the %<nop>WEB% and %<nop>TOPIC% parameters are referred to in the template, they will be expanded to the web/topic where the *%COMMENT* was seen, not the web/topic of the target.
+Your local installation may add more template types as well - see [[#TemPlates][Customisation]], below.
 
 #TemPlates
 ---+ Customisation
-Customisation of the comment plugin requires write access to the templates directory and some familiarity with the TWiki templating language. See %TWIKIWEB%.TWikiTemplates for more information.
+Customisation of the comment plugin requires
+	* familiarity with HTML forms,
+	* write access to the templates directory,
+	* some familiarity with the [[%TWIKIWEB%.TWikiTemplates][TWiki templating language]].
 
-The plugin picks up its templates from a standard TWiki template file. This allows different templates to be defined for different TWiki skins.
+The plugin picks up its templates from a standard TWiki template file, named "comments". This allows different templates to be defined for different TWiki skins.
 
-To define a comment type, you have to provide three simple template definitions in the template file; one for the prompt box, one for the generated output, and one to indicate where in the file to put the generated output. If we have a template type "mytype", these are named "PROMPTmytype" and "OUTPUTmytype" respectively. See 'comments.tmpl' in the templates directory for examples.
+To define a comment type, you have to provide two simple template definitions in the template file; one for the prompt box, and one for the generated output. If we have a template type "mytype", these are named =PROMPT:mytype= and =OUTPUT:mytype= respectively. See =comments.tmpl= in the templates directory for examples.
 
-The PROMPT definition defines the contents of an HTML form that is used to capture the comment. Parameters to the comment generator are defined using standard HTML input fields, such as =input=, =textarea= and =select=. The user enters values for these parameters that are then available when the OUTPUT template is expanded, in the form of %<nop>URLPARAM%s.
+---++ The =PROMPT= template
+The =PROMPT= template defines the contents of an HTML form that is used to capture the comment. This form invokes the comment generator when submitted. Parameters to the comment generator are defined using standard HTML input fields, such as =input=, =textarea= and =select=. The user enters values for these parameters, and these are then available when the =OUTPUT= template is expanded, in the form of <code>%<nop>URLPARAM%</code>s.
+
+Only the input fields of the form need be defined. The plugin automatically generates the <code>&gt;form&lt;</code> and <code>&gt:/form&lt;</code> tags. *Note* that you must define a "submit" button if you want the form to work!
 
 #MoreAttrs
-If an attribute is given to the %COMMENT that is not one of the standard attributes, then that attribute is taken as the name of a parameter to the PROMPT template. Expressions in the template of the form <code>%</code><i>param</i><code>|</code><i>default</i><code>%</code> (e.g. <code>%rows|3%</code>, <code>%button|Push me%</code>) are expanded to the values given in the %COMMENT. For example, if the PROMPT template 'example' contains:
+If an attribute is given to the =%COMMENT= tag that is not one of the [[#StandardAttrs][standard attributes]], then that attribute is taken as the name of a parameter to be expanded in the =PROMPT= template. Expressions in the template of the form <code>%</code><i>param</i><code>|</code><i>default</i><code>%</code> (e.g. <code>%rows|3%</code>, <code>%button|Push me%</code>) are expanded to the values given in the <code>%COMMENT</code>. For example, if the =PROMPT= template 'example' contains:
 <pre>
-&lt;textarea rows=%rows|3 cols="%cols|50%">
+&lt;textarea rows=%rows|3% cols="%cols|50%" value="%tval|Rubbish%">
 </pre>
 and the %COMMENT tag is:
 <pre>
-%<nop>COMMENT{type="example" rows="5"}%
+%<nop>COMMENT{type="example" rows="5" cols="20"}%
 </pre>
 then the template will be expanded as
 <pre>
-&lt;textarea rows=5 cols="50">
+&lt;textarea rows=5 cols="20" value="Rubbish">
 </pre>
 
-As well as all the usual support for variables in templates, the following special variables are supported in the PROMPT definition:
+As well as support for all the usual TWiki variables in templates, the following special variables are supported in the =PROMPT= definition:
     | *Variable* | *Description* |
     | =%<nop>MESSAGE%= | A helpful generated message, either a lock message or a reminder to refresh. |
     | =%<nop>DISABLED%= | Set to 'disabled' when you cannot comment (see [[#HandlingPageLock][Important Note regarding Locks]], below). |
 
-The OUTPUT template definition defines the format for the text that actually gets embedded into the topic. There are four position tags that are used to indicate where in the file the comment should be placed:
+---++ The =OUTPUT= template
+The =OUTPUT= template defines the format for the text that actually gets embedded into the topic. All the usual TWiki variables are available in the =PROMPT= definition, but note that they get expanded _when the comment is inserted in the text_, so time, date and username will refer to the time and date when the comment was made and the user who made it.
 
-    | =%<nop>POS:TOP%= | If present, comments will be inserted at the top of the topic |
-    | =%<nop>POS:BOTTOM%= | If present, comments will be inserted at the end of the topic |
-    | =%<nop>POS:BEFORE%= | If present, comments will be inserted *immediately before* the =%<nop>COMMENT%= tag |
-    | =%<nop>POS:AFTER%= | If present, comments will be inserted *immediately after* the =%<nop>COMMENT%= tag |
-Note that these position tags are obviously mutually exclusive. If you define more than one, the result is undefined. If none is present, the default is =%<nop>POS_BOTTOM%=.
+There are also four position tags that are used to indicate where the comment should be placed, relative to the =location= defined in the =%COMMENT= tag:
 
-Note that TWiki variables in the OUTPUT definition get expanded when the comment is inserted in the text; so time, date and username will refer to the time and date the comment was made and the user who made it.
+    | =%<nop>POS:TOP%= | If present, comments will be inserted *at the top of the topic* i.e. before any other text |
+    | =%<nop>POS:BOTTOM%= | If present, comments will be inserted *at the end of the topic* i.e. after all existing text |
+    | =%<nop>POS:BEFORE%= | If present, comments will be inserted <b>immediately before the =%<nop>COMMENT%= tag</b> |
+    | =%<nop>POS:AFTER%= | If present, comments will be inserted <b>immediately after the =%<nop>COMMENT%= tag</b> |
+Note that these position tags are obviously mutually exclusive. If you define more than one, the result is undefined. If none is present, the default is taken from the plugin setting =DEFAULT_TYPE=
 
----++ _Caveat emptor_
-When you write templates, always make sure that the expansion of URLs cannot result in TWiki content (such as Set statements) that could compromise the security of your site. The default templates are written so that it's impossible to embed Set statements using them, by always prepending a sash '-' to inserted comments.
+---++ <i>Cave canem</i> (beware of the dog!)
+When you write templates, always make sure that the expansion of URLs cannot result in TWiki content (such as =Set= statements) that could compromise the security of your site. The default templates are written so that it's impossible to embed Set statements using them, by always prepending a hyphen '-' to inserted comments.
 
 #HandlingPageLock
 ---+ Important Note regarding Locks
@@ -115,21 +123,19 @@ Note that if the page was read long time ago, it's possible that page was locked
 	* *Cancel* - throw away your comment and return to viewing the page.
 	* *Back* - *WARNING* some browsers might requery the page and *lose* your comments - so test how your browser behaves before using the Back button.
 
-To help avoid edit conflict, a reminder to refresh the page before entering comments is the default text for a =%COMMENT=
+To help avoid edit conflict, a reminder to refresh the page before entering comments is the default text for a =%COMMENT=. When the target page is known to be locked, the =PROMPT= form is automatically disabled.
 
 ---+ Settings
-
 	* Description:
-		* Set SHORTDESCRIPTION = Allows users to quickly post comments to a page without edit/preview/save cycle.
-	* "please refresh" message to help prevent edit conflict
+		* Set SHORTDESCRIPTION = Allows users to quickly post comments to a page without an edit/preview/save cycle.
+	* Message to help prevent edit conflict
 		* Set REFRESH = Remember to refresh before you comment
 	* templates
 		* Set TEMPLATES = comments
-	* default template type
-		* Set DEFAULT_TYPE = below
+	* default template type (if not present, defaults to "bottom")
+		* Set DEFAULT_TYPE = bottom
 		
 ---+ Plugin Installation Instructions
-
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	| *File:* | *Description:* |
@@ -149,8 +155,8 @@ If installed correctly, you should see a some =%COMMENT= edit boxes below here.
 %COMMENT{type="bottom" target="Trash.Comments"}%
 ----
 
----+ Known problems
----++ Use of unpublished functions and variables
+---++ Known problems
+---+++ Use of unpublished functions and variables
 The plugin uses the following unpublished TWiki variables:
 <verbatim>
 $TWiki::webNameRegex

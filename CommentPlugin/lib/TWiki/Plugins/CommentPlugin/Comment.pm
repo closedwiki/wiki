@@ -1,3 +1,9 @@
+# Comment TWiki plugin
+# Original author David Weller, reimplemented by Peter Masiar
+# and again by Crawford Currie
+#
+# This version Copyright (C) 2004 Crawford Currie
+#
 use strict;
 use integer;
 
@@ -97,7 +103,9 @@ use TWiki::Plugins::CommentPlugin::Attrs;
       if ( $target =~ s/($TWiki::anchorRegex)$//o ) {
 	$anchor = $1;
       }
-      $topic = $target;
+      if ( $target ne "" ) {
+	$topic = $target;
+      }
     }
 
     my $url = "";
