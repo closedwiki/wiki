@@ -1,3 +1,4 @@
+#!c:/perl/bin/perl -wI.
 #!/usr/bin/perl -wI.
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
@@ -18,11 +19,43 @@
 # DESCRIPTION: Test utility to see if CGI is running and enabled
 # for the bin directory
 
+use CGI;
+use CGI::Carp qw( fatalsToBrowser );
 use lib ( '.' );
 use lib ( '../lib' );
 
+use Config; 		# Perl's configuration details
+
+# use strict;		# Recommended for mod_perl, enable for Perl 5.6.1
+# use diagnostics;	# Debug only
+
+package TWiki;
+
+
+&main;
+
+
+
+sub main() {
+
+my $perlverRequired = 5.005;
+my $rcsverRequired = 5.7;
+
+my @requiredMods = ( 
+	'CGI', 
+	'CGI::Carp', 
+	'File::Copy', 
+   );
+my @requiredModsWindows = ( 
+	'Digest::SHA1', 
+	'MIME::Base64', 
+	'Net::SMTP',
+   );
+
 open(STDERR,'>&STDOUT'); # redirect error to browser
 $| = 1;                  # no buffering
+
+
 print "Content-type: text/html\n\n";
 print <<EOM;
 <html>
@@ -33,41 +66,201 @@ Read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationNotes">TW
 <h3>Environment variables:</h3>
 <table>
 EOM
+my $key;
 for $key ( sort keys %ENV ) {
     print "<tr><th align=\"right\">$key</th><td>$ENV{$key}</td></tr>\n";
 }
 print <<EOM;
 </table>
-<h3>CGI User and Group:</h3>
+<h3>CGI Setup:</h3>
 <table>
 EOM
-my $usr = getpwuid( $< );
+
+my $query;
+if (!defined ($query)) { $query = new CGI; }
+
+
+# read the TWiki configuration early - includes OS detection
+do "TWiki.cfg";
+
+# Get Perl version - output looks neater with new variable
+my $perlvernum = $];
+my $perlver;
+if (defined $^V) {
+    $perlver = $^V;             # New in Perl 5.6.1, one byte per part
+    $perlver = ord(substr($perlver,0)) . "." . ord(substr($perlver,1))
+                                       . "." . ord(substr($perlver,2));
+} else {
+    $perlver = $perlvernum
+}
+
+ 
+
+# Detect OS in more detail, in order to get type of Perl on Windows
+my $opsys ='';
+my ($perltype, @lines);
+my $rcsver;
+unless ($opsys = $^O) {
+    require Config;
+    $opsys = $Config::Config{'osname'};
+}
+if ($opsys eq 'cygwin') {
+    $perltype = 'Cygwin';
+
+    # Get Cygwin perl-x.x package version number
+    my $pkg = `/bin/grep 'inst=[^ ]*/'perl-5 /setup.log.full 2>/dev/null`; 
+    if ($?) { 
+        $pkg = " [Can't identify package - no grep command installed]";
+	$perlver .= $pkg
+    } else {
+	# Grab the last line in case of upgrades
+	@lines = split /\n/, $pkg;
+	$pkg = $lines[ (scalar @lines) - 1 ];
+	$pkg =~ s!^.*perl/perl-!!;
+	$pkg =~ s!\.tar.*!!;
+	$perlver = $pkg;	# Use package version number, more detailed
+    }
+	
+    # Get Cygwin rcs-x.x package version number
+    $pkg = `/bin/grep 'inst=[^ ]*/'rcs-5 /setup.log.full 2>/dev/null`; 
+    if ($?) { 
+        $pkg = " [Can't identify package - no grep command installed]";
+	$rcsver = $pkg
+    } else {
+	# Grab the last line in case of upgrades
+	@lines = split /\n/, $pkg;
+	$pkg = $lines[ (scalar @lines) - 1 ];
+	$pkg =~ s!^.*rcs/rcs-!!;
+	$pkg =~ s!\.tar.*!!;
+	$rcsver = $pkg;		# Use package version number, more detailed
+    }
+
+} elsif ($opsys=~/win/i && $opsys !~ /darwin/i ) {
+    $perltype = 'ActiveState';
+    $perlver .= ", build " . Win32::BuildNumber();	# ActivePerl only
+} else {
+    $perltype = 'generic';
+}
+
+# Detect executable name suffix, e.g. .exe on Windows or '' on Unix
+my $exeSuffix='';
+if ( $Config::Config{'_exe'}) { 
+    $exeSuffix = $Config::Config{'_exe'};
+}
+
+my $thePathInfo = $query->path_info(); 
+# my $theRemoteUser = $query->remote_user();
+my $theTopic = $query->param( 'topic' );
+my $theUrl = $query->url;
+
+# Detect whether mod_perl was loaded into Apache
+my $LOAD_MOD_PERL = ( exists $ENV{'SERVER_SOFTWARE'} && 
+			  ( $ENV{'SERVER_SOFTWARE'} =~ /mod_perl/ )) && 
+					"loaded" || "not loaded";
+
+# Detect whether we are actually running under mod_perl
+# FIXME: just test for MOD_PERL, which is enough
+my $USE_MOD_PERL = ((exists $ENV{'GATEWAY_INTERFACE'}
+                  and $ENV{'GATEWAY_INTERFACE'} eq "CGI-Perl/1.1")
+                   or exists $ENV{'MOD_PERL'} ) && 
+		   "Used" || 
+		   "Not used";
+
+
+print "<tr><th align=\"right\">Operating system:</th><td>" . ucfirst(lc($OS)) . "</td></tr>\n";
+print "<tr><th align=\"right\">Perl version:</th><td>$perlver";
+print " ($perltype)" if $perltype ne 'generic';
+print "</td></tr>\n";
+if( $perlvernum < $perlverRequired ) {
+    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+    print "This version of Perl is old - upgrade to the recommended Perl $required_version.\n";
+    print "</td></tr>\n";
+}
+
+# Add to list of required modules if on Windows (FIXME: also needed for 
+# most non-Unix OSes)
+if ( $OS eq 'WINDOWS') {
+    push @requiredMods,  @requiredModsWindows;
+}
+
+# Check that each of the required Perl modules can be loaded, and
+# print its version number.
+print "<tr><th align=\"right\">Perl modules:</th><td>";
+foreach $mod (@requiredMods) {
+    eval "use $mod";
+    print "<tr><th></th><td>\n";
+    if ($@) {
+	print "<b><font color=\"red\">Warning:</font></b> ";
+	print "'$mod' not installed - check TWiki documentation to see if this is required.\n";
+	print "</td></tr>\n";
+    } else {
+	my $mod_version = $ {"$ {mod}::VERSION"};
+        print "$mod ($mod_version)";
+	print "</td></tr>\n";
+    }
+    print "</td></tr>\n";
+}
+
+print "<tr><th align=\"right\">PATH_INFO:</th><td>$thePathInfo</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>";
+print "For a URL such as '$theUrl/foo/bar', ";
+print "the correct PATH_INFO is '/foo/bar', without any prefixed path ";
+print "components. Click <a href=\"$theUrl/foo/bar\">here</a> to test.";
+print "</td></tr>\n";
+print "<tr><th align=\"right\">mod_perl:</th><td>$USE_MOD_PERL for this script (mod_perl $LOAD_MOD_PERL)</td></tr>\n";
+print "<tr><th align=\"right\">RCS version:</th><td>$rcsver" if defined($rcsver);
+
+
+# print "<tr><th align=\"right\">Null device:</th><td>$nullDev</td></tr>\n";
+
+# Get userid (ActiveState or other Perl), should work on all Perl systems 
+my $usr; 
+$usr = lc( getlogin || getpwuid($<) );
+# 
+# Get group info
+my $grp = "";
+if ( $perltype eq 'Cygwin' ) {
+    foreach( split( " ", $( ) ) {
+	my $onegrp = getgrgid( $_ );
+	$grp .= " " . lc($onegrp);
+    }
+} elsif ( $perltype eq 'ActiveState' ) {
+    # Try to use Cygwin's 'id' command - may be on the path, since Cygwin
+    # is probably installed to supply ls, egrep, etc - if it isn't, give up.
+    # Run command without stderr output, to avoid CGI giving error.
+    # Get names of primary and other groups.
+    $grp = lc(qx(sh -c '( id -un ; id -gn) 2>/dev/null' 2>nul ));
+    if ($?) { 
+        $grp = "[Can't identify groups - no Cygwin 'id' or 'sh' command on path]";
+    }
+}
+
 print "<tr><th align=\"right\">User:</th><td>$usr</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is the user your cgi-bin scripts are executing.";
+print "Your CGI scripts are executing as this user.";
 print "</td></tr>\n";
 if( $usr ne "nobody" ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "Since your CGI script is not running as user <tt>nobody</tt>";
+    print "Since your CGI script is not running as user <tt>nobody</tt>, ";
     print "you need to change the locks in the *,v RCS files of the TWiki ";
     print "distribution from <tt>nobody</tt> to <tt>$usr</tt>.\n";
+    print "Otherwise, changes to topics will not be logged by RCS.\n";
     print "</td></tr>\n";
 }
-print "<tr><th align=\"right\">Member of groups:</th><td>";
-foreach( split( " ", $( ) ) {
-    $grp = getgrgid( $_ );
-    print "$grp ";
-}
+print "<tr><th align=\"right\">Member of group(s):</th><td>";
+print "$grp";
 print "</table>\n";
+
+
 
 print "<h3>Test of <tt>TWiki.cfg</tt> Configuration:</h3>\n";
 
-# read the TWiki configuration
-do "TWiki.cfg";
-
+# TWiki.cfg read earlier
 print "<table>\n";
 
+
 print "<tr><th align=\"right\">\$wikiHomeUrl:</th><td>$wikiHomeUrl</td></tr>\n";
+my $junk1 = $wikiHomeUrl; 	# Avoid warning
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is the link of the TWiki icon in the upper left corner.";
 print "</td></tr>\n";
@@ -80,7 +273,7 @@ print "</td></tr>\n";
 my $val = $ENV{"HTTP_HOST"};
 if( ! ( $defaultUrlHost =~ /$val/ ) ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "It does not match with </b>HTTP_HOST</b>";
+    print "This does not match </b>HTTP_HOST</b>";
     print "</td></tr>\n";
 }
 
@@ -91,15 +284,15 @@ print "</td></tr>\n";
 $val = $ENV{"REQUEST_URI"};
 if( ! ( $val =~ /^$scriptUrlPath/ ) ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "It does not match with </b>REQUEST_URI</b>";
+    print "This does not match </b>REQUEST_URI</b>";
     print "</td></tr>\n";
 }
 
 print "<tr><th align=\"right\">\$pubUrlPath:</th><td>$pubUrlPath</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This must be the URI of the public directory.";
-print "This is not set correctly if below ";
-print "$pubUrlPath/wikiHome.gif image is broken:<br />";
+print "This is not set correctly if the ";
+print "$pubUrlPath/wikiHome.gif image below is broken:<br />";
 print "<img src=\"$pubUrlPath/wikiHome.gif\" />";
 print "</td></tr>\n";
 
@@ -130,7 +323,7 @@ if( ! ( -e "$templateDir/view.tmpl" ) ) {
 } elsif( testFileIsWritable( "$templateDir/testenv.test" ) ) {
     # directory is writable
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "Security issue: This directory should not be writable by <b>$usr</b> user.";
+    print "Security issue: This directory should not be writable by the <b>$usr</b> user.";
     print "</td></tr>\n";
 }
 
@@ -145,7 +338,7 @@ if( ! ( -e "$dataDir" ) ) {
 } elsif( ! ( testFileIsWritable( "$dataDir/testenv.test" ) ) ) {
     # directory is not writable
     print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
-    print "This directory must be writable by <b>$usr</b> user.";
+    print "This directory must be writable by the <b>$usr</b> user.";
     print "</td></tr>\n";
 }
 
@@ -161,23 +354,39 @@ if( ! ( -e $val ) ) {
     print "</td></tr>\n";
 }
 
+my $rcsDir = $TWiki::rcsDir;	# Not clear why 'use strict' requires this.
 print "<tr><th align=\"right\">\$rcsDir:</th><td>$rcsDir</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is the directory where RCS is located.";
 print "</td></tr>\n";
-# FIXME should look for ci.exe in Windows
-if( ! ( -e "$rcsDir/ci" ) ) {
+if( ! ( -e "$rcsDir/ci$exeSuffix" ) ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "RCS program <tt>$rcsDir/ci</tt> not found. Check the path.";
+    print "RCS program <tt>$rcsDir/ci$exeSuffix</tt> not found. Check the path.";
     print "</td></tr>\n";
+} else {
+    my $rcsvernum = `$rcsDir/ci$exeSuffix -V`;
+    $rcsvernum = (split(/\s+/, $rcsvernum))[2];
+    
+    print "<tr><th align=\"right\">RCS Version:</th><td>$rcsvernum</td></tr>\n";
+    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+    print "This is the version of RCS which will be used.";
+    print "</td></tr>\n";
+    
+    if( $rcsvernum < $rcsverRequired ) {
+   print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+   print "RCS program is too old, upgrade to version $rcsverRequired or higher.";
+   print "</td></tr>\n";
+    }
+
 }
+
 # FIXME check that diff command is in path, required by ci
 
 print "<tr><th align=\"right\">\$lsCmd:</th><td>$lsCmd</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is the file list program TWiki uses to list topics.";
 print "</td></tr>\n";
-$val = $lsCmd;
+$val = $lsCmd . $exeSuffix;
 $val =~ s/([^\s]*).*/$1/go;
 if( ! ( -e $val ) ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
@@ -189,7 +398,7 @@ print "<tr><th align=\"right\">\$egrepCmd:</th><td>$egrepCmd</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is a program TWiki uses for search.";
 print "</td></tr>\n";
-$val = $egrepCmd;
+$val = $egrepCmd . $exeSuffix;
 $val =~ s/([^\s]*).*/$1/go;
 if( ! ( -e $val ) ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
@@ -201,7 +410,7 @@ print "<tr><th align=\"right\">\$fgrepCmd:</th><td>$fgrepCmd</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is a program TWiki uses for search.";
 print "</td></tr>\n";
-$val = $fgrepCmd;
+$val = $fgrepCmd . $exeSuffix;
 $val =~ s/([^\s]*).*/$1/go;
 if( ! ( -e $val ) ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
@@ -217,6 +426,8 @@ print <<EOM;
 </html>
 EOM
 exit;
+
+}
 
 # =========================
 sub testFileIsWritable
