@@ -56,6 +56,7 @@ sub main
     my $remoteUser = "";
     my $passwordA = "";
     my $passwordB = "";
+
     foreach( @paramNames ) {
         if( /^(Twk)([0-9])(.*)/ ) {
             $value = $query->param( "$1$2$3" );
@@ -66,6 +67,7 @@ sub main
             $name =~ s/(AIM)(Screen)/$1 $2/go;  # Horrible hack to space AIMScreen
             $formDataName[@formDataName] = $name;
             $formDataValue[@formDataValue] = $value;
+
             if( $name eq "Name" ) {
                 $firstLastName = $value;
             } elsif( $name eq "Wiki Name" ) {
@@ -124,8 +126,9 @@ sub main
     $wikiName =~ /(.*)/;
     $wikiName = $1;
 
-    # check if passwords are identical
-    if( $passwordA ne $passwordB ) {
+    # check if passwords are identical (or empty)
+    if ( ( $passwordA ne $passwordB ) 
+        || ( $passwordA eq "" ) ) {
         $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregpasswd" );
         TWiki::redirect( $query, $url );
         return;
@@ -140,6 +143,7 @@ sub main
 
 
     # everything OK
+#TODO: what do we have Login Name for if we don't use it for the login:password?
 
     # generate user entry and add to .htpasswd file
     if( ! $remoteUser ) {
