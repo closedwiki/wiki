@@ -162,6 +162,17 @@ sub remove
 }
 
 # ===========================
+# Copy all entries of a type from another meta data set to self,
+# overwriting the own set
+sub copyFrom
+{
+    my( $self, $otherMeta, $type ) = @_;
+
+    my $data = $otherMeta->{$type};
+    $self->{$type} = $data if( $data );
+}
+
+# ===========================
 # Number of entries of a given type
 sub count
 {
