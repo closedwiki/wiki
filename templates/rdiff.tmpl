@@ -8,7 +8,7 @@
 </head>
 <body bgcolor="#ffffff">
 #PageTop
-<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEBURLENCODED%/">
+<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%URLENCODE{"%WEB%/%TOPIC%"}%">
 %TMPL:DEF{"titleaction"}%(%REVTITLE2% vs. %REVTITLE1%)%TMPL:END%
 %TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
 %TMPL:P{"standardheader"}%

@@ -1738,6 +1738,8 @@ sub handleUrlParam
 }
 
 # =========================
+# Encode 8-bit-set characters for use in URLs (not using UTF8 URL
+# encoding by browser)
 sub handleUrlEncode
 {
     my( $theStr, $doExtract ) = @_;
@@ -1748,6 +1750,7 @@ sub handleUrlEncode
     $theStr =~ s/\&/\%26/g;
     $theStr =~ s/\</\%3C/g;
     $theStr =~ s/\>/\%3E/g;
+    $theStr =~ s/([\x7f-\xff])/'%' . unpack( "H*", $1 ) /ge;
 
     return $theStr;
 }
@@ -1789,7 +1792,7 @@ sub handleInternalTags
     # $_[2] is web
 
     # Make Edit URL unique for every edit - fix for RefreshEditPage
-    $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit$scriptSuffix/%WEBURLENCODED%/%TOPICURLENCODED%\?t=".time()!geo;
+    $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit$scriptSuffix/%URLENCODE{\"%WEB%/%TOPIC%\"}%\?t=" . time()!ge;
 
     $_[0] =~ s/%NOP{(.*?)}%/$1/gs;  # remove NOP tag in template topics but show content
     $_[0] =~ s/%NOP%/<nop>/g;
@@ -1801,7 +1804,8 @@ sub handleInternalTags
     $_[0] =~ s/%REMOTE_PORT%/&handleEnvVariable('REMOTE_PORT')/ge;
     $_[0] =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/ge;
 
-    # Un-encoded topic and web names
+    # Un-encoded topic and web names. Note: In form action, URL encode variables 
+    # that might have 8-bit characters with %URLENCODE{"%TOPIC%"}%
     $_[0] =~ s/%TOPIC%/$_[1]/g;
     $_[0] =~ s/%BASETOPIC%/$topicName/g;
     $_[0] =~ s/%INCLUDINGTOPIC%/$includingTopicName/g;
@@ -1809,15 +1813,6 @@ sub handleInternalTags
     $_[0] =~ s/%WEB%/$_[2]/g;
     $_[0] =~ s/%BASEWEB%/$webName/g;
     $_[0] =~ s/%INCLUDINGWEB%/$includingWebName/g;
-
-    # I18N: URL encoded topic and web names for use in form submission URLs with
-    # topics/webs that have 8-bit characters in name.
-    $_[0] =~ s/%TOPICURLENCODED%/&urlEncode($_[1])/ge;
-    $_[0] =~ s/%BASETOPICURLENCODED%/&urlEncode($topicName)/g;
-    $_[0] =~ s/%INCLUDINGTOPICURLENCODED%/&urlEncode($includingTopicName)/g;
-    $_[0] =~ s/%WEBURLENCODED%/&urlEncode($_[2])/ge; 
-    $_[0] =~ s/%BASEWEBURLENCODED%/&urlEncode($webName)/ge;
-    $_[0] =~ s/%INCLUDINGWEBURLENCODED%/&urlEncode($includingWebName)/ge;
 
     $_[0] =~ s/%CHARSET%/$siteCharset/g;
 
@@ -2316,21 +2311,10 @@ sub makeAnchorName
     # causes some anchors to collide, a consistent 8-bit-to-7-bit
     # alphabetic character mapping could be defined to minimise this issue.  
     $anchorName =~ s/([\x7f-\xff])/_/g;		# Map 8-bit chars
-    ##$anchorName =~ urlEncode( $anchorName );	# Was doing URL-encode 
+    ##$anchorName =~ handleUrlEncode( $anchorName );	# Was doing URL-encode 
 
     return $anchorName;
 }
-
-# =========================
-# Encode 8-bit-set characters for use in URLs (not using UTF8 URL
-# encoding by browser)
-sub urlEncode {
-    my ($url) = @_;
-
-    $url =~ s/([\x7f-\xff])/'%' . unpack( "H*", $1 ) /ge;
-    return $url;
-}
-
 
 # =========================
 sub internalLink {
