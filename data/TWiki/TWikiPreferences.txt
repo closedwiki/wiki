@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1091680245" format="1.0" version="1.68"}%
+%META:TOPICINFO{author="PeterThoeny" date="1091946708" format="1.0" version="1.69"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), __topic level__ (the topic being rendered), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -17,7 +17,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set WEBBGCOLOR = #C0C0C0
 
 	* Copyright notice:
-		* Set WEBCOPYRIGHT = <font size="-2">Copyright &copy; 1999-%GMTIME{"$year"}% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%WEB%.%TOPIC%">Send feedback</a>. </font>
+		* Set WEBCOPYRIGHT = Copyright &copy; 1999-%GMTIME{"$year"}% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%WEB%.%TOPIC%">Send feedback</a>
 
 	* Simplified Copyright notice for the WebRss feed (don't use any special characters or xml tags
 		* Set WEBRSSCOPYRIGHT = Copyright %GMTIME{"$year"}% by contributing authors
@@ -94,7 +94,8 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* #Set BROADCASTMESSAGE = <table border="0" cellpadding="3" cellspacing="0" width="100%"><tr><td bgcolor="yellow"><font color="red"><strong>NOTE:</strong></font><font size="-1">
 		  Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled %WIKITOOLNAME% maintenance.
 		  </font></td></tr></table>
-
+		* If you use PatternSkin:
+		* #Set BROADCASTMESSAGE = <div class="twikiBroadcastMessage"> *NOTE:* Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled %WIKITOOLNAME% maintenance.</div>
 
 ---+++ Search Settings
 
@@ -167,21 +168,9 @@ The following are __site-level__ settings that affect all users in all webs on t
 ---+++ PatternSkin
 
 	* Using attachments for styles 
-		* #Set TWIKILAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/layout.css
-		* #Set TWIKISTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/style.css
+		* Set TWIKILAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/layout.css
+		* Set TWIKISTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/style.css
 
-	* Using topics to define styles - these settings will override attachment style settings above -
-		* Default TWiki CSS styling topics where layout and style are are defined:
-			* #Set TWIKILAYOUTTOPIC = %TWIKIWEB%.TWikiLayout
-			* #Set TWIKISTYLETOPIC = %TWIKIWEB%.TWikiStyle
-		* CSS styling topics to be defined in local webs or in user topics (these can complement or override default TWiki style topics):
-			* Set LAYOUTTOPIC = 
-			* Set STYLETOPIC = 
-		* Use the CSS TOPIC setting above to build the URLS used in the templates
-			* #Set TWIKILAYOUTURL = %RELATIVETOPICPATH{%TWIKILAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css
-			* #Set TWIKISTYLEURL = %RELATIVETOPICPATH{%TWIKISTYLETOPIC%}%?skin=text&amp;contenttype=text/css
-			* #Set USERLAYOUTURL = %RELATIVETOPICPATH{%USERLAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css
-			* #Set USERSTYLEURL = %RELATIVETOPICPATH{%USERSTYLETOPIC%}%?skin=text&amp;contenttype=text/css
 
 ---+++ DragonSkin
 
