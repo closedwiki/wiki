@@ -1,0 +1,4 @@
+. SETTINGS
+
+cd $TWIKIROOT
+tar zxvf $TWIKISTAGE/$PLUGINNAME.tar.gz "./lib/TWiki/Plugins/$PLUGINNAME*" "./data/TWiki/$PLUGINNAME*" "./pub/TWiki/$PLUGINNAME/*"

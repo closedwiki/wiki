@@ -1,0 +1,9 @@
+export CVSUSER=mrjc
+export TWIKIROOT=~/www/twiki
+export TWIKISTAGE=$TWIKIROOT/stage
+
+if [ ! -d "$TWIKISTAGE" ]
+then
+   print "Stage directory '$TWIKISTAGE' does not exist"
+   exit
+fi

@@ -1,0 +1,8 @@
+
+. SETTINGS
+
+export CVS_RSH=ssh
+export PLUGINNAME=EncryptedPagesPlugin
+export CVSROOT=mrjc@cvs.twikiplugins.sourceforge.net:/cvsroot/twikiplugins
+
+cd "$TWIKISTAGE" && cvs export -f -r HEAD twikiplugins/$PLUGINNAME
