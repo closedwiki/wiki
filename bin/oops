@@ -71,7 +71,7 @@ sub main
 
     $tmplData = &TWiki::handleCommonTags( $tmplData, $topic );
     $tmplData = &TWiki::getRenderedVersion( $tmplData );
-    $tmplData =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags (PTh 06 Nov 2000)
+    $tmplData =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
     TWiki::writeHeader( $query );
     print $tmplData;

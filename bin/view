@@ -269,7 +269,7 @@ sub main
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/%MAXREV%/1.$maxrev/go;
     $tmpl =~ s/%CURRREV%/1.$rev/go;
-    $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags (PTh 06 Nov 2000)
+    $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> tags (PTh 06 Nov 2000)
 
     # check access permission
     my $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );

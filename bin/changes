@@ -76,7 +76,7 @@ sub main
     my $after = "";
     ( $before, $text, $after) = split( /%REPEAT%/, $text );
     &TWiki::writeHeader( $query );
-    $before =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags
+    $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;  # remove <nop> and <noautolink> tags
     print $before;
 
     foreach( reverse split( /\n/, $changes ) ) {
@@ -104,7 +104,7 @@ sub main
             $summary = &TWiki::Store::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );
             $summary = &TWiki::makeTopicSummary( $summary, $bar[0], $webName );
             $foo =~ s/%TEXTHEAD%/$summary/go;
-            $foo =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags
+            $foo =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
             print $foo;
             $exclude{ $bar[0] } = "1";
         }
@@ -115,6 +115,6 @@ sub main
         &TWiki::Store::writeLog( "changes", $webName, "" );
     }
 
-    $after =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags
+    $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
     print $after;
 }
