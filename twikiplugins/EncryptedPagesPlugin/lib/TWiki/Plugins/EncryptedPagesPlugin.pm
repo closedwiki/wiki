@@ -104,6 +104,7 @@ sub outsidePREHandler
 
     $_[0] =~ s/$prefixPattern(.*)$postfixPattern/$replacementText/geo;
     my $key= $1;
+    $replacementText = expandCommonVariables( $replacementText);
     $_[0] =~ s/--!!--/$key/geo;
 }
 
