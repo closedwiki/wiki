@@ -11,7 +11,9 @@ print <<EOM;
 <html>
 <head><title>Test the CGI environment</title></head>
 <body>
-<h1>Test the CGI environment</h1>
+<h1>Test the CGI environment for TWiki</h1>
+Read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationNotes">TWikiInstallationNotes</a>.
+<h3>Environment variables:</h3>
 <table>
 EOM
 for $key ( sort keys %ENV ) {
@@ -19,7 +21,226 @@ for $key ( sort keys %ENV ) {
 }
 print <<EOM;
 </table>
+<h3>CGI User and Group:</h3>
+<table>
+EOM
+my $usr = getpwuid( $< );
+print "<tr><th align=\"right\">User:</th><td>$usr</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is the user your cgi-bin scripts are executing.";
+print "</td></tr>\n";
+if( $usr ne "nobody" ) {
+    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+    print "Since your CGI script is not running as user <tt>nobody</tt>";
+    print "you need to change the locks in the *,v RCS files of the TWiki ";
+    print "distribution from <tt>nobody</tt> to <tt>$usr</tt>.\n";
+    print "</td></tr>\n";
+}
+print "<tr><th align=\"right\">Member of groups:</th><td>";
+foreach( split( " ", $( ) ) {
+    $grp = getgrgid( $_ );
+    print "$grp ";
+}
+print "</table>\n";
+
+print "<h3>Test of <tt>wikicfg.pm</tt> Configuration:</h3>\n";
+
+# read the TWiki configuration
+do "wikicfg.pm";
+
+print "<table>\n";
+
+print "<tr><th align=\"right\">\$wikiHomeUrl:</th><td>$wikiHomeUrl</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is the link of the TWiki icon in the upper left corner.";
+print "</td></tr>\n";
+
+print "<tr><th align=\"right\">\$defaultUrlHost:</th><td>$defaultUrlHost</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This must be the protocol and host part (with optional port number) of ";
+print "the TWiki URL.";
+print "</td></tr>\n";
+my $val = $ENV{"HTTP_HOST"};
+if( ! ( $defaultUrlHost =~ /$val/ ) ) {
+    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+    print "It does not match with </b>HTTP_HOST</b>";
+    print "</td></tr>\n";
+}
+
+print "<tr><th align=\"right\">\$scriptUrlPath:</th><td>$scriptUrlPath</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This must be the URI of the TWiki cgi-bin directory.";
+print "</td></tr>\n";
+$val = $ENV{"REQUEST_URI"};
+if( ! ( $val =~ /^$scriptUrlPath/ ) ) {
+    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+    print "It does not match with </b>REQUEST_URI</b>";
+    print "</td></tr>\n";
+}
+
+print "<tr><th align=\"right\">\$pubUrlPath:</th><td>$pubUrlPath</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This must be the URI of the public directory.";
+print "This is not set correctly if below ";
+print "$pubUrlPath/wikiHome.gif image is broken:<br>";
+print "<img src=\"$pubUrlPath/wikiHome.gif\">";
+print "</td></tr>\n";
+
+print "<tr><th align=\"right\">\$pubDir:</th><td>$pubDir</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is the public directory, as seen from the file system. ";
+print "It must correspond to <b>\$pubUrlPath</b>.";
+print "</td></tr>\n";
+if( ! ( -e "$pubDir/wikiHome.gif" ) ) {
+    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
+    print "Directory does not exist or file <tt>wikiHome.gif</tt> does not exist in this directory.";
+    print "</td></tr>\n";
+} elsif( ! ( testFileIsWritable( "$pubDir/testenv.test" ) ) ) {
+    # directory is not writable
+    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
+    print "This directory is not writable by <b>$usr</b> user.";
+    print "</td></tr>\n";
+}
+
+print "<tr><th align=\"right\">\$templateDir:</th><td>$templateDir</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is the TWiki template directory, as seen from the file system. ";
+print "</td></tr>\n";
+if( ! ( -e "$templateDir/view.tmpl" ) ) {
+    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
+    print "Directory does not exist or file <tt>view.tmpl</tt> does not exist in this directory.";
+    print "</td></tr>\n";
+} elsif( testFileIsWritable( "$templateDir/testenv.test" ) ) {
+    # directory is writable
+    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+    print "Security issue: This directory should not be writable by <b>$usr</b> user.";
+    print "</td></tr>\n";
+}
+
+print "<tr><th align=\"right\">\$dataDir:</th><td>$dataDir</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is the data directory where TWiki stores all topics.";
+print "</td></tr>\n";
+if( ! ( -e "$dataDir" ) ) {
+    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
+    print "Directory does not exist.";
+    print "</td></tr>\n";
+} elsif( ! ( testFileIsWritable( "$dataDir/testenv.test" ) ) ) {
+    # directory is not writable
+    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
+    print "This directory must be writable by <b>$usr</b> user.";
+    print "</td></tr>\n";
+}
+
+print "<tr><th align=\"right\">\$mailProgram:</th><td>$mailProgram</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is the mail program TWiki uses to send mail.";
+print "</td></tr>\n";
+$val = $mailProgram;
+$val =~ s/([^\s]*).*/$1/go;
+if( ! ( -e $val ) ) {
+    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+    print "Mail program <tt>$val</tt> not found. Check the path.";
+    print "</td></tr>\n";
+}
+
+print "<tr><th align=\"right\">\$rcsDir:</th><td>$rcsDir</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is the directory where RCS is located.";
+print "</td></tr>\n";
+if( ! ( -e "$rcsDir/ci" ) ) {
+    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+    print "RCS program <tt>$rcsDir/ci</tt> not found. Check the path.";
+    print "</td></tr>\n";
+}
+
+print "<tr><th align=\"right\">\$lsCmd:</th><td>$lsCmd</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is the file list program TWiki uses to list topics.";
+print "</td></tr>\n";
+$val = $lsCmd;
+$val =~ s/([^\s]*).*/$1/go;
+if( ! ( -e $val ) ) {
+    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+    print "List program <tt>$val</tt> not found. Check the path.";
+    print "</td></tr>\n";
+}
+
+print "<tr><th align=\"right\">\$egrepCmd:</th><td>$egrepCmd</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is a program TWiki uses for search.";
+print "</td></tr>\n";
+$val = $egrepCmd;
+$val =~ s/([^\s]*).*/$1/go;
+if( ! ( -e $val ) ) {
+    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+    print "Search program <tt>$val</tt> not found. Check the path.";
+    print "</td></tr>\n";
+}
+
+print "<tr><th align=\"right\">\$fgrepCmd:</th><td>$fgrepCmd</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is a program TWiki uses for search.";
+print "</td></tr>\n";
+$val = $fgrepCmd;
+$val =~ s/([^\s]*).*/$1/go;
+if( ! ( -e $val ) ) {
+    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+    print "Search program <tt>$val</tt> not found. Check the path.";
+    print "</td></tr>\n";
+}
+
+print "</table>\n";
+
+print <<EOM;
+</pre>
 </body>
 </html>
 EOM
 exit;
+
+# =========================
+sub testFileIsWritable
+{
+    my( $name ) = @_;
+    my $txt1 = "test 1 2 3";
+    deleteTestFile( $name );
+    writeTestFile( $name, $txt1 );
+    my $txt2 = readTestFile( $name );
+    deleteTestFile( $name );
+    my $identical = ( $txt2 eq $txt1 );
+    return $identical;
+}
+
+# =========================
+sub readTestFile
+{
+    my( $name ) = @_;
+    my $data = "";
+    undef $/; # set to read to EOF
+    open( IN_FILE, "<$name" ) || return "";
+    $data = <IN_FILE>;
+    $/ = "\n";
+    close( IN_FILE );
+    return $data;
+}
+
+# =========================
+sub writeTestFile
+{
+    my( $name, $text ) = @_;
+    if( open( FILE, ">$name" ) ) {
+        print FILE $text;
+        close( FILE);
+    }
+}
+
+# =========================
+sub deleteTestFile
+{
+    my( $name ) = @_;
+    if( -e $name ) {
+        unlink $name;
+    }
+}
+
