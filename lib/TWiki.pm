@@ -322,7 +322,7 @@ sub initialize
     ##writeDebug( "===== thePathInfo after cleanup = $thePathInfo" );
 
     # Get the web and topic names from PATH_INFO
-    if( $thePathInfo =~ /\/(.*)\/(.*)/ ) {
+    if( $thePathInfo =~ /\/(.*)[\.\/](.*)/ ) {
         # is "bin/script/Webname/SomeTopic" or "bin/script/Webname/"
         $webName   = $1 || "" if( ! $webName );
         $topicName = $2 || "" if( ! $topicName );
