@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "01 Dec 2003";
+$wikiversion      = "10 Dec 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1918,6 +1918,7 @@ sub handleUrlEncode
     $theStr =~ s/\+/\%2B/g;
     $theStr =~ s/\</\%3C/g;
     $theStr =~ s/\>/\%3E/g;
+    $theStr =~ s/\\/\%5C/g;
     # Encode characters with 8th bit set (ASCII-derived charsets only)
     $theStr =~ s/([\x7f-\xff])/'%' . unpack( "H*", $1 ) /ge;
 
