@@ -47,14 +47,14 @@ use File::Path qw( rmtree );
 use File::Basename;
 use Cwd qw( cwd getcwd );
 use Data::Dumper qw( Dumper );
+use URI::Escape;
 #use CPAN;
 
 my $account = "twiki";
 
 import_names();
 my $cgibin      = getcwd();
-my $project	= [ split( '/', $cgibin ) ]->[-2];	# (this script runs from cgi-bin; see what's above)
-my $tar		= $Q::tar	|| 'TWiki20040901.tar.gz';
+my $tar		= 'TWiki20040901.tar.gz';
 my $home        = "/Users/$account/Sites";
 my $tmp		= "$cgibin/tmp";
 my $htdocs	= $home . '/htdocs';
@@ -85,6 +85,7 @@ checkdir($cpan);
 ################################################################################
 # setup directory skeleton workplace
 
+print qq{<h2>TWiki</h2>\n};
 execute("tar xzf $tar -C $tmp");
 execute("cp -pr $tmp/twiki/data $dest"); execute("chmod -R 777 $dest");
 execute("cp -r $tmp/twiki/bin/* $bin; cp $tmp/twiki/bin/.htaccess.txt $bin");  execute("chmod -R 777 $bin");
@@ -147,8 +148,6 @@ execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt $dest/data/TWiki/TWikiReg
 execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt,v $dest/data/TWiki/TWikiRegistration.txt,v") or warn $!;
 
 ################################################################################
-
-#exit 0;
 
 eraseBundledPlugins();
 
@@ -381,31 +380,31 @@ foreach my $plugin ( @availPlugins )
 ################################################################################
 ### various patches/fixes/upgrades
 my @patches = (
-	       'testenv',				# make testenv a little more useful...
-	       'create-new-web-copy-attachments',	# update "create new web" to also copy attachments, not just topics
-	       'trash-attachment-button',		# a clickable link/button to (more easily) trash attachments
-	       'preview-manage-attachment',		# provide an image preview when working with attachments
-	       'ImageGallery-fix-unrecognised-formats',	# bugfixes for ImageGalleryPlugin 
-	       'PreviewOnEditPage',			# PreviewOnEditPage
-	       'InterWikiPlugin-icons',			# InterWiki icons
-	       'prefsperf',			# cdot's preferences handling performance improvements (http://twiki.org/cgi-bin/view/Codev/PrefsPmPerformanceFixes)
-	       'WikiWord-web-names',			# fix templates use of %WEB% instead of <nop>%WEB%
-	       'force-new-revision',			# add force new revision (TWiki:Codev.ForceNewRevisionCheckBox)
-	       'AttachmentVersionsBrokenOnlyShowsLast',	# view attachment v1.1 fix
+	       'macosx',				# fixes paths for gnu tools (e|f)grep
+#	       'testenv',				# make testenv a little more useful...
+#	       'create-new-web-copy-attachments',	# update "create new web" to also copy attachments, not just topics
+#	       'trash-attachment-button',		# a clickable link/button to (more easily) trash attachments
+#	       'preview-manage-attachment',		# provide an image preview when working with attachments
+#	       'ImageGallery-fix-unrecognised-formats',	# bugfixes for ImageGalleryPlugin 
+#	       'PreviewOnEditPage',			# PreviewOnEditPage
+#	       'InterWikiPlugin-icons',			# InterWiki icons
+#	       'prefsperf',			# cdot's preferences handling performance improvements (http://twiki.org/cgi-bin/view/Codev/PrefsPmPerformanceFixes)
+#	       'WikiWord-web-names',			# fix templates use of %WEB% instead of <nop>%WEB%
+#	       'force-new-revision',			# add force new revision (TWiki:Codev.ForceNewRevisionCheckBox)
+#	       'AttachmentVersionsBrokenOnlyShowsLast',	# view attachment v1.1 fix
 	       );
 
 print qq{<h2>Patches</h2>\n};
-#chdir "/Users/$account/Sites";
 foreach my $patch ( @patches )
 {
     print qq{<h3>Applying patch "$patch"</h3>\n};
-#    execute( "patch -p2 <tmp/install/downloads/patches/local/${patch}.patch" ) or warn $!;
+    execute( "patch -p1 <tmp/install/downloads/patches/local/${patch}.patch" ) or warn $!;
 }
-#chdir $install;
 
 ################################################################################
 # (NOT DONE YET, but this code was in the original mac install.pl)
 # addons
+print qq{<h2>AddOns</h2>\n};
 if ( 0 ) {
 # install addons
 chdir 'twiki/bin';
@@ -441,7 +440,7 @@ chdir '../..';
 
 print qq{<h2>Installing local webs</h2>\n};
 chdir( "tmp/install" ) or warn $!;
-my @webs = ( 'HowToThinkLikeAComputerScientistUsingPython' );
+my @webs = ();
 if ( opendir( WIKIS, "webs/local" ) )
 {
     @webs = grep { /\.wiki\.tar\.gz$/ } readdir( WIKIS );  #or warn $!; 
@@ -472,7 +471,7 @@ execute("chmod -R 777 $tmp");
 
 # a handy link to the place to go *after* the next step
 print qq{<hr><hr>\n};
-print qq{do a <tt>post-wiki.sh</tt> and then <br/><a href="http://localhost/~twiki/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
+print qq{do a <tt>./post-wiki.sh</tt> and then <br/><a href="http://localhost/~$account/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
 
 print end_html();
 
@@ -526,18 +525,20 @@ __HTML__
 
     my ($cmd) = @_;
 
-    chomp( my $output = `$cmd` );
+    chomp( my @output = `$cmd` );
     my ( $clrCommand, $clrError ) = ( ( my $error = $? ) ? qw( black red ) : qw( gray gray ) );
 
-    print qq{<a href="#" onclick="toggleDisplay('cmd$nCmd')" >cmd</a> };
+    ( my $cmdE = $cmd ) =~ s/&/&amp;/g;  $cmdE =~ s/</&lt;/g;  $cmdE =~ s/>/&gt;/g;  $cmdE =~ s/"/&quot;/g;
+    print qq{<a href="#" title="$cmdE" onclick="toggleDisplay('cmd$nCmd')" >cmd</a> };
 
     my $display = $error ? "" : "none";
     print qq{<span style="display:$display" id="cmd$nCmd" >\n};
 
-    print "<br/>[<font color=$clrError>$error</font>]: ";
-    print "<font color=$clrCommand>", pre($cmd), "</font>\n";
+    print qq{<br/>[<font color="$clrError">$error</font>]: };
+    $cmd =~ s/&/&amp;/g;  $cmd =~ s/</&lt;/g;  $cmd =~ s/>/&gt;/g;
+    print qq{<font color="$clrCommand"><pre>$cmd</pre></font>\n};
 
-    print "<pre>$output</pre>\n";
+    print join( '<br/>', @output );
 
     print "</span>\n";
 }
