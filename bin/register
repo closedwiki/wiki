@@ -2,7 +2,7 @@
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
-# Copyright (C) 1999 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2002 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,13 +27,7 @@ if( $TWiki::OS eq "WINDOWS" ) {
     require Digest::SHA1;
 }
 
-
 $query = new CGI;
-
-##### for debug only: Remove next 3 comments (but redirect does not work)
-#open(STDERR,'>&STDOUT'); # redirect error to browser
-#$| = 1;                  # no buffering
-#TWiki::writeHeader( $query );
 
 &main();
 
@@ -198,7 +192,7 @@ sub htpasswdGeneratePasswd
     # by David Levy, Internet Channel, 1997
     # found at http://world.inch.com/Scripts/htpasswd.pl.html
     if ( $TWiki::OS eq "WINDOWS" ) {
-        return $user . ':{SHA}' . MIME::Base64::encode_base64(Digest::SHA1::sha1($passwd));
+        return $user . ':{SHA}' . MIME::Base64::encode_base64( Digest::SHA1::sha1( $passwd ) );
     }
     srand( $$|time );
     my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
@@ -284,3 +278,5 @@ sub addUserToTWikiUsersTopic
     &TWiki::Store::saveTopic( $TWiki::mainWebname, $topicName, $result, $meta, "", 1 );
     return $topicName;
 }
+
+# EOF
