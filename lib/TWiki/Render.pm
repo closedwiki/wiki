@@ -1083,12 +1083,14 @@ sub renderMetaTags {
 
 Clean up TWiki text for display as plain text without pushing it
 through the full rendering pipeline. Intended for generation of
-topic and change summaries.
+topic and change summaries. Adds nop tags to prevent TWiki 
+subsequent rendering; nops get removed at the very end.
 
 Defuses TML.
 
 $opts:
-   * showvar - keeps !%VARS%
+   * showvar - shows !%VAR% names
+   * expandvar - expands !%VARS%
    * nohead - strips ---+ headings at the top of the text
 
 =cut
@@ -1098,15 +1100,20 @@ sub TML2PlainText {
     ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
 
     $opts = "" unless( $opts );
-    $text =~ s/\r//g;
+    if( $opts =~ /expandvar/ ) {
+        $text =~ s/(\%)(SEARCH){/$1<nop>$2/g; # prevent recursion
+        $text = $this->{session}->handleCommonTags( $text, $topic, $web );
+    }
+    $text =~ s/\r//g;  # SMELL, what about OS10?
     $text =~ s/%META:[A-Z].*?}%//g;  # remove meta data SMELL
 
     # Format e-mail to add spam padding (HTML tags removed later)
     $text =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . $this->_mailtoLink( $2, $3, $4 )/ge;
-    $text =~ s/<\!\-\-.*?\-\->//gs;  # remove all HTML comments
-    $text =~ s/<\!\-\-.*$//s;        # cut HTML comment
-    $text =~ s/<[^>]*>//g;           # remove all HTML tags
-    $text =~ s/\&[a-z]+;/ /g;        # remove entities
+    $text =~ s/<\!\-\-.*?\-\->//gs;     # remove all HTML comments
+    $text =~ s/<\!\-\-.*$//s;           # cut HTML comment
+    $text =~ s/<\/?nop *\/?>/${TWiki::TranslationToken}NOP/g; # save <nop>
+    $text =~ s/<[^>]*>//g;              # remove all HTML tags
+    $text =~ s/\&[a-z]+;/ /g;           # remove entities
     $text =~ s/%WEB%/$web/g;
     $text =~ s/%TOPIC%/$topic/g;
     $text =~ s/%WIKITOOLNAME%/$TWiki::cfg{WikiToolName}/g;
@@ -1116,15 +1123,18 @@ sub TML2PlainText {
     }
     unless( $opts =~ /showvar/ ) {
         # remove variables
-        $text =~ s/%[A-Z_]+%//g;     # remove %VARS%
-        $text =~ s/%[A-Z_]+{.*?}%//g;# remove %VARS{}%
+        $text =~ s/%[A-Z_]+%//g;        # remove %VARS%
+        $text =~ s/%[A-Z_]+{.*?}%//g;   # remove %VARS{}%
     }
     $text =~ s/\[\[([^\]]*\]\[|[^\s]*\s)(.*?)\]\]/$2/g; # keep only link text of [[][]]
-    $text =~ s/[\%\[\]\*\|=_\&\<\>\$]/ /g;              # remove Wiki formatting chars & defuse %VARS%
-    $text =~ s/\-\-\-+\+*\s*\!*/ /g; # remove heading formatting
-    $text =~ s/\s+[-\+]*/ /g;        # remove newlines and special chars
-    $text =~ s/^\s+//;    # remove leading whitespace
-    $text =~ s/\s+$//;    # remove trailing whitespace
+    $text =~ s/[\[\]\*\|=_\&\<\>]/ /g;  # remove Wiki formatting chars
+    $text =~ s/${TWiki::TranslationToken}NOP/<nop>/g;  # restore <nop>
+    $text =~ s/\%(\w)/\%<nop>$1/g;      # defuse %VARS%
+    $text =~ s/\!(\w)/<nop>$1/g;        # escape !WikiWord escapes
+    $text =~ s/\-\-\-+\+*\s*\!*/ /g;    # remove heading formatting
+    $text =~ s/\s+[\+\-]*/ /g;          # remove newlines and special chars
+    $text =~ s/^\s+//;                  # remove leading whitespace
+    $text =~ s/\s+$//;                  # remove trailing whitespace
 
     return $text;
 }
