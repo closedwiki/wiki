@@ -283,10 +283,12 @@ static int isAccessible(DBM* db, const char* web, const char* topic,
 static int barred(char* path, char mode, const char* user,
 		   DBM* db, int monitor) {
   DBM_DATUM list;
+  int l = strlen(path);
+  int denied = 0;
 
   strcat(path, ":");
   strcat(path, " :");
-  path[strlen(path) - 2] = mode;
+  path[l + 1] = mode;
 
   /* Paranoia; deny before allow */
   if (user) {
@@ -295,43 +297,38 @@ static int barred(char* path, char mode, const char* user,
 	  fprintf(stderr,"\t%sD => %s\n", path, dump(list));
 	if (list.dptr) {
 	  /* user must not be in deny list */
-	  if (isInList(list, user, db, 0)) {
-		DBM_FREE(list);
-		return 1;
-	  }
+	  denied = (isInList(list, user, db, 0));
 	  DBM_FREE(list);
 	}
   }
 
-  list = getKey(path, "A", db);
-  if ((monitor & 4) != 0)
-	fprintf(stderr,"\t%sA => %s\n", path, dump(list));
+  if (!denied) {
+	list = getKey(path, "A", db);
+	if ((monitor & 4) != 0)
+	  fprintf(stderr,"\t%sA => %s\n", path, dump(list));
 
-  if (list.dptr) {
-	/* user must be in good list */
-	if (user == NULL || !isInList(list, user, db, 0)) {
+	if (list.dptr) {
+	  /* user must be in good list */
+	  denied = (user == NULL || !isInList(list, user, db, 0));
 	  DBM_FREE(list);
-	  return 1;
 	}
-	DBM_FREE(list);
   }
 
-  return 0;
+  path[l] = '\0';
+
+  return denied;
 }
 
 static DBM_DATUM getKey(const char* path, const char* ad, DBM* db) {
-  char *keyn;
-  DBM_DATUM key, datum;
+  static char keyn[16384];
+  DBM_DATUM key;
 
-  keyn = (char*)calloc(strlen(path) + strlen(ad) + 1, 1);
   strcpy(keyn, path);
   strcat(keyn, ad);
 
   key.dptr = keyn;
   key.dsize = strlen(keyn);
-  datum = DBM_FETCH(db, key);
-  free(keyn);
-  return datum;
+  return DBM_FETCH(db, key);
 }
 
 /**
