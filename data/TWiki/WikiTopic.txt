@@ -1,1 +1,9 @@
-A WikiTopic is one unit of information in the %WIKITOOLNAME% web. It is one web page in your browser. The name of the <nop>WikiTopic should be a WikiWord.
+%META:TOPICINFO{author="MikeMannix" date="1021185300" format="1.0" version="1.3"}%
+A WikiTopic is one unit of information in a T/Wiki web. It is more or less a universal term in the world of Wikis. Each WikiTopic is displayed as one Web page in your browser. While debate swirls in high circles of TWiki development as to whether a _topic_ should simply be called a _page_, there is a good case for the distinction: 
+	* a WikiTopic has a distinct WikiWord title that defines it; a Web page doesn't
+	* a topic's content is self-contained, doesn't spill over onto other topics; a Web page can continue a subject, book-like, across many pages
+	* particularly in TWiki, a topic has an array of features that make it distinct - attachments, relationships to other topics, classification data, independent revision control, and so on; a Web page has none of that
+
+For now, a __topic__ is used by TWiki to generate a regular Web page. 
+
+-- Main.MikeMannix - 12 May 2002
