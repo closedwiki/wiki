@@ -1,6 +1,6 @@
-# GaugePlugin for TWiki Collaboration Platform
+# GaugePlugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2002-2003 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ use vars qw(
         $defaultTrendWidth $defaultTrendHeight
     );
 
-$VERSION = '1.001';
+$VERSION = '1.002';   # 01 May 2003
 $pluginInitialized = 0;
 $perlGDModuleFound = 0;
 
@@ -364,20 +364,21 @@ sub _make_tambar_gauge
     my ( $dir, $filename ) = _make_filename("tambar", $name, $topic, $web);
 
     # Get the gauge value.
-    my $value = _get_parameter( "value", undef, $parameters);
+    my $value = _get_parameter( "value", undef, $parameters );
 
-    # Get the gauge IMG 'alt' text.  If there is no value, then use 'value'
-    # as the default;
-    my $alt = _get_parameter( "alt", $value, $parameters);
+    # Get the gauge IMG 'alt' text.  If there is no value, then use 'value' as the default;
+    my $alt = _get_parameter( "alt", $value, $parameters ) || "";
 
-    # If there is no value, then create an error graphic noting the error.
-    if( ! defined $value ) {
-        return _make_error_image("no data", $dir, $filename, $tambar_width,
-                                 $tambar_height, $parameters );
+    # clean up numerical value
+    $value =~ s/<[^>]+//g if( $value );
+    if( ( defined $value ) && ( $value =~ /^.*?([\+\-]?[0-9\.]+).*$/ ) ) {
+        $value = $1;
+    } else {
+        # If there is no numerical value, then create an error graphic noting the error
+        return _make_error_image( "no data", $dir, $filename, $tambar_width, $tambar_height, $parameters );
     }
 
-    # If this is a reverse gauge, then negate the value (leaving 'alt'
-    # alone)
+    # If this is a reverse gauge, then negate the value (leaving 'alt' alone)
     $value = -$value if( $reverseGauge );
 
     # OK, we are ready to generate the tambar gauge.
@@ -504,24 +505,30 @@ sub _make_trend_gauge
     my $trend_width = _get_parameter( "width", $defaultTrendWidth, $parameters);
     my $trend_height = _get_parameter( "height", $defaultTrendHeight, $parameters);
 
-    # Get the trend value.  If there is no value, then create an error
-    # graphic noting the error.
+    # Get the trend value.  If there is no value, then create an error graphic noting the error
     my $filename;
-    my $value = _get_parameter( "value", undef, $parameters);
-    if( ! defined $value ) {
-        $filename = "trendnd.gif";
-        $value = "no data";     # Force an understandable value in case 'alt' is not define
-    } else {
+    my $value = _get_parameter( "value", undef, $parameters );
+
+    # Get the gauge IMG 'alt' text.  If there is no value, then use 'value' as the default
+    my $alt = _get_parameter( "alt", $value, $parameters ) || "";
+
+    # clean up numerical value
+    $value =~ s/<[^>]+//g if( $value );
+    if( ( defined $value ) && ( $value =~ /^.*?([\+\-]?[0-9\.]+).*$/ ) ) {
+        $value = $1;
+
         # OK, we are ready to generate the trend gauge.  This is simple since
         # the graphics are assumed to already exist so we just figure out which
         # one to display and then display it.
         $filename = "trenddn.gif" if( $value < 0 );
         $filename = "trendeq.gif" if( $value == 0 );
         $filename = "trendup.gif" if( $value > 0 );
+
+    } else {
+        # show the "no data" gif
+        $filename = "trendnd.gif";
+        $alt = "no data" unless( $alt );
     }
-    # Get the gauge IMG 'alt' text.  If there is no value, then use 'value'
-    # as the default;
-    my $alt = _get_parameter( "alt", $value, $parameters);
 
     # Get remaining parameters and pass to <img ... />
     my $options = "";
