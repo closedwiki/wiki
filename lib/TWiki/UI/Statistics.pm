@@ -58,7 +58,7 @@ sub statistics {
     # Initial messages
     _printMsg( "TWiki: Create Usage Statistics", $query );
     if( $query ) {
-        print "<h4><font color=\"red\">Do not interrupt this script!</font> ( Please wait until page download has finished )</h4>\n";
+        print "<h4><font color=\"red\"><span class=\"twikiAlert\">Do not interrupt this script!</span></font> ( Please wait until page download has finished )</h4>\n";
     }
 
     unless( $logDate ) {
@@ -529,12 +529,12 @@ sub _printMsg
 	if( $htmlMsg =~ /^[A-Z]/ ) {
 	    $htmlMsg =~ s/^([A-Z].*)/<h3>$1<\/h3>/go;
 	} else {
-	    $htmlMsg =~ s/(\*\*\*.*)/<font color=\"FF0000\">$1<\/font>/go;
+	    $htmlMsg =~ s/(\*\*\*.*)/<font color=\"#FF0000\"><span class=\"twikiAlert\">$1<\/span><\/font>/go;
 	    $htmlMsg =~ s/^\s\s/&nbsp;&nbsp;/go;
 	    $htmlMsg =~ s/^\s/&nbsp;/go;
 	    $htmlMsg .= "<br />";
 	}
-	$htmlMsg =~ s/==([A-Z]*)==/<font color=\"FF0000\">==$1==<\/font>/go;
+	$htmlMsg =~ s/==([A-Z]*)==/<font color=\"#FF0000\"><span class=\"twikiAlert\">==$1==<\/span><\/font>/go;
         print "$htmlMsg\n";
     } else {
         $msg =~ s/&nbsp;/ /go;

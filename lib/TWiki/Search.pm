@@ -932,9 +932,9 @@ sub searchWeb
 		       # NOTE: Must *not* use /o here, since $match is based on
 		       # search string that will vary during lifetime of
 		       # compiled code with mod_perl.
-                       my $subs = s|$match|$1<font color="red">$2</font>&nbsp;|g;
+                       my $subs = s|$match|$1<font color="red"><span class="twikiAlert">$2</span></font>&nbsp;|g;
                        $match = '(\[\[)' . "($spacedTopic)" . '(?=\]\])';
-                       $subs += s|$match|$1<font color="red">$2</font>&nbsp;|gi;
+                       $subs += s|$match|$1<font color="red"><span class="twikiAlert">$2</span></font>&nbsp;|gi;
                        if( $subs ) {
                            $topicCount++ if( ! $reducedOutput );
                            $reducedOutput .= "$_<br />\n" if( $subs );
