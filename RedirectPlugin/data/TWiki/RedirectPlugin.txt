@@ -1,0 +1,50 @@
+%META:TOPICINFO{author="smokris" date="1056159480" format="1.0" version="1.2"}%
+---+ Redirect Plugin
+
+This plugin allows one to produce TWiki topics that automatically redirect to other TWiki topics or URLs.
+
+I typically use this to make easy-to-type shortforms/acronyms of topic names.  For example:
+	* actual content appears under =Main.LightweightDirectoryAccessProtocol=
+	* =Main.LDAP= contains just a redirect tag.  Referencing =Main.LDAP= anywhere or entering it in the _Go_ box takes one directly to =Main.LightweightDirectoryAccessProtocol=
+
+---++ Related Topics
+	* http://twiki.org/cgi-bin/view/Codev/RedirectPage
+	* http://twiki.org/cgi-bin/view/Codev/PageRedirectTag
+	* http://twiki.org/cgi-bin/view/Codev/TopicAliases
+	* http://twiki.org/cgi-bin/view/Codev/RedirectToRenamedPage
+
+---++ Syntax Rules
+	* Redirect to a topic within the web: =&#37;REDIRECT{"WikiWord"}%=
+	* Redirect to a topic in another web: =&#37;REDIRECT{"TWiki.WikiWord"}%=
+	* Redirect to any URL: =&#37;REDIRECT{"http://google.com/"}%=
+
+---++ Caveat
+	* Once you've added a redirect tag to a topic, you won't ever see the topic itself until you remove the tag.  Therefore, to remove or change redirection, you will need to manually enter the appropriate URL to edit the topic.
+
+---++ Redirect Plugin Settings
+		* Set SHORTDESCRIPTION = This plugin allows one to produce TWiki topics that automatically redirect to other TWiki topics or URLs.
+		* Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* Test if the installation was successful (see above syntax notes)
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/SteveMokris |
+|  Plugin Version: | 20 Jun 2003 (v1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  20 Jun 2003: | Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/RedirectPlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/RedirectPluginDev |
