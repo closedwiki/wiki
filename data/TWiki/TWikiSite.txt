@@ -24,7 +24,8 @@ Topics of interest:
 		* TWikiCategoryTable 
 		* TWikiImplementationNotes 
 		* TWikiInstallationNotes 
-		* TWikiUpgradeTo01Mai2000
+		* TWikiUpgradeTo01May2000
+	* TWikiAdministration tells you how to do administrative stuff like renaming or deleting a topic.
 
 *Note:*
 	* %WIKITOOLNAME% automatically signs new pages with your WikiName in case TWiki is running on an Intranet where you log in. In case your TWiki installation does not authenticate users, TWiki does not know about user names, all visitors have the user name Main.TWikiGuest.
