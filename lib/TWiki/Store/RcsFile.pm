@@ -110,7 +110,7 @@ sub restoreLatestRevision
     
     my $rev = $self->numRevisions();
     my $text = $self->getRevision( $rev );
-    $self->_saveFile( $self->{file}, \$text );
+    $self->_saveFile( $self->{file}, $text );
 }
 
 
@@ -481,7 +481,7 @@ sub _readFile
     my $data = "";
     undef $/; # set to read to EOF
     open( IN_FILE, "<$name" ) || return "";
-    binmode IN_FILE if( $self->{binary} );
+    binmode IN_FILE;
     $data = <IN_FILE>;
     $/ = "\n";
     close( IN_FILE );
