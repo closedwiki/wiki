@@ -27,6 +27,7 @@ implements Difference.ModifiableText {
 
     private static final int UNDO_DEPTH = 100;
     private static final RESyntax syntax = RESyntax.RE_SYNTAX_EMACS;
+    private static final char DELIMITER = '/';
 
     String searchString, replaceString, clipboard;
     boolean caseSensitive, reSearch;
@@ -73,12 +74,12 @@ implements Difference.ModifiableText {
     SearchableTextArea() {
 	super("", 10, 10, TextArea.SCROLLBARS_VERTICAL_ONLY);
 
-	/* Init per-invocation features */
+	/// Init per-invocation features
         recordUndo = false;
 	undoBuffer = new UndoBuffer(UNDO_DEPTH);
 	prevText = "";
 	repeatCommand = null;
-	/** Init persistant features */
+	/// Init persistant features
         caseSensitive = true;
         reSearch = false;
         try {
@@ -156,22 +157,22 @@ implements Difference.ModifiableText {
     }
 
     /**
-     * Replay a macro command. Editor commands are delineated by % signs.
+     * Replay a macro command. Editor commands are delineated by / signs.
      */
     public void replayMacro(String macro) {
         //System.out.println("Replay <" + macro + "> over " + getSelectedText());
         int idx = 0;
 	int ml = macro.length();
         while (idx < ml) {
-            int cmdstart = macro.indexOf('%', idx);
+            int cmdstart = macro.indexOf(DELIMITER, idx);
             if (cmdstart < 0) {
                 overwriteSelection(macro.substring(idx));
                 break;
-            } else if (macro.charAt(cmdstart + 1) == '%') {
-                overwriteSelection("%");
+            } else if (macro.charAt(cmdstart + 1) == DELIMITER) {
+                overwriteSelection("" + DELIMITER);
                 idx = cmdstart + 2;
             } else {
-                int cmdend = macro.indexOf('%', cmdstart + 1);
+                int cmdend = macro.indexOf(DELIMITER, cmdstart + 1);
                 if (cmdend < 0) {
                     overwriteSelection(macro.substring(idx));
                     break;

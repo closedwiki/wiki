@@ -89,9 +89,16 @@ class Controls extends Hashtable {
 	}
     }
 
+    Controls() {
+    }
+
     /** Create from a control file */
-    Controls(String controlText) {
+    public void parse(String controlText) throws IOException {
 	StreamTokenizer st = new StreamTokenizer(new StringReader(controlText));
+	st.commentChar('<');
+	st.slashStarComments(false);
+	st.slashSlashComments(false);
+
 	try {
 	    while (st.nextToken() == StreamTokenizer.TT_WORD) {
 		Block b = (Block)get(st.sval);
@@ -100,14 +107,14 @@ class Controls extends Hashtable {
 		b.parse(st);
 	    }
 	} catch (IOException ioe) {
-	    throw new Error(ioe.getMessage() +
+	    throw new IOException(ioe.getMessage() +
 			    " while parsing controls; line " + st.lineno());
 	}
     }
 
     private void expect(StreamTokenizer st, char c) throws IOException {
 	if (st.nextToken() != c)
-	    throw new Error("Expected '" + c + "' in controls at line " +
+	    throw new IOException("Expected '" + c + "' in controls at line " +
 		st.lineno() + " but saw '" + st + "'");
     }
 
@@ -115,7 +122,7 @@ class Controls extends Hashtable {
 	if (st.ttype != StreamTokenizer.TT_WORD ||
 	    !st.sval.equals(s))
 
-	    throw new Error("Expected '" + s + "' in controls at line " +
+	    throw new IOException("Expected '" + s + "' in controls at line " +
 		st.lineno() + " but saw '" + st + "'");
     }
 
@@ -171,9 +178,9 @@ class Controls extends Hashtable {
 
 	p = new Panel();
 	p.setLayout(new FlowLayout());
-	Button preview = new Definition("Preview", "%preview%").makeButton(l);
+	Button preview = new Definition("Preview", "/preview/").makeButton(l);
 	p.add(preview);
-	Button save = new Definition("Save", "%save%").makeButton(l);
+	Button save = new Definition("Save", "/save/").makeButton(l);
 	p.add(save);
 	editLock = new Checkbox("Release edit lock", true);
 	p.add(editLock);
