@@ -2227,6 +2227,7 @@ sub emitList {
     $isList = 1;
     $theOlType = "" unless( $theOlType );
     $theOlType =~ s/^(.).*/$1/;
+    $theOlType = "" if( $theOlType eq "1" );
 
     if( @listTypes < $theDepth ) {
         my $firstTime = 1;
@@ -2234,7 +2235,7 @@ sub emitList {
             push( @listTypes, $theType );
             push( @listElements, $theElement );
             $result .= "<$theElement>\n" unless( $firstTime );
-            if ($theOlType) {
+            if( $theOlType ) {
                 $result .= "<$theType type=\"$theOlType\">\n";
             } else {
                 $result .= "<$theType>\n";
