@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1047105060" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1047199802" format="1.0" version="1.4"}%
 ---+ %WIKITOOLNAME% Site Map
 %STARTINCLUDE%
 <table width="100%" border="0" cellspacing="2" bgcolor="#000000" cellpadding="3">
@@ -14,5 +14,27 @@
 %SEARCH{ "\* Set SITEMAPLIST \= on" regex="on" web="%MAINWEB%, %TWIKIWEB%, all" nototal="on" nosearch="on" format=" <tr bgcolor=\"$pattern(.*?\* Set WEBBGCOLOR\s*=\s*([^\s]*).*)\">$n <td align=\"right\"> <b>[[$web.%HOMETOPIC%][$web]]</b>&nbsp;[[$web.%HOMETOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/home.gif\" alt=\"Home of $web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebSearch][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/searchtopic.gif\" alt=\"Search $web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebChanges][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/changes.gif\" alt=\"Recent changes in the $web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%NOTIFYTOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/notify.gif\" alt=\"Get notified of changes to the $web web\" width=\"16\" height=\"16\" border=\"0\">]]</td>$n <td> $pattern(.*?\* Set SITEMAPWHAT\s*=([^\n\r]*).*) </td><td> $pattern(.*?\* Set SITEMAPUSETO\s*=([^\n\r]*).*) </td> </tr>" }%
   <tr bgcolor="#ffffff">
 	 <td colspan="3"><font size="-1">You can use color coding by web for identification and reference. This table is updated automatically based on <nop>WebPreferences settings of the individual webs. Contact %WIKIWEBMASTER% if you need a separate collaboration web for your team. </font></td>
+  </tr>
+</table>
+<table border="0" cellspacing="2" cellpadding="3">
+  <tr bgcolor="#ffffff">
+	 <td valign="top">
+<font size="-1">
+Legend of icons:
+</font></td>
+	 <td valign="top">
+&nbsp;</td>
+	 <td valign="top">
+<font size="-1">
+<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/home.gif" alt="Home of web" width="16" height="16" border="0"> = Go to the home of the web%BR%
+<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/searchtopic.gif" alt="Search web" width="16" height="16" border="0"> = Search the web
+</font></td>
+	 <td valign="top">
+&nbsp;</td>
+	 <td valign="top">
+<font size="-1">
+<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/changes.gif" alt="Recent changes in the web" width="16" height="16" border="0"> = See recent changes in the web%BR%
+<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/notify.gif" alt="Get notified of changes to the web" width="16" height="16" border="0"> = Subscribe to get notified of changes by e-mail
+</font></td>
   </tr>
 </table>
