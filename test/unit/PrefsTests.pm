@@ -4,13 +4,13 @@ package PrefsTests;
 use base qw(Test::Unit::TestCase);
 
 BEGIN {
-    #unshift @INC, '../../lib';
-    unshift @INC, '/home/twiki/cairo/lib';
+    unshift @INC, '../../lib';
+    #unshift @INC, '/home/twiki/cairo/lib';
     unshift @INC, '.';
 }
 
-#require '../../bin/setlib.cfg';
-require '/home/twiki/cairo/bin/setlib.cfg';
+require '../../bin/setlib.cfg';
+#require '/home/twiki/cairo/bin/setlib.cfg';
 use TWiki;
 use TWiki::Prefs;
 use strict;
