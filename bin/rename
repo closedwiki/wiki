@@ -1,6 +1,6 @@
 #!/usr/bin/perl -wT
 #
-# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+# TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
 #
 # Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
 # Copyright (C) 2001 Sven Dowideit, svenud@ozemail.com.au
@@ -90,6 +90,8 @@ sub main
        $redoRename = 1;
     }
 
+    # redoRename will be true when some topics that had links to $oldTopic
+    # still need updating, previous update being prevented by a lock.
     if (! $redoRename) {
        # check access permission
        my $text = "";
@@ -133,7 +135,7 @@ sub main
            }
         }
         print "Content-type: text/html\n\n";
-        $tmpl= &TWiki::Store::readTemplate( "oopsneednewtopic" );
+        $tmpl= &TWiki::Store::readTemplate( "rename" );
         $tmpl =~ s/%OLD_TOPIC%/$oldTopic/go;
         $tmpl =~ s/%OLD_WEB%/$oldWeb/go;
         $tmpl =~ s/%NEW_WEB%//go; # JET set from selection
@@ -148,41 +150,43 @@ sub main
     TWiki::writeDebug("A oldWeb, oldTopic: $oldWeb, $oldTopic");
     TWiki::writeDebug("B newWeb, newTopic: $newWeb, $newTopic");
 
-    # Check all is okay before we proceed.
-    if( ! &TWiki::Store::webExists( $oldWeb ) ) {
-        print "Content-type: text/html\n\n";
-        $tmpl= &TWiki::Store::readTemplate( "noweb" );
-        $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic );
-        print $tmpl;
-        return;
-    }
+    if ( ! $redoRename ) {
+        # Check all is okay before we proceed.
+        if( ! &TWiki::Store::webExists( $oldWeb ) ) {
+            print "Content-type: text/html\n\n";
+            $tmpl = &TWiki::Store::readTemplate( "noweb" );
+            $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic );
+            print $tmpl;
+            return;
+        }
     
-    if( ! &TWiki::Store::webExists( $newWeb ) ) {
-        print "Content-type: text/html\n\n";
-        $tmpl= &TWiki::Store::readTemplate( "noweb" );
-        $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
-        print $tmpl;
-        return;
-    }
+        if( ! &TWiki::Store::webExists( $newWeb ) ) {
+            print "Content-type: text/html\n\n";
+            $tmpl= &TWiki::Store::readTemplate( "noweb" );
+            $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
+            print $tmpl;
+            return;
+        }
 
 
-    my $fileName = &TWiki::Store::getFileName($oldWeb, $oldTopic);
-    my $newName = &TWiki::Store::getFileName($newWeb, $newTopic);
+        my $fileName = &TWiki::Store::getFileName($oldWeb, $oldTopic);
+        my $newName = &TWiki::Store::getFileName($newWeb, $newTopic);
     
-    if (!redoRename && ! -e $fileName) {
-        print "Content-type: text/html\n\n";
-        $tmpl= &TWiki::Store::readTemplate( "oopsmissing" );
-        $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic );
-        print $tmpl;
-        return;    
-    }
+        if ( ! -e $fileName) {
+            print "Content-type: text/html\n\n";
+            $tmpl= &TWiki::Store::readTemplate( "oopsmissing" );
+            $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic );
+            print $tmpl;
+            return;    
+        }
     
-    if ( -e $newName ) {
-        print "Content-type: text/html\n\n";
-        $tmpl= &TWiki::Store::readTemplate( "oopsexists" );
-        $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
-        print $tmpl;
-        return;    
+        if ( -e $newName ) {
+            print "Content-type: text/html\n\n";
+            $tmpl= &TWiki::Store::readTemplate( "oopsexists" );
+            $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
+            print $tmpl;
+            return;    
+        }
     }
 
     if (( $redoRename eq "ON" ) || !&TWiki::Store::topicIsLockedBy( $oldWeb, $oldTopic ))
@@ -209,10 +213,13 @@ sub main
            if ( &TWiki::Store::topicExists($itemWeb, $itemTopic) ) { 
              my $scantext = &TWiki::Store::readWebTopic($itemWeb, $itemTopic);
              foreach( split( /\n/, $scantext ) ) {
-                s/([^.A-Za-z0-9])\Q$oldWeb\.$oldTopic\E([_\*<\s]+)/$1$newWeb.$newTopic$2/go;
+                # Deal with longest pattern first
+                my $preTopic = "^\|[\\*\\s][\\(\\-\\*\\s]*";
+                my $postTopic = "$\|[_\\*<\\s]";
+                s/($preTopic)\Q$oldWeb.$oldTopic\E($postTopic)/$1$newWeb.$newTopic$2/go;
                 my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
-                s/([^.A-Za-z0-9])\Q$oldTopic\E([_\*<\s]+)/$1$insertWeb$newTopic$2/go;
-                s/([^.A-Za-z0-9])\Q$oldTopic\E$/$1$insertWeb$newTopic/go;
+                s/($preTopic)\Q$oldTopic\E($postTopic)/$1$insertWeb$newTopic$2/go;
+                #s/($preTopic)\Q$oldTopic\E$/$1$insertWeb$newTopic/go;
                 $resultText .= "$_\n";
              }
           } else {
@@ -240,7 +247,7 @@ sub main
            $tmpl =~ s/%OLD_WEB%/$oldWeb/go;
            $tmpl =~ s/%NEW_WEB%/$newWeb/go;
            $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
-           $tmpl =~ s/%WEB_SELECTION%/$newTopic/go;
+           $tmpl =~ s/%WEB_SELECTION%/$newWeb/go;
            $tmpl =~ s/%%/TRUE/go;
            $tmpl = &TWiki::handleCommonTags( $tmpl, "" );
            print $tmpl;
@@ -301,3 +308,4 @@ sub findReferingPages
     return @result;
 }
 
+# EOF

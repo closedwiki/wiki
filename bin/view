@@ -1,11 +1,11 @@
 #!/usr/bin/perl -wT
 #
-# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+# TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
 #
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
 # Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
-# Copyright (C) 1999 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2001 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -38,6 +38,9 @@ sub main
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
+
+    my $doShowAttachmentAttr = $query->param( 'showAttr' );
+    TWiki::writeDebug( "view showAttr = $doShowAttachmentAttr" );
 
     ( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
@@ -135,6 +138,13 @@ sub main
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessview" );
         print $query->redirect( $url );
         return;
+    }
+
+    TWiki::writeDebug("view showAtt = $doShowAttachmentAttr");
+    if ( $doShowAttachmentAttr ) {
+        # FIXME a rather inefficient way of doing things.
+        my $endMacro = TWiki::Attach::startMacro();
+        $text =~ s/(\Q$startMacro\E)(}%)/$1 view=\"$doShowAttachmentAttr\"$2/go;
     }
 
     $text = &TWiki::handleCommonTags( $text, $topic );

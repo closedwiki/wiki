@@ -1,6 +1,6 @@
 #!/usr/bin/perl -wT
 #
-# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+# TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
 #
 # Copyright (C) 1999-2001 Peter Thoeny, peter@thoeny.com
 #
@@ -17,7 +17,7 @@
 
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use File::Copy;
+use File::Copy; # FIXME remove
 use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
@@ -55,6 +55,39 @@ sub filenameToIcon
 
 # =========================
 sub updateAttachment
+{
+   my ( $atext, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $hideFile ) = @_;
+
+   my $tmpVersion = "-";
+   my $tmpAttr = "";
+   if ( $hideFile ) {
+      $tmpAttr .= "h";
+   }
+
+   my $attachMacro = TWiki::Attach::formFileAttachmentMacro(
+          $fileName, $tmpVersion, $filePath, $fileSize, $fileDate, $fileUser, 
+          $fileComment, $tmpAttr );
+          
+   my $endMacro = TWiki::Attach::endMacro();
+
+   if ( ! $atext ) {
+      $atext = "\n" . &TWiki::Attach::startMacro();
+      # FIXME
+      $atext .= "$attachMacro\n";
+      $atext .= $endMacro;
+   } else {
+      # Is there already an entry for this file replace, otherwise, add to end
+      if ( ! ( $atext =~ s/%FILEATTACHMENT{[\s]*\"$fileName\"[^}]*}%/$attachMacro/ ) ) {
+          $atext =~ s/(\Q$endMacro\E)/$attachMacro\n$1/;
+      }
+   }
+   return $atext;
+}
+
+
+
+# =========================
+sub updateAttachmentOld
 {
     my ( $atext, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) = @_;
     my $atTable = &TWiki::Store::readTemplate( "attachtable" );
@@ -391,6 +424,7 @@ sub main
     my $tmpFilename = $query->tmpFileName( $filePath ) || "";
     my $fileComment = $query->param( 'filecomment' ) || "";
     my $createLink = $query->param( 'createlink' ) || "";
+    my $hideFile = $query->param( 'hidefile' ) || "";
 
     # JET need to change windows path to unix path
     $tmpFilename =~ s@\\@/@go;
@@ -400,7 +434,7 @@ sub main
 
     # check if file exists and has non zero size
     my $size = -s $tmpFilename;
-    &TWiki::writeDebug( "size $size" );
+    ##&TWiki::writeDebug( "size $size" );
     if( ! -e $tmpFilename ) {
         &TWiki::writeDebug( "no file" );
         # PTh 20 Jun 2000: changed to getOopsUrl
@@ -416,32 +450,16 @@ sub main
     $fileName = $pathza[$#pathza];
     $fileName =~ s/[^A-Za-z0-9_\.\-]//go;  # delete special characters
 
-    # before save, create directories if not exist
-    my $pubDir = &TWiki::getPubDir();
-    my $tempPath = "$pubDir/$webName";
-    if( ! -e "$tempPath" ) {
-        umask( 0 );
-        mkdir( $tempPath, 0777 );
-    }
-    $tempPath = "$tempPath/$topic";
-    if( ! -e "$tempPath" ) {
-        umask( 0 );
-        mkdir( $tempPath, 0777 );
-    }
-
-    # save uploaded file
-    my $newFile = "$tempPath/$fileName";
-    copy( $tmpFilename, $newFile ) or warn "copy($tmpFilename, $newFile) failed: $!";
-    umask( 0027 );
-    chmod( 0644, $newFile );
     
     # Update RCS if required
-    # !!!make optional
-    my $text = "";
+    # FIXME make optional
+    my $text1 = "";
     my $saveCmd = "";
     my $doNotLogChanges = 1;
     my $doUnlock = 1;
-    my $error = &TWiki::Store::save( $webName, $topic, $text, $saveCmd, $fileName, $doNotLogChanges, $doUnlock );
+    my $dontNotify = "";
+    my $error = &TWiki::Store::saveAttachment( $webName, $topic, $text1, $saveCmd, $fileName, $doNotLogChanges, $doUnlock, 
+                                               $dontNotify, $fileComment, $tmpFilename );
 
     if ( $error ) {
         # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
@@ -475,8 +493,14 @@ sub main
     ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
     if( ! $before ) { $before = ""; }
     if( ! $atext  ) { $atext  = ""; }
+
+    if ( $atext =~ /\<TwkNextItem\>/ ) {
+        # FIXME - move to view code, maybe not as this would cause RCS update?
+        $atext = TWiki::Attach::migrateToFileAttachmentMacro( $atext );
+    }
+
     $atext = updateAttachment( $atext, $fileName, $filePath, $fileSize,
-                               $fileDate, $fileUser, $fileComment );
+                               $fileDate, $fileUser, $fileComment, $hideFile );
     if( $createLink ) {
         $before = addLinkToEndOfTopic( $before, $newFile, $fileName, $fileComment );
     }

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -wT
 #
-# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+# TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
 #
-# Copyright (C) 1999 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2001 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -47,6 +47,21 @@ sub main
     }
 
     my $fileName = $query->param( 'filename' );
+
+    my $rev = $query->param( 'rev' );
+
+    if ( $rev ) {
+        # FIXME doesn't deal with extension correctly yet.
+        my $fileContent = TWiki::Store::readAttachmentVersion( $webName, $topic, $fileName, $rev ); 
+        TWiki::writeDebug( "$fileContent" );
+        if ( $fileName =~ /\.txt$/ ) {
+           print "Content-type: text/plain\n\n";
+        } else {
+           print "Content-type: application\n\n";
+        }
+        print "$fileContent";
+        return;
+    }
 
     # this should actually kick off a document conversion 
     # (.doc, .xls... to .html) and show the html file.

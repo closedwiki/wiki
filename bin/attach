@@ -1,6 +1,6 @@
 #!/usr/bin/perl -wT
 #
-# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+# TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
 #
 # Copyright (C) 1999-2001 Peter Thoeny, peter@thoeny.com
 #
@@ -28,8 +28,7 @@ $| = 1;                  # no buffering
 
 &main();
 
-
-# =========================
+# FIXME Remove
 sub getAttachAttr
 {
     my( $atext, $fileName ) = @_;
@@ -68,9 +67,9 @@ sub listVersions
 {
     my( $web, $topic, $attachment ) = @_;
 
-    &TWiki::writeDebug( "Att = $attachment" );
+    ##&TWiki::writeDebug( "Att = $attachment" );
     my $latestRev = TWiki::Store::getRevisionNumberNew( $web, $topic, $attachment );
-    &TWiki::writeDebug( "latestRev = $latestRev" );
+    ##&TWiki::writeDebug( "latestRev = $latestRev" );
     $latestRev =~ /\.(.*)/;
     my $maxRevNum = $1;
     &TWiki::writeDebug( "max = $maxRevNum" );
@@ -87,11 +86,12 @@ sub listVersions
         my $rev = "1.$version";
         $ins =~ s/%FILEVERSION%/$rev/go;
         my $changeToIsoDate = 0;
-        my( $date, $userName ) = 
+        my( $date, $userName, $dummy, $comment ) = 
            TWiki::Store::getRevisionInfoNew( $topic, $rev, $changeToIsoDate, $web, $attachment );
         my $wikiUserName = &TWiki::userToWikiName( $userName );
         $ins =~ s/%VERSIONDATE%/$date/go;
         $ins =~ s/%VERSIONUPDATER%/$wikiUserName/go;
+        $ins =~ s/%VERSIONCOMMENT%/$comment/go;
         $result = "$result$ins";
         #&TWiki::writeDebug( "Ver = $version, res=$result" );
     }
@@ -124,6 +124,8 @@ sub main
     my $fileName = "";
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
+    my $isHideChecked = "";
+
     if( ! &TWiki::Store::webExists( $webName ) ) {
         $tmpl= &TWiki::Store::readTemplate( "noweb" );
         $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
@@ -148,15 +150,32 @@ sub main
         ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
         if( ! $atext ) { $atext = ""; }
     }
-    # get filePath and fileComment:
-    my ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) 
-      = getAttachAttr( $atext, $fileName );
 
-    # !!! temp to block table at top of page
+    # Process old style attachment table # FIXME -remove at some point
+    my $oldStyleAttach = "";
+    if ( $atext =~ /\<TwkNextItem\>/ ) {
+        $oldStyleAttach = 1;
+    }
+    # get filePath and fileComment:
+    my ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
+    if ( $oldStyleAttach ) {
+        ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) 
+            = getAttachAttr( $atext, $fileName );
+    } else {
+       my ( $tmpFile, $tmpVersion, $tmpAttr );
+       $atext =~ /%FILEATTACHMENT{( \"$fileName\"[^}]*)}%/;
+       ( $tmpFile, $tmpVersion, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $tmpAttr ) =
+          TWiki::Attach::extractFileAttachmentArgs( $1 );
+       if ( $tmpAttr =~ /h/o ) {
+          $isHideChecked = "checked";
+       } 
+    }
+
+    # FIXME temp to block table at top of page
     if( ! $action ) { $atext = listVersions( $webName, $topic, $fileName ); }
 
 
-    # !!! why log attach before post is called?
+    # why log attach before post is called?
     # FIXME: Move down, log only if successful (or with error msg?)
     if( $TWiki::doLogTopicAttach && $action ) {
         # write log entry
@@ -174,6 +193,7 @@ sub main
         $tmpl =~ s/%FILENAME%/$fileName/go;
         $tmpl =~ s/%ACTION%/Update file:/go;
         $tmpl =~ s/%PREVIOUS%/Previous <br> upload:/go;
+        $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
         $fileUser = &TWiki::getRenderedVersion( $fileUser );
         $fileUser =~ s/\n//go;
         $tmpl =~ s/%FILEUSER%/\($fileUser\)/go;

@@ -1,7 +1,7 @@
 #
-# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+# TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
 #
-# Copyright (C) 1999, 2000 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2001 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,6 +27,8 @@
 #
 
 package TWiki::Store;
+
+use File::Copy;
 
 use strict;
 
@@ -67,7 +69,12 @@ sub getFileName
       $file = "$TWiki::dataDir/$web/$topic$extension";
 
    } else {
-      $file = "$TWiki::pubDir/$web/$topic/$attachment$extension";
+      # FIXME may well want to switch this back to having rcs history under pub
+      if ( $extension eq ",v" ) {
+         $file = "$TWiki::dataDir/$web/$topic/$attachment$extension";
+      } else {
+         $file = "$TWiki::pubDir/$web/$topic/$attachment$extension";
+      }
    }
 
    ## !!! clean up an ..s etc in $web and $topic
@@ -80,18 +87,27 @@ sub getFileName
 
 # =========================
 # Get directory that topic or attachment lives in
+#    Leave topic blank if you want the web directory rather than the topic directory
 sub getFileDir
 {
-   my( $web, $topic, $attachment ) = @_;
+   my( $web, $topic, $attachment, $extension) = @_;
    
    my $dir = "";
    if( ! $attachment ) {
       $dir = "$TWiki::dataDir/$web";
    } else {
-      $dir = "$TWiki::pubDir/$web/$topic";
+      my $suffix = $topic;
+      if ( $topic ) {
+         $suffix = "/$suffix";
+      }
+      if ( $extension ) {
+         $dir = "$TWiki::dataDir/$web$suffix";
+      } else { 
+         $dir = "$TWiki::pubDir/$web$suffix";
+      }
    }
 
-   ## !!! clean up an ..s etc in $web and $topic
+   ## FIXME clean up an ..s etc in $web and $topic
    $dir =~ /(.*)/;
    $dir = $1; # untaint
    
@@ -172,9 +188,11 @@ sub renameTopic
    );
    
    # Rename the attachment directory if there is one
-   my $oldAttachDir = getFileDir( $oldWeb, $oldTopic, 1 );
+   my $oldAttachDir = getFileDir( $oldWeb, $oldTopic, 1, "");
    if( $oldAttachDir ) {
-      rename( $oldAttachDir, getFileDir( $newWeb, $newTopic, 1 ) );
+      rename( $oldAttachDir, getFileDir( $newWeb, $newTopic, 1, "") );
+      # FIXME assumption that if attachment dir is present then so is history dir 
+      rename( getFileDir( $oldWeb, $oldTopic, 1, ",v" ), getFileDir( $newWeb, $newTopic, 1, ",v" ) );
    }
    
    # Log rename
@@ -199,6 +217,21 @@ sub readVersion
     return `$tmp`;
 }
 
+# =========================
+# FIXME probably doesn't work yet
+sub readAttachmentVersion
+{
+   my ( $theWeb, $theTopic, $theAttachment, $theRev ) = @_;
+   my $tmp = $TWiki::revCoCmd;
+   my $fileName = getFileName( $theWeb, $theTopic, $theAttachment, ",v" ); 
+   $tmp =~ s/%FILENAME%/$fileName/;
+   $tmp =~ s/%REVISION%/$theRev/;
+   $tmp =~ /(.*)/;
+   $tmp = $1;       # now safe, so untaint variable
+   ##TWiki::writeDebug( $tmp );
+   return `$tmp`;
+}
+
 
 # =========================
 # rdiff:	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
@@ -206,6 +239,9 @@ sub readVersion
 sub getRevisionNumber
 {
     my( $theTopic, $theWebName ) = @_;
+    if( ! $theWebName ) {
+        $theWebName = $TWiki::webName;
+    }
     return getRevisionNumberNew( $theWebName, $theTopic, "" );
 }
 
@@ -218,19 +254,21 @@ sub getRevisionNumberNew
     if( ! $theWebName ) {
         $theWebName = $TWiki::webName;
     }
-    my $tmp= $TWiki::revHistCmd;
-    my $fileName = "";
     if( ! $attachment ) {
-       $fileName = "$TWiki::dataDir/$theWebName/$theTopic.txt";
-    } else {
-       $fileName = "$TWiki::pubDir/$theWebName/$theTopic/$attachment";
+        $attachment = "";
     }
+
+    my $tmp= $TWiki::revHistCmd;
+    my $fileName = getFileName( $theWebName, $theTopic, $attachment );
     
-    &TWiki::writeDebug( "getRevisionNumberNew: fileName: $fileName" );
-    if( ! -e "$fileName,v" ) {
-       return ""; # JET !!! previously 1.1, why?
+    ##&TWiki::writeDebug( "getRevisionNumberNew: fileName: $fileName" );
+    my $rcsfilename = getFileName( $theWebName, $theTopic, $attachment, ",v" );
+    ##&TWiki::writeDebug( "getRevisionNumberNew: rcsfilename: $rcsfilename" );
+    if( ! -e $rcsfilename ) {
+       return "1.1"; # FIXME Can't tell that there is no revision file
     }
-    $tmp =~ s/%FILENAME%/$fileName/;
+
+    $tmp =~ s/%FILENAME%/$rcsfilename/;
     $tmp =~ /(.*)/;
     $tmp = $1;       # now safe, so untaint variable
     $tmp = `$tmp`;
@@ -304,11 +342,17 @@ sub getRevisionInfoNew
     $fileName =~ s/$TWiki::securityFilter//go;
     $fileName =~ /(.*)/;
     $fileName = $1;       # now safe, so untaint variable
-    $tmp =~ s/%FILENAME%/$fileName/;
+    my $rcsFile = "";
+    if ( $attachment ) {
+       $rcsFile = getFileName( $theWebName, $theTopic, $attachment, ",v" );
+    }
+    $tmp =~ s/%FILENAME%/$fileName $rcsFile/;
     $tmp = `$tmp`;
-    $tmp =~ /date: (.*?);  author: (.*?);/;
+    $tmp =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/;
     my $date = $1;
     my $user = $2;
+    my $comment = $3;
+    ## TWiki::writeDebug( "Store: rlog output = \n$tmp\n  ########################### comment=$comment" );
     $tmp =~ /revision 1.([0-9]*)/;
     my $rev = $1;
     if( ! $user ) {
@@ -336,19 +380,19 @@ sub getRevisionInfoNew
             }
         }
     }
-    return ( $date, $user, $rev );
+    return ( $date, $user, $rev, $comment );
 }
 
 
 # =========================
-sub topicIsLockedBy           # was topicIsLockedNew
+sub topicIsLockedBy
 {
     my( $theWeb, $theTopic ) = @_;
 
     # pragmatic approach: Warn user if somebody else pressed the
     # edit link within one hour
 
-    my $lockFilename = "$TWiki::dataDir/$theWeb/$theTopic.lock"; #!!!use file generation method
+    my $lockFilename = "$TWiki::dataDir/$theWeb/$theTopic.lock"; # FIXME use file generation method
     if( ( -e "$lockFilename" ) && ( $TWiki::editLockTime > 0 ) ) {
         my $tmp = readFile( $lockFilename );
         my( $lockUser, $lockTime ) = split( /\n/, $tmp );
@@ -376,25 +420,65 @@ sub saveTopic
     save( $TWiki::webName, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify );
 }
 
+# =========================
+sub saveAttachment
+{
+    my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $theTmpFilename ) = @_;
+
+    # before save, create directories if they don't exist
+    my $tempPath = getFileDir( $web, "", $attachment );
+    if( ! -e "$tempPath" ) {
+        umask( 0 );
+        mkdir( $tempPath, 0777 );
+    }
+    $tempPath = getFileDir( $web, $topic, $attachment );
+    if( ! -e "$tempPath" ) {
+        umask( 0 );
+        mkdir( $tempPath, 0777 );
+    }
+
+    # save uploaded file
+    my $newFile = "$tempPath/$attachment";
+    copy($theTmpFilename, $newFile) or warn "copy($theTmpFilename, $newFile) failed: $!";
+    umask( 0027 );
+    chmod( 0644, $newFile );
+    
+    # Update RCS if required
+    # FIXME make optional
+    my $error = save($web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, 
+		     $dontNotify, $theComment );
+    return $error;
+}
+
 
 # =========================
 sub save
 {
-    my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify ) = @_;
+    my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment ) = @_;
     my $name = getFileName( $web, $topic, $attachment );
-    my $dir  = getFileDir( $web, $topic, $attachment );
+    my $dir  = getFileDir( $web, $topic, $attachment, "" );
     my $time = time();
     my $tmp = "";
     my $rcsError = "";
 
     if( $attachment ) {
-       $dontLogSave = 1; #!!!
-
+       $dontLogSave = 1; # FIXME
     } else {
         # RCS requires a newline for the last line,
         # so add newline if needed
         $text =~ s/([^\n\r])$/$1\n/os;
     }
+    
+    if( ! $theComment ) {
+       $theComment = "none";
+    }
+
+    my $rcsFile = "";
+    if( $attachment ) {
+       $rcsFile = getFileName( $web, $topic, $attachment, ",v");
+    }
+
+
 
     #### Normal Save
     if( ! $saveCmd ) {
@@ -411,7 +495,7 @@ sub save
 
         if( ! $attachment ) {
             # save file
-            &TWiki::writeDebug( "save: web: $web, name: $name, topic: $topic" );
+            ##&TWiki::writeDebug( "save: web: $web, name: $name, topic: $topic" );
             saveFile( $name, $text );
 
             # reset lock time, this is to prevent contention in case of a long edit session
@@ -439,14 +523,27 @@ sub save
         if( $saveCmd ne "repRev" ) {
             # If attachment and RCS file doesn't exist, initialise
             if( $attachment ) {
-               my $rcsFile = getFileName( $web, $topic, $attachment, 1 );
+               # Make sure directory for rcs history file exists
+               my $rcsDir = getFileDir( $web, $topic, $attachment, ",v" );
+               my $tempPath = "&TWiki::dataDir/$web"; # FIXME move up to getDirName
+               if( ! -e "$tempPath" ) {
+                  umask( 0 );
+                  mkdir( $tempPath, 0777 );
+               }
+               $tempPath = $rcsDir;
+               if( ! -e "$tempPath" ) {
+                  umask( 0 );
+                  mkdir( $tempPath, 0777 );
+               }
+ 
                if( ! -e $rcsFile ) {
+                  # FIXME add RCS error handling
                   $tmp = $TWiki::revInitBinaryCmd;
                   $tmp =~ s/%USERNAME%/$TWiki::userName/;
-                  $tmp =~ s/%FILENAME%/$name/;
+                  $tmp =~ s/%FILENAME%/$name $rcsFile/;
                   $tmp =~ /(.*)/;
                   $tmp = $1;       # safe, so untaint variable
-                  &TWiki::writeDebug( "save: Init RCS file" );
+                  ##&TWiki::writeDebug( "save: Init RCS file, $tmp" );
                   `$tmp`;
                }
             }
@@ -454,7 +551,8 @@ sub save
             # update repository
             $tmp= $TWiki::revCiCmd;
             $tmp =~ s/%USERNAME%/$TWiki::userName/;
-            $tmp =~ s/%FILENAME%/$name/;
+            $tmp =~ s/%FILENAME%/$name $rcsFile/;
+            $tmp =~ s/%COMMENT%/\'$theComment\'/;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
             $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
@@ -504,7 +602,7 @@ sub save
         } else {
             # delete latest revision (unlock, delete revision, lock)
             $tmp= $TWiki::revUnlockCmd;
-            $tmp =~ s/%FILENAME%/$name/go;
+            $tmp =~ s/%FILENAME%/$name $rcsFile/go;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
             $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
@@ -515,7 +613,7 @@ sub save
             }
             $tmp= $TWiki::revDelRevCmd;
             $tmp =~ s/%REVISION%/$rev/go;
-            $tmp =~ s/%FILENAME%/$name/go;
+            $tmp =~ s/%FILENAME%/$name $rcsFile/go;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
             $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
@@ -526,7 +624,7 @@ sub save
             }
             $tmp= $TWiki::revLockCmd;
             $tmp =~ s/%REVISION%/$rev/go;
-            $tmp =~ s/%FILENAME%/$name/go;
+            $tmp =~ s/%FILENAME%/$name $rcsFile/go;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
             $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
@@ -539,7 +637,7 @@ sub save
         $tmp = $TWiki::revCiDateCmd;
         $tmp =~ s/%DATE%/$date/;
         $tmp =~ s/%USERNAME%/$user/;
-        $tmp =~ s/%FILENAME%/$name/;
+        $tmp =~ s/%FILENAME%/$name $rcsFile/;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
         $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
@@ -567,7 +665,7 @@ sub save
             return;
         }
         $tmp= $TWiki::revUnlockCmd;
-        $tmp =~ s/%FILENAME%/$name/go;
+        $tmp =~ s/%FILENAME%/$name $rcsFile/go;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
         $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
@@ -578,7 +676,7 @@ sub save
         }
         $tmp= $TWiki::revDelRevCmd;
         $tmp =~ s/%REVISION%/$rev/go;
-        $tmp =~ s/%FILENAME%/$name/go;
+        $tmp =~ s/%FILENAME%/$name $rcsFile/go;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
         $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
@@ -589,7 +687,7 @@ sub save
         }
         $tmp= $TWiki::revLockCmd;
         $tmp =~ s/%REVISION%/$rev/go;
-        $tmp =~ s/%FILENAME%/$name/go;
+        $tmp =~ s/%FILENAME%/$name $rcsFile/go;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
         $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
