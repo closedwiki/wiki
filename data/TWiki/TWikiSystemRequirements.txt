@@ -1,19 +1,17 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000450173" format="1.0" version="1.21"}%
-%INCLUDE{"UtilTempDocNote"}%
-
+%META:TOPICINFO{author="MikeMannix" date="1000544189" format="1.0" version="1.22"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki System Requirements
 
-_Server and client system requirements of TWiki 01-Sep-2001_
+_Server and client system requirements for TWiki 01-Sep-2001_
 
 ---++ Overview
 
-Maintaining minimum client and server requirements is necessary to keep TWiki deployment as broad as possible. 
+Maintaining minimum client and server requirements is necessary to keep TWiki deployment as broad as possible.
 
----++ Server-Side Requirements
+---++ Server Requirements
 
-TWiki is written in Perl 5 and uses a number of shell commands. It requires GNU RCS (Revision Control System) to be installed on the same system. TWiki is developed in a standard Linux/Apache environment. It can also work with Microsoft Windows and other platforms.
+TWiki is written in Perl 5, uses a number of shell commands, and requires [[http://www.gnu.org/software/rcs/rcs.html][RCS (Revision Control System)]], a GNU Free Software package. TWiki is developed in a basic Linux/Apache environment. It also works with Microsoft Windows, and should have no problem on any other platform that meets the requirements:
 
 | *Required Server Environment* |||
 | *Resource* | *Unix* | *Windows* |
@@ -23,21 +21,22 @@ TWiki is written in Perl 5 and uses a number of shell commands. It requires GNU 
 | Other external programs |  =ls, fgrep, egrep=  ||
 | Web server |  Apache; others (with support for CGI, authentication, extended path) ***  ||
 
-Current documentation covers Linux only. Compiling a basic [[http://twiki.org/cgi-bin/view/Codev/TWikiOnWindows][TWikiOnWindows]] installation guide is an ongoing effort. 
+Current documentation covers Linux only. A [[http://twiki.org/cgi-bin/view/Codev/TWikiOnWindows][TWikiOnWindows]] installation guide is next. 
 
----++ Client-Side Requirements
+---++ Client Requirements
 
-The TWiki standard installation has extremely low browser requirements:
+The TWiki [[TWikiInstallationGuide][standard installation]] has extremely low browser requirements:
 
 	* HTML 3.2 compliant
+	* generates XHTML 1.0 pages that are compatible with HTML 3.2
 	* minimal use of <nop>JavaScript in the user interface (degrades gracefully)
 	* no cookies
 	* no CSS
 
-TWiki generates XHTML 1.0 code as long as it is compatible with HTML 3.2.
+You can easily add capabilities, through customizing the templates, for one, while tailoring the browser requirements to your situation. 
 
 ---++ Known Issues
 
-	* The new TWikiPlugins feature currently does not have any compatibility guidelines for developers. Plugins can require just about anything: browser-specific functions, stylesheets (CSS), Java, cookies, etc.
+	* The new TWikiPlugins feature currently does not have compatibility guidelines for developers. Plugins can require just about anything: browser-specific functions, stylesheets (CSS), DHTML, Java applets, cookies.
 
--- MikeMannix - 29 Aug 2001 
+-- MikeMannix - 15 Sep 2001 <br />
