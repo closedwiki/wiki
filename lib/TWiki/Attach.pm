@@ -1,6 +1,6 @@
 # Module of TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -18,12 +18,14 @@
 # - Latest version at http://twiki.org/
 # - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
 # - Customize variables in TWiki.cfg when installing TWiki.
-#
-#
-#
-# This package contains routines for dealing with attachments to topics.
-# 
-# 
+
+=begin twiki
+
+---+ TWiki::Attach Module
+
+This package contains routines for dealing with attachments to topics.
+
+=cut
 
 package TWiki::Attach;
 

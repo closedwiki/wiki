@@ -1,6 +1,6 @@
 # Module of TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2000-2004 Peter Thoeny, peter@thoeny.com
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -22,6 +22,15 @@
 # - Files wiki[a-z]+.pm are included by wiki.pm
 # - Upgrading TWiki is easy as long as you only customize wikicfg.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
+
+=begin twiki
+
+---+ TWiki::Prefs Module
+
+This module reads TWiki preferences of site-level, web-level and user-level
+topics and implements routines to access those preferences.
+
+=cut
 
 package TWiki::Prefs;
 

@@ -1,6 +1,6 @@
 # Module of TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -15,6 +15,14 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 # Written by John Talintyre, jet@cheerful.com, Jul 2001.
+
+=begin twiki
+
+---+ TWiki::Form Module
+
+This module handles the encoding and decoding of %TWIKIWEB%.TWikiForms
+
+=cut
 
 package TWiki::Form;
 

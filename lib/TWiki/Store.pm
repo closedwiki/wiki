@@ -1,6 +1,6 @@
 # Module of TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -25,6 +25,14 @@
 # 20000917 - NicholasLee : Split file/storage related functions from wiki.pm
 # 200105   - JohnTalintyre : AttachmentsUnderRevisionControl & meta data in topics
 # 200106   - JohnTalintyre : Added Form capability (replaces Category tables)
+
+=begin twiki
+
+---+ TWiki::Store Module
+
+This module hosts the generic storage backend.
+
+=cut
 
 package TWiki::Store;
 

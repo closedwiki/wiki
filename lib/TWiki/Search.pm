@@ -2,7 +2,7 @@
 #
 # Search engine of TWiki.
 #
-# Copyright (C) 2000-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2000-2004 Peter Thoeny, peter@thoeny.com
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -30,6 +30,14 @@
 #                           but may forget) doesn't clear the $n match
 #                           params if a match fails... *^&$#!!!
 # PTh 03 Nov 2000: Performance improvements
+
+=begin twiki
+
+---+ TWiki::Search Module
+
+This module implements all the search functionality.
+
+=cut
 
 package TWiki::Search;
 use strict;

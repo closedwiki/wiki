@@ -1,7 +1,7 @@
 # Module of TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -14,10 +14,14 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-#
-# This program applies in order the installed TWiki plugins.
-# Each plugin is a package that contains the subs listed in
-# @registrableHandlers.
+
+=begin twiki
+
+---+ TWiki:: Module
+
+This module handles Plugins loading, initialization and execution
+
+=cut
 
 package TWiki::Plugins;
 

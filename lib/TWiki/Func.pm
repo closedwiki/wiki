@@ -1,6 +1,6 @@
 # Module of TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2000-2004 Peter Thoeny, Peter@Thoeny.com
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 #
 # Note: Use the TWiki:Plugins/PerlDocPlugin to extract the documentation
+#       Unlike in other modules, do not use a ---+ level one heading
 
 =begin twiki
 

@@ -23,9 +23,15 @@
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 #
 # Jun 2001 - written by John Talintyre, jet@cheerful.com
-#
-# Read/write meta data that describes a topic
-# Data is held as TWiki variables at the start and end of each topic
+
+=begin twiki
+
+---+ TWiki::Meta Module
+
+This module reads/writes meta data that describes a topic.
+Data is held as META:FIELD TWiki variables at the start and end of each topic.
+
+=cut
 
 package TWiki::Meta;
 
