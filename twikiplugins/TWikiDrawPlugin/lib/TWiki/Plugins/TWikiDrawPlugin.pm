@@ -71,7 +71,7 @@ sub initPlugin
 
 sub handleDrawing
 {
-    my( $attributes ) = @_;
+    my( $attributes, $topic, $web ) = @_;
     my $nameVal = TWiki::Func::extractNameValuePair( $attributes );
     if( ! $nameVal ) {
         $nameVal = "untitled";
@@ -129,8 +129,8 @@ sub commonTagsHandler
     # do custom extension rule, like for example:
     # $_[0] =~ s/%XYZ%/&handleXyz()/geo;
     # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/geo;
-    $_[0] =~ s/%DRAWING{(.*?)}%/&handleDrawing($1)/geo;
-    $_[0] =~ s/%DRAWING%/&handleDrawing("untitled")/geo;
+    $_[0] =~ s/%DRAWING{(.*?)}%/&handleDrawing($1, $_[1], $_[2])/geo;
+    $_[0] =~ s/%DRAWING%/&handleDrawing("untitled", $_[1], $_[2])/geo;
 }
 
 # =========================
