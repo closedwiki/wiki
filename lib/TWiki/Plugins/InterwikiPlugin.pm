@@ -54,8 +54,8 @@ BEGIN {
 # 8-bit characters in both parts - see Codev.InternationalisationEnhancements
 # TODO: Need to update the Plugins API to support export of regexes and regex components
 $prefixPattern  = '(^|[\s\-\*\(])';
-$sitePattern    = "([${TWiki::upperAlpha}][${TWiki::mixedAlphaNum}]+)";
-$pagePattern    = "([${TWiki::mixedAlphaNum}_\/][${TWiki::mixedAlphaNum}" . '\+\_\.\,\;\:\!\?\/\%\#-]+?)';
+$sitePattern    = "([${TWiki::regex{upperAlpha}}][${TWiki::regex{mixedAlphaNum}}]+)";
+$pagePattern    = "([${TWiki::regex{mixedAlphaNum}}_\/][${TWiki::regex{mixedAlphaNum}}" . '\+\_\.\,\;\:\!\?\/\%\#-]+?)';
 $postfixPattern = '(?=[\s\.\,\;\:\!\?\)]*(\s|$))';
 
 # =========================

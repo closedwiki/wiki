@@ -145,7 +145,7 @@ sub _searchTopicsInWeb
     return @topicList unless( @theTokens );                        # bail out if no search string
 
     if( $theTopic ) {                                              # limit search to topic list
-        if( $theTopic =~ /^\^\([$TWiki::mixedAlphaNum\|]+\)\$$/ ) { # topic list without wildcards
+        if( $theTopic =~ /^\^\([$TWiki::regex{mixedAlphaNum}\|]+\)\$$/ ) { # topic list without wildcards
             my $topics = $theTopic;                                # for speed, do not get all topics in web
             $topics =~ s/^\^\(//o;                                 # but convert topic pattern into topic list
             $topics =~ s/\)\$//o;                                  #
@@ -279,7 +279,7 @@ sub _makeTopicPattern
     my( $theTopic ) = @_ ;
     return "" unless( $theTopic );
     # "Web*, FooBar" ==> ( "Web*", "FooBar" ) ==> ( "Web.*", "FooBar" )
-    my @arr = map { s/[^\*\_$TWiki::mixedAlphaNum]//go; s/\*/\.\*/go; $_ }
+    my @arr = map { s/[^\*\_$TWiki::regex{mixedAlphaNum}]//go; s/\*/\.\*/go; $_ }
               split( /,\s*/, $theTopic );
     return "" unless( @arr );
     # ( "Web.*", "FooBar" ) ==> "^(Web.*|FooBar)$"
@@ -432,7 +432,7 @@ sub searchWeb
 	# I18N: match non-alpha before and after topic name in renameview searches
 	# This regex must work under grep, i.e. if using Perl 5.6 or higher
 	# the POSIX character classes will be used in grep as well.
-        my $alphaNum = $TWiki::mixedAlphaNum;
+        my $alphaNum = $TWiki::regex{mixedAlphaNum};
         $theSearchVal = "(^|[^${alphaNum}_])$theSearchVal" . 
 			"([^${alphaNum}_]" . '|$)|' .
                         '(\[\[' . $spacedTopic . '\]\])';
@@ -666,7 +666,7 @@ sub searchWeb
         if( $theHeader ) {
             $theHeader =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
 	    # I18N fix
-	    my $mixedAlpha = $TWiki::mixedAlpha;
+	    my $mixedAlpha = $TWiki::regex{mixedAlpha};
 	    $theHeader =~ s/\$n([^$mixedAlpha])/\n$1/gos; # expand "$n" to new line
             $beforeText = $theHeader;
             $beforeText =~ s/\$web/$thisWebName/gos;
@@ -752,7 +752,7 @@ sub searchWeb
                 }
                 $tempVal =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
 		# I18N fix
-		my $mixedAlpha = $TWiki::mixedAlpha;
+		my $mixedAlpha = $TWiki::regex{mixedAlpha};
                 $tempVal =~ s/\$n([^$mixedAlpha])/\n$1/gos; # expand "$n" to new line
                 $tempVal =~ s/\$web/$thisWebName/gos;
                 $tempVal =~ s/\$topic\(([^\)]*)\)/breakName( $topic, $1 )/geos;
@@ -839,7 +839,7 @@ sub searchWeb
                    if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
                        # Case insensitive option is required to get [[spaced Word]] to match
 		       # I18N: match non-alpha before and after topic name in renameview searches
-		       my $alphaNum = $TWiki::mixedAlphaNum;
+		       my $alphaNum = $TWiki::regex{mixedAlphaNum};
                        my $match =  "(^|[^${alphaNum}_.])($originalSearch)(?=[^${alphaNum}]|\$)";
 		       # NOTE: Must *not* use /o here, since $match is based on
 		       # search string that will vary during lifetime of
@@ -1108,8 +1108,8 @@ sub spacedTopic
     my( $topic ) = @_;
     # FindMe -> Find\s*Me
     # I18N fix
-    my $upperAlpha = $TWiki::singleUpperAlphaRegex;
-    my $lowerAlpha = $TWiki::singleLowerAlphaRegex;
+    my $upperAlpha = $TWiki::regex{singleUpperAlphaRegex};
+    my $lowerAlpha = $TWiki::regex{singleLowerAlphaRegex};
     $topic =~ s/($lowerAlpha)($upperAlpha)/$1 *$2/go;
     return $topic;
 }

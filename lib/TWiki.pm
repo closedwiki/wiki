@@ -106,30 +106,11 @@ use vars qw(
 # ---------------------------
 # Site-Wide Global Variables
 
-# Regex variables
-use vars qw(
-        $headerPatternDa $headerPatternSp $headerPatternHt $headerPatternNoTOC
-	$linkProtocolPattern
-    );
-# Regex setup for internationalisation:
-use vars qw(
-	$upperAlpha $lowerAlpha $mixedAlpha $mixedAlphaNum $lowerAlphaNum $numeric
-
-	$wikiWordRegex $webNameRegex $defaultWebNameRegex $anchorRegex $abbrevRegex 
-	$emailAddrRegex $filenameRegex
-
-	$singleUpperAlphaRegex $singleLowerAlphaRegex $singleUpperAlphaNumRegex
-	$singleMixedAlphaNumRegex $singleMixedNonAlphaNumRegex 
-	$singleMixedNonAlphaRegex $mixedAlphaNumRegex
-
-	$validAsciiStringRegex $validUtf8CharRegex $validUtf8StringRegex 
-    );
-
 # Misc. Globals
 use vars qw(
 	@isoMonth @weekDay %userToWikiList %wikiToUserList $wikiversion
 	$TranslationToken %mon2num $viewScript $twikiLibDir $formatVersion
-	@publicWebList
+	@publicWebList %regex
     );
 
 # Internationalisation (I18N) setup:
@@ -207,13 +188,13 @@ $cgiQuery = 0;
 $noAutoLink = 0;
 $viewScript = "view";
 
-$linkProtocolPattern = "(file|ftp|gopher|http|https|irc|news|nntp|telnet)";
+$regex{linkProtocolPattern} = "(file|ftp|gopher|http|https|irc|news|nntp|telnet)";
 
 # Header patterns based on '+++'. The '###' are reserved for numbered headers
-$headerPatternDa = '^---+(\++|\#+)\s*(.+)\s*$';       # '---++ Header', '---## Header'
-$headerPatternSp = '^\t(\++|\#+)\s*(.+)\s*$';         # '   ++ Header', '   + Header'
-$headerPatternHt = '^<h([1-6])>\s*(.+?)\s*</h[1-6]>'; # '<h6>Header</h6>
-$headerPatternNoTOC = '(\!\!+|%NOTOC%)';  # '---++!! Header' or '---++ Header %NOTOC% ^top'
+$regex{headerPatternDa} = '^---+(\++|\#+)\s*(.+)\s*$';       # '---++ Header', '---## Header'
+$regex{headerPatternSp} = '^\t(\++|\#+)\s*(.+)\s*$';         # '   ++ Header', '   + Header'
+$regex{headerPatternHt} = '^<h([1-6])>\s*(.+?)\s*</h[1-6]>'; # '<h6>Header</h6>
+$regex{headerPatternNoTOC} = '(\!\!+|%NOTOC%)';  # '---++!! Header' or '---++ Header %NOTOC% ^top'
 
 $debugUserTime   = 0;
 $debugSystemTime = 0;
@@ -353,7 +334,7 @@ sub initialize
     $topicName = "";
     $webName   = "";
     if( $theTopic ) {
-        if(( $theTopic =~ /^$linkProtocolPattern\:\/\//o ) && ( $cgiQuery ) ) {
+        if(( $theTopic =~ /^$regex{linkProtocolPattern}\:\/\//o ) && ( $cgiQuery ) ) {
             # redirect to URI
             print $cgiQuery->redirect( $theTopic );
             return; # should never return here
@@ -571,61 +552,61 @@ sub setupRegexes {
     if ( not $useLocale or $] < 5.006 or not $localeRegexes ) {
 	# No locales needed/working, or Perl 5.005_03 or lower, so just use
 	# any additional national characters defined in TWiki.cfg
-	$upperAlpha = "A-Z$upperNational";
-	$lowerAlpha = "a-z$lowerNational";
-	$numeric = '\d';
-	$mixedAlpha = "${upperAlpha}${lowerAlpha}";
+	$regex{upperAlpha} = "A-Z$upperNational";
+	$regex{lowerAlpha} = "a-z$lowerNational";
+	$regex{numeric} = '\d';
+	$regex{mixedAlpha} = "$regex{upperAlpha}$regex{lowerAlpha}";
     } else {
 	# Perl 5.6 or higher with working locales
-	$upperAlpha = "[:upper:]";
-	$lowerAlpha = "[:lower:]";
-	$numeric = "[:digit:]";
-	$mixedAlpha = "[:alpha:]";
+	$regex{upperAlpha} = "[:upper:]";
+	$regex{lowerAlpha} = "[:lower:]";
+	$regex{numeric} = "[:digit:]";
+	$regex{mixedAlpha} = "[:alpha:]";
     }
-    $mixedAlphaNum = "${mixedAlpha}${numeric}";
-    $lowerAlphaNum = "${lowerAlpha}${numeric}";
+    $regex{mixedAlphaNum} = "$regex{mixedAlpha}$regex{numeric}";
+    $regex{lowerAlphaNum} = "$regex{lowerAlpha}$regex{numeric}";
 
     # Compile regexes for efficiency and ease of use
     # Note: qr// locks in regex modes (i.e. '-xism' here) - see Friedl
     # book at http://regex.info/. 
 
     # TWiki concept regexes
-    $wikiWordRegex = qr/[$upperAlpha]+[$lowerAlpha]+[$upperAlpha]+[$mixedAlphaNum]*/;
-    $webNameRegex = qr/[$upperAlpha]+[$mixedAlphaNum]*/;
-    $defaultWebNameRegex = qr/_[${mixedAlphaNum}_]+/;
-    $anchorRegex = qr/\#[${mixedAlphaNum}_]+/;
-    $abbrevRegex = qr/[$upperAlpha]{3,}/;
+    $regex{wikiWordRegex} = qr/[$regex{upperAlpha}]+[$regex{lowerAlpha}]+[$regex{upperAlpha}]+[$regex{mixedAlphaNum}]*/;
+    $regex{webNameRegex} = qr/[$regex{upperAlpha}]+[$regex{mixedAlphaNum}]*/;
+    $regex{defaultWebNameRegex} = qr/_[$regex{mixedAlphaNum}_]+/;
+    $regex{anchorRegex} = qr/\#[$regex{mixedAlphaNum}_]+/;
+    $regex{abbrevRegex} = qr/[$regex{upperAlpha}]{3,}/;
 
     # Simplistic email regex, e.g. for WebNotify processing - no i18n
     # characters allowed
-    $emailAddrRegex = qr/([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/;
+    $regex{emailAddrRegex} = qr/([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/;
 
     # Filename regex, for attachments
-    $filenameRegex = qr/[${mixedAlphaNum}\.]+/;
+    $regex{filenameRegex} = qr/[$regex{mixedAlphaNum}\.]+/;
 
     # Single-character alpha-based regexes
-    $singleUpperAlphaRegex = qr/[$upperAlpha]/;
-    $singleLowerAlphaRegex = qr/[$lowerAlpha]/;
-    $singleUpperAlphaNumRegex = qr/[${upperAlpha}${numeric}]/;
-    $singleMixedAlphaNumRegex = qr/[${upperAlpha}${lowerAlpha}${numeric}]/;
+    $regex{singleUpperAlphaRegex} = qr/[$regex{upperAlpha}]/;
+    $regex{singleLowerAlphaRegex} = qr/[$regex{lowerAlpha}]/;
+    $regex{singleUpperAlphaNumRegex} = qr/[$regex{upperAlpha}$regex{numeric}]/;
+    $regex{singleMixedAlphaNumRegex} = qr/[$regex{upperAlpha}$regex{lowerAlpha}$regex{numeric}]/;
 
-    $singleMixedNonAlphaRegex = qr/[^${upperAlpha}${lowerAlpha}]/;
-    $singleMixedNonAlphaNumRegex = qr/[^${upperAlpha}${lowerAlpha}${numeric}]/;
+    $regex{singleMixedNonAlphaRegex} = qr/[^$regex{upperAlpha}$regex{lowerAlpha}]/;
+    $regex{singleMixedNonAlphaNumRegex} = qr/[^$regex{upperAlpha}$regex{lowerAlpha}$regex{numeric}]/;
 
     # Multi-character alpha-based regexes
-    $mixedAlphaNumRegex = qr/[${mixedAlphaNum}]*/;
+    $regex{mixedAlphaNumRegex} = qr/[$regex{mixedAlphaNum}]*/;
 
     # Character encoding regexes
 
     # 7-bit ASCII only
-    $validAsciiStringRegex = qr/^[\x00-\x7F]+$/;
+    $regex{validAsciiStringRegex} = qr/^[\x00-\x7F]+$/;
     
     # Regex to match only a valid UTF-8 character, taking care to avoid
     # security holes due to overlong encodings by excluding the relevant
     # gaps in UTF-8 encoding space - see 'perldoc perlunicode', Unicode
     # Encodings section.  Tested against Markus Kuhn's UTF-8 test file
     # at http://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt.
-    $validUtf8CharRegex = qr{
+    $regex{validUtf8CharRegex} = qr{
 				# Single byte - ASCII
 				[\x00-\x7F] 
 				|
@@ -657,7 +638,7 @@ sub setupRegexes {
 				    [\x80-\xBF][\x80-\xBF]
 			    }x;
 
-    $validUtf8StringRegex = qr/^ (?: $validUtf8CharRegex )+ $/x;
+    $regex{validUtf8StringRegex} = qr/^ (?: $regex{validUtf8CharRegex} )+ $/x;
 
 }
 
@@ -697,9 +678,9 @@ sub convertUtf8URLtoSiteCharset {
     my $charEncoding;
 
     # Detect character encoding of the full topic name from URL
-    if ( $fullTopicName =~ $validAsciiStringRegex ) {
+    if ( $fullTopicName =~ $regex{validAsciiStringRegex} ) {
 	$urlCharEncoding = 'ASCII';
-    } elsif ( $fullTopicName =~ $validUtf8StringRegex ) {
+    } elsif ( $fullTopicName =~ $regex{validUtf8StringRegex} ) {
 	$urlCharEncoding = 'UTF-8';
 
 	# Convert into ISO-8859-1 if it is the site charset
@@ -1010,14 +991,14 @@ sub getEmailNotifyList
     my @list = ();
     my %seen;			# Incremented when email address is seen
     foreach ( split ( /\n/, TWiki::Store::readWebTopic( $web, $topicname ) ) ) {
-        if ( /^\s+\*\s(?:$mainWebPattern\.)?($wikiWordRegex)\s+\-\s+($emailAddrRegex)/o ) {
+        if ( /^\s+\*\s(?:$mainWebPattern\.)?($regex{wikiWordRegex})\s+\-\s+($regex{emailAddrRegex})/o ) {
 	    # Got full form:   * Main.WikiName - email@domain
 	    # (the 'Main.' part is optional, non-capturing)
 	    if ( $1 ne 'TWikiGuest' ) {
 		# Add email address to list if non-guest and non-duplicate
 		push (@list, $2) unless $seen{$1}++;
             }
-        } elsif ( /^\s+\*\s(?:$mainWebPattern\.)?($wikiWordRegex)\s*$/o ) { 
+        } elsif ( /^\s+\*\s(?:$mainWebPattern\.)?($regex{wikiWordRegex})\s*$/o ) { 
 	    # Got short form:   * Main.WikiName
 	    # (the 'Main.' part is optional, non-capturing)
             my $userWikiName = $1;
@@ -1176,12 +1157,12 @@ sub userToWikiListInit
 
     # Get all entries with two '-' characters on same line, i.e.
     # 'WikiName - userid - date created'
-    @list = grep { /^\s*\* $wikiWordRegex\s*-\s*[^\-]*-/o } @list;
+    @list = grep { /^\s*\* $regex{wikiWordRegex}\s*-\s*[^\-]*-/o } @list;
     my $wUser;
     my $lUser;
     foreach( @list ) {
 	# Get the WikiName and userid, and build hashes in both directions
-        if(  ( /^\s*\* ($wikiWordRegex)\s*\-\s*([^\s]*).*/o ) && $2 ) {
+        if(  ( /^\s*\* ($regex{wikiWordRegex})\s*\-\s*([^\s]*).*/o ) && $2 ) {
             $wUser = $1;	# WikiName
             $lUser = $2;	# userid
             $lUser =~ s/$securityFilter//go;	# FIXME: Should filter in for security...
@@ -1281,7 +1262,7 @@ sub isWikiName
     my( $name ) = @_;
 
     $name ||= "";	# Default value if undef
-    return ( $name =~ m/^${wikiWordRegex}$/o )
+    return ( $name =~ m/^$regex{wikiWordRegex}$/o )
 }
 
 # =========================
@@ -1299,7 +1280,7 @@ sub isAbbrev
     my( $name ) = @_;
 
     $name ||= "";	# Default value if undef
-    return ( $name =~ m/^${abbrevRegex}$/o )
+    return ( $name =~ m/^$regex{abbrevRegex}$/o )
 }
 
 # =========================
@@ -1317,7 +1298,7 @@ sub isWebName
     my( $name ) = @_;
 
     $name ||= "";	# Default value if undef
-    return ( $name =~ m/^${webNameRegex}$/o )
+    return ( $name =~ m/^$regex{webNameRegex}$/o )
 }
 
 # =========================
@@ -1761,7 +1742,7 @@ sub makeTopicSummary
     # possible.
 
     # limit to 162 chars 
-    $htext =~ s/(.{162})($mixedAlphaNumRegex)(.*?)$/$1$2 \.\.\./g;
+    $htext =~ s/(.{162})($regex{mixedAlphaNumRegex})(.*?)$/$1$2 \.\.\./g;
 
     # Encode special chars into XML &#nnn; entities for use in RSS feeds
     # - no encoding for HTML pages, to avoid breaking international 
@@ -1774,10 +1755,10 @@ sub makeTopicSummary
 
     # inline search renders text, so prevent linking of external and
     # internal links:
-    $htext =~ s/([\-\*\s])($linkProtocolPattern\:)/$1<nop>$2/go;
-    $htext =~ s/([\s\(])($webNameRegex\.$wikiWordRegex)/$1<nop>$2/g;
-    $htext =~ s/([\s\(])($wikiWordRegex)/$1<nop>$2/g;
-    $htext =~ s/([\s\(])($abbrevRegex)/$1<nop>$2/g;
+    $htext =~ s/([\-\*\s])($regex{linkProtocolPattern}\:)/$1<nop>$2/go;
+    $htext =~ s/([\s\(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1<nop>$2/g;
+    $htext =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/g;
+    $htext =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/g;
     $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
 
     return $htext;
@@ -1864,7 +1845,7 @@ sub fixURL
     } elsif( $url =~ /^\./ ) {
         # fix relative URL
         $url = "$theHost$theAbsPath/$url";
-    } elsif( $url =~ /^$linkProtocolPattern\:/ ) {
+    } elsif( $url =~ /^$regex{linkProtocolPattern}\:/ ) {
         # full qualified URL, do nothing
     } elsif( $url ) {
         # FIXME: is this test enough to detect relative URLs?
@@ -1889,7 +1870,7 @@ sub fixIncludeLink
 
     if( $theLabel ) {
         # [[...][...]] link
-        if( $theLink =~ /^($webNameRegex\.|$defaultWebNameRegex\.|$linkProtocolPattern\:)/ ) {
+        if( $theLink =~ /^($regex{webNameRegex}\.|$regex{defaultWebNameRegex}\.|$regex{linkProtocolPattern}\:)/ ) {
             return "[[$theLink][$theLabel]]";  # no change
         }
         # add 'Web.' prefix
@@ -1897,7 +1878,7 @@ sub fixIncludeLink
 
     } else {
         # [[...]] link
-        if( $theLink =~ /^($webNameRegex\.|$defaultWebNameRegex\.|$linkProtocolPattern\:)/ ) {
+        if( $theLink =~ /^($regex{webNameRegex}\.|$regex{defaultWebNameRegex}\.|$regex{linkProtocolPattern}\:)/ ) {
             return "[[$theLink]]";  # no change
         }
         # add 'Web.' prefix
@@ -2124,8 +2105,8 @@ sub handleIncludeFile
     # If needed, fix all "TopicNames" to "Web.TopicNames" to get the right context
     if( ( $isTopic ) && ( $theWeb ne $webName ) ) {
         # "TopicName" to "Web.TopicName"
-        $text =~ s/(^|[\s\(])($webNameRegex\.$wikiWordRegex)/$1$TranslationToken$2/go;
-        $text =~ s/(^|[\s\(])($wikiWordRegex|$abbrevRegex)/$1$theWeb\.$2/go;
+        $text =~ s/(^|[\s\(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1$TranslationToken$2/go;
+        $text =~ s/(^|[\s\(])($regex{wikiWordRegex}|$regex{abbrevRegex})/$1$theWeb\.$2/go;
         $text =~ s/(^|[\s\(])$TranslationToken/$1/go;
         # "[[TopicName]]" to "[[Web.TopicName][TopicName]]"
         $text =~ s/\[\[([^\]]+)\]\]/fixIncludeLink( $theWeb, $1 )/geo;
@@ -2360,7 +2341,7 @@ sub handleToc
             &TWiki::Store::readWebTopic( $web, $topicname ), $topicname, $web ) );
     }
 
-    @list = grep { /(<\/?pre>)|($headerPatternDa)|($headerPatternSp)|($headerPatternHt)/ } @list;
+    @list = grep { /(<\/?pre>)|($regex{headerPatternDa})|($regex{headerPatternSp})|($regex{headerPatternHt})/ } @list;
     my $insidePre = 0;
     my $i = 0;
     my $tabs = "";
@@ -2377,24 +2358,24 @@ sub handleToc
         }
         if (!$insidePre) {
             $level = $line ;
-            if ( $line =~  /$headerPatternDa/o ) {
-                $level =~ s/$headerPatternDa/$1/go;
+            if ( $line =~  /$regex{headerPatternDa}/o ) {
+                $level =~ s/$regex{headerPatternDa}/$1/go;
                 $level = length $level;
-                $line  =~ s/$headerPatternDa/$2/go;
+                $line  =~ s/$regex{headerPatternDa}/$2/go;
             } elsif
-               ( $line =~  /$headerPatternSp/o ) {
-                $level =~ s/$headerPatternSp/$1/go;
+               ( $line =~  /$regex{headerPatternSp}/o ) {
+                $level =~ s/$regex{headerPatternSp}/$1/go;
                 $level = length $level;
-                $line  =~ s/$headerPatternSp/$2/go;
+                $line  =~ s/$regex{headerPatternSp}/$2/go;
             } elsif
-               ( $line =~  /$headerPatternHt/io ) {
-                $level =~ s/$headerPatternHt/$1/gio;
-                $line  =~ s/$headerPatternHt/$2/gio;
+               ( $line =~  /$regex{headerPatternHt}/io ) {
+                $level =~ s/$regex{headerPatternHt}/$1/gio;
+                $line  =~ s/$regex{headerPatternHt}/$2/gio;
             }
             if( ( $line ) && ( $level <= $depth ) ) {
                 $anchor = makeAnchorName( $line );
                 # cut TOC exclude '---+ heading !! exclude'
-                $line  =~ s/\s*$headerPatternNoTOC.+$//go;
+                $line  =~ s/\s*$regex{headerPatternNoTOC}.+$//go;
                 $line  =~ s/[\n\r]//go;
                 next unless $line;
                 $highest = $level if( $level < $highest );
@@ -2408,9 +2389,9 @@ sub handleToc
                 # Prevent WikiLinks
                 $line =~ s/\[\[.*\]\[(.*?)\]\]/$1/g;  # '[[...][...]]'
                 $line =~ s/\[\[(.*?)\]\]/$1/ge;       # '[[...]]'
-                $line =~ s/([\s\(])($webNameRegex)\.($wikiWordRegex)/$1<nop>$3/g;  # 'Web.TopicName'
-                $line =~ s/([\s\(])($wikiWordRegex)/$1<nop>$2/g;  # 'TopicName'
-                $line =~ s/([\s\(])($abbrevRegex)/$1<nop>$2/g;  # 'TLA'
+                $line =~ s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/$1<nop>$3/g;  # 'Web.TopicName'
+                $line =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/g;  # 'TopicName'
+                $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/g;  # 'TLA'
                 # create linked bullet item
                 $line = "$tabs* <a href=\"$scriptUrlPath/$viewScript$scriptSuffix/$webPath/$topicname#$anchor\">$line</a>";
                 $result .= "\n$line";
@@ -2696,7 +2677,7 @@ sub handleSpacedTopic
 {
     my( $theTopic ) = @_;
     my $spacedTopic = $theTopic;
-    $spacedTopic =~ s/($singleLowerAlphaRegex+)($singleUpperAlphaNumRegex+)/$1%20*$2/go;   # "%20*" is " *" - I18N: only in ASCII-derived charsets
+    $spacedTopic =~ s/($regex{singleLowerAlphaRegex}+)($regex{singleUpperAlphaNumRegex}+)/$1%20*$2/go;   # "%20*" is " *" - I18N: only in ASCII-derived charsets
     return $spacedTopic;
 }
 
@@ -2774,7 +2755,7 @@ sub handleInternalTags
     # Include the filename suffixed to %ATTACHURLPATH% - a hack, but required
     # for migration purposes
     # FIXME: Also do this for PUBURLPATH?
-    $_[0] =~ s!%ATTACHURLPATH%/($filenameRegex)!&handleNativeUrlEncode("$pubUrlPath/$_[2]/$_[1]/$1",1)!ge;
+    $_[0] =~ s!%ATTACHURLPATH%/($regex{filenameRegex})!&handleNativeUrlEncode("$pubUrlPath/$_[2]/$_[1]/$1",1)!ge;
     $_[0] =~ s!%ATTACHURLPATH%!&handleNativeUrlEncode("$pubUrlPath/$_[2]/$_[1]",1)!ge;	# No-filename case
     $_[0] =~ s/%ICON{(.*?)}%/&handleIcon($1)/ge;
     $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/ge;
@@ -3381,18 +3362,18 @@ sub makeAnchorHeading
     # - Initial '<nop>' is needed to prevent subsequent matches.
     # - Need to make sure that <a> tags are not nested, i.e. in
     #   case heading has a WikiName or ABBREV that gets linked
-    # - filter out $headerPatternNoTOC ( '!!' and '%NOTOC%' )
+    # - filter out $regex{headerPatternNoTOC} ( '!!' and '%NOTOC%' )
 
     my $text = $theText;
     my $anchorName = &makeAnchorName( $text );
-    $text =~ s/$headerPatternNoTOC//o; # filter '!!', '%NOTOC%'
+    $text =~ s/$regex{headerPatternNoTOC}//o; # filter '!!', '%NOTOC%'
     my $hasAnchor = 0;  # text contains potential anchor
     $hasAnchor = 1 if( $text =~ m/<a /i );
     $hasAnchor = 1 if( $text =~ m/\[\[/ );
 
-    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($abbrevRegex)/ );
-    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($webNameRegex)\.($wikiWordRegex)/ );
-    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($wikiWordRegex)/ );
+    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{abbrevRegex})/ );
+    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/ );
+    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{wikiWordRegex})/ );
     if( $hasAnchor ) {
         # FIXME: '<h1><a name="atext"></a></h1> WikiName' has an
         #        empty <a> tag, which is not HTML conform
@@ -3422,10 +3403,10 @@ sub makeAnchorName
     $anchorName =~ s/[\s\_]*$//;            # no trailing space, nor '_'
     $anchorName =~ s/<\w[^>]*>//gi;         # remove HTML tags
     $anchorName =~ s/\&\#?[a-zA-Z0-9]*;//g; # remove HTML entities
-    $anchorName =~ s/^(.+?)\s*$headerPatternNoTOC.*/$1/o; # filter TOC excludes if not at beginning
-    $anchorName =~ s/$headerPatternNoTOC//o; # filter '!!', '%NOTOC%'
+    $anchorName =~ s/^(.+?)\s*$regex{headerPatternNoTOC}.*/$1/o; # filter TOC excludes if not at beginning
+    $anchorName =~ s/$regex{headerPatternNoTOC}//o; # filter '!!', '%NOTOC%'
     # FIXME: More efficient to match with '+' on next line:
-    $anchorName =~ s/$singleMixedNonAlphaNumRegex/_/g;      # only allowed chars
+    $anchorName =~ s/$regex{singleMixedNonAlphaNumRegex}/_/g;      # only allowed chars
     $anchorName =~ s/__+/_/g;               # remove excessive '_'
     $anchorName =~ s/^(.{32})(.*)$/$1/;     # limit to 32 chars - FIXME: Use Unicode chars before truncate
 
@@ -3475,10 +3456,10 @@ sub internalLink {
     # whole link, and first of each word. TODO: Try to turn this off,
     # avoiding spaces being stripped elsewhere - e.g. $doPreserveSpacedOutWords 
     $theTopic =~ s/^(.)/\U$1/;
-    $theTopic =~ s/\s($singleMixedAlphaNumRegex)/\U$1/go;	
+    $theTopic =~ s/\s($regex{singleMixedAlphaNumRegex})/\U$1/go;	
 
     # Add <nop> before WikiWord inside link text to prevent double links
-    $theLinkText =~ s/([\s\(])($singleUpperAlphaRegex)/$1<nop>$2/go;
+    $theLinkText =~ s/([\s\(])($regex{singleUpperAlphaRegex})/$1<nop>$2/go;
 
     my $exist = &TWiki::Store::topicExists( $theWeb, $theTopic );
     # I18N - Only apply plural processing if site language is English, or
@@ -3551,24 +3532,24 @@ sub specificLink
     $theLink =~ s/^\s*//;
     $theLink =~ s/\s*$//;
 
-    if( $theLink =~ /^$linkProtocolPattern\:/ ) {
+    if( $theLink =~ /^$regex{linkProtocolPattern}\:/ ) {
 
         # External link: add <nop> before WikiWord and ABBREV 
 	# inside link text, to prevent double links
-	$theText =~ s/([\s\(])($singleUpperAlphaRegex)/$1<nop>$2/go;
+	$theText =~ s/([\s\(])($regex{singleUpperAlphaRegex})/$1<nop>$2/go;
         return "$thePreamble<a href=\"$theLink\" target=\"_top\">$theText</a>";
 
     } else {
 
 	# Internal link: get any 'Web.' prefix, or use current web
-	$theLink =~ s/^($webNameRegex|$defaultWebNameRegex)\.//;
+	$theLink =~ s/^($regex{webNameRegex}|$regex{defaultWebNameRegex})\.//;
 	my $web = $1 || $theWeb;
 	(my $baz = "foo") =~ s/foo//;       # reset $1, defensive coding
 
 	# Extract '#anchor'
 	# FIXME and NOTE: Had '-' as valid anchor character, removed
 	# $theLink =~ s/(\#[a-zA-Z_0-9\-]*$)//;
-	$theLink =~ s/($anchorRegex$)//;
+	$theLink =~ s/($regex{anchorRegex}$)//;
 	my $anchor = $1 || "";
 
 	# Get the topic name
@@ -3776,7 +3757,7 @@ sub getRenderedVersion {
             s/$TranslationToken(\!\-\-)/\<$1/go;
 
 # Handle embedded URLs
-            s!(^|[\-\*\s\(])($linkProtocolPattern\:([^\s\<\>\"]+[^\s\.\,\!\?\;\:\)\<]))!&externalLink($1,$2)!geo;
+            s!(^|[\-\*\s\(])($regex{linkProtocolPattern}\:([^\s\<\>\"]+[^\s\.\,\!\?\;\:\)\<]))!&externalLink($1,$2)!geo;
 
 # Entities
             s/&(\w+?)\;/$TranslationToken$1\;/g;      # "&abc;"
@@ -3786,11 +3767,11 @@ sub getRenderedVersion {
 
 # Headings
             # '<h6>...</h6>' HTML rule
-            s/$headerPatternHt/&makeAnchorHeading($2,$1)/geoi;
+            s/$regex{headerPatternHt}/&makeAnchorHeading($2,$1)/geoi;
             # '\t+++++++' rule
-            s/$headerPatternSp/&makeAnchorHeading($2,(length($1)))/geo;
+            s/$regex{headerPatternSp}/&makeAnchorHeading($2,(length($1)))/geo;
             # '----+++++++' rule
-            s/$headerPatternDa/&makeAnchorHeading($2,(length($1)))/geo;
+            s/$regex{headerPatternDa}/&makeAnchorHeading($2,(length($1)))/geo;
 
 # Horizontal rule
             s/^---+/<hr \/>/;
@@ -3823,7 +3804,7 @@ sub getRenderedVersion {
             }
 
 # '#WikiName' anchors
-            s/^(\#)($wikiWordRegex)/ '<a name="' . &makeAnchorName( $2 ) . '"><\/a>'/ge;
+            s/^(\#)($regex{wikiWordRegex})/ '<a name="' . &makeAnchorName( $2 ) . '"><\/a>'/ge;
 
 # enclose in white space for the regex that follow
              s/(.*)/\n$1\n/;
@@ -3869,21 +3850,21 @@ sub getRenderedVersion {
             unless( $noAutoLink || $insideNoAutoLink ) {
 
                 # 'Web.TopicName#anchor' link:
-                s/([\s\(])($webNameRegex)\.($wikiWordRegex)($anchorRegex)/&internalLink($1,$2,$3,"$TranslationToken$3$4$TranslationToken",$4,1)/geo;
+                s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})($regex{anchorRegex})/&internalLink($1,$2,$3,"$TranslationToken$3$4$TranslationToken",$4,1)/geo;
                 # 'Web.TopicName' link:
-                s/([\s\(])($webNameRegex)\.($wikiWordRegex)/&internalCrosswebLink($1,$2,$3,"$TranslationToken$3$TranslationToken","",1)/geo;
+                s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/&internalCrosswebLink($1,$2,$3,"$TranslationToken$3$TranslationToken","",1)/geo;
 
                 # 'TopicName#anchor' link:
-                s/([\s\(])($wikiWordRegex)($anchorRegex)/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/geo;
+                s/([\s\(])($regex{wikiWordRegex})($regex{anchorRegex})/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/geo;
 
                 # 'TopicName' link:
-		s/([\s\(])($wikiWordRegex)/&internalLink($1,$theWeb,$2,$2,"",1)/geo;
+		s/([\s\(])($regex{wikiWordRegex})/&internalLink($1,$theWeb,$2,$2,"",1)/geo;
 
 		# Handle acronyms/abbreviations of three or more letters
                 # 'Web.ABBREV' link:
-                s/([\s\(])($webNameRegex)\.($abbrevRegex)/&internalLink($1,$2,$3,$3,"",0)/geo;
+                s/([\s\(])($regex{webNameRegex})\.($regex{abbrevRegex})/&internalLink($1,$2,$3,$3,"",0)/geo;
                 # 'ABBREV' link:
-		s/([\s\(])($abbrevRegex)/&internalLink($1,$theWeb,$2,$2,"",0)/geo;
+		s/([\s\(])($regex{abbrevRegex})/&internalLink($1,$theWeb,$2,$2,"",0)/geo;
                 # (deprecated <link> moved to DefaultPlugin)
 
                 s/$TranslationToken(\S.*?)$TranslationToken/$1/go;

@@ -241,7 +241,7 @@ sub changeRefTo
 
    my $preTopic = '^|[\*\s\[][-\(\s]*';
    # I18N: match non-alpha before/after topic names
-   my $alphaNum = $TWiki::mixedAlphaNum;
+   my $alphaNum = $TWiki::regex{mixedAlphaNum};
    my $postTopic = '$|' . "[^${alphaNum}_.]" . '|\.\s';
    my $metaPreTopic = '"|[\s[,\(-]';
    my $metaPostTopic = "[^${alphaNum}_.]" . '|\.\s';
