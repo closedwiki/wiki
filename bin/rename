@@ -59,10 +59,17 @@ sub main
     if( ! $justChangeRefs ) {
        $justChangeRefs = "";
     }
-
+    
+    my $fileName = &TWiki::Store::getFileName($oldWeb, $oldTopic);
+    my $newName;
+    $newName = &TWiki::Store::getFileName($newWeb, $newTopic) if( defined( $newWeb ) );
+    
     if( ! $justChangeRefs ) {
+       if( checkExist( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $fileName, $newName ) ) {
+           return;
+       }
+    
        if( ! checkPermissions( $oldWeb, $oldTopic, $wikiUserName ) ) {
-          # FIXME below error indicated by true return
            # FIXME: This produces Internal Server Error if oldWeb does not exist
            return;
        }
@@ -81,20 +88,9 @@ sub main
               return;
         }
     }
-        
-    my $fileName = &TWiki::Store::getFileName($oldWeb, $oldTopic);
-    my $newName = &TWiki::Store::getFileName($newWeb, $newTopic);
-    
-    if( ! $justChangeRefs ) {
-        # Check all is okay before we proceed.
-        if( checkExist( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $fileName, $newName ) ) {
-           return;
-        }
-    }
-    
+            
     # FIXME should warn if newname is not a wiki name
     # FIXME to do after move?
-    TWiki::writeDebug( "rename: about to find referring pages" );
     if( ! $theAttachment ) {
         my @refs = findReferingPages( $oldWeb, $oldTopic );
         my $problems;
@@ -287,7 +283,7 @@ sub checkExist
    }
 
    # Does new WEB exist?
-   if( ! &TWiki::Store::webExists( $newWeb ) ) {
+   if( defined( $newFileName ) && ! &TWiki::Store::webExists( $newWeb ) ) {
       TWiki::writeHeader( $query );
       $tmpl= &TWiki::Store::readTemplate( "oopsnoweb" );
       $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic, $newWeb );
@@ -305,7 +301,7 @@ sub checkExist
    }
 
    # Check new topic doesn't exist (opposite if we've moving an attachment)
-   if( -e $newFileName && ! $theAttachment ) {
+   if( defined( $newFileName ) && -e $newFileName && ! $theAttachment ) {
       # Unless moving an attachment, new topic should not already exist
       TWiki::writeHeader( $query );
       # FIXME - should this use oopsexists rather than oopsgeneral?
@@ -318,7 +314,8 @@ sub checkExist
       # FIXME error doesn't appear on user screen.
       $ret = "problem";    
    }    
-   if( $theAttachment && ! -e $newFileName ) {
+   
+   if( defined( $newFileName ) && $theAttachment && ! -e $newFileName ) {
       TWiki::writeHeader( $query );
       $tmpl= &TWiki::Store::readTemplate( "oopsmissing" );
       $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic, $newWeb );
