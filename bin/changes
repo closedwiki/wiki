@@ -73,16 +73,18 @@ sub main
             $foo =~ s/%TOPICNAME%/$bar[0]/go;
             $wikiuser = &TWiki::userToWikiName( $bar[1] );
             $foo =~ s/%AUTHOR%/$wikiuser/go;
+            $foo =~ s/%LOCKED%//go;
             $time = &TWiki::formatGmTime( $bar[2] );
             $frev = "";
             if( $bar[3] ) {
                 if( $bar[3] > 1 ) {
-                    $frev = " - r1.$bar[3]";
+                    $frev = "r1.$bar[3]";
                 } else {
-                    $frev = " - <b>NEW</b>";
+                    $frev = "<b>NEW</b>";
                 }
             }
-            $foo =~ s/%TIME%/$time$frev/go;
+            $foo =~ s/%TIME%/$time/go;
+            $foo =~ s/%REVISION%/$frev/go;
             $foo = &TWiki::getRenderedVersion( $foo );
 
             $head = &TWiki::Store::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );
