@@ -46,10 +46,9 @@ use HTML::TableExtract;
 mkpath $Config->{local_cache} or die $! unless -d $Config->{local_cache};
 my @errors;
 my ( $nPatches, $nDownloadedPatches ) = qw( 0 0 );
-my @patches = #( { web => 'Codev', patch => 'DebugDoesNotWork' } ) ||
-    getPatchesCatalogList();
+my @patches = getPatchesCatalogList();
 
--e "web" || ( mkdir "web" or die $! );
+mkdir "$Config->{local_cache}/web" or die $! unless -e "$Config->{local_cache}/web";
 
 print "\n| *Patch* | *Download Status* |";
 foreach my $patchS ( @patches )
@@ -64,17 +63,14 @@ foreach my $patchS ( @patches )
     my $remote_uri = "$Config->{twiki}->{view}/$web/$topic?skin=text&raw=debug";
     print "$remote_uri\n";
 
-    -e "web/$topic/data" || ( File::Path::mkpath( "web/$topic/data" ) or die $! );
-    -e "web/$topic/pub" || ( File::Path::mkpath( "web/$topic/pub" ) or die $! );
+    File::Path::mkpath( "$Config->{local_cache}/web/$topic/data" ) or die $! unless -e "$Config->{local_cache}/web/$topic/data";
+    File::Path::mkpath( "$Config->{local_cache}/web/$topic/pub" ) or die $! unless -e "$Config->{local_cache}/web/$topic/pub";
 
-    mirror( $remote_uri, "web/$topic/data/$topic.txt" );
-    my $patchTopic = LWP::Simple::get( "file:web/$topic/data/$topic.txt" ) or die $!;
+    mirror( $remote_uri, "$Config->{local_cache}/web/$topic/data/$topic.txt" );
+    my $patchTopic = LWP::Simple::get( "file:$Config->{local_cache}/web/$topic/data/$topic.txt" ) or die $!;
 #    print "$patchTopic";
 
-#    %META:FILEATTACHMENT{name="Func.pm.patch" attr="" comment="Patch for Func.pm" date="1097756003" path="Func.pm.patch" size="478" user="JChristophFuchs" version="1.1"}%
-    # CODE_SMELL: are %'s inside the attrs required to be escaped? (i know there were issues with ImageGalleryPlugin using attachment comments)
-    # nope, oops, ran into this on ..., hm, what was it?  NoSearchResultsForALLOWWEBVIEW, i think...
-#    while ( $patchTopic =~ m|META:FILEATTACHMENT{([^}]+)|gsi )
+    # CODE_SMELL: hopefully won't run into a }% in any of the attributes
     while ( $patchTopic =~ m|META:FILEATTACHMENT{(^(}%)+)|gsi )
     {
 	#name="Func.pm.patch" attr="" comment="Patch for Func.pm" date="1097756003" path="Func.pm.patch" size="478" user="JChristophFuchs" version="1.1"
@@ -83,14 +79,14 @@ foreach my $patchS ( @patches )
 	print Data::Dumper::Dumper( $attrsAttach );
 	my $remote_attachment_uri = "$Config->{twiki}->{pub}/$web/$topic/$attrsAttach->{path}";
 	print "$remote_attachment_uri\n";
-	# CODE_SMELL: if path contained an actual path (subdirectory), what would happen... ? should be using File::Path::mkpath
-	my $status = mirror( $remote_attachment_uri, "web/$topic/pub/$attrsAttach->{path}" );
+	# CODE_SMELL: if path contained an actual path (subdirectory), what would happen... ? should be using File::Path::mkpath...
+	my $status = mirror( $remote_attachment_uri, "$Config->{local_cache}/web/$topic/pub/$attrsAttach->{path}" );
     }
 
     # create a GetAWebAddOn-compatable (er, really the installer at this point)
-    system( "tar czvf $Config->{local_cache}/$topic.wiki.tar.gz -C web/$topic ." );
+    system( "tar czvf $Config->{local_cache}/$topic.wiki.tar.gz -C $Config->{local_cache}/web/$topic ." );
 
-    File::Path::rmtree( "web/$topic" ) or warn $!;
+    File::Path::rmtree( "$Config->{local_cache}/web/$topic" ) or warn $!;
 
 #    if ($status == RC_OK) {
 #	++$nDownloadedPatches;
@@ -107,7 +103,7 @@ foreach my $patchS ( @patches )
 #    last;
 }
 
-File::Path::rmtree( "web" ) or warn $!;
+File::Path::rmtree( "$Config->{local_cache}/web" ) or warn $!;
 
 ## print summary results (suitable for inclusion as a TWiki page)
 #print "\n| *Patches Processed* | $nDownloadedPatches/$nPatches |";
