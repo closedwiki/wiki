@@ -24,22 +24,22 @@
 %TMPL:END%
 
 %TMPL:DEF{"notes"}%
-<div class="TWikiNotes">
+<div class="twikiNotes">
    * *Help:* Please see %TWIKIWEB%.FileAttachment for more information about attaching files.
    * *Bug:* Internet Explorer 4.0 or earlier: If you get an "Internal Server Error" message when you upload a file, you need to try again. It should work the second time.
 </div>%TMPL:END%
 
 %TMPL:DEF{"bodystart"}%
-<body class="TWikiAttachPage" onLoad="initForm()"><a name="PageTop"></a>%TMPL:END%
+<body class="twikiAttachPage" onLoad="initForm()"><a name="PageTop"></a>%TMPL:END%
 
 
 %TMPL:DEF{"main"}%
-<div class="TWikiMiddleContainer">
-<div class="TWikiMain">
+<div class="twikiMiddleContainer">
+<div class="twikiMain">
 %TMPL:P{"simpleheader"}%
-<div class="TWikiTopic">
+<div class="twikiTopic">
 %TMPL:P{"previousdetails"}%
-<table class="TWikiAttachTable" width="100%">
+<table class="twikiAttachTable" width="100%">
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 	%TMPL:P{"previous"}% 
 	<tr>
@@ -98,3 +98,7 @@ Images will be displayed, for other attachments a link will be created.
 %TMPL:P{"bodystart"}%
 %TMPL:P{"main"}%
 %TMPL:P{"bodyend"}% %TMPL:END%
+
+
+
+

@@ -17,7 +17,7 @@
  </tr>%TMPL:END%
 
 %TMPL:DEF{"extranotes"}%
-<div class="TWikiNotes">
+<div class="twikiNotes">
    * *Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without 
      uploading a file by pressing "Change Properties"; see <a target="HiddenAttachment" onClick="return launchWindow('%TWIKIWEB%','HiddenAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/HiddenAttachment">HiddenAttachment</a>
    * *Change comment:* If you use _Change Properties_ to change a comment, the comment shown in 
@@ -27,12 +27,12 @@
      updated or added.
 </div>%TMPL:END%
 
-%TMPL:DEF{"topicaction"}%<div class="TWikiTopicAction">
+%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
 <table>
 <tr>
-<td class="TWikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>
-<td class="TWikiSubmitCol"><input type="submit" class="TWikiSubmit" value="Upload file" /><input type="submit" class="TWikiSubmit" name="changeproperties" value="Change properties" /></td>
-<td class="TWikiAddCol"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move&nbsp;attachment</a></td>
+<td class="twikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>
+<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Upload file" /><input type="submit" class="twikiSubmit" name="changeproperties" value="Change properties" /></td>
+<td class="twikiAddCol"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move&nbsp;attachment</a></td>
 </tr>
 </table>
 </div>%TMPL:END%
