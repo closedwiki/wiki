@@ -1,0 +1,344 @@
+%META:TOPICINFO{author="SvenDowideit" date="1099196874" format="1.0" version="1.4"}%
+---+ Paragraphs
+---++ Expected
+<!-- expected -->
+1st paragraph
+<p />
+2nd paragraph
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+1st paragraph
+
+2nd paragraph
+<!-- /actual-->
+
+---+ Headings
+---++ Expected
+<!-- expected -->
+<h2 >Sushi</h2>
+<h3 >Maguro</h3>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+---++ Sushi
+---+++ Maguro
+---++ Actual
+<!-- actual -->
+
+---+ Bold Text
+---++ Expected
+<!-- expected -->
+<strong>Bold</strong>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+*Bold*
+<!-- /actual -->
+
+---+ Italic Text
+ Words get _italic_ by enclosing them in =_= underscores.
+---++ Expected
+<!-- expected -->
+_Italic_
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+_Italic_
+<!-- /actual -->
+
+---+ Bold Italic
+---++ Expected
+<!-- expected -->
+__Bold italic__
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+__Bold italic__
+<!-- /actual -->
+
+---+ Fixed Font
+---++ Expected
+<!-- expected -->
+<code>Fixed font</code>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+=Fixed font=
+<!-- /actual -->
+
+---+ Bold Fixed Font
+---++ Expected
+<!-- expected -->
+<strong><code>Bold fixed</code></strong>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+==Bold fixed==
+<!-- /actual -->
+
+---+ Verbatim Mode
+---++ Expected
+<!-- expected -->
+<pre>
+class CatAnimal {
+  void purr() {
+	 code here
+  }
+}
+</pre>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+<verbatim>
+class CatAnimal {
+  void purr() {
+	 code here
+  }
+}
+</verbatim>
+<!-- /actual -->
+
+---+ Separator
+ At least three dashes at the beginning of a line.
+---++ Expected
+<!-- expected -->
+<hr>
+<hr>
+--
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+---
+-------
+--
+<!-- /actual -->
+
+---+ List Item
+---++ Expected
+<!-- expected -->
+<ul>
+<li>bullet item
+</li>
+</ul>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+	* bullet item
+<!-- /actual -->
+
+---+ Nested List Item
+---++ Expected
+<!-- expected -->
+<ul>
+<li>level 1
+<ul>
+<li>level 2
+</li>
+</ul>
+</li>
+</ul>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+	* level 1
+		* level 2
+<!-- /actual -->
+
+---+ Ordered List
+---++ Expected
+<!-- expected -->
+<ol>
+<li> Sushi</li>
+</ol>
+<ol type="A">
+<li> Sushi
+</li>
+</ol>
+<ol type="i">
+<li> Sushi
+</li>
+</ol>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+	1. Sushi
+	A. Sushi
+	i. Sushi
+<!-- /actual -->
+
+---+ Definition List
+---++ Expected
+<!-- expected -->
+<dl>
+<dt> Sushi </dt><dd> Japan
+</dd>
+<dt> Dim Sum </dt><dd> S.F.
+</dd>
+
+</dl>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+	$ Sushi: Japan
+	$ Dim Sum: S.F.
+<!-- /actual -->
+
+---+ Table
+---++ Expected
+<!-- expected -->
+<table border="0" cellspacing="2" cellpadding="1">
+<tr><th valign="top" class="twikiFirstCol" bgcolor="#0c2577"><a href="http://twiki.org/cgi-bin/view/Codev/TestCaseBasicFormatting?sortcol=0&amp;table=1&amp;up=0#sorted_table" title="Sort by this column"><font color="#FFFF99"> L</font></a> </th><th valign="top" bgcolor="#0c2577"><a href="http://twiki.org/cgi-bin/view/Codev/TestCaseBasicFormatting?sortcol=1&amp;table=1&amp;up=0#sorted_table" title="Sort by this column"><font color="#FFFF99"> C</font></a> </th><th valign="top" bgcolor="#0c2577"><a href="http://twiki.org/cgi-bin/view/Codev/TestCaseBasicFormatting?sortcol=2&amp;table=1&amp;up=0#sorted_table" title="Sort by this column"><font color="#FFFF99"> R</font></a> </th></tr>
+<tr><td valign="top" class="twikiFirstCol" bgcolor="#F8F8F8"> A2 </td><td align="center" valign="top" bgcolor="#F8F8F8"> 2 </td><td align="right" valign="top" bgcolor="#F8F8F8"> 2 </td></tr>
+
+<tr><td valign="top" class="twikiFirstCol" bgcolor="#DDDDDD"> A3 </td><td align="center" valign="top" bgcolor="#DDDDDD"> 3 </td><td align="right" valign="top" bgcolor="#DDDDDD"> 3 </td></tr>
+<tr><td colspan="3" valign="top" class="twikiFirstCol" bgcolor="#F8F8F8"> multi span </td></tr>
+<tr><td valign="top" class="twikiFirstCol" rowspan="2" bgcolor="#DDDDDD"> A4-6 </td><td valign="top" bgcolor="#DDDDDD"> four </td><td valign="top" bgcolor="#DDDDDD"> four </td></tr>
+
+<tr><td valign="top" bgcolor="#F8F8F8"> five </td><td valign="top" bgcolor="#F8F8F8"> five </td></tr>
+</table>
+<p />
+<table border="0" cellspacing="2" cellpadding="1">
+<tr><td valign="top" bgcolor="#DDDDDD"> six </td><td valign="top" bgcolor="#DDDDDD"> six </td></tr>
+</table>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+| *L* | *C* | *R* |
+| A2 |  2  |  2 |
+| A3 |  3  |  3 |
+| multi span |||
+| A4-6 | four | four |
+|^| five | five |
+
+|^| six | six |
+<!-- /actual -->
+
+---+ Wiki Word Links
+---++ Expected
+<!-- expected -->
+<a class="twikiLink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/WebNotify">WebNotify</a>
+<p />
+<a class="twikiLink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Main/TWikiUsers">TWikiUsers</a>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+WebNotify
+
+%MAINWEB%.TWikiUsers
+<!-- /actual -->
+
+---+ SquareBrackets
+---++ Expected
+<verbatim>
+<!-- expected -->
+<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">wiki syntax</font><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/WikiSyntax?topicparent=%WEB%.TestCaseBasicFormatting"><sup>?</sup></a></span>
+<p />
+<a class="twikiLink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%MAINWEB%/TWikiUsers">Main.TWiki users</a>
+<p />
+escaped:
+[[wiki syntax]]
+<!-- /expected -->
+</verbatim>
+---++ Actual
+<!-- actual -->
+[[wiki syntax]]
+
+[[%MAINWEB%.TWiki users]]
+
+escaped:
+![[wiki syntax]]
+<!-- /actual -->
+
+---+ Specific Links
+---++ Expected
+<!-- expected -->
+<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">syntax</font><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/WikiSyntax?topicparent=%WEB%.TestCaseBasicFormatting"><sup>?</sup></a></span>
+<p />
+<a href="http://gnu.org" target="_top">GNU</a>
+<p />
+<a href="http://xml.org" target="_top">XML</a>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+[[WikiSyntax][syntax]]
+
+[[http://gnu.org][GNU]]
+
+[[http://xml.org XML]]
+<!-- /actual -->
+
+---+ Anchors
+---++ Expected
+<!-- expected -->
+<a class="twikiAnchorLink" href="/cgi-bin/view/Codev/WikiWord#NotThere">WikiWord#NotThere</a>
+<p />
+<a class="twikiAnchorLink" href="/cgi-bin/view/Codev/TestCaseBasicFormatting#MyAnchor">Jump</a>
+<p />
+<a name="MyAnchor"></a> To here
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+[[WikiWord#NotThere]]
+
+[[#MyAnchor][Jump]]
+
+#MyAnchor To here
+<!-- /actual -->
+
+---+ Prevent a Link
+---++ Expected
+<verbatim>
+<!-- expected -->
+SunOS
+<!-- /expected -->
+</verbatim>
+---++ Actual
+<!-- actual -->
+!SunOS
+<!-- /actual -->
+
+---+ Disable Links
+---++ Expected
+<verbatim>
+<!-- expected -->
+ RedHat & SuSE
+<!-- /expected -->
+</verbatim>
+---++ Actual
+<!-- actual -->
+ <noautolink>
+ RedHat & SuSE
+ </noautolink>
+<!-- /actual -->
+
+---+ Mailto: Links
+---++ Expected
+<!-- expected -->
+<a href="mailto:a@zSTOPSPAM.com">Mail</a>
+
+<p />
+<a href="mailto:?subject=Hi">Hi</a>
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+[[mailto:a@z.com Mail]]
+
+[[mailto:?subject=Hi Hi]]
+<!-- /actual -->
+
+-- Main.CrawfordCurrie - 21 Oct 2004
+
+CategoryTestCase
+
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="TopicClassification" title="TopicClassification" value="Select one..."}%
+%META:FIELD{name="TopicSummary" title="TopicSummary" value=""}%
+%META:FIELD{name="InterestedParties" title="InterestedParties" value=""}%
+%META:FIELD{name="AssignedTo" title="AssignedTo" value=""}%
+%META:FIELD{name="AssignedToCore" title="AssignedToCore" value=""}%
+%META:FIELD{name="ScheduledFor" title="ScheduledFor" value=""}%
+%META:FIELD{name="RelatedTopics" title="RelatedTopics" value=""}%
+%META:FIELD{name="SpecProgress" title="SpecProgress" value=""}%
+%META:FIELD{name="ImplProgress" title="ImplProgress" value=""}%
+%META:FIELD{name="DocProgress" title="DocProgress" value=""}%

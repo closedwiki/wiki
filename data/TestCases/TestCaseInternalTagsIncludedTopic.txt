@@ -1,0 +1,40 @@
+%META:TOPICINFO{author="CrawfordCurrie" date="1098453098" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="TestCaseInternalTagsAutomatableTests"}%
+This topic is not a testcase, it is part of a fixture for the TestCaseInternalTags
+
+THE TEST FAILED
+%STARTINCLUDE%
+ <tr>
+  <td>BASEWEB</td>
+  <td><!-- expected -->Testcases<!-- /expected --></td>
+  <td><!-- actual -->%BASEWEB%<!-- /actual --></td>
+ </tr>
+ <tr>
+  <td>INCLUDINGWEB</td>
+  <td><!-- expected -->Testcases<!-- /expected --></td>
+  <td><!-- actual -->%INCLUDINGWEB%<!-- /actual --></td>
+ </tr>
+ <tr>
+  <td>BASETOPIC</td>
+  <td><!-- expected -->TestCaseInternalTags<!-- /expected --></td>
+  <td><!-- actual -->%BASETOPIC%<!-- /actual --></td>
+ </tr>
+ <tr>
+  <td>INCLUDINGTOPIC</td>
+  <td><!-- expected -->TestCaseInternalTags<!-- /expected --></td>
+  <td><!-- actual -->%INCLUDINGTOPIC%<!-- /actual --></td>
+ </tr>
+%STOPINCLUDE%
+THE TEST FAILED
+
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="TopicClassification" title="TopicClassification" value="Select one..."}%
+%META:FIELD{name="TopicSummary" title="TopicSummary" value=""}%
+%META:FIELD{name="InterestedParties" title="InterestedParties" value=""}%
+%META:FIELD{name="AssignedTo" title="AssignedTo" value=""}%
+%META:FIELD{name="AssignedToCore" title="AssignedToCore" value=""}%
+%META:FIELD{name="ScheduledFor" title="ScheduledFor" value=""}%
+%META:FIELD{name="RelatedTopics" title="RelatedTopics" value=""}%
+%META:FIELD{name="SpecProgress" title="SpecProgress" value=""}%
+%META:FIELD{name="ImplProgress" title="ImplProgress" value=""}%
+%META:FIELD{name="DocProgress" title="DocProgress" value=""}%

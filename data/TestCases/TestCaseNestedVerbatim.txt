@@ -1,0 +1,77 @@
+%META:TOPICINFO{author="CrawfordCurrie" date="1099297193" format="1.0" version="1.1"}%
+Spec: &lt;verbatim> tags should be nestable to at least two levels.
+
+	* Set EGG = font color="blue"
+	* Set BACON = font color="purple"
+	* Set ENDBREAKFAST = /font
+<table>
+<tr><th>Expected (TWiki will munge this when viewing the topic, so view raw)</th><th>Actual</th></tr>
+<tr><td>
+<!-- expected -->
+<font color="purple"> Before Verbatim </font>
+<pre>
+&lt;%EGG%&gt; In outer verbatim &lt;%ENDBREAKFAST%&gt;
+
+&lt;verbatim&gt;
+In inner verbatim with &lt;text in angle braces&gt;
+&lt;/verbatim&gt;
+&lt;%EGG%&gt; In outer verbatim again &lt;%ENDBREAKFAST%&gt;
+</pre>
+<font color="purple"> After Verbatim </font>
+<!-- /expected -->
+</td><td>
+<!-- actual -->
+<%BACON%> Before Verbatim <%ENDBREAKFAST%>
+<verbatim>
+<%EGG%> In outer verbatim <%ENDBREAKFAST%>
+<verbatim>
+In inner verbatim with <text in angle braces>
+</verbatim>
+<%EGG%> In outer verbatim again <%ENDBREAKFAST%>
+</verbatim>
+<%BACON%> After Verbatim <%ENDBREAKFAST%>
+<!-- /actual -->
+</td></tr></table>
+---++ Expected at end of topic
+<!-- expected -->
+Function is
+<pre>
+---++ sub marine() =&gt; dive dive dive
+Admire the pretty fishes.
+Usage:
+&lt;verbatim&gt;
+	 my $fishes = _marine();
+	 if ( $fishes-&gt;{"big mouth rass"} ) {
+&lt;/verbatim&gt;
+</pre>
+Lorem ipsum is pig latin for "that's my lorry, that is".
+<p />
+-- <font color="#0000ff">AlexanderTheGeek</font> - 01 Nov 2004
+<!-- expected -->
+---++ Actual at end of topic
+<!-- actual -->
+Function is
+<verbatim>
+---++ sub marine() => dive dive dive
+Admire the pretty fishes.
+Usage:
+<verbatim>
+	 my $fishes = _marine();
+	 if ( $fishes->{"big mouth rass"} ) {
+</verbatim>
+</verbatim>
+Lorem ipsum is pig latin for "that's my lorry, that is".
+
+-- %BLUE%AlexanderTheGeek%ENDCOLOR% - 01 Nov 2004
+
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="TopicClassification" title="TopicClassification" value="Select one..."}%
+%META:FIELD{name="TopicSummary" title="TopicSummary" value=""}%
+%META:FIELD{name="InterestedParties" title="InterestedParties" value=""}%
+%META:FIELD{name="AssignedTo" title="AssignedTo" value=""}%
+%META:FIELD{name="AssignedToCore" title="AssignedToCore" value=""}%
+%META:FIELD{name="ScheduledFor" title="ScheduledFor" value=""}%
+%META:FIELD{name="RelatedTopics" title="RelatedTopics" value=""}%
+%META:FIELD{name="SpecProgress" title="SpecProgress" value=""}%
+%META:FIELD{name="ImplProgress" title="ImplProgress" value=""}%
+%META:FIELD{name="DocProgress" title="DocProgress" value=""}%

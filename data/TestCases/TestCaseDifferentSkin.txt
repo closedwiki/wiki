@@ -1,0 +1,45 @@
+%META:TOPICINFO{author="CrawfordCurrie" date="1098455456" format="1.0" version="1.2"}%
+%META:TOPICPARENT{name="KickStartingTestcaseDefinition"}%
+---+ Different Skins
+
+NB. Tested by visual inspection only.
+
+---++ Plain
+
+%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=plain
+---++ Dragon
+%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=dragon
+
+---++ Pattern
+%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=pattern
+
+---++ Print
+%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print
+
+---++ Print current skin
+	* Is there a better way to invoke the printable view of pattern?
+%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.%SKIN%
+
+---++ Traditional
+%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=twiki1985
+
+
+-- Main.MartinCleaver - 22 Oct 2004
+
+What about ?raw=on and ?skin=test&raw=on
+
+-- Main.CrawfordCurrie - 22 Oct 2004
+
+%COMMENT{}%
+
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="TopicClassification" title="TopicClassification" value="Select one..."}%
+%META:FIELD{name="TopicSummary" title="TopicSummary" value="TestCase for Different Skin. No suitable TopicClassification. Unsuitable Web."}%
+%META:FIELD{name="InterestedParties" title="InterestedParties" value=""}%
+%META:FIELD{name="AssignedTo" title="AssignedTo" value=""}%
+%META:FIELD{name="AssignedToCore" title="AssignedToCore" value=""}%
+%META:FIELD{name="ScheduledFor" title="ScheduledFor" value=""}%
+%META:FIELD{name="RelatedTopics" title="RelatedTopics" value=""}%
+%META:FIELD{name="SpecProgress" title="SpecProgress" value=""}%
+%META:FIELD{name="ImplProgress" title="ImplProgress" value=""}%
+%META:FIELD{name="DocProgress" title="DocProgress" value=""}%

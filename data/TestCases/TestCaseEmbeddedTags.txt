@@ -1,0 +1,45 @@
+%META:TOPICINFO{author="CrawfordCurrie" date="1098368728" format="1.0" version="1.1"}%
+---+ Tests for handling embedded tag parameters
+
+---++ Test for embedding a URLPARAM in a SEARCH
+<verbatim>
+%SEARCH{"%URLPARAM{"tagname"}%" topic="TestCaseEmbeddedTags" nosearch="on" nototal="on" format="The test passed %TOPIC%"}%
+</verbatim>
+<a href="%SCRIPTURLPATH%/view/%WEB%/%TOPIC%?tagname=passed&searchtgt="ArfleBarfleGloop">Click here to run test</a>
+The expected result was:
+<!-- expected -->
+Search hit in TestCaseEmbeddedTags
+<!-- /expected -->
+The actual output was:
+<!-- actual -->
+%SEARCH{"%URLPARAM{"tagname"}%" topic="TestCaseEmbeddedTags" nosearch="on" nototal="on" format="Search hit in $topic"}%
+<!-- /actual -->
+
+---++ Test for embedding an URLPARAM tag in the parameters to another URLPARAM tag.
+<verbatim>
+%URLPARAM{ "%URLPARAM{"tagname" default="failed"}%" default="failed"}%
+</verbatim>
+<a href="%SCRIPTURLPATH%/view/%WEB%/%TOPIC%?tagname=passed">Click here to run test</a>
+The expected output was:
+<!-- expected -->
+passed
+<!--/expected -->
+The actual output was:
+<!-- actual -->
+The test: %URLPARAM{ "%URLPARAM{"tagname" default="failed"}%" default="failed"}%
+<!-- /actual -->
+
+---
+CategoryTestCase
+
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="TopicClassification" title="TopicClassification" value="Select one..."}%
+%META:FIELD{name="TopicSummary" title="TopicSummary" value=""}%
+%META:FIELD{name="InterestedParties" title="InterestedParties" value=""}%
+%META:FIELD{name="AssignedTo" title="AssignedTo" value=""}%
+%META:FIELD{name="AssignedToCore" title="AssignedToCore" value=""}%
+%META:FIELD{name="ScheduledFor" title="ScheduledFor" value=""}%
+%META:FIELD{name="RelatedTopics" title="RelatedTopics" value=""}%
+%META:FIELD{name="SpecProgress" title="SpecProgress" value=""}%
+%META:FIELD{name="ImplProgress" title="ImplProgress" value=""}%
+%META:FIELD{name="DocProgress" title="DocProgress" value=""}%
