@@ -119,7 +119,7 @@ sub PushRemoteTWikiInstall
 #	warn "no (install) config" unless $parms->{install};
 	print "twiki_config = [$twiki_config]\n" if $parms->{debug};
 	my $distro_basename = basename( $distro );
-    logSystem( qq{ssh $parms->{install_account}\@$parms->{install_host} "cd $parms->{install_dir}; tar xjf $distro_basename; time ./pre-twiki.sh; time curl --silent --show-error 'http://$parms->{install_host}/~$parms->{install_account}/cgi-bin/install_twiki.cgi?${twiki_config};twiki=${kernel};install=install' -o 'TWikiInstallationReport.html'; ./post-twiki.pl"} );
+    logSystem( qq{ssh $parms->{install_account}\@$parms->{install_host} "cd $parms->{install_dir}; tar xjf $distro_basename || tar xf $distro_basename; time ./pre-twiki.sh; time curl --silent --show-error 'http://$parms->{install_host}/~$parms->{install_account}/cgi-bin/install_twiki.cgi?${twiki_config};twiki=${kernel};install=install' -o 'TWikiInstallationReport.html'; ./post-twiki.pl"} );
 }
 
 ################################################################################
@@ -154,7 +154,7 @@ install-remote-twiki.pl --distro -kernel [-web ...]* [-install_account [twiki]] 
 
 =over 8
 
-=item B<-distro [distro]>				TWikiDistribution filename (in .tar.bz2 format)
+=item B<-distro [distro]>				TWikiDistribution filename (in .tar or .tar.bz2 format)
 
 =item B<-kernel [kernel]>				none currently, though perhaps it should be TWiki20040902.tar.gz
 
