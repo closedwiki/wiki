@@ -1,0 +1,26 @@
+<HTML>
+<HEAD>
+  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (oops)</TITLE>
+  <META NAME="ROBOTS" CONTENT="NOINDEX"> %HTTP_EQUIV_ON_EDIT%
+</HEAD>
+<BODY bgcolor="#ffffff">
+
+<FORM name="main" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+
+%HEADER{action="(oops)" description="No form definition"}%
+
+---+ Topic can not be upgrade from old style category table
+
+This can be automatically upgraded by:
+	* Creating a suitable Form Definition topic
+	* Adding a =WEBFORMS= variable in WebPreferences
+	* See http://twiki.org/cgi-bin/view/TWiki/FormDefinition
+   
+Please ask your administrator, %WIKIWEBMASTER%, to do this.
+
+%FOOTER{%
+     <A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=1">View topic text</A>
+%}FOOTER%
+
+</FORM>
+</BODY></HTML>
