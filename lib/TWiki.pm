@@ -248,9 +248,13 @@ sub writeWarning {
         $year = sprintf( "%.4u", $year + 1900 );
         my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u",
 			   $mday, $year, $hour, $min );
-        open( FILE, ">>$warningFilename" );
-        print FILE "$time $text\n";
-        close( FILE );
+
+        if( open( FILE, ">>$warningFilename" ) ) {
+            print FILE "$time $text\n";
+            close( FILE );
+        } else {
+            print STDERR "Couldn't write \"$text\" to $warningFilename: $!\n";
+        }
     }
 }
 
