@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="PeterThoeny" date="1091678638" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="TWikiGroups"}%
+---+!! <nop>%URLPARAM{"topic"}%
+
+	* Set GROUP = %WIKIUSERNAME%, Main.Others...
+	* Set ALLOWTOPICCHANGE = %URLPARAM{"topic"}%
+
+__Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
+
+-- %WIKIUSERNAME% - %DATE%
+
