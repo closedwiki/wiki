@@ -452,10 +452,7 @@ sub searchWeb
             }
 
             if( $doRenameView ) { # added JET 19 Feb 2000
-                if( ! $text ) {
-                    my $meta = "";
-                    ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
-                }
+                my $rawText = &TWiki::Store::readTopicRaw( $thisWebName, $topic );
                 my $changeable = "";
                 my $changeAccessOK = &TWiki::Access::checkAccessPermission( "change", $TWiki::wikiUserName, $text, $topic, $thisWebName );
                 if( ! $changeAccessOK ) {
@@ -476,7 +473,9 @@ sub searchWeb
                 my $insideVERBATIM = 0;
                 my $noAutoLink = 0;
                 
-                foreach( split( /\n/, $text ) ) {
+                foreach( split( /\n/, $rawText ) ) {
+                
+                   next if( /^%META:TOPIC(INFO|MOVED)/ );
 
                    # This code is in far too many places
                    m|<pre>|i  && ( $insidePRE = 1 );
@@ -491,13 +490,13 @@ sub searchWeb
                    m|</noautolink>|i  && ( $noAutoLink = 0 );
 
                    if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
-                       if( /$theSearchVal/g ) {
-                           s|$theSearchVal|$1<font color="red">$2</font>&nbsp;$4|g;
-                           $reducedOutput .= "$_<br>\n";
-                       }
+                       # This can incorrectly show matches becuase of case insenstive option, required to get [[spaced Word]] to match
+                       my $subs = s|$theSearchVal|$1<font color="red">$2</font>&nbsp;|ig;
+                       $reducedOutput .= "$_<br>\n" if( $subs );
                    }
                 }
                 $tempVal =~ s/%TEXTHEAD%/$reducedOutput/go;
+                next if ( ! $reducedOutput );
             } elsif( $noSummary ) {
                 $tempVal =~ s/%TEXTHEAD%//go;
                 $tempVal =~ s/&nbsp;//go;
