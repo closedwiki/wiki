@@ -76,9 +76,9 @@ sub handler {
             $slideMax = @slides;
             my @titles = ();
             foreach( @slides ) {
-                /^([^\n\r]*)(.*)$/s;
-                $slideTitle = $1 || '';
-                $slideBody  = $2 || '';
+                next unless /^([^\n\r]*)(.*)$/s;
+                $slideTitle = $1;
+                $slideBody  = $2;
                 $slideComment = '';
                 if( $hideComments && $slideBody =~ s/(\-\-\-+\+$level+\!*\s*Comments.*)//is ) {
                     $slideComment = $1;

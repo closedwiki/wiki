@@ -25,7 +25,7 @@ use vars qw(
             $mishooHome
     );
 
-$VERSION = '1.024';
+$VERSION = '1.025';
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
 
@@ -33,7 +33,7 @@ sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1 ) {
+    if( $TWiki::Plugins::VERSION < 1.026 ) {
         TWiki::Func::writeWarning( "Version mismatch between EditTablePlugin and Plugins.pm" );
         return 0;
     }

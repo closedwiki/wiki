@@ -179,8 +179,10 @@ sub _buildNewTopic {
     }
 
     # Expand the template
-    $output =~ s/%POS:(.*?)%//go;
-    my $position = $1 || 'AFTER';
+    my $position = 'AFTER';
+    if( $output =~ s/%POS:(.*?)%//go ) {
+        $position = $1;
+    }
 
     # Expand common variables in the template, but don't expand other
     # tags.

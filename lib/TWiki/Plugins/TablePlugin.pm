@@ -53,7 +53,7 @@ sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1 ) {
+    if( $TWiki::Plugins::VERSION < 1.026 ) {
         TWiki::Func::writeWarning( 'Version mismatch between TablePlugin and Plugins.pm' );
         return 0;
     }
@@ -278,9 +278,11 @@ sub processTR {
             $attr = " colspan=\"$span\"" ;
         }
         s/^\s+$/ &nbsp; /o;
-        /^(\s*).*?(\s*)$/;
-        $l1 = length( $1 || '' );
-        $l2 = length( $2 || '' );
+        ( $l1, $l2 ) = ( 0, 0 );
+        if( /^(\s*).*?(\s*)$/ ) {
+            $l1 = length( $1 );
+            $l2 = length( $2 );
+        }
         if( $l1 >= 2 ) {
             if( $l2 <= 1 ) {
                 $attr .= ' align="right"';
