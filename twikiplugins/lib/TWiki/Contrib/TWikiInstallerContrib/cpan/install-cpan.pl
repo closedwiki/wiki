@@ -1,34 +1,60 @@
 #!/usr/bin/perl -w
 # $Id$
-# Copyright 2004 Will Norris.  All Rights Reserved.
+# Copyright 2004,2005 Will Norris.  All Rights Reserved.
 # License: GPL
 
 ################################################################################
 
 use strict;
-++$|;
-open(STDERR,'>&STDOUT'); # redirect error to browser
 use Data::Dumper qw( Dumper );
+++$|;
+#open(STDERR,'>&STDOUT'); # redirect error to browser
 use CPAN;
-use Cwd qw( getcwd );
+use File::Path qw( mkpath );
+use File::Spec qw( rel2abs );
+use Getopt::Long;
+use FindBin;
+use Pod::Usage;
+use Cwd qw( cwd );
+sub mychomp { chomp $_[0]; $_[0] }
 
-my $account = "twiki";
-our $cpan;
+my $optsConfig = {
+#
+    baselibdir => $FindBin::Bin . "/../cgi-bin/lib/CPAN",
+    mirror => "file:$FindBin::Bin/MIRROR/TWIKI",
+#
+    verbose => 0,
+    debug => 0,
+    help => 0,
+    man => 0,
+};
 
-BEGIN {
-    # TODO: copied (and cropped) from install_twiki.cgi; share
-    my $cgibin = getcwd() . "/cgi-bin";
-    my $lib = $cgibin . '/lib';
-    $cpan = "$lib/CPAN";
+GetOptions( $optsConfig,
+	    'baselibdir=s', 'mirror=s', 'user=s',
+#	    'baselibdir=s', 'mirror=s@', 'user=s',
+# miscellaneous/generic options
+	    'help', 'man', 'debug', 'verbose|v',
+	    );
+pod2usage( 1 ) if $optsConfig->{help};
+pod2usage({ -exitval => 1, -verbose => 2 }) if $optsConfig->{man};
+print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 
-    use Config;
-    my $localLibBase = "$lib/CPAN/lib/site_perl/" . $Config{version};
-    unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
-}
+# fix up relative paths
+$optsConfig->{baselibdir} = File::Spec->rel2abs( $optsConfig->{baselibdir} );
+$optsConfig->{mirror} = File::Spec->rel2abs( $optsConfig->{mirror} );
 
-`mkdir -p $cpan; chmod -R 777 $cpan` unless -d $cpan;
+# TODO: copied (and cropped) from install_twiki.cgi
+use Config;
+#my $localLibBase = "$optsConfig->{baselibdir}/lib/" . $Config{version};
+my $localLibBase = "$optsConfig->{baselibdir}/lib";
+my @localLibs = ( $localLibBase, "$localLibBase/$Config{archname}" );
+unshift @INC, @localLibs;
+$ENV{PERL5LIB} = join( ':', @localLibs );
+print STDERR Dumper( \@INC ) if $optsConfig->{debug};
 
 ################################################################################
+
+-d $optsConfig->{baselibdir} or mkpath $optsConfig->{baselibdir};
 
 # eg
 #installLocalModules({
@@ -42,7 +68,7 @@ BEGIN {
 #});
 
 installLocalModules({
-    dir => $cpan,
+    dir => $optsConfig->{baselibdir},
     config => {
 	'HTML::Parser' => [ qw( no ) ],
 	'XML::SAX' => [ qw( Y ) ],
@@ -80,7 +106,6 @@ installLocalModules({
 				     Data::UUID Safe Language::Prolog XMLRPC::Transport::HTTP
 				     ) ],
 });
-
 # Image::LibRSVG
 
 ################################################################################
@@ -90,8 +115,6 @@ sub installLocalModules
 {
     my $parm = shift;
     my $cpan = $parm->{dir};
-
-    checkdir( $cpan );
 
     $CPAN::Config->{'make'} = q[/usr/bin/make];
     # some modules refuse to work if PREFIX is set, and some refuse to work if it is not. ???
@@ -115,7 +138,8 @@ sub installLocalModules
     $CPAN::Config->{'prerequisites_policy'} = 'follow';
 
 #    $CPAN::Config->{'urllist'} = [ "file:/Users/wbniv/twiki/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/cpan/MIRROR/MINICPAN/" ];
-    $CPAN::Config->{'urllist'} = [ "file:/Users/$account/Sites/cpan/MIRROR/TWIKI/" ];
+#    $CPAN::Config->{'urllist'} = [ "file:/Users/$account/Sites/cpan/MIRROR/TWIKI/" ];
+    $CPAN::Config->{'urllist'} = [ $optsConfig->{mirror} ];
     $CPAN::Config->{'build_cache'} = q[0];
 
     $CPAN::Config->{'ftp'} = q[/usr/bin/ftp];
@@ -147,9 +171,10 @@ sub installLocalModules
 #    print Data::Dumper::Dumper( $CPAN::Config );
 
     my @modules = @{$parm->{modules}};
-#    print Dumper( \@modules );
+    print "Installing the following modules: ", Dumper( \@modules ) if $optsConfig->{debug};
     foreach my $module ( @modules )
     {
+	print "Installing $module\n" if $optsConfig->{verbose};
 	my $obj = CPAN::Shell->expand( Module => $module ) or warn "$module: $!";
 	next unless $obj;
 #	$obj->force( 'install' ); # or warn "Error installing $module\n"; 
@@ -162,25 +187,44 @@ sub installLocalModules
 ################################################################################
 ################################################################################
 
-sub mode {
-	my ($file) = @_;
-	my ($dev, $ino, $mode) = stat $file;
-	return $mode;
-}
+__DATA__
+=head1 NAME
 
-sub checkdir {
-	my ($dir) = @_;
-	unless (-d $dir) {
-	    print "Directory not found: $dir";
-	    exit 1;
-	}
-#	unless (mode($dir) & 0x2) {
-#	    print "Directory $dir is not world writable";
-#	    exit 1;
-#	}
-}
+install-cpan.pl - ...
 
-################################################################################
+=head1 SYNOPSIS
+
+install-cpan.pl [options] [-baselibdir] [-mirrordir]
+
+Copyright 2004, 2005 Will Norris.  All Rights Reserved.
+
+  Options:
+   -baselibdir         where to install the CPAN modules
+   -mirrordir          location of the (mini) CPAN mirror
+   -verbose
+   -debug
+   -help               this documentation
+   -man                full docs
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<-baselibdir>
+
+=item B<-mirrordir>
+
+=back
+
+=head1 DESCRIPTION
+
+B<install-cpan.pl> will ...
+
+=head2 SEE ALSO
+
+        http://twiki.org/cgi-bin/view/Codev/...
+
+=cut
 
 __END__
 ################################################################################
