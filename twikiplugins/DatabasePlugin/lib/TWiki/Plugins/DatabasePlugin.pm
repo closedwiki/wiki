@@ -1,7 +1,7 @@
 #
 # TWiki WikiClone ($wikiversion has version info)
 #
-# Copyright (C) 2002 Tait Cyrus, tait.cyrus@usa.net
+# Copyright (C) 2002,2003 Tait Cyrus, tait.cyrus@usa.net
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -112,11 +112,11 @@ use strict;
 # =========================
 use vars qw(
 	$web $topic $user $installWeb $VERSION $debug $security_on
-	$security_message $description %db_driver %db_name %db_table
+	$security_message $description %db_driver %db_name %db_sid %db_table
 	%db_username %db_password %db_hostname
     );
 
-$VERSION = '1.20';
+$VERSION = '1.3';
 
 # =========================
 sub initPlugin
@@ -136,27 +136,47 @@ sub initPlugin
     # Get plugin security flag
     $security_message = &TWiki::Func::getPreferencesValue( "DATABASEPLUGIN_SECURITY_MESSAGE" );
 
-    # Go to the default database (specified in DatabasePluginConfig.pm) to
-    # obtain secure information.  This is done so increase security by
-    # minimizing the availability of clear text database passwords.
-    my $db = DBI->connect("DBI:$DatabasePluginConfig::db_driver:database=$DatabasePluginConfig::db_database;host=$DatabasePluginConfig::db_hostname", $DatabasePluginConfig::db_username, $DatabasePluginConfig::db_password, {PrintError=>1, RaiseError=>0});
-    if (! $db ) {
-	return make_error("Can't open initialization DatabasePlugin database '$DatabasePluginConfig::db_database'");
+    if ($DatabasePluginConfig::db_driver =~ m/local/i) {
+	foreach my $info (@DatabasePluginConfig::dbinfo) {
+	    my @info = @$info;
+	    my $description		= $info[0];
+	    $db_driver{$description}	= $info[1];
+	    $db_name{$description}	= $info[2];
+	    $db_sid{$description}	= $info[3];
+	    $db_table{$description}	= $info[4];
+	    $db_username{$description}	= $info[5];
+	    $db_password{$description}	= $info[6];
+	    $db_hostname{$description}	= $info[7];
+	}
+    } else {
+	# Everything else is assumed to be the same as 'remote' Go to the
+	# default database (specified in DatabasePluginConfig.pm) to obtain
+	# secure information.  This is done so increase security by
+	# minimizing the availability of clear text database passwords.
+	my $sid = "";
+	if ($DatabasePluginConfig::db_sid ne "") {
+	    $sid = ";sid=$DatabasePluginConfig::db_sid"
+	}
+	my $db = DBI->connect("DBI:$DatabasePluginConfig::db_driver:database=$DatabasePluginConfig::db_database;host=$DatabasePluginConfig::db_hostname$sid", $DatabasePluginConfig::db_username, $DatabasePluginConfig::db_password, {PrintError=>1, RaiseError=>0});
+	if (! $db ) {
+	    return make_error("Can't open initialization DatabasePlugin database '$DatabasePluginConfig::db_database'");
+	}
+	my $cmd = "SELECT description, driver, db_name, db_sid, table_name, ro_username, ro_password, hostname FROM $DatabasePluginConfig::db_table";
+	&TWiki::Func::writeDebug( "- TWiki::Plugins::DatabasePlugin [$cmd]") if $debug;
+	my $sth = $db->prepare($cmd);
+	$sth->execute;
+	# Fill hashes with the database information.
+	while (my @row = $sth->fetchrow_array()) {
+	    $db_driver{$row[0]}		= $row[1];
+	    $db_name{$row[0]}		= $row[2];
+	    $db_sid{$row[0]}		= $row[3];
+	    $db_table{$row[0]}		= $row[4];
+	    $db_username{$row[0]}	= $row[5];
+	    $db_password{$row[0]}	= $row[6];
+	    $db_hostname{$row[0]}	= $row[7];
+	}
+	$db->disconnect();
     }
-    my $cmd = "SELECT description, driver, db_name, table_name, ro_username, ro_password, hostname FROM $DatabasePluginConfig::db_table";
-    &TWiki::Func::writeDebug( "- TWiki::Plugins::DatabasePlugin [$cmd]") if $debug;
-    my $sth = $db->prepare($cmd);
-    $sth->execute;
-    # Fill hashes with the database information.
-    while (my @row = $sth->fetchrow_array()) {
-	$db_driver{$row[0]}	= $row[1];
-	$db_name{$row[0]}	= $row[2];
-	$db_table{$row[0]}	= $row[3];
-	$db_username{$row[0]}	= $row[4];
-	$db_password{$row[0]}	= $row[5];
-	$db_hostname{$row[0]}	= $row[6];
-    }
-    $db->disconnect();
     &TWiki::Func::writeDebug( "- TWiki::Plugins::DatabasePlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
 
     return 1;
@@ -192,6 +212,7 @@ sub do_table {
 
     my $db_driver	= $db_driver{$description};
     my $database	= $db_name{$description};
+    my $db_sid		= $db_sid{$description};
     my $user		= $db_username{$description};
     my $password	= $db_password{$description};
     my $table		= $db_table{$description};
@@ -214,7 +235,7 @@ sub do_table {
     # Since columns might be '*', we need to get the column names that
     # will be returned by '*'.
     if ($tmp eq "*") {
-	@columns = get_column_names($db_driver, $database, $hostname, $user, $password, $table);
+	@columns = get_column_names($db_driver, $database, $db_sid, $hostname, $user, $password, $table);
     } else {
 	@columns = split( /,\s*/, $tmp );
     }
@@ -228,7 +249,11 @@ sub do_table {
 	@headers = @columns;
     }
 
-    my $db = DBI->connect("DBI:$db_driver:database=$database;host=$hostname", $user, $password, {PrintError=>1, RaiseError=>1});
+    my $sid = "";
+    if ($db_sid ne "") {
+	$sid = ";sid=$db_sid";
+    }
+    my $db = DBI->connect("DBI:$db_driver:database=$database;host=$hostname$sid", $user, $password, {PrintError=>1, RaiseError=>1});
     if (! $db ) {
 	return make_error("Can't open database specified by description '$description'");
     }
@@ -245,12 +270,13 @@ sub do_table {
     my $sth = $db->prepare($cmd);
     $sth->execute;
     while (my @row = $sth->fetchrow_array()) {
-	$line .= "| ";
-	for my $i (@row) {
-	    (my $fix = $i) =~ s/\r\n/<br>/g;
-	    $line .= "$fix | ";
+	my $row = "| ";
+	for my $c (@row) {
+	    $c = "" unless $c;	# prevent 'uninitialized value' warnings
+	    $row .= "$c | ";
 	}
-	$line .= "\n";
+	$row =~ s/\r\n/<br>/g;
+	$line .= "$row\n";
     }
     $db->disconnect();
     return $line;
@@ -273,7 +299,7 @@ sub do_sql_table {
     if( defined $tmp && $tmp ne "" ) {
 	@headers = split( /,\s*/, $tmp ) if( $tmp );
     } else {
-	return make_error("Required option 'header' not found");
+	return make_error("Required option 'headers' not found");
     }
 
     # Get the SQL command
@@ -282,6 +308,7 @@ sub do_sql_table {
 
     my $db_driver	= $db_driver{$description};
     my $database	= $db_name{$description};
+    my $db_sid		= $db_sid{$description};
     my $user		= $db_username{$description};
     my $password	= $db_password{$description};
     my $table		= $db_table{$description};
@@ -295,27 +322,32 @@ sub do_sql_table {
         ($DatabasePluginConfig::db_table eq $table)) {
 	return $security_message;
     }
-    my $db = DBI->connect("DBI:$db_driver:database=$database;host=$hostname", $user, $password, {PrintError=>1, RaiseError=>1});
+    my $sid = "";
+    if ($db_sid ne "") {
+	$sid = ";sid=$db_sid";
+    }
+    my $db = DBI->connect("DBI:$db_driver:database=$database;host=$hostname$sid", $user, $password, {PrintError=>1, RaiseError=>1});
     if (! $db ) {
 	return make_error("Can't open database specified by description '$description'");
     }
-    my $cmd = $command;
+    my $cmd = "$command";
     &TWiki::Func::writeDebug( "- TWiki::Plugins::DatabasePlugin [$cmd]") if $debug;
-    my $sth = $db->prepare("$cmd;");
+    my $sth = $db->prepare($cmd);
     $sth->execute;
-    # Generate table header using the table column names
+    # Generate table header using the 'headers' values for column names
     my $line = "| ";
     for my $c (@headers) {
 	$line .= "*$c* | ";
     }
     $line .= "\n";
     while (my @row = $sth->fetchrow_array()) {
-	$line .= "| ";
-	for my $i (@row) {
-	    (my $fix = $i) =~ s/\r\n/<br>/g;
-	    $line .= "$fix | ";
+	my $row = "| ";
+	for my $c (@row) {
+	    $c = "" unless $c;	# prevent 'uninitialized value' warnings
+	    $row .= "$c | ";
 	}
-	$line .= "\n";
+	$row =~ s/\r\n/<br>/g;
+	$line .= "$row\n";
     }
     $db->disconnect();
     return $line;
@@ -334,6 +366,7 @@ sub do_repeat {
 
     my $db_driver	= $db_driver{$description};
     my $database	= $db_name{$description};
+    my $db_sid		= $db_sid{$description};
     my $user		= $db_username{$description};
     my $password	= $db_password{$description};
     my $table		= $db_table{$description};
@@ -361,7 +394,11 @@ sub do_repeat {
 	@columns = split( /,\s*/, $tmp );
     }
 
-    my $db = DBI->connect("DBI:$db_driver:database=$database;host=$hostname", $user, $password, {PrintError=>1, RaiseError=>1});
+    my $sid = "";
+    if ($db_sid ne "") {
+	$sid = ";sid=$db_sid";
+    }
+    my $db = DBI->connect("DBI:$db_driver:database=$database;host=$hostname$sid", $user, $password, {PrintError=>1, RaiseError=>1});
     if (! $db ) {
 	return make_error("Can't open database specified by description '$description'");
     }
@@ -404,6 +441,7 @@ sub do_sql_repeat {
 
     my $db_driver	= $db_driver{$description};
     my $database	= $db_name{$description};
+    my $db_sid		= $db_sid{$description};
     my $user		= $db_username{$description};
     my $password	= $db_password{$description};
     my $table		= $db_table{$description};
@@ -432,13 +470,17 @@ sub do_sql_repeat {
 	return $security_message;
     }
 
-    my $db = DBI->connect("DBI:$db_driver:database=$database;host=$hostname", $user, $password, {PrintError=>1, RaiseError=>1});
+    my $sid = "";
+    if ($db_sid ne "") {
+	$sid = ";sid=$db_sid";
+    }
+    my $db = DBI->connect("DBI:$db_driver:database=$database;host=$hostname$sid", $user, $password, {PrintError=>1, RaiseError=>1});
     if (! $db ) {
 	return make_error("Can't open database specified by description '$description'");
     }
     my $cmd = $command;
     &TWiki::Func::writeDebug( "- TWiki::Plugins::DatabasePlugin [$cmd]") if $debug;
-    my $sth = $db->prepare("$cmd;");
+    my $sth = $db->prepare("$cmd");
     $sth->execute;
 
     my $line;
@@ -492,12 +534,21 @@ sub do_edit {
 # Go out to the specified database table and return the columns available
 # in that table.
 sub get_column_names {
-    my ($db_driver, $database, $hostname, $user, $password, $table) = @_;
-    my $db = DBI->connect("DBI:$db_driver:database=$database;host=$hostname", $user, $password, {PrintError=>1, RaiseError=>1});
+    my ($db_driver, $database, $db_sid, $hostname, $user, $password, $table) = @_;
+    my $sid = "";
+    if ($db_sid ne "") {
+	$sid = ";sid=$db_sid";
+    }
+    my $db = DBI->connect("DBI:$db_driver:database=$database;host=$hostname$sid", $user, $password, {PrintError=>1, RaiseError=>1});
     if (! $db ) {
 	return "Can't open database specified by description '$description'";
     }
-    my $cmd = "DESCRIBE $table";
+    my $cmd;
+    if ($db_driver eq "Oracle") {
+	$cmd = "SELECT COLUMN_NAME FROM all_tab_columns WHERE TABLE_NAME = '$table'";
+    } else {
+	$cmd = "DESCRIBE $table";
+    }
     &TWiki::Func::writeDebug( "- TWiki::Plugins::DatabasePlugin [$cmd]") if $debug;
     my $sth = $db->prepare($cmd);
     $sth->execute;
