@@ -85,7 +85,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "31 Jan 2001";
+$wikiversion      = "02 Feb 2001";
 
 # ===========================
 # read the configuration part
@@ -1060,7 +1060,7 @@ sub isWikiName
 sub getRenderedVersion
 {
     my( $text, $theWeb ) = @_;
-    my( $result, $insidePRE, $insideVERBATIM, $insideTABLE, $blockquote );
+    my( $result, $insidePRE, $insideVERBATIM, $insideTABLE, $noAutoLink, $blockquote );
 
     # PTh 22 Jul 2000: added $theWeb for correct handling of %INCLUDE%, %SEARCH%
     if( !$theWeb ) {
@@ -1070,6 +1070,7 @@ sub getRenderedVersion
     $insidePRE = 0;
     $insideVERBATIM = 0;  # PTh 31 Jan 2001: Added Codev.VerbatimModeForSourceCodes
     $insideTABLE = 0;
+    $noAutoLink = 0;      # PTh 02 Feb 2001: Added Codev.DisableWikiWordLinks
     $blockquote = 0;
     $code = "";
     $text =~ s/\\\n//go;
@@ -1087,6 +1088,8 @@ sub getRenderedVersion
             s|</verbatim>|</pre>|goi;
             $insideVERBATIM = 0;
         }
+        m|<noautolink>|i   && ( $noAutoLink = 1 );
+        m|</noautolink>|i  && ( $noAutoLink = 0 );
 
         if( $insidePRE || $insideVERBATIM ) {
             # inside <PRE> or <VERBATIM>
@@ -1172,15 +1175,21 @@ sub getRenderedVersion
             # allow [[Odd Wiki Word]] links and [[Web.Odd Wiki Name]]
             s/([\*\s][\(\-\*\s]*)\[\[([A-Z]+[a-z]*)\.([\w\s]+)\]\]/&internalLink($2,$3,"$TranslationToken$3$TranslationToken",$1,1)/geo;
             s/([\*\s][\(\-\*\s]*)\[\[([\w\s]+)\]\]/&internalLink($webName,$2,$2,$1,1)/geo;
+            if( $noAutoLink ) {
+                # no WikiWord links except [[forced links]]
+                s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
 
-            ## add Web.TopicName internal link -- PeterThoeny:
-            ## allow 'AaA1' type format, but not 'Aa1' type -- PeterThoeny:
-            s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($2,$3,"$TranslationToken$3$TranslationToken",$1,1)/geo;
-            s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($theWeb,$2,$2,$1,1)/geo;
-            s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
+            } else {
 
-            s/([\*\s][\-\*\s]*)([A-Z]{3,})/&internalLink($theWeb,$2,$2,$1,0)/geo;
-            s/<link>(.*?)<\/link>/&internalLink($theWeb,$1,$1,"",1)/geo;
+                ## add Web.TopicName internal link -- PeterThoeny:
+                ## allow 'AaA1' type format, but not 'Aa1' type -- PeterThoeny:
+                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($2,$3,"$TranslationToken$3$TranslationToken",$1,1)/geo;
+                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($theWeb,$2,$2,$1,1)/geo;
+                s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
+
+                s/([\*\s][\-\*\s]*)([A-Z]{3,})/&internalLink($theWeb,$2,$2,$1,0)/geo;
+                s/<link>(.*?)<\/link>/&internalLink($theWeb,$1,$1,"",1)/geo;
+            }
 
             s/^\n//o;
         }
@@ -1191,11 +1200,8 @@ sub getRenderedVersion
         $result .= "</TABLE>\n";
     }
     $result .= &emitCode( "", 0 );
-    if( $insidePRE ) {
+    if( $insidePRE || $insideVERBATIM ) {
         $result .= "</pre>\n";
-    }
-    if( $insideVERBATIM ) {
-        $result .= "</verbatim>\n";
     }
     return $result;
 }
