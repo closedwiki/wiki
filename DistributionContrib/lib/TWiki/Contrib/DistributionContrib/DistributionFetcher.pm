@@ -40,7 +40,7 @@ sub fetchLatestDistributionVersion {
 	my $status = getstore($fileUrl, $attachmentPath);
 	if (is_error($status)) {
 		my $error = "Couldn't get $distribution:as $fileUrl to $attachmentPath ($status)";
-		TWiki::Func::writeWarning($error."\n");
+#		TWiki::Func::writeWarning($error."\n");
 		$ans = "Couldn't download - $error";
 	}
 	return $ans;
