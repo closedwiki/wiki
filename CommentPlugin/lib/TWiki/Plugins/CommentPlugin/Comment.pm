@@ -6,7 +6,7 @@
 #
 use strict;
 
-use TWiki::Plugins::SharedCode;
+use TWiki::Plugins::SharedCode::Attrs;
 
 { package CommentPlugin::Comment;
 
@@ -25,27 +25,27 @@ use TWiki::Plugins::SharedCode;
 
     my $wikiUserName = &TWiki::Func::getWikiUserName();
     if( ! TWiki::Func::checkAccessPermission( "change", $wikiUserName, "",
-					       $topic, $web ) ) {
+											  $topic, $web ) ) {
       # user has no permission to change the topic
       $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsaccesschange" );
     } else {
       my( $oopsUrl, $lockUser ) =
-	TWiki::Func::checkTopicEditLock( $web, $topic );
+		TWiki::Func::checkTopicEditLock( $web, $topic );
       if( $lockUser ) {
-	$url = $oopsUrl;
+		$url = $oopsUrl;
       } else {
-	TWiki::Func::setTopicEditLock( $web, $topic, 1 );
+		TWiki::Func::setTopicEditLock( $web, $topic, 1 );
+		
+		$inSave = 1;
+		my $error = _buildNewTopic( $web, $topic, $query );
+		$inSave = 0;
 
-	$inSave = 1;
-	my $error = _buildNewTopic( $web, $topic, $query );
-	$inSave = 0;
-
-	TWiki::Func::setTopicEditLock( $web, $topic, 0 );
-	if( $error ) {
-	  $url = $error;
-	} else {
-	  $url = TWiki::Func::getViewUrl( $web, $topic );
-	}
+		TWiki::Func::setTopicEditLock( $web, $topic, 0 );
+		if( $error ) {
+		  $url = $error;
+		} else {
+		  $url = TWiki::Func::getViewUrl( $web, $topic );
+		}
       }
     }
 
@@ -120,6 +120,9 @@ use TWiki::Plugins::SharedCode;
 
     my $url = "";
     if ( $disable eq "" ) {
+	  # invoke viewauth so we get authentication. When viewauth is run,
+	  # the 'save' method in here will be invoked as the commenTagsHandler
+	  # is run as flagged by the "comment_action" parameter.
       $url = TWiki::Func::getScriptUrl( "%INTURLENCODE{$web}%",
 					"%INTURLENCODE{$topic}%",
 					"viewauth" );
@@ -181,7 +184,7 @@ use TWiki::Plugins::SharedCode;
     my $templates;
 
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
-	  use TWiki::Plugins::CairoCompatibilityModule;
+	  eval "use TWiki::Plugins::CairoCompatibilityModule;";
 	  $templates = CairoCompatibilityModule::readTemplate( $templateFile );
 	} else {
 	  $templates = TWiki::Store::readTemplate( $templateFile );
@@ -231,7 +234,7 @@ use TWiki::Plugins::SharedCode;
     # Expand common variables in the template, but don't expand other
     # tags.
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
-	  use TWiki::Plugins::CairoCompatibilityModule;
+	  eval "use TWiki::Plugins::CairoCompatibilityModule;";
 	}
 	$output = TWiki::expandVariablesOnTopicCreation($output);
 
@@ -247,14 +250,14 @@ use TWiki::Plugins::SharedCode;
     my $text = "";
     foreach my $line ( split( /\n/, $bloody_hell )) {
       if( $line =~ /^(%META:[^{]+{[^}]*}%)/ ) {
-	if ( $inpost) {
-	  $postmeta .= "$1\n";
-	} else {
-	  $premeta .= "$1\n";
-	}
+		if ( $inpost) {
+		  $postmeta .= "$1\n";
+		} else {
+		  $premeta .= "$1\n";
+		}
       } else {
-	$text .= "$line\n";
-	$inpost = 1;
+		$text .= "$line\n";
+		$inpost = 1;
       }
     }
 
@@ -264,28 +267,27 @@ use TWiki::Plugins::SharedCode;
       $text .= "$output";
     } else {
       if ( $location ) {
-	if ( $position eq "BEFORE" ) {
-	  $text =~ s/($location)/$output$1/m;
-	} else { # AFTER
-	  $text =~ s/($location)/$1$output/m;
-	}
+		if ( $position eq "BEFORE" ) {
+		  $text =~ s/($location)/$output$1/m;
+		} else { # AFTER
+		  $text =~ s/($location)/$1$output/m;
+		}
       } elsif ( $anchor ) {
-	# position relative to anchor
-	if ( $position eq "BEFORE" ) {
-	  $text =~ s/^($anchor)/$output$1/m;
-	} else { # AFTER
-	  $text =~ s/^($anchor)/$1$output/m;
-	}
+		# position relative to anchor
+		if ( $position eq "BEFORE" ) {
+		  $text =~ s/^($anchor)/$output$1/m;
+		} else { # AFTER
+		  $text =~ s/^($anchor)/$1$output/m;
+		}
       } else {
-	# Position relative to index'th comment
-	my $idx = 0;
-	$text =~ s/(%COMMENT({.*?})?%)/&_nth($1,\$idx,$position,$index,$output)/ego;
+		# Position relative to index'th comment
+		my $idx = 0;
+		$text =~ s/(%COMMENT({.*?})?%)/&_nth($1,\$idx,$position,$index,$output)/ego;
       }
     }
     $text =~ s/ {3}/\t/go;
     $text = $premeta . $text . $postmeta;
-
-    return TWiki::Func::saveTopicText( $web, $topic, $text, 1, $silent );
+	return TWiki::Func::saveTopicText( $web, $topic, $text, 1, $silent );
   }
 
   # PRIVATE embed output if this comment is the interesting one

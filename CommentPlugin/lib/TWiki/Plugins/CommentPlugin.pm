@@ -35,14 +35,14 @@ sub commonTagsHandler {
   my $query = TWiki::Func::getCgiQuery();
   return unless( defined( $query ));
   my $action = $query->param( 'comment_action' ) || "";
-
-  if ( defined( $action ) && $action eq "save" ) {
+  if ( defined( $action ) && $action eq "save" &&
+	 $query->path_info() eq "/$_[2]/$_[1]" ) {
     # $firstCall ensures we only save once, ever.
     if ( $firstCall ) {
       $firstCall = 0;
       CommentPlugin::Comment::save( $_[2], $_[1], $query );
     }
-  } elsif ( $_[0] =~ m/%COMMENT{.*?}%/o ) {
+  } elsif ( $_[0] =~ m/%COMMENT({.*?})?%/o ) {
     # Nasty, tacky way to find out where we were invoked from
     my $scriptname = $ENV{'SCRIPT_NAME'} || "";
     my $previewing = ($scriptname =~ /\/preview/ ||
