@@ -210,7 +210,7 @@ sub testBeforeEditHandler {
   BaseFixture::setSkin("action");
   TWiki::Plugins::ActionTrackerPlugin::beforeEditHandler($text,"Topic2","Main");
   $text = $this->assert_html_matches("<input type=\"text\" name=\"who\" value=\"Main\.Fred\" size=\"35\"/>", $text);
-  $text = $this->assert_html_matches("<input type=\"text\" name=\"due\" value=\"Tue, 1 Jan 2002\" size=\"16\"/>", $text);
+  $text = $this->assert_html_matches("<input type=\"text\" name=\"due\" value=\"Tue, 1 Jan 2002\" size=\"16\"", $text);
   $this->assert_html_matches("<select name=\"state\" size=\"1\">", $text);
   $this->assert_html_matches("<option value=\"open\">open</option>", $text);
   $this->assert_html_matches("<option value=\"closed\" selected>closed</option></select>", $text);

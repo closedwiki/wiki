@@ -348,9 +348,9 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	| *File:* | *Description:* |
 %$MANIFEST%
 	* Unzip ==ActionTrackerPlugin.zip== in your twiki installation directory.
-	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. This script also includes an _uninstaller_ should you ever wish to remove the plugin from your installation.
+	* =perl= ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. This script also includes an _uninstaller_ should you ever wish to remove the plugin from your installation.
 	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
-	%$DEPENDENCIES%
+%$DEPENDENCIES%
 
 	* Configure lib/TWiki/Plugins/ActionTrackerPlugin/ActionTrackerConfig.pm appropriately for your installation. Several of the configuration items are the same as in lib/TWiki.cfg - you can copy your local values from there if you're not sure what you're doing. If you are using Rcs<nop>Lite, just ignore the rlogCmd; you can't use the changedsince feature with Rcs<nop>Lite anyway.
 	* If the plugin is installed and enabled correctly you should see a formatted action below:
@@ -403,6 +403,8 @@ Due to limitations in the Time::Parsedate module, dates before January 1, 1970 m
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+| 26 Mar 2005 | 2.022 Corrected JSCalendar problems, and cleaned up lazy-loading of libraries. |
+| 8 Feb 2005 | 2.021 Documentation fixes. |
 | 19 Nov 2004 | 2.020 Added conditions for date matching, and fixed config so that tests pass again. |
 | 13 Oct 2004 | 2.013 If a user cuts and pastes an action with a uid in it, the action editor would get confused. This update ensures all action UIDs are unique within a topic when it is saved. |
 | 16 Aug 2004 | 2.012 Dependency automation and Cairo readiness, further change to =within= behaviour (bidirectionality) |

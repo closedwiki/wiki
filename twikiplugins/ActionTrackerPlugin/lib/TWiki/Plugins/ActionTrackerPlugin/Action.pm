@@ -44,10 +44,12 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 # created       When the action was created
 # closer        Who closed the action
 # closed        When the action was closed
-{ package TWiki::Plugins::ActionTrackerPlugin::Action;
+package TWiki::Plugins::ActionTrackerPlugin::Action;
 
-  my $now = time();
-  my $mainweb = TWiki::Func::getMainWebname();
+use vars qw( $now );
+
+$now = time();
+my $mainweb = TWiki::Func::getMainWebname();
 
   # Options for parsedate
   my %pdopt = ( NO_RELATIVE => 1, DATE_REQUIRED => 1, WHOLE => 1 );
@@ -848,6 +850,6 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     }
     return $table;
   }
-}
+
 
 1;

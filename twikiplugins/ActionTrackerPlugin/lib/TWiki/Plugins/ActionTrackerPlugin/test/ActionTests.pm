@@ -62,7 +62,7 @@ sub testIsLateAndDaysToGo {
 									"who=\"Who\" due=\"2 Jun 02\" open", "");
   $this->assert(!$action->isLate());
   $this->assert_num_equals(2, $action->daysToGo());
-  TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("1 Jun 2002 24:59:59");
+  TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("1 Jun 2002 23:59:59");
   $this->assert(!$action->isLate());
   $this->assert_num_equals(0, $action->daysToGo());
   TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jun 2002 00:00:01");
@@ -658,10 +658,9 @@ sub testFormatForEdit {
   $this->assert($s =~ s/<th>state<\/th>//);
   foreach my $n (split(/\|/,$expand)) {
 	$this->assert($s =~ s/<th>$n<\/th>//, $n);
-    my $r;
-    eval '$r = TWiki::Contrib::JSCalendarContrib::VERSION';
-    if ($r && ($n eq "closed" || $n eq "due" || $n eq "created")) {
-      $s = $this->assert_html_matches("<td><input type=\"text\" name=\"$n\" value=\"\" size=\"\" id=\"date_$n\"/><a onclick=\"return showCalendar\('date_$n', '\%e \%B \%Y'\)\"><img src=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/img.gif\"/></a></td>", $s);
+    require TWiki::Contrib::JSCalendarContrib;
+    if (!$@ && ($n eq "closed" || $n eq "due" || $n eq "created")) {
+      $s = $this->assert_html_matches("<td><input type=\"text\" name=\"$n\" value=\"{*.*?*}\" size=\"{*.*?*}\" id=\"date_$n\"/><button type=\"reset\" onclick=\"return showCalendar\('date_$n','\%e \%B \%Y'\)\"><img src=\"http://pub/TWiki/JSCalendarContrib/img.gif\" alt=\"Calendar\"/></button></td>", $s);
     } else {
       $s = $this->assert_html_matches("<td><input type=\"text\" name=\"$n\" value=\"{*.*?*}\" size=\"{*.*?*}\"/></td>", $s);
     }
