@@ -131,7 +131,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "17 Apr 2004";
+$wikiversion      = "18 Apr 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -3233,7 +3233,7 @@ sub renderFormData
     if( %form ) {
         my $name = $form{"name"};
         $metaText = "<div class=\"TWikiForm\">\n";
-        $metaText .= "<p><\/p>\n"; # prefix empty line
+        $metaText .= "<p></p>\n"; # prefix empty line
         $metaText .= "|*[[$name]]*||\n"; # table header
         my @fields = $meta->find( "FIELD" );
         foreach my $field ( @fields ) {
@@ -3440,32 +3440,20 @@ Not yet documented.
 
 sub makeAnchorHeading
 {
-    my( $theText, $theLevel ) = @_;
+    my( $theHeading, $theLevel ) = @_;
 
-    # - Need to build '<nop><h1><a name="atext"></a> text </h1>'
-    #   type markup.
+    # - Build '<nop><h1><a name="atext"></a> heading </h1>' markup
     # - Initial '<nop>' is needed to prevent subsequent matches.
-    # - Need to make sure that <a> tags are not nested, i.e. in
-    #   case heading has a WikiName or ABBREV that gets linked
     # - filter out $regex{headerPatternNoTOC} ( '!!' and '%NOTOC%' )
+    # CODE_SMELL: Empty anchor tags seem not to be allowed, but validators and browsers tolerate them
 
-    my $text = $theText;
-    my $anchorName =       makeAnchorName( $text, 0 );
-    my $compatAnchorName = makeAnchorName( $text, 1 );
-    $text =~ s/$regex{headerPatternNoTOC}//o; # filter '!!', '%NOTOC%'
-    my $hasAnchor = 0;  # text contains potential anchor
-    $hasAnchor = 1 if( $text =~ m/<a /i );
-    $hasAnchor = 1 if( $text =~ m/\[\[/ );
-
-    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{abbrevRegex})/ );
-    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/ );
-    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{wikiWordRegex})/ );
-
-    # FIXME: $hasAnchor is not used
-	# FIXME: What does $compatAnchorName do? Seems to be redundant: document this please
-    my $headerprefix = "<nop><h$theLevel>";
-    my $anchorprefix = "<a name=\"$compatAnchorName\"></a>" . "<a name=\"$anchorName\"></a>";
-	$text = "$headerprefix$anchorprefix$text</h$theLevel>";
+    my $anchorName =       makeAnchorName( $theHeading, 0 );
+    my $compatAnchorName = makeAnchorName( $theHeading, 1 );
+    $theHeading =~ s/$regex{headerPatternNoTOC}//o; # filter '!!', '%NOTOC%'
+    my $text = "<nop><h$theLevel>";
+    $text .= "<a name=\"$anchorName\"> </a>";
+    $text .= "<a name=\"$compatAnchorName\"> </a>" if( $compatAnchorName ne $anchorName );
+    $text .= " $theHeading </h$theLevel>";
 
     return $text;
 }
@@ -3560,7 +3548,7 @@ sub linkToolTipInfo
     $text =~ s/\$wikiname/"<nop>" . &TWiki::userToWikiName( $user, 1 )/ge;  # "JohnSmith"
     $text =~ s/\$wikiusername/"<nop>" . &TWiki::userToWikiName( $user )/ge; # "Main.JohnSmith"
     if( $text =~ /\$summary/ ) {
-        my $summary = &TWiki::Store::readFileHead( "$TWiki::dataDir\/$theWeb\/$theTopic.txt", 16 );
+        my $summary = &TWiki::Store::readFileHead( "$TWiki::dataDir/$theWeb/$theTopic.txt", 16 );
         $summary = &TWiki::makeTopicSummary( $summary, $theTopic, $theWeb );
         $summary =~ s/[\"\']/<nop>/g;       # remove quotes (not allowed in title attribute)
         $text =~ s/\$summary/$summary/g;
