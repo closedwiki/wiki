@@ -20,6 +20,8 @@ function toggleShowHide( e )
 <div id="toggle_toc">
 %TOC{ "%BASETOPIC%" depth="2" }%
 </div>
+[[%SCRIPTURL%/view/%WEB%/%BASETOPIC%?test=compare&debugenableplugins=TestFixturePlugin][Run Test]]<br/>
+[[http://validator.w3.org/check/referer][XHTML Validator]]
 
 %INCLUDE{CreateNewTestCaseForm}%
 <form>
