@@ -417,8 +417,8 @@ sub resetPassword {
 
     my @userNames = $query->param( 'LoginName' ) || ();
     unless( @userNames ) {
-        # self abuse
-        push( @userNames, $user->login());
+	throw TWiki::UI::OopsException
+      ( undef, $user->wikiName(), 'resetpasswd', "No users to reset for", $action );
     }
 
     my $introduction = $query->param( 'Introduction' ) || '';
