@@ -46,7 +46,7 @@ use vars qw(
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "03 Oct 1999";
+$wikiversion      = "10 Jan 2000";
 
 @isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 
@@ -654,7 +654,6 @@ sub handleCommonTags
     $text=~ s/%MAINWEB%/$mainWebname/go;
     $text=~ s/%HOMETOPIC%/$mainTopicname/go;
     $text=~ s/%NOTIFYTOPIC%/$notifyTopicname/go;
-    $text=~ s/%%/%/g;
     return $text;
 }
 
@@ -728,7 +727,9 @@ sub externalLink
     my( $pre, $url ) = @_;
     if( $url =~ /\.(gif|jpg|jpeg)$/ )
     {
-	return "$pre<IMG src=\"$url\" alt=\"$url\">";
+        my $filename = $url;
+        $filename =~ s@.*/([^/]*)@$1@go;
+	return "$pre<IMG src=\"$url\" alt=\"$filename\">";
     }
 
     return "$pre<A href=\"$url\" target=\"_top\">$url</A>";

@@ -38,9 +38,10 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $scriptUrl, $userName ) = 
+    ( $topic, $webName, $tmp, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
+    $tmp = ""; # set to suppress warning
     my $tmpl= "", $text="";
     my $rev= $query->param("rev");
     my $maxrev = 1;
