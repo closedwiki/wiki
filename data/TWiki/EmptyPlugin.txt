@@ -1,4 +1,4 @@
-%META:TOPICINFO{version="1.2" date="994668989" author="PeterThoeny" format="1.0beta2"}%
+%META:TOPICINFO{author="PeterThoeny" date="995149114" format="1.0beta2" version="1.3"}%
 ---++ Empty TWiki Plugin
 
 This is an empty plugin you can use as a template to build your own %TWIKIWEB%.TWikiPlugins. This plugin does nothing, but is ready to be used.
@@ -6,23 +6,26 @@ This is an empty plugin you can use as a template to build your own %TWIKIWEB%.T
 To create your own plugin:
 
 	* Copy file ==TWiki/Plugins/EmptyPlugin.pm== to ==&lt;name&gt;Plugin.pm== and customize the plugin.
-	* Copy this topic to ==&lt;name&gt;Plugin== and customize it.
+	* Create a  ==&lt;name&gt;Plugin== topic in the %TWIKIWEB% web. Do so by visiting http://TWiki.org/cgi-bin/view/Plugins/ and starting a new topic to get the default plugin topic text (don't save the topic). Customize your plugin topic to your needs.
 	* See details in %TWIKIWEB%.TWikiPlugins.
 
 ---+++ Syntax Rules
 
 (none)
 
----+++ <nop>%TOPIC% Preferences
+---+++ <nop>%TOPIC% Settings
 
-Plugin preferences are stored as preferences variables. To reference
-a plugin preference write ==%<nop>&lt;plugin&nbsp;name&gt;_&lt;preference&nbsp;name&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is included in the %TWIKIWEB%.TextFormattingRules topic:
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = This plugin does nothing, but can be used as a template for your own plugins.
 
-	* Your own preferences, i.e.:
-		* Set COLOR = red
+	* Your own setting, i.e.:
+		* Set EXAMPLE = got it!
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
 
 ---+++ Plugin Installation Instructions
 
@@ -31,8 +34,8 @@ a plugin preference write ==%<nop>&lt;plugin&nbsp;name&gt;_&lt;preference&nbsp;n
 ---+++ Plugin Info
 
 |  Plugin Author: | %TWIKIWEB%.AndreaSterbini, %TWIKIWEB%.PeterThoeny |
-|  Plugin Version: | 08 Jul 2001 |
-|  Change History: | 08 Jul 2001: Changed to plug&play <br> 27 Feb 2001: Initial version |
+|  Plugin Version: | 14 Jul 2001 |
+|  Change History: | 14 Jul 2001: Changed to plug&play <br> 27 Feb 2001: Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
@@ -42,4 +45,4 @@ a plugin preference write ==%<nop>&lt;plugin&nbsp;name&gt;_&lt;preference&nbsp;n
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
 
 -- %TWIKIWEB%.AndreaSterbini - 27 Feb 2001 <br> 
--- %TWIKIWEB%.PeterThoeny - 08 Jul 2001 <br>
+-- %TWIKIWEB%.PeterThoeny - 14 Jul 2001 <br>
