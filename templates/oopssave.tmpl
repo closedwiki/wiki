@@ -20,12 +20,19 @@
   </TR>
 </TABLE>
 <H2>Inproper use of the <code>save</code> script</H2>
-This script can only be used by other TWiki scripts.
+You cannot call this script directly, %WIKITOOLNAME% uses
+it internally.
+<p>
+The other possibility is an internal error in %WIKITOOLNAME% 
+configuration, or that you did not have write access to the 
+directory or file that was being edited.
 <p>
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR BGCOLOR="%WEBBGCOLOR%">
     <TD valign="top">
-      Topic <B>%TOPIC%</B> . { }
+      Topic <B>%TOPIC%</B> . {
+        <A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">OK</A>
+      }
     </TD>
   </TR>
 </TABLE>
