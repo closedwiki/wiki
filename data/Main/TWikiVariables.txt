@@ -1,3 +1,2 @@
-<!-- Include from TWiki web to avoid broken links. -->
-<!-- To edit, edit the TWikiVariables topic in the TWiki web. -->
-%INCLUDE{"%TWIKIWEB%.TWikiVariables"}%
+%META:TOPICINFO{author="PeterThoeny" date="1042331384" format="1.0" version="1.3"}%
+See [[%TWIKIWEB%.TWikiVariables]]
