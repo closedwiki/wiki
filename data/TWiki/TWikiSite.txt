@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1059252865" format="1.0" version="1.22"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071557760" format="1.0" version="1.23"}%
 ---++ TWiki is a Web-based collaboration platform
 	* A TWiki site is an easy-to-use, full-featured open communications environment:
 		* people anywhere on the Web or on an intranet can meet
@@ -38,11 +38,13 @@
 
 <blockquote> %X% If you have to log-in to use TWiki, for example, if Twiki is running on an intranet, it automatically signs pages you edit and create with your WikiName. If your TWiki installation doesn't require a log-in, TWiki gives everyone the same username: Main.TWikiGuest.</blockquote>
 
-TWiki<sup>TM</sup> is a trademark of PeterThoeny, originator and lead developer.
+TWiki<sup>TM</sup> is a trademark of PeterThoeny - originator and lead developer.
 	* TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
+	* TWiki has its root in the GPLed <nop>JosWiki. Many thanks to Markus Peter and Dave Harris for creating <nop>JosWiki!
 	* TWiki's home address is http://twiki.org/.
 	* Source code is available upon request: see http://twiki.org/download.html.
 	* WelcomeGuest is a fast track guide to TWiki.
 	* This site is powered by TWiki version *%WIKIVERSION%*.
 
--- Main.MikeMannix - 12 May 2002
+-- TWiki:Main.MikeMannix - 12 May 2002 %BR%
+-- TWiki:Main.PeterThoeny - 16 Dec 2003
