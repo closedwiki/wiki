@@ -102,6 +102,7 @@ use vars qw(
 
 # TWiki::Store config:
 use vars qw(
+        $rcsDir $rcsArg $nullDev $endRcsCmd $storeTopicImpl $keywordMode
         $storeImpl @storeSettings
     );
 
