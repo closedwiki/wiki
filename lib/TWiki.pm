@@ -101,7 +101,7 @@ use vars qw(
 # Internationalisation and regex setup:
 use vars qw(
 	$basicInitDone $useLocale $localeRegexes $siteLocale $siteCharset 
-	$siteCharsetOverride $siteLang $urlCharEncoding 
+	$siteCharsetOverride $siteLang $siteFullLang $urlCharEncoding 
 
 	$upperNational $lowerNational 
 	$upperAlpha $lowerAlpha $mixedAlpha $mixedAlphaNum $lowerAlphaNum $numeric
@@ -492,6 +492,7 @@ sub setupLocale {
  
     $siteCharset = 'ISO-8859-1';	# Default values if locale mis-configured
     $siteLang = 'en';
+    $siteFullLang = 'en-us';
 
     if ( $useLocale ) {
 	if ( not defined $siteLocale or $siteLocale !~ /[a-z]/i ) {
@@ -502,19 +503,23 @@ sub setupLocale {
 	# and HTTP headers
 	$siteLocale =~ m/\.([a-z0-9_-]+)$/i;
 	$siteCharset = $1 if defined $1;
-	$siteCharset =~ s/utf8$/utf-8/;		# For convenience, avoid override
-	# Override charset if locale setting not usable with Perl
+	$siteCharset =~ s/^utf8$/utf-8/;	# For convenience, avoid override
+
+	# Override charset - used when locale charset not supported by Perl
 	# conversion modules
 	$siteCharset = $siteCharsetOverride || $siteCharset;
+	$siteCharset = lc $siteCharset;
 
-	# Extract the default site language 
-	$siteLocale =~ m/^([a-z]+)_/i;
-	$siteLang = $1 if defined $1;
+	# Extract the default site language
+	$siteLocale =~ m/^([a-z]+)_([a-z]+)/i;
+	$siteLang = (lc $1) if defined $1;	# Not including country part
+	$siteFullLang = (lc "$1-$2" ) 		# Including country part
+		if defined $1 and defined $2;
 
 	# Set environment variables for grep 
 	$ENV{'LC_CTYPE'}= $siteLocale;
 
-	# Load POSIX for i18n support 
+	# Load POSIX for I18N support 
 	require POSIX;
 	import POSIX qw( locale_h LC_CTYPE );
 
@@ -673,15 +678,15 @@ sub convertUtf8URLtoSiteCharset {
 
 	# Convert into ISO-8859-1 if it is the site charset
 	if ( $siteCharset =~ /^iso-?8859-?1$/i ) {
-	    # FIXME: Use 'unpack' to convert into real Unicode characters
-	    # if on Perl 5.6 or higher (Unicode aware)
-
 	    # ISO-8859-1 maps onto first 256 codepoints of Unicode
 	    # (conversion from 'perldoc perluniintro')
 	    $fullTopicName =~ s/ ([\xC2\xC3]) ([\x80-\xBF]) / 
 				 chr( ord($1) << 6 & 0xC0 | ord($2) & 0x3F )
 				 /egx;
-	} elsif ( $siteCharset =~ /^utf-?8$/i ) {
+	} elsif ( $siteCharset = "utf-8" ) {
+	    # FIXME: Use 'unpack' to convert into real Unicode characters
+	    # if on Perl 5.6 or higher (Unicode aware)
+
 	    writeWarning "UTF-8 not yet supported as site charset - TWiki is likely to have problems";
 	    writeDebug "UTF-8 not yet supported as site charset - TWiki is likely to have problems";
 	    writeDebug "No conversion needed from UTF-8 to $siteCharset";
@@ -2706,6 +2711,8 @@ sub handleInternalTags
     $_[0] =~ s/%INCLUDINGWEB%/$includingWebName/g;
 
     $_[0] =~ s/%CHARSET%/$siteCharset/g;
+    $_[0] =~ s/%SHORTLANG%/$siteLang/g;
+    $_[0] =~ s/%LANG%/$siteFullLang/g;
 
     $_[0] =~ s/%TOPICLIST{(.*?)}%/&handleWebAndTopicList($1,'0')/ge;
     $_[0] =~ s/%WEBLIST{(.*?)}%/&handleWebAndTopicList($1,'1')/ge;
