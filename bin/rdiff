@@ -143,12 +143,12 @@ sub main
 
     my $topicExists = &TWiki::Store::topicExists( $webName, $topic );
     if( $topicExists ) {
-	$maxrev = &TWiki::Store::getRevisionNumber( $webName, $topic );
-        $maxrev =~ s/1\.//go;  # cut major
-	if( ! $rev1 ) { $rev1 = 0; }
-	if( ! $rev2 ) { $rev2 = 0; }
-        $rev1 =~ s/1\.//go;  # cut major
-        $rev2 =~ s/1\.//go;  # cut major
+        $maxrev = &TWiki::Store::getRevisionNumber( $webName, $topic );
+        $maxrev =~ s/r?1\.//go;  # cut 'r' and major
+        if( ! $rev1 ) { $rev1 = 0; }
+        if( ! $rev2 ) { $rev2 = 0; }
+        $rev1 =~ s/r?1\.//go;  # cut 'r' and major
+        $rev2 =~ s/r?1\.//go;  # cut 'r' and major
         if( $rev1 < 1 )       { $rev1 = $maxrev; }
         if( $rev1 > $maxrev ) { $rev1 = $maxrev; }
         if( $rev2 < 1 )       { $rev2 = 1; }
