@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = 'Alpha 10 Jul 2004 $Rev$';
+$wikiversion      = 'Alpha 15 Jul 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2053,7 +2053,7 @@ sub handleIncludeFile
     &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
 
-    # Wiki Plugin Hook (4th parameter tells plugin that its called from an include)
+    # TWiki Plugin Hook (4th parameter tells plugin that its called from an include)
     &TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb, 1 );
 
     # handle tags again because of plugin hook
@@ -3061,7 +3061,10 @@ sub handleCommonTags
     if( !$theWeb ) {
         $theWeb = $webName;
     }
-    
+
+    # TWiki Plugin Hook (for cache Plugins only)
+    &TWiki::Plugins::beforeCommonTagsHandler( $text, $theTopic, $theWeb );
+
     my @verbatim = ();
     $text = takeOutVerbatim( $text, \@verbatim );
 
@@ -3077,7 +3080,7 @@ sub handleCommonTags
     # recursively process multiple embedded %INCLUDE% statements and prefs
     $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $theTopic, $theWeb, \@verbatim, @theProcessedTopics )/ge;
 
-    # Wiki Plugin Hook
+    # TWiki Plugin Hook
     &TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb, 0 );
 
     # handle tags again because of plugin hook
@@ -3094,6 +3097,9 @@ sub handleCommonTags
     # Ideally would put back in getRenderedVersion rather than here which would save removing
     # it again!  But this would mean altering many scripts to pass back verbatim
     $text = putBackVerbatim( $text, "verbatim", @verbatim );
+
+    # TWiki Plugin Hook (for cache Plugins only)
+    &TWiki::Plugins::afterCommonTagsHandler( $text, $theTopic, $theWeb );
 
     return $text;
 }
@@ -3120,8 +3126,8 @@ sub handleMetaTags
     $text =~ s/%META{\s*"moved"\s*}%/&TWiki::Render::renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
     $text =~ s/%META{\s*"parent"\s*(.*)}%/&TWiki::Render::renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information
 
-  $text = handleCommonTags( $text, $theTopic );
-  $text = TWiki::Render::getRenderedVersion( $text, $theWeb );
+    $text = handleCommonTags( $text, $theTopic );
+    $text = TWiki::Render::getRenderedVersion( $text, $theWeb );
 
     return $text;
 }

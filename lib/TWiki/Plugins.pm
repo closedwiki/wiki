@@ -33,14 +33,16 @@ use vars qw(
 	$VERSION $initialisationErrors
     );
 
-$VERSION = '1.023';
+$VERSION = '1.024';
 
 @registrableHandlers = (           #                                         VERSION:
         'earlyInitPlugin',         # ( )                                     1.020
         'initPlugin',              # ( $topic, $web, $user, $installWeb )    1.000
         'initializeUserHandler',   # ( $loginName, $url, $pathInfo )         1.010
         'registrationHandler',     # ( $web, $wikiName, $loginName )         1.010
+        'beforeCommonTagsHandler', # ( $text, $topic, $web )                 1.024
         'commonTagsHandler',       # ( $text, $topic, $web )                 1.000
+        'afterCommonTagsHandler',  # ( $text, $topic, $web )                 1.024
         'startRenderingHandler',   # ( $text, $web )                         1.000
         'outsidePREHandler',       # ( $text )                               1.000
         'insidePREHandler',        # ( $text )                               1.000
@@ -465,6 +467,23 @@ sub registrationHandler
 # =========================
 =pod
 
+---++ sub beforeCommonTagsHandler ()
+
+Not yet documented.
+
+=cut
+
+sub beforeCommonTagsHandler
+{
+    # Called by sub handleCommonTags at the beginning (for cache Plugins only)
+#    my( $text, $topic, $theWeb ) = @_;
+    unshift @_, ( 'beforeCommonTagsHandler' );
+    &applyHandlers;
+}
+
+# =========================
+=pod
+
 ---++ sub commonTagsHandler ()
 
 Not yet documented.
@@ -480,6 +499,23 @@ sub commonTagsHandler
     $_[0] =~ s/%PLUGINDESCRIPTIONS%/&handlePluginDescription()/geo;
     $_[0] =~ s/%ACTIVATEDPLUGINS%/&handleActivatedPlugins()/geo;
     $_[0] =~ s/%FAILEDPLUGINS%/&handleFailedPlugins()/geo;
+}
+
+# =========================
+=pod
+
+---++ sub afterCommonTagsHandler ()
+
+Not yet documented.
+
+=cut
+
+sub afterCommonTagsHandler
+{
+    # Called by sub handleCommonTags at the end (for cache Plugins only)
+#    my( $text, $topic, $theWeb ) = @_;
+    unshift @_, ( 'afterCommonTagsHandler' );
+    &applyHandlers;
 }
 
 # =========================
