@@ -1,19 +1,69 @@
 __What is a Category Table?__
 
-A Category Table is a table that can include drop-down menus, checkboxes, radio buttons, and text fields. It makes it easy to provide keywords to categorize a topic. 
+It is possible to add a Category Table to a %WIKITOOLNAME% web. It allows you to categorize and classify a topic, e.g. give some structure to the content of a web.
 
-For example, if a TWiki web is devoted to technical support, wiki topics might be incident reports. The Category Table can prompt the writer to select the operating system, the software product, and the version for this report. For the operating system category, checkboxes can be displayed for <nop>OsSolaris, <nop>OsSunOS, <nop>OsHPUX and <nop>OsWin.
+The Category Table is located at the end of a topic. Example:
 
-__Using a Category Table__
+<table border="2" cellspacing="1" cellpadding="1">
+<tr>
+<td valign="top" align="right"> <A href="">TopicClassification</a>:  <br></td><td>  <A href="">PublicFAQ</A> </td>
+</tr><tr>
+<td valign="top" align="right"> <A href="">OperatingSystem</a>:  <br></td><td>  <A href="">OsSolaris</A> </td>
+</tr>
+</table>
 
-It is possible to add a category table to a TWiki web. This permits storing and searching for more structured information. Editing a topic shows a HTML form with the usual text area and a table with selectors, checkboxes, radio buttons and text fields. The category table is shown at the end of a topic. The format of the category table can be defined per TWiki web.
+When you edit the topic you see below the usual text area a table that includes widgets (controls) like drop-down menus, checkboxes, radio buttons, and text boxes. It makes it easy to provide keywords to categorize a topic. Example:
 
-If you want to add a Category Table in a TWiki web you need to place the following three files into the =twiki/templates/{Yourweb}= directory:
+<form>
+<table border="2" cellspacing="1" cellpadding="1">
+<tr>
+<td valign="top" align="right"> <A href="">UseCategory</a>
+:  <br></td><td>  
+<table cellspacing="0" cellpadding="0"><tr>
+<td><input type="radio" name="UseCategory" value="Yes" checked>Yes &nbsp;&nbsp;</td>
+<td><input type="radio" name="UseCategory" value="Nodeletethiscategorytable" >No, delete this category table &nbsp;&nbsp;</td>
+</tr></table>
+ </td>
+</tr><tr>
+<td valign="top" align="right"> <A href="">TopicClassification</a>
+:  <br></td><td>  <select name="TopicClassification" size="1">
+<option value="Selectone" >Select one...
+<option value="NoDisclosure" >NoDisclosure
+<option value="PublicSupported" >PublicSupported
+<option value="PublicFAQ" selected>PublicFAQ
+</select> </td>
+</tr><tr>
+<td valign="top" align="right"> <A href="">OperatingSystem</a>
+:  <br>
+<input type="button" value=" Set " onClick="">&nbsp;
+<input type="button" value="Clear" onClick="">&nbsp;</td><td>  
+<table cellspacing="0" cellpadding="0"><tr>
+<td><input type="checkbox" name="OperatingSystemOsSolaris" checked>OsSolaris &nbsp;&nbsp;</td>
+<td><input type="checkbox" name="OperatingSystemOsSunOS" >OsSunOS &nbsp;&nbsp;</td>
+<td><input type="checkbox" name="OperatingSystemOsHPUX" >OsHPUX &nbsp;&nbsp;</td>
+<td><input type="checkbox" name="OperatingSystemOsWin" >OsWin &nbsp;&nbsp;</td>
+</tr></table>
+ </td>
+</tr>
+</table>
+</form>
+
+The format of the Category Table can be defined per %WIKITOOLNAME% web.
+
+One sample application is a knowledge base for customer support. The web for customer support contains internal documents, FAQ entries and knowledge base entries. Topics are __classified__ accordingly. In addition, FAQ entries and knowledge base entries can be __categorized__ i.e. by the software product anf the operating system. For the operating system category, a checkbox contains <nop>OsSolaris, <nop>OsSunOS, <nop>OsHPUX and <nop>OsWin.
+
+__Hint:__ The topic classification can be used to do some automatic processing in the background. For example, a script could automatically publish the FAQ entries to your corporate web site, including FAQ index page and file attachments.
+
+
+__How to Define a Category Table__
+
+The Category Table is defined by some template files. To add a Category Table to your %WIKITOOLNAME% web you need to place the following three files into the =twiki/templates/{Yourweb}= directory:
 	* =twikicatitems.tmpl= : Defines the items in the table
 	* =twikicatedit.tmpl= : Defines the look of the table when editing a topic
 	* =twikicatview.tmpl= : Defines the look of the table when viewing a topic
 
-__Format of category definition template twikicatitems.tmpl__
+
+__Format of Category Definition Template File twikicatitems.tmpl__
 
 Valid lines:
 <pre>
@@ -113,9 +163,9 @@ Above template files will result in the following table when __editing__ a topic
 </table>
 </form>
 
-__Note:__ It is possible to force the values of a category table when creating a new topic. This is useful to create new topics using a form for the topic name. The default values of the category table can be specified as hidden fields if needed, i.e. =&lt;input type="hidden" name="someCategory" value="someValue"&gt;= 
+__Note:__ It is possible to force the values of a Category Table when creating a new topic. This is useful to create new topics using a form for the topic name. The default values of the Category Table can be specified as hidden fields if needed, i.e. =&lt;input type="hidden" name="someCategory" value="someValue"&gt;= 
 
 Example (edit this page to see the source) :
 	* <form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Know/"> New Know.PublicFAQ topic: <input type="text" name="topic" size="32"> <input type="hidden" name="TopicClassification" value="PublicFAQ"> <input type="hidden" name="OperatingSystem" value="OsSolaris,OsSunOS"> <input type="hidden" name="OsVersion" value="Just testing..."> <input type="hidden" name="onlywikiname" value="on"> <input type="submit" value="Create Topic"> </form>
 
--- Main.PeterThoeny - 21 Apr 2000 <br>
+-- Main.PeterThoeny - 26 Feb 2001 <br>
