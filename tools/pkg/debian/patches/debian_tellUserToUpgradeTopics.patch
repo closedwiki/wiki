@@ -1,13 +1,12 @@
-=== lib/TWiki/Prefs.pm
-===================================================================
---- lib/TWiki/Prefs.pm	(revision 3832)
-+++ lib/TWiki/Prefs.pm	(working copy)
-@@ -308,6 +308,8 @@
+--- Prefs.pm	2005-03-20 14:07:07.000000000 +1100
++++ Prefs.pm.new	2005-03-20 14:07:38.000000000 +1100
+@@ -308,6 +308,9 @@
      $self->inheritPrefs( $self->{parent} ) if defined $self->{parent};
  
      if( $self->{type} eq "global" ) {
-+    	#default for debian , incase we are upgrading from pre-cairo, and your topics are out of date.
-+	$self->_insertPreference("BROADCASTMESSAGE", "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\" width=\"100%\"><tr><td bgcolor=\"yellow\"><font color=\"red\">If you see this message you have not set BROADCASTMESSAGE in TWiki.TWikiPreferences. This is probably because you have topic data from before the Cairo (Sept2004) TWiki release. You need to either run /var/lib/twiki/UpgradeTwiki using the newly distributed data files, or merge in the topic changes by hand. Currently the debian package does not help you do this - Sorry</font></td></tr></table>");
++        #default for debian , incase we are upgrading from pre-cairo, and your topics are out of date.
++        $self->_insertPreference("BROADCASTMESSAGE", "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\" width=\"100%\"><tr><td bgcolor=\"yellow\"><font color=\"red\">If you see this message you have not set BROADCASTMES SAGE in TWiki.TWikiPreferences. This is probably because you have topic data from before the Cairo (Sept2004) TWiki release. You need to either run /var/lib/twiki/UpgradeTwiki using the newly distributed data files, or merge in the topic changes by hand. Currently the debian package does not help you do this - Sorry</font></td></tr></table>");
++
          # global prefs
          $self->loadPrefsFromTopic( $TWiki::twikiWebname,
                                     $TWiki::wikiPrefsTopicname,
