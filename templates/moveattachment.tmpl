@@ -8,39 +8,27 @@
 </head>
 <body bgcolor="#ffffff">
 <form name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-%TMPL:DEF{"titleaction"}% <b> %FILENAME%</b> (move)%TMPL:END%
-%TMPL:DEF{"webaction"}%%TMPL:END%
-%TMPL:P{"standardheader"}%
-<br />
-<table border="1" cellpadding="1" cellspacing="0">
-<tr>
-  <th></th><th bgcolor=#00FFFF>Currently</th><th bgcolor=#FFFFC0>Change to</th>
-</tr>
-<tr>
-  <th>Web</TH><TD  bgcolor=#00FFFF>&nbsp;%WEB%&nbsp;</td>
-  <td bgcolor=#FFFFC0>
-     &nbsp;
-     <select name="newweb">
-        %WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%WEB%"}%
-     </select>
-     &nbsp;
-  </td>
-<tr>
-<tr>
-  <th>Topic</th><td bgcolor=#00FFFF>&nbsp;%TOPIC%&nbsp;</td>
-  <td bgcolor=#FFFFC0>
-     &nbsp;<input name="newtopic" value="%TOPIC%" /> &nbsp;
-  </td>
-</tr>
-</table>
+%TMPL:DEF{"titleaction"}%(move attachment)%TMPL:END%
+%TMPL:DEF{"webaction"}% *Move file attachment* %TMPL:END%
+%TMPL:P{"simpleheader"}%
+---+ Move file <code>%FILENAME%</code>
+
+| |  *Web:* | *&nbsp;Topic:* |
+|  *From:* |    %WEB%. | &nbsp;%TOPIC% |
+|  *To:* |  <select name="newweb"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}% </select>. | &nbsp;<input name="newtopic" value="%TOPIC%" /> |
 <input type="hidden" name="attachment" value="%FILENAME%">
 <input type="hidden" name="changeRefs" value="0">
-<br />
-The attachment and any history will be moved to the new topic.  An error page will be shown if either of the topics are
-locked by another user.  The new topic chosen must already exist.  Note that any URLs that refer to the attachment will be broken after this move.
 
-<br>
-%TMPL:DEF{"topicaction"}% <input type="submit" value="Move"> %TMPL:END%
+__Note:__
+
+   * The attachment and any history will be moved to the new topic.
+   * An error page will be shown if either of the topics are locked by another user.
+   * The new topic chosen must already exist.
+   * Note that any URLs that refer to the attachment will be broken after this move.
+
+%TMPL:DEF{"topicaction"}%
+ <input type="submit" value=" Move ">
+ %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
 %TMPL:P{"standardfooter"}%
 </form>
 </body>

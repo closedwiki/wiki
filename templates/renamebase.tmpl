@@ -21,37 +21,27 @@
 <body bgcolor="#ffffff">
 <form method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 %TMPL:P{"simpleheader"}%
-<br />
-<table border="1" cellpadding="1" cellspacing="0">
-<tr>
-  <th></th><th bgcolor="#00ffff">Currently</th><th bgcolor="#ffffc0">Change to</th>
-</tr><tr>
-  <th>Web</th><td bgcolor="#00ffff">&nbsp;%WEB%&nbsp;</td>
-  <td bgcolor=#FFFFC0>&nbsp; %TMPL:P{"newweb"}% &nbsp;</td>
-</tr><tr>
-  <th>Topic</th><td bgcolor="#00ffff">&nbsp;%TOPIC%&nbsp;</td>
-  <td bgcolor="#ffffc0">
-  &nbsp; %TMPL:P{"newtopic"}% &nbsp;
-  </td>
-</tr>
-</table>
-%TMPL:P{"hidden"}%
-<br />
-See <a target="RenameTopic" onClick="return launchWindow('%TWIKIWEB%','RenameTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/RenameTopic">RenameTopic</a>.
-Select Trash Web to delete.
-<br />
-<hr />
-<br />
-<b>Change references in referring pages</b> - 
-the ticked pages will be updated (if not locked, in which case you'll be able to re-submit.)
-<p>
-<br />
----++ Topics that refer to %TOPIC% in Web %WEB%:
+---+ Rename or move topic <code>%TOPIC%</code>
+
+| |  *Web:* | *&nbsp;Topic:* |
+|  *From:* |    %WEB%. | &nbsp;%TOPIC% |
+|  *To:* |  %TMPL:P{"newweb"}%. | %TMPL:P{"newtopic"}% |
+
+---++ Change links in topics that refer to %TOPIC% in the %WEB% Web:
+
 %SEARCH{ "(^|[_\*\> \t])((%TOPIC%))([^A-Za-z0-9_]|$)" web="%WEB%" noempty="on" showlock="on" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
----++ Topics that refer to [[%WEB%.%TOPIC%]] in any Web:
+
+---++ Change links in topics that refer to [[%WEB%.%TOPIC%]] in any Web:
+
 %SEARCH{ "(^|[_\*\> \t])((%WEB%\.)%TOPIC%)([^A-Za-z0-9_]|$)" web="all" noempty="on" showlock="on" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
 
-<hr />
+__Note:__
+   * Get help on
+     <a target="RenameTopic" onClick="return launchWindow('%TWIKIWEB%','RenameTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/RenameTopic">RenameTopic</a>.
+   * Select the Trash Web to delete the topic.
+   * The checkmarked topics will be updated (if not locked, in which case you'll be able to re-submit.)
+
+%TMPL:P{"hidden"}%
 %TMPL:P{"standardfooter"}%
 </form>
 </body>
