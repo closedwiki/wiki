@@ -39,6 +39,32 @@ sub initializeAccess
 }
 
 # =========================
+# Are there any security restrictions for this Web
+# (ignoring settings on individual pages).
+sub permissionsSet
+{
+    my( $web ) = @_;
+    
+    my $permSet = 0;
+    
+    my @types = qw/ALLOW DENY/;
+    my @actions = qw/CHANGE VIEW RENAME/;
+    
+    OUT: foreach my $type ( @types ) {
+        foreach my $action ( @actions ) {
+            my $pref = $type . "WEB" . $action;
+            my $prefValue = TWiki::Prefs::getPreferencesValue( $pref, $web ) || "";
+            if( $prefValue !~ /^\s*$/ ) {
+                $permSet = 1;
+                last OUT;
+            }
+        }
+    }
+    
+    return $permSet;
+}
+
+# =========================
 sub checkAccessPermission
 {
     my( $theAccessType, $theUserName,
