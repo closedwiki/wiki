@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeBarton" date="1012336080" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="MarcoCarnut" date="1021311720" format="1.0" version="1.10"}%
 ---++ Find Elsewhere Plugin
 
 This plugin will automatically link to another web(s) if a topic isn't found in the current web.  
@@ -13,7 +13,7 @@ Without this kind of plugin, it's likely that common terms used within an organi
 ---+++ Syntax Rules
 No new rules are introduced.  However, new automatic TWiki.WikiWord linking will occur.  
 
-If a topic is not found in the current web, this plugin will look in the LOOKELSEWHERE web list for that topic.  If and when the topic is found as it looks through the webs in their listed order, it will create a link to that page using the [<nop>[ ]] syntax.
+If a topic is not found in the current web, this plugin will look in the LOOKELSEWHERE web list for that topic.  If and when the topic is found as it looks through the webs in their listed order, it will create a link to that page using either the [<nop>[ ]] syntax or the standard syntax, according to the value of the SHOWWEBNAME preference variable described below.
 
 #NewFunctionalityTest
 New Functionality
@@ -42,6 +42,9 @@ Don't break other types of links...
 
 	* List other webs in which to look for topics that don't exist
 		* Set LOOKELSEWHERE = TWiki, Main
+
+	* If it shows the full topic name with (default) or without (=0) the web name
+		* Set SHOWWEBNAME = 0
 
 	* If the TWiki.WikiWord is plural but doesn't exist, also look for the singular word.  Note this setting is for looking in *other* webs only (plural to singular is still automatically done in the current web).
 		* Set PLURALTOSINGULAR = 1
