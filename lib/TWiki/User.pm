@@ -350,6 +350,7 @@ sub isAdmin {
     ASSERT(ref($this) eq "TWiki::User") if DEBUG;
 
     my $sag = $this->users()->findUser( $TWiki::cfg{SuperAdminGroup} );
+    ASSERT(ref($sag) eq "TWiki::User") if DEBUG;
     return $this->isInList( $sag->groupMembers());
 }
 

@@ -61,7 +61,8 @@ sub new {
     }
 
     # create the guest user
-    $this->findUser( $TWiki::cfg{DefaultUserLogin}, $TWiki::cfg{DefaultUserWikiName} );
+    $this->_createUser( $TWiki::cfg{DefaultUserLogin},
+                        $TWiki::cfg{DefaultUserWikiName} );
 
     return $this;
 }
@@ -127,49 +128,88 @@ sub expandUserList {
 
 ---++ ObjectMethod findUser( $name [, $wikiname] [, $nocreate ] ) -> $userObject
 
-Find the user object corresponding to a name, either a
-login name or a wiki name. If no user object is found,
-and a wikiname is given, a new user object is created.
+   * =$name= - login name or wiki name
+   * =$wikiname= - optional, wikiname for created user
+   * =$nocreate= - optional, disable creation of user object for user not found in TWikiUsers
 
-If the $wikiname is specified, it is used as the wikiname
-of the user, overriding whatever may be in the username
-mappings.
+Find the user object corresponding to =$name=, which may be either a
+login name or a wiki name. The name is looked up in the
+TWikiUsers topic. If =$name= is found (either in the list
+of login names or the list of wiki names) the corresponding
+user object is returned. In this case =$wikiname= is ignored.
 
-If $nocreate is specified, don't create the user if they don't already
-exist in the TWikiUsers mapping.
+If they are not found, and =$nocreate= is true, then return undef.
+
+If =$nocreate= is false, then a user object is returned even if
+the user is not listed in TWikiUsers.
+
+If =$nocreate= is false, and no =$wikiname= is given, then the
+=$name= is used for both login name and wiki name.
 
 =cut
 
 sub findUser {
     my( $this, $name, $wikiname, $dontCreate ) = @_;
     ASSERT(ref($this) eq "TWiki::Users") if DEBUG;
-    ASSERT($name || $wikiname) if DEBUG;
+    ASSERT($name) if DEBUG;
     my $object;
 
-    if( $name ) {
-        if( $name =~ /(.*)\.(.*)/ ) {
-            # must be web.wikiname
-            $object = $this->{wikiname}{$name};
-            return $object if $object;
-        }
-        # is it a login name?
-        $object = $this->{login}{$name};
-        return $object if $object;
+    # is it a cached login name?
+    $object = $this->{login}{$name};
+    return $object if $object;
 
-        # prepend the mainweb and try again in wikinames
-        $object = $this->{wikiname}{"$TWiki::cfg{UsersWebName}.$name"};
+    if( $name =~ m/^$TWiki::regex{webNameRegex}\.$TWiki::regex{wikiWordRegex}$/o ) {
+        # may be web.wikiname; try the cache
+        $object = $this->{wikiname}{$name};
         return $object if $object;
-
-        # not cached; assume the name was a login name
-        # and create the stub for the user. If no wikiname
-        # was given, try to infer one from the TWikiUsers topic.
-        $wikiname = $this->_lookupTWikiUsers( $name ) unless $wikiname;
     }
 
-    return undef if( !$wikiname || $dontCreate );
+    # prepend the mainweb and try again in the cache
+    if( $name =~ /^$TWiki::regex{wikiWordRegex}$/ ) {
+        $object = $this->{wikiname}{"$TWiki::cfg{UsersWebName}.$name"};
+        return $object if $object;
+    }
 
-    $wikiname = $name unless $wikiname;
-    $object = new TWiki::User( $this->{session}, $name, $wikiname );
+    # not cached
+
+    # if no wikiname is given, try and recover it from
+    # TWikiUsers
+    unless( $wikiname ) {
+        $wikiname = $this->{U2W}{$name};
+    }
+
+    if( !$wikiname &&
+        $name =~ m/^($TWiki::regex{webNameRegex}\.)?$TWiki::regex{wikiWordRegex}$/o ) {
+        my $t = $name;
+        $t = "$TWiki::cfg{UsersWebName}.$t" unless $1;
+        # not in TWiki users as a login name; see if it is
+        # a WikiName
+        my $lUser = $this->{W2U}{$t};
+        if( $lUser ) {
+            # it's a wikiname
+            $name = $lUser;
+            $wikiname = $t;
+        }
+    }
+
+    # if we haven't matched a wikiname yet and we've been told
+    # not to create, then abandon ship
+    return undef if ( !$wikiname && $dontCreate );
+
+    unless( $wikiname ) {
+        # default to wikiname being the same as name.
+        $this->{session}->writeWarning("Cannot deduce full identity of user $name");
+        $wikiname = $name;
+    }
+
+    return $this->_createUser( $name, $wikiname );
+}
+
+# force-create a user (even if they already exist)
+sub _createUser {
+    my( $this, $name, $wikiname ) = @_;
+
+    my $object = new TWiki::User( $this->{session}, $name, $wikiname );
     ASSERT($object->login()) if DEBUG;
     ASSERT($object->wikiName()) if DEBUG;
     ASSERT($object->webDotWikiName()) if DEBUG;
@@ -272,6 +312,7 @@ sub _cacheTWikiUsersTopic {
     $this->{CACHED} = 1;
 
     %{$this->{U2W}} = ();
+    %{$this->{W2U}} = ();
     my @list = ();
     if( $TWiki::cfg{MapUserToWikiName} ) {
         my $text = $this->store()->readTopicRaw( undef, $TWiki::cfg{UsersWebName},
@@ -288,14 +329,14 @@ sub _cacheTWikiUsersTopic {
     my $wUser;
     my $lUser;
     foreach( @list ) {
-	# Get the WikiName and userid, and build hashes in both directions
+        # Get the WikiName and userid, and build hashes in both directions
         if(  ( /^\s*\* ($TWiki::regex{webNameRegex}\.)?(\S+)\s*\-\s*([^\s]*).*/o ) && $2 ) {
-            my $web = $1;
-            $web = $TWiki::cfg{UsersWebName} unless $web;
+            my $web = $1 || $TWiki::cfg{UsersWebName};
             $wUser = $2;	# WikiName
             $lUser = $3;	# userid
             $lUser =~ s/$TWiki::cfg{NameFilter}//go;	# FIXME: Should filter in for security...
-            $this->{U2W}{ $lUser } = "$web.$wUser";
+            $this->{U2W}{$lUser} = "$web.$wUser";
+            $this->{W2U}{"$web.$wUser"} = $lUser;
         }
     }
 }
@@ -388,27 +429,33 @@ sub initializeRemoteUser {
     return $remoteUser;
 }
 
-# _lookupTWikiUsers( $loginUser, $wantUndef ) --> $wikiName
-#
-# Translates intranet username (e.g. jsmith) to
-# Web.WikiName (e.g. Main.JaneSmith)
-#
-# if you give an invalid username, we just return that
-# unless $wantUndef is set, in which case it returns undef.
-#
-sub _lookupTWikiUsers {
+# Translates username (e.g. jsmith) to Web.WikiName
+# (e.g. Main.JaneSmith) by lookup in TWikiUsers.
+sub __lookupLoginName {
     my( $this, $loginUser ) = @_;
 
-    if( !$loginUser ) {
-        return "";
-    }
+    return undef unless $loginUser;
 
     $this->_cacheTWikiUsersTopic();
 
     $loginUser =~ s/$TWiki::cfg{NameFilter}//go;
-    my $wUser = $this->{U2W}{ $loginUser };
+    return $this->{U2W}{$loginUser};
+}
 
-    return $wUser;
+# Translates Web.WikiName (e.g. Main.JaneSmith) to
+# username (e.g. jsmith) to by lookup in TWikiUsers.
+sub __lookupWikiName {
+    my( $this, $wikiName ) = @_;
+
+    return undef unless $wikiName;
+
+    $this->_cacheTWikiUsersTopic();
+
+    $wikiName =~ s/$TWiki::cfg{NameFilter}//go;
+    $wikiName = "$TWiki::cfg{UsersWebName}.$wikiName"
+      unless $wikiName =~ /\./;
+
+    return $this->{W2U}{$wikiName};
 }
 
 1;
