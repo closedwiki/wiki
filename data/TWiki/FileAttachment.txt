@@ -1,4 +1,11 @@
-*FileAttachment*
+%META:TOPICINFO{author="MikeMannix" date="999162452" format="1.0" version="1.4"}%
+---++ Dev Reorg Note:
+
+The latest version of <nop>FileAttachments includes attachments under revision control. It's in the 01 Sep 2001 TWiki release.
+
+	* Current Dev topic: Codev.AttachmentsUnderRevisionControl 
+
+-----
 
 Each topic can have files attached to it. This is similar to an e-mail attachment. Just use your browser to upload or download a file.
 	* To upload: Click on the Attach link at the bottom of each page. A form is shown where you can browse for a file and upload it. The uploaded file will show up in the <nop>FileAttachment table.
@@ -44,64 +51,5 @@ Is a table that looks like this:
 		* Edit topic and write text: =%<nop>ATTACHURL%/Smile.gif=
 		* Text is shown as: %PUBURL%/%WEB%/%TOPIC%/Smile.gif , i.e. it shows up as an image.
 	* It is not possible to delete attached files with the current TWiki implementation. Contact %WIKIWEBMASTER% if you need to delete files.
-<!--TWikiAttachment--><p>
-<table cellpadding="0" border="0" cellspacing="4">
-<tr bgcolor="#99CCCC">
-  <th>
-%TWIKIWEB%.FileAttachment:
-  </th><th>
-Action:
-  </th><th>
-Size:
-  </th><th>
-Date:
-  </th><th>
-Who:
-  </th><th>
-Comment:
-  </th>
-</tr><TwkNextItem>
-<tr>
-  <td valign="top">
-<TwkFileIcon><IMG src="%PUBURLPATH%/icn/txt.gif" width="16" hight="16" align="top"></TwkFileIcon>&nbsp;<a href="%PUBURLPATH%/%WEB%/%TOPIC%/Sample.txt"><TwkFileName>Sample.txt</TwkFileName></a>
-<TwkFilePath> <TwkData value="C:\DATA\Sample.txt"> </TwkFilePath>
-  </td><td valign="top">
-<TwkAction><a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=Sample.txt">view</a>&nbsp;<a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=Sample.txt">update</a></TwkAction>
-  </td><td valign="top" align="right">
-<TwkFileSize>30</TwkFileSize>
-  </td><td valign="top">
-<TwkFileDate>22&nbsp;Jul&nbsp;2000&nbsp;-&nbsp;19:37</TwkFileDate>
-  </td><td valign="top">
-<TwkFileUser> Main.PeterThoeny</TwkFileUser>
-  </td><td valign="top">
-<TwkFileComment>Just a sample</TwkFileComment>
-  </td>
-</tr><TwkNextItem>
-<tr>
-  <td valign="top">
-<TwkFileIcon><IMG src="%PUBURLPATH%/icn/bmp.gif" width="16" hight="16" align="top"></TwkFileIcon>&nbsp;<a href="%PUBURLPATH%/%WEB%/%TOPIC%/Smile.gif"><TwkFileName>Smile.gif</TwkFileName></a>
-<TwkFilePath> <TwkData value="C:\DATA\Smile.gif"> </TwkFilePath>
-  </td><td valign="top">
-<TwkAction><a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=Smile.gif">view</a>&nbsp;<a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=Smile.gif">update</a></TwkAction>
-  </td><td valign="top" align="right">
-<TwkFileSize>94</TwkFileSize>
-  </td><td valign="top">
-<TwkFileDate>22&nbsp;Jul&nbsp;2000&nbsp;-&nbsp;19:38</TwkFileDate>
-  </td><td valign="top">
-<TwkFileUser> Main.PeterThoeny</TwkFileUser>
-  </td><td valign="top">
-<TwkFileComment>Smiley face</TwkFileComment>
-  </td>
-</tr><TwkNextItem>
-<tr>
-  <td valign="top">
-  </td><td valign="top">
-<TwkAction><a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">add</a><TwkAction>
-  </td><td valign="top" align="right">
-  </td><td valign="top">
-  </td><td valign="top">
-  </td><td valign="top">
-  </td>
-</tr>
-</table>
-<!--TWikiAttachment-->
+%META:FILEATTACHMENT{name="Sample.txt" attr="" comment="Just a sample" date="964294620" path="C:\DATA\Sample.txt" size="30" user="thoeny" version=""}%
+%META:FILEATTACHMENT{name="Smile.gif" attr="" comment="Smiley face" date="964294680" path="C:\DATA\Smile.gif" size="94" user="thoeny" version=""}%
