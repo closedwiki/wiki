@@ -144,7 +144,7 @@ sub main
 	return;
     }
     &TWiki::Store::lockTopic( $topic );
-    
+
     my $formTemplate = $query->param( "formtemplate" ) || "";
 
     # get edit template, standard or a different skin
@@ -198,14 +198,12 @@ sub main
        }
        $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
        $text = $query->param( 'text' );
-    } else {
-       $tmpl =~ s/%FORMTEMPLATE%//go;
     }
     
     if( $saveCmd eq "repRev" ) {
        $text = TWiki::Store::readTopicRaw( $webName, $topic );
     }
-    
+
     $text =~ s/&/&amp\;/go;
     $text =~ s/</&lt\;/go;
     $text =~ s/>/&gt\;/go;
@@ -233,9 +231,15 @@ sub main
     $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
 
     # Dont want to render form fields, so this after getRenderedVersion
-    my %form = $meta->findOne( "FORM" );
-    if( %form && $saveCmd ne "repRev" ) {
-       my $form = $form{"name"};
+    my %formMeta = $meta->findOne( "FORM" );
+    my $form = "";
+    if( ! %formMeta ) {
+       $form = TWiki::Prefs::getPreferencesValue( "DEFAULTFORM", $webName );
+       $tmpl =~ s/%FORMTEMPLATE%/$form/go;
+    } else {
+       $form = $formMeta{"name"};
+    }
+    if( $form && $saveCmd ne "repRev" ) {
        my @fieldDefs = &TWiki::Form::getFormDef( $webName, $form );
        
        if( ! @fieldDefs ) {
@@ -251,9 +255,10 @@ sub main
        $tmpl =~ s/%FORMFIELDS%//go;
     }
     
+    $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
 
     $tmpl =~ s/%TEXT%/$text/go;
-    
+
     TWiki::writeHeader( $query );
 
     print $tmpl;
