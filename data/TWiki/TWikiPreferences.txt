@@ -54,7 +54,7 @@ __Preferences:__
 	* http-equiv meta tags for __view__, __rdiff__, __attach__, __search*__ scripts:
 		* Set HTTP_EQUIV_ON_VIEW = 
 
-	* http-equiv meta tags for __edit__ script. Example to expire immediately: <br> =Set HTTP_EQUIV_ON_EDIT = &lt;meta http-equiv="Expires" content="%<nop>GMTIME{"day month, year - hour:min:sec"}% GMT"&gt;=
+	* http-equiv meta tags for __edit__ script. Example to expire immediately: <br> =Set HTTP_EQUIV_ON_EDIT = &lt;meta http-equiv="Expires" content="%<nop>GMTIME{"$day $month, $year - $hour:$min:$sec"}% GMT"&gt;=
 		* Set HTTP_EQUIV_ON_EDIT = 
 
 	* http-equiv meta tags for __preview__ script:
