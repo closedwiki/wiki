@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007364180" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1019368012" format="1.0" version="1.13"}%
 ---# <nop>TWikiShorthand Basics
 
 If you can enter text, you're ready for TWiki. With a few simple, intuitive TWikiShorthand rules, you'll be able to use plain text to create well-styled postings, instantly. Here's a fast-track guide to shorthand basics...
@@ -11,11 +11,11 @@ If you can enter text, you're ready for TWiki. With a few simple, intuitive TWik
 
 	* To display a word or phrase in __bold italic__, put it in _double_ underscores: =__bold italic__=.
 
-	* To link to another Wiki topic, type the WikiWord for that topic. To link to a Wiki topic in another web, type the name of the web, and a dot, first: =Test.<nop>%HOMETOPIC%=.
+	* To link to another Wiki topic, type the WikiWord for that topic. To link to a Wiki topic in another web, type the name of the web, and a dot, first: =Sandbox.<nop>%HOMETOPIC%=.
 
 	* If you enter a WikiWord for a topic that doesn't exist, it'll appear highlighted, with question mark at the end, prompting you (or someone else) to start off the new topic by clicking the *?* - NewTopic (click the *?*, but don't save, to preserve the example!).
 	
-	* When entering <nop>WikiName signatures - like, %USERNAME% - include the %MAINWEB% as a prefix, since all TWiki member pages are in the %MAINWEB% web: =Main.YourName=.
+	* When entering <nop>WikiName signatures - like, <nop>%USERNAME% - include the %MAINWEB% as a prefix, since all TWiki member pages are in the %MAINWEB% web: =Main.YourName=.
 
 	* For an external link, type the full URL: =http://twiki.org=.
 
