@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042702500" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044102412" format="1.0" version="1.6"}%
 ---+!! Include Topics and Web Pages Using ==%<nop>INCLUDE{...}%== Variable
 
-Use the ==%<nop>INCLUDE{...}%== variable to embed the content of another topic or web page inside a %WIKITOOLNAME% topic. The whole content or only parts of a page can be included.
+Use the ==%<nop>INCLUDE{...}%== variable to embed the content of another topic or web page inside a %WIKITOOLNAME% topic. The whole content or only parts of a page can be included. If needed, set a proxy server in %WIKIPREFSTOPIC%.
 
 %TOC%
 
