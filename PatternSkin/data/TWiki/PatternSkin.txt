@@ -100,7 +100,23 @@ See: PatternSkinCustomization
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related topic:__ %TWIKIWEB%.TWikiSkins, TWiki:TWiki/TWikiSkinBrowser
+---++ Related topics
+
+   * TWiki:TWiki/TWikiCss
+   * TWiki:TWiki/TWikiLayout
+   * TWiki:TWiki/TWikiStyle
+   * TWiki:TWiki/WebBottomBar
+   * TWiki:TWiki/WebLeftBar
+   * TWiki:TWiki/WebLeftBarPersonalTemplate
+   * TWiki:TWiki/WebTopBar
+
+See also [[%TOPIC%#Further_reading][Further reading]] on this page.
+
+Other skins:
+   * TWiki:TWiki/TWikiSkins
+   * TWiki:TWiki/TWikiSkinBrowser
+
+---
 
 -- TWiki:Main/ArthurClemens - 15 Aug 2004
 
