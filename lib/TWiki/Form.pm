@@ -235,7 +235,7 @@ sub renderForEdit
     foreach my $c ( @fieldsInfo ) {
         my @fieldInfo = @$c;
         my $fieldName = shift @fieldInfo;
-        my $name = $fieldName . "FLD";
+        my $name = $fieldName;
         my $title = shift @fieldInfo;
         my $type = shift @fieldInfo;
         my $size = shift @fieldInfo;
@@ -360,12 +360,12 @@ sub fieldVars2Meta
        my $title     = shift @fieldInfo;
        my $type      = shift @fieldInfo;
        my $size      = shift @fieldInfo;
-       my $value     = $query->param( $fieldName . "FLD" );
+       my $value     = $query->param( $fieldName );
        my $cvalue    = "";
        
        if( ! $value && $type =~ "^checkbox" ) {
           foreach my $name ( @fieldInfo ) {
-             $cvalue = $query->param( "$fieldName" . "FLD$name" );
+             $cvalue = $query->param( "$fieldName" . "$name" );
              if( defined( $cvalue ) ) {
                  if( ! $value ) {
                      $value = "";
@@ -409,7 +409,6 @@ sub getFieldParams
        my $name  = $field->{"name"};
        my $value = $field->{"value"};
        $value = TWiki::Meta::cleanValue( $value );
-       $name .= "FLD";
        $params .= "<input type=\"hidden\" name=\"$name\" value=\"$value\" />\n";
     }
     
@@ -451,8 +450,8 @@ sub changeForm
     }
     $tmpl =~ s/%FORMLIST%/$formList/go;
 
-    my $parent = $theQuery->param( 'parent' ) || "";
-    $tmpl =~ s/%PARENT%/$parent/go;
+    my $parent = $theQuery->param( 'topicparent' ) || "";
+    $tmpl =~ s/%TOPICPARENT%/$parent/go;
 
     $tmpl =~ s|</*nop/*>||goi;
 
