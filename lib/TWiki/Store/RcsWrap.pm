@@ -52,24 +52,43 @@ sub new {
 }
 
 # implements RcsFile
-sub binaryChange {
+sub initBinary {
     my( $self ) = @_;
-    if( $self->{binary} ) {
-        # Can only do something when changing to binary
-        my ( $rcsOutput, $exit ) =
-          $self->{session}->{sandbox}->readFromProcess
-            ( $TWiki::cfg{RCS}{initBinaryCmd},
-              FILENAME => $self->{file} );
-        if( $exit && $rcsOutput ) {
-           $rcsOutput = "$TWiki::cfg{RCS}{initBinaryCmd}\n$rcsOutput";
-        } elsif( ! -e $self->{rcsFile} ) {
-            # Sometimes (on Windows?) rcs file not formed, so check for it
-            $rcsOutput =
-              "$TWiki::cfg{RCS}{initBinaryCmd}\nFailed to create history file $self->{rcsFile}";
-        }
-        return $rcsOutput;
+
+    $self->{binary} = 1;
+
+    my ( $rcsOutput, $exit ) =
+      $self->{session}->{sandbox}->readFromProcess
+        ( $TWiki::cfg{RCS}{initBinaryCmd},
+          FILENAME => $self->{file} );
+    if( $exit && $rcsOutput ) {
+        $rcsOutput = "$TWiki::cfg{RCS}{initBinaryCmd}\n$rcsOutput";
+    } elsif( ! -e $self->{rcsFile} ) {
+        # Sometimes (on Windows?) rcs file not formed, so check for it
+        $rcsOutput =
+          "$TWiki::cfg{RCS}{initBinaryCmd}\nFailed to create history file $self->{rcsFile}";
     }
-    return undef;
+    return $rcsOutput;
+}
+
+# implements RcsFile
+sub initText {
+    my( $self ) = @_;
+
+    $self->{binary} = 0;
+
+    my ( $rcsOutput, $exit ) =
+      $self->{session}->{sandbox}->readFromProcess
+        ( $TWiki::cfg{RCS}{initTextCmd},
+          FILENAME => $self->{file} );
+    if( $exit && $rcsOutput ) {
+        $rcsOutput = "$TWiki::cfg{RCS}{initTextCmd}\n$rcsOutput";
+    } elsif( ! -e $self->{rcsFile} ) {
+        # Sometimes (on Windows?) rcs file not formed, so check for it
+        $rcsOutput =
+          "$TWiki::cfg{RCS}{initTextCmd}\nFailed to create history file $self->{rcsFile}";
+    }
+    return $rcsOutput;
 }
 
 # implements RcsFile

@@ -87,10 +87,13 @@ sub init {
         }
     }
 
-    if( $self->{attachment} &&
-        ! -e $self->{rcsFile} && 
-        ! $self->isAsciiDefault() ) {
-        $self->setBinary( 1 );
+    unless( -e $self->{rcsFile} ) {
+        if( $self->{attachment} &&
+            !$self->isAsciiDefault() ) {
+            $self->initBinary();
+        } else {
+            $self->initText();
+        }
     }
 }
 
@@ -300,22 +303,6 @@ sub isAsciiDefault {
    } else {
       return "";
    }
-}
-
-=pod
-
----++ ObjectMethod setBinary (   $binary  )
-
-Change into a binary file.
-
-=cut
-
-sub setBinary {
-    my( $self, $binary ) = @_;
-    my $oldSetting = $self->{binary};
-    $binary = "" if( ! $binary );
-    $self->{binary} = $binary;
-    $self->binaryChange() if( (! $oldSetting && $binary) || ($oldSetting && ! $binary) );
 }
 
 =pod
@@ -622,14 +609,27 @@ lastError().
 
 =pod
 
----++ ObjectMethod binaryChange()
+---++ ObjectMethod initBinary()
 
-Change into a binary file.
+Initialise a binary file.
 
 Must be provided by subclasses.
 
 Returns "" if okay, otherwise an error string.
-Don't use this outside the package, use setBinary instead.
+
+*Virtual method* - must be implemented by subclasses
+
+=cut
+
+=pod
+
+---++ ObjectMethod initText()
+
+Initialise a text file.
+
+Must be provided by subclasses.
+
+Returns "" if okay, otherwise an error string.
 
 *Virtual method* - must be implemented by subclasses
 

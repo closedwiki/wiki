@@ -256,7 +256,7 @@ sub _process {
        } elsif( ( $where eq "admin.postStrict" || $where eq "admin.postComment" )  &&
                 /^expand\s/o ) {
              $where = "admin.postExpand";
-             $self->{expand} = $string;         
+             $self->{expand} = $string;
        } elsif( $where eq "admin.postStrict" || $where eq "admin.postComment" || 
                 $where eq "admin.postExpand" || $where eq "delta.date") {
           if( /^([0-9]+)\.([0-9]+)\s+date\s+(\d\d(\d\d)?(\.\d\d){5}?);$/o ) {
@@ -350,11 +350,19 @@ sub _write {
 }
 
 # implements RcsFile
-sub binaryChange {
+sub initBinary {
    my( $self ) = @_;
    # Nothing to be done but note for re-writing
-   $self->{expand} = "b" if( $self->{binary} );
+   $self->{expand} = "b";
    # FIXME: unless we have to not do diffs for binary files
+   return undef;
+}
+
+# implements RcsFile
+sub initText {
+   my( $self ) = @_;
+   # Nothing to be done but note for re-writing
+   $self->{expand} = "";
    return undef;
 }
 
