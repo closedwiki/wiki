@@ -105,7 +105,7 @@ Plugin status variables let you list all active Plugins wherever needed. There a
 Using =%<nop>ACTIVATEDPLUGINS%=:<br />
 On this TWiki site, the active Plugins are: %ACTIVATEDPLUGINS%.
 
-Using =%<no>PLUGINDESCRIPTIONS%=:<br />
+Using =%<nop>PLUGINDESCRIPTIONS%=:<br />
 You can use any of these active TWiki Plugins:
 %PLUGINDESCRIPTIONS%
 </blockquote>
