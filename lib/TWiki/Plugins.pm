@@ -102,7 +102,6 @@ $inited = 0;
 
 my %onlyOnceHandlers =
   (
-   initializeUserHandler          => 1,
    registrationHandler            => 1,
    writeHeaderHandler             => 1,
    redirectCgiQueryHandler        => 1,
@@ -145,7 +144,7 @@ sub new {
 
 =pod
 
----++ ObjectMethod load($disabled) -> $loginName
+---++ ObjectMethod load($allDisabled) -> $loginName
 
 Find all active plugins, and invoke the early initialisation.
 Has to be done _after_ prefs are read.
@@ -153,25 +152,17 @@ Has to be done _after_ prefs are read.
 Returns the user returned by the last =initializeUserHandler= to be
 called.
 
-If disabled is set, no plugin handlers will be called.
+If allDisabled is set, no plugin handlers will be called.
 
 =cut
 
 sub load {
-    my ( $this, $disabled ) = @_;
+    my ( $this, $allDisabled ) = @_;
     ASSERT(ref($this) eq 'TWiki::Plugins') if DEBUG;
 
     my %disabledPlugins;
-
-    # SMELL: this module should not rely on the environment. This
-    # should be handled somewhere else. TWiki.pm?
-    if( $ENV{'REDIRECT_STATUS'} && $ENV{'REDIRECT_STATUS'} eq '401' ) {
-        # bail out if authentication failed
-        return '';
-    }
-
-    my $p;
     my %lookup;
+    my $p;
 
     my $query = $this->{session}->{cgiQuery};
 
@@ -184,22 +175,18 @@ sub load {
 
     if ( defined( $debugEnablePlugins )) {
         # enable only specific plugins, for test and benchmarking
-        foreach $p ( grep { /^[A-Za-z0-9_]+Plugin$/ }
-                     split( /[,\s]+/, $debugEnablePlugins )) {
-            $p =~ s/\.([^.]+)$/$1/;
+        foreach $p ( split( /[,\s]+/, $debugEnablePlugins )) {
             unless( $lookup{$p} ) {
-                push( @{$this->{plugins}}, $lookup{$p} =
-                      new TWiki::Plugin( $session, $p ) );
+                $lookup{$p} = new TWiki::Plugin( $session, $p );
             }
+            push( @{$this->{plugins}}, $lookup{$p} );
         }
-    } else {
 
+    } else {
         # explicitly requested plugins
         my $prefs = $this->{session}->{prefs};
         my $installed = $prefs->getPreferencesValue( 'INSTALLEDPLUGINS' ) || '';
-        foreach $p ( grep { /^[A-Za-z0-9_]+Plugin$/ }
-                     split( /[,\s]+/ , $installed )) {
-            $p =~ s/\.([^.]+)$/$1/;
+        foreach $p ( split( /[,\s]+/ , $installed )) {
             unless( $lookup{$p} ) {
                 $lookup{$p} = new TWiki::Plugin( $session, $p )
             }
@@ -210,8 +197,7 @@ sub load {
         }
 
         # implicitly requested plugins
-        foreach $p ( grep { /^[A-Za-z0-9_]+Plugin$/ }
-                     split( /[,\s]+/ ,_discoverPluginPerlModules()) ) {
+        foreach $p ( split( /[,\s]+/ ,_discoverPluginPerlModules()) ) {
             unless( $lookup{$p} ) {
                 push( @{$this->{plugins}}, $lookup{$p} =
                       new TWiki::Plugin( $session, $p ) );
@@ -220,23 +206,20 @@ sub load {
 
         # differently challenged plugins
         my $disabled = $prefs->getPreferencesValue( 'DISABLEDPLUGINS' ) || '';
-        foreach $p ( grep { /^[A-Za-z0-9_]+Plugin$/ }
-                     split( /[,\s]+/ , $disabled )) {
-            if ( $p =~ /^.+Plugin$/ ) {
-                $p =~ s/\.([^.]+)$/$1/;
-                push( @{$this->{errors}}, 'Disabled in DISABLEDPLUGINS' );
-                $lookup{$p}->{disabled} = 1 if $lookup{$p};
-            }
+        foreach $p ( split( /[,\s]+/ , $disabled )) {
+            push( @{$this->{errors}}, 'Disabled in DISABLEDPLUGINS' );
+            $lookup{$p}->{disabled} = 1 if $lookup{$p};
         }
     }
 
     my $user; # the user login name
     my $userDefiner; # the plugin that is defining the user
     foreach my $p ( @{$this->{plugins}} ) {
-        if ( $disabled ) {
+        if ( $allDisabled ) {
             # all plugins are disabled
             push( @{$this->{errors}}, 'all plugins are disabled' );
             $p->{disabled} = 1;
+
         } else {
             my $anotherUser = $p->load();
             if( $anotherUser ) {
@@ -244,6 +227,7 @@ sub load {
                     die 'Two plugins - '. $userDefiner->{name} . ' and ' .
                       $p->{name} .
                         ' are both trying to define the user login name.';
+
                 } else {
                     $userDefiner = $p;
                     $user = $anotherUser;
@@ -264,7 +248,7 @@ sub _discoverPluginPerlModules {
     my @modules = ();
     if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
         @modules = map{ s/\.pm$//i; $_ }
-                   sort
+                   sort # for consistency
                    grep /^[A-Za-z0-9_]+Plugin\.pm$/, readdir DIR;
         closedir( DIR );
     }
@@ -313,7 +297,6 @@ sub getPluginVersion {
 
     foreach my $plugin ( @{$this->{plugins}} ) {
         if( $plugin->{name} eq $thePlugin ) {
-            last if ( $plugin->{disabled} );
             return $plugin->getVersion();
         }
     }
@@ -362,31 +345,34 @@ sub haveHandlerFor {
 # note this is invoked with the session as the first parameter
 sub _handleFAILEDPLUGINS {
     my $this = shift->{plugins};
-    my $text;
 
-    $text .= "---++ Plugins defined\n";
+    my $text = CGI::start_table( { border => 1 } ).
+      CGI::Tr(CGI::th('Plugin').CGI::th('Errors'));
 
     foreach my $plugin ( @{$this->{plugins}} ) {
-        $text .= "\t* <nop>$plugin->{name}";
+        my $err = 'none';
         if ( $plugin->{disabled} && $plugin->{errors}) {
-            $text .= " DISABLED\n---+++ Errors\n<verbatim>\n" .
+            $err= "\n<verbatim>\n" .
               join( "\n", @{$plugin->{errors}} ) . "\n</verbatim>";
         }
-        $text .= "\n";
+        $text .= CGI::Tr( { valign=>'top' },
+                          CGI::td($plugin->{name}). CGI::td( $err ));
     }
 
-    $text.="\n\n";
+    $text .= CGI::end_table().CGI::start_table({ border=>1 }).
+      CGI::Tr(CGI::th('Handler').CGI::th('Plugins'));
 
     foreach my $handler (@TWiki::Plugin::registrableHandlers) {
-        $text .= "| $handler |";
+        my $h = '';
         if ( defined( $this->{registeredHandlers}{$handler} ) ) {
-            $text .=
-              join( CGI::br(), @{$this->{registeredHandlers}{$handler}} );
+            $h = join( CGI::br(),
+                       @{$this->{registeredHandlers}{$handler}} );
         }
-        $text .= " |\n";
+        $text .= CGI::Tr( { valign=>'top' },
+                          CGI::td( $handler ).CGI::td( $h ) );
     }
 
-    return $text;
+    return $text.CGI::end_table();
 }
 
 # note this is invoked with the session as the first parameter
@@ -394,10 +380,10 @@ sub _handlePLUGINDESCRIPTIONS {
     my $this = shift->{plugins};
     my $text = '';
     foreach my $plugin ( @{$this->{plugins}} ) {
-        $text .= $plugin->getDescription();
+        $text .= CGI::li( $plugin->getDescription() );
     }
 
-    return $text;
+    return CGI::ul( $text );
 }
 
 # note this is invoked with the session as the first parameter
@@ -675,7 +661,7 @@ sub beforeAttachmentSaveHandler {
 
 ---++ ObjectMethod afterAttachmentSaveHandler( $attachmentAttrHash, $topic, $web, $error )
 
-This code provides plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other plugins.
+deal with an uploaded attachment between the upload and save-to-store processes. It is invoked as per other plugins.
 
    * =$attrHashRef= - Hash reference of attachment attributes (keys are indicated below)
    * =$topic= -     | Topic name
@@ -689,7 +675,7 @@ Keys in $attrHashRef:
 | comment     | Comment to be associated with the upload |
 | user        | Login name of the person submitting the attachment, e.g. 'jsmith' |
 
-Note: All keys should be used read-only.
+Note: The hash is *read-only*
 
 =cut
 
@@ -704,13 +690,24 @@ sub afterAttachmentSaveHandler {
 
 ---++ ObjectMethod writeHeaderHandler () -> $headers
 
-Called by TWiki::writePageHeader
+Called by TWiki::writePageHeader. *DEPRECATED* do not use!
 
 =cut
 
 sub writeHeaderHandler {
     my $this = shift;
     return $this->_applyHandlers( 'writeHeaderHandler', @_ );
+}
+
+=pod
+
+---++ ObjectMethod modifyHeaderHandler ( \@headers, $query )
+
+=cut
+
+sub modifyHeaderHandler {
+    my $this = shift;
+    return $this->_applyHandlers( 'modifyHeaderHandler', @_ );
 }
 
 =pod

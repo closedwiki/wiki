@@ -658,6 +658,23 @@ sub getRevisionInfo {
 
 =pod
 
+---+++ getRevisionAtTime( $web, $topic, $time ) -> $rev
+   * =$web= - web for topic
+   * =$topic= - topic
+   * =$time= - time (in epoch secs) for the rev
+
+Get the revision number of a topic at a specific time.
+Returns a single-digit rev number or undef if it couldn't be determined
+(either because the topic isn't that old, or there was a problem)
+
+=cut
+
+sub getRevisionAtTime {
+    return $TWiki::Plugins::SESSION->{store}->getRevisionAtTime( @_ );
+}
+
+=pod
+
 ---+++ checkTopicEditLock( $web, $topic ) -> ( $oopsUrl, $loginName, $unlockTime )
 *DEPRECATED* since TWiki::Plugins::VERSION 1.026
 
@@ -1127,7 +1144,7 @@ Return: =$text=    Template text
 
 sub readTemplate {
 #   my( $name, $skin ) = @_;
-    return &TWiki::Store::readTemplate( @_ );
+    return $TWiki::Plugins::SESSION->{templates}->readTemplate( @_ );
 }
 
 =pod
@@ -1438,6 +1455,36 @@ where =Main= and =TWiki= are the web names set in $cfg{UsersWebName} and $cfg{Sy
 sub normalizeWebTopicName {
     #my( $theWeb, $theTopic ) = @_;
     return $TWiki::Plugins::SESSION->normalizeWebTopicName( @_ );
+}
+
+=pod
+
+---+++ searchInWebContent($searchString, $web, $type, $caseSensitive, $justTopics, \@topics ) -> \%map
+Search for a string in the content of a web. The search is over all content, including meta-data. Meta-data matches will be returned as formatted lines within the topic content (meta-data matches are returned as lines of the format %META:\w+{.*}%)
+   * =$searchString= - the search string, in egrep format
+   * =$web= - The web to search in
+   * =$type= - =regex= or something else
+   * =$caseSensitive= - obvious
+   * =$justTopics= - if specified, it will return on the first match in each topic (i.e. it will return only one match per topic, and will not return matching lines).
+   * =\@topics= - reference to a list of topics to search
+
+The return value is a reference to a hash which maps each matching topic
+name to a list of the lines in that topic that matched the search,
+as would be returned by 'grep'.
+
+To iterate over the returned topics use:
+<verbatim>
+my $result = TWiki::Func::searchInWebContent( "Slimy Toad", $web, "regex", 0, 0, \@topics );
+foreach my $topic (keys %$result ) {
+   foreach my $matching_line ( @{$result->{$topic}} ) {
+...etc
+</verbatim>
+=cut
+
+sub searchInWebContent {
+    #my( $searchString, $web, $type, $caseSensitive, $justTopics, $topics ) = @_;
+
+    return $TWiki::Plugins::SESSION->{store}->searchInWebContent( @_ );
 }
 
 =pod

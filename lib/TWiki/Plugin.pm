@@ -35,31 +35,32 @@ use vars qw( @registrableHandlers %deprecated );
 
 @registrableHandlers =
   (                                # VERSION:
-   'earlyInitPlugin',              # 1.020
-   'initPlugin',                   # 1.000
-   'initializeUserHandler',        # 1.010
-   'registrationHandler',          # 1.010
-   'beforeCommonTagsHandler',      # 1.024
-   'commonTagsHandler',            # 1.000
+   'afterAttachmentSaveHandler',   # 1.022
    'afterCommonTagsHandler',       # 1.024
-   'startRenderingHandler',        # 1.000 DEPRECATED
-   'outsidePREHandler',            # 1.000 DEPRECATED
-   'insidePREHandler',             # 1.000 DEPRECATED
-   'endRenderingHandler',          # 1.000 DEPRECATED
-   'preRenderingHandler',          # 1.026
-   'postRenderingHandler',         # 1.026
-   'beforeEditHandler',            # 1.010
    'afterEditHandler',             # 1.010
-   'beforeSaveHandler',            # 1.010
    'afterSaveHandler',             # 1.020
    'beforeAttachmentSaveHandler',  # 1.022
-   'afterAttachmentSaveHandler',   # 1.022
-   'writeHeaderHandler',           # 1.010
-   'redirectCgiQueryHandler',      # 1.010
+   'beforeCommonTagsHandler',      # 1.024
+   'beforeEditHandler',            # 1.010
+   'beforeSaveHandler',            # 1.010
+   'commonTagsHandler',            # 1.000
+   'earlyInitPlugin',              # 1.020
+   'endRenderingHandler',          # 1.000 DEPRECATED
    'getSessionValueHandler',       # 1.010
-   'setSessionValueHandler',       # 1.010
+   'initPlugin',                   # 1.000
+   'initializeUserHandler',        # 1.010
+   'insidePREHandler',             # 1.000 DEPRECATED
+   'modifyHeaderHandler',          # 1.026
+   'outsidePREHandler',            # 1.000 DEPRECATED
+   'postRenderingHandler',         # 1.026
+   'preRenderingHandler',          # 1.026
+   'redirectCgiQueryHandler',      # 1.010
+   'registrationHandler',          # 1.010
    'renderFormFieldForEditHandler',# ?
    'renderWikiWordHandler',        # 1.023
+   'setSessionValueHandler',       # 1.010
+   'startRenderingHandler',        # 1.000 DEPRECATED
+   'writeHeaderHandler',           # 1.010 DEPRECATED
   );
 
 # deprecated handlers
@@ -81,7 +82,7 @@ sub new {
     $this->{disabled} = 0;
 
     unless ( $name =~ m/^[A-Za-z0-9_]+Plugin$/ ) {
-        push( @{$this->{errors}}, "$name - invalid name for plugin" );
+        push( @{$this->{errors}}, $name.' - invalid name for plugin' );
         $this->{disabled} = 1;
     }
 
@@ -114,13 +115,14 @@ sub load {
         # found plugin in Plugins web (compatibility, deprecated)
         $web = 'Plugins';
     } elsif ( $store->topicExists( $this->{session}->{webName},
-                                           $this->{name} ) ) {
+                                   $this->{name} ) ) {
         # found plugin in current web
         $web = $this->{session}->{webName};
     } else {
         # not found
-        push( @{$this->{errors}}, "Plugins: couldn't register $this->{name}, no plugin topic" );
-        $this->{web} = "(Not Found)";
+        push( @{$this->{errors}}, 'Plugins: could not register '.
+              $this->{name}.', no plugin topic' );
+        $this->{web} = '(Not Found)';
         $this->{disabled} = 1;
         return undef;
     }
@@ -132,19 +134,30 @@ sub load {
     #my $begin = new Benchmark;
     eval "use $p;";
     if ($@) {
-        push( @{$this->{errors}}, "Plugin \"$p\" could not be loaded.  Errors were:\n----\n$@----" );
+        push( @{$this->{errors}}, $p.
+              ' could not be loaded.  Errors were: '."\n$@\n".'----' );
         $this->{disabled} = 1;
         return undef;
     }
 
-    my $user;
+    # Set the session for this call stack
+    local $TWiki::Plugins::SESSION = $this->{session};
+
     my $sub = $p . '::earlyInitPlugin';
     if( defined( &$sub ) ) {
-        # Set the session for this call stack
-        local $TWiki::Plugins::SESSION = $this->{session};
-        # Note that the earlyInitPlugin method is _never called_. Not sure why
-        # it exists at all!
-        $sub = $p. '::initializeUserHandler';
+        no strict 'refs';
+        my $error = &$sub();
+       if( $error ) {
+            push( @{$this->{errors}}, $sub.' failed: '.$error );
+            $this->{disabled} = 1;
+            return undef;
+        }
+        use strict 'refs';
+    }
+
+    my $user;
+    $sub = $p. '::initializeUserHandler';
+    if( defined( &$sub ) ) {
         no strict 'refs';
         $user = &$sub( $this->{session}->{remoteUser},
                        $this->{session}->{url},
@@ -166,14 +179,14 @@ sub registerHandlers {
     my $p = 'TWiki::Plugins::' . $this->{name};
     my $sub = $p . "::initPlugin";
     if( ! defined( &$sub ) ) {
-        push( @{$this->{errors}}, "$sub is not defined");
+        push( @{$this->{errors}}, $sub.' is not defined');
         $this->{disabled} = 1;
         return;
     }
 
     my $prefs = $this->{session}->{prefs};
     $prefs->getPrefsFromTopic( $this->{web}, $this->{name},
-                                       uc( $this->{name} ) . '_');
+                               uc( $this->{name} ) . '_');
 
     no strict 'refs';
     my $status = &$sub( $TWiki::Plugins::SESSION->{topicName},
@@ -183,7 +196,7 @@ sub registerHandlers {
     use strict 'refs';
 
     unless( $status ) {
-        push( @{$this->{errors}}, "$p\::initPlugin did not return true ($status)" );
+        push( @{$this->{errors}}, $sub.' did not return true ('.$status.')' );
         $this->{disabled} = 1;
         return;
     }
@@ -194,7 +207,7 @@ sub registerHandlers {
             push( @{$plugins->{registeredHandlers}{$h}}, $sub );
             if( $deprecated{$h} ) {
                 $this->{session}->writeWarning
-                  ( "$this->{name} defines deprecated $h" );
+                  ( $this->{name}.' defines deprecated '.$h );
             }
         }
     }
@@ -216,15 +229,17 @@ sub getDescription {
     my $this = shift;
     ASSERT(ref($this) eq 'TWiki::Plugin') if DEBUG;
 
-    return '' if $this->{disabled};
-
     unless( $this->{description} ) {
         my $pref = uc( $this->{name} ) . '_SHORTDESCRIPTION';
         my $prefs = $this->{session}->{prefs};
         $this->{description} = $prefs->getPreferencesValue( $pref );
     }
-
-    return "\t\* $this->{web}.$this->{name}: $this->{description}\n";
+    if( $this->{disabled} ) {
+        return " !$this->{name}: (disabled)";
+    } else {
+        return " $this->{web}.$this->{name} (".$this->getVersion().
+          "): $this->{description}";
+    }
 }
 
 1;

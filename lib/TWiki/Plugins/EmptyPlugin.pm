@@ -146,20 +146,15 @@ sub _EXAMPLETAG {
 
 ---++ earlyInitPlugin()
 
-May be used by a plugin that requires early initialization, that
-is expects to have initializeUserHandler called before initPlugin,
-giving the plugin a chance to set the user.
+May be used by a plugin that requires early initialization. This handler
+is called before any other handler.
 
-The function is never called by the core code; it simply has to be
-defined in order for intialiseUserHandler to be called.
-
-See SessionPlugin for an example of usage.
+If it returns a non-null error string, the plugin will be disabled.
 
 =cut
 
 sub DISABLE_earlyInitPlugin {
-    die 'Should never be called';
-    return 1;
+    return undef;
 }
 
 =pod
@@ -172,7 +167,9 @@ Allows a plugin to set the username, for example based on cookies.
 
 Return the user name, or =guest= if not logged in.
 
-New hook in TWiki::Plugins::VERSION = '1.010'
+This handler is called very early, immediately after =earlyInitPlugin=.
+
+__Since:__ TWiki::Plugins::VERSION = '1.010'
 
 =cut
 
@@ -189,12 +186,10 @@ sub DISABLE_initializeUserHandler {
    * =$web= - the name of the web in the current CGI query
    * =$wikiName= - users wiki name
    * =$loginName= - users login name
-Allows a plugin to set something up (for example a cookie) at
-time of user registration.
 
-Called by the register script.
+Called when a new user registers with this TWiki.
 
-New hook in TWiki::Plugins::VERSION = '1.010'
+__Since:__ TWiki::Plugins::VERSION = '1.010'
 
 =cut
 
@@ -337,7 +332,7 @@ sub DISABLE_postRenderingHandler {
 This handler is called by the edit script just before presenting the edit text
 in the edit box. Use it to process the text before editing.
 
-New hook in TWiki::Plugins::VERSION = '1.010'
+__Since:__ TWiki::Plugins::VERSION = '1.010'
 
 =cut
 
@@ -358,7 +353,7 @@ This handler is called by the preview script just before presenting the text.
 
 __NOTE:__ this handler is _not_ called unless the text is previewed.
 
-New hook in TWiki::Plugins::VERSION = '1.010'
+__Since:__ TWiki::Plugins::VERSION = '1.010'
 
 =cut
 
@@ -379,7 +374,7 @@ This handler is called just before the save action. The text is populated
 with 'meta-data tags' before this method is called. If you modify any of
 these tags, or their contents, you may break meta-data. You have been warned!
 
-New hook in TWiki::Plugins::VERSION = '1.010'
+__Since:__ TWiki::Plugins::VERSION = '1.010'
 
 =cut
 
@@ -400,7 +395,7 @@ sub DISABLE_beforeSaveHandler {
    * =$error= - any error string returned by the save.
 This handler is called just after the save action.
 
-New hook in TWiki::Plugins::VERSION = '1.020'
+__Since:__ TWiki::Plugins::VERSION = '1.020'
 
 =cut
 
@@ -423,7 +418,7 @@ will include at least the following attributes:
    * =comment= - the comment
    * =user= - the user's Web.<nop>WikiName
 
-New hook in TWiki::Plugins::VERSION = '1.023'
+__Since:__ TWiki::Plugins::VERSION = '1.023'
 
 =cut
 
@@ -446,7 +441,7 @@ will include at least the following attributes:
    * =comment= - the comment
    * =user= - the user's Web.<nop>WikiName
 
-New hook in TWiki::Plugins::VERSION = '1.023'
+__Since:__ TWiki::Plugins::VERSION = '1.023'
 
 =cut
 
@@ -472,7 +467,7 @@ If this handler is defined in more than one plugin, only the handler
 in the earliest plugin in the INSTALLEDPLUGINS list will be called. All
 the others will be ignored.
 
-New hook in TWiki::Plugins::VERSION = '1.010'
+*DEPRECATED* since TWiki::Plugins::VERSION = '1.026' - *DO NOT USE*
 
 =cut
 
@@ -481,6 +476,28 @@ sub DISABLE_writeHeaderHandler {
     ### my ( $query ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::writeHeaderHandler( query )" ) if $debug;
+}
+
+=pod
+
+---++ modifyHeaderHandler( \@headers, $query )
+   * =\@headers= - reference to an array of existing header-value pairs
+   * =$query= - reference to CGI query object
+Lets the plugin modify the HTTP headers that will be emitted when an HTML page is written to the browser. The =\@headers= array will contain
+the headers proposed by the core, plus any modifications made by other plugins that also implement this method that come earlier in the plugins
+list. You can add key-value pairs to the array simply by pushing them on; for example:
+<verbatim>
+push( @$headers, expires => '+1h' );
+</verbatim>
+
+__Since:__ TWiki::Plugins::VERSION 1.026
+
+=cut
+
+sub DISABLE_modifyHeaderHandler {
+    my ( \@headers, $query ) = @_;
+
+    TWiki::Func::writeDebug( "- ${pluginName}::modifyHeaderHandler()" ) if $debug;
 }
 
 =pod
@@ -495,7 +512,7 @@ If this handler is defined in more than one plugin, only the handler
 in the earliest plugin in the INSTALLEDPLUGINS list will be called. All
 the others will be ignored.
 
-New hook in TWiki::Plugins::VERSION = '1.010'
+__Since:__ TWiki::Plugins::VERSION = '1.010'
 
 =cut
 
@@ -519,7 +536,7 @@ If this handler is defined in more than one plugin, only the handler
 in the earliest plugin in the INSTALLEDPLUGINS list will be called. All
 the others will be ignored.
 
-New hook in TWiki::Plugins::VERSION = '1.010'
+__Since:__ TWiki::Plugins::VERSION = '1.010'
 
 =cut
 
@@ -543,7 +560,7 @@ If this handler is defined in more than one plugin, only the handler
 in the earliest plugin in the INSTALLEDPLUGINS list will be called. All
 the others will be ignored.
 
-New hook in TWiki::Plugins::VERSION = '1.010'
+__Since:__ TWiki::Plugins::VERSION = '1.010'
 
 =cut
 

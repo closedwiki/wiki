@@ -277,7 +277,7 @@ sub _searchTopicsInWeb
         unless( $theScope eq 'topic' ) {
             # search only for the topic name, ignoring matching lines.
             # We will make a mess of reporting the matches later on.
-            my $matches = $store->searchInWebContent( $theWeb, $theType, $caseSensitive, 1, $token, \@topicList );
+            my $matches = $store->searchInWebContent( $token, $theWeb, $theType, $caseSensitive, 1, \@topicList );
             @scopeTextList = keys %$matches;
         }
 
@@ -473,8 +473,9 @@ sub searchWeb {
             $renameWeb = $1;
             $renameTopic = $2;
         }
-        $spacedTopic = TWiki::searchableTopic( $renameTopic );
-        $spacedTopic = $renameWeb . '\.' . $spacedTopic if( $renameWeb );
+        $spacedTopic = TWiki::spaceOutWikiWord( $renameTopic );
+        $spacedTopic =~ s/ / */g;
+        $spacedTopic = $renameWeb . '.' . $spacedTopic if( $renameWeb );
 
         # I18N: match non-alpha before and after topic name in renameview searches
         # This regex must work under grep, i.e. if using Perl 5.6 or higher
