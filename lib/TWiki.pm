@@ -81,8 +81,6 @@ use vars qw(
             $langAlphabetic $VERSION
            );
 
-$VERSION = ' $Date$ $Rev$ ';
-
 # SMELL: should this be part of the config?
 $defaultWikiName = "TWikiGuest";
 
@@ -276,6 +274,9 @@ sub _setupRegexes {
 # expansion or calls the relevant _handle method for
 # the tag.
 sub _setupHandlerMaps {
+    $VERSION = '$Date$ $Rev$ ';
+    $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$1 build $2/;
+
     %staticInternalTags =
       (
        ENDSECTION      => "",
@@ -304,7 +305,7 @@ sub _setupHandlerMaps {
        DATE              => \&_handleDATE,
        DISPLAYTIME       => \&_handleDISPLAYTIME,
        ENCODE            => \&_handleENCODE,
-       FORMFIELD         => \&_handleFORMFIELD,,
+       FORMFIELD         => \&_handleFORMFIELD,
        GMTIME            => \&_handleGMTIME,
        HTTP_HOST         => \&_handleHTTP_HOST,
        ICON              => \&_handleICON,
