@@ -76,11 +76,31 @@ sub _save {
   my $dontNotify = $query->param( "dontnotify" ) || "";
   my $changeform = $query->param( 'submitChangeForm' ) || "";
   my $theParent = $query->param( 'topicparent' ) || "";
+  my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
+  my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
   my $formTemplate = $query->param( "formtemplate" );
+
+  my $topicExists  = TWiki::Store::topicExists( $webName, $topic );
 
   return 0 unless TWiki::UI::webExists( $webName, $topic );
 
   return 0 if TWiki::UI::isMirror( $webName, $topic );
+
+  # Prevent saving existing topic?
+  if( $onlyNewTopic && $topicExists ) {
+    # Topic exists and user requested oops if it exists
+    TWiki::UI::oops( $webName, $topic, "createnewtopic" );
+    return 0;
+  }
+
+  # prevent non-Wiki names?
+  if( ( $onlyWikiName )
+      && ( ! $topicExists )
+      && ( ! ( &TWiki::isWikiName( $topic ) || &TWiki::isAbbrev( $topic ) ) ) ) {
+    # do not allow non-wikinames, redirect to view topic
+    TWiki::UI::redirect( TWiki::getViewUrl( $webName, $topic ) );
+    return 0;
+  }
 
   my $wikiUserName = TWiki::userToWikiName( $userName );
   return 0 unless TWiki::UI::isAccessPermitted( $webName, $topic,
