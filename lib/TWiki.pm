@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = 'TWikiAlphaRelease $Rev$';
+$wikiversion      = 'Alpha 10 Jul 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1923,14 +1923,12 @@ sub handleIncludeUrl
         }
         $text = cleanupIncludedHTML( $text, $host, $path );
 
-    } elsif( $contentType =~ /^text\/plain/ ) {
-        # do nothing
-    } elsif( $contentType =~ /^text\/css/ ) {
+    } elsif( $contentType =~ /^text\/(plain|css)/ ) {
         # do nothing
 
     } else {
         $text = showError( "Error: Unsupported content type: $contentType."
-              . " (Must be text/html or text/plain or text/css)" );
+              . " (Must be text/html, text/plain or text/css)" );
     }
 
     $text = applyPatternToIncludedText( $text, $thePattern ) if( $thePattern );
@@ -2929,7 +2927,6 @@ sub handleInternalTags
     }
     $_[0] =~ s/%METASEARCH{(.*?)}%/&handleMetaSearch($1)/ge;
     $_[0] =~ s/%FORMFIELD{(.*?)}%/&TWiki::Render::getFormField($_[2],$_[1],$1)/ge;
-    $_[0] =~ s/%GROUPS%/join( ", ", &TWiki::Access::getListOfGroups() )/ge;  #SVEN
 
     $_[0] =~ s/%REVINFO%/handleRevisionInfo( $_[2], $_[1] )/ge;
     $_[0] =~ s/%REVINFO{\"(.*?)\"}%/handleRevisionInfo( $_[2], $_[1], $1 )/ge;
