@@ -40,7 +40,7 @@ sub noop { undef }
 sub noop_affirm (&;$) { undef };
 
 sub import {
-    if( 1 ) {#$ENV{TWIKI_ASSERTS} ) {
+    if( $ENV{TWIKI_ASSERTS} ) {
         *DEBUG = *REAL_DEBUG;
         Assert->_export_to_level(1, @_);
     } else {
