@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018764939" format="1.0" version="1.18"}%
+%META:TOPICINFO{author="PeterThoeny" date="1025254438" format="1.0" version="1.19"}%
 <table><tr><td>
 *<font size="+1"> %TWIKIWEB%.WelcomeGuest: </font>* %WIKITOOLNAME% is a web-based collaboration tool, web authoring tool, document management tool and knowledge base tool. You can edit any %WIKITOOLNAME% page.
 </td><td>
-<a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
+<a href="http://TWiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/twikiRobot131x64.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
 </td><td>
 <b>The TWiki <sup>TM</sup> home is <br> at http://TWiki.org/ </b>
 </td></tr>
