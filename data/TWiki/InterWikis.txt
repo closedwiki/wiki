@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="996216417" format="1.0beta2" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1016527459" format="1.0" version="1.2"}%
 ---++ <nop>Inter-Wiki Link Rules (or Links to other Sites)
 
 This topic lists all aliases needed to map Inter-Site links to external wikis/sites.
@@ -43,7 +43,7 @@ Whenever you write ==ExternalSite:Page== it will be linked automatically to the 
 ---+++ Miscellaneous Inter-Site Links
 
 | *Alias:* | *URL:* | *Tooltip Text:* |
-| Acronym | http://www.acronymfinder.com/af-query.asp?Acronym=$page&String=exact | Look up $page on Acronym Finder site |
+| Acronym | http://www.acronymfinder.com/af-query.asp?Acronym=$page&String=exact | Look up '$page' on Acronym Finder site |
 | DejaNews | http://www.deja.com/=dnc/getdoc.xp?AN= | '$page' on Net News |
 | ISBN | http://service.bfast.com/bfast/click?bfmid=2181&sourceid=38704253&bfpid= | Book with ISBN#$page (One click patent? Say no to Amazon!) |
 | RFC | http://www.faqs.org/rfcs/rfc$page.html | IETF RFC #$page |
