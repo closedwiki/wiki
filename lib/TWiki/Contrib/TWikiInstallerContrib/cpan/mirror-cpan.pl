@@ -37,14 +37,14 @@ my $TRACE = 1;
 ### END CONFIG
 
 my $where = 'cpan';
-if ( $ARGV[0] =~ /^--/ )
+if ( ($ARGV[0] || '') =~ /^--/ )
 {
     ( $where = shift ) =~ s/^--//;
 }
 
 # pass module list on the command line
 my @modules = @ARGV ? @ARGV : q(.+);
-print Dumper( \@modules );
+#print Dumper( \@modules );
 
 ################################################################################
 
