@@ -31,15 +31,18 @@ set -e
 
 db_get twiki/samplefiles
 if [ "$RET" = true ]; then
+#TODO: really should look into the TWiki.cfg and use that to find the %MAINWEB%
     if [ ! -e /var/lib/twiki/data/Main/WebHome.txt ]; then
-	# only extract if they say so and there's no home there
-	# and even then, fail on overwrite so we don't stomp.
-	tar -zxk -C / -f /usr/share/doc/twiki/twiki-data.tar.gz
-	# clean up the .mailnotify timestamps.
-	webs="Know Main Sandbox TWiki Trash _default";
-	for web in $webs; do
-		date +%s > /var/lib/twiki/data/$web/.mailnotify
-	done
+        if [ ! -e /var/lib/twiki/data/TWiki/WebHome.txt ]; then
+	    # only extract if they say so and there's no home there
+	    # and even then, fail on overwrite so we don't stomp.
+	    tar -zxk -C / -f /usr/share/doc/twiki/twiki-data.tar.gz
+	    # clean up the .mailnotify timestamps.
+	    webs="Know Main Sandbox TWiki Trash _default";
+	    for web in $webs; do
+	    	    date +%s > /var/lib/twiki/data/$web/.mailnotify
+    	    done
+        fi
     fi
     if [ ! -e /var/www/twiki/pub/wikiHome.gif ]; then
 	tar -zxk -C / -f /usr/share/doc/twiki/twiki-pub.tar.gz
@@ -73,7 +76,7 @@ case "$1" in
 #	    fi
 #	done
 
-	servers="apache apache-ssl apache2"
+	servers="apache apache-perl apache-ssl apache2"
 	for server in $servers; do 
 	    . /usr/share/wwwconfig-common/apache-run.get
 	    includefile=/etc/twiki/apache.conf
