@@ -55,7 +55,6 @@ use integer;
     my ( $class, $header, $fields, $orient, $textform, $changeFields ) = @_;
 
     my $this = {};
-
     $header =~ s/^\s*\|//so;
     $header =~ s/\|\s*$//so;
     my @heads = split( /\|/, $header );
