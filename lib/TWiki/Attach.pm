@@ -34,10 +34,8 @@ use vars qw(
 # ======================
 sub renderMetaData
 {
-    my( $web, $topic, $metaP ) = @_;
-    
-    my @meta = @$metaP;
-    
+    my( $web, $topic, $meta ) = @_;
+        
     my $metaText = "";
     
     $viewableAttachmentCount = 0;
@@ -50,10 +48,9 @@ sub renderMetaData
     }
     $header .= "\n";
     
-    foreach my $metaItem ( @meta ) {
-       if( $metaItem =~ /(%META:FILEATTACHMENT\{)([^\}]*)(}%)/ ) {
-           $metaText .= formatAttachments( $1, $2, $3, $web, $topic );
-       }
+    my @attachments = $meta->find( "FILEATTACHMENT" );
+    foreach my $attachment ( @attachments ) {
+        $metaText .= formatAttachments( $web, $topic, %$attachment );
     }
     
     my $footer = "";
@@ -67,8 +64,6 @@ sub renderMetaData
         }
         $footer = "|  $footer  |||||||";
     }
-    
-    #TWiki::writeDebug( "Attach: $header$metaText$footer" );
     
     my $text = "";
     if( $attachmentCount ) {
@@ -107,12 +102,12 @@ sub filenameToIcon
 # =========================
 sub formatAttachments
 {
-    my ( $start, $attributes, $end, $theWeb, $theTopic ) = @_;
+    my ( $theWeb, $theTopic, %attachment ) = @_;
 
     my $row = "";
 
     my ( $file, $attrVersion, $attrPath, $attrSize, $attrDate, $attrUser, $attrComment, $attrAttr ) =
-        TWiki::Attach::extractFileAttachmentArgs( $attributes );
+        TWiki::Attach::extractFileAttachmentArgs( %attachment );
 
     $attachmentCount++;
     if (  ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ ) ) {
@@ -197,7 +192,7 @@ sub getOldAttachAttr
 # =========================
 sub migrateToFileAttachmentMacro
 {
-   my ( $text, @meta ) = @_;
+   my ( $meta, $text ) = @_;
    
    
    my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
@@ -213,7 +208,7 @@ sub migrateToFileAttachmentMacro
           if( $fileName ) {
              my @args = formFileAttachmentArgs( $fileName, "", $filePath, $fileSize, 
                                               $fileDate, $fileUser, $fileComment, "" );
-             @meta = TWiki::Store::metaUpdate( "FILEATTACHMENT", \@args, "name", @meta );                                 
+             $meta->put( "FILEATTACHMENT", @args );                                 
           }
        }
    } else {
@@ -227,14 +222,14 @@ sub migrateToFileAttachmentMacro
                my @values = TWiki::Store::keyValue2list( $rest );
                unshift @values, $name;
                unshift @values, "name";
-               @meta = TWiki::Store::metaUpdate( "FILEATTACHMENT", \@values, "name", @meta );
+               $meta->put( "FILEATTACHMENT", @values );
            }
        }
    }
        
    $text = "$before$after";
    
-   return( $text, @meta );
+   return $text;
 }
 
 
@@ -263,16 +258,16 @@ sub formFileAttachmentArgs
 # =========================
 sub extractFileAttachmentArgs
 {
-    my( $attributes ) = @_;
+    my( %attributes ) = @_;
 
-    my $file =        TWiki::extractNameValuePair( $attributes, "name" );
-    my $attrVersion = TWiki::extractNameValuePair( $attributes, "version" );
-    my $attrPath    = TWiki::extractNameValuePair( $attributes, "path" );
-    my $attrSize    = TWiki::extractNameValuePair( $attributes, "size" );
-    my $attrDate    = TWiki::extractNameValuePair( $attributes, "date" );
-    my $attrUser    = TWiki::extractNameValuePair( $attributes, "user" );
-    my $attrComment = TWiki::extractNameValuePair( $attributes, "comment" ); 
-    my $attrAttr    = TWiki::extractNameValuePair( $attributes, "attr" );
+    my $file =        $attributes{"name"};
+    my $attrVersion = $attributes{"version"};
+    my $attrPath    = $attributes{"path"};
+    my $attrSize    = $attributes{"size"};
+    my $attrDate    = $attributes{"date"};
+    my $attrUser    = $attributes{"user"};
+    my $attrComment = $attributes{"comment"}; 
+    my $attrAttr    = $attributes{"attr"};
 
     return ( $file, $attrVersion, $attrPath, $attrSize, $attrDate, $attrUser, 
              $attrComment, $attrAttr );
@@ -314,29 +309,26 @@ sub removeFile
 # $text is full set of attachments, new attachments will be added to the end.
 sub updateAttachment
 {
-    my ( $fileVersion, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $hideFile, @meta ) = @_;
+    my ( $fileVersion, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $hideFile, $meta ) = @_;
 
     my $tmpAttr = "";
     if ( $hideFile ) {
        $tmpAttr .= "h";
     }
           
-    #TWiki::writeDebug( "Attach: attachArgs = @args" );
-
     if( ! $fileDate ) {
         # Only trying to change attribute
         
-        my @args = ( "attr" => $tmpAttr );
-        @meta = TWiki::Store::metaUpdatePartial( "FILEATTACHMENT", \@args, "name", @meta );
+        my %fileAttachment = $meta->findOne( "FILEATTACHMENT", $fileName );
+        $fileAttachment{"attr"} = $tmpAttr;
+        $meta->put( "FILEATTACHMENT", %fileAttachment );
         # FIXME warning if no entry?
     } else {
         my @args = formFileAttachmentArgs(
           $fileName, $fileVersion, $filePath, $fileSize, $fileDate, $fileUser, 
           $fileComment, $tmpAttr );
-        @meta = TWiki::Store::metaUpdate( "FILEATTACHMENT", \@args, "name", @meta );
+        $meta->put( "FILEATTACHMENT", @args );
     }
-    
-    return @meta;
 }
 
 1;

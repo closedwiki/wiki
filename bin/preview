@@ -39,8 +39,7 @@ sub main
     my $tmpl = ""; 
     my $text = "";
     my $ptext = "";
-    my $metaText = "";
-    my @meta = ();
+    my $meta = "";
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
 	$tmpl= &TWiki::Store::readTemplate( "noweb" );
@@ -62,8 +61,9 @@ sub main
 
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
 
-    my $changeform = $query->param( 'submitChangeForm' );
-    TWiki::writeDebug( "================= edit, changeform $changeform" );
+    # Is user looking to change the form used?  Sits oddly in preivew, but would be okay if this was
+    # called postedit
+    my $changeform = $query->param( 'submitChangeForm' ) || "";
     if( $changeform ) {
         my $tmpl = &TWiki::Store::readTemplate( "changeform", "", $skin );
         &TWiki::writeHeader( $query );
@@ -72,8 +72,12 @@ sub main
         my $listForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$webName" );
 	my @forms = split( /,\s*/, $listForms );	    
 	unshift @forms, "";
-	my( $tmp, @metat ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
-	my $formName = &TWiki::Form::getFormName( @metat );
+	my( $metat, $tmp ) = &TWiki::Store::readTopic( $webName, $topic );
+	my $formName = $query->param( 'formtemplate' ) || "";
+	if( ! $formName ) {
+	    my %form = $metat->findOne( "FORM" );
+	    $formName = $form{"name"};
+	}
 	    
 	my $formList = "";
 	foreach my $form ( @forms ) {
@@ -84,6 +88,9 @@ sub main
 	   $formList .= "<input type=\"radio\" name=\"formtemplate\" value=\"$value\" $selected>&nbsp;$show";
 	}
         $tmpl =~ s/%FORMLIST%/$formList/go;
+        
+        my $parent = $query->param( 'parent' ) || "";
+        $tmpl =~ s/%PARENT%/$parent/go;
     
         #$tmpl = &TWiki::getRenderedVersion( $tmpl );
         print $tmpl;
@@ -103,17 +110,13 @@ sub main
     
     if( $saveCmd ne "repRev" ) {
         my $dummy = "";
-        ( $dummy, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
+        ( $meta, $dummy ) = &TWiki::Store::readTopic( $webName, $topic );
         
 	# parent setting
 	my $theParent = $query->param( 'parent' ) || "";
 	if( $theParent ) {
-	    if( $theParent !~ /\./ ) {
-	       $theParent = "$webName.$theParent";
-	    }
 	    $tmpl =~ s/%TOPICPARENT%/$theParent/go;
-	    my @args = ( "name" => $theParent );
-	    @meta = &TWiki::Store::metaUpdate( "TOPICPARENT", \@args, "", @meta );
+	    $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
 	}
 	$tmpl =~ s/%TOPICPARENT%/$theParent/;
 
@@ -122,11 +125,11 @@ sub main
 	if( $formTemplate ) {
 	   # FIXME temporary because potentially shared fields
 	   my @args = ( name => $formTemplate );
-	   @meta = &TWiki::Store::metaRemove( "FORM", @meta );
+	   $meta->remove( "FORM" );
 	   if( $formTemplate ne "none" ) {
-	       @meta = &TWiki::Store::metaUpdate( "FORM", \@args, "name", @meta);
+	       $meta->put( "FORM", @args );
 	   } else {
-	       $formTemplate = "";
+	       $meta->remove( "FORM" );
 	   }
 	   $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
 	} else {
@@ -134,17 +137,13 @@ sub main
 	}
 
         # get the edited text and combine text, form and attachments for preview
-        @meta = &TWiki::Form::fieldVars2Meta( $webName, $query, @meta );
+        &TWiki::Form::fieldVars2Meta( $webName, $query, $meta );
         $text = $query->param( "text" );
         $ptext = $text;
         
-        my $fieldParams = &TWiki::Form::getFieldParams( @meta );
+        my $fieldParams = &TWiki::Form::getFieldParams( $meta );
 
-        # FIXME overly verbose        
-	my $oldargsr;
-	( $oldargsr, @meta ) = &TWiki::Store::metaExtract( "FORM", "", "", @meta );
-	my @oldargs = @$oldargsr;
-	if( @oldargs ) {
+	if( $meta->count( "FORM" ) ) {
 	   $tmpl =~ s/%FORMFIELDS%/$fieldParams/go;
 	} else {
 	   $tmpl =~ s/%FORMFIELDS%//go;
@@ -165,7 +164,7 @@ sub main
     $ptext = &TWiki::handleCommonTags( $ptext, $topic );
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-    $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, \@meta );
+    $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
     my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
     $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
     $tmpl =~ s/%TEXT%/$ptext/go;

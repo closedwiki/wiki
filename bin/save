@@ -76,34 +76,31 @@ sub main
         return;
     }
 
-    my @meta = ();
+    my $meta = "";
     if( $saveCmd eq "repRev" ) {
         # Nothing to do
     } else {
         # normal case: Get latest attachment from file for preview
         my $tmp;
-        ( $tmp, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
+        ( $meta, $tmp ) = &TWiki::Store::readTopic( $webName, $topic );
         
 	# parent setting
 	my $theParent = $query->param( 'parent' ) || "";
 	if( $theParent ) {
-	    if( $theParent !~ /\./ ) {
-	       $theParent = "$webName.$theParent";
-	    }
 	    $tmpl =~ s/%TOPICPARENT%/$theParent/go;
-	    my @args = ( "name" => $theParent );
-	    @meta = &TWiki::Store::metaUpdate( "TOPICPARENT", \@args, "", @meta );
+	    $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
 	}
         
 	my $formTemplate = $query->param( "formtemplate" );
 	if( $formTemplate ) {
-	   # FIXME temporary because potentially shared fields
-	   my @args = ( name => $formTemplate );
-	   @meta = &TWiki::Store::metaRemove( "FORM", @meta );
-	   @meta = &TWiki::Store::metaUpdate( "FORM", \@args, "name", @meta);
+	   $meta->remove( "FORM" );
+	   if( $formTemplate ne "none" ) {
+	       # FIXME temporary because potentially shared fields
+	       $meta->put( "FORM", ( name => $formTemplate ) );
+	   }
 	}
 
-        @meta = &TWiki::Form::fieldVars2Meta( $webName, $query, @meta );
+        &TWiki::Form::fieldVars2Meta( $webName, $query, $meta );
     }
 
     # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
@@ -114,7 +111,7 @@ sub main
     $text =~ s/%_A_%/&/go;
     $text =~ s/ {3}/\t/go;
 
-    my $error = &TWiki::Store::saveTopicNew( $webName, $topic, $text, \@meta, $saveCmd, $unlock, $dontNotify );
+    my $error = &TWiki::Store::saveTopic( $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
     if( $error ) {
         # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );

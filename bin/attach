@@ -75,7 +75,7 @@ sub main
 
     my $tmpl = "";
     my $text = "";
-    my @meta = ();
+    my $meta = "";
     my $atext = "";
     my $fileName = "";
     my $fileUser = "";
@@ -108,13 +108,10 @@ sub main
     $fileName = $query->param( 'filename' ) || "";
 
     if( &TWiki::Store::topicExists( $webName, $topic ) ) {
-        ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
+        ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
     }
     
-    my @identifier = ("name" => $fileName );
-    my( $argsr, @dummy ) = &TWiki::Store::metaExtract( "FILEATTACHMENT", \@identifier, "", @meta );
-    my @argsa = @$argsr;
-    my %args = @argsa;
+    my %args = $meta->findOne( "FILEATTACHMENT", $fileName );
 
     if ( $args{"attr"} =~ /h/o ) {
           $isHideChecked = "checked";

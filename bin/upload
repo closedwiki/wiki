@@ -313,8 +313,8 @@ sub main
     my $filePath = $query->param( 'filepath' ) || "";
     my $fileName = $query->param( 'filename' ) || "";
     if ( $filePath && ! $fileName ) {
-        $filePath =~ m|/([^/]*$)|;
-        $fileName = $1;
+        $filePath =~ m|([^/\\]*$)|;
+        $fileName = $1; #FIXME - what is this used for?
         TWiki::writeDebug( "upload: fileName=$fileName **********************" );
     }
     my $tmpFilename = $query->tmpFileName( $filePath ) || "";
@@ -399,21 +399,16 @@ sub main
 
     # update topic
     $fileDate =~ s/ /&nbsp;/go;
-    my ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
+    my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
 
-    #if ( $atext =~ /\<TwkNextItem\>/ ) {
-        # FIXME - move to view code, maybe not as this would cause RCS update?
-    #    $atext = TWiki::Attach::migrateToFileAttachmentMacro( $atext );
-    #}
-
-    @meta = TWiki::Attach::updateAttachment( 
+    TWiki::Attach::updateAttachment( 
                 $fileVersion, $fileName, $filePath, $fileSize,
-                $fileDate, $fileUser, $fileComment, $hideFile, @meta );
+                $fileDate, $fileUser, $fileComment, $hideFile, $meta );
     if( $createLink ) {
         $text = addLinkToEndOfTopic( $text, $newFile, $fileName, $fileComment );
     }
 
-    my $error = &TWiki::Store::saveTopicNew( $webName, $topic, $text, \@meta );
+    my $error = &TWiki::Store::saveTopic( $webName, $topic, $text, $meta );
     if( $error ) {
         # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
