@@ -11,7 +11,9 @@
 	* <A href="#category">(10)</A> TWiki Category Table
 	* <A href="#administration">(11)</A> TWiki Administration
 
-Related Topics: TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests.
+__Note:__ Read the most up to date version of this document at http://TWiki.org/cgi-bin/view/TWiki/TWikiDocumentation
+
+__Related Topics:__ TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests.
 
 <A name="implementation">
 -----
