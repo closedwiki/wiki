@@ -28,6 +28,7 @@
 #   outsidePREHandler    ( $text )
 #   insidePREHandler     ( $text )
 #   endRenderingHandler  ( $text )
+#   beforeSaveHandler    ( $text, $topic, $web )
 #
 # initPlugin is required, all other are optional. 
 # For increased performance, all handlers except initPlugin are
@@ -134,6 +135,17 @@ sub DISABLE_endRenderingHandler
     &TWiki::Func::writeDebug( "- EmptyPlugin::endRenderingHandler( $web.$topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion just after the line loop
+
+}
+
+# =========================
+sub DISABLE_beforeSaveHandler
+{
+### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
+    &TWiki::Func::writeDebug( "- EmptyPlugin::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
+
+    # This handler is called by TWiki::Store::saveTopic just before the save action.
 
 }
 

@@ -424,7 +424,9 @@ sub saveTopic
     my( $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave, $forceDate ) = @_;
     my $attachment = "";
     my $comment = "";
-    saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $comment, $forceDate );
+    &TWiki::Plugins::beforeSaveHandler( $text, $topic, $web, $meta );  # $meta is undocumented
+    my$error = saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $comment, $forceDate );
+    return $error;
 }
 
 # =========================

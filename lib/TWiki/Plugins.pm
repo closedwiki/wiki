@@ -314,6 +314,15 @@ sub endRenderingHandler
 }
 
 # =========================
+sub beforeSaveHandler
+{
+    # Called by TWiki::Store::saveTopic before the save action
+#    my ( $theText, $theTopic, $theWeb ) = @_;
+    unshift @_, ( 'beforeSaveHandler' );
+    &applyHandlers;
+}
+
+# =========================
 sub writeHeaderHandler
 {
     # Called by TWiki.writeHeader
