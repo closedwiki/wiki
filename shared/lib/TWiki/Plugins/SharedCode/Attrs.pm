@@ -120,6 +120,7 @@ sub isEmpty {
 }
 
 =begin text
+
 ---++ remove($key) => value
 | $key | Attribute to remove |
 Remove an attr value from the map, return old value. After a call to
