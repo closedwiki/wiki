@@ -3,7 +3,7 @@ Welcome to the home of TWiki.%WEB%. This is a web based collaboration area to ge
 <table><tr><td>
 <a href="http://www.mindspring.com/~peterthoeny/twiki/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
 </td><td>
-<b>The TWiki home is at <br> http://www.mindspring.net/~peterthoeny/twiki/ </b>
+<b>The TWiki home is at <br> http://www.mindspring.com/~peterthoeny/twiki/ </b>
 </td></tr>
 </table>
 
@@ -17,12 +17,13 @@ Good *starting points* at the TWiki.Main web are:
 	* TextFormattingFAQ: Answers to frequently asked questions about text formatting.
 	* TestArea: The place to get your virtual TWiki hands dirty!
 
-<FORM name="main" action="../../search/%WEB%/">
-	* <A HREF="../../search/%WEB%/?scope=topic&regex=on&search=.*">Topic index</A>: List up all TWiki.%WEB% topics in alphabetical order.
-	* <A HREF="../../view/%WEB%/WebSearch">Search</A>: Full text search of TWiki.%WEB%.
-	* <INPUT type="text" name="search" size="32"> <INPUT type="submit" value="Search"> <INPUT type="hidden" name="scope" value="text"> <INPUT type="hidden" name="ignorecase" value="on"> &nbsp;&nbsp; (More options in WebSearch)
-	* <A HREF="../../changes/%WEB%">Changes</A>: Find out recent changes of the %WEB% web.
+<FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
+	* <A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=.*">Topic index</A>: List up all TWiki.%WEB% topics in alphabetical order.
+	* <A HREF="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/WebSearch">Search</A>: Full text search of TWiki.%WEB%.
+	* <INPUT type="text" name="search" size="32"> <INPUT type="submit" value="Search"> <INPUT type="hidden" name="scope" value="text"> &nbsp;&nbsp; (More options in WebSearch)
+	* <A HREF="%SCRIPTURLPATH%/changes%SCRIPTSUFFIX%/%WEB%">Changes</A>: Find out recent changes of the %WEB% web.
 	* WebNotify: Subscribe to be automatically notified when something changes in TWiki.%WEB%.
+	* WebStatistics: View access statistics of the TWiki.%WEB% web.
 </FORM>
 
 *Notes:*
@@ -30,4 +31,4 @@ Good *starting points* at the TWiki.Main web are:
 
 ----
 
-%INCLUDE:"wikiwebtable.inc"%
+%INCLUDE{"wikiwebtable.inc"}%
