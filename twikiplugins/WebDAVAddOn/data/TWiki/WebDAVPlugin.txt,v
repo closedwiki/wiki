@@ -1,4 +1,27 @@
----+!! <nop>Web<nop>DAV for TWiki
+head	1.1;
+access;
+symbols;
+locks
+	crawford:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2004.09.20.08.10.31;	author crawford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@---+!! <nop>Web<nop>DAV for TWiki
 
 <nop>Web<nop>DAV stands for "Web-based Distributed Authoring and Versioning". It is a set of extensions to the HTTP protocol which allows users to collaboratively edit and manage files on remote web servers.
 
@@ -133,10 +156,11 @@ Note that if you have non-default permissions set in your TWiki, then you *must*
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-This product includes software developed by Greg Stein <gstein@lyra.org> for use in the mod_dav module for Apache (http://www.webdav.org/mod_dav/). mod_dav is licensed under the terms of the following license: http://webdav.org/mod_dav/license-1.html
+This product includes software developed by Greg Stein <gstein@@lyra.org> for use in the mod_dav module for Apache (http://www.webdav.org/mod_dav/). mod_dav is licensed under the terms of the following license: http://webdav.org/mod_dav/license-1.html
 
 This work was commissioned by [[http://www.windriver.com/][Wind River Systems]].
 
 __Related Topic:__ %TWIKIWEB%.TWikiPlugins, TWiki:Codev.WebDAV
 
 -- TWiki:Main/CrawfordCurrie - %$DATE%
+@

@@ -150,6 +150,8 @@ if ( $function eq "delete" ) {
 
   my ( $meta, $text ) = TWiki::Store::readTopic( $web, $topic );
 
+  $text =~ s/\t/   /g; # SMELL should be done in readTopic, if at all
+
   $path =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
   open(TXT, ">$path") or fail("Could not open $path");
   print TXT $text;
@@ -176,6 +178,8 @@ if ( $function eq "delete" ) {
 	$text .= $_;
   }
   close(TXT);
+
+  $text =~ s/ {3}/\t/g; # SMELL should be done in saveTopic, if at all
 
   $error = TWiki::Store::saveTopic( $web, $topic, $text, $meta, "", 0, 0 );
 

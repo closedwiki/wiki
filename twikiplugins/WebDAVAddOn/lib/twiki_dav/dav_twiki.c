@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004 WindRiver Ltd.
+ * Copyright (C) 2004 Wind River Systems..
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,9 +108,10 @@ int dav_twiki_setDBpath(const char* dbname) {
 #ifndef PROT_PRINT
 /**
  * Main interface to permissions database. KISS.
+ * Returns an HTTP error code or OK
  */
-int dav_twiki_accessible(const request_rec *r, const dav_resource* dr,
-						 int tgt) {
+int dav_twiki_accessible(request_rec *r, const dav_resource* dr,
+                         int tgt) {
   twiki_resources* tr;
   char mode;
   const char* pw;
@@ -132,33 +133,36 @@ int dav_twiki_accessible(const request_rec *r, const dav_resource* dr,
 		   (r->method_number == M_MOVE && !tgt))
 	mode = 'R';/*ENAME*/
   else
-	return 1;
+	return OK;
   
   tr = dr->twiki;
 
   /* if this is a twiki resource, check permissions */
   if (tr) {
 	if (dr->collection && mode != 'V')
-	  return 0;
+      /* no change access to collection */
+      return HTTP_FORBIDDEN;
 
-	/** connection->user gets filled in by ap_get_basic_auth, but there
-	 * are probably other ways by which authentication generates a user
-	 * id. It's a big assumption that the user will be valid. However
-	 * this is the value used to create REMOTE_USER, so if it kinda has
-	 * to work. I should really check Apache::AuthHandler. */
+	/**
+     * If connection->user has not been set by the authentication method,
+     * then try and fill it in using basic_auth. Authentication MUST be
+     * set on DAV directories. */
 	if (!r->connection->user) {
-	  fprintf(stderr, "twiki_dav using basic auth\n");
-	  ap_get_basic_auth_pw((request_rec*)r, &pw);
+	  int code = ap_get_basic_auth_pw((request_rec*)r, &pw);
+      if (code != OK) {
+        ap_note_auth_failure(r);
+        return code;
+      }
 	}
 
 	tr->user = ap_pstrdup(r->pool, r->connection->user);
 
 	if (!checkAccessibility(tr->web, tr->topic, tr->file, mode, tr->user,
 							dav_get_monitor(r)))
-	  return 0;
+      return HTTP_UNAUTHORIZED;
   }
 
-  return 1;
+  return OK;
 }
 
 #endif
@@ -218,7 +222,8 @@ static int checkAccessibility(const char* web,
 	return 1;
   }
 
-  if ((monitor & 4) != 0) {
+  if ((monitor & 8) != 0) {
+    /* Dump the whole database */
 	DBM_DATUM d1, d2;
 	fprintf(stderr, "<DB %s>\n", dbfile);
 	d1 = DBM_FIRSTKEY(db);
@@ -245,7 +250,7 @@ static int isAccessible(DBM* db, const char* web, const char* topic,
   static char path[16384];
 
   if ((monitor & 4) != 0)
-	fprintf(stderr, "Check %s/%s:%c for %s\n",web,topic,mode,user);
+    fprintf(stderr, "Test access to / for user %s\n", user);
 
   strcpy(path, "P:/");
   if (barred(path, mode, user, db, monitor)) {
@@ -257,7 +262,7 @@ static int isAccessible(DBM* db, const char* web, const char* topic,
 	strcat(path, "/");
 
 	if ((monitor & 4) != 0)
-	  fprintf(stderr, "WebCheck %s:%c for %s\n",path,mode,user);
+	  fprintf(stderr, "Test access to %s:%c for user %s\n",path,mode,user);
 
 	if (barred(path, mode, user, db, monitor)) {
 	  return 0;
@@ -267,7 +272,8 @@ static int isAccessible(DBM* db, const char* web, const char* topic,
 	  strcat(path, topic);
 
 	  if ((monitor & 4) != 0)
-		fprintf(stderr, "TopicCheck %s:%c for %s\n",path,mode,user);
+		fprintf(stderr, "Test access to %s:%c for user %s\n",path,mode,user);
+
 	  if (barred(path, mode, user, db, monitor)) {
 		return 0;
 	  }
@@ -293,8 +299,6 @@ static int barred(char* path, char mode, const char* user,
   /* Paranoia; deny before allow */
   if (user) {
 	list = getKey(path, "D", db);
-	if ((monitor & 4) != 0)
-	  fprintf(stderr,"\t%sD => %s\n", path, dump(list));
 	if (list.dptr) {
 	  /* user must not be in deny list */
 	  denied = (isInList(list, user, db, 0));
@@ -302,17 +306,20 @@ static int barred(char* path, char mode, const char* user,
 	}
   }
 
-  if (!denied) {
+  if (denied) {
+    if ((monitor & 4) != 0)
+	  fprintf(stderr,"\tdenied by rule %sD => %s\n", path, dump(list));
+  } else {
 	list = getKey(path, "A", db);
-	if ((monitor & 4) != 0)
-	  fprintf(stderr,"\t%sA => %s\n", path, dump(list));
-
 	if (list.dptr) {
 	  /* user must be in good list */
 	  denied = (user == NULL || !isInList(list, user, db, 0));
 	  DBM_FREE(list);
 	}
+    if (denied && (monitor & 4) != 0)
+	  fprintf(stderr,"\tdenied by rule %sA => %s\n", path, dump(list));
   }
+
 
   path[l] = '\0';
 
@@ -498,7 +505,7 @@ static dav_error* invoke_command(const char* action,
 		nb = 0;
 	}
 	mess[nb] = '\0';
-	if (r->monitor)
+	if (r->monitor & 1)
 	  fprintf(stderr, "%s evoked response %s\n", cmd, mess);
 	return dav_new_error(p, HTTP_FORBIDDEN, 0, ap_psprintf(p, "%s", mess));
   }
