@@ -154,6 +154,7 @@ sub RunComparisonTests
 	foreach my $topic ( @topics )
 	{
 		my $testTopic = "$iWeb.$topic";
+		print "$testTopic\n" if $parms->{verbose};
 		my $text = $mech->view( $testTopic, { skin => 'text', test => 'compare' } )->content();
 		my $passOrFail = 
 			$text =~ /TESTS FAILED/ && 'Failed' ||
