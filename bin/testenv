@@ -385,7 +385,7 @@ if( ! ( -e "$dataDir" ) ) {
 }
 
 $val = $mailProgram;
-$val =~ s/([^\s]*).*/$1/go;
+$val =~ s/([^\s]*).*/$1/g;
 # Don't warn on Windows, as Net::SMTP is normally used
 if( $OS ne 'WINDOWS' && ! ( -e $val ) ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
@@ -401,14 +401,6 @@ if( $OS ne 'WINDOWS' ) {
     print "This is not typically used on Windows - the Perl Net::SMTP module is used instead.";
 }
 print "</td></tr>\n";
-$val = $mailProgram;
-$val =~ s/([^\s]*).*/$1/go;
-# Don't warn on Windows, as Net::SMTP is normally used
-if( $OS ne 'WINDOWS' && ! ( -e $val ) ) {
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "Mail program <tt>$val</tt> not found. Check the path.";
-    print "</td></tr>\n";
-}
 
 print "<tr><th align=\"right\">\$rcsDir:</th><td>$rcsDir</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
