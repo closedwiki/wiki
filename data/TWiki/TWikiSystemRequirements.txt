@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="MikeMannix" date="999987801" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="MikeMannix" date="1000077544" format="1.0" version="1.20"}%
 %TOC%
 %STARTINCLUDE%
----# TWiki Requirements
+---# TWiki System Requirements
 
-_Server and client system requirements; file system structure_
+_Server and client system requirements of TWiki 01-Sep-2001_
 
 ---++ Overview
 
