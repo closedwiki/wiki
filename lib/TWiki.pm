@@ -678,9 +678,9 @@ sub makeTopicSummary
     # inline search renders text, 
     # so prevent linking of external and internal links:
     $htext =~ s/([\-\*\s])((http|ftp|gopher|news|file|https)\:)/$1<nop>$2/go;
-    $htext =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z0-9]*\.[A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
-    $htext =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
-    $htext =~ s/([\*\s][\-\*\s]*)([A-Z]{3,})/$1<nop>$2/go;
+    $htext =~ s/([\s\(])([A-Z]+[a-z0-9]*\.[A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
+    $htext =~ s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
+    $htext =~ s/([\s\(])([A-Z]{3,})/$1<nop>$2/go;
     $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/go;
 
     return $htext;
@@ -1118,9 +1118,9 @@ sub handleToc
                 # Prevent WikiLinks
                 $line =~ s/\[\[.*\]\[(.*?)\]\]/$1/go;  # '[[...][...]]'
                 $line =~ s/\[\[(.*?)\]\]/$1/geo;       # '[[...]]'
-                $line =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z0-9]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$3/go;  # 'Web.TopicName'
-                $line =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;  # 'TopicName'
-                $line =~ s/([\*\s][\-\*\s]*)([A-Z]{3,})/$1<nop>$2/go;  # 'TLA'
+                $line =~ s/([\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$3/go;  # 'Web.TopicName'
+                $line =~ s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;  # 'TopicName'
+                $line =~ s/([\s\(])([A-Z]{3,})/$1<nop>$2/go;  # 'TLA'
                 # create linked bullet item
                 $line = "$tabs* <a href=\"$scriptUrlPath/view$scriptSuffix/$webPath/$topicname#$anchor\">$line</a>";
                 $result .= "\n$line";
@@ -1351,7 +1351,7 @@ sub handleMetaTags
     $text =~ s/%META{\s*"parent"\s*(.*)}%/&renderParent( $theWeb, $theTopic, $meta, $1 )/goe;
 
     $text = &TWiki::handleCommonTags( $text, $theTopic );
-        
+
     return $text;
 }
 
@@ -1505,8 +1505,8 @@ sub encodeSpecialChars
     $text =~ s/>/%_G_%/go;
     $text =~ s/</%_L_%/go;
     # PTh, JoachimDurchholz 22 Nov 2001: Fix for Codev.OperaBrowserDoublesEndOfLines
-    $text =~ s/(\r*\n|\r)/%_N_%/go; 
-    
+    $text =~ s/(\r*\n|\r)/%_N_%/go;
+
     return $text;
 }
 
@@ -1617,9 +1617,9 @@ sub makeAnchorHeading
     $hasAnchor = 1 if( $text =~ m/<a /i );
     $hasAnchor = 1 if( $text =~ m/\[\[/ );
 
-    $hasAnchor = 1 if( $text =~ m/(^|[\*\s][\-\*\s]*)([A-Z]{3,})/ );
-    $hasAnchor = 1 if( $text =~ m/(^|[\*\s][\(\-\*\s]*)([A-Z]+[a-z0-9]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ );
-    $hasAnchor = 1 if( $text =~ m/(^|[\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ );
+    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])([A-Z]{3,})/ );
+    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ );
+    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ );
     if( $hasAnchor ) {
         # FIXME: '<h1><a name="atext"></a></h1> WikiName' has an
         #        empty <a> tag, which is not HTML conform
@@ -1660,7 +1660,7 @@ sub internalLink
     $theTopic =~ s/^(.)/\U$1/;
     $theTopic =~ s/\s([a-zA-Z0-9])/\U$1/g;
     # Add <nop> before WikiWord inside text to prevent double links
-    $theLinkText =~ s/(\s)([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
+    $theLinkText =~ s/([\s\(])([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
 
     my $exist = &TWiki::Store::topicExists( $theWeb, $theTopic );
     if(  ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) && ! ( $exist ) ) {
@@ -1938,17 +1938,17 @@ sub getRenderedVersion
             if( ! ( $noAutoLink ) ) {
 
                 # 'Web.TopicName#anchor' link:
-                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z0-9]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\#[a-zA-Z0-9_]*)/&internalLink($1,$2,$3,"$TranslationToken$3$4$TranslationToken",$4,1)/geo;
+                s/([\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\#[a-zA-Z0-9_]*)/&internalLink($1,$2,$3,"$TranslationToken$3$4$TranslationToken",$4,1)/geo;
                 # 'Web.TopicName' link:
-                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z0-9]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&internalLink($1,$2,$3,"$TranslationToken$3$TranslationToken","",1)/geo;
+                s/([\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&internalLink($1,$2,$3,"$TranslationToken$3$TranslationToken","",1)/geo;
                 # 'TopicName#anchor' link:
-                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\#[a-zA-Z0-9_]*)/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/geo;
+                s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\#[a-zA-Z0-9_]*)/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/geo;
                 # 'TopicName' link:
-                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&internalLink($1,$theWeb,$2,$2,"",1)/geo;
+                s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&internalLink($1,$theWeb,$2,$2,"",1)/geo;
                 # 'Web.ABBREV' link:
-                s/([\*\s][\-\*\s]*)([A-Z]+[a-z0-9]*)\.([A-Z]{3,})/&internalLink($1,$2,$3,$3,"",0)/geo;
+                s/([\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]{3,})/&internalLink($1,$2,$3,$3,"",0)/geo;
                 # 'ABBREV' link:
-                s/([\*\s][\-\*\s]*)([A-Z]{3,})/&internalLink($1,$theWeb,$2,$2,"",0)/geo;
+                s/([\s\(])([A-Z]{3,})/&internalLink($1,$theWeb,$2,$2,"",0)/geo;
                 # depreciated link:
                 s/<link>(.*?)<\/link>/&internalLink("",$theWeb,$1,$1,"",1)/geo;
 
