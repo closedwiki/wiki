@@ -31,7 +31,7 @@ package TWiki::Plugins;
 
 use vars qw(
         @activePluginWebs @activePluginTopics
-        @registrableHandlers %registeredHandlers
+        @registrableHandlers %registeredHandlers %onlyOnceHandlers
 	$VERSION
     );
 
@@ -58,6 +58,7 @@ $VERSION = '1.000';
                       'getSessionValueHandler'  => 1 );
 
 %registeredHandlers = ();
+
 
 # =========================
 sub discoverPluginPerlModules
@@ -242,16 +243,19 @@ sub handleActivatedPlugins
     return $text;
 }
 
+# =========================
 sub initializeUser
 {
 #   my( $theRemoteUser, $theUrl,  $thePathInfo ) = @_;
     my $user;
     my $p = "TWiki::Plugins::SessionPlugin";
     my $sub = $p.'::initializeUserHandler';
-    eval "use $p;";
-    if( defined( &$sub ) ) {
-        $user = &$sub( @_ );
-    }
+
+# FIXME: Fails if SessionPlugin module is not present
+#    eval "use $p;";
+#    if( defined( &$sub ) ) {
+#        $user = &$sub( @_ );
+#    }
     if( ! defined( $user ) ) {
         $user = &TWiki::initializeRemoteUser( $_[0] );
     }

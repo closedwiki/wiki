@@ -221,7 +221,22 @@ sub chooseFormButton
 sub renderForEdit
 {
     my( $web, $form, $meta, @fieldsInfo ) = @_;
-    
+
+# FIXME: Old code missing that gets default value from cgi param:
+#
+#   # check for CategoryName=CategoryValue parameter
+#   my $cvalue = $query->param( $cmd[1] );
+#   if( $cvalue ) {
+#       $src = "<!---->$cvalue<!---->";
+#   } elsif( $ctext ) {
+#       foreach( split( /\n/, $ctext ) ) {
+#           if( /$cmd[1]/ ) {
+#               $src = $_;
+#               last;
+#           }
+#       }
+#   }
+
     my $chooseForm = "";   
     if( TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) ) {
         $chooseForm = chooseFormButton( "Change" );
@@ -254,7 +269,7 @@ sub renderForEdit
         } elsif( $type eq "textarea" ) {
             my $cols = 40;
             my $rows = 5;
-            if( $size =~ /(.*)x(.*)/ ) {
+            if( $size =~ /([0-9]+)x([0-9]+)/ ) {
                $cols = $1;
                $rows = $2;
             }
@@ -279,6 +294,36 @@ sub renderForEdit
             }
             $value = "<select name=\"$name\" size=\"$size\">$val</select>";
         } elsif( $type =~ "^checkbox" ) {
+
+# FIXME: Old code had this (with modification that adds
+#        a new cgi parameter query for default checkbox values) :
+#
+#           $catname = $cmd[1];
+#           $scatname = $catname;
+#           $scatname =~ s/[^a-zA-z0-9]//g;
+#           if( $cmd[2] eq "true" || $cmd[2] eq "1" ) {
+#               $i = $len - 4;
+#               $catmodifier = "$catmodifier\n<input type=\"button\" value=\" Set \" onClick=\"checkAll(this, 2, $i, true)\">&nbsp;";
+#               $catmodifier = "$catmodifier\n<input type=\"button\" value=\"Clear\" onClick=\"checkAll(this, 1, $i, false)\">&nbsp;";
+#           }
+#           $itemsPerLine = $cmd[3];
+#           $catvalue = "\n<table cellspacing=\"0\" cellpadding=\"0\"><tr>";
+#           for( $i = 4; $i < $len; $i++ ) {
+#               my $value = $cmd[$i];
+#               my $svalue = $value;
+#               $svalue =~ s/[^a-zA-z0-9]//g;
+#               $cvalue = $query->param( "$scatname$svalue" );
+#               my $flag = "";
+#               if( ( $src =~ /$value[^a-zA-Z0-9\.]/ ) || ( $cvalue ) ) {
+#                   $flag = "checked";
+#               }
+#               $catvalue = "$catvalue\n<td><input type=\"checkbox\" name=\"$scatname$svalue\" $flag>$value &nbsp;&nbsp;</td>";
+#               if( ( $itemsPerLine > 0 ) && (($i-4) % $itemsPerLine == $itemsPerLine - 1 ) ) {
+#                   $catvalue = "$catvalue\n</tr><tr>";
+#               }
+#           }
+#           $catvalue = "$catvalue\n</tr></table>\n";
+
             if( $type eq "checkbox+buttons" ) {
                 my $boxes = $#fieldInfo + 1;
                 $extra = "<br>\n<input type=\"button\" value=\" Set \" onClick=\"checkAll(this, 2, $boxes, true)\">&nbsp;\n" .
