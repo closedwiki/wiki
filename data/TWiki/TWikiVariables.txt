@@ -4,7 +4,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <th> Variable: </th><th> Expanded to: </th>
 </tr><tr>
   <td> =%<nop>WIKIHOMEURL%= </td>
-  <td> The base script URL of TWiki, link of Home icon in upper left corner is <b>%WIKIHOMEURL%</b> </td>
+  <td> The base script URL of TWiki, link of Home icon in upper left corner, is <b>%WIKIHOMEURL%</b> </td>
 </tr><tr>
   <td> =%<nop>SCRIPTURL%= </td>
   <td> The script URL of TWiki, is <b>%SCRIPTURL%</b></td>
@@ -44,6 +44,18 @@ TWiki expands the following variables enclosed in % percent signs:
 </tr><tr>
   <td> =%<nop>DATE%= </td>
   <td> Todays date, is <b>%DATE%</b> </td>
+</tr><tr>
+  <td> =%<nop>HTTP_HOST%= </td>
+  <td> HTTP_HOST environment variable, is <b>%HTTP_HOST%</b> </td>
+</tr><tr>
+  <td> =%<nop>REMOTE_ADDR%= </td>
+  <td> REMOTE_ADDR environment variable, is <b>%REMOTE_ADDR%</b> </td>
+</tr><tr>
+  <td> =%<nop>REMOTE_PORT%= </td>
+  <td> REMOTE_PORT environment variable, is <b>%REMOTE_PORT%</b> </td>
+</tr><tr>
+  <td> =%<nop>REMOTE_USER%= </td>
+  <td> REMOTE_USER environment variable, is <b>%REMOTE_USER%</b> </td>
 </tr><tr>
   <td> =%<nop>INCLUDE{"file.ext"}%= </td>
   <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: =<b>%<nop>INCLUDE{"../Know/TopicName.txt"}%</b>= </td>
@@ -98,3 +110,5 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> __SL__ , __UL__ </td>
   <td> Default state of the link check box in the attach file page. Check box is initially checked if value is set to =CHECKED= , unchecked if empty. If checked, a link is created to the attached file at the end of the topic. Value is: <b><code>%ATTACHLINKBOX%</code></b> </td>
 </tr></table>
+
+-- Main.PeterThoeny - 21 Apr 2000 <br>
