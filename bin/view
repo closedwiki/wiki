@@ -18,13 +18,6 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.ai.mit.edu/copyleft/gpl.html 
 
-BEGIN {
-    use CGI::Carp qw(carpout);
-    open( LOG, ">>/home/groups/twiki/a/data/carp-log.txt" )
-      or die "unable to append to /home/groups/twiki/a/data/carp-log.txt: $!\n";
-    carpout( *LOG );
-}
-
 use CGI;
 use wiki;
 
