@@ -1420,7 +1420,7 @@ sub handleInternalTags
     $_[0] =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$_[2]\/$_[1]/go;
     $_[0] =~ s/%ATTACHURLPATH%/$pubUrlPath\/$_[2]\/$_[1]/go;
     $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/geo;
-    $_[0] =~ s/%DATE%/&getLocaldate()/geo; # deprecated
+    $_[0] =~ s/%DATE%/&getGmDate()/geo; # deprecated
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/geo;
     $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/geo;
     $_[0] =~ s/%SERVERTIME%/&handleTime("","servertime")/geo;
