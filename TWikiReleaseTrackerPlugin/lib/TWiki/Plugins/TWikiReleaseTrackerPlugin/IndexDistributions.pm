@@ -103,37 +103,42 @@ sub indexLocalInstallation {
 	print "Indexing localInstallation\n";
 	IndexDistributions::indexDistribution( "localInstallation",
 		$Common::installationDir, $Common::excludeFilePattern );
-	my $saveFile = $Common::md5IndexDir . "/localInstallation.md5" ;
-	print "saving to ".File::Spec->rel2abs($saveFile)."\n";
-	FileDigest::saveIndex($saveFile);
+	saveIndex("localInstallation.md5");
 
 #	print FileDigest::dataOutline();
 }
 
 sub indexReleases {
-#	die "feature broken";
-	indexDistributions("(?!beta)");
-	FileDigest::saveIndex( $Common::md5IndexDir . "/releases.md5" );
+    my $inclusionTest = sub { 
+	my ($download) = @_;
+	return 0 unless ($download =~ m/TWiki[0-9].*/);
+	return 0 if ($download =~ m/beta/);
+	return 1;
+    };
+
+    indexDistributions($inclusionTest, "releases.md5");
 }
 
 sub indexBetaReleases {
-	indexDistributions("beta");
-	FileDigest::saveIndex( $Common::md5IndexDir . "/betas.md5" );
+    my $inclusionTest = sub { 
+	my ($download) = @_;
+	return 0 unless ($download =~ m/TWiki[0-9].*/);
+	return 1 if ($download =~ m/beta/);
+	return 0;
+    };
+
+    indexDistributions($inclusionTest, "betas.md5" );
 }
 
 sub indexPlugins {
-	FileDigest::emptyIndexes();
-	my $dir = $Common::downloadDir;
+    my $inclusionTest = sub {
+        my ($download) = @_;
+        return 1 unless ($download =~ m/TWiki.*/);
+        return 0 if ($download =~ m/TWiki[0-9]/);
+        return 1; # e.g. TWikiCacheAddOn
+    };
 
-	my @modules = getDirsListed($dir);
-
-	foreach my $module (@modules) {
-		next if ( $module =~ m/^TWiki/ );
-		print "$module\n";
-		IndexDistributions::indexDistribution( $module, $dir . "/" . $module,
-			$Common::excludeFilePattern, "twiki" );
-	}
-	FileDigest::saveIndex( $Common::md5IndexDir . "/plugins.md5" );
+    indexDistributions($inclusionTest, "plugins.md5" );
 }
 
 sub getDirsListed {
@@ -173,37 +178,28 @@ sub setRunDir {
 
 sub indexDistributions {
     # This depends on a modified version of Crawfords' SharedCode
-	my ($filterIn) = @_;
+	my ($filterInSub, $indexName) = @_;
 
 	FileDigest::emptyIndexes();
 	my $dir = $Common::downloadDir;
 
-	my @releases = getDirsListed($Common::downloadDir);
+	my @downloads = getDirsListed($Common::downloadDir);
 
-	foreach my $release (@releases) {
-		next unless ( $release =~ m/^TWiki/ );
-		next unless ( $release =~ m/$filterIn/ );
-		print "Indexing $release\n";
-		IndexDistributions::indexDistribution( $release, $dir . $release,
+	foreach my $download (@downloads) {
+	    next unless &$filterInSub($download);
+	    print "Indexing $download\n";
+	    IndexDistributions::indexDistribution( $download, $dir . $download,
 			$Common::excludeFilePattern, "twiki" );
 	}
 
+	saveIndex($indexName);
 }
 
-sub target_indexPlugins {
-	FileDigest::emptyIndexes();
-	chdir($runDir) || die "Can't cd into $runDir - $!";
-	my $dir = $Common::downloadDir;
+sub saveIndex {
+    my ($indexName) = @_;
+    my $saveFile = $Common::md5IndexDir . $indexName ;
+    print "saving to ".File::Spec->rel2abs($saveFile)."\n";
 
-	my @modules = getDirsListed($dir);
-
-	foreach my $module (@modules) {
-		next if ( $module =~ m/^TWiki/ );
-		print "$module\n";
-		IndexDistributions::indexDistribution( $module, $dir . "/" . $module,
-			$Common::excludeFilePattern, "twiki" );
-	}
-	FileDigest::saveIndex( $Common::md5IndexDir . "/plugins.md5" );
+    FileDigest::saveIndex($saveFile);
 }
-
 1;
