@@ -52,40 +52,42 @@ my $action = $query->param('action');
 
 if ($action eq 'register') {
 	TWiki::UI::Register::register(
-                                  query => $query,
-                                  sendActivationCode => $sendActivationCode,
-                                  tempUserDir => $tempUserDir
-                                 );
-    if (!$sendActivationCode) {
-        die "Need to call verify automatically";
-    }
+				      query => $query,
+				      sendActivationCode => $sendActivationCode,
+				      tempUserDir => $tempUserDir
+				      );
+	  if (!$sendActivationCode) {
+	      die "Need to call verify automatically";
+	  }
 } elsif ($action eq 'approve') {
     TWiki::UI::Register::finish(
-                                query=>$query,
-                                tempUserDir=>$tempUserDir
-                               );
-}
+				query=>$query,
+				tempUserDir=>$tempUserDir
+				);
+      
+  }
 elsif ($action eq 'verify') {
-    TWiki::UI::Register::verifyEmailAddress(
-                                            query=>$query,
-                                            tempUserDir=>$tempUserDir,
-                                            needApproval=>$needApproval
-                                           );
-    #	if (! $needApproval) {
-    #	    die "Need to call approve automatically";
-    #	}
+      TWiki::UI::Register::verifyEmailAddress(
+					      query=>$query,
+					      tempUserDir=>$tempUserDir,
+					      needApproval=>$needApproval
+					      );
+#	if (! $needApproval) {
+#	    die "Need to call approve automatically";
+#	}
 	TWiki::UI::Register::finish(
-                                query=>$query,
-                                tempUserDir=>$tempUserDir,
-                                approve=>$query->param('code')
-                               );
-} elsif ($action eq 'resetPassword') { #TODO
-    TWiki::UI::Register::resetPassword(
-                                       query => $query
-                                      );
-} else {
+				query=>$query,
+				tempUserDir=>$tempUserDir,
+				approve=>$query->param('code')
+				);
+
+    } elsif ($action eq 'resetPassword') { #TODO
+      TWiki::UI::Register::resetPassword(
+					 query => $query
+					);
+    } else {
 	die "invalid action ($action) in register";
-}
+    }
 
 
 # Output of register:

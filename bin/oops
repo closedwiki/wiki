@@ -31,6 +31,8 @@ use CGI;
 use TWiki;
 use TWiki::UI::Oops;
 
+use IO::Handle; STDOUT->blocking(0); 
+
 my $query = new CGI;
 my $pathInfo = $query->path_info(); 
 my $user = $query->remote_user();

@@ -10,8 +10,7 @@
 #    part should match the $dataDir setting in TWiki.cfg
 # !URL_path_to_TWiki!
 #    This is the URL path you put into the webserver for users to use to
-#    access TWiki. Excludes the http://.../ portion.
-#       e.g. /twiki
+#    access TWiki.
 #
 
 # Use CGI & Perl to handle all files in 'bin' directory, i.e. run as scripts
@@ -53,6 +52,10 @@ ErrorDocument 401 !URL_path_to_TWiki!/bin/oops/TWiki/TWikiRegistration?template=
 <Files ~ "[^/]*\.html$">
        SetHandler blabla
        allow from all
+</Files>
+
+<Files "resetpasswd">
+       require valid-user
 </Files>
 
 <Files "viewauth">

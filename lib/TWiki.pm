@@ -346,7 +346,7 @@ use TWiki::Sandbox;   # system command sandbox
 use TWiki::Store;     # file I/O and rcs related functions
 use TWiki::Prefs;     # preferences
 use TWiki::Access;    # access control
-use TWiki::Form;    # access control
+use TWiki::Form;      # forms
 use TWiki::Search;    # search engine
 use TWiki::Plugins;   # plugins handler
 use TWiki::User;

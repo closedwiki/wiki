@@ -1,0 +1,65 @@
+%META:TOPICINFO{author="TWikiGuest" date="1102436888" format="1.0" version="1.2"}%
+%META:TOPICPARENT{name="ManagingUsers"}%
+---++ Bulk Registration
+
+Any fields you define in this table will end up in the User's topic. If a form (such as UserForm) is attached to NewUserTemplate then the data will go in as META:FIELDS, meaning that you can use SEARCH formfield constructs to search. 
+
+If you use the UserForm then ensure that it contains all the fields you define here. Otherwise they will disappear when the user edits their home topic!
+
+---+++ Mandatory fields
+	* WikiName 
+	* Email
+	* !FirstName
+	* !LastName 
+
+---+++ Optional fields
+	* LoginName - if not set will register with WikiName
+
+
+---++ Settings
+		* Set REGISTERTOPIC = %MAINWEB%.UnprocessedRegistrations
+		* Set LOGTOPIC = %REGISTERTOPIC%Log
+
+		* Set OVERWRITEHOMETOPICS = 0
+
+---+++ Example format
+The following should be inserted into your REGISTERTOPIC as a table.
+<verbatim>
+| FirstName | LastName | Email | WikiName | CustomFieldThis | SomeOtherRandomField | WhateverYouLike |
+| Test | User | you@example.com | TestUser | A | B | C |
+</verbatim>
+
+To use this:
+	1 Make sure that the Custom fields appear on the UserForm
+	2 Copy the above table to your clipboard
+	3 Click through and paste this on %REGISTERTOPIC%, save the topic and return here.
+	4 Click the Bulk register button below
+	5 Read %LOGTOPIC%
+	6 When you are ready, you probably want to use the BulkResetPassword page
+
+Notes:
+	1 The first row of the table dictates the heading format and that the fieldnames must be plain, i.e. *must not contain bolded* entries.
+	2 You are responsible for ensuring that the fieldnames appear in the [[TWiki.UserForm]]
+	3 Only members of the [[%MAINWEB%.TWikiAdminGroup]] can run this.
+
+
+<FORM name="bulkRegister" action="%SCRIPTURL%/manage%SCRIPTSUFFIX%/%REGISTERTOPIC%" method="post">
+<input type="hidden" name="action" value="bulkRegister"/>
+<input type="submit" value="Bulk Register these people" />
+<input type="hidden" name="LogTopic" value="%LOGTOPIC%" />
+<input type="hidden" name="OverwriteHomeTopics" value="%OVERWRITEHOMETOPICS%" />
+<input type="hidden" name="EmailUsersWithDetails" value="0" /> <!-- warning - not actually implemented -->
+</FORM>
+
+---++ %REGISTERTOPIC%
+
+%INCLUDE{%REGISTERTOPIC%}%
+
+
+---++ %LOGTOPIC%
+
+%INCLUDE{%LOGTOPIC%}%
+
+
+-- People.MartinCleaver - 18 Oct 2004
+

@@ -40,7 +40,7 @@ use vars qw($urlroot $old $new $olddata $newdata
 #$pass = "";
 #############################################################
 
-do "LocalSite.cfg"
+do "LocalSite.cfg";
 
 print STDERR "Sanitising fixtures.....\n";
 `rm -rf $oldpub/Sandbox/AutoCreated*`;
@@ -151,8 +151,7 @@ sub unlock {
 
 sub _unlock {
     my ($this, $data, $web, $topic) = @_;
-
-    chmod 777, "$data/$web/$topic.lock";
+    chmod 0777, "$data/$web/$topic.lock";
     if (-e "$data/$web/$topic.lock" && !unlink("$data/$web/$topic.lock")) {
         print STDERR "WARNING! FAILED TO UNLOCK $web/$topic in $data\n";
         print STDERR `ls -l $data/$web/$topic.lock`;
@@ -163,7 +162,7 @@ sub _unlock {
 sub _deleteData {
     my ($this, $data, $web, $topic) = @_;
 
-    chmod 777, "$data/$web/$topic.txt", "$data/$web/$topic.txt,v",
+    chmod 0777, "$data/$web/$topic.txt", "$data/$web/$topic.txt,v",
       "$data/$web/$topic.lock";
 
     if (-e "$data/$web/$topic.txt" && !unlink("$data/$web/$topic.txt")) {

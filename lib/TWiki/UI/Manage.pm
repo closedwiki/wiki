@@ -95,6 +95,8 @@ sub removeUser {
     return;
 }
 
+#changePassword is now in register (belongs in User.pm though)
+
 # PRIVATE Prepare a template var for expansion in a message
 sub _template {
     my $theTmplVar = shift;
@@ -102,7 +104,6 @@ sub _template {
 }
 
 =pod
-
 ---++ createWeb( $session )
 Create a new web. Parameters defining the new web are
 in the query.

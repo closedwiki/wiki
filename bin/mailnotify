@@ -53,7 +53,7 @@ sub main
              processWeb( $web );
 
              # remove obsolete .lock files
-             $TWiki::T->{store}->removeObsoleteTopicLocks( $web );
+             $TWiki::store->removeObsoleteTopicLocks( $web );
         }
     }
     $debug && print "End TWiki mail notification\n";
@@ -68,7 +68,7 @@ sub processWeb
 
     $debug && print "Checking TWiki.$webName\n";
 
-    if( ! $TWiki::T->{store}->webExists( $webName ) ) {
+    if( ! $TWiki::store->webExists( $webName ) ) {
 	print STDERR "* ERROR: TWiki mailnotify does not find web $webName\n";
 	return;
     }
@@ -84,7 +84,7 @@ sub processWeb
 
     my $skin = TWiki::Prefs::getPreferencesValue( "SKIN" );
     my $text = TWiki::Store::readTemplate( "changes", $skin );
-    my $changes= $TWiki::T->{store}->readFile( "$dataDir/$webName/.changes" );
+    my $changes= $TWiki::store->readFile( "$dataDir/$webName/.changes" );
 
     my %exclude;
 
@@ -104,11 +104,11 @@ sub processWeb
     $after = &TWiki::Render::getRenderedVersion( $after );
 
     my $prevLastmodify =
-      $TWiki::T->{store}->readFile( "$dataDir/$webName/.mailnotify" ) || "0";
+      $TWiki::store->readFile( "$dataDir/$webName/.mailnotify" ) || "0";
     my $currLastmodify = "";
     my $scriptSuffix = $TWiki::scriptSuffix;
     my $scriptUrlPath = $TWiki::scriptUrlPath;
-    my $scriptUrl = $TWiki::T->{urlHost}.$scriptUrlPath;
+    my $scriptUrl = "$TWiki::urlHost$scriptUrlPath";
     my $frev = "";
 
     foreach( reverse split( /\n/, $changes ) ) {
@@ -120,7 +120,7 @@ sub processWeb
 	$newText = $text;		# Repeating text from email template
 
 	if( ( ! %exclude ) || ( ! $exclude{ $topicName } ) ) {
-            next unless $TWiki::T->{store}->topicExists( $webName, $topicName );
+            next unless $TWiki::store->topicExists( $webName, $topicName );
 
 	    if( ! $currLastmodify ) {
 	        # newest entry
@@ -151,16 +151,16 @@ sub processWeb
 	    # Create entry in HTML attachment
 	    $newText = $text;
 	    $newText =~ s/%TOPICNAME%/$topicName/go;
-	    $wikiuser = $TWiki::T->{users}->userToWikiName( $userName );
+	    $wikiuser = &TWiki::User::userToWikiName( $userName );
 
 	    $newText =~ s/%AUTHOR%/$wikiuser/go;
             $newText =~ s/%LOCKED%//go;
 	    $time = &TWiki::formatTime( $changeTime );
             $newText =~ s/%TIME%/$time/go;
             $newText =~ s/%REVISION%/$frev/go;
-            $newText = $TWiki::T->{renderer}->getRenderedVersion( $newText );
+            $newText = $TWiki::renderer->getRenderedVersion( $newText );
 
-            $head = $TWiki::T->{store}->readFile( "$dataDir\/$webName\/$topicName.txt", 16 );
+            $head = $TWiki::store->readFile( "$dataDir\/$webName\/$topicName.txt", 16 );
             $head = TWiki::makeTopicSummary( $head, $topicName, $webName );
             $newText =~ s/%TEXTHEAD%/$head/go;
 
@@ -207,7 +207,7 @@ sub processWeb
 
     $debug && print "- Sending mail notification to: $notifylist\n";
 
-    my $error = $TWiki::T->{net}->sendEmail( $text );
+    my $error = &TWiki::Net::sendEmail( $text );
     if( $error ) {
 	print STDERR "* $error\n";
         $debug && print "- End TWiki.$webName\n";
@@ -243,7 +243,7 @@ sub getEmailNotifyList
     my( $web, $topicname ) = @_;
 
     $topicname = $notifyTopicname unless $topicname;
-    return() unless $TWiki::T->{store}->topicExists( $web, $topicname );
+    return() unless $TWiki::store->topicExists( $web, $topicname );
 
     # Allow %MAINWEB% as well as 'Main' in front of users/groups -
     # non-capturing regex.
@@ -292,7 +292,7 @@ sub getEmailOfUser
     my @list = ();
     # Ignore guest entry and non-existent pages
     if ( $wikiName ne "TWikiGuest" && 
-		$TWiki::T->{store}->topicExists( $mainWebname, $wikiName ) ) {
+		$TWiki::store->topicExists( $mainWebname, $wikiName ) ) {
         if ( $wikiName =~ /Group$/ ) {
             # Page is for a group, get all users in group
 	    ##writeDebug "using group: $mainWebname . $wikiName";

@@ -3,10 +3,13 @@
 %TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
 %TMPL:DEF{"heading"}%You are already registered%TMPL:END%
 %TMPL:DEF{"message"}%
-Can't register twice, the username %PARAM1% is already registered.
+You cannot register twice, the username '%PARAM1%' is already registered.
 
-Please contact 
-<a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Registration&#32;Question">%WIKIWEBMASTER%</a>
-if you have any questions. %TMPL:END%
+Did you want to [[%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki.ResetPassword?username=%PARAM1%][reset !%PARAM1%'s password]]?
+
+Alternatively hit back to go back to TWiki.TWikiRegistration and choose a different username.
+
+Please contact <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Registration&#32;Question">%WIKIWEBMASTER%</a>
+if you have any questions.  %TMPL:END%
 %TMPL:DEF{"topicaction"}% %TMPL:END%
 %TMPL:P{"oops"}%
