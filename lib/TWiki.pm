@@ -1695,6 +1695,151 @@ sub formatTime  {
     return $value;
 }
 
+#
+# SMELL: this is _not_ a tag handler in the sense of other builtin tags, because it requires
+# far more context information (the text of the topic) than any handler. It is really
+# a plugin, and since it has an interface exactly like a plugin, would be much
+# happier as a plugin. Having it here requires more code, and offers no perceptible benefit.
+#
+# Parameters:
+#    * $text  : ref to the text of the current topic
+#    * $topic : the topic we are in
+#    * $web   : the web we are in
+#    * $args  : "Topic" [web="Web"] [depth="N"]
+# Return value: $tableOfContents
+# Handles %<nop>TOC{...}% syntax.  Creates a table of contents
+# using TWiki bulleted
+# list markup, linked to the section headings of a topic. A section heading is
+# entered in one of the following forms:
+#    * $headingPatternSp : \t++... spaces section heading
+#    * $headingPatternDa : ---++... dashes section heading
+#    * $headingPatternHt : &lt;h[1-6]> HTML section heading &lt;/h[1-6]>
+sub _TOC {
+    my ( $text, $defaultTopic, $defaultWeb, $args ) = @_;
+
+    my %params = extractParameters( $args );
+
+    # get the topic name attribute
+    my $topicname = $params{_DEFAULT} || $defaultTopic;
+
+    # get the web name attribute
+    my $web = $params{web} || $defaultWeb;
+    $web =~ s/\//\./g;
+    my $webPath = $web;
+    $webPath =~ s/\./\//g;
+
+    # get the depth limit attribute
+    my $depth = $params{depth} || 6;
+
+    # get the title attribute
+    my $title = $params{title} || "";
+    $title = "\n<span class=\"twikiTocTitle\">$title</span>" if( $title );
+
+    my $result  = "";
+    my $line  = "";
+    my $level = "";
+    my @list  = ();
+    if( "$web.$topicname" eq "$defaultWeb.$defaultTopic" ) {
+        # use text from parameter
+        @list = split( /\n/, $text );
+
+    } else {
+        # read text from file
+        if ( ! TWiki::Func::topicExists( $web, $topicname ) ) {
+            return _inlineError( "TOC: Cannot find topic \"$web.$topicname\"" );
+        }
+        my $t = TWiki::Func::readWebTopic( $web, $topicname );
+        $t =~ s/.*?%STARTINCLUDE%//s;
+        $t =~ s/%STOPINCLUDE%.*//s;
+        @list = split( /\n/, TWiki::Func::expandCommonVariables( $t, $topicname, $web ) );
+    }
+
+    my $headerDaRE =  $regex{headerPatternDa};
+    my $headerSpRE =  $regex{headerPatternSp};
+    my $headerHtRE =  $regex{headerPatternHt};
+    my $webnameRE =   $regex{webNameRegex};
+    my $wikiwordRE =  $regex{wikiWordRegex};
+    my $abbrevRE =    $regex{abbrevRegex};
+    my $headerNoTOC = $regex{headerPatternNoTOC};
+    @list = grep { /(<\/?pre>)|($headerDaRE)|($headerSpRE)|($headerHtRE)/o } @list;
+    my $insidePre = 0;
+    my $i = 0;
+    my $tabs = "";
+    my $anchor = "";
+    my $highest = 99;
+    # SMELL: this handling of <pre> is archaic. Surely this should be
+    # done using the outsidePreHandler?
+    foreach $line ( @list ) {
+        if( $line =~ /^.*<pre>.*$/io ) {
+            $insidePre = 1;
+            $line = "";
+        }
+        if( $line =~ /^.*<\/pre>.*$/io ) {
+            $insidePre = 0;
+            $line = "";
+        }
+        if (!$insidePre) {
+            $level = $line ;
+            if ( $line =~  /$headerDaRE/o ) {
+                $level =~ s/$headerDaRE/$1/go;
+                $level = length $level;
+                $line  =~ s/$headerDaRE/$2/go;
+            } elsif
+               ( $line =~  /$headerSpRE/o ) {
+                $level =~ s/$headerSpRE/$1/go;
+                $level = length $level;
+                $line  =~ s/$headerSpRE/$2/go;
+            } elsif
+               ( $line =~  /$headerHtRE/io ) {
+                $level =~ s/$headerHtRE/$1/gio;
+                $line  =~ s/$headerHtRE/$2/gio;
+            }
+            my $urlPath = "";
+            if( "$web.$topicname" ne "$defaultWeb.$defaultTopic" ) {
+                # not current topic, can't omit URL
+                $urlPath = "$TWiki::dispScriptUrlPath$TWiki::dispViewPath$TWiki::scriptSuffix/$webPath/$topicname";
+            }
+            if( ( $line ) && ( $level <= $depth ) ) {
+                $anchor = TWiki::Render::makeAnchorName( $line );
+                # cut TOC exclude '---+ heading !! exclude'
+                $line  =~ s/\s*$headerNoTOC.+$//go;
+                $line  =~ s/[\n\r]//go;
+                next unless $line;
+                $highest = $level if( $level < $highest );
+                $tabs = "";
+                for( $i=0 ; $i<$level ; $i++ ) {
+                    $tabs = "\t$tabs";
+                }
+                # Remove *bold*, _italic_ and =fixed= formatting
+                $line =~ s/(^|[\s\(])\*([^\s]+?|[^\s].*?[^\s])\*($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+                $line =~ s/(^|[\s\(])_+([^\s]+?|[^\s].*?[^\s])_+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+                $line =~ s/(^|[\s\(])=+([^\s]+?|[^\s].*?[^\s])=+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+                # Prevent WikiLinks
+                $line =~ s/\[\[.*?\]\[(.*?)\]\]/$1/g;  # '[[...][...]]'
+                $line =~ s/\[\[(.*?)\]\]/$1/ge;        # '[[...]]'
+                $line =~ s/([\s\(])($webnameRE)\.($wikiwordRE)/$1<nop>$3/g;  # 'Web.TopicName'
+                $line =~ s/([\s\(])($wikiwordRE)/$1<nop>$2/g;  # 'TopicName'
+                $line =~ s/([\s\(])($abbrevRE)/$1<nop>$2/g;    # 'TLA'
+                # create linked bullet item, using a relative link to anchor
+                $line = "$tabs* <a href=\"$urlPath#$anchor\">$line</a>";
+                $result .= "\n$line";
+            }
+        }
+    }
+    if( $result ) {
+        if( $highest > 1 ) {
+            # left shift TOC
+            $highest--;
+            $result =~ s/^\t{$highest}//gm;
+        }
+        $result = "<div class=\"twikiToc\">$title$result\n</div>";
+        return $result;
+
+    } else {
+        return _inlineError("TOC: No TOC in \"$web.$topicname\"");
+    }
+}
+
 #| $web | web and  |
 #| $topic | topic to display the name for |
 #| $formatString | twiki format string (like in search) |
@@ -2285,6 +2430,9 @@ sub handleCommonTags {
 
     $sessionInternalTags{INCLUDINGWEB} = $memW;
     $sessionInternalTags{INCLUDINGTOPIC} = $memT;
+
+    # "Special plugin tag" TOC hack
+    $text =~ s/%TOC(?:{(.*?)})?%/_TOC($text, $theTopic, $theWeb, $1)/ge;
 
     # Codev.FormattedSearchWithConditionalOutput: remove <nop> lines,
     # possibly introduced by SEARCHes with conditional CALC. This needs
