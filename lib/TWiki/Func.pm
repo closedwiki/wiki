@@ -51,10 +51,10 @@ use strict;
 
 ---+++ getSessionValue( $key ) ==> $value
 
-| Description: | Get a session value from the Session Plugin (if installed) |
+| Description:      | Get a session value from the Session Plugin (if installed) |
 | Parameter: =$key= | Session key |
-| Return: =$value= | Value associated with key; empty string if not set; undef if session plugin is not installed |
-| Since: | 27 Jul 2001 |
+| Return: =$value=  | Value associated with key; empty string if not set; undef if session plugin is not installed |
+| Since:            |  TWiki::Plugins::VERSION 1.000 (27 Feb 2001) |
 
 =cut
 # -------------------------
@@ -70,11 +70,11 @@ sub getSessionValue
 
 ---+++ setSessionValue( $key, $value ) ==> $result
 
-| Description: | Set a session value via the Session Plugin (if installed) |
-| Parameter: =$key= | Session key |
+| Description:        | Set a session value via the Session Plugin (if installed) |
+| Parameter: =$key=   | Session key |
 | Parameter: =$value= | Value associated with key |
-| Return: =$result= | ="1"= if success; undef if session plugin is not installed |
-| Since: | 17 Aug 2001 |
+| Return: =$result=   | ="1"= if success; undef if session plugin is not installed |
+| Since:              |  TWiki::Plugins::VERSION 1.000 (17 Aug 2001) |
 
 =cut
 # -------------------------
@@ -89,9 +89,9 @@ sub setSessionValue
 
 ---+++ getSkin( ) ==> $skin
 
-| Description: | Get the name of the skin, set by the =SKIN= preferences variable or the =skin= CGI parameter |
+| Description:    | Get the name of the skin, set by the =SKIN= preferences variable or the =skin= CGI parameter |
 | Return: =$skin= | Name of skin, e.g. ="gnu"=. Empty string if none |
-| Since: | 29 Jul 2001 |
+| Since:          |  TWiki::Plugins::VERSION 1.000 (29 Jul 2001) |
 
 =cut
 # -------------------------
@@ -105,9 +105,9 @@ sub getSkin
 
 ---+++ getUrlHost( ) ==> $host
 
-| Description: | Get protocol, domain and optional port of script URL |
+| Description:    | Get protocol, domain and optional port of script URL |
 | Return: =$host= | URL host, e.g. ="http://example.com:80"= |
-| Since: | 7 Dec 2002 |
+| Since:          |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -121,12 +121,12 @@ sub getUrlHost
 
 ---+++ getScriptUrl( $web, $topic, $script ) ==> $url
 
-| Description: | Compose fully qualified URL |
-| Parameter: =$web= | Web name, e.g. ="Main"= |
-| Parameter: =$topic= | Topic name, e.g. ="WebNotify"= |
+| Description:         | Compose fully qualified URL |
+| Parameter: =$web=    | Web name, e.g. ="Main"= |
+| Parameter: =$topic=  | Topic name, e.g. ="WebNotify"= |
 | Parameter: =$script= | Script name, e.g. ="view"= |
-| Return: =$url= | URL, e.g. ="http://example.com:80/cgi-bin/view.pl/Main/WebNotify"= |
-| Since: | 7 Dec 2002 |
+| Return: =$url=       | URL, e.g. ="http://example.com:80/cgi-bin/view.pl/Main/WebNotify"= |
+| Since:               |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -143,7 +143,7 @@ sub getScriptUrl
 
 | Description: | Get script URL path |
 | Return: =$path= | URL path of TWiki scripts, e.g. ="/cgi-bin"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -161,7 +161,7 @@ sub getScriptUrlPath
 | Parameter: =$web= | Web name, e.g. ="Main"=. The current web is taken if empty |
 | Parameter: =$topic= | Topic name, e.g. ="WebNotify"= |
 | Return: =$url= | URL, e.g. ="http://example.com:80/cgi-bin/view.pl/Main/WebNotify"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -182,7 +182,7 @@ sub getViewUrl
 | Parameter: =$template= | Oops template name, e.g. ="oopslocked"= |
 | Parameter: =$param1= ... =$param4= | Parameter values for %<nop>PARAM1% ... %<nop>PARAM4% variables in template, optional |
 | Return: =$url= | URL, e.g. ="http://example.com:80/cgi-bin/oops.pl/ Main/WebNotify?template=oopslocked&amp;param1=joe"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -200,7 +200,7 @@ sub getOopsUrl
 
 | Description: | Get pub URL path |
 | Return: =$path= | URL path of pub directory, e.g. ="/pub"= |
-| Since: | 14 Jul 2001 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (14 Jul 2001) |
 
 =cut
 # -------------------------
@@ -216,7 +216,7 @@ sub getPubUrlPath
 
 | Description: | Get CGI query object. Important: Plugins cannot assume that scripts run under CGI, Plugins must always test if the CGI query object is set |
 | Return: =$query= | CGI query object; or 0 if script is called as a shell script |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -233,7 +233,7 @@ sub getCgiQuery
 | Description: | Prints a basic content-type HTML header for text/html to standard out |
 | Parameter: =$query= | CGI query object |
 | Return: | none |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -252,7 +252,7 @@ sub writeHeader
 | Parameter: =$query= | CGI query object |
 | Parameter: =$url= | URL to redirect to |
 | Return: | none, never returns |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -273,7 +273,7 @@ sub redirectCgiQuery
 | Parameter: =$attr= | Attribute string |
 | Parameter: =$name= | Name, optional |
 | Return: =$value= | Extracted value |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
    * Example:
       * Variable: =%<nop>TEST{ "nameless" name1="val1" name2="val2" }%=
@@ -300,7 +300,7 @@ sub extractNameValuePair
 | Parameter: =$key= | Preferences key |
 | Parameter: =$web= | Name of web, optional. Current web if not specified; does not apply to settings of Plugin topics |
 | Return: =$value= | Preferences value; empty string if not set |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
    * Example for Plugin setting:
       * MyPlugin topic has: =* Set COLOR = red=
@@ -328,7 +328,7 @@ sub getPreferencesValue
 | Parameter: =$key= | Preferences key |
 | Parameter: =$web= | Name of web, optional. Current web if not specified; does not apply to settings of Plugin topics |
 | Return: =$value= | Preferences flag ="1"= (if set), or ="0"= (for preferences values ="off"=, ="no"= and ="0"=) |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
    * Example for Plugin setting:
       * MyPlugin topic has: =* Set SHOWHELP = off=
@@ -350,7 +350,7 @@ sub getPreferencesFlag
 
 | Description: | Get toolname as defined in TWiki.cfg |
 | Return: =$name= | Name of tool, e.g. ="TWiki"= |
-| Since: | 27 Jul 2001 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (27 Feb 2001) |
 
 =cut
 # -------------------------
@@ -366,7 +366,7 @@ sub getWikiToolName
 
 | Description: | Get name of Main web as defined in TWiki.cfg |
 | Return: =$name= | Name, e.g. ="Main"= |
-| Since: | 27 Jul 2001 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (27 Feb 2001) |
 
 =cut
 # -------------------------
@@ -382,7 +382,7 @@ sub getMainWebname
 
 | Description: | Get name of TWiki documentation web as defined in TWiki.cfg |
 | Return: =$name= | Name, e.g. ="TWiki"= |
-| Since: | 27 Jul 2001 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (27 Feb 2001) |
 
 =cut
 # -------------------------
@@ -400,7 +400,7 @@ sub getTwikiWebname
 
 | Description: | Get default user name as defined in TWiki.cfg's =$defaultUserName= |
 | Return: =$loginName= | Default user name, e.g. ="guest"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -416,7 +416,7 @@ sub getDefaultUserName
 
 | Description: | Get Wiki name of logged in user |
 | Return: =$wikiName= | Wiki Name, e.g. ="JohnDoe"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -432,7 +432,7 @@ sub getWikiName
 
 | Description: | Get Wiki name of logged in user with web prefix |
 | Return: =$wikiName= | Wiki Name, e.g. ="Main.JohnDoe"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -449,7 +449,7 @@ sub getWikiUserName
 | Description: | Translate a Wiki name to a login name based on [[%MAINWEB%.TWikiUsers]] topic |
 | Parameter: =$wikiName= | Wiki name, e.g. ="Main.JohnDoe"= or ="JohnDoe"= |
 | Return: =$loginName= | Login name of user, e.g. ="jdoe"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -468,7 +468,7 @@ sub wikiToUserName
 | Parameter: =$loginName= | Login name, e.g. ="jdoe"= |
 | Parameter: =$dontAddWeb= | Do not add web prefix if ="1"= |
 | Return: =$wikiName= | Wiki name of user, e.g. ="Main.JohnDoe"= or ="JohnDoe"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -485,7 +485,7 @@ sub userToWikiName
 
 | Description: | Test if logged in user is a guest |
 | Return: =$flag= | ="1"= if yes, ="0"= if not |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -502,7 +502,7 @@ sub isGuest
 | Description: | Test if any access restrictions are set for this web, ignoring settings on individual pages |
 | Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
 | Return: =$flag= | ="1"= if yes, ="0"= if no |
-| Since: | 27 Jul 2001 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (27 Feb 2001) |
 
 =cut
 # -------------------------
@@ -524,7 +524,7 @@ sub permissionsSet
 | Parameter: =$topic= | Topic name, required, e.g. ="PrivateStuff"= |
 | Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
 | Return: =$flag= | ="1"= if access may be granted, ="0"= if not |
-| Since: | 27 Jul 2001 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (27 Feb 2001) |
 
 =cut
 # -------------------------
@@ -544,7 +544,7 @@ sub checkAccessPermission
 | Description: | Test if web exists |
 | Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
 | Return: =$flag= | ="1"= if web exists, ="0"= if not |
-| Since: | 14 Jul 2001 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (14 Jul 2001) |
 
 =cut
 # -------------------------
@@ -563,7 +563,7 @@ sub webExists
 | Parameter: =$web= | Web name, optional, e.g. ="Main"= |
 | Parameter: =$topic= | Topic name, required, e.g. ="TokyoOffice"=, or ="Main.TokyoOffice"= |
 | Return: =$flag= | ="1"= if topic exists, ="0"= if not |
-| Since: | 14 Jul 2001 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (14 Jul 2001) |
 
 =cut
 # -------------------------
@@ -583,7 +583,7 @@ sub topicExists
 | Parameter: =$topic= | Topic name, required, e.g. ="TokyoOffice"= |
 | Return: =( $date, $loginName, $rev )= | List with: ( last update date, login name of last user, minor part of top revision number ), e.g. =( 12345 "phoeny", "5" )= |
 | | $date is in epochSeconds |
-| Since: | 29 Jul 2001 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (29 Jul 2001) |
 
 =cut
 # -------------------------
@@ -602,7 +602,7 @@ sub getRevisionInfo
 | Parameter: =$web= | Web name, e.g. ="Main"=, or empty |
 | Parameter: =$topic= | Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"= |
 | Return: =( $oopsUrl, $loginName, $unlockTime )= | The =$oopsUrl= for calling redirectCgiQuery(), user's =$loginName=, and estimated =$unlockTime= in minutes. The =$oopsUrl= and =$loginName= is empty if topic has no edit lock. |
-| Since: | 31 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.010 (31 Dec 2002) |
 
 =cut
 # -------------------------
@@ -631,7 +631,7 @@ sub checkTopicEditLock
 | Parameter: =$topic= | Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"= |
 | Parameter: =$lock= | Set to =1= to lock topic, =0= to unlock |
 | Return: =$oopsUrl= | Empty string if OK; the =$oopsUrl= for calling redirectCgiQuery() in case lock is already taken when trying to lock topic |
-| Since: | 31 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.010 (31 Dec 2002) |
 
 =cut
 # -------------------------
@@ -657,7 +657,7 @@ sub setTopicEditLock
 | Parameter: =$rev= | Topic revision to read, optional. Specify the minor part of the revision, e.g. ="5"=, not ="1.5"=; the top revision is returned if omitted or empty. |
 | Parameter: =$ignorePermissions=  | Set to ="1"= if checkAccessPermission() is already performed and OK; an oops URL is returned if user has no permission |
 | Return: =$text= | Topic text with embedded meta data; an oops URL for calling redirectCgiQuery() is returned in case of an error |
-| Since: | 31 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.010 (31 Dec 2002) |
 
 =cut
 # -------------------------
@@ -685,7 +685,7 @@ sub readTopicText
 | Parameter: =$ignorePermissions=  | Set to ="1"= if checkAccessPermission() is already performed and OK |
 | Parameter: =$dontNotify= | Set to ="1"= if not to notify users of the change |
 | Return: =$oopsUrl= | Empty string if OK; the =$oopsUrl= for calling redirectCgiQuery() in case of error |
-| Since: | 31 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.010 (31 Dec 2002) |
 
    * Example: <br />
      =my $oopsUrl = TWiki::Func::setTopicEditLock( $web, $topic, 1 );= <br />
@@ -748,7 +748,7 @@ sub saveTopicText
 
 | Description: | Get list of all public webs, e.g. all webs that do not have the =NOSEARCHALL= flag set in the WebPreferences |
 | Return: =@webs= | List of all public webs, e.g. =( "Main",  "Know", "TWiki" )= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -765,7 +765,7 @@ sub getPublicWebList
 | Description: | Get list of all topics in a web |
 | Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
 | Return: =@topics= | Topic list, e.g. =( "WebChanges",  "WebHome", "WebIndex", "WebNotify" )= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -787,7 +787,7 @@ sub getTopicList
 | Parameter: =$topic= | Current topic name, e.g. ="WebNotify"= |
 | Parameter: =$web= | Web name, optional, e.g. ="Main"=. The current web is taken if missing |
 | Return: =$text= | Expanded text, e.g. ="Current user is <nop>TWikiGuest"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -806,7 +806,7 @@ sub expandCommonVariables
 | Parameter: =$text= | Text to render, e.g. ="*bold* text and =fixed font="= |
 | Parameter: =$web= | Web name, optional, e.g. ="Main"=. The current web is taken if missing |
 | Return: =$text= | XHTML text, e.g. ="&lt;b>bold&lt;/b> and &lt;code>fixed font&lt;/code>"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -829,7 +829,7 @@ sub renderText
 | Parameter: =$anchor= | Anchor, optional, e.g. ="#Jump"= |
 | Parameter: =$createLink= | Set to ="1"= to add question linked mark after topic name if topic does not exist;<br /> set to ="0"= to suppress link for non-existing topics |
 | Return: =$text= | XHTML anchor, e.g. ="&lt;a href="/cgi-bin/view/Main/WebNotify#Jump">notify&lt;/a>"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -857,11 +857,11 @@ sub internalLink
 
 | Description: | Format the time in seconds into the desired time string |
 | Parameter: =$time= | Time in epoc seconds |
-| Parameter: =$format= | Format type, optional. Default e.g. ="31 Dec 2002 - 19:30"=, can be ="iso"= (e.g. ="2002-12-31T19:30Z"=), ="rcs"= (e.g. ="2001/12/31 23:59:59"=, ="http"= for HTTP header format (e.g. ="Thu, 23 Jul 1998 07:21:56 GMT"=) |
+| Parameter: =$format= | Format type, optional. Default e.g. =" TWiki::Plugins::VERSION 1.010 (31 Dec 2002) - 19:30"=, can be ="iso"= (e.g. ="2002-12-31T19:30Z"=), ="rcs"= (e.g. ="2001/12/31 23:59:59"=, ="http"= for HTTP header format (e.g. ="Thu, 23 Jul 1998 07:21:56 GMT"=) |
 | Parameter: =$timezone= | either not defined (uses the displaytime setting), "gmtime", or "servertime" |
 | Return: =$text= | Formatted time string |
 | Note: | if you used the removed formatGmTime, add a third parameter "gmtime" |
-| Since: | 26 Feb 2004 |
+| Since: |  TWiki::Plugins::VERSION 1.020 (26 Feb 2004) |
 
 =cut
 # -------------------------
@@ -876,12 +876,12 @@ sub formatTime
 
 ---+++ formatGmTime( $time, $format ) ==> $text
 
-*WARNING: DO _NOT_USE THIS FUNCTION - IT IS DEPRECATED AND WILL BE REMOVED IN A FUTURE VERSION*
+| NOTE: | <b>The following function is deprecated and should not be used. Use formatTime() instead</b> |
 | Description: | Format the time to GM time |
 | Parameter: =$time= | Time in epoc seconds |
 | Parameter: =$format= | Format type, optional. Default e.g. ="31 Dec 2002 - 19:30"=, can be ="iso"= (e.g. ="2002-12-31T19:30Z"=), ="rcs"= (e.g. ="2001/12/31 23:59:59"=, ="http"= for HTTP header format (e.g. ="Thu, 23 Jul 1998 07:21:56 GMT"=) |
 | Return: =$text= | Formatted time string |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -889,7 +889,7 @@ sub formatGmTime
 {
 #   my ( $epSecs, $format ) = @_;
 
-    writeWarning( "DEPRECATED use of Func::formatGmTime" );
+    writeWarning( "deprecated use of Func::formatGmTime" );
 
     return &formatTime( @_, "gmtime" );
 }
@@ -904,7 +904,7 @@ sub formatGmTime
 
 | Description: | Get data directory (topic file root) |
 | Return: =$dir= | Data directory, e.g. ="/twiki/data"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -920,7 +920,7 @@ sub getDataDir
 
 | Description: | Get pub directory (file attachment root). Attachments are in =$dir/Web/TopicName= |
 | Return: =$dir= | Pub directory, e.g. ="/htdocs/twiki/pub"= |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -934,13 +934,12 @@ sub getPubDir
 
 ---+++ readTopic( $web, $topic ) ==> ( $meta, $text )
 
-*WARNING: DO _NOT_USE THIS FUNCTION - IT IS DEPRECATED AND WILL BE REMOVED IN A FUTURE VERSION*
-NOTE: The following function is deprecated and should not be used. Use readTopicText() instead
+| NOTE: | <b>The following function is deprecated and should not be used. Use readTopicText() instead</b> |
 | Description: | Read topic text and meta data, regardless of access permissions. |
 | Parameter: =$web= | Web name, required, e.g. ="Main"= |
 | Parameter: =$topic= | Topic name, required, e.g. ="TokyoOffice"= |
 | Return: =( $meta, $text )= | Meta data object and topic text |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -948,7 +947,7 @@ sub readTopic
 {
 #   my( $web, $topic ) = @_;
 
-    writeWarning( "DEPRECATED use of Func::readTopic" );
+    writeWarning( "deprecated use of Func::readTopic" );
 
     return &TWiki::Store::readTopic( @_ );
 }
@@ -962,7 +961,7 @@ sub readTopic
 | Parameter: =$name= | Template name, e.g. ="view"= |
 | Parameter: =$skin= | Skin name, optional, e.g. ="print"= |
 | Return: =$text= | Template text |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -980,7 +979,7 @@ sub readTemplate
 | Description: | Read text file, low level. NOTE: For topics use readTopicText() |
 | Parameter: =$filename= | Full path name of file |
 | Return: =$text= | Content of file |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -999,7 +998,7 @@ sub readFile
 | Parameter: =$filename= | Full path name of file |
 | Parameter: =$text= | Text to save |
 | Return: | none |
-| Since: | 7 Dec 2002 |
+| Since: |  TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
 =cut
 # -------------------------
@@ -1017,7 +1016,7 @@ sub saveFile
 | Description: | Log Warning that may require admin intervention to data/warning.txt |
 | Parameter: =$text= | Text to write; timestamp gets added |
 | Return: | none |
-| Since: | 16 Feb 2004 |
+| Since: |  TWiki::Plugins::VERSION 1.020 (16 Feb 2004) |
 
 =cut
 # -------------------------
@@ -1035,7 +1034,7 @@ sub writeWarning
 | Description: | Log debug message to data/debug.txt |
 | Parameter: =$text= | Text to write; timestamp gets added |
 | Return: | none |
-| Since: | 16 Feb 2004 |
+| Since: |  TWiki::Plugins::VERSION 1.020 (16 Feb 2004) |
 
 =cut
 # -------------------------
@@ -1055,8 +1054,7 @@ sub writeDebug
 | Description: | Retrieves a TWiki predefined regular expression |
 | Parameter: =$regexName= | Name of the regular expression to retrieve.  See notes below |
 | Return: | String or precompiled regular expression matching as described below |
-| Introduced: | VERSION 1.020 (Feb 2004) |
-| Since: | 9 Feb 2004 |
+| Since: |  TWiki::Plugins::VERSION 1.020 (9 Feb 2004) |
 
 __Notes:__ TWiki internally precompiles several regular expressions to represent various string entities
 in an I18N-compatible manner.  Plugins are encouraged to use these in matching where appropriate.
