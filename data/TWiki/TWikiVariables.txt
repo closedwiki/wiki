@@ -88,6 +88,7 @@
 | =nosummary="on"= | Show topic title only | Show topic summary |
 | =bookview="on"= | BookView search, e.g. show complete topic text | Show topic summary |
 | =nosearch="on"= | Suppress search string | Show search string |
+| =noheader="on"= | Suppress search header <br> <span style='background: #FFB0B0;'>Topics: Changed: By: </span> | Show search header |
 | =nototal="on"= | Do not show number of topics found | Show number |
 Example: =<b>%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%</b>= </td>
 </tr><tr>
