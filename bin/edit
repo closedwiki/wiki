@@ -111,15 +111,21 @@ sub main
     }
     &TWiki::Store::lockTopic( $topic );
 
-    my $formTemplate = $query->param( "formtemplate" ) || "";
+    my $formTemplate  = $query->param( "formtemplate" ) || "";
+    my $templateTopic = $query->param( "templatetopic" ) || "";
+    my $templateWeb = $webName;
 
     # get edit template, standard or a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
     $tmpl = &TWiki::Store::readTemplate( "edit", $skin );
     if( ! &TWiki::Store::topicExists( $webName, $topic ) ) {
-        my $templateTopic = $query->param( "templatetopic" ) || "";
         if( $templateTopic ) {
-            ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $templateTopic );
+            if( $templateTopic =~ /^(.+)\.(.+)$/ ) {
+                # is "Webname.SomeTopic"
+                $templateWeb   = $1;
+                $templateTopic = $2;
+            }
+            ( $meta, $text ) = &TWiki::Store::readTopic( $templateWeb, $templateTopic );
         }
         if( ! $text ) {
             ( $meta, $text ) = &TWiki::Store::readTemplateTopic( "WebTopicEditTemplate" );
@@ -201,7 +207,7 @@ sub main
     my $form = "";
     $form = $formMeta{"name"} if( %formMeta );
     if( $form && $saveCmd ne "repRev" ) {
-       my @fieldDefs = &TWiki::Form::getFormDef( $webName, $form );
+       my @fieldDefs = &TWiki::Form::getFormDef( $templateWeb, $form );
        
        if( ! @fieldDefs ) {
             my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoformdef" );
