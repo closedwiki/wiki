@@ -356,7 +356,7 @@ sub _settings
     $self->{"dataDir"}   = $settings{"dataDir"};
     $self->{"pubDir"}    = $settings{"pubDir"};
     $self->{"binary"}    = "";
-    $self->{"attachAsciiPath"} = $settings{"attachAsciiPath"};
+    $self->{attachAsciiPath} = $settings{attachAsciiPath};
     $self->{dirPermission} = $settings{dirPermission};
 }
 
@@ -365,7 +365,7 @@ sub isAsciiDefault
 {
    my( $self, $filename ) = @_;
    
-   my $attachAsciiPath = $self->{"attachAsciiPath"};
+   my $attachAsciiPath = $self->{attachAsciiPath};
    
    if( $filename =~ /$attachAsciiPath/ ) {
       return "ascii";
