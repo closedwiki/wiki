@@ -4023,6 +4023,8 @@ sub getRenderedVersion {
             s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &mailtoLink( $2, $3, $4 )/ge;
 
 # Make internal links
+            # Escape rendering: Change "![[..." to "[<nop>[...", for final unescaped "[[..." output
+            s/\!\[\[/\[<nop>\[/g;
 	    # Spaced-out Wiki words with alternative link text
             # '[[Web.odd wiki word#anchor][display text]]' link:
             s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&specificLink("",$theWeb,$theTopic,$2,$1)/ge;
