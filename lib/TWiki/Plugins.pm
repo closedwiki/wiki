@@ -238,7 +238,7 @@ sub initialize1
         }
     }
     unless( $user ) {
-        $user = &TWiki::initializeRemoteUser( $_[0] );
+        $user = &TWiki::initializeRemoteUser( $theLoginName );
     }
     return $user;
 }
