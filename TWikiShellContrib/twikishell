@@ -49,6 +49,7 @@ use diagnostics;
 ####################################################################################
 {
 package Config;
+    my $mode="";
     
     sub new {
         my $self=bless {};
@@ -75,6 +76,24 @@ package Config;
         my ($config,$text)=@_;    
         print $text unless ($config->{verbosity}==0);
     }
+    
+    #######################################
+    # Mode stuff
+    #######################################
+
+    sub mode {
+        my ($self,$newMode)=@_;
+        if ($newMode) {
+            if ($newMode eq "--") {
+                $mode="";
+            } else {
+                $mode=$newMode;
+            }
+        } else {
+            return $mode;
+        }
+    }
+
     
     #######################################
     # Handle CL params
@@ -107,7 +126,7 @@ package Config;
     # Prepare the enviroment
     #######################################
     
-    sub prepareEnviroment {
+    sub prepareEnvironment {
         my $self=shift;
         print "The config file was not found\n";
         print "I'll explore the system and try to figure out your configuration\n";
@@ -168,7 +187,7 @@ BEGIN {
         do "./".$configFileName
     } else {
         $config=new Config();
-        $config->prepareEnviroment();
+        $config->prepareEnvironment();
         $config->{configFileName}=".twikishellrc";
     }
  
@@ -176,6 +195,8 @@ BEGIN {
         $config->handleParams();
         $config->loadSetLibCfg();
     }
+
+    $config->save();
 }
 
 # The shell starts here

@@ -15,6 +15,7 @@ TWikiShellContrib is  a shell that can be use to replace all twiki command line 
         | ==/data/TWiki/TWikiShellContrib.txt== | This topic |
         | ==/lib/TWiki/Contrib/TWikiShellContrib/TWikiShell.pm== | Main module |
         | ==/lib/TWiki/Contrib/TWikiShellContrib/Standard.pm== | Standard set of commands |
+        | ==/lib/TWiki/Contrib/TWikiShellContrib/Common.pm== | Common subs used |
         | ==/lib/TWiki/Contrib/TWikiShellContrib/Ext/Dump.pm== | Example Extended Command |
 
 If you have a non-standard instalation, then move the files wherever you need them to be.
@@ -46,6 +47,9 @@ On a bare installation (without any Extensions installed), you have the followin
 | import <perl module> | Imports a perl module and scan it for new commands to be added to the shell |
 | verbose <level> | Changes the verbosity level to either 1 or 2 |
 | quiet | Changes the verbosity level to 0 |
+| reload <command> | Reload the module associated with <command> |
+| reload <module> | Reload the extention module (assumes that it's under the extentions dir |
+| reload shell | Reloads the shell (don't clear the handler list) |
 
 The config file is a dump (using Data::Dumper) of the configuration object used internally
 

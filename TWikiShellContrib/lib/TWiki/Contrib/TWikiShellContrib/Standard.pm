@@ -1,11 +1,12 @@
 package TWiki::Contrib::TWikiShellContrib::Standard;
 
+use FileHandle;
 
 ##############################
 # set verbosity
 ##############################
 sub run_verbose {
-    my ($self,$config,$level) = @_;
+    my ($shell,$config,$level) = @_;
 
     if (!$level) {
         print "verbosity : $config->{verbosity}\n";
@@ -31,7 +32,7 @@ If called without arguments, show the current verbosity level.
 
 
 sub run_quiet {
-    my ($self,$config) = @_;
+    my ($shell,$config) = @_;
 
     $config->{verbosity}=0;
     print "verbosity : $config->{verbosity}\n";
@@ -40,6 +41,16 @@ sub run_quiet {
 
 sub smry_quiet { return "Set the verbosity level to 0";}
 sub help_quiet { return smry_quiet()."\n";}
+
+sub run_use {
+    my ($shell,$config,$mode) = @_;
+    $config->mode($mode);
+    print "Mode set to: ".$config->mode;
+}
+
+sub smry_use {
+	return "experimental feature - don't use!\n";
+}
 
 sub undefined_run {
     print "Undefined action\n";
@@ -52,6 +63,86 @@ sub undefined_smry {
 sub undefined_help {
     return "No help available\n";
 }
+
+    
+    
+#####################################################################
+# TODO: Reload should remove those handlers that are removed from the module to be reloaded.
+
+package TWiki::Contrib::TWikiShellContrib::Ext::Reload;
+
+use FileHandle;
+
+sub _reloadClass { 
+    my ($shell,$config,$class) = @_;
+    
+    if (!exists $shell->{packages}{$class}) {
+        $config->printNotQuiet("Class $class not loaded. Please, use import instead\n");                        
+    } else {
+        my $file=$class;
+        $file=~ s!\:\:!\/!g;
+        $config->printNotQuiet("Reloading $class .......");
+        _reload($config,$file.".pm"); 
+        {
+            no warnings;
+            $shell->remove_handlers($class);
+            $shell->find_handlers($class);
+         }   
+    }
+}
+
+  
+sub _reload {
+    my ($config,$class) = @_;
+    
+    my $fh = FileHandle->new($INC{$class});
+    if (!$fh) {
+        print "$class not found\n";
+        return;
+    }
+	local($/);
+	{
+	    no warnings;
+	    eval <$fh>;
+	    warn $@ if $@;
+	    $config->printNotQuiet("Done.\n");
+    }
+    
+}
+sub run_shell {
+    my ($shell,$config) = @_;
+    $config->printNotQuiet("Reloading Shell .......");
+    _reload($config,'TWiki/Contrib/TWikiShellContrib/TWikiShell.pm');
+}
+
+sub smry_shell { return "Reloads the shell (don't clear the handler list)";}  
+sub help_shell { return smry_shell()."\n"; }
+
+sub smry { return "Reloads the specified command set";}  
+sub help { return smry()."\n"; }
+
+
+sub run {
+    my ($shell,$config,@args) = @_;
+    if (!@args) {
+        return;
+    }
+    my $cmd=join(" ",@args);
+    
+    my $handler=$shell->{handlers}{"$cmd"}{run};
+    
+    if ($handler && $handler=~/(.*)\:\:[^\:]+/) {
+        _reloadClass($shell,$config,"$1");
+    } else {
+        my ( $class, @remainingArgs ) = $shell->findTargetClassForString($config,@args);  
+        if ($class) {  
+            $class=$TWiki::Contrib::TWikiShellContrib::TWikiShell::prefix."::".$class;
+            _reloadClass($shell,$config,$class);
+        } else {
+            $config->printNotQuiet("Cannot find the associated module to command $cmd\n");
+        }
+    }
+}   
 
     
 1;
