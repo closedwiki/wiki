@@ -2165,13 +2165,14 @@ sub formatTime
 {
     my ($epochSeconds, $formatString, $outputTimeZone) = @_;
     my $value = $epochSeconds;
-    
-    $formatString = "\$wday \$month \$day \$hour:\$min:\$sec \$year" if ((! $formatString) || ($formatString eq ""));
-    $outputTimeZone = $displayTimeValues if ((! $outputTimeZone) || ($outputTimeZone eq ""));
-    
+
+    # use default TWiki format "31 Dec 1999 - 23:59" unless specified
+    $formatString = "\$day \$month \$year - \$hour:\$min" unless( $formatString );
+    $outputTimeZone = $displayTimeValues unless( $outputTimeZone );
+
     my( $sec, $min, $hour, $day, $mon, $year, $wday) = gmtime( $epochSeconds );
-        ( $sec, $min, $hour, $day, $mon, $year, $wday ) = localtime( $epochSeconds ) if( $outputTimeZone eq "servertime" );
-            
+      ( $sec, $min, $hour, $day, $mon, $year, $wday ) = localtime( $epochSeconds ) if( $outputTimeZone eq "servertime" );
+
     #standard twiki date time formats
     if( $formatString =~ /rcs/i ) {
         # RCS format, example: "2001/12/31 23:59:59"
@@ -2182,7 +2183,7 @@ sub formatTime
         # by TWiki::Net for Date header in emails.
         $formatString = "\$wday, \$day \$month \$year \$hour:\$min:\$sec \$tz";
     } elsif ( $formatString =~ /iso/i ) {
-  	    # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
+        # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
         # e.g. "2002-12-31T19:30Z"
         $formatString = "\$year-\$mo-\$dayT\$hour:\$min";
         if( $outputTimeZone eq "gmtime" ) {
@@ -2190,7 +2191,7 @@ sub formatTime
         } else {
             #TODO:            $formatString = $formatString.  # TZD  = time zone designator (Z or +hh:mm or -hh:mm) 
         }
-	} 
+    } 
     
     $value = $formatString;
     $value =~ s/\$sec[o]?[n]?[d]?[s]?/sprintf("%.2u",$sec)/geoi;
