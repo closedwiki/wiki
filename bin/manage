@@ -18,6 +18,22 @@
 #
 # The manage script is used to manage some actions like creating
 # a new web.
+#
+#usage example:
+#
+#
+#C h a n g e
+#
+#</form>
+#<form name="passwd" action="/%SCRIPTURLPATH%/passwd%SCRIPTSUFFIX%/%WEB%/">
+#Username     <input type="text" name="username" value="" size="16" /> <br />
+#Old password <input type="password" name="oldpassword" size="16" />
+#New password <input type="password" name="password" size="16" />
+#retype New password <input type="password" name="passwordA" size="16" />
+#<input type="submit" name="passwd" />
+#<input type="hidden" name="action" value="changePassword" />
+#</form>
+#
 
 BEGIN {
     # Set default current working directory
@@ -33,6 +49,7 @@ use CGI::Carp qw( fatalsToBrowser );
 use CGI;
 use File::Copy;
 use TWiki;
+use TWiki::User;
 
 use strict;
 
@@ -46,6 +63,9 @@ sub main
 
     if( $action eq "createweb" ) {
         createWeb( $query );
+
+    } elsif( $action eq "changePassword" ) {
+        changePassword($query);
 
     # } elsif( $action eq "othercommand" ) {
 
@@ -67,6 +87,76 @@ sub oopsRedirectMsg
     my $url = &TWiki::getOopsUrl( $theWeb, $theTopic, $theOopsTmpl,
                                   "%TMPL:P{\"$theTmplVar\"}%", $theMsg2, $theMsg3, $theMsg4 );
     TWiki::redirect( $theQuery, $url );
+}
+
+#=========================
+sub changePassword
+{
+    my( $query ) = @_;
+
+    # get all parameters from the form
+    my $wikiName = $query->param( 'username' );
+    my $passwordA = $query->param( 'password' );
+    my $passwordB = $query->param( 'passwordA' );
+ 
+    #initialize
+    my $topicName = $query->param( 'TopicName' );
+    my $thePathInfo = $query->path_info();
+    my $theUrl = $query->url;
+
+    my ( $topic, $webName ) =
+        &TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl, $query );
+ 
+    my $text = "";
+    my $url = "";
+
+    # check if required fields are filled in
+    if( ! $wikiName || ! $passwordA ) {
+        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregrequ", );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+ 
+    # check if user entry exists
+    if(  ( $wikiName )  && (! TWiki::User::UserPasswordExists( $wikiName ) ) ) {
+        # PTh 20 Jun 2000: changed to getOopsUrl
+        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnotwikiuser", $wikiName );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+
+    # check if passwords are identical
+    if( $passwordA ne $passwordB ) {
+        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregpasswd" );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+ 
+     # c h a n g e
+     my $oldpassword = $query->param( 'oldpassword' );
+
+     # check if required fields are filled in
+     if( ! $oldpassword ) {
+         $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregrequ" );
+         TWiki::redirect( $query, $url );
+         return;
+     }
+
+     my $pw = TWiki::User::CheckUserPasswd( $wikiName, $oldpassword );
+     if( ! $pw ) {
+         # NO - wrong old password
+         $url = &TWiki::getOopsUrl( $webName, $topic, "oopswrongpassword");
+         TWiki::redirect( $query, $url );
+         return;
+     }
+
+     # OK - password may be changed
+     TWiki::User::UpdateUserPassword($wikiName,  $oldpassword, $passwordA );
+
+     # OK - password changed
+     $url = &TWiki::getOopsUrl( $webName, $topic, "oopschangepasswd" );
+     TWiki::redirect( $query, $url );
+     return; 
 }
 
 #=========================
