@@ -41,16 +41,18 @@ function launchWindow( theWeb, theTopic ) {
 </TABLE>
 <BR>
 %TEXT%
+%META{"form"}%
+%META{"attachments"}%
 <BR clear=all>
 <FORM name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR BGCOLOR="%WEBBGCOLOR%">
     <TD valign="top">
       Topic <B>%TOPIC%</B> . {
-      <INPUT type="hidden" name="text" value="%HIDDENTEXT%">
-      <INPUT type="hidden" name="cmd" value="%CMD%">
-      <INPUT type="submit" value=" Save Changes ">
-      }
+        <INPUT type="hidden" name="text" value="%HIDDENTEXT%">
+        <INPUT type="hidden" name="cmd" value="%CMD%">
+        <INPUT type="hidden" name="formtemplate" value="%FORMTEMPLATE%">
+        <INPUT type="submit" value=" Save Changes ">%FORMFIELDS% }
     </TD>
   </TR>
 </TABLE>
