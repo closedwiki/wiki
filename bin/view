@@ -53,6 +53,13 @@ sub main
 	print $tmpl;
 	return;
     }
+
+    my $unlock = $query->param( "unlock" );
+    if( $unlock eq "on" ) {
+        # unlock topic, user cancelled out of edit
+        &wiki::lockTopic( $topic, "on" );
+    }
+
     $tmpl= &wiki::readTemplate( "view", $topic );
     my $topicExists = &wiki::topicExists( $webName, $topic );
     if( $topicExists ) {

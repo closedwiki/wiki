@@ -3,6 +3,17 @@
   <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (preview)</TITLE>
   <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX"> %HTTP_EQUIV_ON_PREVIEW%
 </HEAD>
+<SCRIPT LANGUAGE="JavaScript">
+<!--HIDE
+function launchWindow( theWeb, theTopic ) {
+  win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic, theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+  if( win ) {
+    win.focus();
+  }
+  return false;
+}
+//STOP HIDING-->
+</SCRIPT>
 <BODY bgcolor="#ffffff" background="%PREVIEWBGIMAGE%">
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR>
@@ -40,7 +51,7 @@
       <INPUT type="hidden" name="cmd" value="%CMD%">
       <INPUT type="submit" value=" Save Changes "> &nbsp; &nbsp;
       <INPUT type="checkbox" name="unlock"> Release edit lock
-      <font size="-1">(<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font>
+      <font size="-1">(<a target="UnlockTopic" onClick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font>
       }
     </TD>
   </TR>
