@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = 'Alpha 15 Jul 2004 $Rev$';
+$wikiversion      = 'Alpha 17 Jul 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2422,6 +2422,11 @@ sub handleToc
                 $level =~ s/$regex{headerPatternHt}/$1/gio;
                 $line  =~ s/$regex{headerPatternHt}/$2/gio;
             }
+            my $urlPath = "";
+            if( "$web.$topicname" ne "$webName.$topicName" ) {
+                # not current topic, can't omit URL
+                $urlPath = "$dispScriptUrlPath$dispViewPath$scriptSuffix/$webPath/$topicname";
+            }
             if( ( $line ) && ( $level <= $depth ) ) {
                 $anchor = TWiki::Render::makeAnchorName( $line );
                 # cut TOC exclude '---+ heading !! exclude'
@@ -2444,7 +2449,7 @@ sub handleToc
                 $line =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/g;  # 'TopicName'
                 $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/g;    # 'TLA'
                 # create linked bullet item, using a relative link to anchor
-                $line = "$tabs* <a href=\"#$anchor\">$line</a>";
+                $line = "$tabs* <a href=\"$urlPath#$anchor\">$line</a>";
                 $result .= "\n$line";
             }
         }
