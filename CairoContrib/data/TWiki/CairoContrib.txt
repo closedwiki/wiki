@@ -1,0 +1,34 @@
+Cairo compatibility module
+
+---+ Summary of Contents
+Implements some of the functions added in Cairo so they are available to plugins running in a pre-Cairo installation. This allows plugin authors to upgrade to Cairo without losing compatibility with earlier TWiki releases.
+
+---+ Detailed Documentation
+%$POD%
+
+---++ Settings
+	* Name of the perl package
+		* Set STUB = %$STUB%
+
+---++ Installation Instructions
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content: 
+	| *File:* | *Description:* |
+%$MANIFEST%
+
+---++ Plugin Info
+
+|  Author: | TWiki:Main/CrawfordCurrie |
+|  Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
+|  License: | GPL |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Change History: | |
+|  14/08/04 | Separated out from SharedCode module |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main/CrawfordCurrie - %$DATE%
+
