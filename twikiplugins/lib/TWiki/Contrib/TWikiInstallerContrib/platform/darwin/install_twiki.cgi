@@ -81,7 +81,7 @@ open(STDERR,'>&STDOUT'); # redirect error to browser
 
 use CGI qw( :all );
 use CGI::Carp qw( fatalsToBrowser );
-use File::Copy qw( cp );
+use File::Copy qw( cp mv );
 use File::Path qw( rmtree );
 use File::Basename qw( basename );
 use Cwd qw( cwd getcwd );
@@ -227,21 +227,13 @@ erasePlugin( @preinstalledPlugins );
 
 ################################################################################
 # update TWiki.cfg for local directories configuration
-
 print qq{<h2>TWiki.cfg</h2>\n};
-my $file = "$lib/TWiki.cfg";
-open(FH, "<$file") or die "Can't open $file: $!";
-my $config = join( "", <FH> );
-close(FH) || die "Can't write to $file: $!";
+print qq{<h3>LocalSite.cfg</h3>\n};
 
-# need to put our configurations in the "right" spot in the configuration file
-# they need to be inserted after the default definitions, but before any of them are used
-# hm, maybe i could have just put the whole thing in a BEGIN { } block ?
-$config =~ s/(# FIGURE OUT THE OS WE'RE RUNNING UNDER - from CGI.pm)/$localDirConfig\n$1/;
-# TODO: check for success
-open(FH, ">$file") || die "Can't open $file: $!";
-print FH $config;
-close(FH) || die "Can't write to $file: $!";
+my $file = "$lib/LocalSite.cfg";
+open(FH, ">$file") or die "Can't open $file: $!";
+print FH $localDirConfig;
+close(FH) or die "Can't write to $file: $!";
 
 ################################################################################
 # authentication
@@ -666,7 +658,7 @@ sub erasePlugin
 
 sub RestartApache
 {
-    `apachectl restart`;
+    system qw( apachectl restart );
 }
 
 #--------------------------------------------------------------------------------
@@ -747,3 +739,5 @@ else
 				 -cols => 5,
 #				 -linebreak => 'true',
 				 );
+
+
