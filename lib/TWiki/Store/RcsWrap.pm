@@ -241,8 +241,11 @@ sub getRevisionInfo {
             $user = $2 || "";
             $comment = $3 || "";
             $date = TWiki::Time::parseTime( $date );
-            $rcsOut =~ /revision 1.([0-9]*)/;
-            $rev = $1;
+            if( $rcsOut =~ /revision 1.([0-9]*)/ ) {
+                $rev = $1;
+            } else {
+                $rev = 1;
+            }
             $rcsError = "Rev missing from revision file $self->{rcsFile}" unless( $rev );
        }
     } else {
