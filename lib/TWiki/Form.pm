@@ -2,23 +2,6 @@ package TWiki::Form;
 
 use strict;
 
-# ============================
-sub getFormName
-{
-    my( @meta ) = @_;
-    
-    my $form = "";
-    
-    my $oldargsr;
-    ( $oldargsr, @meta ) = &TWiki::Store::metaExtract( "FORM", "", "", @meta );
-    my @oldargs = @$oldargsr;
-    if( @oldargs ) {
-       my %args = @oldargs;
-       $form = $args{"name"};
-    }
-    
-    return $form;
-}
 
 # ============================
 # Get definition from supplied topic text
@@ -45,7 +28,13 @@ sub getFormDefinition
                 $type = "text" if( ! $type );
                 $size = _cleanField( $size );
                 if( ! $size ) {
-                    $size = ( $type eq "text" ) ? 20 : 1;
+                    if( $type eq "text" ) {
+                        $size = 20;
+                    } elsif( $type eq "textarea" ) {
+                        $size = "40x5";
+                    } else {
+                        $size = 1;
+                    }
                 }
                 $size = 1 if( ! $size );
                 $vals =~ s/^\s*//go;
@@ -116,7 +105,7 @@ sub getFormDef
    
     # Read topic that defines the form
     if( &TWiki::Store::topicExists( $webName, $form ) ) {
-        my( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $form );
+        my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $form );
         @fieldDefs = getFormDefinition( $text );
     } else {
         # FIXME - do what if there is an error?
@@ -134,7 +123,7 @@ sub getFormDef
         }
 
         if( ( ! @posValues ) && &TWiki::Store::topicExists( $webName, $name ) ) {
-            my( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $name );
+            my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $name );
             @posValues = getPossibleFieldValues( $text );
             if( ! $type ) {
                 $type = "select";  #FIXME keep?
@@ -196,11 +185,10 @@ sub link
 # Render form information 
 sub renderForEdit
 {
-    my( $web, $form, $metap, @fieldsInfo ) = @_;
+    my( $web, $form, $meta, @fieldsInfo ) = @_;
     
     my $text = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
                &link( $web, $form, "", "h", "", 2 ) . "</tr>\n";
-    my @meta = @$metap;
     
     foreach my $c ( @fieldsInfo ) {
         my @fieldInfo = @$c;
@@ -211,15 +199,20 @@ sub renderForEdit
         my $size = shift @fieldInfo;
         my $tooltip = shift @fieldInfo;
             
-        my @ident = ( "name" => $fieldName );
-        my( $oldargsr, @meta ) = &TWiki::Store::metaExtract( "FIELD", \@ident, "", @meta );
-        my @oldargs = @$oldargsr;
-        my %args = @oldargs;
-        my $value = $args{"value"} || "";
+        my %field = $meta->findOne( "FIELD", $fieldName );
+        my $value = $field{"value"} || "";
         my $extra = "";
                 
         if( $type eq "text" ) {
-            $value = "<input name=\"$name\" type=\"input\" value=\"$value\">";
+            $value = "<input name=\"$name\" size=\"$size\" type=\"input\" value=\"$value\">";
+        } elsif( $type eq "textarea" ) {
+            my $cols = 40;
+            my $rows = 5;
+            if( $size =~ /(.*)x(.*)/ ) {
+               $cols = $1;
+               $rows = $2;
+            }
+            $value = "<textarea cols=\"$cols\" rows=\"$rows\" name=\"$name\">$value</textarea>";
         } elsif( $type eq "select" ) {
             my $val = "";
             my $matched = "";
@@ -296,17 +289,13 @@ sub renderForEdit
 # =============================
 sub getFormInfoFromMeta
 {
-    my( $webName, @meta ) = @_;
+    my( $webName, $meta ) = @_;
     
     my @fieldsInfo = ();
     
-    my $oldargsr;
-    ( $oldargsr, @meta ) = &TWiki::Store::metaExtract( "FORM", "", "", @meta );
-    my @oldargs = @$oldargsr;
-    if( @oldargs ) {
-       my %args = @oldargs;
-       my $form = $args{"name"};
-       @fieldsInfo = getFormDef( $webName, $form );
+    my %form = $meta->findOne( "FORM" );
+    if( %form ) {
+       @fieldsInfo = getFormDef( $webName, $form{"name"} );
     }
     
     return @fieldsInfo;
@@ -318,11 +307,10 @@ sub getFormInfoFromMeta
 # Note that existing meta information for fields is removed
 sub fieldVars2Meta
 {
-   my( $webName, $query, @meta ) = @_;
+   my( $webName, $query, $meta ) = @_;
    
-   @meta = &TWiki::Store::metaRemove( "FIELD", @meta );
-   my @fieldsInfo = getFormInfoFromMeta( $webName, @meta );
-   my $order = 0; # Used to ensure order of fields, FIXME
+   $meta->remove( "FIELD" );
+   my @fieldsInfo = getFormInfoFromMeta( $webName, $meta );
    foreach my $fieldInfop ( @fieldsInfo ) {
        my @fieldInfo = @$fieldInfop;
        my $fieldName = shift @fieldInfo;
@@ -340,35 +328,35 @@ sub fieldVars2Meta
           }
        }
        
+       $value = TWiki::Meta::restoreValue( $value );
+              
        # Have title and name stored so that topic can be view without reading in form definition
-       my @args = ( "order" => sprintf( "%02d", $order ),
-                    "name" =>  $fieldName,
+       my @args = ( "name" =>  $fieldName,
                     "title" => $title,
                     "value" => $value );
                     
-       @meta = &TWiki::Store::metaUpdate( "FIELD", \@args, "name", @meta);
-       $order++;
+       $meta->put( "FIELD", @args );
    }
    
-   return @meta;
+   return $meta;
 }
 
 
 # =============================
 sub getFieldParams
 {
-    my( @meta ) = @_;
+    my( $meta ) = @_;
     
     my $params = "";
     
-    foreach my $metaItem( @meta ) {
-       if( $metaItem =~ /(%META:FIELD\{)([^\}]*)(}%)/ ) {
-           my $args = $2;
-           my $name  = &TWiki::extractNameValuePair( $args, "name" );
-           my $value = &TWiki::extractNameValuePair( $args, "value" );
-           $name .= "FLD";
-           $params .= "<input type=\"hidden\" name=\"$name\" value=\"$value\">\n";
-       }
+    my @fields = $meta->find( "FIELD" );
+    foreach my $field ( @fields ) {
+       my $args = $2;
+       my $name  = $field->{"name"};
+       my $value = $field->{"value"};
+       $value = TWiki::Meta::cleanValue( $value );
+       $name .= "FLD";
+       $params .= "<input type=\"hidden\" name=\"$name\" value=\"$value\">\n";
     }
     
     return $params;
@@ -464,7 +452,7 @@ sub upgradeCategoryItem
 # load old style category table
 sub upgradeCategoryTable
 {
-    my( $web, $text, @meta ) = @_;
+    my( $web, $meta, $text ) = @_;
     
     my $icat = &TWiki::Store::readTemplate( "twikicatitems" );
     
@@ -493,10 +481,8 @@ sub upgradeCategoryTable
         # FIXME - deal with none
         my $defaultFormTemplate = $formTemplates[0];
         my @fieldsInfo = getFormDef( $web, $defaultFormTemplate );
-        my @args = ( name => $defaultFormTemplate );
-        @meta = &TWiki::Store::metaUpdate( "FORM", \@args, "", @meta );
+        $meta->put( "FORM", ( name => $defaultFormTemplate ) );
         
-        my $order = 0; # Used to ensure order of categories
         foreach my $catInfop ( @fieldsInfo ) {
            my @catInfo = @$catInfop;
            my $fieldName = shift @catInfo;
@@ -509,18 +495,16 @@ sub upgradeCategoryTable
                   last;
                }
            }
-           my @args = ( "order" => sprintf( "%02d", $order ),
-                        "name" => $fieldName,
+           my @args = ( "name" => $fieldName,
                         "title" => $title,
                         "value" => $value );
-           @meta = &TWiki::Store::metaUpdate( "FIELD", \@args, "name", @meta);
-           $order++;
+           $meta->put( "FIELD", @args );
         }
 
     }
     
     
-    return( $text, @meta );
+    return $text;
 }
   
 1;
