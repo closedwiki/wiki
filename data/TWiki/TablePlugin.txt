@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1007432760" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1007710080" format="1.0" version="1.7"}%
 ---+ Table Plugin
 
 Gives extra control off table display:
@@ -95,8 +95,8 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="3" cellsp
 ---+++ Plugin Info
 
 |  Plugin Author: | %TWIKIWEB%.JohnTalintyre |
-|  Plugin Version: | 03 Dec 2001 |
-|  Change History: | 03 Dec 2001 PTh: Fixed sort="off" bug and more <br /> 29 Nov 2001: PTh fixed Perl warnings <br /> 16 Nov 2001: PTh added table border, cell spacing, cell padding, gif files <br /> 07 Oct 2001: Initial version |
+|  Plugin Version: | 06 Dec 2001 |
+|  Change History: | 06 Dec 2001 PTh: Fixed date sorting bug <br /> 03 Dec 2001 PTh: Fixed sort="off" bug and more <br /> 29 Nov 2001: PTh fixed Perl warnings <br /> 16 Nov 2001: PTh added table border, cell spacing, cell padding, gif files <br /> 07 Oct 2001: Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
@@ -106,7 +106,7 @@ Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="3" cellsp
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- %TWIKIWEB%.JohnTalintyre - 07 Oct 2001 <br />
--- %TWIKIWEB%.PeterThoeny - 03 Dec 2001 <br>
+-- %TWIKIWEB%.PeterThoeny - 06 Dec 2001 <br />
 %META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1005707580" path="C:\Data\Temp\up.gif" size="876" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1005707591" path="C:\Data\Temp\down.gif" size="869" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1005707607" path="C:\Data\Temp\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
