@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "10 Feb 2003";
+$wikiversion      = "06 Mar 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2324,6 +2324,17 @@ sub makeAnchorName
 }
 
 # =========================
+sub internalCrosswebLink
+{
+    my( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink ) = @_;
+    if ( $theTopic eq $mainTopicname && $theWeb ne $webName ) {
+        return &internalLink( $thePreamble, $theWeb, $theTopic, $theWeb, $theAnchor, $doLink );
+    } else {
+        return &internalLink( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink );
+    }
+}
+
+# =========================
 sub internalLink {
     my( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink ) = @_;
     # $thePreamble is text used before the TWiki link syntax
@@ -2674,7 +2685,7 @@ sub getRenderedVersion {
                 # 'Web.TopicName#anchor' link:
                 s/([\s\(])($webNameRegex)\.($wikiWordRegex)($anchorRegex)/&internalLink($1,$2,$3,"$TranslationToken$3$4$TranslationToken",$4,1)/geo;
                 # 'Web.TopicName' link:
-                s/([\s\(])($webNameRegex)\.($wikiWordRegex)/&internalLink($1,$2,$3,"$TranslationToken$3$TranslationToken","",1)/geo;
+                s/([\s\(])($webNameRegex)\.($wikiWordRegex)/&internalCrosswebLink($1,$2,$3,"$TranslationToken$3$TranslationToken","",1)/geo;
 
                 # 'TopicName#anchor' link:
                 s/([\s\(])($wikiWordRegex)($anchorRegex)/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/geo;
