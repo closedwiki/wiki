@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1016272805" format="1.0" version="1.28"}%
+%META:TOPICINFO{author="PeterThoeny" date="1018172325" format="1.0" version="1.29"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -83,7 +83,7 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 	1. Update data/TWiki files: (in case you want the updated docs)
 		* Using your browser, merge the new <nop>TWiki.TWikiRegistration topic (or <nop>TWiki.TWikiRegistrationPub in case you used that one) into your existing <nop>TWiki.TWikiRegistration topic.
 		* In the temporary =twiki/data/TWiki= directory where you unzipped the installation package:
-			* Remove the files you do *not* want to upgrade: =TWikiPreferences.*=, =TWikiWebsTable.*=, =WebNotify.*=, =WebPreferences.*=, =WebStatistics.*= and all =WebTopic*= files.
+			* Remove the files you do *not* want to upgrade: =TWikiPreferences.*=, =Main.TWikiSiteDirectory.*=, =WebNotify.*=, =WebPreferences.*=, =WebStatistics.*= and all =WebTopic*= files.
 			* In case the cgi-scripts are not running as user =nobody=: The =*,v= RCS repository files delivered with the installation package are locked by user nobody and need to be changed the user of your cgi-scripts, i.e. =www-data=. A simple way to switch the locker of the RCS files is to use sed:
 			  <br /> =for f in *,v; do sed 's/nobody\:/www-data\:/' $f &gt; x; mv x $f; done=
 		* Move all remaining =*.txt= and =*.txt,v= files from the temporary =data/TWiki= directory to your =$TWIKIROOT/data/TWiki= directory.
@@ -199,7 +199,7 @@ You can do the following changes using your old TWiki 01-Dec-2000 or new TWiki 0
 		* The original =TWiki= web.
 		* The new =TWiki2= web, which gets renamed to =TWiki= when you switch over the installation.
 	1. In case you customized =TWiki.TWikiRegistration=, merge your changes back into =TWiki2.TWikiRegistration=.
-	1. Copy =TWiki.TWikiWebsTable= to =TWiki2.TWikiWebsTable=.
+	1. Copy =TWiki.Main.TWikiSiteDirectory= to =TWiki2.Main.TWikiSiteDirectory=.
 		* Do the same for any other topics you might have created in the =TWiki= web.
 	1. In =TWiki2.TWikiPreferences=, merge the old =TWiki.TWikiPreferences= settings and customize it.
 		* Add your webs to WIKIWEBLIST

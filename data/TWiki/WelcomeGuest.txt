@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1011775067" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="PeterThoeny" date="1018172520" format="1.0" version="1.16"}%
 <H3>Welcome, %WIKIUSERNAME%!</H3>
 
 You have reached a TWikiSite (pronounced _twee-kee site_). TWiki is a meeting place where people collaborate on common interests. Anyone can contribute using a regular Web browser. TWiki looks like a normal Web site, but it allows (and encourages) everyone to *freely edit the pages* by contributing questions, answers, comments, changes - ideas can be transformed into published input, instantly. TWiki is very simple to learn and use, and provides possibly the most powerful way to exchange and develop ideas online, in an open, uncomplicated environment.
@@ -54,4 +54,4 @@ You have reached a TWikiSite (pronounced _twee-kee site_). TWiki is a meeting pl
 	* WebChanges: Newest topic changes in the %WEB% web.
 	* TWikiRegistration: *Sign up so you can use edit* and other features.
 
-%INCLUDE{"TWikiWebsTable"}%
+%INCLUDE{"%TWIKIWEB%.SiteMap"}%
