@@ -1054,7 +1054,7 @@ sub lockTopic {
     while ( 1 ) {
         my ( $user, $time ) = $topicHandler->isLocked();
         last if ( !$user || $locker->wikiName() eq $user );
-        TWiki::writeWarning( "Lock on $web.$topic for ".$locker->wikiName().
+        $this->{session}->writeWarning( "Lock on $web.$topic for ".$locker->wikiName().
                              " denied by $user" );
         # see how old the lock is. If it's older than 2 minutes,
         # break it anyway. Locks are atomic, and should never be
