@@ -11,7 +11,7 @@ BEGIN {
     if ($twiki_home) {
 	$Common::installationDir = "$twiki_home"; # Uncomment for distro; #NB. assumes below, e.g. twiki/bin/view, not bin/view
     }
-    $Common::downloadDir = "/home/mrjc/twikiplugindev/stage/twikiplugins/shared/tools/download/";
+    $Common::downloadDir = "/home/mrjc/twikiplugindev/twikiplugins/shared/tools/download/";
 }
 
 1;
