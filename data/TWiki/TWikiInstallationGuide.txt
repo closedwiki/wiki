@@ -63,7 +63,7 @@ Download the TWiki 01-Sep-2004 distribution in Unix ZIP format from http://TWiki
 	* _Go directly to [[#StepTwo][Step 2]]..._
 
 #StepOneB		  
----++++ Aletrnative Step 1: Create &amp; Configure the Directories for Non-Root Accounts
+---++++ Alternative Step 1: Create &amp; Configure the Directories for Non-Root Accounts
 
 To install TWiki on a system where you don't have Unix/Linux root (administrator) privileges, for example, on a hosted Web account or an intranet server administered by someone else: 
 
@@ -80,7 +80,7 @@ To install TWiki on a system where you don't have Unix/Linux root (administrator
 | =twiki/templates= | web templates | dir secure from public access | =/home/smith/twiki/templates= |
 </blockquote>
 
-__Note:__ Don't worry if you are not able to put the =twiki/lib= directory at the same level as the =twiki/bin= directory (e.g. because CGI =bin= directories can't be under your home directory and you don't have root access). You can create this directory elsewhere and configure the =/twiki/bin/setlib.cfg= file (done in Step 3)
+__Note:__ Don't worry if you are not able to put the =twiki/lib= directory at the same level as the =twiki/bin= directory (e.g. because CGI =bin= directories can't be under your home directory and you don't have root access). You can create this directory elsewhere and configure the paths in =/twiki/bin/LocalLib.cfg= file (done in Step 3)
 
 #StepTwo
 ---+++ Step 2: Set File Permissions
@@ -93,7 +93,7 @@ __Note:__ Don't worry if you are not able to put the =twiki/lib= directory at th
 	* To be able to edit the Perl scripts and =.tmpl= files it is necessary to =chown= and =chgrp -R twiki= so all the files have the owner you want.
 	* %H% This Guide assumes user =nobody= ownership for all files manipulated by the CGI scripts (executed by the Web server), and user =twiki= for all other files. You can: 
 		* replace =nobody= with another user if your server executes scripts under a different name (ex: default for Debian is =www-data=).
-			* %T% *HINT:* Run the =testenv= script from your browser: =http://yourdomain.com/twiki/bin/testenv=. It will show you the user name of the CGI scripts, a table listing all CGI environment variables, and a test of your =twiki/lib/TWiki.cfg= configuration file (you'll configure that in a minute).
+			* %T% *HINT:* Run the =testenv= script from your browser: =http://yourdomain.com/twiki/bin/testenv=. It will show you the user name of the CGI scripts, a table listing all CGI environment variables, and a test of your =twiki/lib/LocalSite.cfg= configuration file (you'll configure that in a minute).
 		* replace user =twiki= with your own username
 	* Set permissions manually.
 		* Set the permission of all *files* below =twiki/data= so that they are writable by user =nobody=. A simple way is to =chmod= them to =-rw-rw-r--= (664) and to =chown= them to =nobody=.
@@ -110,7 +110,7 @@ __Note:__ Don't worry if you are not able to put the =twiki/lib= directory at th
 
 ---+++ Step 3: Edit the Configuration Files
 
-	* Create the file =/twiki/bin/LocalLib.cfg=; =/twiki/bin/LocalLib.cfg.txt= is provided as a template. In essence, LocalLib.cfg should contain the following:
+	* Create the file =/twiki/bin/LocalLib.cfg=; =/twiki/bin/LocalLib.cfg.txt= is provided as a template. =/twiki/bin/LocalLib.cfg= should contain at least the following:
 <verbatim>
 $twikiLibPath = "/absolute/path/to/your/lib";
 </verbatim>
@@ -118,14 +118,10 @@ $twikiLibPath = "/absolute/path/to/your/lib";
 		* %X% __Attention:__ While TWiki will work if you don't create this file, it will be slower.
 		* You can also set =$CPANBASE= if you are not root and need to install additional CPAN modules, but can't update the main Perl installation files on the server.  Just set this variable to the full pathname to your local lib directory, typically under your home directory. 
 		* %X% __Attention:__ If you are running TWiki on Apache 2.0 on Unix you might experience cgi scripts to hang forever. This is a known Apache 2.0 bug. See details and workaround described in the =setlib.cfg= file.
-	* Edit the file =twiki/lib/TWiki.cfg=, setting the variables to your needs.
-		* Set the file extension in the =$scriptSuffix= variable to =cgi= or =pl= if required.
-		* RCS - revision control system to store revision of topics and attachments.  You can use RCS executables or a version of RCS written in Perl, note that as the time of writing (Apr 2002) the Perl version has not been widely tested, so if you want to put up a live site the RCS executables are recommended. 
-			* Set <code>$storeTopicImpl = "RcsWrap";</code> for the RCS executables and make sure RCS is installed. Set =$rcsDir= in =twiki/lib/TWiki.cfg= to match the location of your RCS binaries. You can check this by issuing the command =rcs= at the prompt, it should result in something like ="rcs: no input file"=.  
-				* Check that you have GNU =diff=, by typing =diff -v= - an error indicates you have a non-GNU diff, so install the GNU =diffutils= package and make sure that =diff= is on the PATH used by TWiki (see =$safeEnvPath= in the =TWiki.cfg= file).
-			* Set <code>$storeTopicImpl = "RcsLite";</code> for the Perl based RCS
-	* *Security issue:* Directories =twiki/data= , =twiki/templates= and all their subdirectories should be set so that they are __not__ visible through URLs. (Alternatively, move the directories to a place where they are not visible, and change the variables in =twiki/lib/TWiki.cfg= accordingly)
-	* Test your settings by running the =testenv= script from your browser: =http://yourdomain.com/twiki/bin/testenv=. Check if your =twiki/lib/TWiki.cfg= configuration file settings are correct.
+	* Create the file =twiki/lib/LocalSite.cfg=. Configuration settings in this file will override the default settings, which are to be found in =twiki/lib/TWiki.cfg=. Most sites will only need to override a very few settings, as described at the top of =twiki/lib/TWiki.cfg=. All the settings and their application are described in TWiki.cfg; read through this file, and create any local settings you need in =LocalSite.cfg=.
+	* Check that you have GNU =diff=, by typing =diff -v= - an error indicates you have a non-GNU diff, so install the GNU =diffutils= package and make sure that =diff= is on the PATH used by TWiki (see =$cfg{safeEnvPath}= in the =TWiki.cfg= file).
+	* *Security issue:* Directories =twiki/data= , =twiki/templates= and all their subdirectories should be set so that they are __not__ visible through URLs. (Alternatively, move the directories to a place where they are not visible, and set the paths in =twiki/lib/LocalSite.cfg= as appropriate)
+	* Test your settings by running the =testenv= script from your browser: =http://yourdomain.com/twiki/bin/testenv=. Check if your configuration settings are correct.
 
 
 ---+++ Step 4: Internationalisation Setup (Optional)
@@ -135,9 +131,9 @@ By default, TWiki is configured to support US ASCII letters (no accents) in Wiki
 If your Wiki will be used by non-English speakers, TWiki can be configured for Internationalisation ('I' followed by 18 letters, then 'N', or _I18N_).  Specifically, TWiki will support suitable accented characters in WikiWords (as well as languages such as Japanese or Chinese in which WikiWords do not apply), and will support virtually any character set in the contents of pages.  __NOTE:__ TWiki does not currently support UTF-8, so you are advised *not* to use this - however, improved UTF-8 support is under development, see TWiki:Codev/ProposedUTF8SupportForI18N.
 
 To configure internationalisation suppport:
-	1 Edit the =TWiki.cfg= file's Internationalisation section to set the =$useLocale= parameter to =1=.  TWiki will now use the I18N parameters set in the rest of this section.
+	1 Set  =$cfg{useLocale}= to =1= in =LocalSite.cfg=.  TWiki will now use the I18N parameters set in the rest of this section.
 	1 Type the Unix/Linux command =locale -a= to find a suitable 'locale' for your use of TWiki.  A locale that includes a dot followed by a character set is recommended, e.g. =pl_PL.ISO-8859-2= for Poland.  Consult your system administrator if you are not sure which locale to use.
-	1 In =TWiki.cfg=, set the =$siteLocale= parameter to your chosen locale, e.g. =pl_PL.ISO-8859-2= for Poland. 
+	1 Set =$cfg{siteLocale}= to your chosen locale, e.g. =pl_PL.ISO-8859-2= for Poland, in =LocalSite.cfg.
 	1 Check your setup using =testenv= (download the latest =testenv= from TWiki:Support/SupportGuidelines if possible) - this provides some diagnostics for I18N setup, and in particular checks that your locale can be used successfully.
 	1 _(For upgrade of TWiki I18N sites only:)_ If you were using TWiki:Codev.TWikiRelease01Feb2003 support for I18N, and are using Internet Explorer or Opera, you should re-configure your browser so that it sends URLs encoded with UTF-8 (supported since TWiki:Codev.TWikiRelease01Sep2004).  If you are doing a new installation of TWiki, you can ignore this step - no browser reconfiguration is needed for TWiki Release 01-Sep-2004).
 		* Internet Explorer 5.0 or higher: in  _Tools | Options | Advanced_, check 'always send URLs as UTF-8', then close all IE windows and restart IE. 
@@ -147,16 +143,16 @@ To configure internationalisation suppport:
 
 ---++++ Trouble with I18N? 
 
-If international characters in WikiWords do not seem to work, and you are on Perl 5.6 or higher, you may need to set the =TWiki.cfg= parameter =$localeRegexes= to 0 - this disables some features but enables TWiki to work even if your system has locales that do not work.  Then, set the =$upperNational= and =$lowerNational= parameters to the valid upper and lower case accented letters for your locale. 
+If international characters in WikiWords do not seem to work, and you are on Perl 5.6 or higher, you may need to set the =$cfg{LocaleRegexes}= to 0 in =LocalSite.cfg - this disables some features but enables TWiki to work even if your system has locales that do not work.  Then, set the =$upperNational= and =$lowerNational= parameters to the valid upper and lower case accented letters for your locale. 
 	* __NOTE:__ You will need to do the above workaround for Windows based servers (whether using Cygwin or <nop>ActiveState Perl), since Perl locales are not working on Windows as of Feb 2004.
 
-If international characters in WikiWords aren't working, and you are on Perl 5.005 with working locales, keep =$useLocale= set to 1 and set =$localeRegexes= to 0, then set =$upperNational= and =$lowerNational= - if =testenv= generates the lists of characters for you, your locales are working so there is no need to set =$localeRegexes= to 0 in this case.  See the comments in =TWiki.cfg= for more information.
+If international characters in WikiWords aren't working, and you are on Perl 5.005 with working locales, keep =$cfg{UseLocale}= set to 1 and set =$cfg{LocaleRegexes}= to 0, then set =$cfg{UpperNational}= and =$cfg{LowerNational}= - if =testenv= generates the lists of characters for you, your locales are working so there is no need to set =$cfg{LocaleRegexes}= to 0 in this case.  See the comments in =TWiki.cfg= for more information.
 
 ---+++ Step 5: Configure Site-Wide Email Preferences
 
 	* Edit the TWikiPreferences topic in the %TWIKIWEB% web (by pointing your browser to <nop>http://yourdomain.com/twiki/bin/view/%TWIKIWEB%/TWikiPreferences) to set the =WIKIWEBMASTER= email address, and other email settings required for registration and WebChangesAlert to work:
 		* =WIKIWEBMASTER= should be set to the email address of the TWiki administrator
-		* =SMTPMAILHOST= is typically set on Windows or other non-Unix/Linux systems, where =sendmail= or similar is not available.  When this is set and the Perl module ==Net::SMTP== is installed, TWiki will connect to this SMTP server (e.g. =mail.yourdomain.com=) to send email for user registration and WebChangesAlerts.  If you do have a sendmail-type program, leave =SMTPMAILHOST= unset so that the external sendmail program is used instead (defined by ==$mailProgram== in ==TWiki.cfg==).
+		* =SMTPMAILHOST= is typically set on Windows or other non-Unix/Linux systems, where =sendmail= or similar is not available.  When this is set and the Perl module ==Net::SMTP== is installed, TWiki will connect to this SMTP server (e.g. =mail.yourdomain.com=) to send email for user registration and WebChangesAlerts.  If you do have a sendmail-type program, leave =SMTPMAILHOST= unset so that the external sendmail program is used instead (defined by ==$cfg{mailProgram}== in ==LocalSite.cfg==).
 		* =SMTPSENDERHOST= is optional, and set to the domain name sending the email (e.g. =twiki.yourdomain.com=). For use where the SMTP server requires that you identify the TWiki server sending mail. If not set, ==Net::SMTP== will guess it for you. 
 	* You may want to set up other TWikiPreferences later on.
 	* To enable the WebChangesAlerts (email notifications) you need to read about cron in the topic TWiki.TWikiSiteTools.
@@ -186,7 +182,7 @@ With your new TWiki installation up and running, you can manage most aspects of 
 			* %H% The browser should ask for login name and password when you click on the <u>Edit</u> link. In case =.htaccess= does not have the desired effect, you need to enable it: Add "AllowOverride All" to the Directory <a href=http://httpd.apache.org/docs/mod/core.html#directory>[3]</a> section of =access.conf= for your =twiki/bin= directory. 
 				* *This applies only if you have root access:* on hosted accounts, you shouldn't have this problem - otherwise, email tech support.
 			* %X% *NOTE:* In the TWiki distribution package, the =twiki/data/.htpasswd.txt= file contains several TWiki core team user accounts and a guest user account. You probably want to remove those accounts by deleting the entries in =.htpasswd=. Do not remove the guest user if you want to allow guest logins.
-		1. TWiki now supports several Password file format/encoding methods for Apache. Once you know what method is used by your Appache server, you can configure TWiki to create compatible .htpasswd entries by editing the =$htpasswdFormatFamily=, =$htpasswdEncoding= and =$htpasswdFilename= in the TWiki.cfg file. The supported options are htpasswd:plain, htpasswd:crypt, htpasswd:sha1, htdigest:md5
+		1. TWiki now supports several Password file format/encoding methods for Apache. Once you know what method is used by your Apache server, you can configure TWiki to create compatible .htpasswd entries by adding the =$cfg{HtpasswdFormatFamily}=, =$cfg{HtpasswdEncoding}= and =$cfg{HtpasswdFilename}= in the =LocalSite.cfg= file. The supported options are htpasswd:plain, htpasswd:crypt, htpasswd:sha1, htdigest:md5
 		1. *Copy* the TWikiRegistrationPub topic to TWikiRegistration, overwriting old version of <nop>TWikiRegistration. Do that by either editing the topics in the%TWIKIWEB% web, or by renaming the =.txt= and =.txt,v= files in the =twiki/data/%TWIKIWEB%= directory.
 	* Customization:
 		* You can customize the registration form by deleting or adding input tags. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are carried over into the user home page correctly.
