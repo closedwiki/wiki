@@ -72,13 +72,21 @@ my $treeTemplates = slurp_tree( 'templates', rule => File::Find::Rule->or( $disc
 spew_tree( "$installBase/templates" => $treeTemplates );
 
 #-[data]-------------------------------------------------------------------------------
-my $dir = 'data';
+{ my $dir = 'data';
 rmtree "$installBase/$dir" or die $!;
-my $treeData = slurp_tree( $dir, rule => File::Find::Rule->or( $discardSVN, $all )->start( $dir ) );
-spew_tree( "$installBase/$dir" => $treeData );
+my $tree = slurp_tree( $dir, rule => File::Find::Rule->or( $discardSVN, $all )->start( $dir ) );
+spew_tree( "$installBase/$dir" => $tree ); }
+
+#-[pub]-------------------------------------------------------------------------------
+if ( 0 ) { my $dir = 'pub/TWiki';
+rmtree "$installBase/$dir" or die $!;
+my $tree = slurp_tree( $dir, rule => File::Find::Rule->or( $discardSVN, $all )->start( $dir ) );
+spew_tree( "$installBase/$dir" => $tree ); }
 
 ################################################################################
 # some cleanup
+rmtree( "$installBase/lib/Algorithm" ) or warn $!;
+rmtree( "$installBase/lib/Text" ) or warn $!;
 # ??? what else?
 
 ################################################################################
@@ -128,13 +136,14 @@ __END__
 [x] /templates (SVN)
 
 [x] /data (SVN)
-   * Main/, Sandbox/, TWiki/, Trash/, _default/; also TestWeb/
-   * .htpasswd (added to DEVELOP)
-   * mime.types (added to DEVELOP)
+   * Main/, Sandbox/, TWiki/, Trash/, _default/ (SVN); also TestWeb/
+   * .htpasswd (SVN; added to DEVELOP)
+   * mime.types (SVN; added to DEVELOP)
    * delete debug.txt, warning.txt (deletes whole data/ tree from .tar.gz now)
 
 /pub
-   * Main/, Sandbox/, TWiki/, Trash/, _default/
+   * TWiki/ (SVN)
+   * Main/, Sandbox/, Trash/, _default/
    * icn/_filetypes.txt, icn/*.gif
    * favicon.ico [blasted robot]
    * wikiHome.gif [blasted robot]
