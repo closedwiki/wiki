@@ -1256,7 +1256,6 @@ sub _handleINCLUDE {
 
     my $text = "";
     my $meta = "";
-
     # test for different topic name and file name patterns
     # TopicName
     # Web.TopicName
@@ -1289,22 +1288,24 @@ sub _handleINCLUDE {
     # prevent recursive includes. Note that the inclusion of a topic into
     # itself is not blocked; however subsequent attempts to include the
     # topic will fail.
-    if( $this->{processingTopic}{$path} ) {
+    if( grep( /^$path$/, @{$this->{includeStack}} )) {
         $warn = $this->{prefs}->getPreferencesValue( "INCLUDEWARNING" ) unless( $warn );
         if( $warn && $warn !~ /^(off|no)$/i ) {
-            return _inlineError( "Warning: Can't INCLUDE <nop>$inctopic twice, topic is already included" );
+	    return _inlineError( "Warning: Can't INCLUDE $incweb.<nop>$inctopic twice, topic is already included; ".join(":", @{$this->{includeStack}} ));
         } # else fail silently
-        return "";
-    } else {
-        $this->{processingTopic}{$path} = 1;
+	return "";
     }
-
-    # set include web/filenames and current web/filenames
+   
+    my $oldWeb = $this->{SESSION_TAGS}{INCLUDINGWEB};
+    my $oldTopic = $this->{SESSION_TAGS}{INCLUDINGTOPIC};
+    
     $this->{SESSION_TAGS}{INCLUDINGWEB} = $theWeb;
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $theTopic;
-
-    $theWeb = $incweb;
+    
+    push( @{$this->{includeStack}}, $path );
+    
     $theTopic = $inctopic;
+    $theWeb = $incweb;
 
     ( $meta, $text ) =
       $this->{store}->readTopic( $this->{wikiUserName}, $theWeb, $theTopic,
@@ -1314,7 +1315,6 @@ sub _handleINCLUDE {
     # after %STOPINCLUDE%
     $text =~ s/.*?%STARTINCLUDE%//s;
     $text =~ s/%STOPINCLUDE%.*//s;
-
     $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 
     # take out verbatims, pushing them into the same storage block
@@ -1349,10 +1349,12 @@ sub _handleINCLUDE {
     # handle tags again because of plugin hook
     $this->_expandAllTags( \$text, $theTopic, $theWeb );
 
+    pop( @{$this->{includeStack}} );
+    $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $oldTopic;
+    $this->{SESSION_TAGS}{INCLUDINGWEB} = $oldWeb;
+
     $text =~ s/^\n+/\n/;
     $text =~ s/\n+$/\n/;
-
-    $this->{processingTopic}{$path} = 0;
 
     return $text;
 }
