@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "26 Apr 2003";
+$wikiversion      = "13 May 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2121,17 +2121,15 @@ sub renderFormData
     my %form = $meta->findOne( "FORM" );
     if( %form ) {
         my $name = $form{"name"};
-        $metaText = "<p />\n<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>";
-        $metaText .= "<th colspan=\"2\" align=\"center\" bgcolor=\"#99CCCC\"> $name </th></tr>\n";        
+        $metaText = "\n|*[[$name]]*||\n";
         
         my @fields = $meta->find( "FIELD" );
         foreach my $field ( @fields ) {
             my $title = $field->{"title"};
             my $value = $field->{"value"};
-            $metaText .= "<tr><th bgcolor=\"#99CCCC\" align=\"right\"> $title:</th><td align=\"left\"> $value </td></tr>\n";
+            $value =~ s/\n/<br \/>/g;      # undo expansion
+            $metaText .= "|  $title:|$value  |\n";
         }
-
-        $metaText .= "</table>\n";
 
         $metaText = getRenderedVersion( $metaText, $web );
     }
