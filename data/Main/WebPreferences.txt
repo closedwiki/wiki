@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000795265" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1018596360" format="1.0" version="1.12"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ %WIKITOOLNAME%.%WEB% Web Preferences
 
@@ -12,6 +12,12 @@ __Preferences:__
 
 	* Web specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors)
 		* Set WEBBGCOLOR = #FFFFC0
+
+	* List this web in the %TWIKIWEB%.SiteMap:
+		* If yes, Set SITEMAPLIST = =on=, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. %WEB%.Topic links.
+		* Set SITEMAPLIST = on
+		* Set SITEMAPWHAT = Welcome to %WIKITOOLNAME%... [[%WEB%.%WIKIUSERSTOPIC%][Users]], [[%WEB%.TWikiGroups][Groups]], [[%WEB%.OfficeLocations][Offices]] - tour this expandable virtual workspace.
+		* Set SITEMAPUSETO = ...get a first-hand feel for TWiki possibilities.
 
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs)
 		* Set NOSEARCHALL = 
