@@ -24,8 +24,15 @@
 # Much of the meta data could have been passed by an extra hidden field, instead individual items such
 # as parent information is passed by individual form variables, hopefully giving a clear "API".
 
-# Set library paths in @INC, at compile time
-BEGIN { unshift @INC, '.'; require 'setlib.cfg'; }
+BEGIN {
+    # Set default current working directory
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+}
 
 use CGI;
 use CGI::Carp qw(fatalsToBrowser);

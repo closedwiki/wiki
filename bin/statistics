@@ -24,12 +24,17 @@
 # The script should be called by a cron job, it is recommended to
 # call it once a day.
 
-# Set library paths in @INC, at compile time
-BEGIN { unshift @INC, '.'; require 'setlib.cfg'; }
-
-# 'Use locale' for internationalisation of Perl regexes -
-# main locale settings are done in TWiki::setupLocale
 BEGIN {
+    # Set default current working directory
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+
+    # 'Use locale' for internationalisation of Perl regexes -
+    # main locale settings are done in TWiki::setupLocale
     # Do a dynamic 'use locale' for this module
     if( $TWiki::useLocale ) {
         require locale;

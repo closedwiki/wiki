@@ -27,8 +27,13 @@ use vars qw( $useLocale $setlibAvail );
 
 my $brokenTWikiCfg;
 
-# Set library paths in @INC, read TWiki.cfg and set locale, at compile time
-BEGIN { 
+BEGIN {
+    # Set default current working directory
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+
+    # Set library paths in @INC, read TWiki.cfg and set locale, at compile time
     # Try to use setlib.cfg, use default path if missing
     if ( -r './setlib.cfg' ) {
 	require './setlib.cfg'; 

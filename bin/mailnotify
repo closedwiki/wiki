@@ -23,8 +23,11 @@
 # - no mail is sent to TWikiGuest
 # - if user is a group, recurses through its members
 
-# Set library paths in @INC, at compile time
-BEGIN { unshift @INC, '.'; require 'setlib.cfg'; }
+BEGIN {
+    # Set library paths in @INC at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+}
 
 use TWiki;
 use TWiki::Net;
