@@ -56,13 +56,13 @@
 <div class="twikiVersatileTable">
 <table width="100%">%TMPL:P{"previous"}% 
 	<tr>
-		<th class="twikiMainCol">
+		<th>
 			Local file 
 		</th>
 		<td class="twikiMainCol">
 			<input type="hidden" name="filename" value="%FILENAME%" /><input type="file" name="filepath" value="%FILEPATH%" size="30" /> 
 		</td>
-		<td class="help twikiMainCol">
+		<td class="twikiHelp twikiMainCol">
 Upload up to %ATTACHFILESIZELIMIT% KB.
 		</td>
 	</tr>
@@ -73,7 +73,7 @@ Upload up to %ATTACHFILESIZELIMIT% KB.
 		<td>
 			<input class="comment" type="text" name="filecomment" value="%FILECOMMENT%" maxlength="30" size="50" /> 
 		</td>
-		<td class="help"></td>
+		<td class="twikiHelp"></td>
 	</tr>
 	<tr>
 		<th>
@@ -82,7 +82,7 @@ Upload up to %ATTACHFILESIZELIMIT% KB.
 		<td>
 			<input type="checkbox" name="createlink" %ATTACHLINKBOX% /> Create a link to the attached file
 		</td>
-		<td class="help">
+		<td class="twikiHelp">
 Images will be displayed, for other attachments a link will be created.
 		</td>
 	</tr>
@@ -93,7 +93,7 @@ Images will be displayed, for other attachments a link will be created.
 		<td>
 			<input type="checkbox" name="hidefile" %HIDEFILE% /> Do not show attachment in table
 		</td>
-		<td class="help">Attachments will not be shown in topic view page.</td>
+		<td class="twikiHelp">Attachments will not be shown in topic view page.</td>
 	</tr>
 </table>
 </div>

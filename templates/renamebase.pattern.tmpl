@@ -39,33 +39,27 @@
 <table>
 <tr>
 <th>Move from:</th>
-<td align="right"><b><nop>%WEB%.</b></td>
-<td><b>%TOPIC%</b></td>
-<td></td>
+<td class="twikiOldCol"align="right"><b><nop>%WEB%</b></td>
+<td class="twikiOldCol"><b>%TOPIC%</b></td>
+<td class="twikiOldCol"></td>
 </tr>
 <tr>
 <th>To:</th>
 <td class="twikiMainCol" align="right">%TMPL:P{"newweb"}%.</td>
 <td class="twikiMainCol">%TMPL:P{"newtopic"}%</td>
-<td class="nameCol">%TMPL:P{"namehelp"}%</td>
+<td class="twikiMainCol nameCol">%TMPL:P{"namehelp"}%</td>
 </tr>
 <tr>
-<th class="lastRow"></th>
-<td class="lastRow twikiMainCol" colspan="2">%TMPL:P{"allownonwikiword"}%</td>
-<td class="lastRow"></td>
+<th></th>
+<td class="twikiMainCol" colspan="3">%TMPL:P{"allownonwikiword"}%</td>
 </tr>
 </table>
 </div>
 
----++ Change links in topics that refer to <nop>%TOPIC% in the <nop>%WEB% Web:
-
-<div class="twikiRenameList">
+<div class="twikiSearchResults"><div class="twikiSearchResultsHeader" style="background-color:%WEBBGCOLOR%">Change links in topics that refer to %TOPIC% in the <nop>%WEB% Web:</div>
 %RESEARCH{ "%TOPIC%" web="%WEB%" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
 </div>
-
----++ Change links in topics that refer to <nop>%WEB%.<nop>%TOPIC% in any Web:
-
-<div class="twikiRenameList">
+<div class="twikiSearchResults"><div class="twikiSearchResultsHeader">Change links in topics that refer to [[%WEB%.%TOPIC%]] in any Web:</div>
 %RESEARCH{ "%WEB%\.%TOPIC%" web="all" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
 </div>
 <div class="twikiTopicAction twikiSecondaryTopicAction">

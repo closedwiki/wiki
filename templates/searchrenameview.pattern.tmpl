@@ -24,24 +24,25 @@
 <form>
 %SPLIT%
 %REPEAT%
-<div class="twikiRenameList" style="background-color:%WEBBGCOLOR%;">
+<div class="twikiSearchResultItem">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-	<tr>
-		<th width="4%" align="left">%SELECTION%<input type="checkbox" name="RENAME%LABEL%%TOPIC_NUMBER%" checked="checked" /><input type="hidden" name="TOPIC%LABEL%%TOPIC_NUMBER%" value="%WEB%.%TOPICNAME%" />%SELECTION%
+<tr>
+<th width="6%">%SELECTION%<input type="checkbox" name="RENAME%LABEL%%TOPIC_NUMBER%" checked="checked" /><input type="hidden" name="TOPIC%LABEL%%TOPIC_NUMBER%" value="%WEB%.%TOPICNAME%" />%SELECTION%
 		</th>
-		<th width="96%" align="left"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TOPICNAME%</a></th>
-	</tr>
-	<tr>
-		<td width="4%"></td>
-		<td width="96%">%TEXTHEAD% <span class="twikiLocked">%LOCKED%</span><span class="twikiRevision"><a href='%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%'>%TIME% - %REVISION%</a></span> Changed by: %AUTHOR%
-		</td>
-	</tr>
-</table>
-</div>
-%REPEAT%<br clear="all" />
-<p />%SPLIT%Number of topics: <b>%NTOPICS%</b>
-<p />%SPLIT%
-</form>
+  <td width="46%">
+    <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a>
+    <span class="twikiAlert"> %LOCKED% </span>
+  </td><td width="30%">
+    <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TIME%</a> - %REVISION%
+  </td><td width="20%">
+    %AUTHOR%
+  </td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td colspan="2" class="twikiSummary twikiGrayText">%TEXTHEAD%</td>
+  <td>&nbsp;</td>
+</tr></table></div>%REPEAT%</div><div class="twikiSearchResultCount">%SPLIT%Number of topics: <b>%NTOPICS%</b></div>%SPLIT%</form>
 %TMPL:P{"standardfooter"}%
 %TMPL:END%
 
