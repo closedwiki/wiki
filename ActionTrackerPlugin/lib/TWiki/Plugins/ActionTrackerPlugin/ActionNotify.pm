@@ -82,7 +82,8 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
     my $result = "";
     my $webs = $attrs->get( "web" ) || ".*";
-    
+    my $topics = $attrs->get( "topic" ) || ".*";
+
     # Okay, we have tables of all the actions and a partial set of the
     # people who can be notified.
     my %notifications = ();
@@ -93,7 +94,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       # need to get rid of formatting done in actionnotify perl script
       $date =~ s/[, ]+/ /go; 
       $date = _getRelativeDate( $date );
-      _findChangesInWebs( $webs, $date, $format, \%notifications );
+      _findChangesInWebs( $webs, $topics, $date, $format, \%notifications );
       foreach my $key ( keys %notifications ) {
 	if ( defined ( $notifications{$key} ) ) {
 	  $people{$key} = 1;
@@ -378,6 +379,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   }
   
   # Get the revision number of a topic at a specific date
+  # $date is a date string, not an integer date value
   # SMELL: This is dependent on RCS. Store should provide
   # this functionality.
   sub _getRevAtDate {
@@ -417,9 +419,6 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my ( $theWeb, $theTopic, $theDate, $format, $notifications ) = @_;
     my $filename = TWiki::Func::getDataDir() . "\/$theWeb\/$theTopic.txt";
 
-    # There can be no changes if the file date on the topic file
-    # is earlier than theDate!
-
     # Recover the rev at the previous date
     my $oldrev = _getRevAtDate( $theWeb, $theTopic, $theDate );
     return unless defined( $oldrev );
@@ -441,11 +440,12 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     $currentActions->findChanges( $oldActions, $theDate, $format,
 				  $notifications );
   }
-  
+
   # Gather all notifications for modifications in all topics in the
   # given web, since the given date.
+  # $theDate is a string, not an integer
   sub _findChangesInWeb {
-    my ( $theWeb, $theDate, $format, $notifications ) = @_;
+    my ( $theWeb, $topics, $theDate, $format, $notifications ) = @_;
     my $actions = new ActionTrackerPlugin::ActionSet();
     my $dd = TWiki::Func::getDataDir() || "..";
 
@@ -465,14 +465,21 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $grep = `$cmd -c $q%ACTION\\{.*\\}%$q $dd/$theWeb/*.txt`;
     my $number = 0;
     my %processed;
+	my $date = Time::ParseDate::parsedate( $theDate );
 
     foreach my $line ( split( /\r?\n/, $grep )) {
       $line =~ m/^.*\/([^\/\.\n]+)\.txt:/o;
       my $topic = $1;
-      if ( !$processed{$topic} ) {
-	_findChangesInTopic( $theWeb, $topic, $theDate, $format,
-			     $notifications );
-	$processed{$topic} = 1;
+      if ( !$processed{$topic} && $topic =~ /^$topics$/ ) {
+		my @st = stat( "$dd/$theWeb/$topic.txt" );
+		my $mtime = $st[9];
+		# There can be no changes if the file date on the topic file
+		# is earlier than theDate, so don't bother looking.
+		if ( $mtime >= $date ) {
+		  _findChangesInTopic( $theWeb, $topic, $theDate, $format,
+							   $notifications );
+		}
+		$processed{$topic} = 1;
       }
     }
   }
@@ -483,14 +490,14 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # INCLUDING those flagged NOSEARCHALL, on the assumption that
   # people registering for notifications in those webs really want
   # to know.
+  # $date is a string, not an integer
   sub _findChangesInWebs {
-    my ( $webs, $date, $format, $notifications ) = @_;
-    
+    my ( $webs, $topics, $date, $format, $notifications ) = @_;
+
     my $dataDir = TWiki::Func::getDataDir();
     opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
     my @weblist = grep /^[^._].*$/, readdir DIR;
     closedir DIR;
-    
     #debug
     #$notifications->{$dataDir} = "Searching";
     my $web;
@@ -498,7 +505,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       if ( -d "$dataDir/$web" && $web =~ /^$webs$/ ) {
 	$web =~ /(.*)/; # untaint
 	my $theWeb = $1;
-	_findChangesInWeb( $theWeb, $date, $format, $notifications );
+	_findChangesInWeb( $theWeb, $topics, $date, $format, $notifications );
       }
     }
   }
