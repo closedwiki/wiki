@@ -7,7 +7,7 @@ our @ISA = qw(Exporter);
 our @EXPORT=qw(%config);
 
 %TWiki::Contrib::DistributionContrib::Config::config = (
- serverUrl => "http://twikitreleasetracker.mrjc.com/download",
+ serverUrl => "http://twikireleasetracker.mrjc.com/download",
  saveTopic => "TWiki.DistributionContrib",
  saveTopicAttachmentName => "remoteFileSavedLocally"
 );
