@@ -3,7 +3,9 @@ use strict;
 use diagnostics;
 
 package TWiki::Contrib::DistributionContrib::DistributionFetcher;
+use TWiki::Contrib::DistributionContrib::Config qw(%config);
 my %config = %TWiki::Contrib::DistributionContrib::Config::config;
+
 use LWP::Simple;
 
 =pod
