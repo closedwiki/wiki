@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079502931" format="1.0" version="1.81"}%
+%META:TOPICINFO{author="PeterThoeny" date="1079600096" format="1.0" version="1.82"}%
 <table><tr><td valign="top">
 *Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
@@ -17,6 +17,7 @@ _Documentation for TWiki users._
 
 	* *TWiki Quick Start* - the fast track approach
 		* WelcomeGuest: A fast track intro covering all the basics
+		* ATasteOfTWiki: A short introduction training course for beginners
 		* TWikiRegistration: Sign up so you can edit pages and select options
 
 	* *One-Page Primers* cover TWiki basics
