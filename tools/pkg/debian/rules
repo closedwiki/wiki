@@ -81,6 +81,10 @@ install: build
 	#stop lintian whinging
 	chmod 755 lib/TWiki/Plugins/CommentPlugin/build.pl
 
+	#distribute the UpgradeTwiki script
+	cp UpgradeTwiki debian/twiki/var/lib/twiki
+	chmod 777 debian/twiki/var/lib/twiki/UpgradeTwiki
+
 # Copy the TWikiRegistrationPub topic to TWikiRegistration
 	cp debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistration.txt debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistrationDefault.txt
 	cp debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistration.txt,v debian/twiki/var/lib/twiki/data/TWiki/TWikiRegistrationDefault.txt,v
