@@ -206,6 +206,10 @@ sub main
     $text =~ s/>/&gt\;/go;
     $text =~ s/\t/   /go;
 
+    #AS added hook for plugins that want to do heavy stuff
+    TWiki::Plugins::beforeEditHandler( $text, $topic, $webName ) unless( $saveCmd eq "repRev" );
+    #/AS
+
     if( $TWiki::doLogTopicEdit ) {
         # write log entry
         &TWiki::Store::writeLog( "edit", "$webName.$topic", $extra );

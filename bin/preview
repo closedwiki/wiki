@@ -117,12 +117,16 @@ sub main
             print $query->redirect( $url );
             return;
         }
+        #AS added hook for plugins that want to do heavy stuff
+        TWiki::Plugins::afterEditHandler( $text, $topic, $webName );
         $ptext = $text;
         
-	if( $meta->count( "FORM" ) ) {
-	   $formFields = &TWiki::Form::getFieldParams( $meta );
-	}
+        if( $meta->count( "FORM" ) ) {
+            $formFields = &TWiki::Form::getFieldParams( $meta );
+        }
+
     } else {
+        # undocumented "repRev" mode
         $text = $query->param( "text" ); # text to save
         ( $meta, $ptext ) = &TWiki::Store::_extractMetaData( $webName, $topic, $text );
         $text =~ s/%_(.)_%/%__$1__%/go;
