@@ -210,6 +210,11 @@ sub initialize1
     @activePluginWebs = ();
     @instPlugins = ();
 
+    if( $ENV{'REDIRECT_STATUS'} && $ENV{'REDIRECT_STATUS'} eq '401' ) {
+        # bail out if authentication failed
+        return "";
+    }
+
     # Get INSTALLEDPLUGINS and DISABLEDPLUGINS variables
     my $plugin = &TWiki::Prefs::getPreferencesValue( "INSTALLEDPLUGINS" ) || "";
     $plugin =~ s/[\n\t\s\r]+/ /go;

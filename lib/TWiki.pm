@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "10 Dec 2003";
+$wikiversion      = "18 Dec 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -813,6 +813,11 @@ sub initializeRemoteUser
     $remoteUser = $1;  # untaint variable
 
     my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
+
+    if( $ENV{'REDIRECT_STATUS'} && $ENV{'REDIRECT_STATUS'} eq '401' ) {
+        # bail out if authentication failed
+        $remoteAddr = "";
+    }
 
     if( ( ! $doRememberRemoteUser ) || ( ! $remoteAddr ) ) {
         # do not remember IP address
