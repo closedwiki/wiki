@@ -175,7 +175,7 @@ sub _save {
         my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
 
         if ( $rev ne $originalrev ) {
-            $newText = TWiki::Merge::merge( $currText, $newText, /(\r?\n)/ );
+            $newText = TWiki::Merge::merge( $currText, $newText, "\\r?\\n" );
             $newMeta->merge( $currMeta );
         }
     }

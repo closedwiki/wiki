@@ -78,8 +78,8 @@ sub _acceptB {
 sub _change {
     my ( $a, $b, $out, $ai, $bi ) = @_;
 
-    push( @$out, "<del> $ai->[$a] </del>" );
-    push( @$out, "<ins> $bi->[$b] </ins>" );
+    push( @$out, "<del>$ai->[$a]</del>" );
+    push( @$out, "<ins>$bi->[$b]</ins>" );
 }
 
 1;

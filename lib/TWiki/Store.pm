@@ -1054,8 +1054,9 @@ sub lockTopic {
     while ( 1 ) {
         my ( $user, $time ) = $topicHandler->isLocked();
         last if ( !$user || $locker->wikiName() eq $user );
-        $this->{session}->writeWarning( "Lock on $web.$topic for ".$locker->wikiName().
-                             " denied by $user" );
+        $this->{session}->writeWarning( "Lock on $web.$topic for ".
+                                        $locker->wikiName().
+                                        " denied by $user" );
         # see how old the lock is. If it's older than 2 minutes,
         # break it anyway. Locks are atomic, and should never be
         # held that long, by _any_ process.
