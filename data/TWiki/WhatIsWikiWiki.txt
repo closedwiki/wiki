@@ -1,11 +1,12 @@
-*FAQ:*
+%META:TOPICINFO{author="PeterThoeny" date="999308033" format="1.0" version="1.2"}%
+---++ FAQ:
 
 So what is this <nop>WikiWiki thing exactly? 
 
-*Answer:*
+---++ Answer:
 
-A set of pages of information that are open and free for anyone to edit as they wish. They are stored on a server and managed using some Perl CGI scripts. The system creates cross-reference hyperlinks between pages automatically. See WelcomeGuest and TWikiWeb for more information.
+A set of pages of information that are open and free for anyone to edit as they wish. They are stored on a server and managed using some Perl CGI scripts. The system creates cross-reference hyperlinks between pages automatically. See WelcomeGuest and TWikiSite for more information.
 
-See other TWikiFAQs.
+__Back to:__ TWikiFAQ
 
 -- Main.PeterThoeny - 27 Nov 2000 <br>
