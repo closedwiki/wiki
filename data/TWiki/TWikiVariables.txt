@@ -66,21 +66,27 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> =%<nop>REMOTE_USER%= </td>
   <td> REMOTE_USER environment variable, is <b>%REMOTE_USER%</b> </td>
 </tr><tr>
-  <td> =%<nop>INCLUDE{"file.ext"}%= </td>
-  <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: =<b>%<nop>INCLUDE{"../Know/TopicName.txt"}%</b>= </td>
+  <td> =%<nop>INCLUDE{"SomeTopic"}%= </td>
+  <td> Server side include, includes another topic. The current Wiki web is searched by default. Example: =<b>%<nop>INCLUDE{"TWiki.TWikiWebsTable"}%</b>= </td>
 </tr><tr>
   <td> =%<nop>SEARCH{"str" ...}%= </td>
   <td> Inline search, shows a search result embedded in a topic. Parameter is composed of the search string, followed by optional =name="value"= pairs:
 | *Pair:* | *Description:* | *Default:* |
-| =web="Name"= | Specify Wiki web to search | Current web |
-| =scope="topic"= | Search topic name (title) | Topic text (body) |
+| =web="Name"= <br> =web="Main Know"= <br> =web="all"= | Wiki web to search: A web, a list of webs separated by whitespace, or all webs =[1]= | Current web |
+| =scope="topic"= <br> =scope="text"= | Search topic name (title) or in the text (body) of the topic | Topic text (body) |
+| =order="topic"= <br> =order="modified"= <br> =order="editby"= | Sort the results of search by the topic names, last modified time, or last editor | Sort by topic name |
+| =limit="all"= <br> =limit="16"= | Limit the number of results returned | All results |
 | =regex="on"= | RegularExpression search | Literal search |
+| =reverse="on"= | Reverse the direction of the search | Ascending search |
 | =casesensitive="on"= | Case sensitive search | Ignore case |
 | =nosummary="on"= | Show topic title only | Show topic summary |
+| =bookview="on"= | BookView search, e.g. show complete topic text | Show topic summary |
 | =nosearch="on"= | Suppress search string | Show search string |
 | =nototal="on"= | Do not show number of topics found | Show number |
 Example: =<b>%<nop>SEARCH{"wiki" web="Main" scope="topic"}%</b>= </td>
 </tr></table>
+
+[1] __Note__: A web can be excluded from a =web="all"= search if you define a =NOSEARCHALL=on= variable in its WebPreferences.
 
 Additional variables are defined in the preferences ( site-level ( __SL__ ) in %TWIKIWEB%.%WIKIPREFSTOPIC%, web-level ( __WL__ ) in %WEBPREFSTOPIC% of each web, and user level ( __UL__ ) preferences in individual user topics):
 
@@ -107,6 +113,10 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> __WL__ </td>
   <td> Background color of web </td>
 </tr><tr>
+  <td> =%<nop>NOSEARCHALL%= </td>
+  <td> __WL__ </td>
+  <td> Exclude web from a =web="all"= search (set variable to =on= for hidden webs) </td>
+</tr><tr>
   <td> =%<nop>EDITBOXWIDTH%= </td>
   <td> __SL__ , __UL__ </td>
   <td> Horizontal size of edit box, is <b> =%EDITBOXWIDTH%= </b> </td>
@@ -118,6 +128,18 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> =%<nop>ATTACHLINKBOX%= </td>
   <td> __SL__ , __UL__ </td>
   <td> Default state of the link check box in the attach file page. Check box is initially checked if value is set to =CHECKED= , unchecked if empty. If checked, a link is created to the attached file at the end of the topic. Value is: <b><code>%ATTACHLINKBOX%</code></b> </td>
+</tr><tr>
+  <td> =%<nop>HTTP_EQUIV_ON_VIEW%= </td>
+  <td> __SL__ </td>
+  <td> http-equiv meta tags for view, rdiff, attach, search* scripts. </td>
+</tr><tr>
+  <td> =%<nop>HTTP_EQUIV_ON_EDIT%= </td>
+  <td> __SL__ , __UL__ </td>
+  <td> http-equiv meta tags for edit script. </tr><tr>
+</tr><tr>
+  <td> =%<nop>HTTP_EQUIV_ON_PREVIEW%= </td>
+  <td> __SL__ , __UL__ </td>
+  <td> http-equiv meta tags for preview script. </td>
 </tr></table>
 
--- Main.PeterThoeny - 29 May 2000 <br>
+-- Main.PeterThoeny - 17 Aug 2000 <br>
