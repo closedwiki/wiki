@@ -327,7 +327,7 @@ sub addLinkToEndOfTopic
     my( $before, $after ) = split( /<!--TWikiCat-->/, $text );
     if( ! $after ) { $after = ""; }
     my $fileLink = "";
-    if( $fileName =~ /\.(gif|jpg|jpeg)$/ ) {
+    if( $fileName =~ /\.(gif|jpg|jpeg|png)$/i ) {
         if( $fileComment ) {
             $fileComment = "<br> $fileComment ";
         }
