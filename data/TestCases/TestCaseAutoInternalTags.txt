@@ -142,6 +142,11 @@ Description: Tag tests that can be automated
   <td><!-- expected -->RELATIVETOPICPATH ../TestCases/Chips<!-- /expected --></td>
   <td><!-- actual -->RELATIVETOPICPATH %RELATIVETOPICPATH{"Chips"}%<!-- /actual --></td>
  </tr>
+ <tr>
+  <td>SCRIPTNAME</td>
+  <td><!-- expected expand -->  view%SCRIPTSUFFIX% <!-- /expected --></td>
+  <td><!-- actual --> %SCRIPTNAME% <!-- /actual --></td>
+ </tr>
 </table>
 
 ---+ INCLUDE

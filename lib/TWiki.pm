@@ -285,6 +285,7 @@ sub _setupHandlerMaps {
     $functionTags{REMOTE_PORT}       = \&_REMOTE_PORT;
     $functionTags{REMOTE_USER}       = \&_REMOTE_USER;
     $functionTags{REVINFO}           = \&_REVINFO;
+    $functionTags{SCRIPTNAME}        = \&_SCRIPTNAME;
     $functionTags{SEARCH}            = \&_SEARCH;
     $functionTags{SERVERTIME}        = \&_SERVERTIME;
     $functionTags{SPACEDTOPIC}       = \&_SPACEDTOPIC;
@@ -2500,7 +2501,7 @@ sub _RELATIVETOPICPATH {
     }
     # replace dot by slash is not necessary; TWiki.MyTopic is a valid url
     # add ../ if not already present to make a relative file reference
-    if ( $theRelativePath !~ m!../! ) {
+    if ( $theRelativePath !~ m!^../! ) {
         $theRelativePath = "../$theRelativePath";
     }
     return $theRelativePath;
@@ -2509,6 +2510,25 @@ sub _RELATIVETOPICPATH {
 sub _ATTACHURLPATH {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
     return nativeUrlEncode( "$TWiki::cfg{PubUrlPath}/$theWeb/$theTopic" );
+}
+
+sub _SCRIPTNAME {
+    #my ( $this, $params, $theTopic, $theWeb ) = @_;
+    my $value = $ENV{SCRIPT_URL};
+    if( $value ) {
+        # e.g. '/cgi-bin/view.cgi/TWiki/WebHome'
+        $value =~ s|^$TWiki::cfg{DispScriptUrlPath}/?||o;  # cut URL path to get 'view.cgi/TWiki/WebHome'
+        $value =~ s|/.*$||;                    # cut extended path to get 'view.cgi'
+        return $value;
+    }
+    # no SCRIPT_URL, try SCRIPT_FILENAME
+    $value = $ENV{SCRIPT_FILENAME};
+    if( $value ) {
+        $value =~ s!.*/([^/]+)$!$1!o;
+        return $value;
+    }
+    # no joy
+    return "";
 }
 
 1;
