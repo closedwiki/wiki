@@ -121,7 +121,8 @@ install: build
 	mv debian/twiki/usr/share/perl5/TWiki.cfg debian/twiki/etc/twiki/TWiki.cfg
 
 # fix paths for index.html
-	perl -pi~ -e 's|\./bin/view/Main/WebHome|/cgi-bin/twiki/view/Main/WebHome|;' index.html
+	perl -pi~ -e 's|http://your.server.com/your-cgi-bin/view/Main/WebHome|http://localhost/cgi-bin/twiki/view/Main/WebHome|;' index.html
+	perl -pi~ -e 's|license.txt|copyright|g;' index.html
 	rm index.html~
 
 # Build architecture-independent files here.

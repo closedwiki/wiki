@@ -1,6 +1,7 @@
 twiki (20030201-5) unstable; urgency=high
 
   * added dependancy option of apache-perl (Closes: #235603)
+  * cleaned up index.html (Closes: #228748)
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sat, 17 Jan 2004 00:00:01 -1000
 
