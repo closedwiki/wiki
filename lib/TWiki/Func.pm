@@ -926,46 +926,6 @@ sub saveFile
     return &TWiki::Store::saveFile( @_ );
 }
 
-=pod
-
----++ Functions - I18N related
-
----+++ getRegularExpression( $regexName )
-
-| Description: | Retrieves a TWiki predefined regular expression. |
-| Parameter: =$regexName= | Name of the regular expression to retrieve.  See notes below. |
-| Return: | String or precompiled regular expression matching as described below. |
-
----++++ Notes
-
-TWiki internally precompiles several regular expressions to represent various string entities
-in an I18N-compatible manner.  Plugins are encouraged to use these in matching where appropriate.
-The following are guaranteed to be present; others may exist, but their use is unsupported and
-they may be removed in future TWiki versions.  Those which are marked "CC" are for use within
-character classes and may not produce the desired results outside of them.
-
-| *Name* | *Matches* | *CC* |
-| upperAlpha | Upper case characters | Y |
-| lowerAlpha | Lower case characters | Y |
-| mixedAlpha | Alphabetic characters | Y |
-| mixedAlphaNum | Alphanumeric charactecs | Y |
-| wikiWordRegex | WikiWords | N |
-
-Example:
-<pre>
-   my $upper = TWiki::Func::getRegularExpression("upperAlpha");
-   my $alpha = TWiki::Func::getRegularExpression("mixedAlpha");
-   my $capitalized = qr/[$upper][$alpha]+/;
-</pre>
-
-=cut
-
-sub getRegularExpression
-{
-    my ( $regexName ) = @_;
-    return $TWiki::regex{$regexName};
-}
-
 # =========================
 =pod
 
@@ -1003,9 +963,50 @@ sub writeDebug
 # =========================
 =pod
 
+---++ Functions - I18N related
+
+---+++ getRegularExpression( $regexName )
+
+| Description: | Retrieves a TWiki predefined regular expression. |
+| Parameter: =$regexName= | Name of the regular expression to retrieve.  See notes below. |
+| Return: | String or precompiled regular expression matching as described below. |
+
+__Notes:__
+
+TWiki internally precompiles several regular expressions to represent various string entities
+in an I18N-compatible manner.  Plugins are encouraged to use these in matching where appropriate.
+The following are guaranteed to be present; others may exist, but their use is unsupported and
+they may be removed in future TWiki versions.  Those which are marked "CC" are for use within
+character classes and may not produce the desired results outside of them.
+
+| *Name* | *Matches* | *CC* |
+| upperAlpha | Upper case characters | Y |
+| lowerAlpha | Lower case characters | Y |
+| mixedAlpha | Alphabetic characters | Y |
+| mixedAlphaNum | Alphanumeric charactecs | Y |
+| wikiWordRegex | WikiWords | N |
+
+Example:
+<pre>
+   my $upper = TWiki::Func::getRegularExpression("upperAlpha");
+   my $alpha = TWiki::Func::getRegularExpression("mixedAlpha");
+   my $capitalized = qr/[$upper][$alpha]+/;
+</pre>
+
+=cut
+
+sub getRegularExpression
+{
+    my ( $regexName ) = @_;
+    return $TWiki::regex{$regexName};
+}
+
+# =========================
+=pod
+
 ---++ Copyright and License
 
-Copyright (C) 2000-2003 Peter Thoeny, Peter@Thoeny.com
+Copyright (C) 2000-2004 Peter Thoeny, Peter@Thoeny.com
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
