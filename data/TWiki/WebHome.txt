@@ -1,9 +1,8 @@
-%META:TOPICINFO{author="MikeMannix" date="999556165" format="1.0" version="1.32"}%
+%META:TOPICINFO{author="MikeMannix" date="999563286" format="1.0" version="1.33"}%
 <table><tr><td>
-Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about it, download it, and try it out for yourself.</td><td>
-<a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
-</td><td>
-<b>The TWiki <sup>TM</sup> home is <br> at http://TWiki.org/ </b>
+<font size="3">Welcome to %WIKITOOLNAME%, a flexible, powerful, and simple Web-based collaboration platform, for intranets, extranets, and the Web. With %WIKITOOLNAME%, you can easily run a project development space, document managment system, knowledge base, and any other groupware tool. This is the place to learn about it, download it, and try it out for yourself... </font></td><td width="25">&nbsp;</td><td width="200">
+<a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a> <br>
+The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
 </td></tr>
 </table>
 
