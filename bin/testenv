@@ -117,9 +117,9 @@ my $query = new CGI;
 print "Content-type: text/html\n\n";
 print <<EOM;
 <html>
-<head><title>Test the CGI environment</title></head>
+<head><title>Test TWiki environment</title></head>
 <body>
-<h1>Test the CGI environment for TWiki</h1>
+<h1>Test the environment for TWiki</h1>
 Please read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationNotes">TWikiInstallationNotes</a> for more information on TWiki installation.
 <h3>Environment variables:</h3>
 <table>
@@ -169,7 +169,7 @@ if ( !defined $detailedOS ) {
 
 # Detect Perl flavour on Windows, and Cygwin Perl/RCS package versions
 my $perltype;
-my $rcsver;
+my $cygwinRcsVerNum;
 if ($detailedOS eq 'cygwin') {
     $perltype = 'Cygwin';				# Cygwin Perl only
     my ($pkg, $pkgName);
@@ -185,7 +185,7 @@ if ($detailedOS eq 'cygwin') {
 	$perlver = $pkg;
     }
 	
-    # Get Cygwin perl's package version number
+    # Get Cygwin RCS's package version number
     $pkgName = 'rcs';
     $pkg = `/bin/cygcheck -c $pkgName | /bin/grep $pkgName 2>/dev/null`; 
     if ($?) { 
@@ -193,7 +193,7 @@ if ($detailedOS eq 'cygwin') {
 	$perlver .= $pkg
     } else {
 	$pkg = (split ' ', $pkg)[1];	# Package version
-	$rcsver = $pkg;	
+	$cygwinRcsVerNum = $pkg;	
     }
 } elsif ($detailedOS =~ /win/i && $detailedOS !~ /darwin/i ) {
     $perltype = 'ActiveState';
@@ -220,12 +220,8 @@ my $LOAD_MOD_PERL = ( exists $ENV{'SERVER_SOFTWARE'} &&
 					"loaded" || "not loaded";
 
 # Detect whether we are actually running under mod_perl
-# FIXME: just test for MOD_PERL, which is enough
-my $USE_MOD_PERL = ((exists $ENV{'GATEWAY_INTERFACE'}
-                  and $ENV{'GATEWAY_INTERFACE'} eq "CGI-Perl/1.1")
-                   or exists $ENV{'MOD_PERL'} ) && 
-		   "Used" || 
-		   "Not used";
+# - test for MOD_PERL alone, which is enough.
+my $USE_MOD_PERL = ( exists $ENV{'MOD_PERL'} ) && "Used" || "Not used";
 
 
 
@@ -341,7 +337,7 @@ if( $usr ne "nobody" ) {
     print "Otherwise, changes to topics will not be logged by RCS.\n";
     print "</td></tr>\n";
 }
-print "<tr><th align=\"right\">Member of group(s):</th><td>";
+print "<tr><th align=\"right\">Group(s):</th><td>";
 print "$grp";
 print "</table>\n";
 
@@ -365,7 +361,7 @@ print "This must be the protocol and host part (with optional port number) of ";
 print "the TWiki URL.";
 print "</td></tr>\n";
 my $val = $ENV{"HTTP_HOST"} || '';
-if( ! ( $defaultUrlHost =~ /$val/ ) ) {
+if( $defaultUrlHost !~ /$val/ ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
     print "This does not match </b>HTTP_HOST</b>";
     print "</td></tr>\n";
@@ -376,7 +372,7 @@ print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This must be the URI of the TWiki cgi-bin directory.";
 print "</td></tr>\n";
 $val = $ENV{"REQUEST_URI"} || '';
-if( ! ( $val =~ /^$scriptUrlPath/ ) ) {
+if( $val !~ /^$scriptUrlPath/ ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
     print "This does not match </b>REQUEST_URI</b>";
     print "</td></tr>\n";
@@ -436,6 +432,7 @@ if( ! ( -e "$dataDir" ) ) {
     print "</td></tr>\n";
 }
 
+# Check 'sendmail'
 $val = $mailProgram;
 $val =~ s/([^\s]*).*/$1/g;
 # Don't warn on Windows, as Net::SMTP is normally used
@@ -454,35 +451,43 @@ if( $OS ne 'WINDOWS' ) {
 }
 print "</td></tr>\n";
 
+
+# Check RCS directory
 print "<tr><th align=\"right\">\$rcsDir:</th><td>$rcsDir</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is the directory where RCS is located.";
 print "</td></tr>\n";
+
+# Check RCS
 if( ! ( -e "$rcsDir/ci$exeSuffix" ) ) {
+    # RCS not installed
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "RCS program <tt>$rcsDir/ci$exeSuffix</tt> not found. Check the path.";
+    print "RCS program <tt>$rcsDir/ci$exeSuffix</tt> not found. Check \$rcsDir setting in TWiki.cfg. ";
+    print "TWiki will not work (unless you are ";
+    print "using TWiki's built-in RCS implementation, <b>RcsLite</b>).";
     print "</td></tr>\n";
+
 } else {
-    my $rcsvernum = `$rcsDir/ci$exeSuffix -V`;		# May fail due to diff or DLL not on PATH
-    $rcsvernum = (split(/\s+/, $rcsvernum))[2] || "";	# Recover from unset variable
+    # Check RCS version
+    my $rcsVerNum = `$rcsDir/ci$exeSuffix -V`;		# May fail due to diff or DLL not on PATH
+    $rcsVerNum = (split(/\s+/, $rcsVerNum))[2] || "";	# Recover from unset variable
     
-    print "<tr><th align=\"right\">RCS Version:</th><td>$rcsvernum";
-    print "&nbsp;&nbsp;(Cygwin package <tt>rcs-$rcsver</tt>)" if defined($rcsver);
+    print "<tr><th align=\"right\">RCS Version:</th><td>$rcsVerNum";
+    print "&nbsp;&nbsp;(Cygwin package <tt>rcs-$cygwinRcsVerNum</tt>)" if defined($cygwinRcsVerNum);
     print "</td></tr>\n";
     print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
     print "This is the version of RCS which will be used.";
     print "</td></tr>\n";
     
-    if( $rcsvernum && $rcsvernum < $rcsverRequired ) {
+    if( $rcsVerNum && $rcsVerNum < $rcsverRequired ) {
+	# RCS too old
 	print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
 	print "RCS program is too old, upgrade to version $rcsverRequired or higher.";
 	print "</td></tr>\n";
     }
-
 }
 
-# FIXME check that diff command is in path, required by ci
-
+# Check 'ls'
 print "<tr><th align=\"right\">\$lsCmd:</th><td>$lsCmd</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is the file list program TWiki uses to list topics.";
@@ -495,6 +500,7 @@ if( ! ( -e $val ) ) {
     print "</td></tr>\n";
 }
 
+# Check 'grep'
 print "<tr><th align=\"right\">\$egrepCmd:</th><td>$egrepCmd</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is a program TWiki uses for search.";
@@ -507,6 +513,7 @@ if( ! ( -e $val ) ) {
     print "</td></tr>\n";
 }
 
+# Check 'fgrep'
 print "<tr><th align=\"right\">\$fgrepCmd:</th><td>$fgrepCmd</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is a program TWiki uses for search.";
@@ -547,7 +554,7 @@ print "</td></tr>\n";
 
 # Generate a separate table about specific environment variables
 print "</table>\n";
-print "<h3>Selected Environment Variables</h3>\n";
+print "<h3>Path and Shell Environment</h3>\n";
 print "<table>\n";
 
 # PATH check on all platforms
@@ -563,6 +570,39 @@ print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is the actual PATH setting that will be used by Perl to run programs.\n";
 print "It is normally identical to <b>\$safeEnvPath</b>, unless that variable is empty.\n";
 print "</td></tr>\n";
+
+
+# Check that diff is found in PATH and is GNU diff - used by various RCS
+# commands, including ci.  Since Windows makes it hard to capture stderr
+# ('2>&1' works only on Win2000 or higher), and Windows will usually have
+# GNU diff in any case, we only check for diff on Unix/Linux and Cygwin.  
+if( $OS eq 'UNIX' or  ($OS eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
+    print "<tr><th align=\"right\">diff:</th>";
+    my $diffOut = `diff 2>&1` || "";
+    my $notFound = ( $? == -1 );
+    if( $notFound ) {
+	print "<td><b><font color=\"red\">Warning:</font></b> ";
+	print "'diff' program was not found on the current PATH.\n";
+	print "</td></tr>";
+    } else {
+	# diff found, check that it's GNU - using '-v' should cause error if not GNU,
+	# since there are no arguments (tested with Solaris diff).
+	$diffOut = `diff -v 2>&1` || "";
+	if( $diffOut !~ /\bGNU\b/ ) {
+	    print "<td><b><font color=\"red\">Warning:</font></b> ";
+	    print "'diff' program was found on the PATH but is not GNU diff - this may cause problems.\n";
+	    print "</td></tr>";
+	} else {
+	    print "<td>GNU diff was found on the PATH - this is the recommended diff tool.";
+	    print "</td></tr>";
+	}
+    }
+
+    # Final table row applies to all cases
+    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
+    print "The 'diff' command is used by RCS to compare files.\n";
+    print "</td></tr>";
+}
 
 # PERL5SHELL check for ActiveState Perl on Windows only
 if( $OS eq 'WINDOWS' && $perltype eq 'ActiveState' ) {
