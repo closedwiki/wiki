@@ -49,7 +49,7 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 	private String action;
 	private String redirectHTML;
 	private String redirectURL;
-    public static String javaPasteCvsRevision = "$Revision$";
+    public static String javaPasteCvsRevision = "Cvs: $Revision$";
 	
 	public TwikiPaste() {
 
@@ -92,7 +92,7 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 		    System.out.println(javaPasteCvsRevision + " ACTION='"+action+"'");
 		    addText("TWiki "+ javaPasteCvsRevision + "Paste initiated\n\n");
 		    addText("With this utility, you can paste capture pictures or files\n placed on the Clipboard.\n");
-			addText("For conversation on this tool, please see:\n http://javapaste.mrjc.com/JavaPaste.htm\n");
+			addText("For conversation on this tool, please see:\n http://javapaste.mrjc.com/JavaPaste.htm\n\n");
 		}
 		repaint();
     }
@@ -103,7 +103,7 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
      * @author	Catherine Macleod
      * @param	newWord text to be written to screen 
      */
-    private void addText(String newWord) 
+    public void addText(String newWord) 
 	{
 		msgTxt.append(newWord);
         repaint();
@@ -112,17 +112,18 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
     private String getTypeOfData(Object dataOnClipboard) 
     {
     	String ans;
+    	
 		if (dataOnClipboard instanceof Byte) {
-			ans = "\nData on clipboard is a byte array";
+			ans = "Data on clipboard is a byte array\n";
 		} else if (dataOnClipboard instanceof String)
-    		ans = "\nData on clipboard is "+DATATYPE_TEXT;
+    		ans = "Data on clipboard is "+DATATYPE_TEXT+"\n";
 		else if (dataOnClipboard instanceof Reader)
-			ans = "\nData on clipboard is "+DATATYPE_RICHTEXT;
+			ans = "Data on clipboard is "+DATATYPE_RICHTEXT+"\n";
 		else if (dataOnClipboard instanceof Image)
-			ans = "\nData on clipboard is "+DATATYPE_IMAGE;
+			ans = "Data on clipboard is "+DATATYPE_IMAGE+"\n";
 		else if (dataOnClipboard instanceof AbstractList)
-			ans = "\nData on clipboard is "+DATATYPE_FILE;
-		else ans = "\n(unrecognised type)"+dataOnClipboard.getClass().getName() +"\n";
+			ans = "Data on clipboard is "+DATATYPE_FILE+"\n";
+		else ans = "Data on clipboard is unrecognised: "+dataOnClipboard.getClass().getName() +"\n";
 		
 		return ans;
     }
@@ -145,8 +146,11 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 	 */
 	public void actionPerformed(ActionEvent eNotUsed) {
 
-		processData(cbHelper.getClipboardContents());
-
+		try {
+		    processData(cbHelper.getClipboardContents());
+		} catch (java.security.AccessControlException ace) {
+			addText(ace.toString());
+		}
 	}
 	
 	public void processData(Object dataOnClipboard) {
@@ -161,12 +165,18 @@ public class TwikiPaste extends Applet implements ActionListener, DropTargetList
 
 		String comment = "";
 		
-		addText("Okay, starting paste. Please wait.");
+		addText("Okay, starting paste. Please wait.\n");
+		//addText(dataOnClipboard.getClass().toString());
 		addText(getTypeOfData(dataOnClipboard));
 
 
 		try {
-			fu = new FileUploader(action);
+			//NB, Passing a reference to this object is a hack to allow 
+			//    the uploader to show that it is doing something.
+			//    It should be implemented using an interface, perhaps Observable
+			//    Feel free.
+			  
+			fu = new FileUploader(action, this);
 			fu.uploadData(dataOnClipboard, comment);
 			redirectHTML = fu.getPOSTRequestResponse();
 			
