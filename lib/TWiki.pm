@@ -58,7 +58,7 @@ use vars qw(
         $userListFilename %userToWikiList %wikiToUserList
         $twikiWebname $mainWebname $mainTopicname $notifyTopicname
         $wikiPrefsTopicname $webPrefsTopicname
-        $statisticsTopicname $statsTopViews $statsTopContrib
+        $statisticsTopicname $statsTopViews $statsTopContrib $doDebugStatistics
         $numberOfRevisions $editLockTime
         $attachAsciiPath $scriptSuffix $wikiversion
         $safeEnvPath $mailProgram $noSpamPadding $mimeTypesFilename
@@ -94,7 +94,6 @@ use vars qw(
 	$upperAlpha $lowerAlpha $mixedAlpha $mixedAlphaNum $lowerAlphaNum $numeric
 
 	$wikiWordRegex $webNameRegex $defaultWebNameRegex $anchorRegex $abbrevRegex $emailAddrRegex
-
 	$singleUpperAlphaRegex $singleLowerAlphaRegex $singleUpperAlphaNumRegex
 	$singleMixedAlphaNumRegex $singleMixedNonAlphaNumRegex 
 	$mixedAlphaNumRegex

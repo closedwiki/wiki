@@ -72,6 +72,9 @@ sub main
         # script is called by cron job
     }
 
+    # Set up locale and regexes
+    &TWiki::basicInitialize();
+
     # Initial messages
     printMsg( "TWiki: Create Usage Statistics", $cgiQuery );
     if( $cgiQuery ) {
@@ -251,38 +254,55 @@ sub collectLogData
     my %statSaves;
     my %statUploads;
 
+    # Imported regex objects
+    my $webNameRegex = $TWiki::webNameRegex;
+    my $wikiWordRegex = $TWiki::wikiWordRegex;
+    my $abbrevRegex = $TWiki::abbrevRegex;
+
+    # Script regexes
+    my $intranetUserRegex = qr/[a-z0-9]+/;	# FIXME: should centralise this
+    my $userRegex = qr/(?:$intranetUserRegex|$wikiWordRegex)/; 
+    my $opRegex = qr/[a-z0-9]+/;        	# Operation, no i18n needed
+    my $topicRegex = qr/(?:$wikiWordRegex|$abbrevRegex)/; 
+
     my ($webName, $opName, $topicName, $userName, $newTopicName, $newTopicWeb);
     binmode $TMPFILE;
     while ( <$TMPFILE> ) {
         my $line = $_;
-	$line =~ s/\r*\n$//o;		# Clean out line endings
+	$line =~ s/\r*\n$//;		# Clean out line endings
 
-	$line =~ /^\|[^\|]*\| ([a-z0-9]+\.[a-z0-9]+) \| ([a-z0-9]+) \| ([a-z0-9]+)[. ]/io;
+	$line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)[. ]/o;
 	$userName = $1 || "";		# Main.FredBloggs
 	$opName = $2 || "";
 	$webName = $3 || "";
 
-	# commented out, this blows up the debug files without much gain
-	##unless ($userName && $opName && $webName) {
-	##    TWiki::writeDebug("Invalid log file line = '$line'");
-	##    TWiki::writeDebug("userName = '$userName'");
-	##    TWiki::writeDebug("opName = '$opName'");
-	##    TWiki::writeDebug("webName = '$webName'");
-	##}
+	# Skip bad logfile lines and warn if necessary
+	unless ($userName && $opName && $webName) {
+	    if( $TWiki::doDebugStatistics ) {
+	        TWiki::writeDebug("Invalid log file line = '$line'");
+	        TWiki::writeDebug("userName = '$userName'");
+	        TWiki::writeDebug("opName = '$opName'");
+	        TWiki::writeDebug("webName = '$webName'");
+	    }
+	    next;
+	}
 
 	my $logContrib = 0;
 	if ($opName eq 'view' ) {
 	    $statViews{$webName}++;
 	    # Pick up the topic name 
-	    $line =~ /^\|[^\|]*\| ([a-z0-9]+\.[a-z0-9]+) \| ([a-z0-9]+) \| ([a-z0-9]+)\.([a-z0-9]+) /io;
+	    $line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)\.($topicRegex) /o;
 	    $topicName = $4 || "";
-	    # commented out, this blows up the debug files without much gain
-	    ##unless ($topicName) {
-	    ##	TWiki::writeDebug("Invalid log file line = '$line'");
-	    ##	TWiki::writeDebug("userName = '$userName'");
-	    ##	TWiki::writeDebug("opName = '$opName'");
-	    ##	TWiki::writeDebug("webName = '$webName'");
-	    ##}
+
+	    unless( $topicName ) {
+		if( $TWiki::doDebugStatistics ) {
+		    TWiki::writeDebug("Invalid log file line = '$line'");
+		    TWiki::writeDebug("userName = '$userName'");
+		    TWiki::writeDebug("opName = '$opName'");
+		    TWiki::writeDebug("webName = '$webName'");
+		}
+		next;
+	    }
 	    $view{$webName}{$topicName}++;
 	} elsif ($opName eq 'save' ) {
 	    $statSaves{$webName}++;
@@ -292,21 +312,24 @@ sub collectLogData
 	    $logContrib = 1;
 	} elsif ($opName eq 'rename' ) {
 	    # Pick up the old and new topic names
-	    $line =~ /^\|[^\|]*\| ([a-z0-9]+\.[a-z0-9]+) \| ([a-z0-9]+) \| ([a-z0-9]+)\.([a-z0-9]+) \| moved to ([a-z0-9]+)\.([a-z0-9]+) /io;
+	    $line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)\.($topicRegex) \| moved to ($webNameRegex)\.($topicRegex) /o;
 	    $topicName = $4 || "";
 	    $newTopicWeb = $5 || "";
 	    $newTopicName = $6 || "";
 	    ## TWiki::writeDebug("$topicName renamed to $newTopicWeb.$newTopicName");
-	    # commented out, this blows up the debug files without much gain
-	    ##unless ($topicName && $newTopicWeb && $newTopicName) {
-	    ##	TWiki::writeDebug("Invalid log file line (rename) = '$line'");
-	    ##	TWiki::writeDebug("userName = '$userName'");
-	    ##	TWiki::writeDebug("opName = '$opName'");
-	    ##	TWiki::writeDebug("webName = '$webName'");
-	    ##	TWiki::writeDebug("userName = '$topicName'");
-	    ##	TWiki::writeDebug("opName = '$newTopicWeb'");
-	    ##	TWiki::writeDebug("webName = '$newTopicName'");
-	    ##}
+
+	    unless ($topicName && $newTopicWeb && $newTopicName) {
+		if( $TWiki::doDebugStatistics ) {
+		    TWiki::writeDebug("Invalid log file line (rename) = '$line'");
+		    TWiki::writeDebug("userName = '$userName'");
+		    TWiki::writeDebug("opName = '$opName'");
+		    TWiki::writeDebug("webName = '$webName'");
+		    TWiki::writeDebug("topicName= '$topicName'");
+		    TWiki::writeDebug("newTopicWeb= '$newTopicWeb'");
+		    TWiki::writeDebug("newTopicName = '$newTopicName'");
+		}
+		next;
+	    }
 	    # Get number of views for old topic this month (may be zero)
 	    my $oldViews = $view{$webName}{$topicName} || 0;
 
@@ -418,12 +441,12 @@ sub processWeb
 	if( ! $statLine ) {
 	    $statLine = "| <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |";
 	}
-	$statLine =~ s/<\!\-\-statDate\-\->/$theLogMonthYear/o;
-	$statLine =~ s/<\!\-\-statViews\-\->/ $statViews/o;
-	$statLine =~ s/<\!\-\-statSaves\-\->/ $statSaves/o;
-	$statLine =~ s/<\!\-\-statUploads\-\->/ $statUploads/o;
-	$statLine =~ s/<\!\-\-statTopViews\-\->/$statTopViews/o;
-	$statLine =~ s/<\!\-\-statTopContributors\-\->/$statTopContributors/o;
+	$statLine =~ s/<\!\-\-statDate\-\->/$theLogMonthYear/;
+	$statLine =~ s/<\!\-\-statViews\-\->/ $statViews/;
+	$statLine =~ s/<\!\-\-statSaves\-\->/ $statSaves/;
+	$statLine =~ s/<\!\-\-statUploads\-\->/ $statUploads/;
+	$statLine =~ s/<\!\-\-statTopViews\-\->/$statTopViews/;
+	$statLine =~ s/<\!\-\-statTopContributors\-\->/$statTopContributors/;
 
 	if( $idxStat >= 0 ) {
 	    # entry already exists, need to update
@@ -480,9 +503,9 @@ sub getTopList
 
     # Sort @list by frequency and pick the top N entries
     if( @list ) {
-        @list = map{ s/^([0-9][0-9][^0-9])/\&nbsp\;$1/o; $_ }
-                map{ s/^([0-9][^0-9])/\&nbsp\;\&nbsp\;$1/o; $_ }
-                map{ s/^\s*//o; $_ }
+        @list = map{ s/^([0-9][0-9][^0-9])/\&nbsp\;$1/; $_ }
+                map{ s/^([0-9][^0-9])/\&nbsp\;\&nbsp\;$1/; $_ }
+                map{ s/^\s*//; $_ }
                 reverse( sort( @list ) );
         if( $theMaxNum >= @list ) {
             $theMaxNum = @list - 1;
@@ -499,6 +522,8 @@ sub printMsg
     my $htmlMsg = $msg;
 
     if( $cgiQuery ) {
+	# TODO: May need to fix this regex if internationalised script
+	# messages are supported in future.
 	if( $htmlMsg =~ /^[A-Z]/ ) {
 	    $htmlMsg =~ s/^([A-Z].*)/<h3>$1<\/h3>/go;
 	} else {
