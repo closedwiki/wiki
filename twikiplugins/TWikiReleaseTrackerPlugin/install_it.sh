@@ -1,15 +1,13 @@
-export TWIKI_LIBSDIR=$HOME/twikiplugindev/twikiplugins/
+cvs update
 
-#export TWIKI_SHARED=`pwd`
-export TWIKI_LIBS=`echo $TWIKI_LIBSDIR*/lib/ | tr " " ":"`
-
+ . ~/twikiplugindev/settwikivars.sh
 
 cd lib/TWiki/Plugins/TWikiReleaseTrackerPlugin
 
-for i in athenstwiki.mrjc.com/twiki beijingtwiki.mrjc.com/twiki cairotwiki.mrjc.com/twiki cleaver.org/twiki mbawiki.com/twiki
+for i in $TWIKI_HOMES
 do
    echo "Installing to $i"
-   export TWIKI_HOME=/home/mrjc/$i
+   export TWIKI_HOME=$HOME/$i
    perl build.pl install
    echo
 done
