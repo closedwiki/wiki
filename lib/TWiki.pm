@@ -1808,9 +1808,9 @@ sub _TOC {
                 # Prevent WikiLinks
                 $line =~ s/\[\[.*?\]\[(.*?)\]\]/$1/g;  # '[[...][...]]'
                 $line =~ s/\[\[(.*?)\]\]/$1/ge;        # '[[...]]'
-                $line =~ s/([\s\(])($webnameRE)\.($wikiwordRE)/$1<nop>$3/g;  # 'Web.TopicName'
-                $line =~ s/([\s\(])($wikiwordRE)/$1<nop>$2/g;  # 'TopicName'
-                $line =~ s/([\s\(])($abbrevRE)/$1<nop>$2/g;    # 'TLA'
+                $line =~ s/([\s\(])($webnameRE)\.($wikiwordRE)/$1<nop>$3/go;  # 'Web.TopicName'
+                $line =~ s/([\s\(])($wikiwordRE)/$1<nop>$2/go;  # 'TopicName'
+                $line =~ s/([\s\(])($abbrevRE)/$1<nop>$2/go;    # 'TLA'
                 # create linked bullet item, using a relative link to anchor
                 $line = "$tabs* <a href=\"$urlPath#$anchor\">$line</a>";
                 $result .= "\n$line";
