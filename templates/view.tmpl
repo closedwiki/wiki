@@ -11,7 +11,6 @@
 %TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
 %TMPL:P{"standardheader"}%
 </form>
-%META{"parent" prefix="Parents: "}%<br />
 %TEXT%
 %META{"form"}%
 %META{"attachments"}%
@@ -30,7 +29,7 @@
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td valign="top">
-   Revision %REVINFO%
+   Revision %REVINFO% %META{"parent" prefix="<br />Parents: "}%
   </td>
   <td width="40%" valign="top">
    %WEBCOPYRIGHT%
