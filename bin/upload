@@ -329,6 +329,8 @@ sub main
     my $tmpFilename = $query->tmpFileName( $filePath ) || "";
     my $fileComment = $query->param( 'filecomment' ) || "";
     my $createLink = $query->param( 'createlink' ) || "";
+    
+    close $filePath if( $TWiki::OS eq "WINDOWS");
 
     # JET need to change windows path to unix path
     $tmpFilename =~ s@\\@/@go;
