@@ -190,7 +190,7 @@ sub createWeb {
   # check permission, user authorized to create webs?
   my $wikiUserName = TWiki::userToWikiName( $userName );
   return unless TWiki::UI::isAccessPermitted( $webName, $topicName,
-                                              "createweb", $wikiUserName );
+                                              "manage", $wikiUserName );
 
   if( $newWeb =~ /^_[a-zA-Z0-9_]+$/ ) {
     # valid template web name, untaint
