@@ -1,10 +1,9 @@
-%META:TOPICINFO{author="thoeny" date="1081687680" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1089963196" format="1.0" version="1.7"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ Statistics for <nop>%WEB% Web
 
-| *Month:* | *Topic <br> views:* | *Topic <br> saves:* | *File <br> uploads:* | *Most popular <br> topic views:* | *Top contributors for <br> topic save and uploads:* |
+| *Month:* | *Topic <br /> views:* | *Topic <br /> saves:* | *File <br /> uploads:* | *Most popular <br /> topic views:* | *Top contributors for <br /> topic save and uploads:* |
 | <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |
-| Apr 2004 |  0 |  0 |  0 |  |  |
 
 __Notes:__
 	* Do not edit this topic, it is updated automatically. (You can also [[%SCRIPTURL%/statistics%SCRIPTSUFFIX%/%WEB%][force]] an update)
