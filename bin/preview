@@ -21,106 +21,26 @@ use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
 
-$query= new CGI;
+use strict;
 
 &main();
 
-sub buildCategoryItem
-{
-    my ( $catitems ) = @_;
-    my $catname = "", $scatname = "", $catvalue = "";
-    my @cmd = split( /\|/, $catitems );
-    my $param = "";
-    my $len = @cmd;
-    if( $len < "2" ) {
-        return ( $catname, $catvalue )
-    }
-
-    if( $cmd[0] eq "select" ) {
-        $catname = $cmd[1];
-        $scatname = $catname;
-        $scatname =~ s/[^a-zA-Z0-9]//g;
-        $param = $query->param( "$scatname" );
-        for( $i = 3; $i < $len; $i++ ) {
-            my $value = $cmd[$i];
-            my $svalue = $value;
-            $svalue =~ s/[^a-zA-Z0-9]//g;
-            if( $param eq $svalue ) {
-                $catvalue = "$value";
-                last;
-            }
-        }
-        if( ! $catvalue ) {
-            $catvalue = "&nbsp;";
-        }
-
-    } elsif( $cmd[0] eq "checkbox" ) {
-        $catname = $cmd[1];
-        $scatname = $catname;
-        $scatname =~ s/[^a-zA-Z0-9]//g;
-        for( $i = 4; $i < $len; $i++ ) {
-            my $value = $cmd[$i];
-            my $svalue = $value;
-            $svalue =~ s/[^a-zA-Z0-9]//g;
-            $param = $query->param( "$scatname$svalue" );
-            if( $param ) {
-                $catvalue = "$catvalue, $value";
-            }
-            $catvalue =~ s/^,\s//;
-        }
-        if( ! $catvalue ) {
-            $catvalue = "&nbsp;";
-        }
-
-    } elsif( $cmd[0] eq "radio" ) {
-        $catname = $cmd[1];
-        $scatname = $catname;
-        $scatname =~ s/[^a-zA-Z0-9]//g;
-        $param = $query->param( "$scatname" );
-        for( $i = 3; $i < $len; $i++ ) {
-            my $value = $cmd[$i];
-            my $svalue = $value;
-            $svalue =~ s/[^a-zA-Z0-9]//g;
-            if( $param eq $svalue ) {
-                $catvalue = "$value";
-                last;
-            }
-        }
-        if( ! $catvalue ) {
-            $catvalue = "&nbsp;";
-        }
-        if( $scatname eq "UseCategory" ) {
-            if( $catvalue eq "Yes" ) {
-                # delete "UseCategory" entry if "UseCategory" is "Yes"
-                $catname = "";
-            } else {
-                # delete whole category table
-                $catname = "DELETE_ME";
-            }
-        }
-
-    } elsif( $cmd[0] eq "text" ) {
-        $catname = $cmd[1];
-        $scatname = $catname;
-        $scatname =~ s/[^a-zA-Z0-9]//g;
-        $param = $query->param( "$scatname" );
-        $catvalue = "<!---->$param<!---->&nbsp;";
-    }
-
-    return ( $catname, $catvalue )
-}
 
 sub main
 {
+    my $query = new CGI;
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
-    ( $topic, $webName ) = 
+    my( $topic, $webName ) = 
     &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
-    my $tmpl = "", $atext = "", $text = "", $ptext = "", $tcat = "", $icat = "";
+    my $tmpl = ""; 
+    my $text = "";
+    my $ptext = "";
     my $metaText = "";
+    my @meta = ();
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
 	$tmpl= &TWiki::Store::readTemplate( "noweb" );
@@ -140,10 +60,39 @@ sub main
     # reset lock time, this is to prevent contention in case of a long edit session
     &TWiki::Store::lockTopic( $topic );
 
-    # get view template, standard view or a view with a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
+
+    my $changeform = $query->param( 'submitChangeForm' );
+    TWiki::writeDebug( "================= edit, changeform $changeform" );
+    if( $changeform ) {
+        my $tmpl = &TWiki::Store::readTemplate( "changeform", "", $skin );
+        &TWiki::writeHeader( $query );
+        $tmpl =~ s/%TEXT%/$query->param( 'text' )/goe;
+        $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+        my $listForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$webName" );
+	my @forms = split( /,\s*/, $listForms );	    
+	unshift @forms, "";
+	my( $tmp, @metat ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
+	my $formName = &TWiki::Form::getFormName( @metat );
+	    
+	my $formList = "";
+	foreach my $form ( @forms ) {
+	   my $selected = ( $form eq $formName ) ? "checked" : "";
+	   $formList .= "\n<br>" if( $formList );
+	   my $show = $form ? $form : "&lt;none&gt;";
+	   my $value = $form ? $form : "none";
+	   $formList .= "<input type=\"radio\" name=\"formtemplate\" value=\"$value\" $selected>&nbsp;$show";
+	}
+        $tmpl =~ s/%FORMLIST%/$formList/go;
+    
+        #$tmpl = &TWiki::getRenderedVersion( $tmpl );
+        print $tmpl;
+        return;
+    }
+
+
+    # get view template, standard view or a view with a different skin
     $tmpl = &TWiki::Store::readTemplate( "preview", "", $skin );
-    $icat = &TWiki::Store::readTemplate( "twikicatitems" );
     my $dontNotify = $query->param( "dontnotify" ) || "";
     $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
     my $saveCmd = $query->param( "cmd" ) || "";
@@ -151,66 +100,46 @@ sub main
         $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
-
-    if( $icat ) {
-        # get category items from parameters and build category section
-        $tcat = &TWiki::Store::readTemplate( "twikicatview" );
-        my $line = "", $ttext = "", $temp = "";
-        ( $before, $line, $after) = split( /%REPEAT%/, $tcat );
-        foreach( split( /\n/, $icat ) ) {
-            my( $catname, $catvalue ) = buildCategoryItem( $_ );
-            if( $catname ) {
-                if( $catname eq "DELETE_ME" ) {
-                    $ttext = "";
-                    last;
-                }
-                $temp = $line;
-                $temp =~ s/%CATNAME%/$catname/go;
-                $temp =~ s/%CATMODIFIER%//go;
-                $temp =~ s/%CATVALUE%/$catvalue/go;
-                $ttext = "$ttext$temp";
-            }
-        }
-        if( $ttext ) {
-            $tcat = "$before$ttext$after";
-        } else {
-            $tcat = "";
-        }
-    }
-
+    
     if( $saveCmd ne "repRev" ) {
-        ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
-        # get the edited text and combine text, category table and attachment for preview
-        @meta = &TWiki::Classification::catVars2Meta( $webName, $query, @meta );
-        $metaText = &TWiki::renderMetaData( $webName, $topic, \@meta );
+        my $dummy = "";
+        ( $dummy, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
+	my $formTemplate = $query->param( "formtemplate" );
+	if( $formTemplate ) {
+	   # FIXME temporary because potentially shared fields
+	   my @args = ( name => $formTemplate );
+	   @meta = &TWiki::Store::metaRemove( "FORM", @meta );
+	   if( $formTemplate ne "none" ) {
+	       @meta = &TWiki::Store::metaUpdate( "FORM", \@args, "name", @meta);
+	   } else {
+	       $formTemplate = "";
+	   }
+	   $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
+	} else {
+	   $tmpl =~ s/%FORMTEMPLATE%//go;
+	}
+
+        # get the edited text and combine text, form and attachments for preview
+        @meta = &TWiki::Form::fieldVars2Meta( $webName, $query, @meta );
         $text = $query->param( "text" );
-        $text .= $tcat;        # text to save
-        $ptext = $text;        # text to preview
+        $ptext = $text;
         
-        my $catParams = &TWiki::Classification::categoryParams( @meta );
-        
+        my $fieldParams = &TWiki::Form::getFieldParams( @meta );
+
+        # FIXME overly verbose        
 	my $oldargsr;
-	( $oldargsr, @meta ) = &TWiki::Store::metaExtract( "CLASSIFICATION", "", "", @meta );
+	( $oldargsr, @meta ) = &TWiki::Store::metaExtract( "FORM", "", "", @meta );
 	my @oldargs = @$oldargsr;
 	if( @oldargs ) {
-	   my %args = @oldargs;
-	   my $classification = $args{"name"};
-	   my @categoriesInfo = &TWiki::Classification::getCategoriesInfo( $webName, $classification );
-	   my $catInfo = &TWiki::Classification::renderCategoryInfo( "edit", $classification, \@meta, @categoriesInfo );
-	   my $catInfo = &TWiki::handleCommonTags( $catInfo, $topic, $webName );
-	   my $catInfo = &TWiki::getRenderedVersion( $catInfo, $webName );
-	   $tmpl =~ s/%CATEGORIES%/$catInfo/go;
-	   $tmpl =~ s/%CATEGORYPARAMS%/$catParams/go;
+	   $tmpl =~ s/%FORMFIELDS%/$fieldParams/go;
 	} else {
-	   $tmpl =~ s/%CATEGORIES%//go;
-	   $tmpl =~ s/%CATEGORYPARAMS%//go;
+	   $tmpl =~ s/%FORMFIELDS%//go;
         }
     } else {
         # for debug: Don't include attachment FIXME is this correct?
-        $text = $query->param( "text" );
-        # combine text and category table
-        $text = "$before$after$tcat";   # text to save
-        $ptext = $text;                 # text to preview
+        $text = $query->param( "text" ); # text to save
+        # FIXME
+        $ptext = $text;                  # text to preview
     }
 
     $ptext =~ s/ {3}/\t/go;
@@ -219,12 +148,12 @@ sub main
 
     # do not allow click on link before save:
     $ptext =~ s@(href=".*?")@href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?template=oops"@goi;
-    $ptext = &TWiki::handleCommonTags( $ptext, $topic );
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+    $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, \@meta );
     my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
     $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
-    $tmpl =~ s/%TEXT%/$ptext$metaText/go;
+    $tmpl =~ s/%TEXT%/$ptext/go;
 
     $text =~ s/&/%_A_%/go;
     $text =~ s/\"/%_Q_%/go;
