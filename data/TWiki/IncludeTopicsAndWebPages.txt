@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="PeterThoeny" date="1018175160" format="1.0" version="1.2"}%
 *Include Topics and Web Pages Using ==%<nop>INCLUDE{...}%== Variable*
 
 Use the ==%<nop>INCLUDE{...}%== variable to embed the content of another topic or web page inside a %WIKITOOLNAME% topic. The whole content or only parts of a page can be included.
@@ -12,7 +13,7 @@ Use the ==%<nop>INCLUDE{...}%== variable to embed the content of another topic o
 	* =="page"==: <br>
 	  The nameless parameter specifies the page to include. It is
 		* The name of a topic located in the current web, i.e. ==%<nop>INCLUDE{"WebNotify"}%==
-		* A =Web.Topic= name specifying a topic in another web, i.e. ==%<nop>INCLUDE{"%TWIKIWEB%.TWikiWebsTable"}%==
+		* A =Web.Topic= name specifying a topic in another web, i.e. ==%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%==
 		* A full qualified URL with ==http== protocol, domain name and optional port number, i.e. ==%<nop>INCLUDE{"http://twiki.org:80/index.html"}%==. Supported content types are ==text/html== and ==text/plain==. The full page is included by default, but the HTML header and scripts are stripped in case it is a web page.
 
 	* ==pattern="reg-exp"==: <br>

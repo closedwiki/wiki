@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1012136640" format="1.0" version="1.43"}%
+%META:TOPICINFO{author="PeterThoeny" date="1018175220" format="1.0" version="1.44"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
@@ -152,7 +152,6 @@ To create a new web:
 		* Customize the =%<nop>WEBTOPICLIST%= variable to contain the web-specific links you prefer.
 		* Set the WEBBGCOLOR variable to a color. The number represents the unique color for the web.
 		* Set Plugins, access privileges, custom variables, other web-level options (ex: =%<nop>WEBCOPYRIGHT%= can be set for an individual web).
-	1. *Add* the new web to the color-coded web directory table by editing the %TWIKIWEB%.TWikiWebsTable topic.
 	1. *Test* the new web: view pages, create a new page.
 
 That's it for a basic new web set-up!
