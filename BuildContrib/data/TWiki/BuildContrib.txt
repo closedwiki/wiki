@@ -1,7 +1,43 @@
 TWiki Plugins/Addons/Contrib build system
 
 ---+ Summary of Contents
----++ Build & Install Modules
+
+---++ TWikiCLI - command line interface to TWiki (Martin Cleaver)
+
+Note that the TWikiCLI (BuildContrib/contrib/bin/twikicli) feature is strictly experimental.
+Its interfaces are likely to change and it may be dropped completely.
+
+Purpose:
+	1 To replace all twiki command line scripts with a single interface script environment
+
+Its purpose is to seek out classes in the path that can do its bidding. Only one class is provided
+at present: TWikiCLI::Extension
+
+Usage:
+	1 Add BuildContrib/contrib/bin to your PATH. This contains one uber-command:
+		* twikicli
+
+You can use "twikicli extension install &lt;TWiki:Plugins.TWikiExtension&gt;
+	* e.g.:
+		* twikicli extension install DistributionContrib
+		* twikicli extension install TWikiReleaseTrackerPlugin
+
+Prerequisite environment:
+
+export TWIKI_RUNTIMELIB=$HOME/latestbetatwiki.mrjc.com/twiki/lib
+export TWIKI_LIBSDIR=$HOME/twikiplugindev/twikiplugins/
+export TWIKI_LIBS=`echo $TWIKI_LIBSDIR*/lib/ | tr " " ":"`:$TWIKI_RUNTIMELIB
+export TWIKI_HOMES="latestbetatwiki.mrjc.com/twiki athenstwiki.mrjc.com/twiki be
+ijingtwiki.mrjc.com/twiki cairotwiki.mrjc.com/twiki cleaver.org/twiki mbawiki.co
+m/twiki"
+
+	
+Development notes:
+	1 This is a very rough implementation - I built one myself as I could not find one on CPAN. If
+	we find one we will trash the implementation. Hopefully we will be able to keep the functionality though
+	
+
+---++ Build & Install Modules (Crawford Currie)
 The Build.pm module can be used to create a really simple build process for your plugin, addon or contrib module, including build, test, install, release and upload targets. The advantage of this module is that it defines a standard build procedure for plugins, so you won't get file names wrong or get the list of files in the plugin topic wrong either. The easiest way to use the module is to copy the =build.pl= file from the =lib/TWiki/Contrib/BuildContrib/= into your own plugin subdirectory. Note that the test target assumes you are using Test::Unit. =Build.pm= has only been tested on Linux, but should work with cygwin OK.
 
 Note this is a _build_ module for use by developers, not an _install_ module for end users. The intent is that =Build.pm= will be extended to _auto-generate_ the installer for the plugin as part of the release process. We're not quite there yet, but watch this space!
@@ -34,10 +70,11 @@ The fixtures do not replace _all_ of the TWiki core functionality, just those pi
 
 ---++ Contrib Info
 
-|  Author: | TWiki:Main/CrawfordCurrie|
+|  Author: | TWiki:Main.CrawfordCurrie and TWiki:Main.MartinCleaver |
 |  Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
 |  License: | GPL |
 |  Dependencies: | %$DEPENDENCIES% |
+|  26/08/04 | Added twikicli |
 |  14/08/04 | Separated out from SharedCode module |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
