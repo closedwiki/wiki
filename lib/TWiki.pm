@@ -1851,7 +1851,7 @@ sub getRenderedVersion
             &TWiki::Plugins::outsidePREHandler( $_ );
 
 # Blockquote
-            s/^>(.*?)$/> <cite> $1 <\/cite><br />/go;
+            s/^>(.*?)$/> <cite> $1 <\/cite><br \/>/go;
 
 # Embedded HTML
             s/\<(\!\-\-)/$TranslationToken$1/go;  # Allow standalone "<!--"
