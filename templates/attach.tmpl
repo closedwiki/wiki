@@ -8,6 +8,13 @@
 function initForm() {
    document.main.filepath.focus();
 }
+function launchWindow( theWeb, theTopic ) {
+  win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+  if( win ) {
+    win.focus();
+  }
+  return false;
+}
 //STOP HIDING-->
 </SCRIPT>
 </HEAD>
@@ -63,29 +70,35 @@ function initForm() {
   </TR>
   <TR>
     <TD ALIGN="right">
-      Hide file:
+      <I>Hide file:</I>
     </TD><TD>
-      <INPUT TYPE="checkbox" NAME="hidefile" %HIDEFILE%> Hide attachment in normal topic view.
+      <INPUT TYPE="checkbox" NAME="hidefile" %HIDEFILE%> <I>Hide attachment in normal topic view.</I>
     </TD>
   </TR>
+
 </TABLE>
+Notes:
 <UL>
-<LI> <B>Note:</B> Link checkbox: In case the attached file is a JPG or GIF image and you check the box, it will create an inline image (e.g. show the image) at the end of the topic.
-<LI> <B>Note:</B> There is a bug with Internet Explorer. In case you get an "Internal Server Error" message when you upload a file, you need to try again. It works the second time.
+<LI> <B>Link checkbox: </B>In case the attached file is a JPG or GIF image and you check the box, it will create an inline image (e.g. show the image) at the end of the topic.
+<LI> <B>Bug: </B>There is a bug with Internet Explorer. In case you get an "Internal Server Error" message when you upload a file, you need to try again. It works the second time.
+<!--FIXME Codev to TWiki-->
+<LI> <B>Properties: </B>Can be changed without uploading a file; see <A target="HiddenAttachment" onClick="return launchWindow('%TWIKIWEB%','HiddenAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Codev/HiddenAttachment">HiddenAttachment</A>
+ and <A target="DeletedAttachment" onClick="return launchWindow('%TWIKIWEB%','DeletedAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Codev/DeletedAttachment">DeletedAttachment</A>
 </UL>
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR BGCOLOR="%WEBBGCOLOR%">
     <TD valign="top">
       Topic <B>%TOPIC%</B> . {
-      <INPUT type="submit" value=" &nbsp; Upload and attach file &nbsp; "> &nbsp;
+      <INPUT type="submit" name="uploadButton" value=" &nbsp; Upload file &nbsp; "> &nbsp;
+      <INPUT type="submit" name="changeButton" value="Change properties"> &nbsp;
       <A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">cancel</A>
       }
     </TD>
 <!-- FIXME: Hidden until implemented
     <TD>
-    <a href="!!!">Delete attachment</a> <a href="!!!">&nbsp;(Help)</a>
-    &nbsp;|&nbsp;<a href="!!!">Move attachment</a> <a href="!!!">&nbsp;(Help)</a>
-    </TD>
+    <a href="!!!">Delete attachment</a> <a href="FIXME">&nbsp;(Help)</a>
+    &nbsp;|&nbsp;<a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move attachment</a> <a href="FIXME">&nbsp;(Help)</a>
+    </TD
 -->
   </TR>
 </TABLE>
