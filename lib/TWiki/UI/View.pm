@@ -323,8 +323,7 @@ sub view {
 
     # can't use simple length() in case we have UNICODE
     # see perldoc -f length
-    $| = 1;
-    my $len = 0;#do { use bytes; length( $tmpl) };
+    my $len = do { use bytes; length( $tmpl) };
     $session->writeHeaderFull( $query, 'basic', $contentType, $len);
     print $tmpl;
 }
