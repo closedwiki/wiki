@@ -131,7 +131,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "18 Apr 2004";
+$wikiversion      = "24 Apr 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -436,7 +436,9 @@ sub initialize
     # PTh: Moved from internalLink to initialize ('cause of performance)
     $newTopicBgColor   = TWiki::Prefs::getPreferencesValue("NEWTOPICBGCOLOR")   || "#FFFFCE";
     $newTopicFontColor = TWiki::Prefs::getPreferencesValue("NEWTOPICFONTCOLOR") || "#0000FF";
+    # tooltip init
     $linkToolTipInfo   = TWiki::Prefs::getPreferencesValue("LINKTOOLTIPINFO")   || "";
+    $linkToolTipInfo = '$username - $date - r$rev: $summary' if( $linkToolTipInfo =~ /^on$/ );
     # Prevent autolink of WikiWords
     $noAutoLink        = TWiki::Prefs::getPreferencesValue("NOAUTOLINK") || 0;
 
@@ -3529,6 +3531,7 @@ sub linkToolTipInfo
 {
     my( $theWeb, $theTopic ) = @_;
     return "" unless( $linkToolTipInfo );
+    return "" if( $linkToolTipInfo =~ /^off$/i );
 
     # FIXME: This is slow, it can be improved by caching topic rev info and summary
     my( $date, $user, $rev ) = TWiki::Store::getRevisionInfo( $theWeb, $theTopic );
