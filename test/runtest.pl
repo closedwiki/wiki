@@ -28,16 +28,26 @@ print "<pre>\n";
 print `svn update`;
 print "</pre>\n";
 
-print "<h1>Compile Tests</h1>\n<table border='1'>";
+print "<h1>Compile Tests</h1>\n";
 my $pms = `find ../lib -name '*.pm'`;
+my $rose = "";
 foreach my $pm (split /\n/, $pms){
-    print "<tr><td>$pm</td><td><pre>\n";
-    print `perl -I ../lib -I . -w -c $pm`;
-    print "</pre></td></tr>\n";
+    my $mess = `perl -I ../lib -I . -w -c $pm 2>&1`;
+    $mess =~ s/^.*Subroutine .*? redefined at .*?$//gm;
+    $mess =~ s/^.*Name ".*?" used only once: possible typo.*$//gm;
+    $mess =~ s/^.*?syntax OK$//m;
+    $mess =~ s/\n\n/\n/sg;
+    if ( $mess =~ /\S/ ) {
+        $rose .= "<tr align='top'><td>$pm</td><td>\n";
+        $rose .= "<pre>$mess</pre></td></tr>\n";
+    }
 }
-print "</table\n\n";
-
-print "<h1>Unit Tests</h1>";
+if ( $rose) {
+    print "<table border='1'>$rose</table\n";
+} else {
+    print "No compile errors\n";
+}
+print "<h1>Unit Tests</h1>\n";
 print "Errors will be in $outputDir/unit$now\n<pre>\n";
 execute ( "cd unit ; perl ../bin/TestRunner.pl TWikiUnitTestSuite.pm > $outputDir/unit$now ; cd ..") or die $!;
 print "</pre>\n";
