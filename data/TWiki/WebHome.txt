@@ -75,7 +75,7 @@ _Documentation for webmasters, system administrators, project managers, team lea
 		1. [[FormattedSearch][Formatted Search]]
 		1. [[TWikiMetaData][TWiki MetaData]]
 		1. [[TWikiPlugins][TWiki Plugins]]
-		1. [[TWikiFuncModule][TWiki::Func Module Documentation]]
+		1. [[FuncDotPm][TWiki::Func Module Documentation]]
 		1. [[TWikiSiteTools][TWiki Site Tools]] 
 		1. [[ManagingTopics][Managing Topics]] 
 		1. [[ManagingWebs][Managing Webs]]

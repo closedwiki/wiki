@@ -21,7 +21,7 @@ This guide describes how to upgrade from TWiki 01-Dec-2001 to TWiki 01-Feb-2003.
 ---++ Major Changes from TWiki 01-Dec-2001
 
 	* Form and script to [[ManagingWebs][create new webs]]
-	* Enhanced Plugin API to manipulate topic data with new functions in TWikiFuncModule: =readTopicText=, =saveTopicText=, =setTopicEditLock=, =checkTopicEditLock=
+	* Enhanced Plugin API to manipulate topic data with new functions in FuncDotPm: =readTopicText=, =saveTopicText=, =setTopicEditLock=, =checkTopicEditLock=
 	* New Plugin hooks =registrationHandler=, =beforeEditHandler=, =afterEditHandler=, =beforeSaveHandler=, =writeHeaderHandler=, =redirectCgiQueryHandler=, =getSessionValueHandler=, =setSessionValueHandler=
 	* Internationalization ('I18N') support 8-bit character sets in WikiWords, such as ISO-8859-15, KOI8-R
 	* Possible to omit e-mail address in %NOTIFYTOPIC%, in which case the e-mail is taken from the user's home page; if the WikiName is a group name, a notification is sent to all members of the group
