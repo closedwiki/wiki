@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "22 Aug 2003";
+$wikiversion      = "28 Aug 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1784,7 +1784,9 @@ sub handleUrlParam
         $value = "" unless( defined $value );
         $value =~ s/\r?\n/$newLine/go if( $newLine );
     }
-
+    unless( $value ) {
+        $value = extractNameValuePair( $theArgs, "default" ) || "";
+    }
     return $value;
 }
 
