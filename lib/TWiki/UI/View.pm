@@ -34,6 +34,8 @@ UI delegate for view function
 package TWiki::UI::View;
 
 use strict;
+use integer;
+
 use TWiki;
 use TWiki::User;
 use TWiki::UI;
@@ -65,7 +67,7 @@ sub view {
     my $viewRaw = $query->param( "raw" ) || "";
     my $contentType = $query->param( "contenttype" );
 
-    my $maxrev = 1;
+    my $showRev = 1;
     my $extra = "";
     my $revdate = "";
     my $revuser = "";
@@ -90,18 +92,18 @@ sub view {
     if( $topicExists ) {
         ( $currMeta, $currText ) = $session->{store}->readTopic
           ( undef, $webName, $topicName, undef );
-        ( $revdate, $revuser, $maxrev ) =
+        ( $revdate, $revuser, $showRev ) =
           $currMeta->getRevisionInfo( $webName, $topicName );
 
         $revdate = TWiki::Time::formatTime( $revdate );
 
-        if ( !$rev || $rev > $maxrev ) {
-            $rev = $maxrev;
+        if ( !$rev || $rev > $showRev ) {
+            $rev = $showRev;
         } elsif ( $rev < 0 ) {
             $rev = 1;
         }
 
-        if( $rev < $maxrev ) {
+        if( $rev < $showRev ) {
             # Note: the most recent topic read in even if earlier rev
             # requested. The most recent rev is required for access
             # control checking.
@@ -144,7 +146,7 @@ sub view {
         if( $skin !~ /^text/ ) {
             my $vtext = "<form><textarea readonly=\"readonly\" " .
               "wrap=\"virtual\" rows=\"\%EDITBOXHEIGHT%\" " .
-	        "style=\"\%EDITBOXSTYLE%\" " .
+               "style=\"\%EDITBOXSTYLE%\" " .
                 "cols=\"\%EDITBOXWIDTH%\">";
             $vtext = $session->handleCommonTags( $vtext, $webName, $topicName );
             $text = TWiki::entityEncode( $text );
@@ -193,7 +195,7 @@ sub view {
             $text = "";
         }
         $tmpl =~ s/%REVTITLE%//go;
-    } elsif( $rev < $maxrev ) {
+    } elsif( $rev < $showRev ) {
         # disable edit of previous revisions - FIXME consider change
         # to use two templates
         # SMELL: won't work with non-default skins, see %EDITURL%
@@ -225,36 +227,30 @@ sub view {
         $tmpl =~ s/<meta name="robots"[^>]*>//goi;
     }
 
-    # SMELL: HUH? - TODO: why would you not show the revisions around
-    # the version that you are displaying? and this logic is yucky@!
-    my $i = $maxrev;
-    my $j = $maxrev;
+    # Show revisions around the one being displayed
+    my $revsToShow = $TWiki::cfg{NumberOfRevisions} + 1;
+    my $topRev = $rev + $revsToShow / 2;
+    $topRev = $revsToShow if $topRev < $revsToShow;
+    $topRev = $showRev if $topRev > $showRev;
     my $revisions = "";
-    my $breakRev = 0;
-    if( ( $TWiki::cfg{NumberOfRevisions} > 0 ) &&
-        ( $TWiki::cfg{NumberOfRevisions} < $maxrev ) ) {
-        $breakRev = $maxrev - $TWiki::cfg{NumberOfRevisions} + 1;
-    }
-    while( $i > 0 ) {
-        if( $i == $rev) {
-            $revisions = "$revisions | r$i";
+    my @revs;
+    while( $revsToShow && $topRev ) {
+        if( $topRev == $rev) {
+            push( @revs, "r$rev" );
         } else {
-            $revisions = "$revisions | <a href=\"".
-              $session->getScriptUrl( $webName, $topicName, "view" ) .
-                "?rev=$i\" $TWiki::cfg{NoFollow}>r$i</a>";
+            push( @revs, "<a href=\"".
+                  $session->getScriptUrl( $webName, $topicName, "view" ) .
+                  "?rev=$topRev\" $TWiki::cfg{NoFollow}>r$topRev</a>" );
         }
-        if( $i != 1 ) {
-            if( $i == $breakRev ) {
-                $i = 1;
-            } else {
-                $j = $i - 1;
-                $revisions = "$revisions | <a href=\"".
+        if( $revsToShow > 1 && $topRev > 1 ) {
+            push( @revs, "<a href=\"".
                   $session->getScriptUrl( $webName, $topicName, "rdiff").
-                    "?rev1=$i&amp;rev2=$j\" $TWiki::cfg{NoFollow}>&gt;</a>";
-            }
+                  "?rev1=$topRev&amp;rev2=".($topRev-1)."\" $TWiki::cfg{NoFollow}>&gt;</a>" );
         }
-        $i = $i - 1;
+        $revsToShow--;
+        $topRev--;
     }
+    $revisions = join(" ", @revs );
     $tmpl =~ s/%REVISIONS%/$revisions/go;
 
     $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;
@@ -264,13 +260,13 @@ sub view {
     if( $viewRaw ) {
         $tmpl =~ s/%META{[^}]*}%//go;
     } else {
-        $tmpl = $session->{renderer}->renderMetaTags( $webName, $topicName, $tmpl, $meta, ( $rev == $maxrev ) );
+        $tmpl = $session->{renderer}->renderMetaTags( $webName, $topicName, $tmpl, $meta, ( $rev == $showRev ) );
     }
 
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topicName );
 
     $tmpl =~ s/%TEXT%/$text/go;
-    $tmpl =~ s/%MAXREV%/$maxrev/go;
+    $tmpl =~ s/%MAXREV%/$showRev/go;
     $tmpl =~ s/%CURRREV%/$rev/go;
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
