@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "21 Mar 2003";
+$wikiversion      = "25 Mar 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -592,7 +592,8 @@ sub writeHeaderFull
 
 	}
     }
-    $finalHeaders .= "\r\n";		
+    $finalHeaders .= "\r\n" if ( $finalHeaders);
+
     ##writeDebug( "===== Final Headers are:\n$finalHeaders" );
     print $finalHeaders;
 
