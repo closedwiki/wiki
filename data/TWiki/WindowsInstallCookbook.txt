@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044099332" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044149808" format="1.0" version="1.3"}%
 %TOC%
 %STARTINCLUDE%
 ---# Windows Install Cookbook 
@@ -40,7 +40,7 @@ There is a huge volume of existing material on TWiki about installing on Windows
 
 ---++ Scope
 
-This document covers installation of the TWiki *Dec 2001* release in the following environment - if you want to use a different environment, feel free to use this as a guideline only.
+This document covers installation of the TWiki -1-Feb-2003 production release in the following environment - if you want to use a different environment, feel free to use this as a guideline only.
 
 | *Component* | *Name, version* | *Comment* |
 | Operating System | Windows 2000 | Should also work for Windows NT |
@@ -241,7 +241,7 @@ This setup is written to the Windows registry, so there's no need to put these c
 
 *7. Download TWiki*
 
-Download the latest TWiki release (this cookbook is tested with the ==Dec 2001== release) from the URL that %MAINWEB%.PeterThoeny sent you, and save it in the =c:/twiki= directory.
+Download the latest TWiki release from the URL that %MAINWEB%.PeterThoeny sent you, and save it in the =c:/twiki= directory.
 
 *8. Install TWiki*
 
