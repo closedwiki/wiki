@@ -217,7 +217,7 @@ checkdir( $cpan );
 ################################################################################
 # setup directory skeleton workplace
 
-my $tar = $q->param( 'twiki' ) || "TWiki20040901.tar.gz";
+my $tar = $q->param( 'twiki' ) || "TWiki20040902.tar.gz";
 installTWikiExtension({ file => $tar,
 			dir => "downloads/releases",
 			name => 'TWiki',
