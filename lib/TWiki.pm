@@ -2156,6 +2156,10 @@ sub getRenderedVersion
     $text =~ s/\r//go;
     $text =~ s/(\n?)$/\n<nop>\n/os; # clutch to enforce correct rendering at end of doc
 
+    my @verbatim = ();
+    $text = takeOutVerbatim( $text, \@verbatim );
+    $text =~ s/\\\n//go;  # Join lines ending in "\"
+
     # do not render HTML head, style sheets and scripts
     if( $text =~ m/<body[\s\>]/i ) {
         my $bodyTag = "";
@@ -2164,10 +2168,6 @@ sub getRenderedVersion
         $text = $bodyTag . $bodyText;
     }
     
-    my @verbatim = ();
-    $text = takeOutVerbatim( $text, \@verbatim );
-    $text =~ s/\\\n//go;  # Join lines ending in "\"
-
     # Wiki Plugin Hook
     &TWiki::Plugins::startRenderingHandler( $text, $theWeb, $meta );
 
