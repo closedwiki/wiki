@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1020583527" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1036923555" format="1.0" version="1.4"}%
 ---++ NOTE: This Wiki topic does not exist yet
 
 ---+++ If you would like to create this page:
@@ -29,7 +29,7 @@ Use the <a href="WebSearch">Search</a> link on top of this page, or do a simple 
 Make sure you spelled the %TWIKIWEB%.WikiWord correctly and try again.
 Remember, a <nop>WikiWord is case sensitive.
 
-	* Similar topics in this web (if any): %SEARCH{ "%TOPIC%" limit="10" scope="topic" nosearch="on" nototal="on" format="	  [[$topic]], " }%
+	* Similar topics in this web (if any): %SEARCH{ "%TOPIC%" limit="16" scope="topic" nosearch="on" nototal="on" format="	  [[$topic]], " }% [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&amp;nosummary=on&amp;nototal=on&amp;search=%TOPIC%][...]]
 
 	* [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%WEB%/?web=all&amp;scope=topic&amp;nosummary=on&amp;nototal=on&amp;search=%TOPIC%][Search]] for similar topics in all public webs.
 </blockquote>
