@@ -42,7 +42,7 @@ use TWiki::Func;
     my $chosen = $actions->search("state=open sort=\"\$ap,\$due\"");
     my $fmt = new ActionTrackerPlugin::Format("|AP|","|\$ap|","\$ap");
     my $s = $chosen->formatAsString($fmt);
-    Assert::sEquals($s,"2\n\$ap\n");
+    Assert::sEquals($s,"2\n\n");
   }
 }
 

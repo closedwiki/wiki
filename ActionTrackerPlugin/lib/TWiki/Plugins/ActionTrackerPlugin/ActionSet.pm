@@ -139,23 +139,57 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
   # names of people who have registered for notification.
   sub findChanges {
     my ( $this, $old, $date, $format, $notifications ) = @_;
-    my @matchNumber = ();
-    my @matchValue = ();
+
+    my @matchOld;
+    my @matchNew;
+    my $oaction;
+    my $naction;
+    my $o;
+    my $n;
+
+    # Try and match by UIDs first. If all the actions in your
+    # wiki are known to have UIDs, they should all match here.
+    $o = 0;
+    foreach $oaction ( @{$old->{ACTIONS}} ) {
+      my $uid = $oaction->{uid};
+      if ( defined( $uid )) {
+	$n = 0;
+	foreach $naction ( @{$this->{ACTIONS}} ) {
+	  if ( defined( $naction->{uid} ) && $naction->{uid} eq $uid ) {
+	    $naction->findChanges( $oaction, $format, $notifications );
+	    $matchOld[$o] = 1;
+	    $matchNew[$n] = 1;
+	    last;
+	  }
+	  $n++;
+	}
+      }
+      $o++;
+    }
 
     # Assume the action _order_ is not changed, but actions may have
     # been inserted or deleted. For each old action,
     # find the next new action that fuzzyMatches the old action starting
     # from the most recently matched new action.
-    my $n = 0;
-    for ( my $o = 0; $o < scalar( @{$old->{ACTIONS}} ); $o++ ) {
-      my $oaction = @{$old->{ACTIONS}}[$o];
-      for ( my $i = $n; $i < scalar( @{$this->{ACTIONS}} ); $i++ ) {
-	my $naction = @{$this->{ACTIONS}}[$i];
-	my $score = $naction->fuzzyMatches( $oaction );
-	if ( $score > 7 ) {
+    for ( $o = 0; $o < scalar( @{$old->{ACTIONS}} ); $o++ ) {
+      if ( !$matchOld[$o] ) {
+	$oaction = @{$old->{ACTIONS}}[$o];
+	my $bestMatch = -1;
+	my $bestScore = -1;
+	for ( $n = 0; $n < scalar( @{$this->{ACTIONS}} ); $n++ ) {
+	  if ( !$matchNew[$n] ) {
+	    $naction = @{$this->{ACTIONS}}[$n];
+	    my $score = $naction->fuzzyMatches( $oaction );
+	    if ( $score > $bestScore ) {
+	      $bestMatch = $n;
+	      $bestScore = $score;
+	    }
+	  }
+	}
+	if ( $bestScore > 7 ) {
+	  $naction = @{$this->{ACTIONS}}[$bestMatch];
 	  $naction->findChanges( $oaction, $format, $notifications );
-	  $n = $i + 1;
-	  last;
+	  $matchNew[$bestMatch] = 1;
 	}
       }
     }
@@ -220,7 +254,11 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
     my $webs = $attrs->get( "web" ) || $theweb;
     my $actions = new ActionTrackerPlugin::ActionSet();
     my $dataDir = TWiki::Func::getDataDir();
-    opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
+    if ( !opendir( DIR, "$dataDir" )) {
+      TWiki::Func::writeWarning("could not open $dataDir in " .
+				__FILE__ . ": " .__LINE__);
+      return $actions;
+    }
     my @weblist = grep !/^[._].*$/, readdir DIR;
     closedir DIR;
     my $web;

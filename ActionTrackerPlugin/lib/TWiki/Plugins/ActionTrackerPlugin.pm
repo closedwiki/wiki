@@ -41,7 +41,7 @@ $perlTimeParseDateFound = 0;
 $pluginName = "ActionTrackerPlugin";
 
 my $actionNumber = 0;
-
+my %prefs;
 # =========================
 sub initPlugin {
   ( $topic, $web, $user, $installWeb ) = @_;
@@ -55,41 +55,31 @@ sub initPlugin {
   # Get plugin debug flag
   $debug = &TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_DEBUG" ) ||
     0;
-  $useNewWindow = &TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_USENEWWINDOW" ) || 0;
+
+  loadPrefsOverrides( $web );
+
+  $useNewWindow = getPref( "USENEWWINDOW", 0 );
 
   # Colour for warning of late actions
-  $ActionTrackerPlugin::Format::latecol = 
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_LATECOL" ) ||
-      "yellow";
+  $ActionTrackerPlugin::Format::latecol = getPref( "LATECOL", "yellow" );
   # Colour for an unparseable date
-  $ActionTrackerPlugin::Format::badcol =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_BADDATECOL" ) ||
-      "red";
+  $ActionTrackerPlugin::Format::badcol = getPref( "BADDATECOL", "red" );
   # Colour for table header rows
-  $ActionTrackerPlugin::Format::hdrcol =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_HEADERCOL" ) ||
-      "FFCC66";
+  $ActionTrackerPlugin::Format::hdrcol = getPref( "HEADERCOL", "#FFCC66" );
 
-  my $hdr =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEHEADER" );
-  my $bdy =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEFORMAT" );
-  my $textform =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TEXTFORMAT" );
-  my $orient =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEORIENT" );
-  my $changes =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_NOTIFYCHANGES" );
+  my $hdr      = getPref( "TABLEHEADER" );
+  my $bdy      = getPref( "TABLEFORMAT" );
+  my $textform = getPref( "TEXTFORMAT" );
+  my $orient   = getPref( "TABLEORIENT" );
+  my $changes  = getPref( "NOTIFYCHANGES" );
   $defaultFormat =
     new ActionTrackerPlugin::Format( $hdr, $bdy, $textform, $changes, $orient );
 
-  my $extras =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EXTRAS" );
+  my $extras = getPref( "EXTRAS" );
 
   if ( $extras ) {
     my $e = ActionTrackerPlugin::Action::extendTypes( $extras );
     if ( defined( $e )) {
-print STDERR "Bottlin $e\n";
       TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin ERROR $e" );
     }
   }
@@ -158,13 +148,16 @@ sub commonTagsHandler {
   }
   $_[0] = $text;
   $_[0] =~ s/%ACTIONSEARCH{(.*)?}%/&handleActionSearch($web, $1)/geo;
-  $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&handleActionNotify($web, $1)/geo;
+  if ( $debug ) {
+    $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&handleActionNotify($web, $1)/geo;
+    $_[0] =~ s/%ACTIONTRACKERPREFS%/&dumpPrefs()/geo;
+  }
 }
 
 # This handler is called by the edit script just before presenting
 # the edit text in the edit box.
 # New hook in TWiki::Plugins $VERSION = '1.010'
-# We use it to populate the editaction.tmpl template, which is then
+# We use it to populate the actionform.tmpl template, which is then
 # inserted in the edit.action.tmpl as the %TEXT%.
 # We process the %META fields from the raw text of the topic and
 # insert them as hidden fields in the form, so the topic is
@@ -184,10 +177,10 @@ sub beforeEditHandler {
   my $web = $_[2];
 
   my $query = TWiki::Func::getCgiQuery();
-  # editaction.tmpl is a sub-template inserted into the parent template
+  # actionform.tmpl is a sub-template inserted into the parent template
   # as %TEXT%. This is done so we can use the standard template mechanism
   # without screwing up the content of the subtemplate.
-  my $tmpl = TWiki::Func::readTemplate( "editaction", "");
+  my $tmpl = TWiki::Func::readTemplate( "actionform", "");
   my $date = TWiki::getGmDate();
   $tmpl =~ s/%DATE%/$date/go;
   my $user = TWiki::Func::getWikiUserName();
@@ -237,14 +230,13 @@ sub beforeEditHandler {
 
   $tmpl =~ s/%UID%/$uid/go;
   
-  my $useNewWindow =
-    &TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_USENEWWINDOW" );
+  my $useNewWindow = ( getPref( "USENEWWINDOW", 0 ) == 1 );
   
   my $submitCmd = "Preview";
   my $submitScript = "";
   my $cancelScript = "";
 
-  if ( TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_NOPREVIEW" )) {
+  if ( getPref( "NOPREVIEW", 0 )) {
     $submitCmd = "Save";
     if ( $useNewWindow ) {
       # I'd like close the subwindow here, but not sure how. Like this,
@@ -265,26 +257,22 @@ sub beforeEditHandler {
   $submitCmd = lcfirst( $submitCmd );
   $tmpl =~ s/%SUBMITCOMMAND%/$submitCmd/go;
   
-  my $hdrs =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITHEADER" );
-  my $body =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITFORMAT" );
-  my $vert =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITORIENT" );
+  my $hdrs = getPref( "EDITHEADER" );
+  my $body = getPref( "EDITFORMAT" );
+  my $vert = getPref( "EDITORIENT" );
 
   my $fmt = new ActionTrackerPlugin::Format( $hdrs, $body, "", "", $vert );
-  my $editable = $fmt->formatForEdit( $action );
+  my $editable = $action->formatForEdit( $fmt );
   $tmpl =~ s/%EDITFIELDS%/$editable/o;
 
-  my $ebh =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITBOXHEIGHT" ) ||
-      TWiki::Func::getPreferencesValue( 'EDITBOXHEIGHT' );
+  my $dfltH = TWiki::Func::getPreferencesValue( 'EDITBOXHEIGHT' );
+  my $ebh = getPref( "EDITBOXHEIGHT", $dfltH );
   $tmpl =~ s/%EBH%/$ebh/go;
   
-  my $ebw =
-    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITBOXWIDTH" ) ||
-      TWiki::Func::getPreferencesValue( 'EDITBOXWIDTH' );
+  my $dfltW = TWiki::Func::getPreferencesValue( 'EDITBOXWIDTH' );
+  my $ebw = getPref( "EDITBOXWIDTH", $dfltW );
   $tmpl =~ s/%EBW%/$ebw/go;
+
   $text = $action->{text};
   # Process the text so it's nice to edit. This gets undone in Action.pm
   # when the action is saved.
@@ -389,6 +377,58 @@ sub _populateFields {
   my $action = new ActionTrackerPlugin::Action( $web, $topic, $actionNumber++, $attrs, $text );
   $action->populateMissingFields();
   return $action->toString();
+}
+
+# Prefs handling
+
+# Get a prefs value
+sub getPref {
+  my ( $vbl, $default ) = @_;
+  my $val = $prefs{$vbl};
+  if ( !defined( $val )) {
+    $val = TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_$vbl" );
+    if ( !defined( $val ) || $val eq "" ) {
+      $val = $default;
+    }
+  }
+  return $val;
+}
+
+# Load prefs from WebPreferences so they override the settings
+# in the plugin topic.
+sub loadPrefsOverrides {
+  my $web = shift;
+
+  # The remaining prefs are defined in the plugin topic but may be overridden
+  # in WebPreferences. Reload ACTIONTRACKERPLUGIN_ prefs from WebPreferences
+  # topic. Note: Default load order is:
+  # TWiki.TWikiPreferences
+  # Main.TWikiPreferences
+  # $web.WebPreferences
+  # Main.TWikiGuest
+  # TWiki.DefaultPlugin
+  # All other plugins
+  if ( TWiki::Func::topicExists( $web, "WebPreferences" )) {
+    my $text = TWiki::Func::readTopicText( $web, "WebPreferences" );
+    foreach my $line ( split ( /\n/, $text )) {
+      if ( $line =~ /^\s+\* Set ACTIONTRACKERPLUGIN_(\w+)\s+=\s+([^\r\n]*)/o ) {
+	$prefs{$1} = $2;
+      }
+    }
+  }
+}
+
+# Generate plugin prefs in HTML
+sub dumpPrefs {
+  my $text = "";
+  foreach my $key ( "TABLEHEADER","TABLEFORMAT","TABLEORIENT","TEXTFORMAT","LATECOL","BADDATECOL","HEADERCOL","EDITHEADER","EDITFORMAT","EDITORIENT","USENEWWINDOW","NOPREVIEW","EXTRAS","EDITBOXHEIGHT","EDITBOXWIDTH" ) {
+    $text .= "\t* $key\n<verbatim>\n";
+    if ( defined( getPref($key))) {
+      $text .= getPref( $key );
+    }
+    $text .= "\n</verbatim>\n";
+  }
+  return $text;
 }
 
 # =========================

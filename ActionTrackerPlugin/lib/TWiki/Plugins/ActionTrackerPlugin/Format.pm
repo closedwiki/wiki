@@ -149,17 +149,18 @@ use integer;
   sub _expandVar {
     my $object = shift;
     my $vbl = shift;
+    my $asHTML = shift;
     if ( defined( &{ref( $object ) . "::_formatField_$vbl"} ) ) {
       # special format for this field
       my $fn = "_formatField_$vbl";
-      return $object->$fn( @_ );
+      return $object->$fn( $asHTML, @_ );
     }
     my $type = $object->getType( $vbl );
     my $typename = $type->{type};
     if ( defined( &{ref( $object ) . "::_formatType_$typename"} ) ) {
       # special format for this type
       my $fn = "_formatType_$typename";
-      return $object->$fn( $vbl, @_ );
+      return $object->$fn( $vbl, $asHTML, @_ );
     }
 
     if ( defined( $object->{$vbl} ) ) {
@@ -167,7 +168,11 @@ use integer;
       return ( $object->{$vbl}, 0 );
     }
 
-    return ( "\$$vbl", 0 );
+    if ( $asHTML ) {
+      return ( "&nbsp;", 0 );
+    } else {
+      return ( "", 0 );
+    }
   }
 
   # PRIVATE STATIC fill in variable expansions in simple text form
@@ -265,7 +270,7 @@ use integer;
   # are more useful if the table is oriented as rows.
   sub _generateHTMLTable {
     my ( $this, $rows, $anchors ) = @_;
-    my $text = "<table border=\"$border\">";
+    my $text = "<table border=\"$border\">\n";
     my $i;
 
     if ( $this->{ORIENTATION} eq "rows" ) {
@@ -279,23 +284,23 @@ use integer;
 	$text .= "<tr><th bgcolor=\"$hdrcol\">$head</th>";
         foreach my $col ( @$rows ) {
 	  my $datum = @$col[$i];
-	  $text .= $datum;
+	  $text .= "$datum\n";
 	}
-        $text .= "</tr>";
+        $text .= "</tr>\n";
       }
     } else {
       $text .= "<tr bgcolor=\"$hdrcol\">";
       foreach $i ( @{$this->{HEADINGS}} ) {
 	$text .= "<th>$i</th>";
       }
-      $text .= "</tr>";
+      $text .= "</tr>\n";
       foreach my $row ( @$rows ) {
 	$text .= "<tr valign=\"top\">";
 	if ( defined( $anchors ) ) {
 	  my $a = shift( @$anchors );
 	  $text .= $a if ( defined( $a ) );
 	}
-	$text .= join( "", @$row) . "</tr>";
+	$text .= join( "\n", @$row) . "</tr>\n";
       }
     }
     $text .= "</table>";
@@ -336,7 +341,7 @@ use integer;
       }
     }
     if ( $tbl ne "" ) {
-      return "<table><tr><th>Attribute</th>".
+      return "<table border=\"$border\"><tr bgcolor=\"$badcol\"><th>Attribute</th>".
 	"<th>Old</th><th>New</th></tr>\n$tbl</table>";
     }
     return $tbl;
@@ -365,15 +370,16 @@ use integer;
     return $tbl;
   }
 
-  # Format the object for editing.
-  sub formatForEdit {
-    my ( $this, $object ) = @_;
+  # Format the editable fields of $object for editing.
+  sub formatEditableFields {
+    my ( $this, $object, $expanded ) = @_;
+
     # for each of the fields in EDITFORMAT, create an appropriate
     # parameter.
     my @fields;
     foreach my $col ( @{$this->{FIELDS}} ) {
       my $entry = $col;
-      $entry =~ s/\$(\w+\b)(\(\))?/&_expandEditField( $this, $object, $1 )/geos;
+      $entry =~ s/\$(\w+\b)(\(\))?/&_expandEditField( $this, $object, $1, $expanded )/geos;
       $entry = "<td>$entry</td>";
       push @fields, $entry;
     }
@@ -387,7 +393,11 @@ use integer;
   # returns a non-zero color, then fill in the passed-by-reference color
   # variable $col with the value returned.
   sub _expandEditField {
-    my ( $this, $object, $var ) = @_;
+    my ( $this, $object, $var, $expanded ) = @_;
+
+    # record the fact that we expanded this field, so it doesn't get
+    # generated as a hidden
+    $expanded->{$var} = 1;
 
     if ( $var eq "dollar") {
       return "\$";
@@ -422,12 +432,26 @@ use integer;
 	$field .= ">$option</OPTION>";
       }
       return $field . "</SELECT>";
-    } elsif ( $type->{type} ne 'ignore' ) {
+    } elsif ( $type->{type} !~ m/noload/ ) {
       my ( $val, $c ) = _expandVar( $object, $attrname );
+      if ( $type->{type} eq 'date' ) {
+	$val =~ s/ \(LATE\)//o;
+      }
       my $field = "<INPUT TYPE=\"text\" NAME=\"$attrname\" ";
       return $field . "VALUE=\"$val\" SIZE=\"$size\"/>";
     }
     return $attrname;
+  }
+
+  # PUBLIC generate and return a hidden editable field
+  sub formatHidden {
+    my ( $this, $object, $attrname ) = @_;
+
+    my ( $v, $c ) = _expandVar( $object, $attrname, 0 );
+    if ( defined( $v ) ) {
+      return "<INPUT TYPE=\"hidden\" NAME=\"$attrname\" VALUE=\"$v\">\n";
+    }
+    return "";
   }
 }
 

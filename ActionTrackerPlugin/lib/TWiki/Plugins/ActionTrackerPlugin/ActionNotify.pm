@@ -41,7 +41,11 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	  &TWiki::initialize( "/Main", "nobody" );
       $dummy = "";  # to suppress warning
       
-      doNotifications( $webName, $expr, 0 );
+      if ( $expr =~ s/DEBUG//o ) {
+	print doNotifications( $webName, $expr, 1 ),"\n";
+      } else {
+	doNotifications( $webName, $expr, 0 );
+      }
   }
 
   # Entry point separated from main entry point, because we may want
@@ -329,6 +333,9 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my ( $theWeb, $theTopic, $date ) = @_;
     my $dataDir = TWiki::Func::getDataDir();
     my $fname = "$dataDir\/$theWeb\/$theTopic.txt";
+    if ( !-e "$fname,v") {
+      return undef;
+    }
     my $tmp = $ActionTrackerPlugin::Config::rlogCmd;
     $tmp =~ s/%DATE%/$date/o;
     $tmp =~ s/%FILENAME%/$fname/o;
@@ -345,7 +352,6 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # PRIVATE STATIC get the "real" date from a relative date.
   sub _getRelativeDate {
     my $ago = shift;
-    
     my $triggerTime = Time::ParseDate::parsedate( "$ago", PREFER_PAST => 1 );
     return gmtime( $triggerTime );
   }

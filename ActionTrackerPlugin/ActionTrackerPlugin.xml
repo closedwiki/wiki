@@ -18,13 +18,16 @@
     <property name="release.zip" value="${ant.project.name}.zip" />
     <property name="test.zip" value="${plugin.lib}/test.zip" />
 
+    <!-- Caution: also used in uninstall, so don't use * in shared dirs -->
     <patternset id="installed.files">
 	<include name="${ant.project.name}.xml"/>
         <include name="${plugin.lib}.pm"/>
         <include name="${plugin.lib}/*.pm"/>
         <include name="${plugin.data}*.txt"/>
         <include name="bin/actionnotify"/>
-        <include name="templates/*.tmpl"/>
+        <include name="templates/actionnotify.tmpl"/>
+        <include name="templates/edit.action.tmpl"/>
+        <include name="templates/actionform.tmpl"/>
         <include name="${test.zip}"/>
     </patternset>
 

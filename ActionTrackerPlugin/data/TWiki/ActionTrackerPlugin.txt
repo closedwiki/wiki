@@ -174,19 +174,16 @@ The wiki name of the user to be notified is translated to a mail address accordi
 	* If the user has a personal page, and that personal page contains a line or lines matching<br />
 	_spaces_ * Email: _email address_ <br />
 	or<br />
-	_three spaces_ * E-mail: _email address_ <br />
-	Alternatively if the topic is a group definition (the name ends in 'Group') then the line<br /> _spaces_ * Set GROUP =<br /> is used to determine the wikinames of the people in the group. These are resolved to email addresses recursively.
-	then the notification is sent to that address. If that fails, 
+	_spaces_ * E-mail: _email address_ <br />
+	Alternatively if the topic is a group definition (the name ends in 'Group') then the line<br /> _spaces_ * Set GROUP =<br /> is used to determine the wikinames of the people in the group. These are resolved to email addresses recursively. If that fails, 
 	* If they appear in *any* WebNotify in *any* web, in the form of a line that gives an email address, then that address is used.
-	* If they are listed in WebNotify *in any web*, the mail address given there is used.
-*all* those e-mail addresses. This is how you assign actions to groups.
 	* If this fails and the 'who' name is a valid e-mail address, for example person@domain.co.uk, then that name is used.
 
-The =actionnotify= script is also used to notify users who have registered an interest in being notified when an action changes. This function of the script is activated when you use the special =changedsince= parameter.
+__Note:__ If a name cannot be translated to an e-mail address using the mechanisms described above, a warning will be output to =data/warning.txt=..
 
-__Note:__ When =changedsince= is active the other functions of the script, as described above, are disabled.
+The =actionnotify= script is also used to notify users who have registered an interest in being notified when an action changes. This function of the script is activated when you use the =changedsince= parameter.
 
-=changedsince= is used to specify the time period within which changed actions are interesting. Any action which has changed in the given period will be notified to all users who have registered an interest using =notify=. The =changedsince= value is a relative date string, which uses the following formats 
+=changedsince= is used to specify the time period within which changed actions are interesting. Any action which has changed in the given period will be notified to all users who have registered an interest in that action using =notify=. The =changedsince= value is a relative date string, which uses the following formats 
 	* yesterday
 	* last _dow_ (e.g. "last monday")
 	* last week
@@ -201,7 +198,10 @@ Obviously you have to be careful to synchronise your =changedsince= expression w
 </pre>
 will notify registered users of action changes that occurred in the last 24 hours.
 
-Not all action changes get notified; only changes to the action state, or changes to the text of the action (usually additions) get notified. For example, if the person responsible for the action is changed, or its due date, then no notification is generated.
+__Notes__
+	1 Not all action changes get notified, only changes to certain sensitive fields. You can change the set of fields that are sensitive to changes by setting the NOTIFYCHANGES parameter, as described in [[#SettingsAnchor][Settings]], below.
+	1 Unlike all other search terms, =changedsince= works as an OR term rather than an AND term. If you use a compound expression like <code>late,changedsince=yesterday</code>, this will *not* give you all late actions that changed since yesterday. Instead, it will give you all late actions *and* all actions that changed since yesterday.
+	1 If you give the parameter DEBUG to the actionnotify script, it will print out the mails that would have been sent to STDOUT. This is useful for debugging, and may be useful if you have some other processing in mind.
 
 #NonStandardAttributes
 ---++ Non-standard Attributes
@@ -225,11 +225,11 @@ The following types are supported:
 | =names= | names, <i>size</i> | One or more wiki names or e-mail addresses. |
 | =text= | text, <i>size</i> | An arbitrary text field |
 | =date= | date, <i>size</i> | A date in one of the formats described above. See [[#DateFormats][Date Formats]] |
-In the above, <i>size</i> is a single number, which is the width (in characters) of the display box in the action editor.
+In the above, <i>size</i> is a single number, which is the width (in characters) of the text box in the action editor for =text=, =names= and =date=, and the number of options to show in =select=..
 
-__Note__ that there is one exception to the "no redefinition" rule above; the =state= attribute can be extended to take extra states. However the =closed= state must be retained, and must be the last state. To extend the set of states, simply include a definition of =state= in the EXTRAS definition:
+__Note__ that there is one exception to the "no redefinition" rule above; the =state= attribute can be extended to take extra states. However if you want the closure functionality (closed, closer, and late actions) to work, the =closed= state must be retained. To extend the set of states, simply include a definition of =state= in the EXTRAS definition:
 <pre>
-	* <nop>Set EXTRAS = |state,select,5,"open","fried","boiled","poached","closed"|
+	* <nop>Set EXTRAS = |state,select,1,"open","fried","boiled","poached","closed"|
 </pre>
 
 ---+++ Searching for non-standard attributes
@@ -237,34 +237,49 @@ You can of course search for values of non-standard attributes. For example:
 <pre>
 %<nop>ACTIONSEARCH{ sentence="life" }%
 </pre>
-If a non-standard attribute is declared as type =text= you can use perl regular expressions in the search.
+If a non-standard attribute is declared as type =text= you can use perl regular expressions in the search. Searches for values of type =names= will match any-to-any. For example,
+
+%<nop>ACTIONSEARCH{ car="VolkswagenBeetle,MercedesCoupe" }%
+
+will match both of the following actions:
+
+%<nop>ACTION{ car="VolkswagenBeetle,AudiSport" ... }%
+%<nop>ACTION{ car="ToyotaSupra,MercedesCoupe,ColtLancer" ... }%
 
 #SettingsAnchor
 ---++ <nop>%TOPIC% Settings
 These settings can be overridden in the Web<nop>Preferences topic of the current web (by defining ACTIONTRACKERPLUGIN_TABLEHEADER or ACTIONTRACKERPLUGIN_TABLEFORMAT etc).
+	* Set to 1 to enable debug features, including the undocumented %<nop>ACTIONNOTIFICATIONS{}% and %<nop>ACTIONTRACKERPREFS% features.
+		* Set DEBUG = 0
 	* One line description, shown in the TextFormattingRules topic
 		* Set SHORTDESCRIPTION = Adds support for action tags in topics, and automatic notification of action statii
-	* The format of an action output. The following fields can be output: web, topic, text, who, due, notify, uid, creator, state, edit. TABLEFORMAT defines the contents of the columns, TABLEHEADER defines the column headings. These settings can be overridden in an ACTIONSEARCH command using the =format= and =header= attributes. If TABLEORIENT is set to "rows", action tables will be aligned as rows of values instead of the default columns of values.
-		* Set TABLEHEADER = | Assigned to | Due date | Description | State ||
-		* Set TABLEFORMAT = | $who | $due | $text | $state | $edit |
+	* The format of an action output. The following fields can be output: web, topic, text, who, due, notify, uid, creator, state, edit, and any EXTRAS you may have. These settings can be overridden in an ACTIONSEARCH command using the =format= and =header= attributes. 
+		* TABLEHEADER defines the column headings.
+		* Set TABLEHEADER = | Assigned to | Due date | Description | State | Notify ||
+		* TABLEFORMAT defines the contents of the columns
+		* Set TABLEFORMAT = | $who | $due | $text | $state | $notify | $edit |
+		* If TABLEORIENT is set to "rows", action tables will be aligned as rows of values instead of the default columns of values.
 		* Set TABLEORIENT = cols
 	* The alternative text format of an action, used when mailing action or change notifications.
 		* Set TEXTFORMAT = Action for $who, due $due, $state$n$text
-	* The format of the action editor.
-		* Set EDITHEADER = | Assigned to | Due date | State |
-		* Set EDITFORMAT = | $who | $due | $state |
-		* Set EDITORIENT = cols
-	* If set to 1 will edit an action in a separate browser window (requires <nop>JavaScript)
-		* Set USENEWWINDOW = 1
-	* If set to 1, action edits will offer a 'Save Changes' instead of the usual 'Preview Changes' button. If this is set along with the USENEWWINDOW parameter, the subwindow _should_ close on save, but it won't because I haven't worked out how to do this safely.
-		* Set NOPREVIEW = 1
 	* Set the colours for late actions, errors and the table headers. Accepts standard HTML colours.
 		* Set LATECOL = yellow
 		* Set BADDATECOL = red
 		* Set HEADERCOL = orange
+
+	* The format of the action editor. You can also set EDITBOXWIDTH and EDITBOXHEIGHT to override the defaults (which are %EDITBOXWIDTH%x%EDITBOXHEIGHT%) just for the action editor.
+		* Set EDITHEADER = | Assigned to | Due date | State | Notify |
+		* Set EDITFORMAT = | $who | $due | $state | $notify |
+		* Set EDITORIENT = cols
+	* If set to 1 will edit an action in a separate browser window (requires <nop>JavaScript)
+		* Set USENEWWINDOW = 1
+	* If set to 1, action edits will offer a 'Save Changes' instead of the usual 'Preview Changes' button. If this is set along with the USENEWWINDOW parameter, the subwindow _should_ close on save, but it won't because I haven't worked out how to do this safely in Java<nop>Script.
+		* Set NOPREVIEW = 1
+
 #SettingsNotify
 	* The fields to scan to detect changes for actionnotify. Changes in other fields are ignored.
 		* Set NOTIFYCHANGES = $due,$state,$text
+
 	* Non-standard attributes - see [[#SettingsStateSet][Defining non-standard attributes]] above.
 		* Set EXTRAS = 
 
@@ -280,7 +295,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	| ==bin/actionnotify== | Mailer script |
 	| ==templates/actionnotify.tmpl== | Page template for notify message |
 	| ==templates/edit.action.tmpl== | Action editor page template |
-	| ==templates/editaction.tmpl== | Action editor page subtemplate |
+	| ==templates/actionform.tmpl== | Action editor page subtemplate |
 	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	| ==lib/TWiki/Plugins/%TOPIC%/Action.pm== | Perl support module |
 	| ==lib/TWiki/Plugins/%TOPIC%/ActionNotify.pm== | Perl support module |
@@ -319,6 +334,7 @@ TWiki::Net::sendEmail()
 ---+++ Corruption of action items with Mozilla browser
 Action lines are joined together if edited by a Mozilla browser, resulting in an odd display.
 	* Work-around: Edit the topic ("Edit" at the bottom of the page, not the "edit" of the ActionTrackerPlugin) and add a new line to the =%<nop>ACTION{...}%=. Basically, each =%<nop>ACTION{...}%= needs to be on its own line. 
+*OLD* may be fixed.
 
 ---+++ Behaviour of egrep
 
@@ -339,7 +355,7 @@ The output of the =$egrepCmd= in TWiki.cfg (with no switches) must be of the for
 |			| 26 Sep 2002: Added changedsince notify support, added support for editing in a seperate window, incorporated attribute syntax corrections contributed by Main.PeterThoeny, sorted ACTIONSEARCH output and action notifications |
 |			| 30 Jan 2003: Query-by-example action search with notify field; notfication of change emails and actions email are sent as one; notify field was added to topic view and edit; various bug fixes by TWiki:Main/PaulineCheung |
 |			| 30 Apr 2003: Version 2.0; Large sections rewritten to take advantage of improvements in Plugin support, eliminating two scripts in bin. Added UIDs and formattable action searches |
-|			| 4 May 2003: Non-standard fields. Configurability of tables and action editor. Non-standard attributes. Eliminated chdir. |
+|			| 10 May 2003: Non-standard fields. Configurability of tables and action editor. Non-standard attributes. Eliminated chdir. |
 |  CPAN Dependencies: | Time::ParseDate |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -349,13 +365,14 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 ---+++ Further development
 
-Further development of this code is welcomed. It is recommended that you unpack the distribution into a development directory and use the supplied Ant (http://jakarta.apache.org) build file which provides targets to run the test suite, and install and uninstall your development code into a test installation. Please, please, please run and extend the test set!
+Further development of this code is welcomed. It is recommended that you unpack the distribution into a development directory and use the supplied Ant (http://jakarta.apache.org) build file which provides targets to run the test suite, and install and uninstall your development code into a test installation. Please, please, _please_ run, and extend if necessary, the test set!
 
 Some ideas:
-   * Fix the "close subwindow on save" functionality. See ActionTrackerPlugin.pm, search for $submitScript.
-   * It would be nice to generalise the search to support =within= and =late= style searches on all date fields, including non-standard ones.
-   * A really brave soul might consider moving action change notification to where it belongs; in the beforeSaveHandler.
-   * You could turn this into a full-blooded issue tracker by constraining state transitions.
+	1 Fix the "close subwindow on save" functionality. See ActionTrackerPlugin.pm, search for $submitScript.
+	1 It would be nice to generalise the search to support =within= and =late= style searches on all date fields, including non-standard ones.
+	1 A really brave soul might consider moving action change notification to where it belongs; in the beforeSaveHandler.
+	1 You could turn this into a full-blooded issue tracker by constraining state transitions.
+	1 Make it work for a PC server
 
 ---+++ Copyright
 

@@ -105,6 +105,9 @@ use integer;
 	}
 	$i++;
       }
+      if ($pass){
+	$pass = ($i == length($saw) && $i == length($exp)) ? 1 : 0;
+      }
     }
     assert($pass,
 	   "\nsaw      \"$beforeSaw***** HERE->$afterSaw\"".
@@ -124,8 +127,7 @@ use integer;
     if ($expected eq "") {
       assert($test eq "", "saw \"$test\" expected \"\"");
     }
-    my $re = unregex($expected);
-    my $pass = $test =~ m/^$re$/s ? 1 : 0;
+    my $pass = ($test eq $expected) ? 1 : 0;
     _assertMismatch($pass, $test, $expected);
   }
 
