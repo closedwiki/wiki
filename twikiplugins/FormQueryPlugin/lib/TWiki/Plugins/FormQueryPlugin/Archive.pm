@@ -3,7 +3,6 @@
 #
 use strict;
 use FileHandle;
-use Carp;
 
 #
 # Simple file archive storer and restorer. Handles serialising objects
@@ -15,30 +14,54 @@ use Carp;
 #
 { package FormQueryPlugin::Archive;
 
+  # Must be first in an archive, or it isn't an archive
+  my $ARCHIVE_ID = 0x76549876;
+
   # PUBLIC create a new archive, using filename $file and
   # mode $rw which must be "r" or "w". The archive will remain
   # in existence (and the file remain open) until "close" is
   # called. An exclusive lock is taken for write as long as the file
-  # is open.
+  # is open. Throws an exception if the archive cannot be opened.
   sub new {
     my ( $class, $file, $rw ) = @_;
     
-    my $this = {};
-    $this->{FH} = new FileHandle( $file, $rw );
-    if ( !defined( $this->{FH} )) {
-      Carp::croak "Open $file failed";
-    }
+    my $this = bless( {}, $class );
+    my $fh = new FileHandle( $file, "r" );
+    $this->{FH} = $fh;
     $this->{OBJECTINDEX} = 0;
     $this->{lock} = $rw;
     if ( $rw eq "w" ) {
-      # get an exclusive lock on the file
-      flock( *{$this->{FH}}, 2 );
+      if ( !defined( $fh )) {
+	$fh = new FileHandle( $file, "w" );
+	$fh->close();
+	$this->{FH} = $fh;
+	$fh->open( $file, "r" ) || die( "Reopen failed" );
+      }
+      # get an exclusive lock on the file and write the ID (2==LOCK_EX)
+      #print STDERR "$$ Wait write lock\n";
+      flock( $fh, 2 ) || die( "LOCK_EX failed" );
+      if ( !$fh->open( $file, "w" )) {
+	die( "Open for write failed" );
+      };
+      #print STDERR "$$ Got write lock\n";
+      $this->writeInt( $ARCHIVE_ID );
+    } else {
+      if ( !defined( $fh )) {
+	die( "Open $file failed" );
+      }
+      # 1==LOCK_SH
+      #print STDERR "$$ Wait read lock\n";
+      flock( $fh, 1 ) || die( "LOCK_SH failed" );
+      #print STDERR "$$ Got read lock\n";
+      # Check the first integer to make sure it's the archive ID
+      my $id = $this->readInt();
+      if ( $id != $ARCHIVE_ID ) {
+	die( "$file is not a valid Archive" );
+      }
     }
-
-    return bless( $this, $class );
+    return $this;
   }
 
-  # If we enable this, it seems to close the file immediately!
   sub DESTROY {
     my $this = shift;
     $this->close();
@@ -49,9 +72,8 @@ use Carp;
   sub close {
     my $this = shift;
     if ( defined( $this->{FH} )) {
-      if ( $this->{lock} eq "w" ) {
-	flock( *{$this->{FH}}, 8 );
-      }
+      flock( $this->{FH}, 8 ) || die( "LOCK_UN failed" );
+      #print STDERR "$$ released lock\n";
       $this->{FH}->close();
       $this->{FH} = undef;
     }
@@ -159,7 +181,7 @@ use Carp;
     } elsif ( $key eq 'U' ) {
       return undef;
     } else {
-      Carp::confess( "Unrecognised key '$key'" );
+      die( "Corrupt archive: Unrecognised key '$key'" );
     }
   }
 }
