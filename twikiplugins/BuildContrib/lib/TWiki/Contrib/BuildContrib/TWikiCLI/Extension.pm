@@ -14,38 +14,14 @@ sub cli__init {
  $oldPwd = cwd();
 }
 
-sub cli_upload {
- my ($extension) = @_;
-
- print "Doing upload for $extension\n\n";
- my $libFrag = getLibFragmentForExtension($extension);
- my $dir     = getTWikiLibFragDir($libFrag);
-
- chdir($dir) || die "$!";
-
- # CodeSmell: Yuk
- print "Type TWiki.org username <return> password <return>\n";
- my $ans = `perl build.pl upload`;
-}
-
-# now this really ought to be in Extension::CVS, but that directory would clash
-sub cli_cvsupdate {
- my ($extension) = @_;
-
- print "Doing cvs update for $extension\n\n";
- my $libFrag = getLibFragmentForExtension($extension);
-
- my $dir = selectTWikiLibDir($libFrag) . "/..";    # codesmell: Lazy
-
- chdir($dir) || die "Couldn't CD to $dir - $!";
-
- my $ans = `cvs update`;
+sub cli_dev {
+TWiki::Contrib::BuildContrib::TWikiCLI::Extension::Dev
 
 }
 
 =pod
 
-sub cli_install_download 
+---+++ sub cli_install_download 
 
 This just takes the zip file and does a Build::target_install on it.
 Note that this is actually the wrong thing, because it is different to 
@@ -95,36 +71,6 @@ print $@ if $@;
  $buildObj->manifest();
 
 }
-
-sub cli_install_dev {
- my ($extension) = @_;
-
- print "Installing dev $extension\n\n";
- my $libFrag = getLibFragmentForExtension($extension);
-
- my $outputLog;
-
- my $buildDotPlDir = getTWikiLibFragDir($libFrag);
- if ($buildDotPlDir) {
-  chdir($buildDotPlDir) || die "Couldn't cd to $buildDotPlDir - $!";
-  print "From $buildDotPlDir...\n";
-  foreach my $home ( getHomes() ) {
-   if ( $home !~ m!^/! ) {
-    $home = $ENV{"HOME"} . "/" . $home;
-   }
-   print "\tInstalling to $home\n";
-   $ENV{"TWIKI_HOME"} = $home;
-
-   $outputLog .= `perl build.pl install`;
-  }
- }
- else {
-  print "Failed to find build.pl for $extension\n";
- }
- chdir($oldPwd);    # Not strictly necessary, but...
- return $outputLog;
-}
-
 sub cli_download {
  my ($extension) = @_;
 
@@ -153,6 +99,20 @@ sub getTWikiLibFragDir {
  return selectTWikiLibDir($libFrag) . "/TWiki/$libFrag/";
 }
 
+=pod 
+---+++ selectTWikiLibDir
+
+From the multiple plugin development areas listed in $TWIKI_LIBS,
+returns the one that contains the development for a frag, where 
+Frag is:
+ * Plugins/*Plugin,
+ * Plugins/*Addon
+ * Contrib/*Contrib
+
+As returned by getLibFragmentForExtension
+
+=cut
+
 sub selectTWikiLibDir {
  my ($frag) = @_;
  unless ( $ENV{"TWIKI_LIBS"} ) {
@@ -174,6 +134,18 @@ sub selectTWikiLibDir {
  return "";
 }
 
+==pod
+---+++ sub getLibFragmentForExtension
+Given an TWiki:Plugins.TWikiExtension such as "BlahPlugin" or "FooAddOn",
+returns the directory under lib where code for it is stored
+
+| Input | Output |
+| BlahPlugin | Plugins/BlahPlugin |
+| FooAddOn | Plugins/FooAddon |
+| BaContrib | Contrib/*Contrib |
+
+=cut 
+
 sub getLibFragmentForExtension {
  my ($extension) = @_;
  my $dir;
@@ -191,7 +163,7 @@ sub getLibFragmentForExtension {
 }
 
 =pod
-  sub getFilenameForDistributionDownload 
+---+++  sub getFilenameForDistributionDownload 
   
   In: distribution name (e.g. TWiki20030201, KoalaSkin) 
   Out: local file name that it would be stored in, usually an attachment on BuildContrib

@@ -1,12 +1,18 @@
 #! perl -w
 use strict;
 use diagnostics;
+use Cwd;
+
+print cwd()."\n";
+#BEGIN {
+#chdir "../../lib";
+#}
 
 package TWiki::Contrib::BuildContrib::TWikiCLI;
 my $prefix = "TWiki::Contrib::BuildContrib::TWikiCLI";
 
 use Getopt::Long; # see http://www.aplawrence.com/Unix/perlgetopts.html
-use TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
+#use TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
 
 sub dispatch {
  my $verboseFlag = 0;
@@ -14,10 +20,11 @@ sub dispatch {
 
  my @args =  @ARGV;
 
- my $class = ucfirst shift @args; # eg. extension => Extension 
-
+ my ($class, $args) = findTargetClassForString(@args);
+ 
  unless ($class) {
      return helpText();
+     exit;
  }
  my $fqClass = $prefix."::".$class;
 
@@ -31,6 +38,44 @@ sub dispatch {
 #  print "$_\n";
 # }
 
+sub findTargetClassForString {
+ my @cli_args = @_;
+ # e.g. extension dev foo bar
+ # we match extension dev, because Extension::Dev exists but
+ # neither Extension::Dev::Foo::Bar nor Extension::Dev::Foo nor 
+ # exists
+  
+# ucfirst shift @args; # eg. extension => Extension 
+ my $argsSeparator = $#cli_args;
+ my $classToTry;
+ my $remainingParameters;
+ 
+ while ($argsSeparator--) {
+  $classToTry = join("::", map {ucfirst} @cli_args[0..$argsSeparator]);
+  $remainingParameters = join(" ", @cli_args[$argsSeparator+1..$#cli_args]);
+  
+  print "Trying $classToTry '$remainingParameters'\n";
+  if (classExists($classToTry)) {
+   last;
+  }
+  $classToTry = undef;
+  last if ($argsSeparator < 1);
+ }
+ return ($classToTry, $remainingParameters);
+}
+
+sub classExists {
+  my ($class) = @_;
+  my $fqClass = $prefix."::".$class;
+  print "\tTesting $fqClass\n";
+  eval { require $fqClass; };
+  if ($@) {
+   print $@;
+   return 0;
+  } {
+   return 1;
+  }
+}
 
 sub noSuchMethod {
     my ($err) = @_;
