@@ -651,13 +651,11 @@ sub searchWeb
             $ntopics += 1;
             last if $ntopics >= $theLimit;
         }
-        if( $theFormat ) {
-            $searchResult =~ s/\n$//gos;  # remove trailing new line
-        }
     
         # output footer of $thisWebName
         if( $doInline || $theFormat ) {
             # print at the end if formatted search because of table rendering
+            $afterText =~ s/\n$//gos;  # remove trailing new line
             $searchResult .= $afterText;
         } else {
             $afterText = &TWiki::getRenderedVersion( $afterText, $thisWebName );
@@ -680,6 +678,9 @@ sub searchWeb
         }
     }
 
+    if( $theFormat ) {
+        $searchResult =~ s/\n$//gos;  # remove trailing new line
+    }
     if( $doInline ) {
         # return formatted search result
         return $searchResult;
