@@ -146,9 +146,9 @@ sub initialize
     
     ##writeDebug( "\n---------------------------------" );
     
-    $TWiki::Attach::noFooter = 0;
-    $TWiki::Attach::showAttr = 0;
     $cgiQuery = $theQuery;
+
+    %headerfooter = ();
 
     # Make %ENV safer for CGI
     if( $safeEnvPath ) {
@@ -1353,7 +1353,7 @@ sub handleMetaTags
     my( $theWeb, $theTopic, $text, $meta ) = @_;
 
     $text =~ s/%META{\s*"form"\s*}%/&renderFormData( $theWeb, $theTopic, $meta )/goe;
-    $text =~ s/%META{\s*"attachments"\s*}%/&TWiki::Attach::renderMetaData( $theWeb, $theTopic, $meta )/goe;
+    $text =~ s/%META{\s*"attachments"\s*(.*)}%/&TWiki::Attach::renderMetaData( $theWeb, $theTopic, $meta, $1 )/goe;
     $text =~ s/%META{\s*"moved"\s*}%/&renderMoved( $theWeb, $theTopic, $meta )/goe;
     $text =~ s/%META{\s*"parent"\s*(.*)}%/&renderParent( $theWeb, $theTopic, $meta, $1 )/goe;
         
