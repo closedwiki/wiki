@@ -35,9 +35,6 @@ p {
 table {
 	border-collapse:separate;
 }
-th {
-	border:0px none;
-}
 strong, b {
 	font-weight:bold;
 }
@@ -94,7 +91,6 @@ h6 { font-size:95%; color:#900;}
 :visited:active {
 	text-decoration:none;
 	color:#1e5bbd;
-	font-weight:normal;
 	background-color:transparent;
 }
 :link:hover,
@@ -115,28 +111,29 @@ th a:visited {
 }
 
 /* sorting of table columns */
+/* not yet finalized for tables in topic text */
 
 th.twikiSortedAscendingCol a:link,
 th.twikiSortedAscendingCol a:visited {
-	border-top:1px solid #345;
+	border-top:1px solid #999; /* a neutral color that should work on light and dark backgrounds */
 }
 th.twikiSortedAscendingCol a:hover,
 th.twikiSortedAscendingCol a:hover {
 	text-decoration:none;
 	border-top:0;
-	border-bottom:1px solid #345;
+	border-bottom:1px solid #999;
 }
 th.twikiSortedDescendingCol a:link,
 th.twikiSortedDescendingCol a:visited,
 th.twikiSortedDescendingCol a:link,
 th.twikiSortedDescendingCol a:visited {
-	border-bottom:1px solid #345;
+	border-bottom:1px solid #999;
 }
 th.twikiSortedDescendingCol a:hover,
 th.twikiSortedDescendingCol a:hover {
 	text-decoration:none;
 	border-bottom:0;
-	border-top:1px solid #345;
+	border-top:1px solid #999;
 }
 
 /* Forms */
@@ -244,10 +241,6 @@ label {
 	padding:0;
 	margin:0;
 }
-.twikiLeftBar a:link,
-.twikiLeftBar a:visited {
-	font-weight:normal;
-}
 .twikiLeftBar strong a:link,
 .twikiLeftBar strong a:visited {
 	font-weight:bold;
@@ -259,7 +252,6 @@ label {
 }
 .twikiLeftBar li a {
 	display:block;
-	font-weight:normal;
 	width:98%;
 	padding-right:2%;
 }
@@ -306,6 +298,10 @@ html>body .twikiLeftBar li a {
 }
 .twikiTopic table {
 	width:auto;
+}
+.twikiTopic table th a:link,
+.twikiTopic table th a:visited {
+	text-decoration:none;
 }
 .twikiTopic ul {
 	margin-top:0;
@@ -366,6 +362,7 @@ html>body .twikiLeftBar li a {
 .twikiForm th {
 	padding:0.2em 0.6em;
 	height:2.5em;
+	border-color:#ccc;
 	border-left:1px solid #ccc;
 	border-bottom:1px solid #ccc;
 	background-color:white;
@@ -406,6 +403,7 @@ html>body .twikiLeftBar li a {
 .twikiForm th a:link,
 .twikiForm th a:visited {
 	color:#1559B3;
+	border-color:#345;
 	text-decoration:none;
 }
 .twikiAttachments th font,
@@ -416,6 +414,7 @@ html>body .twikiLeftBar li a {
 .twikiForm th a:hover {
 	text-decoration:underline;
 	background-color:transparent;
+	border-color:#345;
 }
 .twikiAttachments td a:link,
 .twikiAttachments td a:visited,
@@ -475,6 +474,9 @@ table.twikiTopicAction {
 }
 .twikiTopicAction tr {
 	background-color:#22638c;
+}
+.twikiTopicAction th {
+	border:none;
 }
 .twikiTopicAction td {
 	height:2em;
@@ -589,7 +591,6 @@ table.twikiTopicAction {
 .twikiToc a:visited {
 	text-decoration:none;
 	color:#1e5bbd;
-	font-weight:normal;
 	border:0;
 }
 .twikiToc a:hover {
@@ -838,6 +839,7 @@ html>body .twikiToc li a {
 .twikiNew { }
 .twikiSummary {
 	font-size:85%;
+	line-height:1.3em;
 }
 .twikiNewLink {
 	background-color:transparent;
@@ -1290,8 +1292,11 @@ html>body .twikiToc li a {
 	background-color:#ddd;
 }
 
-/* Plain */
-
+/*	-----------------------------------------------------------
+	Plain
+	styles and overridden styles used in plain.pattern.tmpl
+	-----------------------------------------------------------	*/
+	
 .twikiPlainPage .twikiMain {
 	padding-top:2.5em;
 	padding-bottom:2em;
