@@ -942,6 +942,7 @@ sub handleCommonTags
     $text =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$webName\/$topic/go;
     $text =~ s/%ATTACHURLPATH%/$pubUrlPath\/$webName\/$topic/go;
     $text =~ s/%DATE%/&getLocaldate()/geo;
+    $text =~ s/%GMTIME%/&formatGmTime(time())/geo;
     $text =~ s/%WIKIVERSION%/$wikiversion/go;
     $text =~ s/%USERNAME%/$userName/go;
     $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
