@@ -40,7 +40,7 @@ package TWiki;
 use strict;
 
 use Time::Local;	# Added for revDate2EpSecs
-use Cwd; 		# Added for getTWikiLibDir 
+use Cwd qw( cwd ); 	# Added for getTWikiLibDir
 
 require 5.005;		# For regex objects and internationalisation
 
