@@ -46,13 +46,13 @@ __Note:__ The =%<nop>EDITCELL{ }%=variable cannot be used by itself; place an =%
 
 <form>
 	* In page view mode:
-		* <input type="submit" name="et"	value="Edit table" onClick="return(false);" /> - turn the table into edit mode
+		* <input type="submit" name="et"	value="Edit table" onclick="return(false);" /> - turn the table into edit mode
 	* In edit mode:
-		* <input type="submit" name="etsave"	value="Save table"  onClick="return(false);" /> - save your changes
-		* <input type="submit" name="etqsave"	value="Quiet save"  onClick="return(false);" /> - save your changes without alerting subscribed WebNotify users
-		* <input type="submit" name="etaddrow" value="Add row" onClick="return(false);" /> - add row to the table (if enabled)
-		* <input type="submit" name="etdelrow" value="Delete last row" onClick="return(false);" /> - remove last row from the table (if enabled)
-		* <input type="submit" name="etcancel" value="Cancel" onClick="return(false);" /> - cancel without saving and release edit lock
+		* <input type="submit" name="etsave"	value="Save table"  onclick="return(false);" /> - save your changes
+		* <input type="submit" name="etqsave"	value="Quiet save"  onclick="return(false);" /> - save your changes without alerting subscribed WebNotify users
+		* <input type="submit" name="etaddrow" value="Add row" onclick="return(false);" /> - add row to the table (if enabled)
+		* <input type="submit" name="etdelrow" value="Delete last row" onclick="return(false);" /> - remove last row from the table (if enabled)
+		* <input type="submit" name="etcancel" value="Cancel" onclick="return(false);" /> - cancel without saving and release edit lock
 </form>
 
 ---++ Examples
@@ -73,11 +73,11 @@ If this plugin is installed you will see an *[&nbsp;Edit&nbsp;table&nbsp;]* butt
 <tr><td  bgcolor="#FFFFFF"> 1<input type="hidden" name="etcell2x1" value="1" />  </td><td  bgcolor="#FFFFFF"> <input type="text" name="etcell2x2" size="20" value="hello table" />  </td><td  bgcolor="#FFFFFF"> <select name="etcell2x3" size="1"> <option selected="selected">one</option> <option>two</option> <option>three</option> <option>four</option> </select>  </td><td  bgcolor="#FFFFFF"> 26 Jun 2002 12:30<input type="hidden" name="etcell2x4" value="26 Jun 2002 12:30" />  </td></tr>
 <tr><td  bgcolor="#FFFF99"> 2<input type="hidden" name="etcell3x1" value="2" />  </td><td  bgcolor="#FFFF99"> <input type="text" name="etcell3x2" size="20" value="" />  </td><td  bgcolor="#FFFF99"> <select name="etcell3x3" size="1"> <option>one</option> <option selected="selected">two</option> <option>three</option> <option>four</option> </select>  </td><td  bgcolor="#FFFF99"> 27 Jun 2002 12:40<input type="hidden" name="etcell3x4" value="27 Jun 2002 12:40" />  </td></tr>
 </table>
-<input type="submit" name="etsave"	value="Save table" onClick="return(false);" />
-<input type="submit" name="etqsave"	value="Quiet save"  onClick="return(false);" />
-<input type="submit" name="etaddrow" value="Add row" onClick="return(false);" />
-<input type="submit" name="etdelrow" value="Delete last row" onClick="return(false);" />
-<input type="submit" name="etcancel" value="Cancel" onClick="return(false);" /> (demo only, these buttons do not work)
+<input type="submit" name="etsave"	value="Save table" onclick="return(false);" />
+<input type="submit" name="etqsave"	value="Quiet save"  onclick="return(false);" />
+<input type="submit" name="etaddrow" value="Add row" onclick="return(false);" />
+<input type="submit" name="etdelrow" value="Delete last row" onclick="return(false);" />
+<input type="submit" name="etcancel" value="Cancel" onclick="return(false);" /> (demo only, these buttons do not work)
 </form>
 
 The following example shows a simple table with key/value rows. The default edit field type for the value column is a text field. This is overloaded by a selector for the Gender, and a date picker for the DOB. This is typically used by TWiki applications where new topics with tables are created based on a template topic.
