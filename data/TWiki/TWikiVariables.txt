@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1061625101" format="1.0" version="1.67"}%
+%META:TOPICINFO{author="PeterThoeny" date="1062139775" format="1.0" version="1.68"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -49,9 +49,10 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
 </tr><tr>
   <td> =%<nop>URLPARAM{"name"}%= </td>
   <td> Returns the value of a URL parameter. Note that there is a risk that this variable could be misused for cross-scripting. Parameters are name and newline:
-	 | *Parameter:* | *Description:* |
-	 | ="name"= | The name of a URL parameter |
-	 | =newline="&lt;br /&gt;"= | Convert newlines to other delimiters |
+	 | *Parameter:* | *Description:* | *Default:* |
+	 | ="name"= | The name of a URL parameter | required |
+	 | =default="..."= | Default value in case parameter is empty or missing | empty string |
+	 | =newline="&lt;br /&gt;"= | Convert newlines to other delimiters | no conversion |
 	 Example: =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b>
 </td>
 </tr><tr>
