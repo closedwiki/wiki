@@ -17,4 +17,6 @@ interface Application {
     Frame getFrame();
     /** Execute a command reflected from a child */
     void doCommand(String command);
+    /** Get the mapping for the key */
+    String getKeyCommand(String key);
 }

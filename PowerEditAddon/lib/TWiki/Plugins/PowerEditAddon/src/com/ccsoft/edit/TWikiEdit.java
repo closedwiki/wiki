@@ -41,31 +41,6 @@ import java.lang.reflect.*;
  * server. The edited text is passed back in the form of MIME-form data.
  * </td></tr>
  *
- * <tr><td>top, bottom, left, right</td><td>Each defines the list of
- * buttons for the panel at that location on the applet. Each button
- * panel is defined by a list of | separated strings, each of which is
- * a name=value pair where the name is used as the label on the button,
- * and the value is interpreted as a macro sequence. Macro sequences are
- * either sequences of %% commands (the basic commands of the editor)
- * interleaved with text, or may be simple names of macros provided
- * in other parameters. For example:
- * "Tele type=%cut%=%paste%=|A Space=space"
- * The first button will be labelled "Tele type" and will cut the
- * selected text, then insert an =, paste back the text and then insert
- * another =. The second button will be labelled "A Space" and will
- * execute the macro defined by the applet parameter named "space". A
- * | may be inserted in a definition using ||. It is not possible to
- * insert an = sign in a button name.
- *
- * <td>A list of additional parameter names to be interpreted as macro
- * definitions.</td></tr>
- * <tr><td><i>macro-name</i></td><td>Macro definition</td>
- * <td>Each name in the <tt>macros</tt> list defines the name of
- * a parameter which contains the macro definition. The macro definition
- * consists of text and commands delineated by % signs. A single % sign
- * may be inserted in text as %%. Each macro will be given a button in the
- * second row of buttons.</td></tr>
- *
  * </table>
  */
 public class TWikiEdit extends Applet implements Application {
@@ -76,6 +51,8 @@ public class TWikiEdit extends Applet implements Application {
     static SearchableTextArea textarea;
     /** Command (url, actually) used to save the results */
     String server;
+    /** Edit controls */
+    Controls controls;
 
     /** MIME form separator */
     static private final String MIME_SEP =
@@ -92,22 +69,35 @@ public class TWikiEdit extends Applet implements Application {
             return frame;
     }
 
+    /** Implements Application to look up keystrokes */
+    public String getKeyCommand(String kc) {
+	return controls.getKey(kc);
+    }
+
     /** Implements Applet initialisation */
     public synchronized void init() {
 	server = getParameter("server");
 
-	String text = downloadText();
         boolean framed = getParameter("useframe") != null &&
             getParameter("useframe").equals("yes");
 
         textarea = new SearchableTextArea();
+	String text = download("get");
+	controls = new Controls(download("controls"));
+	ActionListener actionListener =
+	    new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+			textarea.replayMacro(e.getActionCommand());
+		    }
+		};
+
         if (framed) {
             int r = Integer.parseInt(getParameter("editboxheight"));
             int c = Integer.parseInt(getParameter("editboxwidth"));
             textarea.reset(this, text, r, c);
             if (frame == null) {
                 frame = new Frame();
-                initControls(frame);
+		controls.makeStandardLayout(frame, textarea, actionListener);
             }
             frame.pack();
             frame.show();
@@ -121,8 +111,14 @@ public class TWikiEdit extends Applet implements Application {
             // reset the textarea to a small size; it will be resized
             // by the layout manager.
             textarea.reset(this, text, 10, 100);
-            initControls(this);
+	    controls.makeStandardLayout(this, textarea, actionListener);
         }
+
+        boolean dontNotify = getParameter("dontNotify") != null &&
+            getParameter("dontNotify").equals("checked");
+        boolean releaseEditLock = getParameter("releaseEditLock") != null &&
+            getParameter("releaseEditLock").equals("checked");
+	controls.setDefaultControls(dontNotify, releaseEditLock);
     }
 
     public void stop() {
@@ -149,6 +145,11 @@ public class TWikiEdit extends Applet implements Application {
      * Handle a command reflected from a child
      */
     public void doCommand(String command) {
+	String macro = controls.getMacro(command);
+	if (macro != null) {
+	    textarea.replayMacro(macro);
+	    return;
+	}
 	try {
 	    Method m = getClass().getMethod(command, null);
 	    m.invoke(this, null);
@@ -159,104 +160,18 @@ public class TWikiEdit extends Applet implements Application {
 	}
     }
 
-    /**
-     * Make a button
-     */
-    private Button makeButton(String name, String cmd) {
-        Button but = new Button(name);
-        if (cmd != null) {
-            but.setActionCommand(cmd);
-            but.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        textarea.replayMacro(e.getActionCommand());
-                    }
-                });
-        }
-        return but;
-    }
-
-    /**
-     * Make a command button panel given a descriptor string.
-     * Descriptor strings are | separated lists of name=value
-     * pairs.
-     */
-    private Panel makePanel(String desc, int dx, int dy) {
-	Panel buttonPanel = new Panel();
-	GridBagLayout buttonBag = new GridBagLayout();
-	GridBagConstraints buttonBagConstraints = new GridBagConstraints();
-	buttonPanel.setLayout(buttonBag);
-	String[] buttons = PanelParser.parsePanel(desc);
-
-	for (int i = 0; i < buttons.length; ) {
-	    String name = buttons[i++];
-	    String def = buttons[i++];
-
-	    // Look up to see if there's a param defining
-	    // the def
-	    String macro = getParameter(def);
-	    if (macro == null)
-		macro = def;
-
-	    Button button = makeButton(name, macro);
-	    buttonBagConstraints.gridx += dx;
-	    buttonBagConstraints.gridy += dy;
-	    buttonBag.setConstraints(button, buttonBagConstraints);
-	    buttonPanel.add(button);
-	}
-	return buttonPanel;
-    }
-
-    private void addPanel(Container container, GridBagLayout layout,
-			     String name,
-			     int dx, int dy,
-			     int gx, int gy) {
-        String def = getParameter(name);
-        if (def == null)
-	    return;
-
-	Panel buttonPanel = makePanel(def, dx, dy);
-	GridBagConstraints gbc = new GridBagConstraints();
-	gbc.gridx = gx;
-	gbc.gridy = gy;
-	gbc.anchor = dx > 0 ?
-	    GridBagConstraints.WEST :
-	    GridBagConstraints.NORTH;
-	layout.setConstraints(buttonPanel, gbc);
-	container.add(buttonPanel);
-    }
-
-    /** Initialise controls for an in-browser applet */
-    private void initControls(Container container) {
-        GridBagLayout layout = new GridBagLayout();
-        container.setLayout(layout);
-
-	addPanel(container, layout, "top_buttons", 1, 0, 1, 0);
-	addPanel(container, layout, "bottom_buttons", 1, 0, 1, 2);
-	addPanel(container, layout, "left_buttons", 0, 1, 0, 1);
-	addPanel(container, layout, "right_buttons", 0, 1, 2, 1);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-	gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        layout.setConstraints(textarea, gbc);
-        container.add(textarea);
-    }
-
-    /** Download the text from the given server url */
-    private String downloadText() {
+    /** Download text from the server, using the given command. */
+    private String download(String command) {
 	String reply = "";
 	// a url of "debug" means run in appletviewer mode and
 	// don't try to talk to the server
 	if (!server.startsWith("debug")) {
-	    reply = post(server, formParameter("action", "get"));
+	    reply = post(server, formParameter("action", command));
 	    if (reply.startsWith("OK")) {
 		return reply.substring(2);
 	    } else {
 		showStatus(reply);
-		return "ERROR during download: " + reply;
+		return "ERROR during get?action=" + command + " -> " + reply;
 	    }
 	} else {
 	    reply = server.substring(5);
@@ -265,40 +180,51 @@ public class TWikiEdit extends Applet implements Application {
 	return reply;
     }
 
-    /** Command action on save. This command is reflected
-     * from the textarea. */
+    /**
+     * Command action on save. This command is reflected
+     * from the textarea.
+     * Save the modified text.
+     */
     public void save() {
-	String text = textarea.getText();
-	String reply = post(server,	    
-			    formParameter("action", "put") +
-			    formParameter("text", text));
-	if (reply.startsWith("OK")) {
-	    reply = reply.substring(2) + "?action=commit";
-	    try {
-		URL url = new URL(getCodeBase(), reply);
-		getAppletContext().showDocument(url);
-		// never returns because we've navigated away from
-		// this page
-	    } catch (MalformedURLException mue) {
-		showStatus("ERROR Bad url: " + mue.getMessage());
+	if (textarea.isModified()) {
+	    String sp = "&unlock=" + (controls.getReleaseLock() ? 1 : 0) +
+		"&dontnotify=" + (controls.getDontNotify() ? 1 : 0);
+	    String text = textarea.getText();
+	    String reply = post(server,	    
+				formParameter("action", "put") +
+				formParameter("text", text));
+	    if (reply.startsWith("OK")) {
+		reply = reply.substring(2) + "?action=commit" + sp;
+		try {
+		    URL url = new URL(getCodeBase(), reply);
+		    getAppletContext().showDocument(url);
+		    // never returns because we've navigated away from
+		    // this page
+		} catch (MalformedURLException mue) {
+		    showStatus("ERROR Bad url: " + mue.getMessage());
+		}
+	    } else {
+		showStatus(reply);
 	    }
 	} else {
-	    showStatus(reply);
+	    showStatus("No changes to save");
 	}
     }
 
-    /** Command action on preview. This command is reflected
-     * from the textarea. */
+    /**
+     * Command action on preview. This command is reflected
+     * from the textarea.
+     * Preview the edited text in a new window.
+     */
     public void preview() {
 	String text = textarea.getText();
 	String reply = post(server,	    
 			    formParameter("action", "put") +
 			    formParameter("text", text));
 	if (reply.startsWith("OK")) {
-	    reply = reply.substring(2) + "?action=preview&skin=power";
+	    reply = reply.substring(2) + "?action=preview";
 	    try {
 		URL url = new URL(getCodeBase(), reply);
-		showStatus("Reply is " + reply);
 		getAppletContext().showDocument(url, "_blank");
 	    } catch (MalformedURLException mue) {
 		showStatus("ERROR Bad url: " + mue.getMessage());

@@ -14,9 +14,10 @@ public class TWikiEditSuite extends TestCase {
         TestSuite suite = new TestSuite();
         suite.addTest(DifferenceTest.suite());
         suite.addTest(UndoBufferTest.suite());
-        suite.addTest(PanelParserTest.suite());
         suite.addTest(SearchableTextAreaTest.suite());
         suite.addTest(TWikiEditTest.suite());
+	suite.addTest(ControlsTest.suite());
+	suite.addTest(HTML2TWikiTest.suite());
         return suite;
     }
 }
