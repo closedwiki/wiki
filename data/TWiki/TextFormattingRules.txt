@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044097920" format="1.0" version="1.36"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044132468" format="1.0" version="1.37"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---# TWiki Text Formatting
@@ -437,7 +437,8 @@ Being able to create links without any formatting required is a core TWiki featu
 
 ---+++ External Links
 
-	* =http://...=, =https://...=, =ftp://...= and =mailto:...@...= are linked automatically.
+	* =http://...=, =https://...=, =ftp://...=, =gopher://...=, =news://...=, =file://...=, =telnet://...=
+	  and =mailto:...@...= are linked automatically.
 
 	* Email addresses like =name@domain.com= are linked automatically.
 

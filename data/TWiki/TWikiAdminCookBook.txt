@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043999884" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044132393" format="1.0" version="1.2"}%
 ---+!! TWiki Admin Cook Book
 
 This page has many tips and tricks, particularly useful when you're installing TWiki for the first time. This guide is most useful *%RED%before%ENDCOLOR%* or immediately following a TWiki installation! 
@@ -40,7 +40,7 @@ Consider installing [[#CommentPlugin]] and [[#SlideShowPlugin]] before your firs
 
 *How to get nice pages with simpler menu options for beginners*
 
-A *Skin* is TWiki's way to present different system-generated formats (like header/footer/sidebar menu) *and exactly the same* information from the page body (see TWikiSkins). The "Classic" TWiki skin is oriented towards advanced power users. _Newbies_ may feel overhelmed by the number of options. Many simpler custom skins are in development at TWiki:Plugins.WebHome. Consider using a simpler custom skin to make a better "first impression": _TWiki is simple to use._ 
+A *Skin* is TWiki's way to present different system-generated formats (like header/footer/sidebar menu) *and exactly the same* information from the page body (see TWikiSkins). The "Classic" TWiki skin is oriented towards advanced power users. _Newbies_ may feel overwhelmed by the number of options. Many simpler custom skins are in development at TWiki:Plugins.WebHome. Consider using a simpler custom skin to make a better "first impression": _TWiki is simple to use._ 
 
 There is currently a discussion at TWiki:Codev.SimplerDefaultTemplates about simpler default template for TWiki:Codev.SimplerTWikiDistribution.
 
