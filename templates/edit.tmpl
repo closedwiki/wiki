@@ -55,21 +55,21 @@ function launchWindow( theWeb, theTopic ) {
 </TABLE>
 <TEXTAREA name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%">%TEXT%</TEXTAREA>
 <INPUT TYPE="hidden" NAME="TWikiAttachment" value="%TWIKIATTACHMENT%">
+<INPUT TYPE="hidden" NAME="formtemplate" value="%FORMTEMPLATE%">
 <BR>
 Don't forget - if you change something, do it in 
 <A target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">GoodStyle</A>
 and follow the
 <A target="TextFormattingRules" onClick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">TextFormattingRules</A>.
 <BR> <b>-- %WIKIUSERNAME% - %DATE% &lt;br&gt;</b> &nbsp;&nbsp;<code>&lt;==</code> This is your signature for easy copy & paste operation
-%TWIKICAT%
-<BR>
-%CATEGORIES%
+<br />
+%FORMFIELDS%
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR BGCOLOR="%WEBBGCOLOR%">
     <TD valign="top">
       Topic <B>%TOPIC%</B> . {
-      <INPUT type="submit" value=" &nbsp; Preview Changes &nbsp; "> <INPUT type="hidden" name="cmd" value="%CMD%">
-      &nbsp; | &nbsp; <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit
+      <INPUT type="submit" value=" &nbsp; Preview Changes &nbsp; "> <INPUT type="hidden" name="cmd" value="%CMD%">     
+      &nbsp; | &nbsp; %CHANGEFORM% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit
       }
     </TD>
   </TR>
