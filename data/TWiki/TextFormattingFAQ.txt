@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999835477" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="MikeMannix" date="1000108590" format="1.0" version="1.7"}%
 <font size="+3"><b>Text Formatting FAQ</b></font>
 
 	* The most frequently asked questions about text formatting are answered here. 
@@ -7,80 +7,68 @@
 %TOC%
 
 <blockquote>
------
+---
 ---+++ How do I make a separator?
 
-You can make a horizontal separator by writing 4 or more dashes at the beginning of a line.
+You can make a horizontal separator by writing three or more dashes at the beginning of a line.
 
------
----+++ How do I create a title or a heading?
+---
+---+++ How do I create a heading?
 
-The most simple way is to enclose it in '*' Asterisk characters or '_' Underscore characters. 
-
-*This is an example header enclosed in Asterisk characters*
-
-_This is an example header enclosed in Underscore characters_
-
-You could use also HTML tags for headings, e.g. <code>&lt;H4&gt;This is an HTML heading&lt;/H4&gt;</code> will show up as:
-
-<H4>This is an HTML heading</H4>
+You can create six sizes of headings - &lt;H1&gt;...&lt;H6&gt; in HTML - by typing, from the beginning of a line, three dashes (-), from one to six plus signs (+), a space, and your heading text. The FAQ questions on this page are created with: =---+++ Have a question?=.
+	* You can insert a nested table of contents, generated from headings, by placing =%<nop>TOC%= wherever you like on a page (see %TWIKIWEB%.TWikiVariables for more =%<nop>TOC%= options).
 
 -----
 #TextEnclosed
 ---+++ Text enclosed in angle brackets like &lt;filename&gt; is not displayed. How can I show it as it is?
 
-TWiki interprets text as HTML. The '&lt;' and '&gt;' characters are used to define HTML commands. Any valid text within angle brackets gets interpreted by the browser as an HTML command. Invalid text is ignored, that's why it doesn't show up.
+TWiki interprets text as HTML. The '&lt;' and '&gt;' characters are used to define HTML commands. Text contained in angle brackets is interpreted by the browser if it's a valid HTML instruction, or ignored if it isn't - either way, the brackets and its contents are not displayed.
 
-There are two work arounds if you want to display angle brackets:
+If you want to display angle brackets, enter them as HTML codes instead of typing them in directly:
+		* =&amp;lt;= = =&lt;=
+		* =&amp;gt;= = =&gt;=
+		* Enter: =(a &amp;gt; 0)= to get =(a &gt; 0)=
 
-	* Do an escape sequence in HTML:
-		* Write <code>&amp;lt;</code> instead of <code>&lt;</code>
-		* Write <code>&amp;gt;</code> instead of <code>&gt;</code>
-		* Example: Write <code>(a &amp;gt; 0)</code> instead of <code>(a &gt; 0)</code>
-	* Replace angle brackets with curly brackets.
-		* Example: Write <code>{is-writable}</code> instead of <code>&lt;is-writable&gt;</code>
-
------
+---
 ---+++ Some words (like WinAPI) have an unwanted question mark at the end. How can I prevent that?
 
-A question mark after a word is a link to a not yet existing topic. For example, WinAPI is a valid WikiName, but the actual topic _WinAPI_ does not exist.
+A question mark after a word is a link to a topic that doesn't yet exist - click it to create the new page. This is a TWiki feature - typing a MeaningfulTitle in a comment is an invitation for someone else to add to the topic.  
 
-If you do not intend to create a topic for a valid WikiWord, you can prevent it being linked by putting an HTML tag in front of it. I usually use &lt;nop&gt;. This is a non existing HTML tag, so a browser just ignores it.
+To prevent auto-linking - you may simply want to enter a word like <nop>JavaScript (the proper spelling!) - prefix it with the special TWiki HTML tag =&lt;nop&gt;=: 
 
-	* Example text: <br> <code><nop>WinAPI as it is, &lt;nop&gt;WinAPI with preceding NOP.</code>
-	* Example output: <br> WinAPI as it is, <nop>WinAPI with preceding NOP.
+	* =&lt;nop&gt;WikiWord= displays as <nop>WikiWord
 
------
+---
 ---+++ How can I write fixed font text?
 
-Enclose text in "=" equal signs.
+Enclose text in "=" equal signs:
 
-	* Example text: <br> =Proportional text, <nop>=fixed font text=<nop> , proportional again.=
-	* Example output: <br> Proportional text, =fixed font text= , proportional again.
+	* =Proportional text, <nop>=fixed font text=<nop>, proportional again.= appears as...
+	  <br> Proportional text, =fixed font text= , proportional again.
 
 Alternatively you could also use preformatted text, see next question for details.
 
------
+---
 ---+++ Text I enter gets wrapped around. How can I keep the formatting as it is?
 
-TWiki interprets text as HTML. It is possible to use preformatted text to work around this. Use the preformatted HTML tags to keep the new line of text as it is. Do so by enclosing the text with &lt;PRE&gt; and &lt;/PRE&gt; tags, e.g.
+TWiki interprets text as HTML. It is possible to use preformatted text to workaround this. Use the preformatted HTML tags to keep the new line of text as it is. Do so by enclosing text in either &lt;pre&gt; &lt;/pre&gt; or &lt;verbatim&gt; &lt;verbatim&gt; tags:
 <pre>
 This text will keep its format as it is:
-&lt;PRE&gt;
+&lt;pre&gt;
   Unit	  Price	Qty  Cost
   -------  ------  ---  ------
   aaa		 12.00	 3	36.00
-&lt;/PRE&gt;
+&lt;/pre&gt;
 </pre>
 
-It is recommended to use preformatting for tables and source code.
+The =pre= tag is standard HTML; =verbatim= is a special TWiki tag that also forces text to fixed font mode, and also prevents other tags and TWiki shortcuts from being expanded.
 
------
+---
 ---+++ How do I create tables?
 
 There are three possibilities:
 	1 Use Wiki rule with "|" vertical bars.
-	2 Use HTML tables with &lt;TABLE&gt;, &lt;TR&gt;, &lt;TD&gt; tags.
+	2 Use HTML tables with &lt;table&gt;, &lt;tr&gt;, &lt;td&gt; tags.
 	3 Use preformatted text with &lt;PRE&gt; tags.
 
 *_1. Use Wiki rule with "|" vertical bars_*
@@ -120,15 +108,11 @@ It is displayed as a table like this:
   </TR>
 </TABLE>
 
-You can copy the example from &lt;TABLE&gt; to &lt;/TABLE&gt; and change it to your needs.
-
-More information about HTML tables can be found at http://www.htmlhelp.com/reference/wilbur/table/table.html
-
 *_3. Use preformatted text with &lt;PRE&gt; tags_*
 
 Text I enter gets wrapped around. How can I keep the formatting as it is? See [[#TextEnclosed]["Text enclosed..."]] 
 
------
+---
 ---+++ Can I include images and pictures?
 
 Yes, this is possible. The easiest way of including images is to attach a GIF or JPG file to a topic and then to include it with text =%<nop>ATTACHURL%/myImage.gif= . FileAttachment has more.
@@ -188,4 +172,4 @@ hexadecimal notation. For example, to specify white, the red, green and blue com
 -----
 </blockquote>
 
--- Main.PeterThoeny - 18 Aug 2000
+-- Main.MikeMannix - 10 Sep 2001 <br />
