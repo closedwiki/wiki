@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1026460200" format="1.0" version="1.37"}%
+%META:TOPICINFO{author="PeterThoeny" date="1028322636" format="1.0" version="1.38"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %MAINWEB%.%USERNAME%). 
@@ -73,7 +73,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		  %WEBLIST{"[[$name.%HOMETOPIC%][$name]]" separator=" %SEP% "}%
 
 
----++ Email Settings
+---++ Email and Proxy Server Settings
 
 	* TWiki webmaster email address:
 		* Set WIKIWEBMASTER = webmaster@your.company
@@ -83,6 +83,11 @@ The following are __site-level__ settings that affect all users in all webs on t
 
 	* Mail domain sending mail. SMTP requires that you identify the TWiki server sending mail. If not set, ==Net::SMTP== will guess it for you. Ex: ==twiki.your.company==
 		* Set SMTPSENDERHOST = 
+
+	* Proxy Server. Some environments require outbound HTTP traffic to go through a proxy server. Set the host in PROXYHOST (example: ==proxy.your.company==), and the port number in PROXYPORT (example: ==8080==). No proxy is used if PROXYHOST or PROXYPORT is empty.
+		* Set PROXYHOST = 
+		* Set PROXYPORT = 
+
 
 ---+++ Email Link Settings
 
