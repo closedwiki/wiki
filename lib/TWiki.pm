@@ -93,7 +93,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "03 Aug 2001";
+$wikiversion      = "12 Aug 2001";
 
 # ===========================
 # read the configuration part
@@ -1154,7 +1154,8 @@ sub getPublicWebList
         my $hidden = "";
         foreach $item ( @list ) {
             $hidden = &TWiki::Prefs::getPreferencesValue( "NOSEARCHALL", $item );
-            if( ( $item eq $TWiki::webName  ) || ( ! $hidden ) ) {
+            # exclude topics that are hidden or start with . or _ unless current web
+            if( ( $item eq $TWiki::webName  ) || ( ( ! $hidden ) && ( $item =~ /^[^\.\_]/ ) ) ) {
                 push( @publicWebList, $item );
             }
         }

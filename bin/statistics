@@ -111,16 +111,15 @@ sub main
         if( $thePathInfo ) {
             # do a particular web:
             processWeb( $thePathInfo, $theRemoteUser, $theTopic, $logMonthYear, @logList );
+
         } else {
             # do all webs:
             my $dataDir = &TWiki::getDataDir();
             opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
-            @weblist = grep !/^\.\.?$/, readdir DIR;
+            @weblist = grep /^[^\.\_]/, readdir DIR; # exclude webs starting with . or _
             closedir DIR;
-            foreach $web ( @weblist )
-            {
-                if( -d "$dataDir/$web" )
-                {
+            foreach $web ( @weblist ) {
+                if( -d "$dataDir/$web" ) {
                     processWeb( "/$web", $theRemoteUser, $theTopic, $logMonthYear, @logList );
                 }
             }

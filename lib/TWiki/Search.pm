@@ -232,9 +232,9 @@ sub searchWeb
         # make sure we can report this web on an 'all' search
         # DON'T filter out unless it's part of an 'all' search.
         # PTh 18 Aug 2000: Need to include if it is the current web
-        next if ( ( $searchAllFlag ) &&
-                  ( $thisWebNoSearchAll =~ /on/i ) &&
-                  ( $thisWebName ne $TWiki::webName ) );
+        next if (   ( $searchAllFlag )
+                 && ( ( $thisWebNoSearchAll =~ /on/i ) || ( $thisWebName =~ /^[\.\_]/ ) )
+                 && ( $thisWebName ne $TWiki::webName ) );
 
         (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding
 
