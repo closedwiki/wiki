@@ -299,10 +299,16 @@ sub main
     my $contentType = $query->param( "contenttype" );
     if( $contentType ) {
 	TWiki::writeHeaderFull( $query, 'basic', $contentType, 0);
-        $tmpl =~ s/<img [^>]*>//g if( $skin =~ /^rss/ );  # remove image tags
+        if( $skin =~ /^rss/ ) {
+            $tmpl =~ s/<img [^>]*>//g;  # remove image tags
+            $tmpl =~ s/<a [^>]*>//g;    # remove anchor tags
+            $tmpl =~ s/<\/a>//g;        # remove anchor tags
+        }
     } elsif( $skin =~ /^rss/ ) {
 	TWiki::writeHeaderFull( $query, 'basic', 'text/xml', 0);
         $tmpl =~ s/<img [^>]*>//g;  # remove image tags
+        $tmpl =~ s/<a [^>]*>//g;    # remove anchor tags
+        $tmpl =~ s/<\/a>//g;        # remove anchor tags
     } else {
         TWiki::writeHeader( $query );
     }
