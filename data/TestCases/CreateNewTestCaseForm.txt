@@ -2,7 +2,7 @@
 
 <form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%" >
 Create new testcase<br/>
-<input value="TestCase" name="topic" type="text" size="15" />
+<input value="TestCaseAuto" name="topic" type="text" size="15" />
 <input type="hidden" name="web" value="%WEB%" />
 <input type="hidden" name="templatetopic" value="TestCaseTemplate" />
 <input type="hidden" name="topicparent" value="%HOMETOPIC%" />
