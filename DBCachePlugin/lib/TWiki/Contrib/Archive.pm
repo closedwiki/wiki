@@ -45,6 +45,7 @@ is open. Throws an exception if the archive cannot be opened.
     if ( $rw eq "w" ) {
       if ( !defined( $fh )) {
 	$fh = new FileHandle( $file, "w" );
+    die "Can't write $file" unless $fh;
 	$fh->close();
 	$this->{FH} = $fh;
 	$fh->open( $file, "r" ) || die( "Reopen failed" );
