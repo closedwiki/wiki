@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="1007710080" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1007891134" format="1.0" version="1.8"}%
 ---+ Table Plugin
 
-Gives extra control off table display:
+Gives extra control of table display:
 	* Allows sorting
 	* Changing table properties like border width, cell spacing and cell padding
 	* Changing background color for header cells
