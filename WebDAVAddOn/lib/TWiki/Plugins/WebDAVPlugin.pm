@@ -31,6 +31,11 @@ use vars qw(
 $VERSION = '1.010';
 my $pluginName = 'WebDAVPlugin';
 
+my @dependencies =
+  (
+   { package => 'TDB_File' }
+ };
+
 sub initPlugin {
   ( $topic, $web, $user, $installWeb ) = @_;
 
@@ -39,6 +44,30 @@ sub initPlugin {
     TWiki::Func::writeWarning( "Version mismatch between WebDAVPlugin and Plugins.pm" );
     return 0;
   }
+
+  my $depsOK = 1;
+  foreach my $dep ( @dependencies ) {
+    my ( $ok, $ver ) = ( 0, 0 );
+    eval "use $dep->{package}";
+    unless ( $@ ) {
+	  if ( defined( $dep->{constraint} )) {
+		eval "\$ver = \$$dep->{package}::VERSION;\$ok = (\$ver $dep->{constraint})";
+	  } else {
+		$ok = 1;
+	  }
+	}
+	unless ( $ok ) {
+	  my $mess = "$dep->{package} ";
+	  $mess .= "version $dep->{constraint} " if ( $dep->{constraint} );
+	  $mess .= "is required for $pluginName version $VERSION. ";
+	  $mess .= "$dep->{package} $ver is currently installed. " if ( $ver );
+	  $mess .= "Please check the plugin installation documentation. ";
+	  TWiki::Func::writeWarning( $mess );
+	  print STDERR "$mess\n";
+	  $depsOK = 0;
+	}
+  }
+  return 0 unless $depsOK;
 
   my $twn = TWiki::Func::getTwikiWebname();
   my $pd = TWiki::Func::getPubDir();

@@ -228,7 +228,7 @@ sub _tieDB {
   my ( $this, $hash ) = @_;
 
   tie(%$hash,'TDB_File', $this->{dbfile}, TDB_File::TDB_DEFAULT,
-	  Fcntl::O_RDWR | Fcntl::O_CREAT, 0700) ||
+	  Fcntl::O_RDWR | Fcntl::O_CREAT, 0770) ||
 		  die $this->{dbfile} . " DB open failure: $!";
 }
 
