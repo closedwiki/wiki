@@ -31,6 +31,10 @@ use vars qw(
 );
 
 # =========================
+=head2 initializeAccess()
+
+Basic module initialization, called from TWiki::initialize.
+=cut to implementation
 sub initializeAccess
 {
     %allGroups = ();

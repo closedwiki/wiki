@@ -200,16 +200,21 @@ $pageMode = 'html';		# Default is to render as HTML
 
 
 # =========================
-# Warning and errors that may require admin intervention, to 'warnings.txt' typically.
-# Not using store writeLog; log file is more of an audit/usage file.
-# Use this for defensive programming warnings (e.g. assertions).
+=head2 writeWarning( $text )
+
+Prints date, time, and contents $text to $warningFilename, typically
+'warnings.txt'.  Use for warnings and errors that may require admin
+intervention.  Not using Store::writeLog; log file is more of an audit/usage
+file.  Use this for defensive programming warnings (e.g. assertions).
+=cut to implementation
 sub writeWarning {
     my( $text ) = @_;
     if( $warningFilename ) {
-    my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
-    my( $tmon) = $isoMonth[$mon];
-    $year = sprintf( "%.4u", $year + 1900 );
-    my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
+        my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
+	my( $tmon) = $isoMonth[$mon];
+        $year = sprintf( "%.4u", $year + 1900 );
+        my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u",
+			   $mday, $year, $hour, $min );
         open( FILE, ">>$warningFilename" );
         print FILE "$time $text\n";
         close( FILE );
@@ -217,7 +222,11 @@ sub writeWarning {
 }
 
 # =========================
-# Use for debugging messages, goes to 'debug.txt' normally
+=head2 writeDebug( $text )
+
+Prints date, time, and contents of $text to $debugFilename, typically
+'debug.txt'.  Use for debugging messages.
+=cut to implementation
 sub writeDebug {
     my( $text ) = @_;
     open( FILE, ">>$debugFilename" );
@@ -232,7 +241,12 @@ sub writeDebug {
 }
 
 # =========================
-# Use for performance monitoring/debugging
+=head2 writeDebugTimes( $text )
+
+Dumps user and system time spent, with deltas from last call, followed
+by contents of $text, to debug log using writeDebug above.  Use for
+performance monitoring/debugging.
+=cut to implementation
 sub writeDebugTimes
 {
     my( $text ) = @_;
@@ -252,6 +266,20 @@ sub writeDebugTimes
 }
 
 # =========================
+=head2 initaliaze( $pathInfo, $remoteUser, $topic, $url, $query )
+Return value: ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir )
+
+Per-web initialization of all aspects of TWiki.  Initializes the
+Store, User, Access, and Prefs modules.  Contains two plugin
+initialization hooks: 'initialize1' to allow plugins to interact
+for authentication, and 'initialize2' once the authenticated username
+is available.
+
+Also parses $theTopic to determine whether it's a URI, a "Web.Topic"
+pair, a "Web." WebHome shorthand, or just a topic name.  Note that
+if $pathInfo is set, this overrides $theTopic.
+
+=cut to implementation
 sub initialize
 {
     my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $theQuery ) = @_;
@@ -264,7 +292,8 @@ sub initialize
 
     $cgiQuery = $theQuery;
     
-    # Initialise vars here rather than at start of module, so compatible with modPerl
+    # Initialise vars here rather than at start of module,
+    # so compatible with modPerl
     @publicWebList = ();
     &TWiki::Store::initialize();
 
@@ -372,8 +401,9 @@ sub initialize
     # initialize user name and user to WikiName list
     userToWikiListInit();
     if( !$disableAllPlugins ) {
-            # Early plugin initialization, allow plugins like SessionPlugin to set the user
-            # This must be done before preferences are set, as we need to get user preferences
+            # Early plugin initialization, allow plugins like SessionPlugin
+	    # to set the user.  This must be done before preferences are set,
+	    # as we need to get user preferences
             $userName = &TWiki::Plugins::initialize1( $topicName, $webName, $theRemoteUser, $theUrl, $thePathInfo );
     }
     $wikiName     = userToWikiName( $userName, 1 );      # i.e. "JonDoe"
@@ -406,9 +436,13 @@ sub initialize
     return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
 }
 
-# Basic initialisation - for use from scripts that handle multiple webs
-# (e.g. mailnotify) and need regexes or isWebName/isWikiName to work before
-# the per-web initialize() is called.
+=head2 basicInitialize()
+
+Sets up POSIX locale and precompiled regexes - for use from scripts
+that handle multiple webs (e.g. mailnotify) and need regexes or
+isWebName/isWikiName to work before the per-web initialize() is called.
+Also called from initialize() if not necessary beforehand.
+=cut to implementation
 sub basicInitialize() {
     # Set up locale for internationalisation and pre-compile regexes
     setupLocale();
@@ -418,9 +452,19 @@ sub basicInitialize() {
 }
 
 # =========================
-# Run-time locale setup - 'use locale' must be done in BEGIN block
-# for regexes and sorting to work properly, although regexes can still
-# work without this in 'non-locale regexes' mode (see setupRegexes routine).
+=head2 setupLocale()
+
+Run-time locale setup - If $useLocale is set, this function parses $siteLocale
+from TWiki.cfg and passes it to the POSIX::setLocale function to change TWiki's
+operating environment.
+
+mod_perl compatibility note: If TWiki is running under Apache, won't this play
+with the Apache process's locale settings too?  What effects would this have?
+
+Note that 'use locale' must be done in BEGIN block for regexes and sorting to
+work properly, although regexes can still work without this in
+'non-locale regexes' mode (see setupRegexes routine).
+=cut to implementation
 sub setupLocale {
  
     $siteCharset = 'ISO-8859-1';	# Default values if locale mis-configured
@@ -458,10 +502,13 @@ sub setupLocale {
 }
 
 # =========================
-# Set up pre-compiled regexes for use in rendering.  All regexes with
-# unchanging variables in match should use the '/o' option, even if not in a
-# loop, to help mod_perl, where the same code can be executed many times
-# without recompilation.
+=head2 setupRegexes()
+
+Set up pre-compiled regexes for use in rendering.  All regexes with
+unchanging variables in match should use the '/o' option, even if not in a
+loop, to help mod_perl, where the same code can be executed many times
+without recompilation.
+=cut to implementation
 sub setupRegexes {
 
     # Build up character class components for use in regexes.
@@ -557,18 +604,25 @@ sub setupRegexes {
 
 }
 
-# Check for unusable ASCII-based multi-byte encodings as site character set
-# - anything that enables a single ASCII character such as '[' to be
-# matched within a multi-byte character cannot be used for TWiki.
+=head2 invalidSiteCharset()
+Return value: boolean $isCharsetInvalid
+
+Check for unusable ASCII-based multi-byte encodings as site character set
+- anything that enables a single ASCII character such as '[' to be
+matched within a multi-byte character cannot be used for TWiki.
+=cut to implementation
 sub invalidSiteCharset {
     # FIXME: match other problematic multi-byte character sets 
     return ( $siteCharset =~ /^(?:iso-2022-?|hz-?)/i );
 }
 
-# Auto-detect UTF-8 vs. site charset in URL, and convert
-# UTF-8 into site charset.
-# FIXME: remove dependence on webname and topicname, i.e. generic encoding
-# subroutine
+=head2 convertUtf8URLtoSiteCharset( $webName, $topicName )
+Return value: ( string $convertedWebName, string $convertedTopicName)
+
+Auto-detect UTF-8 vs. site charset in URL, and convert UTF-8 into site charset.
+FIXME: remove dependence on webname and topicname, i.e. generic encoding
+subroutine
+=cut to implementation
 sub convertUtf8URLtoSiteCharset {
     my ( $webName, $topicName ) = @_;
 
@@ -937,14 +991,20 @@ sub initializeRemoteUser
 }
 
 # =========================
-# Build hashes to translate in both directions between username (e.g. jsmith) 
-# and WikiName (e.g. JaneSmith)
+=head2 userToWikiListInit()
+
+Build hashes to translate in both directions between username (e.g. jsmith) 
+and WikiName (e.g. JaneSmith).  Only used for sites where authentication is
+managed by external Apache configuration, instead of via TWiki's .htpasswd
+mechanism.
+=cut to implementation
 sub userToWikiListInit
 {
     %userToWikiList = ();
     %wikiToUserList = ();
 
-    # bail out in .htpasswd authenticated sites, fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
+    # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
+    # bail out in .htpasswd authenticated sites
     return unless( $doMapUserToWikiName );
 
     my @list = split( /\n/, &TWiki::Store::readFile( $userListFilename ) );
@@ -1082,6 +1142,12 @@ sub getPubUrlPath
 }
 
 # =========================
+=head2 getTWikiLibDir()
+
+If necessary, finds the full path of the directory containing TWiki.pm,
+and sets the variable $twikiLibDir so that this process is only performed
+once per invocation.  (mod_perl safe: lib dir doesn't change.)
+=cut to implementation
 sub getTWikiLibDir
 {
     if( $twikiLibDir ) {

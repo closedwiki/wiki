@@ -36,6 +36,12 @@ $finalPrefsName = "FINALPREFERENCES";
 
 
 # =========================
+=head2 initializePrefs( $webName )
+
+Resets all preference globals (for mod_perl compatibility), and reads
+preferences from TWiki::TWikiPreferences, Main::TWikiPreferences, and
+$webName::WebPreferences.
+=cut to implementation
 sub initializePrefs
 {
     my( $theWebName ) = @_;
@@ -56,7 +62,12 @@ sub initializePrefs
 }
 
 # =========================
-# late init after user is known, potentially by Plugin
+=head2 initializeUserPrefs( $completeUserName )
+
+Called after user is known (potentially by Plugin), this function
+reads preferences from the user's personal topic.  Note that the
+parameter is of the form "Main.JohnSmith", not just "JohnSmith".
+=cut to implementation
 sub initializeUserPrefs
 {
     my( $theWikiUserName ) = @_;
