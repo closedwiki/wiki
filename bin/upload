@@ -17,6 +17,7 @@
 # http://www.gnu.ai.mit.edu/copyleft/gpl.html 
 
 use CGI;
+use File::Copy;
 use wiki;
 
 $query = new CGI;
@@ -395,7 +396,8 @@ sub main
     # save uploaded file
     my $newFile = "$tempPath/$fileName";
     ## link( $tmpFilename, $newFile );      # fails, don't know why
-    `$wiki::cpCmd $tmpFilename $newFile`;   # ==> use shell cp
+#    `$wiki::cpCmd $tmpFilename $newFile`;   # ==> use shell cp
+    copy($tmpFilename, $newFile) or warn "copy($tmpFilename, $newFile) failed: $!";
     umask( 0027 );
     chmod( 0644, $newFile );
 
