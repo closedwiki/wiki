@@ -1,108 +1,46 @@
-<h3>Documentation of the TWiki Implementation (version %WIKIVERSION%)</h3>
-	* <A href="#implementation">(1)</A> Implementation Notes
-	* <A href="#installation">(2)</A> Installation Notes
-	* <A href="#upgrade">(3)</A> Upgrading Earlier Versions of TWiki
-	* <A href="#authentication">(4)</A> TWiki Authentication
-	* <A href="#login">(5)</A> TWiki Username vs. Login Username
-	* <A href="#access">(6)</A> TWiki Access Control
-	* <A href="#templates">(7)</A> TWiki Templates
-	* <A href="#skins">(8)</A> TWiki Skins
-	* <A href="#variables">(9)</A> TWiki Variables
-	* <A href="#notification">(10)</A> Notification of Changes by Email
-	* <A href="#category">(11)</A> TWiki Category Table
-	* <A href="#plugins">(12)</A> TWiki Plugins
-	* <A href="#administration">(13)</A> TWiki Administration
+*Documentation of the TWiki Implementation (version %WIKIVERSION%)*
+
+%TOC{depth="3"}%
 
 __Note:__ Read the most up to date version of this document at http://TWiki.org/cgi-bin/view/TWiki/TWikiDocumentation
 
 __Related Topics:__ TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests.
 
-<A name="implementation">
 -----
-*(1) Implementation Notes*
-
 %INCLUDE{"TWikiImplementationNotes"}%
 
-
-<A name="installation">
 -----
-*(2) Installation Notes*
-
 %INCLUDE{"TWikiInstallationNotes"}%
 
-
-<A name="upgrade">
 -----
-*(3) Upgrading Earlier Versions of TWiki*
-
 %INCLUDE{"TWikiUpgradeNotes"}%
 
-
-<A name="authentication">
 -----
-*(4) TWiki Authentication*
-
 %INCLUDE{"TWikiAuthentication"}%
 
-
-<A name="login">
 -----
-*(5) TWiki Username vs. Login Username*
-
 %INCLUDE{"TWikiUsernameVsLoginUsername"}%
 
-
-<A name="control">
 -----
-*(6) TWiki Access Control*
-
 %INCLUDE{"TWikiAccessControl"}%
 
-
-<A name="templates">
 -----
-*(7) TWiki Templates*
-
 %INCLUDE{"TWikiTemplates"}%
 
-
-<A name="skins">
 -----
-*(8) TWiki Skins*
-
 %INCLUDE{"TWikiSkins"}%
 
-
-<A name="variables">
 -----
-*(9) TWiki Variables*
-
 %INCLUDE{"TWikiVariables"}%
 
-
-<A name="notification">
 -----
-*(10) Notification of Changes by Email*
-
 %INCLUDE{"TWikiNotificationOfChanges"}%
 
-
-<A name="category">
 -----
-*(11) TWiki Category Table*
-
 %INCLUDE{"TWikiCategoryTable"}%
 
-
-<A name="plugins">
 -----
-*(12) TWiki Plugins*
-
 %INCLUDE{"TWikiPlugins"}%
 
-
-<A name="administration">
 -----
-*(13) TWiki Administration*
-
 %INCLUDE{"TWikiAdministration"}%
