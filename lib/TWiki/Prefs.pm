@@ -126,7 +126,7 @@ sub updateSetFromForm
                 $key = $field->{"name"};
                 $value = $field->{"value"};
                 my $attributes = $field->{"attributes"};
-                if( $attributes =~ /[S]/o ) {
+                if( $attributes && $attributes =~ /[S]/o ) {
                     $value =~ s/\n/\\\n/o;
                     TWiki::writeDebug( "updateSetFromForm: \"$key\"=\"$value\"" );
                     # Worry about verbatim?  Multi-lines
