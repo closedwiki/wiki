@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1033687380" format="1.0" version="1.41"}%
+%META:TOPICINFO{author="PeterThoeny" date="1036197071" format="1.0" version="1.42"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -135,6 +135,9 @@ The following are __site-level__ settings that affect all users in all webs on t
 
 	* Line break:
 		* Set BR = <br />
+
+	* Bullet sign:
+		* Set BULLET = &#8226;
 
 	* Colored text: (see more StandardColors)
 	  | You type: | =%<nop>RED% red text %<nop>ENDCOLOR% and %<nop>GREEN% green text %<nop>ENDCOLOR%= |
