@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1006515285" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="MikeMannix" date="1007113980" format="1.0" version="1.2"}%
 %TOC%
 %STARTINCLUDE%
 ---# <nop>TWikiSiteTools
@@ -7,27 +7,23 @@ _Utilities for searching, navigation, and monitoring site activity_
 
 ---++ Overview
 
-TWikiSiteTools include utilities for navigating, searching and keeping up with site activity. Preferences can be configured by web or site-wide. You are currently in the *%TWIKIWEB%* web.
+TWikiSiteTools include utilities for navigating, searching and keeping up with site activity. Preferences can be configured by web or site-wide. You are currently in the *%TWIKIWEB%* web. In particular, TWiki provides two highly configurable, automated site monitoring tools, *<nop>WebNotify*, to email alerts when topics are edited, and *<nop>WebStats*, to generate detailed activity reports.
 
----++ Monitoring Topic Changes
-
-TWiki provides two highly configurable, automated site monitoring tools, *<nop>WebNotify*, to email alerts when topics are edited, and *<nop>WebStats*, to generate detailed activity reports.
-
----+++ <nop>WebNotify Recent Changes Alert
+---++ <nop>WebNotify Recent Changes Alert
 
 Each TWiki web has an automatic email alert service that sends a list of recent changes on a preset schedule, like once a day. Users can subscribe and unsubscribe using %NOTIFYTOPIC% in each web.
 
----++++ Setting Up <nop>WebNotify
+---+++ How It Works
 
 The Perl script =mailnotify= is called by a deamon in regular intervals. The script sends an automated email to subscribed users if topics were changed in a web within last interval.
 
----+++++ Configuring Outgoing Mail
+---+++ Configuring Outgoing Mail
 
 %WIKITOOLNAME% will use the =Net::SMTP= module in case it is installed on your system. You need to specify the =SMTPMAILHOST= variable in TWikiPreferences.
 
 You can use an external mail program like =sendmail= in case the =Net::SMTP= module is not installed. In this case specify the =$mailProgram= in =twiki/bin/TWiki.cfg=.
 
----+++++ Setting the Automatic Email Schedule
+---+++ Setting the Automatic Email Schedule
 
 *For Unix platforms:* Edit the =cron= table so that =mailnotify= is called in an interval of your choice. Please consult =man crontab= of how to modify the table that schedules program execution at certain intervals. Example:
 <pre>
@@ -44,13 +40,11 @@ Microsoft lists several third-party
 [[http://www.microsoft.com/ntserver/partners/findoffering/serversolutions/Maintnce.asp#cron][replacements]]
 (as of 2001-11-20, none of them free).
 
----+++ WebChanges
+---++ <nop>WebChanges
 
 To check for the most recently edited topics while on-site, use the WebChanges link, usually located on the upper toolbar. It lists the ___ most recently modified, newest first, along with the first couple of lines of the page content.
 
----++++ How does it work?
-
----++ WebStatistics Site Usage Log
+---++ <nop>WebStatistics Site Usage Log
 
 You can generate a listing manually, or on an automated schedule, of visits to individual pages, on a per web basis. Compiled as a running total on a monthly basis. Includes totals for Topic Views, Topic Saves, Attachment Uploads, Most Popular Topics with number of views, and Top Contributors showing total of saves and attachment uploads. Previous months are saved.
 
@@ -72,16 +66,13 @@ You can generate a listing manually, or on an automated schedule, of visits to i
 
 ---++ <nop>WebSearch
 
-An extremely fast and flexible search facility.
+WebSearch is an extremely fast and flexible search facility, part of the core TWiki feature set. Options include:
+	* topic title or full-text search
+	* regular expressions
+	* search within web or site-wide
+	* index-style A-Z alphabetical listing sorted topic title
+	* many more
 
-See also: TWikiVariables
+See also: TWikiVariables for including hard-coded searches in text.
 
----
----++ Docs Comments for this page
-
-	* What about WebChanges: why isn't that covered here?
-
-	* Need more details on WebNotify: How does it work? Exactly what data is emailed, in what format? 
-
--- PeterThoeny - 16 Mar 2001 
--- Main.MikeMannix - 23 Nov 2001	
+-- Main.MikeMannix - 30 Nov 2001	
