@@ -43,6 +43,7 @@ sub main
     my $breakLock = $query->param( 'breaklock' );
     my $theAttachment = $query->param( 'attachment' );
     my $confirm = $query->param( 'confirm' );
+    my $currentWebOnly = $query->param( 'currentwebonly' ) || "";
     my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || "";
     my $skin = $query->param( "skin" ) || TWiki::Prefs::getPreferencesValue( "SKIN" );
 
@@ -61,10 +62,7 @@ sub main
     
     # justChangeRefs will be true when some topics that had links to $oldTopic
     # still need updating, previous update being prevented by a lock.
-    my $justChangeRefs = $query->param( 'changeRefs' );
-    if( ! $justChangeRefs ) {
-       $justChangeRefs = "";
-    }
+    my $justChangeRefs = $query->param( 'changeRefs' ) || "";
 
     my $fileName = &TWiki::Store::getFileName($oldWeb, $oldTopic);
     my $newName;
@@ -82,7 +80,8 @@ sub main
 
     # Has user selected new name yet?
     if( ! $newTopic || $confirm ) {
-       newTopicScreen( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $confirm, $skin );
+       newTopicScreen( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
+                       $confirm, $currentWebOnly, $skin );
        return;
     } 
     
@@ -372,7 +371,7 @@ sub getLocks
 # Display screen so user can decide on new web and topic.
 sub newTopicScreen
 {
-   my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $confirm, $skin ) = @_;
+   my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $confirm, $currentWebOnly, $skin ) = @_;
    
    my $tmpl = "";
    
@@ -393,6 +392,9 @@ sub newTopicScreen
    $tmpl = setVars( $tmpl, $oldTopic, $newWeb, $newTopic );
    $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
    $tmpl = &TWiki::getRenderedVersion( $tmpl );
+   if( $currentWebOnly ) {
+     $tmpl =~ s/%RESEARCH\{.*?web=\"all\".*\}%/(skipped)/o; # Remove search all web search
+   }
    $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
    $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );   
    print $tmpl;

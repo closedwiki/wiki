@@ -4,8 +4,11 @@
 %TMPL:DEF{"heading"}%More Actions on Topic %TOPIC%%TMPL:END%
 %TMPL:DEF{"message"}%
 
-   * *Rename, move or delete:*
-      * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a> <nop>%TOPIC%
+   * *Rename, move or delete <nop>%TOPIC%:*
+      * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?currentwebonly=on">Rename/move topic</a>,
+        looking for references in __%WEB% web__ only.
+      * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move topic</a>,
+        looking for references in __all public webs__. (recommended)
 
    * *Ref-By:*
       * <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Find topics</a>
@@ -14,7 +17,7 @@
         in __all public webs__ that link to <nop>%TOPIC%.
       * Child topics in __%WEB% Web__: %METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" title=""}%
 
-<form name="main" action="%EDITURL%" method="post">
+<form name="main" action="%EDITURL%">
    * *Parent of <nop>%TOPIC%:*
       * Set topic parent to
         <select name="topicparent"><option value="">Select...</option>
