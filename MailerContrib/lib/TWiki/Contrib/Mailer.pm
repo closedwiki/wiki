@@ -40,7 +40,7 @@ package TWiki::Contrib::Mailer;
 
 use vars qw ( $VERSION $sendmail $verbose );
 
-$VERSION = 1.002;
+$VERSION = 1.003;
 
 =begin text
 
@@ -70,7 +70,7 @@ sub mailNotify {
     # SMELL: have to getAllWebs, because getPublicWebList only returns public
     # webs.
     foreach my $web ( grep( /$webstr/o, TWiki::Store::getAllWebs() )) {
-        _processWeb( $web );
+        _processWeb( $web ) if ( TWiki::isWebName( $web ));
     }
 }
 
@@ -108,6 +108,11 @@ sub _processChanges {
     my $prevLastmodify = TWiki::Func::readFile( "$wroot/.mailnotify" ) || 0;
     my $currLastmodify = "";
 
+    if ( $verbose ) {
+        print "\tLast notification was at " .
+          TWiki::Func::formatTime( $prevLastmodify ). "\n";
+    }
+
     # hash indexed on email address, each entry of which contains an
     # array of MailerContrib::Change objects
     my %changeset;
@@ -119,7 +124,10 @@ sub _processChanges {
     my %seenset;
     my $changes = TWiki::Func::readFile("$wroot/.changes" );
 
-    return unless ( $changes );
+    unless ( $changes ) {
+        print "No changes\n" if ( $verbose );
+        return;
+    }
 
     foreach( reverse split( /\n/, $changes ) ) {
         # Parse lines from .changes:
@@ -132,8 +140,6 @@ sub _processChanges {
         # First formulate a change record, irrespective of
         # whether any subscriber is interested
         if( ! $currLastmodify ) {
-            # newest entry
-            my $time = TWiki::Func::formatTime( $prevLastmodify );
             if( $prevLastmodify eq $changeTime ) {
                 # newest entry is same as at time of previous notification
                 return;
@@ -142,8 +148,7 @@ sub _processChanges {
         }
 
         if( $prevLastmodify >= $changeTime ) {
-            #print "Date: found item of last notification\n";
-            # found item of last notification
+            # found last notification
             last;
         }
         my $frev = "";
@@ -154,6 +159,8 @@ sub _processChanges {
                 $frev = "<b>NEW</b>";
             }
         }
+
+        print "\tFound change to $topicName\n" if ( $verbose );
 
         my $change =
           new TWiki::Contrib::MailerContrib::Change
@@ -252,6 +259,9 @@ sub _generateEmails {
             my $error = TWiki::Net::sendEmail( $mail );
             if( $error ) {
                 print "**** ERROR :Mail send failed: $error\n";
+            } else {
+                print "Mailed to following changes to $mail\n";
+                print $plain;
             }
         } elsif ( $verbose ) {
             print "Please tell $email about the following changes:\n";
