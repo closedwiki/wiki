@@ -577,7 +577,7 @@ sub upgradeCategoryTable
         
         my @formTemplates = split( /,\s*/, TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) );
         my $defaultFormTemplate = "";
-        $defaultFormTemplate = @formTemplates[0] if ( @formTemplates );
+        $defaultFormTemplate = $formTemplates[0] if ( @formTemplates );
         
         if( ! $defaultFormTemplate ) {
             &TWiki::writeWarning( "Form: can't get form definition to convert category table " .
