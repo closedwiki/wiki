@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043309760" format="1.0" version="1.75"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043658747" format="1.0" version="1.76"}%
 <table><tr><td valign="top">
 Welcome to TWiki: a flexible, powerful, secure, simple, Web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either on an intranet or on the Internet.
 
@@ -27,6 +27,7 @@ The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
 		* TWikiVariables: How to easily embed text, graphics, dynamic content
 		* FileAttachments: Browser-upload files for distribution or display
 		* WebChangesAlert: Get email alerts linking to the latest page changes
+		* TWikiGlossary: A simple glossary of TWiki terms
 
 	* *TWiki Help FAQs*
 		* TWikiFAQ: The first things people ask about TWiki
