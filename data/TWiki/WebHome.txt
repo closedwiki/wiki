@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042011208" format="1.0" version="1.72"}%
+%META:TOPICINFO{author="PeterThoeny" date="1042349514" format="1.0" version="1.73"}%
 <table><tr><td valign="top">
 Welcome to TWiki, a flexible, powerful, and simple, secure, Web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base, or any other groupware tool, on an intranet or on the Web. <p>This is the place to learn about it, download it, and try it out for yourself...
 </td><td width="25">&nbsp;</td><td width="200" align="center" valign="top">
@@ -47,7 +47,7 @@ The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
 	* %T% *ADMINS:* In less than an hour, you can read through and customize the [[#UsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. 
 
 #ReferenceManual
----++ TWiki Configuration Manual
+---++ TWiki Reference Manual
 
 Documentation for webmasters, system administrators, project managers, team <br />
 leaders, and all other users of the TWiki advanced online collaboration tool.
@@ -75,13 +75,9 @@ leaders, and all other users of the TWiki advanced online collaboration tool.
 	  [[AppendixFileSystem][A. TWiki File System]]<br />
 	  [[TWikiHistory][B. TWiki Development Timeline]]
 
----++ TWiki Reference
-	* [[TWikiCourseOutlineExample][Demonstrating TWiki]]
-		
-
 ---++ <nop>TWikiSiteTools
 
-TWikiSiteTools include utilities for navigation and for monitoring %TWIKIWEB% web and site-wide activity.
+	* TWikiSiteTools include utilities for navigation and for monitoring %TWIKIWEB% web and site-wide activity.
 
 %INCLUDE{"%TWIKIWEB%.WebSiteTools"}%
 	* %WIKIPREFSTOPIC%: %WIKITOOLNAME% site-wide preferences
