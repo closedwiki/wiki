@@ -3,6 +3,7 @@
 <!-- Header definition for topic attachments and top table in attach screen -->
 %TMPL:DEF{ATTACH:files:header(basic)}%
 <div class="twikiAttachments"><p></p>
+%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%
 | *I* | *[[%TWIKIWEB%.FileAttachment][Attachment]]* | *Action* | *Size* | *Date* | *Who* | *Comment* |%TMPL:END%
 
 <!-- A basic row definition, for attachment table and attach screen -->
@@ -41,6 +42,7 @@
 
 <!-- Header for versions table in attach screen -->
 %TMPL:DEF{ATTACH:versions:header}%
+%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%
 |  *Version*  |  *Action*   |  *Date*  |  *Who*  |  *Comment*  |
 %TMPL:END%
 
