@@ -26,8 +26,6 @@ use TWiki;
 
 use strict;
 
-writeDebugTimes( "view:start" );
-
 ##### for debug only: Remove next 2 comments (but redirect does not work)
 #print "Content-type: text/html\n\n";
 #open(STDERR,'>&STDOUT'); # redirect error to browser
@@ -44,7 +42,6 @@ sub writeDebug
 sub writeDebugTimes
 {
     my( $text ) = @_;
-    
 #    TWiki::writeDebugTimes( $text );
 }
 
@@ -56,6 +53,8 @@ sub main
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
+
+    writeDebugTimes( "view - start $thePathInfo" );
 
     my( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
