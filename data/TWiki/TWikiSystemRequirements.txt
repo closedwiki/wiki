@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999687993" format="1.0" version="1.14"}%
+%META:TOPICINFO{author="JohnTalintyre" date="999706127" format="1.0" version="1.15"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Operating Environment
@@ -16,7 +16,7 @@ TWiki is written in Perl 5 and uses a number of shell commands. It requires GNU 
 | *Required Server Environment* |||
 | *Resource* | *Unix* | *Windows* |
 | Perl |  5.005_03 or higher  ||
-| Non standard Perl modules |  =Net::SMTP= (or =sendmail=)  |  =Net::SMTP=  | 
+| Non standard Perl modules |  =Net::SMTP= (or =sendmail=)  |  =Net::SMTP=, =MIME::Base64=,  =Digest::SHA1= |
 | RCS |  5.7 or higher  ||
 | Other external programs |  =ls, fgrep, egrep=  ||
 | Web server |  Apache; others (with support for CGI, authentication, extended path) ***  ||
