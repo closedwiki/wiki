@@ -1,22 +1,55 @@
-%META:TOPICINFO{author="PeterThoeny" date="1074422280" format="1.0" version="1.14"}%
-%META:TOPICPARENT{name="WebHome"}%
-<noautolink>
-<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%/%INCLUDINGTOPIC%"}%">
-<table border="0" cellspacing="3" cellpadding="0"><tr><td>
-  <input type="text" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="32" /><input type="submit" value="Search" />%BR%
-  <input type="checkbox" name="web" %CALC{$IF($EXACT(%URLPARAM{web}%,),,checked="checked")}% /> All public webs
-</td><td>
-	* [[SearchHelp][Help]]
-	* [[%INCLUDINGWEB%.WebSearchAdvanced][Advanced search]]
-</td></tr><tr><td>
-  <input type="radio" name="scope" value="text" %CALC{$IF($EXACT(%URLPARAM{"scope" default="text"}%,text),checked="checked")}% /> Text body &nbsp;
-  <input type="radio" name="scope" value="topic" %CALC{$IF($EXACT(%URLPARAM{scope}%,topic),checked="checked")}% /> Topic title &nbsp;
-  <input type="radio" name="scope" value="all" %CALC{$IF($EXACT(%URLPARAM{scope}%,all),checked="checked")}% /> Both
+%META:TOPICINFO{author="PeterThoeny" date="1074422460" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="WebSearch"}%
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
+	* <b>Advanced search</b>:
+	<table border="0" cellspacing="0" cellpadding="0"><tr><td>
+	  <input type="radio" name="scope" value="text" checked="checked" /> Topic text (body) &nbsp; &nbsp;
+	</td><td>
+	  Search
+	</td><td>
+	  <select name="web">
+	  <option value="all">all public</option>
+	  <option>%INCLUDINGWEB%</option>
+%WEBLIST{"	  <option>$name</option>"}%
+	  </select>
+	  web(s)
+	</td></tr><tr><td>
+	  <input type="radio" name="scope" value="topic" /> Topic name
+	</td><td>
+	  Sort by
+	</td><td>
+	  <select name="order">
+	  <option VALUE="topic">Topic name</option>
+	  <option VALUE="modified">Last modified time</option>
+	  <option VALUE="editby">Last editor</option>
+	  </select> in
+	  <input type="checkbox" name="reverse" /> reversed order
+	</td></tr></table>
+	<input type="text" name="search" size="32" />
+	<input type="submit" value="Search text" /> <br>
+	<table><tr><td>
+	  Make search:
+	</td><td>
+	  <input type="checkbox" name="casesensitive" /> Case sensitive
+	</td><td>
+	  <input type="checkbox" name="regex" /> %TWIKIWEB%.RegularExpression search (semicolon ';' for _and_)
+	</td></tr><tr><td>
+	  Don't show:
+	</td><td>
+	  <input type="checkbox" name="nosearch" /> search string
+	</td><td>
+	  <input type="checkbox" name="nosummary" /> summaries &nbsp; &nbsp;
+	  <input type="checkbox" name="nototal" /> total matches
+	</td></tr><tr><td>
+	  Do show:
+	</td><td>
+	  <input type="checkbox" name="bookview" /> %TWIKIWEB%.BookView
+	</td><td>
+	  <input type="checkbox" name="showlock" /> locked topic &nbsp;
+	  <input type="text" name="limit" size="5" value="all" /> topics (result count)
 	</td></tr></table>
 </form>
-</noautolink>
 
-%SEARCH{ "%URLPARAM{search}%" type="keyword" scope="%URLPARAM{scope}%" web="%URLPARAM{web}%" nosearch="on" }%
 
 	* <b><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=\.*">Topic index</a></b>: List of <nop>%INCLUDINGWEB% topics in alphabetical order. <br />
 	  <b>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=\.*">All</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ea">A</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eb">B</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ec">C</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ed">D</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ee">E</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ef">F</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eg">G</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eh">H</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ei">I</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ej">J</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ek">K</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5El">L</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Em">M</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5En">N</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eo">O</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ep">P</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eq">Q</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Er">R</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Es">S</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Et">T</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eu">U</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ev">V</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ew">W</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ex">X</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ey">Y</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ez">Z</a>| <br />
@@ -30,3 +63,5 @@
 		* Make changes to topics in %TWIKIWEB%.GoodStyle,
 		* Learn the %TWIKIWEB%.TextFormattingRules, and
 		* Have a look at the %TWIKIWEB%.TextFormattingFAQ
+
+-- TWiki:Main.PeterThoeny - 18 Jan 2004
