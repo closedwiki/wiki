@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1070384864" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071557226" format="1.0" version="1.10"}%
 ---+ TWiki Contributor
 
 A TWiki contributor is a person devoting his/her time to contribute on the development of the Open Source project TWiki, hosted at http://TWiki.org/ . It is defined as a person who:
@@ -38,7 +38,7 @@ I would like to take this opportunity to express my sincere appreciation and tha
 | Raymond Lutz | TWiki:Main/RaymondLutz | |
 | Ryan Freebern | TWiki:Main/RyanFreebern | |
 | Stanley Knutson | TWiki:Main/StanleyKnutson | |
-| Sven Dowideit | TWiki:Main/SvenDowideit | |
+| Sven Dowideit | TWiki:Main/SvenDowideit | TWiki:Codev/CoreTeam member |
 | Ted Pavlic | TWiki:Main/TedPavlic | |
 | Vito Miliano | TWiki:Main/VitoMiliano | |
 | Walter Mundt | TWiki:Main/WalterMundt | TWiki:Codev/CoreTeam member |
