@@ -1501,24 +1501,28 @@ sub renderParent
     my( $web, $topic, $meta, $args ) = @_;
     
     my $text = "";
-    
-    my $dontRecurse;
-    my $prefix;
-    my $usesep;
-    
+
+    my $dontRecurse = 0;
+    my $noWebHome = 0;
+    my $prefix = "";
+    my $suffix = "";
+    my $usesep = "";
+
     if( $args ) {
        $dontRecurse = extractNameValuePair( $args, "dontrecurse" );
-       $prefix = extractNameValuePair( $args, "prefix" );
-       $usesep = extractNameValuePair( $args, "separator" );
-    }
-    
-    if( ! $usesep ) {
-       $usesep = " > ";
+       $noWebHome =   extractNameValuePair( $args, "nowebhome" );
+       $prefix =      extractNameValuePair( $args, "prefix" );
+       $suffix =      extractNameValuePair( $args, "suffix" );
+       $usesep =      extractNameValuePair( $args, "separator" );
     }
 
-    my %visited = ();    
+    if( ! $usesep ) {
+       $usesep = " &gt; ";
+    }
+
+    my %visited = ();
     $visited{"$web.$topic"} = 1;
-    
+
     my $sep = "";
     my $cWeb = $web;
 
@@ -1532,7 +1536,10 @@ sub renderParent
                $pWeb = $1;
                $pTopic = $2;
             }
-            $text = "$pWeb.$pTopic$sep$text";
+            if( $noWebHome && ( $pTopic eq $mainTopicname ) ) {
+               last;  # exclude "WebHome"
+            }
+            $text = "[[$pWeb.$pTopic][$pTopic]]$sep$text";
             $sep = $usesep;
             if( $dontRecurse || ! $name ) {
                last;
@@ -1559,11 +1566,14 @@ sub renderParent
        $text = "$prefix$text";
     }
 
+    if( $text && $suffix ) {
+       $text .= $suffix;
+    }
+
     $text = handleCommonTags( $text, $topic, $web );
     $text = getRenderedVersion( $text, $web );
-    
+
     return $text;
-    
 }
 
 # ========================
