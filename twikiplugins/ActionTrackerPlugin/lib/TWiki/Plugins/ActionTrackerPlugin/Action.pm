@@ -190,7 +190,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     $defs =~ s/^\s*\|//o;
     $defs =~ s/\|\s*$//o;
     foreach my $def ( split( /\s*\|\s*/, $defs )) {
-      if ( $def =~ m/^(\w+)\s*,\s*(\w+)\s*(,\s*(\d+)\s*)?(,\s*(.*))?$/o ) {
+      if ( $def =~ m/^\s*(\w+)\s*,\s*(\w+)\s*(,\s*(\d+)\s*)?(,\s*(.*))?$/o ) {
 	my $name = $1;
 	my $type = $2;
 	my $size = $4;
