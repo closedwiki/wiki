@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="995875071" format="1.0beta2" version="1.7"}%
+%META:TOPICINFO{author="JohnTalintyre" date="997199693" format="1.0beta2" version="1.8"}%
 *%WIKITOOLNAME%.%WEB% Web Preferences*
 
 The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
@@ -15,9 +15,11 @@ __Preferences:__
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs)
 		* Set NOSEARCHALL =
 
-	* Users or groups who __are not__ / __are__ allowed to change topics in the %WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
+	* Users or groups who __are not__ / __are__ allowed to change/rename topics in the %WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
 		* Set DENYWEBCHANGE = 
 		* Set ALLOWWEBCHANGE = 
+		* Set DENYWEBRENAME = 
+		* #Set ALLOWEBRENAME = %MAINWEB%.TWikiAdminGroup
 
 	* Users or groups allowed to change this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
 		* Set ALLOWTOPICCHANGE = 
