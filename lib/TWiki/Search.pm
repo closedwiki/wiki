@@ -181,7 +181,11 @@ sub searchWeb
 
     my $cmd = "";
     if( $theScope eq "topic" ) {
-        $cmd = "$TWiki::lsCmd *.txt | %GREP% %SWITCHES% $TWiki::cmdQuote$theSearchVal$TWiki::cmdQuote";
+        if( $noSearch ) {
+           $cmd = "$TWiki::lsCmd *.txt"; # FIXME this exists elsewhere
+        } else {
+           $cmd = "$TWiki::lsCmd *.txt | %GREP% %SWITCHES% $TWiki::cmdQuote$theSearchVal$TWiki::cmdQuote";
+        }
     } else {
         $cmd = "%GREP% %SWITCHES% -l $TWiki::cmdQuote$theSearchVal$TWiki::cmdQuote *.txt";
     }
@@ -412,11 +416,8 @@ sub searchWeb
                 my $meta = "";
                 ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
                 $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $topic, $thisWebName );
-                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta, 1 );
-                $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
-                $topicRevDate{ $tempVal } = $revdate;
-                $topicRevNum{ $tempVal } = $revnum;
-                $topicAllowView{ $tempVal } = $allowView;
+                ( $revDate, $revUser, $revNum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta, 1 );
+                $revUser = &TWiki::userToWikiName( $revUser );
             }
 
             $locked = "";
