@@ -33,12 +33,12 @@ package TWiki::Contrib::MailerContrib::Change;
 =begin text
 
 ---+++ sub new($web)
-| $web | Web name |
-| $topic | Topic name |
-| $author | String author of change |
-| $time | String time of change |
-| $rev | String revision identifier |
-| $summary | String summary of the change |
+| =$web= | Web name |
+| =$topic= | Topic name |
+| =$author= | String author of change |
+| =$time= | String time of change |
+| =$rev= | String revision identifier |
+| =$summary= | String summary of the change |
 Construct a new change object.
 
 =cut
@@ -62,9 +62,12 @@ sub new {
 =begin text
 
 ---+++ sub expandHTML($html) -> string
+| =$html= | Template to expand keys within |
 Expand an HTML template using the values in this change. The following
 keys are expanded: %<nop>TOPICNAME%, %<nop>AUTHOR%, %<nop>TIME%,
-%<nop>REVISION%, %<nop>TEXTHEAD%,
+%<nop>REVISION%, %<nop>TEXTHEAD%.
+
+Returns the expanded template.
 
 =cut
 
