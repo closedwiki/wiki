@@ -872,7 +872,7 @@ sub searchWeb
             if( $revNum > 1 ) {
                 $revNumText = "r1.$revNum";
             } else {
-                $revNumText = "<b>NEW</b>";
+                $revNumText = "<span class=\"twikiNew\"><b>NEW</b></span>";
             }
             $tempVal =~ s/%REVISION%/$revNumText/o;
             $tempVal =~ s/%AUTHOR%/$revUser/o;

@@ -73,7 +73,7 @@ sub changes {
         if( $bar[3] > 1 ) {
           $frev = "r1.$bar[3]";
         } else {
-          $frev = "<b>NEW</b>";
+          $frev = "<span class=\"twikiNew\"><b>NEW</b></span>";
         }
       }
       $foo =~ s/%TIME%/$time/go;
