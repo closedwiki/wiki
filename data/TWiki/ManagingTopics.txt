@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000788905" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="PeterThoeny" date="1008578651" format="1.0" version="1.14"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -49,7 +49,7 @@ title="This topic used to exist and was moved to: "}%
 
 ---++ Effect of Access Settings
 
-Permissions affect the rename function in various ways.  To rename a topic, you need both change and rename permissions.  To alter refer4ing topics, you need change permission.  See TWikiAccessControl for information on setting up access permissions.
+Permissions affect the rename function in various ways.  To rename a topic, you need both change and rename permissions.  To alter referring topics, you need change permission.  See TWikiAccessControl for information on setting up access permissions.
 
 ---++ How Rename/move Works
 
