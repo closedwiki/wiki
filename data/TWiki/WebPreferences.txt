@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1001637866" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="MikeMannix" date="1009508186" format="1.0" version="1.11"}%
 ---++ %WIKITOOLNAME%.%WEB% Web Preferences
 
 The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
@@ -12,10 +12,9 @@ __Preferences:__
 	* Web specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors)
 		* Set WEBBGCOLOR = #FFE0B0
 
-	* Graphics used in TWiki documentation (view all images in %TWIKIWEB%.TWikiDocGraphics):
+	* Graphics used in TWiki documentation - view all images in %TWIKIWEB%.TWikiDocGraphics. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
 		* Set TLS = <img width="88" height="31" border="0" alt="TWiki ID button" src="%PUBURL%/TWiki/TWikiDocGraphics/8831.gif">
 		* Set H = <img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" border="0" alt="HELP" width="16" height="16" />
-		* Set A = <img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" alt="ALERT!" width="16" height="16" />
 		* Set X = <img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" alt="ALERT!" width="16" height="16" />
 		* Set T = <img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" alt="TIP" width="16" height="16" />
 
