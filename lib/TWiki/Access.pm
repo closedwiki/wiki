@@ -1,6 +1,6 @@
 # Module of TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2000-2004 Peter Thoeny, peter@thoeny.com
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -22,6 +22,15 @@
 # - Upgrading TWiki is easy as long as you only customize wikicfg.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 
+=begin twiki
+
+---+ TWiki::Access Package
+
+This package manages access control to view and change topics. Plugins
+should only use the equivalent interface in TWiki::Func.
+
+=cut
+
 package TWiki::Access;
 
 use strict;
@@ -31,9 +40,11 @@ use vars qw(
 );
 
 # =========================
-=head2 initializeAccess()
+=pod
 
-Basic module initialization, called from TWiki::initialize.
+---++ initializeAccess()
+| Description: | Basic module initialization, called from TWiki::initialize |
+
 =cut to implementation
 sub initializeAccess
 {
@@ -68,6 +79,18 @@ sub permissionsSet
 }
 
 # =========================
+=pod
+
+---++ checkAccessPermission( $action, $user, $text, $topic, $web ) ==> $ok
+| Description:          | Check if user is allowed to access topic |
+| Parameter: =$action=  | "VIEW", "CHANGE", "CREATE", etc. |
+| Parameter: =$user=    | Remote WikiName, e.g. "Main.PeterThoeny" |
+| Parameter: =$text=    | If empty: Read "$theWebName.$theTopicName" to check permissions |
+| Parameter: =$topic=   | Topic name to check, e.g. "SomeTopic" |
+| Parameter: =$web=     | Web, e.g. "Know" |
+| Return:    =$ok=      | 1 if OK to access, 0 if no permission |
+
+=cut to implementation
 sub checkAccessPermission
 {
     my( $theAccessType, $theUserName,
@@ -81,12 +104,6 @@ sub checkAccessPermission
 	}
     }
 #/AS
-
-    # $theAccessType  "VIEW", "CHANGE", "CREATE", e.t.c.
-    # $theUserName    Remote WikiName, i.e. "Main.PeterThoeny"
-    # $theTopicText   If empty: Read "$theWebName.$theTopicName"
-    # $theTopicName   Topic name to check, i.e. "SomeTopic"
-    # $theWebName     Web, i.e. "Know"
 
     $theAccessType = uc( $theAccessType );  # upper case
     if( ! $theWebName ) {
@@ -170,6 +187,15 @@ sub checkAccessPermission
 }
 
 # =========================
+=pod
+
+---++ userIsInGroup( $user, $group ) ==> $ok
+| Description:        | Check if user is a member of a group |
+| Parameter: =$user=  | Remote WikiName, e.g. "Main.PeterThoeny" |
+| Parameter: =$group= | Group name, e.g. "Main.EngineeringGroup" |
+| Return:    =$ok=    | 1 user is in group, 0 if not |
+
+=cut to implementation
 sub userIsInGroup
 {
     my( $theUserName, $theGroupTopicName ) = @_;
@@ -193,6 +219,14 @@ sub userIsInGroup
 }
 
 # =========================
+=pod
+
+---++ getUsersOfGroup( $group ) ==> @users
+| Description:         | Get all members of a group; groups are expanded recursively |
+| Parameter: =$group=  | Group topic name, e.g. "Main.EngineeringGroup" |
+| Return:    =@users=  | List of users, e.g. ( "Main.JohnSmith", "Main.JaneMiller" ) |
+
+=cut to implementation
 sub getUsersOfGroup
 {
     my( $theGroupTopicName ) = @_;
@@ -223,6 +257,7 @@ sub prvGetUsersOfGroup
 
     # check if group topic is already processed
     if( $theFirstCall ) {
+        # FIXME: Get rid of this global variable
         @processedGroups = ();
     } elsif( grep { /^$web\.$topic$/ } @processedGroups ) {
         # do nothing, already processed
