@@ -1,25 +1,35 @@
-%META:TOPICINFO{author="PeterThoeny" date="1002073392" format="1.0" version="1.24"}%
+%META:TOPICINFO{author="PeterThoeny" date="1007453640" format="1.0" version="1.25"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
 
-_Upgrade from TWiki 01-Dec-2000 to TWiki 01-Sep-2001 (previous to new full release)_
+_Upgrade from TWiki 01-Dec-2000 or TWiki 01-Sep-2001 to TWiki 01-Dec-2001 (previous to new full release)_
 
 ---++ Overview
 
-The latest version of TWiki (01-Sep-2001) involves several major new features and numerous enhancements to the last full version (01-Dec-2000). The file system set-up is almost identical, but much of the underlying data structure and processes is new. With all the changes, the upgrade procedure is straightforward, and your existing page data is imported directly. 
+This guide describes how to upgrade either from TWiki 01-Dec-2000 or TWiki 01-Sep-2001 to TWiki 01-Dec-2001.
+
+	* The latest version of TWiki (01-Dec-2001) is a small incremental release over the 01-Sep-2001 version.
+	* The 01-Sep-2001 version involves several major new features and numerous enhancements to the last full version (01-Dec-2000). The file system set-up is almost identical, but much of the underlying data structure and processes is new. With all the changes, the upgrade procedure is straightforward, and your existing page data is imported directly. 
 
 ---++ Upgrade Requirements
 
-	* To upgrade from a 01-Dec-2000 standard installation to the new, next generation 01-Sep-2001 TWiki Production Release, follow the instructions below.
+	* To upgrade from a 01-Dec-2000 or 01-Sep-2001 standard installation to the latest 01-Dec-2001 TWiki Production Release, follow the instructions below.
 
 	* __NOTE:__ To upgrade from a *pre-01-Dec-2000* TWiki, start with	%TWIKIWEB%.TWikiUpgradeTo01Dec2000.
 
 	* To upgrade from a Beta of the new release, or if you made custom modifications to the application, read through all new reference documentation, then use the procedure below as a guideline.  
 
+---++ Major Changes from TWiki 01-Sep-2001
+
+The latest 01-Dec-2001 release includes the following new features and enhancements compared to the 01-Sep-2001 release:
+
+	* *[[%TWIKIWEB%.FormattedSearch][FormattedSearch]]* - New =format=""= parameter in =%<nop>SEARCH{}%= variable for database like reporting. 
+	* Various bug fixes
+
 ---++ Major Changes from TWiki 01-Dec-2000
 
-The 01-Sep-2001 release includes the following new features and enhancements:
+The 01-Sep-2001 release includes the following new features and enhancements compared to the 01-Dec-2000 release:
 
 	* *[[%TWIKIWEB%.TWikiPlugins][TWikiPlugins]]* - Easily install program enhancements using external plug-in modules. Developers can create plug-ins in Perl, with the [[%TWIKIWEB%.TWikiPlugins#PluginAPI][TWiki Plugin API]].
 		* %TWIKIWEB%.InterwikiPlugin (preinstalled) - Link to external sites with text aliases, =SiteAlias:Page=; rules are defined in InterWikis. (Get more Plugins from the TWiki:Plugins web.) 
@@ -36,11 +46,12 @@ The 01-Sep-2001 release includes the following new features and enhancements:
 	* *HierarchicalNavigation* uses new [[%TWIKIWEB%.TWikiMetaData][Meta Data]] variables to link hierarchically.
 	* *Convert to XHTML* - Pages are rendered for display in XHTML 1.0, as far as possible without breaking HTML 3.2 compliance.
 
+
 ---++ TWiki Directory Structure and File Names
 
 The TWiki directory structure remains the same, with one exception, the TWiki configuration file and Perl modules have been moved from the =twiki/bin= directory into it's own =twiki/lib= directory tree. The following files have been renamed and moved:
 
-| *From TWiki 01-Dec-2000:*		| *To TWiki 01-Sep-2001:* |
+| *From TWiki 01-Dec-2000:*		| *To TWiki 01-Dec-2001:* |
 | =twiki/bin/wikicfg.pm=	 | =twiki/lib/TWiki.cfg= |
 | =twiki/bin/wiki.pm=		 | =twiki/lib/TWiki.pm= |
 | =twiki/bin/wikiaccess.pm= | =twiki/lib/TWiki/Access.pm= |
@@ -50,21 +61,51 @@ The TWiki directory structure remains the same, with one exception, the TWiki co
 
 A new =twiki/lib/TWiki/Plugins= directory contains the new Plugin modules.
 
----++ Standard Upgrade Procedure
+
+---++ Standard Upgrade Procedure from 01-Sep-2000 to 01-Dec-2001 Release
+
+This incremental update can be performed easily.
+
+The following steps describe the upgrade assuming that =$TWIKIROOT= is the root of your current 01-Sep-2000 release.
+
+	1. Back up and prepare:
+		* Back up all existing TWiki directories =$TWIKIROOT/bin=, =$TWIKIROOT/pub=, =$TWIKIROOT/data=, =$TWIKIROOT/templates=.
+		* Create a temporary directory and unpack the ZIP file there.
+	1. Update files in TWiki root:
+		* Overwrite all =*.html= and =*.txt= files in =$TWIKIROOT= with the new ones.
+	1. Update template files:
+		* Overwrite all template files in =$TWIKIROOT/templates= with the new ones.
+	1. Update script files:
+		* Overwrite all script files in =$TWIKIROOT/bin= with the new ones.
+	1. Update library files:
+		* Overwrite the =TWiki.pm= library in =$TWIKIROOT/lib= with the new one.
+		* Overwrite all =*.pm= library files in =$TWIKIROOT/lib/TWiki= and =$TWIKIROOT/lib/TWiki/Plugins= with the new ones.
+	1. Update data/TWiki files: (in case you want the updated docs)
+		* Using your browser, merge the new <nop>TWiki.TWikiRegistration topic (or <nop>TWiki.TWikiRegistrationPub in case you used that one) into your existing <nop>TWiki.TWikiRegistration topic.
+		* In the temporary =twiki/data/TWiki= directory where you unzipped the installation package:
+			* Remove the files you do *not* want to upgrade: =TWikiPreferences.*=, =TWikiWebsTable.*=, =WebNotify.*=, =WebPreferences.*=, =WebStatistics.*= and all =WebTopic*= files.
+			* In case the cgi-scripts are not running as user =nobody=: The =*,v= RCS repository files delivered with the installation package are locked by user nobody and need to be changed the user of your cgi-scripts, i.e. =www-data=. A simple way to switch the locker of the RCS files is to use sed:
+			  <br /> =for f in *,v; do sed 's/nobody\:/www-data\:/' $f &gt; x; mv x $f; done=
+		* Move all remaining =*.txt= and =*.txt,v= files from the temporary =data/TWiki= directory to your =$TWIKIROOT/data/TWiki= directory.
+	1. Update pub/TWiki files:
+		* Move the new =pub/TWiki/TWikiDocGraphics= directory into your =$TWIKIROOT/pub/TWiki= directory.
+
+
+---++ Standard Upgrade Procedure from 01-Dec-2000 to 01-Dec-2001 Release
 
 The idea is to have the new and old installation work in parallel so that you can test the new installation before switching over. That way you can make the switch on your live TWiki installation within one minute without affecting the users.
 
 | *Before Switch:* || *After Switch:* ||
-| *Current 01-Dec-2000:* | *New 01-Sep-2001:* | *Obsolete 01-Dec-2000:* | *New 01-Sep-2001:* |
+| *Current 01-Dec-2000:* | *New 01-Dec-2001:* | *Obsolete 01-Dec-2000:* | *New 01-Dec-2001:* |
 | =twiki/templates/= | =twiki/templates2/= | =twiki/templates1/= | =twiki/templates/= |
 | =twiki/bin/= | =twiki/bin/2/= | (overwritten) | =twiki/bin/= |
 | (N/A) | =twiki/bin/lib/= | (N/A) | =twiki/lib/= |
 | =twiki/data/TWiki= | =twiki/data/TWiki2= | =twiki/data/TWiki1= | =twiki/data/TWiki= |
 | (other directories do not change) ||||
 
-Alternatively you could move the existing installation away, install the 01-Sep-2001 release into it's place and move your webs and pub files back.
+Alternatively you could move the existing installation away, install the 01-Dec-2001 release into it's place and move your webs and pub files back.
 
-Follow this step-by-step guide to upgrade from the 01-Dec-2000 TWiki to the 01-Sep-2001 release, importing your original page data and related files:
+Follow this step-by-step guide to upgrade from the 01-Dec-2000 TWiki to the 01-Dec-2001 release, importing your original page data and related files:
 
 ---+++ Pre-Upgrade Preparation
 
@@ -77,9 +118,9 @@ The following steps describe the upgrade on Unix. Windows setup is very similar.
 	1. Back up all existing TWiki directories =twiki/bin=, =twiki/pub=, =twiki/data=, =twiki/templates=.
 	1. Create a temporary directory and unpack the ZIP file there:
 	  <br /> =mkdir -p ~/tmp/=
-	  <br /> =cp -p ~/downloads/TWiki20010901.zip ~/tmp/=
+	  <br /> =cp -p ~/downloads/TWiki20011201.zip ~/tmp/=
 	  <br /> =cd ~/tmp/=
-	  <br /> =unzip ~/tmp/TWiki20010901.zip=
+	  <br /> =unzip ~/tmp/TWiki20011201.zip=
 
 ---+++ Step 2: Upgrade TWiki document files 
 
@@ -113,7 +154,7 @@ The following steps describe the upgrade on Unix. Windows setup is very similar.
 	  <br /> =mv ~/tmp/pub/*.gif $TWIKIROOT/pub=
 	1. Pay attention to the file permissions of the =TWiki2= and =Know2= directories and its files. The files must be writable by the cgi-scripts (usually user =nobody=).
 	1. In case the cgi-scripts are not running as user =nobody=: The =*,v= RCS repository files delivered with the installation package are locked by user nobody and need to be changed the user of your cgi-scripts, i.e. =www-data=. A simple way to switch the locker of the RCS files is to use sed:
-	  <br /> =for f in *,v; do sed 's/nobody\:/www-data\:/' $f > x; mv x $f; done=
+	  <br /> =for f in *,v; do sed 's/nobody\:/www-data\:/' $f &gt; x; mv x $f; done=
 
 ---+++ Step 5: Install new CGI scripts
 
@@ -152,7 +193,7 @@ The following steps describe the upgrade on Unix. Windows setup is very similar.
 
 ---+++ Step 8: Update topics
 
-You can do the following changes using your old TWiki 01-Dec-2000 or new TWiki 01-Sep-2001 installation. Pointing your browser to the old installation for edit-copy-edit-paste operations is recommended, so that users don't get surprised by meta data content showing up in topics.
+You can do the following changes using your old TWiki 01-Dec-2000 or new TWiki 01-Dec-2001 installation. Pointing your browser to the old installation for edit-copy-edit-paste operations is recommended, so that users don't get surprised by meta data content showing up in topics.
 
 	1. Remember that you now have two TWiki webs:
 		* The original =TWiki= web.
@@ -205,9 +246,9 @@ __NOTE:__ Skip this step if you did not customize your template files.
 
 ---+++ Step 10: Switch over to new installation
 
-In this step, you move the working 01-Sep-2001 installation to the old 01-Dec-2000 installation, so that users don't have to change the URL.
+In this step, you move the working 01-Dec-2001 installation to the old 01-Dec-2000 installation, so that users don't have to change the URL.
 
-	1. Test your new 01-Sep-2001 installation under =twiki/bin/2/view= to make sure everything works as expected.
+	1. Test your new 01-Dec-2001 installation under =twiki/bin/2/view= to make sure everything works as expected.
 		* __NOTE:__ Don't worry about the Plugins, they'll work after the switch.
 	1. Edit =$TWIKIROOT/bin/2/TWiki.cfg= and remove the =/2= from =$scriptUrlPath= and =$templateDir=, ex:
 	  <br /> =$scriptUrlPath	 = "/twiki/bin";=
@@ -230,7 +271,7 @@ In this step, you move the working 01-Sep-2001 installation to the old 01-Dec-20
 	  <br /> =cd $TWIKIROOT/bin=
 	  <br /> =cp -p bin/2/* .=
 	  <br /> =cp -p bin/2/.htaccess .=
-	1. Point your browser to the original URL and make sure the relocated 01-Sep-2001 installation works as expected: check browsing, searching and user registration.
+	1. Point your browser to the original URL and make sure the relocated 01-Dec-2001 installation works as expected: check browsing, searching and user registration.
 	1. Clean up and remove obsolete directories:
 		* Remove directory =$TWIKIROOT/bin/2=
 		* Remove directory =$TWIKIROOT/templates1=
@@ -267,8 +308,8 @@ In this step, you move the working 01-Sep-2001 installation to the old 01-Dec-20
 
 ---++ Known Issues
 
-	* Check TWiki:Codev/KnownIssuesOfTWiki01Sep2001 for known issues of TWiki 01 Sep 2001 (production release)
+	* Check TWiki:Codev/KnownIssuesOfTWiki01Dec2001 for known issues of TWiki 01 Dec 2001 (production release)
 		
 -- JohnTalintyre - 18 Jul 2001 <br />
 -- MikeMannix - 12 Sep 2001 <br />
--- PeterThoeny - 02 Oct 2001 <br />
+-- PeterThoeny - 03 Dec 2001 <br />
