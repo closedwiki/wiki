@@ -61,7 +61,7 @@ db_get twiki/defaultUrlHost
 perl -pi~ -e '$U=q{'"$RET"'}; s/^(\$defaultUrlHost\s*=\s*").*(";\n)$/$1$U$2/;' /etc/twiki/TWiki.cfg
 perl -pi~ -e '$U=q{'"$RET"'}; s{http://your.domain.com}{$U}g;' /etc/twiki/apache.conf
 #perl -pi~ -e '$U=q{'"$RET"'}; s{^(Redirect\s+/twiki/index.html\s+).*(cgi-bin/twiki/view\n)$}{$1$U$2};' /etc/twiki/apache.conf
-mv /etc/twiki/*~ /tmp
+rm /etc/twiki/*~ 
 
 db_get twiki/wikiwebmaster
 # do rcs checkout first?
