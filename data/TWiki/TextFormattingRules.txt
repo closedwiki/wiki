@@ -1,3 +1,4 @@
+%META:TOPICINFO{version="1.19" date="995100495" author="PeterThoeny" format="1.0beta2"}%
 It is easy to collaborate; just type your text. You don't need to know HTML at all, though you can use it if you prefer. Links to topics will be created automatically, as long as you follow these simple Text Formatting Rules. TextFormattingFAQ has answers to frequently asked questions about text formatting.
 
 %TOC{depth="2"}%
@@ -408,9 +409,8 @@ The formatting rules are fairly simple to use and fast to type. However, there a
 
 ---++ %WIKITOOLNAME% Plugins
 
-%WIKITOOLNAME% Plugins offer additional text formatting rules. Plugins currently installed are:
+Plugins offer additional text formatting rules and extend the functionality of %WIKITOOLNAME%. Currently enabled plugins are:
 
-	* DefaultPlugin: The default plugin is used for some depreciated rendering of older TWiki versions.
-	* 
+%PLUGINDESCRIPTIONS%
 
 Learn more about plugins in TWikiPlugins and TWikiPreferences.
