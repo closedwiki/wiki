@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1030259897" format="1.0" version="1.57"}%
+%META:TOPICINFO{author="PeterThoeny" date="1033867260" format="1.0" version="1.58"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -45,7 +45,7 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
   <td> The path of the attachment URL of the current topic, is <b>%ATTACHURLPATH%</b> </td>
 </tr><tr>
   <td> =%<nop>URLPARAM{"name"}%= </td>
-  <td> Returns the value of a URL parameter. Ex: =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b> </td>
+  <td> Returns the value of a URL parameter. Note that there is a low risk that this variable could be misused for cross-scripting. Ex: =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b> </td>
 </tr><tr>
   <td> =%<nop>URLENCODE{"string"}%= </td>
   <td> Encodes a string for use as a URL parameter. Ex: =%<nop>URLENCODE{"spaced name"}%= returns <b>%URLENCODE{"spaced name"}%</b> </td>
@@ -351,12 +351,17 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> __SL__ , __WL__ </td>
   <td> List of preferences that are not allowed to be overridden by next level preferences</td>
 </tr></table>
+
+<blockquote>
+__Note:__ There are some more useful variables defined in the TWikiPreferences like =%<nop>BR%= for line break, colors like =%<nop>RED%= for colored text and small icons like =%<nop>H%= for a %H% Help icon.
+</blockquote>
+
 #SettingPrefs
 ---++ Setting Preferences
 
-	* The syntax for Preferences Variables is the same anywhere in TWiki (on its own TWiki bullet line, including nested bullets): <br />[3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]<br /> __Examples:__ 
-	* ==<nop>Set VARIABLENAME = =value===
-		* ==<nop>Set VARIABLENAME = =value===
+	* The syntax for Preferences Variables is the same anywhere in TWiki (on its own TWiki bullet line, including nested bullets): <br />[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]<br /> __Examples:__ 
+	* ==<nop>Set VARIABLENAME = value==
+		* ==<nop>Set VARIABLENAME = value==
 
 ---++ Creating Custom Variables
 
