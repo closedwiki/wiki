@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1090999355" format="1.0" version="1.44"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092472815" format="1.0" version="1.45"}%
 ---+!! TWiki Reference Manual (%WIKIVERSION%)
 
 <script type="text/javascript">
@@ -11,6 +11,9 @@ document.ondblclick=dblclick;
 
 This page contains all documentation topics as one long, complete reference sheet.%BR%
 __Doubleclick anywhere__ to return to the top of the page.
+
+Note - if you are reading this at twiki.org, then you are reading about the most recent code under development.%BR%
+If you want to read about the features on your local TWiki, then you should read the documentation there!
 
 %TOC{depth="5"}%
 
@@ -77,6 +80,12 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 
 -----
 %INCLUDE{"AppendixFileSystem"}%
+
+-----
+%INCLUDE{"TWikiCss"}%
+
+-----
+%INCLUDE{"AppendixEncodeURLsWithUTF8"}%
 
 -----
 %INCLUDE{"TWikiHistory"}%
