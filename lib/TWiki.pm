@@ -2290,8 +2290,11 @@ sub handleRevisionInfo
 {
     my ($web, $topic, $formatString) = @_;
 
+    my $cgiQuery = getCgiQuery();
+    my $theRev = $cgiQuery->param('rev') || "";
+
     $formatString = "r1.\$rev - \$date - \$wikiusername" unless( $formatString );
-    my ( $date, $user, $rev, $comment ) = TWiki::Store::getRevisionInfo($web, $topic);
+    my ( $date, $user, $rev, $comment ) = TWiki::Store::getRevisionInfo($web, $topic, $theRev);
 
     my $value = $formatString;
     $value =~ s/\$web/$web/geoi;
