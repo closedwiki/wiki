@@ -1,13 +1,12 @@
 %TMPL:INCLUDE{"twiki"}%
+
+%TMPL:P{"titleaction"}%
+(book view)
+%TMPL:END%
+
 %TMPL:P{"htmldoctype"}%
-<head>
- <title>(book view) %WEB% &lt; %WIKITOOLNAME%</title>
- <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
- <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
- <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
-</head>
-<body bgcolor="#ffffff">
-#PageTop
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 %TMPL:DEF{"titleaction"}%(book view) %TMPL:END%
 %TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
@@ -55,6 +54,4 @@
   </td>
  </tr>
 </table>
-#PageBottom
-</body>
-</html>
+%TMPL:P{"bodyend"}%

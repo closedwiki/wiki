@@ -1,10 +1,14 @@
 %TMPL:INCLUDE{"attach"}%
+
 %TMPL:DEF{"titleaction"}%(attach) %TMPL:END%
 %TMPL:DEF{"headerhelp"}% %TMPL:END%
-%TMPL:DEF{"webaction"}% Update attachment *%FILENAME%* on *%TOPIC%* %TMPL:END%
+%TMPL:DEF{"webaction"}% Update attachment *%FILENAME%* on *%TOPIC%* 
+%TMPL:END%
 %TMPL:DEF{"previousdetails"}%
 ---++ Update attachment <code>%FILENAME%</code>
-%ATTACHTABLE% %TMPL:END%
+%ATTACHTABLE% 
+%TMPL:END%
+
 %TMPL:DEF{"previous"}%
   <tr>
   <td align="right">
@@ -13,6 +17,7 @@
    <code>%FILEPATH%</code> %TMPL:P{"fileuser"}%
   </td>
  </tr>%TMPL:END%
+ 
 %TMPL:DEF{"extranotes"}%
    * *Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without 
      uploading a file by pressing "Change Properties"; see
@@ -23,10 +28,14 @@
    * *Local file:* If you select a different file in _Local file:_, it is this that will be 
      updated or added.
 %TMPL:END%
+
 %TMPL:DEF{"topicaction"}%
    <input type="submit" value=" &nbsp; Upload file &nbsp; " /> %TMPL:P{"sep"}%
    <input type="submit" name="changeproperties" value="Change properties" />  %TMPL:P{"sep"}%
    <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move attachment</a> %TMPL:P{"sep"}%
    [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+   
 %TMPL:DEF{"fileuser"}%(%FILEUSER%)%TMPL:END%
+
+
 %TMPL:P{"attach"}%

@@ -1,15 +1,15 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:P{"htmldoctype"}%
-<head>
- <title> %TMPL:P{"titleaction"}%%TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>
- <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_EDIT%
- <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
-</head>
-<body bgcolor="#ffffff">
-#PageTop
+
 %TMPL:DEF{"titleaction"}%(change form) %TMPL:END%
 %TMPL:DEF{"webaction"}% *Action* %TMPL:END%
-%TMPL:P{"simpleheader"}%
+
+
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"titleaction"}%
+%TMPL:P{"webaction"}%
+%TMPL:P{"topbar"}%
 <form name="main" action="%EDITURL%" method="post">
 ---++ Choose a new form template
 
@@ -31,12 +31,8 @@
 <input type="hidden" name="text" value="%TEXT%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 %TMPL:DEF{"topicaction"}% <input type="submit" name="submit" value=" &nbsp; Change form &nbsp; " /> %TMPL:END%
- 
- %TMPL:P{"topicaction"}%
-  
+%TMPL:P{"topicaction"}%
 %TMPL:P{"standardfooter"}%
 %WEBCOPYRIGHT%
 </form>
-#PageBottom
-</body>
-</html>
+%TMPL:P{"bodyend"}%

@@ -1,10 +1,7 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:P{"htmldoctype"}%
-<head>
- <title> %TMPL:P{"titleaction"}%%TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>
- <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
- <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_PREVIEW%
- <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+
+
+%TMPL:DEF{"script"}%
 <script language="JavaScript">
 <!--HIDE
 function launchWindow( theWeb, theTopic ) {
@@ -16,21 +13,39 @@ function launchWindow( theWeb, theTopic ) {
 }
 //STOP HIDING-->
 </script>
-</head>
-<body bgcolor="#ffffff" background="%PREVIEWBGIMAGE%">
-#PageTop
-%TMPL:DEF{"titleaction"}%(preview) %TMPL:END%
-%TMPL:DEF{"headerhelp"}% <font size="-2">
+%TMPL:END%
+
+%TMPL:DEF{"bodystart"}%
+<body id="previewpage" onload="initPage()" background="%PREVIEWBGIMAGE%"><a name="PageTop"></a>
+%TMPL:END%
+
+%TMPL:DEF{"titleaction"}%(preview)
+%TMPL:END%
+
+%TMPL:DEF{"headerhelp"}% 
+<font size="-2">
   <ul>
   <li> To <b>save</b> changes: Press the [Save Changes] button.</li>
   <li> To make <b>more changes</b>: Go back in your browser.</li>
   <li> To <b>cancel</b>: Go back twice.</li>
   </ul>
-  </font> %TMPL:END%
+  </font> 
+  %TMPL:END%
+  
 %TMPL:DEF{"webaction"}%
   <b><font color="#FF0000">Note:</font></b>
-  This is a preview. <b><font color="#FF0000">Do not forget</font></b> to save your changes. %TMPL:END%
-%TMPL:P{"simpleheader"}%
+  This is a preview. <b><font color="#FF0000">Do not forget</font></b> to save your changes. 
+ %TMPL:END%
+
+%TMPL:DEF{"topicaction"}% <input type="submit" value=" Save Changes " /> %FORMFIELDS% 
+%TMPL:END%
+
+
+%TMPL:DEF{"main"}%
+%TMPL:P{"topbar"}%
+%TMPL:P{"titleaction"}%
+%TMPL:P{"headerhelp"}%
+%TMPL:P{"webaction"}%
 <br />
 %TEXT%
 %META{"form"}%
@@ -40,16 +55,14 @@ function launchWindow( theWeb, theTopic ) {
 <input type="hidden" name="cmd" value="%CMD%" />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-%TMPL:DEF{"topicaction"}% <input type="submit" value=" Save Changes " /> %FORMFIELDS% %TMPL:END%
- 
- %TMPL:P{"topicaction"}%
-  
+%TMPL:P{"topicaction"}%
 %TMPL:P{"standardfooter"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td bgcolor="%WEBBGCOLOR%">
    &nbsp; &nbsp;
-  </td><td valign="top">
+  </td>
+  <td valign="top">
    &nbsp; &nbsp;
    <input type="checkbox" name="unlock" %RELEASEEDITLOCKCHECKBOX% /> Release edit lock
    <font size="-1">(<a target="UnlockTopic" onClick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font> <br />
@@ -63,6 +76,11 @@ function launchWindow( theWeb, theTopic ) {
  </tr>
 </table>
 </form>
-#PageBottom
-</body>
-</html>
+%TMPL:END%
+
+
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%
