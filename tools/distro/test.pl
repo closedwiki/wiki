@@ -13,10 +13,10 @@ use Getopt::Long qw( :config bundling auto_version );
 use Pod::Usage;
 use WWW::Mechanize::TWiki 0.05;
 
-$main::VERSION = '0.55';
+$main::VERSION = '0.56';
 my $Config = {
 # TEST OPTIONS
-    testweb => 'GameDev',
+    testweb => '' || 'GameDev',
 # BUILD OPTIONS
 	platform => $^O,				# only darwin and sourceforge atm
 	twikiplugins => '../../../twikiplugins',
@@ -176,7 +176,11 @@ sub WebBrowser
 	print STDERR "WebBrowser: ", Dumper( $parms ) if $parms->{debug};
 	my $url = $parms->{url} or die "url?";
 	
-	logSystem( open => $url );
+	my $cmdBrowser = 
+		$^O =~ /darwin/ && 'open'
+		|| $^O =~ /windows/ && 'start'
+		|| 'htmlview';
+	logSystem( $cmdBrowser => $url );
 }
 
 ################################################################################
@@ -246,16 +250,16 @@ sub PushRemoteTWikiInstall
 	die "no account?" unless $parms->{install_account};
 	die "no host?" unless $parms->{install_host};
 	die "no install_dir?" unless $parms->{install_dir};
-	# TODO: handle testweb as an optional parameter
-	die "no testweb?" unless $parms->{testweb};
 
-	my $testweb = -e $parms->{testweb} ? $parms->{testweb} : "${dirInstaller}/webs/local/$parms->{testweb}.wiki.tar.gz";
 	my $report = $parms->{report} || 0;
-	
+	my $testweb = $parms->{testweb};
+	unless ( -e $testweb ) { $testweb = "${dirInstaller}/webs/local/$parms->{testweb}.wiki.tar.gz" }
+	unless ( -e $testweb ) { warn qq{Not installing "$testweb": not found}; $testweb = undef }
+		
 	logSystem( './install-remote-twiki.pl' => '--verbose', '--debug',
 		'--distro' => "${dirInstaller}/twiki-${platform}.tar.bz2",
 		'--kernel' => $kernel,
-		'--web' => $testweb, 
+		$testweb ? ( '--web' => $testweb ) : qw(),
 		'--install_account' => $parms->{install_account},
 		'--install_host' => $parms->{install_host},
 		'--install_dir' => $parms->{install_dir},
@@ -303,7 +307,7 @@ sub BuildTWikiDistribution
 __DATA__
 =head1 NAME
 
-tests.pl - ...
+test.pl - ...
 
 =head1 SYNOPSIS
 
@@ -320,9 +324,9 @@ Copyright 2004 Will Norris.  All Rights Reserved.
 
   Build Options:
    -platform [$^O]					(darwin|sourceforge)
-   -twikiplugins [../../../twikiplugins]
-   -twikisync                       download latest versions of plugins, addons, etc from twiki.org	
-
+   -twikiplugins [../../../twikiplugins]	path to twikiplugins cvs checkout; this default will work if you have twikiplugins cvs and TWiki SVN branch(es) checked out in the same directory (eg, ~/twiki/twikiplugins and ~/twiki/DEVELOP)
+   -twikisync, -no-twiki-sync       download latest versions of plugins, addons, etc from twiki.org; default: off	
+     
   Install Options:
    -install_account [twiki]
    -install_host [localhost]
@@ -330,7 +334,8 @@ Copyright 2004 Will Norris.  All Rights Reserved.
    [-plugin ...]*
    [-contrib ...]*
    [-addon ...]*
-
+   -report, -no-report              default: on
+   
   Miscellaneous Options:
    -verbose
    -help							this documentation
