@@ -156,6 +156,9 @@ sub findUser {
     $object = $this->{login}{$name};
     return $object if $object;
 
+    # remove pointless tag; we'll be looking there anyway
+    $name =~ s/^%MAINWEB%.//;
+
     if( $name =~ m/^$TWiki::regex{webNameRegex}\.$TWiki::regex{wikiWordRegex}$/o ) {
         # may be web.wikiname; try the cache
         $object = $this->{wikiname}{$name};

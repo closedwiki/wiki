@@ -713,7 +713,6 @@ sub saveTopic {
     my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
     ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
     ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
-    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
 
     $options = {} unless defined( $options );
 
@@ -725,21 +724,29 @@ sub saveTopic {
                                              $this->{session}->{security}->getReason());
     }
 
-    # SMELL: Staggeringly inefficient code that adds meta-data for
-    # Plugin callback. Why not simply pass the meta in? It would be far
-    # more sensible.
-    $text = _writeMeta( $meta, $text );  # add meta data for Plugin callback
     my $plugins = $this->{session}->{plugins};
 
-    $plugins->beforeSaveHandler( $text, $topic, $web );
+    if( $plugins->haveHandlerFor( 'beforeSaveHandler' )) {
+        if( $meta ) {
+            # SMELL: Staggeringly inefficient code that adds meta-data for
+            # Plugin callback. Why not simply pass the meta in? It would be far
+            # more sensible.
+            $text = _writeMeta( $meta, $text );
+        }
 
-    # remove meta data again!
-    $meta = $this->extractMetaData( $web, $topic, \$text );
+        $plugins->beforeSaveHandler( $text, $topic, $web );
+
+        # remove meta data again, and throw any new meta data
+        # away!!!! That's CRAP.
+        $this->extractMetaData( $web, $topic, \$text );
+    }
 
     my $error =
       $this->_noHandlersSave( $user, $web, $topic, $text, $meta,
                               $options );
+
     $plugins->afterSaveHandler( $text, $topic, $web, $error );
+
     return $error;
 }
 
@@ -872,8 +879,10 @@ sub _noHandlersSave {
         }
     }
 
-    $meta->addTOPICINFO( $web, $topic, $nextRev );
-    $text = _writeMeta( $meta, $text );
+    if( $meta ) {
+        $meta->addTOPICINFO( $web, $topic, $nextRev );
+        $text = _writeMeta( $meta, $text );
+    }
 
     # RCS requires a newline for the last line,
     $text =~ s/([^\n\r])$/$1\n/os;
