@@ -13,7 +13,7 @@ SetHandler cgi-script
 # The path here must be a system file pathname, not a URL - first part should 
 # match the $dataDir setting in TWiki.cfg
 AuthUserFile /filepath/to/TWiki/data/.htpasswd
-AuthName ByPassword
+AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
 AuthType Basic
 
 # File to return on access control error (e.g. wrong password)
