@@ -657,13 +657,13 @@ sub searchWeb {
                     @tmpList =
                       map { $_->[1] }
                         sort {$b->[0] <=> $a->[0] }
-                          map { $this->store()->getTopicLatestRevTime( $web, $_ ) }
+                          map { [ $this->store()->getTopicLatestRevTime( $web, $_ ), $_ ] }
                             @topicList;
                 } else {
                     @tmpList =
                       map { $_->[1] }
                         sort {$a->[0] <=> $b->[0] }
-                          map { $this->store()->getTopicLatestRevTime( $web, $_ ) }
+                          map { [ $this->store()->getTopicLatestRevTime( $web, $_ ), $_ ] }
                             @topicList;
                 }
 

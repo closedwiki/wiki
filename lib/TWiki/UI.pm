@@ -116,26 +116,34 @@ sub run {
                              $query, $scripted );
 
     $Error::Debug = 1 if DEBUG; # comment out in production
-    try {
+    if( $query->param( 'compile_debug' )) {
         eval "use $class";
         my $m = "$class"."::$method";
         no strict 'refs';
         &$m( $session );
         use strict 'refs';
-    } catch TWiki::UI::OopsException with {
-        my $e = shift;
-        my $url = $session->getOopsUrl( $e->{-web},
-                                        $e->{-topic},
-                                        "oops$e->{-template}",
-                                        $e->{-param1},
-                                        $e->{-param2},
-                                        $e->{-param3},
-                                        $e->{-param4} );
-        $session->redirect( $url );
-    } catch Error::Simple with {
-        my $e = shift;
-        print "Content-type: text/plain\n\n";
-        print $e->stringify();
+    } else {
+        try {
+            eval "use $class";
+            my $m = "$class"."::$method";
+            no strict 'refs';
+            &$m( $session );
+            use strict 'refs';
+        } catch TWiki::UI::OopsException with {
+            my $e = shift;
+            my $url = $session->getOopsUrl( $e->{-web},
+                                            $e->{-topic},
+                                            "oops$e->{-template}",
+                                            $e->{-param1},
+                                            $e->{-param2},
+                                            $e->{-param3},
+                                            $e->{-param4} );
+            $session->redirect( $url );
+        } catch Error::Simple with {
+            my $e = shift;
+            print "Content-type: text/plain\n\n";
+            print $e->stringify();
+        }
     }
 }
 
