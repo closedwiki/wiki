@@ -1,0 +1,8 @@
+%META:TOPICINFO{author="TWikiGuest" date="1108036690" format="1.0" version="1.2"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+!! %TOPIC%
+
+Description: Rename this Topic to check that all the references to it on TestCaseRenameFixture are correctly changed
+
+%META:TOPICMOVED{by="TWiki::User=HASH(0x875b84c)" date="1108036690" from="TestCases.BananaPie" to="TestCases.TestCaseRename"}%
+

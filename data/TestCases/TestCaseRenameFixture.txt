@@ -1,0 +1,24 @@
+%META:TOPICINFO{author="TWikiGuest" date="1108036690" format="1.0" version="1.3"}%
+
+make sure that all of the following are correctly renamed to the new topic name
+
+---+++ without web name
+	* TestCases.TestCaseRename
+	*   TestCaseRenames
+	* [[TestCaseRename][asdf]]
+
+---+++ with web name
+	* TestCases.TestCaseRename
+	*   TestCases.TestCaseRenames
+	* [[TestCases.TestCaseRename][asdf]]
+
+---+++ these should not be renamed (I think)
+	*   NotTestCaseRename
+	*   TestCaseRenameNot
+	*   TestCaseRenamenot
+	* !TestCaseRename
+	* <nop>TestCaseRename
+
+---+++ TODO:
+	* metadata, attachments, more...
+
