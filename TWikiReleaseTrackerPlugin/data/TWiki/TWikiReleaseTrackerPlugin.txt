@@ -2,64 +2,65 @@
 %META:TOPICPARENT{name="Main.MartinCleaver"}%
 ---+!! TWiki Release Tracker Plugin
 
-This plugin tells you exactly how your install differs from every production and beta release of TWiki.
+The TWiki Release Tracker (aka TRT) plugin tells you exactly how your install differs from every production and beta release of TWiki.
 
 If you find it useful, please send me (Martin AT Cleaver.org) a note of thanks. 
 Donations towards the beer fund can be sent to the same paypal address.
 
 %TOC%
 
----++ Settings
-One line description, is shown in the TextFormattingRules topic: 
-		* Set SHORTDESCRIPTION = Plugin telling you how similar your install is to past releases of TWiki 
+---++ %TOPIC% Overview
 
-See the Parameters section for descriptions of the rest of these:
-		* Set STATUSFILTER = FSCD,FDCS,FDCM
-		* Set FROM = localInstallation
-		* Set TO = ,
+---+++ Features and Benefits
 
----+++ Checking against particular versions
+   * By generating a content identifier for every file in all TWiki distributions (core beta and release versions, plus all the plugins), the system advises where every file in your install has come from.
+   * By providing navigation from installation file content to distribution file content, the system provides the means to generate diffs from your install to a distro. This means that not only can you tell where your version is behind a distribution, but also shows you where you have altered your version. The downloadable diff provides the opportunity to feed back to the TWiki community the change you've made back, meaning for the patch owner less rework the next time TWiki is released and, for the community as a whole, better capture of changes leading to more progress .
 
-The TRT is shipped with data about many versions of TWiki. By default it compares that specified by 
-the WIKIVERSION variable against your local installation but it can also do a multi-dimensional comparison
+---+++ How it works
 
----++ Features and Benefits
-	* By generating a content identifier for every file in all TWiki distributions (core beta and release versions, plus all the plugins), the system advises where every file in your install has come from.
-	* By providing navigation from installation file content to distribution file content, the system provides the means to generate diffs from your install to a distro. This means that not only can you tell where your version is behind a distribution, but also shows you where you have altered your version. The downloadable diff provides the opportunity to feed back to the TWiki community the change you've made back, meaning for the patch owner less rework the next time TWiki is released and, for the community as a whole, better capture of changes leading to more progress .
-
----++ How it works
 The TRT centres on the concept of a unique CONTENT identifier - instead of identifying a file *by its filename*, identities are based on *file content*. This means that a file copied to another place has the same unique content identifier. The system used md5 signatures as the identifier.
 
+%TOPIC% is comprised of two parts:
+   1 a twiki plugin that provides a web interface to the API of the comparator.
+      Unlike previoius versions, this one includes in situ building of indexes for the local machine using the web interface.
+   1 a command line indexer that builds and saves indexes. This is used to generate the md5 files included in pub/TWiki/TWikiReleaseTrackerPlugin
 
-The system is comprised of two parts:
-	1 a twiki plugin that provides a web interface to the API of the comparator.
-		Unlike previoius versions, this one includes in situ building of indexes for the local machine using the web interface.
-	1 a command line indexer that builds and saves indexes. This is used to generate the md5 files included in pub/TWiki/TWikiReleaseTrackerPlugin
+---++ Plugin Installation and Set up Instructions
 
----++ Set up
-	* %SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?mode=indexLocalInstallation
+   1 Download the ZIP file from the Plugin web (see below).
+   1 Unzip EditTablePlugin.zip in your twiki installation directory. 
+   1 This plugin requires TWiki:Plugins.BuildContrib and TWiki:Plugins.DistributionContrib to run. If you do not have these two plugins installed, download and install them before proceeding.
+   1 Create a mp5 index of your local installation by clicking [[%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?mode=indexLocalInstallation][here]]. _(Repeat this step after modifying installation files to create new index.)_
+   1 Test if the Plugin is correctly installed:
+      * Check the TRTChangesFromDistribution topic and see that the %<nop>DIFFWIKI{}% is expanded into formated report.
+   1 For further customization of the default setup, see #Settings below.
 
----++ Testing
-	1 Even before you have built the index for your own installation, you can use the TRT to determine what changes were made between versions: %SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?from=TWiki19990901&to=TWiki20000501&statusFilter=all <!-- N.B. use of TWiki/ not TWiki. because athens did not support its use -->
-	2 Ensure you have built your index (see above)
-	3 Run %SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?from=localInstallation&statusFilter=FSCD ; pick the appropriate 'to' parameter 
+---++ Plugin Usage Instructions
 
+---+++ Basic usage
 
----++ Parameters
+   * The TRT is shipped with data about standard TWiki "Production Releases". By default, the TRTChangesFromDistribution topic automatically generates a report comparing your local installation against the standard TWiki distribution specified by the WIKIVERSION variable. %RED%Note:%ENDCOLOR% If you are running a "Beta Release," you will need to download the "beta.mp5" file from TWiki:Plugins.TWikiReleaseTrackerPluginDev and attach it to your local version of the %TOPIC% topic. 
+   * To view the changes for a particular file listed in the report, click on the corresponding link in the "Status" column.
 
-	* The page TRTChangesFromDistribution has a GUI that sets up some useful default parameters (overriding the defaults listed on this page). All parameters specified below can also be overridden on the URL line.
+---+++ Comparing differences between standard TWiki installations
 
-All parameters can be sourced from one of three places:
-	1 Defaults listed on the plugin home page
-	2 Parameters specified on the %DIFFWIKI{} line
-	3 Parameters recognised as a CGI.pm parameter (e.g. on the URL line)
+Even before you have built the index for your own installation, you can use the TRT to determine what changes were made between standard TWiki distributions. For example, click [[%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?from=TWiki19990901&to=TWiki20000501&statusFilter=all][here]] to compare <nop>TWikiRelease01Sep2001 and <nop>TWikiRelease01May2000 production releases. To compare other releases, simply select them from the From and To drop down menus and click the Go button.<!-- N.B. use of TWiki/ not TWiki. because athens did not support its use --> From the drop down menu, you can 
 
----+++ Parameters to the %DIFFWIKI directive
+---+++ Advanced usage - Setting custom report parameters
+
+Using the form at the top of TRTChangesFromDistribution, you can override the defaults listed on this page. All parameters specified below can also be overridden on the URL line.
+
+In otherwords, TRT parameters can be sourced from one of three places:
+   1 Defaults listed on the plugin home page
+   2 Parameters specified on the %DIFFWIKI{} line
+   3 Parameters recognised as a CGI.pm parameter (e.g. on the URL line)
+
+---++++ Parameters to the %DIFFWIKI directive
 
 | *Parameter name* | *Values* | *Default* |
 | *Mode = listing* | listing, file | listing |
 | fscsFormat | string to show when file is FSCS | &pipe; $relativeFile &pipe; FSCS &pipe; $locations &pipe; |
-| fscdFormat | string to show when file is FSCS | &pipe; $relativeFile &pipe; FSCDCALLBACK &pipe; FSCDDIST &pipe; |
+| fscdFormat | string to show when file is FSCD | &pipe; $relativeFile &pipe; FSCDCALLBACK &pipe; FSCDDIST &pipe; |
 | - | FSCDDIST, FSCDCALLBACK and FDCSDIFF have interesting effects in this setting |
 | fdcsFormat | | &pipe; $relativeFile &pipe; FDCS &pipe; $locations &pipe; |
 | fdcdFormat | | &pipe; ($relativeFile name not recognised, and no content match)  &pipe; FDCD &pipe; &pipe; |
@@ -75,9 +76,7 @@ All parameters can be sourced from one of three places:
 | *Mode = dumpIndex* | Shows indexes loaded | - |
 | *Mode = indexLocalDistribution* | Regenerates the localInstallation.md5 file, use after modifying files | |
 
----+++ Parameters to the %DIFFWIKI directive
-
----++ Limitations
+---++++ Limitations
 | *Issue* | *Future Plan* | *Impact* |
 | To compare specific file changes (FSCD = File Same, Content Different), you need to have pre-downloaded all of the releases. | My plan is to have the plugin pull them down as needed, but I need a web address for a specific twiki version / file; currently this is not available (partly due to the switch to subversion) | High - file mode not yet functional |
 | The MD5 for specific releases (i.e. releases.md5) needs pregenerating. | Release the code (actually a merge for the TWiki:Codev.SharedCode) when I have cleaned it up | Low - releases are not very often |
@@ -85,12 +84,22 @@ All parameters can be sourced from one of three places:
 | The results are not sorted | sort them | Low - workaround available: Use table sort function |
 | The underlying data structures could do with some optimisation | Review | Low - Page load is slow in some cases |
 
+---++ Default Plugin Settings
+One line description, is shown in the TextFormattingRules topic: 
+      * Set SHORTDESCRIPTION = Plugin telling you how similar your install is to past releases of TWiki 
+
+See the Parameters section for descriptions of the rest of these:
+      * Set STATUSFILTER = FSCD,FDCS,FDCM
+      * Set FROM = localInstallation
+      * Set TO = ,
+      * Set FSCDFORMAT = | $relativeFile | FSCDCALLBACK (show diffs) | FSCDDIST |
+      
 ---++ Future plans
-	* Make the TRT detect inconsistent indexes and offer to regenerate the localInstallation md5 file if necessary
-	* Make test suite TWiki:Plugins.BuildContrib <nop>TestRunner compatible
-	* Make use of TWiki:Plugins.AttrsContrib
-	* Investigate why the -w flag to diff is necessary
-	* md5 files will be pulled from a server rather than distributed
+   * Make the TRT detect inconsistent indexes and offer to regenerate the localInstallation md5 file if necessary
+   * Make test suite TWiki:Plugins.BuildContrib <nop>TestRunner compatible
+   * Make use of TWiki:Plugins.AttrsContrib
+   * Investigate why the -w flag to diff is necessary
+   * md5 files will be pulled from a server rather than distributed
 
 ---++ Manifest
 %$MANIFEST%
@@ -100,6 +109,7 @@ All parameters can be sourced from one of three places:
 |  Plugin Author: | TWiki:Main.MartinCleaver |
 |  Plugin Version: | %$DATE% (%$VERSION%) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  29 Aug 2004: | Documentation update (thanks to TWiki:Main.LynnwoodBrown) |
 |  25 Aug 2004: | Diff is now passed the -w flag to ignore whitespace changes | 
 |  24 Aug 2004: | Bugfix when comparing two arbitrary versions |
 |  23 Aug 2004: | First standalone version, this no longer requires download of zips to do comparisons against |

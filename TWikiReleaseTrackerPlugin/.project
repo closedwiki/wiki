@@ -3,6 +3,9 @@
 	<name>TWikiReleaseTrackerPlugin</name>
 	<comment></comment>
 	<projects>
+		<project>BuildContrib</project>
+		<project>DistributionContrib</project>
+		<project>TWiki</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
