@@ -131,7 +131,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "16 Apr 2004";
+$wikiversion      = "17 Apr 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1767,7 +1767,52 @@ sub fixIncludeLink
 # =========================
 =pod
 
----++ sub handleIncludeUrl (  $theUrl, $thePattern  )
+---++ sub cleanupIncludedHTML ( $text, $path, $host )
+
+Clean-up HTML text so that it can be shown embedded in a topic
+
+=cut
+
+sub cleanupIncludedHTML
+{
+    my( $text, $path, $host ) = @_;
+
+    # FIXME: Make aware of <base> tag
+
+    $text =~ s/^.*?<\/head>//is;            # remove all HEAD
+    $text =~ s/<script.*?<\/script>//gis;   # remove all SCRIPTs
+    $text =~ s/^.*?<body[^>]*>//is;         # remove all to <BODY>
+    $text =~ s/(?:\n)<\/body>//is;          # remove </BODY>
+    $text =~ s/(?:\n)<\/html>//is;          # remove </HTML>
+    $text =~ s/(<[^>]*>)/&fixN($1)/ges;     # join tags to one line each
+    $text =~ s/(\s(href|src|action)\=[\"\']?)([^\"\'\>\s]*)/$1 . &fixURL( $host, $path, $3 )/geois;
+
+    return $text;
+}
+
+# =========================
+=pod
+
+---++ sub applyPatternToIncludedText (  $theText, $thePattern )
+
+Apply a pattern on included text to extract a subset
+
+=cut
+
+sub applyPatternToIncludedText
+{
+    my( $theText, $thePattern ) = @_;
+    $thePattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/g;  # escape some special chars
+    $thePattern =~ /(.*)/;     # untaint
+    $thePattern = $1;
+    $theText = "" unless( $theText =~ s/$thePattern/$1/is );
+    return $theText;
+}
+
+# =========================
+=pod
+
+---++ sub handleIncludeUrl (  $theUrl, $thePattern )
 
 Not yet documented.
 
@@ -1775,13 +1820,36 @@ Not yet documented.
 
 sub handleIncludeUrl
 {
-    my( $theUrl, $thePattern ) = @_;
+    my( $theUrl, $thePattern, $theWeb, $theTopic ) = @_;
     my $text = "";
     my $host = "";
     my $port = 80;
     my $path = "";
     my $user = "";
     my $pass = "";
+
+    # For speed, read file directly if URL matches an attachment directory
+    if( $theUrl =~ /^$urlHost$pubUrlPath\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
+        my $web = $1;
+        my $topic = $2;
+        my $fileName = "$pubDir/$web/$topic/$3";
+        if( $fileName =~ m/\.(txt|html?)$/i ) {       # FIXME: Check for MIME type, not file suffix
+            unless( -e $fileName ) {
+                return showError( "Error: File attachment at $theUrl does not exist" );
+            }
+            if( "$web.$topic" ne "$theWeb.$theTopic" ) {
+                # CODE_SMELL: Does not account for not yet authenticated user
+                unless( TWiki::Access::checkAccessPermission( "VIEW", $wikiUserName, "", $topic, $web ) ) {
+                    return showError( "Error: No permission to view files attached to $web.$topic" );
+                }
+            }
+            $text = TWiki::Store::readFile( $fileName );
+            $text = cleanupIncludedHTML( $text, $urlHost, $pubUrlPath );
+            $text = applyPatternToIncludedText( $text, $thePattern ) if( $thePattern );
+            return $text;
+        }
+        return showError( "Error: Unsupported file type, must be .html or .txt" );
+    }
 
     # RNF 22 Jan 2002 Handle http://user:pass@host
     if( $theUrl =~ /http\:\/\/(.+)\:(.+)\@([^\:]+)\:([0-9]+)(\/.*)/ ) {
@@ -1826,16 +1894,7 @@ sub handleIncludeUrl
         if( $port != 80 ) {
             $host .= ":$port";
         }
-
-        # FIXME: Make aware of <base> tag
-
-        $text =~ s/^.*?<\/head>//is;            # remove all HEAD
-        $text =~ s/<script.*?<\/script>//gis;   # remove all SCRIPTs
-        $text =~ s/^.*?<body[^>]*>//is;         # remove all to <BODY>
-        $text =~ s/(?:\n)<\/body>//is;          # remove </BODY>
-        $text =~ s/(?:\n)<\/html>//is;          # remove </HTML>
-        $text =~ s/(<[^>]*>)/&fixN($1)/ges;     # join tags to one line each
-        $text =~ s/(\s(href|src|action)\=[\"\']?)([^\"\'\>\s]*)/$1 . &fixURL( $host, $path, $3 )/geois;
+        $text = cleanupIncludedHTML( $text, $host, $path );
 
     } elsif( $contentType =~ /^text\/plain/ ) {
         # do nothing
@@ -1845,12 +1904,7 @@ sub handleIncludeUrl
               . " (Must be text/html or text/plain)" );
     }
 
-    if( $thePattern ) {
-        $thePattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/g;  # escape some special chars
-        $thePattern =~ /(.*)/;     # untaint
-        $thePattern = $1;
-        $text = "" unless( $text =~ s/$thePattern/$1/is );
-    }
+    $text = applyPatternToIncludedText( $text, $thePattern ) if( $thePattern );
 
     return $text;
 }
@@ -1879,7 +1933,7 @@ sub handleIncludeFile
 
     if( $incfile =~ /^http\:/ ) {
         # include web page
-        return handleIncludeUrl( $incfile, $pattern );
+        return handleIncludeUrl( $incfile, $pattern, $theWeb, $theTopic );
     }
 
     # CrisBailiff, PeterThoeny 12 Jun 2000: Add security
@@ -1893,29 +1947,35 @@ sub handleIncludeFile
         $incfile =~ s/passwd//gi;    # filter out passwd filename
     }
 
-    # test for different usage
-    my $fileName = "$dataDir/$theWeb/$incfile";       # TopicName.txt
-    if( ! -e $fileName ) {
-        $fileName = "$dataDir/$theWeb/$incfile.txt";  # TopicName
-        if( ! -e $fileName ) {
-            $fileName = "$dataDir/$incfile";              # Web/TopicName.txt
-            if( ! -e $fileName ) {
-                $incfile =~ s/\.([^\.]*)$/\/$1/g;
-                $fileName = "$dataDir/$incfile.txt";      # Web.TopicName
-                if( ! -e $fileName ) {
-                    # give up, file not found
-                    $warn = TWiki::Prefs::getPreferencesValue( "INCLUDEWARNING" ) unless( $warn );
-                    if( $warn =~ /^on$/i ) {
-                        return showError( "Warning: Can't INCLUDE <nop>$incfile, topic not found" );
-                    } elsif( $warn && $warn !~ /^(off|no)$/i ) {
-                        $incfile =~ s/\//\./go;
-                        $warn =~ s/\$topic/$incfile/go;
-                        return $warn;
-                    } # else fail silently
-                    return "";
-                }
-            }
-        }
+    my $text = "";
+    my $meta = "";
+    my $isTopic = 0;
+
+    # test for different topic name and file name patterns
+    my $fileName = "";
+    TRY: {
+        # check for topic
+        $fileName = "$dataDir/$theWeb/$incfile.txt";      # TopicName
+        last TRY if( -e $fileName );
+        my $incwebfile = $incfile;
+        $incwebfile =~ s/\.([^\.]*)$/\/$1/;
+        $fileName = "$dataDir/$incwebfile.txt";           # Web.TopicName
+        last TRY if( -e $fileName );
+        $fileName = "$dataDir/$theWeb/$incfile";          # TopicName.txt
+        last TRY if( -e $fileName );
+        $fileName = "$dataDir/$incfile";                  # Web/TopicName.txt
+        last TRY if( -e $fileName );
+
+        # give up, file not found
+        $warn = TWiki::Prefs::getPreferencesValue( "INCLUDEWARNING" ) unless( $warn );
+        if( $warn =~ /^on$/i ) {
+            return showError( "Warning: Can't INCLUDE <nop>$incfile, topic not found" );
+        } elsif( $warn && $warn !~ /^(off|no)$/i ) {
+            $incfile =~ s/\//\./go;
+            $warn =~ s/\$topic/$incfile/go;
+            return $warn;
+        } # else fail silently
+        return "";
     }
 
     # prevent recursive loop
@@ -1932,15 +1992,10 @@ sub handleIncludeFile
         push( @theProcessedTopics, $fileName );
     }
 
-    my $text = "";
-    my $meta = "";
-    my $isTopic = 0;
-
     # set include web/filenames and current web/filenames
     $includingWebName = $theWeb;
     $includingTopicName = $theTopic;
-    $fileName =~ s/\/([^\/]*)\/([^\/]*)(\.txt)$/$1/g;
-    if( $3 ) {
+    if( $fileName =~ s/\/([^\/]*)\/([^\/]*)\.txt$/$1/ ) {
         # identified "/Web/TopicName.txt" filename, e.g. a Wiki topic
         # so save the current web and topic name
         $theWeb = $1;
@@ -1959,12 +2014,7 @@ sub handleIncludeFile
 
     } # else is a file with relative path, e.g. $dataDir/../../path/to/non-twiki/file.ext
 
-    if( $pattern ) {
-        $pattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/g;  # escape some special chars
-        $pattern =~ /(.*)/;     # untaint
-        $pattern = $1;
-        $text = "" unless( $text =~ s/$pattern/$1/is );
-    }
+    $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 
     # handle all preferences and internal tags (for speed: call by reference)
     $text = takeOutVerbatim( $text, $verbatim );
