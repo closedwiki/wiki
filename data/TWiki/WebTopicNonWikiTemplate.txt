@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="PeterThoeny" date="1019706720" format="1.0" version="1.2"}%
 ---++ NOTE: This Wiki topic does not exist
 
 <font size="+2" color="FF0000">WARNING:</font>
@@ -7,7 +8,9 @@
 
 <blockquote>
 Make sure you spelled the %TWIKIWEB%.WikiWord correctly and try again.
-Remember, a <nop>WikiWord is case sensitive.
+Remember, a <nop>WikiWord is case sensitive. Similar topics (if any):
+
+%SEARCH{ "%TOPIC%" limit="10" scope="topic" nosearch="on" nototal="on" web="all" format="	* [[$web.%HOMETOPIC%][$web]].[[$web.$topic][$topic]]" }%
 </blockquote>
 
 ---+++ If you intended to do a full text search:
