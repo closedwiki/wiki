@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042883580" format="1.0" version="1.20"}%
+%META:TOPICINFO{author="PeterThoeny" date="1048319208" format="1.0" version="1.21"}%
 ---++ Welcome, %WIKIUSERNAME%!
 
 Welcome to %WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_), a meeting place to work on common interests. Anyone can contribute using any web browser. %WIKITOOLNAME% looks like a normal Web site... except that it encourages contribution and *editing* of pages, questions, answers, comments and updates.
@@ -36,7 +36,7 @@ __Mission: &quot;TWiki is a leading-edge, web-based collaboration platform targe
 
 	* *[[TWikiTutorial]]* Familiarize yourself with TWiki
 	* TWikiRegistration *Sign up to edit* topics, personal home page
-	* WebChanges in this %WEB% web
+	* WebChanges in this <nop>%WEB% web
 	* %HOMETOPIC% this web's entry point
 	* TWikiSite What is a TWiki site?
 	* WikiSyntax simple syntax for edits
