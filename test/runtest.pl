@@ -65,7 +65,7 @@ unless( $args =~ /\bnocompile\b/ ) {
 
 unless( $args =~ /\bnounit\b/ ) {
     print "<h1>Unit Tests</h1>\n";
-    print "Errors will be in <a href=\"$outputUrl\">$outputDir/unit$now</a>\n<pre>\n";
+    print "Errors will be in <a href=\"$outputUrl/unit$now\">$outputDir/unit$now</a>\n<pre>\n";
     execute ( "cd unit ; perl ../bin/TestRunner.pl TWikiUnitTestSuite.pm > $outputDir/unit$now ; cd ..") or die $!;
     print "</pre>\n";
 }
