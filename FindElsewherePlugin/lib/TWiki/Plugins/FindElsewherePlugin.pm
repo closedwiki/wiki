@@ -48,7 +48,7 @@ use vars qw(
         $doPluralToSingular
     );
 
-$VERSION = '1.000';
+$VERSION = '1.001';
 
 # =========================
 sub initPlugin
@@ -65,6 +65,7 @@ sub initPlugin
    $debug = &TWiki::Func::getPreferencesFlag( "FINDELSEWHEREPLUGIN_DEBUG" );
    
    $otherWebMulti =  &TWiki::Func::getPreferencesValue( "FINDELSEWHEREPLUGIN_LOOKELSEWHERE" ) || "";
+   $showWebName = &TWiki::Func::getPreferencesFlag(   "FINDELSEWHEREPLUGIN_SHOWWEBNAME" ) || "";
    @webList = split( /[\,\s]+/, $otherWebMulti );
    &TWiki::Func::writeDebug( "- TWiki::Plugins::FindElsewherePlugin will look in @webList" ) if $debug;
 
@@ -136,14 +137,22 @@ sub findTopicElsewhere
             my $theTopicSingular = &makeSingular( $theTopic );
             if( &TWiki::Func::topicExists( $otherWeb, $theTopicSingular ) ) {
                &TWiki::Func::writeDebug( "- $theTopicSingular was found in $otherWeb." ) if $debug;
+                if ($showWebName) {
                $text .= "[[$otherWeb.$theTopic]]"; # leave it as we found it
+                } else {
+                   $text .= "$otherWeb.$theTopic"; # leave it as we found it
+                }
                return $text;
             }
          }
       }
       else  {
          &TWiki::Func::writeDebug( "- $theTopic was found in $otherWeb." ) if $debug;
-         $text .= "[[$otherWeb.$theTopic]]";
+         if ($showWebName) {
+           $text .= "[[$otherWeb.$theTopic]]"; # leave it as we found it
+         } else {
+            $text .= "$otherWeb.$theTopic"; # leave it as we found it
+         }
          return $text;
       }
    }
