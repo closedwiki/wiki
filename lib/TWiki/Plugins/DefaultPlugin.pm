@@ -89,7 +89,7 @@ sub DISABLE_earlyInitPlugin
 {
 ### Remove DISABLE_ for a plugin that requires early initialization, that is expects to have
 ### initializeUserHandler called before initPlugin, giving the plugin a chance to set the user
-### See SesionPlugin for an example of this.
+### See SessionPlugin for an example of this.
     return 1;
 }
 
