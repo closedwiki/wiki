@@ -9,6 +9,7 @@
         in __%WEB% web__ that link to <nop>%TOPIC%.
       * <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;web=all;&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Find topics</a>
         in __all public webs__ that link to <nop>%TOPIC%.
+      * Child topics in __%WEB% Web__: %METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" title=""}%
 
 <form name="main" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
    * *Parent of <nop>%TOPIC%:*
@@ -20,7 +21,7 @@
         to activate the new parent.
 </form>
 
-   * *Rename or move:*
+   * *Rename, move or delete:*
       * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a> <nop>%TOPIC%
 
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
