@@ -15,6 +15,7 @@ import java.util.Enumeration;
 import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 import java.util.Hashtable;
+import com.ccsoft.edit.tags.XMLTokeniser;
 
 /**
  * Editor applet using a Frame and a SearchableTextArea, specifically
@@ -52,13 +53,9 @@ public class TWikiEdit extends Applet implements Application {
     /** Containing frame */
     static Frame frame = null;
     /** Editing area */
-    static SearchableTextArea textarea;
-    /** Edit controls */
-    Controls controls;
-    /** Listener for control actions */
-    ActionListener actionListener;
-    /** JavaScript reference to form object */
-    JSObject form;
+    static Editor editor;
+
+    String text, controlsText;
 
     /** Implements Application to provide the containing Frame */
     public Frame getFrame() {
@@ -69,7 +66,7 @@ public class TWikiEdit extends Applet implements Application {
     }
 
     /** Get a field in the form */
-    private String getFieldValue(String field) {
+    private String getFieldValue(JSObject form, String field) {
 	JSObject member = (JSObject)form.getMember(field);
 	String val = (String)member.getMember("value");
 	if (val != null) {
@@ -83,42 +80,36 @@ public class TWikiEdit extends Applet implements Application {
 	return val;
     }
 
+    private void getLargeParameters() {
+	text = controlsText = null;
+	try {
+	    JSObject jsWin = JSObject.getWindow(this);
+	    JSObject doc = (JSObject)jsWin.getMember("document");
+	    JSObject form = (JSObject)doc.getMember("main");
+	    text = getFieldValue(form, "text");
+	    controlsText = getFieldValue(form, "controls");
+	} catch (NoClassDefFoundError ncfe) {
+	    System.out.println("JavaScript not available; trying applet parameters");
+	    text = getParameter("text");
+	    // XMLTokeniser.decode()
+	    controlsText = getParameter("controls");
+	}
+    }
+
     /** Implements Applet initialisation */
     public synchronized void init() {
-	JSObject jsWin = JSObject.getWindow(this);
-	JSObject doc = (JSObject)jsWin.getMember("document");
-	form = (JSObject)doc.getMember("main");
 
+	getLargeParameters();
+	
 	String uf = getParameter("useframe");
         boolean framed = (uf != null && uf.equals("yes"));
-
-	controls = null;
-	String text = getFieldValue("text");
-	String ct = getFieldValue("controls");
-	try {
-	    controls = new Controls(ct);
-	} catch (IOException cioe) {
-	    text = cioe.getMessage() + "\n" + ct;
-	}
-
-        textarea = new SearchableTextArea(controls);
-	actionListener =
-	    new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-			textarea.replayMacro(e.getActionCommand());
-		    }
-		};
+	Container container;
 
         if (framed) {
-            int r = Integer.parseInt(getParameter("editboxheight"));
-            int c = Integer.parseInt(getParameter("editboxwidth"));
-            textarea.reset(this, text, r, c);
             if (frame == null) {
                 frame = new Frame();
-		makeStandardLayout(frame);
             }
-            frame.pack();
-            frame.show();
+	    container = frame;
         } else {
             // if we are switching from framed to unframed, kill the
             // cached frame.
@@ -126,10 +117,29 @@ public class TWikiEdit extends Applet implements Application {
                 frame.hide();
                 frame = null;
             }
-            // reset the textarea to a small size; it will be resized
-            // by the layout manager.
-            textarea.reset(this, text, 10, 100);
-	    makeStandardLayout(this);
+	    container = this;
+	}
+
+	if (editor == null) {
+	    try {
+		editor = new Editor(controlsText, container, this);
+	    } catch (IOException ioe) {
+		ioe.printStackTrace();
+		throw new Error("Failed during startup; stack trace should have been printed");
+	    }
+	}
+
+	int r = Integer.parseInt(getParameter("editboxheight"));
+	int c = Integer.parseInt(getParameter("editboxwidth"));
+
+	// Attach the editor to this application and reset the text
+	editor.reset(this, text, r, c);
+	
+	if (framed) {
+	    frame.pack();
+	    frame.setSize(10 * r, 10 * c);
+	    frame.show();
+
         }
     }
 
@@ -137,7 +147,7 @@ public class TWikiEdit extends Applet implements Application {
      * Provided for JavaScript to get the value of the text
      */
     public String getText() {
-	return textarea.getText();
+	return editor.getText();
     }
 
     public void stop() {
@@ -160,57 +170,4 @@ public class TWikiEdit extends Applet implements Application {
         super.destroy();
     }
 
-    /**
-     * Create the standard layout of panels in the container.
-     */
-    void makeStandardLayout(Container container) {
-
-        GridBagLayout layout = new GridBagLayout();
-        container.setLayout(layout);
-        GridBagConstraints gbc = new GridBagConstraints();
-
-	Panel p;
-	ControlBlock b = controls.getBlock("top");
-	if (b != null) {
-	    p = b.makePanel(true, actionListener);
-	    gbc.gridx = 1; gbc.gridy = 0;
-	    gbc.anchor = GridBagConstraints.WEST;
-	    layout.setConstraints(p, gbc);
-	    container.add(p);
-	}
-
-	b = controls.getBlock("bottom");
-	if (b != null) {
-	    p = b.makePanel(true, actionListener);
-	    gbc.gridx = 1; gbc.gridy = 2;
-	    gbc.anchor = GridBagConstraints.WEST;
-	    layout.setConstraints(p, gbc);
-	    container.add(p);
-	}
-
-	b = controls.getBlock("left");
-	if (b != null) {
-	    p = b.makePanel(false, actionListener);
-	    gbc.gridx = 0; gbc.gridy = 1;
-	    gbc.anchor = GridBagConstraints.NORTH;
-	    layout.setConstraints(p, gbc);
-	    container.add(p);
-	}
-
-	b = controls.getBlock("right");
-	if (b != null) {
-	    p = b.makePanel(false, actionListener);
-	    gbc.gridx = 2; gbc.gridy = 1;
-	    gbc.anchor = GridBagConstraints.NORTH;
-	    layout.setConstraints(p, gbc);
-	    container.add(p);
-	}
-
-	gbc.gridx = 1; gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        layout.setConstraints(textarea, gbc);
-        container.add(textarea);
-    }
 }
