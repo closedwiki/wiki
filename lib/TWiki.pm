@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "04 Sep 2003";
+$wikiversion      = "11 Sep 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1330,7 +1330,7 @@ sub handleIncludeUrl
         $text =~ s/(?:\n)<\/body>//is;          # remove </BODY>
         $text =~ s/(?:\n)<\/html>//is;          # remove </HTML>
         $text =~ s/(<[^>]*>)/&fixN($1)/ges;     # join tags to one line each
-        $text =~ s/(\s(href|src|action)\=\"?)([^\"\>\s]*)/$1 . &fixURL( $host, $path, $3 )/geis;
+        $text =~ s/(\s(href|src|action)\=[\"\']?)([^\"\'\>\s]*)/$1 . &fixURL( $host, $path, $3 )/geois;
 
     } elsif( $contentType =~ /^text\/plain/ ) {
         # do nothing
