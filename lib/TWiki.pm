@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "29 Nov 2001";
+$wikiversion      = "30 Nov 2001";
 
 # ===========================
 # read the configuration part
@@ -223,7 +223,10 @@ sub initialize
 
     # some remaining init
     $viewScript = "view";
-    $viewScript = "viewauth" if( $ENV{'SCRIPT_NAME'} =~ /^.*\/viewauth$/ );  # Needed for TOC
+    if( ( $ENV{'SCRIPT_NAME'} ) && ( $ENV{'SCRIPT_NAME'} =~ /^.*\/viewauth$/ ) ) {
+        # Needed for TOC
+        $viewScript = "viewauth";
+    }
 
     # Add background color and font color (AlWilliams - 18 Sep 2000)
     # PTh: Moved from interalLink to initialize ('cause of performance)
@@ -331,7 +334,7 @@ sub getEmailNotifyList
 	push @list, $1 if (/([\w\-\.\+]+\@[\w\-\.\+]+)/);
     }
 
-    return( scalar @list ? @list : () );
+    return( @list );
 }
 
 # =========================
@@ -800,12 +803,12 @@ sub fixURL
         $url = "$theHost$url";
     } elsif( $url =~ /^\./ ) {
         # fix relative URL
-        $url = "$theHost/$theAbsPath$url";
+        $url = "$theHost$theAbsPath/$url";
     } elsif( $url =~ /^(http|ftp|gopher|news|file|https)\:/ ) {
         # full qualified URL, do nothing
     } elsif( $url ) {
         # FIXME: is this test enough to detect relative URLs?
-        $url = "$theHost/$theAbsPath$url";
+        $url = "$theHost$theAbsPath/$url";
     }
 
     return $url;
@@ -855,8 +858,8 @@ sub handleIncludeUrl
         $text =~ s/^.*?<\/head>//ois;            # remove all HEAD
         $text =~ s/<script.*?<\/script>//gois;   # remove all SCRIPTs
         $text =~ s/^.*?<body[^>]*>//ois;         # remove all to <BODY>
-        $text =~ s/<\/body>.*//ois;              # remove </BODY> to end
-        $text =~ s/<\/html>.*//ois;              # remove </HTML> to end
+        $text =~ s/(?:\n)<\/body>//ois;          # remove </BODY>
+        $text =~ s/(?:\n)<\/html>//ois;          # remove </HTML>
         $text =~ s/(<[^>]*>)/&fixN($1)/geos;     # join tags to one line each
         $text =~ s/(\s(href|src|action)\=\"?)([^\"\>\s]*)/$1 . &fixURL( $host, $path, $3 )/geois;
 
@@ -1405,10 +1408,11 @@ sub handleCommonTags
 # =========================
 sub handleMetaTags
 {
-    my( $theWeb, $theTopic, $text, $meta ) = @_;
+    my( $theWeb, $theTopic, $text, $meta, $isTopRev ) = @_;
 
     $text =~ s/%META{\s*"form"\s*}%/&renderFormData( $theWeb, $theTopic, $meta )/goe;
-    $text =~ s/%META{\s*"attachments"\s*(.*)}%/&TWiki::Attach::renderMetaData( $theWeb, $theTopic, $meta, $1 )/goe;
+    $text =~ s/%META{\s*"attachments"\s*(.*)}%/&TWiki::Attach::renderMetaData( $theWeb,
+                                                $theTopic, $meta, $1, $isTopRev )/goe;
     $text =~ s/%META{\s*"moved"\s*}%/&renderMoved( $theWeb, $theTopic, $meta )/goe;
     $text =~ s/%META{\s*"parent"\s*(.*)}%/&renderParent( $theWeb, $theTopic, $meta, $1 )/goe;
 
