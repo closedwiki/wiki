@@ -59,7 +59,7 @@ sub main
     if( ! $justChangeRefs ) {
        $justChangeRefs = "";
     }
-    
+
     my $fileName = &TWiki::Store::getFileName($oldWeb, $oldTopic);
     my $newName;
     $newName = &TWiki::Store::getFileName($newWeb, $newTopic) if( defined( $newWeb ) );
@@ -68,7 +68,7 @@ sub main
        if( checkExist( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $fileName, $newName ) ) {
            return;
        }
-    
+
        if( ! checkPermissions( $oldWeb, $oldTopic, $wikiUserName ) ) {
            return;
        }
@@ -85,7 +85,7 @@ sub main
               return;
         }
     }
-            
+
     # FIXME Might be good to insure that new topic is a WikiWord or that user is intentionally picking a non-WikiWord.
     # At present we just have a note in the template.
     if( ! $theAttachment ) {
