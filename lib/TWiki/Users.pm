@@ -245,7 +245,7 @@ sub addUserToTWikiUsersTopic {
     my $store = $this->{session}->{store};
     my( $meta, $text ) =
       $store->readTopic( undef, $TWiki::cfg{UsersWebName},
-                                 $TWiki::cfg{UsersTopicName}, undef );
+                         $TWiki::cfg{UsersTopicName}, undef );
     my $result = '';
     my $entry = "\t* ";
     $entry .= $user->web()."."
@@ -261,37 +261,35 @@ sub addUserToTWikiUsersTopic {
     foreach my $line ( split( /\r?\n/, $text) ) {
         # TODO: I18N fix here once basic auth problem with 8-bit user names is
         # solved
-        if ( $entry && $line =~ /(t|   )+\*\s($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s\-\s(.*)/ ) {
+        if ( $entry &&
+             $line =~ /^\s+\*\s($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*\w+\s*)?-\s*(.*)/ ) {
             my $web = $1 || $TWiki::cfg{UsersWebName};
             my $name = $2;
             my $odate = $3;
             if( $user->wikiName() le $name ) {
-                my $isit = ( $user->wikiName() eq $name );
                 # found alphabetical position
-                if( $isit ) {
+                if( $user->wikiName() eq $name ) {
                     # adjusting existing user - keep original registration date
                     $entry .= $odate;
                 } else {
-                    $entry .= $today;
+                    $entry .= $today."\n".$line;
                 }
                 # don't adjust if unchanged
                 return $TWiki::cfg{UsersTopicName} if( $entry eq $line );
-                $result .= "$entry\n";
+                $line = $entry;
                 $entry = '';
-                # don't add existing user entry twice
-                next if $isit;
             }
         }
 
-        $result .= "$line\n";
+        $result .= $line."\n";
     }
     if( $entry ) {
         # brand new file - add to end
         $result .= "$entry$today\n";
     }
     $store->saveTopic( $me, $TWiki::cfg{UsersWebName},
-                               $TWiki::cfg{UsersTopicName},
-                               $result, $meta );
+                       $TWiki::cfg{UsersTopicName},
+                       $result, $meta );
 
     return $TWiki::cfg{UsersTopicName};
 }
@@ -309,32 +307,32 @@ sub _cacheTWikiUsersTopic {
 
     %{$this->{U2W}} = ();
     %{$this->{W2U}} = ();
-    my @list = ();
+    my $text;
     my $store = $this->{session}->{store};
     if( $TWiki::cfg{MapUserToWikiName} ) {
-        my $text = $store->readTopicRaw( undef, $TWiki::cfg{UsersWebName},
-                                                 $TWiki::cfg{UsersTopicName},
-                                                 undef );
-        @list = split( /\n/, $text );
+        $text = $store->readTopicRaw( undef, $TWiki::cfg{UsersWebName},
+                                      $TWiki::cfg{UsersTopicName},
+                                      undef );
     } else {
         # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
-        # for .htpasswd authenticated sites ignore user list, but map only
-        #guest to TWikiGuest. CODE_SMELL on localization
-        @list = ( "\t* $TWiki::cfg{DefaultUserWikiName} - $TWiki::cfg{DefaultUserLogin} - " );
+        # map only guest to TWikiGuest. CODE_SMELL on localization
+        $text = "\t* $TWiki::cfg{DefaultUserWikiName} - $TWiki::cfg{DefaultUserLogin} - 01 Apr 1970";
     }
 
     my $wUser;
     my $lUser;
-    foreach( @list ) {
-        # Get the WikiName and userid, and build hashes in both directions
-        if( /^\s*\* ($TWiki::regex{webNameRegex}\.)?(\w+)\s*-\s*(\S+)\s*-\s*\d+ \w+ \d+$/o && $2 ) {
-            my $web = $1 || $TWiki::cfg{UsersWebName};
-            $wUser = $2;	# WikiName
-            $lUser = $3;	# userid
-            $lUser =~ s/$TWiki::cfg{NameFilter}//go;	# FIXME: Should filter in for security...
-            $this->{U2W}{$lUser} = $web.'.'.$wUser;
-            $this->{W2U}{$web.'.'.$wUser} = $lUser;
-        }
+    # Get the WikiName and userid, and build hashes in both directions
+    # This matches:
+    #   * TWikiGuest - guest - 10 Mar 2005
+    #   * TWikiGuest - 10 Mar 2005
+    while( $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?(\w+)\s*(?:-\s*(\S+)\s*)?-\s*\d+ \w+ \d+$//om ) {
+        my $web = $1 || $TWiki::cfg{UsersWebName};
+        $wUser = $2;	# WikiName
+        $lUser = $3 || $wUser;	# userid
+        $lUser =~ s/$TWiki::cfg{NameFilter}//go;	# FIXME: Should filter in for security...
+        my $wwn = $web.'.'.$wUser;
+        $this->{U2W}{$lUser} = $wwn;
+        $this->{W2U}{$wwn} = $lUser;
     }
 }
 

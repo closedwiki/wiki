@@ -193,16 +193,20 @@ sub load {
             }
         }
     } else {
-        # user-requested plugins
+
+        # explicitly requested plugins
         my $prefs = $this->{session}->{prefs};
         my $installed = $prefs->getPreferencesValue( 'INSTALLEDPLUGINS' ) || '';
         foreach $p ( grep { /^[A-Za-z0-9_]+Plugin$/ }
                      split( /[,\s]+/ , $installed )) {
             $p =~ s/\.([^.]+)$/$1/;
             unless( $lookup{$p} ) {
-                push( @{$this->{plugins}}, $lookup{$p} =
-                      new TWiki::Plugin( $session, $p ) );
+                $lookup{$p} = new TWiki::Plugin( $session, $p )
             }
+            # Note this allows the same plugin to be listed
+            # multiple times! Thus their handlers can be called
+            # more than once.
+            push( @{$this->{plugins}}, $lookup{$p} );
         }
 
         # implicitly requested plugins
@@ -214,6 +218,7 @@ sub load {
             }
         }
 
+        # differently challenged plugins
         my $disabled = $prefs->getPreferencesValue( 'DISABLEDPLUGINS' ) || '';
         foreach $p ( grep { /^[A-Za-z0-9_]+Plugin$/ }
                      split( /[,\s]+/ , $disabled )) {

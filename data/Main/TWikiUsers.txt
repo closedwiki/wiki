@@ -1,6 +1,12 @@
 %META:TOPICINFO{author="TWikiGuest" date="1108352099" format="1.0" version="1.1"}%
 ---+ List of %WIKITOOLNAME% users
 
+__Related topics:__ TWikiGroups
+
+<!--
+	* Set ALLOWTOPICCHANGE = TWikiAdminGroup, TWikiRegistrationAgent
+-->
+
 Please take the time and add yourself to the list. To do that fill out the form in %TWIKIWEB%.TWikiRegistration. This will create an account for you which allows you to edit topics. 
 
 The format of these lines is TWiki.WikiName - TWiki.LoginName - Date registered
@@ -35,10 +41,4 @@ The format of these lines is TWiki.WikiName - TWiki.LoginName - Date registered
 	* X - <a name="X">- - - -</a>
 	* Y - <a name="Y">- - - -</a>
 	* Z - <a name="Z">- - - -</a>
-
-[[#A][A]] [[#B][B]] [[#C][C]] [[#D][D]] [[#E][E]] [[#F][F]] [[#G][G]] [[#H][H]] [[#I][I]] [[#J][J]] [[#K][K]] [[#L][L]] [[#M][M]] [[#N][N]] [[#O][O]] [[#P][P]] [[#Q][Q]] [[#R][R]] [[#S][S]] [[#T][T]] [[#U][U]] [[#V][V]] [[#W][W]] [[#X][X]] [[#Y][Y]] [[#Z][Z]]
-
-	* Set ALLOWTOPICCHANGE = TWikiAdminGroup, TWikiRegistrationAgent
-
-__Related topics:__ OfficeLocations, TWikiGroups
 

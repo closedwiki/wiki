@@ -310,7 +310,7 @@ sub addTOPICINFO {
                  # compatibility; older versions of the code use
                  # RCS rev numbers save with them so old code can
                  # read these topics
-                 version => '1.$rev',
+                 version => '1.'.$rev,
                  date    => $time,
                  author  => $user->wikiName(),
                  format  => $formatVersion
