@@ -1,0 +1,36 @@
+%META:TOPICINFO{author="PeterThoeny" date="1079598540" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="ATasteOfTWiki"}%
+Slide template for ATasteOfTWiki presentation
+
+%STARTINCLUDE%
+<font face="Verdana" color="white" size="+2">
+<table width="100%" border="0" cellspacing="0">
+ <tr bgcolor="#0069D1">
+  <td valign="middle" colspan="2">
+	<font size="+4"><b>%SLIDETITLE%</b></font>
+  </td>
+ </tr>
+ <tr bgcolor="#0f87ff">
+  <td>
+	<img src="%ATTACHURL%/sidebar.gif" width="1" height="480" alt="" />
+  </td>
+  <td valign="top" align="left">
+	<br />
+	%SLIDETEXT%
+  </td>
+ </tr>
+ <tr bgcolor="#4da6ff">
+  <td valign="middle" align="center" colspan="2">
+	<font size="-1" color="black">
+	 %SLIDENAVFIRST% %SLIDENAVPREV%
+	 Slide %SLIDENUM% of %SLIDEMAX%
+	 %SLIDENAVNEXT% %SLIDENAVLAST% <br>
+	Copyright &copy; %SERVERTIME{$year}% by the contributing authors</font>
+  </td>
+ </tr>
+</table>
+</font>
+%STOPINCLUDE%
+
+
+-- TWiki:Main.CrawfordCurrie - 18 Feb 2004
