@@ -325,7 +325,7 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
     my $renderStyle = $query->param('render');
-    $renderStyle = "sidebyside" if ( ! $renderStyle );
+    $renderStyle = "sequential" if ( ! $renderStyle );
 
     ( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
