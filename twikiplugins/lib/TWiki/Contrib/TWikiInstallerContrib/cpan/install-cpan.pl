@@ -24,9 +24,6 @@ BEGIN {
     use Config;
     my $localLibBase = "$lib/CPAN/lib/site_perl/" . $Config{version};
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
-
-    print STDERR "$localLibBase\n\n";
-    print `ls $localLibBase`;
 }
 
 `mkdir -p $cpan; chmod -R 777 $cpan` unless -d $cpan;
@@ -50,7 +47,7 @@ installLocalModules({
 				     Digest::MD5 Storable
 				     SOAP::Lite 
 				     Time::ParseDate Date::Handler Date::Parse 
-				     HTML::CalendarMonthSimple Image::LibRSVG
+				     HTML::CalendarMonthSimple 
 				     Test::Unit 
 				     LWP::Simple 
 				     CGI::Session 
@@ -58,8 +55,10 @@ installLocalModules({
 				     Barcode::Code128
 				     XML::NamespaceSupport XML::SAX XML::LibXML::Common XML::LibXML 
 				     XML::LibXSLT Cache::Cache String::CRC
+				     Data::UUID Safe Language::Prolog XMLRPC::Transport::HTTP
 				     ) ],
-#    Data::UUID Date::Handler Safe Language::Prolog GD XMLRPC::Transport::HTTP
+# GD Image::LibRSVG
+# Data::UUID and XML::SAX require pressing ENTER to provide default answers to several questions
 });
 
 ################################################################################
