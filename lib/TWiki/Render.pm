@@ -707,7 +707,9 @@ sub externalLink
         return "$pre<img src=\"$url\" alt=\"$filename\" />";
     }
 
-    return "$pre<a href=\"$url\" target=\"_top\">$url</a>";
+    my $url_with_breaks = $url;
+    $url_with_breaks =~ s!([a-zA-Z0-9][&?/])!$1<WBR>!go;
+    return "$pre<a href=\"$url\" target=\"_top\">$url_with_breaks</a>";
 }
 
 # =========================
