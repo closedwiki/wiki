@@ -31,6 +31,7 @@
 #   beforeEditHandler       ( $text, $topic, $web )                 1.010
 #   afterEditHandler        ( $text, $topic, $web )                 1.010
 #   beforeSaveHandler       ( $text, $topic, $web )                 1.010
+#   renderFormFieldForEditHandler( $name, $type, $size, $value, $attributes, $possibleValues)
 #   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
 #   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
 #   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
@@ -282,6 +283,20 @@ sub DISABLE_setSessionValueHandler
     # Use only in one Plugin.
     # New hook in TWiki::Plugins $VERSION = '1.010'
 
+}
+
+# =========================
+sub DISABLE_renderFormFieldForEditHandler
+{
+    my ( $name, $type, $size, $value, $attributes, $possibleValues ) = @_;
+
+    TWiki::Func::writeDebug( "- ${pluginName}::renderFormFieldForEditHandler( $web.$topic )" ) if $debug;
+
+    # This handler is called by Form.renderForEdit, before built in types are considered
+    
+    my $ret = "";
+    # Set ret to html, leave empty if plugin doesn't want to render this field
+    return $ret;
 }
 
 # =========================
