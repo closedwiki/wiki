@@ -37,40 +37,28 @@ function launchWindow( theWeb, theTopic ) {
 </head>
 <body onLoad="initForm()">
 #PageTop
-<div id="topsection">
-	<h1 id="title">%LOGOCHAR% %INTURLENCODE{"%TOPIC%"}% %TMPL:P{"titleaction"}%</h1>
-</div>
-<div id="content">
+<h1>%LOGOCHAR% <span class="deem">%TMPL:P{"titleaction"}%</span> %INTURLENCODE{"%TOPIC%"}%</h1>
 <form name="main" action="%SCRIPTURLPATH%/savemulti%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post" id="editcont">
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 <input type="hidden" name="cmd" value="%CMD%" />
 <br />
-<strong>-- <nop>%WIKIUSERNAME% - %DATE%</strong> &nbsp;&nbsp;<code>&lt;==</code>
+Don't forget - if you change something, do it in
+<a target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">GoodStyle</a>
+and follow the
+<a target="TextFormattingRules" onClick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">TextFormattingRules</a>.
+<br /> <strong>-- <nop>%WIKIUSERNAME% - %DATE%</strong> &nbsp;&nbsp;<code>&lt;==</code>
 This is your signature for easy copy &amp; paste operation
-<dl id="menu">
-	<dt>Topic Action:
-		%TMPL:P{"topicaction"}%
-</dl>
+%TMPL:P{"plainfooter"}%
 %FORMFIELDS%
 </form>
+%TMPL:P{"help"}%
+<div id="menu">
+	<dl>
+		<dd>(%TMPL:P}"titleaction"%)
+	</dl>
 </div>
-<hr class="nocss">
-<dl id="lineage">
-	<dt>%TMPL:P{"titleaction"}%
-	<dt>%INTURLENCODE{"%TOPIC%"}%
-	<dd>Revision %REVINFO%
-	<dt>
-	<dd>Please use <a target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">GoodStyle</a>
-	when changing things and follow the
-<a target="TextFormattingRules" onClick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">TextFormattingRules</a>.
-</dl>
-<hr class="nocss">
-<dl id="navigate">
-	%TMPL:P{"help"}%
-</dl>
-<div id="logochar">%LOGOCHAR%</div>
 #PageBottom
 </body>
 </html>
@@ -78,16 +66,6 @@ This is your signature for easy copy &amp; paste operation
 %TMPL:DEF{"titleaction"}%(editing)%TMPL:END%
 %TMPL:DEF{"titlehelp"}% %TMPL:END%
 %TMPL:DEF{"topicaction"}%
-	<dt>%TMPL:P{"titleaction"}%
-	<dd><label accesskey="s" id="save">
-		<input type="submit" name="action" value="Save" id="save"></label>
-	<dd><label accesskey="k" for="checkpoint">
-		<input type="submit" name="action" value="QuietSave" id="quietsave" /></label>
-	<dd><label accesskey="p" for="preview">
-		<input type="submit" name="action" value="Preview" id="preview" /></label>
-	<dd><label accesskey="c" for="cancel">
-      <input type="submit" name="action" value="Cancel" id="cancel" /></label>%TMPL:END%
-%TMPL:DEF{"seetoo_topicaction"}%
 <fieldset><legend><span class="deem"> [[Plugins.SeeSkinAccessKeys][AccessKeys]]: S = Save, Q = Quiet Save, K = Checkpoint, P = Preview, C = Cancel</span></legend>
    <label accesskey="q" for="quietsave">
       <input type="submit" name="action" value="QuietSave" id="quietsave" />

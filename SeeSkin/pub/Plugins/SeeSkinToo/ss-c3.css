@@ -1,3 +1,4 @@
+/* --------- redefined html elements ---------- */
 /* for most text sizing issues, just change 'body font-size', everything else will follow suit. 
    Wierd things happen if you go less than 76% though. */
 body{ font-size:80%; 
@@ -17,15 +18,11 @@ a:link {	}
 a:visited {	}
 a:hover{text-decoration:underline;}
 
-div{	/*border: 1px dotted #999;*/}
 p { text-indent: 2ex; }
 ul,ol { margin-right: 4ex; }
 code, pre { text-align: left; }
-textarea { font-family: Georgia,"Times New Roman", serif; text-align:justify; height: 30em;}
-
+textarea { font-family: monospace;}
 p,table,td,th,ol,ul,dl,dt,dd { font-size: 2ex; }
-
-#content pre { overflow: auto; background-color: #eee;}
 
 dl{margin-left:0; padding-left:1ex; }
 dt { /*display: list-item; list-style: none;*/ 
@@ -36,14 +33,17 @@ dd a:link{ }
 dd a:visited{ }
 dd a:hover{ }
 
+/* -------- IDs ------------ */
 #topsection { position: relative; top: 6ex; left: 0; }
 #title { display: none; }
 #logochar {position:absolute; top:0; left:0; font-size: 36ex; font-weight: bold; color: rgb(234, 234, 234);width: 1em;}
-#search { position: relative; top: 0; right: 0; text-align: right;}
+#search { position: relative; top: 0; right: 2ex; /*text-align: right;*/}
 #search input { font-size: 1.6ex; border: 1px solid #bbb;}
 #search a { color: #bbb; }
-#content { border: none; margin: 3ex 18ex 6ex 18ex;}
-#content textarea { margin-top: 3ex; margin-bottom: 3ex;}
+
+#content { border: none; /*margin: 3ex 18ex 6ex 18ex;*/ width: auto;}
+#content pre { overflow: auto; background-color: #eee;}
+#editcont { margin-left: 1ex;}
 
 #lineage { width: 15ex; position: absolute; top: 11ex; left: 1ex; text-align: left;  overflow: hidden; }
 #lineage * { color: #bbb; }
@@ -60,7 +60,7 @@ dd a:hover{ }
 /*#navigate *:hover { color: black; }*/
 
 /* try % instead of ex for left/right columns */
-#content { margin: 3ex 18% 6ex 18%; position:relative;}
+#content { margin: 3ex 18% 6ex 18%; position:relative; }
 #navigate, #lineage { width: 15%; }
 
 #meta { text-align: center; }
@@ -75,7 +75,7 @@ dd a:hover{ }
 #menu dt {display: none;}
 #diffs { display:inline; font-size:1.6ex;}
 #menu #editmore { font-style: italic;}
-#menu input { border: thin solid groove; background-color: transparent; }
+/*#menu input { border: thin solid groove; background-color: transparent; }*/
 /*
 #menu dl dt a, #menu dl dd a { padding:0.5ex 0.7ex 0.5ex 0.7ex; color: MenuText;}
 */
@@ -89,10 +89,15 @@ dd a:hover{ }
 /* hide stuff which is only for non-css browsers */
 .nocss { display: none; }
 
+/* de-emphasize */
+.deem { font-size: smaller; }
+
 /* ----- IE5.5/Win workarounds ----- */
 * html body { margin: 0; }
 * html #content table{ width: auto; }
+* html #content textarea { width: 40em; }
 * html #diffs {padding:0;}
+
 /* ----------------------- */
 
 
