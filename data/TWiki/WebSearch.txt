@@ -24,7 +24,7 @@
 
 	* <b>Jump to topic</b>: If you already know the name of the topic, enter the name of the topic into the %TWIKIWEB%.GoBox at the top
 
-	* <b> WebChanges</b>: Find out what topics in <nop>%INCLUDINGWEB% have changed recently
+	* <b> [[%INCLUDINGWEB%.WebChanges][WebChanges]] </b>: Find out what topics in <nop>%INCLUDINGWEB% have changed recently
 
 	* <b>[[%TWIKIWEB%.GoodStyle][How to edit text]]</b>:
 		* Make changes to topics in %TWIKIWEB%.GoodStyle,
