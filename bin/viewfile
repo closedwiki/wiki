@@ -39,6 +39,7 @@ sub main
     if( ! &wiki::webExists( $webName ) ) {
 	$tmpl= &wiki::readTemplate( "noweb" );
 	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+        print "Content-type: text/html\n\n";  # Fixed n.lee 20000922
 	print $tmpl;
 	return;
     }
