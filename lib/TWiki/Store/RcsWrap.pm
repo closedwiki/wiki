@@ -587,6 +587,11 @@ sub _ci
 {
     my( $self, $file, $comment, $userName ) = @_;
 
+    # Check that we can write the file being checked in. This won't check that
+    # $file,v is writable, but it _will_ trap 99% of all common errors (permissions
+    # on directory tree)
+    return "$file is not writable" unless ( -w $file );
+
     my $cmd = $self->{"ciCmd"};
     my $rcsOutput = "";
     $cmd =~ s/%USERNAME%/$userName/;
