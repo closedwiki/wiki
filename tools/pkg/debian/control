@@ -4,10 +4,11 @@ Priority: optional
 Maintainer: Sven Dowideit <svenud@ozemail.com.au>
 Build-Depends-Indep: debhelper (>> 4.1.16), tarcust, po-debconf
 Standards-Version: 3.6.1
+
 Package: twiki
 Architecture: all
 Depends: ${perl:Depends} (>= 5.8), libnet-perl, libmime-base64-perl, libdigest-sha1-perl, rcs (>= 5.7), apache-common | apache2-common, debconf (>=  0.5), libalgorithm-diff-perl, libtext-diff-perl
-Suggets: libunicode-maputf8-perl 
+Suggests: libunicode-maputf8-perl 
 Description: A Web Based Collaboration Platform
  TWiki is a modern CGI-based implementation of the Wiki collaboration platform
  originally developed for OOP/Patterns collaboration.  In addition to the 
