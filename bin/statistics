@@ -62,8 +62,8 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
   my $thePathInfo = $query->path_info() || ""; 
   my $theRemoteUser = $query->remote_user() || "";
   my $theTopic = $query->param( 'topic' ) || "";
+  my $theUrl = $query->url;
   ( $topic, $web ) = 
-  	my $theUrl = $query->url;
     TWiki::initialize( $thePathInfo, $theRemoteUser,
                        $theTopic, $theUrl, $query );
 } else {
