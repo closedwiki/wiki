@@ -2290,36 +2290,51 @@ sub _processTags {
         #return _inlineError( $mess );
     }
 
-    $text =~ s/%([A-Z][A-Z0-9_:]*?(?:\{.*\})?)%/_renderTag($1,$depth,$expanding,@_)/ge;
-    
-    return $text;
-}
+    my @queue = split( /(%)/, $text );
+    my @stack;
+    #my $tell = 0;
 
-sub _renderTag {
-    my $expr=shift;
-    my $depth = shift;
-    my $expanding = shift;
-    
-    my ( $tag, $args);
-    #print STDERR $expr."\n";
-    if( $expr =~ /^(.*?)\{(.*?)\}$/s ) {
-        ( $tag, $args) = ( $1, $2 );
-    } else {
-        ( $tag, $args ) = ( $expr, undef );
-    }
-    
-    $args=_processTags($args,$depth-1,"",@_);
-    
-    my ( $ok, $e ) = _handleTag( $expr, $tag, $args, @_ );
-    if ( $ok ) {
-        $e = _processTags($e,$depth-1,"$expanding:$depth/$tag",@_);
-    } else {
-        $e="%".$expr."%";
-    }
-    
-    return $e
-}
+    push( @stack, "" );
+    while ( scalar( @queue )) {
+        my $token = shift( @queue );
+        #print " " x $tell,"PROCESSING $token \n" if $tell;
 
+        # each % sign either closes an existing stacked context, or
+        # opens a new context.
+        if ( $token eq "%" ) {
+            #print " " x $tell,"CONSIDER $stack[$#stack]\n" if $tell;
+            if ( $stack[$#stack] =~ /^%([A-Z][A-Z0-9_:]*)(?:{(.*)})?$/ ) {
+                my ( $tag, $args ) = ( $1, $2 );
+                #print " " x $tell,"POP $tag\n" if $tell;
+                my ( $ok, $e ) = _handleTag( $tag, $args, @_ );
+                if ( $ok ) {
+                    #print " " x $tell--,"EXPANDED $tag -> $e\n" if $tell;
+                    pop( @stack );
+                    unshift( @queue, split( /(%)/, $e ));
+                } else { # expansion failed
+                    #print " " x $tell++,"EXPAND $tag FAILED\n" if $tell;
+                    push( @stack, "%" ); # push a new context
+                    # ...OR...
+                    #$stack[$#stack] .= "%"; # ignore the tag
+                }
+            } else {
+                push( @stack, "%" ); # push a new context
+                #$tell++ if ( $tell );
+            }
+        } else {
+            $stack[$#stack] .= $token;
+        }
+    }
+
+    # Run out of input. Gather up everything in the stack.
+    while ( $#stack ) {
+        my $expr = pop( @stack );
+        writeWarning( "Unclosed tag $expr...");
+        $stack[$#stack] .= $expr;
+    }
+
+    return pop( @stack );
+}
 
 # Handle expansion of 'constant' tags (as against preference tags)
 # $eref is a reference to the flag that records the number of
@@ -2328,8 +2343,7 @@ sub _renderTag {
 # $tag is the tag part
 # $args is the bit in the {} (if there are any)
 sub _handleTag {
-    my $result = shift; # whole expression
-    my $tag = shift;    # tag subexpression
+    my $tag = shift;
     my $args = shift;
     # my( $topic, $web, $verbatim, $processedTopics ) = @_;
 
