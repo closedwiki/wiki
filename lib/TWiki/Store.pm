@@ -382,7 +382,7 @@ sub readTopicVersion
     my $text = _readVersionNoMeta( $theWeb, $theTopic, $theRev );
     my $meta = "";
    
-    ( $meta, $text ) = _extractMetaData( $theWeb, $text );
+    ( $meta, $text ) = _extractMetaData( $theWeb, $theTopic, $text );
         
     return( $meta, $text );
 }
@@ -1203,7 +1203,7 @@ sub getRevisionInfoFromMeta
 # =========================
 sub convert2metaFormat
 {
-    my( $web, $text ) = @_;
+    my( $web, $topic, $text ) = @_;
     
     my $meta = TWiki::Meta->new();
     $text = $meta->read( $text );
@@ -1213,7 +1213,7 @@ sub convert2metaFormat
     }
     
     if ( $text =~ /<!--TWikiCat-->/ ) {
-       $text = TWiki::Form::upgradeCategoryTable( $web, $meta, $text );    
+       $text = TWiki::Form::upgradeCategoryTable( $web, $topic, $meta, $text );    
     }
     
     return( $meta, $text );
@@ -1224,7 +1224,7 @@ sub convert2metaFormat
 # If we have an old file format without meta data, then convert
 sub _extractMetaData
 {
-    my( $web, $fulltext ) = @_;
+    my( $web, $topic, $fulltext ) = @_;
     
     my $meta = TWiki::Meta->new();
     my $text = $meta->read( $fulltext );
@@ -1232,17 +1232,44 @@ sub _extractMetaData
     
     # If there is no meta data then convert
     if( ! $meta->count( "TOPICINFO" ) ) {
-        ( $meta, $text ) = convert2metaFormat( $web, $text );
+        ( $meta, $text ) = convert2metaFormat( $web, $topic, $text );
     } else {
         my %topicinfo = $meta->findOne( "TOPICINFO" );
         if( $topicinfo{"format"} eq "1.0beta" ) {
             if( $text =~ /<!--TWikiCat-->/ ) {
-               $text = TWiki::Form::upgradeCategoryTable( $web, $meta, $text );
+               $text = TWiki::Form::upgradeCategoryTable( $web, $topic, $meta, $text );
             }
         }
     }
     
     return( $meta, $text );
+}
+
+# ======================
+# Just read the meta data at the top of the topic
+sub readTopMeta
+{
+    my( $theWeb, $theTopic ) = @_;
+    
+    my $filename = getFileName( $theWeb, $theTopic );
+    
+    my $data = "";
+    my $line;
+    $/ = "\n";     # read line by line
+    open( IN_FILE, "<$filename" ) || return "";
+    while( ( $line = <IN_FILE> ) ) {
+        if( $line !~ /^%META:/ ) {
+           last;
+        } else {
+           $data .= $line;
+        }
+    }
+    
+    my( $meta, $text ) = _extractMetaData( $theWeb, $theTopic, $data );
+    
+    close( IN_FILE );
+
+    return $meta;
 }
 
 # =========================
@@ -1252,7 +1279,7 @@ sub readTopic
     
     my $fullText = readTopicRaw( $theWeb, $theTopic );
     
-    my ( $meta, $text ) = _extractMetaData( $theWeb, $fullText );
+    my ( $meta, $text ) = _extractMetaData( $theWeb, $theTopic, $fullText );
     
     return( $meta, $text );
 }
