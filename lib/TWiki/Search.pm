@@ -442,6 +442,13 @@ sub searchWeb
     my $tempVal = "";
     my $tmpl = "";
     my $topicCount = 0; # JohnTalintyre
+
+    # fix for Codev.SecurityAlertExecuteCommandsWithSearch
+    # vulnerability, search: "test_vulnerability '; ls -la'"
+    $theSearchVal =~ s/[\'\`]//g;                  # Filter ' and `
+    $theSearchVal =~ s/\@\(/\@\\\(/g;              # Defuse @( ... )
+    $theSearchVal = substr($theSearchVal, 0, 200); # Limit string length
+
     my $originalSearch = $theSearchVal;
     my $renameTopic;
     my $renameWeb = "";
