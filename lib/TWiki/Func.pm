@@ -48,6 +48,7 @@ use Assert;
 
 use TWiki::Time;
 use TWiki::Plugins;
+use TWiki::Attrs;
 
 # =========================
 =pod
@@ -294,8 +295,8 @@ sub redirectCgiQuery
 # -------------------------
 sub extractParameters
 {
-#   my( $theAttr ) = @_;
-    my $params = TWiki::extractParameters( @_ );
+    my( $theAttr ) = @_;
+    my $params = new TWiki::Attrs( $theAttr );
     return %$params;
 }
 
@@ -323,8 +324,11 @@ sub extractParameters
 # -------------------------
 sub extractNameValuePair
 {
-#   my( $theAttr, $theName ) = @_;
-    return &TWiki::extractNameValuePair( @_ );
+    my( $theAttr, $theName ) = @_;
+    $theName ||= "_DEFAULT";
+
+    my $attrs = new TWiki::Attrs( $theAttr );
+    return $attrs->{$theName};
 }
 
 # =========================

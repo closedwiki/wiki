@@ -1140,105 +1140,6 @@ sub _writeReport {
     }
 }
 
-=pod
-
----++ StaticMethod extractParameters( $str ) -> \%hash
-
-Extracts parameters from a variable string and returns a hash with all parameters.
-The nameless parameter key is _DEFAULT.
-
-   * Example variable: %TEST{ "nameless" name1="val1" name2="val2" }%
-   * First extract text between {...} to get: "nameless" name1="val1" name2="val2"
-   * Then call this on the text:
-   * =my $params = $session->extractParameters( $text );
-   * The $params hash contains: <br />
-     $params->{_DEFAULT} is "nameless" <br />
-     $params->{name1} is "val1" <br />
-     $params->{name2} is "val2"
-
-=cut
-
-sub extractParameters {
-    my( $str ) = @_;
-
-    my $params = {};
-    return $params unless defined $str;
-    $str =~ s/\\\"/\\$TranslationToken/g;  # escape \"
-
-    if( $str =~ s/^\s*\"(.*?)\"\s*(\w+\s*=\s*\"|$)/$2/ ) {
-        # is: %VAR{ "value" }%
-        # or: %VAR{ "value" param="etc" ... }%
-        # Note: "value" may contain embedded double quotes
-        # distinguish between "" and "0";
-        $params->{_DEFAULT} = $1 if defined $1;
-        if( $2 ) {
-            while( $str =~ s/^\s*(\w+)\s*=\s*\"([^\"]*)\"// ) {
-                $params->{$1} = $2 if defined $2;
-            }
-        }
-    } elsif( ( $str =~ s/^\s*(\w+)\s*=\s*\"([^\"]*)\"// ) && ( $1 ) ) {
-        # is: %VAR{ name = "value" }%
-        $params->{$1} = $2 if defined $2;
-        while( $str =~ s/^\s*(\w+)\s*=\s*\"([^\"]*)\"// ) {
-            $params->{$1} = $2 if defined $2;
-        }
-    } elsif( $str =~ s/^\s*(.*?)\s*$// ) {
-        # is: %VAR{ value }%
-        $params->{_DEFAULT} = $1 unless $1 eq "";
-    }
-    foreach my $k ( keys %$params ) {
-        $params->{$k} =~ s/\\$TranslationToken/\"/go;
-    }
-    return $params;
-}
-
-=pod
-
----++ StaticMethod extractNameValuePair (  $str, $name  ) -> $string
-
-Extract a named or unnamed value from a variable parameter string
-Function extractParameters is more efficient for extracting several parameters
-   * | =$attr= | Attribute string |
-   * | =$name= | Name, optional |
-Returns the extracted value
-
-=cut
-
-sub extractNameValuePair {
-    my( $str, $name ) = @_;
-
-    my $value = "";
-    return $value unless( $str );
-    $str =~ s/\\\"/\\$TranslationToken/g;  # escape \"
-
-    if( $name ) {
-        # format is: %VAR{ ... name = "value" }%
-        if( $str =~ /(^|[^\S])$name\s*=\s*\"([^\"]*)\"/ ) {
-            $value = $2 if defined $2;  # distinguish between "" and "0"
-        }
-
-    } else {
-        # test if format: { "value" ... }
-        if( $str =~ /(^|\=\s*\"[^\"]*\")\s*\"(.*?)\"\s*(\w+\s*=\s*\"|$)/ ) {
-            # is: %VAR{ "value" }%
-            # or: %VAR{ "value" param="etc" ... }%
-            # or: %VAR{ ... = "..." "value" ... }%
-            # Note: "value" may contain embedded double quotes
-            $value = $2 if defined $2;  # distinguish between "" and "0";
-
-        } elsif( ( $str =~ /^\s*\w+\s*=\s*\"([^\"]*)/ ) && ( $1 ) ) {
-            # is: %VAR{ name = "value" }%
-            # do nothing, is not a standalone var
-
-        } else {
-            # format is: %VAR{ value }%
-            $value = $str;
-        }
-    }
-    $value =~ s/\\$TranslationToken/\"/go;  # resolve \"
-    return $value;
-}
-
 sub _fixN {
     my( $theTag ) = @_;
     $theTag =~ s/[\r\n]+//gs;
@@ -1316,7 +1217,7 @@ sub applyPatternToIncludedText {
     return $theText;
 }
 
-# Fetch content from a URL for includion by an INCLUDE
+# Fetch content from a URL for inclusion by an INCLUDE
 sub _includeUrl {
     my( $this, $theUrl, $thePattern, $theWeb, $theTopic ) = @_;
     my $text = "";
@@ -1416,7 +1317,7 @@ sub _includeUrl {
 sub _TOC {
     my ( $this, $text, $defaultTopic, $defaultWeb, $args ) = @_;
 
-    my $params = extractParameters( $args );
+    my $params = new TWiki::Attrs( $args );
 
     # get the topic name attribute
     my $topic = $params->{_DEFAULT} || $defaultTopic;
@@ -1554,7 +1455,7 @@ sub expandVariablesOnTopicCreation {
     $text =~ s/%USERNAME%/$user->login()/geo;               # "jdoe"
     $text =~ s/%WIKINAME%/$user->wikiName()/geo;            # "JonDoe"
     $text =~ s/%WIKIUSERNAME%/$user->webDotWikiName()/geo;# Main.JonDoe
-    $text =~ s/%URLPARAM{(.*?)}%/$this->_URLPARAM(extractParameters($1))/geo;
+    $text =~ s/%URLPARAM{(.*?)}%/$this->_URLPARAM(new TWiki::Attrs($1))/geo;
 
     # Remove filler: Use it to remove access control at time of
     # topic instantiation or to prevent search from hitting a template
@@ -1909,7 +1810,7 @@ sub _expandTag {
     } elsif ( defined( $constantTags{$tag} )) {
         $res = $constantTags{$tag};
     } elsif ( defined( $functionTags{$tag} )) {
-        my $params = extractParameters( $args );
+        my $params = new TWiki::Attrs( $args );
         $res = &{$functionTags{$tag}}( $this, $params, @_ );
     }
 
@@ -2050,10 +1951,10 @@ sub _PLUGINVERSION {
 # include hierarchy. Works for both URLs and absolute server paths.
 sub _INCLUDE {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
-    my $path = $params->{_DEFAULT} || "";
-    my $pattern = $params->{pattern};
-    my $rev     = $params->{rev};
-    my $warn    = $params->{warn};
+    my $path = $params->remove("_DEFAULT") || "";
+    my $pattern = $params->remove("pattern");
+    my $rev     = $params->remove("rev");
+    my $warn    = $params->remove("warn");
 
     if( $path =~ /^https?\:/ ) {
         # include web page
@@ -2114,17 +2015,20 @@ sub _INCLUDE {
             }
             return _inlineError( $mess );
         } # else fail silently
-	return "";
+        return "";
     }
-   
-    my $oldWeb = $this->{SESSION_TAGS}{INCLUDINGWEB};
-    my $oldTopic = $this->{SESSION_TAGS}{INCLUDINGTOPIC};
-    
+
+    my %saveTags = %{$this->{SESSION_TAGS}};
+
+    push( @{$this->{includeStack}}, $path );
     $this->{SESSION_TAGS}{INCLUDINGWEB} = $theWeb;
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $theTopic;
-    
-    push( @{$this->{includeStack}}, $path );
-    
+
+    # copy params into session tags
+    foreach my $k ( keys %$params ) {
+        $this->{SESSION_TAGS}{$k} = $params->{$k};
+    }
+
     $theTopic = $inctopic;
     $theWeb = $incweb;
 
@@ -2170,9 +2074,9 @@ sub _INCLUDE {
     # handle tags again because of plugin hook
     $this->_expandAllTags( \$text, $theTopic, $theWeb );
 
+    # restore the tags
     pop( @{$this->{includeStack}} );
-    $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $oldTopic;
-    $this->{SESSION_TAGS}{INCLUDINGWEB} = $oldWeb;
+    %{$this->{SESSION_TAGS}} = %saveTags;
 
     $text =~ s/^\n+/\n/;
     $text =~ s/\n+$/\n/;

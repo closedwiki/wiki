@@ -112,8 +112,8 @@ sub expandTemplate {
     my( $this, $theParam ) = @_;
     ASSERT(ref($this) eq "TWiki::Templates") if DEBUG;
 
-    $theParam = TWiki::extractNameValuePair( $theParam );
-    my $value = $this->_tmplP( $theParam );
+    my $attrs = new TWiki::Attrs( $theParam );
+    my $value = $this->_tmplP( $attrs->{_DEFAULT} );
     return $value;
 }
 

@@ -449,7 +449,11 @@ sub renameTopic {
 
     # Log rename
     if( $TWiki::cfg{Log}{rename} ) {
-        $this->{session}->writeLog( "rename", "$oldWeb.$oldTopic", "moved to $newWeb.$newTopic $error" );
+        my $old = "$oldWeb.$oldTopic";
+        my $new = "$newWeb.$newTopic";
+        $error ||= "";
+        $this->{session}->writeLog( "rename", $old,
+                                    "moved to $new $error" );
     }
 
     return $error;
@@ -667,9 +671,9 @@ sub getRevisionInfo {
 }
 
 # STATIC Build a hash by parsing name=value comma separated pairs
-# SMELL: duplication of TWiki::extractParameters, using a different
+# SMELL: duplication of TWiki::Attrs, using a different
 # system of escapes :-(
-sub _readKeyValue {
+sub _readKeyValues {
     my( $args ) = @_;
     my $res = {};
 
@@ -1136,7 +1140,7 @@ sub topicExists {
 # PRIVATE parse and add a meta-datum. Returns "" so it can be used in s///e
 sub _addMetaDatum {
     #my ( $meta, $type, $args ) = @_;
-    $_[0]->put( $_[1], _readKeyValue( $_[2] ));
+    $_[0]->put( $_[1], _readKeyValues( $_[2] ));
     return ""; # so it can be used in s///e
 }
 
@@ -1469,7 +1473,7 @@ sub createWeb {
 }
 
 # STATIC Write a meta-data key=value pair
-# The encoding is reversed in _readKeyValue
+# The encoding is reversed in _readKeyValues
 # SMELL: this uses a really bad escape encoding
 # 1. it doesn't handle all characters that need escaping.
 # 2. it's excessively noisy

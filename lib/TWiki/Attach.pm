@@ -75,7 +75,8 @@ sub renderMetaData {
     my( $this, $web, $topic, $meta, $attrs, $isTopTopicRev ) = @_;
     ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
 
-    my $showAll = TWiki::extractNameValuePair( $attrs, "all" );
+    $attrs = new TWiki::Attrs( $attrs );
+    my $showAll = $attrs->{all};
     my $showAttr = $showAll ? "h" : "";
 	my $a = ( $showAttr ) ? ":A" : "";
 
@@ -558,20 +559,6 @@ sub _getOldAttachAttr {
     return ( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
 }
 
-# Convert a key=value list to a hash
-# SMELL: almost exactly duplicates TWiki::extractNameValuePairs
-sub _parseKeyValues {
-    my( $args ) = @_;
-    my $res = {};
-
-    # Format of data is name="value" name1="value1" [...]
-    while( $args =~ s/\s*([^=]+)=\"([^"]*)\"//o ) { #" avoid confusing syntax highlighters
-        $res->{$1} = $2;
-    }
-    return $res
-}
-
-# =========================
 =pod
 
 ---++ ObjectMethod migrateToFileAttachmentMacro (  $meta, $text  ) -> $text
@@ -616,9 +603,7 @@ sub migrateToFileAttachmentMacro {
         foreach $line ( split( /\n/, $atext ) ) {
             if( $line =~ /%FILEATTACHMENT{\s"([^"]*)"([^}]*)}%/ ) {
                 my $name = $1;
-                my $rest = $2;
-                $rest =~ s/^\s*//;
-                my $values = _parseKeyValues( $rest );
+                my $values = new TWiki::Attrs( $2 );
                 $values->{name} = $name;
                 $meta->put( "FILEATTACHMENT", $values );
             }
@@ -628,7 +613,6 @@ sub migrateToFileAttachmentMacro {
     return $text;
 }
 
-# =========================
 =pod
 
 ---++ ObjectMethod upgradeFrom1v0beta (  $meta  ) -> $text

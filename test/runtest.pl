@@ -33,8 +33,9 @@ unless( $args =~ /\bnoupdate\n/ ) {
 }
 
 unless( $args =~ /\bnodocs\b/ ) {
-    print "<h1>Update docs</h1>";
+    print "<h1>Update docs</h1><pre>";
     print `cd ../tools && perl gendocs.pl`;
+    print "</pre>\n";
 }
 
 unless( $args =~ /\bnocompile\b/ ) {

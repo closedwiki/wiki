@@ -48,6 +48,7 @@ sub eachfile {
     if( $dir =~ m!/\.! ||
         $dir =~ m!/test! ||
         $dir =~ m!/Plugins! ||
+        $dir =~ m!/Upgrade! ||
         $dir =~ m!/Contrib! ) {
         ($File::Find::prune = 1);
         return;

@@ -28,6 +28,7 @@ use strict;
 use Assert;
 use TWiki::Plurals;
 use TWiki::Attach;
+use TWiki::Attrs;
 use TWiki::Time;
 
 BEGIN {
@@ -89,7 +90,7 @@ sub _renderParent {
     my $ah;
 
     if( $args ) {
-        $ah = TWiki::extractParameters( $args );
+        $ah = new TWiki::Attrs( $args );
     }
     my $dontRecurse = $ah->{dontrecurse} || 0;
     my $noWebHome =   $ah->{nowebhome} || 0;
@@ -164,12 +165,12 @@ sub _renderMoved {
     return $text;
 }
 
-
 sub _renderFormField {
     my( $this, $meta, $args ) = @_;
     my $text = "";
     if( $args ) {
-        my $name = TWiki::extractNameValuePair( $args, "name" );
+        my $attrs = new TWiki::Attrs( $args );
+        my $name = $attrs->{name};
         $text = TWiki::Search::getMetaFormField( $meta, $name ) if( $name );
     }
     return $text;
@@ -1413,16 +1414,18 @@ Obtain and render revision info for a topic.
 =cut
 
 sub renderRevisionInfo {
-    my( $this, $web, $topic, $requestedRev, $format ) = @_;
+    my( $this, $web, $topic, $rev, $format ) = @_;
 
-    if( $requestedRev ) {
-        $requestedRev = $this->store()->cleanUpRevID( $requestedRev );
+    if( $rev ) {
+        $rev = $this->store()->cleanUpRevID( $rev );
     }
 
-    my( $meta, $text ) = $this->store()->readTopic( undef, $web, $topic, $requestedRev );
+    my( $meta, $text ) =
+      $this->store()->readTopic( undef, $web, $topic, $rev );
 
-    my( $date, $user, $rev, $comment ) =
-      $meta->getRevisionInfo( $web, $topic, $requestedRev );
+    my( $date, $user, $comment );
+    ( $date, $user, $rev, $comment ) =
+      $meta->getRevisionInfo( $web, $topic, $rev );
 
     my $wun = "";
     my $wn = "";

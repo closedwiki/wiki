@@ -55,3 +55,18 @@ IncludedTopic
 %INCLUDE{"IncludedTopic"}%
 <!-- /actual -->
 </noautolink>
+
+---+ Parameterized includes
+---++ Expected
+<!-- expected -->
+%A% %B% %C%
+1 2 3
+
+%A% %B% %C%
+<!-- /expected -->
+---++ Actual
+<!-- actual -->
+%A% %B% %C%
+%INCLUDE{"ParameterizedIncludeFixture" A="1" B="2" C="3"}%
+%A% %B% %C%
+<!-- /actual -->
