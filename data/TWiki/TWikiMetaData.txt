@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999868902" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="MikeMannix" date="999959425" format="1.0" version="1.4"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -106,22 +106,20 @@ Should only be present if there is a FORM entry.  Note that this data is used wh
 
 ---+++ Recommended Sequence
 
-There no absolute need for meta data variables to be in a specific order, however, it does for the following reasons:
-	* Keep (form) fields in the order they are defined
-	* Allow diff command to give output in a logically sensible order
+There is no absolute need for Meta Data variables to be listed in a specific order within a topic, but it makes sense to do so a couple of good reasons:
 
-These could be done in other ways, but this adds complexity
-	* Order fields - definition could be read on each rendering (expensive)
-	* Diff - render data before doing diff, has something to offer, but not likely to be available for next TWiki release
+	* form fields remain in the order they are defined
+	* the =diff= function output appears in a logical order
 
-So the order is:
+The recommended sequence is:
+
 	* TOPICINFO
-	* text of topic
-	* TOPICMOVED - optional
-	* TOPICPARENT - optional
-	* FILEATTACHMENT - 0 or more entries
-	* FORM - optional
-	* FIELD - 0 or more entries (FORM required)
+	* =text of topic=
+	* TOPICMOVED (optional)
+	* TOPICPARENT (optional)
+	* FILEATTACHMENT (0 or more entries)
+	* FORM (optional)
+	* FIELD (0 or more entries; FORM required)
 
 ---++ Viewing Meta Data in Page Source
 
@@ -130,14 +128,14 @@ When viewing a topic the ==Raw Text== link can be clicked to show the text of a 
 #MetaDataRendering
 ---++ Rendering Meta Data
 
-Meta Data is rendered with the %<nop>META% variable. This is mostly used in the ==view==, ==preview== and ==edit== scripts.
+Meta Data is rendered with the %<nop>META% variable. This is mostly used in the =view=, =preview= and =edit= scripts.
 
-Current support is fairly basic:
+Current support covers:
 
   | *Variable usage:*	| *Comment:*  |
   | %<nop>META{"form"}% | Show form data, see [[TWikiDocumentation#Form_Templates][Form Templates]] |
   | %<nop>META{"attachments"}% | Show attachments, exclude hidden |
-  | Options for attachments: | |
+  | Options for [[FileAttachments][Attachments]]: | |
   | all="on" | Show ALL attachments (including hidden) |
   | %<nop>META{"moved"}% | Details of any topic moves |
   | %<nop>META{"parent [options]"}% | Show topic parent |
@@ -153,6 +151,6 @@ Current support is fairly basic:
 
 ---++ Known Issues
 
-There is currently no support for meta data for Plugins.  However, the format is readily extendable and the =Meta.pm= code that supports the format needs only minor alteration.
+At present, there is no Meta Data support for Plugins. However, the format is readily extendable and the =Meta.pm= code that supports the format needs only minor alteration.
 
 -- JohnTalintyre - 29 Aug 2001 <br />
