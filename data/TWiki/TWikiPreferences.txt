@@ -79,7 +79,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 	* TWiki site name:
 		* Set WIKITOOLNAME = TWiki
 
-	* Image, URL and alternate tooltip text of TWiki logo: (can be overwritten by web preferences)
+	* Image, URL and alternate tooltip text of the logo *for this installation*: you should change these settings for your site, or they can be overwridden in !WebPreferences for individual webs by defining these variables there.
 		* Set WIKILOGOIMG = %PUBURL%/%TWIKIWEB%/TWikiLogos/horzTWiki.gif
 		* Set WIKILOGOURL = http://TWiki.org/
 		* Set WIKILOGOALT = TWiki home
