@@ -95,9 +95,6 @@ sub postRenderingHandler {
 sub encodeValue {
     my( $theText ) = @_;
 
-    # WindRiver specific hack to remove SprPlugin rendering
-    $theText =~ s/<a href="[\w\/]*sprreport[^>]*>(.*?) (.*?)<\/a>/$1$2/goi;
-
     # FIXME: *very* crude encoding to escape Wiki rendering inside form fields
     $theText =~ s/\./%dot%/gos;
     $theText =~ s/(.)/\.$1/gos;
