@@ -1,54 +1,15 @@
 %TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"search"}%
+%TMPL:DEF{"repeatedsearchblock"}%%REPEAT%<tr><td class="twikiTopRow" width="6%" style="text-align:center;">%SELECTION%<input type="checkbox" name="RENAME%LABEL%%TOPIC_NUMBER%" checked="checked" /><input type="hidden" name="TOPIC%LABEL%%TOPIC_NUMBER%" value="%WEB%.%TOPICNAME%" />%SELECTION% </td>
+<td class="twikiTopRow" width="46%"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%WEB%.%TOPICNAME%</b></a> <span class="twikiAlert">%LOCKED%</span></td><td class="twikiTopRow" width="30%"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">
+%TIME%</a> - %REVISION%</td><td class="twikiTopRow" width="20%">%AUTHOR%</td>
+</tr><tr class="twikiBottomRow"><td class="twikiBottomRow">&nbsp;</td><td width="80%" colspan="2" class="twikiSummary twikiGrayText twikiBottomRow">%TEXTHEAD%</td><td class="twikiBottomRow" width="20%">&nbsp;</td></tr>%REPEAT%%TMPL:END%
 
 
 
-%TMPL:DEF{"titleaction"}%(search result) %TMPL:END%
+%TMPL:DEF{"searchbody"}%%SPLIT%<table width="100%" border="0" cellspacing="0" cellpadding="0">%TMPL:P{"repeatedsearchblock"}%</table>%SPLIT%%TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
-
-
-
-%TMPL:DEF{"topicaction"}% %TMPL:END%
-
-
-
-%TMPL:P{"titleaction"}%
-(search result)%TMPL:END%
-
-
-
-%TMPL:DEF{"content"}%
-%SPLIT%Search: <b>%SEARCHSTRING%</b>
-<form>
-%SPLIT%
-%REPEAT%
-<div class="twikiRenameList" style="background-color:%WEBBGCOLOR%;">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-	<tr>
-		<th width="4%" align="left">%SELECTION%<input type="checkbox" name="RENAME%LABEL%%TOPIC_NUMBER%" checked="checked" /><input type="hidden" name="TOPIC%LABEL%%TOPIC_NUMBER%" value="%WEB%.%TOPICNAME%" />%SELECTION%
-		</th>
-		<th width="96%" align="left"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TOPICNAME%</a></th>
-	</tr>
-	<tr>
-		<td width="4%"></td>
-		<td width="96%">%TEXTHEAD% <span class="twikiLocked">%LOCKED%</span><span class="twikiRevision"><a href='%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%'>%TIME% - %REVISION%</a></span> Changed by: %AUTHOR%
-		</td>
-	</tr>
-</table>
-</div>
-%REPEAT%<br clear="all" />
-<p />%SPLIT%Number of topics: <b>%NTOPICS%</b>
-<p />%SPLIT%
-</form>
-%TMPL:P{"standardfooter"}%
-%TMPL:END%
-
-
-
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
+%TMPL:DEF{"content"}%%SPLIT%%TMPL:P{"searchbody"}%%SPLIT%
+%TMPL:P{"standardfooter"}%%TMPL:END%

@@ -23,7 +23,7 @@
 %TMPL:DEF{"toolbar"}%<div class="twikiToolBar"><div class="twikiLeft" style="display:inline;">
    * %EDITTOPIC%
    * <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach</a>
-   * <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print%REVARG%">Print version</a>
+   * <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%">Print version</a>
 </div><div class="twikiRight" style="display:inline;"><span class="twikiPageNav twikiGrayText"><a href="#PageBottom">to bottom</a></span><br class="twikiClearLine" /></div><div class="twikiRevInfo twikiGrayText">Last changed: %REVINFO{"$date"}% GMT by %REVINFO{"$wikiusername"}%</div></div>%TMPL:END%
 
 
@@ -33,11 +33,11 @@
 %TEXT%
 </div><div class="twikiHidden"><hr />End of topic<br /><a href="#Actions">Skip to action links</a> | <a href="#PageTop">Back to top</a><hr /></div>
 %TMPL:P{"form"}%%TMPL:P{"attachments"}%%TMPL:P{"topicaction"}%
-%TMPL:P{"topicinfo"}% %TMPL:END%
+%TMPL:P{"topicinfo"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><span class="twikiHidden"><br /></span><div class="twikiTopicAction">%EDITTOPIC% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach image or document</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print%REVARG%">Print version</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on">Raw text</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%">More topic actions</a><br />Revisions: %REVISIONS% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Total page history</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;web=all&amp;excludetopic=%TOPIC%&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z0-9%5D">Backlinks</a></div>%TMPL:END%
+%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><span class="twikiHidden"><br /></span><div class="twikiTopicAction">%EDITTOPIC% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach image or document</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%">Print version</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on">Raw text</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%">More topic actions</a><br />Revisions: %REVISIONS% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Total page history</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;web=all&amp;excludetopic=%TOPIC%&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z0-9%5D">Backlinks</a></div>%TMPL:END%
 
 
 

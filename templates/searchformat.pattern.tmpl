@@ -1,31 +1,6 @@
 %TMPL:INCLUDE{"twiki"}%
-
-%TMPL:P{"titleaction"}%
-(search result)
-%TMPL:END%
-
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-%TMPL:DEF{"titleaction"}%(search result) %TMPL:END%
-%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
-%TMPL:P{"standardheader"}%
-</form>
-%SPLIT%Search: <b> %SEARCHSTRING% </b><p />
+%TMPL:INCLUDE{"search"}%
+%TMPL:DEF{"searchbody"}%
 %SPLIT%%REPEAT%%REPEAT%
-%SPLIT%Number of topics: <b>%NTOPICS%</b><p />
-%SPLIT%
-%TMPL:DEF{"topicaction"}% %TMPL:END%
-%TMPL:P{"standardfooter"}%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr>
-  <td valign="top">
-   &nbsp;
-  </td>
-  <td width="50%" valign="top">
-   %WEBCOPYRIGHT%
-  </td>
- </tr>
-</table>
-%TMPL:P{"bodyend"}%
+%SPLIT%Number of topics: <b>%NTOPICS%</b>%SPLIT%
+%TMPL:END%
