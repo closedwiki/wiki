@@ -376,6 +376,8 @@ sub topicIsLockedBy
     # pragmatic approach: Warn user if somebody else pressed the
     # edit link within a time limit e.g. 1 hour
 
+    ( $theWeb, $theTopic ) = normalizeWebTopicName( $theWeb, $theTopic );
+
     my $lockFilename = "$TWiki::dataDir/$theWeb/$theTopic.lock";
     if( ( -e "$lockFilename" ) && ( $TWiki::editLockTime > 0 ) ) {
         my $tmp = readFile( $lockFilename );
@@ -689,12 +691,14 @@ sub lockTopic
 }
 
 # =========================
-# FIXME remove this function - currently called from rename
+# Called from rename and TWiki::Func
 sub lockTopicNew
 {
-    my( $web, $topic, $doUnlock ) = @_;
+    my( $theWeb, $theTopic, $doUnlock ) = @_;
+
+    ( $theWeb, $theTopic ) = normalizeWebTopicName( $theWeb, $theTopic );
     
-    my $topicHandler = _getTopicHandler( $web, $topic );
+    my $topicHandler = _getTopicHandler( $theWeb, $theTopic );
     $topicHandler->setLock( ! $doUnlock );
 }
 
