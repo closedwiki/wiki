@@ -583,7 +583,7 @@ sub addRevision
     $text = $self->_readFile( $self->{file} ) if( $self->{attachment} );
     my $head = $self->numRevisions();
     if( $head ) {
-        my $delta = _diffText( \$text, \$self->delta($head), "" );
+        my $delta = _diffText( \$text, \$self->delta($head), "", 0 );
         ${$self->{"delta"}}[$head] = $delta;
     }   
     $head++;
@@ -699,7 +699,7 @@ sub _delLastRevision
 # ======================
 =pod
 
----++ sub revisionDiff (  $self, $rev1, $rev2  )
+---++ sub revisionDiff (  $self, $rev1, $rev2, $contextLines  )
 
 Not yet documented.
 
@@ -707,13 +707,13 @@ Not yet documented.
 
 sub revisionDiff
 {
-    my( $self, $rev1, $rev2 ) = @_;
+    my( $self, $rev1, $rev2, $contextLines ) = @_;
     $self->_ensureProcessed();
     my $text1 = $self->getRevision( $rev1 );
     $text1 =~ s/%META:TOPICINFO{[^\n]*}%\n//o;
     my $text2 = $self->getRevision( $rev2 );
     $text2 =~ s/%META:TOPICINFO{[^\n]*}%\n//o;
-    my $diff = _diffText( \$text1, \$text2, "diff" );
+    my $diff = _diffText( \$text1, \$text2, "diff", $contextLines );
     return ("", $diff);
 }
 
@@ -899,7 +899,7 @@ sub _mySplit
 # Way of dealing with trailing \ns feels clumsy
 =pod
 
----++ sub _diffText (  $new, $old, $type  )
+---++ sub _diffText (  $new, $old, $type, $contextLines  )
 
 Not yet documented.
 
@@ -907,11 +907,11 @@ Not yet documented.
 
 sub _diffText
 {
-    my( $new, $old, $type ) = @_;
+    my( $new, $old, $type, $contextLines ) = @_;
     
     my @lNew = _mySplit( $new );
     my @lOld = _mySplit( $old );
-    return _diff( \@lNew, \@lOld, $type );
+    return _diff( \@lNew, \@lOld, $type, $contextLines );
 }
 
 # ======================
@@ -987,15 +987,17 @@ sub _diffEnd
 # no type means diff for putting in rcs file, diff means normal diff output
 =pod
 
----++ sub _diff (  $new, $old, $type  )
+---++ sub _diff (  $new, $old, $type, $contextLines  )
 
 Not yet documented.
+
+TODO need to add functionality to use $contextLines
 
 =cut to implementation
 
 sub _diff
 {
-    my( $new, $old, $type ) = @_;
+    my( $new, $old, $type, $contextLines ) = @_;
     # Work out diffs to change new to old, params are refs to lists
     my $diffs = Algorithm::Diff::diff( $new, $old );
 

@@ -438,11 +438,12 @@ sub getRevInfo
 | Parameter: param( "rev1" ) | the higher revision |
 | Parameter: param( "rev2" ) | the lower revision |
 | Parameter: param('render') | the rendering style {sequential, sidebyside, raw, debug} |
+| Parameter: param( 'type' ) | {history, diff} history diff, or version to version |
+| Parameter: param( 'context' ) | number of lines of context |
 | TODO: | add a {word} render style |
-| TODO: | add a param("type") that is {history, diff} |
-| TODO: | add a param("context") that allows the secification of the number of lines of context (if possible) |
 | Parameter: param( "skin" ) | the skin to use to display the diff |
-| TODO: | move the common CGI param handling to one place
+| TODO: | move the common CGI param handling to one place |
+| TODO: | move defaults somewhere |
 | Return: | none |
 
 =cut
@@ -455,6 +456,10 @@ sub main
     my $theUrl = $query->url;
     my $renderStyle = $query->param('render');
     $renderStyle = "sequential" if ( ! $renderStyle );
+    my $diffType = $query->param('type');
+    $diffType = "history" if ( ! $diffType );
+    my $contextLines = $query->param('context');
+    $contextLines = 3 if ( ! $contextLines );
 
     ( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
@@ -546,7 +551,7 @@ sub main
     $difftmpl = &TWiki::handleCommonTags( $difftmpl, $topic );
     if( $topicExists ) {
         my $r1 = $rev1, $r2 = $rev2, $rInfo = "";
-        if( $r1 > $r2 + 1) {
+        if (( $diffType eq "history" ) && ( $r1 > $r2 + 1)) {
             $r2 = $r1 - 1;
             $isMultipleDiff = 1;
         }
@@ -555,7 +560,7 @@ sub main
             $diff =~ s/%REVTITLE1%/r1\.$r1/go;
 	    $rInfo = getRevInfo( $webName, $r1, $topic, 1 );
             $diff =~ s/%REVINFO1%/$rInfo/go;
-            $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1" );
+            $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1", $contextLines );
             if ( $renderStyle eq "raw" ) {
                 $text = "\n<code>\n$text\n</code>\n";
             } else {
@@ -568,7 +573,7 @@ sub main
             $r1 = $r1 - 1;
             $r2 = $r2 - 1;
             if( $r2 < 1 ) { $r2 = 1; }
-        } while( ( $r1 > $rev2 ) || ( $r1 == 1 ) );
+        } while( ( $diffType eq "history") && (( $r1 > $rev2 ) || ( $r1 == 1 )) );
 
     } else {
         $diff = $difftmpl;

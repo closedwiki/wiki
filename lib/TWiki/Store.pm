@@ -518,22 +518,22 @@ sub getRevisionNumberX
 
 =pod
 
----++ sub getRevisionDiff (  $web, $topic, $rev1, $rev2  )
+---++ sub getRevisionDiff (  $web, $topic, $rev1, $rev2, $contextLines  )
 
 <pre>
-rdiff:            $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1" );
+rdiff:            $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1", 3 );
 </pre>
 
 =cut
 
 sub getRevisionDiff
 {
-    my( $web, $topic, $rev1, $rev2 ) = @_;
+    my( $web, $topic, $rev1, $rev2, $contextLines ) = @_;
 
     my $rcs = _getTopicHandler( $web, $topic );
     my $r1 = substr( $rev1, 2 );
     my $r2 = substr( $rev2, 2 );
-    my( $error, $diff ) = $rcs->revisionDiff( $r1, $r2 );
+    my( $error, $diff ) = $rcs->revisionDiff( $r1, $r2, $contextLines );
     return $diff;
 }
 

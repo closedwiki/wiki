@@ -449,7 +449,7 @@ sub getRevisionInfo
 # rev2 newer than rev1
 =pod
 
----++ sub revisionDiff (  $self, $rev1, $rev2  )
+---++ sub revisionDiff (  $self, $rev1, $rev2, $contextLines  )
 
 Not yet documented.
 
@@ -457,7 +457,7 @@ Not yet documented.
 
 sub revisionDiff
 {
-    my( $self, $rev1, $rev2 ) = @_;
+    my( $self, $rev1, $rev2, $contextLines ) = @_;
     
     my $error = "";
 
@@ -475,6 +475,7 @@ sub revisionDiff
         my $rcsFile = $self->rcsFile();
         $rcsFile =~ s/$TWiki::securityFilter//go;
         $tmp =~ s/%FILENAME%/$rcsFile/;
+        $tmp =~ s/%CONTEXT%/$contextLines/;
         $tmp =~ /(.*)/;
         my $cmd = $1;       # now safe, so untaint variable
         $tmp = `$cmd`;
