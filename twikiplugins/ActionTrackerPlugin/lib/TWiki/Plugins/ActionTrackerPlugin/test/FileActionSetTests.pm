@@ -11,6 +11,8 @@ use TWiki::Func;
 
 { package FileActionSetTests;
 
+  my $textonlyfmt = new ActionTrackerPlugin::Format("Text", "\$text", "cols", "\$text", "", "");
+
   sub setUp {
     TWiki::TestMaker::init("ActionTrackerPlugin");
     ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
@@ -19,7 +21,9 @@ use TWiki::Func;
     TWiki::TestMaker::writeTopic("Test", "Topic1", "
 %ACTION{who=Main.C,due=\"3 Jan 02\",open}% C_open_ontime");
     TWiki::TestMaker::writeTopic("Test", "Topic2", "
-%ACTION{who=A,due=\"1 Jun 2001\",open}% A_open_late
+%ACTION{who=A,due=\"1 Jun 2001\",open}% <<EOF
+A_open_late
+EOF
 %ACTION{who=TestRunner,due=\"1 Jun 2001\",open}% TestRunner_open_late");
     
     TWiki::TestMaker::writeTopic("Main", "WebNotify", "
@@ -37,7 +41,7 @@ use TWiki::Func;
   sub testAllActionsInWebTest {
     my $attrs = new ActionTrackerPlugin::Attrs("topic=\".*\"");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = $textonlyfmt;
     my $chosen = $actions->formatAsString($fmt);
 
     Assert::assert($chosen =~ /C_open_ontime/o);
@@ -57,7 +61,7 @@ use TWiki::Func;
   sub testAllActionsInWebMain {
     my $attrs = new ActionTrackerPlugin::Attrs();
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Main", $attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = $textonlyfmt;
     my $chosen = $actions->formatAsString( $fmt );
 
     Assert::assert($chosen !~ /C_open_ontime/o);
@@ -77,7 +81,7 @@ use TWiki::Func;
   sub testOpenActions {
     my $attrs = new ActionTrackerPlugin::Attrs("open");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs );
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = $textonlyfmt;
     my $chosen = $actions->formatAsString($fmt);
     Assert::assert($chosen =~ /C_open_ontime/o);
     Assert::assert($chosen =~ /A_open_late/o);
@@ -94,7 +98,7 @@ use TWiki::Func;
   sub testLateActions {
     my $attrs = new ActionTrackerPlugin::Attrs("late");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs );
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = $textonlyfmt;
     my $chosen = $actions->formatAsString($fmt);
 
     Assert::assert($chosen !~ /C_open_ontime/o);
@@ -107,7 +111,7 @@ use TWiki::Func;
   sub testMyActions {
     my $attrs = new ActionTrackerPlugin::Attrs("who=me");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = $textonlyfmt;
     my $chosen = $actions->formatAsString($fmt);
     Assert::assert($chosen !~ /C_open_ontime/o);
     Assert::assert($chosen !~ /A_open_late/o);

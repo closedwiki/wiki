@@ -249,7 +249,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     # Could do this using flock but it's not guaranteed to be
     # implemented on all systems. This technique is simpler
     # and mostly works.
-    # COVERAGE OFF
+    # COVERAGE OFF lock file wait
     while ( -f $lockFile ) {
       sleep(1);
     }
@@ -600,7 +600,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my ( $this, $old ) = @_;
     my $sum = 0;
 
-    # COVERAGE OFF
+    # COVERAGE OFF fuzzy match with uid
     if ( defined( $this->{uid} )) {
       if ( defined( $old->{uid} ) && $this->{uid} eq $old->{uid} ) {
 	return 100;
@@ -668,7 +668,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub findChanges {
     my ( $this, $old, $format, $notifications ) = @_;
 
-    # COVERAGE OFF
+    # COVERAGE OFF safety net
     if ( !defined( $this->{notify} ) || $this->{notify} !~ m/\w/o ) {
       # Shouldn't ever get here
       return 0;

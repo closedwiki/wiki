@@ -41,13 +41,13 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	  &TWiki::initialize( "/Main", "nobody" );
       $dummy = "";  # to suppress warning
       
-      # COVERAGE OFF
+      # COVERAGE OFF debug only
       if ( $expr =~ s/DEBUG//o ) {
 	print doNotifications( $webName, $expr, 1 ),"\n";
-      } else {
-	doNotifications( $webName, $expr, 0 );
+	return;
       }
       # COVERAGE ON
+      doNotifications( $webName, $expr, 0 );
   }
 
   # Entry point separated from main entry point, because we may want
@@ -67,7 +67,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $changes =
       TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_NOTIFYCHANGES" );
 
-    my $format = new ActionTrackerPlugin::Format( $hdr, $bdy, $textform, $changes, $vert );
+    my $format = new ActionTrackerPlugin::Format( $hdr, $bdy, $vert, $textform, $changes );
 
     my $result = "";
     my $webs = $attrs->get( "web" ) || ".*";
@@ -174,7 +174,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       my $message = _composeActionsMail($actionsString, $actionsHTML,
 					$changesString, $changesHTML,
 					$date, $email, $format );
-      # COVERAGE OFF
+      # COVERAGE OFF debug only
       if ( $debugMailer ) {
 	$result .= $message;
       } else {
@@ -211,7 +211,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub _loadWebNotify {
     my( $web, $mailAddress ) = @_;
     
-    # COVERAGE OFF
+    # COVERAGE OFF safety net
     if( ! TWiki::Func::webExists( $web ) ) {
       my $error = "ActionTrackerPlugin:ActionNotify: did not find web $web";
       TWiki::Func::writeWarning( $error );
@@ -363,7 +363,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my ( $theWeb, $theTopic, $date ) = @_;
     my $dataDir = TWiki::Func::getDataDir();
     my $fname = "$dataDir\/$theWeb\/$theTopic.txt";
-    # COVERAGE OFF
+    # COVERAGE OFF safety net
     if ( !-e "$fname,v") {
       return undef;
     }

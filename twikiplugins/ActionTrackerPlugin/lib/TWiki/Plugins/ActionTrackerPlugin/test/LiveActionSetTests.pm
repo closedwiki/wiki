@@ -52,7 +52,7 @@ TWiki::TestMaker::writeTopic("Main", "E", "
   sub testGetAllInMain {
     my $attrs = ActionTrackerPlugin::Attrs->new();
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Main", $attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $chosen = $actions->formatAsString($fmt);
     Assert::assert($chosen !~ /Test_Topic1_C_open_ontime/o);
     Assert::assert($chosen !~ /Test_Topic2_A_open_late/o);
@@ -64,7 +64,7 @@ TWiki::TestMaker::writeTopic("Main", "E", "
   sub testGetAllInTest {
     my $attrs = ActionTrackerPlugin::Attrs->new();
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $chosen = $actions->formatAsString($fmt);
     Assert::assert($chosen =~ /Test_Topic1_C_open_ontime/o);
     Assert::assert($chosen =~ /Test_Topic2_A_open_late/o);
@@ -77,7 +77,7 @@ TWiki::TestMaker::writeTopic("Main", "E", "
     my $attrs = ActionTrackerPlugin::Attrs->new("web=\".*\"");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
     $actions->sort();
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $chosen = $actions->formatAsString($fmt);
 
     Assert::assert($chosen =~ /Test_Topic1_C_open_ontime/o);
@@ -100,7 +100,7 @@ TWiki::TestMaker::writeTopic("Main", "E", "
     my $attrs = ActionTrackerPlugin::Attrs->new("web=\".*\"");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
     $actions->sort("who,state");
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $chosen = $actions->formatAsString($fmt);
     Assert::assert($chosen =~ /Main_Topic2_A_closed_ontime.*Test_Topic2_A_open_late.*Main_Topic2_B_open_ontime.*Test_Topic1_C_open_ontime.*Main_Topic2_E_open_ontime/so);
   }
@@ -108,7 +108,7 @@ TWiki::TestMaker::writeTopic("Main", "E", "
   sub testAllInTestWebRE {
     my $attrs = ActionTrackerPlugin::Attrs->new("web=\"T.*\"");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $chosen = $actions->formatAsString($fmt);
 
     Assert::assert($chosen =~ /Test_Topic1_C_open_ontime/o);
@@ -121,7 +121,7 @@ TWiki::TestMaker::writeTopic("Main", "E", "
   sub testAllInMainWebRE {
     my $attrs = ActionTrackerPlugin::Attrs->new("web=\".*ain\"");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $chosen = $actions->formatAsString($fmt);
 
     Assert::assert($chosen !~ /Test_Topic1_C_open_ontime/o);
@@ -134,7 +134,7 @@ TWiki::TestMaker::writeTopic("Main", "E", "
   sub testAllTopicRE {
     my $attrs = ActionTrackerPlugin::Attrs->new("web=Test topic=\".*2\"");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Test", $attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $chosen = $actions->formatAsString($fmt);
     Assert::assert($chosen !~ /Test_Topic1_C_open_ontime/o);
     Assert::assert($chosen =~ /Test_Topic2_A_open_late/o);
@@ -146,7 +146,7 @@ TWiki::TestMaker::writeTopic("Main", "E", "
   sub testAllWebsTopicRE {
     my $attrs = ActionTrackerPlugin::Attrs->new("web=\".*\",topic=\".*2\"");
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $chosen = $actions->formatAsString($fmt);
     Assert::assert($chosen !~ /Test_Topic1_C_open_ontime/o);
     Assert::assert($chosen =~ /Test_Topic2_A_open_late/o);

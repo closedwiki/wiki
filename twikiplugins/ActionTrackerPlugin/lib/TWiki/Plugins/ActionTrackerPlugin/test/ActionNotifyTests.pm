@@ -97,17 +97,18 @@ use TWiki::Func;
 "head	1.2;
 access;
 symbols;
-locks; strict;
+locks
+	crawford:1.2; strict;
 comment	\@# \@;
 
 
 1.2
-date	2003.05.18.11.25.38;	author crawford;	state Exp;
+date	2003.05.21.20.18.01;	author crawford;	state Exp;
 branches;
 next	1.1;
 
 1.1
-date	2001.05.18.11.24.12;	author crawford;	state Exp;
+date	2001.05.21.20.16.54;	author crawford;	state Exp;
 branches;
 next	;
 
@@ -126,7 +127,7 @@ text
 %ACTION{who=EMailGroup,due=\"5 Jan 01\",state=open,notify=nobody}% No change
 %ACTION{who=ActorFive,due=\"22-jun-2002\" notify=Main.ActorOne}% Stuck in
 %ACTION{who=ActorSix,due=\"22-jul-2001\",notify=\"Main.ActorSix,Main.ActorEight\"}% A8: Text change from original, late
-
+%ACTION{uid=1234 who=NonEntity notify=ActorFive}% A9: No change
 \@
 
 
@@ -135,12 +136,10 @@ log
 \@Initial revision
 \@
 text
-\@d1 2
-a2 2
+\@d1 5
+a5 3
 %META:TOPICINFO{author=\"guest\" date=\"1032811587\" format=\"1.0\" version=\"1.1\"}%
 %ACTION{who=ActorFive,due=\"22-jun-2001\",notify=Main.ActorFive}% A7: Date change
-d4 3
-a6 1
 %ACTION{who=\"Main.ActorFour\",due=\"22-jul-2001\",notify=ActorFive}% A8: Text change
 \@
 ");

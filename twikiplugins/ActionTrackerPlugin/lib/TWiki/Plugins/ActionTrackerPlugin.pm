@@ -49,7 +49,7 @@ sub initPlugin {
   ( $topic, $web, $user, $installWeb ) = @_;
 
   # check for Plugins.pm versions
-  # COVERAGE OFF
+  # COVERAGE OFF standard plugin code
   if( $TWiki::Plugins::VERSION < 1 ) {
     &TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION" );
     return 0;
@@ -77,13 +77,13 @@ sub initPlugin {
   my $orient   = _getPref( "TABLEORIENT" );
   my $changes  = _getPref( "NOTIFYCHANGES" );
   $defaultFormat =
-    new ActionTrackerPlugin::Format( $hdr, $bdy, $textform, $changes, $orient );
+    new ActionTrackerPlugin::Format( $hdr, $bdy, $orient, $textform, $changes );
 
   my $extras = _getPref( "EXTRAS" );
 
   if ( $extras ) {
     my $e = ActionTrackerPlugin::Action::extendTypes( $extras );
-    # COVERAGE OFF
+    # COVERAGE OFF safety net
     if ( defined( $e )) {
       TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin ERROR $e" );
     }
@@ -190,7 +190,7 @@ sub commonTagsHandler {
   }
   $_[0] = $text;
   $_[0] =~ s/%ACTIONSEARCH{(.*)?}%/&_handleActionSearch($web, $1)/geo;
-  # COVERAGE OFF
+  # COVERAGE OFF debug only
   if ( $debug ) {
     $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&_handleActionNotify($web, $1)/geo;
     $_[0] =~ s/%ACTIONTRACKERPREFS%/&_dumpPrefs()/geo;
@@ -309,7 +309,7 @@ sub beforeEditHandler {
   my $body = _getPref( "EDITFORMAT" );
   my $vert = _getPref( "EDITORIENT" );
 
-  my $fmt = new ActionTrackerPlugin::Format( $hdrs, $body, "", "", $vert );
+  my $fmt = new ActionTrackerPlugin::Format( $hdrs, $body, $vert, "", "" );
   my $editable = $action->formatForEdit( $fmt );
   $tmpl =~ s/%EDITFIELDS%/$editable/o;
 
@@ -505,7 +505,7 @@ sub _loadPrefsOverrides {
 }
 
 # PRIVATE Generate plugin prefs in HTML for debugging
-# COVERAGE OFF
+# COVERAGE OFF debug only
 sub _dumpPrefs {
   my $text = "";
   foreach my $key ( "TABLEHEADER","TABLEFORMAT","TABLEORIENT","TEXTFORMAT","LATECOL","BADDATECOL","HEADERCOL","EDITHEADER","EDITFORMAT","EDITORIENT","USENEWWINDOW","NOPREVIEW","EXTRAS","EDITBOXHEIGHT","EDITBOXWIDTH" ) {
@@ -535,7 +535,7 @@ sub _handleActionSearch {
     $fmts = $defaultFormat->getFields() unless ( defined( $fmts ));
     $hdrs = $defaultFormat->getHeaders() unless ( defined( $hdrs ));
     $orient = $defaultFormat->getOrientation() unless ( defined( $orient ));
-    $fmt = new ActionTrackerPlugin::Format( $hdrs, $fmts, $fmts, $orient );
+    $fmt = new ActionTrackerPlugin::Format( $hdrs, $fmts, $orient, "", "" );
   } else {
     $fmt = $defaultFormat;
   }
@@ -604,7 +604,7 @@ function editWindow(url) {
 
 # PRIVATE return formatted actions that have changed in all webs
 # Debugging only
-# COVERAGE OFF
+# COVERAGE OFF debug only
 sub _handleActionNotify {
   my ( $web, $expr ) = @_;
 
