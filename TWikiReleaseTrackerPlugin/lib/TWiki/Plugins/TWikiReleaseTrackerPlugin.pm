@@ -29,6 +29,7 @@ use CGI;
 use vars qw(
 	    $web $topic $user $installWeb $VERSION $pluginName
 	    $debug $cgiQuery %showStatusFilter 
+	    %listingFormat
 	    $fdcsFormat $fscsFormat $fscdFormat $fdcdFormat 
 	    );
 
@@ -85,13 +86,13 @@ sub handleDiffWiki {
         '| $relativeFile | FSCS | $locations |'."\n";
 
     $fscdFormat = getParam($param, "fscdFormat") || 
-        '<TABLE border=1> <TR><TD><b> $fromDistribution - $relativeFile (FSCDCALLBACK)</b>'."\n".'</TD><TD>FSCDDIFF </TD></TR></TABLE>';
-#        '| $relativeFile | FSCDCALLBACK | FSCDDIST |'."\n";
+#        '<TABLE border=1> <TR><TD><b> $fromDistribution - $relativeFile (FSCDCALLBACK)</b>'."\n".'</TD><TD>FSCDDIFF </TD></TR></TABLE>';
+        '| $relativeFile | FSCDCALLBACK | FSCDDIST |'."\n";
 
     $fdcdFormat = getParam($param, "fdcdFormat") ||
 	'| ($relativeFile name not recognised, and no content match)  | FDCD | |'."\n";
 
-    $fdcsFormat = getParam($param, "fdcsFormat") || 
+    $listingFormat{'FDCS'} = getParam($param, "fdcsFormat") || 
 	'| $relativeFile | FDCS | $locations |'."\n";
 
 
@@ -176,8 +177,8 @@ sub foundFile {
 	   $ans .= $line; 
        }
    } elsif ($status eq "FDCS") {
-       if ($fdcsFormat) {
-	   my $line = $fdcsFormat;
+       if ($listingFormat{'FDCS'}) {
+	   my $line = $listingFormat{'FDCS'};
 	   $ans .= $line; 
        }
    } elsif ($status eq "FDCD") {
