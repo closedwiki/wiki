@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079853100" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1080980603" format="1.0" version="1.7"}%
 ---+ TWiki Spreadsheet Plugin
 
 This Plugin adds speadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
@@ -37,6 +37,7 @@ The action of this Plugin is triggered by the ==%<nop>CALC{"..."}%== variable, w
 
 | *Function* | *Description* |
 | =="$ABOVE()"== | The address range of cells above the current cell |
+| =="$ABS(num)"== | The absolute value of a number. Example: ==%<nop>CALC{"$ABS(-12.5)"}%== returns ==12.5== |
 | =="$AND(list)"== | The logcial AND of a list. Example: ==%<nop>CALC{"$AND(1, 0, 1)"}%== returns ==0== |
 | =="$AVERAGE(list)"== | The average of a list or a range of cells. Example: To get the average of column 5 excluding the title row, write in the last row: ==%<nop>CALC{"$AVERAGE( R2:C5..R$ROW(-1):C5 )"}%== |
 | =="$CHAR(number)"== | The ASCII character represented by number. Example: ==%<nop>CALC{"$CHAR(97)"}%== returns ==a== |
@@ -47,7 +48,7 @@ The action of this Plugin is triggered by the ==%<nop>CALC{"..."}%== variable, w
 | =="$DEF(list)"== | Returns the first list item or cell reference that is not empty. Example: ==%<nop>CALC{"$DEF( R1:C1..R1:C3 )"}%== |
 | =="$EVAL(formula)"== | Evaluates a simple formula. Only addition, substraction, multiplication, division and modulus of numbers are supported. Any nesting is permitted. Example: ==%<nop>CALC{"$EVAL( (5 * 3) / 2 + 1.1 )"}%== returns ==8.6== |
 | =="$EXACT(text1, text2)"== | Compares two text strings and returns ==1== if they are exactly the same, or ==0== if not. Example: ==%<nop>CALC{"$EXACT( foo, Foo )"}%== returns ==0==; ==%<nop>CALC{"$EXACT( foo, $LOWER(Foo) )"}%== returns ==1== |
-| =="$FIND(search_string, text, start_index)"== | Finds one text string =search_string=, within another text string =text=, and returns the number of the starting position of =search_string=, from the first character of =text=. This search is case sensitive and is not a regular expression search; use =$SEARCH()= for regular expression searching. Starting position is 1; an empty string is returned if nothing is matched. Examples: %BR% ==%<nop>CALC{"$FIND(f, fluffy)"}%== returns ==1== %BR% ==%<nop>CALC{"$FIND(f, fluffy, 2)"}%== returns ==4== %BR% ==%<nop>CALC{"$FIND(@, fluffy, 1)"}%== returns an empty string |
+| =="$FIND(search_string, text, start_index)"== | Finds one text string =search_string=, within another text string =text=, and returns the number of the starting position of =search_string=, from the first character of =text=. This search is case sensitive and is not a regular expression search; use =$SEARCH()= for regular expression searching. Starting position is 1; a 0 is returned if nothing is matched. Examples: %BR% ==%<nop>CALC{"$FIND(f, fluffy)"}%== returns ==1== %BR% ==%<nop>CALC{"$FIND(f, fluffy, 2)"}%== returns ==4== %BR% ==%<nop>CALC{"$FIND(@, fluffy, 1)"}%== returns ==0== |
 | =="$FORMAT(type, prec, number)"== | Formats a number to a certain type and precision. Types with examples:<br />&nbsp; - ==%<nop>CALC{"$FORMAT( COMMA, 2, 12345.6789 )"}%== returns ==12,345.68== <br />&nbsp; - ==%<nop>CALC{"$FORMAT( DOLLAR, 2, 12345.67 )"}%== returns ==$12,345.68== <br />&nbsp; - ==%<nop>CALC{"$FORMAT( NUMBER, 1, 12345.67 )"}%== returns ==12345.7== <br />&nbsp; - ==%<nop>CALC{"$FORMAT( PERCENT, 1, 0.1234567 )"}%== returns ==12.3%== |
 | =="$FORMATTIME(serial, text)"== | Convert a serialized date into a date string; the following variables in text are expanded: =$second= (seconds, 00..59); =$minute= (minutes, 00..59); =$hour= (hours, 00..23); =$day= (day of month, 01..31); =$month= (month, 01..12); =$mon= (month in text format, Jan..Dec); =$year= (4 digit year, 1999); =$ye= (2 digit year, 99), =$wd= (day number of the week, 1 for Sunday, 2 for Monday, etc), =$wday= (day of the week, Sun..Sat), =$weekday= (day of the week, Sunday..Saturday), =$yearday= (day of the year, 1..365, or 1..366 in leap years). Date is assumed to be server time; add =GMT= to indicate Greenwich time zone. See also =$TIME()=, =$TODAY()=, =$FORMATGMTIME()=, =$TIMEDIFF()=. Example: ==%<nop>CALC{"$FORMATTIME(0, $year/$month/$day GMT)"}%== returns ==1970/01/01 GMT== |
 | =="$FORMATGMTIME(serial, text)"== | Convert a serialized date into a date string in Greenwich time zone. Same variables expansion as in =$FORMATTIME()=. Example: ==%<nop>CALC{"$FORMATGMTIME(1041379200, $day $mon $year)"}%== returns ==01 Jan 2003== |
@@ -57,8 +58,9 @@ The action of this Plugin is triggered by the ==%<nop>CALC{"..."}%== variable, w
 | =="$LEFT()"== | The address range of cells to the left of the current cell |
 | =="$LENGTH(text)"== | The length in bytes of text. Example: ==%<nop>CALC{"$LENGTH(abcd)"}%== returns ==4== |
 | =="$LIST(range)"== | Converts the content of a range of cells into a flat list, delimited by comma. Cells containing commas are merged into the list. Example: ==%<nop>CALC{"$LIST( $LEFT() )"}%== returns ==Apples, Lemons, Oranges, Kiwis== assuming the cells to the left contain ==&#124; Apples &#124; Lemons, Oranges &#124; Kiwis &#124;== |
-| =="$LISTITEM(index, list)"== | Get one item of a list. Index is 1 to size of list; use a negative number to count from the end of the list. Examples:%BR% ==%<nop>CALC{"$LISTITEM(2, Apple, Orange, Apple, Kiwi)"}%== returns ==Orange== %BR% ==%<nop>CALC{"$LISTITEM(-1, Apple, Orange, Apple, Kiwi)"}%== returns ==Kiwi== |
-| =="$LISTMAP(formula, list)"== | Evaluate and update each element of a list. In the formla, ==$item== indicates the element, ==$index== the index of the list starting at 1. Example: ==%<nop>CALC{"$LISTMAP($index: $EVAL(2 * $item), 3, 5, 7, 11)"}%== returns ==1: 6, 2: 10, 3: 14, 4: 22== |
+| =="$LISTIF(condition, list)"== | Remove elements from a list that do not meet a condition. In addition to the condition described in =$IF()=, you can use ==$item== to indicate the current element. Examples: %BR% ==%<nop>CALC{"$LISTIF($item > 12, 14, 7, 25)"}%== returns ==14, 25== %BR% ==%<nop>CALC{"$LISTIF($NOT($EXACT($item,)), A, B, , C)"}%== returns ==A, B, C== |
+| =="$LISTITEM(index, list)"== | Get one element of a list. Index is 1 to size of list; use a negative number to count from the end of the list. Examples:%BR% ==%<nop>CALC{"$LISTITEM(2, Apple, Orange, Apple, Kiwi)"}%== returns ==Orange== %BR% ==%<nop>CALC{"$LISTITEM(-1, Apple, Orange, Apple, Kiwi)"}%== returns ==Kiwi== |
+| =="$LISTMAP(formula, list)"== | Evaluate and update each element of a list. In the formula you can use ==$item== to indicate the element; ==$index== to show the index of the list, starting at 1. Example: ==%<nop>CALC{"$LISTMAP($index: $EVAL(2 * $item), 3, 5, 7, 11)"}%== returns ==1: 6, 2: 10, 3: 14, 4: 22== |
 | =="$LISTREVERSE(list)"== | The opposite order of a list. Example: ==%<nop>CALC{"$LISTREVERSE(Apple, Orange, Apple, Kiwi)"}%== returns ==Kiwi, Apple, Orange, Apple== |
 | =="$LISTSIZE(list)"== | The number of elements in a list. Example: ==%<nop>CALC{"$LISTSIZE(Apple, Orange, Apple, Kiwi)"}%== returns ==4== |
 | =="$LISTSORT(list)"== | Sorts a list in ASCII order, or numerically if all elements are numeric. Example: ==%<nop>CALC{"$LISTSORT(Apple, Orange, Apple, Kiwi)"}%== returns ==Apple, Apple, Kiwi, Orange== |
@@ -80,7 +82,7 @@ The action of this Plugin is triggered by the ==%<nop>CALC{"..."}%== variable, w
 | =="$RIGHT()"== | The address range of cells to the right of the current cell |
 | =="$ROUND(formula, digits)"== | Evaluates a simple ==formula== and rounds the result up or down to the number of digits if ==digits== is positive; to the nearest integer if digits is missing; or to the left of the decimal point if digits is negative. Examples: %BR% ==%<nop>CALC{"$ROUND(3.15, 1)"}%== returns ==3.2== %BR% ==%<nop>CALC{"$ROUND(3.149, 1)"}%== returns ==3.1== %BR% ==%<nop>CALC{"$ROUND(-2.475, 2)"}%== returns ==-2.48== %BR% ==%<nop>CALC{"$ROUND(34.9, -1)"}%== returns ==30== |
 | =="$ROW(offset)"== | The current row number with an offset. Example: To get the number of rows excluding table heading ( first row) and summary row (last row you are in), write: ==%<nop>CALC{"$ROW(-2)"}%== |
-| =="$SEARCH(search_string, text, start_index)"== | Finds one text string =search_string=, within another text string =text=, and returns the number of the starting position of =search_string=, from the first character of =text=. This search a %TWIKIWEB%.RegularExpression search; use =$FIND()= for non-regular expression searching. Starting position is 1; an empty string is returned if nothing is matched. Examples: %BR% ==%<nop>CALC{"$SEARCH([uy], fluffy)"}%== returns ==3== %BR% ==%<nop>CALC{"$SEARCH([uy], fluffy, 3)"}%== returns ==6== %BR% ==%<nop>CALC{"$SEARCH([abc], fluffy,)"}%== returns an empty string |
+| =="$SEARCH(search_string, text, start_index)"== | Finds one text string =search_string=, within another text string =text=, and returns the number of the starting position of =search_string=, from the first character of =text=. This search a %TWIKIWEB%.RegularExpression search; use =$FIND()= for non-regular expression searching. Starting position is 1; a 0 is returned if nothing is matched. Examples: %BR% ==%<nop>CALC{"$SEARCH([uy], fluffy)"}%== returns ==3== %BR% ==%<nop>CALC{"$SEARCH([uy], fluffy, 3)"}%== returns ==6== %BR% ==%<nop>CALC{"$SEARCH([abc], fluffy,)"}%== returns ==0== |
 | =="$SET(name, value)"== | Set a variable for later use. Specify the variable name (alphanumeric characters and underscores) and the value. The value may contain a formula; formulas are evaluated before the variable assignment. This function returns no output. Use =$GET()= to retrieve variables. Unlike table ranges, variables live for the time of the page view and persist across tables, i.e. you can use it to summarize results across several tables. See also =$GET()=. Example: ==%<nop>CALC{"$SET( my_total, $SUM($ABOVE()) )"}%== sets the =my_total= variable to the sum of all table cells located above the current cell and returns an empty string |
 | =="$SETM(name, formula)"== | Updates an existing variable based on a formula. Specify the variable name (alphanumeric characters and underscores) and the formula. The formula must start with an operator to ==+== (add), ==-== (subtract), ==*== (multiply), or ==/== (divide) something to the variable. This function returns no output. Use =$GET()= to retrieve variables. Example: ==%<nop>CALC{"$SETM( total, + $SUM($LEFT()) )"}%== adds the sum of all table cells on the left to the =total= variable, and returns an empty string |
 | =="$SIGN(num)"== | The sign of a number. Returns -1 if ==num== is negative, 0 if zero, or 1 if positive. Example: ==%<nop>CALC{"$SIGN(-12.5)"}%== returns ==-1== |
@@ -156,9 +158,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 21 Mar 2004 |
+|  Plugin Version: | 03 Apr 2004 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  21 Mar 2004: | Added $LISTINDEX(); fixed call to inofficial function |
+|  03 Apr 2004: | Added $ABS(), $LISTIF(); fixed $VALUE() to remove leading zeros; changed $FIND() and $SEARCH() to return 0 instead of empty string if no match |
+|  21 Mar 2004: | Added $LISTITEM(); fixed call to unofficial function |
 |  16 Mar 2004: | Added $LISTMAP(), $LISTREVERSE(), $LISTSIZE(), $LISTSORT(), $LISTUNIQUE(), $SETM(); retired $COUNTUNIQUE() in favor of $COUNTITEMS($LISTUNIQUE()); fixed evaluation order issue of $IF(); fixed missing eval error messages suppressed since version 06 Mar 2004; redirect stderr messages to warning |
 |  08 Mar 2004: | Added $LIST() |
 |  06 Mar 2004: | Added $AND(), $MOD(), $NOT(), $OR(), $PRODUCT(), $PROPER(), $PROPERSPACE(), $RAND(), $REPEAT(), $SIGN(), $VALUE(); added digits parameter to $ROUND(); renamed $MULT() to $PRODUCT(); $MULT() is deprecated and undocumented |
@@ -189,4 +192,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/PeterThoeny - 21 Mar 2004
+-- TWiki:Main/PeterThoeny - 03 Apr 2004
+
