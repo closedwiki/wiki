@@ -33,6 +33,16 @@ use Time::Local;
 
 use strict;
 
+# 'Use locale' for internationalisation of Perl sorting in getTopicNames
+# and other routines - main locale settings are done in TWiki::setupLocale
+BEGIN {
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::useLocale ) {
+        require locale;
+        import locale ();
+    }
+}
+
 # FIXME: Move elsewhere?
 # template variable hash: (built from %TMPL:DEF{"key"}% ... %TMPL:END%)
 use vars qw( %templateVars ); # init in TWiki.pm so okay for modPerl
