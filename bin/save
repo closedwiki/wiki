@@ -109,7 +109,7 @@ sub main
 	# parent setting
 	my $theParent = $query->param( 'parent' ) || "";
 	if( $theParent ) {
-	    $tmp =~ s/%TOPICPARENT%/$theParent/go;
+	    $tmpl =~ s/%TOPICPARENT%/$theParent/go;
 	    $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
 	}
         
