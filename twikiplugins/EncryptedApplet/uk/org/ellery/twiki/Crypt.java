@@ -60,7 +60,9 @@ public class Crypt {
 
 	  PBEParameterSpec spec = new PBEParameterSpec(salt, count);
 
-	  Cipher ciph = Cipher.getInstance("PBEWithMD5AndTripleDES");
+	  //Cipher ciph = Cipher.getInstance("PBEWithMD5AndTripleDES");
+		Cipher ciph = Cipher.getInstance("PBEWithMD5AndDES");
+	  
 	  ciph.init(mode, key, spec);
 
 	  result =  ciph.doFinal(input);
