@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "13 Apr 2002";
+$wikiversion      = "14 Apr 2002";
 
 # ===========================
 # read the configuration part
@@ -1983,7 +1983,7 @@ sub specificLink
         return "$thePreamble<a href=\"$theLink\" target=\"_top\">$theText</a>";
     }
 
-    $theLink =~ s/^([A-Z]+[a-z0-9]*)\.//o;
+    $theLink =~ s/^([A-Z]+[a-z0-9]*|_[a-zA-Z0-9_]+)\.//o;
     my $web = $1 || $theWeb;            # extract 'Web.'
     (my $baz = "foo") =~ s/foo//;       # reset $1, defensive coding
     $theLink =~ s/(\#[a-zA-Z_0-9\-]*$)//o;
