@@ -1,10 +1,6 @@
 %TMPL:INCLUDE{"twiki"}%
 
-%TMPL:DEF{"titleaction"}%(attach) %TMPL:END%
 
-%TMPL:DEF{"simpleheader"}%
----+ Attach image or document on %TOPIC%
-%TMPL:END%
 
 %TMPL:DEF{"script"}%
 <script type="text/javascript">
@@ -20,8 +16,29 @@
 	  return false;
 	}
 //STOP HIDING-->
-</script>
-%TMPL:END%
+</script> %TMPL:END%
+
+
+
+%TMPL:DEF{"bodystart"}%
+<body class="twikiNoViewPage twikiAttachPage" onload="initForm()"><a name="PageTop"></a>%TMPL:END%
+
+
+
+%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
+%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
+
+
+
+%TMPL:DEF{"titleaction"}%(attach) %TMPL:END%
+
+
+
+%TMPL:DEF{"simpleheader"}%
+---+ Attach image or document on %TOPIC% %TMPL:END%
+
+
 
 %TMPL:DEF{"notes"}%
 <div class="twikiNotes">
@@ -29,19 +46,14 @@
    * *Bug:* Internet Explorer 4.0 or earlier: If you get an "Internal Server Error" message when you upload a file, you need to try again. It should work the second time.
 </div>%TMPL:END%
 
-%TMPL:DEF{"bodystart"}%
-<body class="twikiAttachPage" onLoad="initForm()"><a name="PageTop"></a>%TMPL:END%
 
 
-%TMPL:DEF{"main"}%
-<div class="twikiMiddleContainer">
-<div class="twikiMain">
+%TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%
 <div class="twikiTopic">
 %TMPL:P{"previousdetails"}%
-<table class="twikiAttachTable" width="100%">
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
-	%TMPL:P{"previous"}% 
+<table class="twikiUploadTable" width="100%">%TMPL:P{"previous"}% 
 	<tr>
 		<td class="title input">
 			Local file 
@@ -67,7 +79,7 @@ Upload up to %ATTACHFILESIZELIMIT% KB.
 			Link 
 		</td>
 		<td>
-			<input type="checkbox" name="createlink" %attachlinkbox% /> Create a link to the attached file
+			<input type="checkbox" name="createlink" %ATTACHLINKBOX% /> Create a link to the attached file
 		</td>
 		<td class="help">
 Images will be displayed, for other attachments a link will be created.
@@ -78,27 +90,27 @@ Images will be displayed, for other attachments a link will be created.
 			Hide file 
 		</td>
 		<td>
-			<input type="checkbox" name="hidefile" %hidefile% /> Do not show attachment in table
+			<input type="checkbox" name="hidefile" %HIDEFILE% /> Do not show attachment in table
 		</td>
 		<td class="help">Attachments will not be shown in topic view page.</td>
 	</tr>
 </table>
-
+</form>
+<div class="twikiNotes twikiGrayText">
 %TMPL:P{"notes"}%
-%TMPL:P{"extranotes"}%</div>
+%TMPL:P{"extranotes"}%</div></div>
 %TMPL:P{"topicaction"}%
 %BR%
----++ Existing attachments for <nop>%TOPIC%
+---++ Existing attachments for <span class="twikiTitle"><nop>%TOPIC%</span>
 %META{"attachments" all="on"}%
-%TMPL:P{"standardfooter"}%</div></div></form>%TMPL:END%
+%TMPL:P{"standardfooter"}%%TMPL:END%
+
+
 
 %TMPL:DEF{"attach"}%
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%
 %TMPL:P{"main"}%
-%TMPL:P{"bodyend"}% %TMPL:END%
-
-
-
-
+%TMPL:P{"bodyend"}%
+%TMPL:END%

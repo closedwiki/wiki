@@ -1,25 +1,7 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
-%TMPL:DEF{"titlehelp"}% %TMPL:END%
-%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
-%TMPL:DEF{"topicaction"}%
-<fieldset><legend><span class="deem"> [[%TWIKIWEB%.AccessKeys][AccessKeys]]: S = Save, Q = Quiet Save, K = Checkpoint, P = Preview, C = Cancel</span></legend>
-   <label accesskey="s" for="save">
-       <input type="submit" name="action" value="Save" />
-   </label>
-   <label accesskey="q" for="quietsave">
-       <input type="submit" name="action" value="QuietSave" />
-   </label>
-   <label accesskey="k" for="checkpoint">
-        <input type="submit" name="action" value="Checkpoint" />
-   </label>
-   <label accesskey="p" for="preview">
-        <input type="submit" name="action" value="Preview" />
-   </label>
-   <label accesskey="c" for="cancel">
-        <input type="submit" name="action" value="Cancel" />
-   </label>
-</fieldset>%TMPL:END%
+
+
+
 %TMPL:DEF{"script"}%
 <script type="text/javascript">
 <!--HIDE
@@ -79,45 +61,81 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
   return false;
 }
 //STOP HIDING-->
-</script>
-%TMPL:END%
+</script> %TMPL:END%
+
+
 
 %TMPL:DEF{"bodystart"}%
-<body id="editpage" onload="initForm()"><a name="PageTop"></a>%TMPL:END%
-%TMPL:DEF{"main"}%
+<body class="twikiNoViewPage twikiEditPage" onload="initForm()"><a name="PageTop"></a>%TMPL:END%
+
+
+
+%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
+%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
+
+
+
+%TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
+
+
+
+%TMPL:DEF{"titlehelp"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+
+
+
+%TMPL:DEF{"simpleheader"}%
+---+ <nop>%TOPIC% (edit)
+%BR%
+%TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}%
+<fieldset><legend class="twikiGrayText">[[%TWIKIWEB%.AccessKeys][AccessKeys]]: C = Cancel, Q = Quiet Save, K = Checkpoint, P = Preview, S = Save</legend>
+   <label accesskey="c" for="cancel">
+        <input type="submit" class="twikiSubmit twikiCancel" name="action" id="cancel" value="Cancel" />
+   </label>
+   <label accesskey="q" for="quietsave">
+       <input type="submit" class="twikiSubmit twikiSecondary" name="action" id="quietsave" value="QuietSave" />
+   </label>
+   <label accesskey="k" for="checkpoint">
+        <input type="submit" class="twikiSubmit twikiSecondary" name="action" id="checkpoint" value="Checkpoint" />
+   </label>
+   <label accesskey="p" for="preview">
+        <input type="submit" class="twikiSubmit" name="action" id="preview" value="Preview" />
+   </label>
+   <label accesskey="s" for="save">
+       <input type="submit" class="twikiSubmit" name="action" id="save" value="Save" />
+   </label>
+</fieldset>%TMPL:END%
+
+
+
+%TMPL:DEF{"content"}%
 <form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%TMPL:P{"topbar"}%
-<textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onKeyDown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
+%TMPL:P{"simpleheader"}%<textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onkeydown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 <input type="hidden" name="cmd" value="%CMD%" />     
 See below for help in editing this page.
 <table border="0" cellpadding="2" cellspacing="0">
  <tr>
-  <td><b>-- <nop>%WIKIUSERNAME% - %DATE%</b></td>
+  <td><span class="twikiSig"><b>-- <nop>%WIKIUSERNAME% - %DATE%</b></span></td>
   <td> &nbsp;&nbsp; <code>&lt;==</code> Your signature for easy copy and paste (triple click to select)</td>
  </tr>
 </table>
 %FORMFIELDS%
- %TMPL:P{"topicaction"}%
-%TMPL:P{"standardfooter"}%
-<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#EEEEEE">
- <tr>
-  <td>
-<font color="#333333" size="-1">
-%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%
-</font>
-  </td>
- </tr>
-</table>
-<table width="100%" border="0" cellpadding="5" cellspacing="0">
- <tr>
-  <td>
-   %WEBCOPYRIGHT%
-  </td>
- </tr>
-</table>
-</form>%TMPL:END%
+%TMPL:P{"topicaction"}%
+<div class="twikiHelp">
+%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%</div></form>%TMPL:END%
+
+
+
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%
