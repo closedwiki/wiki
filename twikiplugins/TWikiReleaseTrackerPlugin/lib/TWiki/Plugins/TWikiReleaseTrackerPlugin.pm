@@ -549,6 +549,7 @@ sub listFiles {
 
 sub getFile {
 	my ( $file, $distribution, $copyNumber ) = @_;
+	$file =~ s!^twiki/!!;
 	if ( $distribution eq "localInstallation" ) {
 		return getLocalVersion($file);
 	}
@@ -558,7 +559,7 @@ sub getFile {
 }
 
 sub getLocalVersion {
-	return "../../" . $_[0];
+	return "../" . $_[0];
 }
 
 =pod
@@ -567,7 +568,7 @@ Pick up from CVS if before XXXX/2004, else look in SVN.
 =cut
 sub getDistributionVersion {
 	my ( $file, $distribution, $uniqifier ) = @_;
-	$file =~ s!^twiki/!!;
+
 	use TWiki::Contrib::DistributionContrib::FileFetcher;
 	my $file2 = TWiki::Contrib::DistributionContrib::FileFetcher::fetchDistributionFile($file, $distribution, $uniqifier);
 	return $file2;
