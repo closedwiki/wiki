@@ -176,8 +176,8 @@ sub updateReferingPages
 
     my $result = "";
     my $alphaNum = $TWiki::mixedAlphaNum;
-    my $preTopic = '^|[^${alphaNum}_]';
-    my $postTopic = '$|[^${alphaNum}_]';
+    my $preTopic = '^|[^${alphaNum}_]';		# Start of line or non-alphanumeric
+    my $postTopic = '$|[^${alphaNum}_]';	# End of line or non-alphanumeric
     my $spacedTopic = TWiki::Search::spacedTopic( $oldTopic );
 
     while ( @refs ) {
@@ -276,7 +276,7 @@ sub checkPermissions
 
 
 #==========================================
-# Check that various web and topics exist or don't exist as required
+# Check that various webs and topics exist or don't exist as required
 sub checkExist
 {
    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $oldFileName, $newFileName ) = @_;
