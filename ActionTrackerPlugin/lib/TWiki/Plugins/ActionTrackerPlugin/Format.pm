@@ -80,7 +80,7 @@ use integer;
     if ( $changeFields ) {
       $changeFields =~ s/\s//go;
       $changeFields =~ s/\$//go;
-      @{$this->{CHANGEFIELDS}} = split( /,/, $changeFields );
+      @{$this->{CHANGEFIELDS}} = split( /,\s*/, $changeFields );
     }
 
     if ( $orient && $orient eq "rows" ) {

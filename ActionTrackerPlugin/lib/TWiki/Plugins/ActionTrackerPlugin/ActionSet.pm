@@ -94,7 +94,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
     my ( $this, $order ) = @_;
     if ( defined( $order ) ) {
       $order =~ s/[^\w,]//g;
-      @_sortfields = split( /,/, $order );
+      @_sortfields = split( /,\s*/, $order );
       @{$this->{ACTIONS}} = sort {
 	foreach my $sf ( @_sortfields ) {
 	  my ( $x, $y ) = ( $a->{$sf}, $b->{$sf} );
@@ -239,7 +239,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
     my $action;
 
     foreach $action ( @{$this->{ACTIONS}} ) {
-      my @persons = split( /,/, $action->{who} );
+      my @persons = split( /,\s*/, $action->{who} );
       foreach my $person ( @persons ) {
 	$whos->{$person} = 1;
       }

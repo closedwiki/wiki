@@ -150,7 +150,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	foreach my $n ( @names ) {
 	  $n = _canonicalName( $n );
 	}
-	$this->{$key} = join( ',', @names );
+	$this->{$key} = join( ", ", @names );
       } elsif ( $type eq "date" ) {
 	if ( defined( $val )) {
 	  $this->{$key} = Time::ParseDate::parsedate( $val, %pdopt );
@@ -448,7 +448,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     foreach my $name ( split( /\s*,\s*/, $val )) {
       my $who = _canonicalName( $name );
       $who =~ s/\./\\./go;
-      if ( $this->{$vbl} =~ m/$who,/ || $this->{$vbl} =~ m/$who$/) {
+      if ( $this->{$vbl} =~ m/$who,\s*/ || $this->{$vbl} =~ m/$who$/) {
 	return 1;
       }
     }
