@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043012255" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1048318506" format="1.0" version="1.11"}%
 %META:TOPICPARENT{name="WebHome"}%
----++ %WIKITOOLNAME%.%WEB% Web Preferences
+---++ <nop>%WEB% Web Preferences
 
-The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
+The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
 
 
 __Preferences:__
@@ -14,7 +14,7 @@ __Preferences:__
 		* Set WEBBGCOLOR = #D0D0D0
 
 	* List this web in the %TWIKIWEB%.SiteMap:
-		* If yes, Set SITEMAPLIST = =on=, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. %WEB%.Topic links.
+		* If yes, Set SITEMAPLIST = =on=, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. <nop>%WEB%.Topic links.
 		* Set SITEMAPLIST = on
 		* Set SITEMAPWHAT = Sandbox test area with all features enabled. 
 		* Set SITEMAPUSETO = ...experiment in an unrestricted hands-on web. 
@@ -28,7 +28,7 @@ __Preferences:__
 		* %TWIKIWEB%.TWikiForms: How to enable form(s)
 		* Set WEBFORMS = 
 
-	* Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the %WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
+	* Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
 		* Set DENYWEBVIEW = 
 		* Set ALLOWWEBVIEW = 
 		* Set DENYWEBCHANGE = 
