@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1023240035" format="1.0" version="1.56"}%
+%META:TOPICINFO{author="PeterThoeny" date="1030259897" format="1.0" version="1.57"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -135,7 +135,7 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
 	 | =selection="%<nop>WEB%"= | Current value to be selected in list | =section="%<nop>WEB%"= |
 	 Examples: <br /> =%<nop>WEBLIST{"	* [<nop>[$name.%HOMETOPIC%]]"}%= creates a bullet list of all webs.
 <br />
-=%<nop>WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}%= Dropdown of all public Webs + Trash Web, current Web highlighted.
+=%<nop>WEBLIST{"&lt;option $marker value=$qname&gt;$name&lt;/option&gt;" webs="Trash,public" selection="%WEB%" separator=" "}%= Dropdown of all public Webs + Trash Web, current Web highlighted.
 </td>
 </tr><tr>
   <td> =%<nop>GMTIME%= </td>
