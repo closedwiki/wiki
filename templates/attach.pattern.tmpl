@@ -53,31 +53,31 @@
 <div class="twikiTopic">
 %TMPL:P{"previousdetails"}%
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
-<table class="twikiUploadTable" width="100%">%TMPL:P{"previous"}% 
+<table class="twikiVersatileTable" width="100%">%TMPL:P{"previous"}% 
 	<tr>
-		<td class="title input">
+		<th class="twikiMainCol">
 			Local file 
-		</td>
-		<td class="input">
+		</th>
+		<td class="twikiMainCol">
 			<input type="hidden" name="filename" value="%FILENAME%" /><input type="file" name="filepath" value="%FILEPATH%" size="30" /> 
 		</td>
-		<td class="help input">
+		<td class="help twikiMainCol">
 Upload up to %ATTACHFILESIZELIMIT% KB.
 		</td>
 	</tr>
 	<tr>
-		<td class="title">
+		<th>
 			Comment 
-		</td>
+		</th>
 		<td>
 			<input class="comment" type="text" name="filecomment" value="%FILECOMMENT%" maxlength="30" size="50" /> 
 		</td>
 		<td class="help"></td>
 	</tr>
 	<tr>
-		<td class="title">
+		<th>
 			Link 
-		</td>
+		</th>
 		<td>
 			<input type="checkbox" name="createlink" %ATTACHLINKBOX% /> Create a link to the attached file
 		</td>
@@ -86,9 +86,9 @@ Images will be displayed, for other attachments a link will be created.
 		</td>
 	</tr>
 	<tr>
-		<td class="title">
+		<th>
 			Hide file 
-		</td>
+		</th>
 		<td>
 			<input type="checkbox" name="hidefile" %HIDEFILE% /> Do not show attachment in table
 		</td>

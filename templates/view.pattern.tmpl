@@ -2,9 +2,9 @@
 
 
 
-%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="twikiMiddleContainer">%TMPL:P{"leftbar"}%<div class="twikiMain">%TMPL:P{"toolbar"}%
-%TMPL:P{"content"}%
-%TMPL:P{"standardfooter"}%</div></div>%TMPL:P{"bottombar"}%%TMPL:END%
+
+%TMPL:DEF{"bodystart"}%
+<body class="twikiViewPage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
 
 
 
@@ -37,7 +37,7 @@
 
 
 
-%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><span class="twikiHidden"><br /></span><div class="twikiTopicAction">%EDITTOPIC% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach image or document</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print%REVARG%">Print version</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on">Raw text</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%">Advanced topic actions</a><br />Revisions: %REVISIONS% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Total page history</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Backlinks</a></div>%TMPL:END%
+%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><span class="twikiHidden"><br /></span><div class="twikiTopicAction">%EDITTOPIC% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach image or document</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print%REVARG%">Print version</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on">Raw text</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%">More topic actions</a><br />Revisions: %REVISIONS% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Total page history</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Backlinks</a></div>%TMPL:END%
 
 
 

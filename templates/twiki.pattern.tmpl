@@ -50,7 +50,7 @@
 
 
 
-%TMPL:DEF{"templatecustomstyle"}%<style></style>%TMPL:END%
+%TMPL:DEF{"templatecustomstyle"}%<style type="text/css" media="all"></style>%TMPL:END%
 
 
 
@@ -76,7 +76,7 @@
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="twikiViewPage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+<body onload="initPage()"><a name="PageTop"></a>%TMPL:END%
 
 
 
@@ -98,25 +98,27 @@
 
 
 
+%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="twikiMiddleContainer">%TMPL:P{"leftbar"}%<div class="twikiMain">%TMPL:P{"toolbar"}%
+%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%</div></div>%TMPL:P{"bottombar"}%%TMPL:END%
 
 
 
-
-
-
-%TMPL:DEF{"main"}%
-%TMPL:P{"topbar"}%
-%TMPL:P{"sidebar"}%<div class="twikiMain">
+%TMPL:DEF{"content"}%
 <div class="twikiTopic">
-%TMPL:P{"webaction"}%
-<p>
+---++ %TMPL:P{"webaction"}%
+%BR%
 ---+ %TMPL:P{"heading"}%
-<p>
+%BR%
 %TMPL:P{"message"}%
 </div>
-%TMPL:P{"topicaction"}%
-%TMPL:P{"standardfooter"}%
-</div>%TMPL:END%
+<div class="twikiTopicAction">
+<table>
+<tr>
+<td class="twikiCancelCol">%TMPL:P{"topicaction"}%</td>
+<td class="twikiSubmitCol"></td>
+<td class="twikiAddCol"></td>
+</tr></table></div>%TMPL:END%
 
 %TMPL:DEF{"oops"}%
 %TMPL:P{"htmldoctype"}%
