@@ -1848,7 +1848,7 @@ sub handleIncludeUrl
             $text = applyPatternToIncludedText( $text, $thePattern ) if( $thePattern );
             return $text;
         }
-        return showError( "Error: Unsupported file type, must be .html or .txt" );
+        # fall through; try to include file over http based on MIME setting
     }
 
     # RNF 22 Jan 2002 Handle http://user:pass@host
