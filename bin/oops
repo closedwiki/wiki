@@ -21,7 +21,9 @@ use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
 
-$query= new CGI;
+use strict;
+
+my $query = new CGI;
 
 &main();
 
@@ -32,7 +34,7 @@ sub main
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
-    ( $topic ) = 
+    my( $topic ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
     my $tmplName = $query->param( 'template' );
