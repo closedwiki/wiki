@@ -1,3 +1,7 @@
+---## TWiki Variables
+
+---+++ Predefined Variables
+
 %WIKITOOLNAME% expands the following variables enclosed in % percent signs:
 
 <table border="1"><tr>
@@ -131,11 +135,13 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
 Example: =<b>%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%</b>= </td>
 </tr><tr>
   <td> =%<nop>VAR{"NAME" web="Web"}%= </td>
-  <td> Get a preference value from another web then the current one. Example: To get =%<nop>WEBBGCOLOR%= of the %MAINWEB% web write =%<nop>VAR{"WEBBGCOLOR" web="%MAINWEB%"}%=, is =<b>%VAR{"WEBBGCOLOR" web="%MAINWEB%"}%</b>= </td>
+  <td> Get a preference value from a web other then the current one. Example: To get =%<nop>WEBBGCOLOR%= of the %MAINWEB% web write =%<nop>VAR{"WEBBGCOLOR" web="%MAINWEB%"}%=, is =<b>%VAR{"WEBBGCOLOR" web="%MAINWEB%"}%</b>= </td>
 
 </tr></table>
 
 [1] __Note__: A web can be excluded from a =web="all"= search if you define a =NOSEARCHALL=on= variable in its %WEBPREFSTOPIC%.
+
+---+++ Preferences Variables
 
 Additional variables are defined in the preferences ( site-level ( __SL__ ) in %TWIKIWEB%.%WIKIPREFSTOPIC%, web-level ( __WL__ ) in %WEBPREFSTOPIC% of each web, and user level ( __UL__ ) preferences in individual user topics):
 
@@ -226,4 +232,4 @@ __Notes:__
 	* Additional preferences variables can be defined on all three level as needed. Example:
 		* =<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif=
 
--- %MAINWEB%.PeterThoeny - 01 Mar 2001 <br>
+-- PeterThoeny - 15 Mar 2001 <br>
