@@ -47,6 +47,8 @@ use TWiki::Contrib::Map;
     }
     $this->{format} = $format;
 
+    $this->{help_undefined} = $attrs->get( "help" );
+
     return bless( $this, $class );
   }
 
@@ -146,13 +148,15 @@ use TWiki::Contrib::Map;
 	  }
 	}
 
-	if (!defined( $ret )) {
-      $ret = "<font color=\"red\">Undefined field <nop>$vbl</font> _(defined fields are: <code>" . join ( ', <nop>', grep(!/^\./, $map->getKeys()) ) . "</code>)_";
+	if ( !defined( $ret )) {
+        if ( $this->{help_undefined} ) {
+            $ret = "<font color=\"red\">Undefined field <nop>$vbl</font> _(defined fields are: <code>" . join ( ', <nop>', grep(!/^\./, $map->getKeys()) ) . "</code>)_";
+        } else {
+            $ret = "";
+        }
     }
-    if ( defined( $cmap )) {
+    if ( defined( $cmap ) && $ret ne "" ) {
       $ret = $cmap->map( $ret );
-    } else {
-      $ret = " $ret ";
     }
     return $ret;
   }
@@ -161,7 +165,11 @@ use TWiki::Contrib::Map;
     my ( $this, $vbl, $fmt, $map, $cmap ) = @_;
     my $table = $map->get( $vbl );
     if ( !defined( $table )) {
-      return "<font color=\"red\">UNDEFINED field <nop>$vbl</font> _(defined fields are: <code>" . join ( ', <nop>', $map->getKeys()) . "</code>)_";
+        if ( $this->{help_undefined} ) {
+            return "<font color=\"red\">UNDEFINED field <nop>$vbl</font> _(defined fields are: <code>" . join ( ', <nop>', $map->getKeys()) . "</code>)_";
+        } else {
+            return "";
+        }
     }
     my $attrs = new TWiki::Contrib::Map( $fmt );
     my $format = new FormQueryPlugin::TableFormat( $attrs );

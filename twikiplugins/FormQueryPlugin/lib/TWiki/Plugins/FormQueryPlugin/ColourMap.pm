@@ -7,52 +7,51 @@ use strict;
 # colour map, it has now been morphed to be more powerful, with
 # the ability to embed the matched string inside a more complex
 # formatting statement.
-{ package FormQueryPlugin::ColourMap;
+package FormQueryPlugin::ColourMap;
 
-  # Load the colour map by parsing a newline-separated list of
-  # mappings from re to colour. For example,
-  # * /pass/ = green
-  # * /fail.*/ = #FF0000
-  # * /[Nn]ot [Ss]tarted/ = yellow
-  #
-  sub new {
+# Load the colour map by parsing a newline-separated list of
+# mappings from re to colour. For example,
+# * /pass/ = green
+# * /fail.*/ = #FF0000
+# * /[Nn]ot [Ss]tarted/ = yellow
+#
+sub new {
     my ( $class, $text ) = @_;
     my $this = {};
 
     foreach my $line ( split( /\n/, $text )) {
-      if ( $line =~ m/\s+\*\s+\/(.*?)\/\s*=\s*(.*)$/ ) {
-	my $e = { expr=>"$1", colour=>"$2" };
-	push( @{$this->{map}}, $e );
-      }
+        if ( $line =~ m/\s+\*\s+\/(.*?)\/\s*=\s*(.*)$/ ) {
+            $this->{map}{$1} = $2;
+        }
     }
 
     return bless( $this, $class );
-  }
+}
 
-  # PUBLIC map the test string into a formatted string
-  # Always maps the first map statement that the string matches.
-  sub map {
+# PUBLIC map the test string into a formatted string
+# Always maps the first map statement that the string matches.
+sub map {
     my ( $this, $test ) = @_;
 
-    foreach my $entry ( @{$this->{map}} ) {
-      my $e = $entry->{expr};
-      if ( $test =~ m/^$e$/ ) {
-	# SimonHardyFrancis; extend to expand $1..$n in colourmap entry
-	if ( $test =~ m/^($e)$/ ) {
-	  my $c = $entry->{colour};
-	  my @matches;
-	  foreach ( 1..$#+ ) {
-	    $matches[$_] = substr($test, $-[$_], $+[$_] - $-[$_]);
-	  }
-	  foreach my $index ( 1..$#matches ) {
-	    $c =~ s/\$$index/$matches[$index]/g;
-	  }
-	  return $c;
-	}
-      }
+    no strict 'refs'; # for $$i
+    foreach my $e ( keys %{$this->{map}} ) {
+        # expand $1..$n in colourmap entry
+        if ( $test =~ m/^$e$/ ) {
+            my @matches;
+            my $i = 1;
+            while ( defined( $$i )) {
+                push( @matches, $$i );
+                $i++;
+            }
+            my $c = $this->{map}{$e};
+            while ( --$i ) {
+                $c =~ s/\$$i/$matches[$i-1]/g;
+            }
+            return $c;
+        }
     }
+
     return $test;
-  }
 }
 
 1;

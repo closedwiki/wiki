@@ -5,6 +5,7 @@ BEGIN { unshift @INC, '.'; require 'setlib.cfg' }
 use CGI::Carp qw( fatalsToBrowser );
 use CGI;
 use TWiki;
+use TWiki::Plugins::FormQueryPlugin::WebDB;
 
 my $query = new CGI;
 
