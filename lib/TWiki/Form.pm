@@ -118,9 +118,15 @@ sub getPossibleFieldValues
 
 # ============================
 # Get array of field definition, given form name
+# If form contains Web this overrides webName
 sub getFormDef
 {
     my( $webName, $form ) = @_;
+    
+    if( $form =~ /^(.*)\.(.*)$/ ) {
+        $webName = $1;
+        $form = $2;
+    }
     
     my @fieldDefs = ();    
    
