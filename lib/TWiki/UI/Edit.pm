@@ -225,32 +225,6 @@ sub edit {
     $tmpl =~ s/%FORMFIELDS%//go;
   }
 
-  # simplified signature. ColasNahaboo, v3 - 13 Jun 2002
-  my( $sec, $min, $hour, $day, $mon, $year ) = gmtime( time() );
-  my $wikiName =  &TWiki::userToWikiName( $userName, 1);
-  my $homePage = $wikiUserName;
-  my $initials = $wikiName; 
-  if ( $wikiName ne "TWikiGuest" ) {
-    $initials =~ s/[a-z0-9]//go;
-  } else {
-    $initials="Guest";
-  }
-  if (&TWiki::Store::topicExists($TWiki::mainWebname, $wikiName)) {
-    foreach (split( /\n/, &TWiki::Store::readWebTopic($TWiki::mainWebname, 
-                                                      $wikiName))) {
-      if (/^\s\*\sInitials:\s+([^\s]+)/) { # Initials field
-        $initials=$1; 
-        TWiki::handleInternalTags( $initials, $webName, $topic);
-        last;
-      }
-    }
-  } else { # no home page? no link to avoid creating one by mistake
-    $homePage = "Test.$wikiName";
-  }
-  my $simplesig = "[[" . $homePage . "#" . sprintf("%.2u",$day) . 
-    $TWiki::isoMonth[$mon] . $year . "][" . $initials . "]]";
-  $tmpl =~ s/%INITIALS%/$simplesig/go;
-
   $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
   $tmpl =~ s/%TEXT%/$text/go;
   $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
