@@ -16,26 +16,28 @@
 #include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <errno.h>
 
 #ifdef SDBM
 #include "sdbm/sdbm.h"
-#define DBM_OPENN(_f,_m,_fl); sdbm_openN((_f), (_m), (_p));
+#define DBM_OPEN(_f,_m,_fl); sdbm_openN((_f), (_m), (_p));
 #define DBM_CLOSE(_db) sdbm_close(_db)
 #define DBM_FETCH(_k,_d) sdbm_fetch((_k),(_d))
-#define DATUM datum
-#define FIRSTKEY(db) sdbm_firstkey(db)
-#define NEXTKEY(db,d) sdbm_nextkey(db)
-#define FREEDATUM(x)
+#define DBM_DATUM datum
+#define DBM_FIRSTKEY(db) sdbm_firstkey(db)
+#define DBM_NEXTKEY(db,d) sdbm_nextkey(db)
+#define DBM_FREE(x)
 #else
 #include <tdb.h>
 #define DBM TDB_CONTEXT
 #define DBM_OPEN(_f,_m,_p) tdb_open((_f),0,TDB_DEFAULT,(_m),(_p))
 #define DBM_CLOSE(_db) tdb_close(_db)
 #define DBM_FETCH(_k,_d) tdb_fetch((_k),(_d))
-#define FIRSTKEY(db) tdb_firstkey(db)
-#define NEXTKEY(db,d) tdb_nextkey(db,d)
-#define DATUM TDB_DATA
-#define FREEDATUM(x) (x).dptr ? free((x).dptr) : 0
+#define DBM_FIRSTKEY(db) tdb_firstkey(db)
+#define DBM_NEXTKEY(db,d) tdb_nextkey(db,d)
+#define DBM_DATUM TDB_DATA
+#define DBM_FREE(x) (x).dptr ? free((x).dptr) : 0
+#define DBM_ERROR(_db) tdb_error(_d)
 #endif
 
 /*
@@ -45,9 +47,9 @@ static char dbfile[512];
 
 static int barred(char* path, const char* mode, const char* user,
 				  DBM* db);
-static DATUM getKey(const char* path, const char* ad,
+static DBM_DATUM getKey(const char* path, const char* ad,
 						  DBM* db);
-static int isInList(DATUM list, const char* user,
+static int isInList(DBM_DATUM list, const char* user,
 					DBM* db, int depth);
 static int isInGroup(const char* group, const char*user,
 					 DBM* db, int depth);
@@ -57,7 +59,7 @@ static int isAccessible(DBM* db, const char* web, const char* topic,
 #ifdef PROT_PRINT
 static char dumpdata[255];
 
-static char* dump(DATUM d) {
+static char* dump(DBM_DATUM d) {
   strncpy(dumpdata, d.dptr, d.dsize);
   dumpdata[d.dsize] = 0;
   return dumpdata;
@@ -79,7 +81,9 @@ int PROT_setDBpath(const char* dbname) {
 int PROT_accessible(const char* web, const char* topic,
 			   const char* mode, const char* user) {
   DBM* db = NULL;
-  DATUM d;
+#ifdef PROT_PRINT
+  DBM_DATUM d;
+#endif
   int ret;
 
   if (mode == NULL)
@@ -90,17 +94,17 @@ int PROT_accessible(const char* web, const char* topic,
   if (db == NULL) {
 	/* No DB, access is permitted */
 #ifdef PROT_PRINT
-	fprintf(stderr, "Can't open %s\n", dbfile);
+	fprintf(stderr, "Can't open %s: %s\n", dbfile, strerror(errno));
 #endif
 	return 1;
   }
 
 #ifdef PROT_PRINT
   fprintf(stderr, "<DB %s>\n", dbfile);
-  d = FIRSTKEY(db);
+  d = DBM_FIRSTKEY(db);
   while(d.dptr && d.dsize) {
 	fprintf(stderr,"\tKey %s\n", dump(d));
-	d = NEXTKEY(db,d);
+	d = DBM_NEXTKEY(db,d);
   }
   fprintf(stderr, "</DB>\n");
 #endif
@@ -149,7 +153,7 @@ static int isAccessible(DBM* db, const char* web, const char* topic,
 
 static int barred(char* path, const char* mode, const char* user,
 		   DBM* db) {
-  DATUM list;
+  DBM_DATUM list;
 
   strcat(path, ":");
   strcat(path, mode);
@@ -164,10 +168,10 @@ static int barred(char* path, const char* mode, const char* user,
 	if (list.dptr) {
 	  /* user must not be in deny list */
 	  if (isInList(list, user, db, 0)) {
-		FREEDATUM(list);
+		DBM_FREE(list);
 		return 1;
 	  }
-	  FREEDATUM(list);
+	  DBM_FREE(list);
 	}
   }
 
@@ -178,18 +182,18 @@ static int barred(char* path, const char* mode, const char* user,
   if (list.dptr) {
 	/* user must be in good list */
 	if (user == NULL || !isInList(list, user, db, 0)) {
-	  FREEDATUM(list);
+	  DBM_FREE(list);
 	  return 1;
 	}
-	FREEDATUM(list);
+	DBM_FREE(list);
   }
 
   return 0;
 }
 
-static DATUM getKey(const char* path, const char* ad, DBM* db) {
+static DBM_DATUM getKey(const char* path, const char* ad, DBM* db) {
   char keyn[255];
-  DATUM key;
+  DBM_DATUM key;
 
   strcpy(keyn, path);
   strcat(keyn, ad);
@@ -206,7 +210,7 @@ static DATUM getKey(const char* path, const char* ad, DBM* db) {
  * of the number of groups opened, and will give up if it reaches 100
  */
 static int isInGroup(const char* group, const char*user, DBM* db, int depth) {
-  DATUM expanded;
+  DBM_DATUM expanded;
   int ret;
 
   if (depth > 99) {
@@ -221,12 +225,12 @@ static int isInGroup(const char* group, const char*user, DBM* db, int depth) {
   ret = 0;
   if (expanded.dptr) {
 	ret = isInList(expanded, user, db, depth);
-	FREEDATUM(expanded);
+	DBM_FREE(expanded);
   }
   return ret;
 }
 
-static int isInList(DATUM list, const char* user, DBM* db, int depth) {
+static int isInList(DBM_DATUM list, const char* user, DBM* db, int depth) {
   const char* start = list.dptr;
   const char* stop = list.dptr + list.dsize;
   const char* end;

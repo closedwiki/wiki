@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use TDB_File;
 
-die "Usage: $0 <DAVLockDB>" unless scalar($ARGV);
+die "Usage: $0 <DAVLockDB>" unless $ARGV[0];
 
 $DAVLockDB = $ARGV[0];
 
