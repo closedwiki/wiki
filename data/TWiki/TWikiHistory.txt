@@ -44,10 +44,11 @@
 	  =| This | is | a table | with | cells |=
 	  | This | is | a table | with | cells |
 	* Main.PeterThoeny - 31 Aug 1999: Fixed Y2K bug. (Date in year 2000 had wrong format.)
+	* Main.PeterThoeny - 03 Oct 1999: Limit the number of revisions shown at the bottom of the topic. Example: <br> Topic <nop>%TOPIC% . { ..... | <A href="../../rdiff/%WEB%/%TOPIC%">Diffs</A> | r1.10 | <A href="../../rdiff/%WEB%/%TOPIC%?rev1=1.10&rev2=1.9">&gt;</A> | <A href="../../view/%WEB%/%TOPIC%?rev=1.9">r1.9</A> | <A href="../../rdiff/%WEB%/%TOPIC%?rev1=1.9&rev2=1.8">&gt;</A> | <A href="../../view/%WEB%/%TOPIC%?rev=1.8">r1.8</A> | <A href="../../rdiff/%WEB%/%TOPIC%?rev1=1.8&rev2=1.7">&gt;</A> | <A href="../../view/%WEB%/%TOPIC%?rev=1.7">r1.7</A> | <A href="../../oops/%WEB%/%TOPIC%?template=oopsrev&param1=1.10">&gt;...</A> } <br> Additional revisions can be selected by pressing the =>...= link. 
 
 *Related Topics*
 	* TWikiDocumentation has implementation details.
 	* TWikiPlannedFeatures has a list of planned features. 
 	* TWikiEnhancementRequests is the place where you can add your enhancement requests. 
 
--- Main.PeterThoeny - 31 Aug 1999 <br>
+-- Main.PeterThoeny - 03 Oct 1999 <br>
