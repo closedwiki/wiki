@@ -28,7 +28,7 @@ use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
 
-open(STDERR,'>&STDOUT');   # redirect error to browser
+#open(STDERR,'>&STDOUT');   # redirect error to browser
 $| = 1;                    # no buffering
 
 # initialize variables
@@ -58,7 +58,7 @@ sub main
         if( $tmp ne "" ) {
             $logDate = "$tmp";
         }
-        print "Content-type: text/html\n\n";
+        TWiki::writeHeader( $cgiQuery );
         print "<html>\n<head>\n<title>TWiki: Create Usage Statistics</title>\n";
         print "</head>\n<body>\n";
     } else {
@@ -143,9 +143,8 @@ sub processWeb
 {
     my( $thePathInfo, $theRemoteUser, $theTopic, $theLogMonthYear, @theLogList ) = @_;
 
-    # initialize wiki
     my ( $topic, $webName, $dummy, $userName, $dataDir ) = 
-        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic );
+        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, "", $cgiQuery );
     $dummy = "";  # to suppress warning
 
     printMsg( "* Checking TWiki.$webName web" );
