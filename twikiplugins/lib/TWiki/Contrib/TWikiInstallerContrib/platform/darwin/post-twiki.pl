@@ -8,6 +8,8 @@ use File::Basename qw( basename );
 # TODO notes:
 # * tighten up templates directory permissions (chmod -R o-w twiki/templates)
 
+my $startupTopic = "";
+
 BEGIN {
     use Config;
     my $localLibBase = cwd() . "/cgi-bin/lib/CPAN/lib/site_perl/" . $Config{version};
@@ -61,6 +63,8 @@ if ( -e "TWikiInstallationReport.html" )
 			    },
 	) ) { #unlink "${topic}.html" 
 	}
+    
+    $startupTopic = "TWiki.$topic";
 }
 
 ################################################################################
@@ -72,6 +76,10 @@ Header( "Location: http://" . $_SERVER[HTTP_HOST] . "/cgi-bin/twiki/view/" );
 ?>
 EOF
 close( INDEX_PHP );
+
+################################################################################
+
+system( open => "http://`hostname`/~`whoami`/cgi-bin/twiki/view/$startupTopic" );
 
 ################################################################################
 ################################################################################
