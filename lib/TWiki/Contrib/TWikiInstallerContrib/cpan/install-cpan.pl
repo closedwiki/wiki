@@ -32,6 +32,11 @@ BEGIN {
 
 installLocalModules({
     dir => $cpan,
+    config => {
+	'XML::SAX' => [ qw( Y ) ],
+	'Data::UUID' => [ qw( /var/tmp 0007 ) ],
+	'GD' => [ qw( /sw/lib y y y ) ],
+    },
     # TODO: update to use same output as =cpan/calc-twiki-deps.pl=
     modules => [ @ARGV ? @ARGV : qw( 
 				     XML::Parser XML::Simple 
@@ -56,10 +61,12 @@ installLocalModules({
 				     XML::NamespaceSupport XML::SAX XML::LibXML::Common XML::LibXML 
 				     XML::LibXSLT Cache::Cache String::CRC
 				     Data::UUID Safe Language::Prolog XMLRPC::Transport::HTTP
+				     GD 
+				     Image::LibRSVG
 				     ) ],
-# GD Image::LibRSVG
-# Data::UUID and XML::SAX require pressing ENTER to provide default answers to several questions
 });
+
+# Image::LibRSVG
 
 ################################################################################
 ################################################################################
