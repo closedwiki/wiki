@@ -40,7 +40,7 @@ $TWiki::UI::Register::password = "foo";
 		#test_registerIllegitimateBypassApprove
                 #test_registerVerifyAndFinish
 
-#our @TESTS = qw(test_bulkRegister);
+our @TESTS = qw(test_bulkRegister);
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -83,6 +83,8 @@ sub tear_down {
 
     system "rm -rf $TWiki::dataDir/$temporaryWeb"; # smell - deleteweb
     system "rm -rf $TWiki::pubDir/$temporaryWeb"; 
+
+    deleteUsers('TestBulkUser1', 'TestBulkUser2', 'TestBulkUser3'); # should be in test_bulkRegister SMELL
 
     #  system ("ls -la ".$file);
     # print "\n== done ==\n";
@@ -494,7 +496,7 @@ EOM
     my $regTopic = 'UnprocessedRegistrations2';
     
     my $logTopic = 'UnprocessedRegistrations2Log';
-    my $file = $TWiki::dataDir.$regTopic.'.txt';
+    my $file = $TWiki::dataDir.'/'.$temporaryWeb.'/'.$regTopic.'.txt';
     my $fh = new FileHandle;
     
     die "Can't write $file" unless ($fh->open(">".$file));
@@ -522,16 +524,28 @@ EOM
     
     try {
         TWiki::UI::Register::bulkRegister($session)
+
     } catch TWiki::UI::OopsException with {
         my $e = shift;
         $self->assert_matches(qr/Moved.*$logTopic/, $e->{-text});
+
     } catch Error::Simple with {
         my $e = shift;
         $self->assert(0, $e->stringify);
     } otherwise {
         $self->assert(0, "expected an oops redirect");
     }
-      # test users will be deleted as they are in the temporary web
+
+}
+
+sub deleteUsers {
+  my (@users) = @_;
+  print "Cleaning up: ".join(", ", @users);
+  foreach my $user (@users) {
+    my $file = $TWiki::dataDir.'/'.$peopleWeb.'/'.$user.'.txt';
+    print "deleting '$file'\n";
+    unlink $file || die "Can't delete $file";
+  }
 }
 
 sub test_buildRegistrationEmail {
