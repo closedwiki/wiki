@@ -143,7 +143,8 @@ sub main
         $text =~ s/%DATE%/$foo/go;
         $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
         $text =~ s/%URLPARAM{(.*?)}%/TWiki::handleUrlParam($1)/geo;  # expand URL parameters
-        $text =~ s/%NOP%//go;  # Remove filler (use it to prevent search from hitting a template)
+        $text =~ s/%NOP%//go;  # Remove filler: Use it to prevent search from hitting a template,
+        $text =~ s/%NOP{.*?}%//gos;  # or to remove access control at time of topic instantiation
     }
     
     # parent setting

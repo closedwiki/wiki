@@ -92,7 +92,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "09 Aug 2002";
+$wikiversion      = "30 Oct 2002";
 
 # ===========================
 # read the configuration part
@@ -1483,6 +1483,7 @@ sub handleInternalTags
     $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit$scriptSuffix/%WEB%/%TOPIC%\?t=".time()!geo;
 
     $_[0] =~ s/%NOP%/<nop>/go;
+    $_[0] =~ s/%NOP{(.*?)}%/$1/gos;  # remove NOP tag in template topics but show content
     $_[0] =~ s/%TMPL\:P{(.*?)}%/&handleTmplP($1)/geo;
     $_[0] =~ s/%SEP%/&handleTmplP('"sep"')/geo;
     $_[0] =~ s/%HTTP_HOST%/&handleEnvVariable('HTTP_HOST')/geo;
