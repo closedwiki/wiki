@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "13 May 2003";
+$wikiversion      = "17 Jun 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2213,46 +2213,131 @@ sub emitList {
     return $result;
 }
 
-# =========================
+# ========================
+sub initTableData {
+    my ( $tableData ) = @_;
+    %$tableData = ("rows"=>[], "cols"=>[], "rowspan"=>[]);
+}
+
+# ========================
 sub emitTR {
-    my ( $thePre, $theRow, $insideTABLE ) = @_;
+    my ( $thePre, $row ) = @_;
+
+    my $result = "$thePre<tr>";
+    foreach my $col (@$row) {
+        my $tag = $$col{"tag"};
+        my $attr = $$col{"attr"};
+        my $text = $$col{"text"};
+        if ($tag) {
+            $result .= "<$tag$attr> $text </$tag>";
+        }
+    }
+    $result .= "</tr>";
+
+    return $result;
+}
+
+# ========================
+sub doTableRowspan {
+    my ( $rows, $span, $col ) = @_;
+
+    my $numRows = scalar(@$rows);
+    $$rows[$numRows - $span][$col]{"attr"} .= " rowspan=\"$span\"";
+}
+
+# ========================
+sub flushTable {
+    my ( $thePre, $tableData ) = @_;
+
+    my $rows = $$tableData{"rows"};
+    my $rowspan = $$tableData{"rowspan"};
+
+    for(my $i = 0; $i < @$rowspan; $i++) {
+        if ($$rowspan[$i] > 0) {
+            my $span = $$rowspan[$i]+1;
+            doTableRowspan($rows, $span, $i);
+        }
+    }
+    
+    my $result = "";
+    foreach my $row (@$rows) {
+        $result .= emitTR( $thePre, $row );
+    }
+    $result .= "\n$thePre</table>\n";
+    initTableData($tableData);
+    return $result;
+}
+
+# ========================
+sub processTR {
+    my ( $thePre, $theRow, $insideTABLE, $tableData ) = @_;
 
     my $text = "";
-    my $attr = "";
-    my $l1 = 0;
-    my $l2 = 0;
-    if( $insideTABLE ) {
-        $text = "$thePre<tr>";
-    } else {
-        $text = "$thePre<table border=\"1\" cellspacing=\"0\" cellpadding=\"1\"> <tr>";
+    unless( $insideTABLE ) { # start a new table if necessary
+        $text .= "$thePre<table border=\"1\" cellspacing=\"0\" cellpadding=\"1\"> ";
     }
     $theRow =~ s/\t/   /g;  # change tabs to space
     $theRow =~ s/\s*$//;    # remove trailing spaces
     $theRow =~ s/(\|\|+)/$TranslationToken . length($1) . "\|"/ge;  # calc COLSPAN
+
+    my $colnum = 0;
+    my $rowData = [];
+    my $rows = ${$tableData}{"rows"};
+    
     foreach( split( /\|/, $theRow ) ) {
-        $attr = "";
+        my $l1 = 0;
+        my $l2 = 0;
+        my $attr = "";
+        my $colData = {};
+        my $colInc = 1;
         #AS 25-5-01 Fix to avoid matching also single columns
         if ( s/$TranslationToken([0-9]+)// ) { # No o flag for mod-perl compatibility
             $attr = " colspan=\"$1\"" ;
+            $colInc = $1;
         }
-        s/^\s+$/ &nbsp; /;
-        /^(\s*).*?(\s*)$/;
-        $l1 = length( $1 || "" );
-        $l2 = length( $2 || "" );
-        if( $l1 >= 2 ) {
-            if( $l2 <= 1 ) {
-                $attr .= ' align="right"';
-            } else {
-                $attr .= ' align="center"';
-            }
-        }
-        if( /^\s*(\*.*\*)\s*$/ ) {
-            $text .= "<th$attr bgcolor=\"#99CCCC\"> $1 </th>";
+        if (/^\s*\^\s*$/) {
+            $$tableData{"rowspan"}[$colnum]++;
         } else {
-            $text .= "<td$attr> $_ </td>";
+            for (my $c = $colnum; $c < ($colnum+$colInc); $c++) {
+                if ($$tableData{"rowspan"}[$c]) {
+                    my $span = $$tableData{"rowspan"}[$c] + 1;
+                    $$tableData{"rowspan"}[$c] = 0;
+                    doTableRowspan($rows, $span, $c);
+                }
+            }
+            s/^\s+$/ &nbsp; /;
+            /^(\s*).*?(\s*)$/;
+            $l1 = length( $1 || "" );
+            $l2 = length( $2 || "" );
+            if( $l1 >= 2 ) {
+                if( $l2 <= 1 ) {
+                    $attr .= ' align="right"';
+                } else {
+                    $attr .= ' align="center"';
+                }
+            }
+            if( /^\s*(\*.*\*)\s*$/ ) {
+                $$colData{"text"} = $1;
+                $$colData{"tag"} = "th";
+                $$colData{"attr"} = $attr . " bgcolor=\"#99CCCC\"";
+            } else {
+                $$colData{"text"} = $_;
+                $$colData{"tag"} = "td";
+                $$colData{"attr"} = $attr;
+            }
+            $$rowData[$colnum] = $colData;
         }
+        $colnum+=$colInc;
     }
-    $text .= "</tr>";
+    push @$rows, $rowData;
+    my $maxSpan = 0;
+    foreach my $span (@{$$tableData{"rowspan"}}) {
+        $maxSpan = $span if $span > $maxSpan;
+    }
+    while ($maxSpan < (@$rows-1)) {
+        $text .= emitTR( $thePre, shift @$rows );
+    }
+    $text = "$thePre<nop>" unless $text;
     return $text;
 }
 
@@ -2507,7 +2592,8 @@ sub mailtoLinkSimple
 # =========================
 sub getRenderedVersion {
     my( $text, $theWeb, $meta ) = @_;
-    my( $head, $result, $extraLines, $insidePRE, $insideTABLE, $insideNoAutoLink );
+    my( $head, $result, $extraLines, $insidePRE, $insideTABLE, $insideNoAutoLink,
+        %tableData, $tablePreSpace );
 
     return "" unless $text;  # nothing to do
 
@@ -2528,6 +2614,7 @@ sub getRenderedVersion {
     $isList = 0;
     @listTypes = ();
     @listElements = ();
+    initTableData(\%tableData);
 
     # Initial cleanup
     $text =~ s/\r//g;
@@ -2626,10 +2713,12 @@ sub getRenderedVersion {
 # Table of format: | cell | cell |
             # PTh 25 Jan 2001: Forgiving syntax, allow trailing white space
             if( $_ =~ /^(\s*)\|.*\|\s*$/ ) {
-                s/^(\s*)\|(.*)/&emitTR($1,$2,$insideTABLE)/e;
+                $tablePreSpace = $1 || "";
+                s/^(\s*)\|(.*)/processTR($1,$2,$insideTABLE,\%tableData)/e;
                 $insideTABLE = 1;
             } elsif( $insideTABLE ) {
-                $result .= "</table>\n";
+                $result .= flushTable( $tablePreSpace, \%tableData );
+#                $_ = flushTable( $tablePreSpace, \%tableData ) . $_;
                 $insideTABLE = 0;
             }
 
@@ -2719,7 +2808,7 @@ sub getRenderedVersion {
         }
     }
     if( $insideTABLE ) {
-        $result .= "</table>\n";
+        $result .= flushTable( $tablePreSpace, \%tableData );
     }
     $result .= &emitList( "", "", 0 );
     if( $insidePRE ) {
