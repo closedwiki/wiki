@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079859586" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PeterThoeny" date="1101030117" format="1.0" version="1.9"}%
 ---+!! Slide Show Plugin
 
 This Plugin converts a topic with headings into a slide show.
@@ -36,6 +36,7 @@ To create your own template topic, copy the "Default Slide Template" section bel
 	  | *Keyword* | *What it means* |
 	  | =%<nop>SLIDETITLE%= | The heading of the slide |
 	  | =%<nop>SLIDETEXT%= | The text of the slide |
+	  | =%<nop>SLIDECOMMENT%= | The comment of the slide (optional; appended to slide of missing) |
 	  | =%<nop>SLIDENUM%= | The current slide number |
 	  | =%<nop>SLIDEMAX%= | The last slide number |
 	  | =%<nop>SLIDENAV%= | The navigation buttons for "First", "Previous", "Next" slide |
@@ -146,9 +147,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 21 Mar 2004 (V1.003) |
+|  Plugin Version: | 1.005 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  21 Mar 2004: | Internal change: Fixed inofficial function call |
+|  16 Mar 2005: | 1.005 Crawford Currie prepped for Dakar, and fixed multiple evaluation bug |
+|  21 Nov 2004: | 1.004 Added support for =%<nop>SLIDECOMMENT%= template keyword (TWiki:Main/ArthurClemens); added benchmarks |
+|  21 Mar 2004: | Internal change: Fixed unofficial function call |
 |  14 Dec 2002: | Added =%<nop>SLIDENAVALL%= template keyword; added HIDECOMMENTS setting |
 |  23 Nov 2002: | Added =%<nop>SLIDENAVLAST%= template keyword; using print Skin for presentation mode |
 |  19 Nov 2002: | Added "Start presentation" and "End presentation" buttons; added =%<nop>SLIDENAVFIRST%=, =%<nop>SLIDENAVPREV%=, =%<nop>SLIDENAVNEXT%= template keywords |
@@ -156,17 +159,20 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 98%, %TWIKIWEB%.FormattedSearch 99%, SlideShowPlugin 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main.PeterThoeny - 21 Mar 2004
-%META:FILEATTACHMENT{name="clearpixel.gif" attr="" comment="Clear pixel for spacing" date="1071216910" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\clearpixel.gif" size="807" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="startpres.gif" attr="" comment="Start Presentation button" date="1071217038" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\startpres.gif" size="2065" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="endpres.gif" attr="" comment="End Presentation button" date="1071217056" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\endpres.gif" size="2066" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="logo.gif" attr="" comment="Logo for slide template" date="1071217079" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\logo.gif" size="2877" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="first.gif" attr="" comment="First slide button" date="1071217098" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\first.gif" size="1010" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="last.gif" attr="" comment="Last slide button" date="1071217111" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\last.gif" size="1014" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="next.gif" attr="" comment="Next button" date="1071217145" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\next.gif" size="993" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="prev.gif" attr="" comment="Prev button" date="1071217162" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\prev.gif" size="993" user="PeterThoeny" version="1.1"}%
+-- TWiki:Main.PeterThoeny - 21 Nov 2004
+
+%META:FILEATTACHMENT{name="next.gif" attr="" comment="Next button" date="1037510613" path="C:\Data\next.gif" size="993" user="PeterThoeny" version="1.2"}%
+%META:FILEATTACHMENT{name="prev.gif" attr="" comment="Prev button" date="1037510599" path="C:\Data\prev.gif" size="993" user="PeterThoeny" version="1.2"}%
+%META:FILEATTACHMENT{name="clearpixel.gif" attr="" comment="Clear pixel for spacing" date="1037523452" path="C:\Data\clearpixel.gif" size="807" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="startpres.gif" attr="" comment="Start Presentation button" date="1037759933" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\startpres.gif" size="2065" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="endpres.gif" attr="" comment="End Presentation button" date="1037759950" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\endpres.gif" size="2066" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="logo.gif" attr="" comment="Logo for slide template" date="1037760048" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\logo.gif" size="2877" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="first.gif" attr="" comment="First slide button" date="1037951064" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\first.gif" size="1010" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="last.gif" attr="" comment="Last slide button" date="1037951080" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\last.gif" size="1014" user="PeterThoeny" version="1.1"}%
