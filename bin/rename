@@ -57,8 +57,9 @@ sub main
     my $confirm = $query->param( 'confirm' );
     my $currentWebOnly = $query->param( 'currentwebonly' ) || "";
     my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || "";
+    my ( $oldTopic, $oldWeb, $scriptUrlPath, $userName, $dataDir ) = 
+        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query ); # DRKW difference to core
     my $skin = $query->param( "skin" ) || TWiki::Prefs::getPreferencesValue( "SKIN" );
-
     
     $newTopic =~ s/\s//go;
     $newTopic =~ s/$TWiki::securityFilter//go;
@@ -67,9 +68,6 @@ sub main
         $theAttachment = "";
     }
     
-    my ( $oldTopic, $oldWeb, $scriptUrlPath, $userName, $dataDir ) = 
-        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query ); # DRKW difference to core
-
     my $wikiUserName = &TWiki::userToWikiName( $userName );
     
     # justChangeRefs will be true when some topics that had links to $oldTopic
