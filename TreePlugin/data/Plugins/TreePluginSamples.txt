@@ -1,0 +1,197 @@
+%META:TOPICINFO{author="SlavaKozlov" date="1013888683" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="TreePlugin"}%
+
+
+---++ Regular Outline
+<code>
+%<nop>TREEVIEW{web="Test" topic="TreeTop" formatting="outline"}%
+</code>
+
+1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TreeTop</a> <br>1.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheOne</a> <br>1.1.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneOne</a> <br>1.1.1.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneOneOne</a> <br>1.1.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwo</a> <br>1.1.2.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoOne</a> <br>1.1.2.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwo</a> <br>1.1.2.2.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoOne</a> <br>1.1.2.2.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoThree</a> <br>1.1.2.2.3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoTwo</a> <br>1.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheThree</a> <br>1.2.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeOne</a> <br>1.2.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeThree</a> <br>1.2.2.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeThreeOne</a> <br>1.2.3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeTwo</a> <br>1.3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheTwo</a> <br>
+<p />
+
+<hr>
+
+---++ Unnumbered List
+<code>
+%<nop>TREEVIEW{web="Test" topic="WebHome" topic="TreeTop" 
+formatting="ullist"}%
+</code>
+<p />
+
+<a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TreeTop</a><ul> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheOne</a><ul> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneOne</a><ul> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneOneOne</a> </li> </ul> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwo</a><ul> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoOne</a> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwo</a><ul> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoOne</a> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoThree</a> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoTwo</a> </li> </ul> </li> </ul> </li> </ul> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheThree</a><ul> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeOne</a> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeThree</a><ul> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeThreeOne</a> </li> </ul> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeTwo</a> </li> </ul> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheTwo</a> </li> </ul> 
+<p />
+
+<hr>
+
+---++ Numbered List
+<code>
+%<nop>TREEVIEW{web="Test"  topic="TreeTop" 
+formatting="ollist"}%
+</code>
+<p />
+
+<a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TreeTop</a><ol> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheOne</a><ol> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneOne</a><ol> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneOneOne</a> </li> </ol> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwo</a><ol> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoOne</a> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwo</a><ol> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoOne</a> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoThree</a> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoTwo</a> </li> </ol> </li> </ol> </li> </ol> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheThree</a><ol> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeOne</a> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeThree</a><ol> <li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeThreeOne</a> </li> </ol> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeTwo</a> </li> </ol> </li><li> <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheTwo</a> </li> </ol> 
+<p />
+
+
+<hr>
+
+---++ Headings
+<code>
+%<nop>TREEVIEW{web="Test" topic="TreeTop" formatting="hlist"}%
+</code>
+<h1><a name ="1_TreeTop"> </a> 1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TreeTop</a> </h1> TREESEARCH{web "Test" formating "outline" header " out topic " format " $urltreetopic $topic $outnum $spacetopic $summary "} Main.SlavaKozlov  10 Feb 2002 <h2> 1.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheOne</a> </h2> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h3> 1.1.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneOne</a> </h3> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h4> 1.1.1.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneOneOne</a> </h4> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h3> 1.1.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwo</a> </h3> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h4> 1.1.2.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoOne</a> </h4> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h4> 1.1.2.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwo</a> </h4> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h5> 1.1.2.2.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoOne</a> </h5> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h5> 1.1.2.2.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoThree</a> </h5> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h5> 1.1.2.2.3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoTwo</a> </h5> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h2> 1.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheThree</a> </h2> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h3> 1.2.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeOne</a> </h3> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h3> 1.2.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeThree</a> </h3> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h4> 1.2.2.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeThreeOne</a> </h4> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h3> 1.2.3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeTwo</a> </h3> CREATECHILD Main.SlavaKozlov  10 Feb 2002 <h2> 1.3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheTwo</a> </h2> CREATECHILD Main.SlavaKozlov  10 Feb 2002 
+
+<p>
+
+
+<hr>
+
+---++ Outline with summaries
+<verbatim>
+%TREEVIEW{web="Test" topic="WebHome" topic="TreeTop" 
+formatting="outline" format="  $outnum $topic
+<blockquote>$summary</blockquote>"}%
+</verbatim>
+  1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TreeTop</a> <blockquote> TREESEARCH{web "Test" formating "outline" header " out topic " format " $urltreetopic $topic $outnum $spacetopic $summary "} Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheOne</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.1.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneOne</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.1.1.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneOneOne</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.1.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwo</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.1.2.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoOne</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.1.2.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwo</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.1.2.2.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoOne</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.1.2.2.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoThree</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.1.2.2.3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">OneTwoTwoTwo</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheThree</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.2.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeOne</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.2.2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeThree</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.2.2.1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeThreeOne</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.2.3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">ThreeTwo</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+  1.3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">TheTwo</a> <blockquote> CREATECHILD Main.SlavaKozlov  10 Feb 2002 </blockquote>
+<p />
+
+<hr>
+
+---++ Aligned outline with zooming
+<verbatim>
+%TABLE{tableborder="0"}%
+%TREEVIEW{web="Test" formating="outline" topic="TreeTop" 
+header="| out | topic |" format="| [[$urltreetopic=$topic][$outnum]] </a> 
+| $spacetopic |"}%
+
+</verbatim>
+
+<table border="0" cellspacing="1" cellpadding="1">
+<tr><td > out  </td><td > topic  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1</a> </a>  </td><td > Tree Top  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.1</a> </a>  </td><td > The One  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.1.1</a> </a>  </td><td > One One  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.1.1.1</a> </a>  </td><td > One One One  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.1.2</a> </a>  </td><td > One Two  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.1.2.1</a> </a>  </td><td > One Two One  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.1.2.2</a> </a>  </td><td > One Two Two  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.1.2.2.1</a> </a>  </td><td > One Two Two One  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.1.2.2.2</a> </a>  </td><td > One Two Two Three  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.1.2.2.3</a> </a>  </td><td > One Two Two Two  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.2</a> </a>  </td><td > The Three  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.2.1</a> </a>  </td><td > Three One  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.2.2</a> </a>  </td><td > Three Three  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.2.2.1</a> </a>  </td><td > Three Three One  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.2.3</a> </a>  </td><td > Three Two  </td></tr>
+<tr><td > <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview" target="_top">1.3</a> </a>  </td><td > The Two  </td></tr>
+</table>
+<p />
+
+<hr>
+
+---++ Colored Nested tables
+
+<verbatim>
+%TREEVIEW{web="Test" topic="TreeTop" formatting="coloroutline:#ffeeff,#eeffee,#ffffee,#eeeeff,#ffeeee,#eeffff"
+format="  $count [[$web.$topic][$spacetopic]]<br>"
+formatbranch="<table cellspacing=5><tr><td width=\"20%\"> $parent
+</td><td bgcolor=$level>$children</td></td></tr></table>"}%
+</verbatim>
+
+<p />
+<table cellspacing=5><tr><td width="20%">   1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Tree Top</a><br>
+ </td><td bgcolor=#eeffff><table cellspacing=5><tr><td width="20%">   1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">The One</a><br>
+ </td><td bgcolor=#ffeeff><table cellspacing=5><tr><td width="20%">   1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One One</a><br>
+ </td><td bgcolor=#eeffee>  1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One One One</a><br>
+</td></td></tr></table><table cellspacing=5><tr><td width="20%">   2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two</a><br>
+ </td><td bgcolor=#eeffee>  1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two One</a><br>
+<table cellspacing=5><tr><td width="20%">   2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two Two</a><br>
+ </td><td bgcolor=#ffffee>  1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two Two One</a><br>
+  2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two Two Three</a><br>
+  3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two Two Two</a><br>
+</td></td></tr></table></td></td></tr></table></td></td></tr></table><table cellspacing=5><tr><td width="20%">   2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">The Three</a><br>
+ </td><td bgcolor=#ffeeff>  1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Three One</a><br>
+<table cellspacing=5><tr><td width="20%">   2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Three Three</a><br>
+ </td><td bgcolor=#eeffee>  1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Three Three One</a><br>
+</td></td></tr></table>  3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Three Two</a><br>
+</td></td></tr></table>  3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">The Two</a><br>
+</td></td></tr></table>
+
+<hr>
+
+---++ Nested tables, black brackets
+<verbatim>
+%TREEVIEW{web="Test" topic="WebHome" formatting="outline" format=" 
+$count [[$web.$topic][$spacetopic]]<br>"
+formatbranch="<table cellspacing=5><tr><td width=\"20%\"> $parent 
+</td><td bgcolor=black width=1></td><td bgcolor=>$children</td></td></tr></table>"}%
+</verbatim>
+<table cellspacing=5><tr><td width="20%">  1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Tree Top</a><br>
+ </td><td bgcolor=black width=1></td><td bgcolor=><table cellspacing=5><tr><td width="20%">  1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">The One</a><br>
+ </td><td bgcolor=black width=1></td><td bgcolor=><table cellspacing=5><tr><td width="20%">  1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One One</a><br>
+ </td><td bgcolor=black width=1></td><td bgcolor=> 1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One One One</a><br>
+</td></td></tr></table><table cellspacing=5><tr><td width="20%">  2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two</a><br>
+ </td><td bgcolor=black width=1></td><td bgcolor=> 1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two One</a><br>
+<table cellspacing=5><tr><td width="20%">  2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two Two</a><br>
+ </td><td bgcolor=black width=1></td><td bgcolor=> 1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two Two One</a><br>
+ 2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two Two Three</a><br>
+ 3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two Two Two</a><br>
+</td></td></tr></table></td></td></tr></table></td></td></tr></table><table cellspacing=5><tr><td width="20%">  2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">The Three</a><br>
+ </td><td bgcolor=black width=1></td><td bgcolor=> 1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Three One</a><br>
+<table cellspacing=5><tr><td width="20%">  2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Three Three</a><br>
+ </td><td bgcolor=black width=1></td><td bgcolor=> 1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Three Three One</a><br>
+</td></td></tr></table> 3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Three Two</a><br>
+</td></td></tr></table> 3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">The Two</a><br>
+</td></td></tr></table>
+<p />
+<p />
+
+<hr>
+
+---++ Nested tables, colored brackets
+
+<verbatim>
+%TREEVIEW{web="Test" topic="TreeTop"
+formatting="coloroutline:#AA6666,#66AA66,#6666AA"
+format="  $count [[$web.$topic][$spacetopic]]<br>"
+formatbranch="<table cellspacing=5><tr><td width=\"%20\"> $parent
+</td><td bgcolor=$level width=1></td><td bgcolor=#eeeeee>$children</td></td></tr></table>"}%
+</verbatim>
+
+
+<table cellspacing=5><tr><td width="%20">  1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Tree Top</a><br>
+ </td><td bgcolor=#6666AA width=1></td><td bgcolor=#eeeeee><table cellspacing=5><tr><td width="%20">  1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">The One</a><br>
+ </td><td bgcolor=#AA6666 width=1></td><td bgcolor=#eeeeee><table cellspacing=5><tr><td width="%20">  1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One One</a><br>
+ </td><td bgcolor=#66AA66 width=1></td><td bgcolor=#eeeeee> 1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One One One</a><br>
+</td></td></tr></table><table cellspacing=5><tr><td width="%20">  2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two</a><br>
+ </td><td bgcolor=#66AA66 width=1></td><td bgcolor=#eeeeee> 1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two One</a><br>
+<table cellspacing=5><tr><td width="%20">  2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two Two</a><br>
+ </td><td bgcolor=#6666AA width=1></td><td bgcolor=#eeeeee> 1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two Two One</a><br>
+ 2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two Two Three</a><br>
+ 3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">One Two Two Two</a><br>
+</td></td></tr></table></td></td></tr></table></td></td></tr></table><table cellspacing=5><tr><td width="%20">  2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">The Three</a><br>
+ </td><td bgcolor=#AA6666 width=1></td><td bgcolor=#eeeeee> 1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Three One</a><br>
+<table cellspacing=5><tr><td width="%20">  2 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Three Three</a><br>
+ </td><td bgcolor=#66AA66 width=1></td><td bgcolor=#eeeeee> 1 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Three Three One</a><br>
+</td></td></tr></table> 3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">Three Two</a><br>
+</td></td></tr></table> 3 <a href="/twiki/bin/oops/Test/TreeTop?template=oopspreview">The Two</a><br>
+</td></td></tr></table>
+
+-- Main.SlavaKozlov - 16 Feb 2002

@@ -1,0 +1,94 @@
+%META:TOPICINFO{author="SlavaKozlov" date="1013891641" format="1.0" version="1.1"}%
+---++ %TOPIC%
+
+Provides support to view and manage TWiki topic trees (topic hierarchies of parents/children).
+
+_Alpha release. Documentation will be revised. More features finalized._
+
+---+++ Syntax Rules
+
+Adds the following tags:
+	* %<nop>TREEVIEW% - displays a TWiki topic's children in a hierarchical fashion.
+
+<blockquote>
+Attributes:
+	* *web* - specify web
+	* *topic* - specify topic
+	* *formatting* - specify the formatting method ()
+	* *format* - specify the format for each node
+	* *formatbranch* - specify the format for a group of children
+	* *stoplevel* - the depth of the tree to show
+	* *header* - header output
+	* *bookview* - list topics in BookView form
+</blockquote>
+
+See Plugins.TreePluginSamples for samples.
+
+<!-- The Plugins.<nop>TreePluginHelp topic in the installation contains complete help information. -->
+
+---+++ Plugin Installation Instructions
+
+<!--
+		* Set PLDIR = twiki/lib/TWiki/Plugins/
+-->
+
+	* Download the ZIP file from the Plugin web (see below). Contents:
+
+	| *File:* | *Description:* |
+	| ==data/Plugins/%TOPIC%.txt== | Plugin topic |
+	| ==data/Plugins/%TOPIC%Samples.txt== | Plugin Samples |
+	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	| ==twiki/templates/booktree.tmpl== | Template for bookview mode |
+| ==%PLDIR%/ColorNodeFormatter.pm== | Library component |
+| ==%PLDIR%/FormatHelper.pm== | Library component |
+| ==%PLDIR%/FormatOutlineNodeFormatter.pm== | Library component |
+| ==%PLDIR%/HOutlineNodeFormatter.pm== | Library component |
+| ==%PLDIR%/ListNodeFormatter.pm== | Library component |
+| ==%PLDIR%/TreePlugin/Node.pm== | Library component |
+| ==%PLDIR%/NodeFormatter.pm== | Library component |
+| ==%PLDIR%/OutlineNodeFormatter.pm== | Library component |
+| ==%PLDIR%/TWikiNode.pm== | Library component |
+| ==%PLDIR%/test.tar.gz== | Test files |
+
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
+	* Add ==Plugins.%TOPIC%== to the ==INSTALLEDPLUGINS== variable in %TWIKIWEB%.TWikiPreferences (or any WebPreferences topic).
+	* If you see a tree of this topic here:
+
+%TREEVIEW{topic="TreePlugin"}%
+
+  then installation was successful
+<!-- Check the %TOPIC%Help topic. .-->
+<!---	* Add the following line to the "TWiki Plugins" section of %TWIKIWEB%.TextFormattingRules:
+		* Plugins.%TOPIC%: Tree viewing
+-->
+
+---+++ Plugin Info
+
+|  One Line Description: | View Twiki topics as nodes in a tree |
+|  Plugin Author: | Main.SlavaKozlov |
+|  Plugin Version: | 0.2 |
+|  Change History: | 08 Feb 2002 Internal (0.1) release |
+| | 15 Feb 2002 Alpha (0.2) release |
+|  CPAN Dependencies: | none _(test package relies on PerlUnit)_ |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 _(only tested on 5.6.1 so far)_ |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+---++++ Copyright
+This code is protected by the following
+copyrights:
+	* Copyright (C) 2002 Slava Kozlov. All Rights Reserved.
+
+---++++ License
+As required for the publication of all extensions to TWiki, this
+software is published under the terms of the GNU General Public
+License.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details, published at
+http://www.gnu.org/copyleft/gpl.html
