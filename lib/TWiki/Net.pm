@@ -29,13 +29,45 @@ package TWiki::Net;
 use strict;
 
 use vars qw(
-        $useNetSmtp
+        $useSocket $useNetSmtp
     );
 
 BEGIN {
+    $useSocket = 0;
     eval {
        $useNetSmtp = require Net::SMTP;
     }
+}
+
+# =========================
+sub getUrl
+{
+    my ( $theHost, $thePort, $theUrl, $theHeader ) = @_;
+
+    if( ! $useSocket ) {
+        use Socket;
+        $useSocket = 1;
+    }
+    if( $thePort < 1 ) {
+        $thePort = 80;
+    }
+    if( ! $theHeader ) {
+        $theHeader = "";
+    }
+    my $result = '';
+    my $req = "GET $theUrl HTTP/1.0\r\n$theHeader\r\n\r\n";
+    my ( $iaddr, $paddr, $proto );
+    $iaddr   = inet_aton( $theHost );
+    $paddr   = sockaddr_in( $thePort, $iaddr );
+    $proto   = getprotobyname( 'tcp' );
+    socket( SOCK, PF_INET, SOCK_STREAM, $proto )  or die "socket: $!";
+    connect( SOCK, $paddr ) or die "connect: $!";
+    select SOCK; $| = 1;
+    print SOCK $req;
+    while( <SOCK> ) { $result .= $_; }
+    close( SOCK )  or die "close: $!";
+    select STDOUT;
+    return $result;
 }
 
 # =========================

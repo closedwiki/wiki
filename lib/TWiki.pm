@@ -125,6 +125,7 @@ use TWiki::Access;    # access control
 use TWiki::Store;     # file I/O and rcs related functions
 use TWiki::Attach;    # file attachment functions
 use TWiki::Plugins;   # plugins handler  #AS
+use TWiki::Net;       # SMTP, get URL
 use TWiki::Classification; # category handling functions
 
 # ===========================
@@ -188,10 +189,9 @@ sub initialize
         # is "bin/script/Webname/SomeTopic" or "bin/script/Webname/"
         $webName   = $1 || "" if( ! $webName );
         $topicName = $2 || "" if( ! $topicName );
-    } else {
+    } elsif( $thePathInfo =~ /\/(.*)/ ) {
         # is "bin/script/Webname" or "bin/script/"
-        $thePathInfo =~ s/^\/(.*)//o;
-        $webName = $thePathInfo if( ! $webName );
+        $webName   = $1 || "" if( ! $webName );
     }
     ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
     # filter out dangerous or unwanted characters:
@@ -631,10 +631,67 @@ sub extractNameValuePair
 }
 
 # =========================
+sub handleIncludeUrl
+{
+    my( $theUrl, $thePattern ) = @_;
+    my $text = "";
+    my $host = "";
+    my $port = 80;
+    my $path = "";
+
+    if( $theUrl =~ /http\:\/\/([^\:]+)\:([0-9]+)(\/.*)/ ) {
+        $host = $1;
+        $port = $2;
+        $path = $3;
+
+    } elsif( $theUrl =~ /http\:\/\/([^\/]+)(\/.*)/ ) {
+        $host = $1;
+        $path = $2;
+
+    } else {
+        $text = showError( "Error: Unsupported protocol. (Must be 'http://domain/...')" );
+        return $text;
+    }
+
+    $text = &TWiki::Net::getUrl( $host, $port, $path );
+    $text =~ s/^.*?Content\-Type\:\s*([^\n\r]*)[\n\r]*(.*)/$2/os;
+    my $contentType = $1;
+    if( $contentType eq "text/html" ) {
+        $text =~ s/^.*?<\/head>//ois;            # remove all HEAD
+        $text =~ s/<script.*?<\/script>//gois;   # remove all SCRIPTs
+        $text =~ s/^.*?<body[^>]*>//ois;         # remove all to <BODY>
+        $text =~ s/<\/body>.*//ois;              # remove </BODY> to end
+        $text =~ s/<\/html>.*//ois;              # remove </HTML> to end
+
+    } elsif( $contentType eq "text/plain" ) {
+        # do nothing
+
+    } else {
+        $text = showError( "Error: Unsupported content type: $contentType."
+              . " (Must be text/html or text/plain)" );
+    }
+
+    if( $thePattern ) {
+        $thePattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
+        $thePattern =~ /(.*)/;     # untaint
+        $thePattern = $1;
+        $text =~ s/$thePattern/$1/is;
+    }
+
+    return $text;
+}
+
+# =========================
 sub handleIncludeFile
 {
     my( $theAttributes, $theTopic, $theWeb, @theProcessedTopics ) = @_;
     my $incfile = extractNameValuePair( $theAttributes );
+    my $pattern = extractNameValuePair( $theAttributes, "pattern" );
+
+    if( $incfile =~ /^http\:/ ) {
+        # include web page
+        return handleIncludeUrl( $incfile, $pattern );
+    }
 
     # CrisBailiff, PeterThoeny 12 Jun 2000: Add security
     $incfile =~ s/$securityFilter//go;    # zap anything suspicious
@@ -689,6 +746,13 @@ sub handleIncludeFile
         $text =~ s/.*?%STARTINCLUDE%//os;
         $text =~ s/%STOPINCLUDE%.*//os;
     } # FIXME what if it's not a topic, is this possible given only dataDir above?
+
+    if( $pattern ) {
+        $pattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
+        $pattern =~ /(.*)/;     # untaint
+        $pattern = $1;
+        $text =~ s/$pattern/$1/is;
+    }
 
     # handle all preferences and internal tags (for speed: call by reference)
     &TWiki::Prefs::handlePreferencesTags( $text );
