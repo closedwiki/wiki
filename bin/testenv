@@ -16,19 +16,55 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 # DESCRIPTION: Test utility to see if CGI is running and enabled
-# for the bin directory
+# for the bin directory, and check a variety of TWiki, Perl and RCS
+# setup.
 
-use CGI;
-use CGI::Carp qw( fatalsToBrowser );
+# Compile-time module use
 use lib ( '.' );
 use lib ( '../lib' );
 
 use Config; 		# Perl's configuration details
 
 # use strict;		# Recommended for mod_perl, enable for Perl 5.6.1 only
+			# Doesn't work well on this script due to 'do "TWiki.cfg"'
 # use diagnostics;	# Debug only
 
+
 package TWiki;
+# Check whether basic CGI modules exist (some broken installations of
+# Perl don't have this, even though they ars standard modules), and warn user
+my @basicMods = qw(CGI CGI::Carp);
+my $modMissing = 0;
+my $mod;
+foreach $mod (@basicMods) {
+    eval "use $mod";
+    if ($@) {
+	unless ($modMissing) {
+	    print "Content-type: text/html\n\n";
+	    print "<html><head><title>Perl Module(s) missing</title></head>\n";
+	    print "<body>\n";
+	    print "<h1>Perl Module(s) missing</h1>\n";
+	}
+        $modMissing = 1;
+	print "<p><b><font color=\"red\">Warning:</font></b> ";
+	print "Essential module <b>$mod</b> not installed - please check your Perl\n";
+	print "installation, including the setting of <b>\@INC</b>, and re-install Perl if necessary.</p>\n";
+    }
+}
+# Display @INC and give up, if any critical modules missing
+if ($modMissing) {
+    print "<p><b>\@INC setting:</b><br /><tt> ";
+    print join "<br />\n", @INC;
+    print "</tt></p>\n";
+    print "<body>\n";
+    exit;
+}
+
+# Run-time use of CGI modules
+require CGI;
+require CGI::Carp;
+import CGI::Carp qw( fatalsToBrowser );
+
 
 
 &main;
@@ -43,11 +79,9 @@ my $perlverRecommended = '5.6.1';
 
 my $rcsverRequired = 5.7;
 
-my @requiredMods = ( 
-	'CGI', 
-	'CGI::Carp', 
-	'File::Copy', 
-   );
+my @requiredMods = ( @basicMods,  
+	'File::Copy'
+    ); 
 my @requiredModsWindows = ( 
 	'Digest::SHA1', 
 	'MIME::Base64', 
@@ -55,7 +89,9 @@ my @requiredModsWindows = (
    );
 
 open(STDERR,'>&STDOUT'); # redirect error to browser
-$| = 1;                  # no buffering
+$| = 1;                  # no buffering - FIXME: mod_perl issue?
+
+my $query = new CGI;
 
 
 print "Content-type: text/html\n\n";
@@ -64,7 +100,7 @@ print <<EOM;
 <head><title>Test the CGI environment</title></head>
 <body>
 <h1>Test the CGI environment for TWiki</h1>
-Read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationNotes">TWikiInstallationNotes</a>.
+Read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationNotes">TWikiInstallationNotes</a> for more information on TWiki installation.
 <h3>Environment variables:</h3>
 <table>
 EOM
@@ -77,9 +113,6 @@ print <<EOM;
 <h3>CGI Setup:</h3>
 <table>
 EOM
-
-my $query;
-if (!defined ($query)) { $query = new CGI; }
 
 
 # read the TWiki configuration early - includes OS detection
@@ -149,6 +182,7 @@ my $exeSuffix='';
 if ( $Config::Config{'_exe'}) { 
     $exeSuffix = $Config::Config{'_exe'};
 }
+
 
 my $thePathInfo = $query->path_info(); 
 # my $theRemoteUser = $query->remote_user();
