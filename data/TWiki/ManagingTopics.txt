@@ -1,16 +1,16 @@
-%META:TOPICINFO{author="MikeMannix" date="1009457340" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="MikeMannix" date="1009500480" format="1.0" version="1.16"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
 ---# Managing Topics
 
----++ Overview
-
 _Browser-based rename, move, and delete for individual topics_
 
----++ How to Rename/Move/Delete a Topic
+---++ Overview
 
 While view a special topic, you can use browser-based controls to change its name, move it to another TWiki web, or delete it to a hidden =Trash= web.
+
+---++ How to Rename/Move/Delete a Topic
 
 	1. *Click* on ==[More]== (bottom right of page) on the topic to be changed, then, in the new screen, on ==[Rename/move]==. You can now rename and/or move/delete in one operation:
 	1. *Move/Delete:* Select the target web if other than the current web - choose =Trash= to [[#DeleteTopic][delete a topic]].
@@ -29,7 +29,7 @@ Deleted topics are moved to a special ==Trash== web - they are NOT physically er
 The =Trash= web should be be cleared periodically, by archiving (saving) the text and RCS files if required (recommended), then deleting them from the =Trash= directory. 
 
 	* %X% This can only be done from on the server, not through the browser. 
-		* %T% Since simple FTP access to the =Trash= directory is all that's required to maintain =Trash=, it's possible grant users =Trash= admin privileges while limiting server access. 
+		* %T% Since simple FTP access to the ==Trash== directory is all that's required for maintenance, it's possible to grant =Trash= admin privileges to multiple users, while strictly limiting server access. 
 
 ---++ Redirecting from an Old Topic
 
@@ -67,12 +67,12 @@ Consider carefully whether to make browser-based *Rename/Move/Delete* widely ava
 	* When referring links are updated, the modified topics appear in WebChanges, creating the impression that editorial changes were made. This can undermine the usefulness of WebChanges.
 	* Due to [[#RenameLimitations][current limitations]], fairly heavy use of rename/move/delete functions can lead to an accumulation of minor technical problems (ex: broken links) and usability issues (ex: user confusion). If Rename is used heavily, these types of negatives will obviously increase.
 
-Ultimately, the size, objectives, and policies of your TWiki site, and the real-world behavior of your user group, will determine the most effective implementation of this feature.
+Ultimately, the size, objectives, and policies of your TWiki site, the real-world behavior of your user group, and most importantly, the initial TWiki site management leadership, will determine the most effective implementation of this feature, and the success of the site overall. 
 
 #RenameLimitations
 ---++ Known Issues
 
-*Rename/Move* is fairly complicated due to the dynamic generation of links. Ideally, it would be possible to run the required part of rendering in a way that would allow identification of the text to be changed. Unfortunately, these hooks don't exist in TWiki at present.  Instead, %<nop>SEARCH% is used with a special template to show the text to be changed, and the selected topics are then altered. One drawback is that =search= can show matches that will not be updated because of case differences. Other mismatches to actual rendered output are also possible as the approaches are so different.
+*Rename/Move* is fairly complicated due to the dynamic generation of links. Ideally, it would be possible to run the required part of rendering in a way that would allow identification of the text to be changed. Unfortunately, these hooks don't exist in TWiki at present.  Instead, %<nop>SEARCH% is used with a special template to show the text to be changed, and the selected topics are then altered. One drawback is that =search= can show matches that will not be updated due to case differences. Other mismatches with actual rendered output are also possible as the approaches are so different.
 
 The following shows some limitations of square bracket processing.
 
