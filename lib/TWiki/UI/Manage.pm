@@ -44,6 +44,7 @@ sub removeUser {
   my $password = $query->param( 'password' );
 
   # check if user entry exists
+  #TODO: need to handle the NoPasswdUser case (UserPasswordExists will retun false here)
   if(  ( $wikiName )  && (! TWiki::User::UserPasswordExists( $wikiName ) ) ) {
     TWiki::UI::oops( $webName, $topic, "notwikiuser", $wikiName );
     return;
@@ -117,6 +118,7 @@ sub changePassword {
   }
 
   # check if user entry exists
+  #TODO: need to handle the NoPasswdUser case (UserPasswordExists will retun false here)
   if(  ( $wikiName )  && (! TWiki::User::UserPasswordExists( $wikiName ) ) ) {
     TWiki::UI::oops( $webName, $topic, "notwikiuser", $wikiName );
     return;
