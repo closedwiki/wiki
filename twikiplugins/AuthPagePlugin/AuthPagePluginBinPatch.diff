@@ -1,0 +1,182 @@
+diff -u ../cairo/bin/attach bin/attach
+--- ../cairo/bin/attach	2004-11-15 16:03:51.000000000 +0000
++++ bin/attach	2005-03-02 14:51:01.000000000 +0000
+@@ -39,6 +39,7 @@
+ my( $topic, $webName, $dummy, $userName ) = 
+   TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+ 
+-TWiki::UI::Upload::attach( $webName, $topic, $userName, $query );
+-
++use TWiki::Plugins::AuthPagePlugin;
++TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
+ 
++TWiki::UI::Upload::attach( $webName, $topic, $userName, $query );
+diff -u ../cairo/bin/changes bin/changes
+--- ../cairo/bin/changes	2004-11-15 16:03:51.000000000 +0000
++++ bin/changes	2005-03-02 14:53:45.000000000 +0000
+@@ -47,5 +47,8 @@
+   TWiki::initialize( $thePathInfo, $theRemoteUser,
+                      $theTopic, $theUrl, $query );
+ 
++use TWiki::Plugins::AuthPagePlugin;
++TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+ TWiki::UI::Changes::changes( $webName, $topic, $query );
+ 
+diff -u ../cairo/bin/edit bin/edit
+--- ../cairo/bin/edit	2004-11-15 16:03:51.000000000 +0000
++++ bin/edit	2005-03-02 14:53:44.000000000 +0000
+@@ -51,5 +51,8 @@
+                      $theUrl, $query );
+ $dummy = "";  # to suppress warning
+ 
++use TWiki::Plugins::AuthPagePlugin;
++TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+ TWiki::UI::Edit::edit( $webName, $topic, $userName, $query );
+ 
+diff -u ../cairo/bin/manage bin/manage
+--- ../cairo/bin/manage	2005-02-23 17:59:08.000000000 +0000
++++ bin/manage	2005-03-02 14:53:39.000000000 +0000
+@@ -65,6 +65,9 @@
+     TWiki::initialize( $thePathInfo, $theRemoteUser,
+                        $theTopic, $theUrl, $query );
+ 
++  use TWiki::Plugins::AuthPagePlugin;
++  TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+   TWiki::UI::Manage::createWeb( $webName, $topic, $userName, $query );
+ 
+ } elsif( $action eq "changePassword" ) {
+@@ -75,6 +78,9 @@
+   my ( $topic, $webName ) =
+     TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl, $query );
+ 
++  use TWiki::Plugins::AuthPagePlugin;
++  TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+   TWiki::UI::Manage::changePassword( $webName, $topic, $query );
+ 
+ } elsif( $action eq "deleteUserAccount" ) {
+@@ -85,6 +91,9 @@
+   my ( $topic, $webName ) =
+     TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl, $query );
+ 
++  use TWiki::Plugins::AuthPagePlugin;
++  TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+     TWiki::UI::Manage::removeUser($webName, $topic, $wikiName, $query);
+ 
+ # FIXME: Contains backticks, needs refactoring, upstream has been informed.
+@@ -96,6 +105,9 @@
+   my( $topic, $webName, $dummy, $userName ) = 
+     TWiki::initialize( $thePathInfo, $theRemoteUser,
+                        $theTopic, $theUrl, $query );
++  use TWiki::Plugins::AuthPagePlugin;
++  TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+   TWiki::UI::oops( "", "", "manage",
+                    TWiki::UI::Manage::_template("msg_unrecognized_action"),
+                    $action );
+@@ -105,6 +117,9 @@
+   my( $topic, $webName, $dummy, $userName ) = 
+     TWiki::initialize( $thePathInfo, $theRemoteUser,
+                        $theTopic, $theUrl, $query );
++  use TWiki::Plugins::AuthPagePlugin;
++  TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+   TWiki::UI::oops( "", "", "manage",
+                    TWiki::UI::Manage::_template("msg_missing_action") );
+ 
+diff -u ../cairo/bin/preview bin/preview
+--- ../cairo/bin/preview	2004-11-15 16:03:51.000000000 +0000
++++ bin/preview	2005-03-02 14:53:38.000000000 +0000
+@@ -43,4 +43,7 @@
+                      $theUrl, $query );
+ $dummy = "";  # to suppress warning
+ 
++use TWiki::Plugins::AuthPagePlugin;
++TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+ TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );
+diff -u ../cairo/bin/rdiff bin/rdiff
+--- ../cairo/bin/rdiff	2004-11-15 16:03:51.000000000 +0000
++++ bin/rdiff	2005-03-02 14:53:35.000000000 +0000
+@@ -41,4 +41,7 @@
+   TWiki::initialize( $thePathInfo, $theRemoteUser,
+                      $theTopic, $theUrl, $query );
+ 
++use TWiki::Plugins::AuthPagePlugin;
++TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+ TWiki::UI::RDiff::diff( $webName, $topic, $userName, $query );
+diff -u ../cairo/bin/rename bin/rename
+--- ../cairo/bin/rename	2004-11-15 16:03:51.000000000 +0000
++++ bin/rename	2005-03-02 14:53:34.000000000 +0000
+@@ -50,4 +50,7 @@
+   TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic,
+                      $theUrl, $query );
+ 
++use TWiki::Plugins::AuthPagePlugin;
++TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+ TWiki::UI::Manage::rename( $web, $topic, $userName, $query );
+diff -u ../cairo/bin/save bin/save
+--- ../cairo/bin/save	2004-11-15 16:03:51.000000000 +0000
++++ bin/save	2005-03-02 14:52:52.000000000 +0000
+@@ -46,5 +46,8 @@
+   TWiki::initialize( $thePathInfo, $theRemoteUser,
+                      $theTopic, $theUrl, $query );
+ 
++use TWiki::Plugins::AuthPagePlugin;
++TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+ TWiki::UI::Save::savemulti( $web, $topic, $userName, $query );
+ 
+diff -u ../cairo/bin/search bin/search
+--- ../cairo/bin/search	2004-11-15 16:03:51.000000000 +0000
++++ bin/search	2005-03-02 14:53:31.000000000 +0000
+@@ -46,5 +46,8 @@
+   &TWiki::initialize( $thePathInfo, $theRemoteUser,
+                       $theTopic, $theUrl, $query );
+ 
++use TWiki::Plugins::AuthPagePlugin;
++TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+ TWiki::UI::Search::search( $webName, $topic, $query );
+ 
+diff -u ../cairo/bin/upload bin/upload
+--- ../cairo/bin/upload	2004-11-15 16:03:51.000000000 +0000
++++ bin/upload	2005-03-02 14:53:30.000000000 +0000
+@@ -43,4 +43,7 @@
+   TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic,
+                      $theUrl, $query );
+ 
++use TWiki::Plugins::AuthPagePlugin;
++TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+ TWiki::UI::Upload::upload( $webName, $topic, $userName, $query );
+diff -u ../cairo/bin/view bin/view
+--- ../cairo/bin/view	2004-11-15 16:03:51.000000000 +0000
++++ bin/view	2005-03-02 14:53:30.000000000 +0000
+@@ -46,5 +46,8 @@
+   TWiki::initialize( $thePathInfo, $theRemoteUser,
+                      $theTopic, $theUrl, $query );
+ 
++use TWiki::Plugins::AuthPagePlugin;
++TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+ TWiki::UI::View::view( $webName, $topic, $userName, $query );
+ 
+diff -u ../cairo/bin/viewfile bin/viewfile
+--- ../cairo/bin/viewfile	2004-11-15 16:03:51.000000000 +0000
++++ bin/viewfile	2005-03-02 14:53:30.000000000 +0000
+@@ -41,5 +41,8 @@
+   TWiki::initialize( $thePathInfo, $theRemoteUser,
+                      $theTopic, $theUrl, $query );
+ 
++use TWiki::Plugins::AuthPagePlugin;
++TWiki::Plugins::AuthPagePlugin::authenticate( $query, $webName, $topic );
++
+ TWiki::UI::Viewfile::view( $webName, $topic, $query );
+ 

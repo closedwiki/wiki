@@ -1,0 +1,7 @@
+bin/login
+AuthPagePluginBinPatch.diff
+data/TWiki/AuthPagePlugin.txt
+lib/TWiki/Plugins/AuthPagePlugin.pm
+lib/TWiki/Plugins/AuthPagePlugin/build.pl
+lib/TWiki/Plugins/AuthPagePlugin/Apache_HtPasswd_Validator.pm
+templates/login.tmpl
