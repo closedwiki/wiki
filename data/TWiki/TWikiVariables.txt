@@ -159,12 +159,6 @@ Additional variables are defined in the preferences topics:
   <td> %NOSEARCHALL% &nbsp;</td>
 </tr>
 <tr>
-  <td> =%<nop>RELEASEEDITLOCKCHECKBOX%= </td>
-  <td> __SL__ , __UL__ </td>
-  <td> Default state of the "Release edit lock" (UnlockTopic) check box in preview. Checkbox is initially checked if =Set RELEASEEDITLOCKCHECKBOX = checked="checked"=, or unchecked if empty. If checked, make sure to click on <u>Edit</u> to do more changes; do *not* go back in your browser to the edit page, or you risk that someone else will edit the topic at the same time! Value is: <b><code>%RELEASEEDITLOCKCHECKBOX%</code></b> </td>
-  <td> %RELEASEEDITLOCKCHECKBOX% &nbsp;</td>
-</tr>
-<tr>
   <td> =%<nop>WEBBGCOLOR%= </td>
   <td> __WL__ </td>
   <td> Background color of web </td>
