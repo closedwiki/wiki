@@ -389,8 +389,11 @@ sub handleFailedPlugins
 
    foreach my $handler (@registrableHandlers) {
       $text .= "| $handler |";
-      $text .= join "<br />", @{$registeredHandlers{$handler}}; 
-      $text .= "|\n";
+      $text .= "| $handler | ";
+      if ( defined( $registeredHandlers{$handler} ) ) {
+          $text .= join "<br />", @{$registeredHandlers{$handler}};
+      }
+      $text .= " |\n";
    }
 
    $text .= "<br />\n---++ Errors\n<br />\n<verbatim>\n$initialisationErrors\n</verbatim>\n";
