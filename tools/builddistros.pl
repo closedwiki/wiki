@@ -3,6 +3,7 @@
 # License: GPL
 
 use strict;
+use File::Path qw( rmtree mkpath );
 
 my $outputDir;
 
@@ -16,6 +17,10 @@ if  ( $#ARGV == 0 ) {
 
 print "building distros\n";
 print "results will be in $outputDir\n";
+
+#removing old build contents to save disk space
+( rmtree( $outputDir ) or die "Unable to empty the twiki build directory: $!" ) if -e $outputDir;
+mkpath( $outputDir, 1 );
 
 execute ( "cd distro ; ./build-twiki-kernel.pl /tmp $outputDir" ) or die $!;
 
