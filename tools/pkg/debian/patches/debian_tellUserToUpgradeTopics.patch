@@ -5,7 +5,7 @@
      
      if ($self->{type} eq "global") {
 +        #default for debian , incase we are upgrading from pre-cairo, and your topics are out of date.
-+        $self->_insertPreference("BROADCASTMESSAGE", "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\" width=\"100%\"><tr><td bgcolor=\"yellow\"><font col or=\"red\">If you see this message you have not set BROADCASTMES SAGE in TWiki.TWikiPreferences. This is probably because you have topic data from before the Cair o (Sept2004) TWiki release. You need to either run /var/lib/twiki/UpgradeTwiki using the newly distributed data files, or merge in the topic changes by hand. Currently the debian package does not help you do this - Sorry</font></td></tr></table>");
++        $self->_insertPreference("BROADCASTMESSAGE", "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\" width=\"100%\"><tr><td bgcolor=\"yellow\"><font col or=\"red\">If you see this message you have not set BROADCASTMESSAGE in TWiki.TWikiPreferences. This is probably because you have topic data from before the Cair o (Sept2004) TWiki release. You need to merge in the topic changes from /usr/share/doc/twiki/twiki-data.tar.gz and twiki-pub.tar.gz by hand. Currently the debian package does not help you do this - Sorry</font></td></tr></table>");
  	# global prefs
          $self->loadPrefsFromTopic($TWiki::twikiWebname, $TWiki::wikiPrefsTopicname, "", $allowCache);
          $self->loadPrefsFromTopic($TWiki::mainWebname, $TWiki::wikiPrefsTopicname, "", $allowCache);
