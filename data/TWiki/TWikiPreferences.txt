@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044148814" format="1.0" version="1.47"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044255731" format="1.0" version="1.48"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -239,3 +239,6 @@ You can introduce new VARIABLES and use them in your topics and templates. There
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
 	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
 	* %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
+
+__Note__: Can't edit?
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw topic]]
