@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="1041715740" format="1.0" version="1.14"}%
----# <nop>TWikiShorthand Basics
+%META:TOPICINFO{author="PeterThoeny" date="1044093695" format="1.0" version="1.15"}%
+---# TWiki Shorthand Basics
 
-If you can enter text, you're ready for TWiki. With a few simple, intuitive TWikiShorthand rules, you'll be able to use plain text to create well-styled postings, instantly. Here's a fast-track guide to shorthand basics...
+If you can enter text, you're ready for TWiki. With a few simple, intuitive TextFormattingRules, you'll be able to use plain text to create well-styled postings, instantly. Here's a fast-track guide to shorthand basics...
 
 	* Separate each *paragraph* with a blank line.
 
@@ -46,4 +46,4 @@ unformatted text!
 
 	* Three (or more) consecutive *hyphens* expand into a horizontal rule:%BR% =---=
 
-	* See TWikiShorthand for the complete set of formatting rules.
+	* See TextFormattingRules for the complete set of formatting rules.
