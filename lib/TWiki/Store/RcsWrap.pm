@@ -256,7 +256,7 @@ sub numRevisions
 
     $cmd =~ s/%FILENAME%/$rcsFile/;
     $cmd =~ /(.*)/;
-    my $cmd = $1;       # now safe, so untaint variable
+    $cmd = $1;       # now safe, so untaint variable
     my $rcsOutput = `$cmd`;
     _traceExec( $cmd, $rcsOutput );
     if( $rcsOutput =~ /head:\s+\d+\.(\d+)\n/ ) {
