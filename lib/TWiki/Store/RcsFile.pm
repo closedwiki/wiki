@@ -23,6 +23,7 @@ package TWiki::Store::RcsFile;
 use strict;
 
 use File::Copy;
+use File::Spec;
 
 # ======================
 sub new
@@ -450,8 +451,8 @@ sub _saveFile
     
     umask( 002 );
     unless ( open( FILE, ">$name" ) )  {
-	warn "Can't create file $name - $!\n";
-	return;
+        warn "Can't create file $name - $!\n";
+        return;
     }
     binmode( FILE );
     print FILE $text;
@@ -480,6 +481,7 @@ sub _readFile
     my $data = "";
     undef $/; # set to read to EOF
     open( IN_FILE, "<$name" ) || return "";
+    binmode IN_FILE if( $self->{binary} );
     $data = <IN_FILE>;
     $/ = "\n";
     close( IN_FILE );
@@ -592,6 +594,59 @@ sub _makePubWebDir
     $dir = $1; # untaint
 
     return $dir;
+}
+
+sub _mkTmpFilename
+{
+    my $tmpdir = File::Spec->tmpdir();
+    my $file = _mktemp( "twikiAttachmentXXXXXX", $tmpdir );
+    return File::Spec->catfile($tmpdir, $file);
+}
+
+# Adapted from CPAN - File::MkTemp
+sub _mktemp {
+   my ($template,$dir,$ext,$keepgen,$lookup);
+   my (@template,@letters);
+
+   croak("Usage: mktemp('templateXXXXXX',['/dir'],['ext']) ") 
+     unless(@_ == 1 || @_ == 2 || @_ == 3);
+
+   ($template,$dir,$ext) = @_;
+   @template = split //, $template;
+
+   croak("The template must end with at least 6 uppercase letter X")
+      if (substr($template, -6, 6) ne 'XXXXXX');
+
+   if ($dir){
+      croak("The directory in which you wish to test for duplicates, $dir, does not exist") unless (-e $dir);
+   }
+
+   @letters = split(//,"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+
+   $keepgen = 1;
+
+   while ($keepgen){
+      for (my $i = $#template; $i >= 0 && ($template[$i] eq 'X'); $i--){
+         $template[$i] = $letters[int(rand 52)];
+      }
+
+      undef $template;
+
+      $template = pack "a" x @template, @template;
+
+      $template = $template . $ext if ($ext);
+
+         if ($dir){
+            $lookup = File::Spec->catfile($dir, $template);
+            $keepgen = 0 unless (-e $lookup);
+         }else{
+            $keepgen = 0;
+         }
+
+   next if $keepgen == 0;
+   }
+
+   return($template);
 }
 
 1;

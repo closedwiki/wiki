@@ -233,13 +233,23 @@ sub getRevision
 {
     my( $self, $version ) = @_;
     
+    my $tmpfile = "";
     my $cmd = $self->{"coCmd"};
     $cmd =~ s/%REVISION%/1.$version/;
     my $file = $self->file();
     $cmd =~ s/%FILENAME%/$file/;
-    $cmd =~ /(.*)/;
-    $cmd = $1; # untaint
+    if( $TWiki::OS eq "WINDOWS" ) {
+        $tmpfile = $self->_mkTmpFilename();
+        $cmd .= " > $tmpfile";
+    }    $cmd =~ /(.*)/;
+    $cmd = "$1"; # untaint
     my $text = `$cmd`;
+    if( $tmpfile ) {
+        $text = $self->_readFile( $tmpfile );
+        TWiki::writeDebug( "tmpfile: $tmpfile" );
+        TWiki::writeDebug( "len = " . length($text ) );
+        unlink $tmpfile;
+    }
     _traceExec( $cmd, $text );
     return $text;
 }
