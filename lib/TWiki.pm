@@ -37,13 +37,15 @@
 
 package TWiki;
 
-## 0501 kk : vvv Added for revDate2EpSecs
-use Time::Local;
-
 use strict;
 
+use Time::Local;	# Added for revDate2EpSecs
+use Cwd; 		# Added for getTWikiLibDir 
+
+require 5.005;		# For regex objects and internationalisation
+
 # ===========================
-# TWiki config variables:
+# TWiki global config variables:
 use vars qw(
         $webName $topicName $includingWebName $includingTopicName
         $defaultUserName $userName $wikiName $wikiUserName
@@ -60,7 +62,6 @@ use vars qw(
         $numberOfRevisions $editLockTime
         $attachAsciiPath $scriptSuffix $wikiversion
         $safeEnvPath $mailProgram $noSpamPadding $mimeTypesFilename
-	$upperAlpha $lowerAlpha $mixedAlphaNum
         $doKeepRevIfEditLock $doGetScriptUrlFromCgi $doRemovePortNumber
         $doRemoveImgInMailnotify $doRememberRemoteUser $doPluralToSingular
         $doHidePasswdInRegistration $doSecureInclude
@@ -79,6 +80,20 @@ use vars qw(
         $readTopicPermissionFailed
     );
 
+# Internationalisation and regex setup:
+use vars qw(
+	$useLocale $siteLocale 
+
+	$upperNational $lowerNational 
+	$upperAlpha $lowerAlpha $mixedAlphaNum $lowerAlphaNum $numeric
+
+	$wikiWordRegex $webNameRegex $defaultWebNameRegex $anchorRegex $abbrevRegex
+
+	$singleUpperAlphaRegex $singleLowerAlphaRegex $singleUpperAlphaNumRegex
+	$singleMixedAlphaNumRegex $singleMixedNonAlphaNumRegex 
+	$mixedAlphaNumRegex
+    );
+
 # TWiki::Store config:
 use vars qw(
         $storeImpl @storeSettings
@@ -93,11 +108,39 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "17 Nov 2002";
+$wikiversion      = "26 Nov 2002";
 
 # ===========================
-# read the configuration file 
-do "TWiki.cfg";
+# Key Global variables, required for writeDebug
+# (new variables must be declared in "use vars qw(..)" above)
+@isoMonth = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
+@weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+
+{ 
+    my $count = 0;
+    %mon2num = map { $_ => $count++ } @isoMonth; 
+}
+
+# ===========================
+# Read the configuration file at compile time in order to set locale
+BEGIN {
+    do "TWiki.cfg";
+
+    # Do a dynamic 'use locale' for this module
+    if( $useLocale ) {
+        require locale;
+        import locale ();
+    }
+}
+
+
+
+# Forward declarations for debug
+sub writeDebug;
+sub writeWarning;
+
+# writeDebug "got useLocale = $useLocale";
+
 
 # ===========================
 # use TWiki and other modules
@@ -111,18 +154,11 @@ use TWiki::Form;      # forms for topics
 use TWiki::Func;      # official TWiki functions for plugins
 use TWiki::Plugins;   # plugins handler  #AS
 use TWiki::Net;       # SMTP, get URL
-use Cwd;
+
+
 
 # ===========================
-# variables: (new variables must be declared in "use vars qw(..)" above)
-@isoMonth = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
-@weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
-
-{ 
-    my $count = 0;
-    %mon2num = map { $_ => $count++ } @isoMonth; 
-}
-
+# Other Global variables
 
 # Token character/string that must not occur in any normal text - converted
 # to a flag character if it ever does occur (very unlikely).
@@ -154,8 +190,7 @@ $formatVersion = "1.0";
 # Warning and errors that may require admin intervention, to 'warnings.txt' typically.
 # Not using store writeLog; log file is more of an audit/usage file.
 # Use this for defensive programming warnings (e.g. assertions).
-sub writeWarning
-{
+sub writeWarning {
     my( $text ) = @_;
     if( $warningFilename ) {
     my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
@@ -169,9 +204,8 @@ sub writeWarning
 }
 
 # =========================
-sub writeDebug
 # Use for debugging messages, goes to 'debug.txt' normally
-{
+sub writeDebug {
     my( $text ) = @_;
     open( FILE, ">>$debugFilename" );
     
@@ -181,12 +215,12 @@ sub writeDebug
     my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
 
     print FILE "$time $text\n";
-    close( FILE);
+    close(FILE);
 }
 
 # =========================
-sub writeDebugTimes
 # Use for performance monitoring/debugging
+sub writeDebugTimes
 {
     my( $text ) = @_;
 
@@ -231,6 +265,10 @@ sub initialize
     &TWiki::Access::initializeAccess();
     $readTopicPermissionFailed = ""; # Will be set to name(s) of topic(s) that can't be read
 
+    # Set up locale for internationalisation and pre-compile regexes
+    setupLocale();
+    setupRegexes();
+
     # initialize user name and user to WikiName list
     userToWikiListInit();
     $userName = &TWiki::Plugins::initializeUser( $theRemoteUser, $theUrl, $thePathInfo );  # e.g. "jdoe"
@@ -255,17 +293,15 @@ sub initialize
         }
     }
 
-    # RD 19 Mar 02: Fix for Support.WebNameIncludesViewScriptPath and
-    # Support.CobaltRaqInstall.  A valid PATH_INFO is '/Main/WebHome', 
-    # i.e. the text after the script name; invalid PATH_INFO is often 
-    # a full path starting with '/cgi-bin/...'.
-
-    # Fix path_info if broken - FIXME: extreme brokenness may require more work
-    # DEBUG: Simulate broken path_info
-    # $thePathInfo = "$scriptUrlPath/view/Main/WebStatistics";
+    # Clean up PATH_INFO problems, e.g.  Support.CobaltRaqInstall.  A valid
+    # PATH_INFO is '/Main/WebHome', i.e. the text after the script name;
+    # invalid PATH_INFO is often a full path starting with '/cgi-bin/...'.
+    ## DEBUG: Simulate broken path_info
+    ## $thePathInfo = "$scriptUrlPath/view/Main/WebStatistics";
     $thePathInfo =~ s!$scriptUrlPath/[\-\.A-Z]+$scriptSuffix/!/!i;
     ##writeDebug( "===== thePathInfo after cleanup = $thePathInfo" );
 
+    # Get the web and topic names from PATH_INFO
     if( $thePathInfo =~ /\/(.*)\/(.*)/ ) {
         # is "bin/script/Webname/SomeTopic" or "bin/script/Webname/"
         $webName   = $1 || "" if( ! $webName );
@@ -276,7 +312,9 @@ sub initialize
     }
     ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
 
-    # filter out dangerous or unwanted characters:
+    ##writeDebug "raw topic is $topicName";
+
+    # Filter out dangerous or unwanted characters
     $topicName =~ s/$securityFilter//go;
     $topicName =~ /(.*)/;
     $topicName = $1 || $mainTopicname;  # untaint variable
@@ -325,6 +363,82 @@ sub initialize
 #/AS
 
     return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
+}
+
+# =========================
+# Run-time locale setup - 'use locale' must be done in BEGIN block
+# for regexes and sorting to work properly.
+sub setupLocale {
+ 
+    # TODO: Extract the character set from locale and use as variable in templates
+    # as well as in HTTP headers.
+    # TODO: Extract the language and use to disable plural processing if
+    # non-English
+    if ( $useLocale ) {
+	# Set environment variables for grep, ls, etc.
+	$ENV{'LC_CTYPE'}= $siteLocale;
+	$ENV{'LC_COLLATE'}= $siteLocale;
+
+	# Load i18n support module
+	require POSIX;
+	import POSIX qw( locale_h LC_CTYPE LC_COLLATE );
+
+	##my $old_locale = setlocale(LC_CTYPE);
+	##writeDebug "Old locale was $old_locale";
+
+	# Set new locale
+	my $locale = setlocale(&LC_CTYPE, $siteLocale);
+	setlocale(&LC_COLLATE, $siteLocale);
+	##writeDebug "New locale is $locale";
+    }
+}
+
+# =========================
+# Set up pre-compiled regexes for use in rendering
+sub setupRegexes {
+
+    # Build up character class components for use in regexes.
+    # Depends on locale mode and Perl version.
+    if ( not $useLocale or $] < 5.006 ) {
+	# No locales needed/working, or Perl 5.005_03 or lower, so just use
+	# any additional national characters defined in TWiki.cfg
+	# TODO: Build character set maps by applying '\w' to all 
+	# characters in character set, for Perl 5.005 with locales turned on.
+	$upperAlpha = "A-Z$upperNational";
+	$lowerAlpha = "a-z$lowerNational";
+	$numeric = '\d';
+	$lowerAlphaNum = "${lowerAlpha}${numeric}";
+	$mixedAlphaNum = "${lowerAlphaNum}${upperAlpha}";
+    } else {
+	# Perl 5.6 or higher with working locales
+	$upperAlpha = "[:upper:]";
+	$lowerAlpha = "[:lower:]";
+	$numeric = "[:digit:]";
+	$lowerAlphaNum = "[:lower:][:digit]";
+	$mixedAlphaNum = "[:alpha:][:digit]";
+    }
+
+    # Compile regexes for efficiency and ease of use
+    # Note: qr// locks in regex modes (i.e. '-xism' here) - see Friedl
+    # book at http://regex.info/
+    $wikiWordRegex = qr/[$upperAlpha]+[$lowerAlpha]+[$upperAlpha]+[$mixedAlphaNum]*/;
+    $webNameRegex = qr/[$upperAlpha]+[$lowerAlphaNum]*/;
+    $defaultWebNameRegex = qr/_[${mixedAlphaNum}_]+/;
+    # FIXME: Should really be '+' not '*' - at least one character in
+    # anchor
+    $anchorRegex = qr/\#[${mixedAlphaNum}_]*/;
+    $abbrevRegex = qr/[$upperAlpha]{3,}/;
+
+    # Single-character alpha-based regexes
+    $singleUpperAlphaRegex = qr/[$upperAlpha]/;
+    $singleLowerAlphaRegex = qr/[$lowerAlpha]/;
+    $singleUpperAlphaNumRegex = qr/[${upperAlpha}${numeric}]/;
+    $singleMixedAlphaNumRegex = qr/[${upperAlpha}${lowerAlpha}${numeric}]/;
+    $singleMixedNonAlphaNumRegex = qr/[^${upperAlpha}${lowerAlpha}${numeric}]/;
+
+    # Multi-character alpha-based regexes
+    $mixedAlphaNumRegex = qr/[${mixedAlphaNum}]*/;
+
 }
 
 # =========================
@@ -471,6 +585,7 @@ sub getEmailNotifyList
     my %seen;			# Incremented when email address is seen
     foreach ( split ( /\n/, TWiki::Store::readWebTopic( $web, $topicname ) ) ) {
         if (/^\s\*\s[A-Za-z0-9\.]+\s+\-\s+/) {
+	    # TODO: i18n fix on prev line
             # full form:   * Main.WikiName - email@domain
 	    # (the 'Main.' part is optional, non-capturing)
             if ( !/^\s\*\s(?:$mainWebPattern\.)?TWikiGuest\s/o ) {
@@ -480,6 +595,7 @@ sub getEmailNotifyList
 		}
             }
         } elsif (/^\s\*\s(?:$mainWebPattern\.)?([A-Z][A-Za-z0-9]+)/o ) {   
+	    # TODO: i18n fix on prev line
 	    # short form:   * Main.WikiName
 	    # (the 'Main.' part is optional, non-capturing)
             my $userWikiName = $1;
@@ -582,12 +698,14 @@ sub userToWikiListInit
 {
     my $text = &TWiki::Store::readFile( $userListFilename );
     my @list = split( /\n/, $text );
+    # TODO: i18n fix
     @list = grep { /^\s*\* [A-Za-z0-9]*\s*\-\s*[^\-]*\-/ } @list;
     %userToWikiList = ();
     %wikiToUserList = ();
     my $wUser;
     my $lUser;
     foreach( @list ) {
+	# TODO: i18n fix
         if(  ( /^\s*\* ([A-Za-z0-9]*)\s*\-\s*([^\s]*).*/ ) 
           && ( isWikiName( $1 ) ) && ( $2 ) ) {
             $wUser = $1;
@@ -607,7 +725,7 @@ sub isWikiName
     if( ! $name ) {
         $name = "";
     }
-    if ( $name =~ /^[A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*$/ ) {
+    if ( $name =~ m/^${wikiWordRegex}$/o ) {
         return "1";
     }
     return "";
@@ -942,18 +1060,20 @@ sub makeTopicSummary
     $htext =~ s/\s+[\+\-]*/ /g;       # remove newlines and special chars
 
     # limit to 162 chars
-    $htext =~ s/(.{162})([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./g;
+    $htext =~ s/(.{162})($mixedAlphaNumRegex)(.*?)$/$1$2 \.\.\./g;
 
-    # encode special chars to be iso-8859-1 conformant
+    # Encode special chars into HTML &#nnn; entities for international
+    # character support
+    # TODO: Review for i18n issues
     $htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
 
-    # inline search renders text, 
-    # so prevent linking of external and internal links:
+    # inline search renders text, so prevent linking of external and
+    # internal links:
     $htext =~ s/([\-\*\s])($linkProtocolPattern\:)/$1<nop>$2/go;
-    $htext =~ s/([\s\(])([A-Z]+[a-z0-9]*\.[A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/g;
-    $htext =~ s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/g;
-    $htext =~ s/([\s\(])([A-Z]{3,})/$1<nop>$2/g;
-    $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;
+    $htext =~ s/([\s\(])($webNameRegex\.$wikiWordRegex)/$1<nop>$2/g;
+    $htext =~ s/([\s\(])($wikiWordRegex)/$1<nop>$2/g;
+    $htext =~ s/([\s\(])($abbrevRegex)/$1<nop>$2/g;
+    $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# FIXME: i18n for email address?
 
     return $htext;
 }
@@ -1423,9 +1543,9 @@ sub handleToc
                 # Prevent WikiLinks
                 $line =~ s/\[\[.*\]\[(.*?)\]\]/$1/g;  # '[[...][...]]'
                 $line =~ s/\[\[(.*?)\]\]/$1/ge;       # '[[...]]'
-                $line =~ s/([\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$3/g;  # 'Web.TopicName'
-                $line =~ s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/g;  # 'TopicName'
-                $line =~ s/([\s\(])([A-Z]{3,})/$1<nop>$2/g;  # 'TLA'
+                $line =~ s/([\s\(])($webNameRegex)\.($wikiWordRegex)/$1<nop>$3/g;  # 'Web.TopicName'
+                $line =~ s/([\s\(])($wikiWordRegex)/$1<nop>$2/g;  # 'TopicName'
+                $line =~ s/([\s\(])($abbrevRegex)/$1<nop>$2/g;  # 'TLA'
                 # create linked bullet item
                 $line = "$tabs* <a href=\"$scriptUrlPath/$viewScript$scriptSuffix/$webPath/$topicname#$anchor\">$line</a>";
                 $result .= "\n$line";
@@ -1570,7 +1690,7 @@ sub handleSpacedTopic
 {
     my( $theTopic ) = @_;
     my $spacedTopic = $theTopic;
-    $spacedTopic =~ s/([a-z]+)([A-Z0-9]+)/$1%20*$2/g;   # "%20*" is " *"
+    $spacedTopic =~ s/($singleLowerAlphaRegex+)($singleUpperAlphaNumRegex+)/$1%20*$2/g;   # "%20*" is " *"
     return $spacedTopic;
 }
 
@@ -1655,14 +1775,14 @@ sub takeOutVerbatim
     my $verbatimCount = $#{$verbatim} + 1;
     
     foreach( split( /\n/, $intext ) ) {
-        if( /^(\s*)<verbatim>\s*$/oi ) {
+        if( /^(\s*)<verbatim>\s*$/i ) {
             $nesting++;
             if( $nesting == 1 ) {
                 $outtext .= "$1%_VERBATIM$verbatimCount%\n";
                 $tmp = "";
                 next;
             }
-        } elsif( m|^\s*</verbatim>\s*$|oi ) {
+        } elsif( m|^\s*</verbatim>\s*$|i ) {
             $nesting--;
             if( ! $nesting ) {
                 $verbatim->[$verbatimCount++] = $tmp;
@@ -1727,7 +1847,7 @@ sub handleCommonTags
     &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
 
-    # recursively process multiple embeded %INCLUDE% statements and prefs
+    # recursively process multiple embedded %INCLUDE% statements and prefs
     $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $theTopic, $theWeb, \@verbatim, @theProcessedTopics )/ge;
 
     # Wiki Plugin Hook
@@ -2058,9 +2178,9 @@ sub makeAnchorHeading
     $hasAnchor = 1 if( $text =~ m/<a /i );
     $hasAnchor = 1 if( $text =~ m/\[\[/ );
 
-    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])([A-Z]{3,})/ );
-    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ );
-    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ );
+    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($abbrevRegex)/ );
+    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($webNameRegex)\.($wikiWordRegex)/ );
+    $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($wikiWordRegex)/ );
     if( $hasAnchor ) {
         # FIXME: '<h1><a name="atext"></a></h1> WikiName' has an
         #        empty <a> tag, which is not HTML conform
@@ -2083,7 +2203,8 @@ sub makeAnchorName
     $anchorName =~ s/<\w[^>]*>//gi;         # remove HTML tags
     $anchorName =~ s/^(.+?)\s*$headerPatternNoTOC.*/$1/o; # filter TOC excludes if not at beginning
     $anchorName =~ s/$headerPatternNoTOC//o; # filter '!!', '%NOTOC%'
-    $anchorName =~ s/[^a-zA-Z0-9]/_/g;      # only allowed chars
+    # FIXME: More efficient to match with '+' on next line:
+    $anchorName =~ s/$singleMixedNonAlphaNumRegex/_/g;      # only allowed chars
     $anchorName =~ s/__+/_/g;               # remove excessive '_'
     $anchorName =~ s/^(.{32})(.*)$/$1/;     # limit to 32 chars
 
@@ -2091,8 +2212,7 @@ sub makeAnchorName
 }
 
 # =========================
-sub internalLink
-{
+sub internalLink {
     my( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink ) = @_;
     # $thePreamble is text used before the TWiki link syntax
     # $doLink is boolean: false means suppress link for non-existing pages
@@ -2101,17 +2221,19 @@ sub internalLink
     $theTopic =~ s/^\s*//;
     $theTopic =~ s/\s*$//;
 
-    # Upper case start of name, turn spaced-out names into WikiWords
+    # Turn spaced-out names into WikiWords - upper case first letter of
+    # whole link, and first of each word.
+    # TODO: option to turn off uppercasing of spaced-out wiki words, for i18n
     $theTopic =~ s/^(.)/\U$1/;
-    $theTopic =~ s/\s([a-zA-Z0-9])/\U$1/g;
+    $theTopic =~ s/\s($singleMixedAlphaNumRegex)/\U$1/g;	
 
     # Add <nop> before WikiWord inside link text to prevent double links
-    $theLinkText =~ s/([\s\(])([A-Z])/$1<nop>$2/g;
+    $theLinkText =~ s/([\s\(])($singleUpperAlphaRegex)/$1<nop>$2/g;
 
     my $exist = &TWiki::Store::topicExists( $theWeb, $theTopic );
-    # FIXME: Only apply plural processing to English pages...
+    # TODO: i18n - Only apply plural processing if sitelocale is English..
     if(  ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) && ! ( $exist ) ) {
-        # page is a non-existing plural
+        # Topic name is plural in form and doesn't exist as written
         my $tmp = $theTopic;
         $tmp =~ s/ies$/y/;       # plurals like policy / policies
         $tmp =~ s/sses$/ss/;     # plurals like address / addresses
@@ -2164,32 +2286,38 @@ sub specificLink
     $theLink =~ s/\s*$//;
 
     if( $theLink =~ /^$linkProtocolPattern\:/ ) {
-        # Found external link, add <nop> before WikiWord and ABBREV 
+
+        # External link: add <nop> before WikiWord and ABBREV 
 	# inside link text, to prevent double links
-	$theText =~ s/([\s\(])([A-Z])/$1<nop>$2/g;
+	$theText =~ s/([\s\(])($singleUpperAlphaRegex)/$1<nop>$2/g;
         return "$thePreamble<a href=\"$theLink\" target=\"_top\">$theText</a>";
+
+    } else {
+
+	# Internal link: get any 'Web.' prefix, or use current web
+	$theLink =~ s/^($webNameRegex|$defaultWebNameRegex)\.//;
+	my $web = $1 || $theWeb;
+	(my $baz = "foo") =~ s/foo//;       # reset $1, defensive coding
+
+	# Extract '#anchor'
+	# FIXME and NOTE: Had '-' as valid anchor character, removed
+	# $theLink =~ s/(\#[a-zA-Z_0-9\-]*$)//;
+	$theLink =~ s/($anchorRegex$)//;
+	my $anchor = $1 || "";
+
+	# Get the topic name
+	my $topic = $theLink || $theTopic;  # remaining is topic
+	$topic =~ s/\&[a-z]+\;//gi;        # filter out &any; entities
+	$topic =~ s/\&\#[0-9]+\;//g;       # filter out &#123; entities
+	$topic =~ s/[\\\/\#\&\(\)\{\}\[\]\<\>\!\=\:\,\.]//g;
+	$topic =~ s/$securityFilter//go;    # filter out suspicious chars
+	if( ! $topic ) {
+	    return "$thePreamble$theText"; # no link if no topic
+	}
+
+	return internalLink( $thePreamble, $web, $topic, $theText, $anchor, 1 );
     }
 
-    # Get any 'Web.' prefix, or use current web
-    $theLink =~ s/^([A-Z]+[a-z0-9]*|_[a-zA-Z0-9_]+)\.//;
-    my $web = $1 || $theWeb;
-    (my $baz = "foo") =~ s/foo//;       # reset $1, defensive coding
-
-    # Extract '#anchor'
-    $theLink =~ s/(\#[a-zA-Z_0-9\-]*$)//;
-    my $anchor = $1 || "";
-
-    # Get the topic name
-    my $topic = $theLink || $theTopic;  # remaining is topic
-    $topic =~ s/\&[a-z]+\;//gi;        # filter out &any; entities
-    $topic =~ s/\&\#[0-9]+\;//g;       # filter out &#123; entities
-    $topic =~ s/[\\\/\#\&\(\)\{\}\[\]\<\>\!\=\:\,\.]//g;
-    $topic =~ s/$securityFilter//go;    # filter out suspicious chars
-    if( ! $topic ) {
-        return "$thePreamble$theText"; # no link if no topic
-    }
-
-    return internalLink( $thePreamble, $web, $topic, $theText, $anchor, 1 );
 }
 
 # =========================
@@ -2239,8 +2367,7 @@ sub mailtoLinkSimple
 
 
 # =========================
-sub getRenderedVersion
-{
+sub getRenderedVersion {
     my( $text, $theWeb, $meta ) = @_;
     my( $head, $result, $extraLines, $insidePRE, $insideTABLE, $noAutoLink );
 
@@ -2380,7 +2507,7 @@ sub getRenderedVersion
             }
 
 # '#WikiName' anchors
-            s/^(\#)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ '<a name="' . &makeAnchorName( $2 ) . '"><\/a>'/ge;
+            s/^(\#)($wikiWordRegex)/ '<a name="' . &makeAnchorName( $2 ) . '"><\/a>'/ge;
 
 # enclose in white space for the regex that follow
              s/(.*)/\n$1\n/;
@@ -2422,24 +2549,21 @@ sub getRenderedVersion
             if( ! ( $noAutoLink ) ) {
 
                 # 'Web.TopicName#anchor' link:
-                s/([\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\#[a-zA-Z0-9_]*)/&internalLink($1,$2,$3,"$TranslationToken$3$4$TranslationToken",$4,1)/ge;
+                s/([\s\(])($webNameRegex)\.($wikiWordRegex)($anchorRegex)/&internalLink($1,$2,$3,"$TranslationToken$3$4$TranslationToken",$4,1)/geo;
                 # 'Web.TopicName' link:
-                s/([\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&internalLink($1,$2,$3,"$TranslationToken$3$TranslationToken","",1)/ge;
+                s/([\s\(])($webNameRegex)\.($wikiWordRegex)/&internalLink($1,$2,$3,"$TranslationToken$3$TranslationToken","",1)/geo;
 
                 # 'TopicName#anchor' link:
-                s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\#[a-zA-Z0-9_]*)/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/ge;
+                s/([\s\(])($wikiWordRegex)($anchorRegex)/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/geo;
 
                 # 'TopicName' link:
-		s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&internalLink($1,$theWeb,$2,$2,"",1)/ge;
-		# TODO for i18n: Define $wikiWord pattern as qr//, and
-		# finalised new settings in TWiki.cfg
-		# s/([\s\(])($upperAlpha+$lowerAlpha+$upperAlpha+$mixedAlphaNum*)/&internalLink($1,$theWeb,$2,$2,"",1)/geo;
+		s/([\s\(])($wikiWordRegex)/&internalLink($1,$theWeb,$2,$2,"",1)/geo;
 
 		# Handle acronyms/abbreviations of three or more letters
                 # 'Web.ABBREV' link:
-                s/([\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]{3,})/&internalLink($1,$2,$3,$3,"",0)/ge;
+                s/([\s\(])($webNameRegex)\.($abbrevRegex)/&internalLink($1,$2,$3,$3,"",0)/geo;
                 # 'ABBREV' link:
-                s/([\s\(])([A-Z]{3,})/&internalLink($1,$theWeb,$2,$2,"",0)/ge;
+                s/([\s\(])($abbrevRegex)/&internalLink($1,$theWeb,$2,$2,"",0)/geo;
                 # (deprecated <link> moved to DefaultPlugin)
 
                 s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
