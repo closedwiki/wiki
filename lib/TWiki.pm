@@ -248,7 +248,7 @@ sub initialize
 
 #AS
     if( !$disableAllPlugins ) {
-	&TWiki::Plugins::initialize( $topicName, $webName, $userName );
+        &TWiki::Plugins::initialize( $topicName, $webName, $userName );
     }
 #/AS
 
@@ -278,14 +278,14 @@ sub writeHeaderFull
     # of other types of page, with expiry driven by page type.
 
     if( ! &TWiki::Plugins::writeHeaderHandler( $query ) ) {
-	# FIXME: Need to merge any headers supplied by plugin
-	# FIXME: Disable this plugin for now, for full header setup
+        # FIXME: Need to merge any headers supplied by plugin
+        # FIXME: Disable this plugin for now, for full header setup
         # print $query->header();
     }
 
     # Generate date of format 'Thu, 23 Jul 1998 07:21:56 GMT'
     my $lastModifiedString = gmtime();
-    $lastModifiedString =~ s/ /, /;		# Comma after the day
+    $lastModifiedString =~ s/ /, /; # Comma after the day
     $lastModifiedString =~ s/$/ GMT/;
 
     # Expiry time is set high to avoid any data loss.  Each instance of Edit 
@@ -300,11 +300,11 @@ sub writeHeaderFull
     # (aka HTTP keepalive), and cache control headers, to ensure edit page is 
     # cached until required expiry time.
     print $query->header(-content_type => $contentType,
-			 -content_length => $contentLength,
-			 -last_modified => $lastModifiedString,
-			 -expires => "+${expireHours}h",
-			 -cache_control => "max-age=$expireSeconds"
-			 );
+                         -content_length => $contentLength,
+                         -last_modified => $lastModifiedString,
+                         -expires => "+${expireHours}h",
+                         -cache_control => "max-age=$expireSeconds"
+             );
 
 }
 
@@ -384,8 +384,8 @@ sub getEmailNotifyList
 
     my @list = ();
     foreach ( split( /\n/, &TWiki::Store::readWebTopic( $web, $topicname ) ) ) {
-	next unless /^\s\*\s[A-Za-z0-9\.\%]+\s+\-\s+/;
-	push @list, $1 if (/([\w\-\.\+]+\@[\w\-\.\+]+)/);
+        next unless /^\s\*\s[A-Za-z0-9\.\%]+\s+\-\s+/;
+        push @list, $1 if (/([\w\-\.\+]+\@[\w\-\.\+]+)/);
     }
 
     return( @list );
@@ -1501,6 +1501,8 @@ sub putBackVerbatim
         if( $type ne "verbatim" ) {
             $val =~ s/</&lt;/go;
             $val =~ s/</&gt;/go;
+            $val =~ s/\t/   /go; # A shame to do this, but been in TWiki.org have converted
+                                 # 3 spaces to tabs since day 1
         }
         $text =~ s|%_VERBATIM$i%|<$type>\n$val</$type>|;
     }
@@ -1800,10 +1802,10 @@ sub emitTR {
     $theRow =~ s/(\|\|+)/$TranslationToken . length($1) . "\|"/geo;  # calc COLSPAN
     foreach( split( /\|/, $theRow ) ) {
         $attr = "";
-	#AS 25-5-01 Fix to avoid matching also single columns
+        #AS 25-5-01 Fix to avoid matching also single columns
         if ( s/$TranslationToken([0-9]+)// ) { # No o flag for mod-perl compatibility
             $attr = " colspan=\"$1\"" ;
-	}
+        }
         s/^\s+$/ &nbsp; /o;
         /^(\s*).*?(\s*)$/;
         $l1 = length( $1 || "" );
