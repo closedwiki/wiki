@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000534076" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="MikeMannix" date="1000546377" format="1.0" version="1.7"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -63,11 +63,11 @@ The template files are in the ==twiki/templates== directory. As an example, ==tw
 	1. ==twiki/templates/$webName/$scriptName.tmpl==
 	2. ==twiki/templates/$scriptName.tmpl==
 
-__Note:__ ==$webName== is the name of the web ( i.e. ==Main== ), and ==$scriptName== is the script ( i.e. ==view== ).
+__Note:__ =$webName= is the name of the web (ex: =Main=), and ==$scriptName== is the script (ex: =view=).
 
 __Note:__ TWikiSkins can be defined to overload the standard templates.
 
-Some special variables are used in templates ( especially ==view== ) to show meta data - see [[TWikiDocumentation#Meta_Data_Rendering][Meta Data Rendering]]
+Special variables are used in templates, especially in =view=, to display [[TWikiMetaData#MetaDataRendering][meta data]].
 
 ---+++ Template Topics
 
