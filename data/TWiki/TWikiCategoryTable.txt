@@ -1,4 +1,6 @@
-__What is a Category Table?__
+---## TWiki Category Table
+
+---+++ What is a Category Table?
 
 It is possible to add a Category Table to a %WIKITOOLNAME% web. It allows you to categorize and classify a topic, e.g. give some structure to the content of a web.
 
@@ -55,15 +57,15 @@ One sample application is a knowledge base for customer support. The web for cus
 __Hint:__ The topic classification can be used to do some automatic processing in the background. For example, a script could automatically publish the FAQ entries to your corporate web site, including FAQ index page and file attachments.
 
 
-__How to Define a Category Table__
+---+++ How to Define a Category Table
 
-The Category Table is defined by some template files. To add a Category Table to your %WIKITOOLNAME% web you need to place the following three files into the =twiki/templates/{Yourweb}= directory:
-	* =twikicatitems.tmpl= : Defines the items in the table
-	* =twikicatedit.tmpl= : Defines the look of the table when editing a topic
-	* =twikicatview.tmpl= : Defines the look of the table when viewing a topic
+The Category Table is defined by some template files. To add a Category Table to your %WIKITOOLNAME% web you need to place the following three files into the ==twiki/templates/{Yourweb}== directory:
+| ==twikicatitems.tmpl== : | Defines the items in the table |
+| ==twikicatedit.tmpl== : | Defines the look of the table when editing a topic |
+| ==twikicatview.tmpl== : | Defines the look of the table when viewing a topic |
 
 
-__Format of Category Definition Template File twikicatitems.tmpl__
+---++++ Format of Category Definition Template File twikicatitems.tmpl
 
 Valid lines:
 <pre>
@@ -94,11 +96,11 @@ checkbox|OperatingSystem|true|5|OsSolaris|OsSunOS|OsHPUX|OsWin
 text|OsVersion|16
 </pre>
 
-__Format of twikicatedit.tmpl and twikicatview.tmpl__
+---++++ Format of twikicatedit.tmpl and twikicatview.tmpl
 
-Use the example below and customize if needed. =twikicatedit.tmpl= and =twikicatview.tmpl= can be identical, but they do not have to be.
+Use the example below and customize if needed. ==twikicatedit.tmpl== and ==twikicatview.tmpl== can be identical, but they do not have to be.
 
-__Attention:__ =&lt;!--TWikiCat--&gt;= is needed at the beginning and end as markers. Do not delete them!
+__Attention:__ ==&lt;!--TWikiCat--&gt;== is needed at the beginning and end as markers. Do not delete them!
 
 Example:
 <pre>
@@ -163,9 +165,21 @@ Above template files will result in the following table when __editing__ a topic
 </table>
 </form>
 
-__Note:__ It is possible to force the values of a Category Table when creating a new topic. This is useful to create new topics using a form for the topic name. The default values of the Category Table can be specified as hidden fields if needed, i.e. =&lt;input type="hidden" name="someCategory" value="someValue"&gt;= 
+
+---+++ Default Values for a Category Table
+
+It is possible to force the values of a Category Table when creating a new topic. You can define a default template to set the Category Table and/or specify individual values.
+
+---++++ Default Topic Template 
+
+Whenever you create a new topic, the ==twiki/templates/Webname/notedited.tmpl== file is used as the new topic template. To create this template, save a topic with the default text and the Category Table setting you need, then copy the content of the topic to the ==notedited.tmpl== template (including the Category Table). Look also at the ==twiki/templates/Know/notedited.tmpl== included in the distribution. 
+
+---++++ Set Individual Category Table Values
+
+It is possible to set individual values of a Category Table when creating a new topic. This is useful when you have a form to create a new topic of a certain classification. The default values of the Category Table can be specified as hidden fields as needed, i.e. =&lt;input type="hidden" name="someCategory" value="someValue"&gt;= 
 
 Example (edit this page to see the source) :
 	* <form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Know/"> New Know.PublicFAQ topic: <input type="text" name="topic" size="32"> <input type="hidden" name="TopicClassification" value="PublicFAQ"> <input type="hidden" name="OperatingSystem" value="OsSolaris,OsSunOS"> <input type="hidden" name="OsVersion" value="Just testing..."> <input type="hidden" name="onlywikiname" value="on"> <input type="submit" value="Create Topic"> </form>
 
--- Main.PeterThoeny - 26 Feb 2001 <br>
+-- RandyKramer - 26 Feb 2001 <br>
+-- Main.PeterThoeny - 04 Mar 2001 <br>
