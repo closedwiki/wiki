@@ -296,13 +296,6 @@ else
     warn ".htaccess !!!";
 }
 
-execute( "rm $dest/data/TWiki/TWikiRegistration.txt" ) or warn $!;
-my $reg = "$dest/data/TWiki/TWikiRegistration.txt,v";
-if ( -e $reg ) { execute( "rm $reg" ) or warn $!; }
-execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt $dest/data/TWiki/TWikiRegistration.txt") or warn $!;
-my $pubreg = "$dest/data/TWiki/TWikiRegistrationPub.txt,v";
-if ( -e $pubreg ) { execute( "mv $pubreg $reg") or warn $!; }
-
 # TODO: setup data/.htpasswd (default file contains TWikiGuest/guest)
 
 ################################################################################
