@@ -124,6 +124,8 @@ $debugFilename      = "$dataDir/debug.txt";
 $htpasswdFilename   = "$dataDir/.htpasswd";
 #                   Pathname of log file :
 $logFilename        = "$dataDir/log%DATE%.txt";
+#                   Pathname of remote users file that maps IP to user :
+$remoteUserFilename = "$dataDir/remoteusers.txt";
 #                   %WIKIUSERSTOPIC% : Name of users list topic :
 $wikiUsersTopicname = "TWikiUsers";
 #                   Pathname of users topic, used to translate Intranet name to Wiki name :
@@ -154,6 +156,10 @@ $editLockTime       = "3600";
 $doKeepRevIfEditLock = "1";
 #                   Remove port number from URL. Default "0"
 $doRemovePortNumber = "0";
+#                   Remember remote user for non-authenticated scripts
+#                   by matching the IP address with known users. Default "0"
+#                   (Note: Does not work reliably with dynamic IP addresses)
+$doRememberRemoteUser = "0";
 #                   Change non existing plural topic name to singular,
 #                   e.g. TestPolicies to TestPolicy. Default "1"
 $doPluralToSingular = "1";

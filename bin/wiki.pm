@@ -64,13 +64,15 @@ use vars qw(
         $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir
         $wikiToolName $securityFilter
         $debugFilename $htpasswdFilename 
-        $logFilename $wikiUsersTopicname $userListFilename %userToWikiList
+        $logFilename $remoteUserFilename $wikiUsersTopicname 
+        $userListFilename %userToWikiList
         $twikiWebname $mainWebname $mainTopicname $notifyTopicname
         $wikiPrefsTopicname $webPrefsTopicname
         $statisticsTopicname $statsTopViews $statsTopContrib
 	$editLockTime 
         $mailProgram $wikiversion 
-        $doKeepRevIfEditLock $doRemovePortNumber $doPluralToSingular
+        $doKeepRevIfEditLock $doRemovePortNumber
+        $doRememberRemoteUser $doPluralToSingular
         $doSecureInclude
         $doLogTopicView $doLogTopicEdit $doLogTopicSave
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
@@ -84,7 +86,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "28 Sep 2000";
+$wikiversion      = "04 Oct 2000";
 
 # ===========================
 # read the configuration part
@@ -120,11 +122,7 @@ sub initialize
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
     # initialize user name and user to WikiName list
-    $userName = $defaultUserName;
-    if( $theRemoteUser ) {
-        $userName = $theRemoteUser;
-    }
-    $userName =~ s/$securityFilter//go;
+    $userName = initializeRemoteUser( $theRemoteUser );
     userToWikiListInit();
     $wikiUserName = userToWikiName( $userName );
 
@@ -259,6 +257,52 @@ sub getEmailNotifyList
         $list =~ s/ *$//go;
     }
     return $list;
+}
+
+# =========================
+sub initializeRemoteUser
+{
+    my( $theRemoteUser ) = @_;
+
+    my $remoteUser = $theRemoteUser || $defaultUserName;
+    $remoteUser =~ s/$securityFilter//go;
+    $remoteUser =~ /(.*)/;
+    $remoteUser = $1;  # untaint variable
+
+    my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
+
+    if( ( ! $doRememberRemoteUser ) || ( ! $remoteAddr ) ) {
+        # do not remember IP address
+        return $remoteUser;
+    }
+
+    my $text = readFile( $remoteUserFilename );
+    my %AddrToName = map { split( /\|/, $_ ) }
+                   grep { /[^\|]*\|[^\|]*\|$/ }
+                   split( /\n/, $text );
+
+    my $rememberedUser = "";
+    if( exists( $AddrToName{ $remoteAddr } ) ) {
+        $rememberedUser = $AddrToName{ $remoteAddr };
+    }
+
+    if( $theRemoteUser ) {
+        if( $theRemoteUser ne $rememberedUser ) {
+            $AddrToName{ $remoteAddr } = $theRemoteUser;
+            # create file as "$remoteAddr|$theRemoteUser|" lines
+            $text = "# This is a generated file, do not modify.\n";
+            foreach my $usrAddr ( sort keys %AddrToName ) {
+                my $usrName = $AddrToName{ $usrAddr };
+                $text .= "$usrAddr|$usrName|\n";
+            }
+            saveFile( $remoteUserFilename, $text );
+        }
+    } else {
+        # get user name from AddrToName table
+        $remoteUser = $rememberedUser || $defaultUserName;
+    }
+
+    return $remoteUser;
 }
 
 # =========================
