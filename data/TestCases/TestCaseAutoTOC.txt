@@ -74,7 +74,7 @@ Description: tests for TOCs included from other topics and with funny deprecated
 <!-- /expected -->
 </td><td>
 <!-- actual -->
-%TOC{title="The Top" web="%WEB%" topic="%TOPIC%}%
+%TOC{title="The Top" web="%WEB%" topic="%TOPIC%"}%
 <!-- /actual -->
 </td></tr></table>
 ---+!! Ignore me H1

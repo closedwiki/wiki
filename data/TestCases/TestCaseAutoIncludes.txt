@@ -61,7 +61,7 @@ IncludedTopic
 <!-- expected -->
 %A% %B% %C%
 1 2 3
-
+<p />
 %A% %B% %C%
 <!-- /expected -->
 ---++ Actual

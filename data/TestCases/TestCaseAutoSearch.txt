@@ -277,7 +277,7 @@ Same as last test
 <!-- /expected -->
 ---++ Actual
 <!-- actual -->
-%SEARCH{ "Pingu the Penguin" nototal="on" nosearch="on" format="<nop>$web <nop>$topic <br /> <nop>$username <img src=\"pingu.gif\" alt=\"<nop>\" > " }%
+%SEARCH{ "Pingu the Penguin" nototal="on" nosearch="on" format="<nop>$web <nop>$topic <br /> <nop>$wikiname <img src=\"pingu.gif\" alt=\"<nop>\" > " }%
 <!-- /actual -->
 
 ---+ order="created"
