@@ -12,6 +12,7 @@
 #    * run rcslock
 #    * ???
 # TODO: (long term)
+#    * better mechanism to publish distribution definition
 #    * compare/contrast with MS-'s installer
 #    * put in package namespace
 #    * install plugin dependencies (ooh, add to twiki form?)
@@ -65,12 +66,12 @@ unless ( $q->param('install') =~ /install/i )
 					-title => $title,
 					-style => { -code => "\
 table, tr, td, td p  { padding:0em; margin:0em; } \
-table { width:100%; border:thin solid black; background:#66dd99; } \
-tr { border:thin dotted red; } \
+table { width:90%; } \
 td { padding:0.2em; background:#9999cc; } \
 td:hover { background:#bbbbff; } \
-th { background:pink; font:1.5em; padding:0.35em; } \
-th:hover { background:#ffeeee; } \
+th { background:pink; font:1.5em; padding:0.35em; text-align:right; } \
+th:hover { background:#ffdddd; } \
+#hdr td { padding:0.2em; background:#ffff66; border:0px; } \
 " },
 					);
 #    print "$q";
@@ -100,6 +101,15 @@ function toggleHover( e )
 }
 -->
 </script>
+<h1>TWiki Installation</h1>
+
+<table id="hdr"><tr>
+<td>Step 2/4 <br/>
+TWiki Release: 01 Sep 2004 (Cairo)</td>
+<td align="right" width="1%" nowrap >
+<input type="submit" name="install" value="install" /> <br/>
+</td>
+</table>
 <form id="form">
 __HTML__
 
@@ -108,13 +118,11 @@ __HTML__
     print catalogue({ xml => "tmp/install/downloads/addons/addons.xml", title => "AddOns", type => "addon", cgi => $q });
 #    print catalogue({ xml => "tmp/install/downloads/skins/skins.xml", title => "Skins", type => "skin", cgi => $q });
     print catalogue({ xml => "tmp/install/downloads/patches/patches.xml", title => "Patches", type => "patch", cgi => $q });
-    print catalogue({ xml => "tmp/install/downloads/webs/webs.xml", title => "Web Templates", type => "web", cgi => $q });
-    print wikiCatalogue({ type => "systemweb", webs => [ wikiWebList({ dir => "downloads/webs/system" }) ], title => "System Webs (Updates)", cgi => $q });
-    print wikiCatalogue({ type => "localweb", title => "Local Webs", webs => [ wikiWebList({ dir => "webs/local" }) ], cgi => $q });
+#    print catalogue({ xml => "tmp/install/downloads/webs/webs.xml", title => "Web Templates", type => "web", cgi => $q });
+    print wikiCatalogue({ webs => [ wikiWebList({ dir => "downloads/webs/system" }) ], title => "System Wiki Webs (Updates)", type => "systemweb", cgi => $q });
+    print wikiCatalogue({ webs => [ wikiWebList({ dir => "webs/local" }) ], title => "Local Wiki Webs", type => "localweb", cgi => $q });
 
     print <<__HTML__;
-<br/>
-<input type="submit" name="install" value="install" /> <br/>
 </form>
 </body>
 </html>
@@ -379,6 +387,8 @@ sub wikiCatalogue
 {
     my $p = shift;
 
+    unless ( @{ $p->{webs} } ) { return "" }
+
     my $text = "";
     $text .= "<table>";
     $text .= qq{<tr><th onclick="toggleAll( document.getElementById('form'), '$p->{type}' )" >} . $p->{title} . "</th></tr>\n";
@@ -432,7 +442,7 @@ sub catalogue
 	    $text .= "<td>";
 	    # BLECH - force a checkbox click, because the TD handler above will undo it (happens twice :( )
 	    $text .= qq{<input type="checkbox" name="$p->{type}" value="$_->{name}->[0]" $checked $disabled onclick="toggleHover(this.parentNode.parentNode);" /> };
-	    $text .= "<big><b>" . $p->{cgi}->a( $aAttr, $_->{name}->[0] ) . "</b></big>\n";
+	    $text .= "<b>" . $p->{cgi}->a( $aAttr, $_->{name}->[0] ) . "</b>\n";
 	    $text .= $_->{description}->[0] || '';
 	    $text .= "</td>";
 	    #--------------------------------------------------------------------------------
