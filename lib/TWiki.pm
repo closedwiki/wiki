@@ -1051,6 +1051,7 @@ sub makeTopicSummary
     $htext =~ s/<\!\-\-.*$//s;        # cut HTML comment
     $htext =~ s/<[^>]*>//g;           # remove all HTML tags
     $htext =~ s/\&[a-z]+;/ /g;        # remove entities
+    # FIXME: May need to use %WEBURLENCODED% and %TOPICURLENCODED% etc
     $htext =~ s/%WEB%/$theWeb/g;      # resolve web
     $htext =~ s/%TOPIC%/$theTopic/g;  # resolve topic
     $htext =~ s/%WIKITOOLNAME%/$wikiToolName/g; # resolve TWiki tool name
@@ -1720,6 +1721,13 @@ sub handleInternalTags
     $_[0] =~ s/%WEB%/$_[2]/g;
     $_[0] =~ s/%BASEWEB%/$webName/g;
     $_[0] =~ s/%INCLUDINGWEB%/$includingWebName/g;
+
+    # URL encoding for use in POST URLs with topics/webs that have 8-bit
+    # characters in name
+    $_[0] =~ s/%TOPICURLENCODED%/&urlEncode($_[1])/ge; 	# URL-encoded topic name 
+    $_[0] =~ s/%WEBURLENCODED%/&urlEncode($_[2])/ge; 	# URL-encoded web name 
+
+
     $_[0] =~ s/%TOPICLIST{(.*?)}%/&handleWebAndTopicList($1,'0')/ge;
     $_[0] =~ s/%WEBLIST{(.*?)}%/&handleWebAndTopicList($1,'1')/ge;
     $_[0] =~ s/%WIKIHOMEURL%/$wikiHomeUrl/g;
@@ -2197,8 +2205,7 @@ sub makeAnchorHeading
 # Build a valid HTML anchor name
 sub makeAnchorName
 {
-    my( $theName ) = @_;
-    my $anchorName = $theName;
+    my( $anchorName ) = @_;
 
     $anchorName =~ s/^[\s\#\_]*//;          # no leading space nor '#', '_'
     $anchorName =~ s/[\s\_]*$//;            # no trailing space, nor '_'
@@ -2211,10 +2218,22 @@ sub makeAnchorName
     $anchorName =~ s/^(.{32})(.*)$/$1/;     # limit to 32 chars
 
     # URL-encode 8-bit characters
-    $anchorName =~ s/([\x7f-\xff])/'%' . unpack( "H*", $1 ) /ge;
+    $anchorName = urlEncode($anchorName);
 
     return $anchorName;
 }
+
+
+# =========================
+# Encode 8-bit-set characters for use in URLs (not using UTF8 URL
+# encoding by browser)
+sub urlEncode {
+    my ($url) = @_;
+
+    $url =~ s/([\x7f-\xff])/'%' . unpack( "H*", $1 ) /ge;
+    return $url;
+}
+
 
 # =========================
 sub internalLink {
