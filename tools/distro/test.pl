@@ -13,7 +13,7 @@ use Getopt::Long qw( :config bundling auto_version );
 use Pod::Usage;
 use WWW::Mechanize::TWiki 0.05;
 
-$main::VERSION = '0.50';
+$main::VERSION = '0.55';
 my $Config = {
 # TEST OPTIONS
     testweb => 'GameDev',
@@ -48,11 +48,11 @@ my $result = GetOptions( $Config,
 pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 
-$Config->{plugin} ||= [ qw( PerlDocPlugin CommentPlugin
+$Config->{plugin} ||= [ qw( PerlDocPlugin
 		    FindElsewherePlugin InterwikiPlugin SpreadSheetPlugin TablePlugin TocPlugin 
 		    SpacedWikiWordPlugin ChartPlugin 
 		    TWikiReleaseTrackerPlugin
-		   	) ];										#+ ActionTrackerPlugin BeautifierPlugin CalendarPlugin
+		   	) ];										#+ ActionTrackerPlugin BeautifierPlugin CalendarPlugin CommentPlugin
 $Config->{contrib} ||= [ qw( DistributionContrib ) ];	#+ AttrsContrib DBCacheContrib JSCalendarContrib TWikiShellContrib
 $Config->{addon} ||= [ qw( GetAWebAddOn ) ];			#+ ???
 die "twikiplugins doesn't exist" unless -d $Config->{twikiplugins};
@@ -69,7 +69,7 @@ cp( $newDistro, $Config->{_installer}->{TWikiReleases} ) or die $!;
 
 # install reference version
 BuildTWikiDistribution({ %$Config }); 
-PushRemoteTWikiInstall({ %$Config, kernel => 'TWiki20040901.tar.gz', report => 0 });
+PushRemoteTWikiInstall({ %$Config, kernel => 'TWiki20040902.tar.gz', report => 0 });
 TWikiTopics2TestCases({ %$Config });
 GetAWeb({ %$Config, web => $Config->{testweb} });
 UninstallTWiki({ %$Config });
@@ -209,7 +209,7 @@ sub GetAWeb
 
     my $getaweb = 'get-a-web';
     my $exportWeb = "$webOutput.tar";
-    $mech->$getaweb( $exportWeb, { output => $exportWeb, gzip => 1, saveasweb => $web } );
+    $mech->$getaweb( $exportWeb, { output => $exportWeb, saveasweb => $web } );
 ###
     open( WEB, ">$exportWeb" ) or die $!;
     print WEB $mech->content() or die $!;
