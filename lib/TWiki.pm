@@ -532,21 +532,28 @@ sub getLocaldate
 # =========================
 sub formatGmTime
 {
-    my( $time, $isoFormat ) = @_;
+    my( $theTime, $theFormat ) = @_;
 
-    my( $sec, $min, $hour, $mday, $mon, $year) = gmtime( $time );
+    my( $sec, $min, $hour, $mday, $mon, $year ) = gmtime( $theTime );
 
-    if( $isoFormat ) {
+    if( $theFormat ) {
         $mon += 1;
         $year += 1900;
-        # Note: ISO date spec is at http://www.w3.org/TR/NOTE-datetime
-        return "$year-$mon-$mday" . "T$hour:$min" . "Z";
+
+        if( $theFormat =~ /rcs/i ) {
+            # RCS format, example: "2001/12/31 23:59:59:59"
+            return sprintf( "%.4u/%.2u/%.2u %.2u:%.2u:%.2u", 
+                            $year, $mon, $mday, $hour, $min, $sec );
+        }
+
+        # ISO Format, see ISO date spec at http://www.w3.org/TR/NOTE-datetime
+        return sprintf( "%.4u\-%.2u\-%.2uT%.2u\:%.2u:%.2uZ", 
+                        $year, $mon, $mday, $hour, $min, $sec );
     }
 
     my( $tmon ) = $isoMonth[$mon];
     $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
-    $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
-    return $time;
+    return sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
 }
 
 # =========================
