@@ -40,8 +40,8 @@ use vars qw(
 
 $VERSION = '1.000';
 
-$prefixPattern  = 'ENCRYPTEDPAGE{';
-$postfixPattern = '}';
+$prefixPattern  = '%ENCRYPTEDPAGE{';
+$postfixPattern = '}%';
 $replacementText = <<EOT;
 <APPLET CODE = "uk.org.ellery.twiki.TwikiEncrypt.class"  ARCHIVE = "http://twiki.org/p/pub/Sandbox/EncryptionApplet/TwikiEncrypt.jar,http://twiki.org/p/pub/Sandbox/EncryptionApplet/Crypt.jar"  WIDTH = 400 HEIGHT = 200>
 <PARAM NAME ="ATTACHURL" VALUE="%ATTACHURL%">
@@ -74,7 +74,7 @@ sub initPlugin
 
     # Get plugin preferences from EncryptedPagesPlugin topic
 
-    $debug            = &TWiki::Func::getPreferencesFlag( "ENCRYPTEDPAGESPLUGIN_DEBUG" );
+    $debug = &TWiki::Func::getPreferencesFlag( "ENCRYPTEDPAGESPLUGIN_DEBUG" );
 
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::EncryptedPagesPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -101,7 +101,7 @@ sub outsidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-    $_[0] =~ s/prefixPattern$(.*)$postfixPattern/$replacementText/geo;
+    $_[0] =~ s/$prefixPattern(.*)$postfixPattern/$replacementText/geo;
     my $key= $1;
     $_[0] =~ s/--!!--/$key/geo;
 }

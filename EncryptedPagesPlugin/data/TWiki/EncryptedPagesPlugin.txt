@@ -16,6 +16,6 @@ Raw java test:
 </APPLET>
 
 And now for a Twiki plugin test:
-ENCRYPTEDPAGE{key2}%
+%ENCRYPTEDPAGE{key2}%
 
 -- Main.RichardJEllery - 13 Jan 2003
