@@ -179,6 +179,7 @@ __END__
    * TWiki/ (SVN)
    * Main/, Sandbox/, Trash/, <strike>_default/</strike> (empty; deleted by build-twiki-kernel.pl)
    * icn/_filetypes.txt, icn/*.gif (SVN)
+   * favicon.ico (in pub/TWiki/WebPreferences)
 
 /
    8 -rw-r--r--    1 twiki  twiki     475 29 May 02:51 pub-htaccess.txt (SVN)
@@ -198,7 +199,6 @@ __END__
   40 -rw-r--r--    1 twiki  twiki   19696 30 Aug 02:52 license.txt (use confused with distribution)
 
 /pub
-   * favicon.ico [blasted robot]
    * wikiHome.gif [blasted robot]
 
 ################################################################################
