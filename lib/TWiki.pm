@@ -497,7 +497,7 @@ sub getTWikiLibDir
 
     # fix relative path
     if( $twikiLibDir =~ /^\./ ) {
-        my $curr = cwd();
+        my $curr = getcwd();
         $twikiLibDir = "$curr/$twikiLibDir/";
         # normalize "/../" and "/./"
         $twikiLibDir =~ s|([\\/])[^\\/]+[\\/]\.\.[\\/]|$1|go;
