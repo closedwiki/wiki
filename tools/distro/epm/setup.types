@@ -1,9 +1,0 @@
-TYPE Typical EndUser Configuration 
-INSTALL foo 
-INSTALL foohelp 
-TYPE Typical Developer Configuration 
-INSTALL foo 
-INSTALL foohelp 
-INSTALL foodevel 
-INSTALL fooexamples 
-TYPE Custom Configuration 
