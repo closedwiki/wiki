@@ -130,7 +130,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "26 Feb 2004";
+$wikiversion      = "28 Feb 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2359,8 +2359,8 @@ sub handleToc
                 $line =~ s/(^|[\s\(])\*([^\s]+?|[^\s].*?[^\s])\*($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
                 $line =~ s/(^|[\s\(])_+([^\s]+?|[^\s].*?[^\s])_+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
                 # Prevent WikiLinks
-                $line =~ s/\[\[.*\]\[(.*?)\]\]/$1/g;  # '[[...][...]]'
-                $line =~ s/\[\[(.*?)\]\]/$1/ge;       # '[[...]]'
+                $line =~ s/\[\[.*?\]\[(.*?)\]\]/$1/g;  # '[[...][...]]'
+                $line =~ s/\[\[(.*?)\]\]/$1/ge;        # '[[...]]'
                 $line =~ s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/$1<nop>$3/g;  # 'Web.TopicName'
                 $line =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/g;  # 'TopicName'
                 $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/g;  # 'TLA'
