@@ -1,0 +1,67 @@
+%META:TOPICINFO{author="tarzan" date="1061986675" format="1.0" version="1.6"}%
+---++ RevisionLinkPlugin
+
+This plugin enables the author of a TWiki page to specify a particular version of a topic to link to. You can use also negative numbers when specifying the revision number.
+
+---+++ Syntax Rules
+| %<nop>REV{"1.1"}% | Points to current topic in specified revision |
+| %<nop>REV['-2']}% | Points to current topic in revision which was two times back |
+| %<nop>REV{"ATopic" rev="1.1"}% | Points to specified topic in specified revision |
+| %<nop>REV{"ATopic" web="AWeb" rev="1.1"}% | Points to specified topic in web |
+| %<nop>REV{"ATopic" web="AWeb" rev="1.1" format="$web.$topic(rev=$rev)"}% | Points to specified topic in web and formats the output |
+
+You can specify also the topic by topic attribute, i.e. %<nop>REV{topic="ATopic" rev="1.1"}%<br>
+
+If you want to add this plugin to metadata than you can use character *[* instead of *{* and *'* instead of *"*. These characters should not be in conflict with the syntax of metadata. 
+
+---++++ Syntax and variables in 'format' attribute
+You can use these variables: *$web*, *$topic*, *$rev*, *$date*, *$user*, *$comment*. <br>
+As default the whole string is used as link to appropriate revision. If you write more complex format string and you don't want to link only part of the string encapsulate it with *!*. Ex. %<nop>REV{"ATopic" web="AWeb" rev="1.1" format="| $date | $user | !$web.$topic(rev=$rev)! | $comment |"}%.
+
+---++ Examples
+| %REV{"1.1"}% | Points to current topic in specified revision |
+| %REV['-2']}% | Points to current topic in revision which was two times back |
+| %REV{"CalendarPlugin" rev="1.3"}% | Points to specified topic in specified revision |
+| %REV{"WebHome" web="TWiki" rev="1.1"}% | Points to specified topic in web |
+| %REV{"WebHome" web="TWiki" rev="1.1" format="$web.$topic(rev=$rev)"}% | Points to specified topic in web and formats the output |
+
+Example of more complex format attribute:<br>
+%REV{"WebHome" web="TWiki" rev="1.1" format="| $date | $user | !$web.$topic(rev=$rev)! | $comment |"}%
+
+---+++ <nop>%TOPIC% Global Settings
+
+Plugin settings are stored as preferences variables. The following variables are used for this plugin.
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = This plugin enables linking to specific topic revisions.
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+---+++ Plugin Installation Instructions
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* Test if the installation was successful:
+		* %REV{"1.1"}%
+
+---+++ Plugin Info
+
+|  Plugin Author: | Main.RichardBaar |
+|  Plugin Version: | Version 1.11 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+|  History: | 05 Aug 2003 | Version 1.0 | Initial version |
+| | 14 Aug 2003 | Version 1.1 | You can specify revision only with one number (ex. %<nop>REV{"5"}%)<br>You can use negative numbers for revision (ex. %<nop>REV{"-2"}%)<br>Enhanced syntax (added characters *[* and *'*)<br>Added variables $date, $user and $comment to format attribute |
+| | 27 Aug 2003 | Version 1.11 | Repaired link when "web" attribute specified |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+
+This work was sponsored by [[http://www.systinet.com][Systinet Corp.]]
