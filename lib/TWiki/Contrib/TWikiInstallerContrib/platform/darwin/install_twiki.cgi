@@ -177,12 +177,12 @@ my $releaseTracker = ";contrib=DistributionContrib;plugin=TWikiReleaseTrackerPlu
 
 #plugin=CommentPlugin;plugin=SectionalEditPlugin
 #plugin=CalendarPlugin or plugin=QuickCalendarPlugin
+#addon=CompareRevisionsAddOn - waiting until TWiki:Codev....InsDelTags... fixed
 
-my $baseWiki = ";plugin=InterwikiPlugin;plugin=SpacedWikiWordPlugin;plugin=SpreadSheetPlugin;plugin=TablePlugin;addon=GetAWebAddOn;plugin=SmiliesPlugin;addon=CompareRevisionsAddOn;plugin=SessionPlugin";
+my $baseWiki = ";plugin=InterwikiPlugin;plugin=FindElsewherePlugin;plugin=SpacedWikiWordPlugin;plugin=SpreadSheetPlugin;plugin=TablePlugin;addon=GetAWebAddOn;plugin=SmiliesPlugin;plugin=SessionPlugin";
 my $level2Wiki = $baseWiki . $releaseTracker . ";plugin=SlideShowPlugin;plugin=TocPlugin;plugin=RandomTopicPlugin";
 my $publicWiki = $level2Wiki . ";plugin=BlackListPlugin";
-my $level3Wiki = $level2Wiki . ";plugin=FindElsewherePlugin;plugin=InterwikiPlugin;contrib=AttrsContrib";
-	#plugin=ImageGalleryPlugin - problems with DEVELOP atm?
+my $level3Wiki = $level2Wiki . ";plugin=InterwikiPlugin;contrib=AttrsContrib;plugin=ImageGalleryPlugin";
 	#plugin=BatchPlugin (esp. handy with ImageGallery (but i haven't tested it))
 my $appWiki = $level3Wiki . ";plugin=FormQueryPlugin;plugin=MacrosPlugin";
 
@@ -510,15 +510,12 @@ sub installTWikiExtension
 
     print "<h3>Installing $name</h3>\n";
     (my $tarPackage = $file);
-    print STDERR "trying tarPackage=[$tarPackage]\n";
     unless ( -e $tarPackage )
     {
 	($tarPackage = "$dir/$file") =~ s|^tmp/install/||;
-	print STDERR "trying tarPackage=[$tarPackage]\n";
 	unless ( -e "tmp/install/$tarPackage" )
 	{ 
 	    $tarPackage .= ".tar.gz";
-	    print STDERR "trying tarPackage=[$tarPackage]\n";
 	    unless ( -e "tmp/install/$tarPackage" )
 	    {
 		print "<br/>Skipping $name ($tarPackage not found)<br/>\n"; 
