@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1058399820" format="1.0" version="1.38"}%
+%META:TOPICINFO{author="PeterThoeny" date="1059255424" format="1.0" version="1.39"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---# TWiki Text Formatting
@@ -321,7 +321,7 @@ Know.ReadmeFirst
  Create a link where you can specify the link text and the link reference separately, using nested square brackets like =[<nop>[reference][text]]=. Internal link references (e.g. WikiSyntax) and external link references (e.g. http://TWiki.org/) are supported.
  %BR% __Note:__ The same __Forced Links__ rules apply for internal link references.
  %BR% __Note:__ For external link references, you can simply use a space instead of =][= to separate the link URL from the descriptive text.
- %BR% __Note:__ Anchor names can be added as well, like =[<nop>[WebHome#MyAnchor][go home]]= and =[<nop>[http://gnu.org/#Action][GNU Action]]=.
+ %BR% __Note:__ Anchor names can be added as well, like =[<nop>[%HOMETOPIC%#MyAnchor][go home]]= and =[<nop>[http://gnu.org/#Action][GNU Action]]=.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -347,7 +347,7 @@ Know.ReadmeFirst
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
-[[WebHome#NotThere]]
+[[WikiWord#NotThere]]
 
 [[#MyAnchor][Jump]]
 
@@ -355,7 +355,7 @@ Know.ReadmeFirst
 </pre>
 </font></span>
 </td><td valign="top">
-[[WebHome#NotThere]]
+[[WikiWord#NotThere]]
 
 [[#MyAnchor][Jump]]
 
