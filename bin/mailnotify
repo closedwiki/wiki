@@ -167,8 +167,8 @@ sub processWeb
 	    $debug && print "$topicName ";
 
 	    # URL-encode topic names for use of I18N topic names in plain text
-	    $webNameEnc = TWiki::urlEncode( $webName );
-	    my $topicNameEnc = TWiki::urlEncode( $topicName );
+	    $webNameEnc = TWiki::handleUrlEncode( $webName );
+	    my $topicNameEnc = TWiki::handleUrlEncode( $topicName );
 
 	    # Create entry in plain-text email body
 	    $newText = "- $topicName  ($wikiuser)\n  $scriptUrl/view$scriptSuffix/$webNameEnc/$topicNameEnc\n";
