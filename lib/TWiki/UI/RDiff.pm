@@ -350,18 +350,13 @@ sub diff {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
 
-    my $renderStyle = $query->param('render');
-    $renderStyle = $session->{prefs}->getPreferencesValue( 'DIFFRENDERSTYLE' ) unless ( $renderStyle );
-    my $diffType = $query->param('type');
-    my $contextLines = $query->param('context');
-    $contextLines = $session->{prefs}->getPreferencesValue( 'DIFFCONTEXTLINES' ) unless ( $contextLines );
+    my $renderStyle = $query->param('render') || $session->{prefs}->getPreferencesValue( 'DIFFRENDERSTYLE' ) || 'sequential';
+    my $diffType = $query->param('type') || 'diff';
+    my $contextLines = $query->param('context') || $session->{prefs}->getPreferencesValue( 'DIFFCONTEXTLINES' );
+    $contextLines = 3 unless defined $contextLines;
     my $skin = $session->getSkin();
     my $rev1 = $query->param( 'rev1' );
     my $rev2 = $query->param( 'rev2' );
-
-    $renderStyle = 'sequential' if ( ! $renderStyle );
-    $diffType = 'diff' if ( ! $diffType );
-    $contextLines = 3 unless ( defined $contextLines );
 
     TWiki::UI::checkWebExists( $session, $webName, $topic );
 
