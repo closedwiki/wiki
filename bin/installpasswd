@@ -1,0 +1,153 @@
+#!/usr/bin/perl -wTI.
+#
+# Copyright (C) 2001 Klaus Wriessnegger, kw@sap.com
+#                    Andrea Sterbini, a.sterbini@flashnet.it
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at
+# http://www.gnu.ai.mit.edu/copyleft/gpl.html
+#
+# 26-5-01 Password installation (only by the $superAdminGroup)
+#
+
+#usage example:
+#
+#I n s t a l l
+#
+#</FORM>
+#<FORM name="passwd" action="/%SCRIPTURLPATH%/passwd%SCRIPTSUFFIX%/%WEB%/">
+#Username:EncryptedPW <input type="text" name="encryptedpassword" value="" size="16"> <br>
+#<input type="submit" name="passwd">
+#<input type="hidden" name="install" value="on">
+#</FORM>
+ 
+
+use CGI::Carp qw(fatalsToBrowser);
+use CGI;
+use lib ( '.' );
+use lib ( '../lib' );
+use TWiki;
+ 
+##### for debug only: Remove next 2 comments (but redirect does not work)
+#print "Content-type: text/html\n\n";
+#open(STDERR,'>&STDOUT'); # redirect error to browser
+#$| = 1;                  # no buffering
+ 
+$query= new CGI;
+ 
+&main();
+ 
+sub main
+{
+    # get all parameters from the form
+    my $wikiName = $query->param( 'username' );
+
+    #initialize
+    my $topicName = $query->param( 'TopicName' );
+    my $thePathInfo = $query->path_info();
+    my $theUrl = $query->url;
+
+    ( $topic, $webName ) =
+        &TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl, $query );
+ 
+    my $text = "";
+    my $url = "";
+
+    my $theRemoteUser = $query->remote_user();
+    my ( $dummy1, $dummy2, $dummy3, $userName ) = 
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $topicName, $theUrl, $query );
+    my $wikiUserName = &TWiki::userToWikiName( $userName );
+
+    if( ! &TWiki::Access::userIsInGroup( $wikiUserName, $TWiki::superAdminGroup ) ) {
+    	# user has no permission to install the password
+    	my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$TWiki::mainWebname.$TWiki::superAdminGroup" );
+    	print $query->redirect( $url );
+    	return;
+    }
+
+    my $theCryptPassword = $query->param( 'encryptedPassword' ) || '';
+    if ( ! $theCryptPassword ) {
+	# missing username:encryptedpassword
+    	$url = &TWiki::getOopsUrl( $webName, $topic, "oopsregrequ", );
+        print $query->redirect( $url );
+        return;
+    }
+	
+    if ( $theCryptPassword =~ m/^([A-Z][a-zA-Z]+[A-Z][a-zA-Z]*)\:.{13}$/ ) {
+	$wikiName = $1;
+    } else {
+	# bad format
+    	$url = &TWiki::getOopsUrl( $webName, $topic, "oopsbadpwformat", $theCryptPassword);
+        print $query->redirect( $url );
+        return;
+    }
+
+    # check if user entry exists
+    if(  ( $wikiName )  && (! htpasswdExistUser( $wikiName ) ) ){
+        # PTh 20 Jun 2000: changed to getOopsUrl
+        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnotwikiuser", $wikiName );
+        print $query->redirect( $url );
+        return;
+    }
+
+    # old password
+    my $oldcrypt = htpasswdReadPasswd( $wikiName );
+    # OK - password may be changed
+    my $oldCryptPassword = "$wikiName\:$oldcrypt";
+    htpasswdAddUser( $oldCryptPassword, $theCryptPassword );
+
+    # OK - password changed
+    $url = &TWiki::getOopsUrl( $webName, $topic, "oopschangepasswd" );
+    print $query->redirect( $url );
+    return; 
+}
+
+#========================= 
+sub htpasswdReadPasswd
+{
+    my ( $user ) = @_;
+ 
+    if( ! $user ) {
+        return "";
+    }
+ 
+    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
+    if( $text =~ /$user\:(\S+)/ ) {
+        return $1;
+    }
+    return "";
+}
+ 
+sub htpasswdExistUser
+{
+    my ( $user ) = @_;
+ 
+    if( ! $user ) {
+        return "";
+    }
+ 
+    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
+    if( $text =~ /$user\:/go ) {
+        return "1";
+    }
+    return "";
+}
+ 
+sub htpasswdAddUser
+{
+    my ( $oldUserEntry, $newUserEntry ) = @_;
+ 
+    # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
+    # simply add name to file, but this is a security issue
+    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
+    $text =~ s/$oldUserEntry/$newUserEntry/;
+    &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
+}
+

@@ -45,7 +45,8 @@ sub checkAccessPermission
         $theTopicText, $theTopicName, $theWebName ) = @_;
 
 #AS 2001-11-04 see Codev.UnchangeableTopicBug
-    if ( $TWiki::superAdminGroup ) {
+    if ( $TWiki::doSuperAdminGroup && 
+	 $TWiki::superAdminGroup ) {
 	if ( &userIsInGroup( $theUserName, $TWiki::superAdminGroup ) ) {
 	    return 1;
 	}

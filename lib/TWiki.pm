@@ -86,7 +86,7 @@ use vars qw(
         $headerPatternDa $headerPatternSp $headerPatternHt
         $debugUserTime $debugSystemTime
         $viewableAttachmentCount $noviewableAttachmentCount
-	$superAdminGroup
+	$superAdminGroup $doSuperAdminGroup
     );
 
 
@@ -219,7 +219,9 @@ sub initialize
     if ($newTopicFontColor eq "") { $newTopicFontColor="#0000FF"; }
 
 #AS
-    &TWiki::Plugins::initialize( $topicName, $webName, $userName );
+    if (!$disableAllPlugins) {
+	&TWiki::Plugins::initialize( $topicName, $webName, $userName );
+    }
 #/AS
 
     return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
@@ -1013,8 +1015,10 @@ sub emitTR {
     $theRow =~ s/(\|\|+)/$TranslationToken . length($1) . "\|"/geo;  # calc COLSPAN
     foreach( split( /\|/, $theRow ) ) {
         $attr = "";
-        s/$TranslationToken([0-9]+)//; # No o flag for mod-perl compatibility
-        $attr = " colspan=\"$1\"" if $1 && $1 > 0;
+	#AS 25-5-01 Fix to avoid matching also single columns
+        if ( s/$TranslationToken([0-9]+)// ) { # No o flag for mod-perl compatibility
+            $attr = " colspan=\"$1\"" ;
+	}
         s/^\s$/ &nbsp; /o;
         /^(\s*).*?(\s*)$/;
         $l1 = length( $1 || "" );

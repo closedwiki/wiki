@@ -31,7 +31,10 @@ package TWiki::Plugins;
 
 use vars qw(
         @pluginList @registrableHandlers %registeredHandlers
+	$VERSION
     );
+
+$VERSION = '1.000';
 
 @registrableHandlers = (
         'initPlugin',            # ( $topic, $web, $user, $installWeb )
@@ -56,23 +59,56 @@ sub registerHandler
 # =========================
 sub registerPlugin
 {
+    #FIXME make all this sub more robust
     # parameters: ( $plugin, $topic, $web, $user )
     my ( $plugin, $topic, $web, $user ) = @_;
-    my $installWeb = $web;
-    if ( $plugin =~ /^(.+)\.([^.]+Plugin)$/ ) {
+
+    # look for the plugin installation web (needed for attached files)
+    # in the order:
+    # 	1 fully specified web.plugin
+    #	2 twiki.plugin
+    #   3 thisweb.plugin
+    #   4 main.plugin
+
+    my $installWeb = '';
+	# first we suppose the plugin is installed in this same web
+        # then we check for fully specified plugins
+    if ( $plugin =~ m/^(.+)\.([^.]+Plugin)$/ ) {
 	$plugin = $2;
 	$installWeb = $1;
+    } 
+    # then, we hope the plugin is in the TWiki web
+    elsif ( &TWiki::Store::topicExists( $TWiki::twikiWebname, $topic ) ) {
+	$installWeb = $TWiki::twikiWebname;
     }
+    # then, we hope the plugin is in the current web
+    elsif ( &TWiki::Store::topicExists( $web, $topic ) ) {
+	$installWeb = $web;
+    }
+    # finally, we hope the plugin is in the Main web
+    elsif ( &TWiki::Store::topicExists( $TWiki::mainWebname, $topic ) ) {
+	$installWeb = $TWiki::mainWebname;
+    }
+    # else not found ...
+    else { return; }
+
     my $p   = 'TWiki::Plugins::'.$plugin;
-    eval "use $p;" ;
+
+    #FIXME: something wrong with an insecure dependency if the plugin
+    #       is not <web>.<plugin> ... no idea why !!!
+    eval "use $p;";
     my $h   = "";
     my $sub = "";
-    foreach $h ( @registrableHandlers ) {
-        $sub = $p.'::'.$h;
-        &registerHandler( $h, $sub ) if defined( &$sub );
-    }
     $sub = $p.'::initPlugin';
-    &$sub($topic, $web, $user, $installWeb) if defined( &$sub );
+    # we register a plugin ONLY if it defines initPlugin AND it returns true 
+    if (defined( &$sub ) 
+	&& 
+	&$sub($topic, $web, $user, $installWeb)) {
+	    foreach $h ( @registrableHandlers ) {
+    		$sub = $p.'::'.$h;
+    		&registerHandler( $h, $sub ) if defined( &$sub );
+		}
+    }
 }
 
 # =========================
@@ -80,7 +116,6 @@ sub applyHandlers
 {
     my $handlerName = shift;
     my $theHandler;
-
     if( $TWiki::disableAllPlugins ) {
         return;
     }
@@ -98,7 +133,7 @@ sub initialize
     $active =~ s/[\n\t\s\r]+/ /go;
 
     # FIXME: should we enforce the schema <webname>.<name>Plugin or not?
-    @pluginList = grep { /^.+\.[^.]+Plugin$/ }
+    @pluginList = grep { /^.+Plugin$/ }
 		  split( /,?\s+/ , $active );
 
     # for efficiency we register all possible handlers at once
@@ -107,9 +142,6 @@ sub initialize
     foreach $plug ( @pluginList ) {
         &registerPlugin( $plug, @_ );
     }
-# moved to registerPlugin to handle installation web
-    # parameters: ( $topic, $web, $user, $pluginWeb )
-#    &applyHandlers( 'initPlugin', @_ );
 }
 
 # =========================

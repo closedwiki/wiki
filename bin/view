@@ -29,6 +29,7 @@ use strict;
 writeDebugTimes( "view:start" );
 
 ##### for debug only: Remove next 2 comments (but redirect does not work)
+#print "Content-type: text/html\n\n";
 #open(STDERR,'>&STDOUT'); # redirect error to browser
 #$| = 1;                  # no buffering
 

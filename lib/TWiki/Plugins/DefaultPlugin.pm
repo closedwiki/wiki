@@ -36,8 +36,9 @@
 package TWiki::Plugins::DefaultPlugin;
 
 # =========================
-use vars qw( $web $topic $user $installWeb $doOldInclude $renderingWeb );
-
+use vars qw( $web $topic $user $installWeb $VERSION
+	    $doOldInclude $renderingWeb );
+$VERSION = '1.000';
 # =========================
 sub initPlugin
 {
@@ -47,6 +48,9 @@ sub initPlugin
 
     # Get preferences
     $doOldInclude = &TWiki::Prefs::getPreferencesFlag( "DEFAULTPLUGIN_OLDINCLUDE" ) || "";
+    
+    # Initialized
+    return 1;
 }
 
 # =========================

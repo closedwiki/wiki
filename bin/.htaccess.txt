@@ -33,6 +33,10 @@ ErrorDocument 401 /urlpath/to/TWiki/bin/view/TWiki/TWikiRegistration
        require valid-user
 </Files>
 
+<Files "installpasswd">
+       require valid-user
+</Files>
+
 <Files "*">
        allow from all
 </Files>

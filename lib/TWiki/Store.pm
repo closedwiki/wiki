@@ -547,7 +547,7 @@ sub getRevisionInfo
     my $user = $2;
     my $comment = $3;
     $tmp =~ /revision 1.([0-9]*)/;
-    my $rev = $1;
+    my $rev = $1 || ""; #AS 25-5-01 added default value
     writeDebug( "rev = $rev" );
     
     return _tidyRevInfo( $theWebName, $theTopic, $date, $user, $rev, $comment, $changeToIsoDate );

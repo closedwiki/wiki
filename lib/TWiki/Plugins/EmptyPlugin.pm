@@ -36,8 +36,9 @@
 package TWiki::Plugins::EmptyPlugin; 	# change the package name!!!
 
 # =========================
-use vars qw( $web $topic $user $installWeb $myConfigVar );
-
+use vars qw( $web $topic $user $installWeb $VERSION
+	    $myConfigVar );
+$VERSION = '1.000';
 # =========================
 sub initPlugin
 {
@@ -45,6 +46,15 @@ sub initPlugin
 
     # Get plugin preferences
     $myConfigVar = &TWiki::Prefs::getPreferencesFlag( "EMPTYPLUGIN_VAR1" ) || "";
+
+    # check for TWiki.pm and Plugins.pm versions
+    if ( $TWiki::VERSION < 1 || 
+	 $TWiki::Plugins::VERSION < 1 ) {
+	 return 0;
+	 };
+    
+    # Plugin correctly initialized
+    return 1;
 }
 
 # =========================

@@ -191,9 +191,9 @@ sub main
         return;
     }
     if( ( $saveCmd ) &&
-        ( ! &TWiki::Access::userIsInGroup( $wikiUserName, "TWikiAdminGroup" ) ) ) {
+        ( ! &TWiki::Access::userIsInGroup( $wikiUserName, $TWiki::superAdminGroup ) ) ) {
         # user has no permission to execute undocumented cmd=... parameter
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$TWiki::mainWebname.TWikiAdminGroup" );
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$TWiki::mainWebname.$TWiki::superAdminGroup" );
         print $query->redirect( $url );
         return;
     }
