@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="guest" date="1100246657" format="1.0" version="1.1"}%
+Description: Manual test to check creation of topics with a template topic.
+
+The following link will create a new topic that should be templated from *this* topic.
+
+To test, click the link and manually verify that this topic has been used as a template for the new topic.
+
+*DO NOT SAVE THE NEW TOPIC* - hit 'Cancel' in the editor instead.
+
+%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%NewTopicFixture?templatetopic=%WEB%.%TOPIC%
+
