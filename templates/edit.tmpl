@@ -1,0 +1,69 @@
+<HTML>
+<HEAD>
+    <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (edit)</TITLE>
+    <META NAME="ROBOTS" CONTENT="NOINDEX">
+<SCRIPT LANGUAGE="JavaScript">
+<!--HIDE
+function initForm() {
+   document.main.text.focus();
+}
+function checkAll( theButton, theButtonOffset, theNum, theCheck )
+{
+    // find button element index
+    var j = 0
+    for (var i = 0; i <= document.main.length; i++)
+    {
+        if ( theButton == document.main.elements[i] )
+        {
+            j = i
+            break
+        }
+    }
+    // set/clear all checkboxes
+    var last = j+theButtonOffset+theNum
+    for (i = last-theNum; i < last; i++)
+    {
+        document.main.elements[i].checked = theCheck
+    }
+}
+//STOP HIDING-->
+</SCRIPT>
+</HEAD>
+<BODY bgcolor="#ffffff"  onLoad="initForm()" >
+<BASE href="%SCRIPTURL%/edit/%WEB%/%TOPIC%">
+<FORM name="main" action="%SCRIPTURL%/preview/%WEB%/%TOPIC%" method="post">
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR>
+    <TD BGCOLOR="%INCLUDE:"webcolor.inc"%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%/"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
+    </TD>
+    <TD>
+      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (edit)</FONT>
+    </TD>
+  </TR>
+  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+    <TD>
+      Change topic
+    </TD>
+  </TR>
+</TABLE>
+<TEXTAREA name="text" wrap="virtual" rows="15" cols="70">%TEXT%</TEXTAREA>
+<INPUT TYPE="hidden" NAME="TWikiAttachment" value="%TWIKIATTACHMENT%">
+<BR>
+Don't forget - if you change something, do it in 
+<A href="%SCRIPTURL%/view/Main/GoodStyle">GoodStyle</A> and follow the
+<A href="%SCRIPTURL%/view/Main/TextFormattingRules">TextFormattingRules</A>.
+<BR> <b>-- %WIKIUSERNAME% - %DATE% &lt;br&gt;</b> &nbsp;&nbsp;<code>&lt;==</code> This is your signature for easy copy & paste operation
+%TWIKICAT%
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+    <TD valign="top">
+      Topic <B>%TOPIC%</B> . {
+      <INPUT type="submit" value=" &nbsp; Preview Changes &nbsp; "> <INPUT type="hidden" name="cmd" value="%CMD%">
+      }
+    </TD>
+  </TR>
+</TABLE>
+%INCLUDE:"webcopyright.inc"%
+</FORM>
+</BODY></HTML>

@@ -1,0 +1,81 @@
+<HTML>
+<HEAD>
+    <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (attach)</TITLE>
+    <META NAME="ROBOTS" CONTENT="NOINDEX">
+<SCRIPT LANGUAGE="JavaScript">
+<!--HIDE
+function initForm() {
+   document.main.filepath.focus();
+}
+//STOP HIDING-->
+</SCRIPT>
+</HEAD>
+<BODY bgcolor="#ffffff"  onLoad="initForm()" >
+<BASE href="%SCRIPTURL%/view/%WEB%/%TOPIC%">
+<FORM name="main" enctype="multipart/form-data" action="%SCRIPTURL%/upload/%WEB%/%TOPIC%" method="post">
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR>
+    <TD BGCOLOR="%INCLUDE:"webcolor.inc"%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%/"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
+    </TD>
+    <TD>
+      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (attach)</FONT>
+    </TD>
+  </TR>
+  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+    <TD COLSPAN="2">
+      Attach file to topic <B>%TOPIC%</B>
+    </TD>
+  </TR>
+</TABLE>
+%ATTACHTABLE%
+<P>
+<B>%ACTION% <code>%FILENAME%</code></B>
+<TABLE width="100%">
+  <TR>
+    <TD ALIGN="right">
+      %PREVIOUS%
+    </TD><TD>
+      <code>%FILEPATH%</code> %FILEUSER%
+    </TD>
+  </TR>
+  <TR>
+    <TD ALIGN="right">
+      Local file:
+    </TD><TD>
+      <INPUT TYPE="hidden" NAME="filename" VALUE="%FILENAME%">
+      <INPUT TYPE="file" NAME="filepath" VALUE="%FILEPATH%" SIZE="50">
+    </TD>
+  </TR>
+  <TR>
+    <TD ALIGN="right">
+      Comment:
+    </TD><TD>
+      <INPUT TYPE="text" NAME="filecomment" VALUE="%FILECOMMENT%" MAXLENGTH="50" SIZE="50">
+    </TD>
+  </TR>
+</TABLE>
+<BR>
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+    <TD valign="top">
+      Topic <B>%TOPIC%</B> . {
+      <INPUT type="submit" value=" &nbsp; Upload and attach file &nbsp; "> &nbsp;
+      <A href="%SCRIPTURL%/view/%WEB%/%TOPIC%">cancel</A>
+      }
+    </TD>
+  </TR>
+</TABLE>
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR>
+    <TD valign="top">
+      &nbsp;
+    </TD>
+    <TD width="50%" valign="top">
+      %INCLUDE:"webcopyright.inc"%
+    </TD>
+  </TR>
+</TABLE>
+</FORM>
+</BODY></HTML>
+

@@ -1,0 +1,190 @@
+#!/usr/bin/perl -w
+#
+# TWiki WikiClone (see $wikiversion in wiki.pm for version)
+#
+# Copyright (C) 1999 Peter Thoeny, peter.thoeny@ibm.net
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+
+use CGI;
+use wiki;
+
+$query = new CGI;
+
+##### for debug only: Remove next 3 comments (but redirect does not work)
+#open(STDERR,'>&STDOUT'); # redirect error to browser
+#$| = 1;                  # no buffering
+#print "Content-type: text/html\n\n";
+
+&main();
+
+sub main
+{
+    # get all parameters from the form
+    my $firstLastName = $query->param('FirstLastName');
+    my $emailAddress = $query->param('EmailAddress');
+    my $wikiName = $query->param('WikiName');
+    my $passwordA = $query->param('PasswordA');
+    my $passwordB = $query->param('PasswordB');
+    my $companyName = $query->param('CompanyName');
+    my $companyUrl = $query->param('CompanyUrl');
+    my $countryName = $query->param('CountryName');
+    my $hearFrom = $query->param('HearFrom');
+    my $commentText = $query->param('CommentText');
+    my $topicName = $query->param('TopicName');
+
+    my $thePathInfo = $query->path_info(); 
+    my $theUrl = $query->url;
+    ( $topic, $webName, $scriptUrl, $userName ) = 
+	&wiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl );
+
+    my $text = "";
+
+    # check if required fields are filled in
+    if( ( ! $firstLastName ) || ( ! $emailAddress ) || ( ! $wikiName ) || 
+        ( ! $passwordA ) || ( ! $passwordB ) || ( $countryName eq "SelectCountry" ) )
+    {
+        print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopsregrequ" );
+        return;
+    }
+
+    # check if wikiName is a WikiName
+    if( ! &wiki::isWikiName( $wikiName ) ) {
+        print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopsregwiki" );
+        return;
+    }
+
+    # check if passwords are identical
+    if( $passwordA ne $passwordB ) {
+        print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopsregpasswd" );
+        return;
+    }
+
+    # check if user entry already exists
+    if( htpasswdExistUser( $wikiName ) ) {
+        print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopsregexist&param1=$wikiName" );
+        return;
+    }
+
+    # generate user entry and add to .htpasswd file
+    htpasswdAddUser( htpasswdGeneratePasswd( $wikiName, $passwordA ) );
+
+    # create user topic if not exist
+    if( ! &wiki::topicExists( $wiki::mainWebname, $wikiName ) ) {
+        $commentText =~ s/\n/ /go;
+        $text= &wiki::readTemplate( "register" );
+        $text =~ s/%FIRSTLASTNAME%/$firstLastName/go;
+        $text =~ s/%EMAILADDRESS%/$emailAddress/go;
+        $text =~ s/%COMPANYNAME%/$companyName/go;
+        $text =~ s/%COMPANYURL%/$companyUrl/go;
+        $text =~ s/%COUNTRYNAME%/$countryName/go;
+        $text =~ s/%HEARFROM%/$hearFrom/go;
+        $text =~ s/%COMMENTTEXT%/$commentText/go;
+        $text =~ s/ {3}/\t/go;
+        &wiki::saveTopic( $wikiName, $text, "" );
+    }
+
+    # add user to TWikiUsers topic
+    my $userTopic = addUserToTWikiUsersTopic( $wikiName );
+
+    # write log entry
+    if( $wiki::doLogRegistration )
+    {
+        my $time = time();
+        $time = &wiki::formatGmTime( $time );
+        $text = &wiki::userToWikiName( $wikiName );
+        &wiki::writeLog( "| $time | $text | register | $webName.$userTopic | $emailAddress |" );
+    }
+
+    # and finally display user topic
+    print $query->redirect( &wiki::viewUrl( $userTopic ) );
+}
+
+sub htpasswdGeneratePasswd
+{
+    my ( $user, $passwd ) = @_;
+    # by David Levy, Internet Channel, 1997
+    # found at http://world.inch.com/Scripts/htpasswd.pl.html
+    srand($$|time);
+    @saltchars=(a..z,A..Z,0..9,'.','/');
+    $salt=$saltchars[int(rand($#saltchars+1))];
+    $salt.=$saltchars[int(rand($#saltchars+1))];
+    $passwdcrypt = crypt($passwd,$salt);
+    return "$user\:$passwdcrypt";
+}
+
+sub htpasswdExistUser
+{
+    my ( $user ) = @_;
+
+    my $text = &wiki::readFile( $wiki::htpasswdFilename );
+    if( $text =~ /$user\:/go ) {
+        return "1";
+    }
+    return "";
+}
+
+sub htpasswdAddUser
+{
+    my ( $userEntry ) = @_;
+
+    # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
+    # simply add name to file, but this is a security issue
+    my $text = &wiki::readFile( $wiki::htpasswdFilename );
+    $text .= "$userEntry\n";
+    &wiki::saveFile( $wiki::htpasswdFilename, $text );
+}
+
+sub addUserToTWikiUsersTopic
+{
+    my ( $wikiName ) = @_;
+    my $today = &wiki::getLocaldate();
+    my $topicName = $wiki::userListFilename;
+    $topicName =~ s/(.*[^\/])\/([a-zA-Z0-9]*)\.txt$/$2/go;
+    my $text  = &wiki::readTopic( $topicName );
+    my $result = "";
+    my $status = "0";
+    my $line = "";
+    my $name = "";
+    my $isList = "";
+    # add name alphabetically to list
+    foreach( split( /\n/, $text) )
+    {
+        $line = $_;
+        $isList = ( $line =~ /^\t\*\s[A-Z][a-zA-Z0-9]*\s\-/go );
+        if( ( $status == "0" ) && ( $isList ) ) {
+            $status = "1";
+        }
+        if( $status == "1" ) {
+            if( $isList ) {
+                $name = $line;
+                $name =~ s/(\t\*\s)([A-Z][a-zA-Z0-9]*)\s\-.*/$2/go;            
+                if( $wikiName eq $name ) {
+                    # name is already there, do nothing
+                    return $topicName;
+                } elsif( $wikiName lt $name ) {
+                    # found alphabetical position
+                    $result .= "\t* $wikiName - $today\n";
+                    $status = "2";
+                }
+            } else {
+                # is last entry
+                $result .= "\t* $wikiName - $today\n";
+                $status = "2";
+            }
+        }
+
+        $result .= "$line\n";
+    }
+    &wiki::saveTopic( $topicName, $result, "" );
+    return $topicName;
+}

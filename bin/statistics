@@ -1,0 +1,303 @@
+#!/usr/bin/perl -w
+#
+# TWiki WikiClone (see $wikiversion in wiki.pm for version)
+#
+# Copyright (C) 2000 Peter Thoeny, peter.thoeny@attglobal.net
+# TakeFive Software Inc., peter.thoeny@takefive.com 
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+# 
+# DESCRIPTION
+# This script does update the usage statistics of each TWiki web.
+# It reads the current month's log file and updates the table
+# in the WebStatistics topic of each web.
+# The script should be called by a cron job, it is recommended to
+# call it once a day.
+
+use CGI;
+use wiki;
+
+open(STDERR,'>&STDOUT');   # redirect error to browser
+$| = 1;                    # no buffering
+
+# initialize variables
+my $isCgi = "";
+my $cgiQuery = "";
+
+&main();
+
+sub main
+{
+    my $tmp;
+    my $theTopic = "";
+    my $thePathInfo = ""; 
+    my $theRemoteUser = "";
+    my $logDate = "";
+
+    # determine at runtime if script is called by browser or cron job
+    if( $ENV{'DOCUMENT_ROOT'} ) {
+        # script is called by browser
+        $isCgi = "1";
+        $cgiQuery = new CGI;
+        $thePathInfo = $cgiQuery->path_info() || ""; 
+        $theRemoteUser = $cgiQuery->remote_user() || "";
+        $theTopic = $cgiQuery->param('topic') || "";
+        $tmp = $cgiQuery->param('logdate') || "";
+        $tmp =~ s/[^0-9]//go;  # remove all non numerals
+        if( $tmp ne "" ) {
+            $logDate = "$tmp";
+        }
+        print "Content-type: text/html\n\n";
+        print "<html>\n<head>\n<title>TWiki: Create Usage Statistics</title>\n";
+        print "</head>\n<body>\n";
+    } else {
+        # script is called by cron job
+    }
+
+    # Initial messages
+    printMsg( "TWiki: Create Usage Statistics" );
+    if( $isCgi ) {
+        print "<h4><font color=\"red\">Do not interupt!</font> ( Wait until page download has finished )</h4>\n";
+    }
+    if ( $theRemoteUser ) {
+        $tmp = &wiki::userToWikiName( $theRemoteUser );
+        $tmp =~ s/Main\.//go;
+        printMsg( "* Executed by $tmp" );
+    } else {
+        printMsg( "* Executed by a guest or a cron job scheduler" );
+    }
+
+    if( ! $logDate ) {
+        # get current time and format to "yyyymm" format:
+        my ( $sec, $min, $hour, $mday, $mon, $year) = gmtime( time() );
+        $year = sprintf("%.4u", $year + 1900);  # Y2K fix
+        $mon = $mon+1;
+        $logDate = sprintf("%.4u%.2u", $year, $mon);
+    }
+
+    my $logMonth;
+    my $logYear;
+    $tmp = $logDate;
+    $tmp =~ s/([0-9]{4})(.*)/$2/go;
+    if( $tmp && $tmp < 13 ) {
+        $logMonth = $wiki::isoMonth[$tmp-1];
+    } else {
+        $logMonth = "Date error";
+    }
+    $logYear = $logDate;
+    $logYear =~ s/([0-9]{4})(.*)/$1/go;
+    my $logMonthYear = "$logMonth $logYear";
+    printMsg( "* Statistics for $logMonthYear" );
+
+    my $logFile = $wiki::logFilename;
+    $logFile =~ s/%DATE%/$logDate/go;
+
+    if( -e $logFile ) {
+
+        my @logList = split( /\n/, &wiki::readFile( $logFile ) );
+
+        if( $thePathInfo ) {
+            # do a particular web:
+            processWeb( $thePathInfo, $theRemoteUser, $theTopic, $logMonthYear, @logList );
+        } else {
+            # do all webs:
+            my $dataDir = &wiki::getDataDir();
+            opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
+            @weblist = grep !/^\.\.?$/, readdir DIR;
+            closedir DIR;
+            foreach $web ( @weblist )
+            {
+                if( -d "$dataDir/$web" )
+                {
+                    processWeb( "/$web", $theRemoteUser, $theTopic, $logMonthYear, @logList );
+                }
+            }
+        }
+    } else {
+        printMsg( "  *** Error: Log file $logFile does not exist" );
+    }
+
+    if( $isCgi ) {
+        $tmp = $wiki::statisticsTopicname;
+        my $url = &wiki::viewUrl( $tmp );
+        printMsg( "* Go back to <a href=\"$url\">$tmp</a> topic" );
+        printMsg( "End creating usage statistics" );
+        print "</body></html>\n";
+    } else {
+        printMsg( "End creating usage statistics" );
+    }
+}
+
+sub processWeb
+{
+    my( $thePathInfo, $theRemoteUser, $theTopic, $theLogMonthYear, @theLogList ) = @_;
+
+    # initialize wiki
+    my ( $topic, $webName, $scriptUrl, $userName, $dataDir ) = 
+        &wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic );
+
+    printMsg( "* Checking TWiki.$webName web" );
+
+    if( ! &wiki::webExists( $webName ) ) {
+        printMsg( "  *** Error: Web $webName does not exist" );
+        return;
+    }
+
+    # format example of log:
+    # | 03 Feb 2000 - 02:43 | Main.PeterThoeny | view | Know.WebHome |  |
+    # | 03 Feb 2000 - 02:43 | Main.PeterThoeny | save | Know.WebHome |  |
+    # | 03 Feb 2000 - 02:53 | Main.PeterThoeny | save | Know.WebHome | repRev 1.7 Main.PeterThoeny 2000/02/03 02:43:22 |
+
+    my $tmp;
+    my @list = grep( /^\|[^\|]*\|[^\|]*\| view \| $webName/, @theLogList );
+    my $statViews = @list;
+    my @topViews = getTopList( 0, $wiki::statsTopViews, @list );
+
+    @list = grep( /^\|[^\|]*\|[^\|]*\| save \| $webName/, @theLogList );
+    my $statSaves = @list;
+    @list = grep( /^\|[^\|]*\|[^\|]*\| upload \| $webName/, @theLogList );
+    my $statUploads = @list;
+    @list = grep( /^\|[^\|]*\|[^\|]*\| (save|upload) \| $webName/, @theLogList );
+    my @topContrib = getTopList( 1, $wiki::statsTopContrib, @list );
+    printMsg( "  - view: $statViews, save: $statSaves, upload: $statUploads" );
+    my $statTopViews = "";
+    my $statTopContributors = "";
+    if( @topViews ) {
+        printMsg( "  - top view: $topViews[0]" );
+        for( $x = 0; $x < @topViews; $x++ )
+        {
+            $statTopViews .= "$topViews[$x] <br>";
+        }
+    }
+    if( @topContrib ) {
+        printMsg( "  - top contributor: $topContrib[0]" );
+        for( $x = 0; $x < @topContrib; $x++ )
+        {
+            $statTopContributors .= "$topContrib[$x] <br>";
+        }
+    }
+
+    my $statsFile = $wiki::statisticsTopicname;
+    if( &wiki::topicExists( $webName, $statsFile ) ) {
+        my $text = &wiki::readTopic( $statsFile );
+        my @lines = split( /\n/, $text );
+        my $statLine;
+        my $idxStat = -1;
+        my $idxTmpl = -1;
+        for( $x = 0; $x < @lines; $x++ ) {
+             $tmp = $lines[$x];
+            if( $tmp =~ /$theLogMonthYear/ ) {
+                $idxStat = $x;
+            } elsif( $tmp =~ /<\!\-\-statDate\-\->/ ) {
+                $statLine = $_;
+                $idxTmpl = $x;
+            }
+        }
+        if( ! $statLine ) {
+            $statLine = "| <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |";
+        }
+        $statLine =~ s/<\!\-\-statDate\-\->/$theLogMonthYear/go;
+        $statLine =~ s/<\!\-\-statViews\-\->/$statViews/go;
+        $statLine =~ s/<\!\-\-statSaves\-\->/$statSaves/go;
+        $statLine =~ s/<\!\-\-statUploads\-\->/$statUploads/go;
+        $statLine =~ s/<\!\-\-statTopViews\-\->/$statTopViews/go;
+        $statLine =~ s/<\!\-\-statTopContributors\-\->/$statTopContributors/go;
+
+        if( $idxStat >= 0 ) {
+            # entry already exists, need to update
+            $lines[$idxStat] = $statLine;
+
+        } elsif( $idxTmpl >= 0 ) {
+            # entry does not exists, add after <!--statDate--> line
+            $lines[$idxTmpl] = "$lines[$idxTmpl]\n$statLine";
+
+        } else {
+            # entry does not exists, add at the end
+            $lines[@lines] = $statLine;
+        }
+        $text = join( "\n", @lines );
+        $text .= "\n";
+        &wiki::saveTopic( $statsFile, $text, "", 1 );
+        printMsg( "  - Topic $statsFile updated" );
+
+    } else {
+        printMsg( "  *** Warning: No updates done, topic $webName.$statsFile does not exist" );
+    }
+}
+
+# =====================================================================
+sub getTopList
+{
+    my( $doUser, $theMaxNum, @theList ) = @_;
+
+    my %hash = ();
+    my $tmp;
+    foreach( @theList ) {
+        $tmp = $_;
+        if( $doUser ) {
+            $tmp =~ s/^\|[^\|]*\|\s([^\.]*\.\S*).*/$1/go;
+        } else {
+            $tmp =~ s/^\|[^\|]*\|[^\|]*\|[^\|]*\|\s([^\.]*\.\S*).*/$1/go;
+        }
+        if( $hash{ $tmp } ) {
+            $hash{ $tmp } = $hash{ $tmp } + 1;
+        } else {
+            %hash = ( %hash, $tmp, 1 );
+        }
+    }
+
+    my @list = ();
+    while( ( $key, $value ) = each( %hash ) ) {
+        $tmp = "     $value";
+        $tmp =~ s/\s*(.{5})$/$1/go;
+        $list[@list] = "$tmp $key";
+    }
+    @list = reverse( sort( @list ) );
+
+    my @returnList = ();
+    my $idx = 0;
+    for( $x = 0; $x < @list; $x++ )
+    {
+        if( $x >= $theMaxNum ) {
+            return @returnList;
+        }
+        $tmp = $list[$x];
+        $tmp =~ s/^\s*(.*)/ $1/go;
+        $returnList[$x] = $tmp;
+    }
+
+    return @returnList;
+}
+
+# =====================================================================
+sub printMsg
+{
+    my( $msg ) = @_;
+    my $htmlMsg = $msg;
+
+    if( $htmlMsg =~ /^[A-Z]/ ) {
+        $htmlMsg =~ s/^([A-Z].*)/<h3>$1<\/h3>/go;
+    } else {
+        $htmlMsg =~ s/(\*\*\*.*)/<font color=\"FF0000\">$1<\/font>/go;
+        $htmlMsg =~ s/^\s\s/&nbsp;&nbsp;/go;
+        $htmlMsg =~ s/^\s/&nbsp;/go;
+        $htmlMsg .= "<br>";
+    }
+    $htmlMsg =~ s/==([A-Z]*)==/<font color=\"FF0000\">==$1==<\/font>/go;
+
+    if( $isCgi ) {
+        print "$htmlMsg\n";
+    } else {
+        print "$msg\n";
+    }
+}
+

@@ -1,0 +1,44 @@
+<p>
+<table cellpadding="0" border="0" cellspacing="4">
+<tr bgcolor="#99CCCC">
+  <th>
+Main.FileAttachment:
+  </th><th>
+Action:
+  </th><th>
+Size:
+  </th><th>
+Date:
+  </th><th>
+Who:
+  </th><th>
+Comment:
+  </th>
+</tr>%REPEAT%<TwkNextItem>
+<tr>
+  <td valign="top">
+<TwkFileIcon>%FILEICON%</TwkFileIcon>&nbsp;<a href="%PUBURL%/%WEB%/%TOPIC%/%FILENAME%"><TwkFileName>%FILENAME%</TwkFileName></a>
+<TwkFilePath> <TwkData value="%FILEPATH%"> </TwkFilePath>
+  </td><td valign="top">
+<TwkAction><a href="../../viewfile/%WEB%/%TOPIC%?filename=%FILENAME%">view</a>&nbsp;<a href="../../attach/%WEB%/%TOPIC%?filename=%FILENAME%">update</a></TwkAction>
+  </td><td valign="top" align="right">
+<TwkFileSize>%FILESIZE%</TwkFileSize>
+  </td><td valign="top">
+<TwkFileDate>%FILEDATE%</TwkFileDate>
+  </td><td valign="top">
+<TwkFileUser> %FILEUSER%</TwkFileUser>
+  </td><td valign="top">
+<TwkFileComment>%FILECOMMENT%</TwkFileComment>
+  </td>
+</tr>%REPEAT%<TwkNextItem>
+<tr>
+  <td valign="top">
+  </td><td valign="top">
+<TwkAction><a href="../../attach/%WEB%/%TOPIC%">add</a><TwkAction>
+  </td><td valign="top" align="right">
+  </td><td valign="top">
+  </td><td valign="top">
+  </td><td valign="top">
+  </td>
+</tr>
+</table>

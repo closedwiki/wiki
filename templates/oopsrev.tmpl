@@ -1,0 +1,56 @@
+<HTML>
+<HEAD>
+    <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (revision)</TITLE>
+</HEAD>
+<BODY bgcolor="#ffffff">
+<BASE href="%SCRIPTURL%/view/%WEB%/%TOPIC%">
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR>
+    <TD BGCOLOR="%INCLUDE:"webcolor.inc"%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%/"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
+    </TD>
+    <TD>
+      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (revision)</FONT>
+    </TD>
+  </TR>
+  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+    <TD COLSPAN="2">
+      Select revision
+    </TD>
+  </TR>
+</TABLE>
+<H2>View Previous Topic Revision</H2>
+<FORM name="main" action="../../view/%WEB%/%TOPIC%">
+<UL>
+<LI> Revision: <INPUT type="text" name="rev" size="6" value="%PARAM1%"> <INPUT type="submit" value="View revision"> ( 1.1 ... %PARAM1% )
+</UL>
+</FORM>
+<H2>Compare Revisions</H2>
+<FORM name="main" action="../../rdiff/%WEB%/%TOPIC%">
+<TABLE>
+<TR>
+<TD>
+<UL>
+<LI> Older revision: 
+</UL>
+</TD><TD>
+<INPUT type="text" name="rev2" size="6" value="1.1">
+</TD></TR><TR><TD>
+<UL>
+<LI> Newer Revision: 
+</UL>
+</TD><TD>
+<INPUT type="text" name="rev1" size="6" value="%PARAM1%"> <INPUT type="submit" value="View difference">
+</TD></TR>
+</TABLE>
+</FORM>
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+    <TD valign="top">
+      Topic <B>%TOPIC%</B> . {
+        <A href="%SCRIPTURL%/view/%WEB%/%TOPIC%">Cancel</A>
+      }
+    </TD>
+  </TR>
+</TABLE>
+</BODY>

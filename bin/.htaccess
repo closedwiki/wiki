@@ -1,0 +1,35 @@
+Redirect /crew/scharf/TWiki/index.html http://starship.python.net/crew/scharf/TWiki/bin/view
+
+AuthUserFile /home/crew/scharf/public_html/TWiki/.htpasswd
+AuthGroupFile /home/crew/scharf/public_html/TWiki/.htgroup
+AuthName ByPassword
+AuthType Basic
+
+SetHandler cgi-script
+
+ErrorDocument 401 /crew/scharf/TWiki/bin/error401.html
+
+<Files ~ "[^/]*\.html$">
+       SetHandler blabla
+       allow from all
+</Files>
+
+<Files "edit.tmp">
+       require group TWikiUsers
+</Files>
+
+<Files "save.tmp">
+       require group TWikiUsers
+</Files>
+
+<Files "attach.tmp">
+       require valid-user
+</Files>
+
+<Files "upload.tmp">
+       require valid-user
+</Files>
+
+<Files "*">
+       allow from all
+</Files>

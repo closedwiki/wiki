@@ -1,0 +1,143 @@
+#!/usr/bin/perl -w
+#
+# TWiki WikiClone (see $wikiversion in wiki.pm for version)
+#
+# Based on parts of Ward Cunninghams original Wiki and JosWiki.
+# Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
+# Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
+# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
+# TakeFive Software Inc.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+
+use CGI;
+use wiki;
+
+$query= new CGI;
+
+print "Content-type: text/html\n\n";
+
+&main();
+
+sub main
+{
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theTopic = $query->param('topic');
+    my $theUrl = $query->url;
+
+    ( $topic, $webName) = 
+	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+
+    my $tmpl= "", $text="";
+    my $rev= $query->param("rev");
+    $rev =~ s/1\.//go;  # cut major
+    my $maxrev = 1;
+
+    if( ! &wiki::webExists( $webName ) )
+    {
+	$tmpl= &wiki::readTemplate( "noweb" );
+	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+	print $tmpl;
+	return;
+    }
+    $tmpl= &wiki::readTemplate( "view" );
+    my $topicExists = &wiki::topicExists( $webName, $topic );
+    if( $topicExists )
+    {
+	$maxrev = &wiki::getRevisionNumber( $topic );
+        $maxrev =~ s/1\.//go;  # cut major
+	if( $rev )
+	{
+	    if( $rev < 1 )       { $rev = 1; }
+            if( $rev > $maxrev ) { $rev = $maxrev; }
+	    $text= &wiki::readVersion( $topic, "1.$rev" );
+	}
+	else
+	{
+	    $text= &wiki::readTopic( $topic );
+	    $rev= $maxrev;
+	}
+    }
+    else
+    {
+	$rev = 1;
+	if( &wiki::isWikiName( $topic ) )
+	{
+	    $text= &wiki::readTemplate( "notext" );
+	}
+	else
+	{
+	    $text= &wiki::readTemplate( "notwiki" );
+	}
+    }
+    $text = &wiki::handleCommonTags( $text, $topic );
+    $text = &wiki::getRenderedVersion( $text );
+
+    if( $rev < $maxrev )
+    {
+        # disable edit of previous revisions
+        $tmpl =~ s/%EDITTOPIC%/Edit/go;
+        $tmpl =~ s/%REVTITLE%/\(r1.$rev\)/go;
+    }
+    else
+    {
+        if( $topicExists )
+        {
+            $tmpl =~ s/%EDITTOPIC%/<A href=\"..\/..\/edit\/%WEB%\/%TOPIC%\"><B>Edit<\/B><\/A>/go; 
+        }
+        else
+        {
+            $tmpl =~ s/%EDITTOPIC%/<A href=\"..\/..\/edit\/%WEB%\/%TOPIC%\"><B>Create<\/B><\/A>/go; 
+        }
+        $tmpl =~ s/%REVTITLE%//go;
+    }
+
+    my $i = $maxrev;
+    my $j = $maxrev;
+    my $revisions = "";
+
+    while( $i > 0 )
+    {
+        if( $i eq $rev)
+        {
+            $revisions = "$revisions | r1.$i";
+        }
+        else
+        {
+            $revisions = "$revisions | <A href=\"../../view/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
+        }
+        if( $i != 1 )
+        {
+            $j = $i - 1;
+            $revisions = "$revisions | <A href=\"../../rdiff/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
+        }
+        $i = $i - 1;
+    }
+    $tmpl =~ s/%REVISIONS%/$revisions/go;
+
+    if( $topicExists )
+    {
+        my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
+        $user = &wiki::userToWikiName( $user );
+        my $temp = &wiki::getRenderedVersion( "r1.$rev - $date by $user" );
+        $tmpl =~ s/%REVINFO%/$temp/go;
+    }
+    else
+    {
+        $tmpl =~ s/%REVINFO%//go;
+    }
+
+    $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    $tmpl =~ s/%TEXT%/$text/go;
+    print $tmpl;
+}

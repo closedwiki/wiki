@@ -1,0 +1,44 @@
+<HTML>
+<HEAD>
+    <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (oops)</TITLE>
+</HEAD>
+<BODY bgcolor="#ffffff">
+<BASE href="%SCRIPTURL%/view/%WEB%/%TOPIC%">
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR>
+    <TD BGCOLOR="%INCLUDE:"webcolor.inc"%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%/"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
+    </TD>
+    <TD>
+      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (oops)</FONT>
+    </TD>
+  </TR>
+  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+    <TD COLSPAN="2">
+      Attention
+    </TD>
+  </TR>
+</TABLE>
+<H1>Topic is locked by an other user</H1>
+There is a possibility that <b> %PARAM1% </b> is editing this topic. 
+Please ask the contributor before making changes to this topic. <p>
+
+<ul>
+<li> To edit anyway press the Edit link at the bottom of the page
+<li> To cancel go back in your browser
+</ul>
+
+<b>Note:</b> Locking gets reset after one hour of inactivity.
+
+<p>
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+    <TD valign="top">
+      Topic <B>%TOPIC%</B> . {
+        <A href="../../edit/%WEB%/%TOPIC%?breaklock=on">Edit anyway</A> | 
+        <A href="../../view/%WEB%/%TOPIC%">Cancel</A>
+      }
+    </TD>
+  </TR>
+</TABLE>
+</BODY>

@@ -1,0 +1,126 @@
+#!/usr/bin/perl
+#
+# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
+# TakeFive Software Inc.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+
+use CGI;
+use wiki;
+
+
+print "Content-type: text/html\n\n";
+
+$query= new CGI;
+
+&main();
+
+sub main
+{
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theTopic = $query->param('topic');
+    my $theUrl = $query->url;
+
+    ( $topic, $webName, $scriptUrl, $userName, $dataDir ) = 
+	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+
+    if( ! &wiki::webExists($webName))
+    {
+	$tmpl= &wiki::readTemplate( "noweb" );
+	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+	print $tmpl;
+	return;
+    }
+
+    $text       = &wiki::readTemplate("search");
+    $search     = $query->param("search");
+    $scope      = $query->param("scope");
+    $ignorecase = $query->param("ignorecase");
+    $regex      = $query->param("regex");
+
+    if( $scope ne "topic")
+    {
+        $cmd = "%GREP% %SWITCHES% -l '$search' *.txt";
+    }
+    else
+    {
+        $cmd = "ls *.txt | %GREP% %SWITCHES% '$search'";
+    }
+
+    if( $ignorecase ne "on")
+    {
+        $foo = "";
+    }
+    else
+    {
+        $foo = "-i";
+    }
+    $cmd =~ s/%SWITCHES%/$foo/go;
+
+    if( $regex ne "on")
+    {
+        $foo = "fgrep";
+    }
+    else
+    {
+        $foo = "egrep";
+    }
+    $cmd =~ s/%GREP%/$foo/go;
+
+    $result = `cd $dataDir/$webName;$cmd`;
+    $result =~ s/\.txt//go;
+
+    $text = &wiki::handleCommonTags($text, $topic);
+
+    ( $before, $text, $after) = split( /%REPEAT%/, $text);
+    $search =~ s/&/&amp;/go;
+    $search =~ s/</&lt;/go;
+    $search =~ s/>/&gt;/go;
+    $search =~ s/^\.\*$/Index/go;
+    $before =~ s/%SEARCHSTRING%/$search/go;
+    print $before;
+    $lasttopic = "";
+    $ntopics = 0;
+    $revdate, $revuser = "";
+    foreach( split( /\n/, $result))
+    {
+        @bar = split( /\t/);
+        $filename = $bar[0];
+        if( $filename ne $lasttopic)
+        {
+            ( $revdate, $revuser ) = &wiki::getRevisionInfo( $filename, "", 1 );
+            $revuser = &wiki::userToWikiName( $revuser );
+
+            $foo = $text;
+            $foo =~ s/%TOPICNAME%/$filename/go;
+            $foo =~ s/%TIME%/$revdate/go;
+            $foo =~ s/%AUTHOR%/$revuser/go;
+	    $foo = &wiki::getRenderedVersion( $foo );
+
+	    $head = &wiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 12 );
+            $head =~ s/\n/ /go;
+            $head =~ s/<[^>]*>//go;
+            $head =~ s/[\*\|]/ /go;
+            $head =~ s/(..................................................................................................................................................................)([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
+            $foo =~ s/%TEXTHEAD%/$head/go;
+            $foo =~ s/%%/%/go;
+            print $foo;
+            $lasttopic = $bar;
+            $ntopics += 1;
+        }
+    }
+    $after =~ s/%NTOPICS%/$ntopics/go;
+    print $after;
+
+}
+

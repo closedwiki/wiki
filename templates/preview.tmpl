@@ -1,0 +1,49 @@
+<HTML>
+<HEAD>
+    <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (preview)</TITLE>
+    <META NAME="ROBOTS" CONTENT="NOINDEX">
+</HEAD>
+<BODY bgcolor="#ffffff">
+<BASE href="%SCRIPTURL%/preview/%WEB%/%TOPIC%">
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR>
+    <TD BGCOLOR="%INCLUDE:"webcolor.inc"%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%/"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
+    </TD>
+    <TD>
+      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (preview)</FONT>
+    </TD><TD>
+      <FONT SIZE=-2>
+      <UL>
+      <LI> To <B>save</B> changes: Press the [Save Changes] button.
+      <LI> To make <B>more changes</B>: Go back in your browser.
+      <LI> To <B>cancel</B>: Go back twice.
+      </UL>
+      </FONT>
+    </TD>
+  </TR>
+  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+    <TD colspan="2">
+      <B><FONT COLOR="#FF0000"> Note: </FONT></B>
+      This is a preview. <B><FONT COLOR="#FF0000"> Do not forget </FONT></B> to save your changes.
+    </TD>
+  </TR>
+</TABLE>
+<BR>
+%TEXT%
+<BR clear=all>
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+<FORM name="main" action="%SCRIPTURL%/save/%WEB%/%TOPIC%" method="post">
+  <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
+    <TD valign="top">
+      Topic <B>%TOPIC%</B> . {
+      <INPUT type="hidden" name="text" value="%HIDDENTEXT%">
+      <INPUT type="hidden" name="cmd" value="%CMD%">
+      <INPUT type="submit" value=" Save Changes ">
+      }
+    </TD>
+  </TR>
+</FORM>
+</TABLE>
+%INCLUDE:"webcopyright.inc"%
+</BODY></HTML>

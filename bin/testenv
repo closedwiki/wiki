@@ -1,0 +1,25 @@
+#!/usr/bin/perl -w
+#
+# test utility to see if CGI is running and enabled
+# for the bin directory
+#
+
+open(STDERR,'>&STDOUT'); # redirect error to browser
+$| = 1;                  # no buffering
+print "Content-type: text/html\n\n";
+print <<EOM;
+<html>
+<head><title>Test the CGI environment</title></head>
+<body>
+<h1>Test the CGI environment</h1>
+<table>
+EOM
+for $key ( sort keys %ENV ) {
+    print "<tr><th align=\"right\">$key</th><td>$ENV{$key}</td></tr>\n";
+}
+print <<EOM;
+</table>
+</body>
+</html>
+EOM
+exit;

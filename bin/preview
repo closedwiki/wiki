@@ -1,0 +1,241 @@
+#!/usr/bin/perl -w
+#
+# TWiki WikiClone (see $wikiversion in wiki.pm for version)
+#
+# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
+# TakeFive Software Inc.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+
+use CGI;
+use wiki;
+
+$query= new CGI;
+
+print "Content-type: text/html\n\n";
+
+&main();
+
+sub buildCategoryItem
+{
+    my ( $catitems ) = @_;
+    my $catname = "", $scatname = "", $catvalue = "";
+    my @cmd = split( /\|/, $catitems );
+    my $param = "";
+    my $len = @cmd;
+    if( $len < "2" )
+    {
+        return ( $catname, $catvalue )
+    }
+
+    if( @cmd[0] eq "select" )
+    {
+        $catname = @cmd[1];
+        $scatname = $catname;
+        $scatname =~ s/[^a-zA-z0-9]//g;
+        $param = $query->param("$scatname");
+        for( $i = 3; $i < $len; $i++ )
+        {
+            my $value = @cmd[$i];
+            my $svalue = $value;
+            $svalue =~ s/[^a-zA-z0-9]//g;
+            if( $param eq $svalue )
+            {
+                $catvalue = "$value";
+                last;
+            }
+        }
+        if( $catvalue eq "" )
+        {
+            $catvalue = "&nbsp;";
+        }
+    }
+    elsif( @cmd[0] eq "checkbox" )
+    {
+        $catname = @cmd[1];
+        $scatname = $catname;
+        $scatname =~ s/[^a-zA-z0-9]//g;
+        for( $i = 4; $i < $len; $i++ )
+        {
+            my $value = @cmd[$i];
+            my $svalue = $value;
+            $svalue =~ s/[^a-zA-z0-9]//g;
+            $param = $query->param("$scatname$svalue");
+            if( $param ne "" )
+            {
+                $catvalue = "$catvalue, $value";
+            }
+            $catvalue =~ s/^,\s//;
+        }
+        if( $catvalue eq "" )
+        {
+            $catvalue = "&nbsp;";
+        }
+    }
+    elsif( @cmd[0] eq "radio" )
+    {
+        $catname = @cmd[1];
+        $scatname = $catname;
+        $scatname =~ s/[^a-zA-z0-9]//g;
+        $param = $query->param("$scatname");
+        for( $i = 3; $i < $len; $i++ )
+        {
+            my $value = @cmd[$i];
+            my $svalue = $value;
+            $svalue =~ s/[^a-zA-z0-9]//g;
+            if( $param eq $svalue )
+            {
+                $catvalue = "$value";
+                last;
+            }
+        }
+        if( $catvalue eq "" )
+        {
+            $catvalue = "&nbsp;";
+        }
+        if( $scatname eq "UseCategory" )
+        {
+            if( $catvalue eq "Yes" )
+            {
+                # delete "UseCategory" entry if "UseCategory" is "Yes"
+                $catname = "";
+            }
+            else
+            {
+                # delete whole category table
+                $catname = "DELETE_ME";
+            }
+        }
+    }
+    elsif( @cmd[0] eq "text" )
+    {
+        $catname = @cmd[1];
+        $scatname = $catname;
+        $scatname =~ s/[^a-zA-z0-9]//g;
+        $param = $query->param("$scatname");
+        $catvalue = "<!---->$param<!---->&nbsp;";
+    }
+
+    return ( $catname, $catvalue )
+}
+
+sub main
+{
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theTopic = $query->param('topic');
+    my $theUrl = $query->url;
+
+    ( $topic, $webName) = 
+	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+
+    my $tmpl = "", $atext = "", $text = "", $ptext = "", $tcat = "", $icat = "";
+
+    if( ! &wiki::webExists($webName))
+    {
+	$tmpl= &wiki::readTemplate( "noweb" );
+	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+	print $tmpl;
+	return;
+    }
+
+    # reset lock time, this is to prevent contention in case of a long edit session
+    &wiki::lockTopic( $topic );
+
+    $tmpl= &wiki::readTemplate("preview");
+    $icat= &wiki::readTemplate("twikicatitems");
+    my $saveCmd = $query->param("cmd");
+    if( $saveCmd )
+    {
+        $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;
+    }
+    $tmpl =~ s/%CMD%/$saveCmd/go;
+
+    if( icat ne "" )
+    {
+        # get category items from parameters and build category section
+        $tcat = &wiki::readTemplate("twikicatview");
+        my $line = "", $ttext = "", $temp = "";
+        ( $before, $line, $after) = split( /%REPEAT%/, $tcat);
+        foreach( split( /\n/, $icat))
+        {
+            my( $catname, $catvalue ) = buildCategoryItem( $_ );
+            if( $catname ne "" )
+            {
+                if( $catname eq "DELETE_ME" )
+                {
+                    $ttext = "";
+                    last;
+                }
+                $temp = $line;
+                $temp =~ s/%CATNAME%/$catname/go;
+                $temp =~ s/%CATMODIFIER%//go;
+                $temp =~ s/%CATVALUE%/$catvalue/go;
+                $ttext = "$ttext$temp";
+            }
+        }
+        if( $ttext ne "" )
+        {
+            $tcat = "$before$ttext$after";
+        }
+        else
+        {
+            $tcat = "";
+        }
+    }
+
+    if( $saveCmd ne "repRev" )
+    {
+        # normal case: Get latest attachment from file for preview
+        $text= &wiki::readTopic($topic);
+        ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
+        # get the edited text and combine text, category table and attachment for preview
+        $text = $query->param( "text" );
+        $ptext = "$text$tcat$atext"; # text to preview
+        $text = "$text$tcat";        # text to save
+    }
+    else
+    {
+        # for debug: Extract attachment
+        $text = $query->param( "text" );
+        ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
+        # combine text, category table and attachment for preview
+        $ptext = "$before$after$tcat$atext";     # text to preview
+        if( $atext eq "" )
+        {
+            $text = "$before$after$tcat";
+        }
+        else
+        {
+            $text = "$before$after$tcat<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
+        }
+    }
+
+    $ptext =~ s/ {3}/\t/go;
+    $ptext = &wiki::handleCommonTags( $ptext, $topic );
+    $ptext = &wiki::getRenderedVersion( $ptext );
+
+    # do not allow click on link before save:
+    $ptext =~ s@(href=".*?")@href="%SCRIPTURL%/oops/%WEB%/%TOPIC%\?template=oops"@goi;
+
+    $tmpl =~ s/%TEXT%/$ptext/go;
+    $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+
+    $text =~ s/</%_L_%/go;
+    $text =~ s/>/%_G_%/go;
+    $text =~ s/\"/%_Q_%/go;
+    $text =~ s/&/%_A_%/go;
+
+    $tmpl =~ s/%HIDDENTEXT%/$text/go;
+
+    print $tmpl;
+}

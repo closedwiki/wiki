@@ -1,0 +1,34 @@
+Redirect /urlpath/to/TWiki/index.html http://your.domain.com/url/path/to/TWiki/bin/view
+
+AuthUserFile /filepath/to/TWiki/distrib/bin/data/.htpasswd
+AuthName ByPassword
+AuthType Basic
+
+SetHandler cgi-script
+
+ErrorDocument 401 /urlpath/to/TWiki/distrib/bin/view/Main/TWikiRegistration
+
+<Files ~ "[^/]*\.html$">
+       SetHandler blabla
+       allow from all
+</Files>
+
+<Files "edit">
+       require valid-user
+</Files>
+
+<Files "save">
+       require valid-user
+</Files>
+
+<Files "attach">
+       require valid-user
+</Files>
+
+<Files "upload">
+       require valid-user
+</Files>
+
+<Files "*">
+       allow from all
+</Files>

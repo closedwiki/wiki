@@ -1,0 +1,202 @@
+#!/usr/bin/perl -w
+#
+# TWiki WikiClone (see $wikiversion in wiki.pm for version)
+#
+# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
+# TakeFive Software Inc.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+
+use CGI;
+use wiki;
+
+$query = new CGI;
+
+##### for debug only: Remove next 3 comments (but redirect does not work)
+#open(STDERR,'>&STDOUT'); # redirect error to browser
+#$| = 1;                  # no buffering
+#print "Content-type: text/html\n\n";
+
+&main();
+
+sub filenameToIcon
+{
+    my( $fileName ) = @_;
+
+    my @bits = ( split( /\./, $fileName ) );
+    my $fileExt = lc $bits[$#bits];
+
+    my $tmp = &wiki::getPubDir();
+    my $iconDir = "$tmp/icn";
+    my $iconUrl = "%PUBURL%/icn";
+    my $iconList = &wiki::readFile( "$iconDir/_filetypes.txt" );
+    foreach( split( /\n/, $iconList ) )
+    {
+        @bits = ( split( / / ) );
+	if( $bits[0] eq $fileExt )
+        {
+            return "<IMG src=\"$iconUrl/$bits[1].gif\" width=\"16\" hight=\"16\" align=\"top\">";
+        }
+    }
+    return "<IMG src=\"$iconUrl/else.gif\" width=\"16\" hight=\"16\" align=\"top\">";
+}
+
+
+sub updateAttachment
+{
+    my ( $atext, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) = @_;
+    my $atTable = &wiki::readTemplate( "attachtable" );
+    my ( $atTableBefore, $atTableFile, $atTableAfter ) = split( /%REPEAT%/, $atTable );
+
+    my $before="", $item="", $lcItem="", $after="", $set="", $ins="", $comp="";
+    my $lcFileName = lc $fileName;
+    my $fileIcon = filenameToIcon( $fileName );
+
+    my $result = $atTableBefore;
+    my $found = 0;
+#print "<br> ===== lcFileName : $lcFileName <br>";
+
+    foreach( split( /<TwkNextItem>/, $atext ) )
+    {
+        $set = $_;
+        ( $before, $item, $after ) = split( /<(?:\/)*TwkFileName>/, $set );
+        if( $item ) 
+        {
+            $set = "<TwkNextItem>$set";
+            $lcItem = lc $item;
+            $comp = ( $lcItem cmp $lcFileName );
+            if( $comp == 0 )
+            {
+                # identical, so replace entry
+                $found = 1;
+                $set = $atTableFile;
+                $set =~ s/%FILEICON%/$fileIcon/go;
+                $set =~ s/%FILENAME%/$fileName/go;
+                $set =~ s/%FILEPATH%/$filePath/go;
+                $set =~ s/%FILESIZE%/$fileSize/go;
+                $set =~ s/%FILEDATE%/$fileDate/go;
+                $set =~ s/%FILEUSER%/$fileUser/go;
+                $set =~ s/%FILECOMMENT%/$fileComment/go;
+            }
+            elsif( ( $comp > 0 ) && ( ! $found ) )
+            {
+                # insert in alphabetical order
+                $found = 1;
+                $ins = $atTableFile;
+                $ins =~ s/%FILEICON%/$fileIcon/go;
+                $ins =~ s/%FILENAME%/$fileName/go;
+                $ins =~ s/%FILEPATH%/$filePath/go;
+                $ins =~ s/%FILESIZE%/$fileSize/go;
+                $ins =~ s/%FILEDATE%/$fileDate/go;
+                $ins =~ s/%FILEUSER%/$fileUser/go;
+                $ins =~ s/%FILECOMMENT%/$fileComment/go;
+                $result = "$result$ins";
+            }
+
+            # copy existing entry
+            $result = "$result$set";
+        }
+    }
+
+    if( ! $found )
+    {
+        # add entry
+        $ins = $atTableFile;
+        $ins =~ s/%FILEICON%/$fileIcon/go;
+        $ins =~ s/%FILENAME%/$fileName/go;
+        $ins =~ s/%FILEPATH%/$filePath/go;
+        $ins =~ s/%FILESIZE%/$fileSize/go;
+        $ins =~ s/%FILEDATE%/$fileDate/go;
+        $ins =~ s/%FILEUSER%/$fileUser/go;
+        $ins =~ s/%FILECOMMENT%/$fileComment/go;
+        $result = "$result$ins";
+    }
+
+    $result = "$result$atTableAfter";
+    return $result;
+}
+
+
+sub main
+{
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theTopic = $query->param('topic');
+    my $theUrl = $query->url;
+
+    ( $topic, $webName, $scriptUrl, $userName ) = 
+	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+
+    my $filePath = $query->param('filepath');
+    my $fileName = $query->param('filename');
+    my $tmpFilename = $query->tmpFileName($filePath);
+    my $fileComment = $query->param('filecomment');
+
+    # check if file exists and has non zero size
+    if( ! -s "$tmpFilename" )
+    {
+        print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopsupload&param1=$fileName" );
+        return;
+    }
+
+    # cut path from filepath name (Windows "\" and Unix "/" format)
+    @pathz = ( split( /\\/, $filePath ) );
+    $filetemp = $pathz[$#pathz];
+    @pathza = ( split( '/', $filetemp ) );
+    $fileName = $pathza[$#pathza];
+    $fileName =~ s/[^A-Za-z0-9_\.\-]//go;  # delete special characters
+
+    # before save, create directories if not exist
+    my $pubDir = &wiki::getPubDir();
+    my $tempPath = "$pubDir/$webName";
+    if( ! -e "$tempPath" )
+    {
+        `mkdir $tempPath`;
+        `chmod 777 $tempPath`;
+    }
+    $tempPath = "$tempPath/$topic";
+    if( ! -e "$tempPath" )
+    {
+        `mkdir $tempPath`;
+        `chmod 777 $tempPath`;
+    }
+
+    # save uploaded file
+    my $tempPath = "$tempPath/$fileName";
+    # use "$tmpFilename" because filename may have spaces
+    `cp "$tmpFilename" $tempPath`;
+    `chmod 644 $tempPath`;
+
+    # get user name
+    my $fileUser = &wiki::userToWikiName( $userName );
+
+    # get time stamp and file size of uploaded file:
+    my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$fileSize,$tmp9,
+        $mtime,$tmp11,$tmp12,$tmp13 ) = "";
+    ( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$fileSize,$tmp9,
+      $mtime,$tmp11,$tmp12,$tmp13 ) = stat $tmpFilename;
+    my $fileDate = &wiki::formatGmTime( $mtime );
+    $fileDate =~ s/ /&nbsp;/go;
+
+    # update topic
+    my $text = "", $before="", $atext, $after="";
+    $text = &wiki::readTopic( $topic );
+    # extract attachment section:
+    ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
+    $atext = updateAttachment( $atext, $fileName, $filePath, $fileSize, 
+                               $fileDate, $fileUser, $fileComment );
+    $text = "$before<!--TWikiAttachment-->$atext<!--TWikiAttachment-->$after";
+    &wiki::saveTopic( $topic, $text );
+
+    # and finally display topic
+    print $query->redirect( &wiki::viewUrl( $topic ) );
+}

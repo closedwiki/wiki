@@ -1,0 +1,117 @@
+#!/usr/bin/perl -w
+#
+# TWiki WikiClone (see $wikiversion in wiki.pm for version)
+#
+# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
+# TakeFive Software Inc.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+
+use CGI;
+use wiki;
+
+$query= new CGI;
+
+#open(STDERR,'>&STDOUT'); # redirect error to browser
+$| = 1;                  # no buffering
+print "Content-type: text/html\n\n";
+
+&main();
+
+
+sub getAttachAttr
+{
+    my ( $atext, $fileName ) = @_;
+    my $filePath="", $fileSize="", $fileDate="", $fileUser="", $fileComment="";
+    my $before="", $item="", $after="", $set="";
+
+    foreach( split( /<TwkNextItem>/, $atext ) )
+    {
+        $set = $_;
+        ( $before, $item, $after ) = split( /<(?:\/)*TwkFileName>/, $set );
+        if( ( $item ) && ( $item eq $fileName ) )
+        {
+            ( $before, $filePath,    $after ) = split( /<(?:\/)*TwkFilePath>/, $set );
+            $filePath =~ s/ <TwkData value="//go;
+            $filePath =~ s/"> //go;
+            ( $before, $fileSize,    $after ) = split( /<(?:\/)*TwkFileSize>/, $set );
+            ( $before, $fileDate,    $after ) = split( /<(?:\/)*TwkFileDate>/, $set );
+            ( $before, $fileUser,    $after ) = split( /<(?:\/)*TwkFileUser>/, $set );
+            $fileUser =~ s/ //go;
+            ( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $set );
+
+            return ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
+        }
+    }
+
+    return ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
+}
+
+
+sub main
+{
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theTopic = $query->param('topic');
+    my $theUrl = $query->url;
+
+    ( $topic, $webName, $scriptUrl, $userName ) = 
+	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+
+    my $tmpl="", $text="", $atext="", $fileName="";
+
+    if( ! &wiki::webExists( $webName ) )
+    {
+	$tmpl= &wiki::readTemplate( "noweb" );
+	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+	print $tmpl;
+	return;
+    }
+
+    $fileName = $query->param('filename');
+
+    if( &wiki::topicExists( $webName, $topic ) )
+    {
+	$text = &wiki::readTopic( $topic );
+        # extract attachment section
+        my $before="", $after="";
+        ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
+    }
+    # get filePath and fileComment:
+    my ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) 
+      = getAttachAttr( $atext, $fileName );
+
+    $tmpl = &wiki::readTemplate( "attach" );
+    $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    $atext = &wiki::getRenderedVersion( $atext );
+    $atext = &wiki::handleCommonTags( $atext, $topic );
+    $tmpl =~ s/%ATTACHTABLE%/$atext/go;
+    if( $fileName eq "" )
+    {
+        $tmpl =~ s/%ACTION%/Attach new file/go;
+        $tmpl =~ s/%PREVIOUS%//go;
+        $tmpl =~ s/%FILEUSER%/$fileUser/go;
+    }
+    else
+    {
+        $tmpl =~ s/%ACTION%/Update file:/go;
+        $tmpl =~ s/%PREVIOUS%/Previous <br> upload:/go;
+        $fileUser = &wiki::getRenderedVersion( $fileUser );
+        $fileUser =~ s/\n//go;
+        $tmpl =~ s/%FILEUSER%/\($fileUser\)/go;
+    }
+    $tmpl =~ s/%FILENAME%/$fileName/go;
+    $tmpl =~ s/%FILEPATH%/$filePath/go;
+    $tmpl =~ s/%FILECOMMENT%/$fileComment/go;
+    print $tmpl;
+}
+

@@ -1,0 +1,165 @@
+#!/usr/bin/perl
+#
+# TWiki WikiClone (see $wikiversion in wiki.pm for version)
+#
+# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
+# TakeFive Software Inc.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+
+use wiki;
+
+&main();
+
+sub main
+{
+    print "TWiki mail notification\n";
+
+    my $dataDir = &wiki::getDataDir();
+    opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
+    @weblist = grep !/^\.\.?$/, readdir DIR;
+    closedir DIR;
+    foreach $web ( @weblist )
+    {
+        if( -d "$dataDir/$web" )
+        {
+             processWeb( $web );
+
+             # remove obsolete .lock files
+             &wiki::removeObsoleteTopicLocks( $web );
+        }
+    }
+    print "End Twiki mail notification\n";
+}
+
+sub processWeb
+{
+    my( $web) = @_;
+
+    my ( $topic, $webName, $scriptUrl, $userName, $dataDir) = 
+	&wiki::initialize( "/$web", "nobody" );
+
+    print "Checking TWiki.$webName\n";
+
+    if( ! &wiki::webExists($webName))
+    {
+	print "* Error: Web $webName does not exist\n";
+	return;
+    }
+
+    my $notifylist = &wiki::getEmailNotifyList($webName);
+    if( $notifylist eq "" )
+    {
+	print "- Note: Notification list is empty\n";
+	return;
+    }
+
+    my $emailbody = "";
+    my $topiclist = "";
+
+    my $text = &wiki::readTemplate("changes");
+    my $changes= &wiki::readFile("$dataDir/$webName/.changes");
+   
+    my %exclude;
+
+    $text = &wiki::handleCommonTags($text, $topic);
+    $text =~ s/<img src=.*?[^>]>/[IMG]/goi;  # remove all images
+
+    ( $before, $text, $after) = split( /%REPEAT%/, $text);
+    $emailbody = "$before";
+
+    my $prevLastmodify = &wiki::readFile( "$dataDir/$webName/.mailnotify");
+    my $currLastmodify = "";
+
+    #print "Date: prevLastmodify ($prevLastmodify)\n";
+
+    foreach( reverse split( /\n/, $changes))
+    {
+	@bar = split( /\t/);
+	$foo = $text;
+	if( !defined( %exclude) ||
+	    $exclude{$bar[0]} ne "1")
+	{
+	    #print "Date: ($bar[2])\n";
+
+	    if( $currLastmodify eq "")
+	    {
+	        # newest entry
+	        $time = &wiki::formatGmTime($prevLastmodify);
+	        if( $prevLastmodify eq $bar[2])
+	        {
+	            # newest entry is same as at time of previous notification
+	            print "- Note: No topics changed since $time\n";
+	            return;
+	        }
+	        $currLastmodify = $bar[2];
+	        print "- Changed topics since $time: ";
+	    }
+
+	    if( $prevLastmodify >= $bar[2])
+	    {
+	        #print "Date: found item of last notification\n";
+	        # found item of last notification
+	        last;
+	    }
+
+	    #create entry in HTML attachment
+	    $foo = $text;
+	    $foo =~ s/%TOPICNAME%/$bar[0]/go;
+	    $wikiuser = &wiki::userToWikiName( $bar[1]);
+	    $foo =~ s/%AUTHOR%/$wikiuser/go;
+	    $time = &wiki::formatGmTime($bar[2]);
+	    $foo =~ s/%TIME%/$time/go;
+	    $foo = &wiki::getRenderedVersion( $foo);
+
+	    $head = &wiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 12 );
+            $head =~ s/\n/ /go;
+            $head =~ s/<[^>]*>//go;
+            $head =~ s/[\*\|]/ /go;
+            $head =~ s/(..................................................................................................................................................................)([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
+            $foo =~ s/%TEXTHEAD%/$head/go;
+
+	    $emailbody = "$emailbody$foo";
+	    $exclude{$bar[0]}="1";
+
+	    print "$bar[0] ";
+
+	    #add new item to topic list in email body
+	    $foo = "- $bar[0]  ($wikiuser)\n  $scriptUrl/view/$webName/$bar[0]\n";
+            $foo =~ s/Main\.//go;
+	    $topiclist = "$topiclist$foo";
+	}
+    }
+
+    print "\n";
+
+    &wiki::saveFile( "$dataDir/$webName/.mailnotify", $currLastmodify);
+
+    $emailbody = "$emailbody$after";
+
+    $text = &wiki::readTemplate("mailnotify");
+    $text =~ s/%EMAILFROM%/%WIKIWEBMASTER%/go;
+    $text =~ s/%EMAILTO%/$notifylist/go;
+    $text =~ s/%EMAILBODY%/$emailbody/go;
+    $text =~ s/%TOPICLIST%/$topiclist/go;
+    $text =~ s/%LASTDATE%/&wiki::formatGmTime($prevLastmodify)/geo;
+    $text = &wiki::handleCommonTags($text, $topic);
+
+    print "- Sending mail notification to: $notifylist\n";
+
+    if( ! &wiki::sendEmail( $text ))
+    {
+	print "- ERROR: Can't send mail\n- End Twiki.$webName\n";
+    } else {
+	print "- End Twiki.$webName, mail notification sent\n";
+    }
+}

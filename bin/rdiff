@@ -1,0 +1,240 @@
+#!/usr/bin/perl -w
+#
+# TWiki WikiClone (see $wikiversion in wiki.pm for version)
+#
+# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
+# TakeFive Software Inc.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+
+use CGI;
+use wiki;
+
+$query= new CGI;
+
+print "Content-type: text/html\n\n";
+
+&main();
+
+sub renderCellData
+{
+    my( $data, $topic ) = @_;
+    if( $data ne "" )
+    {
+        $data = &wiki::handleCommonTags( $data, $topic );
+        $data = &wiki::getRenderedVersion( $data );
+        if( $data =~ m/<\/?(th|td|table)/i )
+        {
+            # data has <th> or <td>, check if need to add <table>
+            if( $data !~ m/<table/i )
+            {
+                $data = "\n<table>\n$data";
+            }
+            if( $data !~ m/<\/table/i )
+            {
+                $data = "$data\n</table>";
+            }
+        }
+    }
+    return $data;
+}
+
+
+sub renderRevisionDiff
+{
+    my( $text, $topic ) = @_;
+
+    $text =~ s/\r//go;  # cut CR
+    my $result = "<table width=\"100%\" cellspacing=\"0\">\n<tr><td>";
+    my $data = "";
+    foreach( split( /\n/, $text))
+    {
+        if( /^[0-9]/ )
+        {
+            $data = renderCellData( $data, $topic );
+            $result = "$result$data";
+            $data = "";
+            s/^([0-9\,]+)d([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#FFD7D7" colspan ="2"><b> Deleted: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br>&lt;<\/td><td>/go;
+            s/^([0-9\,]+)a([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Added:   <\/b><\/td><\/tr>\n<tr><td bgcolor="#40FF40" valign="top" width="1%">&gt;<br>&gt;<\/td><td>/go;
+            s/^([0-9\,]+)c([0-9\,]+)/\n<\/td><\/tr>\n<tr><td bgcolor="#D0FFD0" colspan ="2"><b> Changed: <\/b><\/td><\/tr>\n<tr><td bgcolor="#FF4040" valign="top" width="1%">&lt;<br>&lt;<\/td><td>/go;
+            $result = "$result$_";
+        }
+        elsif( /^[<>]/ )
+        {
+            s/^[<>] (.*)/$1/go;
+            $data = "$data\n$_";
+        }
+        elsif( /^--*/ )
+        {
+            $data = renderCellData( $data, $topic );
+            $result = "$result$data";
+            $data = "";
+            $result = "$result\n</td></tr><tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br>&gt;</td><td>\n";
+        }
+    }
+    $data = renderCellData( $data, $topic );
+    $result = "$result$data";
+    $data = "";
+    $text = "$result<\/td><\/tr>\n<\/table>";
+
+    return $text;
+}
+
+
+sub getRevInfo
+{
+    my( $rev, $topic, $short ) = @_;
+
+    my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
+    $user = &wiki::userToWikiName( $user );
+    my $revInfo = &wiki::getRenderedVersion( "$date - $user" );
+    if( $short )
+    {
+        # cut time
+        $revInfo =~ s/ \- [0-9]*\:[0-9]*//go;
+        # eliminate white space to prevent wrap around in HR table:
+        $revInfo =~ s/ /\&nbsp\;/go;
+    }
+
+    $revInfo =~ s/\n//go;
+    return $revInfo;
+}
+
+
+sub main
+{
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theTopic = $query->param('topic');
+    my $theUrl = $query->url;
+
+    ( $topic, $webName) = 
+	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+
+    my $tmpl = "", $text = "", $diff = "";
+    my $rev1 = $query->param( "rev1" );
+    my $rev2 = $query->param( "rev2" );
+    $rev1 =~ s/1\.//go;  # cut major
+    $rev2 =~ s/1\.//go;  # cut major
+    my $maxrev= 1;
+    my $i = $maxrev,    $j = $maxrev;
+    my $revTitle1 = "", $revTitle2 = "";
+    my $revInfo1 = "",  $revInfo2 = "";
+    my $isMultipleDiff = 0;
+
+    if( ! &wiki::webExists( $webName ) )
+    {
+	$tmpl= &wiki::readTemplate( "noweb" );
+	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+	print $tmpl;
+	return;
+    }
+    $tmpl= &wiki::readTemplate( "rdiff" );
+    my( $before, $difftmpl, $after) = split( /%REPEAT%/, $tmpl);
+
+    my $topicExists = &wiki::topicExists( $webName, $topic );
+    if( $topicExists )
+    {
+	$maxrev = &wiki::getRevisionNumber( $topic );
+        $maxrev =~ s/1\.//go;  # cut major
+        if( $rev1 < 1 )       { $rev1 = $maxrev; }
+        if( $rev1 > $maxrev ) { $rev1 = $maxrev; }
+        if( $rev2 < 1 )       { $rev2 = 1; }
+        if( $rev2 > $maxrev ) { $rev2 = $maxrev; }
+        $revTitle1 = "r1.$rev1";
+        $revInfo1 = getRevInfo( $rev1, $topic );
+        if( $rev1 != $rev2 )
+        {
+            $revTitle2 = "r1.$rev2";
+            $revInfo2 = getRevInfo( $rev2, $topic );
+        }
+    }
+    else
+    {
+	$rev1 = 1;
+	$rev2 = 1;
+    }
+
+
+    # format "before" part
+    $before =~ s/%REVTITLE1%/$revTitle1/go;
+    $before =~ s/%REVTITLE2%/$revTitle2/go;
+    $before = &wiki::handleCommonTags( $before, $topic );
+    print $before;
+
+
+    # do one or more diffs
+    $difftmpl = &wiki::handleCommonTags( $difftmpl, $topic );
+    if( $topicExists )
+    {
+        my $r1 = $rev1, $r2 = $rev2, $rInfo = "";
+        if( $r1 > $r2 + 1)
+        {
+            $r2 = $r1 - 1;
+            $isMultipleDiff = 1;
+        }
+        do
+        {
+            $diff = $difftmpl;
+            $diff =~ s/%REVTITLE1%/r1\.$r1/go;
+            $rInfo = getRevInfo( $r1, $topic, 1 );
+            $diff =~ s/%REVINFO1%/$rInfo/go;
+            $text = &wiki::getRevisionDiff( $topic, "1.$r2", "1.$r1" );
+            $text = renderRevisionDiff( $text, $topic );
+            $diff =~ s/%TEXT%/$text/go;
+            print $diff;
+            $r1 = $r1 - 1;
+            $r2 = $r2 - 1;
+            if( $r2 < 1 ) { $r2 = 1; }
+        } while( ( $r1 > $rev2 ) || ( $r1 == 1 ) );
+    }
+    else
+    {
+        $diff = $difftmpl;
+        $diff =~ s/%REVTITLE1%/$revTitle1/go;
+        $diff =~ s/%REVTITLE2%/$revTitle2/go;
+        $diff =~ s/%TEXT%//go;
+        print $diff;
+    }
+
+
+    # format "after" part
+    $i = $maxrev;
+    $j = $maxrev;
+    my $revisions = "";
+
+    while( $i > 0 )
+    {
+        $revisions = "$revisions | <A href=\"../../view/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
+        if( $i != 1 )
+        {
+            if( ( $i == $rev1 ) && ( !$isMultipleDiff ) )
+            {
+                $revisions = "$revisions | &gt;";
+            }
+            else
+            {
+                $j = $i - 1;
+                $revisions = "$revisions | <A href=\"../../rdiff/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
+            }
+        }
+        $i = $i - 1;
+    }
+    $after =~ s/%REVISIONS%/$revisions/go;
+    $after =~ s/%REVTITLE1%/$revTitle1/go;
+    $after =~ s/%REVINFO1%/$revInfo1/go;
+    $after =~ s/%REVTITLE2%/$revTitle2/go;
+    $after =~ s/%REVINFO2%/$revInfo2/go;
+
+    $after = &wiki::handleCommonTags( $after, $topic );
+    print $after;
+}

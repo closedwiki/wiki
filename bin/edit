@@ -1,0 +1,264 @@
+#!/usr/bin/perl
+#
+# TWiki WikiClone (see $wikiversion in wiki.pm for version)
+#
+# Based on parts of Ward Cunninghams original Wiki and JosWiki.
+# Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
+# Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
+# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
+# TakeFive Software Inc.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+
+use CGI;
+use wiki;
+
+$query= new CGI;
+
+&main();
+
+sub buildCategoryItem
+{
+    my ( $catitems, $ctext ) = @_;
+    my $catname = "", $scatname = "", $catmodifier = "", $catvalue = "";
+    my @cmd = split( /\|/, $catitems );
+    my $src = "";
+    my $len = @cmd;
+    if( $len < "2" )
+    {
+        return ( $catname, $catmodifier, $catvalue )
+    }
+    foreach( split( /\n/, $ctext ))
+    {
+        if( /@cmd[1]/ )
+        {
+            $src = $_;
+            last;
+        }
+    }
+
+    if( @cmd[0] eq "select" )
+    {
+        $catname = @cmd[1];
+        $scatname = $catname;
+        $scatname =~ s/[^a-zA-z0-9]//g;
+        my $size = @cmd[2];
+        $catvalue = "<select name=\"$scatname\" size=\"$size\">";
+        for( $i = 3; $i < $len; $i++ )
+        {
+            my $value = @cmd[$i];
+            my $svalue = $value;
+            $svalue =~ s/[^a-zA-z0-9]//g;
+            my $flag = "";
+            if( $src =~ /$value/ )
+            {
+                $flag = "selected";
+            }
+            $catvalue = "$catvalue\n<option value=\"$svalue\" $flag>$value";
+        }
+        $catvalue = "$catvalue\n</select>";
+
+    }
+    elsif( @cmd[0] eq "checkbox" )
+    {
+        $catname = @cmd[1];
+        $scatname = $catname;
+        $scatname =~ s/[^a-zA-z0-9]//g;
+        if( @cmd[2] eq "true" || @cmd[2] eq "1" )
+        {
+            $i = $len - 4;
+            $catmodifier = "$catmodifier\n<input type=\"button\" value=\" Set \" onClick=\"checkAll(this, 2, $i, true)\">&nbsp;";
+            $catmodifier = "$catmodifier\n<input type=\"button\" value=\"Clear\" onClick=\"checkAll(this, 1, $i, false)\">&nbsp;";
+        }
+        $itemsPerLine = @cmd[3];
+        $catvalue = "\n<table cellspacing=\"0\" cellpadding=\"0\"><tr>";
+        for( $i = 4; $i < $len; $i++ )
+        {
+            my $value = @cmd[$i];
+            my $svalue = $value;
+            $svalue =~ s/[^a-zA-z0-9]//g;
+            my $flag = "";
+            if( $src =~ /$value[^a-zA-Z0-9\.]/ )
+            {
+                $flag = "checked";
+            }
+            $catvalue = "$catvalue\n<td><input type=\"checkbox\" name=\"$scatname$svalue\" $flag>$value &nbsp;&nbsp;</td>";
+            if( ( $itemsPerLine > 0 ) && (($i-4) % $itemsPerLine == $itemsPerLine - 1 ) )
+            {
+                $catvalue = "$catvalue\n</tr><tr>";
+            }
+        }
+        $catvalue = "$catvalue\n</tr></table>\n";
+    }
+    elsif( @cmd[0] eq "radio" )
+    {
+        $catname = @cmd[1];
+        $scatname = $catname;
+        $scatname =~ s/[^a-zA-z0-9]//g;
+        $itemsPerLine = @cmd[2];
+        $catvalue = "\n<table cellspacing=\"0\" cellpadding=\"0\"><tr>";
+        for( $i = 3; $i < $len; $i++ )
+        {
+            my $value = @cmd[$i];
+            my $svalue = $value;
+            $svalue =~ s/[^a-zA-z0-9]//g;
+            my $flag = "";
+            if( $src =~ /$value[^a-zA-Z0-9\.]/ )
+            {
+                $flag = "checked";
+            }
+            elsif( ( $scatname eq "UseCategory" ) && 
+                ( ( $i == 3 && $ctext ne "" ) || ( $i == 4 && $ctext eq "" ) )
+              )
+            {
+                $flag = "checked";
+            }
+            $catvalue = "$catvalue\n<td><input type=\"radio\" name=\"$scatname\" value=\"$svalue\" $flag>$value &nbsp;&nbsp;</td>";
+            if( ( $itemsPerLine > 0 ) && (($i-3) % $itemsPerLine == $itemsPerLine - 1 ) )
+            {
+                $catvalue = "$catvalue\n</tr><tr>";
+            }
+        }
+        $catvalue = "$catvalue\n</tr></table>\n";
+    }
+    elsif( @cmd[0] eq "text" )
+    {
+        $catname = @cmd[1];
+        $scatname = $catname;
+        $scatname =~ s/[^a-zA-z0-9]//g;
+        my @temp = split( /<!---->/, $src );
+        $catvalue = "<input type=\"text\" name=\"$scatname\" size=\"@cmd[2]\" value=\"@temp[1]\" >";
+    }
+
+    return ( $catname, $catmodifier, $catvalue )
+}
+
+sub main
+{
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theTopic = $query->param('topic');
+    my $theUrl = $query->url;
+
+    ( $topic, $webName, $scriptUrl, $userName) = 
+	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+
+    my $saveCmd = $query->param('cmd');
+    my $tmpl="", $tcat="", $icat="", $text="";
+    my $before="", $atext="", $ctext="", $after="";
+
+    if( ! &wiki::webExists($webName))
+    {
+        print "Content-type: text/html\n\n";
+	$tmpl= &wiki::readTemplate( "noweb" );
+	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+	print $tmpl;
+        return;
+    }
+
+    my $breakLock = $query->param('breaklock');
+    my $lockUser = &wiki::topicIsLocked( $topic );
+    if( ( ! $breakLock ) && ( $lockUser ne "" ) )
+    {
+        # warn user that other person is editing this topic
+        $lockUser = &wiki::userToWikiName( $lockUser );
+        print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopslocked&param1=$lockUser" );
+	return;
+    }
+    &wiki::lockTopic( $topic );
+
+    print "Content-type: text/html\n\n";
+
+    $tmpl= &wiki::readTemplate("edit");
+    $icat= &wiki::readTemplate("twikicatitems");
+    if( &wiki::topicExists($webName,$topic))
+    {
+	$text= &wiki::readTopic($topic);
+    }
+    else
+    {
+	if( &wiki::isWikiName($topic))
+	{
+	    $text= &wiki::readTemplate("notedited");
+	}
+	else
+	{
+	    $text= &wiki::readTemplate("notwiki");
+	}
+
+        my $foo = &wiki::getLocaldate();
+        $text =~ s/%DATE%/$foo/go;
+        $foo = &wiki::userToWikiName($userName);
+        if( &wiki::isWikiName( $foo))
+        {
+            $text =~ s/%USERNAME%/$foo/go;
+        }
+        else
+        {
+            $text =~ s/%USERNAME%/Main.{yourWikiName}/go;
+        }
+    }
+
+    if( icat ne "" )
+    {
+        # extract category section and build category form elements
+        ( $before, $ctext, $after) = split( /<!--TWikiCat-->/, $text);
+        $text = "$before$after";   # cut TWikiCat
+
+        $tcat = &wiki::readTemplate("twikicatedit");
+        if( $tcat eq "" )
+        {
+            $tcat = &wiki::readTemplate("twikicatview");
+        }
+        my $line = "", $ttext = "", $temp = "";
+        ( $before, $line, $after) = split( /%REPEAT%/, $tcat);
+        foreach( split( /\n/, $icat))
+        {
+            my( $catname, $catmod, $catvalue ) = buildCategoryItem( $_, $ctext );
+            if( $catname ne "" )
+            {
+                $catname = &wiki::getRenderedVersion( $catname );
+                $temp = $line;
+                $temp =~ s/%CATNAME%/$catname/go;
+                $temp =~ s/%CATMODIFIER%/$catmodifier/go;
+                $temp =~ s/%CATVALUE%/$catvalue/go;
+                $ttext = "$ttext$temp";
+            }
+        }
+        $tcat = "$before$ttext$after";
+
+    }
+
+    if( $saveCmd ne "repRev" )
+    {
+        # cut attachment section if not in debug mode
+        ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
+        $text = "$before$after";   # cut TWikiAttachment
+    }
+
+    $text =~ s/&/&amp\;/go;
+    $text =~ s/</&lt\;/go;
+    $text =~ s/>/&gt\;/go;
+    $text =~ s/\t/   /go;
+
+    if( $saveCmd )
+    {
+        $tmpl =~ s/\(edit\)/\(edit cmd=$saveCmd\)/go;
+    }
+    $tmpl =~ s/%CMD%/$saveCmd/go;
+    $tmpl = &wiki::handleCommonTags($tmpl, $topic);
+
+    $tmpl =~ s/%TEXT%/$text/go;
+    $tmpl =~ s/%TWIKICAT%/$tcat/go;
+
+    print $tmpl;
+}
