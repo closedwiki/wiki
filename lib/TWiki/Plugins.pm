@@ -20,7 +20,7 @@
 #
 #   initPlugin           ( $topic, $web, $user )
 #   commonTagsHandler    ( $text, $topic, $web )
-#   startRenderingHandler( $text, $web )
+#   startRenderingHandler( $text, $web, $meta )
 #   outsidePREHandler    ( $text )
 #   insidePREHandler     ( $text )
 #   endRenderingHandler  ( $text )
@@ -40,7 +40,7 @@ $VERSION = '1.000';
 @registrableHandlers = (
         'initPlugin',              # ( $topic, $web, $user, $installWeb )
         'commonTagsHandler',       # ( $text, $topic, $web )
-        'startRenderingHandler',   # ( $text, $topic, $web )
+        'startRenderingHandler',   # ( $text, $topic, $web, $meta )
         'outsidePREHandler',       # ( $text, $web )
         'insidePREHandler',        # ( $text, $web )
         'endRenderingHandler',     # ( $text, $topic, $web )
@@ -244,6 +244,7 @@ sub handleActivatedPlugins
 }
 
 # =========================
+# This could be better integrated with the other auto discovery for plugins
 sub initializeUser
 {
 #   my( $theRemoteUser, $theUrl,  $thePathInfo ) = @_;
@@ -251,11 +252,12 @@ sub initializeUser
     my $p = "TWiki::Plugins::SessionPlugin";
     my $sub = $p.'::initializeUserHandler';
 
-# FIXME: Fails if SessionPlugin module is not present
-#    eval "use $p;";
-#    if( defined( &$sub ) ) {
-#        $user = &$sub( @_ );
-#    }
+    my $libDir = &TWiki::getTWikiLibDir();
+    return undef if( ! -e "$libDir/TWiki/Plugins/SessionPlugin.pm" );
+    eval "use $p;";
+    if( defined( &$sub ) ) {
+        $user = &$sub( @_ );
+    }
     if( ! defined( $user ) ) {
         $user = &TWiki::initializeRemoteUser( $_[0] );
     }
