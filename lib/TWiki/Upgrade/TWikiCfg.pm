@@ -225,9 +225,12 @@ sub upgradeConfig {
     print CFG old2new($ss{diffCmd}, "$rcsDir/rcsdiff  -q -w -B -r%REVISION1% -r%REVISION2% $keywordMode --unified=%CONTEXT% %FILENAME%",
                       "{RCS}{diffCmd}");
     # hack, change lock behaviour
-    $ss{breakLockCmd} =~ s/\b-l\b/-u/;
-    print CFG old2new($ss{breakLockCmd}, "$rcsDir/rcs  -q -u -M %FILENAME%",
-                      "{RCS}{breakLockCmd}");
+    $ss{unlockCmd} =~ s/\b-l\b/-u/;
+    print CFG old2new($ss{unlockCmd}, "$rcsDir/rcs  -q -u -M %FILENAME%",
+                      "{RCS}{unlockCmd}");
+    $ss{lockCmd} =~ s/\b-l\b/-u/;
+    print CFG old2new($ss{lockCmd}, "$rcsDir/rcs  -q -l %FILENAME%",
+                      "{RCS}{lockCmd}");
     # hack, change lock behaviour
     $ss{ciDateCmd} =~ s/\b-l\b/-u/;
     print CFG old2new($ss{ciDateCmd}, "$rcsDir/ci -u  -q -mnone -t-none -d$cmdQuote%DATE%$cmdQuote -w$cmdQuote%USERNAME%$cmdQuote %FILENAME%",
