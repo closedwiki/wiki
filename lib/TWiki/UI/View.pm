@@ -242,7 +242,7 @@ sub view {
                             },
                             " r$doingRev" );
         }
-        if ($doingRev-$rev >= $TWiki::cfg{NumberOfRevisions}) {
+        if ( $doingRev - $rev >= $TWiki::cfg{NumberOfRevisions} ) {
             # we started too far away, need to jump closer to $rev
             use integer;
             $doingRev = $rev + $revsToShow / 2;
@@ -251,13 +251,13 @@ sub view {
             next;
         }
         if( $revsToShow ) {
-            $revs .= CGI::a
+            $revs .= '&nbsp;' . CGI::a
               ( { href=>$session->getScriptUrl
                   ( $webName, $topicName, 'rdiff',
                     rev1 => $doingRev,
                     rev2 => $doingRev-1 ),
                   rel => 'nofollow' },
-                '&gt;' );
+                '&gt;' ) . '&nbsp;';
         }
         $doingRev--;
     }
