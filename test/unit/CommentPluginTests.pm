@@ -119,27 +119,27 @@ sub inputTest {
 
     $this->assert($pidx == $eidx + 1, $html);
 
-    $html =~ s/^<form(.*?)>//sio;
+    $this->assert(scalar($html =~ s/^<form(.*?)>//sio));
     my $dattrs = $1;
-    $html =~ s/<\/form>\n$//sio;
+    $this->assert(scalar($html =~ s/<\/form>\s*$//sio));
     $this->assert(scalar($dattrs =~ s/\s+name=\"(.*?)\"//), $dattrs);
     $this->assert_str_equals("${type}$eidx", $1);
     $this->assert(scalar($dattrs =~ s/\s+method\s*=\s*\"post\"//i), $dattrs);
     $this->assert(scalar($dattrs =~ s/\s+action=\"(.*?)\"//), $dattrs);
-    $this->assert_str_equals("$url", $1);
-    $this->assert_str_equals("", trim($dattrs));
+    $this->assert_str_equals($url, $1);
+    $this->assert_str_equals('enctype="application/x-www-form-urlencoded"', trim($dattrs));
 
     # no hiddens should be generated if disabled
-    $html =~ s/<input name=\"comment_type"(.*?)\s*\/>//i;
+    $this->assert(scalar($html =~ s/<input ([^>]*\bname="comment_type".*?)\/>//i),$html);
     $dattrs = $1;
     $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
     $this->assert(scalar($dattrs =~ s/\s*value=\"$type\"//), $dattrs);
-    $this->assert_str_equals("", trim($dattrs));
+    $this->assert_str_equals('name="comment_type"', trim($dattrs));
 
     if ( $anchor ) {
-        $this->assert_matches(qr/<input name=\"comment_anchor"(.*?)\s*\/>/i,$html);
-        $html =~ s/<input name=\"comment_anchor"(.*?)\s*\/>//i;
+        $this->assert($html =~ s/<input ([^>]*name=\"comment_anchor".*?)\s*\/>//i,$html);
         $dattrs = $1;
+        $this->assert(scalar($dattrs =~ s/\s*name=\"comment_anchor\"//io), $dattrs);
         $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
         $this->assert(scalar($dattrs =~ s/\s*value=\"(.*?)\"//o), $dattrs);
         $this->assert_str_equals($anchor, $1);
@@ -147,19 +147,20 @@ sub inputTest {
         $this->assert_does_not_match(qr/<input name=\"comment_index/, $html);
         $this->assert_does_not_match(qr/<input name=\"comment_location/, $html);
     } elsif ( $location ) {
-        $this->assert_matches(qr/<input name=\"comment_location"(.*?)\s*\/>/i, $html);
-        $html =~ s/<input name=\"comment_location"(.*?)\s*\/>//i;
+        $this->assert_matches(qr/<input [^>]*name="comment_location"(.*?)\s*\/>/i, $html);
+        $this->assert($html =~ s/<input ([^>]*name="comment_location".*?)\s*\/>//i);
         $dattrs = $1;
         $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
+        $this->assert(scalar($dattrs =~ s/\s*name=\"comment_location\"//io), $dattrs);
         $this->assert(scalar($dattrs =~ s/\s*value=\"(.*?)\"//o), $dattrs);
         $this->assert_str_equals($location, $1);
         $this->assert_str_equals("", trim($dattrs));
         $this->assert_does_not_match(qr/<input name=\"comment_index/, $html);
         $this->assert_does_not_match(qr/<input name=\"comment_anchor/, $html);
     } else {
-        $this->assert_matches(qr/<input name=\"comment_index"(.*?)\s*\/>/i, $html);
-        $html =~ s/<input name=\"comment_index"(.*?)\s*\/>//i;
+        $this->assert($html =~ /<input ([^>]*name=\"comment_index".*?)\s*\/>/i, $html);
         $dattrs = $1;
+        $this->assert(scalar($dattrs =~ s/\s*name=\"comment_index\"//io), $dattrs);
         $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
         $this->assert(scalar($dattrs =~ s/\s*value=\"(.*?)\"//io), $dattrs);
         $this->assert_str_equals($eidx, $1);
@@ -168,16 +169,9 @@ sub inputTest {
         $this->assert_does_not_match(qr/<input name=\"comment_location/, $html);
     }
 
-    $this->assert_matches(qr/<input name=\"unlock\"(.*?)\s*\/>/, $html);
-    $html =~ s/<input name=\"unlock\"(.*?)\s*\/>//i;
+    $this->assert($html =~ s/<input ([^>]*name=\"comment_action\".*?)\s*\/>//, $html);
     $dattrs = $1;
-    $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
-    $this->assert(scalar($dattrs =~ s/\s*value=\"1\"//io), $dattrs);
-    $this->assert_str_equals("", trim($dattrs));
-
-    $this->assert_matches(qr/<input name=\"comment_action\"(.*?)\s*\/>/, $html);
-    $html =~ s/<input name=\"comment_action\"(.*?)\s*\/>//i;
-    $dattrs = $1;
+    $this->assert($dattrs =~ s/name=\"comment_action\"//i,$dattrs);
     $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
     $this->assert(scalar($dattrs =~ s/\s*value=\"save\"//io), $dattrs);
     $this->assert_str_equals("", trim($dattrs));
@@ -297,7 +291,7 @@ sub test_reverseCompat {
            "The Message",
 	 "",
            "bottom");
-    $this->assert_matches(qr/form name=\"after0\"/, $html);
+    $this->assert_matches(qr/form [^>]*name=\"after0\"/, $html);
     $this->assert_matches(qr/rows=\"99\"/, $html);
     $this->assert_matches(qr/cols=\"104\"/, $html);
     $this->assert_matches(qr/type=\"submit\" value=\"HoHo\"/, $html);
@@ -315,7 +309,7 @@ sub test_locationOverridesAnchor {
            "The Message",
 	 "",
            "bottom");
-    $this->assert_matches(qr/<input\s+name="comment_location"(.*?)\s*\/>/, $html);
+    $this->assert_matches(qr/<input ([^>]*name="comment_location".*?)\s*\/>/, $html);
 }
 
 1;
