@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="MikeMannix" date="1007274180" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="MikeMannix" date="1007279327" format="1.0" version="1.10"}%
 %TOC%
 %STARTINCLUDE%
 ---# 20-Minute TWiki
 
-This step-by-step, hands-on tutorial gets you up to speed with all the TWiki basics, in _mere minutes_...
+This step-by-step, hands-on tutorial gets you up to speed with all the TWikiSite basics, in _mere minutes_...
 <blockquote>
 ---++ 1. Get set...
 Open two browser windows, so that you can follow these steps in one window, while trying things out in the other.
