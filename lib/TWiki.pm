@@ -315,8 +315,11 @@ BEGIN {
         $TWiki::cfg{OS} = 'OS2';
     }
 
-    do "TWiki.cfg" or die "Bad configuration $@";
-    do "LocalSite.cfg" or die "Bad configuration $@";
+    do "TWiki.cfg";
+    die "Cannot read TWiki.cfg: $!" if $!;
+    die "Bad configuration: $@" if $@;
+    do "LocalSite.cfg";
+    die "Bad configuration: $@" if $@;
 
     if( $TWiki::cfg{UseLocale} ) {
         eval 'require locale; import locale ();';
