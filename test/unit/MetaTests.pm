@@ -34,10 +34,10 @@ use vars qw( $m1 %args %args1 %args2 $web $topic $session );
            "value" => "3" );
 $web= "ZoopyDoopy";
 $topic = "NoTopic";
-%{$session} = ();
 
-sub set_up
-{
+sub set_up {
+    $session = new TWiki( "/$web/$topic", "", $topic, "" );
+
     $m1 = TWiki::Meta->new($session, $web, $topic);
     $m1->put( "TOPICINFO", %args );
     $m1->put( "FIELD", %args );
@@ -45,8 +45,7 @@ sub set_up
 }
 
 # Field that can only have one copy
-sub test_single
-{
+sub test_single {
     my $this = shift;
     my $meta = TWiki::Meta->new($session, $web, $topic);
     
@@ -63,8 +62,7 @@ sub test_single
     $this->assert( $meta->count( "TOPICINFO" ) == 1, "Should be one item" );
 }
 
-sub test_multiple
-{
+sub test_multiple {
     my $this = shift;
     my $meta = TWiki::Meta->new($session, $web, $topic);
     
@@ -87,8 +85,7 @@ sub test_multiple
     $this->assert_str_equals( $vals2{"value"}, "3" );
 }
 
-sub test_removeSingle
-{
+sub test_removeSingle {
     my $this = shift;
     my $meta = TWiki::Meta->new($session, $web, $topic);
     
@@ -98,8 +95,7 @@ sub test_removeSingle
     $this->assert( $meta->count( "TOPICINFO" ) == 0, "Should be no items after remove" );
 }
 
-sub test_removeMultiple
-{
+sub test_removeMultiple {
     my $this = shift;
     my $meta = TWiki::Meta->new($session, $web, $topic);
     

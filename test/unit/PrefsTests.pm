@@ -14,6 +14,7 @@ require '../../bin/setlib.cfg';
 use TWiki;
 use TWiki::Prefs;
 use strict;
+use Assert;
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -30,9 +31,9 @@ my $theUrl = "/save/$web/$topic";
 
 sub _set {
     my ( $this, $web, $topic, $pref, $val ) = @_;
-    die unless $web;
-    die unless $topic;
-    die unless $pref;
+    assert($web) if DEBUG;
+    assert($topic) if DEBUG;
+    assert($pref) if DEBUG;
 
     my $text = "";
     if ( -e "$TWiki::dataDir/$web/$topic.txt") {
