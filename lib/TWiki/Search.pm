@@ -951,7 +951,7 @@ sub searchWeb {
                 }
 
                 # output topic (or line if multiple=on)
-                if( !( $inline || $theFormat )) {
+                unless( $inline || $theFormat ) {
                     $out =
                       $this->renderer()->getRenderedVersion( $out, $web );
                     $out =~ s|</*nop/*>||goi;   # remove <nop> tag

@@ -43,7 +43,7 @@ use vars qw(
             $wikiPrefsTopicname $webPrefsTopicname
             $statisticsTopicname $statsTopViews $statsTopContrib
             $doDebugStatistics
-            $numberOfRevisions $editLockTime $scriptSuffix
+            $numberOfRevisions $scriptSuffix
             $safeEnvPath $mailProgram $noSpamPadding $mimeTypesFilename
             $doKeepRevIfEditLock $doGetScriptUrlFromCgi $doRemovePortNumber
             $doRemoveImgInMailnotify $doRememberRemoteUser $doPluralToSingular

@@ -56,24 +56,21 @@ Parse settings from text and add them to the preferences in $prefs
 sub parseText {
     my( $self, $text, $prefs ) = @_;
 
-    #$text =~ s/\r/\n/g;
-    #$text =~ s/\n+/\n/g;
-
     my $key = "";
     my $value ="";
     my $isKey = 0;
-    foreach( split( /\r?\n/, $text ) ) {
-        if( /^\t+\*\sSet\s(\w+)\s\=\s*(.*)/ ) {
+    foreach my $line ( split( /\r?\n/, $text ) ) {
+        if( $line =~ /^\t+\*\sSet\s(\w+)\s\=\s*(.*)$/ ) {
             if( $isKey ) {
                 $prefs->_insertPrefsValue( $key, $value );
             }
             $key = $1;
-            $value = defined $2 ? $2 : "";
+            $value = (defined $2) ? $2 : "";
             $isKey = 1;
         } elsif( $isKey ) {
-            if(( /^\t+/ ) &&( ! /^\t+\*/ ) ) {
+            if( $line =~ /^\t+/ && $line !~ /^\t+\*/ ) {
                 # follow up line, extending value
-                $value .= "\n$_";
+                $value .= "\n$line";
             } else {
                 $prefs->_insertPrefsValue( $key, $value );
                 $isKey = 0;

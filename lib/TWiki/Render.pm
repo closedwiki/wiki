@@ -814,12 +814,13 @@ sub getRenderedVersion {
         # Protect isolated <!-- and -->
         $line =~ s/<!--/{$TWiki::TranslationToken!--/g;
         $line =~ s/-->/--}$TWiki::TranslationToken/g;
-        # SMELL: this next expression is a frightful hack, to handle the
+        # SMELL: this next fragment is a frightful hack, to handle the
         # case where simple HTML tags (i.e. without values) are embedded
         # in the values provided to other tags. The only way to do this
         # correctly (i.e. handle HTML tags with values as well) is to
         # parse the HTML (bleagh!)
-        $line =~ s/<([a-z]+(\s+\/)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/i;
+        $line =~ s/<(\/[A-Za-z]+)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
+        $line =~ s/<([A-Za-z]+(\s+\/)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
         $line =~ s/<(\S.*?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
         # entitify lone < and >, praying that we haven't screwed up :-(
         $line =~ s/</&lt\;/g;
