@@ -37,7 +37,7 @@ function launchWindow( theWeb, theTopic ) {
 </head>
 <body bgcolor="%WEBBGCOLOR%" onLoad="initForm()">
 #PageTop<div id="header">%TMPL:P{"masthead"}%</div>
-<form name="main" action="%SCRIPTURLPATH%/savemulti%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form name="main" action="%SCRIPTURLPATH%/savemulti%SCRIPTSUFFIX%/%URLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />

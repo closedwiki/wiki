@@ -24,7 +24,7 @@ function launchWindow( theWeb, theTopic ) {
 <div id="header">%TMPL:P{"masthead"}%</div>
 <div id="wrapper">
 <div id="content">
-<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%URLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 ---++ Existing attachments for <nop>%TOPIC%
 %META{"attachments" all="on"}%
 %TMPL:P{"previousdetails"}%
