@@ -36,7 +36,7 @@ use Assert;
 use CGI::Carp qw( fatalsToBrowser );
 use CGI qw( :cgi );
 use TWiki;
-use TWiki::UI::OopsException;
+use TWiki::OopsException;
 
 =pod
 
@@ -171,19 +171,17 @@ sub run {
             }
             $session->redirect( $url );
         } else {
-            $url = $session->getOopsUrl( $e->{-web},
-                                         $e->{-topic},
-                                         'accessdenied',
-                                         $e->{-mode},
-                                         $e->{-reason} );
+            $url = $session->getOopsUrl( 'accessdenied',
+                                         def => 'topic',
+                                         web => $e->{-web},
+                                         topic => $e->{-topic},
+                                         params => [ $e->{-mode},
+                                                     $e->{-reason} ] );
         }
         $session->redirect( $url );
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
         my $e = shift;
-        my $url = $session->getOopsUrl( $e->{-web},
-                                        $e->{-topic},
-                                        $e->{-template},
-                                        @{$e->{-params}} );
+        my $url = $session->getOopsUrl( $e );
         $session->redirect( $url );
     } catch Error::Simple with {
         my $e = shift;
@@ -207,14 +205,14 @@ sub checkWebExists {
 
     unless ( $session->{store}->webExists( $webName ) ) {
         throw
-          TWiki::UI::OopsException( $webName,
-                                    $topic,
-                                    'noweb',
-                                    $op);
+          TWiki::OopsException( 'noweb',
+                                web => $webName,
+                                topic => $topic,
+                                params => $op );
     }
 }
 
-=pod twiki
+=pod
 
 ---++ StaticMethod topicExists( $session, $web, $topic, $op ) => boolean
 Check if the given topic exists, throwing an OopsException
@@ -227,7 +225,10 @@ sub checkTopicExists {
     ASSERT(ref($session) eq 'TWiki') if DEBUG;
 
     unless( $session->{store}->topicExists( $webName, $topic )) {
-        throw TWiki::UI::OopsException( $webName, $topic, 'notopic', $op );
+        throw TWiki::OopsException( 'notopic',
+                                    web => $webName,
+                                    topic => $topic,
+                                    params => $op );
     }
 }
 
@@ -248,17 +249,18 @@ sub checkMirror {
 
     return unless ( $mirrorSiteName );
 
-    throw TWiki::UI::OopsException( $webName, $topic,
-                                    'mirror',
-                                    $mirrorSiteName,
-                                    $mirrorViewURL );
+    throw TWiki::OopsException( 'mirror',
+                                web => $webName,
+                                topic => $topic,
+                                params => [ $mirrorSiteName,
+                                            $mirrorViewURL ] );
 }
 
 =pod twiki
 
 ---++ StaticMethod checkAccess( $web, $topic, $mode, $user )
 Check if the given mode of access by the given user to the given
-web.topic is permissible, throwing a TWiki::UI::OopsException if not.
+web.topic is permissible, throwing a TWiki::OopsException if not.
 
 =cut
 
@@ -268,10 +270,13 @@ sub checkAccess {
 
     unless( $session->{security}->checkAccessPermission( $mode, $user, '',
                                                          $topic, $web )) {
-        throw TWiki::UI::OopsException( $web, $topic,
-                                        'accessdenied',
-                                        $mode,
-                                        $session->{security}->getReason());
+        throw TWiki::OopsException( 'accessdenied',
+                                    def => 'topic',
+                                    web => $web,
+                                    topic => $topic,
+                                    params =>
+                                    [ $mode,
+                                      $session->{security}->getReason()]);
     }
 }
 

@@ -1,0 +1,27 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%(oops) %TMPL:END%
+%TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
+%TMPL:DEF{"heading"}%TWiki Registration%TMPL:END%
+%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][OK]] %TMPL:END%
+%TMPL:DEF{"thanks"}%
+---++ Thank you for registering
+   * You can review your changes in your personal TWiki topic %TOPIC% <br />
+     (__Suggestion:__ How about uploading your picture to your topic?)
+   * You are also listed in the %MAINWEB%.%WIKIUSERSTOPIC% topic
+   * A confirmation e-mail has been sent to %PARAM1%
+%TMPL:END%
+%TMPL:DEF{"reset_ok"}%
+%PARAM1%
+
+Users with automatically generated passwords should proceed immediately to [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ChangePassword%PARAM2%][ch
+ange password]] to change their password to something memorable.
+%TMPL:END%
+%TMPL:DEF{"password_changed"}%
+---++ Password changed successfully!
+
+You need to close your browser to make this change take effect.
+%TMPL:END%
+%TMPL:DEF{"message"}%
+%INSTANTIATE%
+%TMPL:END%
+%TMPL:P{"oops"}%

@@ -38,7 +38,7 @@ use TWiki::UI;
 use TWiki::Time;
 
 use Error qw( :try );
-use TWiki::UI::OopsException;
+use TWiki::OopsException;
 
 #TODO: this needs to be exposed to plugins and whoever might want to over-ride the rendering of diffs
 #Hash, indexed by diffType (+,-,c,u,l.....)

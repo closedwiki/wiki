@@ -187,10 +187,11 @@ sub finish {
     my $session = initialise($query, $TWiki::cfg{DefaultUserName});
     try {
         TWiki::UI::Register::finish ( $session, $tempUserDir );
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
         my $e = shift;
         $self->assert_matches(qr/$testUserEmail/, $e->{-text});
-        $self->assert_str_equals("regthanks", $e->{-template});
+        $self->assert_str_equals("register", $e->{-template});
+        $self->assert_str_equals("thanks", $e->{-def});
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $self->assert(0, $e->stringify);
@@ -214,7 +215,7 @@ sub test_registerVerifyOk {
     my $self = shift;
     try {
         $self->register();
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
         my $e = shift;
         $self->assert_str_equals("regconfirm", $e->{-template});
         $self->assert_matches(qr/$testUserEmail/, $e->{-text});
@@ -231,7 +232,7 @@ sub test_registerVerifyOk {
         my $e = shift;
         $self->assert(0, $e->stringify);
 
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
         my $e = shift;
         print STDERR "PUB DIR: ".`ls -lR $approvalsDir`;
         $self->assert(0, $e->stringify );
@@ -243,7 +244,7 @@ sub test_registerBadVerify {
     my $self = shift;
     try {
         $self->register();
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
         my $e = shift;
         $self->assert_matches(qr/$testUserEmail/, $e->{-text});
         $self->assert_str_equals("regconfirm", $e->{-template});
@@ -260,7 +261,7 @@ sub test_registerBadVerify {
         my $e = shift;
         $self->assert(0, $e->stringify);
 
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
     } otherwise {
         $self->assert(0, "Expected a redirect" );
     }
@@ -298,7 +299,7 @@ sub test_resetPasswordOkay {
         my $e = shift;
         $self->assert(0, $e->stringify);
 
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
         my $e = shift;
         $self->assert_str_equals("resetpasswd", $e->{-template});
     } otherwise {
@@ -331,9 +332,10 @@ sub test_resetPasswordNoSuchUser {
         my $e = shift;
         $self->assert(0, $e->stringify);
 
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
         my $e = shift;
-        $self->assert_str_equals("notwikiuser", $e->{-template});
+        $self->assert_str_equals("registerbad", $e->{-template});
+        $self->assert_str_equals("no_email_for", $e->{-def});
     } otherwise {
         $self->assert(0, "expected an oops redirect");
     }
@@ -366,10 +368,11 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
         my $e = shift;
         $self->assert(0, $e->stringify);
 
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
         my $e = shift;
-        $self->assert_matches(qr/Main\.TWikiAdminGroup/, $e->{-text});
-        $self->assert_str_equals("accessgroup", $e->{-template});
+        $self->assert_matches(qr/Main\.TWikiAdminGroup/, $e->stringify());
+        $self->assert_str_equals('accessdenied', $e->{-template});
+        $self->assert_str_equals('group', $e->{-def});
     } otherwise {
         $self->assert(0, "expected an oops redirect");
     }
@@ -405,9 +408,9 @@ sub test_resetPasswordNoPassword {
         my $e = shift;
         $self->assert(0, $e->stringify);
 
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
         my $e = shift;
-        $self->assert_str_equals("notwikiuser", $e->{-template});
+        $self->assert_str_equals("manage", $e->{-template});
     } otherwise {
         $self->assert(0, "expected an oops redirect");
     }
@@ -452,7 +455,7 @@ sub test_UnregisteredUser {
     # this is a deliberate attempt to reload an already used token.
     # this should fail!
      UnregisteredUser::deleteUserContext( $code );
-   } catch TWiki::UI::OopsException with {
+   } catch TWiki::OopsException with {
      my $e = shift;
      $self->assert_matches(qr/has no file/, $e->{-text});
    }
@@ -512,9 +515,9 @@ EOM
     try {
         TWiki::UI::Register::bulkRegister($session)
 
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
         my $e = shift;
-        $self->assert_matches(qr/Moved.*$logTopic/, $e->{-text}, $e->stringify());
+        $self->assert_matches(qr/Moved.*$logTopic/, $e->stringify());
 
     } catch Error::Simple with {
         my $e = shift;

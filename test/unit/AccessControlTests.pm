@@ -21,6 +21,7 @@ my $peopleWeb = "AccessControlPeopleWeb";
 my $testWeb = "AccessControlTestsWeb";
 my $twiki;
 my $currUser;
+my $savePeople;
 
 sub make_web {
     my $web = shift;
@@ -48,6 +49,7 @@ sub set_up {
     make_web($peopleWeb);
     make_web($testWeb);
 
+    $savePeople = $TWiki::cfg{UsersWebName};
     $TWiki::cfg{UsersWebName} = $peopleWeb;
     $currUser = $twiki->{users}->findUser($TWiki::cfg{DefaultUserLogin});
     create_user($TWiki::cfg{DefaultUserWikiName});
@@ -64,6 +66,7 @@ THIS
 }
 
 sub tear_down {
+    $TWiki::cfg{UsersWebName} = $savePeople;
     unmake_web($TWiki::cfg{UsersWebName});
     unmake_web($testWeb);
 }

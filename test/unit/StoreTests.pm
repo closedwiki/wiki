@@ -18,7 +18,7 @@ use TWiki::Meta;
 use Error qw( :try );
 use CGI;
 use TWiki::UI::Save;
-use TWiki::UI::OopsException;
+use TWiki::OopsException;
 
 
 my $zanyweb = "ZanyTestZeebleWeb";
@@ -262,7 +262,7 @@ sub test_releaselocksonsave {
     $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl, $query );
     try {
         TWiki::UI::Save::save( $twiki );
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
         my $e = shift;
         print $e->stringify();
     } catch Error::Simple with {
@@ -281,7 +281,7 @@ sub test_releaselocksonsave {
     $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl, $query );
     try {
         TWiki::UI::Save::save( $twiki );
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
         my $e = shift;
         print $e->stringify();
     } catch Error::Simple with {
@@ -301,7 +301,7 @@ sub test_releaselocksonsave {
     $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl, $query );
     try {
         TWiki::UI::Save::save( $twiki );
-    } catch TWiki::UI::OopsException with {
+    } catch TWiki::OopsException with {
     } catch Error::Simple with {
     };
 

@@ -33,7 +33,7 @@ use strict;
 use TWiki;
 use TWiki::UI;
 use Error qw( :try );
-use TWiki::UI::OopsException;
+use TWiki::OopsException;
 
 =pod
 
@@ -198,18 +198,22 @@ sub upload {
         $fileDate = $stats[9];
 
         if( ! $fileSize ) {
-            throw TWiki::UI::OopsException( $webName, $topic,
-                             'upload',
-                             "ERROR $webName.$topic File missing or zero size",
-                             $fileName );
+            throw TWiki::OopsException( 'upload',
+                                        web => $webName,
+                                        topic => $topic,
+                                        def => 'zero_size',
+                                        params => $fileName );
         }
 
         my $maxSize = $session->{prefs}->getPreferencesValue( 'ATTACHFILESIZELIMIT' );
         $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
 
         if( $maxSize && $fileSize > $maxSize * 1024 ) {
-            throw TWiki::UI::OopsException( $webName, $topic,
-                             'uploadlimit', $fileName, $maxSize );
+            throw TWiki::OopsException( 'upload',
+                                        web => $webName,
+                                        topic => $topic,
+                                        def => 'limit',
+                                        params => [ $fileName, $maxSize ] );
         }
     }
 
@@ -227,8 +231,10 @@ sub upload {
                                     } );
 
     if( $error ) {
-        throw TWiki::UI::OopsException( $webName, $topic, 'saveerr',
-                                        "Save error $error" );
+        throw TWiki::OopsException( 'saveerr',
+                                    web => $webName,
+                                    topic => $topic,
+                                    params => $error );
     }
 
     $session->redirect( $session->getScriptUrl( $webName, $topic, 'view' ) );

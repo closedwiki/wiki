@@ -36,7 +36,7 @@ use TWiki::Prefs;
 use TWiki::Store;
 use TWiki::UI;
 use Error qw( :try );
-use TWiki::UI::OopsException;
+use TWiki::OopsException;
 use CGI qw( :form );
 
 =pod
@@ -92,7 +92,8 @@ sub edit {
     # Prevent editing existing topic?
     if( $onlyNewTopic && $topicExists ) {
         # Topic exists and user requested oops if it exists
-        throw TWiki::UI::OopsException( $webName, $topic, 'createnewtopic' );
+        throw TWiki::OopsException( 'createnewtopic',
+                                    web => $webName, tpoic => $topic );
     }
 
     # prevent non-Wiki names?
@@ -118,8 +119,9 @@ sub edit {
                             'change', $session->{user} );
 
     if( $saveCmd && ! $session->{user}->isAdmin()) {
-        throw TWiki::UI::OopsException( $webName, $topic, 'accessgroup',
-                                        "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
+        throw TWiki::OopsException( 'accessdenied', def=>'group',
+                                    web => $webName, topic => $topic,
+                                    params => "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
     }
 
     my $templateWeb = $webName;

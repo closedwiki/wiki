@@ -26,7 +26,7 @@ use TWiki;
 use TWiki::UI;
 use TWiki::Form;
 use Error qw( :try );
-use TWiki::UI::OopsException;
+use TWiki::OopsException;
 
 sub preview {
     my $session = shift;
@@ -69,8 +69,10 @@ sub preview {
     $tmpl =~ s/%FORCENEWREVISIONCHECKBOX%/$forceNewRevision/go;
     if( $saveCmd ) {
         unless( $user->isAdmin()) {
-            throw TWiki::UI::OopsException( $webName, $topic, 'accessgroup',
-                                        "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
+            throw TWiki::OopsException( 'accessdenied', def => 'group',
+                                        web => $webName,
+                                        topic => $topic,
+                                        params => "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
         }
         $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;
     }

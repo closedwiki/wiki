@@ -36,7 +36,7 @@ use TWiki::UI;
 use TWiki::User;
 use TWiki::Sandbox;
 use Error qw( :try );
-use TWiki::UI::OopsException;
+use TWiki::OopsException;
 use TWiki::UI::Register;
 
 =pod
@@ -62,12 +62,11 @@ sub manage {
     } elsif( $action eq 'deleteUserAccount' ) {
         TWiki::UI::Manage::removeUser( $session );
     } elsif( $action ) {
-        throw TWiki::UI::OopsException
-          ( '', '', 'manage', '%TMPL:P{"unrecognized_action"}%',
-            $action );
+        throw TWiki::OopsException( 'managebad',
+                                    def => 'unrecognized_action',
+                                    params => $action );
     } else {
-        throw TWiki::UI::OopsException
-          ( '', '', 'manage', '%TMPL:P{"missing_action"}%', '' );
+        throw TWiki::OopsException( 'managebad', def => 'missing_action' );
     }
 }
 
@@ -94,23 +93,37 @@ sub removeUser {
     my $password = $query->param( 'password' );
 
     # check if user entry exists
-    #TODO: need to handle the NoPasswdUser case (userPasswordExists will retun false here)
+    # TODO: need to handle the NoPasswdUser case (userPasswordExists
+    # will return false here)
     if( $user && !$user->passwordExists()) {
-        throw TWiki::UI::OopsException( $webName, $topic,
-                                        'notwikiuser', $user->stringify() );
+        throw TWiki::OopsException( 'managebad',
+                                    web => $webName,
+                                    topic => $topic,
+                                    def => 'notwikiuser',
+                                    params => $user->stringify() );
     }
 
-    #check to see it the user we are trying to remove is a memebr of a group.
+    #check to see it the user we are trying to remove is a member of a group.
     #initially we refuse to delete the user
     #in a later implementation we will remove the from the group (if Access.pm implements it..)
     my @groups = $user->getGroups();
-    my $numberOfGroups =  $#groups;
-    if ( $numberOfGroups > -1 ) { 
-        throw TWiki::UI::OopsException( $webName, $topic, 'genericerror');
+    if ( scalar( @groups ) > 0 ) { 
+        throw TWiki::OopsException( 'managebad',
+                                    web => $webName,
+                                    topic => $topic,
+                                    def => 'in_a_group',
+                                    params =>
+                                    [ $user->stringify(),
+                                      join(', ',
+                                           map { $_->stringify() }
+                                           @groups ) ] );
     }
 
     unless( $user->checkPasswd( $password ) ) {
-        throw TWiki::UI::OopsException( $webName, $topic, 'wrongpassword');
+        throw TWiki::OopsException( 'managebad',
+                                    web => $webName,
+                                    topic => $topic,
+                                    def => 'wrong_password');
     }
 
     #TODO: need to add GetUniqueTopicName
@@ -121,7 +134,6 @@ sub removeUser {
     #
     #   if ( $renameError ) {
     #TODO: add better error message for rname failed
-    #         throw TWiki::UI::OopsException( $webName, $topic, 'renameerr');
     #     }
     #
     #    # Update references in referring pages - not applicable to attachments.
@@ -132,8 +144,11 @@ sub removeUser {
 
     $user->remove();
 
-    throw TWiki::UI::OopsException( $webName, $topic, 'removeuserdone',
-                                    $user->stringify() );
+    throw TWiki::OopsException( 'manageok',
+                                web => $webName,
+                                topic => $topic,
+                                def => 'remove_user_done',
+                                params => $user->webDotWikiName() );
 }
 
 sub _isValidHTMLColor {
@@ -171,37 +186,34 @@ sub createWeb {
 
     # check permission, user authorized to create webs?
     TWiki::UI::checkAccess( $session, $webName, $topicName,
-                            'manage', $session->{user} );
+                            'changewebs', $session->{user} );
 
     unless( $newWeb ) {
-        throw TWiki::UI::OopsException
-          ( '', '', 'mngcreateweb', '%TMPL:P{"web_missing"}%', '' );
+        throw TWiki::OopsException( 'managebad', def => 'web_missing' );
     }
 
     unless ( TWiki::isValidWebName( $newWeb, 1 )) {
-        throw TWiki::UI::OopsException
-          ( '', '', 'mngcreateweb', '%TMPL:P{"invalid_web_name"}%',
-            "Web: $newWeb" );
+        throw TWiki::OopsException
+          ( 'managebad', def =>'invalid_web_name', params => $newWeb );
     }
 
     if( $session->{store}->isKnownWeb( $newWeb )) {
-        throw TWiki::UI::OopsException
-          ( '', '', 'mngcreateweb', '%TMPL:P{"web_exists"}%',
-            "Web: $newWeb" );
+        throw TWiki::OopsException
+          ( 'managebad', def => 'web_exists', params => $newWeb );
     }
 
     $baseWeb =~ s/$TWiki::cfg{NameFilter}//go;
     $baseWeb = TWiki::Sandbox::untaintUnchecked( $baseWeb );
 
     unless( $session->{store}->isKnownWeb( $baseWeb )) {
-        throw TWiki::UI::OopsException
-          ( '', '', 'mngcreateweb', '%TMPL:P{"base_web_missing"}%',
-            'Based on web:'.$baseWeb );
+        throw TWiki::OopsException
+          ( 'managebad', def => 'base_web_missing',
+            params => $baseWeb );
     }
     unless( _isValidHTMLColor( $webBGColor )) {
-        throw TWiki::UI::OopsException
-          ( '', '', 'mngcreateweb', '%TMPL:P{"invalid_web_color"}%',
-            'Color: '.$webBGColor );
+        throw TWiki::OopsException
+          ( 'managebad', def => 'invalid_web_color',
+            params => $webBGColor );
     }
 
     # create the empty web
@@ -216,16 +228,17 @@ sub createWeb {
 
     my $err = $session->{store}->createWeb( $newWeb, $baseWeb, $opts );
     if( $err ) {
-        throw TWiki::UI::OopsException
-          ( '', '', 'mngcreateweb', '%TMPL:P{"web_creation_error"}%',
-            'Error: '.$err );
+        throw TWiki::OopsException
+          ( 'managebad', def => 'web_creation_error',
+            params => [ $newWeb, $err ] );
     }
 
     # everything OK, redirect to last message
     $newTopic = $TWiki::cfg{HomeTopicName} unless( $newTopic );
 
-    throw TWiki::UI::OopsException
-      ( $newWeb, $newTopic, 'mngcreateweb', '%TMPL:P{"created_web"}%', 'Web: '.$newWeb );
+    throw TWiki::OopsException
+      ( 'manageok', web => $newWeb, topic => $newTopic,
+        def => 'created_web' );
 }
 
 =pod
@@ -283,22 +296,31 @@ sub rename {
             # Does old attachment exist?
             unless( $session->{store}->attachmentExists( $oldWeb, $oldTopic,
                                                          $theAttachment )) {
-                throw TWiki::UI::OopsException( $oldWeb, $oldTopic,
-                                                'moveerr', $theAttachment );
+                throw TWiki::OopsException( 'managebad',
+                                            web => $oldWeb,
+                                            topic => $oldTopic,
+                                            def => 'move_err',
+                                            params => $theAttachment );
             }
             # does new attachment already exist?
             if( $session->{store}->attachmentExists( $newWeb, $newTopic,
                                                      $theAttachment )) {
-                throw TWiki::UI::OopsException( $newWeb, $newTopic,
-                                                'moverr', $theAttachment );
+                throw TWiki::OopsException( 'managebad',
+                                            web => $newWeb,
+                                            topic => $newTopic,
+                                            def => 'move_err',
+                                            params => $theAttachment );
             }
         } else {
             # Check new topic doesn't exist
             if( $newTopic &&
                 $session->{store}->topicExists( $newWeb, $newTopic)) {
                 # Unless moving an attachment, new topic should not exist
-                throw TWiki::UI::OopsException( $newWeb, $newTopic,
-                                                'topicexists' );
+                throw TWiki::OopsException( 'managebad',
+                                            web => $oldWeb,
+                                            topic => $oldTopic,
+                                            def => 'topic_exists',
+                                            params => [ $newWeb, $newTopic ] );
             }
         }
 
@@ -325,16 +347,22 @@ sub rename {
                                                  $session->{user} );
 
             if( $moveError ) {
-                throw TWiki::UI::OopsException( $newWeb, $newTopic,
-                                                'moveerr',
-                                                $theAttachment,
-                                                $moveError );
+                throw TWiki::OopsException( 'managebad',
+                                            web => $oldWeb,
+                                            topic => $oldTopic,
+                                            def => 'move_err',
+                                            params => [ $newWeb, $newTopic,
+                                                        $theAttachment,
+                                                        $moveError ] );
             }
         } else {
             unless( TWiki::isValidWikiWord( $newTopic ) ) {
                 unless( $doAllowNonWikiWord ) {
-                    throw TWiki::UI::OopsException( $newWeb, $newTopic,
-                                                    'renamenotwikiword' );
+                    throw TWiki::OopsException( 'managebad',
+                                                web => $oldWeb,
+                                                topic => $oldTopic,
+                                                def => 'rename_not_wikiword',
+                                              [ $newTopic ] );
                 }
                 # Filter out dangerous characters (. and / may cause
                 # issues with pathnames
@@ -346,10 +374,13 @@ sub rename {
               $session->{store}->renameTopic( $oldWeb, $oldTopic, $newWeb,
                                           $newTopic, 1, $session->{user} );
             if( $renameError ) {
-                throw TWiki::UI::OopsException( $oldWeb, $oldTopic,
-                                                'renameerr',
-                                                $renameError, $newWeb,
-                                                $newTopic );
+                throw TWiki::OopsException( 'managebad',
+                                            web => $oldWeb,
+                                            topic => $oldTopic,
+                                            def => 'rename_err',
+                                            params => [ $renameError,
+                                                        $newWeb,
+                                                        $newTopic ] );
             }
         }
     }

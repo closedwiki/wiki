@@ -38,7 +38,7 @@ use TWiki;
 use TWiki::UI;
 use TWiki::UI::Preview;
 use Error qw( :try );
-use TWiki::UI::OopsException;
+use TWiki::OopsException;
 use TWiki::Merge;
 use Assert;
 
@@ -60,7 +60,8 @@ sub _save {
     my $onlyNewTopic = $query->param( 'onlynewtopic' ) || '';
     if( $onlyNewTopic && $topicExists ) {
         # Topic exists and user requested oops if it exists
-        throw TWiki::UI::OopsException( $webName, $topic, 'createnewtopic' );
+        throw TWiki::OopsException( 'createnewtopic',
+                                    web => $webName, topic => $topic );
     }
 
     # prevent non-Wiki names?
@@ -80,8 +81,9 @@ sub _save {
 
     my $saveCmd = $query->param( 'cmd' ) || 0;
     if ( $saveCmd && ! $session->{user}->isAdmin()) {
-        throw TWiki::UI::OopsException( $webName, $topic, 'accessgroup',
-                                        "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
+        throw TWiki::OopsException( 'accessdenied', def => 'group',
+                                    web => $webName, topic => $topic,
+                                    params => "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
     }
 
     if( $saveCmd eq 'delRev' ) {
@@ -89,8 +91,9 @@ sub _save {
         my $error =
           $session->{store}->delRev( $user, $webName, $topic );
         if( $error ) {
-            throw TWiki::UI::OopsException( $webName, $topic,
-                                            'saveerr', $error );
+            throw TWiki::OopsException( 'saveerr',
+                                        web => $webName, topic => $topic,
+                                        params => $error );
         }
 
         return 1;
@@ -141,8 +144,9 @@ sub _save {
           $session->{store}->repRev( $user, $webName, $topic,
                                      $newText, $newMeta, $saveOpts );
         if( $error ) {
-            throw TWiki::UI::OopsException( $webName, $topic,
-                                            'saveerr', $error );
+            throw TWiki::OopsException( 'saveerr',
+                                        web => $webName, topic => $topic,
+                                        params => $error );
         }
 
         return 1;
@@ -191,7 +195,9 @@ sub _save {
                                     $newText, $newMeta, $saveOpts );
 
     if( $error ) {
-        throw TWiki::UI::OopsException( $webName, $topic, 'saveerr', $error );
+        throw TWiki::OopsException( 'saveerr',
+                                    web => $webName, topic => $topic,
+                                    params => $error );
     }
 
     return 1;

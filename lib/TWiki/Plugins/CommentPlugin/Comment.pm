@@ -23,8 +23,10 @@ sub save {
     if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '',
 											  $_[1], $_[2] ) ) {
         # user has no permission to change the topic
-        throw TWiki::UI::OopsException( $_[2], $_[1], 'accessdenied',
-                                      'CHANGE', 'access is denied' );
+        throw TWiki::OopsException( 'accessdenied',
+                                    def => 'topic',
+                                    web => $_[2],
+                                    topic => $_[1] );
     } else {
         _buildNewTopic( @_ );
     }

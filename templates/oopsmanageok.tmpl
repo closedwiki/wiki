@@ -1,0 +1,26 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%(oops) %TMPL:END%
+%TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
+%TMPL:DEF{"heading"}%TWiki Administration%TMPL:END%
+%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][OK]] %TMPL:END%
+%TMPL:DEF{"remove_user_done"}%
+---++ User Account %PARAM1% Deleted
+Your user name has been removed from the Authentication System.
+
+Your user topic has not been renamed. Please email 
+<a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Delete&#32;User&amp;body=%PARAM1%">%WIKIWEBMASTER%</a> to request this.
+%TMPL:END%
+%TMPL:DEF{"created_web"}%
+---++ The new web has been created
+And populated with topics from the base web
+
+Would you like to go to:
+	* %HOMETOPIC% to start working on the new web
+	* %WEBPREFSTOPIC% to customize the web specific preferences
+	* %TWIKIWEB%.ManagingWebs to create another web
+	* [[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]] home
+%TMPL:END%
+%TMPL:DEF{"message"}%
+%INSTANTIATE%
+%TMPL:END%
+%TMPL:P{"oops"}%

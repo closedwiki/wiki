@@ -860,12 +860,18 @@ sub getUniqueScriptUrl {
 
 =pod
 
----++ ObjectMethod getOopsUrl( $web, $topic, $template, @scriptParams ) -> $absoluteOopsURL
+---++ ObjectMethod getOopsUrl( $template, @options ) -> $absoluteOopsURL
 
-Composes a URL for an "oops" error page.  The last parameters depend on the
-specific oops template in use, and are passed in the URL as '&param1=' etc.
+Composes a URL for an "oops" error page. The @options consists of a list
+of key => value pairs. The following keys are used:
+   * =-web= - web name
+   * =-topic= - topic name
+   * =-def= - optional template def within the main template file
+   * =-params= - a single parameter, or a reference to an array of parameters  These are passed in the URL as '&param1=' etc.
 
 Do _not_ include the "oops" part in front of the template name.
+
+Alternatively you can pass a reference to an OopsException in place of the template. All other parameters will be ignored.
 
 The returned URL ends up looking something like this:
 "http://host/twiki/bin/oops/$web/$topic?template=$template&param1=$scriptParams[0]..."
@@ -874,24 +880,38 @@ The returned URL ends up looking something like this:
 
 sub getOopsUrl {
     my $this = shift;
-    my $web = shift || $this->{webName};
-    my $topic = shift;
     my $template = shift;
+    my $params;
+
+    if( ref($template) eq "TWiki::OopsException" ) {
+        $params = $template;
+        $template = $params->{-template};
+    } else {
+        $params = { @_ };
+    }
+    my $web = $params->{web} || $params->{-web} || $this->{webName};
+    my $topic = $params->{topic} || $params->{-topic} || $this->{topicName};
+    my $def = $params->{def} || $params->{-def};
+    my $PARAMS = $params->{params} || $params->{-params};
 
     ASSERT(ref($this) eq 'TWiki') if DEBUG;
 
-    my $url =
-      $this->getScriptUrl( $web, $topic, 'oops',
-                           template => 'oops'.$template );
+    my @urlParams = ( template => 'oops'.$template );
 
-    my $n = 1;
-    my $p;
-    while( $p = shift ) {
-        $url .= "&param$n=" . urlEncode( $p );
-        $n++;
+    push( @urlParams, def => $def ) if $def;
+
+    if( ref($PARAMS) eq "ARRAY" ) {
+        my $n = 1;
+        my $p;
+        while( $p = shift @$PARAMS ) {
+            push( @urlParams, "param$n" => $p );
+            $n++;
+        }
+    } elsif( defined $PARAMS ) {
+        push( @urlParams, param1=> $PARAMS );
     }
 
-    return $url;
+    return $this->getScriptUrl( $web, $topic, 'oops', @urlParams );
 }
 
 =pod
@@ -2328,7 +2348,7 @@ sub _SPACEDTOPIC {
     my ( $this, $params, $theTopic ) = @_;
     my $topic = spaceOutWikiWord( $theTopic );
     $topic =~ s/ / */g;
-    return urlEncode( searchableTopic( $theTopic ));
+    return urlEncode( $theTopic );
 }
 
 sub _ICON {

@@ -197,7 +197,9 @@ Return: =$url=                     URL, e.g. ="http://example.com:80/cgi-bin/oop
 sub getOopsUrl {
     my( $web, $topic, $template, @params ) = @_;
     $template =~ s/^oops//;
-    return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, $template, @params );
+    return $TWiki::Plugins::SESSION->getOopsUrl( $template, web => $web,
+                                                 topic => $topic,
+                                                 params => \@params );
 }
 
 =pod
@@ -757,7 +759,8 @@ sub readTopicText {
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $text = $TWiki::Plugins::SESSION->getOopsUrl
-          ($web, $topic, 'accessdenied', $e->{-mode}, $e->{-reason} );
+          ( 'accessdenied', def=>'topic', web => $web, topic => $topic,
+            params => [ $e->{-mode}, $e->{-reason} ] );
     };
 
     return $text;
@@ -834,7 +837,9 @@ sub saveTopicText {
     my( $web, $topic, $text, $ignorePermissions, $dontNotify ) = @_;
 
     my( $mirrorSite, $mirrorViewURL ) = $TWiki::Plugins::SESSION->readOnlyMirrorWeb( $web );
-    return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, 'mirror', $mirrorSite, $mirrorViewURL ) if( $mirrorSite );
+    return $TWiki::Plugins::SESSION->getOopsUrl
+      ( 'mirror', web => $web, topic => $topic,
+        params => [ $mirrorSite, $mirrorViewURL ] ) if( $mirrorSite );
 
     # check access permission
     unless( $ignorePermissions ||
@@ -842,10 +847,10 @@ sub saveTopicText {
                                                      $TWiki::Plugins::SESSION->{user}, '',
                                                      $topic, $web )
           ) {
-        return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, 'accessdenied' );
+        return $TWiki::Plugins::SESSION->getOopsUrl( 'accessdenied', def => 'topic', web => $web, topic => $topic );
     }
 
-    return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, 'saveerr' )  unless( defined $text );
+    return $TWiki::Plugins::SESSION->getOopsUrl( 'saveerr', web => $web, topic => $topic )  unless( defined $text );
 
     # extract meta data and merge old attachment meta data
     my $meta = $TWiki::Plugins::SESSION->{store}->extractMetaData( $web, $topic, \$text );
@@ -858,7 +863,8 @@ sub saveTopicText {
       $TWiki::Plugins::SESSION->{store}->saveTopic
         ( $TWiki::Plugins::SESSION->{user}, $web, $topic, $text, $meta,
           { notify => $dontNotify } );
-    return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, 'saveerr', $error ) if( $error );
+    return $TWiki::Plugins::SESSION->getOopsUrl
+      ( 'saveerr', web => $web, topic => $topic, params => $error ) if( $error );
     return '';
 }
 

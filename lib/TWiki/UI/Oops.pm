@@ -57,6 +57,7 @@ sub oops_cgi {
     my $skin = $session->getSkin();
 
     my $tmplData = $session->{templates}->readTemplate( $tmplName, $skin );
+
     if( ! $tmplData ) {
         $tmplData = CGI::start_html()
           . CGI::h1('TWiki Installation Error')
@@ -64,16 +65,21 @@ sub oops_cgi {
                . '.tmpl not found or template directory '
                  . $TWiki::cfg{TemplateDir}.' not found.'.CGI::p()
                    . 'Check the configuration setting for TemplateDir.'
-                     .end_html();
+                     .CGI::end_html();
     } else {
+        my $def = $query->param( 'def' );
+        if( defined $def ) {
+            # if a def is specified, instantiate that def
+            $tmplData =~ s/%INSTANTIATE%/%TMPL:P{"$def"}%/;
+        }
+        $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );
         my $param;
         my $n = 1;
-        while( $param = $query->param( 'param'.$n ) || $n <= 4 ) {
+        while( $param = $query->param( 'param'.$n ) ) {
             $param = '' unless defined $param;
             $tmplData =~ s/%PARAM$n%/$param/g;
             $n++;
         }
-        $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );
         $tmplData = $session->{renderer}->getRenderedVersion( $tmplData, $web, $topic );
     }
 

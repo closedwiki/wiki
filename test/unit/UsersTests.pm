@@ -29,9 +29,11 @@ sub new {
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
+    $saveTopic = $TWiki::cfg{UsersTopicName};
 }
 
 sub tear_down {
+    $TWiki::cfg{UsersTopicName} = $saveTopic;
     `rm -f $ttpath*`;
     print STDERR "tear_down failed: $!\n" if $!;
 }
@@ -75,7 +77,6 @@ sub testAddUsers {
     my $this = shift;
     $twiki = new TWiki();
     $ttpath = "$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$testtopic.txt";
-    $saveTopic = $TWiki::cfg{UsersTopicName};
     $TWiki::cfg{UsersTopicName} = $testtopic;
     $me =  $twiki->{users}->findUser("TWikiRegistrationAgent");
 
@@ -96,7 +97,6 @@ sub testAddUsers {
     $text = `cat $ttpath`;
     $this->assert_matches(qr/Aaron.*George.*Zebediah/s, $text);
     unlink($ttpath);
-    $TWiki::cfg{UsersTopicName} = $saveTopic;
 }
 
 sub testLoad {
@@ -105,7 +105,6 @@ sub testLoad {
     $twiki = new TWiki();
     $me =  $twiki->{users}->findUser("TWikiRegistrationAgent");
     $ttpath = "$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$testtopic.txt";
-    $saveTopic = $TWiki::cfg{UsersTopicName};
     $TWiki::cfg{UsersTopicName} = $testtopic;
 
     open(F,">$ttpath") || $this->assert(0,  "open $ttpath failed");
@@ -149,7 +148,6 @@ sub testLoad {
     $this->assert_str_equals("", $k);
 
     unlink($ttpath);
-    $TWiki::cfg{UsersTopicName} = $saveTopic;
 }
 
 1;

@@ -2,7 +2,8 @@
 %TMPL:DEF{"titleaction"}%(oops) %TMPL:END%
 %TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
 %TMPL:DEF{"heading"}%Access Denied%TMPL:END%
-%TMPL:DEF{"message"}%
+%TMPL:DEF{"topicaction"}% [[%MAINWEB%.%HOMETOPIC%][OK]] %TMPL:END%
+%TMPL:DEF{"topic"}%
 Access check on <nop>%WEB%.<nop>%TOPIC% failed;
 %PARAM1% %PARAM2%.
 
@@ -11,5 +12,16 @@ Contact
 if you have any questions.
 
 __Related topics:__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl %TMPL:END%
-%TMPL:DEF{"topicaction"}% [[%MAINWEB%.%HOMETOPIC%][OK]] %TMPL:END%
+%TMPL:DEF{"only_group"}%
+Only members of the %PARAM1% are allowed to perform this action.
+
+Contact
+<a href="mailto:%WIKIWEBMASTER%?subject=Access&#32;Denieds&#32;fors&#32;'%WEB%.%TOPIC%',s&#32;needs&#32;'%PARAM1%'">%WIKIWEBMASTER%</a>
+if you have any questions.
+
+__Related topics:__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl %TMPL:END%
+
+%TMPL:DEF{"message"}%
+%INSTANTIATE%
+%TMPL:END%
 %TMPL:P{"oops"}%

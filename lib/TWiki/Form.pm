@@ -32,7 +32,7 @@ package TWiki::Form;
 use strict;
 use Assert;
 use Error qw( :try );
-use TWiki::UI::OopsException;
+use TWiki::OopsException;
 use CGI qw( :form );
 
 =pod
@@ -168,7 +168,7 @@ sub getPossibleFieldValues {
 Get array of field definition, given form name
 If form contains Web this overrides webName
 
-May throw TWiki::UI::OopsException
+May throw TWiki::OopsException
 
 =cut
 
@@ -188,9 +188,10 @@ sub getFormDef {
           $store->readTopic( $this->{session}->{user}, $webName, $form, undef );
         @fieldDefs = $this->_parseFormDefinition( $text );
     } else {
-        throw TWiki::UI::OopsException( $this->{session}->{webName},
-                                        $this->{session}->{topicName},
-                                        'noformdef', $webName, $form);
+        throw TWiki::OopsException( 'noformdef',
+                                    web => $this->{session}->{webName},
+                                    topic => $this->{session}->{topicName},
+                                    params => [ $webName, $form ] );
     }
 
     my @fieldsInfo = ();
@@ -452,7 +453,7 @@ Extract new values of form fields from a query.
 
 Note that existing meta information for fields is removed unless $justOverride is true
 
-May throw TWiki::UI::OopsException
+May throw TWiki::OopsException
 
 =cut
 
@@ -633,7 +634,7 @@ sub _upgradeCategoryItem {
 
 Upgrade old style category table
 
-May throw TWiki::UI::OopsException
+May throw TWiki::OopsException
 
 =cut
 
