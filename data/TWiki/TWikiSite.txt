@@ -1,14 +1,18 @@
-%META:TOPICINFO{author="MikeMannix" date="1009631588" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="MikeMannix" date="1021182945" format="1.0" version="1.20"}%
 ---++ TWiki is a Web-based collaboration platform
-
 	* A TWiki site is an easy-to-use, full-featured open communications environment:
 		* people anywhere on the Web or on an intranet can meet
 		* rich Web text, images, and online multimedia are easily shared
 		* documents and other files can be uploaded and downloaded
 		* all you need is a Web browser and any available network connection
 
----+++ TWiki is a powerful Web enhancement...
+---+++ TWiki is an UNUSUAL Web-based collaboration platform
+	* There's no doubt that, to most people, TWiki at first seems almost the opposite of how the Web and online communications "normally" work. Why?
+		* TWiki operates like a whiteboard for the Web - it lets you and all other users write, place pictures and post links, anywhere on any page.
+		* Not only that, everyone can EDIT anything, anywhere on a page.
+		* At first, this may seem "too" open - it soon becomes second-nature, allowing you the freedom to edit and update the way you want to.
 
+---+++ TWiki is a powerful Web enhancement...
 	* TWiki's parsing engine is written in Perl. It reads a text file, and converts TWiki shorthand into standard HTML, on the fly. The point is to:
 		* make adding and editing text simple _(How simple? Click on the *Edit* link at the bottom of the page...)_ 
 		* let you find information _fast_ ([[WebSearch][WebSearch]])
@@ -32,7 +36,7 @@
 	* WikiCulture looks at the unique type of collaboration Wiki systems offer.
 	* WikiReferences links to articles and books about collaboration and Wiki technology.
 
-<blockquote> __NOTE:__ If you have to log-in to usr TWiki, for example, if Twiki is running on an intranet, it automatically signs pages you edit and create with your WikiName. If your TWiki installation doesn't require a log-in, TWiki gives everyone the same username: Main.TWikiGuest.</blockquote>
+<blockquote> %X% If you have to log-in to use TWiki, for example, if Twiki is running on an intranet, it automatically signs pages you edit and create with your WikiName. If your TWiki installation doesn't require a log-in, TWiki gives everyone the same username: Main.TWikiGuest.</blockquote>
 
 TWiki<sup>TM</sup> is a trademark of PeterThoeny, originator and lead developer.
 	* TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
@@ -41,4 +45,4 @@ TWiki<sup>TM</sup> is a trademark of PeterThoeny, originator and lead developer.
 	* WelcomeGuest is a fast track guide to TWiki.
 	* This site is powered by TWiki version *%WIKIVERSION%*.
 
--- Main.MikeMannix - 29 Dec 2001
+-- Main.MikeMannix - 12 May 2002
