@@ -89,6 +89,7 @@ be found or is not active, 0 is returned.
 sub getPluginVersion
 {
     my ( $thePlugin ) = @_;
+    $thePlugin = TWiki::extractNameValuePair( $thePlugin );
     my $version = 0;
     if( $thePlugin ) {
         foreach my $plugin ( @activePlugins ) {
