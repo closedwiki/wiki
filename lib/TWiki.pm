@@ -1656,7 +1656,7 @@ character codes.
 sub urlEncode {
     my $text = shift;
 
-    $text =~ s/([^0-9a-zA-Z-_.!*'()])/'%'.sprintf('%02x',ord($1))/ge;
+    $text =~ s/([^0-9a-zA-Z-_.!*'()\/])/'%'.sprintf('%02x',ord($1))/ge;
 
     return $text;
 }
@@ -1878,7 +1878,6 @@ sub _expandTag {
     # my( $topic, $web ) = @_;
 
     my $res;
-
     if ( defined( $this->{SESSION_TAGS}{$tag} )) {
         $res = $this->{SESSION_TAGS}{$tag};
     } elsif ( defined( $constantTags{$tag} )) {
@@ -2042,6 +2041,7 @@ sub _INCLUDE {
         $path =~ s/\.+/\./g;
     } else {
         # danger, could include .htpasswd with relative path
+        # SMELL: this hack is a bit pointless, really.
         $path =~ s/passwd//gi;    # filter out passwd filename
     }
 

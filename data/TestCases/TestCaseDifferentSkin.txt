@@ -1,3 +1,5 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+
 Description: Visual inspection tests for different skins.
 
 ---+ Different Skins
@@ -24,8 +26,8 @@ NB. Tested by visual inspection only.
 %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=twiki1985
 
 
--- Main.MartinCleaver - 22 Oct 2004
+
 
 What about ?raw=on and ?skin=test&raw=on
 
--- Main.CrawfordCurrie - 22 Oct 2004
+

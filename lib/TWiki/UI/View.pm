@@ -102,7 +102,6 @@ sub view {
         } elsif ( $rev < 0 ) {
             $rev = 1;
         }
-
         if( $rev < $showRev ) {
             # Note: the most recent topic read in even if earlier rev
             # requested.

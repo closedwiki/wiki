@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1006601794" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+
+
 %SEARCH{"\.*" scope="topic" regex="on" nosearch="on"}%
 
 See also the faster WebTopicList

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="guest" date="1101815388" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+
+
 This is the <nop>%WEB% web. If you are here, you want to test this version of TWiki. This web is held in the TWiki Subversion repository, so:
 	1 You must manually ensure that all topics in this web are readable and writable by the apache user
 	1 You must _not_ check in ,v files. Topic histories will be maintained in Subversion.

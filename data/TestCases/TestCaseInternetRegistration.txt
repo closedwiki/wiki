@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="TWikiGuest" date="1102439040" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+
+
 Description: Intranet Registration manual tests
 
 ---++ Preconditions
@@ -36,5 +38,5 @@ If you get it wrong takes you to oopsregcode
 ---++ Post test
 	1 Go back to the email. Try clicking the link on the email again. It should now take you to oopsregcode.
  
--- Main.MartinCleaver - 24 Oct 2004
+
 

@@ -1,3 +1,5 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+
 Description: ensure attribute parsing provides expected outcome
 
 Expected outcome in each case is defined as the results of =extractParameters=, the Cairo equivalent to the attribute parser.

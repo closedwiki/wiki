@@ -1,2 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="997991791" format="1.0beta2" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+
+
 %INCLUDE{"%TWIKIWEB%.WebChanges"}%

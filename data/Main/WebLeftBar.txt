@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="WillNorris" date="1107843106" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+
+
 <div class="twikiLeftBarPersonal" style="margin-top:0;">
 %CALC{"$IF($EXACT(%USERNAME%,guest),[[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%BASETOPIC%][login]],Hello [[%WIKIUSERNAME%][$PROPERSPACE(%WIKINAME%)]]<!-- <br /><small>[[Sandbox.LogoutAndLogin][Not me?]]</small> -->)"}%
 <script type="text/javascript">

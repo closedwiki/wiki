@@ -1,3 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="997250162" format="1.0beta2" version="1.6"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111927433" version="$Rev$"}%
+
 %META:TOPICPARENT{name="WebHome"}%
 %INCLUDE{"%TWIKIWEB%.WebSearch"}%

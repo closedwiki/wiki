@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="guest" date="1100972665" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+
+
 
 <form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%" >
 Create new testcase<br/>

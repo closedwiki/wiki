@@ -160,6 +160,7 @@ qw (
       index.html UpgradeTwiki
       AUTHORS COPYING COPYRIGHT LICENSE readme.txt 
     );
+cp( "$installBase/AUTHORS", "$installBase/pub/TWiki/TWikiContributor/AUTHORS" ) )
 
 my $ua = LWP::UserAgent::TWiki::TWikiGuest->new( agent => $Config->{agent} ) or die $!;
 foreach my $doc qw( TWikiDocumentation TWikiHistory )

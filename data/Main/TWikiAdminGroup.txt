@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093970022" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+
+
 *TWiki Administrator Group*
 
 	* Set GROUP = ListOfWikiNames

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="TWikiGuest" date="1102359942" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+
+
 ---+ Bulk Registration
 
 ---++ Preconditions
@@ -15,4 +17,4 @@
 	2 
 
 
--- Main.TWikiGuest - 06 Dec 2004
+

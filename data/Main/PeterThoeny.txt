@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093932788" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+
+
 	* Name: Peter Thoeny
 	* Email: Peter@Thoeny.com
 	* Comment: Peter is the author of TWiki and therefore a TWiki:Codev/CoreTeam member. See home page at TWiki:Main/PeterThoeny

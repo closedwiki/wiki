@@ -1,3 +1,5 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+
 Description: Tag tests that can be automated
 
 <table border="1"><tr><th> Tag </th><th>Expected</th><th>Actual</th></tr>

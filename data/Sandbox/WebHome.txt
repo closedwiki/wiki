@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018765129" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111927433" version="$Rev$"}%
+
 The <b>%WIKITOOLNAME%.%WEB%</b> web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %TWIKIWEB%.TWikiTutorial to get a jumpstart on the %WIKITOOLNAME% tool. A good rule of thumb is to add at the end of the page and sign & date it with your %TWIKIWEB%.WikiName.
 
 	* TestTopic1, TestTopic2, TestTopic3, TestTopic4 

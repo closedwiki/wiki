@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
 head	1.3;
 access;
 symbols;
@@ -45,7 +46,7 @@ log
 text
 @d1 2
 a2 2
-%META:TOPICINFO{author="guest" date="1102074173" format="1.0" version="1.2"}%
+
 This is revision 2
 @
 

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="guest" date="1100246657" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+
+
 Description: Manual test to check creation of topics with a template topic.
 
 The following link will create a new topic that should be templated from *this* topic.

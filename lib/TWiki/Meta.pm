@@ -341,6 +341,7 @@ sub getRevisionInfo {
         $date = $topicinfo->{date} ;
         $author = $this->{_session}->{users}->findUser($topicinfo->{author});
         $rev = $topicinfo->{version};
+        $rev =~ s/^\$Rev(: \d+)?\$$/0/;
         $rev =~ s/^\d+\.//;
         $comment = '';
     } else {

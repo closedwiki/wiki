@@ -1,3 +1,5 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+
 Description: Simple formatting, as described in TWiki.TextFormattingRules
 
 <table cols=3 border=2>

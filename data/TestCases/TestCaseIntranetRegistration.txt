@@ -1,3 +1,5 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+
 Description: Intranet Registration manual tests
 
 ---++ Preconditions
@@ -15,4 +17,4 @@ Description: Intranet Registration manual tests
 	4 Email is sent to administrator
 	5 Email is sent to user
  
--- Main.MartinCleaver - 24 Oct 2004
+
