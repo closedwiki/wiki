@@ -3,8 +3,7 @@
 # Simple utility to fetch an HTML page from a server
 #
 # Copyright (C) 1999 Jon Udell, BYTE
-# Copyright (C) 2000 Peter Thoeny, TakeFive Software Inc., 
-# peter.thoeny@takefive.com , peter.thoeny@attglobal.net
+# Copyright (C) 2000 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
