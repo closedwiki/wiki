@@ -8,7 +8,7 @@ Provides a simple and consistent interface for creation and management of lists 
 
 ---++ Settings
 	* Name of the perl package
-		* Set STUB = TWiki::Contrib::AttrsContrib
+		* Set STUB = %$STUB%
 
 ---++ Installation Instructions
 

@@ -19,7 +19,7 @@ use integer;
 
 =begin text
 
----+ Package TWiki::Contrib::Attrs
+---++ Package TWiki::Contrib::Attrs
 Class of attribute sets, designed for parsing and storing attribute values
 from a TWiki tag e.g. =%TAG{fred="bad" "sad" joe="mad"}%=
 
@@ -45,7 +45,7 @@ my $DEFAULTKEY = "__default__";
 
 =begin text
 
----++ new ($string) => Attrs object ref
+---+++ new ($string) => Attrs object ref
 | $string | String containing attribute specification |
 Parse a standard attribute string containing name=value pairs and create a new
 attributes object. The value may be a word or a quoted string. If there is an
@@ -109,7 +109,7 @@ sub new {
 
 =begin text
 
----++ get( $key) => value
+---+++ get( $key) => value
 | $key | Attribute name |
 Get an attr value; return undef if not set
 
@@ -122,7 +122,7 @@ sub get {
 
 =begin text
 
----++ isEmpty() => boolean
+---+++ isEmpty() => boolean
 Return false if attribute set is not empty.
 
 =cut
@@ -134,7 +134,7 @@ sub isEmpty {
 
 =begin text
 
----++ remove($key) => value
+---+++ remove($key) => value
 | $key | Attribute to remove |
 Remove an attr value from the map, return old value. After a call to
 =remove= the attribute is no longer defined.
@@ -150,7 +150,7 @@ sub remove {
 
 =begin text
 
----++ toString() => string
+---+++ toString() => string
 Generate a printed form for the map, using standard
 attribute syntax, with only the single-quote extension
 syntax observed (no {} brackets, though).
