@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wT
+#!/usr/bin/perl -w
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
@@ -15,7 +15,7 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 
 #This is a hack to the standard "save" script until Plugins are allowed
@@ -25,20 +25,30 @@
 
 #Version history...
 #30 Nov 2001: Initial version
-#4 Dec 2001: 1.01 release, changed name to CommentPlugin, 
+#4 Dec 2001: 1.01 release, changed name to CommentPlugin,
 #            added $button var, changed textarea WRAP setting to "soft"
-#24 Feb 2002: added a few more user requests, made "English" text configurable 
-#5 March 2002: Bug fixes 
+#24 Feb 2002: added a few more user requests, made "English" text configurable
+#5 March 2002: Bug fixes
 #6 March 2002: Hopefully the LAST bug fix for savecomment for now...
 #              formattedPost was processing TWiki variables incorrectly
+#9 Dec 2002: Changed to strict mode
+#            updated library includes to match beta TWiki - JonLambert
+#11 Dec 2002: Added check for locked pages
+#            will redirect to a new oopslockedcomment.tmpl - JonLambert
+#15 July 2003: passing comments to oops template - to copy-paste if BACK is broken
 
 
-use CGI::Carp qw(fatalsToBrowser);
+# Set library paths in @INC, at compile time
+BEGIN { unshift @INC, '.'; require 'setlib.cfg'; }
+
 use CGI;
-use lib ( '.' );
-use lib ( '../lib' );
+use CGI::Carp qw(fatalsToBrowser);
 use TWiki;
+use TWiki::Plugins::CommentPlugin;
 
+use strict;
+
+use vars qw( $query );
 
 $query= new CGI;
 
@@ -46,17 +56,14 @@ $query= new CGI;
 
 sub main
 {
-    my $thePathInfo = $query->path_info(); 
+    my $thePathInfo = $query->path_info();
     my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param( 'topic' );
+    my $theTopic = $query->param( 'topic' ) || "";
     my $theUrl = $query->url;
 
-    my $theName  = $query->param( 'commentname' );
-    my $mode = $query->param( 'mode' );
-
-    ( $topic, $webName, $dummy, $userName ) = 
+    my ( $topic, $webName, $dummy, $userName ) =
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
-    $dummy = "";  # to suppress warning	
+    $dummy = "";  # to suppress warning
 
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
@@ -80,55 +87,41 @@ sub main
         return;
     }
 
+    # get all text as entered, so user can copy-paste them somewhere if save failed
+    my $comment_all = "URL: ".  $query->param('comment_url'). '<br />'.
+                      "Link: ". $query->param('comment_link'). '<br />'.
+                      "Text: ". $query->param('comment'). '<br />';
 
-    # get text and other parameters
-    my $comment = $query->param( "comment" );
+    # check for locks and if so redirect - JonLambert
+    my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $webName, $topic );
+    if( $lockUser ) {
+        # warn user that other person is editing this topic
+        $lockUser = &TWiki::userToWikiName( $lockUser );
+        use integer;
+        $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
+        my $editLock = $TWiki::editLockTime / 60;
+        # PTh 20 Jun 2000: changed to getOopsUrl
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopslockedcomment",
+            $lockUser, $editLock, $lockTime, $comment_all );
+        TWiki::redirect( $query, $url );
+        return;
+    }
 
-    #OMFG...what a hack!
-    $comment = &TWiki::decodeSpecialChars( $comment );
-    $comment =~ s/ {3}/\t/go;
+    #now just read in the topic file, format comments as mode requires, and save
+    my ($meta, $text) =  &TWiki::Store::readTopic( $webName, $topic );
+    $text = TWiki::Plugins::CommentPlugin::saveComment($query, $wikiUserName, $text); # will format text for save
+    # will return (1) UNDEF if no save needed, (2) empty string if format error
+    
+    TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) ) if not defined $text;
 
-    my $errMsg = '<font color="red">(attempt to change authorization settings detected)</font>';
-
-    $comment =~ s/\s*\*\s+Set\s+(ALLOW|DENY)(TOPIC|WEB)(CHANGE|RENAME|POST)\s*=.*/$errMsg/go;
+    my $error = '';
+    $error = "COMMENT format error: cannot save $comment_all " unless $text;
 
     my $unlock = "on";
     my $dontNotify = "";
     my $saveCmd = "";
-
-    my $defaultBgColor = &TWiki::Prefs::getPreferencesValue("COMMENTPLUGIN_BACKGROUNDCOLOR");
-    my $defaultSignature = &TWiki::Prefs::getPreferencesValue("COMMENTPLUGIN_SIGNATURE");
-    my $defaultPrefixName = &TWiki::Prefs::getPreferencesValue("COMMENTPLUGIN_PREFIXMODENAME");
-    my $defaultPostfixName = &TWiki::Prefs::getPreferencesValue("COMMENTPLUGIN_POSTFIXMODENAME");
-
-    my $formattedPost = "----\n\n$comment\n\n";
-    #Thanks to Laurent AMON for finding/killing this bug...
-    $formattedPost .= TWiki::Func::expandCommonVariables("$defaultSignature\n\n", $topic, $webname);
-
-    my $localDate = &TWiki::getLocaldate();
-    $defaultSignature =~ s/%DATE%/$localDate/go;
-    $defaultSignature =~ s/%WIKIUSERNAME%/$wikiUserName/go;
-
-    #now just read in the topic file, modify it, and save
-    my ($meta, $text) =  &TWiki::Store::readTopic( $webName, $topic );
-
-    if ($comment ne "") { #no post if no comment
-        if ($theName ne "__default__") { #Find a comment by its given name
-          if ($mode eq $defaultPostfixName) {
-            $text =~ s/%COMMENT(.*"$theName".*?)%/%COMMENT$1%\n$formattedPost/g;
-          } else {
-            $text =~ s/%COMMENT(.*"$theName".*?)%/$formattedPost%COMMENT$1%/g;
-          }
-        } else {
-          if ($mode eq $defaultPostfixName) {
-            $text =~ s/%COMMENT(.*?)%/%COMMENT$1%\n$formattedPost/g;
-          } else {
-            $text =~ s/%COMMENT/$formattedPost%COMMENT/g;
-          }
-        }
-    }
-
-    my $error = &TWiki::Store::saveTopic( $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
+    
+    $error = &TWiki::Store::saveTopic( $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify ) unless $error;
     if( $error ) {
         # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );

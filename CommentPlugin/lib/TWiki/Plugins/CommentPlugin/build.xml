@@ -1,0 +1,146 @@
+<!-- ANTfile for TWiki CommentPlugin
+  Ant is at http://jakarta.apache.org
+  Four main targets are available:
+        test - runs unit tests on the package
+        release - runs tests and creates a zipped package
+        install - installs in the local TWiki
+        uninstall - inverse of install
+-->
+
+<project name="CommentPlugin" default="test" basedir="../../../..">
+
+    <property environment="ENV"/>
+    <property name="twiki" value="${ENV.TWIKI_HOME}"/>
+    <property name="lib.plugins" value="lib/TWiki/Plugins"/>
+    <property name="plugin.lib" value="${lib.plugins}/${ant.project.name}"/>
+    <property name="data.plugins" value="data/TWiki"/>
+    <property name="plugin.data" value="${data.plugins}/${ant.project.name}"/>
+    <property name="release.zip" value="${ant.project.name}.zip" />
+    <property name="test.zip" value="${plugin.lib}/test.zip" />
+
+    <!-- Caution: also used in uninstall, so don't use * in shared dirs -->
+    <patternset id="installed.files">
+        <include name="${plugin.lib}.pm"/>
+        <include name="${plugin.lib}/*.pm"/>
+        <include name="${plugin.lib}/build.xml"/>
+        <include name="${plugin.data}*.txt"/>
+        <include name="${data.plugins}/CommentTemplates.txt"/>
+        <include name="bin/savecomment"/>
+        <include name="templates/oopslockedcomment.tmpl"/>
+        <include name="${test.zip}"/>
+    </patternset>
+
+    <patternset id="test.files">
+        <include name="test/**/*.pm"/>
+        <include name="test/**/*.pl"/>
+    </patternset>
+
+    <!-- Init target -->
+    <target name="init">
+        <tstamp />
+    </target>
+
+    <target name="installBAD" unless="ENV.TWIKI_HOME">
+        <fail message="TWIKI_HOME must be set to install or uninstall!!" />
+    </target>
+
+    <!-- Install in local TWiki -->
+    <target name="installOK" if="ENV.TWIKI_HOME">
+        <copy todir="${twiki}" overwrite="yes">
+            <fileset dir="${basedir}">
+                <patternset refid="installed.files"/>
+            </fileset>
+        </copy>
+
+        <chmod perm="ugoa+rwx" parallel="no">
+            <fileset dir="${twiki}">
+                <patternset refid="installed.files"/>
+            </fileset>
+        </chmod>
+    </target>
+
+    <!-- Uninstall from local TWiki -->
+    <target name="uninstallOK" if="ENV.TWIKI_HOME">
+        <delete>
+            <fileset dir="${twiki}">
+                <patternset refid="installed.files"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <!-- Create tests zip -->
+    <target name="tests.zip">
+        <delete file="${test.zip}" />
+        <zip zipfile="${test.zip}">
+            <zipfileset dir="${plugin.lib}">
+                <patternset refid="test.files"/>
+            </zipfileset>
+	</zip>
+    </target>
+
+    <!-- Check that all files in the zip are in the topic file, and
+	 vice versa -->
+    <target description="Check release package" name="completeness">
+	<exec	executable="unzip"
+		outputproperty="zip.dat">
+	    <arg line="-l ${release.zip}" />
+	</exec>
+        <exec	executable="gawk"
+		inputstring="${zip.dat}"
+		outputproperty="zip2.dat">
+	    <arg line="'/^[ \t]+[0-9]+[ \t]+[0-9]+-.*[^/]$/{print $4;}'" />
+	</exec>
+        <exec	executable="sort"
+		inputstring="${zip2.dat}"
+		output="zipcontents.dat">
+	</exec>
+        <exec	executable="gawk"
+		outputproperty="file.dat">
+	    <arg line="-F = '/^[ \t]+\|[ \t]+==.+==[ \t]+\|.+\|$/{print $3;}' ${plugin.data}.txt" />
+	</exec>
+        <exec	executable="sed"
+		inputstring="${file.dat}"
+		outputproperty="file2.dat">
+	    <arg line="'s/%TOPIC%/${ant.project.name}/g'" />
+	</exec>
+        <exec	executable="sort"
+		inputstring="${file2.dat}"
+		output="filecontents.dat">
+	</exec>
+	<exec	executable="diff" failonerror="true">
+	    <arg line="zipcontents.dat filecontents.dat" />
+	</exec>
+    </target>
+
+    <target description="Make the release zip" name="zip" depends="test">
+        <delete file="${release.zip}" />
+        <zip zipfile="${release.zip}">
+            <zipfileset dir="${basedir}">
+                <patternset refid="installed.files"/>
+            </zipfileset>
+	</zip>
+    </target>
+
+    <!--
+        MAIN TARGETS
+     -->
+
+    <target description="Test the package"
+            name="test" depends="tests.zip">
+        <exec dir="${plugin.lib}/test"
+		failonerror="yes" executable="perl">
+            <arg line="-w AllTests.pl"/>
+        </exec>
+    </target>
+
+    <target description="Build and check release zip"
+            name="release" depends="zip,completeness">
+    </target>
+
+    <target description="Install in local TWiki"
+            name="install" depends="installBAD,installOK" />
+
+    <target description="Uninstall from local TWiki"
+            name="uninstall" depends="installBAD,uninstallOK" />
+
+</project>
