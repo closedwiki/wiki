@@ -323,8 +323,8 @@ sub getRevisionInfo
        $rcsError = "Error with $cmd, output: $rcsOut" if( $exit );
        if( ! $rcsError ) {
             $rcsOut =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/;
-            $date = $1 | "";
-            $user = $2 | "";
+            $date = $1 || "";
+            $user = $2 || "";
             $comment = $3 || "";
             $date = TWiki::Store::RcsFile::_rcsDateTimeToEpoch( $date );
             $rcsOut =~ /revision 1.([0-9]*)/;
