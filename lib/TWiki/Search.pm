@@ -1252,11 +1252,11 @@ sub breakName
         $sep = $params[1] if( @params > 1 );
         if( $sep =~ /^\.\.\./i ) {
             # make name shorter like "ThisIsALongTop..."
-            $theText =~ s/(.{$len})(.+)/$1.../;
+            $theText =~ s/(.{$len})(.+)/$1.../s;
 
         } else {
             # split and hyphenate the topic like "ThisIsALo- ngTopic"
-            $theText =~ s/(.{$len})/$1$sep/g;
+            $theText =~ s/(.{$len})/$1$sep/gs;
             $theText =~ s/$sep$//;
         }
     }
