@@ -126,12 +126,8 @@ sub edit {
     $tmpl = $session->{templates}->readTemplate( "edit", $skin );
     unless( $topicExists ) {
         if( $templateTopic ) {
-            if( $templateTopic =~ /^(.+)\.(.+)$/ ) {
-                # SMELL: this is pointless, according to the spec of readTopic
-                # is "Webname.SomeTopic"
-                $templateWeb   = $1;
-                $templateTopic = $2;
-            }
+            ( $templateWeb, $templateTopic ) =
+              $session->normalizeWebTopicName( $templateWeb, $templateTopic );
 
             ( $meta, $text ) =
               $session->{store}->readTopic( $session->{user}, $templateWeb,
@@ -164,13 +160,13 @@ sub edit {
     if( $theParent eq "none" ) {
         $meta->remove( "TOPICPARENT" );
     } elsif( $theParent ) {
-        if( $theParent =~ /^([^.]+)\.([^.]+)$/ ) {
-            my $parentWeb = $1;
-            if( $1 eq $webName ) {
-                $theParent = $2;
-            }
+        my $parentWeb;
+        ($parentWeb, $theParent) =
+          $session->normalizeWebTopicName( $theParent );
+        if( $parentWeb ne $webName ) {
+            $theParent = "$parentWeb.$theParent";
         }
-        $meta->put( "TOPICPARENT", { "name" => $theParent } );
+        $meta->put( "TOPICPARENT", { name => $theParent } );
     }
     $tmpl =~ s/%TOPICPARENT%/$theParent/;
 

@@ -1352,6 +1352,34 @@ sub expandVariablesOnTopicCreation {
     return $TWiki::Plugins::SESSION->expandVariablesOnTopicCreation( shift, $TWiki::Plugins::SESSION->{user} );
 }
 
+=pod
+
+---+++ normalizeWebTopicName($web, $topic) -> ($web, $topic)
+
+| Description: | Parse a web and topic name, supplying defaults as appropriate. |
+| Parameter: =$web= | Web name, identifying variable, or empty string |
+| Parameter: =$topic= | Topic name, may be a web.topic string, required. |
+| Return: | the parsed Web/Topic pair.
+| Since: | TWiki::Plugins::VERSION 1.026 |
+
+| *Input* | *Return* |
+| <tt>( "Web",  "Topic" )     </tt> | <tt>( "Web",  "Topic" ) </tt> |
+| <tt>( "",     "Topic" )     </tt> | <tt>( "Main", "Topic" ) </tt> |
+| <tt>( "",     "" )          </tt> | <tt>( "Main", "WebHome" ) </tt> |
+| <tt>( "",     "Web/Topic" ) </tt> | <tt>( "Web",  "Topic" ) </tt> |
+| <tt>( "",     "Web.Topic" ) </tt> | <tt>( "Web",  "Topic" ) </tt> |
+| <tt>( "Web1", "Web2.Topic" )</tt> | <tt>( "Web2", "Topic" ) </tt> |
+| <tt>( "%MAINWEB%", "Topic" )</tt> | <tt>( "Main", "Topic" ) </tt> |
+| <tt>( "%TWIKIWEB%", "Topic" )</tt> | <tt>( "TWiki", "Topic" ) </tt> |
+where =Main= and =TWiki= are the web names set in $cfg{UsersWebName} and $cfg{SystemWebName} respectively.
+
+=cut
+
+sub normalizeWebTopicName {
+    #my( $theWeb, $theTopic ) = @_;
+    return $TWiki::Plugins::SESSION->normalizeWebTopicName( @_ );
+}
+
 # =========================
 =pod
 

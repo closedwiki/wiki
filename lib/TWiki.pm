@@ -703,7 +703,7 @@ sub getTWikiLibDir {
     # module.
     my $dir = "";
     foreach $dir ( @INC ) {
-        if( -e "$dir/TWiki.pm" ) {
+        if( $dir && -e "$dir/TWiki.pm" ) {
             $twikiLibDir = $dir;
             last;
         }
@@ -848,6 +848,8 @@ Input:                      Return:
   ( "",     "Web/Topic" )     ( "Web",  "Topic" )
   ( "",     "Web.Topic" )     ( "Web",  "Topic" )
   ( "Web1", "Web2.Topic" )    ( "Web2", "Topic" )
+  ( "%MAINWEB%", "Web2.Topic" ) ( "Main", "Topic" )
+  ( "%TWIKIWEB%", "Web2.Topic" ) ( "TWiki", "Topic" )
 </pre>
 Note: Function renamed from getWebTopic
 
@@ -860,17 +862,17 @@ sub normalizeWebTopicName {
     my( $this, $theWeb, $theTopic ) = @_;
 
     ASSERT(ref($this) eq "TWiki") if DEBUG;
-    ASSERT(defined $theWeb) if DEBUG;
     ASSERT(defined $theTopic) if DEBUG;
 
     if( $theTopic =~ m|^([^.]+)[\.\/](.*)$| ) {
         $theWeb = $1;
         $theTopic = $2;
     }
-    $theWeb = $this->{webName} unless( $theWeb );
-    $theTopic = $this->{topicName} unless( $theTopic );
-
-    return( $theWeb, $theTopic );
+    my( $web, $topic ) = ( $theWeb, $theTopic );
+    $web ||= $cfg{UsersWebName};
+    $topic ||= $cfg{HomeTopicName};
+    $web =~ s/^%((MAIN|TWIKI)WEB)%$/$this->_expandTag( $1 )/e;
+    return( $web, $topic );
 }
 
 =pod
@@ -1772,8 +1774,8 @@ sub _processTags {
             if ( $stack[$#stack] =~ /^%([A-Z][A-Z0-9_:]*)(?:{(.*)})?$/ ) {
                 my ( $tag, $args ) = ( $1, $2 );
                 print " " x $tell,"POP $tag\n" if $tell;
-                my ( $ok, $e ) = $this->_expandTag( $tag, $args, @_ );
-                if ( $ok ) {
+                my $e = $this->_expandTag( $tag, $args, @_ );
+                if ( defined( $e )) {
                     print " " x $tell--,"EXPANDED $tag -> $e\n" if $tell;
                     pop( @stack );
                     # Choice: can either tokenise and push the expanded
@@ -1826,7 +1828,7 @@ sub _expandTag {
         $res = &{$functionTags{$tag}}( $this, $params, @_ );
     }
 
-    return ( defined( $res ), $res );
+    return $res;
 }
 
 =pod

@@ -175,13 +175,11 @@ sub getFormDef {
     my( $this, $webName, $form ) = @_;
     ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
 
-    if( $form =~ /^(.*)\.(.*)$/ ) {
-        $webName = $1;
-        $form = $2;
-    }
-    
-    my @fieldDefs = ();    
-   
+    ( $webName, $form ) =
+      $this->{session}->normalizeWebTopicName( $webName, $form );
+
+    my @fieldDefs = ();
+
     # Read topic that defines the form
     if( $this->store()->topicExists( $webName, $form ) ) {
         my( $meta, $text ) =
@@ -190,9 +188,9 @@ sub getFormDef {
     } else {
         # FIXME - do what if there is an error?
     }
-    
+
     my @fieldsInfo = ();
-        
+
     # Get each field definition
     foreach my $fieldDefP ( @fieldDefs ) {
         my @fieldDef = @$fieldDefP;

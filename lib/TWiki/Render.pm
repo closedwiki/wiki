@@ -103,20 +103,21 @@ sub _renderParent {
 
     my $sep = "";
     my $pWeb = $web;
+    my $pTopic;
     my $text = "";
     my $parentMeta = $meta->get( "TOPICPARENT" );
     my $parent;
+
     $parent = $parentMeta->{name} if $parentMeta;
+
     my @stack;
 
     while( $parent ) {
-        my $pTopic = $parent;
-        if( $parent =~ /^(.*)\.(.*)$/ ) {
-            $pWeb = $1;
-            $pTopic = $2;
-        }
+        ( $pWeb, $pTopic ) =
+          $this->{session}->normalizeWebTopicName( $pWeb, $parent );
         $parent = "$pWeb.$pTopic";
-        last if( $noWebHome && ( $pTopic eq $TWiki::cfg{HomeTopicName} ) ||
+        last if( $noWebHome &&
+                 ( $pTopic eq $TWiki::cfg{HomeTopicName} ) ||
                  $dontRecurse ||
                  $visited{$parent} );
         $visited{$parent} = 1;
@@ -139,19 +140,14 @@ sub _renderMoved {
     my $moved = $meta->get( "TOPICMOVED" );
 
     if( $moved ) {
-        my $from = $moved->{"from"};
-        $from =~ /(.*)\.(.*)/;
-        my $fromWeb = $1;
-        my $fromTopic = $2;
-        my $to   = $moved->{"to"};
-        $to =~ /(.*)\.(.*)/;
-        my $toWeb = $1;
-        my $toTopic = $2;
-        my $by   = $moved->{"by"};
+        my( $fromWeb, $fromTopic ) =
+          $this->{session}->normalizeWebTopicName( $web, $moved->{from} );
+        my( $toWeb, $toTopic ) =
+          $this->{session}->normalizeWebTopicName( $web, $moved->{to} );
+        my $by = $moved->{by};
         my $u = $this->users()->findUser( $by );
         $by = $u->webDotWikiName() if $u;
-        my $date = $moved->{"date"};
-        $date = TWiki::Time::formatTime( $date, "", "gmtime" );
+        my $date = TWiki::Time::formatTime( $moved->{date}, "", "gmtime" );
 
         # Only allow put back if current web and topic match stored information
         my $putBack = "";
@@ -160,7 +156,7 @@ sub _renderMoved {
             $putBack .= " href=\"".$this->{session}->getScriptUrl($web, $topic, 'rename')."?newweb=$fromWeb&newtopic=$fromTopic&";
             $putBack .= "confirm=on\" $TWiki::cfg{NoFollow}>put it back</a>";
         }
-        $text = "<i><nop>$to moved from <nop>$from on $date by $by </i>$putBack";
+        $text = "<i><nop>$toWeb.<nop>$toTopic moved from <nop>$fromWeb.<nop>$fromTopic on $date by $by </i>$putBack";
     }
     return $text;
 }
@@ -598,8 +594,13 @@ sub _handleSquareBracketedLink {
 
     # Get the topic name
     my $topic = $theLink || $theTopic;  # remaining is topic
-    $topic =~ s/\&[a-z]+\;//gi;        # filter out &any; entities
-    $topic =~ s/\&\#[0-9]+\;//g;       # filter out &#123; entities
+    # Capitalise
+    $topic =~ s/^(.)/\U$1/;
+    $topic =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;	
+    # filter out &any; entities
+    $topic =~ s/\&[a-z]+\;//gi;
+    # filter out &#123; entities
+    $topic =~ s/\&\#[0-9]+\;//g;
     $topic =~ s/[\\\/\#\&\(\)\{\}\[\]\<\>\!\=\:\,\.]//g;
     $topic =~ s/$TWiki::cfg{NameFilter}//go;    # filter out suspicious chars
     if( ! $topic ) {

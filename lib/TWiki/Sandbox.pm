@@ -151,7 +151,7 @@ sub normalizeFileName {
             # FIXME: This might be a Perl bug.
             push @result, untaintUnchecked( $component );
         } else {
-            throw Error::Simple( "whitespace in file name component '$component' of filename '$string'" );
+            throw Error::Simple( "illegal characters in file name component '$component' of filename '$string'" );
         }
     }
     if (@result) {

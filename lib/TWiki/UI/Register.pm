@@ -218,14 +218,15 @@ sub bulkRegister {
     $log .= "----\n";
     $log .= "registrationsMade: $registrationsMade";
 
-    my $logTopic =  $query->param('LogTopic') || $topic."Result"; # get preference 
-    $logTopic =~ s/(.*)\.(.*)/$2/ ; # ignore the web as TWiki is too stupid to let $topic specify web.topic in save's $topic. SMELL SMELL SMELL. 
+    my $logWeb;
+    my $logTopic =  $query->param('LogTopic') || $topic."Result";
+    ( $logWeb, $logTopic ) = $session->normalizeWebTopicName( "", $logTopic );
 
     #-- Save the LogFile as designated, link back to the source topic 
 
-    $meta->put( "TOPICPARENT", { "name" => $topic } );
+    $meta->put( "TOPICPARENT", { name => "$web.$topic" } );
 
-    my $err = $session->{store}->saveTopic($user, $web, $logTopic, $log, $meta );
+    my $err = $session->{store}->saveTopic($user, $logWeb, $logTopic, $log, $meta );
 
     $session->redirect($session->getScriptUrl($web, $logTopic, "view"));
 }

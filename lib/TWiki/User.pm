@@ -70,14 +70,10 @@ sub new {
     $this->{session} = $session;
 
     $this->{login} = $name;
-    my $web = $TWiki::cfg{UsersWebName};
-    if(  $wikiname =~ /^(.*)\.(.*)$/ ) {
-        $web = $1;
-        $wikiname = $2;
-    }
+    my( $web, $topic ) =
+      $session->normalizeWebTopicName( "", $wikiname );
     $this->{web} = $web;
-    $this->{wikiname} = $wikiname;
-
+    $this->{wikiname} = $topic;
     return $this;
 }
 
