@@ -126,9 +126,8 @@ sub main
     $wikiName =~ /(.*)/;
     $wikiName = $1;
 
-    # check if passwords are identical (or empty)
-    if ( ( $passwordA ne $passwordB ) 
-        || ( $passwordA eq "" ) ) {
+    # check if passwords are identical
+    if ( $passwordA ne $passwordB ) {
         $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregpasswd" );
         TWiki::redirect( $query, $url );
         return;
@@ -143,10 +142,9 @@ sub main
 
 
     # everything OK
-#TODO: what do we have Login Name for if we don't use it for the login:password?
 
     # generate user entry and add to .htpasswd file
-    if( ! $remoteUser ) {
+    unless( $remoteUser ) {
         TWiki::User::AddUserPassword($wikiName, $passwordA );
     }
 
