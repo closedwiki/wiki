@@ -112,7 +112,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "10 Dec 2002";
+$wikiversion      = "14 Dec 2002";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -473,8 +473,8 @@ sub setupRegexes {
     $singleUpperAlphaNumRegex = qr/[${upperAlpha}${numeric}]/;
     $singleMixedAlphaNumRegex = qr/[${upperAlpha}${lowerAlpha}${numeric}]/;
 
-    $singleMixedNonAlphaRegex = qr/[^${upperAlpha}${lowerAlpha}${numeric}]/;
-    $singleMixedNonAlphaNumRegex = qr/[^${upperAlpha}${lowerAlpha}]/;
+    $singleMixedNonAlphaRegex = qr/[^${upperAlpha}${lowerAlpha}]/;
+    $singleMixedNonAlphaNumRegex = qr/[^${upperAlpha}${lowerAlpha}${numeric}]/;
 
     # Multi-character alpha-based regexes
     $mixedAlphaNumRegex = qr/[${mixedAlphaNum}]*/;
