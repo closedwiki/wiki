@@ -1,13 +1,60 @@
 #
 # Copyright (C) Motorola 2003 - All rights reserved
+# Copyright (C) Crawford Currie 2004
 #
 use strict;
 
 use Time::ParseDate;
 
-# A search is a binary tree of AND and OR nodes.
-# A search object implements the "matches" method as its general
-# contract with the rest of the world.
+=begin text
+
+---++ class Search
+Search operators work on the fields of a DBCachePlugin::Map. The fields are given by name, and the values by strings. Strings should always be surrounded by 'single-quotes'. String which are regular expressions use 'perl' re syntax (see =man perlre= for help)
+
+*Warning* single and double quotes are not allowed in values!
+
+The following operators are available:
+
+| *Operator* | *LHS* | *RHS* | *Meaning* |
+| <code>=</code> | field name | regular expression | Value exactly matches this regular expression. The expression must match the whole string. |
+| <code>!=</code> | field name | regular expression | Field is not this RE. Inverse of = |
+| <code>=~</code> | field name | regular expression | Value contains this regular expression i.e. the RE is found somewhere in the field value. |
+| <code>&lt;</code> | field name | integer (string containing an integer e.g '4') | Number is < |
+| <code>&gt;</code> | field name | integer | Number is > |
+| <code>&gt;=</code> | field name | integer | Number is >= |
+| <code>&lt;=</code> | field name | integer | Number is <= |
+| <code>EARLIER_THAN</code> | field name | date (string containing a date e.g. '1 Apr 2003' | Date is earlier than the given date |
+| <code>LATER_THAN</code> | field name | date | Date is later than the given date |
+| <code>WITHIN_DAYS</code> | field name | integer | Date (which must be in the future) is within n _working_ days of todays date |
+| <code>!</code> | none | expr | Boolean NOT |
+| <code>AND</code> | expr | expr | Boolean AND |
+| <code>OR</code> | expr | expr | Boolean OR |
+| <code>()</code> | N/A | N/A | Bracketed subexpression |
+
+Dates for =EARLIER_THAN=, =LATER_THAN= and =WITHIN_DAYS= must be dates in the format expected by =Time::ParseDate= (like the ActionTrackerPlugin). =WITHIN_DAYS= works out the number of _working_ days (i.e. excluding Saturday and Sunday). Apologies in advance if your weekend is offset &plusmn; a day!
+
+A search object implements the "matches" method as its general
+contract with the rest of the world.
+
+---++++ Example
+Get a list of attachments that have a date earlier than 1st January 2000
+<verbatim>
+  $db = new DBCachePlugin::DBCache( $web ); # always done
+  $db->load();
+  my $search = new DBCachePlugin::Search("date EARLIER_THAN '1st January 2000'");
+
+  foreach my $topic ($db->getKeys()) {
+     my $attachments = $topic->get("attachments");
+     foreach my $val ($attachments->getValues()) {
+       if ($search->matches($val)) {
+          print $val->get("name") . "\n";
+       }
+     }
+  }
+</verbatim>
+
+=cut
+
 { package DBCachePlugin::Search;
 
   # Operator precedences
@@ -42,16 +89,24 @@ use Time::ParseDate;
     $now = Time::ParseDate::parsedate( $t );
   }
 
+=begin text
+
+---+++ =new($string)
+   * =$string= - string containing an expression to parse
+Construct a new search node by parsing the passed expression.
+
+=cut
+
   sub new {
     my ( $class, $string, $left, $op, $right ) = @_;
     my $this;
     if ( defined( $string )) {
       if ( $string =~ m/^\s*$/o ) {
-	return new DBCachePlugin::Search( undef, undef, "TRUE", undef );
+		return new DBCachePlugin::Search( undef, undef, "TRUE", undef );
       } else {
-	my $rest;
-	( $this, $rest ) = _parse( $string );
-	return $this;
+		my $rest;
+		( $this, $rest ) = _parse( $string );
+		return $this;
       }
     } else {
       $this = {};
@@ -116,10 +171,14 @@ use Time::ParseDate;
     return ( pop( @opands ), $string );
   }
 
-  # PUBLIC
-  # See if the fields in the Map $cmper match the search
-  # expression. $map can actually be any object that provides
-  # the method "get" that returns a value given a string key.
+=begin text
+
+---+++ =matches($object)= -> boolean
+   * -=$object= - object to test; must implement =get=
+See if object matches the search. =$object= can actually be any object that provides
+the method "get" that returns a value given a string key.
+
+=cut
   sub matches {
     my ( $this, $map ) = @_;
 
@@ -194,7 +253,13 @@ use Time::ParseDate;
     return $whole_weeks * 5 + $extra_days;
   }
 
-  # PUBLIC debug print
+=begin text
+
+---+++ =toString()= -> string
+Generates a string representation of the object.
+
+=cut
+
   sub toString {
     my $this = shift;
 

@@ -1,10 +1,27 @@
 #
 # Copyright (C) Motorola 2003 - All rights reserved
+# Copyright (C) Crawford Currie 2004
 #
 use strict;
 
-# Generic array object
+=begin text
+
+---++ class Array
+
+Generic array object. This is required because perl arrays are not objects, and
+cannot be subclassed e.g. for serialisation. To avoid lots of horrid code to handle
+special cases of the different perl data structures, we use this array object instead.
+
+=cut
+
 { package DBCachePlugin::Array;
+
+=begin text
+
+---+++ =new()=
+Create a new, empty array object
+
+=cut
 
   sub new {
     my $class = shift;
@@ -25,14 +42,27 @@ use strict;
     # should be enough; nothing else should be pointing to the array
   }
 
-  # PUBLIC add an element to the end of the array
+=begin text
+
+---+++ =add($object)=
+   * =$object= any perl data type
+Add an element to the end of the array
+
+=cut
+
   sub add {
     my $this = shift;
     return push( @{$this->{values}}, shift );
   }
 
-  # PUBLIC find the given element in the array and
-  # return it's index
+=begin text
+
+---+++ =find($object) -> integer
+   * $object datum of the same type as the content of the array
+Uses "==" to find the given element in the array and return it's index
+
+=cut
+
   sub find {
     my ( $this, $obj ) = @_;
     my $i = 0;
@@ -43,34 +73,59 @@ use strict;
     return -1;
   }
 
-  # PUBLIC remove an entry at an index from the array.
+=begin text
+
+---+++ =remove($index)
+   * =$index= - integer index
+Remove an entry at an index from the array.
+
+=cut
+
   sub remove {
     my ( $this, $i ) = @_;
     splice( @{$this->{values}}, $i, 1 );
   }
 
-  # PUBLIC get the element at an index or, if the parameter is a string,
-  # the sum of a field
+=begin text
+
+---+++ =get($index)=
+   * =$index= - integer index
+Get the element at an index. if =$index= is not an integer, will return the result
+of $this->sum($index)
+
+=cut
+
   sub get {
     my ( $this, $index ) = @_;
-    # there's gotta be a better way than this.....
-    if ( $index !~ /^\d+$/ ) {
-      return $this->sum( $index );
-    }
+	if ( $index !~ /^\d+$/ ) {
+     return $this->sum( $index );
+	}
+
     return undef unless ( $this->size() > $index );
     return $this->{values}[$index];
   }
 
-  # PUBLIC get the size of the array
+=begin text
+
+---+++ =size()=
+Get the size of the array
+
+=cut
+
   sub size {
     my $this = shift;
     return 0 unless ( defined( $this->{values} ));
     return scalar( @{$this->{values}} );
   }
 
-  # PUBLIC
-  # sum the values in a field in the objects at each position in the
-  # array
+=begin text
+
+---+++ =sum($field)=
+   * =$field= - name of a field in the class of objects stored by this array
+Returns the sum of values of the given field in the objects stored in this array.
+
+=cut
+
   sub sum {
     my ( $this, $field ) = @_;
     return 0 if ( $this->size() == 0 );
@@ -84,15 +139,15 @@ use strict;
 
     foreach my $meta ( @{$this->{values}} ) {
       if ( ref( $meta )) {
-	my $fieldval = $meta->get( $field );
-	if ( defined( $fieldval ) ) {
-	  if ( defined( $subfields )) {
-	    die "$field has no subfield $subfields" unless ( ref( $fieldval ));
-	    $sum += $fieldval->sum( $subfields );
-	  } elsif ( $fieldval =~ m/^\s*\d+/o ) {
-	    $sum += $fieldval;
-	  }
-	}
+		my $fieldval = $meta->get( $field );
+		if ( defined( $fieldval ) ) {
+		  if ( defined( $subfields )) {
+			die "$field has no subfield $subfields" unless ( ref( $fieldval ));
+			$sum += $fieldval->sum( $subfields );
+		  } elsif ( $fieldval =~ m/^\s*\d+/o ) {
+			$sum += $fieldval;
+		  }
+		}
       }
     }
 
@@ -104,8 +159,15 @@ use strict;
     return ( $this->find( $tv ) >= 0 );
   }
 
-  # PRIVATE search the array for matches with the given field
-  # values. Return a list of matched topics..
+=begin text
+
+---+++ =search($search)= -> search result
+   * =$search* =DBCachePlugin::Search object to use in the search
+Search the array for matches with the given object.
+values. Return a =DBCachePlugin::Array= of matching entries.
+
+=cut
+
   sub search {
     my ( $this, $search ) = @_;
     my $result = new DBCachePlugin::Array();
@@ -121,7 +183,15 @@ use strict;
     return $result;
   }
 
-  # For some reason when an empty array is restored from Storable,
+=begin text
+
+---+++ =getValues()=
+
+Get a "perl" array of the values in the array, suitable for use with =foreach=
+
+=cut
+
+   # For some reason when an empty array is restored from Storable,
   # getValues gives us a one-element array. Archive doesn't,
   # it gives us a nice empty array. With storable, the one
   # entry is undef.
@@ -132,6 +202,15 @@ use strict;
     # does this return the array by reference? probably not...
     return @{$this->{values}};
   }
+
+=begin text
+
+---+++ =toString($limit, $level, $strung)= -> string
+   * =$limit= - recursion limit for expansion of elements
+   * =$level= - currentl recursion level
+Generates an HTML string representation of the object.
+
+=cut
 
   sub toString {
     my ( $this, $limit, $level, $strung ) = @_;
@@ -165,6 +244,15 @@ use strict;
     return "$ss</ol>";
   }
 
+=begin text
+
+---+++ write($archive)
+   * =$archive= - the DBCachePlugin::Archive being written to
+Writes this object to the archive. Archives are used only if Storable is not available. This
+method must be overridden by subclasses is serialisation of their data fields is required.
+
+=cut
+
   sub write {
     my ( $this, $archive ) = @_;
 
@@ -174,6 +262,15 @@ use strict;
       $archive->writeObject( $v );
     }
   }
+
+=begin text
+
+---+++ read($archive)
+   * =$archive= - the DBCachePlugin::Archive being read from
+Reads this object from the archive. Archives are used only if Storable is not available. This
+method must be overridden by subclasses is serialisation of their data fields is required.
+
+=cut
 
   sub read {
     my ( $this, $archive ) = @_;
