@@ -36,25 +36,25 @@ use TWiki::Func;
   sub testAHTable {
     my $fmt = new ActionTrackerPlugin::Format("|Web|Topic|Edit|",
 					      "|\$web|\$topic|\$edit|",
-					      "", "",
-					      "horizontal");
+					      "rows",
+					      "", "");
     my $s;
     $s = $actions->formatAsHTML( $fmt, "href", 0 );
     $s =~ s/\n//go;
-    Assert::sEquals($s, "<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\">edit</a></td></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\">edit</a></td></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\">edit</a></td></tr></table>");
+    Assert::sEquals($s, "<table border=\"1\"><tr><th bgcolor=\"orange\">Web</th><td>Test</td><td>Test</td><td>Test</td></tr><tr><th bgcolor=\"orange\">Topic</th><td>Topic</td><td>Topic</td><td>Topic</td></tr><tr><th bgcolor=\"orange\">Edit</th><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\">edit</a></td></tr></table>");
     $s = $actions->formatAsHTML( $fmt, "name", 0 );
     $s =~ s/\n//go;
-    Assert::sEquals($s, "<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><a name=\"AcTion0\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion1\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion2\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\">edit</a></td></tr></table>");
+    Assert::sEquals($s, "<table border=\"1\"><a name=\"AcTion0\"></a><a name=\"AcTion1\"></a><a name=\"AcTion2\"></a><tr><th bgcolor=\"orange\">Web</th><td>Test</td><td>Test</td><td>Test</td></tr><tr><th bgcolor=\"orange\">Topic</th><td>Topic</td><td>Topic</td><td>Topic</td></tr><tr><th bgcolor=\"orange\">Edit</th><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\">edit</a></td></tr></table>");
     $s = $actions->formatAsHTML( $fmt, "name", 1 );
     $s =~ s/\n//go;
-    Assert::sEquals($s, "<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><a name=\"AcTion0\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0')\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion1\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1')\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion2\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2')\">edit</a></td></tr></table>");
+    Assert::sEquals($s, "<table border=\"1\"><a name=\"AcTion0\"></a><a name=\"AcTion1\"></a><a name=\"AcTion2\"></a><tr><th bgcolor=\"orange\">Web</th><td>Test</td><td>Test</td><td>Test</td></tr><tr><th bgcolor=\"orange\">Topic</th><td>Topic</td><td>Topic</td><td>Topic</td></tr><tr><th bgcolor=\"orange\">Edit</th><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0')\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1')\">edit</a></td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2')\">edit</a></td></tr></table>");
   }
 
   sub testAVTable {
     my $fmt = new ActionTrackerPlugin::Format("|Web|Topic|Edit|",
 					      "|\$web|\$topic|\$edit|",
-					      "", "",
-					      "vertical");
+					      "cols",
+					      "", "",);
     my $s;
     $s = $actions->formatAsHTML( $fmt, "href", 0 );
     $s =~ s/\n//go;
@@ -70,7 +70,7 @@ use TWiki::Func;
   sub testSearchOpen {
     my $attrs = new ActionTrackerPlugin::Attrs("state=open");
     my $chosen = $actions->search($attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
     Assert::assert($text =~ /Blah_B_open/);
     Assert::assert($text =~ /A_open/);
@@ -80,7 +80,7 @@ use TWiki::Func;
   sub testSearchClosed {
     my $attrs = new ActionTrackerPlugin::Attrs("closed");
     my $chosen = $actions->search($attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
     Assert::assert($text !~ /open/o);
   }
@@ -88,7 +88,7 @@ use TWiki::Func;
   sub testSearchWho {
     my $attrs = new ActionTrackerPlugin::Attrs("who=A");
     my $chosen = $actions->search($attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
     Assert::assert($text !~ /B_open_ontime/o);
   }
@@ -96,7 +96,7 @@ use TWiki::Func;
   sub testSearchLate {
     my $attrs = new ActionTrackerPlugin::Attrs("late");
     my $chosen = $actions->search($attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
     Assert::assert($text !~ /ontime/o);
   }
@@ -104,7 +104,7 @@ use TWiki::Func;
   sub testSearchAll {
     my $attrs = new ActionTrackerPlugin::Attrs("");
     my $chosen = $actions->search($attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
     Assert::assert($text =~ /Main_A_open_late/o);
     Assert::assert($text =~ /Main_A_closed_ontime/o);
@@ -114,7 +114,7 @@ use TWiki::Func;
   # add more actions to the fixture
   sub addMoreActions {
     my $moreactions = new ActionTrackerPlugin::ActionSet();
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $action = new ActionTrackerPlugin::Action( "Test", "Topic", 0,
 			      "who=C,due=\"1 Jan 02\",open",
 			      "C_open_late");
@@ -127,7 +127,7 @@ use TWiki::Func;
     addMoreActions();
     my $attrs = new ActionTrackerPlugin::Attrs("late");
     my $chosen = $actions->search($attrs);
-    my $fmt = new ActionTrackerPlugin::Format("", "", "\$text");
+    my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
     my $text = $chosen->formatAsString($fmt);
     Assert::assert($text =~ /A_open_late/);
     Assert::assert($text =~ /C_open_late/o);

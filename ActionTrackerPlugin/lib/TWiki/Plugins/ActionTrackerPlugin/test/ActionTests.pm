@@ -175,10 +175,10 @@ require CGI;
 
   sub testStringFormattingOpen {
     my $action = new ActionTrackerPlugin::Action( "Test", "Topic", 0, "who=\"JohnDoe\" due=\"2 Jun 02\" state=open notify=\"SamPeckinpah,QuentinTarantino\" created=\"1 Jan 1999\" creator=\"ThomasMoore\"", "A new action");
-    my $fmt = new ActionTrackerPlugin::Format("|Who|Due|","|\$who|","Who: \$who \$who","\$who,\$due","vertical");
+    my $fmt = new ActionTrackerPlugin::Format("|Who|Due|","|\$who|","","Who: \$who \$who","\$who,\$due");
     my $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "Who: Main.JohnDoe Main.JohnDoe\n",$fmt->toString());
-    $fmt = new ActionTrackerPlugin::Format("","","Due: \$due");
+    $fmt = new ActionTrackerPlugin::Format("","","","Due: \$due");
     # make it late
     ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
     $s = $fmt->formatStringTable([$action]);
@@ -189,31 +189,31 @@ require CGI;
     Assert::sEquals($s, "Due: Sun, 2 Jun 2002\n");
     # make it late again
     ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
-    $fmt = new ActionTrackerPlugin::Format("","", "State: \$state\n");
+    $fmt = new ActionTrackerPlugin::Format("","","", "State: \$state\n");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "State: open\n\n");
-    $fmt = new ActionTrackerPlugin::Format("", "","Notify: \$notify\n");
+    $fmt = new ActionTrackerPlugin::Format("","", "","Notify: \$notify\n");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "Notify: Main.SamPeckinpah,Main.QuentinTarantino\n\n");
-    $fmt = new ActionTrackerPlugin::Format("", "", "\$creator");
+    $fmt = new ActionTrackerPlugin::Format("","", "", "\$creator");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "Main.ThomasMoore\n");
-    $fmt = new ActionTrackerPlugin::Format("", "","|\$created|");
+    $fmt = new ActionTrackerPlugin::Format("","", "","|\$created|");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "|Fri, 1 Jan 1999|\n");
-    $fmt = new ActionTrackerPlugin::Format("", "","|\$edit|");
+    $fmt = new ActionTrackerPlugin::Format("","", "","|\$edit|");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "||\n");
-    $fmt = new ActionTrackerPlugin::Format("", "","\$web.\$topic");
+    $fmt = new ActionTrackerPlugin::Format("","", "","\$web.\$topic");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "Test.Topic\n");
-    $fmt = new ActionTrackerPlugin::Format("", "", "Text \"\$text\"");
+    $fmt = new ActionTrackerPlugin::Format("","", "", "Text \"\$text\"");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "Text \"A new action\"\n");
-    $fmt = new ActionTrackerPlugin::Format("", "","|\$n\$n()\$nop()\$quot\$percnt\$dollar|");
+    $fmt = new ActionTrackerPlugin::Format("","", "","|\$n\$n()\$nop()\$quot\$percnt\$dollar|");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "|\n\n\"%\$|\n");
-    $fmt = new ActionTrackerPlugin::Format("","","Who: \$who Creator: \$creator");
+    $fmt = new ActionTrackerPlugin::Format("","","","Who: \$who Creator: \$creator");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s,
 		    "Who: Main.JohnDoe Creator: Main.ThomasMoore\n");
@@ -221,7 +221,7 @@ require CGI;
 
   sub testStringFormattingClosed {
     my $action = ActionTrackerPlugin::Action->new( "Test", "Topic", 0, "who=JohnDoe due=\"2 Jun 02\" closed=\"1-Jan-03\"closer=\"LucBesson\"", "A new action");
-    my $fmt = new ActionTrackerPlugin::Format("", "", "|\$closed|\$closer|");
+    my $fmt = new ActionTrackerPlugin::Format("","", "", "|\$closed|\$closer|");
     my $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s,
 		    "|Wed, 1 Jan 2003|Main.LucBesson|\n");
@@ -229,7 +229,7 @@ require CGI;
 
   sub testVerticalOrient {
     my $action = ActionTrackerPlugin::Action->new( "Test", "Topic", 0, "who=JohnDoe due=\"2 Jun 02\" state=open notify=\"SamPeckinpah,QuentinTarantino\" created=\"1 Jan 1999\" creator=\"ThomasMoore\"", "A new action");
-    my $fmt = new ActionTrackerPlugin::Format("|Who|Due|", "|\$who|\$due|", "", "", "rows");
+    my $fmt = new ActionTrackerPlugin::Format("|Who|Due|", "|\$who|\$due|", "rows");
     my $s = $fmt->formatHTMLTable([$action], "name", 0);
 
     $s =~ s/<table border=\"1\">//ios;
@@ -240,11 +240,11 @@ require CGI;
   sub testHTMLFormattingOpen {
     my $action = ActionTrackerPlugin::Action->new( "Test", "Topic", 0, "who=JohnDoe due=\"2 Jun 02\" state=open notify=\"SamPeckinpah,QuentinTarantino\" created=\"1 Jan 1999\" creator=\"ThomasMoore\"", "A new action");
 
-    my $fmt = new ActionTrackerPlugin::Format("", "|\$who|", "");
+    my $fmt = new ActionTrackerPlugin::Format("", "|\$who|");
     my $s = $fmt->formatHTMLTable([$action], "name", 0);
     Assert::sContains($s,
 		    "<a name=\"AcTion0\"></a><td>Main.JohnDoe</td>");
-    $fmt = new ActionTrackerPlugin::Format("", "| \$due |", "");
+    $fmt = new ActionTrackerPlugin::Format("", "| \$due |");
     # make it late
     ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
     $s = $fmt->formatHTMLTable([$action], "href", 0);
@@ -326,20 +326,20 @@ require CGI;
     ActionTrackerPlugin::Action::forceTime("31 May 2002");
     my $tim = Time::ParseDate::parsedate("31 May 2002");
     $action->populateMissingFields();
-    my $fmt = new ActionTrackerPlugin::Format("","","|\$uid|\$who|");
+    my $fmt = new ActionTrackerPlugin::Format("","","","|\$uid|\$who|");
     my $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "|000001|Main.TestRunner|\n");
-    $fmt = new ActionTrackerPlugin::Format("","","|\$creator|\$created|");
+    $fmt = new ActionTrackerPlugin::Format("","","","|\$creator|\$created|");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "|Main.TestRunner|Fri, 31 May 2002|\n");
-    $fmt = new ActionTrackerPlugin::Format("","","|\$closer|\$closed|");
+    $fmt = new ActionTrackerPlugin::Format("","","","|\$closer|\$closed|");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "|Main.TestRunner|Fri, 31 May 2002|\n");
     $action =
       new ActionTrackerPlugin::Action( "Test", "Topic", 8,
 				       "who=me", "action");
     $action->populateMissingFields();
-    $fmt = new ActionTrackerPlugin::Format("","","|\$who|\$due|");
+    $fmt = new ActionTrackerPlugin::Format("","","","|\$who|\$due|");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "|Main.TestRunner|Fri, 31 May 2002|\n");
   }
@@ -421,7 +421,7 @@ EOF";
     my $naction = ActionTrackerPlugin::Action->new( "Test", "Topic", 0, "who=JaneDoe due=\"2 Jun 09\" state=closed notify=\"SamPeckinpah,QuentinTarantino\" creator=\"ThomasMoore\"", "A new action<p>with more text");
 
     my $s = "|\$who|\$due|\$state|\$creator|\$created|\$text|";
-    my $fmt = new ActionTrackerPlugin::Format($s,$s,$s,"\$who,\$due,\$state,\$created,\$creator,\$text");
+    my $fmt = new ActionTrackerPlugin::Format($s,$s,"cols",$s,"\$who,\$due,\$state,\$created,\$creator,\$text");
     my %not = ();
     $naction->findChanges($oaction, $fmt, \%not);
     $text = $not{"Main.SamPeckinpah"}{text};
@@ -462,25 +462,25 @@ EOF";
     $s =~ s/ sentence=\"5 years\"//o;
     Assert::sEquals($s, "%ACTION{ }%");
 
-    my $fmt = new ActionTrackerPlugin::Format("", "|\$plaintiffs|","\$plaintiffs");
+    my $fmt = new ActionTrackerPlugin::Format("", "|\$plaintiffs|","","\$plaintiffs");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "fred.bloggs\@limp.net,Main.JoeShmoe\n");
     $s = $fmt->formatHTMLTable([$action], "href", 0);
     Assert::sContains($s, "<td>fred.bloggs\@limp.net,Main.JoeShmoe</td>");
     
-    $fmt = new ActionTrackerPlugin::Format("", "|\$decision|","\$decision");
+    $fmt = new ActionTrackerPlugin::Format("", "|\$decision|","","\$decision");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "cut off their heads\n");
     $s = $fmt->formatHTMLTable([$action], "href", 0);
     Assert::sContains($s, "<td>cut off their heads</td>");
     
-    $fmt = new ActionTrackerPlugin::Format("", "|\$sentence|","\$sentence");
+    $fmt = new ActionTrackerPlugin::Format("", "|\$sentence|","","\$sentence");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "5 years\n");
     $s = $fmt->formatHTMLTable([$action], "href", 0);
     Assert::sContains($s, "<td>5 years</td>");
     
-    $fmt = new ActionTrackerPlugin::Format("", "","\$sentencing");
+    $fmt = new ActionTrackerPlugin::Format("", "","","\$sentencing");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "Thu, 2 Mar 2006\n");
     
@@ -547,7 +547,7 @@ EOF";
     my $action =
       new ActionTrackerPlugin::Action("Web", "Topic", 9,
 				      "state=\"open\" creator=\"Main.Creator\" notify=\"Main.Notifyee\" closer=\"Main.Closer\" due=\"4-May-2003\" closed=\"2-May-2003\" who=\"Main.Who\" created=\"3-May-2003\" uid=\"UID\"", "Text");
-    my $fmt = new ActionTrackerPlugin::Format( "|Who|", "|\$who|", "","");
+    my $fmt = new ActionTrackerPlugin::Format( "|Who|", "|\$who|", "cols","","");
     my $s = $action->formatForEdit($fmt);
     # only the who field should be a text; the rest should be hiddens
     $s =~ s/<INPUT TYPE=\"hidden\" NAME=\"state\" VALUE=\"open\">//io;

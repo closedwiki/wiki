@@ -24,6 +24,7 @@ use TWiki::TestMaker;
 
     TWiki::TestMaker::writeTopic("Test", "WebPreferences", "
    * Set ACTIONTRACKERPLUGIN_HEADERCOL = green
+   * Set ACTIONTRACKERPLUGIN_EXTRAS = |plaintiffs,names,16|decision,text,16|sentencing,date|sentence,select,\"life\",\"5 years\",\"community service\"|
 ");
 
     TWiki::TestMaker::writeTopic("Main", "Topic2", "
@@ -87,9 +88,9 @@ use TWiki::TestMaker;
   }
 
   sub testActionSearchFormat {
-    my $chosen = TWiki::Plugins::ActionTrackerPlugin::_handleActionSearch("Main", "web=\".*\" who=Sam header=\"|Who|Due|\" format=\"|\$who|\$due|\"");
+    my $chosen = TWiki::Plugins::ActionTrackerPlugin::_handleActionSearch("Main", "web=\".*\" who=Sam header=\"|Who|Due|\" format=\"|\$who|\$due|\" orient=rows");
     $chosen =~ s/\n//og;
-    Assert::sEquals($chosen, "<table border=\"1\"><tr bgcolor=\"green\"><th>Who</th><th>Due</th></tr><tr valign=\"top\"><td>Main.Sam</td><td bgcolor=\"yellow\">Thu, 3 Jan 2002</td></tr></table>");
+    Assert::sEquals($chosen, "<table border=\"1\"><tr><th bgcolor=\"green\">Who</th><td>Main.Sam</td></tr><tr><th bgcolor=\"green\">Due</th><td bgcolor=\"yellow\">Thu, 3 Jan 2002</td></tr></table>");
   }
 
   sub test2CommonTagsHandler {

@@ -52,7 +52,7 @@ use integer;
   # $orient is the orientation of generated tables; "rows" gives
   # data in rows, anything else gives data in columns.
   sub new {
-    my ( $class, $header, $fields, $textform, $changeFields, $orient ) = @_;
+    my ( $class, $header, $fields, $orient, $textform, $changeFields ) = @_;
 
     my $this = {};
 

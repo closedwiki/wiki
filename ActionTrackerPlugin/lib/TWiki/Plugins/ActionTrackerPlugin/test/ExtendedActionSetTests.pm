@@ -40,7 +40,7 @@ use TWiki::Func;
 
   sub testSort {
     $actions->sort("\$ap,\$due");
-    my $fmt = new ActionTrackerPlugin::Format("|AP|","|\$ap|","\$ap");
+    my $fmt = new ActionTrackerPlugin::Format("|AP|","|\$ap|","","\$ap");
     my $s = $actions->formatAsString($fmt);
     Assert::sEquals($s,"1\n2\n\n");
   }

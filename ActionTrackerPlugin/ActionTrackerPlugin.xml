@@ -87,7 +87,7 @@
             name="test" depends="tests.zip">
         <exec dir="${plugin.lib}/test"
 		failonerror="yes" executable="perl">
-            <arg line="-w ActionTrackerPluginTests.pl"/>
+            <arg line="-w AllTests.pl"/>
         </exec>
     </target>
 

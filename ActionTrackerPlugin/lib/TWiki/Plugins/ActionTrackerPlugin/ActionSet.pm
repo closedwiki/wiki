@@ -101,7 +101,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
 	  if ( defined( $x ) && defined( $y )) {
 	    my $c = ( $x cmp $y );
 	    return $c if ( $c != 0 );
-	    # COVERAGE OFF
+	    # COVERAGE OFF should never be needed
 	  } elsif ( defined( $x ) ) {
 	    return -1;
 	  } elsif ( defined( $y ) ) {
@@ -289,7 +289,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Config;
     my $webs = $attrs->get( "web" ) || $theweb;
     my $actions = new ActionTrackerPlugin::ActionSet();
     my $dataDir = TWiki::Func::getDataDir();
-    # COVERAGE OFF
+    # COVERAGE OFF safety net
     if ( !opendir( DIR, "$dataDir" )) {
       TWiki::Func::writeWarning("could not open $dataDir in " .
 				__FILE__ . ": " .__LINE__);

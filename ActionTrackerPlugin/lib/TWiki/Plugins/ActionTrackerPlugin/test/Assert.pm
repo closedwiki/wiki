@@ -19,7 +19,7 @@ use integer;
       my $i = 0;
       while (($p, $f, $l) = caller($i++)) {
 	last if ($f =~ /^\(eval/);
-	$mess .= "\n$f: $l";
+	$mess .= "\n$f: $l: " unless ($f =~ /Assert\.pm/o);
       }
       #print STDERR "FAILURE Assert failed: $mess\n";
       die "${banner}Assert failed: $mess\ndied";

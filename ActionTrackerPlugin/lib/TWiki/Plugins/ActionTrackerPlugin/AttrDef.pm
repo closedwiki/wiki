@@ -32,8 +32,7 @@ use integer;
     return bless( $this, $class );
   }
 
-  # COVERAGE OFF
-  # Debug only
+  # COVERAGE OFF Debug only
   sub toString {
     my $this = shift;
     my $text = "type=" . $this->{type} . " size=" . $this->{size};
