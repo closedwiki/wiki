@@ -1238,7 +1238,7 @@ sub _fixN {
 }
 
 # Convert relative URLs to absolute URIs
-sub __fixURL {
+sub _fixURL {
     my( $theHost, $theAbsPath, $theUrl ) = @_;
 
     my $url = $theUrl;
