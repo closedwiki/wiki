@@ -1,0 +1,27 @@
+%META:TOPICINFO{author="JohnTalintyre" date="999103602" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="TWikiTemplates"}%
+---## Meta Data Rendering
+
+Various meta data can be stored in topics - MetaDataDefinition
+
+This is rendered using the %<nop>META% variable.  This is mostly used in the =view=, =preview= and =edit= scripts.
+
+At present support is fairly basic:
+  | *Variable usage:*	| *Comment:*  |
+  | %<nop>META{"form"}% | Show form data, see [[TWikiDocumentation#Form_Templates][Form Templates]] |
+  | %<nop>META{"attachments"}% | Show attachments, excluding hidden ones |
+  | options for attachments: |
+  | all="on" | Show all attachments i.e.  including hidden ones |
+  | %<nop>META{"moved"}% | Details of any topic moves |
+  | %<nop>META{"parent [options]"}% | Show topic parent |
+  | options for parent: |
+  | dontrecurse="on" | By default recurses up tree, this has some cost |
+  | prefix="..." | Prefix that goes before parents, but only if there are parents, default "" |
+  | suffix="..." | Suffix, only appears if there are parents, default "" |
+  | seperator="..." | Seperator between parents, default is " > " |
+
+Possible future additions:
+	* Rendering of form data to alternate formats e.g. bullet lists
+	* Specify a template to be used for rendering
+
+-- JohnTalintyre - 29 Aug 2001 <br />
