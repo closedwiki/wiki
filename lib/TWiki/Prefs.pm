@@ -248,6 +248,8 @@ sub getPreferencesValue
             @finalPrefsKeys = ();
             my @saveKeys    = @prefsKeys; # quick hack, this stinks
             my @saveValues  = @prefsValues; # ditto
+            @prefsKeys      = ();
+            @prefsValues    = ();
             getPrefsFromTopic( $TWiki::twikiWebname, $TWiki::wikiPrefsTopicname );
             getPrefsFromTopic( $altWebName, $TWiki::webPrefsTopicname );
             @altPrefsKeys   = @prefsKeys; # quick hack, this stinks
