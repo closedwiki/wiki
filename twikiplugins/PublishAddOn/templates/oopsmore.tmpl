@@ -1,0 +1,66 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%(more)%TMPL:END%
+%TMPL:DEF{"webaction"}% *Topic actions* %TMPL:END%
+%TMPL:DEF{"heading"}%More Actions on Topic %TOPIC%%TMPL:END%
+%TMPL:DEF{"message"}%
+
+   * *Rename, move or delete <nop>%TOPIC%:*
+      * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?currentwebonly=on">Rename/move topic</a>,
+        looking for references in __%WEB% web__ only.
+      * *<a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move topic</a>*,
+        looking for references in __all public webs__. *(recommended)*
+
+   * *Ref-By:*
+      * <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Find topics</a>
+        in __%WEB% web__ that link to <nop>%TOPIC%.
+      * <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;web=all;&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Find topics</a>
+        in __all public webs__ that link to <nop>%TOPIC%.
+      * Child topics in __%WEB% Web__: %METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" title=""}%
+
+<form name="main" action="%EDITURL%">
+   * *Parent of <nop>%TOPIC%:*
+      * Set topic parent to
+        <select name="topicparent"><option value="">Select...</option>
+        %TOPICLIST{"<option value=$qname>$name</option>" separator=" "}%
+        </select>,
+        then <input type="submit" value="Edit" /> and save the topic
+        to activate the new parent.
+</form>
+
+<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+   * *View previous topic revision:*
+      * Revision: <input type="text" name="rev" size="6" value="%PARAM2%" />
+        in <input type="checkbox" name="raw"> raw text format
+        <input type="submit" value="View revision" />
+      * Revisions: 1.1 ... %PARAM1%
+</form>
+
+<form name="main" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+   * *Compare revisions:*
+      * Older revision:&nbsp;&nbsp; <input type="text" name="rev2" size="6" value="1.1" />
+      * Newer revision: <input type="text" name="rev1" size="6" value="%PARAM1%" />
+        <input type="submit" value="View difference" />
+</form>
+
+<form name="main" action="%SCRIPTURLPATH%/publish%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+   * *Publish : extract some topics from TWiki and get them in a ZIP file*
+      * <input type="text" name="inclusions" value="%TOPIC%"> : topics NAMES to include (regex against TOPIC names,  __.*__ for all topics),
+      * <input type="text" name="topicsearch" value=""> : topics to include from their content (regex against TOPIC content),
+      * <input type="text" name="exclusions" value=""> : topics to exclude,
+      *  <SELECT NAME="skin">
+           <OPTION value="plain" selected> no skin </OPTION>
+           <OPTION value="" > my prefered TWiki skin </OPTION>
+           <OPTION value="export"> export skin</OPTION>
+         </SELECT> will be used for publishing.
+      *  <SELECT NAME="slideshow">
+           <OPTION value="on" selected> Presentation mode</OPTION>
+           <OPTION value="" >Standard mode</OPTION>
+         </SELECT> will be used in topics using Slide Show.
+      <input type="hidden" name="goAhead" value="yes" />
+      <br><br>
+      <input type="submit" value="Publish" />
+</form> %TMPL:END%
+
+
+%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+%TMPL:P{"oops"}%
