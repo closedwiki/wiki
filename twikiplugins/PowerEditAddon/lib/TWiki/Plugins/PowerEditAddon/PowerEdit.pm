@@ -50,8 +50,15 @@ sub serverCommand {
     &TWiki::initialize( $thePathInfo, $theRemoteUser,
 			$theTopic, $theUrl, $query );
   
-  if ( $action eq "get" ) {
-    _getTopicText( $webName, $topic, $userName, $query );
+  if ( $action eq "controls" ) {
+    _getControls( $userName, $query );
+  } elsif ( $action eq "get" ) {
+    if ( ! _checkLock( $webName, $topic, $userName )) {
+      print $query->header( -type=>'text/plain' );
+      print "ERROR $userName is not locking $topic";
+      return;
+    }
+    _getTopicText( $webName, $topic, $query );
   } elsif ( $action eq "put" ) {
     _cacheText( $webName, $topic, $query );
   } elsif ( $action eq "commit" ) {
@@ -59,13 +66,20 @@ sub serverCommand {
   } elsif ( $action eq "preview" ) {
     _executeBinScript( "preview", $webName, $topic, $query );
   } else {
-    # error message
-    TWiki::Func::writeDebug( "Unknown server command $action" );
-    # Can't do much more because context is unknown.
-    my $url = &TWiki::Func::getOopsUrl( $webName, $topic, "oopslocked",
-					"ERROR action $action" );
-    TWiki::Func::redirectCgiQuery( $query, $url );
+    print $query->header( -type=>'text/plain' );
+    print "ERROR unknown server command $action";
   }
+}
+
+# Get the text of the controls topic
+sub _getControls {
+  my ( $userName, $query ) = @_;
+  my $controls = TWiki::Func::getPreferencesValue( "POWEREDIT_CONTROLS" );
+  if ( ! $controls ) {
+    $controls = "TWiki.PowerEditControls";
+  }
+  $controls =~ /(.*)\.(.*)/;
+  _getTopicText( $1, $2, $query );
 }
 
 # url: <twiki>/bin/poweredit/<web>/<topic>?action=get
@@ -77,34 +91,36 @@ sub serverCommand {
 # they will receive back the file contents unadulterated without
 # further security checks.
 sub _getTopicText {
-  my ( $webName, $topic, $userName, $query ) = @_;
+  my ( $webName, $topic, $query ) = @_;
   
-  # Make sure there's a lock on the topic, and it's locked by the
-  # caller. I'd rather do this using topicIsLockedBy but this doesn't
-  # differentiate between the topic not being locked (bad) and the topic
-  # being locked by this user (good)
+  if ( TWiki::Func::topicExists( $webName, $topic ) ) {
+    my ( $meta, $text ) = &TWiki::Func::readTopic( $webName, $topic );
+    # Meta gets ignored. It gets re-attached when we save.
+    $text =~ s/\t/   /go;
+    print $query->header( -type=>'text/plain', -expires=>'+1s' );
+    print "OK", $text;
+  } else {
+    print $query->header( -type=>'text/plain' );
+    print "ERROR no such topic $webName.$topic";
+  }
+}
+
+# Make sure there's a lock on the topic, and it's locked by the
+# caller. I'd rather do this using topicIsLockedBy but this doesn't
+# differentiate between the topic not being locked (bad) and the topic
+# being locked by this user (good)
+sub _checkLock {
+  my ( $webName, $topic, $userName ) = @_;
   my $lockOK = 0;
   my $lockFile = TWiki::Func::getDataDir()."/$webName/$topic.lock";
   if ( -f $lockFile ) {
     my $tmp = TWiki::Func::readFile( $lockFile );
     my( $lockUser, $lockTime ) = split( /\n/, $tmp );
     if ( $lockUser eq $userName ) {
-      $lockOK = 1;
+      return 1;
     }
   }
-  
-  print $query->header( -type=>'text/plain', -expires=>'+1s' );
-  
-  if ( !$lockOK ) {
-    print "ERROR $userName is not locking $topic";
-  } elsif ( TWiki::Func::topicExists( $webName, $topic ) ) {
-    my ( $meta, $text ) = &TWiki::Func::readTopic( $webName, $topic );
-    # Meta gets ignored. It gets re-attached when we save.
-    $text =~ s/\t/   /go;
-    print "OK", $text;
-  } else {
-    print "ERROR no such topic $topic";
-  }
+  return 0;
 }
 
 # url: <twiki>/bin/poweredit/<web>/<topic>?action=put&text=...
@@ -148,14 +164,14 @@ sub _executeBinScript {
   my $text = _readRemoveCache( $webName, $topic );
   $newQuery->param( -name=>'text', -value=>$text );
 
+  # Read the script from bin and massage it to create a subblock
   my $theScript = TWiki::Func::readFile( $script . $TWiki::scriptSuffix );
-  $theScript =~ s/new CGI/\$newQuery/o;
+  $theScript =~ s/new\s+CGI/\$newQuery/o;
+  $theScript =~ s/&main\s*(\s*)//o;
+  $theScript =~ s/sub\s+main//o;
   $theScript =~ /(.*)/s;
   $theScript = $1;
   {
-    package IncludedScript;
-    # declarations required because not declared 'my' in save script
-    # Note that this causes warnings that I can't get rid of
     my ($topic, $webName, $dummy, $userName);
     eval "$theScript";
   }
