@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="MikeMannix" date="1021230286" format="1.0" version="1.67"}%
+%META:TOPICINFO{author="PeterThoeny" date="1025254333" format="1.0" version="1.68"}%
 <table><tr><td valign="top">
 Welcome to TWiki, a flexible, powerful, and simple, secure, Web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base, or any other groupware tool, on an intranet or on the Web. <p>This is the place to learn about it, download it, and try it out for yourself...
 </td><td width="25">&nbsp;</td><td width="200" align="center" valign="top">
-<a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a> <br>
+<a href="http://TWiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/twikiRobot131x64.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a> <br>
 The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
 </td></tr>
 </table>
@@ -88,4 +88,4 @@ TWikiSiteTools include utilities for navigation and for monitoring %TWIKIWEB% we
 	* TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
 	* This site is running TWiki version *%WIKIVERSION%*
 	* Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]] <br />
-	  %PUBURL%/twikilogo88x31.gif
+	  %PUBURL%/%TWIKIWEB%/TWikiLogos/twikiRobot88x31.gif
