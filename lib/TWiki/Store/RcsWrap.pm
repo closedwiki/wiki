@@ -121,7 +121,7 @@ sub replaceRevision {
         $this->_deleteRevision( $rev );
     }
     $this->_saveFile( $this->{file}, $text );
-	$date = TWiki::Time::formatTime( $date , '\$rcs', 'gmtime');
+	$date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
 
     my $error = $this->_lock();
     return $error if $error;
@@ -400,7 +400,7 @@ sub getRevisionAtTime {
     if ( !-e $this->{rcsFile} ) {
         return undef;
     }
-	$date = TWiki::Time::formatTime( $date , '\$rcs', 'gmtime');
+	$date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
     my ($rcsOutput, $exit) = $this->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{rlogDateCmd}, DATE => $date, FILENAME => $this->{file} );
 

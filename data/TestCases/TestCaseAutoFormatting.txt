@@ -38,7 +38,7 @@ Description: Simple formatting, as described in TWiki.TextFormattingRules
 <!-- /actual -->
 </td></tr>
 <tr><td> Bold Text with URL</td><td>
-<!-- expected BOLD -->
+<!-- expected BOLD LINK -->
 <strong>reminded about <a target="_top" href="http://www.koders.com">http://www.koders.com</a></strong>
 <!-- /expected -->
 </td><td>

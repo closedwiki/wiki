@@ -34,8 +34,8 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set NOAUTOLINK = 
 		* __Note:__ Use the =[<nop>[...][...]]= syntax to link topics in case you disabled <nop>WikiWord linking. The =&lt;noautolink&gt; ... &lt;/noautolink&gt;= syntax can be used to prevents links within a block of text.
 
-	* Warn if =%<nop>INCLUDE{}%= of topic fails: Fail silently (if empty or =off=); output "Warning: Can't INCLUDE <nop>Topic, topic not found" (if set to =on=); else, output specific text (use =$topic= for topic). You can override this setting by web preferences and by a =warn="..."= parameter in =%<nop>INCLUDE{}%= :
-		* Set INCLUDEWARNING = %RED% __Note:__ %ENDCOLOR% Included topic [[$topic]] does not exist yet
+	* Warn if =%<nop>INCLUDE{}%= of topic fails: Fail silently if empty or =off=. Output warning message (defined in templates/oopsalerts.tmpl) if set to =on=. Otherwise output specific text (use =$topic= for topic). You can override this in web preferences, or by using a =warn="..."= parameter with =%<nop>INCLUDE{}%= :
+		* Set INCLUDEWARNING = on
 
 
 ---++ Default User Settings

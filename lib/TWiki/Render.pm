@@ -919,8 +919,12 @@ sub getRenderedVersion {
     $text =~ s/{$TWiki::TranslationToken/</go;
     $text =~ s/}$TWiki::TranslationToken/>/go;
 
+    if( $text =~ /reminded/ ) {
+        print STDERR "DURING $text\n";
+    }
+
     # standard URI
-    $text =~ s/(^|[\-\*\s\(])($TWiki::regex{linkProtocolPattern}\:([^\s\<\>\"]+[^\s\.\,\!\?\;\:\)\<]))/$this->_externalLink($1,$2)/geo;
+    $text =~ s/(^|[-*\s(])($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<]))/$this->_externalLink($1,$2)/geo;
 
     # other entities
     $text =~ s/&(\w+);/$TWiki::TranslationToken$1;/g;      # "&abc;"
@@ -1457,7 +1461,7 @@ sub renderRevisionInfo {
     $value =~ s/\$topic/$topic/gi;
     $value =~ s/\$rev/r$rev/gi;
     $value =~ s/\$time/TWiki::Time::formatTime($date)/gei;
-    $value =~ s/\$date/TWiki::Time::formatTime($date, "\$day \$mon \$year")/gei;
+    $value =~ s/\$date/TWiki::Time::formatTime($date, '$day $mon $year')/gei;
     $value =~ s/\$comment/$comment/gi;
     $value =~ s/\$username/$un/gi;
     $value =~ s/\$wikiname/$wn/gi;

@@ -487,7 +487,8 @@ sub _convertUtf8URLtoSiteCharset {
                 require Encode;			# Perl 5.8 or higher only
                 $fullTopicName = Encode::decode('utf8', $fullTopicName);	# 'decode' into UTF-8
             } else {
-                $this->writeWarning( "UTF-8 not supported on Perl $] - use Perl 5.8 or higher." );
+                $this->writeWarning( 'UTF-8 not supported on Perl '.$].
+                                     ' - use Perl 5.8 or higher..' );
             }
             $this->writeWarning( 'UTF-8 not yet supported as site charset - TWiki is likely to have problems' );
         } else {
@@ -501,12 +502,14 @@ sub _convertUtf8URLtoSiteCharset {
                 # Map $siteCharset into real encoding name
                 $charEncoding = Encode::resolve_alias( $siteCharset );
                 if( not $charEncoding ) {
-                    $this->writeWarning( "Conversion to \$siteCharset '$siteCharset' not supported, or name not recognised - check 'perldoc Encode::Supported'" );
+                    $this->writeWarning
+                      ( 'Conversion to $siteCharset "'.$siteCharset.
+                        '" not supported, or name not recognised - check "perldoc Encode::Supported"' );
                 } else {
                     ##$this->writeDebug "Converting with Encode, valid 'to' encoding is '$charEncoding'";
                     # Convert text using Encode:
                     # - first, convert from UTF8 bytes into internal (UTF-8) characters
-                    $fullTopicName = Encode::decode("utf8", $fullTopicName);	
+                    $fullTopicName = Encode::decode('utf8', $fullTopicName);	
                     # - then convert into site charset from internal UTF-8,
                     # inserting \x{NNNN} for characters that can't be converted
                     $fullTopicName = Encode::encode( $charEncoding, $fullTopicName, &FB_PERLQQ() );
@@ -516,13 +519,17 @@ sub _convertUtf8URLtoSiteCharset {
                 require Unicode::MapUTF8;	# Pre-5.8 Perl versions
                 $charEncoding = $siteCharset;
                 if( not Unicode::MapUTF8::utf8_supported_charset($charEncoding) ) {
-                    $this->writeWarning( "Conversion to \$siteCharset '$siteCharset' not supported, or name not recognised - check 'perldoc Unicode::MapUTF8'" );
+                    $this->writeWarning
+                      ( 'Conversion to $siteCharset "'.$siteCharset.
+                        '" not supported, or name not recognised - check "perldoc Unicode::MapUTF8"' );
                 } else {
                     # Convert text
                     ##$this->writeDebug "Converting with Unicode::MapUTF8, valid encoding is '$charEncoding'";
-                    $fullTopicName = Unicode::MapUTF8::from_utf8({ 
-                                                                  -string => $fullTopicName, 
-                                                                  -charset => $charEncoding });
+                    $fullTopicName =
+                      Unicode::MapUTF8::from_utf8({
+                                                   -string => $fullTopicName,
+                                                   -charset => $charEncoding
+                                                  });
                     # FIXME: Check for failed conversion?
                 }
             }
@@ -605,7 +612,7 @@ sub writePageHeader {
     if ($pageType && $pageType eq 'edit') {
         # Get time now in HTTP header format
         my $lastModifiedString =
-          TWiki::Time::formatTime(time, '\$http', 'gmtime');
+          TWiki::Time::formatTime(time, '$http', 'gmtime');
 
         # Expiry time is set high to avoid any data loss.  Each instance of 
         # Edit page has a unique URL with time-string suffix (fix for 
@@ -1199,7 +1206,7 @@ sub _writeReport {
 
     if ( $log ) {
         my $time =
-          TWiki::Time::formatTime( time(), "\$year\$mo", "servertime");
+          TWiki::Time::formatTime( time(), '$year$mo', 'servertime');
         $log =~ s/%DATE%/$time/go;
         $time = TWiki::Time::formatTime( time(), undef, 'servertime' );
 
@@ -1207,7 +1214,7 @@ sub _writeReport {
             print FILE "| $time | $message\n";
             close( FILE );
         } else {
-            print STDERR "Couldn't write \"$message\" to $log: $!\n";
+            print STDERR 'Could not write "'.$message.'" to '."$log: $!\n";
         }
     }
 }
@@ -1304,9 +1311,11 @@ sub _includeUrl {
         my $web = $1;
         my $topic = $2;
         my $fileName = "$TWiki::cfg{PubDir}/$web/$topic/$3";
-        if( $fileName =~ m/\.(txt|html?)$/i ) {       # FIXME: Check for MIME type, not file suffix
+        # FIXME: Check for MIME type, not file suffix
+        if( $fileName =~ m/\.(txt|html?)$/i ) {
             unless( -e $fileName ) {
-                return inlineAlert( "Error: File attachment at $theUrl does not exist" );
+                return $this->inlineAlert( 'alerts', 'no_such_attachment',
+                                           $theUrl );
             }
             if( $web ne $theWeb || $topic ne $theTopic ) {
                 # CODE_SMELL: Does not account for not yet authenticated user
@@ -1314,12 +1323,15 @@ sub _includeUrl {
                                                                  $this->{user},
                                                                  '', $topic,
                                                                  $web ) ) {
-                    return inlineAlert( "Error: No permission to view files attached to $web.$topic" );
+                    return $this->inlineAlert( 'alerts', 'access_denied',
+                                               $web, $topic );
                 }
             }
             $text = $this->{store}->readFile( $fileName );
-            $text = _cleanupIncludedHTML( $text, $this->{urlHost}, $TWiki::cfg{PubUrlPath} );
-            $text = applyPatternToIncludedText( $text, $thePattern ) if( $thePattern );
+            $text = _cleanupIncludedHTML( $text, $this->{urlHost},
+                                          $TWiki::cfg{PubUrlPath} );
+            $text = applyPatternToIncludedText( $text, $thePattern )
+              if( $thePattern );
             return $text;
         }
         # fall through; try to include file over http based on MIME setting
@@ -1334,7 +1346,7 @@ sub _includeUrl {
     } elsif( $theUrl =~ /http\:\/\/([^\/]+)(\/.*)/ ) {
         ( $host, $path ) = ( $1, $2 );
     } else {
-        $text = inlineAlert( "Error: Unsupported protocol. (Must be 'http://domain/...')" );
+        $text = $this->inlineAlert( 'alerts', 'bad_protocol', $theUrl );
         return $text;
     }
 
@@ -1349,7 +1361,7 @@ sub _includeUrl {
     }
     if( $contentType =~ /^text\/html/ ) {
         $path =~ s/(.*)\/.*/$1/; # build path for relative address
-        $host = "http://$host";   # build host for absolute address
+        $host = 'http://'.$host;   # build host for absolute address
         if( $port != 80 ) {
             $host .= ":$port";
         }
@@ -1359,8 +1371,7 @@ sub _includeUrl {
         # do nothing
 
     } else {
-        $text = inlineAlert( "Error: Unsupported content type: $contentType."
-              . " (Must be text/html, text/plain or text/css)" );
+        $text = $this->inlineAlert( 'alerts', 'bad_content', $contentType );
     }
 
     $text = applyPatternToIncludedText( $text, $thePattern ) if( $thePattern );
@@ -1410,8 +1421,8 @@ sub _TOC {
     if( $web ne $defaultWeb || $topic ne $defaultTopic ) {
         unless( $this->{security}->checkAccessPermission
                 ( 'view', $this->{user}, '', $topic, $web ) ) {
-            return inlineAlert( 'Error: No permission to view '.
-                                 $web.'.'.$topic );
+            return $this->inlineAlert( 'alerts', 'access_denied',
+                                       $web, $topic );
         }
         my $meta;
         ( $meta, $text ) =
@@ -1495,11 +1506,40 @@ sub _TOC {
     }
 }
 
-# Format an error for inline inclusion in HTML
+=pod
+
+---++ ObjectMethod inlineAlert($template, $def, ... ) -> $string
+Format an error for inline inclusion in rendered output. The message string
+is obtained from the template 'oops'.$template, and the DEF $def is
+selected. The parameters (...) are used to populate %PARAM1%..%PARAMn%
+
+=cut
+
 sub inlineAlert {
-    my( $errormessage ) = @_;
-    return CGI::font( { -size => -1, -class => 'twikiAlert', -color => 'red' },
-                      $errormessage ).'&nbsp;';
+    my $this = shift;
+    my $template = shift;
+    my $def = shift;
+
+    my $text = $this->{templates}->readTemplate( 'oops'.$template,
+                                                 $this->getSkin() );
+    if( $text ) {
+        $text =~ s/%INSTANTIATE%/%TMPL:P{"$def"}%/;
+        # web and topic can be anything; they are not used
+        $text = $this->handleCommonTags( $text, '', '' );
+        my $n = 1;
+        while( defined( my $param = shift )) {
+            $text =~ s/%PARAM$n%/$param/g;
+            $n++;
+        }
+
+    } else {
+        $text = CGI::h1('TWiki Installation Error')
+          . 'Template file '.$template.'.tmpl not found or template directory '
+            . $TWiki::cfg{TemplateDir}.' not found.'.CGI::p()
+              . 'Check the configuration setting for TemplateDir.';
+    }
+
+    return $text;
 }
 
 =pod
@@ -1735,7 +1775,8 @@ Space out a wiki word by inserting spaces before each word component
 
 sub spaceOutWikiWord {
     my $word = shift;
-    $word =~ s/([$regex{lowerAlpha}]+)([$regex{upperAlpha}$regex{numeric}]+)/$1 $2/go;
+    $word =~ s/([$regex{lowerAlpha}])([$regex{upperAlpha}$regex{numeric}]+)/$1 $2/go;
+    $word =~ s/([$regex{numeric}])([$regex{upperAlpha}])/$1 $2/go;
     return $word;
 }
 
@@ -1814,7 +1855,6 @@ sub _processTags {
         my $mess = "Max recursive depth reached: $expanding";
         $this->writeWarning( $mess );
         return $text;
-        #return inlineAlert( $mess );
     }
 
     my @queue = split( /(%)/, $text );
@@ -2101,17 +2141,18 @@ sub _INCLUDE {
     my $incweb = $theWeb;
     my $inctopic = $path;
     $inctopic =~ s/\.txt$//; # strip .txt extension
-    if ( $inctopic =~ /^($regex{webNameRegex})[\.\/]($regex{wikiWordRegex})$/ ) {
+    if ( $inctopic =~ /^($regex{webNameRegex})[\.\/]($regex{wikiWordRegex})$/o ) {
         $incweb = $1;
         $inctopic = $2;
     }
 
+    # See Codev.FailedIncludeWarning for the history.
     unless( $this->{store}->topicExists($incweb, $inctopic)) {
-        # give up, file not found
-        $warn = $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' ) unless( $warn );
-        if( $warn && $warn =~ /^on$/i ) {
-            return inlineAlert( "Warning: Can't INCLUDE <nop>$inctopic, topic not found" );
-        } elsif( $warn && $warn !~ /^(off|no)$/i ) {
+        $warn ||= $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' ) ||
+          '';
+        if( lc( $warn ) eq 'on' ) {
+            return $this->inlineAlert( 'alerts', 'no_such_topic', $inctopic );
+        } elsif( $warn !~ /^(off|no)$/i ) {
             $inctopic =~ s/\//\./go;
             $warn =~ s/\$topic/$inctopic/go;
             return $warn;
@@ -2124,14 +2165,15 @@ sub _INCLUDE {
     # itself is not blocked; however subsequent attempts to include the
     # topic will fail.
     if( grep( /^$path$/, @{$this->{includeStack}} )) {
-        $warn = $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' ) unless( $warn );
-        if( $warn && $warn !~ /^(off|no)$/i ) {
-            my $mess = "Warning: Can't INCLUDE $incweb.<nop>$inctopic twice, topic is already included";
+        $warn ||= $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' ) ||
+          '';
+        if( $warn !~ /^(off|no)$/i ) {
+            my $more = '';
             if( $#{$this->{includeStack}} ) {
-                $mess .= '; include path is ' .
-                  join('/', @{$this->{includeStack}});
+                $more .= join( '/', @{$this->{includeStack}} );
             }
-            return inlineAlert( $mess );
+            return $this->inlineAlert( 'alerts', 'already_included',
+                                       $incweb, $inctopic, $more );
         } # else fail silently
         return '';
     }
@@ -2231,7 +2273,7 @@ sub _METASEARCH {
 # Deprecated, but used in signatures
 sub _DATE {
     my $this = shift;
-    return TWiki::Time::formatTime(time(), "\$day \$mon \$year", 'gmtime');
+    return TWiki::Time::formatTime(time(), '$day $mon $year', 'gmtime');
 }
 
 sub _GMTIME {
@@ -2360,7 +2402,7 @@ sub _SPACEDTOPIC {
     my ( $this, $params, $theTopic ) = @_;
     my $topic = spaceOutWikiWord( $theTopic );
     $topic =~ s/ / */g;
-    return urlEncode( $theTopic );
+    return urlEncode( $topic );
 }
 
 sub _ICON {

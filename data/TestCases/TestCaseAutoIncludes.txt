@@ -5,16 +5,17 @@ Description: Check for the correct detection and handling of recursive and repea
 ---+ Recursion detection and avoidance
 ---++ Expected
 <!-- expected -->
+<p />
 <pre>
 There was an old Man of the coast
-<font size="-1" class="twikiAlert" color="red">Warning: Can't INCLUDE TestCases.<nop>RecursiveInclude twice, topic is already included</font>
+<span class='twikiAlert'>Warning: Can't INCLUDE TestCases.<nop>RecursiveInclude twice, topic is already included.</span>
 
 Who placidly sat on a post;
 But when it was cold
 He relinquished his hold
 And called for some hot buttered toast.
 </pre>
-<p />
+<p /><p />
 Who placidly sat on a post;
 But when it was cold
 He relinquished his hold
@@ -32,7 +33,7 @@ And called for some hot buttered toast.
 ---+ File not found
 ---++ Expected
 <!-- expected expand -->
-<font color="#ff0000"> <strong><em>Note:</em></strong> </font> Included topic <span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">FileNotFound</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/FileNotFound?topicparent=TestCases.TestCaseAutoIncludes" rel='nofollow'><sup>?</sup></a></span> does not exist yet
+<span class='twikiAlert'>Warning: Can't find topic FileNotFound</span>
 <!-- /expected -->
 ---++ Actual
 <!-- actual -->
@@ -43,6 +44,7 @@ And called for some hot buttered toast.
 <!-- AAA hubba AAA tag string used for testing pattern -->
 ---+ Expected
 <!-- expected expand -->
+<p />
 %TOPIC%
 %TOPIC%
 hubba
@@ -62,6 +64,7 @@ IncludedTopic
 ---++ Expected
 <!-- expected -->
 %A% %B% %C%
+<p />
 1 2 3
 <p />
 %A% %B% %C%

@@ -61,7 +61,7 @@ sub oops_cgi {
     if( ! $tmplData ) {
         $tmplData = CGI::start_html()
           . CGI::h1('TWiki Installation Error')
-            . 'Template file'.$tmplName
+            . 'Template file '.$tmplName
                . '.tmpl not found or template directory '
                  . $TWiki::cfg{TemplateDir}.' not found.'.CGI::p()
                    . 'Check the configuration setting for TemplateDir.'
@@ -76,7 +76,6 @@ sub oops_cgi {
         my $param;
         my $n = 1;
         while( $param = $query->param( 'param'.$n ) ) {
-            $param = '' unless defined $param;
             $tmplData =~ s/%PARAM$n%/$param/g;
             $n++;
         }

@@ -138,8 +138,8 @@ sub parseTime {
 
 ---++ StaticMethod formatTime ($epochSeconds, $formatString, $outputTimeZone) -> $value
    * =$epochSeconds= epochSecs GMT
-   * =$formatString= twiki time date format
-   * =$outputTimeZone= timezone to display ('gmtime' or 'servertime', default "gmtime")
+   * =$formatString= twiki time date format, default =$day $month $year - $hour:$min=
+   * =$outputTimeZone= timezone to display, =gmtime= or =servertime=, default is whatever is set in $TWiki::cfg{DisplayTimeValues}
 =$formatString= supports:
    | $seconds | secs |
    | $minutes | mins |
@@ -152,7 +152,9 @@ sub parseTime {
    | $mo | month number |
    | $year | 4-digit year |
    | $ye | 2-digit year |
-
+   | $http | ful HTTP header format date/time |
+   | $email | full email format date/time |
+   | $rcs | full RCS format date/time |
 =cut
 
 # previous known as TWiki::formatTime
@@ -162,9 +164,8 @@ sub formatTime  {
     my $value = $epochSeconds;
 
     # use default TWiki format "31 Dec 1999 - 23:59" unless specified
-    $formatString = '$day $month $year - $hour:$min' unless( $formatString );
-    $outputTimeZone = $TWiki::cfg{DisplayTimeValues}
-      unless( $outputTimeZone );
+    $formatString ||= '$day $month $year - $hour:$min';
+    $outputTimeZone ||= $TWiki::cfg{DisplayTimeValues};
 
     my( $sec, $min, $hour, $day, $mon, $year, $wday);
     if( $outputTimeZone eq 'servertime' ) {

@@ -977,7 +977,7 @@ sub repRev {
         # write log entry
         my $extra = 'repRev by '.$user->login().": $rev " .
           $revuser->login().
-            ' '. TWiki::Time::formatTime( $revdate, 'rcs', 'gmtime' );
+            ' '. TWiki::Time::formatTime( $revdate, '$rcs', 'gmtime' );
         $extra   .= ' minor' if( $options->{minor} );
         $this->{session}->writeLog( 'save', $web.'.'.$topic, $extra );
     }

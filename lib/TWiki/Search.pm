@@ -380,9 +380,10 @@ sub searchWeb {
     my $theWebName =    $params{web} || '';
     my $theDate =       $params{date} || "";
 
-    my $renderer = $this->{session}->{renderer};
+    my $session = $this->{session};
+    my $renderer = $session->{renderer};
 
-    ##$this->{session}->writeDebug "Search locale is $TWiki::cfg{SiteLocale}";
+    ##$session->writeDebug "Search locale is $TWiki::cfg{SiteLocale}";
 
     # Limit search results
     if ($theLimit =~ /(^\d+$)/o) { # only digits, all else is the same as
@@ -410,9 +411,9 @@ sub searchWeb {
     }
 
     my $searchResult = '';
-    my $homeWeb = $this->{session}->{webName};
+    my $homeWeb = $session->{webName};
     my $homeTopic = $TWiki::cfg{HomeTopicName};
-    my $store = $this->{session}->{store};
+    my $store = $session->{store};
 
     my @webList = ();
 
@@ -444,7 +445,7 @@ sub searchWeb {
 
     } else {
         #default to current web
-        push @webList, $this->{session}->{webName};
+        push @webList, $session->{webName};
     }
 
     $theTopic   = _makeTopicPattern( $theTopic );    # E.g. "Bug*, *Patch" ==> "^(Bug.*|.*Patch)$"
@@ -490,7 +491,7 @@ sub searchWeb {
     } else {
         $theTemplate = 'search';
     }
-    $tmpl = $this->{session}->{templates}->readTemplate( $theTemplate );
+    $tmpl = $session->{templates}->readTemplate( $theTemplate );
 
     # SMELL: the only META tags in a template will be METASEARCH
     # Why the heck are they being filtered????
@@ -514,18 +515,18 @@ sub searchWeb {
     }
 
     # Expand tags in template sections
-    $tmplSearch = $this->{session}->handleCommonTags( $tmplSearch,
-                                                      $homeWeb,
-                                                      $homeTopic );
-    $tmplNumber = $this->{session}->handleCommonTags( $tmplNumber,
-                                                      $homeWeb,
-                                                      $homeTopic );
+    $tmplSearch = $session->handleCommonTags( $tmplSearch,
+                                              $homeWeb,
+                                              $homeTopic );
+    $tmplNumber = $session->handleCommonTags( $tmplNumber,
+                                              $homeWeb,
+                                              $homeTopic );
 
     # If not inline search, also expand tags in head and tail sections
     unless( $inline ) {
-        $tmplHead = $this->{session}->handleCommonTags( $tmplHead,
-                                                        $homeWeb,
-                                                        $homeTopic );
+        $tmplHead = $session->handleCommonTags( $tmplHead,
+                                                $homeWeb,
+                                                $homeTopic );
 
         if( defined $callback ) {
             $tmplHead = $renderer->getRenderedVersion( $tmplHead,
@@ -550,9 +551,9 @@ sub searchWeb {
         $searchStr =~ s/^\.\*$/Index/go;
         $tmplSearch =~ s/%SEARCHSTRING%/$searchStr/go;
         if( defined $callback ) {
-            $tmplSearch = $this->{session}->{renderer}->getRenderedVersion( $tmplSearch,
-                                                                 $homeWeb,
-                                                                 $homeTopic );
+            $tmplSearch = $renderer->getRenderedVersion( $tmplSearch,
+                                                         $homeWeb,
+                                                         $homeTopic );
             $tmplSearch =~ s|</*nop/*>||goi;   # remove <nop> tag
             &$callback( $cbdata, $tmplSearch );
         } else {
@@ -569,7 +570,7 @@ sub searchWeb {
     # FIXME: Move log entry further down to log actual webs searched
     if( ( $TWiki::cfg{Log}{search} ) && ( ! $inline ) ) {
         my $t = join( ' ', @webList );
-        $this->{session}->writeLog( 'search', $t, $theSearchVal );
+        $session->writeLog( 'search', $t, $theSearchVal );
     }
 
     # Loop through webs
@@ -579,14 +580,14 @@ sub searchWeb {
 
         next unless $store->webExists( $web );  # can't process what ain't thar
 
-        my $prefs = $this->{session}->{prefs};
+        my $prefs = $session->{prefs};
         my $thisWebNoSearchAll = $prefs->getPreferencesValue( 'NOSEARCHALL', $web );
 
         # make sure we can report this web on an 'all' search
         # DON'T filter out unless it's part of an 'all' search.
         next if ( $searchAllFlag
                   && ( $thisWebNoSearchAll =~ /on/i || $web =~ /^[\.\_]/ )
-                  && $web ne $this->{session}->{webName} );
+                  && $web ne $session->{webName} );
 
         # Run the search on topics in this web
         my @topicList = $this->_searchTopicsInWeb( $web, $theTopic, $theScope, $theType, $caseSensitive, @tokens );
@@ -649,13 +650,13 @@ sub searchWeb {
             # simple sort, suggested by RaymondLutz in Codev.SchwartzianTransformMisused
             # note no extraction of topic info here, as not needed for the sort. Instead it
             # will be read lazily, later on.
-            ##$this->{session}->writeDebug 'Topic list before sort = @topicList';
+            ##$session->writeDebug 'Topic list before sort = @topicList';
             if( $revSort ) {
                 @topicList = sort {$b cmp $a} @topicList;
             } else {
                 @topicList = sort {$a cmp $b} @topicList;
             }
-            ##$this->{session}->writeDebug 'Topic list after sort = @topicList';
+            ##$session->writeDebug 'Topic list after sort = @topicList';
         }
 
         if( $theDate ){
@@ -700,7 +701,7 @@ sub searchWeb {
             my $isoDate = TWiki::Time::formatTime( $epochSecs, '$iso', 'gmtime');
 
             my $revUser = $topicInfo->{$topic}->{editby} || 'UnknownUser';
-            my $ru = $this->{session}->{users}->findUser( $revUser );
+            my $ru = $session->{users}->findUser( $revUser );
             my $revNum  = $topicInfo->{$topic}->{revNum} || 0;
 
             # Check security
@@ -720,8 +721,7 @@ sub searchWeb {
                         # primitive way to prevent recursion
                         $text =~ s/%SEARCH/%<nop>SEARCH/g;
                     }
-                    $text = $this->{session}->handleCommonTags( $text, $web,
-                                                                $topic );
+                    $text = $session->handleCommonTags( $text, $web, $topic );
                 }
             }
 
@@ -761,7 +761,7 @@ sub searchWeb {
                     $out =~ s/\$createwikiusername/$this->_getRev1Info( $web, $topic, 'wikiusername', $r1info )/geos;
                     if( $out =~ m/\$text/ ) {
                         ( $meta, $text ) = $this->_getTextAndMeta( $topicInfo, $web, $topic ) unless $text;
-                        if( $topic eq $this->{session}->{topicName} ) {
+                        if( $topic eq $session->{topicName} ) {
                             # defuse SEARCH in current topic to prevent loop
                             $text =~ s/%SEARCH{.*?}%/SEARCH{...}/go;
                         }
@@ -789,12 +789,8 @@ sub searchWeb {
                 } else {
                     # don't callback yet because of table
                     # rendering
-                    $out = $this->{session}->handleCommonTags( $out,
-                                                               $web,
-                                                               $topic );
-                    $out = $renderer->getRenderedVersion( $out,
-                                                                  $web,
-                                                                  $topic );
+                    $out = $session->handleCommonTags( $out, $web, $topic );
+                    $out = $renderer->getRenderedVersion( $out, $web, $topic );
                 }
 
                 if( $doRenameView ) {
@@ -803,8 +799,8 @@ sub searchWeb {
                       ( undef, $web, $topic, undef );
                     my $changeable = '';
                     my $changeAccessOK =
-                      $this->{session}->{security}->checkAccessPermission
-                        ( 'change', $this->{session}->{user},
+                      $session->{security}->checkAccessPermission
+                        ( 'change', $session->{user},
                           $text, $topic, $web );
                     if( ! $changeAccessOK ) {
                         $changeable = '(NO CHANGE PERMISSION)';
@@ -846,9 +842,9 @@ sub searchWeb {
                             # NOTE: Must *not* use /o here, since $match is based on
                             # search string that will vary during lifetime of
                             # compiled code with mod_perl.
-                            my $subs = s/$match/$1.TWiki::inlineAlert($2)/ge;
+                            my $subs = s/$match/$1.$session->inlineAlert('alerts','generic',$2)/ge;
                             $match = '(\[\[)('.$spacedTopic.')(?=\]\])';
-                            $subs += s/$match/$1.TWiki::inlineAlert($2)/gei;
+                            $subs += s/$match/$1.$session->inlineAlert('alerts','generic', $2)/gei;
                             if( $subs ) {
                                 $topicCount++ if( ! $reducedOutput );
                                 $reducedOutput .= $_.CGI::br() if( $subs );
@@ -865,11 +861,9 @@ sub searchWeb {
                         # primitive way to prevent recursion
                         $text =~ s/%SEARCH/%<nop>SEARCH/g;
                     }
-                    $text = $this->{session}->handleCommonTags( $text,
-                                                                $web, $topic );
-                    $text = $this->{session}->{enderer}->getRenderedVersion( $text,
-                                                                   $web,
-                                                                   $topic );
+                    $text = $session->handleCommonTags( $text, $web, $topic );
+                    $text = $session->{renderer}->getRenderedVersion
+                      ( $text, $web, $topic );
                     # FIXME: What about meta data rendering?
                     $out =~ s/%TEXTHEAD%/$text/go;
 
@@ -909,11 +903,11 @@ sub searchWeb {
                 # lazy output of header (only if needed for the first time)
                 unless( $headerDone || $noHeader ) {
                     $headerDone = 1;
-                    my $prefs = $this->{session}->{prefs};
+                    my $prefs = $session->{prefs};
                     my $thisWebBGColor = $prefs->getPreferencesValue( 'WEBBGCOLOR', $web ) || '\#FF00FF';
                     $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
                     $beforeText =~ s/%WEB%/$web/go;
-                    $beforeText = $this->{session}->handleCommonTags
+                    $beforeText = $session->handleCommonTags
                       ( $beforeText, $web, $topic );
                     if ( defined $callback ) {
                         $beforeText =
@@ -954,9 +948,9 @@ sub searchWeb {
         # output footer only if hits in web
         if( $ntopics ) {
             # output footer of $web
-            $afterText  = $this->{session}->handleCommonTags( $afterText,
-                                                              $web,
-                                                              $homeTopic );
+            $afterText  = $session->handleCommonTags( $afterText,
+                                                      $web,
+                                                      $homeTopic );
             if( $inline || $theFormat ) {
                 $afterText =~ s/\n$//os;  # remove trailing new line
             }
@@ -1001,14 +995,14 @@ sub searchWeb {
     }
 
     unless( $inline ) {
-        $tmplTail = $this->{session}->handleCommonTags( $tmplTail,
-                                                        $homeWeb,
-                                                        $homeTopic );
+        $tmplTail = $session->handleCommonTags( $tmplTail,
+                                                $homeWeb,
+                                                $homeTopic );
 
         if( defined $callback ) {
             $tmplTail = $renderer->getRenderedVersion( $tmplTail,
-                                                               $homeWeb,
-                                                               $homeTopic );
+                                                       $homeWeb,
+                                                       $homeTopic );
             $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
             &$callback( $cbdata, $tmplTail );
         } else {
@@ -1019,12 +1013,12 @@ sub searchWeb {
     return undef if ( defined $callback );
     return $searchResult if $inline;
 
-    $searchResult = $this->{session}->handleCommonTags( $searchResult,
-                                                        $homeWeb,
-                                                        $homeTopic );
+    $searchResult = $session->handleCommonTags( $searchResult,
+                                                $homeWeb,
+                                                $homeTopic );
     $searchResult = $renderer->getRenderedVersion( $searchResult,
-                                                           $homeWeb,
-                                                           $homeTopic );
+                                                   $homeWeb,
+                                                   $homeTopic );
 
     return $searchResult;
 }
@@ -1058,7 +1052,8 @@ sub _sortTopics{
 sub _extractTopicInfo {
     my ( $this, $web, $topic, $cacheText, $sortfield ) = @_;
     my $info = {};
-    my $store = $this->{session}->{store};
+    my $session = $this->{session};
+    my $store = $session->{store};
 
     my ( $meta, $text ) = $this->_getTextAndMeta( undef, $web, $topic );
 
@@ -1072,9 +1067,9 @@ sub _extractTopicInfo {
     $info->{revNum}     = $revnum;
 
     $info->{allowView} =
-      $this->{session}->{security}->
+      $session->{security}->
         checkAccessPermission( 'view',
-                               $this->{session}->{user},
+                               $session->{user},
                                $text, $topic,
                                $web );
 

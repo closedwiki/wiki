@@ -1,0 +1,30 @@
+%TMPL:DEF{"comment"}%
+
+Inline alerts, embedded in rendered text. One DEF is selected and
+inserted at %INSTANTIATE%
+
+%TMPL:END%
+%TMPL:DEF{"access_denied"}%
+No permission to view %PARAM1%
+%TMPL:END%
+%TMPL:DEF{"no_such_attachment"}%
+Error: File attachment at %PARAM1%,%PARAM2% does not exist
+%TMPL:END%
+%TMPL:DEF{"bad_protocol"}%
+Error: Unsupported protocol. (Must be 'http://domain/...'
+%TMPL:END%
+%TMPL:DEF{"bad_content_type"}%
+Error: Unsupported content type: %PARAM1% (Must be =text/html=, =text/plain=
+or =text/css=)
+%TMPL:END%
+%TMPL:DEF{"no_such_topic"}%
+Warning: Can't find topic <nop>%PARAM1%
+%TMPL:END%
+%TMPL:DEF{"already_included"}%
+Warning: Can't INCLUDE <nop>%PARAM1%.<nop>%PARAM2% twice, topic is already
+included. %PARAM3%
+%TMPL:END%
+%TMPL:DEF{"generic"}%
+%PARAM1% %PARAM2% %PARAM3% %PARAM4%
+%TMPL:END%
+<span class='twikiAlert'>%INSTANTIATE%</span>

@@ -1,3 +1,4 @@
+<!-- Templates for access denied messages. One DEF is selected and inserted at %INSTANTIATE -->
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:DEF{"titleaction"}%(oops) %TMPL:END%
 %TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
@@ -19,8 +20,8 @@ Contact
 <a href="mailto:%WIKIWEBMASTER%?subject=Access&#32;Denieds&#32;fors&#32;'%WEB%.%TOPIC%',s&#32;needs&#32;'%PARAM1%'">%WIKIWEBMASTER%</a>
 if you have any questions.
 
-__Related topics:__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl %TMPL:END%
-
+__Related topics:__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl
+%TMPL:END%
 %TMPL:DEF{"message"}%
 %INSTANTIATE%
 %TMPL:END%
