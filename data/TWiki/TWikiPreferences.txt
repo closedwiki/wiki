@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1083003669" format="1.0" version="1.65"}%
+%META:TOPICINFO{author="PeterThoeny" date="1091171092" format="1.0" version="1.66"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), __topic level__ (the topic being rendered), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -73,7 +73,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 
 ---++ TWiki Platform Settings
 
-	* TWiki platform name:
+	* TWiki site name:
 		* Set WIKITOOLNAME = TWikibeta
 
 	* Image, URL and alternate tooltip text of TWiki logo: (can be overwritten by web preferences)
@@ -82,12 +82,12 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set WIKILOGOALT = TWiki home
 
 	* List of %WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %TWIKIWEB%.SiteMap):
-		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Know.%HOMETOPIC%][Know]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]
+		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]
 		* %T% *NOTE:* To automatically list all non-hidden webs in alphabetical order, use the =%<nop>WEBLIST{}%= variable instead: <br />
 		  %WEBLIST{"[[$name.%HOMETOPIC%][$name]]" separator=" %SEP% "}%
 
-	* Skin overriding the default TWiki templates: (can be overwritten by WebPreferences and user preferences) 
-		* Set SKIN = 
+	* Maximum size of %TWIKIWEB%.FileAttachments in KB, 0 for no limit:
+		* Set ATTACHFILESIZELIMIT = 10000
 
 	* Broadcast message for skins supporting a %<nop>BROADCASTMESSAGE% at the top of the page: (IMPORTANT: Set to empty message if not used; #Comment out unused messages)
 		* Set BROADCASTMESSAGE = 
@@ -95,8 +95,6 @@ The following are __site-level__ settings that affect all users in all webs on t
 		  Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled %WIKITOOLNAME% maintenance.
 		  </font></td></tr></table>
 
-	* Maximum size of %TWIKIWEB%.FileAttachments in KB, 0 for no limit:
-		* Set ATTACHFILESIZELIMIT = 10000
 
 ---+++ Search Settings
 
@@ -144,7 +142,8 @@ The following are __site-level__ settings that affect all users in all webs on t
 
 	* ==http-equiv== meta tags for ==view==, ==rdiff==, ==attach==, ==search*== scripts:
 <verbatim>
-		* Set HTTP_EQUIV_ON_VIEW = 
+		* #Set HTTP_EQUIV_ON_VIEW = 
+		* Set HTTP_EQUIV_ON_VIEW =  <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?skin=rss&amp;contenttype=text/xml" />
 </verbatim>
 
 	* ==http-equiv== meta tags for ==edit== script:
@@ -156,6 +155,25 @@ The following are __site-level__ settings that affect all users in all webs on t
 <verbatim>
 		* Set HTTP_EQUIV_ON_PREVIEW = 
 </verbatim>
+
+
+---++ Skin Settings
+
+	* Skin overriding the default TWiki templates: (can be overwritten by WebPreferences and user preferences) 
+		* Set SKIN = 
+
+	* Default TWiki CSS styling topics where layout and style are are defined:
+		* #Set TWIKILAYOUTTOPIC = %TWIKIWEB%.TWikiLayout
+		* #Set TWIKISTYLETOPIC = %TWIKIWEB%.TWikiStyle
+	* CSS styling topics to be defined in local webs or in user topics (these can complement or override default TWiki style topics):
+		* Set LAYOUTTOPIC = 
+		* Set STYLETOPIC = 
+
+	* Use the CSS TOPIC setting above to build the URLS used in the templates
+		* #Set TWIKILAYOUTURL = %RELATIVETOPICPATH{%TWIKILAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css
+		* #Set TWIKISTYLEURL = %RELATIVETOPICPATH{%TWIKISTYLETOPIC%}%?skin=text&amp;contenttype=text/css
+		* #Set USERLAYOUTURL = %RELATIVETOPICPATH{%USERLAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css
+		* #Set USERSTYLEURL = %RELATIVETOPICPATH{%USERSTYLETOPIC%}%?skin=text&amp;contenttype=text/css
 
 
 ---++ Plugins Settings
@@ -199,6 +217,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* %GREEN% *Set GREEN = looks like this* %ENDCOLOR%
 		* %OLIVE% *Set OLIVE = looks like this* %ENDCOLOR%
 		* %MAROON% *Set MAROON = looks like this* %ENDCOLOR%
+		* %BROWN% *Set BROWN = looks like this* %ENDCOLOR%
 		* %BLACK% *Set BLACK = looks like this* %ENDCOLOR%
 		* %GRAY% *Set GRAY = looks like this* %ENDCOLOR%
 		* %SILVER% *Set SILVER = looks like this* %ENDCOLOR%
@@ -218,6 +237,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set GREEN = <font color="#008000">
 		* Set OLIVE = <font color="#808000">
 		* Set MAROON = <font color="#800000">
+		* Set BROWN = <font color="#996633">
 		* Set BLACK = <font color="#000000">
 		* Set GRAY = <font color="#808080">
 		* Set SILVER = <font color="#c0c0c0">
@@ -267,7 +287,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set TOPICOVERRIDESUSER = off
 
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
-		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE, READTOPICPREFS, TOPICOVERRIDESUSER
+		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE, READTOPICPREFS, TOPICOVERRIDESUSER, BASICSTYLETOPIC
 
 
 ---++ Creating New Preference Variables
