@@ -32,6 +32,15 @@ use TWiki;
 
 $query= new CGI;
 
+#TODO: this needs to be exposed to plugins and whoever might want to over-ride the rendering of diffs
+#Hash, indexed by diffType (+,-,c,u,l.....)
+#contains {colour, CssClassName}
+my %diffColours = ("+" => [ "#ccccff", "TWikiDiffAddedMarker"],
+                    "-" => [ "#ff9999", "TWikiDiffDeletedMarker"],
+                    "c" => [ "#99ff99", "TWikiDiffChangedText"],
+                    "u" => [ "#ffffff", "TWikiDiffUnchangedText"],
+                    "l" => [ "#eeeeee", "TWikiDiffLineNumberHeader"] );
+
 &main();
 
 #SVEN - new design.
@@ -71,6 +80,7 @@ sub renderCellData
 
         $data = &TWiki::handleCommonTags( $data, $topic );
         $data = &TWiki::getRenderedVersion( $data );
+#TODO need to do the same with unmatched <!---, <p>, <div> and....
         if( $data =~ m/<\/?(th|td|table)/i )
         {
             # data has <th> or <td>, need to fix <table>
@@ -93,44 +103,51 @@ sub renderCellData
     return $data;
 }
 
-# =========================
+#==========================
 sub renderSideBySide
 {
   my ( $diffType, $left, $right ) = @_;
   my $result = "";
-  if ( $diffType eq "c" ) {
-      $lcolor = $rcolor = "#99ff99";
-  } elsif ( $diffType eq "u" ) {
-      $lcolor = $rcolor = "#ffffff";
-#      $lcolor = $rcolor = "#99ff99";
-  } elsif ( $diffType eq "+" ) {
-      $lcolor = "#cccccc";
-      $rcolor = "#ccccff";
-  } elsif ( $diffType eq "-" ) {
-      $lcolor = "#ff9999";
-      $rcolor = "#cccccc";
-  }
-  if ( $diffType eq "l" ) {
+
+  $left = renderCellData( $left, $topic );
+  $right = renderCellData( $right, $topic );
+
+  if ( $diffType eq "-") {
+    $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top">$left&nbsp;</td>);
+    $result .= qq(<td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$right&nbsp;</td></tr>\n);
+  } elsif ( $diffType eq "+") {
+    $result .= qq(<tr><td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$left&nbsp;</td>);
+    $result .= qq(<td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top">$right&nbsp;</td></tr>\n);
+  } elsif ( $diffType eq "u") {
+    $result .= qq(<tr><td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$left&nbsp;</td>);
+    $result .= qq(<td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$right&nbsp;</td></tr>\n);
+  } elsif ( $diffType eq "c") {
+    $result .= qq(<tr><td bgcolor="$diffColours{"c"}[0]" class="$diffColours{"c"}[1]" valign="top">$left&nbsp;</td>);
+    $result .= qq(<td bgcolor="$diffColours{"c"}[0]" class="$diffColours{"c"}[1]" valign="top">$right&nbsp;</td></tr>\n);
+  } elsif ( $diffType eq "l") {
     if (( $left ne "" ) && ($right ne "" )) {
-      $result .= qq(<tr bgcolor="#eeeeee"><th>Line: $left</th><th>Line: $right</th></tr>\n)
+      $result .= qq(<tr bgcolor="$diffColours{"l"}[0]" class="$diffColours{"l"}[1]"><th align="center">Line: $left</th><th align="center">Line: $right</th></tr>\n);
     }
-  } else {
-    $right = renderCellData( $right, $topic );
-    $left = renderCellData( $left, $topic );
-    $result .= qq(<tr><td bgcolor="$lcolor" valign="top">$left&nbsp;</td><td bgcolor="$rcolor" valign="top">$right&nbsp;</td></tr>\n);
   }
+
   return $result;
 }
 
-
-######
 #==========================
 sub renderDebug
 {
   my ( $diffType, $left, $right ) = @_;
   my $result = "";
 
-  $result = "<hr>type: $diffType<p style=\"border: 1px dotted;\">$left</p><p style=\"border: 1px dotted;\">$right</p>";
+#de-html-ize
+  $left =~ s/</\&lt;/geo;
+  $right =~ s/</\&lt;/geo;
+  $left =~ s/>/\&gt;/geo;
+  $right =~ s/>/\&gt;/geo;
+
+  $result = "<hr>type: $diffType\n";
+  $result .= "<div style=\"border: 1px dotted;\">$left</div>\n";
+  $result .= "<div style=\"border: 1px dotted;\">$right</div>\n";
 
   return $result;
 }
@@ -142,30 +159,38 @@ sub renderSequential
   my ( $diffType, $left, $right ) = @_;
   my $result = "";
 
+#note: I have made the colspan 9 to make sure that it spans all columns (thought there are only 2 now)
   if ( $diffType eq "-") {
-    $result .= "<tr><td bgcolor=\"#FFD7D7\" colspan =\"2\"><b> Deleted: <\/b>\n<\/td><\/tr>\n";
-    $result .= "<tr><td bgcolor=\"#FF4040\" valign=\"top\" width=\"1%\">&lt;<br \/>&lt;<\/td><td>" ;
+    $result .= qq(<tr><td bgcolor="#FFD7D7" class="TWikiDiffDeletedHeader" colspan ="9"><b> Deleted: </b>\n</td></tr>\n);
+    $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top" width="1%">&lt;<br />&lt;</td>\n);
+    $result .= qq(<td class="TWikiDiffDeletedText">\n);
     $result .= renderCellData( $left, $topic );
-    $result .= "\n<\/td><\/tr>\n";
+    $result .= qq(\n</td></tr>\n);
   } elsif ( $diffType eq "+") {
-    $result .= "<tr><td bgcolor=\"#D0FFD0\" colspan =\"2\"><b> Added:   <\/b>\n<\/td><\/tr>\n";
-    $result .= "<tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br \/>&gt;<\/td><td>" ;
+    $result .= qq(<tr><td bgcolor="#D0FFD0" class="TWikiDiffAddedHeader" colspan ="9"><b> Added:   </b>\n</td></tr>\n);
+    $result .= qq(<tr><td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top" width="1%">&gt;<br />&gt;</td>\n);
+    $result .= qq(<td class="TWikiDiffAddedText">\n);
     $result .= renderCellData( $right, $topic );
-    $result .= "\n<\/td><\/tr>\n";
+    $result .= qq(\n</td></tr>\n);
   } elsif ( $diffType eq "u") {
-    $result .= "<tr><td valign=\"top\" width=\"1%\"><br \/><\/td><td>" ;
+    $result .= qq(<tr><td valign="top" bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" width="1%"><br /></td>\n);
+    $result .= qq(<td class="TWikiDiffUnchangedText">\n);
     $result .= renderCellData( $right, $topic );
-    $result .= "\n<\/td><\/tr>\n";
+    $result .= qq(\n</td></tr>\n);
   } elsif ( $diffType eq "c") {
-    $result .= "<tr><td bgcolor=\"#D0FFD0\" colspan =\"2\"><b> Changed: <\/b>\n<\/td><\/tr>\n";
-    $result .= "<tr><td bgcolor=\"#FF4040\" valign=\"top\" width=\"1%\">&lt;<br \/>&lt;<\/td><td>" ;
+    $result .= qq(<tr><td bgcolor="#D0FFD0" class="TWikiDiffChangedHeader" colspan ="9"><b> Changed: </b></td></tr>\n);
+    $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top" width="1%">&lt;<br />&lt;</td>\n);
+    $result .= qq(<td class="TWikiDiffAddedText">\n);
     $result .= renderCellData( $left, $topic );
-    $result .= "<tr><td bgcolor=\"#40FF40\" valign=\"top\" width=\"1%\">&gt;<br \/>&gt;<\/td><td>" ;
+    $result .= qq(\n</td></tr>\n);
+    $result .= qq(<tr><td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top" width="1%">&gt;<br />&gt;</td>\n);
+    $result .= qq(<td class="TWikiDiffDeletedText">\n);
     $result .= renderCellData( $right, $topic );
-    $result .= "\n<\/td><\/tr>\n";
+    $result .= qq(\n</td></tr>\n);
   } elsif ( $diffType eq "l") {
-    $result .= "<tr bgcolor=\"#eeeeee\"><th></th><th align=\"left\">Line: $left to $right</th></tr>";
-    $result .= "\n<\/td><\/tr>\n";
+    if (( $left ne "" ) && ($right ne "" )) {
+      $result .= qq(<tr bgcolor="$diffColours{"l"}[0]" class="TWikiDiffLineNumberHeader"><th align="left" colspan="9">Line: $left to $right</th></tr>\n);
+    }
   }
 
   return $result;
