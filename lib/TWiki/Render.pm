@@ -496,6 +496,7 @@ sub makeAnchorName
     }
     $anchorName =~ s/<\w[^>]*>//gi;         # remove HTML tags
     $anchorName =~ s/\&\#?[a-zA-Z0-9]*;//g; # remove HTML entities
+    $anchorName =~ s/\&//g;                 # remove &
     $anchorName =~ s/^(.+?)\s*$regex{headerPatternNoTOC}.*/$1/o; # filter TOC excludes if not at beginning
     $anchorName =~ s/$regex{headerPatternNoTOC}//o; # filter '!!', '%NOTOC%'
     # FIXME: More efficient to match with '+' on next line:
