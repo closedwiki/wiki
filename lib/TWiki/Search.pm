@@ -312,7 +312,7 @@ sub searchWeb
                 my $tempVal = $_;
                 # FIXME should be able to get data from topic
                 my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal );
-                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta, 1 );
+                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta, 1 );
                 $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
                 $topicRevNum{ $tempVal } = $revnum;
@@ -339,7 +339,7 @@ sub searchWeb
             foreach( @topicList ) {
                 $tempVal = $_;
                 my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal );
-                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta, 1 );
+                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta, 1 );
                 $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
                 $topicRevNum{ $tempVal } = $revnum;
