@@ -18,6 +18,10 @@
 # Set library paths in @INC, at compile time
 BEGIN { unshift @INC, '.'; require 'setlib.cfg'; }
 
+# I18N: No locale settings necessary yet - only 7-bit ASCII due
+# to Apache limitations on userids.
+
+
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use TWiki;
@@ -112,6 +116,7 @@ sub main
         TWiki::redirect( $query, $url );
         return;
     }
+
     # a WikiName is safe, so untaint variable
     $wikiName =~ /(.*)/;
     $wikiName = $1;
@@ -122,6 +127,14 @@ sub main
         TWiki::redirect( $query, $url );
         return;
     }
+
+    # check valid email address
+    if( $emailAddress !~ $TWiki::emailAddrRegex ) {
+        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregemail" );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+
 
     # everything OK
 
