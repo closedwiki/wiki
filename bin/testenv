@@ -21,9 +21,12 @@
 
 # Set library paths in @INC, at compile time
 BEGIN { 
-    # Use a default lib path if setlib.cfg is missing
-    unshift @INC, '../lib';
-    ( -r './setlib.cfg' ) && require './setlib.cfg'; 
+    # Try to use setlib.cfg, use default path if missing
+    if ( -r './setlib.cfg' ) {
+	require './setlib.cfg'; 
+    } else {
+	unshift @INC, '../lib';
+    }
 }
 
 # use strict;		# Recommended for mod_perl, enable for Perl 5.6.1 only
