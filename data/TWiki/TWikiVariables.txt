@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1061617140" format="1.0" version="1.66"}%
+%META:TOPICINFO{author="PeterThoeny" date="1061625101" format="1.0" version="1.67"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -188,6 +188,7 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
 	| ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org/"}%= | |
 	| =pattern="..."= | A RegularExpression pattern to include a subset of a topic or page | none |
 	| =rev="1.2"= | Include a previous topic revision; N/A for URLs | top revision |
+	| =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%INCLUDE- WARNING%= preferences setting |
   </td>
 </tr><tr>
   <td> =%<nop>STARTINCLUDE%= </td>
