@@ -14,7 +14,7 @@
 Create an upgraded twiki installation from an existing one
 and a new distribution.
 
-This script expected '.' to be the root of a TWiki distribution when it is called.
+This script expects '.' to be the root of a TWiki distribution when it is called.
 =cut
 
 BEGIN {
@@ -207,7 +207,9 @@ Now: you need to
 
    and finally: visit...
 
-      $TWikiCfg::defaultUrlHost$TWikiCfg::scriptUrlPath$TWikiCfg::dispViewPath
+      $TWikiCfg::defaultUrlHost$TWikiCfg::scriptUrlPath$TWikiCfg::dispViewPath/TWiki/TWikiPreferences
+
+   ... it should be working, and you can edit the new WIKIWEBMASTER setting!
 
 Goodluck... :-)
 ";
