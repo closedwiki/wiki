@@ -874,12 +874,12 @@ sub readTopicRaw
     }
 
     my $viewAccessOK = 1;
-    if( ! $internal ) {
+    unless( $internal ) {
         $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $theTopic, $theWeb );
-        TWiki::writeDebug( "readTopicRaw $viewAccessOK $TWiki::wikiUserName $theWeb $theTopic" );
+        # TWiki::writeDebug( "readTopicRaw $viewAccessOK $TWiki::wikiUserName $theWeb $theTopic" );
     }
     
-    if( ! $viewAccessOK ) {
+    unless( $viewAccessOK ) {
         $text = "No permission to read topic $theWeb.$theTopic\n";
         # Could note inability to read so can divert to viewauth or similar
         $TWiki::readTopicPermissionFailed = "$TWiki::readTopicPermissionFailed $theWeb.$theTopic";
