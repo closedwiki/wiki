@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018414778" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092609648" format="1.0" version="1.9"}%
 ---++ FAQ:
 
 Everybody can edit any page, this is scary. Doesn't that lead to chaos?
@@ -21,4 +21,5 @@ __Related topics:__ TWikiSite, WelcomeGuest, GoodStyle, WikiSyntax, TWikiFAQ, Wa
 
 __Back to:__ TWikiFAQ
 
--- %MAINWEB%.PeterThoeny - 09 Apr 2002
+-- TWiki:Main.PeterThoeny - 09 Apr 2002
+
