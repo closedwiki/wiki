@@ -1,4 +1,6 @@
----++ <nop>%TOPIC%
+---++!! %TOPIC%
+
+%TOC%
 
 The %TOPIC% is a plug-in extension to TWiki that supports a Java 1.1 applet text editor. This applet works on most Java-enabled browsers (we haven't tested them <u>all</u>!).
 
@@ -11,34 +13,38 @@ The applet provides the same editing capabilities as a standard browser text are
 	* Programmable buttons.
 	* Convertor for HTML to TWiki markup
 
----++ Usage information</h2>
----+++ The buttons
-Buttons on the applet are all created by defining applet parameters in the =templates/edit.power.tmpl= template.
-Button panels can be placed at the top, bottom, left and right of the applet, and are defined by the parameters "top_buttons", "bottom_buttons",
-"left_buttons" and "right_buttons".
-
-Each button panel is defined using a | separated string, each field of which
-is a name=value pair where the name is used as the label on the button, and
-the value is interpreted as a command. Commands are either macro sequences of
-basic editor commands (see below) interleaved with text, or may be simple
-names of other parameters which are in turn intepreted as macro sequences.
-For example:
+---++ Usage information
+---+++ Configuring the Buttons and Hot keys
+Buttons and hotkeys are all created by reading a user-defined topic which is set by the POWEREDIT_CONTROLS variable (see TWiki.TWikiVariables). If the variable is not set, the topic TWiki<nop>.PowerEditControls is read instead. This allows administrators to set default buttons and keys for the whole installation, for each web, and users can to set up their own controls for the editor by defining this variable in their personal topics. The variable must be set to the *full name* (including the web) of the topic that cntains the control definitions; for example,
 <pre>
-&lt;param name="top_buttons" value="Tele type=%cut%=%paste%=|A Space=space">
+      * <nop>Set POWEREDIT_CONTROLS = Main<nop>.My<nop>Power<nop>Edit<nop>Controls
 </pre>
-The first button will be labelled "Tele type" and will perform the macro
-sequence %cut%=%paste= - which will put = signs around the currently
-selected text. The second button will be labelled "A Space" and will:
-	* If there's another param named "space" it will execute the macro defined in that parameter.
-	* If there's no param named "space" it will simply insert the string "space" in the text.
-A | may be inserted in a button panel macro definition using ||. It is not
-possible to insert an = sign in a button name - though they can obviously be
-used in definitions.
+The control file contains a set of button panel and macro definitions. For example:
+<pre>
+macros
+   "space" = " "
+end
+top
+   "Tele type" = "%cut%=%paste%="
+   "A Space"="%space%"
+end
+ctrlkeys
+   "X" = "%cut%"
+end
+</pre>
+In this example the first button in the top panel will be labelled "Tele type" and will perform the sequence %cut%=%paste%= - which will put = signs around the currently selected text. The second button will be labelled "A Space" and will execute the =space= macro, which in turn inserts a space. The key "Ctrl+X" will be defined to perform the "%cut%" command.
+   * The four button panels are named "top", "bottom", "left" and "right"
+   * There can be as many "macros" blocks as you like
+   * In button blocks, the name is used as the label on the button
+   * Only control keys can be defined (Ctrl+A through Ctrl+Z). Note that some browsers may not support key definitions.
+   * The command string is a mixture of basic editor commands (see below) and text to be inserted.
+   * The usual 'C' escapes are available in names and macro definitions i.e. prepending the character '\' will cause the next character to be interpreted literally.
+
+The default control definitions for this installation may be viewed <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/PowerEditControls?raw=on">here</a>.
 
 ---+++ Commands</h3>
 The following commands are basic to the editor and can be used in button definitions:
 | *Name* | *Description* |
-| %br% | Insert a newline |
 | %copy% | Copy the currently selected text to the internal cut buffer |
 | %cut% | Cut the currently selected text to the internal cut buffer |
 | %find% | Invoke the find dialog |
@@ -46,11 +52,12 @@ The following commands are basic to the editor and can be used in button definit
 | %save% | Save the text by posting it to the server, and quits the edit |
 | %undo% | Undo the last edit |
 | %redo% | Repeats the last command executed (does *not* repeat typing) |
+| %preview% | Previews the text in a new window |
 | %refind% | Repeat the last find |
 | %replace% | Invoke the replace dialog |
 | %rereplace% | Repeat the last replacement |
 
----+++ Other applet parameters
+---+++ Applet parameters
 | *Parameter* | *Values* | *Description* |
 | useframe | "yes" or "no" | Whether to use a separate window or not |
 | editboxwidth | Number of columns | If useframe=yes, then defines the number of columns width of the edit area. Ignored if useframe=no. |
@@ -65,10 +72,13 @@ It is a condition of use that any useful customisations are fed back to the %TOP
 	| *File:* | *Description:* |
 	| ==%TOPIC%.xml== | Ant build file |
 	| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	| ==data/TWiki/PowerEditControls.txt== | Sample control configuration |
 	| ==bin/poweredit== | Server module |
 	| ==templates/edit.power.tmpl== | Specialised skin |
+	| ==templates/preview.power.tmpl== | Specialised skin |
 	| ==pub/TWiki/%TOPIC%/poweredit.jar== | JAR file |
 	| ==lib/TWiki/Plugins/%TOPIC%/source.zip== | Source and test code |
+	| ==lib/TWiki/Plugins/%TOPIC%/PowerEdit.pm== | Server script |
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 	* Add the following line to the "TWiki Addons" section of %TWIKIWEB%.TextFormattingRules:
 		* Plugins.%TOPIC%: Power Editor Addon
@@ -94,6 +104,9 @@ It is a condition of use that any useful customisations are fed back to the %TOP
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
+---++++ Known Problems
+If you see a message in the text area suggesting that the topic is not locked for edit, try refreshing the page with the applet on (shift+Reload in Netscape, shift+F5 in IE). It's not really a problem, just a side-effect of the security checking in the applet.
+
 ---++++ Customisation
 All the sources and unit tests are provided with the distribution, together with an Ant build file (see http://www.jakarta.org) should further customisation be required. The source.zip is shipped in the =lib/TWiki/Plugins/%TOPIC%= directory and when unzipped creates source, packages and test subdirectories. The =src= directory contains the PowerEdit applet sources, the =test= directory contains JUnit unit tests, and the =packages= directory contains the GNU 'regexp' packages, which is used by search and replace.
 
@@ -105,7 +118,9 @@ The applet uses a simple server in the form of the 'poweredit' script (called _s
 
 When the text is saved in the editor, the applet creates a MIME form containing the text contents and writes it to the _server_ with "action" set to "put" . The _server_ caches the text in a temporary file, and replies to the applet with a URL appropriate for previewing the text.
 
-The applet reads this URL and redirects to it. Note that Java does not support passing parameters to a URL which is being redirected to, hence the necessity for the cache of the topic. The redirection is (of course) back to the _server_, this time with "action" set to "commit". The _server_ in turn invokes the standard =preview= script with the cached text as parameter, and deletes the cache.
+The applet reads this URL and redirects to it. Note that Java does not support passing parameters to a URL which is being redirected to, hence the necessity for the cache of the topic. The redirection is (of course) back to the _server_, this time with "action" set to "commit". The _server_ in turn invokes the standard =save= script with the cached text as parameter, and deletes the cache.
+
+The =preview= functions works in the same way as =save=, except that it invokes the standard =preview= script.
 
 ---++++ Copyright
 This code is a development of the Architectures and Systems
