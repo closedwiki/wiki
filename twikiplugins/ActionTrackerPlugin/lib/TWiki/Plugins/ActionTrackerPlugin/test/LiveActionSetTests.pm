@@ -51,7 +51,7 @@ sub set_up {
 ");
 }
 
-sub testGetAllInMain {
+sub test_GetAllInMain {
   my $this = shift;
   my $attrs = TWiki::Attrs->new();
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Main", $attrs);
@@ -64,7 +64,7 @@ sub testGetAllInMain {
   $this->assert_matches(qr/Main_Topic2_E_open_ontime/o, $chosen);
 }
 
-sub testGetAllInTest {
+sub test_GetAllInTest {
   my $this = shift;
   my $attrs = TWiki::Attrs->new();
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
@@ -77,7 +77,7 @@ sub testGetAllInTest {
   $this->assert_does_not_match(qr/Main_Topic2_E_open_ontime/o, $chosen);
 }
 
-sub testGetAllInAllWebs {
+sub test_GetAllInAllWebs {
   my $this = shift;
   my $attrs = TWiki::Attrs->new("web=\".*\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
@@ -101,7 +101,7 @@ sub testGetAllInAllWebs {
   $this->assert_matches(qr/Main_Topic2_E_open_ontime.*Main_Topic2_A_closed_ontime.*Test_Topic2_A_open_late.*Test_Topic1_C_open_ontime.*Main_Topic2_B_open_ontime/so, $chosen, $chosen);
 }
 
-sub testSortAllWebs {
+sub test_SortAllWebs {
   my $this = shift;
   my $attrs = TWiki::Attrs->new("web=\".*\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
@@ -111,7 +111,7 @@ sub testSortAllWebs {
   $this->assert_matches(qr/Main_Topic2_A_closed_ontime.*Test_Topic2_A_open_late.*Main_Topic2_B_open_ontime.*Test_Topic1_C_open_ontime.*Main_Topic2_E_open_ontime/so, $chosen);
 }
 
-sub testAllInTestWebRE {
+sub test_AllInTestWebRE {
   my $this = shift;
   my $attrs = TWiki::Attrs->new("web=\"T.*\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
@@ -125,7 +125,7 @@ sub testAllInTestWebRE {
   $this->assert_does_not_match(qr/Main_Topic2_E_open_ontime/o, $chosen);
 }
 
-sub testAllInMainWebRE {
+sub test_AllInMainWebRE {
   my $this = shift;
   my $attrs = TWiki::Attrs->new("web=\".*ain\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
@@ -139,7 +139,7 @@ sub testAllInMainWebRE {
   $this->assert_matches(qr/Main_Topic2_E_open_ontime/o, $chosen);
 }
 
-sub testAllTopicRE {
+sub test_AllTopicRE {
   my $this = shift;
   my $attrs = TWiki::Attrs->new("web=Test topic=\".*2\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Test", $attrs);
@@ -152,7 +152,7 @@ sub testAllTopicRE {
   $this->assert_does_not_match(qr/Main_Topic2_E_open_ontime/o, $chosen);
 }
 
-sub testAllWebsTopicRE {
+sub test_AllWebsTopicRE {
   my $this = shift;
   my $attrs = TWiki::Attrs->new("web=\".*\",topic=\".*2\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);

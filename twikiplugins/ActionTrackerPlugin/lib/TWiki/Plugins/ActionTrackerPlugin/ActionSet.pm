@@ -263,20 +263,40 @@ use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
     # file.txt: ...matched text...
     my $cmd = $ActionTrackerPlugin::ActionTrackerConfig::egrepCmd;
     my $q = $ActionTrackerPlugin::ActionTrackerConfig::cmdQuote;
-    my $grep = `$cmd $q%ACTION\\{.*\\}%$q $dd/$web/*.txt`;
-    my $topics = $attrs->get( "topic" );
-    my %processed;
-    foreach my $line ( split( /\r?\n/, $grep )) {
-      if ( $line =~ m/^.*\/([^\/\.\r\n]+)\.txt:/o ) {
-	my $topic = $1;
-	if ( !$processed{$topic} && ( !$topics || $topic =~ m/^$topics$/ )) {
-	  my $text = TWiki::Func::readTopicText( $web, $topic, undef, $internal );
-	  my $tacts = ActionTrackerPlugin::ActionSet::load( $web, $topic, $text );
-	  $tacts = $tacts->search( $attrs );
-	  $actions->concat( $tacts );
-	  $processed{$topic} = 1;
+	my $topics = $attrs->get( "topic" );
+	my @tops = TWiki::Func::getTopicList( $web );
+	@tops = grep( /^$topics$/, @tops ) if ( $topics );
+	my $topic;
+	my @groups;
+	my $group = "";
+	my $cnt = 512;
+	foreach $topic ( @tops ) {
+	  unless ( $cnt ) {
+		push( @groups, $group );
+		$group = "";
+		$cnt = 512;
+	  }
+	  $cnt--;
+	  $group .= " $dd/$web/$topic.txt";
 	}
-      }
+	push( @groups, $group ) if ( $group );
+
+	my $justDid = "";
+	foreach $group ( @groups ) {
+	  $group =~ m/^(.*)$/o; # untaint
+	  my $grep = `$cmd -H $q%ACTION\\{.*\\}%$q $1`;
+	  foreach my $line ( split( /\r?\n/, $grep )) {
+		if ( $line =~ m/^.*\/([^\/\.\r\n]+)\.txt:/o ) {
+		  $topic = $1;
+		  unless ( $topic eq $justDid ) {
+			my $text = TWiki::Func::readTopicText( $web, $topic, undef, $internal );
+			my $tacts = ActionTrackerPlugin::ActionSet::load( $web, $topic, $text );
+			$tacts = $tacts->search( $attrs );
+			$actions->concat( $tacts );
+			$justDid = $topic;
+		  }
+		}
+	  }
     }
 
     return $actions;
