@@ -28,6 +28,8 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 public class FileUploader 
 {
     HttpURLConnection httpURLConn;
+    String uploadScript;
+    private TwikiPaste twikiPaste;
 
     private static String boundary="7d1fbfe5050c";
     private static String twoHyphens="--";
@@ -44,34 +46,24 @@ public class FileUploader
      * @author	Catherine Macleod
      * @param	cgiScript script to action HTTP POST request 
      */
-    public FileUploader(String cgiScript) throws IOException
+    public FileUploader(String cgiScript, TwikiPaste hack) throws IOException
     {
 		httpURLConn = null;
-		initialiseConnection(cgiScript);
+		twikiPaste = hack;
+    	uploadScript = cgiScript;
     }
 
-    /**
-     * Initialises connection.
-     * 
-     * @author	Catherine Macleod
-    
-     *  * @param	url to send the upload 
-     */
-    public void initialiseConnection (String cgiScript) throws IOException  
+    private void addMessage(String string)
     {
-		// create HTTP-connection to the script/servlet/whatever on the server and set its properties
-		URL theURL = new URL(cgiScript);
-		httpURLConn  = (HttpURLConnection)theURL.openConnection();
-
-		httpURLConn.setRequestMethod("POST");
-		httpURLConn.setRequestProperty("Connection", "Keep-Alive");
-		httpURLConn.setDoOutput(true);
-		httpURLConn.setUseCaches(false);
-		httpURLConn.setRequestProperty("Accept-Charset", "iso-8859-1,*,utf-8");
-		httpURLConn.setRequestProperty("Accept-Language", "en");
-		httpURLConn.setRequestProperty("Content-type", "multipart/form-data; boundary=" + boundary);
-	     
+    	string += "\n"; // or CRLF
+    	if (twikiPaste != null) {
+           twikiPaste.addText(string);
+    	} else {
+    	   System.out.println("Couldn't write message '"+ string +"' to applet");	
+    	}	
     }
+
+
 	
 	void appendDispositionToOutputStream(DataOutputStream outStream, String fileName) throws IOException {
 		String contentDispositionLines = "Content-Disposition: form-data; name=\"filepath\";" + " filename=\"{0}\"" + lineEnd +lineEnd;
@@ -145,10 +137,9 @@ public class FileUploader
 		FileInputStream fis = new FileInputStream(file);
 		while (fis.available() > 0)
 		{
-
-			/* WE are working on this  */
 			int lengthRead = fis.read(buff, 0, BUFLEN);
 			outStream.write(buff, 0, lengthRead);
+			System.out.println("Sending "+lengthRead+" bytes");
 		}
 
 		fis.close();
@@ -176,9 +167,33 @@ public class FileUploader
 		outStream.writeBytes(lineEnd + lineEnd);
 		outStream.writeBytes(comment);	
 	}
-	
+
+	/**
+	 * Initialises connection.
+	 *
+	 * @author	Catherine Macleod
+
+	 *  * @param	url to send the upload
+	 */
+	public void initialiseConnection () throws IOException
+	{
+		// create HTTP-connection to the script/servlet/whatever on the server and set its properties
+		URL theURL = new URL(uploadScript);
+		httpURLConn  = (HttpURLConnection)theURL.openConnection();
+
+		httpURLConn.setRequestMethod("POST");
+		httpURLConn.setRequestProperty("Connection", "Keep-Alive");
+		httpURLConn.setDoOutput(true);
+		httpURLConn.setUseCaches(false);
+		httpURLConn.setRequestProperty("Accept-Charset", "iso-8859-1,*,utf-8");
+		httpURLConn.setRequestProperty("Accept-Language", "en");
+		httpURLConn.setRequestProperty("Content-type", "multipart/form-data; boundary=" + boundary);
+
+	}
+		
 	public DataOutputStream startUpload() throws IOException
 	{
+		initialiseConnection();
 		DataOutputStream outStream = new DataOutputStream (httpURLConn.getOutputStream());
 		appendDelimiterToOutputStream(outStream);
 		return outStream;
@@ -214,7 +229,8 @@ public class FileUploader
 		if (data instanceof Reader)
 		{
 			// open output stream to server, POST data and multipart form up to the file data
-			DataOutputStream outStream = startUpload(); 
+			DataOutputStream outStream = startUpload();
+			addMessage("You've got RTF on the clipboard... uploading as clipboard.rtf"); 
 			appendToOutputStream((Reader)data, "clipboard.rtf", outStream);
 			finishUpload(outStream);
 			
@@ -223,6 +239,7 @@ public class FileUploader
 		else if (data instanceof String)
 		{
 			DataOutputStream outStream = startUpload();
+			addMessage("You've got text on the clipboard... uploading as clipboard.txt");
 			appendToOutputStream((String) data, "clipboard.txt", outStream);
 			finishUpload(outStream);
 		}
@@ -231,6 +248,7 @@ public class FileUploader
 		else if (data instanceof Image)
 		{
 			DataOutputStream outStream = startUpload();
+			addMessage("Converting image on clipboard to jpeg, uploading as clipboard.jpg");
 			appendToOutputStream((Image)data, "clipboard.jpg", outStream);
 			finishUpload(outStream);				
 		}
@@ -246,12 +264,12 @@ public class FileUploader
 			{
 				f = ((File)iterator.next());
 				DataOutputStream outStream = startUpload();
-				System.out.println("filename: "+f.getPath());
+				addMessage("filename: "+f.getPath());
 				appendToOutputStream(f,outStream);					
 				finishUpload(outStream);
 			}
 		} else {
-		    System.out.println("Can't send this, as I don't understand the type: " +  data.getClass().getName());
+		    addMessage("I can't send this, as I don't understand the type: " +  data.getClass().getName());
 		}
 
     }
