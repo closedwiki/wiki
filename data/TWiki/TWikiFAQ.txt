@@ -1,5 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="999308845" format="1.0" version="1.2"}%
----+ Frequently Asked Questions around the %WIKITOOLNAME% Tool
+%META:TOPICINFO{author="MikeMannix" date="999865017" format="1.0" version="1.3"}%
+---+ Frequently Asked Questions About %WIKITOOLNAME%
+
+This is a real FAQ and a demo application - one way to implement a knowledge base solution.
 
 %SEARCH{ "\-\-\-\+\+ FAQ\:" casesensitive="on" regex="on" nosearch="on" nototal="on"}%
 
