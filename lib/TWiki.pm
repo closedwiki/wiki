@@ -2760,6 +2760,37 @@ sub handleIcon
 
 =pod
 
+---++ sub handleRelativeTopicPath ( $styleTopic, $web )
+
+Not yet documented.
+
+=cut
+
+sub handleRelativeTopicPath
+{
+       my( $theStyleTopic, $theWeb ) = @_;
+
+       if ( !$theStyleTopic ) {
+               return "";
+       }
+       my $theRelativePath;
+       # if there is no dot in $theStyleTopic, no web has been specified
+       if ( index( $theStyleTopic, "." ) == -1 ) {
+               # add local web
+               $theRelativePath = $theWeb . "/" . $theStyleTopic;
+       } else {
+               $theRelativePath = $theStyleTopic; #including dot
+       }
+       # replace dot by slash is not necessary; TWiki.MyTopic is a valid url
+       # add ../ if not already present to make a relative file reference
+       if ( index( $theRelativePath, "../" ) == -1 ) {
+               $theRelativePath = "../" . $theRelativePath;
+       }
+       return $theRelativePath;
+}
+
+=pod
+
 ---++ handleInternalTags( $text, $topic, $web )
 
 Modifies $text in-place, replacing variables internal to TWiki with their
@@ -2811,6 +2842,7 @@ sub handleInternalTags
     $_[0] =~ s/%SCRIPTSUFFIX%/$scriptSuffix/g;
     $_[0] =~ s/%PUBURL%/$urlHost$pubUrlPath/g;
     $_[0] =~ s/%PUBURLPATH%/$pubUrlPath/g;
+    $_[0] =~ s/%RELATIVETOPICPATH{(.*?)}%/&handleRelativeTopicPath($1,$_[2])/ge;
 
     # Attachments
     $_[0] =~ s!%ATTACHURL%!$urlHost%ATTACHURLPATH%!g;
