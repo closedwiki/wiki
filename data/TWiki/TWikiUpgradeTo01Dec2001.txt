@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999908646" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="MikeMannix" date="999990233" format="1.0" version="1.14"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -31,7 +31,7 @@ The 01 Sep 2001 release includes the following new features and enhancements:
 	* *[[TWikiDocumentation#Changing_Passwords][Change passwords]]* Change and reset passwords using forms.
 	* *TOC (Table of Contents)* - =%<nop>TOC%= variable generates a hierarchical table of contents from topic headings: &lt;HI&gt;...&lt;H6&gt;. Set depth.
 	* *[[%TWIKIWEB%.TWikiVariables][Arbitrary Text for <nop>WikiWord Links]]* - Text formatting rules to generate automatic links from any combination of words and spaces.
-	* *[[%TWIKIWEB%.FileAttachments][Attachments Under Revision Control]* Changes to files attached to topics - - are now tracked under revision control (RCS).
+	* *[[%TWIKIWEB%.FileAttachment][Attachments Under Revision Control]]* Changes to files attached to topics - - are now tracked under revision control (RCS).
 	* *ConvertToXHTML10* - Templates and HTML page rendering are in XHTML 1.0 as far as possible without breaking HTML 3.2 compliance.
 	* *HierarchicalNavigation* uses new Meta Data variables to link hierarchically, for example, as in Yahoo! and other search sites. 
 
@@ -120,13 +120,13 @@ Follow this step-by-step guide to upgrade the 01 Dec 2000 version to the 01 Sep 
 		1. The =WebSearch= topic has considerable changes. Copy the one from =TWiki.TWiki= into all webs, or merge them if you made changes. To copy, do an edit-copy-edit-paste operation.
 		1. __Change the =WebHome= topics in all your webs to reflect these changes:__
 		1. If you are using ==.htaccess==, add the =rename= script
-		  * You may want to add =[ALLOW|DENY][WEB|TOPIC]RENAME= in some places, like  %TWIKIWEB%TWikiPreferences, WebPreferences and %MAINWEB%.TWikiUsers
+		  * You may want to add =[ALLOW|DENY][WEB|TOPIC]RENAME= in some places, like  %TWIKIWEB%.TWikiPreferences, WebPreferences and %MAINWEB%.TWikiUsers
 		  
 ---+++ General Format Changes
 
 	* Format changed of ==%<nop>GMTIME{"..."}%== and ==%<nop>SERVERTIME{"..."}%== variables. Format is now =="$hour:$min"== instead of =="hour:min"==. More in %TWIKIWEB%.TWikiVariables.
 
-	* ExtendingTableSyntax: Enhanced table syntax might have unwanted side effect: ==| <nop>*bold*<nop> |== cells, ==|  center aligned  |== and ==|	right aligned |== cells, span multiple columns using ==| empty cells |||==. More in %TWIKIWEB%.TextFormattingRules.
+	* [[%TWIKIWEB%.TWikiVariables][ExtendingTableSyntax]]: Enhanced table syntax might have unwanted side effect: ==| <nop>*bold*<nop> |== cells, ==|  center aligned  |== and ==|	right aligned |== cells, span multiple columns using ==| empty cells |||==. More in %TWIKIWEB%.TextFormattingRules.
 
 	* Use ==Net::SMTP== module instead of ==sendmail== if installed. 
 
