@@ -36,7 +36,7 @@ my $result = GetOptions(
 pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 
-# TODO: use config to process these (learn how to do this)
+# TODO: use Getopt to process these (learn how to do this)
 map { $Config->{$_} = rel2abs( $Config->{$_} ) } qw( temp_dir output_dir );
 
 $Config->{local_cache} = $Config->{temp_dir} . "/.cache";
@@ -183,20 +183,20 @@ sub execute
 __DATA__
 =head1 NAME
 
-    build-twiki-kernel.pl - Codev.TWikiKernel
+build-twiki-kernel.pl - Codev.TWikiKernel
 
 =head1 SYNOPSIS
 
-    build-twiki-kernel.pl [options] [-tempdir=] [-outputdir=] [-agent=]
+build-twiki-kernel.pl [options] [-tempdir=] [-outputdir=] [-agent=]
 
 Copyright 2004 Will Norris and Sven Dowideit.  All Rights Reserved.
 
-  Options:
-    -tempdir=[.]		where all temporary files for this build are placed
-    -outputdir=[.]		where the generated TWikiKernel-BRANCH-DATE.tar.gz is placed
-    -agent=[$Config->{agent}]	LWP::UserAgent name
-    -help			this documentation
-    -man			full docs
+ Options:
+   -tempdir=[.]		where all temporary files for this build are placed
+   -outputdir=[.]		where the generated TWikiKernel-BRANCH-DATE.tar.gz is placed
+   -agent=[$Config->{agent}]	LWP::UserAgent name
+   -help			this documentation
+   -man			full docs
 
 =head1 OPTIONS
 
@@ -216,7 +216,7 @@ B<build-twiki-kernel.pl> will build a TWikiKernel release file suitable for dist
 
 The TWikiKernel is comprised of several subsystems:
     * CgiScripts - fulfils requests from the web. Primarily through the ViewCgiScript
-    * AuthenticationSubSystem - authenticates users and bestows privileges.
+    * AuthenticationSubSystem - authenticates users and bestows privileges
     * ParsePipeline - interprets what's typed in forms and topics and converts into Topics, Forms, MetaData and Attachments
     * StorageSubSystem - arranges for data to be stored, currently in RcsFormat
     * RenderingPipeline - displays WikiML Topics, Forms, MetaData and Attachments as HTML
