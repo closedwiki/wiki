@@ -32,7 +32,7 @@ BEGIN {
     }
 }
 
-use vars qw( $useLocale );
+use vars qw( $useLocale $setlibAvail );
 
 # ===========================
 # Read the configuration file at compile time in order to set locale
@@ -52,7 +52,7 @@ BEGIN {
 # use diagnostics;	# Debug only
 
 
-my $setlibAvail = -r './setlib.cfg'; 
+$setlibAvail = -r './setlib.cfg'; 
 
 
 &main();
