@@ -704,7 +704,7 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 
 
 
-%META:FILEATTACHMENT{name="PatternSkinPalette.css" attr="" comment="" date="1093733793" path="PatternSkinPalette.css" size="9554" user="ArthurClemens" version="1.1"}%
-%META:FILEATTACHMENT{name="filterColours.pl.txt" attr="" comment="" date="1093733821" path="filterColours.pl.txt" size="98" user="ArthurClemens" version="1.1"}%
-%META:FILEATTACHMENT{name="makeColourTable.pl.txt" attr="" comment="" date="1093733844" path="makeColourTable.pl.txt" size="330" user="ArthurClemens" version="1.1"}%
-%META:FILEATTACHMENT{name="textmask.gif" attr="h" comment="" date="1093821457" path="textmask.gif" size="101" user="ArthurClemens" version="1.1"}%
+%META:FILEATTACHMENT{name="PatternSkinPalette.css" attr="" comment="" date="1093733793" path="PatternSkinPalette.css" size="9554" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="filterColours.pl.txt" attr="" comment="" date="1093733821" path="filterColours.pl.txt" size="98" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="makeColourTable.pl.txt" attr="" comment="" date="1093733844" path="makeColourTable.pl.txt" size="330" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="textmask.gif" attr="h" comment="" date="1093821457" path="textmask.gif" size="101" user="TWikiContributor" version="1.1"}%

@@ -690,4 +690,4 @@ People who've tested or reviewed this document and provided valuable feedback in
 ---
 %X% Comments welcome at TWiki:Codev.WindowsInstallCookbookComments
 
-%META:FILEATTACHMENT{name="cygwin-icon.gif" attr="h" comment="Cygwin icon" date="1092612100" path="C:\Data\Temp\cygwin-icon.gif" size="132" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="cygwin-icon.gif" attr="h" comment="Cygwin icon" date="1092612100" path="C:\Data\Temp\cygwin-icon.gif" size="132" user="TWikiContributor" version="1.1"}%

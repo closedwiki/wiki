@@ -53,10 +53,10 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the %TWIK
 
 __Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser
 
-%META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" date="1091257589" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\screenshot.gif" size="5104" user="PeterThoeny" version="1.2"}%
-%META:FILEATTACHMENT{name="fullscreen.gif" attr="h" comment="" date="1091257219" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\fullscreen.gif" size="15695" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="spacer.gif" attr="h" comment="" date="1091257235" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\spacer.gif" size="43" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="gray.theme.css" attr="h" comment="" date="1091257274" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\gray.theme.css" size="5695" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="monochrome.theme.css" attr="h" comment="" date="1091257259" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\monochrome.theme.css" size="6493" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="tabstyle.theme.css" attr="h" comment="" date="1091257262" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\tabstyle.theme.css" size="5739" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="typography.css" attr="h" comment="" date="1091257302" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\typography.css" size="1987" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" date="1091257589" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\screenshot.gif" size="5104" user="TWikiContributor" version="1.2"}%
+%META:FILEATTACHMENT{name="fullscreen.gif" attr="h" comment="" date="1091257219" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\fullscreen.gif" size="15695" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="spacer.gif" attr="h" comment="" date="1091257235" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\spacer.gif" size="43" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="gray.theme.css" attr="h" comment="" date="1091257274" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\gray.theme.css" size="5695" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="monochrome.theme.css" attr="h" comment="" date="1091257259" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\monochrome.theme.css" size="6493" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="tabstyle.theme.css" attr="h" comment="" date="1091257262" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\tabstyle.theme.css" size="5739" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="typography.css" attr="h" comment="" date="1091257302" path="C:\Data\MyTWiki\Skins\dragonskin\pub\TWiki\DragonSkin\typography.css" size="1987" user="TWikiContributor" version="1.1"}%

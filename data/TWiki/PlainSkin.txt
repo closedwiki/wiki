@@ -26,5 +26,5 @@ __Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser
 
 
 
-%META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" date="1090918243" path="C:\Data\Temp\screenshot.gif" size="4407" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="fullscreen.gif" attr="h" comment="" date="1090918257" path="C:\Data\Temp\fullscreen.gif" size="8915" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" date="1090918243" path="C:\Data\Temp\screenshot.gif" size="4407" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="fullscreen.gif" attr="h" comment="" date="1090918257" path="C:\Data\Temp\fullscreen.gif" size="8915" user="TWikiContributor" version="1.1"}%

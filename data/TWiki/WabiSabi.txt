@@ -25,4 +25,4 @@ For more about wabi-sabi, see http://www.art.unt.edu/ntieva/artcurr/asian/wabisa
 
 __Related Topics:__ WikiCulture, TWikiSite
 
-%META:FILEATTACHMENT{name="wabisabi.gif" attr="h" comment="Wabi Sabi" date="984123900" path="C:\DATA\wabisabi.gif" size="994" user="thoeny" version=""}%
+%META:FILEATTACHMENT{name="wabisabi.gif" attr="h" comment="Wabi Sabi" date="984123900" path="C:\DATA\wabisabi.gif" size="994" user="TWikiContributor" version=""}%

@@ -12,7 +12,7 @@ Remarks:
 
 
 
-%META:FILEATTACHMENT{name="blankltgraybg.gif" attr="" comment="Blank white background" date="970534080" path="D:\Data\Temp\blankltgraybg.gif" size="878" user="PeterThoeny" version=""}%
-%META:FILEATTACHMENT{name="blankwhitebg.gif" attr="" comment="Blank white background" date="970534080" path="D:\Data\Temp\blankwhitebg.gif" size="878" user="PeterThoeny" version=""}%
-%META:FILEATTACHMENT{name="previewbg.gif" attr="" comment="Slanted PREVIEW watermark" date="970533960" path="D:\Data\Temp\previewbg.gif" size="1821" user="PeterThoeny" version=""}%
-%META:FILEATTACHMENT{name="preview2bg.gif" attr="" comment="Slanted PREVIEW, 3D" date="1030259095" path="preview2bg.gif" size="1881" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="blankltgraybg.gif" attr="" comment="Blank white background" date="970534080" path="D:\Data\Temp\blankltgraybg.gif" size="878" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="blankwhitebg.gif" attr="" comment="Blank white background" date="970534080" path="D:\Data\Temp\blankwhitebg.gif" size="878" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="previewbg.gif" attr="" comment="Slanted PREVIEW watermark" date="970533960" path="D:\Data\Temp\previewbg.gif" size="1821" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="preview2bg.gif" attr="" comment="Slanted PREVIEW, 3D" date="1030259095" path="preview2bg.gif" size="1881" user="TWikiContributor" version="1.1"}%

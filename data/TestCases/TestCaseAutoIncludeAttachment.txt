@@ -30,5 +30,5 @@ The requested URL %ATTACHURLPATH%/noexist was not found on this server.<P>
 <!-- manual /actual -->
 
 
-%META:FILEATTACHMENT{name="attachment.html" attachment="attachment.html" attr="" comment="" date="1101889684" path="attachment.html" size="18" tmpFilename="/var/tmp/CGItemp34644" user="guest" version="1.1"}%
+%META:FILEATTACHMENT{name="attachment.html" attachment="attachment.html" attr="" comment="" date="1101889684" path="attachment.html" size="18" tmpFilename="/var/tmp/CGItemp34644" user="TWikiContributor" version="1.1"}%
 
