@@ -1,0 +1,4 @@
+data/TWiki/WtfPlugin.txt Plugin topic
+lib/TWiki/Plugins/WtfPlugin.pm Plugin Perl module
+lib/TWiki/Plugins/WtfPlugin/build.pl Build file
+
