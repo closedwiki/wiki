@@ -101,8 +101,9 @@ case "$1" in
 	       :
 	   else
 	       echo "twiki needs mod_action loaded,  doing DSO scan..."
-	       if [ -x /usr/sbin/apacheconfig ]; then
-		   (echo y; echo n) | /usr/sbin/apacheconfig --force-modules
+	       if [ -x /usr/sbin/modules-config ]; then
+#grumble - why do i need to know which apache is loaded?
+		   /usr/sbin/modules-config apache enable modaction
 		   echo "Restart apache yourself for now..."
 	       fi
 	   fi

@@ -8,6 +8,7 @@ twiki (20030201-5) unstable; urgency=high
     - (Closes: #255782)
   * made TWikiRegistrationPub the default to match .htaccess default
     - (Closes: #221514)
+  * use modules-config instead of apacheconfig (Closes: 251340)
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sat, 17 Jan 2004 00:00:01 -1000
 
