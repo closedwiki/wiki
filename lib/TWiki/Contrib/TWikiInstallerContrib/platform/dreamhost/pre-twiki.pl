@@ -21,20 +21,15 @@ if ( -e "cgi-bin/install_twiki.cgi" )
     exit 0;
 }
 
--d "cgi-bin" || mkpath "cgi-bin";
+-d "cgi-bin" || mkpath( "cgi-bin", 0, 0755 );
 print `cp install_twiki.cgi cgi-bin/ ; chmod +x cgi-bin/install_twiki.cgi` unless -e "cgi-bin/install_twiki.cgi";
 
 mkpath( [ qw( cgi-bin/tmp/ cgi-bin/tmp/twiki/pub/ cgi-bin/tmp/twiki/templates/ cgi-bin/tmp/install/ ) ] );
 print `cp -R downloads/ cgi-bin/tmp/install/downloads/`;
 print `cp -R cpan/ cgi-bin/tmp/install/cpan/`;
 print `cp -R webs/ cgi-bin/tmp/install/webs/`;
-print `chmod -R 777 cgi-bin/tmp/`;
+mkpath( [ qw( cgi-bin/twiki/ cgi-bin/lib/ twiki/ cgi-bin/lib/CPAN/ ) ] );
 
-print `mkdir -p cgi-bin/twiki/ ; chmod 777 cgi-bin/twiki/`;
-print `mkdir -p cgi-bin/lib/ ; chmod -R 777 cgi-bin/lib/`;
-print `mkdir -p twiki/ ; chmod -R 777 twiki/`;
-
-print `mkdir -p cgi-bin/lib/CPAN/ ; chmod -R 777 cgi-bin/lib/CPAN/`;
 if ( -e ( my $mirrorOrigLoc = "cgi-bin/tmp/install/cpan/MIRROR/" ) ) 
 { 
     print `mv $mirrorOrigLoc/ cgi-bin/lib/CPAN/`;
