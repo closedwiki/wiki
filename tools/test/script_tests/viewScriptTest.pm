@@ -53,6 +53,11 @@ sub test_simple2 {
   $this->compareOldAndNew("view", "TWiki", "TextFormattingRules", undef, 1);
 }
 
+sub test_simple3 {
+  my $this = shift;
+  $this->compareOldAndNew("view", "TWiki", "TWikiDocGraphics", undef, 1);
+}
+
 sub ntest_raw {
   my $this = shift;
   $this->compareOldAndNew("view", "TWiki", "TextFormattingFAQ", "raw=on", 0);
