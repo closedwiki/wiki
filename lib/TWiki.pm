@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = 'Alpha 29 Aug 2004 $Rev$';
+$wikiversion      = '01 Sep 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
