@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044132393" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092561150" format="1.0" version="1.3"}%
 ---+!! TWiki Admin Cook Book
 
 This page has many tips and tricks, particularly useful when you're installing TWiki for the first time. This guide is most useful *%RED%before%ENDCOLOR%* or immediately following a TWiki installation! 
@@ -30,7 +30,7 @@ A quick way to check the guest password is to view the =.htaccess= file.
 ----
 ---++ Before First Presentation
 
-Tips about first presentation -- read TWiki:Main.TWikiCourseOutlineExample and TWiki:Codev.HowToGetInternalBuyInForTWiki. TWiki:Main.TWikiPresentations page has PeterThoeny's full presentation, RichardDonkin added an *excellent* <nop>PowerPoint version (only 18 slides), with places to add your own info. 
+Tips about first presentation -- ATasteOfTWiki is a handy presentation you can give to your users. Read also TWiki:Main.TWikiCourseOutlineExample and TWiki:Codev.HowToGetInternalBuyInForTWiki. The TWiki:Codev.TWikiPresentation05Aug2004 talk given by TWiki:Main.PeterThoeny during !LinuxWorld gives some background on TWiki collaboration.
 
 How to build participation: read WikiOrg:TipsForSiteOperators - advice directly from Ward Cunningham, author of Wiki concept and first Wiki.
 
@@ -49,9 +49,16 @@ There is currently a discussion at TWiki:Codev.SimplerDefaultTemplates about sim
 Select simpler skin and customize beginner's help topics accordingly. 
 
 ---
+---++ Ongoing admin tasks
+
+---+++ Admin Tools
+
+AdminTools has most of the tools you need to administer a TWiki site - on one page. You can link it from SiteMap.
+
+---------------------
 ---++ Best of Plugins
 
-With more than 60 TWiki plugins (and counting), there are a lot to choose from. Plugins are mainly contributed by TWiki users who are software developers. Plugins are a relatively new TWiki addition, so there are fewer established standards than for the core TWiki code.  This means that not all plugins are equal in ease of installation, operation, or compatibility with each other. Here are selected plugins that are reliable, easy-to-use and offer basic enhanced functionality.
+With more than 100 TWiki plugins (and counting), there are a lot to choose from. Plugins are mainly contributed by TWiki users who are software developers. Plugins are a relatively new TWiki addition, so there are fewer established standards than for the core TWiki code.  This means that not all plugins are equal in ease of installation, operation, or compatibility with each other. Here are selected plugins that are reliable, easy-to-use and offer basic enhanced functionality.
 
 #CommentPlugin
 ---+++ <nop>CommentPlugin !! -- TWiki:Plugins.CommentPlugin
@@ -88,3 +95,4 @@ This lets you create variables, like a graphics icon library, in any topic - ins
 Please add your favorite TWiki tips/trick to TWiki:%WEB%.%TOPIC% to help the next new TWiki admin. (One BIG area: include pages of implemented basic SEARCHes, like, to generate a straight TOPICS list (alphabetical web topic titles only); also, simple combos of forms + search, like one- and two-category forms to use to classify pages, and then searches to find and display in few useful formats; more in that general area.)
 
 *Contributors:* TWiki:Main.GrantBow, TWiki:Main.JonReid, TWiki:Main.MikeMannix, TWiki:Main.MikeMaurer, TWiki:Main.PeterMasiar, TWiki:Main.PeterThoeny
+

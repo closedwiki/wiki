@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1084085418" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092561291" format="1.0" version="1.12"}%
 ---+ TWiki Contributor
 
 A TWiki contributor is a person devoting his/her time to contribute on the development of the Open Source project TWiki, hosted at http://TWiki.org/ . It is defined as a person who:
@@ -17,6 +17,7 @@ I would like to take this opportunity to express my sincere appreciation and tha
 | Andrea Sterbini | TWiki:Main/AndreaSterbini | TWiki:Codev/CoreTeam member |
 | Antonio Bellezza | TWiki:Main/AntonioBellezza | |
 | Arthur Clemens | TWiki:Main/ArthurClemens | TWiki:Codev/CoreTeam member |
+| Carl Patten | TWiki:Main/CarlPatten | |
 | Caylan Larson | TWiki:Main/CaylanLarson | |
 | Christophe Vermeulen | TWiki:Main/ChristopheVermeulen | |
 | Claus Brunzema | TWiki:Main/ClausBrunzema | |
@@ -39,6 +40,7 @@ I would like to take this opportunity to express my sincere appreciation and tha
 | Martin Raabe | TWiki:Main/MartinRaabe | |
 | MS | TWiki:Main/MichaelSparks | |
 | Mike Mannix | TWiki:Main/MikeMannix | TWiki:Codev/CoreTeamHallOfFame member |
+| Neil !McCurdy  | TWiki:Main/NeilMcCurdy | |
 | Nicholas Lee | TWiki:Main/NicholasLee | TWiki:Codev/CoreTeam member |
 | Niels Koldso | TWiki:Main/NielsKoldso | |
 | Pauline Cheung | TWiki:Main/PaulineCheung | |
@@ -54,6 +56,7 @@ I would like to take this opportunity to express my sincere appreciation and tha
 | Sue Blake | TWiki:Main/SueBlake | |
 | Sven Dowideit | TWiki:Main/SvenDowideit | TWiki:Codev/CoreTeam member |
 | Ted Pavlic | TWiki:Main/TedPavlic | |
+| Thomas Weigert | TWiki:Main/ThomasWeigert | |
 | Vito Miliano | TWiki:Main/VitoMiliano | |
 | Walter Mundt | TWiki:Main/WalterMundt | TWiki:Codev/CoreTeam member |
 
