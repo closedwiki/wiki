@@ -41,11 +41,29 @@ use TWiki::Func;
     push @{$this->{ACTIONS}}, $action;
   }
 
-  # PUBLIC sort by due date
-  sub sort {
-    my $this = shift;
+  # PRIVATE place to put sort fields
+  my @_sortfields;
 
-    @{$this->{ACTIONS}} = sort { $a->{DUE} <=> $b->{DUE} } @{$this->{ACTIONS}};
+  # PUBLIC sort by due date or, if given, by an ordered sequence
+  # of attributes by string value
+  sub sort {
+    my ( $this, $order ) = @_;
+
+    if ( defined( $order ) ) {
+      $order =~ s/[^\w,]//g;
+      @_sortfields = split( /,/, $order );
+      @{$this->{ACTIONS}} = sort {
+	foreach my $sf ( @_sortfields ) {
+	  my $c = ( $a->{$sf} cmp $b->{$sf} );
+	  return $c if ( $c != 0 );
+	}
+	# default to sorting on due
+	$a->{due} <=> $b->{due};
+      } @{$this->{ACTIONS}};
+    } else {
+      @{$this->{ACTIONS}} =
+	sort { $a->{due} <=> $b->{due} } @{$this->{ACTIONS}};
+    }
   }
 
   # PUBLIC Concatenate another action set to this one
@@ -73,48 +91,48 @@ use TWiki::Func;
   }
 
   # PUBLIC format the action set as an HTML table
-  # Pass $type="name" to to get a jump to a position
+  # Pass $type="name" to to get an anchor to a position
   # within the topic, "href" to get a jump. Defaults to "name".
   # Pass $newWindow=1 to get separate browser window,
   # $newWindow=0 to get jump in same window.
-  sub formatAsTable {
-    my ( $this, $type, $newWindow ) = @_;
-    my $action;
+  sub formatAsHTML {
+    my ( $this, $type, $format, $newWindow ) = @_;
 
-    my $text = "<table border=$Action::border>\n" .
-      "<tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th>" .
-	"<th>Due date</th>" .
-	  "<th>Description</th>" .
-	    "<th>State</th><th>&nbsp;</th></tr>\n";
-    foreach $action ( @{$this->{ACTIONS}} ) {
-      my $row = $action->formatAsTableData( $type, $newWindow );
-      $text .= "<tr valign=\"top\">$row</tr>\n";
+    my $text =
+      "<table border=$Action::border><tr bgcolor=\"$Action::hdrcol\">" .
+	$format->getHTMLHeads() . "</tr>";
+
+    foreach my $action ( @{$this->{ACTIONS}} ) {
+      my $row = $action->formatAsHTML( $type, $format, $newWindow );
+      $text .= "<tr valign=\"top\">$row</tr>";
     }
 
-    return "$text</table>\n";
+    return "$text</table>";
   }
 
   # PUBLIC format the action set as a plain string
   sub formatAsString {
-    my ( $this, $type ) = @_;
+    my ( $this, $format ) = @_;
     my $action;
     my $text = "";
 
     foreach $action ( @{$this->{ACTIONS}} ) {
-      $text .= $action->formatAsString( $type ) . "\n";
+      $text .= $action->formatAsString( $format ) . "\n";
     }
 
     return $text;
   }
 
-  # PUBLIC find actions that have changed. Because action numbering
-  # may have changed, the actions are matched using a fuzzy match
-  # tuned for detecting 'interesting' state changes in actions.
+  # PUBLIC find actions that have changed.
+  # Recent actions will have a UID that lets us match them exactly,
+  # but older actions will not have a UID and will have to be
+  # matched using a fuzzy match tuned for detecting 'interesting'
+  # state changes in actions.
   # See Action->fuzzyMatches for details.
   # Changed actions are returned as text in a hash keyed on the
   # names of people who have registered for notification.
-  sub gatherNotifications {
-    my ( $this, $old, $date, $notifications ) = @_;
+  sub findChanges {
+    my ( $this, $old, $date, $format, $notifications ) = @_;
     my @matchNumber = ();
     my @matchValue = ();
 
@@ -127,8 +145,9 @@ use TWiki::Func;
       my $oaction = @{$old->{ACTIONS}}[$o];
       for ( my $i = $n; $i < scalar( @{$this->{ACTIONS}} ); $i++ ) {
 	my $naction = @{$this->{ACTIONS}}[$i];
-	if ( $naction->fuzzyMatches( $oaction ) > 7 ) {
-	  $naction->gatherNotifications( $oaction, $notifications );
+	my $score = $naction->fuzzyMatches( $oaction );
+	if ( $score > 7 ) {
+	  $naction->findChanges( $oaction, $format, $notifications );
 	  $n = $i + 1;
 	  last;
 	}
@@ -143,7 +162,10 @@ use TWiki::Func;
     my $action;
 
     foreach $action ( @{$this->{ACTIONS}} ) {
-      $whos->{$action->who()} = 1;
+      my @persons = split( /[,\s]+/, $action->{who} );
+      foreach my $person ( @persons ) {
+	$whos->{$person} = 1;
+      }
     }
     return $whos;
   }
@@ -162,6 +184,7 @@ use TWiki::Func;
     # isn't very useful in TWiki.
     # Also assumed: the output of the egrepCmd must be of the form
     # file.txt: ...matched text...
+    # SMELL: uses unpublished TWiki:: constants
     chdir( "$dd/$web" );
     my $grep = `${TWiki::egrepCmd} ${TWiki::cmdQuote}%ACTION\\{.*\\}%${TWiki::cmdQuote} *.txt`;
     #&TWiki::Func::writeWarning( "Grep $dd/$web $grep" );
@@ -174,9 +197,11 @@ use TWiki::Func;
       my $text = $3;
       $topic =~ s/[\r\n\s]+//go;
       $number = 0 if ( $topic ne $lastTopic );
-      if ( ! $topics || $topic =~ /^$topics$/ ) { 
+      if ( ! $topics || $topic =~ /^$topics$/ ) {
 	my $action = Action->new( $web, $topic, $number++, $sat, $text );
-	$actions->add( $action ) if ( $action->matches( $attrs ) );
+	if ( $action->matches( $attrs ) ) {
+	  $actions->add( $action )
+	}
       }
       $lastTopic = $topic;
     }

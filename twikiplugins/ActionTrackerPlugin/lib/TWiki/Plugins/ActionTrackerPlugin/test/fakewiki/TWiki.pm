@@ -45,7 +45,10 @@ use vars qw(
   TWiki::TestMaker::init();
   $dataDir = TWiki::TestMaker::getDataDir();
   $pubDir =  TWiki::TestMaker::getPubDir();
-
+  $notifyTopicname = "WebNotify";
+  $egrepCmd = "/bin/egrep";
+  $cmdQuote = "'";
+$securityFilter     = "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\x00-\x1F]";
   sub initialize {
     my ( $path, $remuser, $topic, $url, $query ) = @_;
 

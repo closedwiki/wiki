@@ -30,7 +30,20 @@ use TWiki::TestMaker;
 
   sub getPreferencesValue {
     my $thing = shift;
-    return "PREFS($thing)";
+    if ($TWiki::TestMaker::prefs{$thing}) {
+      return $TWiki::TestMaker::prefs{$thing};
+    } else {
+      return "PREFS($thing)";
+    }
+  }
+
+  sub getPreferencesFlag {
+    my $thing = shift;
+    if ($TWiki::TestMaker::prefs{$thing}) {
+      return $TWiki::TestMaker::prefs{$thing};
+    } else {
+      return "PREFS($thing)";
+    }
   }
 
   sub webExists {
@@ -43,10 +56,19 @@ use TWiki::TestMaker;
     return -f getDataDir() . "/$web/$topic.txt";
   }
 
-  sub readTopic {
-    my ( $web,$topic ) = @_;
+  sub readTopicText {
+    my ( $web,$topic,$rev ) = @_;
+    if ("$rev" ne "") {
+      my $cmd = "/usr/bin/co -q -p -r1.$rev ".getDataDir() . "/$web/$topic.txt";
+      return `$cmd`;
+    }
     return TWiki::TestMaker::readFile( getDataDir() . "/$web/$topic.txt" );
   }
+
+#  sub readTopic {
+#    my ( $web,$topic ) = @_;
+#    return TWiki::TestMaker::readFile( getDataDir() . "/$web/$topic.txt" );
+#  }
 
   sub readTemplate {
     my $template = shift;

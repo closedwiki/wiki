@@ -24,11 +24,8 @@
         <include name="${plugin.lib}/*.pm"/>
         <include name="${plugin.data}*.txt"/>
         <include name="bin/actionnotify"/>
-        <include name="bin/editaction"/>
-        <include name="bin/previewaction"/>
         <include name="templates/actionnotify.tmpl"/>
-        <include name="templates/actionchangenotify.tmpl"/>
-        <include name="templates/editaction.tmpl"/>
+        <include name="templates/edit.action.tmpl"/>
         <include name="${test.zip}"/>
     </patternset>
 
