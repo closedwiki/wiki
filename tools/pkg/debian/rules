@@ -122,6 +122,7 @@ install: build
 
 # fix paths for index.html
 	perl -pi~ -e 's|\./bin/view/Main/WebHome|/cgi-bin/twiki/view/Main/WebHome|;' index.html
+	rm index.html~
 
 # Build architecture-independent files here.
 binary-indep: build install
