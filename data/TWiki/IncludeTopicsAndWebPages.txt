@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="PeterThoeny" date="1039594686" format="1.0" version="1.4"}%
-*Include Topics and Web Pages Using ==%<nop>INCLUDE{...}%== Variable*
+%META:TOPICINFO{author="PeterThoeny" date="1042702500" format="1.0" version="1.5"}%
+---+!! Include Topics and Web Pages Using ==%<nop>INCLUDE{...}%== Variable
 
 Use the ==%<nop>INCLUDE{...}%== variable to embed the content of another topic or web page inside a %WIKITOOLNAME% topic. The whole content or only parts of a page can be included.
 
@@ -30,33 +30,29 @@ __Note:__ All text of a topic is included unless you specify ==%<nop>STARTINCLUD
 ---+++ 1. Display regression test results in a TWiki page
 <pre>
   &lt;pre&gt;
-  %<nop>INCLUDEURL{"http://domain/~qa/v1.1/REDTest.log.txt"}%
+  %<nop>INCLUDE{"http://domain/~qa/v1.1/REDTest.log.txt"}%
   &lt;/pre&gt;
 </pre>
 
 ---+++ 2. Display Yahoo's robot.txt file
 
 	* You type:
-		* ==%<nop>INCLUDE{"http://www.yahoo.com/robots.txt"}%== <br>
-	* You get:
-<verbatim>
-%INCLUDE{"http://www.yahoo.com/robots.txt"}%
-</verbatim>
+		* ==%<nop>INCLUDE{"http://www.yahoo.com/robots.txt"}%==
 
 ---+++ 3. Display the SUNW stock quote in a TWiki page
 
 	* You type:
-		* ==SUNW: %<nop>INCLUDE{"http://finance.yahoo.com/q?s=SUNW&d=v1&o=t" pattern="^.*?&gt;SUNW&lt;/a&gt;[^&lt;]+(.*?)\s+\S+\s+&lt;small.*"}%== <br>
+		* ==SUNW: %<nop>INCLUDE{"http://finance.yahoo.com/q?s=SUNW&d=v1&o=t" pattern="^.*?&gt;SUNW&lt;/a&gt;[^&lt;]+(.*?)\s+\S+\s+&lt;small.*"}%==
 	* You get:
 		* SUNW: %INCLUDE{"http://finance.yahoo.com/q?s=SUNW&d=v1&o=t" pattern="^.*?>SUNW</a>[^<]+(.*?)\s+\S+\s+<small.*"}%
 
 ---+++ 4. Display the temperature in San Francisco
 
 	* You type:
-		* ==San Francisco: %<nop>INCLUDE{"http://weather.yahoo.com/forecast/San_Francisco_CA_US_f.html" pattern="^.*?([0-9]+\&amp;ordm\;F).*"}%== <br>
+		* ==San Francisco: %<nop>INCLUDE{"http://weather.yahoo.com/forecast/San_Francisco_CA_US_f.html" pattern="^.*?([0-9]+\&amp;ordm\;F).*"}%==
 	* You get:
 		* San Francisco: %INCLUDE{"http://weather.yahoo.com/forecast/San_Francisco_CA_US_f.html" pattern="^.*?([0-9]+\&ordm\;F).*"}%
 
 See also other TWikiVariables.
 
--- Main.PeterThoeny - 25 Jun 2001 <br>
+-- Main.PeterThoeny - 15 Jan 2003
