@@ -140,13 +140,16 @@ sub searchWeb
     my $renameWeb = "";
     my $spacedTopic;
     $theTemplate = "searchformat" if( $theFormat );
+
     if( $theTemplate ) {
         $tmpl = &TWiki::Store::readTemplate( "$theTemplate" );
         # FIXME replace following with this @@@
     } elsif( $doBookView ) {
         $tmpl = &TWiki::Store::readTemplate( "searchbookview" );
     } elsif ($doRenameView ) {
+	# Rename view, showing where topics refer to topic being renamed.
         $tmpl = &TWiki::Store::readTemplate( "searchrenameview" ); # JohnTalintyre
+
         # Create full search string from topic name that is passed in
         $renameTopic = $theSearchVal;
         if( $renameTopic =~ /(.*)\\\.(.*)/o ) {
@@ -155,7 +158,13 @@ sub searchWeb
         }
         $spacedTopic = spacedTopic( $renameTopic );
         $spacedTopic = $renameWeb . '\.' . $spacedTopic if( $renameWeb );
-        $theSearchVal = "(^|[^[:alpha:][:digit:]_])$theSearchVal" . '([^A[:alpha:][:digit:]_]|$)|' .
+
+	# I18N: match non-alpha before and after topic name in renameview searches
+	# This regex must work under grep, i.e. if using Perl 5.6 or higher
+	# the POSIX character classes will be used in grep as well.
+        my $alphaNum = $TWiki::mixedAlphaNum;
+        $theSearchVal = "(^|[^${alphaNum}_])$theSearchVal" . 
+			"([^${alphaNum}_]" . '|$)|' .
                         '(\[\[' . $spacedTopic . '\]\])';
     } else {
         $tmpl = &TWiki::Store::readTemplate( "search" );
@@ -203,10 +212,11 @@ sub searchWeb
         }
     }
 
-    # Construct command line with 'ls' and 'grep.  Note that 'ls' does not
+    # Construct command line with 'ls' and 'grep.  I18N: 'ls' does not
     # need to be locale-aware as long as it does not transform filenames -
     # all results are sorted by Perl 'sort'.  However, 'grep' must use
-    # locales if needed, for case-insensitive searching.
+    # locales if needed, for case-insensitive searching.  See
+    # TWiki::setupLocale.
     my $cmd = "";
     if( $theScope eq "topic" ) {
         $cmd = "$TWiki::lsCmd %FILES% | %GREP% %SWITCHES% -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote";
@@ -450,8 +460,9 @@ sub searchWeb
         my( $beforeText, $repeatText, $afterText ) = split( /%REPEAT%/, $tmplTable );
         if( $theHeader ) {
             $theHeader =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
-	    # TODO: i18n fix
-            $theHeader =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
+	    # I18N fix
+	    my $mixedAlpha = $TWiki::mixedAlpha;
+	    $theHeader =~ s/\$n([^$mixedAlpha])/\n$1/gos; # expand "$n" to new line
             $beforeText = $theHeader;
             $beforeText =~ s/\$web/$thisWebName/gos;
             $beforeText =~ s/([^\n])$/$1\n/os;
@@ -499,8 +510,9 @@ sub searchWeb
             }
             
             # Check security
-            # FIXME - how deal with user login not available if coming from search script?
-            if( ! $allowView ) {
+	    # FIXME - how do we deal with user login not being available if
+	    # coming from search script?
+	    if( ! $allowView ) {
                 next;
             }
 
@@ -508,8 +520,9 @@ sub searchWeb
                 $tempVal = $theFormat;
                 $tempVal =~ s/([^\n])$/$1\n/gos;       # cut last trailing new line
                 $tempVal =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
-		# TODO: i18n fix
-                $tempVal =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
+		# I18N fix
+		my $mixedAlpha = $TWiki::mixedAlpha;
+                $tempVal =~ s/\$n([^$mixedAlpha])/\n$1/gos; # expand "$n" to new line
                 $tempVal =~ s/\$web/$thisWebName/gos;
                 $tempVal =~ s/\$topic\(([^\)]*)\)/breakName( $topic, $1 )/geos;
                 $tempVal =~ s/\$topic/$topic/gos;
@@ -593,9 +606,13 @@ sub searchWeb
 
                    if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
                        # Case insensitive option is required to get [[spaced Word]] to match
-                       my $match =  "(^|[^[:alpha:][:digit:]_.])($originalSearch)(?=[^[:alpha:][:digit:]]|\$)";
-                       # FIXME: Should use /o here since $match is based on
-                       # search string.  I would think shouldn't use because based on search string JohnTalintyre
+
+		       # I18N: match non-alpha before and after topic name in renameview searches
+		       my $alphaNum = $TWiki::mixedAlphaNum;
+                       my $match =  "(^|[^${alphaNum}_.])($originalSearch)(?=[^${alphaNum}]|\$)";
+		       # NOTE: Must *not* use /o here, since $match is based on
+		       # search string that will vary during lifetime of
+		       # compiled code with mod_perl.
                        my $subs = s|$match|$1<font color="red">$2</font>&nbsp;|g;
                        $match = '(\[\[)' . "($spacedTopic)" . '(?=\]\])';
                        $subs += s|$match|$1<font color="red">$2</font>&nbsp;|gi;
@@ -806,12 +823,16 @@ sub breakName
 }
 
 #=========================
+# Turn a topic into a spaced-out topic, with space before each part of
+# the WikiWord.
 sub spacedTopic
 {
     my( $topic ) = @_;
     # FindMe -> Find\s*Me
-    # TODO: i18n fix
-    $topic =~ s/([a-z])([A-Z])/$1 *$2/go;
+    # I18N fix
+    my $upperAlpha = $TWiki::singleUpperAlphaRegex;
+    my $lowerAlpha = $TWiki::singleLowerAlphaRegex;
+    $topic =~ s/($lowerAlpha)($upperAlpha)/$1 *$2/go;
     return $topic;
 }
 
