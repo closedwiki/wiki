@@ -36,7 +36,156 @@ use strict;
 ##);
 
 
-# view:	    $text= &TWiki::readVersion( $topic, "1.$rev" );
+# =========================
+# Given a full topic name, split into Web and Topic
+# e.g. Test.TestTopic1 -> ("Test", "TestTopic1")
+sub getWebTopic
+{
+   my( $fullTopic ) = @_;
+   $fullTopic =~ m|^([^.]+)[./](.*)$|;
+   my $web = $1;
+   my $topic = $2;
+   return ($web, $topic );
+}
+
+
+# =========================
+# Get full filename for attachment or topic, untaint
+sub getFileName
+{
+   my ($web, $topic, $attachment, $extension) = @_;
+   if( ! $attachment ) {
+      $attachment = "";
+   }
+   
+   if( ! $extension ) {
+      $extension = ".txt";
+   }
+   
+   my $file = "";
+   if( ! $attachment ) {
+      $file = "$TWiki::dataDir/$web/$topic$extension";
+   } else {
+      $file = "$TWiki::pubDir/$web/$topic/$attachment$extension";
+   }
+
+   ## !!! clean up an ..s etc in $web and $topic
+   $file =~ /(.*)/;
+   $file = $1; # untaint
+   
+   return $file;
+}
+
+
+# =========================
+# Get directory that topic or attachment lives in
+sub getFileDir
+{
+   my( $web, $topic, $attachment ) = @_;
+   
+   my $dir = "";
+   if( ! $attachment ) {
+      $dir = "$TWiki::dataDir/$web";
+   } else {
+      $dir = "$TWiki::pubDir/$web/$topic";
+   }
+
+   ## !!! clean up an ..s etc in $web and $topic
+   $dir =~ /(.*)/;
+   $dir = $1; # untaint
+   
+   return $dir;
+}
+
+
+# =========================
+# List Webs - JohnTalintyre 26 Feb 2001
+# Sub webs returned in format Top.Sub
+sub listWebs
+{
+   my $baseDir = &TWiki::getDataDir();
+   # Directories within this
+   opendir( DIR, $baseDir ) || warn "can't opendir $baseDir: $!";
+   my @dirs = grep { /^[^.]/ && -d "$baseDir/$_" } readdir( DIR );
+   closedir DIR;
+   return @dirs;
+}
+
+
+# =========================
+# Get rid a topic and its attachments completely
+# Use with GREAT CARE as file will be gone, including RCS history
+sub erase
+{
+   my( $web, $topic ) = @_;
+
+   my $file = getFileName( $web, $topic );
+   my $rcsFile = "$file,v";
+
+   my @files = ( $file, $rcsFile );
+   unlink( @files );
+   
+   # Delete all attachments and the attachment directory
+   my $attDir = "$TWiki::pubDir/$web/$topic";
+   if( -e $attDir ) {
+       opendir( DIR, $attDir );
+       my @attachments = readdir( DIR );
+       closedir( DIR );
+       my $attachment;
+       foreach $attachment ( @attachments ) {
+          if( $attachment !~ /^\./ ) {
+             unlink( "$attDir/$attachment" ) || warn "Couldn't remove $attDir/$attachment";
+             if( $attachment !~ /,v$/ ) {
+                writeLog( "erase", "$web.$topic.$attachment" );
+             }
+          }
+       }
+       
+       rmdir( "$attDir" ) || warn "Couldn't remove directory $attDir";
+   }
+
+   writeLog( "erase", "$web.$topic", "" );
+}
+
+
+# =========================
+# Rename a Web, allow for transfer between Webs
+sub renameTopic
+{
+   my( $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
+
+   #!!!check lock
+   
+   # Change data file
+   my $from = getFileName( $oldWeb, $oldTopic );
+   my $to =  getFileName( $newWeb, $newTopic );
+   rename( $from, $to );
+
+   # Remove lock file
+   lockTopicNew( $oldWeb, $oldTopic, 1 );
+   
+   # Change data file history
+   rename(
+     getFileName( $oldWeb, $oldTopic, "", ".txt,v" ),
+     getFileName( $newWeb, $newTopic, "", ".txt,v" )
+   );
+   
+   # Rename the attachment directory if there is one
+   my $oldAttachDir = getFileDir( $oldWeb, $oldTopic, 1 );
+   if( $oldAttachDir ) {
+      rename( $oldAttachDir, getFileDir( $newWeb, $newTopic, 1 ) );
+   }
+   
+   # Log rename
+   if( $TWiki::doLogRename ) {
+      writeLog( "rename", "$oldWeb.$oldTopic -> $newWeb.$newTopic", "" );
+   }
+}
+
+
+# =========================
+# Read a specific version of a topic
+# view:	    $text= &wiki::readVersion( $topic, "1.$rev" );
 sub readVersion
 {
     my( $theTopic, $theRev ) = @_;
@@ -49,18 +198,37 @@ sub readVersion
     return `$tmp`;
 }
 
+
 # =========================
 # rdiff:	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
 # view:	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
-
 sub getRevisionNumber
 {
     my( $theTopic, $theWebName ) = @_;
+    return getRevisionNumberNew( $theWebName, $theTopic, "" );
+}
+
+
+# =========================
+# Latest reviewion number
+sub getRevisionNumberNew
+{
+    my( $theWebName, $theTopic, $attachment ) = @_;
     if( ! $theWebName ) {
         $theWebName = $TWiki::webName;
     }
     my $tmp= $TWiki::revHistCmd;
-    my $fileName = "$TWiki::dataDir/$theWebName/$theTopic.txt";
+    my $fileName = "";
+    if( ! $attachment ) {
+       $fileName = "$TWiki::dataDir/$theWebName/$theTopic.txt";
+    } else {
+       $fileName = "$TWiki::pubDir/$theWebName/$theTopic/$attachment";
+    }
+    
+    &TWiki::writeDebug( "getRevisionNumberNew: fileName: $fileName" );
+    if( ! -e "$fileName,v" ) {
+       return ""; # JET !!! previously 1.1, why?
+    }
     $tmp =~ s/%FILENAME%/$fileName/;
     $tmp =~ /(.*)/;
     $tmp = $1;       # now safe, so untaint variable
@@ -69,9 +237,10 @@ sub getRevisionNumber
     if( ( $tmp ) && ( $1 ) ) {
         return $1;
     } else {
-        return "1.1";
+        return "1.1"; # !!!ever get here?
     }
 }
+
 
 # =========================
 # rdiff:            $text = &TWiki::Store::getRevisionDiff( $topic, "1.$r2", "1.$r1" );
@@ -107,10 +276,19 @@ sub getRevisionDiff
 # wikisearch.pm: my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfo( $filename, "", 1, $thisWebName );
 sub getRevisionInfo
 {
-    my( $theTopic, $theRev, $changeToIsoDate, $theWebName ) = @_;
+    my( $theTopic, $theRev, $changeToIsoDate, $theWebName) = @_;
+    return getRevisionInfoNew($theTopic, $theRev, $changeToIsoDate, $theWebName, "");
+}
+
+
+# =========================
+sub getRevisionInfoNew
+{
+    my( $theTopic, $theRev, $changeToIsoDate, $theWebName, $attachment ) = @_;
     if( ! $theWebName ) {
         $theWebName = $TWiki::webName;
     }
+
     if( ! $theRev ) {
         # PTh 03 Nov 2000: comment out for performance
         ### $theRev = getRevisionNumber( $theTopic, $theWebName );
@@ -121,7 +299,7 @@ sub getRevisionInfo
     $theRev =~ /(.*)/;
     $theRev = $1;       # now safe, so untaint variable
     $tmp =~ s/%REVISION%/$theRev/;
-    my $fileName = "$TWiki::dataDir/$theWebName/$theTopic.txt";
+    my $fileName = getFileName( $theWebName, $theTopic, $attachment );
     $fileName =~ s/$TWiki::securityFilter//go;
     $fileName =~ /(.*)/;
     $fileName = $1;       # now safe, so untaint variable
@@ -162,13 +340,60 @@ sub getRevisionInfo
 
 
 # =========================
+sub topicIsLockedNew
+{
+    my( $web, $name ) = @_;
+
+    # pragmatic approach: Warn user if somebody else pressed the
+    # edit link within one hour
+
+    my $lockFilename = "$TWiki::dataDir/$web/$name.lock"; #!!!use file generation method
+    if( ( -e "$lockFilename" ) && ( $TWiki::editLockTime > 0 ) ) {
+        my $tmp = readFile( $lockFilename );
+        my( $lockUser, $lockTime ) = split( /\n/, $tmp );
+        if( $lockUser ne $TWiki::userName ) {
+            # time stamp of lock within one hour of current time?
+            my $systemTime = time();
+            # calculate remaining lock time in seconds
+            $lockTime = $lockTime + $TWiki::editLockTime - $systemTime;
+            if( $lockTime > 0 ) {
+                # must warn user that it is locked
+                return( $lockUser, $lockTime );
+            }
+        }
+    }
+    return( "", 0 );
+}
+
+
+# =========================
 sub saveTopic
 {
     my( $topic, $text, $saveCmd, $doUnlock, $dontNotify, $dontLogSave ) = @_;
-    my $name = "$TWiki::dataDir/$TWiki::webName/$topic.txt";
+#   my( $topic, $text, $saveCmd, $doNotLogChanges, $doUnlock ) = @_;
+    my $attachment = "";
+    save( $TWiki::webName, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify );
+}
+
+
+# =========================
+sub save
+{
+    my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify ) = @_;
+    my $name = getFileName( $web, $topic, $attachment );
+    my $dir  = getFileDir( $web, $topic, $attachment );
     my $time = time();
     my $tmp = "";
     my $rcsError = "";
+
+    if( $attachment ) {
+       $dontLogSave = 1; #!!!
+
+    } else {
+        # RCS requires a newline for the last line,
+        # so add newline if needed
+        $text =~ s/([^\n\r])$/$1\n/os;
+    }
 
     #### Normal Save
     if( ! $saveCmd ) {
@@ -183,27 +408,48 @@ sub saveTopic
             $mtime1 = $tmp10;
         }
 
-        # save file
-        saveFile( $name, $text );
+        if( ! $attachment ) {
+            # save file
+            &TWiki::writeDebug( "save: web: $web, name: $name, topic: $topic" );
+            saveFile( $name, $text );
 
-        # reset lock time, this is to prevent contention in case of a long edit session
-        lockTopic( $topic, $doUnlock );
+            # reset lock time, this is to prevent contention in case of a long edit session
+           lockTopicNew( $web, $topic, $doUnlock );
+        }
 
         # time stamp of existing file within one hour of old one?
         my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp8,$tmp9,
             $tmp10,$tmp11,$tmp12,$tmp13 ) = stat $name;
         $mtime2 = $tmp10;
         if( abs( $mtime2 - $mtime1 ) < $TWiki::editLockTime ) {
-            my $rev = getRevisionNumber( $topic );
-            my( $date, $user ) = getRevisionInfo( $topic, $rev );
+            my $rev = getRevisionNumberNew( $web, $topic, $attachment );
+            my( $date, $user ) = getRevisionInfoNew( $topic, $rev, "", $web, $attachment );
             # same user?
             if( ( $TWiki::doKeepRevIfEditLock ) && ( $user eq $TWiki::userName ) ) {
                 # replace last repository entry
                 $saveCmd = "repRev";
+                #!!!
+                if( $attachment ) {
+                   $saveCmd = "";
+                }
             }
         }
 
         if( $saveCmd ne "repRev" ) {
+            # If attachment and RCS file doesn't exist, initialise
+            if( $attachment ) {
+               my $rcsFile = getFileName( $web, $topic, $attachment, 1 );
+               if( ! -e $rcsFile ) {
+                  $tmp = $TWiki::revInitBinaryCmd;
+                  $tmp =~ s/%USERNAME%/$TWiki::userName/;
+                  $tmp =~ s/%FILENAME%/$name/;
+                  $tmp =~ /(.*)/;
+                  $tmp = $1;       # safe, so untaint variable
+                  &wiki::writeDebug("save: Init RCS file");
+                  `$tmp`;
+               }
+            }
+
             # update repository
             $tmp= $TWiki::revCiCmd;
             $tmp =~ s/%USERNAME%/$TWiki::userName/;
@@ -211,7 +457,9 @@ sub saveTopic
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
             $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
-            if( $rcsError ) {   # oops, stderr was not empty, return error
+            $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
+            if( $rcsError ) { # oops, stderr was not empty, return error
+                $rcsError = "$tmp\n$rcsError";
                 return $rcsError;
             }
 
@@ -247,8 +495,8 @@ sub saveTopic
         lockTopic( $topic, $doUnlock );
 
         # update repository with same userName and date, but do not update .changes
-        my $rev = getRevisionNumber( $topic );
-        my( $date, $user ) = getRevisionInfo( $topic, $rev );
+        my $rev = getRevisionNumberNew( $web, $topic, $attachment );
+        my( $date, $user ) = getRevisionInfoNew( $topic, $rev, "", $web, $attachment );
         if( $rev eq "1.1" ) {
             # initial revision, so delete repository file and start again
             unlink "$name,v";
@@ -259,7 +507,9 @@ sub saveTopic
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
             $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+            $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
             if( $rcsError ) {   # oops, stderr was not empty, return error
+                $rcsError = "$tmp\n$rcsError";
                 return $rcsError;
             }
             $tmp= $TWiki::revDelRevCmd;
@@ -268,7 +518,9 @@ sub saveTopic
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
             $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+            $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
             if( $rcsError ) {   # oops, stderr was not empty, return error
+                $rcsError = "$tmp\n$rcsError";
                 return $rcsError;
             }
             $tmp= $TWiki::revLockCmd;
@@ -277,7 +529,9 @@ sub saveTopic
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
             $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+            $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
             if( $rcsError ) {   # oops, stderr was not empty, return error
+                $rcsError = "$tmp\n$rcsError";
                 return $rcsError;
             }
         }
@@ -288,7 +542,9 @@ sub saveTopic
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
         $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+        $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
         if( $rcsError ) {   # oops, stderr was not empty, return error
+            $rcsError = "$tmp\n$rcsError";
             return $rcsError;
         }
 
@@ -314,7 +570,9 @@ sub saveTopic
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
         $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+        $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
         if( $rcsError ) {   # oops, stderr was not empty, return error
+            $rcsError = "$tmp\n$rcsError";
             return $rcsError;
         }
         $tmp= $TWiki::revDelRevCmd;
@@ -323,7 +581,9 @@ sub saveTopic
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
         $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+        $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
         if( $rcsError ) {   # oops, stderr was not empty, return error
+            $rcsError = "$tmp\n$rcsError";
             return $rcsError;
         }
         $tmp= $TWiki::revLockCmd;
@@ -332,7 +592,9 @@ sub saveTopic
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
         $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+        $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
         if( $rcsError ) {   # oops, stderr was not empty, return error
+            $rcsError = "$tmp\n$rcsError";
             return $rcsError;
         }
 
@@ -389,9 +651,17 @@ sub saveFile
 # =========================
 sub lockTopic
 {
-    my( $name, $doUnlock ) = @_;
+   my ( $name, $doUnlock ) = @_;
 
-    my $lockFilename = "$TWiki::dataDir/$TWiki::webName/$name.lock";
+   lockTopicNew( $TWiki::webName, $name, $doUnlock );
+}
+
+# =========================
+sub lockTopicNew
+{
+    my( $web, $name, $doUnlock ) = @_;
+
+    my $lockFilename = getFileName( $web, $name, "", ".lock" );
     if( $doUnlock ) {
         unlink "$lockFilename";
     } else {
@@ -594,12 +864,11 @@ sub readFileHead
 
 
 # =========================
-
 #AS 5 Dec 2000 collect all Web's topic names
 sub getTopicNames {
-    my ($web) = @_ ;
+    my( $web ) = @_ ;
 
-    if (!defined $web) {
+    if( !defined $web ) {
 	$web="";
     }
 
@@ -607,8 +876,8 @@ sub getTopicNames {
 
     # get list of all topics by scanning $dataDir
     opendir DIR, "$TWiki::dataDir/$web" ;
-    my @tmpList = readdir(DIR);
-    closedir(DIR);
+    my @tmpList = readdir( DIR );
+    closedir( DIR );
 
     # this is not magic, it just looks like it.
     my @topicList = sort
@@ -621,12 +890,13 @@ sub getTopicNames {
 }
 #/AS
 
+
 # =========================
 #AS 5 Dec 2000 collect immediate subWeb names
 sub getSubWebs {
-    my ($web) = @_ ;
+    my( $web ) = @_ ;
     
-    if (!defined $web) {
+    if( !defined $web ) {
 	$web="";
     }
 
@@ -634,8 +904,8 @@ sub getSubWebs {
 
     # get list of all subwebs by scanning $dataDir
     opendir DIR, "$TWiki::dataDir/$web" ;
-    my @tmpList = readdir(DIR);
-    closedir(DIR);
+    my @tmpList = readdir( DIR );
+    closedir( DIR );
 
     # this is not magic, it just looks like it.
     my @webList = sort
@@ -648,34 +918,36 @@ sub getSubWebs {
 }
 #/AS
 
+
 # =========================
 #AS 26 Dec 2000 recursively collects all Web names
-
 #FIXME: move var to TWiki.cfg ?
 use vars qw ($subWebsAllowedP);
 $subWebsAllowedP = 0; # 1 = subwebs allowed, 0 = flat webs
 
 sub getAllWebs {
     # returns a list of subweb names
-    my ($web) = @_ ;
+    my( $web ) = @_ ;
     
-    if (!defined $web) {
+    if( !defined $web ) {
 	$web="";
     }
     my @webList =   map { s/^\///o }
 		    map { "$web/$_" }
-		    &getSubWebs($web);
+		    &getSubWebs( $web );
     my $subWeb = "";
-    if ($subWebsAllowedP) {
+    if( $subWebsAllowedP ) {
         my @subWebs = @webList;
-	foreach $subWeb (@webList) {
-	    push @subWebs, &getAllWebs("$subWeb");
+	foreach $subWeb ( @webList ) {
+	    push @subWebs, &getAllWebs( $subWeb );
 	}
 	return @subWebs;
     }
     return @webList ;
 }
 #/AS
+
+
 # =========================
 
 1;
