@@ -510,7 +510,8 @@ sub setupLocale {
 	$siteCharset = $siteCharsetOverride || $siteCharset;
 	$siteCharset = lc $siteCharset;
 
-	# Extract the default site language
+	# Extract the default site language - ignores '@euro' part of
+	# 'fr_BE@euro' type locales.
 	$siteLocale =~ m/^([a-z]+)_([a-z]+)/i;
 	$siteLang = (lc $1) if defined $1;	# Not including country part
 	$siteFullLang = (lc "$1-$2" ) 		# Including country part
@@ -683,7 +684,7 @@ sub convertUtf8URLtoSiteCharset {
 	    $fullTopicName =~ s/ ([\xC2\xC3]) ([\x80-\xBF]) / 
 				 chr( ord($1) << 6 & 0xC0 | ord($2) & 0x3F )
 				 /egx;
-	} elsif ( $siteCharset = "utf-8" ) {
+	} elsif ( $siteCharset eq "utf-8" ) {
 	    # FIXME: Use 'unpack' to convert into real Unicode characters
 	    # if on Perl 5.6 or higher (Unicode aware)
 
@@ -1728,11 +1729,13 @@ sub makeTopicSummary
     $htext =~ s/\s+[\+\-]*/ /g;       # remove newlines and special chars
 
     # FIXME I18N: Avoid splitting within multi-byte characters (e.g. EUC-JP
-    # encoding). Unicode-aware versions of Perl (5.6+) will not split
-    # within a Unicode codepoint, but need to avoid splitting closely
-    # related Unicode codepoints, specifically: (1) Unicode combining
-    # character sequences (e.g. letters + accents) and (2) surrogate pairs
-    # (i.e. two 16 bit codepoints for single character higher than U+FFFF).  
+    # encoding) by encoding bytes as Perl UTF-8 characters in Perl 5.8+. 
+    # This avoids splitting within a Unicode codepoint (or a UTF-16
+    # surrogate pair, which is encoded as a single Perl UTF-8 character),
+    # but we ideally need to avoid splitting closely related Unicode codepoints.
+    # Specifically, this means Unicode combining character sequences (e.g.
+    # letters and accents) - might be better to split on word boundary if
+    # possible.
 
     # limit to 162 chars 
     $htext =~ s/(.{162})($mixedAlphaNumRegex)(.*?)$/$1$2 \.\.\./g;
@@ -2525,7 +2528,7 @@ sub handleUrlParam
 # =========================
 # Encode to URL parameter or HTML entity
 # TODO: For non-ISO-8859-1 $siteCharset, need to convert to Unicode 
-# for use in entity or to UTF-8 before URL encoding.
+# for use in entity, or to UTF-8 before URL encoding.
 =pod
 
 ---++ sub handleUrlEncode (  $theArgs, $doExtract  )
@@ -2574,13 +2577,27 @@ sub handleUrlEncode
     return $text;
 }
 
+# TODO: Routine to do URL encoding into $siteCharset, for use when
+# viewing attachments on sites running with non-UTF-8 character sets
+# and browsers that use UTF-8 URLs.
+
 # =========================
 # Encode characters with 8th bit set for use in URLs with non-UTF-8 '$siteCharset'
 # encoding by browser - mainly for older browsers with no UTF-8 support.
 # Ignored when using UTF-8 URLs or when on EBCDIC platforms.
+
+# =pod
+# ---++ sub handleIntUrlEncode ( $theStr, $doExtract )
+# =cut
+
+
+# =========================
+# Encode characters with 8th bit set for use in URLs with non-UTF-8 '$siteCharset'
+# encoding by browser - mainly for Mozilla-based browsers that 
+# No encoding when using UTF-8 URLs or when on EBCDIC platforms.
 =pod
 
----++ sub handleIntUrlEncode (  $theStr, $doExtract  )
+---++ sub handleIntUrlEncode ( $theStr, $doExtract )
 
 Not yet documented.
 
