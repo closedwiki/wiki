@@ -1428,7 +1428,8 @@ sub putBackVerbatim
     for( my $i=0; $i<=$#verbatim; $i++ ) {
         my $val = $verbatim[$i];
         if( $type ne "verbatim" ) {
-            $val =~ s/<(.*)>/&lt;$1&gt;/go;
+            $val =~ s/</&lt;/go;
+            $val =~ s/</&gt;/go;
         }
         $text =~ s|%_VERBATIM$i%|<$type>\n$val</$type>|;
     }
