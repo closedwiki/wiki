@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092563338" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092981301" format="1.0" version="1.20"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%  
 %STARTINCLUDE%
@@ -29,7 +29,7 @@ A Form Template is simply a page containing your form, defined as a table where 
 	  | One or more checkboxes, plus *Set* and *Clear* buttons | =checkbox+buttons= | (same) | (same) |
 	  | Read-only label text | =label= | =1= | (unused) |
 	  | One or more radio buttons | =radio= | number of radio buttons per line | comma list of checkbox labels |
-	  | Drop-down menu or scrollable box | =label= | =1= for drop down, =2= and up for scrollable box | comma list of options |
+	  | Drop-down menu or scrollable box | =select= | =1= for drop down, =2= and up for scrollable box | comma list of options |
 	  | A one-line text field | =text= | text box width in number of characters | (unused) |
 	  | A text box; size is 40x10 (columns x rows) | =textarea= | columns x rows, e.g. =40x6= | (unused) |
 	* *field value* - one or more values from a fixed set (select, checkbox, radio type) or free-form (text). (replaces _category item value_)

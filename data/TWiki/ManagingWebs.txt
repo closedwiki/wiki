@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092558303" format="1.0" version="1.24"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092981212" format="1.0" version="1.25"}%
 %TOC%
 %STARTINCLUDE%
 ---# Managing Webs
