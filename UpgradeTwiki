@@ -1,0 +1,159 @@
+#!/usr/bin/perl -w
+
+# Support functionality for the TWiki Collaboration Platform, http://TWiki.org/
+#
+# A script to help people upgrade an existing TWiki to a new version
+#  (don't laugh - we're expecting applause, not laughter!)
+#
+# Jul 2004 - written by Martin Gregory, martin@gregories.net
+
+# **** NOTE: UpdateTopics directs STDERR to rcs.log
+
+# I haven't been able to tidy this up, so if you're missing some
+# error messages, look there!
+
+=begin twiki
+
+---+ UpgradeTwiki
+
+Create an upgraded twiki installation from an existing one
+and a new distribution.
+
+This script expected '.' to be the root of a TWiki distribution when it is called.
+=cut
+
+BEGIN {
+(-d "lib" and -d "data") or 
+    die "Sorry - can't see ./lib and ./data files: you need to run $0 in the directory where you extracted the TWiki distribution!\n";
+unshift @INC, "./lib";  # have to find Text::Diff, UpdateTopics, TWikiCfg which are bundled with TWiki.
+}
+
+use TWiki::Upgrade::TWikiCfg;
+use TWiki::Upgrade::UpdateTopics;
+use File::Copy;
+use Text::Diff;
+
+my $targetDir = shift or die "Usage: $0 <target directory for new wiki build>\n";
+
+# not sure if a relative path with be safe... better safe than sorry...
+$targetDir =~ m|^/| or die "Usage: $0 <full path to target directory for new wiki build>\n"; 
+
+print "OK - I'm assuming you've unpacked a TWiki distribution in this directory.
+
+That means that there should be all the normal TWiki directories here: bin, lib, pub, templates etc. right here.
+
+Here's what's about to happen:
+
+1) I'm going to create a new TWiki in $targetDir based on this new distribution
+2) I'm going to update the TWiki.cfg in $targetDir/lib to match the existing one in your current TWiki
+3) I'm going to merge the new TWiki data files from the release with all your existing information 
+4) I'm going to tell you what you need to do next!
+
+Here goes...
+
+";
+
+print "Creating $targetDir structures...\n";
+
+opendir(HERE , ".");
+
+mkdir $targetDir or die "Couldn't create the target directory ($targetDir): $!\n";
+
+my $file;
+
+foreach $file (readdir(HERE))
+{
+    next if ($file eq '.');
+    next if ($file eq '..');
+    next if ($file =~ /.zip$/);
+
+    print "$file\n";
+    system("cp -R $file $targetDir");
+}
+
+use vars '$TWikiCfg::dataDir';  # gets defined in TWikiCfg by reading the old TWiki.cfg...
+
+my $existingScriptDir = TWikiCfg::UpgradeTWikiConfig("$targetDir");   # dies on error, without doing damage
+
+print "\n\nMerging your existing twiki data with new release twiki data, putting the result in $targetDir/data...\n";
+
+my $baseDir = `pwd`;
+chomp ($baseDir);
+
+UpdateTopics::UpdateTopics($TWikiCfg::dataDir, "$baseDir/data", "$targetDir/data"); # dies on error, without doing damage
+
+#make sure we're in the right place still
+chdir($baseDir);
+
+print "OK - the merge process completed successfully...\n";
+
+print "
+Congratulations... you made it this far!
+
+";
+
+if (-f "$existingScriptDir/.htaccess")
+{
+    if (copy("$existingScriptDir/.htaccess", "$targetDir/bin/.htaccess"))
+    {
+	print "
+I copied in your existing .htaccess into $targetDir/bin.
+
+\tThe differences between the new template for .htacess and your previous one are:
+
+";
+	print diff "$targetDir/bin/.htaccess", "./bin/.htaccess.txt";
+    }
+    else
+    {
+	warn "
+I couldn't copy in your existing .htaccess file from $existingScriptDir to $targetDir/bin: $!\n";
+    }
+}
+else
+{
+    warn "
+Couldn't see a .htaccess in $existingScriptDir ... so I didn't try to help in that respect\n";
+}
+
+print "
+
+Now: you need to 
+
+ - See what kind of a mess I made merging the data, and fix accordingly (look in data/patch.log).
+
+ - Check if you modified the old version of setlib.cfg: if you did,
+    then you need to do the same to the new one (which you will find in ./bin).
+
+   (There are only two reasons I can think of why you might have done that:
+     1) You wanted to workaround the Apache2 hang bug or 
+     2) You needed to point to a local perl library for some reason.  )
+
+ - Setup authentication for the new TWiki
+
+    If you are using htaccess, then check the diffs above make sense.
+    If you are using some other method, you'll need to figure out what you need to do (sorry!)
+
+ - If you are one of the few people who modify \@storeSettings, then you need to 
+   look in TWiki.cfg and see if you need to make changes (I installed new the default ones)
+
+   If you don't know what this means, it probably doesn't apply to you.
+
+ - re-install plugins you were using (?)
+
+ - re-link new webs you created (?)
+
+ - copy over custom templates you put in the original templates directory
+
+ - probably heaps of other stuff I haven't thought of?
+
+ - archive your old installation 
+
+ - move the newly created twiki directory ($targetDir) to the place where your previous version was.
+
+Goodluck... :-)
+";
+
+
+
+
