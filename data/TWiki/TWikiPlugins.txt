@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1046406720" format="1.0" version="1.22"}%
+%META:TOPICINFO{author="PeterThoeny" date="1059716224" format="1.0" version="1.23"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Plugins
@@ -54,6 +54,12 @@ To test new Plugins on your installation before making them public, you may want
 		* *Copy* the modified files to the Production installation. You can update a TWiki installation live and users won't even notice.
 
 	* *Method 2:* List the Plugin being tested in the =DISABLEDPLUGINS= variable in %TWIKIWEB%.TWikiPreferences. Redefine the =DISABLEDPLUGINS= variable in the =Sandbox= web and do the testing there.
+
+---+++ A Note on Performance
+
+The performance of the system depends on the number of Plugins installed and on the Plugin implementation. Some Plugins impose no measurable performance decrease, some do. For example, =outsidePREHandler= is an expensive callback function, or a Plugin might use many Perl libraries that needs to be initialized with each page view (unless you run mod_perl). It is recommended to measure the performance with and without a new Plugin.
+
+In case you need to install an "expensive" Plugin and you need its functionality only in one web you can place the Plugin topic into that web. TWiki will initialize the Plugin only if the Plugin topic is found (which won't be the case for other webs.)
 
 ---++ Managing Plugins
 
