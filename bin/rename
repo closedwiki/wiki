@@ -104,23 +104,13 @@ sub main
 	     &TWiki::Store::moveAttachment( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment );
 	  # FIXME change to doing as one call
 	  if( $moveError ) {
-	      TWiki::writeHeader( $query );
-              my $tmpl = &TWiki::Store::readTemplate( "oopsgeneral" );
-	      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic ); # FIXME newtopic?
-	      $tmpl =~ s/%SUMMARY%/problem moving attachment/go;
-	      $tmpl =~ s/%DETAIL%/$moveError/go;
-              print $tmpl;
+              TWiki::redirect( $query, &TWiki::getOopsUrl( $newWeb, $newTopic, "oopsmoveerr", $theAttachment, $moveError ) );
               return;
           }
        } else {
 	  my $renameError = &TWiki::Store::renameTopic( $oldWeb, $oldTopic, $newWeb, $newTopic, "relink" );
 	  if( $renameError ) {
-	      TWiki::writeHeader( $query );
-	      my $tmpl = &TWiki::Store::readTemplate( "oopsgeneral" );
-	      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic ); #FIXME newTopic?
-	      $tmpl =~ s/%SUMMARY%/problem renaming topic/go;
-	      $tmpl =~ s/%DETAIL%/$renameError/go;
-	      print $tmpl;
+	      TWiki::redirect( $query, &TWiki::getOopsUrl( $newWeb, $newTopic, "oopsrenameerr", $renameError ) );
 	      return;
            }
        } 
@@ -274,52 +264,31 @@ sub checkExist
    
    # Does old WEB exist?
    if( ! &TWiki::Store::webExists( $oldWeb ) ) {
-      # FIXME: Below code needs also getRenderedVersion. Better to use redirect instead. 
-      TWiki::writeHeader( $query ); 
-      $tmpl = &TWiki::Store::readTemplate( "oopsnoweb" );
-      $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
-      print $tmpl;
+      TWiki::redirect( $query, &TWiki::getOopsUrl( $oldWeb, $oldTopic, "oopsnoweb" ) );
       $ret = "problem";
    }
 
    # Does new WEB exist?
    if( defined( $newFileName ) && ! &TWiki::Store::webExists( $newWeb ) ) {
-      TWiki::writeHeader( $query );
-      $tmpl= &TWiki::Store::readTemplate( "oopsnoweb" );
-      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic, $newWeb );
-      print $tmpl;
+      TWiki::redirect( $query, &TWiki::getOopsUrl( $newWeb, $newTopic, "oopsnoweb" ) );
       $ret = "problem";
    }
 
    # Does old attachment exist?
    if( ! -e $oldFileName) {
-      TWiki::writeHeader( $query );
-      $tmpl= &TWiki::Store::readTemplate( "oopsmissing" );
-      $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
-      print $tmpl;
+      TWiki::redirect( $query, &TWiki::getOopsUrl( $oldWeb, $oldTopic, "oopsmissing" ) );
       $ret = "problem"; 
    }
 
    # Check new topic doesn't exist (opposite if we've moving an attachment)
    if( defined( $newFileName ) && -e $newFileName && ! $theAttachment ) {
       # Unless moving an attachment, new topic should not already exist
-      TWiki::writeHeader( $query );
-      # FIXME - should this use oopsexists rather than oopsgeneral?
-      $tmpl = &TWiki::Store::readTemplate( "oopsgeneral" );
-      $tmpl =~ s/%SUMMARY%/Topic $newTopic already exists/go;
-      $tmpl =~ s|%DETAIL%|Topic $newTopic already exists in Web $newWeb, press <I>Back</I> and try a new name|go;
-      # FIXME - could offer number addition to topic name that doesn't exist?
-      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic, $newWeb );
-      print $tmpl;
-      # FIXME error doesn't appear on user screen.
+      TWiki::redirect( $query, &TWiki::getOopsUrl( $newWeb, $newTopic, "oopstopicexists" ) );
       $ret = "problem";    
    }    
    
    if( defined( $newFileName ) && $theAttachment && ! -e $newFileName ) {
-      TWiki::writeHeader( $query );
-      $tmpl= &TWiki::Store::readTemplate( "oopsmissing" );
-      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic, $newWeb );
-      print $tmpl;
+      TWiki::redirect( $query, &TWiki::getOopsUrl( $newWeb, $newTopic, "oopsmissing" ) );
       $ret = "problem"; 
    }
    
