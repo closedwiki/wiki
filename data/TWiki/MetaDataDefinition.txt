@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="JohnTalintyre" date="999103330" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="MikeMannix" date="999188016" format="1.0" version="1.3"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -120,5 +120,7 @@ When viewing a topic the =Raw Text= link can be clicked to show the text of a to
 ---+++ Other
 
 There is currently no support for meta data for Plugins.  However, the format is readily extendable and the =Meta.pm= code that supports the format only needs minor alteration.
+
+%INCLUDE{"%TWIKIWEB%.MetaDataRendering"}%
 
 -- JohnTalintyre - 16 Aug 2001 <br>

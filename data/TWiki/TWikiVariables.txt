@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="MikeMannix" date="999182965" format="1.0" version="1.34"}%
+%META:TOPICINFO{author="MikeMannix" date="999187591" format="1.0" version="1.35"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Variables
 
 ---+++ About Variables
 
-__Include/write if not found elsewhere.__
+<nop>TWikiVariables are text strings enclosed in percentage signs: ==%<no>VARIABLE%== that represent stored data. When a topic is rendered for viewing, defined variables replaced by their actual values. TWiki has two types of variable, predefined, and Preference-based, where you can change settings. Through Preference variables, you can even define custom variables. Clearly, they are a power TWiki feature.
 
 ---+++ Predefined Variables
 
@@ -24,7 +24,7 @@ __Include/write if not found elsewhere.__
   <td> The path of the script URL of %WIKITOOLNAME%, is <b>%SCRIPTURLPATH%</b></td>
 </tr><tr>
   <td> =%<nop>SCRIPTSUFFIX%= </td>
-  <td> The script suffix, i.e. =.pl=, is <b>%SCRIPTSUFFIX%</b></td>
+  <td> The script suffix, ex: =.pl=, =.cgi= is <b>%SCRIPTSUFFIX%</b></td>
 </tr><tr>
   <td> =%<nop>PUBURL%= </td>
   <td> The public URL of TWiki, is <b>%PUBURL%</b> </td>
@@ -39,16 +39,16 @@ __Include/write if not found elsewhere.__
   <td> The path of the attachment URL of the current topic, is <b>%ATTACHURLPATH%</b> </td>
 </tr><tr>
   <td> =%<nop>URLPARAM{"name"}%= </td>
-  <td> Returns the value of a URL parameter. I.e. =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b> </td>
+  <td> Returns the value of a URL parameter. Ex: =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b> </td>
 </tr><tr>
   <td> =%<nop>WIKITOOLNAME%= </td>
   <td> Name of wiki tool, is <b>%WIKITOOLNAME%</b> </td>
 </tr><tr>
   <td> =%<nop>WIKIVERSION%= </td>
-  <td> Wiki tool version, is <b>%WIKIVERSION%</b> </td>
+  <td> Wiki tool version is <b>%WIKIVERSION%</b> </td>
 </tr><tr>
   <td> =%<nop>USERNAME%= </td>
-  <td> Your login username, is <b>%USERNAME%</b> </td>
+  <td> Your login username is <b>%USERNAME%</b> </td>
 </tr><tr>
   <td> =%<nop>WIKINAME%= </td>
   <td> Your Wiki username. Same as %<nop>USERNAME% if not defined in the %MAINWEB%.%WIKIUSERSTOPIC% topic. Is <b>%WIKINAME%</b> </td>
@@ -60,10 +60,10 @@ __Include/write if not found elsewhere.__
   <td> The Main web containing %MAINWEB%.%WIKIUSERSTOPIC%, %MAINWEB%.OfficeLocations and %MAINWEB%.TWikiGroups. Is <b>%MAINWEB%</b> </td>
 </tr><tr>
   <td> =%<nop>TWIKIWEB%= </td>
-  <td> The web containing all documentation and configuration of %WIKITOOLNAME%. Is <b>%TWIKIWEB%</b> </td>
+  <td> The web containing all documentation and configuration of %WIKITOOLNAME% is <b>%TWIKIWEB%</b> </td>
 </tr><tr>
   <td> =%<nop>WEB%= </td>
-  <td> The current web, is <b>%WEB%</b> </td>
+  <td> The current web is <b>%WEB%</b> </td>
 </tr><tr>
   <td> =%<nop>BASEWEB%= </td>
   <td> The web name where the includes started, e.g. the web of the first topic of nested includes. Same as =%<nop>WEB%= in case there is no include. </td>
@@ -320,12 +320,14 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> __SL__ , __WL__ </td>
   <td> List of preferences that are not allowed to be overridden by next level preferences</td>
 </tr></table>
-
----+++ Setting and Creating New Preferences
+---+++ Setting Variable Preferences
 
 	* The syntax for Preferences variables is the same anywhere in TWiki. In Edit mode, from the start of a new line: <br>[6 spaces] * [space] Set [space] VARIABLENAME [space] = [value] <br> __Example:__ 
 		* ==<nop>Set VARIABLENAME = value==
-	* You can add your own preference variables for an entire site, a single web, or a single topic, using the standard syntax. Whatever you include in your variable will be expanded on display, and treated exactly as if it had been written out. So you can place formatted text, page links, images.<br> __Example:__ To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, define the variable in the web's WebPreferences topic, like this (in this case, you also have to upload ==logo.gif== to the same directory): 
+
+---+++ Creating Custom Variables
+
+	* You can add your own preference variables for an entire site, a single web, or a single topic, using the standard syntax. Whatever you include in your variable will be expanded on display, and treated exactly as if it had been written out. So you can place formatted text, page links, image paths.<br> __Example:__ To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, define the variable in the web's WebPreferences topic, like this (in this case, you also have to upload ==logo.gif== to the same directory): 
 		* ==<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif==
 
--- MikeMannix - 26 Aug 2001 <br>	
+-- MikeMannix - 30 Aug 2001 <br>	
