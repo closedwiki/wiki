@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1073890440" format="1.0" version="1.23"}%
+%META:TOPICINFO{author="PeterThoeny" date="1075364160" format="1.0" version="1.24"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -31,6 +31,8 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/days.gif" alt="days.gif"  width="16" height="16"  />  | =days.gif= | Days |
 |  <img src="%ATTACHURLPATH%/hourglass.gif" alt="hourglass.gif"  width="16" height="16"  />  | =hourglass.gif= | Hour glass |
 |  <img src="%ATTACHURLPATH%/watch.gif" alt="watch.gif"  width="16" height="16"  />  | =watch.gif= | Watch |
+|  <img src="%ATTACHURLPATH%/globe.gif" alt="globe.gif"  width="16" height="16"  />  | =globe.gif= | Globe |
+|  <img src="%ATTACHURLPATH%/folder.gif" alt="folder.gif"  width="16" height="16"  />  | =folder.gif= | Folder |
 |  <img src="%ATTACHURLPATH%/viewtopic.gif" alt="viewtopic.gif"  width="16" height="16"  />  | =viewtopic.gif= | View topic |
 |  <img src="%ATTACHURLPATH%/edittopic.gif" alt="edittopic.gif"  width="16" height="16"  />  | =edittopic.gif= | Edit topic |
 |  <img src="%ATTACHURLPATH%/topicdiffs.gif" alt="topicdiffs.gif"  width="16" height="16"  />  | =topicdiffs.gif= | Topic difference |
@@ -67,7 +69,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/dot_udl.gif" alt="dot_udl.gif"  width="16" height="16"  />  | =dot_udl.gif= | Dot graph up-down-left |
 |  <img src="%ATTACHURLPATH%/dot_ulr.gif" alt="dot_ulr.gif"  width="16" height="16"  />  | =dot_ulr.gif= | Dot graph up-left-right |
 
--- TWiki:Main.PeterThoeny - 11 Jan 2004<br />
+-- TWiki:Main.PeterThoeny - 29 Jan 2004 %BR%
 -- TWiki:Main.MikeMannix - 16 May 2002
 
 %META:FILEATTACHMENT{name="help.gif" attr="" comment="Help" date="1001637645" path="C:\02_TWikiDocs\help.gif" size="130" user="MikeMannix" version="1.1"}%
@@ -124,3 +126,5 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="mail.gif" attr="" comment="Mail" date="1073864027" path="C:\Data\Temp\mail.gif" size="897" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="choice-no.gif" attr="" comment="No" date="1073890365" path="C:\Data\Temp\choice-no.gif" size="908" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="choice-cancel.gif" attr="" comment="Cancel" date="1073890377" path="C:\Data\Temp\choice-cancel.gif" size="886" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="globe.gif" attr="" comment="Globe" date="1075364114" path="C:\Data\Temp\globe.gif" size="1024" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="folder.gif" attr="" comment="Folder" date="1075364129" path="C:\Data\Temp\folder.gif" size="903" user="PeterThoeny" version="1.1"}%
