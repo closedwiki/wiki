@@ -1,10 +1,11 @@
 #! perl -w
 use strict;
 use diagnostics;
-use LWP::Simple;
+
 
 package TWiki::Contrib::DistributionContrib::DistributionFetcher;
 my %config = %TWiki::Contrib::DistributionContrib::Config::config;
+use LWP::Simple;
 
 =pod
 ---++ sub fetchLatestDistributionVersion 
