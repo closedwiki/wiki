@@ -1,7 +1,8 @@
+%META:TOPICINFO{author="PeterThoeny" date="995354133" format="1.0beta2" version="1.14"}%
 <table><tr><td>
 *<font size="+1"> %TWIKIWEB%.WelcomeGuest: </font>* %WIKITOOLNAME% is a web-based collaboration tool, web authoring tool, document management tool and knowledge base tool. You can edit any %WIKITOOLNAME% page.
 </td><td>
-<a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
+<a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
 </td><td>
 <b>The TWiki <sup>TM</sup> home is <br> at http://TWiki.org/ </b>
 </td></tr>
@@ -14,15 +15,15 @@
 	* TWikiGroups: List of groups.
 	* OfficeLocations: Corporate offices.
 
-<FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
 	* WebSearch: Full text search of the %WIKITOOLNAME%.%WEB% web.
-	* <INPUT type="text" name="search" size="32"> <INPUT type="submit" value="Search"> &nbsp;&nbsp; (More options in WebSearch)
-	* WebChanges: Find out recent changes of the %WIKITOOLNAME%.%WEB% web.
+	* <input type="text" name="search" size="32" /> <input type="submit" value="Search" /> &nbsp;&nbsp; (More options in WebSearch)
+	* WebChanges: Find out recent modifications to the %WIKITOOLNAME%.%WEB% web.
 	* WebIndex: Display all %WIKITOOLNAME%.%WEB% topics in alphabetical order.
 	* %NOTIFYTOPIC%: Subscribe to be automatically notified when something changes in the %WIKITOOLNAME%.%WEB% web.
 	* %STATISTICSTOPIC%: View access statistics of the %WIKITOOLNAME%.%WEB% web.
 	* %WEBPREFSTOPIC%: Preferences of the %WIKITOOLNAME%.%WEB% web.
-</FORM>
+</form>
 
 *%WIKITOOLNAME%.%TWIKIWEB% Web:*
 	* <b> %TWIKIWEB%.WelcomeGuest: </b> Look here first to get you rolling on %WIKITOOLNAME%.
