@@ -353,7 +353,6 @@ sub _setupHandlerMaps {
 BEGIN {
     # Read the configuration files at compile time in order to set locale
     do "TWiki.cfg";
-    do "LocalSite.cfg";
 
     if( $useLocale ) {
         eval 'require locale; import locale ();';
