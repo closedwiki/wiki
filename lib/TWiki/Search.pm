@@ -514,7 +514,9 @@ sub searchWeb {
         $theTemplate = "searchbookview";
     } elsif ($doRenameView ) {
         # Rename view, showing where topics refer to topic being renamed.
-        $theTemplate = "searchbookview";
+        # SMELL: this is really messy; it should be done a lot
+        # better than this.
+        $theTemplate = "searchrenameview";
 
         # Create full search string from topic name that is passed in
         my $renameWeb = "";
@@ -620,10 +622,9 @@ sub searchWeb {
 
         # make sure we can report this web on an 'all' search
         # DON'T filter out unless it's part of an 'all' search.
-        # PTh 18 Aug 2000: Need to include if it is the current web
-        next if (   ( $searchAllFlag )
-                    && ( ( $thisWebNoSearchAll =~ /on/i ) || ( $web =~ /^[\.\_]/ ) )
-                    && ( $web ne $this->{session}->{webName} ) );
+        next if ( $searchAllFlag
+                  && ( $thisWebNoSearchAll =~ /on/i || $web =~ /^[\.\_]/ )
+                  && $web ne $this->{session}->{webName} );
 
         # Run the search on topics in this web
         my @topicList = $this->_searchTopicsInWeb( $web, $theTopic, $theScope, $theType, $caseSensitive, @tokens );
