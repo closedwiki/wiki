@@ -119,13 +119,15 @@ img { border: 0; }
 p,td,th,tr { font-size: 1.0em;  }
 pre {	font-family: monospace;	font-size: 1.1em;	}
 strong, b {	font-weight: bold;	}
+code { font-size: 1.1em; }
 /* --------- end font sizing --------- */
 
 /* this is to (almost) stop IE from overlapping the menu and the content div when it contains tables */
 * html  table,* html tr {	width: 80%; margin:0;}	
 /*table,td,tr,th { width: 90%; }*/
 
-pre { overflow: auto; }
+#content pre { overflow: auto; background-color: #eee;}
+
 textarea {width: 95%;}
 
 .skiplink { display: none; }

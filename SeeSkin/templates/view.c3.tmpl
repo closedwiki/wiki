@@ -7,10 +7,12 @@
 <body>
 #PageTop
 <div id="topsection">
-	<h1 id="title">%INTURLENCODE{"%TOPIC%"}% %TMPL:P{"titleaction"}%</h1>
+	<h1 id="title">%LOGOCHAR% %INTURLENCODE{"%TOPIC%"}% %TMPL:P{"titleaction"}%</h1>
 	<!-- <form id="search"> -->
 		<form id="search" name="photonsearch" action="%SCRIPTURLPATH%/photonsearch%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%" method="post">
-		<input type="text" name="topic" size="10" title="type topic name to search for and press [Enter]" /> <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebSearch" title="Go to advanced search form">Search</a>
+			<p align="right">
+			<input type="text" name="topic" size="10" title="type topic name to search for and press [Enter]" /> <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebSearch" title="Go to advanced search form">Search</a> 
+			</p>
 	</form>
 </div>
 <div id="content">%TEXT%
@@ -20,11 +22,13 @@
 	%META{"moved"}%	
 	</div>
 </div>
+<hr class="nocss">
 <dl id="lineage">
 	<dt>%INTURLENCODE{"%TOPIC%"}%
 	<dd>Revision %REVINFO%
 	<dt>%META{"parent" prefix="Parents:<dd>{" suffix="}" separator="<dd>&lt;" nowebhome="on"}%
 </dl>
+<hr class="nocss">
 <dl id="menu">
 	<dt>Topic Action:
 		%TMPL:P{"topicaction"}%
@@ -35,6 +39,7 @@
 	<dt><a name="%TMPL:P{"weblabel"}%s"></a>Far:
 	<dd>%WIKIWEBLIST%
 </dl>
+<div id="logochar">%LOGOCHAR%</div>
 #PageBottom
 </body>
 </html>

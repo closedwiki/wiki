@@ -21,12 +21,9 @@ div{	/*border: 1px dotted #999;*/}
 p { text-indent: 2ex; }
 ul,ol { margin-right: 4ex; }
 code, pre { text-align: left; }
+textarea { font-family: Georgia,"Times New Roman", serif; text-align:justify; height: 30em;}
 
 p,table,td,th,ol,ul,dl,dt,dd { font-size: 2ex; }
-
-p{
-	
-}
 
 #content pre { overflow: auto; background-color: #eee;}
 
@@ -41,10 +38,12 @@ dd a:hover{ }
 
 #topsection { position: relative; top: 6ex; left: 0; }
 #title { display: none; }
+#logochar {position:absolute; top:0; left:0; font-size: 36ex; font-weight: bold; color: rgb(234, 234, 234);width: 1em;}
 #search { position: relative; top: 0; right: 0; text-align: right;}
 #search input { font-size: 1.6ex; border: 1px solid #bbb;}
 #search a { color: #bbb; }
 #content { border: none; margin: 3ex 18ex 6ex 18ex;}
+#content textarea { margin-top: 3ex; margin-bottom: 3ex;}
 
 #lineage { width: 15ex; position: absolute; top: 11ex; left: 1ex; text-align: left;  overflow: hidden; }
 #lineage * { color: #bbb; }
@@ -61,7 +60,7 @@ dd a:hover{ }
 /*#navigate *:hover { color: black; }*/
 
 /* try % instead of ex for left/right columns */
-#content { margin: 3ex 18% 6ex 18%; }
+#content { margin: 3ex 18% 6ex 18%; position:relative;}
 #navigate, #lineage { width: 15%; }
 
 #meta { text-align: center; }
@@ -69,16 +68,26 @@ dd a:hover{ }
 /* ----- menu ----- */
 * html #menu { /* for IE5 which doesn't do 'fixed' */ position: absolute; }
 #menu{ margin:0; width:100%; height: auto; position:fixed; top:0; left:0; border: none;
-   border-bottom: 1px solid rgb(220, 220, 220); color: MenuText; background-color: Menu; 
+   border-bottom: thin groove ThreedShadow; color: MenuText; background-color: Menu; 
    line-height: 3ex;}
 #menu a { color: MenuText; }
 #menu dl, #menu dt,#menu dd { display: inline; list-style: none; }
 #menu dt {display: none;}
 #diffs { display:inline; font-size:1.6ex;}
 #menu #editmore { font-style: italic;}
+#menu input { border: thin solid groove; background-color: transparent; }
 /*
 #menu dl dt a, #menu dl dd a { padding:0.5ex 0.7ex 0.5ex 0.7ex; color: MenuText;}
 */
+
+/* layer order */
+#logochar {	z-index: 1;}
+#lineage, #navigate { z-index: 5; }
+#content { z-index: 9; }
+#menu { z-index: 10; }
+
+/* hide stuff which is only for non-css browsers */
+.nocss { display: none; }
 
 /* ----- IE5.5/Win workarounds ----- */
 * html body { margin: 0; }
