@@ -110,11 +110,14 @@ __Note:__ Don't worry if you are not able to put the =twiki/lib= directory at th
 
 ---+++ Step 3: Edit the Configuration Files
 
-	* Edit the file =/twiki/bin/setlib.cfg=
-		* Set =$twikiLibPath= to the absolute file path of your =/twiki/lib= as seen by the web server.
-		* %X% __Attention:__ Do *not* leave it as a relative ="../lib"= path or Plugins might fail to initialize properly
-		* You can also edit =$localPerlLibPath= if you are not root and need to install additional CPAN modules, but can't update the main Perl installation files on the server.  Just set this variable to the full pathname to your local lib directory, typically under your home directory. 
-		* %X% __Attention:__ If you are running TWiki on Apache 2.0 on Unix you might experience cgi scripts to hang forever. This is a known Apache 2.0 bug. See details and woraround in the =setlib.cfg= file.
+	* Create the file =/twiki/bin/LocalLib.cfg=. Add the following line:
+<verbatim>
+$twikiLibPath = "/absolute/path/to/your/lib";
+</verbatim>
+        * =$twikiLibPath= must be set to the absolute file path of your =/twiki/lib= as seen by the web server.
+		* %X% __Attention:__ While TWiki will work if you don't create this file, it will be slower.
+		* You can also set =$CPANBASE= if you are not root and need to install additional CPAN modules, but can't update the main Perl installation files on the server.  Just set this variable to the full pathname to your local lib directory, typically under your home directory. 
+		* %X% __Attention:__ If you are running TWiki on Apache 2.0 on Unix you might experience cgi scripts to hang forever. This is a known Apache 2.0 bug. See details and workaround described in the =setlib.cfg= file.
 	* Edit the file =twiki/lib/TWiki.cfg=, setting the variables to your needs.
 		* Set the file extension in the =$scriptSuffix= variable to =cgi= or =pl= if required.
 		* RCS - revision control system to store revision of topics and attachments.  You can use RCS executables or a version of RCS written in Perl, note that as the time of writing (Apr 2002) the Perl version has not been widely tested, so if you want to put up a live site the RCS executables are recommended. 
