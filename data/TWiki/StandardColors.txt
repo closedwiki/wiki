@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1063074660" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071561570" format="1.0" version="1.6"}%
 ---+ The 216 Standard Colors
 
 This table can be used to choose a color in %WEBPREFSTOPIC% of each web.
@@ -160,4 +160,11 @@ This table can be used to choose a color in %WEBPREFSTOPIC% of each web.
 </tr>
 </table>
 
--- TWiki:Main.PeterThoeny - 09 Dec 2002
+__Related web sites:__
+	* http://www.cloford.com/resources/colours/websafe2.htm
+	* http://html-color-codes.com/
+	* http://the-light.com/colclick.html 
+	* http://www.triplecode.com/munsell/
+
+-- TWiki:Main.PeterThoeny - 16 Dec 2003 %BR%
+-- TWiki:Main.AndreaSterbini - 08 Sep 2003
