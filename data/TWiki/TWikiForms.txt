@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="MikeMannix" date="1000548172" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="MikeMannix" date="1007374142" format="1.0" version="1.13"}%
 %META:TOPICPARENT{name="WebHome"}%
-%TOC%
+%TOC%  
 %STARTINCLUDE%
 ---# TWiki Forms
 
@@ -101,15 +101,10 @@ The Form Template can also be defined in an alternative way by using more then o
 </blockquote>
 
 	* *Implementation Notes:* This format allows you to define field items with or without TWiki.WikiNames, depending on your needs.
-
 		* The topic can be protected in the usual manner so that not everybody can change the form template - see TWikiAccessControl
-
 		* =[<nop>[...]]= links can be used for force a link, at present =[<nop>[...][...]]= format is not supported.
-
 		* The "Tooltip message" column is used as a tool tip for the field name (only if field name is a TWiki.WikiName) - you only see the tooltip on edit.
-
 		* The first item in the list is the default item.  Alternative initial values can be given in a topic template such as =WebTopicEditTemplate= or using field=value or for checkboxes field<checkbox name>=1.
-
 		* The topic definition is not read when a topic is viewed.
 
 ---++ Enabling Forms by Web
@@ -148,5 +143,5 @@ A form embedded in a topic also appears in a new topic. This is done by specifyi
 The Form Template topic name, fields and values are stored as TWikiMetaData. The order of field/value pairs in the Meta Data is the same as in the Template.
 
 -- JohnTalintyre - 16 Aug 2001 <br />
--- MikeMannix - 15 Sep 2001 <br />
+-- Main.MikeMannix - 03 Dec 2001	
 %META:TOPICMOVED{by="MikeMannix" date="1000277489" from="TWiki.TWikiFormTemplate" to="TWiki.TWikiForms"}%
