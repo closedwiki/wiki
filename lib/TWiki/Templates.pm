@@ -227,27 +227,9 @@ sub readTemplate {
 
     # handle %TMPL:P{"..."}% recursively
     $result =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/$this->_tmplP($1)/geo;
-    # __diagnoseReadTemplate(\%templateVars, $result);
     $result =~ s|^(( {3})+)|"\t" x (length($1)/3)|geom;  # leading spaces to tabs
     return $result;
 }
-
-# Call this to illustrate the state of the readTemplate sub
-# If you don't want this (indeed, any) diagnostics in the main codebase feel free to delete it.
-sub __diagnoseReadTemplate {
-    my ($templateVarsRef, $result) = @_;
-    print "Content-type: text/html\n\n";
-    use Data::Dumper;
-
-    $Data::Dumper::Pad = "                           "; 
-    print "<PRE>".Dumper($templateVarsRef)."</PRE><BR/><BR/><FONT COLOR=BLUE>".$result."</FONT><BR><BR>";
-
-    unless ($result) {
-	print "<FONT COLOR=RED>Result was empty!</FONT><BR>";
-    }
-}
-
-1;
 
 # STATIC: Return value: raw template text, or "" if read fails
 sub _readTemplateFile {
