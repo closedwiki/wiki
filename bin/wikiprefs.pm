@@ -44,16 +44,16 @@ sub initializePrefs
     $defaultWebName = $theWebName;
     $altWebName = "";
     @finalPrefsKeys = ();
-    privateGetPrefsList( "$twikiWebname\.$wikiPrefsTopicname" ); # site-level
-    privateGetPrefsList( "$theWebName\.$webPrefsTopicname" );    # web-level
-    privateGetPrefsList( $theWikiUserName );                     # user-level
+    prvGetPrefsList( "$twikiWebname\.$wikiPrefsTopicname" ); # site-level
+    prvGetPrefsList( "$theWebName\.$webPrefsTopicname" );    # web-level
+    prvGetPrefsList( $theWikiUserName );                     # user-level
 
     return;
 }
 
 
 # =========================
-sub privateGetPrefsList
+sub prvGetPrefsList
 {
     my ( $theWebTopic ) = @_;
     my $fileName = $theWebTopic;                  # "Main.TopicName"
@@ -66,7 +66,7 @@ sub privateGetPrefsList
     foreach( split( /\n/, $text ) ) {
         if( /^\t+\*\sSet\s([a-zA-Z0-9_]*)\s\=\s*(.*)/ ) {
             if( $isKey ) {
-                privateAddToPrefsList( $key, $value );
+                prvAddToPrefsList( $key, $value );
             }
             $key = $1;
             $value = $2 || "";
@@ -77,19 +77,19 @@ sub privateGetPrefsList
                 $value .= "\n";
                 $value .= $_;
             } else {
-                privateAddToPrefsList( $key, $value );
+                prvAddToPrefsList( $key, $value );
                 $isKey = 0;
             }
         }
     }
     if( $isKey ) {
-        privateAddToPrefsList( $key, $value );
+        prvAddToPrefsList( $key, $value );
     }
     @finalPrefsKeys = split( /[\,\s]+/, getPreferencesValue( $finalPrefsName ) );
 }
 
 # =========================
-sub privateAddToPrefsList
+sub prvAddToPrefsList
 {
     my ( $theKey, $theValue ) = @_;
 
@@ -127,12 +127,25 @@ sub privateAddToPrefsList
 }
 
 # =========================
-sub privateHandlePrefsValue
+sub prvHandlePrefsValue
 {
     my( $theIdx ) = @_;
     # dummy sub needed because eval can't have multiple
     # lines in s/../../go
     return $prefsValues[$theIdx];
+}
+
+# =========================
+sub prvHandleWebVariable
+{
+    my( $attributes ) = @_;
+    my $key = extractNameValuePair( $attributes );
+    my $attrWeb = extractNameValuePair( $attributes, "web" );
+    if( $attrWeb =~ /%[A-Z]+%/ ) {
+        &wiki::handleInternalTags( $attrWeb, $defaultWebName, "dummy" );
+    }
+    my $val = getPreferencesValue( $key, $attrWeb );
+    return $val;
 }
 
 # =========================
@@ -142,8 +155,13 @@ sub handlePreferencesTags
     my $x;
     my $cmd;
     for( $x = 0; $x < @wiki::prefsKeys; $x++ ) {
-        $cmd = "\$_[0] =~ s/%$prefsKeys[$x]%/&privateHandlePrefsValue($x)/geo;";
+        $cmd = "\$_[0] =~ s/%$prefsKeys[$x]%/&prvHandlePrefsValue($x)/geo;";
         eval( $cmd );
+    }
+
+    if( $_[0] =~ /%VAR{(.*?)}%/ ) {
+        # handle web specific variables
+        $_[0] =~ s/%VAR{(.*?)}%/&prvHandleWebVariable($1)/geo;
     }
 }
 
@@ -168,8 +186,8 @@ sub getPreferencesValue
             @finalPrefsKeys = ();
             my @saveKeys    = @prefsKeys; # quick hack, this stinks
             my @saveValues  = @prefsValues; # ditto
-            privateGetPrefsList( "$twikiWebname\.$wikiPrefsTopicname" );
-            privateGetPrefsList( "$altWebName\.$webPrefsTopicname" );
+            prvGetPrefsList( "$twikiWebname\.$wikiPrefsTopicname" );
+            prvGetPrefsList( "$altWebName\.$webPrefsTopicname" );
             @altPrefsKeys   = @prefsKeys; # quick hack, this stinks
             @altPrefsValues = @prefsValues; # quick hack, this stinks
             @prefsKeys      = @saveKeys; # quick hack, this stinks
@@ -187,3 +205,4 @@ sub getPreferencesValue
 
 # =========================
 # EOF
+

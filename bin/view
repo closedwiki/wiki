@@ -85,12 +85,13 @@ sub main
         $extra .= " (not exist)";
     }
 
-    # check access permission
-    if( ! &wiki::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName ) ) {
-        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccessview" );
-        print $query->redirect( $url );
-        return;
-    }
+# commented out because not tested and not finished (protect also %INCLUDE% and search)
+#    # check access permission
+#    if( ! &wiki::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName ) ) {
+#        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccessview" );
+#        print $query->redirect( $url );
+#        return;
+#    }
 
     $text = &wiki::handleCommonTags( $text, $topic );
     $text = &wiki::getRenderedVersion( $text );
