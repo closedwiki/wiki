@@ -328,8 +328,8 @@ sub diffFiles {
 "   * file = '$file', dist='$distribution', comp='$comparedDistribution' <HR>"
 	  if $debug;
 
-	my $file1 = getFile( $file, $distribution, 1 );
-	my $file2 = getFile( $file, $comparedDistribution, 2 );
+	my $file1 = getFile( $file, $distribution, "From" );
+	my $file2 = getFile( $file, $comparedDistribution, "To" );
 
 	my $cmd              = "diff $fileDiffParams $file1 $file2";
 	my $output           = captureOutput($cmd);
