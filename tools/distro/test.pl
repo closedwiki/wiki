@@ -52,40 +52,41 @@ $Config->{plugin} ||= [ qw( PerlDocPlugin CommentPlugin
 		    FindElsewherePlugin InterwikiPlugin SpreadSheetPlugin TablePlugin TocPlugin 
 		    SpacedWikiWordPlugin ChartPlugin 
 		    TWikiReleaseTrackerPlugin
-		   	) ];	#+ ActionTrackerPlugin BeautifierPlugin CalendarPlugin
+		   	) ];										#+ ActionTrackerPlugin BeautifierPlugin CalendarPlugin
 $Config->{contrib} ||= [ qw( DistributionContrib ) ];	#+ AttrsContrib DBCacheContrib JSCalendarContrib TWikiShellContrib
-$Config->{addon} ||= [ qw( GetAWebAddOn ) ];		#+ PluginBenchmarkAddOn
+$Config->{addon} ||= [ qw( GetAWebAddOn ) ];			#+ ???
 die "twikiplugins doesn't exist" unless -d $Config->{twikiplugins};
 $Config->{_installer}->{dir} = "$Config->{twikiplugins}/lib/TWiki/Contrib/TWikiInstallerContrib/";
 $Config->{_installer}->{TWikiReleases} = "$Config->{_installer}->{dir}/downloads/releases/";
 print Dumper( $Config ) if $Config->{debug};
-$Config->{install_dir} =~ s/~/\\~/g;						# KLUDGE
-print "[", $Config->{install_dir}, "]\n";
 
 ################################################################################
 
 # build kernel
 my $newDistro = BuildTWikiKernel({ %$Config }) or die;
+die "no TWikiReleases dir?" unless $Config->{_installer}->{TWikiReleases};
 cp( $newDistro, $Config->{_installer}->{TWikiReleases} ) or die $!;
+
+# install reference version
 BuildTWikiDistribution({ %$Config }); 
 PushRemoteTWikiInstall({ %$Config, kernel => 'TWiki20040901.tar.gz', report => 0 });
 TWikiTopics2TestCases({ %$Config });
 GetAWeb({ %$Config, web => $Config->{testweb} });
 UninstallTWiki({ %$Config });
-exit 0;
 
 # reinstall new version to be tested (with newly-saved test web)
 PushRemoteTWikiInstall({ %$Config, kernel => $newDistro, testweb => "$Config->{testweb}.wiki.tar.gz" });
 my $comparisonResults = RunComparisonTests({ %$Config });
-print Dumper( $comparisonResults ) if $Config->{debug};
+	print Dumper( $comparisonResults ) if $Config->{debug};
 my $textTopicReport = MakeComparisonTestsResultsReport({ %$Config, results => $comparisonResults });
-print Dumper( $textTopicReport ) if $Config->{debug};
+	print Dumper( $textTopicReport ) if $Config->{debug};
 PostComparisonTestsResultsReport({ %$Config, text => $textTopicReport, topic => "$Config->{testweb}.$Config->{testweb}ComparisonsReport" });
-$Config->{isInstalled} = 1;
+$Config->{_isInstalled} = 1;
 
-END {
+END 
+{
 	# final installation report
-	WebBrowser({ url => "http://$Config->{install_host}/~$Config->{install_account}/cgi-bin/twiki/view?topic=$Config->{testweb}.$Config->{testweb}ComparisonsReport" }) if $Config->{isInstalled};
+	WebBrowser({ url => "http://$Config->{install_host}/~$Config->{install_account}/cgi-bin/twiki/view?topic=$Config->{testweb}.$Config->{testweb}ComparisonsReport" }) if $Config->{_isInstalled};
 }
 
 ################################################################################
@@ -184,11 +185,11 @@ sub UninstallTWiki
 	print STDERR "UninstallTWiki: ", Dumper( $parms ) if $parms->{debug};
 	die "install_account?" unless $parms->{install_account};
 	die "install_host?" unless $parms->{install_host};
-	die "install_dir?" unless $parms->{install_dir};
+	my $install_dir = $parms->{install_dir} or die "install_dir?";
 	
-	die "no testweb?" unless $parms->{testweb};
 	my $cmdUninstallWeb = $parms->{testweb} && "rm webs/local/$parms->{testweb}.wiki.tar.gz; rmdir webs/local; rmdir webs" || '';
-	logSystem( qq{ssh $parms->{install_account}\@$parms->{install_host} "cd $parms->{install_dir}; ./un-twiki.sh; ./uninstall.sh; $cmdUninstallWeb"} );
+	logSystem( qq{ssh $parms->{install_account}\@$parms->{install_host} "cd $install_dir; ./un-twiki.sh; ./uninstall.sh; $cmdUninstallWeb"} );
+#	logSystem( ssh => "$parms->{install_account}\@$parms->{install_host}" => "cd $install_dir; ./un-twiki.sh; ./uninstall.sh; $cmdUninstallWeb" );
 }
 
 ################################################################################
@@ -242,23 +243,21 @@ sub PushRemoteTWikiInstall
 
 	die "no account?" unless $parms->{install_account};
 	die "no host?" unless $parms->{install_host};
-	die "no dir?" unless $parms->{install_dir};
+	die "no install_dir?" unless $parms->{install_dir};
 	# TODO: handle testweb as an optional parameter
 	die "no testweb?" unless $parms->{testweb};
 
 	my $testweb = -e $parms->{testweb} ? $parms->{testweb} : "${dirInstaller}/webs/local/$parms->{testweb}.wiki.tar.gz";
 	my $report = $parms->{report} || 0;
 	
-#	$parms->{install_dir} =~ s/~/\~/g;		# KLUDGE!!!
-		
 	logSystem( './install-remote-twiki.pl' => '--verbose', '--debug',
 		'--distro' => "${dirInstaller}/twiki-${platform}.tar.bz2",
-		'--kernel' => "$kernel",
-		'--web' => "$testweb", 
-		'--install_account' => "$parms->{install_account}",
-		'--install_host' => "$parms->{install_host}",
-		'--install_dir' => "$parms->{install_dir}",
-		'--agent' => "$parms->{agent}",
+		'--kernel' => $kernel,
+		'--web' => $testweb, 
+		'--install_account' => $parms->{install_account},
+		'--install_host' => $parms->{install_host},
+		'--install_dir' => $parms->{install_dir},
+		'--agent' => $parms->{agent},
 		'--report' => $report,
 		);
 }
@@ -306,26 +305,26 @@ tests.pl - ...
 
 =head1 SYNOPSIS
 
-test.pl [options] [-testweb=] 
-	[-platform=[$^O]] [-twikiplugins=] [-twikisync=[0]]
-	[-install_account=[twiki]] [-install_host=[localhost]] [-install_dir=[~/Sites]]
-	[-plugin=(...)] [-contrib=(...)] [-addon=(...)]
+test.pl [options] [-testweb] 
+	[-platform [$^O]] [-twikiplugins] [-twikisync [0]]
+	[-install_account [twiki]] [-install_host [localhost]] [-install_dir[~/Sites]]
+	[-plugin (...)] [-contrib (...)] [-addon (...)]
 	[--report|--no-report] [-verbose] [-help] [-man]
 
 Copyright 2004 Will Norris.  All Rights Reserved.
 
   Test Options:
-   -testweb=[GameDev]				...
+   -testweb	[GameDev]				...
 
   Build Options:
-   -platform=[$^O]					(darwin|sourceforge)
-   -twikiplugins=[../../../twikiplugins]
+   -platform [$^O]					(darwin|sourceforge)
+   -twikiplugins [../../../twikiplugins]
    -twikisync                       download latest versions of plugins, addons, etc from twiki.org	
 
   Install Options:
-   -install_account=[twiki]
-   -install_host=[localhost]
-   -install_dir=[~/Sites]
+   -install_account [twiki]
+   -install_host [localhost]
+   -install_dir [~/Sites]
    [-plugin ...]*
    [-contrib ...]*
    [-addon ...]*
