@@ -88,8 +88,12 @@ sub main
     my $nototal       = $query->param( "nototal" ) || "";
     my $bookView      = $query->param( "bookview" )  || ""; # PTh 20 Jul 2000
     my $renameView    = $query->param( "renameview" )  || "";
+    my $showlock      = $query->param( "showlock" ) || "";
 
-    &TWiki::Search::searchWeb( "0", $websStr, $search, $scope, $order, $regex,
-                               $limit, $revSort, $caseSensitive, $nosummary,
-                               $nosearch, $noheader, $nototal, $bookView, $renameView );
+    &TWiki::Search::searchWeb( "0",
+        $websStr, $search, $scope, $order, $regex,
+        $limit, $revSort, $caseSensitive, $nosummary,
+        $nosearch, $noheader, $nototal, $bookView, $renameView,
+        $showlock
+    );
 }

@@ -71,7 +71,8 @@ use vars qw(
         $twikiWebname $mainWebname $mainTopicname $notifyTopicname
         $wikiPrefsTopicname $webPrefsTopicname
         $statisticsTopicname $statsTopViews $statsTopContrib
-        $numberOfRevisions $editLockTime $mailProgram $wikiversion 
+        $numberOfRevisions $editLockTime
+        $scriptSuffix $safeEnvPath $mailProgram $wikiversion 
         $doKeepRevIfEditLock $doRemovePortNumber
         $doRememberRemoteUser $doPluralToSingular
         $doHidePasswdInRegistration $doSecureInclude
@@ -79,7 +80,6 @@ use vars qw(
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
         @isoMonth $TranslationToken $code @code $depth %mon2num
-        $scriptSuffix
         $newTopicFontColor $newTopicBgColor
         $headerPatternDa $headerPatternSp $headerPatternHt
         $debugUserTime $debugSystemTime
@@ -100,7 +100,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "08 Mar 2001";
+$wikiversion      = "09 Mar 2001";
 
 # ===========================
 # read the configuration part
@@ -136,7 +136,9 @@ sub initialize
     my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl ) = @_;
 
     # Make %ENV safer for CGI
-    $ENV{'PATH'} = '/bin:/usr/bin';
+    if( $safeEnvPath ) {
+        $ENV{'PATH'} = $safeEnvPath;
+    }
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
     # initialize access control
@@ -609,11 +611,13 @@ sub handleSearchWeb
     my $attrNototal       = extractNameValuePair( $attributes, "nototal" );
     my $attrBookview      = extractNameValuePair( $attributes, "bookview" );
     my $attrRenameview    = extractNameValuePair( $attributes, "renameview" );
+    my $attrShowlock      = extractNameValuePair( $attributes, "showlock" );
 
     return &TWiki::Search::searchWeb( "1", $attrWeb, $searchVal, $attrScope,
        $attrOrder, $attrRegex, $attrLimit, $attrReverse,
        $attrCasesensitive, $attrNosummary, $attrNosearch,
-       $attrNoheader, $attrNototal, $attrBookview, $attrRenameview
+       $attrNoheader, $attrNototal, $attrBookview, $attrRenameview,
+       $attrShowlock
     );
 }
 

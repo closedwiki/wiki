@@ -341,14 +341,14 @@ sub getRevisionInfoNew
 
 
 # =========================
-sub topicIsLockedNew
+sub topicIsLockedBy           # was topicIsLockedNew
 {
-    my( $web, $name ) = @_;
+    my( $theWeb, $theTopic ) = @_;
 
     # pragmatic approach: Warn user if somebody else pressed the
     # edit link within one hour
 
-    my $lockFilename = "$TWiki::dataDir/$web/$name.lock"; #!!!use file generation method
+    my $lockFilename = "$TWiki::dataDir/$theWeb/$theTopic.lock"; #!!!use file generation method
     if( ( -e "$lockFilename" ) && ( $TWiki::editLockTime > 0 ) ) {
         my $tmp = readFile( $lockFilename );
         my( $lockUser, $lockTime ) = split( /\n/, $tmp );
@@ -702,34 +702,6 @@ sub removeObsoleteTopicLocks
         }
     }
 }
-
-
-# =========================
-sub topicIsLocked
-{
-    my( $theName ) = @_;
-
-    # pragmatic approach: Warn user if somebody else pressed the
-    # edit link within one hour
-
-    my $lockFilename = "$TWiki::dataDir/$TWiki::webName/$theName.lock";
-    if( ( -e "$lockFilename" ) && ( $TWiki::editLockTime > 0 ) ) {
-        my $tmp = readFile( $lockFilename );
-        my( $lockUser, $lockTime ) = split( /\n/, $tmp );
-        if( $lockUser ne $TWiki::userName ) {
-            # time stamp of lock within one hour of current time?
-            my $systemTime = time();
-            # calculate remaining lock time in seconds
-            $lockTime = $lockTime + $TWiki::editLockTime - $systemTime;
-            if( $lockTime > 0 ) {
-                # must warn user that it is locked
-                return ( $lockUser, $lockTime );
-            }
-        }
-    }
-    return ( "", 0 );
-}
-
 
 # =========================
 sub webExists

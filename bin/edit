@@ -197,7 +197,7 @@ sub main
         return;
     }
 
-    my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLocked( $topic );
+    my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $webName, $topic );
     if( ( ! $breakLock ) && ( $lockUser ) ) {
         # warn user that other person is editing this topic
         $lockUser = &TWiki::userToWikiName( $lockUser );

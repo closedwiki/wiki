@@ -46,7 +46,8 @@ sub searchWeb
     ## 0501 kk : vvv Added params
     my ( $doInline, $theWebName, $theSearchVal, $theScope, $theOrder,
          $theRegex, $theLimit, $revSort, $caseSensitive, $noSummary,
-         $noSearch, $noHeader, $noTotal, $doBookView, $doRenameView, @junk ) = @_;
+         $noSearch, $noHeader, $noTotal, $doBookView, $doRenameView,
+         $doShowLock, @junk ) = @_;
 
     ## 0501 kk : vvv new option to limit results
     # process the result limit here, this is the 'global' limit for
@@ -370,6 +371,7 @@ sub searchWeb
         my $revDate = "";
         my $revUser = "";
         my $revNum = "";
+        my $locked = "";
         foreach( @topicList ) {
             $topic = $_;
 
@@ -386,16 +388,27 @@ sub searchWeb
                 $revNum  = $revnum;
             }
 
+            $locked = "";
+            if( $doShowLock ) {
+                ( $tempVal ) = &TWiki::Store::topicIsLockedBy( $thisWebName, $topic );
+                if( $tempVal ) {
+                    $revUser = &TWiki::userToWikiName( $tempVal );
+                    $locked = "(LOCKED)";
+                }
+            }
+
             $tempVal = $repeatText;
             $tempVal =~ s/%WEB%/$thisWebName/go;
             $tempVal =~ s/%TOPICNAME%/$topic/go;
+            $tempVal =~ s/%LOCKED%/$locked/o;
+            $tempVal =~ s/%TIME%/$revDate/o;
             if( $revNum > 1 ) {
-                $revNum = "$revDate - r1.$revNum";
+                $revNum = "r1.$revNum";
             } else {
-                $revNum = "$revDate - <b>NEW</b>";
+                $revNum = "<b>NEW</b>";
             }
-            $tempVal =~ s/%TIME%/$revNum/go;
-            $tempVal =~ s/%AUTHOR%/$revUser/go;
+            $tempVal =~ s/%REVISION%/$revNum/o;
+            $tempVal =~ s/%AUTHOR%/$revUser/o;
             $tempVal = &TWiki::handleCommonTags( $tempVal, $topic );
             $tempVal = &TWiki::getRenderedVersion( $tempVal );
 
