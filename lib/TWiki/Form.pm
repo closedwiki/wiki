@@ -250,6 +250,9 @@ sub renderForEdit
         
         if( $type eq "text" ) {
             $value =~ s/"/&#34/go; # Make sure double quote don't kill us
+            $value =~ s/&/&amp\;/go;
+            $value =~ s/</&lt\;/go;
+            $value =~ s/>/&gt\;/go;
             $value = "<input type=\"text\" name=\"$name\" size=\"$size\" value=\"$value\" />";
         } elsif( $type eq "textarea" ) {
             my $cols = 40;
@@ -258,6 +261,10 @@ sub renderForEdit
                $cols = $1;
                $rows = $2;
             }
+            $value =~ s/"/&#34/go; # Make sure double quote don't kill us
+            $value =~ s/&/&amp\;/go;
+            $value =~ s/</&lt\;/go;
+            $value =~ s/>/&gt\;/go;
             $value = "<textarea cols=\"$cols\" rows=\"$rows\" name=\"$name\">$value</textarea>";
         } elsif( $type eq "select" ) {
             my $val = "";
@@ -270,6 +277,7 @@ sub renderForEdit
                    $matched = $item;
                 }
                 $defaultMarker = "";
+                $item =~ s/<nop/&lt\;nop/go;
                 $val .= "   <option$selected>$item</option>";
             }
             if( ! $matched ) {
@@ -371,7 +379,9 @@ sub fieldVars2Meta
        
        if( ! $value && $type =~ "^checkbox" ) {
           foreach my $name ( @fieldInfo ) {
-             $cvalue = $query->param( "$fieldName" . "$name" );
+             my $cleanName = $name;
+             $cleanName =~ s/<nop>//g;
+             $cvalue = $query->param( "$fieldName" . "$cleanName" );
              if( defined( $cvalue ) ) {
                  if( ! $value ) {
                      $value = "";
@@ -415,6 +425,9 @@ sub getFieldParams
        my $name  = $field->{"name"};
        my $value = $field->{"value"};
        $value = TWiki::Meta::cleanValue( $value );
+       $value =~ s/&/&amp\;/go;
+       $value =~ s/</&lt\;/go;
+       $value =~ s/>/&gt\;/go;
        $params .= "<input type=\"hidden\" name=\"$name\" value=\"$value\" />\n";
     }
     
