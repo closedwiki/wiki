@@ -85,7 +85,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "22 Jan 2001";
+$wikiversion      = "25 Jan 2001";
 
 # ===========================
 # read the configuration part
@@ -981,7 +981,7 @@ sub emitTR {
     } else {
         $cells = "$pre<TABLE border=\"1\"><TR><TD> $cells";
     }
-    $cells =~ s@\|$@ </TD></TR>@go;
+    $cells =~ s@\|\s*$@ </TD></TR>@go;
     $cells =~ s@\|@ </TD><TD> @go;
     return $cells;
 }
@@ -1108,12 +1108,11 @@ sub getRenderedVersion
             s@^([a-zA-Z0-9]+)----*@<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><HR></td></tr></table>@o;
 
 # Table of format: | cell | cell |
-            if( $_ =~ /^(\s*)\|.*\|$/ ) {
+            # PTh 25 Jan 2001: Forgiving syntax, allow trailing white space
+            if( $_ =~ /^(\s*)\|.*\|\s*$/ ) {
                 s/^(\s*)\|(\s*)(.*)/&emitTR($1,$3,$insideTABLE)/eo;
                 $insideTABLE = 1;
             } elsif( $insideTABLE ) {
-
-
                 $result .= "</TABLE>\n";
                 $insideTABLE = 0;
             }
