@@ -41,6 +41,15 @@ sub getSessionValue
 }
 
 # =========================
+# set session value (via session plugin)
+# =========================
+sub setSessionValue
+{
+#   my( $key, $value ) = @_;
+    &TWiki::setSessionValue( @_ );
+}
+
+# =========================
 # get a preferences value
 # =========================
 sub getPreferencesValue
