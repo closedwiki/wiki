@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042355356" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1044150120" format="1.0" version="1.12"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
 #FileSystem
 ---# Appendix A: TWiki Filesystem
 
-_Annotated directory and file listings, for the 01-Dec-2001 TWiki production release._
+_Annotated directory and file listings, for the 01-Feb-2003 TWiki production release._
 
 ---++ Who and What is This Good For?
 
@@ -25,7 +25,7 @@ You can rename the root TWiki directory - ==twiki== - to whatever you like by ch
 
 ---++ File Descriptions
 
-A rundown of the individual files included in the current 01-Dec-2001 distribution, organized by TWiki root directories.
+A rundown of the individual files included in the current distribution, organized by TWiki root directories.
 
 #TWikiFiles
 ---+++ Files in <code>twiki</code>
