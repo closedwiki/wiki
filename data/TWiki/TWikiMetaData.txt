@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000458670" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="MikeMannix" date="1000619828" format="1.0" version="1.7"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
 #MetaDataDefinition
 ---# TWiki Meta Data
 
-_Topic data not editable from main freeform text box, stored in name/value =META= variable pairs_
+_Additional topic data, not editable from main freeform text box, stored in =META= variable name/value pairs_
 
 ---++ Overview
 

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000548476" format="1.0" version="1.14"}%
+%META:TOPICINFO{author="MikeMannix" date="1000620081" format="1.0" version="1.15"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Plugins
@@ -80,7 +80,7 @@ Plugin status variables let you list all active Plugins wherever needed. There a
 	* The =%<nop>ACTIVATEDPLUGINS%= variable lists activated Plugins by name. (This variable is displayed in %TWIKIWEB%.TWikiPreferences for debugging use.)
 	* The =%<nop>PLUGINDESCRIPTIONS%= variable displays a bullet list with a one-line description of each active Plugins. This variable is based on the =%&lt;plugin&gt;_SHORTDESCRIPTION%= Preferences variables of individual topics and is shown in %TWIKIWEB%.TextFormattingRules.
 
-<blockquote style="background-color:#f0f0f0">
+<blockquote style="background-color:#f5f5f5">
 <span style="color:#0000ff"> *DEMO: Active Plugin Variables* </span>
 
 =%<nop>ACTIVATEDPLUGINS%= <br />
@@ -159,8 +159,8 @@ The Plugin documentation topic contains usage instructions and version details. 
 	2. *Customize* the template for your Plugin; you'll probably want to post a working version on your local TWiki site.
 	3. *Save* your topic as a text file, for use in [[#CreatePluginPackage][packaging]] and [[#PublishPlugin][publishing]] your Plugin.
 
-<blockquote style="background-color:#f0f0f0">
-<span style="color:#0000ff"><b>OUTLINE:</b> Doc Topic Contents </span><br>
+<blockquote style="background-color:#f5f5f5">
+*OUTLINE: Doc Topic Contents* <br />
 Check EmptyPlugin on TWiki.org for the latest Plugin doc topic template. Here's a quick overview of what's covered:
 
 *Syntax Rules:* Describe any special text formatting that will be rendered. 
@@ -204,4 +204,4 @@ You can release your tested, packaged Plugin to the TWiki community through the 
 
 -- AndreaSterbini - 29 May 2001 <br />
 -- MikeMannix - 01 Sep 2001 <br />
--- Main.PeterThoeny - 14 Sep 2001 <br />
+-- PeterThoeny - 14 Sep 2001 <br />
