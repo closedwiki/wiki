@@ -228,6 +228,10 @@ sub load {
             $p->{disabled} = 1;
         } else {
             $user = $p->load();
+            # Report initialisation errors
+            if( $p->{errors} ) {
+                $this->{session}->writeWarning( join( "\n", $p->{errors} ));
+            }
         }
     }
 
