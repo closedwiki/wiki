@@ -237,22 +237,33 @@ sub addLinkToEndOfTopic
 {
     my ( $text, $pathFilename, $fileName, $fileComment ) = @_;
     my $fileLink = "";
+    my $imgSize = "";
+
     if( $fileName =~ /\.(gif|jpg|jpeg|png)$/i ) {
-        if( $fileComment ) {
-            $fileComment = "<br> $fileComment ";
-        }
+        # inline image
+        $fileComment = $fileName if( ! $fileComment );
         my( $nx, $ny ) = &imgsize( $pathFilename );
-        my $imgSize = "";
         if( ( $nx > 0 ) && ( $ny > 0 ) ) {
-            $imgSize = "width=\"$nx\" height=\"$ny\"";
+            $imgSize = " width=\"$nx\" height=\"$ny\" ";
         }
-        $fileLink = "\n<img src=\"%ATTACHURLPATH%/$fileName\" $imgSize alt=\"$fileName\"> $fileComment<br>\n";
+        $fileLink = &TWiki::Prefs::getPreferencesValue( "ATTACHEDIMAGEFORMAT" )
+                  || '   * $comment: <br />'
+                   . ' <img src="%ATTACHURLPATH%/$name" alt="$name"$size />';
     } else {
-        if( $fileComment ) {
-            $fileComment = "($fileComment) ";
-        }
-        $fileLink = "\n<a href=\"%ATTACHURLPATH%/$fileName\">$fileName</a> $fileComment<br>\n";
+        # normal attached file
+        $fileLink = &TWiki::Prefs::getPreferencesValue( "ATTACHEDFILELINKFORMAT" )
+                 || '   * [[%ATTACHURL%/$name][$name]]: $comment';
     }
+
+    $fileLink =~ s/^      /\t\t/go;
+    $fileLink =~ s/^   /\t/go;
+    $fileLink =~ s/\$name/$fileName/g;
+    $fileLink =~ s/\$comment/$fileComment/g;
+    $fileLink =~ s/\$size/$imgSize/g;
+    $fileLink =~ s/\\t/\t/go;
+    $fileLink =~ s/\\n/\n/go;
+    $fileLink =~ s/([^\n])$/$1\n/;
+
     return "$text$fileLink";
 }
 
