@@ -3,5 +3,6 @@ Here would stand the information about the Tokyo office:
 	* Address:
 	* Phone:
 	* Fax:
+	* <a href="%SCRIPTURL%/search%SCRIPTSUFFIX%/%WEB%/?scope=text&search=Location:%20%TOPIC%">List</a> of employees at <nop>%TOPIC%.
 
-%INCLUDE{"OfficeLocations"}%
+__Related topic:__ OfficeLocations, %WIKIUSERSTOPIC%
