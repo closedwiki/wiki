@@ -244,7 +244,8 @@ sub renderForEdit
         my $tooltip = shift @fieldInfo;
 
         my %field = $meta->findOne( "FIELD", $fieldName );
-        my $value = $field{"value"} || "";
+        my $value = $field{"value"};
+        $value = "" unless defined $value;  # allow "0" values
         my $extra = "";
         
         if( $type eq "text" ) {
