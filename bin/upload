@@ -424,7 +424,7 @@ sub main
         $text = addLinkToEndOfTopic( $text, $filePath, $fileName, $fileComment );
     }
 
-    my $error = &TWiki::Store::saveTopic( $webName, $topic, $text, $meta );
+    my $error = &TWiki::Store::saveTopic( $webName, $topic, $text, $meta, "", 1 );
     if( $error ) {
     	handleError( $noredirect, "Save topic error", $query, $webName, $topic,
     	       "oopssaveerr", $error );
