@@ -241,18 +241,19 @@ sub compareFile {
 	my $modeCallback = selectModeCallback($mode);
 
 	my $distString = join( ",", @distributions );
+    my $distStringNop = join( ",<nop>", @distributions );   
 	$ans .=
 	  browserCallback( "   <LI> Back to file listing", 'mode' => 'listing' )
 	  . "\n";
 	$ans .= browserCallback(
-		"   <LI> Linecount differences for distribution(s) " . $distString,
+		"   <LI> Linecount differences for distribution(s) " . $distStringNop,
 		'file' => $file,
 		'to'   => $distString,
 		'mode' => "lineCount"
 	  )
 	  . "\n";
 	$ans .= browserCallback(
-		"   <LI> Detailed differences for distribution(s) " . $distString,
+		"   <LI> Detailed differences for distribution(s) " . $distStringNop,
 		'file' => $file,
 		'to'   => $distString,
 		'mode' => 'diff'
