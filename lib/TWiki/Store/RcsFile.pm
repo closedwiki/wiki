@@ -180,10 +180,9 @@ sub moveMe
 sub _moveTopic
 {
    my( $self, $newWeb, $newTopic ) = @_;
-   
+
    my $oldWeb = $self->{web};
    my $oldTopic = $self->{topic};
-   
    my $error = "";
 
    # Change data file
@@ -204,8 +203,8 @@ sub _moveTopic
        ) ) {
           $error .= "history file move failed.  ";
        }
-   }   
-   
+   }
+
    if( ! $error ) {
        # Make sure pub directory exists for newWeb
        my $newPubWebDir = $new->_makePubWebDir( $newWeb );
@@ -223,7 +222,7 @@ sub _moveTopic
           }
        }
    }
-      
+
    return $error;
 }
 
@@ -236,12 +235,12 @@ sub _moveTopic
 sub _moveAttachment
 {
     my( $self, $newWeb, $newTopic ) = @_;
-    
+
     my $oldWeb = $self->{web};
     my $oldTopic = $self->{topic};
     my $attachment = $self->{attachment};
-        
-    my $error = "";   
+
+    my $error = "";
     my $what = "$oldWeb.$oldTopic.$attachment -> $newWeb.$newTopic";
 
     # FIXME might want to delete old directories if empty
@@ -260,7 +259,7 @@ sub _moveAttachment
         umask( 0 );
         mkdir( $tempPath, 0775 ); # FIXME get from elsewhere
     }
-    
+
     # Move attachment
     my $oldAttachment = $self->{file};
     my $newAttachment = $new->{file};
@@ -268,14 +267,14 @@ sub _moveAttachment
         $error = "Failed to move attachment; $what ($!)";
         return $error;
     }
-    
+
     # Make sure rcs directory exists
     my $newRcsDir = $new->_makeFileDir( 1, ",v" );
     if ( ! -e $newRcsDir ) {
         umask( 0 );
         mkdir( $newRcsDir, $self->{dirPermission} );
     }
-    
+
     # Move attachment history
     my $oldAttachmentRcs = $self->{rcsFile};
     my $newAttachmentRcs = $new->{rcsFile};

@@ -48,7 +48,6 @@ use strict;
 # delRevCmd               RCS delete revision command
 # unlockCmd               RCS unlock command
 # lockCmd                 RCS lock command
-# tagCmd                  RCS tag command
 #
 # (from RcsFile)
 # dataDir
@@ -82,23 +81,10 @@ sub _settings
     $self->{delRevCmd}    = $settings{delRevCmd};
     $self->{unlockCmd}    = $settings{unlockCmd};
     $self->{lockCmd}      = $settings{lockCmd};
-    $self->{tagCmd}      = $settings{tagCmd};
 }
 
 #TODO set from TWiki.cfg
 my $cmdQuote = "'";
-
-# Remember to uncomment the calls as well
-#sub _traceExec
-#{
-#    my( $cmd, $string, $exit ) = @_;
-#    if( $exit ) {
-#        $exit = " Error: $exit";
-#    } else {
-#        $exit = "";
-#    }
-#    print STDERR "Rcs: $cmd -> ($exit) $string\n";
-#}
 
 # ======================
 # Returns false if okay, otherwise an error string
@@ -107,23 +93,18 @@ sub _binaryChange
     my( $self ) = @_;
     if( $self->getBinary() ) {
         # Can only do something when changing to binary
-        my $cmd = $self->{"initBinaryCmd"};
-        my $file = $self->file();
-        $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/go;
-        $cmd =~ /(.*)/;
-        $cmd = "$1";       # safe, so untaint variable
-        my $rcsOutput = `$cmd`;
-        my $exit = $? >> 8;
-        #_traceExec( $cmd, $rcsOutput, $exit );
+        my $file = $self->{file};
+        my ( $rcsOutput, $exit ) =
+          TWiki::Sandbox::readFromProcess ( $self->{initBinaryCmd},
+                                   FILENAME => $self->{file} );
         if( $exit && $rcsOutput ) {
-           $rcsOutput = "$cmd\n$rcsOutput";
-           return $rcsOutput;
+           $rcsOutput = "$self->{initBinaryCmd}\n$rcsOutput";
+        } elsif( ! -e $self->{rcsFile} ) {
+            # Sometimes (on Windows?) rcs file not formed, so check for it
+            $rcsOutput =
+              "$self->{initBinaryCmd}\nFailed to create history file $self->{rcsFile}";
         }
-
-        # Sometimes (on Windows?) rcs file not formed, so check for it
-        if( ! -e $file ) {
-           return "$cmd\nFailed to create history file $file";
-        }
+        return $rcsOutput;
     }
     return "";
 }
@@ -141,8 +122,8 @@ sub addRevision
 {
     my( $self, $text, $comment, $userName ) = @_;
     
-    $self->_save( $self->file(), \$text );
-    return $self->_ci( $self->file(), $comment, $userName );
+    $self->_save( $self->{file}, \$text );
+    return $self->_ci( $self->{file}, $comment, $userName );
 }
 
 # ======================
@@ -159,13 +140,11 @@ Return non empty string with error message if there is a problem
 sub replaceRevision
 {
     my( $self, $text, $comment, $user, $date ) = @_;
-    
+
     my $rev = $self->numRevisions();
     my $file    = $self->{file};
     my $rcsFile = $self->{rcsFile};
-    my $cmd;
-    my $rcsOut;
-    
+
     # update repository with same userName and date
     if( $rev == 1 ) {
         # initial revision, so delete repository file and start again
@@ -173,22 +152,16 @@ sub replaceRevision
     } else {
         $self->_deleteRevision( $rev );
     }
-    $self->_saveFile( $self->file(), $text );
-    $cmd = $self->{ciDateCmd};
+    $self->_saveFile( $self->{file}, $text );
 	$date = TWiki::formatTime( $date , "\$rcs", "gmtime");
-    $cmd =~ s/%DATE%/$date/;
-    $cmd =~ s/%USERNAME%/$user/;
-    $file =~ s/$TWiki::securityFilter//go;
-    $rcsFile =~ s/$TWiki::securityFilter//go;
-    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote $cmdQuote$rcsFile$cmdQuote/;
-    $cmd =~ /(.*)/;
-    $cmd = $1;       # safe, so untaint variable
-    $rcsOut = `$cmd`;
-    my $exit = $? >> 8;
-    #_traceExec( $cmd, $rcsOut, $exit );
-    #$rcsOut =~ s/^Warning\: missing newline.*//os; # forget warning
+
+    my ($rcsOut, $exit) = TWiki::Sandbox::readFromProcess
+      ( $self->{ciDateCmd},
+        DATE => $date,
+        USERNAME => $user,
+        FILENAME => [$file, $rcsFile] );
     if( $exit ) {
-        $rcsOut = "$cmd\n$rcsOut";
+        $rcsOut = "$self->{ciDateCmd}\n$rcsOut";
         return $rcsOut;
     }
     return "";
@@ -215,45 +188,33 @@ sub deleteRevision
 sub _deleteRevision
 {
     my( $self, $rev ) = @_;
-    
+
     # delete latest revision (unlock, delete revision, lock)
     my $file    = $self->{file};
     my $rcsFile = $self->{rcsFile};
-    my $cmd= $self->{unlockCmd};
-    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote $cmdQuote$rcsFile$cmdQuote/go;
-    $cmd =~ /(.*)/;
-    $cmd = $1;       # safe, so untaint
-    my $rcsOut = `$cmd`; # capture stderr
-    my $exit = $? >> 8;
-    #_traceExec( $cmd, $rcsOut, $exit );
-    #$rcsOut =~ s/^Warning\: missing newline.*//os; # forget warning
+
+    my ($rcsOut, $exit) = TWiki::Sandbox::readFromProcess
+      ( $self->{unlockCmd}, FILENAME => [$file, $rcsFile] );
     if( $exit ) {
-        $rcsOut = "$cmd\n$rcsOut";
+        $rcsOut = "$self->{unlockCmd}\n$rcsOut";
         return $rcsOut;
     }
-    $cmd= $self->{delRevCmd};
-    $cmd =~ s/%REVISION%/1.$rev/go;
-    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote $cmdQuote$rcsFile$cmdQuote/go;
-    $cmd =~ /(.*)/;
-    $cmd = $1;       # safe, so untaint variable
-    $rcsOut = `$cmd`;
-    $exit = $? >> 8;
-    #_traceExec( $cmd, $rcsOut, $exit );
-    #$rcsOut =~ s/^Warning\: missing newline.*//os; # forget warning
+
+    ($rcsOut, $exit) = TWiki::Sandbox::readFromProcess
+      ( $self->{delRevCmd},
+        REVISION => "1.$rev",
+        FILENAME => [$file, $rcsFile] );
     if( $exit ) {
-        $rcsOut = "$cmd\n$rcsOut";
+        $rcsOut = "$self->{delRevCmd}\n$rcsOut";
         return $rcsOut;
     }
-    $cmd= $self->{lockCmd};
-    $cmd =~ s/%REVISION%/$rev/go;
-    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote $cmdQuote$rcsFile$cmdQuote/go;
-    $cmd =~ /(.*)/;
-    $cmd = $1;       # safe, so untaint variable
-    $rcsOut = `$cmd`;
-    #_traceExec( $cmd, $rcsOut, $exit );
-    #$rcsOut =~ s/^Warning\: missing newline.*//os; # forget warning
+
+    ($rcsOut, $exit) =
+      TWiki::Sandbox::readFromProcess( $self->{lockCmd},
+                              REVISION => "$rev",
+                              FILENAME => [$file, $rcsFile] );
     if( $exit ) {
-        $rcsOut = "$cmd\n$rcsOut";
+        $rcsOut = "$self->{lockCmd}\n$rcsOut";
         return $rcsOut;
     }
 }
@@ -273,39 +234,34 @@ sub getRevision
 
     my $tmpfile = "";
     my $tmpRevFile = "";
-    my $cmd = $self->{"coCmd"};
-    my $file = $self->file();
+    my $coCmd = $self->{coCmd};
+    my $file = $self->{file};
     if( $TWiki::OS eq "WINDOWS" ) {
-        # Need to take temporary copy of topic, check it out to file, then read that
+        # Need to take temporary copy of topic, check it out to file,
+        # then read that
         # Need to put RCS into binary mode to avoid extra \r appearing and
-        # read from binmode file rather than stdout to avoid early file read termination
+        # read from binmode file rather than stdout to avoid early file
+        # read termination
         $tmpfile = $self->_mkTmpFilename();
         $tmpRevFile = "$tmpfile,v";
-        copy( $self->rcsFile(), $tmpRevFile );
-        my $cmd1 = $self->{tmpBinaryCmd};
-        $cmd1 =~ s/%FILENAME%/$cmdQuote$tmpRevFile$cmdQuote/;
-        $cmd1 =~ /(.*)/;
-        $cmd1 = "$1";
-        my $tmp = `$cmd1`;
-        #_traceExec( $cmd1, $tmp );
+        copy( $self->{rcsFile}, $tmpRevFile );
+        my ($tmp) =
+          TWiki::Sandbox::readFromProcess( $self->{tmpBinaryCmd},
+                                  FILENAME => $tmpRevFile );
         $file = $tmpfile;
-        $cmd =~ s/-p%REVISION%/-r%REVISION%/;
-    }    
-    $cmd =~ s/%REVISION%/1.$version/;
-    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
-    $cmd =~ /(.*)/;
-    $cmd = "$1"; # untaint
-    my $text = `$cmd`;
+        $coCmd =~ s/-p%REVISION%/-r%REVISION%/;
+    }
+    my ($text) =
+      TWiki::Sandbox::readFromProcess( $coCmd,
+                              REVISION => "1.$version",
+                              FILENAME => $file );
+
     if( $tmpfile ) {
         $text = $self->_readFile( $tmpfile );
-        $tmpfile =~ /(.*)/;
-        $tmpfile = "$1"; # untaint		
-        unlink $tmpfile;
-        $tmpRevFile =~ /(.*)/;
-        $tmpRevFile = "$1"; # untaint		
-        unlink $tmpRevFile;
+        # SMELL: Is untainting really necessary here?
+        unlink TWiki::Sandbox::untaintUnchecked( $tmpfile );
+        unlink TWiki::Sandbox::untaintUnchecked( $tmpRevFile );
     }
-    #_traceExec( $cmd, $text );
     return $text;
 }
 
@@ -314,24 +270,20 @@ sub getRevision
 
 ---++ sub numRevisions (  $self  )
 
-Find out how many.
+Find out how many revisions there are.
 
 =cut
 
 sub numRevisions
 {
     my( $self ) = @_;
-    my $cmd= $self->{"histCmd"};
-    my $rcsFile = $self->rcsFile();
+    my $rcsFile = $self->{rcsFile};
     if( ! -e $rcsFile ) {
        return "";
     }
 
-    $cmd =~ s/%FILENAME%/$cmdQuote$rcsFile$cmdQuote/;
-    $cmd =~ /(.*)/;
-    $cmd = $1;       # now safe, so untaint variable
-    my $rcsOutput = `$cmd`;
-    #_traceExec( $cmd, $rcsOutput );
+    my ($rcsOutput) = TWiki::Sandbox::readFromProcess( $self->{histCmd},
+                                              FILENAME => $rcsFile );
     if( $rcsOutput =~ /head:\s+\d+\.(\d+)\n/ ) {
         return $1;
     } else {
@@ -353,7 +305,7 @@ sub numRevisions
 sub getRevisionInfo
 {
     my( $self, $version ) = @_;
-    
+
     if( ! $version ) {
         # PTh 03 Nov 2000: comment out for performance
         ### $theRev = getRevisionNumber( $theTopic, $theWebName );
@@ -365,19 +317,16 @@ sub getRevisionInfo
 			$version = "1.$version";
 		}
     }
-    
+
     my $rcsFile = $self->{rcsFile};
     my $rcsError = "";
     my( $dummy, $rev, $date, $user, $comment );
     if ( -e $rcsFile ) {
-       my $cmd= $self->{infoCmd};
-       $cmd =~ s/%REVISION%/$version/;
-       $cmd =~ s/%FILENAME%/$cmdQuote$rcsFile$cmdQuote/;
-       $cmd =~ /(.*)/; $cmd = $1;       # Untaint
-       my $rcsOut = `$cmd`;
-       my $exit = $? >> 8;
-       #_traceExec( $cmd, $cmd, $exit );
-       $rcsError = "Error with $cmd, output: $rcsOut" if( $exit );
+       my ($rcsOut, $exit) = TWiki::Sandbox::readFromProcess
+         ( $self->{infoCmd},
+           REVISION => $version,
+           FILENAME => $rcsFile );
+       $rcsError = "Error with $self->{infoCmd}, output: $rcsOut" if( $exit );
        if( ! $rcsError ) {
             $rcsOut =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/;
             $date = $1 || "";
@@ -413,7 +362,8 @@ sub revisionDiff
     
     my $error = "";
 
-    my $tmp= "";
+    my $tmp = "";
+    my $exit;
     if ( $rev1 eq "1" && $rev2 eq "1" ) {
         my $text = $self->getRevision(1);
         $tmp = "1a1\n";
@@ -421,26 +371,15 @@ sub revisionDiff
            $tmp = "$tmp> $_\n";
         }
     } else {
-        $tmp= $self->{"diffCmd"};
-        $tmp =~ s/%REVISION1%/1.$rev1/;
-        $tmp =~ s/%REVISION2%/1.$rev2/;
-        my $rcsFile = $self->rcsFile();
-        $rcsFile =~ s/$TWiki::securityFilter//go;
-        $tmp =~ s/%FILENAME%/$cmdQuote$rcsFile$cmdQuote/;
+        my $rcsFile = $self->{rcsFile};
         $contextLines = "" unless defined($contextLines);
-        $tmp =~ s/%CONTEXT%/$contextLines/;
-        $tmp =~ /(.*)/;
-        my $cmd = $1;       # now safe, so untaint variable
-        $tmp = `$cmd`;
-        my $exit = $? >> 8;
-        $error = "Error $exit when runing $cmd";
-        #_traceExec( $cmd, $tmp, $exit );
-        # Avoid showing change in revision number!
-        # I'm not too happy with this implementation, I think it may be better to filter before sending to diff command,
-        # possibly using Algorithm::Diff from CPAN.
-#removed as it causes erronious changes - and it _has_ to be done in Store.pm so it works for rsclite too
-#        $tmp =~ s/[0-9]+c[0-9]+\n[<>]\s*%META:TOPICINFO{[^}]*}%\s*\n---\n[+-<>]\s*%META:TOPICINFO{[^}]*}%\s*n//go;
-#        $tmp =~ s/[+-<>]\s*%META:TOPICINFO{[^}]*}%\s*//go;
+        ( $tmp, $exit ) =
+          TWiki::Sandbox::readFromProcess( $self->{diffCmd},
+                                  REVISION1 => "1.$rev1",
+                                  REVISION2 => "1.$rev2",
+                                  FILENAME => $rcsFile,
+                                  CONTEXT => $contextLines );
+        $error = "Error $exit when running $self->{diffCmd}";
     }
 	
     return ($error, parseRevisionDiff( $tmp ) );
@@ -520,82 +459,30 @@ sub _ci {
     # errors (permissions on directory tree)
     return "$file is not writable" unless ( -w $file );
 
-    my $ciCmd = $self->{"ciCmd"};
-    my $rcsOutput = "";
-    $ciCmd =~ s/%USERNAME%/$userName/;
-    $file =~ s/$TWiki::securityFilter//go;
-    $ciCmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
     $comment = "none" unless( $comment );
-    $comment =~ s/[\"\'\`\;]//go;  # security, Codev.NoShellCharacterEscapingInFileAttachComment, MikeSmith
-    $ciCmd =~ s/%COMMENT%/$comment/;
-    $ciCmd =~ /(.*)/;
-    $ciCmd = $1;       # safe, so untaint variable
-    $rcsOutput = `$ciCmd`; # capture stderr  (S.Knutson)
 
-    my $exit = $? >> 8;
-    #_traceExec( $ciCmd, $rcsOutput );
+    my ($rcsOutput, $exit) = TWiki::Sandbox::readFromProcess
+      ( $self->{ciCmd},
+        USERNAME => $userName,
+        FILENAME => $file,
+        COMMENT => $comment );
     if( $exit && $rcsOutput =~ /no lock set by/ ) {
-          # Try and break lock, setting new lock and doing ci again
-          my $blCmd = $self->{"breakLockCmd"};
-          $blCmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/go;
-          $blCmd =~ /(.*)/;
-          my $out = `$blCmd`;
-          # Assume it worked, as not sure how to trap failure
-          #_traceExec( $blCmd, $out );
+        # Try and break lock, setting new lock and doing ci again
+        # Assume it worked, as not sure how to trap failure
+        TWiki::Sandbox::readFromProcess( $self->{breakLockCmd},
+                                FILENAME => $file);
 
-          # re-do the ci command
-          $rcsOutput = `$ciCmd`;
-          $exit = $? >> 8;
-          #_traceExec( $ciCmd, $rcsOutput );
-          if( ! $exit ) {
-              $rcsOutput = "";
-          }
+        # re-do the ci command
+        ( $rcsOutput, $exit ) =
+          TWiki::Sandbox::readFromProcess( $self->{ciCmd},
+                                  USERNAME => $userName,
+                                  FILENAME => $file,
+                                  COMMENT => $comment );
     }
-    if( $exit && $rcsOutput ) { # oops, stderr was not empty, return error
-        $rcsOutput = "$ciCmd\n$rcsOutput";
+    if( $exit && $rcsOutput ) {
+        $rcsOutput = "$self->{ciCmd}\n$rcsOutput";
     }
     return $rcsOutput;
-}
-
-=pod
-
----+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
-
-| Description: | sets a names tag on the specified revision |
-| Parameter: =$web= | webname |
-| Parameter: =$topic= | topic name |
-| Parameter: =$rev= | the revision we are taging |
-| Parameter: =$tag= | the string to tag with |
-| Return: =$success= |  |
-| TODO: | we _need_ an error mechanism! |
-| TODO: | NEED to check if the version exists (rcs does not) |
-| Since: | TWiki:: (20 April 2004) |
-
-=cut
-
-sub setTopicRevisionTag
-{
-	my ( $self,  $web, $topic, $rev, $tag ) = @_;
-
-    my $file = $self->{file};
-    if ( -e $file ) {
-        my $cmd= $self->{tagCmd};
-        $cmd =~ s/%REVISION%/$rev/;
-        $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
-        $cmd =~ s/%TAG%/$tag/;
-        $cmd = $cmd."  2>> $TWiki::warningFilename";
-        $cmd =~ /(.*)/; $cmd = $1;       # Untaint
-        my $rcsOut = `$cmd`;
-        my $exit = $? >> 8;
-        #_traceExec( $cmd, $cmd, $exit );
-		if( $exit && $rcsOut ) { # oops, stderr was not empty, return error
-			$rcsOut = "$cmd\n$$rcsOut";
-			TWiki:writeDebug("RCSWrap::setTopicRevisionTag error - $rcsOut");
-			return 0;
-		}
-   }
-
-	return 1;
 }
 
 1;

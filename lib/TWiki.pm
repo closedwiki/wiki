@@ -363,6 +363,7 @@ BEGIN {
     _setupRegexes();
 }
 
+use TWiki::Sandbox;   # system command sandbox
 use TWiki::Prefs;     # preferences
 use TWiki::Access;    # access control
 use TWiki::Store;     # file I/O and rcs related functions
@@ -426,7 +427,10 @@ Write the log for an event to the logfile
 
 sub writeLog
 {
-    my( $action, $webTopic, $extra, $user ) = @_;
+    my $action = shift || "";
+    my $webTopic = shift || "";
+    my $extra = shift || "";
+    my $user = shift || "";
 
     my $wuserName = $user || $userName;
     $wuserName = TWiki::User::userToWikiName( $wuserName );

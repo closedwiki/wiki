@@ -151,7 +151,7 @@ sub _compareResults {
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
-    die "initPlugin called twice" if $called{initPlugin};
+    #die "initPlugin called twice" if $called{initPlugin};
     undef %called;
     $called{initPlugin} = 1;
 

@@ -191,18 +191,19 @@ sub _searchTopicsInWeb
 
         # scope="text", e.g. grep search on topic text:
         unless( $theScope eq "topic" ) {
-            # Construct command line with 'grep'.  I18N: 'grep' must use locales if needed,
+            # Construct command line with 'grep'.
+            # I18N: 'grep' must use locales if needed,
             # for case-insensitive searching.  See TWiki::setupLocale.
-            my $cmd = "";
+            my $program = "";
             if( $theType eq "regex" ) {
-                $cmd .= $TWiki::egrepCmd;
+                $program = $TWiki::egrepCmd;
             } else {
-                $cmd .= $TWiki::fgrepCmd;
+                $ program= $TWiki::fgrepCmd;
             }
-            $cmd .= " -i" unless( $caseSensitive );
-            $cmd .= " -l -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote %FILES%";
+            my $template = '';
+            $template .= ' -i' unless( $caseSensitive );
+            $template .= ' -l -- %TOKEN|U% %FILES|F%';
 
-            my $result = "";
             if( $sDir ) {
                 chdir( "$sDir" );
                 _traceExec( "chdir to $sDir", "" );
@@ -210,38 +211,34 @@ sub _searchTopicsInWeb
             }
 
             # process topics in sets,  fix for Codev.ArgumentListIsTooLongForSearch
-            my $maxTopicsInSet = 512;                              # max number of topics for a grep call
+            my $maxTopicsInSet = 512;                      # max number of topics for a grep call
             my @take = @topicList;
             my @set = splice( @take, 0, $maxTopicsInSet );
             while( @set ) {
-                @set = map { "$_.txt" } @set;                      # add ".txt" extension to topic names
-                my $acmd = $cmd;
-                $acmd =~ s/%TOKEN%/$token/o;
-                $acmd =~ s/%FILES%/@set/o;
-                $acmd =~ /(.*)/;
-                $acmd = "$1";                                      # untaint variable (FIXME: Needs a better check!)
-                $result = `$acmd`;
-                _traceExec( $acmd, $result );
-                @set = split( /\n/, $result );
-                @set = map { /(.*)\.txt$/; $_ = $1; } @set;        # cut ".txt" extension
+                @set = map { "$_.txt" } @set;              # add ".txt" extension to topic names
+                @set =
+                  TWiki::Sandbox::readFromProcessArray ($program, $template,
+                                               TOKEN => $token,
+                                               FILES => \@set);
+                @set = map { $_ =~ s/\.txt$//; $_ } @set;  # cut ".txt" extension
                 my %seen = ();
                 foreach my $topic ( @set ) {
-                    $seen{$topic}++;                               # make topics unique
+                    $seen{$topic}++;                     # make topics unique
                 }
-                push( @scopeTextList, sort keys %seen );           # add hits to found list
+                push( @scopeTextList, sort keys %seen ); # add hits to found list
                 @set = splice( @take, 0, $maxTopicsInSet );
             }
         }
 
         if( @scopeTextList && @scopeTopicList ) {
-            push( @scopeTextList, @scopeTopicList );               # join "topic" and "text" lists
+            push( @scopeTextList, @scopeTopicList );       # join "topic" and "text" lists
             my %seen = ();
             @scopeTextList = sort grep { ! $seen{$_} ++ } @scopeTextList;  # make topics unique
         } elsif( @scopeTopicList ) {
             @scopeTextList =  @scopeTopicList;
         }
 
-        if( $invertSearch ) {                                      # do AND NOT search
+        if( $invertSearch ) {                              # do AND NOT search
             my %seen = ();
             foreach my $topic ( @scopeTextList ) {
                 $seen{$topic} = 1;

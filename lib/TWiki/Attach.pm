@@ -299,32 +299,34 @@ sub getAttachmentLink
 
 # =========================
 sub _imgsize {
-  my( $file, $att ) = @_;
-  my( $x, $y) = ( 0, 0 );
+    my( $file, $att ) = @_;
+    my( $x, $y) = ( 0, 0 );
 
-  if( defined( $file ) ) {
-    binmode( $file ); # for crappy MS OSes - Win/Dos/NT use is NOT SUPPORTED
-    my $s;
-    return ( 0, 0 ) unless ( read( $file, $s, 4 ) == 4 );
-    seek( $file, 0, 0 );
-    if ( $s eq "GIF8" ) {
-        #  GIF 47 49 46 38
-        ( $x, $y ) = _gifsize( $file );
-    } else {
-        my ( $a, $b, $c, $d ) = unpack( 'C4', $s );
-        if ( $a == 0x89 && $b == 0x50 &&
-             $c == 0x4E && $d == 0x47 ) {
-            #  PNG 89 50 4e 47
-            ( $x, $y ) = _pngsize( $file );
-        } elsif ( $a == 0xFF && $b == 0xD8 &&
-                  $c == 0xFF && $d == 0xE0 ) {
-            #  JPG ff d8 ff e0
-            ( $x, $y ) = _jpegsize( $file );
+    $file = TWiki::normalizeFileName( $file );
+    if( defined( $file ) ) {
+        # for crappy MS OSes - Win/Dos/NT use is NOT SUPPORTED
+        binmode( $file );
+        my $s;
+        return ( 0, 0 ) unless ( read( $file, $s, 4 ) == 4 );
+        seek( $file, 0, 0 );
+        if ( $s eq "GIF8" ) {
+            #  GIF 47 49 46 38
+            ( $x, $y ) = _gifsize( $file );
+        } else {
+            my ( $a, $b, $c, $d ) = unpack( 'C4', $s );
+            if ( $a == 0x89 && $b == 0x50 &&
+                 $c == 0x4E && $d == 0x47 ) {
+                #  PNG 89 50 4e 47
+                ( $x, $y ) = _pngsize( $file );
+            } elsif ( $a == 0xFF && $b == 0xD8 &&
+                      $c == 0xFF && $d == 0xE0 ) {
+                #  JPG ff d8 ff e0
+                ( $x, $y ) = _jpegsize( $file );
+            }
         }
+        close( $file );
     }
-    close( $file );
-  }
-  return( $x, $y );
+    return( $x, $y );
 }
 
 

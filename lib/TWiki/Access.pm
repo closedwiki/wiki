@@ -100,6 +100,7 @@ sub checkAccessPermission
     my( $theAccessType, $theUserName,
         $theTopicText, $theTopicName, $theWebName ) = @_;
 
+    # super admin is always allowed
     if ( $TWiki::doSuperAdminGroup && $TWiki::superAdminGroup ) {
         if ( userIsInGroup( $theUserName, $TWiki::superAdminGroup )) {
             return 1;
@@ -115,14 +116,16 @@ sub checkAccessPermission
         $theTopicText = TWiki::Store::readTopicRaw( $theWebName, $theTopicName, undef, 1 );
     }
 
-    # extract the " * Set (ALLOWTOPIC|DENYTOPIC)$theAccessType = " in body text
     my $allowText;
     my $denyText;
 
+    # extract the * Set (ALLOWTOPIC|DENYTOPIC)$theAccessType =
+    # from the topic text
     foreach( split( /\n/, $theTopicText ) ) {
         if( /^\s+\*\sSet\s(ALLOWTOPIC|DENYTOPIC)$theAccessType\s*\=\s*(.*)/ ) {
             my ( $how, $set ) = ( $1, $2 );
-            if( defined( $set ) && $set =~ /\S/ ) {
+            # Note: an empty value is a valid value!
+            if( defined( $set )) {
                 if( $how eq "DENYTOPIC" ) {
                     $denyText = $set;
                 } else {
@@ -132,20 +135,13 @@ sub checkAccessPermission
         }
     }
 
-    # if empty, get access permissions from preferences
+    # DENYTOPIC overrides DENYWEB, even if it is empty
     unless( defined( $denyText )) {
-        my $tmpVal =
+        $denyText =
           TWiki::Prefs::getPreferencesValue( "DENYWEB$theAccessType",
                                              $theWebName );
-        $denyText = $tmpVal	if defined($tmpVal) && $tmpVal =~ /\S/;
     }
 
-    unless( defined( $allowText )) {
-        my $tmpVal =
-          TWiki::Prefs::getPreferencesValue( "ALLOWWEB$theAccessType",
-                                             $theWebName );
-        $allowText = $tmpVal	if defined($tmpVal) && $tmpVal =~ /\S/;
-    }
     if( defined( $denyText )) {
         my %deny = _parseUserList( $denyText, 1 );
         return 0 if $deny{$theUserName};
@@ -154,6 +150,16 @@ sub checkAccessPermission
     if( defined( $allowText )) {
     	my %allow = _parseUserList( $allowText, 1 );
         return 0 unless $allow{$theUserName};
+    } else {
+        # ALLOWTOPIC overrides ALLOWWEB, even if it is empty
+        $allowText =
+          TWiki::Prefs::getPreferencesValue( "ALLOWWEB$theAccessType",
+                                             $theWebName );
+
+        if( defined( $allowText ) && $allowText =~ /\S/ ) {
+            my %allow = _parseUserList( $allowText, 1 );
+            return 0 unless $allow{$theUserName};
+        }
     }
 
     return 1;

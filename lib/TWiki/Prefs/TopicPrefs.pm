@@ -65,6 +65,8 @@ sub readPrefs {
 
     $self->{prefs} = {};
 
+    return unless TWiki::Store::topicExists( $theWeb, $theTopic );
+
     my( $meta, $text ) =
       TWiki::Store::readTopic( $theWeb, $theTopic, undef, 1 );
 

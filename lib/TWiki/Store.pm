@@ -85,8 +85,7 @@ sub _getTopicHandler
 
 =pod
 
----++ readTopic( $web, $topic, $version, $internal )
-Return value: ( $metaObject, $topicText )
+---++ readTopic($web, $topic, $version, $internal) -> ($meta, $text)
 
 Reads the given version of a topic and it's meta-data. If the version
 is undef, then read the most recent version. The version number may be
@@ -341,7 +340,7 @@ sub _changeRefTo
 
 =pod
 
----++ sub renameTopic (  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  ) -> error string or undef
+---++ sub renameTopic(  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  ) -> error string or undef
 
 Rename a topic, allowing for transfer between Webs. This method will change
 all references _from_ this topic to other topics _within the old web_
@@ -373,17 +372,18 @@ sub renameTopic
       }
       my $meta = extractMetaData( $newWeb, $newTopic, \$text );
       $meta->put( "TOPICMOVED", @args );
+
       noHandlersSave( $newWeb, $newTopic, $text, $meta, "", "", "", "unlock" );
    }
-   
+
    # Log rename
    if( $TWiki::doLogRename ) {
       TWiki::writeLog( "rename", "$oldWeb.$oldTopic", "moved to $newWeb.$newTopic $error" );
    }
-   
+
    # Remove old lock file
    $topicHandler->setLock( "" );
-   
+
    return $error;
 }
 
@@ -652,23 +652,6 @@ sub _keyValue2Hash
 }
 
 
-# =pod
-# 
-# ---++ sub saveTopicNew (  $web, $topic, $text, $metaData, $saveCmd, $doUnlock, $dontNotify, $dontLogSave  )
-# 
-# Never called.
-# 
-# =cut
-# 
-# sub saveTopicNew
-# {
-#     my( $web, $topic, $text, $metaData, $saveCmd, $doUnlock, $dontNotify, $dontLogSave ) = @_;
-#     my $attachment = "";
-#     my $meta = TWiki::Meta->new();
-#     $meta->readArray( @$metaData );
-#     noHandlersSave( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify );
-# }
-
 =pod
 
 ---++ sub saveTopic (  $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave, $forceDate  )
@@ -755,7 +738,6 @@ sub saveAttachment
         my $topicHandler = _getTopicHandler( $web, $topic, $attachment );
         TWiki::Plugins::beforeAttachmentSaveHandler( \%attrs,
                                                      $topic, $web );
-
         my $error = $topicHandler->addRevision( $opts->{file},
                                                 $opts->{comment},
                                                 $user );
@@ -843,11 +825,11 @@ sub noHandlersSave
     my $tmp = "";
     my $rcsError = "";
     my $dataError = "";
-    
+
     my $topicHandler = _getTopicHandler( $web, $topic, $attachment );
 
     my $currentRev = $topicHandler->numRevisions();
-    
+
     my $nextRev    = "";
     if( ! $currentRev ) {
         $nextRev = "1.1";
@@ -880,7 +862,8 @@ sub noHandlersSave
             my( $date, $user ) = getRevisionInfo( $web, $topic, $currentRev, $attachment, $topicHandler );
             # TWiki::writeDebug( "Store::save date = $date" );
             # same user?
-            if( ( $TWiki::doKeepRevIfEditLock ) && ( $user eq $TWiki::userName ) && $currentRev ) { # TODO shouldn't this also check to see if its still locked?
+            if( ( $TWiki::doKeepRevIfEditLock ) && ( $user eq $TWiki::userName ) && $currentRev ) {
+                # TODO shouldn't this also check to see if its still locked?
                 # replace last repository entry
                 $saveCmd = "repRev";
                 if( $attachment ) {
@@ -991,7 +974,9 @@ SMELL: Breaks Store encapsulation.
 sub saveFile
 {
     my( $name, $text ) = @_;
-    
+
+    $name = TWiki::Sandbox::normalizeFileName( $name );
+
     umask( 002 );
     unless ( open( FILE, ">$name" ) )  {
 	warn "Can't create file $name - $!\n";
@@ -1059,8 +1044,6 @@ sub removeObsoleteTopicLocks
 }
 
 =pod
-
----++ Functions: Content Handling
 
 ---+++ webExists( $web ) ==> $flag
 
@@ -1193,9 +1176,7 @@ sub getTopicParent {
 Return value: $fileContents
 
 Returns the entire contents of the given file, which can be specified in any
-format acceptable to the Perl open() function.  SECURITY NOTE: make sure
-any $filename coming from a user is stripped of special characters that might
-change Perl's open() semantics.
+format acceptable to the Perl open() function.
 
 Used for reading side-files of meta-data, such as fileTypes, changes, etc.
 
@@ -1206,6 +1187,7 @@ SMELL: Breaks Store encapsulation, if it is used to read files other than the st
 sub readFile
 {
     my( $name ) = @_;
+    $name = TWiki::Sandbox::normalizeFileName( $name );
     my $data = "";
     undef $/; # set to read to EOF
     open( IN_FILE, "<$name" ) || return "";
@@ -1213,33 +1195,6 @@ sub readFile
     $/ = "\n";
     close( IN_FILE );
     $data = "" unless $data; # no undefined
-    return $data;
-}
-
-
-=pod
-
----++ sub readFileHead (  $name, $maxLines  )
-
-Returns $maxLines of content from the head of the given file-system file.
-
-SMELL: breaks Store encapsulation, if it is used to access topics or attachments under the control of Store.
-
-=cut
-
-sub readFileHead
-{
-    my( $name, $maxLines ) = @_;
-    my $data = "";
-    my $line;
-    my $l = 0;
-    $/ = "\n";     # read line by line
-    open( IN_FILE, "<$name" ) || return "";
-    while( ( $l < $maxLines ) && ( $line = <IN_FILE> ) ) {
-        $data .= $line;
-        $l += 1;
-    }
-    close( IN_FILE );
     return $data;
 }
 
@@ -1345,34 +1300,11 @@ sub getAllWebs {
     return @webList ;
 }
 
-=pod
-
----+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
-
-| Description: | sets a names tag on the specified revision |
-| Parameter: =$web= | webname |
-| Parameter: =$topic= | topic name |
-| Parameter: =$rev= | the revision we are taging |
-| Parameter: =$tag= | the string to tag with |
-| Return: =$success= |  |
-| TODO: | we _need_ an error mechanism! |
-| Since: | TWiki:: (20 April 2004) |
-
-=cut
-
-sub setTopicRevisionTag
-{
-	my ( $web, $topic, $rev, $tag ) = @_;
-	
-    my $topicHandler = _getTopicHandler( $web, $topic );
-#	TWiki::writeDebug("Store - setTopicRevisionTag ( $web, $topic, $rev, $tag )");	
-    return $topicHandler->setTopicRevisionTag( $web, $topic, $rev, $tag );
-}
-
 # Write a meta-data key=value pair
 sub _writeKeyValue {
     my( $key, $value ) = @_;
 
+    $value = "" unless defined( $value );
     $value =~ s/\r\r\n/%_N_%/go;
     $value =~ s/\r\n/%_N_%/go;
     $value =~ s/\n\r/%_N_%/go;

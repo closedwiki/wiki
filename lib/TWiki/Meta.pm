@@ -64,8 +64,8 @@ Construct a new, empty Meta collection.
 sub new {
     my ( $class, $web, $topic ) = @_;
     my $self = {};
-    die join(" ", caller) unless $web;
-    die join(" ", caller) unless $topic;
+    die join(" ", caller(2)) unless $web;
+    die join(" ", caller(2)) unless $topic;
     $self->{_web} = $web;
     $self->{_topic} = $topic;
     bless( $self, $class );
