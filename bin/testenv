@@ -20,6 +20,13 @@
 # for the bin directory, and check a variety of TWiki, Perl and RCS
 # setup.
 
+# NOTE: Testenv should always run on older TWiki versions, as far as
+# possible - so any dependency on TWiki modules should be carefully 
+# handled and error checked.  If a newer feature or subroutine is not
+# there, it's OK to fail silently and not do the associated tests.
+# This is more painful to code, but it means that testenv can be downloaded
+# from CVS and used on older TWiki versions to diagnose problems.
+
 package TWiki;
 
 use vars qw( $useLocale $setlibAvail );
@@ -367,8 +374,9 @@ print "</td></tr>\n";
 # Do locale settings if TWiki.pm was found
 my $showLocales = 0;
 if ($twikiFound) {
-    TWiki::setupLocale();
-    $showLocales = 1;
+    if (eval 'TWiki::setupLocale()' ){	# Not in older TWiki.pm versions
+	$showLocales = 1;
+    }
 }
 
 
@@ -876,7 +884,7 @@ if ( $showLocales ) {		# Only if TWiki.pm found
 	# Warn against UTF-8 without Perl 5.8
 	if ( $perlvernum < 5.008 ) {
 	    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-	    print "Perl 5.8 is strongly recommended if you are testing TWiki's current UTF-8 support\n";
+	    print "Perl 5.8 is <b>strongly</b> recommended if you are testing TWiki's current UTF-8 support\n";
 	    print "</td></tr>\n";
 	}
     }
