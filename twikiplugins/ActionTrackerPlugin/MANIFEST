@@ -7,7 +7,6 @@ lib/TWiki/Plugins/ActionTrackerPlugin.pm Plugin Perl module
 lib/TWiki/Plugins/ActionTrackerPlugin/Action.pm Perl support module
 lib/TWiki/Plugins/ActionTrackerPlugin/ActionNotify.pm Perl support module
 lib/TWiki/Plugins/ActionTrackerPlugin/ActionSet.pm Perl support module
-lib/TWiki/Plugins/ActionTrackerPlugin/Attrs.pm Perl support module
 lib/TWiki/Plugins/ActionTrackerPlugin/AttrDef.pm Perl support module
 lib/TWiki/Plugins/ActionTrackerPlugin/ActionTrackerConfig.pm Configuration module
 lib/TWiki/Plugins/ActionTrackerPlugin/Format.pm Perl support module
