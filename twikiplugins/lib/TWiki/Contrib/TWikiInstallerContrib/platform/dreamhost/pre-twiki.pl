@@ -8,8 +8,6 @@ sub mychomp { chomp $_[0]; $_[0] }
 print "TWiki Installation (Step 1/4)\n";
 
 my $whoami = mychomp(`whoami`);
-#my $INSTALL = "http://" . mychomp(`hostname`) . "/~$whoami/config/install.html";
-#my $INSTALL = "http://wbniv.wikihosting.com/config/install.html";
 my $INSTALL = "http://wbniv.wikihosting.com/cgi-bin/install_twiki.cgi";
 
 if ( -e "cgi-bin/install_twiki.cgi" )
