@@ -19,11 +19,12 @@
 # for the bin directory, and check a variety of TWiki, Perl and RCS
 # setup.
 
-# Compile-time use of modules
-use lib ( '.' );
-use lib ( '../lib' );
-
-use Config; 		# Perl's configuration details
+# Set library paths in @INC, at compile time
+BEGIN { 
+    # Use a default lib path if setlib.cfg is missing
+    unshift @INC, '../lib';
+    ( -r './setlib.cfg' ) && require './setlib.cfg'; 
+}
 
 # use strict;		# Recommended for mod_perl, enable for Perl 5.6.1 only
 			# Doesn't work well here, due to 'do "TWiki.cfg"'
@@ -32,45 +33,52 @@ use Config; 		# Perl's configuration details
 package TWiki;
 
 
-# Check whether basic CGI modules exist (some broken installations of
-# Perl don't have this, even though they are standard modules), and warn user
-my @basicMods = qw( CGI CGI::Carp );
-my $modMissing = 0;
-my $mod;
-foreach $mod (@basicMods) {
-    eval "use $mod";
-    if ($@) {
-	unless ($modMissing) {
-	    print "Content-type: text/html\n\n";
-	    print "<html><head><title>Perl Module(s) missing</title></head>\n";
-	    print "<body>\n";
-	    print "<h1>Perl Module(s) missing</h1>\n";
+sub checkBasicModules {
+    # Check whether basic CGI modules exist (some broken installations of
+    # Perl don't have this, even though they are standard modules), and warn user
+    my @basicMods = qw( CGI CGI::Carp );
+    my $modMissing = 0;
+    my $mod;
+    foreach $mod (@basicMods) {
+	eval "use $mod";
+	if ($@) {
+	    unless ($modMissing) {
+		print "Content-type: text/html\n\n";
+		print "<html><head><title>Perl Module(s) missing</title></head>\n";
+		print "<body>\n";
+		print "<h1>Perl Module(s) missing</h1>\n";
+	    }
+	    $modMissing = 1;
+	    print "<p><b><font color=\"red\">Warning:</font></b> ";
+	    print "Essential module <b>$mod</b> not installed - please check your Perl\n";
+	    print "installation, including the setting of <b>\@INC</b>, and re-install Perl if necessary.</p>\n";
 	}
-        $modMissing = 1;
-	print "<p><b><font color=\"red\">Warning:</font></b> ";
-	print "Essential module <b>$mod</b> not installed - please check your Perl\n";
-	print "installation, including the setting of <b>\@INC</b>, and re-install Perl if necessary.</p>\n";
     }
-}
-# Display @INC and give up, if any critical modules missing
-if ($modMissing) {
-    print "<p><b>\@INC setting:</b><br /><tt> ";
-    print join "<br />\n", @INC;
-    print "</tt></p>\n";
-    print "</body>\n</html>\n";
-    exit;
+    # If any critical modules missing, display @INC and give up 
+    if ($modMissing) {
+	print "<p><b>\@INC setting:</b><br /><tt> ";
+	print join "<br />\n", @INC;
+	print "</tt></p>\n";
+	print "</body>\n</html>\n";
+	exit;
+    }
+
+    # Call main routine to make variable available
+    &main(@basicMods);
 }
 
-# Run-time use of CGI modules
+&checkBasicModules;
+
+# Load CGI modules (run-time, after lib path checks)
 require CGI;
 require CGI::Carp;
 import CGI::Carp qw( fatalsToBrowser );
 
 
-&main();
-
 sub main
 {
+
+my @basicMods = @_;
 
 my $perlverRequired = 5.00503;		# Oldest supported version of Perl
 my $perlverRequiredString = '5.005_03';
@@ -210,16 +218,29 @@ my $USE_MOD_PERL = ((exists $ENV{'GATEWAY_INTERFACE'}
 		   "Not used";
 
 
+
+# OS
 print "<tr><th align=\"right\">Operating system:</th><td>" . ucfirst(lc($OS)) . "</td></tr>\n";
+
+# Perl version
 print "<tr><th align=\"right\">Perl version:</th><td>$perlver";
 print " ($perltype)" if $perltype ne 'generic';
 print "</td></tr>\n";
-if( $perlvernum < $perlverRequired ) {
+if ( $perlvernum < $perlverRequired ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
     print "This version of Perl is old - upgrade to at least Perl $perlverRequiredString\n";
     print "and preferably to Perl $perlverRecommended.\n";
     print "</td></tr>\n";
 }
+
+# Perl @INC (lib path)
+print "<tr><th align=\"right\" valign=\"top\">\@INC:</th><td>" . 
+			( join "<br />\n", @INC ) . 
+			"</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
+print "This is the Perl library path, used to load TWiki modules, ";
+print "third-party modules used by some plugins, and Perl built-in modules.";
+print "</td></tr>\n";
 
 # Add to list of required modules if on Windows (FIXME: also needed for 
 # most non-Unix OSes)
