@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044132468" format="1.0" version="1.37"}%
+%META:TOPICINFO{author="PeterThoeny" date="1058399820" format="1.0" version="1.38"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---# TWiki Text Formatting
@@ -108,6 +108,7 @@ __Bold italic__
 </font></span>
 </td><td valign="top">
 =Fixed font=
+
 </td>
 </tr>
 <tr bgcolor="#ffffff">
@@ -126,7 +127,7 @@ __Bold italic__
 </tr>
 <tr bgcolor="#ffffff">
 <td valign="top">
- __Note:__ Make sure to "stick" the =* _ = <nop>==<nop>= signs to the words, that is, take away spaces.
+ __Note:__ Make sure there is no space between the text and the bold, italic, or other indicators (=* _ __ = ===).
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -135,7 +136,7 @@ _this not _
 </pre>
 </font></span>
 </td><td valign="top">
-_This works_,
+_This works_,%BR%
 _this not _
 </td>
 </tr>
@@ -200,11 +201,13 @@ class CatAnimal {
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
-		* nested stuff
+	* level 1
+		* level 2
 </pre>
 </font></span>
 </td><td valign="top">
-		* nested stuff
+	* level 1
+		* level 2
 </td>
 </tr>
 <tr bgcolor="#ffffff">
@@ -243,12 +246,15 @@ __Note:__ Terms with spaces are not supported. In case you do have a term with m
 <tr bgcolor="#ffffff">
 <td valign="top">
  *Table:* %BR%
- Optional spaces followed by the cells enclosed in vertical bars. %BR%
-__Note:__ =| <nop>*bold*<nop> |= cells are rendered as table headers. %BR%
-__Note:__ =|	spaced	|= cells are rendered center aligned. %BR%
-__Note:__ =|	  spaced |= cells are rendered right aligned. %BR%
-__Note:__ =| 2 colspan ||= cells are rendered as multi-span columns. %BR%
-__Note:__ In case you have a long row and you want it to be more readable when you edit the table you can split the row into lines that end with a ='\'= backslash character. %BR%
+ Any number of lines of text. Each line is one row of the table consisting of one or more cells. Each cell starts and ends with a vertical bar '|'. Any spaces at the beginning of a line are ignored.%BR%
+ __Notes:__ %BB%
+ =| <nop>*bold*<nop> |= cells are displayed as table headers.%BB%
+ =|	center-spaced	|= cells are displayed center aligned.%BB%
+ =|	  right-spaced |= cells are displayed right aligned.%BB%
+ =| 2 colspan ||= cells are displayed as multi-span columns (i.e., a cell with no text spans a column).%BB%
+ =|^|= cells with a caret indicate follow-up rows of multi-span rows.%BB%
+ If a row contains a large amount of text, and you want it to be more readable while editing the table, split the row into multiple text lines by ending each line with a backslash character ='\'=.%BB%
+ Table cells wrap automatically as determined by the browser.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -256,7 +262,9 @@ __Note:__ In case you have a long row and you want it to be more readable when y
 | A2 |  2  |  2 |
 | A3 |  3  |  3 |
 | multi span |||
-| A4 | next | next |
+| A4-6 | four | four |
+|^| five | five |
+|^| six | six |
 </pre>
 </font></span>
 </td><td valign="top">
@@ -264,7 +272,9 @@ __Note:__ In case you have a long row and you want it to be more readable when y
 | A2 |  2  |  2 |
 | A3 |  3  |  3 |
 | multi span |||
-| A4 | next | next |
+| A4-6 | four | four |
+|^| five | five |
+|^| six | six |
 </td>
 </tr>
 <tr bgcolor="#ffffff">
@@ -422,7 +432,7 @@ You can use just about any HTML tag without a problem - however, there are a few
 	* TWiki converts shorthand notation to XHTML 1.0 for display. To copy a fully marked-up page, simply view source in your browser and save the contents.
 		* %T% If you need to save HTML frequently, you may want to check out TWiki:Plugins/GenHTMLAddon - it will "generate a directory containing rendered versions of a set of TWiki pages together with any attached files."
 	* %X% *NOTE:* The opening and closing angle brackets - ==&lt;...&gt;== - of an HTML tag __must be on the same line__, or the tag will be broken.
-		* This feature allows you to enter an unclosed angle bracket - as a greater than or less than symbol - and have it automatically rendered as if you had entered its HTML character, =&amp;lt;=, ex: ==a > b==
+		* This feature allows you to enter an unclosed angle bracket - as a greater than or less than symbol - and have it automatically rendered as if you had entered its HTML character, =&amp;lt;=, ex: ==a < b==
 		* %T% If you're pasting in preformatted HTML text and notice problems, check the file in a text processor with no text wrap. Also, save without hard line breaks on text wrap, in your HTML editing program. 
 
 ---++ Hyperlinks
@@ -492,4 +502,4 @@ TWiki formatting rules are fairly simple to use and quick to type. However, ther
 		* *A:* The ='&'= character has a special meaning in HTML, it starts a so called character entity, i.e. ='&amp;copy;'= is the =&copy;= copyright character. You need to escape ='&amp;'= to see it as it is, so write ='&amp;amp;'= instead of ='&amp;'=. <br /> Example: Type ='This &amp;amp; that'= to get ='This &amp; that'=.
 
 -- Main.MikeMannix - 02 Dec 2001 <br />
--- Main.PeterThoeny - 01 Feb 2003
+-- Main.PeterThoeny - 15 Jul 2003
