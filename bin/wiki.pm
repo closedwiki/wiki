@@ -84,7 +84,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "28 May 2000";
+$wikiversion      = "12 Jun 2000";
 
 # ===========================
 # read the configuration part
@@ -861,6 +861,13 @@ sub handleIncludeFile
 {
     my( $attributes ) = @_;
     my $incfile = extractNameValuePair( $attributes );
+
+    # CrisBailiff, PeterThoeny 12 Jun 2000:
+    # Quick hack to plug security hole
+    # (Should be made optional with new flag in wikicfg.pm)
+    $incfile =~ s/\.+/\./g;               # collapse all '..' to '.'
+    $incfile =~ s/$securityFilter//go;    # zap anything suspicious
+
     my $fileName = "$dataDir/$webName/$incfile";
     if( -e $fileName ) {
         return &readFile( $fileName );
