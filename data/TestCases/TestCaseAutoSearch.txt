@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="PeterThoeny" date="997991913" format="1.0beta2" version="1.1"}%
 Description: Automated search function tests.
 
 Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "pattern" skin and standard search templates.
@@ -7,7 +8,7 @@ Results dependent on templates used to render search results. Tests only make se
 <!-- expected expand rex DEFAULT -->
 <div class="twikiSearchString">Searched: <b>hit me with your rhythm stick</b></div><div class="twikiSearchResultsBegin"></div>
 <div class="twikiSearchResultsHeader" style="background-color:yellow">Results from TestCases web</div><div class="twikiSearchResults">
-<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> <span class="twikiAlert"></span></div>
+<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
@@ -273,11 +274,11 @@ Same as last test
 ---+ format="..." (very incomplete)
 ---++ Expected
 <!-- expected expand rex FORMAT -->
-%WEB% %TOPIC% <br /> %WIKINAME% <img src="pingu.gif" alt="<nop>" > 
+%WEB% %TOPIC% <br /> @WIKINAME <img src="pingu.gif" alt="<nop>" > 
 <!-- /expected -->
 ---++ Actual
 <!-- actual -->
-%SEARCH{ "Pingu the Penguin" nototal="on" nosearch="on" format="<nop>$web <nop>$topic <br /> <nop>$wikiname <img src=\"pingu.gif\" alt=\"<nop>\" > " }%
+%SEARCH{ "Pingu the Penguin" nototal="on" nosearch="on" format="<nop>$web <nop>$topic <br /> <nop>$username <img src=\"pingu.gif\" alt=\"<nop>\" > " }%
 <!-- /actual -->
 
 ---+ order="created"

@@ -318,8 +318,9 @@ sub _readTemplateFile {
 
     if ( $this->store()->topicExists( $theWeb, $theTopic ) &&
          $this->security()->checkAccessPermission( "view",
-                                                  $this->{session}->{user}, "",
-                                                  $theTopic, $theWeb )) {
+                                                   $this->{session}->{user},
+                                                   "",
+                                                   $theTopic, $theWeb )) {
         my ( $meta, $text ) =
           $this->store()->readTopic( undef, $theWeb, $theTopic, undef );
         return $text;

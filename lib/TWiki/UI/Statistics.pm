@@ -143,8 +143,8 @@ sub statistics {
         # do a particular web:
         push( @weblist, $session->{webName} );
     } else {
-        # do all webs:
-        @weblist = grep{ /^[^\.\_]/ } $session->{store}->getAllWebs( "" );
+        # do all user webs:
+        @weblist = $session->{store}->getListOfWebs( "user" );
     }
     my $firstTime = 1;
     foreach my $web ( @weblist ) {

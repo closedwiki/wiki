@@ -731,8 +731,9 @@ sub readTopicText
           $TWiki::Plugins::SESSION->{store}->readTopicRaw
             ( $user, $web, $topic, $rev );
     } catch TWiki::AccessControlException with {
+        my $e = shift;
         $text = $TWiki::Plugins::SESSION->getOopsUrl
-          ($web, $topic, "oopsaccessdenied" );
+          ($web, $topic, "oopsaccessdenied", $e->{-mode}, $e->{-reason} );
     };
 
     return $text;
@@ -814,7 +815,7 @@ sub saveTopicText
 # -------------------------
 sub getPublicWebList
 {
-    return $TWiki::Plugins::SESSION->getPublicWebList();
+    return $TWiki::Plugins::SESSION->{store}->getListOfWebs("user,public");
 }
 
 # =========================

@@ -775,10 +775,10 @@ sub isValidAbbrev {
 
 =pod
 
----++ isValidWebName (  $name  )
+---++ isValidWebName (  $name, $system  ) -> boolean
 
 STATIC Check for a valid web name. If $system is true, then
-system web names are considered valid (names startingn with _)
+system web names are considered valid (names starting with _)
 otherwise only user web names are valid
 
 =cut
@@ -1735,32 +1735,6 @@ sub _inlineError {
 
 =pod
 
----++ getPublicWebList ()
-Return public web list, i.e. exclude hidden webs, but include current web
-
-=cut
-
-sub getPublicWebList {
-    my $this = shift;
-
-    ASSERT(ref($this) eq "TWiki") if DEBUG;
-
-    if( ! @{$this->{publicWebList}} ) {
-        my @list = $this->{store}->getAllWebs();
-        my $item = "";
-        my $hidden = "";
-        foreach $item ( @list ) {
-            $hidden = $this->{prefs}->getPreferencesValue( "NOSEARCHALL", $item );
-            if( ( $item eq $this->{webName}  ) || ( ( ! $hidden ) && ( $item =~ /^[^\.\_]/ ) ) ) {
-                push( @{$this->{publicWebList}}, $item );
-            }
-        }
-    }
-    return @{$this->{publicWebList}};
-}
-
-=pod
-
 ---++ expandVariablesOnTopicCreation ( $theText, $user )
 Expand limited set of variables during topic creation. These are variables
 expected in templates that must be statically expanded in new content.
@@ -1824,9 +1798,9 @@ sub _webOrTopicList {
         my @webslist = split( /,\s?/, $webs );
         foreach my $aweb ( @webslist ) {
             if( $aweb eq "public" ) {
-                push( @list, $this->getPublicWebList() );
+                push( @list, $this->{store}->getListOfWebs( "user,public" ) );
             } elsif( $aweb eq "webtemplate" ) {
-                push( @list, grep { /^\_/o } $this->{store}->getAllWebs() );
+                push( @list, $this->{store}->getListOfWebs( "template" ));
             } else{
                 push( @list, $aweb ) if( $this->{store}->webExists( $aweb ) );
             }

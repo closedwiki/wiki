@@ -3,10 +3,11 @@
 %TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
 %TMPL:DEF{"heading"}%Access Denied%TMPL:END%
 %TMPL:DEF{"message"}%
-You do not have permission to access topic <nop>%WEB%.<nop>%TOPIC%.
+Access check on <nop>%WEB%.<nop>%TOPIC% failed;
+%PARAM1% %PARAM2%.
 
 Contact 
-<a href="mailto:%WIKIWEBMASTER%?subject=View&#32;Access&#32;Denied&#32;for&#32;'%WEB%.%TOPIC%'">%WIKIWEBMASTER%</a>
+<a href="mailto:%WIKIWEBMASTER%?subject=%PARAM1%&#32;access&#32;denied&#32;for&#32;'%WEB%.%TOPIC%'">%WIKIWEBMASTER%</a>
 if you have any questions.
 
 __Related topics:__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl %TMPL:END%

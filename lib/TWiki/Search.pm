@@ -479,7 +479,7 @@ sub searchWeb {
 
             if( $web =~ /^(all|on)$/i  ) {
                 # Get list of all webs
-                my @tmpList = grep { ! /^_/ } $this->store()->getAllWebs();
+                my @tmpList = $this->store()->getListOfWebs( "user" );
 
                 # Build list of webs, without duplicates
                 foreach my $aweb ( @tmpList ) {
@@ -722,7 +722,8 @@ sub searchWeb {
                   $this->_extractTopicInfo( $web, $topic, 1, 0, undef );
             }
             my $revDate = TWiki::formatTime( $topicInfo->{$topic}->{modified} );
-            my $revUser = $topicInfo->{$topic}->{editby};
+            my $revUser = $topicInfo->{$topic}->{editby} || "UnknownUser";
+            my $ru = $this->users()->findUser( $revUser );
             my $revNum  = $topicInfo->{$topic}->{revNum};
 
             # Check security
@@ -772,9 +773,9 @@ sub searchWeb {
                     $out =~ s/\$date/$revDate/gos;
                     $out =~ s/\$isodate/&revDate2ISO($revDate)/geos;
                     $out =~ s/\$rev/$revNum/gos;
-                    $out =~ s/\$wikiusername/TWiki::User->new( $this->{session}, $revUser, $revUser )->webDotWikiName()/geos;
-                    $out =~ s/\$wikiname/$revUser->wikiName()/geos;
-                    $out =~ s/\$username/$revUser->login()/geos;
+                    $out =~ s/\$wikiusername/$ru->webDotWikiName()/geos;
+                    $out =~ s/\$wikiname/$ru->wikiName()/geos;
+                    $out =~ s/\$username/$ru->login()/geos;
                     my $r1info = {};
                     $out =~ s/\$createdate/$this->_getRev1Info( $web, $topic, "date", $r1info )/geos;
                     $out =~ s/\$createusername/$this->_getRev1Info( $web, $topic, "username", $r1info )/geos;

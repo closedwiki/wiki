@@ -71,6 +71,8 @@ sub new {
 }
 
 sub security { my $this = shift; return $this->{session}->{security}; }
+sub prefs { my $this = shift; return $this->{session}->{prefs}; }
+sub plugins { my $this = shift; return $this->{session}->{plugins}; }
 sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
 sub users { my $this = shift; return $this->{session}->{users}; }
 sub form { my $this = shift; return $this->{session}->{form}; }
@@ -167,7 +169,8 @@ sub readTopicRaw {
         !$this->security()->checkAccessPermission
         ( "view", $user, $text, $theTopic, $theWeb )) {
         throw TWiki::AccessControlException( "VIEW", $user,
-                                             $theWeb, $theTopic );
+                                             $theWeb, $theTopic,
+                                             $this->security()->getReason());
     }
 
     return $text;
@@ -200,7 +203,8 @@ sub moveAttachment {
         !$this->security()->checkAccessPermission
         ( "change", $user, $otext, $oldTopic, $oldWeb )) {
         throw TWiki::AccessControlException( "CHANGE", $user,
-                                             $oldWeb, $oldTopic );
+                                             $oldWeb, $oldTopic,
+                                             $this->security()->getReason());
     }
 
     my ( $nmeta, $ntext ) = $this->readTopic( undef, $newWeb, $newTopic );
@@ -208,7 +212,8 @@ sub moveAttachment {
         !$this->security()->checkAccessPermission
         ( "change", $user, $ntext, $newTopic, $newWeb )) {
         throw TWiki::AccessControlException( "CHANGE", $user,
-                                             $newWeb, $newTopic );
+                                             $newWeb, $newTopic,
+                                             $this->security()->getReason());
     }
 
     # Remove file attachment from old topic
@@ -282,7 +287,8 @@ sub getAttachmentStream {
     if( $user &&
         !$this->security()->checkAccessPermission
         ( "view", $user, undef, $topic, $web )) {
-        throw TWiki::AccessControlException( "VIEW", $user, $web, $topic );
+        throw TWiki::AccessControlException( "VIEW", $user, $web, $topic,
+                                           $this->security()->getReason());
     }
 
     my $topicHandler = $this->_getTopicHandler( $web, $topic, $att );
@@ -397,7 +403,7 @@ SMELL: $user must be the user login name, not their wiki name
 sub renameTopic {
     my( $this, $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo, $user ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-    ASSERT(defined($user)) if DEBUG;
+    ASSERT(ref($user) eq "TWiki::User") if DEBUG;
 
     # will block
     $this->lockTopic( $user, $oldWeb, $oldTopic );
@@ -407,7 +413,8 @@ sub renameTopic {
         !$this->security()->checkAccessPermission
         ( "change", $user, $otext, $oldTopic, $oldWeb )) {
         throw TWiki::AccessControlException( "CHANGE", $user,
-                                             $oldWeb, $oldTopic );
+                                             $oldWeb, $oldTopic,
+                                             $this->security()->getReason());
     }
 
     my ( $nmeta, $ntext ) = $this->readTopic( undef, $newWeb, $newTopic );
@@ -415,7 +422,8 @@ sub renameTopic {
         !$this->security()->checkAccessPermission
         ( "change", $user, $ntext, $newTopic, $newWeb )) {
         throw TWiki::AccessControlException( "CHANGE", $user,
-                                             $newWeb, $newTopic );
+                                             $newWeb, $newTopic,
+                                           $this->security()->getReason());
     }
 
     my $topicHandler = $this->_getTopicHandler( $oldWeb, $oldTopic, "" );
@@ -427,7 +435,8 @@ sub renameTopic {
                     "from" => "$oldWeb.$oldTopic",
                     "to"   => "$newWeb.$newTopic",
                     "date" => "$time",
-                    "by"   => "$user" );
+                    # SMELL: surely this should be wikiUserName?
+                    "by"   => $user->wikiName() );
         my $text = $this->readTopicRaw( undef, $newWeb, $newTopic, undef );
         if( ( $oldWeb ne $newWeb ) && $doChangeRefTo ) {
             $text = $this->_changeRefTo( $text, $oldWeb, $oldTopic );
@@ -485,11 +494,12 @@ sub updateReferringPages {
             $this->lockTopic( $user, $itemWeb, $itemTopic );
             my $scantext =
               $this->readTopicRaw( undef, $itemWeb, $itemTopic, undef );
-            if( $user && !$this->security()->checkAccessPermission( "change",
-                                                                    $user,
-                                                                    $scantext,
-                                                                    $itemWeb,
-                                                                    $itemTopic ) ) {
+            if( $user &&
+                !$this->security()->checkAccessPermission( "change",
+                                                           $user,
+                                                           $scantext,
+                                                           $itemWeb,
+                                                           $itemTopic ) ) {
                 # This shouldn't happen, as search will not return, but
                 # check to be on the safe side
                 $this->{session}->writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
@@ -566,7 +576,9 @@ sub readAttachment {
     if( $user &&
         !$this->security()->checkAccessPermission
         ( "change", $user, undef, $theTopic, $theWeb )) {
-        throw TWiki::AccessControlException( "CHANGE", $user, $theWeb, $theTopic );
+        throw TWiki::AccessControlException( "CHANGE", $user,
+                                             $theWeb, $theTopic,
+                                             $this->security()->getReason());
     }
 
     my $topicHandler = $this->_getTopicHandler( $theWeb, $theTopic, $theAttachment );
@@ -710,21 +722,22 @@ sub saveTopic {
         !$this->security()->checkAccessPermission
         ( "change", $user, undef, $topic, $web )) {
 
-        throw TWiki::AccessControlException( "CHANGE", $user, $web, $topic );
+        throw TWiki::AccessControlException( "CHANGE", $user, $web, $topic,
+                                             $this->security()->getReason());
     }
 
     # SMELL: Staggeringly inefficient code that adds meta-data for
     # Plugin callback. Why not simply pass the meta in? It would be far
     # more sensible.
     $text = _writeMeta( $meta, $text );  # add meta data for Plugin callback
-    $this->{session}->{plugins}->beforeSaveHandler( $text, $topic, $web );
+    $this->plugins()->beforeSaveHandler( $text, $topic, $web );
     # remove meta data again!
     $meta = $this->extractMetaData( $web, $topic, \$text );
 
     my $error =
       $this->_noHandlersSave( $user, $web, $topic, $text, $meta,
                               $options );
-    $this->{session}->{plugins}->afterSaveHandler( $text, $topic, $web, $error );
+    $this->plugins()->afterSaveHandler( $text, $topic, $web, $error );
     return $error;
 }
 
@@ -766,7 +779,8 @@ sub saveAttachment {
         !$this->security()->checkAccessPermission
         ( "change", $user, $text, $topic, $web )) {
 
-        throw TWiki::AccessControlException( "CHANGE", $user, $web, $topic );
+        throw TWiki::AccessControlException( "CHANGE", $user, $web, $topic,
+                                           $this->security()->getReason());
     }
 
     if ( $opts->{file} ) {
@@ -783,14 +797,14 @@ sub saveAttachment {
           );
 
         my $topicHandler = $this->_getTopicHandler( $web, $topic, $attachment );
-        $this->{session}->{plugins}->beforeAttachmentSaveHandler( \%attrs,
-                                                     $topic, $web );
+        $this->plugins()->beforeAttachmentSaveHandler( \%attrs,
+                                                       $topic, $web );
         my $error = $topicHandler->addRevision( $opts->{file},
                                                 $opts->{comment},
                                                 $user->wikiName() );
 
-        $this->{session}->{plugins}->afterAttachmentSaveHandler( \%attrs,
-                                                    $topic, $web, $error );
+        $this->plugins()->afterAttachmentSaveHandler( \%attrs,
+                                                      $topic, $web, $error );
 
         return "attachment save failed: $error" if $error;
 
@@ -1094,6 +1108,9 @@ sub unlockTopic {
 | Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
 | Return: =$flag= | ="1"= if web exists, ="0"= if not |
 
+Note: see isKnownWeb to test for whether the web is actually a usable
+web or not (it has to have a home topic if it is)
+
 =cut
 
 sub webExists {
@@ -1328,72 +1345,86 @@ sub getTopicNames {
     return @topicList;
 }
 
-# Gets a list of sub-webs contained in the given named web. If the
-# web is null, it gets a list of all top-level webs. $web may
-# be a pathname at any level of the hierarchy; for example, it may be
-# Dadweb/Kidweb/Petweb. Includes hidden webs (those starting with
-# non-alphanumeric characters).
-sub _getSubWebs {
-    my( $this, $web ) = @_ ;
-
-    opendir DIR, "$TWiki::cfg{DataDir}/$web" ;
-    my @tmpList = readdir( DIR );
-    closedir( DIR );
-
-    # this is not magic, it just looks like it.
-    my @webList = sort
-      grep { !/^\.\.?$/ && -d "$TWiki::cfg{DataDir}/$web/$_" }
-        @tmpList;
-
-    return @webList ;
-}
-
 =pod
 
----++ sub getAllWebs() -> list of web names
+---++ sub getListOfWebs( $filter ) -> list of web names
 
-Gets a list of webnames, of webs contained within the given
-web. Potentially able to expand recursively, but this is
-commented out as support is lacking for subwebs almost everywhere
-else. If the web parameter is not given or is "", returns the
-list of all top-level webs (including hidden webs).
+Gets a list of webs, filtered according to the spec in the $filter,
+which may include one of:
+   1 "user" (for only user webs)
+   2 "template" (for only template webs)
+$filter may also contain the word "public" which will further filter
+webs on whether NOSEARCHALL is specified for them or not.
 
 =cut
 
-sub getAllWebs {
-    my( $this, $web ) = @_ ;
+sub getListOfWebs {
+    my( $this, $filter ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    $filter ||= "";
 
-    $web = "" unless( defined $web );
+    opendir DIR, "$TWiki::cfg{DataDir}" ;
+    my @webList = grep { !/^\./ &&
+                           -d "$TWiki::cfg{DataDir}/$_" } readdir( DIR );
+    closedir( DIR );
 
-    my @webList = $this->_getSubWebs( $web );
-    if ( $web ) {
-        @webList = map { "$web/$_" } @webList ;
+    if ( $filter =~ /\buser\b/ ) {
+        @webList = grep { !/^_/, } @webList;
+    } elsif( $filter =~ /\btemplate\b/ ) {
+        @webList = grep { /^_/, } @webList;
     }
 
-#cc    my $subWeb = "";
-#cc    if( $subWebsAllowedP ) {
-#cc        my @subWebs = @webList;
-#cc        foreach $subWeb ( @webList ) {
-#cc            push @subWebs, $this->getAllWebs( $subWeb );
-#cc        }
-#cc        return @subWebs;
-#cc    }
-    return @webList;
+    if( $filter =~ /\bpublic\b/ ) {
+        @webList =
+          grep {
+              $_ eq $this->{session}->{webName} ||
+              !$this->prefs()->getPreferencesValue( "NOSEARCHALL", $_ )
+          } @webList;
+    }
+
+    return sort @webList;
 }
 
 =pod
 
----++ sub createWeb( $name ) -> $err
-Create a new empty web (empty means "with no topic". Returns an error
-string if it fails.
+---++ sub isKnownWeb( $webName ) -> boolean
+
+Check if the given name refers to a web known to the store system
+(including system webs). Differs from webExists because it checks
+that the web actually has a home topic.
+
+=cut
+
+sub isKnownWeb {
+    my( $this, $web ) = @_;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT( $web ) if DEBUG;
+    return -e "$TWiki::cfg{DataDir}/$web/$TWiki::cfg{HomeTopicName}.txt";
+}
+
+=pod
+
+---++ sub createWeb( $newWeb, $baseWeb, $opts ) -> $err
+
+Create a new web. Returns an error string if it fails, undef if alles gut.
+
+$newWeb is the name of the new web.
+
+$baseWeb is the name of an existing web (a template web). If the
+base web is a system web, all topics in it
+will be copied into the new web. If it is a normal web, only topics starting
+with "Web" will be copied.
+
+$opts is a ref to a hash that contains settings to be modified in
+the web preferences topic in the new web.
 
 =cut
 
 sub createWeb {
-    my ( $this, $theWeb ) = @_;
+    my ( $this, $newWeb, $baseWeb, $opts ) = @_;
+    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
-    my $dir = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$theWeb");
+    my $dir = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$newWeb");
     umask( 0 );
     unless( mkdir( $dir, 0775 ) ) {
         return "Could not create $dir, error: $!";
@@ -1416,7 +1447,31 @@ sub createWeb {
     }
     print FILE "";
     close( FILE );
-    return undef;
+
+    # copy topics from base web
+    my @topicList = $this->getTopicNames( $baseWeb );
+    unless( $baseWeb =~ /^_/ ) {
+        # not a system web, so filter for only Web* topics
+        @topicList = grep { /^Web/ } @topicList;
+    }
+    my $err;
+    foreach my $topic ( @topicList ) {
+        $topic =~ s/$TWiki::cfg{NameFilter}//go;
+        $err = $this->_copyTopicBetweenWebs( $baseWeb,
+                                             $topic, $newWeb );
+        return( $err ) if( $err );
+    }
+
+    # patch WebPreferences in new web
+    my $wpt = $TWiki::cfg{WebPrefsTopicName};
+    my( $meta, $text ) =
+      $this->readTopic( undef, $newWeb, $wpt, undef );
+
+    foreach my $key ( %$opts ) {
+        $text =~ s/(\s\* Set $key =)[^\n\r]*/$1 $opts->{$key}/;
+    }
+    return $this->saveTopic( $this->{session}->{user}, $newWeb, $wpt,
+                             $text, $meta );
 }
 
 # STATIC Write a meta-data key=value pair
@@ -1550,16 +1605,9 @@ sub cleanUpRevID {
     return $rev;
 }
 
-=pod
-
----++ sub copyTopicBetweenWebs($fromWeb, $topic, $toWeb)
-
-Copy a topic and all it's attendant data from one web to another.
-Returns an error string if it fails.
-
-=cut
-
-sub copyTopicBetweenWebs {
+# Copy a topic and all it's attendant data from one web to another.
+# Returns an error string if it fails.
+sub _copyTopicBetweenWebs {
     my ( $this, $theFromWeb, $theTopic, $theToWeb ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 

@@ -89,6 +89,21 @@ sub permissionsSet {
 
 =pod
 
+---++ getReason() -> $string
+
+Return a string describing the reason why the last access control failure
+occurred.
+
+=cut
+
+sub getReason {
+    my $this = shift;
+
+    return $this->{failure};
+}
+
+=pod
+
 ---++ checkAccessPermission( $action, $user, $text, $topic, $web ) ==> $ok
 | Description:          | Check if user is allowed to access topic |
 | Parameter: =$action=  | "VIEW", "CHANGE", "CREATE", etc. |
@@ -96,7 +111,7 @@ sub permissionsSet {
 | Parameter: =$text=    | If empty: Read "$theWebName.$theTopicName" to check permissions |
 | Parameter: =$topic=   | Topic name to check, e.g. "SomeTopic" |
 | Parameter: =$web=     | Web, e.g. "Know" |
-| Return:    1 if access is OK  |
+| Return:    undef if access is OK, an explanation otherwise  |
 
 =cut
 
@@ -105,6 +120,8 @@ sub checkAccessPermission {
         $theTopicText, $theTopicName, $theWebName ) = @_;
     ASSERT(ref($this) eq "TWiki::Access") if DEBUG;
     ASSERT(ref($user) eq "TWiki::User") if DEBUG;
+
+    undef $this->{failure};
 
     # super admin is always allowed
     return 1 if $user->isAdmin();
@@ -142,19 +159,26 @@ sub checkAccessPermission {
         }
     }
 
-    my $check;
+    my $control = "topic";
     # DENYTOPIC overrides DENYWEB, even if it is empty
     unless( defined( $denyText )) {
+        $control = "web";
         $denyText =
           $this->prefs()->getPreferencesValue( "DENYWEB$theAccessType", $theWebName );
     }
 
     if( defined( $denyText )) {
-        return 0 if( $user->isInList( $denyText ));
+        if( $user->isInList( $denyText )) {
+            $this->{failure} = "$control is denied";
+            return 0;
+        }
     }
 
-    if( defined( $allowText )) {
-        return 0 unless( $user->isInList( $allowText ));
+    if( defined( $allowText ) ) {
+        unless( $user->isInList( $allowText )) {
+            $this->{failure} = "topic is not allowed";
+            return 0;
+        }
     } else {
         # ALLOWTOPIC overrides ALLOWWEB, even if it is empty
         $allowText =
@@ -162,7 +186,10 @@ sub checkAccessPermission {
                                              $theWebName );
 
         if( defined( $allowText ) && $allowText =~ /\S/ ) {
-            return 0 unless $user->isInList( $allowText );
+            unless( $user->isInList( $allowText )) {
+                $this->{failure} = "web is not allowed";
+                return 0;
+            }
         }
     }
 

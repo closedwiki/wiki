@@ -170,7 +170,8 @@ sub run {
             $session->redirect( $url );
         } else {
             $url = $session->getOopsUrl( $e->{-web}, $e->{-topic},
-                                         "oopsaccessdenied" );
+                                         "oopsaccessdenied",
+                                         $e->{-mode}, $e->{-reason} );
         }
         $session->redirect( $url );
     } catch TWiki::UI::OopsException with {
@@ -261,10 +262,10 @@ sub checkAccess {
 
     unless( $session->{security}->checkAccessPermission( $mode, $user, "",
                                                          $topic, $web )) {
-        throw
-          TWiki::UI::OopsException( $web,
-                                    $topic,
-                                    "access$mode" );
+        throw TWiki::UI::OopsException( $web, $topic,
+                                        "accessdenied",
+                                        $mode,
+                                        $session->{security}->getReason());
     }
 }
 

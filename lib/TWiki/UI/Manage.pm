@@ -170,7 +170,7 @@ sub createWeb {
           ( "", "", $oopsTmpl, _template( "msg_web_name" ));
     }
 
-    if( $session->{store}->topicExists( $newWeb, $TWiki::cfg{HomeTopicName} ) ) {
+    if( $session->{store}->isKnownWeb( $newWeb )) {
         throw TWiki::UI::OopsException( "", "", $oopsTmpl,
                                         _template("msg_web_exist"), $newWeb );
     }
@@ -178,7 +178,7 @@ sub createWeb {
     $baseWeb =~ s/$TWiki::cfg{NameFilter}//go;
     $baseWeb = TWiki::Sandbox::untaintUnchecked( $baseWeb );
 
-    unless( $session->{store}->topicExists( $baseWeb, $TWiki::cfg{HomeTopicName} ) ) {
+    unless( $session->{store}->isKnownWeb( $baseWeb )) {
         throw TWiki::UI::OopsException( "", "", $oopsTmpl,
                                         _template("msg_base_web"), $baseWeb );
     }
@@ -189,72 +189,25 @@ sub createWeb {
     }
 
     # create the empty web
-    my $err = $session->{store}->createWeb( $newWeb );
+    my $opts =
+      {
+       WEBBGCOLOR => $webBgColor,
+       SITEMAPWHAT => $siteMapWhat,
+       SITEMAPUSETO => $siteMapUseTo,
+       NOSEARCHALL => $noSearchAll,
+      };
+    $opts->{SITEMAPLIST} = "on" if( $siteMapWhat );
+
+    my $err = $session->{store}->createWeb( $newWeb, $baseWeb, $opts );
     if( $err ) {
         throw TWiki::UI::OopsException( "", "", $oopsTmpl,
                                         _template("msg_web_create"), $err );
-    }
-
-    # copy needed topics from base web
-    $err = _copyWebTopics( $session, $baseWeb, $newWeb );
-    if( $err ) {
-        throw TWiki::UI::OopsException( $newWeb, "", $oopsTmpl,
-                                        _template("msg_web_copy_topics"),
-                                        $err );
-    }
-
-    # patch WebPreferences
-    $err = _patchWebPreferences( $session, $newWeb, $TWiki::cfg{WebPrefsTopicName}, $webBgColor,
-                                 $siteMapWhat, $siteMapUseTo, $noSearchAll );
-    if( $err ) {
-        throw TWiki::UI::OopsException( $newWeb, $TWiki::cfg{WebPrefsTopicName},
-                                        $oopsTmpl,
-                                        _template("msg_patch_webpreferences"),
-                                        $err );
     }
 
     # everything OK, redirect to last message
     $newTopic = $TWiki::cfg{HomeTopicName} unless( $newTopic );
     throw TWiki::UI::OopsException( $newWeb, $newTopic, $oopsTmpl,
                                     _template("msg_create_web_ok") );
-}
-
-sub _copyWebTopics {
-    my ( $session, $theBaseWeb, $theNewWeb ) = @_;
-
-    my $err = "";
-    my @topicList = $session->{store}->getTopicNames( $theBaseWeb );
-    unless( $theBaseWeb =~ /^_/ ) {
-        # not a template web, so filter for only Web* topics
-        @topicList = grep { /^Web/ } @topicList;
-    }
-    foreach my $topic ( @topicList ) {
-        $topic =~ s/$TWiki::cfg{NameFilter}//go;
-        $topic = TWiki::Sandbox::untaintUnchecked( $topic );
-        $err = $session->{store}->copyTopicBetweenWebs( $theBaseWeb,
-                                                    $topic, $theNewWeb );
-        return( $err ) if( $err );
-    }
-    return "";
-}
-
-sub _patchWebPreferences {
-    my ( $session, $theWeb, $theTopic, $theWebBgColor, $theSiteMapWhat, $theSiteMapUseTo, $doNoSearchAll ) = @_;
-
-    my( $meta, $text ) =
-      $session->{store}->readTopic( undef, $theWeb, $theTopic, undef );
-
-    my $siteMapList = "";
-    $siteMapList = "on" if( $theSiteMapWhat );
-    $text =~ s/(\s\* Set WEBBGCOLOR =)[^\n\r]*/$1 $theWebBgColor/os;
-    $text =~ s/(\s\* Set SITEMAPLIST =)[^\n\r]*/$1 $siteMapList/os;
-    $text =~ s/(\s\* Set SITEMAPWHAT =)[^\n\r]*/$1 $theSiteMapWhat/os;
-    $text =~ s/(\s\* Set SITEMAPUSETO =)[^\n\r]*/$1 $theSiteMapUseTo/os;
-    $text =~ s/(\s\* Set NOSEARCHALL =)[^\n\r]*/$1 $doNoSearchAll/os;
-
-    my $err = $session->{store}->saveTopic( $session->{user}, $theWeb, $theTopic, $text, $meta );
-
-    return $err;
 }
 
 =pod

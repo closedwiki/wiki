@@ -30,19 +30,20 @@ use Error;
 @TWiki::AccessControlException::ISA = qw(Error);
 
 sub new {
-    my ( $class, $mode, $user, $web, $topic ) = @_;
+    my ( $class, $mode, $user, $web, $topic, $reason ) = @_;
 
     return $class->SUPER::new(
                               -web => $web,
                               -topic => $topic,
                               -user => $user->wikiName(),
                               -mode => $mode,
+                              -reason => $reason,
                              );
 }
 
 sub stringify {
     my $self = shift;
-    return "AccessControlException: $self->{-mode} access to $self->{-web}.$self->{-topic} denied for $self->{-user}";
+    return "AccessControlException: Access to $self->{-mode} $self->{-web}.$self->{-topic} for $self->{-user} is denied. $self->{-reason}";
 }
 
 1;
