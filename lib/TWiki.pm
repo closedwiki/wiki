@@ -1494,7 +1494,7 @@ expected in templates that must be statically expanded in new content.
 
 The expanded variables are:
 | =%<nop>DATE%= | Signature-format date |
-| =%<nop>TIME%= | Server time |
+| =%<nop>TIME%= | Server time (deprecated) |
 | =%<nop>SERVERTIME%= | Server time |
 | =%<nop>GMTIME%= | GM time |
 | =%<nop>USERNAME%= | Base login name |
@@ -1514,18 +1514,15 @@ sub expandVariablesOnTopicCreation {
     ASSERT(ref($this) eq 'TWiki') if DEBUG;
     ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
 
-    $text =~ s/%DATE%/$this->_DATE()/ge;
-    $text =~ s/%TIME%/%SERVERTIME%/g;
+    $text =~ s/%DATE%/$this->_DATE()/ge; # deprecated
     $text =~ s/%SERVERTIME(?:{(.*?)})?%/$this->_SERVERTIME(new TWiki::Attrs($1))/ge;
     $text =~ s/%GMTIME(?:{(.*?)})?%/$this->_GMTIME(new TWiki::Attrs($1))/ge;
 
     $text =~ s/%((USER|WIKI|WIKIUSER)NAME)%/$this->{SESSION_TAGS}{$1}/g;
     $text =~ s/%URLPARAM{(.*?)}%/$this->_URLPARAM(new TWiki::Attrs($1))/ge;
 
-    # Remove filler: Use it to remove access control at time of
-    # topic instantiation or to prevent search from hitting a template
-    # SMELL: this expansion of %NOP{}% is different to the default
-    # which retains content.....
+    # Remove template-only text and variable protection markers.
+    # See TWiki.TWikiTemplates for details.
     $text =~ s/%NOP{.*?}%//gos;
     $text =~ s/%NOP%//go;
 
