@@ -67,7 +67,7 @@ sub main
 
     foreach( reverse split( /\n/, $changes ) ) {
         @bar = split( /\t/ );
-        if( ( !defined( %exclude ) ) || ( ! $exclude{ $bar[0] } ) ) {
+        if( ( ! %exclude ) || ( ! $exclude{ $bar[0] } ) ) {
             next unless TWiki::Store::topicExists( $webName, $bar[0] );
             $foo = $text;
             $foo =~ s/%TOPICNAME%/$bar[0]/go;
