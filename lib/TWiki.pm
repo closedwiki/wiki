@@ -123,6 +123,7 @@ use Cwd;
 
 # The following are also initialized in initialize, here for cases where
 # initialize not called.
+$TranslationToken= "\263";
 $cgiQuery = 0;
 @publicWebList = ();
 
@@ -220,7 +221,6 @@ sub initialize
     &TWiki::Prefs::initializePrefs( $wikiUserName, $webName );
 
     # some remaining init
-    $TranslationToken= "\263";
     $code="";
     @code= ();
 
@@ -691,27 +691,31 @@ sub extractNameValuePair
 {
     my( $str, $name ) = @_;
 
+    my $value = "";
+    $str =~ s/\\\"/\\$TranslationToken/go;  # escape \"
+
     if( $name ) {
         # format is: %VAR{ ... name = "value" }%
         if( ( $str =~ /(^|[^\S])$name\s*=\s*\"([^\"]*)\"/ ) && ( $2 ) ) {
-            return $2;
+            $value = $2;
         }
     } else {
         # test if format: { "value" ... }
         if( ( $str =~ /(^|\=\s*\"[^\"]*\")\s*\"([^\"]*)\"/ ) && ( $2 ) ) {
-            # is: { "value" ... }
-            return $2;
+            # is: %VAR{ ... = "..." "value" ... }%
+            $value = $2;
 
-        } elsif( ( $str =~ /^\s*\w+\s*=\s*\"([^\"]*)/ ) && ( $1 ) ) { # value in double quotes (")
-            # is not a standalone var, but: %VAR{ name = "value" }%
-            return "";
+        } elsif( ( $str =~ /^\s*\w+\s*=\s*\"([^\"]*)/ ) && ( $1 ) ) {
+            # is: %VAR{ name = "value" }%
+            # do nothing, is not a standalone var
 
         } else {
             # format is: %VAR{ value }%
-            return $1;
+            $value = $str;
         }
     }
-    return "";
+    $value =~ s/\\$TranslationToken/\"/go;  # resolve \"
+    return $value;
 }
 
 # =========================
@@ -805,7 +809,7 @@ sub handleIncludeUrl
         $thePattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
         $thePattern =~ /(.*)/;     # untaint
         $thePattern = $1;
-        $text =~ s/$thePattern/$1/is;
+        $text = "" unless( $text =~ s/$thePattern/$1/is );
     }
 
     return $text;
@@ -881,7 +885,7 @@ sub handleIncludeFile
         $pattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
         $pattern =~ /(.*)/;     # untaint
         $pattern = $1;
-        $text =~ s/$pattern/$1/is;
+        $text = "" unless( $text =~ s/$pattern/$1/is );
     }
 
     # handle all preferences and internal tags (for speed: call by reference)
@@ -963,12 +967,14 @@ sub handleSearchWeb
     my $attrRenameview    = extractNameValuePair( $attributes, "renameview" );
     my $attrShowlock      = extractNameValuePair( $attributes, "showlock" );
     my $attrNoEmpty       = extractNameValuePair( $attributes, "noempty" );
+    my $attrHeader        = extractNameValuePair( $attributes, "header" );
+    my $attrFormat        = extractNameValuePair( $attributes, "format" );
 
     return &TWiki::Search::searchWeb( "1", $attrWeb, $searchVal, $attrScope,
        $attrOrder, $attrRegex, $attrLimit, $attrReverse,
        $attrCasesensitive, $attrNosummary, $attrNosearch,
        $attrNoheader, $attrNototal, $attrBookview, $attrRenameview,
-       $attrShowlock, $attrNoEmpty, ""
+       $attrShowlock, $attrNoEmpty, "", $attrHeader, $attrFormat
     );
 }
 
@@ -1252,6 +1258,7 @@ sub handleInternalTags
     # $_[1] is topic
     # $_[2] is web
 
+    $_[0] =~ s/%NOP%/<nop>/go;
     $_[0] =~ s/%TMPL\:P{(.*?)}%/&handleTmplP($1)/geo;
     $_[0] =~ s/%SEP%/&handleTmplP('"sep"')/geo;
     $_[0] =~ s/%HTTP_HOST%/&handleEnvVariable('HTTP_HOST')/geo;

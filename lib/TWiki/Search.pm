@@ -56,7 +56,8 @@ sub searchWeb
     my ( $doInline, $theWebName, $theSearchVal, $theScope, $theOrder,
          $theRegex, $theLimit, $revSort, $caseSensitive, $noSummary,
          $noSearch, $noHeader, $noTotal, $doBookView, $doRenameView,
-         $doShowLock, $noEmpty, $template, @junk ) = @_;
+         $doShowLock, $noEmpty, $theTemplate, $theHeader, $theFormat,
+         @junk ) = @_;
 
     ## 0501 kk : vvv new option to limit results
     # process the result limit here, this is the 'global' limit for
@@ -110,7 +111,7 @@ sub searchWeb
 	           grep { s#^.+/([^/]+)$#$1# }
                    grep { -d }
 	           map  { "$TWiki::dataDir/$_" }
-                   grep { ! /^\.\.?$/ } @tmpList;
+                   grep { ! /^[._]/ } @tmpList;
 
         # what that does (looking from the bottom up) is take the file
         # list, filter out the dot directories and dot files, turn the
@@ -136,8 +137,9 @@ sub searchWeb
     my $renameTopic;
     my $renameWeb = "";
     my $spacedTopic;
-    if( $template ) {
-        $tmpl = &TWiki::Store::readTemplate( "$template" );
+    $theTemplate = "searchformat" if( $theFormat );
+    if( $theTemplate ) {
+        $tmpl = &TWiki::Store::readTemplate( "$theTemplate" );
         # FIXME replace following with this @@@
     } elsif( $doBookView ) {
         $tmpl = &TWiki::Store::readTemplate( "searchbookview" );
@@ -390,6 +392,11 @@ sub searchWeb
 
         # output header of $thisWebName
         my( $beforeText, $repeatText, $afterText ) = split( /%REPEAT%/, $tmplTable );
+        if( $theHeader ) {
+            $theHeader =~ s/([^\n])$/$1\n/gos;
+            $beforeText = $theHeader;
+        }
+
         $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/o;
         $beforeText =~ s/%WEB%/$thisWebName/o;
         $beforeText = &TWiki::handleCommonTags( $beforeText, $topic );
@@ -416,6 +423,7 @@ sub searchWeb
         foreach( @topicList ) {
             $topic = $_;
             
+            my $meta = "";
             my $text = "";
             
             # make sure we have date and author
@@ -426,7 +434,6 @@ sub searchWeb
                 $allowView = $topicAllowView{$topic};
             } else {
                 # lazy query, need to do it at last
-                my $meta = "";
                 ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
                 $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $topic, $thisWebName );
                 ( $revDate, $revUser, $revNum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta, 1 );
@@ -448,7 +455,19 @@ sub searchWeb
                 next;
             }
 
-            $tempVal = $repeatText;
+            if( $theFormat ) {
+                $tempVal = $theFormat;
+                $tempVal =~ s/([^\n])$/$1\n/gos;
+                $tempVal =~ s/\$web/$thisWebName/gos;
+                $tempVal =~ s/\$topic/$topic/gos;
+                $tempVal =~ s/\$locked/$locked/gos;
+                $tempVal =~ s/\$date/$revDate/gos;
+                $tempVal =~ s/\$rev/1.$revNum/gos;
+                $tempVal =~ s/\$wikiusername/$revUser/gos;
+
+            } else {
+                $tempVal = $repeatText;
+            }
             $tempVal =~ s/%WEB%/$thisWebName/go;
             $tempVal =~ s/%TOPICNAME%/$topic/go;
             $tempVal =~ s/%LOCKED%/$locked/o;
@@ -518,12 +537,10 @@ sub searchWeb
                 $tempVal =~ s/%TOPIC_NUMBER%/$topicCount/go;
                 $tempVal =~ s/%TEXTHEAD%/$reducedOutput/go;
                 next if ( ! $reducedOutput );
-            } elsif( $noSummary ) {
-                $tempVal =~ s/%TEXTHEAD%//go;
-                $tempVal =~ s/&nbsp;//go;
-            } elsif( $doBookView ) {  # added PTh 20 Jul 2000
+
+            } elsif( $doBookView ) {
+                # BookView, added PTh 20 Jul 2000
                 if( ! $text ) {
-                    my $meta = "";
                     ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
                 }
 
@@ -531,7 +548,22 @@ sub searchWeb
                 $text = &TWiki::getRenderedVersion( $text, $thisWebName );
                 # FIXME: What about meta data rendering?
                 $tempVal =~ s/%TEXTHEAD%/$text/go;
+
+            } elsif( $theFormat ) {
+                # free format, added PTh 10 Oct 2001
+                if( ! $text ) {
+                    ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
+                }
+                $tempVal =~ s/\$summary/&TWiki::makeTopicSummary( $text, $topic, $thisWebName )/geos;
+                $tempVal =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
+                $tempVal =~ s/\$pattern\(\s*(.*?\s*\.\*)\)/getTextPattern( $text, $1 )/geos;
+
+            } elsif( $noSummary ) {
+                $tempVal =~ s/%TEXTHEAD%//go;
+                $tempVal =~ s/&nbsp;//go;
+
             } else {
+                # regular search view
                 if( $text ) {
                     $head = $text;
                 } else {
@@ -551,6 +583,9 @@ sub searchWeb
 
             $ntopics += 1;
             last if $ntopics >= $theLimit;
+        }
+        if( $theFormat ) {
+            $searchResult =~ s/\n$//gos;  # remove trailing new line
         }
     
         # output footer of $thisWebName
@@ -585,6 +620,36 @@ sub searchWeb
 }
 
 #=========================
+sub getMetaFormField
+{
+    my( $theMeta, $theTitle ) = @_;
+
+    my $title = "";
+    my $value = "";
+    my @fields = $theMeta->find( "FIELD" );
+    foreach my $field ( @fields ) {
+       $title = $field->{"title"};
+       $value = $field->{"value"};
+       $value =~ s/^\s*(.*?)\s*$/$1/go;
+       return $value if( $title eq $theTitle );
+    }
+    return "";
+}
+
+#=========================
+sub getTextPattern
+{
+    my( $theText, $thePattern ) = @_;
+
+    $thePattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
+    $thePattern =~ /(.*)/;     # untaint
+    $thePattern = $1;
+    $theText = "" unless( $theText =~ s/$thePattern/$1/is );
+
+    return $theText;
+}
+
+#=========================
 sub spacedTopic
 {
     my( $topic ) = @_;
@@ -598,4 +663,3 @@ sub spacedTopic
 1;
 
 # EOF
-
