@@ -741,7 +741,7 @@ sub getRevisionInfoFromMeta
        ( $date, $author, $rev ) = getRevisionInfo( $web, $topic, "", 1 );
     }
     
-    writeDebug( "rev = $rev" );
+    # writeDebug( "rev = $rev" );
     
     return( $date, $author, $rev );
 }
