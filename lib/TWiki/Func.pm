@@ -820,6 +820,28 @@ sub getTopicList
 # =========================
 =pod
 
+---+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
+
+| Description: | Sets a names tag on the specified revision |
+| Parameter: =$web= | Web name |
+| Parameter: =$topic= | Topic name |
+| Parameter: =$rev= | The revision to tag |
+| Parameter: =$tag= | The string to tag with |
+| Return: =$success= |  |
+| TODO: | we _need_ an error mechanism! |
+| Since: | TWiki::Plugins::VERSION 1.022 (20 April 2004) |
+
+=cut
+
+sub setTopicRevisionTag
+{
+#	my ( $web, $topic, $rev, $tag ) = @_;
+	
+    return TWiki::Store::setTopicRevisionTag( @_ );
+}
+
+=pod
+
 ---++ Functions: Rendering
 
 ---+++ expandCommonVariables( $text, $topic, $web ) ==> $text
@@ -918,7 +940,7 @@ sub formatTime
 
 ---+++ formatGmTime( $time, $format ) ==> $text
 
-| NOTE:                | <b>The following function is deprecated and should not be used. Use formatTime() instead</b> |
+| NOTE:                | <b>This function is deprecated and should not be used. Use formatTime() instead</b> |
 | Description:         | Format the time to GM time |
 | Parameter: =$time=   | Time in epoc seconds |
 | Parameter: =$format= | Format type, optional. Default e.g. ="31 Dec 2002 - 19:30"=, can be ="iso"= (e.g. ="2002-12-31T19:30Z"=), ="rcs"= (e.g. ="2001/12/31 23:59:59"=, ="http"= for HTTP header format (e.g. ="Thu, 23 Jul 1998 07:21:56 GMT"=) |
@@ -1092,7 +1114,7 @@ sub writeDebug
 # =========================
 =pod
 
----++ Functions: I18N related
+---++ Functions: System and I18N related
 
 ---+++ getRegularExpression( $regexName ) ==> $pattern
 
@@ -1131,34 +1153,12 @@ sub getRegularExpression
 
 =pod
 
----+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
+---+++ checkDependencies( $moduleName, $dependenciesRef ) ==> $error
 
-| Description: | sets a names tag on the specified revision |
-| Parameter: =$web= | webname |
-| Parameter: =$topic= | topic name |
-| Parameter: =$rev= | the revision we are taging |
-| Parameter: =$tag= | the string to tag with |
-| Return: =$success= |  |
-| TODO: | we _need_ an error mechanism! |
-| Since: | TWiki::Plugins::VERSION 1.022 (20 April 2004) |
-
-=cut
-
-sub setTopicRevisionTag
-{
-#	my ( $web, $topic, $rev, $tag ) = @_;
-	
-    return TWiki::Store::setTopicRevisionTag( @_ );
-}
-
-=pod
-
----+++ checkDependencies
-
-| Description: | checks a list of Perl dependencies at runtime |
-| Parameter: =$context= | Context description e.g. name of the module being checked |
-| Parameter: =$deps= | List of hashes containing dependency information |
-| Returns: | undef if dependencies are OK, an error message otherwise |
+| Description: | Checks a list of Perl dependencies at runtime |
+| Parameter: =$moduleName= | Context description e.g. name of the module being checked |
+| Parameter: =$dependenciesRef= | Reference of list of hashes containing dependency information; see notes below |
+| Return: =$error= | undef if dependencies are OK, an error message otherwise |
 | Since: | TWiki::Plugins::VERSION 1.025 (01 Aug 2004) |
 
 The dependencies are expressed as a list of hashes. Each hash contains
