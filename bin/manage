@@ -231,11 +231,13 @@ sub copyOneTopic
     # FIXME: Hack, no support for RCS subdirectory
     $from .= ",v";
     $to .= ",v";
-    unless( copy( $from, $to ) ) {
-        return( "Copy file ( $from, $to ) failed, error: $!" );
+    if( -e $from ) {
+        unless( copy( $from, $to ) ) {
+            return( "Copy file ( $from, $to ) failed, error: $!" );
+        }
+        umask( 002 );
+        chmod( 0644, $to );
     }
-    umask( 002 );
-    chmod( 0644, $to );
 
     # FIXME: Copy also attachments if present
 
