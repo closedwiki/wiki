@@ -53,7 +53,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
   if( ! theAnchor ) {
     theAnchor = "";
   }
-  win = open( "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + theAnchor,
+  win = open( "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain.pattern" + theAnchor,
               theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
   if( win ) {
     win.focus();
