@@ -44,8 +44,7 @@
 
 %TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
 
-%TMPL:DEF{"topbar"}%<div id="TWikiTopBar"><div class="TWikiTopBarMainContents">
-%INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div>%TMPL:END%
+%TMPL:DEF{"topbar"}%<div id="TWikiTopBar"><div class="TWikiTopBarMainContents" style="display: none">%INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div><br class="TWikiClearLine" /></div>%TMPL:END%
 
 %TMPL:DEF{"leftbar"}%<div id="TWikiLeftBar"><div class="TWikiLeftBarContents">
 %INCLUDE{"%TWIKIWEB%.WebLeftBar"}%</div></div>%TMPL:END%
