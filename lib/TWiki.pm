@@ -2324,21 +2324,21 @@ sub new {
     $T = $this;
 
     $this->{sandbox} = new TWiki::Sandbox( $this, $TWiki::OS );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{sandbox};
+    die "ASSERT $this sandbox from ".join(",",caller)."\n" unless $this->{sandbox};
 
     $this->{net} = new TWiki::Net( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{net};
+    die "ASSERT $this net from ".join(",",caller)."\n" unless $this->{net};
     my %ss = @storeSettings;
     $this->{store} = new TWiki::Store( $this, $storeTopicImpl, \%ss );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{store};
+    die "ASSERT $this store from ".join(",",caller)."\n" unless $this->{store};
     $this->{search} = new TWiki::Search( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{search};
+    die "ASSERT $this search from ".join(",",caller)."\n" unless $this->{search};
     $this->{templates} = new TWiki::Templates( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{templates};
+    die "ASSERT $this templates from ".join(",",caller)."\n" unless $this->{templates};
     $this->{attach} = new TWiki::Attach( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{attach};
+    die "ASSERT $this attach from ".join(",",caller)."\n" unless $this->{attach};
     $this->{form} = new TWiki::Form( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{form};
+    die "ASSERT $this form from ".join(",",caller)."\n" unless $this->{form};
 
     $this->{cgiQuery} = $theQuery;
 
