@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1078198740" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1079859121" format="1.0" version="1.7"}%
 ---+ Render List Plugin 
 
 Render bullet lists in a variety of formats
@@ -353,8 +353,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 01 Mar 2004 (V1.031) |
+|  Plugin Version: | 21 Mar 2004 (V1.031) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  21 Mar 2004: | Internal change: Fixed inofficial function call |
 |  01 Mar 2004: | Added FILE_THEME and folder/file icons |
 |  29 Dec 2003: | Fixed rendering issue if focus bullet contains =icon:name=; added TREND_THEME |
 |  16 Dec 2003: | Specify icons with =icon:name= syntax |
@@ -369,8 +370,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, TWiki:Plugins/TreePlugin
 
--- TWiki:Main/PeterThoeny - 01 Mar 2004
-
+-- TWiki:Main/PeterThoeny - 21 Mar 2004
 %META:FILEATTACHMENT{name="empty.gif" attr="h" comment="Empty 16x16 spacer" date="1070519327" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\empty.gif" size="100" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="dot_udr.gif" attr="h" comment="Dot T-graph 16x16" date="1070519374" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\dot_udr.gif" size="109" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="dot_ud.gif" attr="h" comment="Dot I-graph 16x16" date="1070519385" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\dot_ud.gif" size="108" user="PeterThoeny" version="1.1"}%
