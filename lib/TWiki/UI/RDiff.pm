@@ -258,7 +258,10 @@ sub _renderRevisionDiff
 #combine sequential array elements that are the same diffType
     my @diffArray = ();
 	foreach my $ele ( @$sdiffArray_ref ) {
-		if ( ( @diffArray ) && ( @{$diffArray[$#diffArray]}[0] eq @$ele[0] ) ) {
+		if( ( @$ele[1] =~ /^\%META\:TOPICINFO/ ) || ( @$ele[2] =~ /^\%META\:TOPICINFO/ ) ) {
+			# do nothing, ignore redundant topic info
+			# FIXME: Intelligently remove followup lines in case META:TOPICINFO is the only change
+		} elsif( ( @diffArray ) && ( @{$diffArray[$#diffArray]}[0] eq @$ele[0] ) ) {
 			@{$diffArray[$#diffArray]}[1] .= "\n".@$ele[1];
 			@{$diffArray[$#diffArray]}[2] .= "\n".@$ele[2];
 		} else {
