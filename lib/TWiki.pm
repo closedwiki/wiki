@@ -1436,10 +1436,10 @@ sub handleMetaSearch
     my $searchWeb = "all";
     
     if( $attrType eq "topicmoved" ) {
-       $searchVal = "%META:TOPICMOVED\{.*from=\\\"$attrWeb\.$attrTopic\\\".*\}%";
+       $searchVal = "%META:TOPICMOVED[{].*from=\\\"$attrWeb\.$attrTopic\\\".*[}]%";
     } elsif ( $attrType eq "parent" ) {
        $searchWeb = $attrWeb;
-       $searchVal = "%META:TOPICPARENT\{.*name=\\\"($attrWeb\\.)?$attrTopic\\\".*\}%";
+       $searchVal = "%META:TOPICPARENT[{].*name=\\\"($attrWeb\\.)?$attrTopic\\\".*[}]%";
     }
     
     my $text = &TWiki::Search::searchWeb( "1", $searchWeb, $searchVal, "",
