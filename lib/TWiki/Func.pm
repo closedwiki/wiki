@@ -860,6 +860,31 @@ sub getPublicWebList {
     return $TWiki::Plugins::SESSION->{store}->getListOfWebs("user,public");
 }
 
+=pod
+
+---+++ getListOfWebs( $filter ) -> @webs
+   * =$filter= - spec of web types to recover
+Gets a list of webs, filtered according to the spec in the $filter,
+which may include one of:
+   1 "user" (for only user webs)
+   2 "template" (for only template webs i.e. those starting with "_")
+=$filter= may also contain the word "public" which will further filter
+out webs that have NOSEARCHALL set on them.
+
+For example, the deprecated getPublicWebList function can be duplicated
+as follows:
+<verbatim>
+   my @webs = TWiki::Func::getListOfWebs( "user,public" );
+</verbatim>
+
+*Since:* TWiki::Plugins::VERSION 1.026
+
+=cut
+
+sub getListOfWebs {
+    my $filter = shift;
+    return $TWiki::Plugins::SESSION->{store}->getListOfWebs($filter);
+}
 
 =pod
 
