@@ -1,9 +1,12 @@
-%META:TOPICINFO{author="PeterThoeny" date="1069728780" format="1.0" version="1.20"}%
+%META:TOPICINFO{author="PeterThoeny" date="1073858460" format="1.0" version="1.21"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
 
-There are other approaches as well: the TWiki:Plugins/TopicVarsPlugin lets you set variables in any topic, not just in WebPreferences, for use in the same. The TWiki:Plugins/SmiliesPlugin, using a different short hand than =<nop>%VARIABLES%=, may be worth checking out for extended use.
+There are other approaches as well:
+	* In any topic, write =%<nop>PUBURL%/%<nop>TWIKIWEB%/%TOPIC%/help.gif= to show the %PUBURL%/%TWIKIWEB%/%TOPIC%/help.gif icon
+	* The TWiki:Plugins/TopicVarsPlugin lets you set variables in any topic, not just in WebPreferences, for use in the same topic
+	* The TWiki:Plugins/SmiliesPlugin, using a different short hand than =<nop>%VARIABLES%=, may be worth checking out for extended use
 
 In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics are uploaded and displayed. Then, the paths are set in [[TWiki.TWikiPreferences#DocGraphics]] for site-wide access. You can also create individual library pages in each web. And you don't have to restrict yourself to graphics: Preferences Variables can include text and links to any type of file.
 
@@ -18,6 +21,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 	* <img src="%ATTACHURLPATH%/starred.gif" alt="starred.gif"  width="16" height="16"  /> Highlight (positive)
 	* <img src="%ATTACHURLPATH%/stargold.gif" alt="stargold.gif"  width="16" height="16"  /> Favorites (gold star)
 	* <img src="%ATTACHURLPATH%/arrowright.gif" alt="arrowright.gif"  width="16" height="16"  /> Moved to...
+	* <img src="%ATTACHURLPATH%/arrowdot.gif" alt="arrowdot.gif"  width="16" height="16"  /> Meet here (arrow to red dot)
 	* <img src="%ATTACHURLPATH%/wip.gif" alt="wip.gif"  width="16" height="16"  /> Work in progress
 	* <img src="%ATTACHURLPATH%/rfc.gif" alt="rfc.gif"  width="16" height="16"  /> Request for comments
 	* <img src="%ATTACHURLPATH%/days.gif" alt="days.gif"  width="16" height="16"  /> Days
@@ -29,6 +33,8 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 	* <img src="%ATTACHURLPATH%/searchtopic.gif" alt="searchtopic.gif"  width="16" height="16"  /> Search topic
 	* <img src="%ATTACHURLPATH%/printtopic.gif" alt="printtopic.gif"  width="16" height="16"  /> Print topic
 	* <img src="%ATTACHURLPATH%/attachfile.gif" alt="attachfile.gif"  width="16" height="16"  /> Attach file
+	* <img src="%ATTACHURLPATH%/topicdiffs.gif" alt="topicdiffs.gif"  width="16" height="16"  /> Topic difference
+	* <img src="%ATTACHURLPATH%/topicbacklinks.gif" alt="topicbacklinks.gif"  width="16" height="16"  /> Topic back-links
 	* <img src="%ATTACHURLPATH%/home.gif" alt="home.gif"  width="16" height="16"  /> Home
 	* <img src="%ATTACHURLPATH%/changes.gif" alt="changes.gif"  width="16" height="16"  /> Changes
 	* <img src="%ATTACHURLPATH%/notify.gif" alt="notify.gif"  width="16" height="16"  /> Notify
@@ -56,9 +62,8 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 	* <img src="%ATTACHURLPATH%/dot_udl.gif" alt="dot_udl.gif"  width="16" height="16"  /> Dot graph up-down-left
 	* <img src="%ATTACHURLPATH%/dot_ulr.gif" alt="dot_ulr.gif"  width="16" height="16"  /> Dot graph up-left-right
 
--- Main.PeterThoeny - 17 Jan 2003<br />
--- Main.MikeMannix - 16 May 2002
-
+-- TWiki:Main.PeterThoeny - 11 Jan 2004<br />
+-- TWiki:Main.MikeMannix - 16 May 2002
 %META:FILEATTACHMENT{name="help.gif" attr="" comment="Help" date="1001637645" path="C:\02_TWikiDocs\help.gif" size="130" user="MikeMannix" version="1.1"}%
 %META:FILEATTACHMENT{name="tip.gif" attr="" comment="Tip" date="1007360101" path="C:\02_TWikiDocs\tip.gif" size="123" user="MikeMannix" version="1.2"}%
 %META:FILEATTACHMENT{name="warning.gif" attr="" comment="Warning" date="1001637707" path="C:\02_TWikiDocs\warning.gif" size="138" user="MikeMannix" version="1.1"}%
@@ -107,3 +112,6 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="dot_lrd.gif" attr="" comment="Dot graph left-right-down" date="1069727756" path="dot_lrd.gif" size="108" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="dot_udl.gif" attr="" comment="Dot graph up-down-left" date="1069727770" path="dot_udl.gif" size="109" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="dot_ulr.gif" attr="" comment="Dot graph up-left-right" date="1069727783" path="dot_ulr.gif" size="108" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="arrowdot.gif" attr="" comment="Arrows to red dot" date="1073858315" path="C:\Data\Temp\arrowdot.gif" size="927" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="topicdiffs.gif" attr="" comment="Topic difference" date="1073858341" path="C:\Data\Temp\topicdiffs.gif" size="916" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="topicbacklinks.gif" attr="" comment="Topic back-links" date="1073858382" path="C:\Data\Temp\topicbacklinks.gif" size="933" user="PeterThoeny" version="1.1"}%
