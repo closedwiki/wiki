@@ -51,194 +51,190 @@ Edit handler. Most parameters are in the CGI query:
 
 =cut
 sub edit {
-  my ( $webName, $topic, $userName, $query ) = @_;
+    my ( $webName, $topic, $userName, $query ) = @_;
 
-  my $saveCmd = $query->param( 'cmd' ) || "";
-  my $breakLock = $query->param( 'breaklock' ) || "";
-  my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
-  my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
-  my $formTemplate  = $query->param( "formtemplate" ) || "";
-  my $templateTopic = $query->param( "templatetopic" ) || "";
-  # apptype is undocumented legacy
-  my $cgiAppType = $query->param( 'contenttype' ) || $query->param( 'apptype' ) || "text/html";
-  my $skin = TWiki::getSkin();
-  my $theParent = $query->param( 'topicparent' ) || "";
-  my $ptext = $query->param( 'text' );
+    my $saveCmd = $query->param( 'cmd' ) || "";
+    my $breakLock = $query->param( 'breaklock' ) || "";
+    my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
+    my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
+    my $formTemplate  = $query->param( "formtemplate" ) || "";
+    my $templateTopic = $query->param( "templatetopic" ) || "";
+    # apptype is undocumented legacy
+    my $cgiAppType = $query->param( 'contenttype' ) ||
+      $query->param( 'apptype' ) || "text/html";
+    my $skin = TWiki::getSkin();
+    my $theParent = $query->param( 'topicparent' ) || "";
+    my $ptext = $query->param( 'text' );
 
-  my $getValuesFromFormTopic = ( ( $formTemplate ) && ( ! $ptext ) );
+    my $getValuesFromFormTopic = ( ( $formTemplate ) && ( ! $ptext ) );
 
-  return unless TWiki::UI::webExists( $webName, $topic );
+    return unless TWiki::UI::webExists( $webName, $topic );
 
-  return if TWiki::UI::isMirror( $webName, $topic );
-print STDERR "One\n";
-  my $tmpl = "";
-  my $text = "";
-  my $meta = "";
-  my $extra = "";
-  my $topicExists  = &TWiki::Store::topicExists( $webName, $topic );
+    return if TWiki::UI::isMirror( $webName, $topic );
 
-  # Prevent editing existing topic?
-  if( $onlyNewTopic && $topicExists ) {
-    # Topic exists and user requested oops if it exists
-    TWiki::UI::oops( $webName, $topic, "createnewtopic" );
-    return;
-  }
+    my $tmpl = "";
+    my $text = "";
+    my $meta = "";
+    my $extra = "";
+    my $topicExists  = &TWiki::Store::topicExists( $webName, $topic );
 
-  # prevent non-Wiki names?
-  if( ( $onlyWikiName )
-      && ( ! $topicExists )
-      && ( ! TWiki::isValidTopicName( $topic ) ) ) {
-    # do not allow non-wikinames, redirect to view topic
-    TWiki::UI::redirect( TWiki::getViewUrl( $webName, $topic ) );
-    return;
-  }
+    # Prevent editing existing topic?
+    if( $onlyNewTopic && $topicExists ) {
+        # Topic exists and user requested oops if it exists
+        TWiki::UI::oops( $webName, $topic, "createnewtopic" );
+        return;
+    }
 
-  # Read topic 
-  if( $topicExists ) {
-    ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
-  }
+    # prevent non-Wiki names?
+    if( ( $onlyWikiName )
+        && ( ! $topicExists )
+        && ( ! TWiki::isValidTopicName( $topic ) ) ) {
+        # do not allow non-wikinames, redirect to view topic
+        TWiki::UI::redirect( TWiki::getViewUrl( $webName, $topic ) );
+        return;
+    }
 
-  my $wikiUserName = &TWiki::User::userToWikiName( $userName );
-  return unless TWiki::UI::isAccessPermitted( $webName, $topic,
+    # Read topic 
+    if( $topicExists ) {
+        ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+    }
+
+    my $wikiUserName = &TWiki::User::userToWikiName( $userName );
+    return unless TWiki::UI::isAccessPermitted( $webName, $topic,
                                             "change", $wikiUserName );
 
-  # Special save command
-  return if( $saveCmd && ! TWiki::UI::userIsAdmin( $webName, $topic, $wikiUserName ));
+    # Special save command
+    return if( $saveCmd && ! TWiki::UI::userIsAdmin( $webName, $topic, $wikiUserName ));
 
-  # Check for locks
-  my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $webName, $topic );
-  if( ( ! $breakLock ) && ( $lockUser ) ) {
-    # warn user that other person is editing this topic
-    $lockUser = &TWiki::User::userToWikiName( $lockUser );
-    use integer;
-    $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
-    my $editLock = $TWiki::editLockTime / 60;
-    TWiki::UI::oops( $webName, $topic, "locked",
-                     $lockUser, $editLock, $lockTime );
-    return;
-  }
-  TWiki::Store::lockTopic( $webName, $topic );
-
-  my $templateWeb = $webName;
-
-print STDERR "Two\n";
-  # Get edit template, standard or a different skin
-  $tmpl = &TWiki::Templates::readTemplate( "edit", $skin );
-  unless( $topicExists ) {
-    if( $templateTopic ) {
-      if( $templateTopic =~ /^(.+)\.(.+)$/ ) {
-        # is "Webname.SomeTopic"
-        $templateWeb   = $1;
-        $templateTopic = $2;
-      }
-
-      ( $meta, $text ) = TWiki::Templates::readTopic( $templateWeb, $templateTopic );
+    # Check for locks
+    my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $webName, $topic );
+    if( ( ! $breakLock ) && ( $lockUser ) ) {
+        # warn user that other person is editing this topic
+        $lockUser = &TWiki::User::userToWikiName( $lockUser );
+        use integer;
+        $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
+        my $editLock = $TWiki::editLockTime / 60;
+        TWiki::UI::oops( $webName, $topic, "locked",
+                         $lockUser, $editLock, $lockTime );
+        return;
     }
-    unless( $text ) {
-      ( $meta, $text ) = TWiki::UI::readTemplateTopic( "WebTopicEditTemplate" );
+    TWiki::Store::lockTopic( $webName, $topic );
+
+    my $templateWeb = $webName;
+
+    # Get edit template, standard or a different skin
+    $tmpl = &TWiki::Templates::readTemplate( "edit", $skin );
+    unless( $topicExists ) {
+        if( $templateTopic ) {
+            if( $templateTopic =~ /^(.+)\.(.+)$/ ) {
+                # is "Webname.SomeTopic"
+                $templateWeb   = $1;
+                $templateTopic = $2;
+            }
+
+            ( $meta, $text ) = TWiki::Templates::readTopic( $templateWeb, $templateTopic );
+        }
+        unless( $text ) {
+            ( $meta, $text ) = TWiki::UI::readTemplateTopic( "WebTopicEditTemplate" );
+        }
+        $extra = "(not exist)";
+
+        # If present, instantiate form
+        if( ! $formTemplate ) {
+            my %args = $meta->findOne( "FORM" );
+            $formTemplate = $args{"name"};
+        }
+
+        $text = TWiki::expandVariablesOnTopicCreation( $text, $userName );
     }
-    $extra = "(not exist)";
 
-    # If present, instantiate form
-    if( ! $formTemplate ) {
-      my %args = $meta->findOne( "FORM" );
-      $formTemplate = $args{"name"};
+    # parent setting
+    if( $theParent eq "none" ) {
+        $meta->remove( "TOPICPARENT" );
+    } elsif( $theParent ) {
+        if( $theParent =~ /^([^.]+)\.([^.]+)$/ ) {
+            my $parentWeb = $1;
+            if( $1 eq $webName ) {
+                $theParent = $2;
+            }
+        }
+        $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+    }
+    $tmpl =~ s/%TOPICPARENT%/$theParent/;
+
+    # Processing of formtemplate - comes directly from query parameter formtemplate , 
+    # or indirectly from webtopictemplate parameter.
+    my $oldargsr;
+    if( $formTemplate ) {
+        my @args = ( name => $formTemplate );
+        $meta->remove( "FORM" );
+        if( $formTemplate ne "none" ) {
+            $meta->put( "FORM", @args );
+        } else {
+            $meta->remove( "FORM" );
+        }
+        $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
+        if( defined $ptext ) {
+            $text = $ptext;
+            $text = &TWiki::Render::decodeSpecialChars( $text );
+        }
     }
 
-    $text = TWiki::expandVariablesOnTopicCreation( $text, $userName );
-  }
-
-  # parent setting
-  if( $theParent eq "none" ) {
-    $meta->remove( "TOPICPARENT" );
-  } elsif( $theParent ) {
-    if( $theParent =~ /^([^.]+)\.([^.]+)$/ ) {
-      my $parentWeb = $1;
-      if( $1 eq $webName ) {
-        $theParent = $2;
-      }
+    if( $saveCmd eq "repRev" ) {
+        $text = TWiki::Store::readTopicRaw( $webName, $topic );
     }
-    $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
-  }
-  $tmpl =~ s/%TOPICPARENT%/$theParent/;
 
-  # Processing of formtemplate - comes directly from query parameter formtemplate , 
-  # or indirectly from webtopictemplate parameter.
-  my $oldargsr;
-  if( $formTemplate ) {
-    my @args = ( name => $formTemplate );
-    $meta->remove( "FORM" );
-    if( $formTemplate ne "none" ) {
-      $meta->put( "FORM", @args );
+    $text =~ s/&/&amp\;/go;
+    $text =~ s/</&lt\;/go;
+    $text =~ s/>/&gt\;/go;
+    $text =~ s/\t/   /go;
+
+    TWiki::Plugins::beforeEditHandler( $text, $topic, $webName ) unless( $saveCmd eq "repRev" );
+
+    if( $TWiki::doLogTopicEdit ) {
+        # write log entry
+        TWiki::writeLog( "edit", "$webName.$topic", $extra );
+    }
+
+    if( $saveCmd ) {
+        $tmpl =~ s/\(edit\)/\(edit cmd=$saveCmd\)/go;
+    }
+    $tmpl =~ s/%CMD%/$saveCmd/go;
+    $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+    $tmpl = &TWiki::Render::renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd eq "repRev" );
+    $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
+
+    # Don't want to render form fields, so this after getRenderedVersion
+    my %formMeta = $meta->findOne( "FORM" );
+    my $form = "";
+    $form = $formMeta{"name"} if( %formMeta );
+    if( $form && $saveCmd ne "repRev" ) {
+        my @fieldDefs = &TWiki::Form::getFormDef( $templateWeb, $form );
+
+        if( ! @fieldDefs ) {
+            TWiki::UI::oops( $webName, $topic, "noformdef" );
+            return;
+        }
+        my $formText = &TWiki::Form::renderForEdit( $webName, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldDefs );
+        $tmpl =~ s/%FORMFIELDS%/$formText/go;
+    } elsif( $saveCmd ne "repRev" && TWiki::Prefs::getPreferencesValue( "WEBFORMS", $webName )) {
+        # follows a hybrid html monster to let the 'choose form button' align at
+        # the right of the page in all browsers
+        $form = '<div style="text-align:right;"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder"><tr><td align="right">'
+          . &TWiki::Form::chooseFormButton( "Add form" )
+            . '</td></tr></table></div>';
+        $tmpl =~ s/%FORMFIELDS%/$form/go;
     } else {
-      $meta->remove( "FORM" );
+        $tmpl =~ s/%FORMFIELDS%//go;
     }
-    $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
-    if( defined $ptext ) {
-      $text = $ptext;
-      $text = &TWiki::Render::decodeSpecialChars( $text );
-    }
-  }
 
-print STDERR "Three\n";
-  if( $saveCmd eq "repRev" ) {
-    $text = TWiki::Store::readTopicRaw( $webName, $topic );
-  }
+    $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
+    $tmpl =~ s/%TEXT%/$text/go;
+    $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
-  $text =~ s/&/&amp\;/go;
-  $text =~ s/</&lt\;/go;
-  $text =~ s/>/&gt\;/go;
-  $text =~ s/\t/   /go;
+    TWiki::writeHeaderFull ( $query, 'edit', $cgiAppType, length($tmpl) );
 
-  #AS added hook for plugins that want to do heavy stuff
-  TWiki::Plugins::beforeEditHandler( $text, $topic, $webName ) unless( $saveCmd eq "repRev" );
-  #/AS
-
-  if( $TWiki::doLogTopicEdit ) {
-    # write log entry
-    TWiki::writeLog( "edit", "$webName.$topic", $extra );
-  }
-
-  if( $saveCmd ) {
-    $tmpl =~ s/\(edit\)/\(edit cmd=$saveCmd\)/go;
-  }
-  $tmpl =~ s/%CMD%/$saveCmd/go;
-  $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-  $tmpl = &TWiki::Render::renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd eq "repRev" );
-  $tmpl = &TWiki::Render::getRenderedVersion( $tmpl );
-
-  # Don't want to render form fields, so this after getRenderedVersion
-  my %formMeta = $meta->findOne( "FORM" );
-  my $form = "";
-  $form = $formMeta{"name"} if( %formMeta );
-  if( $form && $saveCmd ne "repRev" ) {
-    my @fieldDefs = &TWiki::Form::getFormDef( $templateWeb, $form );
-
-    if( ! @fieldDefs ) {
-      TWiki::UI::oops( $webName, $topic, "noformdef" );
-      return;
-    }
-    my $formText = &TWiki::Form::renderForEdit( $webName, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldDefs );
-    $tmpl =~ s/%FORMFIELDS%/$formText/go;
-  } elsif( $saveCmd ne "repRev" && TWiki::Prefs::getPreferencesValue( "WEBFORMS", $webName )) {
-	# follows a hybrid html monster to let the 'choose form button' align at
-	# the right of the page in all browsers
-    $form = '<div style="text-align:right;"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder"><tr><td align="right">'
-      . &TWiki::Form::chooseFormButton( "Add form" )
-        . '</td></tr></table></div>';
-    $tmpl =~ s/%FORMFIELDS%/$form/go;
-  } else {
-    $tmpl =~ s/%FORMFIELDS%//go;
-  }
-
-print STDERR "Four\n";
-  $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
-  $tmpl =~ s/%TEXT%/$text/go;
-  $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-
-  TWiki::writeHeaderFull ( $query, 'edit', $cgiAppType, length($tmpl) );
-
-  print $tmpl;
+    print $tmpl;
 }
 
 1;
