@@ -307,7 +307,7 @@ The =tasknotify= script should be invoked by a cron job (or equivalent). Note th
 #SettingsAnchor
 ---++ <nop>%TOPIC% Settings
 Set to 1 to enable internal consistency checks and other debug states.
-	* Set DEBUG = 1
+	* Set DEBUG = 0
 Set to 0 if you do not want to use the =Storable= module even if it is installed. The plugin is _much_ faster if =Storable= is installed and enabled.
 	* Set STORABLE = 1
 The remaining settings are defined on a per-web basis.
@@ -361,7 +361,8 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	| ==lib/TWiki/Plugins/FormQueryPlugin.pm== | Main plugin script |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/Arithmetic.pm== | Arithmetic interpreter |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/Archive.pm== | Archiver used if Storable is not available |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/Array.pm== | Array class|
+	| ==lib/TWiki/Plugins/FormQueryPlugin/Array.pm== | Array class |
+	| ==lib/TWiki/Plugins/FormQueryPlugin/FileTime.pm== | Cache support |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/Map.pm== | Map class |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/Search.pm== | Search class |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/ColourMap.pm== | Highlight map class |
@@ -370,7 +371,9 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	| ==lib/TWiki/Plugins/FormQueryPlugin/Relation.pm== | Topic relation class |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/ReqDBSupport.pm== | Extra features |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/WebDB.pm== | Subclass of Map for a whole web |
+	| ==lib/TWiki/Plugins/FormQueryPlugin/test/ArchiveTest.pm== | Test::Unit module |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/test/ArrayTest.pm== | Test::Unit module |
+	| ==lib/TWiki/Plugins/FormQueryPlugin/test/FileTimeTest.pm== | Test::Unit module |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/test/FuncFixture.pm== | Test::Unit module |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/test/TableDefTest.pm== | Test::Unit module |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/test/testDB.dat== | Test data |
