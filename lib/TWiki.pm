@@ -1518,8 +1518,10 @@ sub formatTime  {
     $value =~ s/\$minu?t?e?s?/sprintf("%.2u",$min)/geoi;
     $value =~ s/\$hour?s?/sprintf("%.2u",$hour)/geoi;
     $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
-    $value =~ s/\$wday/(WEEKDAY)[$wday]/geoi;
-    $value =~ s/\$mont?h?/(ISOMONTH)[$mon]/goi;
+    my $tmp = (WEEKDAY)[$wday];
+    $value =~ s/\$wday/$tmp/geoi;
+    $tmp = (ISOMONTH)[$mon];
+    $value =~ s/\$mont?h?/$tmp/goi;
     $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
     $value =~ s/\$year?/sprintf("%.4u",$year+1900)/geoi;
     $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;

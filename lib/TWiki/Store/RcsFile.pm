@@ -675,7 +675,7 @@ sub _mktemp {
    return($template);
 }
 
-use constant {
+use constant MON2NUM => {
     Jan => 0,
     Feb => 1,
     Mar => 2,
@@ -710,7 +710,7 @@ sub revDate2EpSecs
         my $year = $3;
         $year -= 1900 if( $year > 1900 );
         # The ($2) will look up the constant so named
-        return timegm( 0, $5, $4, $1, ($2), $year );
+        return timegm( 0, $5, $4, $1, MON2NUM->{$2}, $year );
     }
 
     # try "2001/12/31 23:59:59" or "2001.12.31.23.59.59" (RCS date)
