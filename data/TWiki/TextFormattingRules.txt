@@ -253,21 +253,29 @@ __Note:__ Terms with spaces are not supported. In case you do have a term with m
 <td valign="top">
  *Table:* <br>
  Optional spaces followed by the cells enclosed in vertical bars. <br>
-__Note:__ In case you have a long row and you want it to be more readable when you edit the table you can split the row into lines that end with a ='\'= backslash character.
+__Note:__ =| <nop>*bold*<nop> |= cells are rendered as table headers. <br>
+__Note:__ =|	spaced	|= cells are rendered center aligned. <br>
+__Note:__ =|	  spaced |= cells are rendered right aligned. <br>
+__Note:__ =| 2 colspan ||= cells are rendered as multi-span columns. <br>
+__Note:__ In case you have a long row and you want it to be more readable when you edit the table you can split the row into lines that end with a ='\'= backslash character. <br>
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
-| A1 | B1 | C1 |
-| A2 | B2 | C2 |
-| A3 \<nop>
+| *L* | *C* | *R* |
+| A2 |  2  |  2 |
+| A3 |  3  |  3 |
+| multi span |||
+| A4 \<nop>
   | next \<nop>
   | next |
 </pre>
 </font></span>
 </td><td valign="top">
-| A1 | B1 | C1 |
-| A2 | B2 | C2 |
-| A3 \
+| *L* | *C* | *R* |
+| A2 |  2  |  2 |
+| A3 |  3  |  3 |
+| multi span |||
+| A4 \
   | next \
   | next |
 </td>
