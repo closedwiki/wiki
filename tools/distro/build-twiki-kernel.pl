@@ -236,7 +236,7 @@ build-twiki-kernel.pl - Codev.TWikiKernel
 
 build-twiki-kernel.pl [options] [-tempdir] [-outputdir] [-outfile] [-agent]
 
-Copyright 2004 Will Norris and Sven Dowideit.  All Rights Reserved.
+Copyright 2004, 2005 Will Norris and Sven Dowideit.  All Rights Reserved.
 
  Options:
    -tempdir [.]		where all temporary files for this build are placed
@@ -244,6 +244,7 @@ Copyright 2004 Will Norris and Sven Dowideit.  All Rights Reserved.
    -outfile		.
    -agent [$Config->{agent}]	LWP::UserAgent name (used for downloading some documentation from wiki pages on twiki.org)
    -pdoc		run source code through Pdoc to produce html in twiki/doc/ (autodetects if Pdoc installed)
+   -gendocs		run source code through the TWiki:Plugins.PerlPodPlugin 
    -verbose
    -debug
    -help			this documentation
