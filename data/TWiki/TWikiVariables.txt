@@ -75,6 +75,12 @@
   <td> =%<nop>INCLUDE{"SomeTopic"}%= </td>
   <td> Server side include, includes another topic. The current Wiki web is searched by default. Example: =<b>%<nop>INCLUDE{"%TWIKIWEB%.TWikiWebsTable"}%</b>= </td>
 </tr><tr>
+  <td> =%<nop>STARTINCLUDE%= </td>
+  <td> If present in included topic, start to include text from this location up to the end, or up to the location of the =%<nop>STOPINCLUDE%= variable. A normal view of the topic shows everyting exept the =%<nop>STARTINCLUDE%= variable itself. </td>
+</tr><tr>
+  <td> =%<nop>STOPINCLUDE%= </td>
+  <td> If present in included topic, stop to include text at this location and ignore the remaining text. A normal view of the topic shows everyting exept the =%<nop>STOPINCLUDE%= variable itself. </td>
+</tr><tr>
   <td> =%<nop>SEARCH{"str" ...}%= </td>
   <td> Inline search, shows a search result embedded in a topic. Parameter is composed of the search string, followed by optional =name="value"= pairs:
 | *Pair:* | *Description:* | *Default:* |
