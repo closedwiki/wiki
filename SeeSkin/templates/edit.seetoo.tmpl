@@ -37,9 +37,7 @@ function launchWindow( theWeb, theTopic ) {
 </head>
 <body bgcolor="%WEBBGCOLOR%" onLoad="initForm()">
 #PageTop
-	<div id="topsection">	
-		<div id="header">%TMPL:P{"standardheader"}%</div>
-	</div> <!-- end topsection -->
+<div id="topsection">%TMPL:P{"plainheader"}%</div>
 <div id="midsection">
 <form name="main" action="%SCRIPTURLPATH%/savemulti%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post" id="editcont">
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
@@ -58,6 +56,14 @@ This is your signature for easy copy &amp; paste operation
 </form>
 %TMPL:P{"help"}%
 </div> <!-- end midsection -->
+<!-- begin "not in any section" -->
+<div id="menu">
+	<hr>	
+	<a name="Menu"></a><h4>Menu</h4>
+	<ul>
+		%TMPL:P{"sep"}% <em>%TMPL:P{"titleaction"}%</em> <!-- %TMPL:P{"topicaction"}% -->
+	</ul> 
+</div><!-- end menu -->
 <div id="bottsection">
 	<hr>
 	%WEBCOPYRIGHT%
@@ -65,7 +71,7 @@ This is your signature for easy copy &amp; paste operation
 #PageBottom
 </body>
 </html>
-%TMPL:DEF{"titleaction"}%(edit)%TMPL:END%
+%TMPL:DEF{"titleaction"}%(editing)%TMPL:END%
 %TMPL:DEF{"titlehelp"}% %TMPL:END%
 %TMPL:DEF{"topicaction"}%
 <fieldset><legend><span class="deem"> [[Plugins.SeeSkinAccessKeys][AccessKeys]]: S = Save, Q = Quiet Save, K = Checkpoint, P = Preview, C = Cancel</span></legend>

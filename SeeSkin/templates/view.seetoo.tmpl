@@ -6,7 +6,7 @@
 </head>
 <body bgcolor="%WEBBGCOLOR%">
 #PageTop
-<div id="topsection">%TMPL:P{"masthead"}%</div>
+<div id="topsection">%TMPL:P{"standardheader"}%</div>
 <div class="skiplink">Skip to:
 [<a href="#Menu">Menu</a>]
 [<a href="#Navigate">Navigation</a>]
@@ -28,11 +28,6 @@
 			<ul>
 				<li>%WEBTOPICLIST%
 			</ul>
-		<!-- <span class="deem">Experimental: <br />
-		<ul>
-			<li><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=tg&contenttype=application/x-touchgraph-launch" title="An experimemtal method of viewing topic relationships">Graph</a>
-		</span>
-		</ul> -->
 		</form>
 		<div id="zones">
 			<hr>
@@ -66,4 +61,4 @@
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D" accesskey="r" title="Which pages link to this one?"><u>R</u>ef-By</a>
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print%REVARG%" accesskey="p" title="a barebones version of this page more suitable for printing"><u>P</u>rintable</a>
   %TMPL:P{"sep"}% <div id="diffs"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%" accesskey="s" title="View previous versions of this page">Hi<u>s</u>tory</a> <ul>{ %REVISIONS% }</ul></div>
-  <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" accesskey="m" title="advanced actions: rename/move, parentage, compare revisions, etc." id="editmore"><u>M</u>ore...</a>%TMPL:END%
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" accesskey="m" title="advanced actions: rename/move, parentage, compare revisions, etc." id="editmore"><u>M</u>ore...</a>%TMPL:END%
