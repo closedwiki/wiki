@@ -120,7 +120,7 @@ sub run_dump {
  my $self = shift;
  use Data::Dump;
 
-# print Data::Dump::dump($self) . "\n";
+ print Data::Dump::dump($self) . "\n";
 }
 
 sub run_inc {
@@ -304,7 +304,17 @@ sub do_action {
  }
 }
 
-sub prompt_str { "TWiki> " }
+sub prompt_str {
+ my $self = shift;
+ my $cmd = $self->{subcommand} || "";
+ return "TWiki ". $cmd." >";
+}
+
+sub run_help {
+    my $self = shift;
+    $self->SUPER::run_help(@_);
+    
+}
 
 sub catch_smry {
  my ( $self, $command ) = @_;
