@@ -62,7 +62,7 @@ use vars qw(
             $doLogTopicChanges $doLogTopicSearch $doLogRegistration
             $superAdminGroup $doSuperAdminGroup $OS
             $disableAllPlugins $attachAsciiPath $displayTimeValues
-            $dispScriptUrlPath $dispViewPath
+            $dispScriptUrlPath
             $useLocale
             $rcsDir $rcsArg $nullDev $endRcsCmd $storeTopicImpl $keywordMode
             @storeSettings
@@ -294,7 +294,7 @@ sub _setupHandlerMaps {
        STOPINCLUDE     => "",
        TWIKIWEB        => $twikiWebname,
        WEBPREFSTOPIC   => $webPrefsTopicname,
-       WIKIHOMEURL     => "$defaultUrlHost/$scriptUrlPath$dispViewPath",
+       WIKIHOMEURL     => "$defaultUrlHost/$scriptUrlPath/view$scriptSuffix",
        WIKIPREFSTOPIC  => $wikiPrefsTopicname,
        WIKITOOLNAME    => $wikiToolName,
        WIKIUSERSTOPIC  => $wikiUsersTopicname,
@@ -855,6 +855,7 @@ sub getSkin {
 ---++ getViewUrl (  $web, $topic  )
 
 Returns a fully-qualified URL to the specified topic.
+#SMELL - how is this diferent from getScriptUrl ?
 
 =cut
 
@@ -864,7 +865,7 @@ sub getViewUrl {
 
     $theTopic =~ s/\s*//gs; # Illegal URL, remove space
 
-    return $this->{urlHost}."$dispScriptUrlPath$dispViewPath$scriptSuffix/$theWeb/$theTopic";
+    return $this->{urlHost}."$dispScriptUrlPath/view$scriptSuffix/$theWeb/$theTopic";
 }
 
 =pod
@@ -1628,7 +1629,7 @@ sub _TOC {
             my $urlPath = "";
             if( "$web.$topicname" ne "$defaultWeb.$defaultTopic" ) {
                 # not current topic, can't omit URL
-                $urlPath = "$TWiki::dispScriptUrlPath$TWiki::dispViewPath$TWiki::scriptSuffix/$webPath/$topicname";
+                $urlPath = TWiki::getScriptUrl($webPath, $topicname);
             }
             if( ( $line ) && ( $level <= $depth ) ) {
                 $anchor = $this->{renderer}->makeAnchorName( $line );
@@ -2354,7 +2355,6 @@ sub new {
 	} else {
         $this->{users} = new TWiki::User( $this, "NoPasswdUser" );
 	}
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{users};
 
     # Make %ENV safer, preventing hijack of the search path
     if( $safeEnvPath ) {

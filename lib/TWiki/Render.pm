@@ -163,7 +163,7 @@ sub _renderMoved {
         my $putBack = "";
         if( $web eq $toWeb && $topic eq $toTopic ) {
             $putBack  = " - <a title=\"Click to move topic back to previous location, with option to change references.\"";
-            $putBack .= " href=\"$TWiki::dispScriptUrlPath/rename$TWiki::scriptSuffix/$web/$topic?newweb=$fromWeb&newtopic=$fromTopic&";
+            $putBack .= " href=\"".TWiki::getScriptUrl($web, $topic, 'rename')."?newweb=$fromWeb&newtopic=$fromTopic&";
             $putBack .= "confirm=on\">put it back</a>";
         }
         $text = "<i><nop>$to moved from <nop>$from on $date by $by </i>$putBack";
@@ -515,14 +515,14 @@ sub internalLink {
     if( $exist) {
         if( $theAnchor ) {
             my $anchor = $this->makeAnchorName( $theAnchor );
-            $text .= "<a class=\"twikiAnchorLink\" href=\"$TWiki::dispScriptUrlPath$TWiki::dispViewPath"
-		  .  "$TWiki::scriptSuffix/$theWeb/$theTopic\#$anchor\""
+            $text .= "<a class=\"twikiAnchorLink\" href=\"".
+				TWiki::getScriptUrl($theWeb, $theTopic, 'view')."\#$anchor\""
                   .  $this->_linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText</a>";
             return $text;
         } else {
-            $text .= "<a class=\"twikiLink\" href=\"$TWiki::dispScriptUrlPath$TWiki::dispViewPath"
-		  .  "$TWiki::scriptSuffix/$theWeb/$theTopic\""
+            $text .= "<a class=\"twikiLink\" href=\"".
+				TWiki::getScriptUrl($theWeb, $theTopic, 'view') ."\""
                   .  $this->_linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText</a>";
             return $text;
@@ -531,7 +531,8 @@ sub internalLink {
     } elsif( $doLink ) {
         $text .= "<span class=\"twikiNewLink\" style='background : $this->{NEWTOPICBGCOLOR};'>"
               .  "<font color=\"$this->{NEWTOPICFONTCOLOR}\">$theLinkText</font>"
-              .  "<a href=\"$TWiki::dispScriptUrlPath/edit$TWiki::scriptSuffix/$theWeb/$theTopic?topicparent="
+              .  "<a href=\"".
+				TWiki::getScriptUrl($theWeb, $theTopic, 'edit')."?topicparent="
                 .$this->{session}->{webName}.".".$this->{session}->{topicName}."\">$this->{NEWLINKSYMBOL}</a></span>";
         return $text;
 
