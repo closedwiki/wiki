@@ -38,18 +38,18 @@ sub initPlugin {
  ( $topic, $web, $user, $installWeb ) = @_;
 
  # check for Plugins.pm versions
- if ( $TWiki::Plugins::VERSION < 1.021 ) {
+ if ( $TWiki::Plugins::VERSION < 1.001 ) {
   TWiki::Func::writeWarning(
    "Version mismatch between $pluginName and Plugins.pm");
   return 0;
  }
 
  # Get plugin debug flag
- $debug = TWiki::Func::getPluginPreferencesFlag("DEBUG");
+# $debug = TWiki::Func::getPluginPreferencesFlag("DEBUG");
 
  # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
- $phpAdsNewBase = TWiki::Func::getPluginPreferencesValue("ADVERTSCRIPTBASE")
-   || "http://testwiki.mrjc.com/phpAdsNew-2.0/";
+# $phpAdsNewBase = TWiki::Func::getPluginPreferencesValue("ADVERTSCRIPTBASE")
+#   || "http://testwiki.mrjc.com/phpAdsNew-2.0/";
 
  # Plugin correctly initialized
  TWiki::Func::writeDebug(
@@ -68,8 +68,11 @@ sub commonTagsHandler {
  # This is the place to define customized tags and variables
  # Called by sub handleCommonTags, after %INCLUDE:"..."%
 
- # do custom extension rule, like for example:
- $_[0] =~ s/%ADVERT%/&handleAdvert()/ge;
+ $_[0] =~ s/%ADVERT%/&handleAdvertRIJS()/ge;
+ $_[0] =~ s/%ADVERT{(.*)}%/&handleAdvertRIJS($1)/ge;
+
+ $_[0] =~ s/%ADVERTRIJS%/&handleAdvertRIJS()/ge;
+ $_[0] =~ s/%ADVERTRIJS{(.*)}%/&handleAdvertRIJS($1)/ge;
 
  # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
 }
@@ -77,6 +80,11 @@ sub commonTagsHandler {
 # =========================
 
 =pod
+
+---+++ getTemplateAdvertRemoteInvocationJavaScript
+
+This produces the code for phpAdsNew "Remote Invocation JavaScript" method
+
 <script language='JavaScript' type='text/javascript'>
 <!--
    if (!document.phpAds_used) document.phpAds_used = ',';
@@ -92,35 +100,56 @@ sub commonTagsHandler {
 //-->
 </script><noscript><a href='http://testwiki.mrjc.com/phpAdsNew-2.0/adclick.php?n=ad13c123' target='_blank'><img src='http://testwiki.mrjc.com/phpAdsNew-2.0/adview.php?what=Foobar&amp;clientid=2&amp;n=ad13c123' border='0' alt=''></a></noscript>
 
+and (http://twiki.org/cgi-bin/view/Codev/JavaScriptInterferedWithByTWiki)
+
+<script type="text/javascript">
+<!-- Hide JavaScript and <pre> escape TWiki rendering
+... your JavaScript goes here...
+// Stop hiding and stop </pre> escaping TWiki rendering -->
+</script>
+
+Causes an entry such as this in access.log:
+
+65.94.104.160 - - [29/Aug/2004:18:39:14 -0700] "GET /phpAdsNew-2.0/adjs.php?n=239035524&bannerid:1&exclude=, HTTP/1.1" 200 928 "http://cairotwiki.mrjc.com/ad.html" "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.0.3705)"
+
+
+which then causes this:
+
+65.94.104.160 - - [29/Aug/2004:18:39:14 -0700] "GET /phpAdsNew-2.0/adlog.php?bannerid=1&clientid=2&zoneid=0&source=&block=0&capping=0&cb=092590b19368e17feb905f0b445970fe HTTP/1.1" 200 387 "http://cairotwiki.mrjc.com/ad.html" "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.0.3705)"
+
+
+
 =cut
 
-sub handleAdvert {
- my $ans = getTemplateAdvert();
- $what          = "Foobar&amp;clientid=2";
- $random        = "ad13c123";
- $serverUrlBase = "http://testwiki.mrjc.com/phpAdsNew-2.0/";
-
- $ans =~ s/%WHAT%/$what/g;
- $ans =~ s/%RANDOM%/$random/g;
- $ans =~ s/%SERVERURLBASE%/$serverUrlBase/g;
-
+sub handleAdvertRIJS {
+    my ($param) = @_;
+    my $ans = getTemplateAdvertRemoteInvocationJavaScript();
+    $what          = $param || "";
+    $random        = "ad13xc123";
+    $serverUrlBase = "http://testwiki.mrjc.com/phpAdsNew-2.0";
+    
+    $ans =~ s/%WHAT%/$what/g;
+    $ans =~ s/%RANDOM%/$random/g;
+    $ans =~ s/%SERVERURLBASE%/$serverUrlBase/g;
+    
+    return $ans;
 }
 
-sub getTemplateAdvert {
+sub getTemplateAdvertRemoteInvocationJavaScript {
  my $ans = <<EOM;
 <script language='JavaScript' type='text/javascript'>
-<!--
+<!-- Hide JavaScript and <pre> escape TWiki rendering
    if (!document.phpAds_used) document.phpAds_used = ',';
    phpAds_random = new String (Math.random()); phpAds_random = phpAds_random.substring(2,11);
    
    document.write ("<" + "script language='JavaScript' type='text/javascript' src='");
-   document.write ("%SERVERURLBASE/adjs.php%n=" + phpAds_random);
+   document.write ("%SERVERURLBASE%/adjs.php?n=" + phpAds_random);
    document.write ("&amp;what=%WHAT%");
    document.write ("&amp;exclude=" + document.phpAds_used);
    if (document.referer)
       document.write ("&amp;referer=" + escape(document.referer));
    document.write ("'><" + "/script>");
-//-->
+// Stop hiding and stop </pre> escaping TWiki rendering -->
 </script><noscript><a href='%SERVERURLBASE%?n=%RANDOM%' target='_blank'><img src='%SERVERURLDIR%/adview.php?what=%WHAT%;%RANDOM%' border='0' alt=''></a></noscript>
    
 EOM
