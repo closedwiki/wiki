@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="PeterThoeny" date="995355832" format="1.0beta2" version="1.6"}%
 *%WIKITOOLNAME%.%WEB% Web Preferences*
 
 The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
@@ -7,13 +8,14 @@ __Preferences:__
 
 	* List of topics of the %WIKITOOLNAME%.%WEB% web:
 		* Set WEBTOPICLIST = %WEB% . {
-				<a href="%HOMETOPIC%">Home</a>
-			 | <a href="%WIKIUSERSTOPIC%">Users</a>
-			 | <a href="OfficeLocations">Offices</a>
-			 | <a href="WebChanges">Changes</a>
-			 | <a href="WebIndex">Index</a>
-			 | <a href="WebSearch">Search</a>
-			 | Go <input type="text" name="topic" size="16">
+				[[%HOMETOPIC%][Home]]
+			 | [[%WIKIUSERSTOPIC%][Users]]
+			 | [[TWikiGroups][Groups]]
+			 | [[OfficeLocations][Offices]]
+			 | [[WebChanges][Changes]]
+			 | [[WebIndex][Index]]
+			 | [[WebSearch][Search]]
+			 | Go <input type="text" name="topic" size="16" />
 		  }
 
 	* Web specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors)
@@ -33,7 +35,7 @@ __Preferences:__
 		* Set FINALPREFERENCES = WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE
 
 __Notes:__
-	* A preference is defined as: <br> =6 spaces * Set NAME = value= <br> Example:
+	* A preference is defined as: <br /> =6 spaces * Set NAME = value= <br /> Example:
 		* S<nop>et WEBBGCOLOR = #FFFFC0
 	* Preferences are used as %TWIKIWEB%.TWikiVariables by enclosing the name in percent signs. Example:
 		* When you write variable =%WEB<nop>BGCOLOR%= , it gets expanded to =%WEBBGCOLOR%= .
@@ -43,5 +45,5 @@ __Notes:__
 __Related Topics:__
 	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences.
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
-	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%= .
+	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
 	* %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
