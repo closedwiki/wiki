@@ -232,8 +232,8 @@ sub getCgiQuery
 ---+++ writeHeader( $query, $contentLength )
 
 | Description:        | Prints a basic content-type HTML header for text/html to standard out |
-| Parameter: =$query= | CGI query object |
-  | Parameter: =$contentLength= | Length of content |
+| Parameter: =$query= | CGI query object. If not given, the default CGI query will be used. In most cases you should _not_ pass this parameter. |
+| Parameter: =$contentLength= | Length of content |
 | Return:             | none |
 | Since:              | TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
@@ -241,8 +241,8 @@ sub getCgiQuery
 # -------------------------
 sub writeHeader
 {
-#   my( $theQuery ) = @_;
-    return $TWiki::Plugins::SESSION->writeHeader( @_ );
+    my( $theQuery ) = @_;
+    return $TWiki::Plugins::SESSION->writePageHeader( $theQuery );
 }
 
 # =========================
@@ -251,7 +251,7 @@ sub writeHeader
 ---+++ redirectCgiQuery( $query, $url )
 
 | Description:        | Redirect to URL |
-| Parameter: =$query= | CGI query object |
+| Parameter: =$query= | CGI query object. Ignored, only there for compatibility. The session CGI query object is used instead. |
 | Parameter: =$url=   | URL to redirect to |
 | Return:             | none, never returns |
 | Since:              | TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
@@ -261,7 +261,7 @@ sub writeHeader
 sub redirectCgiQuery
 {
     my( $theQuery, $theUrl ) = @_;
-    return $TWiki::Plugins::SESSION->redirect( @_ );
+    return $TWiki::Plugins::SESSION->redirect( $theUrl );
 }
 
 # =========================

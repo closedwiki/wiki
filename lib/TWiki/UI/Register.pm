@@ -228,7 +228,7 @@ sub bulkRegister {
 
     my $err = $session->{store}->saveTopic($web, $logTopic, $log, $meta, "",  1 );
 
-    $session->redirect($query, $session->getViewUrl($web, $logTopic));
+    $session->redirect($session->getViewUrl($web, $logTopic));
 }
 
 =pod

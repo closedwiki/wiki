@@ -53,13 +53,11 @@ duties.
 
 sub save {
     my $session = shift;
-    my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
 
     if ( _save( $session )) {
-        $session->redirect( $query,
-                            $session->getViewUrl( $session->normalizeWebTopicName($webName, $topic)) );
+        $session->redirect( $session->getViewUrl( $session->normalizeWebTopicName($webName, $topic)) );
     }
 }
 
@@ -112,7 +110,7 @@ sub _save {
         && ( ! TWiki::isValidTopicName( $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         # SMELL: this should be an oops, shouldn't it?
-        TWiki::UI::redirect( $session, $session->getViewUrl( $webName, $topic ) );
+        $session->redirect( $session->getViewUrl( $webName, $topic ) );
         return 0;
     }
 
@@ -132,7 +130,7 @@ sub _save {
     }
 
     if( $changeform ) {
-        $session->{form}->changeForm( $webName, $topic, $query );
+        $session->{form}->changeForm( $webName, $topic );
         return 0;
     }
 
@@ -211,7 +209,7 @@ sub savemulti {
         $query->param( -name=>"dontnotify", -value=>"checked" );
     } elsif ( $saveaction eq "cancel" ) {
         my $viewURL = $session->getScriptUrl( $webName, $topic, "view" );
-        $session->redirect( $query, "$viewURL?unlock=on" );
+        $session->redirect( "$viewURL?unlock=on" );
         return;
     } elsif( $saveaction eq "preview" ) {
         TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );
@@ -220,7 +218,7 @@ sub savemulti {
 
     # save called by preview
     if ( _save( $session )) {
-        $session->redirect( $query, $redirecturl );
+        $session->redirect( $redirecturl );
     }
 }
 

@@ -47,15 +47,13 @@ sub statistics {
     my $destWeb = $TWiki::mainWebname; #web to redirect to after finishing
     my $logDate = "".$session->{cgiQuery}->param( 'logdate' );
     $logDate =~ s/[^0-9]//g;  # remove all non numerals
-    my $query;
 
     if( !$session->{scripted} ) {
-        $query = $session->{cgiQuery};
         # running from CGI
         my $mess =
           "<html>\n<head>\n<title>TWiki: Create Usage Statistics</title>\n" .
             "</head>\n<body>\n";
-        $session->writeHeader( $query, length( $mess ));
+        $session->writePageHeader();
         print $mess;
     }
 
@@ -90,7 +88,7 @@ sub statistics {
     $logFile =~ s/%DATE%/$logDate/g;
 
     unless( -e $logFile ) {
-        _printMsg( "  - Note: Log file $logFile does not exist", $session );
+        _printMsg( "!Log file $logFile does not exist; aborting", $session );
         return;
     }
 

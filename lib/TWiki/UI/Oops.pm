@@ -45,34 +45,33 @@ sub oops_cgi {
     my $user = $session->{userName};
     my $query = $session->{cgiQuery};
 
-  my $tmplName = $query->param( 'template' ) || "oops";
-  my $skin = $session->getSkin();
+    my $tmplName = $query->param( 'template' ) || "oops";
+    my $skin = $session->getSkin();
 
-  my $tmplData = $session->{templates}->readTemplate( $tmplName, $skin );
-  if( ! $tmplData ) {
-      $tmplData = "<html><body>\n"
-        . "<h1>TWiki Installation Error</h1>\n"
-          . "Template file $tmplName.tmpl not found or template directory \n"
-            . "$TWiki::templateDir not found.<p />\n"
-              . "Check the \$templateDir variable in TWiki.cfg.\n"
-                . "</body></html>\n";
-  } else {
-      my $param = $query->param( 'param1' ) || "";
-      $tmplData =~ s/%PARAM1%/$param/go;
-      $param = $query->param( 'param2' ) || "";
-      $tmplData =~ s/%PARAM2%/$param/go;
-      $param = $query->param( 'param3' ) || "";
-      $tmplData =~ s/%PARAM3%/$param/go;
-      $param = $query->param( 'param4' ) || "";
-      $tmplData =~ s/%PARAM4%/$param/go;
+    my $tmplData = $session->{templates}->readTemplate( $tmplName, $skin );
+    if( ! $tmplData ) {
+        $tmplData = "<html><body>\n"
+          . "<h1>TWiki Installation Error</h1>\n"
+            . "Template file $tmplName.tmpl not found or template directory \n"
+              . "$TWiki::templateDir not found.<p />\n"
+                . "Check the \$templateDir variable in TWiki.cfg.\n"
+                  . "</body></html>\n";
+    } else {
+        my $param = $query->param( 'param1' ) || "";
+        $tmplData =~ s/%PARAM1%/$param/go;
+        $param = $query->param( 'param2' ) || "";
+        $tmplData =~ s/%PARAM2%/$param/go;
+        $param = $query->param( 'param3' ) || "";
+        $tmplData =~ s/%PARAM3%/$param/go;
+        $param = $query->param( 'param4' ) || "";
+        $tmplData =~ s/%PARAM4%/$param/go;
 
-      $tmplData = $session->handleCommonTags( $tmplData, $topic );
-      $tmplData = $session->{renderer}->getRenderedVersion( $tmplData );
-      $tmplData =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-  }
+        $tmplData = $session->handleCommonTags( $tmplData, $topic );
+        $tmplData = $session->{renderer}->getRenderedVersion( $tmplData );
+        $tmplData =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
+    }
 
-  $session->writeHeader( $query, length( $tmplData ));
-  print $tmplData;
+    $session->writeCompletePage( $tmplData );
 }
 
 1;

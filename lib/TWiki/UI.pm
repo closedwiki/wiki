@@ -131,37 +131,11 @@ sub run {
                                         $e->{-param2},
                                         $e->{-param3},
                                         $e->{-param4} );
-        $session->redirect( undef, $url );
+        $session->redirect( $url );
     } catch Error::Simple with {
         my $e = shift;
         print "Content-type: text/plain\n\n";
         print $e->stringify();
-    }
-}
-
-=pod twiki
-
----+++ redirect( $url, ... )
-Generate a CGI redirect unless (1) $session->{cgiQuery} is undef or
-(2) $query->param('noredirect') is set to any value. Thus a redirect is
-only generated when in a CGI context. The ... parameters are
-concatenated to the message written when printing to STDOUT, and are
-ignored for a redirect.
-
-=cut
-
-sub redirect {
-    my ($session, $url ) = @_;
-    assert(ref($session) eq "TWiki") if DEBUG;
-
-    my $query = $session->{cgiQuery};
-
-    if ( $query && $query->param( 'noredirect' )) {
-        my $content = join(" ", @_) . " \n";
-        $session->writeHeader( $query, length( $content ) );
-        print $content;
-    } elsif ( $query ) {
-        $session->redirect( $query, $url );
     }
 }
 

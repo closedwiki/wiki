@@ -543,61 +543,62 @@ sub _convertUtf8URLtoSiteCharset {
 
 =pod
 
----++ writeHeader ( $query )
+---++ writeCompletePage( $text )
 
-Simple header setup for most scripts.  Calls writeHeaderFull, assuming
-'basic' type and 'text/html' content-type.
+Write a complete HTML page with basic header to the browser.
 
 =cut
 
-sub writeHeader {
-    my( $this, $query, $contentLength ) = @_;
+sub writeCompletePage {
+    my ( $this, $text, $pageType, $contentType ) = @_;
 
     assert(ref($this) eq "TWiki") if DEBUG;
 
-    # Just write a basic content-type header for text/html
-    $this->writeHeaderFull( $query, 'basic', 'text/html', $contentLength);
+    $text .= "\n" unless $text =~ /\n$/s;
+
+    # can't use simple length() in case we have UNICODE
+    # see perldoc -f length
+    my $len = do { use bytes; length( $text ); };
+    $this->writePageHeader( undef, $pageType, $contentType, $len );
+    print $text;
 }
 
 =pod
 
----++ writeHeaderFull( $query, $pageType, $contentType, $contentLength )
+---++ writePageHeader( $query, $pageType, $contentType, $contentLength )
 
-Builds and outputs HTTP headers.  $pageType should (currently) be either
-"edit" or "basic".  $query is the object from the CGI module, not the actual
-query string.
+All parameters are optional.
 
-"edit" will cause headers to be generated that force caching for 24 hours, to
-prevent Codev.BackFromPreviewLosesText bug, which caused data loss with IE5 and
-IE6.
-
-"basic" will cause only the Content-Type header to be set (from the
-parameter), plus any headers set by plugins.  Hopefully, further types will
-be used to improve cacheability for other pages in future.
+| $query | CGI query object | Session CGI query (there is no good reason to set this) |
+| $pageType | May be "edit", which will cause headers to be generated that force caching for 24 hours, to prevent Codev.BackFromPreviewLosesText bug, which caused data loss with IE5 and IE6. |
+| $contentType | page content type | text/html |
+| $contentLength | content-length | no content-length will be set if this is undefined, as required by HTTP1.1 |
 
 Implements the post-Dec2001 release plugin API, which requires the
 writeHeaderHandler in plugin to return a string of HTTP headers, CR/LF
-delimited.  Filters out headers that the core code needs to generate for
-whatever reason, and any illegal headers.
+delimited. Filters any illegal headers. Plugin headers will override
+core settings.
 
 =cut
 
-sub writeHeaderFull {
+sub writePageHeader {
     my( $this, $query, $pageType, $contentType, $contentLength ) = @_;
 
     assert(ref($this) eq "TWiki") if DEBUG;
+
+    $query = $this->{cgiQuery} unless $query;
 
     # Handle Edit pages - future versions will extend to caching
     # of other types of page, with expiry time driven by page type.
     my( $pluginHeaders, $coreHeaders );
 
-    $contentType .= "; charset=$siteCharset";
-
     my @hopts = ();
 
+    $contentType = "text/html" unless $contentType;
+    $contentType .= "; charset=$siteCharset";
     push( @hopts, -content_type => $contentType );
 
-    if ($pageType eq 'edit') {
+    if ($pageType && $pageType eq 'edit') {
         # Get time now in HTTP header format
         my $lastModifiedString = formatTime(time, '\$http', "gmtime");
 
@@ -615,8 +616,6 @@ sub writeHeaderFull {
         push( @hopts, -last_modified => $lastModifiedString );
         push( @hopts, -expires => "+${expireHours}h" );
         push( @hopts, -cache_control => "max-age=$expireSeconds" );
-    } elsif ($pageType ne 'basic') {
-        $this->writeWarning( "Invalid page type in TWiki.pm, writeHeaderFull(): $pageType" );
     }
 
     # Add a content-length if one has been provided. HTTP1.1 says a
@@ -644,7 +643,16 @@ sub writeHeaderFull {
 
 =pod
 
----++ redirect( $query, $url )
+---++ redirect( $url, ... )
+
+$url is required.
+
+Generate a CGI redirect unless (1) $session->{cgiQuery} is undef or
+(2) $query->param('noredirect') is set to any value. Thus a redirect is
+only generated when in a CGI context.
+
+The ... parameters are concatenated to the message written when printing
+to STDOUT, and are ignored for a redirect.
 
 Redirects the request to $url, via the CGI module object $query unless
 overridden by a plugin declaring a =redirectCgiQueryHandler=.
@@ -652,13 +660,20 @@ overridden by a plugin declaring a =redirectCgiQueryHandler=.
 =cut
 
 sub redirect {
-    my( $this, $query, $url ) = @_;
+    my $this = shift;
+    my $url = shift;
 
     assert(ref($this) eq "TWiki") if DEBUG;
 
-    $query = $this->{cgiQuery} unless $query;
-    if( ! $this->{plugins}->redirectCgiQueryHandler( $query, $url ) ) {
-        print $query->redirect( $url );
+    my $query = $this->{cgiQuery};
+
+    unless( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) ) {
+        if ( $query && $query->param( 'noredirect' )) {
+            my $content = join(" ", @_) . " \n";
+            $this->writeCompletePage( $query, $content );
+        } elsif ( $query ) {
+            print $query->redirect( $url );
+        }
     }
 }
 
@@ -1982,11 +1997,11 @@ sub _handleSPACEDTOPIC {
 
 sub _handleICON {
     my( $this, $params ) = @_;
-    my $theParam = $params->{_DEFAULT};
+    my $file = $params->{_DEFAULT};
 
-    return "" unless $theParam;
+    $file = "" unless $file;
 
-    my $value = $this->{renderer}->filenameToIcon( "file.$theParam" );
+    my $value = $this->{renderer}->filenameToIcon( "file.$file" );
     return $value;
 }
 
@@ -2336,7 +2351,7 @@ sub new {
         if( $topic =~ /^$regex{linkProtocolPattern}\:\/\//o &&
             $this->{cgiQuery} ) {
             # redirect to URI
-            print $this->redirect( undef, $topic );
+            print $this->redirect( $topic );
             return;
         } elsif( $topic =~ /(.*)[\.\/](.*)/ ) {
             # is "bin/script?topic=Webname.SomeTopic"
@@ -2377,7 +2392,7 @@ sub new {
         $this->writeWarning( "Cannot use this multi-byte encoding ('$siteCharset') as site character encoding" );
         $this->writeWarning( "Please set a different character encoding in the \$siteLocale setting in TWiki.cfg." );
         $url = $this->getOopsUrl( $web, $topic, "oopsbadcharset" );
-        print $this->redirect( undef, $url );
+        print $this->redirect( $url );
         return;
     }
 

@@ -166,8 +166,7 @@ sub view {
               . "$TWiki::templateDir not found.<p />\n"
                 . "Check the \$templateDir variable in TWiki.cfg.\n"
                   . "</body></html>\n";
-        $session->writeHeader( $query, length( $mess ));
-        print $mess;
+        $session->writeCompletePage( $mess );
         return;
     }
 
@@ -319,13 +318,7 @@ sub view {
         $contentType = 'text/html'
     }
 
-    $tmpl .= "\n";
-
-    # can't use simple length() in case we have UNICODE
-    # see perldoc -f length
-    my $len = do { use bytes; length( $tmpl) };
-    $session->writeHeaderFull( $query, 'basic', $contentType, $len);
-    print $tmpl;
+    $session->writeCompletePage( $tmpl );
 }
 
 =pod
@@ -375,7 +368,7 @@ sub viewfile {
 
     my $pubUrlPath = $TWiki::pubUrlPath;
     my $host = $session->{urlHost};
-    TWiki::UI::redirect( $session, "$host$pubUrlPath/$webName/$topic/$fileName" );
+    $session->redirect( "$host$pubUrlPath/$webName/$topic/$fileName" );
 }
 
 sub _suffixToMimeType {

@@ -433,7 +433,7 @@ sub rename {
         $new_url = $session->getViewUrl( $newWeb, $newTopic );
     }
 
-    TWiki::UI::redirect( $session, $new_url );
+    $session->redirect( $new_url );
 }
 
 =pod
@@ -526,8 +526,7 @@ sub _getLocks {
         $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $oldWeb );
         $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
         # SMELL: this is a redirect!
-        $session->writeHeader( $query, length( $tmpl ));
-        print $tmpl;
+        $session->writeCompletePage( $tmpl );
         return 0;
     } else {
         $session->{store}->lockTopic( $oldWeb, $oldTopic );
@@ -567,11 +566,10 @@ sub _newTopicScreen {
         $tmpl =~ s/%RESEARCH\{.*?web=\"all\".*\}%/(skipped)/o; # Remove search all web search
     }
     $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
-    $tmpl = $session->handleCommonTags( $tmpl, $oldTopic, $oldWeb );   
+    $tmpl = $session->handleCommonTags( $tmpl, $oldTopic, $oldWeb );
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
-    $session->writeHeader( $query, length( $tmpl ));
-    print $tmpl;
+    $session->writeCompletePage( $tmpl );
 }
 
 sub _setVars {
@@ -593,8 +591,7 @@ sub _moreRefsToChange {
     $tmpl = $session->handleCommonTags( $tmpl, $oldTopic, $oldWeb );
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
-    $session->writeHeader( $query, length( $tmpl ));
-    print $tmpl;
+    $session->writeCompletePage( $tmpl );
 }
 
 1;

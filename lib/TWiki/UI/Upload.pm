@@ -110,8 +110,8 @@ sub attach {
     $tmpl =~ s/%FILEPATH%/$args{"path"}/go;
     $tmpl =~ s/%FILECOMMENT%/$args{"comment"}/go;
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-    $session->writeHeader( $session->{cgiQuery}, length( $tmpl ));
-    print $tmpl;
+
+    $session->writeCompletePage( $tmpl );
 }
 
 =pod
@@ -221,7 +221,7 @@ sub upload {
                                         "Save error $error" );
     }
 
-    TWiki::UI::redirect( $session, $session->getViewUrl( $webName, $topic ) );
+    $session->redirect( $session->getViewUrl( $webName, $topic ) );
     my $message = ( $doPropsOnly ) ?
       "properties changed" : "$fileName uploaded";
 

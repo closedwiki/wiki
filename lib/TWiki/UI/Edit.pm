@@ -95,7 +95,7 @@ sub edit {
         && ( ! TWiki::isValidTopicName( $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         # SMELL: this should be an oops, shouldn't it?
-        TWiki::UI::redirect( $session, $session->getViewUrl( $webName, $topic ) );
+        $session->redirect( $session->getViewUrl( $webName, $topic ));
         return;
     }
 
@@ -228,7 +228,7 @@ sub edit {
         if( ! @fieldDefs ) {
             throw TWiki::UI::OopsException( $webName, $topic, "noformdef" );
         }
-        my $formText = $session->{form}->renderForEdit( $webName, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldDefs );
+        my $formText = $session->{form}->renderForEdit( $webName, $topic, $form, $meta, $getValuesFromFormTopic, @fieldDefs );
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } elsif( $saveCmd ne "repRev" && $session->{prefs}->getPreferencesValue( "WEBFORMS", $webName )) {
         # follows a hybrid html monster to let the 'choose form button' align at
@@ -245,9 +245,7 @@ sub edit {
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
-    $session->writeHeaderFull ( $query, 'edit', $cgiAppType, length($tmpl) );
-
-    print $tmpl;
+    $session->writeCompletePage( $tmpl, 'edit', $cgiAppType );
 }
 
 1;

@@ -730,7 +730,7 @@ sub afterAttachmentSaveHandler {
 
 ---++ sub writeHeaderHandler ()
 
-Called by $TWiki::writeHeader
+Called by TWiki::writePageHeader
 
 =cut
 

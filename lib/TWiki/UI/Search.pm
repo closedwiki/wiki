@@ -99,7 +99,7 @@ sub search {
     $attrWeb =~ tr/+/ /;       # pluses become spaces
     $attrWeb =~ s/%([0-9a-fA-F]{2})/pack("c",hex($1))/ge;  # %20 becomes space
 
-    $session->writeHeader( $query, 0);
+    $session->writePageHeader();
 
     # SMELL: what's all the "scalar" crud, below?
     $session->{search}->searchWeb(

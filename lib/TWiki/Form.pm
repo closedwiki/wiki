@@ -278,17 +278,17 @@ sub chooseFormButton {
 
 =pod
 
----++ sub renderForEdit (  $web, $topic, $form, $meta, $query, $getValuesFromFormTopic,  @fieldsInfo  )
+---++ sub renderForEdit (  $web, $topic, $form, $meta, $getValuesFromFormTopic,  @fieldsInfo  )
 
-Render form information 
+Render form fields for entry during an edit session
 
 =cut
 
 sub renderForEdit {
-    my( $this, $web, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldsInfo ) = @_;
+    my( $this, $web, $topic, $form, $meta, $getValuesFromFormTopic, @fieldsInfo ) = @_;
     assert(ref($this) eq "TWiki::Form") if DEBUG;
 
-    my $chooseForm = "";   
+    my $chooseForm = "";
     if( $this->prefs()->getPreferencesValue( "WEBFORMS", "$web" ) ) {
         $chooseForm = chooseFormButton( "Replace form..." );
     }
@@ -297,6 +297,7 @@ sub renderForEdit {
     my $text = "<div class=\"twikiForm twikiEditForm\"><table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
                $this->_link( $web, $form, "", "h", "", 2, $chooseForm ) . "</tr>\n";
 
+    my $query = $this->{session}->{cgiQuery};
     $this->fieldVars2Meta( $web, $query, $meta, "override" );
 
     foreach my $c ( @fieldsInfo ) {
@@ -545,20 +546,21 @@ sub getFieldParams {
 
 =pod
 
----++ sub changeForm (  $theWeb, $theTopic, $theQuery  )
+---++ sub changeForm (  $theWeb, $theTopic )
 
 Called by script to change the form for a topic
 
 =cut
 
 sub changeForm {
-    my( $this, $theWeb, $theTopic, $theQuery ) = @_;
+    my( $this, $theWeb, $theTopic ) = @_;
     assert(ref($this) eq "TWiki::Form") if DEBUG;
 
     my $tmpl = $this->templates()->readTemplate( "changeform" );
     $tmpl = $this->{session}->handleCommonTags( $tmpl, $theTopic );
     $tmpl = $this->renderer()->getRenderedVersion( $tmpl );
-    my $text = $theQuery->param( 'text' );
+    my $q = $this->{session}->{cgiQuery};
+    my $text = $q->param( 'text' );
     $text = TWiki::encodeSpecialChars( $text );
     $tmpl =~ s/%TEXT%/$text/go;
 
@@ -569,7 +571,7 @@ sub changeForm {
     unshift @forms, "";
     my( $metat, $tmp ) =
       $this->store()->readTopic( $this->{session}->{wikiUserName}, $theWeb, $theTopic, undef, 0 );
-    my $formName = $theQuery->param( 'formtemplate' ) || "";
+    my $formName = $q->param( 'formtemplate' ) || "";
     if( ! $formName ) {
         my %form = $metat->findOne( "FORM" );
         $formName = $form{"name"};
@@ -586,13 +588,12 @@ sub changeForm {
     }
     $tmpl =~ s/%FORMLIST%/$formList/go;
 
-    my $parent = $theQuery->param( 'topicparent' ) || "";
+    my $parent = $q->param( 'topicparent' ) || "";
     $tmpl =~ s/%TOPICPARENT%/$parent/go;
 
     $tmpl =~ s|</*nop/*>||goi;
 
-    $this->{session}->writeHeader( $theQuery, length( $tmpl ));
-    print $tmpl;
+    $this->{session}->writeCompletePage( $tmpl );
 }
 
 =pod

@@ -108,8 +108,7 @@ sub changes {
     $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
     $page .= $after;
 
-    $session->writeHeader( $query, length( $page ));
-    print $page;
+    $session->writeCompletePage( $page );
 }
 
 1;

@@ -55,7 +55,7 @@ sub preview {
     # Is user looking to change the form used?  Sits oddly in preview, but 
     # to avoid Javascript and pick up text on edit page it has to be in preview.
     if( $changeform ) {
-        $session->{form}->changeForm( $webName, $topic, $query );
+        $session->{form}->changeForm( $webName, $topic );
         return;
     }
 
@@ -141,8 +141,7 @@ sub preview {
     $tmpl =~ s/%FORMFIELDS%/$formFields/go;
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
-    $session->writeHeader( $query, length( $tmpl ));
-    print $tmpl;
+    $session->writeCompletePage( $tmpl );
 }
 
 1;

@@ -451,7 +451,7 @@ sub diff {
             } else {
                 $url = $session->{urlHost}."$scriptUrlPath/$rdiffauthFile/$webName/$topic";
             }
-            TWiki::UI::redirect( $session, $url );
+            $session->redirect( $url );
             return;
         }
     }
@@ -547,15 +547,14 @@ sub diff {
     $after =~ s/%REVINFO1%/$revInfo1/go;
     $after =~ s/%REVTITLE2%/$revTitle2/go;
     $after =~ s/%REVINFO2%/$revInfo2/go;
-    
+
     $after = $session->handleCommonTags( $after, $topic );
     $after = $session->{renderer}->getRenderedVersion( $after );
     $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-    
+
     $page .= $after;
-    
-    $session->writeHeader( $query, length( $page ));
-    print $page;
+
+    $session->writeCompletePage( $page );
 }
 
 1;
