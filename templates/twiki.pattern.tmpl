@@ -35,8 +35,8 @@
 	.twikiToc ul {
 		list-style-image:url(%PUBURL%/%TWIKIWEB%/PatternSkin/i_arrow_down.gif);
 	}
-	.twikiLeftBarContents {
-		border-color:%WEBBGCOLOR%;
+	.twikiWebIndicator {
+		background-color:%WEBBGCOLOR%;
 	}
 </style>%TMPL:END%
 
@@ -72,7 +72,8 @@
 
 
 
-%TMPL:DEF{"leftbar"}%<div class="twikiLeftBar"><div class="twikiLeftBarContents"><form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> 
+%TMPL:DEF{"leftbar"}%<div class="twikiLeftBar"><div class="twikiWebIndicator"><b>%WEB%</b></div>
+<div class="twikiLeftBarContents"><form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> 
 %INCLUDE{"%TWIKIWEB%.WebLeftBar"}%</form></div></div>%TMPL:END%
 
 

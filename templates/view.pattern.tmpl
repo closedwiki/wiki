@@ -20,11 +20,11 @@
 
 
 
-%TMPL:DEF{"toolbar"}%<div class="twikiToolBar"><div class="twikiLeft" style="display:inline;">
+%TMPL:DEF{"toolbar"}%<div class="twikiToolBar"><div>
    * %EDITTOPIC%
    * <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach</a>
    * <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%">Printable</a>
-</div><div class="twikiRevInfo"><b><nop>%WEB%.%TOPIC%</b><span class="twikiGrayText">. Last changed: %REVINFO{"$date"}% GMT by %REVINFO{"$wikiusername"}% &nbsp; <a href="#TopicEnd">end of topic</a></span></div></div>%TMPL:END%
+</div><div class="twikiRevInfo"><span class="twikiToolbarElem"><b><nop>%WEB%.%TOPIC%</b></span><span class="twikiGrayText"><span class="twikiToolbarElem">%REVINFO{"$date"}% GMT - <nop>%REVINFO{"$username"}%</span><span class="twikiToolbarElem"><a href="#TopicEnd">topic&nbsp;end</a></span></span></div></div>%TMPL:END%
 
 
 
@@ -39,8 +39,8 @@
 %TEXT%
 <br class="twikiClear" />
 #TopicEnd
-<span class="twikiRight twikiPageNav twikiGrayText"><a href="#PageTop">to top</a></span><br class="twikiClear" />
-</div><div class="twikiHidden"><hr />End of topic<br /><a href="#Actions">Skip to action links</a> | <a href="#PageTop">Back to top</a><hr /></div>
+<span class="twikiRight twikiPageNav twikiGrayText"><a href="#PageTop">to&nbsp;top</a></span><br class="twikiClear" />
+</div><div class="twikiHidden"><hr />End of topic<br /><a href="#Actions">Skip to action links</a> | <a href="#PageTop">Back&nbsp;to&nbsp;top</a><hr /></div>
 %TMPL:P{"form"}%%TMPL:P{"attachments"}%%TMPL:P{"topicaction"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
@@ -55,7 +55,7 @@
 
 
 %TMPL:DEF{"standardfooter"}%
-<div class="twikiTopicFooter"><span class="twikiLeft"><span class="twikiHomePath">You are here: [[%WEB%.WebHome][%WEB%]] %META{"parent" nowebhome="on" prefix=" <span class='twikiSeparator'>&gt;</span> " suffix=""}% <span class='twikiSeparator'>&gt;</span> <nop>%TOPIC% </span></span><span class="twikiHidden"><br /><br /></span><span class="twikiRight twikiPageNav twikiGrayText"><a href="#PageTop">to top</a></span><br class="twikiClear" /><span class="twikiHidden"><br /></span></div>
+<div class="twikiTopicFooter"><span class="twikiLeft"><span class="twikiHomePath">You are here: [[%WEB%.WebHome][%WEB%]] %META{"parent" nowebhome="on" prefix=" <span class='twikiSeparator'>&gt;</span> " suffix=""}% <span class='twikiSeparator'>&gt;</span> <nop>%TOPIC% </span></span><span class="twikiHidden"><br /><br /></span><span class="twikiRight twikiPageNav twikiGrayText"><a href="#PageTop">to&nbsp;top</a></span><br class="twikiClear" /><span class="twikiHidden"><br /></span></div>
 #PageBottom %TMPL:END%
 
 

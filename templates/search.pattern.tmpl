@@ -1,4 +1,4 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"view"}%
 
 
 
@@ -34,12 +34,16 @@
 
 %TMPL:DEF{"content"}%%SPLIT%
 Searched: <b><nop>%SEARCHSTRING%</b>
-%TMPL:P{"searchbody"}%%SPLIT%%TMPL:P{"standardfooter"}%%TMPL:END%
+%TMPL:P{"searchbody"}%%SPLIT%%TMPL:END%
 
 
 
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
+%TMPL:DEF{"standardfooter"}%
+<div class="twikiTopicFooter"></div>
+#PageBottom %TMPL:END%
+
+
+
+%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="twikiMiddleContainer">%TMPL:P{"leftbar"}%<div class="twikiMain">
+%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%</div></div>%TMPL:P{"bottombar"}%%TMPL:END%
