@@ -338,7 +338,7 @@ sub renameTopic
    
    if( ! $error ) {
       my $time = time();
-      my $user = &TWiki::getWikiUserTopic();
+      my $user = $TWiki::userName;
       my @args = (
          "from" => "$oldWeb.$oldTopic",
          "to"   => "$newWeb.$newTopic",
@@ -1236,8 +1236,17 @@ sub _extractMetaData
     } else {
         my %topicinfo = $meta->findOne( "TOPICINFO" );
         if( $topicinfo{"format"} eq "1.0beta" ) {
+            # This format used live at DrKW for a few months
             if( $text =~ /<!--TWikiCat-->/ ) {
                $text = TWiki::Form::upgradeCategoryTable( $web, $topic, $meta, $text );
+            }
+            
+            TWiki::Attach::upgradeFrom1v0beta( $meta );
+            
+            if( $meta->count( "TOPICMOVED" ) ) {
+                 my %moved = $meta->findOne( "TOPICMOVED" );
+                 $moved{"by"} = TWiki::wikiToUserName( $moved{"by"} );
+                 $meta->put( "TOPICMOVED", %moved );
             }
         }
     }
