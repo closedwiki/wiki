@@ -543,7 +543,7 @@ if( $defaultUrlHost !~ /$val/ ) {
 }
 
 # Check Script URL Path against REQUEST_URI
-print "<tr><th align=\"right\">\$scriptUrlPath:</th><td>$scriptUrlPath</td></tr>\n";
+print "<tr><th align=\"right\">\$scriptUrlPath:</th><td>".$TWiki::T->{scriptUrlPath}."</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This must match the 'cgi-bin' part of the URL used to access the TWiki cgi-bin directory.";
 print "</td></tr>\n";

@@ -75,8 +75,13 @@ if( $action eq "createweb" ) {
   my ( $topic, $webName ) =
     TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl, $query );
 
-  TWiki::UI::Manage::changePassword( $webName, $topic, $query );
+  TWiki::UI::Register::changePassword( $webName, $topic, $query );
 
+} elsif ($action eq 'bulkRegister') {
+    use TWiki::UI::Register;
+    TWiki::UI::Register::bulkRegister(
+                                        query => $query,
+                                   );
 } elsif( $action eq "deleteUserAccount" ) {
 
   my $wikiName = $query->param( 'username' );
