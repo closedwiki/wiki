@@ -1,37 +1,14 @@
-<HTML>
-<HEAD>
-  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (oops)</TITLE>
-  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX">
-</HEAD>
-<BODY bgcolor="#ffffff">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
-    </TD>
-    <TD>
-      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (oops)</FONT>
-    </TD>
-  </TR>
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD COLSPAN="2">
-      Attention
-    </TD>
-  </TR>
-</TABLE>
-<H1>Rename Access Denied</H1>
-You do not have permission to rename topic <nop>%WEB%.<nop>%TOPIC%.<p>
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}% (oops) %TMPL:END%
+%TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
+%TMPL:DEF{"heading"}% Rename Access Denied%TMPL:END%
+%TMPL:DEF{"message"}%
+You do not have permission to rename topic <nop>%WEB%.<nop>%TOPIC%.
+
 Contact
-<a href="mailto:%WIKIWEBMASTER%?subject=Rename Access Denied for '%WEB%.%TOPIC%'">%WIKIWEBMASTER%</a>
-if you have any questions.<p>
-Related topics: %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl<p>
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD valign="top">
-      Topic <B>%TOPIC%</B> . {
-        <A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">OK</A>
-      }
-    </TD>
-  </TR>
-</TABLE>
-</BODY>
+<a href="mailto:%WIKIWEBMASTER%?subject=Rename&#32;Access&#32;Denied&#32;for&#32;'%WEB%.%TOPIC%'">%WIKIWEBM$
+if you have any questions.
+
+__Related topics:__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl %TMPL:END%
+%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][OK]] %TMPL:END%
+%TMPL:P{"oops"}%
