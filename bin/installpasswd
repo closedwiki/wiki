@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wTI.
+#!/usr/bin/perl -wT
 #
 # Copyright (C) 2001 Klaus Wriessnegger, kw@sap.com
 #                    Andrea Sterbini, a.sterbini@flashnet.it
@@ -34,11 +34,6 @@ use CGI;
 use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
- 
-##### for debug only: Remove next 2 comments (but redirect does not work)
-#print "Content-type: text/html\n\n";
-#open(STDERR,'>&STDOUT'); # redirect error to browser
-#$| = 1;                  # no buffering
  
 $query= new CGI;
  
