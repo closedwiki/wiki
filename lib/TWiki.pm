@@ -2035,7 +2035,7 @@ sub handleIncludeFile
     my $rev     = $params{"rev"}      || "";
     my $warn    = $params{"warn"}     || "";
 
-    if( $incfile =~ /^http\:/ ) {
+    if( $incfile =~ /^https?\:/ ) {
         # include web page
         return handleIncludeUrl( $incfile, $pattern, $theWeb, $theTopic );
     }
