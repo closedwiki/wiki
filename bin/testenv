@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!c:/perl/bin/perl -w
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
@@ -247,7 +247,8 @@ if ( !defined $detailedOS ) {
 }
 
 # Detect Perl flavour on Windows, and Cygwin Perl/RCS package versions
-my $perltype;
+use vars qw($perltype);
+
 my $cygwinRcsVerNum;
 $perlverMsg = $perlver;		# Default version message
 if ($detailedOS eq 'cygwin') {
@@ -667,7 +668,8 @@ if( ! ( -e "$rcsDir/ci$exeSuffix" ) ) {
 # Check 'ls'
 print "<tr><th align=\"right\">\$lsCmd:</th><td>$lsCmd</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is the file list program TWiki uses to list topics.";
+print "This is the program TWiki uses to list topics.";
+print "  (Not used in TWiki 01 Sep 2004 or later.)";
 print "</td></tr>\n";
 $val = $lsCmd . $exeSuffix;
 $val =~ s/([^\s]*).*/$1/go;
@@ -695,6 +697,7 @@ print "<tr><th align=\"right\">\$fgrepCmd:</th><td>$fgrepCmd</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is a program TWiki uses for search.";
 print "</td></tr>\n";
+$fgrepCmd =~ s/ .*//;   # Strip any options
 $val = $fgrepCmd . $exeSuffix;
 $val =~ s/([^\s]*).*/$1/go;
 if( ! ( -e $val ) ) {
@@ -750,38 +753,21 @@ print "It is normally identical to <b>\$safeEnvPath</b>, unless that variable is
 print "</td></tr>\n";
 
 
-# Check that diff is found in PATH and is GNU diff - used by various RCS
-# commands, including ci.  Since Windows makes it hard to capture stderr
-# ('2>&1' works only on Win2000 or higher), and Windows will usually have
-# GNU diff in any case (installed for TWiki since there's no built-in
-# diff), we only check for diff on Unix/Linux and Cygwin.  
-if( $OS eq 'UNIX' or  ($OS eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
-    print "<tr><th align=\"right\">diff:</th>";
-    my $diffOut = `diff 2>&1` || "";
-    my $notFound = ( $? == -1 );
-    if( $notFound ) {
-	print "<td><b><font color=\"red\">Warning:</font></b> ";
-	print "'diff' program was not found on the current PATH.\n";
-	print "</td></tr>";
-    } else {
-	# diff found, check that it's GNU - using '-v' should cause error if not GNU,
-	# since there are no arguments (tested with Solaris diff).
-	$diffOut = `diff -v 2>&1` || "";
-	if( $diffOut !~ /\bGNU\b/ ) {
-	    print "<td><b><font color=\"red\">Warning:</font></b> ";
-	    print "'diff' program was found on the PATH but is not GNU diff - this may cause problems.\n";
-	    print "</td></tr>";
-	} else {
-	    print "<td>GNU diff was found on the PATH - this is the recommended diff tool.";
-	    print "</td></tr>";
-	}
-    }
+# Check that GNU egrep is found in PATH
+checkGnuVersion( $egrepCmd, "egrep", "used for regular expression searches" );
 
-    # Final table row applies to all cases
-    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
-    print "The 'diff' command is used by RCS to compare files.\n";
-    print "</td></tr>";
-}
+# Check that GNU fgrep is found in PATH
+checkGnuVersion( $fgrepCmd, "fgrep", "used for non-regular expression searches" );
+
+# Check that GNU ls is found in PATH 
+# FIXME: GNU not really necessary - do a check that any version found in PATH.
+# checkGnuVersion( $lsCmd, "ls", "used to list files in TWiki versions earlier than 01 Sep 2004" );
+
+# Check that GNU diff is found in PATH
+checkGnuVersion( "diff", "diff", "used by RCS to compare files" );
+
+# Check that GNU patch is found in PATH 
+checkGnuVersion( "patch", "patch", "used by the UpgradeTwiki script to upgrade an existing TWiki installation" );
 
 # PERL5SHELL check for non-Cygwin Perl on Windows only
 if( $OS eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
@@ -1030,5 +1016,39 @@ sub deleteTestFile
     my( $name ) = @_;
     if( -e $name ) {
         unlink $name;
+    }
+}
+
+# Since Windows (without Cygwin) makes it hard to capture stderr
+# ('2>&1' works only on Win2000 or higher), and Windows will usually have
+# GNU tools in any case (installed for TWiki since there's no built-in
+# diff, grep, patch, etc), we only check for these tools on Unix/Linux 
+# and Cygwin.  
+sub checkGnuVersion {
+    my ($progExecString, $progReadableName, $progUsage) = @_;        # Usage is 'used for...' string
+
+    if( $OS eq 'UNIX' or  ($OS eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
+        print "<tr><th align=\"right\">$progReadableName:</th>";
+
+        my $diffOut = `$progExecString --version 2>&1` || "";
+        my $notFound = ( $? == -1 );
+        if( $notFound ) {
+            # Check if on path
+            print "<td><b><font color=\"red\">Warning:</font></b> ";
+            print "'$progReadableName' program was not found on the current PATH.\n";
+        } elsif ( $diffOut !~ /\bGNU\b/ ) {
+            # Program found on path, check that GNU mentioned in version output
+            print "<td><b><font color=\"red\">Warning:</font></b> ";
+            print "'$progReadableName' program was found on the PATH but is not GNU $progReadableName - this may cause problems.\n";
+    } else {
+            # GNU version not found
+            print "<td>GNU $progReadableName was found on the PATH - this is the recommended $progReadableName tool.";
+        }
+        print "</td></tr>";
+
+        # Final table row applies to all cases
+        print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
+        print "The '$progReadableName' command is $progUsage.\n";
+        print "</td></tr>";
     }
 }
