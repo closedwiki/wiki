@@ -23,18 +23,13 @@
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 #
 # 20000917 - NicholasLee : Split file/storage related functions from wiki.pm
-#
+# 200105   - JohnTalintyre : AttachmentsUnderRevisionControl & meta data in topics
 
 package TWiki::Store;
 
 use File::Copy;
 
 use strict;
-
-##use vars qw(
-##        $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
-##        $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd
-##);
 
 # ===========================
 # Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
@@ -87,22 +82,26 @@ sub getFileName
    }
  
    my $file = "";
+   my $extra = "";
    if( ! $attachment ) {
       if( ! $extension ) {
          $extension = ".txt";
       } else {
          if( $extension eq ",v" ) {
             $extension = ".txt$extension";
+            if( $TWiki::useRcsDir ) {
+               $extra = "/RCS";
+            }
          }
       }
-      $file = "$TWiki::dataDir/$web/$topic$extension";
+      $file = "$TWiki::dataDir/$web$extra/$topic$extension";
 
    } else {
-      if ( $extension eq ",v" ) {
-         $file = "$TWiki::pubDir/$web/$topic/$attachment$extension";
-      } else {
-         $file = "$TWiki::pubDir/$web/$topic/$attachment$extension";
+      if ( $extension eq ",v" && $TWiki::useRcsDir ) {
+         $extra = "/RCS";
       }
+      
+      $file = "$TWiki::pubDir/$web/$topic$extra/$attachment$extension";
    }
 
    # Shouldn't really need to untaint here - done to be sure
@@ -122,17 +121,17 @@ sub getFileDir
    
    my $dir = "";
    if( ! $attachment ) {
-      $dir = "$TWiki::dataDir/$web";
+      if( ! $TWiki::useRcsDir || $extension ne ",v" ) {
+         $dir = "$TWiki::dataDir/$web";
+      } else {
+         $dir = "$TWiki::dataDir/$web/RCS";
+      }
    } else {
-      my $suffix = $topic;
-      if ( $topic ) {
-         $suffix = "/$suffix";
+      my $suffix = "";
+      if ( $extension eq ",v" && $TWiki::useRcsDir ) {
+         $suffix = "/RCS";
       }
-      if ( $extension ) {
-         $dir = "$TWiki::pubDir/$web$suffix";
-      } else { 
-         $dir = "$TWiki::pubDir/$web$suffix";
-      }
+      $dir = "$TWiki::pubDir/$web/$topic$suffix";
    }
 
    # Shouldn't really need to untaint here - done to be sure
@@ -140,20 +139,6 @@ sub getFileDir
    $dir = $1; # untaint
    
    return $dir;
-}
-
-
-# =========================
-# List Webs - JohnTalintyre 26 Feb 2001
-# Sub webs returned in format Top.Sub
-sub listWebs
-{
-   my $baseDir = &TWiki::getDataDir();
-   # Directories within this
-   opendir( DIR, $baseDir ) || warn "can't opendir $baseDir: $!";
-   my @dirs = grep { /^[^.]/ && -d "$baseDir/$_" } readdir( DIR );
-   closedir DIR;
-   return @dirs;
 }
 
 
@@ -281,21 +266,48 @@ sub moveAttachment
 }
 
 # =========================
+# Change refs out of a topic, I have a feeling this shouldn't be in Store.pm
 sub changeRefTo
 {
    my( $text, $oldWeb, $oldTopic ) = @_;
-   my $preTopic = "^\|[\\*\\s][\\(\\-\\*\\s]*";
-   my $postTopic = "$\|[_\\*<\\s]";
-
+   my $preTopic = '^|[\*\s\[][\(-\s]*';
+   my $postTopic = '$|[^A-Za-z0-9_]';
+   
+   my $out = "";
+   
    # Get list of topics in $oldWeb, replace local refs topic, with full web.topic
    my @topics = getTopicNames( $oldWeb );
-   foreach my $topic ( @topics ) {
-       if( $topic ne $oldTopic ) {
-           $text =~ s/($preTopic)\Q$topic\E($postTopic)/$1$oldWeb.$topic$2/gm;
-       }
-   }
    
-   return $text;
+   my $insidePRE = 0;
+   my $insideVERBATIM = 0;
+   my $noAutoLink = 0;
+   
+   foreach( split( /\n/, $text ) ) {
+
+       # change state:
+       m|<pre>|i  && ( $insidePRE = 1 );
+       m|</pre>|i && ( $insidePRE = 0 );
+       if( m|<verbatim>|i ) {
+           $insideVERBATIM = 1;
+       }
+       if( m|</verbatim>|i ) {
+           $insideVERBATIM = 0;
+       }
+       m|<noautolink>|i   && ( $noAutoLink = 1 );
+       m|</noautolink>|i  && ( $noAutoLink = 0 );
+   
+       if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
+           # Fairly inefficient, time will tell if this should be changed.
+           foreach my $topic ( @topics ) {
+              if( $topic ne $oldTopic ) {
+                  s/($preTopic)\Q$topic\E($postTopic)/$1$oldWeb.$topic$2/g;
+              }
+           }
+       }
+       $out .= "$_\n";
+   }
+
+   return $out;
 }
 
 
@@ -476,8 +488,6 @@ sub getRevisionDiff
            $tmp = "$tmp> $_\n";
         }
     } else {
-        # FIXME - this will not look very good as meta data not rendered, mind you it's relatively informative
-        # Best course is probably to filter output and pass to diff command - at least to cut out some/all of TOPICINFO stuff
         $tmp= $TWiki::revDiffCmd;
         $tmp =~ s/%REVISION1%/$rev1/;
         $tmp =~ s/%REVISION2%/$rev2/;
@@ -488,6 +498,13 @@ sub getRevisionDiff
         my $cmd = $1;       # now safe, so untaint variable
         $tmp = `$cmd`;
         _traceExec( $cmd, $tmp );
+        # Avoid showing change in revision number!
+        # I'm not too happy with this implementation, I think it may be better to filter before sending to diff command,
+        # possibly using Algorithm::Diff from CPAN.
+        $tmp =~ s/[0-9]+c[0-9]+\n[<>]\s*%META:TOPICINFO{[^}]*}%\s*\n---\n[<>]\s*%META:TOPICINFO{[^}]*}%\s*\n//go;
+        $tmp =~ s/[<>]\s*%META:TOPICINFO{[^}]*}%\s*//go;
+        
+        TWiki::writeDebug( "and now $tmp" );
     }
     return "$tmp";
 }
@@ -789,7 +806,6 @@ sub saveAttachment
 
 
 #==========================
-# FIXME use properties
 sub isBinary
 {
    my( $filename, $theWeb ) = @_;
@@ -860,9 +876,7 @@ sub saveNew
         $nextRev = "1.1";
     }
 
-    if( $attachment ) {
-       $dontLogSave = 1; # FIXME
-    } else {
+    if( !$attachment ) {
         # RCS requires a newline for the last line,
         # so add newline if needed
         $text =~ s/([^\n\r])$/$1\n/os;
@@ -902,13 +916,13 @@ sub saveNew
                 # replace last repository entry
                 $saveCmd = "repRev";
                 if( $attachment ) {
-                   $saveCmd = ""; # FIXME - correct?
+                   $saveCmd = ""; # cmd option not supported for attachments.
                 }
             }
         }
         
         if( ! $nextRev ) {
-            # FIXME what if content hasn't changed?
+            # If content hasn't changed we still get a new version, with revised META:TOPICINFO
             writeDebug( "currentRev = $currentRev" );
             $currentRev =~ /1\.([0-9]+)/;
             my $num = $1;
@@ -919,11 +933,11 @@ sub saveNew
         if( $saveCmd ne "repRev" ) {
             ( $text, @meta ) = _saveWithMeta( $web, $topic, $text, $attachment, $doUnlock, $nextRev, @meta );
 
-            # If attachment and RCS file doesn't exist, initialise
+            # If attachment and RCS file doesn't exist, initialise things
             if( $attachment ) {
                # Make sure directory for rcs history file exists
                my $rcsDir = getFileDir( $web, $topic, $attachment, ",v" );
-               my $tempPath = "&TWiki::dataDir/$web"; # FIXME move up to getDirName
+               my $tempPath = "&TWiki::dataDir/$web";
                if( ! -e "$tempPath" ) {
                   umask( 0 );
                   mkdir( $tempPath, 0777 );
@@ -934,13 +948,9 @@ sub saveNew
                   mkdir( $tempPath, 0777 );
                }
  
-               if( ! -e $rcsFile && $TWiki::revInitBinaryCmd ) {
+               if( ! -e $rcsFile && $TWiki::revInitBinaryCmd && isBinary( $attachment, $web ) ) {
                   $tmp = $TWiki::revInitBinaryCmd;
                   $tmp =~ s/%FILENAME%/$rcsFile/go;
-                  if( ! isBinary( $attachment, $web ) ) {
-                      # FIXME naff
-                      $tmp =~ s/-kb //go;
-                  }
                   $tmp =~ /(.*)/;
                   $tmp = "$1 2>&1 1>$TWiki::nullDev";       # safe, so untaint variable
                   $rcsError = `$tmp`;
@@ -959,7 +969,6 @@ sub saveNew
 
             $tmp= $TWiki::revCiCmd;
             $tmp =~ s/%USERNAME%/$TWiki::userName/;
-            # FIXME put back $rcsFile if history for attachments moves to data area
             $tmp =~ s/%FILENAME%/$name/;
             $tmp =~ s/%COMMENT%/$theComment/;
             $tmp =~ /(.*)/;
@@ -979,7 +988,6 @@ sub saveNew
                   # Assume it worked, as not sure how to trap failure
                   $tmp= $TWiki::revCiCmd;
                   $tmp =~ s/%USERNAME%/$TWiki::userName/;
-                  # FIXME put back $rcsFile if history for attachments moves to data area
                   $tmp =~ s/%FILENAME%/$name/;
                   $tmp =~ s/%COMMENT%/$theComment/;
                   $tmp =~ /(.*)/;
@@ -1431,9 +1439,7 @@ sub readTemplate
         $txt =~ s/%HEADER{([^}]*)}%/&TWiki::handleHeader( $1, $theTopic, $theSkin )/geo;
         $txt =~ s/%FOOTER(:[A-Z]*)?%/&TWiki::handleFooter( $1, $theTopic, $theSkin )/geo;
         $txt =~ s/%SEP%/&TWiki::handleSep( $theTopic, $theSkin )/geo;
-        
 
-        
         # Modify views for DrKW style
         if ( -e "$tmplDir/drkwtop.tmpl" && $tmplFile !~ m|/view.| ) {
             my $top = &readFile( "$tmplDir/drkwtop.tmpl" );
