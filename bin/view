@@ -76,6 +76,11 @@ sub main
     my $unlock  = $query->param( "unlock" ) || "";
     my $skin    = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
 
+    # Set page generation mode to RSS if using an RSS skin
+    if( $skin =~ /^rss/ ) {
+	TWiki::pageMode( 'rss' );
+    }
+
     # get view template, standard view or a view with a different skin
     $tmpl = &TWiki::Store::readTemplate( "view", $skin );
     if( ! $tmpl ) {
@@ -283,16 +288,15 @@ sub main
 
     writeDebugTimes( "view - checked access permissions" );
 
-    # print header information.
-    # check for "contenttype" parameter, used to produce
-    # other MIME types like text/plain or text/xml
+    # Write header based on "contenttype" parameter, used to produce
+    # MIME types like text/plain or text/xml, e.g. for RSS feeds.
     my $contentType = $query->param( "contenttype" );
     if( $contentType ) {
-        print "Content-type: $contentType\n\n";
+	TWiki::writeHeaderFull( $query, 'basic', $contentType, 0);
     } else {
         TWiki::writeHeader( $query );
     }
-
+    
     # print page content
     print $tmpl;
 

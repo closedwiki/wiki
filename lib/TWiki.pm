@@ -84,6 +84,7 @@ use vars qw(
         $cgiQuery @publicWebList
         $formatVersion $OS
         $readTopicPermissionFailed
+	$pageMode
     );
 
 # Internationalisation and regex setup:
@@ -96,7 +97,7 @@ use vars qw(
 	$wikiWordRegex $webNameRegex $defaultWebNameRegex $anchorRegex $abbrevRegex $emailAddrRegex
 	$singleUpperAlphaRegex $singleLowerAlphaRegex $singleUpperAlphaNumRegex
 	$singleMixedAlphaNumRegex $singleMixedNonAlphaNumRegex 
-	$mixedAlphaNumRegex
+	$singleMixedNonAlphaRegex $mixedAlphaNumRegex
     );
 
 # TWiki::Store config:
@@ -187,6 +188,8 @@ $debugSystemTime = 0;
 $formatVersion = "1.0";
 
 $basicInitDone = 0;		# basicInitialize not yet done
+
+$pageMode = 'html';		# Default is to render as HTML
 
 
 # =========================
@@ -470,7 +473,8 @@ sub setupRegexes {
     $singleUpperAlphaNumRegex = qr/[${upperAlpha}${numeric}]/;
     $singleMixedAlphaNumRegex = qr/[${upperAlpha}${lowerAlpha}${numeric}]/;
 
-    $singleMixedNonAlphaNumRegex = qr/[^${upperAlpha}${lowerAlpha}${numeric}]/;
+    $singleMixedNonAlphaRegex = qr/[^${upperAlpha}${lowerAlpha}${numeric}]/;
+    $singleMixedNonAlphaNumRegex = qr/[^${upperAlpha}${lowerAlpha}]/;
 
     # Multi-character alpha-based regexes
     $mixedAlphaNumRegex = qr/[${mixedAlphaNum}]*/;
@@ -509,6 +513,7 @@ sub writeHeaderFull
     # Handle Edit pages - future versions will extend to caching
     # of other types of page, with expiry time driven by page type.
     my( $pluginHeaders, $coreHeaders );
+
 
     $contentType .= "; charset=$siteCharset";
 
@@ -581,6 +586,15 @@ sub writeHeaderFull
     ##writeDebug( "===== Final Headers are:\n$finalHeaders" );
     print $finalHeaders;
 
+}
+
+# =========================
+# Set page mode:
+#   - 'rss' - encode 8-bit characters as XML entities
+#   - 'html' - no encoding of 8-bit characters
+sub pageMode
+{
+    $pageMode = shift;
 }
 
 # =========================
@@ -1117,16 +1131,16 @@ sub makeTopicSummary
     $htext =~ s/\-\-\-+\+*\s*\!*/ /g; # remove heading formatting
     $htext =~ s/\s+[\+\-]*/ /g;       # remove newlines and special chars
 
-    # limit to 162 chars
+    # limit to 162 chars 
+    # FIXME I18N: Avoid splitting within multi-byte character sets
     $htext =~ s/(.{162})($mixedAlphaNumRegex)(.*?)$/$1$2 \.\.\./g;
 
-    # Commented out by RD - encoding breaks non-ISO-8859-1 character sets, and 
-    # the browsers and RSS readers work OK with unencoded 8 bit characters
-    # within RSS feeds, as long as %CHARSET% is included in template.
-    #
-    # Encode special chars into HTML &#nnn; entities for international
-    # character support 
-    # $htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
+    # Encode special chars into XML &#nnn; entities for use in RSS feeds
+    # - no encoding for HTML pages, to avoid breaking international 
+    # characters.
+    if( $pageMode eq 'rss' ) {
+	$htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
+    }
 
     # inline search renders text, so prevent linking of external and
     # internal links:
