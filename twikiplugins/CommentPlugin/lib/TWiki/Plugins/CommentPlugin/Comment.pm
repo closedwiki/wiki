@@ -247,7 +247,7 @@ sub _buildNewTopic {
     if ( $output =~ m/^%RED%/o ) {
         return $output;
     }
-die unless $output;
+
     # Expand the template
     $output =~ s/%POS:(.*?)%//go;
     my $position = $1 || "AFTER";
@@ -257,7 +257,9 @@ die unless $output;
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
         eval 'use TWiki::Contrib::CairoContrib';
 	}
-	$output = TWiki::expandVariablesOnTopicCreation($output);
+    my $wikiname = TWiki::Func::getWikiName();
+    my $user = TWiki::Func::wikiToUserName( $wikiname );
+	$output = TWiki::expandVariablesOnTopicCreation($output, $user, $wikiname);
 
 	# CODE_SMELL: This should be part of TWiki::expandVariablesOnTopicCreation
     my @t = gmtime();
