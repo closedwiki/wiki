@@ -23,9 +23,9 @@
 # NOTE: Testenv should always run on older TWiki versions, as far as
 # possible - so any dependency on TWiki modules should be carefully 
 # handled and error checked.  If a newer feature or subroutine is not
-# there, it's OK to fail silently and not do the associated tests.
-# This is more painful to code, but it means that testenv can be downloaded
-# from SVN and used on older TWiki versions to diagnose problems.
+# there, it's OK to fail silently and not do the associated tests.  This is
+# more painful to code, but it means that testenv can be downloaded from
+# SVN and used on older TWiki versions to diagnose problems.
 
 package TWiki;
 
@@ -159,6 +159,7 @@ my @optionalMods = (
    );
 
 
+# FIXME: Should rely on fatalsToBrowser??
 open(STDERR,'>&STDOUT'); # redirect errors to browser
 $| = 1;                  # no buffering - FIXME: mod_perl issue?
 
@@ -181,6 +182,7 @@ print <<EOM;
 <body>
 <h1>Test the environment for TWiki</h1>
 Please read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationGuide">TWikiInstallationGuide</a> for more information on TWiki installation.
+If your TWiki site is working, the front page should be <a href="view">right here</a>.
 EOM
 
 # TWiki.cfg was read earlier, in BEGIN block.
