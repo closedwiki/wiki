@@ -31,25 +31,44 @@
 #
 # initPlugin is required, all other are optional. 
 # For increased performance, DISABLE handlers you don't need.
+#
+# NOTE: To interact with TWiki use the official TWiki functions 
+# in the &TWiki::Func module. Do not reference any functions or
+# variables elsewhere in TWiki!!
+
 
 # =========================
 package TWiki::Plugins::DefaultPlugin;
 
 # =========================
-use vars qw( $web $topic $user $installWeb $VERSION
-	    $doOldInclude $renderingWeb );
+use vars qw(
+        $web $topic $user $installWeb $VERSION $debug
+        $doOldInclude $renderingWeb
+    );
+
 $VERSION = '1.000';
+
 # =========================
 sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
 
+    # check for Plugins.pm versions
+    if( $TWiki::Plugins::VERSION < 1 ) {
+        &TWiki::Func::writeWarning( "Version mismatch between DefaultPlugin and Plugins.pm" );
+        return 0;
+    }
+
+    # Get plugin preferences
+    $doOldInclude = &TWiki::Func::getPreferencesFlag( "DEFAULTPLUGIN_OLDINCLUDE" ) || "";
+
+    # Get plugin debug flag
+    $debug = &TWiki::Func::getPreferencesFlag( "DEFAULTPLUGIN_DEBUG" );
+
     $renderingWeb = $web;
 
-    # Get preferences
-    $doOldInclude = &TWiki::Prefs::getPreferencesFlag( "DEFAULTPLUGIN_OLDINCLUDE" ) || "";
-    
-    # Initialized
+    # Plugin correctly initialized
+    &TWiki::Func::writeDebug( "- DefaultPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
 }
 
@@ -58,7 +77,7 @@ sub commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-#    print "DefaultPlugin::commonTagsHandler called<br>";
+    &TWiki::Func::writeDebug( "- DefaultPlugin::commonTagsHandler( $web.$topic )" ) if $debug;
 
     # This is the place to define customized tags and variables
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
@@ -79,7 +98,7 @@ sub startRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
 
-#    print "DefaultPlugin::startRenderingHandler called<br>";
+    &TWiki::Func::writeDebug( "- DefaultPlugin::startRenderingHandler( $web.$topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion just before the line loop
 
@@ -91,7 +110,7 @@ sub outsidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-#    print "DefaultPlugin::outsidePREHandler called<br>";
+    &TWiki::Func::writeDebug( "- DefaultPlugin::outsidePREHandler( $web.$topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion, in loop outside of <PRE> tag
     # This is the place to define customized rendering rules
@@ -117,11 +136,11 @@ sub outsidePREHandler
 }
 
 # =========================
-sub DISABLEinsidePREHandler
+sub DISABLE_insidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-#    print "DefaultPlugin::insidePREHandler called<br>";
+    &TWiki::Func::writeDebug( "- DefaultPlugin::insidePREHandler( $web.$topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion, in loop inside of <PRE> tag
     # This is the place to define customized rendering rules
@@ -131,11 +150,11 @@ sub DISABLEinsidePREHandler
 }
 
 # =========================
-sub DISABLEendRenderingHandler
+sub DISABLE_endRenderingHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-#    print "DefaultPlugin::endRenderingHandler called<br>";
+    &TWiki::Func::writeDebug( "- DefaultPlugin::endRenderingHandler( $web.$topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion just after the line loop
 

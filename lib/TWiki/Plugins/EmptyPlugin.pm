@@ -30,86 +30,108 @@
 #   endRenderingHandler  ( $text )
 #
 # initPlugin is required, all other are optional. 
-# For increased performance, DISABLE (or comment) handlers you don't need.
+# For increased performance, all handlers except initPlugin are
+# disabled. To enable a handler remove the leading DISABLE_ from
+# the function name.
+# 
+# NOTE: To interact with TWiki use the official TWiki functions
+# in the &TWiki::Func module. Do not reference any functions or
+# variables elsewhere in TWiki!!
+
 
 # =========================
 package TWiki::Plugins::EmptyPlugin; 	# change the package name!!!
 
 # =========================
-use vars qw( $web $topic $user $installWeb $VERSION
-	    $myConfigVar );
+use vars qw(
+        $web $topic $user $installWeb $VERSION $debug
+        $exampleCfgVar
+    );
+
 $VERSION = '1.000';
+
 # =========================
 sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
 
-    # Get plugin preferences
-    $myConfigVar = &TWiki::Prefs::getPreferencesFlag( "EMPTYPLUGIN_VAR1" ) || "";
+    # check for Plugins.pm versions
+    if( $TWiki::Plugins::VERSION < 1 ) {
+        &TWiki::Func::writeWarning( "Version mismatch between EmptyPlugin and Plugins.pm" );
+        return 0;
+    }
 
-    # check for TWiki.pm and Plugins.pm versions
-    if ( $TWiki::VERSION < 1 || 
-	 $TWiki::Plugins::VERSION < 1 ) {
-	 return 0;
-	 };
-    
+    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
+    $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
+
+    # Get plugin debug flag
+    $debug = &TWiki::Func::getPreferencesFlag( "EMPTYPLUGIN_DEBUG" );
+
     # Plugin correctly initialized
+    &TWiki::Func::writeDebug( "- EmptyPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
 }
 
 # =========================
-sub commonTagsHandler
+sub DISABLE_commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-#    print "DefaultPlugin::commonTagsHandler called<br>";
+    &TWiki::Func::writeDebug( "- EmptyPlugin::commonTagsHandler( $web.$topic )" ) if $debug;
 
     # This is the place to define customized tags and variables
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
 
+    # do custom extension rule, like for example:
+    # $_[0] =~ s/%XYZ%/&handleXyz()/geo;
+    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/geo;
 }
 
 # =========================
-sub startRenderingHandler
+sub DISABLE_startRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
 
-#    print "DefaultPlugin::startRenderingHandler called<br>";
+    &TWiki::Func::writeDebug( "- EmptyPlugin::startRenderingHandler( $web.$topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion just before the line loop
 
+    # do custom extension rule, like for example:
+    # $_[0] =~ s/old/new/go;
 }
 
 # =========================
-sub outsidePREHandler
+sub DISABLE_outsidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-#    print "DefaultPlugin::outsidePREHandler called<br>";
+#   &TWiki::Func::writeDebug( "- EmptyPlugin::outsidePREHandler( $web.$topic )" ) if $debug;
 
-    # This handler is called by getRenderedVersion, in loop outside of <PRE> tag
-    # This is the place to define customized rendering rules
-
+    # This handler is called by getRenderedVersion, in loop outside of <PRE> tag.
+    # This is the place to define customized rendering rules.
+    # Note: This is an expensive function to comment out.
+    # Consider startRenderingHandler instead
 }
 
 # =========================
-sub insidePREHandler
+sub DISABLE_insidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-#    print "DefaultPlugin::insidePREHandler called<br>";
+#   &TWiki::Func::writeDebug( "- EmptyPlugin::insidePREHandler( $web.$topic )" ) if $debug;
 
-    # This handler is called by getRenderedVersion, in loop inside of <PRE> tag
-    # This is the place to define customized rendering rules
-
+    # This handler is called by getRenderedVersion, in loop inside of <PRE> tag.
+    # This is the place to define customized rendering rules.
+    # Note: This is an expensive function to comment out.
+    # Consider startRenderingHandler instead
 }
 
 # =========================
-sub endRenderingHandler
+sub DISABLE_endRenderingHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-#    print "DefaultPlugin::endRenderingHandler called<br>";
+    &TWiki::Func::writeDebug( "- EmptyPlugin::endRenderingHandler( $web.$topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion just after the line loop
 
@@ -118,5 +140,3 @@ sub endRenderingHandler
 # =========================
 
 1;
-
-

@@ -30,7 +30,8 @@ package TWiki::Plugins;
 ##use strict;
 
 use vars qw(
-        @pluginList @activeWebTopicList @registrableHandlers %registeredHandlers
+        @activePluginWebs @activePluginTopics
+        @registrableHandlers %registeredHandlers
 	$VERSION
     );
 
@@ -50,6 +51,22 @@ $VERSION = '1.000';
 %registeredHandlers = ();
 
 # =========================
+sub discoverPluginPerlModules
+{
+    my $libDir = &TWiki::getTWikiLibDir();
+    my @plugins = ();
+    my @modules = ();
+    if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
+        @modules = map{ s/^(.*?)\.pm$/$1/oi; $_ }
+                   sort
+                   grep /.+Plugin\.pm$/i, readdir DIR;
+        push( @plugins, @modules );
+        closedir( DIR );
+    }
+    return @plugins;
+}
+
+# =========================
 sub registerHandler
 {
     my ( $handlerName, $theHandler ) = @_;
@@ -66,36 +83,45 @@ sub registerPlugin
     # look for the plugin installation web (needed for attached files)
     # in the order:
     #   1 fully specified web.plugin
-    #   2 twiki.plugin
-    #   3 thisweb.plugin
-    #   4 main.plugin
+    #   2 TWiki.plugin
+    #   3 Plugins.plugin
+    #   4 thisweb.plugin
 
     my $installWeb = '';
-	# first we suppose the plugin is installed in this same web
-        # then we check for fully specified plugins
-    if ( $plugin =~ m/^(.+)\.([^.]+Plugin)$/ ) {
-	$plugin = $2;
-	$installWeb = $1;
+    # first check for fully specified plugin
+    if ( $plugin =~ m/^(.+)\.([^\.]+Plugin)$/ ) {
+        $installWeb = $1;
+        $plugin = $2;
     } 
-    # then, we hope the plugin is in the TWiki web
-    elsif ( &TWiki::Store::topicExists( $TWiki::twikiWebname, $plugin ) ) {
-	$installWeb = $TWiki::twikiWebname;
-    }
-    # then, we hope the plugin is in the current web
-    elsif ( &TWiki::Store::topicExists( $web, $plugin ) ) {
-	$installWeb = $web;
-    }
-    # finally, we hope the plugin is in the Main web
-    elsif ( &TWiki::Store::topicExists( $TWiki::mainWebname, $plugin ) ) {
-	$installWeb = $TWiki::mainWebname;
-    }
-    # else not found ...
-    else { return; }
 
-    # clean up the dirty laundry ....
-    if ( $plugin =~ m/^([^\.]+Plugin)$/ ) {
-	$plugin = $1; 
-    } else { return; }
+    if( grep { /^$plugin$/ } @activePluginTopics ) {
+        # Plugin is already registered
+        return;
+    }
+
+    if( ! $installWeb ) {
+        if ( &TWiki::Store::topicExists( $TWiki::twikiWebname, $plugin ) ) {
+            # found plugin in TWiki web
+            $installWeb = $TWiki::twikiWebname;
+        } elsif ( &TWiki::Store::topicExists( "Plugins", $plugin ) ) {
+            # found plugin in Plugins web
+            $installWeb = "Plugins";
+        } elsif ( &TWiki::Store::topicExists( $web, $plugin ) ) {
+            # found plugin in current web
+            $installWeb = $web;
+        } else {
+            # not found
+            return;
+        }
+    }
+
+    # untaint & clean up the dirty laundry ....
+    if ( $plugin =~ m/^([A-Za-z0-9_]+Plugin)$/ ) {
+        $plugin = $1; 
+    } else {
+        # invalid topic name for plugin
+        return;
+    }
 
     my $p   = 'TWiki::Plugins::'.$plugin;
 
@@ -105,17 +131,20 @@ sub registerPlugin
     my $prefix = "";
     $sub = $p.'::initPlugin';
     # we register a plugin ONLY if it defines initPlugin AND it returns true 
-    if( defined( &$sub ) && &$sub( $topic, $web, $user, $installWeb ) ) {
+    if( ! defined( &$sub ) ) {
+        return;
+    }
+    # read plugin preferences before calling initPlugin
+    $prefix = uc( $plugin ) . "_";
+    &TWiki::Prefs::getPrefsFromTopic( $installWeb, $plugin, $prefix );
+
+    if( &$sub( $topic, $web, $user, $installWeb ) ) {
         foreach $h ( @registrableHandlers ) {
             $sub = $p.'::'.$h;
             &registerHandler( $h, $sub ) if defined( &$sub );
         }
-
-        # read plugin preferences
-        $prefix = uc( $plugin ) . "_";
-        &TWiki::Prefs::getPrefsFromTopic( $installWeb, $plugin, $prefix );
-
-        $activeWebTopicList[@activeWebTopicList] = "$installWeb.$plugin";
+        $activePluginWebs[@activePluginWebs] = $installWeb;
+        $activePluginTopics[@activePluginTopics] = $plugin;
     }
 }
 
@@ -136,20 +165,33 @@ sub applyHandlers
 # =========================
 sub initialize
 {
-    # Get ACTIVEPLUGINS variable
-    my $active = &TWiki::Prefs::getPreferencesValue( "ACTIVEPLUGINS" ) || "";
-    $active =~ s/[\n\t\s\r]+/ /go;
+    my( $theTopicName, $theWebName, $theUserName ) = @_;
 
-    # FIXME: should we enforce the schema <webname>.<name>Plugin or not?
-    @pluginList = grep { /^.+Plugin$/ }
-		  split( /,?\s+/ , $active );
+    # initialize variables, needed when TWiki::initialize called more then once
+    %registeredHandlers = ();
+    @activePluginTopics = ();
+    @activePluginWebs = ();
+
+    # Get INSTALLEDPLUGINS and DISABLEDPLUGINS variables
+    my $plugin = &TWiki::Prefs::getPreferencesValue( "INSTALLEDPLUGINS" ) || "";
+    $plugin =~ s/[\n\t\s\r]+/ /go;
+    my @instPlugins = grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
+    $plugin = &TWiki::Prefs::getPreferencesValue( "DISABLEDPLUGINS" ) || "";
+    $plugin =~ s/[\n\t\s\r]+/ /go;
+    my @disabledPlugins = map{ s/^.*\.(.*)$/$1/o; $_ }
+                          grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
+
+    # append discovered plugin modules to installed plugin list
+    push( @instPlugins, discoverPluginPerlModules() );
 
     # for efficiency we register all possible handlers at once
-    %registeredHandlers = ();  # needed when TWiki::initialize called more then once
-    @activeWebTopicList = ();
-    my $plug    = "";
-    foreach $plug ( @pluginList ) {
-        &registerPlugin( $plug, @_ );
+    my $p = "";
+    foreach $plugin ( @instPlugins ) {
+        $p = $plugin;
+        $p =~ s/^.*\.(.*)$/$1/o; # cut web
+        if( ! ( grep { /^$p$/ } @disabledPlugins ) ) {
+            &registerPlugin( $plugin, @_, $theWebName, $theUserName );
+        }
     }
 }
 
@@ -159,16 +201,25 @@ sub handlePluginDescription
     my $text = "";
     my $line = "";
     my $pref = "";
-    my $webTopic = "";
-    foreach $webTopic ( @activeWebTopicList ) {
-        $webTopic =~ /^(.*)\.(.*)$/;
-        $pref = uc( $2 ) . "_SHORTDESCRIPTION";
+    for( my $i = 0; $i < @activePluginTopics; $i++ ) {
+        $pref = uc( $activePluginTopics[$i] ) . "_SHORTDESCRIPTION";
         $line = &TWiki::Prefs::getPreferencesValue( $pref );
         if( $line ) {
-            $text .= "\t\* $webTopic: $line\n"
+            $text .= "\t\* $activePluginWebs[$i].$activePluginTopics[$i]: $line\n"
         }
     }
 
+    return $text;
+}
+
+# =========================
+sub handleActivatedPlugins
+{
+    my $text = "";
+    for( my $i = 0; $i < @activePluginTopics; $i++ ) {
+        $text .= "$activePluginWebs[$i].$activePluginTopics[$i], "
+    }
+    $text =~ s/\,\s*$//o;
     return $text;
 }
 
@@ -180,6 +231,7 @@ sub commonTagsHandler
     unshift @_, ( 'commonTagsHandler' );
     &applyHandlers;
     $_[0] =~ s/%PLUGINDESCRIPTIONS%/&handlePluginDescription()/geo;
+    $_[0] =~ s/%ACTIVATEDPLUGINS%/&handleActivatedPlugins()/geo;
 }
 
 # =========================
