@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="1076437528" format="1.0" version="1.61"}%
+%META:TOPICINFO{author="PeterThoeny" date="1077341568" format="1.0" version="1.62"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
-The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
+The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), __topic level__ (the topic being rendered), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
 	* %X% *NOTE:* You can lock individual settings at the site or web levels using User & Group Access Control - see section below.
 %TOC%
 
@@ -18,6 +18,9 @@ The following are __site-level__ settings that affect all users in all webs on t
 
 	* Copyright notice:
 		* Set WEBCOPYRIGHT = <font size="-2">Copyright &copy; 1999-%GMTIME{"$year"}% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%WEB%.%TOPIC%">Send</a> feedback. </font>
+
+	* Simplified Copyright notice for the WebRss feed (don't use any special characters or xml tags
+		* Set WEBRSSCOPYRIGHT = Copyright %GMTIME{"$year"}% by contributing authors
 
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences)
 		* Set NOSEARCHALL =
@@ -251,8 +254,16 @@ The following are __site-level__ settings that affect all users in all webs on t
 	* Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
 		* Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
 
+---++ Preferences Control Settings
+
+	*  Allow topic level preferences, on or off:  If set to =on=, topic preferences will be read, and will override any web- or site-level preferences not set as =FINALPREFERENCES=.  By default, user preferences will override topic preferences.
+		* Set READTOPICPREFS = on
+
+	* Topic level overrides user level preferences, on or off: If set to =on=, topic preferences will override user preferences.  The user can in turn override this behavior by setting further =FINALPREFERENCES= in his or her user topic.
+		* Set TOPICOVERRIDESUSER = off
+
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
-		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE
+		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE, READTOPICPREFS, TOPICOVERRIDESUSER
 
 
 ---++ Creating New Preference Variables
