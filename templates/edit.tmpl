@@ -1,7 +1,7 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:P{"htmldoctype"}%
 <head>
- <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
+ <title> %TMPL:P{"titleaction"}%%TOPIC% &laquo; %WEB% &laquo; %WIKITOOLNAME%</title>
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
  <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_EDIT%
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
@@ -69,7 +69,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 <body bgcolor="#ffffff" onLoad="initForm()">
 #PageTop
 <form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%TMPL:DEF{"titleaction"}%(edit)%TMPL:END%
+%TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
 %TMPL:DEF{"titlehelp"}% %TMPL:END%
 %TMPL:DEF{"webaction"}%Change topic%TMPL:END%
 %TMPL:P{"simpleheader"}%

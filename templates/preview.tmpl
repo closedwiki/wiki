@@ -1,7 +1,7 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:P{"htmldoctype"}%
 <head>
- <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
+ <title> %TMPL:P{"titleaction"}%%TOPIC% &laquo; %WEB% &laquo; %WIKITOOLNAME%</title>
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
  <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_PREVIEW%
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
@@ -19,7 +19,7 @@ function launchWindow( theWeb, theTopic ) {
 </head>
 <body bgcolor="#ffffff" background="%PREVIEWBGIMAGE%">
 #PageTop
-%TMPL:DEF{"titleaction"}%(preview)%TMPL:END%
+%TMPL:DEF{"titleaction"}%(preview) %TMPL:END%
 %TMPL:DEF{"headerhelp"}% <font size="-2">
   <ul>
   <li> To <b>save</b> changes: Press the [Save Changes] button.</li>

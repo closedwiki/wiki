@@ -1,7 +1,7 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:P{"htmldoctype"}%
 <head>
- <title>%WIKITOOLNAME% . %WEB% (book view)</title>
+ <title>(book view) %WEB% &laquo; %WIKITOOLNAME%</title>
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
  <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
@@ -9,7 +9,7 @@
 <body bgcolor="#ffffff">
 #PageTop
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-%TMPL:DEF{"titleaction"}%(book view)%TMPL:END%
+%TMPL:DEF{"titleaction"}%(book view) %TMPL:END%
 %TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
 %TMPL:P{"standardheader"}%
 </form>
