@@ -1,0 +1,46 @@
+%META:TOPICINFO{author="ChrisHuebsch" date="1018861908" format="1.0" version="1.1"}%
+---++ UpdateInfoPlugin
+
+The UpdateInfoPlugin handels the new <nop>%ISNEW% tag after a WikiWord.
+
+<nop>WikiWord <nop>%ISNEW% becomes 
+	* WikiWord if the Topic is neither new nor updated
+	* WikiWord <img src="%PUBURLPATH%/TWiki/UpdateInfoPlugin/new.gif">  if the Topic is younger than five days and is revision 1.1
+	* WikiWord <img src="%PUBURLPATH%/TWiki/UpdateInfoPlugin/updated.gif"> if the Topic was changed during the last five days
+
+---+++ Syntax Rules
+
+The <nop>%ISNEW%-Tag must be written after a WikiWord speperates by excatly one Space.
+
+Using full syntax <nop>%ISNEW% takes one ore two options:
+
+	* days: changes the number of days a Topic is marked as new or updated
+	* version: specifyes which revision is still considered to be new
+
+---+++ Examples:
+
+	* <nop>MyTopic <nop>%ISNEW%
+	* <nop>Web.ToPic <nop>%ISNEW%
+	* <nop>TopIc <nop>%ISNEW{days="15"}
+	* <nop>TopiC <nop>%ISNEW{days="20" version="1.4"}
+
+---+++ <nop>%TOPIC% Settings
+
+none
+
+---+++ Plugin Installation Instructions
+
+	* Just unzip the package as usual.
+
+---+++ Plugin Info
+
+|  Plugin Author: | %TWIKIWEB%.ChrisHuebsch |
+|  Plugin Version: | 15 Apr 2002 |
+|  Change History: | 15 Apr 2002: Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% ( TWiki:Plugins/%TOPIC% )|
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev ( TWiki:Plugins/%TOPIC%Dev )|
+
+-- Main.ChrisHuebsch - 12 Apr 2002
