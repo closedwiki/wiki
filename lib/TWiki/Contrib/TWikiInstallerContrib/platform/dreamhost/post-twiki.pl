@@ -81,7 +81,8 @@ close( INDEX_PHP );
 
 ################################################################################
 
-system( open => "http://" . mychomp(`hostname`) . "/~" . mychomp(`whoami`) . "/cgi-bin/twiki/view/$startupTopic" );
+my $START = "http://" . mychomp(`hostname`) . "/~" . mychomp(`whoami`) . "/cgi-bin/twiki/view/$startupTopic";
+system( open => $START ) or print "start using your wiki at $START\n";
 
 ################################################################################
 ################################################################################
