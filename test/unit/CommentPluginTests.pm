@@ -88,7 +88,7 @@ sub inputTest {
         $sattrs .= "\"";
     }
 
-    my $url = "$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}/viewauth/%INTURLENCODE{$web}%/%INTURLENCODE{$topic}%";
+    my $url = "$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}/viewauth/$web/$topic";
 
     if ( $location ) {
         $sattrs .= " location=\"$location\"";
@@ -111,8 +111,8 @@ sub inputTest {
     my $html =
       TWiki::Plugins::CommentPlugin::Comment::_handleInput
           ($sattrs,
-           $basetopic,
            $baseweb,
+           $basetopic,
            \$pidx,
            "The Message",
            "",
@@ -206,11 +206,13 @@ sub inputTest {
 
     $twiki->{cgiQuery} = $query;
     my $text = "Ignore this text";
+
+    # Should really test when this is wrong
+    $TWiki::Plugins::CommentPlugin::context = "$web.$topic";
+
     # invoke the save handler
     TWiki::Plugins::CommentPlugin::commonTagsHandler($text, $topic, $web);
 
-    #$this->assert_str_equals("http://twiki/view.cgi/$web/$topic",
-    #BaseFixture::redirected());
     $text = TWiki::Func::readTopicText($web, $topic);
     $this->assert_matches(qr/$comm/, $text, "$web.$topic: $text");
 

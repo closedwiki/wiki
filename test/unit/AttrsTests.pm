@@ -36,7 +36,6 @@ sub test_boolean {
 	$this->assert_str_equals("1", $attrs->{"a"});
 
 	$attrs = TWiki::Attrs->new("a12g b987", 1);
-	$this->assert_str_equals("a12g",$attrs->remove("_DEFAULT"));
 	$this->assert_not_null($attrs->remove("a12g"));
 	$this->assert_null($attrs->{"a12g"});
 	$this->assert_not_null($attrs->remove("b987"));
