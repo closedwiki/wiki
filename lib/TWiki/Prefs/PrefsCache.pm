@@ -61,7 +61,7 @@ sub new {
         ASSERT(ref($parent) eq 'TWiki::Prefs::PrefsCache') if DEBUG;
         $this->{final} = $parent->{final};
         $this->{prefs}{FINALPREFERENCES} =
-          join(",", keys( %{$this->{final}} ));
+          join(', ', keys( %{$this->{final}} ));
     } else {
         $this->{final} = ();
     }
