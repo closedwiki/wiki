@@ -131,7 +131,7 @@ sub main
 
     # get view template, standard view or a view with a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
-    $tmpl = &TWiki::Store::readTemplate( "attach", "", $skin );
+    $tmpl = &TWiki::Store::readTemplate( "attach", $skin );
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
     my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
     $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
