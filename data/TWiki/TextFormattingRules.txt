@@ -1,4 +1,4 @@
-%META:TOPICINFO{version="1.19" date="995100495" author="PeterThoeny" format="1.0beta2"}%
+%META:TOPICINFO{author="PeterThoeny" date="997515680" format="1.0beta2" version="1.20"}%
 It is easy to collaborate; just type your text. You don't need to know HTML at all, though you can use it if you prefer. Links to topics will be created automatically, as long as you follow these simple Text Formatting Rules. TextFormattingFAQ has answers to frequently asked questions about text formatting.
 
 %TOC{depth="2"}%
@@ -238,7 +238,7 @@ class CatAnimal {
 <tr>
 <td valign="top">
  *Definition List:* <br>
- Three spaces, the term, a colon, followed by the definition. <br>
+ Three spaces, the term, a colon, a space, followed by the definition. <br>
 __Note:__ Terms with spaces are not supported. In case you do have a term with more then one word, separate the words with dashes or with the =&amp;nbsp;= non-breaking-space entity.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
