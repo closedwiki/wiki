@@ -32,7 +32,7 @@ use TWiki; # required for unpublished constants!
   # Command quote ' for unix, \" for Windows. Copy from TWiki.cfg
   $cmdQuote         = "'";
   # Unix egrep command. Copy from TWiki.cfg
-  $egrepCmd         = "/bin/egrep";
+  $egrepCmd         = $TWiki::egrepCmd;
   # Regex security filter. Copy from TWiki.cfg
   $securityFilter   = "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\x00-\x1F]";
   # Name of topic for email notifications. Copy from TWiki.cfg
