@@ -545,6 +545,17 @@ sub getViewUrl
     return "$urlHost$scriptUrlPath/view$scriptSuffix/$web/$theTopic";
 }
 
+
+sub getScriptUrl
+{
+    my( $theWeb, $theTopic, $theScript ) = @_;
+    
+    my $url = "$urlHost$scriptUrlPath/$theScript$scriptSuffix/$theWeb/$theTopic";
+    # FIXME consider a plugin call here - useful for certificated logon environment
+    
+    return $url;
+}
+
 # =========================
 sub getOopsUrl
 {
@@ -555,8 +566,9 @@ sub getOopsUrl
     if( $theWeb ) {
         $web = $theWeb;
     }
+    my $url = "";
     # $urlHost is needed, see Codev.PageRedirectionNotWorking
-    my $url = "$urlHost$scriptUrlPath/oops$scriptSuffix/$web/$theTopic";
+    $url = getScriptUrl( $web, $theTopic, "oops" );
     $url .= "\?template=$theTemplate";
     if( $theParam1 ) {
         # PTh, Stanley Knutson 03 Feb 2001: Proper URL encoding
@@ -1378,7 +1390,11 @@ sub renderParent
 	       } else {
 	          $visited{"$pWeb.$pTopic"} = 1;
 	       }
-	       ( $meta, $dummy ) = TWiki::Store::readTopMeta( $pWeb, $pTopic );
+               if( TWiki::Store::topicExists( $pWeb, $pTopic ) ) {
+	           ( $meta, $dummy ) = TWiki::Store::readTopMeta( $pWeb, $pTopic );
+               } else {
+                   last;
+               }
 	    }
 	} else {
 	    last;
