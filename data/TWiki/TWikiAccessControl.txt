@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000616943" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="MikeMannix" date="1007283720" format="1.0" version="1.20"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -41,15 +41,17 @@ A user is created by with the TWikiRegistration form. The process generates a to
 ---+++ Managing Groups
 
 Groups are defined by group topics in the ==%MAINWEB%== web, like the %MAINWEB%.TWikiAdminGroup. To start a new group:
-	1. *Create* a new topic with A name that ends in *Group*, =SomeGroup=
+	1. *Create* a new topic with A name that ends in *Group*, =<nop>SomeGroup=
 	1. *Define* two variables:
 		* Set <nop>GROUP = &lt; list of users and groups &gt;
 		* Set <nop>ALLOWTOPICCHANGE = &lt; list of users and groups &gt;
 
-		* GROUP is a comma-separated list of users and of other groups:<br>
-	  ==&nbsp; &nbsp; * Set <nop>GROUP = %MAINWEB%.<nop>SomeUser, %MAINWEB%.<nop>OtherUser, %MAINWEB%.<nop>SomeOtherGroup==
+	* GROUP is a comma-separated list of users and of other groups:<br />
+	  ==&nbsp; &nbsp; Set <nop>GROUP = %MAINWEB%.<nop>SomeUser, %MAINWEB%.<nop>OtherUser, %MAINWEB%.<nop>SomeOtherGroup==
 
-		* ALLOWTOPICCHANGE defines who is allowed to change the group topic; it is a comma delimited list of users and groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic,<br> =&nbsp; &nbsp; * Set <nop>ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup= <br> for the <nop>TWikiAdminGroup topic. (This prevents users not in the group from editing the topic and from gaining unauthorized membership to the group.)
+	* ALLOWTOPICCHANGE defines who is allowed to change the group topic; it is a comma delimited list of users and groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic,<br /> 
+	  ==&nbsp; &nbsp; Set <nop>ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup== <br /> 
+	  for the <nop>TWikiAdminGroup topic. (This prevents users not in the group from editing the topic and from gaining unauthorized membership to the group.)
 
 ---++ Restricting Write Access
 
@@ -135,6 +137,15 @@ You can define restrictions of who is allowed to view a %WIKITOOLNAME% web.
 				* Set <nop>NOSEARCHALL = on
 			* It is not recommended to restrict view access to individual topics since all content is searchable _within_ a web.
 
+---++ Hiding Control Settings
+
+	* %T% To hide access control settings from normal browser viewing, place them in comment markers. 
+<blockquote style="background-color:#f5f5f5">
+	&lt;!--<br />
+	Set <nop>DENYTOPICCHANGE = Main.<nop>SomeGroup<br />
+	--&gt;
+</blockquote>
+
 #SuperAdminGroup
 ---++ The <nop>SuperAdminGroup
 
@@ -147,5 +158,4 @@ $superAdminGroup = "TWikiAdminGroup";
 </blockquote>
 	* The default setting is not to have superusers.
 
--- PeterThoeny - 16 Mar 2001 <br />
--- AndreaSterbini - 11 Apr 2001 <br />
+-- Main.MikeMannix - 02 Dec 2001	
