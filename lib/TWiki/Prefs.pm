@@ -757,7 +757,7 @@ interpreting a value as a number.
 
 =cut
 
-sub getPreferencesFlag
+sub getPreferencesNumber
 {
     my ( $theKey, $theWeb ) = @_;
 
