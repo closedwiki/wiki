@@ -1734,8 +1734,10 @@ sub renderParent
        $text .= $suffix;
     }
 
-    $text = handleCommonTags( $text, $topic, $web );
-    $text = getRenderedVersion( $text, $web );
+    if( $text ) {
+        $text = handleCommonTags( $text, $topic, $web );
+        $text = getRenderedVersion( $text, $web );
+    }
 
     return $text;
 }
