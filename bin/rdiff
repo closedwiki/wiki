@@ -190,7 +190,7 @@ sub main
             $diff =~ s/%REVTITLE1%/r1\.$r1/go;
             $rInfo = getRevInfo( $webName, $r1, $topic, 1 );
             $diff =~ s/%REVINFO1%/$rInfo/go;
-            $text = &TWiki::Store::getRevisionDiff( $topic, "1.$r2", "1.$r1" );
+            $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1" );
             $text = renderRevisionDiff( $text, $topic );
             $diff =~ s/%TEXT%/$text/go;
             $diff =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
