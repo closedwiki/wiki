@@ -5,22 +5,25 @@
 Description: Tests for inclusion of attachments
 
 ---+ Existing attachment
-
-Enter the golden HTML surrounded by structured HTML comments:
+---++ Expected
 <!-- expected -->
 <h1><a name="heading_1"></a>heading 1</h1>
 <!-- /expected -->
-
+---++ Actual
 <!-- actual -->
 %INCLUDE{"%ATTACHURL%/attachment.html"}%
 <!-- /actual -->
-
----+ Non-existant attachment
-<!-- expected -->
-<h1><a name="heading_1"></a>heading 1</h1>
+---
+---+ Non-existant attachment (manual test)
+---++ Expected
+<!-- manual expected  -->
+<p />
+<h1><a name="Not_Found"> </a> Not Found </h1>
+The requested URL %ATTACHURLPATH%/noexist was not found on this server.<P>
+<HR>
 <!-- /expected -->
-
-<!-- actual -->
+---++ Actual
+<!-- manual actual -->
 %INCLUDE{"%ATTACHURL%/noexist"}%
 <!-- /actual -->
 
