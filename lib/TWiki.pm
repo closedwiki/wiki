@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "31 Jul 2003";
+$wikiversion      = "07 Aug 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1385,6 +1385,7 @@ sub handleIncludeFile
 
     my $text = "";
     my $meta = "";
+    my $isTopic = 0;
 
     # set include web/filenames and current web/filenames
     $includingWebName = $theWeb;
@@ -1395,6 +1396,7 @@ sub handleIncludeFile
         # so save the current web and topic name
         $theWeb = $1;
         $theTopic = $2;
+        $isTopic = 1;
 
         if( $rev ) {
             $rev = "1.$rev" unless( $rev =~ /^1\./ );
@@ -1428,6 +1430,18 @@ sub handleIncludeFile
 
     # handle all preferences and internal tags (for speed: call by reference)
     $text = takeOutVerbatim( $text, $verbatim );
+
+    # If needed, fix all "TopicNames" to "Web.TopicNames" to get the right context
+    if( ( $isTopic ) && ( $theWeb ne $webName ) ) {
+        # "TopicName" to "Web.TopicName"
+        $text =~ s/(^|[\s\(])($webNameRegex\.$wikiWordRegex)/$1$TranslationToken$2/go;
+        $text =~ s/(^|[\s\(])($wikiWordRegex|$abbrevRegex)/$1$theWeb\.$2/go;
+        $text =~ s/(^|[\s\(])$TranslationToken/$1/go;
+        # "[[TopicName]]" to "[[Web.TopicName]]"
+        $text =~ s/(\[\[)($wikiWordRegex|$abbrevRegex)(\]\[|\]\])/$1$theWeb\.$2$3/go;
+        # FIXME: Support for "[[Spaced Names]]"
+        # FIXME: Support for <noautolink>
+    }
 
     # Wiki Plugin Hook (4th parameter tells plugin that its called from an include)
     &TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb, 1 );
