@@ -1,4 +1,4 @@
-#! /usr/bin/perl -wT
+#! /usr/bin/perl -w
 ################################################################################
 # download-twiki-plugins.pl
 # Copyright 2004 Will Norris.  All Rights Reserved.
@@ -13,12 +13,12 @@ use diagnostics;
 ++$|;
 
 my $account;
-
 BEGIN {
-    chomp( $account = 'twiki' || `whoami` );
-    unshift @INC, "/Users/$account/Sites/cgi-bin/lib/CPAN/lib/site_perl/5.8.4";
-    unshift @INC, "/Users/$account/Sites/cgi-bin/lib/CPAN/lib/site_perl/5.8.4/darwin-thread-multi-2level";
-    # TODO: use setlib.cfg (TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
+    use Cwd qw( cwd getcwd );
+    use Config;
+    chomp( $account = `whoami` );
+    my $localLibBase = getcwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
+    unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
 }
 
 ################################################################################
@@ -37,7 +37,8 @@ use File::Path qw( mkpath );
 use HTML::TokeParser;
 
 mkpath $Config->{local_cache} or die $! unless -d $Config->{local_cache};
-my ( @errors, $nPlugins, $nDownloadedPlugins );
+my @errors;
+my ( $nPlugins, $nDownloadedPlugins ) = ( 0, 0 );
 my @plugins = getPluginsCatalogList();
 
 print "\n| *Plugin* | *Download Status* |";
