@@ -68,6 +68,9 @@ sub getParam {
  }
 
  #    writeDebug("$paramName = $ans");
+ # Circumstances sometimes that getPreferencesValue returns a CR, breaking the table definitions.
+ # Arguably a bug in TWiki::Prefs::getPreferencesValue (Codev.GetPreferencesValueReturnsNL)
+ $ans = s/\n//;
  return $ans;
 }
 
