@@ -1614,7 +1614,7 @@ sub makeTopicSummary
 
     my $htext = $theText;
     # Format e-mail to add spam padding (HTML tags removed later)
-    $htext =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &mailtoLink( $2, $3, $4 )/ge;
+    $htext =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &TWiki::Render::mailtoLink( $2, $3, $4 )/ge;
     $htext =~ s/<\!\-\-.*?\-\->//gs;  # remove all HTML comments
     $htext =~ s/<\!\-\-.*$//s;        # cut HTML comment
     $htext =~ s/<[^>]*>//g;           # remove all HTML tags

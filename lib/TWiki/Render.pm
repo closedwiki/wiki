@@ -182,7 +182,7 @@ sub renderMoved
         my $by   = $moved{"by"};
         $by = userToWikiName( $by );
         my $date = $moved{"date"};
-        $date = formatTime( $date, , "gmtime" );
+        $date = TWiki::formatTime( $date, , "gmtime" );
         
         # Only allow put back if current web and topic match stored information
         my $putBack = "";
@@ -547,7 +547,7 @@ sub linkToolTipInfo
     $text =~ s/\$web/<nop>$theWeb/g;
     $text =~ s/\$topic/<nop>$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
-    $text =~ s/\$date/&formatTime( $date )/ge;
+    $text =~ s/\$date/&TWiki::formatTime( $date )/ge;
     $text =~ s/\$username/<nop>$user/g;                                     # "jsmith"
     $text =~ s/\$wikiname/"<nop>" . &TWiki::userToWikiName( $user, 1 )/ge;  # "JohnSmith"
     $text =~ s/\$wikiusername/"<nop>" . &TWiki::userToWikiName( $user )/ge; # "Main.JohnSmith"
