@@ -19,7 +19,7 @@
 # a new web.
 
 # Set library paths in @INC, at compile time
-BEGIN { require './setlib.cfg'; }
+BEGIN { unshift @INC, '.'; require 'setlib.cfg'; }
 
 use CGI::Carp qw( fatalsToBrowser );
 use CGI;

@@ -19,7 +19,8 @@
 # http://www.gnu.org/copyleft/gpl.html
 
 # Set library paths in @INC, at compile time
-BEGIN { require './setlib.cfg'; }
+# BEGIN { require './setlib.cfg'; }
+BEGIN { unshift @INC, '.'; require 'setlib.cfg' }
 
 use CGI::Carp qw( fatalsToBrowser );
 use CGI;
