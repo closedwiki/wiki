@@ -99,7 +99,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "28 Feb 2001";
+$wikiversion      = "01 Mar 2001";
 
 # ===========================
 # read the configuration part
@@ -1156,8 +1156,8 @@ sub getRenderedVersion
             s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_\.]*[a-zA-Z0-9\-\_])(?=[\s\.\,\;\:\!\?\)])#$1<a href=\"mailto\:$2">$2</a>#go;
 
 # Make internal links
-            # '[[display text][Web.odd wiki word#anchor]]' link:
-            s/\[\[(.*?)\]\[(.*?)\]\]/&specificLink("",$theWeb,$theTopic,$1,$2)/geo;
+            # '[[Web.odd wiki word#anchor][display text]]' link:
+            s/\[\[(.*?)\]\[(.*?)\]\]/&specificLink("",$theWeb,$theTopic,$2,$1)/geo;
             # '[[Web.odd wiki word#anchor]]' link:
             s/\[\[(.*?)\]\]/&specificLink("",$theWeb,$theTopic,$1,$1)/geo;
 
