@@ -177,7 +177,7 @@ sub upload {
         $fileName =~ s/${nonAlphaNum}//go;
         # apply security filter
         $fileName =~ s/$TWiki::uploadFilter/$1\.txt/goi;
-        $filename = TWiki::Sandbox::untaintUnchecked( $fileName );
+        $fileName = TWiki::Sandbox::untaintUnchecked( $fileName );
 
         ##$session->writeDebug ("Upload filename after cleanup is '$fileName'");
 
