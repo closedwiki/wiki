@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "06 Apr 2002";
+$wikiversion      = "13 Apr 2002";
 
 # ===========================
 # read the configuration part
@@ -1332,6 +1332,8 @@ sub handleWebAndTopicList
         foreach my $aweb ( @webslist ) {
             if( $aweb eq "public" ) {
                 push( @list, getPublicWebList() );
+            } elsif( $aweb eq "webtemplate" ) {
+                push( @list, grep { /^\_/o } &TWiki::Store::getAllWebs( "" ) );
             } else{
                 push( @list, $aweb ) if( &TWiki::Store::webExists( $aweb ) );
             }
