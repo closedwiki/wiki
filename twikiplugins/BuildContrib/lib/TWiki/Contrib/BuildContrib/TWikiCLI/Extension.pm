@@ -91,8 +91,8 @@ require "TWiki/Contrib/Build.pm";
 
 print $@ if $@;
 
- my $buildObj = TWiki::Contrib::Build->new($extension);
- $buildObj->manifest();
+# my $buildObj = TWiki::Contrib::Build->new($extension);
+# $buildObj->manifest();
 
 }
 
