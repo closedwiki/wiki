@@ -1057,7 +1057,7 @@ sub checkGnuVersion {
                        "problems.");
         } else {
             # GNU version not found
-            $n = "GNU $progReadableName was found on the PATH -",
+            $n = "GNU $progReadableName was found on the PATH -".
                   "this is the recommended $progReadableName tool.";
         }
 
