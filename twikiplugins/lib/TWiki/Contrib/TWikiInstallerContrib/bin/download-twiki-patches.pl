@@ -13,23 +13,25 @@
 ################################################################################
 use strict;
 use diagnostics;
+use Data::Dumper qw( Dumper );
 ++$|;
 
-my $account;
+#my $account;
 BEGIN {
     use Cwd qw( cwd getcwd );
     use Config;
-    chomp( $account = `whoami` );
+#    chomp( $account = `whoami` );
     my $localLibBase = getcwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
 }
 
-use LWP;
 use LWP::Simple;
 use Cwd qw( getcwd );
 use File::Path qw( rmtree mkpath );
-use Data::Dumper qw( Dumper );
-use TWiki::Contrib::Attrs;
+use HTML::SimpleParse;
+use LWP::Simple qw( mirror RC_OK RC_NOT_MODIFIED );
+use HTML::TableExtract;
+#use Error;
 
 ################################################################################
 # config
@@ -43,16 +45,12 @@ my $Config = {
 
 ################################################################################
 
-use LWP::Simple qw( mirror RC_OK RC_NOT_MODIFIED );
-use File::Path qw( mkpath );
-use HTML::TableExtract;
-
 mkpath $Config->{local_cache} or die $! unless -d $Config->{local_cache};
 my @errors;
 my ( $nPatches, $nDownloadedPatches ) = qw( 0 0 );
 my @patches = getPatchesCatalogList();
 
-mkdir "$Config->{local_cache}/web" or die $! unless -e "$Config->{local_cache}/web";
+mkpath( "$Config->{local_cache}/web" ) or die $! unless -e "$Config->{local_cache}/web";
 
 print "\n| *Patch* | *Download Status* |";
 foreach my $patchS ( @patches )
@@ -79,12 +77,19 @@ foreach my $patchS ( @patches )
     {
 	#name="Func.pm.patch" attr="" comment="Patch for Func.pm" date="1097756003" path="Func.pm.patch" size="478" user="JChristophFuchs" version="1.1"
 	print "Attrs=[[$1]]\n";
-	my $attrsAttach = TWiki::Contrib::Attrs->new( $1 );
+	my $attrsAttach = { HTML::SimpleParse->parse_args( $1 ) };
 	print Data::Dumper::Dumper( $attrsAttach );
-	my $remote_attachment_uri = "$Config->{twiki}->{pub}/$web/$topic/$attrsAttach->{path}";
+	die "no filename for attachment?" unless $attrsAttach->{name};
+
+	my $remote_attachment_uri = "$Config->{twiki}->{pub}/$web/$topic/$attrsAttach->{name}";
 	print "$remote_attachment_uri\n";
 	# CODE_SMELL: if path contained an actual path (subdirectory), what would happen... ? should be using File::Path::mkpath...
-	my $status = mirror( $remote_attachment_uri, "$Config->{local_cache}/web/$topic/pub/$attrsAttach->{path}" );
+#	my $pub = "$Config->{local_cache}/web/$topic/pub";
+#	File::Path::mkpath( $pub );
+#	my $status = mirror( $remote_attachment_uri, "$pub/$attrsAttach->{name}" );
+
+#	my $status = mirror( $remote_attachment_uri, "$Config->{local_cache}/web/$topic/pub/$attrsAttach->{path}" );
+	my $status = mirror( $remote_attachment_uri, "$Config->{local_cache}/web/$topic/pub/$attrsAttach->{name}" );
     }
 
     # create a GetAWebAddOn-compatable (er, really the installer at this point)
@@ -119,7 +124,7 @@ File::Path::rmtree( "$Config->{local_cache}/web" ) or warn $!;
 use XML::Simple;
 my $xs = new XML::Simple() or die $!;
 open( XML, ">$Config->{local_cache}/patches.xml" ) or die $!;
-print XML $xs->XMLout( { patch => [ @plugins ] }, NoAttr => 1 );
+print XML $xs->XMLout( { patch => [ @patches ] }, NoAttr => 1 );
 close( XML ) or warn $!;
 
 ################################################################################
@@ -130,7 +135,8 @@ sub getPatchesCatalogList
     my $pg = 'PatchProposal';
 
     mirror( "http://twiki.org/cgi-bin/view/Codev/${pg}?skin=plain", "${pg}.html" );
-    my $patchesCatalogPage = LWP::Simple::get( "file:${pg}.html" ) or die $!;
+    my $patchesCatalogPage = LWP::Simple::get( "file:${pg}.html" ) 
+	or die "Can't download patches catalogue: $!";
 
     # get list of patches (from the links)
     my @patches = qw();
