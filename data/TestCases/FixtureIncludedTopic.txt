@@ -15,12 +15,12 @@ THE TEST FAILED
  </tr>
  <tr>
   <td>BASETOPIC</td>
-  <td><!-- expected -->TestCaseInternalTagsAutomatableTests<!-- /expected --></td>
+  <td><!-- expected -->TestCaseAutoInternalTags<!-- /expected --></td>
   <td><!-- actual -->%BASETOPIC%<!-- /actual --></td>
  </tr>
  <tr>
   <td>INCLUDINGTOPIC</td>
-  <td><!-- expected -->TestCaseInternalTagsAutomatableTests<!-- /expected --></td>
+  <td><!-- expected -->TestCaseAutoInternalTags<!-- /expected --></td>
   <td><!-- actual -->%INCLUDINGTOPIC%<!-- /actual --></td>
  </tr>
 %STOPINCLUDE%
