@@ -488,6 +488,8 @@ sub searchWeb
                 foreach( split( /\n/, $rawText ) ) {
                 
                    next if( /^%META:TOPIC(INFO|MOVED)/ );
+                   s/</&lt;/go;
+                   s/>/&gt;/go;
 
                    # This code is in far too many places
                    m|<pre>|i  && ( $insidePRE = 1 );
