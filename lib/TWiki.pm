@@ -3442,7 +3442,7 @@ sub makeAnchorHeading
 {
     my( $theText, $theLevel ) = @_;
 
-    # - Need to build '<nop><h1><a name="atext"> text </a></h1>'
+    # - Need to build '<nop><h1><a name="atext"></a> text </h1>'
     #   type markup.
     # - Initial '<nop>' is needed to prevent subsequent matches.
     # - Need to make sure that <a> tags are not nested, i.e. in
@@ -3461,13 +3461,11 @@ sub makeAnchorHeading
     $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/ );
     $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{wikiWordRegex})/ );
 
-    my $prefix = "<nop><h$theLevel><a name=\"$compatAnchorName\"></a> " .
-		 "<a name=\"$anchorName\"></a> ";
-    if( $hasAnchor ) {
-        $text = "$prefix $text </h$theLevel>";
-    } else {
-        $text = "$prefix $text </h$theLevel>";
-    }
+    # FIXME: $hasAnchor is not used
+	# FIXME: What does $compatAnchorName do? Seems to be redundant: document this please
+    my $headerprefix = "<nop><h$theLevel>";
+    my $anchorprefix = "<a name=\"$compatAnchorName\"></a>" . "<a name=\"$anchorName\"></a>";
+	$text = "$headerprefix$anchorprefix$text</h$theLevel>";
 
     return $text;
 }
