@@ -1,8 +1,8 @@
 TWiki Distribution
 ------------------
 
-Version: 01 Sep 1999
-Release type: Production release
+Version: 03 Oct 1999
+Release type: Beta release
 
 Installation instructions in TWikiDocumentation.html or
 http://starship.python.net/crew/scharf/TWiki/bin/view/Main/TWikiDocumentation

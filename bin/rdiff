@@ -221,20 +221,33 @@ sub main
     $i = $maxrev;
     $j = $maxrev;
     my $revisions = "";
+    my $breakRev = 0;
+    if( ( $wiki::numberOfRevisions > 0 ) && ( $wiki::numberOfRevisions < $maxrev ) )
+    {
+        $breakRev = $maxrev - $wiki::numberOfRevisions + 1;
+    }
 
     while( $i > 0 )
     {
         $revisions .= " | <A href=\"../../view/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
         if( $i != 1 )
         {
-            if( ( $i == $rev1 ) && ( !$isMultipleDiff ) )
+            if( $i == $breakRev )
             {
-                $revisions .= " | &gt;";
+                $revisions = "$revisions | <A href=\"../../oops/%WEB%/%TOPIC%?template=oopsrev&param1=1.$maxrev\">&gt;...</A>";
+                $i = 1;
             }
             else
             {
-                $j = $i - 1;
-                $revisions .= " | <A href=\"../../rdiff/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
+                if( ( $i == $rev1 ) && ( !$isMultipleDiff ) )
+                {
+                    $revisions .= " | &gt;";
+                }
+                else
+                {
+                    $j = $i - 1;
+                    $revisions .= " | <A href=\"../../rdiff/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
+                }
             }
         }
         $i = $i - 1;

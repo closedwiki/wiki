@@ -88,7 +88,7 @@ $rmFileCmd        = "rm -f %FILENAME%";
 # variables that probably do not change:
 # ==================================================================
 #                   %WIKITOOLNAME% : TWiki tool name :
-$wikiToolName     = "TWiki";
+$wikiToolName     = "TWikibeta";
 #                   Pathname of debug file :
 $debugFilename    = "$dataDir/debug.txt";
 #                   Pathname of user name/password file for authentication :
@@ -104,7 +104,9 @@ $mainWebname      = "Main";
 #                   %HOMETOPIC% : Name of main topic in a web :
 $mainTopicname    = "WebHome";
 #                   %NOTIFYTOPIC% : Name of topic for email notifications :
-$notifyTopicname    = "WebNotify";
+$notifyTopicname  = "WebNotify";
+#                   Show how many number of revision links, "0" for all :
+$numberOfRevisions = "4";
 
 # flag variables that could change:
 # ==================================================================

@@ -122,7 +122,11 @@ sub main
     my $i = $maxrev;
     my $j = $maxrev;
     my $revisions = "";
-
+    my $breakRev = 0;
+    if( ( $wiki::numberOfRevisions > 0 ) && ( $wiki::numberOfRevisions < $maxrev ) )
+    {
+        $breakRev = $maxrev - $wiki::numberOfRevisions + 1;
+    }
     while( $i > 0 )
     {
         if( $i eq $rev)
@@ -135,8 +139,16 @@ sub main
         }
         if( $i != 1 )
         {
-            $j = $i - 1;
-            $revisions = "$revisions | <A href=\"../../rdiff/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
+            if( $i == $breakRev )
+            {
+                $revisions = "$revisions | <A href=\"../../oops/%WEB%/%TOPIC%?template=oopsrev&param1=1.$maxrev\">&gt;...</A>";
+                $i = 1;
+            }
+            else
+            {
+                $j = $i - 1;
+                $revisions = "$revisions | <A href=\"../../rdiff/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
+            }
         }
         $i = $i - 1;
     }
