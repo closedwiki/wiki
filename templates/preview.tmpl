@@ -1,7 +1,6 @@
 %TMPL:INCLUDE{"twiki"}%
-
 %TMPL:DEF{"script"}%
-<script language="JavaScript">
+<script type="text/javascript">
 <!--HIDE
 function launchWindow( theWeb, theTopic ) {
   win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
@@ -11,22 +10,18 @@ function launchWindow( theWeb, theTopic ) {
   return false;
 }
 //STOP HIDING-->
-</script>
-%TMPL:END%
-
+</script>%TMPL:END%
 %TMPL:DEF{"footernote"}%
   <div >
    &nbsp; &nbsp;
   </td><td valign="top">
    &nbsp; &nbsp;
    <input type="checkbox" name="unlock" %RELEASEEDITLOCKCHECKBOX% /> Release edit lock
-   <font size="-1">(<a target="UnlockTopic" onClick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font> <br />
+   <font size="-1">(<a target="UnlockTopic" onclick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font> <br />
    &nbsp; &nbsp;
    <input type="checkbox" name="dontnotify" %DONTNOTIFYCHECKBOX% /> Minor changes, don't notify
-   <font size="-1">(<a target="DontNotify" onClick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>)</font>
-   </div>
-%TMPL:END%
-
+   <font size="-1">(<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>)</font>
+   </div>%TMPL:END%
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 <body bgcolor="#ffffff" background="%PREVIEWBGIMAGE%">
@@ -54,7 +49,6 @@ function launchWindow( theWeb, theTopic ) {
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 %TMPL:DEF{"topicaction"}% <input type="submit" value=" Save Changes " /> %FORMFIELDS% %TMPL:END%
 %TMPL:P{"standardfooter"}%
-
 </form>
 #PageBottom
 </body>

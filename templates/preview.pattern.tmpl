@@ -1,8 +1,6 @@
 %TMPL:INCLUDE{"twiki"}%
-
-
 %TMPL:DEF{"script"}%
-<script language="JavaScript">
+<script type="text/javascript">
 <!--HIDE
 function launchWindow( theWeb, theTopic ) {
   win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
@@ -14,14 +12,9 @@ function launchWindow( theWeb, theTopic ) {
 //STOP HIDING-->
 </script>
 %TMPL:END%
-
 %TMPL:DEF{"bodystart"}%
-<body id="previewpage" onload="initPage()" background="%PREVIEWBGIMAGE%"><a name="PageTop"></a>
-%TMPL:END%
-
-%TMPL:DEF{"titleaction"}%(preview)
-%TMPL:END%
-
+<body id="previewpage" onload="initPage()" background="%PREVIEWBGIMAGE%"><a name="PageTop"></a>%TMPL:END%
+%TMPL:DEF{"titleaction"}%(preview)%TMPL:END%
 %TMPL:DEF{"headerhelp"}% 
 <font size="-2">
   <ul>
@@ -29,18 +22,11 @@ function launchWindow( theWeb, theTopic ) {
   <li> To make <b>more changes</b>: Go back in your browser.</li>
   <li> To <b>cancel</b>: Go back twice.</li>
   </ul>
-  </font> 
-  %TMPL:END%
-  
+  </font>%TMPL:END%
 %TMPL:DEF{"webaction"}%
   <b><font color="#FF0000">Note:</font></b>
-  This is a preview. <b><font color="#FF0000">Do not forget</font></b> to save your changes. 
- %TMPL:END%
-
-%TMPL:DEF{"topicaction"}% <input type="submit" value=" Save Changes " /> %FORMFIELDS% 
-%TMPL:END%
-
-
+  This is a preview. <b><font color="#FF0000">Do not forget</font></b> to save your changes.%TMPL:END%
+%TMPL:DEF{"topicaction"}% <input type="submit" value=" Save Changes " /> %FORMFIELDS% %TMPL:END%
 %TMPL:DEF{"main"}%
 %TMPL:P{"topbar"}%
 %TMPL:P{"titleaction"}%
@@ -65,20 +51,17 @@ function launchWindow( theWeb, theTopic ) {
   <td valign="top">
    &nbsp; &nbsp;
    <input type="checkbox" name="unlock" %RELEASEEDITLOCKCHECKBOX% /> Release edit lock
-   <font size="-1">(<a target="UnlockTopic" onClick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font> <br />
+   <font size="-1">(<a target="UnlockTopic" onclick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font> <br />
    &nbsp; &nbsp;
    <input type="checkbox" name="dontnotify" %DONTNOTIFYCHECKBOX% /> Minor changes, don't notify
-   <font size="-1">(<a target="DontNotify" onClick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>)</font>
+   <font size="-1">(<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>)</font>
   </td>
   <td width="50%" valign="top">
    %WEBCOPYRIGHT%
   </td>
  </tr>
 </table>
-</form>
-%TMPL:END%
-
-
+</form>%TMPL:END%
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%

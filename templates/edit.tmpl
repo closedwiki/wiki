@@ -1,6 +1,6 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:DEF{"script"}%
-<script language="JavaScript">
+<script type="text/javascript">
 <!--HIDE
 ns4 = (document.layers)? true:false;
 ie4 = (document.all)? true:false;
@@ -76,14 +76,14 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 %TMPL:DEF{"webaction"}%Change topic%TMPL:END%
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
-<body bgcolor="#ffffff" onLoad="initForm()">
+<body bgcolor="#ffffff" onload="initForm()">
 #PageTop
 <form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"simpleheader"}%
-<textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onKeyDown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
+<textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onkeydown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-<input type="hidden" name="cmd" value="%CMD%" />     
+<input type="hidden" name="cmd" value="%CMD%" />
 See below for help in editing this page.
 <table border="0" cellpadding="2" cellspacing="0">
  <tr>

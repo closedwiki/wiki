@@ -1,9 +1,7 @@
 %TMPL:INCLUDE{"twiki"}%
-
 %TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
 %TMPL:DEF{"titlehelp"}% %TMPL:END%
 %TMPL:DEF{"webaction"}%Change topic%TMPL:END%
-
 %TMPL:DEF{"topicaction"}%
 <fieldset><legend><span class="deem"> [[%TWIKIWEB%.AccessKeys][AccessKeys]]: S = Save, Q = Quiet Save, K = Checkpoint, P = Preview, C = Cancel</span></legend>
    <label accesskey="s" for="save">
@@ -22,9 +20,8 @@
         <input type="submit" name="action" value="Cancel" />
    </label>
 </fieldset>%TMPL:END%
-
 %TMPL:DEF{"script"}%
-<script language="JavaScript">
+<script type="text/javascript">
 <!--HIDE
 ns4 = (document.layers)? true:false;
 ie4 = (document.all)? true:false;
@@ -87,7 +84,6 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 %TMPL:DEF{"bodystart"}%
 <body id="editpage" onload="initForm()"><a name="PageTop"></a>%TMPL:END%
-
 %TMPL:DEF{"main"}%
 <form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"topbar"}%
@@ -121,10 +117,7 @@ See below for help in editing this page.
   </td>
  </tr>
 </table>
-</form>
-%TMPL:END%
-
-
+</form>%TMPL:END%
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%
