@@ -414,8 +414,8 @@ sub setupRegexes {
 	$upperAlpha = "[:upper:]";
 	$lowerAlpha = "[:lower:]";
 	$numeric = "[:digit:]";
-	$lowerAlphaNum = "[:lower:][:digit]";
-	$mixedAlphaNum = "[:alpha:][:digit]";
+	$lowerAlphaNum = "[:lower:][:digit:]";
+	$mixedAlphaNum = "[:alpha:][:digit:]";
     }
 
     # Compile regexes for efficiency and ease of use
