@@ -110,7 +110,7 @@ When deciding whether to grant access, TWiki evaluates the following rules in or
       * access is *PERMITTED*.
    1 If DENYTOPIC is set to a list of wikinames
       * people in the list will be *DENIED*.
-   1 If DENYTOPIC is set to _empty_ ( i.e. <tt>Set DENYWEB =</tt> )
+   1 If DENYTOPIC is set to _empty_ ( i.e. <tt>Set DENYTOPIC =</tt> )
       * access is *PERMITTED* _i.e _ no-one is denied access to this topic
    1 If ALLOWTOPIC is set
       1 people in the list are *PERMITTED*
