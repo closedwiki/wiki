@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "25 Mar 2003";
+$wikiversion      = "10 Apr 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1410,7 +1410,7 @@ sub handleIncludeFile
     # FIXME What about attachments?
 
     # recursively process multiple embedded %INCLUDE% statements and prefs
-    $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $theTopic, $theWeb, @theProcessedTopics )/ge;
+    $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $theTopic, $theWeb, $verbatim, @theProcessedTopics )/ge;
 
     return $text;
 }
