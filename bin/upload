@@ -42,7 +42,7 @@ sub filenameToIcon
     my $tmp = &TWiki::getPubDir();
     my $iconDir = "$tmp/icn";
     my $iconUrl = "%PUBURLPATH%/icn";
-    my $iconList = &TWiki::readFile( "$iconDir/_filetypes.txt" );
+    my $iconList = &TWiki::Store::readFile( "$iconDir/_filetypes.txt" );
     foreach( split( /\n/, $iconList ) ) {
         @bits = ( split( / / ) );
 	if( $bits[0] eq $fileExt ) {
@@ -57,7 +57,7 @@ sub filenameToIcon
 sub updateAttachment
 {
     my ( $atext, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) = @_;
-    my $atTable = &TWiki::readTemplate( "attachtable" );
+    my $atTable = &TWiki::Store::readTemplate( "attachtable" );
     my ( $atTableBefore, $atTableFile, $atTableAfter ) = split( /%REPEAT%/, $atTable );
 
     my $before="", $item="", $lcItem="", $after="", $set="", $ins="", $comp="";
@@ -371,8 +371,8 @@ sub main
 
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
-    if( ! &TWiki::webExists( $webName ) ) {
-        $tmpl= &TWiki::readTemplate( "noweb" );
+    if( ! &TWiki::Store::webExists( $webName ) ) {
+        $tmpl= &TWiki::Store::readTemplate( "noweb" );
         $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print "Content-type: text/html\n\n";
         print $tmpl;
@@ -438,13 +438,13 @@ sub main
 
     if( $TWiki::doLogTopicUpload ) {
         # write log entry
-        &TWiki::writeLog( "upload", "$webName.$topic", $fileName );
+        &TWiki::Store::writeLog( "upload", "$webName.$topic", $fileName );
     }
 
     # update topic
     $fileDate =~ s/ /&nbsp;/go;
     my $text = "", $before="", $atext="", $after="";
-    $text = &TWiki::readTopic( $topic );
+    $text = &TWiki::Store::readTopic( $topic );
     # extract attachment section:
     ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
     if( ! $before ) { $before = ""; }

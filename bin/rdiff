@@ -125,8 +125,8 @@ sub main
     my $revInfo1 = "",  $revInfo2 = "";
     my $isMultipleDiff = 0;
 
-    if( ! &TWiki::webExists( $webName ) ) {
-	$tmpl= &TWiki::readTemplate( "noweb" );
+    if( ! &TWiki::Store::webExists( $webName ) ) {
+	$tmpl= &TWiki::Store::readTemplate( "noweb" );
 	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
 	return;
@@ -134,10 +134,10 @@ sub main
 
     # get view template, standard view or a view with a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
-    $tmpl = &TWiki::readTemplate( "rdiff", $topic, $skin );
+    $tmpl = &TWiki::Store::readTemplate( "rdiff", $topic, $skin );
     my( $before, $difftmpl, $after) = split( /%REPEAT%/, $tmpl);
 
-    my $topicExists = &TWiki::topicExists( $webName, $topic );
+    my $topicExists = &TWiki::Store::topicExists( $webName, $topic );
     if( $topicExists ) {
 	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
         $maxrev =~ s/1\.//go;  # cut major

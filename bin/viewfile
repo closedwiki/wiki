@@ -38,8 +38,8 @@ sub main
 
     my $tmpl= "";
 
-    if( ! &TWiki::webExists( $webName ) ) {
-	$tmpl= &TWiki::readTemplate( "noweb" );
+    if( ! &TWiki::Store::webExists( $webName ) ) {
+	$tmpl= &TWiki::Store::readTemplate( "noweb" );
 	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print "Content-type: text/html\n\n";  # Fixed n.lee 20000922
 	print $tmpl;

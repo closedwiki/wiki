@@ -122,9 +122,9 @@ sub searchWeb
     my $tempVal = "";
     my $tmpl = "";
     if( $doBookView ) {
-        $tmpl = &TWiki::readTemplate( "searchbookview" );
+        $tmpl = &TWiki::Store::readTemplate( "searchbookview" );
     } else {
-        $tmpl = &TWiki::readTemplate( "search" );
+        $tmpl = &TWiki::Store::readTemplate( "search" );
     }
     my( $tmplHead, $tmplSearch,
 	$tmplTable, $tmplNumber, $tmplTail ) = split( /%SPLIT%/, $tmpl );
@@ -190,7 +190,7 @@ sub searchWeb
         #     e.g. do not log inline search
         # PTh 03 Nov 2000: Moved out of the 'foreach $thisWebName' loop
         my $tempVal = join( ' ', @webList );
-        &TWiki::writeLog( "search", $tempVal, $theSearchVal );
+        &TWiki::Store::writeLog( "search", $tempVal, $theSearchVal );
     }
 
     ## #############
@@ -205,7 +205,7 @@ sub searchWeb
         $thisWebName =~ /(.*)/;
         $thisWebName = $1;  # untaint variable
 
-        next unless &TWiki::webExists( $thisWebName );  # can't process what ain't thar
+        next unless &TWiki::Store::webExists( $thisWebName );  # can't process what ain't thar
 
         my $thisWebBGColor     = &TWiki::Prefs::getPreferencesValue( "WEBBGCOLOR", $thisWebName ) || "\#FF00FF";
         my $thisWebNoSearchAll = &TWiki::Prefs::getPreferencesValue( "NOSEARCHALL", $thisWebName );
@@ -400,12 +400,12 @@ sub searchWeb
                 $tempVal =~ s/%TEXTHEAD%//go;
                 $tempVal =~ s/&nbsp;//go;
             } elsif( $doBookView ) {  # added PTh 20 Jul 2000
-                $head = &TWiki::readFile( "$TWiki::dataDir\/$thisWebName\/$topic.txt" );
+                $head = &TWiki::Store::readFile( "$TWiki::dataDir\/$thisWebName\/$topic.txt" );
                 $head = &TWiki::handleCommonTags( $head, $topic, $thisWebName );
                 $head = &TWiki::getRenderedVersion( $head, $thisWebName );
                 $tempVal =~ s/%TEXTHEAD%/$head/go;
             } else {
-                $head = &TWiki::readFileHead( "$TWiki::dataDir\/$thisWebName\/$topic.txt", 16 );
+                $head = &TWiki::Store::readFileHead( "$TWiki::dataDir\/$thisWebName\/$topic.txt", 16 );
                 $head = &TWiki::makeTopicSummary( $head, $topic, $thisWebName );
                 $tempVal =~ s/%TEXTHEAD%/$head/go;
             }

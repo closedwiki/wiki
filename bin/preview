@@ -123,8 +123,8 @@ sub main
 
     my $tmpl = "", $atext = "", $text = "", $ptext = "", $tcat = "", $icat = "";
 
-    if( ! &TWiki::webExists( $webName ) ) {
-	$tmpl= &TWiki::readTemplate( "noweb" );
+    if( ! &TWiki::Store::webExists( $webName ) ) {
+	$tmpl= &TWiki::Store::readTemplate( "noweb" );
 	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
 	return;
@@ -135,8 +135,8 @@ sub main
 
     # get view template, standard view or a view with a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
-    $tmpl = &TWiki::readTemplate( "preview", "", $skin );
-    $icat = &TWiki::readTemplate( "twikicatitems" );
+    $tmpl = &TWiki::Store::readTemplate( "preview", "", $skin );
+    $icat = &TWiki::Store::readTemplate( "twikicatitems" );
     my $dontNotify = $query->param( "dontnotify" ) || "";
     $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
     my $saveCmd = $query->param( "cmd" ) || "";
@@ -147,7 +147,7 @@ sub main
 
     if( $icat ) {
         # get category items from parameters and build category section
-        $tcat = &TWiki::readTemplate( "twikicatview" );
+        $tcat = &TWiki::Store::readTemplate( "twikicatview" );
         my $line = "", $ttext = "", $temp = "";
         ( $before, $line, $after) = split( /%REPEAT%/, $tcat );
         foreach( split( /\n/, $icat ) ) {
@@ -173,7 +173,7 @@ sub main
 
     if( $saveCmd ne "repRev" ) {
         # normal case: Get latest attachment from file for preview
-        $text= &TWiki::readTopic( $topic );
+        $text= &TWiki::Store::readTopic( $topic );
         ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
         # get the edited text and combine text, category table and attachment for preview
         $text = $query->param( "text" );

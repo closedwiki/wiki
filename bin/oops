@@ -39,7 +39,7 @@ sub main
     if( ! $tmplName ) {
         $tmplName = "oops";
     }
-    my $tmplData = &TWiki::readTemplate( $tmplName );
+    my $tmplData = &TWiki::Store::readTemplate( $tmplName );
     if( ! $tmplData ) {
         print "Content-type: text/html\n\n";
         print "<html><body>";

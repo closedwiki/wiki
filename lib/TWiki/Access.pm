@@ -56,7 +56,7 @@ sub checkAccessPermission
     }
     if( ! $theTopicText ) {
         # text not supplied as parameter, so read topic
-        $theTopicText = &TWiki::readWebTopic( $theWebName, $theTopicName );
+        $theTopicText = &TWiki::Store::readWebTopic( $theWebName, $theTopicName );
     }
     ##&TWiki::writeDebug( "checkAccessPermission: Type $theAccessType, user $theUserName, topic $theTopicName" );
 
@@ -180,7 +180,7 @@ sub prvGetUsersOfGroup
     push( @processedGroups, "$web\.$topic" );
 
     # read topic
-    my $text = &TWiki::readWebTopic( $web, $topic );
+    my $text = &TWiki::Store::readWebTopic( $web, $topic );
 
     # reset variables, defensive coding needed for recursion
     (my $baz = "foo") =~ s/foo//;

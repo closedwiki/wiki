@@ -49,8 +49,8 @@ sub main
     my $extra = "";
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
-    if( ! &TWiki::webExists( $webName ) ) {
-	$tmpl= &TWiki::readTemplate( "noweb" );
+    if( ! &TWiki::Store::webExists( $webName ) ) {
+	$tmpl= &TWiki::Store::readTemplate( "noweb" );
 	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print "Content-type: text/html\n\n";
 	print $tmpl;
@@ -65,7 +65,7 @@ sub main
 
     # get view template, standard view or a view with a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
-    $tmpl = &TWiki::readTemplate( "view", $topic, $skin );
+    $tmpl = &TWiki::Store::readTemplate( "view", $topic, $skin );
     if( ! $tmpl ) {
         print "Content-type: text/html\n\n";
         print "<html><body>";
@@ -76,7 +76,7 @@ sub main
 	return;
     }
 
-    my $topicExists = &TWiki::topicExists( $webName, $topic );
+    my $topicExists = &TWiki::Store::topicExists( $webName, $topic );
     if( $topicExists ) {
 	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
         $maxrev =~ s/1\.//go;  # cut major
@@ -87,15 +87,15 @@ sub main
 	    $text= &TWiki::Store::readVersion( $topic, "1.$rev" );
             $extra .= "r1.$rev";
 	} else {
-	    $text= &TWiki::readTopic( $topic );
+	    $text= &TWiki::Store::readTopic( $topic );
 	    $rev= $maxrev;
 	}
     } else {
 	$rev = 1;
 	if( &TWiki::isWikiName( $topic ) ) {
-	    $text= &TWiki::readTemplate( "notext" );
+	    $text= &TWiki::Store::readTemplate( "notext" );
 	} else {
-	    $text= &TWiki::readTemplate( "notwiki" );
+	    $text= &TWiki::Store::readTemplate( "notwiki" );
 	}
         $extra .= " (not exist)";
     }
@@ -133,7 +133,7 @@ sub main
 
     if( $TWiki::doLogTopicView ) {
         # write log entry
-        &TWiki::writeLog( "view", "$webName.$topic", $extra );
+        &TWiki::Store::writeLog( "view", "$webName.$topic", $extra );
     }
 
     if( $rev < $maxrev ) {

@@ -28,7 +28,7 @@ package TWiki::Net;
 
 use strict;
 
-use TWiki::Prefs;
+##use TWiki::Prefs;
 use Net::SMTP;
 
 sub sendEmail
@@ -44,14 +44,11 @@ sub sendEmail
 	@to = @{$toref};
     }
     return "" unless ($#to);
-    my $mailhost = &TWiki::Prefs::getPreferencesValue("MAILHOST");
+    my $mailhost = &TWiki::Prefs::getPreferencesValue("MAILHOST") || "mail";
     
-    # For now just return if no mailhost
-    # For later:
+    # ToDo For later:
     # Make it the fail back option dependant on if MAILHOST is non-"" 
     # and Net::Smtp exists.  Rather than creating a new flag in Cfg.
-
-    return "" unless $mailhost;
 
     my $smtp = Net::SMTP->new( $mailhost );
     $smtp->mail($from);

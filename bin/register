@@ -81,7 +81,7 @@ sub main
 
     # check if user entry already exists
     if(  ( $wikiName ) 
-      && (  ( &TWiki::topicExists( $webName,  $wikiName ) )
+      && (  ( &TWiki::Store::topicExists( $webName,  $wikiName ) )
          || ( htpasswdExistUser( $wikiName ) ) 
          ) ) {
         # PTh 20 Jun 2000: changed to getOopsUrl
@@ -125,7 +125,7 @@ sub main
     }
 
     # send email confirmation
-    $text = &TWiki::readTemplate( "registernotify" );
+    $text = &TWiki::Store::readTemplate( "registernotify" );
     $text =~ s/%FIRSTLASTNAME%/$firstLastName/go;
     $text =~ s/%WIKINAME%/$wikiName/go;
     $text =~ s/%EMAILADDRESS%/$emailAddress/go;
@@ -143,12 +143,12 @@ sub main
     $text = "$before$after";
     $text = &TWiki::handleCommonTags( $text, $wikiName );
 
-    &TWiki::Net::sendEmail( &TWiki::Prefs::getPreferencesValue("WIKIWEBMASTER"), 
+    &TWiki::Net::sendEmail( &TWiki::Prefs::getPreferencesValue( "WIKIWEBMASTER" ), 
 			    $emailAddress, $text );
 
     # create user topic if not exist
-    if( ! &TWiki::topicExists( $TWiki::mainWebname, $wikiName ) ) {
-        $text = &TWiki::readTemplate( "register" );
+    if( ! &TWiki::Store::topicExists( $TWiki::mainWebname, $wikiName ) ) {
+        $text = &TWiki::Store::readTemplate( "register" );
         ( $before, $after) = split( /%FORMDATA%/, $text );
         for( $x = 0; $x < $formLen; $x++ ) {
             $name = $formDataName[$x];
@@ -170,7 +170,7 @@ sub main
 
     # write log entry
     if( $TWiki::doLogRegistration ) {
-        &TWiki::writeLog( "register", "$webName.$userTopic", $emailAddress, $wikiName );
+        &TWiki::Store::writeLog( "register", "$webName.$userTopic", $emailAddress, $wikiName );
     }
 
     # and finally display thank you page
@@ -223,7 +223,7 @@ sub addUserToTWikiUsersTopic
     my $today = &TWiki::getLocaldate();
     my $topicName = $TWiki::userListFilename;
     $topicName =~ s/(.*[^\/])\/([a-zA-Z0-9]*)\.txt$/$2/go;
-    my $text  = &TWiki::readTopic( $topicName );
+    my $text  = &TWiki::Store::readTopic( $topicName );
     my $result = "";
     my $status = "0";
     my $line = "";

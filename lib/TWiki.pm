@@ -36,7 +36,7 @@
 #                          to sort dates.)
 #
 # 15 May 2000  PeterFokkinga :
-#    With this patch each topic can have its own template. TWiki::readTemplate()
+#    With this patch each topic can have its own template. TWiki::Store::readTemplate()
 #    has been modified to search for the following templates (in this order): 
 #
 #     1.$templateDir/$webName/$name.$topic.tmpl 
@@ -98,39 +98,19 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "11 Feb 2001";
+$wikiversion      = "16 Feb 2001";
 
 # ===========================
 # read the configuration part
 do "TWiki.cfg";
 
 # ===========================
-# read the preferences part
-##do "TWiki/Prefs.pm";
-use TWiki::Prefs;
-
-# ===========================
-# read the search engine part
-##do "TWiki/Search.pm";
-use TWiki::Search;
-
-# ===========================
-# read the access control part
-##do "TWiki/Access.pm";
-use TWiki::Access;
-
-# ===========================
-# read the rcs related functions
-##do "TWiki/Store.pm";
-use TWiki::Store;
-
-#AS
-# =========================
-# read the plugins handler
-##do "TWiki/Plugins.pm";
-use TWiki::Plugins;
-#/AS
-
+# use TWiki modules
+use TWiki::Prefs;     # preferences
+use TWiki::Search;    # search engine
+use TWiki::Access;    # access control
+use TWiki::Store;     # file I/O and rcs related functions
+use TWiki::Plugins;   # plugins handler  #AS
 
 # ===========================
 # variables: (new variables must be declared in "use vars qw(..)" above)
@@ -237,10 +217,10 @@ sub getEmailNotifyList
     my( $web, $topicname ) = @_;
 
     $topicname |= $TWiki::notifyTopicname;
-    return undef unless &TWiki::topicExists( $web, $topicname );
+    return undef unless &TWiki::Store::topicExists( $web, $topicname );
 
     my @list = ();
-    foreach ( split( /\n/, &TWiki::readWebTopic( $web, $topicname ) ) ) {
+    foreach ( split( /\n/, &TWiki::Store::readWebTopic( $web, $topicname ) ) ) {
 	next unless /^\s\*\s[A-Za-z0-9\.]/;
 	push @list, $1 if (/([\w\-\.\+]+\@[\w\-\.\+]+)/);
     }
@@ -386,72 +366,6 @@ sub revDate2EpSecs {
 }
 
 # =========================
-sub readFileHead
-{
-    my( $name, $maxLines ) = @_;
-    my $data = "";
-    my $line;
-    my $l = 0;
-    $/ = "\n";     # read line by line
-    open( IN_FILE, "<$name" ) || return "";
-    while( ( $l < $maxLines ) && ( $line = <IN_FILE> ) ) {
-        $data .= $line;
-        $l += 1;
-    }
-    close( IN_FILE );
-    return $data;
-}
-
-
-# =========================
-sub topicIsLocked
-{
-    my( $name ) = @_;
-
-    # pragmatic approach: Warn user if somebody else pressed the
-    # edit link within one hour
-
-    my $lockFilename = "$dataDir/$webName/$name.lock";
-    if( ( -e "$lockFilename" ) && ( $editLockTime > 0 ) ) {
-        my $tmp = &TWiki::Store::readFile( $lockFilename );
-        my( $lockUser, $lockTime ) = split( /\n/, $tmp );
-        if( $lockUser ne $userName ) {
-            # time stamp of lock within one hour of current time?
-            my $systemTime = time();
-            # calculate remaining lock time in seconds
-            $lockTime = $lockTime + $editLockTime - $systemTime;
-            if( $lockTime > 0 ) {
-                # must warn user that it is locked
-                return ( $lockUser, $lockTime );
-            }
-        }
-    }
-    return ( "", 0);
-}
-
-
-# =========================
-sub topicExists
-{
-    my( $web, $name ) = @_;
-    return -e "$dataDir/$web/$name.txt";
-}
-
-# =========================
-sub readTopic
-{
-    my( $name ) = @_;
-    return &TWiki::Store::readFile( "$dataDir/$webName/$name.txt" );
-}
-
-# =========================
-sub readWebTopic
-{
-    my( $web, $name ) = @_;
-    return &TWiki::Store::readFile( "$dataDir/$web/$name.txt" );
-}
-
-# =========================
 sub getViewUrl
 {
     my( $theWeb, $theTopic ) = @_;
@@ -512,87 +426,6 @@ sub getOopsUrl
         $url .= "\&param4=$theParam4";
     }
     return $url;
-}
-
-
-# =========================
-sub readTemplate
-{
-    my( $theName, $theTopic, $theSkin ) = @_;
-    $theTopic = "" unless $theTopic; # prevent 'uninitialized value' ...
-    $theSkin  = "" unless $theSkin;  #   ... warnings
-
-    # CrisBailiff, PeterThoeny 13 Jun 2000: Add security
-    $theName =~ s/$securityFilter//go;    # zap anything suspicious
-    $theName =~ s/\.+/\./g;               # Filter out ".." from filename
-    $theTopic =~ s/$securityFilter//go;   # zap anything suspicious
-    $theTopic =~ s/\.+/\./g;              # Filter out ".." from filename
-    $theSkin =~ s/$securityFilter//go;    # zap anything suspicious
-    $theSkin =~ s/\.+/\./g;               # Filter out ".." from filename
-
-    my $tmplFile = "";
-
-    # search first in twiki/templates/Web dir
-    # for file script(.topic)(.skin).tmpl
-    my $tmplDir = "$templateDir/$webName";
-    if( opendir( DIR, $tmplDir ) ) {
-        # for performance use readdir, not a row of ( -e file )
-        my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
-        closedir DIR;
-        $tmplFile = "$theName.$theTopic.tmpl";
-        if( ! grep { /^$tmplFile$/ } @filelist ) {
-            $tmplFile = "$theName.$theSkin.tmpl";
-            if( ! grep { /^$tmplFile$/ } @filelist ) {
-                $tmplFile = "$theName.$theTopic.$theSkin.tmpl";
-                if( ! grep { /^$tmplFile$/ } @filelist ) {
-                    $tmplFile = "$theName.tmpl";
-                    if( ! grep { /^$tmplFile$/ } @filelist ) {
-                        $tmplFile = "";
-                    }
-                }
-            }
-        }
-        if( $tmplFile ) {
-            $tmplFile = "$tmplDir/$tmplFile";
-        }
-    }
-
-    # if not found, search in twiki/templates dir
-    $tmplDir = $templateDir;
-    if( ( ! $tmplFile ) && ( opendir( DIR, $tmplDir ) ) ) {
-        my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
-        closedir DIR;
-        $tmplFile = "$theName.$theTopic.tmpl";
-        if( ! grep { /^$tmplFile$/ } @filelist ) {
-            $tmplFile = "$theName.$theSkin.tmpl";
-            if( ! grep { /^$tmplFile$/ } @filelist ) {
-                $tmplFile = "$theName.$theTopic.$theSkin.tmpl";
-                if( ! grep { /^$tmplFile$/ } @filelist ) {
-                    $tmplFile = "$theName.tmpl";
-                    if( ! grep { /^$tmplFile$/ } @filelist ) {
-                        $tmplFile = "";
-                    }
-                }
-            }
-        }
-        if( $tmplFile ) {
-            $tmplFile = "$tmplDir/$tmplFile";
-        }
-    }
-
-    # read the template file
-    if( -e $tmplFile ) {
-        return &TWiki::Store::readFile( $tmplFile );
-    }
-    return "";
-}
-
-
-# =========================
-sub webExists
-{
-    my( $web ) = @_;
-    return -e "$dataDir/$web";
 }
 
 # =========================
@@ -952,19 +785,19 @@ sub internalLink
     # Add <nop> before WikiWord inside text to prevent double links
     $text =~ s/(\s)([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
 
-    if( $doPluralToSingular && $page =~ /s$/ && ! topicExists( $web, $page) ) {
+    if( $doPluralToSingular && $page =~ /s$/ && ! &TWiki::Store::topicExists( $web, $page) ) {
         # page is a non-existing plural
         my $tmp = $page;
         $tmp =~ s/ies$/y/;      # plurals like policy / policies
         $tmp =~ s/sses$/ss/;    # plurals like address / addresses
         $tmp =~ s/xes$/x/;      # plurals like box / boxes
         $tmp =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
-        if( topicExists( $web, $tmp ) ) {
+        if( &TWiki::Store::topicExists( $web, $tmp ) ) {
             $page = $tmp;
         }
     }
 
-    topicExists( $web, $page) ?
+    &TWiki::Store::topicExists( $web, $page) ?
         "$bar<A href=\"$scriptUrlPath/view$scriptSuffix/$web/$page\">$text<\/A>"
         : $foo?"$bar<SPAN STYLE='background : $newTopicBgColor;'><font color=\"$newTopicFontColor\">$text</font></SPAN><A href=\"$scriptUrlPath/edit$scriptSuffix/$web/$page\">?</A>"
             : "$bar$text";

@@ -18,7 +18,6 @@
 use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
-use TWiki::Prefs;
 use TWiki::Net;
 
 my $debug = ! ( @ARGV && $ARGV[0] eq "-q" );
@@ -55,7 +54,7 @@ sub processWeb
 
     $debug && print "Checking TWiki.$webName\n";
 
-    if( ! &TWiki::webExists( $webName ) ) {
+    if( ! &TWiki::Store::webExists( $webName ) ) {
 	print STDERR "* Error: TWiki mailnotify does not find web $webName\n";
 	return;
     }
@@ -69,7 +68,7 @@ sub processWeb
     my $emailbody = "";
     my $topiclist = "";
 
-    my $text = &TWiki::readTemplate( "changes" );
+    my $text = &TWiki::Store::readTemplate( "changes" );
     my $changes= &TWiki::Store::readFile( "$dataDir/$webName/.changes" );
 
     my %exclude;
@@ -156,7 +155,7 @@ sub processWeb
 
     my $notifylist = join ', ', @notifylist;
 
-    $text = &TWiki::readTemplate( "mailnotify" );
+    $text = &TWiki::Store::readTemplate( "mailnotify" );
     $text =~ s/%EMAILFROM%/$from/go;
     $text =~ s/%EMAILTO%/$notifylist/go;
     $text =~ s/%EMAILBODY%/$emailbody/go;

@@ -160,9 +160,8 @@ sub getRevisionInfo
     return ( $date, $user, $rev );
 }
 
+
 # =========================
-
-
 sub saveTopic
 {
     my( $topic, $text, $saveCmd, $dontNotify, $doUnlock ) = @_;
@@ -185,10 +184,10 @@ sub saveTopic
         }
 
         # save file
-        &TWiki::Store::saveFile( $name, $text );
+        saveFile( $name, $text );
 
         # reset lock time, this is to prevent contention in case of a long edit session
-        &TWiki::Store::lockTopic( $topic, $doUnlock );
+        lockTopic( $topic, $doUnlock );
 
         # time stamp of existing file within one hour of old one?
         my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp8,$tmp9,
@@ -222,7 +221,7 @@ sub saveTopic
                 $fdate = ""; # suppress warning
                 $fuser = ""; # suppress warning
 
-                my @foo = split(/\n/, &TWiki::readFile( "$TWiki::dataDir/$TWiki::webName/.changes" ) );
+                my @foo = split( /\n/, &readFile( "$TWiki::dataDir/$TWiki::webName/.changes" ) );
                 if( $#foo > 100 ) {
                     shift( @foo);
                 }
@@ -234,7 +233,7 @@ sub saveTopic
 
             if( $TWiki::doLogTopicSave ) {
                 # write log entry
-                &TWiki::Store::writeLog( "save", "$TWiki::webName.$topic", "" );
+                writeLog( "save", "$TWiki::webName.$topic", "" );
             }
         }
     }
@@ -244,8 +243,8 @@ sub saveTopic
         # fix topic by replacing last revision
 
         # save file
-        &TWiki::Store::saveFile( $name, $text );
-        &TWiki::Store::lockTopic( $topic, $doUnlock );
+        saveFile( $name, $text );
+        lockTopic( $topic, $doUnlock );
 
         # update repository with same userName and date, but do not update .changes
         my $rev = getRevisionNumber( $topic );
@@ -296,7 +295,7 @@ sub saveTopic
         if( $TWiki::doLogTopicSave ) {
             # write log entry
             $tmp  = &TWiki::userToWikiName( $user );
-            &TWiki::Store::writeLog( "save", "$TWiki::webName.$topic", "repRev $rev $tmp $date" );
+            writeLog( "save", "$TWiki::webName.$topic", "repRev $rev $tmp $date" );
         }
     }
 
@@ -340,14 +339,14 @@ sub saveTopic
         # restore last topic from repository
         $rev = getRevisionNumber( $topic );
         $tmp = readVersion( $topic, $rev );
-        &TWiki::Store::saveFile( $name, $tmp );
-        &TWiki::Store::lockTopic( $topic, $doUnlock );
+        saveFile( $name, $tmp );
+        lockTopic( $topic, $doUnlock );
 
         # delete entry in .changes : To Do !
 
         if( $TWiki::doLogTopicSave ) {
             # write log entry
-            &TWiki::Store::writeLog( "cmd", "$TWiki::webName.$topic", "delRev $rev" );
+            writeLog( "cmd", "$TWiki::webName.$topic", "delRev $rev" );
         }
     }
     return 0; # all is well
@@ -367,7 +366,7 @@ sub writeLog
     my $yearmonth = sprintf( "%.4u%.2u", $year, $mon+1 );
 
     my $wuserName = $user || $TWiki::userName;
-    $wuserName = userToWikiName( $wuserName );
+    $wuserName = &TWiki::userToWikiName( $wuserName );
     my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
     my $text = "| $time | $wuserName | $action | $webTopic | $extra | $remoteAddr |";
 
@@ -397,7 +396,7 @@ sub lockTopic
         unlink "$lockFilename";
     } else {
         my $lockTime = time();
-        &TWiki::Store::saveFile( $lockFilename, "$TWiki::userName\n$lockTime" );
+        saveFile( $lockFilename, "$TWiki::userName\n$lockTime" );
     }
 }
 
@@ -435,6 +434,134 @@ sub removeObsoleteTopicLocks
 
 
 # =========================
+sub topicIsLocked
+{
+    my( $theName ) = @_;
+
+    # pragmatic approach: Warn user if somebody else pressed the
+    # edit link within one hour
+
+    my $lockFilename = "$TWiki::dataDir/$TWiki::webName/$theName.lock";
+    if( ( -e "$lockFilename" ) && ( $TWiki::editLockTime > 0 ) ) {
+        my $tmp = readFile( $lockFilename );
+        my( $lockUser, $lockTime ) = split( /\n/, $tmp );
+        if( $lockUser ne $TWiki::userName ) {
+            # time stamp of lock within one hour of current time?
+            my $systemTime = time();
+            # calculate remaining lock time in seconds
+            $lockTime = $lockTime + $TWiki::editLockTime - $systemTime;
+            if( $lockTime > 0 ) {
+                # must warn user that it is locked
+                return ( $lockUser, $lockTime );
+            }
+        }
+    }
+    return ( "", 0 );
+}
+
+
+# =========================
+sub webExists
+{
+    my( $theWeb ) = @_;
+    return -e "$TWiki::dataDir/$theWeb";
+}
+
+# =========================
+sub topicExists
+{
+    my( $theWeb, $theName ) = @_;
+    return -e "$TWiki::dataDir/$theWeb/$theName.txt";
+}
+
+# =========================
+sub readTopic
+{
+    my( $theName ) = @_;
+    return &readFile( "$TWiki::dataDir/$TWiki::webName/$theName.txt" );
+}
+
+# =========================
+sub readWebTopic
+{
+    my( $theWeb, $theName ) = @_;
+    return &readFile( "$TWiki::dataDir/$theWeb/$theName.txt" );
+}
+
+# =========================
+sub readTemplate
+{
+    my( $theName, $theTopic, $theSkin ) = @_;
+    $theTopic = "" unless $theTopic; # prevent 'uninitialized value' ...
+    $theSkin  = "" unless $theSkin;  #   ... warnings
+
+    # CrisBailiff, PeterThoeny 13 Jun 2000: Add security
+    $theName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
+    $theName =~ s/\.+/\./g;                      # Filter out ".." from filename
+    $theTopic =~ s/$TWiki::securityFilter//go;   # zap anything suspicious
+    $theTopic =~ s/\.+/\./g;                     # Filter out ".." from filename
+    $theSkin =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
+    $theSkin =~ s/\.+/\./g;                      # Filter out ".." from filename
+
+    my $tmplFile = "";
+
+    # search first in twiki/templates/Web dir
+    # for file script(.topic)(.skin).tmpl
+    my $tmplDir = "$TWiki::templateDir/$TWiki::webName";
+    if( opendir( DIR, $tmplDir ) ) {
+        # for performance use readdir, not a row of ( -e file )
+        my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
+        closedir DIR;
+        $tmplFile = "$theName.$theTopic.tmpl";
+        if( ! grep { /^$tmplFile$/ } @filelist ) {
+            $tmplFile = "$theName.$theSkin.tmpl";
+            if( ! grep { /^$tmplFile$/ } @filelist ) {
+                $tmplFile = "$theName.$theTopic.$theSkin.tmpl";
+                if( ! grep { /^$tmplFile$/ } @filelist ) {
+                    $tmplFile = "$theName.tmpl";
+                    if( ! grep { /^$tmplFile$/ } @filelist ) {
+                        $tmplFile = "";
+                    }
+                }
+            }
+        }
+        if( $tmplFile ) {
+            $tmplFile = "$tmplDir/$tmplFile";
+        }
+    }
+
+    # if not found, search in twiki/templates dir
+    $tmplDir = $TWiki::templateDir;
+    if( ( ! $tmplFile ) && ( opendir( DIR, $tmplDir ) ) ) {
+        my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
+        closedir DIR;
+        $tmplFile = "$theName.$theTopic.tmpl";
+        if( ! grep { /^$tmplFile$/ } @filelist ) {
+            $tmplFile = "$theName.$theSkin.tmpl";
+            if( ! grep { /^$tmplFile$/ } @filelist ) {
+                $tmplFile = "$theName.$theTopic.$theSkin.tmpl";
+                if( ! grep { /^$tmplFile$/ } @filelist ) {
+                    $tmplFile = "$theName.tmpl";
+                    if( ! grep { /^$tmplFile$/ } @filelist ) {
+                        $tmplFile = "";
+                    }
+                }
+            }
+        }
+        if( $tmplFile ) {
+            $tmplFile = "$tmplDir/$tmplFile";
+        }
+    }
+
+    # read the template file
+    if( -e $tmplFile ) {
+        return &readFile( $tmplFile );
+    }
+    return "";
+}
+
+
+# =========================
 sub readFile
 {
     my( $name ) = @_;
@@ -443,6 +570,24 @@ sub readFile
     open( IN_FILE, "<$name" ) || return "";
     $data = <IN_FILE>;
     $/ = "\n";
+    close( IN_FILE );
+    return $data;
+}
+
+
+# =========================
+sub readFileHead
+{
+    my( $name, $maxLines ) = @_;
+    my $data = "";
+    my $line;
+    my $l = 0;
+    $/ = "\n";     # read line by line
+    open( IN_FILE, "<$name" ) || return "";
+    while( ( $l < $maxLines ) && ( $line = <IN_FILE> ) ) {
+        $data .= $line;
+        $l += 1;
+    }
     close( IN_FILE );
     return $data;
 }

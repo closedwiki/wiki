@@ -60,9 +60,14 @@ sub initializePrefs
 sub prvGetPrefsList
 {
     my ( $theWebTopic ) = @_;
-    my $fileName = $theWebTopic;                  # "Main.TopicName"
-    $fileName =~ s/([^\.]*)\.(.*)/$1\/$2\.txt/go; # "Main/TopicName.txt"
-    my $text = &TWiki::readFile( "$TWiki::dataDir/$fileName" );  # read topic text
+
+    my $topicName = $theWebTopic;
+    my $webName = $TWiki::mainWebname;
+    $topicName =~ s/([^\.]*)\.(.*)/$2/go;    # "Web.TopicName" to "TopicName"
+    if( $2 ) {
+        $webName = $1;
+    }
+    my $text = &TWiki::Store::readWebTopic( $webName, $topicName );  # read topic text
     $text =~ s/\r//go;                            # cut CR
     my $key;
     my $value;
@@ -183,7 +188,7 @@ sub getPreferencesValue
                 return $prefsValues[$x];
             }
         }
-    } elsif( &TWiki::webExists( $theWeb ) ) {
+    } elsif( &TWiki::Store::webExists( $theWeb ) ) {
         # search the alternate web, rebuild prefs if necessary
         if( $theWeb ne $altWebName ) {
             $altWebName = $theWeb;

@@ -47,8 +47,8 @@ sub main
     my $after = "";
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
-    if( ! &TWiki::webExists( $webName ) ) {
-	$tmpl= &TWiki::readTemplate( "noweb" );
+    if( ! &TWiki::Store::webExists( $webName ) ) {
+	$tmpl= &TWiki::Store::readTemplate( "noweb" );
 	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
 	return;
@@ -78,7 +78,7 @@ sub main
         # for debug: Use $text as is, it possibly contains an attachment table
     } else {
         # normal case: Get latest attachment from file for preview
-        my $tmp = &TWiki::readTopic( $topic );
+        my $tmp = &TWiki::Store::readTopic( $topic );
         my ( $tmp1, $atext, $tmp2 ) = split( /<!--TWikiAttachment-->/, $tmp );
         # combine text and attachment
         ( $before, $tmp, $after ) = split( /<!--TWikiAttachment-->/, $text );

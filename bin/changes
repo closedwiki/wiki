@@ -44,14 +44,14 @@ sub main
     $dummy1 = "";  # to suppress warning
     $dummy2 = "";  # to suppress warning
 
-    if( ! &TWiki::webExists( $webName ) ) {
-        my $tmpl= &TWiki::readTemplate( "noweb" );
+    if( ! &TWiki::Store::webExists( $webName ) ) {
+        my $tmpl= &TWiki::Store::readTemplate( "noweb" );
         $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print $tmpl;
         return;
     }
 
-    my $text = &TWiki::readTemplate( "changes" );
+    my $text = &TWiki::Store::readTemplate( "changes" );
     my $changes= &TWiki::Store::readFile( "$dataDir/$webName/.changes" );
    
     my @bar = ();

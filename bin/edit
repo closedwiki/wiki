@@ -164,23 +164,24 @@ sub main
     my $extra = "";
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
-    if( ! &TWiki::webExists( $webName ) ) {
+    if( ! &TWiki::Store::webExists( $webName ) ) {
         print "Content-type: text/html\n\n";
-	$tmpl= &TWiki::readTemplate( "noweb" );
+	$tmpl= &TWiki::Store::readTemplate( "noweb" );
 	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
         return;
     }
 
-    if( ( $onlyWikiName ) && ( ! &TWiki::isWikiName( $topic ) ) && ( ! &TWiki::topicExists( $webName, $topic ) ) ) {
+    if( ( $onlyWikiName ) && ( ! &TWiki::isWikiName( $topic ) ) &&
+        ( ! &TWiki::Store::topicExists( $webName, $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         print $query->redirect( &TWiki::getViewUrl( $webName, $topic ) );
 	return;
     }
 
     # check access permission
-    if( &TWiki::topicExists( $webName, $topic ) ) {
-	$text = &TWiki::readTopic( $topic );
+    if( &TWiki::Store::topicExists( $webName, $topic ) ) {
+	$text = &TWiki::Store::readTopic( $topic );
     }
     if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $text, $topic, $webName ) ) {
         # user has not permission to change the topic
@@ -189,14 +190,14 @@ sub main
         return;
     }
     if( ( $saveCmd ) &&
-        ( ! &TWiki::Access::userIsInGroup( $TWikiUserName, "TWikiAdminGroup" ) ) ) {
+        ( ! &TWiki::Access::userIsInGroup( $wikiUserName, "TWikiAdminGroup" ) ) ) {
         # user has no permission to execute undocumented cmd=... parameter
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$TWiki::mainWebname.TWikiAdminGroup" );
         print $query->redirect( $url );
         return;
     }
 
-    my( $lockUser, $lockTime ) = &TWiki::topicIsLocked( $topic );
+    my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLocked( $topic );
     if( ( ! $breakLock ) && ( $lockUser ) ) {
         # warn user that other person is editing this topic
         $lockUser = &TWiki::userToWikiName( $lockUser );
@@ -215,15 +216,15 @@ sub main
 
     # get edit template, standard or a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
-    $tmpl = &TWiki::readTemplate( "edit", $topic, $skin );
-    $icat = &TWiki::readTemplate( "twikicatitems" );
-    if( ! &TWiki::topicExists( $webName, $topic ) ) {
-        $text= &TWiki::readTemplate( "notedited" );
+    $tmpl = &TWiki::Store::readTemplate( "edit", $topic, $skin );
+    $icat = &TWiki::Store::readTemplate( "twikicatitems" );
+    if( ! &TWiki::Store::topicExists( $webName, $topic ) ) {
+        $text= &TWiki::Store::readTemplate( "notedited" );
         $extra = "(not exist)";
 
         my $foo = &TWiki::getLocaldate();
         $text =~ s/%DATE%/$foo/go;
-        $text =~ s/%USERNAME%/$TWikiUserName/go;
+        $text =~ s/%USERNAME%/$wikiUserName/go;
     }
 
     if( $icat ) {
@@ -236,9 +237,9 @@ sub main
             $text .= $after;
         }
 
-        $tcat = &TWiki::readTemplate( "twikicatedit" );
+        $tcat = &TWiki::Store::readTemplate( "twikicatedit" );
         if( ! $tcat ) {
-            $tcat = &TWiki::readTemplate( "twikicatview" );
+            $tcat = &TWiki::Store::readTemplate( "twikicatview" );
         }
         my $line = "", $ttext = "", $temp = "";
         ( $before, $line, $after) = split( /%REPEAT%/, $tcat );

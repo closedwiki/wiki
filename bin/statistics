@@ -150,7 +150,7 @@ sub processWeb
 
     printMsg( "* Checking TWiki.$webName web" );
 
-    if( ! &TWiki::webExists( $webName ) ) {
+    if( ! &TWiki::Store::webExists( $webName ) ) {
         printMsg( "  *** Error: Web $webName does not exist" );
         return;
     }
@@ -190,8 +190,8 @@ sub processWeb
     }
 
     my $statsFile = $TWiki::statisticsTopicname;
-    if( &TWiki::topicExists( $webName, $statsFile ) ) {
-        my $text = &TWiki::readTopic( $statsFile );
+    if( &TWiki::Store::topicExists( $webName, $statsFile ) ) {
+        my $text = &TWiki::Store::readTopic( $statsFile );
         my @lines = split( /\n/, $text );
         my $statLine;
         my $idxStat = -1;

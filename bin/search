@@ -43,8 +43,8 @@ sub main
     ( $topic, $webName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
-    if( ! &TWiki::webExists( $webName ) ) {
-        $tmpl= &TWiki::readTemplate( "noweb" );
+    if( ! &TWiki::Store::webExists( $webName ) ) {
+        $tmpl= &TWiki::Store::readTemplate( "noweb" );
         $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print $tmpl;
         return;
