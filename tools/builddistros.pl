@@ -23,7 +23,7 @@ mkpath( $outputDir, 1 );
 
 ################################################################################
 # build the twiki-kernel
-execute ( "cd distro ; ./build-twiki-kernel.pl /tmp $outputDir" ) or die $!;
+execute ( "cd distro/ ; ./build-twiki-kernel.pl --tempdir=/tmp --outputdir=$outputDir" ) or die $!;
 print "<HR />\n";
 
 
@@ -38,4 +38,5 @@ sub execute
     my ($cmd) = @_;
     chomp( my @output = `$cmd` );
     print "$?: $cmd\n", join( "\n", @output );
+    return not $?;
 }
