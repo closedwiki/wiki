@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "05 Jun 2002";
+$wikiversion      = "06 Jun 2002";
 
 # ===========================
 # read the configuration part
@@ -1061,7 +1061,10 @@ sub handleIncludeFile
 
     # handle all preferences and internal tags (for speed: call by reference)
     $text = takeOutVerbatim( $text, $verbatim );
-    
+
+    # Wiki Plugin Hook (4th parameter tells plugin that its called from an include)
+    &TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb, 1 );
+
     &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
     
@@ -1599,7 +1602,7 @@ sub handleCommonTags
     $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $theTopic, $theWeb, \@verbatim, @theProcessedTopics )/geo;
 
     # Wiki Plugin Hook
-    &TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb );
+    &TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb, 0 );
 
     # handle tags again because of plugin hook
     &TWiki::Prefs::handlePreferencesTags( $text );
