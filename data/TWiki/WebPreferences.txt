@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="PeterThoeny" date="995356030" format="1.0beta2" version="1.5"}%
 *%WIKITOOLNAME%.%WEB% Web Preferences*
 
 The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
@@ -7,13 +8,13 @@ __Preferences:__
 
 	* List of topics of the %WIKITOOLNAME%.%WEB% web:
 		* Set WEBTOPICLIST = %WEB% . {
-				<a href="%HOMETOPIC%">Home</a> 
-			 | <a href="WelcomeGuest">Welcome</a> 
-			 | <a href="TWikiRegistration">Register</a> 
-			 | <a href="WebChanges">Changes</A>
-			 | <a href="WebIndex">Index</A>
-			 | <a href="WebSearch">Search</a>
-			 | Go <input type="text" name="topic" size="16">
+				[[%HOMETOPIC%][Home]]
+			 | [[WelcomeGuest][Welcome]]
+			 | [[TWikiRegistration][Register]]
+			 | [[WebChanges][Changes]]
+			 | [[WebIndex][Index]]
+			 | [[WebSearch][Search]]
+			 | Go <input type="text" name="topic" size="16" />
 		  }
 
 	* Web specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors)
@@ -33,7 +34,7 @@ __Preferences:__
 		* Set FINALPREFERENCES = WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE
 
 __Notes:__
-	* A preference is defined as: <br> =6 spaces * Set NAME = value= <br> Example:
+	* A preference is defined as: <br /> =6 spaces * Set NAME = value= <br /> Example:
 		* S<nop>et WEBBGCOLOR = #FFFFC0
 	* Preferences are used as %TWIKIWEB%.TWikiVariables by enclosing the name in percent signs. Example:
 		* When you write variable =%WEB<nop>BGCOLOR%= , it gets expanded to =%WEBBGCOLOR%= .
