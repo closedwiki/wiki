@@ -481,12 +481,16 @@ sub upgradeCategoryTable
         # FIXME - deal with none
         
         if( ! @formTemplates ) {
-            if( $TWiki::cgiQuery ) {
-                my $url = &TWiki::getOopsUrl( $web, $topic, "oopsnoformdef" );
-                TWiki::redirect( $TWiki::cgiQuery, $url );
-            }
             &TWiki::writeWarning( "Form: can't get form definition to convert category table " .
                                   " for topic $web.$topic" );
+                                  
+            foreach my $oldCat ( @items ) {
+                my $name = $oldCat->[0];
+                my $value = $oldCat->[2];
+                $meta->put( "FORM", ( "name" => "" ) );
+                $meta->put( "FIELD", ( "name" => $name, "title" => $name, "value" => $value ) );
+            }
+            
             return;
         }
         
