@@ -78,15 +78,14 @@ sub writeDebug
 ---+++ UserPasswordExists( $user ) ==> $passwordExists
 | Description: | checks to see if there is a $user in the password system |
 | Parameter: =$user= | the username we are looking for  |
-| Return: =$passwordExists= | "1" if true, "" if not |
-| TODO: | not sure if this should return true or false |
+| Return: =$passwordExists= | "" as there is no password in NoPasswdUser (this allows the registration script (and others) register new users) |
 
 =cut
 sub UserPasswordExists
 {
     my ( $self, $user ) = @_;
 
-    return "1";
+    return "";
 }
  
 #========================= 
