@@ -41,7 +41,6 @@ This module implements all the search functionality.
 
 package TWiki::Search;
 use strict;
-use TWiki::Grep;
 
 use vars qw(
     $cacheRev1webTopic $cacheRev1date $cacheRev1user
@@ -194,18 +193,19 @@ sub _searchTopicsInWeb
         unless( $theScope eq "topic" ) {
             # Construct command line with 'grep'.  I18N: 'grep' must use locales if needed,
             # for case-insensitive searching.  See TWiki::setupLocale.
-            #my $cmd = "";
-            #if( $theType eq "regex" ) {
-            #    $cmd .= $TWiki::egrepCmd;
-            #} else {
-            #    $cmd .= $TWiki::fgrepCmd;
-            #}
-            #$cmd .= " -i" unless( $caseSensitive );
-            #$cmd .= " -l -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote %FILES%";
+            my $cmd = "";
+            if( $theType eq "regex" ) {
+                $cmd .= $TWiki::egrepCmd;
+            } else {
+                $cmd .= $TWiki::fgrepCmd;
+            }
+            $cmd .= " -i" unless( $caseSensitive );
+            $cmd .= " -l -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote %FILES%";
 
             my $result = "";
             if( $sDir ) {
                 chdir( "$sDir" );
+                _traceExec( "chdir to $sDir", "" );
                 $sDir = "";  # chdir only once
             }
 
@@ -215,11 +215,13 @@ sub _searchTopicsInWeb
             my @set = splice( @take, 0, $maxTopicsInSet );
             while( @set ) {
                 @set = map { "$_.txt" } @set;                      # add ".txt" extension to topic names
-                my %opt;
-                $opt{l}=1; #a lowercase L and a one
-                $opt{i}=1 unless ($caseSensitive); 
-                $opt{e}=$token;
-                $result=TWiki::Grep::grep(\%opt,@set);
+                my $acmd = $cmd;
+                $acmd =~ s/%TOKEN%/$token/o;
+                $acmd =~ s/%FILES%/@set/o;
+                $acmd =~ /(.*)/;
+                $acmd = "$1";                                      # untaint variable (FIXME: Needs a better check!)
+                $result = `$acmd`;
+                _traceExec( $acmd, $result );
                 @set = split( /\n/, $result );
                 @set = map { /(.*)\.txt$/; $_ = $1; } @set;        # cut ".txt" extension
                 my %seen = ();
