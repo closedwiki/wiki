@@ -50,12 +50,12 @@ sub beforeEditHandler {
 
   TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
 
-  # read the applet template
-  my $tmpl = TWiki::Func::readTemplate( "applet", TWiki::Func::getSkin());
+  # read the applet sub-template applet.<skin>.tmpl
+  my $tmpl = TWiki::Func::readTemplate( "applet", "power" );
   $tmpl = TWiki::Func::expandCommonVariables( $tmpl, $topic, $web );
 
-  # Note: DO NOT render the text in the template,
-  # as it would munge the applet!
+  # Note: DO NOT render the text in the sub-template,
+  # as it would munge the applet tag!
 
   my $controls = TWiki::Func::getPreferencesValue( "POWEREDIT_CONTROLS" );
   if ( ! $controls ) {
