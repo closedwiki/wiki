@@ -1,0 +1,49 @@
+%META:TOPICINFO{author="TWikiGuest" date="1081752098" format="1.0" version="1.2"}%
+---++ Spaced Out TWiki Word Plugin
+
+Causes wiki words to be displayed with spaces between capitals.
+
+See also TWiki:Support.CanIRenderWikiWordsSpacedOut 
+
+Regexes shamelessly stolen from TWiki:Codev.SpacedOutTWikiWords
+
+NB. Needs TWiki:Codev.CairoRelease or alphas after 12 Apr 2004
+
+---+++ Syntax Rules
+
+| *If you write* | *You should see* | *Test* |
+| !BSFLeaders | BSF Leaders | BSFLeaders | 
+| !DogWalkers | Dog Walkers | DogWalkers | 
+| !Lotus123 | Lotus 123 | Lotus123 | 
+| !ILikeTWiki | I Like T Wiki |ILikeTWiki | 
+
+---+++ %TOPIC% Settings
+
+Plugin settings are stored as preferences variables. 
+
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Causes wiki words to be displayed with spaces between capitals.
+
+		* Set DEBUG = 0
+
+---+++ Plugin Installation Instructions
+
+To install plugin:
+	* Unzip the archive to the top of your directory
+
+---+++ Plugin Info
+
+|  Plugin Author: | Main.MartinCleaver |
+|  Plugin Version: | 12 Apr 2004 |
+|  Change History: | 14 Apr 2002 Initial version |
+|  Change History: | 12 Apr 2004 Updated for TWiki:Codev.CairoRelease |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% ( TWiki:Plugins/%TOPIC% )|
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev ( TWiki:Plugins/%TOPIC%Dev )|
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+
+-- Main.MartinCleaver - 27 Feb 2001 <br> 
+
