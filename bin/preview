@@ -128,8 +128,6 @@ sub main
         $text =~ s/%_(.)_%/%__$1__%/go;
     }
 
-    my @verbatim = ();
-    $ptext = &TWiki::takeOutVerbatim( $ptext, \@verbatim );
     $ptext =~ s/ {3}/\t/go;
     $ptext = &TWiki::handleCommonTags( $ptext, $topic );
     $ptext = &TWiki::getRenderedVersion( $ptext );
@@ -137,7 +135,6 @@ sub main
     # do not allow click on link before save:
     $ptext =~ s@(href=".*?")@href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?template=oopspreview"@goi;
     $ptext = &TWiki::handleCommonTags( $ptext, $topic );
-    $ptext = &TWiki::putBackVerbatim( $ptext, "pre", @verbatim );
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
     $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );

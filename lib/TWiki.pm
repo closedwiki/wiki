@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "03 Aug 2002";
+$wikiversion      = "09 Aug 2002";
 
 # ===========================
 # read the configuration part
@@ -2154,7 +2154,6 @@ sub getRenderedVersion
     @listTypes = ();
     @listElements = ();
     $text =~ s/\r//go;
-    $text =~ s/\\\n//go;  # Join lines ending in "\"
     $text =~ s/(\n?)$/\n<nop>\n/os; # clutch to enforce correct rendering at end of doc
 
     # do not render HTML head, style sheets and scripts
@@ -2167,6 +2166,7 @@ sub getRenderedVersion
     
     my @verbatim = ();
     $text = takeOutVerbatim( $text, \@verbatim );
+    $text =~ s/\\\n//go;  # Join lines ending in "\"
 
     # Wiki Plugin Hook
     &TWiki::Plugins::startRenderingHandler( $text, $theWeb, $meta );
