@@ -1,17 +1,15 @@
-%META:TOPICINFO{author="JohnTalintyre" date="1000367740" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="MikeMannix" date="1000524734" format="1.0" version="1.5"}%
 %META:TOPICPARENT{name="WebHome"}%
-%INCLUDE{"UtilTempDocNote"}%
-
 %TOC%
 %STARTINCLUDE%
 #FileSystem
----# A: TWiki File System
+---# Appendix A: TWiki File System
 
-_Breakdown of the files included in the 01-Sep-2001 TWiki distribution_
+_Annotated listings of files included in the 01-Sep-2001 TWiki distribution_
 
 ---++ Overview
 
-This Appendix contains directory and file listings, with individual file descriptions, for the full 01-Sep-2001 TWiki distribution package.
+This Appendix contains directory and file listings, and individual file descriptions, for the full 01-Sep-2001 TWiki distribution package.
 
 ---++ Directory Structure
 
@@ -64,7 +62,7 @@ Perl CGI scripts. _Full file list:_
 | =testenv=		 | Script to test CGI environment variables |
 | =upload=		  | Script that does file upload (FileAttachment) |
 | =view=			 | Script to view a topic ( *the* script ) |
-| =viewfile=		| Script to view an file attachment |
+| =viewfile=		| Script to view a file attachment |
 
 #LibFiles
 ---+++ Files under <code>twiki/lib</code>
@@ -150,9 +148,9 @@ Templates used to control appearance of all rendered pages. _Full file list:_
 | =attachnew.tmpl= | Control screen |
 | =changeform.tmpl= | Control screen |
 | =changes.tmpl= | Displays WebChanges list of recently changed topics |
-| =edit.iejs.tmpl= | xxxx |
+| =edit.iejs.tmpl= | Edit screen |
 | =edit.tmpl= | Main edit window |
-| =mailnotify.tmpl= | xxxx |
+| =mailnotify.tmpl= | Email notification |
 | =moveattachment.tmpl= | Control screen |
 | =oopsaccesschange.tmpl= | Error message |
 | =oopsaccessgroup.tmpl= | Error message |
@@ -187,14 +185,14 @@ Templates used to control appearance of all rendered pages. _Full file list:_
 | =preview.tmpl= | Preview Changes screen |
 | =rdiff.tmpl= | Displays text changes before &amp; after (Diffs) |
 | =register.tmpl= | Registration page |
-| =registernotify.tmpl= | xxxx |
+| =registernotify.tmpl= | Registration notification |
 | =rename.tmpl= | Doing a new topic rename, user chooses web &amp; topic |
 | =renamebase.tmpl= | Used by other rename templates |
 | =renameconfirm.tmpl= | Confirms a pre-specified rename, ex: undoing a rename |
 | =renamerefs.tmpl= | Rename done, but some references not changed (topics were  locked) |
-| =search.tmpl= | xxxx |
+| =search.tmpl= | Search screen |
 | =searchbookview.tmpl= | Search results with full topic content |
-| =searchmeta.tmpl= | xxxx |
+| =searchmeta.tmpl= | Search screen |
 | =searchrenameview.tmpl= | Used by =rename= to list references to topic being renamed |
 | =twiki.tmpl= | Base template definitions used by other templates |
 | =view.plain.tmpl= | Alternate topic header/footer view |
@@ -205,7 +203,7 @@ Templates used to control appearance of all rendered pages. _Full file list:_
 
 The following partial directory listings from a Linux installation show typical file permissions and ownership. This is provided for general debugging use only and isn't an exact representation of the current distribution.
 
-Directory =twiki/bin= :
+Directory =twiki/bin=:
 
 <pre>
 drwxrwxr-x	2 twiki twiki	4096 Jun 17 16:34 .
@@ -229,7 +227,7 @@ drwxrwxr-x	3 twiki twiki	4096 Jun 17 16:34 ..
 -rwxrwxr-x	1 twiki twiki	1689 Jun 20 20:10 viewfile
 </pre>
 
-Directory =twiki/templates/= :
+Directory =twiki/templates/=:
 
 <pre>
 drwxrwxr-x	4 twiki twiki	4096 Aug  3 01:17 .
@@ -254,7 +252,7 @@ drwxrwxr-x	2 twiki twiki	4096 May  1 01:24 Main
 -rw-rw-r--	1 twiki twiki	 955 Mar  8 11:41 oopsregpasswd.tmpl
 </pre>
 
-Directory =twiki/data/= :
+Directory =twiki/data/=:
 
 <pre>
 drwxrwxrwx	6 nobody  nobody  4096 Aug  3 01:09 .
@@ -267,7 +265,7 @@ drwxrwxrwx	2 nobody  nobody  4096 Aug 20 17:56 TWiki
 -rw-r--r--	1 nobody  nobody  1516 Aug 20 17:56 log200008.txt
 </pre>
 
-Partial file list for =twiki/data/Main= :
+Partial file list for =twiki/data/Main=:
 
 <pre>
 drwxrwxrwx	2 nobody  nobody  4096 Aug 19 04:15 .
@@ -286,7 +284,7 @@ drwxrwxrwx	6 nobody  nobody  4096 Aug  3 01:09 ..
 -r--r--r--	1 nobody  nobody  6523 Aug 18 18:08 WebHome.txt,v
 </pre>
 
-Directory =twiki/pub/= :
+Directory =twiki/pub/=:
 
 <pre>
 drwxrwxrwx	6 nobody  nobody  4096 Aug  3 01:21 .
@@ -304,7 +302,7 @@ drwxrwxr-x	2 twiki	twiki	4096 Jun 17 16:35 icn
 -rw-rw-r--	1 twiki	twiki	2877 Jun  7  1999 wikiHome.gif
 </pre>
 
-Partial file list for =twiki/pub/icn/= :
+Partial file list for =twiki/pub/icn/=:
 
 <pre>
 drwxrwxr-x	2 twiki	twiki	4096 Jun 17 16:35 .
@@ -317,4 +315,6 @@ drwxrwxrwx	6 nobody  nobody  4096 Aug  3 01:21 ..
 -rw-rw-r--	1 twiki	twiki	 152 Mar  9  1999 doc.gif
 </pre>
 
--- Main.MikeMannix - 08 Sep 2001 <br />
+-- Main.MikeMannix - 14 Sep 2001 <br />
+
+%META:TOPICMOVED{by="MikeMannix" date="1000524678" from="TWiki.DocsATWikiFileSystem" to="TWiki.AppendixFileSystem"}%
