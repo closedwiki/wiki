@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1048314917" format="1.0" version="1.64"}%
+%META:TOPICINFO{author="PeterThoeny" date="1057016404" format="1.0" version="1.65"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -43,6 +43,9 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
 </tr><tr>
   <td> =%<nop>ATTACHURLPATH%= </td>
   <td> The path of the attachment URL of the current topic, is <b>%ATTACHURLPATH%</b> </td>
+</tr><tr>
+  <td> =%<nop>ICON{"type"}%= </td>
+  <td> Small 16x16 pixel icon of common attachment types, like =bmp=, =doc=, =gif=, =hlp=, =html=, =pdf=, =ppt=, =txt=, =wav=, =xml=, =zip=, etc. Specify file type only, file name, or full path name. Example: =%<nop>ICON{"pdf"}%= returns %ICON{"pdf"}% </td>
 </tr><tr>
   <td> =%<nop>URLPARAM{"name"}%= </td>
   <td> Returns the value of a URL parameter. Note that there is a low risk that this variable could be misused for cross-scripting. Ex: =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b> </td>
