@@ -1,6 +1,6 @@
 package TWiki::Contrib::BuildContrib::TWikiCLI::Extension::Dev;
 use TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
-@ISA = "TWiki::Contrib::BuildContrib::TWikiCLI::Extension";
+@ISA = ("TWiki::Contrib::BuildContrib::TWikiCLI::Extension");
 
 sub cli__init {
 
