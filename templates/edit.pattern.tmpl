@@ -53,7 +53,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
   if( ! theAnchor ) {
     theAnchor = "";
   }
-  win = open( "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain" + theAnchor,
+  win = open( "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + theAnchor,
               theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
   if( win ) {
     win.focus();
@@ -88,29 +88,28 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 
 
-%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
-<div class="twikiTopicActionHelp twikiGrayText">
-<a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">Access keys</a>: C = Cancel, K = Checkpoint, Q = Quiet Save, S = Save, P = Preview</div><div class="twikiTopicActionSecondary">
-<input type="checkbox" class="twikiCheckbox" name="unlock" id="releaselock" %RELEASEEDITLOCKCHECKBOX% /><label for="releaselock">Release edit lock</label>&nbsp;&nbsp;<a target="UnlockTopic" onclick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a><br />
-   <input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">Minor changes, don't notify</label>&nbsp;&nbsp;<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>
-</div>
-<table>
-<tr>
+%TMPL:DEF{"topicaction"}%<table class="twikiTopicAction">
+<tr class="twikiTopicActionHelp twikiGrayText">
+<td colspan="3" class="twikiTopicActionHelp twikiGrayText"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">Access keys</a>: C = Cancel, K = Checkpoint, Q = Quiet Save, S = Save, P = Preview</td>
+</tr>
+<tr class="twikiTopicActionSecondary">
+<td class="twikiCancelCol">&nbsp;</td>
+<td class="twikiSubmitCol"><div class="twikiSubmitOptions"><input type="checkbox" class="twikiCheckbox" name="unlock" id="releaselock" %RELEASEEDITLOCKCHECKBOX% /><label for="releaselock">Release edit lock</label>&nbsp;&nbsp;<a target="UnlockTopic" onclick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a><br />
+   <input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">Minor changes, don't notify</label>&nbsp;&nbsp;<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a></div></td>
+<td class="twikiAddCol">&nbsp;</td>
+</tr>
+<tr class="twikiTopicAction">
 <td class="twikiCancelCol"><a id="cancel" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" accesskey="c">Cancel</a></td>
-<td class="twikiSubmitCol">
-	<input type="submit" class="twikiSubmit twikiSecondary" name="action" id="checkpoint" value="Checkpoint" /><label accesskey="k" for="checkpoint"></label>
-	<input type="submit" class="twikiSubmit twikiSecondary" name="action" id="quietsave" value="QuietSave" /><label accesskey="q" for="quietsave"></label>
-	<input type="submit" class="twikiSubmit" name="action" id="save" value="Save" /><label accesskey="s" for="save"></label></td>
+<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit twikiSecondary" name="action" id="checkpoint" value="Checkpoint" /><label accesskey="k" for="checkpoint"></label><input type="submit" class="twikiSubmit twikiSecondary" name="action" id="quietsave" value="QuietSave" /><label accesskey="q" for="quietsave"></label><input type="submit" class="twikiSubmit" name="action" id="save" value="Save" /><label accesskey="s" for="save"></label></td>
 <td class="twikiAddCol"><input type="submit" class="twikiSubmit twikiTertiary" name="action" id="preview" value="Preview" /><label accesskey="p" for="preview"></label></td>
 </tr>
 </table>
-</div>
 %TMPL:END%
 
 
 
 %TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><label for="topic" class="twikiGrayText">See below for help in editing this page.</label><textarea id="topic" name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" onkeydown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
+%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><label for="topic" class="twikiGrayText">See below for help in editing this page.<br /></label><textarea id="topic" name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" onkeydown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 <input type="hidden" name="cmd" value="%CMD%" /><div></div>

@@ -24,7 +24,7 @@
    * %EDITTOPIC%
    * <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach</a>
    * <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%">Printable</a>
-</div><div class="twikiRevInfo"><span class="twikiToolbarElem"><b><nop>%WEB%.%TOPIC%</b></span><span class="twikiGrayText"><span class="twikiToolbarElem">%REVINFO{"$date"}% GMT - <nop>%REVINFO{"$username"}%</span><span class="twikiToolbarElem"><a href="#TopicEnd">topic&nbsp;end</a></span></span></div></div>%TMPL:END%
+</div><div class="twikiRevInfo"><span class="twikiGrayText"><span class="twikiToolbarElem"><nop>%WEB%.%TOPIC%</span><span class="twikiToolbarElem">%REVINFO%</span><span class="twikiToolbarElem"><a href="#TopicEnd">topic&nbsp;end</a></span></span></div></div>%TMPL:END%
 
 
 
@@ -50,7 +50,7 @@
 
 
 
-%TMPL:DEF{"topicinfo"}%<span class="twikiHidden"><br /></span><div class="twikiTopicInfo"><span class="twikiRevInfo twikiGrayText">Revision: %REVINFO% <span class="twikiMoved"><br />%META{"moved"}%</span></span></div>%TMPL:END%
+%TMPL:DEF{"topicinfo"}%<div class="twikiTopicInfo twikiRevInfo twikiGrayText twikiMoved">%META{"moved"}%</div>%TMPL:END%
 
 
 
