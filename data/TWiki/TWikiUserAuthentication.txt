@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000280080" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000454534" format="1.0" version="1.12"}%
 %INCLUDE{"UtilTempDocNote"}%
 
 %TOC%
@@ -18,7 +18,7 @@ TWiki uses visitor identification to keep track of who made changes to topics at
 No special installation steps need to be performed if the server is already authenticated. If not, you have three standard options for controlling user access:
 	1. *Forget about authentication* to make your site completely public - anyone can browse and edit freely, in classic Wiki mode. All visitors are assigned the %MAINWEB%.TWikiGuest default identity, so you can't track individual user activity. <br>
 	1. *Use SSL* (Secure Sockets Layer; HTTPS) to authenticate and secure the whole server. <br>
-	1. *Use Basic Authentication (HTAccess)* to control access by protecting key scripts: =attach=, =edit==, =installpasswd=, =password=, =preview=, =rename=, =save=, =upload=, =view=, =viewfile= using .htaccess files. The [[TWikiDocumentation#TWiki_Installation_Notes][TWiki Installation Guide]] has step-by-step instructions. 
+	1. *Use Basic Authentication (.htaccess)* to control access by protecting key scripts: =attach=, =edit==, =installpasswd=, =preview=, =rename=, =save=, =upload= using the .htaccess file. The TWikiInstallationGuide has step-by-step instructions. 
 
 ---+++ Partial Authentication
 
