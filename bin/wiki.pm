@@ -32,7 +32,8 @@ use strict;
 use vars qw(
 	$webName $topicName $defaultUserName $userName 
 	$wikiToolName $wikiHomeUrl $defaultRootUrl $pubUrl $wikiDir $templateDir 
-	$dataDir $pubDir $debugFilename $logDateCmd $logFilename $userListFilename 
+	$dataDir $pubDir $debugFilename $logDateCmd $htpasswdFilename 
+	$logFilename $userListFilename 
 	$mainWebname $mainTopicname $notifyTopicname $mailProgram $wikiwebmaster 
 	$wikiversion $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
 	$revDiffCmd $revDelRevCmd $revDelRepCmd $headCmd $rmFileCmd 
@@ -44,7 +45,7 @@ use vars qw(
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "03 Aug 1999";
+$wikiversion      = "08 Aug 1999";
 
 @isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 
@@ -669,6 +670,9 @@ sub handleCommonTags
     $text=~ s/%USERNAME%/$userName/go;
     $text=~ s/%WIKIUSERNAME%/&userToWikiName($userName)/geo;
     $text=~ s/%WIKITOOLNAME%/$wikiToolName/go;
+    $text=~ s/%MAINWEB%/$mainWebname/go;
+    $text=~ s/%HOMETOPIC%/$mainTopicname/go;
+    $text=~ s/%NOTIFYTOPIC%/$notifyTopicname/go;
     $text=~ s/%%/%/g;
     return $text;
 }
@@ -693,6 +697,19 @@ sub emitCode {
 	$code[$#code] = $code;
     }
     return $result;
+}
+
+# =========================
+sub emitTR {
+    my ( $pre, $cells, $insideTABLE ) = @_;
+    if( $insideTABLE ) {
+        $cells = "$pre<TR><TD> $cells";
+    } else {
+        $cells = "$pre<TABLE border=\"1\"><TR><TD> $cells";
+    }
+    $cells =~ s@\|$@ </TD></TR>@go;
+    $cells =~ s@\|@ </TD><TD> @go;
+    return $cells;
 }
 
 # =========================
@@ -746,10 +763,11 @@ sub isWikiName
 sub getRenderedVersion
 {
     my( $text ) = @_;
-    my( $result, $insidePRE, $blockquote );
+    my( $result, $insidePRE, $insideTABLE, $blockquote );
 
     $result = "";
     $insidePRE = 0;
+    $insideTABLE = 0;
     $blockquote = 0;
     $code = "";
     $text =~ s/\\\n//go;
@@ -783,6 +801,15 @@ sub getRenderedVersion
 	    
 	    s/^----*/<HR>/o;
 	    s@^([a-zA-Z0-9]+)----*@<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><HR></td></tr></table>@o;
+
+# Table of format: | cell | cell |
+	    if( $_ =~ /^(\s*)\|.*\|$/ ) {
+	        s/^(\s*)\|(\s*)(.*)/&emitTR($1,$3,$insideTABLE)/eo;
+	        $insideTABLE = 1;
+	    } elsif( $insideTABLE ) {
+	        $result .= "</TABLE>\n";
+	        $insideTABLE = 0;
+	    }
 
 # Lists etc.
 	    s/^\s*$/<p> /o                   && ( $code = 0 );
@@ -832,7 +859,13 @@ sub getRenderedVersion
 	s/\t/   /go;
         $result .= $_;
     }
+    if( $insideTABLE ) {
+        $result .= "</TABLE>\n";
+    }
     $result .= &emitCode( "", 0 );
+    if( $insidePRE ) {
+        $result .= "</PRE>\n";
+    }
     return $result;
 }
 

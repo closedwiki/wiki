@@ -101,11 +101,11 @@ $logFilename      = "$dataDir/log%DATE%.txt";
 $userListFilename = "$dataDir/Main/TWikiUsers.txt";
 #                   Default user name :
 $defaultUserName  = "guest";
-#                   Name of Main web :
+#                   %MAINWEB% : Name of Main web :
 $mainWebname      = "Main";
-#                   Name of main topic in a web :
+#                   %HOMETOPIC% : Name of main topic in a web :
 $mainTopicname    = "WebHome";
-#                   Name of topic for email notifications :
+#                   %NOTIFYTOPIC% : Name of topic for email notifications :
 $notifyTopicname    = "WebNotify";
 
 # flag variables that could change:

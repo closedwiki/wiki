@@ -74,9 +74,22 @@ sub main
         print $query->redirect( "$scriptUrl/oops/$webName/$topic?template=oopsregexist&param1=$wikiName" );
         return;
     }
+    # everything OK
 
     # generate user entry and add to .htpasswd file
     htpasswdAddUser( htpasswdGeneratePasswd( $wikiName, $passwordA ) );
+
+    # send email to Wikiwebmaster
+    $text= &wiki::readTemplate( "registernotify" );
+    $text =~ s/%FIRSTLASTNAME%/$firstLastName/go;
+    $text =~ s/%EMAILADDRESS%/$emailAddress/go;
+    $text =~ s/%COMPANYNAME%/$companyName/go;
+    $text =~ s/%COMPANYURL%/$companyUrl/go;
+    $text =~ s/%COUNTRYNAME%/$countryName/go;
+    $text =~ s/%HEARFROM%/$hearFrom/go;
+    $text =~ s/%COMMENTTEXT%/$commentText/go;
+    $text =~ &wiki::handleCommonTags( );
+    &wiki::sendEmail( $text );
 
     # create user topic if not exist
     if( ! &wiki::topicExists( $wiki::mainWebname, $wikiName ) ) {

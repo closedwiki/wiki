@@ -56,7 +56,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> Name of wiki tool, is <b>TWikibeta</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WIKIVERSION%</CODE> </td>
-  <td> Wiki tool version, is <b>03 Aug 1999</b> </td>
+  <td> Wiki tool version, is <b>08 Aug 1999</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>USERNAME%</CODE> </td>
   <td> Your login username, is <b>guest</b> </td>
@@ -71,7 +71,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> The current topic name, is <b>TWikiDocumentation</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>DATE%</CODE> </td>
-  <td> Todays date, is <b>03 Aug 1999</b> </td>
+  <td> Todays date, is <b>09 Aug 1999</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>INCLUDE:"file.ext"%</CODE> </td>
   <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: <CODE><b>%<nop>INCLUDE:"../Know/TopicName.txt"%</b></CODE> </td>
@@ -247,7 +247,6 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 <LI> Now add <CODE>Alias</CODE> for <CODE>/twiki/pub</CODE> and <CODE>ScriptAlias</CODE> for <CODE>/twiki/bin</CODE> to <CODE>/etc/httpd/conf/srm-conf</CODE> .
 <LI> Restart Apache by <CODE>/etc/rc.d/rc5.d/S85httpd restart</CODE> .
 <LI> Test if the <CODE>twiki/bin</CODE> directory is cgi-enabled: Enter the URL of that directory into your browser (http://your.domain.com/twiki/bin). It is not set correctly as cgi-bin in case you get something like <CODE>"Index of /twiki/bin"</CODE> . It is OK if you get a message like <CODE>"Forbidden. You don't have permission to access /twiki/bin/ on this server."</CODE> .
-<LI> If you want to authenticate users you need to edit the <CODE>.htaccess</CODE> file in the <CODE>twiki/bin</CODE> directory. Consult the HTTP server documentation.
 <LI> Make sure PERL and the PERL CGI library is installed on your system. Default location of PERL executable is <CODE>/usr/bin/perl</CODE> . In case PERL is installed in a different location, the first line of all perl scripts in the <CODE>twiki/bin</CODE> directory need to be changed (alternatively you can create a symbolic link from <CODE>/usr/bin/perl</CODE> ).
 <LI> To be able to edit the perl scripts and .tmpl files it is necessary to <CODE>chown</CODE> and <CODE>chgrp -R twiki</CODE> so all the files have the owner you want.
 <LI> The scripts execute as <CODE>nobody</CODE> . Set the file permission of all Perl scripts in the <CODE>twiki/bin</CODE> directory as executable to <CODE>-rw-r-xr-x</CODE> .
@@ -259,6 +258,7 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 <LI> Point your browser at <A href="http://your.domain.com/twiki/bin/view" target="_top">http://your.domain.com/twiki/bin/view</A> and start wiki-ing away! 
 <LI> Security issue: Directories <CODE>twiki/bin/data</CODE> , <CODE>twiki/bin/templates</CODE> and all its subdirectories should be set so that they are <STRONG>not</STRONG> visible as a URL. (Alternatively, move the directries to a place where they are not visible, and change the variables in <CODE>twiki/bin/wikicfg.pm</CODE> accordingly)
 <LI> Optional: You can add new rendering rules or new %variables%. To insure an easy upgrade of TWiki it is recommended to do this customization in <CODE>twiki/bin/wikicfg.pm</CODE> , not <CODE>twiki/bin/wiki.pm</CODE> .
+<LI> Optional: If you are on a public server and you would like to authenticate users you need to rename file <CODE>.htaccess.txt</CODE> in the <CODE>twiki/bin</CODE> directory to <CODE>.htaccess</CODE> and change it to your needs. Consult the HTTP server documentation for details.
 </UL>
 <p> 
 <UL>
@@ -376,6 +376,10 @@ drwxrwxrwx   2 twiki    t5           4608 Nov 19 00:56 .
 drwxrwxrwx   6 twiki    t5            512 Nov 19 01:01 ..
 -rw-rw-rw-   1 twiki    t5           5974 Nov 15 21:42 .changes
 -rw-rw-rw-   1 twiki    t5              9 Nov 15 23:00 .mailnotify
+-rw-r--r--   1 nobody   65535        3991 Jul 22 04:33 FileAttachment.txt
+-r--r--r--   1 nobody   65535        4173 Jul 22 04:33 FileAttachment.txt,v
+-rw-r--r--   1 nobody   65535        6773 Aug  5 16:18 TWikiRegistration.txt
+-r--r--r--   1 nobody   65535        6960 Aug  5 16:18 TWikiRegistration.txt,v
 -rw-r--r--   1 nobody   65535        1990 Nov  6 18:25 TWikiUsers.txt
 -r--r--r--   1 nobody   65535        3045 Nov  6 18:25 TWikiUsers.txt,v
 -rw-r--r--   1 nobody   65535        1181 Oct 29 20:54 WebHome.txt
