@@ -89,13 +89,13 @@ sub main
         return;
     }
 
+    my $changeform = $query->param( 'submitChangeForm' ) || "";
+    if( $changeform ) {
+        &TWiki::Form::changeForm( $webName, $topic, $query );
+        return;
+    }
     
-    # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
-    $text =~ s/%_N_%/\r\n/go;
-    $text =~ s/%_L_%/</go;
-    $text =~ s/%_G_%/>/go;
-    $text =~ s/%_Q_%/\"/go;
-    $text =~ s/%_A_%/&/go;
+    $text = &TWiki::decodeSpecialChars( $text );
     $text =~ s/ {3}/\t/go;
 
     my $meta = "";
@@ -114,24 +114,9 @@ sub main
 	}
         
 	my $formTemplate = $query->param( "formtemplate" );
-	my $noForm = "";
 	if( $formTemplate ) {
 	   $meta->remove( "FORM" );
-	   if( &TWiki::Form::useFormSpecial() ) {
-	   my $useForm = lc $query->param( 'UseFormFLD' );
-	       if( ! $useForm || $useForm ne "yes" ) {
-	       $noForm = 1;
-	   }
-	   }
-	   if( $formTemplate ne "none" && ! $noForm ) {
-	       $meta->put( "FORM", ( name => $formTemplate ) );
-	   }
-	} elsif ( &TWiki::Form::useFormSpecial() ) {
-	   my $useForm = lc $query->param( 'UseFormFLD' );
-	   if( ! $useForm || $useForm ne "yes" ) {
-	       $meta->remove( "FORM" );
-	       $meta->remove( "FIELD" );
-	   }
+	   $meta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
 	}
 
         &TWiki::Form::fieldVars2Meta( $webName, $query, $meta ) if( ! $noForm );
