@@ -154,7 +154,8 @@ sub startRenderingHandler
 		my @sections = split(m%^---\+%m, $_[0]);
 		my $pos = 0;
 		foreach $sec (@sections) {
-		    $ret .= editRow($eurl,$pos, ($pos > 0 ? "\n---+" : "") . $sec);
+		    $ret .= editRow($eurl,$pos, ($pos > 0 ? "\n---+" : "") . $sec)
+			unless ($sec =~ /^\s*$/o);
 		    $pos++;
 		}
 	    }
