@@ -115,7 +115,7 @@ use vars qw(
 
 # Internationalisation (I18N) setup:
 use vars qw(
-	$siteCharset $siteLang $siteFullLang $urlCharEncoding 
+	$siteCharset $useUnicode $siteLang $siteFullLang $urlCharEncoding 
     );
 
 # ---------------------------
@@ -373,14 +373,8 @@ sub initialize
     if ( invalidSiteCharset() and $theUrl !~ m!$scriptUrlPath/oops! ) {  
 	writeWarning "Cannot use this multi-byte encoding ('$siteCharset') as site character encoding";
 	writeWarning "Please set a different character encoding in the \$siteLocale setting in TWiki.cfg.";
-
         my $url = &TWiki::getOopsUrl( $webName, $topicName, "oopsbadcharset" );
-
-	writeDebug "URL of redirect is $url";
-	my $foo = $cgiQuery->redirect( $url );
-
 	print $cgiQuery->redirect( $url );
-	writeDebug "Redirect output is $foo";
         return;
     }
 
@@ -674,7 +668,7 @@ subroutine.
 sub convertUtf8URLtoSiteCharset {
     my ( $webName, $topicName ) = @_;
 
-    writeDebug "URL web.topic is $webName.$topicName";
+    ##writeDebug "URL web.topic is $webName.$topicName";
     my $fullTopicName = "$webName.$topicName";
     my $charEncoding;
 
@@ -692,10 +686,14 @@ sub convertUtf8URLtoSiteCharset {
 				 chr( ord($1) << 6 & 0xC0 | ord($2) & 0x3F )
 				 /egx;
 	} elsif ( $siteCharset eq "utf-8" ) {
-	    # FIXME: Use 'unpack' to convert into real Unicode characters
-	    # if on Perl 5.8 or higher.
+	    # Convert into internal Unicode characters if on Perl 5.8 or higher.
+	    if( $] >= 5.008 ) {
+		require Encode;			# Perl 5.8 or higher only
+		$fullTopicName = Encode::decode("utf8", $fullTopicName);	# 'decode' into UTF-8
+	    } else {
+		writeWarning "UTF-8 not supported on Perl $] - use Perl 5.8 instead.";
+	    }
 	    writeWarning "UTF-8 not yet supported as site charset - TWiki is likely to have problems";
-	    writeDebug "No conversion needed from UTF-8 to $siteCharset";
 	} else {
 	    # Convert from UTF-8 into some other site charset
 	    writeDebug "Converting from UTF-8 to $siteCharset";
@@ -703,20 +701,19 @@ sub convertUtf8URLtoSiteCharset {
 	    # Use conversion modules depending on Perl version
 	    if( $] >= 5.008 ) {
 		require Encode;			# Perl 5.8 or higher only
+                import Encode qw(:fallbacks);
 		# Map $siteCharset into real encoding name
 		$charEncoding = Encode::resolve_alias( $siteCharset );
 		if( not $charEncoding ) {
 		    writeWarning "Conversion to \$siteCharset '$siteCharset' not supported, or name not recognised - check 'perldoc Encode::Supported'";
 		} else {
-		    writeDebug "Converting with Encode, valid 'to' encoding is '$charEncoding'";
+		    ##writeDebug "Converting with Encode, valid 'to' encoding is '$charEncoding'";
 		    # Convert text using Encode:
 		    # - first, convert from UTF8 bytes into internal (UTF-8) characters
 		    $fullTopicName = Encode::decode("utf8", $fullTopicName);	
 		    # - then convert into site charset from internal UTF-8,
 		    # inserting \x{NNNN} for characters that can't be converted
-		    {   
-			no strict 'subs';
-			$fullTopicName = Encode::encode( $charEncoding, $fullTopicName, Encode::FB_PERLQQ );
+                    $fullTopicName = Encode::encode( $charEncoding, $fullTopicName, &FB_PERLQQ );
 		    }
 		    ##writeDebug "Encode result is $fullTopicName";
 		}
@@ -728,7 +725,7 @@ sub convertUtf8URLtoSiteCharset {
 		    writeWarning "Conversion to \$siteCharset '$siteCharset' not supported, or name not recognised - check 'perldoc Unicode::MapUTF8'";
 		} else {
 		    # Convert text
-		    writeDebug "Converting with Unicode::MapUTF8, valid encoding is '$charEncoding'";
+		    ##writeDebug "Converting with Unicode::MapUTF8, valid encoding is '$charEncoding'";
 		    $fullTopicName = Unicode::MapUTF8::from_utf8({ 
 			    			-string => $fullTopicName, 
 		    			 	-charset => $charEncoding });
@@ -744,7 +741,7 @@ sub convertUtf8URLtoSiteCharset {
 	$urlCharEncoding = 'Native';
 	$charEncoding = $siteCharset;
     }
-    writeDebug "Final web and topic are $webName $topicName ($urlCharEncoding URL -> $siteCharset)";
+    ##writeDebug "Final web and topic are $webName $topicName ($urlCharEncoding URL -> $siteCharset)";
 
     return ($webName, $topicName);
 }
@@ -768,22 +765,6 @@ sub writeHeader
 
     # Just write a basic content-type header for text/html
     writeHeaderFull( $query, 'basic', 'text/html', 0);
-}
-
-=pod
-
----++ addScript( $extraScript )
-
-Javascript that will be added to (some) template(s)
-FIXME: This function is currently unused.  Remove on some non
-documentation-only commit, unless use is planned in future.
-
-=cut
-
-sub addScript
-{
-    my( $extraScript ) = @_;
-    $script .= "\n$extraScript";
 }
 
 
@@ -2726,7 +2707,6 @@ sub handleInternalTags
     $_[0] =~ s/%REMOTE_PORT%/&handleEnvVariable('REMOTE_PORT')/ge;
     $_[0] =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/ge;
 
-    # Topic and web names
     $_[0] =~ s/%TOPIC%/$_[1]/g;
     $_[0] =~ s/%BASETOPIC%/$topicName/g;
     $_[0] =~ s/%INCLUDINGTOPIC%/$includingTopicName/g;
