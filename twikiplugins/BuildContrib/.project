@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>BuildContrib</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>my_version.pl</name>
+			<type>1</type>
+			<location>C:/temp/conformance_analyser.pl</location>
+		</link>
+	</linkedResources>
+</projectDescription>
