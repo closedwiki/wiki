@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092546325" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093211341" format="1.0" version="1.3"}%
 This is a short introduction training course for TWiki beginners (newbies).
 
 %SLIDESHOWSTART{template="ATasteOfTWikiTemplate"}%
@@ -59,7 +59,7 @@ TWiki-with-extensions has been used as:
 	* A database
 	* A project management system
 	* A tracking tool
-	* (<i>truth is, we don't really know it's limits!</i>)
+	* (<i>truth is, we don't really know its limits!</i>)
 
 ---++ Structure of a TWiki page
 TWiki pages are usually organised into three parts:
@@ -170,7 +170,7 @@ TWiki understands pages in plain text just fine, but you can %RED% __jazz__ %END
 
 ---++ More common formatting
 	* A blank line gives a paragraph break<br />
-	* <nop>--- on a line of it's own gives a horizontal bar
+	* <nop>--- on a line of its own gives a horizontal bar
 	* Text in stars <nop>*like this* looks *like this* <br />
 	* Text in underscores <nop>_like this_ looks _like this_ <br />
 	* Text in equals signs <nop>=like this= looks =like this= <br />
