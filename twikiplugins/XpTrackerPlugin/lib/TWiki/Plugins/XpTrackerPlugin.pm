@@ -81,10 +81,32 @@ sub initPlugin
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
 
+    # reasonable defaults to produce a small calendar
+    %defaults = (
+	# normal HTML::CalendarMonthSimple options
+	# colors
+	headercolor			=> $webColor,
+	taskwaitcolor			=> 'red',
+	taskprogresscolor		=> 'yellow',
+	taskcompletecolor		=> 'green',
+	storywaitcolor			=> 'red',
+	storyprogresscolor		=> 'yellow',
+	storycompletecolor		=> 'blue',
+	storyacceptedcolor		=> 'green'
+	);
+
+    # now get defaults from XpTrackerPlugin topic
+    my $v;
+    foreach $option (keys %defaults) {
+	# read defaults from XpTrackerPlugin topic
+	$v = &TWiki::Func::getPreferencesValue("XPTRACKERPLUGIN_\U$option\E") || undef;
+	$defaults{$option} = $v if defined($v);
+    }
+
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
 
-	&xpCacheBuild( $web );
+    &xpCacheBuild( $web );
 
     return 1;
 }
@@ -152,6 +174,9 @@ sub commonTagsHandler
 
     # %XPDUMPITERATION% - Dumps an iteration for printing
     $_[0] =~ s/%XPDUMPITERATION\{(.*?)\}%/&xpDumpIteration($1,$web)/geo;
+
+    # %XPSHOWCOLOURS% - Service procedure to show current colours
+    $_[0] =~ s/%XPSHOWCOLOURS%/&xpShowColours($web)/geo;
 
     # ========================== END XP TAGS ==========================
 
@@ -1597,6 +1622,29 @@ sub xpSavePage()
 		TWiki::redirect( $query, $url );
 	}
 }
+
+###########################
+# xpShowColours
+#
+# Service method to show current background colours
+
+sub xpShowColours {
+
+    my ($web) = @_;
+
+    &TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::xpShowColours( $web ) is OK" ) if $debug;
+
+    my $table = "%TABLE{initsort=\"1\"}%\n";
+    $table .= "|*name*|*colour*|\n";
+    my ($key, $value);
+    while (($key, $value) = each(%defaults)) {
+	# read colours and put them in table
+	$table .= "|$key| <table width=\"100%\"><tr><td bgcolor=\"$value\">&nbsp;</td></tr></table>|\n";
+    }
+    return $table;
+}
+
+
 # =========================
 
 1;
