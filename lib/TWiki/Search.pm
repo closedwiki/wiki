@@ -965,10 +965,6 @@ sub searchWeb
                 $tempVal =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
                 $tempVal =~ s/\$formname/_getMetaFormName( $meta )/geos;
                 $tempVal =~ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/geos;
-                $tempVal =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
-                $tempVal =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
-                $tempVal =~ s/\$percnt(\(\))?/\%/gos; # expand percent
-                $tempVal =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
                 $tempVal =~ s/\r?\n/$newLine/gos if( $newLine );
                 if( $theSeparator ) {
                     $tempVal .= $theSeparator;
@@ -977,6 +973,10 @@ sub searchWeb
                 }
                 $tempVal =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
                 $tempVal =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos; # expand "$n" to new line
+                $tempVal =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
+                $tempVal =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
+                $tempVal =~ s/\$percnt(\(\))?/\%/gos; # expand percent
+                $tempVal =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
 
             } elsif( $noSummary ) {
                 $tempVal =~ s/%TEXTHEAD%//go;
