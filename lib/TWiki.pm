@@ -131,7 +131,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "20 Mar 2004";
+$wikiversion      = "21 Mar 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -3912,6 +3912,9 @@ sub getRenderedVersion {
             $_ = $extraLines if( defined $extraLines );
             s/^(.*?)\n(.*)$/$1/s;
             $extraLines = $2;    # Save extra lines, need to parse each separately
+
+# Escape rendering: Change " !AnyWord" to " <nop>AnyWord", for final " AnyWord" output
+            s/([\s\(])\!(?=\w)/$1<nop>/g;
 
 # Blockquoted email (indented with '> ')
             s/^>(.*?)$/> <cite> $1 <\/cite><br \/>/g;
