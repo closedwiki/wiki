@@ -91,7 +91,7 @@ sub view {
     my( $meta, $text );
     if( $topicExists ) {
         ( $currMeta, $currText ) = $session->{store}->readTopic
-          ( undef, $webName, $topicName, undef );
+          ( $session->{user}, $webName, $topicName, undef );
         ( $revdate, $revuser, $showRev ) =
           $currMeta->getRevisionInfo( $webName, $topicName );
 
@@ -105,8 +105,7 @@ sub view {
 
         if( $rev < $showRev ) {
             # Note: the most recent topic read in even if earlier rev
-            # requested. The most recent rev is required for access
-            # control checking.
+            # requested.
             ( $meta, $text ) = $session->{store}->readTopic
               ( $session->{user}, $webName, $topicName, $rev );
 

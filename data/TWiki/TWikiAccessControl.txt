@@ -1,4 +1,3 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092559631" format="1.0" version="1.29"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -62,95 +61,81 @@ Groups are defined by group topics created in the ==%MAINWEB%== web, like the %M
 		* ALLOWTOPICCHANGE defines who is allowed to change the group topic; it is a comma delimited list of Users and Groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic. (This prevents Users not in the Group from editing the topic to give themselves or others access. For example, for the <nop>TWikiAdminGroup topic write:
 		* ==Set ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup==
 
----++ Restricting Write Access
+#SuperAdminGroup
+---+++ The <nop>SuperAdminGroup
 
-You can define who is allowed to make changes to a web or a topic. 
+By mistyping a user or group name in the ALLOWTOPICCHANGE setting, it's possible to lock a topic so that no-one can edit it from a browser. To avoid this, you can create *superusers*:
+	* Set the ==SuperAdminGroup== configuration setting to the wikiname of a group of Users who are always allowed to edit/view topics e.g. "TWikiAdminGroup".
 
----+++ Deny Editing by Topic
+---++ Restricting Access
 
-Denying editing of a topic also restricts file attachment; both privileges are assigned together.
-	* Define one or both of these variables in a topic, preferably at the end of the page:
-		* ==Set <nop>DENYTOPICCHANGE = &lt; list of Users and Groups &gt;==
-		* ==Set <nop>ALLOWTOPICCHANGE = &lt; list of Users and Groups &gt;==
+You can define who is allowed to read or write to a web or a topic. Note that some plugins may not respect access permissions.
 
-	* DENYTOPICCHANGE defines Users or Groups that *are not* allowed to make changes to the topic, with a comma-delimited list. Example:
-		* ==Set <nop>DENYTOPICCHANGE = %MAINWEB%.<nop>SomeBadBoy, %MAINWEB%.<nop>SomeBadGirl, %MAINWEB%.<nop>SomeHackerGroup==
+   * Restricting VIEW blocks viewing and searching of content.
+   * Restricting CHANGE blocks creating new topics, changing topics or attaching files.
+   * Restricting RENAME controls who is allowed to rename, move or delete a topic.
+      * To rename, move or delete a topic, the user also also needs VIEW and CHANGE permission.  They also need CHANGE access to change references in any referring topics (though the rename can proceed without this access), and CHANGE access to the target topic.
 
-	* ALLOWTOPICCHANGE defines Users or Groups that *are* allowed to make changes to the topic. It is a comma delimited list of Users and Groups. Example:
-		* ==Set <nop>ALLOWTOPICCHANGE = %MAINWEB%.<nop>SomeGoodGuy, %MAINWEB%.<nop>SomeGoodGirl, %MAINWEB%.<nop>TWikiAdminGroup==
-
-	* DENYTOPICCHANGE is evaluated before ALLOWTOPICCHANGE. Access is denied if the authenticated person is in the DENYTOPICCHANGE list, or not in the ALLOWTOPICCHANGE list. Access is granted in case DENYTOPICCHANGE and ALLOWTOPICCHANGE is not defined.
-
----+++ Deny Editing by Web
-
-Restricting web-level editing blocks creating new topics, changing topics or attaching files.
-
-	* Define one or both of these variable in the %WEBPREFSTOPIC% topic:
-		* ==Set <nop>DENYWEBCHANGE = &lt; list of Users and Groups &gt;==
-		* ==Set <nop>ALLOWWEBCHANGE = &lt; list of Users and Groups &gt;==
-
-The same rules apply as for restricting topics, with these additions:
-	* DENYTOPICCHANGE (in topic) overrides DENYWEBCHANGE (in <nop>%WEBPREFSTOPIC%)
-	* ALLOWTOPICCHANGE (in topic) overrides ALLOWWEBCHANGE (in <nop>%WEBPREFSTOPIC%)
-
----++ Restricting Rename Access
-
-You can define who is allowed to rename, move or delete a topic, or rename a web.
-
----+++ Deny Renaming by Topic
-
-To allow a user to rename, move or delete a topic, they also need write (editing) permission.  They also need write access to change references in referring topics.
-
-	* Define one or both of these variables in a topic, preferably at the end of the topic:
-		* ==Set <nop>DENYTOPICRENAME = &lt; list of Users and Groups &gt;==
-		* ==Set <nop>ALLOWTOPICRENAME = &lt; list of Users and Groups &gt;==
-
-	* DENYTOPICCRENAME defines Users or Groups that *are not* allowed to rename the topic. It is a comma delimited list of Users and Groups. Example:
-		* ==Set <nop>DENYTOPICRENAME = %MAINWEB%.<nop>SomeBadBoy, %MAINWEB%.<nop>SomeBadGirl, %MAINWEB%.<nop>SomeHackerGroup==
-
-	* ALLOWTOPICRENAME defines Users or Groups that *are* allowed to rename the topic. It is a comma delimited list of Users and Groups. Example:
-		* ==Set <nop>ALLOWTOPICRENAME = %MAINWEB%.<nop>SomeGoodGuy, %MAINWEB%.<nop>SomeGoodGirl, %MAINWEB%.<nop>TWikiAdminGroup==
-
-	* DENYTOPICRENAME is evaluated before ALLOWTOPICRENAME. Access is denied if the authenticated person is in the DENYTOPICRENAME list, or not in the ALLOWTOPICRENAME list. Access is granted in case DENYTOPICRENAME and ALLOWTOPICRENAME is not defined.
-
----+++ Deny Renaming by Web
-
-You can define restrictions of who is allowed to rename a %WIKITOOLNAME% web.
-
-	* Define one or both of these variable in the %WEBPREFSTOPIC% topic:
-		* ==Set <nop>DENYWEBRENAME = &lt; list of Users and Groups &gt;==
-		* ==Set <nop>ALLOWWEBRENAME = &lt; list of Users and Groups &gt;==
-
-The same rules apply as for topics, with these additions:
-	* DENYTOPICRENAME (in topic) overrides DENYWEBRENAME (in <nop>%WEBPREFSTOPIC%)
-	* ALLOWTOPICRENAME (in topic) overrides ALLOWWEBRENAME (in <nop>%WEBPREFSTOPIC%)
-
----++ Restricting Read Access
-
-You can define who is allowed to see a web.
-
----+++ Deny Viewing by Topic
-
-%X% Technically it is possible to restrict read access to an individual topic based on ==DENYTOPICVIEW== / ==ALLOWTOPICVIEW== preferences variables, provided that the view script is authenticated. However this setup is not recommended since all content is searchable within a web - a search will turn up view restricted topics.
-
----+++ Deny Viewing by Web
+---+++ Controlling access to a Web
 
 You can define restrictions of who is allowed to view a %WIKITOOLNAME% web. You can restrict access to certain webs to selected Users and Groups, by:
 
-	* *obfuscating webs:* Insecure but handy method to hide new webs until content is ready for deployment.
 	* *authenticating all webs and restricting selected webs:* Topic access in all webs is authenticated, and selected webs have restricted access.
 	* *authenticating and restricting selected webs only:* Provide unrestricted viewing access to open webs, with authentication and restriction only on selected webs.
 
----++++ Obfuscate Webs
+	* You can define these settings in the %WEBPREFSTOPIC% topic, preferable towards the end of the topic:
+		* ==Set <nop>DENYWEBVIEW = &lt; comma-delimited list of Users and Groups &gt;==
+		* ==Set <nop>ALLOWWEBVIEW = &lt; comma-delimited list of Users and Groups &gt;==
+		* ==Set <nop>DENYWEBCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
+		* ==Set <nop>ALLOWWEBCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
+		* ==Set <nop>DENYWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
+		* ==Set <nop>ALLOWWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
 
-The idea is to keep a web hidden by not publishing its URL and by preventing the ==all webs== search option from accessing obfuscated webs. Do so by enabling the ==NOSEARCHALL== variable in %WEBPREFSTOPIC%:
+---+++ Controlling access to a Topic
+
+	* You can define these settings in the %WEBPREFSTOPIC% topic, preferable towards the end of the topic:
+		* ==Set <nop>DENYTOPICVIEW = &lt; comma-delimited list of Users and Groups &gt;==
+		* ==Set <nop>ALLOWTOPICVIEW = &lt; comma-delimited list of Users and Groups &gt;==
+		* ==Set <nop>DENYTOPICCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
+		* ==Set <nop>ALLOWTOPICCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
+		* ==Set <nop>DENYTOPICRENAME = &lt; comma-delimited list of Users and Groups &gt;==
+		* ==Set <nop>ALLOWTOPICRENAME = &lt; comma-delimited list of Users and Groups &gt;==
+
+Remember when opening up access to specific topics within a restricted web that other topics in the web - for example, the WebLeftBar - may also be accessed when viewing the topics. The message you get when you are denied access should tell you what topic you were not permitted to access.
+
+---+++ How TWiki evaluates ALLOW/DENY settings
+
+When deciding whether to grant access, TWiki evaluates the following rules in order (read from the top of the list; if the logic arrives at *PERMITTED* or *DENIED* that applies immediately and no more rules are applied). You need to read the rules bearing in mind that VIEW, CHANGE and RENAME access may be granted/denied separately.
+   1 If the user is a [[#SuperAdminGroup][super-user]]
+      * access is *PERMITTED*.
+   1 If DENYTOPIC is set to a list of wikinames
+      * people in the list will be *DENIED*.
+   1 If DENYTOPIC is set to _empty_ ( i.e. <tt>Set DENYWEB =</tt> )
+      * access is *PERMITTED* _i.e _ no-one is denied access to this topic
+   1 If ALLOWTOPIC is set
+      1 people in the list are *PERMITTED*
+      1 everyone else is *DENIED*
+         * Note that this means that setting ALLOWTOPIC to empty _denies access to everyone except admins_ (unless DENYTOPIC is also set to empty, as described above)
+   1 If DENYWEB is set to a list of wikiname
+      * people in the list are *DENIED* access
+   1 If ALLOWWEB is set to a list of wikinames
+      * people in the list will be *PERMITTED*
+      * everyone else will be *DENIED*
+         * Note that setting ALLOWWEB to empty _denies access to everyone except admins_
+   1 If you got this far, access is *PERMITTED*
+
+---++ Access Control quick recipes
+
+---+++ Obfusticating Webs
+
+Another way of hiding webs is to keep them hidden by not publishing the URL and by preventing the ==all webs== search option from accessing obfuscated webs. Do so by enabling the ==NOSEARCHALL== variable in %WEBPREFSTOPIC%:
 	* ==Set <nop>NOSEARCHALL = on==
 
 This setup can be useful to hide a new web until content its ready for deployment.
 
 %X% *Obfuscating webs is insecure*, as anyone who knows the URL can access the web.
 
----++++ Authenticate all Webs and Restrict Selected Webs
+---+++ Authenticate all Webs and Restrict Selected Webs
 
 Use the following setup to authenticate users for topic viewing in all webs and to restrict access to selected webs:
 
@@ -164,7 +149,7 @@ Use the following setup to authenticate users for topic viewing in all webs and 
 
 %H% This method only works if the ==view== script is authenticated, which means that all Users have to login, even for read-only access. (An open guest account, like Main.TWikiGuest, can get around this, allowing anyone to login to a common account with, for example, view-only access for public webs.) TWikiInstallationGuide has more on Basic Authentication, using the ==.htaccess== file.
 
----++++ Authenticate and Restricting Selected Webs Only
+---+++ Authenticate and Restrict Selected Webs Only
 
 Use the following setup to provide unrestricted viewing access to open webs, with authentication only on selected webs:
 
@@ -183,7 +168,7 @@ When a user accesses a web where you enabled view restriction, %WIKITOOLNAME% wi
 %X% *Authenticating webs is not very secure*, as there is a way to circumvent the read access restriction. It can be useful in certain situations - for example, to simplify site organization and clutter, by hiding low traffic webs - but is not recommended for securing sensitive content.
 
 
----++ Hiding Control Settings
+---+++ Hide Control Settings
 
 %T% To hide access control settings from normal browser viewing, place them in comment markers.
 
@@ -192,21 +177,6 @@ When a user accesses a web where you enabled view restriction, %WIKITOOLNAME% wi
 =&nbsp;  * Set <nop>DENYTOPICCHANGE = Main.<nop>SomeGroup= <br />
 =--&gt;=
 </style>
-
-#SuperAdminGroup
----++ The <nop>SuperAdminGroup
-
-By mistyping a user or group name in the ALLOWTOPICCHANGE setting, it's possible to lock a topic so that no-one can edit it from a browser. To avoid this, you can create Web-based *superusers*:
-	* Set the ==$superAdminGroup== variable in ==lib/TWiki.cfg== to the name of a group of Users who are always allowed to edit/view topics.
-<blockquote style="background-color:#f5f5f5">
-<verbatim>
-$superAdminGroup = "TWikiAdminGroup";
-</verbatim>
-</blockquote>
-	* The default setting is not to have superusers.
-
--- TWiki:Main.PeterThoeny - 04 May 2002 %BR%
--- TWiki:Main.MikeMannix - 12 May 2002 
 
 %STOPINCLUDE%
 
