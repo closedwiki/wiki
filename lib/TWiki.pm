@@ -1374,7 +1374,81 @@ sub handleInternalTags
 }
 
 # =========================
+sub takeOutVerbatim
+{
+    my( $intext ) = @_;
+    
+    if( $intext !~ /<verbatim>/oi ) {
+        return( $intext, () );
+    }
+    
+    # Exclude text inside verbatim from variable substitution
+    
+    my $tmp = "";
+    my $outtext = "";
+    my $nesting = 0;
+    my $verbatimCount = 0;
+    my @verbatim = ();
+    
+    foreach( split( /\n/, $intext ) ) {
+        if( /^\s*<verbatim>\s*$/oi ) {
+            $nesting++;
+            if( $nesting == 1 ) {
+                $outtext .= "%_VERBATIM$verbatimCount%\n";
+                $tmp = "";
+                next;
+            }
+        } elsif( m|^\s*</verbatim>\s*$|oi ) {
+            $nesting--;
+            if( ! $nesting ) {
+                $verbatim[$verbatimCount++] = $tmp;
+                next;
+            }
+        }
+
+        if( $nesting ) {
+            $tmp .= "$_\n";
+        } else {
+            $outtext .= "$_\n";
+        }
+    }
+       
+    return ( $outtext, @verbatim );
+}
+
+# =========================
+# set type=verbatim to get back original text
+#     type=pre to convert to HTML readable verbatim text
+sub putBackVerbatim
+{
+    my( $text, $type, @verbatim ) = @_;
+    
+    for( my $i=0; $i<=$#verbatim; $i++ ) {
+        my $val = $verbatim[$i];
+        if( $type ne "verbatim" ) {
+            $val =~ s/<(.*)>/&lt;$1&gt;/go;
+        }
+        $text =~ s|%_VERBATIM$i%|<$type>\n$val</$type>|;
+    }
+
+    return $text;
+}
+
+
+# =========================
 sub handleCommonTags
+{
+    my( $intext, $theTopic, $theWeb, @theProcessedTopics ) = @_;
+    
+    my( $outtext, @verbatim ) = takeOutVerbatim( $intext );
+    
+    $outtext = handleCommonTagsCore( $outtext, $theTopic, $theWeb, @theProcessedTopics );
+    
+    return putBackVerbatim( $outtext, "verbatim", @verbatim );
+}
+
+# =========================
+sub handleCommonTagsCore
 {
     my( $text, $theTopic, $theWeb, @theProcessedTopics ) = @_;
 
@@ -1891,6 +1965,9 @@ sub getRenderedVersion
         ( $head, $bodyTag, $bodyText ) = split( /(<body)/i, $text, 3 );
         $text = $bodyTag . $bodyText;
     }
+    
+    my @verbatim;
+    ( $text, @verbatim ) = takeOutVerbatim( $text );
 
     # Wiki Plugin Hook
     &TWiki::Plugins::startRenderingHandler( $text, $theWeb, $meta );
@@ -2060,6 +2137,8 @@ sub getRenderedVersion
 
     # Wiki Plugin Hook
     &TWiki::Plugins::endRenderingHandler( $result );
+
+    $result = putBackVerbatim( $result, "pre", @verbatim );
 
     $result =~ s|\n?<nop>\n$||os; # clean up clutch
     return "$head$result";
