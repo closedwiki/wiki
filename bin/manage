@@ -35,7 +35,7 @@ use vars qw( $query );
 sub main
 {
     $query= new CGI;
-    my $action = $query->param( 'action' );
+    my $action = $query->param( 'action' ) || "";
 
     if( $action eq "createweb" ) {
         createWeb();
@@ -68,13 +68,14 @@ sub createWeb
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
-    my $newWeb = $query->param( 'newweb' );
-    my $newTopic = $query->param( 'newtopic' );
-    my $baseWeb = $query->param( 'baseweb' );
-    my $webBgColor = $query->param( 'webbgcolor' );
-    my $siteMapWhat = $query->param( 'sitemapwhat' );
-    my $siteMapUseTo = $query->param( 'sitemapuseto' );
-    my $noSearchAll = $query->param( 'nosearchall' );
+
+    my $newWeb = $query->param( 'newweb' ) || "";
+    my $newTopic = $query->param( 'newtopic' ) || "";
+    my $baseWeb = $query->param( 'baseweb' ) || "";
+    my $webBgColor = $query->param( 'webbgcolor' ) || "";
+    my $siteMapWhat = $query->param( 'sitemapwhat' ) || "";
+    my $siteMapUseTo = $query->param( 'sitemapuseto' ) || "";
+    my $noSearchAll = $query->param( 'nosearchall' ) || "";
     my $theUrl = $query->url;
     my $oopsTmpl = "oopsmngcreateweb";
 
@@ -167,6 +168,12 @@ sub createEmptyWeb
         return( "Could not create $dir, error: $!" );
     }
 
+    if ( $TWiki::useRcsDir ) {
+        unless( mkdir( "$dir/RCS", 0775 ) ) {
+            return( "Could not create $dir/RCS, error: $!" );
+        }
+    }
+
     unless( open( FILE, ">$dir/.changes" ) ) {
         return( "Could not create changes file $dir/.changes, error: $!" );
     }
@@ -241,7 +248,7 @@ sub patchWebPreferences
     my( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
 
     my $siteMapList = "";
-    my $siteMapList = "on" if( $theSiteMapWhat );
+    $siteMapList = "on" if( $theSiteMapWhat );
     $text =~ s/(\s\* Set WEBBGCOLOR =)[^\n\r]*/$1 $theWebBgColor/os;
     $text =~ s/(\s\* Set SITEMAPLIST =)[^\n\r]*/$1 $siteMapList/os;
     $text =~ s/(\s\* Set SITEMAPWHAT =)[^\n\r]*/$1 $theSiteMapWhat/os;
