@@ -882,7 +882,7 @@ sub searchWeb
                 $tempVal =~ s/\$summary/&TWiki::makeTopicSummary( $text, $topic, $thisWebName )/geos;
                 $tempVal =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
                 $tempVal =~ s/\$formname/_getMetaFormName( $meta )/geos;
-                $tempVal =~ s/\$pattern\(\s*(.*?\s*\.\*)\)/getTextPattern( $text, $1 )/geos;
+                $tempVal =~ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/geos;
                 $tempVal =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
                 $tempVal =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
                 $tempVal =~ s/\$percnt(\(\))?/\%/gos; # expand percent
@@ -1063,7 +1063,11 @@ sub getTextPattern
     $thePattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
     $thePattern =~ /(.*)/;     # untaint
     $thePattern = $1;
-    $theText = "" unless( $theText =~ s/$thePattern/$1/is );
+    my $OK = 0;
+    eval {
+       $OK = ( $theText =~ s/$thePattern/$1/is );
+    };
+    $theText = "" unless( $OK );
 
     return $theText;
 }
