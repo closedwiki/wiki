@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000791228" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1007461313" format="1.0" version="1.11"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -205,7 +205,7 @@ Test =topicaction=:
 With URL: ==.../bin/oops/Test/TestTopic2?template=oopstest&param1=WebHome&param2=WebNotify==
 
 <blockquote>
-| <img src="%ATTACHURLPATH%/testscreen.gif" width="554" height="304" alt="testscreen.gif"> |
+| <img src="%ATTACHURL%/testscreen.gif" width="554" height="304" alt="testscreen.gif"> |
 </blockquote>
 
 ---++ Known Issues
