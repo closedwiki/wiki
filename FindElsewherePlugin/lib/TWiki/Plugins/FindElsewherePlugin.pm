@@ -55,6 +55,8 @@
 #		- removed "/o"'s as there may be issues with modperl (Codev.ModPerl)
 # 31-Mar-2005:  SteffenPoulsen
 #		- updated plugin to be I18N-aware
+# 02-Apr-2005:  SteffenPoulsen
+#		- fixed problems with WikiWordAsWebName.WikiWord
 #
 
 
@@ -121,8 +123,8 @@ sub startRenderingHandler
    # If the WikiWord is found in the otherWeb, link to it via [[otherWeb.WikiWord]]
    # If it isn't found there either, put the word back unchnaged
 
-   # Match WikiWords, [[wiki words]] and WIK IWO RDS
-   $_[0] =~ s/([\s\(])($regex{wikiWordRegex}|\[\[[$regex{mixedAlphaNum}\s]+\]\]|$regex{abbrevRegex})/&findTopicElsewhere($_[1],$1,$2,$2,"")/geo;
+   # Match WikiWordAsWebName.WikiWord, WikiWords, [[wiki words]] and WIK IWO RDS
+   $_[0] =~ s/([\s\(])($regex{webNameRegex}\.$regex{wikiWordRegex}|$regex{wikiWordRegex}|\[\[[$regex{mixedAlphaNum}\s]+\]\]|$regex{abbrevRegex})/&findTopicElsewhere($_[1],$1,$2,$2,"")/geo;
 
 }
 
@@ -136,23 +138,25 @@ sub makeTopicLink
 sub findTopicElsewhere
 {
    # This was copied and pruned from TWiki::internalLink
-   
+
    my( $theWeb, $thePreamble, $theTopic, $theLinkText, $theAnchor ) = @_;
 
-   # Get rid of leading/trailing spaces in topic name
-   $theTopic =~ s/^\s*//o;
-   $theTopic =~ s/\s*$//o; 
-    
+   # If we got ourselves a WikiWordAsWebName.WikiWord, we're done - return untouched info
+   if ($theTopic =~ /$regex{webNameRegex}\.$regex{wikiWordRegex}/o) {
+      return "$thePreamble$theTopic";
+   }
+   
+   # preserve link style formatting
+   my $oldTheTopic = $theTopic;
+
    # Turn spaced-out names into WikiWords - upper case first letter of
    # whole link, and first of each word.
    $theTopic =~ s/^(.)/\U$1/o;
    $theTopic =~ s/\s($regex{singleMixedAlphaNumRegex})/\U$1/go;
+   $theTopic =~ s/\[\[($regex{singleMixedAlphaNumRegex})(.*)\]\]/\u$1$2/o;
 
-   # Handle [[this example]] style separately
-   $theTopic =~ s/\[\[($regex{singleMixedAlphaNumRegex})(.*)\]\]/\u$1$2/go;
-   
    my $text = $thePreamble;
-
+ 
    # Look in the current web, return when found
    my $exist = &TWiki::Func::topicExists( $theWeb, $theTopic );
    if ( ! $exist ) {
@@ -160,14 +164,14 @@ sub findTopicElsewhere
          my $theTopicSingular = &makeSingular( $theTopic );
          if( &TWiki::Func::topicExists( $theWeb, $theTopicSingular ) ) {
             &TWiki::Func::writeDebug( "- $theTopicSingular was found in $theWeb." ) if $debug;
-            $text .= "$theTopic"; # leave it as we found it
+            $text .= "$oldTheTopic"; # leave it as we found it
             return $text;
          }
       }
    }
    else  {
       &TWiki::Func::writeDebug( "- $theTopic was found in $theWeb." ) if $debug;
-      $text .= "$theTopic";
+      $text .= "$oldTheTopic"; # leave it as we found it
       return $text;
    }
    
@@ -212,7 +216,7 @@ sub findTopicElsewhere
    else
    {
      &TWiki::Func::writeDebug( "- $theTopic is not in any of these webs: @webList." ) if $debug;
-     $text .= $theLinkText;
+     $text .= $theLinkText; 
    }
 
    return $text;
