@@ -10,7 +10,7 @@ What does the name TWiki stand for?
 	* _Wiki wiki_ means quick in Hawai'ian. They call the shuttle at the Honolulu airport the <A HREF="http://www.quickaid.com/airports/hnl/company/trans_tm.html"> wiki wiki bus</A>. 
 	* _TWiki_ is the short form of _TakeFive Wiki_ . (Later on I found out that _Twiki_ is the name of a robot in a <a href="http://www.buck-rogers.com/">Buck Rogers</a> TV show in 1979)
 
-%WIKITOOLNAME% is one of many WikiWikiClones; the first one was built by Ward Cummingham.
+%WIKITOOLNAME% is one of many WikiWikiClones; the first one was built by Ward Cummingham, http://c2.com/
 
 Topics of interest:
 	* TWikiEnhancementRequests is the place where you can add your enhancement requests.
