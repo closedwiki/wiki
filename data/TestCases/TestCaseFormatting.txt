@@ -1,10 +1,14 @@
+%META:TOPICINFO{author="guest" date="1099842057" format="1.0" version="1.1"}%
 Description: Simple formatting, as described in TWiki.TextFormattingRules; manual tests
 
+<table border=1>
 <tr><td> Wiki Word Links</td><td>
 <!-- expected -->
 <a class="twikiLink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/WebPreferences">WebPreferences</a>
 <p />
 <a class="twikiLink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Main/TWikiUsers">TWikiUsers</a>
+
+<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">CompleteAndUtterNothing</font><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/CompleteAndUtterNothing?topicparent=TestCases.TestCaseFormatting"><sup>?</sup></a></span>
 <!-- /expected -->
 </td><td>
 <!-- actual -->
@@ -15,7 +19,7 @@ WebPreferences
 CompleteAndUtterNothing
 <!-- /actual -->
 </td></tr>
-<tr><td> SquareBrackets</td><td>
+<tr><td> Square Brackets</td><td>
 <!-- expected -->
 <span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">wiki syntax</font><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/WikiSyntax?topicparent=%WEB%.TestCaseBasicFormatting"><sup>?</sup></a></span>
 <p />
@@ -53,18 +57,20 @@ escaped:
 </td></tr>
 <tr><td> Anchors</td><td>
 <!-- expected -->
-<a class="twikiAnchorLink" href="%SCRIPTURLPATH%/view/WikiWord#NotThere">WikiWord#NotThere</a>
+<a class="twikiAnchorLink" href="%SCRIPTURLPATH%/view/TestCases/TestCaseAutoFormatting#NotThere">TestCaseAutoFormatting#NotThere</a>
 <p />
-<a class="twikiAnchorLink" href="%SCRIPTURLPATH%/view/TestCases/TestCaseBasicFormatting#MyAnchor">Jump</a>
+<a class="twikiAnchorLink" href="%SCRIPTURLPATH%/view/TestCases/TestCaseFormatting#MyAnchor">Jump</a>
 <p />
 <a name="MyAnchor"></a> To here
 <!-- /expected -->
 </td><td>
 <!-- actual -->
-[[WikiWord#NotThere]]
+[[TestCaseAutoFormatting#NotThere]]
 
 [[#MyAnchor][Jump]]
 
 #MyAnchor To here
 <!-- /actual -->
 </td></tr>
+</table>
+
