@@ -6,7 +6,8 @@
 #  (don't laugh - we're expecting applause, not laughter!)
 #
 # Jul 2004 - written by Martin Gregory, martin@gregories.net
-
+# Changes copyright (C) 2005 Crawford Currie http://c-dot.co.uk
+#
 =begin twiki
 
 ---+ UpgradeTwiki
@@ -52,7 +53,7 @@ That means that there should be all the normal TWiki directories here: bin, lib,
 Here's what's about to happen:
 
 1) I'm going to create a new TWiki in $targetDir based on this new distribution
-2) I'm going to update the TWiki.cfg in $targetDir/lib to match the existing one in your current TWiki
+2) I'm going to update the config files to match the existing TWiki config
 3) I'm going to merge the new TWiki data files from the release with all your existing information 
 4) I'm going to tell you what you need to do next!
 
@@ -114,7 +115,7 @@ foreach $file (readdir(HERE))
     system("cp -R $file $targetDir");
 }
 
-print "Preparing to write a new format configuration file for you...\n\n";
+print "Preparing to write new format configuration files for you...\n\n";
 
 TWikiCfg::UpgradeTWikiConfig($configPath, $targetDir);   # dies on error, without doing damage
 

@@ -29,7 +29,7 @@
 
 package TWiki;
 
-use vars qw( $useLocale $setlibAvail );
+use vars qw( $setlibAvail );
 
 
 my $brokenTWikiCfg;
@@ -43,11 +43,38 @@ BEGIN {
     # Set library paths in @INC, read TWiki.cfg and set locale, at compile time
     # Try to use setlib.cfg, use default path if missing
     if ( -r './setlib.cfg' ) {
-	require './setlib.cfg'; 
-	$setlibAvail = 1;
+        require './setlib.cfg'; 
+        $setlibAvail = 1;
     } else {
-	unshift @INC, '../lib';
-	$setlibAvail = 0;
+        unshift @INC, '../lib';
+        $setlibAvail = 0;
+    }
+
+    if( $OS ) {
+        $cfg{DetailedOS} = $detailedOS;
+        $cfg{OS} = $OS;
+    } else {
+        # SMELL: duplicates code in TWiki.pm
+        unless( ( $cfg{DetailedOS} = $^O ) ) {
+            require Config;
+            $cfg{DetailedOS} = $Config::Config{'osname'};
+        }
+        $cfg{OS} = 'UNIX';
+        if ($cfg{DetailedOS} =~ /darwin/i) { # MacOS X
+            $cfg{OS} = 'UNIX';
+        } elsif ($cfg{DetailedOS} =~ /Win/i) {
+            $cfg{OS} = 'WINDOWS';
+        } elsif ($cfg{DetailedOS} =~ /vms/i) {
+            $cfg{OS} = 'VMS';
+        } elsif ($cfg{DetailedOS} =~ /bsdos/i) {
+            $cfg{OS} = 'UNIX';
+        } elsif ($cfg{DetailedOS} =~ /dos/i) {
+            $cfg{OS} = 'DOS';
+        } elsif ($cfg{DetailedOS} =~ /^MacOS$/i) { # MacOS 9 or earlier
+            $cfg{OS} = 'MACINTOSH';
+        } elsif ($cfg{DetailedOS} =~ /os2/i) {
+            $cfg{OS} = 'OS2';
+        }
     }
 
     # Read the configuration file now in order to set locale;
@@ -62,8 +89,89 @@ BEGIN {
 			( $@ ? "$@\n" : '');	# $@ if not compileable
     }
 
+    # upgrade cfg from old twiki version
+    $cfg{DefaultUrlHost} ||= $defaultUrlHost;
+    $cfg{ScriptUrlPath} ||= $scriptUrlPath;
+    $cfg{DispScriptUrlPath} ||= $dispScriptUrlPath;
+    $cfg{PubUrlPath} ||= $pubUrlPath;
+    $cfg{PubDir} ||= $pubDir;
+    $cfg{TemplateDir} ||= $templateDir;
+    $cfg{DataDir} ||= $dataDir;
+    $cfg{ScriptSuffix} ||= $scriptSuffix;
+    $cfg{UploadFilter} ||= $uploadFilter;
+    $cfg{SafeEnvPath} ||= $safeEnvPath;
+    $cfg{MailProgram} ||= $mailProgram;
+    $cfg{NoSpamPadding} ||= $noSpamPadding;
+    $cfg{MimeTypesFileName} ||= $mimeTypesFilename;
+    $cfg{StoreImpl} ||= $storeTopicImpl;
+    $cfg{EgrepCmd} ||= $egrepCmd;
+    $cfg{FgrepCmd} ||= $fgrepCmd;
+    $cfg{DisplayTimeValues} ||= $displayTimeValues;
+    $cfg{UseLocale} ||= $useLocale;
+    $cfg{SiteLocale} ||= $siteLocale;
+    $cfg{SiteCharsetOverride} ||= $siteCharsetOverride;
+    $cfg{LocaleRegexes} ||= $localeRegexes;
+    $cfg{UpperNational} ||= $upperNational;
+    $cfg{LowerNational} ||= $lowerNational;
+    $cfg{NameFilter} ||= $securityFilter;
+    $cfg{DefaultUserLogin} ||= $defaultUserName;
+    $cfg{SiteWebTopicName} ||= $siteWebTopicName;
+    $cfg{UsersWebName} ||= $mainWebname;
+    $cfg{SystemWebName} ||= $twikiWebname;
+    $cfg{DebugFileName} ||= $debugFilename;
+    $cfg{WarningFileName} ||= $warningFilename;
+    $cfg{HtpasswdFormatFamily} ||= $htpasswdFormatFamily;
+    $cfg{AuthRealm} ||= $authRealm;
+    $cfg{LogFileName} ||= $logFilename;
+    $cfg{RemoteUserFileName} ||= $remoteUserFilename;
+    $cfg{UsersTopicName} ||= $wikiUsersTopicname;
+    $cfg{MapUserToWikiName} ||= $doMapUserToWikiName;
+    $cfg{UsersTopicName} ||= $mainTopicname;
+    $cfg{NotifyTopicName} ||= $notifyTopicname;
+    $cfg{SitePrefsTopicName} ||= $wikiPrefsTopicname;
+    $cfg{WebPrefsTopicName} ||= $webPrefsTopicname;
+    $cfg{Stats}{Topicname} ||= $statisticsTopicname;
+    $cfg{Stats}{TopViews} ||= $statsTopViews;
+    $cfg{Stats}{TopContrib} ||= $statsTopContrib;
+    $cfg{NumberOfRevisions} ||= $numberOfRevisions;
+    $cfg{SuperAdminGroup} ||= $superAdminGroup;
+    $cfg{GetScriptUrlFromCgi} ||= $doGetScriptUrlFromCgi;
+    $cfg{RemovePortNumber} ||= $doRemovePortNumber;
+    $cfg{RemoveImgInMailnotify} ||= $doRemoveImgInMailnotify;
+    $cfg{RememberUserIPAddress} ||= $doRememberRemoteUser;
+    $cfg{PluralToSingular} ||= $doPluralToSingular;
+    $cfg{HidePasswdInRegistration} ||= $doHidePasswdInRegistration;
+    $cfg{DenyDotDotInclude} ||= $doSecureInclude;
+    $cfg{Log}{view} ||= $doLogTopicView;
+    $cfg{Log}{edit} ||= $doLogTopicEdit;
+    $cfg{Log}{save} ||= $doLogTopicSave;
+    $cfg{Log}{rename} ||= $doLogRename;
+    $cfg{Log}{attach} ||= $doLogTopicAttach;
+    $cfg{Log}{upload} ||= $doLogTopicUpload;
+    $cfg{Log}{rdiff} ||= $doLogTopicRdiff;
+    $cfg{Log}{changes} ||= $doLogTopicChanges;
+    $cfg{Log}{search} ||= $doLogTopicSearch;
+    $cfg{Log}{register} ||= $doLogRegistration;
+    $cfg{DisableAllPlugins} ||= $disableAllPlugins;
+    my %ss = @storeSettings;
+    $cfg{RCS}{useSubDir} ||= $useRcsDir;
+    $cfg{RCS}{asciiFileSuffixes} ||= $ss{attachAsciiPath};
+    $cfg{RCS}{dirPermission} ||= $ss{dirPermission};
+    $cfg{RCS}{initBinaryCmd} ||= $ss{initBinaryCmd};
+    $cfg{RCS}{tmpBinaryCmd} ||= $ss{tmpBinaryCmd};
+    $cfg{RCS}{ciCmd} ||= $ss{ciCmd};
+    $cfg{RCS}{coCmd} ||= $ss{coCmd};
+    $cfg{RCS}{histCmd} ||= $ss{histCmd};
+    $cfg{RCS}{infoCmd} ||= $ss{infoCmd};
+    $cfg{RCS}{diffCmd} ||= $ss{diffCmd};
+    $cfg{RCS}{breakLockCmd} ||= $ss{breakLockCmd};
+    $cfg{RCS}{ciDateCmd} ||= $ss{ciDateCmd};
+    $cfg{RCS}{delRevCmd} ||= $ss{delRevCmd};
+    $cfg{RCS}{unlockCmd} ||= $ss{unlockCmd};
+    $cfg{RCS}{lockCmd} ||= $ss{lockCmd};
+
     # Do a dynamic 'use locale' for this script
-    if( $useLocale ) {
+    if( $cfg{UseLocale} ) {
         require locale;
         import locale ();
     }
@@ -86,33 +194,70 @@ sub checkBasicModules {
     my $modMissing = 0;
     my $mod;
     foreach $mod (@basicMods) {
-	eval "use $mod";
-	if ($@) {
-	    unless ($modMissing) {
-		print "Content-type: text/html\n\n";
-		print "<html><head><title>Perl Module(s) missing</title></head>\n";
-		print "<body>\n";
-		print "<h1>Perl Module(s) missing</h1>\n";
-	    }
-	    $modMissing = 1;
-	    print "<p><b><font color=\"red\">Warning:</font></b> ";
-	    print "Essential module <b>$mod</b> not installed - please check your Perl\n";
-	    print "installation, including the setting of <b>\@INC</b>, and re-install Perl if necessary.</p>\n";
-	}
+        eval "use $mod";
+        if ($@) {
+            unless ($modMissing) {
+                print "Content-type: text/html\n\n";
+                print "<html><head><title>Perl Module(s) missing</title></head>\n";
+                print "<body>\n";
+                print "<h1>Perl Module(s) missing</h1>\n";
+            }
+            $modMissing = 1;
+            print "<p><b><font color=\"red\">Warning:</font></b> ";
+            print "Essential module <b>$mod</b> not installed - please check your Perl\n";
+            print "installation, including the setting of <b>\@INC</b>, and re-install Perl if necessary.</p>\n";
+        }
     }
     # If any critical modules missing, display @INC and give up 
     if ($modMissing) {
-	print "<p><b>\@INC setting:</b><br /><tt> ";
-	print join "<br />\n", @INC;
-	print "</tt></p>\n";
-	print "</body>\n</html>\n";
-	exit;
+        print "<p><b>\@INC setting:</b><br /><tt> ";
+        print join "<br />\n", @INC;
+        print "</tt></p>\n";
+        print "</body>\n</html>\n";
+        exit;
     }
 }
 
+sub LEFT {
+    my $text = join(" ",@_);
+    print "<tr valign='top'><th align='right'>$text";
+    print ":" if $text;
+    print "</th>\n";
+}
 
-sub main
-{
+sub LOWLEFT {
+    my $text = join(" ",@_);
+    print "<tr valign='top'><td align='right'>$text";
+    print ":" if $text;
+    print "</td>\n";
+}
+
+sub RIGHT {
+    print "<td>",join(" ",@_),"</td></tr>\n";
+}
+
+sub BOTH {
+    my $text = join(" ",@_);
+    print "<td valign='top' colspan='2'><b>$text</b></th></tr>\n";
+}
+
+sub BIGHEAD {
+    print BOTH("<hr><h3>",join(" ",@_),"</h3>");
+}
+
+sub NOTE {
+    return "<br /><font color='green'><b> Note: </font></b> ".join(" ",@_);
+}
+
+sub WARN {
+    return "<br /><font color='orange'><b> Warning:</b></font> ".join(" ",@_);
+}
+
+sub ERROR {
+    return "<br /><font color='red'><b> Error: </b></font> ".join(" ",@_);
+}
+
+sub main {
 
 my $perlverRequired = 5.00503;		# Oldest supported version of Perl
 my $perlverRequiredString = '5.005_03';
@@ -159,8 +304,6 @@ my @optionalMods = (
    );
 
 
-# FIXME: Should rely on fatalsToBrowser??
-open(STDERR,'>&STDOUT'); # redirect errors to browser
 $| = 1;                  # no buffering - FIXME: mod_perl issue?
 
 
@@ -189,36 +332,28 @@ EOM
 # Check for broken TWiki.cfg and report any Perl error(s)
 if ($brokenTWikiCfg) {
     $brokenTWikiCfgError =~ s!\n!<br />\n!sg; 	# Format properly
-    print "<h3>TWiki.cfg error</h3>\n";
+    print "<h3>Configuration error</h3>\n";
     print "<b><font color=\"red\">WARNING:</font></b> ";
     print "TWiki.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) relate to TWiki.cfg and should help locate the problem.<p />\n";
     print "$brokenTWikiCfgError\n";
     
     # EARLY EXIT
-    print "</body>\n</html>";
+    print "</body></html>";
     exit;
 }
 
-print <<EOM;
-<h3>Environment variables:</h3>
-<table>
-EOM
+print "<table>\n";
+BIGHEAD("Environment variables");
 my $key;
 for $key ( sort keys %ENV ) {
-    print "<tr><th align=\"right\">$key</th><td>$ENV{$key}</td></tr>\n";
+    LEFT($key); RIGHT($ENV{$key});
 }
-print <<EOM;
-</table>
-<h3>CGI Setup:</h3>
-<table>
-EOM
 
-
-
+BIGHEAD("CGI Setup");
 # Make %ENV safer for CGI (should reflect TWiki.pm)
 my $originalPath = $ENV{'PATH'} || '';
-if( $safeEnvPath ) {
-    $ENV{'PATH'} = $safeEnvPath;
+if( $cfg{SafeEnvPath} ) {
+    $ENV{'PATH'} = $cfg{SafeEnvPath};
 }
 delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
@@ -238,12 +373,12 @@ if (defined $^V) {
 # Load Config module - used here and elsewhere
 require Config;
 
-# Set $detailedOS if not using later versions of TWiki.cfg for BeijingRelease
+# Set $cfg{DetailedOS} if not using later versions of TWiki.cfg for BeijingRelease
 # - this code enables the latest testenv to be used with Dec 2001 and 
 # earlier releases.
-if ( !defined $detailedOS ) {
-    $detailedOS = $Config::Config{'osname'};
-    # print "$detailedOS<br>";
+if ( !defined $cfg{DetailedOS} ) {
+    $cfg{DetailedOS} = $Config::Config{'osname'};
+    # print "$cfg{DetailedOS}<br>";
 }
 
 # Detect Perl flavour on Windows, and Cygwin Perl/RCS package versions
@@ -251,7 +386,7 @@ use vars qw($perltype);
 
 my $cygwinRcsVerNum;
 $perlverMsg = $perlver;		# Default version message
-if ($detailedOS eq 'cygwin') {
+if ($cfg{DetailedOS} eq 'cygwin') {
     $perltype = 'Cygwin';				# Cygwin Perl only
     my ($pkg, $pkgName);
 
@@ -276,7 +411,7 @@ if ($detailedOS eq 'cygwin') {
 	$pkg = (split ' ', $pkg)[1];	# Package version
 	$cygwinRcsVerNum = $pkg;	
     }
-} elsif ($detailedOS =~ /win/i && $detailedOS !~ /darwin/i ) {
+} elsif ($cfg{DetailedOS} =~ /win/i && $cfg{DetailedOS} !~ /darwin/i ) {
     # Windows Perl - try ActivePerl-only function: returns number if
     # successful, otherwise treated as a literal (bareword).
     my $isActivePerl= eval 'Win32::BuildNumber !~ /Win32/';
@@ -296,7 +431,7 @@ if ($detailedOS eq 'cygwin') {
 # grep and ls don't end in '.exe', even though Perl's '_exe' setting
 # indicates they should.
 my $exeSuffix='';
-if ( $Config::Config{'_exe'} and ($OS eq 'WINDOWS' and $perltype ne 'Cygwin') ) { 
+if ( $Config::Config{'_exe'} and ($cfg{OS} eq 'WINDOWS' and $perltype ne 'Cygwin') ) { 
     if ( ! $ENV{'INTERIX_ROOT'} ) { #this is set is we are using UnixServicesForWindows (or INTERIX funnily enough) and they don't use .exe either
         $exeSuffix = $Config::Config{'_exe'};
     }
@@ -323,30 +458,27 @@ if ( $usingModPerl ) {
 }
 
 
+my $n = ucfirst(lc($cfg{OS}));
+$n .= " ($cfg{DetailedOS})" if ( $cfg{DetailedOS} ne '' );
 # OS
-print "<tr><th align=\"right\">Operating system:</th><td>" .  ucfirst(lc($OS));
-print " ($detailedOS)" if ( $detailedOS ne '' );
-print "</td></tr>\n";
+LEFT("Operating system"); RIGHT($n);
 
 # Perl version and type
-print "<tr><th align=\"right\">Perl version:</th><td>$perlverMsg";
-print " ($perltype)" if $perltype ne 'generic';
-print "</td></tr>\n";
+$perlverMsg .= " ($perltype)" if $perltype ne 'generic';
+LEFT("Perl version"); RIGHT($perlverMsg);
+
 if ( $perlvernum < $perlverRequired ) {
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "This version of Perl is too old for use with TWiki - upgrade to at least Perl $perlverRequiredString\n";
-    print "and preferably to Perl $perlverRecommended.\n";
-    print "</td></tr>\n";
+    LEFT("");
+    RIGHT(WARN("This version of Perl is too old for use with TWiki -",
+            "upgrade to at least Perl $perlverRequiredString",
+            "and preferably to Perl $perlverRecommended."));
 }
 
 # Perl @INC (lib path)
-print "<tr><th align=\"right\" valign=\"top\">\@INC library path:</th><td>" . 
-			( join "<br />\n", @INC ) . 
-			"</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
-print "This is the Perl library path, used to load TWiki modules, ";
-print "third-party modules used by some plugins, and Perl built-in modules.";
-print "</td></tr>\n";
+LEFT("\@INC library path"); RIGHT(join "<br />\n", @INC );
+
+NOTE("This is the Perl library path, used to load TWiki modules, ",
+     "third-party modules used by some plugins, and Perl built-in modules.");
 
 
 # Turn off fatalsToBrowser while checking module loads, to avoid load errors in
@@ -354,8 +486,9 @@ print "</td></tr>\n";
 $CGI::Carp::WRAP = $CGI::Carp::WRAP = 0;	# Avoid warnings...
 
 # Add to list of required modules if non-Unix, or MacOS X (detected by
-# Perl as 'Darwin') - $detailedOS is set in TWiki.cfg.
-if ( defined $detailedOS and ($detailedOS =~ /darwin/i or $OS ne 'UNIX') ) {
+# Perl as 'Darwin') - $cfg{DetailedOS} is set in TWiki.cfg.
+$cfg{DetailedOS} ||= $cfg{DetailedOS};
+if ( defined $cfg{DetailedOS} and ($cfg{DetailedOS} =~ /darwin/i or $cfg{OS} ne 'UNIX') ) {
     push @requiredMods,  @requiredModsNonUnix;
 } else {
 #these are optional on Unix
@@ -363,88 +496,77 @@ if ( defined $detailedOS and ($detailedOS =~ /darwin/i or $OS ne 'UNIX') ) {
 }
 
 # Check that the TWiki.pm module can be found
-print "<tr><th align=\"right\">TWiki module in \@INC path:</th><td>";
+LEFT("TWiki module in \@INC path");
 $mod = 'TWiki';
 eval "use $mod";
-print "<tr><th></th><td>\n";
 my $twikiFound = 0;
 if ($@) {
-    print "<b><font color=\"red\">Warning:</font></b> ";
-    print "'$mod.pm' not found - check path to <code>twiki/lib</code>";
-    print " and edit <code>twiki/bin/setlib.cfg</code> if necessary" if $setlibAvail;
-    print ".\n";
-    print "</td></tr>\n";
+    RIGHT(WARN("'$mod.pm' not found - check path to <code>twiki/lib</code>",
+         "and edit <code>twiki/bin/LocalLib.cfg</code> if necessary"));
 } else {
     $twikiFound = 1;
     my $mod_version = eval '$TWiki::wikiversion || $TWiki::VERSION';
     $mod_version ||= 'unknown';
-    print "OK, $mod.pm found (TWiki version: <b>$mod_version</b>)";
-    print "</td></tr>\n";
+    RIGHT("OK, $mod.pm found (Version: <b>$mod_version</b>)");
 }
-print "</td></tr>\n";
 
 # Do locale settings if TWiki.pm was found
 my $showLocales = 0;
 if ($twikiFound) {
     if( eval 'TWiki::_setupLocale()' ){	# Not in older TWiki.pm versions
-	# Ignore errors silently
-	$showLocales = 1;
+        # Ignore errors silently
+        $showLocales = 1;
     }
 }
 
 
 # Check that each of the required Perl modules can be loaded, and
 # print its version number.
-print "<tr><th align=\"right\">Required Perl modules:</th><td>";
+BOTH("Required Perl modules");
+$n = "";
 foreach $mod (@requiredMods) {
     eval "use $mod";
-    print "<tr><th></th><td>\n";
     if ($@) {
-	print "<b><font color=\"red\">Warning:</font></b> ";
-	print "'$mod' not installed - check TWiki documentation to see if this is required.\n";
-	print "</td></tr>\n";
+        LOWLEFT($mod);
+        RIGHT(ERROR("not installed"));
     } else {
-	my $mod_version;
-	$mod_version = ${"${mod}::VERSION"};
-        print "$mod ($mod_version)";
-
-	# Check for potential CGI.pm module upgrade 
-	if( $mod eq 'CGI' and $mod_version < $cgiModVerRecommended ) {
-
-	    if ( $perltype eq 'Cygwin' and $perlver eq '5.8.0' ) {
-		# Recommend CGI.pm upgrade if using Cygwin Perl 5.8.0 
-		print "<br /><b><font color=\"red\">Warning:</font></b> ";
-		print "CGI.pm version $cgiModVerRecommended or higher is recommended to avoid problems with attachment uploads on Cygwin Perl $perlver.\n";
-
-	    } elsif ( $usingModPerl and $modPerlVersion >= 1.99 ) {
-
-		# Recommend CGI.pm upgrade if using mod_perl 2.0, which
-		# is reported as version 1.99 and implies Apache 2.0
-		print "<br /><b><font color=\"red\">Warning:</font></b> ";
-		print "CGI.pm version $cgiModVerRecommended or higher is recommended to avoid problems with mod_perl version $modPerlVersion on Apache 2.0 or higher.\n";
-	    }
-	}
-	print "</td></tr>\n";
+        my $mod_version;
+        $mod_version = ${"${mod}::VERSION"};
+        LOWLEFT($mod);
+        $n = $mod_version;
+        # Check for potential CGI.pm module upgrade 
+        if( $mod eq 'CGI' and $mod_version < $cgiModVerRecommended ) {
+            if ( $perltype eq 'Cygwin' and $perlver eq '5.8.0' ) {
+                # Recommend CGI.pm upgrade if using Cygwin Perl 5.8.0 
+                $n .= WARN( "CGI.pm version $cgiModVerRecommended or higher",
+                            "is recommended to avoid problems with attachment",
+                            "uploads on Cygwin Perl $perlver.");
+            } elsif ( $usingModPerl and $modPerlVersion >= 1.99 ) {
+                # Recommend CGI.pm upgrade if using mod_perl 2.0, which
+                # is reported as version 1.99 and implies Apache 2.0
+                $n .= WARN("CGI.pm version $cgiModVerRecommended or higher is",
+                           "recommended to avoid problems with mod_perl version",
+                           "$modPerlVersion on Apache 2.0 or higher.");
+            }
+        }
+        RIGHT($n);
     }
-    print "</td></tr>\n";
 }
 
 # Check that each of the optional Perl modules can be loaded, and
 # print its version number.
-print "<tr><th align=\"right\">Optional Perl modules:</th><td>";
+BOTH("Optional Perl modules");
+$n = "";
 foreach $mod (@optionalMods) {
     eval "use $mod";
-    print "<tr><th></th><td>\n";
+    LOWLEFT($mod);
     if ($@) {
-	print "<b><font color=\"green\">Note:</font></b> ";
-	print "Optional module '$mod' not installed - check TWiki documentation to see if your configuration needs this module.\n";
-	print "</td></tr>\n";
+        RIGHT(WARN("not installed - check TWiki documentation to see",
+                   "if your configuration needs this module."));
     } else {
-	my $mod_version = $ {"$ {mod}::VERSION"};
-        print "$mod ($mod_version)";
-	print "</td></tr>\n";
+        my $mod_version = $ {"$ {mod}::VERSION"};
+        RIGHT($mod_version);
     }
-    print "</td></tr>\n";
 }
 
 # All module checks done, OK to enable fatalsToBrowser
@@ -452,40 +574,44 @@ import CGI::Carp qw( fatalsToBrowser );
 
 
 # PATH_INFO 
-print "<tr><th align=\"right\">PATH_INFO:<a name=\"PATH_INFO\"></th><td>$thePathInfo</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
-print "For a URL such as <b>$theUrl/foo/bar</b>, \n";
-print "the correct PATH_INFO is <b>/foo/bar</b>, without any prefixed path \n";
-print "components. <a href=\"$theUrl/foo/bar#PATH_INFO\"><b>Test this now</b></a> \n";
-print "- particularly if you are using mod_perl, Apache or IIS, or are using a web hosting provider.\n";
-print "The page resulting from the test link should have a PATH_INFO of <b>/foo/bar</b>.\n";
-print "</td></tr>\n";
+LEFT("PATH_INFO<a name=\"PATH_INFO\">");
+RIGHT("$thePathInfo",
+      NOTE("For a URL such as <b>$theUrl/foo/bar</b>,",
+           "the correct PATH_INFO is <b>/foo/bar</b>, without any prefixed path",
+           "components. <a href=\"$theUrl/foo/bar#PATH_INFO\">",
+           "<b>Test this now</b></a>",
+           "- particularly if you are using mod_perl, Apache or IIS, or are using",
+           "a web hosting provider.",
+           "The page resulting from the test link should have a PATH_INFO of",
+           "<b>/foo/bar</b>."));
 
 # mod_perl 
 my $usingModPerlText = $usingModPerl ? "Used" : "Not used";
 my $modPerlLoadedText = ( $modPerlLoaded ? "loaded" : "not loaded" );
 
-print "<tr><th align=\"right\">mod_perl:</th><td>$usingModPerlText for this script (mod_perl $modPerlLoadedText into Apache)\n";
+$n = "$usingModPerlText for this script (mod_perl $modPerlLoadedText into Apache)\n";
 if ( $modPerlVersion ) {
-    print "- mod_perl version $modPerlVersion\n";
+    $n .= "- mod_perl version $modPerlVersion\n";
 }
-print "</td></tr>\n";
+LEFT("mod_perl");RIGHT($n);
 
 # Check for a broken version of mod_perl 2.0
 if ( $usingModPerl and $modPerlVersion >= 1.99 
         and $modPerlVersion eq '1.99_11' ) {
     # Recommend mod_perl upgrade if using a mod_perl 2.0 version
     # with PATH_INFO bug (see Support.RegistryCookerBadFileDescriptor)
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "mod_perl version $modPerlVersionRecommended or higher is strongly recommended to avoid 'internal system error' bugs with PATH_INFO when using mod_perl $modPerlVersion and Apache 2.0 or higher.\n";
-    print "</td></tr>\n";
+    LEFT("");
+    RIGHT(WARN("mod_perl version $modPerlVersionRecommended or higher",
+               "is strongly recommended to avoid 'internal system error'",
+               "bugs with PATH_INFO when using mod_perl $modPerlVersion",
+               "and Apache 2.0 or higher."));
 }
 
 
 # Get web server's user and group info
 my $usr = "";
 my $grp = "";
-if( $OS eq 'UNIX' or  ($OS eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
+if( $cfg{OS} eq 'UNIX' or  ($cfg{OS} eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
     $usr = lc( getpwuid($>) );		# Unix/Cygwin Perl - effective UID
     foreach( split( " ", $( ) ) {
 	my $onegrp = getgrgid( $_ );
@@ -503,285 +629,213 @@ if( $OS eq 'UNIX' or  ($OS eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {
     }
 }
 
-print "<tr><th align=\"right\">User:</th><td> $usr </td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "Your CGI scripts are executing as this user.";
-print "</td></tr>\n";
+LEFT("User");
+$n = $usr.
+  NOTE("Your CGI scripts are executing as this user.");
 if( $usr ne "nobody" ) {
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "Since your CGI script is not running as user <tt>nobody</tt>, ";
-    print "you need to change the locks in the *,v RCS files of the TWiki ";
-    print "distribution from <tt>nobody</tt> to <tt>$usr</tt>.\n";
-    print "Otherwise, changes to topics will not be logged by RCS.\n";
-    print "</td></tr>\n";
+    $n .= WARN("Since your CGI script is not running as user",
+               "<tt>nobody</tt>, you may need to change the locks",
+               "in the *,v RCS files of the TWiki distribution from",
+               "<tt>nobody</tt> to <tt>$usr</tt>. Otherwise, changes",
+               "to topics will not be logged.");
 }
+RIGHT($n);
 
-print "<tr><th align=\"right\">Group(s):</th><td>";
-print "$grp";
-print "</table>\n";
+LEFT("Group(s)"); RIGHT($grp);
 
-
-
-
-print "<h3>Test of <tt>TWiki.cfg</tt> Configuration:</h3>\n";
-
-print "<table>\n";
-
-print "<tr><th align=\"right\">\$defaultUrlHost:</th><td>$defaultUrlHost</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This must match the protocol and host part (with optional port number) of ";
-print "the TWiki URL.";
-print "</td></tr>\n";
+BIGHEAD("Configuration");;
+LEFT("DefaultUrlHost");
+$n = $cfg{DefaultUrlHost}.
+  NOTE("This must match the protocol and host part (with optional",
+       "port number) of the TWiki URL.");
 my $val = $ENV{"HTTP_HOST"} || '';
-if( $defaultUrlHost !~ /$val/ ) {
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "This does not match </b>HTTP_HOST</b>";
-    print "</td></tr>\n";
+if( $cfg{DefaultUrlHost} !~ /$val/ ) {
+    $n .= WARN("This does not match </b>HTTP_HOST</b>");
 }
+RIGHT($n);
 
 # Check Script URL Path against REQUEST_URI
-print "<tr><th align=\"right\">\$scriptUrlPath:</th><td>".$scriptUrlPath."</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This must match the 'cgi-bin' part of the URL used to access the TWiki cgi-bin directory.";
-print "</td></tr>\n";
+LEFT("ScriptUrlPath"); 
+$n = $cfg{ScriptUrlPath}.
+  NOTE("This must match the 'cgi-bin' part of the URL used to access the",
+       "TWiki cgi-bin directory.");
 $val = $ENV{"REQUEST_URI"} || '';
 if( not $val ) {			# REQUEST_URI not set by IIS
-    print "<tr><th></th><td>";
-    print "This web server does not set <b>REQUEST_URI</b>, so it's not
-    possible to check the correctness of this setting.";
-    print "</td></tr>\n";
-} elsif ( $val !~ /^$scriptUrlPath/ ) {
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "This does not match <b>REQUEST_URI</b>";
-    print "</td></tr>\n";
+    $n .= WARN("This web server does not set <b>REQUEST_URI</b>,",
+               "so it's not possible to check the correctness of ",
+               "this setting.");
+} elsif ( $val !~ /^$cfg{ScriptUrlPath}/ ) {
+    $n .= WARN("This does not match <b>REQUEST_URI</b>");
+}
+RIGHT($n);
+
+sub checkdir {
+    my( $id, $dir, $descr, $file, $perms ) = @_;
+    LEFT("$id");
+    my $n = $dir;
+    if( $descr ) {
+        $n .= NOTE( $descr );
+    }
+    if( defined $file && !-e "$dir/$file" ) {
+        $n .= ERROR("Directory does not exist or file <tt>$file</tt> does not exist in this directory.");
+    } elsif( $perms =~ /w/ && ! testFileIsWritable( "$dir/testenv.test" ) ) {
+        $n .= ERROR("The directory must exist and be writable by the <b>$usr</b> user.");
+    } elsif( $perms !~ /w/ && testFileIsWritable( "$dir/testenv.test" ) ) {
+        $n .= WARN("Security issue: The directory should not be writable by the <b>$usr</b> user.");
+    }
+    RIGHT($n);
 }
 
-print "<tr><th align=\"right\">\$pubUrlPath:</th><td>$pubUrlPath</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This must be the URL of the public directory.";
-print "This is not set correctly if the ";
-print "$pubUrlPath/wikiHome.gif image below is broken:<br />";
-print "<img src=\"$pubUrlPath/wikiHome.gif\" />";
-print "</td></tr>\n";
+LEFT("PubUrlPath");
+RIGHT($cfg{PubUrlPath},
+  NOTE("This must be the URL of the public directory.",
+       "This is not set correctly if the ",
+       "$cfg{PubUrlPath}/wikiHome.gif image below is broken:<br />",
+       "<img src=\"$cfg{PubUrlPath}/wikiHome.gif\" />"));
 
-print "<tr><th align=\"right\">\$pubDir:</th><td>$pubDir</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is the public directory, as seen from the file system. ";
-print "It must correspond to <b>\$pubUrlPath</b>.";
-print "</td></tr>\n";
-if( ! ( -e "$pubDir/wikiHome.gif" ) ) {
-    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
-    print "Directory does not exist or file <tt>wikiHome.gif</tt> does not exist in this directory.";
-    print "</td></tr>\n";
-} elsif( ! testFileIsWritable( "$pubDir/testenv.test" ) ) {
-    # directory is not writable
-    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
-    print "This directory is not writable by <b>$usr</b> user.";
-    print "</td></tr>\n";
-}
+checkdir( "PubDir", $cfg{PubDir},
+          "This is the public directory, as seen from the file system. ".
+          "It must correspond to <b>PubUrlPath</b>.",
+          "wikiHome.gif", "w" );
 
-print "<tr><th align=\"right\">\$templateDir:</th><td>$templateDir</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is the TWiki template directory, as seen from the file system. ";
-print "</td></tr>\n";
-if( ! ( -e "$templateDir/view.tmpl" ) ) {
-    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
-    print "Directory does not exist or file <tt>view.tmpl</tt> does not exist in this directory.";
-    print "</td></tr>\n";
-} elsif( testFileIsWritable( "$templateDir/testenv.test" ) ) {
-    # directory is writable
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "Security issue: This directory should not be writable by the <b>$usr</b> user.";
-    print "</td></tr>\n";
-}
+checkdir( "TemplateDir", $cfg{TemplateDir},
+          "This is the template directory, as seen from the file system. ",
+          "view.tmpl", "r" );
 
-print "<tr><th align=\"right\">\$dataDir:</th><td>$dataDir</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is the data directory where TWiki stores all topics.";
-print "</td></tr>\n";
-if( ! ( -e "$dataDir" ) ) {
-    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
-    print "Directory does not exist.";
-    print "</td></tr>\n";
-} elsif( ! testFileIsWritable( "$dataDir/testenv.test" ) ) {
-    # directory is not writable
-    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
-    print "This directory must be writable by the <b>$usr</b> user.";
-    print "</td></tr>\n";
-}
+checkdir( "DataDir", $cfg{DataDir},
+          "This is the data directory where TWiki stores all topics.",
+          undef, "w" );
 
+my $logFile = $cfg{LogFileName};
+checkdir( "LogFileName",
+          $logFile, undef, undef, "w" );
 
-print "<tr><th align=\"right\">\$logDir:</th><td>$logDir</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is the log directory where TWiki stores records of access, errors and warnings.";
-print "</td></tr>\n";
-if( ! ( -e "$logDir" ) ) {
-    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
-    print "Directory does not exist.";
-    print "</td></tr>\n";
-} elsif( ! testFileIsWritable( "$logDir/testenv.test" ) ) {
-    # directory is not writable
-    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
-    print "This directory must be writable by the <b>$usr</b> user.";
-    print "</td></tr>\n";
-}
+$logFile = $cfg{WarningFileName};
+checkdir( "WarningFileName",
+          $logFile, undef, undef, "w" );
 
+$logFile = $cfg{DebugFileName};
+checkdir( "DebugFileName",
+          $logFile, undef, undef, "w" );
 
-# Check 'sendmail'
-$val = $mailProgram;
+$val = $cfg{MailProgram};
 $val =~ s/([^\s]*).*/$1/g;
 # Don't warn on Windows, as Net::SMTP is normally used
-if( $OS ne 'WINDOWS' && ! ( -e $val ) ) {
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "Mail program <tt>$val</tt> not found. Check the path.";
-    print "</td></tr>\n";
-}
 
-print "<tr><th align=\"right\">\$mailProgram:</th><td>$mailProgram</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-if( $OS ne 'WINDOWS' ) {
-    print "This is the mail program TWiki uses to send mail.";
+LEFT("MailProgram");
+$n = $cfg{MailProgram};
+if( $cfg{OS} ne 'WINDOWS' && ! ( -e $val ) ) {
+    $n .= WARN("Mail program <tt>$val</tt> not found. Check the path.");
+} elsif( $cfg{OS} ne 'WINDOWS' ) {
+    $n .= NOTE("This is the mail program TWiki uses to send mail,",
+               "unless Net::SMTP is installed and %SMTPMAILHOST%",
+              "is set in TWikiPreferences");
 } else {
-    print "This is not typically used on Windows - the Perl Net::SMTP module is used instead.";
+    $n .= NOTE("This is not typically used on Windows - the",
+               "Perl Net::SMTP module is used instead.");
 }
-print "</td></tr>\n";
-
-
-# Check RCS directory
-print "<tr><th align=\"right\">\$rcsDir:</th><td>$rcsDir</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is the directory where RCS is located.";
-print "</td></tr>\n";
-
-# Check RCS
-my $badRCS = 0;
-if( ! ( -e "$rcsDir/ci$exeSuffix" ) ) {
-    # RCS not installed
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "RCS program <tt>$rcsDir/ci$exeSuffix</tt> not found. Check \$rcsDir setting in TWiki.cfg. ";
-    print "TWiki will not work (unless you are ";
-    print "using TWiki's built-in RCS implementation, <b>RcsLite</b>).";
-    print "</td></tr>\n";
-
-} else {
-    # Check RCS version
-    my $rcsVerNum = `$rcsDir/ci$exeSuffix -V`;		# May fail due to diff or DLL not on PATH
-    $rcsVerNum = (split(/\s+/, $rcsVerNum))[2] || "";	# Recover from unset variable
-    
-    print "<tr><th align=\"right\">RCS Version:</th><td>$rcsVerNum";
-    print "&nbsp;&nbsp;(Cygwin package <tt>rcs-$cygwinRcsVerNum</tt>)" if defined($cygwinRcsVerNum);
-    print "</td></tr>\n";
-    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-    print "This is the version of RCS which will be used.";
-    print "</td></tr>\n";
-    
-    if( $rcsVerNum && $rcsVerNum < $rcsverRequired ) {
-        # RCS too old
-        print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-        print "RCS program is too old, upgrade to version $rcsverRequired or higher.";
-        print "</td></tr>\n";
-        $badRCS = 1;
-    }
-}
-
-if( $badRCS ) {
-    print "TWiki will not work unless you are using TWiki's built-in RCS implementation, <b>RcsLite</b>).<br>";
-    print "To enable RCSLite you need to change the setting of \$storeTopicImpl in the TWiki.cfg file.";
-}
-
-# Check 'ls'
-print "<tr><th align=\"right\">\$lsCmd:</th><td>$lsCmd</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is the program TWiki uses to list topics.";
-print "  (Not used in TWiki 01 Sep 2004 or later.)";
-print "</td></tr>\n";
-$val = $lsCmd . $exeSuffix;
-$val =~ s/([^\s]*).*/$1/go;
-if( ! ( -e $val ) ) {
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "List program <tt>$val</tt> not found. Check the path.";
-    print "</td></tr>\n";
-}
+RIGHT($n);
 
 # Check 'egrep'
-print "<tr><th align=\"right\">\$egrepCmd:</th><td>$egrepCmd</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is a program TWiki uses for search.";
-print "</td></tr>\n";
-$val = $egrepCmd . $exeSuffix;
+LEFT("EgrepCmd");
+$n = $cfg{EgrepCmd}.
+  NOTE("This is a program TWiki uses for searching." );
+$val = $cfg{EgrepCmd} . $exeSuffix;
 $val =~ s/([^\s]*).*/$1/go;
 if( ! ( -e $val ) ) {
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "Search program <tt>$val</tt> not found. Check the path.";
-    print "</td></tr>\n";
+    $n .= WARN("Search program <tt>$val</tt> not found. Check the path.");
 }
+RIGHT($n);
 
-# Check 'fgrep'
-print "<tr><th align=\"right\">\$fgrepCmd:</th><td>$fgrepCmd</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is a program TWiki uses for search.";
-print "</td></tr>\n";
-$fgrepCmd =~ s/ .*//;   # Strip any options
-$val = $fgrepCmd . $exeSuffix;
+LEFT("FgrepCmd");
+$n = $cfg{FgrepCmd}.
+  NOTE("This is a program TWiki uses for searching.");
+$cfg{FgrepCmd} =~ s/ .*//;   # Strip any options
+$val = $cfg{FgrepCmd} . $exeSuffix;
 $val =~ s/([^\s]*).*/$1/go;
 if( ! ( -e $val ) ) {
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "Search program <tt>$val</tt> not found. Check the path.";
-    print "</td></tr>\n";
+    $n = WARN("Search program <tt>$val</tt> not found. Check the path.");
 }
+RIGHT($n);
 
-# Check $safeEnvPath
-print "<tr><th align=\"right\">\$safeEnvPath:</th><td>$safeEnvPath</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is used to initialise the PATH variable, and is used to run the\n";
-print "'diff' program used by RCS, as well as to run shell programs such as\n";
-if( $OS eq 'WINDOWS' ) {
-    print "cmd.exe or Cygwin's 'bash'.\n";
-    print "<p>\n";
+LEFT("SafeEnvPath");
+$n = "This is used to initialise the PATH variable, and is used to run the".
+  " 'diff' program used by RCS, as well as to run shell programs such as ";
+if( $cfg{OS} eq 'WINDOWS' ) {
+    $n .= " cmd.exe or Cygwin's 'bash'.<p>";
     if( $perltype eq 'Cygwin' ) {
-	print "Since you are using Cygwin Perl, 'bash' will be used without any special setup.\n";
+        $n .= "Since you are using Cygwin Perl, 'bash' will be used without any special setup.";
     } elsif( $perltype eq 'ActiveState' ) {
-	print "To use 'bash' with ActiveState Perl, see the PERL5SHELL section below\n"; 
-	print "- this is recommended\n";
-	print "if Cygwin is installed.\n";
+        $n .= "To use 'bash' with ActiveState Perl, see the PERL5SHELL section below\n";
+        $n .= "- this is recommended if Cygwin is installed.\n";
     }
-    print "</p>\n";
+    $n .= "</p>";
 } else {
-    print "Bourne shell or 'bash'.";
+    $n .= "Bourne shell or 'bash'.";
 }
-if( $safeEnvPath eq '' ) {
-    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> \n";
-    print "Security issue: <b>\$safeEnvPath</b> set to empty string. Check TWiki.cfg.\n";
-    print "</td></tr>\n";
+if( !$cfg{SafeEnvPath} ) {
+    $n .= WARN("Security issue: <b>SafeEnvPath</b> set to empty string.");
 }
-print "</td></tr>\n";
+RIGHT($cfg{SafeEnvPath}, NOTE($n));
+
+BIGHEAD("Revision control tools");
+LEFT("StoreImpl");
+RIGHT($cfg{StoreImpl});
+if( $cfg{StoreImpl} eq "RcsWrap") {
+    BOTH("The following programs are used by the RCS module");
+    # Check RCS directory
+    foreach my $key( %{$cfg{RCS}} ) {
+        if ( $key =~ /Cmd$/ ) {
+            my $proggy = $cfg{RCS}{$key};
+            $proggy =~ s/\s.*$//;
+            LOWLEFT($key);
+            my $rcsVerNum = `$proggy -V`;
+            $rcsVerNum = (split(/\s+/, $rcsVerNum))[2] || "";	# Recover from unset variable
+            $proggy .= " (version $rcsVerNum)";
+            $proggy .= " (Cygwin package <tt>rcs-$cygwinRcsVerNum</tt>)" if defined($cygwinRcsVerNum);
+            if( $rcsVerNum && $rcsVerNum < $rcsverRequired ) {
+                # RCS too old
+                $proggy .= ERROR("The version of this program is too old, upgrade to version $rcsverRequired or higher.");
+                $badRCS = 1;
+            }
+            RIGHT($proggy);
+        }
+    }
+
+    if( $badRCS ) {
+        BOTH(ERROR("TWiki will not work with this RCS setup.",
+                   "Either correct the setup, or switch to RcsLite. ",
+                   "To enable RCSLite you need to change the setting",
+                   "of StoreImpl to 'RcsLite'."));
+    }
+}
+
 
 
 # Generate a separate table about specific environment variables
-print "</table>\n";
-print "<h3>Path and Shell Environment</h3>\n";
-print "<table>\n";
+BIGHEAD("Path and Shell Environment");
 
-# Check PATH 
+# Check PATH
 
-print "<tr><th align=\"right\">Original PATH:</th><td>$originalPath</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is the PATH value passed in from the web server to this script - it is reset by TWiki scripts to the PATH below, and is provided here for comparison purposes only.\n";
-print "</td></tr>\n";
+LEFT("Original PATH");
+RIGHT($originalPath,
+      NOTE("This is the PATH value passed in from the web server to this",
+           "script - it is reset by TWiki scripts to the PATH below, and",
+           "is provided here for comparison purposes only."));
 
 my $currentPath = $ENV{'PATH'} || ''; 	# As re-set earlier in this routine
-print "<tr><th align=\"right\">Current PATH:</th><td>$currentPath</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is the actual PATH setting that will be used by Perl to run programs.\n";
-print "It is normally identical to <b>\$safeEnvPath</b>, unless that variable is empty.\n";
-print "</td></tr>\n";
+LEFT("Current PATH");
+RIGHT($currentPath,
+NOTE("This is the actual PATH setting that will be used by Perl to run ",
+     "programs. It is normally identical to <b>SafeEnvPath</b>, unless",
+     "that variable is empty."));
 
 
 # Check that GNU egrep is found in PATH
-checkGnuVersion( $egrepCmd, "egrep", "used for regular expression searches" );
+checkGnuVersion( $cfg{EgrepCmd}, "egrep", "used for regular expression searches" );
 
 # Check that GNU fgrep is found in PATH
-checkGnuVersion( $fgrepCmd, "fgrep", "used for non-regular expression searches" );
+checkGnuVersion( $cfg{FgrepCmd}, "fgrep", "used for non-regular expression searches" );
 
 # Check that GNU ls is found in PATH 
 # FIXME: GNU not really necessary - do a check that any version found in PATH.
@@ -794,203 +848,219 @@ checkGnuVersion( "diff", "diff", "used by RCS to compare files" );
 checkGnuVersion( "patch", "patch", "used by the UpgradeTwiki script to upgrade an existing TWiki installation" );
 
 # PERL5SHELL check for non-Cygwin Perl on Windows only
-if( $OS eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
+if( $cfg{OS} eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
 
     # ActiveState or SiePerl/other
     # FIXME: Advice in this section should be reviewed and tested by people
     # using ActivePerl
     my $perl5shell = $ENV{'PERL5SHELL'} || '';
     print "</td></tr>\n";
-    print "<tr><th align=\"right\">PERL5SHELL:</th><td>$perl5shell</td></tr>\n";
-    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-    print "This environment variable is used by ActiveState and other Win32 Perls to run \n";
-    print "commands from TWiki scripts - it determines which shell\n";
-    print "program is used to run commands that use 'pipes'.  Examples of shell programs are \n";
-    print "cmd.exe, command.com (aka 'DOS Prompt'), and Cygwin's 'bash'\n";
-    print "(<b>recommended</b> if Cygwin is installed).\n";
-    print "<p>\n";
-    print "To use 'bash' with ActiveState or other Win32 Perls, you should set the \n";
-    print "PERL5SHELL environment variable to something like <tt><b>c:/YOURCYGWINDIR/bin/bash.exe -c</b></tt>.\n"; 
-    print "This should be set in the System Environment, and ideally set \n";
-    print "directly in the web server (e.g. using the Apache <tt>SetEnv</tt> \n";
-    print "command, followed by an Apache restart). Once this is done, you should re-run <b>testenv</b>\n";
-    print "to check that PERL5SHELL is set properly.\n";
+    LEFT("PERL5SHELL");
+    $n = $perl5shell.
+    NOTE("This environment variable is used by ActiveState and other",
+         "Win32 Perls to run \n",
+         "commands from TWiki scripts - it determines which shell\n",
+         "program is used to run commands that use 'pipes'.  Examples",
+         "of shell programs are \n",
+         "cmd.exe, command.com (aka 'DOS Prompt'), and Cygwin's 'bash'\n",
+         "(<b>recommended</b> if Cygwin is installed).\n",
+         "<p>\n",
+         "To use 'bash' with ActiveState or other Win32 Perls,",
+         "you should set the \n",
+         "PERL5SHELL environment variable to something like ",
+         "<tt><b>c:/YOURCYGWINDIR/bin/bash.exe -c</b></tt>.",
+         "This should be set in the System Environment, and ideally set \n",
+         "directly in the web server (e.g. using the Apache <tt>SetEnv</tt>",
+         "command, followed by an Apache restart). Once this is done, you",
+         "should re-run <b>testenv</b>\n",
+         "to check that PERL5SHELL is set properly.\n");
     if ($perltype eq 'ActiveState' and 
 	    Win32::BuildNumber() < $ActivePerlRecommendedBuild ) {
-    	print "</p>\n";
-    	print "<p><b><font color=\"red\">Warning:</font></b> ";
-    	print "ActiveState Perl must be upgraded to build <b>$ActivePerlRecommendedBuild</b> if you are going to use PERL5SHELL, which was broken in earlier builds.";
+    	$n .= WARN("ActiveState Perl must be upgraded to build <b>",
+             $ActivePerlRecommendedBuild,
+             "</b> if you are going to use PERL5SHELL, which was broken",
+             "in earlier builds.");
     }
-    print "</p>\n";
-    print "</td></tr>\n";
+    RIGHT($n);
 }
 
 # User authentication and password handling (only if TWiki::User loaded)
 if( defined $TWiki::htpasswdFormatFamily ) {
-    print "</table>\n";
-    print "<h3>User Authentication</h3>\n";
-    print "<table>\n";
+    BIGHEAD("User Authentication");
 
     $TWiki::htpasswdFormatFamily = $TWiki::htpasswdFormatFamily;	# warning fodder
     $TWiki::htpasswdEncoding = $TWiki::htpasswdEncoding;
     print "</td></tr>\n";
-    print "<tr><th align=\"right\">htpasswd Format Family:</th><td>$TWiki::htpasswdFormatFamily</td></tr>\n";
-    print "<tr><th align=\"right\">htpasswd Encoding:</th><td>$TWiki::htpasswdEncoding</td></tr>\n";
-    print "<tr><th align=\"right\">htpasswd Filename:</th><td>$TWiki::htpasswdFilename</td></tr>\n" if ( $TWiki::htpasswdFilename );
-    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-    print " only some combinations of Format, Encoding and Filename are valid, and fewer are tested\n";
-    print "\n";
-    print "</p>\n";
-    print "</td></tr>\n";
+    LEFT("htpasswd Format Family"); RIGHT($TWiki::htpasswdFormatFamily);
+    LEFT("htpasswd Encoding"); RIGHT($TWiki::htpasswdEncoding);
+    LEFT("htpasswd Filename"); RIGHT($TWiki::htpasswdFilename);
+    BOTH(NOTE("Only some combinations of Format, Encoding and Filename are",
+         " valid, and fewer are tested"));
 }
 
 # Generate a separate table for locale setup
 if ( $showLocales ) {		# Only if TWiki.pm found
-    print "</table>\n";
-    print "<h3>Internationalisation and Locale Setup</h3>\n";
-    print "<table>\n";
+    BIGHEAD("Internationalisation and Locale Setup");
 
-    # $useLocale
-    print "<tr><th align=\"right\">\$useLocale:</th><td>$useLocale</td></tr>\n";
-    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-    print "This TWiki.cfg setting controls whether locales are used by Perl and 'grep'.\n";
-    print "</td></tr>\n";
+    # $cfg{UseLocale}
+    LEFT("UseLocale");
+    $n = $cfg{UseLocale}.
+     NOTE("This setting controls whether locales are used by Perl and 'grep'");
 
-    if( $OS eq 'WINDOWS' ) {
-	# Warn re known broken locale setup
-	print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-	print "Using Perl on Windows, which may have missing or incorrect locales (in Cygwin or ActiveState Perl, respectively)\n";
-	print "- use of <b>\$localeRegexes</b> = 1 (see below) is recommended unless you know your version of Perl has working locale support.\n";
-	print "</td></tr>\n";
-    } 
+    if( $cfg{OS} eq 'WINDOWS' ) {
+        # Warn re known broken locale setup
+        $n .= WARN("Using Perl on Windows, which may have missing or",
+                   "incorrect locales (in Cygwin or ActiveState Perl,",
+                   "respectively) - use of <b>LocaleRegexes</b> = 1",
+                   "(see below) is recommended unless you know your",
+                   "version of Perl has working locale support.");
+    }
 
     # Check for d_setlocale in Config (same as 'perl -V:d_setlocale')
     eval "use Config"; 
     if ( not ( exists $Config{d_setlocale} and $Config{d_setlocale} eq 'define' ) ) {
-	print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-	print "This version of Perl was not compiled with locale support ('d_setlocale' not set in Config.pm)\n";
-	print "- re-compilation of Perl will be required before it can be used to support TWiki internationalisation.\n";
-	print "</td></tr>\n";
+        $n .= WARN("This version of Perl was not compiled with locale",
+                   "support ('d_setlocale' not set in Config.pm)",
+                   "- re-compilation of Perl will be required before",
+                   "it can be used to support TWiki internationalisation.");
     }
+    RIGHT($n);
 
-    # $siteLocale
-    print "<tr><th align=\"right\">\$siteLocale:</th><td>$siteLocale</td></tr>\n";
-    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-    print "This TWiki.cfg parameter sets the site-wide locale - for\n";
-    print "example, <b>de_AT.ISO-8859-1</b> where 'de' is the language code, 'AT' the country code and 'ISO-8859-1' is the character set.  Use the <code>locale -a</code> command on your system to determine available locales.\n";
-    print "</td></tr>\n";
+    LEFT("SiteLocale");
+    $n = $cfg{SiteLocale}.
+    NOTE("This sets the site-wide locale - for example,",
+         "<b>de_AT.ISO-8859-1</b> where 'de' is the language code,",
+         "'AT' the country code and 'ISO-8859-1' is the character set.",
+         "Use the <code>locale -a</code> command on your system to",
+         "determine available locales.");
 
     # Try to see if required locale was correctly set earlier
     my $currentLocale = setlocale(&LC_CTYPE);
-    if ( $currentLocale ne $siteLocale ) {
-	print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-	print "Unable to set locale to '$siteLocale'. The actual locale is '$currentLocale'\n";
-	print "- please test your locale settings. This warning can be ignored\n";
-	print "if you are not planning to use locales (e.g. your site uses English only)\n";
-	print "- or you can set <b>\$siteLocale</b> to <code>C</code>, which should always work.\n";
-	print "</td></tr>\n";
+    if ( $currentLocale ne $cfg{SiteLocale} ) {
+        $n .= WARN("Unable to set locale to '$cfg{SiteLocale}'. The",
+                   "actual locale is '$currentLocale'",
+                   "- please test your locale settings. This warning can",
+                   "be ignored if you are not planning to use locales (e.g.",
+                   "your site uses English only) - or you can set ",
+                   "<b>SiteLocale</b> to <code>C</code>, which should",
+                   "always work.");
     }
+    RIGHT($n);
 
     # $siteCharset (computed in TWiki::setupLocale from TWiki.cfg settings)
-    if (not defined $siteCharsetOverride ) {
-	$siteCharsetOverride = '';
+    if (not defined $cfg{SiteCharsetOverride} ) {
+        $cfg{SiteCharsetOverride} = '';
     }
-    print "<tr><th align=\"right\">\$siteCharset:</th><td>$siteCharset</td></tr>\n";
-    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-    print "This value is derived from the site-wide locale setting.\n";
-    print "It may have been overridden by \$siteCharsetOverride (currently '$siteCharsetOverride').\n";
-    print "It is used in TWiki's HTML pages and HTTP headers,\n";
-    print "so it must be acceptable to web browsers even if it is different\n";
-    print "to the locale-derived setting (e.g. 'euc-jp' instead of 'eucjp')\n";
-    print "</td></tr>\n";
+
+    LEFT("\$siteCharset");
+    $n = $siteCharset.
+      NOTE("This value is derived from the site-wide locale setting.",
+         "It may have been overridden by SiteCharsetOverride (currently '",
+         $cfg{SiteCharsetOverride},
+         "'). It is used in TWiki's HTML pages and HTTP headers,",
+         "so it must be acceptable to web browsers even if it is different",
+         "to the locale-derived setting (e.g. 'euc-jp' instead of 'eucjp')");
 
     # Warn against UTF-8 for now
     if ( $siteCharset eq 'utf-8' ) {
-	print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-	print "UTF-8 is not fully supported as the TWiki site character set at present\n";
-	print "- while many features will work, it is recommended to use a non-UTF-8 character set until full support is completed.\n";
-	print "If you are interested in testing TWiki beta releases with improved UTF-8 support and have access to Perl 5.8, see TWiki.org's\n";
-	print "<a href=\"http://twiki.org/cgi-bin/view/Codev/TWikiBetaRelease\">TWikiBetaRelease</a> topic.\n";
-	print "</td></tr>\n";
+        $n .= WARN("UTF-8 is not fully supported as the TWiki site",
+                   "character set at present",
+                   "- while many features will work, it is recommended",
+                   "to use a non-UTF-8 character set until full support",
+                   "is completed.\n",
+                   "If you are interested in testing TWiki beta releases",
+                   "with improved UTF-8 support and have access to Perl ",
+                   "5.8, see TWiki.org's ",
+                   "<a href=\"http://twiki.org/cgi-bin/view/Codev/TWikiBetaRelease\">TWikiBetaRelease</a> topic.");
+    }
 
 	# Warn against Perl 5.6 or lower for UTF-8
 	if ( $perlvernum < 5.008 ) {
-	    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-	    print "Perl 5.8 is required if you are using TWiki's experimental UTF-8 support\n";
-	    print "</td></tr>\n";
-	}
-
-        # Check for 'useperlio' in Config on Perl 5.8 or higher - required
-        # for use of ':utf8' layer.
-        if ( $perlvernum >= 5.008 and 
-                not ( exists $Config{useperlio} and $Config{useperlio} eq 'define' ) ) {
-            print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-            print "This version of Perl was not compiled to use PerlIO by default ('useperlio' not set in Config.pm, see <i>Perl's Unicode Model</i> in 'perldoc perluniintro')\n";
-            print "- re-compilation of Perl will be required before it can be used to enable TWiki's experimental UTF-8 support.\n";
-            print "</td></tr>\n";
-        }
+        $n .= WARN("Perl 5.8 is required if you are using TWiki's",
+                   "experimental UTF-8 support\n");
     }
 
-    # $localeRegexes
-    print "<tr><th align=\"right\">\$localeRegexes:</th><td>$localeRegexes</td></tr>\n";
-    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
-    print "This TWiki.cfg setting (default: 1) controls whether\n";
-    print "locale-dependent regular expressions (e.g. <code>[:upper:]</code>) are\n";
-    print "used by Perl and 'grep'. It is used in environments where locales are\n";
-    print "broken, to allow use of internationalised WikiWords.  You should\n";
-    print "configure <b>\$useLocale</b> to 1, and set a reasonable\n";
-    print "<b>\$siteLocale</b>, since this enables correct setting of the\n";
-    print "<b>\$siteCharset</b> for use by web browsers. Don't change this\n";
-    print "setting unless your locales are not working for whatever reason\n"; 
-    print "</td></tr>\n";
+    # Check for 'useperlio' in Config on Perl 5.8 or higher - required
+    # for use of ':utf8' layer.
+    if ( $perlvernum >= 5.008 and 
+         not ( exists $Config{useperlio} and
+               $Config{useperlio} eq 'define' ) ) {
+        $n .= WARN("This version of Perl was not compiled to use PerlIO",
+                   "by default ('useperlio' not set in Config.pm, see",
+                   "<i>Perl's Unicode Model</i> in 'perldoc perluniintro')",
+                   "- re-compilation of Perl will be required before it",
+                   "can be used to enable TWiki's experimental UTF-8",
+                   "support.");
+    }
+    RIGHT($n);
+
+    LEFT("LocaleRegexes");
+    $n = $cfg{LocaleRegexes}.
+    NOTE("This setting (default: 1) controls whether\n",
+         "locale-dependent regular expressions (e.g. <code>[:upper:]</code>) are\n",
+         "used by Perl and 'grep'. It is used in environments where locales are\n",
+         "broken, to allow use of internationalised WikiWords.  You should\n",
+         "configure <b>UseLocale</b> to 1, and set a reasonable\n",
+         "<b>SiteLocale</b>, since this enables correct setting of the\n",
+         "<b>\$siteCharset</b> for use by web browsers. Don't change this\n",
+         "setting unless your locales are not working for whatever reason\n");
+    RIGHT($n);
 
     # Locales are off/broken, or using pre-5.6 Perl, so have to 
     # explicitly list the accented characters (but not if using UTF-8)
     my $perlVerPreferred = 5.006;	# 5.6 or higher has [:lower:] etc
-    if ( ( not $useLocale or $perlvernum < $perlVerPreferred 
-	    or not $localeRegexes ) 
-	 and $siteCharset ne 'utf-8' ) {
+    if ( ( not $cfg{UseLocale} or $perlvernum < $perlVerPreferred 
+           or not $cfg{LocaleRegexes} )
+         and $siteCharset ne 'utf-8' ) {
 
-	# Can't use locales, so generate upper and lower case character
-	# classes to avoid doing this at run-time in TWiki.
-	my $forUpperNat;
-	my $forLowerNat;
-	if ( $perlvernum < $perlVerPreferred ) {
-	    
-	    # Get strings with the non-ASCII alphabetic characters only, upper and lower case
-	    $forUpperNat = join '', grep { lc($_) ne $_ and m/[^A-Z]/ } map { chr($_) } 1..255;
-	    $forLowerNat = join '', grep { uc($_) ne $_ and m/[^a-z]/ } map { chr($_) } 1..255;
-	}
+        # Can't use locales, so generate upper and lower case character
+        # classes to avoid doing this at run-time in TWiki.
+        my $forUpperNat;
+        my $forLowerNat;
+        if ( $perlvernum < $perlVerPreferred ) {
+            # Get strings with the non-ASCII alphabetic characters only, upper and lower case
+            $forUpperNat = join '', grep { lc($_) ne $_ and m/[^A-Z]/ } map { chr($_) } 1..255;
+            $forLowerNat = join '', grep { uc($_) ne $_ and m/[^a-z]/ } map { chr($_) } 1..255;
+        }
 
-	# $upperNational
-	$upperNational = $upperNational;	# Warning fodder
-	print "<tr><th align=\"right\">\$upperNational:</th><td>$upperNational</td></tr>\n";
-	print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-	print "This TWiki.cfg parameter is used when <b>\$useLocale</b> is 0 or <b>\$localeRegexes</b> is 0, to work around missing or non-working locales.\n";
-	print "It is also used with Perl 5.005 for efficiency reasons - upgrading to Perl 5.6.1 with working locales is recommended, and removes the need for this. \n";
-	print "If required, this parameter should be set to the upper case accented characters you require in your locale.\n";
-	if ( $forUpperNat ) {
-	    print "<p>The following upper case accented characters have been found in this locale and should be considered for use in this parameter: <b>$forUpperNat</b></p>\n";
-	}
-	print "</td></tr>\n";
-
-	# $lowerNational
-	$lowerNational = $lowerNational;	# Warning fodder
-	print "<tr><th align=\"right\">\$lowerNational:</th><td>$lowerNational</td></tr>\n";
-	print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-	print "This TWiki.cfg parameter is used whenever <b>\$upperNational</b> is used.\n";
-	print "This parameter should be set to the lower case accented characters you require in your locale.\n";
-	if ( $forLowerNat ) {
-	    print "<p>The following lower case accented characters have been found in this locale and should be considered for use in this parameter: <b>$forLowerNat</b></p>\n";
-	}
-	print "</td></tr>\n";
+        unless( $cfg{UseLocale} && $cfg{LocaleRegexes} ) {
+            LEFT("UpperNational");
+            $n = $cfg{UpperNational}.
+              NOTE("This setting is used when <b>UseLocale</b> is 0 or",
+                   "<b>LocaleRegexes</b> is 0, to work around missing or",
+                   "non-working locales.\n",
+                   "It is also used with Perl 5.005 for efficiency reasons",
+                   "- upgrading to Perl 5.6.1 with working locales is",
+                   "recommended, and removes the need for this. \n",
+                   "If required, it should be set to the upper case accented",
+                   "characters you require in your locale.");
+            if ( $forUpperNat ) {
+                $n .= NOTE("The following upper case accented characters have",
+                           "been found in this locale and should be considered",
+                           "for use in this parameter: <b>$forUpperNat</b>");
+            }
+            RIGHT($n);
+            LEFT("LowerNational");
+            $n = $cfg{LowerNational}.
+              NOTE("This setting is used whenever <b>UpperNational</b> is used.",
+                   "It should be set to the lower case accented characters you",
+                   "require in your locale.");
+            if ( $forLowerNat ) {
+                $n = NOTE("The following lower case accented characters have",
+                          "been found in this locale and should be considered",
+                          "for use in this parameter: <b>$forLowerNat</b>");
+            }
+            RIGHT($n);
+        }
     }
 }
 
 print "</table>\n";
 
+print "<h1>Complete list of configuration parameters</h1>";
+print explode(\%cfg);
+
 print <<EOM;
-</pre>
 </body>
 </html>
 EOM
@@ -1051,28 +1121,43 @@ sub deleteTestFile
 sub checkGnuVersion {
     my ($progExecString, $progReadableName, $progUsage) = @_;        # Usage is 'used for...' string
 
-    if( $OS eq 'UNIX' or  ($OS eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
-        print "<tr><th align=\"right\">$progReadableName:</th>";
+    if( $cfg{OS} eq 'UNIX' or  ($cfg{OS} eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
+        LEFT("$progReadableName");
 
         my $diffOut = `$progExecString --version 2>&1` || "";
         my $notFound = ( $? == -1 );
+        my $n;
         if( $notFound ) {
             # Check if on path
-            print "<td><b><font color=\"red\">Warning:</font></b> ";
-            print "'$progReadableName' program was not found on the current PATH.\n";
+            $n = WARN("'$progReadableName' program was not found on the",
+                       "current PATH.");
         } elsif ( $diffOut !~ /\bGNU\b/ ) {
             # Program found on path, check that GNU mentioned in version output
-            print "<td><b><font color=\"red\">Warning:</font></b> ";
-            print "'$progReadableName' program was found on the PATH but is not GNU $progReadableName - this may cause problems.\n";
-    } else {
+            $n = WARN("'$progReadableName' program was found on the PATH",
+                       "but is not GNU $progReadableName - this may cause",
+                       "problems.");
+        } else {
             # GNU version not found
-            print "<td>GNU $progReadableName was found on the PATH - this is the recommended $progReadableName tool.";
+            $n = "GNU $progReadableName was found on the PATH -",
+                  "this is the recommended $progReadableName tool.";
         }
-        print "</td></tr>";
 
         # Final table row applies to all cases
-        print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
-        print "The '$progReadableName' command is $progUsage.\n";
-        print "</td></tr>";
+        RIGHT($n, NOTE("The '$progReadableName' command is $progUsage."));
     }
+}
+
+sub explode {
+    my $has = shift;
+    my $tab = "";
+    foreach $n ( sort keys %$has ) {
+        $tab .= "<tr valign='top'><td align='left'>$n =</td>\n";
+        if( ref($has->{$n}) =~ /^HASH/) {
+            $tab .= "<td valign='top'>{".explode($has->{$n})."}</td>\n";
+        } else {
+            $tab .= "<td>$has->{$n}</td>\n";
+        }
+        $tab .= "</tr>";
+    }
+    return "<table>\n$tab</table>";
 }

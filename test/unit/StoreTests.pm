@@ -26,10 +26,10 @@ my $twiki;
 
 # Set up the test fixture
 sub set_up {
-    mkdir "$TWiki::dataDir/$zanyweb";
-    chmod 0777, "$TWiki::dataDir/$zanyweb";
-    mkdir "$TWiki::pubDir/$zanyweb";
-    chmod 0777, "$TWiki::pubDir/$zanyweb";
+    mkdir "$TWiki::cfg{DataDir}/$zanyweb";
+    chmod 0777, "$TWiki::cfg{DataDir}/$zanyweb";
+    mkdir "$TWiki::cfg{PubDir}/$zanyweb";
+    chmod 0777, "$TWiki::cfg{PubDir}/$zanyweb";
 
     my $web = $zanyweb;
     my $topic = "";
@@ -40,20 +40,20 @@ sub set_up {
     $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl );
 
     # Make sure we have a TestUser1 and TestUser1 topic
-    unless( $twiki->{store}->topicExists($TWiki::mainWebname, "TestUser1")) {
-        saveTopic1($TWiki::mainWebname, "TestUser1",
+    unless( $twiki->{store}->topicExists($TWiki::cfg{UsersWebName}, "TestUser1")) {
+        saveTopic1($TWiki::cfg{UsersWebName}, "TestUser1",
                    "silly user page!!!", "" );
     }
-    unless( $twiki->{store}->topicExists($TWiki::mainWebname, "TestUser2")) {
-        saveTopic1($TWiki::mainWebname, "TestUser2",
+    unless( $twiki->{store}->topicExists($TWiki::cfg{UsersWebName}, "TestUser2")) {
+        saveTopic1($TWiki::cfg{UsersWebName}, "TestUser2",
                    "silly user page!!!", "");
     }
 }
 
 sub tear_down {
-    `rm -rf $TWiki::dataDir/$zanyweb`;
+    `rm -rf $TWiki::cfg{DataDir}/$zanyweb`;
     die "Could not clean fixture $?" if $!;
-    `rm -rf $TWiki::pubDir/$zanyweb`;
+    `rm -rf $TWiki::cfg{PubDir}/$zanyweb`;
     die "Could not clean fixture $?" if $!;
 }
 
@@ -139,7 +139,7 @@ sub test_checkin_attachment {
     saveTopic1($web, $topic, $text, $user );
 
     # directly put file in pub directory (where attachments go)
-    my $dir = $TWiki::pubDir;
+    my $dir = $TWiki::cfg{PubDir};
     $dir = "$dir/$web/$topic";
     if( ! -e "$dir" ) {
         umask( 0 );
@@ -285,7 +285,7 @@ sub test_releaselocksonsave {
     } catch Error::Simple with {
     };
 
-    my $text =  `cat $TWiki::dataDir/$web/$topic.txt`;
+    my $text =  `cat $TWiki::cfg{DataDir}/$web/$topic.txt`;
     $this->assert_matches(qr/%META:TOPICINFO{author="TestUser2"/, $text);
     $this->assert_matches(qr/version="1.3"/, $text);
     $this->assert_matches(qr/<del> Changed <\/del><ins> Sausage <\/ins>/, $text);

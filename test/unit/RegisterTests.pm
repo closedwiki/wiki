@@ -60,21 +60,11 @@ sub set_up {
     $dataDir = "$here/tmpRegisterTestData";
     $pubDir =  "$here/tmpRegisterTestPub";
 
-    $TWiki::dataDir = $dataDir;
-    $TWiki::pubDir = $pubDir;
-    $TWiki::htpasswdFilename = "$dataDir/htpasswd";
-    # grr bloody TWiki.cfg mess....
-    foreach my $grr ( 0..$#TWiki::storeSettings ) {
-        if( $TWiki::storeSettings[$grr] eq "dataDir" ){
-            $TWiki::storeSettings[$grr+1] = $TWiki::dataDir;
-        }
-        elsif( $TWiki::storeSettings[$grr] eq "pubDir" ){
-            $TWiki::storeSettings[$grr+1] = $TWiki::pubDir;
-        }
-    }
-    $TWiki::storeSettings{pubDir} = $TWiki::pubDir;
+    $TWiki::cfg{DataDir} = $dataDir;
+    $TWiki::cfg{PubDir} = $pubDir;
+    $TWiki::cfg{HtpasswdFilename} = "$dataDir/htpasswd";
 
-    $tempUserDir = "$TWiki::dataDir";
+    $tempUserDir = "$TWiki::cfg{DataDir}";
     $saveHtpasswd = $tempUserDir.'/rcsr$$'; # not saved as '.htpasswd' to minimise onlookers interest.
     $saveTWikiUsers = $tempUserDir.'/rcsrUsers$$';
 
@@ -86,20 +76,20 @@ sub set_up {
     mkdir "$dataDir/$temporaryWeb";
     chmod 0777, "$dataDir/$temporaryWeb";
 
-    mkdir "$dataDir/$TWiki::mainWebname";
-    chmod 0777, "$dataDir/$TWiki::mainWebname";
+    mkdir "$dataDir/$TWiki::cfg{UsersWebName}";
+    chmod 0777, "$dataDir/$TWiki::cfg{UsersWebName}";
 
     mkdir $pubDir;
     chmod 0777, $pubDir;
 
-    mkdir "$TWiki::pubDir/$temporaryWeb";
+    mkdir "$pubDir/$temporaryWeb";
     chmod 0777, "$pubDir/$temporaryWeb";
 
     $Error::Debug = 1;
     $TWiki::UI::Register::unitTestMode = 1;
     setupUnregistered();
 
-    $twikiUsersFile = "$TWiki::dataDir/Main/TWikiUsers.txt";
+    $twikiUsersFile = "$TWiki::cfg{DataDir}/Main/TWikiUsers.txt";
 }
 
 sub tear_down {
@@ -145,7 +135,7 @@ sub register {
                                        'register'
                                       ]
                          });
-    my $session = initialise($query, $TWiki::defaultUserName);
+    my $session = initialise($query, $TWiki::cfg{DefaultUserName});
     TWiki::UI::Register::register($session, 1, $tempUserDir);
 }
 
@@ -170,7 +160,7 @@ sub verify {
                                       ]
                          });
 
-    my $session = initialise($query, $TWiki::defaultUserName);
+    my $session = initialise($query, $TWiki::cfg{DefaultUserName});
 
     TWiki::UI::Register::verifyEmailAddress($session,$tempUserDir,1);
 }
@@ -193,7 +183,7 @@ sub finish {
                                       'verify'
                                      ]
                         });
-    my $session = initialise($query, $TWiki::defaultUserName);
+    my $session = initialise($query, $TWiki::cfg{DefaultUserName});
     try {
         TWiki::UI::Register::finish ( $session, $tempUserDir, 1 );
     } catch TWiki::UI::OopsException with {
@@ -415,7 +405,7 @@ sub test_resetPasswordNoPassword {
                                       ]
                          });
 
-    unlink $TWiki::htpasswdFilename;
+    unlink $TWiki::cfg{HtpasswdFilename};
 
     my $session = initialise($query, $guestLoginName);
     try {
@@ -491,7 +481,7 @@ EOM
     my $regTopic = 'UnprocessedRegistrations2';
     
     my $logTopic = 'UnprocessedRegistrations2Log';
-    my $file = $TWiki::dataDir.'/'.$temporaryWeb.'/'.$regTopic.'.txt';
+    my $file = $TWiki::cfg{DataDir}.'/'.$temporaryWeb.'/'.$regTopic.'.txt';
     my $fh = new FileHandle;
     
     die "Can't write $file" unless ($fh->open(">$file"));
@@ -604,7 +594,7 @@ Test User - $testUserWikiName - $testUserEmail
    * Password: mypassword
 EOM
 
-    my $session = initialise(new CGI(""), $TWiki::defaultUserName);
+    my $session = initialise(new CGI(""), $TWiki::cfg{DefaultUserName});
     $self->assert_equals( TWiki::UI::Register::_buildConfirmationEmail ($session, \%data,
                                                                         "%FIRSTLASTNAME% - %WIKINAME% - %EMAILADDRESS%\n\n%FORMDATA%",0), $expected);  
     

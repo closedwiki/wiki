@@ -33,15 +33,15 @@ sub _set {
     ASSERT($pref) if DEBUG;
 
     my $text = "";
-    if ( -e "$TWiki::dataDir/$web/$topic.txt") {
-        open(F, "<$TWiki::dataDir/$web/$topic.txt") || die;
+    if ( -e "$TWiki::cfg{DataDir}/$web/$topic.txt") {
+        open(F, "<$TWiki::cfg{DataDir}/$web/$topic.txt") || die;
         undef $/;
         $text = <F>;
         close F;
         $text =~ s/^\s+\* Set $pref =.*$//mg;
     }
 
-    open(F, ">$TWiki::dataDir/$web/$topic.txt") || die;
+    open(F, ">$TWiki::cfg{DataDir}/$web/$topic.txt") || die;
     print F "\t* Set $pref = $val\n";
     print F "$text\n";
     close F;
@@ -49,12 +49,12 @@ sub _set {
 
 sub _setTWikiPref {
    my ( $this, $pref, $val ) = @_;
-   $this->_set($TWiki::twikiWebname, $TWiki::wikiPrefsTopicname, $pref, $val);
+   $this->_set($TWiki::cfg{SystemWebname}, $TWiki::cfg{SitePrefsTopicName}, $pref, $val);
 }
 
 sub _setWebPref {
    my ( $this, $pref, $val ) = @_;
-   $this->_set($web, $TWiki::webPrefsTopicname, $pref, $val);
+   $this->_set($web, $TWiki::cfg{WebPrefsTopicName}, $pref, $val);
 }
 
 sub _setTopicPref {
@@ -64,7 +64,7 @@ sub _setTopicPref {
 
 sub _setUserPref {
    my ( $this, $pref, $val ) = @_;
-   $this->_set($TWiki::mainWebname, $user, $pref, $val);
+   $this->_set($TWiki::cfg{UsersWebName}, $user, $pref, $val);
 }
 
 my $twiki;
@@ -75,25 +75,25 @@ sub set_up {
     $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl );
 
     # back up TWiki.TWikiPreferences
-    my $prefs = "$TWiki::dataDir/$TWiki::twikiWebname/$TWiki::wikiPrefsTopicname.txt";
+    my $prefs = "$TWiki::cfg{DataDir}/$TWiki::cfg{SystemWebname}/$TWiki::cfg{SitePrefsTopicName}.txt";
     die "Cannot run test - cannot write $prefs" unless ( -w $prefs );
     $this->{TWIKIPREFS} = $prefs;
     $this->{TWIKIPREFSBACKUP} = "$prefs.bak";
     copy($this->{TWIKIPREFS}, $this->{TWIKIPREFSBACKUP});
 
-    `rm -rf $TWiki::dataDir/$web`;
-    die "Cannot create $TWiki::dataDir/$web: $@" if $@;
-    `mkdir $TWiki::dataDir/$web`;
-    die "Cannot create $TWiki::dataDir/$web: $@" if $@;
-    `cp $TWiki::dataDir/_default/*.txt* $TWiki::dataDir/$web`;
-    die "Cannot create $TWiki::dataDir/$web: $@" if $@;
+    `rm -rf $TWiki::cfg{DataDir}/$web`;
+    die "Cannot create $TWiki::cfg{DataDir}/$web: $@" if $@;
+    `mkdir $TWiki::cfg{DataDir}/$web`;
+    die "Cannot create $TWiki::cfg{DataDir}/$web: $@" if $@;
+    `cp $TWiki::cfg{DataDir}/_default/*.txt* $TWiki::cfg{DataDir}/$web`;
+    die "Cannot create $TWiki::cfg{DataDir}/$web: $@" if $@;
 
-    mkdir "$TWiki::pubDir/$web" ||
-      die "Cannot create $TWiki::pubDir/$web";
-    chmod 0777, "$TWiki::pubDir/$web" ||
-      die "Cannot chmod $TWiki::pubDir/$web";
+    mkdir "$TWiki::cfg{PubDir}/$web" ||
+      die "Cannot create $TWiki::cfg{PubDir}/$web";
+    chmod 0777, "$TWiki::cfg{PubDir}/$web" ||
+      die "Cannot chmod $TWiki::cfg{PubDir}/$web";
 
-    open(F, ">$TWiki::dataDir/$TWiki::mainWebname/TestUser1.txt") ||
+    open(F, ">$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/TestUser1.txt") ||
       die "Cant create user";
     print F "silly user page!!!";
     close(F);
@@ -103,9 +103,9 @@ sub tear_down {
     my $this = shift;
     # restore TWiki.TWikiPreferences
     copy( $this->{TWIKIPREFSBACKUP}, $this->{TWIKIPREFS} );
-    `rm -rf $TWiki::dataDir/$web`;
+    `rm -rf $TWiki::cfg{DataDir}/$web`;
     die "Could not clean fixture $?" if $!;
-    `rm -rf $TWiki::pubDir/$web`;
+    `rm -rf $TWiki::cfg{PubDir}/$web`;
     die "Could not clean fixture $?" if $!;
 }
 

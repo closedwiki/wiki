@@ -91,7 +91,7 @@ sub _getTopicHandler {
 
     $attachment = "" if( ! $attachment );
 
-    my $handlerName = "TWiki::Store::$TWiki::cfg{RCS}{impl}";
+    my $handlerName = "TWiki::Store::$TWiki::cfg{storeImpl}";
 
     return $this->{IMPL}->new( $this->{session}, $web, $topic,
                                $attachment );

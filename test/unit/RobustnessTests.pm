@@ -34,7 +34,7 @@ sub set_up {
 
 sub test_env {
     my $this = shift;
-    if ( $TWiki::OS eq "UNIX" ) {
+    if ( $TWiki::cfg{OS} eq "UNIX" ) {
         $this->assert( $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} );
     } else {
         $this->assert( $twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} );
@@ -128,10 +128,10 @@ sub test_buildCommandLine {
 
 sub test_execute {
     my $this = shift;
-    if ( $TWiki::OS eq "UNIX" ) {
-        $this->assert_str_equals( "'", $TWiki::cmdQuote );
+    if ( $TWiki::cfg{OS} eq "UNIX" ) {
+        $this->assert_str_equals( "'", $TWiki::cfg{CmdQuote} );
     } else {
-        $this->assert_str_equals( '"', $TWiki::cmdQuote );
+        $this->assert_str_equals( '"', $TWiki::cfg{CmdQuote} );
     }
     $this->assert_deep_equals([" 1 2 "],
                               [$twiki->{sandbox}->readFromProcessArray('echo',

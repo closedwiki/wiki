@@ -40,8 +40,6 @@ sub set_up {
     die unless $twiki->{prefs};
 }
 
-my %ss = @TWiki::storeSettings;
-
 # Get rid a topic and its attachments completely
 sub mug {
     my( $self ) = @_;
@@ -49,8 +47,8 @@ sub mug {
     my $web = $self->{web};
     my $topic = $self->{topic};
 
-    my $rcsDirFile = $self->{dataDir} . "/$web/RCS/$topic,v";
-    my @files = ( $self->file(), $self->rcsFile(), $rcsDirFile );
+    my $rcsDirFile = "$TWiki::cfg{DataDir}/$web/RCS/$topic,v";
+    my @files = ( $self->{file}, $self->{rcsFile}, $rcsDirFile );
     unlink( @files );
     $self->init();
     $self->{"head"} = 0;
@@ -114,13 +112,13 @@ sub addRevision {
 sub checkRead {
     my( $this, $topic, $attachment, @vals ) = @_;
     my $web = "Test";
-    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, $attachment, \%ss );
+    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, $attachment );
     mug($rcs);
     my $numRevs = $#vals + 1;
     for( my $i=0; $i<$numRevs; $i++ ) {
         addRevision( $rcs, $attachment, $vals[$i], "comment " . $i, "JohnTalintyre" );
     }
-    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, $attachment, \%ss );
+    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, $attachment );
     $this->assert_equals( $numRevs, $rcsLite->numRevisions(), "Number of revisions should be the same" );
     for( my $i=$numRevs; $i>0; $i-- ) {
         my $text = $rcsLite->getRevision( $i );
@@ -135,11 +133,11 @@ sub test_repRev {
     my $web = "Test";
     my $topic = "RcsLiteRepRev";
     #print "Test Rep Rev\n";
-    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "", \%ss );
+    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "" );
     mug($rcsLite);
     $rcsLite->addRevision( "there was a man\n\n", "in once", "JohnTalintyre" );
     $rcsLite->replaceRevision( "there was a cat\n", "1st replace", "NotJohnTalintyre", time() );
-    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "", \%ss );
+    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "" );
     my $numRevs = $rcs->numRevisions();
     $this->assert_equals( 1, $numRevs, "Should be one revision" );
     my $text = $rcs->getRevision(1);
@@ -152,14 +150,14 @@ sub test_repRev {
     mug($rcs);
     $rcs->addRevision( "there was a man\n\n", "in once", "JohnTalintyre" );
     $rcs->replaceRevision( "there was a cat\n", "1st replace", "NotJohnTalintyre", time() );
-    $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "", \%ss );
+    $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "" );
     $numRevs = $rcsLite->numRevisions();
     $this->assert_equals( $numRevs, 1 );
     $text = $rcsLite->getRevision(1);
     $this->assert_equals( "there was a cat\n", $text);
     $rcs->addRevision( "and now this\n\n\n", "2nd entry", "J1" );
     $rcs->replaceRevision( "then this\n", "2nd replace", "J2", time() );
-    $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "", \%ss );
+    $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "" );
     $this->assert_equals( 2, $rcsLite->numRevisions);
     $this->assert_equals( "there was a cat\n", $rcsLite->getRevision(1));
     $this->assert_equals( "then this\n", $rcsLite->getRevision(2));
@@ -168,16 +166,14 @@ sub test_repRev {
 sub writeTest {
     my( $this, $topic, $attachment, @vals ) = @_;
     my $web = "Test";
-    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, $attachment,
-                                              \%ss );
+    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, $attachment );
     mug($rcsLite);
     my $numRevs = $#vals + 1;
     for( my $i=0; $i<$numRevs; $i++ ) {
         addRevision( $rcsLite, $attachment, $vals[$i], "comment " . $i,
                      "JohnTalintyre" );
     }
-    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, $attachment,
-                                          \%ss );
+    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, $attachment);
     $this->assert_equals( $numRevs, $rcs->numRevisions());
     for( my $i = $numRevs; $i > 0; $i-- ) {
         my $text = $rcs->getRevision( $i );
@@ -190,11 +186,11 @@ sub refDelta {
     my( $old, $new ) = @_;
     my $web = "Test";
     my $topic = "RefDelta";
-    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "", \%ss );
+    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "" );
     mug($rcs);
     $rcs->addRevision( $old, "old comment", "JohnTalintyre" );   
     $rcs->addRevision( $new, "old comment", "JohnTalintyre" );   
-    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "", \%ss );
+    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "" );
     my $delta = $rcsLite->delta(1);
     print "Old:\n\"$old\"\n";
     print "New:\n\"$new\"\n";
@@ -573,13 +569,13 @@ sub rcsDiffOne {
     my( $this, @vals ) = @_;
     my $topic = "RcsDiffTest";
     my $web = "Test";
-    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "", \%ss );
+    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "" );
     mug($rcs);
     #print "Rcs Diff test $num\n";
     $rcs->addRevision( $vals[0], "num 0", "JohnTalintyre" );
     $rcs->addRevision( $vals[1], "num 1", "JohnTalintyre" );
     my $diff = $rcs->revisionDiff( 1, 2 );
-    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "", \%ss );
+    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "" );
     my $diffLite = $rcsLite->revisionDiff( 1, 2 );
 
     for ( my $i = 0; $i <= $#$diffLite && $i <= $#$diff; $i++ ) {
@@ -696,13 +692,13 @@ sub genTest {
     my( $this,$ident, $topic, $write, $read, $attachment, @vals ) = @_;
     print "Test Generic ($attachment) $ident\n" if( $ident );
     my $web = "Test";
-    my $writer = $write->new( $twiki, $web, $topic, $attachment, \%ss );
+    my $writer = $write->new( $twiki, $web, $topic, $attachment );
     mug($writer);
     my $numRevs = @vals;
     for( my $i=0; $i<$numRevs; $i++ ) {
         addRevision( $writer, $attachment, $vals[$i], "comment " . $i, "JohnTalintyre" );
     }
-    my $reader = $read->new( $twiki, $web, $topic, $attachment, \%ss );
+    my $reader = $read->new( $twiki, $web, $topic, $attachment );
     my $okay = $this->assert_equals( $reader->numRevisions(), $numRevs, "Number of revisions should be the same" );
     if( $okay ) {
         for( my $i=$numRevs; $i>0; $i-- ) {
@@ -719,20 +715,20 @@ sub test_ciLocked {
     my $topic = "CiLocked";
 
     # create the fixture
-    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "", \%ss );
+    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "" );
     $rcs->addRevision( "Shooby Dooby", "original", "BungditDin" );
     # hack the lock so someone else has it
     my $user = `whoami`;
     chop($user);
-    my $vfile = $rcs->file().",v";
+    my $vfile = $rcs->{file}.",v";
     my $txt = $rcs->_readFile($vfile);
     $txt =~ s/$user/blocker_socker/g;
     `chmod 777 $vfile`;
     $rcs->_saveFile( $vfile, $txt);
     # file is now locked by blocker_socker, save some new text
-    $rcs->_saveFile( $rcs->file(), "Shimmy Dimmy" );
+    $rcs->_saveFile( $rcs->{file}, "Shimmy Dimmy" );
     # check it in
-    $rcs->_ci( $rcs->file(), "Gotcha", "SheikAlot" );
+    $rcs->_ci( $rcs->{file}, "Gotcha", "SheikAlot" );
     $txt = $rcs->_readFile($vfile);
     # make sure the lock is right
     $this->assert_matches(qr/locks\n\s+$user:1\./s, $txt);
