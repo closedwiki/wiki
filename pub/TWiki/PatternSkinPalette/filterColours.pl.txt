@@ -1,0 +1,7 @@
+#! /usr/bin/perl -w
+use strict;
+
+while ( <> )
+{
+    m/\#([0-9a-fA-F]{6})/i and print lc "$1\n";
+}
