@@ -85,8 +85,10 @@ if( $action eq "createweb" ) {
   my ( $topic, $webName ) =
     TWiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl, $query );
 
-  TWiki::UI::Manage::removeUser($webName, $topic, $wikiName, $query);
+    TWiki::UI::Manage::removeUser($webName, $topic, $wikiName, $query);
 
+} elsif( $action eq "relockrcs" ) {
+    TWiki::UI::Manage::relockRcsFiles();
 } elsif( $action ) {
 
   my( $topic, $webName, $dummy, $userName ) = 

@@ -502,6 +502,53 @@ sub rename {
 
 =pod
 
+---++ _relockRcsFiles ( )
+| Description:           | relocks all the rcs files using the configured apache user (called from testenv)) |
+
+=cut
+
+sub relockRcsFiles {
+print "Content-type: text/html\n\n";
+print "<html><head></head><body>\n";
+print "Preparing to change all RCS locks to match current webserver user.\n";
+print "Please wait for this page to tell you it is finished.\n";
+print "This could take awhile, depending on the number of topics to process\n";
+print "(about 10 seconds for a standard twiki beta release - 615 topics -\n";
+print "on a Win2k+cygwin+apache2 machine running @ 1100MHz with 512MB ram).";
+  
+$ENV{PATH} = '';
+  
+opendir(DATA, $TWiki::dataDir) or
+  die "Open $TWiki::dataDir failed";
+foreach my $web ( grep /^\w+$/, readdir DATA ) {
+  $web =~ /(.*)/;     # untaint
+  $web = $1;
+  print "<h1>Unlocking $web</h1>\n";
+  if ( -d "$TWiki::dataDir/$web" ) {
+	opendir(WEB, "$TWiki::dataDir/$web") or
+	  die "Open $TWiki::dataDir/$web failed";;
+	foreach my $topic ( grep /.txt$/, readdir WEB ) {
+      $topic =~ /(.*)/;     # untaint
+      $topic = $1;
+	  print "<code>$topic</code> ";
+	  
+#TODO replace with TWiki::Store::breakLockTopic( $web, $topic );	  
+	  print `$TWiki::rcsDir/rcs -q -u -M $TWiki::dataDir/$web/$topic`;
+#TODO replace with TWiki::Store::reLockTopic( $web, $topic );	  
+	  print `$TWiki::rcsDir/rcs -q -l $TWiki::dataDir/$web/$topic`;
+	  print "<br />\n";
+	}
+	closedir(WEB);
+  }
+}
+closedir(DATA);
+print "</body></html>";
+}
+
+#=========================
+
+=pod
+
 ---++ _getReferingTopicsListFromURL ( $oldWeb, $oldTopic, $newWeb, $newTopic ) ==> @refs
 | Description:           | returns the list of topics that have been found that refer to the renamed topic |
 | Parameter: =$oldWeb=   |   |
