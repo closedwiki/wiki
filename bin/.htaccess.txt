@@ -19,6 +19,10 @@ ErrorDocument 401 /urlpath/to/twiki/bin/oops/TWiki/TWikiRegistration?template=oo
        allow from all
 </Files>
 
+<Files "viewauth">
+       require valid-user
+</Files>
+
 <Files "edit">
        require valid-user
 </Files>
