@@ -1,0 +1,75 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"publish"}%
+%TMPL:P{"htmldoctype"}%
+<head>
+ <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+ <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+ <script language="JavaScript">
+ <!--HIDE
+ function checkAll(theCheck)
+ {
+   // find button element index
+   var j = 0;
+   for (var i = 0; i < document.rename.length; i++) {
+     document.rename.elements[i].checked = theCheck;
+   }
+ }
+ //STOP HIDING-->
+ </script>
+</head>
+<body bgcolor="#ffffff">
+#PageTop
+<form method="POST" name="rename" action="%SCRIPTURLPATH%/publish%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+%TMPL:P{"simpleheader"}%
+---+ Publish topics from the web <code>%WEB%</code>
+   * get a ZIP file of all TWiki TOPICs you need to build a static documentation readable without TWiki.
+
+<table>
+<tr>
+  <td> Which topics should be included from name ? </td>
+  <td> <input type="text" name="inclusions" value="%TOPIC%"></input></td>
+</tr>
+<tr>
+  <td> Which topics should be included from content ? </td>
+  <td> <input type="text" name="topicsearch" value=""></input></td>
+</tr>
+<tr>
+  <td> Which topics should be excluded ? </td>
+  <td> <input type="text" name="exclusions" value=""></input></td>
+</tr>
+<tr>
+  <td>Select skin for published HTML :</td>
+  <td> <SELECT NAME="skin">
+           <OPTION value="plain" selected> no skin </OPTION>
+           <OPTION value="" > default TWiki skin </OPTION>
+           <OPTION value="export"> export skin</OPTION>
+       </SELECT>
+  </td>
+</tr>
+<tr>
+  <td>Select slide show mode :</td>
+  <td> <SELECT NAME="slideshow">
+           <OPTION value="on" selected> presentation </OPTION>
+           <OPTION value="" >standard </OPTION>
+         </SELECT> 
+  </td>
+</tr></table>
+
+<input type="hidden" name="goAhead" value="yes" />
+
+
+%TMPL:P{"hidden"}%
+%TMPL:P{"standardfooter"}%
+#PageBottom
+</form>
+</body>
+</html>%TMPL:END%
+
+%TMPL:DEF{"titleaction"}%(publish)%TMPL:END%
+%TMPL:DEF{"webaction"}% *Choose topics to publish* %TMPL:END%
+%TMPL:DEF{"topicaction"}%
+ <input type="submit" value="Publish" />
+ %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+%TMPL:P{"publish"}%
