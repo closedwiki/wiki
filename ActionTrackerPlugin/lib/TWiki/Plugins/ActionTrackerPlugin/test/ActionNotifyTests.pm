@@ -68,10 +68,14 @@ use TWiki::Func;
    * E-mail: actor6\@correct-address
 ");
     TWiki::TestMaker::writeTopic("Main", "TWikiFormGroup", "
+Garbage
 \t\t* Set GROUP = ActorThree, ActorFour
+More garbage
 ");
     TWiki::TestMaker::writeTopic("Main", "WebNotify", "
+Garbage
    * Main.ActorFive - actor5\@correct.address
+More garbage
    * Main.ActorSix
 ");
     TWiki::TestMaker::writeTopic("Test", "WebNotify", "
