@@ -464,7 +464,7 @@ sub setupRegexes {
     $abbrevRegex = qr/[$upperAlpha]{3,}/;
 
     # Simplistic email regex, e.g. for WebNotify processing - no i18n
-    # characters allowed, and only alphanumeric and '-' in domain part.
+    # characters allowed, and only alphanumeric, '_' and '-' in domain part.
     $emailAddrRegex = qr/([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/;
 
     # Single-character alpha-based regexes
