@@ -503,6 +503,7 @@ sub searchWeb
             if( $theFormat ) {
                 $tempVal = $theFormat;
                 $tempVal =~ s/([^\n])$/$1\n/gos;       # cut last trailing new line
+                $tempVal =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
                 $tempVal =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
                 $tempVal =~ s/\$web/$thisWebName/gos;
                 $tempVal =~ s/\$topic\(([^\)]*)\)/breakName( $topic, $1 )/geos;
@@ -623,6 +624,10 @@ sub searchWeb
                 $tempVal =~ s/\$summary/&TWiki::makeTopicSummary( $text, $topic, $thisWebName )/geos;
                 $tempVal =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
                 $tempVal =~ s/\$pattern\(\s*(.*?\s*\.\*)\)/getTextPattern( $text, $1 )/geos;
+                $tempVal =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
+                $tempVal =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
+                $tempVal =~ s/\$percnt(\(\))?/\%/gos; # expand percent
+                $tempVal =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
 
             } elsif( $noSummary ) {
                 $tempVal =~ s/%TEXTHEAD%//go;

@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "25 Apr 2002";
+$wikiversion      = "16 May 2002";
 
 # ===========================
 # read the configuration part
@@ -1512,7 +1512,8 @@ sub handleInternalTags
     $_[0] =~ s/%STATISTICSTOPIC%/$statisticsTopicname/go;
     $_[0] =~ s/%STARTINCLUDE%//go;
     $_[0] =~ s/%STOPINCLUDE%//go;
-    $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo;
+    $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo; # can be nested
+    $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo if( $_[0] =~ /%SEARCH/o );
     $_[0] =~ s/%METASEARCH{(.*?)}%/&handleMetaSearch($1)/geo;
 
 }
