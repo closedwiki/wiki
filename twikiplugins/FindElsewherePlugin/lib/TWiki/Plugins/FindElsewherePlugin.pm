@@ -3,6 +3,8 @@
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+# Portions Copyright (C) 2002 Mike Barton, Marco Carnut, Peter HErnst
+#	(C) 2003 Martin Cleaver, (C) 2004 Matt Wilkie
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,8 +19,8 @@
 #
 # =========================
 #
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
+# This is the FindElsewhere TWiki plugin, 
+# see http://twiki.org/cgi-bin/view/Plugins/FindElsewherePlugin for details.
 #
 # Each plugin is a package that contains the subs:
 #
@@ -38,9 +40,25 @@
 # in the &TWiki::Func module. Do not reference any functions or
 # variables elsewhere in TWiki!!
 
+## Changelog
+# 29-Jan-2002:	Mike Barton
+#		- initial version (cvs rev1.1)
+# 15-May-2002:	Marco Carnut
+#		- patch to show webname, e.g. Main.WebHome (cvs rev1.2)
+# 25-Sep-2002:	PeterHErnst 
+#		- modified webname to show as superscript, 
+#		- some other changes (chiefly "/o" regex modifiers) (cvs rev1.3)
+# 25-May-2003:	Martin Cleaver 
+#		- patch to add Codev.WebNameAsWikiName (cvs rev1.4)
+# 12-Feb-2004:	Matt Wilkie 
+#		- put all of above into twikiplugins cvs, 
+#		- removed "/o"'s as there may be issues with modperl (Codev.ModPerl)
+#
+
+
 
 # =========================
-package TWiki::Plugins::FindElsewherePlugin; 	# change the package name!!!
+package TWiki::Plugins::FindElsewherePlugin;
 
 # =========================
 use vars qw(
@@ -106,10 +124,10 @@ sub findTopicElsewhere
    my( $theWeb, $thePreamble, $theTopic, $theLinkText, $theAnchor ) = @_;
 
    # kill spaces and Wikify page name (ManpreetSingh - 15 Sep 2000)
-   $theTopic =~ s/^\s*//o;
-   $theTopic =~ s/\s*$//o;
-   $theTopic =~ s/^(.)/\U$1/o;
-   $theTopic =~ s/\s([a-zA-Z0-9])/\U$1/go;
+   $theTopic =~ s/^\s*//;
+   $theTopic =~ s/\s*$//;
+   $theTopic =~ s/^(.)/\U$1/;
+   $theTopic =~ s/\s([a-zA-Z0-9])/\U$1/g;
    # Add <nop> before WikiWord inside text to prevent double links
    $theLinkText =~ s/([\s\(])([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
 
@@ -119,7 +137,7 @@ sub findTopicElsewhere
    # Look in the current web, return when found
    my $exist = &TWiki::Func::topicExists( $theWeb, $theTopic );
    if ( ! $exist ) {
-      if ( ( $doPluralToSingular ) && ( $theTopic =~ /s$/o ) ) {
+      if ( ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) ) {
          my $theTopicSingular = &makeSingular( $theTopic );
          if( &TWiki::Func::topicExists( $theWeb, $theTopicSingular ) ) {
             &TWiki::Func::writeDebug( "- $theTopicSingular was found in $theWeb." ) if $debug;
@@ -150,7 +168,7 @@ sub findTopicElsewhere
 
       my $exist = &TWiki::Func::topicExists( $otherWeb, $theTopic );
       if ( ! $exist ) {
-         if ( ( $doPluralToSingular ) && ( $theTopic =~ /s$/o ) ) {
+         if ( ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) ) {
             my $theTopicSingular = &makeSingular( $theTopic );
             if( &TWiki::Func::topicExists( $otherWeb, $theTopicSingular ) ) {
                &TWiki::Func::writeDebug( "- $theTopicSingular was found in $otherWeb." ) if $debug;
@@ -182,10 +200,10 @@ sub makeSingular
 {
    my ($theWord) = @_;
 
-   $theWord =~ s/ies$/y/o;       # plurals like policy / policies
-   $theWord =~ s/sses$/ss/o;     # plurals like address / addresses
-   $theWord =~ s/([Xx])es$/$1/o; # plurals like box / boxes
-   $theWord =~ s/([A-Za-rt-z])s$/$1/o; # others, excluding ending ss like address(es)
+   $theWord =~ s/ies$/y/;       # plurals like policy / policies
+   $theWord =~ s/sses$/ss/;     # plurals like address / addresses
+   $theWord =~ s/([Xx])es$/$1/; # plurals like box / boxes
+   $theWord =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
    return $theWord;
 }
 
