@@ -17,16 +17,16 @@
 use strict;
 use integer;
 
-use TWiki;
+use TWiki;# for unpublished functions
+
 use TWiki::Net;
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
+use TWiki::Plugins::ActionTrackerPlugin::Config;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
 
 # This module contains the functionality of the bin/actionnotify script
 { package ActionTrackerPlugin::ActionNotify;
-
-  my $vcLogCmd;
 
   # PUBLIC actionnotify script entry point. Reinitialises TWiki.
   #
@@ -62,12 +62,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_NOTIFYCHANGES" );
 
     my $format = new ActionTrackerPlugin::Format( $hdr, $bdy, $textform, $changes, $vert );
-    $vcLogCmd =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_LOGCMD" );
 
-    my $notify = {};
-    _gatherNotables( $notify );
-    
     my $result = "";
     my $webs = $attrs->get( "web" ) || ".*";
     
@@ -95,47 +90,72 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       $actions->getActionees( \%people );
     }
 
-    # Now cycle over the list of people and find their sets of actions
-    # or changes
-    my $mainweb = TWiki::Func::getMainWebname();
+    # Resolve all mail addresses
+    my $mailAddress = {};
+    my $unsatisfied = 0;
     foreach my $key ( keys %people ) {
-      if ( defined( $key ) ) {
-	my $compare_key = $key;
-	$key =~ s/\s//go;
-	$key =~ s/$mainweb\.//go;
-	my $mailaddr = _getMailAddress( $key, $notify );
+      if ( !defined( _getMailAddress( $key, $mailAddress ))) {
+	$unsatisfied = 1;
+      }
+    }
 
-	if ( !defined( $mailaddr ) ) {
-	  TWiki::Func::writeWarning( "No mail address found for $key" );
-	  if ( $debugMailer ) {
-	    $result .= "No mail address found for $key<br />"
-	  }
-	  next;
-	}
-	
-	my $actionsString = "";
-	my $actionsHTML = "";
-	if ( $actions ) {
-	  my $subact = $actions->search("who=\"$key\"");
-	  $subact->sort();
-	  $actionsString = $subact->formatAsString( $format ) || "";
-	  $actionsHTML = $subact->formatAsHTML( $format, "href", 0 ) || "";
-	}
+    # If we could not find everyone, gather up WebNotifys as well.
+    _loadWebNotifies( $mailAddress ) if ( $unsatisfied );
 
-	my $changesString = $notifications{$compare_key}{text} || "";
-	my $changesHTML = $notifications{$compare_key}{html} || "";
+    # Now cycle over the list of people and find their sets of actions
+    # or changes. When we find actions or changes for someone then
+    # combine them and add them to the notifications for each indicated
+    # mail address.
+    my %actionsPerEmail;
+    my %changesPerEmail;
+    foreach my $key ( keys %people ) {
+      # first expand the mail address(es)
+      my $mailaddr = _getMailAddress( $key, $mailAddress );
 
-	my $message = _composeActionsMail($actionsString, $actionsHTML,
-					  $changesString, $changesHTML,
-					  $date, $mailaddr, $format );
-	if ( $debugMailer ) {
-	  $result .= $message;
-	} else {
-	  my $error = TWiki::Net::sendEmail( $message );
-	  if ( defined( $error )) {
-	    $error = "ActionTrackerPlugin:ActionNotify: $error";
-	    TWiki::Func::writeWarning( $error );
-	  }
+      if ( !defined( $mailaddr ) ) {
+	TWiki::Func::writeWarning( "No mail address found for $key" );
+	$result .= "No mail address found for $key<br />" if ( $debugMailer );
+	next;
+      }
+
+      # find all the actions for this wikiname
+      my $myActions;
+      if ( $actions ) {
+	$myActions = $actions->search("who=\"$key\"");
+      }
+
+      # now add these to the lists for each mail address
+      foreach my $actor ( split( /,/, $mailaddr )) {
+	$actionsPerEmail{$actor} = $myActions;
+	$changesPerEmail{$actor} = $notifications{$key};
+      }
+    }
+
+    # Finally send out the messages
+    foreach my $email ( keys %actionsPerEmail ) {
+      my $actionsString = "";
+      my $actionsHTML = "";
+      my $changesString = "";
+      my $changesHTML = "";
+      if ( $actionsPerEmail{$email} ) {
+	$actionsString = $actionsPerEmail{$email}->formatAsString( $format );
+	$actionsHTML = $actionsPerEmail{$email}->formatAsHTML( $format, "href", 0 );
+      }
+      if ( $changesPerEmail{$email} ) {
+	$changesString = $changesPerEmail{$email}{text};
+	$changesHTML = $changesPerEmail{$email}{html};
+      }
+      
+      my $message = _composeActionsMail($actionsString, $actionsHTML,
+					$changesString, $changesHTML,
+					$date, $email, $format );
+      if ( $debugMailer ) {
+	$result .= $message;
+      } else {
+	my $error = TWiki::Net::sendEmail( $message );
+	if ( defined( $error )) {
+	  $error = "ActionTrackerPlugin:ActionNotify: $error";
+	  TWiki::Func::writeWarning( $error );
 	}
       }
     }
@@ -144,8 +164,8 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   }
   
   # PRIVATE Process all known webs to get the list of notifiable people
-  sub _gatherNotables {
-    my ( $notify ) = @_;
+  sub _loadWebNotifies {
+    my ( $mailAddress ) = @_;
     
     my $dataDir = TWiki::Func::getDataDir();
     opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
@@ -154,15 +174,15 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $web;
     foreach $web ( @weblist ) {
       if ( -d "$dataDir/$web" ) {
-	_gatherNotablesFromWeb( $web, $notify );
+	_loadWebNotify( $web, $mailAddress );
       }
     }
   }
   
   # PRIVATE Get the actions that match attrs, and the contents
   # of WebNotify, for a web
-  sub _gatherNotablesFromWeb {
-    my( $web, $notify ) = @_;
+  sub _loadWebNotify {
+    my( $web, $mailAddress ) = @_;
     
     if( ! TWiki::Func::webExists( $web ) ) {
       my $error = "ActionTrackerPlugin:ActionNotify: did not find web $web";
@@ -170,26 +190,22 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       return;
     }
     
-    # get the notify list for this web
-    _addWebNotify( $web, $notify );
-  }
-  
-  # PRIVATE Read the WebNotify topic in this web and add the entries to a map
-  # of name->address
-  sub _addWebNotify {
-    my ( $web, $notify ) = @_;
-    
-    my $topicname = $TWiki::notifyTopicname;
+    my $topicname = $ActionTrackerPlugin::Config::notifyTopicname;
     return undef unless TWiki::Func::topicExists( $web, $topicname );
     
     my $list = {};
     my $mainweb = TWiki::Func::getMainWebname();
-    foreach ( split( /\n/, TWiki::Func::readTopicText( $web, $topicname, undef, 1 ))) {
-      next unless /^\s+\*\s([A-Za-z0-9\.]+)\s+\-\s+/;
-      my $who = $1;
-      $who =~ s/^$mainweb\.//o if ( defined($who) );
-      next unless (/([\w\-\.\+]+\@[\w\-\.\+]+)/);
-      $notify->{$who} = $1;
+    my $text = TWiki::Func::readTopicText( $web, $topicname, undef, 1 );
+    foreach my $line ( split( /\n/, $text)) {
+      if ( $line =~ /^\s+\*\s([\w\.]+)\s+-\s+([\w\-\.\+]+\@[\w\-\.\+]+)/o ) {
+	my $who = $1;
+	my $addr = $2;
+	$who = ActionTrackerPlugin::Action::_canonicalName( $who );
+	if ( !defined( $mailAddress->{$who} )) {
+	  TWiki::Func::writeWarning( "ActionTrackerPlugin:ActionNotify: mail address for $who found in WebNotify" );
+	  $mailAddress->{$who} = $addr;
+	}
+      }
     }
   }
   
@@ -197,8 +213,12 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # map of known addresses or, failing that, by opening their
   # personal topic in the Main web and looking for Email:
   sub _getMailAddress {
-    my ( $who, $notify ) = @_;
+    my ( $who, $mailAddress ) = @_;
     
+    if ( defined( $mailAddress->{$who} )) {
+      return $mailAddress->{$who};
+    }
+
     if ( $who =~ m/,/o ) {
       # Multiple addresses
       # (e.g. who="GenghisKhan,AttillaTheHun")
@@ -206,39 +226,47 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       my $addresses = "";
       my @persons = split( /,/, $who );
       foreach my $person ( @persons ) {
-	my $addressee .= _getMailAddress( $person, $notify );
+	my $addressee = _getMailAddress( $person, $mailAddress );
 	$addresses .= "," if ($addresses ne "");
 	$addresses .= $addressee;
       }
-      $notify->{$who} = $addresses;
-    } elsif ( $who =~ /([\w\-\.\+]+\@[\w\-\.\+]+)/ ) {
+      $mailAddress->{$who} = $addresses;
+    } elsif ( $who =~ /([\w\-\.\+]+\@[\w\-\.\+]+)/o ) {
       # Valid mail address
-      $notify->{$who} = $who;
+      $mailAddress->{$who} = $who;
     } else {
-      my $mainweb = TWiki::Func::getMainWebname();
-      $who =~ s/^$mainweb\.//o if ( defined( $who ) );
-      
-      if ( !defined( $notify->{$who} ) ) {
-	if ( TWiki::Func::topicExists( $mainweb, $who ) ) {
-	  my $text = TWiki::Func::readTopicText( $mainweb, $who, undef, 1 );
-	  
-	  my $addresses = "";
-	  # parse Email: format lines from topic
+      $who = ActionTrackerPlugin::Action::_canonicalName( $who );
+      $who =~ /(\w+)\.(\w+)/o;
+      my ( $inweb, $intopic ) = ( $1, $2 );
+      if ( TWiki::Func::topicExists( $inweb, $intopic ) ) {
+	my $text = TWiki::Func::readTopicText( $inweb, $intopic, undef, 1 );
+	my $addresses = "";
+
+	# If it's a Group topic, match * Set GROUP = 
+	if ( $intopic =~ m/Group$/o ) {
+	  if ( $text =~ m/^\s+\*\s+Set\s+GROUP\s*=\s*([^\r\n]*)/so ) {
+	    # define our mail address to eliminate infinite recursion
+	    $mailAddress->{$who} = "RECURSIVE GROUP DEF";
+	    foreach my $person ( split( /\s*,\s*/, $1 )) {
+	      my $addressee = _getMailAddress( $person, $mailAddress );
+	      $addresses .= "," if ( $addresses ne "" );
+	      $addresses .= $addressee;
+	    }
+	  }
+	} else {
+	  # parse Email: format lines from personal topic
 	  while ( $text =~ s/^\s+\*\s*E-?mail:\s*([^\s\r\n]*)//imo ) {
-	    $addresses .= "," if ($addresses ne "");
+	    $addresses .= "," if ( $addresses ne "" );
 	    $addresses .= $1;
 	  }
-	  
-	  # parse WebNotify format line
-	  while ( $text =~ s/^\s+\*\s([A-Za-z0-9\.]+)\s+\-\s+([^\s\r\n]+)//mo ) {
-	    $addresses .= "," if ($addresses ne "");
-	    $addresses .= $2;
-	  }
-	  $notify->{$who} = $addresses if ( $addresses ne "" );
-	} 
+	}
+
+	if ( defined( $addresses ) && $addresses !~ /^\s*$/o ) {
+	  $mailAddress->{$who} = $addresses;
+	}
       }
     }
-    return $notify->{$who};
+    return $mailAddress->{$who};
   }
   
   # PRIVATE Mail the contents of the action set to the given user(s)
@@ -285,10 +313,11 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
     $text = TWiki::Func::expandCommonVariables( $text, $TWiki::mainTopicname );
     $text =~ s/<img src=.*?[^>]>/[IMG]/goi;  # remove all images
+    # add the url host to any in-twiki urls that lack it
     my $sup = TWiki::Func::getScriptUrlPath();
     my $sun = TWiki::Func::getUrlHost() . $sup;
     $text =~ s/href=\"$sup/href=\"$sun/ogi;
-    $text =~ s|</*nop[ /]*>||goi;
+    $text =~ s/<\/?nop( \/)?>//goi;
     
     return $text;
   }
@@ -300,7 +329,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my ( $theWeb, $theTopic, $date ) = @_;
     my $dataDir = TWiki::Func::getDataDir();
     my $fname = "$dataDir\/$theWeb\/$theTopic.txt";
-    my $tmp = $vcLogCmd;
+    my $tmp = $ActionTrackerPlugin::Config::rlogCmd;
     $tmp =~ s/%DATE%/$date/o;
     $tmp =~ s/%FILENAME%/$fname/o;
     $tmp =~ /(.*)/;
@@ -374,7 +403,9 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     # isn't very useful in TWiki.
     # Also assumed: the output of the egrepCmd must be of the form
     # file.txt: ...matched text...
-    my $grep = `${TWiki::egrepCmd} ${TWiki::cmdQuote}%ACTION\\{.*\\}%${TWiki::cmdQuote} $dd/$theWeb/*.txt`;
+    my $cmd = $ActionTrackerPlugin::Config::egrepCmd;
+    my $q = $ActionTrackerPlugin::Config::cmdQuote;
+    my $grep = `$cmd $q%ACTION\\{.*\\}%$q $dd/$theWeb/*.txt`;
 
     my $number = 0;
     my %processed;
@@ -386,8 +417,6 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 			     $notifications );
 	$processed{$topic} = 1;
       }
-      #debug
-      #$notifications->{"$theWeb.$topic"} = "$theWeb.$topic searched<br>";
     }
   }
   
@@ -413,8 +442,6 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	$web =~ /(.*)/; # untaint
 	my $theWeb = $1;
 	_findChangesInWeb( $theWeb, $date, $format, $notifications );
-	#debug
-	#$notifications->{$theWeb} = "Web $theWeb searched<br>";
       }
     }
   }

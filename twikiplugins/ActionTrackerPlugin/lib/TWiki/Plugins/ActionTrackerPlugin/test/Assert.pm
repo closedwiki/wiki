@@ -180,7 +180,7 @@ use integer;
       if ($fn =~ /^test/) {
 	print STDERR "\t...$fn\n";
 	$fn = "$pkg$fn";
-	die $@ unless defined( eval "&$fn()" );
+	die "OMIGOD $fn $@" unless defined( eval "&$fn()" );
 	$cnt++;
       }
     }

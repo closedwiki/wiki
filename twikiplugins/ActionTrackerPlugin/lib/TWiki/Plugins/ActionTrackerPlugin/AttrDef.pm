@@ -55,7 +55,7 @@ use integer;
   sub isRedefinable {
     my $this = shift;
 
-    return $this->{candef} == 1;
+    return $this->{defineable} == 1;
   }
 }
 

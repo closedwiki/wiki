@@ -1,11 +1,10 @@
 # Tests for module ActionSet.pm
 use lib ('fakewiki');
 use lib ('../../../..');
-use lib ('../../../../TWiki/Plugins');
-use ActionTrackerPlugin::Action;
-use ActionTrackerPlugin::ActionSet;
-use ActionTrackerPlugin::Attrs;
-use ActionTrackerPlugin::Format;
+use TWiki::Plugins::ActionTrackerPlugin::Action;
+use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
+use TWiki::Plugins::ActionTrackerPlugin::Attrs;
+use TWiki::Plugins::ActionTrackerPlugin::Format;
 use Assert;
 use TWiki::TestMaker;
 use TWiki::Func;
@@ -31,6 +30,7 @@ use TWiki::Func;
 			  "who=Blah.B,due=\"29 Jan 2010\",open",
 			  "Test_Blah_B_open_ontime");
     $actions->add($action);
+    my $junk = $actions->toString();
   }
 
   sub testAHTable {
