@@ -66,19 +66,21 @@ sub target_install {
 }
 
 sub target_indexLocalInstallation {
-	IndexDistributions::indexLocalInstallation();
+#FIXME: there needs to be a check in here to ensure that this is only done 
+#from an installation
+	print IndexDistributions::indexLocalInstallation();
 }
 
 sub target_indexReleases {
-	IndexDistributions::indexReleases();
+	print IndexDistributions::indexReleases();
 }
 
 sub target_indexBetaReleases {
-	IndexDistributions::indexBetaReleases();
+	print IndexDistributions::indexBetaReleases();
 }
 
 sub target_indexPlugins {
-	IndexDistributions::indexPlugins();
+	print IndexDistributions::indexPlugins();
 }
 
 sub target_test {
