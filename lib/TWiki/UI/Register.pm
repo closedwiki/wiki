@@ -479,9 +479,10 @@ sub _resetUsersPassword {
 
     my $message = '';
     unless( $user->passwordExists() ) {
-        # Not an error
+        # Not an error.
         $message = 'ResetPassword created new htpasswd entry for '.
-          $user->login()." as it was missing in .htpasswd\n";
+	  '<nop>'.$user->login().
+	    " as it was missing in .htpasswd\n";
     }
 
     my $password = $user->resetPassword();
@@ -499,8 +500,8 @@ sub _resetUsersPassword {
         $message .= 'ERROR: '.$err."\n";
     } else {
         $message .= 'A new *system-generated* password for '.
-          $user->login() . ' (wikiname ' .
-            $user->wikiName() . ') has been sent to '.
+          '<nop>'.$user->login() . ' (wikiname ' .
+            '%MAINWEB%'.$user->wikiName() . ') has been sent to '.
               $email."\n";
     }
 
