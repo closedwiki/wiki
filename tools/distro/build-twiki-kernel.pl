@@ -71,9 +71,14 @@ rmtree "$installBase/templates" or die $!;
 my $treeTemplates = slurp_tree( 'templates', rule => File::Find::Rule->or( $discardSVN, $all )->start( 'templates' ) );
 spew_tree( "$installBase/templates" => $treeTemplates );
 
+#-[data]-------------------------------------------------------------------------------
+my $dir = 'data';
+rmtree "$installBase/$dir" or die $!;
+my $treeData = slurp_tree( $dir, rule => File::Find::Rule->or( $discardSVN, $all )->start( $dir ) );
+spew_tree( "$installBase/$dir" => $treeData );
+
 ################################################################################
 # some cleanup
-unlink "$installBase/data/warning.txt", "$installBase/data/debug.txt";
 # ??? what else?
 
 ################################################################################
@@ -122,11 +127,11 @@ __END__
 
 [x] /templates (SVN)
 
-/data
-   * Main/, Sandbox/, TWiki/, Trash/, _default/
-   * .htpasswd
-   * mime.types
-   * delete debug.txt, warning.txt
+[x] /data (SVN)
+   * Main/, Sandbox/, TWiki/, Trash/, _default/; also TestWeb/
+   * .htpasswd (added to DEVELOP)
+   * mime.types (added to DEVELOP)
+   * delete debug.txt, warning.txt (deletes whole data/ tree from .tar.gz now)
 
 /pub
    * Main/, Sandbox/, TWiki/, Trash/, _default/
