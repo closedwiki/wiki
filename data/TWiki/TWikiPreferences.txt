@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1009781940" format="1.0" version="1.22"}%
+%META:TOPICINFO{author="PeterThoeny" date="1009846291" format="1.0" version="1.23"}%
 <H1>%WIKITOOLNAME% Site-Level Preferences</H1>
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %MAINWEB%.%USERNAME%). 
 	* %X% *NOTE:* You can lock individual settings at the site or web levels using User & Group Access Control - see section below.
@@ -52,7 +52,8 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==\t== to tab (3 spaces for bullets).
 
 	* Format of images when the __link__ check box is checked: (can be overwritten by user preferences)
-		* Set ATTACHEDIMAGEFORMAT = \t* $comment: <br /> <img src="%ATTACHURLPATH%/$name" alt="$name" $size /> __Example image is broken because there is no attached image file.__
+		* Set ATTACHEDIMAGEFORMAT = \t* $comment: <br /> <img src="%ATTACHURLPATH%/$name" alt="$name" $size />
+		* %H% *NOTE:*  __Example image is broken because there is no attached image file.__
 		* %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab (3 spaces for bullets).
 
 ---++ Email Settings
