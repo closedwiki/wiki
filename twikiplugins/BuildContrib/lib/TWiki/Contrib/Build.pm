@@ -236,16 +236,13 @@ sub new {
     }
     close(PF);
 
-    # Add the install script to the manifest, unless it is already there,
-    # but only if there are dependencies
-    if (defined(@{$this->{dependencies}})) {
-        unless( grep(/^$this->{project}_installer.pl$/,
-                     map {$_->{name}} @{$this->{files}})) {
-            push(@{$this->{files}},
-                 { name => "$this->{project}_installer.pl",
-                   description => "Install script" });
-            print "Auto-adding install script to manifest\n";
-        }
+    # Add the install script to the manifest, unless it is already there
+    unless( grep(/^$this->{project}_installer.pl$/,
+                 map {$_->{name}} @{$this->{files}})) {
+        push(@{$this->{files}},
+             { name => "$this->{project}_installer.pl",
+               description => "Install script" });
+        print "Auto-adding install script to manifest\n";
     }
 
     my $mantable = "";
@@ -754,15 +751,16 @@ sub target_installer {
         die "COULD NOT LOCATE TEMPLATE_installer.pl - required for install script generation";
     }
 
-    my $satisfies = "";
+    my @sats;
     foreach my $dep (@{$this->{dependencies}}) {
         my $descr = $dep->{description};
         $descr =~ s/"/\\\"/g;
         $descr =~ s/\$/\\\$/g;
         $descr =~ s/\@/\\\@/g;
         $descr =~ s/\%/\\\%/g;
-        $satisfies .= "{ name=>\"$dep->name}\", type=>\"$dep->{type}\",version=>\"$dep->{version}\",description=>\"$descr\" },\n";
+        push(@sats, "{ name=>\"$dep->{name}\", type=>\"$dep->{type}\",version=>\"$dep->{version}\",description=>\"$descr\" }");
     }
+    my $satisfies = join("\n,", @sats);
 
     my $mantable = "";
     foreach my $file (@{$this->{files}}) {

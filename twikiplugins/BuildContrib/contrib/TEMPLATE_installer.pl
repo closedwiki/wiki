@@ -1,5 +1,10 @@
-# Install script
+# Install script for %$MODULE%
+#
 # Copyright (C) 2004 Crawford Currie http://c-dot.co.uk
+#
+# NOTE TO THE DEVELOPER: THIS FILE IS GENERATED AUTOMATICALLY
+# BY THE BUILD PROCESS DO NOT EDIT IT - IT WILL BE OVERWRITTEN
+#
 use Socket;
 use strict;
 
@@ -29,25 +34,26 @@ sub getUrl
     select STDOUT;
 }
 
+# Satisfy dependencies
 sub satisfy {
-    my ($dep, $type, $version, $description) = @_;
+    my $dep = shift;
     my $msg = "";
     my $ok = 1;
-    print "Checking dependency on $dep....\n";
-    if ($type eq "perl") {
-        eval "use $dep";
+    print "Checking dependency on $dep->{name}....\n";
+    if ($dep->{type} eq "perl") {
+        eval "use $dep->{name}";
         if ( $@ ) {
             $msg .= $@;
             $ok = 0;
         } else {
-            if ( defined( $version ) ) {
+            if ( defined( $dep->{version} ) ) {
                 my $ver;
-                eval "\$ver = \$${dep}::VERSION;";
+                eval "\$ver = \$$dep->{name}::VERSION;";
                 if ( $@ ) {
                     $msg .= "The VERSION of the package could not be found: $@";
                     $ok = 0;
                 } else {
-                    eval "\$ok = ( \$ver $version )";
+                    eval "\$ok = ( \$ver $dep->{version} )";
                     if ( $@ || ! $ok ) {
                         $msg .= " $ver is currently installed: $@";
                         $ok = 0;
@@ -57,22 +63,20 @@ sub satisfy {
         }
     } else {
         $ok = 0;
-        $msg = "Module is type $type, and cannot be automatically checked.\n";
+        $msg = "Module is type $dep->{type}, and cannot be automatically checked.\n";
     }
 
     unless ($ok) {
-        print "%$MODULE% depends on package $dep $version,\n";
-        print "which is described as \"$description\"\nBut when I tried to find it I found this error: $msg\n";
+        print "%$MODULE% depends on package $dep->{name} $dep->{version},\n";
+        print "which is described as \"$dep->{description}\"\nBut when I tried to find it I found this error: $msg\n";
     }
 
-    if (!$ok && $dep =~ /^TWiki::(Contrib|Plugins)::(\w*)/) {
+    if (!$ok && $dep->{name} =~ /^TWiki::(Contrib|Plugins)::(\w*)/) {
         my $pack = $1;
         my $packname = $2;
-        my $reply;
+        my $reply = "y";
         $packname .= $pack if ($pack eq "Contrib");
-        if ($noconfirm) {
-            $reply = "y";
-        } else {
+        unless ($noconfirm) {
             print "Would you like me to try to download and install the correct version of $packname from twiki.org? [y/n] ";
             while (($reply = <STDIN>) !~ /^[yn]/i) {
                 print "Please answer yes or no\n";
@@ -112,11 +116,13 @@ sub satisfy {
 sub usage {
     print "Usage:\t%$MODULE%_installer [-a] install\n";
     print "\t%$MODULE%_installer uninstall\n";
-    print "Install or uninstall %$MODULE%. Default is to install. Must be run from\n";
-    print "the directory where you unzipped the package.\n";
+    print "Install or uninstall %$MODULE%. Default is to install. Should be run\n";
+    print "from the top level of your TWiki installation.\n";
     print "Options:\n";
     print "\t-a Don't prompt for confirmations\n";
 }
+
+unshift(@INC, "lib");
 
 print "%$MODULE% Installer\n\n";
 my $n = 0;
@@ -135,11 +141,8 @@ while ($n < scalar(@ARGV)) {
     $n++;
 }
 
-if ($ARGV[0] !~ /^(install|uninstall)$/) {
-}
-
 print "This installer must be run from the root directory of your TWiki\n";
-print "installation. It can also be run from another directory but it will\n";
+print "installation. It can also be run from another directory, but it will\n";
 print "not detect previously installed dependencies if it is.\n";
 if ($install && !$noconfirm) {
     print "\t* The script will not do anything without asking you for\n";
@@ -154,7 +157,7 @@ if ($install) {
         print "Hit <Enter> to proceed with installation\n";
     }
     <STDIN>;
-    foreach my $dep ( %$DEPENDENCIES% ) {
+    foreach my $dep ( ( %$DEPENDENCIES% ) ) {
         satisfy($dep);
     }
     print "%$MODULE% installed\n";
