@@ -91,10 +91,10 @@ sub searchWeb
     # all (unless marked in WebPrefs as NOSEARCHALL)
 
     if( $theWebName ) {
-        foreach( split( /[\,\s]+/, $theWebName ) ) {
+        foreach my $web ( split( /[\,\s]+/, $theWebName ) ) {
             # the web processing loop filters for valid web names, so don't do it here.
 
-            if( $_ =~ /^(all|on)$/i  ) {
+            if( $web =~ /^(all|on)$/i  ) {
                 # get list of all webs by scanning $dataDir
                 opendir DIR, $TWiki::dataDir;
                 my @tmpList = readdir(DIR);
@@ -112,12 +112,12 @@ sub searchWeb
                    # whatever was left after all that (which should be merely a
                    # list of directory's names.)
 
-                foreach my $web ( @tmpList ) {
-                    push( @webList, $web ) unless( grep { /^$web$/ } @webList );
+                foreach my $aweb ( @tmpList ) {
+                    push( @webList, $aweb ) unless( grep { /^$aweb$/ } @webList );
                 }
 
             } else {
-                push( @webList, $_ ) unless( grep { /^$_$/ } @webList );
+                push( @webList, $web ) unless( grep { /^$web$/ } @webList );
             }
         }
 
