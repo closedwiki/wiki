@@ -2,9 +2,10 @@
 
 This designates that a single word is a reference to a single word. To show TWiki that it should be linked to, write a dot before it.
 
-Hence if you have the WikiWord Ontology you can link to it as .Ontology
+Hence if you have the WikiWord Ontology you can link to it as <nop>.Ontology
 
-In fact, you can already force a single word link to a WikiWord by enclosing it in double square brackets, like this: [[.Ontology]] 
+In fact, you can already force a single word link to a WikiWord by enclosing it in double square brackets, like this:
+<nop>[<nop>[.Ontology]] 
 
 This plugin allows you to write it without the square brackets. 
 
@@ -12,7 +13,7 @@ The syntax was chosen to be an extension of the Web.Topic syntax
 
 Test:
 | *Written as* | *Test* | *If it is installed properly you see* | *If it isn't, you will see* |
-| .Singleword | .Singleword  | [[Singleword]] | .Singleword |
+| .Singleword | .Singleword  | [[Singleword]] | <nop>.Singleword |
 
  
 
@@ -34,7 +35,7 @@ Test:
 
 ---+++ Plugin Info
 |  Plugin Author: | Main.MartinCleaver |
-|  Plugin Version: | 28 Nov 2001 |
+|  Plugin Version: | 15 Apr 2003 |
 |  Change History: | none |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
