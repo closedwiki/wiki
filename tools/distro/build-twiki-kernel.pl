@@ -88,7 +88,7 @@ chdir( '../..' ) or die $!;            # from tools/distro up to BRANCH (eg, tru
 
 ################################################################################
 #-[lib/, templates/, data/, pub/icn, pub/TWiki, bin/]-----------------------------------
-foreach my $dir qw( lib templates data bin pub )
+foreach my $dir qw( lib templates data bin pub logs )
 {
     my $tree = slurp_tree( $dir, rule => $ruleNormalFiles->start( $dir ) );
     spew_tree( "$installBase/$dir" => $tree );
@@ -293,8 +293,8 @@ differences between output of build-twiki-kernel.pl vs. TWiki20040901.tar.gz
 
 ################################################################################
 # empty and/or junk files recreated at runtime
-<           'data/debug.txt',
-<           'data/warning.txt',
+<           'logs/debug.txt',
+<           'logs/warning.txt',
 <           'data/_default/.changes',
 <           'data/_default/.mailnotify',
 <           'data/Main/.changes',
