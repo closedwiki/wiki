@@ -121,7 +121,6 @@ use Cwd;
   %mon2num = map { $_ => $count++ } @isoMonth; }
 
 $cgiQuery = 0;
-@publicWebList = ();
 
 # Header patterns based on '+++'. The '###' are reserved for numbered headers
 $headerPatternDa = '^---+(\++|\#+)\s+(.+)\s*$';       # '---++ Header', '---## Header'
@@ -142,6 +141,11 @@ sub initialize
     ##writeDebug( "\n---------------------------------" );
     
     $cgiQuery = $theQuery;
+    
+    # Initialise vars here rather than at start of module, so compatible with modPerl
+    @publicWebList = ();
+    %TWiki::Store::templateVars = ();
+
 
     # Make %ENV safer for CGI
     if( $safeEnvPath ) {
@@ -156,8 +160,8 @@ sub initialize
     &TWiki::Access::initializeAccess();
 
     # initialize user name and user to WikiName list
-    $userName = initializeRemoteUser( $theRemoteUser );  # i.e. "jdoe"
     userToWikiListInit();
+    $userName = &TWiki::Plugins::initializeUser( $theRemoteUser, $theUrl, $thePathInfo );  # e.g. "jdoe"
     $wikiName     = userToWikiName( $userName, 1 );      # i.e. "JonDoe"
     $wikiUserName = userToWikiName( $userName );         # i.e. "Main.JonDoe"
 
@@ -237,8 +241,9 @@ sub initialize
 sub writeHeader
 {
     my( $query ) = @_;
-    print $query->header();
-    # Can change to save cookie if required
+    if( ! &TWiki::Plugins::writeHeaderHandler( $query ) ) {
+        print $query->header();
+    }
 }
 
 # =========================
@@ -251,8 +256,9 @@ sub getCgiQuery
 sub redirect
 {
     my( $query, $url ) = @_;
-    print $query->redirect( $url );
-    # Can change to save cookie if required
+    if( ! &TWiki::Plugins::redirectCgiQueryHandler( $query, $url ) ) {
+        print $query->redirect( $url );
+    }
 }
 
 # =========================
@@ -538,6 +544,29 @@ sub revDate2EpSecs {
 }
 
 # =========================
+sub getSessionValue
+{
+#   my( $key ) = @_;
+    return &TWiki::Plugins::getSessionValueHandler( @_ );
+}
+
+# =========================
+sub setSessionValue
+{
+#   my( $key, $value ) = @_;
+    return &TWiki::Plugins::setSessionValueHandler( @_ );
+}
+
+# =========================
+sub getSkin
+{
+    my $skin = $cgiQuery->param( 'skin' );
+    if( ! defined( $skin ) ) {
+        $skin = &TWiki::Prefs::getPreferencesValue( "SKIN" );
+    }
+    return $skin;
+}
+
 sub getViewUrl
 {
     my( $theWeb, $theTopic ) = @_;
@@ -1134,10 +1163,20 @@ sub handleWebAndTopicList
     my $separator = extractNameValuePair( $theAttr, "separator" ) || "\n";
     $format .= '$name' if( ! ( $format =~ /\$name/ ) );
     my $web = extractNameValuePair( $theAttr, "web" ) || "";
+    my $webs = extractNameValuePair( $theAttr, "webs" ) || "public";
+    my $selection = extractNameValuePair( $theAttr, "selection" ) || "";
+    my $marker    = extractNameValuePair( $theAttr, "marker" ) || "selected";
 
     my @list = ();
     if( $isWeb ) {
-        @list = getPublicWebList();
+        my @webslist = split( /,/, $webs );
+        foreach my $aweb ( @webslist ) {
+            if( $aweb eq "public" ) {
+                push( @list, getPublicWebList() );
+            } else{
+                push( @list, $aweb ) if( &TWiki::Store::webExists( $aweb ) );
+            }
+        }
     } else {
         $web = $webName if( ! $web );
         my $hidden = &TWiki::Prefs::getPreferencesValue( "NOSEARCHALL", $web );
@@ -1148,10 +1187,14 @@ sub handleWebAndTopicList
     my $text = "";
     my $item = "";
     my $line = "";
+    my $mark = "";
     foreach $item ( @list ) {
         $line = $format;
         $line =~ s/\$web/$web/goi;
         $line =~ s/\$name/$item/goi;
+        $line =~ s/\$qname/"$item"/goi;
+        $mark = ( $item eq $selection ) ? $marker : "";
+        $line =~ s/\$marker/$mark/goi;
         $text .= "$line$separator";
     }
     $text =~ s/$separator$//s;  # remove last separator
@@ -1397,8 +1440,8 @@ sub renderMoved
         my $putBack = "";
         if( $web eq $toWeb && $topic eq $toTopic ) {
             $putBack  = " - <a title=\"Click to move topic back to previous location, with option to change references.\"";
-            $putBack .= " href=\"$scriptUrlPath/rename?newWeb=$fromWeb&newTopic=$fromTopic&oldWeb=$web";
-            $putBack .= "&oldTopic=$topic&confirm=yes\">put it back</a>";
+            $putBack .= " href=\"$scriptUrlPath/rename/$web/$topic?newweb=$fromWeb&newtopic=$fromTopic&";
+            $putBack .= "confirm=on\">put it back</a>";
         }
         $text = "<p><i><nop>$to moved from <nop>$from on $date by $by </i>$putBack</p>";
     }
