@@ -27,7 +27,7 @@ use vars qw(
             $permDB $initialised
            );
 
-$VERSION = 1.011;
+$VERSION = 1.012;
 
 my $pluginName = 'WebDAVPlugin';
 
