@@ -1,0 +1,51 @@
+%META:TOPICINFO{author="PeterThoeny" date="996216417" format="1.0beta2" version="1.1"}%
+---++ <nop>Inter-Wiki Link Rules (or Links to other Sites)
+
+This topic lists all aliases needed to map Inter-Site links to external wikis/sites.
+
+Whenever you write ==ExternalSite:Page== it will be linked automatically to the page on the external site. The link points to the URL corresponding to the ==ExternalSite== alias below, concatenated to the ==Page== you choose. Example: Type ==Wiki<nop>:RecentChanges== to get <a href="http://c2.com/cgi/wiki?RecentChanges">Wiki:RecentChanges</a>, the <nop>RecentChanges page at the original Wiki site.
+
+---+++ How to define Inter-Site links
+
+	* Inter-Site links are defined in the tables below.
+	* Each entry must be of format: <br> ==| External site alias | URL | Tooltip help text |==.
+	* The URL and Tooltip Text may contain optional ==$page== variables; the variable gets expanded to the page name.
+	* __Note:__ The Tooltip Text must not contain any HTML tags (including ==&lt;nop&gt;== escape code), no internal %TWIKIWEB%.WikiWord links, and no external links. Hint: Escape =='WikiWords'== and =='$page'==.
+
+---+++ Inter-Wiki Links
+
+| *Alias:* | *URL:* | *Tooltip Text:* |
+| Wiki | http://c2.com/cgi/wiki? | '$page' on the original 'WikiWikiWeb' site |
+| PPR | http://c2.com/cgi/wiki? | '$page' on the original 'PortlandPatternRepository' site |
+| C2find | http://c2.com/cgi/wiki?FindPage&value= | Search '$page' on the original 'WikiWikiWeb' site |
+| ZWiki | http://joyful.com/zwiki/ | '$page' on Zope's Wiki |
+| OrgPatterns | http://www.bell-labs.com/cgi-user/OrgPatterns/OrgPatterns | '$page' on Organizational Patterns site |
+| FoxWiki | http://fox.wikis.com/wc.dll?Wiki~ | '$page' on Fox Wiki site |
+| PhpWiki | http://phpwiki.sourceforge.net/phpwiki/index.php3? | '$page' on Wiki site written in PHP |
+| MuWeb | http://www.dunstable.com/scripts/MuWebWeb? | '$page' on 'MuWeb' site|
+| PyWiki | http://www.voght.com/cgi-bin/pywiki? | '$page' on Wiki site written in Python |
+| Squeak | http://minnow.cc.gatech.edu/squeak/ | '$page' on Squeak Smalltalk Wiki |
+| UseMod | http://www.usemod.com/cgi-bin/wiki.pl? | '$page' on 'UseMod' Wiki site |
+| MeatBall | http://www.usemod.com/cgi-bin/mb.pl? | '$page' on 'MeatBall' site, a 'UseMod' Wiki variant |
+| MbTest | http://www.usemod.com/cgi-bin/mbtest.pl? | '$page' on 'UseMod' Wiki variant |
+| HammondWiki | http://www.dairiki.org/HammondWiki/index.php3? | '$page' on 'HammondWiki' site |
+| Advogato | http://www.advogato.org/ | '$page' on Advogato community site (with peer review) |
+| MoinMoin | http://moin.sourceforge.net/cgi-bin/moin/moin/ | '$page' on 'MoinMoin' Wiki site |
+| EfnetPythonWiki | http://www.encrypted.net/~jh/python-wiki/moin.cgi/ | '$page' on 'EfnetPythonWiki' site |
+| EfnetCppWiki | http://www.encrypted.net/~jh/cpp-wiki/moin.cgi/ | '$page' on Efnet Cpp Wiki site |
+| EfnetXmlWiki | http://www.encrypted.net/~jh/xml-wiki/moin.cgi/ | '$page' on Efnet XML Wiki site |
+| PolitizenWiki | http://www.politizen.com/wiki.asp? | '$page' on 'PolitizenWiki' site |
+| DolphinWiki | http://www.object-arts.com/wiki/html/Dolphin/ | '$page' on Dolphin Wiki site |
+| LegoWiki | http://www.object-arts.com/wiki/html/Lego-Robotics/ | '$page' on 'LegoWiki' site |
+| TWiki | http://twiki.org/cgi-bin/view/ | '$page' on TWiki site, we know it! |
+| VisualWorks | http://wiki.cs.uiuc.edu/VisualWorks/ | '$page' on 'VisualWorks' site |
+
+---+++ Miscellaneous Inter-Site Links
+
+| *Alias:* | *URL:* | *Tooltip Text:* |
+| Acronym | http://www.acronymfinder.com/af-query.asp?Acronym=$page&String=exact | Look up $page on Acronym Finder site |
+| DejaNews | http://www.deja.com/=dnc/getdoc.xp?AN= | '$page' on Net News |
+| ISBN | http://service.bfast.com/bfast/click?bfmid=2181&sourceid=38704253&bfpid= | Book with ISBN#$page (One click patent? Say no to Amazon!) |
+| RFC | http://www.faqs.org/rfcs/rfc$page.html | IETF RFC #$page |
+
+__Note:__ This topic is powered by the InterwikiPlugin.
