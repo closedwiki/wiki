@@ -56,7 +56,7 @@ my $DIFFEND_DEBUG = 0;
 # ======================
 =pod
 
----++ sub new (  $proto, $web, $topic, $attachment, %settings  )
+---++ sub new(  $proto, $web, $topic, $attachment, %settings  )
 
 Construct new file
 
@@ -70,6 +70,10 @@ sub new
    bless( $self, $class );
    $self->_init();
    $self->{head} = 0;
+   $self->{access} = "";
+   $self->{symbols} = "";
+   $self->{comment} = "";
+   $self->{description} = "";
    return $self;
 }
 
@@ -410,7 +414,7 @@ sub comment
 {
     my( $self ) = @_;
     $self->_ensureProcessed();
-    return $self->{"comment"};
+    return $self->{comment};
 }
 
 # ======================

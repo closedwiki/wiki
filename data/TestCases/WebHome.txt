@@ -8,22 +8,13 @@ The <nop>%WEB% web is stripped down; it only contains this topic, and topics con
 
 The testcases are an important assistant to TWiki testing. However they should _not_ be regarded as the only required testing; manual testing, by a user interacting with TWiki, is also key.
 
-Each testcase consists of a single topic, always named <nop>TestCase<i>Something</i> where _Something_ is descriptive of the testcase. Testcases should contain a line starting with "Description: " that describes what the testcase does, for the table below. Other topics may be created to provide test fixtures, but all topics should be regarded as read-only i.e. no test should require the overwriting of any of the topics in this web. If you need to create topics in order to execute a test, please do so, but delete them after you are finished to avoid polluting future tests.
+Each testcase consists of a single topic, always named <nop>TestCase<i>Something</i> where _Something_ is descriptive of the testcase. Testcases should contain a line starting with "Description: " that describes what the testcase does, for the table below. Other topics may be created to provide test fixtures, but all topics should be regarded as read-only i.e. no test should require the overwriting of any of the topics in this web. If you need to create topics in order to execute a test, please do so, but delete them after you are finished to avoid any risk of polluting future tests.
 
-Testcases that test TWiki rendering may include markers that indicate to automatic test tools what is _expected_ versus what TWiki _actually_ produces. These markers are HTML comments, thus:
-<pre>
-&lt;!-- expected -->
-&lt;!-- /expected -->
-&lt;!-- actual -->
-&lt;!-- /actual -->
-</pre>
-The =expected= markers should embrace the expected output i.e. the raw HTML this sequence is expected to generate. The =actual= markers should embrace the TWiki markup you are testing.
-	* Note that since TWiki may process the text in the =expected= markers, a visual comparison is _not_ enough to fulfil the test.
-	* If an =actual= marker is left open in the text (has no matching =/actual= ), all text up to the end of the topic will be taken as part of the test. This allows for testing markup at the end of topics.
-	* If a =/actual= tag occurs before a =actual= tag early in the text, all text from the start of the topic up to that marker is taken as the actual text. This allows for testing markup at the start of topics.
-	* =actual= and =expected= blocks can occur in any order, but there must be one =actual= for each =expected=.
-The automatic tests may be run on a topic by clicking on the "run" link for the testcase in the table below. *Note that most of the tests are manual; only those with names that start <nop>TestCaseAuto are fully automated*.
+Testcases that test TWiki rendering may include markers that indicate to the %TWIKIWEB%.TestFixturePlugin what is _expected_ versus what TWiki _actually_ produces. See %TWIKIWEB%.TestFixturePlugin for details.
+
+The automatic tests may be run on a topic by clicking on the "run" link for the testcase in the table below. _Note that only those testcases with names that start with =<nop>TestCaseAuto= are fully automated_.
 
 <table border=1><tr align=left><th>Testcase</th><th>Description</th><th>Tests</th></tr>
-%SEARCH{"^TestCase" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/$topic?test=compare][run]]</td></tr>"}%
+%SEARCH{"^TestCaseAuto" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/$topic?test=compare][run]]</td></tr>"}%
+%SEARCH{"^TestCase[^A]" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>manual</td></tr>"}%
 </table>

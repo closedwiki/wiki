@@ -1083,7 +1083,6 @@ sub _handleLink {
 
 sub _handleMailto {
     my ( $text ) = @_;
-print STDERR "Handling :$text:\n";
     if ( $text =~ /^([^\s\@]+)\s+(.+)$/ ) {
         return _mailtoLinkSimple( $1, $2 );
     } elsif ( $text =~ /^([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.(.+?)(\s+|\]\[)(.*)$/ ) {

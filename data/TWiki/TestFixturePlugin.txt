@@ -1,0 +1,67 @@
+---+!! %TOPIC%
+
+%RED% *THIS TOPIC IS NOT PART OF THE DOCUMENTATION SET AND SHOULD NOT BE SHIPPED WITH A RELEASE* %ENDCOLOR%
+
+This plugin is designed specifically for use in automatic test-cases.
+
+%TOC%
+
+---+ Features
+
+Provides comparison of rendered text with golden masters. The golden masters and the test text are together in a single topic and are marked by structured HTML comments that allow the plugin to extract them and compare.
+
+---+ Usage
+
+The plugin is enabled when <code>?test=compare</code> is appended to the URL of a page.
+
+A test failure will cause the TWiki script to =die=. A test pass will generate an appropriate plain text message in the browser. If neither of these outcomes is seen, and the topic renders as normal, then there is probably a problem with the installation (did you install HTML::Diff?)
+
+---+ Syntax
+
+In your testcase topic, enter the golden HTML surrounded by structured HTML comments:
+<verbatim>
+<!-- expected -->
+...your golden HTML...
+<!-- /expected -->
+</verbatim>
+The golden HTML should be what you expect to be rendered in the final output. You can optionally enable expansion of %variables% ( =TWiki::Func::expandCommonVariables= ) on an expected block thus:
+<verbatim>
+<!-- expected expand -->
+</verbatim>
+Normally you should _not_ use the expand option. It is intended primarily for expanding URL components when testing generated HTML which is specific to the installation, and should be used with caution as it assumes that TWiki doesn't do anything naughty during this expansion.
+
+You specify your actual test markup in the same way:
+<verbatim>
+<!-- actual -->
+<!-- /actual -->
+</verbatim>
+
+Some notes about the comparison process:
+	1 The comparison is performed by HTML::Diff, which compares the HTML structures found in the text. See the documentation on HTML::Diff for help.
+	1 The comparison is done on the _body_ of the topic only. At present there is no way to compare the output of the template expansion.
+	1 Because an =endRenderingHandler= is used, there is still rendering to be done _after_ the comparison is complete. This includes removal for &lt;nop> and &lt;noautolink> and re-insertion of &lt;verbatim> blocks.
+	1 =expected= and =actual= blocks are matched up in the order they occur;
+	1 If an =actual= marker is left open in the text ( has no matching =/actual= ), all text up to the end of the topic will be taken as part of the test. This allows for testing markup at the end of topics.
+	1 If a =/actual= tag occurs before a =actual= tag, all text from the start of the topic up to that tag is taken as the =actual= text. This allows for testing markup at the start of topics.
+	1 =actual= and =expected= blocks can occur in any order, but there must be one =actual= for each =expected=.
+    1 If there are differences, the report will indicate which =actual= / =expected= pair the difference was found in. The pairs are numbered from the start of the topic (number 1).
+
+---+ Settings
+	* Description:
+		* Set SHORTDESCRIPTION = Automatic tests.
+		
+---+ Plugin Installation Instructions
+	* The plugin is installed automatically when the source tree is checked out of subversion. There is no other way to install it.
+
+---+ Plugin Info
+
+|  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
+|  Plugin Version: | 1.000 |
+| Change History: <!-- Most recent first --> ||
+| 7 Nov 2004 | 1.000 Initial version. |
+|  Dependencies: | HTML::Diff |
+|  Perl Version: | 5.8 |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main/CrawfordCurrie - 8 Nov 2004

@@ -45,9 +45,10 @@ use vars qw(
             %called $topic $web $user $installWeb
            );
 
-$VERSION = '1.021';
+$VERSION = '1.000';
 $pluginName = 'TestFixturePlugin';
 
+# Parse a topic extracting bracketed subexpressions
 sub _parse {
     my ( $text, $tag ) = @_;
 
@@ -55,100 +56,91 @@ sub _parse {
     $text =~ s/\t/   /g;
     $text =~ s/[^ -~\n]/./g;
 
-    my @tokens = split( /(<!--\s*\/?(?:expected|actual)\s*\w*\s*-->)/, $text );
-    my $errors = "";
-    my $expected;
-    my $actual;
-    my $gather = "";
-    my $gathering;
-    my $group = 1;
     my @list = ();
-    my $opened = 0;
+    my $opt;
+    my $lastTok;
+    my $gathering = 1;
 
-    while ( scalar( @tokens )) {
-        my $tok = shift( @tokens );
-        if ( $tok =~ /<!--\s*(actual|expected)\s*(\d*)\s*-->/ ) {
-            $gather = "";
-            $gathering = $1;
-            $opened = $2;
-        } elsif ( $tok =~ /<!--\s*\/expected\s*(\d*)\s*-->/ ) {
-            $expected = $gather;
-            undef $gathering;
-        } elsif ( $tok =~ /<!--\s*\/actual\s*(\d*)\s*-->/ ) {
-            $actual = $gather;
-            undef $gathering;
-        } else {
-            $gather = $tok;
+    foreach my $tok ( split( /(<!--\s*\/?$tag\s*\S*\s*-->)/, $text ) ) {
+        if ( $tok =~ /<!--\s*$tag\s*(\S*)\s*-->/ ) {
+            $opt = $1;
+            $gathering = 1;
+        } elsif ( $tok =~ /<!--\s*\/$tag\s*-->/ ) {
+            die "<!-- /$tag --> found without matching <!-- $tag -->"
+              unless ( $gathering );
+            push( @list, { text => $lastTok, options=> $opt } );
+            $gathering = 0;
+        } elsif ( $gathering &&
+                  $tok =~ /^<!--\/?\s*(expected|actual).*?-->$/ ) {
+            die "$tok encountered when in open <!-- $tag --> bracket";
         }
-        if ( defined( $actual ) && defined( $expected )) {
-            if ( $tag eq "expected" ) {
-                push( @list, $expected );
-            } elsif ( $tag eq "actual" ) {
-                push( @list, $actual );
-            }
-            undef $actual;
-            undef $expected;
-        }
+        $lastTok = $tok;
     }
-    if ( $gathering && $gathering eq "actual" && defined( $expected )) {
-        $actual = $gather;
-    }
-
-    if ( defined( $actual ) && defined( $expected )) {
-        if ( $tag eq "expected" ) {
-            push( @list, $expected );
-        } elsif ( $tag eq "actual" ) {
-            push( @list, $actual );
-        }
+    if ( $gathering ) {
+        push( @list, { text => $lastTok, options=> $opt } );
     }
 
     return \@list;
 }
 
-# use HTML::Diff to compare the expected and actual brace contents
+# use HTML::Diff to compare the expected and actual contents
 sub _compareExpectedWithActual {
-    my ( $expected, $actual ) = @_;
+    my ( $expected, $actual, $topic, $web ) = @_;
     my $errors = "";
 
-    die "Actual ($#$actual) and expected ($#$expected) blocks don't match"
+    die "Numbers of actual ($#$actual) and expected ($#$expected) blocks don't match"
       unless $#$actual == $#$expected;
 
     for my $i ( 0..$#$actual ) {
-        $errors .= _compareResults( $expected->[$i],
-                                    $actual->[$i], $i + 1 );
+        my $e = $expected->[$i];
+        my $et = $e->{text};
+        my $at = $actual->[$i]->{text};
+        if ( $e->{options} =~ /\bexpand\b/ ) {
+            $et = TWiki::Func::expandCommonVariables( $et, $topic, $web );
+        }
+        $errors .= _compareResults( $et, $at, $i + 1 );
     }
 
-    if ( $errors ) {
-        die $errors;
-    }
+    return $errors;
+}
+
+sub _tidy {
+    my $a = shift;
+    $a =~ s/^\s+//;
+    $a =~ s/\s+$//s;
+    $a =~ s/&/&amp;/g;
+    $a =~ s/</&lt;/g;
+    return $a;
 }
 
 sub _compareResults {
     my ( $expected, $actual, $group ) = @_;
 
     my $result = "";
-    my $diffs = HTML::Diff::html_word_diff($expected, $actual);
-    my $diffc = 0;
+    my $diffs = HTML::Diff::html_word_diff( $expected, $actual );
+    my $failed = 0;
 
     foreach my $diff ( @$diffs ) {
-        if ( $diff->[0] ne 'u' &&
-             $diff->[1] !~ /^\s*$diff->[2]\s*$/ &&
-             $diff->[2] !~ /^\s*$diff->[1]\s*$/ ) {
-            my $a = $diff->[1];
-            my $b = $diff->[2];
-            if ( $diff->[0] eq "+" ) {
-                $result .= "\n$group+ $b\n";
-            } elsif ( $diff->[0] eq "-" ) {
-                $result .= "\n$group- $a\n";
-            } else {
-                $result .= "\n$group$diff->[0]- |$a|\n$group$diff->[0]+ |$b|\n";
-            }
-            $diffc++;
+        my $a = _tidy( $diff->[1] );
+        my $b = _tidy( $diff->[2] );
+
+        if ( $diff->[0] eq 'u' || $a eq $b ) {
+            $result .= "$a\n";
         } else {
-            $result .= $diff->[1];
+            $result .= "<p /></code><font color=\"red\"><bold>$group: ";
+            if ( $diff->[0] eq "+" ) {
+                $result .= "UNEXPECTED: <code>'$b'";
+            } elsif ( $diff->[0] eq "-" ) {
+                $result .= "  EXPECTED: <code>'$a'";
+            } else {
+                $result .= "  EXPECTED <code>'$a'";
+                $result .= "<br /></code>$group: UNEXPECTED <code>'$b'";
+            }
+            $result .= "</bold></font><p />";
+            $failed = 1;
         }
     }
-    return $diffc ? $result : "";
+    return $failed ? "<pre>$result</pre>" : "";
 }
 
 sub initPlugin {
@@ -157,55 +149,64 @@ sub initPlugin {
     die "initPlugin called twice" if $called{initPlugin};
     $called{initPlugin} = 1;
 
-    die "Version $TWiki::Plugins::VERSION mismatch between $pluginName and Plugins.pm"
-      if ( $TWiki::Plugins::VERSION < 1.025 );
-
     return 1;
 }
 
-#sub earlyInitPlugin {
-#    die "unexpected call to earlyInitPlugin", join(",",@_);
-#}
+sub DISABLE_earlyInitPlugin {
+    # There's a delicate relationship between this and initializeUserHandler
+    die "unexpected call to earlyInitPlugin", join(",",@_);
+}
 
-#sub initializeUserHandler {
-#    die "unexpected call to initializeUserHandler", join(",",@_);
-#}
+sub DISABLE_initializeUserHandler {
+    # There's a delicate relationship between this and earlyInitPlugin
+    die "unexpected call to initializeUserHandler", join(",",@_);
+}
 
-sub registrationHandler {
+sub DISABLE_registrationHandler {
     die "unexpected call to registrationHandler(", join(",",@_);
 }
 
-sub beforeCommonTagsHandler {
+sub DISABLE_getSessionValueHandler {
+    # this can only be enabled in one plugin
+    die "unexpected call to getSessionValueHandler ", join(",",@_);
+}
+
+sub DISABLE_setSessionValueHandler {
+    # this can only be enabled in one plugin
+    die "unexpected call to setSessionValueHandler ", join(",",@_);
+}
+
+sub DISABLE_beforeCommonTagsHandler {
     # Replace the text "beforeCommonTagsHandler" with some
     # recognisable text.
     $_[0] =~ s/beforeCommonTagsHandler/BCT1\nBCT2 $_[2].$_[1]\nBCT3\n/g;
 }
 
-sub commonTagsHandler {
+sub DISABLE_commonTagsHandler {
     # Replace the text "commonTagsHandler" with some
     # recognisable text.
     $_[0] =~ s/commonTagsHandler/CT1\nCT2 $_[2].$_[1]\nCT3\n/g;
 }
 
-sub afterCommonTagsHandler {
+sub DISABLE_afterCommonTagsHandler {
     # Replace the text "afterCommonTagsHandler" with some
     # recognisable text.
     $_[0] =~ s/afterCommonTagsHandler/ACT1\nACT2 $_[2].$_[1]\nACT3\n/g;
 }
 
-sub outsidePREHandler {
+sub DISABLE_outsidePREHandler {
     # Replace the text "outsidePREHandler" with some
     # recognisable text.
     $_[0] =~ s/outsidePreHandler/OP1\nOP2\nOP3\n/g;
 }
 
-sub insidePREHandler {
+sub DISABLE_insidePREHandler {
     # Replace the text "insidePREHandler" with some
     # recognisable text.
     $_[0] =~ s/insidePreHandler/IP1\nIP2\nIP3\n/g;
 }
 
-sub startRenderingHandler {
+sub DISABLE_startRenderingHandler {
     $called{startRenderingHandler} = join(",", @_);
 }
 
@@ -213,52 +214,47 @@ sub endRenderingHandler {
     $called{endRenderingHandler} = join(",", @_);
     my $q = TWiki::Func::getCgiQuery();
 
-    # SMELL@ really only want to call this only once, on the body text.
-    # The only way to see if it's the bloody template is to test
-    # if it contains %TEXT%. Which is an utter, utter hack.
-    if ( $q->param( "test" ) eq "compare" && $_[0] !~ /%TEXT%/ ) {
+    if ( $q->param( "test" ) eq "compare" && $_[0] =~ /<!--\s*actual\s*-->/ ) {
         my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
-        _compareExpectedWithActual( _parse( $text, "expected" ),
-                                    _parse( $_[0], "actual" ));
-        $_[0] = "ALL TESTS PASSED";
+        my $res = _compareExpectedWithActual( _parse( $text, "expected" ),
+                                              _parse( $_[0], "actual" ),
+                                              $topic, $web);
+        if ( $res ) {
+            $res = "<font color=\"red\">TESTS FAILED</font><p />$res";
+        } else {
+            $res = "<font color=\"\green\">ALL TESTS PASSED</font>";
+        }
+        $_[0] = $res;
     }
 }
 
-sub beforeEditHandler {
+sub DISABLE_beforeEditHandler {
     $called{beforeEditHandler} = join(",", @_);
 }
 
-sub afterEditHandler {
+sub DISABLE_afterEditHandler {
     $called{afterEditHandler} = join(",", @_);
 }
 
-sub beforeSaveHandler {
+sub DISABLE_beforeSaveHandler {
     $called{beforeSaveHandler} = join(",", @_);
 }
 
-sub afterSaveHandler {
+sub DISABLE_afterSaveHandler {
     $called{afterSaveHandler} = join(",", @_);
 }
 
-sub writeHeaderHandler {
+sub DISABLE_writeHeaderHandler {
     # This is the last opportunity we get in the 'view' cycle
-    # to check what has happened. Compare expected and actual.
+    # to check what has happened.
     return "";
 }
 
-sub redirectCgiQueryHandler {
+sub DISABLE_redirectCgiQueryHandler {
     # This is the last opportunity we get in a rendering sequence that
     # ends in a redirect to check what happened. Redirects come at the
     # end of many scripts.
     return 0;
 }
-
-#sub getSessionValueHandler {
-#    die "unexpected call to getSessionValueHandler ", join(",",@_);
-#}
-
-#sub setSessionValueHandler {
-#    die "unexpected call to setSessionValueHandler ", join(",",@_);
-#}
 
 1;

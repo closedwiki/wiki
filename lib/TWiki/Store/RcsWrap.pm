@@ -427,6 +427,7 @@ sub revisionDiff
         my $rcsFile = $self->rcsFile();
         $rcsFile =~ s/$TWiki::securityFilter//go;
         $tmp =~ s/%FILENAME%/$cmdQuote$rcsFile$cmdQuote/;
+        $contextLines = "" unless defined($contextLines);
         $tmp =~ s/%CONTEXT%/$contextLines/;
         $tmp =~ /(.*)/;
         my $cmd = $1;       # now safe, so untaint variable
