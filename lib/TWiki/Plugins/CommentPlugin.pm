@@ -5,25 +5,16 @@ use strict;
 
 use TWiki::Func;
 
-use vars qw( $VERSION $firstCall $pluginName $context );
+use vars qw( $VERSION );
 
-BEGIN {
-    $VERSION = 3.100;
-    $pluginName = 'CommentPlugin';
-    $firstCall = 0;
-}
+$VERSION = 3.100;
 
 sub initPlugin {
     #my ( $topic, $web, $user, $installWeb ) = @_;
 
     if( $TWiki::Plugins::VERSION < 1.026 ) {
-        TWiki::Func::writeWarning( "Version mismatch between $pluginName $VERSION and Plugins.pm $TWiki::Plugins::VERSION. Plugins.pm >= 1.026 required." );
+        TWiki::Func::writeWarning( "Version mismatch between CommentPlugin $VERSION and Plugins.pm $TWiki::Plugins::VERSION. Plugins.pm >= 1.026 required." );
     }
-
-    $firstCall = 1;
-    my $topic = $_[0] || '';
-    my $web = $_[1] || '';
-    $context = $web.'.'.$topic;
 
     return 1;
 }
@@ -39,28 +30,44 @@ sub commonTagsHandler {
 
     my $query = TWiki::Func::getCgiQuery();
     return unless( defined( $query ));
-    my $action = $query->param( 'comment_action' ) || '';
 
-    if ( defined( $action ) && $action eq 'save' &&
-         # Test that the current context is the context of the
-         # original query. This is needed as the common tags
-         # handler is called on other topics, such as included
-         # topics; but the save action should only happen on
-         # the queried topic.
-         $web.'.'.$topic eq $context ) {
-        # $firstCall ensures we only save once, ever.
-        if ( $firstCall ) {
-            $firstCall = 0;
-            TWiki::Plugins::CommentPlugin::Comment::save( $web, $topic, $query );
-        }
-    } elsif ( $_[0] =~ m/%COMMENT({.*?})?%/o ) {
-        # SMELL: Nasty, tacky way to find out where we were invoked from
-        my $scriptname = $ENV{'SCRIPT_NAME'} || '';
-        # SMELL: unreliable
-        my $previewing = ($scriptname =~ /\/(preview|gnusave|rdiff)/);
-        TWiki::Plugins::CommentPlugin::Comment::prompt( $previewing,
-                                                        $_[0], $web, $topic );
+    return unless $_[0] =~ m/%COMMENT({.*?})?%/o;
+
+    # SMELL: Nasty, tacky way to find out where we were invoked from
+    my $scriptname = $ENV{'SCRIPT_NAME'} || '';
+    # SMELL: unreliable
+    my $previewing = ($scriptname =~ /\/(preview|gnusave|rdiff)/);
+    TWiki::Plugins::CommentPlugin::Comment::prompt( $previewing,
+                                                    $_[0], $web, $topic );
+}
+
+=pod
+
+---++ beforeSaveHandler($text, $topic, $web )
+   * =$text= - text _with embedded meta-data tags_
+   * =$topic= - the name of the topic in the current CGI query
+   * =$web= - the name of the web in the current CGI query
+This handler is called just before the save action. The text is populated
+with 'meta-data tags' before this method is called. If you modify any of
+these tags, or their contents, you may break meta-data. You have been warned!
+
+=cut
+
+sub beforeSaveHandler {
+    #my ( $text, $topic, $web ) = @_;
+
+    require TWiki::Plugins::CommentPlugin::Comment;
+    if ($@) {
+        TWiki::Func::writeWarning( $@ );
+        return 0;
     }
+    my $query = TWiki::Func::getCgiQuery();
+    return unless $query;
+
+    my $action = $query->param('comment_action');
+
+    return unless( defined( $action ) && $action eq 'save' );
+    TWiki::Plugins::CommentPlugin::Comment::save( @_ );
 }
 
 1;

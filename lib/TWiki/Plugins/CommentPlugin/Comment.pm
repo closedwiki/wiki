@@ -11,43 +11,22 @@ use TWiki;
 use TWiki::Plugins;
 use TWiki::Store;
 use TWiki::Attrs;
+use CGI qw( :form );
 
 package TWiki::Plugins::CommentPlugin::Comment;
 
-use vars qw( $inSave ); # recursion block
-
-# PUBLIC save the given comment. Note that this method is protected against
-# recursion. This is because the expansion of variables in the template
-# will invoke the commonTagsHandler in the plugin and therefore
-# this method.
+# PUBLIC save the given comment.
 sub save {
-    my ( $web, $topic, $query ) = @_;
-
-    return if ( $inSave );
-
-    my $url;
+    #my ( $text, $topic, $web ) = @_;
 
     my $wikiUserName = TWiki::Func::getWikiUserName();
     if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '',
-											  $topic, $web ) ) {
+											  $_[1], $_[2] ) ) {
         # user has no permission to change the topic
-        $url = TWiki::Func::getOopsUrl( $web, $topic, 'oopsaccesschange' );
+        throw TWiki::UI::OopsException( $_[2], $_[1], 'oopsaccesschange' );
     } else {
-        $inSave = 1;
-
-        my $error = _buildNewTopic( $web, $topic, $query );
-        $inSave = 0;
-
-        if( $error ) {
-            $url = $error;
-        } else {
-            $url = TWiki::Func::getViewUrl( $web, $topic );
-        }
+        _buildNewTopic( @_ );
     }
-
-    # shouldn't need this, but seem to.
-    $query->param( -name=>'comment_action', -value=>'none' );
-    TWiki::Func::redirectCgiQuery( $query, $url );
 }
 
 # PUBLIC STATIC convert COMMENT statements to form prompts
@@ -115,10 +94,7 @@ sub _handleInput {
 
     my $url = '';
     if ( $disable eq '' ) {
-        # invoke viewauth so we get authentication. When viewauth is run,
-        # the 'save' method in here will be invoked as the commenTagsHandler
-        # is run as flagged by the 'comment_action' parameter.
-        $url = TWiki::Func::getScriptUrl( $web, $topic, 'viewauth' );
+        $url = TWiki::Func::getScriptUrl( $web, $topic, 'save' );
     }
 
     my $noform = $attrs->remove('noform') || '';
@@ -128,35 +104,23 @@ sub _handleInput {
         $input =~ s/%MESSAGE%/$message/g;
         my $n = $$pidx + 0;
 
-        unless ($noform eq 'on') {
-            $input = '<form name="'.$disable.$type.$n.'" ' .
-              'action="'.$disable.$url.'" method="post">'.$input;
-        }
         if ( $disable eq '' ) {
-            $input .= '<input name="comment_action" ' .
-              'type="hidden" value="save" />';
-            $input .= '<input name="comment_type" ' .
-              'type="hidden" value="'.$type.'" />';
-            # remember to unlock the page
-            $input .= '<input name="unlock" ' .
-              'type="hidden" value="1" />';
+            $input .= CGI::hidden( -name=>'comment_action', -value=>'save' );
+            $input .= CGI::hidden( -name=>'comment_type', -value=>$type );
             if( defined( $silent )) {
-                $input .= '<input name="comment_quietly" ' .
-                  'type="hidden" value="1" />';
+                $input .= CGI::hidden( -name=>'comment_quietly', value=>1 );
             }
             if ( $location ) {
-                $input .= '<input name="comment_location" ' .
-                  'type="hidden" value="'.$location.'" />';
+                $input .= CGI::hidden( -name=>'comment_location', -value=>$location );
             } elsif ( $anchor ) {
-                $input .= '<input name="comment_anchor" ' .
-                  'type="hidden" value="'.$anchor.'" />';
+                $input .= CGI::hidden( -name=>'comment_anchor', -value=>$anchor );
             } else {
-                $input .= '<input name="comment_index" ' .
-                  'type="hidden" value="'.$$pidx.'" />';
+                $input .= CGI::hidden( -name=>'comment_index', -value=>$$pidx );
             }
         }
         unless ($noform eq 'on') {
-            $input .= '</form>';
+            $input = CGI::start_form( -name => $type.$n, -action=>$url,
+                                      -method=>'post' ).$input.CGI::end_form();
         }
     }
     $$pidx++;
@@ -198,7 +162,11 @@ sub _expandPromptParams {
 
 # PRIVATE STATIC Performs comment insertion in the topic.
 sub _buildNewTopic {
-    my ( $web, $topic, $query ) = @_;
+    #my ( $text, $topic, $web ) = @_;
+    my ( $topic, $web ) = ( $_[1], $_[2] );
+
+    my $query = TWiki::Func::getCgiQuery();
+    return unless $query;
 
     my $type = $query->param( 'comment_type' );
     my $index = $query->param( 'comment_index' );
@@ -207,7 +175,7 @@ sub _buildNewTopic {
     my $silent = $query->param( 'comment_quietly' );
     my $output = _getTemplate( "OUTPUT:$type", $topic, $web );
     if ( $output =~ m/^%RED%/o ) {
-        return $output;
+        die $output;
     }
 
     # Expand the template
@@ -271,9 +239,7 @@ sub _buildNewTopic {
             };
         }
     }
-    $text = $premeta . $text . $postmeta;
-
-	return TWiki::Func::saveTopicText( $web, $topic, $text, 1, $silent );
+    $_[0] = $premeta . $text . $postmeta;
 }
 
 # PRIVATE embed output if this comment is the interesting one
