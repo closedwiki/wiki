@@ -95,7 +95,7 @@ use vars qw(
 # TWiki::Store config:
 use vars qw(
         $revInitBinaryCmd $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd
-        $revInfoCmd $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd
+        $revInfoCmd $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd $nullDev
     );
 
 # TWiki::Search config:
@@ -868,19 +868,8 @@ sub handleCommonTags
     &TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb );
 
 
-    # FIXME: Move attachment table rendering elsewhere (TWiki::Attach ? )
-    {
-        $viewableAttachmentCount = 0;
-        $noviewableAttachmentCount = 0;
-
-        # FIXME Switch to using templates
-
-        # First do rows of attachment table
-        $text =~ s/(%FILEATTACHMENT\{)([^\}]*)(}%)/&formatAttachments( $1, $2, $3, "", $theWeb, $theTopic )/geo;
-
-        # Rest depends on whether any rows exists to display
-        $text =~ s/(%FILEATTACHMENT\{)([^\}]*)(}%)/&formatAttachments( $1, $2, $3, "cmd", $theWeb, $theTopic )/geo;
-    }
+    # Produce attachments table
+    &TWiki::Attach::handleTags( $text, $theWeb, $theTopic );
 
     # handle tags again because of plugin hook
     &TWiki::Prefs::handlePreferencesTags( $text );
@@ -892,76 +881,6 @@ sub handleCommonTags
     return $text;
 }
 
-# =========================
-# FIXME: Move attachment table rendering elsewhere (TWiki::Attach ? )
-sub formatAttachments
-{
-    my ( $start, $attributes, $end, $justCmd, $theWeb, $theTopic ) = @_;
-
-    my $row = "";
-
-    my $attrCmd     = TWiki::extractNameValuePair( $attributes, "cmd" );
-    if ( $attrCmd ) {
-        # FIXME this is far too complicated
-        
-        if ( $attrCmd eq "Start" ) {
-           $showAttr = TWiki::extractNameValuePair( $attributes, "view" );
-        }
-
-        if ( ! $justCmd ) {
-           return "$start$attributes$end";
-        }
-        
-        if ( $attrCmd eq "Start" && $viewableAttachmentCount > 0 ) {
-           $showAttr = TWiki::extractNameValuePair( $attributes, "view" );
-           $row .= "<br>\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"4\">\n";
-           $row .= "    <tr BGCOLOR=\"#=99CCCC\"><th>FileAttachment:</th><th>Action:</th><th>Size:</th><th>Date:</th>";
-           $row .= "    <th>Who:</th><th>Comment:</th>";
-           if ( $showAttr ) {
-               $row .= "    <th title=\"h : hidden, d : deleted, - none\">Attrib:</th>";
-           }
-           $row .= "    </tr>\n";
-        } elsif ( $attrCmd eq "End" ) {
-           if ( $viewableAttachmentCount > 0 ) {
-               $row .= "</table>\n";
-           }
-           if ( $showAttr ) {
-              # FIXME move to a template
-              $row .= "<a href=\"%SCRIPTURL%/view/$theWeb/$theTopic\">List ordinary attachments</a>";
-           } else {
-              if( $noviewableAttachmentCount > 0 ) {
-                 # FIXME move to a template
-                 $row .= "<a href=\"%SCRIPTURL%/view/$theWeb/$theTopic?showAttr=hd\">View all attachments</a>";
-              }
-           }
-        }
-    } else {
-
-        my ( $file, $attrVersion, $attrPath, $attrSize, $attrDate, $attrUser, $attrComment, $attrAttr ) =
-            TWiki::Attach::extractFileAttachmentArgs( $attributes );
-
-        if (  ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ ) ) {
-            $viewableAttachmentCount++;
-            $row .= "<tr>\n";
-            $row .= "    <td><a href=\"%SCRIPTURL%/viewfile/$theWeb/$theTopic?filename=$file\">$file</a></td>\n";
-            $row .= "    <td><a href=\"%SCRIPTURL%/attach/$theWeb/$theTopic?filename=$file&revInfo=1\">action</a></td>\n";
-            $row .= "    <td> $attrSize </td>\n";
-            $row .= "    <td> $attrDate </td>\n";
-            $row .= "    <td> $attrUser </td>\n";
-            $attrComment = $attrComment || "&nbsp;";
-            $row .= "    <td> $attrComment </td>\n";
-            if ( $showAttr ) {
-                $attrAttr = $attrAttr || "-";
-                $row .= "    <td>$attrAttr</td>\n";
-            }
-            $row .= "</tr>\n";
-        }  else {
-            $noviewableAttachmentCount++;
-        }
-    }
-
-    return $row;
-}
 
 # =========================
 sub emitCode {
