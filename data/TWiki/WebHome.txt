@@ -1,34 +1,35 @@
-%META:TOPICINFO{author="MikeMannix" date="999197399" format="1.0" version="1.24"}%
+%META:TOPICINFO{author="MikeMannix" date="999223364" format="1.0" version="1.25"}%
 <table><tr><td>
-Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about the tool.</td><td>
+Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about it, download it, and try it out for yourself.</td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
 </td><td>
 <b>The TWiki <sup>TM</sup> home is <br> at http://TWiki.org/ </b>
 </td></tr>
 </table>
 
-*Starting points* at the %WIKITOOLNAME%.%WEB% web:
+---+++ Starting points
+
 	* WelcomeGuest: Start here for a %WIKITOOLNAME% crash course.
-	* TWikiRegistration: Create an %WIKITOOLNAME% account in order to edit topics and customize services.
+	* TWikiRegistration: Create an %WIKITOOLNAME% account in order to edit topics and explore customization features.
 
 ---+++ User Guide
 
-	* A collection of single-page topics: clear, concise how-to guides designed for busy TWiki users.
+	* A collection of single-page topics: clear, concise how-to guides designed for busy TWiki users. (TWiki power users will also benefit from browsing the _Webmaster Reference_.)
 
-		* TWikiSite: Brief %WIKITOOLNAME% backgrounder: first was Wiki...
-		* WikiSyntax: TWiki language basics.
-		* TWikiFAQ: The first things people ask about %WIKITOOLNAME%.
-		* TextFormattingFAQ: Most-requested facts about posting in TWiki.
-		* TWikiTutorial: A %WIKITOOLNAME% quick start alternative.
-		* GoodStyle: Tips for an open collaboration environment.
-		* TextFormattingRules: The full power of TWiki layed out on a page.
-		* TWikiVariables: Use simple text strings to place copy, graphics, menus, lots more.
-		* FileAttachments: Upload files to any topic, for display or distribution. 
-		* HandlingTopics: Rename, move, delete pages.
+		* TWikiSite: Brief %WIKITOOLNAME% backgrounder - first, there was Wiki...
+		* WikiSyntax: TWiki language basics
+		* TWikiFAQ: The first things people ask about %WIKITOOLNAME%
+		* TextFormattingFAQ: Most-requested facts about posting in TWiki
+		* TWikiTutorial: A %WIKITOOLNAME% quick start alternative
+		* GoodStyle: Tips for an open collaboration environment
+		* TextFormattingRules: The full power of TWiki syntax on a page
+		* TWikiVariables: Use simple text strings to place copy, graphics, menus, lots more
+		* FileAttachments: Upload files to any topic, for display or distribution
+		* HandlingTopics: Rename, move, delete pages
 
 ---+++ Webmaster Reference
 
-	* Documentation for Webmasters, system administrators, anyone interested in installing and fine-tuning a TWiki site. TWiki power users will also benefit from browsing this collection.
+	* Documentation for Webmasters, system administrators, project managers, team leaders, everyone with an interest in installing a world-class TWiki Web collaboration site. 
 
 		* TWikiHistory: a TWiki development timeline
 		* TWikiDocumentation: complete operator's reference, comprising:
@@ -44,9 +45,9 @@ Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management t
 			1 TWikiMetaData
 			1 TWikiFormTemplate
 			1 TWikiPlugins
-			1 [[TWikiNotificationOfChanges][MonitorSiteActivity]]
-			1 [[RenameTopic][ModifyTopics]]
-			1 [[TWikiAdministration][ModifyWebs]]
+			1 [[TWikiNotificationOfChanges][MonitoringSiteActivity]]
+			1 [[RenameTopic][ModifyingTopics]]
+			1 [[TWikiAdministration][ModifyingWebs]]
 
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
 	* WebSearch: Full text search of the %WIKITOOLNAME%.%WEB% web.
