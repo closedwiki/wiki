@@ -179,9 +179,6 @@ use TWiki::User;
 # to a flag character if it ever does occur (very unlikely).
 $TranslationToken= "\0";	# Null should not be used by any charsets
 
-# Use a multi-byte token only if above clashes with multi-byte character sets
-# $TranslationToken= "_token_\0";
-
 # The following are also initialized in initialize, here for cases where
 # initialize not called.
 $cgiQuery = 0;
@@ -368,7 +365,7 @@ sub initialize
     }
     ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
 
-    # Refuse to work with modal character sets that allow TWiki syntax
+    # Refuse to work with character sets that allow TWiki syntax
     # to be recognised within multi-byte characters.  Only allow 'oops'
     # page to be displayed (redirect causes this code to be re-executed).
     if ( invalidSiteCharset() and $theUrl !~ m!$scriptUrlPath/oops! ) {  
@@ -505,7 +502,7 @@ sub setupLocale {
 	# and HTTP headers
 	$siteLocale =~ m/\.([a-z0-9_-]+)$/i;
 	$siteCharset = $1 if defined $1;
-
+	$siteCharset =~ s/utf8$/utf-8/;		# For convenience, avoid override
 	# Override charset if locale setting not usable with Perl
 	# conversion modules
 	$siteCharset = $siteCharsetOverride || $siteCharset;
