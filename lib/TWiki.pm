@@ -1826,8 +1826,11 @@ sub getRenderedVersion
         if( $insidePRE || $insideVERBATIM ) {
             # inside <PRE> or <VERBATIM>
 
-            $result .= &emitCode( "", 0 );
-            $code = "";
+            # close list tags if any
+            if( @code ) {
+                $result .= &emitCode( "", 0 );
+                $code = "";
+            }
 
             if( $insideVERBATIM ) {
                 s/\&/&amp;/go;
