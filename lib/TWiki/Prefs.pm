@@ -256,7 +256,8 @@ sub insertPrefsValue {
 
 ---+++ sub replacePreferencesTags( $text )
 
-Substitutes preferences values for %PREF% tags in $text, modifying that parameter in-place.
+Substitutes preferences values for =%PREF%= tags in =$text=, modifying that
+parameter in-place.
 
 =cut
 
@@ -280,7 +281,8 @@ sub replacePreferencesTags
 
 ---+++ sub getPreferenceValue( $key )
 
-Returns the stored preference with key $key, or "" if no such preference exists.
+Returns the stored preference with key =$key=, or "" if no such preference
+exists.
 
 =cut
 
@@ -323,7 +325,8 @@ sub initializePrefs
 
 # =========================
 =pod
----++ initializeUserPrefs( $userPrefsTopic )
+
+---++ sub initializeUserPrefs( $userPrefsTopic )
 
 Called after user is known (potentially by Plugin), this function reads
 preferences from the user's personal topic.  The parameter is the topic to read
@@ -351,7 +354,7 @@ sub initializeUserPrefs
 ---+++ sub getPrefsFromTopic (  $theWeb, $theTopic, $theKeyPrefix  )
 
 Reads preferences from the topic at =$theWeb.$theTopic=, prefixes them with
-$theKeyPrefix if one is provided, and adds them to the preference cache.
+=$theKeyPrefix= if one is provided, and adds them to the preference cache.
 
 =cut
 
@@ -488,8 +491,10 @@ sub getPreferencesValue
 
 ---+++ sub getPreferencesFlag (  $theKey, $theWeb  )
 
-Returns 1 if the preference =$theKey= from =$theWeb= as defined above is set
-to something other than "off" or "no", and 0 otherwise.
+Returns 1 if the preference =$theKey= from =$theWeb= is "on", and 0 otherwise.
+"On" means set to something with a true Perl-truth-value, with the special
+cases that "off" and "no" are forced to false.  Both of the latter are
+case-insensitive.
 
 =cut
 
