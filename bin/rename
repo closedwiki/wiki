@@ -96,7 +96,7 @@ sub main
     # Has user selected new name yet?
     if( ! $newTopic || $confirm ) {
        newTopicScreen( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
-                       $confirm, $currentWebOnly, $skin );
+                       $confirm, $currentWebOnly, $doAllowNonWikiWord, $skin );
        return;
     } 
     
@@ -329,25 +329,29 @@ sub getLocks
 # Display screen so user can decide on new web and topic.
 sub newTopicScreen
 {
-   my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $confirm, $currentWebOnly, $skin ) = @_;
-   
+   my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
+       $confirm, $currentWebOnly, $doAllowNonWikiWord, $skin ) = @_;
+
    my $tmpl = "";
-   
-   if( ! $newTopic ) {
-       $newTopic = $oldTopic;
-   }
-   
+
+   $newTopic = $oldTopic unless ( $newTopic );
+   $newWeb = $oldWeb unless ( $newWeb );
+   my $nonWikiWordFlag = "";
+   $nonWikiWordFlag = 'checked="checked"' if( $doAllowNonWikiWord );
+
    TWiki::writeHeader( $query );
    if( $theAttachment ) {
      $tmpl = TWiki::Store::readTemplate( "moveattachment", $skin );
      $tmpl =~ s/%FILENAME%/$theAttachment/go;
    } elsif( $confirm ) {
      $tmpl = TWiki::Store::readTemplate( "renameconfirm", $skin );
+   } elsif( $newWeb eq "Trash" ) {
+     $tmpl = TWiki::Store::readTemplate( "renamedelete", $skin );
    } else {
      $tmpl = &TWiki::Store::readTemplate( "rename", $skin );
    }
-   
-   $tmpl = setVars( $tmpl, $oldTopic, $newWeb, $newTopic );
+
+   $tmpl = setVars( $tmpl, $oldTopic, $newWeb, $newTopic, $nonWikiWordFlag );
    $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
    $tmpl = &TWiki::getRenderedVersion( $tmpl );
    if( $currentWebOnly ) {
@@ -362,10 +366,10 @@ sub newTopicScreen
  #=========================
  sub setVars
  {
-     my( $tmpl, $oldTopic, $newWeb, $newTopic ) = @_;
+     my( $tmpl, $oldTopic, $newWeb, $newTopic, $nonWikiWordFlag ) = @_;
      $tmpl =~ s/%NEW_WEB%/$newWeb/go;
      $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
-     
+     $tmpl =~ s/%NONWIKIWORDFLAG%/$nonWikiWordFlag/go;
      return $tmpl;
  }
  
