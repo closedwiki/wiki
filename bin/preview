@@ -138,6 +138,12 @@ sub main
         # get the edited text and combine text, form and attachments for preview
         &TWiki::Form::fieldVars2Meta( $webName, $query, $meta );
         $text = $query->param( "text" );
+        if( ! $text ) {
+            # empty topic not allowed
+            my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsempty" );
+            print $query->redirect( $url );
+            return;
+        }
         $ptext = $text;
         
         my $fieldParams = &TWiki::Form::getFieldParams( $meta );

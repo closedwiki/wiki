@@ -74,6 +74,11 @@ sub main
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssave" );
         TWiki::redirect( $query, $url );
         return;
+    } elsif( ! $text ) {
+        # empty topic not allowed
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsempty" );
+        print $query->redirect( $url );
+        return;
     }
     
     # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
