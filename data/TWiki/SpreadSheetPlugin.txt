@@ -1,0 +1,161 @@
+%META:TOPICINFO{author="PeterThoeny" date="1071216233" format="1.0" version="1.1"}%
+---+ TWiki Spreadsheet Plugin
+
+This Plugin adds speadsheet capabilities to %WIKITOOLNAME% topics. Formulas like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables.
+
+Example:
+
+| *Region:* | *Sales:* |
+| Northeast |  320 |
+| Northwest |  580 |
+| South	  |  240 |
+| Europe	 |  610 |
+| Asia		|  220 |
+| Total:	 |  %CALC{"$SUM( $ABOVE() )"}% |
+
+The formula next to "Total" is ==%<nop>CALC{"$SUM( $ABOVE() )"}%==. <br /> (you see the formula instead of the sum in case the Plugin is not installed or not enabled.)
+
+
+---++ Syntax Rules
+
+	* The formula in the ==%<nop>CALC{"formula"}%== variable can contain built-in functions
+	* Built-in function are of format ==$<nop>FUNCNAME(parameter)%==
+	* Built-in functions may be nested, e.g. ==%<nop>CALC{"$SUM( R2:C$COL(0)..R$ROW(-1):C$COL(0) )"}%==
+	* The function parameter can be text; a mathematical formula; a cell address; or a range of cell addresses
+	* Multiple parameters form a list; they are separated by a comma, followed by optional space, e.g. ==%<nop>CALC{"$SUM( 3, 5, 7 )"}%==
+	* A table cell can be addressed as ==R1:C1==. Table address matrix:
+	  | ==R1:C1== | ==R1:C2== | ==R1:C3== | ==R1:C4== |
+	  | ==R2:C1== | ==R2:C2== | ==R2:C3== | ==R2:C4== |
+	* A table cell range is defined by two cell addresses separated by ==".."==, e.g. "row 1 through 20, column 3" is: ==R1:C3..R20:C3==
+	* Lists can refer to values and/or table cell ranges, e.g. ==%<nop>CALC{"$SUM( 3, 5, $T(R1:C7), R1:C11..R1:C15 )"}%==
+	* Formulae can only reference cells in the current or preceeding row of the current table; they may not reference cells below the current table row 
+	* Formulae can also be placed outside of tables; they can reference cells in the preceeding table
+
+---++ Built-in Functions
+
+| *Function* | *Description* |
+| =="$ABOVE()"== | The address range of cells above the current cell |
+| =="$AVERAGE(list)"== | The average of the content of a range of cells. Example: To get the average of column 5 excluding the title row, write in the last row: ==%<nop>CALC{"$AVERAGE( R2:C5..R$ROW(-1):C5 )"}%== |
+| =="$CHAR(number)"== | The ASCII character represented by number. Example: ==%<nop>CALC{"$CHAR(97)"}%== returns ==a== |
+| =="$CODE(text)"== | The ASCII numeric value of the first character in text. Example: ==%<nop>CALC{"$CODE(abc)"}%== returns ==97== |
+| =="$COLUMN(offset)"== | The current column number with an optional offset |
+| =="$COUNTITEMS(list)"== | The count of individual items in a list. Example: To count the items of all cells above the current cell, write ==%<nop>CALC{"$COUNTITEMS( $ABOVE() )"}%== |
+| =="$COUNTSTR(list, str)"== | Counts the number of cells in a list equal to a given string (if str is specified), or counts the number of non empty cells in a list. Example: To count the number of non empty cells above the current cell, write ==%<nop>CALC{"$COUNTSTR( $ABOVE() )"}%==; to count the number of cells equal to ==DONE==, write ==%<nop>CALC{"$COUNTSTR( $ABOVE(), DONE )"}%==; |
+| =="$DEF(list)"== | Returns the first list item or cell reference that is not empty. Example: ==%<nop>CALC{"$DEF( R1:C1..R1:C3 )"}%== |
+| =="$EVAL(formula)"== | Evaluates a simple formula. Only addition, substraction, multiplication, division and modulus of numbers are supported. Any nesting is permitted. Example: ==%<nop>CALC{"$EVAL( (5 * 3) / 2 + 1.1 )"}%== returns ==8.6== |
+| =="$EXACT(text1, text2)"== | Compares two text strings and returns ==1== if they are exactly the same, or ==0== if not. Example: ==%<nop>CALC{"$EXACT( foo, Foo )"}%== returns ==0==; ==%<nop>CALC{"$EXACT( foo, $LOWER(Foo) )"}%== returns ==1== |
+| =="$FIND(search_string, text, start_index)"== | Finds one text string =search_string=, within another text string =text=, and returns the number of the starting position of =search_string=, from the first character of =text=. This search is case sensitive and is not a regular expression search; use =$SEARCH()= for regular expression searching. Starting position is 1; an empty string is returned if nothing is matched. Examples: %BR% ==%<nop>CALC{"$FIND(f, fluffy)"}%== returns ==1== %BR% ==%<nop>CALC{"$FIND(f, fluffy, 2)"}%== returns ==4== %BR% ==%<nop>CALC{"$FIND(@, fluffy, 1)"}%== returns an empty string |
+| =="$FORMAT(type, prec, number)"== | Formats a number to a certain type and precision. Types with examples:<br />&nbsp; - ==%<nop>CALC{"$FORMAT( COMMA, 2, 12345.6789 )"}%== returns ==12,345.68== <br />&nbsp; - ==%<nop>CALC{"$FORMAT( DOLLAR, 2, 12345.67 )"}%== returns ==$12,345.68== <br />&nbsp; - ==%<nop>CALC{"$FORMAT( NUMBER, 1, 12345.67 )"}%== returns ==12345.7== <br />&nbsp; - ==%<nop>CALC{"$FORMAT( PERCENT, 1, 0.1234567 )"}%== returns ==12.3%== |
+| =="$FORMATTIME( serial, text )"== | Convert a serialized date into a date string; the following variables in text are expanded: =$second= (seconds, 00..59); =$minute= (minutes, 00..59); =$hour= (hours, 00..23); =$day= (day of month, 01..31); =$month= (month, 01..12); =$mon= (month in text format, Jan..Dec); =$year= (4 digit year, 1999); =$ye= (2 digit year, 99), =$wd= (day number of the week, 1 for Sunday, 2 for Monday, etc), =$wday= (day of the week, Sun..Sat), =$weekday= (day of the week, Sunday..Saturday), =$yearday= (day of the year, 1..365, or 1..366 in leap years). Date is assumed to be server time; add =GMT= to indicate Greenwich time zone. See also =$TIME()=, =$TODAY()=, =$FORMATGMTIME()=, =$TIMEDIFF()=. Example: ==%<nop>CALC{"$FORMATTIME( 0, $year/$month/$day GMT )"}%== returns ==1970/01/01 GMT== |
+| =="$FORMATGMTIME( serial, text )"== | Convert a serialized date into a date string in Greenwich time zone. Same variables expansion as in =$FORMATTIME()=. Example: ==%<nop>CALC{"$FORMATGMTIME( 1041379200, $day $mon $year )"}%== returns ==01 Jan 2003== |
+| =="$GET(name)"== | Get the value of a previously set variable. Specify the variable name (alphanumeric characters and underscores). An empty string is returned if the variable does not exist. Use =$SET()= to set a variable first. Unlike table ranges, variables live for the time of the page view and persist across tables, i.e. you can use it to summarize results across several tables. See also =$SET()=. Example: ==%<nop>CALC{"$GET( my_total )"}%== returns the value of the =my_total= variable |
+| =="$IF(condition, value if true, value if 0)"== | Returns one value if a condition is met, and another value if not. The condition can be a number (where ==0== means condition not met), or two numbers with a comparison operator ==&lt;== (less then), ==&lt;=<nop>== (less then or equal), ==<nop>==<nop>== (equal), ==<nop>!=<nop>== (not equal), ==&gt;=<nop>== (greater then or equal), ==&gt;=<nop>== (greater then). Example: ==%<nop>CALC{"$IF( $T(R1:C5) > 1000, Over Budget, OK )"}%== returns ==Over Budget== if value in R1:C5 is over 1000, ==OK== if not |
+| =="$INT(formula)"== | Evaluates a simple formula and rounds the result down to the nearest integer. Example: ==%<nop>CALC{"$INT( 10 / 4 )"}%== returns ==2== |
+| =="$LEFT()"== | The address range of cells to the left of the current cell |
+| =="$LENGTH(text)"== | The length in bytes of text. Example: ==%<nop>CALC{"$LENGTH(abcd)"}%== returns ==4== |
+| =="$LOWER(text)"== | The lower case string of a text. Example: ==%<nop>CALC{"$LOWER( $T(R1:C5) )"}%== returns the lower case string of the text in cell ==R1:C5== |
+| =="$MAX(list)"== | The biggest value of a list or range of cells. Example: To find the biggest number to the left of the current cell, write: ==%<nop>CALC{"$MAX( $LEFT() )"}%== |
+| =="$MEDIAN(list)"== | The median of a list or range of cells. Example: ==%<nop>CALC{"$MEDIAN( 3, 9, 4, 5 )"}%== returns ==4.5== |
+| =="$MIN(list)"== | The smallest value of a list or range of cells. Example: ==%<nop>CALC{"$MIN( 15, 3, 28 )"}%== returns ==3== |
+| =="$MULT(list)"== | The product of a list or range of cells. Example: to calculate the product of the cells to the left of the current one use ==%<nop>CALC{"$MULT($LEFT())"}%== |
+| =="$NOP(text)"== | A no-operation. Allows one to defy the order of Plugin execution.  For example, it will allow preprossing to be done before =%<nop>SEARCH{}%= is evaluated. Use =$per= to escape '%'.|
+| =="$REPLACE(text, start_num, num_chars, new_text)"== | Replaces part of text string =text=,  based on the starting position =start_num=, and the number of characters to replace =num_chars=. The characters are replaced with =new_text=. Starting position is 1; use a negative =start_num= to count from the end of the text. See also =$SUBSTITUTE()=, =$TRANSLATE()=. Example: %BR% ==%<nop>CALC{"$REPLACE(abcdefghijk,6,5,*)"}%== returns ==abcde*k== |
+| =="$RIGHT()"== | The address range of cells to the right of the current cell |
+| =="$ROUND(formula)"== | Evaluates a simple formula and rounds the result up or down to the nearest integer. Example: ==%<nop>CALC{"$INT( 10 / 6 )"}%== returns ==2== |
+| =="$ROW(offset)"== | The current row number with an offset. Example: To get the number of rows excluding table heading ( first row) and summary row (last row you are in), write: ==%<nop>CALC{"$ROW(-2)"}%== |
+| =="$SEARCH(search_string, text, start_index)"== | Finds one text string =search_string=, within another text string =text=, and returns the number of the starting position of =search_string=, from the first character of =text=. This search a %TWIKIWEB%.RegularExpression search; use =$FIND()= for non-regular expression searching. Starting position is 1; an empty string is returned if nothing is matched. Examples: %BR% ==%<nop>CALC{"$SEARCH([uy], fluffy)"}%== returns ==3== %BR% ==%<nop>CALC{"$SEARCH([uy], fluffy, 3)"}%== returns ==6== %BR% ==%<nop>CALC{"$SEARCH([abc], fluffy,)"}%== returns an empty string |
+| =="$SET(name, value)"== | Set a variable for later use. Specify the variable name (alphanumeric characters and underscores) and the value. The value may contain a formula; formulas are evaluated before the variable assignment. This function returns no output. Use =$GET()= to retrieve variables. Unlike table ranges, variables live for the time of the page view and persist across tables, i.e. you can use it to summarize results across several tables. See also =$GET()=. Example: ==%<nop>CALC{"$SET( my_total, $SUM($ABOVE()) )"}%== sets the =my_total= variable to the sum of all table cells located above the current cell and returns an empty string |
+| =="$SUBSTITUTE(text, old, new, instance, option)"== | Substitutes =new= text for =old= text in a =text= string. =instance= specifies which occurance of =old= you want to replace. If you specify =instance=, only that instance is replaced. Otherwise, every occurance is changed to the new text. A literal search is performed by default; a %TWIKIWEB%.RegularExpression search if the =option= is set to ==r==. See also =$REPLACE()=, =$TRANSLATE()=. Examples: %BR% ==%<nop>CALC{"$SUBSTITUTE(Good morning, morning, day)"}%== returns ==Good day== %BR% ==%<nop>CALC{"$SUBSTITUTE(Q2-2002,2,3)"}%== returns ==Q3-3003== %BR% ==%<nop>CALC{"$SUBSTITUTE(Q2-2002,2,3,3)"}%== returns ==Q2-2003== %BR% ==%<nop>CALC{"$SUBSTITUTE(abc123def,[0-9],9,,r)"}%== returns ==abc999def== |
+| =="$SUM(list)"== | The sum of a list or range of cells. Example: To sum up column 5 excluding the title row, write: ==%<nop>CALC{"$SUM( R2:C5..R$ROW(-1):C5 )"}%== in the last row; or simply ==%<nop>CALC{"$SUM( $ABOVE() )"}%== |
+| =="$SUMDAYS(list)"== | The total number of days in a list or range of cells containing numbers of hours, days or weeks. The default unit is days; units are indicated by a ==h==, ==hours==, ==d==, ==days==, ==w==, ==weeks== suffix. One week is assumed to have 5 working days, one day 8 hours. Example: ==%<nop>CALC{"$SUMDAYS( 2w, 1, 2d, 4h )"}%== returns ==13.5==, the evaluation of =(2*5 + 1 + 2 + 4/8)= |
+| =="$SUMPRODUCT(list, list, ...)"== | The scalar product on ranges of cells. Example: ==%<nop>CALC{"$SUM( R2:C1..R4:C1, R2:C5..R4:C5 )"}%== evaluates and returns ==($T(R2:C1) * $T(R2:C5) + $T(R3:C1) * $T(R3:C5) + $T(R4:C1) * $T(R4:C5))== |
+| =="$T(address)"== | The content of a cell. Example: ==%<nop>CALC{"$T(R1:C5)"}%== returns the text in cell ==R1:C5== |
+| =="$TRANSLATE(text, from, to)"== | Translate text from a set of characters to another set, one character by one. The =text= may contain commas; the last two comma separated parameters are required. For =from= and =to= parameters, you can write =$comma= to escape comma, =$sp= to escape space. See also =$REPLACE()=, =$SUBSTITUTE()=. Examples: %BR% ==%<nop>CALC{"$TRANSLATE(boom,bm,cl)"}%== returns ==cool== %BR% ==%<nop>CALC{"$TRANSLATE(one, two,$comma,;)"}%== returns ==one; two== |
+| =="$TIME(text)"== | Converts a date string into a serialized date number (seconds since the Epoch, e.g. midnight, 01 Jan 1970). Current time is taken if the date string is empty. Supported date formats: =31 Dec 2009=; =31 Dec 2009 GMT=; =31 Dec 09=; =31-Dec-2009=; =31/Dec/2009=; =2009/12/31=; =2009-12-31=; =2009/12/31=; =2009/12/31 23:59=; =2009/12/31 - 23:59=; =2009-12-31-23-59=; =2009/12/31 - 23:59:59=; =2009.12.31.23.59.59=. Date is assumed to be server time; add =GMT= to indicate Greenwich time zone. See also =$TODAY()=, =$FORMATTIME()=, =$FORMATGMTIME()=, =$TIMEDIFF()=. Example: ==%<nop>CALC{"$TIME( 2003/10/14 GMT )"}%== returns ==1066089600== |
+| =="$TIMEADD( serial, value, unit )"== | Add a value to a serialized date. The unit is seconds if not specified; unit can be =second=, =minute=, =hour=, =day=, =week=, =month=, =year=. Note: An approximation is used for month and year calculations. See also =$TIME()=, =$TIMEDIFF()=, =$TODAY()=, =$FORMATTIME()=. Example: ==%<nop>CALC{"$TIMEADD( $TIME(), 2, week )"}%== returns the serialized date two weeks from now |
+| =="$TIMEDIFF( serial_1, serial_2, unit )"== | Time difference between two serialized dates. The unit is seconds if not specified; unit can be specified as in =$TIMEADD()=. Note: An approximation is used for month and year calculations. Use =$FORMAT()= or =$INT()= to format real numbers. See also =$TIME()=, =$TIMEADD()=, =$TODAY()=, =$FORMATTIME()=. Example: ==%<nop>CALC{"$TIMEDIFF( $TIME(), $EVAL($TIME()+90), minute )"}%== returns ==1.5== |
+| =="$TODAY()"== | Get the serialized date of today at midnight GMT. The related =$TIME()= returns the serialized date of today at the current time, e.g. it includes the number of seconds since midnight GMT. See also =$FORMATTIME()=, =$FORMATGMTIME()=, =$TIMEDIFF()=. Example: ==%<nop>CALC{"$TODAY()"}%== returns the number of seconds since Epoch |
+| =="$TRIM(text)"== | Removes all spaces from text except for single spaces between words. Example: ==%<nop>CALC{"$TRIM( eat  spaces  )"}%== returns ==eat spaces==.  |
+| =="$UPPER(text)"== | The upper case string of a text. Example: ==%<nop>CALC{"$UPPER( $T(R1:C5) )"}%== returns the upper case string of the text in cell ==R1:C5== |
+
+---++ Bug Tracking Example
+
+| *Bug#:*  | *Priority:* | *Subject:* | *Status:* | *Days to fix* |
+| Bug:1231 | Low			| File Open ...		 | Open		|  3 |
+| Bug:1232 | High		  | Memory Window ...	| Fixed	  |  2 |
+| Bug:1233 | Medium		| Usability issue ... | Assigned  |  5 |
+| Bug:1234 | High		  | No arrange ...		| Fixed	  |  1 |
+| Total: %CALC{"$ROW(-2)"}% \
+  | %CALC{"$COUNTITEMS( R2:C$COLUMN()..R$ROW(-1):C$COLUMN() )"}% | . \
+  | %CALC{"$COUNTITEMS( R2:C$COLUMN()..R$ROW(-1):C$COLUMN() )"}% \
+  |  Total: %CALC{"$SUM( R2:C$COLUMN()..R$ROW(-1):C$COLUMN() )"}% |
+
+The last row is defined as:
+
+<verbatim>
+| Total: %CALC{"$ROW(-2)"}% \ 
+  | %CALC{"$COUNTITEMS( R2:C$COLUMN()..R$ROW(-1):C$COLUMN() )"}% | . \ 
+  | %CALC{"$COUNTITEMS( R2:C$COLUMN()..R$ROW(-1):C$COLUMN() )"}% \ 
+  |  Total: %CALC{"$SUM( R2:C$COLUMN()..R$ROW(-1):C$COLUMN() )"}% |
+</verbatim>
+
+Above table is created manually. Another Plugin could build the table dynamically, e.g. by pulling data out of a bug tracking system. The Spreadsheet Plugin can be used to display table data statistics.
+
+---++ <nop>%TOPIC% Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>SPREADSHEETPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Add spreadsheet calculation like ="$SUM( $ABOVE() )"= to tables located in %WIKITOOLNAME% topics.
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+	* Do not handle =%<nop>CALC{}%= tag in included topic while including topic: (default: 1)
+		* Set SKIPINCLUDE = 1
+
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. Below installation instructions are for the administrator who needs to install this plugin on the TWiki server. 
+
+	* Download the ZIP file from the <nop>%TOPIC% home
+	* Unzip ==SpreadSheetPlugin.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* Test if the "Total" in the first table in this topic is correct.
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/PeterThoeny |
+|  Plugin Version: | 24 Oct 2003 |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  24 Oct 2003: | Added $SET(), $GET(), $MEDIAN(); added $SUMPRODUCT(), inspired by TWiki:Main/RobertWithrow; added $SUMDAYS(), contributed by TWiki:Main/SvenDowideit |
+|  21 Oct 2003: | Added support for lists =(1, 2, 3)= and lists of table ranges =(R1:C1..R1:C5, R3:C1..R3:C5)= for all functions that accept a table range; added $TIMEADD(); in $TIMEDIFF() added week unit; in $FORMATTIME() changed $weekday to $wd and added $wday and $weekday |
+|  14 Oct 2003: | Added $TIME(), $TODAY(), $FORMATTIME(), $FORMATGMTIME(), $TIMEDIFF() |
+|  13 Oct 2003: | Added $MULT(), contributed by TWiki:Main/GerritJanBaarda |
+|  30 Jul 2003: | Added $TRANSLATE() |
+|  19 Jul 2003: | Added $FIND(), $NOP(), $REPLACE(), $SEARCH(), $SUBSTITUTE(), contributed by TWiki:Main/PaulineCheung |
+|  19 Apr 2003: | Added $COUNTSTR(), $EXACT(), $IF(), $ROUND(), $TRIM(); added $FORMAT(), contributed by TWiki:Main/JimStraus; support =%= modulus operator in $EVAL, $INT, and $ROUND; fixed bug in $DEF |
+|  07 Jun 2002: | Added $DEF(), contributed by TWiki:Main/MartinFuzzey; allow values with HTML formatting like =&lt;u&gt;102&lt;/u&gt;=, suggested by TWiki:Main/GladeDiviney; added SKIPINCLUDE setting |
+|  12 Mar 2002: | Support for multiple functions per nesting level |
+|  15 Jan 2002: | Added $CHAR(), $CODE() and $LENGTH() |
+|  12 Nov 2001: | Added $RIGHT() |
+|  12 Aug 2001: | Fixed bug of disappearing multi-column cells |
+|  19 Jul 2001: | Fixed incorrect $SUM calculation of cell with value =0= |
+|  14 Jul 2001: | Changed to plug & play |
+|  01 Jun 2001: | Fixed insecure dependencies for $MIN and $MAX |
+|  16 Apr 2001: | Fixed div by 0 bug in $AVERAGE |
+|  17 Mar 2001: | Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.000 and up |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main/PeterThoeny - 24 Oct 2003
