@@ -20,7 +20,7 @@ Installation steps:
 	  <br> __Note:__ The =ScriptAlias=  *must* come before the =Alias= in Apache, otherwise it will fail to correctly set up =/twiki/bin/= , due to the fact that it sees that as being just another subdirectory of the =/twiki/= alias. <br>
 	* Here are example =httpd.conf= entries:
  <pre> Script<nop>Alias /twiki/bin/ "/home/httpd/twiki/bin/"
- Alias /twiki/ "/home/httpd/twiki"
+ Alias /twiki/ "/home/httpd/twiki/"
  &lt;Directory "/home/httpd/twiki/bin"&gt;
 	 Options +ExecCGI
 	 Set<nop>Handler cgi-script
