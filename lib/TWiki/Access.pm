@@ -170,8 +170,8 @@ sub prvGetUsersOfGroup
     my $web = $TWiki::mainWebname;
     $topic =~ /^([^\.]*)\.(.*)$/;
     if( $2 ) {
-        $topic = $2;
         $web = $1;
+        $topic = $2;
     }
 
     if( $topic !~ /.*Group$/ ) {
