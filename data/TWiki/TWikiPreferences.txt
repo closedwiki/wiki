@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1028322636" format="1.0" version="1.38"}%
+%META:TOPICINFO{author="PeterThoeny" date="1030052940" format="1.0" version="1.39"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %MAINWEB%.%USERNAME%). 
@@ -72,6 +72,9 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* %T% *NOTE:* To automatically list all non-hidden webs in alphabetical order, use the =%<nop>WEBLIST{}%= variable instead: <br />
 		  %WEBLIST{"[[$name.%HOMETOPIC%][$name]]" separator=" %SEP% "}%
 
+	* Skin overriding the default TWiki templates: (can be overwritten by WebPreferences and user preferences) 
+		* Set SKIN = 
+
 
 ---++ Email and Proxy Server Settings
 
@@ -92,7 +95,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 ---+++ Email Link Settings
 
 	* 'Mail this topic' mailto: link - can be included in topics, templates or skins
-		* Set MAILTHISTOPIC = [[mailto:?subject=%BASETOPIC%&body=%TOPICURL% %MAILTHISTOPICTEXT%]]
+		* Set MAILTHISTOPIC = [[mailto:?subject=%BASETOPIC%&amp;body=%TOPICURL% %MAILTHISTOPICTEXT%]]
 
 	* 'Mail this topic' link text
 		* Set MAILTHISTOPICTEXT = Send a link to this page
@@ -133,25 +136,14 @@ The following are __site-level__ settings that affect all users in all webs on t
 	* Line break:
 		* Set BR = <br />
 
-	* Graphics used in TWiki documentation - view all images in %TWIKIWEB%.TWikiDocGraphics. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
-		* Set H = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif" border="0" alt="HELP" width="16" height="16" />
-		* Set I = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/tip.gif" border="0" alt="IDEA!" width="16" height="16" />
-		* Set M = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/arrowright.gif" border="0" alt="MOVED TO..." width="16" height="16" />
-		* Set N = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/new.gif" border="0" alt="NEW" width="28" height="8" />
-		* Set P = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/pencil.gif" border="0" alt="REFACTOR" width="16" height="16" />
-		* Set Q = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif" border="0" alt="QUESTION?" width="16" height="16" />
-		* Set S = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/starred.gif" border="0" alt="PICK" width="16" height="16" />
-		* Set T = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/tip.gif" border="0" alt="TIP" width="16" height="16" />
-		* Set U = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/updated.gif" border="0" alt="UPDATED" width="56" height="8" />
-		* Set X = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/warning.gif" border="0" alt="ALERT!" width="16" height="16" />
-		* Set Y = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/choice-yes.gif" border="0" alt="DONE" width="16" height="16" />
-
 	* Colored text: (see more StandardColors)
 	  | You type: | =%<nop>RED% red text %<nop>ENDCOLOR% and %<nop>GREEN% green text %<nop>ENDCOLOR%= |
 	  | You get: | %RED% red text %ENDCOLOR% and %GREEN% green text %ENDCOLOR% |
 		* __Note:__ =%&lt;color&gt;%= text must end with =%<nop>ENDCOLOR%= . If you want to switch from one color to another one you first need to end the active color with =%<nop>ENDCOLOR%=, e.g. write =%<nop>RED% some text %<nop>ENDCOLOR% %<nop>GREEN% more text %<nop>ENDCOLOR%=.
 		* Set YELLOW = <font color="#ffff00">
 			* *YELLOW looks like this* </font>
+		* Set ORANGE = <font color="#ff6600">
+			* *ORANGE looks like this* </font>
 		* Set RED = <font color="#ff0000">
 			* *RED looks like this* </font>
 		* Set PINK = <font color="#ff00ff">
@@ -182,9 +174,22 @@ The following are __site-level__ settings that affect all users in all webs on t
 			* *SILVER looks like this* </font>
 		* Set WHITE = <font color="#ffffff">
 			* *WHITE looks like this* </font>
-		* And finally:
+		* And finally:<font>
 		* Set ENDCOLOR = </font>
 			* To finish colored text
+
+	* Graphics used in TWiki documentation - view all images in %TWIKIWEB%.TWikiDocGraphics. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
+		* Set H = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif" border="0" alt="HELP" width="16" height="16" />
+		* Set I = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/tip.gif" border="0" alt="IDEA!" width="16" height="16" />
+		* Set M = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/arrowright.gif" border="0" alt="MOVED TO..." width="16" height="16" />
+		* Set N = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/new.gif" border="0" alt="NEW" width="28" height="8" />
+		* Set P = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/pencil.gif" border="0" alt="REFACTOR" width="16" height="16" />
+		* Set Q = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif" border="0" alt="QUESTION?" width="16" height="16" />
+		* Set S = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/starred.gif" border="0" alt="PICK" width="16" height="16" />
+		* Set T = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/tip.gif" border="0" alt="TIP" width="16" height="16" />
+		* Set U = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/updated.gif" border="0" alt="UPDATED" width="56" height="8" />
+		* Set X = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/warning.gif" border="0" alt="ALERT!" width="16" height="16" />
+		* Set Y = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/choice-yes.gif" border="0" alt="DONE" width="16" height="16" />
 
 	* Background color of non existing topic: ( default =cornsilk= or =#FFFFCE= )
 		* Set NEWTOPICBGCOLOR = #FFFFCE
