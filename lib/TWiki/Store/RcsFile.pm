@@ -197,7 +197,7 @@ sub _moveAttachment
     my $error = "";   
     my $what = "$oldWeb.$oldTopic.$attachment -> $newWeb.$newTopic";
 
-    # FIMXE might want to delete old directories if empty
+    # FIXME might want to delete old directories if empty
 
     my $new = TWiki::Store::RcsFile->new( $newWeb, $newTopic, $attachment,
         ( pubDir => $self->{pubDir} ) );
