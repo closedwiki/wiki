@@ -37,7 +37,8 @@ package TWiki;
 
 sub main() {
 
-my $perlverRequired = 5.005;		# Oldest supported version of Perl
+my $perlverRequired = 5.00503;		# Oldest supported version of Perl
+my $perlverRequiredString = '5.005_03';
 my $perlverRecommended = '5.6.1';
 
 my $rcsverRequired = 5.7;
@@ -174,7 +175,7 @@ print " ($perltype)" if $perltype ne 'generic';
 print "</td></tr>\n";
 if( $perlvernum < $perlverRequired ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "This version of Perl is old - upgrade to at least Perl $perlverRequired\n";
+    print "This version of Perl is old - upgrade to at least Perl $perlverRequiredString\n";
     print "and preferably to Perl $perlverRecommended.\n";
     print "</td></tr>\n";
 }
@@ -212,11 +213,8 @@ print "</td></tr>\n";
 print "<tr><th align=\"right\">mod_perl:</th><td>$USE_MOD_PERL for this script (mod_perl $LOAD_MOD_PERL)</td></tr>\n";
 
 
-# print "<tr><th align=\"right\">Null device:</th><td>$nullDev</td></tr>\n";
-
 # Get userid (ActiveState or other Perl), should work on all Perl systems 
-my $usr; 
-$usr = lc( getlogin || getpwuid($<) );
+my $usr = lc( getlogin || getpwuid($<) );
 # 
 # Get group info
 my $grp = "";
