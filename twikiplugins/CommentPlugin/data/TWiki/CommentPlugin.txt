@@ -110,8 +110,8 @@ If installed correctly, you should see a some =%COMMENT= edit boxes below here.
 
 ---+ Plugin Info
 
-|  Plugin Author: | v1.0 TWiki:Main/DavidWeller v2.0 TWiki:Main/PeterMasiar |
-|  Plugin Version: | 30 Nov 2001 |
+|  Plugin Author: | v1.0 TWiki:Main/DavidWeller v2.0 TWiki:Main/PeterMasiar v3.0 TWiki:Main/CrawfordCurrie |
+|  Plugin Version: | 3.0 |
 |  Change History: | 30 Nov 2001: Initial version |
 | | 4 Dec 2001: 1.01 release, changed name to CommentPlugin, added $button var, changed textarea WRAP setting to "soft" |
 | | 24 Feb 2002 added a few more user requests, made "English" text configurable |
@@ -119,6 +119,7 @@ If installed correctly, you should see a some =%COMMENT= edit boxes below here.
 | | 15 July 2003: Peter Masiar added "reminder" parameter and feature to pass comments to oopslockedcomments.tmpl template to copy-paste later |
 | | 23 Sep 2003 Peter Masiar: 80% rewrite/refactor, adding templates |
 | | 7 Feb 2004: Crawford Currie: rewrote this page and CommentTemplates in an effort to make the plugin more user friendly. Added {TIME} variable. Also updated CVS. |
+| | 18 Feb 2004: rewrote for standard templates and other user requests. |
 |  CPAN Dependencies: | None |
 |  Other Dependencies: | None |
 |  Perl Version: | 5.0 |
@@ -129,4 +130,4 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main/DavidWeller - 05 Mar 2002 <br>
 -- TWiki:Main/PeterMasiar - 15 Jul 2003, 23 Sep 2003<br>
--- TWiki:Main/CrawfordCurrie - 7 Feb 2004
+-- TWiki:Main/CrawfordCurrie - 18 Feb 2004

@@ -20,7 +20,7 @@ use vars qw(
 	    $web $topic $user $installWeb $VERSION $debug
 	   );
 
-$VERSION = '2.100';
+$VERSION = '3.000';
 
 # =========================
 sub initPlugin {
