@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="PeterThoeny" date="1025251620" format="1.0" version="1.13"}%
-<font size="+3"><b>Text Formatting FAQ</b></font>
+%META:TOPICINFO{author="PeterThoeny" date="1042088369" format="1.0" version="1.14"}%
+---++!! Text Formatting FAQ
 
 The most frequently asked questions about text formatting are answered. Also, TextFormattingRules contains the complete TWiki shorthand system on one quick reference page.
 
