@@ -590,7 +590,9 @@ sub saveNew
 
             if( ( $TWiki::doLogTopicSave ) && ! ( $dontLogSave ) ) {
                 # write log entry
-                writeLog( "save", "$TWiki::webName.$topic", "" );
+                my $extra = "";
+                $extra   .= "dontNotify" if( $dontNotify );
+                writeLog( "save", "$TWiki::webName.$topic", $extra );
             }
         }
     }
@@ -616,8 +618,11 @@ sub saveNew
 
         if( ( $TWiki::doLogTopicSave ) && ! ( $dontLogSave ) ) {
             # write log entry
-            $tmp  = &TWiki::userToWikiName( $user );
-            writeLog( "save", "$TWiki::webName.$topic", "repRev $rev $tmp $date" );
+            my $extra = "repRev $rev ";
+            $extra   .= &TWiki::userToWikiName( $user );
+            $extra   .= " $date";
+            $extra   .= " dontNotify" if( $dontNotify );
+            writeLog( "save", "$TWiki::webName.$topic", $extra );
         }
     }
 
