@@ -440,9 +440,7 @@ sub setupRegexes {
     $wikiWordRegex = qr/[$upperAlpha]+[$lowerAlpha]+[$upperAlpha]+[$mixedAlphaNum]*/;
     $webNameRegex = qr/[$upperAlpha]+[$lowerAlphaNum]*/;
     $defaultWebNameRegex = qr/_[${mixedAlphaNum}_]+/;
-    # FIXME: Should really be '+' not '*' - at least one character in
-    # anchor
-    $anchorRegex = qr/\#[${mixedAlphaNum}_]*/;
+    $anchorRegex = qr/\#[${mixedAlphaNum}_]+/;
     $abbrevRegex = qr/[$upperAlpha]{3,}/;
 
     # Simplistic email regex, e.g. for WebNotify processing - no i18n
@@ -786,6 +784,16 @@ sub isWikiName
 
     $name ||= "";	# Default value if undef
     return ( $name =~ m/^${wikiWordRegex}$/o )
+}
+
+# =========================
+# Check for a valid ABBREV (acronym)
+sub isAbbrev
+{
+    my( $name ) = @_;
+
+    $name ||= "";	# Default value if undef
+    return ( $name =~ m/^${abbrevRegex}$/o )
 }
 
 # =========================

@@ -86,7 +86,7 @@ sub main
     # prevent non-Wiki names?
     if( ( $onlyWikiName )
       && ( ! &TWiki::Store::topicExists( $webName, $topic ) )
-      && ( ! ( &TWiki::isWikiName( $topic ) || $topic =~ /^[A-Z]{3,}$/ ) ) ) {
+      && ( ! ( &TWiki::isWikiName( $topic ) || &TWiki::isAbbrev( $topic ) ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         TWiki::redirect( $query, &TWiki::getViewUrl( $webName, $topic ) );
         return;
