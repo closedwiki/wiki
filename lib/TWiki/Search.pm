@@ -215,6 +215,11 @@ sub searchWeb
     if( $theRegex ) {
         $tempVal = $TWiki::egrepCmd;
         @tokens = split( /;/, $theSearchVal );
+        if( $theScope eq "topic" ) {
+            # Fix for Codev.CantAnchorSearchREToEnd
+            @tokens = map { s/\$$/\\\.txt\$/o; $_ } @tokens;
+        }
+
     } else {
         $tempVal = $TWiki::fgrepCmd;
         @tokens = $theSearchVal;
