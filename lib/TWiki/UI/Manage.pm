@@ -252,7 +252,7 @@ sub _patchWebPreferences {
     $text =~ s/(\s\* Set SITEMAPUSETO =)[^\n\r]*/$1 $theSiteMapUseTo/os;
     $text =~ s/(\s\* Set NOSEARCHALL =)[^\n\r]*/$1 $doNoSearchAll/os;
 
-    my $err = $session->{store}->saveTopic( Username(), $theWeb, $theTopic, $text, $meta );
+    my $err = $session->{store}->saveTopic( $session->{user}, $theWeb, $theTopic, $text, $meta );
 
     return $err;
 }

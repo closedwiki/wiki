@@ -1393,7 +1393,7 @@ string if it fails.
 sub createWeb {
     my ( $this, $theWeb ) = @_;
 
-    my $dir = "$TWiki::cfg{DataDir}/$theWeb";
+    my $dir = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$theWeb");
     umask( 0 );
     unless( mkdir( $dir, 0775 ) ) {
         return "Could not create $dir, error: $!";
@@ -1564,8 +1564,8 @@ sub copyTopicBetweenWebs {
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
     # copy topic file
-    my $from = "$TWiki::cfg{DataDir}/$theFromWeb/$theTopic.txt";
-    my $to = "$TWiki::cfg{DataDir}/$theToWeb/$theTopic.txt";
+    my $from = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$theFromWeb/$theTopic.txt");
+    my $to = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$theToWeb/$theTopic.txt");
     unless( copy( $from, $to ) ) {
         return( "Copy file ( $from, $to ) failed, error: $!" );
     }
