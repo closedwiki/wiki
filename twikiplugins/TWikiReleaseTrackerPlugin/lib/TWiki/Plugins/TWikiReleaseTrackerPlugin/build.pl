@@ -17,11 +17,14 @@
 # have to provide and where.
 #
 # Standard preamble
-BEGIN { 
-	foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) { 
+BEGIN 
+{ 
+    print $ENV{TWIKI_LIBS};
+    foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) { 
 	unshift @INC, $pc; 
-} 
-use TWiki::Plugins::Build;
+    } 
+}
+use TWiki::Contrib::Build;
 
 use strict;
 use diagnostics;
@@ -36,7 +39,7 @@ my $runDir = cwd();
 # Declare our build package
 package TWikiReleaseTrackerPluginBuild;
 
-  @TWikiReleaseTrackerPluginBuild::ISA = ( "TWiki::Plugins::Build" );
+  @TWikiReleaseTrackerPluginBuild::ISA = ( "TWiki::Contrib::Build" );
 
   sub new {
     my $class = shift;
@@ -54,6 +57,7 @@ package TWikiReleaseTrackerPluginBuild;
   }
  
   sub target_install {
+    my $this = shift;
     $this->SUPER::target_build();
     target_indexLocalInstallation();
 
