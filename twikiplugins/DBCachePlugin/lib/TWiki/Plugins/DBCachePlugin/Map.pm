@@ -83,14 +83,14 @@ Get the value for a key, but without any subfield field expansion
 
 ---+++ =get($k, $root)= -> datum
    * =$k= - key
-   * =$root= what ! refers to
+   * =$root= what # refers to
 Get the value corresponding to key =$k=; return undef if not set.
 
 *Subfield syntax*
    * =get("X",$r)= will get the subfield named =X=.
    * =get("X.Y",$r)= will get the subfield =Y= of the subfield named =X=.
    * =get("[X]",$r) = will get the subfield named =X= (so X[Y] and X.Y are synonymous)..
-   * =!= (exclamation mark) means "reset to root". So =get("!.Y", $r) will return the subfield =Y= of $r (assuming $r is a map!), as will =get("!{Y}"=.
+   * =#= means "reset to root". So =get("#.Y", $r) will return the subfield =Y= of $r (assuming $r is a map!), as will =get("#[Y]"=.
 
 Where the result of a subfield expansion is another object (a Map or an Array) then further subfield expansions can be used. For example,
 <verbatim>
@@ -119,7 +119,7 @@ See also =DBCachePlugin::Array= for syntax that applies to arrays.
 	  my $field = $this->get( $one, $root );
 	  return $field->get( $two, $root ) if ( $two  && ref( $field ));
 	  return $field;
-    } elsif ( $key =~ m/^!(.*)$/o ) {
+    } elsif ( $key =~ m/^#(.*)$/o ) {
 	  return $root->get( $1, $root );
     } else {
 	  die "ERROR: bad Map expression at $key";
