@@ -1,0 +1,8 @@
+#!/bin/sh
+rm /tmp/vsnlog
+make install
+/etc/init.d/apache restart
+while [ -f dopriv ]; do
+cat /tmp/vsnlog
+sleep 3
+done
