@@ -10,7 +10,7 @@ BEGIN {
 };
 
 use TWiki;
-
+use TWiki::UI::Save;
 use TWiki::Plugins::CommentPlugin;
 use TWiki::Plugins::CommentPlugin::Comment;
 use CGI;
@@ -40,7 +40,6 @@ sub set_up {
       die "$TWiki::cfg{DataDir}/$targetweb fixture setup failed: $!";
 
     TWiki::Plugins::CommentPlugin::initPlugin();
-    $TWiki::Plugins::CommentPlugin::testing = 1;
     $TWiki::Plugins::SESSION = $twiki;
 }
 
@@ -88,7 +87,7 @@ sub inputTest {
         $sattrs .= "\"";
     }
 
-    my $url = "$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}/viewauth/$web/$topic";
+    my $url = "$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}/save/$web/$topic";
 
     if ( $location ) {
         $sattrs .= " location=\"$location\"";
@@ -193,9 +192,13 @@ sub inputTest {
 
     # Compose the query
     my $comm = "This is the comment";
-    my $query = new CGI({'comment_action' => 'save',
+    my $query = new CGI(
+                        {
+                         'comment_action' => 'save',
                          'comment_type' => $type,
-                         'comment' => $comm });
+                         'comment' => $comm,
+                         '.path_info' => "/$web/$topic",
+                        });
     if ( $anchor ) {
         $query->param(-name=>'comment_anchor', -value=>$anchor);
     } elsif ( $location) {
@@ -204,14 +207,11 @@ sub inputTest {
         $query->param(-name=>'comment_index', -value=>$eidx);
     }
 
-    $twiki->{cgiQuery} = $query;
+    my $session = new TWiki("/$web/$topic", "guest", "", "/$web/$topic", $query);
     my $text = "Ignore this text";
 
-    # Should really test when this is wrong
-    $TWiki::Plugins::CommentPlugin::context = "$web.$topic";
-
     # invoke the save handler
-    TWiki::Plugins::CommentPlugin::commonTagsHandler($text, $topic, $web);
+    TWiki::UI::Save::save( $session );
 
     $text = TWiki::Func::readTopicText($web, $topic);
     $this->assert_matches(qr/$comm/, $text, "$web.$topic: $text");
