@@ -343,11 +343,7 @@ writeToolbar("bottom");
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 <input type="hidden" name="cmd" value="%CMD%" />
-<br />
 See below for help in editing this page.
-<br />
-<b>-- <nop>%WIKIUSERNAME% - %DATE%</b> &nbsp;&nbsp;<code>&lt;==</code>
-This is your signature for easy copy and paste
 <script language="JavaScript">
 <!--HIDE
 // Uncomment the next line if you really want to warn non-IE users that they 
@@ -355,12 +351,25 @@ This is your signature for easy copy and paste
 // writeJavaScriptNote();
 //STOP HIDING-->
 </script>
-<br />
+<table border="0" cellpadding="2" cellspacing="0">
+ <tr>
+  <td><b>-- <nop>%WIKIUSERNAME% - %DATE%</b></td>
+  <td> &nbsp;&nbsp; <code>&lt;==</code> Your signature for easy copy and paste (triple click to select in IE)</td>
+ </tr>
+</table>
 %FORMFIELDS%
 %TMPL:DEF{"topicaction"}% <input type="submit" value=" &nbsp; Preview Changes &nbsp; " />
   %SEP% <a class="footerlink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
 %TMPL:P{"standardfooter"}%
-<a name="FormattingHelp"></a>%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%
+<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#EEEEEE">
+ <tr>
+  <td>
+<font color="#333333" size="-1">
+%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%
+</font>
+  </td>
+ </tr>
+</table>
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td width="50%" valign="top">
