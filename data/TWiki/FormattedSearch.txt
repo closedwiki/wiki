@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1062998687" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1064795573" format="1.0" version="1.11"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
@@ -29,7 +29,7 @@ Variables that can be used in the format string:
 | =$topic(20)= | Topic name, "<tt>- </tt>" hyphenated each 20 characters |
 | =$topic(30, -&lt;br /&gt;)= | Topic name, hyphenated each 30 characters with separator "<tt>-&lt;br /&gt;</tt>" |
 | =$topic(40, ...)= | Topic name, shortended to 40 characters with "<tt>...</tt>" indication |
-| =$text= | Formatted topic text |
+| =$text= | Formatted topic text. In case of a =multiple="on"= search, it is the line found for each search hit. |
 | =$locked= | LOCKED flag (if any) |
 | =$date= | Time stamp of last topic update, like =%GMTIME{"$day $mon $year - $hour:$min"}%= |
 | =$isodate= | Time stamp of last topic update, like =%GMTIME{"$year-$mo-$dayT$hour:$minZ"}%= |
@@ -42,7 +42,7 @@ Variables that can be used in the format string:
 | =$formfield(name, 10)= | Form field value, "<tt>- </tt>" hyphenated each 10 characters |
 | =$formfield(name, 20, -&lt;br /&gt;)= | Form field value, hyphenated each 20 characters with separator "<tt>-&lt;br /&gt;</tt>" |
 | =$formfield(name, 30, ...)= | Form field value, shortended to 30 characters with "<tt>...</tt>" indication |
-| =$pattern(reg-exp)= | A regular expression pattern to extract some text from a topic. For example, =$pattern(.*?\*.*?Email\:\s*([^\n\r]+).*)= extracts the email address from a bullet of format =* Email: ...=. |
+| =$pattern(reg-exp)= | A regular expression pattern to extract some text from a topic. In case of a =multiple="on"= search, the pattern is applied to the line found in each search hit. For example, =$pattern(.*?\*.*?Email\:\s*([^\n\r]+).*)= extracts the email address from a bullet of format =* Email: ...=. |
 | =$n= or =$n()= | New line |
 | =$nop= or =$nop()= | Is a "no operation". This variable gets removed; useful for nested search |
 | =$quot= | Double quote (="=). Alternatively write =\"= to escape it |

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1062139775" format="1.0" version="1.68"}%
+%META:TOPICINFO{author="PeterThoeny" date="1064795307" format="1.0" version="1.69"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -48,7 +48,7 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
   <td> Small 16x16 pixel icon of common attachment types, like =bmp=, =doc=, =gif=, =hlp=, =html=, =pdf=, =ppt=, =txt=, =wav=, =xml=, =zip=, etc. Specify file type only, file name, or full path name. Example: =%<nop>ICON{"pdf"}%= returns %ICON{"pdf"}% </td>
 </tr><tr>
   <td> =%<nop>URLPARAM{"name"}%= </td>
-  <td> Returns the value of a URL parameter. Note that there is a risk that this variable could be misused for cross-scripting. Parameters are name and newline:
+  <td> Returns the value of a URL parameter. Note that there is a risk that this variable could be misused for cross-scripting. Parameters are name, default and newline:
 	 | *Parameter:* | *Description:* | *Default:* |
 	 | ="name"= | The name of a URL parameter | required |
 	 | =default="..."= | Default value in case parameter is empty or missing | empty string |
@@ -227,6 +227,8 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
 | =noheader="on"= | Suppress search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span> | Show search header |
 | =nototal="on"= | Do not show number of topics found | Show number |
 | =header="..."= <br /> =format="..."= | Custom format results: see *[[FormattedSearch]]* for usage, variables &amp; examples | Results in table |
+| =multiple="on"= | Multiple hits per topic. Each hit can be [[FormattedSearch][formatted]]. The last token is used in case of a regular expression ";" _and_ search | Only one hit per topic |
+| =separator=", "= | Line separator between hits | Newline ="$n"= |
 Regular example: =<b>%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%</b>= <br />
 Formatted example: ==%<nop>SEARCH{"FAQ" scope="topic" nosearch="on" nototal="on" header="| *Topic: * | *Summary: * |" format="<nop>| $topic | $summary |"%== _(displays results in a table with header - [[FormattedSearch][details]])_ <br />
 %H% If the TWiki:Plugins.TablePlugin is installed, you may set a =%<nop>TABLE{}%= variable just before the =%<nop>SEARCH{}%= to alter the output of a search.  Example: ==%<nop>TABLE{ tablewidth="90%" }%==
