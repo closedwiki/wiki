@@ -517,7 +517,7 @@ sub saveNew
         if( abs( $mtime2 - $mtime1 ) < $TWiki::editLockTime ) {
             # FIXME no previous topic?
             my( $date, $user ) = getRevisionInfo( $web, $topic, $currentRev, "", $attachment, $topicHandler );
-            TWiki::writeDebug( "Store::save date = $date" );
+            # TWiki::writeDebug( "Store::save date = $date" );
             # same user?
             if( ( $TWiki::doKeepRevIfEditLock ) && ( $user eq $TWiki::userName ) && $currentRev ) {
                 # replace last repository entry
