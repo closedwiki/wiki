@@ -67,6 +67,13 @@ use vars qw(
 $TranslationToken= "\0";	# Null not allowed in charsets used with TWiki
 
 BEGIN {
+
+    if( DEBUG ) {
+        # If ASSERTs are on, then warnings are errors. Paranoid,
+        # but the only way to be sure we eliminate them all.
+        $SIG{'__WARN__'} = sub { die @_ };
+    }
+
     # automatically expanded on checkin of this module
     $VERSION = '$Date$ $Rev$ ';
     $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$1 build $2/;

@@ -50,7 +50,7 @@ sub statistics {
 
     my $tmp = "";
     my $destWeb = $TWiki::cfg{UsersWebName}; #web to redirect to after finishing
-    my $logDate = "".$session->{cgiQuery}->param( 'logdate' );
+    my $logDate = $session->{cgiQuery}->param( 'logdate' ) || "";
     $logDate =~ s/[^0-9]//g;  # remove all non numerals
     $debug = $session->{cgiQuery}->param( 'debug' );
 
