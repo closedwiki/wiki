@@ -46,7 +46,8 @@ Edit handler. Most parameters are in the CGI query:
 | =skin= | skin to use |
 | =topicparent= | what to put in the topic prent meta data |
 | =text= | text that will replace the old topic text if a formtemplate is defined (what the heck is this for?) |
-| =apptype= | optional parameter that defines the application type to write into the CGI header. Defaults to text/html. |
+| =contenttype= | optional parameter that defines the application type to write into the CGI header. Defaults to text/html. |
+
 =cut
 sub edit {
   my ( $webName, $topic, $userName, $query ) = @_;
@@ -57,7 +58,8 @@ sub edit {
   my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
   my $formTemplate  = $query->param( "formtemplate" ) || "";
   my $templateTopic = $query->param( "templatetopic" ) || "";
-  my $cgiAppType = $query->param( 'apptype' ) || "text/html";
+  # apptype is undocumented legacy
+  my $cgiAppType = $query->param( 'contenttype' ) || $query->param( 'apptype' ) || "text/html";
   my $skin = $query->param( "skin" );
   my $theParent = $query->param( 'topicparent' ) || "";
   my $ptext = $query->param( 'text' );
