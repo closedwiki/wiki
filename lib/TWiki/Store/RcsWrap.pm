@@ -241,13 +241,16 @@ sub getRevision
     if( $TWiki::OS eq "WINDOWS" ) {
         $tmpfile = $self->_mkTmpFilename();
         $cmd .= " > $tmpfile";
-    }    $cmd =~ /(.*)/;
+    }    
+    $cmd =~ /(.*)/;
     $cmd = "$1"; # untaint
     my $text = `$cmd`;
     if( $tmpfile ) {
         $text = $self->_readFile( $tmpfile );
         TWiki::writeDebug( "tmpfile: $tmpfile" );
         TWiki::writeDebug( "len = " . length($text ) );
+	$tmpfile =~ /(.*)/;
+	$tmpfile = "$1"; # untaint
         unlink $tmpfile;
     }
     _traceExec( $cmd, $text );
