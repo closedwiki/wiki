@@ -1,0 +1,5 @@
+Your name in WikiNotation. Usually your first and last name connected togther.
+
+For example, Bill Clinton's <nop>WikiName is BillClinton.
+
+__Note:__ All users are in the %WIKITOOLNAME%.%MAINWEB% web. Prepend the "%MAINWEB%" name if you write a username in a topic, i.e. write =%MAINWEB%<nop>.TWikiGuest= to link to %MAINWEB%.TWikiGuest.
