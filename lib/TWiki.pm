@@ -324,7 +324,7 @@ sub getEmailNotifyList
 {
     my( $web, $topicname ) = @_;
 
-    $topicname |= $TWiki::notifyTopicname;
+    $topicname = $TWiki::notifyTopicname unless $topicname;
     return() unless &TWiki::Store::topicExists( $web, $topicname );
 
     my @list = ();
