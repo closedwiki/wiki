@@ -553,7 +553,8 @@ sub topicExists
 | Description: | Get revision info of a topic |
 | Parameter: =$web= | Web name, optional, e.g. ="Main"= |
 | Parameter: =$topic= | Topic name, required, e.g. ="TokyoOffice"= |
-| Return: =( $date, $loginName, $rev )= | List with: ( last update date, login name of last user, minor part of top revision number ), e.g. =( "01 Jan 2003", "phoeny", "5" )= |
+| Return: =( $date, $loginName, $rev )= | List with: ( last update date, login name of last user, minor part of top revision number ), e.g. =( 12345 "phoeny", "5" )= |
+| | $date is in epochSeconds |
 
 =cut
 # -------------------------

@@ -105,7 +105,8 @@ sub getRevInfo
 {
     my( $web, $rev, $topic, $short ) = @_;
 
-    my( $date, $user ) = &TWiki::Store::getRevisionInfo( $web, $topic, "1.$rev", 1 );
+    my( $date, $user ) = &TWiki::Store::getRevisionInfo( $web, $topic, "1.$rev");
+    $date = TWiki::formatDisplayTime( $date );
     $user = TWiki::getRenderedVersion( TWiki::userToWikiName( $user ) );
     if( $short ) {
         # cut time

@@ -56,7 +56,8 @@ sub listVersions
         my $rev = "1.$version";
 
         my( $date, $userName, $dummy, $comment ) = 
-           TWiki::Store::getRevisionInfo( $web, $topic, $rev, "TWiki date", $attachment );
+           TWiki::Store::getRevisionInfo( $web, $topic, $rev, $attachment );
+        $date = TWiki::formatDisplayTime( $date );
         my $wikiUserName = &TWiki::userToWikiName( $userName );
 
         my $viewAction = "<a href=\"%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$rev&filename=$attachment\">view</a>";

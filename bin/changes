@@ -88,7 +88,7 @@ sub main
             $wikiuser = &TWiki::userToWikiName( $bar[1] );
             $foo =~ s/%AUTHOR%/$wikiuser/go;
             $foo =~ s/%LOCKED%//go;
-            $time = &TWiki::formatGmTime( $bar[2] );
+            $time = &TWiki::formatDisplayTime( $bar[2] );
             $frev = "";
             if( $bar[3] ) {
                 if( $bar[3] > 1 ) {

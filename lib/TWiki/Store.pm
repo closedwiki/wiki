@@ -566,19 +566,21 @@ sub getRevisionDiff
 # In direct calls changeToIsoDate always seems to be 1
 =pod
 
----+++ getRevisionInfo( $web, $topic ) ==> ( $date, $loginName, $rev )
-
+---+++ getRevisionInfo( $web, $topic ) ==> ( $theWebName, $theTopic, $theRev, $attachment, $topicHandler ) 
 | Description: | Get revision info of a topic |
-| Parameter: =$web= | Web name, optional, e.g. ="Main"= |
-| Parameter: =$topic= | Topic name, required, e.g. ="TokyoOffice"= |
-| Return: =( $date, $loginName, $rev )= | List with: ( last update date, login name of last user, minor part of top revision number ), e.g. =( "01 Jan 2003", "phoeny", "5" )= |
-| TODO: | is it possible to remove teh Display formatting from this code? (ie use the adte as a number) |
+| Parameter: =$theWebName= | Web name, optional, e.g. ="Main"= |
+| Parameter: =$theTopic= | Topic name, required, e.g. ="TokyoOffice"= |
+| Return: =( $date, $user, $rev, $comment )= | List with: ( last update date, login name of last user, minor part of top revision number ), e.g. =( 1234561, "phoeny", "5" )= |
+| $date | in epochSec |
+| $user | |
+| $rev | TODO: this needs to be improves to contain the major number too (and what do we do is we have a different numbering system?) |
+| $comment | WHAT COMMENT? |
 
 =cut
 
 sub getRevisionInfo
 {
-    my( $theWebName, $theTopic, $theRev, $changeToIsoDate, $attachment, $topicHandler ) = @_;
+    my( $theWebName, $theTopic, $theRev, $attachment, $topicHandler ) = @_;
     if( ! $theWebName ) {
         $theWebName = $TWiki::webName;
     }
@@ -588,12 +590,12 @@ sub getRevisionInfo
     $topicHandler = _getTopicHandler( $theWebName, $theTopic, $attachment ) if( ! $topicHandler );
     my( $rcsOut, $rev, $date, $user, $comment ) = $topicHandler->getRevisionInfo( $theRev );
     
-    if( $changeToIsoDate ) {
-        $date = TWiki::formatGmTime( $date );
-    } else {
-         # FIXME get rid of this - shouldn't be needing rcs date time format
-        $date = TWiki::Store::RcsFile::_epochToRcsDateTime( $date );
-    }
+#    if( $changeToIsoDate ) {
+#        $date = TWiki::formatDisplayTime( $date );
+#    } else {
+#         # FIXME get rid of this - shouldn't be needing rcs date time format
+#        $date = TWiki::Store::RcsFile::_epochToRcsDateTime( $date );
+#    }
     
     return ( $date, $user, $rev, $comment );
 }
@@ -604,7 +606,7 @@ sub getRevisionInfo
 
 ---++ sub topicIsLockedBy (  $theWeb, $theTopic  )
 
-Not yet documented.
+| returns  ( $lockUser, $lockTime ) | ( "", 0 ) if not locked |
 
 =cut
 
@@ -850,10 +852,10 @@ sub saveNew
         # how close time stamp of existing file to now?
         if( abs( $mtime2 - $mtime1 ) < $TWiki::editLockTime ) {
             # FIXME no previous topic?
-            my( $date, $user ) = getRevisionInfo( $web, $topic, $currentRev, "", $attachment, $topicHandler );
+            my( $date, $user ) = getRevisionInfo( $web, $topic, $currentRev, $attachment, $topicHandler );
             # TWiki::writeDebug( "Store::save date = $date" );
             # same user?
-            if( ( $TWiki::doKeepRevIfEditLock ) && ( $user eq $TWiki::userName ) && $currentRev ) {
+            if( ( $TWiki::doKeepRevIfEditLock ) && ( $user eq $TWiki::userName ) && $currentRev ) { # TODO shouldn't this also check to see if its still locked?
                 # replace last repository entry
                 $saveCmd = "repRev";
                 if( $attachment ) {
@@ -872,7 +874,7 @@ sub saveNew
 
             if( ! $dontNotify ) {
                 # update .changes
-                my( $fdate, $fuser, $frev ) = getRevisionInfo( $web, $topic, "", "", $attachment, $topicHandler );
+                my( $fdate, $fuser, $frev ) = getRevisionInfo( $web, $topic, "", $attachment, $topicHandler );
                 $fdate = ""; # suppress warning
                 $fuser = ""; # suppress warning
 
@@ -901,16 +903,15 @@ sub saveNew
 
         # save topic with same userName and date
         # FIXME why should date be the same if same user replacing with editLockTime?
-        my( $date, $user, $rev ) = getRevisionInfo( $web, $topic, "", 1, $attachment, $topicHandler );
+        my( $date, $user, $rev ) = getRevisionInfo( $web, $topic, "", $attachment, $topicHandler );
         $rev = "1.$rev";
 
         # Add one minute (make small difference, but not too big for notification)
-        my $epochSec = &TWiki::revDate2EpSecs( $date ) + 60;
-        $date = &TWiki::formatGmTime( $epochSec, "rcs" );
+        my $epochSec = $date + 60; #TODO: this seems wrong. if editLockTime == 3600, and i edit, 30 mins later... why would the recorded date be 29 mins too early?
         $text = _addMeta( $web, $topic, $text, $attachment, $rev,
                           $meta, $epochSec, $user );
 
-        my $dataError = $topicHandler->replaceRevision( $text, $theComment, $user, $date );
+        my $dataError = $topicHandler->replaceRevision( $text, $theComment, $user, $epochSec );
         return $dataError if( $dataError );
         $topicHandler->setLock( ! $doUnlock );
 
@@ -918,6 +919,7 @@ sub saveNew
             # write log entry
             my $extra = "repRev $rev ";
             $extra   .= &TWiki::userToWikiName( $user );
+            $date = &TWiki::formatGmTime( $epochSec, "rcs" );
             $extra   .= " $date";
             $extra   .= " dontNotify" if( $dontNotify );
             writeLog( "save", "$TWiki::webName.$topic", $extra );
@@ -1125,7 +1127,7 @@ sub topicExists
 # Note there is no "1." prefix to this data
 =pod
 
----++ sub getRevisionInfoFromMeta (  $web, $topic, $meta, $changeToIsoDate  )
+---++ sub getRevisionInfoFromMeta (  $web, $topic, $meta  )
 
 Not yet documented.
 
@@ -1133,7 +1135,7 @@ Not yet documented.
 
 sub getRevisionInfoFromMeta
 {
-    my( $web, $topic, $meta, $changeToIsoDate ) = @_;
+    my( $web, $topic, $meta ) = @_;
     
     my( $date, $author, $rev );
     my %topicinfo = ();
@@ -1144,14 +1146,14 @@ sub getRevisionInfoFromMeta
         
     if( %topicinfo ) {
        # Stored as meta data in topic for faster access
-       $date = TWiki::formatGmTime( $topicinfo{"date"} ); # FIXME deal with changeToIsoDate
+       $date = $topicinfo{"date"} ;
        $author = $topicinfo{"author"};
        my $tmp = $topicinfo{"version"};
        $tmp =~ /1\.(.*)/o;
        $rev = $1;
     } else {
        # Get data from RCS
-       ( $date, $author, $rev ) = getRevisionInfo( $web, $topic, "", 1 );
+       ( $date, $author, $rev ) = getRevisionInfo( $web, $topic, "" );
     }
     
     # writeDebug( "rev = $rev" );

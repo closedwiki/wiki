@@ -93,7 +93,7 @@ sub testRead
 sub now
 {
     my $time = time();
-    $date = &TWiki::formatGmTime( $time, "rcs" );
+#    $date = &TWiki::formatGmTime( $time, "rcs" );
     return $date;
 }
 
@@ -450,6 +450,3 @@ doDiffTests();
 
 ### Information to help write the software
 #refDeltas();
-
-
-

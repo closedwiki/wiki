@@ -574,7 +574,8 @@ sub searchWeb
                 my $tempVal = $_;
                 # Permission check done below, so force this read to succeed with "internal" parameter
                 my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal, "", "internal" );
-                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta, 1 );
+                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta );
+                $revdate = TWiki::formatDisplayTime( $revdate );
                 $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
                 $topicRevNum{ $tempVal } = $revnum;
@@ -601,7 +602,8 @@ sub searchWeb
             foreach( @topicList ) {
                 $tempVal = $_;
                 my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal );
-                my( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta, 1 );
+                my( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta);
+                $revdate = TWiki::formatDisplayTime( $revdate );
                 $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
                 $topicRevNum{ $tempVal } = $revnum;
@@ -629,7 +631,8 @@ sub searchWeb
             foreach( @topicList ) {
                 $tempVal = $_;
                 my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal );
-                my( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta, 1 );
+                my( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta );
+                $revdate = TWiki::formatDisplayTime( $revdate );
                 $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
                 $topicRevNum{ $tempVal } = $revnum;
@@ -707,7 +710,8 @@ sub searchWeb
               $text =~ s/%WEB%/$thisWebName/gos;
               $text =~ s/%TOPIC%/$topic/gos;
               $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $topic, $thisWebName );
-              ( $revDate, $revUser, $revNum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta, 1 );
+              ( $revDate, $revUser, $revNum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta );
+              $revDate = TWiki::formatDisplayTime( $revDate );
               $revUser = &TWiki::userToWikiName( $revUser );
           }
 

@@ -75,8 +75,8 @@ use vars qw(
         $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
-	$superAdminGroup $doSuperAdminGroup $OS
-        $disableAllPlugins $attachAsciiPath
+		$superAdminGroup $doSuperAdminGroup $OS
+        $disableAllPlugins $attachAsciiPath $displayTimeValues
     );
 
 # Internationalisation (I18N) config from TWiki.cfg:
@@ -1456,6 +1456,22 @@ sub getLocaldate
 }
 
 # =========================
+sub formatDisplayTime
+{
+    my( $theTime, $theFormat ) = @_;
+
+	my $displayTime = "";
+
+	if ($displayTimeValues eq 'servertime' ) {
+		$displayTime = formatLocTime($theTime, $theFormat);
+	} else {
+		$displayTime = formatGmTime($theTime, $theFormat)." GMT";
+	}
+
+	return $displayTime;
+}
+
+# =========================
 # Return GMT date/time as formatted string 
 =pod
 
@@ -1496,6 +1512,43 @@ sub formatGmTime
     # Default format, e.g. "31 Dec 2002 - 19:30"
     my( $tmon ) = $isoMonth[$mon];
     $year = sprintf( "%.4u", $year + 1900 );
+    return sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
+}
+
+# =========================
+# Return local date/time as formatted string
+# Suggested by Richard Lewis, October 2002
+sub formatLocTime
+{
+    my( $theTime, $theFormat ) = @_;
+
+    my( $sec, $min, $hour, $mday, $mon, $year, $wday ) = localtime( $theTime );
+
+    if( $theFormat ) {
+        $year += 1900;
+
+        if( $theFormat =~ /rcs/i ) {
+            # RCS format, example: "2001/12/31 23:59:59"
+            return sprintf( "%.4u/%.2u/%.2u %.2u:%.2u:%.2u", 
+                            $year, $mon+1, $mday, $hour, $min, $sec );
+        } elsif ( $theFormat =~ /http|email/i ) {
+            # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 GMT"
+	    # - based on RFC 2616/1123 and HTTP::Date; also used
+	    # by TWiki::Net for Date header in emails.
+	    return sprintf( "%s, %02d %s %04d %02d:%02d:%02d GMT", 
+			$weekDay[$wday], $mday, $isoMonth[$mon], $year, 
+			$hour, $min, $sec );
+        } else {
+	    # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
+	    # e.g. "2002-12-31T19:30Z"
+	    return sprintf( "%.4u\-%.2u\-%.2uT%.2u\:%.2u:%.2uZ", 
+			    $year, $mon+1, $mday, $hour, $min, $sec );
+	}
+    }
+
+    # Default format, e.g. "31 Dec 2002 - 19:30"
+    my( $tmon ) = $isoMonth[$mon];
+    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
     return sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
 }
 
@@ -2221,6 +2274,8 @@ sub handleSearchWeb
 }
 
 # =========================
+#TODO: this seems like a duplication with formatGmTime and formatLocTime
+#remove any 2.
 =pod
 
 ---++ sub handleTime (  $theAttributes, $theZone  )
@@ -2261,6 +2316,11 @@ sub handleTime
             $value = localtime( $time );
         }
     }
+
+    if( $theZone eq "gmtime" ) {
+		$value = $value." GMT";
+	}
+
     return $value;
 }
 
@@ -2774,6 +2834,8 @@ sub handleInternalTags
     $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/ge;
     $_[0] =~ s/%SERVERTIME%/&handleTime("","servertime")/ge;
     $_[0] =~ s/%SERVERTIME{(.*?)}%/&handleTime($1,"servertime")/ge;
+    $_[0] =~ s/%DISPLAYTIME%/&handleTime("", $displayTimeValues)/ge;
+    $_[0] =~ s/%DISPLAYTIME{(.*?)}%/&handleTime($1, $displayTimeValues)/ge;
 
     $_[0] =~ s/%WIKIVERSION%/$wikiversion/g;
     $_[0] =~ s/%USERNAME%/$userName/g;

@@ -31,6 +31,14 @@
 #  - tidyup us of 1. for revisions
 #  - cleaner dealing with errors/warnings
 
+=begin twiki
+
+---+ TWiki::Store::RcsLite Module
+
+This module implements rcs (without calling it)
+
+=cut
+
 package TWiki::Store::RcsLite;
 
 use TWiki::Store::RcsFile;
@@ -45,6 +53,14 @@ my $DIFF_DEBUG = 0;
 my $DIFFEND_DEBUG = 0;
 
 # ======================
+=pod
+
+---++ sub new (  $proto, $web, $topic, $attachment, %settings  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub new
 {
    my( $proto, $web, $topic, $attachment, %settings ) = @_;
@@ -57,6 +73,14 @@ sub new
 }
 
 # ======================
+=pod
+
+---++ sub _trace ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub _trace
 {
 #   my( $text ) = @_;
@@ -114,6 +138,14 @@ sub _trace
 # of RCS files. No newphrase will begin with any keyword already in use. 
 
 # ======================
+=pod
+
+---++ sub _readTo (  $file, $char  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _readTo
 {
     my( $file, $char ) = @_;
@@ -170,6 +202,14 @@ sub _readTo
 
 # ======================
 # Called by routines that must make sure RCS file has been read in
+=pod
+
+---++ sub _ensureProcessed (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _ensureProcessed
 {
     my( $self ) = @_;
@@ -180,6 +220,14 @@ sub _ensureProcessed
 
 # ======================
 # Read in the whole RCS file
+=pod
+
+---++ sub _process (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _process
 {
     my( $self ) = @_;
@@ -305,6 +353,14 @@ sub _process
 }
 
 # ======================
+=pod
+
+---++ sub _formatString (  $str  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _formatString
 {
     my( $str ) = @_;
@@ -314,6 +370,14 @@ sub _formatString
 
 # ======================
 # Write content of the RCS file
+=pod
+
+---++ sub _write (  $self, $file  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _write
 {
     my( $self, $file ) = @_;
@@ -348,6 +412,14 @@ sub _write
 }
 
 # ======================
+=pod
+
+---++ sub _binaryChange (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _binaryChange
 {
    my( $self ) = @_;
@@ -357,6 +429,14 @@ sub _binaryChange
 }
 
 # ======================
+=pod
+
+---++ sub numRevisions (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub numRevisions
 {
     my( $self ) = @_;
@@ -365,6 +445,14 @@ sub numRevisions
 }
 
 # ======================
+=pod
+
+---++ sub access (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub access
 {
     my( $self ) = @_;
@@ -373,6 +461,14 @@ sub access
 }
 
 # ======================
+=pod
+
+---++ sub comment (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub comment
 {
     my( $self ) = @_;
@@ -381,20 +477,37 @@ sub comment
 }
 
 # ======================
+=pod
+
+---++ sub date (  $self, $version  )
+
+Not yet documented.
+| $date | in epoch seconds |
+
+=cut to implementation
+
 sub date
 {
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
     my $date = ${$self->{"date"}}[$version];
     if( $date ) {
-        $date = TWiki::Store::RcsFile::_rcsDateTimeToEpoch( $date );
+#        $date = TWiki::Store::RcsFile::_rcsDateTimeToEpoch( $date );
     } else {
-        $date = "";
+        $date = 0;#MMMM, should this be 0, or now()?
     }
     return $date;
 }
 
 # ======================
+=pod
+
+---++ sub description (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub description
 {
     my( $self ) = @_;
@@ -403,6 +516,14 @@ sub description
 }
 
 # ======================
+=pod
+
+---++ sub author (  $self, $version  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub author
 {
     my( $self, $version ) = @_;
@@ -411,6 +532,14 @@ sub author
 }
 
 # ======================
+=pod
+
+---++ sub log (  $self, $version  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub log
 {
     my( $self, $version ) = @_;
@@ -419,6 +548,14 @@ sub log
 }
 
 # ======================
+=pod
+
+---++ sub delta (  $self, $version  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub delta
 {
     my( $self, $version ) = @_;
@@ -427,6 +564,15 @@ sub delta
 }
 
 # ======================
+=pod
+
+---++ sub addRevision (  $self, $text, $log, $author, $date  )
+
+Not yet documented.
+| $date | in epoch seconds |
+
+=cut to implementation
+
 sub addRevision
 {
     my( $self, $text, $log, $author, $date ) = @_;
@@ -446,10 +592,13 @@ sub addRevision
     ${$self->{"log"}}[$head] = $log;
     ${$self->{"author"}}[$head] = $author;
     if( $date ) {
-        $date =~ s/[ \/\:]/\./go;
+ #       $date =~ s/[ \/\:]/\./go;
     } else {
-        $date = TWiki::Store::RcsFile::_epochToRcsDateTime( time() );
+        $date = time();
     }
+    $date = TWiki::Store::RcsFile::_epochToRcsDateTime( $date );
+
+
     _trace("::addRevision date now=\"$date\"" );
     ${$self->{"date"}}[$head] = $date;
 
@@ -457,6 +606,14 @@ sub addRevision
 }
 
 # ======================
+=pod
+
+---++ sub _writeMe (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _writeMe
 {
     my( $self ) = @_;
@@ -476,8 +633,17 @@ sub _writeMe
 }
 
 # ======================
+=pod
+
+---++ sub replaceRevision (  $self, $text, $comment, $user, $date  )
+
+Not yet documented.
 # Replace the top revision
 # Return non empty string with error message if there is a problem
+| $date | is on epoch seconds |
+
+=cut to implementation
+
 sub replaceRevision
 {
     my( $self, $text, $comment, $user, $date ) = @_;
@@ -489,6 +655,14 @@ sub replaceRevision
 
 # ======================
 # Delete the last revision - do nothing if there is only one revision
+=pod
+
+---++ sub deleteRevision (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub deleteRevision
 {
     my( $self ) = @_;
@@ -499,6 +673,14 @@ sub deleteRevision
 }
 
 # ======================
+=pod
+
+---++ sub _delLastRevision (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _delLastRevision
 {
     my( $self ) = @_;
@@ -515,6 +697,14 @@ sub _delLastRevision
 }
 
 # ======================
+=pod
+
+---++ sub revisionDiff (  $self, $rev1, $rev2  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub revisionDiff
 {
     my( $self, $rev1, $rev2 ) = @_;
@@ -528,6 +718,14 @@ sub revisionDiff
 }
 
 # ======================
+=pod
+
+---++ sub getRevision (  $self, $version  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getRevision
 {
     my( $self, $version ) = @_;
@@ -545,6 +743,14 @@ sub getRevision
 # ======================
 # If revision file is missing, information based on actual file is returned.
 # Date is in epoch based seconds
+=pod
+
+---++ sub getRevisionInfo (  $self, $version  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getRevisionInfo
 {
     my( $self, $version ) = @_;
@@ -563,6 +769,14 @@ sub getRevisionInfo
 # is patched to produce text for revision x-1.
 # It is fiddly dealing with differences in number of line breaks after the end of the
 # text.
+=pod
+
+---++ sub _patch (  $text, $delta  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _patch
 {
    # Both params are references to arrays
@@ -607,6 +821,14 @@ sub _patch
 
 
 # ======================
+=pod
+
+---++ sub _patchN (  $self, $text, $version, $target  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _patchN
 {
     my( $self, $text, $version, $target ) = @_;
@@ -622,6 +844,14 @@ sub _patchN
 
 # ======================
 # Split and make sure we have trailing carriage returns
+=pod
+
+---++ sub _mySplit (  $text, $addEntries  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _mySplit
 {
     my( $text, $addEntries ) = @_;
@@ -661,6 +891,14 @@ sub _mySplit
 
 # ======================
 # Way of dealing with trailing \ns feels clumsy
+=pod
+
+---++ sub _diffText (  $new, $old, $type  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _diffText
 {
     my( $new, $old, $type ) = @_;
@@ -671,6 +909,14 @@ sub _diffText
 }
 
 # ======================
+=pod
+
+---++ sub _lastNoEmptyItem (  $items  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _lastNoEmptyItem
 {
    my( $items ) = @_;
@@ -688,6 +934,14 @@ sub _lastNoEmptyItem
 
 # ======================
 # Deal with trailing carriage returns - Algorithm doesn't give output that RCS format is too happy with
+=pod
+
+---++ sub _diffEnd (  $new, $old, $type  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _diffEnd
 {
    my( $new, $old, $type ) = @_;
@@ -725,6 +979,14 @@ sub _diffEnd
 
 # ======================
 # no type means diff for putting in rcs file, diff means normal diff output
+=pod
+
+---++ sub _diff (  $new, $old, $type  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _diff
 {
     my( $new, $old, $type ) = @_;
@@ -803,6 +1065,14 @@ sub _diff
 
 
 # ======================
+=pod
+
+---++ sub _range (  $start, $end  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _range
 {
    my( $start, $end ) = @_;
@@ -814,6 +1084,14 @@ sub _range
 }
 
 # ======================
+=pod
+
+---++ sub _addChunk (  $chunkSign, $out, $lines, $start, $adj, $type, $start1, $last, $newLines  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _addChunk
 {
    my( $chunkSign, $out, $lines, $start, $adj, $type, $start1, $last, $newLines ) = @_;
@@ -869,6 +1147,14 @@ sub _addChunk
 
 
 # ======================
+=pod
+
+---++ sub validTo (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub validTo
 {
     my( $self ) = @_;

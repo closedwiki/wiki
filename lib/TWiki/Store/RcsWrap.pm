@@ -18,6 +18,14 @@
 #
 # Wrapper around the RCS commands required by TWiki
 
+=begin twiki
+
+---+ TWiki::Store::RcsWrap Module
+
+This module calls rcs
+
+=cut
+
 package TWiki::Store::RcsWrap;
 
 use File::Copy;
@@ -48,6 +56,14 @@ use strict;
 # dirPermission           File security for new directories
 
 # ======================
+=pod
+
+---++ sub new (  $proto, $web, $topic, $attachment, %settings  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub new
 {
    my( $proto, $web, $topic, $attachment, %settings ) = @_;
@@ -60,6 +76,14 @@ sub new
 }
 
 # ======================
+=pod
+
+---++ sub _settings (  $self, %settings  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _settings
 {
     my( $self, %settings ) = @_;
@@ -78,6 +102,14 @@ sub _settings
 }
 
 # ======================
+=pod
+
+---++ sub _trace ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub _trace
 {
    #my( $text ) = @_;
@@ -85,6 +117,14 @@ sub _trace
 }
 
 # ======================
+=pod
+
+---++ sub _traceExec ()
+
+Not yet documented.
+
+=cut to implementation
+
 sub _traceExec
 {
    #my( $cmd, $string, $exit ) = @_;
@@ -99,6 +139,14 @@ sub _traceExec
 
 # ======================
 # Returns false if okay, otherwise an error string
+=pod
+
+---++ sub _binaryChange (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _binaryChange
 {
     my( $self ) = @_;
@@ -126,6 +174,14 @@ sub _binaryChange
 }
 
 # ======================
+=pod
+
+---++ sub addRevision (  $self, $text, $comment, $userName  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub addRevision
 {
     my( $self, $text, $comment, $userName ) = @_;
@@ -136,8 +192,17 @@ sub addRevision
 }
 
 # ======================
+=pod
+
+---++ sub replaceRevision (  $self, $text, $comment, $user, $date  )
+
+Not yet documented.
 # Replace the top revision
 # Return non empty string with error message if there is a problem
+| $date | is on epoch seconds |
+
+=cut to implementation
+
 sub replaceRevision
 {
     my( $self, $text, $comment, $user, $date ) = @_;
@@ -157,7 +222,7 @@ sub replaceRevision
     }
     $self->_saveFile( $self->file(), $text );
     $cmd = $self->{ciDateCmd};
-    $date =~ s/$TWiki::securityFilter//go;
+	$date = TWiki::formatGmTime( $date , "rcs");
     $cmd =~ s/%DATE%/$date/;
     $cmd =~ s/%USERNAME%/$user/;
     $file =~ s/$TWiki::securityFilter//go;
@@ -178,6 +243,14 @@ sub replaceRevision
 
 # ======================
 # Return with empty string if only one revision
+=pod
+
+---++ sub deleteRevision (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub deleteRevision
 {
     my( $self ) = @_;
@@ -187,6 +260,14 @@ sub deleteRevision
 }
 
 # ======================
+=pod
+
+---++ sub _deleteRevision (  $self, $rev  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _deleteRevision
 {
     my( $self, $rev ) = @_;
@@ -234,6 +315,14 @@ sub _deleteRevision
 }
 
 # ======================
+=pod
+
+---++ sub getRevision (  $self, $version  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub getRevision
 {
     my( $self, $version ) = @_;
@@ -273,6 +362,14 @@ sub getRevision
 }
 
 # ======================
+=pod
+
+---++ sub numRevisions (  $self  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub numRevisions
 {
     my( $self ) = @_;
@@ -295,8 +392,16 @@ sub numRevisions
 }
 
 # ======================
+=pod
+
+---++ sub getRevisionInfo (  $self, $version  )
+
+Not yet documented.
 # Date return in epoch seconds
 # If revision file is missing, information based on actual file is returned.
+
+=cut to implementation
+
 sub getRevisionInfo
 {
     my( $self, $version ) = @_;
@@ -342,6 +447,14 @@ sub getRevisionInfo
 
 # ======================
 # rev2 newer than rev1
+=pod
+
+---++ sub revisionDiff (  $self, $rev1, $rev2  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub revisionDiff
 {
     my( $self, $rev1, $rev2 ) = @_;
@@ -379,6 +492,14 @@ sub revisionDiff
 }
 
 # ======================
+=pod
+
+---++ sub _ci (  $self, $file, $comment, $userName  )
+
+Not yet documented.
+
+=cut to implementation
+
 sub _ci
 {
     my( $self, $file, $comment, $userName ) = @_;
