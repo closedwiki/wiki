@@ -253,10 +253,11 @@ sub initializeUser
     my $sub = $p.'::initializeUserHandler';
 
     my $libDir = &TWiki::getTWikiLibDir();
-    return undef if( ! -e "$libDir/TWiki/Plugins/SessionPlugin.pm" );
-    eval "use $p;";
-    if( defined( &$sub ) ) {
-        $user = &$sub( @_ );
+    if(  -e "$libDir/TWiki/Plugins/SessionPlugin.pm" ) {
+        eval "use $p;";
+        if( defined( &$sub ) ) {
+            $user = &$sub( @_ );
+        }
     }
     if( ! defined( $user ) ) {
         $user = &TWiki::initializeRemoteUser( $_[0] );
