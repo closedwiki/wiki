@@ -14,6 +14,8 @@ use Getopt::Long qw( :config bundling auto_version );
 use Pod::Usage;
 use WWW::Mechanize::TWiki 0.05;
 
+sub mychomp { chomp $_[0]; $_[0] }
+
 $main::VERSION = '0.50';
 my $Config = {
 # INSTALL OPTIONS
@@ -21,11 +23,11 @@ my $Config = {
     kernel => undef,
 #    web => '',
 	# TODO: change to use a URI (?)
-	install_account => 'twiki',
+	install_account => mychomp( `whoami` ),
 	install_host => 'localhost',
 	install_dir => '~/Sites',
 #	installurl = 'localhost/~twiki',
-	report => 0,
+	report => 1,
 # HELP OPTIONS
 	agent => basename( $0 ),
 	verbose => 0,
@@ -156,7 +158,7 @@ install-remote-twiki.pl --distro -kernel [-web ...]* [-install_account [twiki]] 
 
 =item B<-distro [distro]>				TWikiDistribution filename (in .tar or .tar.bz2 format)
 
-=item B<-kernel [kernel]>				none currently, though perhaps it should be TWiki20040902.tar.gz
+=item B<-kernel [kernel|LATEST]>			none currently, though perhaps it should be TWiki20040902.tar.gz
 
 =item B<-web [web]>					filename of web exported by TWiki:Codev.GetAWebAddOn
 
