@@ -76,7 +76,7 @@ use vars qw(
 use vars qw(
 	@isoMonth @weekDay 
 	$TranslationToken %mon2num $isList @listTypes @listElements
-        $newTopicFontColor $newTopicBgColor $linkProtocolPattern
+        $newTopicFontColor $newTopicBgColor $noAutoLink $linkProtocolPattern
         $headerPatternDa $headerPatternSp $headerPatternHt $headerPatternNoTOC
         $debugUserTime $debugSystemTime
         $viewableAttachmentCount $noviewableAttachmentCount
@@ -113,7 +113,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "29 Dec 2002";
+$wikiversion      = "30 Dec 2002";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -173,6 +173,7 @@ $TranslationToken= "\0";	# Null should not be used by any charsets
 # initialize not called.
 $cgiQuery = 0;
 @publicWebList = ();
+$noAutoLink = 0;
 $viewScript = "view";
 
 $linkProtocolPattern = "(http|ftp|gopher|news|file|https|telnet)";
@@ -368,10 +369,10 @@ sub initialize
 
     # Add background color and font color (AlWilliams - 18 Sep 2000)
     # PTh: Moved from internalLink to initialize ('cause of performance)
-    $newTopicBgColor = &TWiki::Prefs::getPreferencesValue("NEWTOPICBGCOLOR");
-    if ($newTopicBgColor eq "") { $newTopicBgColor="#FFFFCE"; }
-    $newTopicFontColor = &TWiki::Prefs::getPreferencesValue("NEWTOPICFONTCOLOR");
-    if ($newTopicFontColor eq "") { $newTopicFontColor="#0000FF"; }
+    $newTopicBgColor   = TWiki::Prefs::getPreferencesValue("NEWTOPICBGCOLOR")   || "#FFFFCE";
+    $newTopicFontColor = TWiki::Prefs::getPreferencesValue("NEWTOPICFONTCOLOR") || "#0000FF";
+    # Prevent autolink of WikiWords
+    $noAutoLink        = TWiki::Prefs::getPreferencesValue("NOAUTOLINK") || 0;
 
 #AS
     if( !$disableAllPlugins ) {
@@ -2488,7 +2489,7 @@ sub mailtoLinkSimple
 # =========================
 sub getRenderedVersion {
     my( $text, $theWeb, $meta ) = @_;
-    my( $head, $result, $extraLines, $insidePRE, $insideTABLE, $noAutoLink );
+    my( $head, $result, $extraLines, $insidePRE, $insideTABLE, $insideNoAutoLink );
 
     return "" unless $text;  # nothing to do
 
@@ -2505,7 +2506,7 @@ sub getRenderedVersion {
     $result = "";
     $insidePRE = 0;
     $insideTABLE = 0;
-    $noAutoLink = 0;      # PTh 02 Feb 2001: Added Codev.DisableWikiWordLinks
+    $insideNoAutoLink = 0;      # PTh 02 Feb 2001: Added Codev.DisableWikiWordLinks
     $isList = 0;
     @listTypes = ();
     @listElements = ();
@@ -2536,8 +2537,8 @@ sub getRenderedVersion {
         # change state:
         m|<pre>|i  && ( $insidePRE = 1 );
         m|</pre>|i && ( $insidePRE = 0 );
-        m|<noautolink>|i   && ( $noAutoLink = 1 );
-        m|</noautolink>|i  && ( $noAutoLink = 0 );
+        m|<noautolink>|i   && ( $insideNoAutoLink = 1 );
+        m|</noautolink>|i  && ( $insideNoAutoLink = 0 );
 
         if( $insidePRE ) {
             # inside <PRE>
@@ -2667,8 +2668,8 @@ sub getRenderedVersion {
             # '[[Web.odd wiki word#anchor]]' link:
             s/\[\[([^\]]+)\]\]/&specificLink("",$theWeb,$theTopic,$1,$1)/ge;
 
-            # do normal WikiWord link if not disabled by <noautolink>
-            if( ! ( $noAutoLink ) ) {
+            # do normal WikiWord link if not disabled by <noautolink> or NOAUTOLINK preferences variable
+            unless( $noAutoLink || $insideNoAutoLink ) {
 
                 # 'Web.TopicName#anchor' link:
                 s/([\s\(])($webNameRegex)\.($wikiWordRegex)($anchorRegex)/&internalLink($1,$2,$3,"$TranslationToken$3$4$TranslationToken",$4,1)/geo;
