@@ -19,11 +19,32 @@ BEGIN {
     # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
 };
 
+system( "mv cgi-bin/tmp/install/LocalSite.cfg cgi-bin/lib/" );
 system( "mkdir htdocs/" );
 system( "mv cgi-bin/tmp/twiki/pub htdocs/twiki/" );
 system( "mv cgi-bin/tmp/twiki/templates twiki/" );
-system( "chmod -R o-w cgi-bin/twiki cgi-bin/lib cgi-bin/lib/CPAN" );
+system( "chmod -R o-w cgi-bin/twiki/ cgi-bin/lib/ cgi-bin/lib/CPAN/" );
+
+print `find cgi-bin/twiki/ -print | xargs chmod go-w`;
+print `find cgi-bin/lib/ -print | xargs chmod go-w`;
+
 #system( "rm -rf cgi-bin/tmp" );
+
+################################################################################
+
+open( INDEX_PHP, ">htdocs/index.php" ) or die $!;
+print INDEX_PHP <<'EOF';
+<?php 
+Header( "Location: http://" . $_SERVER[HTTP_HOST] . "/cgi-bin/twiki/view/" );
+?>
+EOF
+close( INDEX_PHP );
+
+################################################################################
+# WIKI SYSTEM USABLE AT THIS POINT
+################################################################################
+################################################################################
+################################################################################
 
 my $agent = "TWikiInstaller: " . basename( $0 );
 my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;
@@ -71,18 +92,8 @@ if ( -e "TWikiInstallationReport.html" )
 
 ################################################################################
 
-open( INDEX_PHP, ">htdocs/index.php" ) or die $!;
-print INDEX_PHP <<'EOF';
-<?php 
-Header( "Location: http://" . $_SERVER[HTTP_HOST] . "/cgi-bin/twiki/view/" );
-?>
-EOF
-close( INDEX_PHP );
-
-################################################################################
-
 my $START = "http://" . mychomp(`hostname`) . "/~" . mychomp(`whoami`) . "/cgi-bin/twiki/view/$startupTopic";
-system( open => $START ) or print "start using your wiki at $START\n";
+system( open => $START ) == 0 or print "start using your wiki at $START\n";
 
 ################################################################################
 ################################################################################
