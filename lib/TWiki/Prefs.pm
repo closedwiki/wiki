@@ -63,7 +63,7 @@ sub prvGetPrefsList
 
     my $topicName = $theWebTopic;
     my $webName = $TWiki::mainWebname;
-    $topicName =~ s/([^\.]*)\.(.*)/$2/go;    # "Web.TopicName" to "TopicName"
+    $topicName =~ s/([^\.]*)\.(.*)/$2/o;    # "Web.TopicName" to "TopicName"
     if( $2 ) {
         $webName = $1;
     }
