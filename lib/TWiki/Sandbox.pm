@@ -290,7 +290,7 @@ sub readFromProcessArray {
     my ($this, $path, $template, %params) = @_;
     assert(ref($this) eq "TWiki::Sandbox") if DEBUG;
 
-    my @data;                          # Output lines
+    my $data;                          # Output
     my $processFileHandle;             # Holds filehandle to read from process
 
     # Build argument list from template
@@ -312,9 +312,11 @@ sub readFromProcessArray {
         if ( $pid ) {
             # Parent - read data from process filehandle and remove newlines 
             #$this->_writeDebug("pid = $pid");
-            @data = map { chomp $_; $_ } <$processFileHandle>;
-            #$this->_writeDebug("data = @data");
+            undef $/; # set to read to EOF
+            $data = <$processFileHandle>;
+            #$this->_writeDebug("data = $data");
             close $processFileHandle;
+            $/ = "\n";
         } else {
             # Child - run the command, stdout to pipe
             exec $path, @args
@@ -337,9 +339,11 @@ sub readFromProcessArray {
             #$this->_writeDebug("fileno of processFileHandle= " . fileno($processFileHandle) );
             # FIXME: Doesn't read (or perhaps write in child) any data here... File handle
             # issue of some sort...
-            @data = map { chomp $_; $_ } <$processFileHandle>;
-            #$this->_writeDebug("data = @data ");
+            undef $/; # set to read to EOF
+            $data = <$processFileHandle>;
+            #$this->_writeDebug("data = $data ");
             close $processFileHandle;
+            $/ = "\n";
         } else {
             # Child - run the command, stdout to pipe
             exec $path, @args
@@ -358,15 +362,13 @@ sub readFromProcessArray {
         $cmd .= join( "$cmdQuote $cmdQuote", @args ) .  $cmdQuote;
         # DEBUG
         $cmd .= ' >c:\temp\searchout.log';
-        @data = split( /\r?\n/, `$cmd` );
     }
 
     if( $this->{TRACE} ) {
         my $q = $this->{CMDQUOTE};
-        print STDERR "$path $q",join( "$q $q", @args ), "$q -> ",
-          join( "\n", @data ),"\n";
-   }
-    return @data;
+        print STDERR "$path $q",join( "$q $q", @args ), "$q -> $data\n";
+    }
+    return split( /\r?\n/, $data );
 }
 
 
