@@ -172,31 +172,35 @@ sub initialize
     $wikiUserName = userToWikiName( $userName );
 
     # initialize $webName and $topicName
-    # test if $thePathInfo is "/Webname/SomeTopic" or "/Webname/"
-    if( ( $thePathInfo =~ /[\/](.*)\/(.*)/ ) && ( $1 ) ) {
-        $webName = $1;
-    } else {
-        # test if $thePathInfo is "/Webname" or "/"
-        $thePathInfo =~ /[\/](.*)/;
-        $webName = $1 || $mainWebname;
-    }
-    if( $2 ) {
-        $topicName = $2;
-    } else {
-        if( $theTopic ) {
-            $topicName = $theTopic;
+    $topicName = "";
+    $webName   = "";
+    if( $theTopic ) {
+        if( $theTopic =~ /(.*)\.(.*)/ ) {
+            # is "bin/script?topic=Webname.SomeTopic"
+            $webName   = $1 || "";
+            $topicName = $2 || "";
         } else {
-            $topicName = $mainTopicname;
+            # is "bin/script/Webname?topic=SomeTopic"
+            $topicName = $theTopic;
         }
+    }
+    if( $thePathInfo =~ /\/(.*)\/(.*)/ ) {
+        # is "bin/script/Webname/SomeTopic" or "bin/script/Webname/"
+        $webName   = $1 || "" if( ! $webName );
+        $topicName = $2 || "" if( ! $topicName );
+    } else {
+        # is "bin/script/Webname" or "bin/script/"
+        $thePathInfo =~ s/^\/(.*)//o;
+        $webName = $thePathInfo if( ! $webName );
     }
     ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
     # filter out dangerous or unwanted characters:
     $topicName =~ s/$securityFilter//go;
     $topicName =~ /(.*)/;
-    $topicName = $1;  # untaint variable
+    $topicName = $1 || $mainTopicname;  # untaint variable
     $webName   =~ s/$securityFilter//go;
     $webName   =~ /(.*)/;
-    $webName   = $1;  # untaint variable
+    $webName   = $1 || $mainWebname;  # untaint variable
     $includingTopicName = $topicName;
     $includingWebName = $webName;
 
@@ -510,6 +514,8 @@ sub getViewUrl
     if( $theWeb ) {
         $web = $theWeb;
     }
+    $theTopic =~ s/\s*//gos; # Illedal URL, remove space
+
     # PTh 24 May 2000: added $urlHost, needed for some environments
     # see also Codev.PageRedirectionNotWorking
     return "$urlHost$scriptUrlPath/view$scriptSuffix/$web/$theTopic";
@@ -571,6 +577,8 @@ sub makeTopicSummary
     # called by search, mailnotify & changes after calling readFileHead
 
     my $htext = $theText;
+    $htext =~ s/<\!\-\-.*?\-\->//gos;  # remove all HTML comments
+    $htext =~ s/<\!\-\-.*$//os;        # remove cut HTML comment
     $htext =~ s/<[^>]*>//go;           # remove all HTML tags
     $htext =~ s/%WEB%/$theWeb/go;      # resolve web
     $htext =~ s/%TOPIC%/$theTopic/go;  # resolve topic
@@ -989,6 +997,7 @@ sub handleWebAndTopicList
         $line =~ s/\$name/$item/goi;
         $text .= "$line\n";
     }
+    $text =~ s/\n$//os;  # remove last new line
     return $text;
 }
 
