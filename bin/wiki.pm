@@ -85,7 +85,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "25 Jan 2001";
+$wikiversion      = "31 Jan 2001";
 
 # ===========================
 # read the configuration part
@@ -1060,7 +1060,7 @@ sub isWikiName
 sub getRenderedVersion
 {
     my( $text, $theWeb ) = @_;
-    my( $result, $insidePRE, $insideTABLE, $blockquote );
+    my( $result, $insidePRE, $insideVERBATIM, $insideTABLE, $blockquote );
 
     # PTh 22 Jul 2000: added $theWeb for correct handling of %INCLUDE%, %SEARCH%
     if( !$theWeb ) {
@@ -1068,16 +1068,43 @@ sub getRenderedVersion
     }
     $result = "";
     $insidePRE = 0;
+    $insideVERBATIM = 0;  # PTh 31 Jan 2001: Added Codev.VerbatimModeForSourceCodes
     $insideTABLE = 0;
     $blockquote = 0;
     $code = "";
     $text =~ s/\\\n//go;
     $text =~ s/\r//go;
     foreach( split( /\n/, $text ) ) {
-        m/<PRE>/i && ($insidePRE= 1);
-        m@</PRE>@i && ($insidePRE= 0);
 
-        if( $insidePRE==0) {
+        # change state:
+        m|<pre>|i  && ( $insidePRE = 1 );
+        m|</pre>|i && ( $insidePRE = 0 );
+        if( m|<verbatim>|i ) {
+            s|<verbatim>|<pre>|goi;
+            $insideVERBATIM = 1;
+        }
+        if( m|</verbatim>|i ) {
+            s|</verbatim>|</pre>|goi;
+            $insideVERBATIM = 0;
+        }
+
+        if( $insidePRE || $insideVERBATIM ) {
+            # inside <PRE> or <VERBATIM>
+
+            if( $insideVERBATIM ) {
+                s/\&/&amp;/go;
+                s/\</&lt;/go;
+                s/\>/&gt;/go;
+                s/\&lt;pre\&gt;/<pre>/go;  # fix escaped <pre>
+            }
+
+# Wiki extended rules
+            $_ = extendGetRenderedVersionInsidePRE( $_, $theWeb );
+
+            s/(.*)/$1\n/o;
+
+        } else {
+            # normal state, do Wiki rendering
 
 # Wiki extended rules
             $_ = extendGetRenderedVersionOutsidePRE( $_, $theWeb );
@@ -1156,14 +1183,6 @@ sub getRenderedVersion
             s/<link>(.*?)<\/link>/&internalLink($theWeb,$1,$1,"",1)/geo;
 
             s/^\n//o;
-
-        } else {
-            # inside <PRE>
-
-# Wiki extended rules
-            $_ = extendGetRenderedVersionInsidePRE( $_, $theWeb );
-
-            s/(.*)/$1\n/o;
         }
         s/\t/   /go;
         $result .= $_;
@@ -1173,7 +1192,10 @@ sub getRenderedVersion
     }
     $result .= &emitCode( "", 0 );
     if( $insidePRE ) {
-        $result .= "</PRE>\n";
+        $result .= "</pre>\n";
+    }
+    if( $insideVERBATIM ) {
+        $result .= "</verbatim>\n";
     }
     return $result;
 }
