@@ -1,27 +1,10 @@
-<HTML>
-<HEAD>
-  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (note)</TITLE>
-  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX">
-</HEAD>
-<BODY bgcolor="#ffffff">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
-    </TD>
-    <TD>
-      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (note)</FONT>
-    </TD>
-  </TR>
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD COLSPAN="2">
-      Note
-    </TD>
-  </TR>
-</TABLE>
-<H1>Password changed successfully!</H1>
- 
-You have to close your browser to make this change take affect.
- 
-</BODY>
-</HTML>
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%(note)%TMPL:END%
+%TMPL:DEF{"webaction"}% *Note* %TMPL:END%
+%TMPL:DEF{"heading"}%Password changed successfully!%TMPL:END%
+%TMPL:DEF{"message"}%
+
+You need to close your browser to make this change take effect.
+%TMPL:END%
+%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][OK]] %TMPL:END%
+%TMPL:P{"oops"}%

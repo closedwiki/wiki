@@ -1,43 +1,17 @@
-<HTML>
-<HEAD>
-  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (oops rename)</TITLE>
-  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX">
-</HEAD>
-<BODY bgcolor="#ffffff">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
-    </TD>
-    <TD>
-      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (oops rename)</FONT>
-    </TD>
-  </TR>
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD COLSPAN="2">
-      Attention
-    </TD>
-  </TR>
-</TABLE>
-<H1>Topic is locked by an other user</H1>
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%(oops rename)%TMPL:END%
+%TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
+%TMPL:DEF{"heading"}%Topic is locked by an other user%TMPL:END%
+%TMPL:DEF{"message"}%
 
 %OLD_LOCK%
 %NEW_LOCK%
 
-<BR>
-<ul>
-<li> To rename anyway press the <I>Rename anyway</I> at the bottom of the page
-<li> To cancel go back in your browser
-</ul>
+   * To rename anyway click on *Rename anyway*
+   * To cancel go back in your browser or click on *Cancel*
 
-<p>
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD valign="top">
-      Topic <B>%TOPIC%</B> . {
-        <A href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%">Rename anyway</A>
-      }
-    </TD>
-  </TR>
-</TABLE>
-</BODY>
+%TMPL:END%
+%TMPL:DEF{"topicaction"}%
+  [[%SCRIPTURL%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%][Rename anyway]]
+  %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+%TMPL:P{"oops"}%

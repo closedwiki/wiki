@@ -1,41 +1,12 @@
-<HTML>
-<HEAD>
-  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (note)</TITLE>
-  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX">
-</HEAD>
-<BODY bgcolor="#ffffff">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
-    </TD>
-    <TD>
-      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (note)</FONT>
-    </TD>
-  </TR>
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD COLSPAN="2">
-      Note
-    </TD>
-  </TR>
-</TABLE>
-<H1>Thank you for registering</H1>
-<UL>
-<LI>You can review your changes in your personal TWiki topic %TOPIC%
-    <BR>(<B>Suggestion:</B> How about uploading your picture to your
-topic?)
-<LI>You are also listed up in the %MAINWEB%.%WIKIUSERSTOPIC% topic
-<LI>A confirmation has been sent to %PARAM1%
-</UL>
-<FORM action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD valign="top">
-      Topic <B>%TOPIC%</B> . {
-        <INPUT type="submit" value=" &nbsp; OK &nbsp; ">
-      }
-    </TD>
-  </TR>
-</TABLE>
-</FORM>
-</BODY>
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%(note)%TMPL:END%
+%TMPL:DEF{"webaction"}% *Note* %TMPL:END%
+%TMPL:DEF{"heading"}%Thank you for registering%TMPL:END%
+%TMPL:DEF{"message"}%
+   * You can review your changes in your personal TWiki topic %TOPIC% <br />
+     (__Suggestion:__ How about uploading your picture to your topic?)
+   * You are also listed in the %MAINWEB%.%WIKIUSERSTOPIC% topic
+   * A confirmation e-mail has been sent to %PARAM1%
+%TMPL:END%
+%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][OK]] %TMPL:END%
+%TMPL:P{"oops"}%

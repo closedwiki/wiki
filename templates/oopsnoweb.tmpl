@@ -1,34 +1,8 @@
-<HTML>
-<HEAD>
-  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (oops, web doesn't exist)</TITLE>
-  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX">
-</HEAD>
-<BODY bgcolor="#ffffff">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
-    </TD>
-    <TD>
-      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (oops, web doesn't exist)</FONT>
-    </TD>
-  </TR>
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD COLSPAN="2">
-      Attention
-    </TD>
-  </TR>
-</TABLE>
----+ The "%WEB%" web does not exist
-Please chose only webs that do exist. Contact %WIKIWEBMASTER% if you need a new web for your group.
-<p>
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD valign="top">
-      Topic <B>%TOPIC%</B> . {
-        [[%MAINWEB%.%HOMETOPIC%][OK]]
-      }
-    </TD>
-  </TR>
-</TABLE>
-</BODY>
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%(oops, web doesn't exist)%TMPL:END%
+%TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
+%TMPL:DEF{"heading"}%The "%WEB%" web does not exist%TMPL:END%
+%TMPL:DEF{"message"}%
+  Please chose only webs that do exist. Contact %WIKIWEBMASTER% if you need a new web for your group. %TMPL:END%
+%TMPL:DEF{"topicaction"}% [[%MAINWEB%.%HOMETOPIC%][OK]] %TMPL:END%
+%TMPL:P{"oops"}%

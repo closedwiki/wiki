@@ -1,34 +1,12 @@
-<HTML>
-<HEAD>
-  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (oops)</TITLE>
-  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX">
-</HEAD>
-<BODY bgcolor="#ffffff">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
-    </TD>
-    <TD>
-      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (oops)</FONT>
-    </TD>
-  </TR>
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD COLSPAN="2">
-      Attention
-    </TD>
-  </TR>
-</TABLE>
-<H1>You are already registered</H1>
-Can't register twice, the username %PARAM1% is already registered. <p>
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%(oops)%TMPL:END%
+%TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
+%TMPL:DEF{"heading"}%You are already registered%TMPL:END%
+%TMPL:DEF{"message"}%
+Can't register twice, the username %PARAM1% is already registered.
+
 Please contact 
-<A href="mailto:%WIKIWEBMASTER%?subject=TWikiRegistration Question">%WIKIWEBMASTER%</A>
-if you have any questions. <p>
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD valign="top">
-      Topic <B>%TOPIC%</B> . { }
-    </TD>
-  </TR>
-</TABLE>
-</BODY>
+<a href="mailto:%WIKIWEBMASTER%?subject=TWiki%20Registration%20Question">%WIKIWEBMASTER%</a>
+if you have any questions. %TMPL:END%
+%TMPL:DEF{"topicaction"}% %TMPL:END%
+%TMPL:P{"oops"}%
