@@ -191,7 +191,7 @@ sub initialize
 
     # Fix path_info if broken - FIXME: extreme brokenness may require more work
     $thePathInfo =~ s!$scriptUrlPath/[-.[:alnum:]]+$scriptSuffix/!/!;
-    &writeDebug( "===== thePathInfo after cleanup = $thePathInfo" );
+    ## writeDebug( "===== thePathInfo after cleanup = $thePathInfo" );
 
     if( $thePathInfo =~ /\/(.*)\/(.*)/ ) {
         # is "bin/script/Webname/SomeTopic" or "bin/script/Webname/"
@@ -441,7 +441,7 @@ sub wikiToUserName
     my( $wikiUser ) = @_;
     $wikiUser =~ s/^.*\.//go;
     my $userName =  $wikiToUserList{"$wikiUser"} || $wikiUser;
-    #TWiki::writeDebug( "TWiki::wikiToUserName: $wikiUser->$userName" );
+    ## writeDebug( "TWiki::wikiToUserName: $wikiUser->$userName" );
     return $userName;
 }
 
