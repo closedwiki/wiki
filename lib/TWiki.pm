@@ -131,7 +131,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "12 Apr 2004";
+$wikiversion      = "16 Apr 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2506,8 +2506,8 @@ sub handleUrlParam
             $value = "" unless( defined $value );
         }
     }
-    $value = handleUrlEncode( "\"$value\" type=\"$encode\"", 1 ) if( $encode );
     $value =~ s/\r?\n/$newLine/go if( $newLine );
+    $value = handleUrlEncode( $value, 0, $encode ) if( $encode );
     unless( $value ) {
         $value = extractNameValuePair( $theArgs, "default" ) || "";
     }
@@ -2529,10 +2529,10 @@ Not yet documented.
 
 sub handleUrlEncode
 {
-    my( $theArgs, $doExtract ) = @_;
+    my( $theArgs, $doExtract, $theType ) = @_;
 
     my $text = $theArgs;
-    my $type = "";
+    my $type = $theType || "";
     if( $doExtract ) {
         $text = extractNameValuePair( $theArgs );
         $type = extractNameValuePair( $theArgs, "type" ) || "";
