@@ -5,13 +5,12 @@ use strict;
 
 use TWiki::Func;
 
-use vars qw( $initialised $VERSION $firstCall $pluginName $testing );
+use vars qw( $initialised $VERSION $firstCall $pluginName );
 
 BEGIN {
-    $VERSION = 3.008;
+    $VERSION = 3.009;
     $pluginName = "CommentPlugin";
     $firstCall = 0;
-	$testing = 0;
 	$initialised = 0;
 }
 
@@ -22,15 +21,15 @@ my @dependencies =
   );
 
 sub initPlugin {
-  #my ( $topic, $web, $user, $installWeb ) = @_;
+    #my ( $topic, $web, $user, $installWeb ) = @_;
 
-  if( $TWiki::Plugins::VERSION < 1.020 ) {
-    TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm $TWiki::Plugins::VERSION. Will not work without compatability module." );
-  }
+    if( $TWiki::Plugins::VERSION < 1.020 ) {
+        TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm $TWiki::Plugins::VERSION. Will not work without compatability module." );
+    }
 
-  $firstCall = 1;
+    $firstCall = 1;
 
-  return 1;
+    return 1;
 }
 
 sub commonTagsHandler {
@@ -43,9 +42,8 @@ sub commonTagsHandler {
     my $query = TWiki::Func::getCgiQuery();
     return unless( defined( $query ));
     my $action = $query->param( 'comment_action' ) || "";
-    if ( defined( $action ) && $action eq "save"
-         && ( $testing || $query->path_info() eq "/$_[2]/$_[1]" )
-       ) {
+
+    if ( defined( $action ) && $action eq "save" ) {
         # $firstCall ensures we only save once, ever.
         if ( $firstCall ) {
             $firstCall = 0;
