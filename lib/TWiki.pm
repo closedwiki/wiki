@@ -2946,6 +2946,7 @@ sub handleCommonTags
     &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
 
+    $text =~ s/%FORMFIELD{(.*?)}%/&getFormField($theWeb,$theTopic,$1)/ge;
     $text =~ s/%TOC{([^}]*)}%/&handleToc($text,$theTopic,$theWeb,$1)/ge;
     $text =~ s/%TOC%/&handleToc($text,$theTopic,$theWeb,"")/ge;
 #SVEN
@@ -3710,6 +3711,74 @@ sub mailtoLinkSimple
     }
     return "<a href=\"mailto\:$theMailtoString\">$theLinkText</a>";
 }
+
+=pod
+
+---++ sub getFormField ( $web, $topic, $args )
+
+Handles %FORMFIELD{}% tags in topics, used in handleInternalTags
+
+TODO: use Prefs subsystem to read form info, instead of rereadeing
+topic every time a form field value is requested.
+
+=cut
+
+sub getFormField
+{
+    my( $web, $topic, $args ) = @_;
+    
+    my ( $altText, $found, $format );
+    my ( $formField, $formTopic, $default );
+    
+    $formField = extractNameValuePair( $args );
+    $formTopic = extractNameValuePair( $args, "topic" );
+    $altText   = extractNameValuePair( $args, "alttext" );
+    $default   = extractNameValuePair( $args, "default" ) || undef;
+    $format    = extractNameValuePair( $args, "format" ) || '$value';
+
+    my $meta;
+    if ($formTopic) {
+       my $formTopicWeb;
+       if ($topic =~ /^([^.]+)\.([^.]+)/o) {
+	   ( $formTopicWeb, $topic ) = ( $1, $2 );
+       } else {
+	   $formTopicWeb = extractNameValuePair( $args, "web" );
+       }
+       $formTopicWeb = $web unless defined $formTopicWeb;
+       ( $meta, my $dummyText ) = &TWiki::Store::readTopic( $formTopicWeb, $formTopic );
+    } else {
+       ( $meta, my $dummyText ) = &TWiki::Store::readTopic( $web, $topic );
+    }
+
+    my $text = "";
+    my @fields = $meta->find( "FIELD" );
+    foreach my $field ( @fields ) {
+	my $title = $field->{"title"};
+	my $name = $field->{"name"};
+	if( $title eq $formField || $name eq $formField ) {
+	    my $value = $field->{"value"};
+	    if (length $value) {
+		$found = 1;
+		$text = $format;
+		$text =~ s/\$value/$value/g;
+	    } elsif (defined $altText) {
+		$found = 1;
+		$text = $altText;
+	    }
+	    last; #one hit suffices
+	}
+    }          
+    if (!$found) {
+	if (defined $default) {
+	    $text = $format;
+	    $text =~ s/\$value/$default/g;
+	} else {
+	    $text = $altText;
+	}
+    }
+    $text = getRenderedVersion( $text, $web );
+    return $text;
+} 
 
 
 # =========================
