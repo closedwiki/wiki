@@ -128,10 +128,11 @@ sub handleAdvertRIJS {
     my $ans = getTemplateAdvertRemoteInvocationJavaScript();
     $selectionString          = $param || "";
     $selectionString = $selectionStringPrefix . $selectionString . $selectionStringPostfix;
+    TWiki::Func::writeDebug("Advert selection string: '".$selectionString."'");
     $random        = "ad13xc123"; # TODO fix this
     $serverUrlBase = $phpAdsNewBase;
     
-    $ans =~ s/%WHAT%/$what/g;
+    $ans =~ s/%WHAT%/$selectionString/g;
     $ans =~ s/%RANDOM%/$random/g;
     $ans =~ s/%SERVERURLBASE%/$serverUrlBase/g;
     
