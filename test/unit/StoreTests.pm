@@ -92,9 +92,11 @@ sub saveTopic1 {
    my $doNotLogChanges = 0;
    my $doUnlock = 1;
 
-   $user = $twiki->{user} = $twiki->{users}->findUser($user)
-     unless (ref($user) eq "TWiki::User");
-;
+   unless ($user && ref($user) eq "TWiki::User") {
+       $user = $twiki->{users}->findUser($user);
+       $twiki->{user} = $user;
+   }
+
    $meta = new TWiki::Meta($twiki, $web, $topic) unless $meta;
    my $error =
      $twiki->{store}->saveTopic( $user, $web, $topic, $text,
