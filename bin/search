@@ -26,25 +26,25 @@ use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
 
-
-print "Content-type: text/html\n\n";
-
-$query= new CGI;
+use strict;
 
 &main();
 
 sub main
 {
+    my $query = new CGI;
+    print "Content-type: text/html\n\n";
+    
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
-    ( $topic, $webName ) = 
+    my( $topic, $webName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-        $tmpl= &TWiki::Store::readTemplate( "noweb" );
+        my $tmpl= &TWiki::Store::readTemplate( "noweb" );
         $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print $tmpl;
         return;
@@ -61,7 +61,7 @@ sub main
     # Note for those unused to Perlishness:
     # -------------------------------------
     # The pipeline at the end of this assignment splits the full query
-    # string on '&' and selects out the params that begin with 'web=',
+    # string on '&' or ';' and selects out the params that begin with 'web=',
     # replacing them with whatever is after that.  In the case of a
     # single list of webs passed as a string (say, from a text entry
     # field) it does more processing than it needs to to get the
@@ -70,11 +70,12 @@ sub main
     # join takes the results of the pipeline and strings them back
     # together, space delimited, which is exactly what &searchWikiWeb
     # needs.
+    # Note that mod_perl/cgi appears to use ';' as separator, whereas plain cgi uses '&'
 
     my $websStr       = join ' ',
                         grep { s/^web=(.*)$/$1/ }
-                        split('&', $query->query_string);
-
+                        split(/[&;]/, $query->query_string);
+                        
     my $search        = $query->param( "search" ) || "";
     my $scope         = $query->param( "scope" )  || "";
     my $order         = $query->param( "order" )  || "";
@@ -89,11 +90,12 @@ sub main
     my $bookView      = $query->param( "bookview" )  || ""; # PTh 20 Jul 2000
     my $renameView    = $query->param( "renameview" )  || "";
     my $showlock      = $query->param( "showlock" ) || "";
+    my $noempty       = $query->param( "noempty" ) || "";
 
     &TWiki::Search::searchWeb( "0",
         $websStr, $search, $scope, $order, $regex,
         $limit, $revSort, $caseSensitive, $nosummary,
         $nosearch, $noheader, $nototal, $bookView, $renameView,
-        $showlock
+        $showlock, $noempty
     );
 }
