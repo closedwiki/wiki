@@ -14,7 +14,7 @@ This test uses the =STRICTTAG= feature of the !TestFixturePlugin, that simply cr
 def="m\"no" pqr=" stu="vwx""
 </td><td>
 <!-- expected -->
- def="m\"no" pqr=" stu="
+def="m\"no" pqr=" stu="
 <!-- /expected -->
 </td><td>
 <!-- actual -->
@@ -25,11 +25,11 @@ def="m\"no" pqr=" stu="vwx""
 </td></tr>
 <tr><td>
 </td><td>
-<!-- expected -->
-
+<!-- expected BLANK -->
+<p />
 <!-- /expected -->
 </td><td>
-<!-- actual -->
+<!-- actual BLANK -->
 %STRICTTAG{  }%
 <!-- /actual -->
 </td><td>
@@ -42,11 +42,11 @@ bloody " hell
 "bloody \" hell"
 <!-- /expected -->
 </td><td>
-%STRICTTAG{ bloody " hell}%
-</td><td>
 <!-- actual -->
-%FRIENDLYTAG{ bloody " hell}%
+%STRICTTAG{ bloody " hell}%
 <!-- /actual -->
+</td><td>
+%FRIENDLYTAG{ bloody " hell}%
 </td></tr>
 <tr><td>
 "abc\" def="ghi" jkl" def="mno" pqr=" stu="\"vwx""
