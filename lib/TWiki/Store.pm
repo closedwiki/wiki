@@ -714,9 +714,21 @@ sub saveAttachment
 {
     my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $theTmpFilename,
         $forceDate) = @_;
-        
+
+    writeDebug("saveAttachment");
+    my %attachmentAtt = ( attachment => $attachment,
+                           tmpFilename => $theTmpFilename,
+                           comment => $theComment,
+                           user => $TWiki::userName
+                         ); # pass a hash of stuff using keys
+
     my $topicHandler = _getTopicHandler( $web, $topic, $attachment );
+    TWiki::Plugins::beforeAttachmentSaveHandler( \%attachmentAtt, $topic, $web );
+
+    $theComment = $attachmentAtt{comment};
     my $error = $topicHandler->addRevision( $theTmpFilename, $theComment, $TWiki::userName );
+    TWiki::Plugins::afterAttachmentSaveHandler( \%attachmentAtt, $topic, $web, $error );
+
     $topicHandler->setLock( ! $doUnlock );
     
     return $error;

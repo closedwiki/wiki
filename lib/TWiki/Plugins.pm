@@ -30,10 +30,10 @@ package TWiki::Plugins;
 use vars qw(
         @activePluginWebs @activePluginTopics @instPlugins
         @registrableHandlers %registeredHandlers %onlyOnceHandlers
-	$VERSION
+	$VERSION $initialisationErrors
     );
 
-$VERSION = '1.021';
+$VERSION = '1.022';
 
 @registrableHandlers = (           #                                         VERSION:
         'earlyInitPlugin',         # ( )                                     1.020
@@ -49,6 +49,8 @@ $VERSION = '1.021';
         'afterEditHandler',        # ( $text, $topic, $web )                 1.010
         'beforeSaveHandler',       # ( $text, $topic, $web )                 1.010
         'afterSaveHandler',        # ( $text, $topic, $web, $errors )        1.020
+        'beforeAttachmentSaveHandler',   # ( $text, $topic, $web )           1.022
+        'afterAttachmentSaveHandler',    # ( $text, $topic, $web,$error )    1.022
         'writeHeaderHandler',      # ( $query )                              1.010
         'redirectCgiQueryHandler', # ( $query, $url )                        1.010
         'getSessionValueHandler',  # ( $key )                                1.010
@@ -110,6 +112,20 @@ sub registerHandler
 # =========================
 =pod
 
+---++ sub initialisationError 
+
+Internal routine called every time a plugin fails to laod
+
+=cut
+
+sub initialisationError 
+{
+   my ($error) = @_;
+   $initialisationErrors .= $error."\n";
+   &TWiki::writeWarning($error);
+}
+
+=pod
 ---++ sub registerPlugin (  $plugin, $topic, $web, $user, $theLoginName, $theUrl, $thePathInfo  )
 
 Not yet documented.
@@ -154,7 +170,7 @@ sub registerPlugin
             $installWeb = $web;
         } else {
             # not found
-            &TWiki::writeWarning( "Plugins: couldn't register $plugin, no plugin topic" );
+            initialisationError( "Plugins: couldn't register $plugin, no plugin topic" );
             return;
         }
     }
@@ -163,7 +179,7 @@ sub registerPlugin
     if ( $plugin =~ m/^([A-Za-z0-9_]+Plugin)$/ ) {
         $plugin = $1; 
     } else {
-        # invalid topic name for plugin
+        initialisationError("$plugin - invalid topic name for plugin");
         return;
     }
 
@@ -171,7 +187,7 @@ sub registerPlugin
 
     eval "use $p;";
     if ($@) {
-	TWiki::writeWarning("Plugin \"$p\" could not be loaded by Perl.  Errors were:\n----\n$@----");
+	initialisationError("Plugin \"$p\" could not be loaded by Perl.  Errors were:\n----\n$@----");
 	return;
     }
     
@@ -191,6 +207,7 @@ sub registerPlugin
     $sub = $p.'::initPlugin';
     # we register a plugin ONLY if it defines initPlugin AND it returns true 
     if( ! defined( &$sub ) ) {
+        initialisationError("Plugin $p iniPlugin did not return true");
         return;
     }
     # read plugin preferences before calling initPlugin
@@ -328,6 +345,40 @@ sub initialize2
 # =========================
 =pod
 
+
+--++ sub handleFailedPlugins ()
+
+%FAILEDPLUGINS reports reasons why plugins failed to load
+
+=cut
+
+sub handleFailedPlugins
+{
+   my $text;
+
+   $text .= "---++ Plugins defined\n";
+
+   foreach my $plugin (@instPlugins) {
+      $text .= "   * $plugin\n";
+   }
+
+   $text.="\n\n";
+
+   foreach my $handler (@registrableHandlers) {
+      $text .= "| $handler |";
+      $text .= join "<br>", @{$registeredHandlers{$handler}}; 
+      $text .= "|\n";
+   }
+
+
+   $text .="<br>\n---++ Errors\n<br><verbatim>".$initialisationErrors."</verbatim>";
+
+
+
+   return $text;
+}
+
+=pod
 ---++ sub handlePluginDescription ()
 
 Not yet documented.
@@ -429,6 +480,7 @@ sub commonTagsHandler
     &applyHandlers;
     $_[0] =~ s/%PLUGINDESCRIPTIONS%/&handlePluginDescription()/geo;
     $_[0] =~ s/%ACTIVATEDPLUGINS%/&handleActivatedPlugins()/geo;
+    $_[0] =~ s/%FAILEDPLUGINS%/&handleFailedPlugins()/geo;
 }
 
 # =========================
@@ -550,7 +602,13 @@ sub beforeSaveHandler
     &applyHandlers;
 }
 
-### RafaelAlvarez 2004-01-13 
+=pod
+---++ sub afterSaveHandler ()
+
+Not yet documented.
+
+=cut
+
 sub afterSaveHandler
 {
 # Called by TWiki::Store::saveTopic after the save action
@@ -558,7 +616,38 @@ sub afterSaveHandler
     unshift @_, ( 'afterSaveHandler' );
     &applyHandlers;
 }
-### RafaelAlvarez 2004-01-13 
+
+=pod
+---++ sub beforeAttachmentSaveHandler ()
+
+Not yet documented.
+
+=cut
+
+sub beforeAttachmentSaveHandler
+{
+    # Called by TWiki::Store::saveAttachment before the save action
+#    my ( $theText, $theTopic, $theWeb ) = @_;
+    unshift @_, ( 'beforeAttachmentSaveHandler' );
+    &applyHandlers;
+}
+
+=pod
+---++ sub afterAttachmentSaveHandler ()
+
+Not yet documented.
+
+=cut
+
+sub afterAttachmentSaveHandler
+{
+# Called by TWiki::Store::saveAttachment after the save action
+#    my ( $theText, $theTopic, $theWeb ) = @_;
+    unshift @_, ( 'afterAttachmentSaveHandler' );
+    &applyHandlers;
+}
+
+
 # =========================
 =pod
 
