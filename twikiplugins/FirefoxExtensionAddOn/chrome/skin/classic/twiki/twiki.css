@@ -1,0 +1,59 @@
+/* icon menus */
+.icon-twiki16 {
+  list-style-image: url("chrome://twiki/skin/icon_twiki.png");
+}
+
+#context-forcedlink {
+  list-style-image: url("chrome://twiki/skin/icon_forcedlink.png");
+}
+#context-bold {
+  list-style-image: url("chrome://twiki/skin/icon_bold.png");
+}
+#context-italic {
+  list-style-image: url("chrome://twiki/skin/icon_italic.png");
+}
+#context-bolditalic {
+  list-style-image: url("chrome://twiki/skin/icon_bolditalic.png");
+}
+#context-underline {
+  list-style-image: url("chrome://twiki/skin/icon_underline.png");
+}
+#context-strike {
+  list-style-image: url("chrome://twiki/skin/icon_strike.png");
+}
+#context-table {
+  list-style-image: url("chrome://twiki/skin/icon_table.png");
+}
+#context-image {
+  list-style-image: url("chrome://twiki/skin/icon_image.png");
+}
+#context-signature {
+  list-style-image: url("chrome://twiki/skin/icon_signature.png");
+}
+#context-horline {
+  list-style-image: url("chrome://twiki/skin/icon_line.png");
+}
+#context-weblink {
+  list-style-image: url("chrome://twiki/skin/icon_weblink.png");
+}
+#context-indentation-more {
+  list-style-image: url("chrome://twiki/skin/icon_indentation_more.png");
+}
+#context-indentation-less {
+  list-style-image: url("chrome://twiki/skin/icon_indentation_less.png");
+}
+#context-list-simple {
+  list-style-image: url("chrome://twiki/skin/icon_list_simple.png");
+}
+#context-list-numbered {
+  list-style-image: url("chrome://twiki/skin/icon_list_numbered.png");
+}
+#context-list-remove {
+  list-style-image: url("chrome://twiki/skin/icon_list_remove.png");
+}
+#context-paragraph-increment {
+  list-style-image: url("chrome://twiki/skin/icon_paragraph_increment.png");
+}
+#context-paragraph-decrement {
+  list-style-image: url("chrome://twiki/skin/icon_paragraph_decrement.png");
+}

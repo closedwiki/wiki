@@ -1,0 +1,165 @@
+<!ENTITY twiki.homepage "Homepage">
+<!ENTITY twiki.recentchanges "Recent changes">
+<!ENTITY twiki.randompage "Random page">
+<!ENTITY twiki.watchlist "Watchlist">
+<!ENTITY twiki.user "User">
+<!ENTITY twiki.usertalk "User talk">
+<!ENTITY twiki.preferences "Preferences">
+<!ENTITY twiki.contributions "Contributions">
+
+<!ENTITY twiki.toolbar "TWiki">
+<!ENTITY twiki.toolbar.menu "Toolbar">
+<!ENTITY twiki.toolbar.homepage "Homepage">
+<!ENTITY twiki.toolbar.options "Options">
+
+<!-- character formatting -->
+<!ENTITY twiki.forcedlink "Forced link">
+<!ENTITY twiki.forcedlink.accesskey "L">
+<!ENTITY twiki.bold "Bold">
+<!ENTITY twiki.bold.accesskey "B">
+<!ENTITY twiki.italic "Italic">
+<!ENTITY twiki.italic.accesskey "I">
+<!ENTITY twiki.bolditalic "Bold and italic">
+<!ENTITY twiki.bolditalic.accesskey "c">
+<!ENTITY twiki.format.menu "Formatting">
+<!ENTITY twiki.format.accesskey "F">
+<!ENTITY twiki.underline "Underlined">
+<!ENTITY twiki.underline.accesskey "U">
+<!ENTITY twiki.strike "Strike through">
+<!ENTITY twiki.strike.accesskey "S">
+<!ENTITY twiki.small "Small">
+<!ENTITY twiki.small.accesskey "a">
+<!ENTITY twiki.fixed "Fixed">
+<!ENTITY twiki.fixed.accesskey "C">
+<!ENTITY twiki.pre "Preformatted">
+<!ENTITY twiki.pre.accesskey "P">
+<!ENTITY twiki.verbatim "Verbatim">
+<!ENTITY twiki.verbatim.accesskey "V">
+<!ENTITY twiki.bold.fixed "Bold fixed">
+<!ENTITY twiki.bold.fixed.accesskey "T">
+
+<!-- paragraphs -->
+<!ENTITY twiki.paragraph.menu "Paragraph">
+<!ENTITY twiki.paragraph.accesskey "P">
+<!ENTITY twiki.paragraph.level1 "---+ Level 1 header">
+<!ENTITY twiki.paragraph.level1.accesskey "1">
+<!ENTITY twiki.paragraph.level2 "---++ Level 2 header">
+<!ENTITY twiki.paragraph.level2.accesskey "2">
+<!ENTITY twiki.paragraph.level3 "---+++ Level 3 header">
+<!ENTITY twiki.paragraph.level3.accesskey "3">
+<!ENTITY twiki.paragraph.inclevel "Demote header">
+<!ENTITY twiki.paragraph.inclevel.accesskey "D">
+<!ENTITY twiki.paragraph.declevel "Promote header">
+<!ENTITY twiki.paragraph.declevel.accesskey "I">
+
+<!ENTITY twiki.indentation.more "Increase indentation">
+<!ENTITY twiki.indentation.more.accesskey "n">
+<!ENTITY twiki.indentation.less "Decrease indentation">
+<!ENTITY twiki.indentation.less.accesskey "c">
+
+<!ENTITY twiki.template.menu "Templates">
+<!ENTITY twiki.template.accesskey "p">
+<!ENTITY twiki.template.toc "Table of contents">
+<!ENTITY twiki.template.notoc "No table of contents">
+
+<!ENTITY twiki.list.menu "List">
+<!ENTITY twiki.list.accesskey "L">
+<!ENTITY twiki.list.simple "Bulleted">
+<!ENTITY twiki.list.simple.accesskey "B">
+<!ENTITY twiki.list.numbered "Numbered">
+<!ENTITY twiki.list.numbered.accesskey "N">
+<!ENTITY twiki.list.definition "Definition">
+<!ENTITY twiki.list.definition.accesskey "D">
+<!ENTITY twiki.list.remove "Remove">
+<!ENTITY twiki.list.remove.accesskey "R">
+
+<!-- other complex elements -->
+<!ENTITY twiki.table "Table">
+<!ENTITY twiki.table.accesskey "T">
+<!ENTITY twiki.image "Image">
+<!ENTITY twiki.image.accesskey "m">
+<!ENTITY twiki.signature "Signature">
+<!ENTITY twiki.signature.accesskey "g">
+<!ENTITY twiki.horline "Horizontal line">
+<!ENTITY twiki.horline.accesskey "H">
+
+<!-- special characters -->
+<!ENTITY twiki.specialchars.menu "Special characters">
+<!ENTITY twiki.specialchars.accesskey "S">
+<!ENTITY twiki.quotations "Quotation marks">
+<!ENTITY twiki.super "Super">
+<!ENTITY twiki.nbsp "Nonbreaking space">
+<!ENTITY twiki.dash "&#8211; dash">
+<!ENTITY twiki.dagger "&#8224; dagger">
+<!ENTITY twiki.euro "&#8364; Euro">
+<!ENTITY twiki.times "&#215; multiplication">
+<!ENTITY twiki.middot "&#183; middot">
+
+<!ENTITY twiki.specialchar.grave "grave">
+<!ENTITY twiki.specialchar.acute "acute">
+<!ENTITY twiki.specialchar.circumflex "circumflex">
+<!ENTITY twiki.specialchar.tilde "tilde">
+<!ENTITY twiki.specialchar.ring "ring">
+<!ENTITY twiki.specialchar.umlaut "diaresis">
+<!ENTITY twiki.specialchar.macron "macron">
+<!ENTITY twiki.specialchar.breve "breve">
+
+<!-- table creation dialog -->
+<!ENTITY twiki.table.title "Insert table">
+<!ENTITY twiki.table.basic "Size">
+<!ENTITY twiki.table.rows "Rows">
+<!ENTITY twiki.table.columns "Columns">
+<!ENTITY twiki.table.content "Default content">
+<!ENTITY twiki.table.options "Options (only available with TablePlugin)">
+<!ENTITY twiki.table.usePlugin "Use TablePlugin">
+<!ENTITY twiki.table.border "Visible border">
+<!ENTITY twiki.table.heading "Emphasized title row">
+<!ENTITY twiki.table.color "Background color">
+<!ENTITY twiki.table.color.select "Select">
+<!ENTITY twiki.table.caption "Caption">
+
+<!-- image creation dialog -->
+<!ENTITY twiki.image.title "Insert image">
+<!ENTITY twiki.image.file "File name">
+<!ENTITY twiki.image.description "Description">
+<!ENTITY twiki.image.format "Format">
+<!ENTITY twiki.image.format.thumb "Thumbnail with standard size">
+<!ENTITY twiki.image.format.thumbsized "Thumbnail with selected size">
+<!ENTITY twiki.image.format.framed "Full size framed">
+<!ENTITY twiki.image.format.full "Full size">
+<!ENTITY twiki.image.format.pixels "Pixels">
+
+<!ENTITY twiki.alignment "Alignment">
+<!ENTITY twiki.alignment.left "Left">
+<!ENTITY twiki.alignment.center "Center">
+<!ENTITY twiki.alignment.right "Right">
+<!ENTITY twiki.alignment.none "None">
+
+<!-- forced link creation dialog -->
+<!ENTITY twiki.link.title "Insert forced link">
+<!ENTITY twiki.link.target "Target">
+<!ENTITY twiki.link.label "Visible text (optional)">
+
+<!-- extension options -->
+<!ENTITY twiki.settings.window "TWiki options">
+<!ENTITY twiki.settings.context "twiki.settings.context;">
+<!ENTITY twiki.activation.title "Show TWiki menu">
+<!ENTITY twiki.activation.always "Always">
+<!ENTITY twiki.activation.conditional "Only if URL contains">
+<!ENTITY twiki.settings.user "User options">
+<!ENTITY twiki.settings.locale "Home TWiki">
+<!ENTITY twiki.settings.username "Username">
+
+<!-- shortcut keys; not used if key is empty string -->
+<!ENTITY twiki.modifiers.bold "accel shift">
+<!ENTITY twiki.key.bold "B">
+<!ENTITY twiki.modifiers.italic "accel shift">
+<!ENTITY twiki.key.italic "I">
+<!ENTITY twiki.modifiers.forcedlink "accel shift">
+<!ENTITY twiki.key.forcedlink "L">
+<!ENTITY twiki.modifiers.table "accel shift">
+<!ENTITY twiki.key.table "T">
+<!ENTITY twiki.modifiers.image "accel shift">
+<!ENTITY twiki.key.image "M">
+<!ENTITY twiki.modifiers.signature "accel shift">
+<!ENTITY twiki.key.signature "Q">
