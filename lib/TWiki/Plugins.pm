@@ -35,30 +35,30 @@ use vars qw(
 
 $VERSION = '1.024';
 
-@registrableHandlers = (           #                                         VERSION:
-        'earlyInitPlugin',         # ( )                                     1.020
-        'initPlugin',              # ( $topic, $web, $user, $installWeb )    1.000
-        'initializeUserHandler',   # ( $loginName, $url, $pathInfo )         1.010
-        'registrationHandler',     # ( $web, $wikiName, $loginName )         1.010
-        'beforeCommonTagsHandler', # ( $text, $topic, $web )                 1.024
-        'commonTagsHandler',       # ( $text, $topic, $web )                 1.000
-        'afterCommonTagsHandler',  # ( $text, $topic, $web )                 1.024
-        'startRenderingHandler',   # ( $text, $web )                         1.000
-        'outsidePREHandler',       # ( $text )                               1.000
-        'insidePREHandler',        # ( $text )                               1.000
-        'endRenderingHandler',     # ( $text )                               1.000
-        'beforeEditHandler',       # ( $text, $topic, $web )                 1.010
-        'afterEditHandler',        # ( $text, $topic, $web )                 1.010
-        'beforeSaveHandler',       # ( $text, $topic, $web )                 1.010
-        'afterSaveHandler',        # ( $text, $topic, $web, $errors )        1.020
-        'beforeAttachmentSaveHandler', # ( $attachmentAttrHash, $topic, $web )  1.022
-        'afterAttachmentSaveHandler',  # ( $attachmentAttrHash, $topic, $web, $error )   1.022
-        'writeHeaderHandler',      # ( $query )                              1.010
-        'redirectCgiQueryHandler', # ( $query, $url )                        1.010
-        'getSessionValueHandler',  # ( $key )                                1.010
-        'setSessionValueHandler',  # ( $key, $value )                        1.010
+@registrableHandlers = (                 #                                      VERSION:
+        'earlyInitPlugin',               # ( )                                   1.020
+        'initPlugin',                    # ( $topic, $web, $user, $installWeb )  1.000
+        'initializeUserHandler',         # ( $loginName, $url, $pathInfo )       1.010
+        'registrationHandler',           # ( $web, $wikiName, $loginName )       1.010
+        'beforeCommonTagsHandler',       # ( $text, $topic, $web )               1.024
+        'commonTagsHandler',             # ( $text, $topic, $web )               1.000
+        'afterCommonTagsHandler',        # ( $text, $topic, $web )               1.024
+        'startRenderingHandler',         # ( $text, $web )                       1.000
+        'outsidePREHandler',             # ( $text )                             1.000
+        'insidePREHandler',              # ( $text )                             1.000
+        'endRenderingHandler',           # ( $text )                             1.000
+        'beforeEditHandler',             # ( $text, $topic, $web )               1.010
+        'afterEditHandler',              # ( $text, $topic, $web )               1.010
+        'beforeSaveHandler',             # ( $text, $topic, $web )               1.010
+        'afterSaveHandler',              # ( $text, $topic, $web, $errors )      1.020
+        'beforeAttachmentSaveHandler',   # ( $attrHash, $topic, $web )           1.022
+        'afterAttachmentSaveHandler',    # ( $attrHash, $topic, $web, $error )   1.022
+        'writeHeaderHandler',            # ( $query )                            1.010
+        'redirectCgiQueryHandler',       # ( $query, $url )                      1.010
+        'getSessionValueHandler',        # ( $key )                              1.010
+        'setSessionValueHandler',        # ( $key, $value )                      1.010
         'renderFormFieldForEditHandler', # ( $name, $type, $size, $value, $attributes, $output )
-        'renderWikiWordHandler',   # text                                    2.023
+        'renderWikiWordHandler',         # ( text )                              2.023
     );
     
 %onlyOnceHandlers = ( 'initializeUserHandler'   => 1,
@@ -653,9 +653,9 @@ sub afterSaveHandler
 }
 
 =pod
----++ sub beforeAttachmentSaveHandler  ( $attachmentAttrHash, $topic, $web ) 
+---++ sub beforeAttachmentSaveHandler  ( $attrHash, $topic, $web ) 
 | Description: | This code provides plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other plugins. |
-| Parameters:  | |
+| Parameters:  | FIXME: Document $attrHash!! |
 | Return:      | |
 
 =cut
@@ -663,7 +663,7 @@ sub afterSaveHandler
 sub beforeAttachmentSaveHandler
 {
     # Called by TWiki::Store::saveAttachment before the save action
-#    my ( $theText, $theTopic, $theWeb ) = @_;
+#    my ( $theAttrHash, $theTopic, $theWeb ) = @_;
     unshift @_, ( 'beforeAttachmentSaveHandler' );
     &applyHandlers;
 }
