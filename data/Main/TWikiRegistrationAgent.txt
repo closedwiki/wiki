@@ -1,0 +1,6 @@
+This is a login used by TWiki when it registers new users. This user has special access to write to %WIKIUSERSTOPIC%, and does not need an entry in the password system.
+
+__Related topics__
+	* %WIKIUSERSTOPIC%
+	* %TWIKIWEB%.TWikiRegistration
+

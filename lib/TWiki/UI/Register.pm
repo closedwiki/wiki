@@ -40,6 +40,8 @@ use TWiki::UI::OopsException;
 use vars qw( $unitTestMode );
 # set unitTestMode to 1 for testing
 
+my $twikiRegistrationAgent = 'TWikiRegistrationAgent';
+
 =pod
 
 ---++ register_cgi( $session )
@@ -52,8 +54,8 @@ sub register_cgi {
 
     my $tempUserDir = $TWiki::cfg{PubDir}."/TWiki/RegistrationApprovals";
     # SMELL hacked name, and stores in binary format!
-    my $sendActivationCode = 1;
-    my $needApproval = 1;
+    my $needVerification = 1;
+    my $needApproval = 0;
 
     # Register -> Verify -> Approve -> Finish
 
@@ -62,22 +64,24 @@ sub register_cgi {
     my $action = $session->{cgiQuery}->param('action');
 
     if ($action eq 'register') {
-        register( $session, $sendActivationCode, $tempUserDir );
-        if (!$sendActivationCode) {
-            throw Error::Simple("Need to call verify automatically");
+        register( $session );
+        if ($needVerification) {
+	  _requireVerification($session, $tempUserDir);
+	} else {
+	  finish($session);
         }
-    } elsif ($action eq 'approve') {
-        finish($session, $tempUserDir, 0 );
     }
     elsif ($action eq 'verify') {
-        verifyEmailAddress( $session, $tempUserDir, $needApproval );
-        #	if (! $needApproval) {
-        #	    throw Error::Simple("Need to call approve automatically");
-        #	}
+        verifyEmailAddress( $session, $tempUserDir );
+        if ($needApproval) {
+            throw Error::Simple("Approval code has not been written!");
+        }
         finish( $session, $tempUserDir, $session->{cgiQuery}->param('code'));
 
-    } elsif ($action eq 'resetPassword') { #TODO
-        resetPassword( $session );
+    } elsif ($action eq 'resetPassword') {
+        resetPassword( $session ); #SMELL - is this still called here, or only by passwd? 
+    } elsif ($action eq 'approve') {
+        finish($session, $tempUserDir, 0 );
     } else {
         # SMELL: this should be an OopsException
         throw Error::Simple("invalid action ($action) in register");
@@ -278,7 +282,7 @@ sub _registerSingleBulkUser {
 
     my $userTopic =
       $session->{users}->addUserToTWikiUsersTopic( $user,
-                                                   $session->{user} );
+						   $session->{user} );
 
     if ($TWiki::doEmailUserDetails) {
         # _sendEmail(session=>$session, \%data, template => "registernotifybulk"); # If you want it, write it.
@@ -332,16 +336,11 @@ sub _makeFormFieldOrderMatch {
 ---++ RegisterDotPm::register
 This is called through: TWikiRegistration -> RegisterCgiScript -> here
    1 gets rows and fields as an InTopicTable using IntopicTable::populateEntries()
-   2 calls _validateRegistration()
-   3 generates a activation password
-   4 calls UnregisteredUser::putRegDetailsByCode(activation password)
-   5 sends them a "registerconfirm" email.
-   5 redirects browser to "regconfirm"
-
+   2 calls _validateRegistration() to ensure required fields correct
 =cut
 
 sub register {
-    my( $session, $sendActivationCode, $tmpUserDir ) = @_;
+    my( $session ) = @_;
 
     my $query = $session->{cgiQuery};
 
@@ -358,6 +357,28 @@ sub register {
     $data{WikiName} = TWiki::Sandbox::untaintUnchecked($data{WikiName});
 
     _validateRegistration( $session, \%data, $query, $topic );
+
+}
+
+=pod
+---++ RegisterDotPm::_requireVerification
+   1 generates a activation password
+   2 calls UnregisteredUser::putRegDetailsByCode(activation password)
+   3 sends them a "registerconfirm" email.
+   4 redirects browser to "regconfirm"
+
+=cut
+
+sub _requireVerification {
+    my ($session, $tmpUserDir) = @_;
+
+    my $query = $session->{cgiQuery};
+    my %data;    # this is persisted in the storable.
+    my $topic = $session->{topicName};
+    my $web = $session->{webName};
+
+    %data = IntopicTable::populateEntries( $query, $query->param() );
+    $data{webName} = $web;
 
     $data{VerificationCode} =
       "$data{WikiName}." . TWiki::User::randomPassword();
@@ -532,29 +553,21 @@ sub changePassword {
 ---++ RegisterDotPm::verifyEmailAddress
 This is called: on receipt of the activation password -> RegisterCgiScript -> here
    1 calls UnregisteredUser::reloadUserContext(activation password)
-   2 redirects to an oops if appropriate
+   2 throws oops if appropriate
    3 calls emailRegistrationConfirmations
    4 still calls "oopssendmailerr" if a problem, but this is not done uniformly 
 
 =cut
 
 sub verifyEmailAddress {
-    my( $session, $tempUserDir, $needApproval ) = @_;
+    my( $session, $tempUserDir ) = @_;
 
     my $code = $session->{cgiQuery}->param('code');
     UnregisteredUser::setDir($tempUserDir);
     my %data = UnregisteredUser::reloadUserContext( $code );
 
-    # TODO: refactor with BlockB 
     if (! exists $data{WikiName}) {
-        my $err = UnregisteredUser::getLastError();
-        if ($err =~ /oops/) {
-            #SMELL - what web? We've not initialised because no wikiname
-            throw TWiki::UI::OopsException("", "TWikiRegistration",
-                                           $err, $code );
-        } else {
-            throw Error::Simple( "verifyEmailAddress:". $err );
-        }
+      throw Error::Simple( "verifyEmailAddress: no email address!");
     }
 
     my $topic = $session->{topicName};
@@ -570,8 +583,7 @@ sub verifyEmailAddress {
 ---++ finish
 
 Presently this is called in RegisterCgiScript directly after a call to verify. The separation is intended for the RegistrationApprovals functionality
-   1 calls UnregisteredUser::reloadUserContext
-   2 redirects to an oops if appropriate
+   1 calls UnregisteredUser::reloadUserContext (throws oops if appropriate)
    3 calls newUserFromTemplate()
    4 if using the htpasswdFormatFamily, calls _addUserToPasswordSystem
    5 calls the misnamed RegistrationHandler to set cookies
@@ -585,7 +597,7 @@ these two are separate in here to ease the implementation of administrator appro
 =cut
 
 sub finish {
-    my( $session, $tempUserDir, $approve ) = @_;
+    my( $session, $tempUserDir) = @_;
     my %data;
     my $dataRef;
 
@@ -597,16 +609,8 @@ sub finish {
     %data = UnregisteredUser::reloadUserContext($code);
     UnregisteredUser::deleteUserContext($code);
 
-    # TODO: refactor with BlockB 
     if (! exists $data{WikiName}) {
-        my $err = UnregisteredUser::getLastError();
-        if ($err =~ /oops/) {
-            #SMELL - what web? We've not initialised because no wikiname
-            throw TWiki::UI::OopsException("", "TWikiRegistration",
-                                           $err, $code );
-        } else {
-            throw Error::Simple( "verifyEmailAddress:". $err );
-        }
+      throw Error::Simple( "No verifyEmailAddress - no WikiName after reload");
     }
 
     # create user topic if it does not exist
@@ -633,9 +637,13 @@ sub finish {
     # add user to TWikiUsers topic
     my $user = $session->{users}->findUser( $data{LoginName},
                                             $data{WikiName} );
-    my $userTopic =
+
+    my $agent = $session->{users}->findUser( $twikiRegistrationAgent,
+					     $twikiRegistrationAgent);
+
+    my $userTopic = 
       $session->{users}->addUserToTWikiUsersTopic( $user,
-                                                   $session->{user} );
+                                                   $agent);
 
     # write log entry
     if ($TWiki::cfg{Log}{register}) {
@@ -1047,22 +1055,11 @@ use Storable;    # SMELL - put into a topic readable by admins,  and not binary!
 use Data::Dumper;
 my $tmpDir; # Storage for unregistered user records
 my $error; # 
+use File::Path qw( mkpath );
 
 #SMELL - writes directly to filespace, should go via attachments.
 
 =pod
-
----++ getLastError
-Get the last error that occured after reloadUserContext
-
-=cut
-
-sub getLastError {
-    return $error;
-}
-
-=pod
-
 ---++ putRegDetailsByCode 
 | In | reference to the users data structure |
 | Out | none |
@@ -1078,6 +1075,7 @@ sub putRegDetailsByCode {
 
     # write tmpuser file
     my $file = _verificationCodeFilename($data{VerificationCode} );
+    $file = TWiki::Sandbox::untaintUnchecked($file);
 
     store( $dataRef, $file ) or throw Error::Simple( $! );
 }
@@ -1113,7 +1111,7 @@ sub setDir {
     my ($dir) = @_;
     $tmpDir = $dir;
     unless (-d $tmpDir) {
-        mkdir ($tmpDir) || warn "Cannot make the directory $dir";
+        mkpath ($tmpDir) ||       throw Error::Simple("Can't make $tmpDir");
     }
 }
 
@@ -1129,16 +1127,19 @@ Returns () if not found.
 sub reloadUserContext {
     my ($code) = @_;
 
-
-    unless (-f _verificationCodeFilename($code)){
-        $error = "oopsregcode";
-        return ();
+    my $verificationFilename = _verificationCodeFilename($code);
+    unless (-f $verificationFilename){
+        throw TWiki::UI::OopsException( undef, undef, "regcode",
+					"$code has no file '$verificationFilename'");
     }
 
     my %data = %{ _getRegDetailsByCode($code) };
     $error = _validateUserContext($code);
 
-    return () if $error;
+    if ($error) {
+      throw TWiki::UI::OopsException( undef, undef, "regcode",
+				    "Problem with verification code: $error");
+    }
 
     #   $data{debug} = 1;
     #    ::dumpIfDebug(\%data, "reload check");

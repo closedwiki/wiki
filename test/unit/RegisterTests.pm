@@ -10,7 +10,7 @@ package RegisterTests;
                 #test_registerVerifyAndFinish
 
 #Uncomment to isolate 
-#our @TESTS = qw(test_bulkRegister);
+#our @TESTS = qw(test_UnregisteredUser);
 
 use base qw(Test::Unit::TestCase);
 BEGIN {
@@ -31,7 +31,7 @@ my $scriptUrl = "http://registertesttwiki.mrjc.com/twiki/bin";
 
 my $testUserWikiName = 'TestUser';
 my $testUserLoginName = 'testuser';
-my $testUserEmail = 'martian.cleaver@BCS.org.uk';
+my $testUserEmail = 'martin.cleaver@BCS.org.uk';
 
 my $adminLoginName = 'mrjcleaver';
 my $guestLoginName = 'guest';
@@ -440,7 +440,7 @@ my $dir;
 my %regSave;
 
 sub setupUnregistered {
-    $name = "MartianCleaver";
+    $name = "MartinCleaver";
     $code = "$name.ba";
     $dir = $tempUserDir;
 
@@ -448,8 +448,13 @@ sub setupUnregistered {
                 VerificationCode => $code,
                 WikiName => $name
                );
-    UnregisteredUser::setDir($dir);
+    UnregisteredUser::setDir("$dir/TWiki/RegistrationApprovals"); #mirrors real situation
 }
+
+=pod
+Create an incomplete registration, and try to finish it off.
+Once complete, try again - the second attempt at completion should fail.
+=cut
 
 sub test_UnregisteredUser {
     my $self = shift;
@@ -482,9 +487,9 @@ sub test_bulkRegister {
 
     my $testReg = <<'EOM';
 | FirstName | LastName | Email | WikiName | LoginName | CustomFieldThis | SomeOtherRandomField | WhateverYouLike |
-| Test | User | Martian.Cleaver@BCS.org.uk |  TestBulkUser1 | a | A | B | C |
-| Test | User2 | Martian.Cleaver@BCS.org.uk | TestBulkUser2 | b | A | B | C |
-| Test | User3 | Martian.Cleaver@BCS.org.uk | TestBulkUser3 | c | A | B | C |
+| Test | User | Martin.Cleaver@BCS.org.uk |  TestBulkUser1 | a | A | B | C |
+| Test | User2 | Martin.Cleaver@BCS.org.uk | TestBulkUser2 | b | A | B | C |
+| Test | User3 | Martin.Cleaver@BCS.org.uk | TestBulkUser3 | c | A | B | C |
 EOM
     
     my $regTopic = 'UnprocessedRegistrations2';
