@@ -1,0 +1,34 @@
+Common attributes parser object.
+
+---+ Summary of Contents
+Provides a simple and consistent interface for creation and management of lists of standard TWiki-syntax attribute value lists, as used in tags.
+
+---+ Detailed Documentation
+%$POD%
+
+---++ Settings
+	* Name of the perl package
+		* Set STUB = TWiki::Contrib::AttrsContrib
+
+---++ Installation Instructions
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content: 
+	| *File:* | *Description:* |
+%$MANIFEST%
+
+---++ Plugin Info
+
+|  Author: | TWiki:Main/CrawfordCurrie |
+|  Copyright &copy;: | 2001, Motorola Corp, All Rights Reserved" --> |
+|  License: | GPL |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Change History: | |
+|  14/08/04 | Separated out from SharedCode module |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main/CrawfordCurrie - %$DATE%
+
