@@ -25,7 +25,6 @@ use CGI::Carp qw( fatalsToBrowser );
 use CGI;
 use TWiki;
 use TWiki::UI::OopsException;
-use Data::Dumper;
 
 use constant ENABLEBM => 0;
 
@@ -72,6 +71,7 @@ sub run {
         if ( ENABLEBM ) {
             my $bm = $query->param( 'benchmark' );
             if ( $bm ) {
+                eval 'use Data::Dumper;';
                 open(OF, ">$bm") || throw Error::Simple( "Store failed" );
                 print OF Dumper(\$query, $pathInfo, $user, $url);
                 close(OF);
