@@ -120,7 +120,10 @@ use Cwd;
 { my $count = 0;
   %mon2num = map { $_ => $count++ } @isoMonth; }
 
+# The following are also initialized in initialize, here for cases where
+# initialize not called.
 $cgiQuery = 0;
+@publicWebList = ();
 
 # Header patterns based on '+++'. The '###' are reserved for numbered headers
 $headerPatternDa = '^---+(\++|\#+)\s+(.+)\s*$';       # '---++ Header', '---## Header'
@@ -144,7 +147,7 @@ sub initialize
     
     # Initialise vars here rather than at start of module, so compatible with modPerl
     @publicWebList = ();
-    %TWiki::Store::templateVars = ();
+    &TWiki::Store::initialize();
 
 
     # Make %ENV safer for CGI
@@ -555,6 +558,14 @@ sub setSessionValue
 {
 #   my( $key, $value ) = @_;
     return &TWiki::Plugins::setSessionValueHandler( @_ );
+}
+
+# ==========================
+sub getScriptName
+{
+    my $url = $cgiQuery->url();
+    $url =~ /^[^\:]*\:\/\/[^\/]*.*\/(.*)$/;
+    return $1;
 }
 
 # =========================
@@ -1722,7 +1733,7 @@ sub isWikiName
 # =========================
 sub getRenderedVersion
 {
-    my( $text, $theWeb ) = @_;
+    my( $text, $theWeb, $meta ) = @_;
     my( $head, $result, $insidePRE, $insideVERBATIM, $insideTABLE, $noAutoLink, $blockquote );
 
     # FIXME: Get $theTopic from parameter to handle [[#anchor]] correctly
@@ -1754,7 +1765,7 @@ sub getRenderedVersion
     }
 
     # Wiki Plugin Hook
-    &TWiki::Plugins::startRenderingHandler( $text, $theWeb );
+    &TWiki::Plugins::startRenderingHandler( $text, $theWeb, $meta );
 
     foreach( split( /\n/, $text ) ) {
 
