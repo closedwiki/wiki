@@ -25,7 +25,9 @@ use TWiki::Net;
 
 if( $TWiki::OS eq "WINDOWS" ) {
     require MIME::Base64;
+    import MIME::Base64 qw( encode_base64 );
     require Digest::SHA1;
+    import Digest::SHA1 qw( sha1 );
 }
 
 $query = new CGI;
@@ -196,11 +198,18 @@ sub main
 sub htpasswdGeneratePasswd
 {
     my ( $user, $passwd ) = @_;
-    # by David Levy, Internet Channel, 1997
+
+    # Original code by David Levy, Internet Channel, 1997,
     # found at http://world.inch.com/Scripts/htpasswd.pl.html
+
+    # Generate SHA1 passwords on Windows - like 'htpasswd -s'
     if ( $TWiki::OS eq "WINDOWS" ) {
-        return $user . ':{SHA}' . MIME::Base64::encode_base64( Digest::SHA1::sha1( $passwd ) );
+	my $userEntry;
+        $userEntry = $user . ':{SHA}' . encode_base64( sha1( $passwd ) );
+	chomp $userEntry;	# Chop unwanted newline
+	return $userEntry;
     }
+    # Use 'crypt' on all other platforms (assumed to be Unix/Linux)
     srand( $$|time );
     my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
     my $salt = $saltchars[ int( rand( $#saltchars+1 ) ) ];
@@ -219,9 +228,7 @@ sub htpasswdExistUser
 
     my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
 
-    # RD: Fix for Codev.ModPerlOnceRegex - don't use 'o' flag where variable
-    # is part of a pattern.
-    if( $text =~ /^${user}:/gm ) {
+    if( $text =~ /^${user}:/gm ) {	# mod_perl: don't use /o
         return "1";
     }
     return "";
@@ -234,6 +241,7 @@ sub htpasswdAddUser
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
     my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
+    TWiki::writeDebug "User entry is :$userEntry: before newline";
     $text .= "$userEntry\n";
     &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
 }
