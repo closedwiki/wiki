@@ -34,7 +34,7 @@
 
 %TMPL:DEF{"extranotes"}%
    * *Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without 
-     uploading a file by pressing "Change Properties"; see <a target="HiddenAttachment" onclick="return launchWindow('%TWIKIWEB%','HiddenAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/HiddenAttachment">HiddenAttachment</a>
+     uploading a file by pressing "Change Properties"; see <a target="HiddenAttachment" onclick="return launchWindow('%TWIKIWEB%','HiddenAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/HiddenAttachment" %NOFOLLOW%>HiddenAttachment</a>
    * *Change comment:* If you use _Change Properties_ to change a comment, the comment shown in 
      the topic will change, but the comment shown against the attachment history will be the 
      comment when the file was uploaded.
@@ -46,7 +46,7 @@
 
 %TMPL:DEF{"topicaction"}%<table class="twikiTopicAction">
 <tr class="twikiTopicActionSecondary">
-<td class="twikiCancelCol" colspan="3" style="text-align:right;"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move&nbsp;attachment...</a></td>
+<td class="twikiCancelCol" colspan="3" style="text-align:right;"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%" %NOFOLLOW%>Move&nbsp;attachment...</a></td>
 </tr>
 <tr class="twikiTopicAction">
 <td class="twikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>

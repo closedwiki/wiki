@@ -170,14 +170,17 @@ sub view {
     my( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote ) =
       $session->readOnlyMirrorWeb( $webName );
 
+    # is this view indexable by search engines?
+    my $indexableView = 1;
+
     if( $mirrorSiteName ) {
         # disable edit and attach
         # FIXME: won't work with non-default skins, see %EDITURL%
         $tmpl =~ s/%EDITTOPIC%/$mirrorLink | <strike>Edit<\/strike>/go;
         $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/goi;
         if( $topicExists ) {
-            # remove the NOINDEX meta tag
-            $tmpl =~ s/<meta name="robots"[^>]*>//goi;
+            # allow view to be indexed
+            $indexableView = 1;
         } else {
             $text = "";
         }
@@ -192,9 +195,7 @@ sub view {
         $tmpl =~ s/%REVTITLE%/\(r$rev\)/go;
         $tmpl =~ s/%REVARG%/&rev=$rev/go;
     } else {
-        # Remove the NOINDEX meta tag (for robots) from both Edit and 
-        # Create pages
-        $tmpl =~ s/<meta name="robots"[^>]*>//goi;
+        $indexableView = 1;
         my $editAction = $topicExists ? 'Edit' : 'Create';
         # Special case for 'view' to handle %EDITTOPIC% and Edit vs.
         # Create.
@@ -202,12 +203,18 @@ sub view {
         # suffixes '?t=NNNN' to ensure that every Edit link is unique,
         # fixing
         # Codev.RefreshEditPage bug relating to caching of Edit page.
-        $tmpl =~ s!%EDITTOPIC%!<a href=\"%EDITURL%\"><b>$editAction</b></a>!go;
+        $tmpl =~ s!%EDITTOPIC%!<a href=\"%EDITURL%\" $TWiki::cfg{NoFollow}><b>$editAction</b></a>!go;
 
         # FIXME: Implement ColasNahaboo's suggested %EDITLINK% along
         # same lines, within handleCommonTags
         $tmpl =~ s/%REVTITLE%//go;
         $tmpl =~ s/%REVARG%//go;
+    }
+
+    if( $indexableView && ! keys %{$query->Vars()} ) {
+        # it's an indexable view type and there are no parameters
+        # on the url. Remove the NOINDEX meta tag
+        $tmpl =~ s/<meta name="robots"[^>]*>//goi;
     }
 
     # SMELL: HUH? - TODO: why would you not show the revisions around
@@ -224,14 +231,18 @@ sub view {
         if( $i == $rev) {
             $revisions = "$revisions | r$i";
         } else {
-            $revisions = "$revisions | <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\">r$i</a>";
+            $revisions = "$revisions | <a href=\"".
+              $session->getScriptUrl( $webName, $topicName, "view" ) .
+                "?rev=$i\" $TWiki::cfg{NoFollow}>r$i</a>";
         }
         if( $i != 1 ) {
             if( $i == $breakRev ) {
                 $i = 1;
             } else {
                 $j = $i - 1;
-                $revisions = "$revisions | <a href=\"%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=$j\">&gt;</a>";
+                $revisions = "$revisions | <a href=\"".
+                  $session->getScriptUrl( $webName, $topicName, "rdiff").
+                    "?rev1=$i&amp;rev2=$j\" $TWiki::cfg{NoFollow}>&gt;</a>";
             }
         }
         $i = $i - 1;

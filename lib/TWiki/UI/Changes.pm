@@ -56,7 +56,7 @@ sub changes {
     my @changes = split( /\r?\n/, $changeData );
     unless( $query->param( 'minor' )) {
         @changes = grep { !/\tminor$/ } @changes;
-        $page .= "<b>Note:</b> This page is showing major changes only. To see all changes <a href='".$query->url() . "/$webName?minor=1'>click here</a>";
+        $page .= "<b>Note:</b> This page is showing major changes only. To see all changes <a href='".$query->url() . "/$webName?minor=1' $TWiki::cfg{NoFollow}>click here</a>";
     }
     my %done = ();
     foreach my $change ( reverse @changes ) {

@@ -168,7 +168,7 @@ sub statistics {
     if( !$session->{scripted} ) {
         $tmp = $TWiki::cfg{Stats}{TopicName};
         my $url = $session->getScriptUrl( $destWeb, $tmp, "view" );
-        _printMsg( "* Go back to <a href=\"$url\">$tmp</a> topic", $session );
+        _printMsg( "* Go back to <a href=\"$url\" $TWiki::cfg{NoFollow}>$tmp</a> topic", $session );
     }
     _printMsg( "End creating usage statistics", $session );
     print "</body></html>\n" unless( $session->{scripted} );

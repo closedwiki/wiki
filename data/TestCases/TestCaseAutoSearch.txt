@@ -11,14 +11,14 @@ Results dependent on templates used to render search results. Tests only make se
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText">Description: Automated search function tests. Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "pattern ...</div></div></div><div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a></div>
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText">This is a test fixture topic, used in TestCaseAutoSearch hit me with your rhythm stick hit me! hit me! schmerz ist gut, ich liebe dich hit me! hit me! hit me! includer ...</div></div></div>
 <div class="twikiSearchResultCount">Number of topics: <b>2</b></div>
@@ -56,14 +56,14 @@ Same as last test
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WebPreferences">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WebPreferences" rel='nofollow'>@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TWiki/WebPreferences"><b>WebPreferences</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">WillNorris</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/Main/WillNorris?topicparent=TestCases.TestCaseAutoSearch"><sup>?</sup></a></span>
+<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">WillNorris</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/Main/WillNorris?topicparent=TestCases.TestCaseAutoSearch" rel='nofollow'><sup>?</sup></a></span>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TWiki/WebPreferences">20 Nov 2004 - 18:14</a> - 2</div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TWiki/WebPreferences" rel='nofollow'>20 Nov 2004 - 18:14</a> - 2</div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div>
 <!-- /expected -->
@@ -80,14 +80,14 @@ Same as last test
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TWiki/WhatIsWikiWiki">@DATE - @TIME</a> - 4</div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TWiki/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a> - 4</div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div>
 <!-- /expected -->
@@ -104,7 +104,7 @@ Same as last test
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div>
 <!-- /expected -->
@@ -121,7 +121,7 @@ Same as last test
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div>
 <!-- /expected -->
@@ -166,21 +166,21 @@ Same as last test
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
@@ -188,7 +188,7 @@ Same as last test
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
@@ -196,7 +196,7 @@ Same as last test
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div>
 <!-- /expected -->
@@ -213,14 +213,14 @@ Same as last test
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div>
 <!-- /expected -->
@@ -237,14 +237,14 @@ Same as last test
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki">08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>08 Jan 2005 - 13:00</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div>
 <!-- /expected -->
@@ -261,7 +261,7 @@ Same as last test
 <div class="twikiRight twikiSRAuthor">
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/@WIKINAME">@WIKINAME</a>
 </div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch">@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a> - <span class="twikiNew"><b>NEW</b></span></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div>
 <!-- /expected -->

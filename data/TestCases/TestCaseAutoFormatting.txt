@@ -243,7 +243,7 @@ Note: noautolink tags will still be there, because they are not removed until im
 <p />
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/TWikiUsers">TWikiUsers</a>
 <p />
-<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">CompleteAndUtterNothing</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
+<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">CompleteAndUtterNothing</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting" rel='nofollow'><sup>?</sup></a></span>
 <p />
 <a class="twikiLink" href="%SCRIPTURL%/view/TestCases/LinkBox">LinkBox</a>
 <a class="twikiLink" href="%SCRIPTURL%/view/TestCases/LinkBox">LinkBoxs</a>
@@ -270,7 +270,7 @@ LinkBoxes
 </td></tr>
 <tr><td> Square Brackets</td><td>
 <!-- expected expand -->
-<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">wiki syntax</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
+<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">wiki syntax</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel='nofollow'><sup>?</sup></a></span>
 <p />
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/TWikiUsers">Main.TWiki users</a>
 <p />
@@ -289,7 +289,7 @@ escaped:
 </td></tr>
 <tr><td> Protocol Links</td><td>
 <!-- expected expand -->
-<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">syntax</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
+<span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">syntax</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel='nofollow'><sup>?</sup></a></span>
 <p />
 <a href="http://gnu.org" target="_top">GNU</a>
 <p />

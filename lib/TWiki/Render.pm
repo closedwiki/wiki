@@ -158,7 +158,7 @@ sub _renderMoved {
         if( $web eq $toWeb && $topic eq $toTopic ) {
             $putBack  = " - <a title=\"Click to move topic back to previous location, with option to change references.\"";
             $putBack .= " href=\"".$this->{session}->getScriptUrl($web, $topic, 'rename')."?newweb=$fromWeb&newtopic=$fromTopic&";
-            $putBack .= "confirm=on\">put it back</a>";
+            $putBack .= "confirm=on\" $TWiki::cfg{NoFollow}>put it back</a>";
         }
         $text = "<i><nop>$to moved from <nop>$from on $date by $by </i>$putBack";
     }
@@ -473,36 +473,33 @@ sub _renderExistingWikiWord {
     my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor) = @_;
     my $ans;
 
-
     if( $theAnchor ) {
-            my $anchor = $this->makeAnchorName( $theAnchor );
-            $ans = "<a class=\"twikiAnchorLink\" href=\"".
-	      $this->{session}->getScriptUrl($theWeb, $theTopic, 'view')."\#$anchor\""
-		  .  $this->_linkToolTipInfo( $theWeb, $theTopic )
-                  .  ">$theLinkText</a>";
-            return $ans;
+        my $anchor = $this->makeAnchorName( $theAnchor );
+        $ans = "<a class=\"twikiAnchorLink\" href=\"".
+	      $this->{session}->getScriptUrl($theWeb, $theTopic, 'view').
+            "\#$anchor\""
+              .  $this->_linkToolTipInfo( $theWeb, $theTopic )
+                .  ">$theLinkText</a>";
     } else {
-            $ans = "<a class=\"twikiLink\" href=\""
+        $ans = "<a class=\"twikiLink\" href=\""
 	      .	$this->{session}->getScriptUrl($theWeb, $theTopic, 'view') ."\""
-                  .  $this->_linkToolTipInfo( $theWeb, $theTopic )
-                  .  ">$theLinkText</a>";
-            return $ans;
+            .  $this->_linkToolTipInfo( $theWeb, $theTopic )
+              .  ">$theLinkText</a>";
     }
+    return $ans;
 }
 
 sub _renderNonExistingWikiWord {
     my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor) = @_;
     my $ans;
 
-        $ans .= "<span class=\"twikiNewLink\" style='background : $this->{NEWTOPICBGCOLOR};'>"
-              .  "<font color=\"$this->{NEWTOPICFONTCOLOR}\">$theLinkText</font>"
-              .  "<a href=\"".
-				$this->{session}->getScriptUrl($theWeb, $theTopic, 'edit')."?topicparent="
-                .$this->{session}->{webName}.".".$this->{session}->{topicName}."\">$this->{NEWLINKSYMBOL}</a></span>";
-        return $ans;
+    $ans .= "<span class=\"twikiNewLink\" style='background : $this->{NEWTOPICBGCOLOR};'>"
+      .  "<font color=\"$this->{NEWTOPICFONTCOLOR}\">$theLinkText</font>"
+        .  "<a href=\"".
+          $this->{session}->getScriptUrl($theWeb, $theTopic, 'edit')."?topicparent="
+            .$this->{session}->{webName}.".".$this->{session}->{topicName}."\" $TWiki::cfg{NoFollow}>$this->{NEWLINKSYMBOL}</a></span>";
+    return $ans;
 }
-
-
 
 # NOTE: factored for clarity. Test for any speed penalty.
 # returns the (web, topic) 

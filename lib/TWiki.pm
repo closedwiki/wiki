@@ -173,6 +173,7 @@ BEGIN {
           $TWiki::cfg{ScriptSuffix};
     $constantTags{WIKIPREFSTOPIC}  = $TWiki::cfg{SitePrefsTopicName};
     $constantTags{WIKIUSERSTOPIC}  = $TWiki::cfg{UsersTopicName};
+    $constantTags{NOFOLLOW} = $TWiki::cfg{NoFollow};
 
     # locale setup
     #

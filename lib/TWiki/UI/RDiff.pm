@@ -424,19 +424,16 @@ sub diff {
     }
 
     while( $i > 0 ) {
-        $revisions .= " | <a href=\"$session->{scriptUrlPath}/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\">$i</a>";
+        $revisions .= " | <a href=\"$session->{scriptUrlPath}/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\" $TWiki::cfg{NoFollow}>$i</a>";
         if( $i != 1 ) {
             if( $i == $breakRev ) {
-                # Now obsolete because of 'More' link
-                # $revisions = "$revisions | <a href=\"$session->{scriptUrlPath}/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=$maxrev\">&gt;...</a>";
                 $i = 1;
-                
             } else {
                 if( ( $i == $rev1 ) && ( !$isMultipleDiff ) ) {
                     $revisions .= " | &gt;";
                 } else {
                     $j = $i - 1;
-                    $revisions .= " | <a href=\"$session->{scriptUrlPath}/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=$j\">&gt;</a>";
+                    $revisions .= " | <a href=\"$session->{scriptUrlPath}/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=$j\" $TWiki::cfg{NoFollow}>&gt;</a>";
                 }
             }
         }

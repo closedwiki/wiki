@@ -30,7 +30,7 @@ And called for some hot buttered toast.
 ---+ File not found
 ---++ Expected
 <!-- expected expand -->
-<font color="#ff0000"> <strong><em>Note:</em></strong> </font> Included topic <span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">FileNotFound</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/FileNotFound?topicparent=TestCases.TestCaseAutoIncludes"><sup>?</sup></a></span> does not exist yet
+<font color="#ff0000"> <strong><em>Note:</em></strong> </font> Included topic <span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">FileNotFound</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/FileNotFound?topicparent=TestCases.TestCaseAutoIncludes" rel='nofollow'><sup>?</sup></a></span> does not exist yet
 <!-- /expected -->
 ---++ Actual
 <!-- actual -->

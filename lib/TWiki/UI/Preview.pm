@@ -123,9 +123,9 @@ sub preview {
     # do not allow click on link before save: (mods by TedPavlic)
     my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
     $oopsUrl = $session->handleCommonTags( $oopsUrl, $topic );
-    $ptext =~ s@(?<=<a\s)([^>]*)(href=(?:".*?"|[^"].*?(?=[\s>])))@$1href="$oopsUrl?template=oopspreview"@goi;
-    $ptext =~ s@<form(?:|\s.*?)>@<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">@goi;
-    $ptext =~ s@(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))@$1onclick="location.href='$oopsUrl\?template=oopspreview'"@goi;
+    $ptext =~ s/(?<=<a\s)([^>]*)(href=(?:".*?"|[^"].*?(?=[\s>])))/$1href="$oopsUrl?template=oopspreview" $TWiki::cfg{NoFollow}/goi;
+    $ptext =~ s/<form(?:|\s.*?)>/<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">/goi;
+    $ptext =~ s/(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))/$1onclick="location.href='$oopsUrl\?template=oopspreview'"/goi;
 
     $ptext = $session->{renderer}->putBackBlocks( $ptext, \@verbatim,
                                                   "verbatim", "pre",
