@@ -605,7 +605,6 @@ sub convertUtf8URLtoSiteCharset {
 
 	    # Use conversion modules depending on Perl version
 	    if( $] >= 5.008 ) {
-		# FIXME: Test on 5.8
 		require Encode;			# Perl 5.8 or higher only
 		# Map $siteCharset into real encoding name
 		$charEncoding = Encode::resolve_alias( $siteCharset );
@@ -614,7 +613,13 @@ sub convertUtf8URLtoSiteCharset {
 		} else {
 		    writeDebug "Converting with Encode, valid encoding is '$charEncoding'";
 		    # Convert text, inserting HTML entities for characters that can't be converted
-		    $fullTopicName = Encode::encode( $charEncoding, $fullTopicName, &Encode::FB_HTMLCREF );
+		    # - first convert from UTF8 bytes into internal UTF-8) characters
+		    $fullTopicName = Encode::decode("utf8", $fullTopicName);	
+		    ##writeDebug "Encode::decode result is $fullTopicName";
+		    # - then convert into site charset from internal UTF-8
+		    $fullTopicName = Encode::encode( $charEncoding, $fullTopicName );
+		    # $fullTopicName = Encode::encode( $charEncoding, $fullTopicName, &Encode::FB_HTMLCREF );
+		    ##writeDebug "Encode::encode result is $fullTopicName";
 		}
 
 	    } else {
