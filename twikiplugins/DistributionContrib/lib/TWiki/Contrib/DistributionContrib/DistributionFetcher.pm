@@ -32,8 +32,9 @@ sub fetchLatestDistributionVersion {
 
 	my $fileUrl = $config{'serverUrl'}. "/" . $distribution;
 	my $webTopicBodge = $config{'saveTopic'};
+	my $pubDir = "/tmp"; # TODO make this TWiki::Func::getPubDir();
 	$webTopicBodge =~ s!\.!/!;
-	my $attachmentPath = TWiki::Func::getPubDir()."/".$webTopicBodge."/".$distribution;
+	my $attachmentPath = $pubDir."/".$webTopicBodge."/".$distribution;
 	my $ans = $attachmentPath;
 	my $status = getstore($fileUrl, $attachmentPath);
 	if (is_error($status)) {
