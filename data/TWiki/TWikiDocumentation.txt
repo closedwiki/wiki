@@ -47,7 +47,7 @@ The above line will call mailnotify at 15 minutes and 45 minutes passed every ho
 
 It is possible to add a category table to a TWiki web. This permits storing and searching for more structured information. Editing a topic shows a HTML form with the usual text area and a table with selectors, checkboxes, radio buttons and text fields. The category table is shown at the end of a topic. The format of the category table can be defined per TWiki web.
 
-If you want to use a Category Table in a TWiki web you need to have the following three files in the wiki/bin/templates/{Yourweb} directory:
+If you want to use a Category Table in a TWiki web you need to have the following three files in the twiki/templates/{Yourweb} directory:
 	* twikicatitems.tmpl : Defines the items in the table
 	* twikicatedit.tmpl : Defines the look of the table when editing a topic
 	* twikicatview.tmpl : Defines the look of the table when viewing a topic
@@ -156,28 +156,38 @@ Above template files will result in the following table when *_editing_* a topic
 -----
 *(5) Implementation Notes*
 
-(under construction)
-
 *_Platform_*
 
-TWiki is written in PERL, but it uses many shell command. The current implementation runs only on a Unix machine. RCS for revision control must be installed on the system.
+TWiki is written in PERL 5, but it uses also many shell command. The current implementation runs only on a Unix machine. RCS for revision control must be installed on the system.
 
-*_Files_*
+*_Directories_*
 
-<pre>
-.htaccess
-changes
-debug.txt
-edit
-error401.html
-mailnotify		automatic email notification, called by a cron job
-preview			preview topic, Perl script
-save
-search
-view
-wiki.pm
-wikicfg.pm
-</pre>
+| *Directory:*	 | *Used for:* |
+| twiki/bin		 | TWiki PERL scripts |
+| twiki/pub		 | Public files (FileAttachments, images) |
+| twiki/data		| source text |
+| twiki/templates | HTML templates, used by TWiki scripts |
+
+*_Files in twiki/bin_*
+
+| *File:*		 | *Used for:* |
+| .htaccess.txt | Authentication. Rename to .htaccess and customize if used |
+| attach		  | Script that shows the attach file page (FileAttachment) |
+| changes		 | Script that shows recent changes |
+| delete		  | (not used yet) |
+| edit			 | Script to edit a topic |
+| mailnotify	 | Script called by cron job to notify users of changes |
+| oops			 | Script that shows a OK or oops dialog |
+| preview		 | Script to preview topic after edit |
+| rdiff			| Script to see differences of topics |
+| register		| Script to register new users |
+| save			 | Script that saves a topic, called by preview |
+| search		  | Script that displays search results |
+| upload		  | Script that does file upload (FileAttachment) |
+| view			 | Script to view a topic ( *the* script ) |
+| viewfile		| Script to view an file attachment |
+| wiki.pm		 | main TWiki library |
+| wikicfg.pm	 | for initialization and configuration, used by wiki.pm |
 
 
 <A name="installation">
@@ -196,25 +206,25 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 	* Make sure PERL and the PERL CGI library is installed on your system. Default location of PERL executable is =/usr/bin/perl= . In case PERL is installed in a different location, the first line of all perl scripts in the =twiki/bin= directory need to be changed (alternatively you can create a symbolic link from =/usr/bin/perl= ).
 	* To be able to edit the perl scripts and .tmpl files it is necessary to =chown= and =chgrp -R twiki= so all the files have the owner you want.
 	* The scripts execute as =nobody= . Set the file permission of all Perl scripts in the =twiki/bin= directory as executable to =-rw-r-xr-x= .
-	* Set the file permission of all files below =twiki/bin/data= to 666 ( =-rw-rw-rw-= ).
-	* Set the file permission of the =twiki/bin/data= directory and all its subdirectories to 777 ( =drwxrwxrwx= ).
+	* Set the file permission of all files below =twiki/data= to 666 ( =-rw-rw-rw-= ).
+	* Set the file permission of the =twiki/data= directory and all its subdirectories to 777 ( =drwxrwxrwx= ).
 	* Set the file permission of the =twiki/pub= directory to 777 ( =drwxrwxrwx= ).
 	* Edit the file =twiki/bin/wikicfg.pm= and set the variables at the beginning of the file to your needs.
 	* Make sure RCS is installed. In case RCS is not in the =path= environment variable, add it to =path= . Alternatively, add the full path name to the =rcs, ci, co, rlog, rcsdiff= commands in the variables of =twiki/bin/wikicfg.pm= .
 	* Point your browser at http://your.domain.com/twiki/bin/view and start wiki-ing away! 
-	* Security issue: Directories =twiki/bin/data= , =twiki/bin/templates= and all its subdirectories should be set so that they are *not* visible as a URL. (Alternatively, move the directries to a place where they are not visible, and change the variables in =twiki/bin/wikicfg.pm= accordingly)
+	* Security issue: Directories =twiki/data= , =twiki/templates= and all its subdirectories should be set so that they are *not* visible as a URL. (Alternatively, move the directries to a place where they are not visible, and change the variables in =twiki/bin/wikicfg.pm= accordingly)
 	* Optional: You can add new rendering rules or new %variables%. To insure an easy upgrade of TWiki it is recommended to do this customization in =twiki/bin/wikicfg.pm= , not =twiki/bin/wiki.pm= .
 	* Optional: If you are on a public server and you would like to authenticate users you need to rename file =.htaccess.txt= in the =twiki/bin= directory to =.htaccess= and change it to your needs. Consult the HTTP server documentation for details.
 
 	* To create a new web:
 		* Use a topic name consisting of characters =A..Z= , =a..z= but *not* in WikiNotation.
-		* Create a new template directory under =twiki/bin/templates= .
-		* Create a new data directory under =twiki/bin/data= .
-		* Copy the files TWikiUsers.txt, WebHome.txt, WebNotify.txt, WebSearch.txt, webcolor.inc, and weblist.inc from the =twiki/bin/data/Main= directory to the new data directory.
+		* Create a new template directory under =twiki/templates= .
+		* Create a new data directory under =twiki/data= .
+		* Copy the files TWikiUsers.txt, WebHome.txt, WebNotify.txt, WebSearch.txt, webcolor.inc, and weblist.inc from the =twiki/data/Main= directory to the new data directory.
 		* Make changes to webcolor.inc (unique color for web), and possibly also weblist.inc (web specific links on top).
-		* In case you need a web specific copyright notice (at the bottom), copy file webcopyright.inc from the =twiki/bin/data= directory to the new data directory, and customize it.
-		* If needed, create customized templates in the new templates directory. (Non existing templates are inherited from =twiki/bin/templates= )
-		* If you want to use a category table, copy the three files twikicatitems.tmpl, twikicatedit.tmpl and twikicatview.tmpl from the =twiki/bin/templates/Know= directory to the new templates directory, and customize it. The TWiki Category Table section has more.
+		* In case you need a web specific copyright notice (at the bottom), copy file webcopyright.inc from the =twiki/data= directory to the new data directory, and customize it.
+		* If needed, create customized templates in the new templates directory. (Non existing templates are inherited from =twiki/templates= )
+		* If you want to use a category table, copy the three files twikicatitems.tmpl, twikicatedit.tmpl and twikicatview.tmpl from the =twiki/templates/Know= directory to the new templates directory, and customize it. The TWiki Category Table section has more.
 
 For debugging reasons, here are contents of directories with file permissions:
 
@@ -228,7 +238,6 @@ drwxr-xr-x	6 twiki	 t5				512 Nov  4 20:34 templates
 -rw-r--r--	1 twiki	 t5				430 Oct 21 18:51 .htaccess
 -rwxrwxrwx	1 twiki	 t5			  3752 Mar 27 02:21 attach
 -rwxr-xr-x	1 twiki	 t5			  2810 Oct 21 18:51 changes
--rw-rw-rw-	1 twiki	 t5			  1091 Nov  6 04:15 debug.txt
 -rwxrwxrwx	1 twiki	 t5			  1244 Mar 27 02:21 delete
 -rw-r-xr-x	1 twiki	 t5			  2589 Nov  6 03:05 edit
 -rwxr-xr-x	1 twiki	 t5			  4614 Oct 21 18:52 mailnotify
@@ -245,7 +254,7 @@ drwxr-xr-x	6 twiki	 t5				512 Nov  4 20:34 templates
 -rw-r-xr-x	1 twiki	 t5			  3945 Jun 23 01:24 wikicfg.pm
 </pre>
 
-directory =twiki/bin/templates/= :
+directory =twiki/templates/= :
 
 <pre>
 drwxr-xr-x	6 twiki	 t5				512 Nov  4 20:34 .
@@ -276,7 +285,7 @@ drwxr-xr-x	2 twiki	 t5				512 Nov  4 20:35 Main
 -rw-r--r--	1 twiki	 t5			  1541 Oct 26 21:07 view.tmpl
 </pre>
 
-directory =twiki/bin/templates/Main= :
+directory =twiki/templates/Main= :
 
 <pre>
 drwxr-xr-x	2 twiki	 t5				512 Nov  4 20:35 .
@@ -284,7 +293,7 @@ drwxr-xr-x	6 twiki	 t5				512 Nov  4 20:34 ..
 -rw-r--r--	1 twiki	 t5			  2328 Nov  6 03:03 edit.tmpl
 </pre>
 
-directory =twiki/bin/templates/Know= (has a TWiki Category Table) :
+directory =twiki/templates/Know= (has a TWiki Category Table) :
 
 <pre>
 drwxr-xr-x	2 twiki	 t5				512 Nov  4 20:35 .
@@ -295,7 +304,7 @@ drwxr-xr-x	6 twiki	 t5				512 Nov  4 20:34 ..
 -rw-r--r--	1 twiki	 t5				245 Dec 24 23:27 twikicatview.tmpl
 </pre>
 
-directory =twiki/bin/data/= :
+directory =twiki/data/= :
 
 <pre>
 drwxrwxrwx	6 twiki	 t5				512 Nov 19 01:01 .
@@ -303,6 +312,7 @@ drwxr-xr-x	5 twiki	 t5				512 Nov 11 02:52 ..
 drwxrwxrwx	2 twiki	 t5			  9216 Nov 13 13:55 Know
 drwxrwxrwx	2 twiki	 t5			  4608 Nov 15 21:42 Main
 -rw-r--r--	1 nobody	65535			 53 Aug 03 08:31 .htpasswd
+-rw-rw-rw-	1 twiki	 t5			  1091 Nov  6 04:15 debug.txt
 -rw-r--r--	1 nobody	65535		  4153 Nov 19 01:01 log199810.txt
 -rw-r--r--	1 nobody	65535		  7189 Nov 19 01:01 log199811.txt
 -rw-r--r--	1 twiki	 t5			  2356 Oct 22 00:56 webcopyright.inc
@@ -310,7 +320,7 @@ drwxrwxrwx	2 twiki	 t5			  4608 Nov 15 21:42 Main
 -rw-r--r--	1 twiki	 t5			  1484 Oct 22 01:11 wikiwebtable.inc
 </pre>
 
-part of directory =twiki/bin/data/Main= :
+part of directory =twiki/data/Main= :
 
 <pre>
 drwxrwxrwx	2 twiki	 t5			  4608 Nov 19 00:56 .
@@ -389,3 +399,4 @@ drwxrwxrwx	4 twiki	 t5			  1024 Mar 27 02:58 ..
 -- Main.PeterThoeny - 02 Jun 1999 <br>
 -- Main.PeterThoeny - 14 Jun 1999 <br>
 -- Main.PeterThoeny - 23 Jun 1999 <br>
+-- Main.PeterThoeny - 01 Sep 1999 <br>
