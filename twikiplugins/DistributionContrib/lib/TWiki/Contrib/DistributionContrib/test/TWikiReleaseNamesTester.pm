@@ -1,6 +1,6 @@
-
-
 package TWikiReleaseNamesTester;
+use TWiki::Contrib::DistributionContrib;
+
 use base qw(Test::Unit::TestCase);
 
 sub new {
@@ -24,7 +24,7 @@ sub test_works {
  my $self = shift;
  $self->assert_equals(
   "TWiki20040730beta",
-  TWikiReleaseNames::releaseTopicToDistributionName(
+  TWiki::Contrib::DistributionContrib::TWikiReleaseNames::releaseTopicToDistributionName(
    "TWikiBetaRelease2004x07x30")
  );
 }
@@ -58,3 +58,5 @@ sub assert_equals {
   return -1;
  }
 }
+
+1;
