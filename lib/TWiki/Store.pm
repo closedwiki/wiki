@@ -53,18 +53,19 @@ sub getWebTopic
 # Get full filename for attachment or topic, untaint
 sub getFileName
 {
-   my ($web, $topic, $attachment, $extension) = @_;
+   my( $web, $topic, $attachment, $extension ) = @_;
+
    if( ! $attachment ) {
       $attachment = "";
    }
    
-   if( ! $extension ) {
-      $extension = ".txt";
-   }
-   
    my $file = "";
    if( ! $attachment ) {
+      if( ! $extension ) {
+         $extension = ".txt";
+      }
       $file = "$TWiki::dataDir/$web/$topic$extension";
+
    } else {
       $file = "$TWiki::pubDir/$web/$topic/$attachment$extension";
    }
@@ -185,7 +186,7 @@ sub renameTopic
 
 # =========================
 # Read a specific version of a topic
-# view:	    $text= &wiki::readVersion( $topic, "1.$rev" );
+# view:	    $text= &TWiki::Store::readVersion( $topic, "1.$rev" );
 sub readVersion
 {
     my( $theTopic, $theRev ) = @_;
@@ -445,7 +446,7 @@ sub save
                   $tmp =~ s/%FILENAME%/$name/;
                   $tmp =~ /(.*)/;
                   $tmp = $1;       # safe, so untaint variable
-                  &wiki::writeDebug("save: Init RCS file");
+                  &TWiki::writeDebug( "save: Init RCS file" );
                   `$tmp`;
                }
             }

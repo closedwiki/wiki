@@ -2,7 +2,7 @@
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
-# Copyright (C) 1999-2000 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2001 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,7 +15,7 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-use CGI::Carp qw(fatalsToBrowser);
+use CGI::Carp qw( fatalsToBrowser );
 use CGI;
 use lib ( '.' );
 use lib ( '../lib' );
@@ -29,9 +29,10 @@ $| = 1;                  # no buffering
 &main();
 
 
+# =========================
 sub getAttachAttr
 {
-    my ( $atext, $fileName ) = @_;
+    my( $atext, $fileName ) = @_;
     my $filePath="", $fileSize="", $fileDate="", $fileUser="", $fileComment="";
     my $before="", $item="", $after="", $set="";
 
@@ -62,13 +63,57 @@ sub getAttachAttr
 }
 
 
+# =========================
+sub listVersions
+{
+    my( $web, $topic, $attachment ) = @_;
+
+    &TWiki::writeDebug( "Att = $attachment" );
+    my $latestRev = TWiki::Store::getRevisionNumberNew( $web, $topic, $attachment );
+    &TWiki::writeDebug( "latestRev = $latestRev" );
+    $latestRev =~ /\.(.*)/;
+    my $maxRevNum = $1;
+    &TWiki::writeDebug( "max = $maxRevNum" );
+    my $verTable = &TWiki::Store::readTemplate( "attachvertable" );
+    my( $verTableBefore, $verTableItem, $verTableAfter ) = split( /%REPEAT%/, $verTable );
+
+    my $before="", $item="", $lcItem="", $after="", $set="", $ins="", $comp="";
+
+    my $result = $verTableBefore;
+    my $found = 0;
+
+    for( $version = $maxRevNum; $version >= 1; $version-- ) {
+        $ins = $verTableItem;
+        my $rev = "1.$version";
+        $ins =~ s/%FILEVERSION%/$rev/go;
+        my $changeToIsoDate = 0;
+        my( $date, $userName ) = 
+           TWiki::Store::getRevisionInfoNew( $topic, $rev, $changeToIsoDate, $web, $attachment );
+        my $wikiUserName = &TWiki::userToWikiName( $userName );
+        $ins =~ s/%VERSIONDATE%/$date/go;
+        $ins =~ s/%VERSIONUPDATER%/$wikiUserName/go;
+        $result = "$result$ins";
+        #&TWiki::writeDebug( "Ver = $version, res=$result" );
+    }
+
+    $result = "$result$atTableAfter";
+    return $result;
+}
+
+
+# =========================
 sub main
 {
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
-
+    my $action = 1; # !!! do I need action and revInfo?
+    my $revInfo = $query->param( 'revInfo' ) || "";
+    if( $revInfo ) {
+       $action = 0;
+    }
+    
     ( $topic, $webName, $dummy, $userName ) = 
         &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
     $dummy = "";  # to suppress warning
@@ -107,7 +152,13 @@ sub main
     my ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) 
       = getAttachAttr( $atext, $fileName );
 
-    if( $TWiki::doLogTopicAttach ) {
+    # !!! temp to block table at top of page
+    if( ! $action ) { $atext = listVersions( $webName, $topic, $fileName ); }
+
+
+    # !!! why log attach before post is called?
+    # FIXME: Move down, log only if successful (or with error msg?)
+    if( $TWiki::doLogTopicAttach && $action ) {
         # write log entry
         &TWiki::Store::writeLog( "attach", "$webName.$topic", $fileName );
     }
@@ -138,3 +189,4 @@ sub main
     print $tmpl;
 }
 
+# EOF

@@ -2,7 +2,7 @@
 #
 # TWiki WikiClone (see wiki.pm for $wikiversion and other info)
 #
-# Copyright (C) 1999 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2001 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -392,8 +392,17 @@ sub main
     my $fileComment = $query->param( 'filecomment' ) || "";
     my $createLink = $query->param( 'createlink' ) || "";
 
+    # JET need to change windows path to unix path
+    $tmpFilename =~ s@\\@/@go;
+    $tmpFilename =~ /(.*)/;
+    $tmpFilename = $1;
+    &TWiki::writeDebug( "tmpFilename $tmpFilename" );
+
     # check if file exists and has non zero size
-    if( ! -s "$tmpFilename" ) {
+    my $size = -s $tmpFilename;
+    &TWiki::writeDebug( "size $size" );
+    if( ! -e $tmpFilename ) {
+        &TWiki::writeDebug( "no file" );
         # PTh 20 Jun 2000: changed to getOopsUrl
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsupload", $fileName );
         print $query->redirect( $url );
@@ -422,9 +431,26 @@ sub main
 
     # save uploaded file
     my $newFile = "$tempPath/$fileName";
-    copy($tmpFilename, $newFile) or warn "copy($tmpFilename, $newFile) failed: $!";
+    copy( $tmpFilename, $newFile ) or warn "copy($tmpFilename, $newFile) failed: $!";
     umask( 0027 );
     chmod( 0644, $newFile );
+    
+    # Update RCS if required
+    # !!!make optional
+    my $text = "";
+    my $saveCmd = "";
+    my $doNotLogChanges = 1;
+    my $doUnlock = 1;
+    my $error = &TWiki::Store::save( $webName, $topic, $text, $saveCmd, $fileName, $doNotLogChanges, $doUnlock );
+
+    if ( $error ) {
+        # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
+        print $query->redirect( $url );
+    } else {
+        # and finally display topic
+        print $query->redirect( &TWiki::getViewUrl( "", $topic ) );
+    }
 
     # get user name
     my $fileUser = &TWiki::userToWikiName( $userName );
@@ -470,3 +496,5 @@ sub main
         print $query->redirect( &TWiki::getViewUrl( "", $topic ) );
     }
 }
+
+# EOF
