@@ -1,5 +1,3 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092626203" format="1.0" version="1.16"}%
-%META:TOPICPARENT{name="WebHome"}%
 ---++ <nop>%WEB% Web Preferences
 
 The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.TWikiGuest in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
@@ -44,7 +42,7 @@ __Preferences:__
 		* Set ALLOWWEBRENAME = 
 
 	* Users or groups allowed to change or rename this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
-		* Set ALLOWTOPICCHANGE = 
+		* #Set ALLOWTOPICCHANGE = 
 		* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 
 	* Web preferences that are *not* allowed to be overridden by user preferences:

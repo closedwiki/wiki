@@ -14,142 +14,124 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
-# =========================
-# Interwiki Link Plugin:
-#
-# Here we handle inter-site links, i.e. links going outside TWiki
-# The recognized syntax is:
-#       InterSiteName:TopicName
-# and inserts <a href="URL/TopicName">InterSiteName:TopicName</a>
-# link, where URL is obtained by a topic that lists all
-# InterSiteName/URL pairs.
-# Inter-site name convention: Sites must start with upper case
-# and must be preceeded by white space, '-', '*' or '('
-#
-# =========================
+
+=pod
+
+---+ package TWiki::Plugins::InterwikiPlugin
+
+Recognises and processes special links to other sites defined
+using "inter-site syntax".
+
+The recognized syntax is:
+<pre>
+       InterSiteName:TopicName
+</pre>
+
+Sites must start with upper case and must be preceded by white
+space, '-', '*' or '(', or be part of the link expression
+in a [[link]] or [[link][text]] expression.
+
+=cut
+
 package TWiki::Plugins::InterwikiPlugin;
-# =========================
+
+use strict;
 
 use vars qw(
-        $web $topic $user $installWeb  $VERSION $debug
-        $interSiteLinkRulesTopicName $suppressTooltip
-        $prefixPattern $upperAlpha $mixedAlphaNum $sitePattern $pagePattern $postfixPattern
-        %interSiteTable $debug
+            $VERSION
+            $interWeb
+            $suppressTooltip
+            $sitePattern
+            $pagePattern
+            %interSiteTable
     );
 
-$VERSION = '1.007';
-$interSiteLinkRulesTopicName = "InterWikis";
+$VERSION = '1.008';
 
-# 'Use locale' for internationalisation of Perl sorting and searching - 
-# main locale settings are done in TWiki::setupLocale
 BEGIN {
-    # Do a dynamic 'use locale' for this module
-    if( $TWiki::useLocale ) {
+    # 'Use locale' for internationalisation of Perl sorting and searching - 
+    if( $TWiki::cfg{UseLocale} ) {
         require locale;
-	import locale ();
+        import locale ();
     }
 }
 
-# Regexes for the Site:page format InterWiki reference - updated to support
-# 8-bit characters in both parts - see Codev.InternationalisationEnhancements
-$prefixPattern  = '(^|[\s\-\*\(])';
-if( $TWiki::Plugins::VERSION >= 1.020 ) {
-    $upperAlpha    = TWiki::Func::getRegularExpression("upperAlpha");
-    $mixedAlphaNum = TWiki::Func::getRegularExpression("mixedAlphaNum");
-} else {
-    $upperAlpha    = $TWiki::upperAlpha;
-    $mixedAlphaNum = $TWiki::mixedAlphaNum;
-}
-$sitePattern    = "([${upperAlpha}][${mixedAlphaNum}]+)";
-$pagePattern    = "([${mixedAlphaNum}_\/][${mixedAlphaNum}" . '\+\_\.\,\;\:\!\?\/\%\#-]+?)';
-$postfixPattern = '(?=[\s\.\,\;\:\!\?\)]*(\s|$))';
+# Read preferences and get all InterWiki Site->URL mappings
+sub initPlugin {
+    my( $topic, $web, $user, $installWeb ) = @_;
 
-# =========================
-# Plugin startup - read preferences and get all InterWiki Site->URL mappings
-sub initPlugin
-{
-    ( $topic, $web, $user, $installWeb ) = @_;
+    $interWeb = $installWeb;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.010 ) {
-        &TWiki::Func::writeWarning( "Version mismatch between InterwikiPlugin and Plugins.pm" );
+    if( $TWiki::Plugins::VERSION < 1.020 ) {
+        TWiki::Func::writeWarning( "Version mismatch between InterwikiPlugin and Plugins.pm" );
         return 0;
     }
 
-    # Get plugin preferences from InterwikiPlugin topic
-    $suppressTooltip  = &TWiki::Func::getPreferencesFlag( "INTERWIKIPLUGIN_SUPPRESSTOOLTIP" );
-    $debug            = &TWiki::Func::getPreferencesFlag( "INTERWIKIPLUGIN_DEBUG" );
+    # Regexes for the Site:page format InterWiki reference
+    my $man = TWiki::Func::getRegularExpression('mixedAlphaNum');
+    my $ua = TWiki::Func::getRegularExpression('upperAlpha');
+    $sitePattern    = "([$ua][$man]+)";
+    $pagePattern    = "([${man}_\/][$man" . '\.\/\+\_\,\;\:\!\?\%\#-]+?)';
 
-    my $interTopic = TWiki::Func::getPreferencesValue( "INTERWIKIPLUGIN_RULESTOPIC" )
-      || $interSiteLinkRulesTopicName;
+    # Get plugin preferences from InterwikiPlugin topic
+    $suppressTooltip =
+      TWiki::Func::getPreferencesFlag( "INTERWIKIPLUGIN_SUPPRESSTOOLTIP" );
+
+    my $interTopic =
+      TWiki::Func::getPreferencesValue( "INTERWIKIPLUGIN_RULESTOPIC" )
+          || "InterWikis";
     $interTopic =~ s/%MAINWEB%/TWiki::Func::getMainWebname()/geo;
     $interTopic =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname/geo;
     if( $interTopic =~ s/^(.*)\.// ) {
-        $installWeb = $1;
+        $interWeb = $1;
     }
-    my @data = split( /[\n\r]+/, TWiki::Func::readTopicText( $installWeb, $interTopic, "", 1 ) );
 
-    # grep "| alias | URL | ..." table and extract into "alias", "URL" list
-    # FIXME: Should be able to do this pipeline with just one regex match
-    @data = map { split /\s+/, $_, 2 }
-            map { s/^\|\s*$sitePattern\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|.*$/$1 $2 $3/os ; $_ }
-            grep { m/^\|\s*$sitePattern\s*\|.*?\|.*?\|/o } @data;
-    if( $debug ) {
-        my $tmp = join(", " , @data );
-        &TWiki::Func::writeDebug( "- InterwikiPlugin, table: $tmp" );
-    }
-    %interSiteTable  = @data;
+    my $text = TWiki::Func::readTopicText( $interWeb, $interTopic, undef, 1 );
 
-    # Plugin correctly initialized
-    &TWiki::Func::writeDebug( "- TWiki::Plugins::InterwikiPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
+    # "| alias | URL | ..." table and extract into "alias", "URL" list
+    $text =~ s/^\|\s*($sitePattern)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|.*$/$interSiteTable{$1}=($2,$3);""/mego;
+
     return 1;
 }
 
-# =========================
-sub startRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-    &TWiki::Func::writeDebug( "- InterwikiPlugin::startRenderingHandler( $_[1] )" ) if $debug;
-
-    $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\]\]|\]\[| )/&handleInterwiki($1,$2,$3,$4)/geo;
-    $_[0] =~ s/$prefixPattern$sitePattern:$pagePattern$postfixPattern/&handleInterwiki($1,$2,$3,"")/geo;
+sub startRenderingHandler {
+    # ref in [[ref]] or [[ref][
+    $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\]\]|\]\[| )/_link($1,$2,$3,$4)/geo;
+    # ref in text
+    $_[0] =~ s/(^|[\s\-\*\(])$sitePattern:$pagePattern(?=[\s\.\,\;\:\!\?\)]*(\s|$))/_link($1,$2,$3)/geo;
 }
 
-# =========================
-sub handleInterwiki
-{
-    my( $thePrefix, $theSite, $theTopic, $thePostfix ) = @_;
+sub _link {
+    my( $prefix, $site, $page, $postfix ) = @_;
 
-    &TWiki::Func::writeDebug( "- InterwikiPlugin::handleInterwikiSiteLink: (site: $theSite), (topic: $theTopic)" ) if $debug;
-
-    my $text = "";
-    if( defined( $interSiteTable{ $theSite } ) ) {
-        my( $url, $help ) = split( /\s+/, $interSiteTable{ $theSite }, 2 );
+    my $text;
+    if( defined( $interSiteTable{$site} ) ) {
+        my( $url, $help ) = $interSiteTable{$site};
         my $title = "";
-        if( ! $suppressTooltip ) {
+
+        unless( $suppressTooltip ) {
             $help =~ s/<nop>/&nbsp;/goi;
             $help =~ s/[\"\<\>]*//goi;
-            $help =~ s/\$page/$theTopic/go;
+            $help =~ s/\$page/$page/go;
             $title = " title=\"$help\"";
         }
-        &TWiki::Func::writeDebug( "  (url: $url), (help: $help)" ) if $debug;
-        if( $url =~ s/\$page/$theTopic/go ) {
+
+        if( $url =~ s/\$page/$page/go ) {
             $text = $url;
         } else {
-            $text = "$url$theTopic";
+            $text = "$url$page";
         }
-        if( $thePostfix ) {
-            $text = "$thePrefix$text][";
-            $text .= "$theSite\:$theTopic]]" if( $thePostfix eq "]]" );
+        if( $postfix ) {
+            $text = "$prefix$text][";
+            $text .= "$site\:$page]]" if( $postfix eq "]]" );
         } else {
-            $text = "$thePrefix<a href=\"$text\"$title>$theSite\:$theTopic</a>";
+            $text = "$prefix<a href=\"$text\"$title>$site\:$page</a>";
         }
     } else {
-        $text = "$thePrefix$theSite\:$theTopic$thePostfix";
+        $text = "$prefix$site\:$page$postfix";
     }
     return $text;
 }
-
-# =========================
 
 1;

@@ -19,6 +19,6 @@ _Note that only those testcases with names that start with =<nop>TestCaseAuto= a
 %INCLUDE{CreateNewTestCaseForm}%
 
 <table border=1><tr align=left><th>Testcase</th><th>Description</th><th>Tests</th></tr>
-%SEARCH{"^TestCaseAuto" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/$topic?test=compare&debugenableplugins=TestFixturePlugin&skin=pattern][run]]</td></tr>"}%
+%SEARCH{"^TestCaseAuto" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/$topic?test=compare&debugenableplugins=TestFixturePlugin,CommentPlugin,InterwikiPlugin,DefaultPlugin&skin=pattern][run]]</td></tr>"}%
 %SEARCH{"^TestCase(?!Auto)" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>manual</td></tr>"}%
 </table>

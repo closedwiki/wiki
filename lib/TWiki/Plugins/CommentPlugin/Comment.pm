@@ -210,7 +210,7 @@ sub _buildNewTopic {
     if ( $output =~ m/^%RED%/o ) {
         return $output;
     }
-print STDERR "TEMPLATE $output\n";
+
     # Expand the template
     $output =~ s/%POS:(.*?)%//go;
     my $position = $1 || "AFTER";

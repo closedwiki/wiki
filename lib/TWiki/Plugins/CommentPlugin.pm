@@ -60,7 +60,7 @@ sub commonTagsHandler {
 sub _lazyInit {
     eval 'use TWiki::Plugins::CommentPlugin::Comment';
     if ($@) {
-        print STDERR $@;
+        TWiki::Func::writeWarning( $@ );
         return 0;
     }
     $initialised = 1;
