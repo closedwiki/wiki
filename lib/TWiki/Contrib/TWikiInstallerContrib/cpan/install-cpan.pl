@@ -26,6 +26,7 @@ installLocalModules({
     # TODO: update to use same output as =cpan/calc-twiki-deps.pl=
     modules => [ @ARGV ? @ARGV : qw( 
 				     XML::Parser XML::Simple 
+				     File::Slurp File::Slurp::Tree
 				     List::Permutor File::Temp 
 				     Carp::Clan Bit::Vector Date::Calc 
 				     Error Class::Inner Devel::Symdump
@@ -37,6 +38,8 @@ installLocalModules({
 				     Test::Unit 
 				     LWP::Simple 
 				     CGI::Session 
+				     Weather::Com
+				     Barcode::Code128
 				     ) ],
 #    Data::UUID Date::Handler Safe Language::Prolog GD XMLRPC::Transport::HTTP
     dir => $cpan,
