@@ -1,147 +1,154 @@
-%META:TOPICINFO{author="guest" date="1099829483" format="1.0" version="1.1"}%
 Description: Tag tests that can be automated
 
 <table border="1"><tr><th> Tag </th><th>Expected</th><th>Actual</th></tr>
  <tr>
   <td>TOPIC</td>
-  <td><!-- expected -->TestCaseAutoInternalTags<!-- /expected --></td>
-  <td><!-- actual -->%TOPIC%<!-- /actual --></td>
- </tr>
-%INCLUDE{"FixtureIncludedTopic"}%
- <tr>
-  <td>SPACEDTOPIC</td>
-  <td><!-- expected -->Test%20*Case%20*Auto%20*Internal%20*Tags<!-- /expected --></td>
-  <td><!-- actual -->%SPACEDTOPIC%<!-- /actual --></td>
+  <td><!-- expected -->TOPIC TestCaseAutoInternalTags<!-- /expected --></td>
+  <td><!-- actual -->TOPIC <nop>%TOPIC%<!-- /actual --></td>
  </tr>
  <tr>
   <td>WEB</td>
-  <td><!-- expected -->TestCases<!-- /expected --></td>
-  <td><!-- actual -->%WEB%<!-- /actual --></td>
- </tr>
- <tr>
-  <td>RELATIVETOPICPATH{}</td>
-  <td><!-- expected --><!-- /expected --></td>
-  <td><!-- actual -->%RELATIVETOPICPATH{}%<!-- /actual --></td>
- </tr>
- <tr>
-  <td>RELATIVETOPICPATH{Sausage}</td>
-  <td><!-- expected -->../%WEB%/Sausage<!-- /expected --></td>
-  <td><!-- actual -->%RELATIVETOPICPATH{Sausage}%<!-- /actual --></td>
- </tr>
- <tr>
-  <td>RELATIVETOPICPATH{"Chips"}</td>
-  <td><!-- expected -->../%WEB%/Chips<!-- /expected --></td>
-  <td><!-- actual -->%RELATIVETOPICPATH{"Chips"}%<!-- /actual --></td>
+  <td><!-- expected -->WEB TestCases<!-- /expected --></td>
+  <td><!-- actual -->WEB <nop>%WEB%<!-- /actual --></td>
  </tr>
   <tr>
   <td>ICON{}</td>
-  <td><!-- expected --><img src="%PUBURL%/icn/else.gif" width="16" height="16" align="top" alt="" border="0" /><!-- /expected --></td>
-  <td><!-- actual -->%ICON{}%<!-- /actual --></td>
+  <td><!-- expected -->ICON <img src="%PUBURL%/icn/else.gif" width="16" height="16" align="top" alt="" border="0" /><!-- /expected --></td>
+  <td><!-- actual -->ICON %ICON{}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>ICON{""}</td>
-  <td><!-- expected --><img src="%PUBURL%/icn/else.gif" width="16" height="16" align="top" alt="" border="0" /><!-- /expected --></td>
-  <td><!-- actual -->%ICON{""}%<!-- /actual --></td>
+  <td><!-- expected -->ICON <img src="%PUBURL%/icn/else.gif" width="16" height="16" align="top" alt="" border="0" /><!-- /expected --></td>
+  <td><!-- actual -->ICON %ICON{""}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>ICON{"Fleegle"}</td>
-  <td><!-- expected --><img src="%PUBURL%/icn/else.gif" width="16" height="16" align="top" alt="" border="0" /><!-- /expected --></td>
-  <td><!-- actual -->%ICON{""}%<!-- /actual --></td>
+  <td><!-- expected -->ICON <img src="%PUBURL%/icn/else.gif" width="16" height="16" align="top" alt="" border="0" /><!-- /expected --></td>
+  <td><!-- actual -->ICON %ICON{""}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>ICON{"sniff.sniff"}</td>
-  <td><!-- expected --><img src="%PUBURL%/icn/sniff.gif"/><!-- /expected --></td>
-  <td><!-- actual -->%ICON{""}%<!-- /actual --></td>
+  <td><!-- expected -->ICON <img src="%PUBURL%/icn/sniff.gif"/><!-- /expected --></td>
+  <td><!-- actual -->ICON %ICON{""}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>URLENCODE{""}</td>
-  <td><!-- expected --><!-- /expected --></td>
-  <td><!-- actual -->%URLENCODE{""}%<!-- /actual --></td>
+  <td><!-- expected -->URLENCODE <!-- /expected --></td>
+  <td><!-- actual -->URLENCODE %URLENCODE{""}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>ENCODE{""}</td>
-  <td><!-- expected --><!-- /expected --></td>
-  <td><!-- actual -->%ENCODE{""}%<!-- /actual --></td>
+  <td><!-- expected -->ENCODE <!-- /expected --></td>
+  <td><!-- actual -->ENCODE %ENCODE{""}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>INTURLENCODE{""}</td>
-  <td><!-- expected --><!-- /expected --></td>
-  <td><!-- actual -->%INTURLENCODE{""}%<!-- /actual --></td>
+  <td><!-- expected -->INTURLENCODE <!-- /expected --></td>
+  <td><!-- actual -->INTURLENCODE %INTURLENCODE{""}%<!-- /actual --></td>
  </tr>
  <tr>
  <tr>
   <td>MAINWEB</td>
-  <td><!-- expected -->Main<!-- /expected --></td>
-  <td><!-- actual -->%MAINWEB%<!-- /actual --></td>
+  <td><!-- expected -->MAINWEB Main<!-- /expected --></td>
+  <td><!-- actual -->MAINWEB %MAINWEB%<!-- /actual --></td>
  </tr>
  <tr>
   <td>TWIKIWEB</td>
-  <td><!-- expected -->TWiki<!-- /expected --></td>
-  <td><!-- actual -->%TWIKIWEB%<!-- /actual --></td>
+  <td><!-- expected -->TWIKIWEB TWiki<!-- /expected --></td>
+  <td><!-- actual -->TWIKIWEB %TWIKIWEB%<!-- /actual --></td>
  </tr>
  <tr>
   <td>HOMETOPIC</td>
-  <td><!-- expected -->WebHome<!-- /expected --></td>
-  <td><!-- actual -->%HOMETOPIC%<!-- /actual --></td>
+  <td><!-- expected -->HOMETOPIC WebHome<!-- /expected --></td>
+  <td><!-- actual -->HOMETOPIC <nop>%HOMETOPIC%<!-- /actual --></td>
  </tr>
  <tr>
   <td>WIKIUSERSTOPIC</td>
-  <td><!-- expected -->TWikiUsers<!-- /expected --></td>
-  <td><!-- actual -->%WIKIUSERSTOPIC%<!-- /actual --></td>
+  <td><!-- expected -->WIKIUSERSTOPIC TWikiUsers<!-- /expected --></td>
+  <td><!-- actual -->WIKIUSERSTOPIC <nop>%WIKIUSERSTOPIC%<!-- /actual --></td>
  </tr>
  <tr>
   <td>WIKIPREFSTOPIC</td>
-  <td><!-- expected -->TWikiPreferences<!-- /expected --></td>
-  <td><!-- actual -->%WIKIPREFSTOPIC%<!-- /actual --></td>
+  <td><!-- expected -->WIKIPREFSTOPIC TWikiPreferences<!-- /expected --></td>
+  <td><!-- actual -->WIKIPREFSTOPIC <nop>%WIKIPREFSTOPIC%<!-- /actual --></td>
  </tr>
  <tr>
   <td>WEBPREFSTOPIC</td>
-  <td><!-- expected -->WebPreferences<!-- /expected --></td>
-  <td><!-- actual -->%WEBPREFSTOPIC%<!-- /actual --></td>
+  <td><!-- expected -->WEBPREFSTOPIC WebPreferences<!-- /expected --></td>
+  <td><!-- actual -->WEBPREFSTOPIC <nop>%WEBPREFSTOPIC%<!-- /actual --></td>
  </tr>
  <tr>
   <td>NOTIFYTOPIC</td>
-  <td><!-- expected -->WebNotify<!-- /expected --></td>
-  <td><!-- actual -->%NOTIFYTOPIC%<!-- /actual --></td>
+  <td><!-- expected -->NOTIFYTOPIC WebNotify<!-- /expected --></td>
+  <td><!-- actual -->NOTIFYTOPIC <nop>%NOTIFYTOPIC%<!-- /actual --></td>
  </tr>
  <tr>
   <td>STATISTICSTOPIC</td>
-  <td><!-- expected -->WebStatistics<!-- /expected --></td>
-  <td><!-- actual -->%STATISTICSTOPIC%<!-- /actual --></td>
+  <td><!-- expected -->STATISTICSTOPIC WebStatistics<!-- /expected --></td>
+  <td><!-- actual -->STATISTICSTOPIC <nop>%STATISTICSTOPIC%<!-- /actual --></td>
  </tr>
  <tr>
   <td>STARTINCLUDE</td>
-  <td><!-- expected --><!-- /expected --></td>
-  <td><!-- actual -->%STARTINCLUDE%<!-- /actual --></td>
+  <td><!-- expected -->STARTINCLUDE <!-- /expected --></td>
+  <td><!-- actual -->STARTINCLUDE %STARTINCLUDE%<!-- /actual --></td>
  </tr>
  <tr>
   <td>STOPINCLUDE</td>
-  <td><!-- expected --><!-- /expected --></td>
-  <td><!-- actual -->%STOPINCLUDE%<!-- /actual --></td>
+  <td><!-- expected -->STOPINCLUDE <!-- /expected --></td>
+  <td><!-- actual -->STOPINCLUDE %STOPINCLUDE%<!-- /actual --></td>
  </tr>
  <tr>
   <td>SECTION{""}</td>
-  <td><!-- expected --><!-- /expected --></td>
-  <td><!-- actual -->%SECTION{""}%<!-- /actual --></td>
+  <td><!-- expected -->SECTION <!-- /expected --></td>
+  <td><!-- actual -->SECTION %SECTION{""}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>SECTION{}</td>
-  <td><!-- expected --><!-- /expected --></td>
-  <td><!-- actual -->%SECTION{}%<!-- /actual --></td>
+  <td><!-- expected -->SECTION <!-- /expected --></td>
+  <td><!-- actual -->SECTION %SECTION{}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>ENDSECTION</td>
-  <td><!-- expected --><!-- /expected --></td>
-  <td><!-- actual -->%ENDSECTION%<!-- /actual --></td>
+  <td><!-- expected -->ENDSECTION <!-- /expected --></td>
+  <td><!-- actual -->ENDSECTION %ENDSECTION%<!-- /actual --></td>
  </tr>
  <tr>
   <td>FORMFIELD{"" topic="" alttext="" default="" format="$value"}</td>
-  <td><!-- expected --><!-- /expected --></td>
-  <td><!-- actual -->%FORMFIELD{"" topic="" alttext="" default="" format="$value"}%<!-- /actual --></td>
+  <td><!-- expected -->FORMFIELD <!-- /expected --></td>
+  <td><!-- actual -->FORMFIELD %FORMFIELD{"" topic="" alttext="" default="" format="$value"}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>FORMFIELD{"TopicClassification" topic="" alttext="" default="" format="$value"}</td>
-  <td><!-- expected --><!-- /expected --></td>
-  <td><!-- actual -->%FORMFIELD{"" topic="" alttext="" default="" format="$value"}%<!-- /actual --></td>
+  <td><!-- expected -->FORMFIELD <!-- /expected --></td>
+  <td><!-- actual -->FORMFIELD %FORMFIELD{"" topic="" alttext="" default="" format="$value"}%<!-- /actual --></td>
+ </tr>
+ <tr>
+  <td>SPACEDTOPIC</td>
+  <td><!-- expected -->SPACEDTOPIC Test%20*Case%20*Auto%20*Internal%20*Tags<!-- /expected --></td>
+  <td><!-- actual -->SPACEDTOPIC %SPACEDTOPIC%<!-- /actual --></td>
+ </tr>
+ <tr>
+  <td>RELATIVETOPICPATH{}</td>
+  <td><!-- expected -->RELATIVETOPICPATH <!-- /expected --></td>
+  <td><!-- actual -->RELATIVETOPICPATH %RELATIVETOPICPATH{}%<!-- /actual --></td>
+ </tr>
+ <tr>
+  <td>RELATIVETOPICPATH{Sausage}</td>
+  <td><!-- expected -->RELATIVETOPICPATH ../TestCases/Sausage<!-- /expected --></td>
+  <td><!-- actual -->RELATIVETOPICPATH %RELATIVETOPICPATH{Sausage}%<!-- /actual --></td>
+ </tr>
+ <tr>
+  <td>RELATIVETOPICPATH{"Chips"}</td>
+  <td><!-- expected -->RELATIVETOPICPATH ../TestCases/Chips<!-- /expected --></td>
+  <td><!-- actual -->RELATIVETOPICPATH %RELATIVETOPICPATH{"Chips"}%<!-- /actual --></td>
  </tr>
 </table>
+
+---+ INCLUDE
+---++ Expected
+   * BASEWEB        <!-- expected -->TestCases<!-- /expected -->
+   * INCLUDINGWEB   <!-- expected -->TestCases<!-- /expected -->
+   * BASETOPIC      <!-- expected -->TestCaseAutoInternalTags<!-- /expected -->
+   * INCLUDINGTOPIC <!-- expected -->TestCaseAutoInternalTags<!-- /expected -->
+---++ Actual
+%INCLUDE{"FixtureIncludedTopic"}%

@@ -1,27 +1,10 @@
-%META:TOPICINFO{author="guest" date="1099569536" format="1.0" version="1.1"}%
 Description: This topic is not a testcase, it is part of a fixture for the TestCaseInternalTags
 
 THE TEST FAILED
 %STARTINCLUDE%
- <tr>
-  <td>BASEWEB</td>
-  <td><!-- expected -->TestCases<!-- /expected --></td>
-  <td><!-- actual -->%BASEWEB%<!-- /actual --></td>
- </tr>
- <tr>
-  <td>INCLUDINGWEB</td>
-  <td><!-- expected -->TestCases<!-- /expected --></td>
-  <td><!-- actual -->%INCLUDINGWEB%<!-- /actual --></td>
- </tr>
- <tr>
-  <td>BASETOPIC</td>
-  <td><!-- expected -->TestCaseAutoInternalTags<!-- /expected --></td>
-  <td><!-- actual -->%BASETOPIC%<!-- /actual --></td>
- </tr>
- <tr>
-  <td>INCLUDINGTOPIC</td>
-  <td><!-- expected -->TestCaseAutoInternalTags<!-- /expected --></td>
-  <td><!-- actual -->%INCLUDINGTOPIC%<!-- /actual --></td>
- </tr>
+   * BASEWEB        <!-- actual -->%BASEWEB%<!-- /actual -->
+   * INCLUDINGWEB   <!-- actual -->%INCLUDINGWEB%<!-- /actual -->
+   * BASETOPIC      <!-- actual -->%BASETOPIC%<!-- /actual -->
+   * INCLUDINGTOPIC <!-- actual -->%INCLUDINGTOPIC%<!-- /actual -->
 %STOPINCLUDE%
 THE TEST FAILED
