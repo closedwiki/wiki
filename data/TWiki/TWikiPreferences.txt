@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018739332" format="1.0" version="1.28"}%
+%META:TOPICINFO{author="PeterThoeny" date="1018768140" format="1.0" version="1.29"}%
 <H1>%WIKITOOLNAME% Site-Level Preferences</H1>
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %MAINWEB%.%USERNAME%). 
 	* %X% *NOTE:* You can lock individual settings at the site or web levels using User & Group Access Control - see section below.
@@ -95,6 +95,20 @@ The following are __site-level__ settings that affect all users in all webs on t
 </verbatim>
 
 ---++ Miscellaneous Settings
+
+	* Graphics used in TWiki documentation - view all images in %TWIKIWEB%.TWikiDocGraphics. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
+		* Set H = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif" border="0" alt="HELP" width="16" height="16" />
+		* Set I = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/tip.gif" border="0" alt="IDEA!" width="16" height="16" />
+		* Set M = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/arrowright.gif" border="0" alt="MOVED TO..." width="16" height="16" />
+		* Set N = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/new.gif" border="0" alt="NEW" width="28" height="8" />
+		* Set P = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/pencil.gif" border="0" alt="REFACTOR" width="16" height="16" />
+		* Set Q = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif" border="0" alt="QUESTION?" width="16" height="16" />
+		* Set S = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/starred.gif" border="0" alt="PICK" width="16" height="16" />
+		* Set T = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/tip.gif" border="0" alt="TIP" width="16" height="16" />
+		* Set U = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/updated.gif" border="0" alt="UPDATED" width="56" height="8" />
+		* Set X = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/warning.gif" border="0" alt="ALERT!" width="16" height="16" />
+		* Set Y = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/choice-yes.gif" border="0" alt="DONE" width="16" height="16" />
+		* Set TLS = <img width="88" height="31" border="0" alt="TWiki ID button" src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/8831.gif">
 
 	* Colored text: (see more StandardColors)
 	  | You type: | =%<nop>RED% red text %<nop>ENDCOLOR% and %<nop>GREEN% green text %<nop>ENDCOLOR%= |
