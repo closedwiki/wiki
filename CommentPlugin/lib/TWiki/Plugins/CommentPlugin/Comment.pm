@@ -6,10 +6,10 @@
 #
 use strict;
 
-use TWiki::Contrib::Attrs;
 use TWiki;
 use TWiki::Plugins;
 use TWiki::Store;
+use TWiki::Contrib::Attrs;
 
 package TWiki::Plugins::CommentPlugin::Comment;
 
@@ -138,13 +138,17 @@ sub _handleInput {
         }
     }
 
+    my $noform = $attrs->remove("noform") || "";
+
     if ( $input !~ m/^%RED%/o ) {
         $input =~ s/%DISABLED%/$disable/go;
         $input =~ s/%MESSAGE%/$message/g;
         my $n = $$pidx + 0;
-	
-        $input = "<form name=\"${disable}$type$n\" " .
-          "action=\"$disable$url\" method=\"${disable}post\">$input";
+
+	unless ($noform eq "on") {
+	    $input = "<form name=\"${disable}$type$n\" " .
+		"action=\"$disable$url\" method=\"${disable}post\">$input";
+	}
         if ( $disable eq "" ) {
             $input .= "<input name=\"comment_action\" " .
               "type=\"hidden\" value=\"save\" />";
@@ -168,7 +172,9 @@ sub _handleInput {
                   "type=\"hidden\" value=\"$$pidx\" />";
             }
         }
-        $input .= "</form>";
+	unless ($noform eq "on") {
+	    $input .= "</form>";
+	}
     }
     $$pidx++;
     return $input;
@@ -186,7 +192,6 @@ sub _getTemplate {
     my $templates;
 
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
-die "FUCKSHIT $TWiki::Plugins::VERSION";
         eval 'use TWiki::Contrib::CairoContrib; $templates = TWiki::Contrib::CairoContrib::readTemplate( $templateFile )';
 	} else {
         $templates = TWiki::Store::readTemplate( $templateFile );
