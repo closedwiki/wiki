@@ -149,8 +149,11 @@ sub main
 
     # create user topic if not exist
     if( ! &TWiki::Store::topicExists( $TWiki::mainWebname, $wikiName ) ) {
-        $text = &TWiki::Store::readTemplate( "register" );
-        ( $before, $after) = split( /%FORMDATA%/, $text );
+        my $meta = "";
+        my $row = "";
+        ( $meta, $text ) = &TWiki::Store::readTemplateTopic( "NewUserTemplate" );
+        $text = "%SPLIT%\n\t* %KEY%: %VALUE%%SPLIT%\n" unless $text;
+        ( $before, $repeat, $after) = split( /%SPLIT%/, $text );
         for( $x = 0; $x < $formLen; $x++ ) {
             $name = $formDataName[$x];
             $value = $formDataValue[$x];
@@ -158,12 +161,13 @@ sub main
             if( ! (    ( $name eq "Wiki Name" )
                     || ( $name eq "Password" )
                     || ( $name eq "Confirm" ) ) ) {
-                $before .= "   * $name\: $value\n";
+                $row = $repeat;
+                $row =~ s/%KEY%/$name/go;
+                $row =~ s/%VALUE%/$value/go;
+                $before .= $row;
             }
         }
         $text = "$before$after";
-        $text =~ s/ {3}/\t/go;
-        my $meta = TWiki::Meta->new();
         $meta->put( "TOPICPARENT", ( "name" => $TWiki::wikiUsersTopicname ) );
         &TWiki::Store::saveTopic( $webName, $wikiName, $text, $meta, "", 1 );
     }
