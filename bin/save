@@ -122,6 +122,7 @@ sub main
 	}
 
         &TWiki::Form::fieldVars2Meta( $webName, $query, $meta );
+        $text = &TWiki::Prefs::updateSetFromForm( $meta, $text );
     }
 
 

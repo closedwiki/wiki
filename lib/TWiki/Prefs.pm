@@ -93,7 +93,55 @@ sub getPrefsFromTopic
     if( $isKey ) {
         prvAddToPrefsList( $key, $value );
     }
+    
+    my %form = $meta->findOne( "FORM" );
+    if( %form ) {
+        my @fields = $meta->find( "FIELD" );
+        foreach my $field ( @fields ) {
+            $key = $field->{"name"};
+            $value = $field->{"value"};
+            my $attributes = $field->{"attributes"};
+            if( $attributes =~ /[S]/o ) {
+                prvAddToPrefsList( $key, $value );
+            }
+        }
+    }
+
+    
     @finalPrefsKeys = split( /[\,\s]+/, getPreferencesValue( $finalPrefsName ) );
+}
+
+# =========================
+sub updateSetFromForm
+{
+    my( $meta, $text ) = @_;
+    my( $key, $value );
+    my $ret = "";
+    
+    my %form = $meta->findOne( "FORM" );
+    if( %form ) {
+        my @fields = $meta->find( "FIELD" );
+        foreach my $line ( split( /\n/, $text ) ) {
+            foreach my $field ( @fields ) {
+                $key = $field->{"name"};
+                $value = $field->{"value"};
+                my $attributes = $field->{"attributes"};
+                if( $attributes =~ /[S]/o ) {
+                    $value =~ s/\n/\\\n/o;
+                    TWiki::writeDebug( "updateSetFromForm: \"$key\"=\"$value\"" );
+                    # Worry about verbatim?  Multi-lines
+                    if ( $line =~ s/^(\t+\*\sSet\s$key\s\=\s*).*$/$1$value/g ) {
+                        last;
+                    }
+                }
+            }
+            $ret .= "$line\n";
+        }
+    } else {
+        $ret = $text;
+    }
+    
+    return $ret;
 }
 
 # =========================

@@ -25,7 +25,7 @@ use strict;
 # Get definition from supplied topic text
 # Returns array of arrays
 #   1st - list fields
-#   2nd - name, title, type, size, vals, tooltip
+#   2nd - name, title, type, size, vals, tooltip, setting
 sub getFormDefinition
 {
     my( $text ) = @_;
@@ -33,42 +33,49 @@ sub getFormDefinition
     my @fields = ();
     
     my $inBlock = 0;
-    # | *Name:* | *Type:* | *Size:* | *Value:*  | *Tooltip message:* |
+    # | *Name:* | *Type:* | *Size:* | *Value:*  | *Tooltip message:* | *Attributes:* |
+    # Tooltip and attributes are optional
     foreach( split( /\n/, $text ) ) {
         if( /^\s*\|.*Name[^|]*\|.*Type[^|]*\|.*Size[^|]*\|/ ) {
             $inBlock = 1;
         } else {
             # Only insist on first field being present FIXME - use oops page instead?
-	    if( $inBlock && s/^\s*\|//o ) {
-                my( $title, $type, $size, $vals, $tooltip ) = split( /\|/ );
-                $title =~ s/^\s*//go;
-                $title =~ s/\s*$//go;
-                my $name = _cleanField( $title );
-                $type = lc $type;
-                $type =~ s/[^a-z+]//go;
-                $type = "text" if( ! $type );
-                $size = _cleanField( $size );
-                if( ! $size ) {
-                    if( $type eq "text" ) {
-                        $size = 20;
-                    } elsif( $type eq "textarea" ) {
-                        $size = "40x5";
-                    } else {
-                        $size = 1;
+            if( $inBlock && s/^\s*\|//o ) {
+                    my( $title, $type, $size, $vals, $tooltip, $attributes ) = split( /\|/ );
+                    $title =~ s/^\s*//go;
+                    $title =~ s/\s*$//go;
+                    my $name = _cleanField( $title );
+                    $type = lc $type;
+                    $attributes =~ s/\s*//go;
+                    $attributes = "" if( ! $attributes );
+                    $type =~ s/^\s*//go;
+                    $type =~ s/\s*$//go;
+                    $type = "text" if( ! $type );
+                    $size = _cleanField( $size );
+                    if( ! $size ) {
+                        if( $type eq "text" ) {
+                            $size = 20;
+                        } elsif( $type eq "textarea" ) {
+                            $size = "40x5";
+                        } else {
+                            $size = 1;
+                        }
                     }
-                }
-                $size = 1 if( ! $size );
-                $vals =~ s/^\s*//go;
-                $vals =~ s/\s*$//go;
-                $vals =~ s/"//go; # " would break parsing off META variables
-                $tooltip =~ s/^\s*//go;
-                $tooltip =~ s/^\s*//go;
-                # FIXME object if too short
-                push @fields, [ $name, $title, $type, $size, $vals, $tooltip ];
-	    } else {
-		$inBlock = 0;
-	    }
-	}
+                    $size = 1 if( ! $size );
+                    $vals =~ s/^\s*//go;
+                    $vals =~ s/\s*$//go;
+                    $vals =~ s/"//go; # " would break parsing off META variables
+                    if( $vals eq '$users' ) {
+                       $vals = $TWiki::mainWebname . "." . join( ", ${TWiki::mainWebname}.", ( TWiki::Store::getTopicNames( $TWiki::mainWebname ) ) );
+                    }
+                    $tooltip =~ s/^\s*//go;
+                    $tooltip =~ s/^\s*//go;
+                    # FIXME object if too short
+                    push @fields, [ $name, $title, $type, $size, $vals, $tooltip, $attributes ];
+            } else {
+            $inBlock = 0;
+        }
+    }
     }
     
     return @fields;
@@ -143,7 +150,7 @@ sub getFormDef
     # Get each field definition
     foreach my $fieldDefP ( @fieldDefs ) {
         my @fieldDef = @$fieldDefP;
-        my( $name, $title, $type, $size, $posValuesS, $tooltip ) = @fieldDef;
+        my( $name, $title, $type, $size, $posValuesS, $tooltip, $attributes ) = @fieldDef;
         my @posValues = ();
         if( $posValuesS ) {
            @posValues = split( /,\s*/, $posValuesS );
@@ -158,7 +165,7 @@ sub getFormDef
         } else {
             # FIXME no list matters for some types
         }
-        push @fieldsInfo, [ ( $name, $title, $type, $size, $tooltip, @posValues ) ];
+        push @fieldsInfo, [ ( $name, $title, $type, $size, $tooltip, $attributes, @posValues ) ];
     }
 
     return @fieldsInfo;
@@ -242,13 +249,21 @@ sub renderForEdit
         my $type = shift @fieldInfo;
         my $size = shift @fieldInfo;
         my $tooltip = shift @fieldInfo;
+        my $attributes = shift @fieldInfo;
 
         my %field = $meta->findOne( "FIELD", $fieldName );
         my $value = $field{"value"};
+        if( ! defined( $value ) && $attributes =~ /S/ ) {
+           # Allow initialisation based on a preference
+           $value = &TWiki::Prefs::getPreferencesValue($fieldName);
+        }
         $value = "" unless defined $value;  # allow "0" values
         my $extra = "";
         
-        if( $type eq "text" ) {
+        my $output = TWiki::Plugins::renderFormFieldForEditHandler( $name, $type, $size, $value, $attributes, \@fieldInfo );
+        if( $output ) {
+            $value = $output;
+        } elsif( $type eq "text" ) {
             $value =~ s/"/&#34/go; # Make sure double quote don't kill us
             $value =~ s/&/&amp\;/go;
             $value =~ s/</&lt\;/go;
@@ -285,7 +300,7 @@ sub renderForEdit
                 }
                 $defaultMarker = "";
                 $item =~ s/<nop/&lt\;nop/go;
-                $val .= "   <option$selected>$item</option>";
+                $val .= "   <option name=\"$item\"$selected>$item</option>";
             }
             if( ! $matched ) {
                $val =~ s/%DEFAULTOPTION%/ selected="selected"/go;
@@ -340,6 +355,10 @@ sub renderForEdit
                $val =~ s/%DEFAULTOPTION%//go;
             }
             $value = "$val\n</tr></table>\n";
+        } else {
+            # Treat like test, make it reasonably long
+            $value =~ s/"/&#34/go; # Make sure double quote don't kill us
+            $value = "<input type=\"text\" name=\"$name\" size=\"80\" value=\"$value\" />";
         }
         $text .= "   <tr> " . &link( $web, $title, $tooltip, "h", "right", "", $extra ) . "<td align=\"left\"> $value </td> </tr>\n";
     }
@@ -374,6 +393,8 @@ sub fieldVars2Meta
    
    $meta->remove( "FIELD" ) if( ! $justOverride );
    
+   #TWiki::writeDebug( "Form::fieldVars2Meta " . $query->query_string );
+   
    my @fieldsInfo = getFormInfoFromMeta( $webName, $meta );
    foreach my $fieldInfop ( @fieldsInfo ) {
        my @fieldInfo = @$fieldInfop;
@@ -381,6 +402,8 @@ sub fieldVars2Meta
        my $title     = shift @fieldInfo;
        my $type      = shift @fieldInfo;
        my $size      = shift @fieldInfo;
+       my $tooltip   = shift @fieldInfo;
+       my $attributes = shift @fieldInfo;
        my $value     = $query->param( $fieldName );
        my $cvalue    = "";
        
@@ -410,6 +433,7 @@ sub fieldVars2Meta
            my @args = ( "name" =>  $fieldName,
                         "title" => $title,
                         "value" => $value );
+           push @args, ( "attributes" => $attributes ) if( $attributes );
                     
            $meta->put( "FIELD", @args );
        }
@@ -431,6 +455,7 @@ sub getFieldParams
        my $args = $2;
        my $name  = $field->{"name"};
        my $value = $field->{"value"};
+       #TWiki::writeDebug( "Form::getFieldParams " . $name . ", " . $value );
        $value = TWiki::Meta::cleanValue( $value );
        $value =~ s/&/&amp\;/go;
        $value =~ s/</&lt\;/go;

@@ -136,6 +136,7 @@ sub main
     my @verbatim = ();
     $ptext = &TWiki::takeOutVerbatim( $ptext, \@verbatim );
     $ptext =~ s/ {3}/\t/go;
+    $ptext = &TWiki::Prefs::updateSetFromForm( $meta, $ptext );
     $ptext = &TWiki::handleCommonTags( $ptext, $topic );
     $ptext = &TWiki::getRenderedVersion( $ptext );
 
