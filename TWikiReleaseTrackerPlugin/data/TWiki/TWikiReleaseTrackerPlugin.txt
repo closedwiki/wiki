@@ -21,16 +21,16 @@ Donations towards specifics for further development can be sent to the same payp
 The TRT centres on the concept of a unique CONTENT identifier - instead of identifying a file *by its filename*, identities are based on *file content*. This means that a file copied to another place has the same unique content identifier. The system used md5 signatures as the identifier.
 
 %TOPIC% is comprised of two parts:
-	1 a twiki plugin that provides a web interface to the API of the comparator.
-		Unlike previoius versions, this one includes in situ building of indexes for the local machine using the web interface.
-	1 a command line indexer that builds and saves indexes. This is used to generate the md5 files included in pub/TWiki/TWikiReleaseTrackerPlugin
+   1 a twiki plugin that provides a web interface to the API of the comparator.
+      Unlike previous versions, this one includes in situ building of indexes for the local installation using the web interface.
+   1 a command line indexer that builds and saves indexes. This is used to generate the md5 files included in pub/TWiki/TWikiReleaseTrackerPlugin
 
 ---++ Plugin Installation and Set up Instructions
 
 	1 Download the ZIP file from the Plugin web (see below).
 	1 Unzip EditTablePlugin.zip in your twiki installation directory. 
 	1 This plugin requires TWiki:Plugins.BuildContrib and TWiki:Plugins.DistributionContrib to run. If you do not have these two plugins installed, download and install them before proceeding.
-	1 Create a mp5 index of your local installation by clicking [[%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?mode=indexLocalInstallation][here]]. _(Repeat this step after modifying installation files to create new index.)_
+	1 Create a md5 index of your local installation by clicking [[%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?mode=indexLocalInstallation][here]]. _(Repeat this step after modifying installation files to create new index.)_
 	1 Test if the Plugin is correctly installed:
 		* Check the TRTChangesFromDistribution topic and see that the %<nop>DIFFWIKI{}% is expanded into formated report.
 	1 For further customization of the default setup, see #Settings below.
