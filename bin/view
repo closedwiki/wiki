@@ -60,7 +60,9 @@ sub main
         &wiki::lockTopic( $topic, "on" );
     }
 
-    $tmpl= &wiki::readTemplate( "view", $topic );
+    # get view template, standard view or a view with a different skin
+    my $skin = $query->param( "skin" ) || &wiki::getPreferencesValue( "SKIN" );
+    $tmpl = &wiki::readTemplate( "view", $topic, $skin );
     if( ! $tmpl ) {
         print "Content-type: text/html\n\n";
         print "<html><body>";
@@ -95,13 +97,33 @@ sub main
         $extra .= " (not exist)";
     }
 
-# commented out because not tested and not finished (protect also %INCLUDE% and search)
-#    # check access permission
-#    if( ! &wiki::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName ) ) {
-#        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccessview" );
-#        print $query->redirect( $url );
-#        return;
-#    }
+    # check access permission
+    # To Do: Need to protect also %INCLUDE% and search
+    my $viewAccessOK = &wiki::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );
+    if( ! $viewAccessOK ) {
+        # user could not be authenticated, may be not logged in yet?
+        my $viewauthFile = $ENV{'SCRIPT_FILENAME'};
+        $viewauthFile =~ s|/view|/viewauth|o;
+        if( ( ! $theRemoteUser ) && (-e $viewauthFile ) ) {
+            # try again with authenticated viewauth script
+            # instead of non authenticated view script
+            my $url = $ENV{"REQUEST_URI"};
+            if( $url ) {
+                # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
+                $url =~ s|/view|/viewauth|o;
+                $url = "$wiki::urlHost$url";
+            } else {
+                $url = "$wiki::urlHost$scriptUrlPath/$viewauthFile/$webName/$topic";
+            }
+            print $query->redirect( $url );
+            return;
+        }
+    }
+    if( ! $viewAccessOK ) {
+        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccessview" );
+        print $query->redirect( $url );
+        return;
+    }
 
     $text = &wiki::handleCommonTags( $text, $topic );
     $text = &wiki::getRenderedVersion( $text );
