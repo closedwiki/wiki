@@ -1431,6 +1431,17 @@ sub handleIncludeFile
     # handle all preferences and internal tags (for speed: call by reference)
     $text = takeOutVerbatim( $text, $verbatim );
 
+    # handle all preferences and internal tags
+    &TWiki::Prefs::handlePreferencesTags( $text );
+    handleInternalTags( $text, $theTopic, $theWeb );
+
+    # Wiki Plugin Hook (4th parameter tells plugin that its called from an include)
+    &TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb, 1 );
+
+    # handle tags again because of plugin hook
+    &TWiki::Prefs::handlePreferencesTags( $text );
+    handleInternalTags( $text, $theTopic, $theWeb );
+
     # If needed, fix all "TopicNames" to "Web.TopicNames" to get the right context
     if( ( $isTopic ) && ( $theWeb ne $webName ) ) {
         # "TopicName" to "Web.TopicName"
@@ -1442,12 +1453,6 @@ sub handleIncludeFile
         # FIXME: Support for "[[Spaced Names]]"
         # FIXME: Support for <noautolink>
     }
-
-    # Wiki Plugin Hook (4th parameter tells plugin that its called from an include)
-    &TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb, 1 );
-
-    &TWiki::Prefs::handlePreferencesTags( $text );
-    handleInternalTags( $text, $theTopic, $theWeb );
     
     # FIXME What about attachments?
 
