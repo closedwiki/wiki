@@ -26,10 +26,16 @@ use vars qw( $VERSION
             %smiliesUrls %smiliesEmotions
             $smiliesPubUrl $allPattern $smiliesFormat );
 
-$VERSION = '1.004';
+$VERSION = '1.006';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
+
+    # check for Plugins.pm versions
+    if( $TWiki::Plugins::VERSION < 1.026 ) {
+        TWiki::Func::writeWarning( "Version mismatch between InterwikiPlugin and Plugins.pm" );
+        return 0;
+    }
 
     # Get plugin preferences
     $smiliesFormat =

@@ -63,7 +63,7 @@ sub initPlugin {
     $interWeb = $installWeb;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.020 ) {
+    if( $TWiki::Plugins::VERSION < 1.026 ) {
         TWiki::Func::writeWarning( "Version mismatch between InterwikiPlugin and Plugins.pm" );
         return 0;
     }
