@@ -99,7 +99,7 @@ sub _htpasswdGeneratePasswd
 
     if( 'sha1' eq $TWiki::htpasswdEncoding ) {
 
-        $encodedPassword = $user . ':{SHA}' . MIME::Base64::encode_base64( Digest::SHA1::sha1( $passwd ) ); 
+        $encodedPassword = '{SHA}' . MIME::Base64::encode_base64( Digest::SHA1::sha1( $passwd ) ); 
         chomp $encodedPassword;
 
     } elsif ( 'crypt' eq $TWiki::htpasswdEncoding ) {
