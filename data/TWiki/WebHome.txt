@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092472322" format="1.0" version="1.83"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092548287" format="1.0" version="1.84"}%
 <table><tr><td valign="top">
 *Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
@@ -88,7 +88,7 @@ _Documentation for webmasters, system administrators, project managers, team lea
 	* %T% *ADMINS:* In less than an hour, you can read through and customize the [[#UsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. See also other enhancement pages: 
 		* TWikiAdminCookBook: Some tips that can be applied *before installation*
 		* InstantEnhancements: Simple tips (using just browser, no install needed) and quick (max couple of minutes).
-
+		* AdminTools: Topics an admin typically needs, all in one page
 
 ---++ <nop>TWikiSiteTools
 
