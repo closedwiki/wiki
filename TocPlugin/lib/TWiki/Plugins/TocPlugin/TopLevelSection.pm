@@ -106,7 +106,7 @@ use TWiki::Plugins::TocPlugin::Section;
     @tocNames = grep( /^\s+\*\s/, @tocNames );
       
     my $tocEntry;
-    my $attrs = Attrs->new("");
+    my $attrs = TocPlugin::Attrs->new("");
 
     # Check that each topic in the WebOrder only appears once
     my %seen;
@@ -206,6 +206,11 @@ use TWiki::Plugins::TocPlugin::Section;
       }
       getTopicList($section, $topics);
     }
+  }
+
+  sub toPrint {
+    my ($this, $toc, $wif, $web, $nohtml) = @_;
+    return $this->SUPER::toPrint($wif, $toc, $web, $nohtml);
   }
 
   sub toString {

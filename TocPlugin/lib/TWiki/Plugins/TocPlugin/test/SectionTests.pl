@@ -185,15 +185,15 @@ $TR$TD${JS}$s1topic#${type1}_$t1n2${JE}1.B $t1n2texp$AE$DT$RT$TFER");
 
 # Now test tag processors
 my $lev = $s1->level() + 1;
-my $s1_2 = $s1->processSECTIONTag(Attrs->new("level=$lev,text=\"$ts2text\""));
+my $s1_2 = $s1->processSECTIONTag(TocPlugin::Attrs->new("level=$lev,text=\"$ts2text\""));
 Assert::sEquals(__LINE__, $s1_2->generateReference(),
                 "${JS}#Section_1.2.${JE}1.2. $ts2texp$AE");
 
-Assert::sEquals(__LINE__, $s1->processANCHORTag(Attrs->new("
+Assert::sEquals(__LINE__, $s1->processANCHORTag(TocPlugin::Attrs->new("
 type=${type1},name=$t1n3,display=no,text=\"$t1n3text\""))->generateTarget(),
                 "${TS}${type1}_$t1n3${TE} $AE");
 $lev = $s1->level() + 2;
-my $s1_2_1 = $s1->processSECTIONTag(Attrs->new("
+my $s1_2_1 = $s1->processSECTIONTag(TocPlugin::Attrs->new("
 name=Deep,level=$lev,text=\"$ts3text\""));
 Assert::sEquals(__LINE__, $s1_2_1->generateReference(),
                 "${JS}#Section_1.2.1.${JE}1.2.1. $ts3texp$AE");
@@ -207,23 +207,23 @@ $LU$IL
 $LU$IL
 $LU");
 
-Assert::sEquals(__LINE__, $s1->processANCHORTag(Attrs->new("
+Assert::sEquals(__LINE__, $s1->processANCHORTag(TocPlugin::Attrs->new("
 type=${type1},name=$t1n4,display=yes,text=\"$t1n4text\""))->generateTarget(),
                 "${TS}${type1}_$t1n4${TE}1.2.1.A $t1n4texp$AE");
 
 # Process ref tags
 Assert::sEquals(__LINE__,
-        $s1->processREFTag(Attrs->new("type=Section,name=Deep")),
+        $s1->processREFTag(TocPlugin::Attrs->new("type=Section,name=Deep")),
         "${JS}$s1topic#Section_1.2.1.${JE}1.2.1. $ts3texp$AE");
 Assert::sEquals(__LINE__,
-        $s1->processREFTag(Attrs->new("type=${type1},name=$t1n4")),
+        $s1->processREFTag(TocPlugin::Attrs->new("type=${type1},name=$t1n4")),
         "${JS}$s1topic#${type1}_$t1n4${JE}1.2.1.A $t1n4texp$AE");
 Assert::sEquals(__LINE__,
-        $s1->processREFTag(Attrs->new("type=${type2},name=$t2n1")),
+        $s1->processREFTag(TocPlugin::Attrs->new("type=${type2},name=$t2n1")),
         "${JS}$s1topic#${type2}_$t2n1${JE}1.A $t2n1texp$AE");
 $s1->{SECTION_TESTS_JUST_TESTING} = 1;
 Assert::sEquals(__LINE__,
-        $s1->processREFTag(Attrs->new("type=${type2},name=$t2n1,topic=$s1topic")),
+        $s1->processREFTag(TocPlugin::Attrs->new("type=${type2},name=$t2n1,topic=$s1topic")),
         "${JS}$s1topic#${type2}_$t2n1${JE}1.A $t2n1texp$AE");
 }
 1;

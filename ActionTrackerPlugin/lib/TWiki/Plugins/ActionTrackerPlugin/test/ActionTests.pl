@@ -24,9 +24,9 @@ Assert::assert(__FILE__,__LINE__, $action->daysToGo() == -1);
 Assert::sEquals(__FILE__,__LINE__, $action->formatAsString(),
 "Test.Topic/0: Open action for Main.Fred, due Sun, 2 Jun 2002 (LATE): A new action ");
 Assert::htmlContains(__FILE__,__LINE__, $action->formatAsTableData( "href" ),
-"<td> Main.Fred </td><td bgcolor=$Action::latecol> Sun, 2 Jun 2002 </td><td> [[Test.Topic#AcTion0][ A new action ]] </td><td> open </td>");
+"<td> Main.Fred </td><td bgcolor=\"$Action::latecol\"> Sun, 2 Jun 2002 </td><td> [[Test.Topic#AcTion0][ A new action ]] </td><td> open </td>");
 Assert::htmlContains(__FILE__,__LINE__, $action->formatAsTableData( "name" ),
-"<td> Main.Fred </td><td bgcolor=$Action::latecol> Sun, 2 Jun 2002 </td><td> <A name=\"AcTion0\"></A> A new action </td><td> open </td>");
+"<td> Main.Fred </td><td bgcolor=\"$Action::latecol\"> Sun, 2 Jun 2002 </td><td> <A name=\"AcTion0\"></A> A new action </td><td> open </td>");
 
 # Check late actions for Fred
 $attrs = ActionTrackerPlugin::Attrs->new("who=Fred");

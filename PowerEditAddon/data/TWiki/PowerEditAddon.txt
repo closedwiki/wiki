@@ -62,10 +62,10 @@ It is a condition of use that any useful customisations are fed back to the %TOP
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 	| ==%TOPIC%.xml== | Ant build file |
-	| ==data/Plugins/%TOPIC%.txt== | Plugin topic |
+	| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	| ==bin/poweredit== | Server module |
 	| ==templates/edit.power.tmpl== | Specialised skin |
-	| ==pub/Plugins/%TOPIC%/poweredit.jar== | JAR file |
+	| ==pub/TWiki/%TOPIC%/poweredit.jar== | JAR file |
 	| ==lib/TWiki/Plugins/%TOPIC%/source.zip== | Source and test code |
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 	* Add the following line to the "TWiki Addons" section of %TWIKIWEB%.TextFormattingRules:

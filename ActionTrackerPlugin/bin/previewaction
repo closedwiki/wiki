@@ -124,7 +124,7 @@ sub main
     $desc =~ s/\r?\n/ <br \/>/sgo;
     
     $text = $query->param( "pretext" ) || "";
-    $text .= "%ACTION{ who=\"$who\" due=\"$due\" state=\"$state\" }% $desc\n";
+    $text .= "\n%ACTION{ who=\"$who\" due=\"$due\" state=\"$state\" }% $desc\n";
     $text .= $query->param( "posttext" );
     
     $ptext = $text;

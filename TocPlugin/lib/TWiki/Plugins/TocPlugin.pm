@@ -84,7 +84,7 @@ sub DISABLE_commonTagsHandler
 }
 
 # =========================
-sub DISABLE_startRenderingHandler
+sub startRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
 
@@ -94,6 +94,7 @@ sub DISABLE_startRenderingHandler
 
   # do custom extension rule, like for example:
   # $_[0] =~ s/old/new/go;
+  $_[0] = TOC::processTopic($wif, $web, $topic, $_[0]);
 }
 
 # =========================
@@ -123,7 +124,7 @@ sub DISABLE_insidePREHandler
 }
 
 # =========================
-sub endRenderingHandler
+sub DISABLE_endRenderingHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 

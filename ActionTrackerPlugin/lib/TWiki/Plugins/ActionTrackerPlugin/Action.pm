@@ -232,9 +232,9 @@ use Time::ParseDate;
 
     my $text = "<td> " . $this->{WHO} . " </td><td";
     if ( !defined($this->{DUE}) ) {
-      $text .= " bgcolor=$badcol";
+      $text .= " bgcolor=\"$badcol\"";
     } elsif ( $this->isLate() ) {
-      $text .= " bgcolor=$latecol";
+      $text .= " bgcolor=\"$latecol\"";
     }
     $text .= "> " . $this->dueString();
     #debug $text .= " (" . $this->daysToGo() . " days to go)";
@@ -252,11 +252,11 @@ use Time::ParseDate;
       # point that will be in the middle of a table
       my $tmp = $this->{TEXT};
       $tmp =~ s/<br ?\/?>/\n/sgo;
-      $text .= "<A name=\"$anchor\"></A> " . $tmp;
+      $text .= "<a name=\"$anchor\"></a> " . $tmp;
     }
     $text .= " </td><td> " . $this->{STATE} . " </td>";
 
-    $text .= "<td><A ";
+    $text .= "<td><a ";
 
     my $url = "%SCRIPTURLPATH%/editaction%SCRIPTSUFFIX%/" .
       $this->{WEB} . "/" . $this->{TOPIC} .

@@ -1,4 +1,4 @@
-#
+
 # Copyright (C) Motorola 2001 - All rights reserved
 #
 # TWiki extension that adds tags for the generation of tables of contents.
@@ -25,7 +25,7 @@ use TWiki::Plugins::TocPlugin::TopLevelSection;
 
   # Private
   sub _processTag {
-    my ($toc, $wif, $tag, @params) = @_;
+    my ($toc, $wif, $ct, $tag, @params) = @_;
     
     if ($tag eq "TOCCHECK") {
       return $toc->processTOCCHECKTag(@params);
@@ -36,13 +36,13 @@ use TWiki::Plugins::TocPlugin::TopLevelSection;
     } elsif ($tag eq "TOCDUMP") {
       return $toc->toString(0);
     } else {
-      my $ct = $toc->currentTopic();
+#      my $ct = $toc->currentTopic();
       return Section::_error("Bad $tag: Current topic not in WebOrder") unless $ct;
       if ($tag eq "ANCHOR") {
         my $anc = $ct->processANCHORTag(@params);
         return $anc->generateTarget() if $anc;
       } elsif ($tag eq "SECTION") {
-        my $ct = $toc->currentTopic();
+#        my $ct = $toc->currentTopic();
         my $sec = $ct->processSECTIONTag(@params);
         return $sec->generateTarget() if $sec;
       } elsif ($tag eq "REF") {
@@ -68,27 +68,67 @@ use TWiki::Plugins::TocPlugin::TopLevelSection;
     while ($text =~
            s/%((SECTION[0-9]+)|ANCHOR)({[^%]*})?%(.*)/\<TOC_Mark\>/o) {
       my $tag = $1;
-      my $attrs = Attrs->new($3);
+      my $attrs = TocPlugin::Attrs->new($3);
+      $attrs->set("text", $4);
+      if ($ct) {
+        if ($tag =~ s/SECTION([0-9]+)//o) {
+          my $level = $1;
+          $attrs->set("level", $ct->level() + $level);
+          $text =~ s/\<TOC_Mark\>/&_processTag($toc, $wif, $toc->currentTopic, "SECTION", $attrs)/eo;
+        } else {
+          $text =~ s/\<TOC_Mark\>/&_processTag($toc, $wif, $toc->currentTopic, "ANCHOR", $attrs)/eo;
+        }
+      }
+    }
+    # The order in which the other tags is done is irrelevant
+    my $nullatt = TocPlugin::Attrs->new("");
+    $text =~ s/%(REF|REFTABLE){([^%]*)}%/&_processTag($toc, $wif, $toc->currentTopic, $1, TocPlugin::Attrs->new($2))/geo;
+    $text =~ s/%(TOCDUMP)%/&_processTag($toc, $wif, $toc->currentTopic, $1, $nullatt)/geo;
+    $text =~ s/%(TOCCHECK)%/&_processTag($toc, $wif, $toc->currentTopic, $1, $nullatt)/geo;
+    $text =~ s/%(CONTENTS)({[^%]*})?%/&_processTag($toc, $wif, $toc->currentTopic, $1, TocPlugin::Attrs->new($2))/geo;
+    return $text;
+  }
+
+  sub _printWithTOCTags {
+    my ($toc, $wif, $ct, $text) = @_;
+   
+    # remove sections and anchors that were generated from the text
+    # from the current topic for reload as the content may have changed
+    $ct->purge() if $ct;
+
+    # Anchors and sections must be done before we generate the table
+    # of contents and ref tables.
+    while ($text =~
+           s/%((SECTION[0-9]+)|ANCHOR)({[^%]*})?%(.*)/\<TOC_Mark\>/o) {
+      my $tag = $1;
+      my $attrs = TocPlugin::Attrs->new($3);
       $attrs->set("text", $4);
       if ($tag =~ s/SECTION([0-9]+)//o) {
         my $level = $1;
         $attrs->set("level", $ct->level() + $level);
-        $text =~ s/\<TOC_Mark\>/&_processTag($toc, $wif, "SECTION", $attrs)/eo;
+        $text =~ s/\<TOC_Mark\>/&_processTag($toc, $wif, $ct, "SECTION", $attrs)/eo;
       } else {
-        $text =~ s/\<TOC_Mark\>/&_processTag($toc, $wif, "ANCHOR", $attrs)/eo;
+        $text =~ s/\<TOC_Mark\>/&_processTag($toc, $wif, $ct, "ANCHOR", $attrs)/eo;
       }
     }
     # The order in which the other tags is done is irrelevant
-    my $nullatt = Attrs->new("");
-    $text =~ s/%(REF|REFTABLE){([^%]*)}%/&_processTag($toc, $wif, $1, Attrs->new($2))/geo;
-    $text =~ s/%(CONTENTS)({[^%]*})?%/&_processTag($toc, $wif, $1, Attrs->new($2))/geo;
-    $text =~ s/%(TOCCHECK)%/&_processTag($toc, $wif, $1, $nullatt)/geo;
-    $text =~ s/%(TOCDUMP)%/&_processTag($toc, $wif, $1, $nullatt)/geo;
+    my $nullatt = TocPlugin::Attrs->new("");
+    $text =~ s/%(REF|REFTABLE){([^%]*)}%/&_processTag($toc, $wif, $ct, $1, TocPlugin::Attrs->new($2))/geo;
+    $text =~ s/%(CONTENTS)({[^%]*})?%/&_processTag($toc, $wif, $ct, $1, TocPlugin::Attrs->new($2))/geo;
+    $text =~ s/%(TOCCHECK)%/&_processTag($toc, $wif, $ct, $1, $nullatt)/geo;
+    $text =~ s/%(TOCDUMP)%/&_processTag($toc, $wif, $ct, $1, $nullatt)/geo;
     
     return $text;
   }
 
+
+
   my $toc = undef;
+
+  sub _webPrint {
+    my ($toc, $wif, $web) = @_;
+    return $toc->toPrint($toc, $wif, $web, 0);
+  }
 
   sub processTopic {
     my ($wif, $web, $topic, $text) = @_;
@@ -99,11 +139,18 @@ use TWiki::Plugins::TocPlugin::TopLevelSection;
     if (!$toc || $web ne $toc->web() || $topic eq "WebOrder") {
       my $mess;
       ($toc, $mess) = TopLevelSection::createTOC($web, $wif);
+      if ($toc && $topic eq "WebPrint") {
+	return _webPrint($toc, $wif, $web);
+      }
+
       return Section::replaceAllTags($text, $mess) unless $toc;
     }
     my $ct = $toc->currentTopic();
 
-    return Section::replaceAllTags($text, Section::_error("Topic $topic not in WebOrder")) unless $ct;
+# CarlMikkelsen didn't understand why this test was here, and it got in his way,
+# so he removed it.  This is important so that there can be a topic NOT in WebOrder
+# that uses tags other than %SECTION% and %ANCHOR%.
+#    return Section::replaceAllTags($text, Section::_error("Topic $topic not in WebOrder")) unless $ct;
 
     return _processTOCTags($toc, $wif, $text);
   }

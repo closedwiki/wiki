@@ -1,10 +1,20 @@
 ---++ <nop>%TOPIC%
 
+%TOC%
+
 This plugin encapsulates the <nop>TWikiDraw Java Applet first developed by Main.PeterThoeny from the original <nop>JHotDraw.
+
+<nop>JHotDraw is a drawing editor that supports drawing in a style similar to that found in MS Powerpoint and MS Word. Various shaped figures can be placed in the drawing and text annotations joined to them.
+
+Unique to TWikiDraw, a drawing can also have a "map" which makes figures in the drawing sensitive to the mouse cursor. A map is automatically added to an image when a URL is attached to any of the figures.
+
+How you edit a drawing depends on whether the drawing has a map and the setting of the "EDIT_BUTTON" option. A drawing with no map can be edited simply by clicking on the drawing. A drawing with a map can be edited by clicking the edit button or, failing that, on the boundary of the image.
+
+Browser support for Java 1.1 required.
 
 ---++ Syntax Rules
 
-	* Write the command =%<nop>DRAWING{name}%= anywhere in a TWiki topic. You can name the drawing anything you like, allowed characters are =A-Z a-z 0-9 _ - .= . If you have only one drawing in the topic you can simply write =%<nop>DRAWING%= . A drawing with no map can be edited simply by clicking on the drawing, or if it has a map by clicking the edit button or failing that on the boundary of the image. Browser support for Java 1.1 required.
+	* Write the command =%<nop>DRAWING{name}%= anywhere in a TWiki topic. You can name the drawing anything you like, allowed characters are =A-Z a-z 0-9 _ - .= . If you have only one drawing in the topic you can simply write =%<nop>DRAWING%= .
 
 ---+++ Tools
 
@@ -57,32 +67,61 @@ Set to 1 if an "Edit" button is to be generated attached to the image. You will 
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 	| ==%TOPIC%.xml== | Ant build file |
-	| ==data/Plugins/%TOPIC%.txt== | Plugin topic |
+	| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	| ==templates/twikidraw.tmpl== | Applet page template |
-	| ==pub/Plugins/TWikiDrawPlugin/twikidraw.jar== | JAR file |
+	| ==pub/TWiki/TWikiDrawPlugin/twikidraw.jar== | JAR file |
 	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	| ==lib/TWiki/Plugins/%TOPIC%/source.zip== | Java sources |
-	| ==pub/Plugins/%TOPIC%/twikidraw.jar== | JAR file |
-	| ==pub/Plugins/%TOPIC%/example.gif== | Example file |
-	| ==pub/Plugins/%TOPIC%/example.gif,v== | Example file |
-	| ==pub/Plugins/%TOPIC%/example.draw== | Example file |
-	| ==pub/Plugins/%TOPIC%/example.draw,v== | Example file |
-	| ==pub/Plugins/%TOPIC%/ATEXT1.gif== | Button image |
-	| ==pub/Plugins/%TOPIC%/BORDDEC1.gif== | Button image |
-	| ==pub/Plugins/%TOPIC%/CONN1.gif== | Button image |
-	| ==pub/Plugins/%TOPIC%/ELLIPSE1.gif== | Button image |
-	| ==pub/Plugins/%TOPIC%/LINE1.gif== | Button image |
-	| ==pub/Plugins/%TOPIC%/OCONN1.gif== | Button image |
-	| ==pub/Plugins/%TOPIC%/POLYGON1.gif== | Button image |
-	| ==pub/Plugins/%TOPIC%/RECT1.gif== | Button image |
-	| ==pub/Plugins/%TOPIC%/RRECT1.gif== | Button image |
-	| ==pub/Plugins/%TOPIC%/SCRIBBL1.gif== | Button image |
-	| ==pub/Plugins/%TOPIC%/SEL1.gif== | Button image |
-	| ==pub/Plugins/%TOPIC%/TEXT1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/twikidraw.jar== | JAR file |
+	| ==pub/TWiki/%TOPIC%/example.gif== | Example file |
+	| ==pub/TWiki/%TOPIC%/example.draw== | Example file |
+	| ==pub/TWiki/%TOPIC%/ATEXT1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/ATEXT2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/ATEXT3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/BORDDEC1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/BORDDEC2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/BORDDEC3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/CONN1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/CONN2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/CONN3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/ELLIPSE1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/ELLIPSE2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/ELLIPSE3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/LINE1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/LINE2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/LINE3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/OCONN1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/OCONN2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/OCONN3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/POLYGON1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/POLYGON2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/POLYGON3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/RECT1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/RECT2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/RECT3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/RRECT1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/RRECT2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/RRECT3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/SCRIBBL1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/SCRIBBL2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/SCRIBBL3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/SEL1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/SEL2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/SEL3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/TEXT1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/TEXT2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/TEXT3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/URL1.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/URL2.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/URL3.gif== | Button image |
+	| ==pub/TWiki/%TOPIC%/applettest.html== | Test |
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 	* Add ==Plugins.%TOPIC%== to the ==INSTALLEDPLUGINS== variable in %TWIKIWEB%.TWikiPreferences (or any WebPreferences topic).
 	* To test if the plugin is correctly installed, view this topic in the installation and you should see a placeholder box below. Click on it.<br />
 	%DRAWING{example}%
+
+---+++ Known Problems
+If you add a map to a drawing by setting a URL on any of the figures a map file is created. If you subsequently remove all the URLs from figures in the drawing the map still exists, but is now empty. There is no way to remove the map other than by manually moving the attachment.
 
 ---+++ Plugin Info
 
@@ -92,6 +131,7 @@ Set to 1 if an "Edit" button is to be generated attached to the image. You will 
 | | 1 Oct 2001: Updated this text |
 | | 20 Feb 2002: Merged Main.RobWalker's fixes for text attached to figures |
 | | 30 Sep 2002: Add support for URLs, EXTRA_COLORS, fixed a number of outstanding bugs |
+| | 2 Feb 2003: Bug fixes
 |  CPAN Dependencies: | None |
 |  Other Dependencies: | Java 1.1 enabled browser |
 |  Perl Version: | 5.0 |

@@ -18,7 +18,7 @@ use strict;
 use integer;
 
 # Class of attribute sets
-{ package Attrs;
+{ package TocPlugin::Attrs;
 
   # Parse a standard attribute string containing name=value pairs. The
   # value may be a word or a quoted string (no escapes!)
