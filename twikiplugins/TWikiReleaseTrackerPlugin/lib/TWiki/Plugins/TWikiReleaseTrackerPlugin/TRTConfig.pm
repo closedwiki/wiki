@@ -15,8 +15,15 @@ BEGIN {
 		  "$twiki_home"
 		  ; # Uncomment for distro; #NB. assumes below, e.g. twiki/bin/view, not bin/view
 	}
+
+	unless ($Common::installationDir) { #CodeSmell - need to determine where used
+	    if ( defined(&TWiki::Func::getPubDir) ) {
+		$Common::installationDir = TWiki::Func::getPubDir()."/..";
+	    }	    
+	}
+
 	$Common::downloadDir =
-	  "/home/mrjc/twikiplugindev/twikiplugins/shared/tools/download/";
+	    "/home/mrjc/twikiplugindev/twikiplugins/shared/tools/download/";
 }
 
 1;
