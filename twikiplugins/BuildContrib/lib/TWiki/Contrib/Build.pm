@@ -180,8 +180,10 @@ sub new {
 
   # read the manifest
   my $manifest = "$basedir/MANIFEST";
-  open(PF, "<$manifest") ||
-	die "$manifest missing";
+  unless (open(PF, "<$manifest")) {
+      target_manifest(); #CodeSmell - calling package sub not object method
+      die "$manifest missing";
+  }
   my $line;
   while ($line = <PF>) {
 	if ( $line =~ /^(\S+)(\s+(\S.*))?\s*$/o ) {
@@ -713,10 +715,11 @@ Generate and print to STDOUT a rough guess at the MANIFEST listing
 
 sub target_manifest {
   my $this = shift;
-  my $target = shift;
   print STDERR "Here's a rough guess at your MANIFEST list (from $basedir)\n";
   chdir("$basedir") || die "can't cd to $basedir - $!";
-  print `find . -type f | grep -v CVS | grep -v '~'`;
+  print STDERR `find . -type f | grep -v CVS | grep -v '~'`;
+  print "\n";
+  print "Save this as $basedir/MANIFEST and check it manually!\n";
 }
 
 
