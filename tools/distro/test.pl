@@ -13,6 +13,8 @@ use Getopt::Long qw( :config bundling auto_version );
 use Pod::Usage;
 use WWW::Mechanize::TWiki 0.05;
 
+sub mychomp { chomp $_[0]; $_[0] }
+
 $main::VERSION = '0.56';
 my $Config = {
 # TEST OPTIONS
@@ -23,7 +25,7 @@ my $Config = {
 	twikisync => 0,					# download latest versions of plugins, addons, etc from twiki.org	
 # INSTALL OPTIONS
 	# TODO: change to use a URI (?)
-	install_account => 'twiki',
+	install_account => mychomp( `whoami` ),
 	install_host => 'localhost',
 	install_dir => '~/Sites',
 	report => 0,
@@ -215,7 +217,7 @@ sub GetAWeb
 
     my $getaweb = 'get-a-web';
     my $exportWeb = "$webOutput.tar";
-    $mech->$getaweb( $exportWeb, { output => $exportWeb, saveasweb => $web } );
+    $mech->$getaweb( "${webOutput}.${web}.tar" );
 ###
     open( WEB, ">$exportWeb" ) or die $!;
     print WEB $mech->content() or die $!;
