@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="998030806" format="1.0beta2" version="1.16"}%
+%META:TOPICINFO{author="MikeMannix" date="999328830" format="1.0" version="1.17"}%
 *%WIKITOOLNAME% Site-Level Preferences*
 
 The following settings are __site-level preferences__ , e.g. affecting all users in all %WIKITOOLNAME% webs. These preferences can be overwritten by __web preferences__ (topic %WEBPREFSTOPIC% in each %WIKITOOLNAME% web) and __user preferences__ (your personal topic, i.e. Main.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
@@ -57,7 +57,7 @@ __Preferences:__
 	* Wiki webmaster email address:
 		* Set WIKIWEBMASTER = webmaster@your.company
 
-	* Mail host for outgoing mail. This is used for TWikiNotificationOfChanges if Perl module ==Net::SMTP== is installed. If not, sendmail is used instead (defined by ==$mailProgram== in ==TWiki.cfg==). Examples: =mail.your.company= or =localhost=
+	* Mail host for outgoing mail. This is used for WebNotification if Perl module ==Net::SMTP== is installed. If not, sendmail is used instead (defined by ==$mailProgram== in ==TWiki.cfg==). Examples: =mail.your.company= or =localhost=
 		* Set SMTPMAILHOST = mail
 
 	* TWikiPlugins configuration: All plugin modules that exist in the =lib/TWiki/Plugins= directory are activated automatically unless disabled by DISABLEDPLUGINS. You can optionally list the installed plugins in INSTALLEDPLUGINS. This is useful to define the sequence of plugin execution, or to specify other webs then the %TWIKIWEB% web for the plugin topics. Specify plugins as a comma separated list of topics.

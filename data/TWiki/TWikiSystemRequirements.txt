@@ -1,21 +1,48 @@
-%META:TOPICINFO{author="MikeMannix" date="999320061" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="MikeMannix" date="999336394" format="1.0" version="1.12"}%
 %TOC%
 %STARTINCLUDE%
----## TWiki Software Environment
+---## TWiki Operating Environment
 
----+++ System Requirements
+Low requirements on client-side and server-side environment, to keep TWiki deployment as broad as possible is a key element of the TWikiMission. Strict W3C and ECMA standards compliance is also a mandate. These requirements are amended from time to time as technology progresses.
 
-TWiki is written in *Perl 5* and also uses some *shell commands*. It also requires that *GNU RCS* (Revision Control System) is installed on the same system. The current implementation runs best on a Linux machine, but it can also run with Microsoft Windows. 
+---+++ Server-Side Requirements
 
-| *Required Environment by Platform* |||
-| *Packages:* | *Linux/Unix:* | *Windows:* |
-| Perl		 |	5.x	|	5.x  |
-| Non-standard Perl modules |  ???  | =MIME::Base64=, Digest::SHA1 (for password generation) |
-| Optional Perl modules | =Net::SMTP= (or sendmail) |  =Net::SMTP=  | 
-| RCS		  |	5.7	|	5.7 (including =diff=  |
-| Other external programs |	=ls=, =fgrep=, =egrep=  |  =ls=, =fgrep=, =egrep=  |
-| Web server  |	Apache  |	Apache, IIS	|
+TWiki is written in *Perl 5* and uses a number of *shell commands*. It requires that *GNU RCS* (Revision Control System) be installed on the same system. Current development is on Linux. the recommended platform, but it can also work with Microsoft Windows and other OS.
+
+| *Required Server Environment by Platform* |||
+| *Resource* | *Unix* | *Windows* |
+| Perl |  5.005_03 or higher  ||
+| Non standard Perl modules |  =Net::SMTP= (or =sendmail=)  |  =Net::SMTP=  | 
+| RCS |  5.7 or higher  ||
+| Other external programs |  =ls, fgrep, egrep=  ||
+| Web server |  Apache and others (support for cgi, authentication, extended path) ***  ||
 | _OS versions_ |  __Linux, Unix...__  |  __every last Win?!__  |
+| Required disk space | | |
+
+__ISP INSTALLATION REQUIREMENTS: SSI, RCS local or sysadmin, same for perl modules for plugins, cron, basic authentication,...__
+
+---++ Client-Side Requirements
+
+The basic TWiki engine and templates have a low requirement on the browser:
+
+|  *Recommend PC Requirement*  |||
+| *Component* | *Min/Rec* |
+
+|  *Browser Requirements*  ||
+| *Resource* | *Details* |
+| HTML 3.2 browser | |
+| JavaScript 1.? | Optional: JS degrades gracefully |
+| Cookies | Not used |
+| CSS1/2 | ???? |
+
+	* TWiki generates XHTML 1.0 code as long as it is compatible with HTML 3.2.
+
+__WHAT ABOUT WEB STANDARDS PROJECT - CSS CONTROL__
+
+---+++ Known Issues
+
+	* Some TWikiSkins may require more, like cookies and JavaScript
+	* At present, contributed Plugins are not checked against compatibility standards, and may require anything imaginable: browser-specific functions, Java, cookies, CSS, etc.
 
 ---+++ TWiki Directory Structure
 
@@ -370,8 +397,8 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 | ==TWiki/RandyKramer.txt,v== | xxxx |
 | ==TWiki/RegularExpression.txt== | xxxx |
 | ==TWiki/RegularExpression.txt,v== | xxxx |
-| ==TWiki/RenameTopic.txt== | xxxx |
-| ==TWiki/RenameTopic.txt,v== | xxxx |
+| ==TWiki/ManagingTopics.txt== | xxxx |
+| ==TWiki/ManagingTopics.txt,v== | xxxx |
 | ==TWiki/SearchDoesNotWork.txt== | xxxx |
 | ==TWiki/SearchDoesNotWork.txt,v== | xxxx |
 | ==TWiki/SimultaneousEdits.txt== | xxxx |
@@ -388,8 +415,8 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 | ==TWiki/TextFormattingRules.txt,v== | xxxx |
 | ==TWiki/TWikiAccessControl.txt== | xxxx |
 | ==TWiki/TWikiAccessControl.txt,v== | xxxx |
-| ==TWiki/TWikiAdministration.txt== | xxxx |
-| ==TWiki/TWikiAdministration.txt,v== | xxxx |
+| ==TWiki/ManagingWebs.txt== | xxxx |
+| ==TWiki/ManagingWebs.txt,v== | xxxx |
 | ==TWiki/TWikiUserAuthentication.txt== | xxxx |
 | ==TWiki/TWikiUserAuthentication.txt,v== | xxxx |
 | ==TWiki/TWikiCategoryTable.txt== | xxxx |
@@ -412,8 +439,8 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 | ==TWiki/TWikiImplementationNotes.txt,v== | xxxx |
 | ==TWiki/TWikiInstallationGuide.txt== | xxxx |
 | ==TWiki/TWikiInstallationGuide.txt,v== | xxxx |
-| ==TWiki/TWikiNotificationOfChanges.txt== | xxxx |
-| ==TWiki/TWikiNotificationOfChanges.txt,v== | xxxx |
+| ==TWiki/WebNotification.txt== | xxxx |
+| ==TWiki/WebNotification.txt,v== | xxxx |
 | ==TWiki/TWikiPlannedFeatures.txt== | xxxx |
 | ==TWiki/TWikiPlannedFeatures.txt,v== | xxxx |
 | ==TWiki/TWikiPlugins.txt== | xxxx |

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999324428" format="1.0" version="1.28"}%
+%META:TOPICINFO{author="MikeMannix" date="999329908" format="1.0" version="1.29"}%
 <script language="JavaScript1.2" type="text/javascript">
 function dblclick() { window.scrollTo(0,0) }
 if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
@@ -51,11 +51,11 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 %INCLUDE{"TWikiPlugins"}%
 
 -----
-%INCLUDE{"TWikiNotificationOfChanges"}%
+%INCLUDE{"WebNotification"}%
 
 ----
-%INCLUDE{"RenameTopic"}%
+%INCLUDE{"ManagingTopics"}%
 
 -----
-%INCLUDE{"TWikiAdministration"}%
+%INCLUDE{"ManagingWebs"}%
 

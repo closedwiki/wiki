@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999324144" format="1.0" version="1.29"}%
+%META:TOPICINFO{author="MikeMannix" date="999329987" format="1.0" version="1.30"}%
 <table><tr><td>
 Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about it, download it, and try it out for yourself.</td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
@@ -44,9 +44,9 @@ Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management t
 			1 TWikiMetaData
 			1 TWikiFormTemplate
 			1 TWikiPlugins
-			1 [[TWikiNotificationOfChanges][MonitoringSiteChanges]]
-			1 [[RenameTopic][ManagingTopics]]
-			1 [[TWikiAdministration][ManagingWebs]]
+			1 MonitoringSiteActivity
+			1 ManagingTopics
+			1 ManagingWebs
 
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
 	* WebSearch: Full text search of the %WIKITOOLNAME%.%WEB% web.

@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="MikeMannix" date="999316016" format="1.0" version="1.7"}%
----## Monitoring Site Changes
+%META:TOPICINFO{author="MikeMannix" date="999329460" format="1.0" version="1.8"}%
+---## Web Notification on Changes
 
 Each %WIKITOOLNAME% web does an automatic email notification of recent changes. Users can subscribe / unsubscribe themselves in %NOTIFYTOPIC% of each TWiki web. The Perl script ==mailnotify== is called by a deamon in regular intervals. The script is sending an automated email to subscribed users in case some topics changed in a web within this interval.
 
@@ -21,3 +21,4 @@ The above line will call mailnotify at 15 minutes and 45 minutes past every hour
 On Windows NT / 2000 you can use a scheduled task.
 
 -- PeterThoeny - 16 Mar 2001 <br>
+%META:TOPICMOVED{by="MikeMannix" date="999328830" from="TWiki.TWikiNotificationOfChanges" to="TWiki.WebNotification"}%
