@@ -149,10 +149,9 @@ sub main
 	   $tmpl =~ s/%FORMFIELDS%//go;
         }
     } else {
-        # for debug: Don't include attachment FIXME is this correct?
         $text = $query->param( "text" ); # text to save
-        # FIXME
-        $ptext = $text;                  # text to preview
+        ( $meta, $ptext ) = &TWiki::Store::_extractMetaData( $webName, $topic, $text );
+        $tmpl =~ s/%FORMFIELDS%//go;
     }
 
     $ptext =~ s/ {3}/\t/go;
