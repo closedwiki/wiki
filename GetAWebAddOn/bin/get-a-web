@@ -2,7 +2,7 @@
 # Copyright 2004 Will Norris.  All Rights Reserved.
 # License: GPL
 use strict;
-my $VERSION = '0.97';
+my $VERSION = '0.99';
 
 BEGIN {
     ++$|;
@@ -14,7 +14,6 @@ BEGIN {
     require './setlib.cfg';
 }
 
-use Data::Dumper qw( Dumper );
 use CGI;
 use CGI::Carp qw( fatalsToBrowser );;
 use TWiki;
@@ -52,7 +51,7 @@ sub getaweb
     my $templateDir = $TWiki::cfg{TemplateDir} || $TWiki::templateDir;
 
     $error .= qq{web "$webName" doesn't exist<br/>} unless TWiki::Func::webExists( $webName );
-    $error .= qq{data dir "$dataDir}" doesn't exist<br/>} unless -d $dataDir;
+    $error .= qq{data dir "$dataDir" doesn't exist<br/>} unless -d $dataDir;
     $error .= qq{pub dir "$pubDir" doesn't exist<br/>} unless -d $pubDir;
     $error .= qq{template dir "$templateDir" doesn't exist<br/>} unless -d $templateDir;
 
@@ -79,7 +78,7 @@ sub getaweb
 	chdir "$dirEntry->{dir}/$webName" or die $!;
 
 	# CODE SMELL: the archive will fail if no topics end up being exported
-	my @files = grep { !/(\.htpasswd|\.htaccess|.*\.lock)/ } <* */*>;		# HACK: make true recursive thingee
+	my @files = grep { !/(\.htpasswd|\.htaccess|.*\.lock|~$)/ } <* */*>;		# HACK: make true recursive thingee
 	foreach my $file ( @files )
 	{
 	    next if -d $file;
