@@ -83,14 +83,18 @@ mkpath( $installBase ) or die "Unable to create the new build directory: $!";
 
 ################################################################################
 
-my $svnExport = $Config->{svn_export} or die "no svn_export?";
-( rmtree( $svnExport ) or die qq{Unable to empty the svn export directory "$svnExport": $!} ) if -e $svnExport;
-execute( qq{svn export ../.. $svnExport} );  # or die $!;  -- "Inconsistent line ending style" error
-die "no svn export output?" unless -d $svnExport;
-
 my $pwdStart = cwd();
-chdir( '../..' ) or die $!;            # from tools/distro up to BRANCH (eg, trunk, DEVELOP)
-#chdir( $svnExport ) or die $!;
+
+if ( 0 ) {
+    my $svnExport = $Config->{svn_export} or die "no svn_export?";
+    ( rmtree( $svnExport ) or die qq{Unable to empty the svn export directory "$svnExport": $!} ) if -e $svnExport;
+    execute( qq{svn export ../.. $svnExport} ) or die $!;
+#    die "no svn export output?" unless -d $svnExport;
+    chdir( $svnExport ) or die $!;
+}
+else {
+    chdir( '../..' ) or die $!;            # from tools/distro up to BRANCH (eg, trunk, DEVELOP)
+}
 
 ################################################################################
 #-[lib/, templates/, data/, pub/icn, pub/TWiki, bin/]-----------------------------------
