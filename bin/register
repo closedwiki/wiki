@@ -162,7 +162,7 @@ sub main
         }
         $text = "$before$after";
         $text =~ s/ {3}/\t/go;
-        &TWiki::Store::saveTopic( $wikiName, $text, "", 1 );
+        &TWiki::Store::saveTopic( $webName, $wikiName, $text, "", 1 );
     }
 
     # add user to TWikiUsers topic
