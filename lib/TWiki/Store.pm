@@ -116,6 +116,7 @@ sub getFileName
       $file = "$TWiki::pubDir/$web/$topic$extra/$attachment$extension";
    }
 
+   # FIXME: Dangerous, need to make sure that parameters are not tainted
    # Shouldn't really need to untaint here - done to be sure
    $file =~ /(.*)/;
    $file = $1; # untaint
@@ -148,6 +149,7 @@ sub getFileDir
       $dir = "$TWiki::pubDir/$web/$topic$suffix";
    }
 
+   # FIXME: Dangerous, need to make sure that parameters are not tainted
    # Shouldn't really need to untaint here - done to be sure
    $dir =~ /(.*)/;
    $dir = $1; # untaint
@@ -155,6 +157,19 @@ sub getFileDir
    return $dir;
 }
 
+# =========================
+# Get public web directory, where topic attachment dirs live in
+sub getPubWebDir
+{
+    my( $web ) = @_;
+
+    # FIXME: Dangerous, need to make sure that parameters are not tainted
+    my $dir = "$TWiki::pubDir/$web";
+    $dir =~ /(.*)/;
+    $dir = $1; # untaint
+
+    return $dir;
+}
 
 # =========================
 # Get rid a topic and its attachments completely
@@ -219,9 +234,16 @@ sub moveAttachment
     
     my $error = "";   
     my $what = "$oldWeb.$oldTopic.$theAttachment -> $newWeb.$newTopic";
+
+    # Make sure pub directory exists for web
+    my $newPubDir = getPubWebDir( $newWeb );
+    if ( ! -e $newPubDir ) {
+        umask( 0 );
+        mkdir( $newPubDir, 0777 );        
+    }
     
     # Make sure directory exists to move to - FIMXE might want to delete old one if empty?
-    my $newPubDir = getFileDir( $newWeb, $newTopic, $theAttachment, "" );
+    $newPubDir = getFileDir( $newWeb, $newTopic, $theAttachment, "" );
     if ( ! -e $newPubDir ) {
         umask( 0 );
         mkdir( $newPubDir, 0777 );        
@@ -381,6 +403,13 @@ sub renameTopic
       saveNew( $newWeb, $newTopic, $text, $meta, "", "", "", "unlock" );
    }
 
+   # Make sure pub directory exists for new web
+   my $newPubWebDir = getPubWebDir( $newWeb );
+   if ( ! -e $newPubWebDir ) {
+       umask( 0 );
+       mkdir( $newPubWebDir, 0777 );        
+   }
+    
    # Rename the attachment directory if there is one
    my $oldAttachDir = getFileDir( $oldWeb, $oldTopic, 1, "");
    my $newAttachDir = getFileDir( $newWeb, $newTopic, 1, "");
