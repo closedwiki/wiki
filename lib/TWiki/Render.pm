@@ -1116,6 +1116,8 @@ sub TML2PlainText {
     $text =~ s/\&[a-z]+;/ /g;           # remove entities
     $text =~ s/%WEB%/$web/g;
     $text =~ s/%TOPIC%/$topic/g;
+    # FIXME : this _is_ happening and giving errors/warnings
+    warn "FIXME : no WikiToolName?" unless $TWiki::cfg{WikiToolName};
     $text =~ s/%WIKITOOLNAME%/$TWiki::cfg{WikiToolName}/g;
     if( $opts =~ /nohead/ ) {
         # skip headings on top
