@@ -3,7 +3,7 @@
 # Support functionality for the TWiki Collaboration Platform, http://TWiki.org/
 # 
 # TWiki Shell 
-# Oct 2004 - written by Crawford Currie, Rafael Alvarez and MartinCleaver
+# Oct 2004 - written by Rafael Alvarez based on MartinCleaver work
 #
 # Assumes that the user has enough privileges to perform the required operations.
 #
@@ -187,7 +187,7 @@ if ($config->{execute}) {
     $shell->cmd($config->{execute});
 }else {
     print "TWiki Interactive Shell v$VERSION
- Oct 2004 - written by Crawford Currie, Rafael Alvarez and MartinCleaver
+ Oct 2004 - written by Rafael Alvarez based on MartinCleaver work
  Type \"help\" for a list of available commands
  
 ";
