@@ -162,7 +162,8 @@ sub main
         }
         $text = "$before$after";
         $text =~ s/ {3}/\t/go;
-        &TWiki::Store::saveTopic( $webName, $wikiName, $text, "", 1 );
+        my $meta = TWiki::Meta->new();
+        &TWiki::Store::saveTopic( $webName, $wikiName, $text, $meta, "", 1 );
     }
 
     # add user to TWikiUsers topic
@@ -270,6 +271,6 @@ sub addUserToTWikiUsersTopic
 
         $result .= "$line\n";
     }
-    &TWiki::Store::saveTopic( $topicName, $result, "", 1 );
+    &TWiki::Store::saveTopic( $TWiki::mainWebname, $topicName, $result, $meta, "", 1 );
     return $topicName;
 }
