@@ -1,28 +1,21 @@
-*Text Formatting FAQ*
+%META:TOPICINFO{author="MikeMannix" date="999835477" format="1.0" version="1.6"}%
+<font size="+3"><b>Text Formatting FAQ</b></font>
 
-This topic has answers to frequently asked questions about text formatting. TextFormattingRules has more on formatting rules in general. It also has links to HTML documentation.
+	* The most frequently asked questions about text formatting are answered here. 
+		* TextFormattingRules has the complete system in a handy quick reference format.
 
-	* <A HREF="#sepa">Q:</A> How do I make a separator?
-	* <A HREF="#head">Q:</A> How do I create a title or a heading?
-	* <A HREF="#brac">Q:</A> Text enclosed in angle brackets like &lt;filename&gt; is not displayed. How can I show it as it is?
-	* <A HREF="#ques">Q:</A> Some words (like WinAPI) have an unwanted question mark at the end. How can I prevent that?
-	* <A HREF="#fixe">Q:</A> How can I write fixed font text?
-	* <A HREF="#wrap">Q:</A> Text I enter gets wrapped around. How can I keep the formatting as it is?
-	* <A HREF="#tabl">Q:</A> How do I create tables?
-	* <A HREF="#imag">Q:</A> Can I include images and pictures?
-	* <A HREF="#colo">Q:</A> Can I write colored text?
+%TOC%
 
+<blockquote>
 -----
-<A NAME="sepa">Q:</A>
-*How do I make a separator?*
+---+++ How do I make a separator?
 
 You can make a horizontal separator by writing 4 or more dashes at the beginning of a line.
 
 -----
-<A NAME="head">Q:</A>
-*How do I create a title or a heading?*
+---+++ How do I create a title or a heading?
 
-The most simple way is to enclose it in '*' Asterisk characters or '_' Underscore charcters. 
+The most simple way is to enclose it in '*' Asterisk characters or '_' Underscore characters. 
 
 *This is an example header enclosed in Asterisk characters*
 
@@ -33,8 +26,8 @@ You could use also HTML tags for headings, e.g. <code>&lt;H4&gt;This is an HTML 
 <H4>This is an HTML heading</H4>
 
 -----
-<A NAME="brac">Q:</A>
-*Text enclosed in angle brackets like &lt;filename&gt; is not displayed. How can I show it as it is?*
+#TextEnclosed
+---+++ Text enclosed in angle brackets like &lt;filename&gt; is not displayed. How can I show it as it is?
 
 TWiki interprets text as HTML. The '&lt;' and '&gt;' characters are used to define HTML commands. Any valid text within angle brackets gets interpreted by the browser as an HTML command. Invalid text is ignored, that's why it doesn't show up.
 
@@ -48,19 +41,17 @@ There are two work arounds if you want to display angle brackets:
 		* Example: Write <code>{is-writable}</code> instead of <code>&lt;is-writable&gt;</code>
 
 -----
-<A NAME="ques">Q:</A>
-*Some words (like WinAPI) have an unwanted question mark at the end. How can I prevent that?*
+---+++ Some words (like WinAPI) have an unwanted question mark at the end. How can I prevent that?
 
 A question mark after a word is a link to a not yet existing topic. For example, WinAPI is a valid WikiName, but the actual topic _WinAPI_ does not exist.
 
 If you do not intend to create a topic for a valid WikiWord, you can prevent it being linked by putting an HTML tag in front of it. I usually use &lt;nop&gt;. This is a non existing HTML tag, so a browser just ignores it.
 
-	* Example text: <br> <code><nop>WinAPI as it is, &lt;nop&gt;WinAPI with preceeding NOP.</code>
-	* Example output: <br> WinAPI as it is, <nop>WinAPI with preceeding NOP.
+	* Example text: <br> <code><nop>WinAPI as it is, &lt;nop&gt;WinAPI with preceding NOP.</code>
+	* Example output: <br> WinAPI as it is, <nop>WinAPI with preceding NOP.
 
 -----
-<A NAME="fixe">Q:</A>
-*How can I write fixed font text?*
+---+++ How can I write fixed font text?
 
 Enclose text in "=" equal signs.
 
@@ -70,8 +61,7 @@ Enclose text in "=" equal signs.
 Alternatively you could also use preformatted text, see next question for details.
 
 -----
-<A NAME="wrap">Q:</A>
-*Text I enter gets wrapped around. How can I keep the formatting as it is?*
+---+++ Text I enter gets wrapped around. How can I keep the formatting as it is?
 
 TWiki interprets text as HTML. It is possible to use preformatted text to work around this. Use the preformatted HTML tags to keep the new line of text as it is. Do so by enclosing the text with &lt;PRE&gt; and &lt;/PRE&gt; tags, e.g.
 <pre>
@@ -86,8 +76,7 @@ This text will keep its format as it is:
 It is recommended to use preformatting for tables and source code.
 
 -----
-<A NAME="tabl">Q:</A>
-*How do I create tables?*
+---+++ How do I create tables?
 
 There are three possibilities:
 	1 Use Wiki rule with "|" vertical bars.
@@ -137,11 +126,10 @@ More information about HTML tables can be found at http://www.htmlhelp.com/refer
 
 *_3. Use preformatted text with &lt;PRE&gt; tags_*
 
-See <A HREF="#wrap">Q:</A> Text I enter gets wrapped around. How can I keep the formatting as it is?
+Text I enter gets wrapped around. How can I keep the formatting as it is? See [[#TextEnclosed]["Text enclosed..."]] 
 
 -----
-<A NAME="imag">Q:</A>
-*Can I include images and pictures?*
+---+++ Can I include images and pictures?
 
 Yes, this is possible. The easiest way of including images is to attach a GIF or JPG file to a topic and then to include it with text =%<nop>ATTACHURL%/myImage.gif= . FileAttachment has more.
 
@@ -162,8 +150,7 @@ This is a manual process where you have more control over the rendering of the i
 	* Example output: <br> TWiki <IMG SRC="%PUBURL%/wikiHome.gif" WIDTH=46 HEIGHT=50> logo.
 
 -----
-<A NAME="colo">Q:</A>
-*Can I write colored text?*
+---+++ Can I write colored text?
 
 Place text you would like to specify a color inside &lt;FONT COLOR="colorCode"&gt; and &lt;/FONT&gt; tags. 
 
@@ -199,5 +186,6 @@ hexadecimal notation. For example, to specify white, the red, green and blue com
 	* Example output: <br> <FONT COLOR="#FF0000"> Red color </FONT> draws attention.
 
 -----
+</blockquote>
 
 -- Main.PeterThoeny - 18 Aug 2000
