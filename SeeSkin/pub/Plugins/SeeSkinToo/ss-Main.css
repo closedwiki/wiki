@@ -4,7 +4,7 @@
 
 /* base colour: rgb(255, 255, 192); #ffffc0 */
 #topsection h1 a { color: rgb(204, 153, 0); }
-#search input{ background:rgb(215,226,239); }
+#search input{ background: rgb(255, 255, 240); }
 #search input:hover { background-color: white; }
 #metadata { color: gray;}
 #navigation{ border-left: 1px dotted rgb(255, 250, 221); } 

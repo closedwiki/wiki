@@ -125,6 +125,7 @@ strong, b {	font-weight: bold;	}
 * html  table,* html tr {	width: 80%; margin:0;}	
 /*table,td,tr,th { width: 90%; }*/
 
+pre { overflow: auto; }
 textarea {width: 95%;}
 
 .skiplink { display: none; }
