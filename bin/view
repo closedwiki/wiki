@@ -248,12 +248,12 @@ sub main
     }
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+    $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, \@meta );
     writeDebugTimes( "view - handleCommonTags for template done" );
     my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
     $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
 
-    my $metaText = &TWiki::renderMetaData( $webName, $topic, \@meta );
-    $tmpl =~ s/%TEXT%/$text\n$metaText/go;
+    $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
     TWiki::writeHeader( $query );
     print $tmpl;
