@@ -1,8 +1,7 @@
+# Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# TWiki WikiClone ($wikiversion has version info)
-#
-# Copyright (C) 2001 John Talintyre, jet@cheerful.com
-# Copyright (C) 2001 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2001-2003 John Talintyre, jet@cheerful.com
+# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,17 +29,20 @@ use Time::Local;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $debug
+        $web $topic $user $installWeb $VERSION $debug $translationToken
         $insideTABLE $tableCount @curTable $sortCol $requestedTable $up
         $doBody $doAttachments $currTablePre $tableWidth @columnWidths
-        $tableBorder $cellPadding $cellSpacing $headerAlign $dataAlign $vAlign
+        $tableBorder $tableFrame $tableRules $cellPadding $cellSpacing 
+        @headerAlign @dataAlign $vAlign
         $headerBg $headerColor $doSort $twoCol @dataBg @dataColor @isoMonth
         $headerRows $footerRows
         @fields $upchar $downchar $diamondchar $url $curTablePre
         @isoMonth %mon2num $initSort $initDirection $pluginAttrs $prefsAttrs
+        @rowspan
     );
 
-$VERSION = '1.010';
+$VERSION = '1.012';  # 01 Dec 2003
+$translationToken = "\0";
 $currTablePre = "";
 $upchar = "";
 $downchar = "";
@@ -144,6 +146,9 @@ sub endRenderingHandler
         $insideTABLE = 0;
         undef $initSort;
     }
+    if( $_[0] =~/tablepluginfixlinkcolor/ ) {
+         $_[0] =~ s/(<font )tablepluginfixlinkcolor.*?(color=\")([^\"]*)(\">.*?<\/font>)/&fixLinkColor("$1$2$3$4",$3)/geo;
+    }
 }
 
 # =========================
@@ -151,14 +156,16 @@ sub setDefaults
 {
     $doSort       = $doBody;
     $tableBorder  = 1;
+    $tableFrame   = "";
+    $tableRules   = "";
     $cellSpacing  = 1;
     $cellPadding  = 0;
     $tableWidth   = "";
     @columnWidths = ( );
     $headerRows   = 1;
     $footerRows   = 0;
-    $headerAlign  = "";
-    $dataAlign    = "";
+    @headerAlign  = ( );
+    @dataAlign    = ( );
     $vAlign       = "";
     $headerBg     = "#99CCCC";
     $headerColor  = "";
@@ -195,6 +202,12 @@ sub handleTableAttrs
     $tmp = TWiki::Func::extractNameValuePair( $args, "tableborder" );
     $tableBorder = $tmp if( $tmp ne "" );
 
+    $tmp = TWiki::Func::extractNameValuePair( $args, "tableframe" );
+    $tableFrame = $tmp if( $tmp ne "" );
+
+    $tmp = TWiki::Func::extractNameValuePair( $args, "tablerules" );
+    $tableRules = $tmp if( $tmp ne "" );
+
     $tmp = TWiki::Func::extractNameValuePair( $args, "cellpadding" );
     $cellPadding = $tmp if( $tmp ne "" );
 
@@ -202,10 +215,10 @@ sub handleTableAttrs
     $cellSpacing = $tmp if( $tmp ne "" );
 
     $tmp = TWiki::Func::extractNameValuePair( $args, "headeralign" );
-    $headerAlign = $tmp if( $tmp );
+    @headerAlign = split( /,\s*/, $tmp ) if( $tmp );
 
     $tmp = TWiki::Func::extractNameValuePair( $args, "dataalign" );
-    $dataAlign = $tmp if( $tmp );
+    @dataAlign = split( /,\s*/, $tmp ) if( $tmp );
 
     $tmp = TWiki::Func::extractNameValuePair( $args, "tablewidth" );
     $tableWidth = $tmp if( $tmp );
@@ -253,9 +266,11 @@ sub getTypes
         $date = 0;
     }
 
-    if( $text =~ /^\s*([0-9]{1,2})\s*([A-Z][a-z][a-z])\s*([0-9]{4})\s*-\s*([0-9][0-9]):([0-9][0-9])\s*$/ ) {
+    if( $text =~ m|^\s*([0-9]{1,2})[-\s/]*([A-Z][a-z][a-z])[-\s/]*([0-9]{4})\s*-\s*([0-9][0-9]):([0-9][0-9])| ) {
+        # "31 Dec 2003 - 23:59", "31-Dec-2003 - 23:59", "31 Dec 2003 - 23:59 - any suffix"
         $date = timegm(0, $5, $4, $1, $mon2num{$2}, $3 - 1900);
     } elsif( $text =~ m|^\s*([0-9]{1,2})[-\s/]([A-Z][a-z][a-z])[-\s/]([0-9]{2,4})\s*$| ) {
+        # "31 Dec 2003", "31 Dec 03", "31-Dec-2003", "31/Dec/2003"
         my $year = $3;
         $year += 1900 if( length( $year ) == 2 && $year > 80 );
         $year += 2000 if( length( $year ) == 2 );
@@ -266,7 +281,6 @@ sub getTypes
 
     return( $num, $date );
 }
-
 
 # =========================
 sub processTR {
@@ -279,11 +293,12 @@ sub processTR {
     my $l2 = 0;
     if( ! $insideTABLE ) {
         @curTable = ();
+        @rowspan = ();
         $tableCount++;
     }
     $theRow =~ s/\t/   /go;  # change tabs to space
     $theRow =~ s/\s*$//o;    # remove trailing spaces
-    $theRow =~ s/(\|\|+)/$TWiki::TranslationToken . length($1) . "\|"/geo;  # calc COLSPAN
+    $theRow =~ s/(\|\|+)/$translationToken . length($1) . "\|"/geo;  # calc COLSPAN
     my $colCount = 0;
     my @row = ();
     $span = 0;
@@ -291,9 +306,9 @@ sub processTR {
     foreach( split( /\|/, $theRow ) ) {
         $colCount++;
         $attr = "";
-        $span = 0;
+        $span = 1;
         #AS 25-5-01 Fix to avoid matching also single columns
-        if ( s/$TWiki::TranslationToken([0-9]+)// ) {
+        if ( s/$translationToken([0-9]+)// ) {
             $span = $1;
             $attr = " colspan=\"$span\"" ;
         }
@@ -308,23 +323,46 @@ sub processTR {
                 $attr .= ' align="center"';
             }
         }
-        $attr .= ' width="' . $columnWidths[$colCount-1] . '"' if( defined $columnWidths[$colCount-1] );
-        if( /^\s*\*(.*)\*\s*$/ ) {
-            $value = $1;
-            $attr .= " align=\"$headerAlign\"" if $headerAlign; # override $attr
-            $attr .= " valign=\"$vAlign\"" if $vAlign;
-            push @row, [ $value, "$attr", "th" ];
+        if( defined $columnWidths[$colCount-1] && $columnWidths[$colCount-1] && $span <= 2 ) {
+            $attr .= ' width="' . $columnWidths[$colCount-1] . '"';
+        }
+        if( /^\s*\^\s*$/ ) { # row span above
+            $rowspan[$colCount-1]++;
+            push @row, [ $value, "", "X" ];
         } else {
-            if( /^\s*(.*)\s*$/ ) {   # strip white spaces
-                $_ = $1;
+            for (my $col = $colCount-1; $col < ($colCount+$span-1); $col++) {
+                if( defined($rowspan[$col]) && $rowspan[$col] ) {
+                    my $nRows = scalar(@curTable);
+                    my $rspan = $rowspan[$col]+1;
+                    $curTable[$nRows-$rspan][$col][1] .= " rowspan=\"$rspan\"";
+                    undef($rowspan[$col]);
+                }
             }
-            $value = $_;
-            $attr .= " align=\"$dataAlign\"" if $dataAlign; # override $attr
-            $attr .= " valign=\"$vAlign\"" if $vAlign;
-            push @row, [ $value, "$attr", "td" ];
+            if( /^\s*\*(.*)\*\s*$/ ) {
+                $value = $1;
+                if( @headerAlign ) {
+                    my $align = @headerAlign[($colCount - 1) % ($#headerAlign + 1) ];
+                    $attr .= " align=\"$align\""; # override $attr
+                }
+
+                $attr .= " valign=\"$vAlign\"" if $vAlign;
+                push @row, [ $value, "$attr", "th" ];
+            } else {
+                if( /^\s*(.*?)\s*$/ ) {   # strip white spaces
+                    $_ = $1;
+                }
+                $value = $_;
+                if( @dataAlign ) {
+                    my $align = @dataAlign[($colCount - 1) % ($#dataAlign + 1) ];
+                    $attr .= " align=\"$align\""; # override $attr
+                }
+                $attr .= " valign=\"$vAlign\"" if $vAlign;
+                push @row, [ $value, "$attr", "td" ];
+            }
         }
         while( $span > 1 ) {
             push @row, [ $value, "", "X" ];
+            $colCount++;
             $span--;
         }
     }
@@ -346,7 +384,7 @@ sub doIt
     my $doIt = $doSort;
     if( $doSort ) {
         # All cells in header are headings?
-        foreach $cell ( @$header ) {
+        foreach my $cell ( @$header ) {
             if( $cell->[2] ne "th" ) {
                 $doIt = 0;
                 last;
@@ -400,15 +438,34 @@ sub stripHtml
 # =========================
 sub emitTable
 {
+    #Validate headerrows/footerrows and modify if out of range
+    if ( $headerRows > @curTable ) {
+        $headerRows = @curTable; # limit header to size of table!
+    }
+    if ( $headerRows + $footerRows > @curTable ) {
+        $footerRows = @curTable - $headerRows; # and footer to whatever is left
+    }
     my $direction = $up ? 0 : 1;
     my $doIt = doIt( $curTable[$headerRows-1] );
-    my $text = "$currTablePre<table border=\"$tableBorder\" cellspacing=\"$cellSpacing\""
-             . " cellpadding=\"$cellPadding\"";
+    my $text = "$currTablePre<table border=\"$tableBorder\"";
+    $text .= " frame=\"$tableFrame\"" if( $tableFrame );
+    $text .= " cellspacing=\"$cellSpacing\" cellpadding=\"$cellPadding\"";
+    $text .= " rules=\"$tableRules\"" if( $tableRules );
     $text .= " width=\"$tableWidth\"" if( $tableWidth );
     $text .= ">\n";
     my $type = "";
     my $attr = "";
     my $stype = "";
+
+    #Flush out any remaining rowspans
+    for (my $i = 0; $i < @rowspan; $i++) {
+        if( defined($rowspan[$i]) && $rowspan[$i] ) {
+            my $nRows = scalar(@curTable);
+            my $rspan = $rowspan[$i]+1;
+            my $row = $nRows - $rspan;
+            $curTable[$row][$i][1] .= " rowspan=\"$rspan\"";
+        }
+    }
 
     #Added to aid initial sorting direction and column : ShawnBradford 20020221
     if ( defined( $sortCol ) ) {
@@ -427,7 +484,7 @@ sub emitTable
         my @header = splice( @curTable, 0, $headerRows );
         # DG 08 Aug 2002: Skip sorting any trailers as well
         my @trailer = ();
-        if ( $footerRows ) {
+        if ( $footerRows && scalar( @curTable ) > $footerRows ) {
             @trailer = splice( @curTable, -$footerRows );
         }
 
@@ -457,6 +514,8 @@ sub emitTable
         @curTable = ( @header, @curTable, @trailer );
     }
     my $rowCount = 0;
+    my $dataColorCount = 0;
+    my $resetCountNeeded = 0;
     my $arrow = "";
     my $color = "";
     foreach my $row ( @curTable ) {
@@ -469,7 +528,9 @@ sub emitTable
             my $cell = $fcell->[0];
             my $attr = $fcell->[1];
             if( $type eq "th" ) {
-
+               # reset data color count to start with first color after each table heading
+               $dataColorCount = 0 if( $resetCountNeeded );
+               $resetCountNeeded = 0;
                if( ! $upchar ) {
                    # Added arrow images for up and down S. Bradford 20011018
                    # PTh 13 Nov 2001: Modfied and moved to TablePlugin attachment
@@ -497,7 +558,7 @@ sub emitTable
                    }
                }
                $color = "";
-               $color = "<font color=\"$headerColor\">" if( $headerColor );
+               $color = "<font tablepluginfixlinkcolor=\"on\" color=\"$headerColor\">" if( $headerColor );
                if( $doIt && $rowCount == $headerRows - 1 ) {
                   if( $cell =~ /\[\[|href/o ) {
                      $cell = "$color $cell</font>" if( $color );
@@ -518,32 +579,45 @@ sub emitTable
                }
 
             } else {
+               $resetCountNeeded = 1 if( $colCount == 0 );
                if( @dataBg ) {
-                   $color = $dataBg[$rowCount % ($#dataBg + 1) ];
+                   $color = $dataBg[$dataColorCount % ($#dataBg + 1) ];
                    $attr .= " bgcolor=\"$color\"" unless( $color =~ /none/i );
                }
                $color = "";
                if( @dataColor ) {
-                   $color = $dataColor[$rowCount % ($#dataColor + 1) ];
+                   $color = $dataColor[$dataColorCount % ($#dataColor + 1) ];
                    if( $color =~ /^(|none)$/i ) {
                        $color = "";
                    } else {
                        $color = "<font color=\"$color\">";
                    }
                }
-               $cell = "$color $cell";
+               $cell = "$color $cell ";
                $cell .= "</font>" if( $color );
             }
-            $text .= "<$type $attr>$cell";
+            $text .= "<$type$attr>$cell";
             $text .= "</$type>";
             $colCount++;
         }
         $text .= "</tr>\n";
         $rowCount++;
+        $dataColorCount++;
     }
     $text .= "$currTablePre</table>\n";
     setDefaults();
     return $text;
+}
+
+# =========================
+sub fixLinkColor
+{
+   my( $text, $color ) = @_;
+   # Hack to solve color problem of links produced after table rendering
+   $color = "<font color=\"$color\">";
+   $text =~ s|(<a href=\".*?\">)(.*?)(</a>)|</font>$1$color$2</font>$3$color|go;
+   $text =~ s|$color\s*</font>||go;
+   return $text;
 }
 
 # =========================
