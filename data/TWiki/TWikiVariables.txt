@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1003975824" format="1.0" version="1.44"}%
+%META:TOPICINFO{author="MikeMannix" date="1007115240" format="1.0" version="1.45"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -12,7 +12,7 @@ _Text strings expanded on the fly to display data or system info_
 
 ---++ Predefined Variables
 
-With a couple of notable exceptions, predefined variables return  set values that are defined on installation and left alone. Most are directory names and file paths, customized for your server, and only have to be updated once in the main configuration file if your server set-up changes. 
+Most predefined variables return values that were either defined when TWiki was installed, or taken from server info (like current username, or date and time). Many of the variables let you control how the formatted results appear.
 
 %WIKITOOLNAME% expands the following variables (enclosed in ==%== percent signs):
 
@@ -205,15 +205,40 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
 | =regex="on"= | RegularExpression search | Literal search |
 | =reverse="on"= | Reverse the direction of the search | Ascending search |
 | =casesensitive="on"= | Case sensitive search | Ignore case |
-| =nosummary="on"= | Show topic title only. [3] | Show topic summary |
-| =bookview="on"= | BookView search, e.g. show complete topic text. [3] | Show topic summary. |
-| =format="..."= | Define a FormattedSearch, i.e. <br /> ="	* [<nop>[$topic]]: $summary"=. [3] | Show regular search result with topic summary |
-| =header="..."= | Specify header of FormattedSearch, i.e. <br /> ="	* <nop>*Topic: Summary:*"=. | Show regular header |
+| =nosummary="on"= | Show topic title only | Show topic summary |
+| =bookview="on"= | BookView search, e.g. show complete topic text | Show topic summary |
 | =nosearch="on"= | Suppress search string | Show search string |
 | =noheader="on"= | Suppress search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span> | Show search header |
 | =nototal="on"= | Do not show number of topics found | Show number |
 Example: =<b>%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%</b>= </td>
-</tr><tr>
+</tr>
+<tr>
+<td> =%<nop>SEARCH{... format="..."}%= </td>
+<td> *Control the formatting of an embedded search.* By default, the search result display format is fixed: a table with rows of topic name and topic summary. Use the =format="..."= parameter to specify a custom format, typically, a bullet list or table row containing variables <br />
+Ex: =%<nop>SEARCH{ "food" format="| $topic | $summary |" }%=) <br />
+ *Two paramters can be used to specify a customized search result:* <br />
+*1.* =header="..."= parameter <br />
+Use the header paramter to specify the header of a search result. It should correspond to the format of the format parameter. This parameter is optional. Ex: =header="| <nop>*Topic:*<nop> | <nop>*Summary:*<nop> |"= <br />
+*2.* =format="..."= parameter <br />
+*Use the format paramter to specify the format of one search hit.* <br />
+Ex: =format="| $topic | $summary |"= <br />
+*Variables that can be used in the format string:*
+| *Name:* | *Expands To:* |
+| =$web= | Name of the web |
+| =$topic= | Topic name |
+| =$locked= | LOCKED flag (if any) |
+| =$date= | Time stamp of last topic update |
+| =$rev= | Number of last topic revision, i.e. =1.4= |
+| =$wikiusername= | Wiki user name of last topic update, i.e. =%MAINWEB%.<nop>JohnSmith= |
+| =$summary= | Topic summary |
+| =$formfield(name)= | The field value of a form field, i.e. =$formfield(TopicClassification)= would get expanded to =PublicFAQ=. This applies only to topics that have a [[TWiki.TWikiForms][TWikiForm]] |
+| =$pattern(reg-exp)= | A regular expression pattern to extract some text from a topic, i.e. =$pattern(.*?\*.*?Email\:\s*([^\n\r]+).*)= extracts the email address from a bullet of format =* Email: ...=. |
+__Note:__ For =$pattern(reg-exp)=, specify a TWiki.RegularExpression that scans from start to end and contains the text you want to keep in parenthesis, ex: =$pattern(.*?(from here.*?to here).*)=. You need to make sure that the integrity of a web page is not compromised, i.e. if you include a table make sure to include everything including the table end tag. <br />
+*NOTE:* Sorting is nicely covered by the TWiki.TablePlugin. <br />
+__For how-to tips and tricks, see: TWikiVariablesExamples__
+</td>
+</tr>
+<tr>
   <td> =%<nop>METASEARCH{...}%= </td>
   <td> Special search of meta data
 | *Parameter:* | *Description:* | *Default:* |
@@ -235,8 +260,6 @@ Example: ==%<nop>METASEARCH{type="topicmoved" web="%<nop>WEB%" topic="%<nop>TOPI
 [1] __Note__: The search form uses identical names for input fields.
 
 [2] __Note__: A web can be excluded from a =web="all"= search if you define a =NOSEARCHALL=on= variable in its %WEBPREFSTOPIC%.
-
-[3] __Note__: Regular search, no summary, BookView and FormattedSearch are exclusive.
 </blockquote>
 
 ---++ Preferences Variables
@@ -354,15 +377,9 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
 	* The syntax for Preferences variables is the same anywhere in TWiki. In Edit mode, from the start of a new line: <br />[6 spaces] * [space] Set [space] VARIABLENAME [space] = [value] <br /> __Example:__ 
 		* ==<nop>Set VARIABLENAME = value==
 
----++ Creating Custom Variables
+---++ Customizing Variables
 
-	* You can add your own preference variables for an entire site, a single web, or a single topic, using the standard syntax. Whatever you include in your variable will be expanded on display, and treated exactly as if it had been written out. So you can place formatted text, page links, image paths.
+__See:__ [[TWikiVariablesExamples][<nop>TWikiVariables Examples]]
 
-<blockquote style="background-color:#f5f5f5">
-*Example: Create a custom logo variable* <br />
-	* To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, simply define the variable on the web's WebPreferences page. You also have to upload =logo.gif= - this can be done by [[FileAttachment][attaching a file]] to =LogoTopic= (any topic name you choose):
-		* ==<nop>Set MYLOGO = %<nop>PUBURL%/%<nop>MAINWEB%/LogoTopic/logo.gif== 
-</blockquote>
-
--- MikeMannix - 30 Aug 2001 <br />	
 -- PeterThoeny - 13 Sep 2001 <br />
+-- MikeMannix - 30 Nov 2001	
