@@ -32,7 +32,7 @@
         <option value="none">none (remove topic parent)</option>
         %TOPICLIST{"<option value=$qname>$name</option>" separator=" "}%
         </select>
-      * Step 2: Continue to <input type="submit" value="Edit" /> and save <nop>%TOPIC% to activate the new parent
+      * Step 2: Continue to <input type="submit" class="twikiSubmit" value="Edit" /> and save <nop>%TOPIC% to activate the new parent
         <input type="hidden" name="t" value="%SERVERTIME{$hour$min$sec}%">
 </form>
 
@@ -40,7 +40,7 @@
    * *View previous topic revision:*
       * Revision: <input type="text" name="rev" size="6" value="%PARAM2%" />
         in <input type="checkbox" name="raw" /> raw text format
-        <input type="submit" value="View revision" />
+        <input type="submit" class="twikiSubmit" value="View revision" />
       * Revisions: 1.1 ... %PARAM1%
 </form>
 
@@ -48,7 +48,7 @@
    * *Compare revisions:*
       * Older revision:&nbsp;&nbsp; <input type="text" name="rev2" size="6" value="1.1" />
       * Newer revision: <input type="text" name="rev1" size="6" value="%PARAM1%" />
-        <input type="submit" value="View difference" />
+        <input type="submit" class="twikiSubmit" value="View difference" />
 </form> %TMPL:END%
 %TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
 %TMPL:P{"oops"}%

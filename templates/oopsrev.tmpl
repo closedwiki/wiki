@@ -5,7 +5,7 @@
 %TMPL:DEF{"message"}%
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
    * Revision: <input type="text" name="rev" size="6" value="%PARAM1%" />
-     <input type="submit" value="View revision" /> ( 1.1 ... %PARAM1% )
+     <input type="submit" class="twikiSubmit" value="View revision" /> ( 1.1 ... %PARAM1% )
 </form>
 
 ---+ Compare Revisions
@@ -20,7 +20,7 @@
    * Newer revision: 
 </td><td>
 <input type="text" name="rev1" size="6" value="%PARAM1%" />
-<input type="submit" value="View difference" />
+<input type="submit" class="twikiSubmit" value="View difference" />
 </td></tr>
 </table>
 </form> %TMPL:END%
