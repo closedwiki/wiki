@@ -21,7 +21,7 @@
 # =========================
 package TWiki::Plugins::TreePlugin;
 
-use TWiki::Func;
+#use TWiki::Func;
 
 use TWiki::Plugins::TreePlugin::TWikiNode;
 use TWiki::Plugins::TreePlugin::ListNodeFormatter;
@@ -33,12 +33,13 @@ use TWiki::Plugins::TreePlugin::ImgNodeFormatter;
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $debug $INTREE
-        %FormatMap %TreeTopics $RootLabel $CgiQuery $CurrUrl
+        %FormatMap %TreeTopics $RootLabel $cgi $CurrUrl
     );
 
-$VERSION = '0.250';
+$VERSION = '0.310';
 
 $RootLabel = "_"; # what we use to label the root of a tree if not a topic
+$cgi = &TWiki::Func::getCgiQuery();
 
 
 # =========================
@@ -62,14 +63,16 @@ sub initPlugin
 
 	# mod_perl will have trouble because these three vals are globals
     %TreeTopics = ();
-    $CgiQuery = &TWiki::Func::getCgiQuery();
-    my $plist = $CgiQuery->query_string();
+    if( ! $cgi ) {
+        return 0;
+    }
+    my $plist = $cgi->query_string();
 	$plist .= "\&" if $plist;
-	$CurrUrl = $CgiQuery->url . $CgiQuery->path_info() . "?" . $plist;
+	$CurrUrl = $cgi->url . $cgi->path_info() . "?" . $plist;
     # $CurrUrl =~ s/\&/\&amp;/go;
     
     # Plugin correctly initialized
-    #&TWiki::Func::writeDebug( "- TWiki::Plugins::TreePlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
+    &TWiki::Func::writeDebug( "- TWiki::Plugins::TreePlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
 }
 
@@ -272,7 +275,7 @@ sub cgiOverride {
     my $variable = shift;
     my $paramname = shift;
     
-    my $tmp = $CgiQuery->param( $paramname );
+    my $tmp = $cgi->param( $paramname );
     $$variable = $tmp if( $tmp );
 }
 
