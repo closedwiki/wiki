@@ -150,10 +150,9 @@ sub main
     $tmpl =~ s/%TOPICPARENT%/$theParent/;
     
     # Processing of formtemplate - comes directly from query parameter formtemplate , 
-    # or indirectly fromwebtopictemplate parameter.
+    # or indirectly from webtopictemplate parameter.
     my $oldargsr;
     if( $formTemplate ) {
-       # FIXME temporary because potentially shared fields
        my @args = ( name => $formTemplate );
        $meta->remove( "FORM" );
        if( $formTemplate ne "none" ) {
@@ -208,7 +207,7 @@ sub main
             TWiki::redirect( $query, $url );
             return;
        }
-       my $formText = &TWiki::Form::renderForEdit( $webName, $form, $meta, @fieldDefs );
+       my $formText = &TWiki::Form::renderForEdit( $webName, $form, $meta, $query, @fieldDefs );
        $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } elsif( $saveCmd ne "repRev" && TWiki::Prefs::getPreferencesValue( "WEBFORMS", $webName )) {
        $tmpl =~ s/%FORMFIELDS%/&TWiki::Form::chooseFormButton( "Add form" )/goe;
