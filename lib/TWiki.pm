@@ -1004,11 +1004,13 @@ sub handleIncludeFile
 
     # CrisBailiff, PeterThoeny 12 Jun 2000: Add security
     $incfile =~ s/$securityFilter//go;    # zap anything suspicious
-    $incfile =~ s/passwd//goi;    # filter out passwd filename
     if( $doSecureInclude ) {
         # Filter out ".." from filename, this is to
         # prevent includes of "../../file"
         $incfile =~ s/\.+/\./g;
+    } else {
+        # danger, could include .htpasswd with relative path
+        $incfile =~ s/passwd//goi;    # filter out passwd filename
     }
 
     # test for different usage
@@ -1054,7 +1056,7 @@ sub handleIncludeFile
         # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
         $text =~ s/.*?%STARTINCLUDE%//os;
         $text =~ s/%STOPINCLUDE%.*//os;
-    } # FIXME what if it's not a topic, is this possible given only dataDir above?
+    } # else is a file with relative path, e.g. $dataDir/../../path/to/non-twiki/file.ext
 
     if( $pattern ) {
         $pattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
