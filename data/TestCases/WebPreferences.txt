@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="guest" date="1099826602" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="guest" date="1099826662" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ %WIKITOOLNAME%.%WEB% Web Preferences
 
-	* Set BROADCASTMESSAGE = <table border="0" cellpadding="3" cellspacing="0" width="100%"><tr><td bgcolor="black"><font color="yellow"><strong>NOTE:This is the testcases web. You cannot edit any topic named "TestCase..." or "Web..." in this web, you can only create new topics.</strong></font></td></tr></table>
+	* Set BROADCASTMESSAGE = <table border="0" cellpadding="3" cellspacing="0" width="100%"><tr><td bgcolor="black"><font color="yellow"><strong>NOTE:This is the testcases web. You cannot edit any topic named "TestCase..." or "Web..." in this web, you can only create new topics. Any topics you _do_ create that are not checked into subversion may be deleted by anyone, at any time.</strong></font></td></tr></table>
 
 The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
 
