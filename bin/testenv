@@ -442,7 +442,7 @@ print "</td></tr>\n";
 my $usr = "";
 my $grp = "";
 if( $OS eq 'UNIX' or  ($OS eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
-    $usr = lc( getpwuid($<) );		# Unix/Cygwin Perl
+    $usr = lc( getpwuid($>) );		# Unix/Cygwin Perl - effective UID
     foreach( split( " ", $( ) ) {
 	my $onegrp = getgrgid( $_ );
 	$grp .= " " . lc($onegrp);
@@ -633,7 +633,7 @@ if( ! ( -e $val ) ) {
     print "</td></tr>\n";
 }
 
-# Check 'grep'
+# Check 'egrep'
 print "<tr><th align=\"right\">\$egrepCmd:</th><td>$egrepCmd</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is a program TWiki uses for search.";
@@ -659,6 +659,7 @@ if( ! ( -e $val ) ) {
     print "</td></tr>\n";
 }
 
+# Check $safeEnvPath
 print "<tr><th align=\"right\">\$safeEnvPath:</th><td>$safeEnvPath</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This is used to initialise the PATH variable, and is used to run the\n";
@@ -690,7 +691,7 @@ print "</table>\n";
 print "<h3>Path and Shell Environment</h3>\n";
 print "<table>\n";
 
-# PATH check on all platforms
+# Check PATH 
 
 print "<tr><th align=\"right\">Original PATH:</th><td>$originalPath</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
