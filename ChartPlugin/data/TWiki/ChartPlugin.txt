@@ -1,0 +1,165 @@
+%META:TOPICINFO{author="PeterThoeny" date="1034359320" format="1.0" version="1.4"}%
+---+ Chart Plugin
+
+This plugin creates PNG or GIF charts to visualize TWiki tables.
+
+Three types of charts are currently available, an _area_ chart that shows data as areas under a line, a _line_ chart that shows data as simple lines, and _arealine_ which combines _area_ and _line_.
+
+All data is specified via TWiki tables.
+
+| *Type of Chart* | *Name* | *What it Does* | *Example* |
+| Area | =area= | Shows a chart using areas under a line to represent the data | <img src="%ATTACHURLPATH%/areaexample.png" /> |
+| Line | =line= | Shows a chart using simple lines to represent the data.  All data points on one of the lines are shown with their values | <img src="%ATTACHURLPATH%/lineexample.png" /> |
+| Area and Line combined | =arealine= | Shows a chart combining the features from =area= and =line=. | <img src="%ATTACHURLPATH%/arealineexample.png" /> |
+
+The =%<nop>CHART{...}%= variable gets expanded to an image representing the chart. Parameters and global settings determine the type of chart, dimensions, and values.
+
+---++ <nop>%TOPIC% Global Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>CHARTPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Create PNG or GIF charts to visualize TWiki tables.
+
+	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+		* Set DEBUG = 0
+
+	* Default chart used: =area=, =line=, or =arealine=. Default: =line=
+		* Set TYPE = line
+
+	* Default dimensions, scale and colors for a chart. See details in the syntax rules.
+		* Set WIDTH = 400
+		* Set HEIGHT = 250
+		* Set NUMYGRIDS = 10
+		* Set BGCOLOR = #FFFFFF, #FFFFFF
+		* Set AREA_COLORS = #FF3333, #FFFF33, #33FF33, #CC66FF, #33CCFF, #FFCC00, #996633, #33CCCC, #3366CC
+		* Set LINE_COLORS = #0000FF, #00FF00, #FF0000, #FF6600, #FF00FF, #0099FF, #000000
+
+---++ Syntax Rules
+
+The =%<nop>CHART{...}%= variable gets expanded to an image representing the chart. 
+
+	* Some parameters expect a range of table cells, using SpreadSheetPlugin syntax:
+		* A table cell can be addressed as ==R1:C1==. Cell addresses:
+		  | ==R1:C1== | ==R1:C2== | ==R1:C3== | ==R1:C4== |
+		  | ==R2:C1== | ==R2:C2== | ==R2:C3== | ==R2:C4== |
+		* A range of table cells is defined by two cell addresses separated by ==".."==. For example, "row 1-20, column 3" is: ==R1:C3..R20:C3==
+
+| *%<nop>CHART% Parameter* | *Comment* | *Default* |
+| =type= | The type of chart to create, =area=, =line=, or =arealine= | Global =TYPE= setting |
+| =name= | Name to uniquely identify the chart file that is auto-created. | None; is required for all charts |
+| =web= | The web in which to find =topic= (specified below) in which to find the TWiki tables | The current web |
+| =topic= | The topic in which to find the TWiki tables | The current topic |
+| =table= | TWiki table used to build the chart. A numerical value refers to the table number, where "1" is the first table seen in a topic. Any other non-numeric string refers to a named table defined by the =TABLE= variable with a =name= parameter. For example, table="trends" refers to the table that is preceded by =%<nop>TABLE{ name="trends" }%=. | ="1"= |
+| =title= | The title placed at the top of the chart | None |
+| =xlabel= | The label placed under the X axis describing the X values | None |
+| =ylabel= | The label placed to the left of the Y axis describing the Y values | None |
+| =data= | The source data to build the chart, defined as a range of table cells. For example for =type="line"=, a =data="R2:C3..R999:C6"= would say that four lines were to be drawn with first line being rows 2-999 column 3 and last line being rows 2-999 column 6. | None; is required for all charts |
+| =datatype= | For =type="arealine"= only: An ="area, line"= list defining how to represent the data. For example ="area, area, area, line"= would say that the first three data sets are areas and the last one is a line. | All but the last data set are assumed to be =area= and the last data set is assumed to be =line= |
+| =xaxis= | X-Axis labels: The values are defined as a range of table cells. The range also defines the orientation -- row or column oriented (if specified). For example ="R2:C2..R999:C2"= would take all of column 2 starting at row 2 and going through row 999.  It would also denote that all remaining data is oriented columnar. | None.  If not specified, then no X axis labels shown and data assumed to be in columnar format. |
+| =yaxis= | Y-Axis labels: ="on"= to show the labels, ="off"= for no labels. | ="off"= |
+| =ymin= | Minimum value drawn on the Y axis. Nice human readable values are calculated from the =data= values if =ymin= and =ymax= are unspecified. | The minimum value specified by =data= |
+| =ymax= | Maximum value drawn on the Y axis | The maximum value specified by =data= |
+| =xgrid= | Grid shown for X axis: ="on"= for solid grid lines, ="dot"= for dotted grid lines, ="off"= for none. | ="dot"= |
+| =ygrid= | Grid shown for Y axis: ="on"= for solid grid lines, ="dot"= for dotted grid lines, ="off"= for none. | ="dot"= |
+| =numygrids= | Number of grids drawn for Y axis. This value gets adjusted up or down if =ymin= and =ymax= are unspecified so that the grid values fall on nice human readable values | Global =NUMYGRIDS= setting |
+| =datalabel= | Show data labels: ="on"= for labels, ="box"= for label in a box, ="off"= for none. It can also be a list like ="off, off, off, box"= to show values in a box for the fourth set of data points only. | ="off"= |
+| =legend= | Legend shown to the right of the chart.  For example ="R1:C3..R1:C6"= would take all of row 1 starting at column 3 and going through column 6 as the name/legend of each set of data points | None; no legend if not specified |
+| =width= | Defines the overall width of the chart in pixels. | Global =WIDTH= setting |
+| =height= | Defines the overall height of the chart in pixels. | Global =HEIGHT= setting |
+| =alt= | Alternate text for image | Empty alt tag |
+| =colors= | A list of colors defining the color of each set of data points. | Global =LINE_COLORS= setting for lines; global =AREA_COLORS= setting for area |
+| =bgcolor= | Background color of the area surrounding the chart. For example, ="#E7E7E7"= sets a light gray background. Optionally specify a second values for the chart background itself. For example, ="#E7E7E7, #FFFFC0"= defines a chart with a light yellow background on a light gray surrounding. | Global =BGCOLOR= setting |
+| (other parameters) | Other parameters are passed on to the =img= tag. Useful to add additional image parameters like =align="right"= | None |
+
+---++ Examples
+
+Assuming the following two TWiki tables.  The first shows the data oriented in columns while the seconds shows the data oriented in rows
+
+| *Year* | *Actual* |
+| 1998 | 9 |
+| 1999 | 14 |
+| 2000 | 19 | 
+| 2001 | 25 |
+| 2002 | 39 |
+
+| *Year* | *1998* | *1999* | *2000* | *2001* | *2002* |
+| *Low* | 8 |  10 | 13 | 17 | 22 |
+| *Target* | 10 | 12 | 17 | 20 | 25 |
+| *High* | 12 | 15 | 19 | 24 | 29 |
+| *Actual* | 9 | 14 | 15 | 19 | 27 |
+
+| *Type of chart* | *You type* | *You should get...* | *...if installed* |
+| line | =%<nop>CHART{ type="line" name="t1" table="4" data="R2:C2..R6:C2" xaxis="R2:C1..R6:C1" yaxis="on" legend="R1:C2..R1:C2" width="225" height="200"}%= | <img src="%ATTACHURLPATH%/line1.png" /> | %CHART{ type="line" name="t1" table="4" data="R2:C2..R6:C2" xaxis="R2:C1..R6:C1" yaxis="on" legend="R1:C2..R1:C2" width="225" height="200"}% |
+| line | =%<nop>CHART{ type="line" name="t2" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" yaxis="on" legend="R2:C1..R5:C1" width="225" height="200"}%= | <img src="%ATTACHURLPATH%/line2.png" /> | %CHART{ type="line" name="t2" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" yaxis="on" legend="R2:C1..R5:C1" width="225" height="200"}% |
+| area | =%<nop>CHART{ type="area" name="t3" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" yaxis="on" legend="R2:C1..R5:C1" width="225" height="200"}%= | <img src="%ATTACHURLPATH%/area3.png" /> | %CHART{ type="area" name="t3" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" yaxis="on" legend="R2:C1..R5:C1" width="225" height="200"}% |
+| arealine | =%<nop>CHART{ type="arealine" name="t4" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" yaxis="on" legend="R2:C1..R5:C1" datatype="area area area line" width="225" height="200"}%= | <img src="%ATTACHURLPATH%/arealine4.png" /> | %CHART{ type="arealine" name="t4" table="5" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" yaxis="on" legend="R2:C1..R5:C1" datatype="area area area line" width="225" height="200"}% |
+
+The "if installed" column shows images instead of variables in case the plugin is installed correctly.
+
+---++ Output
+
+	* A graphics file in PNG or GIF format is created containing the chart results.  The file is placed in =%<nop>PUBURLPATH%/%<nop>WEB%/%<nop>TOPIC%/_ChartPlugin_&lt;type&gt;_&lt;name&gt;.png= or =.gif= (GIF for GD version 1.19 or older)
+	* =%<nop>CHART{...}%= gets expanded to an =&lt;img ... /&gt;= image tag.
+
+---++ Error Handling
+
+If the required parameters are not defined, then an error message is returned or an =&lt;img ... /&gt;= image tag is returned pointing to a graphic containing the error message.
+
+---++ Plugin Installation Instructions
+
+*Note:* You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==data/TWiki/ChartPluginTests.txt== | Test page containing many examples of the <nop>ChartPlugin in action.  Also shows various error conditions |
+	  | ==data/TWiki/ChartPluginTests.txt,v== | RCS file for above |
+	  | ==data/TWiki/ChartPluginTestsRemote.txt== | Topic containing remote tables referenced by ChartPluginTests |
+	  | ==data/TWiki/ChartPluginTestsRemote.txt,v== | RCS file for above |
+	  | ==pub/TWiki/ChartPlugin/line1.png== | Sample =line= image |
+	  | ==pub/TWiki/ChartPlugin/line2.png== | Sample =line= image |
+	  | ==pub/TWiki/ChartPlugin/area3.png== | Sample =area= image |
+	  | ==pub/TWiki/ChartPlugin/arealine4.png== | Sample =arealine= image |
+	  | ==pub/TWiki/ChartPlugin/lineexample.png== | Sample =line= image |
+	  | ==pub/TWiki/ChartPlugin/areaexample.png== | Sample =area= image |
+	  | ==pub/TWiki/ChartPlugin/arealineexample.png== | Sample =arealine= image |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==lib/TWiki/Plugins/%TOPIC%/Chart.pm== | Chart library Plugin Perl module |
+	  | ==lib/TWiki/Plugins/%TOPIC%/Table.pm== | Table library Plugin Perl module |
+	  | ==lib/TWiki/Plugins/%TOPIC%/Parameter.pm== | Parameter library Plugin Perl module |
+	* If you see =Permission denied= errors, verify that ownership and permissions are correct for the following making sure that ownership and permissions match existing directories ownerships and permissions:
+		* =pub/TWiki/ChartPlugin=
+	* Test if the plugin is correctly installed:
+		* Check above examples if the "if installed" column shows images instead of variables.
+		* Check ChartPluginTests for some more tests
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/TaitCyrus, %TWIKIWEB%.PeterThoeny |
+|  Plugin Version: | 30 Sep 2002 (V1.003) |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  10 Oct 2002: | V1.003 - Improved performance, fixed bugs with color allocation, auto-legend placement and parsing of numbers in tables.  Also bumped the upper value when numbers switch from decimal format to engineering format |
+|  30 Sep 2002: | V1.002 - Add support for better placement of legends so they don't overlap, add auto ymin/ymax determination if not specified, add =bgcolor= and =numygrids= options |
+|  27 Jun 2002: | V1.001 - Data range specified is clipped to actual table size; more forgiving data parsing by extracting first numeral from a table cell, e.g. extract =25= from =&lt;u&gt;25%&lt;/u&gt;= |
+|  20 Jun 2002: | Initial version (V1.000) |
+|  CPAN Dependencies: | GD from http://stein.cshl.org/WWW/software/GD |
+|  Other Dependencies: | gd library from http://www.boutell.com/gd (Tested with 1.8.4)<br /> PNG graphics library from http://www.libpng.org/pub/png|
+|  Perl Version: | 5.005 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- Main.TaitCyrus - 10 Oct 2002 <br />
+-- Main.PeterThoeny - 10 Oct 2002
+%META:FILEATTACHMENT{name="line1.png" attr="h" comment="" date="1034358856" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\line1.png" size="1247" user="PeterThoeny" version="1.2"}%
+%META:FILEATTACHMENT{name="line2.png" attr="h" comment="" date="1034358866" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\line2.png" size="2289" user="PeterThoeny" version="1.2"}%
+%META:FILEATTACHMENT{name="lineexample.png" attr="h" comment="" date="1024533198" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\lineexample.png" size="2462" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="area3.png" attr="h" comment="" date="1034358879" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\area3.png" size="1988" user="PeterThoeny" version="1.2"}%
+%META:FILEATTACHMENT{name="areaexample.png" attr="h" comment="" date="1024533210" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\areaexample.png" size="3370" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="arealine4.png" attr="h" comment="" date="1034358891" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\arealine4.png" size="2102" user="PeterThoeny" version="1.2"}%
+%META:FILEATTACHMENT{name="arealineexample.png" attr="h" comment="" date="1024533223" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\arealineexample.png" size="4211" user="PeterThoeny" version="1.1"}%
