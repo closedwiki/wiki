@@ -30,6 +30,7 @@ my $Config = {
     agent => "TWikiKernel Builder/v0.7.1",
 # documentation switches
     pdoc => eval { require Pdoc::Parsers::Files::PerlModule } && $@ eq '',
+    gendocs => 1,
 # 
     verbose => 0,
     debug => 0,
@@ -40,7 +41,7 @@ my $Config = {
 my $result = GetOptions( $Config,
 			'localcache=s', 'tempdir=s', 'outputdir=s', 'outfile=s',
 # documentation switches
-			'pdoc',
+			'pdoc!', 'gendocs!',
 # miscellaneous/generic options
 			'agent=s', 'help', 'man', 'debug', 'verbose|v',
 			);
@@ -105,7 +106,10 @@ else {
 
 ###############################################################################
 # build source code docs
-execute( "cd tools && perl gendocs.pl nosmells" ) or die $!;
+if ( $Config->{gendocs} )
+{
+    execute( "cd tools && perl gendocs.pl nosmells" ) or die $!;
+}
 
 if ( $Config->{pdoc} )
 {
