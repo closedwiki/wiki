@@ -1,6 +1,5 @@
-%META:TOPICINFO{author="SvenDowideit" date="1105009919" format="1.0" version="1.1"}%
 The topic %TOPIC% was correctly created from the template in TopicTemplateWithUrlParamFixture
 
-the Url Param _testtext_ = %URLPARAM{"testtext"}%
+If =%URLPARAM{"testtext"}%= is =text from the url= then the test *passed*.
 
-%META:TOPICMOVED{by="SvenDowideit" date="1105009965" from="TestCases.TopicTemplateFixtureWithUrlParam" to="TestCases.TopicTemplateWithUrlParamFixture"}%
+If it is anything else, it *failed*.
