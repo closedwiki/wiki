@@ -61,7 +61,7 @@ $destMech->submit_form(
 		webbgcolor => '#FF0099',	# hot pink (noticeable!)
 		sitemapwhat => 'TWiki Automated Unit and Regression Tests',
 		sitemapuseto => '...internal testing',
-#		nosearchall => [ radio => '' ],# HTML smell: should have values of "yes" and "no" ?
+#		nosearchall => 'off',
 		},
 	) or die $!;
 
