@@ -120,6 +120,7 @@ sub main
     &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
     my $tmpl = "", $atext = "", $text = "", $ptext = "", $tcat = "", $icat = "";
+    my $metaText = "";
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
 	$tmpl= &TWiki::Store::readTemplate( "noweb" );
@@ -180,11 +181,30 @@ sub main
     if( $saveCmd ne "repRev" ) {
         ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
         # get the edited text and combine text, category table and attachment for preview
-        my $metaText = &TWiki::renderMetaData( $webName, $topic, \@meta );
+        @meta = &TWiki::Classification::catVars2Meta( $webName, $query, @meta );
+        $metaText = &TWiki::renderMetaData( $webName, $topic, \@meta );
         $text = $query->param( "text" );
-        $text .= $metaText;
         $text .= $tcat;        # text to save
         $ptext = $text;        # text to preview
+        
+        my $catParams = &TWiki::Classification::categoryParams( @meta );
+        
+	my $oldargsr;
+	( $oldargsr, @meta ) = &TWiki::Store::metaExtract( "CLASSIFICATION", "", "", @meta );
+	my @oldargs = @$oldargsr;
+	if( @oldargs ) {
+	   my %args = @oldargs;
+	   my $classification = $args{"name"};
+	   my @categoriesInfo = &TWiki::Classification::getCategoriesInfo( $webName, $classification );
+	   my $catInfo = &TWiki::Classification::renderCategoryInfo( "edit", $classification, \@meta, @categoriesInfo );
+	   my $catInfo = &TWiki::handleCommonTags( $catInfo, $topic, $webName );
+	   my $catInfo = &TWiki::getRenderedVersion( $catInfo, $webName );
+	   $tmpl =~ s/%CATEGORIES%/$catInfo/go;
+	   $tmpl =~ s/%CATEGORYPARAMS%/$catParams/go;
+	} else {
+	   $tmpl =~ s/%CATEGORIES%//go;
+	   $tmpl =~ s/%CATEGORYPARAMS%//go;
+        }
     } else {
         # for debug: Don't include attachment FIXME is this correct?
         $text = $query->param( "text" );
@@ -200,7 +220,7 @@ sub main
     # do not allow click on link before save:
     $ptext =~ s@(href=".*?")@href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?template=oops"@goi;
 
-    $tmpl =~ s/%TEXT%/$ptext/go;
+    $tmpl =~ s/%TEXT%/$ptext$metaText/go;
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
 
     $text =~ s/&/%_A_%/go;
