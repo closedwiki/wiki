@@ -320,12 +320,12 @@ sub test_wt10Wrap {
 
 sub test_wt11Lite {
     my $this = shift;
-    $this->verifyLite( $wTopic, "", ( 'john.talintyre@drkw.com\n' ) );
+    $this->verifyLite( $wTopic, "", ( "john.talintyre\@drkw.com\n" ) );
 }
 
 sub test_wt11Wrap {
     my $this = shift;
-    $this->verifyWrap( $wTopic, "", ( 'john.talintyre@drkw.com\n' ) );
+    $this->verifyWrap( $wTopic, "", ( "john.talintyre\@drkw.com\n" ) );
 }
 
 # ensure RCS keywords are not expanded in the checked-out version
@@ -531,12 +531,12 @@ sub test_wa10Wrap {
 
 sub test_wa11Lite {
     my $this = shift;
-    $this->verifyLite( $wTopic, "it.doc", ( 'john.talintyre@drkw.com\n' ) ); # TODO: broken!
+    $this->verifyLite( $wTopic, "it.doc", ( "john.talintyre\@drkw.com\n" ) ); # TODO: broken!
 }
 
 sub test_wa11Wrap {
     my $this = shift;
-    $this->verifyWrap( $wTopic, "it.doc", ( 'john.talintyre@drkw.com\n' ) ); # TODO: broken!
+    $this->verifyWrap( $wTopic, "it.doc", ( "john.talintyre\@drkw.com\n" ) ); # TODO: broken!
 }
 
 sub test_wa12Lite {
@@ -752,12 +752,12 @@ sub test_rt11Lite {
 
 sub test_rt12Wrap {
     my $this = shift;
-    $this->verifyWrap( $rTopic, "it.doc", ( 'john.talintyre@drkw.com\n' ) );
+    $this->verifyWrap( $rTopic, "it.doc", ( "john.talintyre\@drkw.com\n" ) );
 }
 
 sub test_rt12Lite {
     my $this = shift;
-    $this->verifyLite($rTopic, "it.doc", ( 'john.talintyre@drkw.com\n' ) );
+    $this->verifyLite($rTopic, "it.doc", ( "john.talintyre\@drkw.com\n" ) );
 }
 
 sub test_rt13Wrap {
@@ -942,12 +942,12 @@ sub test_ra11Lite {
 
 sub test_ra12Wrap {
     my $this = shift;
-    $this->verifyWrap( $rTopic, "", ( 'john.talintyre@drkw.com\n' ) );
+    $this->verifyWrap( $rTopic, "", ( "john.talintyre\@drkw.com\n" ) );
 }
 
 sub test_ra12Lite {
     my $this = shift;
-    $this->verifyLite($rTopic, "", ( 'john.talintyre@drkw.com\n' ) );
+    $this->verifyLite($rTopic, "", ( "john.talintyre\@drkw.com\n" ) );
 }
 
 sub test_ra13Wrap {
