@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042362385" format="1.0" version="1.4"}%
-<nop><h1>Interwiki Plugin</h1>
+%META:TOPICINFO{author="PeterThoeny" date="1042962180" format="1.0" version="1.5"}%
+---+!! Interwiki Plugin
 
 The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on aliases defined in the %TWIKIWEB%.InterWikis topic. This plugin is inspired by <nop>UseMod Wiki's inter-wiki links, http://www.usemod.com/cgi-bin/wiki.pl?InterWiki.
 
@@ -45,10 +45,11 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 ---++ Plugin Info
 
 |  Plugin Author: | %TWIKIWEB%.AndreaSterbini, %TWIKIWEB%.PeterThoeny |
-|  Plugin Version: | 31 Aug 2002, 1.0.2 |
+|  Plugin Version: | 18 Jan 2003, 1.0.3 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  31 Aug 2002: | Allow percent sign in site name |
-|  27 Jul 2001: | Allow numbers in site name |
+|  18 Jan 2003: | Allow number sign =#= in Page name |
+|  31 Aug 2002: | Allow percent sign =%= in page name |
+|  27 Jul 2001: | Allow numbers =0-9= in site name |
 |  26 Jul 2001: | Fixed alternating missed link bug due to greedy $postfixPattern (fix by Richard Donkin) |
 |  14 Jul 2001: | Changed to plug & play |
 |  16 Jun 2001: | Made tooltips optional; prevent ==Module::Sub== type of link |
@@ -64,5 +65,5 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 __Related Topics:__ %TWIKIWEB%.InterWikis, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- %TWIKIWEB%.AndreaSterbini - 20 Oct 2000 <br />
--- %TWIKIWEB%.PeterThoeny - 31 Aug 2002 <br />
+-- %TWIKIWEB%.PeterThoeny - 18 Jan 2003 <br />
 -- %TWIKIWEB%.MikeMannix - 01 Oct 2001 <br />	
