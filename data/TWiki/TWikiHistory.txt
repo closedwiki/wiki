@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999675680" format="1.0" version="1.44"}%
+%META:TOPICINFO{author="MikeMannix" date="999689617" format="1.0" version="1.45"}%
 <font size="+3"> *TWiki History: The Dev Timeline* </font>
 
 %TOC%
@@ -246,4 +246,4 @@
 	* [[http://twiki.org/cgi-bin/view/Codev/TWikiPlannedFeatures][TWikiPlannedFeatures]]: accepted for future development
 	* [[http://twiki.org/cgi-bin/view/Codev/FeatureToDo][FeatureToDo]]: prioritized to up-next dev status
 	* [[http://twiki.org/cgi-bin/view/Codev/FeatureUnderConstruction][FeatureUnderConstruction]]: currently in development
-	* [[http://twiki.org/cgi-bin/view/Codev/TWikiDocumentation][TWikiDocumentation]]: reference manual for the latest TWiki
+	* TWikiDocumentation: reference manual for the latest TWiki
