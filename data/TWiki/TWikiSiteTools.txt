@@ -75,7 +75,7 @@ You can generate a listing manually, or on an automated schedule, of visits to i
 TWiki generates monthly log files which are used by the statistics
 	* The log directory is defined by the =$logDir= variable in TWiki.cfg
 	* The file name is =log&lt;year&gt;&lt;month&gt;.txt=
-	* Example path name: =twiki/data/log%SERVERTIME{$year$mo}%.txt=
+	* Example path name: =twiki/logs/log%SERVERTIME{$year$mo}%.txt=
 	* Each access gets logged as: %BR%
 	  =| &lt;time&gt; | &lt;wikiusername&gt; | &lt;action&gt; | &lt;web&gt;.&lt;topic&gt; | &lt;extra info&gt; | &lt;IP address&gt; |=
 	* Example log entry: %BR%
@@ -86,12 +86,16 @@ TWiki generates monthly log files which are used by the statistics
 	  | attach | =attach= | when viewing attach screen of previous uploaded attachment: =filename= |
 	  | changes | =changes= |  |
 	  | edit | =edit= | when editing non-existing topic: =(not exist)= |
-	  | register | =register= | E-mail address |
-	  | save | =save= | when replacing existing revision: =repRev 1.3= %BR% when user checks the minor changes box: =dontNotify= |
-	  | search | =search= | search string |
 	  | rdiff | =rdiff= | =1.4 1.3= |
+	  | register | =regstart= | WikiUserName | E-Mail address | LoginName | =user attempts to register= |
+	  | register | =register= | E-mail address | =user successfully registers= |
+	  | register | =bulkregister= | WikiUserName of new | E-mail address | Admin Id | 
 	  | rename | =rename= | when moving topic: =moved to !Newweb.NewTopic= |
 	  | rename | =move= | when moving attachment: =Attachment filename moved to !Newweb.NewTopic= |
+	  | passwd | =resetpasswd= | LoginName | WikiName | EmailAddress | =Success code from addUserPassword= |
+	  | passwd | =changepasswd= | LoginName | WikiName | 
+	  | save | =save= | when replacing existing revision: =repRev 1.3= %BR% when user checks the minor changes box: =dontNotify= |
+	  | search | =search= | search string |
 	  | upload | =upload= | filename |
 	  | view | =view= | when viewing non-existing topic: =(not exist)= %BR% when viewing previous topic revision: =r1.3= |
 
