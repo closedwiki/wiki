@@ -1,8 +1,7 @@
+%META:TOPICINFO{author="guest" date="1101348158" format="1.0" version="1.1"}%
 ---+!! %TOPIC%
 
 Description: Tags composed from the expansion of other tags. Example: is * Set A=Some and * Set B=Tag, then <nop>%%A<nop>%<nop>%B<nop>%% must expand to whatever is the expansion of %SomeTag%
-
-
 
 	* Set EGGSAMPLE = Egg sample
 	* Set A = EGG
@@ -49,4 +48,28 @@ Expected:
 saw:
 <!-- actual -->
 %E%%F%
+<!-- /actual -->
+
+	* Set EXEMPLAR = Exem plar
+	* Set XA = EXEM
+	* Set XB = PLAR
+
+---++ <nop>%<nop>%XA{}<nop>%<nop>%XB{}<nop>%<nop>%
+Expected:
+<!-- expected expand -->
+%EXEMPLAR%
+<!-- /expected -->
+saw:
+<!-- actual -->
+%%XA{}%%XB{}%%
+<!-- /actual -->
+
+---++ <nop>%<nop>%XA<nop>%<nop>%XB<nop>%<nop>{}%
+Expected:
+<!-- expected expand -->
+%EXEMPLAR%
+<!-- /expected -->
+saw:
+<!-- actual -->
+%%XA%%XB%{}%
 <!-- /actual -->

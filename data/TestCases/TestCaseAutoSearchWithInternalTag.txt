@@ -1,5 +1,3 @@
-%META:TOPICINFO{author="guest" date="1100281865" format="1.0" version="1.2"}%
-%META:TOPICPARENT{name="Main.WebHome"}%
 Description: Tags embedded in the format option must expand correcly
 <verbatim>
 %SEARCH{"%TOPIC%" format="$percntINCLUDE{ $topic }$nop%" nosearch="on" noheader="on" nosummary="on" nototal="on"}%
@@ -20,7 +18,12 @@ Fixture for test: TestCaseAutoSearchWithInternalTag
 <!-- actual -->%SEARCH{"%TOPIC%" format="$percntINCLUDE{ $topic }$nop%" nosearch="on" noheader="on" nosummary="on" nototal="on"}%<!-- /actual -->
 </td>
 </tr>
+<tr><td>
+<!-- expected -->Test Passed Ok<!-- /expected -->
+</td>
+<td>
+<!-- actual -->%SEARCH{"%TOPIC%" format="$percntINCLUDE{ $topic }$nop$percnt" nosearch="on" noheader="on" nosummary="on" nototal="on"}%<!-- /actual -->
+</td>
+</tr>
 </table>
 
-
-%META:TOPICMOVED{by="guest" date="1100281949" from="TestCases.TestCaseSearchWithInternalTag" to="TestCases.TestCaseAutoSearchWithInternalTag"}%
