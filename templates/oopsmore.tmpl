@@ -4,6 +4,9 @@
 %TMPL:DEF{"heading"}%More Actions on Topic %TOPIC%%TMPL:END%
 %TMPL:DEF{"message"}%
 
+   * *Rename, move or delete:*
+      * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a> <nop>%TOPIC%
+
    * *Ref-By:*
       * <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Find topics</a>
         in __%WEB% web__ that link to <nop>%TOPIC%.
@@ -20,9 +23,6 @@
         then <input type="submit" value="Edit" /> and save the topic
         to activate the new parent.
 </form>
-
-   * *Rename, move or delete:*
-      * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a> <nop>%TOPIC%
 
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
    * *View previous topic revision:*
