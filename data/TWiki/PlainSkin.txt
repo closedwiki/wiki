@@ -1,0 +1,28 @@
+%META:TOPICINFO{author="PeterThoeny" date="1090917279" format="1.0" version="1.1"}%
+---+ Plain Skin
+
+The plain skin can be used to get the rendered topic text without any page decoration.
+
+This skin is part of every TWiki distribution.
+
+---++ Skin Info
+
+|  Description: | The plain skin can be used to get the rendered topic text without any page decoration |
+|  Screenshot: | <a href="%ATTACHURL%/fullscreen.gif"><img src="%ATTACHURL%/screenshot.gif" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Base Name: | plain |
+|  Skin Author: | TWiki:Main/PeterThoeny |
+|  Skin Version: | 27 Jul 2004 (v1.000) |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  27 Jul 2004: | Initial version (v1.000) |
+|  Dependencies: |  |
+|  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Note:__ The Description, Screenshot and Base Name rows are needed by the %TWIKIWEB%.TWikiSkinBrowser
+
+__Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser
+
+-- TWiki:Main/PeterThoeny - 27 Jul 2004
+
+%META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" date="1090918243" path="C:\Data\Temp\screenshot.gif" size="4407" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="fullscreen.gif" attr="h" comment="" date="1090918257" path="C:\Data\Temp\fullscreen.gif" size="8915" user="PeterThoeny" version="1.1"}%
