@@ -26,7 +26,7 @@ installLocalModules({
     # TODO: update to use same output as =cpan/calc-twiki-deps.pl=
     modules => [ @ARGV ? @ARGV : qw( 
 				     XML::Parser XML::Simple 
-				     File::Slurp File::Slurp::Tree
+				     File::Find::Rule File::Slurp File::Slurp::Tree
 				     List::Permutor File::Temp 
 				     WWW::Mechanize
 				     Carp::Clan Bit::Vector Date::Calc 
