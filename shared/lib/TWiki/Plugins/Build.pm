@@ -288,7 +288,7 @@ Run a Test::Unit test module, using TestRunner
 =cut
 sub run_tests {
   my ($this, $module) = @_;
-  $this->sys_action("perl -w -I$basedir/lib -I$shared/lib -I$shared/test/fixtures -I. $shared/lib/TWiki/Plugins/SharedCode/test/TestRunner.pl $module");
+  $this->sys_action("perl -w -I$basedir/lib -I$shared/lib -I$shared/test/fixtures -I. $shared/test/TestRunner.pl $module");
 }
 
 =pod
