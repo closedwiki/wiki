@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999077269" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000247135" format="1.0" version="1.6"}%
 %TOC%
 %STARTINCLUDE%
 ---## 20 Minute TWiki
@@ -21,9 +21,10 @@ This step-by-step, hands-on tutorial gets you up to speed with all the %WIKITOOL
 	* To edit topics, you need to have a %WIKITOOLNAME% account.
 	* Go to the TWikiRegistration page to create your %WIKITOOLNAME% account.
 
----+++ 4. Check out %WIKITOOLNAME% Users and offices:
+---+++ 4. Check out %WIKITOOLNAME% Users, offices and groups:
 	* Go to the %MAINWEB%.%WIKIUSERSTOPIC% topic in the %WIKITOOLNAME%.%MAINWEB% web; it has a list of all users of %WIKITOOLNAME%. Your WikiName will be in this list after you register.
 	* Go to the %MAINWEB%.OfficeLocations topic in the %WIKITOOLNAME%.%MAINWEB% web; it has a list of corporate offices already entered into %WIKITOOLNAME%.
+	* Go to the %MAINWEB%.TWikiGroups topic in the %WIKITOOLNAME%.%MAINWEB% web; it has a list of groups which can be used to define fine grained TWikiAccessControl in %WIKITOOLNAME%.
 
 ---+++ 5. Test the Topic controls:
 	* Go to the %HOMETOPIC% topic to learn what we can do with a topic.
