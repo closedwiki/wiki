@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1048319208" format="1.0" version="1.21"}%
+%META:TOPICINFO{author="PeterThoeny" date="1059255946" format="1.0" version="1.22"}%
 ---++ Welcome, %WIKIUSERNAME%!
 
 Welcome to %WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_), a meeting place to work on common interests. Anyone can contribute using any web browser. %WIKITOOLNAME% looks like a normal Web site... except that it encourages contribution and *editing* of pages, questions, answers, comments and updates.
@@ -19,7 +19,7 @@ __Mission: &quot;TWiki is a leading-edge, web-based collaboration platform targe
 		* click ==[&nbsp;Preview&nbsp;Changes&nbsp;]== at the bottom to verify the topic (use your brower's ==Back== button if necessary)
 		* click ==[&nbsp;Save&nbsp;Changes&nbsp;]==
 	1. *Don't worry!* It can be scary at first to change "public" content. Please just try it. _Revision control_ keeps all content, nothing is lost.  For special cases, [[TWikiAccessControl][access control]] is available yet you may find you don't need it in most cases. You'll soon see how successful WikiCulture works in this kind of collaboration environment. This is new.  Just try to relax.
-	1. *Experiment*  Edit your personal page or visit the [[Sandbox.WebHome][Sandbox]] web.
+	1. *Experiment*  Edit your personal page or visit the Sandbox.%HOMETOPIC% web.
 		1. *Link* To link to another topic, start by editing an existing topic.
 			* To create a link to an existing topic type its ==JoinCapitalizedWords== name.  WikiWords (two or more capitalized words run together) link automatically.
 			* To create a link to a new topic, enter a newly ==UsedPhrase==. 
