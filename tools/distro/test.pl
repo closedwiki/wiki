@@ -4,10 +4,8 @@ use Data::Dumper qw( Dumper );
 ++$|;
 
 # TODO:
-#  * rewrite extension2url() in terms of CGI's query_form() (used in tools/test/TWikiTopic2TestCase.pl)
 #  * change ( install_account, install_host, install_dir ) into an URI (i think it's URI)
 #  * update man pod docs {grin}
-#  * 
 
 use File::Copy qw( cp mv );
 use File::Basename qw( basename );
@@ -21,14 +19,15 @@ my $Config = {
     testweb => 'GameDev',
 # BUILD OPTIONS
 	platform => $^O,				# only darwin and sourceforge atm
-	twikiplugins => '../twikiplugins',
+	twikiplugins => '../../../twikiplugins',
 	twikisync => 0,					# download latest versions of plugins, addons, etc from twiki.org	
 # INSTALL OPTIONS
 	# TODO: change to use a URI (?)
 	install_account => 'twiki',
 	install_host => 'localhost',
 	install_dir => '~/Sites',
-	installurl = 'localhost/~twiki',
+	report => 0,
+#	installurl => 'localhost/~twiki',
 # HELP OPTIONS
 	agent => basename( $0 ),
 	verbose => 0,
@@ -38,12 +37,13 @@ my $Config = {
 };
 Getopt::Long::Configure( "bundling" );
 my $result = GetOptions( $Config,
-			'testweb=s', 'platform=s', 'twikiplugins=s', 'twikisync',
+			'testweb=s', 'platform=s', 'twikiplugins=s', 'twikisync!',
 # plugin, addon, contrib
 			'plugin=s@', 'addon=s@', 'contrib=s@',
 # install_account, install_host, install_dir
-# plugin, contrib, addon
-			'verbose', 'help|?', 'man', 'debug',
+			'install_account=s', 'install_host=s', 'install_dir=s',
+# misc. options
+			'agent=s', 'report!', 'verbose', 'help|?', 'man', 'debug',
 			);
 pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
@@ -59,37 +59,33 @@ die "twikiplugins doesn't exist" unless -d $Config->{twikiplugins};
 $Config->{_installer}->{dir} = "$Config->{twikiplugins}/lib/TWiki/Contrib/TWikiInstallerContrib/";
 $Config->{_installer}->{TWikiReleases} = "$Config->{_installer}->{dir}/downloads/releases/";
 print Dumper( $Config ) if $Config->{debug};
+$Config->{install_dir} =~ s/~/\\~/g;						# KLUDGE
+print "[", $Config->{install_dir}, "]\n";
 
 ################################################################################
 
 # build kernel
 my $newDistro = BuildTWikiKernel({ %$Config }) or die;
 cp( $newDistro, $Config->{_installer}->{TWikiReleases} ) or die $!;
-# build twiki distribution
 BuildTWikiDistribution({ %$Config }); 
-# install reference version
-PushRemoteTWikiInstall({ %$Config, kernel => 'TWiki20040901.tar.gz' });
-# run test
+PushRemoteTWikiInstall({ %$Config, kernel => 'TWiki20040901.tar.gz', report => 0 });
 TWikiTopics2TestCases({ %$Config });
-# save web
 GetAWeb({ %$Config, web => $Config->{testweb} });
-# delete first install
 UninstallTWiki({ %$Config });
+exit 0;
+
 # reinstall new version to be tested (with newly-saved test web)
 PushRemoteTWikiInstall({ %$Config, kernel => $newDistro, testweb => "$Config->{testweb}.wiki.tar.gz" });
-# compare rendered html
 my $comparisonResults = RunComparisonTests({ %$Config });
 print Dumper( $comparisonResults ) if $Config->{debug};
-# make tml-style report page
 my $textTopicReport = MakeComparisonTestsResultsReport({ %$Config, results => $comparisonResults });
 print Dumper( $textTopicReport ) if $Config->{debug};
-# post the results to the wiki
 PostComparisonTestsResultsReport({ %$Config, text => $textTopicReport, topic => "$Config->{testweb}.$Config->{testweb}ComparisonsReport" });
 $Config->{isInstalled} = 1;
 
 END {
 	# final installation report
-	WebBrowser({ url => "http://$Config->{install_host}/~$Config->{install_account}/cgi-bin/twiki/view/TWiki/TWikiInstallationReport" }) if $Config->{isInstalled};
+	WebBrowser({ url => "http://$Config->{install_host}/~$Config->{install_account}/cgi-bin/twiki/view?topic=$Config->{testweb}.$Config->{testweb}ComparisonsReport" }) if $Config->{isInstalled};
 }
 
 ################################################################################
@@ -230,8 +226,8 @@ sub TWikiTopics2TestCases
 	my $parms = shift;
 	print STDERR "TWikiTopics2TestCases: ", Dumper( $parms ) if $parms->{debug};	
 	my $testweb = $parms->{testweb} or die "no testweb?";
-	
-    logSystem( './TWikiTopic2TestCase.pl' => "--web=$testweb" => '--verbose' => '--debug' );
+
+    logSystem( './TWikiTopic2TestCase.pl' => '--verbose' => '--debug' => '--web' => $testweb );
 }
 
 ################################################################################
@@ -251,17 +247,20 @@ sub PushRemoteTWikiInstall
 	die "no testweb?" unless $parms->{testweb};
 
 	my $testweb = -e $parms->{testweb} ? $parms->{testweb} : "${dirInstaller}/webs/local/$parms->{testweb}.wiki.tar.gz";
-	my $testweb_basename = basename( $testweb );
-
-	# copy TWikiDistribution, $testweb to webs/local/
-    logSystem( qq{scp ${dirInstaller}/twiki-${platform}.tar.bz2 $parms->{install_account}\@$parms->{install_host}:$parms->{install_dir}} );
-    logSystem( qq{scp $testweb $parms->{install_account}\@$parms->{install_host}:$parms->{install_dir}} );
-    logSystem( qq{ssh $parms->{install_account}\@$parms->{install_host} "cd $parms->{install_dir}; mkdir -p webs/local; mv $testweb_basename webs/local/"} );
-    # run the install program ( pre-twiki.sh, install_twiki.cgi (with install options), post-twiki.pl )
-	my $twiki_config = extensions2uri({ plugin => $parms->{plugin}, addon => $parms->{addon}, contrib => $parms->{contrib} });
-#	warn "no (install) config" unless $parms->{install};
-	print "twiki_config = [$twiki_config]\n" if $parms->{debug};
-    logSystem( qq{ssh $parms->{install_account}\@$parms->{install_host} "cd $parms->{install_dir}; tar xjf twiki-${platform}.tar.bz2; time ./pre-twiki.sh; time curl --silent --show-error 'http://$parms->{install_host}/~$parms->{install_account}/cgi-bin/install_twiki.cgi?${twiki_config};twiki=${kernel};install=install;localweb=$testweb_basename' -o 'TWikiInstallationReport.html'; ./post-twiki.pl"} );
+	my $report = $parms->{report} || 0;
+	
+#	$parms->{install_dir} =~ s/~/\~/g;		# KLUDGE!!!
+		
+	logSystem( './install-remote-twiki.pl' => '--verbose', '--debug',
+		'--distro' => "${dirInstaller}/twiki-${platform}.tar.bz2",
+		'--kernel' => "$kernel",
+		'--web' => "$testweb", 
+		'--install_account' => "$parms->{install_account}",
+		'--install_host' => "$parms->{install_host}",
+		'--install_dir' => "$parms->{install_dir}",
+		'--agent' => "$parms->{agent}",
+		'--report' => $report,
+		);
 }
 
 ################################################################################
@@ -272,7 +271,7 @@ sub BuildTWikiKernel
 	print STDERR "BuildTWikiKernel: ", Dumper( $parms ) if $parms->{debug};
 
 	print "Building a new TWikiKernel\n" if $parms->{verbose};
-	chomp( my $newDistro = basename( (`./build-twiki-kernel.pl`)[-1] ) );		# last line output is the resultant distro tar file
+	chomp( my $newDistro = basename( (`./build-twiki-kernel.pl`)[-1] ) );	# last line output is the resultant distro tar file
 	die "no TWikiKernel built?: [$newDistro]" unless $newDistro =~ /TWikiKernel-[^-]+-\d{8}.\d{6}.tar.gz/;
 	print "Build complete: $newDistro\n";	
 
@@ -298,19 +297,6 @@ sub BuildTWikiDistribution
 }
 
 ################################################################################
-sub extensions2uri
-{
-    my $config = shift or die;
-
-    my @config;
-    foreach my $ext ( keys %$config )
-    {
-		push @config, join( ';', map { "${ext}=$_" } @{$config->{$ext}} );
-    }
-    return join( ';', @config );
-}
-
-################################################################################
 ###############################################################################
 
 __DATA__
@@ -324,7 +310,7 @@ test.pl [options] [-testweb=]
 	[-platform=[$^O]] [-twikiplugins=] [-twikisync=[0]]
 	[-install_account=[twiki]] [-install_host=[localhost]] [-install_dir=[~/Sites]]
 	[-plugin=(...)] [-contrib=(...)] [-addon=(...)]
-	[-verbose] [-help] [-man]
+	[--report|--no-report] [-verbose] [-help] [-man]
 
 Copyright 2004 Will Norris.  All Rights Reserved.
 
@@ -333,7 +319,7 @@ Copyright 2004 Will Norris.  All Rights Reserved.
 
   Build Options:
    -platform=[$^O]					(darwin|sourceforge)
-   -twikiplugins=[/Users/wbniv/twiki/twikiplugins]
+   -twikiplugins=[../../../twikiplugins]
    -twikisync                       download latest versions of plugins, addons, etc from twiki.org	
 
   Install Options:
@@ -355,7 +341,7 @@ Copyright 2004 Will Norris.  All Rights Reserved.
 
 =item B<-platform=[$^O]>
 
-=item B<-twikiplugins=[/Users/wbniv/twiki/twikiplugins]>
+=item B<-twikiplugins=[../twikiplugins]>
 
 =item B<-twikisync=(0|1)>
 
