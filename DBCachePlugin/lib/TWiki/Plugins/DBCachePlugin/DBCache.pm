@@ -21,7 +21,7 @@ Typical usage:
 <verbatim>
   use TWiki::Plugins::DBCachePlugin::DBCache;
 
-  $db = new DBCachePlugin::DBCache( $web ); # always done
+  $db = new TWiki::Plugins::DBCachePlugin::DBCache( $web ); # always done
   $db->load(); # may be always done, or only on demand when a tag is parsed that needs it
 
   # the DB is a hash of topics keyed on their name
@@ -40,11 +40,11 @@ As topics are loaded, the readTopicLine method gives subclasses an opportunity t
 
 =cut
 
-{ package DBCachePlugin::DBCache;
+{ package TWiki::Plugins::DBCachePlugin::DBCache;
 
   # A DB is a hash keyed on topic name
 
-  @DBCachePlugin::DBCache::ISA = ("DBCachePlugin::Map");
+  @TWiki::Plugins::DBCachePlugin::DBCache::ISA = ("TWiki::Plugins::DBCachePlugin::Map");
 
   use vars qw( $initialised $storable $VERSION );
 
@@ -81,7 +81,7 @@ Construct a new DBCache object.
     if ( $storable ) {
       Storable::lock_store( $this, $cache );
     } else {
-      my $archive = new DBCachePlugin::Archive( $cache, "w" );
+      my $archive = new TWiki::Plugins::DBCachePlugin::Archive( $cache, "w" );
       $archive->writeObject( $this );
       $archive->close();
     }
@@ -98,7 +98,7 @@ Construct a new DBCache object.
 	if ( $storable ) {
 	  $data = Storable::lock_retrieve( $cache );
 	} else {
-	  my $archive = new DBCachePlugin::Archive( $cache, "r" );
+	  my $archive = new TWiki::Plugins::DBCachePlugin::Archive( $cache, "r" );
 	  $data = $archive->readObject();
 	  $archive->close();
 	}
@@ -115,10 +115,10 @@ Construct a new DBCache object.
 
     open( $fh, "<$filename" )
       or die "Failed to open $dataDir/$topic.txt";
-    my $meta = new DBCachePlugin::Map();
+    my $meta = new TWiki::Plugins::DBCachePlugin::Map();
     $meta->set( "name", $topic );
     $meta->set( "topic", $topic );
-    $meta->set( ".cache_time", new DBCachePlugin::FileTime( $filename ));
+    $meta->set( ".cache_time", new TWiki::Plugins::DBCachePlugin::FileTime( $filename ));
 	
     my $line;
 	my $text = "";
@@ -126,7 +126,7 @@ Construct a new DBCache object.
     while ( $line = <$fh> ) {
       if ( $line =~ m/%META:/o ) {
 		if ( $line =~ m/%META:FORM{name=\"([^\"]*)\"}%/o ) {
-		  $form = new DBCachePlugin::Map() unless $form;
+		  $form = new TWiki::Plugins::DBCachePlugin::Map() unless $form;
 		  my $name = $1;
 		  $form->set( "name", $name );
 		  $form->set( "_up", $meta );
@@ -136,29 +136,30 @@ Construct a new DBCache object.
 		  $meta->set( "parent", $1 );
 		  $meta->set( "_up", $this->get( $1 ));
 		} elsif ( $line =~ m/%META:TOPICINFO{(.*)}%/o ) {
-		  my $att = new DBCachePlugin::Map($1);
+		  my $att = new TWiki::Plugins::DBCachePlugin::Map($1);
 		  $att->set( "_up", $meta );
 		  $meta->set( "info", $att );
 		} elsif ( $line =~ m/%META:TOPICMOVED{(.*)}%/o ) {
-		  my $att = new DBCachePlugin::Map($1);
+		  my $att = new TWiki::Plugins::DBCachePlugin::Map($1);
 		  $att->set( "_up", $meta );
 		  $meta->set( "moved", $att );
 		} elsif ( $line =~ m/%META:FIELD{(.*)}%/o ) {
 		  my $fs = new TWiki::Attrs($1);
-		  $form = new DBCachePlugin::Map() unless $form;
+		  $form = new TWiki::Plugins::DBCachePlugin::Map() unless $form;
 		  $form->set( $fs->get("name"), $fs->get("value"));
 		} elsif ( $line =~ m/%META:FILEATTACHMENT{(.*)}%/o ) {
-		  my $att = new DBCachePlugin::Map($1);
+		  my $att = new TWiki::Plugins::DBCachePlugin::Map($1);
 		  $att->set( "_up", $meta );
 		  my $atts = $meta->get( "attachments" );
 		  if ( !defined( $atts )) {
-			$atts = new DBCachePlugin::Array();
+			$atts = new TWiki::Plugins::DBCachePlugin::Array();
 			$meta->set( "attachments", $atts );
 		  }
 		  $atts->add( $att );
 		}
       } else {
-		$text .= $this->readTopicLine( $topic, $meta, $line, $fh );
+		$line = $this->readTopicLine( $topic, $meta, $line, $fh );
+        $text .= $line if ( $line );
 	  }
     }
     close( $fh );

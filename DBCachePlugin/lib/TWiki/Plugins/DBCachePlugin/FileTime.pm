@@ -13,7 +13,7 @@ Object that handles a file/time tuple for use in Storable and
 
 =cut
 
-{ package DBCachePlugin::FileTime;
+{ package TWiki::Plugins::DBCachePlugin::FileTime;
 
 =begin text
 
