@@ -3,6 +3,7 @@ twiki (20030201-4) unstable; urgency=high
   * added .htaccess to conffile (Closes: #217406)
   * fixed up doc-base file (Closes: #215395)
   * moved change of index.html from postinst to rules (Closes: #215397)
+  * updated copyright
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 16 Nov 2003 00:00:01 -1000
 
