@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="998895765" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="JohnTalintyre" date="998986839" format="1.0" version="1.7"}%
 ---## TWiki Implementation Notes
 
 ---+++ Platform
@@ -8,11 +8,11 @@ TWiki is written in Perl 5 and also uses some shell commands. The current implem
 | *Required Environment by Platform* |||
 | *Package(s):* | *Unix:* | *Windows:* |
 | Perl		 |	5.x	|	5.x  |
-| Non-standard Perl modules | | |
+| Non-standard Perl modules | | =MIME::Base64=, Digest::SHA1 (for password generation) |
 | Optional Perl modules | =Net::SMTP= (or sendmail) | =Net::SMTP= | 
-| RCS		  |	5.7	|	5.7	|
-| Other external programs |	ls, fgrep, egrep  |  ?  |
-| Web server  |	Apache  |	?	 |
+| RCS		  |	5.7	|	5.7 (including =diff=  |
+| Other external programs |	=ls=, =fgrep=, =egrep=  |  =ls=, =fgrep=, =egrep=  |
+| Web server  |	Apache  |	Apache, IIS	|
 
 ---+++ Directory Structure
 
@@ -20,8 +20,8 @@ TWiki is written in Perl 5 and also uses some shell commands. The current implem
 | ==twiki/bin==		 | TWiki Perl scripts |
 | ==twiki/lib/TWiki== | TWiki Perl modules |
 | ==twiki/lib/TWiki/Plugins== | Plugins modules |
-| ==twiki/pub==		 | Public files (FileAttachments, images) |
-| ==twiki/data==		| source text |
+| ==twiki/pub==		 | Public files (FileAttachments, images), plus RCS histories |
+| ==twiki/data==		| source (topic) text, including RCS histories |
 | ==twiki/templates== | HTML templates, used by TWiki scripts |
 
 
@@ -37,6 +37,7 @@ TWiki is written in Perl 5 and also uses some shell commands. The current implem
 | ==oops==			 | Script that shows an OK or oops dialog |
 | ==preview==		 | Script to preview topic after edit |
 | ==rdiff==			| Script to see differences of topics |
+| ==rename==		  | Script to rename/move topics and move attachments |
 | ==register==		| Script to register new users |
 | ==save==			 | Script that saves a topic, called by preview |
 | ==search==		  | Script that displays search results |
@@ -56,6 +57,8 @@ TWiki is written in Perl 5 and also uses some shell commands. The current implem
 
 | *File:*			| *Used for:* |
 | ==Access.pm==	| Access control |
+| ==Attach.pm==	| Attachment handling |
+| ==Meta.pm==	  | Meta data in topics |
 | ==Net.pm==		| SMTP mail handling |
 | ==Plugins.pm==  | Plugin handling |
 | ==Prefs.pm==	 | Preferences handling |
@@ -67,5 +70,6 @@ TWiki is written in Perl 5 and also uses some shell commands. The current implem
 | *File:*				  | *Used for:* |
 | ==DefaultPlugin.pm== | Default plugin |
 | ==EmptyPlugin.pm==	| Empty plugin, use to create your own |
+| ==InterwikiPlugin.pm== | Refer to external Wikis and other Web sites |
 
 -- Main.MikeMannix - 26 Aug 2001 
