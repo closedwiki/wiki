@@ -68,12 +68,13 @@ $destMech->submit_form(
 ################################################################################
 
 my @topics = grep { !/^Web/ } $srcMech->getPageList( $Config->{web} );
+print Dumper( \@topics ) if $Config->{debug};
 die "no topics in $Config->{web}?" unless @topics;
 map { 
     my $iTopic = $_;
     print STDERR "$Config->{web}.$iTopic\n" if $Config->{verbose};
     TWikiTopic2TestCase({ topic => "$Config->{web}.${iTopic}", outweb => $Config->{outweb}, topic_name_without_web => $iTopic, %$Config });
-} @topics[0..5];
+} @topics;
 
 exit 0;
 
@@ -126,7 +127,8 @@ __TEMPLATE__
     	print $attachment->{_filename}, "\n" if $parms->{verbose};
 		print Dumper( $attachment ) if $parms->{debug};
 
-		$uaAttachment->mirror( $attachment->{Attachment}, $attachment->{_filename} ) or die $!;
+		$uaAttachment->mirror( $attachment->{Attachment}, $attachment->{_filename} ) or warn $!;
+		warn "$attachment->{_filename} missing\n", next unless -e $attachment->{_filename};
 		$destMech->attach( "$outweb.$iTopic" ) or die $!;
 		$destMech->submit_form(		# 'Upload file'
 			       fields => {
