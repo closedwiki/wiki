@@ -9,7 +9,7 @@ CGIScriptSuite uses 'wget' extensively, so it's generally wise to use http://loc
 
 Note that as of April 2004 the script tests are very naive; many of them are little more than compile and compare tests. All the scripts need more sophisticated testing of their various parameters.
 
-The CGIScriptSuite is run with the command:
+The CGIScriptSuite is configured in the ScriptTestFixture.pm file and run with the command:
 
 perl TestRunner.pl CGIScriptSuite.pm
 

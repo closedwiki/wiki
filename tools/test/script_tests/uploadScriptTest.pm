@@ -34,15 +34,21 @@ sub new {
   return $self;
 }
 
-sub set_up {
+sub createOldFixture {
   my $this = shift;
-  $this->SUPER::set_up();
+  $this->createTempForUpload();
   my $text = "Pugh,Pugh,Barney%20McGrew,Cuthbert,Dibble,Grubb";
-  # Save in both old and new
-  $this->compareOldAndNew("save", $web, $topic, "text=$text&unlock=on");
+  $this->getOld("save", $web, $topic, "text=$text&unlock=on");
 }
 
-sub tear_down {
+sub createNewFixture {
+  my $this = shift;
+  $this->createTempForUpload();
+  my $text = "Pugh,Pugh,Barney%20McGrew,Cuthbert,Dibble,Grubb";
+  $this->getNew("save", $web, $topic, "text=$text&unlock=on");
+}
+
+sub deleteFixture {
   my $this = shift;
   $this->SUPER::tear_down();
   # clean up fixture
@@ -52,14 +58,62 @@ sub tear_down {
 sub test_simple {
   my $this = shift;
 
-  $this->createTempForUpload();
+  $this->createOldFixture();
   my $old = $this->getOld("upload", $web, $topic, "filepath=/tmp/robot.gif&filecomment=Arrrrgh&createlink=on&noredirect=on");
+  $this->deleteFixture();
 
-  $this->createTempForUpload();
+  $this->createNewFixture();
   my $new = $this->getNew("upload", $web, $topic, "filepath=/tmp/robot.gif&filecomment=Arrrrgh&createlink=on&noredirect=on");
+  $this->deleteFixture();
 
   $this->diff($old, $new);
 }
+
+sub test_badweb {
+  my $this = shift;
+
+  $this->createOldFixture();
+  my $old = $this->getOld("upload", "Spogarog", $topic, "filepath=/tmp/robot.gif&filecomment=Arrrrgh&createlink=on&noredirect=on");
+  $this->deleteFixture();
+
+  $this->createNewFixture();
+  my $new = $this->getNew("upload", "Spogarog", $topic, "filepath=/tmp/robot.gif&filecomment=Arrrrgh&createlink=on&noredirect=on");
+  $this->deleteFixture();
+
+  $this->diff($old, $new);
+}
+
+sub test_badtopic {
+  my $this = shift;
+
+  $this->createOldFixture();
+  my $old = $this->getOld("upload", $web, "Spogarog", "filepath=/tmp/robot.gif&filecomment=Arrrrgh&createlink=on&noredirect=on");
+  $this->deleteFixture();
+
+  $this->createNewFixture();
+  my $new = $this->getNew("upload", $web, "Spogarog", "filepath=/tmp/robot.gif&filecomment=Arrrrgh&createlink=on&noredirect=on");
+  $this->deleteFixture();
+
+  $this->diff($old, $new);
+}
+
+sub test_missing_upload {
+  my $this = shift;
+
+  $this->createOldFixture();
+  my $old = $this->getOld("upload", $web, $topic, "filepath=/dev/scream.gif&filecomment=Arrrrgh&createlink=on&noredirect=on");
+  $this->deleteFixture();
+
+  $this->createNewFixture();
+  my $new = $this->getNew("upload", $web, $topic, "filepath=/dev/scream.gif&filecomment=Arrrrgh&createlink=on&noredirect=on");
+  $this->deleteFixture();
+
+  $this->diff($old, $new);
+}
+
+#sub test_size_limit {
+#  my $this = shift;
+#}
 
 # Should test other parameters
 

@@ -39,6 +39,6 @@ my $theUrl = $query->url;
 my( $topic, $webName, $dummy, $userName ) = 
   TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
-TWiki::UI::Upload::attach( $webName, $topic, $query );
+TWiki::UI::Upload::attach( $webName, $topic, $userName, $query );
 
 

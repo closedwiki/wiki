@@ -76,7 +76,7 @@ sub webExists {
 
   return 1 if( TWiki::Store::webExists( $webName ) );
 
-  oops( $webName, $topic, "noweb" );
+  oops( $webName, $topic, "noweb", "ERROR $webName.$topic Missing Web" );
 
   return 0;
 }
@@ -96,7 +96,7 @@ sub topicExists {
 
   return 1 if TWiki::Store::topicExists( $webName, $topic );
 
-  oops( $webName, $topic, "${fn}notopic" );
+  oops( $webName, $topic, "${fn}notopic", "ERROR $webName.$topic Missing topic" );
 
   return 0;
 }
