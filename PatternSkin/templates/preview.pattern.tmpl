@@ -41,6 +41,9 @@ function launchWindow( theWeb, theTopic ) {
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 %TMPL:DEF{"topicaction"}% <input type="submit" value=" Save Changes " /> %FORMFIELDS% %TMPL:END%
+ 
+ %TMPL:P{"topicaction"}%
+  
 %TMPL:P{"standardfooter"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
