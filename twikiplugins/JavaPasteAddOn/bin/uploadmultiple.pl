@@ -15,6 +15,9 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
+# This is a place holder for a version that allows multiple attachments 
+# to be uploaded in one HTTP connection, without the use of a zip file.
+
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use File::Copy; # FIXME remove
