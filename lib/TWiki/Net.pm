@@ -53,7 +53,7 @@ sub getUrl
     my $base64;
     my $result = '';
     $theUrl = "/" unless( $theUrl );
-    my $req = "GET $theUrl HTTP/1.1\r\n";
+    my $req = "GET $theUrl HTTP/1.0\r\n";
 
     # RNF 22 Jan 2002 Support for vhosts and user authentication.
     $req .= "Host: $theHost\r\n";
@@ -70,6 +70,7 @@ sub getUrl
     my $proxyHost = &TWiki::Prefs::getPreferencesValue("PROXYHOST");
     my $proxyPort = &TWiki::Prefs::getPreferencesValue("PROXYPORT");
     if($proxyHost && $proxyPort) {
+        $req = "GET http://$theHost$theUrl HTTP/1.0\r\n";
         $theHost = $proxyHost;
         $thePort = $proxyPort;
     }
