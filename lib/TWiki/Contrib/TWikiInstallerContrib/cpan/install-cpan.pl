@@ -13,17 +13,28 @@ use CPAN;
 use Cwd qw( getcwd );
 
 my $account = "twiki";
+our $cpan;
 
-# TODO: copied (and cropped) from install_twiki.cgi; share
-my $cgibin      = getcwd() . "/cgi-bin";
-my $lib		= $cgibin . '/lib';
-my $cpan        = "$lib/CPAN";
+BEGIN {
+    # TODO: copied (and cropped) from install_twiki.cgi; share
+    my $cgibin = getcwd() . "/cgi-bin";
+    my $lib = $cgibin . '/lib';
+    $cpan = "$lib/CPAN";
+
+    use Config;
+    my $localLibBase = "$lib/CPAN/lib/site_perl/" . $Config{version};
+    unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
+
+    print STDERR "$localLibBase\n\n";
+    print `ls $localLibBase`;
+}
 
 `mkdir -p $cpan; chmod -R 777 $cpan` unless -d $cpan;
 
 ################################################################################
 
 installLocalModules({
+    dir => $cpan,
     # TODO: update to use same output as =cpan/calc-twiki-deps.pl=
     modules => [ @ARGV ? @ARGV : qw( 
 				     XML::Parser XML::Simple 
@@ -45,12 +56,10 @@ installLocalModules({
 				     CGI::Session 
 				     Weather::Com
 				     Barcode::Code128
-				     XML::NamespaceSupport XML::LibXML::Common XML::LibXML 
+				     XML::NamespaceSupport XML::SAX XML::LibXML::Common XML::LibXML 
 				     XML::LibXSLT Cache::Cache String::CRC
 				     ) ],
-#     XML::NamespaceSupport XML::SAX XML::LibXML::Common XML::LibXML 
 #    Data::UUID Date::Handler Safe Language::Prolog GD XMLRPC::Transport::HTTP
-    dir => $cpan,
 });
 
 ################################################################################
