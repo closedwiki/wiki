@@ -34,3 +34,5 @@ sub fetchDistributionFile {
 	}
 	return $ans;
 }
+
+1;
