@@ -173,8 +173,10 @@ sub link
     $name =~ s/[\[\]]//go;
     
     my $cell = "td";
+    my $attr = "";
     if( $heading ) {
-       $cell = "th bgcolor=\"#99CCCC\"";
+       $cell = "th";
+       $attr = ' bgcolor="#99CCCC"';
     }
     
     if( !$align ) {
@@ -184,7 +186,7 @@ sub link
     }
     
     if( $span ) {
-       $span = " colspan=$span";
+       $span = " colspan=\"$span\"";
     } else {
        $span = "";
     }
@@ -203,7 +205,7 @@ sub link
         $link = "<span title=\"$tooltip\">$name</span>";
     }
 
-    my $html = "<$cell$span$align>$link $extra</$cell>";
+    my $html = "<$cell$attr$span$align>$link $extra</$cell>";
     return $html;
 }
 
@@ -247,7 +249,7 @@ sub renderForEdit
         
         if( $type eq "text" ) {
             $value =~ s/"/&#34/go; # Make sure double quote don't kill us
-            $value = "<input name=\"$name\" size=\"$size\" type=\"input\" value=\"$value\" />";
+            $value = "<input type=\"text\" name=\"$name\" size=\"$size\" value=\"$value\" />";
         } elsif( $type eq "textarea" ) {
             my $cols = 40;
             my $rows = 5;
@@ -263,14 +265,14 @@ sub renderForEdit
             foreach my $item ( @fieldInfo ) {
                 my $selected = $defaultMarker;
                 if( $item eq $value ) {
-                   $selected = " selected";
+                   $selected = ' selected="selected"';
                    $matched = $item;
                 }
                 $defaultMarker = "";
-                $val .= "   <option name=\"$item\"$selected>$item</option>";
+                $val .= "   <option$selected>$item</option>";
             }
             if( ! $matched ) {
-               $val =~ s/%DEFAULTOPTION%/ selected/go;
+               $val =~ s/%DEFAULTOPTION%/ selected="selected"/go;
             } else {
                $val =~ s/%DEFAULTOPTION%//go;
             }
@@ -306,7 +308,7 @@ sub renderForEdit
                 my $selected = $defaultMarker;
                 my $expandedItem = &TWiki::handleCommonTags( $item );
                 if( $item eq $value ) {
-                   $selected = 'checked="checked"';
+                   $selected = ' checked="checked"';
                    $matched = $item;
                 }
                 $defaultMarker = "";
@@ -317,7 +319,7 @@ sub renderForEdit
                 $lines++;
             }
             if( ! $matched ) {
-               $val =~ s/%DEFAULTOPTION%/ checked/go;
+               $val =~ s/%DEFAULTOPTION%/ checked="checked"/go;
             } else {
                $val =~ s/%DEFAULTOPTION%//go;
             }
