@@ -445,9 +445,9 @@ sub searchWeb
 
     # fix for Codev.SecurityAlertExecuteCommandsWithSearch
     # vulnerability, search: "test_vulnerability '; ls -la'"
-    $theSearchVal =~ s/[\'\`]//g;                  # Filter ' and `
-    $theSearchVal =~ s/\@\(/\@\\\(/g;              # Defuse @( ... )
-    $theSearchVal = substr($theSearchVal, 0, 200); # Limit string length
+    $theSearchVal =~ s/(^|[^\\])([\'\`])/\\$2/g;    # Escape ' and `
+    $theSearchVal =~ s/[\@\$]\(/$1\\\(/g;           # Defuse @( ... ) and $( ... )
+    $theSearchVal = substr($theSearchVal, 0, 1500); # Limit string length
 
     my $originalSearch = $theSearchVal;
     my $renameTopic;
