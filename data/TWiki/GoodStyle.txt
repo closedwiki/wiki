@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1072855913" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="PeterThoeny" date="1079171880" format="1.0" version="1.9"}%
 ---+ <nop>GoodStyle Collaboration Tips
 
 	* TWiki has a very simple *[[TWikiShorthand][text formatting shorthand]]*. In any case, you won't go wrong if you simply:
@@ -10,12 +10,16 @@
 		* make up meaningful, reasonably brief Wiki names - it can be a challenge (it'll sharpen you up!)
 		* WikiWords has name-creation tips that may help
 
+#SignAndDate
 	* If a *discussion* is going on:
 		* separate each follow-up with a space
-		* add your WikiName and the date at the end
+		* add your WikiName and the date at the end. Example:%BR%
+		  =-- <nop>%WIKIUSERNAME% - %SERVERTIME{$day $mon $year}%=
 		* OR, by all means, insert your comment where it seems to fit best:
 			* you may want to inset it with a bullet and/or _set it in italics_ so it's clear (always sign and date)
-		* if a sub-topic develops, separate it with a horizontal rule at beginning and end
+		* if you'd like to use an initial, use a link with label. Example:%BR%
+		  =-- [<nop>[%WIKIUSERNAME%][ZXQ]] - %SERVERTIME{$day $mon $year}%=
+			* To automate that, add a bullet like =* Initials: ZXQ= to your [[%WIKIUSERNAME%][home page]].
 
 	* A good format for a *new topic* is "dissertation followed by discussion": 
 		* start with a brief, factual introduction, followed by double horizontal rules
@@ -34,4 +38,4 @@
 	* *TIP:* Check the source when you want to find out how something is formatted: click ==Edit== on the lower toolbar. To see earlier versions, click ==More==, then check ==Raw text format== and click ==View revision==. A bit of HTML experience can't hurt, but you'll soon see with TWikiShorthand how far that is from necessary. 
 
 -- TWiki:Main.MikeMannix - 01 Dec 2001 %BR%
--- TWiki:Main.PeterThoeny - 16 Dec 2003
+-- TWiki:Main.PeterThoeny - 13 Mar 2004
