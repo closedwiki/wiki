@@ -56,7 +56,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> Name of wiki tool, is <b>TWikibeta</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WIKIVERSION%</CODE> </td>
-  <td> Wiki tool version, is <b>14 Jan 2000</b> </td>
+  <td> Wiki tool version, is <b>07 Feb 2000</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>USERNAME%</CODE> </td>
   <td> Your login username, is <b>guest</b> </td>
@@ -71,10 +71,23 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> The current topic name, is <b>TWikiDocumentation</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>DATE%</CODE> </td>
-  <td> Todays date, is <b>18 Jan 2000</b> </td>
+  <td> Todays date, is <b>07 Feb 2000</b> </td>
 </tr><tr>
-  <td> <CODE>%<nop>INCLUDE:"file.ext"%</CODE> </td>
-  <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: <CODE><b>%<nop>INCLUDE:"../Know/TopicName.txt"%</b></CODE> </td>
+  <td> <CODE>%<nop>INCLUDE{"file.ext"}%</CODE> </td>
+  <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: <CODE><b>%<nop>INCLUDE{"../Know/TopicName.txt"}%</b></CODE> </td>
+</tr><tr>
+  <td> <CODE>%<nop>SEARCH{"str" ...}%</CODE> </td>
+  <td> Inline search, shows a search result embedded in a topic. Parameter is composed of the search string, followed by optional <CODE>name="value"</CODE> pairs:
+<TABLE border="1"><TR><TD> <STRONG>Pair:</STRONG>  </TD><TD>  <STRONG>Description:</STRONG>  </TD><TD>  <STRONG>Default:</STRONG>  </TD></TR>
+<TR><TD> <CODE>web="Name"</CODE>  </TD><TD>  Specify Wiki web to search  </TD><TD>  Current web  </TD></TR>
+<TR><TD> <CODE>scope="topic"</CODE>  </TD><TD>  Search topic name (title)  </TD><TD>  Topic text (body)  </TD></TR>
+<TR><TD> <CODE>regex="on"</CODE>  </TD><TD>  <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/RegularExpression">RegularExpression</A> search  </TD><TD>  Literal search  </TD></TR>
+<TR><TD> <CODE>casesensitive="on"</CODE>  </TD><TD>  Case sensitive search  </TD><TD>  Ignore case  </TD></TR>
+<TR><TD> <CODE>nosummary="on"</CODE>  </TD><TD>  Show topic title only  </TD><TD>  Show topic summary  </TD></TR>
+<TR><TD> <CODE>nosearch="on"</CODE>  </TD><TD>  Suppress search string  </TD><TD>  Show search string  </TD></TR>
+<TR><TD> <CODE>nototal="on"</CODE>  </TD><TD>  Do not show number of topics found  </TD><TD>  Show number  </TD></TR>
+</TABLE>
+Example: <CODE><b>%<nop>SEARCH{"wiki" web="Main" scope="topic"}%</b></CODE> </td>
 </tr></table>
 <p> 
 <p> 
@@ -268,7 +281,11 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 <LI> The <CODE>twiki/pub</CODE> directory of TWiki must be set so that it is visible as a URL. Add <CODE>/home/httpd/twiki/pub</CODE> to <CODE>/etc/httpd/conf/access.conf</CODE> with normal access options (copy from /home/httpd/html).
 <LI> Now add <CODE>Alias</CODE> for <CODE>/twiki/pub</CODE> and <CODE>ScriptAlias</CODE> for <CODE>/twiki/bin</CODE> to <CODE>/etc/httpd/conf/srm-conf</CODE> .
 <LI> Restart Apache by <CODE>/etc/rc.d/rc5.d/S85httpd restart</CODE> .
-<LI> Test if the <CODE>twiki/bin</CODE> directory is cgi-enabled: Enter the URL of that directory into your browser (http://your.domain.com/twiki/bin). It is not set correctly as cgi-bin in case you get something like <CODE>"Index of /twiki/bin"</CODE> . It is OK if you get a message like <CODE>"Forbidden. You don't have permission to access /twiki/bin/ on this server."</CODE> .
+<LI> Test if the <CODE>twiki/bin</CODE> directory is cgi-enabled:
+<UL>
+<LI> Enter the URL of that directory into your browser ( <CODE>http://your.domain.com/twiki/bin</CODE> ). It is not set correctly as cgi-bin in case you get something like <CODE>"Index of /twiki/bin"</CODE> . It is OK if you get a message like <CODE>"Forbidden. You don't have permission to access /twiki/bin/ on this server."</CODE>
+<LI> Execute the <CODE>testenv</CODE> script from your browser ( <CODE>http://your.domain.com/twiki/bin/testenv</CODE> ). It should show a table of all CGI environment variables.
+</UL>
 <LI> Make sure PERL and the PERL CGI library is installed on your system. Default location of PERL executable is <CODE>/usr/bin/perl</CODE> . In case PERL is installed in a different location, the first line of all perl scripts in the <CODE>twiki/bin</CODE> directory need to be changed (alternatively you can create a symbolic link from <CODE>/usr/bin/perl</CODE> ).
 <LI> To be able to edit the perl scripts and .tmpl files it is necessary to <CODE>chown</CODE> and <CODE>chgrp -R twiki</CODE> so all the files have the owner you want.
 <LI> The scripts execute as <CODE>nobody</CODE> . Set the file permission of all Perl scripts in the <CODE>twiki/bin</CODE> directory as executable to <CODE>-rw-r-xr-x</CODE> .
@@ -280,23 +297,50 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 <LI> Point your browser at <A href="http://your.domain.com/twiki/bin/view" target="_top">http://your.domain.com/twiki/bin/view</A> and start wiki-ing away! 
 <LI> Note in case cgi user is <STRONG><EM>not</EM></STRONG> <CODE>nobody</CODE> : The <CODE>*,v</CODE> RCS repository files delivered with the installation package are locked by user <CODE>nobody</CODE> . In case the user is different (e.g. <CODE>www-data</CODE> ), it is not possible to check in files, this has the effect that the topic version number does not increase when saving a topic. In this case you need to unlock all repository files and lock them as user <CODE>www-data</CODE> , or simply delete all the repository files.
 <LI> Security issue: Directories <CODE>twiki/data</CODE> , <CODE>twiki/templates</CODE> and all its subdirectories should be set so that they are <STRONG>not</STRONG> visible as a URL. (Alternatively, move the directries to a place where they are not visible, and change the variables in <CODE>twiki/bin/wikicfg.pm</CODE> accordingly)
+</UL>
+<p> 
+<UL>
 <LI> Optional: You can add new rendering rules or new %variables%. To insure an easy upgrade of TWiki it is recommended to do this customization in <CODE>twiki/bin/wikicfg.pm</CODE> , not <CODE>twiki/bin/wiki.pm</CODE> .
-<LI> Optional: If you are on a public server and you would like to authenticate users you need to rename file <CODE>.htaccess.txt</CODE> in the <CODE>twiki/bin</CODE> directory to <CODE>.htaccess</CODE> and change it to your needs. Consult the HTTP server documentation for details.
+</UL>
+<p> 
+<UL>
+<LI> Optional: If you are on a public server and you would like to authenticate users you need to rename file <CODE>.htaccess.txt</CODE> in the <CODE>twiki/bin</CODE> directory to <CODE>.htaccess</CODE> and change it to your needs. For details consult the HTTP server documentation (for Apache server: <a href="http://www.scs.nevada.edu/cs/documents/web/htaccess.html">[1]</a>, <a href="http://www.mcs.kent.edu/system/web_help/htaccess/introduction.html">[2]</a>, <a href="http://www.apache.org/docs/mod/directives.html">[3]</a>). <STRONG><EM>Note:</EM></STRONG> In case <CODE>.htaccess</CODE> does not have any effect you need to enable it: Add "AllowOverride All" to the Directory section of <CODE>access.conf</CODE> for your <CODE>twiki/bin</CODE> directory.
+</UL>
+<p> 
+<UL>
+<LI> Optional: You can automatically generate usage statistics for all webs. To enable this:
+<UL>
+<LI> Make sure variable <CODE>$doLogTopicView, $doLogTopicSave and $doLogTopicUpload</CODE> in <CODE>wikicfg.pm</CODE> are set. This will generate log entries in file <CODE>twiki/data/log&lt;date&gt;.txt</CODE> .
+<LI> Topic <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebStatistics">WebStatistics</A> must be present in all webs where you want to have statistics. You can use the topic in the Main web as a template.
+<LI> Call the <CODE>twiki/bin/statistics</CODE> script from a cron job, once a day is recommended. This will update the <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebStatistics">WebStatistics</A> topics in all webs.
+<LI> <STRONG><EM>Attention:</EM></STRONG> The script must run as the same user as the CGI scripts are running, which is user <CODE>nobody</CODE> on most systems. Example crontab entry: <br> <CODE>0 0 * * * (cd /path/to/TWiki/bin; ./statistics &gt;/dev/null 2&gt;&amp;1)</CODE>
+<LI> There is a workaround in case you can't run the script as user <CODE>nobody</CODE> : Run the utility <CODE>twiki/bin/geturl</CODE> in your cron job and specify the URL of the <CODE>twiki/bin/statistics</CODE> script as a parameter. Example: <br> <CODE>0 0 * * * (cd /path/to/TWiki/bin; ./geturl mydomain.com /urlpath/to/TWiki/bin/statistics &gt;/dev/null 2&gt;&amp;1)</CODE>
+<LI> The <CODE>twiki/bin/statistics</CODE> script can also be executed as a CGI script, just enter the URL in your browser. Examples:
+<UL>
+<LI> Update current month for all webs: <br> <CODE>http://starship.python.net/crew/scharf/TWiki/bin/statistics</CODE>
+<LI> Update current month for Main web only: <br> <CODE>http://starship.python.net/crew/scharf/TWiki/bin/statistics/Main</CODE>
+<LI> Update January 2000 for Main web: <br> <CODE>http://starship.python.net/crew/scharf/TWiki/bin/statistics/Main?logdate=200001</CODE>
+</UL>
+</UL>
 </UL>
 <p> 
 <UL>
 <LI> To create a new web:
 <UL>
-<LI> Use a topic name consisting of characters <CODE>A..Z</CODE> , <CODE>a..z</CODE> but <STRONG>not</STRONG> in <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WikiNotation">WikiNotation</A>.
+<LI> Use a name for the web consisting of characters <CODE>A..Z</CODE> , <CODE>a..z</CODE> but <STRONG>not</STRONG> in <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WikiNotation">WikiNotation</A>.
 <LI> Create a new template directory under <CODE>twiki/templates</CODE> .
 <LI> Create a new data directory under <CODE>twiki/data</CODE> and check the file permission of the directory.
-<LI> Copy the files <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/TWikiUsers">TWikiUsers</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebHome">WebHome</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebNotify">WebNotify</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebSearch">WebSearch</A>.txt, webcolor.inc, and weblist.inc from the <CODE>twiki/data/Main</CODE> directory to the new data directory.
-<LI> Make changes to webcolor.inc (unique color for web), and possibly also weblist.inc (web specific links on top).
-<LI> In case you need a web specific copyright notice (at the bottom), copy file webcopyright.inc from the <CODE>twiki/data</CODE> directory to the new data directory, and customize it.
+<LI> Copy the files <CODE>WebHome.txt</CODE> , <CODE>WebNotify.txt</CODE> , <CODE>WebSearch.txt</CODE> , <CODE>WebStatistics.txt</CODE> , <CODE>webcolor.inc</CODE> and <CODE>weblist.inc</CODE> from the <CODE>twiki/data/Main</CODE> directory to the new data directory.
+<LI> Change <CODE>webcolor.inc</CODE> to a color of your taste. The number represents the unique color for the web (consult an HTML book for colors.) <STRONG><EM>Note:</EM></STRONG> The file must not have a new line, just the number without a return.
+<LI> Customize <CODE>weblist.inc</CODE> (web specific links on top) if needed.
+<LI> Add the new web in <CODE>twiki/data/wikiwebs.inc</CODE> (web specific links on top) and <CODE>twiki/data/wikiwebtable.inc</CODE> (table of all webs at the end of the <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebHome">WebHome</A> topics).
+<LI> In case you need a web specific copyright notice (at the bottom), copy file <CODE>webcopyright.inc</CODE> from the <CODE>twiki/data</CODE> directory to the new data directory, and customize it.
 <LI> If needed, create customized templates in the new templates directory. (Non existing templates are inherited from <CODE>twiki/templates</CODE> )
-<LI> If you want to use a category table, copy the three files twikicatitems.tmpl, twikicatedit.tmpl and twikicatview.tmpl from the <CODE>twiki/templates/Know</CODE> directory to the new templates directory, and customize it. The TWiki Category Table section has more.
+<LI> If you want to use a category table, copy the three files <CODE>twikicatitems.tmpl</CODE> , <CODE>twikicatedit.tmpl</CODE> and <CODE>twikicatview.tmpl</CODE> from the <CODE>twiki/templates/Know</CODE> directory to the new templates directory, and customize it. The TWiki Category Table section has more.
+<LI> In case you want usage statistics for this web: Copy file <CODE>WebStatistics.txt</CODE> from the <CODE>twiki/data/Main</CODE> directory to the new data directory. Edit topic <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebStatistics">WebStatistics</A> and delete old usage entries.
 </UL>
 </UL>
+<p> 
 <p> 
 Here are contents of directories with file permissions. Please note that this is for debugging reasons only and does not exactly reflect the distribution:
 <p> 
@@ -310,6 +354,7 @@ drwxr-xr-x   5 twiki    t5            512 Nov  6 02:57 ..
 -rw-r-xr-x   1 twiki    t5           2810 Oct 21 18:51 changes
 -rw-r-xr-x   1 twiki    t5           1244 Mar 27 02:21 delete
 -rw-r-xr-x   1 twiki    t5           2589 Nov  6 03:05 edit
+-rwxr--r--   1 twiki    t5           1811 Feb  4 12:15 geturl
 -rwxr-xr-x   1 twiki    t5           4614 Oct 21 18:52 mailnotify
 -rw-r-xr-x   1 twiki    t5           1353 Oct 23 20:19 oops
 -rw-r-xr-x   1 twiki    t5           2043 Nov  6 03:05 preview
@@ -317,11 +362,14 @@ drwxr-xr-x   5 twiki    t5            512 Nov  6 02:57 ..
 -rw-r-xr-x   1 twiki    t5           6890 Nov 11 03:06 rdiff
 -rw-r-xr-x   1 twiki    t5           1819 Nov  6 03:06 save
 -rw-r-xr-x   1 twiki    t5           3174 Oct 21 18:51 search
+-rw-r-xr-x   1 twiki    t5           9774 Feb  4 12:26 statistics
+-rwxr-xr-x   1 twiki    t5            509 Feb  7 18:55 testenv
 -rw-r-xr-x   1 twiki    t5           6696 Mar 27 02:22 upload
 -rw-r-xr-x   1 twiki    t5           3878 Nov 11 03:06 view
 -rw-r-xr-x   1 twiki    t5           1538 Mar 27 02:22 viewfile
 -rw-r-xr-x   1 twiki    t5          16169 Nov  7 01:43 wiki.pm
 -rw-r-xr-x   1 twiki    t5           3945 Jun 23 01:24 wikicfg.pm
+-rw-r-xr-x   1 twiki    t5           5127 Feb  4 11:37 wikisearch.pm
 </pre>
 <p> 
 directory <CODE>twiki/templates/</CODE> :
@@ -409,6 +457,8 @@ drwxrwxrwx   6 twiki    t5            512 Nov 19 01:01 ..
 -r--r--r--   1 nobody   65535         638 Oct 27 02:45 WebNotify.txt,v
 -rw-r--r--   1 nobody   65535        3653 Oct 21 18:52 WebSearch.txt
 -r--r--r--   1 nobody   65535        3835 Oct 27 02:45 WebSearch.txt,v
+-rw-r--r--   1 nobody   65535        4282 Feb  4 15:08 WebStatistics.txt
+-r--r--r--   1 nobody   65535        4471 Feb  4 15:08 WebStatistics.txt,v
 -rw-r--r--   1 twiki    t5              7 Oct 21 18:52 webcolor.inc
 -rw-r--r--   1 twiki    t5            278 May 20 17:42 webcopyright.inc
 -rw-r--r--   1 twiki    t5            402 Oct 26 07:45 weblist.inc
@@ -472,5 +522,7 @@ drwxrwxrwx   4 twiki    t5           1024 Mar 27 02:58 ..
 -- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 01 Sep 1999 <br>
 -- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 29 Sep 1999 <br>
 -- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 14 Jan 2000 <br>
+-- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 02 Feb 2000 <br>
+-- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 04 Feb 2000 <br>
 <p> 
 </body></html>

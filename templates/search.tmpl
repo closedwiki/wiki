@@ -23,10 +23,10 @@
   </TR>
 </FORM>
 </TABLE>
-<BR>
+%SPLIT%<BR>
 Search: <B> %SEARCHSTRING% </B>
 <P>
-<TABLE width="100%" border="0" cellpadding="0" cellspacing="4">
+%SPLIT%<TABLE width="100%" border="0" cellpadding="0" cellspacing="4">
 <TR>
   <TD width="50%">
     <B>Topic:</B>
@@ -50,20 +50,17 @@ Search: <B> %SEARCHSTRING% </B>
 <TR>
   <TD COLSPAN="2" width="80%">
     <FONT SIZE="-1">
-    %TEXTHEAD%
-    </FONT>
-  </TD><TD width="20%">
-    &nbsp;
+    %TEXTHEAD% </FONT>
+  </TD><TD width="20%"> &nbsp;
   </TD>
 </TR></TABLE>
-%REPEAT%
-<BR clear=all>
-Number of topics: <B>%NTOPICS%</B>
-<P>
+%REPEAT%<BR clear=all>
+%SPLIT%<P>Number of topics: <B>%NTOPICS%</B>
+%SPLIT%<P>
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR BGCOLOR="%INCLUDE:"webcolor.inc"%">
     <TD valign="top">
-      Topic <B>Changes</B> . { }
+      Topic <B>SearchResult</B> . { }
     </TD>
   </TR>
 </TABLE>

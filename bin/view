@@ -41,11 +41,11 @@ sub main
     ( $topic, $webName, $tmp, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
-    $tmp = ""; # set to suppress warning
+    $tmp = "";  # set to suppress warning
     my $tmpl= "", $text="";
     my $rev= $query->param("rev");
     my $maxrev = 1;
-    my $extra = "";
+    my $extra = $query->remote_host();
 
     if( ! &wiki::webExists( $webName ) )
     {
@@ -66,7 +66,7 @@ sub main
 	    if( $rev < 1 )       { $rev = 1; }
             if( $rev > $maxrev ) { $rev = $maxrev; }
 	    $text= &wiki::readVersion( $topic, "1.$rev" );
-            $extra = "r1.$rev";
+            $extra .= " r1.$rev";
 	}
 	else
 	{
@@ -85,7 +85,7 @@ sub main
 	{
 	    $text= &wiki::readTemplate( "notwiki" );
 	}
-        $extra = "(not exist)";
+        $extra .= " (not exist)";
     }
     $text = &wiki::handleCommonTags( $text, $topic );
     $text = &wiki::getRenderedVersion( $text );

@@ -3,8 +3,8 @@
 #
 # Configuration and custom extensions for wiki.pm of TWiki.
 #
-# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
-# TakeFive Software Inc.
+# Copyright (C) 1999, 2000 Peter Thoeny, TakeFive Software Inc., 
+# peter.thoeny@takefive.com , peter.thoeny@attglobal.net
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,10 +18,11 @@
 # http://www.gnu.ai.mit.edu/copyleft/gpl.html 
 #
 # Notes:
-# - Latest version at http://www.mindspring.net/~peterthoeny/twiki/index.html
+# - Latest version at http://www.mindspring.net/~peterthoeny/twiki/
 # - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
+# - Files wikifcg.pm and wikisearch.pm are included by wiki.pm
 # - Upgrading TWiki is easy as long as you do not customize wiki.pm.
 # - Variables that can be accessed from topics (see details in
 #   TWikiDocumentation.html) :
@@ -75,9 +76,9 @@ $revHistCmd       = "$rcsDir/rlog -h %FILENAME%";
 #                   RCS history on revision command :
 $revInfoCmd       = "$rcsDir/rlog -r%REVISION% %FILENAME%";
 #                   RCS revision diff command :
-$revDiffCmd       = "$rcsDir/rcsdiff -w -B -r%REVISION1% -r%REVISION2% %FILENAME%";
+$revDiffCmd       = "$rcsDir/rcsdiff -q -w -B -r%REVISION1% -r%REVISION2% %FILENAME%";
 #                   RCS delete revision command :
-$revDelRevCmd     = "$rcsDir/rcs -u %FILENAME%; rcs -o%REVISION% %FILENAME%; rcs -l %FILENAME%";
+$revDelRevCmd     = "$rcsDir/rcs -q -u %FILENAME%; rcs -o%REVISION% %FILENAME%; rcs -l %FILENAME%";
 #                   Delete RCS repository file command :
 $revDelRepCmd     = "rm -f %FILENAME%,v";
 #                   Print head of files command :
@@ -105,6 +106,12 @@ $mainWebname      = "Main";
 $mainTopicname    = "WebHome";
 #                   %NOTIFYTOPIC% : Name of topic for email notifications :
 $notifyTopicname  = "WebNotify";
+#                   %STATISTICSTOPIC% : Name of statistics topic :
+$statisticsTopicname = "WebStatistics";
+#                   Number of top viewed topics to show in statistics topic :
+$statsTopViews     = "10";
+#                   Number of top contributors to show in statistics topic :
+$statsTopContrib   = "10";
 #                   Show how many number of revision links, "0" for all :
 $numberOfRevisions = "4";
 
@@ -143,6 +150,10 @@ sub extendHandleCommonTags
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
 
     my( $text, $topic ) = @_;
+
+    # for compatibility for earlier TWiki versions:
+    $text=~ s/%INCLUDE:"(.*?)"%/&handleIncludeFile($1)/geo;
+    $text=~ s/%INCLUDE:"(.*?)"%/&handleIncludeFile($1)/geo;  # allow two level includes
 
     # do custom extension rule, like for example:
     # $text=~ s/%WIKIWEB%/$wikiToolName.$webName/go;

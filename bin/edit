@@ -164,6 +164,7 @@ sub main
 
     my $saveCmd = $query->param('cmd');
     my $breakLock = $query->param('breaklock');
+    my $onlyWikiName = $query->param('onlywikiname');
     my $tmpl="", $tcat="", $icat="", $text="";
     my $before="", $atext="", $ctext="", $after="";
     my $catname="", $catmod="", $catvalue="";
@@ -176,6 +177,13 @@ sub main
 	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
         return;
+    }
+
+    if( ( $onlyWikiName ) && ( ! &wiki::isWikiName( $topic ) ) && ( ! &wiki::topicExists( $webName, $topic ) ) )
+    {
+        # do not allow non-wikinames, redirect to view topic
+        print $query->redirect( "$scriptUrl/view/$webName/$topic" );
+	return;
     }
 
     my $lockUser = &wiki::topicIsLocked( $topic );
@@ -198,16 +206,8 @@ sub main
     }
     else
     {
-	if( &wiki::isWikiName($topic))
-	{
-	    $text= &wiki::readTemplate("notedited");
-            $extra = "(not exist)";
-	}
-	else
-	{
-	    $text= &wiki::readTemplate("notwiki");
-            $extra = "(not exist, not wiki)";
-	}
+        $text= &wiki::readTemplate("notedited");
+        $extra = "(not exist)";
 
         my $foo = &wiki::getLocaldate();
         $text =~ s/%DATE%/$foo/go;

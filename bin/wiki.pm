@@ -4,8 +4,8 @@
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
 # Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
-# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
-# TakeFive Software Inc.
+# Copyright (C) 1999, 2000 Peter Thoeny, TakeFive Software Inc., 
+# peter.thoeny@takefive.com , peter.thoeny@attglobal.net
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 # - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
+# - Files wikifcg.pm and wikisearch.pm are included by wiki.pm
 # - Upgrading TWiki is easy as long as you do not customize wiki.pm.
 
 
@@ -34,7 +35,9 @@ use vars qw(
 	$wikiToolName $wikiHomeUrl $defaultScriptUrl $pubUrl $templateDir 
 	$dataDir $pubDir $debugFilename $logDateCmd $htpasswdFilename 
 	$logFilename $userListFilename 
-	$mainWebname $mainTopicname $notifyTopicname $mailProgram $wikiwebmaster 
+	$mainWebname $mainTopicname $notifyTopicname
+	$statisticsTopicname $statsTopViews $statsTopContrib
+	$mailProgram $wikiwebmaster 
 	$wikiversion $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
 	$revDiffCmd $revDelRevCmd $revDelRepCmd $headCmd $rmFileCmd 
 	$doRemovePortNumber $doPluralToSingular
@@ -46,7 +49,7 @@ use vars qw(
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "14 Jan 2000";
+$wikiversion      = "07 Feb 2000";
 
 @isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 
@@ -55,6 +58,9 @@ $wikiversion      = "14 Jan 2000";
 # read the configuration part
 do "wikicfg.pm";
 
+# ===========================
+# read the search engine part
+do "wikisearch.pm";
 
 # =========================
 sub initialize
@@ -66,13 +72,14 @@ sub initialize
         $userName = $theRemoteUser;
     }
 
-    $thePathInfo =~ /[\/](.*)\/(.*)/;
-    if( $1 )
+    # test if $thePathInfo is "/Webname/SomeTopic" or "/Webname/"
+    if( ( $thePathInfo =~ /[\/](.*)\/(.*)/ ) && ( $1 ) )
     {
         $webName = $1;
     }
     else
     {
+        # test if $thePathInfo is "/Webname" or "/"
         $thePathInfo =~ /[\/](.*)/;
         $webName = $1 || $mainWebname;
     }
@@ -260,18 +267,6 @@ sub readFile
 }
 
 # =========================
-sub readIncludeFile
-{
-    my( $name ) = @_;
-    my $incfile = "$dataDir/$webName/$name";
-    if( -e $incfile )
-    {
-	return &readFile( $incfile );
-    }
-    return &readFile( "$dataDir/$name");
-}
-
-# =========================
 sub readFileHead
 {
     my( $name, $lines ) = @_;
@@ -413,9 +408,13 @@ sub readVersion
 # =========================
 sub getRevisionNumber
 {
-    my( $topic ) = @_;
+    my( $theTopic, $theWebName ) = @_;
+    if( ! $theWebName )
+    {
+        $theWebName = $webName;
+    }
     my $tmp= $revHistCmd;
-    $tmp =~ s/%FILENAME%/$dataDir\/$webName\/$topic.txt/;
+    $tmp =~ s/%FILENAME%/$dataDir\/$theWebName\/$theTopic.txt/;
     $tmp = `$tmp`;
     $tmp =~ /head: (.*?)\n/;
     return $1;
@@ -450,14 +449,18 @@ sub getRevisionDiff
 # =========================
 sub getRevisionInfo
 {
-    my( $topic, $rev, $changeToIsoDate ) = @_;
-    if( $rev eq "" )
+    my( $theTopic, $theRev, $changeToIsoDate, $theWebName ) = @_;
+    if( ! $theWebName )
     {
-        $rev = getRevisionNumber( $topic );
+        $theWebName = $webName;
+    }
+    if( ! $theRev )
+    {
+        $theRev = getRevisionNumber( $theTopic, $theWebName );
     }
     my $tmp= $revInfoCmd;
-    $tmp =~ s/%REVISION%/$rev/;
-    $tmp =~ s/%FILENAME%/$dataDir\/$webName\/$topic.txt/;
+    $tmp =~ s/%REVISION%/$theRev/;
+    $tmp =~ s/%FILENAME%/$dataDir\/$theWebName\/$theTopic.txt/;
     $tmp = `$tmp`;
     $tmp =~ /date: (.*?);  author: (.*?);/;
     my $date = $1;
@@ -478,7 +481,7 @@ sub getRevisionInfo
 # =========================
 sub saveTopic
 {
-    my( $topic, $text, $saveCmd ) = @_;
+    my( $topic, $text, $saveCmd, $doNotLogChanges ) = @_;
     my $name = "$dataDir/$webName/$topic.txt";
     my $time = time();
     my $tmp = "";
@@ -524,16 +527,19 @@ sub saveTopic
             $tmp =~ s/%FILENAME%/$name/;
             `$tmp`;
 
-            # update .changes
-            my @foo = split(/\n/, &readFile("$dataDir/$webName/.changes"));
-            if( $#foo > 100 )
+            if( ! $doNotLogChanges )
             {
-                shift( @foo);
+                # update .changes
+                my @foo = split(/\n/, &readFile("$dataDir/$webName/.changes"));
+                if( $#foo > 100 )
+                {
+                    shift( @foo);
+                }
+                push( @foo, "$topic\t$userName\t$time");
+                open( FILE, "> $dataDir/$webName/.changes");
+                print FILE join("\n",@foo)."\n";
+                close(FILE);
             }
-            push( @foo, "$topic\t$userName\t$time");
-            open( FILE, "> $dataDir/$webName/.changes");
-            print FILE join("\n",@foo)."\n";
-            close(FILE);
 
             if( $doLogTopicSave )
             {
@@ -630,11 +636,78 @@ sub webExists
 }
 
 # =========================
+sub extractNameValuePair
+{
+    my( $str, $name ) = @_;
+
+    if( $name )
+    {
+        # format is: name = "value"
+        if( ( $str =~ /(^|[^\S])$name[\s]*=[\s]*[\"]([^\"]*)/ ) && ( $2 ) )
+        {
+            return $2;
+        }
+    }
+    else
+    {
+        # test if format: "value"
+        if( ( $str =~ /(^|=[\s]*[\"][^\"]*\")[\s]*[\"]([^\"]*)/ ) && ( $2 ) )
+        {
+            return $2;
+        }
+        elsif( ( $str =~ /^[\s]*([^"]\S*)/ ) && ( $1 ) )
+        {
+            # format is: value
+            return $1;
+        }
+    }
+
+    return "";
+}
+
+# =========================
+sub handleIncludeFile
+{
+    my( $attributes ) = @_;
+    my $incfile = extractNameValuePair( $attributes );
+    my $fileName = "$dataDir/$webName/$incfile";
+    if( -e $fileName )
+    {
+	return &readFile( $fileName );
+    }
+    return &readFile( "$dataDir/$incfile" );
+}
+
+# =========================
+sub handleSearchWeb
+{
+    my( $attributes ) = @_;
+    my $searchVal = extractNameValuePair( $attributes );
+    if( ! $searchVal )
+    {
+        # %SEARCH{"string" ...} not found, try
+        # %SEARCH{search="string" ...}
+        $searchVal = extractNameValuePair( $attributes, "search" );
+    }
+
+    return &searchWikiWeb( "1",
+       extractNameValuePair( $attributes, "web" ),
+       $searchVal, 
+       extractNameValuePair( $attributes, "scope" ),
+       extractNameValuePair( $attributes, "regex" ),
+       extractNameValuePair( $attributes, "casesensitive" ),
+       extractNameValuePair( $attributes, "nosummary" ),
+       extractNameValuePair( $attributes, "nosearch" ),
+       extractNameValuePair( $attributes, "nototal" ),
+    );
+}
+
+# =========================
 sub handleCommonTags
 {
     my( $text, $topic ) = @_;
-    $text=~ s/%INCLUDE:"(.*?)"%/&readIncludeFile($1)/geo;
-    $text=~ s/%INCLUDE:"(.*?)"%/&readIncludeFile($1)/geo;  # allow two level includes
+    $text=~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1)/geo;
+    $text=~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1)/geo;  # allow two level includes
 
     # Wiki extended rules
     $text = extendHandleCommonTags( $text, $topic );
@@ -654,6 +727,9 @@ sub handleCommonTags
     $text=~ s/%MAINWEB%/$mainWebname/go;
     $text=~ s/%HOMETOPIC%/$mainTopicname/go;
     $text=~ s/%NOTIFYTOPIC%/$notifyTopicname/go;
+    $text=~ s/%STATISTICSTOPIC%/$statisticsTopicname/go;
+    $text=~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo;
+
     return $text;
 }
 
@@ -819,6 +895,9 @@ sub getRenderedVersion
 	    s/(\s)=([^\s].*?[^\s])=(\s)/$1<CODE>$2<\/CODE>$3/go;
 	    s/(\s)_([^\s].*?[^\s])_(\s)/$1<EM>$2<\/EM>$3/go;
 
+# Mailto
+	    s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+)(?=[\s\)]|$)#$1<A href=\"mailto\:$2">$2</A>#go;
+
 # Make internal links
 	    ## add Web.TopicName internal link -- PeterThoeny:
 	    ## allow 'AaA1' type format, but not 'Aa1' type -- PeterThoeny:
@@ -828,9 +907,6 @@ sub getRenderedVersion
 
 	    s/([\*\s][\-\*\s]*)([A-Z]{3,})/&internalLink($webName,$2,$2,$1,0)/geo;
 	    s/<link>(.*?)<\/link>/&internalLink($webName,$1,$1,"",1)/geo;
-
-# Mailto
-	    s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+)(?=[\s\)]|$)#$1<A href=\"mailto\:$2">$2</A>#go;
 
 	    s/^\n//o;
 	}
