@@ -35,13 +35,7 @@ use CGI;
 use TWiki;
 use TWiki::Net;
 use TWiki::Plugins;
-
-if( $TWiki::OS eq "WINDOWS" ) {
-    require MIME::Base64;
-    import MIME::Base64 qw( encode_base64 );
-    require Digest::SHA1;
-    import Digest::SHA1 qw( sha1 );
-}
+use TWiki::User;
 
 &main();
 
@@ -101,7 +95,7 @@ sub main
     # check if user entry already exists
     if(  ( $wikiName ) 
       && (  ( &TWiki::Store::topicExists( $webName,  $wikiName ) )
-         || ( htpasswdExistUser( $wikiName ) ) 
+         || ( TWiki::User::htpasswdExistUser( $wikiName ) ) 
          ) ) {
         # PTh 20 Jun 2000: changed to getOopsUrl
         $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregexist", $wikiName );
@@ -149,7 +143,7 @@ sub main
 
     # generate user entry and add to .htpasswd file
     if( ! $remoteUser ) {
-        htpasswdAddUser( htpasswdGeneratePasswd( $wikiName, $passwordA ) );
+        TWiki::User::htpasswdAddUser( TWiki::User::htpasswdGeneratePasswd( $wikiName, $passwordA ) );
     }
 
     # send email confirmation
@@ -217,7 +211,7 @@ sub main
     &TWiki::Plugins::registrationHandler( $webName, $wikiName, $remoteUser );
 
     # add user to TWikiUsers topic
-    my $userTopic = addUserToTWikiUsersTopic( $wikiName, $remoteUser );
+    my $userTopic = TWiki::User::addUserToTWikiUsersTopic( $wikiName, $remoteUser );
 
     # write log entry
     if( $TWiki::doLogRegistration ) {
@@ -234,108 +228,5 @@ sub main
     TWiki::redirect( $query, $url );
 }
 
-sub htpasswdGeneratePasswd
-{
-    my ( $user, $passwd ) = @_;
-
-    # Original code by David Levy, Internet Channel, 1997,
-    # found at http://world.inch.com/Scripts/htpasswd.pl.html
-
-    # Generate SHA1 passwords on Windows - like 'htpasswd -s'
-    if ( $TWiki::OS eq "WINDOWS" ) {
-	my $userEntry;
-        $userEntry = $user . ':{SHA}' . encode_base64( sha1( $passwd ) );
-	chomp $userEntry;	# Chop unwanted newline
-	return $userEntry;
-    }
-    # Use 'crypt' on all other platforms (assumed to be Unix/Linux)
-    srand( $$|time );
-    my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
-    my $salt = $saltchars[ int( rand( $#saltchars+1 ) ) ];
-    $salt .= $saltchars[ int( rand( $#saltchars+1 ) ) ];
-    my $passwdcrypt = crypt( $passwd, $salt );
-    return "$user\:$passwdcrypt";
-}
-
-sub htpasswdExistUser
-{
-    my ( $user ) = @_;
-
-    if( ! $user ) {
-        return "";
-    }
-
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
-
-    if( $text =~ /^${user}:/gm ) {	# mod_perl: don't use /o
-        return "1";
-    }
-    return "";
-}
-
-sub htpasswdAddUser
-{
-    my ( $userEntry ) = @_;
-
-    # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
-    # simply add name to file, but this is a security issue
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
-    ##TWiki::writeDebug "User entry is :$userEntry: before newline";
-    $text .= "$userEntry\n";
-    &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
-}
-
-sub addUserToTWikiUsersTopic
-{
-    my ( $wikiName, $remoteUser ) = @_;
-    my $today = &TWiki::getGmDate();
-    my $topicName = $TWiki::wikiUsersTopicname;
-    my( $meta, $text )  = &TWiki::Store::readTopic( $TWiki::mainWebname, $topicName );
-    my $result = "";
-    my $status = "0";
-    my $line = "";
-    my $name = "";
-    my $isList = "";
-    # add name alphabetically to list
-    foreach( split( /\n/, $text) ) {
-        $line = $_;
-	# TODO: I18N fix here once basic auth problem with 8-bit user names is
-	# solved
-        $isList = ( $line =~ /^\t\*\s[A-Z][a-zA-Z0-9]*\s\-/go );
-        if( ( $status == "0" ) && ( $isList ) ) {
-            $status = "1";
-        }
-        if( $status == "1" ) {
-            if( $isList ) {
-                $name = $line;
-                $name =~ s/(\t\*\s)([A-Z][a-zA-Z0-9]*)\s\-.*/$2/go;            
-                if( $wikiName eq $name ) {
-                    # name is already there, do nothing
-                    return $topicName;
-                } elsif( $wikiName lt $name ) {
-                    # found alphabetical position
-                    if( $remoteUser ) {
-                        $result .= "\t* $wikiName - $remoteUser - $today\n";
-                    } else {
-                        $result .= "\t* $wikiName - $today\n";
-                    }
-                    $status = "2";
-                }
-            } else {
-                # is last entry
-                if( $remoteUser ) {
-                    $result .= "\t* $wikiName - $remoteUser - $today\n";
-                } else {
-                    $result .= "\t* $wikiName - $today\n";
-                }
-                $status = "2";
-            }
-        }
-
-        $result .= "$line\n";
-    }
-    &TWiki::Store::saveTopic( $TWiki::mainWebname, $topicName, $result, $meta, "", 1 );
-    return $topicName;
-}
 
 # EOF

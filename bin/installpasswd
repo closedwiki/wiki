@@ -110,7 +110,7 @@ sub main
     my $oldcrypt = TWiki::User::htpasswdReadPasswd( $wikiName );
     # OK - password may be changed
     my $oldCryptPassword = "$wikiName\:$oldcrypt";
-    TWiki::User::htpasswdAddUser( $oldCryptPassword, $theCryptPassword );
+    TWiki::User::htpasswdUpdateUser( $oldCryptPassword, $theCryptPassword );
 
     # OK - password changed
     $url = &TWiki::getOopsUrl( $webName, $topic, "oopschangepasswd" );
