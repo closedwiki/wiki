@@ -2283,12 +2283,15 @@ sub makeAnchorName
     $anchorName =~ s/__+/_/g;               # remove excessive '_'
     $anchorName =~ s/^(.{32})(.*)$/$1/;     # limit to 32 chars
 
-    # URL-encode 8-bit characters
-    $anchorName = urlEncode($anchorName);
+    # Encode 8-bit characters in anchor - due to Mozilla problems with
+    # URL-encoded anchors, such characters are mapped to '_'.  If this
+    # causes some anchors to collide, a consistent 8-bit-to-7-bit
+    # alphabetic character mapping could be defined to minimise this issue.  
+    $anchorName =~ s/([\x7f-\xff])/_/g;		# Map 8-bit chars
+    ##$anchorName =~ urlEncode( $anchorName );	# Was doing URL-encode 
 
     return $anchorName;
 }
-
 
 # =========================
 # Encode 8-bit-set characters for use in URLs (not using UTF8 URL
