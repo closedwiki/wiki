@@ -2292,34 +2292,46 @@ sub _processTags {
 
     my @queue = split( /(%)/, $text );
     my @stack;
-    #my $tell = 0;
+    my $tell = 0; # uncomment all tell lines set this to 1 to print debugging
 
     push( @stack, "" );
     while ( scalar( @queue )) {
         my $token = shift( @queue );
-        #print " " x $tell,"PROCESSING $token \n" if $tell;
+        print " " x $tell,"PROCESSING $token \n" if $tell;
 
         # each % sign either closes an existing stacked context, or
         # opens a new context.
         if ( $token eq "%" ) {
-            #print " " x $tell,"CONSIDER $stack[$#stack]\n" if $tell;
+            print " " x $tell,"CONSIDER $stack[$#stack]\n" if $tell;
+            # If this is a closing }%, try to rejoin the previous
+            # tokens until we get to a valid tag construct. This is
+            # a bit of a hack, but it's hard to think of a better
+            # way to do this without a full parse that takes % signs
+            # in tag parameters into account.
+            if ( $stack[$#stack] =~ /}$/ ) {
+                while ( $#stack &&
+                        $stack[$#stack] !~ /^%([A-Z][A-Z0-9_:]*){(.*)}$/ ) {
+                    my $top = pop( @stack );
+                    print " " x $tell,"COLLAPSE $top \n" if $tell;
+                    $stack[$#stack] .= $top;
+                }
+            }
             if ( $stack[$#stack] =~ /^%([A-Z][A-Z0-9_:]*)(?:{(.*)})?$/ ) {
                 my ( $tag, $args ) = ( $1, $2 );
-                #print " " x $tell,"POP $tag\n" if $tell;
+                print " " x $tell,"POP $tag\n" if $tell;
                 my ( $ok, $e ) = _handleTag( $tag, $args, @_ );
                 if ( $ok ) {
-                    #print " " x $tell--,"EXPANDED $tag -> $e\n" if $tell;
+                    print " " x $tell--,"EXPANDED $tag -> $e\n" if $tell;
                     pop( @stack );
-                    unshift( @queue, split( /(%)/, $e ));
+                    #unshift( @queue, split( /(%)/, $e ));
+                    $stack[$#stack] .= $e;
                 } else { # expansion failed
                     #print " " x $tell++,"EXPAND $tag FAILED\n" if $tell;
-                    push( @stack, "%" ); # push a new context
-                    # ...OR...
-                    #$stack[$#stack] .= "%"; # ignore the tag
+                    push( @stack, "%" ); # push a new context, starting
                 }
             } else {
                 push( @stack, "%" ); # push a new context
-                #$tell++ if ( $tell );
+                $tell++ if ( $tell );
             }
         } else {
             $stack[$#stack] .= $token;
