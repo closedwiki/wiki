@@ -98,15 +98,18 @@ sub getRevInfo
     my( $web, $rev, $topic, $short ) = @_;
 
     my( $date, $user ) = &TWiki::Store::getRevisionInfo( $web, $topic, "1.$rev", 1 );
-    $user = &TWiki::userToWikiName( $user );
-    my $revInfo = &TWiki::getRenderedVersion( "$date GMT - $user" );
+    $user = TWiki::getRenderedVersion( TWiki::userToWikiName( $user ) );
+    my $revInfo = &TWiki::getRenderedVersion( $date );
     if( $short ) {
         # cut time
-        $revInfo =~ s/ \- [0-9]*\:[0-9]*(?:\sGMT)*//go;
+        $date =~ s/ \- [0-9]*\:[0-9]+$//go;
         # eliminate white space to prevent wrap around in HR table:
-        $revInfo =~ s/ /\&nbsp\;/go;
+        $date =~ s/ /\&nbsp\;/go;
+    } else {
+        $date .= " GMT";
     }
 
+    my $revInfo = "$date - $user";
     $revInfo =~ s/[\n\r]*//go;
     return $revInfo;
 }
