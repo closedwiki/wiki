@@ -8,7 +8,7 @@ use base qw(BaseFixture);
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
-use TWiki::Plugins::ActionTrackerPlugin::Attrs;
+use TWiki::Plugins::SharedCode;
 use Time::ParseDate;
 
 sub new {
@@ -43,7 +43,7 @@ EOF
 
 sub testAllActionsInWebTest {
   my $this = shift;
-  my $attrs = new ActionTrackerPlugin::Attrs("topic=\".*\"");
+  my $attrs = new TWiki::Attrs("topic=\".*\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
   my $fmt = $textonlyfmt;
   my $chosen = $actions->formatAsString($fmt);
@@ -64,7 +64,7 @@ sub testAllActionsInWebTest {
 
 sub notestAllActionsInWebMain {
   my $this = shift;
-  my $attrs = new ActionTrackerPlugin::Attrs();
+  my $attrs = new TWiki::Attrs();
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Main", $attrs);
   my $fmt = $textonlyfmt;
   my $chosen = $actions->formatAsString( $fmt );
@@ -84,7 +84,7 @@ sub notestAllActionsInWebMain {
 
 sub notestOpenActions {
   my $this = shift;
-  my $attrs = new ActionTrackerPlugin::Attrs("open");
+  my $attrs = new TWiki::Attrs("open");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs );
   my $fmt = $textonlyfmt;
   my $chosen = $actions->formatAsString($fmt);
@@ -103,7 +103,7 @@ sub notestOpenActions {
 #%ACTION{who=Blah.B,due=\"29 Jan 2010\",open}% B_open_ontime");
 sub notestLateActions {
   my $this = shift;
-  my $attrs = new ActionTrackerPlugin::Attrs("late");
+  my $attrs = new TWiki::Attrs("late");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs );
   my $fmt = $textonlyfmt;
   my $chosen = $actions->formatAsString($fmt);
@@ -117,7 +117,7 @@ sub notestLateActions {
 
 sub notestMyActions {
   my $this = shift;
-  my $attrs = new ActionTrackerPlugin::Attrs("who=me");
+  my $attrs = new TWiki::Attrs("who=me");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
   my $fmt = $textonlyfmt;
   my $chosen = $actions->formatAsString($fmt);

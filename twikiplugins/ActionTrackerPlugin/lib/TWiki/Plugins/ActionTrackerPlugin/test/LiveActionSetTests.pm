@@ -7,7 +7,7 @@ use base qw(BaseFixture);
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
-use TWiki::Plugins::ActionTrackerPlugin::Attrs;
+use TWiki::Plugins::SharedCode;
 use Time::ParseDate;
 use CGI;
 
@@ -53,7 +53,7 @@ sub set_up {
 
 sub testGetAllInMain {
   my $this = shift;
-  my $attrs = ActionTrackerPlugin::Attrs->new();
+  my $attrs = TWiki::Attrs->new();
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Main", $attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
@@ -66,7 +66,7 @@ sub testGetAllInMain {
 
 sub testGetAllInTest {
   my $this = shift;
-  my $attrs = ActionTrackerPlugin::Attrs->new();
+  my $attrs = TWiki::Attrs->new();
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Test", $attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
@@ -79,7 +79,7 @@ sub testGetAllInTest {
 
 sub testGetAllInAllWebs {
   my $this = shift;
-  my $attrs = ActionTrackerPlugin::Attrs->new("web=\".*\"");
+  my $attrs = TWiki::Attrs->new("web=\".*\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
   $actions->sort();
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
@@ -103,7 +103,7 @@ sub testGetAllInAllWebs {
 
 sub testSortAllWebs {
   my $this = shift;
-  my $attrs = ActionTrackerPlugin::Attrs->new("web=\".*\"");
+  my $attrs = TWiki::Attrs->new("web=\".*\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
   $actions->sort("who,state");
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
@@ -113,7 +113,7 @@ sub testSortAllWebs {
 
 sub testAllInTestWebRE {
   my $this = shift;
-  my $attrs = ActionTrackerPlugin::Attrs->new("web=\"T.*\"");
+  my $attrs = TWiki::Attrs->new("web=\"T.*\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
@@ -127,7 +127,7 @@ sub testAllInTestWebRE {
 
 sub testAllInMainWebRE {
   my $this = shift;
-  my $attrs = ActionTrackerPlugin::Attrs->new("web=\".*ain\"");
+  my $attrs = TWiki::Attrs->new("web=\".*ain\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
@@ -141,7 +141,7 @@ sub testAllInMainWebRE {
 
 sub testAllTopicRE {
   my $this = shift;
-  my $attrs = ActionTrackerPlugin::Attrs->new("web=Test topic=\".*2\"");
+  my $attrs = TWiki::Attrs->new("web=Test topic=\".*2\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Test", $attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
@@ -154,7 +154,7 @@ sub testAllTopicRE {
 
 sub testAllWebsTopicRE {
   my $this = shift;
-  my $attrs = ActionTrackerPlugin::Attrs->new("web=\".*\",topic=\".*2\"");
+  my $attrs = TWiki::Attrs->new("web=\".*\",topic=\".*2\"");
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs("Main", $attrs);
   my $fmt = new ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
