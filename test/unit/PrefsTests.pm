@@ -120,7 +120,7 @@ sub test_system {
     TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
 
     $this->assert_str_equals("TWIKI",
-                             $TWiki::prefsObject->getValue("SOURCE"));
+                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_web {
@@ -138,7 +138,7 @@ sub test_web {
     TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
 
     $this->assert_str_equals("WEB",
-                             $TWiki::prefsObject->getValue("SOURCE"));
+                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_user {
@@ -156,7 +156,7 @@ sub test_user {
     TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
 
     $this->assert_str_equals("USER",
-                             $TWiki::prefsObject->getValue("SOURCE"));
+                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_topic {
@@ -172,7 +172,7 @@ sub test_topic {
 
     TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
     $this->assert_str_equals("TOPIC",
-                             $TWiki::prefsObject->getValue("SOURCE"));
+                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_order1 {
@@ -193,7 +193,7 @@ sub test_order1 {
     TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
 
     $this->assert_str_equals("USER",
-                             $TWiki::prefsObject->getValue("SOURCE"));
+                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_order2 {
@@ -214,7 +214,7 @@ sub test_order2 {
     TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
 
     $this->assert_str_equals("USER",
-                             $TWiki::prefsObject->getValue("SOURCE"));
+                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_order3 {
@@ -235,7 +235,7 @@ sub test_order3 {
     TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
 
     $this->assert_str_equals("USER",
-                             $TWiki::prefsObject->getValue("SOURCE"));
+                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_order4 {
@@ -256,7 +256,7 @@ sub test_order4 {
     TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
 
     $this->assert_str_equals("TOPIC",
-                             $TWiki::prefsObject->getValue("SOURCE"));
+                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_finalSystem {
@@ -277,7 +277,7 @@ sub test_finalSystem {
     TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
 
     $this->assert_str_equals("TWIKI",
-                             $TWiki::prefsObject->getValue("SOURCE"));
+                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_finalWeb {
@@ -298,7 +298,7 @@ sub test_finalWeb {
     TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
 
     $this->assert_str_equals("WEB",
-                             $TWiki::prefsObject->getValue("SOURCE"));
+                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_finalUser {
@@ -319,7 +319,7 @@ sub test_finalUser {
     TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
 
     $this->assert_str_equals("USER",
-                             $TWiki::prefsObject->getValue("SOURCE"));
+                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 1;
