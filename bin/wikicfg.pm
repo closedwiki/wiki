@@ -91,8 +91,12 @@ $revHistCmd       = "$rcsDir/rlog -h %FILENAME%";
 $revInfoCmd       = "$rcsDir/rlog -r%REVISION% %FILENAME%";
 #                   RCS revision diff command :
 $revDiffCmd       = "$rcsDir/rcsdiff -q -w -B -r%REVISION1% -r%REVISION2% %FILENAME%";
-#                   RCS delete revision command : (Sequence unlock; delete; lock)
-$revDelRevCmd     = "$rcsDir/rcs -q -u %FILENAME%; $rcsDir/rcs -q -o%REVISION% %FILENAME%; $rcsDir/rcs -q -l %FILENAME%";
+#                   RCS delete revision command :
+$revDelRevCmd     = "$rcsDir/rcs -q -o%REVISION% %FILENAME%";
+#                   RCS unlock command :
+$revUnlockCmd     = "$rcsDir/rcs -q -u %FILENAME%";
+#                   RCS lock command :
+$revLockCmd       = "$rcsDir/rcs -q -l %FILENAME%";
 #                   Unix ls command :
 $lsCmd            = "/bin/ls";
 #                   Unix cp command :
@@ -104,13 +108,13 @@ $fgrepCmd         = "/bin/fgrep";
 
 # variables that probably do not change:
 # ==================================================================
-#                   %WIKITOOLNAME% : TWiki tool name :
+#                   %WIKITOOLNAME% : TWiki tool name, default "TWiki" :
 $wikiToolName       = "TWikibeta";
 #                   Regex security filter for web name, topic name, user name :
 $securityFilter     = "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\n\r]";
-#                   Default user name :
+#                   Default user name, default "guest" :
 $defaultUserName    = "guest";
-#                   %MAINWEB% : Name of Main web :
+#                   %MAINWEB% : Name of Main web, default "Main" :
 $mainWebname        = "Main";
 #                   Pathname of debug file :
 $debugFilename      = "$dataDir/debug.txt";
@@ -122,26 +126,30 @@ $logFilename        = "$dataDir/log%DATE%.txt";
 $wikiUsersTopicname = "TWikiUsers";
 #                   Pathname of users topic, used to translate Intranet name to Wiki name :
 $userListFilename   = "$dataDir/$mainWebname/$wikiUsersTopicname.txt";
-#                   %HOMETOPIC% : Name of main topic in a web :
+#                   %HOMETOPIC% : Name of main topic in a web, default "WebHome" :
 $mainTopicname      = "WebHome";
-#                   %NOTIFYTOPIC% : Name of topic for email notifications :
-$notifyTopicname    = "WebNotify";
-#                   %WIKIPREFSTOPIC% : Name of site-level preferences topic :
+#                   %NOTIFYTOPIC% : Name of topic for email notifications, default "WebNotify" :
+$notifyTopicname  = "WebNotify";
+#                   %WIKIPREFSTOPIC% : Name of site-level preferences topic, default "TWikiPreferences" :
 $wikiPrefsTopicname = "TWikiPreferences";
-#                   %WEBPREFSTOPIC% : Name of preferences topic in a web :
+#                   %WEBPREFSTOPIC% : Name of preferences topic in a web, default "WebPreferences" :
 $webPrefsTopicname  = "WebPreferences";
-#                   %STATISTICSTOPIC% : Name of statistics topic :
+#                   %STATISTICSTOPIC% : Name of statistics topic, default "WebStatistics" :
 $statisticsTopicname = "WebStatistics";
-#                   Number of top viewed topics to show in statistics topic :
+#                   Number of top viewed topics to show in statistics topic, default "10" :
 $statsTopViews      = "10";
-#                   Number of top contributors to show in statistics topic :
+#                   Number of top contributors to show in statistics topic, default "10" :
 $statsTopContrib    = "10";
-#                   Show how many number of revision links, "0" for all :
+#                   Show how many number of revision links, "0" for all, default "4" :
 $numberOfRevisions  = "4";
+#                   Number of seconds a topic is locked during edit, default "3600" :
+$editLockTime       = "3600";
 
 # flag variables that could change:
 # ==================================================================
 # values are "0" for no, or "1" for yes
+#                   Keep same revision if topic is saved again within edit lock time. Default "1"
+$doKeepRevIfEditLock = "1";
 #                   Remove port number from URL. Default "0"
 $doRemovePortNumber = "0";
 #                   Change non existing plural topic name to singular,

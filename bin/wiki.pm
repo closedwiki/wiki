@@ -42,11 +42,12 @@ use vars qw(
         $mainWebname $mainTopicname $notifyTopicname
         $wikiPrefsTopicname $webPrefsTopicname @prefsKeys @prefsValues
         $statisticsTopicname $statsTopViews $statsTopContrib
+	$editLockTime 
         $mailProgram $wikiversion 
         $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
-        $revDiffCmd $revDelRevCmd
+        $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd
         $lsCmd $cpCmd $egrepCmd $fgrepCmd
-        $doRemovePortNumber $doPluralToSingular
+        $doKeepRevIfEditLock $doRemovePortNumber $doPluralToSingular
         $doLogTopicView $doLogTopicEdit $doLogTopicSave
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
@@ -56,7 +57,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "11 Mar 2000";
+$wikiversion      = "16 Mar 2000";
 
 # ===========================
 # read the configuration part
@@ -409,13 +410,13 @@ sub topicIsLocked
     # edit link within one hour
 
     my $lockFilename = "$dataDir/$webName/$name.lock";
-    if( -e "$lockFilename" ) {
+    if( ( -e "$lockFilename" ) && ( $editLockTime > 0 ) ) {
         my $tmp = readFile( $lockFilename );
         my( $lockUser, $lockTime ) = split( /\n/, $tmp );
         if( $lockUser ne $userName ) {
             # time stamp of lock within one hour of current time?
             my $systemTime = time();
-            if( abs( $systemTime - $lockTime ) < 3600 ) {
+            if( abs( $systemTime - $lockTime ) < $editLockTime ) {
                 # must warn user that it is locked
                 return $lockUser;
             }
@@ -459,7 +460,7 @@ sub removeObsoleteTopicLocks
         if( ! $lockTime ) { $lockTime = ""; }
 
         # time stamp of lock over one hour of current time?
-        if( abs( $systemTime - $lockTime ) > 3600 ) {
+        if( abs( $systemTime - $lockTime ) > $editLockTime ) {
             # obsolete, so delete file
             unlink "$pathFile";
         }
@@ -532,7 +533,11 @@ sub getRevisionNumber
     $tmp = $1;       # now safe, so untaint variable
     $tmp = `$tmp`;
     $tmp =~ /head: (.*?)\n/;
-    return $1;
+    if( ( $tmp ) && ( $1 ) ) {
+        return $1;
+    } else {
+        return "1.1";
+    }
 }
 
 # =========================
@@ -583,6 +588,9 @@ sub getRevisionInfo
     $tmp =~ /date: (.*?);  author: (.*?);/;
     my $date = $1;
     my $user = $2;
+    if( ! $user ) {
+        return ( "", "" );
+    }
     if( $changeToIsoDate ) {
         # change date to ISO format
         $tmp = $1;
@@ -625,11 +633,11 @@ sub saveTopic
         my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp8,$tmp9,
             $tmp10,$tmp11,$tmp12,$tmp13 ) = stat $name;
         $mtime2 = $tmp10;
-        if( abs( $mtime2 - $mtime1 ) < 3600 ) {
+        if( abs( $mtime2 - $mtime1 ) < $editLockTime ) {
             my $rev = getRevisionNumber( $topic );
             my( $date, $user ) = getRevisionInfo( $topic, $rev );
             # same user?
-            if( $user eq $userName ) {
+            if( ( $doKeepRevIfEditLock ) && ( $user eq $userName ) ) {
                 # replace last repository entry
                 $saveCmd = "repRev";
             }
@@ -678,8 +686,19 @@ sub saveTopic
             # initial revision, so delete repository file and start again
             unlink "$name,v";
         } else {
-            # delete latest revision
-            $tmp = $revDelRevCmd;
+            # delete latest revision (unlock, delete revision, lock)
+            $tmp= $revUnlockCmd;
+            $tmp =~ s/%FILENAME%/$name/go;
+            $tmp =~ /(.*)/;
+            $tmp = $1;       # safe, so untaint variable
+            `$tmp`;
+            $tmp= $revDelRevCmd;
+            $tmp =~ s/%REVISION%/$rev/go;
+            $tmp =~ s/%FILENAME%/$name/go;
+            $tmp =~ /(.*)/;
+            $tmp = $1;       # safe, so untaint variable
+            `$tmp`;
+            $tmp= $revLockCmd;
             $tmp =~ s/%REVISION%/$rev/go;
             $tmp =~ s/%FILENAME%/$name/go;
             $tmp =~ /(.*)/;
@@ -705,12 +724,24 @@ sub saveTopic
     if( $saveCmd eq "delRev" ) {
         # delete last revision
 
-        # delete last entry in repository
+        # delete last entry in repository (unlock, delete revision, lock operation)
         my $rev = getRevisionNumber( $topic );
         if( $rev eq "1.1" ) {
-            return; #can't delete initial revision
+            # can't delete initial revision
+            return;
         }
+        $tmp= $revUnlockCmd;
+        $tmp =~ s/%FILENAME%/$name/go;
+        $tmp =~ /(.*)/;
+        $tmp = $1;       # safe, so untaint variable
+        `$tmp`;
         $tmp= $revDelRevCmd;
+        $tmp =~ s/%REVISION%/$rev/go;
+        $tmp =~ s/%FILENAME%/$name/go;
+        $tmp =~ /(.*)/;
+        $tmp = $1;       # safe, so untaint variable
+        `$tmp`;
+        $tmp= $revLockCmd;
         $tmp =~ s/%REVISION%/$rev/go;
         $tmp =~ s/%FILENAME%/$name/go;
         $tmp =~ /(.*)/;
@@ -925,7 +956,7 @@ sub externalLink
 sub isWikiName
 {
     my( $name ) = @_;
-    if ( $name =~ /[A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*)$/ ) {
+    if ( $name =~ /^[A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*)$/ ) {
         return "1";
     }
     return "";

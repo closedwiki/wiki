@@ -114,7 +114,7 @@ sub main
 {
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param('topic');
+    my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
     ( $topic, $webName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
@@ -133,7 +133,7 @@ sub main
 
     $tmpl= &wiki::readTemplate( "preview" );
     $icat= &wiki::readTemplate( "twikicatitems" );
-    my $saveCmd = $query->param( "cmd" );
+    my $saveCmd = $query->param( "cmd" ) || "";
     if( $saveCmd ) {
         $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;
     }
@@ -179,6 +179,7 @@ sub main
         # for debug: Extract attachment
         $text = $query->param( "text" );
         ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
+        if( ! $after ) { $after = ""; }
         # combine text, category table and attachment for preview
         if( $atext ) {
             $text = "$before$after$tcat<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
