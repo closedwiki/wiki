@@ -1,62 +1,16 @@
-%META:TOPICINFO{author="PeterThoeny" date="1039944840" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="PeterThoeny" date="1040164692" format="1.0" version="1.16"}%
 ---+ Table Plugin
 
 Gives extra control of table display:
 	* Allows sorting
 	* Changing table properties like border width, cell spacing and cell padding
-	* Changing background color for header cells
-	* Changing background color for data cells - colors can _alternate_
-	* Behaviour can be specified for a specific table using %<nop>TABLE{...}% or with global preferences
-
-
----++ <nop>%TOPIC% Global Settings
-
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
-
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Control attributes of tables and sorting of table columns
-
-	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
-		* Set DEBUG = 0
-
-	* Table border width.  Default: 1
-		* Set TABLEBORDER = 1
-
-	* Table cell padding.  Default: 0
-		* Set CELLPADDING = 0
-
-	* Table cell spacing.  Default: 1
-		* Set CELLSPACING = 1
-
-	* Table width, e.g. =100%= for relative, =640= for absolute width.  Default: (not set)
-		* Set TABLEWIDTH = 
-
-	* Vertical alignment of cells. Set to: =top=, =middle=, =bottom= or =baseline=; default: (empty)
-		* Set VALIGN = 
-
-	* Table header cell alignment. Set to: =left=, =center=, =right= or =justify=; default: (empty)
-		* Set HEADERALIGN = 
-
-	* Table data cell alignment. Set to: =left=, =center=, =right= or =justify=; default: (empty)
-		* Set DATAALIGN = 
-
-	* Background color of header cells ('*'s around text). Choose one of the %TWIKIWEB%.StandardColors. Default: <span style="background : #99CCCC;">#99CCCC</span>
-		* Set HEADER_BG = 
-
-	* Text color of header cells ('*'s around text).  Default: not specified, e.g. determined by the browser
-		* Set HEADER_COLOR = 
-
-	* Background color of table rows, two alternate colors.  Default: <span style="background : #FFFFCC;">#FFFFCC</span>, <span style="background : #FFFFFF;">#FFFFFF</span>
-		* Set DATA_BG = #FFFFCC, #FFFFFF
-
-	* Text color of table rows, alternate colors.  Default: not specified, e.g. determined by the browser
-		* Set DATA_COLOR = 
-
-	* Make sortable:
-		* #Set SORT = attachments
-		* Set SORT = all
-		* #Set SORT = none
+	* Changing background color and text color for header cells
+	* Changing background color and text color for data cells - colors can _alternate_
+	* Table attributes can be set and overridden in this order:
+		* Default =TABLEATTRIBUTES= Plugin setting in this topic.
+		* A =TABLEATTRIBUTES= preferences setting on site-level (%TWIKIWEB%.TWikiPreferences) or web-level (any WebPreferences), e.g.
+			* =Set TABLEATTRIBUTES = tableborder="0" cellpadding="1" ...=
+		* Before a table using =%<nop>TABLE{...}%=
 
 ---++ Sorting
 
@@ -69,9 +23,29 @@ Click on column heading text to sort by a column.  Initial column will be sorted
 	* number is digits, with optional decimal point
 	* otherwise treated as text
 
----++ Per Table Settings
+---++ <nop>%TOPIC% Global Settings
 
-On line before the table use =%<nop>TABLE{...}%=:
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Control attributes of tables and sorting of table columns
+
+	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+		* Set DEBUG = 0
+
+	* Make sortable:
+		* #Set SORT = attachments
+		* Set SORT = all
+		* #Set SORT = none
+
+	* Default table attributes:
+		* Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="1" headerbg="#99CCCC" databg="#FFFFCC, #FFFFFF"
+
+
+---++ Table Attributes
+
+Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =TABLEATTRIBUTES= preferences setting, or on line before the table using =%<nop>TABLE{...}%=:
 
 | *Argument* | *Comment* | *Example* |
 | =sort=	  | Set table sorting =on= or =off= | =sort="on"= |
@@ -92,7 +66,7 @@ On line before the table use =%<nop>TABLE{...}%=:
 | =headerrows= | Number of header rows to exclude from sort; default 1 | =headerrows="1"= |
 | =footerrows= | Number of footer rows to exclude from sort; default 0 | =footerrows="1"= |
 
-All default to the global setting
+The =%<nop>TABLE{...}%= settings override =TABLEATTRIBUTES= preferences settings, which override the =TABLEATTRIBUTES= Plugin settings. 
 
 ---++ Example
 
@@ -128,8 +102,9 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 ---++ Plugin Info
 
 |  Plugin Author: | %TWIKIWEB%.JohnTalintyre, %TWIKIWEB%.PeterThoeny |
-|  Plugin Version: | 15 Dec 2002 |
+|  Plugin Version: | 17 Dec 2002 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  17 Dec 2002: | PTh: Removed individual table Plugin settings; added TABLEATTRIBUTES Plugins setting and TABLEATTRIBUTES preferences setting |
 |  15 Dec 2002: | PTh: Added headerrows and footerrows params (TWiki:Main/WoutMertens); added tablewidth and columnwidths params (TWiki:Main/ThorstenSommermann) |
 |  09 Dec 2002: | PTh: Added headercolor and datacolor parameters |
 |  05 Jun 2002: | PTh: Added "none" value to databg parameter (suggested by TWiki:Main/TaitCyrus); fixed sorting by stripping HTML tags, removing links and making sort ignore case (suggested by TWiki:Main/ShawnBradford) |
@@ -149,7 +124,7 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.StandardColors
 
 -- %TWIKIWEB%.JohnTalintyre - 07 Oct 2001 <br />
--- %TWIKIWEB%.PeterThoeny - 15 Dec 2002 <br />
+-- %TWIKIWEB%.PeterThoeny - 17 Dec 2002 <br />
 %META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1005707580" path="C:\Data\Temp\up.gif" size="876" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1005707591" path="C:\Data\Temp\down.gif" size="869" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1005707607" path="C:\Data\Temp\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
