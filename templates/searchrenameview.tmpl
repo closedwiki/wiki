@@ -1,0 +1,73 @@
+<HTML>
+<HEAD>
+  <TITLE> %WIKITOOLNAME% . %WEB% . SearchResult </TITLE>
+  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/main"> <META NAME="ROBOTS" CONTENT="NOINDEX"> %HTTP_EQUIV_ON_VIEW%
+</HEAD>
+<BODY bgcolor="#ffffff">
+<FORM name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/">
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR>
+    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
+    </TD>
+    <TD>
+      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>SearchResult</B></FONT>
+    </TD><TD ALIGN="right">
+      %WIKIWEBLIST%
+    </TD>
+  </TR>
+  <TR BGCOLOR="%WEBBGCOLOR%">
+    <TD COLSPAN="2">
+      %WEBTOPICLIST%
+    </TD>
+  </TR>
+</TABLE>
+</FORM>
+%SPLIT%Search: <B> %SEARCHSTRING% </B>
+<P>
+%SPLIT%<TABLE width="100%" border="0" cellpadding="0" cellspacing="4">
+<TR BGCOLOR="%WEBBGCOLOR%">
+  <TD width="10%">
+    <B>Update ref:</B>
+  </TD> <TD width="45%">
+    <B>Topics in %WEB% web:</B>
+  </TD><TD width="25%">
+    <B>Changed:</B> now %GMTIME{"$hour:$min"}% GMT
+  </TD><TD width="20%">
+    <B>Changed by:</B>
+  </TD>
+</TR>
+</TABLE>
+%REPEAT%<TABLE width="100%" border="0" cellspacing="0" cellpadding="0">
+<TR>
+  <TD width="10%">
+    <INPUT TYPE="checkbox" NAME="RENAME%TOPIC_NUMBER%" checked>
+    <INPUT TYPE="hidden"   NAME="TOPIC%TOPIC_NUMBER%" VALUE="%WEB%.%TOPICNAME%">
+  </TD><TD width="45%">
+    <A HREF="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><B>%TOPICNAME%</B></A>
+  </TD><TD width="25%">
+    <A HREF="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TIME%</A>
+  </TD><TD width="20%">
+    %AUTHOR%
+  </TD>
+</TR>
+<TR>
+  <TD COLSPAN="2" width="80%">
+    <FONT SIZE="-1">
+    %TEXTHEAD% </FONT>
+  </TD><TD width="20%"> &nbsp;
+  </TD>
+</TR></TABLE>
+%REPEAT%<BR clear=all>
+<P>%SPLIT%Number of topics: <B>%NTOPICS%</B>
+<P>%SPLIT%
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR BGCOLOR="%WEBBGCOLOR%">
+    <TD valign="top">
+      Topic <B>SearchResult</B> . { }
+    </TD>
+  </TR>
+</TABLE>
+%WEBCOPYRIGHT%
+</TABLE>
+</BODY></HTML>

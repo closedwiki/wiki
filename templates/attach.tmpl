@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
 <HEAD>
   <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (attach)</TITLE>
@@ -42,6 +43,7 @@ function initForm() {
     <TD ALIGN="right">
       Local file:
     </TD><TD>
+      <!--
       <INPUT TYPE="hidden" NAME="filename" VALUE="%FILENAME%">
       <INPUT TYPE="file" NAME="filepath" VALUE="%FILEPATH%" SIZE="50">
     </TD>
@@ -73,6 +75,10 @@ function initForm() {
       <A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">cancel</A>
       }
     </TD>
+    <TD>
+    <a href="!!!">Delete attachment</a> <a href="!!!">&nbsp;(Help)</a>
+    &nbsp;|&nbsp;<a href="!!!">Move attachment</a> <a href="!!!">&nbsp;(Help)</a>
+    </TD
   </TR>
 </TABLE>
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
