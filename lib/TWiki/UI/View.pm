@@ -228,29 +228,37 @@ sub view {
     }
 
     # Show revisions around the one being displayed
+    # we start at $showRev then possibly jump near $rev if too distant
     my $revsToShow = $TWiki::cfg{NumberOfRevisions} + 1;
-    my $topRev = $rev + $revsToShow / 2;
-    $topRev = $revsToShow if $topRev < $revsToShow;
-    $topRev = $showRev if $topRev > $showRev;
-    my $revisions = "";
+    $revsToShow = $showRev if $showRev < $revsToShow;
+    my $doingRev = $showRev;
     my @revs;
-    while( $revsToShow && $topRev ) {
-        if( $topRev == $rev) {
-            push( @revs, "r$rev" );
+    while( $revsToShow > 0 ) {
+        $revsToShow--;
+        if( $doingRev == $rev) {
+            push( @revs, "r$rev");
         } else {
             push( @revs, "<a href=\"".
                   $session->getScriptUrl( $webName, $topicName, "view" ) .
-                  "?rev=$topRev\" $TWiki::cfg{NoFollow}>r$topRev</a>" );
+                  "?rev=$doingRev\" $TWiki::cfg{NoFollow}>r$doingRev</a>");
         }
-        if( $revsToShow > 1 && $topRev > 1 ) {
+        if ($doingRev-$rev >= $TWiki::cfg{NumberOfRevisions}) {
+            # we started too far away, need to jump closer to $rev
+            use integer;
+            $doingRev = $rev + $revsToShow / 2;
+            $doingRev = $revsToShow if $revsToShow > $doingRev;
+            push( @revs, "|" );
+            next;
+        }
+        if( $revsToShow ) {
             push( @revs, "<a href=\"".
                   $session->getScriptUrl( $webName, $topicName, "rdiff").
-                  "?rev1=$topRev&amp;rev2=".($topRev-1)."\" $TWiki::cfg{NoFollow}>&gt;</a>" );
+                  "?rev1=$doingRev&amp;rev2=".($doingRev-1)."\" $TWiki::cfg{NoFollow}>&gt;</a>");
         }
-        $revsToShow--;
-        $topRev--;
+        $doingRev--;
     }
-    $revisions = join(" ", @revs );
+    my $revisions = join(" ", @revs);
+
     $tmpl =~ s/%REVISIONS%/$revisions/go;
 
     $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;
