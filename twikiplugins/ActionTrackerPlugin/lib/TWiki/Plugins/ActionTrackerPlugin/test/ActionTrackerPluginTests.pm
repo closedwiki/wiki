@@ -215,7 +215,7 @@ action("AcTion8","Main.ActorNine",undef,"Tue, 1 Jan 2002","Create the mailer","c
     Assert::assert($text =~ s/<INPUT TYPE=\"hidden\" NAME=\"Know\.OsVersion\" VALUE=\"hhhhhh\">//o);
     Assert::assert($text =~ s/<INPUT TYPE=\"hidden\" NAME=\"pretext\" VALUE=\"\n\">//mo);
     Assert::assert($text =~ s/<INPUT TYPE=\"hidden\" NAME=\"posttext\" VALUE=\"%ACTION{who=Joe,due=&quot;29 Jan 2010&quot;,open}% Main1: Joe_open_ontime\n%ACTION{who=TheWholeBunch,due=&quot;29 Jan 2001&quot;,open}% Main2: Joe_open_ontime\n\">//mo);
-    Assert::assert($text =~ s/<textarea NAME=\"text\" WRAP=\"virtual\" ROWS=\"PREFS\(ACTIONTRACKERPLUGIN_EDITBOXHEIGHT\)\" COLS=\"PREFS\(ACTIONTRACKERPLUGIN_EDITBOXWIDTH\)\">Main0: Fred_closed_ontime<\/textarea>//o);
+    Assert::assert($text =~ s/<textarea NAME=\"text\" WRAP=\"virtual\" ROWS=\"%ACTIONTRACKERPLUGIN_EDITBOXHEIGHT%\" COLS=\"%ACTIONTRACKERPLUGIN_EDITBOXWIDTH%\">Main0: Fred_closed_ontime<\/textarea>//o);
   }
 
   sub testAfterEditHandler {

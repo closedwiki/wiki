@@ -20,9 +20,9 @@
 
     <!-- Caution: also used in uninstall, so don't use * in shared dirs -->
     <patternset id="installed.files">
-	<include name="${ant.project.name}.xml"/>
         <include name="${plugin.lib}.pm"/>
         <include name="${plugin.lib}/*.pm"/>
+        <include name="${plugin.lib}/build.xml"/>
         <include name="${plugin.data}*.txt"/>
         <include name="bin/actionnotify"/>
         <include name="templates/actionnotify.tmpl"/>
@@ -79,6 +79,49 @@
 	</zip>
     </target>
 
+    <!-- Check that all files in the zip are in the topic file, and
+	 vice versa -->
+    <target description="Check release package" name="completeness">
+	<exec	executable="unzip"
+		outputproperty="zip.dat">
+	    <arg line="-l ${release.zip}" />
+	</exec>
+        <exec	executable="gawk"
+		inputstring="${zip.dat}"
+		outputproperty="zip2.dat">
+	    <arg line="'/^[ \t]+[0-9]+[ \t]+[0-9]+-.*[^/]$/{print $4;}'" />
+	</exec>
+        <exec	executable="sort"
+		inputstring="${zip2.dat}"
+		output="zipcontents.dat">
+	</exec>
+        <exec	executable="gawk"
+		outputproperty="file.dat">
+	    <arg line="-F = '/^[ \t]+\|[ \t]+==.+==[ \t]+\|.+\|$/{print $3;}' ${plugin.data}.txt" />
+	</exec>
+        <exec	executable="sed"
+		inputstring="${file.dat}"
+		outputproperty="file2.dat">
+	    <arg line="'s/%TOPIC%/${ant.project.name}/g'" />
+	</exec>
+        <exec	executable="sort"
+		inputstring="${file2.dat}"
+		output="filecontents.dat">
+	</exec>
+	<exec	executable="diff" failonerror="true">
+	    <arg line="zipcontents.dat filecontents.dat" />
+	</exec>
+    </target>
+
+    <target description="Make the release zip" name="zip" depends="test">
+        <delete file="${release.zip}" />
+        <zip zipfile="${release.zip}">
+            <zipfileset dir="${basedir}">
+                <patternset refid="installed.files"/>
+            </zipfileset>
+	</zip>
+    </target>
+
     <!--
         MAIN TARGETS
      -->
@@ -91,14 +134,8 @@
         </exec>
     </target>
 
-    <target description="Build from sources and package"
-            name="release" depends="test">
-        <delete file="${release.zip}" />
-        <zip zipfile="${release.zip}">
-            <zipfileset dir="${basedir}">
-                <patternset refid="installed.files"/>
-            </zipfileset>
-	</zip>
+    <target description="Build and check release zip"
+            name="release" depends="zip,completeness">
     </target>
 
     <target description="Install in local TWiki"
@@ -106,4 +143,5 @@
 
     <target description="Uninstall from local TWiki"
             name="uninstall" depends="installBAD,uninstallOK" />
+
 </project>
