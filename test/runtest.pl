@@ -48,16 +48,16 @@ unless( $args =~ /\bnocompile\b/ ) {
     my $rose = "";
     foreach my $pm (split /\n/, $pms){
         my $mess = `perl -I ../lib -I . -w -c $pm 2>&1`;
-        $mess =~ s/^.*Subroutine .*? redefined at .*?$//gm;
+        $mess =~ s/^.*Subroutine .*? redefined at .*?$//gmi;
         $mess =~ s/^.*Name ".*?" used only once: possible typo.*$//gm;
         $mess =~ s/^.*?syntax OK$//m;
-        $mess =~ s/\n\n/\n/sg;
         if ( $mess =~ /\S/ ) {
             $rose .= "<tr align='top'><td>$pm</td><td>\n";
             $rose .= "<pre>$mess</pre></td></tr>\n";
         }
     }
-    if ( $rose) {
+    $rose =~ s/\n+/\n/sg;
+    if ( $rose ) {
         print "<table border='1'>$rose</table\n";
     } else {
         print "No compile errors\n";
