@@ -2896,7 +2896,6 @@ sub getRenderedVersion {
 
     # $isList is tested and set by this loop and 'emitList' function
     $isList = 0;		# True when within a list
-    my $isPara = 0;		# True when within a paragraph
 
     foreach( split( /\n/, $text ) ) {
 
