@@ -1,0 +1,28 @@
+%META:TOPICINFO{author="guest" date="1101889773" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+!! %TOPIC%
+
+Description: Tests for inclusion of attachments
+
+---+ Existing attachment
+
+Enter the golden HTML surrounded by structured HTML comments:
+<!-- expected -->
+<h1><a name="heading_1"></a>heading 1</h1>
+<!-- /expected -->
+
+<!-- actual -->
+%INCLUDE{"%ATTACHURL%/attachment.html"}%
+<!-- /actual -->
+
+---+ Non-existant attachment
+<!-- expected -->
+<h1><a name="heading_1"></a>heading 1</h1>
+<!-- /expected -->
+
+<!-- actual -->
+%INCLUDE{"%ATTACHURL%/noexist"}%
+<!-- /actual -->
+
+%META:FILEATTACHMENT{name="attachment.html" attachment="attachment.html" attr="" comment="" date="1101889684" path="attachment.html" size="18" tmpFilename="/var/tmp/CGItemp34644" user="guest" version="1.1"}%
+
