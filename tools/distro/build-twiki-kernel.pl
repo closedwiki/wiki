@@ -243,8 +243,8 @@ Copyright 2004, 2005 Will Norris and Sven Dowideit.  All Rights Reserved.
    -outputdir [.]	where the generated TWikiKernel-BRANCH-DATE.tar.gz is placed
    -outfile		.
    -agent [$Config->{agent}]	LWP::UserAgent name (used for downloading some documentation from wiki pages on twiki.org)
-   -pdoc		run source code through Pdoc to produce html in twiki/doc/ (autodetects if Pdoc installed)
-   -gendocs		run source code through the TWiki:Plugins.PerlPodPlugin 
+   -pdoc		process source code using Pdoc to produce html in twiki/doc/ (autodetects if Pdoc installed)
+   -gendocs		process source code using the equivalent of TWiki:Plugins.PerlPodPlugin 
    -verbose
    -debug
    -help			this documentation
