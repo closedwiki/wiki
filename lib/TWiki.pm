@@ -91,7 +91,7 @@ use vars qw(
 
 # Internationalisation and regex setup:
 use vars qw(
-	$basicInitDone $useLocale $siteLocale $siteCharset $siteLang
+	$basicInitDone $useLocale $localeRegexes $siteLocale $siteCharset $siteLang
 
 	$upperNational $lowerNational 
 	$upperAlpha $lowerAlpha $mixedAlpha $mixedAlphaNum $lowerAlphaNum $numeric
@@ -389,7 +389,8 @@ sub initialize
 
 # =========================
 # Run-time locale setup - 'use locale' must be done in BEGIN block
-# for regexes and sorting to work properly.
+# for regexes and sorting to work properly, although regexes can still
+# work without this in 'list chars' mode (see setupRegexes routine).
 sub setupLocale {
  
     $siteCharset = 'ISO-8859-1';	# Defaults if locale mis-configured
@@ -440,8 +441,9 @@ sub setupLocale {
 sub setupRegexes {
 
     # Build up character class components for use in regexes.
-    # Depends on locale mode and Perl version.
-    if ( not $useLocale or $] < 5.006 ) {
+    # Depends on locale mode and Perl version, and finally on
+    # whether locale-based regexes are turned off.
+    if ( not $useLocale or $] < 5.006 or not $localeRegexes ) {
 	# No locales needed/working, or Perl 5.005_03 or lower, so just use
 	# any additional national characters defined in TWiki.cfg
 	$upperAlpha = "A-Z$upperNational";
@@ -470,7 +472,7 @@ sub setupRegexes {
     $abbrevRegex = qr/[$upperAlpha]{3,}/;
 
     # Simplistic email regex, e.g. for WebNotify processing - no i18n
-    # characters allowed, and only alphanumeric, '_' and '-' in domain part.
+    # characters allowed
     $emailAddrRegex = qr/([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/;
 
     # Single-character alpha-based regexes
@@ -2644,6 +2646,7 @@ sub getRenderedVersion {
             s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.(.+?)(\s+|\]\[)(.*?)\]\]/&mailtoLinkFull( $1, $2, $3, $5 )/ge;
 
 	    # Normal mailto:foo@example.com ('mailto:' part optional)
+	    # FIXME: Should be '?' after the 'mailto:'...
             s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &mailtoLink( $2, $3, $4 )/ge;
 
 # Make internal links
