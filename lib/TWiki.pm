@@ -867,7 +867,7 @@ sub makeTopicSummary
     $htext =~ s/%WIKITOOLNAME%/$wikiToolName/go; # resolve TWiki tool name
     $htext =~ s/%META:.*?%//go;        # Remove meta data variables
     $htext =~ s/[\%\[\]\*\|=_]/ /go;   # remove Wiki formatting chars & defuse %VARS%
-    $htext =~ s/\-\-\-+\+*/ /go;       # remove heading formatting
+    $htext =~ s/\-\-\-+\+*\s*\!*/ /go; # remove heading formatting
     $htext =~ s/\s+[\+\-]*/ /go;       # remove newlines and special chars
 
     # limit to 162 chars
