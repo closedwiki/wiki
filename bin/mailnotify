@@ -163,9 +163,10 @@ sub processWeb
     $text =~ s/%LASTDATE%/&TWiki::formatGmTime($prevLastmodify)/geo;
     $text = &TWiki::handleCommonTags( $text, $topic );
 
-    # change absolute addresses to relative ones
+    # change absolute addresses to relative ones & do some cleanup
     $text =~ s/(href=\")$scriptUrlPath/$1..\/../goi;
     $text =~ s/(action=\")$scriptUrlPath/$1..\/../goi;
+    $text =~ s/<nop>//goi;
 
     $debug && print "- Sending mail notification to: $notifylist\n";
 
