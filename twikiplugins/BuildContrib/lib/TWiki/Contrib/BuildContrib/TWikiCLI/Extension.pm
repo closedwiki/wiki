@@ -1,6 +1,6 @@
 package TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
 use TWiki::Contrib::DistributionContrib::DistributionFetcher;
-use TWiki; # TODO why do I have to use this? Why not just TWiki::Func?
+use TWiki;    # TODO why do I have to use this? Why not just TWiki::Func?
 use TWiki::Func;
 use strict;
 use Cwd;
@@ -42,18 +42,52 @@ sub cli_cvsupdate {
 
 }
 
+=pod
+
+sub cli_install_download 
+
+This just takes the zip file and does a Build::target_install on it.
+Note that this is actually the wrong thing, because it is different to 
+what happens if you do a install_dev, which is to run build.pl - as 
+I understand it people using BuildContrib will have packaged their PkgPluginBuild
+class into the build.pl.
+
+Have I misunderstood? Is it too late to change this?
+
+If I can be bothered, I'll do something like this....
+
+    print "Installing $extension\n\n";
+    my $libFrag = getLibFragmentForExtension($extension);
+
+     my $buildDotPlDir = $localCopy."/lib/TWiki/$libFrag/";
+     
+     if (-f $buildDotPlDir."/build.pl") {
+      print "Woah! Found it!!\n";
+     } else {
+      print "boo :( failed - no build.pl in $buildDotPlDir \n";
+     }
+
+
+=cut
+
 sub cli_install_download {
-   my ($extension) = @_;
-   
-   my $localFile = getFilenameForDistributionDownload($extension);
-   print "$localFile\n";
+ my ($extension) = @_;
+
+ print "Installing download $extension\n\n";
+
+ my $localFile = getFilenameForDistributionDownload($extension);
+ print "$localFile\n";
+
+# TODO : Find out why its called both Build and BuildContrib...
+ my $buildObj = new( $extension, "Build" );
+ $buildObj->manifest();
 
 }
 
 sub cli_install_dev {
  my ($extension) = @_;
 
- print "Installing $extension\n\n";
+ print "Installing dev $extension\n\n";
  my $libFrag = getLibFragmentForExtension($extension);
 
  my $outputLog;
@@ -82,10 +116,10 @@ sub cli_install_dev {
 sub cli_download {
  my ($extension) = @_;
 
-
- my $localFile = getFilenameForDistributionDownload($extension); 	
+ my $localFile = getFilenameForDistributionDownload($extension);
  my $localCopy =
-   TWiki::Contrib::DistributionContrib::DistributionFetcher::fetchLatestDistributionVersion ($extension, $extension.'.zip', $localFile);
+   TWiki::Contrib::DistributionContrib::DistributionFetcher::fetchLatestDistributionVersion(
+  $extension, $extension . '.zip', $localFile );
  if ( $localCopy eq "" ) {
   return "Couldn't get it";
  }
@@ -93,21 +127,6 @@ sub cli_download {
   return "okay - got it as $localCopy";
  }
 
-=pod
-    print "Installing $extension\n\n";
-    my $libFrag = getLibFragmentForExtension($extension);
-
-     my $buildDotPlDir = $localCopy."/lib/TWiki/$libFrag/";
-     
-     if (-f $buildDotPlDir."/build.pl") {
-      print "Woah! Found it!!\n";
-     } else {
-      print "boo :( failed - no build.pl in $buildDotPlDir \n";
-     }
-    } else {
-    
-    }
-=cut
 
 }
 
@@ -168,12 +187,12 @@ sub getLibFragmentForExtension {
 =cut
 
 sub getFilenameForDistributionDownload {
-    my ($distribution) = @_;
-	my $attachmentDir = getDistributionTopicDir();
-	my $distributionFile = $distribution.'.zip';
-	
-	my $attachmentPath = $attachmentDir.'/'.$distributionFile;
-	return $attachmentPath;
+ my ($distribution)   = @_;
+ my $attachmentDir    = getDistributionTopicDir();
+ my $distributionFile = $distribution . '.zip';
+
+ my $attachmentPath = $attachmentDir . '/' . $distributionFile;
+ return $attachmentPath;
 }
 
 =pod
@@ -181,10 +200,12 @@ Returns where downloaded distribution files should be stored
 =cut
 
 sub getDistributionTopicDir {
-    my $pubDir = TWiki::Func::getPubDir();
-    my $webTopicDir = TWiki::Contrib::DistributionContrib::DistributionFetcher::getDistributionTopic();
-  	$webTopicDir =~ s!\.!/!;
-	my $attachmentDir = $pubDir."/".$webTopicDir;
-    return $attachmentDir;	
+ my $pubDir      = TWiki::Func::getPubDir();
+ my $webTopicDir =
+   TWiki::Contrib::DistributionContrib::DistributionFetcher::getDistributionTopic
+   ();
+ $webTopicDir =~ s!\.!/!;
+ my $attachmentDir = $pubDir . "/" . $webTopicDir;
+ return $attachmentDir;
 }
 1;
