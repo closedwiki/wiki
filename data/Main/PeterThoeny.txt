@@ -1,7 +1,7 @@
 	* Name: Peter Thoeny, author of the TWikiWeb
 	* Work: Peter.Thoeny@WindRiver.com
 	* Home: Peter@Thoeny.com
-	* Location: San Jose, CA
+	* Location: SanJoseOffice
 	* Personal web: http://www.thoeny.com/peter/
 	* Local time: Current <A HREF="http://www.bsdi.com/date?America/Los_Angeles">time</A> in the Silicon Valley.
 
