@@ -1,0 +1,47 @@
+TWiki Plugins/Addons/Contrib build system
+
+---+ Summary of Contents
+---++ Build & Install Modules
+The Build.pm module can be used to create a really simple build process for your plugin, addon or contrib module, including build, test, install, release and upload targets. The advantage of this module is that it defines a standard build procedure for plugins, so you won't get file names wrong or get the list of files in the plugin topic wrong either. The easiest way to use the module is to copy the =build.pl= file from the =lib/TWiki/Contrib/BuildContrib/= into your own plugin subdirectory. Note that the test target assumes you are using Test::Unit. =Build.pm= has only been tested on Linux, but should work with cygwin OK.
+
+Note this is a _build_ module for use by developers, not an _install_ module for end users. The intent is that =Build.pm= will be extended to _auto-generate_ the installer for the plugin as part of the release process. We're not quite there yet, but watch this space!
+
+The build environment also requires =curl= if you want to use the =upload= target.
+
+Note that this topic and all the embedded POD documentation are generated using this build module.
+
+The build environment does _not_ assume the use of CVS, though it is highly recommended.
+---++ Test Fixtures
+The are a number of test fixtures in the repository that can be used for testing plugins with =Test::Unit=. The fixtures replace the =TWiki::Func=, =TWiki::Store= and TWiki modules, allowing a stand-alone unit test suite to be built for the plugin. The easiest way to use the fixtures is to copy the tests from an existing plugin that uses them - for example, CommentPlugin, ActionTrackerPlugin, WebDAVPlugin or FormQueryPlugin - and modify the tests appropriately for your plugin.
+
+The fixtures do not replace _all_ of the TWiki core functionality, just those pieces used by the plugins. If you find a piece is missing, and you need it, please feel free to extend the fixtures on condition that you check your improvements back in.
+---++ Support scripts
+=conformance_analyser.pl= is a perl script that analyses the conformance of plugins to the API and packaging standards. It is driven from the zips downloadable from twiki.org.
+
+---+ Detailed Documentation
+%$POD%
+
+---++ Settings
+	* Name of the perl package
+		* Set STUB = %$STUB%
+
+---++ Installation Instructions
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+%$MANIFEST%
+
+---++ Contrib Info
+
+|  Author: | TWiki:Main/CrawfordCurrie |
+|  Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
+|  License: | GPL |
+|  Dependencies: | %$DEPENDENCIES% |
+|  14/08/04 | Separated out from SharedCode module |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main/CrawfordCurrie - %$DATE%
