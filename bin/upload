@@ -377,14 +377,14 @@ sub main
 	}
 
 	# get user name
-	$fileUser = &TWiki::userToWikiName( $userName );
-
+	$fileUser = $userName;
+	
 	# get time stamp and file size of uploaded file:
 	my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp9,
 	    $mtime,$tmp11,$tmp12,$tmp13 ) = "";
 	( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$fileSize,$tmp9,
 	  $mtime,$tmp11,$tmp12,$tmp13 ) = stat $tmpFilename;
-	$fileDate = &TWiki::formatGmTime( $mtime );
+	$fileDate = $mtime;
 
 	if( $TWiki::doLogTopicUpload ) {
 	    # write log entry
@@ -398,7 +398,6 @@ sub main
     # FIXME more code probably that shouldn't run if no new attachment
 
     # update topic
-    $fileDate =~ s/ /&nbsp;/go;
     my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
 
     TWiki::Attach::updateAttachment( 
