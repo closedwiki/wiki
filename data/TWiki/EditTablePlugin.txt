@@ -1,0 +1,119 @@
+%META:TOPICINFO{author="PeterThoeny" date="1071217860" format="1.0" version="1.1"}%
+<h1>Edit Table Plugin</h1>
+
+This plugin allows you to edit TWiki tables using edit fields and drop down boxes. Tables have an *[&nbsp;Edit&nbsp;table&nbsp;]* button if preceeded by an =%<nop>EDITTABLE{...}%= variable. Each column can be a text field, a drop down box or a row number. Multiple tables per topic can be editable, but only one at a time canbe edited.
+
+---++ <nop>%TOPIC% Global Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Edit TWiki tables using edit fields and drop down boxes.
+
+	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+		* Set DEBUG = 0
+
+---++ Per Table Settings
+
+Add a =%<nop>EDITTABLE{...}%= variable just before an existing table to make it editable, or add the variable anywhere in a topic to start a new table. Parameters:
+
+| *Parameter* | *Comment* | *Default* |
+| =header= | Enable static header if ="on"=, e.g. disable editing of the first row;<br /> Else specify the header format of a new table like ="&#124;*Food*&#124;*Drink*&#124;"=. | (no header) |
+| =format= | The format of one row when editing the table. A cell can be a text input field, a drop down box, a fixed label, or a row number. Cell definitions: <table cellpadding="0" cellspacing="0"><tr><td valign="top">-Text input field (1 line): </td><td> =&#124; text, &lt;size&gt;, &lt;initial value&gt; &#124;= </td></tr><tr><td valign="top">-Textarea input field: </td><td> =&#124; textarea, &lt;rows&gt;x&lt;columns&gt;, &lt;initial value&gt; &#124;= </td></tr><tr><td valign="top">- Drop down box: </td><td> =&#124; select, &lt;size&gt;, &lt;option 1&gt;, &lt;option 2&gt;, etc &#124;= </td></tr><tr><td valign="top">- Fixed label: </td><td> =&#124; label, 0, &lt;label text&gt; &#124;= </td></tr><tr><td valign="top">- Row number: </td><td> =&#124; row, &lt;offset&gt; &#124;= </td></tr><tr><td valign="top">- Date: </td><td> =&#124; date, &lt;sizet&gt; &#124;= </td></tr></table>  | ="text, 16"= for all cells |
+| =changerows= | Rows can be added and removed if ="on"=;<br /> Rows can be added but not removed if ="add"= | ="on"= |
+| =include= | Other topic defining the EDITTABLE parameters. The first %<nop>EDITTABLE% in the topic is used. This is useful if you have many topics with the same table format and you want to update the format in one place. | (none) |
+| =helptopic= | Topic name containing help text shown below the table when editing a table. The %<nop>STARTINCLUDE% and %<nop>STOPINCLUDE% variables can be used in the topic to specify what is shown. | (no help text) |
+
+__Note:__ By default, variables in =&lt;initial value&gt;= (of text input field) and =&lt;label text&gt;= (of fixed label) get expanded when a new row is added. This can be used for example to add a timestamp to a label. You can escape characters if you do not want that:
+| *Text:* | *To Escape:* |
+| =$quot= | Double quote (="=). Alternatively write =\"= to escape it |
+| =$percnt= | Percent sign (=%=) |
+| =$dollar= | Dollar sign (=$=) |
+| =$nop= or =$nop()= | Is a "no operation" |
+
+---++ Examples
+
+Line before table: =%<nop>EDITTABLE{ header="|*Nr*|*Text field sandbox*|*Drop down sandbox*|*Timestamp*|" format="| row, -1 | text, 20, init | select, 1, one, two, three, four | label, 0, %<nop>SERVERTIME{"$day $mon $year $hour:$min"}% |" changerows="on" }%=
+%EDITTABLE{ header="|*Nr*|*Text field sandbox*|*Drop down sandbox*|*Timestamp*|" format="| row, -1 | text, 20, init | select, 1, one, two, three, four | label, 0, %SERVERTIME{"$day $mon $year $hour:$min"}% |" changerows="on" }%
+|*Nr*|*Text field sandbox*|*Drop down sandbox*|*Timestamp*|
+| 1 | hello table | one | 26 Jun 2002 12:30 |
+| 2 |  | two | 27 Jun 2002 12:40 |
+
+If this plugin is installed you will see an *[&nbsp;Edit&nbsp;table&nbsp;]* button above; when you click on it you get this form:
+
+<form>
+<table border="1" cellspacing="1" cellpadding="0">
+<tr><th bgcolor="#99CCCC"> Nr </th><th bgcolor="#99CCCC"> Text field sandbox </th><th bgcolor="#99CCCC"> Drop down sandbox </th><th bgcolor="#99CCCC"> Timestamp </th></tr>
+<tr><td  bgcolor="#FFFFFF"> 1<input type="hidden" name="etcell2x1" value="1" />  </td><td  bgcolor="#FFFFFF"> <input type="text" name="etcell2x2" size="20" value="hello table" />  </td><td  bgcolor="#FFFFFF"> <select name="etcell2x3" size="1"> <option selected="selected">one</option> <option>two</option> <option>three</option> <option>four</option> </select>  </td><td  bgcolor="#FFFFFF"> 26 Jun 2002 12:30<input type="hidden" name="etcell2x4" value="26 Jun 2002 12:30" />  </td></tr>
+<tr><td  bgcolor="#FFFF99"> 2<input type="hidden" name="etcell3x1" value="2" />  </td><td  bgcolor="#FFFF99"> <input type="text" name="etcell3x2" size="20" value="" />  </td><td  bgcolor="#FFFF99"> <select name="etcell3x3" size="1"> <option>one</option> <option selected="selected">two</option> <option>three</option> <option>four</option> </select>  </td><td  bgcolor="#FFFF99"> 27 Jun 2002 12:40<input type="hidden" name="etcell3x4" value="27 Jun 2002 12:40" />  </td></tr>
+</table>
+<input type="submit" name="etsave"	value="Save table" onClick="return(false);" />
+<input type="submit" name="etqsave"	value="Quietsave"  onClick="return(false);" />
+<input type="submit" name="etaddrow" value="Add row" onClick="return(false);" />
+<input type="submit" name="etdelrow" value="Delete last row" onClick="return(false);" />
+<input type="submit" name="etcancel" value="Cancel" onClick="return(false);" /> (demo only, these buttons do not work)
+</form>
+
+
+---++ Limitations and Known Issues
+
+	* This Plugin does not support TWiki table formatting like Multi-span cells (e.g. =| ... ||=) and cell justification (e.g. =|  centered  |	right |=).
+	* There is a performance issue when editing a large table, say, with more then 50 rows.
+	* The Plugin fails if the table is at the very end of the topic
+	  (without a new line) Always ensure there is a newline after the table
+	* Variables like =%<nop>ATTACHURL%= get expanded unless they are in a label.
+	* %RED% *Warning:* %ENDCOLOR% This plugin uses undocumented functions to read, save and lock a topic. The plugin will likely break in a future TWiki release.
+	* You cannot put two %<nop>EDITTABLE% statements on the same line
+	  in the source.
+	* You can include %-vars now in select values, by quoting them with
+	  &lt;nop&gt;, as in %&lt;nop&gt;X% for %X%, say for instance:
+	  <br /> =select,1,%&lt;nop&gt;X%,%&lt;nop&gt;Y%=
+	* =date= field type for the =format= parameter adds a button popping a javascript 
+	  calendar to choose the date
+	  on browsers supporting it.
+	  It uses the nice *Mishoo DHTML calendar* at http://dynarch.com/mishoo/calendar.epl,
+	  that should be included in Cairo release, or see TWiki:Codev/JavaScriptDatePickerForForm
+	  for installing it on Beijing Release
+
+---++ Plugin Installation Instructions
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* The plugin depends on the =viewauth= script to authenticate the user. As described in %TWIKIWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file. 
+	* Test if the plugin is correctly installed:
+		* Check above example if there is an *[&nbsp;Edit&nbsp;table&nbsp;]* button below the table in above example
+		* Click on *[&nbsp;Edit&nbsp;table&nbsp;]*, make changes and save the table
+
+
+---++ Plugin Info
+
+|  Plugin Author: | %TWIKIWEB%.PeterThoeny |
+|  Plugin Version: | 16 Oct 2003 |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  16 Oct 2003: | small typo fixed (garbled if ---<nop>+ header on top) |
+|  15 Oct 2003: | new date field type with javascript calendar - CN |
+|  14 Oct 2003: | docfix: the documentation page was an old one - CN |
+|  13 Oct 2003: | bugfix: %-vars in select were resetted to first on add/del row - CN |
+|  18 Sep 2003: | *incompatibility:* changed default of =changerows= to =on=<br /> support for %-vars, Quietsave for saving without notification, all other fixes in Dev topic integrated - CN |
+|  08 Nov 2002: | Prevent variable expansion in label text; added escape characters |
+|  27 Jun 2002: | New =helptopic= parameter |
+|  26 Jun 2002: | Support for variables in included EDITTABLE parameters; fixed problem with HTML in cells |
+|  21 May 2002: | Added fixed label format; new =changerows="add"= parameter |
+|  27 Apr 2002: | Fixed bug where text after a double quote in a cell disappeared |
+|  18 Apr 2002: | Fixed bug where table was breaking when pasting multiple lines into an edit field using Netscape on Unix |
+|  08 Apr 2002: | Check for change permission and edit lock of topic |
+|  05 Apr 2002: | Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- %TWIKIWEB%.PeterThoeny - 08 Nov 2002
