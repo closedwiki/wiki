@@ -323,6 +323,8 @@ sub searchWeb
 {
     my %params = @_;
     my $doInline =      $params{"inline"} || 0;
+    my $baseWeb =       $params{"baseweb"}   || $TWiki::webName;
+    my $baseTopic =     $params{"basetopic"} || $TWiki::topicName;
     my $emptySearch =   "something.Very/unLikelyTo+search-for;-)";
     my $theSearchVal =  $params{"search"} || $emptySearch;
     my $theWebName =    $params{"web"} || "";
@@ -801,7 +803,7 @@ sub searchWeb
                   $text =~ s/%TOPIC%/$topic/gos;
               }
               if( $doExpandVars ) {
-                  if( $topic eq $TWiki::topicName ) {
+                  if( "$thisWebName.$topic" eq "$baseWeb.$baseTopic" ) {
                       # primitive way to prevent recursion
                       $text =~ s/%SEARCH/%<nop>SEARCH/g;
                   }
@@ -948,7 +950,10 @@ sub searchWeb
                 if( ! $text ) {
                     ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
                 }
-
+                if( "$thisWebName.$topic" eq "$baseWeb.$baseTopic" ) {
+                    # primitive way to prevent recursion
+                    $text =~ s/%SEARCH/%<nop>SEARCH/g;
+                }
                 $text = &TWiki::handleCommonTags( $text, $topic, $thisWebName );
                 $text = &TWiki::Render::getRenderedVersion( $text, $thisWebName );
                 # FIXME: What about meta data rendering?

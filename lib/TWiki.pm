@@ -2145,7 +2145,7 @@ sub handleMetaSearch
 # =========================
 =pod
 
----++ sub handleSearchWeb (  $attributes  )
+---++ sub handleSearchWeb ( $attributes, $baseWeb, $baseTopic )
 
 Not yet documented.
 
@@ -2153,10 +2153,12 @@ Not yet documented.
 
 sub handleSearchWeb
 {
-    my( $attributes ) = @_;
+    my( $attributes, $baseWeb, $baseTopic ) = @_;
 
     return &TWiki::Search::searchWeb(
         "inline"        => "1",
+        "baseweb"       => $baseWeb,
+        "basetopic"     => $baseTopic,
         "search"        => extractNameValuePair( $attributes ) || extractNameValuePair( $attributes, "search" ),
         "web"           => extractNameValuePair( $attributes, "web" ),
         "topic"         => extractNameValuePair( $attributes, "topic" ),
@@ -2937,7 +2939,7 @@ sub handleInternalTags
     $_[0] =~ s/%SECTION{(.*?)}%//g;
     $_[0] =~ s/%ENDSECTION%//g;
     my $ok = 16; # SEARCH may be nested up to 16 times
-    TRY: while( $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/ge ) {
+    TRY: while( $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1,$_[2],$_[1])/ge ) {
         last TRY unless( --$ok );
     }
     $_[0] =~ s/%METASEARCH{(.*?)}%/&handleMetaSearch($1)/ge;
