@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999502042" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="MikeMannix" date="999567701" format="1.0" version="1.7"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki User Authentication
@@ -45,7 +45,9 @@ This points ==<nop>WikiUser== to the %WIKITOOLNAME%.%MAINWEB% web, where user re
 
 ---+++ Changing Passwords
 
-%INCLUDE{"ChangingPasswords"}%
+%INCLUDE{"ChangePassword"}%
+
+%INCLUDE{"ResetPassword"}%
 
 -- PeterThoeny - 16 Mar 2001 <br>
 -- MikeMannix - 29 Aug 2001 
