@@ -870,9 +870,7 @@ sub getRenderedVersion
         # are inserted at the head of the queue of lines, in the order
         # they would appear in the text.
         if ( $line =~ /\n/ ) {
-	    foreach my $xtra ( reverse split( /\n/, $line )) {
-		push( @lines, $xtra );
-	    }
+            push( @lines, split( /\n/, $line ));
             # need to do full processing on these new lines, so start again
             next;
         }
@@ -1227,6 +1225,9 @@ sub makeTopicSummary
     $htext =~ s/([\s\(])(?=\S)/$1<nop>/g;
     $htext =~ s/([\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/$1<nop>$2/go;
     $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
+
+    $htext =~ s/^\s+//;    # remove leading whitespace
+    $htext =~ s/\s+$//;    # remove trailing whitespace
 
     return $htext;
 }
