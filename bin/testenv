@@ -441,12 +441,12 @@ print "</td></tr>\n";
 $val = $ENV{"REQUEST_URI"} || '';
 if( not $val ) {			# REQUEST_URI not set by IIS
     print "<tr><th></th><td>";
-    print "This web server does not set </b>REQUEST_URI</b>, so it's not
+    print "This web server does not set <b>REQUEST_URI</b>, so it's not
     possible to check the correctness of this setting.";
     print "</td></tr>\n";
 } elsif ( $val !~ /^$scriptUrlPath/ ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "This does not match </b>REQUEST_URI</b>";
+    print "This does not match <b>REQUEST_URI</b>";
     print "</td></tr>\n";
 }
 
