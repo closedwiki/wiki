@@ -201,18 +201,17 @@ sub initialize
     $includingTopicName = $topicName;
     $includingWebName = $webName;
 
-    # initialize $urlHost and $scriptUrlPath 
-    if( ( $theUrl ) && ( $theUrl =~ /^([^\:]*\:\/\/[^\/]*)(.*)\/.*$/ ) && ( $2 ) ) {
+    # initialize $urlHost
+    if( ( $theUrl ) && ( $theUrl =~ /^([^\:]*\:\/\/[^\/]*)/ ) && ( $1 ) ) {
         $urlHost = $1;
-        $scriptUrlPath = $2;
-        if( $doRemovePortNumber )
-        {
+        if( $doRemovePortNumber ) {
             $urlHost =~ s/\:[0-9]+$//;
         }
     } else {
         $urlHost = $defaultUrlHost;
-        # $scriptUrlPath does not change
     }
+    # PTh 15 Jul 2001: Removed init of $scriptUrlPath based on $theUrl because
+    # $theUrl has incorrect URI after failed authentication
 
     # initialize preferences
     &TWiki::Prefs::initializePrefs( $wikiUserName, $webName );
