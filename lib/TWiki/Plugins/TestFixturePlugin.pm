@@ -55,6 +55,7 @@ sub _parse {
     $text =~ s/\r//g;
     $text =~ s/\t/   /g;
     $text =~ s/[^ -~\n]/./g;
+    $text =~ s/<nop>//g;
 
     my @list = ();
     my $opt;
@@ -88,8 +89,20 @@ sub _compareExpectedWithActual {
     my ( $expected, $actual, $topic, $web ) = @_;
     my $errors = "";
 
-    die "Numbers of actual ($#$actual) and expected ($#$expected) blocks don't match"
-      unless $#$actual == $#$expected;
+    unless( $#$actual == $#$expected ) {
+        my $mess = "Numbers of actual ($#$actual) and expected ($#$expected) blocks don't match<table><th>Expected</th><th>Actual</th></tr>";
+        for my $i ( 0..$#$actual ) {
+            my $e = $expected->[$i];
+            my $et = $e->{text};
+            my $at = $actual->[$i]->{text};
+            $et =~ s/&/&amp;/g;
+            $et =~ s/</&lt;/g;
+            $at =~ s/&/&amp;/g;
+            $at =~ s/</&lt;/g;
+            $mess .= "<tr><td>$et</td><td>$at</td></tr>";
+        }
+        return "$mess</table>";;
+    }
 
     for my $i ( 0..$#$actual ) {
         my $e = $expected->[$i];
