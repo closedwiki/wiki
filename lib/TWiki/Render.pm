@@ -26,7 +26,7 @@ package TWiki::Render;
 
 use strict;
 use Assert;
-use TWiki::RenderPlurals;
+use TWiki::Plurals;
 use TWiki::Attach;
 
 BEGIN {
@@ -436,32 +436,28 @@ sub internalLink {
 
 # TODO: this should be overridable by plugins.
 sub _renderWikiWord {
-  my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb) = @_;
-  my $topicExists = $this->store()->topicExists( $theWeb, $theTopic );
+    my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb) = @_;
+    my $topicExists = $this->store()->topicExists( $theWeb, $theTopic );
 
-
-  
-  if (( $theTopic =~ /s$/ ) and not ($topicExists)) {
-    ($topicExists, $theTopic) = TWiki::RenderPlurals::singularForm($this, $topicExists, $theTopic, $theWeb);
-  }
-
-#  if ($topicExists == 0) {
-#      if ($theTopic ne 'CompleteAndUtterNothing' && $theTopic ne 'WikiSyntax') { 
-#     use Data::Dumper;
-#      shift;
-#      die Dumper(\@_);
-#    }
-#  }
-
+    unless( $topicExists ) {
+        # topic not found - try to singularise
+        my $singular = TWiki::Plurals::singularForm($theWeb, $theTopic);
+        if( $singular ) {
+            $topicExists = $this->store()->topicExists( $theWeb, $singular );
+            $theTopic = $singular if $topicExists;
+        }
+    }
 
     my $ans = "";
     #NOTE: Yes, this hierarchy of ifs could be flattened but doing so makes
     # the logic much harder to read.
     if( $topicExists) {
-        $ans = _renderExistingWikiWord($this, $theWeb, $theTopic, $theLinkText, $theAnchor);
+        $ans = _renderExistingWikiWord($this, $theWeb,
+                                       $theTopic, $theLinkText, $theAnchor);
     } else {
          if( $doLinkToMissingPages ) {
-           $ans = _renderNonExistingWikiWord($this, $theWeb, $theTopic, $theLinkText, $theAnchor);
+           $ans = _renderNonExistingWikiWord($this, $theWeb, $theTopic,
+                                             $theLinkText, $theAnchor);
          } else {
            if( $doKeepWeb ) {
               $ans = "$theWeb.$theLinkText";

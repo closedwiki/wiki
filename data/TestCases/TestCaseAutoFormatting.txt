@@ -244,6 +244,13 @@ Note: noautolink tags will still be there, because they are not removed until im
 <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/TWikiUsers">TWikiUsers</a>
 <p />
 <span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">CompleteAndUtterNothing</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
+<p />
+<a class="twikiLink" href="%SCRIPTURL%/view/TestCases/LinkBox">LinkBox</a>
+<a class="twikiLink" href="%SCRIPTURL%/view/TestCases/LinkBox">LinkBoxs</a>
+<a class="twikiLink" href="%SCRIPTURL%/view/TestCases/LinkBoxy">LinkBoxies</a>
+<a class="twikiLink" href="%SCRIPTURL%/view/TestCases/LinkBoxess">LinkBoxess</a>
+<a class="twikiLink" href="%SCRIPTURL%/view/TestCases/LinkBoxess">LinkBoxesses</a>
+<a class="twikiLink" href="%SCRIPTURL%/view/TestCases/LinkBox">LinkBoxes</a>
 <!-- /expected -->
 </td><td>
 <!-- actual -->
@@ -252,6 +259,13 @@ WebPreferences
 %MAINWEB%.TWikiUsers
 
 CompleteAndUtterNothing
+
+LinkBox
+LinkBoxs
+LinkBoxies
+LinkBoxess
+LinkBoxesses
+LinkBoxes
 <!-- /actual -->
 </td></tr>
 <tr><td> Square Brackets</td><td>
