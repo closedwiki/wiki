@@ -30,7 +30,6 @@ use vars qw(
   $web $topic $user $installWeb $VERSION $pluginName
   $debug $cgiQuery %showStatusFilter
   %listingFormat
-  $fdcsFormat $fscsFormat $fscdFormat $fdcdFormat
 );
 
 BEGIN {
@@ -95,6 +94,9 @@ sub handleDiffWiki {
 	$listingFormat{'FSCD'} = getParam( $param, "fscdFormat" )
 	 || '| $relativeFile | FSCDCALLBACK | FSCDDIST |';
 
+	$listingFormat{'FSCM'} = getParam( $param, "fscmFormat" )
+	 || '| $relativeFile | FSCM | $locations |';
+
 	$listingFormat{'FDCD'} = getParam( $param, "fdcdFormat" )
 	    || '| ($relativeFile name not recognised, and no content match)  | FDCD | |';
 
@@ -110,7 +112,7 @@ sub handleDiffWiki {
 
 	setStatusFilter(
 		getParam( $param, "statusFilter" )
-		  || "FSCS, FSCD, FDCS, FDCD" #Filename Same/Different, Content Same/Different
+		  || "FSCS, FSCD, FDCS, FDCM, FDCD" #Filename Same/Different, Content Same/Matched/Different
 	);
 
 	writeDebug("handling...");
@@ -437,6 +439,8 @@ sub listFiles {
 		  grep { !/$compareToDistribution/ }
 		  @allDistributionsForFilename;    # don't match self
 
+        my @unfilteredDistributionsWithDigest = @distributionsWithDigest; 
+
 		if ( $#distributions > -1 ) {      # restrict to specified distributions
 			$debugInfo .=
 			  "|*<LI> Pre-filter results: filename: "
@@ -455,6 +459,7 @@ sub listFiles {
 		  . join( "<LI>", @distributionsWithDigest )
 		  ;    #CodeSmell: why not need the filename dists?
 
+        my $numberOfUnfilteredDistributionsWithDigest = $#unfilteredDistributionsWithDigest +1;
 		my $numberOfDigestMatches   = $#distributionsWithDigest + 1;
 		my $numberOfFilenameMatches = $#allDistributionsForFilename + 1;
 
@@ -480,9 +485,17 @@ sub listFiles {
 				  ;                             # so say where
 			}
 			else {    # filename occurred, but our content different
+			 if ($numberOfUnfilteredDistributionsWithDigest > 0) {  # our content different, but was the same in a different dist.
+                $ans .= 
+                  foundFile( $debugInfo, "FSCM", $relativeFile, 
+                  "<LI>". join( "<LI>", @unfilteredDistributionsWithDigest ),  #CodeSmell: unregular use
+					$comparedDistribution, @unfilteredDistributionsWithDigest );
+			 } else { # our content unrecognised
 				$ans .=
 				  foundFile( $debugInfo, "FSCD", $relativeFile, $locations,
 					$comparedDistribution, @allDistributionsForFilename );
+			 
+			 }
 			}
 		}
 		else {        # this is a filename that has never occurred in a distro
@@ -621,7 +634,7 @@ sub setStatusFilter {
 		$showStatusFilter{$f} = 1;
 	}
 	if ( $statusFilter eq 'all' ) {
-		foreach my $f (qw(FSCS FSCD FDCS FDCD)) {
+		foreach my $f (qw(FSCS FSCD FSCM FDCS FDCD)) {
 			$showStatusFilter{$f} = 1;
 		}
 	}
