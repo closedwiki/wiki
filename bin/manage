@@ -18,11 +18,12 @@
 # The manage script is used to manage some actions like creating
 # a new web.
 
+# Set library paths in @INC, at compile time
+BEGIN { require './setlib.cfg'; }
+
 use CGI::Carp qw( fatalsToBrowser );
 use CGI;
 use File::Copy;
-use lib ( '.' );
-use lib ( '../lib' );
 use TWiki;
 
 use strict;

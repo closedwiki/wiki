@@ -23,14 +23,14 @@
 # The script should be called by a cron job, it is recommended to
 # call it once a day.
 
+# Set library paths in @INC, at compile time
+BEGIN { require './setlib.cfg'; }
+
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use File::Copy qw(copy);
 use IO::File;
 
-
-use lib ( '.' );
-use lib ( '../lib' );
 use TWiki;
 
 use strict;

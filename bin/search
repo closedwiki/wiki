@@ -20,10 +20,11 @@
 #                          hardcoded flags (except the inline flag) from
 #                          the searchWikiWeb call, added new params.
 
+# Set library paths in @INC, at compile time
+BEGIN { require './setlib.cfg'; }
+
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use lib ( '.' );
-use lib ( '../lib' );
 use TWiki;
 
 use strict;

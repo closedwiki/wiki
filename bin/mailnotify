@@ -15,8 +15,9 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-use lib ( '.' );
-use lib ( '../lib' );
+# Set library paths in @INC, at compile time
+BEGIN { require './setlib.cfg'; }
+
 use TWiki;
 use TWiki::Net;
 
