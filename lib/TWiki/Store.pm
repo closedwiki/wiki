@@ -447,7 +447,13 @@ sub saveTopic
     my( $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave, $forceDate ) = @_;
     my $attachment = "";
     my $comment = "";
-    &TWiki::Plugins::beforeSaveHandler( $text, $topic, $web, $meta );  # $meta is undocumented
+
+    # FIXME: Inefficient code that hides meta data from Plugin callback
+    $text = $meta->write( $text );  # add meta data for Plugin callback
+    TWiki::Plugins::beforeSaveHandler( $text, $topic, $web );
+    $meta = TWiki::Meta->remove();  # remove all meta data
+    $text = $meta->read( $text );   # restore meta data
+
     my$error = saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $comment, $forceDate );
     return $error;
 }
