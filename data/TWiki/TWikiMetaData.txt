@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092563687" format="1.0" version="1.16"}%
+%META:TOPICINFO{author="MarioFrasca" date="1111002933" format="1.0" version="1.17"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -138,7 +138,7 @@ Current support covers:
 | *Variable usage:*	| *Comment:*  |
 | =%<nop>META{"form"}%= | Show form data, see TWikiForms. |
 | =%<nop>META{"formfield"}%= | Show form field value. Parameter: ==name="field_name"==. Example:%BR% =%<nop>META{ "formfield" name="TopicClassification" }%= |
-| =%<nop>META{"attachments"}%= | Show attachments, except for hidden ones. Options: <br > \
+| =%<nop>META{"attachments"}%= | Show attachments, except for hidden ones. Options: <br /> \
 	 ==all="on"==: Show all attachments, including hidden ones. |
 | =%<nop>META{"moved"}%= | Details of any topic moves. |
 | =%<nop>META{"parent"}%= | Show topic parent. Options: <br /> \

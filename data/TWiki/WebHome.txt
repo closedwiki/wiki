@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092556616" format="1.0" version="1.85"}%
+%META:TOPICINFO{author="MarioFrasca" date="1110700732" format="1.0" version="1.2"}%
 <table><tr><td valign="top">
 *Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
@@ -108,5 +108,5 @@ _Documentation for webmasters, system administrators, project managers, team lea
 	* TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
 	* This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
 	* Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]] <br />
-	  <img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/horzTWikiPowered.gif">
+	  <img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/horzTWikiPowered.gif" alt="" />
 
