@@ -298,7 +298,7 @@ sub changeRefTo
            # Fairly inefficient, time will tell if this should be changed.
            foreach my $topic ( @topics ) {
               if( $topic ne $oldTopic ) {
-                  s/($preTopic)\Q$topic\E($postTopic)/$1$oldWeb.$topic$2/g;
+                  s/($preTopic)\Q$topic\E(?=$postTopic)/$1$oldWeb.$topic/g;
               }
            }
        }
