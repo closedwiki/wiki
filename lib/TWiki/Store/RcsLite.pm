@@ -306,7 +306,7 @@ sub _process
           if( /^([0-9]+)\.([0-9]+)\s+date\s+(\d\d(\d\d)?(\.\d\d){5}?);$/o ) {
              $where = "delta.author";
              $num = $2;
-             $date[$num] = $3;
+             $date[$num] = TWiki::Store::RcsFile::_rcsDateTimeToEpoch ($3 );
           }
        } elsif( $where eq "delta.author" ) {
           if( /^author\s+(.*);$/o ) {
@@ -343,7 +343,7 @@ sub _process
     
     $self->{"head"} = $headNum;
     $self->{"author"} = \@author;
-    $self->{"date"} = \@date;
+    $self->{"date"} = \@date;   #TODO: i hitnk i need to make this into epochSecs
     $self->{"log"} = \@log;
     $self->{"delta"} = \@text;
     $self->{"status"} = $dnum;
@@ -395,7 +395,7 @@ sub _write
     # delta
     for( my $i=$self->numRevisions(); $i>0; $i--) {
        printf $file "\n1.%d\ndate\t%s;\tauthor %s;\tstate Exp;\nbranches;\n", 
-              ($i, ${$self->{date}}[$i], $self->author($i) );
+              ($i, TWiki::Store::RcsFile::_epochToRcsDateTime( ${$self->{date}}[$i] ), $self->author($i) );
        if( $i == 1 ) {
            print $file "next\t;\n";
        } else {
@@ -596,7 +596,7 @@ sub addRevision
     } else {
         $date = time();
     }
-    $date = TWiki::Store::RcsFile::_epochToRcsDateTime( $date );
+#    $date = TWiki::Store::RcsFile::_epochToRcsDateTime( $date );
 
 
     _trace("::addRevision date now=\"$date\"" );
