@@ -40,7 +40,8 @@
 
 
 # =========================
-package TWiki::Plugins::UserCookiePlugin; 	# change the package name!!!
+#package TWiki::Plugins::UserCookiePlugin; 	# change the package name!!!
+package TWiki::Plugins::SessionPlugin; 	# change the package name!!!
 
 # =========================
 use vars qw(
@@ -141,19 +142,16 @@ sub DISABLE_endRenderingHandler
 sub initializeUserHandler
 {
 #    &TWiki::Func::writeDebug( "- initializeUserHandler( $web.$topic )" );
+#	return "SvenDowideit";
     my (@rawCookies) = split (/; /,$ENV{'HTTP_COOKIE'});
 #    my (@rawCookies) = split (/; / , $_[0]);
     my (%cookies);
     my ($key, $val);
-    
-    my ($cookieName) = &TWiki::Func::getWikiToolName();
-    $cookieName = $cookieName."UserName";
-    
     foreach (@rawCookies)
     {
-#      &TWiki::Func::writeDebug( "cookie ($_)");
+      &TWiki::Func::writeDebug( "cookie ($_)");
       ($key, $val) = split(/=/,$_);
-      if ( ($key =~ /\Q$cookieName\E/i) && (length($val) > 0))
+      if ( ($key =~ /username/i) && (length($val) > 0))
       {
          return $val;
       }
@@ -164,15 +162,11 @@ sub initializeUserHandler
 
 sub registrationHandler
 {
-    my ($date) = "09/12/2011 00:00:00 GMT";
- 
-    my ($domain) = &TWiki::Func::getUrlHost();
-    $domain =~ s/http:\/\/(.*)/$1/i;     # this may need to cater for https:// etc...
-
-    my ($cookieName) = &TWiki::Func::getWikiToolName();
-    $cookieName = $cookieName."UserName";
-
-    print "Set-Cookie: $cookieName=$_[1]; expires=$date; path=/; domain=$domain;\n";
+#my ($date) = "+3M";
+#my ($date) = "09/12/2002 00:00:00 GMT";
+my ($date) = "Fri, 08-Sep-2010 19:48:23 GMT";
+#&TWiki::Func::writeDebug( "- registrationHandler( $_[1] , $_[2] , $_[3] )" );
+print "Set-Cookie: UserName=$_[1]; expires=$date; path=/; domain=hsa.com.au;\n";
 }
 
 1;
