@@ -21,9 +21,9 @@ use Fcntl;
 # unlike DBM it affords record locking.
 package WebDAVPlugin::Permissions;
 
-my $groupDefRE = qr/^\s+\*\s+Set\s+GROUP\s+=\s+(.+?)\s*$/;
-my $accessWebRE = qr/^\s+\*\s+Set\s+(ALLOW|DENY)WEB([A-Z]+?)\s+=\s+(.+?)\s*$/;
-my $accessTopicRE = qr/^\s+\*\s+Set\s+(ALLOW|DENY)TOPIC([A-Z]+?)\s+=\s+(.+?)\s*$/;
+my $setGroupRE = qr/^\s+\*\s+Set\s+GROUP\s+=\s+(.+?)\s*$/;
+my $setWebRE = qr/^\s+\*\s+Set\s+(ALLOW|DENY)WEB([A-Z]+?)\s+=\s+(.+?)\s*$/;
+my $setTopicRE = qr/^\s+\*\s+Set\s+(ALLOW|DENY)TOPIC([A-Z]+?)\s+=\s+(.+?)\s*$/;
 
 # Constructor for a DB. Does not connect to the DB until actually required.
 sub new {
@@ -62,7 +62,7 @@ sub _processWeb {
 sub _processTopic {
   my ( $this, $web, $topic ) = @_;
 
-    my ( $text, $meta ) = TWiki::Func::readTopic( $web, $topic );
+    my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
     $this->processText( $web, $topic, $text );
 }
 
@@ -72,13 +72,13 @@ sub processText {
   my ( $this, $web, $topic, $text ) = @_;
 
   my @lines =
-    grep { /($groupDefRE)|($accessWebRE)|($accessTopicRE)/ }
+    grep { /($setGroupRE)|($setWebRE)|($setTopicRE)/ }
       split /[\r\n]+/, $text;
 
   # If this is a group def topic, extract the group
   if ( $web eq TWiki::Func::getMainWebname() && $topic =~ /Group$/ ) {
-    my ($firstLine) = grep { /$groupDefRE/ } @lines;
-    if ($firstLine =~ m/$groupDefRE/o ) {
+    my ( $firstLine ) = grep { /$setGroupRE/ } @lines;
+    if ( $firstLine && $firstLine =~ m/$setGroupRE/o ) {
       my @users;
       foreach my $who ( split( /[,\s]+/, $1 )) {
         $who = TWiki::Func::wikiToUserName($who) || $who;
@@ -102,18 +102,18 @@ sub processText {
     # first handle (ALLOW|DENY)WEB... (only if it's a XXXPreference topic)
 	$this->_clearPath( $path );
     map {
-      /$accessWebRE/;
+      /$setWebRE/;
       $this->_defineAccessRights( $path, $1, $2, $3 )
-    } grep { /$accessWebRE/ } @lines;
+    } grep { /$setWebRE/ } @lines;
   }
 
   $path = "/$web/$topic";
   # then handle (ALLOW|DENY)TOPIC...
   $this->_clearPath( $path );
   map  {
-    /$accessTopicRE/;
+    /$setTopicRE/;
     $this->_defineAccessRights( $path, $1, $2, $3 )
-  } grep { /$accessTopicRE/ } @lines;
+  } grep { /$setTopicRE/ } @lines;
 }
 
 # Define acces rights for a list of wikinames and groups.

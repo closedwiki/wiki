@@ -94,11 +94,6 @@
 	close(PF);
 	$this->{file_list} = join(" ", @files);
 	
-	chdir("$basedir/".$this->{plugin_libdir});
-	$this->{test_files} = `find test -name '*.pm' -print` . " " .
-	  `find test -name '*.pl' -print` . " " .
-		`find test -name '*.c' -print`;
-	
 	return bless( $this, $class );
   }
 
@@ -199,11 +194,18 @@
 	my $plugin = $this->{project};
 	$this->cd("$basedir");
 	$this->rm("$plugin.zip");
+	foreach my $file (split/\s+/, $this->{file_list}) {
+	  if (! -e $file) {
+		die "$file does not exist - cannot build release\n";
+	  }
+	}
 	$this->sys_action("zip $plugin.zip ".$this->{file_list});
   }
+
   sub target_install {
 	my $this = shift;
 	$this->build("build");
+
 	my $twiki = $ENV{TWIKI_HOME};
 	die "TWIKI_HOME not set" unless $twiki;
 	foreach my $file (split(/\s+/, $this->{file_list})) {
@@ -223,19 +225,19 @@
 
   sub target_tests_zip {
 	my $this = shift;
-	$this->build("test");
 	
 	$this->cd("$basedir/".$this->{plugin_libdir});
 	$this->rm("test.zip");
-	$this->sys_action("zip -r test.zip ".$this->{test_files});
+	$this->sys_action("zip -r test.zip test -x '*~' -x '*/CVS*' -x '*/testdata*' -x \*/accesscheck");
   }
 
   no strict "refs";
   sub build {
 	my $this = shift;
 	my $target = shift;
-	print "Build $target\n";
+	print "Building $target\n";
 	eval "\$this->target_$target()";
+	print "Built $target\n";
   }
   use strict "refs";
 }

@@ -1,7 +1,5 @@
 ---+ <nop>WebDAV for TWiki
 
-Very _very_ early access release of <nop>WebDAV for TWiki. This topic has not been written yet, and any words you may think you are reading are purely a figment of your own imagination.
-
 <nop>WebDAV stands for "Web-based Distributed Authoring and Versioning". It is a set of extensions to the HTTP protocol which allows users to collaboratively edit and manage files on remote web servers.
 
 TWiki integration with <nop>WebDAV means that users can edit attachments on topics by dragging and dropping the attachment from the TWiki topic into an appropriate <nop>WebDAV enabled client program, such as Microsoft&trade; Word&trade; or KWrite. Given the URL of the attachment, they can also be opened directly from applications i.e. the integration publishes TWiki attachment files in a web folder. Saving back the attachment automatically creates a new version. By opening a Web Folder on the attachment directory, users can drag and drop attachments into the topic, and they will automatically be versioned and added to the topic attachment table.
@@ -16,7 +14,7 @@ To edit the attachments for a topic, open the topic in the TWiki. Open the appli
 
 At present you can only save back to the file you edited, or to another location (either a web folder or local folder).
 
-Log messages may be generated in any or all of error_log, access_log or /tmp/vsnlog (debugging).
+Log messages may be generated in the apache error_log.
 
 ---++ Add-On Installation Instructions
 
@@ -60,6 +58,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 	| ==lib/twiki_dav/PROT.c== | twiki_dav module |
 	| ==lib/twiki_dav/PROT.h== | twiki_dav module |
     | ==lib/twiki_dav/README== | twiki_dav document |
+	| ==lib/TWiki/Plugins/%TOPIC%/Build.pm== | Build and uninstall script |
 	| ==lib/TWiki/Plugins/%TOPIC%/build.pl== | Build and uninstall script |
 	| ==lib/TWiki/Plugins/%TOPIC%/Permissions.pm== | Plugin module |
 	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin module |
