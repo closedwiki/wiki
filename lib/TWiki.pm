@@ -714,7 +714,6 @@ sub convertUtf8URLtoSiteCharset {
 		    # - then convert into site charset from internal UTF-8,
 		    # inserting \x{NNNN} for characters that can't be converted
                     $fullTopicName = Encode::encode( $charEncoding, $fullTopicName, &FB_PERLQQ );
-		    }
 		    ##writeDebug "Encode result is $fullTopicName";
 		}
 
