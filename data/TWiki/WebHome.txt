@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071558360" format="1.0" version="1.79"}%
+%META:TOPICINFO{author="PeterThoeny" date="1074420459" format="1.0" version="1.80"}%
 <table><tr><td valign="top">
 *Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
@@ -8,7 +8,7 @@ This is the place to learn about TWiki features, find where to download it, and 
 The official TWiki<sup>TM</sup> <br>site is http://twiki.org/
 </td></tr>
 </table>
-
+%TOC{depth="2"}%
 <table><tr valign="top"><td>
 #UsersGuide
 ---++ TWiki User's Guide
@@ -23,6 +23,7 @@ _Documentation for TWiki users._
 		* TWikiTutorial: A compact, 20-minute TWiki primer
 		* TWikiSite: Instant overview - first, there was Wiki
 		* TWikiTopics: Customize, rename, move, or delete TWiki topics
+		* SearchHelp: Tips and help on search
 		* GoodStyle: Working tips for an open collaboration environment
 		* TWikiShorthand: All of the TWiki shorthand basics
 		* TextFormattingRules: Scan all TWiki text formatting rules on one page
@@ -48,6 +49,7 @@ _Documentation for TWiki users._
 <blockquote>
 %PLUGINDESCRIPTIONS%
 </blockquote>
+
 
 #ReferenceManual
 ---++ TWiki Reference Manual
