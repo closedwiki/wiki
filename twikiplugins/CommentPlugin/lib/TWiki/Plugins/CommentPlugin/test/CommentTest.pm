@@ -4,6 +4,9 @@ package CommentTest;
 
 use base qw(BaseFixture);
 
+use TWiki::Store;
+use TWiki::Plugins::CairoCompatibilityModule;
+
 use TWiki::Plugins::CommentPlugin;
 use TWiki::Plugins::CommentPlugin::Comment;
 use CGI;
