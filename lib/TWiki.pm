@@ -1152,7 +1152,7 @@ sub handleWebAndTopicList
 
     my $format = extractNameValuePair( $theAttr );
     $format = extractNameValuePair( $theAttr, "format" ) if( ! $format );
-    $format = "   * "   if( ! $format );
+    my $separator = extractNameValuePair( $theAttr, "separator" ) || "\n";
     $format .= '$name' if( ! ( $format =~ /\$name/ ) );
     my $web = extractNameValuePair( $theAttr, "web" ) || "";
 
@@ -1173,9 +1173,9 @@ sub handleWebAndTopicList
         $line = $format;
         $line =~ s/\$web/$web/goi;
         $line =~ s/\$name/$item/goi;
-        $text .= "$line\n";
+        $text .= "$line$separator";
     }
-    $text =~ s/\n$//os;  # remove last new line
+    $text =~ s/$separator$//s;  # remove last separator
     return $text;
 }
 
