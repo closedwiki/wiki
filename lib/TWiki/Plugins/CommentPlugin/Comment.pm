@@ -274,12 +274,14 @@ sub _buildNewTopic {
         } else {
             # Position relative to index'th comment
             my $idx = 0;
-            $text =~ s/(%COMMENT({.*?})?%.*\n)/&_nth($1,\$idx,$position,$index,$output)/eg;
+            unless( $text =~ s/(%COMMENT({.*?})?%.*\n)/&_nth($1,\$idx,$position,$index,$output)/eg ) {
+                # If there was a problem adding relative to the comment,
+                # add to the end of the topic
+                $text .= $output;
+            };
         }
     }
-    $text =~ s/ {3}/\t/go;
     $text = $premeta . $text . $postmeta;
-
 	return TWiki::Func::saveTopicText( $web, $topic, $text, 1, $silent );
 }
 
