@@ -1100,7 +1100,6 @@ Defuses TML.
 $opts:
    * showvar - keeps !%VARS%
    * nohead - strips ---+ headings at the top of the text
-   * nonop - doesn't add &lt;nop&gt; before every word
 
 =cut
 
@@ -1134,8 +1133,24 @@ sub TML2PlainText {
     $text =~ s/[\%\[\]\*\|=_\&\<\>\$]/ /g;              # remove Wiki formatting chars & defuse %VARS%
     $text =~ s/\-\-\-+\+*\s*\!*/ /g; # remove heading formatting
     $text =~ s/\s+[-\+]*/ /g;        # remove newlines and special chars
-    $text =~ s/^\s+/ /;              # remove leading spaces
-    $text =~ s/\s+$/ /;              # remove trailing spaces
+    $text =~ s/^\s+//;    # remove leading whitespace
+    $text =~ s/\s+$//;    # remove trailing whitespace
+
+    return $text;
+}
+
+=pod
+
+---++ sub protectPlainText
+
+Protect plain text from expansions that would normally be done
+duing rendering, such as wikiwords. Topic summaries, for example,
+have to be protected this way.
+
+=cut
+
+sub protectPlainText {
+    my( $this, $text ) = @_;
 
     # Encode special chars into XML &#nnn; entities for use in RSS feeds
     # - no encoding for HTML pages, to avoid breaking international 
@@ -1148,14 +1163,9 @@ sub TML2PlainText {
 
     # prevent text from getting rendered in inline search and link tool
     # tip text by escaping links (external, internal, Interwiki)
-    unless( $opts =~ /nonop/ ) {
-        $text =~ s/([\s\(])(?=\S)/$1<nop>/g;
-    }
+    $text =~ s/([\s\(])($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})/$1<nop>$2/g;
     $text =~ s/([\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/$1<nop>$2/go;
     $text =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
-
-    $text =~ s/^\s+//;    # remove leading whitespace
-    $text =~ s/\s+$//;    # remove trailing whitespace
 
     return $text;
 }
@@ -1194,7 +1204,7 @@ sub makeTopicSummary {
     $nchar = 16 if( $nchar < 16 );
     $htext =~ s/(.{$nchar})($TWiki::regex{mixedAlphaNumRegex})(.*?)$/$1$2 \.\.\./;
 
-    return $htext;
+    return $this->protectPlainText( $htext );
 }
 
 =pod

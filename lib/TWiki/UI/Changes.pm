@@ -88,6 +88,7 @@ sub changes {
                 if( length( $summary ) > 162 ) {
                     $text = $summary;
                     $summary = "";
+                    # SMELL: there's got to be a better way to do this
                     foreach my $c ( split( /(<\/?(?:ins|del)>)/i, $text )) {
                         if( $c !~ /<\/?(ins|del)>/i ) {
                             $c =~ s/^(.{12}).*(.{12})$/$1...$2/s;
@@ -95,6 +96,7 @@ sub changes {
                         $summary .= $c;
                     }
                 }
+                $summary = $session->{renderer}->protectPlainText( $summary );
             } else {
                 # only one version, show summary
                 $summary = $session->{renderer}->makeTopicSummary
