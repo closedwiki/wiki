@@ -1252,8 +1252,35 @@ sub handleMetaTags
     $text =~ s/%META{\s*"form"\s*}%/&renderFormData( $theWeb, $theTopic, $metar )/goe;
     $text =~ s/%META{\s*"attachments"\s*}%/&TWiki::Attach::renderMetaData( $theWeb, $theTopic, $metar )/goe;
     $text =~ s/%META{\s*"moved"\s*}%/&renderMoved( $theWeb, $theTopic, $metar )/goe;
+    $text =~ s/%META{\s*"parent"\s*}%/&renderParent( $theWeb, $theTopic, $metar )/goe;
         
     return $text;
+}
+
+# ========================
+sub renderParent
+{
+    my( $web, $topic, $metar ) = @_;
+    
+    my $text = "";
+    
+    my @meta = @$metar;
+    my $text = "";
+    
+    my @tmp = grep { /^%META:TOPICPARENT/ } @meta;
+    if( @tmp ) {
+        my $parentMeta = shift @tmp;
+        $parentMeta =~ /{([^}]*)}/;
+        my $args = $1;
+        my $name = extractNameValuePair( $args, "name" );
+        $text = $name;
+    }
+    
+    $text = handleCommonTags( $text, $topic, $web );
+    $text = getRenderedVersion( $text, $web );
+    
+    return $text;
+    
 }
 
 # ========================
