@@ -641,7 +641,10 @@ sub saveFile
     my( $name, $text ) = @_;
     
     umask( 002 );
-    open( FILE, ">$name" ) or warn "Can't create file $name\n";
+    unless ( open( FILE, ">$name" ) )  {
+	warn "Can't create file $name - $!\n";
+	return;
+    }
     print FILE $text;
     close( FILE);
 }

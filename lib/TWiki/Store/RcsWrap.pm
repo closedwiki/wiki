@@ -101,7 +101,7 @@ sub _binaryChange
 {
     my( $self ) = @_;
     if( $self->getBinary() ) {
-        # Canonly only do something when changing to binary
+        # Can only do something when changing to binary
         my $cmd = $self->{"initBinaryCmd"};
         my $file = $self->file();
         $cmd =~ s/%FILENAME%/$file/go;
