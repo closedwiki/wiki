@@ -120,12 +120,15 @@ sub _save {
         $originalrev = $query->param( "originalrev" );
         $newText = $query->param( "text" );
     }
-	
-    $newText = TWiki::decodeSpecialChars( $newText );
 
     my $saveOpts = {};
     $saveOpts->{minor} = 1 if $query->param( "dontnotify" );
-    $saveOpts->{forcenewrevision} = 1 if $query->param( "forcenewrevision" );
+    # note: always force a new rev if the topic is empty, in case this
+    # is a mistake.
+    $saveOpts->{forcenewrevision} = 1
+      if( $query->param( "forcenewrevision" ) || !$newText );
+
+    $newText = TWiki::decodeSpecialChars( $newText );
 
     if( $saveCmd eq "repRev" ) {
         $newText =~ s/%__(.)__%/%_$1_%/go;
