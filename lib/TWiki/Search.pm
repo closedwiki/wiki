@@ -1077,7 +1077,7 @@ sub searchWeb
     }
 
     return undef if ( $callback );
-
+    $searchResult = TWiki::handleCommonTags( $searchResult, $topic );
     $searchResult = TWiki::Render::getRenderedVersion( $searchResult );
     $searchResult =~ s|</*nop/*>||goi;   # remove <nop> tag
     return $searchResult;
