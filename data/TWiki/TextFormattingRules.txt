@@ -1,18 +1,18 @@
-%META:TOPICINFO{author="PeterThoeny" date="997515680" format="1.0beta2" version="1.20"}%
-It is easy to collaborate; just type your text. You don't need to know HTML at all, though you can use it if you prefer. Links to topics will be created automatically, as long as you follow these simple Text Formatting Rules. TextFormattingFAQ has answers to frequently asked questions about text formatting.
-
-%TOC{depth="2"}%
+%META:TOPICINFO{author="MikeMannix" date="999166231" format="1.0" version="1.21"}%
+%TOC{depth="4"}%
+%STARTINCLUDE%
+It is easy to collaborate; just type your text. You don't need to know HTML at all, though you can use it if you prefer. Links to topics will be created automatically, as long as you follow these simple Text Formatting Rules. TextFormattingFAQ has answers to frequently asked questions about text formatting. This page is available in a pop-up window when in Edit mode.
 
 ---++ Links
 
-The Collaborative Work Area is a bunch of related links that are editable through your web browser. 
+Being able to create links without any formating required is a core TWiki feature, made possible using WikiNames. With the latest version of TWiki linking rules, by adding a few extra symbols, you can have even more powerful linking control. 
 
 ---+++ %WIKITOOLNAME% Internal Links
 
 	* GoodStyle is a WikiWord that links to the <nop>GoodStyle topic located in the current %WIKITOOLNAME% web. 
 	* NotExistingYet is a topic waiting to be written. You could create that topic by clicking on the question mark. (Do not create that topic; you would wreck this example!)
 
----+++ External Links
+---+++ Remote Site Links
 
 	* =http://...=, =https://...=, =ftp://...= and =mailto:...@...= are linked automatically. 
 	* Email addresses like =name@domain.com= are linked automatically.
