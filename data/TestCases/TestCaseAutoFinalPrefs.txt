@@ -103,4 +103,13 @@ Support for automatic tests
 %TESTFIXTUREPLUGIN_SHORTDESCRIPTION%
 <!-- /actual -->
 </td></tr>
+<tr><td>
+<!-- expected -->
+<span style="background-color: #FFD8AA">TWiki</span>
+<!-- /expected -->
+</td><td>
+<!-- actual -->
+<span style="background-color: %VAR{"WEBBGCOLOR" web="TWiki"}%">TWiki</span>
+<!-- /actual -->
+</td></tr>
 </table>
