@@ -52,7 +52,7 @@ sub main
 	print $tmpl;
 	return;
     }
-    $tmpl= &wiki::readTemplate( "view" );
+    $tmpl= &wiki::readTemplate( "view", $topic );
     my $topicExists = &wiki::topicExists( $webName, $topic );
     if( $topicExists ) {
 	$maxrev = &wiki::getRevisionNumber( $topic );

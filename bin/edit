@@ -178,7 +178,7 @@ sub main
 
     print "Content-type: text/html\n\n";
 
-    $tmpl= &wiki::readTemplate( "edit" );
+    $tmpl= &wiki::readTemplate( "edit", $topic );
     $icat= &wiki::readTemplate( "twikicatitems" );
     if( &wiki::topicExists( $webName, $topic ) ) {
 	$text= &wiki::readTopic($topic);

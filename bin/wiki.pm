@@ -35,6 +35,21 @@
 #                          sub -- &revDate2EpSecs -- for calculating the
 #                          epoch seconds from a rev date (the only way
 #                          to sort dates.)
+#
+# 15 May 2000  PeterFokkinga :
+#    With this patch each topic can have its own template. wiki::readTemplate()
+#    has been modified to search for the following templates (in this order): 
+#
+#     1.$templateDir/$webName/$name.$topic.tmpl 
+#     2.$templateDir/$webName/$name.tmpl 
+#     3.$templateDir/$name.$topic.tmpl 
+#     4.$templateDir/$name.tmpl 
+#	    
+#    $name is the name of the script, for example view . The current TWiki version 
+#    uses steps 2 and 4.
+#
+#    See http://twiki.sourceforge.net/cgi-bin/view/Codev/UniqueTopicTemplates
+#    for further details    
 
 package wiki;
 
@@ -531,8 +546,20 @@ sub viewUrl
 # =========================
 sub readTemplate
 {
-    my( $name ) = @_;
-    my $webtmpl = "$templateDir/$webName/$name.tmpl";
+    my( $name, $topic ) = @_;
+    $topic = "" unless $topic; # prevent 'uninitialized value' warnings
+    
+    my $webtmpl = "$templateDir/$webName/$name.$topic.tmpl";
+    if( -e $webtmpl ) {
+        return &readFile( $webtmpl );
+    }
+    
+    $webtmpl = "$templateDir/$webName/$name.tmpl";
+    if( -e $webtmpl ) {
+        return &readFile( $webtmpl );
+    }
+    
+    $webtmpl = "$templateDir/$name.$topic.tmpl";
     if( -e $webtmpl ) {
         return &readFile( $webtmpl );
     }
