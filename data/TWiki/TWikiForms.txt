@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043486587" format="1.0" version="1.16"}%
+%META:TOPICINFO{author="PeterThoeny" date="1061611427" format="1.0" version="1.17"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%  
 %STARTINCLUDE%
@@ -10,26 +10,7 @@ _Form-based input in topics, with name/value pairs stored as Meta Data variables
 
 By adding form-based input to freeform content, you can structure topics with unlimited, easily searchable categories. When forms are enabled for a web and selected in a topic, a single form appears in edit mode, and the contents are rendered as a table when viewed on the display page. You can define unlimited forms per web. For each topic, you can select a template if more than one is defined, or remove forms entirely. Form input values are stored as TWikiMetaData; all data is saved. 
 
-Form Templates replace <nop>TWikiCategoryTables from the 01-Dec-2000 version of TWiki.
-
-#FormsVsCategoryTables
----++ Main Changes from Category Tables
-
-The Form Template system is a more powerful, flexible replacement for the original <nop>TWikiCategoryTable. Data from existing category tables can be imported directly.
- 
-|  *Form Templates*  |  *Category Tables*  |
-|  defined in topics  |  defined in templates  |
-|  many forms per web  |  one table per web  |
-|  saved as Meta Data  |  saved as HTML  |
-|  *Change* &amp; *Add Form* buttons  |  *<nop>UseCategory* radio button  |
-
----+++ Importing Category Table Data
-
-On upgrading from the previous TWiki, a Form Template topic has to be built for each web that used a Category Table, recreating the fields and values from the old ==twikicatitems.tmpl==. The replacement Form Template must be set as the first item in the WebPreferences variable =WEBFORMS=. If missing, pages will display, but attempting to edit results in an error message.
-
-The new Form Template system should work with old Category Table data with no special conversion. Data is assigned to Meta variables the first time an imported topic is edited and saved in the new system.
-
-%T% *NOTE:* If things aren't working correctly, there may be useful entries in =data/warning.txt=.
+Form Templates replace <nop>TWikiCategoryTables from the 01-Dec-2000 version of TWiki. - see [[#FormsVsCategoryTables]]
 
 ---++ Defining a Form Template
 
@@ -141,6 +122,25 @@ The form topic name, fields and values are stored as TWikiMetaData - the order o
 #UsingFormData
 ---++ Using Form Data
 TWikiForms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]] for various options.
+
+#FormsVsCategoryTables
+---++ Main Changes from Category Tables
+
+The Form Template system is a more powerful, flexible replacement for the original <nop>TWikiCategoryTable. Data from existing category tables can be imported directly.
+ 
+|  *Form Templates*  |  *Category Tables*  |
+|  defined in topics  |  defined in templates  |
+|  many forms per web  |  one table per web  |
+|  saved as Meta Data  |  saved as HTML  |
+|  *Change* &amp; *Add Form* buttons  |  *<nop>UseCategory* radio button  |
+
+---+++ Importing Category Table Data
+
+On upgrading from the previous TWiki, a Form Template topic has to be built for each web that used a Category Table, recreating the fields and values from the old ==twikicatitems.tmpl==. The replacement Form Template must be set as the first item in the WebPreferences variable =WEBFORMS=. If missing, pages will display, but attempting to edit results in an error message.
+
+The new Form Template system should work with old Category Table data with no special conversion. Data is assigned to Meta variables the first time an imported topic is edited and saved in the new system.
+
+%T% *NOTE:* If things aren't working correctly, there may be useful entries in =data/warning.txt=.
 
 -- JohnTalintyre - 16 Aug 2001 <br />
 -- Main.MikeMannix - 05 Jan 2002 
