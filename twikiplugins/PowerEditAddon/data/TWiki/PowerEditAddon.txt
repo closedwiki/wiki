@@ -9,6 +9,7 @@ The applet provides the same editing capabilities as a standard browser text are
 	* Find, Replace - optionally use Emacs style regular expressions as provided by the gnu.regexp library. Replace is currently not smart enough to use field replacement, however.
 	* Can be invoked in a separate frame.
 	* Programmable buttons.
+	* Convertor for HTML to TWiki markup
 
 ---++ Usage information</h2>
 ---+++ The buttons
@@ -37,6 +38,7 @@ used in definitions.
 ---+++ Commands</h3>
 The following commands are basic to the editor and can be used in button definitions:
 | *Name* | *Description* |
+| %br% | Insert a newline |
 | %copy% | Copy the currently selected text to the internal cut buffer |
 | %cut% | Cut the currently selected text to the internal cut buffer |
 | %find% | Invoke the find dialog |
