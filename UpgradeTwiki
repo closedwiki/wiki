@@ -128,11 +128,16 @@ UpdateTopics::UpdateTopics($TWikiCfg::dataDir, "$baseDir/data", "$targetDir/data
 #make sure we're in the right place still
 chdir($baseDir);
 
-    print "OK - the merge process completed successfully...\n";
+print "OK - the merge process completed successfully...\n";
 
-    print "Now I'm giving write access to pub & data in the newly set up TWiki, so your web server can access them...\n";
+# fix up permissions ... get them to a working state, if not ideal seurity-wise!
+# (we tell the user to check the permissions later anyhow)
 
-    find( sub {chmod 0777, $File::Find::name;} , "$targetDir/pub", "$targetDir/data");
+print "Now I'm giving write access to pub & data in the newly set up TWiki, so your web server can access them...\n";
+
+find( sub {chmod 0777, $File::Find::name;} , "$targetDir/pub", "$targetDir/data");
+
+# set up .htaccess, if appropriate
 
 if (-f "$setlibPath/.htaccess")
 {
@@ -149,6 +154,7 @@ I copied in your existing .htaccess into $targetDir/bin.
 	print "
 You may need to apply some of these differences to the new .htaccess that I created... that's up to you.
 (I'm not gonna mess with security settings at all!)
+
 ";
 
     }
@@ -164,7 +170,8 @@ else
 Couldn't see a .htaccess in $setlibPath ... so I didn't try to help in that respect\n";
 }
 
-# now let's try to get their scriptSuffix right for them (is this a good idea, I wonder?)
+# now let's try to get their scriptSuffix right for them 
+# (Is this a good idea, I wonder?  Can't see why not...)
 
 if ($TWikiCfg::scriptSuffix)
 {
@@ -185,6 +192,52 @@ Applying your '\$scriptSuffix' ($TWikiCfg::scriptSuffix) to the scripts in $targ
     }
     print "\ndone\n";
 }
+
+# Also, for Cairo, we have to do the pattern skin additions 
+# (etc, as mentioned in the UpgradeGuide, manual upgrade section)
+
+print "Putting in default WebLeftBar and WebAdvancedSearch...\n";
+
+if (-f "data/TWiki/WebLeftBarExample.txt")
+{
+    if (opendir(DATADIR, "$targetDir/data"))
+    {
+	foreach my $web (readdir DATADIR)
+	{
+	    next if ($web =~ m|^\.|); # don't hit '.' , '..'  .  Any other diretories starting with '.' are suss also.
+	    next if (!-d "$targetDir/data/$web");
+
+	    print "$web\n";
+	    
+	    if (!-f "$targetDir/data/$web/WebLeftBar.txt")
+	    {
+		copy("data/TWiki/WebLeftBarExample.txt", "$targetDir/data/$web/WebLeftBar.txt")
+		    or warn "Couldn't put the default WebLeftBar.txt (from data/TWiki/WebLeftBarExample.txt) into $targetDir/data/$web/WebLeftBar.txt: $!\n";
+	    }
+	    else
+	    {
+		print "(already has one)\n";
+	    }
+
+	    if (!-f "$targetDir/data/$web/WebSearchAdvanced.txt")
+	    {
+		open(WSA, ">$targetDir/data/$web/WebSearchAdvanced.txt");
+		print WSA '%INCLUDE{"%TWIKIWEB%.WebSearchAdvanced"}%'."\n";
+		close WSA;
+	    }
+	}
+    }
+    else
+    {
+	warn "Hmmm - was going to add default WebLeftBar topics for you, but couldn't open $targetDir/data: $!  !\n";
+    }
+}
+else
+{
+    warn "Hmmm - I was going to give all your webs a default WebLeftBar topic, but TWiki.WebLeftBarExample doesn't seem to be present in your distribution folders.  Your new twiki will still work, but check the 'UpgradeGuide' topic at twiki.org for information that might help explain this problem.\n"
+}
+
+# At last!
 
 print "
 Congratulations... you made it this far!
