@@ -1251,9 +1251,9 @@ sub handleToc
                 $line  =~ s/$headerPatternSp/$2/go ;
                 $anchor = makeAnchorName( $line );
             } elsif
-               ( $line =~  /$headerPatternHt/o ) {
-                $level =~ s/$headerPatternHt/$1/go ;
-                $line  =~ s/$headerPatternHt/$2/go ;
+               ( $line =~  /$headerPatternHt/io ) {
+                $level =~ s/$headerPatternHt/$1/gio ;
+                $line  =~ s/$headerPatternHt/$2/gio ;
                 $anchor = makeAnchorName( $line );
             }
             if( ( $line ) && ( $level <= $depth ) ) {
