@@ -1,13 +1,15 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042010259" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1079861453" format="1.0" version="1.4"}%
 ---+ Web Site Tools
 %STARTINCLUDE%
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/SearchResult">
+<noautolink>
 	* <input type="text" name="search" size="32" /> <input type="submit" value="Search" /> &nbsp;&nbsp; (More options in [[%INCLUDINGWEB%.WebSearch][WebSearch]])
 	* [[%INCLUDINGWEB%.WebChanges][WebChanges]]: Display recent changes to the %INCLUDINGWEB% web
 	* [[%INCLUDINGWEB%.WebIndex][WebIndex]]: List all %INCLUDINGWEB% topics in alphabetical order. See also the faster [[%INCLUDINGWEB%.WebTopicList][WebTopicList]]
 	* [[%INCLUDINGWEB%.%NOTIFYTOPIC%][%NOTIFYTOPIC%]]: Subscribe to an e-mail alert sent when something changes in the %INCLUDINGWEB% web
 	* [[%INCLUDINGWEB%.%STATISTICSTOPIC%][%STATISTICSTOPIC%]]: View access statistics of the %INCLUDINGWEB% web
-	* [[%INCLUDINGWEB%.%WEBPREFSTOPIC%][%WEBPREFSTOPIC%]]: Preferences of the %INCLUDINGWEB% web (%TWIKIWEB%.%WIKIPREFSTOPIC% has site-wide preferences)
+	* [[%INCLUDINGWEB%.%WEBPREFSTOPIC%][%WEBPREFSTOPIC%]]: Preferences of the %INCLUDINGWEB% web ([[%TWIKIWEB%.%WIKIPREFSTOPIC%][%WIKIPREFSTOPIC%]] has site-wide preferences)
+</noautolink>
 </form>
 %STOPINCLUDE%
 ---
