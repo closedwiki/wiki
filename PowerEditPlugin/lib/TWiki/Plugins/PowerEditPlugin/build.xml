@@ -87,7 +87,6 @@
 	    debug="${debug.setting}"
             target="1.1"
 	    includes="**/*.java"
-	    excludes="**/kizna/**/*.java"
 	/>
         <copy todir="${applet.classes}" overwrite="yes">
             <fileset dir="${plugin.lib}/packages">

@@ -66,9 +66,10 @@ sub beforeEditHandler {
   # Why can't I poweredit PowerEditControls?
   # Remove comments and meta-tags and compact the text for a parameter
   $controls =~ s/^%META:.*$//gom;
-  $controls =~ s/^\s*<.*$//gom;
-  $controls =~ s/\s+(\".*\")\s*=\s*(\".*\")/$1=$2/go;
-  $controls =~ s/\n+/ /gom;
+  $controls =~ s/^<\/?verbatim>.*$//gom;
+  $controls = TWiki::Func::expandCommonVariables( $controls, $topic, $web );
+  #$controls =~ s/\s+(\".*\")\s*=\s*(\".*\")/$1=$2/go;
+  #$controls =~ s/\n+/ /gom;
 
   # Use CGI to correctly escape parameter values
   my $query = new CGI("");

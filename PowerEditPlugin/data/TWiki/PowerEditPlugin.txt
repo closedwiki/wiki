@@ -25,20 +25,26 @@ If set, the variable must be set to the *full name* (including the web) of the t
 <pre>
       * <nop>Set POWEREDIT_CONTROLS = Main<nop>.AlanTuringControls
 </pre>
-The control file contains a set of button panel and macro definitions. For example:
+The control file contains a set of button panel and macro definitions in XML. For example:
 <pre>
-macros
-   "space" = " "
-end
-top
-   "Tele type" = "/cut/=/paste/="
-   "A Space"="/space/"
-end
-keys
-   "^X" = "/cut/"
-end
+&lt;macros>
+   &lt;map name="space" action=" "/>
+&lt;/macros>
+&lt;top>
+   &lt;map name="Tele type" action="/cut/=/paste/="/>
+   &lt;map name="http://my.site.com/space.gif" action="/space/"/>
+   &lt;map name="COPY" action="/copy/"/>
+&lt;/top>
+&lt;/keys>
+   <map name="^X" action="/cut/"/>
+&lt;/keys>
 </pre>
-In this example the first button in the top panel will be labelled "Tele type" and will perform the sequence /cut/=/paste/= - which will cut the currently selected text, enter an '=' sign, paste the text and enter another '=' sign. The second button will be labelled "A Space" and will execute the =space= macro, which in turn is defined to insert a ' ' character. The key "Ctrl+X" will be defined to perform the /cut/ command.
+In this example:
+   * The first button in the top panel will be labelled "Tele type" and will perform the sequence /cut/=/paste/= - which will cut the currently selected text, enter an '=' sign, paste the text and enter another '=' sign.
+   * The second button will use the GIF file at the URL in its name to create an image button, and when invoked will execute the =space= macro, which in turn is defined to insert a ' ' character.
+      * Images for the editor basic commands are all statically bound (see Command below) and the fpllowing additional images are also statically bound: ITALIC TT BOLD UL OL
+   * The third button will use the statically bound COPY image (an image that doesn't have to be downloaded) and invoke the /copy/ editor command.
+   * The key "Ctrl+X" will be defined to perform the /cut/ command.
 	* The four button panels are named "top", "bottom", "left" and "right"
 	* There can be as many "macros" blocks as you like
 	* In button blocks, the name is used as the label on the button
@@ -52,17 +58,16 @@ The default control definitions for this installation may be viewed <a href="%SC
 
 ---+++ Commands
 The following commands are basic to the editor and can be used in button definitions:
-| *Name* | *Description* |
-| /copy/ | Copy the currently selected text to the internal cut buffer |
-| /convert/ | Convert the currently selected text from raw HTML to TWiki ML |
-| /cut/ | Cut the currently selected text to the internal cut buffer |
-| /find/ | Invoke the find dialog |
-| /paste/ | Paste the internal cut buffer. Will erase the current selection. |
-| /undo/ | Undo the last edit |
-| /redo/ | Repeats the last command executed (does *not* repeat typing) |
-| /refind/ | Repeat the last find |
-| /replace/ | Invoke the replace dialog |
-| /rereplace/ | Repeat the last replacement |
+| *Name* | *Image name* | *Description* |
+| /copy/ | COPY | Copy the currently selected text to the internal cut buffer |
+| /cut/ | CUT | Cut the currently selected text to the internal cut buffer |
+| /find/ | FIND | Invoke the find dialog |
+| /paste/ | PASTE | Paste the internal cut buffer. Will erase the current selection. |
+| /undo/ | UNDO | Undo the last edit |
+| /redo/ | REDO | Repeats the last command executed (does *not* repeat typing) |
+| /refind/ | REFIND | Repeat the last find |
+| /replace/ | REPLACE | Invoke the replace dialog |
+| /rereplace/ | REREPLACE | Repeat the last replacement |
 
 ---+++ Applet parameters
 | *Parameter* | *Values* | *Description* |
