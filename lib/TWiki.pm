@@ -1431,6 +1431,7 @@ sub _handleINCLUDE {
 
     if( $incfile =~ /^https?\:/ ) {
         # include web page
+print STDERR "ABOUT TO $incfile\n";
         return _includeUrl( $incfile, $pattern, $theWeb, $theTopic );
     }
 
@@ -2323,8 +2324,12 @@ sub _processTags {
                 if ( $ok ) {
                     print " " x $tell--,"EXPANDED $tag -> $e\n" if $tell;
                     pop( @stack );
+                    # Choice: can either tokenise and push the expanded
+                    # tag, or can recursively expand the tag. The
+                    # behaviour is different in each case.
                     #unshift( @queue, split( /(%)/, $e ));
-                    $stack[$#stack] .= $e;
+                    $stack[$#stack] .=
+                      _processTags($e, $depth + 1, $expanding );
                 } else { # expansion failed
                     #print " " x $tell++,"EXPAND $tag FAILED\n" if $tell;
                     push( @stack, "%" ); # push a new context, starting
