@@ -39,18 +39,23 @@ my ( $cgibin, $home );
 my $localDirConfig;
 
 BEGIN {
-    use Cwd qw( cwd getcwd );
+    use Cwd qw( cwd );
     use Config;
-    $account = [ split( '/', getcwd() ) ]->[-3]   # format: /Users/(account)/Sites/cgi-bin/...
+    # FIXME: darwin-specific
+    $account = [ split( '/', cwd() ) ]->[-3]   # format: /Users/(account)/Sites/cgi-bin/...
 	or die "no account?";
-    my $localLibBase = getcwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
+    my $localLibBase = cwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
     # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
 
-    $cgibin = "/Users/$account/Sites/cgi-bin";
-    $home = "/Users/$account/Sites";
-    chomp( $hostname = $ENV{SERVER_NAME} || `hostname` || 'localhost' );
+    # dreamhost
+#???    $home = "/Users/$account/Sites";
 
+    # darwin
+    $home = "/Users/$account/Sites";
+
+    $cgibin = "$home/cgi-bin";
+    chomp( $hostname = $ENV{SERVER_NAME} || `hostname` || 'localhost' );
     die "hostname?" unless $hostname;
 
     $localDirConfig = qq{
@@ -84,7 +89,7 @@ use CGI::Carp qw( fatalsToBrowser );
 use File::Copy qw( cp mv );
 use File::Path qw( rmtree );
 use File::Basename qw( basename );
-use Cwd qw( cwd getcwd );
+use Cwd qw( cwd );
 use Data::Dumper qw( Dumper );
 use XML::Simple;
 use CPAN;
@@ -239,6 +244,13 @@ checkdir( $cpan );
 
 # TODO: change this to require a kernel parameter? (probably, but need to deal with creating the error "screens")
 my $tar = $q->param( 'kernel' ) || "TWiki20040902.tar.gz";
+# SMELL: not a proper choosing of the latest version
+if ( $tar =~ /^LATEST$/i ) { 
+    $tar = ( reverse sort { ( $a =~ /.+?(\d+)/ )[0] <=> ( $b =~ /.+?(\d+)/ )[0] } <downloads/releases/TWikiKernel-*> )[0];
+print STDERR "using LATEST: $tar\n";
+}
+$tar ||= "TWiki20040902.tar.gz";
+
 installTWikiExtension({ file => $tar, name => 'TWiki', dir => "downloads/releases", cdinto => 'twiki' });
 
 ################################################################################
@@ -524,7 +536,7 @@ sub installTWikiExtension
 	}
     }
 
-    my $pushd = getcwd();
+    my $pushd = cwd();
     chdir( "tmp/install" ) or warn $!;
     ( $tarPackage ) =~ s|^tmp/install/||;
     execute("tar xzvf $tarPackage") or warn $!;
