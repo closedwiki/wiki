@@ -32,6 +32,10 @@
 #                           but may forget) doesn't clear the $n match
 #                           params if a match fails... *^&$#!!!
 
+use vars qw(
+        $lsCmd $egrepCmd $fgrepCmd
+);
+
 # =========================
 sub searchWikiWeb
 {
