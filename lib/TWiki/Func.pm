@@ -62,6 +62,14 @@ sub getPreferencesFlag
 }
 
 # =========================
+# get skin, from query param or preference
+# =========================
+sub getSkin
+{
+    return &TWiki::getSkin();
+}
+
+# =========================
 # extract the value from a name="value" attribute pair
 # =========================
 sub extractNameValuePair
@@ -129,16 +137,7 @@ sub getScriptUrlPath
 }
 
 # =========================
-# get default URL host
-# =========================
-sub getDefaultUrlHost
-{
-    return $TWiki::defaultUrlHost;
-}
-
-# =========================
 # get URL host
-# would this be better as $cgiQuery->url()???
 # =========================
 sub getUrlHost
 {
@@ -286,10 +285,12 @@ sub topicExists
 
 # =========================
 # get revision info from meta
+# returns ($revdate, $revuser, $maxrev)
 # =========================
-sub getRevisionInfoFromMeta
+sub getRevisionInfo
 {
 #   my( $web, $topic, $meta, $format );
+#   format can be  "isoFormat"
     return &TWiki::Store::getRevisionInfoFromMeta( @_ );
 }
 
@@ -313,6 +314,7 @@ sub readTemplate
 
 # =========================
 # read text file, low level
+# better to use readTopic or readTemplate if possible
 # =========================
 sub readFile
 {
@@ -354,21 +356,33 @@ sub getWikiUserName
 }
 
 # =========================
-# translate wikiUserName to userName
+# translate wikiUserName to userName, Main web is optional
+# e.g Main.JohnDoe to jdoe
+#  or Johndoe to jdoe
 # =========================
 sub wikiToUserName
 {
-#   my $wiki = @_;
+#   my( $wiki ) = @_;
     return &TWiki::wikiToUserName( @_ );
 }
 
 # =========================
-# translate wikiUserName to userName
+# translate userName to wikiName
+# e.g. jdoe to Main.JohnDoe
+#   or jdoe to JohnDoe if $dontAddWeb is true
 # =========================
 sub userToWikiName
 {
-#   my $user = @_;
+#   my( $user, $dontAddWeb ) = @_;
     return &TWiki::userToWikiName( @_ );
+}
+
+# =========================
+# returns true if user is guest
+# =========================
+sub isGuest
+{
+    return &TWiki::isGuest();
 }
 
 # =========================
@@ -399,15 +413,8 @@ sub redirectCgiQuery
 
 # =========================u
 # search web
+# if you need to do a search then use handleCommonTags( "%SEARCH{...}%" );
 # =========================
-sub searchWeb
-{
-#   my ( $doInline, $theWebName, $theSearchVal, $theScope, $theOrder,
-#         $theRegex, $theLimit, $revSort, $caseSensitive, $noSummary,
-#         $noSearch, $noHeader, $noTotal, $doBookView, $doRenameView,
-#         $doShowLock, $noEmpty, $template, $meta, $external, @junk ) = @_;
-    return &TWiki::Search::searchWeb( @_ );
-}
 
 # =========================
 # format the time
