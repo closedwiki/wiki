@@ -68,7 +68,7 @@ sub main
     if( ! &TWiki::Access::userIsInGroup( $wikiUserName, $TWiki::superAdminGroup ) ) {
     	# user has no permission to install the password
     	my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$TWiki::mainWebname.$TWiki::superAdminGroup" );
-    	print $query->redirect( $url );
+    	TWiki::redirect( $query, $url );
     	return;
     }
 
@@ -76,7 +76,7 @@ sub main
     if ( ! $theCryptPassword ) {
 	# missing username:encryptedpassword
     	$url = &TWiki::getOopsUrl( $webName, $topic, "oopsregrequ", );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
 	
@@ -85,7 +85,7 @@ sub main
     } else {
 	# bad format
     	$url = &TWiki::getOopsUrl( $webName, $topic, "oopsbadpwformat", $theCryptPassword);
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
 
@@ -93,7 +93,7 @@ sub main
     if(  ( $wikiName )  && (! htpasswdExistUser( $wikiName ) ) ){
         # PTh 20 Jun 2000: changed to getOopsUrl
         $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnotwikiuser", $wikiName );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
 
@@ -105,7 +105,7 @@ sub main
 
     # OK - password changed
     $url = &TWiki::getOopsUrl( $webName, $topic, "oopschangepasswd" );
-    print $query->redirect( $url );
+    TWiki::redirect( $query, $url );
     return; 
 }
 
