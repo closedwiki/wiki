@@ -397,11 +397,11 @@ public class TWikiFrame extends DrawFrame {
             // submit POST command to the server three times:
 	    // *.draw, *.map and *.gif
             // first upload *.draw file
-            showStatus("Saving " + drawingPath);
+            showStatus("Saving .draw file " + drawingPath);
 	    if (bPostEnabled)
 		savedDraw = app.post(
 			savePath, "", "text/plain", drawingPath,
-			out.toString(), "TWikiDraw draw file");
+			out.toString(), "TWiki Draw draw file");
 
 	    // calculate the minimum size of the gif image
 	    Dimension d = new Dimension(0, 0); // not this.view().getSize();
@@ -429,29 +429,38 @@ public class TWikiFrame extends DrawFrame {
 
 	    String map = drawing().getMap();
 	    if (map.length() > 0) {
-		String mapPath = drawingPath.substring(0, drawingPath.length() - 5);
-		showStatus("Saving " + mapPath);
+		String mapPath = drawingPath.substring(0, drawingPath.length() - 5) + ".map";
+		showStatus("Saving .map file " + mapPath);
 		// enclose the map and add editable border. Note that the
-		// edit border is add LAST so the earlier AREAs take
+		// edit border is added LAST so the earlier AREAs take
 		// precedence.
-		map = "<MAP NAME=\"%MAPNAME%\">\n" + map +
-		    "<AREA SHAPE=\"RECT\" COORDS=\"" +
+        String area = "<area shape=\"rect\" coords=\"";
+        String link = "\" href=\"%TWIKIDRAW%\" " +
+            "alt=\"%EDITTEXT%\" title=\"%EDITTEXT%\" %HOVER% />";
+		map = "<map name=\"%MAPNAME%\">" + map +
+
+		    area +
 		    "0,0," + (d.width+iBorder) + "," + (iBorder/2) +
-		    "\" HREF=\"%TWIKIDRAW%\">\n" +
-		    "<AREA SHAPE=\"RECT\" COORDS=\"" +
+		    link +
+
+		    area +
 		    "0,0," + iBorder/2 + "," + (d.height+iBorder) +
-		    "\" HREF=\"%TWIKIDRAW%\">\n" +
-		    "<AREA SHAPE=\"RECT\" COORDS=\"" +
-		    (d.width+iBorder/2) + ",0," + (d.width+iBorder) + "," + (d.height+iBorder) +
-		    "\" HREF=\"%TWIKIDRAW%\">\n" +
-		    "<AREA SHAPE=\"RECT\" COORDS=\"" +
+		    link +
+
+		    area +
+		    (d.width+iBorder/2) + ",0," + (d.width+iBorder) + "," +
+            (d.height+iBorder) +
+		    link +
+
+		    area +
 		    "0," + (d.height+iBorder/2) + "," +
 		    (d.width+iBorder) + "," + (d.height+iBorder) +
-		    "\" HREF=\"%TWIKIDRAW%\">\n" +
-		    "</MAP>";
+		    link +
+
+		    "</map>";
 		savedMap = app.post(
-		    savePath, "", "text/plain", mapPath + ".map",
-		    map, "TWikiDraw map file");
+		    savePath, "", "text/plain", mapPath,
+		    map, "TWiki Draw map file");
 	    } else {
 		// erase any previous map file
 		String mapPath = drawingPath.substring(0, drawingPath.length() - 5);
@@ -478,7 +487,7 @@ public class TWikiFrame extends DrawFrame {
 		gifPath = "untitled.gif";
 
             // then create *.gif image and upload file
-	    showStatus("Saving " + gifPath);
+	    showStatus("Saving .gif file " + gifPath);
 
 	    // clear the selection so it doesn't appear
 	    view().clearSelection();
@@ -492,7 +501,7 @@ public class TWikiFrame extends DrawFrame {
 		savedGif = app.post(
 			savePath, "", "image/gif",
 			gifPath, String.valueOf(aChar, 0, aChar.length),
-			"TWikiDraw GIF file");
+			"TWiki Draw GIF file");
         } catch (MalformedURLException e) {
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             showStatus("Bad Wiki servlet URL: "+e.getMessage());

@@ -339,9 +339,9 @@ public  class PolyLineFigure extends AbstractFigure {
 	    backwards = (p2.x - x) + "," + (p2.y - y) + "," +
 		(p1.x - x) + "," + (p1.y - y) + backwards;
         }
-	return "<AREA SHAPE=\"POLY\" COORDS=\"" +
-	    forwards + "," + backwards + "\" HREF=\"" +
-	    sensitive + "\">\n";
+	return "<area shape=\"poly\" coords=\"" +
+	    forwards + "," + backwards + "\" href=\"" +
+	    sensitive + "\" alt=\"" + sensitive + "\" />";
     }
 
     public void read(StorableInput dr) throws IOException {

@@ -10,7 +10,7 @@ Unique to %TOPIC%, a drawing can also have a "map" which makes figures in the dr
 
 How you edit a drawing depends on whether the drawing has a map and the setting of the "EDIT_BUTTON" option. A drawing with no map can be edited simply by clicking on the drawing. A drawing with a map can be edited by clicking the edit button or, failing that, on the boundary of the image.
 
-Browser support for Java 1.1 required.
+Browser support for Java 1.1 or later required.
 
 ---++ Syntax Rules
 
@@ -60,6 +60,8 @@ Extra colors to be added to the menu of colors in the applet, as a comma-separat
 	* Set EXTRA_COLORS = Aquamarine=#70DB93,New Tan=EBC79E,Sea Green=238E68,Motorola Blue=#3ff
 Set to 1 if an "Edit" button is to be generated attached to the image. You will still be able to edit it by clicking on the boundary of the image.
 	* Set EDIT_BUTTON = 1
+Edit text defined here so you can change it for local languages. Text is shown when you hover over the image, and for the edit button. %<nop>F% will be replaced by the drawing name.
+	* Set EDIT_TEXT = Edit drawing '%F%' (requires a Java 1.1 enabled browser)
 
 ---+++ Plugin Installation Instructions
 
@@ -68,6 +70,8 @@ Set to 1 if an "Edit" button is to be generated attached to the image. You will 
 %$MANIFEST%
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 	* To test if the plugin is correctly installed, view this topic in the installation and you should see a placeholder box below. Click on it.<br />
+	%DRAWING{empty}%
+	* Here's an example using an image map. Move the mouse over the image and watch the status bar.
 	%DRAWING{example}%
 
 ---+++ Known Problems
@@ -93,13 +97,8 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 	* %TOPIC% is based on Erich Gamma's <nop>JHotDraw 5.1. (<nop>JHotDraw is copyright 1996, 1997 by <a href="http://www.ifa.ch/">IFA Informatik</a> and Erich Gamma, erich_gamma@acm.org . _It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies._ )
 	* %TOPIC% uses <a href="http://www.acme.com/java/">ACME Labs</a>' <nop>GifEncoder to convert a drawing into a GIF file format. (<nop>GifEncoder is Copyright &copy;1996,1998 by Jef Poskanzer, jef@acme.com . All rights reserved. _<font size="-6"> THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. )</font>_
 	* %TOPIC% uses some ideas of <a href="http://www.eng.untech.com/serg/bin/KmWiki?Load=FrontPage">KmWiki</a> drawing applet.
-	* %TOPIC%: Copyright 2000 by Peter Thoeny, Peter@Thoeny.com. It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies.
-	* TWiki:Main/PeterThoeny created %TOPIC% based on above software:
-		* <nop>TWikiDraw applet that allows you to save a drawing as a =.draw= and a =.gif= file. (Save calls the TWiki =upload= script)
-		* New =%<nop>DRAWING%= variable to insert a drawing into any TWiki topic. (defined in =wikicfg.pm= )
-		* New =oopstwikidraw.tmpl= template that contains the <nop>%TOPIC% applet.
+	* Copyright 2000 by Peter Thoeny, Peter@Thoeny.com. It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies.
 	* Modifications Copyright &copy; 2001 Motorola. All Rights Reserved.
-	* TWiki:Main/CrawfordCurrie made a number of improvements, including porting to the 2001 release.
 	* Modifications &copy; 2003-2004 Copyright Crawford Currie http://www.c-dot.co.uk
  
 -- TWiki:Main/CrawfordCurrie - %$DATE%

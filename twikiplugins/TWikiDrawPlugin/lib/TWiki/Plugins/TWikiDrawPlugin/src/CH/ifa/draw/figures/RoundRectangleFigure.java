@@ -119,12 +119,12 @@ public  class RoundRectangleFigure extends AttributeFigure {
 		sense = URLDecoder.decode(sense);
 	    } catch (Exception e) {}
 	    Rectangle box = displayBox();
-	    return "<AREA SHAPE=\"RECT\" COORDS=\"" +
+	    return "<area shape=\"rect\" coords=\"" +
 		       box.x + "," + box.y + "," +
 		       (box.x + box.width) + "," +
 		       (box.y + box.height) +
-		       "\" HREF=\"" +
-		       sense + "\">\n";
+		       "\" href=\"" +
+		       sense + "\" alt=\"" + sense + "\" />";
 	}
 	return "";
     }
