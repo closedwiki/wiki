@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000264948" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000448321" format="1.0" version="1.6"}%
 %META:TOPICPARENT{name="WebHome"}%
 %INCLUDE{"UtilTempDocNote"}%
 
@@ -51,7 +51,9 @@ You can now rename, move and delete individual topics from your browser. All thr
 		* Any problems are listed ; you can change them later.
 		* If a referring page can't be update because it's locked (ex: someone's editing), it appears on an alert. You can missed pages later by again pressing *Rename/move*.
 
-*Note:* Deleting means moving the topic to the Trash web. Since all webs share the one Trash, name conflicts may come up.
+*Note:* Deleting means moving the topic to the Trash web. Since all webs share the one Trash, name conflicts may come up. 
+
+*Note:* Keep in mind that moving a topic from a view restricted web to a public web or the Trash web will compromize security.
 
 See [[TWikiDocumentation#Managing_Topics][ManagingTopics]] for more details.
 %META:TOPICMOVED{by="MikeMannix" date="1000261400" from="TWiki.HandlingTopics" to="TWiki.TWikiPages"}%
