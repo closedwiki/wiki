@@ -3,21 +3,30 @@
 make sure that all of the following are correctly renamed to the new topic name
 
 ---+++ without web name
-	* SodNod
-	*   SodNods
-	* [[SodNod][asdf]]
+	* TestCaseRename
+	* TestCaseRenames
+	* [[TestCaseRename][asdf]]
 
 ---+++ with web name
-	* SodNod
-	*   SodNods
-	* [[SodNod][asdf]]
+	* TestCases.TestCaseRename
+	* TestCases.TestCaseRenames
+	* [[TestCases.TestCaseRename][asdf]]
 
----+++ these should not be renamed (I think)
-	*   NotTestCaseRename
-	*   TestCaseRenameNot
-	*   TestCaseRenamenot
-	* !SodNod
-	* <nop>SodNod
+---+++ these should *not* be renamed
+	* NotTestCaseRename
+	* TestCaseRenameNot
+	* TestCaseRenamenot
+	* !TestCaseRename
+	* <nop>TestCaseRename
+<noautolink>
+	* TestCaseRename
+</noautolink>
+<pre>
+	* TestCaseRename
+</pre>
+<verbatim>
+	* TestCaseRename
+</verbatim>
 
 ---+++ TODO:
 	* metadata, attachments, more...
