@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1055024720" format="1.0" version="1.49"}%
+%META:TOPICINFO{author="PeterThoeny" date="1059526773" format="1.0" version="1.50"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -25,6 +25,9 @@ The following are __site-level__ settings that affect all users in all webs on t
 	* Prevent automatic linking of [[%TWIKIWEB%.WikiWords][WikiWords]] and acronyms (if set to =on=); link <nop>WikiWords (if empty); can be overwritten by web preferences:
 		* Set NOAUTOLINK = 
 		* __Note:__ Use the =[<nop>[...][...]]= syntax to link topics in case you disabled <nop>WikiWord linking. The =&lt;noautolink&gt; ... &lt;/noautolink&gt;= syntax can be used to prevents links within a block of text.
+
+	* Warn if =%<nop>INCLUDE{}%= of other topic fails (if set to =on=); silently fail (if empty); can be overwritten by web preferences:
+		* Set INCLUDEWARNING = 
 
 
 ---++ User Settings
