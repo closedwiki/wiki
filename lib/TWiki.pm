@@ -2728,6 +2728,7 @@ sub handleInternalTags
     $_[0] =~ s/%REMOTE_PORT%/&handleEnvVariable('REMOTE_PORT')/ge;
     $_[0] =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/ge;
 
+    # Topic and web names
     $_[0] =~ s/%TOPIC%/$_[1]/g;
     $_[0] =~ s/%BASETOPIC%/$topicName/g;
     $_[0] =~ s/%INCLUDINGTOPIC%/$includingTopicName/g;
@@ -2736,36 +2737,45 @@ sub handleInternalTags
     $_[0] =~ s/%BASEWEB%/$webName/g;
     $_[0] =~ s/%INCLUDINGWEB%/$includingWebName/g;
 
+    # I18N information
     $_[0] =~ s/%CHARSET%/$siteCharset/g;
     $_[0] =~ s/%SHORTLANG%/$siteLang/g;
     $_[0] =~ s/%LANG%/$siteFullLang/g;
 
     $_[0] =~ s/%TOPICLIST{(.*?)}%/&handleWebAndTopicList($1,'0')/ge;
     $_[0] =~ s/%WEBLIST{(.*?)}%/&handleWebAndTopicList($1,'1')/ge;
+
+    # URLs and paths
     $_[0] =~ s/%WIKIHOMEURL%/$wikiHomeUrl/g;
     $_[0] =~ s/%SCRIPTURL%/$urlHost$scriptUrlPath/g;
     $_[0] =~ s/%SCRIPTURLPATH%/$scriptUrlPath/g;
     $_[0] =~ s/%SCRIPTSUFFIX%/$scriptSuffix/g;
     $_[0] =~ s/%PUBURL%/$urlHost$pubUrlPath/g;
     $_[0] =~ s/%PUBURLPATH%/$pubUrlPath/g;
+
+    # Attachments
     $_[0] =~ s!%ATTACHURL%!$urlHost%ATTACHURLPATH%!g;
     # I18N: URL-encode full web, topic and filename to the native
     # $siteCharset for attachments viewed from browsers that use UTF-8 URL,
     # unless we are in UTF-8 mode or working on EBCDIC mainframe.
     # Include the filename suffixed to %ATTACHURLPATH% - a hack, but required
     # for migration purposes
-    # FIXME: Also do this for PUBURLPATH?
     $_[0] =~ s!%ATTACHURLPATH%/($regex{filenameRegex})!&handleNativeUrlEncode("$pubUrlPath/$_[2]/$_[1]/$1",1)!ge;
     $_[0] =~ s!%ATTACHURLPATH%!&handleNativeUrlEncode("$pubUrlPath/$_[2]/$_[1]",1)!ge;	# No-filename case
     $_[0] =~ s/%ICON{(.*?)}%/&handleIcon($1)/ge;
+
+    # URL encoding
     $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/ge;
     $_[0] =~ s/%(URL)?ENCODE{(.*?)}%/&handleUrlEncode($2,1)/ge; 	# ENCODE is documented, URLENCODE is legacy
     $_[0] =~ s/%INTURLENCODE{(.*?)}%/&handleIntUrlEncode($1)/ge;	# Deprecated - not needed with UTF-8 URL support
+    
+    # Dates and times
     $_[0] =~ s/%DATE%/&getGmDate()/ge; 					# Deprecated, but used in signatures
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/ge;
     $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/ge;
     $_[0] =~ s/%SERVERTIME%/&handleTime("","servertime")/ge;
     $_[0] =~ s/%SERVERTIME{(.*?)}%/&handleTime($1,"servertime")/ge;
+
     $_[0] =~ s/%WIKIVERSION%/$wikiversion/g;
     $_[0] =~ s/%USERNAME%/$userName/g;
     $_[0] =~ s/%WIKINAME%/$wikiName/g;
