@@ -99,6 +99,7 @@ All parameters can be sourced from one of three places:
 |  Plugin Author: | TWiki:Main.MartinCleaver |
 |  Plugin Version: | %$DATE% (%$VERSION%) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  24 Aug 2004: | Bugfix when comparing two arbitrary versions |
 |  23 Aug 2004: | First standalone version, this no longer requires download of zips to do comparisons against |
 |  01 Aug 2004: | Initial version |
 |  TWiki Dependency: | %$DEPENDENCIES% |
