@@ -35,7 +35,7 @@ $query= new CGI;
 #TODO: this needs to be exposed to plugins and whoever might want to over-ride the rendering of diffs
 #Hash, indexed by diffType (+,-,c,u,l.....)
 #contains {colour, CssClassName}
-my %diffColours = ("+" => [ "#ccccff", "TWikiDiffAddedMarker"],
+my %diffColours = ( "+" => [ "#ccccff", "TWikiDiffAddedMarker"],
                     "-" => [ "#ff9999", "TWikiDiffDeletedMarker"],
                     "c" => [ "#99ff99", "TWikiDiffChangedText"],
                     "u" => [ "#ffffff", "TWikiDiffUnchangedText"],
@@ -279,7 +279,7 @@ sub renderRevisionDiff
 {
     my( $diffArray_ref, $renderStyle ) = @_;
 
-    my $result = "<table width=\"100%\" cellspacing=\"0\">\n<tr><td>";
+    my $result = "<table class=\"TWikiDiffTable\" width=\"100%\" cellspacing=\"0\">\n";
     my $data = "";
     my $diff_ref = undef;
     for my $next_ref ( @$diffArray_ref ) {
