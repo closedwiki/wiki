@@ -29,11 +29,13 @@ my $avtest = "|SpawnOfAsses|SonOfSwine|MadGroup|";
 my $dt = "   BrainlessGit,   Thicko         ";
 my $dttest = "|BrainlessGit|Thicko|";
 
+# set to 4 for full DB dumps for debug
+my $dbdump = 0;
+
 sub check {
   my ( $this, $check, $exp ) = @_;
 
-  #print STDERR "./accesscheck $check $tmpdir\n";
-  my $status = `./accesscheck $check $tmpdir`;
+  my $status = `./accesscheck $check $tmpdir/junk $dbdump`;
   if ($status !~ /$exp\s*$/) {
 	print STDERR "WHOOOOPS: $status\n";
   }
@@ -57,10 +59,9 @@ sub test__open_access {
 
   $db->processText("Web", "Topic", "");
   $db = undef;
-
-  $this->check("- - V atv1", "permitted");
-  $this->check("Web - V atv1", "permitted");
-  $this->check("Web Topic V -", "permitted");
+  $this->check("- - - V atv1", "permitted");
+  $this->check("Web - - V atv1", "permitted");
+  $this->check("Web Topic - V -", "permitted");
 }
 
 sub test__topic {
@@ -72,10 +73,10 @@ sub test__topic {
 				   "\t* Set ALLOWTOPICVIEW = atv1,atv2");
 
   $db = undef; # force close
-  $this->check("Web Topic V atv1", "permitted");
-  $this->check("Web Topic V atv2", "permitted");
-  $this->check("Web Topic V dtv", "denied");
-  $this->check("Web Topic V atv", "denied");
+  $this->check("Web Topic - V atv1", "permitted");
+  $this->check("Web Topic - V atv2", "permitted");
+  $this->check("Web Topic - V dtv", "denied");
+  $this->check("Web Topic - V atv", "denied");
 }
 
 sub test__web_topic {
@@ -89,8 +90,8 @@ sub test__web_topic {
 				   "\t* Set DENYWEBVIEW = atv1\n");
 
   $db = undef; # force close
-  $this->check(" Web Topic V atv1", "denied");
-  $this->check(" Web Topic V atv2", "permitted");
+  $this->check(" Web Topic - V atv1", "denied");
+  $this->check(" Web Topic - V atv2", "permitted");
 }
 
 sub test__all_web_topic {
@@ -106,9 +107,9 @@ sub test__all_web_topic {
 				   "\t* Set DENYWEBVIEW = atv2\n");
   $db = undef; # force close
 
-  $this->check("Web Topic V atv1", "denied");
-  $this->check("Web Topic V atv2", "denied");
-  $this->check("Web Topic V atv3", "permitted");
+  $this->check("Web Topic - V atv1", "denied");
+  $this->check("Web Topic - V atv2", "denied");
+  $this->check("Web Topic - V atv3", "permitted");
 }
 
 sub test__deny_global_group {
@@ -122,14 +123,29 @@ sub test__deny_global_group {
   $db->processText("Main", "ThemGroup",
 				   "\t* Set GROUP = her,him\n");
   $db = undef; # force close
-dumpdb();
-  $this->check("Web Topic V agent", "permitted");
-dumpdb();
-  $this->check("Web Topic V her", "denied");
-  $this->check("Web Topic V him", "denied");
-  $this->check("Web Topic V me", "denied");
-  $this->check("Web Topic V us", "denied");
-dumpdb();
+  $this->check("Web Topic - V agent", "permitted");
+  $this->check("Web Topic - V her", "denied");
+  $this->check("Web Topic - V him", "denied");
+  $this->check("Web Topic - V me", "denied");
+  $this->check("Web Topic - V us", "denied");
+}
+
+sub test__change_default {
+  my $this = shift;
+  my $db = new WebDAVPlugin::Permissions($tmpdir);
+  $db->processText("Web", "Topic",
+				   "\t* Set DENYTOPICCHANGE = dtv\n");
+  $db = undef; # force close
+
+  $this->check("- - file.dat C her", "denied");
+  $this->check("- Topic - C him", "denied");
+  $this->check("- Topic file.dat C her", "denied");
+  $this->check("Web - - C her", "denied");
+  $this->check("Web - file.dat C him", "denied");
+  $this->check("Web Topic - C him", "denied");
+  $this->check("Web Topic flie.dat C him", "permitted");
+  $this->check("Web Topic flie.dat C dtv", "denied");
+  $this->check("Web Topic flie.dat,v C him", "denied");
 }
 
 1;

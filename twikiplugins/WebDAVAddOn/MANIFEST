@@ -32,8 +32,8 @@ lib/twiki_dav/Makefile.libdir					Build support script
 lib/twiki_dav/Makefile.tmpl						Build support script
 lib/twiki_dav/mod_dav.c							Code
 lib/twiki_dav/mod_dav.h							Code
-lib/twiki_dav/PROT.c							Code
-lib/twiki_dav/PROT.h							Code
+lib/twiki_dav/dav_twiki.c						Code
+lib/twiki_dav/dav_twiki.h						Code
 lib/twiki_dav/sdbm/sdbm.c						Code
 lib/twiki_dav/sdbm/sdbm.h						Code
 lib/twiki_dav/sdbm/sdbm_hash.c					Code

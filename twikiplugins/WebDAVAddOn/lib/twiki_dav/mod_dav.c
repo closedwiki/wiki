@@ -50,9 +50,9 @@
 
 #include "mod_dav.h"
 
-#include "dav_opaquelock.h"
+#include "dav_twiki.h"
 
-#include "PROT.h"
+#include "dav_opaquelock.h"
 
 /* ### what is the best way to set this? */
 #define DAV_DEFAULT_PROVIDER    "filesystem"
@@ -67,10 +67,11 @@ enum {
 typedef struct {
   const char *provider_name;  /* ### aka "module" name */
   const char *dir;
+
   int twiki_dir_type;
   const char* twiki_dir_root;
   const char* twiki_access_script;
-  
+
   int locktimeout;
   int handle_get;		/* cached from repository hook structure */
   int allow_depthinfinity;
@@ -89,6 +90,8 @@ typedef struct {
 /* per-server configuration */
 typedef struct {
   const char *lockdb_path;	/* lock database path */
+
+  int monitor;
   
   uuid_state st;		/* UUID state for opaquelocktoken */
   
@@ -105,47 +108,20 @@ typedef struct {
 /* forward-declare for use in configuration lookup */
 extern module MODULE_VAR_EXPORT dav_module;
 
-/* DEBUG - log protocol events */
-/* #define LOG_EVENTS */
-#ifdef LOG_EVENTS
-#define LOGEVENT(x,y) logEvent(x,y)
-void logEvent(request_rec* s, dav_resource* r) {
+static void monitor_method(request_rec* s, dav_resource* r) {
+  if (dav_get_monitor(s) < 1)
+	return;
+
+  fprintf(stderr, "DAV: %s ", s->method);
+	
   if (r) {
-    const char* exists = r->exists ? "exists" : "does not exist";
-    const char* collection = r->collection ? "collection" : "file";
-    const char* versioned = r->versioned ? "versioned" : "unversioned";
-    const char* web = r->twiki? r->twiki->web : "";
-    const char* topic = r->twiki? r->twiki->topic : "";
-    const char* type = NULL;
-	
-    switch (r->type) {
-    case DAV_RESOURCE_TYPE_REGULAR: type = "regular"; break;
-    case DAV_RESOURCE_TYPE_REVISION: type = "revision"; break;
-    case DAV_RESOURCE_TYPE_HISTORY: type = "history"; break;
-    case DAV_RESOURCE_TYPE_WORKSPACE: type = "workspace"; break;
-    case DAV_RESOURCE_TYPE_ACTIVITY: type = "activity"; break;
-    case DAV_RESOURCE_TYPE_CONFIGURATION: type = "configuration"; break;
-    }
-	
-    ap_log_printf(s->server,
-				  "EVENT: %s %s: %s %s %s, %s, base %d work %d (%s/%s)",
-				  s->method,
-				  r->uri,
-				  type,
-				  versioned,
-				  collection,
-				  exists,
-				  r->baselined,
-				  r->working,
-				  web,
-				  topic);
-  } else {
-	ap_log_printf(s->server, "EVENT: %s no resource", s->method);
+	fprintf(stderr, dav_twiki_tostring(r));
+	/* flag debug to resource handlers */
+	r->monitor = dav_get_monitor(s);
   }
+
+  fprintf(stderr, "\n");
 }
-#else
-#define LOGEVENT(x,y)
-#endif
 
 /* copy a module's providers into our per-directory configuration state */
 static const char * dav_copy_providers(pool *p, dav_dir_conf *conf)
@@ -250,6 +226,7 @@ static void *dav_merge_server_config(pool *p, void *base, void *overrides)
   newconf = (dav_server_conf *) ap_pcalloc(p, sizeof(*newconf));
   
   newconf->lockdb_path = DAV_INHERIT_VALUE(parent, child, lockdb_path);
+  newconf->monitor = DAV_INHERIT_VALUE(parent, child, monitor);
   
   memcpy(&newconf->st, &child->st, sizeof(newconf->st));
   
@@ -364,6 +341,13 @@ const char *dav_get_lockdb_path(const request_rec *r)
   return conf->lockdb_path;
 }
 
+int dav_get_monitor(const request_rec *r) {
+  dav_server_conf *conf;
+  
+  conf = ap_get_module_config(r->server->module_config, &dav_module);
+  return conf->monitor;
+}
+
 table *dav_get_dir_params(const request_rec *r)
 {
   dav_dir_conf *conf;
@@ -474,6 +458,21 @@ static const char *dav_cmd_dav(cmd_parms *cmd, void *config, const char *arg1)
 }
 
 /*
+ * Command handler for the DAVMonitor directive, which is TAKE1.
+ */
+static const char *dav_cmd_monitor(cmd_parms *cmd, void *config, const char *arg1)
+{
+  dav_server_conf *conf;
+  
+  conf = (dav_server_conf *) ap_get_module_config(cmd->server->module_config,
+												  &dav_module);
+  
+  conf->monitor = atoi(arg1);
+  
+  return NULL;
+}
+
+/*
  * Command handler for the DAVDepthInfinity directive, which is FLAG.
  */
 static const char *dav_cmd_davdepthinfinity(cmd_parms *cmd, void *config,
@@ -501,7 +500,7 @@ static const char *dav_cmd_davlockdb(cmd_parms *cmd, void *config, char *arg1)
   conf->lockdb_path = ap_server_root_relative(cmd->pool, arg1);
   
   /* Initialise the TWiki protections cache DB */
-  PROT_setDBpath(conf->lockdb_path);
+  dav_twiki_setDBpath(conf->lockdb_path);
   
   return NULL;
 }
@@ -592,7 +591,9 @@ static int dav_error_response(request_rec *r, int status, const char *body)
 {
   r->status = status;
   r->content_type = "text/html";
-  
+
+  /*fprintf(stderr, "dav_error_response %s\n", body);*/
+
   /* since we're returning DONE, ensure the request body is consumed. */
   (void) ap_discard_request_body(r);
   
@@ -1003,7 +1004,7 @@ static int dav_method_get(request_rec *r)
   result = dav_get_resource(r, &resource);
   if (result != OK)
 	return result;
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   if (!resource->exists) {
 	/* Apache will supply a default error for this. */
 	return HTTP_NOT_FOUND;
@@ -1179,7 +1180,7 @@ static int dav_method_post(request_rec *r)
   if (result != OK) {
 	return result;
   }
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   
   /* Note: depth == 0. Implies no need for a multistatus response. */
   if ((err = dav_validate_request(r, resource, 0, NULL, NULL,
@@ -1221,7 +1222,7 @@ static int dav_method_put(request_rec *r)
   if (result != OK) {
 	return result;
   }
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   
   /* If not a file or collection resource, PUT not allowed */
   if (resource->type != DAV_RESOURCE_TYPE_REGULAR) {
@@ -1367,7 +1368,7 @@ static int dav_method_put(request_rec *r)
   }
   if (err2 != NULL) {
 	/* just log a warning */
-	err2 = dav_push_error(r->pool, err->status, 0,
+	err2 = dav_push_error(r->pool, err2->status, 0,
 						  "The PUT was successful, but there "
 						  "was a problem reverting the writability of "
 						  "the resource or its parent collection.",
@@ -1453,7 +1454,7 @@ static int dav_method_delete(request_rec *r)
   result = dav_get_resource(r, &resource);
   if (result != OK)
 	return result;
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   if (!resource->exists) {
 	/* Apache will supply a default error for this. */
 	return HTTP_NOT_FOUND;
@@ -1582,7 +1583,7 @@ static int dav_method_options(request_rec *r)
   result = dav_get_resource(r, &resource);
   if (result != OK)
 	return result;
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   
   /* determine which providers are available */
   dav_level = "1";
@@ -1736,6 +1737,14 @@ static dav_error * dav_propfind_walker(dav_walker_ctx *ctx, int calltype)
   dav_propdb *propdb;
   dav_get_props_result propstats = { 0 };
   
+  if (ctx->resource->twiki) {
+	/* a twiki resource; ignore ,v files */
+	const char* file = ctx->resource->uri;
+	if (file && strcmp(file + strlen(file) - 2, ",v") == 0) {
+	  return NULL;
+	}
+  }
+
   /*
   ** Note: ctx->doc can only be NULL for DAV_PROPFIND_IS_ALLPROP. Since
   ** dav_get_allprops() does not need to do namespace translation,
@@ -1796,7 +1805,7 @@ static int dav_method_propfind(request_rec *r)
   if (result != OK)
 	return result;
   
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   
   if (dav_get_resource_state(r, resource) == DAV_RESOURCE_NULL) {
 	/* Apache will supply a default error for this. */
@@ -2061,7 +2070,7 @@ static int dav_method_proppatch(request_rec *r)
   result = dav_get_resource(r, &resource);
   if (result != OK)
 	return result;
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   if (!resource->exists) {
 	/* Apache will supply a default error for this. */
 	return HTTP_NOT_FOUND;
@@ -2263,7 +2272,7 @@ static int dav_method_mkcol(request_rec *r)
   result = dav_get_resource(r, &resource);
   if (result != OK)
 	return result;
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   
   if (resource->exists) {
 	/* oops. something was already there! */
@@ -2393,7 +2402,7 @@ static int dav_method_copymove(request_rec *r, int is_move)
 	return HTTP_NOT_FOUND;
   }
   
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   
   /* If not a file or collection resource, COPY/MOVE not allowed */
   if (resource->type != DAV_RESOURCE_TYPE_REGULAR) {
@@ -2445,7 +2454,7 @@ static int dav_method_copymove(request_rec *r, int is_move)
   if (result != OK)
 	return result;
   
-  LOGEVENT(r, resnew);
+  monitor_method(r, resnew);
   
   /* are the two resources handled by the same repository? */
   if (resource->hooks != resnew->hooks) {
@@ -2777,7 +2786,7 @@ static int dav_method_lock(request_rec *r)
   if (result != OK)
 	return result;
   
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   
   parent_resource  = (*resource->hooks->get_parent_resource)(resource);
   if (parent_resource == NULL || !parent_resource->exists) {
@@ -2976,7 +2985,7 @@ static int dav_method_unlock(request_rec *r)
   if (result != OK)
 	return result;
   
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   
   resource_state = dav_get_resource_state(r, resource);
   
@@ -3049,7 +3058,7 @@ static int dav_method_checkout(request_rec *r)
   result = dav_get_resource(r, &resource);
   if (result != OK)
 	return result;
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   if (!resource->exists) {
 	/* Apache will supply a default error for this. */
 	return HTTP_NOT_FOUND;
@@ -3112,7 +3121,7 @@ static int dav_method_uncheckout(request_rec *r)
   result = dav_get_resource(r, &resource);
   if (result != OK)
 	return result;
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   if (!resource->exists) {
 	/* Apache will supply a default error for this. */
 	return HTTP_NOT_FOUND;
@@ -3175,7 +3184,7 @@ static int dav_method_checkin(request_rec *r)
   result = dav_get_resource(r, &resource);
   if (result != OK)
 	return result;
-  LOGEVENT(r, resource);
+  monitor_method(r, resource);
   if (!resource->exists) {
 	/* Apache will supply a default error for this. */
 	return HTTP_NOT_FOUND;
@@ -3351,10 +3360,18 @@ static int dav_access_checker(request_rec *r)
   /* if DAV is not enabled, then we've got nothing to do */
   if (conf->provider_name == NULL)
 	return DECLINED;
-  
-  if (r->method_number == M_GET)
+
+  /* determine our TWiki access mode */
+  if (r->method_number == M_GET ||
+	  r->method_number == M_COPY ||
+	  r->method_number == M_PROPFIND)
 	mode = "V";
-  else if (r->method_number == M_PUT)
+  else if (r->method_number == M_PUT ||
+		   r->method_number == M_DELETE ||
+		   r->method_number == M_LOCK ||
+		   r->method_number == M_UNLOCK ||
+		   r->method_number == M_PROPPATCH ||
+		   r->method_number == M_MOVE)
 	mode = "C";
   else
 	return DECLINED;
@@ -3369,11 +3386,16 @@ static int dav_access_checker(request_rec *r)
   result = dav_get_resource(r, &resource);
   if (result != OK)
 	return DECLINED;
-  
+
   tr = resource->twiki;
-  
-  if (tr && !PROT_accessible(tr->web, tr->topic, mode, tr->user))
-	return HTTP_UNAUTHORIZED;
+
+  /* if this is a twiki resource, check permissions */
+  if (tr &&
+	  ((resource->collection && mode[0] == 'C') ||
+	   !dav_twiki_accessible(tr->web, tr->topic, tr->file, mode, tr->user,
+							 dav_get_monitor(r)))) {
+	return HTTP_FORBIDDEN;
+  }
 
   return OK;
 }
@@ -3499,6 +3521,14 @@ static const command_rec dav_cmds[] =
 	  TAKE1,
 	  "script for twiki checkin"
 	},
+    {
+      "DAVMonitor",
+	  dav_cmd_monitor,
+	  NULL,
+	  RSRC_CONF,/* per server */
+	  TAKE1,
+	  "enable debugging level"
+    },
 	{ NULL }
   };
 

@@ -28,6 +28,7 @@
 
 #include "mod_dav.h"
 #include "dav_fs_repos.h"
+#include "dav_twiki.h"
 
 /* to assist in debugging mod_dav's GET handling */
 #define DEBUG_GET_HANDLER       0
@@ -552,7 +553,7 @@ static dav_error *dav_fs_deleteset(pool *p, const dav_resource *resource)
 /** Create a TWiki resource decorator for resources that are known to be in a TWiki
  * tree. This includes the root, webs, topics and attachments.
  */
-static twiki_resources* make_twiki_resource(request_rec* r,
+static twiki_resources* make_twiki_resource(const request_rec* r,
                                             int type,
                                             const char* web, int webl,
                                             const char*topic, int topicl,
@@ -579,7 +580,7 @@ static twiki_resources* make_twiki_resource(request_rec* r,
    * id. It's a big assumption that the user will be valid. However
    * this is the value used to create REMOTE_USER, so if it kinda has
    * to work. I should really check Apache::AuthHandler. */
-  ap_get_basic_auth_pw(r, &pw);
+  ap_get_basic_auth_pw((request_rec*)r, &pw);
   tr->user = ap_pstrdup(r->pool, r->connection->user);
   return tr;
 }
@@ -592,134 +593,130 @@ static twiki_resources* make_twiki_resource(request_rec* r,
 static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* resource) {
 
   int type = dav_get_twiki_dir_type(r);
-  const char *a, *b, *web, *topic;
+  const char *root, *path, *web, *topic;
   int webl, topicl;
 
+  root = dav_get_twiki_dir_root(r);
+  path = r->filename;
+
+  if ((resource->monitor & 2) != 0)
+	fprintf(stderr, "Getting info on %s in %s - ", path, root);
 
   if (!type) {
 	/* Not a twiki enabled dir */
-#ifdef DETAIL
-	ap_log_printf(r->server, "Not a twiki enabled dir\n");
-#endif
+	if ((resource->monitor & 2) != 0)
+	  fprintf(stderr, "Not a twiki enabled dir\n");
 	return resource;
   }
 
-  a = dav_get_twiki_dir_root(r);
-  b = r->filename;
-
-#ifdef DETAIL
-  ap_log_printf(r->server, "Getting info %s %s\n", a, b);
-#endif
-
-  if (!a || !b) {
-#ifdef DETAIL
-	ap_log_printf(r->server, "Not a twiki enabled dir2\n");
-#endif
+  if (!root || !path) {
+	if ((resource->monitor & 2) != 0)
+	  fprintf(stderr, "Not a twiki enabled dir2\n");
 	return resource;
   }
 
-	/*fprintf(stderr, "Get %s from root %s\n", b, a);*/
+  /*fprintf(stderr, "Get %s from root %s\n", path, a);*/
 
-    /* remove common prefix and the / after it */
-    while (*a == *b && *a  && *b) {
-        a++; b++;
-    }
-    while (*b == '/' || *b == '\\')
-        b++;
-
-    if (!*b) {
-      /* This is the root of the web hierarchy, and should be browseable */
-      resource->twiki = make_twiki_resource(r,
-                                            type,
-                                            NULL, 0,
-                                            NULL, 0,
-                                            NULL);
-#ifdef DETAIL
-	  ap_log_printf(r->server, "OK, root\n");
-#endif
-      return resource;
-    }
-
-    /* next path component is the web */
-    web = b;
-    while (*b != '\0' && *b != '/' && *b != '\\') {
-        b++;
-    }
-    webl = b - web;
-
-    if (!*b) {
-      /* This is a TWiki web, and should be browseable, filtered by TWiki
-       * protections, though not versioned */
-      resource->twiki = make_twiki_resource(r,
-                                            type,
-                                            web, webl,
-                                            NULL, 0,
-                                            NULL);
-#ifdef DETAIL
-	  ap_log_printf(r->server, "OK, web %s\n", web);
-#endif
-      return resource;
-    }
-    b++; /* trailing / */
-
-    /* and now the topic */
-    topic = b;
-    while (*b != '\0' && *b != '/' && *b != '\\' && *b != '.') {
-        b++;
-    }
-    topicl = b - topic;
-
-    if (!*b) {
-      /* This is a topic directory, and should be browseable for attachments,
+  /* remove common prefix and the / after it */
+  while (*root == *path && *root  && *path) {
+	root++; path++;
+  }
+  while (*path == '/' || *path == '\\')
+	path++;
+  
+  if (!*path) {
+	/* This is the root of the web hierarchy, and should be browseable */
+	resource->twiki = make_twiki_resource(r,
+										  type,
+										  NULL, 0,
+										  NULL, 0,
+										  NULL);
+	if ((resource->monitor & 2) != 0)
+	  fprintf(stderr, "OK, root\n");
+	
+	return resource;
+  }
+  
+  /* next path component is the web */
+  web = path;
+  while (*path != '\0' && *path != '/' && *path != '\\') {
+	path++;
+  }
+  webl = path - web;
+  
+  if (!*path) {
+	/* This is a TWiki web, and should be browseable, filtered by TWiki
+	 * protections, though not versioned */
+	resource->twiki = make_twiki_resource(r,
+										  type,
+										  web, webl,
+										  NULL, 0,
+										  NULL);
+	if ((resource->monitor & 2) != 0)
+	  fprintf(stderr, "OK, web %s\n", web);
+	
+	return resource;
+  }
+  path++; /* trailing / */
+  
+  /* and now the topic */
+  topic = path;
+  while (*path != '\0' && *path != '/' && *path != '\\' && *path != '.') {
+	path++;
+  }
+  topicl = path - topic;
+  
+  if (!*path) {
+	/* This is a topic directory, and should be browseable for attachments,
        filtered by protections, though not versioned */
-      resource->twiki = make_twiki_resource(r,
-                                            type,
-                                            web, webl,
-                                            topic, topicl,
-                                            NULL);
-#ifdef DETAIL
-	  ap_log_printf(r->server, "OK, web %s topic %s\n", web, topic);
-#endif
-      return resource;
-    }
-
-    /* if this is data, expect a .txt extension. If it's pub, expect a subdirectory. */
-    if (type == TWIKI_DATA && strcmp(b, ".txt") != 0) {
-#ifdef DETAIL
-	  ap_log_printf(r->server, "NOT OK, data\n");
-#endif
-        return resource;
-    } else if (type == TWIKI_PUB) {
-	  if (*b != '/' && *b != '\\') {
-#ifdef DETAIL
-	  ap_log_printf(r->server, "NOT OK, pub\n");
-#endif
-		return resource;
-	  }
-	  b++;
-	  while (*b != '\0' && *b != '/' && *b != '\\' && *b != '.') {
-		b++;
-	  }
-	  if (*b == '/' || *b == '\\') {
-#ifdef DETAIL
-	  ap_log_printf(r->server, "NOT OK, pub 2\n");
-#endif
-		return resource;
-	  }
-    }
-
-    /* This is a twiki file (topic or attachment), versioned, checked out */
-    resource->versioned = 1;
-    resource->working = 1; /* to make sure it gets checked in */
-    resource->twiki = make_twiki_resource(r,
-                                          type,
-                                          web, webl,
-                                          topic, topicl,
-                                          r->filename);
-#ifdef DETAIL
-	  ap_log_printf(r->server, "OK\n");
-#endif
-    return resource;
+	resource->twiki = make_twiki_resource(r,
+										  type,
+										  web, webl,
+										  topic, topicl,
+										  NULL);
+	if ((resource->monitor & 2) != 0)
+	  fprintf(stderr, "OK, web %s topic %s\n", web, topic);
+	
+	return resource;
+  }
+  
+  /* if this is data, expect a .txt extension. If it's pub,
+   * expect a subdirectory. */
+  if (type == TWIKI_DATA && strcmp(path, ".txt") != 0) {
+	if ((resource->monitor & 2) != 0)
+	  fprintf(stderr, "BAD data %s\n", path);
+	
+	return resource;
+  } else if (type == TWIKI_PUB) {
+	if (*path != '/' && *path != '\\') {
+	  if ((resource->monitor & 2) != 0)
+		fprintf(stderr, "BAD pub $%s\n", path);
+	  
+	  return resource;
+	}
+	path++;
+	while (*path != '\0' && *path != '/' && *path != '\\' && *path != '.') {
+	  path++;
+	}
+	if (*path == '/' || *path == '\\') {
+	  if ((resource->monitor & 2) != 0)
+		fprintf(stderr, "BAD2 pub %s\n", path);
+	  return resource;
+	}
+  }
+  
+  /* This is a twiki file (topic or attachment), versioned, checked out */
+  resource->versioned = 1;
+  resource->working = 1; /* to make sure it gets checked in */
+  resource->twiki = make_twiki_resource(r,
+										type,
+										web, webl,
+										topic, topicl,
+										r->filename);
+  if ((resource->monitor & 2) != 0)
+	fprintf(stderr, "OK\n");
+  
+  return resource;
 }
 
 /* --------------------------------------------------------------------
@@ -1147,6 +1144,27 @@ static dav_error * dav_fs_create_collection(pool *p, dav_resource *resource)
     return NULL;
 }
 
+static dav_error* copymove_resource(int is_move,
+									pool* p,
+									const dav_resource *src,
+									const dav_resource *dst,
+									dav_buffer* work_buf) {
+  dav_error* err;
+
+  if (dst->twiki)
+	err = dav_twiki_commit(dst, src->info->pathname);
+  else
+	err = dav_fs_copymove_file(is_move, p,
+							   src->info->pathname, dst->info->pathname,
+							   &src->info->finfo, &dst->info->finfo, 
+							   work_buf);
+
+  if (!err && src->twiki && is_move)
+	err = dav_twiki_delete(src);
+
+  return err;
+}
+
 static dav_error * dav_fs_copymove_walker(dav_walker_ctx *ctx, int calltype)
 {
     dav_resource_private *srcinfo = ctx->resource->info;
@@ -1171,11 +1189,14 @@ static dav_error * dav_fs_copymove_walker(dav_walker_ctx *ctx, int calltype)
 	}
     }
     else {
-	err = dav_fs_copymove_file(ctx->is_move, ctx->pool, 
-				   srcinfo->pathname, dstinfo->pathname, 
-				   &srcinfo->finfo, &dstinfo->finfo, 
-				   &ctx->work_buf);
-	/* ### push a higher-level description? */
+	  err = copymove_resource(ctx->is_move, ctx->pool, 
+						ctx->resource, ctx->res2, &ctx->work_buf);
+	  /*
+		err = dav_fs_copymove_file(ctx->is_move, ctx->pool, 
+								 srcinfo->pathname, dstinfo->pathname, 
+								 &srcinfo->finfo, &dstinfo->finfo, 
+								 &ctx->work_buf);
+	  */
     }
 
     /*
@@ -1204,24 +1225,23 @@ static dav_error * dav_fs_copymove_walker(dav_walker_ctx *ctx, int calltype)
     return err;
 }
 
-static dav_error *dav_fs_copymove_resource(
-    int is_move,
-    const dav_resource *src,
-    const dav_resource *dst,
-    int depth,
-    dav_response **response)
+static dav_error *dav_fs_copymove_resource(int is_move,
+										   const dav_resource *src,
+										   const dav_resource *dst,
+										   int depth,
+										   dav_response **response)
 {
-    dav_error *err = NULL;
-    dav_buffer work_buf = { 0 };
-
-    *response = NULL;
-
-    /* if a collection, recursively copy/move it and its children,
-     * including the state dirs
-     */
-    if (src->collection) {
+  dav_error *err = NULL;
+  dav_buffer work_buf = { 0 };
+  
+  *response = NULL;
+  
+  /* if a collection, recursively copy/move it and its children,
+   * including the state dirs
+   */
+  if (src->collection) {
 	dav_walker_ctx ctx = { 0 };
-
+	
 	ctx.walk_type = DAV_WALKTYPE_ALL | DAV_WALKTYPE_HIDDEN;
 	ctx.func = dav_fs_copymove_walker;
 	ctx.pool = src->info->pool;
@@ -1229,36 +1249,39 @@ static dav_error *dav_fs_copymove_resource(
 	ctx.res2 = dst;
 	ctx.is_move = is_move;
 	ctx.postfix = is_move;	/* needed for MOVE to delete source dirs */
-
+	
 	/* copy over the source URI */
 	dav_buffer_init(ctx.pool, &ctx.uri, src->uri);
-
-	if ((err = dav_fs_walk(&ctx, depth)) != NULL) {
-            /* on a "real" error, then just punt. nothing else to do. */
-            return err;
-        }
-
-        if ((*response = ctx.response) != NULL) {
-            /* some multistatus responses exist. wrap them in a 207 */
-            return dav_new_error(src->info->pool, HTTP_MULTI_STATUS, 0,
-                                 "Error(s) occurred on some resources during "
-                                 "the COPY/MOVE process.");
-        }
-
-	return NULL;
-    }
-
-    /* not a collection */
-    if ((err = dav_fs_copymove_file(is_move, src->info->pool,
-				    src->info->pathname, dst->info->pathname,
-				    &src->info->finfo, &dst->info->finfo, 
-				    &work_buf)) != NULL) {
-	/* ### push a higher-level description? */
-	return err;
-    }
 	
-    /* copy/move properties as well */
-    return dav_fs_copymoveset(is_move, src->info->pool, src, dst, &work_buf);
+	if ((err = dav_fs_walk(&ctx, depth)) != NULL) {
+	  /* on a "real" error, then just punt. nothing else to do. */
+	  return err;
+	}
+	
+	if ((*response = ctx.response) != NULL) {
+	  /* some multistatus responses exist. wrap them in a 207 */
+	  return dav_new_error(src->info->pool, HTTP_MULTI_STATUS, 0,
+						   "Error(s) occurred on some resources during "
+						   "the COPY/MOVE process.");
+	}
+	
+	return NULL;
+  }
+  
+  /* not a collection */
+  err = copymove_resource(is_move, src->info->pool, src, dst, &work_buf);
+  /*
+  err = dav_fs_copymove_file(is_move, src->info->pool,
+							 src->info->pathname, dst->info->pathname,
+							 &src->info->finfo, &dst->info->finfo, 
+							 &work_buf);
+  */
+
+  if (err) 
+	return err;
+
+  /* copy/move properties as well */
+  return dav_fs_copymoveset(is_move, src->info->pool, src, dst, &work_buf);
 }
 
 static dav_error * dav_fs_copy_resource(
@@ -1330,12 +1353,15 @@ static dav_error * dav_fs_move_resource(
 	/* destination does not exist, but the parent directory should,
 	 * so try it
 	 */
+
 	dirpath = ap_make_dirstr_parent(dstinfo->pool, dstinfo->pathname);
 	if (stat(dirpath, &finfo) == 0
 	    && finfo.st_dev == srcinfo->finfo.st_dev) {
 	    can_rename = 1;
 	}
     }
+
+	can_rename = 0; /** Shortcut rename removed, as it prevents twiki actions*/
 
     /* if we can't simply renamed, then do it the hard way... */
     if (!can_rename) {
@@ -1441,56 +1467,66 @@ static dav_error * dav_fs_delete_walker(dav_walker_ctx *ctx, int calltype)
 static dav_error * dav_fs_remove_resource(dav_resource *resource,
                                           dav_response **response)
 {
-    dav_resource_private *info = resource->info;
+  dav_resource_private *info = resource->info;
 
-    *response = NULL;
+  *response = NULL;
 
-    /* if a collection, recursively remove it and its children,
-     * including the state dirs
-     */
-    if (resource->collection) {
-	dav_walker_ctx ctx = { 0 };
-	dav_error *err = NULL;
+  if (resource->twiki) {
+	/* Delegate removal to TWiki.
+	 * Note: the big assumption is made that files in TWiki directories
+	 * have no properties, so we don't attempt to remove them. Really
+	 * we should walk through. */
+	dav_error* err = dav_twiki_delete(resource);
+	if (err)
+	  return err;
+  } else {
+	/* if a collection, recursively remove it and its children,
+	 * including the state dirs
+	 */
+	if (resource->collection) {
+	  dav_walker_ctx ctx = { 0 };
+	  dav_error *err = NULL;
+	  
+	  ctx.walk_type = DAV_WALKTYPE_ALL | DAV_WALKTYPE_HIDDEN;
+	  ctx.postfix = 1;
+	  ctx.func = dav_fs_delete_walker;
+	  ctx.pool = info->pool;
+	  ctx.resource = resource;
+	  
+	  dav_buffer_init(info->pool, &ctx.uri, resource->uri);
+	  
+	  if ((err = dav_fs_walk(&ctx, DAV_INFINITY)) != NULL) {
+		/* on a "real" error, then just punt. nothing else to do. */
+		return err;
+	  }
+	  
+	  if ((*response = ctx.response) != NULL) {
+		/* some multistatus responses exist. wrap them in a 207 */
+		return dav_new_error(info->pool, HTTP_MULTI_STATUS, 0,
+							 "Error(s) occurred on some resources during "
+							 "the deletion process.");
+	  }
+	  
+	  /* no errors... update resource state */
+	  resource->exists = 0;
+	  resource->collection = 0;
+	  
+	  return NULL;
+	}
+	
+	/* not a collection; remove the file and its properties */
+	if (remove(info->pathname) != 0) {
+	  /* ### put a description in here */
+	  return dav_new_error(info->pool, HTTP_FORBIDDEN, 0, NULL);
+	}
+  }	
 
-	ctx.walk_type = DAV_WALKTYPE_ALL | DAV_WALKTYPE_HIDDEN;
-	ctx.postfix = 1;
-	ctx.func = dav_fs_delete_walker;
-	ctx.pool = info->pool;
-	ctx.resource = resource;
-
-	dav_buffer_init(info->pool, &ctx.uri, resource->uri);
-
-	if ((err = dav_fs_walk(&ctx, DAV_INFINITY)) != NULL) {
-            /* on a "real" error, then just punt. nothing else to do. */
-            return err;
-        }
-
-        if ((*response = ctx.response) != NULL) {
-            /* some multistatus responses exist. wrap them in a 207 */
-            return dav_new_error(info->pool, HTTP_MULTI_STATUS, 0,
-                                 "Error(s) occurred on some resources during "
-                                 "the deletion process.");
-        }
-
-        /* no errors... update resource state */
-        resource->exists = 0;
-        resource->collection = 0;
-
-	return NULL;
-    }
-
-    /* not a collection; remove the file and its properties */
-    if (remove(info->pathname) != 0) {
-	/* ### put a description in here */
-	return dav_new_error(info->pool, HTTP_FORBIDDEN, 0, NULL);
-    }
-
-    /* update resource state */
-    resource->exists = 0;
-    resource->collection = 0;
-
-    /* remove properties and return its result */
-    return dav_fs_deleteset(info->pool, resource);
+  /* update resource state */
+  resource->exists = 0;
+  resource->collection = 0;
+  
+  /* remove properties and return its result */
+  return dav_fs_deleteset(info->pool, resource);
 }
 
 /* ### move this to dav_util? */

@@ -12,7 +12,7 @@ INSTALL_IT = @INSTALL_IT@
 LIBS = @LIBS@
 RANLIB = @RANLIB@
 AR = ar rc
-CC = @CC@
+CC = @CC@ -g
 LCLINT = lclint
 
 # put the autoconf INCLUDE before the cflags. The Apache CFLAGS
@@ -28,7 +28,7 @@ SRCS = \
 	dav_lock.c \
 	dav_opaquelock.c \
 	dav_dyn.c \
-	PROT.c
+	dav_twiki.c
 
 REPOS_SRCS = \
 	dav_fs_dbm.c \
@@ -46,7 +46,7 @@ REPOS_OBJS = $(REPOS_SRCS:.c=.o)
 SDBM_OBJS = $(SDBM_SRCS:.c=.o)
 
 OBJS = $(STD_OBJS) $(REPOS_OBJS) $(SDBM_OBJS)
-HDRS = mod_dav.h dav_opaquelock.h PROT.h $(SDBM_HDRS)
+HDRS = mod_dav.h dav_opaquelock.h dav_twiki.h $(SDBM_HDRS)
 
 all: $(BINNAME)
 

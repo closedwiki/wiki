@@ -1,22 +1,25 @@
 #define PROT_PRINT 1
-
-#include "PROT.h"
-#include "PROT.c"
+#include "dav_twiki.c"
 int main(int argc, const char** argv) {
   int ret;
   const char* web = argv[1];
   const char* topic = argv[2];
-  const char* mode = argv[3];
-  const char* user = argv[4];
-  const char* db = argv[5];
+  const char* file = argv[3];
+  const char* mode = argv[4];
+  const char* user = argv[5];
+  const char* db = argv[6];
+  const char* mon = argv[7];
+  int monitor = atoi(mon);
   if (strcmp(web,"-") == 0)
 	web = NULL;
   if (strcmp(topic,"-") == 0)
 	topic = NULL;
+  if (strcmp(file,"-") == 0)
+	file = NULL;
   if (strcmp(user,"-") == 0)
 	user = NULL;
-  PROT_setDBpath(db);
-  if (PROT_accessible(web, topic, mode, user))
+  dav_twiki_setDBpath(db);
+  if (dav_twiki_accessible(web, topic, file, mode, user, monitor))
 	printf("permitted\n");
   else
 	printf("denied\n");

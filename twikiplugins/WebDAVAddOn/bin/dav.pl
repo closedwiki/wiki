@@ -1,7 +1,6 @@
 #!/usr/bin/perl -w
 # Interaction script for twiki_dav, the mod_dav module.
 BEGIN {
-print "$0\n";
   $0 =~ m/^(.*)\/[^\/]*$/o;
   if ($1) {
     chdir $1;
@@ -14,71 +13,144 @@ use TWiki;
 use TWiki::UI::Upload;
 use File::Copy;
 
+my $jWeb = "Trash";
+my $jTopic = "TrashAttachment";
+
+#open(EF, ">>/tmp/vsnlog");
+#print EF "<".join(" ",@ARGV).">\n";
+
+my $rf = $ARGV[0];
+die "ERROR: No response file" unless $rf;
+
 sub fail {
   my $mess = shift;
+  $mess = "ERROR: $mess\n";
 
-  print STDERR "PERL: $mess\n";
-  die;
+  open(RF, ">$rf");
+  $| = 1;
+  print RF $mess;
+  close(RF);
+
+  #print EF $mess;
+
+  die $mess;
 }
 
-open(STDERR, ">>/tmp/vsnlog");
-open(STDOUT, ">>/tmp/vsnlog");
+my $user = $ARGV[1];
+fail("No user") unless $user;
+my $function = $ARGV[2];
+fail("No function") unless $function;
+my $theResource = $ARGV[3];
 
-my $function = $ARGV[0];
-fail("ERROR: No function") unless $function;
-my $theWeb = $ARGV[1];
-fail("ERROR: No web") unless $theWeb;
-my $theTopic = $ARGV[2];
-fail("ERROR: No topic") unless $theTopic;
-my $fileName = $ARGV[3];
-fail("ERROR: No file") unless $fileName;
-my $theUser = $ARGV[4];
-fail("ERROR: No user") unless $theUser;
+unless ( $theResource =~ m/(\w+)\/(\w+)\/(.*)$/o) {
+  fail("Bad resource $theResource");
+}
+my ( $web, $topic, $att ) = ($1, $2, $3);
+fail("No web in $theResource") unless ($web);
+fail("No topic in $theResource") unless ($topic);
+fail("No attachment in $theResource") unless ($att);
 
-my ( $topic, $webName, $dummy, $userName, $dataDir) = 
-  TWiki::initialize( "/$theWeb/$theTopic", $theUser );
+$web =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
+$topic =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
+$att =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
 
-if ($function eq "commit") {
+# Delete environment variables that would cause RCS to
+# take the lock as the named user rather than as the Apache user.
+delete( $ENV{'USER'} );
+delete( $ENV{'LOGNAME'} );
 
-  print STDERR "Committing $theWeb/$theTopic,$fileName for $theUser\n";
+my $dummy;
 
-  # PUT - checking new version of file. This will also check
-  # for permission to change.
+( $topic, $web, $dummy, $user ) = TWiki::initialize( "/$web/$topic", $user );
 
-  my $safe = "up$$$fileName";
-  File::Copy::move($fileName, $safe);
-  my @error = TWiki::UI::Upload::updateAttachment( $theWeb,
-                                                   $theTopic,
-                                                   $theUser,  # remote user
-                                                   0,         # createLink
-                                                   0,         # propsOnly
-                                                   $fileName, # filepath
-                                                   $safe,     # localfile
-                                                   undef,     # attName
-                                                   0,         # hideFile
-                                                   "Updated by WebDAV" );
-  unlink($safe);
-  if ( ( @error ) && scalar( @error ) && defined( $error[0] )) {
-    fail("Update failed $error[0]");
+if ( $function eq "delete" ) {
+  # This has to be done by an attachment move. We assume the standard
+  # target for the move.
+  # Need to lock src and dest
+
+  # CODE_SMELL: If there is no filename, moveAttachment tries to move
+  # the f***ing topic!
+
+  my $wikiUserName = TWiki::userToWikiName( $user );
+  fail("Web $web does not exist")  unless TWiki::UI::webExists( $web, $topic );
+  fail("Mirror") if TWiki::UI::isMirror( $webName, $topic );
+  fail("Access to $web/$topic denied") unless
+	TWiki::UI::isAccessPermitted( $web, $topic,
+								  "change", $wikiUserName );
+
+  my $error = _lockTopic( $jWeb, $jTopic, $user );
+  if ( !( $error )) {
+	$error = _lockTopic( $web, $topic, $user );
+	if ( !( $error )) {
+	  $error = TWiki::Store::moveAttachment( $web, $topic,
+											 $jWeb, $jTopic,
+											 $att );
+	  TWiki::Store::lockTopicNew( $web, $topic, 1 );
+	}
+	TWiki::Store::lockTopicNew( $jWeb, $jTopic, 1 );
   }
-#}
-# elsif ($function eq "check") {#
-#
-#  # GET for edit - check for permission to change.
 
-#  my $wikiUserName = &TWiki::userToWikiName( $theUser );
-#  fail("No access") unless
-#    TWiki::Access::checkAccessPermission( "change", $wikiUserName, "",
-#                                          $theTopic, $theWeb );
-#} elsif ($function eq "commit" ) {
+  fail( $error ) if ( $error );
 
-#  # CODE_SMELL: Assumes implementation of a topic as an RCS'ed file, where
-#  # the checked-out version can be read before checking back in.
-#  ( $meta, $text ) = TWiki::Store::readTopic( $theWeb, $theTopic );
-#  fail("Store") if TWiki::Store::saveTopic( $theWeb, $theTopic, $text, $meta, "", 1, 0 );
-#
+} elsif ( $function eq "commit" ) {
+
+  my $path = $ARGV[4];
+  fail("No path") unless ($path);
+  $path =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
+  fail( "$path does not exist") unless (-e $path);
+
+  # copy to temp file to avoid conflict over the actual file
+  # this could be done to avoid the copy, but hey, who cares?
+  my $safe = "/tmp/$web$topic$att";
+  File::Copy::copy($path, $safe);
+
+  my $err = _lockTopic( $web, $topic, $user );
+  fail( $err) if ( $err );
+
+  my @error =
+	TWiki::UI::Upload::updateAttachment( $web,
+										 $topic,
+										 $user,     # remote user
+										 0,         # createLink
+										 0,         # propsOnly
+										 $att,      # filepath
+										 $safe,     # localfile
+										 $att,      # attName
+										 0,         # hideFile
+										 "Updated by $user using WebDAV" );
+
+  TWiki::Store::lockTopicNew( $web, $topic, 1 );
+
+  if ( ( @error ) && scalar( @error ) && defined( $error[0] )) {
+	fail("Update failed $error[0] $error[1]");
+  }
+
+  unlink($safe);
+
+  if ( ( @error ) && scalar( @error ) && defined( $error[0] )) {
+	fail("Update failed $error[0]");
+  }
 } else {
-  fail("ERROR: Bad function $function");
+  fail("Bad function $function");
+}
+
+sub _decode {
+  return chr(hex(shift));
+}
+
+sub _lockTopic {
+  my( $web, $topic ) = @_;
+
+  my ( $lockUser, $lockTime ) =
+	TWiki::Store::topicIsLockedBy( $web, $topic );
+  if( $lockUser ) {
+	return TWiki::userToWikiName( $lockUser ) .
+	  " has $web/$topic locked";
+  }
+
+  TWiki::Store::lockTopicNew( $web, $topic, 0 );
+
+  return undef;
 }
 
 1;
