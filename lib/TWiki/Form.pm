@@ -201,6 +201,7 @@ sub link
     my $link = "$name";
     
     if( &TWiki::Store::topicExists( $web, $name ) ) {
+        ( $web, $name ) = &TWiki::Store::normalizeWebTopicName( $web, $name );
         if( ! $tooltip ) {
             $tooltip = "Click to see details in separate window";
         }
