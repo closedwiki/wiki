@@ -60,7 +60,7 @@ sub main
     my $unlock = $query->param( "unlock" ) || "";
     if( $unlock eq "on" ) {
         # unlock topic, user cancelled out of edit
-        &TWiki::lockTopic( $topic, "on" );
+        &TWiki::Store::lockTopic( $topic, "on" );
     }
 
     # get view template, standard view or a view with a different skin

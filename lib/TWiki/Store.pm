@@ -185,10 +185,10 @@ sub saveTopic
         }
 
         # save file
-        &TWiki::saveFile( $name, $text );
+        &TWiki::Store::saveFile( $name, $text );
 
         # reset lock time, this is to prevent contention in case of a long edit session
-        &TWiki::lockTopic( $topic, $doUnlock );
+        &TWiki::Store::lockTopic( $topic, $doUnlock );
 
         # time stamp of existing file within one hour of old one?
         my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp8,$tmp9,
@@ -234,7 +234,7 @@ sub saveTopic
 
             if( $TWiki::doLogTopicSave ) {
                 # write log entry
-                &TWiki::writeLog( "save", "$TWiki::webName.$topic", "" );
+                &TWiki::Store::writeLog( "save", "$TWiki::webName.$topic", "" );
             }
         }
     }
@@ -244,8 +244,8 @@ sub saveTopic
         # fix topic by replacing last revision
 
         # save file
-        &TWiki::saveFile( $name, $text );
-        &TWiki::lockTopic( $topic, $doUnlock );
+        &TWiki::Store::saveFile( $name, $text );
+        &TWiki::Store::lockTopic( $topic, $doUnlock );
 
         # update repository with same userName and date, but do not update .changes
         my $rev = getRevisionNumber( $topic );
@@ -296,7 +296,7 @@ sub saveTopic
         if( $TWiki::doLogTopicSave ) {
             # write log entry
             $tmp  = &TWiki::userToWikiName( $user );
-            &TWiki::writeLog( "save", "$TWiki::webName.$topic", "repRev $rev $tmp $date" );
+            &TWiki::Store::writeLog( "save", "$TWiki::webName.$topic", "repRev $rev $tmp $date" );
         }
     }
 
@@ -340,22 +340,116 @@ sub saveTopic
         # restore last topic from repository
         $rev = getRevisionNumber( $topic );
         $tmp = readVersion( $topic, $rev );
-        &TWiki::saveFile( $name, $tmp );
-        &TWiki::lockTopic( $topic, $doUnlock );
+        &TWiki::Store::saveFile( $name, $tmp );
+        &TWiki::Store::lockTopic( $topic, $doUnlock );
 
         # delete entry in .changes : To Do !
 
         if( $TWiki::doLogTopicSave ) {
             # write log entry
-            &TWiki::writeLog( "cmd", "$TWiki::webName.$topic", "delRev $rev" );
+            &TWiki::Store::writeLog( "cmd", "$TWiki::webName.$topic", "delRev $rev" );
         }
     }
     return 0; # all is well
 }
 
 # =========================
+sub writeLog
+{
+    my( $action, $webTopic, $extra, $user ) = @_;
+
+    # use local time for log, not UTC (gmtime)
+
+    my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
+    my( $tmon) = $TWiki::isoMonth[$mon];
+    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
+    my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
+    my $yearmonth = sprintf( "%.4u%.2u", $year, $mon+1 );
+
+    my $wuserName = $user || $TWiki::userName;
+    $wuserName = userToWikiName( $wuserName );
+    my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
+    my $text = "| $time | $wuserName | $action | $webTopic | $extra | $remoteAddr |";
+
+    my $filename = $TWiki::logFilename;
+    $filename =~ s/%DATE%/$yearmonth/go;
+    open( FILE, ">>$filename");
+    print FILE "$text\n";
+    close( FILE);
+}
+
+# =========================
+sub saveFile
+{
+    my( $name, $text ) = @_;
+    open( FILE, ">$name" ) or warn "Can't create file $name\n";
+    print FILE $text;
+    close( FILE);
+}
+
+# =========================
+sub lockTopic
+{
+    my( $name, $doUnlock ) = @_;
+
+    my $lockFilename = "$TWiki::dataDir/$TWiki::webName/$name.lock";
+    if( $doUnlock ) {
+        unlink "$lockFilename";
+    } else {
+        my $lockTime = time();
+        &TWiki::Store::saveFile( $lockFilename, "$TWiki::userName\n$lockTime" );
+    }
+}
+
+# =========================
+sub removeObsoleteTopicLocks
+{
+    my( $web ) = @_;
+
+    # Clean all obsolete .lock files in a web.
+    # This should be called regularly, best from a cron job (called from mailnotify)
+
+    my $webDir = "$TWiki::dataDir/$web";
+    opendir( DIR, "$webDir" );
+    my @fileList = grep /\.lock$/, readdir DIR;
+    closedir DIR;
+    my $file = "";
+    my $pathFile = "";
+    my $lockUser = "";
+    my $lockTime = "";
+    my $systemTime = time();
+    foreach $file ( @fileList ) {
+        $pathFile = "$webDir/$file";
+        $pathFile =~ /(.*)/;
+        $pathFile = $1;       # untaint file
+        ( $lockUser, $lockTime ) = split( /\n/, readFile( "$pathFile" ) );
+        if( ! $lockTime ) { $lockTime = ""; }
+
+        # time stamp of lock over one hour of current time?
+        if( abs( $systemTime - $lockTime ) > $TWiki::editLockTime ) {
+            # obsolete, so delete file
+            unlink "$pathFile";
+        }
+    }
+}
+
+
+# =========================
+sub readFile
+{
+    my( $name ) = @_;
+    my $data = "";
+    undef $/; # set to read to EOF
+    open( IN_FILE, "<$name" ) || return "";
+    $data = <IN_FILE>;
+    $/ = "\n";
+    close( IN_FILE );
+    return $data;
+}
+
+
+# =========================
 
 1;
 
 # EOF
-

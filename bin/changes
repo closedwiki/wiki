@@ -52,7 +52,7 @@ sub main
     }
 
     my $text = &TWiki::readTemplate( "changes" );
-    my $changes= &TWiki::readFile( "$dataDir/$webName/.changes" );
+    my $changes= &TWiki::Store::readFile( "$dataDir/$webName/.changes" );
    
     my @bar = ();
     my $foo = "";
@@ -85,7 +85,7 @@ sub main
             $foo =~ s/%TIME%/$time$frev/go;
             $foo = &TWiki::getRenderedVersion( $foo );
 
-            $head = &TWiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );
+            $head = &TWiki::Store::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );
             $head = &TWiki::makeTopicSummary( $head, $bar[0], $webName );
             $foo =~ s/%TEXTHEAD%/$head/go;
 
@@ -96,7 +96,7 @@ sub main
 
     if( $TWiki::doLogTopicChanges ) {
         # write log entry
-        &TWiki::writeLog( "changes", $webName, "" );
+        &TWiki::Store::writeLog( "changes", $webName, "" );
     }
 
     print $after;

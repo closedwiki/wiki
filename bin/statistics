@@ -105,7 +105,7 @@ sub main
 
     if( -e $logFile ) {
 
-        my @logList = split( /\n/, &TWiki::readFile( $logFile ) );
+        my @logList = split( /\n/, &TWiki::Store::readFile( $logFile ) );
 
         if( $thePathInfo ) {
             # do a particular web:

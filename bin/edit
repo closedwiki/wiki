@@ -172,7 +172,7 @@ sub main
         return;
     }
 
-    if( ( $onlyWikiName ) && ( ! &TWiki::isWikiName( $topic ) ) && ( ! &wiki::topicExists( $webName, $topic ) ) ) {
+    if( ( $onlyWikiName ) && ( ! &TWiki::isWikiName( $topic ) ) && ( ! &TWiki::topicExists( $webName, $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         print $query->redirect( &TWiki::getViewUrl( $webName, $topic ) );
 	return;
@@ -189,9 +189,9 @@ sub main
         return;
     }
     if( ( $saveCmd ) &&
-        ( ! &TWiki::Access::userIsInGroup( $wikiUserName, "TWikiAdminGroup" ) ) ) {
+        ( ! &TWiki::Access::userIsInGroup( $TWikiUserName, "TWikiAdminGroup" ) ) ) {
         # user has no permission to execute undocumented cmd=... parameter
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$wiki::mainWebname.TWikiAdminGroup" );
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$TWiki::mainWebname.TWikiAdminGroup" );
         print $query->redirect( $url );
         return;
     }
@@ -209,7 +209,7 @@ sub main
         print $query->redirect( $url );
 	return;
     }
-    &TWiki::lockTopic( $topic );
+    &TWiki::Store::lockTopic( $topic );
 
     print "Content-type: text/html\n\n";
 
@@ -223,7 +223,7 @@ sub main
 
         my $foo = &TWiki::getLocaldate();
         $text =~ s/%DATE%/$foo/go;
-        $text =~ s/%USERNAME%/$wikiUserName/go;
+        $text =~ s/%USERNAME%/$TWikiUserName/go;
     }
 
     if( $icat ) {
@@ -272,7 +272,7 @@ sub main
 
     if( $TWiki::doLogTopicEdit ) {
         # write log entry
-        &TWiki::writeLog( "edit", "$webName.$topic", $extra );
+        &TWiki::Store::writeLog( "edit", "$webName.$topic", $extra );
     }
 
     if( $saveCmd ) {

@@ -109,7 +109,7 @@ sub main
 
     if( $TWiki::doLogTopicAttach ) {
         # write log entry
-        &TWiki::writeLog( "attach", "$webName.$topic", $fileName );
+        &TWiki::Store::writeLog( "attach", "$webName.$topic", $fileName );
     }
 
     # get view template, standard view or a view with a different skin

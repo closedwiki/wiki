@@ -131,7 +131,7 @@ sub main
     }
 
     # reset lock time, this is to prevent contention in case of a long edit session
-    &TWiki::lockTopic( $topic );
+    &TWiki::Store::lockTopic( $topic );
 
     # get view template, standard view or a view with a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );

@@ -31,16 +31,16 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName, $scriptUrlPath ) = 
-        &wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
-    if( ! &wiki::webExists( $webName ) ) {
-        my $tmpl= &wiki::readTemplate( "noweb" );
-        $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+    if( ! &TWiki::webExists( $webName ) ) {
+        my $tmpl= &TWiki::readTemplate( "noweb" );
+        $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print $tmpl;
         return;
     }
 
     # PTh 20 Jun 2000: changed to getOopsUrl
-    my $url = &wiki::getOopsUrl( $webName, $topic, "oopsdel" );
+    my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsdel" );
     print $query->redirect( $url );
 }

@@ -202,7 +202,7 @@ sub main
 
     if( $TWiki::doLogTopicRdiff ) {
         # write log entry
-        &TWiki::writeLog( "rdiff", "$webName.$topic", "r1.$rev1 r1.$rev2" );
+        &TWiki::Store::writeLog( "rdiff", "$webName.$topic", "r1.$rev1 r1.$rev2" );
     }
 
     # format "after" part

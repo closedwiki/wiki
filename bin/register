@@ -142,10 +142,12 @@ sub main
     }
     $text = "$before$after";
     $text = &TWiki::handleCommonTags( $text, $wikiName );
-    &TWiki::sendEmail( $text );
+
+    &TWiki::Net::sendEmail( &TWiki::Prefs::getPreferencesValue("WIKIWEBMASTER"), 
+			    $emailAddress, $text );
 
     # create user topic if not exist
-    if( ! &TWiki::topicExists( $wiki::mainWebname, $wikiName ) ) {
+    if( ! &TWiki::topicExists( $TWiki::mainWebname, $wikiName ) ) {
         $text = &TWiki::readTemplate( "register" );
         ( $before, $after) = split( /%FORMDATA%/, $text );
         for( $x = 0; $x < $formLen; $x++ ) {
@@ -197,7 +199,7 @@ sub htpasswdExistUser
         return "";
     }
 
-    my $text = &TWiki::readFile( $wiki::htpasswdFilename );
+    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
     if( $text =~ /$user\:/go ) {
         return "1";
     }
@@ -210,9 +212,9 @@ sub htpasswdAddUser
 
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = &TWiki::readFile( $wiki::htpasswdFilename );
+    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
     $text .= "$userEntry\n";
-    &TWiki::saveFile( $wiki::htpasswdFilename, $text );
+    &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
 }
 
 sub addUserToTWikiUsersTopic
