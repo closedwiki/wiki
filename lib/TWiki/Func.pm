@@ -21,14 +21,17 @@
 
 ---++ package TWiki::Func
 
-This module defines official funtions that [[%TWIKIWEB%.TWikiPlugins][Plugins]] 
-and add-on scripts can use to interact with the TWiki engine and content.
+This module defines official functions that [[%TWIKIWEB%.TWikiPlugins][Plugins]]
+can use to interact with the TWiki engine and content.
+
+Refer to lib/TWiki/Plugins/EmptyPlugin.pm for a template plugin and
+documentation on how to write a plugin.
 
 Plugins should *only* use functions published in this module. If you use
-functions in other TWiki libraries you might impose a security hole and 
+functions in other TWiki libraries you might create a security hole and
 you will likely need to change your Plugin when you upgrade TWiki.
 
-The version of the TWiki::Func module is defined by the VERSION number of the 
+The version of the TWiki::Func module is defined by the VERSION number of the
 TWiki::Plugins module, currently %PLUGINVERSION{}%. This can be shown by the 
 =%<nop>PLUGINVERSION{}%= variable. The "Since" field in the function documentation 
 refers to the VERSION number and the date that the function was addded.
@@ -614,8 +617,10 @@ sub permissionsSet
 # -------------------------
 sub checkAccessPermission
 {
-#   my( $type, $user, $text, $topic, $web ) = @_;
-    return $TWiki::Plugins::SESSION->{security}->checkAccessPermission( @_ );
+    my( $type, $user, $text, $topic, $web ) = @_;
+    $user = $TWiki::Plugins::SESSION->{users}->findUser( $user );
+    return $TWiki::Plugins::SESSION->{security}->checkAccessPermission
+      ( $type, $user, $text, $topic, $web );
 }
 
 # =========================
@@ -847,6 +852,41 @@ sub getTopicList
 =pod
 
 ---++ Functions: Rendering
+
+---+++ registerTagHandler( $tag, \&fn )
+| Description:      | Register a function to handle a simple tag. Should only be called from initPlugin. |
+| Parameter: =$tag= | The name of the tag i.e. the "MYTAG" part of %<nop>MYTAG% |
+| Parameter: =\&fn= | Reference to the handler function. |
+| Since:            | TWiki::Plugins::VERSION 1.026 |
+
+The tag handler function must be of the form:
+<verbatim>
+sub handler(\%session, \%params, $theTopic, $theWeb)
+</verbatim>
+where:
+   * =\%session= - a reference to the TWiki session object (may be ignored)
+   * =\%params= - a reference to a TWiki::Attrs object containing parameters. This can be used as a simple hash that maps parameter names to values, with _DEFAULT being the name for the default parameter.
+   * =$theTopic= - name of the topic in the query
+   * =$theWeb= - name of the web in the query
+
+=cut
+
+sub registerTagHandler {
+    my( $tag, $function ) = @_;
+    # Use an anonymous function so it gets inlined at compile time.
+    # Make sure we don't mangle the session reference.
+    TWiki::registerTagHandler( $tag,
+                               sub {
+                                   my $record = $TWiki::Plugins::SESSION;
+                                   $TWiki::Plugins::SESSION = $_[0];
+                                   my $result = &$function( @_ );
+                                   $TWiki::Plugins::SESSION = $record;
+                                   return $result;
+                               }
+                             );
+}
+
+=pod
 
 ---+++ expandCommonVariables( $text, $topic, $web ) -> $text
 
