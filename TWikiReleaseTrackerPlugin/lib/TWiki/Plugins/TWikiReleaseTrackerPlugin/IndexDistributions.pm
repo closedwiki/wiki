@@ -113,19 +113,16 @@ sub indexLocalInstallation {
 sub indexReleases {
 #	die "feature broken";
 	indexDistributions("(?!beta)");
-	chdir($runDir) || die "Can't cd into $runDir - $!";
 	FileDigest::saveIndex( $Common::md5IndexDir . "/releases.md5" );
 }
 
 sub indexBetaReleases {
 	indexDistributions("beta");
-	chdir($runDir) || die "Can't cd into $runDir - $!";
 	FileDigest::saveIndex( $Common::md5IndexDir . "/betas.md5" );
 }
 
 sub indexPlugins {
 	FileDigest::emptyIndexes();
-	chdir($runDir) || die "Can't cd into $runDir - $!";
 	my $dir = $Common::downloadDir;
 
 	my @modules = getDirsListed($dir);
@@ -175,8 +172,38 @@ sub setRunDir {
 }
 
 sub indexDistributions {
+    # This depends on a modified version of Crawfords' SharedCode
+	my ($filterIn) = @_;
 
+	FileDigest::emptyIndexes();
+	my $dir = $Common::downloadDir;
 
+	my @releases = getDirsListed($Common::downloadDir);
+
+	foreach my $release (@releases) {
+		next unless ( $release =~ m/^TWiki/ );
+		next unless ( $release =~ m/$filterIn/ );
+		print "Indexing $release\n";
+		IndexDistributions::indexDistribution( $release, $dir . $release,
+			$Common::excludeFilePattern, "twiki" );
+	}
+
+}
+
+sub target_indexPlugins {
+	FileDigest::emptyIndexes();
+	chdir($runDir) || die "Can't cd into $runDir - $!";
+	my $dir = $Common::downloadDir;
+
+	my @modules = getDirsListed($dir);
+
+	foreach my $module (@modules) {
+		next if ( $module =~ m/^TWiki/ );
+		print "$module\n";
+		IndexDistributions::indexDistribution( $module, $dir . "/" . $module,
+			$Common::excludeFilePattern, "twiki" );
+	}
+	FileDigest::saveIndex( $Common::md5IndexDir . "/plugins.md5" );
 }
 
 1;
