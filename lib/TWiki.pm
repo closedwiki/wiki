@@ -330,11 +330,11 @@ sub writeHeaderFull
 
     # Add headers supplied by plugin, omitting any already in core headers
     my $finalHeaders = $coreHeaders;
-    if( defined $pluginHeaders ) {
+    if( $pluginHeaders ) {
 	# Build hash of all core header names, lower-cased
 	my ($headerLine, $headerName, %coreHeaderSeen);
 	for $headerLine (split /\r\n/, $coreHeaders) {
-	    $headerLine =~ m/^([^ ]+): /i;		# Get header name
+	    $headerLine =~ m/^([^ ]+): /io;		# Get header name
 	    $headerName = lc($1);
 	    ##writeDebug("==== core header name $headerName");
 	    $coreHeaderSeen{$headerName}++;
