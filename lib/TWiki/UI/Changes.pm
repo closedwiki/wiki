@@ -76,7 +76,7 @@ sub changes {
             $rev = 1 unless $rev;
             my $srev = $rev;
             if( $rev == 1 ) {
-                $srev = "<span class=\"twikiNew\"><b>NEW</b></span>";
+                $srev = "<span class=\"twikiNew\">NEW</span>";
             }
             $thisChange =~ s/%TIME%/$time/go;
             $thisChange =~ s/%REVISION%/$rev/go;

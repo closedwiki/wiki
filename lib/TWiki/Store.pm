@@ -549,8 +549,7 @@ sub updateReferringPages {
                                                \$newItemText );
             $this->saveTopic( $user, $itemWeb, $itemTopic,
                               $newItemText, $meta,
-                              { unlock => 1,
-                                minor => 1 } );
+                              { minor => 1 } );
             $this->unlockTopic( $user, $itemWeb, $itemTopic );
         } else {
             $result .= ";$item does not exist;";
@@ -832,8 +831,7 @@ sub saveAttachment {
                                                    $attachment, $meta );
     }
 
-    my $error = $this->saveTopic( $user, $web, $topic, $text,
-                                  $meta, { unlock => 1 } );
+    my $error = $this->saveTopic( $user, $web, $topic, $text, $meta, {} );
 
     $this->unlockTopic( $user, $web, $topic );
 

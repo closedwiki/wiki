@@ -199,11 +199,11 @@ sub getPreferencesValue {
     if( $web ) {
         unless( defined( $this->{WEBS}{$web} )) {
             my $webs = new TWiki::Prefs::PrefsCache( $this->{session} );
-            $this->{WEBS}{WEB} =
-              $webs->loadPrefsFromTopic( $web,
-                                         $TWiki::cfg{WebPrefsTopicName} );
+            $webs->loadPrefsFromTopic( $web,
+                                       $TWiki::cfg{WebPrefsTopicName} );
+            $this->{WEBS}{$web} = $webs;
         }
-        $val = $this->{WEBS}{$web}{$key};
+        $val = $this->{WEBS}{$web}->{prefs}{$key};
         return $val if defined( $val );
     } else {
         if( defined( $this->{REQUEST} )) {

@@ -765,7 +765,7 @@ sub searchWeb {
                 if( $revNum > 1 ) {
                     $revNumText = "r$revNum";
                 } else {
-                    $revNumText = "<span class=\"twikiNew\"><b>NEW</b></span>";
+                    $revNumText = "<span class=\"twikiNew\">NEW</span>";
                 }
                 $out =~ s/%REVISION%/$revNumText/o;
                 $out =~ s/%AUTHOR%/$revUser/o;
