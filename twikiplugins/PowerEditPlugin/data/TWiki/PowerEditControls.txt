@@ -1,0 +1,59 @@
+<verbatim>
+< Controls for TWiki.PowerEditAddon.
+< block := blocktype def* "end" ;
+< blocktype := "ctrlkeys" | "top" | "bottom" | "left" | "right" | "macros" ;
+< def := name = "=" def ;
+< name := string ;
+< def := string ;
+< string := double-quote delimited string with 'C' style escapes e.g. '\"'
+< Comments are from a < character to the end of line.
+keys
+   "^A" = "/redo/"
+   "^C" = "/copy/"
+   "^F" = "/refind/"
+   "^N" = "/redo/"
+   "^R" = "/rereplace/"
+   "^U" = "/undo/"
+   "^V" = "/paste/"
+   "^X" = "/cut/"
+end
+
+top
+   "Undo"	= "/undo/"
+   "Find..."	= "/find/"
+   "Replace..."	= "/replace/"
+   "Again"	= "/redo/"
+   "HTML2Wiki"	= "/convert/"
+end
+
+macros
+   "action" = "/home/%<nop>ACTION{who=\"\" due=\"\"}% "
+end
+
+left
+   "Bold"	= "/cut/ */paste/* "
+   "Italic"	= "/cut/ _/paste/_ "
+   "TT"		= "/cut/ =/paste/= "
+   "*..."	= "/home/   * /cut/"
+   "1..."	= "/home/   1 /cut/"
+   "Action"	= "/action/"
+end
+
+macros
+   "H" = "\n---"
+end
+
+right
+   "H1" = "/home//H/+ "
+   "H2" = "/home//H/++ "
+   "H3" = "/home//H/+++ "
+   "H4" = "/home//H/++++ "
+   "H5" = "/home//H/+++++ "
+   "H6" = "/home//H/++++++ "
+end
+
+bottom
+   "Red"	= "/cut/ %RED% /paste/ %ENDCOLOR%"
+   "Green"	= "/cut/ %GREEN% /paste/ %ENDCOLOR%"
+end
+</verbatim>
