@@ -1,13 +1,22 @@
 package TWiki::Contrib::BuildContrib::TWikiCLI::Extension::Dev;
-use TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
-@ISA = ("TWiki::Contrib::BuildContrib::TWikiCLI::Extension");
+#use TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
+use base qw(TWiki::Contrib::BuildContrib::TWikiCLI::Extension);
+
+sub new {
+        my $proto = shift;
+        my $class = ref($proto) || $proto;
+        my $self  = {};
+        bless ($self, $class);
+        return $self;
+}
 
 sub cli__init {
-
+  my $self = shift;
+  $self->SUPER::cli__init();
 
 }
 
-sub cli__new {
+sub cli_new {
 my ($extension) = @_;
 
  print "Doing making a new CVS area for Extension named $extension\n\n";
@@ -37,13 +46,18 @@ my ($extension) = @_;
 }
 
 sub cli_upload {
+ my $self = shift;
  my ($extension) = @_;
 
  print "Doing upload for $extension\n\n";
- my $libFrag = getLibFragmentForExtension($extension);
- my $dir     = getTWikiLibFragDir($libFrag);
+ my $libFrag = $self->getLibFragmentForExtension($extension);
+ my $dir     = $self->getTWikiLibFragDir($libFrag);
 
- chdir($dir) || die "$!";
+ if (! defined $dir) {
+  die "Couldn't find the development copy of $extension";
+ }
+
+ chdir($dir) || die "$dir: $!";
 
  # CodeSmell: Yuk
  print "Type TWiki.org username <return> password <return>\n";
@@ -52,6 +66,7 @@ sub cli_upload {
 
 
 sub cli_checkout {
+ my $self = shift;
  my ($extension) = @_;
 
 die ("Not implemented (see code)");
@@ -67,6 +82,7 @@ die ("Not implemented (see code)");
 
 # now this really ought to be in Extension::CVS, but that directory would clash
 sub cli_cvsupdate {
+ my $self = shift;
  my ($extension) = @_;
 
  print "Doing cvs update for $extension\n\n";
@@ -82,6 +98,7 @@ sub cli_cvsupdate {
 
 
 sub cli_install {
+ my $self = shift;
  my ($extension) = @_;
 
  print "Installing dev $extension\n\n";

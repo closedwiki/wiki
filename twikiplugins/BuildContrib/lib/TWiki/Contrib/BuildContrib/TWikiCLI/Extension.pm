@@ -10,13 +10,17 @@ my $oldPwd;
 # Ultimately we'd like to ask the Extension to handle this command
 # itself. For now we just call build.pl
 
-sub cli__init {
- $oldPwd = cwd();
+sub new {
+        my $proto = shift;
+        my $class = ref($proto) || $proto;
+        my $self  = {};
+        bless ($self, $class);
+        return $self;
 }
 
-sub cli_dev {
-#TWiki::Contrib::BuildContrib::TWikiCLI::Extension::Dev
-
+sub cli__init {
+ my $self = shift;
+ $oldPwd = cwd();
 }
 
 =pod
@@ -48,6 +52,7 @@ If I can be bothered, I'll do something like this....
 =cut
 
 sub cli_install_download {
+ my $self = shift;
  my ($extension) = @_;
 
  print "Installing download $extension\n\n";
@@ -72,6 +77,7 @@ print $@ if $@;
 
 }
 sub cli_download {
+ my $self = shift;
  my ($extension) = @_;
 
  my $localFile = getFilenameForDistributionDownload($extension);
@@ -89,14 +95,21 @@ sub cli_download {
 }
 
 sub getHomes {
+ my $self = shift;
  die "Set TWIKI_HOMES to : separated locations to install to"
    unless $ENV{"TWIKI_HOMES"};
  return split / /, $ENV{"TWIKI_HOMES"};
 }
 
 sub getTWikiLibFragDir {
+ my $self = shift;
  my ($libFrag) = @_;
- return selectTWikiLibDir($libFrag) . "/TWiki/$libFrag/";
+ my $libDir = $self->selectTWikiLibDir($libFrag);
+ if ($libDir) {
+  return $libDir. "/TWiki/$libFrag/";
+ } else {
+  return undef;
+ }
 }
 
 =pod 
@@ -114,6 +127,7 @@ As returned by getLibFragmentForExtension
 =cut
 
 sub selectTWikiLibDir {
+ my $self = shift;
  my ($frag) = @_;
  unless ( $ENV{"TWIKI_LIBS"} ) {
   die "No TWIKI_LIBS set?";
@@ -130,7 +144,7 @@ sub selectTWikiLibDir {
    $lookedIn .= "\tNot $buildDotPlDir\n";
   }
  }
- print "Didn't find it: - \n$lookedIn";
+ print "Was looking in TWIKI_LIBS for $frag: - \n$lookedIn";
  return "";
 }
 
@@ -147,6 +161,7 @@ returns the directory under lib where code for it is stored
 =cut 
 
 sub getLibFragmentForExtension {
+ my $self = shift;
  my ($extension) = @_;
  my $dir;
  if ( $extension =~ "Plugin" ) {
@@ -171,6 +186,7 @@ sub getLibFragmentForExtension {
 =cut
 
 sub getFilenameForDistributionDownload {
+ my $self = shift;
  my ($distribution)   = @_;
  my $attachmentDir    = getDistributionTopicDir();
  my $distributionFile = $distribution . '.zip';
@@ -184,6 +200,7 @@ Returns where downloaded distribution files should be stored
 =cut
 
 sub getDistributionTopicDir {
+ my $self = shift;
  my $pubDir      = TWiki::Func::getPubDir();
  my $webTopicDir =
    TWiki::Contrib::DistributionContrib::DistributionFetcher::getDistributionTopic
