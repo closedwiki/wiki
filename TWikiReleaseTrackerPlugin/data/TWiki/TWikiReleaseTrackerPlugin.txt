@@ -62,13 +62,13 @@ In other words, TRT parameters can be sourced from one of three places:
 
 | *Parameter name* | *Values* | *Default* |
 | *Mode = listing* | listing, file | listing |
-| fscsFormat | string to show when file is FSCS | $#124; $relativeFile $#124; FSCS $#124; $locations $#124; |
-| fscdFormat | string to show when file is FSCD | $#124; $relativeFile $#124; FSCDCALLBACK $#124; FSCDDIST $#124; |
+| fscsFormat | string to show when file is FSCS | &#124; $relativeFile &#124; FSCS &#124; $locations &#124; |
+| fscdFormat | string to show when file is FSCD | &#124; $relativeFile &#124; FSCDCALLBACK &#124; FSCDDIST &#124; |
 | - | FSCDDIST, FSCDCALLBACK and FDCSDIFF have interesting effects in this setting |
-| fdcsFormat | | $#124; $relativeFile $#124; FDCS $#124; $locations $#124; |
-| fdcdFormat | | $#124; ($relativeFile name not recognised, and no content match)  $#124; FDCD $#124; $#124; |
-| fdcmFormat | | $#124; $relativeFile $#124; FSCM $#124; $locations $#124; |
-| headerFormat | | $#124; *File* $#124; *Status* $#124; *Also Occurs In* $#124; |
+| fdcsFormat | | &#124; $relativeFile &#124; FDCS &#124; $locations &#124; |
+| fdcdFormat | | &#124; ($relativeFile name not recognised, and no content match)  &#124; FDCD &#124; &#124; |
+| fdcmFormat | | &#124; $relativeFile &#124; FSCM &#124; $locations &#124; |
+| headerFormat | | &#124; *File* &#124; *Status* &#124; *Also Occurs In* &#124; |
 | from | TWiki distribution name (e.g. TWiki20011201), or the string 'localInstallation' | localInstallation |
 | to | (see "from") | , - this says match against all distributions |
 | indexTopic | topic containing the md5 files | defaults to the plugin page |
