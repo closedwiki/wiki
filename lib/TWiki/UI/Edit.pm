@@ -80,7 +80,7 @@ sub edit {
     my $theParent = $query->param( 'topicparent' ) || '';
     my $ptext = $query->param( 'text' );
 
-    TWiki::UI::checkWebExists( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic, 'edit' );
     TWiki::UI::checkMirror( $session, $webName, $topic );
 
     my $tmpl = '';

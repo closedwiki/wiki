@@ -53,7 +53,7 @@ sub _save {
     my $topic = $session->{topicName};
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
-    TWiki::UI::checkWebExists( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic, 'save' );
 
     my $topicExists  = $session->{store}->topicExists( $webName, $topic );
     # Prevent saving existing topic?

@@ -38,14 +38,12 @@ use TWiki;
 ---++ StaticMethod oops_cgi($session)
 
 =oops= command handler.
-This method is designed to be
-invoked via the =TWiki::UI::run= method.
+This method is designed to be invoked via the =TWiki::UI::run= method.
 CGI parameters:
 | =template= | name of template to use |
-| =param1= | Parameter for expansion of template |
-| =param2= | Parameter for expansion of template |
-| =param3= | Parameter for expansion of template |
-| =param4= | Parameter for expansion of template |
+| =paramN= | Parameter for expansion of template |
+%PARAMn% tags will be expanded in the template using the 'paramN'
+values in the query.
 
 =cut
 
@@ -68,15 +66,13 @@ sub oops_cgi {
                    . 'Check the configuration setting for TemplateDir.'
                      .end_html();
     } else {
-        my $param = $query->param( 'param1' ) || '';
-        $tmplData =~ s/%PARAM1%/$param/go;
-        $param = $query->param( 'param2' ) || '';
-        $tmplData =~ s/%PARAM2%/$param/go;
-        $param = $query->param( 'param3' ) || '';
-        $tmplData =~ s/%PARAM3%/$param/go;
-        $param = $query->param( 'param4' ) || '';
-        $tmplData =~ s/%PARAM4%/$param/go;
-
+        my $param;
+        my $n = 1;
+        while( $param = $query->param( 'param'.$n ) || $n <= 4 ) {
+            $param = '' unless defined $param;
+            $tmplData =~ s/%PARAM$n%/$param/g;
+            $n++;
+        }
         $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );
         $tmplData = $session->{renderer}->getRenderedVersion( $tmplData, $web, $topic );
     }

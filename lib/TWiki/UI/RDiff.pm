@@ -350,125 +350,102 @@ sub diff {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
 
-    my $renderStyle = $query->param('render') || $session->{prefs}->getPreferencesValue( 'DIFFRENDERSTYLE' ) || 'sequential';
+    TWiki::UI::checkWebExists( $session, $webName, $topic, 'diff' );
+    TWiki::UI::checkTopicExists( $session, $webName, $topic, 'diff' );
+
+    my $renderStyle = $query->param('render') ||
+      $session->{prefs}->getPreferencesValue( 'DIFFRENDERSTYLE' ) ||
+        'sequential';
     my $diffType = $query->param('type') || 'diff';
-    my $contextLines = $query->param('context') || $session->{prefs}->getPreferencesValue( 'DIFFCONTEXTLINES' );
-    $contextLines = 3 unless defined $contextLines;
-    my $skin = $session->getSkin();
+    my $contextLines = $query->param('context');
+    unless( defined $contextLines ) {
+        $session->{prefs}->getPreferencesValue( 'DIFFCONTEXTLINES' );
+        $contextLines = 3 unless defined $contextLines;
+    }
     my $rev1 = $query->param( 'rev1' );
     my $rev2 = $query->param( 'rev2' );
 
-    TWiki::UI::checkWebExists( $session, $webName, $topic );
-
-    my $tmpl = '';
-    my $diff = '';
-    my $maxrev= 1;
-    my $i = $maxrev;
-    my $j = $maxrev;
-    my $revTitle1 = '';
-    my $revTitle2 = '';
-    my $revInfo = '';
-    my $isMultipleDiff = 0;
-    my( $before, $difftmpl, $after, $tail);
-    my $topicExists;
-
-    $tmpl = $session->{templates}->readTemplate( 'rdiff', $skin );
+    my $skin = $session->getSkin();
+    my $tmpl = $session->{templates}->readTemplate( 'rdiff', $skin );
     $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{'parent'}%
 
-    ( $before, $difftmpl, $after, $tail) = split( /%REPEAT%/, $tmpl);
+    my( $before, $difftmpl, $after, $tail) = split( /%REPEAT%/, $tmpl);
 
-    $topicExists = $session->{store}->topicExists( $webName, $topic );
-    if( $topicExists ) {
-        $maxrev = $session->{store}->getRevisionNumber( $webName, $topic );
-        $maxrev =~ s/r?1\.//go;  # cut 'r' and major
+    my $maxrev = $session->{store}->getRevisionNumber( $webName, $topic );
+    $maxrev =~ s/r?1\.//go;  # cut 'r' and major
 
-        $rev1 = $session->{store}->cleanUpRevID( $rev1 );
-        if( $rev1 < 1 )       { $rev1 = $maxrev; }
-        if( $rev1 > $maxrev ) { $rev1 = $maxrev; }
+    $rev1 = $session->{store}->cleanUpRevID( $rev1 );
+    $rev1 = $maxrev if( $rev1 < 1 );
+    $rev1 = $maxrev if( $rev1 > $maxrev );
 
-        $rev2 = $session->{store}->cleanUpRevID( $rev2 );
-        if( $rev2 < 1 )       { $rev2 = 1; }
-        if( $rev2 > $maxrev ) { $rev2 = $maxrev; }
-        if ( $diffType eq 'last' ) {
-            $rev1 = $maxrev;
-            $rev2 = $maxrev-1;
-        }
-        $revTitle1 = $rev1;
-        if( $rev1 != $rev2 ) {
-            $revTitle2 = $rev2;
-        }
-    } else {
-        $rev1 = 1;
-        $rev2 = 1;
+    $rev2 = $session->{store}->cleanUpRevID( $rev2 );
+    $rev2 = 1 if( $rev2 < 1 );
+    $rev2 = $maxrev if( $rev2 > $maxrev );
+
+    if ( $diffType eq 'last' ) {
+        $rev1 = $maxrev;
+        $rev2 = $maxrev-1;
     }
 
-    # format 'before' part
+    my $revTitle1 = $rev1;
+    my $revTitle2 = ( $rev1 != $rev2 ) ? $rev2 : '';
+
     $before =~ s/%REVTITLE1%/$revTitle1/go;
     $before =~ s/%REVTITLE2%/$revTitle2/go;
     $before = $session->handleCommonTags( $before, $webName, $topic );
     $before = $session->{renderer}->getRenderedVersion( $before, $webName, $topic );
-    $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
+
     my $page = $before;
 
     # do one or more diffs
     $difftmpl = $session->handleCommonTags( $difftmpl, $webName, $topic );
-    if( $topicExists ) {
-        my $r1 = $rev1;
-        my $r2 = $rev2;
-        my $rInfo = '';
-        if (( $diffType eq 'history' ) && ( $r1 > $r2 + 1)) {
-            $r2 = $r1 - 1;
-            $isMultipleDiff = 1;
-        }
-        do {
-            $diff = $difftmpl;
-            $diff =~ s/%REVTITLE1%/$r1/go;
-            $rInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $r1, "\$date - \$wikiusername" );
-            # eliminate white space to prevent wrap around in HR table:
-            $rInfo =~ s/\s+/&nbsp;/g;
-            $diff =~ s/%REVINFO1%/$rInfo/go;
-            my $diffArrayRef = $session->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
-            # $text = $session->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
-            # if ( $renderStyle eq "raw" ) {
-            #     $text = CGI::code($text);
-            # } else {
-            #    my $diffArray = parseRevisionDiff( $text );
-            my $text = _renderRevisionDiff( $session, $webName, $topic, $diffArrayRef, $renderStyle );
-            #            }
-            $diff =~ s/%TEXT%/$text/go;
-            $diff =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-            $page .= $diff;
-            $r1 = $r1 - 1;
-            $r2 = $r2 - 1;
-            if( $r2 < 1 ) { $r2 = 1; }
-        } while( ( $diffType eq 'history') && (( $r1 > $rev2 ) || ( $r1 == 1 )) );
+    my $r1 = $rev1;
+    my $r2 = $rev2;
+    my $isMultipleDiff = 0;
 
-    } else {
-        $diff = $difftmpl;
-        $diff =~ s/%REVTITLE1%/$revTitle1/go;
-        $diff =~ s/%REVTITLE2%/$revTitle2/go;
-        $diff =~ s/%TEXT%//go;
-        $diff =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-        $page .= $diff;
+    if (( $diffType eq 'history' ) && ( $r1 > $r2 + 1)) {
+        $r2 = $r1 - 1;
+        $isMultipleDiff = 1;
     }
 
+    do {
+        my $diff = $difftmpl;
+        $diff =~ s/%REVTITLE1%/$r1/go;
+        my $rInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $r1, "\$date - \$wikiusername" );
+        # eliminate white space to prevent wrap around in HR table:
+        $rInfo =~ s/\s+/&nbsp;/g;
+        $diff =~ s/%REVINFO1%/$rInfo/go;
+        my $diffArrayRef = $session->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
+        # $text = $session->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
+        # if ( $renderStyle eq "raw" ) {
+        #     $text = CGI::code($text);
+        # } else {
+        #    my $diffArray = parseRevisionDiff( $text );
+        my $text = _renderRevisionDiff( $session, $webName, $topic, $diffArrayRef, $renderStyle );
+        #            }
+        $diff =~ s/%TEXT%/$text/go;
+        $page .= $diff;
+        $r1 = $r1 - 1;
+        $r2 = $r2 - 1;
+        $r2 = 1 if( $r2 < 1 );
+    } while( $diffType eq 'history' && ( $r1 > $rev2 || $r1 == 1 ));
+
     if( $TWiki::cfg{Log}{rdiff} ) {
-        # write log entry
         $session->writeLog( 'rdiff', $webName.'.'.$topic, "$rev1 $rev2" );
     }
 
-    # format 'after' part
-    $i = $maxrev;
-    $j = $maxrev;
+    my $i = $maxrev;
+    my $j = $maxrev;
     my $revisions = '';
     my $breakRev = 0;
-    if( ( $TWiki::cfg{NumberOfRevisions} > 0 ) && ( $TWiki::cfg{NumberOfRevisions} < $maxrev ) ) {
+    if( $TWiki::cfg{NumberOfRevisions} > 0 &&
+        $TWiki::cfg{NumberOfRevisions} < $maxrev ) {
         $breakRev = $maxrev - $TWiki::cfg{NumberOfRevisions} + 1;
     }
 
     while( $i > 0 ) {
         $revisions .= ' | '.
-          CGI::a( { href=>$session->getScriptUrl($webName, $topic,'view',
+          CGI::a( { href=>$session->getScriptUrl($webName, $topic, 'view',
                                                  rev => $i ),
                     rel => 'nofollow' }, $i);
         if( $i != 1 ) {
@@ -501,7 +478,7 @@ sub diff {
                                                            rev => $i ),
                               rel => 'nofollow' },
                             $i);
-        $revInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $i, undef );
+        my $revInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $i, undef );
         $tailResult .= $tail;
         $tailResult =~ s/%REVTITLE%/$revTitle/go;
         $tailResult =~ s/%REVINFO%/$revInfo/go;

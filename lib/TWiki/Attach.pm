@@ -33,6 +33,7 @@ package TWiki::Attach;
 use strict;
 use Assert;
 
+use TWiki::Attrs;
 use TWiki::Store;
 use TWiki::User;
 use TWiki::Prefs;

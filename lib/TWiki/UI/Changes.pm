@@ -43,7 +43,7 @@ sub changes {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
 
-    TWiki::UI::checkWebExists( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic, 'find changes in' );
 
     my $skin = $session->getSkin();
 

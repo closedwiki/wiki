@@ -648,10 +648,9 @@ sub doEnableEdit {
 
     my $wikiUserName = TWiki::Func::getWikiUserName();
     if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '', $theTopic, $theWeb ) ) {
-        # user has not permission to change the topic
-        my $url = TWiki::Func::getOopsUrl( $theWeb, $theTopic, 'oopsaccesschange' );
-        TWiki::Func::redirectCgiQuery( $query, $url );
-        return 0;
+        # user has no permission to change the topic
+        throw TWiki::UI::OopsException( $_[2], $_[1], 'accessdenied',
+                                      'CHANGE', 'access is denied' );
     }
 
     my( $oopsUrl, $lockUser ) = TWiki::Func::checkTopicEditLock( $theWeb, $theTopic );

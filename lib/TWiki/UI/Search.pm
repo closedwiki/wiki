@@ -73,7 +73,7 @@ sub search {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
 
-    TWiki::UI::checkWebExists( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic, 'search' );
 
     # The CGI.pm docs claim that it returns all of the values in a
     # multiple select if called in a list context, but that may not

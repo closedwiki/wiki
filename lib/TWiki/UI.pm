@@ -171,16 +171,18 @@ sub run {
             }
             $session->redirect( $url );
         } else {
-            $url = $session->getOopsUrl( $e->{-web}, $e->{-topic},
-                                         'oopsaccessdenied',
-                                         $e->{-mode}, $e->{-reason} );
+            $url = $session->getOopsUrl( $e->{-web},
+                                         $e->{-topic},
+                                         'accessdenied',
+                                         $e->{-mode},
+                                         $e->{-reason} );
         }
         $session->redirect( $url );
     } catch TWiki::UI::OopsException with {
         my $e = shift;
         my $url = $session->getOopsUrl( $e->{-web},
                                         $e->{-topic},
-                                        "oops$e->{-template}",
+                                        $e->{-template},
                                         @{$e->{-params}} );
         $session->redirect( $url );
     } catch Error::Simple with {
@@ -192,14 +194,15 @@ sub run {
 
 =pod twiki
 
----++ StaticMethod checkWebExists( $web, $topic )
+---++ StaticMethod checkWebExists( $web, $topic, $op )
 
 Check if the web exists. If it doesn't, will throw an oops exception.
+ $op is the user operation being performed.
 
 =cut
 
 sub checkWebExists {
-    my ( $session, $webName, $topic ) = @_;
+    my ( $session, $webName, $topic, $op ) = @_;
     ASSERT(ref($session) eq 'TWiki') if DEBUG;
 
     unless ( $session->{store}->webExists( $webName ) ) {
@@ -207,7 +210,7 @@ sub checkWebExists {
           TWiki::UI::OopsException( $webName,
                                     $topic,
                                     'noweb',
-                                    "ERROR $webName.$topic web does not exist" );
+                                    $op);
     }
 }
 
@@ -215,7 +218,7 @@ sub checkWebExists {
 
 ---++ StaticMethod topicExists( $session, $web, $topic, $op ) => boolean
 Check if the given topic exists, throwing an OopsException
-if it doesn't. $op is %PARAM1% in the 'oopsnotopic' template.
+if it doesn't. $op is the user operation being performed.
 
 =cut
 

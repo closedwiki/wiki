@@ -261,26 +261,21 @@ sub rename {
     my $breakLock = $query->param( 'breaklock' );
     my $theAttachment = $query->param( 'attachment' );
     my $confirm = $query->param( 'confirm' );
-    my $currentWebOnly = $query->param( 'currentwebonly' ) || '';
     my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || '';
     my $justChangeRefs = $query->param( 'changeRefs' ) || '';
-
-    my $skin = $session->getSkin();
 
     $newTopic =~ s/\s//go;
     $newTopic =~ s/$TWiki::cfg{NameFilter}//go;
 
-    if( ! $theAttachment ) {
-        $theAttachment = '';
-    }
+    $theAttachment ||= '';
 
     # justChangeRefs will be true when some topics that had links to $oldTopic
     # still need updating, previous update being prevented by a lock.
 
     unless ( $justChangeRefs ) {
-        TWiki::UI::checkWebExists( $session, $oldWeb, $oldTopic );
+        TWiki::UI::checkWebExists( $session, $oldWeb, $oldTopic, 'rename' );
         TWiki::UI::checkTopicExists( $session, $oldWeb, $oldTopic, 'rename');
-        TWiki::UI::checkWebExists( $session, $newWeb, $newTopic );
+        TWiki::UI::checkWebExists( $session, $newWeb, $newTopic, 'rename' );
 
         if ( $theAttachment) {
             # Does old attachment exist?
@@ -311,8 +306,11 @@ sub rename {
 
     # Has user selected new name yet?
     if( ! $newTopic || $confirm ) {
-        _newTopicScreen( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
-                         $confirm, $currentWebOnly, $doAllowNonWikiWord, $skin );
+        _newTopicScreen( $session,
+                         $oldWeb, $oldTopic,
+                         $newWeb, $newTopic,
+                         $theAttachment,
+                         $confirm, $doAllowNonWikiWord );
         return;
     }
 
@@ -433,10 +431,12 @@ sub _getReferringTopicsListFromURL {
 # Display screen so user can decide on new web and topic.
 sub _newTopicScreen {
     my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
-        $confirm, $currentWebOnly, $doAllowNonWikiWord, $skin ) = @_;
+        $confirm, $doAllowNonWikiWord ) = @_;
 
     my $query = $session->{cgiQuery};
     my $tmpl = '';
+    my $skin = $session->getSkin();
+    my $currentWebOnly = $query->param( 'currentwebonly' ) || '';
 
     $newTopic = $oldTopic unless ( $newTopic );
     $newWeb = $oldWeb unless ( $newWeb );

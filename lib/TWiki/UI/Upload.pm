@@ -58,7 +58,7 @@ sub attach {
     my $fileName = $query->param( 'filename' ) || '';
     my $skin = $session->getSkin();
 
-    TWiki::UI::checkWebExists( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic, 'attach' );
 
     my $tmpl = '';
     my $text = '';
@@ -167,12 +167,11 @@ sub upload {
 
     close $filePath if( $TWiki::cfg{OS} eq 'WINDOWS');
 
-    TWiki::UI::checkWebExists( $session, $webName, $topic );
+    TWiki::UI::checkWebExists( $session, $webName, $topic, 'attach files to' );
+    TWiki::UI::checkTopicExists( $session, $webName, $topic, 'attach files to' );
     TWiki::UI::checkMirror( $session, $webName, $topic );
     TWiki::UI::checkAccess( $session, $webName, $topic,
                             'change', $user );
-    TWiki::UI::checkTopicExists( $session, $webName, $topic,
-                                 'attach files to' );
 
     my ( $fileSize, $fileDate, $tmpFileName );
 

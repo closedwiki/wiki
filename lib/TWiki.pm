@@ -383,18 +383,20 @@ BEGIN {
       qr/^ (?: $regex{validUtf8CharRegex} )+ $/xo;
 };
 
-use TWiki::Sandbox;   # system command sandbox
-use TWiki::Store;     # file I/O and rcs related functions
-use TWiki::Prefs;     # preferences
 use TWiki::Access;    # access control
+use TWiki::Attach;    # file attachments
+use TWiki::Attrs;     # tag attribute handling
 use TWiki::Form;      # forms
-use TWiki::Search;    # search engine
-use TWiki::Plugins;   # plugins handler
-use TWiki::Users;     # user handler
-use TWiki::Render;    # HTML generation
-use TWiki::Templates; # TWiki template language
 use TWiki::Net;       # SMTP, get URL
+use TWiki::Plugins;   # plugins handler
+use TWiki::Prefs;     # preferences
+use TWiki::Render;    # HTML generation
+use TWiki::Sandbox;   # system command sandbox
+use TWiki::Search;    # search engine
+use TWiki::Store;     # file I/O and rcs related functions
+use TWiki::Templates; # TWiki template language
 use TWiki::Time;      # date/time conversions
+use TWiki::Users;     # user handler
 
 # Auto-detect UTF-8 vs. site charset in URL, and convert UTF-8 into site charset.
 # TODO: remove dependence on webname and topicname.
@@ -853,6 +855,8 @@ sub getUniqueScriptUrl {
 Composes a URL for an "oops" error page.  The last parameters depend on the
 specific oops template in use, and are passed in the URL as '&param1=' etc.
 
+Do _not_ include the "oops" part in front of the template name.
+
 The returned URL ends up looking something like this:
 "http://host/twiki/bin/oops/$web/$topic?template=$template&param1=$scriptParams[0]..."
 
@@ -867,7 +871,8 @@ sub getOopsUrl {
     ASSERT(ref($this) eq 'TWiki') if DEBUG;
 
     my $url =
-      $this->getScriptUrl( $web, $topic, 'oops', template => $template );
+      $this->getScriptUrl( $web, $topic, 'oops',
+                           template => 'oops'.$template );
 
     my $n = 1;
     my $p;
@@ -1753,6 +1758,8 @@ sub _expandAllTags {
     # template loading?
     $$text =~ s/%NOP{(.*?)}%/$1/gs;  # remove NOP tag in template topics but show content
     $$text =~ s/%NOP%/<nop>/g;
+
+    # SMELL: this is crap, a hack, and should go.
     my $sep = $this->{templates}->expandTemplate('"sep"');
     $$text =~ s/%SEP%/$sep/g;
 
