@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: twiki\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-07-04 11:52+0200\n"
+"POT-Creation-Date: 2005-01-17 21:38+1100\n"
 "PO-Revision-Date: 2004-12-27 13:01+0100\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
 "Language-Team: Czech <provoz@debian.cz>\n"
@@ -23,11 +23,19 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#. Type: string
+#. Default
+#: ../templates:3
+msgid "http://localhost/"
+msgstr ""
+
+#. Type: string
 #. Description
 #: ../templates:4
 msgid "What is the top-level URL of the server TWiki runs under?"
 msgstr "Jaké je vrcholové URL serveru, pod kterým TWiki pobì¾í?"
 
+#. Type: string
 #. Description
 #: ../templates:4
 msgid ""
@@ -41,11 +49,19 @@ msgstr ""
 "pod kterým bude va¹e wiki dostupné. Zadané URL se pou¾ije pro vytváøení "
 "odkazù na nìkterých stránkách."
 
+#. Type: string
+#. Default
+#: ../templates:12
+msgid "webmaster@localhost"
+msgstr ""
+
+#. Type: string
 #. Description
 #: ../templates:13
 msgid "What is the email address of the webmaster for this TWiki?"
 msgstr "Jaká je e-mailová sdresa správce tohoto TWiki?"
 
+#. Type: string
 #. Description
 #: ../templates:13
 msgid ""
@@ -53,31 +69,55 @@ msgid ""
 "\"oops\" page when things go wrong."
 msgstr ""
 "Na tuto emailovou adresu budou zasílány po¾adavky o registraci nových "
-"u¾iavtelù a také se bude zobrazovat na webové stránce v pøípadì, ¾e se "
-"vìci pokazí."
+"u¾iavtelù a také se bude zobrazovat na webové stránce v pøípadì, ¾e se vìci "
+"pokazí."
 
+#. Type: boolean
 #. Description
 #: ../templates:20
 msgid "Install sample wiki universe on initial install?"
 msgstr "Instalovat pøi prvotní instalaci vzorový wiki web?"
 
+#. Type: boolean
 #. Description
 #: ../templates:20
+#, fuzzy
 msgid ""
 "TWiki includes a complete \"starter kit\" which includes user registration "
 "pages, documentation, and tutorials.  If you're re-installing twiki after "
 "deleting the package and want to keep the old data, or if you've got a twiki "
-"data set from your own manual install, you should refuse here. On a normal "
-"initial install, accept, and a sample data set will be installed in /var/lib/"
-"twiki/data. (In either case, if data/Main/WebHome.txt is present, the "
-"starter kit will not be unpacked; you can look in /usr/share/doc/twiki/twiki-"
-"data.tar.gz if you wish to install it manually or compare a new version.)"
+"data set from your own manual install, you should say \"no\" here.  On a "
+"normal initial install, say \"yes\", and a sample data set will be installed "
+"in /var/lib/twiki/data (and /var/www/twiki/pub).  (In either case, if data/"
+"Main/WebHome.txt is present, the starter kit will not be unpacked; you can "
+"look in /usr/share/doc/twiki/twiki-data.tar.gz (and twiki-pub.tar.zg) if you "
+"wish to install it manually or compare a new version.)"
 msgstr ""
-"TWiki obsahuje kompletní \"sadu pro zaèáteèníky\", terá zahrnuje stránky "
-"s registrací u¾ivatelù, dokumentací a návody. Reinstalujete-li twiki po "
+"TWiki obsahuje kompletní \"sadu pro zaèáteèníky\", terá zahrnuje stránky s "
+"registrací u¾ivatelù, dokumentací a návody. Reinstalujete-li twiki po "
 "pøedchozím odstranìní balíku a chcete zachovat svá stará data, nebo pokud "
 "máte data po døívìj¹í ruèní instalaci, mìli byste zde zamítnout. Pøi bì¾né "
 "první instalaci akceptujte, co¾ vám nainstaluje vzorová data do /var/lib/"
-"twiki/data. (Sada pro zaèáteèníky se nerozbalí, pokud existuje soubor "
-"data/Main/WebHome.txt; budete-li ji chtít nainstalovat ruènì, nachází se "
-"v souboru /usr/share/doc/twiki/twiki-data.tar.gz.)"
+"twiki/data. (Sada pro zaèáteèníky se nerozbalí, pokud existuje soubor data/"
+"Main/WebHome.txt; budete-li ji chtít nainstalovat ruènì, nachází se v "
+"souboru /usr/share/doc/twiki/twiki-data.tar.gz.)"
+
+#. Type: note
+#. Description
+#: ../templates:34
+msgid "User Registration configuration required"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../templates:34
+msgid ""
+"The default debian installation of the TWiki is configured to create new "
+"users automatically when a user Registers. This is not as secure as the "
+"default TWiki but is more useful for trying TWiki out. To change it so the "
+"users are created manually by the administrator use TWiki RenameTopic to "
+"rename the TWikiRegistration to TWikiRegistrationPub, and "
+"TWikiRegistrationDefault to TWikiRegistration. IMPORTANT: After you have "
+"created yourself a user, edit the Main.TWikiAdminGroup to restrict Admin "
+"privileges"
+msgstr ""

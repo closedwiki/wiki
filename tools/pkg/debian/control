@@ -2,7 +2,7 @@ Source: twiki
 Section: web
 Priority: optional
 Maintainer: Sven Dowideit <svenud@ozemail.com.au>
-Build-Depends-Indep: debhelper (>> 4.1.16), tarcust
+Build-Depends-Indep: debhelper (>> 4.1.16), tarcust, po-debconf
 Standards-Version: 3.6.0
 
 Package: twiki

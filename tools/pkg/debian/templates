@@ -1,41 +1,42 @@
 Template: twiki/defaultUrlHost
 Type: string
-Default: http://localhost/
-Description: What is the top-level URL of the server TWiki runs under?
- For a normal install, this should be a URL for your web server's full name,
- which is used to construct urls on some pages.  The install will serve up 
- the data by adding "twiki" to the end of this setting; it is also needed
- for certain redirections.
+_Default: http://localhost/
+_Description: What is the top-level URL of the server TWiki runs under?
+ For a normal install, this should be a URL for your web server's full
+ name, which is used to construct urls on some pages.  The install will
+ serve up the data by adding "twiki" to the end of this setting; it is also
+ needed for certain redirections.
 
 Template: twiki/wikiwebmaster
 Type: string
-Default: webmaster@localhost
-Description: What is the email address of the webmaster for this TWiki?
- This email address gets mail for new user registration, and is listed on 
+_Default: webmaster@localhost
+_Description: What is the email address of the webmaster for this TWiki?
+ This email address gets mail for new user registration, and is listed on
  the "oops" page when things go wrong.
 
 Template: twiki/samplefiles
 Type: boolean
 Default: true
-Description: Install sample wiki universe on initial install?
- TWiki includes a complete "starter kit" which includes user registration pages,
- documentation, and tutorials.  If you're re-installing twiki after deleting
- the package and want to keep the old data, or if you've got a twiki data set
- from your own manual install, you should say "no" here.  On a normal initial
- install, say "yes", and a sample data set will be installed in
- /var/lib/twiki/data (and /var/www/twiki/pub).  (In either case, if 
- data/Main/WebHome.txt is present, the starter kit will not be unpacked; 
- you can look in /usr/share/doc/twiki/twiki-data.tar.gz (and twiki-pub.tar.zg) 
- if you wish to install it manually or compare a new version.)
+_Description: Install sample wiki universe on initial install?
+ TWiki includes a complete "starter kit" which includes user registration
+ pages, documentation, and tutorials.  If you're re-installing twiki after
+ deleting the package and want to keep the old data, or if you've got a
+ twiki data set from your own manual install, you should say "no" here.  On
+ a normal initial install, say "yes", and a sample data set will be
+ installed in /var/lib/twiki/data (and /var/www/twiki/pub).  (In either
+ case, if data/Main/WebHome.txt is present, the starter kit will not be
+ unpacked; you can look in /usr/share/doc/twiki/twiki-data.tar.gz (and
+ twiki-pub.tar.zg) if you wish to install it manually or compare a new
+ version.)
 
 Template: twiki/apacheUserCreationNote
 Type: note
-Description: User Registration configuration required
- The default debian installation of the TWiki is configured to create new users 
- automatically when a user Registers. This is not as secure as the default TWiki
- but is more useful for trying TWiki out.
- To change it so the users are created manually by the administrator
- use TWiki RenameTopic to rename the TWikiRegistration to 
- TWikiRegistrationPub, and TWikiRegistrationDefault to TWikiRegistration.
- IMPORTANT: After you have created yourself a user, edit the Main.TWikiAdminGroup
- to restrict Admin privileges
+_Description: User Registration configuration required
+ The default debian installation of the TWiki is configured to create new
+ users automatically when a user Registers. This is not as secure as the
+ default TWiki but is more useful for trying TWiki out. To change it so the
+ users are created manually by the administrator use TWiki RenameTopic to
+ rename the TWikiRegistration to TWikiRegistrationPub, and
+ TWikiRegistrationDefault to TWikiRegistration. IMPORTANT: After you have
+ created yourself a user, edit the Main.TWikiAdminGroup to restrict Admin
+ privileges
