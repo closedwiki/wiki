@@ -157,6 +157,15 @@ if (defined $^V) {
 
  
 
+# Set $detailedOS if not using later versions of TWiki.cfg for BeijingRelease
+# - this code enables the latest testenv to be used with Dec 2001 and 
+# earlier releases.
+if ( !defined $detailedOS ) {
+    require Config;
+    $detailedOS = $Config::Config{'osname'};
+    # print "$detailedOS<br>";
+}
+
 # Detect Perl flavour on Windows, and Cygwin Perl/RCS package versions
 my ($perltype, @lines);
 my $rcsver;
@@ -191,7 +200,7 @@ if ($detailedOS eq 'cygwin') {
 	$rcsver = $pkg;		# Use package version number, more detailed
     }
 
-} elsif ($detailedOS=~/win/i && $detailedOS !~ /darwin/i ) {
+} elsif ($detailedOS =~ /win/i && $detailedOS !~ /darwin/i ) {
     $perltype = 'ActiveState';
     $perlver .= ", build " . Win32::BuildNumber();	# ActivePerl only
 } else {
@@ -226,8 +235,9 @@ my $USE_MOD_PERL = ((exists $ENV{'GATEWAY_INTERFACE'}
 
 
 # OS
-print "<tr><th align=\"right\">Operating system:</th><td>" . 
-		ucfirst(lc($OS)) . " ($detailedOS)" . "</td></tr>\n";
+print "<tr><th align=\"right\">Operating system:</th><td>" .  ucfirst(lc($OS));
+print " ($detailedOS)" if ( $detailedOS ne '' );
+print "</td></tr>\n";
 
 # Perl version
 print "<tr><th align=\"right\">Perl version:</th><td>$perlver";
@@ -394,7 +404,7 @@ if( ! ( -e "$pubDir/wikiHome.gif" ) ) {
     print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
     print "Directory does not exist or file <tt>wikiHome.gif</tt> does not exist in this directory.";
     print "</td></tr>\n";
-} elsif( ! ( testFileIsWritable( "$pubDir/testenv.test" ) ) ) {
+} elsif( ! testFileIsWritable( "$pubDir/testenv.test" ) ) {
     # directory is not writable
     print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
     print "This directory is not writable by <b>$usr</b> user.";
@@ -424,7 +434,7 @@ if( ! ( -e "$dataDir" ) ) {
     print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
     print "Directory does not exist.";
     print "</td></tr>\n";
-} elsif( ! ( testFileIsWritable( "$dataDir/testenv.test" ) ) ) {
+} elsif( ! testFileIsWritable( "$dataDir/testenv.test" ) ) {
     # directory is not writable
     print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
     print "This directory must be writable by the <b>$usr</b> user.";
