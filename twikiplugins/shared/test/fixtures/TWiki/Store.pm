@@ -15,6 +15,10 @@ package TWiki::Store;
 
 use BaseFixture;
 
+sub _readTemplateFile {
+  return readTemplateFile( @_ );
+}
+
 # Required for CairoCompatabilityMode
 sub readTemplateFile {
     my( $theName, $theSkin ) = @_;
