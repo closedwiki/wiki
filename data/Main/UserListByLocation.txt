@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="martincleaver" date="1104771314" format="1.0" version="1.4"}%
+---+ Sorted by country
+
+Also available:
+%INCLUDE{UserListHeader}%
+
+%TABLE{initsort="1"}%
+%SEARCH{"%META:FORM.*[U]serForm" regex="on" header="|*Country* | *State* | *!FirstName* | *!LastName* | *Organization* |", format="| $formfield(Country) | $formfield(State) | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(Organization) |" excludetopic="Web*" nosearch="on" order="formfield(Country)"}%
+
+-- People.MartinCleaver - 30 Dec 2004
+

@@ -1,5 +1,15 @@
 package RegisterTests;
 
+# Tests not implemented:
+		#test_registerTwiceWikiName
+		#test_registerTwiceEmailAddress
+		#test_bulkResetPassword
+		#test_registerIllegitimateBypassApprove
+                #test_registerVerifyAndFinish
+
+#Uncomment to isolate 
+#our @TESTS = qw(test_bulkRegister);
+
 use base qw(Test::Unit::TestCase);
 BEGIN {
     unshift @INC, '../../bin';
@@ -33,14 +43,6 @@ my $saveTWikiUsers = $tempUserDir.'/rcsrUsers$$';
 
 $TWiki::UI::Register::password = "foo";
 
-# Tests not implemented:
-		#test_registerTwiceWikiName
-		#test_registerTwiceEmailAddress
-		#test_bulkResetPassword
-		#test_registerIllegitimateBypassApprove
-                #test_registerVerifyAndFinish
-
-our @TESTS = qw(test_bulkRegister);
 
 sub new {
     my $self = shift()->SUPER::new(@_);

@@ -1,0 +1,15 @@
+%META:TOPICINFO{author="martincleaver" date="1104759349" format="1.0" version="1.1"}%
+---+ Sorted by date joined / updated
+
+Also available:
+
+	* UserListByLocation
+	* UserListByOrganization
+ 
+Click the Last Updated column heading to see when people updated.
+
+%TABLE{initsort="1" initdirection="up"}%
+%SEARCH{"%META:FORM.*[U]serForm" regex="on" header="| *Date joined* | *Last updated* | *!FirstName* | *!LastName* | *Organization* | *Country* |", format="| $createdate | $date | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(Organization) | $formfield(Country) |" excludetopic="Web*" nosearch="on"}%
+
+-- People.MartinCleaver - 03 Jan 2005
+

@@ -1,4 +1,10 @@
-%META:TOPICINFO{author="martincleaver" date="1098991116" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="martincleaver" date="1104759966" format="1.0" version="1.4"}%
 %META:TOPICPARENT{name="WebHome"}%
+---+ Sorted by name
+
+Also available:
+
+%INCLUDE{UserListHeader}%
+
 %SEARCH{"%META:FORM.*[U]serForm" regex="on" header="| *!FirstName* | *!LastName* | *Organization* | *State* | *Country* |", format="| [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(Organization) | $formfield(State) | $formfield(Country) |" excludetopic="Web*" nosearch="on"}%
 

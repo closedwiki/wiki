@@ -12,7 +12,7 @@ _Register users on your TWiki site; change/reset/install passwords; remove user 
 ---++ Register User
 
 	* TWikiRegistration is for users to fill out a form
-	* NewUserTemplate can be changed to customize user home pages, it can optionally use the UserForm to define user fields as meta data
+	* NewUserTemplate can be changed to customize user home pages, it can optionally use the %MAINWEB%.UserForm to define user fields as meta data
 	* BulkRegistration can be used to set up multiple accounts: either from a table or from an external file
 
 ---++ Change, Reset and Install Passwords

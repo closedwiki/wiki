@@ -22,8 +22,9 @@ __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
 		* Set ALLOWTOPICCHANGE =
 
 __Related topics__
-	* ChangePassword
+	* %TWIKIWEB%.ChangePassword
 	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.
 	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of other TWiki users.
+%META:FORM{name="Main.UserForm"}%
 
