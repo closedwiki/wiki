@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = '30 Oct 2004 $Rev$';
+$wikiversion      = '09 Nov 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1687,6 +1687,9 @@ sub makeTopicSummary
     $htext =~ s/([\s\(])(?=\S)/$1<nop>/g;
     $htext =~ s/([\-\*\s])($regex{linkProtocolPattern}\:)/$1<nop>$2/go;
     $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
+
+    $htext =~ s/^\s+//;    # remove leading whitespace
+    $htext =~ s/\s+$//;    # remove trailing whitespace
 
     return $htext;
 }
