@@ -1,0 +1,66 @@
+%META:TOPICINFO{author="guest" date="1091452260" format="1.0" version="1.11"}%
+%META:TOPICPARENT{name="Main.MartinCleaver"}%
+---+ TWiki Release Tracker Plugin
+
+This plugin tells you how similar your install is to past releases of TWiki.
+
+%TOC%
+
+---++ Settings
+
+		* Set STATUSFILTER = FSCD,FDCS
+		* Set FROM = localInstallation
+		* Set TO = TWiki20030201 
+
+---+++ Checking against particular versions
+
+The TRT is shipped with data about many versions of TWiki. As TWiki does not provide programmatic access to the CVS identifier, you'll have to assign the right starting point yourself. See TWiki:Codev.TWikiReleases
+
+
+---++ Features and Benefits
+	* By generating a content identifier for every file in all TWiki distributions (core beta and release versions, plus all the plugins), the system advises where every file in your install has come from.
+	* By providing navigation from installation file content to distribution file content, the system provides the means to generate diffs from your install to a distro. This means that not only can you tell where your version is behind a distribution, but also shows you where you have altered your version. The downloadable diff provides the opportunity to feed back to the TWiki community the change you've made back, meaning for the patch owner less rework the next time TWiki is released and, for the community as a whole, better capture of changes leading to more progress .
+
+---++ How it works
+The TRT centres on the concept of a unique CONTENT identifier - instead of identifying a file *by its filename*, identities are based on *file content*. This means that a file copied to another place has the same unique content identifier. The system used md5 signatures as the identifier.
+
+
+The system is comprised of two parts:
+	1 a command line indexer that builds and saves indexes
+	2 a twiki plugin that provides a web interface to the API of the comparator.
+
+---++ Set up
+	* You must run TWikiReleaseTrackerPlugin/buildIndex.pl to initialise the localInstallation.md5 file. It is shipped empty and without it the plugin will give no results.
+
+---++ Testing
+	* The TRTTestSuite holds a sample testsuite. This showcases functionality and confirms that it still works.
+
+---++ Parameters
+
+	* The page TRTChangesFromDistribution has a GUI that sets up some useful default parameters (overriding the defaults listed on this page). All parameters specified below can also be overridden on the URL line.
+
+All parameters can be sourced from one of three places:
+	1 Defaults listed on the plugin home page
+	2 Parameters specified on the %DIFFWIKI{} line
+	3 Parameters recognised as a CGI.pm parameter (e.g. on the URL line)
+
+| *Parameter name* | *Values* | *Default* |
+| *Mode = listing* | listing, file | listing |
+| from | TWiki distribution name (e.g. TWiki20011201), or the string 'localInstallation' | localInstallation |
+| to | (see "from") ||
+| indexTopic | topic containing the md5 files | defaults to the plugin page |
+| debug | on, off, 2 | off |
+| statusFilter | "FSCS, FSCD, FDCS, FDCD, all" (Filename Same/Different, Content Same/Different) | all |
+| *Mode = file* | (Currently non-functional) ||
+| file | filename to compare | - |
+
+---++ Limitations
+| *Issue* | *Future Plan* | *Impact* |
+| To compare specific file changes (FSCD = File Same, Content Different), you need to have pre-downloaded all of the releases. | My plan is to have the plugin pull them down as needed, but I need a web address for a specific twiki version / file; currently this is not available (partly due to the switch to subversion) | High - file mode not yet functional |
+| The MD5 for specific releases (i.e. releases.md5) needs pregenerating. | Release the code (actually a merge for the TWiki:Codev.SharedCode) when I have cleaned it up | Low - releases are not very often |
+| The results are not sorted | sort them | Low - workaround available: Use table sort function |
+| The underlying data structures could do with some optimisation | Review | Low - Page load is slow in some cases |
+
+%META:FILEATTACHMENT{name="localInstallation.md5" attr="" comment="" date="1090726845" path="There no API to add attachments from plugins, so I hacked it" size="592" user="MartinCleaver" version="1.1"}%
+%META:FILEATTACHMENT{name="releases.md5" attr="" comment="" date="1090726845" path="There no API to add attachments from plugins, so I hacked it" size="592" user="MartinCleaver" version="1.1"}%
+%META:FILEATTACHMENT{name="plugins.md5" attr="" comment="" date="1090726845" path="There no API to add attachments from plugins, so I hacked it" size="592" user="MartinCleaver" version="1.1"}%
