@@ -17,7 +17,10 @@
 
 =pod
 
----+ UNPUBLISHED package TWiki::Store::RcsLite
+---+ package TWiki::Store::RcsLite
+
+This package does not publish any methods. It implements the virtual
+methods of the [[TWikiStoreRcsFileDotPm][TWiki::Store::RcsFile]] superclass.
 
 Simple replacement for RCS.  Doesn't support:
    * branches
@@ -35,6 +38,55 @@ FIXME:
    * still have difficulty on line ending at end of sequences, consequence of doing a line based diff
    * most serious is when having multiple line ends on one seq but not other - this needs fixing
    * cleaner dealing with errors/warnings
+
+---++ File format information:
+<verbatim>
+rcstext    ::=  admin {delta}* desc {deltatext}*
+admin      ::=  head {num};
+                { branch   {num}; }
+                access {id}*;
+                symbols {sym : num}*;
+                locks {id : num}*;  {strict  ;}
+                { comment  {string}; }
+                { expand   {string}; }
+                { newphrase }*
+delta      ::=  num
+                date num;
+                author id;
+                state {id};
+                branches {num}*;
+                next {num};
+                { newphrase }*
+desc       ::=  desc string
+deltatext  ::=  num
+                log string
+                { newphrase }*
+                text string
+num        ::=  {digit | .}+
+digit      ::=  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+id         ::=  {num} idchar {idchar | num }*
+sym        ::=  {digit}* idchar {idchar | digit }*
+idchar     ::=  any visible graphic character except special
+special    ::=  $ | , | . | : | ; | @
+string     ::=  @{any character, with @ doubled}*@
+newphrase  ::=  id word* ;
+word       ::=  id | num | string | :
+</verbatim>
+Identifiers are case sensitive. Keywords are in lower case only. The
+sets of keywords and identifiers can overlap. In most environments RCS
+uses the ISO 8859/1 encoding: visible graphic characters are codes
+041-176 and 240-377, and white space characters are codes 010-015 and 040.
+
+Dates, which appear after the date keyword, are of the form Y.mm.dd.hh.mm.ss,
+where Y is the year, mm the month (01-12), dd the day (01-31), hh the hour
+(00-23), mm the minute (00-59), and ss the second (00-60). Y contains just
+the last two digits of the year for years from 1900 through 1999, and all
+the digits of years thereafter. Dates use the Gregorian calendar; times
+use UTC.
+
+The newphrase productions in the grammar are reserved for future extensions
+to the format of RCS files. No newphrase will begin with any keyword already
+in use.
 
 =cut
 package TWiki::Store::RcsLite;
@@ -54,15 +106,7 @@ use TWiki::Time;
 my $DIFF_DEBUG = 0;
 my $DIFFEND_DEBUG = 0;
 
-# ======================
-=pod
-
----++ ClassMethod new(  $class, $session, $web, $topic, $attachment, $settings  )
-
-Construct new file
-
-=cut to implementation
-
+# implements RcsFile
 sub new {
     my( $class, $session, $web, $topic, $attachment, $settings ) = @_;
     ASSERT(ref($session) eq "TWiki") if DEBUG;
@@ -78,56 +122,6 @@ sub new {
     return $self;
 }
 
-# Process an RCS file
-
-# File format information:
-#
-#rcstext    ::=  admin {delta}* desc {deltatext}*
-#admin      ::=  head {num};
-#                { branch   {num}; }
-#                access {id}*;
-#                symbols {sym : num}*;
-#                locks {id : num}*;  {strict  ;}
-#                { comment  {string}; }
-#                { expand   {string}; }
-#                { newphrase }*
-#delta      ::=  num
-#                date num;
-#                author id;
-#                state {id};
-#                branches {num}*;
-#                next {num};
-#                { newphrase }*
-#desc       ::=  desc string
-#deltatext  ::=  num
-#                log string
-#                { newphrase }*
-#                text string
-#num        ::=  {digit | .}+
-#digit      ::=  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-#id         ::=  {num} idchar {idchar | num }*
-#sym        ::=  {digit}* idchar {idchar | digit }*
-#idchar     ::=  any visible graphic character except special
-#special    ::=  $ | , | . | : | ; | @
-#string     ::=  @{any character, with @ doubled}*@
-#newphrase  ::=  id word* ;
-#word       ::=  id | num | string | :
-#
-# Identifiers are case sensitive. Keywords are in lower case only. The sets of keywords and 
-# identifiers can overlap. In most environments RCS uses the ISO 8859/1 encoding: 
-# visible graphic characters are codes 041-176 and 240-377, and white space characters are 
-# codes 010-015 and 040. 
-#
-# Dates, which appear after the date keyword, are of the form Y.mm.dd.hh.mm.ss, 
-# where Y is the year, mm the month (01-12), dd the day (01-31), hh the hour (00-23), 
-# mm the minute (00-59), and ss the second (00-60). Y contains just the last two digits of 
-# the year for years from 1900 through 1999, and all the digits of years thereafter. 
-# Dates use the Gregorian calendar; times use UTC. 
-#
-# The newphrase productions in the grammar are reserved for future extensions to the format 
-# of RCS files. No newphrase will begin with any keyword already in use. 
-
-# ======================
 sub _readTo {
     my( $file, $char ) = @_;
     my $buf = "";
@@ -160,7 +154,6 @@ sub _readTo {
              next;
           }
        }
-       
        if( $ch =~ /\s/ ) {
           if( length( $buf ) == 0 ) {
               next;
@@ -316,8 +309,7 @@ sub _process {
 }
 
 # ======================
-sub _formatString
-{
+sub _formatString {
     my( $str ) = @_;
     $str =~ s/@/@@/go;
     return "\@$str\@";
@@ -325,8 +317,7 @@ sub _formatString
 
 # ======================
 # Write content of the RCS file
-sub _write
-{
+sub _write {
     my( $self, $file ) = @_;
     
     # admin
@@ -334,7 +325,7 @@ sub _write
     print $file "access" . $self->{access} . ";\n";
     print $file "symbols" . $self->{symbols} . ";\n";
     print $file "locks; strict;\n";
-    printf $file "comment\t%s;\n", ( _formatString( $self->comment() ) );
+    printf $file "comment\t%s;\n", ( _formatString( $self->_comment() ) );
     printf $file "expand\t@%s@;\n", ( $self->{expand} ) if ( $self->{expand} );
     
     print $file "\n";
@@ -342,7 +333,7 @@ sub _write
     # delta
     for( my $i=$self->numRevisions(); $i>0; $i--) {
        printf $file "\n1.%d\ndate\t%s;\tauthor %s;\tstate Exp;\nbranches;\n", 
-              ($i, TWiki::Store::RcsFile::_epochToRcsDateTime( ${$self->{date}}[$i] ), $self->author($i) );
+              ($i, TWiki::Store::RcsFile::_epochToRcsDateTime( ${$self->{date}}[$i] ), $self->_author($i) );
        if( $i == 1 ) {
            print $file "next\t;\n";
        } else {
@@ -350,65 +341,32 @@ sub _write
        }
     }
     
-    printf $file "\n\ndesc\n%s\n\n", ( _formatString( $self->description() ) );
+    printf $file "\n\ndesc\n%s\n\n", ( _formatString( $self->_description() ) );
     
     for( my $i=$self->numRevisions(); $i>0; $i--) {
        printf $file "\n1.$i\nlog\n%s\ntext\n%s\n",
-              ( _formatString( $self->log($i) ), _formatString( $self->delta($i) ) );
+              ( _formatString( $self->_log($i) ), _formatString( $self->_delta($i) ) );
     }
 }
 
-# Overrides RcsFile::binaryChange
+# implements RcsFile
 sub binaryChange {
    my( $self ) = @_;
    # Nothing to be done but note for re-writing
    $self->{expand} = "b" if( $self->{binary} );
    # FIXME: unless we have to not do diffs for binary files
-   return "";
+   return undef;
 }
 
-# ======================
-=pod
-
----++ ObjectMethod numRevisions() -> $integer
-
-Get number of revs
-
-=cut to implementation
-
-sub numRevisions
-{
+# implements RcsFile
+sub numRevisions {
     my( $self ) = @_;
     $self->_ensureProcessed();
     return $self->{head};
 }
 
-=pod
-
----++ ObjectMethod comment() -> $string
-
-Get the comment
-
-=cut to implementation
-
-sub comment
-{
-    my( $self ) = @_;
-    $self->_ensureProcessed();
-    return $self->{comment};
-}
-
-# ======================
-=pod
-
----++ ObjectMethod date (   $version  ) -> $dateInSecs
-
-Get the revision date in epoch seconds (secs since 1970)
-
-=cut to implementation
-
-sub date
-{
+# Get the revision date in epoch seconds (secs since 1970)
+sub _date {
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
     my $date = ${$self->{date}}[$version];
@@ -420,111 +378,66 @@ sub date
     return $date;
 }
 
-# ======================
-=pod
-
----++ ObjectMethod description() -> $string
-
-Get description
-
-=cut to implementation
-
-sub description
-{
+# Get description
+sub _description {
     my( $self ) = @_;
     $self->_ensureProcessed();
     return $self->{description};
 }
 
-# ======================
-=pod
+# Get comment
+sub _comment {
+    my( $self ) = @_;
+    $self->_ensureProcessed();
+    return $self->{comment};
+}
 
----++ ObjectMethod author($version) -> $string
-
-Get author
-
-=cut to implementation
-
-sub author
-{
+# Get author
+sub _author {
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
     return ${$self->{author}}[$version];
 }
 
-# ======================
-=pod
-
----++ ObjectMethod log (   $version  ) -> $string
-
-Get log
-
-=cut to implementation
-
-sub log {
+# Get log
+sub _log {
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
     return ${$self->{log}}[$version];
 }
 
-# ======================
-=pod
-
----++ ObjectMethod delta($version) -> ??
-
-get delta to rev
-
-=cut to implementation
-
-sub delta
-{
+# get delta to rev
+sub _delta {
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
     return ${$self->{delta}}[$version];
 }
 
-# ======================
-=pod
-
----++ ObjectMethod addRevision (   $text, $log, $author, $date  ) -> $error
-
-$date in epoch seconds
-
-=cut to implementation
-
-sub addRevision
-{
+# implements RcsFile
+sub addRevision {
     my( $self, $text, $log, $author, $date ) = @_;
     $self->_ensureProcessed();
-    
+
     $self->_save( $self->{file}, \$text );
     $text = $self->_readFile( $self->{file} ) if( $self->{attachment} );
     my $head = $self->numRevisions();
     if( $head ) {
-        my $delta = _diffText( \$text, \$self->delta($head), "", 0 );
+        my $delta = _diffText( \$text, \$self->_delta($head), "", 0 );
         ${$self->{delta}}[$head] = $delta;
-    }   
+    }
     $head++;
     ${$self->{delta}}[$head] = $text;
     $self->{head} = $head;
     ${$self->{log}}[$head] = $log;
     ${$self->{author}}[$head] = $author;
-    if( $date ) {
- #       $date =~ s/[ \/\:]/\./go;
-    } else {
-        $date = time();
-    }
-#    $date = TWiki::Store::RcsFile::_epochToRcsDateTime( $date );
-
+    $date = time() unless( $date );
 
     ${$self->{date}}[$head] = $date;
 
     return $self->_writeMe();
 }
 
-# ======================
-sub _writeMe
-{
+sub _writeMe {
     my( $self ) = @_;
     my $dataError = "";
     my $out = new FileHandle;
@@ -542,46 +455,24 @@ sub _writeMe
     return $dataError;    
 }
 
-# ======================
-=pod
-
----++ ObjectMethod replaceRevision($text, $comment, $user, $date) -> $error
-
-Replace the top revision
-Return non empty string with error message if there is a problem
-| $date | is on epoch seconds |
-
-=cut to implementation
-
-sub replaceRevision
-{
+# implements RcsFile
+sub replaceRevision {
     my( $self, $text, $comment, $user, $date ) = @_;
     $self->_ensureProcessed();
     $self->_delLastRevision();
     return $self->addRevision( $text, $comment, $user, $date );
 }
 
-# ======================
-=pod
-
----++ ObjectMethod deleteRevision() -> $error
-
-Delete the last revision - do nothing if there is only one revision
-
-=cut to implementation
-
-sub deleteRevision
-{
+# implements RcsFile
+sub deleteRevision {
     my( $self ) = @_;
     $self->_ensureProcessed();
-    return "" if( $self->numRevisions() <= 1 );
+    return undef if( $self->numRevisions() <= 1 );
     $self->_delLastRevision();
     return $self->_writeMe();
 }
 
-# ======================
-sub _delLastRevision
-{
+sub _delLastRevision {
     my( $self ) = @_;
     my $numRevisions = $self->numRevisions();
     if( $numRevisions > 1 ) {
@@ -595,14 +486,10 @@ sub _delLastRevision
     $self->{head} = $numRevisions;
 }
 
-=pod
 
----++ ObjectMethod revisionDiff($rev1, $rev2, $contextLines) -> $error
-| TODO: | so why does this read the rcs file, re-create each of the 2 revisions and then diff them? isn't the delta in the rcs file good enough? (until you want context?) |
-=cut to implementation
-
-sub revisionDiff
-{
+# implements RcsFile
+# SMELL: so why does this read the rcs file, re-create each of the 2 revisions and then diff them? isn't the delta in the rcs file good enough? (until you want context?)
+sub revisionDiff {
     my( $self, $rev1, $rev2, $contextLines ) = @_;
     $self->_ensureProcessed();
     my $text1 = $self->getRevision( $rev1 );
@@ -622,40 +509,22 @@ sub revisionDiff
 	return ("", \@list);	
 }
 
-=pod
-
----++ ObjectMethod getRevision (   $version  ) -> $text
-
-Get a rev
-
-=cut to implementation
-
-sub getRevision
-{
+# implements RcsFile
+sub getRevision {
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
     my $head = $self->numRevisions();
     if( $version == $head ) {
-        return $self->delta( $version );
+        return $self->_delta( $version );
     } else {
-        my $headText = $self->delta( $head );
+        my $headText = $self->_delta( $head );
         my @text = _mySplit( \$headText, 1 );
         return $self->_patchN( \@text, $head-1, $version );
     }
 }
 
-=pod
-
----++ ObjectMethod getRevisionInfo (   $version  ) -> ($rcsError, $rev, $date, $user, $comment)
-
-
-If revision file is missing, information based on actual file is returned.
-Date is in epoch based seconds
-
-=cut to implementation
-
-sub getRevisionInfo
-{
+# implements RcsFile
+sub getRevisionInfo {
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
     $version = $self->numRevisions() if( ! $version );
@@ -663,9 +532,9 @@ sub getRevisionInfo
 	#TODO: need to add a where $revision is not number, find out what rev number the tag refers to
 
     my @result;
-    
+
     if( $self->{where} && $self->{where} ne "nofile" ) {
-        @result = ( "", $version, $self->date( $version ), $self->author( $version ), $self->comment( $version ) );
+        @result = ( "", $version, $self->_date( $version ), $self->author( $version ), $self->_comment() );
     } else {
         @result = $self->_getRevisionInfoDefault();
     }
@@ -720,13 +589,10 @@ sub _patch {
    }
 }
 
-
-# ======================
-sub _patchN
-{
+sub _patchN {
     my( $self, $text, $version, $target ) = @_;
 
-    my $deltaText= $self->delta( $version );
+    my $deltaText= $self->_delta( $version );
     my @delta = _mySplit( \$deltaText );
     _patch( $text, \@delta );
     if( $version <= $target ) {
@@ -736,10 +602,8 @@ sub _patchN
     }
 }
 
-# ======================
 # Split and make sure we have trailing carriage returns
-sub _mySplit
-{
+sub _mySplit {
     my( $text, $addEntries ) = @_;
 
     my $ending = "";
@@ -775,20 +639,15 @@ sub _mySplit
     return @list; # FIXME would it be more efficient to return a reference?
 }
 
-# ======================
-# Way of dealing with trailing \ns feels clumsy
-sub _diffText
-{
+# SMELL: Way of dealing with trailing \ns feels clumsy
+sub _diffText {
     my( $new, $old, $type, $contextLines ) = @_;
-    
     my @lNew = _mySplit( $new );
     my @lOld = _mySplit( $old );
     return _diff( \@lNew, \@lOld, $type, $contextLines );
 }
 
-# ======================
-sub _lastNoEmptyItem
-{
+sub _lastNoEmptyItem {
    my( $items ) = @_;
    my $pos = $#$items;
    my $count = 0;
@@ -802,24 +661,22 @@ sub _lastNoEmptyItem
    return( $pos, $count );
 }
 
-# ======================
 # Deal with trailing carriage returns - Algorithm doesn't give output that RCS format is too happy with
-sub _diffEnd
-{
+sub _diffEnd {
    my( $new, $old, $type ) = @_;
    return if( $type ); # FIXME
-   
+
    my( $posNew, $countNew ) = _lastNoEmptyItem( $new );
    my( $posOld, $countOld ) = _lastNoEmptyItem( $old );
 
    return "" if( $countNew == $countOld );
-   
+
    if( $DIFFEND_DEBUG ) {
      print( "countOld, countNew, posOld, posNew, lastOld, lastNew, lenOld: " .
-            "$countOld, $countNew, $posOld, $posNew, " . $#$old . ", " . $#$new . 
+            "$countOld, $countNew, $posOld, $posNew, " . $#$old . ", " . $#$new .
             "," . @$old . "\n" );
    }
-   
+
    $posNew++;
    my $toDel = ( $countNew < 2 ) ? 1 : $countNew;
    my $startA = @$new - ( ( $countNew > 0 ) ? 1 : 0 );
@@ -828,21 +685,19 @@ sub _diffEnd
    for( my $i=$posOld; $i<@${old}; $i++ ) {
        $theEnd .= $old->[$i] ? $old->[$i] : "\n";
    }
-   
+
    for( my $i=0; $i<$countNew; $i++ ) {pop @$new;}
    pop @$new;
    for( my $i=0; $i<$countOld; $i++ ) {pop @$old;}
    pop @$old;
-   
+
    print "--$theEnd--\n"  if( $DIFFEND_DEBUG );
-      
+
    return $theEnd;
 }
 
-# ======================
 # no type means diff for putting in rcs file, diff means normal diff output
-sub _diff
-{
+sub _diff {
     my( $new, $old, $type, $contextLines ) = @_;
     # Work out diffs to change new to old, params are refs to lists
     my $diffs = Algorithm::Diff::diff( $new, $old );
@@ -912,15 +767,12 @@ sub _diff
        print "]\n" if( $DIFF_DEBUG );
     }
     # Make sure we have the correct number of carriage returns at the end
-    
+
     print "pre end: \"$out\"\n" if( $DIFFEND_DEBUG );
     return $out; # . $theEnd;
 }
 
-
-# ======================
-sub _range
-{
+sub _range {
    my( $start, $end ) = @_;
    if( $start == $end ) {
       return "$start";
@@ -929,9 +781,7 @@ sub _range
    }
 }
 
-# ======================
-sub _addChunk
-{
+sub _addChunk {
    my( $chunkSign, $out, $lines, $start, $adj, $type, $start1, $last, $newLines ) = @_;
    my $nLines = @$lines;
    if( $lines->[$#$lines] =~ /(\n+)$/o ) {

@@ -89,14 +89,14 @@ sub eachfile {
     my $line;
 
     while( $line = <PMFILE>) {
-        return if $line =~ /^---\+\s+UNPUBLISHED/;
         if( $line =~ /^=(begin|pod)/) {
             $inPod = 1;
         } elsif ($line =~ /^=cut/) {
             $addTo = \$text;
             $inPod = 0;
         } elsif ($inPod) {
-            if( $line =~ /---\++\s*package\s*(.*)$/) {
+            return if ($nosmells && $line =~ /^---\+\s+UNPUBLISHED/);
+            if( $line =~ /---\++\s*(?:UNPUBLISHED\s*)?package\s*(.*)$/) {
                 $packageName = $1;
                 $packageName =~ s/\s+//g;
                 $packageSpec = "";
@@ -115,8 +115,8 @@ sub eachfile {
                 $$addTo .= $line;
             }
         } else {
-            if( $line =~ /\@$package\:\:ISA\s*=\s*qw\(\s*(.*)\s*\)/ ) {
-                my $e = $1;
+            if( $line =~ /\@($package\:\:)?ISA\s*=\s*qw\(\s*(.*)\s*\)/ ) {
+                my $e = $2;
                 if( $e =~ /^TWiki/ ) {
                     my $p = $e;
                     $p =~ s/:://g;

@@ -400,7 +400,6 @@ Generate a link.
 
 SMELL: why can topic be spaced out? is this to support auto squishing of [[Spaced Topic Naming]]?
 and [[lowercase Spaced Topic Naming]]
-
    * =$theWeb= - the web containing the topic
    * =$theTopic= - the topic to be lunk
    * =$theLinkText= - text to use for the link
@@ -431,7 +430,6 @@ sub internalLink {
     # Add <nop> before WikiWord inside link text to prevent double links
     $theLinkText =~ s/([\s\(])([$TWiki::regex{upperAlpha}])/$1<nop>$2/go;
 
-
     return _renderWikiWord($this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb);
 }
 
@@ -456,15 +454,15 @@ sub _renderWikiWord {
         $ans = _renderExistingWikiWord($this, $theWeb,
                                        $theTopic, $theLinkText, $theAnchor);
     } else {
-         if( $doLinkToMissingPages ) {
-           $ans = _renderNonExistingWikiWord($this, $theWeb, $theTopic,
-                                             $theLinkText, $theAnchor);
-         } else {
-           if( $doKeepWeb ) {
-              $ans = "$theWeb.$theLinkText";
-           } else {
-              $ans = $theLinkText;
-           }
+        if( $doLinkToMissingPages ) {
+            $ans = _renderNonExistingWikiWord($this, $theWeb, $theTopic,
+                                              $theLinkText, $theAnchor);
+        } else {
+            if( $doKeepWeb ) {
+                $ans = "$theWeb.$theLinkText";
+            } else {
+                $ans = $theLinkText;
+            }
         }
     }
     return $ans;
@@ -542,38 +540,40 @@ sub _handleWikiWord {
     }
 
     if ( defined( $anchor ) ) {
-       # 'Web.TopicName#anchor' or 'Web.ABBREV#anchor' link
-       $text =
-          "$TWiki::TranslationToken$topic$anchor$TWiki::TranslationToken";
+        # 'Web.TopicName#anchor' or 'Web.ABBREV#anchor' link
+        $text = "$topic$anchor";
     } else {
-      $anchor = "";
-      
-      # 'Web.TopicName' or 'Web.ABBREV' link:
-      if ( $topic eq $TWiki::cfg{HomeTopicName} && $web ne $this->{session}->{webName} ) {
-	$text = $web;
-      } else {
-	$text =
-	  "$TWiki::TranslationToken$topic$TWiki::TranslationToken";
-      }
+        $anchor = "";
+
+        # 'Web.TopicName' or 'Web.ABBREV' link:
+        if ( $topic eq $TWiki::cfg{HomeTopicName} &&
+             $web ne $this->{session}->{webName} ) {
+            $text = $web;
+        } else {
+            $text = $topic;
+        }
     }
 
     # Allow spacing out, etc
     $text = $this->plugins()->renderWikiWordHandler( $text ) || $text;
-    
 
-#| =$doKeepWeb= | boolean: true to keep web prefix (for non existing Web.TOPIC) |            
-    # SMELL: Why set keepWeb when the topic is an abbrievation?
+    # =$doKeepWeb= boolean: true to keep web prefix (for non existing Web.TOPIC)
+    # SMELL: Why set keepWeb when the topic is an abbreviation?
+    # NO IDEA, and it doesn't work anyway; it adds "TWiki." in front
+    # of every TWiki.CAPITALISED TWiki.WORD
+    #$keepWeb = ( $topic =~ /^$TWiki::regex{abbrevRegex}$/o );
 
-    $keepWeb = ( $topic =~ /^$TWiki::regex{abbrevRegex}$/o );
-              
-#| =$doLinkToMissingPages= | boolean: false means suppress link for non-existing pages |
+    # =$doLinkToMissingPages= boolean: false means suppress link for
+    # non-existing pages
     $linkIfAbsent = ( $topic !~ /^$TWiki::regex{abbrevRegex}$/o );
-              
-    $text = $topic;
-# SMELL - it seems $linkIfAbsent, $keepWeb are always inverses of each other        
-# TODO: check the spec of doKeepWeb vs $doLinkToMissingPages
 
-    return $this->internalLink( $web, $topic, $text, $anchor, $linkIfAbsent, $keepWeb );
+    $text = $topic;
+    # SMELL - it seems $linkIfAbsent, $keepWeb are always inverses of each
+    # other
+    # TODO: check the spec of doKeepWeb vs $doLinkToMissingPages
+
+    return $this->internalLink( $web, $topic, $text, $anchor,
+                                $linkIfAbsent, $keepWeb );
 }
 
 

@@ -291,12 +291,9 @@ sub getAttachmentStream {
     }
 
     my $topicHandler = $this->_getTopicHandler( $web, $topic, $att );
-    my $strm;
-    my $fp = $topicHandler->{file};
-    if ( $fp ) {
-        unless ( open( $strm, "<$fp" )) {
-            $this->{session}->writeWarning( "File $fp open failed: error $!" );
-        }
+    my $strm = $topicHandler->getStream();
+    unless( $strm ) {
+        $this->{session}->writeWarning( $topicHandler->lastError() );
     }
     return $strm;
 }
@@ -995,7 +992,8 @@ sub delRev {
     return $error if( $error );
 
     # restore last topic from repository
-    $topicHandler->restoreLatestRevision();
+    $error = $topicHandler->restoreLatestRevision();
+    return $error if( $error );
 
     $this->unlockTopic( $user, $web, $topic );
 

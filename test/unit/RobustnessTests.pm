@@ -14,6 +14,7 @@ BEGIN {
 require '../../bin/setlib.cfg';
 use TWiki;
 use TWiki::Sandbox;
+use TWiki::Time;
 use strict;
 
 sub new {
@@ -116,7 +117,7 @@ sub test_buildCommandLine {
     $this->assert_deep_equals(['1', '2.3', '4', 'string', ''],
                               [$twiki->{sandbox}->buildCommandLine(' %A|N% %B|S% %C|S%', (A => [1, 2.3, 4], B => 'string', C => ''))]);
     $this->assert_deep_equals(['2004/11/20 09:57:41'],
-                              [$twiki->{sandbox}->buildCommandLine('%A|D%', A => TWiki::formatTime (1100944661, '$rcs', 'gmtime'))]);
+                              [$twiki->{sandbox}->buildCommandLine('%A|D%', A => TWiki::Time::formatTime (1100944661, '$rcs', 'gmtime'))]);
     eval { $twiki->{sandbox}->buildCommandLine('%A|%') };
     $this->assert_not_null($@, '');
     eval { $twiki->{sandbox}->buildCommandLine('%A|X%') };

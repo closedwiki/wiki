@@ -42,10 +42,14 @@ sub set_up {
     $TWiki::cfg{WarningFileName} = "/tmp/junk";
     die unless $twiki;
     die unless $twiki->{prefs};
+    mkdir("$TWiki::cfg{DataDir}/$web",0777);
+    mkdir("$TWiki::cfg{PubDir}/$web",0777);
 }
 
 sub tear_down {
     $TWiki::cfg{WarningFileName} = $saveWF;
+    `rm -rf $TWiki::cfg{DataDir}/$web`;
+    `rm -rf $TWiki::cfg{PubDir}/$web`;
 }
 
 # Get rid a topic and its attachments completely
@@ -106,7 +110,7 @@ sub addRevision {
         } else {
             my $name = "tmp-attachment.tmp";
             umask( 002 );
-            open( FILE, ">$name" ) or warn "Can't create file $name\n";
+            open( FILE, ">$name" ) or die "Can't create file $name\n";
             binmode( FILE );
             print FILE $text;
             close( FILE);
@@ -117,85 +121,89 @@ sub addRevision {
 }
 
 
-sub checkRead {
+sub verifyWrap {
     my( $this, $topic, $attachment, @vals ) = @_;
-    my $web = "Test";
-    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, $attachment );
-    mug($rcs);
     my $numRevs = $#vals + 1;
+
+    my $rcs = new TWiki::Store::RcsWrap( $twiki, $web, $topic, $attachment );
     for( my $i=0; $i<$numRevs; $i++ ) {
         addRevision( $rcs, $attachment, $vals[$i], "comment " . $i, "JohnTalintyre" );
     }
-    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, $attachment );
-    $this->assert_equals( $numRevs, $rcsLite->numRevisions(), "Number of revisions should be the same" );
+    $this->assert_equals($numRevs, $rcs->numRevisions());
     for( my $i=$numRevs; $i>0; $i-- ) {
-        my $text = $rcsLite->getRevision( $i );
+        my $text = $rcs->getRevision( $i );
         $this->assert_equals( $vals[$i-1], $text );
     }
-    return $rcsLite;
 }
 
+sub verifyLite {
+    my( $this, $topic, $attachment, @vals ) = @_;
+    my $numRevs = $#vals + 1;
 
-sub test_repRev {
+    my $rcs = new TWiki::Store::RcsWrap( $twiki, $web, $topic, $attachment );
+    for( my $i=0; $i<$numRevs; $i++ ) {
+        addRevision( $rcs, $attachment, $vals[$i], "comment " . $i, "JohnTalintyre" );
+    }
+    $this->assert_equals($numRevs, $rcs->numRevisions());
+    for( my $i=$numRevs; $i>0; $i-- ) {
+        my $text = $rcs->getRevision( $i );
+        $this->assert_equals( $vals[$i-1], $text );
+    }
+}
+
+sub test_repRevRcs {
     my $this = shift;
-    my $web = "Test";
-    my $topic = "RcsLiteRepRev";
-    #print "Test Rep Rev\n";
-    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "" );
-    mug($rcsLite);
-    $rcsLite->addRevision( "there was a man\n\n", "in once", "JohnTalintyre" );
-    $rcsLite->replaceRevision( "there was a cat\n", "1st replace", "NotJohnTalintyre", time() );
+    my $topic = "RcsRepRev";
+
     my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "" );
-    my $numRevs = $rcs->numRevisions();
-    $this->assert_equals( 1, $numRevs, "Should be one revision" );
-    my $text = $rcs->getRevision(1);
-    $this->assert_equals( "there was a cat\n", $text, "Text for 1st replaced revision should match" );
-    $rcsLite->addRevision( "and now this\n\n\n", "2nd entry", "J1" );
-    $rcsLite->replaceRevision( "then this", "2nd replace", "J2", time() );
+    $rcs->addRevision( "there was a man\n\n", "in once", "JohnTalintyre" );
+    $this->assert_equals( "there was a man\n\n", $rcs->getRevision(1) );
+    $this->assert_equals( 1, $rcs->numRevisions() );
+
+    $rcs->replaceRevision( "there was a cat\n", "1st replace",
+                           "NotJohnTalintyre", time() );
+    $this->assert_equals( 1, $rcs->numRevisions() );
+    $this->assert_equals( "there was a cat\n", $rcs->getRevision(1) );
+    $rcs->addRevision( "and now this\n\n\n", "2nd entry", "J1" );
+    $this->assert_equals( 2, $rcs->numRevisions() );
+    $this->assert_equals( "there was a cat\n", $rcs->getRevision(1) );
+    $this->assert_equals( "and now this\n\n\n", $rcs->getRevision(2) );
+
+    $rcs->replaceRevision( "then this", "2nd replace", "J2", time() );
     $this->assert_equals( 2, $rcs->numRevisions );
     $this->assert_equals( "there was a cat\n", $rcs->getRevision(1) );
     $this->assert_equals( "then this", $rcs->getRevision(2) );
-    mug($rcs);
-    $rcs->addRevision( "there was a man\n\n", "in once", "JohnTalintyre" );
-    $rcs->replaceRevision( "there was a cat\n", "1st replace", "NotJohnTalintyre", time() );
-    $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "" );
-    $numRevs = $rcsLite->numRevisions();
-    $this->assert_equals( $numRevs, 1 );
-    $text = $rcsLite->getRevision(1);
-    $this->assert_equals( "there was a cat\n", $text);
-    $rcs->addRevision( "and now this\n\n\n", "2nd entry", "J1" );
-    $rcs->replaceRevision( "then this\n", "2nd replace", "J2", time() );
-    $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "" );
-    $this->assert_equals( 2, $rcsLite->numRevisions);
-    $this->assert_equals( "there was a cat\n", $rcsLite->getRevision(1));
-    $this->assert_equals( "then this\n", $rcsLite->getRevision(2));
 }
 
-sub writeTest {
-    my( $this, $topic, $attachment, @vals ) = @_;
-    my $web = "Test";
-    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, $attachment );
-    mug($rcsLite);
-    my $numRevs = $#vals + 1;
-    for( my $i=0; $i<$numRevs; $i++ ) {
-        addRevision( $rcsLite, $attachment, $vals[$i], "comment " . $i,
-                     "JohnTalintyre" );
-    }
-    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, $attachment);
-    $this->assert_equals( $numRevs, $rcs->numRevisions());
-    for( my $i = $numRevs; $i > 0; $i-- ) {
-        my $text = $rcs->getRevision( $i );
-        $this->assert_str_equals( $vals[$i-1], $text );
-    }
+sub test_repRevRcsLite {
+    my $this = shift;
+    my $topic = "RcsLiteRepRev";
+
+    my $rcs = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "" );
+    $rcs->addRevision( "there was a man\n\n", "in once", "JohnTalintyre" );
+    $this->assert_equals( "there was a man\n\n", $rcs->getRevision(1) );
+    $this->assert_equals( 1, $rcs->numRevisions() );
+
+    $rcs->replaceRevision( "there was a cat\n", "1st replace",
+                           "NotJohnTalintyre", time() );
+    $this->assert_equals( 1, $rcs->numRevisions() );
+    $this->assert_equals( "there was a cat\n", $rcs->getRevision(1) );
+    $rcs->addRevision( "and now this\n\n\n", "2nd entry", "J1" );
+    $this->assert_equals( 2, $rcs->numRevisions() );
+    $this->assert_equals( "there was a cat\n", $rcs->getRevision(1) );
+    $this->assert_equals( "and now this\n\n\n", $rcs->getRevision(2) );
+
+    $rcs->replaceRevision( "then this", "2nd replace", "J2", time() );
+    $this->assert_equals( 2, $rcs->numRevisions );
+    $this->assert_equals( "there was a cat\n", $rcs->getRevision(1) );
+    $this->assert_equals( "then this", $rcs->getRevision(2) );
 }
 
 # Outputs delta for helping to work out how to do things
 sub refDelta {
     my( $old, $new ) = @_;
-    my $web = "Test";
     my $topic = "RefDelta";
     my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "" );
-    mug($rcs);
     $rcs->addRevision( $old, "old comment", "JohnTalintyre" );   
     $rcs->addRevision( $new, "old comment", "JohnTalintyre" );   
     my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "" );
@@ -205,380 +213,780 @@ sub refDelta {
     print "Delta new->old:\n\"$delta\"\n\n"; 
 }
 
-sub test_wt1 {
+sub test_wt1Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "a" ) );
+    $this->verifyLite( $wTopic, "", ( "a" ) );
 }
 
-sub test_wt2 {
+sub test_wt1Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "a\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "a" ) );
 }
 
-sub test_wt3 {
+sub test_wt2Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "a\n", "b\n" ) );
+    $this->verifyLite( $wTopic, "", ( "a\n" ) );
 }
 
-sub test_wt4 {
+sub test_wt2Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "a\n", "b" ) );
+    $this->verifyWrap( $wTopic, "", ( "a\n" ) );
 }
 
-sub test_wt5 {
+sub test_wt3Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "a\n", "a\n\n" ) );
+    $this->verifyLite( $wTopic, "", ( "a\n", "b\n" ) );
 }
 
-sub test_wt6 {
+sub test_wt3Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "a\nb\n", "a\nc\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "a\n", "b\n" ) );
 }
 
-sub test_wt7 {
+sub test_wt4Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "one\n", "one\ntwo\n" ) );
+    $this->verifyLite( $wTopic, "", ( "a\n", "b" ) );
 }
 
-sub test_wt8 {
+sub test_wt4Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "one\n", "one\ntwo\n" ) ); # TODO: badly broken
+    $this->verifyWrap( $wTopic, "", ( "a\n", "b" ) );
 }
 
-sub test_wt9 {
+sub test_wt5Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
+    $this->verifyLite( $wTopic, "", ( "a\n", "a\n\n" ) );
 }
 
-sub test_wt10 {
+sub test_wt5Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "three\nfour\n", "one\ntwo\nthree\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "a\n", "a\n\n" ) );
 }
 
-sub test_wt11 {
+sub test_wt6Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( 'john.talintyre@drkw.com\n' ) ); # TODO: broken!
+    $this->verifyLite( $wTopic, "", ( "a\nb\n", "a\nc\n" ) );
 }
 
-sub test_wt12 {
+sub test_wt6Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "", "w\n\n" ) );  
+    $this->verifyWrap( $wTopic, "", ( "a\nb\n", "a\nc\n" ) );
 }
 
-sub test_wt13 {
+sub test_wt7Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "det\nnwaw\ndjrz", "wjmpa\nnwaw\ndjrz" ) );
+    $this->verifyLite( $wTopic, "", ( "one\n", "one\ntwo\n" ) );
 }
 
-sub test_wt14 {
+sub test_wt7Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "ntyp\nzz", "fl\n\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "one\n", "one\ntwo\n" ) );
 }
 
-sub test_wt15 {
+sub test_wt8Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "nrcpb\n", "" ) );
+    $this->verifyLite( $wTopic, "", ( "one\n", "one\ntwo\n" ) ); # TODO: badly broken
 }
 
-sub test_wt16 {
+sub test_wt8Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "smifn", "\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "one\n", "one\ntwo\n" ) ); # TODO: badly broken
 }
 
-sub test_wt17 {
+sub test_wt9Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "\n", "mus\n" ) );
+    $this->verifyLite( $wTopic, "", ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
 }
 
-sub test_wt18 {
+sub test_wt9Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "jw\na\niky", "yorem\na\niky\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
 }
 
-sub test_wt19 {
+sub test_wt10Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "\nilw", "we\nilw" ) );
+    $this->verifyLite( $wTopic, "", ( "three\nfour\n", "one\ntwo\nthree\n" ) );
 }
 
-sub test_wt20 {
+sub test_wt10Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "", ( "a\nb\n", "a\nb\nc\n", "a\nb\nc\n" . chr(0xFF) . "\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "three\nfour\n", "one\ntwo\nthree\n" ) );
 }
 
-sub test_wa1 {
+sub test_wt11Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "a" ) );
+    $this->verifyLite( $wTopic, "", ( 'john.talintyre@drkw.com\n' ) ); # TODO: broken!
 }
 
-sub test_wa2 {
+sub test_wt11Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "a\n" ) );
+    $this->verifyWrap( $wTopic, "", ( 'john.talintyre@drkw.com\n' ) ); # TODO: broken!
 }
 
-sub test_wa3 {
+sub test_wt12Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "a\n", "b\n" ) );
+    $this->verifyLite( $wTopic, "", ( "", "w\n\n" ) );  
 }
 
-sub test_wa4 {
+sub test_wt12Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "a\n", "b" ) );
+    $this->verifyWrap( $wTopic, "", ( "", "w\n\n" ) );  
 }
 
-sub test_wa5 {
+sub test_wt13Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "a\n", "a\n\n" ) );
+    $this->verifyLite( $wTopic, "", ( "det\nnwaw\ndjrz", "wjmpa\nnwaw\ndjrz" ) );
 }
 
-sub test_wa6 {
+sub test_wt13Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "a\nb\n", "a\nc\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "det\nnwaw\ndjrz", "wjmpa\nnwaw\ndjrz" ) );
 }
 
-sub test_wa7 {
+sub test_wt14Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "one\n", "one\ntwo\n" ) );
+    $this->verifyLite( $wTopic, "", ( "ntyp\nzz", "fl\n\n" ) );
 }
 
-sub test_wa8 {
+sub test_wt14Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "one\n", "one\ntwo\n" ) ); # TODO: badly broken
+    $this->verifyWrap( $wTopic, "", ( "ntyp\nzz", "fl\n\n" ) );
 }
 
-sub test_wa9 {
+sub test_wt15Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
+    $this->verifyLite( $wTopic, "", ( "nrcpb\n", "" ) );
 }
 
-sub test_wa10 {
+sub test_wt15Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "three\nfour\n", "one\ntwo\nthree\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "nrcpb\n", "" ) );
 }
 
-sub test_wa11 {
+sub test_wt16Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( 'john.talintyre@drkw.com\n' ) ); # TODO: broken!
+    $this->verifyLite( $wTopic, "", ( "smifn", "\n" ) );
 }
 
-sub test_wa12 {
+sub test_wt16Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "", "w\n\n" ) );  
+    $this->verifyWrap( $wTopic, "", ( "smifn", "\n" ) );
 }
 
-sub test_wa13 {
+sub test_wt17Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "det\nnwaw\ndjrz", "wjmpa\nnwaw\ndjrz" ) );
+    $this->verifyLite( $wTopic, "", ( "\n", "mus\n" ) );
 }
 
-sub test_wa14 {
+sub test_wt17Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "ntyp\nzz", "fl\n\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "\n", "mus\n" ) );
 }
 
-sub test_wa15 {
+sub test_wt18Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "nrcpb\n", "" ) );
+    $this->verifyLite( $wTopic, "", ( "jw\na\niky", "yorem\na\niky\n" ) );
 }
 
-sub test_wa16 {
+sub test_wt18Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "smifn", "\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "jw\na\niky", "yorem\na\niky\n" ) );
 }
 
-sub test_wa17 {
+sub test_wt19Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "\n", "mus\n" ) );
+    $this->verifyLite( $wTopic, "", ( "\nilw", "we\nilw" ) );
 }
 
-sub test_wa18 {
+sub test_wt19Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "jw\na\niky", "yorem\na\niky\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "\nilw", "we\nilw" ) );
 }
 
-sub test_wa19 {
+sub test_wt20Lite {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "\nilw", "we\nilw" ) );
+    $this->verifyLite( $wTopic, "", ( "a\nb\n", "a\nb\nc\n", "a\nb\nc\n" . chr(0xFF) . "\n" ) );
 }
 
-sub test_wa20 {
+sub test_wt20Wrap {
     my $this = shift;
-    $this->writeTest( $wTopic, "it.doc", ( "a\nb\n", "a\nb\nc\n", "a\nb\nc\n" . chr(0xFF) . "\n" ) );
+    $this->verifyWrap( $wTopic, "", ( "a\nb\n", "a\nb\nc\n", "a\nb\nc\n" . chr(0xFF) . "\n" ) );
 }
 
-sub test_rt1 {
+sub test_wa1Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "a" ) );
+    $this->verifyLite( $wTopic, "it.doc", ( "a" ) );
 }
 
-sub test_rt2 {
+sub test_wa1Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "a\n" ) );
+    $this->verifyWrap( $wTopic, "it.doc", ( "a" ) );
 }
 
-sub test_rt3 {
+sub test_wa2Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "a\n", "b\n" ) );
+    $this->verifyLite( $wTopic, "it.doc", ( "a\n" ) );
 }
 
-sub test_rt4 {
+sub test_wa2Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "a\n", "b" ) );
+    $this->verifyWrap( $wTopic, "it.doc", ( "a\n" ) );
 }
 
-sub test_rt5 {
+sub test_wa3Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "a", "b\n" ) );
+    $this->verifyLite( $wTopic, "it.doc", ( "a\n", "b\n" ) );
 }
 
-sub test_rt6 {
+sub test_wa3Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "a\n", "a\n\n" ) );
+    $this->verifyWrap( $wTopic, "it.doc", ( "a\n", "b\n" ) );
 }
 
-sub test_rt7 {
+sub test_wa4Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "a\nb\n", "a\nc\n" ) );
+    $this->verifyLite( $wTopic, "it.doc", ( "a\n", "b" ) );
 }
 
-sub test_rt8 {
+sub test_wa4Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "one", "one\ntwo\n" ) );
+    $this->verifyWrap( $wTopic, "it.doc", ( "a\n", "b" ) );
 }
 
-sub test_rt9 {
+sub test_wa5Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "one\n", "one\ntwo\n" ) );
+    $this->verifyLite( $wTopic, "it.doc", ( "a\n", "a\n\n" ) );
 }
 
-sub test_rt10 {
+sub test_wa5Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
+    $this->verifyWrap( $wTopic, "it.doc", ( "a\n", "a\n\n" ) );
 }
 
-sub test_rt11 {
+sub test_wa6Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "three\nfour\n", "one\ntwo\nthree\n" ) );
+    $this->verifyLite( $wTopic, "it.doc", ( "a\nb\n", "a\nc\n" ) );
 }
 
-sub test_rt12 {
+sub test_wa6Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( 'john.talintyre@drkw.com\n' ) );
+    $this->verifyWrap( $wTopic, "it.doc", ( "a\nb\n", "a\nc\n" ) );
 }
 
-sub test_rt13 {
+sub test_wa7Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "" ) );
+    $this->verifyLite( $wTopic, "it.doc", ( "one\n", "one\ntwo\n" ) );
 }
 
-sub test_rt14 {
+sub test_wa7Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "nrcpb\n", "" ) );
+    $this->verifyWrap( $wTopic, "it.doc", ( "one\n", "one\ntwo\n" ) );
 }
 
-sub test_rt15 {
+sub test_wa8Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( "one\n", "one\ntwo\n" ) ); # TODO: badly broken
+}
+
+sub test_wa8Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( "one\n", "one\ntwo\n" ) ); # TODO: badly broken
+}
+
+sub test_wa9Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
+}
+
+sub test_wa9Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
+}
+
+sub test_wa10Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( "three\nfour\n", "one\ntwo\nthree\n" ) );
+}
+
+sub test_wa10Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( "three\nfour\n", "one\ntwo\nthree\n" ) );
+}
+
+sub test_wa11Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( 'john.talintyre@drkw.com\n' ) ); # TODO: broken!
+}
+
+sub test_wa11Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( 'john.talintyre@drkw.com\n' ) ); # TODO: broken!
+}
+
+sub test_wa12Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( "", "w\n\n" ) );  
+}
+
+sub test_wa12Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( "", "w\n\n" ) );  
+}
+
+sub test_wa13Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( "det\nnwaw\ndjrz", "wjmpa\nnwaw\ndjrz" ) );
+}
+
+sub test_wa13Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( "det\nnwaw\ndjrz", "wjmpa\nnwaw\ndjrz" ) );
+}
+
+sub test_wa14Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( "ntyp\nzz", "fl\n\n" ) );
+}
+
+sub test_wa14Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( "ntyp\nzz", "fl\n\n" ) );
+}
+
+sub test_wa15Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( "nrcpb\n", "" ) );
+}
+
+sub test_wa15Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( "nrcpb\n", "" ) );
+}
+
+sub test_wa16Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( "smifn", "\n" ) );
+}
+
+sub test_wa16Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( "smifn", "\n" ) );
+}
+
+sub test_wa17Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( "\n", "mus\n" ) );
+}
+
+sub test_wa17Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( "\n", "mus\n" ) );
+}
+
+sub test_wa18Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( "jw\na\niky", "yorem\na\niky\n" ) );
+}
+
+sub test_wa18Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( "jw\na\niky", "yorem\na\niky\n" ) );
+}
+
+sub test_wa19Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( "\nilw", "we\nilw" ) );
+}
+
+sub test_wa19Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( "\nilw", "we\nilw" ) );
+}
+
+sub test_wa20Lite {
+    my $this = shift;
+    $this->verifyLite( $wTopic, "it.doc", ( "a\nb\n", "a\nb\nc\n", "a\nb\nc\n" . chr(0xFF) . "\n" ) );
+}
+
+sub test_wa20Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "it.doc", ( "a\nb\n", "a\nb\nc\n", "a\nb\nc\n" . chr(0xFF) . "\n" ) );
+}
+
+sub test_rt1Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "a" ) );
+}
+
+sub test_rt1Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "it.doc", ( "a" ) );
+}
+
+sub test_rt2Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "a\n" ) );
+}
+
+sub test_rt2Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "it.doc", ( "a\n" ) );
+}
+
+sub test_rt3Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "a\n", "b\n" ) );
+}
+
+sub test_rt3Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "it.doc", ( "a\n", "b\n" ) );
+}
+
+sub test_rt4Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "a\n", "b" ) );
+}
+
+sub test_rt4Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "it.doc", ( "a\n", "b" ) );
+}
+
+sub test_rt5Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "a", "b\n" ) );
+}
+
+sub test_rt5Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "it.doc", ( "a", "b\n" ) );
+}
+
+sub test_rt6Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "a\n", "a\n\n" ) );
+}
+
+sub test_rt6Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "it.doc", ( "a\n", "a\n\n" ) );
+}
+
+sub test_rt7Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "a\nb\n", "a\nc\n" ) );
+}
+
+sub test_rt7Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "it.doc", ( "a\nb\n", "a\nc\n" ) );
+}
+
+sub test_rt8Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "one", "one\ntwo\n" ) );
+}
+
+sub test_rt8Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "it.doc", ( "one", "one\ntwo\n" ) );
+}
+
+sub test_rt9Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "one\n", "one\ntwo\n" ) );
+}
+
+sub test_rt9Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "it.doc", ( "one\n", "one\ntwo\n" ) );
+}
+
+sub test_rt10Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
+}
+
+sub test_rt10Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "it.doc", ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
+}
+
+sub test_rt11Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "three\nfour\n", "one\ntwo\nthree\n" ) );
+}
+
+sub test_rt11Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "it.doc", ( "three\nfour\n", "one\ntwo\nthree\n" ) );
+}
+
+sub test_rt12Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( 'john.talintyre@drkw.com\n' ) );
+}
+
+sub test_rt12Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "it.doc", ( 'john.talintyre@drkw.com\n' ) );
+}
+
+sub test_rt13Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "" ) );
+}
+
+sub test_rt13Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "it.doc", ( "" ) );
+}
+
+sub test_rt14Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "it.doc", ( "nrcpb\n", "" ) );
+}
+
+sub test_rt14Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "it.doc", ( "nrcpb\n", "" ) );
+}
+
+sub test_rt15Wrap {
 	my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "smifn", "\n" ) );
+    $this->verifyWrap( $rTopic, "it.doc", ( "smifn", "\n" ) );
 }
 
-sub test_rt16 {
+sub test_rt15Lite {
+	my $this = shift;
+    $this->verifyLite($rTopic, "it.doc", ( "smifn", "\n" ) );
+}
+
+sub test_rt16Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "\n", "mus\n" ) );
+    $this->verifyWrap( $rTopic, "it.doc", ( "\n", "mus\n" ) );
 }
 
-sub test_rt17 {
+sub test_rt16Lite {
     my $this = shift;
-    $this->checkRead( $wTopic, "it.doc", ( "jw\na\niky", "yorem\na\niky\n" ) );
+    $this->verifyLite($rTopic, "it.doc", ( "\n", "mus\n" ) );
 }
 
-sub test_rt18 {
+sub test_rt17Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "\nilw", "we\nilw" ) );
+    $this->verifyWrap( $wTopic, "it.doc", ( "jw\na\niky", "yorem\na\niky\n" ) );
 }
 
-sub test_rt19 {
+sub test_rt17Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "it.doc", ( "a\nb\n", "a\nb\nc\n", "a\nb\nc\n" . chr(0xFF) . "\n" ) );
+    $this->verifyLite($wTopic, "it.doc", ( "jw\na\niky", "yorem\na\niky\n" ) );
 }
 
-
-sub test_ra1 {
+sub test_rt18Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "", ( "a" ) );
+    $this->verifyWrap( $rTopic, "it.doc", ( "\nilw", "we\nilw" ) );
 }
 
-sub test_ra2 {
+sub test_rt18Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "", ( "a\n" ) );
+    $this->verifyLite($rTopic, "it.doc", ( "\nilw", "we\nilw" ) );
 }
 
-sub test_ra3 {
+sub test_rt19Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "", ( "a\n", "b\n" ) );
+    $this->verifyWrap( $rTopic, "it.doc", ( "a\nb\n", "a\nb\nc\n", "a\nb\nc\n" . chr(0xFF) . "\n" ) );
 }
 
-sub test_ra4{
+sub test_rt19Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "", ( "a\n", "b" ) );
+    $this->verifyLite($rTopic, "it.doc", ( "a\nb\n", "a\nb\nc\n", "a\nb\nc\n" . chr(0xFF) . "\n" ) );
 }
 
-sub test_ra5 {
+sub test_ra1Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "", ( "a", "b\n" ) );
+    $this->verifyWrap( $rTopic, "", ( "a" ) );
 }
 
-sub test_ra6 {
+sub test_ra1Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "", ( "a\n", "a\n\n" ) );
+    $this->verifyLite( $rTopic, "", ( "a" ) );
 }
 
-sub test_ra7 {
+sub test_ra2Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "", ( "a\nb\n", "a\nc\n" ) );
+    $this->verifyWrap( $rTopic, "", ( "a\n" ) );
 }
 
-sub test_ra8 {
+sub test_ra2Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "", ( "one", "one\ntwo\n" ) );
+    $this->verifyLite( $rTopic, "", ( "a\n" ) );
 }
 
-sub test_ra9 {
+sub test_ra3Wrap {
     my $this = shift;
-    $this->checkRead( $rTopic, "", ( "one\n", "one\ntwo\n" ) );
+    $this->verifyWrap( $rTopic, "", ( "a\n", "b\n" ) );
 }
 
-sub test_ra10 {
+sub test_ra3Lite {
     my $this = shift;
-    $this->checkRead( $rTopic, "", ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
+    $this->verifyLite( $rTopic, "", ( "a\n", "b\n" ) );
 }
 
-sub test_ra11 {
+sub test_raWrap4{
     my $this = shift;
-    $this->checkRead( $rTopic, "", ( "three\nfour\n", "one\ntwo\nthree\n" ) );
+    $this->verifyWrap( $rTopic, "", ( "a\n", "b" ) );
 }
 
-sub test_ra12 {
+sub test_raLite4{
     my $this = shift;
-    $this->checkRead( $rTopic, "", ( 'john.talintyre@drkw.com\n' ) );
+    $this->verifyLite( $rTopic, "", ( "a\n", "b" ) );
 }
 
-sub test_ra13 { my $this = shift; $this->checkRead( $rTopic, "", ( "" ) ); }
-sub test_ra14 { my $this = shift;
-                $this->checkRead( $rTopic, "", ( "nrcpb\n", "" ) ); }
-sub test_ra15 { my $this = shift;
-                $this->checkRead( $rTopic, "", ( "smifn", "\n" ) ); }
-sub test_ra16 { my $this = shift;
-                $this->checkRead( $rTopic, "", ( "\n", "mus\n" ) ); }
-sub test_ra17 { my $this = shift;
-                $this->checkRead( $wTopic, "", ( "jw\na\niky", "yorem\na\niky\n" ) ); }
-sub test_ra18 { my $this = shift;
-                $this->checkRead( $rTopic, "", ( "\nilw", "we\nilw" ) ); }
+sub test_ra5Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( "a", "b\n" ) );
+}
+
+sub test_ra5Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "", ( "a", "b\n" ) );
+}
+
+sub test_ra6Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( "a\n", "a\n\n" ) );
+}
+
+sub test_ra6Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "", ( "a\n", "a\n\n" ) );
+}
+
+sub test_ra7Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( "a\nb\n", "a\nc\n" ) );
+}
+
+sub test_ra7Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "", ( "a\nb\n", "a\nc\n" ) );
+}
+
+sub test_ra8Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( "one", "one\ntwo\n" ) );
+}
+
+sub test_ra8Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "", ( "one", "one\ntwo\n" ) );
+}
+
+sub test_ra9Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( "one\n", "one\ntwo\n" ) );
+}
+
+sub test_ra9Lite {
+    my $this = shift;
+    $this->verifyLite( $rTopic, "", ( "one\n", "one\ntwo\n" ) );
+}
+
+sub test_ra10Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
+}
+
+sub test_ra10Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "", ( "one\nthree\nfour\n", "one\ntwo\nthree\n" ) );
+}
+
+sub test_ra11Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( "three\nfour\n", "one\ntwo\nthree\n" ) );
+}
+
+sub test_ra11Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "", ( "three\nfour\n", "one\ntwo\nthree\n" ) );
+}
+
+sub test_ra12Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( 'john.talintyre@drkw.com\n' ) );
+}
+
+sub test_ra12Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "", ( 'john.talintyre@drkw.com\n' ) );
+}
+
+sub test_ra13Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( "" ) );
+}
+
+sub test_ra13Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "", ( "" ) );
+}
+
+sub test_ra14Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( "nrcpb\n", "" ) );
+}
+
+sub test_ra14Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "", ( "nrcpb\n", "" ) );
+}
+
+sub test_ra15Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( "smifn", "\n" ) );
+}
+
+sub test_ra15Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "", ( "smifn", "\n" ) );
+}
+
+sub test_ra16Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( "\n", "mus\n" ) );
+}
+
+sub test_ra16Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "", ( "\n", "mus\n" ) );
+}
+
+sub test_ra17Wrap {
+    my $this = shift;
+    $this->verifyWrap( $wTopic, "", ( "jw\na\niky", "yorem\na\niky\n" ) );
+}
+
+sub test_ra17Lite {
+    my $this = shift;
+    $this->verifyLite($wTopic, "", ( "jw\na\niky", "yorem\na\niky\n" ) );
+}
+
+sub test_ra18Wrap {
+    my $this = shift;
+    $this->verifyWrap( $rTopic, "", ( "\nilw", "we\nilw" ) );
+}
+
+sub test_ra18Lite {
+    my $this = shift;
+    $this->verifyLite($rTopic, "", ( "\nilw", "we\nilw" ) );
+}
 
 sub rcsDiffOne {
     my( $this, @vals ) = @_;
     my $topic = "RcsDiffTest";
-    my $web = "Test";
     my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "" );
-    mug($rcs);
     #print "Rcs Diff test $num\n";
     $rcs->addRevision( $vals[0], "num 0", "JohnTalintyre" );
     $rcs->addRevision( $vals[1], "num 1", "JohnTalintyre" );
@@ -652,7 +1060,6 @@ sub randLines {
 # pinsert - prob for an insert, 0 - 100
 sub randTest {
     my( $this, $ident, $iterations, $count, $pinsert, $ndel ) = @_;
-    my $web = "Test";
     my $topic = "RcsLiteRandom";
     my @vals = ();
     my @val  = ();
@@ -699,9 +1106,7 @@ sub printVals {
 sub genTest {
     my( $this,$ident, $topic, $write, $read, $attachment, @vals ) = @_;
     print "Test Generic ($attachment) $ident\n" if( $ident );
-    my $web = "Test";
     my $writer = $write->new( $twiki, $web, $topic, $attachment );
-    mug($writer);
     my $numRevs = @vals;
     for( my $i=0; $i<$numRevs; $i++ ) {
         addRevision( $writer, $attachment, $vals[$i], "comment " . $i, "JohnTalintyre" );
@@ -719,7 +1124,6 @@ sub genTest {
 
 sub test_ciLocked {
     my $this = shift;
-    my $web = "Test";
     my $topic = "CiLocked";
 
     # create the fixture
@@ -738,8 +1142,8 @@ sub test_ciLocked {
     # check it in
     $rcs->_ci( $rcs->{file}, "Gotcha", "SheikAlot" );
     $txt = $rcs->_readFile($vfile);
-    # make sure the lock is right
-    $this->assert_matches(qr/locks\n\s+$user:1\./s, $txt);
+    $this->assert_matches(qr/Gotcha/s, $txt);
+    $this->assert_matches(qr/SheikAlot/s, $txt);
 }
 
 1;

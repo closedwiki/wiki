@@ -212,7 +212,9 @@ sub upgradeConfig {
                       "{RCS}{initBinaryCmd}");
     print CFG old2new($ss{tmpBinaryCmd}, "$rcsDir/rcs  -q -kb %FILENAME%",
                       "{RCS}{tmpBinaryCmd}");
-    print CFG old2new($ss{ciCmd}, "$rcsDir/ci  -q -l -m$cmdQuote%COMMENT%$cmdQuote -t-none -w$cmdQuote%USERNAME%$cmdQuote %FILENAME%",
+    # hack, change lock behaviour
+    $ss{ciCmd} =~ s/\b-l\b/-u/;
+    print CFG old2new($ss{ciCmd}, "$rcsDir/ci  -q -u -m$cmdQuote%COMMENT%$cmdQuote -t-none -w$cmdQuote%USERNAME%$cmdQuote %FILENAME%",
                       "{RCS}{ciCmd}");
     print CFG old2new($ss{coCmd}, "$rcsDir/co  -q -p%REVISION% $keywordMode %FILENAME%",
                       "{RCS}{coCmd}");
@@ -222,16 +224,16 @@ sub upgradeConfig {
                       "{RCS}{infoCmd}");
     print CFG old2new($ss{diffCmd}, "$rcsDir/rcsdiff  -q -w -B -r%REVISION1% -r%REVISION2% $keywordMode --unified=%CONTEXT% %FILENAME%",
                       "{RCS}{diffCmd}");
-    print CFG old2new($ss{breakLockCmd}, "$rcsDir/rcs  -q -l -M %FILENAME%",
+    # hack, change lock behaviour
+    $ss{breakLockCmd} =~ s/\b-l\b/-u/;
+    print CFG old2new($ss{breakLockCmd}, "$rcsDir/rcs  -q -u -M %FILENAME%",
                       "{RCS}{breakLockCmd}");
-    print CFG old2new($ss{ciDateCmd}, "$rcsDir/ci -l  -q -mnone -t-none -d$cmdQuote%DATE%$cmdQuote -w$cmdQuote%USERNAME%$cmdQuote %FILENAME%",
+    # hack, change lock behaviour
+    $ss{ciDateCmd} =~ s/\b-l\b/-u/;
+    print CFG old2new($ss{ciDateCmd}, "$rcsDir/ci -u  -q -mnone -t-none -d$cmdQuote%DATE%$cmdQuote -w$cmdQuote%USERNAME%$cmdQuote %FILENAME%",
                       "{RCS}{ciDateCmd}");
     print CFG old2new($ss{delRevCmd}, "$rcsDir/rcs  -q -o%REVISION% %FILENAME%",
                       "{RCS}{delRevCmd}");
-    print CFG old2new($ss{unlockCmd}, "$rcsDir/rcs  -q -u %FILENAME%",
-                      "{RCS}{unlockCmd}");
-    print CFG old2new($ss{lockCmd}, "$rcsDir/rcs  -q -l %FILENAME%",
-                      "{RCS}{lockCmd}");
     print CFG old2new($ss{tagCmd}, "$rcsDir/rcs  -N%TAG%:%REVISION% %FILENAME%",
                       "{RCS}{tagCmd}");
 

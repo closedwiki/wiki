@@ -18,13 +18,13 @@
 
 =pod
 
----+ UNPUBLISHED package TWiki::Store::RcsWrap
+---+ package TWiki::Store::RcsWrap
+
+This package does not publish any methods. It implements the
+virtual methods of the [[TWikiStoreRcsFileDotPm][TWiki::Store::RcsFile]] superclass.
 
 Wrapper around the RCS commands required by TWiki.
 There is one of these object for each file stored under RCS.
-
-This object is PACKAGE PRIVATE to Store, and should never be
-used from anywhere else.
 
 =cut
 
@@ -40,12 +40,7 @@ use TWiki::Time;
 use strict;
 use Assert;
 
-=pod
-
----++ ClassMethod new($web, $topic, $attachment)
-
-=cut
-
+# implements RcsFile
 sub new {
     my( $class, $session, $web, $topic, $attachment ) = @_;
     ASSERT(ref($session) eq "TWiki") if DEBUG;
@@ -56,15 +51,15 @@ sub new {
     return $self;
 }
 
-# Overrides RcsFile::binaryChange
+# implements RcsFile
 sub binaryChange {
     my( $self ) = @_;
     if( $self->{binary} ) {
         # Can only do something when changing to binary
-        my $file = $self->{file};
         my ( $rcsOutput, $exit ) =
-          $self->{session}->{sandbox}->readFromProcess ( $TWiki::cfg{RCS}{initBinaryCmd},
-                                   FILENAME => $self->{file} );
+          $self->{session}->{sandbox}->readFromProcess
+            ( $TWiki::cfg{RCS}{initBinaryCmd},
+              FILENAME => $self->{file} );
         if( $exit && $rcsOutput ) {
            $rcsOutput = "$TWiki::cfg{RCS}{initBinaryCmd}\n$rcsOutput";
         } elsif( ! -e $self->{rcsFile} ) {
@@ -74,123 +69,78 @@ sub binaryChange {
         }
         return $rcsOutput;
     }
-    return "";
+    return undef;
 }
 
-=pod
-
----++ ObjectMethod addRevision (   $text, $comment, $user ) -> $error
-
-Add new revision. Replace file (if exists) with text.
-$user is a wikiname.
-
-=cut
-
+# implements RcsFile
+# $date is ignored
 sub addRevision {
-    my( $self, $text, $comment, $user ) = @_;
-    $self->_save( $self->{file}, \$text );
-    return $self->_ci( $self->{file}, $comment, $user );
+    my( $self, $text, $comment, $user, $date ) = @_;
+    my $error = $self->_lock();
+    return $error if $error;
+    $error = $self->_save( $self->{file}, \$text );
+    return $error if $error;
+    return $self->_ci( $comment, $user );
 }
 
-=pod
-
----++ ObjectMethod replaceRevision($text, $comment, $user, $date) -> $error
-Replace the top revision.
-   * =$text is the new revision
-   * =$date= is in epoch seconds.
-   * =$user= is a wikiname.
-   * =$comment= is a string
-
-Return non empty string with error message if there is a problem.
-
-=cut
-
+# implements RcsFile
 sub replaceRevision {
     my( $self, $text, $comment, $user, $date ) = @_;
 
     my $rev = $self->numRevisions();
-    my $file    = $self->{file};
-    my $rcsFile = $self->{rcsFile};
 
     # update repository with same userName and date
     if( $rev == 1 ) {
         # initial revision, so delete repository file and start again
-        unlink $rcsFile;
+        unlink $self->{rcsFile};
     } else {
         $self->_deleteRevision( $rev );
     }
     $self->_saveFile( $self->{file}, $text );
 	$date = TWiki::Time::formatTime( $date , "\$rcs", "gmtime");
 
+    my $error = $self->_lock();
+    return $error if $error;
+
     my ($rcsOut, $exit) = $self->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{ciDateCmd},
         DATE => $date,
         USERNAME => $user,
-        FILENAME => [$file, $rcsFile] );
+        FILENAME => $self->{file} );
     if( $exit ) {
         $rcsOut = "$TWiki::cfg{RCS}{ciDateCmd}\n$rcsOut";
         return $rcsOut;
     }
-    return "";
+    return undef;
 }
 
-=pod
-
----++ ObjectMethod deleteRevision() -> $error
-Delete the top revision.
-
-Return with empty string if only one revision.
-
-=cut
-
+# implements RcsFile
 sub deleteRevision {
     my( $self ) = @_;
     my $rev = $self->numRevisions();
-    return "" if( $rev == 1 );
+    return undef if( $rev == 1 );
     return $self->_deleteRevision( $rev );
 }
 
 sub _deleteRevision {
     my( $self, $rev ) = @_;
 
-    # delete latest revision (unlock, delete revision, lock)
-    my $file    = $self->{file};
-    my $rcsFile = $self->{rcsFile};
+    # delete latest revision (unlock (may not be needed), delete revision)
+    $self->{session}->{sandbox}->readFromProcess
+      ( $TWiki::cfg{RCS}{unlockCmd},
+        FILENAME => $self->{file} );
 
     my ($rcsOut, $exit) = $self->{session}->{sandbox}->readFromProcess
-      ( $TWiki::cfg{RCS}{unlockCmd}, FILENAME => [$file, $rcsFile] );
-    if( $exit ) {
-        $rcsOut = "$TWiki::cfg{RCS}{unlockCmd}\n$rcsOut";
-        return $rcsOut;
-    }
-
-    ($rcsOut, $exit) = $self->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{delRevCmd},
         REVISION => "1.$rev",
-        FILENAME => [$file, $rcsFile] );
+        FILENAME => $self->{file} );
     if( $exit ) {
         $rcsOut = "$TWiki::cfg{RCS}{delRevCmd}\n$rcsOut";
         return $rcsOut;
     }
-
-    ($rcsOut, $exit) =
-      $self->{session}->{sandbox}->readFromProcess( $TWiki::cfg{RCS}{lockCmd},
-                              REVISION => "1.$rev",
-                              FILENAME => [$file, $rcsFile] );
-    if( $exit ) {
-        $rcsOut = "$TWiki::cfg{RCS}{lockCmd}\n$rcsOut";
-        return $rcsOut;
-    }
 }
 
-=pod
-
----++ ObjectMethod getRevision($version) -> $text
-
-Get the text for a given revision. The version number must be an integer.
-
-=cut
-
+# implements RcsFile
 sub getRevision {
     my( $self, $version ) = @_;
 
@@ -208,15 +158,16 @@ sub getRevision {
         $tmpRevFile = "$tmpfile,v";
         copy( $self->{rcsFile}, $tmpRevFile );
         my ($tmp) =
-          $self->{session}->{sandbox}->readFromProcess( $TWiki::cfg{RCS}{tmpBinaryCmd},
-                                  FILENAME => $tmpRevFile );
+          $self->{session}->{sandbox}->readFromProcess
+            ( $TWiki::cfg{RCS}{tmpBinaryCmd},
+              FILENAME => $tmpRevFile );
         $file = $tmpfile;
         $coCmd =~ s/-p%REVISION%/-r%REVISION%/;
     }
-    my ($text) =
-      $self->{session}->{sandbox}->readFromProcess( $coCmd,
-                              REVISION => "1.$version",
-                              FILENAME => $file );
+    my ($text) = $self->{session}->{sandbox}->readFromProcess
+      ( $coCmd,
+        REVISION => "1.$version",
+        FILENAME => $file );
 
     if( $tmpfile ) {
         $text = $self->_readFile( $tmpfile );
@@ -228,60 +179,38 @@ sub getRevision {
     return $text;
 }
 
-=pod
-
----++ ObjectMethod numRevisions() -> $integer
-
-Find out how many revisions there are. If there is a problem, such
-as a nonexistent file, returns the null string.
-
-=cut
-
 sub numRevisions {
     my( $self ) = @_;
-    my $rcsFile = $self->{rcsFile};
-    if( ! -e $rcsFile ) {
-       return "";
+
+    if( ! -e $self->{rcsFile} ) {
+       return 0;
     }
 
     my ($rcsOutput) =
-      $self->{session}->{sandbox}->readFromProcess( $TWiki::cfg{RCS}{histCmd},
-                                        FILENAME => $rcsFile );
+      $self->{session}->{sandbox}->readFromProcess
+        ( $TWiki::cfg{RCS}{histCmd},
+          FILENAME => $self->{rcsFile} );
     if( $rcsOutput =~ /head:\s+\d+\.(\d+)\n/ ) {
         return $1;
     } else {
-        return ""; # Note this hides possible errors
+        $ TWiki::Store::RcsFile::lastError = $rcsOutput;
+        return 0; # Note this hides possible errors
     }
 }
 
-=pod
-
----++ ObjectMethod getRevisionInfo($version) -> ($rcsError, $rev, $date, $user, $comment)
-
-A version number of 0 or undef will return info on the _latest_ revision.
-
-If revision file is missing, information based on actual file is returned.
-
-Date return in epoch seconds. Revision returned as a number.
-User returned as a wikiname.
-
-=cut
-
+# implements RcsFile
 sub getRevisionInfo {
     my( $self, $version ) = @_;
 
-    my $rcsFile = $self->{rcsFile};
     my $rcsError = "";
     my( $dummy, $rev, $date, $user, $comment );
-    if ( -e $rcsFile ) {
-        unless ( $version ) {
-            $version = $self->numRevisions();
-        }
+    if ( -e $self->{rcsFile} ) {
+        $version = $self->numRevisions() unless $version;
         my $cmd = $TWiki::cfg{RCS}{infoCmd};
         my ( $rcsOut, $exit ) = $self->{session}->{sandbox}->readFromProcess
           ( $cmd,
             REVISION => "1.$version",
-            FILENAME => $rcsFile );
+            FILENAME => $self->{rcsFile} );
        $rcsError = "Error with $cmd, output: $rcsOut" if( $exit );
        if( ! $rcsError ) {
             $rcsOut =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/;
@@ -291,10 +220,10 @@ sub getRevisionInfo {
             $date = TWiki::Time::parseTime( $date );
             $rcsOut =~ /revision 1.([0-9]*)/;
             $rev = $1;
-            $rcsError = "Rev missing from revision file $rcsFile" unless( $rev );
+            $rcsError = "Rev missing from revision file $self->{rcsFile}" unless( $rev );
        }
     } else {
-       $rcsError = "Revision file $rcsFile is missing";
+       $rcsError = "Revision file $self->{rcsFile} is missing";
     }
 
     ( $dummy, $rev, $date, $user, $comment ) =
@@ -303,14 +232,7 @@ sub getRevisionInfo {
     return( $rcsError, $rev, $date, $user, $comment );
 }
 
-=pod
-
----++ ObjectMethod revisionDiff (   $rev1, $rev2, $contextLines  ) -> \@diffArray
-rev2 newer than rev1.
-Return reference to an array of [ diffType, $right, $left ]
-
-=cut
-
+# implements RcsFile
 sub revisionDiff {
     my( $self, $rev1, $rev2, $contextLines ) = @_;
     
@@ -325,13 +247,12 @@ sub revisionDiff {
            $tmp = "$tmp> $_\n";
         }
     } else {
-        my $rcsFile = $self->{rcsFile};
         $contextLines = "" unless defined($contextLines);
         ( $tmp, $exit ) =
           $self->{session}->{sandbox}->readFromProcess( $TWiki::cfg{RCS}{diffCmd},
                                   REVISION1 => "1.$rev1",
                                   REVISION2 => "1.$rev2",
-                                  FILENAME => $rcsFile,
+                                  FILENAME => $self->{rcsFile},
                                   CONTEXT => $contextLines );
         $error = "Error $exit when running $TWiki::cfg{RCS}{diffCmd}";
     }
@@ -403,37 +324,44 @@ sub parseRevisionDiff {
 }
 
 sub _ci {
-    my( $self, $file, $comment, $user ) = @_;
-
-    # Check that we can write the file being checked in. This won't check
-    # that $file,v is writable, but it _will_ trap 99% of all common
-    # errors (permissions on directory tree)
-    return "$file is not writable" unless ( -w $file );
+    my( $self, $comment, $user ) = @_;
 
     $comment = "none" unless( $comment );
 
     my ($rcsOutput, $exit) = $self->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{ciCmd},
         USERNAME => $user,
-        FILENAME => $file,
+        FILENAME => $self->{file},
         COMMENT => $comment );
-    if( $exit && $rcsOutput =~ /no lock set by/ ) {
-        # Try and break lock, setting new lock and doing ci again
-        # Assume it worked, as not sure how to trap failure
-        $self->{session}->{sandbox}->readFromProcess( $TWiki::cfg{RCS}{breakLockCmd},
-                                FILENAME => $file);
 
-        # re-do the ci command
-        ( $rcsOutput, $exit ) =
-          $self->{session}->{sandbox}->readFromProcess( $TWiki::cfg{RCS}{ciCmd},
-                                  USERNAME => $user,
-                                  FILENAME => $file,
-                                  COMMENT => $comment );
-    }
     if( $exit && $rcsOutput ) {
         $rcsOutput = "$TWiki::cfg{RCS}{ciCmd}\n$rcsOutput";
     }
+
+    # A ci -u leaves the file unwriteable, so fix that. We are still
+    # rather mean with the permissions, but at least the webserver user
+    # can write!
+    chmod( 0644, $self->{file} );
+
     return $rcsOutput;
+}
+
+sub _lock {
+    my $self = shift;
+
+    return undef unless -e $self->{rcsFile};
+
+    # Try and get a lock on the file
+    my ($rcsOutput, $exit) = $self->{session}->{sandbox}->readFromProcess
+      ( $TWiki::cfg{RCS}{lockCmd}, FILENAME => $self->{file} );
+
+    if( $exit && $rcsOutput ) {
+        $rcsOutput = "$TWiki::cfg{RCS}{lockCmd}\n$rcsOutput";
+        return $rcsOutput;
+    }
+    chmod( 0644, $self->{file} );
+
+    return undef;
 }
 
 1;
