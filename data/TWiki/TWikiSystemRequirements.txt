@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="MikeMannix" date="1010881901" format="1.0" version="1.24"}%
+%META:TOPICINFO{author="PeterThoeny" date="1042701780" format="1.0" version="1.25"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki System Requirements
 
-_Server and client requirements for TWiki 01-Dec-2001_
+_Server and client requirements for TWiki 01-Feb-2003 (pending release)_
 
 Low client and server requirements are core features that keep TWiki widely deployable, particularly across a range of browser platforms and versions.
 
@@ -13,13 +13,15 @@ TWiki is written in Perl 5, uses a number of shell commands, and requires [[http
 
 | *Required Server Environment* |||
 | *Resource* | *Unix* | *Windows** |
-| Perl |  5.005_03 or higher  ||
+| Perl |  5.005_03 or higher (5.6.1 recommended)  ||
 | Non-standard Perl modules |  =Net::SMTP= (or =sendmail=)  |  =Net::SMTP=, =MIME::Base64=, =Digest::SHA1=  |
-| RCS |  5.7 or higher  ||
+| RCS |  5.7 or higher (including GNU =diff=) %BR% Optional, but the all-Perl replacement is not currently recommended for live sites - see TWiki:Codev/RcsLite.  ||
+| GNU =diff= |  GNU =diff= 2.7 or higher is required when TWiki's uses RCS binaries.  %BR% Install on PATH if not included with RCS (check version with =diff -v=)  ||
 | Other external programs |  =ls, fgrep, egrep=  ||
-| Web server |  Apache; others (with CGI support, authentication, extended path) ||
+| Cron/scheduler |  =cron=  | =cron= equivalents |
+| Web server |  Apache is well supported; for other servers, CGI support, authentication, extended path required  ||
 
-%X% *** _Current documentation covers Linux/Apache only. See TWiki:Codev/TWikiOnWindows for work-to-date on a Windows installation guide._
+%X% *** _Current documentation mainly covers Linux and Apache installations. See WindowsInstallCookbook for a Windows installation guide._
 
 #ClientRequirements
 ---++ Client Requirements
@@ -40,3 +42,4 @@ You can easily add functionality, by customizing TWikiTemplates, for one, while 
 		* %H% Plugins included in the TWiki distribution do not add requirements.
  
 -- MikeMannix - 12 Jan 2002
+%META:TOPICMOVED{by="PeterThoeny" date="1042701667" from="TWiki.TWikiImplementationNotes" to="TWiki.TWikiSystemRequirements"}%

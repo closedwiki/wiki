@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1039329680" format="1.0" version="1.41"}%
+%META:TOPICINFO{author="PeterThoeny" date="1042701668" format="1.0" version="1.42"}%
 <script language="JavaScript1.2" type="text/javascript">
 function dblclick() { window.scrollTo(0,0) }
 if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
@@ -16,7 +16,7 @@ __Note:__ Read the most up to date version of this document at http://TWiki.org/
 __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests
 
 ------
-%INCLUDE{"TWikiImplementationNotes"}%
+%INCLUDE{"TWikiSystemRequirements"}%
 
 ------
 %INCLUDE{"TWikiInstallationGuide"}%
