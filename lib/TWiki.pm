@@ -1466,7 +1466,7 @@ sub formatDisplayTime
 	if ($displayTimeValues eq 'servertime' ) {
 		$displayTime = formatLocTime($theTime, $theFormat);
 	} else {
-		$displayTime = formatGmTime($theTime, $theFormat)." GMT";
+		$displayTime = formatGmTime($theTime, $theFormat);
 	}
 
 	return $displayTime;
@@ -1533,10 +1533,10 @@ sub formatLocTime
             return sprintf( "%.4u/%.2u/%.2u %.2u:%.2u:%.2u", 
                             $year, $mon+1, $mday, $hour, $min, $sec );
         } elsif ( $theFormat =~ /http|email/i ) {
-            # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 GMT"
+        # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 EST"
 	    # - based on RFC 2616/1123 and HTTP::Date; also used
 	    # by TWiki::Net for Date header in emails.
-	    return sprintf( "%s, %02d %s %04d %02d:%02d:%02d GMT", 
+	    return sprintf( "%s, %02d %s %04d %02d:%02d:%02d ServerTime", 
 			$weekDay[$wday], $mday, $isoMonth[$mon], $year, 
 			$hour, $min, $sec );
         } else {
@@ -2318,9 +2318,9 @@ sub handleTime
         }
     }
 
-    if( $theZone eq "gmtime" ) {
-		$value = $value." GMT";
-	}
+#    if( $theZone eq "gmtime" ) {
+#		$value = $value." GMT";
+#	}
 
     return $value;
 }

@@ -114,7 +114,7 @@ sub getRevInfo
         # eliminate white space to prevent wrap around in HR table:
         $date =~ s/ /\&nbsp\;/go;
     } else {
-        $date .= " GMT";
+#        $date .= " GMT";
     }
 
     my $revInfo = "$date - $user";

@@ -130,7 +130,7 @@ sub sendEmail
     my( $theText ) = @_;
 
     # Put in a Date header, mainly for Qmail
-    my $dateStr = &TWiki::formatGmTime(time, 'email');
+    my $dateStr = &TWiki::formatDisplayTime(time, 'email');
     $theText = "Date: " . $dateStr . "\n" . $theText;
 
     # Check if Net::SMTP is available
