@@ -229,70 +229,23 @@ sub writeDebug
     close( FILE);
 }
 
-# =========================
-sub writeLog
-{
-    my( $action, $webTopic, $extra, $user ) = @_;
 
-    # use local time for log, not UTC (gmtime)
-
-    my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
-    my( $tmon) = $isoMonth[$mon];
-    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
-    my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
-    my $yearmonth = sprintf( "%.4u%.2u", $year, $mon+1 );
-
-    my $wuserName = $user || $userName;
-    $wuserName = userToWikiName( $wuserName );
-    my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
-    my $text = "| $time | $wuserName | $action | $webTopic | $extra | $remoteAddr |";
-
-    my $filename = $logFilename;
-    $filename =~ s/%DATE%/$yearmonth/go;
-    open( FILE, ">>$filename");
-    print FILE "$text\n";
-    close( FILE);
-}
-
-# =========================
-sub sendEmail
-{
-    # Format: "From: ...\nTo: ...\nSubject: ...\n\nMailBody..."
-
-    my( $mailText) = @_;
-
-    if( open( MAIL, "|-" ) || exec "$mailProgram" ) {
-        print MAIL $mailText;
-        close( MAIL );
-        return "OK";
-    }
-    return "";
-}
 
 # =========================
 sub getEmailNotifyList
 {
     my( $web, $topicname ) = @_;
 
-    if ( ! $topicname ) {
-        $topicname = $notifyTopicname;
+    $topicname |= $TWiki::notifyTopicname;
+    return undef unless &TWiki::topicExists( $web, $topicname );
+
+    my @list = ();
+    foreach ( split( /\n/, &TWiki::readWebTopic( $web, $topicname ) ) ) {
+	next unless /^\s\*\s[A-Za-z0-9\.]/;
+	push @list, $1 if (/([\w\-\.\+]+\@[\w\-\.\+]+)/);
     }
-    my $list = "";
-    my $line = "";
-    my $fileName = "$dataDir/$web/$topicname.txt";
-    if ( -e $fileName ) {
-        my @list = split( /\n/, readFile( $fileName ) );
-        @list = grep { /^\s\*\s[A-Za-z0-9\.]+\s+\-\s+[A-Za-z0-9\-_\.\+]+/ } @list;
-        foreach $line ( @list ) {
-            $line =~ s/\-\s+([A-Za-z0-9\-_\.\+]+\@[A-Za-z0-9\-_\.\+]+)/$1/go;
-            if( $1 ) {
-                $list = "$list, $1";
-            }
-        }
-        $list =~ s/^[\s\,]*//go;
-        $list =~ s/[\s\,]*$//go;
-    }
-    return $list;
+
+    return ($#list ? @list : undef);    
 }
 
 # =========================
@@ -312,7 +265,7 @@ sub initializeRemoteUser
         return $remoteUser;
     }
 
-    my $text = TWiki::readFile( $remoteUserFilename );
+    my $text = &TWiki::Store::readFile( $remoteUserFilename );
     my %AddrToName = map { split( /\|/, $_ ) }
                    grep { /[^\|]*\|[^\|]*\|$/ }
                    split( /\n/, $text );
@@ -348,7 +301,7 @@ sub initializeRemoteUser
 # =========================
 sub userToWikiListInit
 {
-    my $text = TWiki::readFile( $userListFilename );
+    my $text = &TWiki::Store::readFile( $userListFilename );
     my @list = split( /\n/, $text );
     @list = grep { /^\s*\* [A-Za-z0-9]*\s*\-\s*[^\-]*\-/ } @list;
     %userToWikiList = ();
@@ -433,19 +386,6 @@ sub revDate2EpSecs {
 }
 
 # =========================
-sub readFile
-{
-    my( $name ) = @_;
-    my $data = "";
-    undef $/; # set to read to EOF
-    open( IN_FILE, "<$name" ) || return "";
-    $data = <IN_FILE>;
-    $/ = "\n";
-    close( IN_FILE );
-    return $data;
-}
-
-# =========================
 sub readFileHead
 {
     my( $name, $maxLines ) = @_;
@@ -462,14 +402,6 @@ sub readFileHead
     return $data;
 }
 
-# =========================
-sub saveFile
-{
-    my( $name, $text ) = @_;
-    open( FILE, ">$name" ) or warn "Can't create file $name\n";
-    print FILE $text;
-    close( FILE);
-}
 
 # =========================
 sub topicIsLocked
@@ -481,7 +413,7 @@ sub topicIsLocked
 
     my $lockFilename = "$dataDir/$webName/$name.lock";
     if( ( -e "$lockFilename" ) && ( $editLockTime > 0 ) ) {
-        my $tmp = TWiki::readFile( $lockFilename );
+        my $tmp = &TWiki::Store::readFile( $lockFilename );
         my( $lockUser, $lockTime ) = split( /\n/, $tmp );
         if( $lockUser ne $userName ) {
             # time stamp of lock within one hour of current time?
@@ -497,51 +429,6 @@ sub topicIsLocked
     return ( "", 0);
 }
 
-# =========================
-sub lockTopic
-{
-    my( $name, $doUnlock ) = @_;
-
-    my $lockFilename = "$dataDir/$webName/$name.lock";
-    if( $doUnlock ) {
-        unlink "$lockFilename";
-    } else {
-        my $lockTime = time();
-        saveFile( $lockFilename, "$userName\n$lockTime" );
-    }
-}
-
-# =========================
-sub removeObsoleteTopicLocks
-{
-    my( $web ) = @_;
-
-    # Clean all obsolete .lock files in a web.
-    # This should be called regularly, best from a cron job (called from mailnotify)
-
-    my $webDir = "$dataDir/$web";
-    opendir( DIR, "$webDir" );
-    my @fileList = grep /\.lock$/, readdir DIR;
-    closedir DIR;
-    my $file = "";
-    my $pathFile = "";
-    my $lockUser = "";
-    my $lockTime = "";
-    my $systemTime = time();
-    foreach $file ( @fileList ) {
-        $pathFile = "$webDir/$file";
-        $pathFile =~ /(.*)/;
-        $pathFile = $1;       # untaint file
-        ( $lockUser, $lockTime ) = split( /\n/, readFile( "$pathFile" ) );
-        if( ! $lockTime ) { $lockTime = ""; }
-
-        # time stamp of lock over one hour of current time?
-        if( abs( $systemTime - $lockTime ) > $editLockTime ) {
-            # obsolete, so delete file
-            unlink "$pathFile";
-        }
-    }
-}
 
 # =========================
 sub topicExists
@@ -554,14 +441,14 @@ sub topicExists
 sub readTopic
 {
     my( $name ) = @_;
-    return &readFile( "$dataDir/$webName/$name.txt" );
+    return &TWiki::Store::readFile( "$dataDir/$webName/$name.txt" );
 }
 
 # =========================
 sub readWebTopic
 {
     my( $web, $name ) = @_;
-    return &readFile( "$dataDir/$web/$name.txt" );
+    return &TWiki::Store::readFile( "$dataDir/$web/$name.txt" );
 }
 
 # =========================
@@ -695,7 +582,7 @@ sub readTemplate
 
     # read the template file
     if( -e $tmplFile ) {
-        return &readFile( $tmplFile );
+        return &TWiki::Store::readFile( $tmplFile );
     }
     return "";
 }
@@ -754,7 +641,7 @@ sub extractNameValuePair
         # test if format: "value"
         if( ( $str =~ /(^|=[\s]*[\"][^\"]*\")[\s]*[\"]([^\"]*)/ ) && ( $2 ) ) {
             return $2;
-        } elsif( ( $str =~ /^[\s]*([^"]\S*)/ ) && ( $1 ) ) {
+        } elsif( ( $str =~ /^[\s]*([^"]\S*)/ ) && ( $1 ) ) { #"
             # format is: value
             return $1;
         }
@@ -805,7 +692,7 @@ sub handleIncludeFile
     }
 
     # finally include file
-    my $text = &readFile( $fileName );
+    my $text = &TWiki::Store::readFile( $fileName );
 
     # set include web/filenames and current web/filenames
     $includingWebName = $theWeb;

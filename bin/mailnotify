@@ -18,6 +18,8 @@
 use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
+use TWiki::Prefs;
+use TWiki::Net;
 
 my $debug = ! ( @ARGV && $ARGV[0] eq "-q" );
 
@@ -37,7 +39,7 @@ sub main
              processWeb( $web );
 
              # remove obsolete .lock files
-             &TWiki::removeObsoleteTopicLocks( $web );
+             &TWiki::Store::removeObsoleteTopicLocks( $web );
         }
     }
     $debug && print "End Twiki mail notification\n";
@@ -58,8 +60,8 @@ sub processWeb
 	return;
     }
 
-    my $notifylist = &TWiki::getEmailNotifyList($webName);
-    if( ! $notifylist ) {
+    my @notifylist = &TWiki::getEmailNotifyList($webName);
+    unless (  @notifylist ) {
 	$debug && print "- Note: Notification list is empty\n";
 	return;
     }
@@ -68,7 +70,7 @@ sub processWeb
     my $topiclist = "";
 
     my $text = &TWiki::readTemplate( "changes" );
-    my $changes= &TWiki::readFile( "$dataDir/$webName/.changes" );
+    my $changes= &TWiki::Store::readFile( "$dataDir/$webName/.changes" );
 
     my %exclude;
 
@@ -78,7 +80,7 @@ sub processWeb
     ( $before, $text, $after) = split( /%REPEAT%/, $text);
     $emailbody = "$before";
 
-    my $prevLastmodify = &TWiki::readFile( "$dataDir/$webName/.mailnotify" ) || "0";
+    my $prevLastmodify = &TWiki::Store::readFile( "$dataDir/$webName/.mailnotify" ) || "0";
     my $currLastmodify = "";
     my $scriptSuffix = $TWiki::scriptSuffix;
     my $scriptUrlPath = $TWiki::scriptUrlPath;
@@ -124,7 +126,7 @@ sub processWeb
 	    $foo =~ s/%TIME%/$time$frev/go;
 	    $foo = &TWiki::getRenderedVersion( $foo );
 
-            $head = &TWiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );
+            $head = &TWiki::Store::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );
             $head = &TWiki::makeTopicSummary( $head, $bar[0], $webName );
             $foo =~ s/%TEXTHEAD%/$head/go;
 
@@ -146,12 +148,16 @@ sub processWeb
     }
     $debug && print "\n";
 
-    &TWiki::saveFile( "$dataDir/$webName/.mailnotify", $currLastmodify );
+    &TWiki::Store::saveFile( "$dataDir/$webName/.mailnotify", $currLastmodify );
 
     $emailbody = "$emailbody$after";
 
+    my $from = &TWiki::Prefs::getPreferencesValue("WIKIWEBMASTER");
+
+    my $notifylist = join ', ', @notifylist;
+
     $text = &TWiki::readTemplate( "mailnotify" );
-    $text =~ s/%EMAILFROM%/%WIKIWEBMASTER%/go;
+    $text =~ s/%EMAILFROM%/$from/go;
     $text =~ s/%EMAILTO%/$notifylist/go;
     $text =~ s/%EMAILBODY%/$emailbody/go;
     $text =~ s/%TOPICLIST%/$topiclist/go;
@@ -164,7 +170,7 @@ sub processWeb
 
     $debug && print "- Sending mail notification to: $notifylist\n";
 
-    if( ! &TWiki::sendEmail( $text ) ) {
+    if( ! &TWiki::Net::sendEmail( $from, \@notifylist, $text ) ) {
 	print STDERR "- ERROR: TWiki mailnotify can't send mail\n";
         $debug && print "- End Twiki.$webName\n";
     } else {
