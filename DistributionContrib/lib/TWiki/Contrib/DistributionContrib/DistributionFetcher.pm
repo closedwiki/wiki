@@ -32,11 +32,17 @@ It will have the same name as it did on the remote server.
 sub fetchLatestDistributionVersion {
    my ($distribution) = @_;
 
-	my $fileUrl = $config{'serverUrl'}. "/" . $distribution;
+	my $fileUrlBase = $config{'serverUrl'}. "/" . $distribution;
+
 	my $pubDir = "/tmp"; # TODO make this TWiki::Func::getPubDir();
 	my $webTopicBodge = $config{'saveTopic'};
 	$webTopicBodge =~ s!\.!/!;
-	my $attachmentPath = $pubDir."/".$webTopicBodge."/".$distribution;
+	my $attachmentDir = $pubDir."/".$webTopicBodge."/";
+	
+	my $distributionFile = $distribution.'.zip';
+	
+	my $attachmentPath = $attachmentDir.'/'.$distributionFile;
+	my $fileUrl = $fileUrlBase.'/'.$distributionFile;
 	my $ans = $attachmentPath;
 	my $status = getstore($fileUrl, $attachmentPath);
 	if (is_error($status)) {
