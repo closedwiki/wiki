@@ -312,7 +312,7 @@ sub _setupHandlerMaps {
        STOPINCLUDE     => "",
        TWIKIWEB        => $twikiWebname,
        WEBPREFSTOPIC   => $webPrefsTopicname,
-       WIKIHOMEURL     => $wikiHomeUrl,
+       WIKIHOMEURL     => "$defaultUrlHost/$scriptUrlPath$dispViewPath",
        WIKIPREFSTOPIC  => $wikiPrefsTopicname,
        WIKITOOLNAME    => $wikiToolName,
        WIKIUSERSTOPIC  => $wikiUsersTopicname,
