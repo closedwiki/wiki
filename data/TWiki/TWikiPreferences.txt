@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="JohnTalintyre" date="997199261" format="1.0beta2" version="1.14"}%
+%META:TOPICINFO{author="JohnTalintyre" date="997261149" format="1.0beta2" version="1.15"}%
 *%WIKITOOLNAME% Site-Level Preferences*
 
 The following settings are __site-level preferences__ , e.g. affecting all users in all %WIKITOOLNAME% webs. These preferences can be overwritten by __web preferences__ (topic %WEBPREFSTOPIC% in each %WIKITOOLNAME% web) and __user preferences__ (your personal topic, i.e. Main.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
@@ -76,7 +76,7 @@ __Preferences:__
 		* Set ALLOWTOPICCHANGE = 
 
 	* Users or groups allow to rename this <nop>%TOPIC% topic:
-		* Set ALLOWTOPICRENAME = %MAINWEB%.NobodyGroup
+		* #Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
 		* Set FINALPREFERENCES = PREVIEWBGIMAGE, WIKIWEBMASTER, MAILHOST
