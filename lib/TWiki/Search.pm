@@ -697,6 +697,8 @@ sub searchWeb
         my $revNumText = "";
         my $allowView = "";
         my $locked = "";
+        my $createDate = "";
+        my $createAuthor = "";
         foreach( @topicList ) {
           $topic = $_;
 
@@ -720,6 +722,10 @@ sub searchWeb
               $revDate = TWiki::formatTime( $revDate );
               $revUser = &TWiki::userToWikiName( $revUser );
           }
+          
+          ( $createDate, $createAuthor ) = &TWiki::Store::getRevisionInfo( $thisWebName, $topic, "1.1");
+          $createDate = TWiki::formatTime( $createDate );
+          $createAuthor = &TWiki::userToWikiName( $createAuthor );
 
           $locked = "";
           if( $doShowLock ) {
@@ -774,6 +780,8 @@ sub searchWeb
                 $tempVal =~ s/\$wikiusername/$revUser/gos;
                 $tempVal =~ s/\$wikiname/wikiName($revUser)/geos;
                 $tempVal =~ s/\$username/&TWiki::wikiToUserName($revUser)/geos;
+                $tempVal =~ s/\$createdate/$createDate/gos;
+                $tempVal =~ s/\$createauthor/$createAuthor/gos;
                 if( $tempVal =~ m/\$text/ ) {
                     # expand topic text
                     ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic ) unless $text;

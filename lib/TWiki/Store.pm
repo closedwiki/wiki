@@ -566,7 +566,7 @@ sub getRevisionDiff
 # In direct calls changeToIsoDate always seems to be 1
 =pod
 
----+++ getRevisionInfo( $web, $topic ) ==> ( $theWebName, $theTopic, $theRev, $attachment, $topicHandler ) 
+---+++ getRevisionInfo($theWebName, $theTopic, $theRev, $attachment, $topicHandler) ==> ( $theWebName, $theTopic, $theRev, $attachment, $topicHandler ) 
 | Description: | Get revision info of a topic |
 | Parameter: =$theWebName= | Web name, optional, e.g. ="Main"= |
 | Parameter: =$theTopic= | Topic name, required, e.g. ="TokyoOffice"= |
@@ -589,13 +589,6 @@ sub getRevisionInfo
 
     $topicHandler = _getTopicHandler( $theWebName, $theTopic, $attachment ) if( ! $topicHandler );
     my( $rcsOut, $rev, $date, $user, $comment ) = $topicHandler->getRevisionInfo( $theRev );
-    
-#    if( $changeToIsoDate ) {
-#        $date = TWiki::formatTime( $date );
-#    } else {
-#         # FIXME get rid of this - shouldn't be needing rcs date time format
-#        $date = TWiki::Store::RcsFile::_epochToRcsDateTime( $date );
-#    }
     
     return ( $date, $user, $rev, $comment );
 }
