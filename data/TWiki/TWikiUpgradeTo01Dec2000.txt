@@ -1,17 +1,17 @@
 If you are coming from a version earlier than the 01 May 2000 production release, please see TWikiUpgradeTo01May2000 first.
 
-The current Beta version has these changes affecting the upgrade of the 01 May 2000 version:
+The current release has these changes that affect the upgrade of the 01 May 2000 version:
 
 	* Improved search, i.e. search multiple webs.
 	* The =changes= script has been retired (related to new search).
 	* Reorganization of topics: The TWiki.Main web was split up into TWiki.Main and TWiki.TWiki web.
 
-These are the steps you need to perform to upgrade the 01 May 2000 version to Beta: [ We assume =export TWIKIROOT=/some/dir/= ]
+These are the steps you need to perform to upgrade the 01 May 2000 version to this release: [ We assume =export TWIKIROOT=/some/dir/= ]
 
 	* Unpack the beta zip file into some working directory:
 	  <br> =mkdir -p ~/tmp/=
 	  <br> =cd ~/tmp=
-	  <br> =unzip ~/TWiki20001101beta.zip=
+	  <br> =unzip ~/TWiki20001105.zip=
 
 	* __Upgrade the TWiki document files__ ( =twiki= )
 		* Move the document files to your TWiki root, i.e.
@@ -25,7 +25,6 @@ These are the steps you need to perform to upgrade the 01 May 2000 version to Be
 		  <br> =mv ~/tmp/bin $TWIKIROOT/bin=
 		* Merge the changes in your current =wikicfg.pm= into the new =wikicfg.pm=. We suggest using =diff -c= to compared the two files if you have made heavy changes to the file, i.e.
 		  <br> =diff -c $TWIKIROOT/bin.old/wikicfg.pm $TWIKIROOT/bin/wikicfg.pm | less=
-		* In =wikicfg.pm=, change =$wikiToolName= from ="TWikibeta"= to ="TWiki"=.
 		* Restore any additional scripts you might have from the old directory, i.e.
 		  <br> =mv $TWIKIROOT/bin.old/somescript $TWIKIROOT/bin/=
 		  <br> (Note that the =changes= script is obsolete.)
@@ -66,13 +65,12 @@ These are the steps you need to perform to upgrade the 01 May 2000 version to Be
 			  <br> =| &lt;a href="WebIndex"&gt;Index&lt;/a&gt;=
 			* In case you want to exclude a web from a =web="all"= search: Set this new preference
 			  <br> =Set NOSEARCHALL = on=
-		* The =WebSearch= topics has considerable changes. Copy the one from =TWiki.TWiki= into all webs, or merge them if you made changes. To copy, do an edit-copy-edit-paste operation.
+		* The =WebSearch= topic has considerable changes. Copy the one from =TWiki.TWiki= into all webs, or merge them if you made changes. To copy, do an edit-copy-edit-paste operation.
 		* Change the =WebHome= topics in all your webs to reflect these changes:
 			1. The "Changes" link should point to =WebChanges=.
 			2. The "Topic index" link should point to =WebIndex=.
 			3. Change the include of the web table to =%<nop>INCLUDE{"TWiki.TWikiWebsTable"}%=
-		* Move your =TWikiWebsTable= topic from TWiki.Main to TWiki.TWiki., i.e.
-		  <br> =mv $TWIKIROOT/data/Main/TWikiWebsTable* $TWIKIROOT/data/TWiki=
+		* Merge your =TWikiWebsTable= topic in TWiki.Main with the =TWikiWebsTable= topic in TWiki.TWiki. Note the new variable to query the color of a web. Delete the old =TWikiWebsTable= topic in TWiki.Main after merge is complete.
 		* The following topics in the TWiki.Main web are depreciated (because they moved to TWiki.TWiki), but still need to be present in TWiki.Main because of existing links to these topics: =FileAttachment=, =TWikiDocumentation=, =TWikiHistory=, =TWikiPreferences=, =TWikiVariables=.
 		  <br> It is recommended to edit these topics in TWiki.Main and replace the content with this line:
 		  <br> =This topic moved to %<nop>TWIKIWEB%.%<nop>TOPIC% in the %<nop>WIKITOOLNAME%.%<nop>TWIKIWEB% web.=
@@ -82,4 +80,10 @@ These are the steps you need to perform to upgrade the 01 May 2000 version to Be
 			* Change topics: =TWikiUsers= , =WebNotify= , =WebHome=
 			* With links to: =TWikiPreferences= , =TWikiVariables= , =TWikiUsers= , =TWikiWebsTable= and =WelcomeGuest=
 
--- Main.PeterThoeny - 02 Nov 2000 <br>
+	* __TWiki Access Control__
+		* Read TWikiAccessControl in case you want to use the new authorization feature based on groups.
+
+	* __Known Issues__
+		* Check http://TWiki.SourceForge.net/cgi-bin/view/Codev/KnownIssuesOfTWiki05Nov2000 for known issues of TWiki 05 Nov 2000 (production release) 
+
+-- Main.PeterThoeny - 03 Nov 2000 <br>
