@@ -45,23 +45,32 @@ __Preferences:__
 	* Vertical size of text edit box: (can be overwritten by user preferences)
 		* Set EDITBOXHEIGHT = 15
 
-	* Default state of the __link__ check box in the attach file page. Check box is initially checked if _Set ATTACHLINKBOX = CHECKED_ , unchecked if empty ( _Set ATTACHLINKBOX =_ ). If checked, a link is created to the attached file at the end of the topic: (can be overwritten by user preferences)
+	* Default state of the __Release edit lock__ check box in preview. Checkbox is initially checked if =Set RELEASEEDITLOCKCHECKBOX = checked="checked"=, or unchecked if empty. If checked, make sure to click on <u>Edit</u> to do more changes; do *not* go back in your browser to the edit page, or you risk that someone else will edit the topic at the same time: (can be overwritten by user preferences)
+		* Set RELEASEEDITLOCKCHECKBOX = 
+
+	* Default state of the __link__ check box in the attach file page. Checkbox is initially checked if =Set ATTACHLINKBOX = checked="checked"=, or unchecked if empty (=Set ATTACHLINKBOX ==). If checked, a link is created to the attached file at the end of the topic: (can be overwritten by user preferences)
 		* Set ATTACHLINKBOX = 
 
 	* Wiki webmaster email address:
 		* Set WIKIWEBMASTER = webmaster@your.company
 
-	* Mail host for outgoing mail. This is used for TWikiNotificationOfChanges if Perl module ==Net::SMTP== is installed. If not, sendmail is used instead (defined by ==$mailProgram== in ==TWiki.cfg==). Examples: mail.your.company, localhost
+	* Mail host for outgoing mail. This is used for TWikiNotificationOfChanges if Perl module ==Net::SMTP== is installed. If not, sendmail is used instead (defined by ==$mailProgram== in ==TWiki.cfg==). Examples: =mail.your.company= or =localhost=
 		* Set SMTPMAILHOST = mail
 
 	* http-equiv meta tags for __view__, __rdiff__, __attach__, __search*__ scripts:
+<verbatim>
 		* Set HTTP_EQUIV_ON_VIEW = 
+</verbatim>
 
 	* http-equiv meta tags for __edit__ script. Example to expire immediately: <br> =Set HTTP_EQUIV_ON_EDIT = &lt;meta http-equiv="Expires" content="%<nop>GMTIME{"$day $month, $year - $hour:$min:$sec"}% GMT"&gt;=
+<verbatim>
 		* Set HTTP_EQUIV_ON_EDIT = 
+</verbatim>
 
 	* http-equiv meta tags for __preview__ script:
+<verbatim>
 		* Set HTTP_EQUIV_ON_PREVIEW = 
+</verbatim>
 
 	* Users or groups allowed to change this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
 		* Set ALLOWTOPICCHANGE = 
