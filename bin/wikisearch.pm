@@ -41,10 +41,6 @@ sub searchWikiWeb
     $theLimit = $1;           # an empty string.  "+10" won't work.
                               # if there's anything but a digit, zap!
 
-    ## 0501 kk : vvv Just make formatting a bit different for inline
-    ##               versus search script results.
-    my $tWide = $doInline ? "90%" : "100%";
-
     my $searchResult = ""; 
     my $topic = $wiki::mainTopicname;
 
@@ -118,6 +114,20 @@ sub searchWikiWeb
         print $tmplHead;
     }
 
+    if( ! $noSearch ) {
+        # print "Search:" part
+        $theSearchVal =~ s/&/&amp;/go;
+        $theSearchVal =~ s/</&lt;/go;
+        $theSearchVal =~ s/>/&gt;/go;
+        $theSearchVal =~ s/^\.\*$/Index/go;
+        $tmplSearch =~ s/%SEARCHSTRING%/$theSearchVal/go;
+        if( $doInline ) {
+            $searchResult .= $tmplSearch;
+        } else {
+            print $tmplSearch;
+        }
+    }
+
     if( $theScope eq "topic" ) {
         $cmd = "$wiki::lsCmd *.txt | %GREP% %SWITCHES% '$theSearchVal'";
     } else {
@@ -168,30 +178,15 @@ sub searchWikiWeb
         (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding
 
         ## #############
-        ## 0501 kk : vvv Moved from search, now logs everything.  if that
-        ##               makes the logs too big, check for inline and
-        ##               don't log will revert to the old behaviour.
-        if( $wiki::doLogTopicSearch ) {
+        ## 0501 kk : vvv Moved from search
+        ## 20000517 pth : reverted to old behaviour,
+        ##                e.g. do not log inline search
+        if( ( $wiki::doLogTopicSearch ) && ( ! $doInline ) ) {
             # write log entry
             &wiki::writeLog( "search", $thisWebName, $theSearchVal );
         }
         ## 0501 kk : ^^^
         ## ##############
-
-        # TODO  vvv  needs to be integrated with the existing templates
-        $tempVal = "<table width=\"\%TMPPROP1\%\"><tr>" . 
-                   "<td align=\"center\" bgcolor=\"\%TMPPROP2%\">" .
-                   "<b>$thisWebName : " .
-                   "<\/b><\/td><\/tr><tr><td>";
-
-        $tempVal =~ s/%TMPPROP1%/$tWide/o;          # table width
-        $tempVal =~ s/%TMPPROP2%/$thisWebBGColor/o;
-
-        if ( $doInline ) {
-            $searchResult .=  $tempVal;
-        } else {
-            print $tempVal;
-        } 
 
         ## 0501 kjk : vvv New var for accessing web dirs.
         # TODO  vvv  do the Right Thing to untaint, current method sucks.      
@@ -212,23 +207,9 @@ sub searchWikiWeb
             @topicList = map { /(.*)\.txt$/; $_ = $1; } @topicList;
         }
 
-        if( ! $noSearch ) {
-            # print "Search:" part
-            $theSearchVal =~ s/&/&amp;/go;
-            $theSearchVal =~ s/</&lt;/go;
-            $theSearchVal =~ s/>/&gt;/go;
-            $theSearchVal =~ s/^\.\*$/Index/go;
-            $tmplSearch =~ s/%SEARCHSTRING%/$theSearchVal/go;
-            if( $doInline ) {
-                $searchResult .= $tmplSearch;
-            } else {
-                print $tmplSearch;
-            }
-        }
-
-        # TODO  vvv  This is where the setup for the color-coded header should
-        #            be.
         my( $beforeText, $repeatText, $afterText ) = split( /%REPEAT%/, $tmplTable );
+        $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/o;
+        $beforeText =~ s/%WEB%/$thisWebName/o;
         $beforeText = handleCommonTags( $beforeText, $topic );
         $afterText = handleCommonTags( $afterText, $topic );
 
@@ -359,15 +340,6 @@ sub searchWikiWeb
             } else {
                 print $thisNumber;
             }
-        }
-  
-        # this closes off the table that the formatted sort
-        # table gets stuffed into; the first row was the
-        # color-coding head string.
-        if ( $doInline ) {
-            $searchResult .= "<\/td><\/tr><\/table>";
-        } else {
-            print "<\/td><\/tr><\/table>";
         }
     }
     if( ! $doInline ) {
