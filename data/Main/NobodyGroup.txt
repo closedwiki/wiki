@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="JohnTalintyre" date="997199563" format="1.0beta2" version="1.1"}%
+%META:TOPICINFO{author="JohnTalintyre" date="1042402146" format="1.0" version="1.2"}%
 *Nobody Group*
 
 	* Set GROUP = 
 	* Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
-Used to prevent dangerous actions e.g. renaming %TWIKIWEB%.TWikiPreferences.
+Used to prevent dangerous actions e.g. renaming %TWIKIWEB%.TWikiPreferences - put NobodyGroup as the only group allowed to rename a topic and it can't be renamed.
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
