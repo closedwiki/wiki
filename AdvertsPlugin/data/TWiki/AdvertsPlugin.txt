@@ -1,0 +1,52 @@
+%META:TOPICINFO{author="PeterThoeny" date="1079856240" format="1.0" version="1.6"}%
+---+ Empty TWiki Plugin
+
+This is an empty plugin you can use as a template to build your own %TWIKIWEB%.TWikiPlugins. This plugin does nothing, but is ready to be used.
+
+To create your own plugin:
+
+	* Copy file ==TWiki/Plugins/EmptyPlugin.pm== to ==&lt;name&gt;Plugin.pm== and customize the plugin.
+	* Create a  ==&lt;name&gt;Plugin== topic in the %TWIKIWEB% web. Do so by visiting http://TWiki.org/cgi-bin/view/Plugins/ and starting a new topic to get the default plugin topic text (don't save the topic). Customize your plugin topic to your needs.
+	* See details in %TWIKIWEB%.TWikiPlugins.
+
+---++ Syntax Rules
+
+(none)
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = This plugin does nothing, but can be used as a template for your own plugins.
+
+	* Your own setting, i.e.:
+		* Set EXAMPLE = got it!
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+	* This plugin is preinstalled, you do not need to install it.
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
+|  Plugin Version: | 21 Mar 2003 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  21 Mar 2004: | Added afterSaveHandler |
+|  14 Jul 2001: | Changed to plug&amp;play |
+|  27 Feb 2001: | Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+
+-- TWiki:Main.AndreaSterbini - 27 Feb 2001 %BR% 
+-- TWiki:Main.PeterThoeny - 21 Mar 2004
