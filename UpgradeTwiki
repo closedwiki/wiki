@@ -13,6 +13,8 @@
 
 use strict;
 
+use File::Spec;
+
 =begin twiki
 
 ---+ UpgradeTwiki
@@ -87,22 +89,36 @@ print "\nLoaded TWiki version: $TWiki::VERSION\n";
 
 print "UpgradeTWiki called with: ($mode), oldCfgFile = ($oldCfgFile), newCfgFile = ($newCfgFile), outputDir = ($outputDir)\n";
 
-if ( $mode eq '' ) {
+if ( $mode eq '' ) 
+{
 #RUN the old cairo upgrade code...
-} elsif ( $mode eq '' ) {
+} 
+elsif ( $mode eq '' ) 
+{
 	eval 'use TWiki::Upgrade::UpgradeToDakar';
 	TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($newCfgFile, $oldCfgFile, $outputDir);
-} elsif ( $mode eq 'cairo' ) {
+}
+elsif ( $mode eq 'cairo' ) 
+{
 	eval 'use TWiki::Upgrade::UpgradeToCairo';
 	TWiki::Upgrade::UpgradeToCairo::doAllCairoUpgrades($newCfgFile, $oldCfgFile, $outputDir);
-} elsif ( $mode eq 'upgradeTopics' ) {
-    	if ((! -d $oldDataDir ) || (! -d $newDataDir)) {
+}
+elsif ( $mode eq 'upgradeTopics' ) 
+{
+		$oldDataDir = File::Spec->rel2abs( $oldDataDir ) ."/";
+		$newDataDir = File::Spec->rel2abs( $newDataDir ) ."/" ;
+		$outputDir = File::Spec->rel2abs( $outputDir ) ."/";
+		
+    	if ((! -d $oldDataDir ) || (! -d $newDataDir)) 
+		{
 		print "\nnewDataDir & oldDataDir must exist\n";
 		exit;
     	}
 	eval 'use TWiki::Upgrade::UpdateTopics';
 	TWiki::Upgrade::UpdateTopics::UpdateTopics($newDataDir, $oldDataDir, $outputDir);
-} elsif ( $mode eq 'moveTopics' ) {
+}
+elsif ( $mode eq 'moveTopics' ) 
+{
 	eval 'use TWiki::Upgrade::MoveTopics';
 
     my ( $class, $method ) = @_;
