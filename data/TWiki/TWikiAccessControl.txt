@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999580216" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="MikeMannix" date="999674195" format="1.0" version="1.14"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -122,6 +122,7 @@ Define one or both of these variable in the %WEBPREFSTOPIC% topic:
 		* Set <nop>NOSEARCHALL = on
 	* It is not recommended to restrict view access to individual topics since all content is searchable _within_ a web.
 
+#SuperAdminGroup
 ---+++ The <nop>SuperAdminGroup
 
 The above schema can lock completely a topic in case of a typing error of the ALLOWTOPICCHANGE setting (see [[TWiki:Codev/UnchangeableTopicBug][UnchangeableTopicBug]] for more detail). To avoid this:
