@@ -82,6 +82,7 @@ use vars qw(
         $useRcsDir
         $revInitBinaryCmd $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd
         $revInfoCmd $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd $nullDev
+        $rcsArg
     );
 
 # TWiki::Search config:
