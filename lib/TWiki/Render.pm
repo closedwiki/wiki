@@ -805,7 +805,7 @@ sub getFormField
     $formTopic = TWiki::extractNameValuePair( $args, "topic" );
     $altText   = TWiki::extractNameValuePair( $args, "alttext" );
     $default   = TWiki::extractNameValuePair( $args, "default" ) || undef;
-    $format    = TWiki::extractNameValuePair( $args, "format" ) || '$value';
+    $format    = TWiki::extractNameValuePair( $args, "format" ) || '<nop>';
 
     my $meta;
     if ($formTopic) {
