@@ -416,12 +416,6 @@ print "<h3>Test of <tt>TWiki.cfg</tt> Configuration:</h3>\n";
 
 print "<table>\n";
 
-print "<tr><th align=\"right\">\$wikiHomeUrl:</th><td>$wikiHomeUrl</td></tr>\n";
-my $junk1 = $wikiHomeUrl; 	# Avoid warning
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is the link of the TWiki icon in the upper left corner.";
-print "</td></tr>\n";
-
 print "<tr><th align=\"right\">\$defaultUrlHost:</th><td>$defaultUrlHost</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This must be the protocol and host part (with optional port number) of ";
