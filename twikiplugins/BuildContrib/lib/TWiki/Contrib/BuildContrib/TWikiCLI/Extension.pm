@@ -1,6 +1,6 @@
 package TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
 use TWiki::Contrib::DistributionContrib::DistributionFetcher;
-use TWiki::Contrib::BuildContrib::Build;
+use TWiki::Contrib::Build;
 use TWiki;    # TODO why do I have to use this? Why not just TWiki::Func?
 use TWiki::Func;
 use strict;
@@ -80,7 +80,7 @@ sub cli_install_download {
  print "$localFile\n";
 
 # TODO : Find out why its called both Build and BuildContrib...
- my $buildObj = TWiki::Contrib::BuildContrib::Build->new($extension);
+ my $buildObj = TWiki::Contrib::Build->new($extension);
  $buildObj->manifest();
 
 }
