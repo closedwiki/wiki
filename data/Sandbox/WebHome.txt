@@ -1,17 +1,18 @@
+%META:TOPICINFO{author="PeterThoeny" date="995354364" format="1.0beta2" version="1.4"}%
 The <b>%WIKITOOLNAME%.%WEB%</b> web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %TWIKIWEB%.TWikiTutorial to get a jumpstart on the %WIKITOOLNAME% tool. A good rule of thumb is to add at the end of the page and sign & date it with your %TWIKIWEB%.WikiName.
 
 	* TestTopic1, TestTopic2, TestTopic3, TestTopic4 
 	* TestTopic5, TestTopic6, TestTopic7, TestTopic8
 
-<FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
 	* WebSearch: Full text search of the %WIKITOOLNAME%.%WEB% web.
-	* <INPUT type="text" name="search" size="32"> <INPUT type="submit" value="Search"> &nbsp;&nbsp; (More options in WebSearch)
-	* WebChanges: Find out recent changes of the %WIKITOOLNAME%.%WEB% web.
+	* <input type="text" name="search" size="32" /> <input type="submit" value="Search" /> &nbsp;&nbsp; (More options in WebSearch)
+	* WebChanges: Find out recent modifications to the %WIKITOOLNAME%.%WEB% web.
 	* WebIndex: Display all %WIKITOOLNAME%.%WEB% topics in alphabetical order.
 	* %NOTIFYTOPIC%: Subscribe to be automatically notified when something changes in the %WIKITOOLNAME%.%WEB% web.
 	* %STATISTICSTOPIC%: View access statistics of the %WIKITOOLNAME%.%WEB% web.
 	* %WEBPREFSTOPIC%: Preferences of the %WIKITOOLNAME%.%WEB% web.
-</FORM>
+</form>
 
 *Notes:*
 	* You are currently in the %WIKITOOLNAME%.%WEB% web. The color code for this web is a light gray background, so you know where you are.
