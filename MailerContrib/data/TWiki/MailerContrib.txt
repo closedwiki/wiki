@@ -6,7 +6,7 @@ A replacement for the core 'mailnotify' functionality. This module brings a new 
 ---++ <code>bin/mailnotifier</code>
 The main part of the mailer module is a script, =bin/mailnotifier=. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard %NOTIFYTOPIC% topic. As well as providing the usual notification service, it also provides per-topic notification services. The script may be run from the command line, a cron job, or from the browser.
 
-The "new" format of %NOTIFYTOPIC% is a natural extension of the existing format. In the old format, subscribers are listed in "bullet lists" following one of the following formats:
+The "new" format of <nop>%NOTIFYTOPIC% is a natural extension of the existing format. In the old format, subscribers are listed in "bullet lists" following one of the following formats:
 
 _three spaces_ * [ _webname_ . ] _wikiName_ - _SMTP mail address_ %BR%
 _three spaces_ * [ _webName_ . ] _wikiName_
@@ -29,14 +29,14 @@ For example:
 	* daisy@flowers.com: Web*
 	* DaisyCutter: Petal* (1), WeedKillers (3), Red*Phlox
 </verbatim>
-A user may be listed many times in the %NOTIFYTOPIC% topic. The basic rule is that they are registered for "old style" notification of changes, that is what they will receive i.e. listing them with a specific topic will _not_ change how they are notified. Where a user has several lines in %NOTIFYTOPIC% that all match the same topic, they will only be notified of changes to that topic _once_.
+A user may be listed many times in the <nop>%NOTIFYTOPIC% topic. The basic rule is that they are registered for "old style" notification of changes, that is what they will receive i.e. listing them with a specific topic will _not_ change how they are notified. Where a user has several lines in <nop>%NOTIFYTOPIC% that all match the same topic, they will only be notified of changes to that topic _once_.
 
 As was the case with old =mailnotify=, if a _group_ is listed for notification, the group will be recursively expanded to the email addresses of all members.
 
 In the future it is intended that individual users will be able to control the frequency with which they are notified of topic changes, by changing a schedule specification in their home topic. However at present, the notification schedule is controlled by the frequency of activation of the =cron= job that runs the =bin/mailnotifier= script.
 
 ---++ <code>TWiki/Contrib/MailerContrib</code> code library
-The second part of the module is a code library that provides the services for other applications to modify %NOTIFYTOPIC% through a clean, well documented interface. This allows (for example) plugin developers to add a "Register me for noitification" button to their pages. The main interface is the =Web<nop>Notify= package described below.
+The second part of the module is a code library that provides the services for other applications to modify <nop>%NOTIFYTOPIC% through a clean, well documented interface. This allows (for example) plugin developers to add a "Register me for noitification" button to their pages. The main interface is the =Web<nop>Notify= package described below.
 
 ---++ <code>bin/remove_obsolete_locks</code>
 The old =mailnotify= script had a side-effect; it would remove obsolete topic locks as it ran. This has not been implemented in =mailnotifier=. Instead, a separate side script is provided in this module that performs this function, called =bin/remove_obsolete_locks. For full compatibility with =mailnotify= this script should be run (from =bin=) on the same schedule as =mailnotifier=.
@@ -44,7 +44,7 @@ The old =mailnotify= script had a side-effect; it would remove obsolete topic lo
 ---+ Detailed Documentation
 The =bin/mailnotifier= is used from the command line as follows:
 
-=Usage: bin/mailnotifier [-q] [-m] [ _web1_ _web2_ ... _webN_ ]=
+<code>Usage: bin/mailnotifier [-q] [-m] [ <i>web1 web2 ... webN</i> ]</code>
 | =-q= | Don't print progress information |
 | =-m= | Send mail. Default behaviour is to print out plain text of mails that would be sent to STDOUT |
 | <code><i>web1 web2 ... webN</i></code> | List of webs to process, separated by spaces or commas. Default is to process all legal TWiki webs. Wildcards (*) are supported. |
@@ -78,24 +78,38 @@ The main class is =TWiki::Contrib::MailContrib::WebNotify=, which allows you to 
 	=bin/mailnotifier= script from the command
 	line, with no parameters. In this case it will print out what it
 	would have done to STDOUT.
-	* *Manually* modify your %TWIKIWEB%.WebChangesAlert topic from TWiki: Replace the part between the STARTINCLUDE and the STOPINCLUDE with the following text (view this topic 'raw', or edit it, to get the source of the text):
+	* Set up cron (or equivalent) jobs to run =mailnotifier= and =remove_obsolete_locks=.
+	* *Manually* modify your %TWIKIWEB%.WebChangesAlert topic from TWiki: Replace the part between the =STARTINCLUDE= and the =STOPINCLUDE= with the following text (view this topic 'raw', or edit it, to get the source of the text):
 
 <!-- TEXT FOR WebChangesAlert STARTS HERE -->
-Format: TWiki handles entries in bullet list (<space><space><space>*) format containing the WikiName of a user; a WikiName with e-mail address; an e-mail address only; or a TWikiGroup. Each of these may be followed by a colon and a comma separated list of topics, indicating what to subscribe to. Examples with explanation:
-
+__Format:__ TWiki handles entries in bullet list (<code>&lt;space>&lt;space>&lt;space>*</code>) format containing the WikiName of a user; a WikiName with e-mail address; an e-mail address only; or a TWikiGroup. Each of these may be followed by a colon and a comma separated list of topics, indicating what to subscribe to. Examples with explanation:
+<table cols="2"><tr valign="top"><td width="40%">
+<verbatim>
 	* Main.FredBloggs
-		send to the e-mail address specified in user's home page
- 	* not.user@work.com
-	send to a user _not_ registered in TWiki by using their e-mail address
- 	* Main.EngineeringGroup
-    	send to all members of a TWiki group
- 	* Main.FredBloggs - secondary@home.com
-		send to an alternative e-mail address
-	* Main.FredBloggs: InterestingStuff, MeetingMinutes*, IssueTracker (2)
-		send changes to specific topics only. Wildcards * may be used. The integer in parenthesis indicates the depth of the tree of children below that topic; changes in all these children will be detected and reported along with changes to the topic itself. _Note_ This uses the TWiki "Topic parent" feature of TWiki.
+</verbatim>
+</td><td> send to the e-mail address specified in the users home page
+</td></tr><tr valign="top"><td>
+<verbatim>
+	* non.user@work.com
+</verbatim>
+</td><td> send to a user _not_ registered in TWiki by using their e-mail address
+</td></tr><tr valign="top"><td>
+<verbatim>
+	* Main.EngineeringGroup
+</verbatim>
+</td><td> send to all members of a TWiki group
+</td></tr><tr valign="top"><td>
+<verbatim>
+	* Main.FredBloggs - secondary@home.com
+</verbatim>
+</td><td> send to an alternative e-mail address
+</td></tr><tr valign="top"><td>
+<verbatim>
+	* Main.SamSpade: MyStuff, MeetingMinutes*, TeamIssues (2)
+</verbatim>
+</td><td> send changes to specific topics only. Wildcards * may be used. The integer in parenthesis indicates the depth of the tree of children below that topic; changes in all these children will be detected and reported along with changes to the topic itself. _Note_ This uses the TWiki "Topic parent" feature of TWiki.
+</td></tr></table>
 <!-- TEXT FOR WebChangesAlert ENDS HERE -->
-
-	* Set up cron (or equivalent) jobs to run =mailnotifier= and =remove_obsolete_locks=.
 
 ---+ Contrib Info
 
