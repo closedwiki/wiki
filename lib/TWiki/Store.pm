@@ -1544,6 +1544,7 @@ sub readFile
     $data = <IN_FILE>;
     $/ = "\n";
     close( IN_FILE );
+    $data = "" unless $data; # no undefined
     return $data;
 }
 
