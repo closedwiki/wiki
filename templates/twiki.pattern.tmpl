@@ -20,11 +20,14 @@
 %TMPL:END%
 %TMPL:DEF{"topicstyle"}%
 <style type="text/css" media="all">
-		/* Topics with style definitions can be included here. Warning: slow! */
-		/*
-		@import url("%RELATIVETOPICPATH{%LAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css");
-		@import url("%RELATIVETOPICPATH{%STYLETOPIC%}%?skin=text&amp;contenttype=text/css");
-		*/
+        /* Default TWiki layout */
+        @import url("%TWIKILAYOUTURL%");
+        /* Default TWiki style */
+        @import url("%TWIKISTYLEURL%");
+        /* Custom overriding layout */
+        @import url("%USERLAYOUTURL%");
+        /* Custom overriding style */
+        @import url("%USERSTYLEURL%");
 </style>
 %TMPL:END%
 
