@@ -4,6 +4,7 @@ List of TWiki users. Please take the time to add yourself to the list in alphabe
 
 *Note:* Above note only applies to a TWiki installed on an Intranet with a user logon. If you install TWiki on a server without authentication, all users are automatically assigned as _TWikiGuest - gu<nop>est_ . In this case TWiki does not distinguish between users.
 
+	* ChristopheVermeulen - cvermeulen - 07 Jul 1999
 	* DavidWarman - dwarman - 21 May 1999
 	* PeterThoeny - thoeny - 10 Feb 1999
 	* TWikiGuest - guest - 10 Feb 1999
