@@ -143,7 +143,7 @@ sub main
 
     my $topicExists = &TWiki::Store::topicExists( $webName, $topic );
     if( $topicExists ) {
-	$maxrev = &TWiki::Store::getRevisionNumber( $web, $topic );
+	$maxrev = &TWiki::Store::getRevisionNumber( $webName, $topic );
         $maxrev =~ s/1\.//go;  # cut major
 	if( ! $rev1 ) { $rev1 = 0; }
 	if( ! $rev2 ) { $rev2 = 0; }
