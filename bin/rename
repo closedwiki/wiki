@@ -307,14 +307,12 @@ sub checkPermissions
     }
     
     
-    # prevent rename of topics in main web unless user in TWikiAdminGroup
-    # FIXME - generlise to have rename permission
-    if( ! TWiki::Access::userIsInGroup( $wikiUserName, "TWikiAdminGroup" ) && $oldWeb eq "$TWiki::mainWebname" ) {           
-       my $url = &TWiki::getOopsUrl( $oldWeb, $oldTopic, "oopsaccesschange" );
+    if( ! &TWiki::Access::checkAccessPermission( "rename", $wikiUserName, $ret, $oldTopic, $oldWeb ) ) {
+       my $url = &TWiki::getOopsUrl( $oldWeb, $oldTopic, "oopsaccessrename" );
        TWiki::redirect( $query, $url );
-       $ret = "";	
+       $ret = "";
     }
-    
+
     return $ret;
 }
 
