@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "06 Jun 2002";
+$wikiversion      = "13 Jun 2002";
 
 # ===========================
 # read the configuration part
@@ -833,17 +833,20 @@ sub makeTopicSummary
     $htext =~ s/<\!\-\-.*?\-\->//gos;  # remove all HTML comments
     $htext =~ s/<\!\-\-.*$//os;        # cut HTML comment
     $htext =~ s/<[^>]*>//go;           # remove all HTML tags
-    $htext =~ s/\&nbsp;//go;           # remove space entity
+    $htext =~ s/\&[a-z]+;/ /go;        # remove entities
     $htext =~ s/%WEB%/$theWeb/go;      # resolve web
     $htext =~ s/%TOPIC%/$theTopic/go;  # resolve topic
     $htext =~ s/%WIKITOOLNAME%/$wikiToolName/go; # resolve TWiki tool name
-    $htext =~ s/%META:.*?%//go;        # Remove meta data variables
-    $htext =~ s/[\%\[\]\*\|=_]/ /go;   # remove Wiki formatting chars & defuse %VARS%
+    $htext =~ s/%META:.*?%//go;        # remove meta data variables
+    $htext =~ s/[\%\[\]\*\|=_\&]/ /go; # remove Wiki formatting chars & defuse %VARS%
     $htext =~ s/\-\-\-+\+*\s*\!*/ /go; # remove heading formatting
     $htext =~ s/\s+[\+\-]*/ /go;       # remove newlines and special chars
 
     # limit to 162 chars
     $htext =~ s/(.{162})([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
+
+    # encode special chars to be iso-8859-1 conform
+    $htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/geo;
 
     # inline search renders text, 
     # so prevent linking of external and internal links:
