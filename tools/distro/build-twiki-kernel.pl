@@ -11,9 +11,36 @@ use File::Find::Rule;
 use File::Slurp::Tree;
 use LWP::UserAgent;
 
+#	print "build-twiki-kernel.pl <tempDir> <outputDirectory>\n";
+#	print "\n";
+#	print "\ttempDir : where all temporary files for this build are placed (defaults to .)\n";
+#	print "\toutputDirectory : where the generated TWikiKernel-BRANCH-DATE.tar.gz is placed\n";
+#	print "no parameters will default to current dir\n";
+
+my $tempDir = getcwd(); 
+my $outputDirectory = getcwd();
+
+if ( $#ARGV == 1 ) {
+	$tempDir = $ARGV[0]; 
+	$outputDirectory = $ARGV[1];
+} elsif  ( $#ARGV == 0 ) {
+	$tempDir = $ARGV[0]; 
+}
+if (( ! -e $tempDir ) || ( ! -d $tempDir )) {
+	print "Error: $tempDir does not exist, or is not a directory\n";
+	exit(1);
+}
+if (( ! -e $outputDirectory ) || ( ! -d $outputDirectory )) {
+	print "Error: $outputDirectory does not exist, or is not a directory\n";
+	exit(1);
+}
+
+print "temporary files will go into $tempDir\n";
+print "output tar file will go into $outputDirectory\n";
+
 my $Config = {
-    local_cache => getcwd() . "/.cache",
-    install_base => getcwd() . "/twiki",
+    local_cache => $tempDir . "/.cache",		
+    install_base => $tempDir . "/twiki",		#the directory the official release is untared to
     agent => "TWikiKernel Builder/0.5",
 };
 
@@ -38,12 +65,14 @@ my $installBase = $Config->{install_base};
 
 ( rmtree( $installBase ) or die "Unable to empty the twiki build directory: $!" ) if -e $installBase;
 my $tar = 'TWiki20040901.tar.gz';
-unless ( -e $tar )
+my $localTar = $tempDir."/".$tar;
+unless ( -e $localTar )
 {
+	print "downloading $tar\n";
     my $ua = LWP::TWikiGuestAgent->new( agent => $Config->{agent} ) or die $!;
-    $ua->mirror( "http://twiki.org/release/$tar", $tar );
+    $ua->mirror( "http://twiki.org/release/$tar", $localTar );
 }
-execute( "tar xzf $tar" ) or die $!;
+execute( "cd $tempDir ; tar xzf $localTar" ) or die $!;
 print scalar File::Find::Rule->file->in( $installBase ), " original files\n";
 
 ################################################################################
@@ -106,15 +135,15 @@ rmtree( [ "$installBase/lib/Algorithm", "$installBase/lib/Text" ] ) or warn $!;
 
 ################################################################################
 
-chdir $pwdStart;
 print scalar File::Find::Rule->file->in( $installBase ), " new files\n";
+chdir $pwdStart;
 
 ################################################################################
 # create TWikiKernel distribution file
 chomp( my $now = `date +'%Y%m%d.%H%M%S'` );
 chomp( my $branch = `head -n 1 branch` || 'MAIN' );
-my $newDistro = "TWikiKernel-$branch-$now";
-execute( "tar czf $newDistro.tar.gz twiki" );	# .tar.gz goes *here* because *z* is here
+my $newDistro = "$outputDirectory/TWikiKernel-$branch-$now";
+execute( "cd $tempDir ; tar czf $newDistro.tar.gz twiki" );	# .tar.gz goes *here* because *z* is here
 print "${newDistro}.tar.gz\n";			# print name of generated file; other tools later in the chain use it
 
 exit 0;
