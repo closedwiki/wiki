@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1073858460" format="1.0" version="1.21"}%
+%META:TOPICINFO{author="PeterThoeny" date="1073862780" format="1.0" version="1.22"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -7,63 +7,67 @@ There are other approaches as well:
 	* In any topic, write =%<nop>PUBURL%/%<nop>TWIKIWEB%/%TOPIC%/help.gif= to show the %PUBURL%/%TWIKIWEB%/%TOPIC%/help.gif icon
 	* The TWiki:Plugins/TopicVarsPlugin lets you set variables in any topic, not just in WebPreferences, for use in the same topic
 	* The TWiki:Plugins/SmiliesPlugin, using a different short hand than =<nop>%VARIABLES%=, may be worth checking out for extended use
+	* __Related:__ TWiki's FileAttachments show their own icons for many different file types. As documented in TWikiVariables, write =%<nop>ICON{"pdf"}%= to show the %ICON{"pdf"}% icon
 
 In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics are uploaded and displayed. Then, the paths are set in [[TWiki.TWikiPreferences#DocGraphics]] for site-wide access. You can also create individual library pages in each web. And you don't have to restrict yourself to graphics: Preferences Variables can include text and links to any type of file.
 
-	* <img src="%ATTACHURLPATH%/help.gif" alt="help.gif"  width="16" height="16"  /> Help 
-	* <img src="%ATTACHURLPATH%/tip.gif" alt="tip.gif"  width="16" height="16"  /> Tip / Idea
-	* <img src="%ATTACHURLPATH%/warning.gif" alt="warning.gif"  width="16" height="16" /> Warning / Important
-	* <img src="%ATTACHURLPATH%/stop.gif" alt="stop.gif"  width="16" height="16"  /> Stop
-	* <img src="%ATTACHURLPATH%/pencil.gif" alt="pencil.gif"  width="16" height="16"  /> Refactor / Edit
-	* <img src="%ATTACHURLPATH%/choice-yes.gif" alt="choice-yes.gif"  width="16" height="16"  /> Done
-	* <img src="%ATTACHURLPATH%/updated.gif" alt="updated.gif"  width="56" height="8"  /> Updated
-	* <img src="%ATTACHURLPATH%/new.gif" alt="new.gif"  width="28" height="8"  /> New
-	* <img src="%ATTACHURLPATH%/starred.gif" alt="starred.gif"  width="16" height="16"  /> Highlight (positive)
-	* <img src="%ATTACHURLPATH%/stargold.gif" alt="stargold.gif"  width="16" height="16"  /> Favorites (gold star)
-	* <img src="%ATTACHURLPATH%/arrowright.gif" alt="arrowright.gif"  width="16" height="16"  /> Moved to...
-	* <img src="%ATTACHURLPATH%/arrowdot.gif" alt="arrowdot.gif"  width="16" height="16"  /> Meet here (arrow to red dot)
-	* <img src="%ATTACHURLPATH%/wip.gif" alt="wip.gif"  width="16" height="16"  /> Work in progress
-	* <img src="%ATTACHURLPATH%/rfc.gif" alt="rfc.gif"  width="16" height="16"  /> Request for comments
-	* <img src="%ATTACHURLPATH%/days.gif" alt="days.gif"  width="16" height="16"  /> Days
-	* <img src="%ATTACHURLPATH%/hourglass.gif" alt="hourglass.gif"  width="16" height="16"  /> Hour glass
-	* <img src="%ATTACHURLPATH%/watch.gif" alt="watch.gif"  width="16" height="16"  /> Watch
-	* <img src="%ATTACHURLPATH%/viewtopic.gif" alt="viewtopic.gif"  width="16" height="16"  /> View topic
-	* <img src="%ATTACHURLPATH%/edittopic.gif" alt="edittopic.gif"  width="16" height="16"  /> Edit topic
-	* <img src="%ATTACHURLPATH%/newtopic.gif" alt="newtopic.gif"  width="16" height="16"  /> New topic
-	* <img src="%ATTACHURLPATH%/searchtopic.gif" alt="searchtopic.gif"  width="16" height="16"  /> Search topic
-	* <img src="%ATTACHURLPATH%/printtopic.gif" alt="printtopic.gif"  width="16" height="16"  /> Print topic
-	* <img src="%ATTACHURLPATH%/attachfile.gif" alt="attachfile.gif"  width="16" height="16"  /> Attach file
-	* <img src="%ATTACHURLPATH%/topicdiffs.gif" alt="topicdiffs.gif"  width="16" height="16"  /> Topic difference
-	* <img src="%ATTACHURLPATH%/topicbacklinks.gif" alt="topicbacklinks.gif"  width="16" height="16"  /> Topic back-links
-	* <img src="%ATTACHURLPATH%/home.gif" alt="home.gif"  width="16" height="16"  /> Home
-	* <img src="%ATTACHURLPATH%/changes.gif" alt="changes.gif"  width="16" height="16"  /> Changes
-	* <img src="%ATTACHURLPATH%/notify.gif" alt="notify.gif"  width="16" height="16"  /> Notify
-	* <img src="%ATTACHURLPATH%/empty.gif" alt="empty.gif"  width="16" height="16"  /> Empty transparent 16x16 spacer
-	* <img src="%ATTACHURLPATH%/line_ud.gif" alt="line_ud.gif"  width="16" height="16"  /> Line graph up-down
-	* <img src="%ATTACHURLPATH%/line_lr.gif" alt="line_lr.gif"  width="16" height="16"  /> Line graph left-right
-	* <img src="%ATTACHURLPATH%/line_udlr.gif" alt="line_udlr.gif"  width="16" height="16"  /> Line graph up-down-left-right
-	* <img src="%ATTACHURLPATH%/line_ur.gif" alt="line_ur.gif"  width="16" height="16"  /> Line graph up-right
-	* <img src="%ATTACHURLPATH%/line_rd.gif" alt="line_rd.gif"  width="16" height="16"  /> Line graph right-down
-	* <img src="%ATTACHURLPATH%/line_ld.gif" alt="line_ld.gif"  width="16" height="16"  /> Line graph left-down
-	* <img src="%ATTACHURLPATH%/line_ul.gif" alt="line_ul.gif"  width="16" height="16"  /> Line graph up-left
-	* <img src="%ATTACHURLPATH%/line_udr.gif" alt="line_udr.gif"  width="16" height="16"  /> Line graph up-down-right
-	* <img src="%ATTACHURLPATH%/line_lrd.gif" alt="line_lrd.gif"  width="16" height="16"  /> Line graph left-right-down
-	* <img src="%ATTACHURLPATH%/line_udl.gif" alt="line_udl.gif"  width="16" height="16"  /> Line graph up-down-left
-	* <img src="%ATTACHURLPATH%/line_ulr.gif" alt="line_ulr.gif"  width="16" height="16"  /> Line graph up-left-right
-	* <img src="%ATTACHURLPATH%/dot_ud.gif" alt="dot_ud.gif"  width="16" height="16"  /> Dot graph up-down
-	* <img src="%ATTACHURLPATH%/dot_lr.gif" alt="dot_lr.gif"  width="16" height="16"  /> Dot graph left-right
-	* <img src="%ATTACHURLPATH%/dot_udlr.gif" alt="dot_udlr.gif"  width="16" height="16"  /> Dot graph up-down-left-right
-	* <img src="%ATTACHURLPATH%/dot_ur.gif" alt="dot_ur.gif"  width="16" height="16"  /> Dot graph up-right
-	* <img src="%ATTACHURLPATH%/dot_rd.gif" alt="dot_rd.gif"  width="16" height="16"  /> Dot graph right-down
-	* <img src="%ATTACHURLPATH%/dot_ld.gif" alt="dot_ld.gif"  width="16" height="16"  /> Dot graph left-down
-	* <img src="%ATTACHURLPATH%/dot_ul.gif" alt="dot_ul.gif"  width="16" height="16"  /> Dot graph up-left
-	* <img src="%ATTACHURLPATH%/dot_udr.gif" alt="dot_udr.gif"  width="16" height="16"  /> Dot graph up-down-right
-	* <img src="%ATTACHURLPATH%/dot_lrd.gif" alt="dot_lrd.gif"  width="16" height="16"  /> Dot graph left-right-down
-	* <img src="%ATTACHURLPATH%/dot_udl.gif" alt="dot_udl.gif"  width="16" height="16"  /> Dot graph up-down-left
-	* <img src="%ATTACHURLPATH%/dot_ulr.gif" alt="dot_ulr.gif"  width="16" height="16"  /> Dot graph up-left-right
+| *Icon* | *File Name* | *Comment* |
+|  <img src="%ATTACHURLPATH%/help.gif" alt="help.gif"  width="16" height="16"  />  | =help.gif= | Help  |
+|  <img src="%ATTACHURLPATH%/tip.gif" alt="tip.gif"  width="16" height="16"  />  | =tip.gif= | Tip / Idea |
+|  <img src="%ATTACHURLPATH%/warning.gif" alt="warning.gif"  width="16" height="16" />  | =warning.gif= | Warning / Important |
+|  <img src="%ATTACHURLPATH%/stop.gif" alt="stop.gif"  width="16" height="16"  />  | =stop.gif= | Stop |
+|  <img src="%ATTACHURLPATH%/pencil.gif" alt="pencil.gif"  width="16" height="16"  />  | =pencil.gif= | Refactor / Edit |
+|  <img src="%ATTACHURLPATH%/choice-yes.gif" alt="choice-yes.gif"  width="16" height="16"  />  | =choice-yes.gif= | Done |
+|  <img src="%ATTACHURLPATH%/updated.gif" alt="updated.gif"  width="56" height="8"  />  | =updated.gif= | Updated |
+|  <img src="%ATTACHURLPATH%/new.gif" alt="new.gif"  width="28" height="8"  />  | =new.gif= | New |
+|  <img src="%ATTACHURLPATH%/starred.gif" alt="starred.gif"  width="16" height="16"  />  | =starred.gif= | Highlight (positive) |
+|  <img src="%ATTACHURLPATH%/stargold.gif" alt="stargold.gif"  width="16" height="16"  />  | =stargold.gif= | Favorites (gold star) |
+|  <img src="%ATTACHURLPATH%/arrowright.gif" alt="arrowright.gif"  width="16" height="16"  />  | =arrowright.gif= | Moved to... |
+|  <img src="%ATTACHURLPATH%/arrowdot.gif" alt="arrowdot.gif"  width="16" height="16"  />  | =arrowdot.gif= | Meet here (arrows to red dot) |
+|  <img src="%ATTACHURLPATH%/wip.gif" alt="wip.gif"  width="16" height="16"  />  | =wip.gif= | Work in progress |
+|  <img src="%ATTACHURLPATH%/rfc.gif" alt="rfc.gif"  width="16" height="16"  />  | =rfc.gif= | Request for comments |
+|  <img src="%ATTACHURLPATH%/days.gif" alt="days.gif"  width="16" height="16"  />  | =days.gif= | Days |
+|  <img src="%ATTACHURLPATH%/hourglass.gif" alt="hourglass.gif"  width="16" height="16"  />  | =hourglass.gif= | Hour glass |
+|  <img src="%ATTACHURLPATH%/watch.gif" alt="watch.gif"  width="16" height="16"  />  | =watch.gif= | Watch |
+|  <img src="%ATTACHURLPATH%/viewtopic.gif" alt="viewtopic.gif"  width="16" height="16"  />  | =viewtopic.gif= | View topic |
+|  <img src="%ATTACHURLPATH%/edittopic.gif" alt="edittopic.gif"  width="16" height="16"  />  | =edittopic.gif= | Edit topic |
+|  <img src="%ATTACHURLPATH%/topicdiffs.gif" alt="topicdiffs.gif"  width="16" height="16"  />  | =topicdiffs.gif= | Topic difference |
+|  <img src="%ATTACHURLPATH%/topicbacklinks.gif" alt="topicbacklinks.gif"  width="16" height="16"  />  | =topicbacklinks.gif= | Topic back-links |
+|  <img src="%ATTACHURLPATH%/newtopic.gif" alt="newtopic.gif"  width="16" height="16"  />  | =newtopic.gif= | New topic |
+|  <img src="%ATTACHURLPATH%/searchtopic.gif" alt="searchtopic.gif"  width="16" height="16"  />  | =searchtopic.gif= | Search topic |
+|  <img src="%ATTACHURLPATH%/printtopic.gif" alt="printtopic.gif"  width="16" height="16"  />  | =printtopic.gif= | Print topic |
+|  <img src="%ATTACHURLPATH%/attachfile.gif" alt="attachfile.gif"  width="16" height="16"  />  | =attachfile.gif= | Attach file |
+|  <img src="%ATTACHURLPATH%/home.gif" alt="home.gif"  width="16" height="16"  />  | =home.gif= | Home |
+|  <img src="%ATTACHURLPATH%/changes.gif" alt="changes.gif"  width="16" height="16"  />  | =changes.gif= | Changes |
+|  <img src="%ATTACHURLPATH%/notify.gif" alt="notify.gif"  width="16" height="16"  />  | =notify.gif= | Notify |
+|  <img src="%ATTACHURLPATH%/mail.gif" alt="mail.gif"  width="16" height="16"  />  | =mail.gif= | Mail |
+|  <img src="%ATTACHURLPATH%/empty.gif" alt="empty.gif"  width="16" height="16"  />  | =empty.gif= | Empty transparent 16x16 spacer |
+|  <img src="%ATTACHURLPATH%/line_ud.gif" alt="line_ud.gif"  width="16" height="16"  />  | =line_ud.gif= | Line graph up-down |
+|  <img src="%ATTACHURLPATH%/line_lr.gif" alt="line_lr.gif"  width="16" height="16"  />  | =line_lr.gif= | Line graph left-right |
+|  <img src="%ATTACHURLPATH%/line_udlr.gif" alt="line_udlr.gif"  width="16" height="16"  />  | =line_udlr.gif= | Line graph up-down-left-right |
+|  <img src="%ATTACHURLPATH%/line_ur.gif" alt="line_ur.gif"  width="16" height="16"  />  | =line_ur.gif= | Line graph up-right |
+|  <img src="%ATTACHURLPATH%/line_rd.gif" alt="line_rd.gif"  width="16" height="16"  />  | =line_rd.gif= | Line graph right-down |
+|  <img src="%ATTACHURLPATH%/line_ld.gif" alt="line_ld.gif"  width="16" height="16"  />  | =line_ld.gif= | Line graph left-down |
+|  <img src="%ATTACHURLPATH%/line_ul.gif" alt="line_ul.gif"  width="16" height="16"  />  | =line_ul.gif= | Line graph up-left |
+|  <img src="%ATTACHURLPATH%/line_udr.gif" alt="line_udr.gif"  width="16" height="16"  />  | =line_udr.gif= | Line graph up-down-right |
+|  <img src="%ATTACHURLPATH%/line_lrd.gif" alt="line_lrd.gif"  width="16" height="16"  />  | =line_lrd.gif= | Line graph left-right-down |
+|  <img src="%ATTACHURLPATH%/line_udl.gif" alt="line_udl.gif"  width="16" height="16"  />  | =line_udl.gif= | Line graph up-down-left |
+|  <img src="%ATTACHURLPATH%/line_ulr.gif" alt="line_ulr.gif"  width="16" height="16"  />  | =line_ulr.gif= | Line graph up-left-right |
+|  <img src="%ATTACHURLPATH%/dot_ud.gif" alt="dot_ud.gif"  width="16" height="16"  />  | =dot_ud.gif= | Dot graph up-down |
+|  <img src="%ATTACHURLPATH%/dot_lr.gif" alt="dot_lr.gif"  width="16" height="16"  />  | =dot_lr.gif= | Dot graph left-right |
+|  <img src="%ATTACHURLPATH%/dot_udlr.gif" alt="dot_udlr.gif"  width="16" height="16"  />  | =dot_udlr.gif= | Dot graph up-down-left-right |
+|  <img src="%ATTACHURLPATH%/dot_ur.gif" alt="dot_ur.gif"  width="16" height="16"  />  | =dot_ur.gif= | Dot graph up-right |
+|  <img src="%ATTACHURLPATH%/dot_rd.gif" alt="dot_rd.gif"  width="16" height="16"  />  | =dot_rd.gif= | Dot graph right-down |
+|  <img src="%ATTACHURLPATH%/dot_ld.gif" alt="dot_ld.gif"  width="16" height="16"  />  | =dot_ld.gif= | Dot graph left-down |
+|  <img src="%ATTACHURLPATH%/dot_ul.gif" alt="dot_ul.gif"  width="16" height="16"  />  | =dot_ul.gif= | Dot graph up-left |
+|  <img src="%ATTACHURLPATH%/dot_udr.gif" alt="dot_udr.gif"  width="16" height="16"  />  | =dot_udr.gif= | Dot graph up-down-right |
+|  <img src="%ATTACHURLPATH%/dot_lrd.gif" alt="dot_lrd.gif"  width="16" height="16"  />  | =dot_lrd.gif= | Dot graph left-right-down |
+|  <img src="%ATTACHURLPATH%/dot_udl.gif" alt="dot_udl.gif"  width="16" height="16"  />  | =dot_udl.gif= | Dot graph up-down-left |
+|  <img src="%ATTACHURLPATH%/dot_ulr.gif" alt="dot_ulr.gif"  width="16" height="16"  />  | =dot_ulr.gif= | Dot graph up-left-right |
 
 -- TWiki:Main.PeterThoeny - 11 Jan 2004<br />
 -- TWiki:Main.MikeMannix - 16 May 2002
+
 %META:FILEATTACHMENT{name="help.gif" attr="" comment="Help" date="1001637645" path="C:\02_TWikiDocs\help.gif" size="130" user="MikeMannix" version="1.1"}%
 %META:FILEATTACHMENT{name="tip.gif" attr="" comment="Tip" date="1007360101" path="C:\02_TWikiDocs\tip.gif" size="123" user="MikeMannix" version="1.2"}%
 %META:FILEATTACHMENT{name="warning.gif" attr="" comment="Warning" date="1001637707" path="C:\02_TWikiDocs\warning.gif" size="138" user="MikeMannix" version="1.1"}%
@@ -115,3 +119,4 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="arrowdot.gif" attr="" comment="Arrows to red dot" date="1073858315" path="C:\Data\Temp\arrowdot.gif" size="927" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="topicdiffs.gif" attr="" comment="Topic difference" date="1073858341" path="C:\Data\Temp\topicdiffs.gif" size="916" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="topicbacklinks.gif" attr="" comment="Topic back-links" date="1073858382" path="C:\Data\Temp\topicbacklinks.gif" size="933" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="mail.gif" attr="" comment="Mail" date="1073864027" path="C:\Data\Temp\mail.gif" size="897" user="PeterThoeny" version="1.1"}%
