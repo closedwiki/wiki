@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1050385753" format="1.0" version="1.55"}%
+%META:TOPICINFO{author="PeterThoeny" date="1054708130" format="1.0" version="1.56"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
@@ -12,6 +12,7 @@ These installation steps are based on the *Apache* web server on *Linux*. TWiki 
 	* For <nop>MacOS X, check TWiki:Codev/TWikiOnMacOSX. 
 	* To install TWiki on <nop>SourceForge, for use on a software development project, read TWiki:Codev/TWikiOnSourceForge
 	* For other platforms, see TWiki:Codev/TWikiOn, and search the TWiki:Codev and TWiki:Support webs for other installation notes.
+
 
 #StandardInstallation
 ---++ Standard Installation
@@ -102,11 +103,12 @@ You can also edit =$localPerlLibPath= in the =setlib.cfg= file if you are not ro
 	* Set the permission of all files below =twiki/data= so that they are writable by user =nobody=. A simple way is to =chmod= them to =-rw-rw-r--= (664) and to =chown= them to =nobody=.
 	* Set the permission of the =twiki/data= directory and its subdirectories so that files in there are writable by user =nobody=. A simple way is to chmod them to =drwxrwxr-x= (775) and to =chown= them to =nobody=.
 	* Set the permission of the =twiki/pub= directory and all its subdirectories so that files in there are writable by user =nobody=. A simple way is to =chmod= them to =drwxrwxr-x= (775) and to =chown= them to =nobody=.
-	* %H% The =twiki/data/*/*.txt,v= RCS repository files in the installation package are locked by user =nobody=. If your CGI scripts are __not__ running as user =nobody=, it's not possible to check in files (you'll see that the revision number won't increase after saving a topic). In this case, you need to unlock all repository files (check the RCS man pages) and lock them with a different user, ex =www-data=, or delete them all - new files will be automatically created the first time each topic is edited. A simple way to change ownership is with a search-and-replace in all files; for example, using perl:
+	* %H% The =twiki/data/*/*.txt,v= RCS repository files in the installation package are locked by user =nobody=. If your CGI scripts are __not__ running as user =nobody=, it's not possible to check in files (you'll see that the revision number won't increase after saving a topic). In this case, you need to unlock all repository files (check the RCS man pages) and lock them with a different user, such as =www-data=, or delete them all - new files will be automatically created the first time each topic is edited. A simple way to change ownership is with a search-and-replace in all files; for example, using Perl (type this carefully!):
 <blockquote style="background-color:#F5F5F5">
 <pre>
 cd twiki/data
-perl -pi~ -e 's/nobody(\:[0-9\.]+[\;\s]+strict\;)/www-data$1/' */*,v
+perl -pi~ -e 'NR <= 10 && s/nobody:/www-data:/ ' */*,v
+
 </pre>
 </blockquote>
 
@@ -124,11 +126,12 @@ perl -pi~ -e 's/nobody(\:[0-9\.]+[\;\s]+strict\;)/www-data$1/' */*,v
 
 ---+++ Step 4: Configure Site-Wide Email Preferences
 
-	* From your web browser, edit the TWikiPreferences topic in the TWiki:%TWIKIWEB% web to set the =WIKIWEBMASTER= email address, and other email settings required for registration and WebChangesAlert to work:
+	* Edit the TWikiPreferences topic in the %TWIKIWEB% web (by pointing your browser to <nop>http://yourdomain.com/twiki/bin/view/%TWIKIWEB%/TWikiPreferences) to set the =WIKIWEBMASTER= email address, and other email settings required for registration and WebChangesAlert to work:
 		* =WIKIWEBMASTER= should be set to the email address of the TWiki administrator
 		* =SMTPMAILHOST= is typically set on Windows or other non-Unix/Linux systems, where =sendmail= or similar is not available.  When this is set and the Perl module ==Net::SMTP== is installed, TWiki will connect to this SMTP server (e.g. =mail.yourdomain.com=) to send email for user registration and WebChangesAlerts.  If you do have a sendmail-type program, leave =SMTPMAILHOST= unset so that the external sendmail program is used instead (defined by ==$mailProgram== in ==TWiki.cfg==).
 		* =SMTPSENDERHOST= is optional, and set to the domain name sending the email (e.g. =twiki.yourdomain.com=). For use where the SMTP server requires that you identify the TWiki server sending mail. If not set, ==Net::SMTP== will guess it for you. 
 	* You may want to set up other TWikiPreferences later on.
+	* To enable the WebChangesAlerts (email notifications) you need to read about cron in the topic TWiki.TWikiSiteTools.
 
 ---+++ Step 5: Finish Up from Your Browser
 
@@ -181,7 +184,7 @@ Optionally, you can also:
 
 See [[AppendixFileSystem][Appendix A: TWiki File System]] for an installed system snapshot and descriptions of all files in the TWiki 01-Sep-2001 distribution.
 
--- PeterThoeny - 28 Dec 2002 <br />
+-- PeterThoeny - 03 Jun 2003 <br />
 -- Main.MikeMannix - 16 May 2002	
 %STOPINCLUDE%
 %META:TOPICMOVED{by="MikeMannix" date="999319650" from="TWiki.TWikiInstallationNotes" to="TWiki.TWikiInstallationGuide"}%
