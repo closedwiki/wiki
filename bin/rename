@@ -121,7 +121,7 @@ sub main
     if( ! $theAttachment ) {
         my @refs = findReferingPages( $oldWeb, $oldTopic );
         my ( $lockFailues, $problems ) = 
-            updateReferingPages( $oldWeb, $oldTopic, $newWeb, $newTopic, @refs );
+            updateReferingPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
     }
 
     if( ! $justChangeRefs ) {
@@ -213,9 +213,10 @@ sub findReferingPages
 
 
 #==================================
+# update pages that refer to the one being renamed/moved
 sub updateReferingPages
 {
-    my ( $oldWeb, $oldTopic, $newWeb, $newTopic, @refs ) = @_;
+    my ( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs ) = @_;
 
     ##TWiki::writeDebug("rename refering pages @refs");
     my $lockFailure = 0;
@@ -237,7 +238,13 @@ sub updateReferingPages
           $result .= ":$item: , "; 
           #open each file, replace $topic with $newTopic
           if ( &TWiki::Store::topicExists($itemWeb, $itemTopic) ) { 
-	     my( $meta, $scantext ) = &TWiki::Store::readTopic($itemWeb, $itemTopic);
+             my( $meta, $scantext ) = &TWiki::Store::readTopic($itemWeb, $itemTopic);
+             if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $scantext,
+                    $itemWeb, $itemTopic ) ) {
+                 # This shouldn't happen, as search will not return, but check to be on the safe side
+                 &TWiki::writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
+                 next;
+             }
 	     my $insidePRE = 0;
 	     my $insideVERBATIM = 0;
              my $noAutoLink = 0;
