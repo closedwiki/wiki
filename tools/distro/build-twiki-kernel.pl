@@ -27,7 +27,7 @@ my $Config = {
     tempdir => '.',
     outputdir => '.',
     outfile => undef,
-    agent => "TWikiKernel Builder/v0.7",
+    agent => "TWikiKernel Builder/v0.7.1",
 # documentation switches
     pdoc => eval { require Pdoc::Parsers::Files::PerlModule } && $@ eq '',
 # 
@@ -56,8 +56,9 @@ $Config->{svn_export} = $Config->{localcache} . "/twiki";
 $Config->{install_base} = $Config->{tempdir} . "/twiki";		# the directory the official release is untarred into
 unless ( $Config->{outfile} )
 {
-    my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } `svn info` )[0] ) =~ /(\d+)$/;
-    my $branch = mychomp(`head -n 1 branch` || 'MAIN');
+    chomp( my @svnInfo = `svn info .` );
+    my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } @svnInfo )[0] ) =~ /(\d+)$/;
+    my ( $branch ) = ( ( grep { /^URL:/ } @svnInfo )[0] ) =~ m/^.+?\/branches\/([^\/]+)\/.+?$/;
     $Config->{outfile} = "TWikiKernel-$branch-$svnRev";
 }
 # make sure output directories exist
@@ -78,7 +79,8 @@ my $ruleDiscardRcsHistory = File::Find::Rule->file->name("*,v")->discard;
 my $ruleDiscardRcsLock = File::Find::Rule->file->name("*.lock")->discard;
 my $ruleDiscardBackup = File::Find::Rule->file->name("*~")->discard;
 my $ruleDiscardSVN = File::Find::Rule->directory->name(".svn")->prune->discard;
-my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardSVN, $ruleDiscardBackup, File::Find::Rule->file );
+my $ruleDiscardOS = File::Find::Rule->file->name(".DS_Store")->discard;
+my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardOS, $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardSVN, $ruleDiscardBackup, File::Find::Rule->file );
 
 ################################################################################
 
@@ -108,9 +110,8 @@ execute( "cd tools && perl gendocs.pl nosmells" ) or die $!;
 if ( $Config->{pdoc} )
 {
     execute( "rm -rf doc/ ; mkdir doc/ && cd tools && perl perlmod2www.pl -source ../lib/TWiki/ -target ../doc/" ) or die $!;
-    my $codeDocsTreeDir = "doc";
-    my $codeDocsTree = slurp_tree( $codeDocsTreeDir, rule => $ruleNormalFiles->start( $codeDocsTreeDir ) );
-    spew_tree( "$installBase/doc" => $codeDocsTree );
+    my $dirDocs = "doc";
+    spew_tree( "$installBase/doc" => slurp_tree( $dirDocs, rule => $ruleNormalFiles->start( $dirDocs ) ) );
 }
 
 ################################################################################
