@@ -33,15 +33,15 @@ __External links:__
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
- 1st paragraph
+1st paragraph
 
- 2nd paragraph
+2nd paragraph
 </pre>
 </font></span>
 </td><td valign="top">
- 1st paragraph
+1st paragraph
 
- 2nd paragraph
+2nd paragraph
 </td>
 </tr>
 <tr>
@@ -51,11 +51,11 @@ __External links:__
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
- *Bold*
+*Bold*
 </pre>
 </font></span>
 </td><td valign="top">
- *Bold*
+*Bold*
 </td>
 </tr>
 <tr>
@@ -65,11 +65,11 @@ __External links:__
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
- _Italic_
+_Italic_
 </pre>
 </font></span>
 </td><td valign="top">
- _Italic_
+_Italic_
 </td>
 </tr>
 <tr>
@@ -79,11 +79,11 @@ __External links:__
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
- __Bold italic__
+__Bold italic__
 </pre>
 </font></span>
 </td><td valign="top">
- __Bold italic__
+__Bold italic__
 </td>
 </tr>
 <tr>
@@ -93,11 +93,11 @@ __External links:__
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
- =Fixed font=
+=Fixed font=
 </pre>
 </font></span>
 </td><td valign="top">
- =Fixed font=
+=Fixed font=
 </td>
 </tr>
 <tr>
@@ -107,11 +107,11 @@ __External links:__
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
- ==Bold fixed==
+==Bold fixed==
 </pre>
 </font></span>
 </td><td valign="top">
- ==Bold fixed==
+==Bold fixed==
 </td>
 </tr>
 <tr>
@@ -120,13 +120,13 @@ __External links:__
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
- _This works_,
- _this not _
+_This works_,
+_this not _
 </pre>
 </font></span>
 </td><td valign="top">
- _This works_,
- _this not _
+_This works_,
+_this not _
 </td>
 </tr>
 <tr>
@@ -260,29 +260,73 @@ __Note:__ In case you have a long row and you want it to be more readable when y
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
- WebNotify,
- Know.ReadmeFirst
+WebNotify
+
+Know.ReadmeFirst
 </pre>
 </font></span>
 </td><td valign="top">
- WebNotify,
- Know.ReadmeFirst
+WebNotify
+
+Know.ReadmeFirst
 </td>
 </tr>
 <tr>
 <td valign="top">
  *Forced Links:* <br>
- You can create a forced internal link by enclosing words in double square brackets. <br> __Note:__ Text within the brackets may contain optional spaces; the topic name is formed by capitalizing the initial letter and by removing the spaces; i.e. =[<nop>[text formatting FAQ]]= links to topic TextFormattingFAQ.  You can also refer to a different web.
+ You can create a forced internal link by enclosing words in double square brackets. <br> __Note:__ Text within the brackets may contain optional spaces; the topic name is formed by capitalizing the initial letter and by removing the spaces; i.e. =[<nop>[text formatting FAQ]]= links to topic TextFormattingFAQ.  You can also refer to a different web and use anchors.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
- [[wiki syntax]],
- [[%MAINWEB%.TWiki users]]
+[[wiki syntax]]
+
+[[%MAINWEB%.TWiki users]]
 </pre>
 </font></span>
 </td><td valign="top">
- [[wiki syntax]],
- [[%MAINWEB%.TWiki users]]
+[[wiki syntax]]
+
+[[%MAINWEB%.TWiki users]]
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Specific Links:* <br>
+ Create a link where you can specify the link text and the link reference separately, using nested square brackets like =[<nop>[text][reference]]=. Internal link references (i.e. WikiSyntax) and external link references (i.e. http://TWiki.org/) are supported. The same __Forced Links__ rules apply for internal link references. Anchor names can be added as well, like =[<nop>[go home][WebHome@MyAnchor]]= and =[<nop>[Yahoo!][http://www.yahoo.com/#somewhere]]=.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+[[syntax][WikiSyntax]]
+
+[[GNU][http://gnu.org]]
+</pre>
+</font></span>
+</td><td valign="top">
+[[syntax][WikiSyntax]]
+
+[[GNU][http://gnu.org]]
+</td>
+</tr>
+<tr>
+<td valign="top">
+ *Anchors:* <br>
+ You can define a link reference inside a %WIKITOOLNAME% topic (called an anchor name) and link to that. To __define__ an anchor write =@AnchorName= at the beginning of a line. The anchor name must be a WikiWord. To __link to__ an anchor name use the =[<nop>[MyTopic@MyAnchor]]= syntax. You can omit the topic name if you want to link within the same topic.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+[[WebHome@NotThere]]
+
+[[Jump][@MyAnchor]]
+
+@MyAnchor To here
+</pre>
+</font></span>
+</td><td valign="top">
+[[WebHome@NotThere]]
+
+[[Jump][@MyAnchor]]
+
+@MyAnchor To here
 </td>
 </tr>
 <tr>
@@ -292,11 +336,11 @@ __Note:__ In case you have a long row and you want it to be more readable when y
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
- &lt;nop&gt;SunOS
+&lt;nop&gt;SunOS
 </pre>
 </font></span>
 </td><td valign="top">
- <nop>SunOS
+<nop>SunOS
 </td>
 </tr>
 </table>
