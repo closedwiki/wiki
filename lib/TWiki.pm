@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = "30 Apr 2004";
+$wikiversion      = "04 May 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2526,7 +2526,7 @@ sub handleWebAndTopicList
         $line =~ s/\$web/$web/goi;
         $line =~ s/\$name/$item/goi;
         $line =~ s/\$qname/"$item"/goi;
-        $mark = ( $selection =~ / $item / ) ? $marker : "";
+        $mark = ( $selection =~ / \Q$item\E / ) ? $marker : "";
         $line =~ s/\$marker/$mark/goi;
         $text .= "$line$separator";
     }
