@@ -25,6 +25,8 @@ and a new distribution.
 my ( $mode ) = '';
 my ( $oldCfgFile ) = '';
 my ( $newCfgFile ) = '';
+my ( $newDataDir ) = '';
+my ( $oldDataDir ) = '';
 my ( $outputDir ) = '';
 
 if ( $#ARGV > -1 ) {
@@ -35,7 +37,7 @@ if ( $#ARGV > -1 ) {
 
 if ( ( $#ARGV >= 1 ) && ($mode eq 'moveTopics') ) { # must be 2 parameters
         $newCfgFile = $ARGV[1] || die "missing parameter1\n\n"; 
-} elseif ( ($mode eq 'upgradeTopics') && ($#ARGV == 4)) {
+} elsif ( ($mode eq 'upgradeTopics') && ($#ARGV == 4)) {
         $newCfgFile = $ARGV[1] || die "missing newCfgFile\n\n"; 
         $newDataDir = $ARGV[2] || die "missing newDataDir\n\n"; 
         $oldDataDir = $ARGV[3] || die "missing oldDataDir\n\n"; 
@@ -91,13 +93,13 @@ if ( $mode eq '' ) {
 	eval 'use TWiki::Upgrade::UpgradeToDakar';
 	TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($newCfgFile, $oldCfgFile, $outputDir);
 } elsif ( $mode eq 'cairo' ) {
-    if ((! -d $CurrentDataDir ) || (! -d $NewReleaseDataDir)) {
-	print "\nnewDataDir & oldDataDir must exist\n";
-	exit;
-    }
 	eval 'use TWiki::Upgrade::UpgradeToCairo';
 	TWiki::Upgrade::UpgradeToCairo::doAllCairoUpgrades($newCfgFile, $oldCfgFile, $outputDir);
 } elsif ( $mode eq 'upgradeTopics' ) {
+    	if ((! -d $oldDataDir ) || (! -d $newDataDir)) {
+		print "\nnewDataDir & oldDataDir must exist\n";
+		exit;
+    	}
 	eval 'use TWiki::Upgrade::UpdateTopics';
 	TWiki::Upgrade::UpdateTopics::UpdateTopics($newDataDir, $oldDataDir, $outputDir);
 } elsif ( $mode eq 'moveTopics' ) {
