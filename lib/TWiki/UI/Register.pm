@@ -415,8 +415,8 @@ sub resetPassword {
     my $web = $session->{webName};
     my $user = $session->{user};
 
-    my @userNames = $query->param( 'LoginName' );
-    unless( scalar( @userNames )) {
+    my @userNames = $query->param( 'LoginName' ) ;
+    unless( @userNames ) {
 	throw TWiki::UI::OopsException
       ( undef, $user->wikiName(), 'resetpasswd', "No users to reset for" );
     }
