@@ -3,6 +3,8 @@
 use strict;
 use diagnostics;
 
+# This line is useful for pasting into PDB:
+# foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {unshift @INC, $pc;}
 BEGIN {
   foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
     unshift @INC, $pc;
