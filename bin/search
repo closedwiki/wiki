@@ -33,7 +33,7 @@ use strict;
 sub main
 {
     my $query = new CGI;
-    print "Content-type: text/html\n\n";
+    TWiki::writeHeader( $query );
     
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
@@ -41,8 +41,8 @@ sub main
     my $theUrl = $query->url;
 
     my( $topic, $webName ) = 
-	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
-
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+    
     if( ! &TWiki::Store::webExists( $webName ) ) {
         my $tmpl= &TWiki::Store::readTemplate( "noweb" );
         $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
