@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1080346431" format="1.0" version="1.27"}%
+%META:TOPICINFO{author="PeterThoeny" date="1080450166" format="1.0" version="1.28"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -14,6 +14,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 | *Icon* | *File Name* | *Comment* |
 |  <img src="%ATTACHURLPATH%/help.gif" alt="help.gif"  width="16" height="16"  />  | =help.gif= | Help |
 |  <img src="%ATTACHURLPATH%/note.gif" alt="note.gif"  width="16" height="16"  />  | =note.gif= | Note |
+|  <img src="%ATTACHURLPATH%/bubble.gif" alt="bubble.gif"  width="16" height="16"  />  | =bubble.gif= | Speech bubble |
 |  <img src="%ATTACHURLPATH%/tip.gif" alt="tip.gif"  width="16" height="16"  />  | =tip.gif= | Tip / Idea |
 |  <img src="%ATTACHURLPATH%/warning.gif" alt="warning.gif"  width="16" height="16" />  | =warning.gif= | Warning / Important |
 |  <img src="%ATTACHURLPATH%/stop.gif" alt="stop.gif"  width="16" height="16"  />  | =stop.gif= | Stop |
@@ -40,6 +41,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/lockfoldergray.gif" alt="lockfoldergray.gif"  width="16" height="16"  />  | =lockfoldergray.gif= | Locked folder, gray |
 |  <img src="%ATTACHURLPATH%/locktopic.gif" alt="locktopic.gif"  width="16" height="16"  />  | =locktopic.gif= | Locked topic |
 |  <img src="%ATTACHURLPATH%/locktopicgray.gif" alt="locktopicgray.gif"  width="16" height="16"  />  | =locktopicgray.gif= | Locked topic, gray |
+|  <img src="%ATTACHURLPATH%/refreshtopic.gif" alt="refreshtopic.gif"  width="16" height="16"  />  | =refreshtopic.gif= | Refresh topic |
 |  <img src="%ATTACHURLPATH%/viewtopic.gif" alt="viewtopic.gif"  width="16" height="16"  />  | =viewtopic.gif= | View topic |
 |  <img src="%ATTACHURLPATH%/edittopic.gif" alt="edittopic.gif"  width="16" height="16"  />  | =edittopic.gif= | Edit topic |
 |  <img src="%ATTACHURLPATH%/topicdiffs.gif" alt="topicdiffs.gif"  width="16" height="16"  />  | =topicdiffs.gif= | Topic difference |
@@ -144,3 +146,5 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="lockfoldergray.gif" attr="" comment="Locked folder, gray" date="1080345919" path="lockfoldergray.gif" size="923" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="locktopic.gif" attr="" comment="Locked topic" date="1080346227" path="locktopic.gif" size="926" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="locktopicgray.gif" attr="" comment="Locked topic, gray" date="1080346376" path="locktopicgray.gif" size="926" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="bubble.gif" attr="" comment="Speech bubble" date="1080449960" path="C:\Data\Temp\bubble.gif" size="889" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="refreshtopic.gif" attr="" comment="Refresh topic" date="1080450158" path="C:\Data\Temp\refreshtopic.gif" size="916" user="PeterThoeny" version="1.1"}%
