@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="997076248" format="1.0beta2" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="997551066" format="1.0beta2" version="1.6"}%
 To edit pages on this %WIKITOOLNAME% Collaborative Web, you must have a registered user name in WikiNotation.
 
 To register as a new user, simply fill out this form:
@@ -24,7 +24,8 @@ To register as a new user, simply fill out this form:
   <td><input type="text" name="Twk0Phone" size="40" value="" /></td>
 </tr><tr>
   <td align="right"> Department: </td>
-  <td><input type="text" name="Twk0Department" size="40" value="" /></tr><tr>
+  <td><input type="text" name="Twk0Department" size="40" value="" />
+</tr><tr>
   <td align="right"> Office location: </td>
   <td>
   <select name="Twk1Location" size="1">

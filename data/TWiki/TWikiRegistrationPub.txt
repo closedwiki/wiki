@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="997076292" format="1.0beta2" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="997551200" format="1.0beta2" version="1.5"}%
 To edit pages on this %WIKITOOLNAME% Collaborative Web, you must have a registered user name and password. <br> __Note:__ You can also login anonymously as user *TWikiGuest* with password *guest*
 
 To register as a new user, simply fill out this form:
@@ -28,6 +28,17 @@ To register as a new user, simply fill out this form:
 </tr><tr>
   <td align="right"> Company URL: <br> (or department URL) &nbsp; </td>
   <td><input type="text" name="Twk0CompanyURL" size="40" onBlur="if(this.value=='http://') { this.value='' }" onFocus="if(this.value=='') { this.value='http://' }" /></td>
+</tr><tr>
+  <td align="right"> Office location: </td>
+  <td>
+  <select name="Twk1Location" size="1">
+  <option selected value="">Select...</option>
+  <option>SanJoseOffice</option>
+  <option>LondonOffice</option>
+  <option>TokyoOffice</option>
+  <option value="(Please specify office location)">Other</option>
+  </select> =<font color="red">**</font>=
+  </td>
 </tr><tr>
   <td align="right"> Country: </td>
   <td>
