@@ -42,8 +42,15 @@ __Preferences:__
 		* #Set ALLOWTOPICRENAME = 
 
 	* Web preferences that are *not* allowed to be overridden by user preferences:
-		* Set FINALPREFERENCES = WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
+		* Set FINALPREFERENCES = WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME, SAUSAGES
 
+   * Try and kidnap a final preference from TWikiPreferences. The FINALPREFERENCES setting there should block this
+   * Set GLOBALFINALTESTPREF1 = ERROR in web
+   * Set GLOBALFINALTESTPREF2 = ERROR in web
+   * Set WEBFINALTESTPREF = web final test pref
+   * Set WEBTESTPREF = web test pref
+   * Set OVERRIDETHISTESTPREF = ERROR web setting
+   * Set FINALPREFERENCES = WEBFINALTESTPREF
 __Notes:__
 	* A preference is defined as: <br /> =6 spaces * Set NAME = value= <br /> Example:
 		* S<nop>et WEBBGCOLOR = #FFFFC0

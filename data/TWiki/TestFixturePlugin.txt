@@ -50,8 +50,9 @@ Some notes about the comparison process:
 
 ---+ Settings
 	* Description:
-		* Set SHORTDESCRIPTION = Automatic tests.
-		
+*DO NOT CHANGE THIS TEXT* it is used in TestCases.TestCaseAutoFinalPrefs!
+		* Set SHORTDESCRIPTION = Support for automatic tests
+
 ---+ Plugin Installation Instructions
 	* The plugin is installed automatically when the source tree is checked out of subversion. There is no other way to install it.
 

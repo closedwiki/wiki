@@ -323,3 +323,12 @@ You can introduce new VARIABLES and use them in your topics and templates. There
 __Note__: Can't edit?
 [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw topic]]
 
+<!-- Test code, used in TWiki testing
+   * Set GLOBALFINALTESTPREF1 = global final test pref 1
+   * Set GLOBALFINALTESTPREF2 = global final test pref 2
+   * Set GLOBALTESTPREF = global test pref
+   * Set OVERRIDETHISTESTPREF = ERROR global setting
+Done on separate lines to test merging
+   * Set FINALPREFERENCES = GLOBALFINALTESTPREF1
+   * Set FINALPREFERENCES = GLOBALFINALTESTPREF2
+--->

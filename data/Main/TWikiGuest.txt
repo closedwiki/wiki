@@ -12,3 +12,7 @@ __Related topics__
 	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.
 	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
 	* %WIKIUSERSTOPIC% has a list of other %WIKITOOLNAME% users.
+
+   * Set USERTESTPREF = user test pref
+   * Set USERFINALTESTPREF = user final test pref
+   * Set OVERRIDETHISTESTPREF = Setting from user topic
