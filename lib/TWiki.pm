@@ -58,20 +58,16 @@ require 5.005;		# For regex objects and internationalisation
 # ===========================
 # TWiki config variables from TWiki.cfg:
 use vars qw(
-        $webName $topicName $includingWebName $includingTopicName
-        $defaultUserName $userName $wikiName $wikiUserName
-        $wikiHomeUrl $defaultUrlHost $urlHost
-        $scriptUrlPath $pubUrlPath $viewScript
-        $pubDir $templateDir $dataDir $logDir $twikiLibDir
+        $defaultUserName $wikiHomeUrl $defaultUrlHost
+        $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir $logDir
         $siteWebTopicName $wikiToolName $securityFilter $uploadFilter
         $debugFilename $warningFilename $htpasswdFilename
         $logFilename $remoteUserFilename $wikiUsersTopicname
-        $userListFilename $doMapUserToWikiName %userToWikiList %wikiToUserList
+        $userListFilename $doMapUserToWikiName
         $twikiWebname $mainWebname $mainTopicname $notifyTopicname
         $wikiPrefsTopicname $webPrefsTopicname
         $statisticsTopicname $statsTopViews $statsTopContrib $doDebugStatistics
-        $numberOfRevisions $editLockTime
-        $attachAsciiPath $scriptSuffix $wikiversion
+        $numberOfRevisions $editLockTime $scriptSuffix
         $safeEnvPath $mailProgram $noSpamPadding $mimeTypesFilename
         $doKeepRevIfEditLock $doGetScriptUrlFromCgi $doRemovePortNumber
         $doRemoveImgInMailnotify $doRememberRemoteUser $doPluralToSingular
@@ -79,36 +75,40 @@ use vars qw(
         $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
+	$superAdminGroup $doSuperAdminGroup $OS
         $disableAllPlugins 
+    );
+
+# Intercnationalisation (I18N) config frow TWiki.cfg:
+use vars qw(
+	$useLocale $localeRegexes $siteLocale $upperNational
+	$lowerNational
     );
 
 # ===========================
 # Global variables:
 use vars qw(
-	@isoMonth @weekDay 
+        $webName $topicName $includingWebName $includingTopicName
+	$userName $wikiName $wikiUserName $urlHost $viewScript
+	@isoMonth @weekDay %userToWikiList %wikiToUserList $wikiVersion
 	$TranslationToken %mon2num $isList @listTypes @listElements
         $newTopicFontColor $newTopicBgColor $noAutoLink $linkProtocolPattern
         $headerPatternDa $headerPatternSp $headerPatternHt $headerPatternNoTOC
-        $debugUserTime $debugSystemTime
+        $debugUserTime $debugSystemTime $twikiLibDir $attachAsciiPath
         $viewableAttachmentCount $noviewableAttachmentCount
-        $superAdminGroup $doSuperAdminGroup
-        $cgiQuery @publicWebList
-        $formatVersion $OS $script
+        $cgiQuery @publicWebList $formatVersion $script
         $readTopicPermissionFailed
 	$pageMode
     );
 
 # Internationalisation (I18N) setup:
 use vars qw(
-	$basicInitDone $useLocale $localeRegexes $siteLocale 
-	$siteCharset $siteCharsetEbcdic $siteCharsetOverride 
+	$basicInitDone $siteCharset $siteCharsetEbcdic $siteCharsetOverride 
 	$siteLang $siteFullLang $urlCharEncoding 
-
     );
 
 # Regex setup for internationalisation:
 use vars qw(
-	$upperNational $lowerNational 
 	$upperAlpha $lowerAlpha $mixedAlpha $mixedAlphaNum $lowerAlphaNum $numeric
 
 	$wikiWordRegex $webNameRegex $defaultWebNameRegex $anchorRegex $abbrevRegex 
