@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042329453" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071644714" format="1.0" version="1.8"}%
 *TWiki Administrator Group*
 
-	* Set GROUP = AndreaSterbini, GrantBow, JohnTalintyre, MikeMannix, NicholasLee, PeterThoeny, RichardDonkin
+	* Set GROUP = AndreaSterbini, JohnTalintyre, NicholasLee, PeterThoeny, RichardDonkin, SvenDowideit
 	* #Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
 (Note: Set the members of TWiki Administrator Group in GROUP, then enable the ALLOWTOPICCHANGE variable by removing # sign)

@@ -1,3 +1,2 @@
-<!-- Include from TWiki web to avoid broken links. -->
-<!-- To edit, edit the FileAttachment topic in the TWiki web. -->
-%INCLUDE{"%TWIKIWEB%.FileAttachment"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071644520" format="1.0" version="1.4"}%
+See [[%TWIKIWEB%.FileAttachment]]
