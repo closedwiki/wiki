@@ -1,5 +1,7 @@
 %TMPL:DEF{"noise_comment"}%
 In case you were wondering, this template is different in that it inverts the form to be above the text facilitating the use of the form as structured data entry for data fields about the user.
+
+15 Mar 2005: If you use this form for data entry, the form would need to look editable. At the moment it does not seem to serve any purpose. -- ArthurClemens
 %TMPL::END%
 
 %TMPL:INCLUDE{"twiki"}%
@@ -29,14 +31,7 @@ In case you were wondering, this template is different in that it inverts the fo
 
 
 
-%TMPL:DEF{"content"}%<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden">Start of topic | <a href="#Actions">Skip to actions</a><hr /></div>
-<TABLE WIDTH="100%"><TR><TD>%TMPL:P{"form"}%</TD>
-</TR></TABLE>
-<div class="twikiTopic">
-
-%TEXT%
-
-<br class="twikiClear" />
+%TMPL:DEF{"content"}%<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden">Start of topic | <a href="#Actions">Skip to actions</a><hr /></div>%TMPL:P{"form"}%<div class="twikiTopic">%TEXT%<br class="twikiClear" />
 #TopicEnd
 <span class="twikiRight twikiPageNav twikiGrayText"><a href="#PageTop">to&nbsp;top</a></span><br class="twikiClear" />
 </div><div class="twikiHidden"><hr />End of topic<br /><a href="#Actions">Skip to action links</a> | <a href="#PageTop">Back&nbsp;to&nbsp;top</a><hr /></div>
