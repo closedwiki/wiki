@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "28 Aug 2003";
+$wikiversion      = "04 Sep 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1247,6 +1247,27 @@ sub fixURL
 }
 
 # =========================
+sub fixIncludeLink
+{
+    my( $theWeb, $theLink, $theLabel ) = @_;
+
+    if( $theLabel ) {
+        # [[...][...]] link
+        if( $theLink =~ /^($webNameRegex|$defaultWebNameRegex)\./ ) {
+            return "[[$theLink][$theLabel]]";
+        }
+        return "[[$theWeb.$theLink][$theLabel]]";
+
+    } else {
+        # [[...]] link
+        if( $theLink =~ /^($webNameRegex|$defaultWebNameRegex)\./ ) {
+            return "[[$theLink]]";
+        }
+        return "[[$theWeb.$theLink][$theLink]]";
+    }
+}
+
+# =========================
 sub handleIncludeUrl
 {
     my( $theUrl, $thePattern ) = @_;
@@ -1446,9 +1467,10 @@ sub handleIncludeFile
         $text =~ s/(^|[\s\(])($webNameRegex\.$wikiWordRegex)/$1$TranslationToken$2/go;
         $text =~ s/(^|[\s\(])($wikiWordRegex|$abbrevRegex)/$1$theWeb\.$2/go;
         $text =~ s/(^|[\s\(])$TranslationToken/$1/go;
-        # "[[TopicName]]" to "[[Web.TopicName]]"
-        $text =~ s/(\[\[)($wikiWordRegex|$abbrevRegex)(\]\[|\]\])/$1$theWeb\.$2$3/go;
-        # FIXME: Support for "[[Spaced Names]]"
+        # "[[TopicName]]" to "[[Web.TopicName][TopicName]]"
+        $text =~ s/\[\[([^\]]+)\]\]/fixIncludeLink( $theWeb, $1 )/geo;
+        # "[[TopicName][...]]" to "[[Web.TopicName][...]]"
+        $text =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/fixIncludeLink( $theWeb, $1, $2 )/geo;
         # FIXME: Support for <noautolink>
     }
     
