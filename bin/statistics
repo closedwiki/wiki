@@ -289,10 +289,18 @@ sub collectLogData
 	    $newTopicWeb = $5;
 	    $newTopicName = $6;
 	    ## TWiki::writeDebug("$topicName renamed to $newTopicWeb.$newTopicName");
-	    # Transfer view stats so far to new topic, or zero if not viewed
-	    # this month.
-	    $view{$newTopicWeb}{$newTopicName} = $view{$webName}{$topicName} || 0;
+	    # Get number of views for old topic this month (may be zero)
+	    my $oldViews = $view{$webName}{$topicName} || 0;
+
+	    # Transfer views from old to new topic
+	    $view{$newTopicWeb}{$newTopicName} = $oldViews;
 	    delete $view{$webName}{$topicName};
+
+	    # Transfer views from old to new web
+	    if ( $newTopicWeb ne $webName ) {
+		$statViews{$webName} -= $oldViews;
+		$statViews{$newTopicWeb} += $oldViews;
+	    }
 	}
 	# Record saves and uploads
 	if ($logContrib) {
