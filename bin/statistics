@@ -62,7 +62,7 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
   # script is called by browser
   $query = new CGI;
   $pathInfo = $query->path_info() || ""; 
-  $remoteUser = $query->remote_user() || "guest";
+  $remoteUser = $query->remote_user() || "";
   $topic = $query->param( 'topic' ) || "";
   $logDate = $query->param( 'logdate' ) || "";
 

@@ -360,7 +360,7 @@ sub _collectLogData
 # =========================
 sub _processWeb
 {
-    my( $thePathInfo, $theTopic, $theRemoteUser, $theLogMonthYear, $viewRef, $contribRef, 
+    my( $thePathInfo, $theRemoteUser, $theTopic, $theLogMonthYear, $viewRef, $contribRef, 
         $statViewsRef, $statSavesRef, $statUploadsRef, $query, $isFirstTime ) = @_;
 
     my ( $topic, $webName, $dummy, $userName, $dataDir ) = 
