@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="guest" date="1101525328" format="1.0" version="1.1"}%
-Manual trivial fast sanity checks for script functions.
+%META:TOPICINFO{author="guest" date="1101815419" format="1.0" version="1.2"}%
+Description: Manual trivial fast sanity checks for script functions.
 
 | *Script* | *Description* | *Test* |
 | =attach= | | |

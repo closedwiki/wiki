@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1101120802" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="guest" date="1101815388" format="1.0" version="1.3"}%
 This is the <nop>%WEB% web. If you are here, you want to test this version of TWiki. This web is held in the TWiki Subversion repository, so:
 	1 You must manually ensure that all topics in this web are readable and writable by the apache user
 	1 You must _not_ check in ,v files. Topic histories will be maintained in Subversion.
@@ -20,5 +20,5 @@ _Note that only those testcases with names that start with =<nop>TestCaseAuto= a
 
 <table border=1><tr align=left><th>Testcase</th><th>Description</th><th>Tests</th></tr>
 %SEARCH{"^TestCaseAuto" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/$topic?test=compare&debugenableplugins=TestFixturePlugin][run]]</td></tr>"}%
-%SEARCH{"^TestCase[^A]" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>manual</td></tr>"}%
+%SEARCH{"^TestCase(?!Auto)" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>manual</td></tr>"}%
 </table>
