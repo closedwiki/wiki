@@ -179,12 +179,11 @@ sub _formatRow {
   if ( $row =~ /%A_URL%/o ) {
 	my $url;
 
-	if ( $topRev || $rev eq "1.1" ) {
+	if ( $topRev ) {
 	  # I18N: To support attachments via UTF-8 URLs to attachment
 	  # directories/files that use non-UTF-8 character sets, go through viewfile. 
 	  # If using %PUBURL%, must URL-encode explicitly to site character set.
-	  $url = TWiki::handleNativeUrlEncode
-		( "%PUBURLPATH%/$web/$topic/$file" );
+	  $url = TWiki::handleNativeUrlEncode( "%PUBURLPATH%/$web/$topic/$file" );
 	} else {
 	  $url = "%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/".
 		"$web/$topic?rev=$rev&filename=$file";
