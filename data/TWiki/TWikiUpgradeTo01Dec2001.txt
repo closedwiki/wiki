@@ -1,22 +1,30 @@
-%META:TOPICINFO{author="MikeMannix" date="999329908" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="MikeMannix" date="999507440" format="1.0" version="1.9"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Upgrade Guide
 
----+++ Upgrading to TWiki 01-Sep-2001 
+Upgrade application and content from last official release 01-Dec-2000 to current 01-Sep-2001
+
+---+++ Overview
+
+Major changes, numerous enhancements, basic structure similar.... Beta on their own...easy. Upgrade involves a changing and merging of files and configs...
+
+---+++ Upgrade Requirements for TWiki 01-Sep-2001 
 
 Upgrade from your 01-Dec-2000 edition to the new, next generation *01-Sep-2001* TWiki Production Release in a few straightforward steps.
+	* To upgrade from a pre-01-Dec-2000 TWiki, make this your first stop: %TWIKIWEB%.TWikiUpgradeTo01Dec2000.
 
----+++ Major Changes from 01-Dec-2000
+---+++ Major Changes from TWiki 01-Dec-2000
 
 The 01 Sep 2001 release includes several new areas of functionality, and existing features have been significantly revised and enhanced. These changes affect the upgrade of the 01 Dec 2000 version:
 
 	* *TWikiPlugins* major enhancement, allows easy installation and removal of program enhancements using external plug-in modules, standardized creation of Plugins with the Plugins API
+		* *InterWikisPlugin* - preinstalled
 	* *AttachmentsUnderRevisionControl* In the previous version, changes to topics were tracked under revision control (RCS); now, topic Attachments are also tracked.
 	* *ManagingTopics/Move/Delete Topic* In the previous version, managing topics required access to the TWiki file system (Telnet or FTP); now, moving, renaming, deleting can be done through the browser. Deleted topics are act move and stored in a common Trash web.
 	* *TOC (Table of Contents)* Automatically generates a hierarchical Table of Contents from topic headings: &lt;HI&gt;...&lt;H6&gt;. Set depth...
 	* *ArbitraryTextForWikiWordLinks*
-	* *ChangingTWikiPasswords* done by Web form
+	* *ChangingPasswords* done by Web form
 	* *TWikiFormTemplate* 
 	* *TWikiTemplateSystem* all new template set-up
 	* *TWikiSkins* 
@@ -27,13 +35,7 @@ The 01 Sep 2001 release includes several new areas of functionality, and existin
 
 The TWiki directory structure remains the same, with one exception, the new ==lib/TWiki/Plugins== directory tree to for the main configuration file, library, internal modules and the new Plugin modules. Pre-existing files were formerly in ==bin==.
 
----+++ Picking the Right Upgrade Path
-
-Check these to make sure you're on the right page:
-	* If you've updated, replaced, or even added files from any of this year's Beta test releases of the new TWiki, head here: %TWIKIWEB%.TWikiBetaUpgradeNotes.
-	* To upgrade from a pre-01-Dec-2000 TWiki, make this your first stop: %TWIKIWEB%.TWikiUpgradeTo01Dec2000.
-
----+++ Standard Six-Step Upgrade
+---+++ Six-Step Standard Upgrade
 
 Follow this step-by-step guide to upgrade the 01 Dec 2000 version to the 01 Sep 2001 release, and transfer all of your original data: [ We assume =export TWIKIROOT=/some/dir/= ]
 
@@ -98,7 +100,7 @@ Follow this step-by-step guide to upgrade the 01 Dec 2000 version to the 01 Sep 
 		* Move these new TWiki.Main web topics to your TWiki.Main web: =TWikiGroups=, =TWikiAdminGroup=, and if needed also =OfficeLocations= , i.e.
 		  <br> =mv ~/tmp/data/Main/TWikiGroups.* $TWIKIROOT/data/Main=
 		  <br> (Pay attention to the file permissions)
-		* The following topics in the TWiki.Main web are obsolete and can be deleted: =BillClinton=, =GoodStyle=, =RegularExpression=, =TextFormattingFAQ=, =TextFormattingRules=, =ManagingWebs=, =TWikiCategoryTable=, =TWikiEnhancementRequests=, =TWikiImplementationNotes=, =TWikiInstallationGuide=, =WebNotification=, =TWikiPlannedFeatures=, =TWikiUpgradeTo01May2000=, =TWikiUsernameVsLoginUsername=, =TWikiSite=, =WelcomeGuest=, =WelcomeVisitor=, =WikiName=, =WikiNotation=, =WikiTopic=, =WikiWikiClones=. Sample delete command:
+		* __The following topics in the TWiki.Main web are obsolete and can be deleted: =BillClinton=, =GoodStyle=, =RegularExpression=, =TextFormattingFAQ=, =TextFormattingRules=, =ManagingWebs=, =TWikiCategoryTable=, =TWikiEnhancementRequests=, =TWikiImplementationNotes=, =TWikiInstallationGuide=, =WebNotification=, =TWikiPlannedFeatures=, =TWikiUpgradeTo01May2000=, =TWikiUsernameVsLoginUsername=, =TWikiSite=, =WelcomeGuest=, =WelcomeVisitor=, =WikiName=, =WikiNotation=, =WikiTopic=, =WikiWikiClones=. Sample delete command:+__
 		  <br> =rm -f $TWIKIROOT/data/Main/BillClinton.*=
 		* The following topics are new and most be copied to all of your TWiki webs: =WebChanges=, =WebIndex=.
 		  <br> =cp -p $TWIKIROOT/data/TWiki/WebChanges.txt* $TWIKIROOT/data/Main=
