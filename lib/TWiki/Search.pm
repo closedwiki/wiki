@@ -877,6 +877,7 @@ sub searchWeb
                 }
                 $tempVal =~ s/\$summary/&TWiki::makeTopicSummary( $text, $topic, $thisWebName )/geos;
                 $tempVal =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
+                $tempVal =~ s/\$formname/_getMetaFormName( $meta )/geos;
                 $tempVal =~ s/\$pattern\(\s*(.*?\s*\.\*)\)/getTextPattern( $text, $1 )/geos;
                 $tempVal =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
                 $tempVal =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
@@ -1018,6 +1019,26 @@ sub getMetaFormField
             $value = breakName( $value, $break );
             return $value;
         }
+    }
+    return "";
+}
+
+#=========================
+=pod
+
+---++ sub _getMetaFormName (  $theMeta )
+
+Returns the name of the form attached to the topic
+
+=cut
+
+sub _getMetaFormName
+{
+    my( $theMeta ) = @_;
+
+    my %aForm = $theMeta->findOne( "FORM" );
+    if( %aForm ) {
+        return $aForm{"name"};
     }
     return "";
 }
