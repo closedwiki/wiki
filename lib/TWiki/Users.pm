@@ -149,6 +149,8 @@ sub findUser {
     ASSERT($name) if DEBUG;
     my $object;
 
+    $this->{session}->writeWarning("Looking for $name / $wikiname / $dontCreate");
+
     # is it a cached login name?
     $object = $this->{login}{$name};
     return $object if $object;
@@ -193,7 +195,7 @@ sub findUser {
 
     unless( $wikiname ) {
         # default to wikiname being the same as name.
-        $this->{session}->writeWarning("Cannot deduce full identity of user $name - is this a bogus user?");
+        $this->{session}->writeWarning("$name does not exist in TWikiUsers - is this a bogus user?");
         $wikiname = $name;
     }
 
