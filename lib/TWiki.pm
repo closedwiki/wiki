@@ -112,7 +112,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "8 Dec 2002";
+$wikiversion      = "10 Dec 2002";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -465,7 +465,7 @@ sub setupRegexes {
 
     # Simplistic email regex, e.g. for WebNotify processing - no i18n
     # characters allowed, and only alphanumeric and '-' in domain part.
-    $emailAddrRegex = qr/([A-Za-z0-9\.\+\-]+\@[A-Za-z0-9\.\-]+)/;
+    $emailAddrRegex = qr/([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/;
 
     # Single-character alpha-based regexes
     $singleUpperAlphaRegex = qr/[$upperAlpha]/;
