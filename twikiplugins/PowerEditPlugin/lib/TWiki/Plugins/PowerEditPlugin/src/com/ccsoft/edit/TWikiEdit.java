@@ -83,20 +83,14 @@ public class TWikiEdit extends Applet implements Application {
 	return val;
     }
 
-    /** Set a field in the form */
-    private void setFieldValue(String field, String value) {
-	JSObject member = (JSObject)form.getMember(field);
-        member.setMember(field, value);
-    }
-
     /** Implements Applet initialisation */
     public synchronized void init() {
 	JSObject jsWin = JSObject.getWindow(this);
 	JSObject doc = (JSObject)jsWin.getMember("document");
 	form = (JSObject)doc.getMember("main");
 
-        boolean framed = getParameter("useframe") != null &&
-            getParameter("useframe").equals("yes");
+	String uf = getParameter("useframe");
+        boolean framed = (uf != null && uf.equals("yes"));
 
 	controls = null;
 	String text = getFieldValue("text");
@@ -166,32 +160,8 @@ public class TWikiEdit extends Applet implements Application {
         super.destroy();
     }
 
-    Panel makePanel(ControlBlock b, boolean horizontal) {
-	Panel buttonPanel = new Panel();
-	GridBagLayout buttonBag = new GridBagLayout();
-	GridBagConstraints buttonBagConstraints = new GridBagConstraints();
-	buttonPanel.setLayout(buttonBag);
-
-	Enumeration i = b.elements();
-	while (i.hasMoreElements()) {
-	    ControlDefinition cd = (ControlDefinition)i.nextElement();
-	    Button but = new Button(cd.getKey());
-	    but.setActionCommand(cd.getValue());
-	    but.addActionListener(actionListener);
-	    if (horizontal)
-		buttonBagConstraints.gridx++;
-	    else
-		buttonBagConstraints.gridy++;
-	    buttonBag.setConstraints(but, buttonBagConstraints);
-	    buttonPanel.add(but);
-	}
-	
-	return buttonPanel;
-    }
-
     /**
-     * Create the standard layout of panels in the container. Buttons
-     * are given the action listener passed.
+     * Create the standard layout of panels in the container.
      */
     void makeStandardLayout(Container container) {
 
@@ -202,7 +172,7 @@ public class TWikiEdit extends Applet implements Application {
 	Panel p;
 	ControlBlock b = controls.getBlock("top");
 	if (b != null) {
-	    p = makePanel(b, true);
+	    p = b.makePanel(true, actionListener);
 	    gbc.gridx = 1; gbc.gridy = 0;
 	    gbc.anchor = GridBagConstraints.WEST;
 	    layout.setConstraints(p, gbc);
@@ -211,7 +181,7 @@ public class TWikiEdit extends Applet implements Application {
 
 	b = controls.getBlock("bottom");
 	if (b != null) {
-	    p = makePanel(b, true);
+	    p = b.makePanel(true, actionListener);
 	    gbc.gridx = 1; gbc.gridy = 2;
 	    gbc.anchor = GridBagConstraints.WEST;
 	    layout.setConstraints(p, gbc);
@@ -220,7 +190,7 @@ public class TWikiEdit extends Applet implements Application {
 
 	b = controls.getBlock("left");
 	if (b != null) {
-	    p = makePanel(b, false);
+	    p = b.makePanel(false, actionListener);
 	    gbc.gridx = 0; gbc.gridy = 1;
 	    gbc.anchor = GridBagConstraints.NORTH;
 	    layout.setConstraints(p, gbc);
@@ -229,7 +199,7 @@ public class TWikiEdit extends Applet implements Application {
 
 	b = controls.getBlock("right");
 	if (b != null) {
-	    p = makePanel(b, false);
+	    p = b.makePanel(false, actionListener);
 	    gbc.gridx = 2; gbc.gridy = 1;
 	    gbc.anchor = GridBagConstraints.NORTH;
 	    layout.setConstraints(p, gbc);

@@ -44,7 +44,7 @@ public class SearchableTextAreaTest extends TestCase implements Application {
         assert(sa.getSelectionEnd() == end);
     }
 
-    public void test1() {
+    public void testReset() {
         sa.reset(this, testText, 20, 20);
         assertEquals("", sa.clipboard);
         assertEquals("", sa.searchString);
@@ -250,4 +250,13 @@ public class SearchableTextAreaTest extends TestCase implements Application {
         sa.replayMacro("");
         assertEquals(testText, sa.getText());
     }
+
+    public void testConvert() {
+	String tt = "<ul><li>Bullet1<li>Bullet2</ul>";
+        sa.reset(this, tt, 20, 20);
+        sa.select(0, tt.length());
+	sa.BUILTIN_convert();
+	assertEquals("\n   * Bullet1\n   * Bullet2", sa.getText());
+    }
+
 }

@@ -42,7 +42,8 @@ implements Difference.ModifiableText {
     private transient boolean recordUndo;
     private transient String repeatCommand;
     private Controls controls;
-    private HTML2TWiki html2wiki = null;
+    private Object html2wiki = null;
+    private Method html2wiki_process = null;
     private Hashtable commandSet;
 
     /**
@@ -238,7 +239,7 @@ implements Difference.ModifiableText {
 	    }
 	} else {
 	    application.showStatus("No such macro: /" + command + "/");
-	    Toolkit.getDefaultToolkit().beep();
+	    beep();
 	}
     }
     
@@ -493,12 +494,53 @@ implements Difference.ModifiableText {
     public void BUILTIN_convert() {
 	if (haveSelection()) {
 	    String convertString = getSelectedText();
-	    if (html2wiki == null)
-		html2wiki = new HTML2TWiki();
-	    String result = html2wiki.process(convertString, "nourl");
-	    overwriteSelection(result);
-	} else
+	    if (html2wiki == null) {
+		String message = null;
+		try {
+		    Class clzz = Class.forName("com.ccsoft.edit.HTML2TWiki");
+		    html2wiki = clzz.newInstance();
+		    Class[] types = new Class[2];
+		    types[1] = types[0] = convertString.getClass();
+		    html2wiki_process = clzz.getMethod("process", types);
+		} catch (ClassNotFoundException cnfe) {
+		    message = "Converter not loaded";
+		} catch (InstantiationException ie) {
+		    application.showStatus("Instantiation exception");
+		    //ie.printStackTrace();
+		    beep();
+		    return;
+		} catch (NoSuchMethodException nsme) {
+		    message = "Internal error";
+		} catch (IllegalAccessException iae) {
+		    message = "Illegal access";
+		}
+		if (message != null) {
+		    application.showStatus(message);
+		    beep();
+		    return;
+		}
+	    }
+	    try {
+		Object[] params = new Object[2];
+		params[0] = convertString;
+		params[1] = "nourl";
+		String result =
+		    (String)html2wiki_process.invoke(html2wiki, params);
+		overwriteSelection(result);
+	    } catch (InvocationTargetException ite) {
+		Throwable te = ite.getTargetException();
+		//te.printStackTrace();
+		application.showStatus("Internal error");
+		beep();
+	    } catch (IllegalAccessException iae) {
+		application.showStatus("Illegal access");
+		beep();
+		return;
+	    }
+	} else {
+	    application.showStatus("No selection");
 	    beep();
+	}
     }
 
 }

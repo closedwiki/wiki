@@ -16,7 +16,7 @@ public class ControlsTest extends TestCase {
 	return new TestSuite(ControlsTest.class);
     }
 
-    public void test1() throws Exception {
+    public void testControlBlockReading() throws Exception {
 	File f = new File("PowerEditControls.txt");
 	Reader fr = new FileReader(f.getAbsolutePath());
 	int c;
@@ -75,5 +75,31 @@ public class ControlsTest extends TestCase {
 	assertEquals("/home//H/++++ ", cb.getDefinition("H4").getValue());
 	assertEquals("/home//H/+++++ ", cb.getDefinition("H5").getValue());
 	assertEquals("/home//H/++++++ ", cb.getDefinition("H6").getValue());
+    }
+
+    public void testPanelMaking() throws Exception {
+	File f = new File("PowerEditControls.txt");
+	Reader fr = new FileReader(f.getAbsolutePath());
+	int c;
+	String str = "";
+	while ((c = fr.read()) != -1)
+	    str += (char)c;
+	fr.close();
+	Controls controls = new Controls(str);
+	ControlBlock b = controls.getBlock("top");
+	assert(b != null);
+	java.awt.Panel p = b.makePanel(true, null);
+
+	b = controls.getBlock("bottom");
+	assert(b != null);
+	p = b.makePanel(true, null);
+
+	b = controls.getBlock("left");
+	assert(b != null);
+	p = b.makePanel(false, null);
+
+	b = controls.getBlock("right");
+	assert(b != null);
+	p = b.makePanel(false, null);
     }
 }
