@@ -19,6 +19,7 @@ print "<HTML><TITLE>Building Distros</TITLE><BODY>\n";
 print "<H2>building distros</H2>\n";
 print "results will be in $outputDir\n";
 
+print "<verbatim>\n";
 mkpath( $outputDir, 1 );
 
 ################################################################################
@@ -27,6 +28,7 @@ execute ( "cd distro/ ; ./build-twiki-kernel.pl --tempdir=/tmp --outputdir=$outp
 print "<HR />\n";
 
 
+print "</verbatim>\n";
 print "</BODY></HTML>";
 exit 0;
 
