@@ -44,7 +44,7 @@ BEGIN {
     $brokenTWikiCfg = 0;
     unless (eval 'require "TWiki.cfg" ' ){	# Includes OS detection
 	# Capture the Perl error(s)
-	$brokenTWikiCfg ||= 1;	
+	$brokenTWikiCfg = 1;	
 	$brokenTWikiCfgError = 
 			( $! ? "$!\n" : '') .	# $! if not readable,
 			( $@ ? "$@\n" : '');	# $@ if not compileable
@@ -157,9 +157,8 @@ Please read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationNo
 EOM
 
 # TWiki.cfg was read earlier, in BEGIN block.
-# Check for broken TWiki.cfg and report the Perl error found earlier.
+# Check for broken TWiki.cfg and report any Perl error(s)
 if ($brokenTWikiCfg) {
-    # Warn user and give up
     $brokenTWikiCfgError =~ s!\n!<br />\n!sg; 	# Format properly
     print "<h3>TWiki.cfg error</h3>\n";
     print "<b><font color=\"red\">WARNING:</font></b> ";
@@ -167,7 +166,7 @@ if ($brokenTWikiCfg) {
     print "$brokenTWikiCfgError\n";
     
     # EARLY EXIT
-    print "</pre>\n</body>\n</html>";
+    print "</body>\n</html>";
     exit;
 }
 
