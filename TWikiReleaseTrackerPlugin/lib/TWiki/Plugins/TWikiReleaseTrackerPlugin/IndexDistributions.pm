@@ -94,7 +94,10 @@ sub includeInResults {
 
 sub indexLocalInstallation {
 	ensureInstallationDir();
-	chdir($runDir) || die "Can't cd into $runDir - $!";
+	FileDigest::emptyIndexes();
+	print "Indexing localInstallation\n";
+	IndexDistributions::indexDistribution( "localInstallation",
+		$Common::installationDir, $Common::excludeFilePattern );
 	my $saveFile = $Common::md5IndexDir . "/localInstallation.md5" ;
 	print "saving to ".File::Spec->rel2abs($saveFile)."\n";
 	FileDigest::saveIndex($saveFile);
