@@ -35,7 +35,6 @@ my $Config = {
     man => 0,
    	debug => 0,
 };
-Getopt::Long::Configure( "bundling" );
 my $result = GetOptions( $Config,
 			'testweb=s', 'platform=s', 'twikiplugins=s', 'twikisync!',
 # plugin, addon, contrib
@@ -48,6 +47,7 @@ my $result = GetOptions( $Config,
 pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 
+# for some reason, providing values in the Config hash doesn't work; need to set defaults after GetOptions
 $Config->{plugin} ||= [ qw( PerlDocPlugin
 		    FindElsewherePlugin InterwikiPlugin SpreadSheetPlugin TablePlugin TocPlugin 
 		    SpacedWikiWordPlugin ChartPlugin 
@@ -56,8 +56,9 @@ $Config->{plugin} ||= [ qw( PerlDocPlugin
 $Config->{contrib} ||= [ qw( DistributionContrib ) ];	#+ AttrsContrib DBCacheContrib JSCalendarContrib TWikiShellContrib
 $Config->{addon} ||= [ qw( GetAWebAddOn ) ];			#+ ???
 die "twikiplugins doesn't exist" unless -d $Config->{twikiplugins};
-$Config->{_installer}->{dir} = "$Config->{twikiplugins}/lib/TWiki/Contrib/TWikiInstallerContrib/";
-$Config->{_installer}->{TWikiReleases} = "$Config->{_installer}->{dir}/downloads/releases/";
+$Config->{_installer}->{TWikiReleases} =
+	( $Config->{_installer}->{dir} = "$Config->{twikiplugins}/lib/TWiki/Contrib/TWikiInstallerContrib/" )
+	. "/downloads/releases/";
 print Dumper( $Config ) if $Config->{debug};
 
 ################################################################################
@@ -126,6 +127,7 @@ sub MakeComparisonTestsResultsReport
 	die "no install_account" unless $parms->{install_account};
 
 	my $textComparisonReport = qq[%TOC%\n\n];
+	# create headings from pass/fail/unknown results from test=compare
 	foreach my $result ( keys %$results )
 	{
 		$textComparisonReport .= "\n---++ $result\n";
