@@ -42,7 +42,7 @@ sub searchWikiWeb
     ## 0501 kk : vvv Added params
     my ( $doInline, $theWebName, $theSearchVal, $theScope, $theOrder,
          $theRegex, $theLimit, $revSort, $caseSensitive, $noSummary,
-         $noSearch, $noTotal, $doBookView, @junk ) = @_;
+         $noSearch, $noHeader, $noTotal, $doBookView, @junk ) = @_;
 
     ## 0501 kk : vvv new option to limit results
     # process the result limit here, this is the 'global' limit for
@@ -343,11 +343,13 @@ sub searchWikiWeb
         $beforeText =~ s/%WEB%/$thisWebName/o;
         $beforeText = handleCommonTags( $beforeText, $topic );
         $afterText = handleCommonTags( $afterText, $topic );
-        if( $doInline ) {
-            $searchResult .= $beforeText;
-        } else {
-            $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
-            print $beforeText;
+        if( ! $noHeader ) {
+            if( $doInline ) {
+                $searchResult .= $beforeText;
+            } else {
+                $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
+                print $beforeText;
+            }
         }
 
         # output the list of topics in $thisWebName

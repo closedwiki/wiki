@@ -58,7 +58,7 @@ use Time::Local;
 use strict;
 
 use vars qw(
-        $webName $topicName
+        $webName $topicName $includingWebName $includingTopicName
         $defaultUserName $userName $wikiUserName 
         $wikiHomeUrl $defaultUrlHost $urlHost
         $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir
@@ -86,7 +86,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "02 Dec 2000";
+$wikiversion      = "04 Dec 2000";
 
 # ===========================
 # read the configuration part
@@ -159,6 +159,8 @@ sub initialize
     $webName   =~ s/$securityFilter//go;
     $webName   =~ /(.*)/;
     $webName   = $1;  # untaint variable
+    $includingTopicName = $topicName;
+    $includingWebName = $webName;
 
     # initialize $urlHost and $scriptUrlPath 
     if( ( $theUrl ) && ( $theUrl =~ /^([^\:]*\:\/\/[^\/]*)(.*)\/.*$/ ) && ( $2 ) ) {
@@ -672,8 +674,8 @@ sub extractNameValuePair
 # =========================
 sub handleIncludeFile
 {
-    my( $attributes ) = @_;
-    my $incfile = extractNameValuePair( $attributes );
+    my( $theAttributes, $theTopic, $theWeb, @theProcessedTopics ) = @_;
+    my $incfile = extractNameValuePair( $theAttributes );
 
     # CrisBailiff, PeterThoeny 12 Jun 2000: Add security
     $incfile =~ s/$securityFilter//go;    # zap anything suspicious
@@ -685,30 +687,51 @@ sub handleIncludeFile
     }
 
     # test for different usage
-    my $fileName = "$dataDir/$webName/$incfile";       # TopicName.txt
+    my $fileName = "$dataDir/$theWeb/$incfile";       # TopicName.txt
     if( ! -e $fileName ) {
-        $fileName = "$dataDir/$webName/$incfile.txt";  # TopicName
+        $fileName = "$dataDir/$theWeb/$incfile.txt";  # TopicName
         if( ! -e $fileName ) {
-            $fileName = "$dataDir/$incfile";           # Web/TopicName.txt
+            $fileName = "$dataDir/$incfile";              # Web/TopicName.txt
             if( ! -e $fileName ) {
                 $incfile =~ s/\.([^\.]*)$/\/$1/go;
-                $fileName = "$dataDir/$incfile.txt";   # Web.TopicName
+                $fileName = "$dataDir/$incfile.txt";      # Web.TopicName
                 if( ! -e $fileName ) {
+                    # give up, file not found
                     return "";
                 }
             }
         }
     }
+
+    # prevent recursive loop
+    if( ( @theProcessedTopics ) && ( grep { /^$fileName$/ } @theProcessedTopics ) ) {
+        # file already included
+        return "";
+    } else {
+        # remember for next time
+        push( @theProcessedTopics, $fileName );
+    }
+
+    # finally include file
     my $text = &readFile( $fileName );
 
+    # set include web/filenames and current web/filenames
+    $includingWebName = $theWeb;
+    $includingTopicName = $theTopic;
     $fileName =~ s/\/([^\/]*)\/([^\/]*)(\.txt)$/$1/go;
     if( $3 ) {
-        # identified "/Web/TopicName.txt" filename
-        my $incWeb = $1;
-        # Change all "TopicName" to "Web.TopicName" in text
-        $text =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/$1$incWeb\.$2/go;
-        $text =~ s/%WEB%/$incWeb/go;
+        # identified "/Web/TopicName.txt" filename, e.g. a Wiki topic
+        # so save the current web and topic name
+        $theWeb = $1;
+        $theTopic = $2;
     }
+
+    # handle all preferences and internal tags (for speed: call by reference)
+    &wiki::handlePreferencesTags( $text );
+    handleInternalTags( $text, $theTopic, $theWeb );
+
+    # recursively process multiple embeded %INCLUDE% statements and prefs
+    $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $theTopic, $theWeb, @theProcessedTopics )/geo;
 
     return $text;
 }
@@ -733,13 +756,14 @@ sub handleSearchWeb
     my $attrCasesensitive = extractNameValuePair( $attributes, "casesensitive" );
     my $attrNosummary = extractNameValuePair( $attributes, "nosummary" );
     my $attrNosearch = extractNameValuePair( $attributes, "nosearch" );
+    my $attrNoheader = extractNameValuePair( $attributes, "noheader" );
     my $attrNototal = extractNameValuePair( $attributes, "nototal" );
     my $attrBookview = extractNameValuePair( $attributes, "bookview" );
 
     return &searchWikiWeb( "1", $attrWeb, $searchVal, $attrScope,
        $attrOrder, $attrRegex, $attrLimit, $attrReverse,
        $attrCasesensitive, $attrNosummary, $attrNosearch,
-       $attrNototal, $attrBookview
+       $attrNoheader, $attrNototal, $attrBookview
     );
 }
 
@@ -764,8 +788,7 @@ sub handleTime
             $value =~ s/mon[a-z]*/$isoMonth[$mon]/goi;
             $value =~ s/yea[a-z]*/sprintf("%.4u",$year+1900)/geoi;
         } elsif( $theZone eq "servertime" ) {
-            my( $sec, $min, $hour, $day, $mon, $year) = localtime( $time
-);
+            my( $sec, $min, $hour, $day, $mon, $year) = localtime( $time );
             $value = $format;
             $value =~ s/sec[a-z]*/sprintf("%.2u",$sec)/geoi;
             $value =~ s/min[a-z]*/sprintf("%.2u",$min)/geoi;
@@ -814,8 +837,12 @@ sub handleInternalTags
     $_[0] =~ s/%REMOTE_PORT%/&handleEnvVariable('REMOTE_PORT')/geo;
     $_[0] =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/geo;
     $_[0] =~ s/%TOPIC%/$_[1]/go;
+    $_[0] =~ s/%BASETOPIC%/$topicName/go;
+    $_[0] =~ s/%INCLUDINGTOPIC%/$includingTopicName/go;
     $_[0] =~ s/%SPACEDTOPIC%/&handleSpacedTopic($_[1])/geo;
     $_[0] =~ s/%WEB%/$_[2]/go;
+    $_[0] =~ s/%BASEWEB%/$webName/go;
+    $_[0] =~ s/%INCLUDINGWEB%/$includingWebName/go;
     $_[0] =~ s/%WIKIHOMEURL%/$wikiHomeUrl/go;
     $_[0] =~ s/%SCRIPTURL%/$urlHost$scriptUrlPath/go;
     $_[0] =~ s/%SCRIPTURLPATH%/$scriptUrlPath/go;
@@ -847,7 +874,7 @@ sub handleInternalTags
 # =========================
 sub handleCommonTags
 {
-    my( $text, $topic, $theWeb ) = @_;
+    my( $text, $theTopic, $theWeb, @theProcessedTopics ) = @_;
 
     # PTh 22 Jul 2000: added $theWeb for correct handling of %INCLUDE%, %SEARCH%
     if( !$theWeb ) {
@@ -855,23 +882,19 @@ sub handleCommonTags
     }
 
     # handle all preferences and internal tags (for speed: call by reference)
+    $includingWebName = $theWeb;
+    $includingTopicName = $theTopic;
     &wiki::handlePreferencesTags( $text );
-    handleInternalTags( $text, $topic, $theWeb );
+    handleInternalTags( $text, $theTopic, $theWeb );
 
-    my $tmp = 0; # quick hack to limit max 10 includes
-    # process prefs and multiple embeded %INCLUDE% statements     # added HaroldGottschalk
-    while( ( $text =~ /%INCLUDE{(.*?)}%/ ) && ($tmp < 10) ) {
-        $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1)/geo;
-        &wiki::handlePreferencesTags( $text );
-        handleInternalTags( $text, $topic, $theWeb );
-        $tmp = $tmp + 1; # quick hack
-    }
+    # recursively process multiple embeded %INCLUDE% statements and prefs
+    $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $theTopic, $theWeb, @theProcessedTopics )/geo;
 
     # Wiki extended rules
-    $text = extendHandleCommonTags( $text, $topic, $theWeb );
+    $text = extendHandleCommonTags( $text, $theTopic, $theWeb );
     # handle tags again because of extend
     &wiki::handlePreferencesTags( $text );
-    handleInternalTags( $text, $topic, $theWeb );
+    handleInternalTags( $text, $theTopic, $theWeb );
 
     return $text;
 }
@@ -1054,7 +1077,7 @@ sub getRenderedVersion
             s/([\s\(])__([^\s]+?|[^\s].*?[^\s])__([\s\,\.\;\:\!\?\)])/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
             s/([\s\(])\*([^\s]+?|[^\s].*?[^\s])\*([\s\,\.\;\:\!\?\)])/$1<STRONG>$2<\/STRONG>$3/go;
             s/([\s\(])_([^\s]+?|[^\s].*?[^\s])_([\s\,\.\;\:\!\?\)])/$1<EM>$2<\/EM>$3/go;
-            s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . fixedFontText($2) . $3/geo;
+            s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText($2) . $3/geo;
 
 # Mailto
             s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+)(?=[\s\)]|$)#$1<A href=\"mailto\:$2">$2</A>#go;
@@ -1097,4 +1120,5 @@ sub getRenderedVersion
 }
 
 1;
+
 
