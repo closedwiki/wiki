@@ -85,7 +85,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "20 Jan 2001";
+$wikiversion      = "21 Jan 2001";
 
 # ===========================
 # read the configuration part
@@ -989,11 +989,15 @@ sub emitTR {
 # =========================
 sub fixedFontText
 {
-    my( $theText ) = @_;
+    my( $theText, $theDoBold ) = @_;
     # preserve white space, so replace it by "&nbsp; " patterns
     $theText =~ s/\t/   /go;
     $theText =~ s|((?:[\s]{2})+)([^\s])|'&nbsp; ' x (length($1) / 2) . "$2"|eg;
-    return "<CODE>$theText</CODE>";
+    if( $theDoBold ) {
+        return "<code><b>$theText</b></code>";
+    } else {
+        return "<code>$theText</code>";
+    }
 }
 
 # =========================
@@ -1129,10 +1133,11 @@ sub getRenderedVersion
 
 # Emphasizing
             # PTh 25 Sep 2000: More relaxing rules, allow leading '(' and trailing ',.;:!?)'
+            s/([\s\(])==([^\s]+?|[^\s].*?[^\s])==([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText( $2, 1 ) . $3/geo;
             s/([\s\(])__([^\s]+?|[^\s].*?[^\s])__([\s\,\.\;\:\!\?\)])/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
             s/([\s\(])\*([^\s]+?|[^\s].*?[^\s])\*([\s\,\.\;\:\!\?\)])/$1<STRONG>$2<\/STRONG>$3/go;
             s/([\s\(])_([^\s]+?|[^\s].*?[^\s])_([\s\,\.\;\:\!\?\)])/$1<EM>$2<\/EM>$3/go;
-            s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText($2) . $3/geo;
+            s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText( $2, 0 ) . $3/geo;
 
 # Mailto
             s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+)(?=[\s\)]|$)#$1<A href=\"mailto\:$2">$2</A>#go;
