@@ -351,6 +351,7 @@ sub searchWeb
     my $theFormat =     $params{"format"} || "";
     my $doMultiple =    $params{"multiple"} || "";
     my $theSeparator =  $params{"separator"} || "";
+    my $newLine =       $params{"newline"} || "";
 
     ##TWiki::writeDebug "Search locale is $TWiki::siteLocale";
 
@@ -375,9 +376,16 @@ sub searchWeb
 
     $theType = "regex" if( $theRegex );
 
+    # I18N fix
+    my $mixedAlpha = $TWiki::regex{mixedAlpha};
+
     if( $theSeparator ) {
-        $theSeparator =~ s/\$n/\n/gos;
         $theSeparator =~ s/\$n\(\)/\n/gos;  # expand "$n()" to new line
+        $theSeparator =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos;
+    }
+    if( $newLine ) {
+        $newLine =~ s/\$n\(\)/\n/gos;  # expand "$n()" to new line
+        $newLine =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos;
     }
 
     my $searchResult = ""; 
@@ -732,15 +740,13 @@ sub searchWeb
         my( $beforeText, $repeatText, $afterText ) = split( /%REPEAT%/, $tmplTable );
         if( $theHeader ) {
             $theHeader =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
-	    # I18N fix
-	    my $mixedAlpha = $TWiki::regex{mixedAlpha};
-	    $theHeader =~ s/\$n([^$mixedAlpha])/\n$1/gos; # expand "$n" to new line
+           $theHeader =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos; # expand "$n" to new line
             $beforeText = $theHeader;
             $beforeText =~ s/\$web/$thisWebName/gos;
             if( $theSeparator ) {
                 $beforeText .= $theSeparator;
             } else {
-                $beforeText =~ s/([^\n])$/$1\n/os;  # add new line at end of needed
+                $beforeText =~ s/([^\n])$/$1\n/os;  # add new line at end if needed
             }
         }
 
@@ -829,15 +835,6 @@ sub searchWeb
 
             if( $theFormat ) {
                 $tempVal = $theFormat;
-                if( $theSeparator ) {
-                    $tempVal .= $theSeparator;
-                } else {
-                    $tempVal =~ s/([^\n])$/$1\n/os;       # add new line at end of needed
-                }
-                $tempVal =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
-		# I18N fix
-		my $mixedAlpha = $TWiki::regex{mixedAlpha};
-                $tempVal =~ s/\$n([^$mixedAlpha])/\n$1/gos; # expand "$n" to new line
                 $tempVal =~ s/\$web/$thisWebName/gos;
                 $tempVal =~ s/\$topic\(([^\)]*)\)/breakName( $topic, $1 )/geos;
                 $tempVal =~ s/\$topic/$topic/gos;
@@ -972,6 +969,14 @@ sub searchWeb
                 $tempVal =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
                 $tempVal =~ s/\$percnt(\(\))?/\%/gos; # expand percent
                 $tempVal =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
+                $tempVal =~ s/\r?\n/$newLine/gos if( $newLine );
+                if( $theSeparator ) {
+                    $tempVal .= $theSeparator;
+                } else {
+                    $tempVal =~ s/([^\n])$/$1\n/os;    # add new line at end if needed
+                }
+                $tempVal =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
+                $tempVal =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos; # expand "$n" to new line
 
             } elsif( $noSummary ) {
                 $tempVal =~ s/%TEXTHEAD%//go;
