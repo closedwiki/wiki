@@ -15,7 +15,6 @@ __Files in twiki/bin__
 | *File:*		 | *Used for:* |
 | .htaccess.txt | Authentication. Rename to .htaccess and customize if used |
 | attach		  | Script that shows the attach file page (FileAttachment) |
-| changes		 | Script that shows recent changes |
 | delete		  | (not used yet) |
 | edit			 | Script to edit a topic |
 | geturl		  | Script to fetch URL data |
@@ -35,4 +34,4 @@ __Files in twiki/bin__
 | wikicfg.pm	 | for initialization and configuration, used by wiki.pm |
 | wikisearch.pm | search engine, used by wiki.pm |
 
--- Main.PeterThoeny - 21 Apr 2000 <br>
+-- Main.PeterThoeny - 19 Aug 2000 <br>
