@@ -1,3 +1,19 @@
-%META:TOPICINFO{author="MikeMannix" date="999329908" format="1.0" version="1.2"}%
-ManagingTopics can also be used to delete a topic.  This is done by moving the topic to the Trash Web.	If this Web does not exist ask your %WIKIWEBMASTER% to add it.
+%META:TOPICINFO{author="MikeMannix" date="1000453233" format="1.0" version="1.3"}%
+*FAQ:*
 
+How do I delete or rename a topic?
+
+*Answer:*
+
+New to the 01-Sep-2001 version of TWiki, you can rename, move and delete topics directly from your browser (previously, these operations could only be done manually, by someone with file-level access to the Web server). 
+
+Moving lets you transfer a topic from one web to another. The soft delete moves a topic to the special ==Trash== web, where it's hidden but can be "undeleted" with system administrator access. 
+
+Click ==[More]== on the control bar at the bottom of the page you want to change, then choose ==[Rename/move]==, and make your changes that screen. There's a link that launches to the ManagingTopics reference page in a pop-up window.
+
+__NOTE:__ The configuration of your site and your own access permissions determine whether you can access these functions.
+
+See other TWikiFAQs.
+
+-- MikeMannix - 14 Sep 2001 <br />
+%META:TOPICMOVED{by="MikeMannix" date="1000453233" from="TWiki.DeleteTopic" to="TWiki.DeleteOrRenameATopic"}%
