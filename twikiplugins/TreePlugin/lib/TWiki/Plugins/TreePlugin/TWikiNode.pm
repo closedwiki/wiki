@@ -86,8 +86,9 @@ sub toHTMLFormat {
     if ( scalar(@{$this->children()}) ) {
 		my $count = 0;
     	foreach my $node (@{$this->children()} ){ 	# accumulate childrens' format
-		$childrenText .= $formatter->formatChild( $node, $count++, $level + 1);
-	}
+			$node->data("count", $count++);	# remember this node's sibling order
+			$childrenText .= $formatter->formatChild( $node, $count, $level + 1);
+		}
     }
     return ($childrenText) 
     	? $formatter->formatBranch(  $this, $childrenText, $num, $level)

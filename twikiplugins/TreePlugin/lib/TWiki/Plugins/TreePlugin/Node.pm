@@ -86,6 +86,8 @@ sub toString {
 # Generate a string representation for formatting
 # 
 # this works ok:  "<ul>", "</ul>", "<li>, "</ li>"
+# mainly for debugging
+
 sub toHTML {
     my ($this) = shift;
     my ($nodeBeg, $nodeEnd, $childBeg, $childEnd) = @_;
