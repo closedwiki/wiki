@@ -263,9 +263,10 @@ if ($detailedOS eq 'cygwin') {
 
 # Detect executable name suffix, e.g. .exe on Windows or '' on Unix
 # Avoid testing for .exe suffixes on Cygwin, since the built-in
-# grep and ls don't end in '.exe'
+# grep and ls don't end in '.exe', even though Perl's '_exe' setting
+# indicates they should.
 my $exeSuffix='';
-if ( $Config::Config{'_exe'} and $perltype ne 'Cygwin' ) { 
+if ( $Config::Config{'_exe'} and ($OS eq 'WINDOWS' and $perltype ne 'Cygwin') ) { 
     $exeSuffix = $Config::Config{'_exe'};
 }
 
