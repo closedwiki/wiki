@@ -34,7 +34,7 @@ use vars qw(
     );
 
 @registrableHandlers = (
-        'initPlugin',            # ( $topic, $web, $user )
+        'initPlugin',            # ( $topic, $web, $user, $installWeb )
         'commonTagsHandler',     # ( $text, $topic, $web )
         'startRenderingHandler', # ( $text, $topic, $web )
         'outsidePREHandler',     # ( $text, $web )
@@ -56,14 +56,23 @@ sub registerHandler
 # =========================
 sub registerPlugin
 {
-    my ( $plug ) = @_;
-    eval "use TWiki::Plugins::$plug;" ;
-    my $h = "";
+    # parameters: ( $plugin, $topic, $web, $user )
+    my ( $plugin, $topic, $web, $user ) = @_;
+    my $installWeb = $web;
+    if ( $plugin =~ /^(.+)\.([^.]+Plugin)$/ ) {
+	$plugin = $2;
+	$installWeb = $1;
+    }
+    my $p   = 'TWiki::Plugins::'.$plugin;
+    eval "use $p;" ;
+    my $h   = "";
     my $sub = "";
     foreach $h ( @registrableHandlers ) {
-        $sub = 'TWiki::Plugins::'.$plug.'::'.$h;
+        $sub = $p.'::'.$h;
         &registerHandler( $h, $sub ) if defined( &$sub );
     }
+    $sub = $p.'::initPlugin';
+    &$sub($topic, $web, $user, $installWeb) if defined( &$sub );
 }
 
 # =========================
@@ -80,26 +89,22 @@ sub applyHandlers
 # =========================
 sub initialize
 {
-# FIXME: we should handle multi-line preference values
-#        for the moment it seems to work ONLY if the variable is on a single line
-
-    # Get ACTIVEPLUGINS variable, use DefaultPlugin if not defined
-    my $active = &TWiki::Prefs::getPreferencesValue( "ACTIVEPLUGINS" )
-                 || "$TWiki::twikiWebname.DefaultPlugin";
+    # Get ACTIVEPLUGINS variable
+    my $active = &TWiki::Prefs::getPreferencesValue( "ACTIVEPLUGINS" ) || "";
     $active =~ s/[\n\t\s\r]+/ /go;
-    
-    # we enforce the schema Plugins.<name>Plugin
-    @pluginList = map { s/^[A-Z]+[A-Za-z]*\.(.*Plugin)$/$1/o; $_ }
-#		  grep { /^Plugins\.(.*Plugin)$/ }
+
+    # FIXME: should we enforce the schema <webname>.<name>Plugin or not?
+    @pluginList = grep { /^.+\.[^.]+Plugin$/ }
 		  split( /,?\s+/ , $active );
 
     # for efficiency we register all possible handlers at once
-    my $plug = "";
+    my $plug    = "";
     foreach $plug ( @pluginList ) {
-        &registerPlugin( $plug );
+        &registerPlugin( $plug, @_ );
     }
-    # parameters: ( $topic, $web, $user )
-    &applyHandlers( 'initPlugin', @_ );
+# moved to registerPlugin to handle installation web
+    # parameters: ( $topic, $web, $user, $pluginWeb )
+#    &applyHandlers( 'initPlugin', @_ );
 }
 
 # =========================
