@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1010877833" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1039591800" format="1.0" version="1.11"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -45,10 +45,10 @@ The current version of Meta Data is 1.0, with support for the following variable
 ---+++ META:TOPICINFO
 
 |  *Key*  |  *Comment*			 |
-	| version | Same as RCS version |
-	| date	 | integer, unx time, seconds since start 1970 |
-	| author  | last to change topic, is the REMOTE_USER |
-	| format  | Format of this topic, will be used for automatic format conversion |
+| version | Same as RCS version |
+| date	 | integer, unx time, seconds since start 1970 |
+| author  | last to change topic, is the REMOTE_USER |
+| format  | Format of this topic, will be used for automatic format conversion |
 
 ---+++ META:TOPICMOVED
 
@@ -57,10 +57,10 @@ This is optional, exists if topic has ever been moved.  If a topic is moved more
 =%<nop>META:TOPICMOVED{from="Codev.OldName" to="Codev.NewName" by="talintj" date="976762680"}%=
 
 |  *Key*  |  *Comment*			 |
-	| from | Full name i.e. web.topic |
-	| to	| Full name i.e. web.topic |
-	| by	| Who did it, is the REMOTE_USER, not <nop>WikiName |
-	| date | integer, unx time, seconds since start 1970 |
+| from | Full name, i.e., web.topic |
+| to	| Full name, i.e., web.topic |
+| by	| Who did it, is the REMOTE_USER, not <nop>WikiName |
+| date | integer, unx time, seconds since start 1970 |
 
 Notes: 
 	* at present version number is not supported directly, it can be inferred from the RCS history.
@@ -69,41 +69,41 @@ Notes:
 ---+++ META:TOPICPARENT
 
 | *Key*	| *Comment* |
-	| name	 | The topic from which this was created, WebHome if done from =Go=, othewise topic where =?= or form used.  Normally just topic, but is full web.topic format if parent is in a different Web.  Renaming a Web will then only break a few of these references or they can be scanned and fixed. |
+| name	 | The topic from which this was created, WebHome if done from =Go=, othewise topic where =?= or form used.  Normally just topic, but is full web.topic format if parent is in a different Web.  Renaming a Web will then only break a few of these references or they can be scanned and fixed. |
 
 ---+++ META:FILEATTACHMENT
 
 | *Key*	| *Comment* |
-	| name	 | Name of file, no path.  Must be unique within topic |
-	| version | Same as RCS revision  |
-	| path	 | Full path file was loaded from |
-	| size	 | In bytes |
-	| date	 | integer, unx time, seconds since start 1970 |
-	| user	 | the REMOTE_USER, not <nop>WikiName |
-	| comment | As supplied when file uploaded |
-	| attr	 | =h= if hidden, optional |
+| name	 | Name of file, no path.  Must be unique within topic |
+| version | Same as RCS revision  |
+| path	 | Full path file was loaded from |
+| size	 | In bytes |
+| date	 | integer, unx time, seconds since start 1970 |
+| user	 | the REMOTE_USER, not <nop>WikiName |
+| comment | As supplied when file uploaded |
+| attr	 | =h= if hidden, optional |
 
 Extra fields that are added if an attachment is moved:
 
 | *Key*	| *Comment* |
-	| movedfrom | full topic name - web.topic |
-	| movedby	| the REMOTE_USER, not <nop>WikiName |
-	| movedto	| full topic name - web.topic |
-	| moveddate | integer, unx time, seconds since start 1970 |
+| movedfrom | full topic name - web.topic |
+| movedby	| the REMOTE_USER, not <nop>WikiName |
+| movedto	| full topic name - web.topic |
+| moveddate | integer, unx time, seconds since start 1970 |
 
 ---+++ META:FORM
 
 | *Key*	| *Comment* |
-	| name	 | A topic name - the topic represents one of the TWikiForms.  Can optionally include the web name i.e. web.topic, but doesn't normally |
+| name	 | A topic name - the topic represents one of the TWikiForms.  Can optionally include the web name (i.e., web.topic), but doesn't normally |
 
 ---+++ META:FIELD
 
 Should only be present if there is a META:FORM entry.  Note that this data is used when viewing a topic, the form template definition is not read.
 
-	| *Key*	| *Name*	|
-	| name	 | Ties to entry in TWikiForms template, is title with all bar alphanumerics and . removed |
-	| title	| Full text from TWikiForms template |
-	| value	| Value user has supplied via form |
+| *Key*	| *Name*	|
+| name	 | Ties to entry in TWikiForms template, is title with all bar alphanumerics and . removed |
+| title	| Full text from TWikiForms template |
+| value	| Value user has supplied via form |
 
 ---+++ Recommended Sequence
 
@@ -124,7 +124,7 @@ The recommended sequence is:
 
 ---++ Viewing Meta Data in Page Source
 
-When viewing a topic the ==Raw Text== link can be clicked to show the text of a topic (ie: as seen when editing).  This is done by adding <code>raw=on</code> to URL.  <code>raw=debug</code> shows the meta data as well as the topic data, ex: <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug">debug view for this topic</a>
+When viewing a topic the ==Raw Text== link can be clicked to show the text of a topic (i.e., as seen when editing).  This is done by adding <code>raw=on</code> to URL.  <code>raw=debug</code> shows the meta data as well as the topic data, ex: <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug">debug view for this topic</a>
 
 #MetaDataRendering
 ---++ Rendering Meta Data
@@ -133,12 +133,12 @@ Meta Data is rendered with the %<nop>META% variable. This is mostly used in the 
 
 Current support covers:
 
-  | *Variable usage:*	| *Comment:*  |
-  | =%<nop>META{"form"}%= | Show form data, see TWikiForms. |
-  | =%<nop>META{"attachments"}%= | Show attachments, except for hidden ones. Options: <br > \
+| *Variable usage:*	| *Comment:*  |
+| =%<nop>META{"form"}%= | Show form data, see TWikiForms. |
+| =%<nop>META{"attachments"}%= | Show attachments, except for hidden ones. Options: <br > \
 	 ==all="on"==: Show all attachments, including hidden ones. |
-  | =%<nop>META{"moved"}%= | Details of any topic moves. |
-  | =%<nop>META{"parent"}%= | Show topic parent. Options: <br /> \
+| =%<nop>META{"moved"}%= | Details of any topic moves. |
+| =%<nop>META{"parent"}%= | Show topic parent. Options: <br /> \
 	 ==dontrecurse="on"==: By default recurses up tree, at some cost. <br /> \
 	 ==nowebhome="on"==: Suppress <nop>%HOMETOPIC%. <br /> \
 	 ==prefix="..."==: Prefix for parents, only if there are parents, default =""=. <br /> \
