@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "17 May 2002";
+$wikiversion      = "05 Jun 2002";
 
 # ===========================
 # read the configuration part
@@ -620,7 +620,7 @@ sub getTWikiLibDir
         my $curr = cwd();
         $twikiLibDir = "$curr/$twikiLibDir/";
         # normalize "/../" and "/./"
-        $twikiLibDir =~ s|([\\/])[^\\/]+[\\/]\.\.[\\/]|$1|go;
+        while ( $twikiLibDir =~ s|([\\/])[^\\/]+[\\/]\.\.[\\/]|$1|o) {};
         $twikiLibDir =~ s|([\\/])\.[\\/]|$1|go;
     }
     $twikiLibDir =~ s|([\\/])[\\/]*|$1|go; # reduce "//" to "/"
