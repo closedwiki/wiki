@@ -33,7 +33,7 @@ use Config; 		# Perl's configuration details
 package TWiki;
 # Check whether basic CGI modules exist (some broken installations of
 # Perl don't have this, even though they ars standard modules), and warn user
-my @basicMods = qw(CGI CGI::Carp);
+my @basicMods = qw( CGI CGI::Carp );
 my $modMissing = 0;
 my $mod;
 foreach $mod (@basicMods) {
@@ -56,7 +56,7 @@ if ($modMissing) {
     print "<p><b>\@INC setting:</b><br /><tt> ";
     print join "<br />\n", @INC;
     print "</tt></p>\n";
-    print "<body>\n";
+    print "</body>\n</html>\n";
     exit;
 }
 
@@ -66,12 +66,10 @@ require CGI::Carp;
 import CGI::Carp qw( fatalsToBrowser );
 
 
+&main();
 
-&main;
-
-
-
-sub main() {
+sub main
+{
 
 my $perlverRequired = 5.00503;		# Oldest supported version of Perl
 my $perlverRequiredString = '5.005_03';
@@ -238,11 +236,11 @@ foreach $mod (@requiredMods) {
     print "</td></tr>\n";
 }
 
-print "<tr><th align=\"right\">PATH_INFO:</th><td>$thePathInfo</td></tr>\n";
+print "<tr><th align=\"right\">PATH_INFO:<a name=\"PATH_INFO\"></th><td>$thePathInfo</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>";
 print "For a URL such as '$theUrl/foo/bar', ";
 print "the correct PATH_INFO is '/foo/bar', without any prefixed path ";
-print "components. Click <a href=\"$theUrl/foo/bar\">here</a> to test.";
+print "components. <a href=\"$theUrl/foo/bar#PATH_INFO\">Test</a> this.";
 print "</td></tr>\n";
 print "<tr><th align=\"right\">mod_perl:</th><td>$USE_MOD_PERL for this script (mod_perl $LOAD_MOD_PERL)</td></tr>\n";
 
