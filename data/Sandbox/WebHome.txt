@@ -1,4 +1,4 @@
-The <b>TWiki.%WEB%</b> web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %TWIKIWEB%.TWikiTutorial to get a jumpstart on the %WIKITOOLNAME% tool. A good rule of thumb is to add at the end of the page and sign & date it with your %TWIKIWEB%.WikiName.
+The <b>%WIKITOOLNAME%.%WEB%</b> web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %TWIKIWEB%.TWikiTutorial to get a jumpstart on the %WIKITOOLNAME% tool. A good rule of thumb is to add at the end of the page and sign & date it with your %TWIKIWEB%.WikiName.
 
 	* TestTopic1, TestTopic2, TestTopic3, TestTopic4 
 	* TestTopic5, TestTopic6, TestTopic7, TestTopic8
@@ -17,4 +17,4 @@ The <b>TWiki.%WEB%</b> web is the sandbox you can use for testing. Everybody is 
 	* You are currently in the %WIKITOOLNAME%.%WEB% web. The color code for this web is a light gray background, so you know where you are.
 	* If you are not familiar with the %WIKITOOLNAME% collaboration tool, please visit %TWIKIWEB%.WelcomeGuest in the %WIKITOOLNAME%.%TWIKIWEB% web first.
 
-%INCLUDE{"TWiki.TWikiWebsTable"}%
+%INCLUDE{"%TWIKIWEB%.TWikiWebsTable"}%
