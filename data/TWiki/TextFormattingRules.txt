@@ -46,6 +46,24 @@ __External links:__
 </tr>
 <tr>
 <td valign="top">
+ *Headings:* <br>
+ At least three dashes at the beginning of a line, followed by plus signs and the heading text. One plus creates a level 1 heading (most important), two pluses a level 2 heading; the maximum is level 6. __Note:__ A Table of Content can be created automatically with the =%<nop>TOC%= variable, see TWikiVariables.
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<pre>
+---++ Sushi
+
+---+++ Maguro
+</pre>
+</font></span>
+</td><td valign="top">
+---++ Sushi
+
+---+++ Maguro
+</td>
+</tr>
+<tr>
+<td valign="top">
  *Bold Text:* <br>
  Words get *bold* by enclosing them in =*= asterisks.
 </td><td valign="top">
@@ -158,7 +176,7 @@ class CatAnimal {
 <tr>
 <td valign="top">
  *Separator:* <br>
- At least four dashes at the beginning of a line.
+ At least three dashes at the beginning of a line.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -292,41 +310,41 @@ Know.ReadmeFirst
 <tr>
 <td valign="top">
  *Specific Links:* <br>
- Create a link where you can specify the link text and the link reference separately, using nested square brackets like =[<nop>[text][reference]]=. Internal link references (i.e. WikiSyntax) and external link references (i.e. http://TWiki.org/) are supported. The same __Forced Links__ rules apply for internal link references. Anchor names can be added as well, like =[<nop>[go home][WebHome@MyAnchor]]= and =[<nop>[Yahoo!][http://www.yahoo.com/#somewhere]]=.
+ Create a link where you can specify the link text and the link reference separately, using nested square brackets like =[<nop>[reference][text]]=. Internal link references (i.e. WikiSyntax) and external link references (i.e. http://TWiki.org/) are supported. The same __Forced Links__ rules apply for internal link references. Anchor names can be added as well, like =[<nop>[WebHome#MyAnchor][go home]]= and =[<nop>[http://www.yahoo.com/#somewhere][Yahoo!]]=.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
-[[syntax][WikiSyntax]]
+[[WikiSyntax][syntax]]
 
-[[GNU][http://gnu.org]]
+[[http://gnu.org][GNU]]
 </pre>
 </font></span>
 </td><td valign="top">
-[[syntax][WikiSyntax]]
+[[WikiSyntax][syntax]]
 
-[[GNU][http://gnu.org]]
+[[http://gnu.org][GNU]]
 </td>
 </tr>
 <tr>
 <td valign="top">
  *Anchors:* <br>
- You can define a link reference inside a %WIKITOOLNAME% topic (called an anchor name) and link to that. To __define__ an anchor write =@AnchorName= at the beginning of a line. The anchor name must be a WikiWord. To __link to__ an anchor name use the =[<nop>[MyTopic@MyAnchor]]= syntax. You can omit the topic name if you want to link within the same topic.
+ You can define a link reference inside a %WIKITOOLNAME% topic (called an anchor name) and link to that. To __define__ an anchor write =#AnchorName= at the beginning of a line. The anchor name must be a WikiWord. To __link to__ an anchor name use the =[<nop>[MyTopic#MyAnchor]]= syntax. You can omit the topic name if you want to link within the same topic.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
-[[WebHome@NotThere]]
+[[WebHome#NotThere]]
 
-[[Jump][@MyAnchor]]
+[[#MyAnchor][Jump]]
 
-@MyAnchor To here
+#MyAnchor To here
 </pre>
 </font></span>
 </td><td valign="top">
-[[WebHome@NotThere]]
+[[WebHome#NotThere]]
 
-[[Jump][@MyAnchor]]
+[[#MyAnchor][Jump]]
 
-@MyAnchor To here
+#MyAnchor To here
 </td>
 </tr>
 <tr>
