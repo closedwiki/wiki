@@ -114,8 +114,12 @@ sub preview {
         $text =~ s/%_(.)_%/%__$1__%/go;
     }
 
-    my @verbatim = ();
-    $ptext = $session->{renderer}->takeOutBlocks( $ptext, "verbatim", \@verbatim );
+    # SMELL: this is horrible, it only handles verbatim. It should be
+    # done by getRenderedVersion with an override for the wikiword
+    # handling.
+    my $verbatim = {};
+    $ptext = $session->{renderer}->takeOutBlocks( $ptext, "verbatim",
+                                                  $verbatim );
     $meta->updateSets( \$ptext );
     $ptext = $session->handleCommonTags( $ptext, $webName, $topic );
     $ptext = $session->{renderer}->getRenderedVersion( $ptext, $webName, $topic );
@@ -127,9 +131,9 @@ sub preview {
     $ptext =~ s/<form(?:|\s.*?)>/<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">/goi;
     $ptext =~ s/(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))/$1onclick="location.href='$oopsUrl\?template=oopspreview'"/goi;
 
-    $ptext = $session->{renderer}->putBackBlocks( $ptext, \@verbatim,
-                                                  "verbatim", "pre",
-                                                  \&TWiki::Render::verbatimCallBack );
+    $session->{renderer}->putBackBlocks( $ptext, $verbatim,
+                                         "verbatim", "pre",
+                                         \&TWiki::Render::verbatimCallBack );
 
     $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
     $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
