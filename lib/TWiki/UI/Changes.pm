@@ -84,7 +84,7 @@ sub changes {
                   ( $text, $webName, $changedTopic, "nonop" );
                 $otext = $session->{renderer}->TML2PlainText
                   ( $otext, $webName, $changedTopic, "nonop" );
-                $summary = TWiki::Merge::merge( $text, $otext, qr/\s+/ );
+                $summary = TWiki::Merge::merge( $otext, $text, qr/\s+/ );
                 if( length( $summary ) > 162 ) {
                     $text = $summary;
                     $summary = "";
