@@ -1,6 +1,6 @@
 # Module of TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -298,7 +298,7 @@ sub read
     
     my $newText = "";
 
-    foreach ( split( /\n/, $text ) ) {
+    foreach ( split( /\r?\n/, $text ) ) {
         if( /^%META:([^{]+){(.*)}%$/ ) {   # greedy match for ending "}%"
             my $type = $1;
             my $args = $2;
