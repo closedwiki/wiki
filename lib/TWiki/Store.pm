@@ -604,8 +604,8 @@ sub saveNew
         $date = &TWiki::formatGmTime( $epochSec, "rcs" );
         $text = _addMeta( $web, $topic, $text, $attachment, $rev,
                           $meta, $epochSec, $user );
-                               
-        my $dataError = $topicHandler->replaceRevision( $text, $theComment, $TWiki::userName, $date );
+
+        my $dataError = $topicHandler->replaceRevision( $text, $theComment, $user, $date );
         return $dataError if( $dataError );
         $topicHandler->setLock( ! $doUnlock );
 
