@@ -1,9 +1,12 @@
-%META:TOPICINFO{author="PeterThoeny" date="1048616740" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1048658040" format="1.0" version="1.5"}%
 %SPLIT%
 	* %KEY%: %VALUE%%SPLIT%
 
 __My Links__
+	* %TWIKIWEB%.WelcomeGuest to learn TWiki
 	* Sandbox.WebHome web to try out TWiki
+	* Sandbox.%TOPIC%Sandbox just for me
+	* 
 	* 
 
 __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
