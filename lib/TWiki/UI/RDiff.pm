@@ -366,9 +366,12 @@ sub diff {
   my ( $webName, $topic, $userName, $query ) = @_;
 
   my $renderStyle = $query->param('render');
+  $renderStyle = &TWiki::Prefs::getPreferencesValue( "DIFFRENDERSTYLE" ) unless ( $renderStyle );
   my $diffType = $query->param('type');
   my $contextLines = $query->param('context');
+  $contextLines = &TWiki::Prefs::getPreferencesValue( "DIFFCONTEXTLINES" ) unless ( $contextLines );
   my $skin = $query->param( "skin" );
+  $skin = &TWiki::Prefs::getPreferencesValue( "SKIN" ) unless ( $skin );
   my $rev1 = $query->param( "rev1" );
   my $rev2 = $query->param( "rev2" );
 
@@ -390,8 +393,6 @@ sub diff {
   my $isMultipleDiff = 0;
   my $scriptUrlPath = $TWiki::scriptUrlPath;
 
-  # get view template, standard view or a view with a different skin
-  $skin = &TWiki::Prefs::getPreferencesValue( "SKIN" ) unless ( $skin );
   $tmpl = &TWiki::Store::readTemplate( "rdiff", $skin );
   $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
