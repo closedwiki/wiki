@@ -105,18 +105,18 @@ sub initializeUserHandler
 
     &TWiki::Func::writeDebug( "- initializeUserHandler( $web.$topic )" ) if $debug;
 
-    my (@rawCookies) = split (/; /,$ENV{'HTTP_COOKIE'});
-    my (%cookies);
-    my ($key, $val);
-    foreach (@rawCookies)
-    {
-      &TWiki::Func::writeDebug( "${pluginName} got userName from cookie: ($_)");
-      ($key, $val) = split(/=/,$_);
-      if ( ($key =~ /username/i) && (length($val) > 0))
-      {
-         return $val;
-      }
-    }
+	if ( $ENV{'HTTP_COOKIE'} ) {
+		my (@rawCookies) = split (/; /, $ENV{'HTTP_COOKIE'});
+		my (%cookies);
+		my ($key, $val);
+		foreach (@rawCookies) {
+			&TWiki::Func::writeDebug( "${pluginName} got userName from cookie: ($_)");
+			($key, $val) = split(/=/,$_);
+			if ( ($key =~ /username/i) && (length($val) > 0)) {
+				return $val;
+			}
+		}
+	}
     return "guest";
 }
 
