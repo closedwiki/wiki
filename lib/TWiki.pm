@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "16 Feb 2002";
+$wikiversion      = "19 Feb 2002";
 
 # ===========================
 # read the configuration part
@@ -734,6 +734,7 @@ sub makeTopicSummary
     $htext =~ s/<\!\-\-.*?\-\->//gos;  # remove all HTML comments
     $htext =~ s/<\!\-\-.*$//os;        # cut HTML comment
     $htext =~ s/<[^>]*>//go;           # remove all HTML tags
+    $htext =~ s/\&nbsp;//go;           # remove space entity
     $htext =~ s/%WEB%/$theWeb/go;      # resolve web
     $htext =~ s/%TOPIC%/$theTopic/go;  # resolve topic
     $htext =~ s/%WIKITOOLNAME%/$wikiToolName/go; # resolve TWiki tool name
