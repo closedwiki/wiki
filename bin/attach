@@ -34,33 +34,25 @@ sub listVersions
 {
     my( $web, $topic, $attachment ) = @_;
 
-    ##&TWiki::writeDebug( "Att = $attachment" );
     my $latestRev = TWiki::Store::getRevisionNumberNew( $web, $topic, $attachment );
-    ##&TWiki::writeDebug( "latestRev = $latestRev" );
     $latestRev =~ /\.(.*)/;
     my $maxRevNum = $1;
-    &TWiki::writeDebug( "max = $maxRevNum" );
-    my $verTable = &TWiki::Store::readTemplate( "attachvertable" );
-    my( $verTableBefore, $verTableItem, $verTableAfter ) = split( /%REPEAT%/, $verTable );
 
-    my $before="", $item="", $lcItem="", $after="", $set="", $ins="", $comp="";
-
-    my $result = $verTableBefore;
     my $found = 0;
 
+    $result = "\n|  *Version:*  |  *Action:*   |  *Date:*  |  *Who:*  |  *Comment:*  |\n";
+
     for( $version = $maxRevNum; $version >= 1; $version-- ) {
-        $ins = $verTableItem;
+
         my $rev = "1.$version";
-        $ins =~ s/%FILEVERSION%/$rev/go;
+
         my $changeToIsoDate = 0;
         my( $date, $userName, $dummy, $comment ) = 
            TWiki::Store::getRevisionInfoNew( $topic, $rev, $changeToIsoDate, $web, $attachment );
         my $wikiUserName = &TWiki::userToWikiName( $userName );
-        $ins =~ s/%VERSIONDATE%/$date/go;
-        $ins =~ s/%VERSIONUPDATER%/$wikiUserName/go;
-        $ins =~ s/%VERSIONCOMMENT%/$comment/go;
-        $result = "$result$ins";
-        #&TWiki::writeDebug( "Ver = $version, res=$result" );
+
+        my $viewAction = "<a href=\"%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$rev&filename=$attachment\">view</a>";
+        $result .= "| 1.$version  | $viewAction | $date | $wikiUserName | $comment |\n";
     }
 
     $result = "$result$atTableAfter";
@@ -140,9 +132,12 @@ sub main
     # get view template, standard view or a view with a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
     $tmpl = &TWiki::Store::readTemplate( "attach", "", $skin );
+    $atext = "<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-    $atext = &TWiki::getRenderedVersion( $atext );
+    $TWiki::Attach::noFooter = 1; # FIXME naff
+    $TWiki::Attach::showAttr = "hd";
     $atext = &TWiki::handleCommonTags( $atext, $topic );
+    $atext = &TWiki::getRenderedVersion( $atext );
     $tmpl =~ s/%ATTACHTABLE%/$atext/go;
     if( $fileName ) {
         $tmpl =~ s/%FILENAME%/$fileName/go;
