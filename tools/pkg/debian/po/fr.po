@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: twiki_20011201-2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-17 21:38+1100\n"
-"PO-Revision-Date: 2003-07-08 21:26+0200\n"
+"PO-Revision-Date: 2005-02-17 13:24+0100\n"
 "Last-Translator: Michel Grentzinger <mic.grentz@online.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,13 +25,13 @@ msgstr ""
 #. Default
 #: ../templates:3
 msgid "http://localhost/"
-msgstr ""
+msgstr "http://localhost/"
 
 #. Type: string
 #. Description
 #: ../templates:4
 msgid "What is the top-level URL of the server TWiki runs under?"
-msgstr "Quelle est l'URL du serveur TWiki ?"
+msgstr "URL du serveur TWiki :"
 
 #. Type: string
 #. Description
@@ -42,7 +42,7 @@ msgid ""
 "the data by adding \"twiki\" to the end of this setting; it is also needed "
 "for certain redirections."
 msgstr ""
-"Pour une installation normale, vous devriez indiquer ici l'URL construite à "
+"Pour une installation normale, vous devriez indiquer l'URL construite à "
 "partir du nom complet de votre serveur. Les données seront accessibles à "
 "l'adresse obtenue en ajoutant « twiki » à cette valeur. Celle-ci servira "
 "également pour certaines redirections."
@@ -51,13 +51,13 @@ msgstr ""
 #. Default
 #: ../templates:12
 msgid "webmaster@localhost"
-msgstr ""
+msgstr "webmaster@localhost"
 
 #. Type: string
 #. Description
 #: ../templates:13
 msgid "What is the email address of the webmaster for this TWiki?"
-msgstr "Quelle est l'adresse électronique du webmestre pour TWiki ?"
+msgstr "Adresse électronique du webmestre de TWiki :"
 
 #. Type: string
 #. Description
@@ -66,20 +66,20 @@ msgid ""
 "This email address gets mail for new user registration, and is listed on the "
 "\"oops\" page when things go wrong."
 msgstr ""
-"Cette adresse électronique reçoit les messages pour les enregistrements des "
-"nouveaux utilisateurs et est affichée sur la page « oops » lorsque quelque "
-"chose ne se passe pas bien."
+"L'adresse électronique indiquée recevra les demandes d'enregistrement des "
+"nouveaux utilisateurs. Elle est affichée sur la page « oops » lorsque un "
+"incident se produit."
 
 #. Type: boolean
 #. Description
 #: ../templates:20
 msgid "Install sample wiki universe on initial install?"
-msgstr "Installer l'exemple d'univers wiki lors de l'installation initiale ?"
+msgstr ""
+"Faut-il installer l'exemple d'univers wiki lors de l'installation initiale ?"
 
 #. Type: boolean
 #. Description
 #: ../templates:20
-#, fuzzy
 msgid ""
 "TWiki includes a complete \"starter kit\" which includes user registration "
 "pages, documentation, and tutorials.  If you're re-installing twiki after "
@@ -96,18 +96,19 @@ msgstr ""
 "tutoriels. Si vous réinstallez twiki après avoir supprimé le paquet et que "
 "vous souhaitez conserver vos anciennes données ou bien si vous avez un "
 "ensemble de données twiki provenant d'une installation que vous avez faite "
-"vous-même, vous devriez refuser ici. Pour une installation normale, acceptez "
-"et un ensemble simple de données sera installé dans /var/lib/twiki/data. "
-"Dans tous les cas ,si data/Main/WebHome.txt existe, le kit de démarrage ne "
-"sera pas décompacté. Vous pourrez alors regarder dans /usr/share/doc/twiki/"
-"twiki-data.tar.gz si vous souhaitez l'installer vous-même ou le comparer à "
-"une nouvelle version."
+"vous-même, ne choisissez pas cette option. Pour une installation normale, "
+"vous pouvez la choisir et un ensemble simple de données sera installé dans /"
+"var/lib/twiki/data (et /var/www/twiki/pub). Dans tous les cas, si data/Main/"
+"WebHome.txt existe, le kit de démarrage ne sera pas décompacté. Vous pourrez "
+"alors regarder dans /usr/share/doc/twiki/twiki-data.tar.gz (et twiki-pub.tar."
+"gz) si vous souhaitez l'installer vous-même ou le comparer à une nouvelle "
+"version."
 
 #. Type: note
 #. Description
 #: ../templates:34
 msgid "User Registration configuration required"
-msgstr ""
+msgstr "Configuration obligatoire de l'enregistrement des utilisateurs"
 
 #. Type: note
 #. Description
@@ -122,3 +123,12 @@ msgid ""
 "created yourself a user, edit the Main.TWikiAdminGroup to restrict Admin "
 "privileges"
 msgstr ""
+"L'installation Debian par défaut est configurée pour créer de nouveaux "
+"utilisateurs automatiquement lorsqu'un utilisateur s'enregistre. Cela n'est "
+"pas aussi sécurisé que les paramètres par défaut de Twiki mais c'est plus "
+"commode pour tester Twiki. Pour changer cela, afin des les utilisateurs "
+"soient crées par l'administrateur, veuillez utiliser « TWiki RenameTopic » "
+"pour renommer « TWikiRegistration » en « TWikiRegistrationPub », et "
+"« TWikiRegistrationDefault» en « TWikiRegistration ». Remarque importante : "
+"une fois que vous aurez créé vous-même un utilisateur, veuillez modifier "
+"« Main.TWikiAdminGroup » afin de restreindre ses privilèges d'administration."

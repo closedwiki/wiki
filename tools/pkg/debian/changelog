@@ -5,6 +5,7 @@ twiki (20040902-2) unstable; urgency=emergency
     (Closes #296655)
   * added libunicode-maputf8-perl suggestion (Closes #297031)
   * default to use sendmail (Closes #252439)
+  * updated fr.po file (Closes #296149)
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 13 Mar 2005 00:00:01 -1000
 
