@@ -179,7 +179,7 @@ sub UpdateUserPassword
 }
 
 #===========================
-# only used by the htpasswd specific installpasswd script 
+# used by the htpasswd specific installpasswd script 
 # (the 2 parameters have the format as in the htpasswd file user:password)
 #(do we use it that much?)
 #would we be better off generating a new password that we email to the user, and then let them change it?
@@ -198,7 +198,7 @@ sub htpasswdUpdateUser
     return "1";
 }
 
-
+#===========================
 sub AddUserPassword
 {
     my ( $self, $user, $newUserPassword ) = @_;
@@ -210,6 +210,16 @@ sub AddUserPassword
     ##TWiki::writeDebug "User entry is :$userEntry: before newline";
     $text .= "$userEntry\n";
     &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
+}
+
+#===========================
+#i'm a wimp - comment out the password entry
+sub RemoveUser
+{
+    my ( $self, $user ) = @_;
+    my $userEntry = $user.":"._htpasswdReadPasswd( $user );
+
+    $self->htpasswdUpdateUser( $userEntry, "#".$userEntry);
 }
 
 # =========================

@@ -121,6 +121,16 @@ sub AddUserPassword
     return $handler->AddUserPassword($user, $newUserPassword);
 }
 
+#========================= 
+# params: username
+sub RemoveUser
+{
+    my ( $user ) = @_;
+
+    my $handler = _getUserHandler();
+    return $handler->RemoveUser($user);
+}
+
 # =========================
 sub CheckUserPasswd
 {
@@ -131,6 +141,7 @@ sub CheckUserPasswd
 }
  
 # =========================
+#TODO: this seems to me to belong elsewhere.. (??)
 sub addUserToTWikiUsersTopic
 {
     my ( $wikiName, $remoteUser ) = @_;

@@ -262,6 +262,84 @@ sub renameTopic
 }
 
 
+#==================================
+# update pages that refer to the one being renamed/moved
+sub updateReferingPages
+{
+    my ( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs ) = @_;
+
+    my $lockFailure = 0;
+
+    my $result = "";
+    my $preTopic = '^|\W';		# Start of line or non-alphanumeric
+    my $postTopic = '$|\W';	# End of line or non-alphanumeric
+    my $spacedTopic = TWiki::Search::spacedTopic( $oldTopic );
+
+    while ( @refs ) {
+       my $type = shift @refs;
+       my $item = shift @refs;
+       my( $itemWeb, $itemTopic ) = TWiki::Store::normalizeWebTopicName( "", $item );
+       if ( &TWiki::Store::topicIsLockedBy( $itemWeb, $itemTopic ) ) {
+          $lockFailure = 1;
+       } else {
+          my $resultText = "";
+          $result .= ":$item: , "; 
+          #open each file, replace $topic with $newTopic
+          if ( &TWiki::Store::topicExists($itemWeb, $itemTopic) ) { 
+             my $scantext = &TWiki::Store::readTopicRaw($itemWeb, $itemTopic);
+             if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $scantext,
+                    $itemWeb, $itemTopic ) ) {
+                 # This shouldn't happen, as search will not return, but check to be on the safe side
+                 &TWiki::writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
+                 next;
+             }
+	     my $insidePRE = 0;
+	     my $insideVERBATIM = 0;
+             my $noAutoLink = 0;
+	     foreach( split( /\n/, $scantext ) ) {
+	        if( /^%META:TOPIC(INFO|MOVED)/ ) {
+	            $resultText .= "$_\n";
+	            next;
+	        }
+		# FIXME This code is in far too many places - also in Search.pm and Store.pm
+		m|<pre>|i  && ( $insidePRE = 1 );
+		m|</pre>|i && ( $insidePRE = 0 );
+		if( m|<verbatim>|i ) {
+		    $insideVERBATIM = 1;
+		}
+		if( m|</verbatim>|i ) {
+		    $insideVERBATIM = 0;
+		}
+		m|<noautolink>|i   && ( $noAutoLink = 1 );
+		m|</noautolink>|i  && ( $noAutoLink = 0 );
+
+		if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
+		    if( $type eq "global" ) {
+			my $insertWeb = ($itemWeb eq $newWeb) ? "" : "$newWeb.";
+			s/($preTopic)\Q$oldWeb.$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
+		    } else {
+			# Only replace bare topic (i.e. not preceeded by web) if web of referring
+			# topic is in original Web of topic that's being moved
+			if( $oldWeb eq $itemWeb ) {
+			    my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
+			    s/($preTopic)\Q$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
+			    s/\[\[($spacedTopic)\]\]/[[$newTopic][$1]]/gi;
+			}
+		    }
+		}
+	        $resultText .= "$_\n";
+	     }
+	     my ( $meta, $text ) = &TWiki::Store::_extractMetaData( $itemWeb, $itemTopic, $resultText );
+	     &TWiki::Store::saveTopic( $itemWeb, $itemTopic, $text, $meta, "", "unlock", "dontNotify", "" );
+          } else {
+	    $result .= ";$item does not exist;";
+          }
+       }
+    }
+    return ( $lockFailure, $result );
+}
+
+
 # =========================
 # Read a specific version of a topic
 # view:     $text= &TWiki::Store::readTopicVersion( $topic, "1.$rev" );
