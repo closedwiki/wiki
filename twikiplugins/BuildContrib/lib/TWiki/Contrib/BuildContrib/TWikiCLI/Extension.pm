@@ -81,10 +81,10 @@ sub cli_download {
  my ($extension) = @_;
 
 
- 	
+ my $localFile = getFilenameForDistributionDownload($extension); 	
  my $localCopy =
    TWiki::Contrib::DistributionContrib::DistributionFetcher::fetchLatestDistributionVersion
-   ($extension, $attachmentPath);
+   ($extension, $localFile);
  if ( $localCopy eq "" ) {
   return "Couldn't get it";
  }
