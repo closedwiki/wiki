@@ -54,7 +54,7 @@ BEGIN {
     # includes checking for broken syntax etc.  Need 'require'
     # to get the $!/$@ to work.
     $brokenTWikiCfg = 0;
-    unless (eval 'require "TWiki.cfg" ' ){	# Includes OS detection
+    unless( eval 'require "TWiki.cfg" ' ){	# Includes OS detection
 	# Capture the Perl error(s)
 	$brokenTWikiCfg = 1;	
 	$brokenTWikiCfgError = 
@@ -374,7 +374,8 @@ print "</td></tr>\n";
 # Do locale settings if TWiki.pm was found
 my $showLocales = 0;
 if ($twikiFound) {
-    if (eval 'TWiki::setupLocale()' ){	# Not in older TWiki.pm versions
+    if( eval 'TWiki::setupLocale()' ){	# Not in older TWiki.pm versions
+	# Ignore errors silently
 	$showLocales = 1;
     }
 }
