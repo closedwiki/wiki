@@ -1,52 +1,58 @@
-<HTML>
-<HEAD>
-  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% %REVTITLE% </TITLE>
-  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX"> %HTTP_EQUIV_ON_VIEW%
-</HEAD>
-<BODY bgcolor="#ffffff">
-<FORM name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
-    </TD>
-    <TD>
-      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> %REVTITLE%</FONT>
-    </TD><TD ALIGN="right">
-      %WIKIWEBLIST%
-    </TD>
-  </TR>
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD COLSPAN="2">
-      %WEBTOPICLIST%
-    </TD>
-  </TR>
-</TABLE>
-</FORM>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+ <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %REVTITLE% </title>
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <meta name="robots" content="noindex"> %HTTP_EQUIV_ON_VIEW%
+</head>
+<body bgcolor="#ffffff">
+<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/">
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+ <tr>
+  <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
+   <a href="%WIKIHOMEURL%"><img src="%PUBURLPATH%/wikiHome.gif" border="0" /></a>
+  </td>
+  <td>
+   <b><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/">%WIKITOOLNAME%</a>
+   . <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/">%WEB%</a>
+   . </b><font size="+2"><b>%TOPIC%</b> %REVTITLE%</font>
+  </td><td align="right">
+    %WIKIWEBLIST%
+  </td>
+ </tr>
+ <tr bgcolor="%WEBBGCOLOR%">
+  <td colspan="2">
+   %WEBTOPICLIST%
+  </td>
+ </tr>
+</table>
+</form>
 %TEXT%
-<BR clear=all><P>
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD valign="top">
-      Topic <B>%TOPIC%</B> . {
-        %EDITTOPIC%
-      | <A href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</A>
-      | <A href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=text&web=all&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Ref-By</A>
-      | <A href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach</A>
-      | <A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print">Print</A>
-      | <A href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</A>
-        %REVISIONS% }
-    </TD>
-  </TR>
-</TABLE>
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD valign="top">
-      Revision %REVINFO%
-    </TD>
-    <TD width="40%" valign="top">
-      %WEBCOPYRIGHT%
-    </TD>
-  </TR>
-</TABLE>
-</BODY></HTML>
+<br clear="all"><p>
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+ <tr bgcolor="%WEBBGCOLOR%">
+  <td valign="top">
+   Topic <b>%TOPIC%</b> . {
+     %EDITTOPIC%
+   | <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach</a>
+   | <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a>
+   | <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=text&web=all&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Ref-By</a>
+   | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print">Printable</a>
+   | <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a>
+   %REVISIONS% }
+  </td>
+ </tr>
+</table>
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+ <tr>
+  <td valign="top">
+   Revision %REVINFO%
+  </td>
+  <td width="40%" valign="top">
+   %WEBCOPYRIGHT%
+  </td>
+ </tr>
+</table>
+</p>
+</body>
+</html>
