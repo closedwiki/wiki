@@ -118,10 +118,11 @@ sub readPrefs
     if( %form ) {
         my @fields = $meta->find( "FIELD" );
         foreach my $field ( @fields ) {
-            $key = $field->{"title"};
+            $key = $field->{"name"};
             $value = $field->{"value"};
-	    my $prefixedKey = $TWiki::Prefs::formPrefPrefix . $key;
-	    $self->insertPrefsValue( $prefixedKey, $value );
+	    my $title = $field->{"title"};
+	    my $prefixedTitle = $TWiki::Prefs::formPrefPrefix . $title;
+	    $self->insertPrefsValue( $prefixedTitle, $value );
             my $attributes = $field->{"attributes"};
             if( $attributes && $attributes =~ /[S]/o ) {
                 $self->insertPrefsValue( $key, $value );
