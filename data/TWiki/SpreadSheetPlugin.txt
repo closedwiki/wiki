@@ -1,9 +1,10 @@
-%META:TOPICINFO{author="PeterThoeny" date="1080980603" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1081014633" format="1.0" version="1.8"}%
 ---+ TWiki Spreadsheet Plugin
 
 This Plugin adds speadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
 
-Example:
+<table><tr><td valign="top">
+__Example:__
 
 | *Region:* | *Sales:* |
 | Northeast |  320 |
@@ -13,7 +14,22 @@ Example:
 | Asia		|  220 |
 | Total:	 |  %CALC{"$SUM( $ABOVE() )"}% |
 
+</td><td>&nbsp; &nbsp; &nbsp;</td><td valign="top">
+__Interactive example:__
+
+<form name="interactive" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="get">
+<noautolink>
+Formula: <code>%<nop>CALC{"</code><input type="text" name="formula" size="30" value="%URLPARAM{ "formula" default="$PROPERSPACE(%USERNAME%)" encode="entity" }%" /><code>"}%</code> &nbsp; <input type="submit" value="Go" /><br />
+Result: &nbsp; &nbsp; %CALC{%URLPARAM{ "formula" default="$PROPERSPACE(%USERNAME%)" }%}%
+
+</noautolink>
+
+</form>
+</td></tr><tr><td colspan="3">
+
 The formula next to "Total" is ==%<nop>CALC{"$SUM( $ABOVE() )"}%==. <br /> (you see the formula instead of the sum in case the Plugin is not installed or not enabled.)
+
+</td></tr></table>
 
 
 ---++ Syntax Rules
@@ -58,7 +74,7 @@ The action of this Plugin is triggered by the ==%<nop>CALC{"..."}%== variable, w
 | =="$LEFT()"== | The address range of cells to the left of the current cell |
 | =="$LENGTH(text)"== | The length in bytes of text. Example: ==%<nop>CALC{"$LENGTH(abcd)"}%== returns ==4== |
 | =="$LIST(range)"== | Converts the content of a range of cells into a flat list, delimited by comma. Cells containing commas are merged into the list. Example: ==%<nop>CALC{"$LIST( $LEFT() )"}%== returns ==Apples, Lemons, Oranges, Kiwis== assuming the cells to the left contain ==&#124; Apples &#124; Lemons, Oranges &#124; Kiwis &#124;== |
-| =="$LISTIF(condition, list)"== | Remove elements from a list that do not meet a condition. In addition to the condition described in =$IF()=, you can use ==$item== to indicate the current element. Examples: %BR% ==%<nop>CALC{"$LISTIF($item > 12, 14, 7, 25)"}%== returns ==14, 25== %BR% ==%<nop>CALC{"$LISTIF($NOT($EXACT($item,)), A, B, , C)"}%== returns ==A, B, C== |
+| =="$LISTIF(condition, list)"== | Remove elements from a list that do not meet a condition. In addition to the condition described in =$IF()=, you can use ==$item== to indicate the current element, and ==$index== for the list index, starting at 1. Examples: %BR% ==%<nop>CALC{"$LISTIF($item > 12, 14, 7, 25)"}%== returns ==14, 25== %BR% ==%<nop>CALC{"$LISTIF($NOT($EXACT($item,)), A, B, , E)"}%== returns non-empty elements ==A, B, E== %BR% ==%<nop>CALC{"$LISTIF($index > 2, A, B, C, D)"}%== returns ==C, D== |
 | =="$LISTITEM(index, list)"== | Get one element of a list. Index is 1 to size of list; use a negative number to count from the end of the list. Examples:%BR% ==%<nop>CALC{"$LISTITEM(2, Apple, Orange, Apple, Kiwi)"}%== returns ==Orange== %BR% ==%<nop>CALC{"$LISTITEM(-1, Apple, Orange, Apple, Kiwi)"}%== returns ==Kiwi== |
 | =="$LISTMAP(formula, list)"== | Evaluate and update each element of a list. In the formula you can use ==$item== to indicate the element; ==$index== to show the index of the list, starting at 1. Example: ==%<nop>CALC{"$LISTMAP($index: $EVAL(2 * $item), 3, 5, 7, 11)"}%== returns ==1: 6, 2: 10, 3: 14, 4: 22== |
 | =="$LISTREVERSE(list)"== | The opposite order of a list. Example: ==%<nop>CALC{"$LISTREVERSE(Apple, Orange, Apple, Kiwi)"}%== returns ==Kiwi, Apple, Orange, Apple== |
