@@ -103,6 +103,7 @@ function toggleHover( e )
 </script>
 <h1>TWiki Installation</h1>
 
+<form id="form">
 <table id="hdr"><tr>
 <td>Step 2/4 <br/>
 TWiki Release: 01 Sep 2004 (Cairo)</td>
@@ -110,7 +111,6 @@ TWiki Release: 01 Sep 2004 (Cairo)</td>
 <input type="submit" name="install" value="install" /> <br/>
 </td>
 </table>
-<form id="form">
 __HTML__
 
     print catalogue({ xml => "tmp/install/downloads/contribs/contrib.xml", title => "Contrib", type => "contrib", cgi => $q });
