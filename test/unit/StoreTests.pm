@@ -13,6 +13,7 @@ BEGIN {
 
 use TWiki;
 use TWiki::Meta;
+use Error qw( :try );
 
 my $zanyweb = "ZanyTestZeebleWeb";
 
@@ -215,6 +216,79 @@ sub test_rename() {
     $this->assert_num_equals($revTopShouldBe, $newRevTop );
 }
 
+use CGI;
+use TWiki::UI::Save;
+use TWiki::UI::OopsException;
+
+sub test_releaselocksonsave {
+    my $this = shift;
+    my $web = $zanyweb;
+    my $topic = "MultiEditTopic";
+    my $meta = new TWiki::Meta($twiki, $web, $topic);
+
+    # create rev 1
+    my $query = new CGI ({
+                          '.path_info' => "/$web/$topic",
+                          originalrev => [ 0 ],
+                          'action' => [ 'save' ],
+                          text => [ "Baseline\nText\n" ],
+                         });
+    my $user = "TestUser1";
+    my $thePathInfo = "/$web/$topic";
+    my $theUrl = "/save/$web/$topic";
+
+    $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl, $query );
+    try {
+        TWiki::UI::Save::save( $twiki );
+    } catch TWiki::UI::OopsException with {
+        my $e = shift;
+        print $e->stringify();
+    } catch Error::Simple with {
+        my $e = shift;
+        print $e->stringify();
+    };
+
+    # create rev 2
+    $query = new CGI ({
+                       '.path_info' => "/$web/$topic",
+                       originalrev => [ 1 ],
+                       'action' => [ 'save' ],
+                       text => [ "Changed\nLines\n" ],
+                       forcenewrevision => [ 1 ],
+                      });
+    $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl, $query );
+    try {
+        TWiki::UI::Save::save( $twiki );
+    } catch TWiki::UI::OopsException with {
+        my $e = shift;
+        print $e->stringify();
+    } catch Error::Simple with {
+        my $e = shift;
+        print $e->stringify();
+    };
+
+    # now testuser2 has a go, based on rev 1
+    $query = new CGI ({
+                       '.path_info' => "/$web/$topic",
+                       originalrev => [ 1 ],
+                       'action' => [ 'save' ],
+                       text => [ "Sausage\nChips\n" ],
+                       forcenewrevision => [ 1 ],
+                      });
+    $user = "TestUser2";
+    $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl, $query );
+    try {
+        TWiki::UI::Save::save( $twiki );
+    } catch TWiki::UI::OopsException with {
+    } catch Error::Simple with {
+    };
+
+    my $text =  `cat $TWiki::dataDir/$web/$topic.txt`;
+    $this->assert_matches(qr/%META:TOPICINFO{author="TestUser2"/, $text);
+    $this->assert_matches(qr/version="1.3"/, $text);
+    $this->assert_matches(qr/<del> Changed <\/del><ins> Sausage <\/ins>/, $text);
+    $this->assert_matches(qr/<del> Lines <\/del><ins> Chips <\/ins>/, $text);
+
+}
+
 1;
-
-
