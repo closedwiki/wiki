@@ -108,7 +108,8 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 
 %TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><label for="topic" class="twikiGrayText">See below for help in editing this page.<br /></label><textarea id="topic" name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" onkeydown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
+%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><label for="topic" class="twikiGrayText">See below for help in editing this page.<br /></label><textarea id="topic" name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" onkeydown="if(window.event.keyCode==27) return false;">
+%TEXT%</textarea><br />
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />

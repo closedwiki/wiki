@@ -259,8 +259,8 @@ sub view {
     }
     $tmpl =~ s/%REVISIONS%/$revs/go;
     $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;
-
     $tmpl =~ m/^(.*)%TEXT%(.*$)/s;
+
     my $start = $1;
     my $end = $2;
     my $strip = 0;
@@ -279,31 +279,33 @@ sub view {
 
     # output in three chunks in case the text takes a long time to render.
     # the client can keep busy fetching the stylesheet, if it's smart.
-    _bungOut($session, $webName, $topicName, $start, $meta, $rev, $showRev, $viewRaw, $strip);
+    my $isTop = ( $rev == $showRev );
+    _bungOut($start, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, 0);
 
-    _bungOut($session, $webName, $topicName, $text, $meta, $rev, $showRev, $viewRaw, $strip);
+    _bungOut( $text, $session, $webName, $topicName,$meta, $isTop, $viewRaw, $strip, 1);
 
-    _bungOut($session, $webName, $topicName, $end, $meta, $rev, $showRev, $viewRaw, $strip);
+    _bungOut($end, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, 0);
 }
 
 sub _bungOut {
-    my ($session, $webName, $topicName, $text, $meta, $rev, $showRev, $viewRaw, $strip) = @_;
+    my ($text, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, $isText) = @_;
     my $renderer = $session->{renderer};
 
     $text = $renderer->renderMetaTags
-      ( $webName, $topicName, $text, $meta, ( $rev == $showRev ), $viewRaw );
+      ( $webName, $topicName, $text, $meta, $isTop, $viewRaw );
 
     $text = $session->handleCommonTags( $text, $webName, $topicName );
-    $text = $renderer->getRenderedVersion( $text, $webName, $topicName );
+    unless( $viewRaw && $isText ) {
+        $text = $renderer->getRenderedVersion( $text, $webName, $topicName );
+        $text =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
-    $text =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
-
-    # Write header based on 'contenttype' parameter, used to produce
-    # MIME types like text/plain or text/xml, e.g. for RSS feeds.
-    if( $strip ) {
-        $text =~ s/<img [^>]*>//g;  # remove image tags
-        $text =~ s/<a [^>]*>//g;    # remove anchor tags
-        $text =~ s/<\/a>//g;        # remove anchor tags
+        # Write header based on 'contenttype' parameter, used to produce
+        # MIME types like text/plain or text/xml, e.g. for RSS feeds.
+        if( $strip ) {
+            $text =~ s/<img [^>]*>//g;  # remove image tags
+            $text =~ s/<a [^>]*>//g;    # remove anchor tags
+            $text =~ s/<\/a>//g;        # remove anchor tags
+        }
     }
     print $text;
 }
