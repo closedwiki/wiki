@@ -67,7 +67,7 @@
 
     <!-- Install in local TWiki -->
     <target name="installOK" if="ENV.TWIKI_HOME" depends="test,src.zip">
-        <copy todir="${twiki}">
+        <copy todir="${twiki}" overwrite="yes">
             <fileset dir="${basedir}">
                 <patternset refid="installed.files"/>
             </fileset>
