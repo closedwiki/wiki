@@ -305,7 +305,12 @@ sub checkExist
    if( -e $newFileName && ! $theAttachment ) {
       # Unless moving an attachment, new topic should not already exist
       print "Content-type: text/html\n\n";
-      $tmpl= &TWiki::Store::readTemplate( "oopsexists" );
+      # FIXME - should this use oopsexists rather than oopsgeneral?
+      $tmpl = &TWiki::Store::readTemplate( "oopsgeneral" );
+      ##TWiki::writeDebug( "rename: tmpl = $tmpl" );
+      $tmpl =~ s/%SUMMARY%/Topic $newTopic already exists/go;
+      $tmpl =~ s/%DETAIL%/Topic $newTopic already exists in Web $newWeb, press _Back_ and try a new name/go;
+      # FIXME - could offer number addition to topic name that doesn't exist?
       $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
       print $tmpl;
       TWiki::writeDebug( "rename: topic already exists" );
