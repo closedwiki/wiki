@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1039479060" format="1.0" version="1.14"}%
+%META:TOPICINFO{author="PeterThoeny" date="1039944840" format="1.0" version="1.15"}%
 ---+ Table Plugin
 
 Gives extra control of table display:
@@ -28,6 +28,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 
 	* Table cell spacing.  Default: 1
 		* Set CELLSPACING = 1
+
+	* Table width, e.g. =100%= for relative, =640= for absolute width.  Default: (not set)
+		* Set TABLEWIDTH = 
 
 	* Vertical alignment of cells. Set to: =top=, =middle=, =bottom= or =baseline=; default: (empty)
 		* Set VALIGN = 
@@ -84,20 +87,26 @@ On line before the table use =%<nop>TABLE{...}%=:
 | =valign= | Vertical alignment of cells, set to =top=, =middle=, =bottom= or =baseline= | =valign="top"= |
 | =headeralign= | Header cell alignment, set to =left=, =center=, =right= or =justify=. Overrides individual cell settings | =headeralign="left"= |
 | =dataalign= | Data cell alignment, set to =left=, =center=, =right= or =justify=. Overrides individual cell settings | =dataalign="center"= |
+| =tablewidth= | Table width: Percentage of window width, or absolute pixel value. Default is unspecified | =tablewidth="100%"= |
+| =columnwidths= | Column widths: Comma delimited list of column widths, percentage or absolute pixel value. Default is unspecified | =columnwidths="80%, 20%"= |
+| =headerrows= | Number of header rows to exclude from sort; default 1 | =headerrows="1"= |
+| =footerrows= | Number of footer rows to exclude from sort; default 0 | =footerrows="1"= |
 
 All default to the global setting
 
 ---++ Example
 
-Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#000099" headercolor="#FFFFCC" databg="#C8CB8F, #DBDDB5" }%=
+Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#000099" headercolor="#FFFFCC" databg="#C8CB8F, #DBDDB5" headerrows="2" footerrows="1" }%=
 
-%TABLE{ sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#000099" headercolor="#FFFFCC" databg="#C8CB8F, #DBDDB5" }%
+%TABLE{ sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#000099" headercolor="#FFFFCC" databg="#C8CB8F, #DBDDB5" headerrows="2" footerrows="1" }%
+| *Table with two Header Rows and Footer Row* ||||||
 | *Num* | *Status* | *Action* | *Who* | *When* | *Progress* |
 | 1 | C | Chose new colours | John | 1-Dec-02 | |
 | 2 | X | Release | John | 1-Apr-02 | |
 | 3 |	| Get feedback | Anne | 1-Feb-02 | |
 | 12 | C | Spec error handling | Jack | 1-Dec-02 | |
 | 5 |	| Abc | John | | |
+| *Num* | *Status* | *Action* | *Who* | *When* | *Progress* |
 
 ---++ Plugin Installation Instructions
 
@@ -119,8 +128,9 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 ---++ Plugin Info
 
 |  Plugin Author: | %TWIKIWEB%.JohnTalintyre, %TWIKIWEB%.PeterThoeny |
-|  Plugin Version: | 09 Dec 2002 |
+|  Plugin Version: | 15 Dec 2002 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  15 Dec 2002: | PTh: Added headerrows and footerrows params (TWiki:Main/WoutMertens); added tablewidth and columnwidths params (TWiki:Main/ThorstenSommermann) |
 |  09 Dec 2002: | PTh: Added headercolor and datacolor parameters |
 |  05 Jun 2002: | PTh: Added "none" value to databg parameter (suggested by TWiki:Main/TaitCyrus); fixed sorting by stripping HTML tags, removing links and making sort ignore case (suggested by TWiki:Main/ShawnBradford) |
 |  13 Mar 2002: | PTh: Added TWiki:Main/ShawnBradford 's initsort and initdirection |
@@ -139,7 +149,7 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.StandardColors
 
 -- %TWIKIWEB%.JohnTalintyre - 07 Oct 2001 <br />
--- %TWIKIWEB%.PeterThoeny - 09 Dec 2002 <br />
+-- %TWIKIWEB%.PeterThoeny - 15 Dec 2002 <br />
 %META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1005707580" path="C:\Data\Temp\up.gif" size="876" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1005707591" path="C:\Data\Temp\down.gif" size="869" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1005707607" path="C:\Data\Temp\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
