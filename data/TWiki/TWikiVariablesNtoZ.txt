@@ -16,18 +16,24 @@ __Note:__ This topic is included by TWikiVariables
 	* Expands to: =%NOTIFYTOPIC%=, renders as [[%NOTIFYTOPIC%]]
 	* Related: [[#VarHOMETOPIC][HOMETOPIC]], [[#VarSTATISTICSTOPIC][STATISTICSTOPIC]], [[#VarTOPIC][TOPIC]]
 
+#VarPLUGINDESCRIPTIONS
+---+++ PLUGINDESCRIPTIONS -- list of plugin descriptions
+   * Syntax: =%<nop>PLUGINDESCRIPTIONS%=
+   * Expands to: %PLUGINDESCRIPTIONS%
+   * Related: [[#VarACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[#VarFAILEDPLUGINS][FAILEDPLUGINS]], [[#VarPLUGINVERSION2][PLUGINVERSION]]
+
 #VarPLUGINVERSION
 ---+++ PLUGINVERSION -- the version of the TWiki Plugin API
 	* This is the =$TWiki::Plugins::VERSION= number, also indicating the version of the Func module
-	* Syntax: =%<nop>PLUGINVERSION{}%=
-	* Expands to: =%PLUGINVERSION{}%=
+	* Syntax: =%<nop>PLUGINVERSION%=
+	* Expands to: =%PLUGINVERSION%=
 	* Related: [[#VarPLUGINVERSION2][PLUGINVERSION{"name"}]], [[#VarWIKIVERSION][WIKIVERSION]]
 
 #VarPLUGINVERSION2
 ---+++ PLUGINVERSION{"name"} -- the version of an installed Plugin
 	* Syntax: =%<nop>PLUGINVERSION{"name"}%=
-	* Example: =%<nop>PLUGINVERSION{"DefaultPlugin"}%= expands to =%PLUGINVERSION{"DefaultPlugin"}%=
-	* Related: [[#VarPLUGINVERSION][PLUGINVERSION]], [[#VarWIKIVERSION][WIKIVERSION]]
+	* Example: =%<nop>PLUGINVERSION{"InterwikiPlugin"}%= expands to =%PLUGINVERSION{"InterwikiPlugin"}%=
+	* Related: [[#VarPLUGINVERSION][PLUGINVERSION]], [[#VarWIKIVERSION][WIKIVERSION]],  [[#VarACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[#FAILEDPLUGINS][FAILEDPLUGINS]], [[#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]]
 
 #VarPUBURL
 ---+++ PUBURL -- the base URL of attachments

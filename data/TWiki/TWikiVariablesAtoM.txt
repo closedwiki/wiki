@@ -7,6 +7,12 @@ __Note:__ This topic is included by TWikiVariables
 -----
 %STARTINCLUDE%
 
+#VarACTIVATEDPLUGINS
+---+++ ACTIVATEDPLUGINS -- list of currently activated plugins
+   * Syntax: =%<nop>ACTIVATEDPLUGINS%=
+   * Expands to: %ACTIVATEDPLUGINS%
+   * Related: [[#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]], [[#VarFAILEDPLUGINS][FAILEDPLUGINS]], [[#VarPLUGINVERSION2][PLUGINVERSION]]
+
 #VarATTACHURL
 ---+++ ATTACHURL -- full URL for attachments in the current topic
 	* Syntax: =%<nop>ATTACHURL%=
@@ -55,6 +61,12 @@ __Note:__ This topic is included by TWikiVariables
 	 | =type="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | (this is the default) |
 	* Example: =%<nop>ENCODE{"spaced name"}%= expands to =%ENCODE{"spaced name"}%=
 	* Related: [[#VarURLPARAM][URLPARAM]]
+
+#VarFAILEDPLUGINS
+---+++ FAILEDPLUGINS -- debugging for plugins that failed to load, and handler list
+   * Syntax: =%<nop>FAILEDPLUGINS%=
+   * Expands to: =%FAILEDPLUGINS%=
+   * Related: [[#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]], [[#ACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[#PLUGINVERSION2][PLUGINVERSION]]
 
 #VarFORMFIELD
 ---+++ FORMFIELD{"format"} -- renders a field in the form attached to some topic
