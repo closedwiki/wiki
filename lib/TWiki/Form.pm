@@ -220,22 +220,7 @@ sub chooseFormButton
 # Render form information 
 sub renderForEdit
 {
-    my( $web, $form, $meta, @fieldsInfo ) = @_;
-
-# FIXME: Old code missing that gets default value from cgi param:
-#
-#   # check for CategoryName=CategoryValue parameter
-#   my $cvalue = $query->param( $cmd[1] );
-#   if( $cvalue ) {
-#       $src = "<!---->$cvalue<!---->";
-#   } elsif( $ctext ) {
-#       foreach( split( /\n/, $ctext ) ) {
-#           if( /$cmd[1]/ ) {
-#               $src = $_;
-#               last;
-#           }
-#       }
-#   }
+    my( $web, $form, $meta, $query, @fieldsInfo ) = @_;
 
     my $chooseForm = "";   
     if( TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) ) {
@@ -245,6 +230,8 @@ sub renderForEdit
     # FIXME could do with some of this being in template
     my $text = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
                &link( $web, $form, "", "h", "", 2, $chooseForm ) . "</tr>\n";
+               
+    fieldVars2Meta( $web, $query, $meta, "override" );
     
     foreach my $c ( @fieldsInfo ) {
         my @fieldInfo = @$c;
@@ -294,36 +281,6 @@ sub renderForEdit
             }
             $value = "<select name=\"$name\" size=\"$size\">$val</select>";
         } elsif( $type =~ "^checkbox" ) {
-
-# FIXME: Old code had this (with modification that adds
-#        a new cgi parameter query for default checkbox values) :
-#
-#           $catname = $cmd[1];
-#           $scatname = $catname;
-#           $scatname =~ s/[^a-zA-z0-9]//g;
-#           if( $cmd[2] eq "true" || $cmd[2] eq "1" ) {
-#               $i = $len - 4;
-#               $catmodifier = "$catmodifier\n<input type=\"button\" value=\" Set \" onClick=\"checkAll(this, 2, $i, true)\">&nbsp;";
-#               $catmodifier = "$catmodifier\n<input type=\"button\" value=\"Clear\" onClick=\"checkAll(this, 1, $i, false)\">&nbsp;";
-#           }
-#           $itemsPerLine = $cmd[3];
-#           $catvalue = "\n<table cellspacing=\"0\" cellpadding=\"0\"><tr>";
-#           for( $i = 4; $i < $len; $i++ ) {
-#               my $value = $cmd[$i];
-#               my $svalue = $value;
-#               $svalue =~ s/[^a-zA-z0-9]//g;
-#               $cvalue = $query->param( "$scatname$svalue" );
-#               my $flag = "";
-#               if( ( $src =~ /$value[^a-zA-Z0-9\.]/ ) || ( $cvalue ) ) {
-#                   $flag = "checked";
-#               }
-#               $catvalue = "$catvalue\n<td><input type=\"checkbox\" name=\"$scatname$svalue\" $flag>$value &nbsp;&nbsp;</td>";
-#               if( ( $itemsPerLine > 0 ) && (($i-4) % $itemsPerLine == $itemsPerLine - 1 ) ) {
-#                   $catvalue = "$catvalue\n</tr><tr>";
-#               }
-#           }
-#           $catvalue = "$catvalue\n</tr></table>\n";
-
             if( $type eq "checkbox+buttons" ) {
                 my $boxes = $#fieldInfo + 1;
                 $extra = "<br>\n<input type=\"button\" value=\" Set \" onClick=\"checkAll(this, 2, $boxes, true)\">&nbsp;\n" .
@@ -398,9 +355,10 @@ sub getFormInfoFromMeta
 # Note that existing meta information for fields is removed
 sub fieldVars2Meta
 {
-   my( $webName, $query, $meta ) = @_;
+   my( $webName, $query, $meta, $justOverride ) = @_;
    
-   $meta->remove( "FIELD" );
+   $meta->remove( "FIELD" ) if( ! $justOverride );
+   
    my @fieldsInfo = getFormInfoFromMeta( $webName, $meta );
    foreach my $fieldInfop ( @fieldsInfo ) {
        my @fieldInfo = @$fieldInfop;
@@ -408,8 +366,8 @@ sub fieldVars2Meta
        my $title     = shift @fieldInfo;
        my $type      = shift @fieldInfo;
        my $size      = shift @fieldInfo;
-       my $value     = "";
-       $value = $query->param( $fieldName . "FLD" );
+       my $value     = $query->param( $fieldName . "FLD" );
+       my $cvalue    = "";
        
        if( $fieldName eq "UseForm" ) {
           if( lc $value ne "yes" ) {
@@ -421,21 +379,31 @@ sub fieldVars2Meta
        
        if( ! $value && $type =~ "^checkbox" ) {
           foreach my $name ( @fieldInfo ) {
-             if( $query->param( "$fieldName" . "FLD$name" ) ) {
-                 $value .= ", " if( $value );
-                 $value .= "$name";
+             $cvalue = $query->param( "$fieldName" . "FLD$name" );
+             if( defined( $cvalue ) ) {
+                 if( ! $value ) {
+                     $value = "";
+                 } else {
+                     $value .= ", " if( $cvalue );
+                 }
+                 $value .= "$name" if( $cvalue );
              }
           }
        }
        
-       $value = TWiki::Meta::restoreValue( $value );
+       if( defined( $value ) ) {
+           $value = TWiki::Meta::restoreValue( $value );
+       }
               
-       # Have title and name stored so that topic can be view without reading in form definition
-       my @args = ( "name" =>  $fieldName,
-                    "title" => $title,
-                    "value" => $value );
+       # Have title and name stored so that topic can be viewed without reading in form definition
+       $value = "" if( ! defined( $value ) && ! $justOverride );
+       if( defined( $value ) ) {
+           my @args = ( "name" =>  $fieldName,
+                        "title" => $title,
+                        "value" => $value );
                     
-       $meta->put( "FIELD", @args );
+           $meta->put( "FIELD", @args );
+       }
    }
    
    return $meta;
