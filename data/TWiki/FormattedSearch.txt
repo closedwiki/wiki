@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1011075257" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1013886793" format="1.0" version="1.5"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
@@ -28,6 +28,7 @@ Variables that can be used in the format string:
 | =$n= | New line |
 | =$web= | Name of the web |
 | =$topic= | Topic name |
+| =$topictext= | Formatted topic text |
 | =$locked= | LOCKED flag (if any) |
 | =$date= | Time stamp of last topic update, i.e. =%GMTIME{"$day $mon $year - $hour:$min"}%= |
 | =$isodate= | Time stamp of last topic update, i.e. =%GMTIME{"$year-$mo-$dayT$hour:$minZ"}%= |
