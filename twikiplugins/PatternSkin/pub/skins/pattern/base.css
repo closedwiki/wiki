@@ -22,7 +22,7 @@ body, p, li, ul, ol, dl, dt, dd, acronym, h1, h2, h3, h4, h5, h6 {
 }
 
 p {
-	margin: 1em 0 1.1em 0;
+	margin: 1em 0 0 0;
 }
 
 table, caption, colgroup, col, tr, th, td {
@@ -81,208 +81,8 @@ span.hidden {
 	padding: 0;
 }
 #TWikiBottomBar {
-	padding-bottom: 1em;
-	margin: 0;
-}
-
-/* bottom bar */
-
-#TWikiBottomBar {
 	margin: 0 0 0 18em; /* align with TWikiMain */
 }
-
-/* CONTENT ELEMENTS */
-
-
-/**	----------------------------------
-*	top bar contents, bottom bar contents
-*	---------------------------------- */
-
-.TWikiTopBarMainContents {
-	margin: 0;
-}
-
-
-
-
-
-/**	----------------------------------
-*	topic info
-*	---------------------------------- */
-
-.TWikiTopicInfo {
-	margin: 0.5em 0 0 0;
-}
-
-/**	----------------------------------
-*	rev info
-*	---------------------------------- */
-
-.TWikiRevInfo {
-	font-size: 95%;
-}
-.TWikiRevInfo em,
-.TWikiRevInfo i {
-	font-style: normal;
-}
-
-.TWikiTopicFooter {
-	display: block;
-	margin-top: 1em;
-	padding-bottom: 2em;
-}
-
-/**	----------------------------------
-*	home path
-*	---------------------------------- */
-
-.TWikiHomePath {
-	font-size: 90%;
-	color: #000;
-}
-.TWikiHomePath .sep {
-	font-family: Arial,Helvetica, "Franklin Gothic Medium", "Lucida Sans", Arial, sans-serif;
-}
-.TWikiHomePath a:hover {
-	text-decoration: underline;
-}
-
-/**	----------------------------------
-*	tool bar
-*	---------------------------------- */
-
-.TWikiToolBar {
-	height: 1.5em; /* must define a height ... (?); include button padding */
-}
-.TWikiToolBar p {
-	clear: both;
-	height: 0;
-	display: none;
-}
-.TWikiToolBar ul {
-	padding: 0;
-	margin: 0;
-	float: left;
-	width: 100%;
-	font-size: 95%;
-	color: #666;
-	background-color: #98A2B0;
-}
-.TWikiToolBar ul li {
-	display: inline;
-}
-.TWikiToolBar ul li a:link,
-.TWikiToolBar ul li a:visited {
-	padding: 0.25em 0.85em;
-	text-decoration: none;
-	float: left;
-	color: white;
-	font-weight: bold;
-	background-color: transparent/*#98A2B0*/;
-	margin-right: 1px;
-}
-.TWikiToolBar ul li a:hover {
-	background-color: #b4d5ff;
-	color: #2c57c2;
-	text-decoration: none;
-}
-.TWikiToolBar input {
-	margin: 0.1em 0 0.1em 0;
-	width: 10em;
-	height: 1.2em;
-	font-size: 100%;
-	font-family: "Lucida Grande", verdana, lucida, helvetica, sans-serif;
-	border-width: 1px;
-	vertical-align: middle;
-}
-.TWikiToolBar .inputButton {
-	margin-left: 3px;
-	padding: 0;
-	height: 18px;
-	width: 18px;
-	vertical-align: middle;
-}
-
-/**	----------------------------------
-*	topic header
-*	---------------------------------- */
-
-.TWikiTopicHeader {
-	display: block;
-	height: 1em;
-	margin-top: 0.3em;
-}
-
-/**	----------------------------------
-*	page nav: top to, to bottom
-*	---------------------------------- */
-
-.TWikiPageNav {
-	font-size: 95%;
-	font-weight: bold;
-}
-
-
-
-/**	----------------------------------
-*	top bar menu
-*	---------------------------------- */
-
-#TWikiTopBar ul {
-	padding: 0;
-	margin: 0;
-	float: left;
-	width: 100%;
-	font-size: 95%;
-	color: #666;
-	background-color: #98A2B0;
-}
-#TWikiTopBar ul li {
-	display: inline;
-}
-#TWikiTopBar ul li a:link,
-#TWikiTopBar ul li a:visited {
-	padding: 0.25em 0.85em;
-	text-decoration: none;
-	float: left;
-	color: white;
-	font-weight: bold;
-	background-color: transparent/*#98A2B0*/;
-	margin-right: 1px;
-}
-#TWikiTopBar ul li a:hover {
-	background-color: #b4d5ff;
-	color: #2c57c2;
-	text-decoration: underline;
-}
-
-/* OTHER STYLES */
-
-.TWikiClearLine {
-	margin: 0;
-	padding: 0;
-	height: 0;
-	clear: all;
-}
-.TWikiAlert {
-	color: red;
-}
-.apart {
-	color: green;
-}
-
-.TWikiGrayText {
-	color: #97A2B1;
-}
-.TWikiGrayText a:link, .TWikiGrayText a:visited {
-	color: #97A2B1;
-	text-decoration: underline;
-}
-.TWikiGrayText a:hover {
-	color: #2c57c2;
-}
-
-
 
 
 
@@ -330,11 +130,13 @@ a:link img, a:visited img, a:hover img, a:active img {
 }
 
 input {
+	font-size: 95%;
+	font-family: verdana, sans-serif;
 	margin: 3px 0 3px 0;
-	height: 1em;
+	height: 100%
 }
 .submit {
-	font-size: 10px;
+	font-size: 95%;
 	font-family: verdana, sans-serif;
 	font-weight: bold;
 	line-height: 140%;
@@ -382,13 +184,13 @@ pre, code {
 #TWikiMiddleContainer { }
 
 #TWikiMain {
-	background-color: white;
+	background-color: transparent;
 	border-left: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
 }
 
 #TWikiTopBar {
-	background-color: white;
+	background-color: transparent;
 }
 
 /* left bar */
@@ -424,40 +226,53 @@ html>body .TWikiLeftBarContents li a {
 	width: auto;
 }
 
+#TWikiBottomBar {
+	padding-bottom: 1em;
+}
+
+.TWikiTopBarMainContents {
+	margin: 0;
+}
+
 /**	----------------------------------
 *	styling of layout blocks contents
 *	---------------------------------- */
 
-#TWikiTopic {
+.TWikiTopic {
 	margin: 1.5em 0 3em 0;
 	background-color: transparent;
 }
-#TWikiTopic a:link {
+.TWikiTopic ul {
+	margin-top: 0;
+}
+.TWikiTopic a:link {
 	text-decoration: underline;
 }
-#TWikiTopic a:visited {
+.TWikiTopic a:visited {
 	text-decoration: underline;
 	color: #76B2ED;
 }
-#TWikiTopic a:hover {
+.TWikiTopic a:hover {
 	color: #2c57c2;
 }
-
-#TWikiTopic table,
-#TWikiTopic th,
-#TWikiTopic td {
+/*
+.TWikiTopic table,
+.TWikiTopic th,
+.TWikiTopic td {
 	border: 1px solid #97A2B1;
 }
-#TWikiTopic th,
-#TWikiTopic td {
+*/
+.TWikiTopic th,
+.TWikiTopic td {
 	margin: 0px;
 	padding: 2px 4px 2px 4px;
 }
-#TWikiTopic th.first,
-#TWikiTopic td.first {
+/*
+.TWikiTopic th.first,
+.TWikiTopic td.first {
 	border-left: 0px;
 }
-
+*/
 .TWikiBottomBarMainContents {
 	padding: 0.5em 2.5em 1.5em 0;
 	font-size: 80%;
@@ -621,6 +436,182 @@ html>body .TWikiToc li a {
 	margin: 0;
 	padding: 0;
 	font-weight: bold;
+}
+
+
+/**	----------------------------------
+*	topic info
+*	---------------------------------- */
+
+.TWikiTopicInfo {
+	margin: 0.5em 0 0 0;
+}
+
+/**	----------------------------------
+*	rev info
+*	---------------------------------- */
+
+.TWikiRevInfo {
+	font-size: 95%;
+}
+.TWikiRevInfo em,
+.TWikiRevInfo i {
+	font-style: normal;
+}
+
+.TWikiTopicFooter {
+	display: block;
+	margin-top: 1em;
+	padding-bottom: 2em;
+}
+
+/**	----------------------------------
+*	home path
+*	---------------------------------- */
+
+.TWikiHomePath {
+	font-size: 90%;
+}
+.TWikiHomePath .sep {
+	font-family: Arial,Helvetica, "Franklin Gothic Medium", "Lucida Sans", Arial, sans-serif;
+}
+.TWikiHomePath a:hover {
+	text-decoration: underline;
+}
+
+/**	----------------------------------
+*	tool bar
+*	---------------------------------- */
+
+.TWikiToolBar {
+	height: 1.5em; /* must define a height ... (?); include button padding */
+}
+.TWikiToolBar p {
+	clear: both;
+	height: 0;
+	display: none;
+}
+.TWikiToolBar ul {
+	padding: 0;
+	margin: 0;
+	float: left;
+	width: 100%;
+	font-size: 95%;
+	color: #666;
+	background-color: #98A2B0;
+}
+.TWikiToolBar ul li {
+	display: inline;
+}
+.TWikiToolBar ul li a:link,
+.TWikiToolBar ul li a:visited {
+	padding: 0.25em 0.85em;
+	text-decoration: none;
+	float: left;
+	color: white;
+	font-weight: bold;
+	background-color: transparent/*#98A2B0*/;
+	margin-right: 1px;
+}
+.TWikiToolBar ul li a:hover {
+	background-color: #b4d5ff;
+	color: #2c57c2;
+	text-decoration: none;
+}
+.TWikiToolBar input {
+	margin: 0.1em 0 0.1em 0;
+	width: 10em;
+	height: 1.2em;
+	font-size: 100%;
+	font-family: "Lucida Grande", verdana, lucida, helvetica, sans-serif;
+	border-width: 1px;
+	vertical-align: middle;
+}
+.TWikiToolBar .inputButton {
+	margin-left: 3px;
+	padding: 0;
+	height: 18px;
+	width: 18px;
+	vertical-align: middle;
+}
+
+/**	----------------------------------
+*	topic header
+*	---------------------------------- */
+
+.TWikiTopicHeader {
+	display: block;
+	height: 1em;
+	margin-top: 0.3em;
+}
+
+/**	----------------------------------
+*	page nav: top to, to bottom
+*	---------------------------------- */
+
+.TWikiPageNav {
+	font-size: 95%;
+	font-weight: bold;
+}
+
+
+
+/**	----------------------------------
+*	top bar menu
+*	---------------------------------- */
+
+#TWikiTopBar ul {
+	padding: 0;
+	margin: 0;
+	float: left;
+	width: 100%;
+	font-size: 95%;
+	color: #666;
+	background-color: #98A2B0;
+}
+#TWikiTopBar ul li {
+	display: inline;
+}
+#TWikiTopBar ul li a:link,
+#TWikiTopBar ul li a:visited {
+	padding: 0.25em 0.85em;
+	text-decoration: none;
+	float: left;
+	color: white;
+	font-weight: bold;
+	background-color: transparent/*#98A2B0*/;
+	margin-right: 1px;
+}
+#TWikiTopBar ul li a:hover {
+	background-color: #b4d5ff;
+	color: #2c57c2;
+	text-decoration: underline;
+}
+
+/* OTHER STYLES */
+
+.TWikiClearLine {
+	margin: 0;
+	padding: 0;
+	height: 0;
+	clear: all;
+}
+.TWikiAlert {
+	color: red;
+}
+.apart {
+	color: green;
+}
+
+.TWikiGrayText {
+	color: #97A2B1;
+}
+.TWikiGrayText a:link, .TWikiGrayText a:visited {
+	color: #97A2B1;
+	text-decoration: underline;
+}
+.TWikiGrayText a:hover {
+	color: #2c57c2;
 }
 
 /* handy: */
