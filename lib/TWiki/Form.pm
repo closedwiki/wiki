@@ -45,10 +45,11 @@ Not yet documented.
 sub getFormDefinition
 {
     my( $text ) = @_;
-    
+
     my @fields = ();
-    
     my $inBlock = 0;
+    $text =~ s/\\\r?\n//go; # remove trailing '\' and join continuation lines
+
     # | *Name:* | *Type:* | *Size:* | *Value:*  | *Tooltip message:* | *Attributes:* |
     # Tooltip and attributes are optional
     foreach( split( /\n/, $text ) ) {
@@ -89,11 +90,11 @@ sub getFormDefinition
                     # FIXME object if too short
                     push @fields, [ $name, $title, $type, $size, $vals, $tooltip, $attributes ];
             } else {
-            $inBlock = 0;
+                $inBlock = 0;
+            }
         }
     }
-    }
-    
+
     return @fields;
 }
 
