@@ -1,15 +1,26 @@
 package TWiki::Contrib::BuildContrib::TWikiCLI;
+my $prefix = "TWiki::Contrib::BuildContrib::TWikiCLI";
 
-use Getopt::Long;
+use Getopt::Long; # see http://www.aplawrence.com/Unix/perlgetopts.html
 
 sub dispatch {
  my $verboseFlag = 0;
  GetOptions( "verbose!" => \$verboseFlag );
 
- my $subcommand = $ARGV[0];
+ my @args =  qw(extension install DistributionContrib);# "@ARGV;
 
- if (defined &$subcommand) {
-  return &$subcommand;
+ my $class = ucfirst lc shift @args; # eg. extension => Extension 
+ my $fqClass = $prefix."::".$class;
+
+ eval { require $fqClass; import $fqClass; };
+ 
+ my $dispatchSub = $@
+  ? &noSuchMethod  # don't have it
+  : sub { dispatch(@_) };
+
+
+ if (defined &$dispatchSub) {
+  return &$dispatchSub(@args);
  } else {
   return helpText();
  }
@@ -20,9 +31,8 @@ sub dispatch {
  }
 }
 
-sub extension {
- print "love ya sweety\n";
+sub noSuchMethod {
+
 
 }
-
 1;
