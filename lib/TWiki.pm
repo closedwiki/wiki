@@ -81,6 +81,7 @@ use vars qw(
         @isoMonth $TranslationToken $code @code $depth %mon2num
         $scriptSuffix
         $newTopicFontColor $newTopicBgColor
+        $headerPatternDa $headerPatternSp $headerPatternHt
     );
 
 # TWiki::Store config:
@@ -98,7 +99,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "24 Feb 2001";
+$wikiversion      = "28 Feb 2001";
 
 # ===========================
 # read the configuration part
@@ -118,6 +119,11 @@ use TWiki::Plugins;   # plugins handler  #AS
 
 { my $count = 0;
   %mon2num = map { $_ => $count++ } @isoMonth; }
+
+$headerPatternDa = '^---*(\++)\s+(.+)\s*$';     # '---++ Header', '---+ Header'
+$headerPatternSp = '^\t(\++)\s+(.+)\s*$';       # '   ++ Header', '   + Header'
+$headerPatternHt = '^<h([1-6])>\s*(.+?)\s*</h[1-6]>'; # '<h6>Header</h6>
+
 
 # =========================
 sub initialize
@@ -221,7 +227,7 @@ sub getEmailNotifyList
 
     my @list = ();
     foreach ( split( /\n/, &TWiki::Store::readWebTopic( $web, $topicname ) ) ) {
-	next unless /^\s\*\s[A-Za-z0-9\.]/;
+	next unless /^\s\*\s[A-Za-z0-9\.]+\s+\-\s+/;
 	push @list, $1 if (/([\w\-\.\+]+\@[\w\-\.\+]+)/);
     }
 
@@ -466,20 +472,25 @@ sub extractNameValuePair
     my( $str, $name ) = @_;
 
     if( $name ) {
-        # format is: name = "value"
-        if( ( $str =~ /(^|[^\S])$name[\s]*=[\s]*[\"]([^\"]*)/ ) && ( $2 ) ) {
+        # format is: %VAR{ ... name = "value" }%
+        if( ( $str =~ /(^|[^\S])$name\s*=\s*\"([^\"]*)\"/ ) && ( $2 ) ) {
             return $2;
         }
     } else {
-        # test if format: "value"
-        if( ( $str =~ /(^|=[\s]*[\"][^\"]*\")[\s]*[\"]([^\"]*)/ ) && ( $2 ) ) {
+        # test if format: { "value" ... }
+        if( ( $str =~ /(^|\=\s*\"[^\"]*\")\s*\"([^\"]*)\"/ ) && ( $2 ) ) {
+            # is: { "value" ... }
             return $2;
-        } elsif( ( $str =~ /^[\s]*([^"]\S*)/ ) && ( $1 ) ) { #"
-            # format is: value
+
+        } elsif( ( $str =~ /^\s*\w+\s*=\s*\"([^\"]*)/ ) && ( $1 ) ) {
+            # is not a standalone var, but: %VAR{ name = "value" }%
+            return "";
+
+        } else {
+            # format is: %VAR{ value }%
             return $1;
         }
     }
-
     return "";
 }
 
@@ -588,8 +599,8 @@ sub handleTime
 {
     my( $theAttributes, $theZone ) = @_;
     # format examples:
-    #   28 Jul 2000 15:33 is "day month year hour:min:sec"
-    #   001128 "2year0monthday"
+    #   28 Jul 2000 15:33:59 is "$day $month $year $hour:$min:$sec"
+    #   001128               is "$ye$mo$day"
 
     my $format = extractNameValuePair( $theAttributes );
 
@@ -627,6 +638,114 @@ sub handleTime
         }
     }
     return $value;
+}
+
+#AS
+# =========================
+sub showError
+{
+    my( $errormessage ) = @_;
+    return "<font size=\"-1\" color=\"#FF0000\">$errormessage</font>" ;
+}
+
+#AS
+# =========================
+sub handleToc
+{
+    # Andrea Sterbini 22-08-00 / PTh 28 Feb 2001
+    # Routine to create a TOC bulleted list linked to the section headings
+    # of a topic. A section heading is entered in one of the following forms:
+    #   $headingPatternSp : \t++... spaces section heading
+    #   $headingPatternDa : ---++... dashes section heading
+    #   $headingPatternHt : <h[1-6]> HTML section heading </h[1-6]>
+    # Parameters:
+    #   $_[0] : the text of the current topic
+    #   $_[1] : the topic we are in
+    #   $_[2] : the web we are in
+    #   $_[3] : attributes = "Topic" [web="Web"] [depth="N"]
+
+    ##     $_[0]     $_[1]      $_[2]    $_[3]
+    ## my( $theText, $theTopic, $theWeb, $attributes ) = @_;
+
+    # get the topic name attribute
+    my $topicname = extractNameValuePair( $_[3] )  || $_[1];
+
+    # get the web name attribute
+    my $web = extractNameValuePair( $_[3], "web" ) || $_[2];
+    $web =~ s/\//\./go;
+    my $webPath = $web;
+    $webPath =~ s/\./\//go;
+
+    # get the depth limit attribute
+    my $depth = extractNameValuePair( $_[3], "depth" ) || 6;
+
+    my $result  = "";
+    my $line  = "";
+    my $level = "";
+    my @list  = ();
+
+    if( "$web.$topicname" eq "$_[2].$_[1]" ) {
+        # use text from parameter
+        @list = split( /\n/, $_[0] );
+
+    } else {
+        # read text from file
+        if ( ! &TWiki::Store::topicExists( $web, $topicname ) ) {
+            return showError( "TOC: Cannot find topic \"$web.$topicname\"" );
+        }
+        @list = split( /\n/, &TWiki::Store::readWebTopic( $web, $topicname ) );
+        # FIXME: Recursively %INCLUDE{...}% handling is pending
+    }
+
+    @list = grep { /(<\/?[pP][rR][eE]>)|($headerPatternDa)|($headerPatternSp)|($headerPatternHt)/ } @list;
+    my $insidePre = 0;
+    my $i = 0;
+    my $tabs = "";
+    my $anchor = "";
+    foreach $line ( @list ) {
+        if( $line =~ /^.*<[pP][rR][eE]>.*$/ ) {
+            $insidePre = 1;
+            $line = "";
+        }
+        if( $line =~ /^.*<\/[pP][rR][eE]>.*$/ ) {
+            $insidePre = 0;
+            $line = "";
+        }
+        if (!$insidePre) {
+            $level = $line ;
+            if ( $line =~  /$headerPatternDa/ ) {
+                $level =~ s/$headerPatternDa/$1/go ;
+                $level = length $level;
+                $line  =~ s/$headerPatternDa/$2/go ;
+                $anchor = makeAnchorName( $line );
+            } elsif
+               ( $line =~  /$headerPatternSp/ ) {
+                $level =~ s/$headerPatternSp/$1/go ;
+                $level = length $level;
+                $line  =~ s/$headerPatternSp/$2/go ;
+                $anchor = makeAnchorName( $line );
+            } elsif
+               ( $line =~  /$headerPatternHt/ ) {
+                $level =~ s/$headerPatternHt/$1/go ;
+                $line  =~ s/$headerPatternHt/$2/go ;
+                $anchor = makeAnchorName( $line );
+            }
+            if( ( $line ) && ( $level <= $depth ) ) {
+                $tabs = "";
+                for( $i=0 ; $i<$level ; $i++ ) {
+                    $tabs = "\t$tabs";
+                }
+                $line = "$tabs* <a href=\"$scriptUrlPath/view$scriptSuffix/$webPath/$topicname#$anchor\">$line</a>";
+                $result .= "\n$line";
+            }
+        }
+    }
+    if( $result ) {
+        return $result;
+
+    } else {
+        return showError("TOC: No TOC in \"$web.$topicname\"");
+    }
 }
 
 # =========================
@@ -693,6 +812,8 @@ sub handleInternalTags
     $_[0] =~ s/%STARTINCLUDE%//go;
     $_[0] =~ s/%STOPINCLUDE%//go;
     $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo;
+    $_[0] =~ s/%TOC{([^}]*)}%/&handleToc($_[0],$_[1],$_[2],$1)/geo;
+    $_[0] =~ s/%TOC%/&handleToc($_[0],$_[1],$_[2],"")/geo;
 }
 
 # =========================
@@ -776,9 +897,12 @@ sub makeAnchorName
     my( $theName ) = @_;
     my $anchorName = $theName;
 
-    $anchorName =~ s/^\s*\@?//o;
-    $anchorName =~ s/\s*$//o;
-    $anchorName =~ s/[^a-zA-Z0-9]/_/go;
+    $anchorName =~ s/^\s*\#?//o;          # no leading space nor '#'
+    $anchorName =~ s/\s*$//o;             # no trailing space
+    $anchorName =~ s/[^a-zA-Z0-9]/_/go;   # only allowed chars
+    $anchorName =~ s/__+/_/go;            # remove excessive _
+    $anchorName =~ s/^(.{32})(.*)$/$1/o;  # limit to 32 chars
+
     return $anchorName;
 }
 
@@ -840,7 +964,7 @@ sub internalLink
 # =========================
 sub specificLink
 {
-    my( $thePreamble, $theWeb, $theText, $theLink ) = @_;
+    my( $thePreamble, $theWeb, $theTopic, $theText, $theLink ) = @_;
 
     # format: $thePreamble[[$theText]]
     # format: $thePreamble[[$theText][$theLink]]
@@ -857,13 +981,13 @@ sub specificLink
 
     my $web = $1 || $theWeb;            # extract 'Web.'
     (my $baz = "foo") =~ s/foo//;       # reset $1, defensive coding
-    $theLink =~ s/(\@[a-zA-Z_0-9\-]*$)//o;
-    my $anchor = $1 || "";              # extract '@anchor'
-    my $topic = $theLink || $topicName; # remaining is topic
-    # above line fails in %INCLUDE% and %SEARCH% !!!
-    # ToDo: get topic name from parameter, not $topicName
+    $theLink =~ s/(\#[a-zA-Z_0-9\-]*$)//o;
+    my $anchor = $1 || "";              # extract '#anchor'
+    my $topic = $theLink || $theTopic;  # remaining is topic
+    $topic =~ s/\&[a-z]+\;//goi;        # filter out &any; entities
+    $topic =~ s/\&\#[0-9]+\;//go;       # filter out &#123; entities
+    $topic =~ s/[\\\/\#\&\(\)\{\}\[\]\<\>\!\=\:\,\.]//go;
     $topic =~ s/$securityFilter//go;    # filter out suspicious chars
-    $topic =~ s/[\\\/\#]//go;           #   and '\', '/', '#'
     if( ! $topic ) {
         return "$thePreamble$theText"; # no link if no topic
     }
@@ -899,6 +1023,10 @@ sub getRenderedVersion
 {
     my( $text, $theWeb ) = @_;
     my( $result, $insidePRE, $insideVERBATIM, $insideTABLE, $noAutoLink, $blockquote );
+
+    # FIXME: Get $theTopic from parameter to handle [[#anchor]] correctly
+    # (fails in %INCLUDE%, %SEARCH%)
+    my $theTopic = $topicName;
 
     # PTh 22 Jul 2000: added $theWeb for correct handling of %INCLUDE%, %SEARCH%
     if( !$theWeb ) {
@@ -976,8 +1104,17 @@ sub getRenderedVersion
             s/&/&amp;/go;                              # escape standalone "&"
             s/$TranslationToken/&/go;
 
+# Headings
+            # '<h6>...</h6>' HTML rule (to prepend anchor)
+            s/$headerPatternHt/"<a name =\"" . &makeAnchorName($2) . "\"><h$1> $2 <\/h$1><\/h$1>"/geoi;
+            # '\t+++++++' rule
+            s/$headerPatternSp/"<a name =\"" . &makeAnchorName( $2 ) . "\"><h" . (length $1) . "> $2 <\/h" . (length $1) ."><\/a>"/geo;
+            # '----+++++++' rule
+            s/$headerPatternDa/"<a name =\"" . &makeAnchorName( $2 ) . "\"><h" . (length $1) . "> $2 <\/h" . (length $1) ."><\/a>"/geo;
+
+
 # Horizontal rule
-            s/^----*/<HR>/o;
+            s/^---*/<HR>/o;
             s@^([a-zA-Z0-9]+)----*@<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><HR></td></tr></table>@o;
 
 # Table of format: | cell | cell |
@@ -1001,8 +1138,8 @@ sub getRenderedVersion
                 $code = "";
             }
 
-# '@WikiName' anchors
-            s/^(\@)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ '<a name="' . &makeAnchorName( $2 ) . '"><\/a>'/geo;
+# '#WikiName' anchors
+            s/^(\#)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ '<a name="' . &makeAnchorName( $2 ) . '"><\/a>'/geo;
 
 # enclose in white space for the regex that follow
              s/(.*)/\n$1\n/o;
@@ -1019,20 +1156,20 @@ sub getRenderedVersion
             s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_\.]*[a-zA-Z0-9\-\_])(?=[\s\.\,\;\:\!\?\)])#$1<a href=\"mailto\:$2">$2</a>#go;
 
 # Make internal links
-            # '[[display text][Web.odd wiki word@anchor]]' link:
-            s/([\*\s][\(\-\*\s]*)\[\[(.*?)\]\[(.*?)\]\]/&specificLink($1,$theWeb,$2,$3)/geo;
-            # '[[Web.odd wiki word@anchor]]' link:
-            s/([\*\s][\(\-\*\s]*)\[\[(.*?)\]\]/&specificLink($1,$theWeb,$2,$2)/geo;
+            # '[[display text][Web.odd wiki word#anchor]]' link:
+            s/\[\[(.*?)\]\[(.*?)\]\]/&specificLink("",$theWeb,$theTopic,$1,$2)/geo;
+            # '[[Web.odd wiki word#anchor]]' link:
+            s/\[\[(.*?)\]\]/&specificLink("",$theWeb,$theTopic,$1,$1)/geo;
 
             # do normal WikiWord link if not disabled by <noautolink>
             if( ! ( $noAutoLink ) ) {
 
-                # 'Web.TopicName@anchor' link:
-                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\@[a-zA-Z0-9_]*)/&internalLink($1,$2,$3,"$TranslationToken$3$4$TranslationToken",$4,1)/geo;
+                # 'Web.TopicName#anchor' link:
+                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\#[a-zA-Z0-9_]*)/&internalLink($1,$2,$3,"$TranslationToken$3$4$TranslationToken",$4,1)/geo;
                 # 'Web.TopicName' link:
                 s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&internalLink($1,$2,$3,"$TranslationToken$3$TranslationToken","",1)/geo;
-                # 'TopicName@anchor' link:
-                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\@[a-zA-Z0-9_]*)/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/geo;
+                # 'TopicName#anchor' link:
+                s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)(\#[a-zA-Z0-9_]*)/&internalLink($1,$theWeb,$2,"$TranslationToken$2$3$TranslationToken",$3,1)/geo;
                 # 'TopicName' link:
                 s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&internalLink($1,$theWeb,$2,$2,"",1)/geo;
                 # 'TLA' link if exist:
