@@ -1,11 +1,19 @@
+__What is a Category Table?__
+
+A Category Table is a table that can include drop-down menus, checkboxes, radio buttons, and text fields. It makes it easy to provide keywords to categorize a topic. 
+
+For example, if a TWiki web is devoted to technical support, wiki topics might be incident reports. The Category Table can prompt the writer to select the operating system, the software product, and the version for this report. For the operating system category, checkboxes can be displayed for <nop>OsSolaris, <nop>OsSunOS, <nop>OsHPUX and <nop>OsWin.
+
+__Using a Category Table__
+
 It is possible to add a category table to a TWiki web. This permits storing and searching for more structured information. Editing a topic shows a HTML form with the usual text area and a table with selectors, checkboxes, radio buttons and text fields. The category table is shown at the end of a topic. The format of the category table can be defined per TWiki web.
 
-If you want to use a Category Table in a TWiki web you need to have the following three files in the twiki/templates/{Yourweb} directory:
-	* twikicatitems.tmpl : Defines the items in the table
-	* twikicatedit.tmpl : Defines the look of the table when editing a topic
-	* twikicatview.tmpl : Defines the look of the table when viewing a topic
+If you want to add a Category Table in a TWiki web you need to place the following three files into the =twiki/templates/{Yourweb}= directory:
+	* =twikicatitems.tmpl= : Defines the items in the table
+	* =twikicatedit.tmpl= : Defines the look of the table when editing a topic
+	* =twikicatview.tmpl= : Defines the look of the table when viewing a topic
 
-*_Format of category definition template twikicatitems.tmpl_*
+__Format of category definition template twikicatitems.tmpl__
 
 Valid lines:
 <pre>
@@ -26,7 +34,7 @@ Explanation:
   {charSize}			number of characters for text fields
 </pre>
 
-*_Remark:_* Line <code> radio|UseCategory|0|Yes|No </code> has a special meaning. If present, it is possible to choose in "edit" if the category table is included in the topic or not
+__Remark:__ Line =radio|UseCategory|0|Yes|No= has a special meaning. If present, it is possible to choose in "edit" if the category table is included in the topic or not
 
 Example file:
 <pre>
@@ -36,11 +44,11 @@ checkbox|OperatingSystem|true|5|OsSolaris|OsSunOS|OsHPUX|OsWin
 text|OsVersion|16
 </pre>
 
-*_Format of twikicatedit.tmpl and twikicatview.tmpl_*
+__Format of twikicatedit.tmpl and twikicatview.tmpl__
 
-Use the example below and customize if needed. twikicatedit.tmpl and twikicatview.tmpl can be identical, but they do not have to be.
+Use the example below and customize if needed. =twikicatedit.tmpl= and =twikicatview.tmpl= can be identical, but they do not have to be.
 
-*_Attention:_* <code> &lt;!--TWikiCat--&gt; </code> is needed at the beginning and end as markers. Do not delete them!
+__Attention:__ =&lt;!--TWikiCat--&gt;= is needed at the beginning and end as markers. Do not delete them!
 
 Example:
 <pre>
@@ -52,7 +60,7 @@ Example:
 &lt;/table&gt;&lt;!--TWikiCat--&gt;
 </pre>
 
-Above template files will result in the following category table when *_viewing_* a topic:
+Above template files will result in the following category table when __viewing__ a topic:
 
 <h4> <A href="">TWikiCategory</a> </h4>
 <table border="2" cellspacing="1" cellpadding="1">
@@ -65,7 +73,7 @@ Above template files will result in the following category table when *_viewing_
 </tr>
 </table>
 
-Above template files will result in the following table when *_editing_* a topic:
+Above template files will result in the following table when __editing__ a topic:
 
 <form>
 <h4><A href="">TWikiCategory</a></h4>
