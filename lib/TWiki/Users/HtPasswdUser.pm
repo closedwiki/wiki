@@ -244,7 +244,7 @@ sub CheckUserPasswd
     my ( $this, $user, $password ) = @_;
     my $currentEncryptedPasswordEntry = $this->htpasswdReadPasswd( $user );
 
-    my $encryptedPassword = htpasswdGeneratePasswd($user, $password , 1);
+    my $encryptedPassword = $this->htpasswdGeneratePasswd($user, $password , 1);
 
     # OK
     if( $encryptedPassword eq $currentEncryptedPasswordEntry ) {
