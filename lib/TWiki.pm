@@ -2289,25 +2289,28 @@ sub formatTime
 =cut
 sub handleRevisionInfo 
 {
-    my ($web, $topic, $formatString) = @_;
+    my( $theWeb, $theTopic, $theArgs ) = @_;
 
     my $cgiQuery = getCgiQuery();
-    my $theRev = $cgiQuery->param('rev') || "";
+    my $format = extractNameValuePair( $theArgs ) || extractNameValuePair( $theArgs, "format" )
+                 || "r1.\$rev - \$date - \$wikiusername";
+    my $web    = extractNameValuePair( $theArgs, "web" ) || $theWeb;
+    my $topic  = extractNameValuePair( $theArgs, "topic" ) || $theTopic;
+    my $revnum = $cgiQuery->param('rev') || extractNameValuePair( $theArgs, "rev" ) || "";
 
-    $formatString = "r1.\$rev - \$date - \$wikiusername" unless( $formatString );
-    my ( $date, $user, $rev, $comment ) = TWiki::Store::getRevisionInfo($web, $topic, $theRev);
+    my( $date, $user, $rev, $comment ) = TWiki::Store::getRevisionInfo( $web, $topic, $revnum );
+    my $wikiName     = userToWikiName( $user, 1 );
+    my $wikiUserName = userToWikiName( $user );
 
-    my $value = $formatString;
-    $value =~ s/\$web/$web/geoi;
-    $value =~ s/\$topic/$topic/geoi;
-    $value =~ s/\$rev/$rev/geoi;
+    my $value = $format;
+    $value =~ s/\$web/$web/goi;
+    $value =~ s/\$topic/$topic/goi;
+    $value =~ s/\$rev/$rev/goi;
     $value =~ s/\$date/&formatTime($date)/geoi;
-    $value =~ s/\$comment/$comment/geoi;
-    $value =~ s/\$username/$user/geoi;
-	my $theWikiName     = userToWikiName( $user, 1 );
-	my $theWikiUserName = userToWikiName( $user );
-    $value =~ s/\$wikiname/$theWikiName/geoi;
-    $value =~ s/\$wikiusername/$theWikiUserName/geoi;
+    $value =~ s/\$comment/$comment/goi;
+    $value =~ s/\$username/$user/goi;
+    $value =~ s/\$wikiname/$wikiName/goi;
+    $value =~ s/\$wikiusername/$wikiUserName/goi;
  
     return $value;        
 }
@@ -2929,7 +2932,7 @@ sub handleInternalTags
     $_[0] =~ s/%FORMFIELD{(.*?)}%/&TWiki::Render::getFormField($_[2],$_[1],$1)/ge;
 
     $_[0] =~ s/%REVINFO%/handleRevisionInfo( $_[2], $_[1] )/ge;
-    $_[0] =~ s/%REVINFO{\"(.*?)\"}%/handleRevisionInfo( $_[2], $_[1], $1 )/ge;
+    $_[0] =~ s/%REVINFO{(.*?)}%/handleRevisionInfo( $_[2], $_[1], $1 )/ge;
 }
 
 =pod
