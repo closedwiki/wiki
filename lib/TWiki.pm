@@ -458,13 +458,13 @@ sub getEmailNotifyList
         if (/^\s\*\s[A-Za-z0-9\.]+\s+\-\s+/) {
             # full form:   * Main.WikiName - email@domain
 	    # (the 'Main.' part is optional, non-capturing)
-            if ( !/^\s\*\s(?:$mainWebPattern\.)?TWikiGuest\s/ ) {
+            if ( !/^\s\*\s(?:$mainWebPattern\.)?TWikiGuest\s/o ) {
 		# Add email address to list if it's not a duplicate
                 if ( /([\w\-\.\+]+\@[\w\-\.\+]+)/ ) {
 		    push (@list, $1) unless $seen{$1}++;
 		}
             }
-        } elsif (/^\s\*\s(?:$mainWebPattern\.)?([A-Z][A-Za-z0-9]+)/ ) {   
+        } elsif (/^\s\*\s(?:$mainWebPattern\.)?([A-Z][A-Za-z0-9]+)/o ) {   
 	    # short form:   * Main.WikiName
 	    # (the 'Main.' part is optional, non-capturing)
             my $userWikiName = $1;
@@ -913,7 +913,7 @@ sub makeTopicSummary
     # limit to 162 chars
     $htext =~ s/(.{162})([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
 
-    # encode special chars to be iso-8859-1 conform
+    # encode special chars to be iso-8859-1 conformant
     $htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/geo;
 
     # inline search renders text, 
