@@ -273,7 +273,7 @@ escaped:
 ![[wiki syntax]]
 <!-- /actual -->
 </td></tr>
-<tr><td> Specific Links</td><td>
+<tr><td> Protocol Links</td><td>
 <!-- expected expand -->
 <span class="twikiNewLink" style='background : #FFFFCE;'><font color="#0000FF">syntax</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
 <p />

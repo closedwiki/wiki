@@ -26,7 +26,7 @@ package TWiki::Render;
 
 use strict;
 use Assert;
-
+use TWiki::RenderPlurals;
 use TWiki::Attach;
 
 BEGIN {
@@ -397,18 +397,25 @@ sub _linkToolTipInfo {
 
 Generate a link.
 
+SMELL: why can topic be spaced out? is this to support auto squishing of [[Spaced Topic Naming]]?
+and [[lowercase Spaced Topic Naming]]
+
    * =$theWeb= - the web containing the topic
    * =$theTopic= - the topic to be lunk
    * =$theLinkText= - text to use for the link
    * =$theAnchor= - the link anchor, if any
-   * =$doLink= - boolean: false means suppress link for non-existing pages
+   * =$doLinkToMissingPages= - boolean: false means suppress link for non-existing pages
    * =$doKeepWeb= - boolean: true to keep web prefix (for non existing Web.TOPIC)
+
+Called by _handleWikiWord and _handleSquareBracketedLink and by Func::internalLink
+SMELL: why is this available to Func?
 
 =cut
 
 sub internalLink {
-    my( $this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink, $doKeepWeb ) = @_;
+    my( $this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb ) = @_;
     ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
+    # SMELL - shouldn't it be callable by TWiki::Func as well?
 
     # Get rid of leading/trailing spaces in topic name
     $theTopic =~ s/^\s*//;
@@ -423,104 +430,175 @@ sub internalLink {
     # Add <nop> before WikiWord inside link text to prevent double links
     $theLinkText =~ s/([\s\(])([$TWiki::regex{upperAlpha}])/$1<nop>$2/go;
 
-     # Allow spacing out, etc
-     if (TWiki::isValidWikiWord($theLinkText)) {
-        $theLinkText = $this->plugins()->renderWikiWordHandler( $theLinkText ) || $theLinkText;
-     }
 
-    my $exist = $this->store()->topicExists( $theWeb, $theTopic );
+    return _renderWikiWord($this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb);
+}
 
-    # I18N - Only apply plural processing if site language is English, or
-    # if a built-in English-language web (Main, TWiki or Plugins).  Plurals
-    # apply to names ending in 's', where topic doesn't exist with plural
-    # name.
-    if(  ( $TWiki::cfg{PluralToSingular} ) and ( $TWiki::siteLang eq 'en' 
-					or $theWeb eq $TWiki::cfg{UsersWebName}
-					or $theWeb eq $TWiki::cfg{SystemWebName}
-					or $theWeb eq 'Plugins' 
-				     ) 
-	    and ( $theTopic =~ /s$/ ) and not ( $exist ) ) {
-        # Topic name is plural in form and doesn't exist as written
-        my $tmp = $theTopic;
-        $tmp =~ s/ies$/y/;       # plurals like policy / policies
-        $tmp =~ s/sses$/ss/;     # plurals like address / addresses
-        $tmp =~ s/([Xx])es$/$1/; # plurals like box / boxes
-        $tmp =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
-        if( $this->store()->topicExists( $theWeb, $tmp ) ) {
-            $theTopic = $tmp;
-            $exist = 1;
+# TODO: this should be overridable by plugins.
+sub _renderWikiWord {
+  my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb) = @_;
+  my $topicExists = $this->store()->topicExists( $theWeb, $theTopic );
+
+
+  
+  if (( $theTopic =~ /s$/ ) and not ($topicExists)) {
+    ($topicExists, $theTopic) = TWiki::RenderPlurals::singularForm($this, $topicExists, $theTopic, $theWeb);
+  }
+
+#  if ($topicExists == 0) {
+#      if ($theTopic ne 'CompleteAndUtterNothing' && $theTopic ne 'WikiSyntax') { 
+#     use Data::Dumper;
+#      shift;
+#      die Dumper(\@_);
+#    }
+#  }
+
+
+    my $ans = "";
+    #NOTE: Yes, this hierarchy of ifs could be flattened but doing so makes
+    # the logic much harder to read.
+    if( $topicExists) {
+        $ans = _renderExistingWikiWord($this, $theWeb, $theTopic, $theLinkText, $theAnchor);
+    } else {
+         if( $doLinkToMissingPages ) {
+           $ans = _renderNonExistingWikiWord($this, $theWeb, $theTopic, $theLinkText, $theAnchor);
+         } else {
+           if( $doKeepWeb ) {
+              $ans = "$theWeb.$theLinkText";
+           } else {
+              $ans = $theLinkText;
+           }
         }
     }
+    return $ans;
+}
 
-    my $text = "";
-    if( $exist) {
-        if( $theAnchor ) {
+sub _renderExistingWikiWord {
+    my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor) = @_;
+    my $ans;
+
+
+    if( $theAnchor ) {
             my $anchor = $this->makeAnchorName( $theAnchor );
-            $text .= "<a class=\"twikiAnchorLink\" href=\"".
-				$this->{session}->getScriptUrl($theWeb, $theTopic, 'view')."\#$anchor\""
+            $ans = "<a class=\"twikiAnchorLink\" href=\"".
+	      $this->{session}->getScriptUrl($theWeb, $theTopic, 'view')."\#$anchor\""
+		  .  $this->_linkToolTipInfo( $theWeb, $theTopic )
+                  .  ">$theLinkText</a>";
+            return $ans;
+    } else {
+            $ans = "<a class=\"twikiLink\" href=\""
+	      .	$this->{session}->getScriptUrl($theWeb, $theTopic, 'view') ."\""
                   .  $this->_linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText</a>";
-            return $text;
-        } else {
-            $text .= "<a class=\"twikiLink\" href=\""
-				  .	$this->{session}->getScriptUrl($theWeb, $theTopic, 'view') ."\""
-                  .  $this->_linkToolTipInfo( $theWeb, $theTopic )
-                  .  ">$theLinkText</a>";
-            return $text;
-        }
+            return $ans;
+    }
+}
 
-    } elsif( $doLink ) {
-        $text .= "<span class=\"twikiNewLink\" style='background : $this->{NEWTOPICBGCOLOR};'>"
+sub _renderNonExistingWikiWord {
+    my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor) = @_;
+    my $ans;
+
+        $ans .= "<span class=\"twikiNewLink\" style='background : $this->{NEWTOPICBGCOLOR};'>"
               .  "<font color=\"$this->{NEWTOPICFONTCOLOR}\">$theLinkText</font>"
               .  "<a href=\"".
 				$this->{session}->getScriptUrl($theWeb, $theTopic, 'edit')."?topicparent="
                 .$this->{session}->{webName}.".".$this->{session}->{topicName}."\">$this->{NEWLINKSYMBOL}</a></span>";
-        return $text;
-
-    } elsif( $doKeepWeb ) {
-        $text .= "$theWeb.$theLinkText";
-        return $text;
-
-    } else {
-        $text .= $theLinkText;
-        return $text;
-    }
+        return $ans;
 }
 
-# Handle specific links of the form:
+
+
+# NOTE: factored for clarity. Test for any speed penalty.
+=pod
+returns the (web, topic) 
+=cut
+#SMELL - we must have implemented this elsewhere?
+sub _getWeb {
+    # Internal link: get any 'Web.' prefix, or use current web
+    my ($theLink) = @_;
+    $theLink =~ s/^($TWiki::regex{webNameRegex}|$TWiki::regex{defaultWebNameRegex})\.//;
+    my $web = $1;
+
+    (my $baz = "foo") =~ s/foo//;       # reset $1, defensive coding
+    # SMELL - is that really necessary?
+    return ($web, $theLink);
+}
+
+=pod
+ _handleWikiWord is called by the TWiki Render routine when it sees a 
+ wiki word that needs linking.
+ Handle the various link constructions. e.g.:
+ WikiWord
+ Web.WikiWord
+ Web.WikiWord#anchor
+
+ This routine adds missing parameters before passing off to internallink
+=cut
+
+sub _handleWikiWord {
+    my ( $this, $theWeb, $web, $topic, $anchor ) = @_;
+
+    my $linkIfAbsent = 1;
+    my $keepWeb = 0;
+    my $text;
+
+    $web = $theWeb unless (defined($web));
+    $anchor = "" unless (defined($anchor));
+
+    ASSERT(($anchor =~ m/\#.*/)) if DEBUG; # must include a hash.
+
+    if ( defined( $anchor ) ) {
+       # 'Web.TopicName#anchor' or 'Web.ABBREV#anchor' link
+       $text =
+          "$TWiki::TranslationToken$topic$anchor$TWiki::TranslationToken";
+    } else {
+      $anchor = "";
+      
+      # 'Web.TopicName' or 'Web.ABBREV' link:
+      if ( $topic eq $TWiki::cfg{HomeTopicName} && $web ne $this->{session}->{webName} ) {
+	$text = $web;
+      } else {
+	$text =
+	  "$TWiki::TranslationToken$topic$TWiki::TranslationToken";
+      }
+    }
+
+    # Allow spacing out, etc
+    $text = $this->plugins()->renderWikiWordHandler( $text ) || $text;
+    
+
+#| =$doKeepWeb= | boolean: true to keep web prefix (for non existing Web.TOPIC) |            
+    # SMELL: Why set keepWeb when the topic is an abbrievation?
+
+    $keepWeb = ( $topic =~ /^$TWiki::regex{abbrevRegex}$/o );
+              
+#| =$doLinkToMissingPages= | boolean: false means suppress link for non-existing pages |
+    $linkIfAbsent = ( $topic !~ /^$TWiki::regex{abbrevRegex}$/o );
+              
+    $text = $topic;
+# SMELL - it seems $linkIfAbsent, $keepWeb are always inverses of each other        
+# TODO: check the spec of doKeepWeb vs $doLinkToMissingPages
+
+    return $this->internalLink( $web, $topic, $text, $anchor, $linkIfAbsent, $keepWeb );
+}
+
+
+=pod
+# Handle SquareBracketed links mentioned on page $theWeb.$theTopic
 # format: [[$theText]]
 # format: [[$theLink][$theText]]
-sub _specificLink {
+=cut
+sub _handleSquareBracketedLink {
     my( $this, $theWeb, $theTopic, $theText, $theLink ) = @_;
 
     $theText = $theLink unless defined( $theText );
 
-    # Current page's $theWeb and $theTopic are also used
-
     # Strip leading/trailing spaces
     $theLink =~ s/^\s*//;
     $theLink =~ s/\s*$//;
-
-    if( $theLink =~ /^$TWiki::regex{linkProtocolPattern}\:/ ) {
-        if ( $theLink =~ /^(\S+)\s+(.*)$/ ) {
-            # '[[URL#anchor display text]]' link:
-            $theLink = $1;
-            $theText = $2;
-        } else {
-            # '[[Web.odd wiki word#anchor][display text]]' link:
-            # '[[Web.odd wiki word#anchor]]' link:
-
-            # External link: add <nop> before WikiWord and ABBREV 
-            # inside link text, to prevent double links
-            $theText =~ s/([\s\(])([$TWiki::regex{upperAlpha}])/$1<nop>$2/go;
-        }
-        return "<a href=\"$theLink\" target=\"_top\">$theText</a>";
-    }
-
-    # Internal link: get any 'Web.' prefix, or use current web
-    $theLink =~ s/^($TWiki::regex{webNameRegex}|$TWiki::regex{defaultWebNameRegex})\.//;
-    my $web = $1 || $theWeb;
-    (my $baz = "foo") =~ s/foo//;       # reset $1, defensive coding
+    return _protocolLink($theLink, $theText) if( $theLink =~ /^$TWiki::regex{linkProtocolPattern}\:/ );
+    my ($web, $theLink) = _getWeb($theLink);
+    $web = $theWeb unless ($web);
 
     # Extract '#anchor'
     # FIXME and NOTE: Had '-' as valid anchor character, removed
@@ -537,8 +615,38 @@ sub _specificLink {
     if( ! $topic ) {
         return $theText; # no link if no topic
     }
+    return $this->internalLink( $web, $topic, $theText, $anchor, 1, undef );
+}
 
-    return $this->internalLink( $web, $topic, $theText, $anchor, 1 );
+=pod 
+---++ sub _protocolLink 
+ Called whenever SquareBracketed links point at an external URL 
+ e.g. file: ftp: http: 
+ used to be called specificLink, but renamed as it is specific to a protocol
+ 
+ returns the HTML fragment
+=cut
+sub _protocolLink {
+    my ($theLink, $theText) = @_;
+
+    if ( $theLink =~ /^(\S+)\s+(.*)$/ ) {
+	 # '[[URL#anchor display text]]' link:
+	    $theLink = $1;
+            $theText = $2;
+
+        } else {
+            # '[[Web.odd wiki word#anchor][display text]]' link:
+            # '[[Web.odd wiki word#anchor]]' link:
+
+            # External link: add <nop> before WikiWord and ABBREV 
+            # inside link text, to prevent double links
+            # SMELL - why is adding <nop> necessary? why is the output reparsed?
+	    # SMELL - why regex{upperAlpha} here - surely this is a web match, not a CAPWORD match?
+
+            $theText =~ s/([\s\(])([$TWiki::regex{upperAlpha}])/$1<nop>$2/go;
+        }
+#	  die $theText unless ($theText eq "GNU" || $theText eq "Run Test" || $theText eq "XHTML Validator");
+       return "<a href=\"$theLink\" target=\"_top\">$theText</a>";
 }
 
 sub _externalLink {
@@ -800,6 +908,7 @@ sub getRenderedVersion {
         $line =~ s/(^|[\s\(])\!(?=[\w\*\=])/$1<nop>/g;
 
         # Blockquoted email (indented with '> ')
+        # Could be used to provide different colours for different numbers of '>'
         $line =~ s/^>(.*?)$/> <cite> $1 <\/cite><br \/>/g;
 
         # locate isolated < and > and translate to entities
@@ -924,13 +1033,16 @@ sub getRenderedVersion {
         # Escape rendering: Change " ![[..." to " [<nop>[...", for final unrendered " [[..." output
         $line =~ s/(\s)\!\[\[/$1\[<nop>\[/g;
         # Spaced-out Wiki words with alternative link text
-        $line =~ s/\[\[([^\]]+)\](\[([^\]]+)\])?\]/$this->_specificLink($theWeb,$theTopic,$3,$1)/ge;
+        # i.e. [[$1][$3]]
+        $line =~ s/\[\[([^\]]+)\](\[([^\]]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$3,$1)/ge;
 
         # do normal WikiWord link if not disabled by <noautolink> or
         # NOAUTOLINK preferences variable
         unless( $this->{NOAUTOLINK} || $insideNoAutoLink ) {
-            # Handle all styles of TWiki link in one hit
-            $line =~ s/([\s\(])(($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$1.$this->_handleLink($theWeb,$3,$4,$5)/geo;
+            # Handle WikiWords 
+            # " WebName.TopicName#anchor" or (WebName.TopicName#anchor) -> currentWeb, explicit web, topic, anchor
+            $line =~ s/([\s\(])(($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$1.$this->_handleWikiWord($theWeb,$3,$4,$5)/geo;
+            # SMELL - what's the rule for inserting TranslationTokens in the code?
 #CCCC            $line =~ s/$TWiki::TranslationToken(\S.*?)$TWiki::TranslationToken/$1/go;
 ASSERT($line !~ /$TWiki::TranslationToken/);
         }
@@ -960,47 +1072,6 @@ ASSERT($line !~ /$TWiki::TranslationToken/);
 
     $result =~ s|\n?<nop>\n$||o; # clean up clutch
     return "$head$result";
-}
-
-# Handle the various link constructions
-sub _handleLink {
-    my ( $this, $theWeb, $web, $topic, $anchor ) = @_;
-
-    my $linkIfAbsent = 1;
-    my $keepWeb = 0;
-    my $text;
-
-    if ( defined( $web )) {
-        if ( defined( $anchor ) ) {
-            # 'Web.TopicName#anchor' or 'Web.ABBREV#anchor' link
-            $text = "$topic$anchor";
-        } else {
-            $anchor = "";
-            # 'Web.TopicName' or 'Web.ABBREV' link:
-            if ( $topic eq $TWiki::cfg{HomeTopicName} && $web ne $this->{session}->{webName} ) {
-                $text = $web;
-            } else {
-                $text = $topic;
-            }
-            $keepWeb =
-              ( $topic =~ /^$TWiki::regex{abbrevRegex}$/o );
-        }
-    } else {
-        $web = $theWeb;
-        if ( defined( $anchor )) {
-            # 'TopicName#anchor' or 'ABBREV#anchor' link:
-            $text = "$topic$anchor";
-        } else {
-            # 'TopicName' or 'ABBREV' link:
-            $anchor = "";
-            $text = $topic;
-            $linkIfAbsent =
-              ( $topic !~ /^$TWiki::regex{abbrevRegex}$/o );;
-        }
-    }
-
-    return $this->internalLink( $web, $topic, $text,
-                         $anchor, $linkIfAbsent, $keepWeb );
 }
 
 sub _handleMailto {
@@ -1060,6 +1131,7 @@ sub renderMetaTags {
     ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
 
     if ( $noexpand ) {
+        # SMELL - should the {} in the following be \} ?
         $text =~ s/%META{[^}]*}%//go;
         return $text;
     }
