@@ -4,6 +4,13 @@ use strict;
 use Data::Dumper qw( Dumper );
 use Cwd qw( getcwd );
 
+BEGIN {
+    use Config;
+    my $localLibBase = getcwd() . "/cgi-bin/lib/CPAN/lib/site_perl/" . $Config{version};
+    unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
+    # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
+};
+
 system( "mkdir -p htdocs/twiki/" );
 system( "mv cgi-bin/tmp/twiki/pub/* htdocs/twiki/" );
 system( "mkdir twiki/templates" );
@@ -12,7 +19,7 @@ system( "cp cgi-bin/tmp/twiki/templates/* twiki/templates/" );
 #rm -rf cgi-bin/install_twiki.cgi cgi-bin/tmp/
 
 # $account = /Users/(twiki)/Sites
-#echo `wget -O - http://localhost/~twiki/cgi-bin/twiki/manage?action=relockrcs | grep code | wc -l` topic(s) unlocked
+# echo `curl http://localhost/~twiki/cgi-bin/twiki/manage?action=relockrcs | grep code | wc -l` topic(s) unlocked
 
 ################################################################################
 
@@ -29,24 +36,21 @@ my $baseWebUrl = "$baseUrl/TWiki";
 # attach TWikiInstallationReport
 
 my $topic = 'TWikiInstallationReport';
-$mech->go( url => "$baseWebUrl/$topic" );
-$mech->get( "$baseWebUrl/$topic" );
-$mech->follow_link( text => 'Create' );
+$mech->get( "http://localhost/~twiki/cgi-bin/twiki/edit/TWiki/$topic" );
 
 $mech->field( text => qq[%TOC%\n\n%INCLUDE{"%ATTACHURL%/TWikiInstallationReport.html"}%\n] );
 $mech->click_button( value => 'Save' );
 
 $mech->follow_link( text => 'Attach' );
-$mech->submit_form(
+if ( $mech->submit_form(
 		   form_name => 'main',
 		   fields    => { 
 		       filepath => getcwd() . "/TWikiInstallationReport.html",
 		       filecomment => `date`,
 		       hidefile => undef,
 		   },
-		   );
-
-unlink "TWikiInstallationReport.html";
+		   ) 
+     ) { unlink "TWikiInstallationReport.html" }
 
 ################################################################################
 
