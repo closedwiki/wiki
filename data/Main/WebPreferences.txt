@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1048318439" format="1.0" version="1.14"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071559969" format="1.0" version="1.15"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ <nop>%WEB% Web Preferences
 
@@ -41,7 +41,7 @@ __Preferences:__
 		* Set ALLOWTOPICRENAME = 
 
 	* Web preferences that are *not* allowed to be overridden by user preferences:
-		* Set FINALPREFERENCES = WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
+		* Set FINALPREFERENCES = NOSEARCHALL, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
 
 __Notes:__
 	* A preference is defined as: <br /> =6 spaces * Set NAME = value= <br /> Example:
