@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071557226" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1084085418" format="1.0" version="1.11"}%
 ---+ TWiki Contributor
 
 A TWiki contributor is a person devoting his/her time to contribute on the development of the Open Source project TWiki, hosted at http://TWiki.org/ . It is defined as a person who:
@@ -11,33 +11,47 @@ I would like to take this opportunity to express my sincere appreciation and tha
 ---++ List of Contributors
 
 | *Person* | *Home Page* | *Comment* |
+| Adam Theo | TWiki:Main/AdamTheo | |
 | Adrian Lynch | TWiki:Main/AdrianLynch | |
 | Al Williams | TWiki:Main/AlWilliams | |
 | Andrea Sterbini | TWiki:Main/AndreaSterbini | TWiki:Codev/CoreTeam member |
+| Antonio Bellezza | TWiki:Main/AntonioBellezza | |
 | Arthur Clemens | TWiki:Main/ArthurClemens | TWiki:Codev/CoreTeam member |
+| Caylan Larson | TWiki:Main/CaylanLarson | |
 | Christophe Vermeulen | TWiki:Main/ChristopheVermeulen | |
+| Claus Brunzema | TWiki:Main/ClausBrunzema | |
 | Colas Nahaboo | TWiki:Main/ColasNahaboo | TWiki:Codev/CoreTeam member |
+| Corey Fruitman | TWiki:Main/CoreyFruitman | |
+| Crawford Currie | TWiki:Main/CrawfordCurrie | |
 | Cris Bailiff | TWiki:Main/CrisBailiff | |
 | Dan Boitnott | TWiki:Main/DanBoitnott | |
 | David Warman | TWiki:Main/DavidWarman | |
+| Frank Smith | TWiki:Main/FrankSmith | |
 | Grant Bowman | TWiki:Main/GrantBow | |
 | Harold Gottschalk | TWiki:Main/HaroldGottschalk | |
 | John Talintyre | TWiki:Main/JohnTalintyre | TWiki:Codev/CoreTeam member |
 | Kevin Kinnell | TWiki:Main/KevinKinnell | TWiki:Codev/CoreTeamHallOfFame member |
+| Kim Covil | TWiki:Main/KimCovil | |
 | Klaus Wriessnegger | TWiki:Main/KlausWriessnegger | |
 | Manpreet Singh | TWiki:Main/ManpreetSingh | |
 | Martin Cleaver | TWiki:Main/MartinCleaver | |
+| Martin Gregory | TWiki:Main/MartinGregory | |
 | Martin Raabe | TWiki:Main/MartinRaabe | |
 | MS | TWiki:Main/MichaelSparks | |
 | Mike Mannix | TWiki:Main/MikeMannix | TWiki:Codev/CoreTeamHallOfFame member |
 | Nicholas Lee | TWiki:Main/NicholasLee | TWiki:Codev/CoreTeam member |
+| Niels Koldso | TWiki:Main/NielsKoldso | |
+| Pauline Cheung | TWiki:Main/PaulineCheung | |
+| Pavel Goran | TWiki:Main/PavelGoran | |
 | Peter Fokkinga | TWiki:Main/PeterFokkinga | |
 | Peter Thoeny | TWiki:Main/PeterThoeny | TWiki:Codev/CoreTeam member and author of TWiki |
 | Randy Kramer | TWiki:Main/RandyKramer | |
 | Richard Donkin | TWiki:Main/RichardDonkin | TWiki:Codev/CoreTeam member |
 | Raymond Lutz | TWiki:Main/RaymondLutz | |
 | Ryan Freebern | TWiki:Main/RyanFreebern | |
+| Sam Hasler | TWiki:Main/SamHasler | |
 | Stanley Knutson | TWiki:Main/StanleyKnutson | |
+| Sue Blake | TWiki:Main/SueBlake | |
 | Sven Dowideit | TWiki:Main/SvenDowideit | TWiki:Codev/CoreTeam member |
 | Ted Pavlic | TWiki:Main/TedPavlic | |
 | Vito Miliano | TWiki:Main/VitoMiliano | |
@@ -52,4 +66,5 @@ __Disclaimer:__ TWiki gets installed on thousands of public web sites. The contr
 	* See %TWIKIWEB%.TWikiHistory
 	* See also List of Production Releases in TWiki:Codev/TWikiReleases
 
--- TWiki:Main/PeterThoeny - 02 Dec 2003
+-- TWiki:Main/PeterThoeny - 09 May 2004
+
