@@ -71,6 +71,7 @@ sub saveTopic1 {
    my $doNotLogChanges = 0;
    my $doUnlock = 1;
 
+   $TWiki::userName = $user;
    $meta = new TWiki::Meta($web, $topic) unless $meta;
    my $error = TWiki::Store::saveTopic( $web, $topic, $text, $meta, $saveCmd,
                                         $doNotLogChanges, $doUnlock );
@@ -91,31 +92,29 @@ sub test_checkin
     my $rev = TWiki::Store::getRevisionNumber( $web, $topic );
     $this->assert_str_equals("1.1", $rev);
 
-    my ( $meta, $text1 ) = TWiki::Store::readTopic( $web, $topic );
+    my ( $meta, $text1 ) = TWiki::Store::readTopic( $web, $topic, undef, 0 );
 
-    # FIXME ?
-    # Temporarily remove \n
     $text1 =~ s/[\s]*$//go;
-
     $this->assert_str_equals( $text, $text1 );
 
     # Check revision number from meta data
     my( $dateMeta, $authorMeta, $revMeta ) = $meta->getRevisionInfo( $web, $topic );
     $this->assert_str_equals( "1", $revMeta, "Rev from meta data should be 1 when first created" );
-
     $meta = new TWiki::Meta($web, $topic);
-    my( $dateMeta0, $authorMeta0, $revMeta0 ) = $meta->getRevisionInfo( $web, $topic );
+    my( $dateMeta0, $authorMeta0, $revMeta0 ) =
+      $meta->getRevisionInfo( $web, $topic );
     $this->assert_str_equals( $revMeta0, $revMeta );
-
     # Check-in with different text, under different user (to force change)
     $user = "TestUser2";
     $text = "bye";
-    saveTopic1($web, $topic, $text, $user, $meta );
-    $rev = TWiki::Store::getRevisionNumber( $web, $topic );
 
+    saveTopic1($web, $topic, $text, $user, $meta );
+
+    $rev = TWiki::Store::getRevisionNumber( $web, $topic );
     $this->assert_str_equals("1.2", $rev );
-    ($text1, $meta ) = TWiki::Store::readTopic( $web, $topic );
-    ( $dateMeta, $authorMeta, $revMeta ) = $meta->getRevisionInfo( $web, $topic );
+    ( $meta, $text1 ) = TWiki::Store::readTopic( $web, $topic, undef, 0 );
+    ( $dateMeta, $authorMeta, $revMeta ) =
+      $meta->getRevisionInfo( $web, $topic );
     $this->assert_str_equals("2", $revMeta, "Rev from meta should be 2 after one change" );
 }
 
@@ -139,35 +138,33 @@ sub test_checkin_attachment {
     }
 
     my $attachment = "afile.txt";
-    my $filename = "$dir/$attachment";
-    open( FILE, ">$filename" );
-    print FILE "Test attachment";
+    open( FILE, ">/tmp/$attachment" );
+    print FILE "Test attachment\n";
     close(FILE);
 
     my $saveCmd = "";
     my $doNotLogChanges = 0;
     my $doUnlock = 1;
 
-    TWiki::Store::saveAttachment($web, $topic, $attachment,
-                                { file => $filename } );
+    TWiki::Store::saveAttachment($web, $topic, $attachment, $user,
+                                { file => "/tmp/$attachment" } );
 
     # Check revision number
     my $rev = TWiki::Store::getRevisionNumber($web, $topic, $attachment);
     $this->assert_str_equals("1.1",$rev);
 
     # Save again and check version number goes up by 1
-    open( FILE, ">$filename" );
+    open( FILE, ">/tmp/$attachment" );
     print FILE "Test attachment\nAnd a second line";
     close(FILE);
 
-    TWiki::Store::saveAttachment( $web, $topic, $attachment,
-                                  { file => $filename } );
+    TWiki::Store::saveAttachment( $web, $topic, $attachment, $user,
+                                  { file => "/tmp/$attachment" } );
     # Check revision number
     $rev = TWiki::Store::getRevisionNumber( $web, $topic, $attachment );
     $this->assert_str_equals("1.2", $rev);
 }
 
-# Assumes topic with attachment already exists
 sub test_rename() {
     my $this = shift;
 
@@ -175,25 +172,42 @@ sub test_rename() {
     my $oldTopic = "UnitTest2";
     my $newWeb = $oldWeb;
     my $newTopic = "UnitTest2Moved";
+    my $user = "TestUser1";
+
+    saveTopic1($oldWeb, $oldTopic, "Elucidate the goose", $user );
     my $attachment = "afile.txt";
+    open( FILE, ">/tmp/$attachment" );
+    print FILE "Test her attachment to me\n";
+    close(FILE);
+    $user = "TestUser2";
+    $TWiki::userName = $user;
+    TWiki::Store::saveAttachment($oldWeb, $oldTopic, $attachment, $user,
+                                { file => "/tmp/$attachment" } );
 
-    my $doNotLogChanges = 0;
-    my $doUnlock = 1;
-    my $oldRevAtt = TWiki::Store::getRevisionNumber( $oldWeb, $oldTopic, $attachment, $doNotLogChanges, $doUnlock );
-    my $oldRevTop = TWiki::Store::getRevisionNumber( $oldWeb, $oldTopic );
+    my $oldRevAtt =
+      TWiki::Store::getRevisionNumber( $oldWeb, $oldTopic, $attachment );
+    my $oldRevTop =
+      TWiki::Store::getRevisionNumber( $oldWeb, $oldTopic );
 
+    $user = "TestUser1";
+    $TWiki::userName = $user;
+
+    #$TWiki::Sandbox::_trace = 1;
     TWiki::Store::renameTopic($oldWeb, $oldTopic, $newWeb, $newTopic);
+    #$TWiki::Sandbox::_trace = 0;
 
-    my $newRevAtt = TWiki::Store::getRevisionNumber($newWeb, $newTopic, $attachment );
-    my $newRevTop = TWiki::Store::getRevisionNumber( $newWeb, $newTopic );
+    my $newRevAtt =
+      TWiki::Store::getRevisionNumber($newWeb, $newTopic, $attachment );
 
+    $this->assert_str_equals($oldRevAtt, $newRevAtt);
+
+    # Topic is modified in move, because meta information is updated
+    # to indicate move
+    my $newRevTop =
+      TWiki::Store::getRevisionNumber( $newWeb, $newTopic );
     $oldRevTop =~ /1\.(.*)/;
     my $revTopShouldBe = $1 + 1;
     $revTopShouldBe = "1.$revTopShouldBe";
-
-    $this->assert_str_equals($oldRevAtt, $newRevAtt);
-    # Topic is modified in move, because meta information is updated
-    # to indicate move
     $this->assert_str_equals($revTopShouldBe, $newRevTop );
 }
 
