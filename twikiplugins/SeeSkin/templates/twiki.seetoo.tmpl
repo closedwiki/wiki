@@ -23,27 +23,20 @@
 %INLINESTYLE%
 --></style>
 %TMPL:END%
-%TMPL:DEF{"masthead"}%
-<div id="title">
-	<a href="%WIKIHOMEURL%" title="Site Homepage"><img src="%WIKILOGOIMG%" border="0" alt="Site Home" /></a>
-	<h1><a href="%WIKIHOMEURL%" title="homepage for TWiki.org">TWiki.org</a></h1>
-	<h2>/ <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%" title='Homepage for %TMPL:P{"weblabel"}%'>%WEB%</a> / %TOPIC% %TMPL:P{"titleaction"}%</h2>
-</div>
-<div id="search">
-	<form><input type="text" name="topic" size="10" title="type topic name to search for and press [Enter]" /> <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebSearch" title="Go to advanced search form">Search</a></form>
-</div>
-%TMPL:END%
 %TMPL:DEF{"standardheader"}%
 <div id="title">
 	<a href="%WIKIHOMEURL%" title="Site Homepage"><img src="%WIKILOGOIMG%" border="0" alt="Site Home" /></a>
 	<h1><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/%HOMETOPIC%">%WIKITOOLNAME%</a></h1>
 	<h2>/ <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a> / %TOPIC% %TMPL:P{"titleaction"}%</h2>
 </div>
+<div id="search">
+	<form><input type="text" name="topic" size="10" title="type topic name to search for and press [Enter]" /> <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebSearch" title="Go to advanced search form">Search</a></form>
+</div>
 %TMPL:END%
 %TMPL:DEF{"plainheader"}%
 <div id="title">
 	<h1><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/%HOMETOPIC%">%WIKITOOLNAME%</a></h1>
-	<h2>/ %WEB% / %TOPIC% %TMPL:P{"titleaction"}%</h2>
+	<h2>/ <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a> / %TOPIC% </h2>
 </div>
 %TMPL:END%
 %TMPL:DEF{"simpleheader"}%

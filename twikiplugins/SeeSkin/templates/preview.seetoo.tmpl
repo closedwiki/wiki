@@ -17,9 +17,7 @@ function launchWindow( theWeb, theTopic ) {
 </head>
 <body bgcolor="%WEBBGCOLOR%" background="%PREVIEWBGIMAGE%">
 #PageTop
-<div id="topsection">
-	<div id="header">%TMPL:P{"standardheader"}%</div>
-</div>
+<div id="topsection">%TMPL:P{"plainheader"}%</div>
 <div id="midsection">
 <div id="content" style="background-image: url(%PREVIEWBGIMAGE%);">%TEXT%
 </div> <!-- end #content -->%META{"form"}% %META{"attachments"}%
@@ -32,6 +30,14 @@ function launchWindow( theWeb, theTopic ) {
 </form>
 %TMPL:P{"help"}%
 </div> <!-- end midsection -->
+<!-- begin "not in any section" -->
+<div id="menu">
+	<hr>	
+	<a name="Menu"></a><h4>Menu</h4>
+	<ul>
+		%TMPL:P{"sep"}% <em>%TMPL:P{"titleaction"}%</em> <!-- %TMPL:P{"topicaction"}% -->
+	</ul> 
+</div><!-- end menu -->
 <div id="bottsection">
 	<hr>
 	%WEBCOPYRIGHT%
