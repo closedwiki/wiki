@@ -1,0 +1,13 @@
+%META:TOPICINFO{author="PeterThoeny" date="999308761" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="TWikiFAQ"}%
+---++ FAQ:
+
+
+
+---++ Answer:
+
+
+
+__Back to:__ TWikiFAQ
+
+-- %WIKIUSERNAME% - %DATE% <br />
