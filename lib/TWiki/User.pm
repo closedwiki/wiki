@@ -1,6 +1,6 @@
 # Module of TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -22,6 +22,14 @@
 # - Upgrading TWiki is easy as long as you do not customize TWiki.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 #
+
+=begin twiki
+
+---+ TWiki::User Package
+
+This module hosts the user authentication implementation
+
+=cut
 
 package TWiki::User;
 
@@ -91,11 +99,13 @@ sub _getUserHandler
 
 #========================= 
 =pod
----+++ UserPasswordExists( $user ) ==> $passwordExists
+
+---++ UserPasswordExists( $user ) ==> $passwordExists
 | Description: | checks to see if there is a $user in the password system |
 | Parameter: =$user= | the username we are looking for  |
 | Return: =$passwordExists= | "1" if true, "" if not |
 | TODO: | what if the login name is not the same as the twikiname?? (I think we don't have TWikiName to username mapping fully worked out|
+
 =cut
 sub UserPasswordExists
 {
@@ -108,13 +118,15 @@ sub UserPasswordExists
  
 #========================= 
 =pod
----+++ UpdateUserPassword( $user, $oldUserPassword, $newUserPassword ) ==> $success
+
+---++ UpdateUserPassword( $user, $oldUserPassword, $newUserPassword ) ==> $success
 | Description: | used to change the user's password |
 | Parameter: =$user= | the username we are replacing  |
 | Parameter: =$oldUserPassword= | unencrypted password |
 | Parameter: =$newUserPassword= | unencrypted password |
 | Return: =$success= | "1" if success |
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
+
 =cut
 sub UpdateUserPassword
 {
@@ -126,12 +138,14 @@ sub UpdateUserPassword
 
 #========================= 
 =pod
----+++ AddUserPassword( $user, $newUserPassword ) ==> $success
+
+---++ AddUserPassword( $user, $newUserPassword ) ==> $success
 | Description: | creates a new user & password entry |
 | Parameter: =$user= | the username we are replacing  |
 | Parameter: =$newUserPassword= | unencrypted password |
 | Return: =$success= | "1" if success |
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
+
 =cut
 sub AddUserPassword
 {
@@ -143,11 +157,13 @@ sub AddUserPassword
 
 #========================= 
 =pod
----+++ RemoveUser( $user ) ==> $success
+
+---++ RemoveUser( $user ) ==> $success
 | Description: | used to remove the user from the password system |
 | Parameter: =$user= | the username we are replacing  |
 | Return: =$success= | "1" if success |
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
+
 =cut
 sub RemoveUser
 {
@@ -159,12 +175,14 @@ sub RemoveUser
 
 # =========================
 =pod
----+++ CheckUserPasswd( $user, $password ) ==> $success
+
+---++ CheckUserPasswd( $user, $password ) ==> $success
 | Description: | used to check the user's password |
 | Parameter: =$user= | the username we are replacing  |
 | Parameter: =$password= | unencrypted password |
 | Return: =$success= | "1" if success |
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
+
 =cut
 sub CheckUserPasswd
 {
@@ -176,12 +194,14 @@ sub CheckUserPasswd
  
 # =========================
 =pod
----+++ addUserToTWikiUsersTopic( $wikiName, $remoteUser ) ==> $topicName
+
+---++ addUserToTWikiUsersTopic( $wikiName, $remoteUser ) ==> $topicName
 | Description: | create the User's TWikiTopic |
 | Parameter: =$wikiName= | the user's TWikiName |
 | Parameter: =$remoteUser= | the remote username (is this used in the password file at any time?) |
 | Return: =$topicName= | the name of the TWikiTopic created |
 | TODO: | does this really belong here? |
+
 =cut
 sub addUserToTWikiUsersTopic
 {
