@@ -27,10 +27,12 @@
  </tr>
 </table>
 </form>
-Parent: %META{"parent"}%<br>
+%META{"parent" prefix="Parents: "}%<br>
 %TEXT%
 %META{"form"}%
 %META{"attachments"}%
+<!-- This search for children is relatively expensive, you may wish to remove-->
+%METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" title="Children: "}%
 
 <br clear="all"><p>
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -51,12 +53,12 @@ Parent: %META{"parent"}%<br>
  <tr>
   <td valign="top">
    Revision %REVINFO%
-   %META{"moved"}%
   </td>
   <td width="40%" valign="top">
    %WEBCOPYRIGHT%
   </td>
  </tr>
+ <tr><td colspan=2> %META{"moved"}% </td></tr>
 </table>
 </p>
 </body>
