@@ -111,12 +111,12 @@ sub DownloadTWikiExtension
 	plugins => getCatalogList({ Config => $Config }),
     };
 
-    print "\n| *Plugin* | *Download Status* |";
+    print "| *Plugin* | *Download Status* |\n";
     foreach my $pluginS ( @{ $self->{plugins} } )
     {
 	my $plugin = $pluginS->{name} or die "no name?";
 	
-	print "\n| TWiki:Plugins.$plugin ";
+	print "| TWiki:Plugins.$plugin ";
 	++$self->{nPlugins};
 	
 	# download plugin
@@ -127,14 +127,14 @@ sub DownloadTWikiExtension
 	
 	if ($status == RC_OK) {
 	    ++$self->{nDownloadedPlugins};
-	    print "| downloaded";
+	    print "| downloaded |\n";
 #	    $pluginS->{file} = $local_file;
 	} elsif ($status != RC_NOT_MODIFIED) {
-	    print "| $!: $remote_uri";
+	    print "| $!: $remote_uri |\n";
 	    push @{ $self->{errors} }, $plugin;
 	} else {
 	    ++$self->{nDownloadedPlugins};
-	    print "| up-to-date";
+	    print "| up-to-date |\r";
 #?	    $pluginS->{file} = $local_file;
 	}
 	
@@ -146,8 +146,7 @@ sub DownloadTWikiExtension
 	    #ASSERT( @shortDescription == 1 );
 	    ( $pluginS->{description} ) = $shortDescription[0] =~ /Set\s+?SHORTDESCRIPTION\s+?=\s+?(.+?)\r?$/;
 	}
-	
-	print " |";
+
     }
 
     return $self;
