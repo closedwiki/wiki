@@ -870,7 +870,9 @@ sub getRenderedVersion
         # are inserted at the head of the queue of lines, in the order
         # they would appear in the text.
         if ( $line =~ /\n/ ) {
-	    push @lines, reverse split( /\n/, $line );
+	    foreach my $xtra ( reverse split( /\n/, $line )) {
+		push( @lines, $xtra );
+	    }
             # need to do full processing on these new lines, so start again
             next;
         }
