@@ -62,6 +62,8 @@ Note that these position tags are obviously mutually exclusive. If you define mo
 
 Note that TWiki variables in the OUTPUT definition get expanded when the comment is inserted in the text; so time, date and username will refer to the time and date the comment was made and the user who made it.
 
+*Warning* to template authors. When you write templates, always ensure that the expansion of URLs cannot result in TWiki content (such as Set statements) that could compromise the security of your site. The default templates are written so that it's impossible to embed Set statements using them.
+
 #HandlingPageLock
 ---+ Important Note regarding Locks
 

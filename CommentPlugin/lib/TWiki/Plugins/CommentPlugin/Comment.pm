@@ -44,6 +44,7 @@ use integer;
     my $defaultType = 
 	TWiki::Func::getPreferencesValue("COMMENTPLUGIN_DEFAULT_TYPE") ||
 	  "bottom";
+
     my $message = TWiki::Func::getPreferencesValue("COMMENTPLUGIN_REFRESH") ||
       "";    
 
@@ -69,6 +70,10 @@ use integer;
     my $type =
       TWiki::Func::extractNameValuePair( $attributes, "type" ) ||
 	$defaultType;
+
+    # clean off whitespace
+    $type =~ m/(\S*)/o;
+    $type = $1;
 
     # Expand the template in the context of the web where the comment
     # box is (not the target of the comment!)
@@ -98,7 +103,6 @@ use integer;
 	TWiki::Func::checkTopicEditLock( $web, $topic );
 
       if ( $lockUser ) {
-	$lockTime = ( $lockTime / 60 ) + 1;
 	$message = "Commenting is locked out by $lockUser for at least $lockTime minutes";
 	$url = "disabled";
       }
@@ -107,8 +111,9 @@ use integer;
     if ( $input !~ m/^%RED%/o ) {
       $input =~ s/%DISABLED%/$disable/go;
       $input =~ s/%MESSAGE%/$message/g;
+      my $n = $$pidx + 0;
 	
-      $input = "<form name=\"$type$$pidx\" action=\"$url\" method=\"post\">\n" .
+      $input = "<form name=\"$type$n\" action=\"$url\" method=\"post\">\n" .
 	$input;
       # need to provide text or the save script will reject us; even though we
       # are going to override it in the beforeSaveHandler
