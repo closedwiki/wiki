@@ -66,8 +66,8 @@ sub getUrl
     }
 
     # RNF 19 Apr 2002 Support for outbound proxies.
-    my $proxyHost = &TWiki::Prefs::getPreferencesValue("PROXY_HOST");
-    my $proxyPort = &TWiki::Prefs::getPreferencesValue("PROXY_PORT");
+    my $proxyHost = &TWiki::Prefs::getPreferencesValue("PROXYHOST");
+    my $proxyPort = &TWiki::Prefs::getPreferencesValue("PROXYPORT");
     if($proxyHost && $proxyPort) {
         $theHost = $proxyHost;
         $thePort = $proxyPort;
