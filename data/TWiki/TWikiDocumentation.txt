@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999130278" format="1.0" version="1.23"}%
+%META:TOPICINFO{author="MikeMannix" date="999180393" format="1.0" version="1.24"}%
 <script language="JavaScript1.2" type="text/javascript">
 function dblclick() { window.scrollTo(0,0) }
 if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
@@ -15,7 +15,7 @@ This page contains all documentation topics as one long and complete reference s
 
 __Note:__ Read the most up to date version of this document at http://TWiki.org/cgi-bin/view/TWiki/TWikiDocumentation
 
-__Related Topics:__ TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests
+__Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests
 
 -----
 %INCLUDE{"TWikiImplementationNotes"}%
