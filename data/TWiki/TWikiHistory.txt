@@ -1,6 +1,11 @@
 *History of the TWiki Implementation (version %WIKIVERSION%)*
 
-	* PeterThoeny - 20 Jan 2001: Format changed of =%<nop>GMTIME{"..."}%= and =%<nop>SERVERTIME{"..."}%= variables. Format is now ="$hour:$min"= instead of ="hour:min"=. More in TWikiVariables.
+
+	* PeterThoeny - 01 Feb 2001: Added =&lt;verbatim&gt;= ... =&lt;/verbatim&gt;= tags to show source code "as is". Unlike the =&lt;pre&gt;= ... =&lt;/pre&gt;= tags, it also shows =&lt;=, =&gt;=, =&amp;= characters "as is".
+	* PeterThoeny - 01 Feb 2001: Fixed <a href="http://TWiki.org/cgi-bin/view/Codev/CreateLinkToAttachedFileBug">TWiki:Codev.CreateLinkToAttachedFileBug</a>.
+	* PeterThoeny - 21 Jan 2001: Added a "Minor change, don't notify" checkbox in preview. More in DontNotify.
+	* PeterThoeny - 21 Jan 2001: Added Bold Fixed formatting using double-equal signs, e.g. write =<nop>==Bold Fixed==<nop>= to get ==Bold Fixed==.
+	* PeterThoeny - 20 Jan 2001: Format changed of =%<nop>GMTIME{"..."}%= and =%<nop>SERVERTIME{"..."}%= variables. Format is now ="$hour:$min"= instead of ="hour:min"=. More in TWikiVariables. __Attention:__ Check your existing topics when you upgrade TWiki!
 	* PeterThoeny - 18 Jan 2001: WebChanges, WebSearch and e-mail notification indicate also the revision number of a topic (i.e. <u>18 Jan 2001 - 16:43 - r1.5</u>), or NEW for a new topic (i.e. i.e. <u>18 Jan 2001 - 16:43 - <b>NEW</b></u>).
 	* PeterThoeny - 16 Jan 2001: New variable =%<nop>STARTINCLUDE%= and =%<nop>STOPINCLUDE%= variables to control what gets included of a topic. More in TWikiVariables.
 	* PeterThoeny - 16 Jan 2001: TWiki skins: Define a different page layout with a customized header and footer layout, i.e. a =print= skin for a printable view of a topic. More in TWikiSkins and <a href="http://TWiki.org/cgi-bin/view/Codev/TWikiSkins">TWiki:Codev.TWikiSkins</a>.
