@@ -127,8 +127,8 @@ To help avoid edit conflict, a reminder to refresh the page before entering comm
 ---+ Settings
 	* Description:
 		* Set SHORTDESCRIPTION = Allows users to quickly post comments to a page without an edit/preview/save cycle.
-	* Message to help prevent edit conflict
-		* Set REFRESH = Remember to refresh before you comment
+	* Message inserted into comment box by default
+		* Set REFRESH = 
 	* templates; recursively includes user templates from TWiki.CommentsTmpl
 		* Set TEMPLATES = comments
 	* default template type (if not present, defaults to "bottom")
