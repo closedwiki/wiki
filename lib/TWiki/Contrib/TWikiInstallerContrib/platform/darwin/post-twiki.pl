@@ -33,7 +33,7 @@ $mech->go( url => "$baseWebUrl/$topic" );
 $mech->get( "$baseWebUrl/$topic" );
 $mech->follow_link( text => 'Create' );
 
-$mech->field( text => q[%INCLUDE{"%ATTACHURL%/TWikiInstallationReport.html"}%] );
+$mech->field( text => qq[%TOC%\n\n%INCLUDE{"%ATTACHURL%/TWikiInstallationReport.html"}%\n] );
 $mech->click_button( value => 'Save' );
 
 $mech->follow_link( text => 'Attach' );
@@ -41,7 +41,7 @@ $mech->submit_form(
 		   form_name => 'main',
 		   fields    => { 
 		       filepath => getcwd() . "/TWikiInstallationReport.html",
-		       filecomment => q[`date`],
+		       filecomment => `date`,
 		       hidefile => undef,
 		   },
 		   );
