@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044149808" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1046654208" format="1.0" version="1.4"}%
 %TOC%
 %STARTINCLUDE%
 ---# Windows Install Cookbook 
@@ -40,7 +40,7 @@ There is a huge volume of existing material on TWiki about installing on Windows
 
 ---++ Scope
 
-This document covers installation of the TWiki -1-Feb-2003 production release in the following environment - if you want to use a different environment, feel free to use this as a guideline only.
+This document covers installation of the TWiki *01-Feb-2003* production release (TWiki:Codev/TWikiRelease01Feb2003) in the following environment - if you want to use a different environment, feel free to use this as a guideline only.  (It has been mainly tested with the TWiki *01-Dec-2001* release but should work fine with Feb 2003.)
 
 | *Component* | *Name, version* | *Comment* |
 | Operating System | Windows 2000 | Should also work for Windows NT |
@@ -457,7 +457,9 @@ Optional step: you can do ='rm <nop>*~'= to clean out the backups made by Perl, 
 
 *5. Minor changes to TWiki scripts*
 
-As an interlude, you now need to make some minor edits to files in the =c:/twiki/bin= directory, using a suitable editor (remember to use =nano -w filename= if you prefer =nano= to =vi= - or just use the Windows [[#Pre_requisites_and_upgrades][PFE editor]]).
+__TWiki Dec 2001 release only - fixed in Feb 2003 release__
+
+If using the Dec 2001 release, you now need to make some minor edits to files in the =c:/twiki/bin= directory, using a suitable editor (remember to use =nano -w filename= if you prefer =nano= to =vi= - or just use the Windows [[#Pre_requisites_and_upgrades][PFE editor]]).
 
 	* Edit the =register= script in =/twiki/bin= - change line 200 to read as follows (insert the ==MIME::Base64::== part):
 
@@ -582,7 +584,7 @@ You have now re-locked all the RCS files and are almost ready to start using TWi
 
 *8. Email setup for notification and registration*
 
-You need to set the =SMTPMAILHOST= to an SMTP email host that is reachable and currently working.  Otherwise you'll get a confusing message from TWiki when registering new users or running =mailnotify= (for WebNotify), along the lines of:
+You need to set the =SMTPMAILHOST= in TWiki.TWikiPreferences to an SMTP email host that is reachable and currently working.  Otherwise you'll get a confusing message from TWiki when registering new users or running =mailnotify= (for WebNotify), along the lines of:
 
 <pre>
 	Software Error: Can't call method "mail" on an undefined value at ../lib/TWiki/Net.pm line 187.
@@ -658,6 +660,7 @@ Material in this cookbook is heavily based on the enormous number of contributio
 
 People who've tested or reviewed this document and provided valuable feedback include:
 
+	* TWiki:Main.BernardFarrell
 	* TWiki:Main.BerndSchiffer
 	* TWiki:Main.ChrisKeith
 	* TWiki:Main.DavideBaroncelli
