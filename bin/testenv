@@ -100,7 +100,7 @@ print <<EOM;
 <head><title>Test the CGI environment</title></head>
 <body>
 <h1>Test the CGI environment for TWiki</h1>
-Read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationNotes">TWikiInstallationNotes</a> for more information on TWiki installation.
+Please read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationNotes">TWikiInstallationNotes</a> for more information on TWiki installation.
 <h3>Environment variables:</h3>
 <table>
 EOM
@@ -246,10 +246,12 @@ foreach $mod (@requiredMods) {
 }
 
 print "<tr><th align=\"right\">PATH_INFO:<a name=\"PATH_INFO\"></th><td>$thePathInfo</td></tr>\n";
-print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>";
-print "For a URL such as '$theUrl/foo/bar', ";
-print "the correct PATH_INFO is '/foo/bar', without any prefixed path ";
-print "components. <a href=\"$theUrl/foo/bar#PATH_INFO\">Test</a> this.";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
+print "For a URL such as <b>$theUrl/foo/bar</b>, \n";
+print "the correct PATH_INFO is <b>/foo/bar</b>, without any prefixed path \n";
+print "components. <a href=\"$theUrl/foo/bar#PATH_INFO\"><b>Test this now</b></a> \n";
+print "- particularly if you are using Apache or IIS, or are using a web hosting provider.\n";
+print "The page resulting from the test link should have a PATH_INFO of <b>/foo/bar</b>.\n";
 print "</td></tr>\n";
 print "<tr><th align=\"right\">mod_perl:</th><td>$USE_MOD_PERL for this script (mod_perl $LOAD_MOD_PERL)</td></tr>\n";
 
@@ -259,12 +261,12 @@ my $usr = lc( getlogin || getpwuid($<) );
 # 
 # Get group info
 my $grp = "";
-if ( $perltype eq 'Cygwin' ) {
-    foreach( split( " ", $( ) ) {
+if ( $perltype ne 'ActiveState' ) {
+    foreach( split( " ", $( ) ) {	# Unix/Cygwin Perl
 	my $onegrp = getgrgid( $_ );
 	$grp .= " " . lc($onegrp);
     }
-} elsif ( $perltype eq 'ActiveState' ) {
+} else {		# ActiveState Perl
     # Try to use Cygwin's 'id' command - may be on the path, since Cygwin
     # is probably installed to supply ls, egrep, etc - if it isn't, give up.
     # Run command without stderr output, to avoid CGI giving error.
@@ -417,8 +419,8 @@ if( ! ( -e "$rcsDir/ci$exeSuffix" ) ) {
     print "RCS program <tt>$rcsDir/ci$exeSuffix</tt> not found. Check the path.";
     print "</td></tr>\n";
 } else {
-    my $rcsvernum = `$rcsDir/ci$exeSuffix -V`;
-    $rcsvernum = (split(/\s+/, $rcsvernum))[2] || "";
+    my $rcsvernum = `$rcsDir/ci$exeSuffix -V`;		# May fail due to diff or DLL not on PATH
+    $rcsvernum = (split(/\s+/, $rcsvernum))[2] || "";	# Recover from unset variable
     
     print "<tr><th align=\"right\">RCS Version:</th><td>$rcsvernum";
     print "&nbsp;&nbsp;(Cygwin package <tt>rcs-$rcsver</tt>)" if defined($rcsver);
