@@ -1,4 +1,3 @@
-%META:TOPICINFO{author="guest" date="1099834253" format="1.0" version="1.1"}%
 Description: Simple formatting, as described in TWiki.TextFormattingRules
 
 <table cols=3 border=2>
@@ -133,11 +132,11 @@ class CatAnimal {
 <tr><td> Ordered List</td><td>
 <!-- expected -->
 <ol><li> Sushi</li></ol><p />
-<ol type="A"><li> Sushi</li></ol><p />
-<ol type="i"><li> Sushi</li></ol><p />
+<ol><li type="A"> Sushi</li></ol><p />
+<ol><li type="i"> Sushi</li></ol><p />
 <ol><li> Sushi</li>
-<li> Sushi</li>
-<li> Sushi</li></ol>
+<li type="A"> Sushi</li>
+<li type="i"> Sushi</li></ol>
 <!-- /expected -->
 </td><td>
 <!-- actual -->
@@ -172,9 +171,9 @@ class CatAnimal {
 <!-- expected -->
 <p />
 <table border="1" cellspacing="0" cellpadding="1"> <tr><th bgcolor="#99CCCC"> <strong>L</strong> </th><th bgcolor="#99CCCC"> <strong>C</strong> </th><th bgcolor="#99CCCC"> <strong>R</strong> </th></tr>
-<tr><td>  A2  </td><td align="center">   2   </td><td align="right">   2  </td></tr>
+<tr><td>  A2  </td><td align="center">	2	</td><td align="right">	2  </td></tr>
 
-<tr><td>  A3  </td><td align="center">   3   </td><td align="right">   3  </td></tr>
+<tr><td>  A3  </td><td align="center">	3	</td><td align="right">	3  </td></tr>
 <tr><td colspan="3">  multi span  </td></tr>
 <tr><td>  A4-6  </td><td>  four  </td><td>  four  </td></tr>
 
@@ -312,8 +311,8 @@ escaped:
 <p />
 <table border="1" cellspacing="0" cellpadding="1"> <tr><th bgcolor="#99CCCC"> <strong>L</strong> </th><th bgcolor="#99CCCC"> <strong>C</strong> </th><th bgcolor="#99CCCC"> <strong>R</strong> </th></tr>
 
-<tr><td>  A2  </td><td align="center">   2   </td><td align="right">   2  </td></tr>
-<tr><td>  A3  </td><td align="center">   3   </td><td align="right">   3  </td></tr>
+<tr><td>  A2  </td><td align="center">	2	</td><td align="right">	2  </td></tr>
+<tr><td>  A3  </td><td align="center">	3	</td><td align="right">	3  </td></tr>
 <tr><td colspan="3">  multi span  </td></tr>
 
 <tr><td>  A4-6  </td><td>  four  </td><td>  four  </td></tr>

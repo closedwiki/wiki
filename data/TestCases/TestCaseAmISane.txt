@@ -1,9 +1,8 @@
-%META:TOPICINFO{author="guest" date="1102081000" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="guest" date="1102321544" format="1.0" version="1.9"}%
 Description: Manual trivial fast sanity checks for script functions.
 
 | *Script* | *Description* | *Test* |
-| =attach= | | |
-| =changes= | Should redirect to changes |<a href="%SCRIPTURLPATH%/changes%SCRIPTSUFFIX%/%WEB%/TestCaseQuickScriptsChecks">click here</a> |
+| =changes= | Should redirect to changes | <a href="%SCRIPTURLPATH%/changes%SCRIPTSUFFIX%/%WEB%/TestCaseQuickScriptsChecks">click here</a> |
 | =edit= | Simple edit (don't save) | <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/TestCaseQuickScriptsChecks">click here</a> |
 | =manage= | | |
 | =oops= | Tested by quietsave, below | |
@@ -15,7 +14,7 @@ Description: Manual trivial fast sanity checks for script functions.
 | =save= | =action= = =quietsave= (should redirect to view) | <a href="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/TestCases/WasteOfSpace?action=quietsave&text=Quietsave%20test%20PASSED&topicparent=TestCaseQuickScriptsChecks">click here </a> |
 | =search= | Search for the word "sanity" |<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/TestCases/WasteOfSpace?search=sanity">click here</a> |
 | =statistics= | Should redirect to refreshed statistics |<a href="%SCRIPTURLPATH%/statistics%SCRIPTSUFFIX%/TestCases">click here</a> |
-| =upload= | | |
+| =attach=, =upload= | Attach a file to topic WasteOfSpace | <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/WasteOfSpace">click here</a> |
 | =view= | Create non-existant (should redirect to create screen, which is an =oops= test) | <a href="%SCRIPTURLPATH%/view/%SCRIPTSUFFIX%/%WEB%/DontCreateThisTopic">click here</a> |
 | =viewfile= | Click on the links to =viewfile= the images | <a href="%SCRIPTURLPATH%/viewfile/%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=volcano.jpg&rev=1">revision 1</a> <a href="%SCRIPTURLPATH%/viewfile/%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=volcano.jpg&rev=2">revision2</a> |
 
@@ -24,5 +23,5 @@ Description: Manual trivial fast sanity checks for script functions.
 
 
 
-%META:FILEATTACHMENT{name="volcano.jpg" attachment="volcano.jpg" attr="" comment="" date="1102080112" path="volcano.jpg" size="2637" tmpFilename="/usr/tmp/CGItemp3319" user="guest" version="1"}%
 
+%META:FILEATTACHMENT{name="volcano.jpg" attachment="volcano.jpg" attr="" comment="" date="1102080112" path="volcano.jpg" size="2637" tmpFilename="/usr/tmp/CGItemp3319" user="guest" version="1"}%
