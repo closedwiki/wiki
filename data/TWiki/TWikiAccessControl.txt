@@ -1,6 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000455102" format="1.0" version="1.18"}%
-%INCLUDE{"UtilTempDocNote"}%
-
+%META:TOPICINFO{author="MikeMannix" date="1000616943" format="1.0" version="1.19"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -142,14 +140,12 @@ You can define restrictions of who is allowed to view a %WIKITOOLNAME% web.
 
 By mistyping a user or group name in the ALLOWTOPICCHANGE setting, it's possible to lock a topic so that it no-one can edit it from a browser. To avoid this:
 	* Set the =$superAdminGroup= variable in =lib/TWiki.cfg= to the name of a group of users that are always allowed to edit/view topics.
-<blockquote style="background-color:#f0f0f0">
+<blockquote style="background-color:#f5f5f5">
 <verbatim>
 $superAdminGroup = "TWikiAdminGroup";
 </verbatim>
 </blockquote>
 	* The default setting is not to have superusers.
 
--- PeterThoeny - 16 Mar 2001 <br>
--- AndreaSterbini - 11 Apr 2001 <br> 
-%STOPINCLUDE%
-__Related topics:__ %WIKIPREFSTOPIC%, %WEBPREFSTOPIC% (in every web), %MAINWEB%.TWikiAdminGroup, %MAINWEB%.TWikiGroups
+-- PeterThoeny - 16 Mar 2001 <br />
+-- AndreaSterbini - 11 Apr 2001 <br />
