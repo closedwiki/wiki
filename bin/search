@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wT -I.
+#!/usr/bin/perl -wTI.
 #
 # Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
 # TakeFive Software Inc.
@@ -13,6 +13,11 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+#
+# 20000501 Kevin Kinnell : Changed to support new search functionality.
+#                          Move a block of code to wikisearch.pm, removed
+#                          hardcoded flags (except the inline flag) from
+#                          the searchWikiWeb call, added new params.
 
 use CGI;
 use wiki;
@@ -41,16 +46,51 @@ sub main
         return;
     }
 
+    # The CGI.pm docs claim that it returns all of the values in a
+    # multiple select if called in a list context, but that may not
+    # work (didn't on the dev box -- perl 5.004_4 and CGI.pm 2.36 on
+    # Linux (Slackware 2.0.33) with Apache 1.2.  That being the case,
+    # we need to parse them out here.
+
+#    my @webs          = $query->param( "web" ) || ( $webName ); #doesn't work
+
+    # Note for those unused to Perlishness:
+    # -------------------------------------
+    # The pipeline at the end of this assignment splits the full query
+    # string on '&' and selects out the params that begin with 'web=',
+    # replacing them with whatever is after that.  In the case of a
+    # single list of webs passed as a string (say, from a text entry
+    # field) it does more processing than it needs to to get the
+    # correct string, but so what?  The pipline is the second
+    # parameter to the join, and consists of the last two lines.  The
+    # join takes the results of the pipeline and strings them back
+    # together, space delimited, which is exactly what &searchWikiWeb
+    # needs.
+
+    my $websStr       = join ' ',
+                        grep { s/^web=(.*)$/$1/ }
+                        split('&', $query->query_string);
+
     my $search        = $query->param( "search" ) || "";
     my $scope         = $query->param( "scope" )  || "";
+    my $order         = $query->param( "order" )  || "";
+    my $revSort       = $query->param( "reverse" )  || "";
     my $caseSensitive = $query->param( "casesensitive" ) || "";
     my $regex         = $query->param( "regex" )  || "";
+    my $limit         = $query->param( "limit" )  || "";
+    my $nosummary     = $query->param( "nosummary" )  || "";
+    my $nosearch      = $query->param( "nosearch" )  || "";
+    my $nototal       = $query->param( "nototal" )  || "";
 
-    &wiki::searchWikiWeb( "0", $webName, $search, $scope, $regex, $caseSensitive, "0", "0", "0" );
 
-    if( $wiki::doLogTopicSearch ) {
-        # write log entry
-        &wiki::writeLog( "search", $webName, $search );
-    }
+    &wiki::searchWikiWeb( "0", $websStr, $search, $scope, $order, $regex,
+                          $limit, $revSort, $caseSensitive, $nosummary,
+                          $nosearch, $nototal );
+
+# Had to move this to wikisearch to cope with new process.
+#    if( $wiki::doLogTopicSearch ) {
+#        # write log entry
+#        &wiki::writeLog( "search", $webStr, $search );
+#    }
+
 }
-

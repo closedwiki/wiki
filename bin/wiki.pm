@@ -26,9 +26,21 @@
 # - Files wikifcg.pm and wikisearch.pm are included by wiki.pm
 # - Upgrading TWiki is easy as long as you do not customize wiki.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
-
+#
+# 20000501 Kevin Kinnell : changed beta0404 to have many new search
+#                          capabilities.  This file had a new hash added
+#                          for month name-to-number look-ups, a slight
+#                          change in the parameter list for the search
+#                          script call in &handleSearchWeb, and a new
+#                          sub -- &revDate2EpSecs -- for calculating the
+#                          epoch seconds from a rev date (the only way
+#                          to sort dates.)
 
 package wiki;
+
+## 0501 kk : vvv Added for revDate2EpSecs
+use Time::Local;
+
 use strict;
 
 use vars qw(
@@ -51,7 +63,7 @@ use vars qw(
         $doLogTopicView $doLogTopicEdit $doLogTopicSave
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
-        @isoMonth $TranslationToken $code @code $depth
+        @isoMonth $TranslationToken $code @code $depth %mon2num
         $scriptSuffix );
 
 
@@ -70,6 +82,9 @@ do "wikisearch.pm";
 # ===========================
 # variables: (new variables must be declared in "use vars qw(..)" above)
 @isoMonth     = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
+
+{ my $count = 0;
+  %mon2num = map { $_ => $count++ } @isoMonth; }
 
 # =========================
 sub initialize
@@ -364,6 +379,20 @@ sub formatGmTime
     $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
     $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
     return $time;
+}
+
+# =========================
+sub revDate2EpSecs {
+
+# This routine *will break* if formatGMTime changes output format.
+
+    my ($day, $mon, $year, $hyph, $hrmin, @junk) = split(" ",$_[0]);
+    my ($hr, $min) = split(/:/, $hrmin);
+
+    #my $mon = $mon2num{$monstr};
+
+    return timegm(0, $min, $hr, $day, $mon2num{$mon}, $year - 1900);
+
 }
 
 # =========================
@@ -824,7 +853,10 @@ sub handleSearchWeb
        extractNameValuePair( $attributes, "web" ),
        $searchVal, 
        extractNameValuePair( $attributes, "scope" ),
+       extractNameValuePair( $attributes, "order" ),
        extractNameValuePair( $attributes, "regex" ),
+       extractNameValuePair( $attributes, "limit" ),
+       extractNameValuePair( $attributes, "reverse" ),
        extractNameValuePair( $attributes, "casesensitive" ),
        extractNameValuePair( $attributes, "nosummary" ),
        extractNameValuePair( $attributes, "nosearch" ),
@@ -1087,3 +1119,4 @@ sub getRenderedVersion
 }
 
 1;
+
