@@ -59,19 +59,20 @@ use Carp;
     return 0 if ( $this->size() == 0 );
 
     my $sum = 0;
-    my $more;
+    my $subfields;
 
     if ( $field =~ s/(\w+)\.(.*)/$1/o ) {
-      $more = $2;
+      $subfields = $2;
     }
 
     foreach my $meta ( @{$this->{values}} ) {
       if ( ref( $meta )) {
 	my $fieldval = $meta->get( $field );
-	if ( defined( $fieldval )) {
-	  if ( defined( $more )) {
-	    $sum += $fieldval->sum( $more );
-	  } else {
+	if ( defined( $fieldval ) ) {
+	  if ( defined( $subfields )) {
+	    die "$field has no subfield $subfields" unless ( ref( $fieldval ));
+	    $sum += $fieldval->sum( $subfields );
+	  } elsif ( $fieldval =~ m/^\s*\d+/o ) {
 	    $sum += $fieldval;
 	  }
 	}
@@ -106,15 +107,23 @@ use Carp;
   }
 
   sub toString {
-    my $this = shift;
-    my $ss = "[";
+    my ( $this, $strung ) = @_;
+    if ( !defined( $strung )) {
+      $strung = {};
+    } elsif ( $strung->{$this} ) {
+      return "$this\[...\]";
+    }
+    $strung->{$this} = 1;
+    my $ss = "$this\[";
     if ( $this->size() > 0 ) {
       foreach my $entry ( @{$this->{values}} ) {
 	$ss .= "," if $ss ne "[";
 	if ( ref( $entry )) {
-	  $ss .= $entry->toString();
+	  $ss .= $entry->toString( $strung );
+	} elsif ( defined( $entry )) {
+	  $ss .= "\"$entry\"";
 	} else {
-	  $ss .= "\"" . $entry . "\"";
+	  $ss .= "UNDEF";
 	}
       }
     }

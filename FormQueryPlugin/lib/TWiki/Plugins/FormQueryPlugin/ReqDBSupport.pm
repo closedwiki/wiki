@@ -1,6 +1,8 @@
 #
 # Copyright (C) Motorola 2003 - All rights reserved
 #
+use strict;
+
 use TWiki::Func;
 
 use TWiki::Plugins::FormQueryPlugin::WebDB;
@@ -96,6 +98,15 @@ use TWiki::Plugins::FormQueryPlugin::Map;
 
     $actual = $target unless ( defined( $actual ));
     $target = $actual unless ( defined( $target ));
+
+    if ( $actual !~ m/^\s*\d+/o &&
+	 $target !~ m/^\s*\d+/o &&
+	 $total !~ m/^\s*\d+/o ) {
+      return moan( $macro, $params, "One of the parameters was non-numeric", 0 );
+    }
+
+    my $tp = int(0.5 + 100 * $target / $total);
+    my $ap = int(0.5 + 100 * $actual / $total);
     
     # block 1 always dark grey
     # block 2 red if late, black if ahead
@@ -103,54 +114,66 @@ use TWiki::Plugins::FormQueryPlugin::Map;
     # block 4 always light grey
     my ( $block1, $block2, $block3, $block4 );
     my ( $block1text, $block2text, $block3text, $block4text );
-    my ( $block2col, $block3col );
-    
+    my ( $block1tcol, $block2tcol, $block3tcol, $block4tcol );
+    my ( $block1bcol, $block2bcol, $block3bcol, $block4bcol );
+    $block1bcol = "#999999";
+    $block1tcol = "white";
+    $block1text = "&nbsp;";
     # Round target and actual to integer percentages
     if ( $actual < $target ) {
       # late
-      $block1text = "&nbsp;";
+      $block1 = $ap;
+
+      $block2 = $tp - $ap;
+      $block2bcol = "red";
+      $block2tcol = "white";
       $block2text = int( $target - $actual );
-      $block3text = "&nbsp;";
-      $block4text = "&nbsp;";
-      $target = int(0.5 + 100 * $target / $total);
-      $actual = int(0.5 + 100 * $actual / $total);
-      $block1 = $actual;
-      $block2 = $target - $actual;
-      $block2col = "red";
+      if ( $block2text eq 0 ) {
+	$block1 += $block2;
+	$block2 = 0;
+      }
+
       $block3 = 1;
-      $block3col = "black";
+      $block3bcol = "black";
+      $block3tcol = "white";
+      $block3text = "&nbsp;";
+
     } else {
       # ahead
-      $block1text = "&nbsp;";
-      $block2text = "&nbsp;";
-      $block3text = int($actual - $target);
-      $block4text = "&nbsp;";
-      $target = int(0.5 + 100 * $target / $total);
-      $actual = int(0.5 + 100 * $actual / $total);
-      $block1 = $target;
+      $block1 = $tp;
+
       $block2 = 1;
-      $block2col = "black";
-      $block3 = $actual - $target;
-      $block3col = "lime";
+      $block2bcol = "black";
+      $block2tcol = "white";
+      $block2text = "&nbsp;";
+
+      $block3 = $ap - $tp;
+      $block3bcol = "lime";
+      $block3tcol = "black";
+      $block3text = int( $actual - $target );
+      $block3 = 0 if ( $block3text eq 0 );
     }
     $block4 = 100 - ($block1 + $block2 + $block3);
-    
-    my $gauge = "<table border=0 cellspacing=0 height=10 width=100%><tr>";
-    if ( $block1 > 0) {
-      $gauge .= "<td width=$block1% bgcolor=\"#666666\" align=center>$block1text</td>";
-    }
-    if ( $block2 > 0 ) {
-      $gauge .= "<td width=$block2% bgcolor=\"$block2col\" align=center>$block2text</td>";
-    }
-    if ( $block3 > 0 ) {
-      $gauge .= "<td width=$block3% bgcolor=\"$block3col\" align=center>$block3text</td>";
-    }
-    if ( $block4 > 0 ) {
-      $gauge .= "<td width=$block4% bgcolor=\"#CCCCCC\" align=center>$block4text</td>";
-    }
+    $block4bcol = "#CCCCCC";
+    $block4tcol = "black";
+    $block4text = "&nbsp;";
+
+    my $gauge = "<table border=0 cellspacing=0 width=100%><tr>".
+      _block( $block1, $block1bcol, $block1tcol, $block1text ) .
+      _block( $block2, $block2bcol, $block2tcol, $block2text ) .
+      _block( $block3, $block3bcol, $block3tcol, $block3text ) .
+      _block( $block4, $block4bcol, $block4tcol, $block4text );
     $gauge .= "</tr></table>";
-    #$gauge .= " DEBUG $block1 $block2 $block3";
     return $gauge;
+  }
+
+  # PRIVATE STATIC generate a bar block
+  sub _block {
+    my ( $width, $bcol, $tcol, $text ) = @_;
+    if ( $width > 0 ) {
+      return "<td width=$width% bgcolor=\"$bcol\" align=center><font color=\"$tcol\">$text</font></td>";
+    }
+    return "";
   }
 }
 

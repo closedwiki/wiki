@@ -64,9 +64,17 @@ use TWiki::Plugins::FormQueryPlugin::Map;
 
   # PRIVATE STATIC compare function for sorting
   sub _compare {
+    my ( $va, $vb );
     foreach my $field ( @compareFields ) {
-      my $va = $a->get( $field );
-      my $vb = $b->get( $field );
+      if ( $field =~ m/^-/o ) {
+	# reverse sort this field
+	my $f = substr( $field, 1 );
+	$va = $b->get( $f );
+	$vb = $a->get( $f );
+      } else {
+	$va = $a->get( $field );
+	$vb = $b->get( $field );
+      }
       if ( defined( $va ) && defined( $vb )) {
 	my $cmp = $va cmp $vb;
 	return $cmp unless ( $cmp == 0 );
