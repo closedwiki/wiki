@@ -440,6 +440,7 @@ sub changeForm
         my %form = $metat->findOne( "FORM" );
         $formName = $form{"name"};
     }
+    $formName = "" if( !$formName || $formName eq "none" );
 
     my $formList = "";
     foreach my $form ( @forms ) {
