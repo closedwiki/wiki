@@ -84,12 +84,13 @@ sub initialize
 #        for the moment it seems to work ONLY if the variable is on a single line
 
     # Get ACTIVEPLUGINS variable, use DefaultPlugin if not defined
-    my $active = &TWiki::Prefs::getPreferencesValue( "ACTIVEPLUGINS" ) || "Plugins.DefaultPlugin";
+    my $active = &TWiki::Prefs::getPreferencesValue( "ACTIVEPLUGINS" )
+                 || "$TWiki::twikiWebname.DefaultPlugin";
     $active =~ s/[\n\t\s\r]+/ /go;
     
     # we enforce the schema Plugins.<name>Plugin
-    @pluginList = map { s/^Plugins\.(.*Plugin)$/$1/o; $_ }
-		  grep { /^Plugins\.(.*Plugin)$/ }
+    @pluginList = map { s/^[A-Z]+[A-Za-z]*\.(.*Plugin)$/$1/o; $_ }
+#		  grep { /^Plugins\.(.*Plugin)$/ }
 		  split( /,?\s+/ , $active );
 
     # for efficiency we register all possible handlers at once

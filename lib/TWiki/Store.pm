@@ -932,7 +932,7 @@ sub getAllWebs {
     if( !defined $web ) {
 	$web="";
     }
-    my @webList =   map { s/^\///o }
+    my @webList =   map { s/^\///o; $_ }
 		    map { "$web/$_" }
 		    &getSubWebs( $web );
     my $subWeb = "";
