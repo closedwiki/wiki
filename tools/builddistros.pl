@@ -50,7 +50,7 @@ foreach my $kernel ( @dirReleases )
     print qq{<b>$rel</b> };
     print qq{<a href="$download" >download</a>\n};
     print qq{<a href="$homepage" >discussion</a>\n};
-    print qq{\n\n};  
+    print qq{<br />\n\n};  
 } 
 
 print "<HR />\n";
