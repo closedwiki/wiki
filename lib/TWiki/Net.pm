@@ -27,6 +27,7 @@ package TWiki::Net;
 
 use strict;
 use Assert;
+use TWiki::Time;
 
 sub new {
     my ( $class, $session ) = @_;
@@ -132,7 +133,7 @@ sub sendEmail {
     $retries = 1 unless $retries;
 
     # Put in a Date header, mainly for Qmail
-    my $dateStr = TWiki::formatTime(time, 'email');
+    my $dateStr = TWiki::Time::formatTime(time, 'email');
     $theText = "Date: " . $dateStr . "\n" . $theText;
 
     # Check if Net::SMTP is available

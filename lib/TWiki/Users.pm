@@ -28,6 +28,7 @@ package TWiki::Users;
 use strict;
 use Assert;
 use TWiki::User;
+use TWiki::Time;
 
 # 'Use locale' for internationalisation of Perl sorting in getTopicNames
 # and other routines - main locale settings are done in TWiki::setupLocale
@@ -213,7 +214,7 @@ sub addUserToTWikiUsersTopic {
       unless $user->web() eq $TWiki::cfg{UsersWebName};
     $entry .= $user->wikiName()." - ";
     $entry .= $user->login() . " - " if $user->login();
-    my $today = TWiki::formatTime(time(), "\$day \$mon \$year", "gmtime");
+    my $today = TWiki::Time::formatTime(time(), "\$day \$mon \$year", "gmtime");
 
     # add to the cache
     $this->{U2W}{$user->login()} = $user->{web} . "." , $user->wikiName();

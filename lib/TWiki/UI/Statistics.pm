@@ -28,8 +28,6 @@ use File::Copy qw(copy);
 use IO::File;
 use Error qw( :try );
 
-use constant ISOMONTH => qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
-
 my $debug = 0;
 
 =pod
@@ -71,24 +69,20 @@ sub statistics {
     _printMsg( "(Please wait until page download has finished)" );
 
     unless( $logDate ) {
-        # get current local time and format to "yyyymm" format:
-        my ( $sec, $min, $hour, $mday, $mon, $year) = localtime( time() );
-        $year = sprintf("%.4u", $year + 1900);  # Y2K fix
-        $mon = $mon+1;
-        $logDate = sprintf("%.4u%.2u", $year, $mon);
+        $logDate =
+          TWiki::Time::formatTime( time(), "\$year\$mo", "servertime" );
     }
 
     my $logMonth;
     my $logYear;
-    $tmp = $logDate;
-    $tmp =~ s/([0-9]{4})(.*)/$2/g;
-    if( $tmp && $tmp < 13 ) {
-        $logMonth = (ISOMONTH)[$tmp-1];
+    if ( $logDate = /^(\d{4})(\d{2})%/ ) {
+        $logYear = $1;
+        $logMonth = $TWiki::Time::ISOMONTH[$2 % 12]
     } else {
-        $logMonth = "Date error";
+        _printMsg( "!Error in date $logDate - must be YYYYMM", $session );
+        return;
     }
-    $logYear = $logDate;
-    $logYear =~ s/([0-9]{4})(.*)/$1/g;
+
     my $logMonthYear = "$logMonth $logYear";
     _printMsg( "* Statistics for $logMonthYear", $session );
 

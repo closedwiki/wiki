@@ -46,6 +46,9 @@ use strict;
 use Error qw( :try );
 use Assert;
 
+use TWiki::Time;
+use TWiki::Plugins;
+
 # =========================
 =pod
 
@@ -929,7 +932,7 @@ sub internalLink
 sub formatTime
 {
 #   my ( $epSecs, $format, $timezone ) = @_;
-    return &TWiki::formatTime( @_ );
+    return TWiki::Time::formatTime( @_ );
 }
 
 # =========================
@@ -953,7 +956,7 @@ sub formatGmTime
     # FIXME: Write warning based on flag (disabled for now); indicate who is calling this function
     ## writeWarning( "deprecated use of Func::formatGmTime" );
 
-    return &formatTime( @_, "gmtime" );
+    return TWiki::Time::formatTime( @_, "gmtime" );
 }
 
 

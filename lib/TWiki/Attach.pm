@@ -32,6 +32,7 @@ use TWiki::Store;
 use TWiki::User;
 use TWiki::Prefs;
 use TWiki::Meta;
+use TWiki::Time;
 
 =pod
 
@@ -227,7 +228,7 @@ sub _expandAttrs {
         return $file;
     }
     elsif ( $attr eq "DATE" ) {
-        return TWiki::formatTime( $info->{date} );
+        return TWiki::Time::formatTime( $info->{date} );
     }
     elsif ( $attr eq "USER" ) {
         return $info->{user};
@@ -513,8 +514,7 @@ sub _pngsize {
 
 #Get file attachment attributes for old html
 #format.
-sub _getOldAttachAttr
-{
+sub _getOldAttachAttr {
     my( $this, $atext ) = @_;
     my $fileName="";
 	my $filePath="";
@@ -530,31 +530,29 @@ sub _getOldAttachAttr
     if( ! $fileName ) { $fileName = ""; }
     if( $fileName ) {
         ( $before, $filePath,    $after ) = split( /<(?:\/)*TwkFilePath>/, $atext );
-	if( ! $filePath ) { $filePath = ""; }
-	$filePath =~ s/<TwkData value="(.*)">//go;
-	if( $1 ) { $filePath = $1; } else { $filePath = ""; }
-	$filePath =~ s/\%NOP\%//goi;   # delete placeholder that prevents WikiLinks
-	( $before, $fileSize,    $after ) = split( /<(?:\/)*TwkFileSize>/, $atext );
-	if( ! $fileSize ) { $fileSize = "0"; }
-	( $before, $fileDate,    $after ) = split( /<(?:\/)*TwkFileDate>/, $atext );
-	if( ! $fileDate ) { 
+        if( ! $filePath ) { $filePath = ""; }
+        $filePath =~ s/<TwkData value="(.*)">//go;
+        if( $1 ) { $filePath = $1; } else { $filePath = ""; }
+        $filePath =~ s/\%NOP\%//goi;   # delete placeholder that prevents WikiLinks
+        ( $before, $fileSize,    $after ) = split( /<(?:\/)*TwkFileSize>/, $atext );
+        if( ! $fileSize ) { $fileSize = "0"; }
+        ( $before, $fileDate,    $after ) = split( /<(?:\/)*TwkFileDate>/, $atext );
+        if( ! $fileDate ) { 
             $fileDate = "";
         } else {
-            # SMELL: violates Store encapsulation!
-            eval 'use TWiki::Store::RcsFile;';
             $fileDate =~ s/&nbsp;/ /go;
-            $fileDate = TWiki::Store::RcsFile::revDate2EpSecs( $fileDate );
+            $fileDate = TWiki::Time::parseTime( $fileDate );
         }
-	( $before, $fileUser,    $after ) = split( /<(?:\/)*TwkFileUser>/, $atext );
-	if( ! $fileUser ) { 
+        ( $before, $fileUser,    $after ) = split( /<(?:\/)*TwkFileUser>/, $atext );
+        if( ! $fileUser ) { 
             $fileUser = ""; 
         } else {
             my $u = $this->users()->findUser( $fileUser );
             $fileUser = $u->login() if $u;
         }
-	$fileUser =~ s/ //go;
-	( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $atext );
-	if( ! $fileComment ) { $fileComment = ""; }
+        $fileUser =~ s/ //go;
+        ( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $atext );
+        if( ! $fileComment ) { $fileComment = ""; }
     }
 
     return ( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
@@ -651,9 +649,8 @@ sub upgradeFrom1v0beta {
     foreach my $att ( @attach ) {
         my $date = $att->{"date"};
         if( $date =~ /-/ ) {
-            use TWiki::Store::RcsFile;
             $date =~ s/&nbsp;/ /go;
-            $date = TWiki::Store::RcsFile::revDate2EpSecs( $date );
+            $date = TWiki::Time::parseTime( $date );
         }
         $att->{"date"} = $date;
         my $u = $this->users()->findUser( $att->{user} );

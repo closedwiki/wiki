@@ -31,6 +31,7 @@ use strict;
 use TWiki;
 use TWiki::User;
 use TWiki::UI;
+use TWiki::Time;
 
 =pod
 
@@ -86,7 +87,7 @@ sub view {
         ( $revdate, $revuser, $maxrev ) =
           $currMeta->getRevisionInfo( $webName, $topicName );
 
-        $revdate = TWiki::formatTime( $revdate );
+        $revdate = TWiki::Time::formatTime( $revdate );
 
         if ( !$rev || $rev > $maxrev ) {
             $rev = $maxrev;
@@ -102,7 +103,7 @@ sub view {
               ( $session->{user}, $webName, $topicName, $rev );
 
             ( $revdate, $revuser ) = $meta->getRevisionInfo();
-            $revdate = TWiki::formatTime( $revdate );
+            $revdate = TWiki::Time::formatTime( $revdate );
             $extra .= "r$rev";
         } else {
             # viewing the most recent rev

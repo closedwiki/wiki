@@ -31,6 +31,7 @@ use strict;
 use Assert;
 use TWiki::Sandbox;
 use TWiki::User;
+use TWiki::Time;
 
 # 'Use locale' for internationalisation of Perl sorting and searching - 
 # main locale settings are done in TWiki::setupLocale
@@ -321,12 +322,6 @@ sub _makeTopicPattern
     return "" unless( @arr );
     # ( "Web.*", "FooBar" ) ==> "^(Web.*|FooBar)$"
     return '^(' . join( "|", @arr ) . ')$';
-}
-
-sub revDate2ISO
-{
-    my $epochSec = TWiki::Store::RcsFile::revDate2EpSecs( $_[0] );
-    return &TWiki::formatTime( $epochSec, "\$iso", "gmtime");
 }
 
 =pod
@@ -677,7 +672,10 @@ sub searchWeb {
                 $topicInfo->{$topic} =
                   $this->_extractTopicInfo( $web, $topic, 1, 0, undef );
             }
-            my $revDate = TWiki::formatTime( $topicInfo->{$topic}->{modified} );
+            my $epochSecs = $topicInfo->{$topic}->{modified};
+            my $revDate = TWiki::Time::formatTime( $epochSecs );
+            my $isoDate = TWiki::Time::formatTime( $epochSecs, "\$iso", "gmtime");
+
             my $revUser = $topicInfo->{$topic}->{editby} || "UnknownUser";
             my $ru = $this->users()->findUser( $revUser );
             my $revNum  = $topicInfo->{$topic}->{revNum};
@@ -727,7 +725,7 @@ sub searchWeb {
                     $out =~ s/\$topic\(([^\)]*)\)/_breakName( $topic, $1 )/geos;
                     $out =~ s/\$topic/$topic/gos;
                     $out =~ s/\$date/$revDate/gos;
-                    $out =~ s/\$isodate/&revDate2ISO($revDate)/geos;
+                    $out =~ s/\$isodate/$isoDate/gs;
                     $out =~ s/\$rev/$revNum/gos;
                     $out =~ s/\$wikiusername/$ru->webDotWikiName()/geos;
                     $out =~ s/\$wikiname/$ru->wikiName()/geos;
@@ -1087,7 +1085,7 @@ sub _getRev1Info {
         return $info->{user}->webDotWikiName();
     }
     if( $theAttr eq "date" ) {
-        return &TWiki::formatTime( $info->{date} );
+        return TWiki::Time::formatTime( $info->{date} );
     }
 
     return 1;

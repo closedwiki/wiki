@@ -21,12 +21,12 @@
 
 ---+ UNPUBLISHED package TWiki::Store::RcsFile
 
-Superclass of RcsWrap and RcsLite, encapsulating common functionality.
+Superclass of RcsWrap and RcsLite.
 
 This class is PACKAGE PRIVATE to Store, and should never be
 used from anywhere else.
 
-The documentation is extremely sparse. Refer to STore.pm for models
+The documentation is extremely sparse. Refer to Store.pm for models
 of usage.
 
 =cut
@@ -37,13 +37,13 @@ use strict;
 
 use File::Copy;
 use File::Spec;
-use Time::Local;	# Added for revDate2EpSecs
 use TWiki::Sandbox;
 use Assert;
+use TWiki::Time;
 
 =pod
 
----++ ClassMethod new (  $proto, $web, $topic, $attachment )
+---++ ClassMethod new($web, $topic, $attachment)
 
 =cut to implementation
 
@@ -61,7 +61,13 @@ sub new {
     return $self;
 }
 
-# Call only after all settings initialised
+=pod
+
+---++ ClassMethod init()
+Used in subclasses for late initialisation during object creation.
+
+=cut
+
 sub init {
     my $self = shift;
 
@@ -210,7 +216,6 @@ sub _moveTopic {
    return $error;
 }
 
-
 # Move an attachment from one topic to another.
 # If there is a problem an error string is returned.
 # The caller to this routine should check that all topics are valid and
@@ -278,12 +283,6 @@ sub _epochToRcsDateTime {
    return $rcsDateTime;
 }
 
-# Suitable for rcs format stored in files (and that returned by rcs executables ???)
-sub _rcsDateTimeToEpoch {
-    my( $rcsDate ) = @_;    
-    return revDate2EpSecs( $rcsDate );
-}
-
 =pod
 
 ---++ ObjectMethod isAsciiDefault (   ) -> $string
@@ -302,11 +301,15 @@ sub isAsciiDefault {
    }
 }
 
+# Must be provided by subclasses
+# Returns "" if okay, otherwise an error string
+sub binaryChange {
+   ASSERT(0) if DEBUG;
+}
+
 =pod
 
 ---++ ObjectMethod setBinary (   $binary  )
-
-Not yet documented.
 
 =cut to implementation
 
@@ -315,7 +318,7 @@ sub setBinary {
     my $oldSetting = $self->{binary};
     $binary = "" if( ! $binary );
     $self->{binary} = $binary;
-    $self->_binaryChange() if( (! $oldSetting && $binary) || ($oldSetting && ! $binary) );
+    $self->binaryChange() if( (! $oldSetting && $binary) || ($oldSetting && ! $binary) );
 }
 
 =pod
@@ -564,76 +567,6 @@ sub _mktemp {
    }
 
    return($template);
-}
-
-use constant MON2NUM => {
-    Jan => 0,
-    Feb => 1,
-    Mar => 2,
-    Apr => 3,
-    May => 4,
-    Jun => 5,
-    Jul => 6,
-    Aug => 7,
-    Sep => 8,
-    Oct => 9,
-    Nov => 10,
-    Dec => 11
-};
-
-=pod
-
----++ StaticMethod revDate2EpSecs ()
-
-Convert RCS revision date/time to seconds since epoch, for easier sorting 
-
-=cut
-
-sub revDate2EpSecs {
-    my( $date ) = @_;
-    # NOTE: This routine *will break* if input is not one of below formats!
-    
-    # FIXME - why aren't ifs around pattern match rather than $5 etc
-    # try "31 Dec 2001 - 23:59"  (TWiki date)
-    if ($date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)[\s\-]+([0-9]+)\:([0-9]+)/) {
-        my $year = $3;
-        $year -= 1900 if( $year > 1900 );
-        # The ($2) will look up the constant so named
-        return timegm( 0, $5, $4, $1, MON2NUM->{$2}, $year );
-    }
-
-    # try "2001/12/31 23:59:59" or "2001.12.31.23.59.59" (RCS date)
-    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)[\.\:]([0-9]+)/) {
-        my $year = $1;
-        $year -= 1900 if( $year > 1900 );
-        return timegm( $6, $5, $4, $3, $2-1, $year );
-    }
-
-    # try "2001/12/31 23:59" or "2001.12.31.23.59" (RCS short date)
-    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)/) {
-        my $year = $1;
-        $year -= 1900 if( $year > 1900 );
-        return timegm( 0, $5, $4, $3, $2-1, $year );
-    }
-
-    # try "2001-12-31T23:59:59Z" or "2001-12-31T23:59:59+01:00" (ISO date)
-    # FIXME: Calc local to zulu time "2001-12-31T23:59:59+01:00"
-    if ($date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)\:([0-9]+)/ ) {
-        my $year = $1;
-        $year -= 1900 if( $year > 1900 );
-        return timegm( $6, $5, $4, $3, $2-1, $year );
-    }
-
-    # try "2001-12-31T23:59Z" or "2001-12-31T23:59+01:00" (ISO short date)
-    # FIXME: Calc local to zulu time "2001-12-31T23:59+01:00"
-    if ($date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)/ ) {
-        my $year = $1;
-        $year -= 1900 if( $year > 1900 );
-        return timegm( 0, $5, $4, $3, $2-1, $year );
-    }
-
-    # give up, return start of epoch (01 Jan 1970 GMT)
-    return 0;
 }
 
 1;

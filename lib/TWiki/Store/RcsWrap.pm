@@ -22,6 +22,7 @@
 
 Wrapper around the RCS commands required by TWiki.
 There is one of these object for each file stored under RCS.
+
 This object is PACKAGE PRIVATE to Store, and should never be
 used from anywhere else.
 
@@ -32,10 +33,18 @@ package TWiki::Store::RcsWrap;
 use TWiki;
 use File::Copy;
 use TWiki::Store::RcsFile;
+use TWiki::Time;
+
 @ISA = qw(TWiki::Store::RcsFile);
 
 use strict;
 use Assert;
+
+=pod
+
+---++ ClassMethod new($web, $topic, $attachment)
+
+=cut
 
 sub new {
     my( $class, $session, $web, $topic, $attachment ) = @_;
@@ -47,9 +56,8 @@ sub new {
     return $self;
 }
 
-# ======================
-# Returns false if okay, otherwise an error string
-sub _binaryChange {
+# Overrides RcsFile::binaryChange
+sub binaryChange {
     my( $self ) = @_;
     if( $self->{binary} ) {
         # Can only do something when changing to binary
@@ -69,7 +77,6 @@ sub _binaryChange {
     return "";
 }
 
-# ======================
 =pod
 
 ---++ ObjectMethod addRevision (   $text, $comment, $user ) -> $error
@@ -85,15 +92,16 @@ sub addRevision {
     return $self->_ci( $self->{file}, $comment, $user );
 }
 
-# ======================
 =pod
 
 ---++ ObjectMethod replaceRevision($text, $comment, $user, $date) -> $error
-
 Replace the top revision.
+   * =$text is the new revision
+   * =$date= is in epoch seconds.
+   * =$user= is a wikiname.
+   * =$comment= is a string
+
 Return non empty string with error message if there is a problem.
-$date is in epoch seconds.
-$user is a wikiname.
 
 =cut
 
@@ -112,7 +120,7 @@ sub replaceRevision {
         $self->_deleteRevision( $rev );
     }
     $self->_saveFile( $self->{file}, $text );
-	$date = TWiki::formatTime( $date , "\$rcs", "gmtime");
+	$date = TWiki::Time::formatTime( $date , "\$rcs", "gmtime");
 
     my ($rcsOut, $exit) = $self->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{ciDateCmd},
@@ -126,10 +134,10 @@ sub replaceRevision {
     return "";
 }
 
-# ======================
 =pod
 
 ---++ ObjectMethod deleteRevision() -> $error
+Delete the top revision.
 
 Return with empty string if only one revision.
 
@@ -142,7 +150,6 @@ sub deleteRevision {
     return $self->_deleteRevision( $rev );
 }
 
-# ======================
 sub _deleteRevision {
     my( $self, $rev ) = @_;
 
@@ -176,7 +183,6 @@ sub _deleteRevision {
     }
 }
 
-# ======================
 =pod
 
 ---++ ObjectMethod getRevision($version) -> $text
@@ -222,7 +228,6 @@ sub getRevision {
     return $text;
 }
 
-# ======================
 =pod
 
 ---++ ObjectMethod numRevisions() -> $integer
@@ -249,7 +254,6 @@ sub numRevisions {
     }
 }
 
-# ======================
 =pod
 
 ---++ ObjectMethod getRevisionInfo($version) -> ($rcsError, $rev, $date, $user, $comment)
@@ -284,7 +288,7 @@ sub getRevisionInfo {
             $date = $1 || "";
             $user = $2 || "";
             $comment = $3 || "";
-            $date = TWiki::Store::RcsFile::_rcsDateTimeToEpoch( $date );
+            $date = TWiki::Time::parseTime( $date );
             $rcsOut =~ /revision 1.([0-9]*)/;
             $rev = $1;
             $rcsError = "Rev missing from revision file $rcsFile" unless( $rev );
@@ -299,7 +303,6 @@ sub getRevisionInfo {
     return( $rcsError, $rev, $date, $user, $comment );
 }
 
-# ======================
 =pod
 
 ---++ ObjectMethod revisionDiff (   $rev1, $rev2, $contextLines  ) -> \@diffArray
@@ -399,7 +402,6 @@ sub parseRevisionDiff {
     return \@diffArray;
 }
 
-# ======================
 sub _ci {
     my( $self, $file, $comment, $user ) = @_;
 

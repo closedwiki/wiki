@@ -28,6 +28,7 @@ use TWiki::Prefs;
 use TWiki::Store;
 use TWiki::UI;
 use TWiki::Merge;
+use TWiki::Time;
 
 # Command handler for changes command
 sub changes {
@@ -68,7 +69,7 @@ sub changes {
             my $u = $session->{users}->findUser( $login );
             $wikiuser = $u->webDotWikiName() if $u;
             $thisChange =~ s/%AUTHOR%/$wikiuser/go;
-            $time = TWiki::formatTime( $time );
+            $time = TWiki::Time::formatTime( $time );
             $rev = 1 unless $rev;
             my $srev = $rev;
             if( $rev == 1 ) {

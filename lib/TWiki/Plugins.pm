@@ -40,11 +40,11 @@ my $pref = TWiki::Func::getPreferencesValue("URGH");
 
 and the call
 
-my $t = TWiki::formatTime($time);
+my $t = TWiki::writeWarning($message);
 
 should be replaced with
 
-my $pref = $TWiki::Plugins::SESSION->formatTime($time);
+my $pref = $TWiki::Plugins::SESSION->writeWarning($message);
 
 Methods in other modules such as Store must be accessed through
 the relevant TWiki sub-object, for example

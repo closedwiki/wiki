@@ -32,8 +32,6 @@ use CGI;
 use TWiki;
 use TWiki::UI::OopsException;
 
-use constant ENABLEBM => 0;
-
 =pod
 
 ---++ StaticMethod run( $class, $method )
@@ -69,21 +67,21 @@ sub run {
         $topic = $query->param( 'topic' );
         # If the 'benchmark' parameter is set in the browser, save the
         # query and other info to the given file on the server.
-        # To benchmark a script, set ENABLEBM above and
-        # put the following lines into the top level CGI script.
+        # To benchmark a script, put the following lines into
+        # the top level CGI script.
         # use Benchmark qw(:all :hireswallclock);
         # use vars qw( $begin );
         # BEGIN{$begin=new Benchmark;}
         # END{print STDERR "Total ".timestr(timediff(new Benchmark,$begin))."\n";}
-        if ( ENABLEBM ) {
-            my $bm = $query->param( 'benchmark' );
-            if ( $bm ) {
-                eval 'use Data::Dumper;';
-                open(OF, ">$bm") || throw Error::Simple( "Store failed" );
-                print OF Dumper(\$query, $pathInfo, $user, $url);
-                close(OF);
-            }
-        }
+        #
+        # and uncomment the following lines and the lines at ****:
+        # my $bm = $query->param( 'benchmark' );
+        # if ( $bm ) {
+        #     eval 'use Data::Dumper;';
+        #     open(OF, ">$bm") || throw Error::Simple( "Store failed" );
+        #     print OF Dumper(\$query, $pathInfo, $user, $url);
+        #     close(OF);
+        # }
     } else {
         # script is called by cron job or user
         $query = new CGI( "" );
@@ -104,19 +102,18 @@ sub run {
                 $pathInfo = $arg;
             }
         }
-        if( ENABLEBM ) {
-            my $bm = $query->param( 'benchmark' );
-            if( $bm ) {
-                open(IF, "<$bm") || die "Benchmark query $bm retrieve failed";
-                undef $/;
-                my $dump = <IF>;
-                close(IF);
-                my ( $VAR1, $VAR2, $VAR3, $VAR4 );
-                eval $dump;
-                ( $query, $pathInfo, $user, $url ) =
-                  ( $$VAR1, $VAR2, $VAR3, $VAR4 );
-            }
-        }
+        # Benchmark code ****
+        # my $bm = $query->param( 'benchmark' );
+        # if( $bm ) {
+        #     open(IF, "<$bm") || die "Benchmark query $bm retrieve failed";
+        #     undef $/;
+        #     my $dump = <IF>;
+        #     close(IF);
+        #     my ( $VAR1, $VAR2, $VAR3, $VAR4 );
+        #     eval $dump;
+        #     ( $query, $pathInfo, $user, $url ) =
+        #         ( $$VAR1, $VAR2, $VAR3, $VAR4 );
+        # }
     }
 
     my $session = new TWiki( $pathInfo, $user, $topic, $url,

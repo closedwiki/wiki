@@ -28,6 +28,7 @@ use strict;
 use Assert;
 use TWiki::Plurals;
 use TWiki::Attach;
+use TWiki::Time;
 
 BEGIN {
     # Do a dynamic 'use locale' for this module
@@ -149,7 +150,7 @@ sub _renderMoved {
         my $u = $this->users()->findUser( $by );
         $by = $u->webDotWikiName() if $u;
         my $date = $moved{"date"};
-        $date = TWiki::formatTime( $date, "", "gmtime" );
+        $date = TWiki::Time::formatTime( $date, "", "gmtime" );
 
         # Only allow put back if current web and topic match stored information
         my $putBack = "";
@@ -377,7 +378,7 @@ sub _linkToolTipInfo {
     $text =~ s/\$web/<nop>$theWeb/g;
     $text =~ s/\$topic/<nop>$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
-    $text =~ s/\$date/TWiki::formatTime( $date )/ge;
+    $text =~ s/\$date/TWiki::Time::formatTime( $date )/ge;
     $text =~ s/\$username/<nop>$user/g;                                     # "jsmith"
     $text =~ s/\$wikiname/"<nop>" . $user->wikiName()/ge;  # "JohnSmith"
     $text =~ s/\$wikiusername/"<nop>" . $user->webDotWikiName()/ge; # "Main.JohnSmith"

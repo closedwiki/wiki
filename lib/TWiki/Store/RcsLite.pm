@@ -47,6 +47,7 @@ use strict;
 use Algorithm::Diff;
 use FileHandle;
 use Assert;
+use TWiki::Time;
 
 #$self->{session}->writeDebug("Diff version $Algorithm::Diff::VERSION\n");
 
@@ -268,7 +269,7 @@ sub _process {
           if( /^([0-9]+)\.([0-9]+)\s+date\s+(\d\d(\d\d)?(\.\d\d){5}?);$/o ) {
              $where = "delta.author";
              $num = $2;
-             $date[$num] = TWiki::Store::RcsFile::_rcsDateTimeToEpoch ($3 );
+             $date[$num] = TWiki::Time::parseTime($3);
           }
        } elsif( $where eq "delta.author" ) {
           if( /^author\s+(.*);$/o ) {
@@ -357,13 +358,13 @@ sub _write
     }
 }
 
-# ======================
-sub _binaryChange
-{
+# Overrides RcsFile::binaryChange
+sub binaryChange {
    my( $self ) = @_;
    # Nothing to be done but note for re-writing
    $self->{expand} = "b" if( $self->{binary} );
    # FIXME: unless we have to not do diffs for binary files
+   return "";
 }
 
 # ======================
@@ -412,7 +413,7 @@ sub date
     $self->_ensureProcessed();
     my $date = ${$self->{date}}[$version];
     if( $date ) {
-#        $date = TWiki::Store::RcsFile::_rcsDateTimeToEpoch( $date );
+#        $date = TWiki::Time::parseTime($date);
     } else {
         $date = 0;#MMMM, should this be 0, or now()?
     }

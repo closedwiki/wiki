@@ -29,8 +29,8 @@ store implementations.
 package TWiki::Store;
 
 use File::Copy;
-use Time::Local;
 use TWiki::Meta;
+use TWiki::Time;
 use TWiki::AccessControlException;
 use Assert;
 use Error qw( :try );
@@ -957,7 +957,7 @@ sub repRev {
         # write log entry
         my $extra = "repRev by ".$user->login().": $rev " .
           $revuser->login().
-            " ". TWiki::formatTime( $epochSec, "rcs", "gmtime" );
+            " ". TWiki::Time::formatTime( $epochSec, "rcs", "gmtime" );
         $extra   .= " minor" if( $options->{minor} );
         $this->{session}->writeLog( "save", "$web.$topic", $extra );
     }

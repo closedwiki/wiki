@@ -28,6 +28,8 @@ use TWiki;
 use TWiki::Store;
 use TWiki::Prefs;
 use TWiki::UI;
+use TWiki::Time;
+
 use Error qw( :try );
 use TWiki::UI::OopsException;
 
@@ -284,11 +286,11 @@ sub _getRevInfo
       $session->{renderer}->getRenderedVersion( $user->wikiName() );
 	
     if ( $short ) {
-	    $date = TWiki::formatTime( $date, "\$day \$month \$year" );
+	    $date = TWiki::Time::formatTime( $date, "\$day \$month \$year" );
         # eliminate white space to prevent wrap around in HR table:
         $date =~ s/ /\&nbsp\;/go;
     } else {
-        $date = TWiki::formatTime( $date );
+        $date = TWiki::Time::formatTime( $date );
 	}
 
     my $revInfo = "$date - $wikiname";

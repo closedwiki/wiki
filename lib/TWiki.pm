@@ -57,10 +57,6 @@ use vars qw(
             $langAlphabetic $VERSION
            );
 
-# Other constant constants
-use constant ISOMONTH => qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
-use constant WEEKDAY => qw( Sun Mon Tue Wed Thu Fri Sat );
-
 # Token character that must not occur in any normal text - converted
 # to a flag character if it ever does occur (very unlikely)
 $TranslationToken= "\0";	# Null not allowed in charsets used with TWiki
@@ -408,6 +404,7 @@ use TWiki::Users;     # user handler
 use TWiki::Render;    # HTML generation
 use TWiki::Templates; # TWiki template language
 use TWiki::Net;       # SMTP, get URL
+use TWiki::Time;      # date/time conversions
 
 # Concatenates date, time, and $text to a log file.
 # The logfilename can optionally use a %DATE% variable to support
@@ -418,14 +415,10 @@ sub _writeReport {
     my ( $this, $log, $message ) = @_;
 
     if ( $log ) {
-        my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
-        my $yearmonth = sprintf( "%.4u%.2u", $year, $mon+1 );
-        $log =~ s/%DATE%/$yearmonth/go;
-
-        my $tmon = (ISOMONTH)[$mon];
-        $year = sprintf( "%.4u", $year + 1900 );
-        my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u",
-                            $mday, $year, $hour, $min );
+        my $time =
+          TWiki::Time::formatTime( time(), "\$year\$mo", "servertime");
+        $log =~ s/%DATE%/$time/go;
+        $time = TWiki::Time::formatTime( time(), undef, "servertime" );
 
         if( open( FILE, ">>$log" ) ) {
             print FILE "| $time | $message\n";
@@ -644,7 +637,8 @@ sub writePageHeader {
 
     if ($pageType && $pageType eq 'edit') {
         # Get time now in HTTP header format
-        my $lastModifiedString = formatTime(time, '\$http', "gmtime");
+        my $lastModifiedString =
+          TWiki::Time::formatTime(time, '\$http', "gmtime");
 
         # Expiry time is set high to avoid any data loss.  Each instance of 
         # Edit page has a unique URL with time-string suffix (fix for 
@@ -1429,66 +1423,6 @@ sub _includeUrl {
     $text = applyPatternToIncludedText( $text, $thePattern ) if( $thePattern );
 
     return $text;
-}
-
-=pod
-
----++ StaticMethod formatTime ($epochSeconds, $formatString, $outputTimeZone) -> $value
-   * =$epochSeconds= epochSecs GMT
-   * =$formatString= twiki time date format
-   * =$outputTimeZone= timezone to display. (not sure this will work)(gmtime or servertime)
-
-=cut
-sub formatTime  {
-    my ($epochSeconds, $formatString, $outputTimeZone) = @_;
-    my $value = $epochSeconds;
-
-    # use default TWiki format "31 Dec 1999 - 23:59" unless specified
-    $formatString = "\$day \$month \$year - \$hour:\$min" unless( $formatString );
-    $outputTimeZone = $TWiki::cfg{DisplayTimeValues} unless( $outputTimeZone );
-
-    my( $sec, $min, $hour, $day, $mon, $year, $wday) = gmtime( $epochSeconds );
-      ( $sec, $min, $hour, $day, $mon, $year, $wday ) = localtime( $epochSeconds ) if( $outputTimeZone eq "servertime" );
-
-    #standard twiki date time formats
-    if( $formatString =~ /rcs/i ) {
-        # RCS format, example: "2001/12/31 23:59:59"
-        $formatString = "\$year/\$mo/\$day \$hour:\$min:\$sec";
-    } elsif ( $formatString =~ /http|email/i ) {
-        # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 EST"
- 	    # - based on RFC 2616/1123 and HTTP::Date; also used
-        # by TWiki::Net for Date header in emails.
-        $formatString = "\$wday, \$day \$month \$year \$hour:\$min:\$sec \$tz";
-    } elsif ( $formatString =~ /iso/i ) {
-        # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
-        # e.g. "2002-12-31T19:30Z"
-        $formatString = "\$year-\$mo-\$dayT\$hour:\$min";
-        if( $outputTimeZone eq "gmtime" ) {
-            $formatString = $formatString."Z";
-        } else {
-            #TODO:            $formatString = $formatString.  # TZD  = time zone designator (Z or +hh:mm or -hh:mm) 
-        }
-    }
-
-    $value = $formatString;
-    $value =~ s/\$seco?n?d?s?/sprintf("%.2u",$sec)/geoi;
-    $value =~ s/\$minu?t?e?s?/sprintf("%.2u",$min)/geoi;
-    $value =~ s/\$hour?s?/sprintf("%.2u",$hour)/geoi;
-    $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
-    my $tmp = (WEEKDAY)[$wday];
-    $value =~ s/\$wday/$tmp/geoi;
-    $tmp = (ISOMONTH)[$mon];
-    $value =~ s/\$mont?h?/$tmp/goi;
-    $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
-    $value =~ s/\$year?/sprintf("%.4u",$year+1900)/geoi;
-    $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
-
-#TODO: how do we get the different timezone strings (and when we add usertime, then what?)
-    my $tz_str = "GMT";
-    $tz_str = "Local" if ( $outputTimeZone eq "servertime" );
-    $value =~ s/\$tz/$tz_str/geoi;
-
-    return $value;
 }
 
 #
@@ -2321,22 +2255,22 @@ sub _METASEARCH {
 # Deprecated, but used in signatures
 sub _DATE {
     my $this = shift;
-    return formatTime(time(), "\$day \$mon \$year", "gmtime");
+    return TWiki::Time::formatTime(time(), "\$day \$mon \$year", "gmtime");
 }
 
 sub _GMTIME {
     my( $this, $params ) = @_;
-    return formatTime( time(), $params->{_DEFAULT} || "", "gmtime" );
+    return TWiki::Time::formatTime( time(), $params->{_DEFAULT} || "", "gmtime" );
 }
 
 sub _SERVERTIME {
     my( $this, $params ) = @_;
-    return formatTime( time(), $params->{_DEFAULT} || "", "servertime" );
+    return TWiki::Time::formatTime( time(), $params->{_DEFAULT} || "", "servertime" );
 }
 
 sub _DISPLAYTIME {
     my( $this, $params ) = @_;
-    return formatTime( time(), $params->{_DEFAULT} || "", $TWiki::cfg{DisplayTimeValues} );
+    return TWiki::Time::formatTime( time(), $params->{_DEFAULT} || "", $TWiki::cfg{DisplayTimeValues} );
 }
 
 #| $web | web and  |
@@ -2373,7 +2307,7 @@ sub _REVINFO {
     $value =~ s/\$web/$web/goi;
     $value =~ s/\$topic/$topic/goi;
     $value =~ s/\$rev/r$rev/goi;
-    $value =~ s/\$date/&formatTime($date)/geoi;
+    $value =~ s/\$date/TWiki::Time::formatTime($date)/geoi;
     $value =~ s/\$comment/$comment/goi;
     $value =~ s/\$username/$un/geoi;
     $value =~ s/\$wikiname/$wn/geoi;
