@@ -26,6 +26,15 @@
 # Set library paths in @INC, at compile time
 BEGIN { unshift @INC, '.'; require 'setlib.cfg'; }
 
+# 'Use locale' for internationalisation of Perl regexes -
+# main locale settings are done in TWiki::setupLocale
+BEGIN {
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::useLocale ) {
+        require locale;
+    }
+}
+
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use File::Copy qw(copy);
