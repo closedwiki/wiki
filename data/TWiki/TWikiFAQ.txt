@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042011054" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043310971" format="1.0" version="1.12"}%
 ---+ Frequently Asked Questions About %WIKITOOLNAME%
 
 This is a real FAQ, and also a demo of one easily implemented knowledge base solution. See how it's done, click ==[Edit]==.
@@ -9,13 +9,14 @@ __NOTE:__ The most recent version of this FAQ is at TWiki:TWiki/TWikiFAQ.
 
 ---++ Submit a new FAQ
 
-__NOTE:__ The FAQs here are for frequently asked questions __including__ answers; please ask support questions in the TWiki:Support web. New FAQ topics are based on the TWikiFaqTemplate.
+__%RED%NOTE:%ENDCOLOR%__ The FAQs here are for frequently asked questions __including__ answers; please ask support questions in the TWiki:Support web. New FAQ topics are based on the TWikiFaqTemplate.
 
 <form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
 New FAQ topic: &nbsp; (Use a name in TWiki.WikiNotation) <br />
 <input type="text" name="topic" size="32" />
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="templatetopic" value="TWikiFaqTemplate" />
+<input type="hidden" name="topicparent" value="%TOPIC%" />
 <input type="submit" value="Create Topic" /> <br />
 </form>
 

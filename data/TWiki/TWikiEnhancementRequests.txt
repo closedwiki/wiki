@@ -1,8 +1,9 @@
-	* Please add enhancement request at the TWiki home at http://TWiki.org/cgi-bin/view/Codev/FeatureEnhancementRequest
+%META:TOPICINFO{author="PeterThoeny" date="1043310851" format="1.0" version="1.4"}%
+	* Please bring your enhancement requests to TWiki:Codev.FeatureEnhancementRequest
 
 *Related Topics*
 	* TWikiHistory has a list of added features in TWiki.
 	* TWikiPlannedFeatures has a list of planned features.
 	* TWikiDocumentation is the implementation documentation. 
 
--- Main.PeterThoeny - 12 May 2000 <br>
+-- Main.PeterThoeny - 23 Jan 2003
