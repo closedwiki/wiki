@@ -1,0 +1,59 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:P{"htmldoctype"}%
+<head>
+ <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+ <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_EDIT%
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+<script language="JavaScript">
+<!--HIDE
+function launchWindow( theWeb, theTopic ) {
+  win = open( "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain",
+              theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+  if( win ) {
+    win.focus();
+  }
+  return false;
+}
+//STOP HIDING-->
+</script>
+</head>
+<body bgcolor="#ffffff"">
+#PageTop
+%TMPL:DEF{"titleaction"}%(edit)%TMPL:END%
+%TMPL:DEF{"titlehelp"}% %TMPL:END%
+%TMPL:DEF{"webaction"}%Edit action %ACTION_NUMBER% from %WEB%.%TOPIC% %TMPL:END%
+%TMPL:P{"simpleheader"}%
+<FORM METHOD="post" ACTION="%SCRIPTURLPATH%/previewaction%SCRIPTSUFFIX%/%WEB%/%TOPIC%" ENCTYPE="application/x-www-form-urlencoded">
+<table border=1 width="100%">
+ <tr bgcolor=FFCC66><th>Assignee</th><th>Due date</th><th>State</th></tr>
+ <tr>
+  <td align=center><INPUT TYPE="text" NAME="who" VALUE="%WHO%"></td>
+  <td align=center><INPUT TYPE="text" NAME="due" VALUE="%DUE%"></td>
+  <td align=center>
+   <SELECT NAME="state">
+    <OPTION NAME="open" %OPENSELECT%>open</OPTION>
+    <OPTION NAME="closed" %CLOSEDSELECT%>closed</OPTION>
+   </SELECT>
+  </td>
+ </tr>
+</table>
+<TEXTAREA NAME="text" wrap="virtual" ROWS="%EBH%" COLS="%EBW%">%TEXT%</TEXTAREA>
+<input type="hidden" name="pretext" value="%PRETEXT%" />
+<input type="hidden" name="posttext" value="%POSTTEXT%" />
+<br>Don't forget - if you change something, do it in 
+<a target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">GoodStyle</a>
+and follow the
+<a target="TextFormattingRules" onClick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">TextFormattingRules</a>.
+<br /> <b>-- <nop>%WIKIUSERNAME% - %DATE% &lt;br /&gt;</b> &nbsp;&nbsp;<code>&lt;==</code> 
+This is your signature for easy copy & paste operation
+<br />
+%TMPL:DEF{"topicaction"}% <input type="submit" value=" &nbsp; Preview Changes &nbsp; " />
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
+%TMPL:P{"standardfooter"}%
+%WEBCOPYRIGHT%
+</form>
+#PageBottom
+</body>
+</html>
+
