@@ -375,10 +375,10 @@ sub getTwikiWebname
 
 ---++ Functions: User Handling and Access Control
 
----+++ getDefaultUserName( ) ==> $user
+---+++ getDefaultUserName( ) ==> $loginName
 
 | Description: | Get default user name as defined in TWiki.cfg's =$defaultUserName= |
-| Return: =$user= | Default user name, e.g. ="guest"= |
+| Return: =$loginName= | Default user name, e.g. ="guest"= |
 
 =cut
 # -------------------------
@@ -487,11 +487,11 @@ sub permissionsSet
 # =========================
 =pod
 
----+++ checkAccessPermission( $type, $user, $text, $topic, $web ) ==> $flag
+---+++ checkAccessPermission( $type, $wikiName, $text, $topic, $web ) ==> $flag
 
 | Description: | Check access permission for a topic based on the [[%TWIKIWEB%.TWikiAccessControl]] rules |
 | Parameter: =$type= | Access type, e.g. ="VIEW"=, ="CHANGE"=, ="CREATE"= |
-| Parameter: =$user= | WikiName of remote user, i.e. ="Main.PeterThoeny"= |
+| Parameter: =$wikiName= | WikiName of remote user, i.e. ="Main.PeterThoeny"= |
 | Parameter: =$text= | Topic text, optional. If empty, topic =$web.$topic= is consulted |
 | Parameter: =$topic= | Topic name, required, e.g. ="PrivateStuff"= |
 | Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
@@ -545,12 +545,12 @@ sub topicExists
 # =========================
 =pod
 
----+++ getRevisionInfo( $web, $topic ) ==> ( $date, $user, $rev )
+---+++ getRevisionInfo( $web, $topic ) ==> ( $date, $loginName, $rev )
 
 | Description: | Get revision info of a topic |
 | Parameter: =$web= | Web name, optional, e.g. ="Main"= |
 | Parameter: =$topic= | Topic name, required, e.g. ="TokyoOffice"= |
-| Return: =( $date, $user, $rev )= | List with: ( last update date, WikiName of last user, minor part of top revision number ), e.g. =( "01 Jan 2003", "PeterThoeny", "5" )= |
+| Return: =( $date, $loginName, $rev )= | List with: ( last update date, login name of last user, minor part of top revision number ), e.g. =( "01 Jan 2003", "phoeny", "5" )= |
 
 =cut
 # -------------------------
@@ -662,8 +662,10 @@ sub readTopicText
      =&nbsp;   TWiki::Func::redirectCgiQuery( $query, $text );= <br />
      =&nbsp;   return;= <br />
      =}= <br />
-     =# do topic manipulation like:= <br />
+     =# do topic text manipulation like:= <br />
      =$text =~ s/old/new/g;= <br />
+     =# do meta data manipulation like:= <br />
+     =$text =~ s/(META\:FIELD.*?name\=\"TopicClassification\".*?value\=\")[^\"]*/$1BugResolved/;= <br />
      =$oopsUrl = TWiki::Func::saveTopicText( $web, $topic, $text ); # save topic text= <br />
      =TWiki::Func::setTopicEditLock( $web, $topic, 0 );             # unlock topic= <br />
      =if( $oopsUrl ) {= <br />
