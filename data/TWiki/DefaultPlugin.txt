@@ -1,15 +1,44 @@
-*Default TWiki Plugin*
+%META:TOPICINFO{version="1.2" date="994668822" author="PeterThoeny" format="1.0beta2"}%
+---++ Default TWiki Plugin
 
-The default plugin is used for some depreciated rendering of older TWiki versions and of <nop>JosWiki. This plugin can also be used to specify some simple custom rendering rules. __Note:__ Create a new [[TWikiPlugins][TWikiPlugin]] based on EmptyPlugin if you plan to offer some complex rendering or functions.
+The default plugin is used for some depreciated rendering of older TWiki versions and of <nop>JosWiki. This plugin can also be used to specify some simple custom rendering rules. __Note:__ Create a new [[%TWIKIWEB%.TWikiPlugins][TWikiPlugin]] based on EmptyPlugin if you plan to offer some complex rendering or other functionality.
+
+---+++ Syntax Rules
 
 Custom rendering rules of the default plugin:
 
-	* Allow old include syntax ( ==%<nop>INCLUDE:"TopicName"%== ) if TWikiPreferences variable ==DEFAULTPLUGIN_OLDINCLUDE== is set to ==1==
+	* Allow old include syntax ( ==%<nop>INCLUDE:"TopicName"%== ) if Plugin Preferences variable ==OLDINCLUDE== is set to ==1==
 	* Render depreciated ==*_text_*== as __bold italic__ text. Test if installed: *_This is bold italic_*
 	* Enable <nop>JosWiki rules if <nop>JosWiki specific code is uncommented
 
 Modify file ==TWiki/Plugins/DefaultPlugin.pm== to add your own rules or to enable <nop>JosWiki rules.
 
-__Related Topics:__ TWikiPreferences, TWikiPlugins, EmptyPlugin
+---+++ <nop>%TOPIC% Preferences
 
--- Main.PeterThoeny - 13 Mar 2001 <br>
+Plugin preferences are stored as preferences variables. To reference
+a plugin preference write ==%<nop>&lt;plugin&gt;_&lt;preference&gt;%==, i.e. ==%<nop>DEFAULTPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is included in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = This plugin can be used to specify some simple custom rendering rules. It also renders depreciated ==*_text_*== as __bold italic__ text.
+	* Allow depreciated ==%<nop>INCLUDE:"TopicName"%== syntax:
+		* Set OLDINCLUDE = 1
+
+---+++ Plugin Installation Instructions
+
+	* This plugin is preinstalled, you do not need to install it.
+
+---+++ Plugin Info
+
+|  Plugin Author: | %TWIKIWEB%.AndreaSterbini, %TWIKIWEB%.PeterThoeny |
+|  Plugin Version: | 08 Jul 2001 |
+|  Change History: | 08 Jul 2001: Changed to plug&play <br> 27 Feb 2001: Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, EmptyPlugin
+
+-- %TWIKIWEB%.AndreaSterbini - 27 Feb 2001 <br> 
+-- %TWIKIWEB%.PeterThoeny - 08 Jul 2001 <br>

@@ -1,9 +1,45 @@
-*Empty TWiki Plugin*
+%META:TOPICINFO{version="1.2" date="994668989" author="PeterThoeny" format="1.0beta2"}%
+---++ Empty TWiki Plugin
 
-This is an empty plugin you can use as a template to build your own TWikiPlugins. This plugin does nothing, but is ready to be used.
+This is an empty plugin you can use as a template to build your own %TWIKIWEB%.TWikiPlugins. This plugin does nothing, but is ready to be used.
 
-Copy file ==TWiki/Plugins/EmptyPlugin.pm== to ==&lt;name&gt;Plugin.pm== and customize the plugin.
+To create your own plugin:
 
-__Related Topics:__ TWikiPreferences, TWikiPlugins, DefaultPlugin
+	* Copy file ==TWiki/Plugins/EmptyPlugin.pm== to ==&lt;name&gt;Plugin.pm== and customize the plugin.
+	* Copy this topic to ==&lt;name&gt;Plugin== and customize it.
+	* See details in %TWIKIWEB%.TWikiPlugins.
 
--- Main.PeterThoeny - 13 Mar 2001 <br>
+---+++ Syntax Rules
+
+(none)
+
+---+++ <nop>%TOPIC% Preferences
+
+Plugin preferences are stored as preferences variables. To reference
+a plugin preference write ==%<nop>&lt;plugin&nbsp;name&gt;_&lt;preference&nbsp;name&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is included in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = This plugin does nothing, but can be used as a template for your own plugins.
+
+	* Your own preferences, i.e.:
+		* Set COLOR = red
+
+---+++ Plugin Installation Instructions
+
+	* This plugin is preinstalled, you do not need to install it.
+
+---+++ Plugin Info
+
+|  Plugin Author: | %TWIKIWEB%.AndreaSterbini, %TWIKIWEB%.PeterThoeny |
+|  Plugin Version: | 08 Jul 2001 |
+|  Change History: | 08 Jul 2001: Changed to plug&play <br> 27 Feb 2001: Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+
+-- %TWIKIWEB%.AndreaSterbini - 27 Feb 2001 <br> 
+-- %TWIKIWEB%.PeterThoeny - 08 Jul 2001 <br>
