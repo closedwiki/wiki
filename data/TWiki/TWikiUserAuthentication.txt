@@ -1,18 +1,43 @@
+%META:TOPICINFO{author="MikeMannix" date="999098621" format="1.0" version="1.3"}%
+%TOC%
+%STARTINCLUDE%
 ---## TWiki Authentication
 
-TWiki does not authenticate users internally, it depends on the ==REMOTE_USER== environment variable. This variable is set when you enable basic authentication or authentication via SSL (https protocol)
+TWiki does not authenticate users internally, it depends on the ==REMOTE_USER== environment variable. This variable is set when you enable basic authentication or authentication via SSL (https protocol).
 
-TWiki keeps track who made changes to topics at what time. This gives a complete audit trail of changes.
+TWiki uses visitor identification to keep track of who made changes to topics at what time and to manage a wide range of personal site settings. This gives a complete audit trail of changes and activity.
 
-No special installation steps need to be performed in case the server is already autenticated. If not you can opt for one of these:
-	* Forget about authentication. All changes will be registered as %MAINWEB%.TWikiGuest user, e.g. you can't tell who made changes.
-	* Use basic authentication for the ==edit== and ==attach== scripts. [[TWikiDocumentation#TWiki_Installation_Notes][TWiki Installation Notes]] tells you more about that.
-	* Use SSL to authenticate and secure the whole server.
+---+++ Authentication Options
 
-The ==REMOTE_USER== environment variable is only set for the scripts that are under authentication. If for example the ==edit==, ==save== and ==preview== scripts are authenticated, but not ==view==, you would get your WikiName in ==preview== for the ==%<nop>WIKIUSERNAME%== variable, but ==view== will show ==TWikiGuest== instead of your <nop>WikiName.
+No special installation steps need to be performed if the server is already authenticated. If not, you have three remaining options to controlling user access:
+	1 *Forget about authentication.* All changes are registered to %MAINWEB%.TWikiGuest user, so you can't tell who made changes. Your site is completely open and public.
+	1 *Use Basic Authentication* for the ==edit== and ==attach== scripts. This uses .htaccess and generates the familiar grey log-in window. [[TWikiDocumentation#TWiki_Installation_Notes][TWiki Installation Notes]] has more.
+	1 *Use SSL* to authenticate and secure the whole server. 
 
-There is a way to tell TWiki to remember the user for the scripts that are not authenticated, e.g. for the case where the ==REMOTE_USER== environment variable is not set. TWiki can be configured to remember the IP address / username pair whenever an authentication happens (edit topic, attach file). Once remembered, the non authenticated scripts like ==view== will show the correct username instead of ==TWikiGuest==. You can enable this by setting the ==$doRememberRemoteUser== flag in ==TWiki.cfg==. TWiki persistently stores the IP address / username pairs in file ==$remoteUserFilename==, which is =="$dataDir/remoteusers.txt"== by default. Please note that this can fail in case the IP address changes due to dynamically assigned IP addresses or proxy servers. 
+---+++ Tracking by IP Address
 
-Test: You are %WIKIUSERNAME%.
+The ==REMOTE_USER== environment variable is only set for the scripts that are under authentication. If, for example, the ==edit==, ==save== and ==preview== scripts are authenticated, but not ==view==, you would get your WikiName in ==preview== for the ==%<nop>WIKIUSERNAME%== variable, but ==view== will show ==TWikiGuest== instead of your <nop>WikiName.
+
+There is a way to tell TWiki to remember the user for the scripts that are not authenticated, ex: in case the ==REMOTE_USER== environment variable is not set. TWiki can be configured to remember the IP address/username pair whenever an authentication happens (edit topic, attach file). Once remembered, the non-authenticated scripts like ==view== will show the correct username instead of ==TWikiGuest==. You can enable this by setting the ==$doRememberRemoteUser== flag in ==TWiki.cfg==. TWiki persistently stores the IP address / username pairs in file ==$remoteUserFilename==, which is =="$dataDir/remoteusers.txt"== by default. Please note that this can fail if the IP address changes due to dynamically assigned IP addresses or proxy servers. 
+
+*Authentication Test:* You are %WIKIUSERNAME% (%<nop>WIKIUSERNAME%)
+
+---+++ TWiki Username vs. Login Username
+
+This section applies only if your %WIKITOOLNAME% is installed on a server that is both *authenticated* and on an *intranet*.
+
+%WIKITOOLNAME% internally manages two usernames: Login username and TWiki username.
+
+	* *Login username:* When you login to the intranet, you use your existing login username, ex: ==pthoeny==. This name is normally passed to %WIKITOOLNAME% by the ==REMOTE_USER== environment variable, and used by internally by %WIKITOOLNAME%. Login usernames are maintained by your system administrator.
+	* *TWiki username:* Your name in WikiNotation, ex: ==PeterThoeny==, is recorded when you register using TWikiRegistration; doing so also generates a personal home page in the %MAINWEB% web.
+
+%WIKITOOLNAME% can automatically map an intranet username to a TWiki username, provided that the username pair exists in the %MAINWEB%.%WIKIUSERSTOPIC% topic. This is also handled automatically when you register.
+
+<blockquote>
+__NOTE:__ *To correctly enter a WikiName* - your own or someone else's - be sure to include the %MAINWEB% web name in front of the Wiki username, followed by a period, and no spaces. Ex:
+<div align="center"> ==%MAINWEB%.<nop>WikiUsername== or ==%<nop>MAINWEB%.<nop>WikiUsername== </div>
+This points ==<nop>WikiUser== to the %WIKITOOLNAME%.%MAINWEB% web, where user registration pages are stored, no matter which web it's entered in. Without the web prefix, the name appears as a NewTopic everywhere but in the %MAINWEB% web.
+</blockquote>
 
 -- PeterThoeny - 16 Mar 2001 <br>
+-- MikeMannix - 29 Aug 2001 
