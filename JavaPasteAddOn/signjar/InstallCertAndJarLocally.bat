@@ -1,6 +1,12 @@
 call SetupEnv.bat
 
-call %SCRIPTDIR%\Sign.bat
+cd %TEMPBASEDIR%
+
+call %SCRIPTDIR%\ClearTempFiles.bat
+
+call %SCRIPTDIR%\CreateUnsignedJar.bat
+
+call %SCRIPTDIR%\SignJar.bat
 
 call %SCRIPTDIR%\GenerateCertificate.bat
 
