@@ -32,6 +32,10 @@ __Note:__ This topic is included by TWikiVariables
 	* Syntax: =%<nop>BASEWEB%=
 	* Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
 
+#VarDATE
+---+++ DATE -- date a topic based on a template was created
+   * %X% Only available in template topics. When used in a template topic, this variable will be expanded to the current date when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details. See also [[TWikiVariables#VarTIME][%<nop>DATE%]]
+
 #VarDISPLAYTIME
 ---+++ DISPLAYTIME -- display time
 	* Syntax: =%<nop>DISPLAYTIME%=
@@ -74,6 +78,8 @@ __Note:__ This topic is included by TWikiVariables
 	* Syntax: =%<nop>GMTIME%=
 	* Expands to: =%GMTIME%=
 	* Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME2][GMTIME{"format"}]], [[#VarSERVERTIME][SERVERTIME]]
+
+%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarGMTIME2
 ---+++ GMTIME{"format"} -- formatted GM time
@@ -126,7 +132,7 @@ __Note:__ This topic is included by TWikiVariables
 	| *Parameter:* | *Description:* | *Default:* |
 	| ="SomeTopic"= | The name of a topic located in the current web, i.e. =%<nop>INCLUDE{"WebNotify"}%= | |
 	| ="Web.Topic"= | A topic in another web, i.e. =%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%= | |
-	| ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org/"}%= <br /> __Note__ if the URL resolves to an attachment file on the server this will _automatically_ translate to a server-side include. | |
+	| ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org/"}%= <br /> %I% if the URL resolves to an attachment file on the server this will _automatically_ translate to a server-side include. | |
 	| =pattern="..."= | A RegularExpression pattern to include a subset of a topic or page | none |
 	| =rev="1.2"= | Include a previous topic revision; N/A for URLs | top revision |
 	| =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%INCLUDE- WARNING%= [[TWikiPreferences][preferences]] setting |

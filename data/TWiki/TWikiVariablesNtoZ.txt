@@ -6,6 +6,10 @@ __Note:__ This topic is included by TWikiVariables
 
 -----
 %STARTINCLUDE%
+#VarNOP
+---+++ NOP -- template text not to be expanded in instantiated topics 
+   * Available in template topics only. See TWikiTemplates#HtmlTemplates for details
+
 #VarNOTIFYTOPIC
 ---+++ NOTIFYTOPIC -- name of the notify topic
 	* Syntax: =%<nop>NOTIFYTOPIC%=
@@ -144,6 +148,8 @@ __Note:__ This topic is included by TWikiVariables
 	* Expands to: =%SERVERTIME%=
 	* Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME2][SERVERTIME{"format"}]]
 
+%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+
 #VarSERVERTIME2
 ---+++ SERVERTIME{"format"} -- formatted server time
 	* Same format qualifiers as =%<nop>GMTIME%=
@@ -176,6 +182,10 @@ __Note:__ This topic is included by TWikiVariables
 	* Syntax: =%<nop>STOPINCLUDE%=
 	* Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTARTINCLUDE][STARTINCLUDE]]
 
+#VarTIME
+---+++ TIME - time a template topic was expanded
+   * %X% Only available in template topics. When used in a template topic, this variable will be expanded to the current time when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details. See also [[TWikiVariables#VarDATE][%<nop>DATE%]]
+
 #VarTOC
 ---+++ TOC -- table of contents of current topic
 	* Syntax: =%<nop>TOC%=
@@ -196,7 +206,7 @@ __Note:__ This topic is included by TWikiVariables
 	* Example: see TWiki:Sandbox.TestTopicInclude
 	* Related: [[#VarTOC][TOC]]
 
-__Note:__ TOC will generate links to the headings, so when a reader clicks on a heading it will jump straight where that heading is anchored in the text. If you have two headings with exactly the same text, then their anchors will also be identical and they won't be able to jump to them. To make the anchors unique, you can add an invisible HTML comment to the text of the heading. This will be hidden in normal view, but will force the anchors to be different. For example, <tt>---+ Heading &lt;!--5--&gt;</tt>.
+%X% TOC will generate links to the headings, so when a reader clicks on a heading it will jump straight where that heading is anchored in the text. If you have two headings with exactly the same text, then their anchors will also be identical and they won't be able to jump to them. To make the anchors unique, you can add an invisible HTML comment to the text of the heading. This will be hidden in normal view, but will force the anchors to be different. For example, <tt>---+ Heading &lt;!--5--&gt;</tt>.
 
 #VarTOPIC
 ---+++ TOPIC -- name of current topic
@@ -228,7 +238,7 @@ __Note:__ TOC will generate links to the headings, so when a reader clicks on a 
 
 #VarURLPARAM
 ---+++ URLPARAM{"name"} -- get value of a URL parameter
-	* Returns the value of a URL parameter. Note that there is a risk that this variable could be misused for cross-scripting
+	* Returns the value of a URL parameter.
 	* Syntax: =%<nop>URLPARAM{"name"}%=
 	* Supported parameters:
 	  | *Parameter:* | *Description:* | *Default:* |
@@ -242,12 +252,18 @@ __Note:__ TOC will generate links to the headings, so when a reader clicks on a 
 	* Example: =%<nop>URLPARAM{"skin"}%= returns =print= for a =.../view/%WEB%/%TOPIC%?skin=print= URL. [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print#VarURLPARAM][Test this]]: %URLPARAM{"skin"}%
 	* Related: [[#VarSEARCH][SEARCH]], FormattedSearch
 
+%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+
+%X% Note that there is a risk that this variable could be misused for cross-scripting.
+
 #VarUSERNAME
 ---+++ USERNAME -- your login username
 	* TWiki makes names available in three formats: USERNAME like =jsmith=, WIKINAME like =JohnSmith= and WIKIUSERNAME like =%MAINWEB%.JohnSmith=. A user is a %MAINWEB%.TWikiGuest in case the topic is not authenticated
 	* Syntax: =%<nop>USERNAME%=
 	* Expands to: =%USERNAME%=
 	* Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication
+
+%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarVAR
 ---+++ VAR{"NAME" web="Web"} -- get a preference value from another web 
@@ -297,6 +313,8 @@ __Note:__ TOC will generate links to the headings, so when a reader clicks on a 
 	* Expands to: =%WIKINAME%=
 	* Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], [[#VarWIKIUSERSTOPIC][WIKIUSERSTOPIC]]
 
+%X% When used in a template topic, this variable will be expanded when the template is used to create  new topic. See TWikiTemplates#TemplateTopicsVars for details.
+
 #VarWIKIPREFSTOPIC
 ---+++ WIKIPREFSTOPIC -- name of site-wide preferences topic
 	* Syntax: =%<nop>WIKIPREFSTOPIC%=
@@ -315,6 +333,8 @@ __Note:__ TOC will generate links to the headings, so when a reader clicks on a 
 	* Syntax: =%<nop>WIKIUSERNAME%=
 	* Expands to: =%WIKIUSERNAME%=, renders as %WIKIUSERNAME%
 	* Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]]
+
+%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details
 
 #VarWIKIUSERSTOPIC
 ---+++ WIKIUSERSTOPIC -- name of topic listing all registers users

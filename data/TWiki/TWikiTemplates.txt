@@ -107,20 +107,35 @@ All template topics are located in the %TWIKIWEB% web. The WebTopicEditTemplate 
 	1. <nop>WebTopicEditTemplate in the current web
 	1. <nop>WebTopicEditTemplate in the %TWIKIWEB% web
 
+#TemplateTopicsVars
 ---++++ Edit Template Topics and Variable Expansion
 
 The following variables get expanded when a user creates a new topic based on a template topic:
 
 <blockquote>
 | *Variable:* | *Description:* |
-| =%<nop>DATE%= | Current date, e.g. =%DATE%= |
-| =%<nop>USERNAME%= | Login name, e.g. =jsmith= |
-| =%<nop>WIKINAME%= | WikiName of user, e.g. =JohnSmith= |
-| =%<nop>WIKIUSERNAME%= | User name, e.g. =Main.JohnSmith= |
-| =%<nop>URLPARAM{"name"}%= | Value of a named URL parameter |
+| =%<nop>GMTIME%= | Date/time. See TWikiVariables#VarGMTIME |
+| =%<nop>GMTIME{...}%= | Formatted date/time. See TWikiVariables#VarGMTIME2 |
 | =%<nop>NOP%= | A no-operation variable that gets removed. Useful to prevent a SEARCH from hitting an edit template topic; also useful to escape a variable like =%<nop>URLPARAM%<nop>NOP%{...}%= |
-| =%<nop>NOP{ ... }%= | A no-operation text that gets removed. Useful to write-protect an edit template topic, but not the topics based this template topic. See notes below. Example:%BR% =%<nop>NOP{%BR%&nbsp; &nbsp;* Set&nbsp;ALLOWTOPICCHANGE = <nop>Main.TWikiAdminGroup%BR% }%= |
+| =%<nop>NOP{ ... }%= | Text that gets removed when a new topic based on the template is created. See notes below. |
+| =%<nop>SERVERTIME%= | Date/time. See TWikiVariables#VarSERVERTIME |
+| =%<nop>SERVERTIME{...}%= | Formatted date/time. See TWikiVariables#VarSERVERTIME2 |
+| =%<nop>USERNAME%= | Login name of user who is instantiating the new topic, e.g. %USERNAME% |
+| =%<nop>URLPARAM{"name"}%= | Value of a named URL parameter |
+| =%<nop>WIKINAME%= | WikiName of user who is instantiating the new topic, e.g. <nop>%WIKINAME% |
+| =%<nop>WIKIUSERNAME%= | User name of user who is instantiating the new tpoic, e.g. <nop>%WIKIUSERNAME% |
 </blockquote>
+
+The =NOP= tag is used to embed text that you _do not_ want expanded when a new topic based on the template is expanded. For example, you might want to write in the template:
+<verbatim>
+%NOP{
+This template can only be changed by:
+   * Set ALLOWTOPICCHANGE = WikiMastersGroup
+}%
+</verbatim>
+which will restrict who can edit the template, but will get removed when a topic based on the template is created.
+
+=%<nop>NOP%= (or %<nop>NOP{}% can be used to prevent expansion of TWiki variables that would otherwise be expanded during topic creation e.g. =%<nop>%NOP%SERVERTIME%=.
 
 __Notes:__
 	* Unlike other variables, =%<nop>NOP{ ... }%= can span multiple lines. 
