@@ -319,9 +319,11 @@ sub view {
         $contentType = 'text/html'
     }
 
+    # can't use simple length() in case we have UNICODE
+    # see perldoc -f length
     $tmpl .= "\n";
-    # was length( $tmpl )
-    $session->writeHeaderFull( $query, 'basic', $contentType, 0);
+    my $len = do { use bytes; length( $tmpl) };
+    $session->writeHeaderFull( $query, 'basic', $contentType, $len);
     print $tmpl;
 }
 
