@@ -434,36 +434,8 @@ sub rename {
       my $moveError = 
         TWiki::Store::moveAttachment( $oldWeb, $oldTopic,
                                       $newWeb, $newTopic,
-                                      $theAttachment );
-
-      my( $meta, $text ) = readTopic( $oldWeb, $oldTopic );
-      my %fileAttachment =
-        $meta->findOne( "FILEATTACHMENT", $theAttachment );
-      $meta->remove( "FILEATTACHMENT", $theAttachment );
-      $moveError .=
-        TWiki::Store::noHandlersSave( $oldWeb, $oldTopic, $text, $meta,
-                                          "", "", "", "doUnlock",
-                                          "dont notify", "" ); 
-      # Remove lock
-      lockTopic( $oldWeb, $oldTopic, 1 );
-
-      # Add file attachment to new topic
-      ( $meta, $text ) = readTopic( $newWeb, $newTopic );
-      $fileAttachment{"movefrom"} = "$oldWeb.$oldTopic";
-      $fileAttachment{"moveby"}   = $TWiki::userName;
-      $fileAttachment{"movedto"}  = "$newWeb.$newTopic";
-      $fileAttachment{"movedwhen"} = time();
-      $meta->put( "FILEATTACHMENT", %fileAttachment );
-
-      $moveError .=
-        TWiki::Store::noHandlersSave( $newWeb, $newTopic, $text, $meta,
-                                          "", "", "", "doUnlock",
-                                          "dont notify", "" ); 
-      # Remove lock file.
-      lockTopic( $newWeb, $newTopic, 1 );
-
-      TWiki::writeLog( "move", "$oldWeb.$oldTopic",
-                "Attachment $theAttachment moved to $newWeb.$newTopic" );
+                                      $theAttachment,
+                                      $userName );
 
       if( $moveError ) {
         TWiki::UI::oops( $newWeb, $newTopic, "moveerr",

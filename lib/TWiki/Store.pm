@@ -85,26 +85,60 @@ sub _getTopicHandler
 
 =pod
 
----++ sub moveAttachment (  $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment  )
+---++ sub moveAttachment (  $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $user  )
 
-Move an attachment from one topic to another. Meta-data is _not_ adjusted,
-this literally just moves the attachment.
+Move an attachment from one topic to another.
 
 If there is a problem an error string is returned.
 
-The caller to this routine should check that all topics are valid and
-do lock on the topics.
+The caller to this routine should check that all topics are valid.
 
 =cut
 
 sub moveAttachment
 {
-    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment ) = @_;
+    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $user ) = @_;
 
     # Remove file attachment from old topic
     my $topicHandler = _getTopicHandler( $oldWeb, $oldTopic, $theAttachment );
     my $error = $topicHandler->moveMe( $newWeb, $newTopic );
+
     return $error if( $error );
+
+    my( $meta, $text ) = readTopic( $oldWeb, $oldTopic );
+    my %fileAttachment =
+      $meta->findOne( "FILEATTACHMENT", $theAttachment );
+    $meta->remove( "FILEATTACHMENT", $theAttachment );
+    $error .=
+      TWiki::Store::noHandlersSave( $oldWeb, $oldTopic, $text, $meta,
+                                    "", "", "", "doUnlock",
+                                    "dont notify", "" );
+    # Remove lock
+    lockTopic( $oldWeb, $oldTopic, 1 );
+
+    return $error if( $error );
+
+    # Add file attachment to new topic
+    ( $meta, $text ) = readTopic( $newWeb, $newTopic );
+    $fileAttachment{"movefrom"} = "$oldWeb.$oldTopic";
+    $fileAttachment{"moveby"}   = $user;
+    $fileAttachment{"movedto"}  = "$newWeb.$newTopic";
+    $fileAttachment{"movedwhen"} = time();
+    $meta->put( "FILEATTACHMENT", %fileAttachment );
+
+    $error .=
+      TWiki::Store::noHandlersSave( $newWeb, $newTopic, $text, $meta,
+                                          "", "", "", "doUnlock",
+                                          "dont notify", "" );
+    # Remove lock file.
+    lockTopic( $newWeb, $newTopic, 1 );
+
+    return $error if( $error );
+
+    TWiki::writeLog( "move", "$oldWeb.$oldTopic",
+                     "Attachment $theAttachment moved to $newWeb.$newTopic" );
+
+    return $error;
 }
 
 =pod
