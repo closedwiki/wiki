@@ -203,7 +203,7 @@ sub main
     my %formMeta = $meta->findOne( "FORM" );
     my $form = "";
     if( ! %formMeta ) {
-       $form = TWiki::Prefs::getPreferencesValue( "DEFAULTFORM", $webName );
+       $form = TWiki::Prefs::getPreferencesValue( "DEFFORM", $webName );
        $tmpl =~ s/%FORMTEMPLATE%/$form/go;
     } else {
        $form = $formMeta{"name"};
