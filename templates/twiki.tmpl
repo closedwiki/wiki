@@ -1,0 +1,63 @@
+%TMPL:DEF{"sep"}% | %TMPL:END%
+%TMPL:DEF{"htmldoctype"}%
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> %TMPL:END%
+%TMPL:DEF{"standardheader"}%
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+ <tr>
+  <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
+   <a href="%WIKIHOMEURL%"><img src="%PUBURLPATH%/wikiHome.gif" border="0" /></a>
+  </td><td>
+   <b><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/%HOMETOPIC%">%WIKITOOLNAME%</a>
+   . <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a>
+   . </b><font size="+2"><b>%TOPIC%</b> %TMPL:P{"titleaction"}%</font>
+  </td><td align="right">
+    %WIKIWEBLIST%
+  </td>
+ </tr>
+ <tr bgcolor="%WEBBGCOLOR%">
+  <td colspan="2">
+   %TMPL:P{"webaction"}%
+  </td>
+ </tr>
+</table> %TMPL:END%
+%TMPL:DEF{"simpleheader"}%
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+ <tr>
+  <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
+   <a href="%WIKIHOMEURL%"><img src="%PUBURLPATH%/wikiHome.gif" border="0" /></a>
+  </td><td>
+   <b>%WIKITOOLNAME% .&nbsp;%WEB% .&nbsp;</b><font size="+2"><B>%TOPIC%</b> %TMPL:P{"titleaction"}%</font>
+  </td>
+ </tr>
+ <tr bgcolor="%WEBBGCOLOR%">
+  <td colspan="2">
+   %TMPL:P{"webaction"}%
+  </td>
+ </tr>
+</table> %TMPL:END%
+%TMPL:DEF{"standardfooter"}%
+<p>
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+ <tr bgcolor="%WEBBGCOLOR%">
+  <td valign="top">
+   Topic <b>%TOPIC%</b> . { %TMPL:P{"topicaction"}%
+   }
+  </td>
+ </tr>
+</table> %TMPL:END%
+%TMPL:DEF{"oops"}%
+%TMPL:P{"htmldoctype"}%
+<head>
+ <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+ <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+</head>
+<body bgcolor="#ffffff">
+%TMPL:P{"simpleheader"}%
+---++ %TMPL:P{"heading"}%
+%TMPL:P{"message"}%
+%TMPL:P{"standardfooter"}%
+</body>
+</html> %TMPL:END%

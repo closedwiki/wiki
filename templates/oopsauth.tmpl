@@ -1,53 +1,22 @@
-<html>
-<head>
-  <title> %WIKITOOLNAME% . %WEB% . %TOPIC% (oops)</title>
-  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-  <meta name="robots" content="noindex">
-</head>
-<body bgcolor="#FFFFFF">
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
-  <tr>
-    <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <a href="%WIKIHOMEURL%"><img src="%PUBURLPATH%/wikiHome.gif" border="0"></a>
-    </td>
-    <td>
-      <b>%WIKITOOLNAME% . %WEB% . </b><font size="+2"><B>%TOPIC%</b> (oops)</font>
-    </td>
-  </tr>
-  <tr bgcolor="%WEBBGCOLOR%">
-    <td colspan="2">
-      Attention
-    </td>
-  </tr>
-</table>
-<h2>Either you need to register or the authentication failed</h2>
-<p>To edit topics on this %WIKITOOLNAME% collaborative web, 
-you must be registered as a user.</p>
-<p><b>If you expected to be logged in at this point:</b></p>
-<ul>
-<li>Did you type in your login name and password correctly?
-    Remeber, both are case sensitive.
-<li>If you want to try again, back arrow and hit edit again. 
-<li>If you have forgotton your password, please contact 
-    %WIKIWEBMASTER% who will reset it for you. 
-<li><b><i>Note:</i></b> You can also login anonymously as user 
-<b>TWikiGuest</b> with password <b>guest</b>.
-</ul>
-<p><b>To register as a new user:</b></p>
-<ul>
-<li>Simply fill out the
-<b><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TWikiRegistration">TWikiRegistration</a></b>
-form. It only takes a minute.
-</ul>
-<p>
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
-  <tr bgcolor="%WEBBGCOLOR%">
-    <td valign="top">
-      Topic <b>%TOPIC%</b> . {
-        <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">OK</a>
-      }
-    </td>
-  </tr>
-</table>
-</body>
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}% (oops) %TMPL:END%
+%TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
+%TMPL:DEF{"heading"}% Either you need to register or the authentication failed %TMPL:END%
+%TMPL:DEF{"message"}%
 
+To edit topics on this %WIKITOOLNAME% collaborative web, you must be registered as a user.
+
+---+++ If you expected to be logged in at this point:
+
+   * Did you type in your login name and password correctly? Remeber, both are case sensitive.
+   * If you want to try again, back arrow and hit edit again. 
+   * If you have forgotton your password, please contact %WIKIWEBMASTER% who will reset it for you. 
+   * __Note:__ You can also login anonymously as user *TWikiGuest* with password *guest*.
+
+---+++ To register as a new user:
+
+   * Simply fill out the *[[%TWIKIWEB%.TWikiRegistration][TWikiRegistration]]* form. It only takes a minute.%TMPL:END%
+%TMPL:DEF{"topicaction"}%
+[[%WEB%.%TOPIC%][OK]] %TMPL:P{"sep"}%
+[[%TWIKIWEB%.TWikiRegistration][Register]] %TMPL:END%
+%TMPL:P{"oops"}%

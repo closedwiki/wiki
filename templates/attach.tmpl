@@ -1,9 +1,20 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<HTML>
-<HEAD>
-  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (attach)</TITLE>
-  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX"> %HTTP_EQUIV_ON_VIEW%
-<SCRIPT LANGUAGE="JavaScript">
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}% (attach) %TMPL:END%
+%TMPL:DEF{"webaction"}% Attach file to topic <B>%TOPIC%</B> %TMPL:END%
+%TMPL:DEF{"topicaction"}%
+  <input type="submit" name="uploadButton" value=" &nbsp; Upload file &nbsp; " /> %TMPL:P{"sep"}%
+  <input type="submit" name="changeButton" value="Change properties" />  %TMPL:P{"sep"}%
+  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">cancel</a> %TMPL:P{"sep"}%
+  <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move attachment</a>
+  <a href="FIXME">(Help)</a> %TMPL:END%
+%TMPL:P{"htmldoctype"}%
+<head>
+ <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+ <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+</head>
+<script language="JavaScript">
 <!--HIDE
 function initForm() {
    document.main.filepath.focus();
@@ -16,71 +27,77 @@ function launchWindow( theWeb, theTopic ) {
   return false;
 }
 //STOP HIDING-->
-</SCRIPT>
-</HEAD>
-<BODY bgcolor="#ffffff"  onLoad="initForm()" >
-<FORM name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%HEADER{action="(Attach)", description="" }%
+</script>
+<body bgcolor="#ffffff"  onLoad="initForm()" >
+<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+%TMPL:P{"simpleheader"}%
 %META{"attachments" all="on"}%
 %ATTACHTABLE%
-<P>
-<B>%ACTION% <code>%FILENAME%</code></B>
-<TABLE width="100%">
-  <TR>
-    <TD ALIGN="right">
-      %PREVIOUS%
-    </TD><TD>
-      <code>%FILEPATH%</code> %FILEUSER%
-    </TD>
-  </TR>
-  <TR>
-    <TD ALIGN="right">
-      Local file:
-    </TD><TD>
-      <INPUT TYPE="hidden" NAME="filename" VALUE="%FILENAME%">
-      <INPUT TYPE="file" NAME="filepath" VALUE="%FILEPATH%" SIZE="50">
-    </TD>
-  </TR>
-  <TR>
-    <TD ALIGN="right">
-      Comment:
-    </TD><TD>
-      <INPUT TYPE="text" NAME="filecomment" VALUE="%FILECOMMENT%" MAXLENGTH="50" SIZE="50">
-    </TD>
-  </TR>
-  <TR>
-    <TD ALIGN="right">
-      Link:
-    </TD><TD>
-      <INPUT TYPE="checkbox" NAME="createlink" %ATTACHLINKBOX%> Create a link to the attached file at the end of the topic.
-    </TD>
-  </TR>
-  <TR>
-    <TD ALIGN="right">
-      <I>Hide file:</I>
-    </TD><TD>
-      <INPUT TYPE="checkbox" NAME="hidefile" %HIDEFILE%> <I>Hide attachment in normal topic view.</I>
-    </TD>
-  </TR>
 
-</TABLE>
-<P>
-<FONT SIZE=2>
-Notes:
-<UL>
-<LI> <B>Link checkbox: </B>In case the attached file is a JPG or GIF image and you check the box, it will create an inline image (e.g. show the image) at the end of the topic.
-<LI> <B>Bug: </B>There is a bug with Internet Explorer. In case you get an "Internal Server Error" message when you upload a file, you need to try again. It works the second time.
-<!--FIXME Codev to TWiki-->
-<LI> <B>Properties: </B>Can be changed without uploading a file; see <A target="HiddenAttachment" onClick="return launchWindow('%TWIKIWEB%','HiddenAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Codev/HiddenAttachment">HiddenAttachment</A>
-</UL>
-</FONT>
-<P>
-%FOOTER{%
-      <INPUT type="submit" name="uploadButton" value=" &nbsp; Upload file &nbsp; "> %SEP%
-      <INPUT type="submit" name="changeButton" value="Change properties">  %SEP%
-      <A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">cancel</A> %SEP%
-      <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move attachment</a> <a href="FIXME">&nbsp;(Help)</a>
-%}FOOTER%
-</FORM>
-</BODY></HTML>
+<b>%ACTION% <code>%FILENAME%</code></b>
+<table width="100%">
+ <tr>
+  <td align="right">
+   %PREVIOUS%
+  </td><td>
+   <code>%FILEPATH%</code> %FILEUSER%
+  </td>
+ </tr>
+ <tr>
+  <td align="right">
+   Local file:
+  </td><td>
+   <input type="hidden" name="filename" value="%FILENAME%" />
+   <input type="file" name="filepath" value="%FILEPATH%" size="50" />
+  </td>
+ </tr>
+ <tr>
+  <td align="right">
+   Comment:
+  </td><td>
+   <input type="text" name="filecomment" value="%FILECOMMENT%" maxlength="50" size="50" />
+  </td>
+ </tr>
+ <tr>
+  <td align="right">
+   Link:
+  </td><td>
+   <input type="checkbox" name="createlink" %ATTACHLINKBOX% /> Create a link to the attached file at the end of the topic.
+  </td>
+ </tr>
+ <tr>
+  <td align="right">
+   Hide file:
+  </td><td>
+   <input type="checkbox" name="hidefile" %HIDEFILE% /> Hide attachment in normal topic view.
+  </td>
+ </tr>
+</table>
+
+__Notes:__
+
+   * *Link checkbox:* In case the attached file is a JPG, GIF or PNG image and you check the box, it will create an
+     inline image (e.g. show the image) at the end of the topic.
+   * *Bug:* There is a bug with Internet Explorer. In case you get an "Internal Server Error" message when you
+     upload a file, you need to try again. It works the second time.
+   * *Properties:* Can be changed without uploading a file; see
+     <a target="HiddenAttachment" onClick="return launchWindow('%TWIKIWEB%','HiddenAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/HiddenAttachment">HiddenAttachment</a>
+
+%TMPL:P{"standardfooter"}%
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+ <tr>
+  <td valign="top">
+   &nbsp;
+  </td>
+  <td width="50%" valign="top">
+   %WEBCOPYRIGHT%
+  </td>
+ </tr>
+ <tr>
+  <td colspan=2> %META{"moved"}% </td>
+ </tr>
+</table>
+</form>
+</body>
+</html>
 

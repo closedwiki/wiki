@@ -1,31 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}% %REVTITLE% %TMPL:END%
+%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
+%TMPL:DEF{"topicaction"}%
+  %EDITTOPIC%
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach</a>
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a>
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&web=all&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Ref-By</a>
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print">Printable</a>
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on" title="View the raw text i.e. as you would see text when editing, plus meta variables">Raw text</a>
+  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a>
+  %REVISIONS% %TMPL:END%
+%TMPL:P{"htmldoctype"}%
 <head>
+ <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %TMPL:P{"titleaction"}%</title>
  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
- <title> %WIKITOOLNAME% . %WEB% . %TOPIC% %REVTITLE% </title>
- <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
+ <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
 </head>
 <body bgcolor="#ffffff">
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/">
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr>
-  <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-   <a href="%WIKIHOMEURL%"><img src="%PUBURLPATH%/wikiHome.gif" border="0" /></a>
-  </td>
-  <td>
-   <b><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/">%WIKITOOLNAME%</a>
-   . <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/">%WEB%</a>
-   . </b><font size="+2"><b>%TOPIC%</b> %REVTITLE%</font>
-  </td><td align="right">
-    %WIKIWEBLIST%
-  </td>
- </tr>
- <tr bgcolor="%WEBBGCOLOR%">
-  <td colspan="2">
-   %WEBTOPICLIST%
-  </td>
- </tr>
-</table>
+%TMPL:P{"standardheader"}%
 </form>
 %META{"parent" prefix="Parents: "}%<br>
 %TEXT%
@@ -33,23 +27,7 @@
 %META{"attachments"}%
 <!-- This search for children is relatively expensive, you may wish to remove-->
 <!--%<nop>METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" title="Children: "}% -->
-
-<br clear="all"><p>
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr bgcolor="%WEBBGCOLOR%">
-  <td valign="top">
-   Topic <b>%TOPIC%</b> . {
-     %EDITTOPIC%
-   | <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach</a>
-   | <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a>
-   | <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=text&web=all&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Ref-By</a>
-   | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print">Printable</a>
-   | <a title="View the raw text i.e. as you would see text when editing, plus meta variables" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on">Raw text</a>
-   | <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a>
-   %REVISIONS% }
-  </td>
- </tr>
-</table>
+%TMPL:P{"standardfooter"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td valign="top">
@@ -61,6 +39,5 @@
  </tr>
  <tr><td colspan=2> %META{"moved"}% </td></tr>
 </table>
-</p>
 </body>
 </html>
