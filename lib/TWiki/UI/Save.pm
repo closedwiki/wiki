@@ -98,7 +98,7 @@ sub save {
   $text = TWiki::Render::decodeSpecialChars( $text );
   $text =~ s/ {3}/\t/go;
 
-  my $meta = "";
+  $meta = "";
   if( $saveCmd eq "repRev" ) {
     $text =~ s/%__(.)__%/%_$1_%/go;
     ( $meta, $text ) = TWiki::Store::_extractMetaData( $webName, $topic, $text );
