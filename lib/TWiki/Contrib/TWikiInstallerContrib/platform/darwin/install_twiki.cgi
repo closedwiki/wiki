@@ -529,12 +529,12 @@ __HTML__
     chomp( my $output = `$cmd` );
     my ( $clrCommand, $clrError ) = ( ( my $error = $? ) ? qw( black red ) : qw( gray gray ) );
 
-    print qq{<br/><a href="#" onclick="toggleDisplay('cmd$nCmd')" >cmd</a> };
+    print qq{<a href="#" onclick="toggleDisplay('cmd$nCmd')" >cmd</a> };
 
     my $display = $error ? "" : "none";
     print qq{<span style="display:$display" id="cmd$nCmd" >\n};
 
-    print "[<font color=$clrError>$error</font>]: ";
+    print "<br/>[<font color=$clrError>$error</font>]: ";
     print "<font color=$clrCommand>", pre($cmd), "</font>\n";
 
     print "<pre>$output</pre>\n";
