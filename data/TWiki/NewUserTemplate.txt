@@ -1,0 +1,16 @@
+%META:TOPICINFO{author="PeterThoeny" date="1020557400" format="1.0" version="1.1"}%
+%SPLIT%
+	* %KEY%: %VALUE%%SPLIT%
+
+__Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
+	* Horizontal size of text edit box:
+		* Set EDITBOXWIDTH = 70
+	* Vertical size of text edit box:
+		* Set EDITBOXHEIGHT = 17
+	* Optionally write protect your home page: (set it to your %TWIKIWEB%.WikiName)
+		* Set ALLOWTOPICCHANGE =
+
+__Related topics__
+	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.
+	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
+	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of other TWiki users.
