@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -wT -I.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -28,18 +28,17 @@ sub main
 {
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param('topic');
+    my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
     ( $topic, $webName, $scriptUrlPath ) = 
-	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+        &wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
-    if( ! &wiki::webExists($webName))
-    {
-	$tmpl= &wiki::readTemplate( "noweb" );
-	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
-	print $tmpl;
-	return;
+    if( ! &wiki::webExists( $webName ) ) {
+        my $tmpl= &wiki::readTemplate( "noweb" );
+        $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+        print $tmpl;
+        return;
     }
 
     my $scriptSuffix = $wiki::scriptSuffix;

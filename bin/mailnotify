@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -wT -I.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -28,10 +28,8 @@ sub main
     opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
     @weblist = grep !/^\.\.?$/, readdir DIR;
     closedir DIR;
-    foreach $web ( @weblist )
-    {
-        if( -d "$dataDir/$web" )
-        {
+    foreach $web ( @weblist ) {
+        if( -d "$dataDir/$web" ) {
              processWeb( $web );
 
              # remove obsolete .lock files
@@ -51,15 +49,13 @@ sub processWeb
 
     print "Checking TWiki.$webName\n";
 
-    if( ! &wiki::webExists($webName))
-    {
+    if( ! &wiki::webExists( $webName ) ) {
 	print "* Error: Web $webName does not exist\n";
 	return;
     }
 
     my $notifylist = &wiki::getEmailNotifyList($webName);
-    if( $notifylist eq "" )
-    {
+    if( ! $notifylist ) {
 	print "- Note: Notification list is empty\n";
 	return;
     }
@@ -67,9 +63,9 @@ sub processWeb
     my $emailbody = "";
     my $topiclist = "";
 
-    my $text = &wiki::readTemplate("changes");
-    my $changes= &wiki::readFile("$dataDir/$webName/.changes");
-   
+    my $text = &wiki::readTemplate( "changes" );
+    my $changes= &wiki::readFile( "$dataDir/$webName/.changes" );
+
     my %exclude;
 
     $text = &wiki::handleCommonTags($text, $topic);
@@ -78,26 +74,19 @@ sub processWeb
     ( $before, $text, $after) = split( /%REPEAT%/, $text);
     $emailbody = "$before";
 
-    my $prevLastmodify = &wiki::readFile( "$dataDir/$webName/.mailnotify");
+    my $prevLastmodify = &wiki::readFile( "$dataDir/$webName/.mailnotify" );
     my $currLastmodify = "";
     my $scriptSuffix = $wiki::scriptSuffix;
     my $scriptUrl = "$wiki::urlHost$wiki::scriptUrlPath";
 
-    foreach( reverse split( /\n/, $changes))
-    {
+    foreach( reverse split( /\n/, $changes ) ) {
 	@bar = split( /\t/);
 	$foo = $text;
-	if( !defined( %exclude) ||
-	    $exclude{$bar[0]} ne "1")
-	{
-	    #print "Date: ($bar[2])\n";
-
-	    if( $currLastmodify eq "")
-	    {
+	if( ( !defined( %exclude) ) || ( !$exclude{ $bar[0] } ) ) {
+	    if( !$currLastmodify ) {
 	        # newest entry
-	        $time = &wiki::formatGmTime($prevLastmodify);
-	        if( $prevLastmodify eq $bar[2])
-	        {
+	        $time = &wiki::formatGmTime( $prevLastmodify );
+	        if( $prevLastmodify eq $bar[2] ) {
 	            # newest entry is same as at time of previous notification
 	            print "- Note: No topics changed since $time\n";
 	            return;
@@ -106,8 +95,7 @@ sub processWeb
 	        print "- Changed topics since $time: ";
 	    }
 
-	    if( $prevLastmodify >= $bar[2])
-	    {
+	    if( $prevLastmodify >= $bar[2] ) {
 	        #print "Date: found item of last notification\n";
 	        # found item of last notification
 	        last;
@@ -116,11 +104,11 @@ sub processWeb
 	    #create entry in HTML attachment
 	    $foo = $text;
 	    $foo =~ s/%TOPICNAME%/$bar[0]/go;
-	    $wikiuser = &wiki::userToWikiName( $bar[1]);
+	    $wikiuser = &wiki::userToWikiName( $bar[1] );
 	    $foo =~ s/%AUTHOR%/$wikiuser/go;
-	    $time = &wiki::formatGmTime($bar[2]);
+	    $time = &wiki::formatGmTime( $bar[2] );
 	    $foo =~ s/%TIME%/$time/go;
-	    $foo = &wiki::getRenderedVersion( $foo);
+	    $foo = &wiki::getRenderedVersion( $foo );
 
 	    $head = &wiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 12 );
             $head =~ s/<[^>]*>//go;         # remove all HTML tags
@@ -133,7 +121,7 @@ sub processWeb
             $foo =~ s/%TEXTHEAD%/$head/go;
 
 	    $emailbody = "$emailbody$foo";
-	    $exclude{$bar[0]}="1";
+	    $exclude{ $bar[0] } = "1";
 
 	    print "$bar[0] ";
 
@@ -144,29 +132,27 @@ sub processWeb
 	}
     }
 
-    if( $topiclist eq "" )
-    {
+    if( $topiclist eq "" ) {
 	print "- Note: Topic list is empty\n";
 	return;
     }
     print "\n";
 
-    &wiki::saveFile( "$dataDir/$webName/.mailnotify", $currLastmodify);
+    &wiki::saveFile( "$dataDir/$webName/.mailnotify", $currLastmodify );
 
     $emailbody = "$emailbody$after";
 
-    $text = &wiki::readTemplate("mailnotify");
+    $text = &wiki::readTemplate( "mailnotify" );
     $text =~ s/%EMAILFROM%/%WIKIWEBMASTER%/go;
     $text =~ s/%EMAILTO%/$notifylist/go;
     $text =~ s/%EMAILBODY%/$emailbody/go;
     $text =~ s/%TOPICLIST%/$topiclist/go;
     $text =~ s/%LASTDATE%/&wiki::formatGmTime($prevLastmodify)/geo;
-    $text = &wiki::handleCommonTags($text, $topic);
+    $text = &wiki::handleCommonTags( $text, $topic );
 
     print "- Sending mail notification to: $notifylist\n";
 
-    if( ! &wiki::sendEmail( $text ))
-    {
+    if( ! &wiki::sendEmail( $text ) ) {
 	print "- ERROR: Can't send mail\n- End Twiki.$webName\n";
     } else {
 	print "- End Twiki.$webName, mail notification sent\n";

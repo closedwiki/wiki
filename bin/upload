@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -wT -I.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -37,13 +37,11 @@ sub filenameToIcon
 
     my $tmp = &wiki::getPubDir();
     my $iconDir = "$tmp/icn";
-    my $iconUrl = "%PUBURL%/icn";
+    my $iconUrl = "%PUBURLPATH%/icn";
     my $iconList = &wiki::readFile( "$iconDir/_filetypes.txt" );
-    foreach( split( /\n/, $iconList ) )
-    {
+    foreach( split( /\n/, $iconList ) ) {
         @bits = ( split( / / ) );
-	if( $bits[0] eq $fileExt )
-        {
+	if( $bits[0] eq $fileExt ) {
             return "<IMG src=\"$iconUrl/$bits[1].gif\" width=\"16\" hight=\"16\" align=\"top\">";
         }
     }
@@ -64,17 +62,14 @@ sub updateAttachment
     my $result = $atTableBefore;
     my $found = 0;
 
-    foreach( split( /<TwkNextItem>/, $atext ) )
-    {
+    foreach( split( /<TwkNextItem>/, $atext ) ) {
         $set = $_;
         ( $before, $item, $after ) = split( /<(?:\/)*TwkFileName>/, $set );
-        if( $item ) 
-        {
+        if( $item ) {
             $set = "<TwkNextItem>$set";
             $lcItem = lc $item;
             $comp = ( $lcItem cmp $lcFileName );
-            if( $comp == 0 )
-            {
+            if( $comp == 0 ) {
                 # identical, so replace entry
                 $found = 1;
                 $set = $atTableFile;
@@ -85,9 +80,7 @@ sub updateAttachment
                 $set =~ s/%FILEDATE%/$fileDate/go;
                 $set =~ s/%FILEUSER%/$fileUser/go;
                 $set =~ s/%FILECOMMENT%/$fileComment/go;
-            }
-            elsif( ( $comp > 0 ) && ( ! $found ) )
-            {
+            } elsif( ( $comp > 0 ) && ( ! $found ) ) {
                 # insert in alphabetical order
                 $found = 1;
                 $ins = $atTableFile;
@@ -106,8 +99,7 @@ sub updateAttachment
         }
     }
 
-    if( ! $found )
-    {
+    if( ! $found ) {
         # add entry
         $ins = $atTableFile;
         $ins =~ s/%FILEICON%/$fileIcon/go;
@@ -141,31 +133,28 @@ sub main
     my $fileComment = $query->param('filecomment');
 
     # check if file exists and has non zero size
-    if( ! -s "$tmpFilename" )
-    {
+    if( ! -s "$tmpFilename" ) {
         my $scriptSuffix = $wiki::scriptSuffix;
         print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsupload&param1=$fileName" );
         return;
     }
 
     # cut path from filepath name (Windows "\" and Unix "/" format)
-    @pathz = ( split( /\\/, $filePath ) );
-    $filetemp = $pathz[$#pathz];
-    @pathza = ( split( '/', $filetemp ) );
+    my @pathz = ( split( /\\/, $filePath ) );
+    my $filetemp = $pathz[$#pathz];
+    my @pathza = ( split( '/', $filetemp ) );
     $fileName = $pathza[$#pathza];
     $fileName =~ s/[^A-Za-z0-9_\.\-]//go;  # delete special characters
 
     # before save, create directories if not exist
     my $pubDir = &wiki::getPubDir();
     my $tempPath = "$pubDir/$webName";
-    if( ! -e "$tempPath" )
-    {
+    if( ! -e "$tempPath" ) {
         umask( 0 );
         mkdir( $tempPath, 0777 );
     }
     $tempPath = "$tempPath/$topic";
-    if( ! -e "$tempPath" )
-    {
+    if( ! -e "$tempPath" ) {
         umask( 0 );
         mkdir( $tempPath, 0777 );
     }
@@ -187,21 +176,25 @@ sub main
       $mtime,$tmp11,$tmp12,$tmp13 ) = stat $tmpFilename;
     my $fileDate = &wiki::formatGmTime( $mtime );
 
-    if( $wiki::doLogTopicUpload )
-    {
+    if( $wiki::doLogTopicUpload ) {
         # write log entry
-        &wiki::writeLog( "upload", "$webName.$topic", "$fileName" );
+        &wiki::writeLog( "upload", "$webName.$topic", $fileName );
     }
 
     # update topic
     $fileDate =~ s/ /&nbsp;/go;
-    my $text = "", $before="", $atext, $after="";
+    my $text = "", $before="", $atext="", $after="";
     $text = &wiki::readTopic( $topic );
     # extract attachment section:
     ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
-    $atext = updateAttachment( $atext, $fileName, $filePath, $fileSize, 
+    if( ! $before ) { $before = ""; }
+    if( ! $atext  ) { $atext  = ""; }
+    $atext = updateAttachment( $atext, $fileName, $filePath, $fileSize,
                                $fileDate, $fileUser, $fileComment );
-    $text = "$before<!--TWikiAttachment-->$atext<!--TWikiAttachment-->$after";
+    $text = "$before<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
+    if( $after  ) {
+        $text .= $after;
+    }
     &wiki::saveTopic( $topic, $text );
 
     # and finally display topic

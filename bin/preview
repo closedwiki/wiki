@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -wT -I.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -32,96 +32,78 @@ sub buildCategoryItem
     my @cmd = split( /\|/, $catitems );
     my $param = "";
     my $len = @cmd;
-    if( $len < "2" )
-    {
+    if( $len < "2" ) {
         return ( $catname, $catvalue )
     }
 
-    if( $cmd[0] eq "select" )
-    {
+    if( $cmd[0] eq "select" ) {
         $catname = $cmd[1];
         $scatname = $catname;
         $scatname =~ s/[^a-zA-z0-9]//g;
-        $param = $query->param("$scatname");
-        for( $i = 3; $i < $len; $i++ )
-        {
+        $param = $query->param( "$scatname" );
+        for( $i = 3; $i < $len; $i++ ) {
             my $value = $cmd[$i];
             my $svalue = $value;
             $svalue =~ s/[^a-zA-z0-9]//g;
-            if( $param eq $svalue )
-            {
+            if( $param eq $svalue ) {
                 $catvalue = "$value";
                 last;
             }
         }
-        if( $catvalue eq "" )
-        {
+        if( ! $catvalue ) {
             $catvalue = "&nbsp;";
         }
-    }
-    elsif( $cmd[0] eq "checkbox" )
-    {
+
+    } elsif( $cmd[0] eq "checkbox" ) {
         $catname = $cmd[1];
         $scatname = $catname;
         $scatname =~ s/[^a-zA-z0-9]//g;
-        for( $i = 4; $i < $len; $i++ )
-        {
+        for( $i = 4; $i < $len; $i++ ) {
             my $value = $cmd[$i];
             my $svalue = $value;
             $svalue =~ s/[^a-zA-z0-9]//g;
-            $param = $query->param("$scatname$svalue");
-            if( $param ne "" )
-            {
+            $param = $query->param( "$scatname$svalue" );
+            if( $param ) {
                 $catvalue = "$catvalue, $value";
             }
             $catvalue =~ s/^,\s//;
         }
-        if( $catvalue eq "" )
-        {
+        if( ! $catvalue ) {
             $catvalue = "&nbsp;";
         }
-    }
-    elsif( $cmd[0] eq "radio" )
-    {
+
+    } elsif( $cmd[0] eq "radio" ) {
         $catname = $cmd[1];
         $scatname = $catname;
         $scatname =~ s/[^a-zA-z0-9]//g;
-        $param = $query->param("$scatname");
-        for( $i = 3; $i < $len; $i++ )
-        {
+        $param = $query->param( "$scatname" );
+        for( $i = 3; $i < $len; $i++ ) {
             my $value = $cmd[$i];
             my $svalue = $value;
             $svalue =~ s/[^a-zA-z0-9]//g;
-            if( $param eq $svalue )
-            {
+            if( $param eq $svalue ) {
                 $catvalue = "$value";
                 last;
             }
         }
-        if( $catvalue eq "" )
-        {
+        if( ! $catvalue ) {
             $catvalue = "&nbsp;";
         }
-        if( $scatname eq "UseCategory" )
-        {
-            if( $catvalue eq "Yes" )
-            {
+        if( $scatname eq "UseCategory" ) {
+            if( $catvalue eq "Yes" ) {
                 # delete "UseCategory" entry if "UseCategory" is "Yes"
                 $catname = "";
-            }
-            else
-            {
+            } else {
                 # delete whole category table
                 $catname = "DELETE_ME";
             }
         }
-    }
-    elsif( $cmd[0] eq "text" )
-    {
+
+    } elsif( $cmd[0] eq "text" ) {
         $catname = $cmd[1];
         $scatname = $catname;
         $scatname =~ s/[^a-zA-z0-9]//g;
-        $param = $query->param("$scatname");
+        $param = $query->param( "$scatname" );
         $catvalue = "<!---->$param<!---->&nbsp;";
     }
 
@@ -139,8 +121,7 @@ sub main
 
     my $tmpl = "", $atext = "", $text = "", $ptext = "", $tcat = "", $icat = "";
 
-    if( ! &wiki::webExists($webName))
-    {
+    if( ! &wiki::webExists( $webName ) ) {
 	$tmpl= &wiki::readTemplate( "noweb" );
 	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
@@ -150,28 +131,23 @@ sub main
     # reset lock time, this is to prevent contention in case of a long edit session
     &wiki::lockTopic( $topic );
 
-    $tmpl= &wiki::readTemplate("preview");
-    $icat= &wiki::readTemplate("twikicatitems");
-    my $saveCmd = $query->param("cmd");
-    if( $saveCmd )
-    {
+    $tmpl= &wiki::readTemplate( "preview" );
+    $icat= &wiki::readTemplate( "twikicatitems" );
+    my $saveCmd = $query->param( "cmd" );
+    if( $saveCmd ) {
         $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
 
-    if( $icat ne "" )
-    {
+    if( $icat ) {
         # get category items from parameters and build category section
-        $tcat = &wiki::readTemplate("twikicatview");
+        $tcat = &wiki::readTemplate( "twikicatview" );
         my $line = "", $ttext = "", $temp = "";
-        ( $before, $line, $after) = split( /%REPEAT%/, $tcat);
-        foreach( split( /\n/, $icat))
-        {
+        ( $before, $line, $after) = split( /%REPEAT%/, $tcat );
+        foreach( split( /\n/, $icat ) ) {
             my( $catname, $catvalue ) = buildCategoryItem( $_ );
-            if( $catname ne "" )
-            {
-                if( $catname eq "DELETE_ME" )
-                {
+            if( $catname ) {
+                if( $catname eq "DELETE_ME" ) {
                     $ttext = "";
                     last;
                 }
@@ -182,40 +158,32 @@ sub main
                 $ttext = "$ttext$temp";
             }
         }
-        if( $ttext ne "" )
-        {
+        if( $ttext ) {
             $tcat = "$before$ttext$after";
-        }
-        else
-        {
+        } else {
             $tcat = "";
         }
     }
 
-    if( $saveCmd ne "repRev" )
-    {
+    if( $saveCmd ne "repRev" ) {
         # normal case: Get latest attachment from file for preview
-        $text= &wiki::readTopic($topic);
+        $text= &wiki::readTopic( $topic );
         ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
         # get the edited text and combine text, category table and attachment for preview
         $text = $query->param( "text" );
         $text .= $tcat;        # text to save
         $ptext = $text;        # text to preview
         if( $atext ) { $ptext .= $atext; }
-    }
-    else
-    {
+
+    } else {
         # for debug: Extract attachment
         $text = $query->param( "text" );
         ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
         # combine text, category table and attachment for preview
-        if( $atext )
-        {
+        if( $atext ) {
             $text = "$before$after$tcat<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
             $ptext = "$before$after$tcat$atext";     # text to preview
-        }
-        else
-        {
+        } else {
             $text = "$before$after$tcat";   # text to save
             $ptext = $text;                 # text to preview
         }

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -wT -I.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -30,27 +30,25 @@ sub main
 {
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param('topic');
+    my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $dummy, $userName) = 
+    ( $topic ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
-    $dummy = "";  # to suppress warning
 
-    my $tmplName = $query->param('template');
-    if( $tmplName eq "" )
-    {
+    my $tmplName = $query->param( 'template' );
+    if( ! $tmplName ) {
         $tmplName = "oops";
     }
     my $tmplData = &wiki::readTemplate( $tmplName );
 
-    my $param = $query->param('param1');
+    my $param = $query->param( 'param1' );
     $tmplData =~ s/%PARAM1%/$param/go;
-    $param = $query->param('param2');
+    $param = $query->param( 'param2' );
     $tmplData =~ s/%PARAM2%/$param/go;
-    $param = $query->param('param3');
+    $param = $query->param( 'param3' );
     $tmplData =~ s/%PARAM3%/$param/go;
-    $param = $query->param('param4');
+    $param = $query->param( 'param4' );
     $tmplData =~ s/%PARAM4%/$param/go;
 
     $tmplData = &wiki::handleCommonTags( $tmplData, $topic );

@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -wT -I.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -35,20 +35,18 @@ sub main
 {
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param('topic');
+    my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
     ( $topic, $webName, $scriptUrlPath ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
-    $tmp = "";  # set to suppress warning
     my $tmpl= "", $text="";
-    my $rev= $query->param("rev");
+    my $rev= $query->param( "rev" );
     my $maxrev = 1;
     my $extra = "";
 
-    if( ! &wiki::webExists( $webName ) )
-    {
+    if( ! &wiki::webExists( $webName ) ) {
 	$tmpl= &wiki::readTemplate( "noweb" );
 	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
@@ -56,33 +54,24 @@ sub main
     }
     $tmpl= &wiki::readTemplate( "view" );
     my $topicExists = &wiki::topicExists( $webName, $topic );
-    if( $topicExists )
-    {
+    if( $topicExists ) {
 	$maxrev = &wiki::getRevisionNumber( $topic );
         $maxrev =~ s/1\.//go;  # cut major
-	if( $rev )
-	{
+	if( $rev ) {
             $rev =~ s/1\.//go;  # cut major
 	    if( $rev < 1 )       { $rev = 1; }
             if( $rev > $maxrev ) { $rev = $maxrev; }
 	    $text= &wiki::readVersion( $topic, "1.$rev" );
             $extra .= "r1.$rev";
-	}
-	else
-	{
+	} else {
 	    $text= &wiki::readTopic( $topic );
 	    $rev= $maxrev;
 	}
-    }
-    else
-    {
+    } else {
 	$rev = 1;
-	if( &wiki::isWikiName( $topic ) )
-	{
+	if( &wiki::isWikiName( $topic ) ) {
 	    $text= &wiki::readTemplate( "notext" );
-	}
-	else
-	{
+	} else {
 	    $text= &wiki::readTemplate( "notwiki" );
 	}
         $extra .= " (not exist)";
@@ -90,28 +79,21 @@ sub main
     $text = &wiki::handleCommonTags( $text, $topic );
     $text = &wiki::getRenderedVersion( $text );
 
-    if( $wiki::doLogTopicView )
-    {
+    if( $wiki::doLogTopicView ) {
         # write log entry
         &wiki::writeLog( "view", "$webName.$topic", $extra );
     }
 
-    if( $rev < $maxrev )
-    {
+    if( $rev < $maxrev ) {
         # disable edit of previous revisions
         $tmpl =~ s/%EDITTOPIC%/Edit/go;
         $tmpl =~ s/%REVTITLE%/\(r1.$rev\)/go;
-    }
-    else
-    {
-        if( $topicExists )
-        {
+    } else {
+        if( $topicExists ) {
             $tmpl =~ s/%EDITTOPIC%/<A href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><B>Edit<\/B><\/A>/go; 
             # remove the NOINDEX meta tag
             $tmpl =~ s/<META NAME="ROBOTS"[^>]*>//goi;
-        }
-        else
-        {
+        } else {
             $tmpl =~ s/%EDITTOPIC%/<A href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><B>Create<\/B><\/A>/go; 
         }
         $tmpl =~ s/%REVTITLE%//go;
@@ -121,29 +103,20 @@ sub main
     my $j = $maxrev;
     my $revisions = "";
     my $breakRev = 0;
-    if( ( $wiki::numberOfRevisions > 0 ) && ( $wiki::numberOfRevisions < $maxrev ) )
-    {
+    if( ( $wiki::numberOfRevisions > 0 ) && ( $wiki::numberOfRevisions < $maxrev ) ) {
         $breakRev = $maxrev - $wiki::numberOfRevisions + 1;
     }
-    while( $i > 0 )
-    {
-        if( $i eq $rev)
-        {
+    while( $i > 0 ) {
+        if( $i eq $rev) {
             $revisions = "$revisions | r1.$i";
-        }
-        else
-        {
+        } else {
             $revisions = "$revisions | <A href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
         }
-        if( $i != 1 )
-        {
-            if( $i == $breakRev )
-            {
+        if( $i != 1 ) {
+            if( $i == $breakRev ) {
                 $revisions = "$revisions | <A href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&param1=1.$maxrev\">&gt;...</A>";
                 $i = 1;
-            }
-            else
-            {
+            } else {
                 $j = $i - 1;
                 $revisions = "$revisions | <A href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&rev2=1.$j\">&gt;</A>";
             }
@@ -152,15 +125,12 @@ sub main
     }
     $tmpl =~ s/%REVISIONS%/$revisions/go;
 
-    if( $topicExists )
-    {
+    if( $topicExists ) {
         my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
         $user = &wiki::userToWikiName( $user );
         my $temp = &wiki::getRenderedVersion( "r1.$rev - $date by $user" );
         $tmpl =~ s/%REVINFO%/$temp/go;
-    }
-    else
-    {
+    } else {
         $tmpl =~ s/%REVINFO%//go;
     }
 

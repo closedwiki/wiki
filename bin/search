@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -wT -I.
 #
 # Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
 # TakeFive Software Inc.
@@ -28,31 +28,27 @@ sub main
 {
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param('topic');
+    my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $dummy1, $dummy2, $dataDir ) = 
+    ( $topic, $webName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
-    $dummy1 = "";  # to suppress warning
-    $dummy2 = "";  # to suppress warning
 
-    if( ! &wiki::webExists($webName))
-    {
+    if( ! &wiki::webExists( $webName ) ) {
         $tmpl= &wiki::readTemplate( "noweb" );
         $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
         print $tmpl;
         return;
     }
 
-    my $search     = $query->param("search") || "";
-    my $scope      = $query->param("scope") || "";
-    my $caseSensitive = $query->param("casesensitive") || "";
-    my $regex      = $query->param("regex") || "";
+    my $search        = $query->param( "search" ) || "";
+    my $scope         = $query->param( "scope" )  || "";
+    my $caseSensitive = $query->param( "casesensitive" ) || "";
+    my $regex         = $query->param( "regex" )  || "";
 
     &wiki::searchWikiWeb( "0", $webName, $search, $scope, $regex, $caseSensitive, "0", "0", "0" );
 
-    if( $wiki::doLogTopicSearch )
-    {
+    if( $wiki::doLogTopicSearch ) {
         # write log entry
         &wiki::writeLog( "search", $webName, $search );
     }

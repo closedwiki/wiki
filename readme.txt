@@ -1,7 +1,7 @@
 TWiki Distribution
 ------------------
 
-Version: 02 Mar 2000
+Version: 11 Mar 2000
 Release type: Beta release
 
 Installation instructions in TWikiDocumentation.html or

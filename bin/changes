@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -wT -I.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -33,51 +33,44 @@ sub main
 {
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param('topic');
+    my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
     ( $topic, $webName, $dummy1, $dummy2, $dataDir ) = 
-	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+        &wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
     $dummy1 = "";  # to suppress warning
     $dummy2 = "";  # to suppress warning
 
-    if( ! &wiki::webExists($webName))
-    {
-	$tmpl= &wiki::readTemplate( "noweb" );
-	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
-	print $tmpl;
-	return;
+    if( ! &wiki::webExists( $webName ) ) {
+        my $tmpl= &wiki::readTemplate( "noweb" );
+        $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+        print $tmpl;
+        return;
     }
 
-    $emailbody = "";
-
-    $text = &wiki::readTemplate("changes");
-    $changes= &wiki::readFile("$dataDir/$webName/.changes");
+    my $text = &wiki::readTemplate( "changes" );
+    my $changes= &wiki::readFile( "$dataDir/$webName/.changes" );
    
     my %exclude;
     my $head;
 
-    $text = &wiki::handleCommonTags($text, $topic);
+    $text = &wiki::handleCommonTags( $text, $topic );
 
     ( $before, $text, $after) = split( /%REPEAT%/, $text);
     print $before;
 
-    foreach( reverse split( /\n/, $changes))
-    {
-	@bar = split( /\t/);
-	$foo = $text;
-	if( !defined( %exclude) ||
-	    $exclude{$bar[0]} ne "1")
-	{
-	    $foo = $text;
-	    $foo =~ s/%TOPICNAME%/$bar[0]/go;
-	    $wikiuser = &wiki::userToWikiName( $bar[1]);
-	    $foo =~ s/%AUTHOR%/$wikiuser/go;
-	    $time = &wiki::formatGmTime($bar[2]);
-	    $foo =~ s/%TIME%/$time/go;
-	    $foo = &wiki::getRenderedVersion( $foo);
+    foreach( reverse split( /\n/, $changes ) ) {
+        @bar = split( /\t/ );
+        if( ( !defined( %exclude ) ) || ( ! $exclude{ $bar[0] } ) ) {
+            $foo = $text;
+            $foo =~ s/%TOPICNAME%/$bar[0]/go;
+            $wikiuser = &wiki::userToWikiName( $bar[1] );
+            $foo =~ s/%AUTHOR%/$wikiuser/go;
+            $time = &wiki::formatGmTime( $bar[2] );
+            $foo =~ s/%TIME%/$time/go;
+            $foo = &wiki::getRenderedVersion( $foo );
 
-	    $head = &wiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 12 );
+            $head = &wiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 12 );
             $head =~ s/<[^>]*>//go;         # remove all HTML tags
             $head =~ s/[\*\|=_]/ /go;       # remove all Wiki formatting
             $head =~ s/%INCLUDE[^%]*%/ /go; # remove server side includes
@@ -87,13 +80,12 @@ sub main
             $head =~ s/(.{162})([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
             $foo =~ s/%TEXTHEAD%/$head/go;
 
-	    print $foo;
-	    $exclude{$bar[0]}="1";
-	}
+            print $foo;
+            $exclude{ $bar[0] } = "1";
+        }
     }
 
-    if( $wiki::doLogTopicChanges )
-    {
+    if( $wiki::doLogTopicChanges ) {
         # write log entry
         &wiki::writeLog( "changes", $webName, "" );
     }

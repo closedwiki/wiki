@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -wT -I.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -30,17 +30,17 @@ $query = new CGI;
 sub main
 {
     # get all parameters from the form
-    my $firstLastName = $query->param('FirstLastName');
-    my $emailAddress = $query->param('EmailAddress');
-    my $wikiName = $query->param('WikiName');
-    my $passwordA = $query->param('PasswordA');
-    my $passwordB = $query->param('PasswordB');
-    my $companyName = $query->param('CompanyName');
-    my $companyUrl = $query->param('CompanyUrl');
-    my $countryName = $query->param('CountryName');
-    my $hearFrom = $query->param('HearFrom');
-    my $commentText = $query->param('CommentText');
-    my $topicName = $query->param('TopicName');
+    my $firstLastName = $query->param( 'FirstLastName' );
+    my $emailAddress = $query->param( 'EmailAddress' );
+    my $wikiName = $query->param( 'WikiName' );
+    my $passwordA = $query->param( 'PasswordA' );
+    my $passwordB = $query->param( 'PasswordB' );
+    my $companyName = $query->param( 'CompanyName' );
+    my $companyUrl = $query->param( 'CompanyUrl' );
+    my $countryName = $query->param( 'CountryName' );
+    my $hearFrom = $query->param( 'HearFrom' );
+    my $commentText = $query->param( 'CommentText' );
+    my $topicName = $query->param( 'TopicName' );
 
     my $thePathInfo = $query->path_info(); 
     my $theUrl = $query->url;
@@ -63,6 +63,9 @@ sub main
         print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregwiki" );
         return;
     }
+    # a WikiName is safe, so untaint variable
+    $wikiName =~ /(.*)/;
+    $wikiName = $1;
 
     # check if passwords are identical
     if( $passwordA ne $passwordB ) {
@@ -75,6 +78,7 @@ sub main
         print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopsregexist&param1=$wikiName" );
         return;
     }
+
     # everything OK
 
     # generate user entry and add to .htpasswd file
@@ -113,11 +117,7 @@ sub main
     my $userTopic = addUserToTWikiUsersTopic( $wikiName );
 
     # write log entry
-    if( $wiki::doLogRegistration )
-    {
-        my $time = time();
-        $time = &wiki::formatGmTime( $time );
-        $text = &wiki::userToWikiName( $wikiName );
+    if( $wiki::doLogRegistration ) {
         &wiki::writeLog( "register", "$webName.$userTopic", $emailAddress, $wikiName );
     }
 
@@ -130,11 +130,11 @@ sub htpasswdGeneratePasswd
     my ( $user, $passwd ) = @_;
     # by David Levy, Internet Channel, 1997
     # found at http://world.inch.com/Scripts/htpasswd.pl.html
-    srand($$|time);
-    @saltchars=(a..z,A..Z,0..9,'.','/');
-    $salt=$saltchars[int(rand($#saltchars+1))];
-    $salt.=$saltchars[int(rand($#saltchars+1))];
-    $passwdcrypt = crypt($passwd,$salt);
+    srand( $$|time );
+    my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
+    my $salt = $saltchars[ int( rand( $#saltchars+1 ) ) ];
+    $salt .= $saltchars[ int( rand( $#saltchars+1 ) ) ];
+    my $passwdcrypt = crypt( $passwd, $salt );
     return "$user\:$passwdcrypt";
 }
 
@@ -173,8 +173,7 @@ sub addUserToTWikiUsersTopic
     my $name = "";
     my $isList = "";
     # add name alphabetically to list
-    foreach( split( /\n/, $text) )
-    {
+    foreach( split( /\n/, $text) ) {
         $line = $_;
         $isList = ( $line =~ /^\t\*\s[A-Z][a-zA-Z0-9]*\s\-/go );
         if( ( $status == "0" ) && ( $isList ) ) {

@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -wT -I.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -19,7 +19,7 @@
 use CGI;
 use wiki;
 
-$query= new CGI;
+$query = new CGI;
 
 #open(STDERR,'>&STDOUT'); # redirect error to browser
 $| = 1;                  # no buffering
@@ -34,20 +34,23 @@ sub getAttachAttr
     my $filePath="", $fileSize="", $fileDate="", $fileUser="", $fileComment="";
     my $before="", $item="", $after="", $set="";
 
-    foreach( split( /<TwkNextItem>/, $atext ) )
-    {
+    foreach( split( /<TwkNextItem>/, $atext ) ) {
         $set = $_;
         ( $before, $item, $after ) = split( /<(?:\/)*TwkFileName>/, $set );
-        if( ( $item ) && ( $item eq $fileName ) )
-        {
+        if( ( $item ) && ( $item eq $fileName ) ) {
             ( $before, $filePath,    $after ) = split( /<(?:\/)*TwkFilePath>/, $set );
-            $filePath =~ s/ <TwkData value="//go;
-            $filePath =~ s/"> //go;
+            if( ! $filePath ) { $filePath = ""; }
+            $filePath =~ s/<TwkData value="(.*)">//go;
+            if( $1 ) { $filePath = $1; } else { $filePath = ""; }
             ( $before, $fileSize,    $after ) = split( /<(?:\/)*TwkFileSize>/, $set );
+            if( ! $fileSize ) { $fileSize = "0"; }
             ( $before, $fileDate,    $after ) = split( /<(?:\/)*TwkFileDate>/, $set );
+            if( ! $fileDate ) { $fileDate = ""; }
             ( $before, $fileUser,    $after ) = split( /<(?:\/)*TwkFileUser>/, $set );
+            if( ! $fileUser ) { $fileUser = ""; }
             $fileUser =~ s/ //go;
             ( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $set );
+            if( ! $fileComment ) { $fileComment = ""; }
 
             return ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
         }
@@ -61,37 +64,35 @@ sub main
 {
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param('topic');
+    my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
     ( $topic, $webName ) = 
-	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+        &wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $tmpl="", $text="", $atext="", $fileName="";
 
-    if( ! &wiki::webExists( $webName ) )
-    {
-	$tmpl= &wiki::readTemplate( "noweb" );
-	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
-	print $tmpl;
-	return;
+    if( ! &wiki::webExists( $webName ) ) {
+        $tmpl= &wiki::readTemplate( "noweb" );
+        $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+        print $tmpl;
+        return;
     }
 
-    $fileName = $query->param('filename');
+    $fileName = $query->param( 'filename' ) || "";
 
-    if( &wiki::topicExists( $webName, $topic ) )
-    {
-	$text = &wiki::readTopic( $topic );
+    if( &wiki::topicExists( $webName, $topic ) ) {
+        $text = &wiki::readTopic( $topic );
         # extract attachment section
         my $before="", $after="";
         ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
+        if( ! $atext ) { $atext = ""; }
     }
     # get filePath and fileComment:
     my ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) 
       = getAttachAttr( $atext, $fileName );
 
-    if( $wiki::doLogTopicAttach )
-    {
+    if( $wiki::doLogTopicAttach ) {
         # write log entry
         &wiki::writeLog( "attach", "$webName.$topic", $fileName );
     }
@@ -101,17 +102,14 @@ sub main
     $atext = &wiki::getRenderedVersion( $atext );
     $atext = &wiki::handleCommonTags( $atext, $topic );
     $tmpl =~ s/%ATTACHTABLE%/$atext/go;
-    if( $fileName )
-    {
+    if( $fileName ) {
         $tmpl =~ s/%FILENAME%/$fileName/go;
         $tmpl =~ s/%ACTION%/Update file:/go;
         $tmpl =~ s/%PREVIOUS%/Previous <br> upload:/go;
         $fileUser = &wiki::getRenderedVersion( $fileUser );
         $fileUser =~ s/\n//go;
         $tmpl =~ s/%FILEUSER%/\($fileUser\)/go;
-    }
-    else
-    {
+    } else {
         $tmpl =~ s/%FILENAME%//go;
         $tmpl =~ s/%ACTION%/Attach new file/go;
         $tmpl =~ s/%PREVIOUS%//go;

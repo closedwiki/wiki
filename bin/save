@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -wT -I.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -31,7 +31,7 @@ sub main
 {
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param('topic');
+    my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
     ( $topic, $webName) = 
@@ -39,34 +39,29 @@ sub main
 
     my $text = "", $tmp = "", $atext = "", $before = "", $after = "";
 
-    if( ! &wiki::webExists($webName))
-    {
+    if( ! &wiki::webExists( $webName ) ) {
 	$tmpl= &wiki::readTemplate( "noweb" );
 	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
 	return;
     }
-    $saveCmd = $query->param("cmd");
+    $saveCmd = $query->param( "cmd" );
 
-    if( $saveCmd ne "repRev" )
-    {
+    if( $saveCmd ne "repRev" ) {
         # normal case: Get latest attachment from file for preview
-        $text= &wiki::readTopic($topic);
+        $text= &wiki::readTopic( $topic );
         ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
         # get the edited text and combine text and attachment
         $text = $query->param( "text" );
         ( $before, $tmp, $after) = split( /<!--TWikiAttachment-->/, $text);
-        if( $atext eq "" )
-        {
+        if( ! $after ) { $after = ""; }
+        if( ! $atext ) {
             $text = "$before$after";
-        }
-        else
-        {
+        } else {
             $text = "$before$after<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
         }
-    }
-    else
-    {
+
+    } else {
         # for debug: Use edited text that possibly contains attachment
         $text = $query->param( "text" );
     }
@@ -77,6 +72,6 @@ sub main
     $text =~ s/%_A_%/&/go;
     $text =~ s/ {3}/\t/go;
 
-    &wiki::saveTopic( $topic, $text, $saveCmd);
-    print $query->redirect( &wiki::viewUrl($topic));
+    &wiki::saveTopic( $topic, $text, $saveCmd );
+    print $query->redirect( &wiki::viewUrl( $topic ) );
 }

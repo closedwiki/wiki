@@ -31,7 +31,7 @@ sub searchWikiWeb
          $caseSensitive, $noSummary, $noSearch, $noTotal ) = @_;
 
     my $searchResult = "";
-
+    my $topic = $wiki::mainTopicname;
     if( ! $theWebName ) {
         $theWebName = $wiki::webName;
     }
@@ -58,7 +58,7 @@ sub searchWikiWeb
     }
 
     if( $theScope eq "topic" ) {
-        $cmd = "ls *.txt | %GREP% %SWITCHES% '$theSearchVal'";
+        $cmd = "$wiki::lsCmd *.txt | %GREP% %SWITCHES% '$theSearchVal'";
     } else {
         $cmd = "%GREP% %SWITCHES% -l '$theSearchVal' *.txt";
     }
@@ -71,17 +71,22 @@ sub searchWikiWeb
     $cmd =~ s/%SWITCHES%/$tempVal/go;
 
     if( $theRegex ) {
-        $tempVal = "egrep";
+        $tempVal = $wiki::egrepCmd;
     } else {
-        $tempVal = "fgrep";
+        $tempVal = $wiki::fgrepCmd;
     }
     $cmd =~ s/%GREP%/$tempVal/go;
 
-    my $topicList = "";
+    my @topicList = "";
     if( $theSearchVal ) {
         # do grep search
-        $topicList = `cd $dataDir/$theWebName;$cmd`;
-        $topicList =~ s/\.txt//go;
+        chdir( "$dataDir/$theWebName" );
+        $cmd =~ /(.*)/;
+        $cmd = $1;       # untaint variable (NOTE: Needs a better check!)
+        $tempVal = `$cmd`;
+        @topicList = split( /\n/, $tempVal );
+        # cut .txt extension
+        @topicList = map { /(.*)\.txt$/; $_ = $1; } @topicList;
     }
 
     if( ! $noSearch ) {
@@ -110,7 +115,7 @@ sub searchWikiWeb
 
     $lasttopic = "";
     $ntopics = 0;
-    foreach( split( /\n/, $topicList ) ) {
+    foreach( @topicList ) {
         $filename = $_;
         if( $filename ne $lasttopic) {
             my ( $revdate, $revuser ) = getRevisionInfo( $filename, "", 1, $theWebName );

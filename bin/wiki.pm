@@ -25,41 +25,38 @@
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
 # - Files wikifcg.pm and wikisearch.pm are included by wiki.pm
 # - Upgrading TWiki is easy as long as you do not customize wiki.pm.
+# - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 
 
 package wiki;
 use strict;
 
 use vars qw(
-	$webName $topicName
-	$defaultUserName $userName $wikiUserName 
-	$wikiHomeUrl $defaultUrlHost $urlHost
-	$scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir
-	$wikiToolName
-	$debugFilename $htpasswdFilename 
-	$logFilename $wikiUsersTopicname $userListFilename %userToWikiList
-	$mainWebname $mainTopicname $notifyTopicname
-	$wikiPrefsTopicname $webPrefsTopicname @prefsKeys @prefsValues
-	$statisticsTopicname $statsTopViews $statsTopContrib
-	$mailProgram $wikiversion 
-	$revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
-	$revDiffCmd $revDelRevCmd
-	$lsCmd $cpCmd $egrepCmd $fgrepCmd
-	$doRemovePortNumber $doPluralToSingular
-	$doLogTopicView $doLogTopicEdit $doLogTopicSave
-	$doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
-	$doLogTopicChanges $doLogTopicSearch $doLogRegistration
-	@isoMonth $TranslationToken $code @code $depth
-	$scriptSuffix );
+        $webName $topicName
+        $defaultUserName $userName $wikiUserName 
+        $wikiHomeUrl $defaultUrlHost $urlHost
+        $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir
+        $wikiToolName $securityFilter
+        $debugFilename $htpasswdFilename 
+        $logFilename $wikiUsersTopicname $userListFilename %userToWikiList
+        $mainWebname $mainTopicname $notifyTopicname
+        $wikiPrefsTopicname $webPrefsTopicname @prefsKeys @prefsValues
+        $statisticsTopicname $statsTopViews $statsTopContrib
+        $mailProgram $wikiversion 
+        $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
+        $revDiffCmd $revDelRevCmd
+        $lsCmd $cpCmd $egrepCmd $fgrepCmd
+        $doRemovePortNumber $doPluralToSingular
+        $doLogTopicView $doLogTopicEdit $doLogTopicSave
+        $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
+        $doLogTopicChanges $doLogTopicSearch $doLogRegistration
+        @isoMonth $TranslationToken $code @code $depth
+        $scriptSuffix );
 
 
-# variables: (new variables must be declared in "use vars qw(..)" above)
-
+# ===========================
 # TWiki version:
-$wikiversion      = "02 Mar 2000";
-
-@isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
-
+$wikiversion      = "11 Mar 2000";
 
 # ===========================
 # read the configuration part
@@ -69,16 +66,25 @@ do "wikicfg.pm";
 # read the search engine part
 do "wikisearch.pm";
 
+# ===========================
+# variables: (new variables must be declared in "use vars qw(..)" above)
+@isoMonth     = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
+
 # =========================
 sub initialize
 {
     my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl ) = @_;
+
+    # Make %ENV safer for CGI
+    $ENV{'PATH'} = '/bin:/usr/bin';
+    delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
     # initialize user name and user to WikiName list
     $userName = $defaultUserName;
     if( $theRemoteUser ) {
         $userName = $theRemoteUser;
     }
+    $userName =~ s/$securityFilter//go;
     userToWikiListInit();
     $wikiUserName = userToWikiName( $userName );
 
@@ -101,6 +107,9 @@ sub initialize
         }
     }
     ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
+    # filter out dangerous or unwanted characters:
+    $topicName =~ s/$securityFilter//go;
+    $webName   =~ s/$securityFilter//go;
 
     # initialize $urlHost and $scriptUrlPath 
     if( ( $theUrl ) && ( $theUrl =~ /^([^\:]*\:\/\/[^\/]*)(.*)\/.*$/ ) && ( $2 ) ) {
@@ -135,7 +144,7 @@ sub initialize
 sub writeDebug
 {
     my( $text) = @_;
-    open( FILE, ">> $debugFilename");
+    open( FILE, ">>$debugFilename");
     print FILE "$text\n";
     close( FILE);
 }
@@ -160,7 +169,7 @@ sub writeLog
 
     my $filename = $logFilename;
     $filename =~ s/%DATE%/$yearmonth/go;
-    open( FILE, ">> $filename");
+    open( FILE, ">>$filename");
     print FILE "$text\n";
     close( FILE);
 }
@@ -213,10 +222,15 @@ sub userToWikiListInit
     my @list = split( /\n/, $text );
     @list = grep { /^\s*\* [A-Za-z0-9]*\s*\-\s*[^\-]*\-/ } @list;
     %userToWikiList = ();
+    my $wUser;
+    my $lUser;
     foreach( @list ) {
         if(  ( /^\s*\* ([A-Za-z0-9]*)\s*\-\s*([^\s]*).*/ ) 
           && ( isWikiName( $1 ) ) && ( $2 ) ) {
-            %userToWikiList = ( %userToWikiList, $2, $1 );
+            $wUser = $1;
+            $lUser = $2;
+            $lUser =~ s/$securityFilter//go;
+            %userToWikiList = ( %userToWikiList, $lUser, $wUser );
         }
     }
 }
@@ -226,6 +240,7 @@ sub userToWikiName
 {
     my( $loginUser ) = @_;
 
+    $loginUser =~ s/$securityFilter//go;
     my $wUser = $userToWikiList{ $loginUser };
     if( $wUser ) {
         return "$mainWebname.$wUser";
@@ -337,19 +352,12 @@ sub getLocaldate
 # =========================
 sub formatGmTime
 {
-    my( $time) = @_;
+    my( $time ) = @_;
 
-    if ( $time =~ /[A-Za-z]/ )
-    {
-        # already formatted, for compatibility with older entries in .changes:
-        $time =~ s/GMT\s*$//;
-        return $time;
-    }
-
-    my ( $sec, $min, $hour, $mday, $mon, $year) = gmtime($time);
+    my( $sec, $min, $hour, $mday, $mon, $year) = gmtime( $time );
     my( $tmon) = $isoMonth[$mon];
-    $year = sprintf("%.4u", $year + 1900);  # Y2K fix
-    $time = sprintf("%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min);
+    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
+    $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
     return $time;
 }
 
@@ -386,8 +394,8 @@ sub readFileHead
 # =========================
 sub saveFile
 {
-    my( $name, $text) = @_;
-    open( FILE, "> $name") or warn "Can't create file $name\n";
+    my( $name, $text ) = @_;
+    open( FILE, ">$name" ) or warn "Can't create file $name\n";
     print FILE $text;
     close( FILE);
 }
@@ -401,16 +409,13 @@ sub topicIsLocked
     # edit link within one hour
 
     my $lockFilename = "$dataDir/$webName/$name.lock";
-    if( -e "$lockFilename" )
-    {
+    if( -e "$lockFilename" ) {
         my $tmp = readFile( $lockFilename );
         my( $lockUser, $lockTime ) = split( /\n/, $tmp );
-        if( $lockUser ne $userName )
-        {
+        if( $lockUser ne $userName ) {
             # time stamp of lock within one hour of current time?
             my $systemTime = time();
-            if( abs( $systemTime - $lockTime ) < 3600 )
-            {
+            if( abs( $systemTime - $lockTime ) < 3600 ) {
                 # must warn user that it is locked
                 return $lockUser;
             }
@@ -442,20 +447,21 @@ sub removeObsoleteTopicLocks
     my @fileList = grep /\.lock$/, readdir DIR;
     closedir DIR;
     my $file = "";
-    my $tmp = "";
+    my $pathFile = "";
     my $lockUser = "";
     my $lockTime = "";
     my $systemTime = time();
-    foreach $file ( @fileList )
-    {
-        $tmp = readFile( "$webDir/$file" );
-        ( $lockUser, $lockTime ) = split( /\n/, $tmp );
+    foreach $file ( @fileList ) {
+        $pathFile = "$webDir/$file";
+        $pathFile =~ /(.*)/;
+        $pathFile = $1;       # untaint file
+        ( $lockUser, $lockTime ) = split( /\n/, readFile( "$pathFile" ) );
+        if( ! $lockTime ) { $lockTime = ""; }
 
         # time stamp of lock over one hour of current time?
-        if( abs( $systemTime - $lockTime ) > 3600 )
-        {
+        if( abs( $systemTime - $lockTime ) > 3600 ) {
             # obsolete, so delete file
-            unlink "$webDir/$file";
+            unlink "$pathFile";
         }
     }
 }
@@ -471,14 +477,14 @@ sub topicExists
 sub readTopic
 {
     my( $name ) = @_;
-    return &readFile( "$dataDir/$webName/$name.txt");
+    return &readFile( "$dataDir/$webName/$name.txt" );
 }
 
 # =========================
 sub readWebTopic
 {
     my( $web, $name ) = @_;
-    return &readFile( "$dataDir/$web/$name.txt");
+    return &readFile( "$dataDir/$web/$name.txt" );
 }
 
 # =========================
@@ -493,20 +499,22 @@ sub readTemplate
 {
     my( $name ) = @_;
     my $webtmpl = "$templateDir/$webName/$name.tmpl";
-    if( -e $webtmpl )
-    {
-	return &readFile( $webtmpl);
+    if( -e $webtmpl ) {
+        return &readFile( $webtmpl );
     }
-    return &readFile( "$templateDir/$name.tmpl");
+    return &readFile( "$templateDir/$name.tmpl" );
 }
 
 # =========================
 sub readVersion
 {
-    my( $name, $rev ) = @_;
+    my( $theTopic, $theRev ) = @_;
     my $tmp= $revCoCmd;
-    $tmp =~ s/%REVISION%/$rev/;
-    $tmp =~ s/%FILENAME%/$dataDir\/$webName\/$name.txt/;
+    my $fileName = "$dataDir/$webName/$theTopic.txt";
+    $tmp =~ s/%FILENAME%/$fileName/;
+    $tmp =~ s/%REVISION%/$theRev/;
+    $tmp =~ /(.*)/;
+    $tmp = $1;       # now safe, so untaint variable
     return `$tmp`;
 }
 
@@ -514,12 +522,14 @@ sub readVersion
 sub getRevisionNumber
 {
     my( $theTopic, $theWebName ) = @_;
-    if( ! $theWebName )
-    {
+    if( ! $theWebName ) {
         $theWebName = $webName;
     }
     my $tmp= $revHistCmd;
-    $tmp =~ s/%FILENAME%/$dataDir\/$theWebName\/$theTopic.txt/;
+    my $fileName = "$dataDir/$theWebName/$theTopic.txt";
+    $tmp =~ s/%FILENAME%/$fileName/;
+    $tmp =~ /(.*)/;
+    $tmp = $1;       # now safe, so untaint variable
     $tmp = `$tmp`;
     $tmp =~ /head: (.*?)\n/;
     return $1;
@@ -531,21 +541,21 @@ sub getRevisionDiff
     my( $topic, $rev1, $rev2 ) = @_;
 
     my $tmp= "";
-    if ( $rev1 eq "1.1" && $rev2 eq "1.1" )
-    {
+    if ( $rev1 eq "1.1" && $rev2 eq "1.1" ) {
         my $text = readVersion($topic, 1.1);    # bug fix 19 Feb 1999
         $tmp = "1a1\n";
-        foreach( split( /\n/, $text))
-        {
+        foreach( split( /\n/, $text ) ) {
            $tmp = "$tmp> $_\n";
         }
-    }
-    else
-    {
+    } else {
         $tmp= $revDiffCmd;
         $tmp =~ s/%REVISION1%/$rev1/;
         $tmp =~ s/%REVISION2%/$rev2/;
-        $tmp =~ s/%FILENAME%/$dataDir\/$webName\/$topic.txt/;
+        my $fileName = "$dataDir/$webName/$topic.txt";
+        $fileName =~ s/$securityFilter//go;
+        $tmp =~ s/%FILENAME%/$fileName/;
+        $tmp =~ /(.*)/;
+        $tmp = $1;       # now safe, so untaint variable
         $tmp = `$tmp`;
     }
     return "$tmp";
@@ -555,28 +565,29 @@ sub getRevisionDiff
 sub getRevisionInfo
 {
     my( $theTopic, $theRev, $changeToIsoDate, $theWebName ) = @_;
-    if( ! $theWebName )
-    {
+    if( ! $theWebName ) {
         $theWebName = $webName;
     }
-    if( ! $theRev )
-    {
+    if( ! $theRev ) {
         $theRev = getRevisionNumber( $theTopic, $theWebName );
     }
     my $tmp= $revInfoCmd;
+    $theRev =~ s/$securityFilter//go;
     $tmp =~ s/%REVISION%/$theRev/;
-    $tmp =~ s/%FILENAME%/$dataDir\/$theWebName\/$theTopic.txt/;
+    my $fileName = "$dataDir/$theWebName/$theTopic.txt";
+    $fileName =~ s/$securityFilter//go;
+    $tmp =~ s/%FILENAME%/$fileName/;
+    $tmp =~ /(.*)/;
+    $tmp = $1;       # now safe, so untaint variable
     $tmp = `$tmp`;
     $tmp =~ /date: (.*?);  author: (.*?);/;
     my $date = $1;
     my $user = $2;
-    if( $changeToIsoDate )
-    {
+    if( $changeToIsoDate ) {
         # change date to ISO format
         $tmp = $1;
         $tmp =~ /(.*?)\/(.*?)\/(.*?) (.*?):[0-9][0-9]$/;
-        if( $4 ne "")
-        {
+        if( $4 ) {
            $date = "$3 $isoMonth[$2-1] $1 - $4";
         }
     }
@@ -592,15 +603,16 @@ sub saveTopic
     my $tmp = "";
 
     #### Normal Save
-    if( $saveCmd eq "" )
-    {
+    if( ! $saveCmd ) {
+        $saveCmd = "";
+
         # get time stamp of existing file
-        my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp8,$tmp9,
-            $mtime1,$mtime2,$tmp11,$tmp12,$tmp13 ) = "";
-        if( -e $name )
-        {
-            ( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp8,$tmp9,
-              $mtime1,$tmp11,$tmp12,$tmp13 ) = stat $name;
+        my $mtime1 = 0;
+        my $mtime2 = 0;
+        if( -e $name ) {
+            my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp8,$tmp9,
+                $tmp10,$tmp11,$tmp12,$tmp13 ) = stat $name;
+            $mtime1 = $tmp10;
         }
 
         # save file
@@ -610,43 +622,40 @@ sub saveTopic
         lockTopic( $topic );
 
         # time stamp of existing file within one hour of old one?
-        ( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp8,$tmp9,
-          $mtime2,$tmp11,$tmp12,$tmp13 ) = stat $name;
-        if( abs( $mtime2 - $mtime1 ) < 3600 )
-        {
+        my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp8,$tmp9,
+            $tmp10,$tmp11,$tmp12,$tmp13 ) = stat $name;
+        $mtime2 = $tmp10;
+        if( abs( $mtime2 - $mtime1 ) < 3600 ) {
             my $rev = getRevisionNumber( $topic );
             my( $date, $user ) = getRevisionInfo( $topic, $rev );
             # same user?
-            if( $user eq $userName )
-            {
+            if( $user eq $userName ) {
                 # replace last repository entry
                 $saveCmd = "repRev";
             }
         }
 
-        if( $saveCmd ne "repRev" )
-        {
+        if( $saveCmd ne "repRev" ) {
             # update repository
             $tmp= $revCiCmd;
             $tmp =~ s/%USERNAME%/$userName/;
             $tmp =~ s/%FILENAME%/$name/;
+            $tmp =~ /(.*)/;
+            $tmp = $1;       # safe, so untaint variable
             `$tmp`;
 
-            if( ! $doNotLogChanges )
-            {
+            if( ! $doNotLogChanges ) {
                 # update .changes
-                my @foo = split(/\n/, &readFile("$dataDir/$webName/.changes"));
-                if( $#foo > 100 )
-                {
+                my @foo = split(/\n/, &readFile( "$dataDir/$webName/.changes" ) );
+                if( $#foo > 100 ) {
                     shift( @foo);
                 }
-                push( @foo, "$topic\t$userName\t$time");
-                open( FILE, "> $dataDir/$webName/.changes");
-                print FILE join("\n",@foo)."\n";
+                push( @foo, "$topic\t$userName\t$time" );
+                open( FILE, ">$dataDir/$webName/.changes" );
+                print FILE join( "\n", @foo )."\n";
                 close(FILE);
 
-                if( $doLogTopicSave )
-                {
+                if( $doLogTopicSave ) {
                     # write log entry
                     writeLog( "save", "$webName.$topic", "" );
                 }
@@ -655,38 +664,37 @@ sub saveTopic
     }
 
     #### Replace Revision Save
-    if( $saveCmd eq "repRev" )
-    {
+    if( $saveCmd eq "repRev" ) {
         # fix topic by replacing last revision
 
         # save file
-        saveFile( $name, $text);
+        saveFile( $name, $text );
         lockTopic( $topic );
 
         # update repository with same userName and date, but do not update .changes
         my $rev = getRevisionNumber( $topic );
         my( $date, $user ) = getRevisionInfo( $topic, $rev );
-        if( $rev eq "1.1" )
-        {
+        if( $rev eq "1.1" ) {
             # initial revision, so delete repository file and start again
             unlink "$name,v";
-        }
-        else
-        {
+        } else {
             # delete latest revision
             $tmp = $revDelRevCmd;
             $tmp =~ s/%REVISION%/$rev/go;
             $tmp =~ s/%FILENAME%/$name/go;
+            $tmp =~ /(.*)/;
+            $tmp = $1;       # safe, so untaint variable
             `$tmp`;
         }
         $tmp = $revCiDateCmd;
         $tmp =~ s/%DATE%/$date/;
         $tmp =~ s/%USERNAME%/$user/;
         $tmp =~ s/%FILENAME%/$name/;
+        $tmp =~ /(.*)/;
+        $tmp = $1;       # safe, so untaint variable
         `$tmp`;
 
-        if( ( $doLogTopicSave ) && ( ! $doNotLogChanges ) )
-        {
+        if( ( $doLogTopicSave ) && ( ! $doNotLogChanges ) ) {
             # write log entry
             $tmp  = userToWikiName( $user );
             writeLog( "save", "$webName.$topic", "repRev $rev $tmp $date" );
@@ -694,19 +702,19 @@ sub saveTopic
     }
 
     #### Delete Revision
-    if( $saveCmd eq "delRev" )
-    {
+    if( $saveCmd eq "delRev" ) {
         # delete last revision
 
         # delete last entry in repository
         my $rev = getRevisionNumber( $topic );
-        if( $rev eq "1.1" )
-        {
+        if( $rev eq "1.1" ) {
             return; #can't delete initial revision
         }
         $tmp= $revDelRevCmd;
         $tmp =~ s/%REVISION%/$rev/go;
         $tmp =~ s/%FILENAME%/$name/go;
+        $tmp =~ /(.*)/;
+        $tmp = $1;       # safe, so untaint variable
         `$tmp`;
 
         # restore last topic from repository
@@ -717,8 +725,7 @@ sub saveTopic
 
         # delete entry in .changes : To Do !
 
-        if( $doLogTopicSave )
-        {
+        if( $doLogTopicSave ) {
             # write log entry
             writeLog( "cmd", "$webName.$topic", "delRev $rev" );
         }
@@ -737,23 +744,16 @@ sub extractNameValuePair
 {
     my( $str, $name ) = @_;
 
-    if( $name )
-    {
+    if( $name ) {
         # format is: name = "value"
-        if( ( $str =~ /(^|[^\S])$name[\s]*=[\s]*[\"]([^\"]*)/ ) && ( $2 ) )
-        {
+        if( ( $str =~ /(^|[^\S])$name[\s]*=[\s]*[\"]([^\"]*)/ ) && ( $2 ) ) {
             return $2;
         }
-    }
-    else
-    {
+    } else {
         # test if format: "value"
-        if( ( $str =~ /(^|=[\s]*[\"][^\"]*\")[\s]*[\"]([^\"]*)/ ) && ( $2 ) )
-        {
+        if( ( $str =~ /(^|=[\s]*[\"][^\"]*\")[\s]*[\"]([^\"]*)/ ) && ( $2 ) ) {
             return $2;
-        }
-        elsif( ( $str =~ /^[\s]*([^"]\S*)/ ) && ( $1 ) )
-        {
+        } elsif( ( $str =~ /^[\s]*([^"]\S*)/ ) && ( $1 ) ) {
             # format is: value
             return $1;
         }
@@ -768,9 +768,8 @@ sub handleIncludeFile
     my( $attributes ) = @_;
     my $incfile = extractNameValuePair( $attributes );
     my $fileName = "$dataDir/$webName/$incfile";
-    if( -e $fileName )
-    {
-	return &readFile( $fileName );
+    if( -e $fileName ) {
+        return &readFile( $fileName );
     }
     return &readFile( "$dataDir/$incfile" );
 }
@@ -780,8 +779,7 @@ sub handleSearchWeb
 {
     my( $attributes ) = @_;
     my $searchVal = extractNameValuePair( $attributes );
-    if( ! $searchVal )
-    {
+    if( ! $searchVal ) {
         # %SEARCH{"string" ...} not found, try
         # %SEARCH{search="string" ...}
         $searchVal = extractNameValuePair( $attributes, "search" );
@@ -855,20 +853,17 @@ sub handleCommonTags
 sub emitCode {
     ( $code, $depth ) = @_;
     my $result="";
-    while (@code > $depth) {
-	local($_) = pop @code;
-	$result= "$result</$_>\n"
-    }
-    while (@code < $depth)
-    {
-	push (@code, ($code));
-	$result= "$result<$code>\n"
+    while( @code > $depth ) {
+        local($_) = pop @code;
+        $result= "$result</$_>\n"
+    } while( @code < $depth ) {
+        push( @code, ($code) );
+        $result= "$result<$code>\n"
     }
 
-    if($#code>-1 && ($code[$#code] ne $code))
-    {
-	$result= "$result</$code[$#code]><$code>\n";
-	$code[$#code] = $code;
+    if( ( $#code > -1 ) && ( $code[$#code] ne $code ) ) {
+        $result= "$result</$code[$#code]><$code>\n";
+        $code[$#code] = $code;
     }
     return $result;
 }
@@ -895,16 +890,14 @@ sub internalLink
 
     $page =~ s/\s/_/;
 
-    if( $doPluralToSingular && $page =~ /s$/ && ! topicExists( $web, $page) )
-    {
+    if( $doPluralToSingular && $page =~ /s$/ && ! topicExists( $web, $page) ) {
         # page is a non-existing plural
         my $tmp = $page;
-	$tmp =~ s/ies$/y/;	# plurals like policy / policies
-	$tmp =~ s/sses$/ss/;	# plurals like address / addresses
-	$tmp =~ s/xes$/x/;	# plurals like box / boxes
-	$tmp =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
-        if( topicExists( $web, $tmp ) )
-        {
+        $tmp =~ s/ies$/y/;      # plurals like policy / policies
+        $tmp =~ s/sses$/ss/;    # plurals like address / addresses
+        $tmp =~ s/xes$/x/;      # plurals like box / boxes
+        $tmp =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
+        if( topicExists( $web, $tmp ) ) {
             $page = $tmp;
         }
     }
@@ -919,11 +912,10 @@ sub internalLink
 sub externalLink
 {
     my( $pre, $url ) = @_;
-    if( $url =~ /\.(gif|jpg|jpeg)$/ )
-    {
+    if( $url =~ /\.(gif|jpg|jpeg)$/ ) {
         my $filename = $url;
         $filename =~ s@.*/([^/]*)@$1@go;
-	return "$pre<IMG src=\"$url\" alt=\"$filename\">";
+        return "$pre<IMG src=\"$url\" alt=\"$filename\">";
     }
 
     return "$pre<A href=\"$url\" target=\"_top\">$url</A>";
@@ -933,8 +925,7 @@ sub externalLink
 sub isWikiName
 {
     my( $name ) = @_;
-    if ( $name =~ /[A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*)$/ )
-    {
+    if ( $name =~ /[A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*)$/ ) {
         return "1";
     }
     return "";
@@ -953,91 +944,89 @@ sub getRenderedVersion
     $code = "";
     $text =~ s/\\\n//go;
     $text =~ s/\r//go;
-    foreach( split( /\n/, $text))
-    {
+    foreach( split( /\n/, $text ) ) {
         m/<PRE>/i && ($insidePRE= 1);
         m@</PRE>@i && ($insidePRE= 0);
 
-	if( $insidePRE==0)
-        {
+        if( $insidePRE==0) {
 
 # Wiki extended rules
-	    $_ = extendGetRenderedVersionOutsidePRE( $_ );
+            $_ = extendGetRenderedVersionOutsidePRE( $_ );
 
 #Blockquote
-	    s/^>(.*?)$/> <cite> $1 <\/cite><BR>/go;
+            s/^>(.*?)$/> <cite> $1 <\/cite><BR>/go;
 
-	    s/\<(\S.*?)\>/$TranslationToken$1$TranslationToken/go;
-	    s/</&lt\;/go;
-	    s/>/&gt\;/go;
-	    s/$TranslationToken(\S.*?)$TranslationToken/\<$1\>/go;
-	    
+            s/\<(\S.*?)\>/$TranslationToken$1$TranslationToken/go;
+            s/</&lt\;/go;
+            s/>/&gt\;/go;
+            s/$TranslationToken(\S.*?)$TranslationToken/\<$1\>/go;
+            
 # Handle embedded URLs
-	    s@(^|[\-\*\s])((http|ftp|gopher|news|https)\:(\S+[^\s\.,!\?;:]))@&externalLink($1,$2)@geo;
+            s@(^|[\-\*\s])((http|ftp|gopher|news|https)\:(\S+[^\s\.,!\?;:]))@&externalLink($1,$2)@geo;
 
 # Entities
-	    s/&(\w+?)\;/$TranslationToken$1\;/go;
-	    s/&/&amp;/go;
-	    s/$TranslationToken/&/go;
-	    
-	    s/^----*/<HR>/o;
-	    s@^([a-zA-Z0-9]+)----*@<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><HR></td></tr></table>@o;
+            s/&(\w+?)\;/$TranslationToken$1\;/go;
+            s/&/&amp;/go;
+            s/$TranslationToken/&/go;
+            
+            s/^----*/<HR>/o;
+            s@^([a-zA-Z0-9]+)----*@<table width=\"100%\"><tr><td valign=\"bottom\"><h2>$1</h2></td><td width=\"98%\" valign=\"middle\"><HR></td></tr></table>@o;
 
 # Table of format: | cell | cell |
-	    if( $_ =~ /^(\s*)\|.*\|$/ ) {
-	        s/^(\s*)\|(\s*)(.*)/&emitTR($1,$3,$insideTABLE)/eo;
-	        $insideTABLE = 1;
-	    } elsif( $insideTABLE ) {
-	        $result .= "</TABLE>\n";
-	        $insideTABLE = 0;
-	    }
+            if( $_ =~ /^(\s*)\|.*\|$/ ) {
+                s/^(\s*)\|(\s*)(.*)/&emitTR($1,$3,$insideTABLE)/eo;
+                $insideTABLE = 1;
+            } elsif( $insideTABLE ) {
+
+
+                $result .= "</TABLE>\n";
+                $insideTABLE = 0;
+            }
 
 # Lists etc.
-	    s/^\s*$/<p> /o                   && ( $code = 0 );
-	    m/^(\S+?)/o                      && ( $code = 0 );
-	    s/^(\t+)(\S+?):\s/<DT> $2<DD> /o && ( $result .= &emitCode( "DL", length $1 ) );
-	    s/^(\t+)\* /<LI> /o              && ( $result .= &emitCode( "UL", length $1 ) );
-	    s/^(\t+)\d+\.?/<LI> /o           && ( $result .= &emitCode( "OL", length $1 ) );
-	    if( !$code )
-	    {
-	        $result .= &emitCode( "", 0 );
-	        $code = "";
-	    }
+            s/^\s*$/<p> /o                   && ( $code = 0 );
+            m/^(\S+?)/o                      && ( $code = 0 );
+            s/^(\t+)(\S+?):\s/<DT> $2<DD> /o && ( $result .= &emitCode( "DL", length $1 ) );
+            s/^(\t+)\* /<LI> /o              && ( $result .= &emitCode( "UL", length $1 ) );
+            s/^(\t+)\d+\.?/<LI> /o           && ( $result .= &emitCode( "OL", length $1 ) );
+            if( !$code ) {
+                $result .= &emitCode( "", 0 );
+                $code = "";
+            }
 
-	    s/(.*)/\n$1\n/o;
+            s/(.*)/\n$1\n/o;
 
 # Emphasizing
-	    s/(\s)__([^\s].*?[^\s])__(\s)/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
-	    s/(\s)\*_([^\s].*?[^\s])_\*(\s)/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
-	    s/(\s)\*([^\s].*?[^\s])\*(\s)/$1<STRONG>$2<\/STRONG>$3/go;
-	    s/(\s)=([^\s].*?[^\s])=(\s)/$1<CODE>$2<\/CODE>$3/go;
-	    s/(\s)_([^\s].*?[^\s])_(\s)/$1<EM>$2<\/EM>$3/go;
+            s/(\s)__([^\s].*?[^\s])__(\s)/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
+            s/(\s)\*_([^\s].*?[^\s])_\*(\s)/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
+            s/(\s)\*([^\s].*?[^\s])\*(\s)/$1<STRONG>$2<\/STRONG>$3/go;
+            s/(\s)=([^\s].*?[^\s])=(\s)/$1<CODE>$2<\/CODE>$3/go;
+            s/(\s)_([^\s].*?[^\s])_(\s)/$1<EM>$2<\/EM>$3/go;
 
 # Mailto
-	    s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+)(?=[\s\)]|$)#$1<A href=\"mailto\:$2">$2</A>#go;
+            s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+)(?=[\s\)]|$)#$1<A href=\"mailto\:$2">$2</A>#go;
 
 # Make internal links
-	    ## add Web.TopicName internal link -- PeterThoeny:
-	    ## allow 'AaA1' type format, but not 'Aa1' type -- PeterThoeny:
-	    s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($2,$3,"$TranslationToken$3$TranslationToken",$1,1)/geo;
-	    s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($webName,$2,$2,$1,1)/geo;
-	    s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
+            ## add Web.TopicName internal link -- PeterThoeny:
+            ## allow 'AaA1' type format, but not 'Aa1' type -- PeterThoeny:
+            s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($2,$3,"$TranslationToken$3$TranslationToken",$1,1)/geo;
+            s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/&internalLink($webName,$2,$2,$1,1)/geo;
+            s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
 
-	    s/([\*\s][\-\*\s]*)([A-Z]{3,})/&internalLink($webName,$2,$2,$1,0)/geo;
-	    s/<link>(.*?)<\/link>/&internalLink($webName,$1,$1,"",1)/geo;
+            s/([\*\s][\-\*\s]*)([A-Z]{3,})/&internalLink($webName,$2,$2,$1,0)/geo;
+            s/<link>(.*?)<\/link>/&internalLink($webName,$1,$1,"",1)/geo;
 
-	    s/^\n//o;
-	}
-        else
-        {
+            s/^\n//o;
+
+        } else {
             # inside <PRE>
 
 # Wiki extended rules
-	    $_ = extendGetRenderedVersionInsidePRE( $_ );
+            $_ = extendGetRenderedVersionInsidePRE( $_ );
 
-     	    s/(.*)/$1\n/o;
+            s/(.*)/$1\n/o;
         }
-	s/\t/   /go;
+        s/\t/   /go;
         $result .= $_;
     }
     if( $insideTABLE ) {

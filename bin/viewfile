@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -wT -I.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -28,23 +28,22 @@ sub main
 {
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param('topic');
+    my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
     ( $topic, $webName) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
-    my $tmpl= "", $text="";
+    my $tmpl= "";
 
-    if( ! &wiki::webExists($webName))
-    {
+    if( ! &wiki::webExists( $webName ) ) {
 	$tmpl= &wiki::readTemplate( "noweb" );
 	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
 	return;
     }
 
-    my $fileName = $query->param('filename');
+    my $fileName = $query->param( 'filename' );
 
     # this should actually kick off a document conversion 
     # (.doc, .xls... to .html) and show the html file.

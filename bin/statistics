@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -wT -I.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -50,8 +50,8 @@ sub main
         $cgiQuery = new CGI;
         $thePathInfo = $cgiQuery->path_info() || ""; 
         $theRemoteUser = $cgiQuery->remote_user() || "";
-        $theTopic = $cgiQuery->param('topic') || "";
-        $tmp = $cgiQuery->param('logdate') || "";
+        $theTopic = $cgiQuery->param( 'topic' ) || "";
+        $tmp = $cgiQuery->param( 'logdate' ) || "";
         $tmp =~ s/[^0-9]//go;  # remove all non numerals
         if( $tmp ne "" ) {
             $logDate = "$tmp";

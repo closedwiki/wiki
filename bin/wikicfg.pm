@@ -73,6 +73,8 @@ $dataDir          = "/home/httpd/twiki/data";
 # ==================================================================
 #                   %SCRIPTSUFFIX% : Suffix of TWiki Perl scripts (i.e. ".pl") :
 $scriptSuffix     = "";
+#                   set ENV{'PATH'} explicitly for taint checks ( #!perl -T option ) :
+$envPath          = "/bin:/usr/bin";
 #                   mail program :
 $mailProgram      = "/usr/sbin/sendmail -t -oi -oeq";
 #                   RCS directory (find out by 'which rcs') :
@@ -89,8 +91,8 @@ $revHistCmd       = "$rcsDir/rlog -h %FILENAME%";
 $revInfoCmd       = "$rcsDir/rlog -r%REVISION% %FILENAME%";
 #                   RCS revision diff command :
 $revDiffCmd       = "$rcsDir/rcsdiff -q -w -B -r%REVISION1% -r%REVISION2% %FILENAME%";
-#                   RCS delete revision command :
-$revDelRevCmd     = "$rcsDir/rcs -q -u %FILENAME%; rcs -o%REVISION% %FILENAME%; rcs -l %FILENAME%";
+#                   RCS delete revision command : (Sequence unlock; delete; lock)
+$revDelRevCmd     = "$rcsDir/rcs -q -u %FILENAME%; $rcsDir/rcs -q -o%REVISION% %FILENAME%; $rcsDir/rcs -q -l %FILENAME%";
 #                   Unix ls command :
 $lsCmd            = "/bin/ls";
 #                   Unix cp command :
@@ -104,6 +106,8 @@ $fgrepCmd         = "/bin/fgrep";
 # ==================================================================
 #                   %WIKITOOLNAME% : TWiki tool name :
 $wikiToolName       = "TWikibeta";
+#                   Regex security filter for web name, topic name, user name :
+$securityFilter     = "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\n\r]";
 #                   Default user name :
 $defaultUserName    = "guest";
 #                   %MAINWEB% : Name of Main web :
