@@ -254,6 +254,10 @@ if test "$XML_LIB" != "" ; then
 	LIBS="$LIBS -L$XML_LIB $XML_EXPAT_LIB"
 fi	
 
+TDB_LIB=libtdb.a
+
+LIBS="$LIBS -$TDBLIB"
+
 #
 # Set up the various includes -- direct and via APXS
 #
