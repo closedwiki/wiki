@@ -32,7 +32,7 @@ use vars qw(
 	    $pluginName $defaultFormat $calendarIncludes
 	   );
 
-$VERSION = '2.011';
+$VERSION = 2.012;
 $initialised = 0;
 $pluginName = "ActionTrackerPlugin";
 $installWeb = "TWiki";
