@@ -1169,14 +1169,14 @@ sub removeObsoleteTopicLocks
     my $file = "";
     my $pathFile = "";
     my $lockUser = "";
-    my $lockTime = "";
+    my $lockTime = 0;
     my $systemTime = time();
     foreach $file ( @fileList ) {
         $pathFile = "$webDir/$file";
         $pathFile =~ /(.*)/;
         $pathFile = $1;       # untaint file
         ( $lockUser, $lockTime ) = split( /\n/, readFile( "$pathFile" ) );
-        if( ! $lockTime ) { $lockTime = ""; }
+        $lockTime = 0 unless( $lockTime );
 
         # time stamp of lock over one hour of current time?
         if( abs( $systemTime - $lockTime ) > $TWiki::editLockTime ) {
