@@ -15,9 +15,10 @@ sub dispatch {
  eval { require $fqClass; import $fqClass; };
  
  my $dispatchSub = $@
-  ? &noSuchMethod  # don't have it
+  ? \&noSuchMethod  # don't have it
   : sub { dispatch(@_) };
 
+print $dispatchSub;
 
  if (defined &$dispatchSub) {
   return &$dispatchSub(@args);
@@ -33,6 +34,11 @@ sub dispatch {
 
 sub noSuchMethod {
 
+
+}
+
+sub helpText {
+   return "Help text goes here\n";
 
 }
 1;
