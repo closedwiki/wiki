@@ -448,14 +448,11 @@ sub resetPassword {
     # Collect all messages into one string
     my $message = '';
     foreach my $userName (@userNames) {
-        $message .= _resetUsersPassword( $session, $userName,
-                                         $introduction ) . "\n";
+        $message .= _resetUsersPassword( $session, $userName, $introduction );
     }
 
     my $action = '';
     # Redirect to a page that tells what happened
-    my $br = CGI::br();
-    $message =~ s/\n/$br/g;
     if( scalar( @userNames ) == 1 ) {
         # one user; refine the change password link to include their
         # username (can't use logged in user - by definition this won't be them!)
@@ -467,8 +464,7 @@ sub resetPassword {
                                 params => $message );
 }
 
-# return a string of messages. If there was an error,
-# this string will include the substring "ERROR:".
+# return an HTML string of messages.
 sub _resetUsersPassword {
     my( $session, $userName, $introduction ) = @_;
 
@@ -476,26 +472,20 @@ sub _resetUsersPassword {
     unless( $user ) {
         # couldn't work out who they are, its neither loginName nor
         # wikiName.
-        throw TWiki::OopsException( 'managebad',
-                                    def => 'notwikiuser',
-                                    params => $userName );
+        return $session->inlineAlert( 'alerts', 'notwikiuser', $userName );
     }
     my @em = $user->emails();
     my $email = $em[0];
     unless ($email) {
-        throw TWiki::OopsException( 'registerbad',
-                                    def => 'no_email_for',
-                                    params => $user->stringify());
+        return $session->inlineAlert( 'alerts', 'no_email_for',
+                                      $user->stringify());
     }
 
     my $message = '';
     unless( $user->passwordExists() ) {
         # Not an error.
-        $message = 'TWiki.ResetPassword notes the passwd entry for '.
-          '<nop>'.$user->login().
-            " was missing in .htpasswd";
-        $session->writeWarning($message);
-        $message .= "\n";
+        $message = $session->inlineAlert( 'alerts', 'missing_user',
+                                          $user->stringify());
     }
 
     my $password = $user->resetPassword();
@@ -511,12 +501,13 @@ sub _resetUsersPassword {
                         );
 
     if( $err ) {
-        $message .= 'ERROR: '.$err."\n";
+        $message .= $session->inlineAlert( 'alerts', 'generic', $err );
     } else {
-        $message .= 'A new *system-generated* password for '.
-          '<nop>'.$user->login() . ' (wikiname ' .
-            '%MAINWEB%.'.$user->wikiName() . ') has been sent to '.
-              $email."\n";
+        $message .= $session->inlineAlert( 'alerts',
+                                           'new_sys_pass',
+                                           $user->login(),
+                                           $user->wikiName(),
+                                           $email );
     }
 
     return $message;
