@@ -119,7 +119,7 @@ sub new {
         }
         # otherwise the whole string - sans padding - is the default
         else {
-            $string =~ s/^\s*(.*)\s*$/$1/;
+            $string =~ s/^\s*(.*?)\s*$/$1/;
             $this->{$DEFAULTKEY} = $string
               unless defined( $this->{$DEFAULTKEY} );
             last;
