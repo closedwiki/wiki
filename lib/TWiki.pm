@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = '28 Sep 2004 $Rev$';
+$wikiversion      = '06 Oct 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2222,37 +2222,14 @@ sub handleSearchWeb
 {
     my( $attributes, $baseWeb, $baseTopic ) = @_;
 
-    return &TWiki::Search::searchWeb(
-        "inline"        => "1",
-        "baseweb"       => $baseWeb,
-        "basetopic"     => $baseTopic,
-        "search"        => extractNameValuePair( $attributes ) || extractNameValuePair( $attributes, "search" ),
-        "web"           => extractNameValuePair( $attributes, "web" ),
-        "topic"         => extractNameValuePair( $attributes, "topic" ),
-        "excludetopic"  => extractNameValuePair( $attributes, "excludetopic" ),
-        "scope"         => extractNameValuePair( $attributes, "scope" ),
-        "order"         => extractNameValuePair( $attributes, "order" ),
-        "type"          => extractNameValuePair( $attributes, "type" )
-                        || TWiki::Prefs::getPreferencesValue( "SEARCHVARDEFAULTTYPE" ),
-        "regex"         => extractNameValuePair( $attributes, "regex" ),
-        "limit"         => extractNameValuePair( $attributes, "limit" ),
-        "reverse"       => extractNameValuePair( $attributes, "reverse" ),
-        "casesensitive" => extractNameValuePair( $attributes, "casesensitive" ),
-        "nosummary"     => extractNameValuePair( $attributes, "nosummary" ),
-        "nosearch"      => extractNameValuePair( $attributes, "nosearch" ),
-        "noheader"      => extractNameValuePair( $attributes, "noheader" ),
-        "nototal"       => extractNameValuePair( $attributes, "nototal" ),
-        "bookview"      => extractNameValuePair( $attributes, "bookview" ),
-        "renameview"    => extractNameValuePair( $attributes, "renameview" ),
-        "showlock"      => extractNameValuePair( $attributes, "showlock" ),
-        "expandvariables" => extractNameValuePair( $attributes, "expandvariables" ),
-        "noempty"       => extractNameValuePair( $attributes, "noempty" ),
-        "template"      => extractNameValuePair( $attributes, "template" ),
-        "header"        => extractNameValuePair( $attributes, "header" ),
-        "format"        => extractNameValuePair( $attributes, "format" ),
-        "multiple"      => extractNameValuePair( $attributes, "multiple" ),
-        "separator"     => extractNameValuePair( $attributes, "separator" ),
-    );
+    my %params = extractParameters( $attributes );     # pass along all attributes
+    $params{"inline"} = 1;                             # and add some more
+    $params{"baseweb"} = $baseWeb;
+    $params{"basetopic"} = $baseTopic;
+    $params{"search"} = $params{"_DEFAULT"} if( $params{"_DEFAULT"} );
+    $params{"type"} = TWiki::Prefs::getPreferencesValue( "SEARCHVARDEFAULTTYPE" ) unless( $params{"type"} );
+
+    return TWiki::Search::searchWeb( %params );
 }
 
 # =========================
