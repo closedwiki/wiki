@@ -126,7 +126,7 @@ sub main
             }
         }
     } else {
-        printMsg( "  *** Error: Log file $logFile does not exist" );
+        printMsg( "  - Note: Log file $logFile does not exist" );
     }
 
     if( $isCgi ) {
