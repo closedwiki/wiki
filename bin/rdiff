@@ -23,7 +23,7 @@ use TWiki;
 
 $query= new CGI;
 
-print "Content-type: text/html\n\n";
+TWiki::writeHeader( $query );
 
 &main();
 
@@ -114,7 +114,7 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName, $scriptUrlPath ) = 
-	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
     my $tmpl = "", $text = "", $diff = "";
     my $rev1 = $query->param( "rev1" );

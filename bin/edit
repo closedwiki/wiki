@@ -144,7 +144,7 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName, $dummy, $userName ) = 
-	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
     $dummy = "";  # to suppress warning
 
     my $saveCmd = $query->param( 'cmd' ) || "";
@@ -166,7 +166,7 @@ sub main
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-        print "Content-type: text/html\n\n";
+        TWiki::writeHeader( $query );
 	$tmpl= &TWiki::Store::readTemplate( "noweb" );
 	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
@@ -213,7 +213,7 @@ sub main
     }
     &TWiki::Store::lockTopic( $topic );
 
-    print "Content-type: text/html\n\n";
+    TWiki::writeHeader( $query );
 
     # get edit template, standard or a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );

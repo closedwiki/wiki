@@ -31,13 +31,14 @@ use TWiki;
 
 use strict;
 
-my $query= new CGI;
+use vars qw($query);
 
 &main();
 
 
 sub main
 {
+    $query= new CGI;
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
     my $theOldWeb = $query->param( 'oldWeb' );
@@ -62,7 +63,7 @@ sub main
     }
     
     my ( $topic, $webName, $scriptUrlPath, $userName, $dataDir ) = 
-        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theOldTopic, $theUrl );
+        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theOldTopic, $theUrl, $query ); # DRKW difference to core
 
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
@@ -137,7 +138,7 @@ sub main
 	     &TWiki::Store::moveAttachment( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment );
 	  # FIXME change to doing as one call
 	  if( $moveError ) {
-	      print "Content-type: text/html\n\n";
+	      TWiki::writeHeader( $query );
               my $tmpl = &TWiki::Store::readTemplate( "oopsgeneral" );
 	      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
 	      $tmpl =~ s/%SUMMARY%/problem moving attachment/go;
@@ -182,7 +183,7 @@ sub dropListOfWebs
 {
    my ($web) = @_;
 
-   my @webs = &TWiki::Store::listWebs();
+   my @webs = &TWiki::Store::getAllWebs();
 
    my $html = "<SELECT NAME=\"webselection\">\n";
    foreach ( @webs ) {
@@ -228,8 +229,8 @@ sub updateReferingPages
     my $lockFailure = 0;
 
     my $result = "";
-    my $preTopic = "^\|[\\*\\s][\\(\\-\\*\\s]*";
-    my $postTopic = "$\|[_\\*<\\s]";
+    my $preTopic = '^|[\*\s\[][\(-\s]*';
+    my $postTopic = '$|[^A-Za-z0-9_]';
 
     while ( @refs ) {
        my $type = shift @refs;
@@ -245,18 +246,35 @@ sub updateReferingPages
           #open each file, replace $topic with $newTopic
           if ( &TWiki::Store::topicExists($itemWeb, $itemTopic) ) { 
 	     my( $scantext, @meta ) = &TWiki::Store::readWebTopicNew($itemWeb, $itemTopic);
+	     my $insidePRE = 0;
+	     my $insideVERBATIM = 0;
+             my $noAutoLink = 0;
 	     foreach( split( /\n/, $scantext ) ) {
-	        if( $type eq "global" ) {
-	            my $insertWeb = ($itemWeb eq $newWeb) ? "" : "$newWeb.";
-	            s/($preTopic)\Q$oldWeb.$oldTopic\E($postTopic)/$1$insertWeb$newTopic$2/g;
-	        } else {
-	            # Only replace bare topic (i.e. not preceeded by web) if web of referring
-	            # topic is in original Web of topic that's being moved
-	            if( $oldWeb eq $itemWeb ) {
-	                my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
-	                s/($preTopic)\Q$oldTopic\E($postTopic)/$1$insertWeb$newTopic$2/g;
-	            }
-	        }
+		# This code is in far too many places
+		m|<pre>|i  && ( $insidePRE = 1 );
+		m|</pre>|i && ( $insidePRE = 0 );
+		if( m|<verbatim>|i ) {
+		    $insideVERBATIM = 1;
+		}
+		if( m|</verbatim>|i ) {
+		    $insideVERBATIM = 0;
+		}
+		m|<noautolink>|i   && ( $noAutoLink = 1 );
+		m|</noautolink>|i  && ( $noAutoLink = 0 );
+
+		if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
+		    if( $type eq "global" ) {
+			my $insertWeb = ($itemWeb eq $newWeb) ? "" : "$newWeb.";
+			s/($preTopic)\Q$oldWeb.$oldTopic\E($postTopic)/$1$insertWeb$newTopic$2/g;
+		    } else {
+			# Only replace bare topic (i.e. not preceeded by web) if web of referring
+			# topic is in original Web of topic that's being moved
+			if( $oldWeb eq $itemWeb ) {
+			    my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
+			    s/($preTopic)\Q$oldTopic\E($postTopic)/$1$insertWeb$newTopic$2/g;
+			}
+		    }
+		}
 	        $resultText .= "$_\n";
 	     }
 	     &TWiki::Store::saveTopicNew( $itemWeb, $itemTopic, $resultText, \@meta, "", "unlock", "dontNotify", "" );
@@ -303,7 +321,7 @@ sub checkExist
    
    # Does old WEB exist?
    if( ! &TWiki::Store::webExists( $oldWeb ) ) {
-      print "Content-type: text/html\n\n";
+      TWiki::writeHeader( $query ); 
       $tmpl = &TWiki::Store::readTemplate( "noweb" );
       $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic );
       print $tmpl;
@@ -312,7 +330,7 @@ sub checkExist
 
    # Does new WEB exist?
    if( ! &TWiki::Store::webExists( $newWeb ) ) {
-      print "Content-type: text/html\n\n";
+      TWiki::writeHeader( $query );
       $tmpl= &TWiki::Store::readTemplate( "noweb" );
       $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
       print $tmpl;
@@ -331,7 +349,7 @@ sub checkExist
    # Check new topic doesn't exist (opposite if we've moving an attachment)
    if( -e $newFileName && ! $theAttachment ) {
       # Unless moving an attachment, new topic should not already exist
-      print "Content-type: text/html\n\n";
+      TWiki::writeHeader( $query );
       # FIXME - should this use oopsexists rather than oopsgeneral?
       $tmpl = &TWiki::Store::readTemplate( "oopsgeneral" );
       ##TWiki::writeDebug( "rename: tmpl = $tmpl" );
@@ -345,7 +363,7 @@ sub checkExist
       $ret = "problem";    
    }    
    if( $theAttachment && ! -e $newFileName ) {
-      print "Content-type: text/html\n\n";
+      TWiki::writeHeader( $query );
       $tmpl= &TWiki::Store::readTemplate( "oopsmissing" );
       $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic, $newWeb );
       print $tmpl;
@@ -402,7 +420,7 @@ sub getLocks
        $tmpl =~ s/%ATTACHMENT%/$theAttachment/go;
        $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
        $tmpl = &TWiki::getRenderedVersion( $tmpl, $oldWeb );
-       print "Content-type: text/html\n\n";
+       TWiki::writeHeader( $query );
        print $tmpl;
        return "";
     } else {
@@ -411,27 +429,6 @@ sub getLocks
             &TWiki::Store::lockTopicNew( $newWeb, $newTopic );
        }
     }
-
-    # FIXME too much repeated code
-    # If we're moving an attachment, check lock status on new topic
-    # FIXME operation to take lock if not already taken is not atomic, lock could be free when
-    # check, but not available when new lock taken.
-    if( $theAttachment ) {
-	my ( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $newWeb, $newTopic );
-	if( ! $breakLock && $lockUser ) {
-	   # warn user that other person is editing this topic
-	   $lockUser = &TWiki::userToWikiName( $lockUser );
-	   use integer;
-	   $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
-	   my $editLock = $TWiki::editLockTime / 60;
-	   my $url = &TWiki::getOopsUrl( $newWeb, $newTopic, "oopslockedrename",
-	       $lockUser, $editLock, $lockTime );
-	   print $query->redirect( $url );
-	   return "";
-	}
-	&TWiki::Store::lockTopicNew( $newWeb, $newTopic );
-    }
-    &TWiki::Store::lockTopicNew( $oldWeb, $oldTopic );
     
     return "okay";
 }
@@ -449,7 +446,7 @@ sub newTopicScreen
        $newTopic = $oldTopic;
    }
    
-   print "Content-type: text/html\n\n";
+   TWiki::writeHeader( $query );
    if( $theAttachment ) {
      $tmpl = &TWiki::Store::readTemplate( "moveattachment" );
      $tmpl =~ s/%FILENAME%/$theAttachment/go;
@@ -479,7 +476,7 @@ sub newTopicScreen
     my( $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
     
     TWiki::writeDebug("lock failure in rename");
-    print "Content-type: text/html\n\n";
+    TWiki::writeHeader( $query );
     my $tmpl = &TWiki::Store::readTemplate( "oopsneednewtopic" );
     $tmpl =~ s/%OLD_TOPIC%/$oldTopic/go;
     $tmpl =~ s/%OLD_WEB%/$oldWeb/go;

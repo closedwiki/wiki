@@ -23,7 +23,7 @@ use TWiki;
 
 $query= new CGI;
 
-print "Content-type: text/html\n\n";
+TWiki::writeHeader( $query );
 
 &main();
 
@@ -119,7 +119,7 @@ sub main
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
     ( $topic, $webName ) = 
-	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+    &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
     my $tmpl = "", $atext = "", $text = "", $ptext = "", $tcat = "", $icat = "";
 
