@@ -5,6 +5,7 @@
 /* ============ top section ============== */
 #topsection { position: relative; top: 3em; left:0; }
 #title { position: relative;float: left; }
+#topsection img {vertical-align:middle;}
 #topsection h1 { display:inline; font-weight: bold; font-size: 1.3em}
 #topsection h1 a {  }
 #topsection h2 { display:inline; font-size: 1.1em;}
@@ -118,9 +119,10 @@ h5 { font-size: 1.0em; margin: 1.2em 0em 1.2em 0em; font-weight: bold; }
 h6 { font-size: 0.8em; margin: 1.2em 0em 1.2em 0em; font-weight: bold; }
 img { border: 0; }
 p,td,th,tr { font-size: 1.0em;  }
-pre {	font-family: monospace;	font-size: 1.1em; overflow: auto; background-color: #ddd;	}
+pre {	font-family: monospace;	font-size: 2.3ex; overflow: auto; background-color: #ddd;	}
+code { font-size: 2.3ex; }
+* html pre, * html code {/*for IE*/ font-size:1em;}
 strong, b {	font-weight: bold;	}
-code { font-size: 1.1em; }
 /* --------- end font sizing --------- */
 
 /* this is to (almost) stop IE from overlapping the menu and the content div when it contains tables */
