@@ -15,6 +15,7 @@ BEGIN {
 system( "mkdir htdocs/" );
 system( "mv cgi-bin/tmp/twiki/pub htdocs/twiki/" );
 system( "mv cgi-bin/tmp/twiki/templates twiki/" );
+system( "chmod o-w cgi-bin/twiki/" );
 
 my $agent = "TWikiInstaller: " . basename( $0 );
 my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;

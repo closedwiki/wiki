@@ -8,8 +8,9 @@
 # TODO: (soon)
 #    * PATCHES!
 #    * get rid of =pre-wiki.sh= and =post-wiki.sh= and become a completely web-based install!
+#    * permissions!
 #    * error checking is pretty good, but error recovery might not be?
-#    * run rcslock
+#    * refactor all those *catalogue() functions
 #    * ???
 # TODO: (long term)
 #    * better mechanism to publish distribution definition
@@ -27,6 +28,9 @@
 #       * and patches, too! (skins, addons, web templates)
 #    * why is root needed? (oh, for writing the apache.conf file) --- is this all taken care of now?
 #    * other stuff i deleted...
+################################################################################
+# OBSELETED:
+#    * run rcslock
 ################################################################################
 
 my $account;
@@ -560,8 +564,9 @@ sub installTWikiExtension
 
     # TODO: assert( isDirectoryEmpty() );
 
-    execute("chmod -R 777 $dest $bin $lib $tmp");
-    checkdir( $tmp, $dest, $bin, $lib );
+	print STDERR "fixing permissions...\n";
+    execute("chmod -R 777 $dest $lib $tmp; chmod -R 755 $bin $lib; chmod -R 775 $dest/data; chmod -R 775 $tmp/twiki");
+    checkdir( $tmp, $dest, $bin, $lib );		# removed bin because it shouldn't be world-writable (taint checking)
 
     chdir $pushd or warn $!;
 }
@@ -585,10 +590,10 @@ sub checkdir
 	    print "Directory not found: $dir";
 	    exit 1;
 	}
-	unless (mode($dir) & 0x2) {
-	    print "Directory $dir is not world writable";
-	    exit 1;
-	}
+#	unless (mode($dir) & 0x2) {
+#	    print "Directory $dir is not world writable";
+#	    exit 1;
+#	}
     }
 }
 
@@ -665,15 +670,6 @@ sub erasePlugin
 sub RestartApache
 {
     system qw( apachectl restart );
-}
-
-#--------------------------------------------------------------------------------
-
-# TODO: howto launch the web browser?
-sub WebBrowser
-{
-    my $url = shift or die "no url";
-    print $url, "\n";
 }
 
 ################################################################################

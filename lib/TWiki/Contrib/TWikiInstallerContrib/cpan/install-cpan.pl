@@ -174,10 +174,10 @@ sub checkdir {
 	    print "Directory not found: $dir";
 	    exit 1;
 	}
-	unless (mode($dir) & 0x2) {
-	    print "Directory $dir is not world writable";
-	    exit 1;
-	}
+#	unless (mode($dir) & 0x2) {
+#	    print "Directory $dir is not world writable";
+#	    exit 1;
+#	}
 }
 
 ################################################################################
