@@ -132,7 +132,7 @@ sub edit {
                 $templateTopic = $2;
             }
 
-            ( $meta, $text ) = TWiki::Templates::readTopic( $templateWeb, $templateTopic );
+            ( $meta, $text ) = TWiki::Store::readTopic( $templateWeb, $templateTopic );
         }
         unless( $text ) {
             ( $meta, $text ) = TWiki::UI::readTemplateTopic( "WebTopicEditTemplate" );
