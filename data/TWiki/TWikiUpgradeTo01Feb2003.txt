@@ -1,0 +1,80 @@
+%META:TOPICINFO{author="PeterThoeny" date="1040114818" format="1.0" version="1.1"}%
+%TOC%
+%STARTINCLUDE%
+
+---# TWiki Upgrade Guide
+
+_Upgrade from TWiki 01-Dec-2001 to TWiki 01-Jan-2003 (previous to new full release)_
+
+---++ Overview
+
+This guide describes how to upgrade from TWiki 01-Dec-2001 to TWiki 01-Jan-2003. The new version involves several new features and numerous enhancements to the previous version.
+
+---++ Upgrade Requirements
+
+	* To upgrade from a 01-Dec-2001 standard installation to the latest 01-Jan-2003 TWiki Production Release, follow the instructions below.
+
+	* __NOTE:__ To upgrade from a *pre-01-Dec-2001* TWiki, start with	%TWIKIWEB%.TWikiUpgradeTo01Dec2001.
+
+	* To upgrade from a Beta of the new release, or if you made custom modifications to the application, read through all new reference documentation, then use the procedure below as a guideline.  
+
+---++ Major Changes from TWiki 01-Dec-2001
+
+	* *AND Search* - With regular expression enabled, use =";"= as the AND operator in FormattedSearch and WebSearch
+	* (to be completed)
+
+---++ Upgrade Procedure from 01-Dec-2001 to 01-Jan-2003 Release
+
+The following steps describe the upgrade assuming that =$TWIKIROOT= is the root of your current 01-Dec-2001 release.
+
+*Note:* These steps assume a downtime during the time of upgrade. You could install the new version in parallel to the existing one and switch over in an instant without affecting the users. As a guideline, install the new version into =$TWIKIROOT/bin1=, =$TWIKIROOT/lib1=, =$TWIKIROOT/templates1=, =$TWIKIROOT/data/TWiki1= (from =data/TWiki=), =$TWIKIROOT/pub/TWiki1= (from =pub/TWiki=), and configure =TWiki.cfg= to point to the same data and pub directory like the existing installation. Once tested and ready to go, reconfigure =$TWIKIROOT/bin1/setlib.cfg= and =$TWIKIROOT/lib1/TWiki.cfg=, then rename =$TWIKIROOT/bin= to =$TWIKIROOT/bin2=, =$TWIKIROOT/bin1= to =$TWIKIROOT/bin=. Do the same with the =lib=, =templates= and =data/TWiki= directories.
+
+	1. *Back up and prepare*:
+		* Back up all existing TWiki directories =$TWIKIROOT/bin=, =$TWIKIROOT/pub=, =$TWIKIROOT/data=, =$TWIKIROOT/templates=.
+		* Create a temporary directory and unpack the ZIP file there.
+	1. *Update files in TWiki root*:
+		* Overwrite all =*.html= and =*.txt= files in =$TWIKIROOT= with the new ones.
+	1. *Update template files*:
+		* Overwrite all template files in =$TWIKIROOT/templates= with the new ones.
+	1. *Update script files*:
+		* Overwrite all script files in =$TWIKIROOT/bin= with the new ones.
+			* If necessary, change the script names to include the required extension, ex: =.cgi=
+		* Edit =$TWIKIROOT/bin/setlib.cfg= and point =$twikiLibPath= to the absolute file path of =$TWIKIROOT/lib= 
+		* Pay attention to the file and directory permissions, the scripts need to be executable, e.g. 775.
+	1. *Update library files*:
+		* Make a backup copy of =$TWIKIROOT/lib/TWiki.cfg= to =TWiki.cfg.save=
+		* Overwrite the =TWiki.cfg= configuration file in =$TWIKIROOT/lib= with the new one.
+		* Restore the configuration values from the backup. You typically need to configure just the ones in the section "variables that need to be changed when installing on a new server".
+		* Overwrite the =TWiki.pm= library in =$TWIKIROOT/lib= with the new one.
+		* Copy and overwrite all subdirectories below =$TWIKIROOT/lib= with the new ones. Make sure to preserve any extra Plugins you might have in =$TWIKIROOT/lib/TWiki/Plugins= 
+		* Pay attention to the file and directory permissions, the library files should not be executable, but set to e.g. 664.
+	1. *Update data files*:
+		* Run the =bin/testenv= script from the browser (e.g. =http://localhost/bin/testenv=) to verify if the cgi-scripts are running as user =nobody=.
+			* In case not: The =*,v= RCS repository files delivered with the installation package are locked by user =nobody= and need to be changed to the user of your cgi-scripts, e.g., =www-data=:
+			* Change the lock user in the temporary =twiki/data/*= directories where you unzipped the installation package: A simple way to switch the locker of the RCS files is to use sed in the :
+			  <br /> =for f in *,v; do sed 's/nobody\:/www-data\:/' $f &gt; x; mv x $f; done=
+		* In the temporary =twiki/data/TWiki= directory where you unzipped the installation package:
+			* Remove the files you do *not* want to upgrade: =InterWikis.*=, =TWikiRegistration.*=, =WebNotify.*=, =WebPreferences.*=, =WebStatistics.*= and all =WebTopic*= files.
+		* Rename =$TWIKIROOT/data/TWiki/TWikiPreferences.*= to =TWikiPreferencesSave.*=.
+		* Move all remaining =*.txt= and =*.txt,v= files from the temporary =data/TWiki= directory to your =$TWIKIROOT/data/TWiki= directory.
+		* Merge your original =TWikiPreferencesSave.txt= settings into =$TWIKIROOT/data/TWiki/TWikiPreferences.txt=.
+		* Move all =*.txt= and =*.txt,v= files from the temporary =data/_default= directory to your =$TWIKIROOT/data/_default= directory.
+		* Move the =data/Sandbox= directory from the temporary location to your =$TWIKIROOT/data= directory.
+		* Make sure that the directories and files below =$TWIKIROOT/data= are writable by your cgi-script user.
+	1. *Update pub/TWiki files*:
+		* Move all subdirectories below =pub/TWiki= from your temporary directory into your =$TWIKIROOT/pub/TWiki= directory.
+		* Make sure that the directories and files below =$TWIKIROOT/pub/TWiki= are writable by your cgi-script user.
+	1. *Verify installation*:
+		* Execute the =$TWIKIROOT/bin/testenv= script from your browser (e.g. =http://localhost/bin/testenv=) to see if it reports any issues; fix any potential problems.
+		* Test your updated TWiki installation to see if you can view, create, edit and rename topics; upload and move attachments; register users.
+		* Test if the installed Plugins work as expected. You should see the list of installed Plugins in TextFormattingRules.
+
+---++ General Format Changes
+
+	* (to be written)
+
+---++ Known Issues
+
+	* Check TWiki:Codev/KnownIssuesOfTWiki01Jan2003 for known issues of TWiki 01 Jan 2003 (production release)
+
+-- Main.PeterThoeny - 17 Dec 2002

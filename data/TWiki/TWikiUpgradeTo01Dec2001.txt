@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1020633411" format="1.0" version="1.30"}%
+%META:TOPICINFO{author="PeterThoeny" date="1040114770" format="1.0" version="1.31"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -314,3 +314,4 @@ In this step, you move the working 01-Dec-2001 installation to the old 01-Dec-20
 -- Main.MikeMannix - 05 May 2002
 
 
+%META:TOPICMOVED{by="PeterThoeny" date="1040114770" from="TWiki.TWikiUpgradeGuide" to="TWiki.TWikiUpgradeTo01Dec2001"}%
