@@ -1,13 +1,15 @@
 #!/usr/bin/perl -wT
 #
-# TWiki WikiClone (see $wikiversion in wiki.pm for version)
+# TWiki Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 1999-2003 Peter Thoeny, peter@thoeny.com
 #
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
 # Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
-# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
-# TakeFive Software Inc.
+# Copyright (C) 1999-2003 Peter Thoeny, peter@thoeny.com
 #
+# For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
