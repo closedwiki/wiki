@@ -1,6 +1,7 @@
+# Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2002 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2002-2004 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,9 +27,9 @@ use vars qw($web $topic $user $installWeb $VERSION $debug
             %smiliesUrls %smiliesEmotions
             $smiliesPattern $allPattern $smiliesPubUrl $smiliesFormat );
 
-$VERSION = '1.000';
+$VERSION = '1.002';
 
-$smiliesPattern = '^\s*\|\s*<nop>([^\s|]+)\s*\|\s*%ATTACHURL%\/([^\s]+)\s*\|\s*"([^"|]+)"\s*\|\s*$';
+$smiliesPattern = '^\s*\|\s*<nop>(?:\&nbsp\;)?([^\s|]+)\s*\|\s*%ATTACHURL%\/([^\s]+)\s*\|\s*"([^"|]+)"\s*\|\s*$';
 #                          smilie       url            emotion
 $allPattern = "";
 $smiliesPubUrl = "";
