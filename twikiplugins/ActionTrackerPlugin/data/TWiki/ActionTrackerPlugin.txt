@@ -114,6 +114,7 @@ Write the command =%<nop>ACTIONSEARCH{= _attributes_ =}%= anywhere in a TWiki to
 For example,
 <pre>
 %<nop>ACTIONSEARCH{ who="me" state="late" }%
+%<nop>ACTIONSEARCH{ who="me" open late }%
 %<nop>ACTIONSEARCH{ who="TWikiGuest" state="open" within="7" }%
 %<nop>ACTIONSEARCH{ web=".*" who="Genghis.Khan@mongol.empire.org" state="open" within="7" }%
 </pre>
