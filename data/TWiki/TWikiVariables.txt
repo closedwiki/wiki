@@ -34,7 +34,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> Your login username, is <b>%USERNAME%</b> </td>
 </tr><tr>
   <td> =%<nop>WIKIUSERNAME%= </td>
-  <td> Your Wiki username, if defined in TWikiUsers. Same as %<nop>USERNAME% if not defined. Is <b>%WIKIUSERNAME%</b> </td>
+  <td> Your Wiki username, if defined in %MAINWEB%.TWikiUsers. Same as %<nop>USERNAME% if not defined. Is <b>%WIKIUSERNAME%</b> </td>
 </tr><tr>
   <td> =%<nop>WEB%= </td>
   <td> The current web, is <b>%WEB%</b> </td>
@@ -42,11 +42,17 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> =%<nop>TOPIC%= </td>
   <td> The current topic name, is <b>%TOPIC%</b> </td>
 </tr><tr>
-  <td> =%<nop>DATE%= </td>
-  <td> Todays date (local server time), is <b>%DATE%</b> </td>
-</tr><tr>
   <td> =%<nop>GMTIME%= </td>
-  <td> Todays date (GM time), is <b>%GMTIME%</b> </td>
+  <td> GM time, is <b>%GMTIME%</b> </td>
+</tr><tr>
+  <td> =%<nop>GMTIME{"format"}%= </td>
+  <td> Formatted GM time based on keywords (first three characters needed.) <br> Example: =%<nop>GMTIME{"day month, year - hour:min:sec"}%= is <b>%GMTIME{"day month, year - hour:min:sec"}%</b> </td>
+</tr><tr>
+  <td> =%<nop>SERVERTIME%= </td>
+  <td> Server time, is <b>%SERVERTIME%</b> </td>
+</tr><tr>
+  <td> =%<nop>SERVERTIME{"format"}%= </td>
+  <td> Formatted server time. Example: =%<nop>SERVERTIME{"hou:min"}%= is <b>%SERVERTIME{"hou:min"}%</b> </td>
 </tr><tr>
   <td> =%<nop>HTTP_HOST%= </td>
   <td> HTTP_HOST environment variable, is <b>%HTTP_HOST%</b> </td>
@@ -76,7 +82,7 @@ TWiki expands the following variables enclosed in % percent signs:
 Example: =<b>%<nop>SEARCH{"wiki" web="Main" scope="topic"}%</b>= </td>
 </tr></table>
 
-Additional variables are defined in the preferences ( site-level ( __SL__ ) in %MAINWEB%.%WIKIPREFSTOPIC%, web-level ( __WL__ ) in %WEBPREFSTOPIC% of each web, and user level ( __UL__ ) preferences in individual user topics):
+Additional variables are defined in the preferences ( site-level ( __SL__ ) in %TWIKIWEB%.%WIKIPREFSTOPIC%, web-level ( __WL__ ) in %WEBPREFSTOPIC% of each web, and user level ( __UL__ ) preferences in individual user topics):
 
 <table border="1"><tr>
   <th> Variable: </th><th> Level: </th><th> What: </th>
