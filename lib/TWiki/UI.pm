@@ -115,26 +115,29 @@ sub run {
                              $query, $scripted );
 
     $Error::Debug = 1; # comment out in production
-    try {
+#    try {
         eval "use $class";
         my $m = "$class"."::$method";
         no strict 'refs';
         &$m( $session );
         use strict 'refs';
-    } catch TWiki::UI::OopsException with {
-        my $e = shift;
-        my $url = $session->getOopsUrl( $e->{-web},
-                                        $e->{-topic},
-                                        "oops$e->{-template}",
-                                        $e->{-param1},
-                                        $e->{-param2},
-                                        $e->{-param3},
-                                        $e->{-param4} );
-        $session->redirect( undef, $url );
-    } catch Error::Simple with {
-        print "Content-type: text/plain\n\n";
-        print shift->stringify();
-    };
+#    } catch TWiki::UI::OopsException with {
+#        my $e = shift;
+#        my $url = $session->getOopsUrl( $e->{-web},
+#                                        $e->{-topic},
+#                                        "oops$e->{-template}",
+#                                        $e->{-param1},
+#                                        $e->{-param2},
+#                                        $e->{-param3},
+#                                        $e->{-param4} );
+#        $session->redirect( undef, $url );
+#    } catch Error::Simple with {
+#        my $e = shift;
+#        print "Content-type: text/plain\n\n";
+#        print "Got Error::Simple\n";
+#        print $e->{-text},"\n";
+#        print $e->stringify();
+#    };
 }
 
 =pod twiki

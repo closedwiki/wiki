@@ -23,6 +23,7 @@ this object.
 package TWiki::Sandbox;
 
 use strict;
+use Error qw( :try );
 
 # TODO: Sandbox module should probably use custom 'die' handler so that output goes
 # only to web server error log - otherwise it might give useful debugging
@@ -142,14 +143,14 @@ sub normalizeFileName ($;$) {
             if ($dotdot && @result > 0) {
                 pop @result;
             } else {
-                die "directory traversal attempt in filename '$string'";
+                throw Error::Simple( "directory traversal attempt in filename '$string'" );
             }
         } elsif ($component =~ /^(\S+)$/) {
             # We need to untaint the string explicitly.
             # FIXME: This might be a Perl bug.
             push @result, untaintUnchecked $1;
         } else {
-            die "whitespace in file name component '$component' of filename '$string'";
+            throw Error::Simple( "whitespace in file name component '$component' of filename '$string'" );
         }
     }
     if (@result) {
@@ -161,7 +162,7 @@ sub normalizeFileName ($;$) {
         return join '/', @result;
     } else {
         return '/' if $absolute;
-        die "empty filename '$string'";
+        throw Error::Simple( "empty filename '$string'" );
     }
 }
 
@@ -201,7 +202,7 @@ sub buildCommandLine {
             if ($t =~ /%(.*?)(|\|[A-Z])%/) {
                 my ($p, $flag) = ($1, $2);
                 if (! exists $params{$p}) {
-                    die "unknown parameter name $p";
+                    throw Error::Simple( "unknown parameter name $p" );
                 }
                 my $type = ref $params{$p};
                 my @params;
@@ -210,7 +211,7 @@ sub buildCommandLine {
                 } elsif ($type eq 'ARRAY') {
                     @params =  @{$params{$p}};
                 } else {
-                    die "$type reference passed in $p";
+                    throw Error::Simple( "$type reference passed in $p" );
                 }
 
                 for my $param (@params) {
@@ -224,24 +225,24 @@ sub buildCommandLine {
                             if ( $param =~ /^([0-9A-Fa-f.x+\-]{0,30})$/ ) {
                                 push @targs, $1;
                             } else {
-                                die "invalid number argument '$param'";
+                                throw Error::Simple( "invalid number argument '$param'" );
                             }
                         } elsif ($flag =~ /S/) {
                             # Harmless string.
                             if ( $param =~ /^([0-9A-Za-z.+_\-]{0,30})$/ ) {
                                 push @targs, $1;
                             } else {
-                                die "invalid string argument";
+                                throw Error::Simple( "invalid string argument" );
                             }
                         } elsif ($flag =~ /D/) {
                             # RCS date.
                             if ( $param =~ m|^(\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d)$| ) {
                                 push @targs, $1;
                             } else {
-                                die "invalid date argument";
+                                throw Error::Simple( "invalid date argument $param" );
                             }
                         } else {
-                            die "illegal flag in $t";
+                            throw Error::Simple( "illegal flag in $t" );
                         }
                     } else {
                         push @targs, $param;
@@ -302,7 +303,7 @@ sub readFromProcessArray {
         # for most Unix/Linux Perl platforms and on Cygwin.  Based on
         # perlipc(1).
         my $pid = open ($processFileHandle, '-|');
-        die "open of pipe failed: $!" unless defined $pid;
+        throw Error::Simple( "open of pipe failed: $!" ) unless defined $pid;
 
         $this->_writeDebug("processFileHandle = $processFileHandle");
 
@@ -315,7 +316,7 @@ sub readFromProcessArray {
         } else {
             # Child - run the command, stdout to pipe
             exec $path, @args
-                or die "exec of $path with args @args failed: $!";
+              or throw Error::Simple( "exec of $path with args @args failed: $!" );
             die "cannot happen";
             exit 127;
         }
@@ -340,7 +341,7 @@ sub readFromProcessArray {
         } else {
             # Child - run the command, stdout to pipe
             exec $path, @args
-                or die "exec of $path with args @args failed: $!";
+                or throw Error::Simple( "exec of $path with args @args failed: $!" );
             die "should never happen";
             exit 127;
         }
@@ -380,13 +381,13 @@ sub _openSafePipeFromProcess {
     # Create pipe 
     my $parentFileHandle;
     my $childFileHandle;
-    pipe ($parentFileHandle, $childFileHandle) or 
-        die "could not create pipe: $!";
+    pipe ($parentFileHandle, $childFileHandle) or
+                     throw Error::Simple( "could not create pipe: $!" );
     $this->_writeDebug("filehandles = $parentFileHandle $childFileHandle ");
 
     my $pid = fork();
     if (not defined $pid) {
-        die "fork() failed: $!";
+        throw Error::Simple( "fork() failed: $!" );
     }
 
     if ($pid) {

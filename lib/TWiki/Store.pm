@@ -1028,9 +1028,7 @@ sub removeObsoleteTopicLocks {
     my $lockTime = 0;
     my $systemTime = time();
     foreach $file ( @fileList ) {
-        $pathFile = "$webDir/$file";
-        $pathFile =~ /(.*)/;
-        $pathFile = $1;       # untaint file
+        $pathFile = TWiki::Sandbox::untaintUnchecked( "$webDir/$file" );
         ( $lockUser, $lockTime ) = split( /\n/, readFile( "$pathFile" ) );
         $lockTime = 0 unless( $lockTime );
 

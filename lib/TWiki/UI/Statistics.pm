@@ -105,8 +105,7 @@ sub statistics {
         $tmpDir = "/tmp";
     }
     my $randNo = int ( rand 1000);	# For mod_perl with threading...
-    my $tmpFilename = "$tmpDir/twiki-stats.$$.$randNo";
-    $tmpFilename =~ /(.*)/; $tmpFilename = $1;   # Untaint
+    my $tmpFilename = TWiki::Sandbox::untaintUnchecked( "$tmpDir/twiki-stats.$$.$randNo" );
 
     File::Copy::copy ($logFile, $tmpFilename)
         or throw Error::Simple( "Can't copy $logFile to $tmpFilename - $!" );

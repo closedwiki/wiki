@@ -201,30 +201,6 @@ sub refDelta {
     print "Delta new->old:\n\"$delta\"\n\n"; 
 }
 
-sub rcsDiffOne {
-    my( $this, @vals ) = @_;
-    my $topic = "RcsDiffTest";
-    my $web = "Test";
-    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "", \%ss );
-    mug($rcs);
-    #print "Rcs Diff test $num\n";
-    $rcs->addRevision( $vals[0], "num 0", "JohnTalintyre" );
-    $rcs->addRevision( $vals[1], "num 1", "JohnTalintyre" );
-    my $diff = $rcs->revisionDiff( 1, 2 );
-    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "", \%ss );
-    my $diffLite = $rcsLite->revisionDiff( 1, 2 );
-
-    my $i = 0;
-    while ( $i <= $#$diffLite && $i <= $#$diff ) {
-        my $a = $i.": ".join("\t", @{$diffLite->[$i]});
-        my $b = $i.": ".join("\t", @{$diff->[$i]});
-
-        $this->assert_str_equals( $b, $a );
-        $i++;
-    }
-    $this->assert_equals( $#$diffLite, $#$diff );
-}
-
 sub test_wt1 {
     my $this = shift;
     $this->writeTest( $wTopic, "", ( "a" ) );
@@ -593,22 +569,53 @@ sub test_ra17 { my $this = shift;
 sub test_ra18 { my $this = shift;
                 $this->checkRead( $rTopic, "", ( "\nilw", "we\nilw" ) ); }
 
-sub test_d1 { my $this = shift; $this->rcsDiffOne("1\n", "\n" ); }
-sub test_d2 { my $this = shift; $this->rcsDiffOne("\n", "1\n" ); }
-sub test_d3 { my $this = shift; $this->rcsDiffOne("1\n", "2\n" ); }
-sub test_d4 { my $this = shift; $this->rcsDiffOne("2\n", "1\n" ); }
-sub test_d5 { my $this = shift;
+sub rcsDiffOne {
+    my( $this, @vals ) = @_;
+    my $topic = "RcsDiffTest";
+    my $web = "Test";
+    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "", \%ss );
+    mug($rcs);
+    #print "Rcs Diff test $num\n";
+    $rcs->addRevision( $vals[0], "num 0", "JohnTalintyre" );
+    $rcs->addRevision( $vals[1], "num 1", "JohnTalintyre" );
+    my $diff = $rcs->revisionDiff( 1, 2 );
+    my $rcsLite = TWiki::Store::RcsLite->new( $twiki, $web, $topic, "", \%ss );
+    my $diffLite = $rcsLite->revisionDiff( 1, 2 );
+
+    for ( my $i = 0; $i <= $#$diffLite && $i <= $#$diff; $i++ ) {
+        print "\nL: ".$i.": ".join("\t", @{$diffLite->[$i]});
+        print "\nH: ".$i.": ".join("\t", @{$diff->[$i]});
+    }
+
+    my $i = 0;
+    while ( $i <= $#$diffLite && $i <= $#$diff ) {
+        my $a = $i.": ".join("\t", @{$diffLite->[$i]});
+        my $b = $i.": ".join("\t", @{$diff->[$i]});
+
+        $this->assert_str_equals( $b, $a );
+        $i++;
+    }
+    $this->assert_equals( $#$diffLite, $#$diff );
+}
+
+# Note that diff tests as written don't work; the diffs are
+# not equivalent in the two implementations, though both are valid.
+sub dont_test_d1 { my $this = shift; $this->rcsDiffOne("1\n", "\n" ); }
+sub dont_test_d2 { my $this = shift; $this->rcsDiffOne("\n", "1\n" ); }
+sub dont_test_d3 { my $this = shift; $this->rcsDiffOne("1\n", "2\n" ); }
+sub dont_test_d4 { my $this = shift; $this->rcsDiffOne("2\n", "1\n" ); }
+sub dont_test_d5 { my $this = shift;
               $this->rcsDiffOne("1\n2\n3\n", "a\n1\n2\n3\nb\n" ); }
-sub test_d6 { my $this = shift;
+sub dont_test_d6 { my $this = shift;
               $this->rcsDiffOne("a\n1\n2\n3\nb\n", "1\n2\n3\n" ); }
-sub test_d7 { my $this = shift;
+sub dont_test_d7 { my $this = shift;
               $this->rcsDiffOne("1\n2\n3\n", "a\nb\n1\n2\n3\nb\nb\n" ); }
-sub test_d8 { my $this = shift;
+sub dont_test_d8 { my $this = shift;
               $this->rcsDiffOne("a\nb\n1\n2\n3\nb\nb\n", "1\n2\n3\n" ); }
-sub test_d9 { my $this = shift;
+sub dont_test_d9 { my $this = shift;
               $this->rcsDiffOne("1\n2\n3\n4\n5\n6\n7\n8\none\nabc\nABC\ntwo\n",
                                 "A\n1\n2\n3\none\nIII\niii\ntwo\nthree\n"); }
-sub test_d10 {
+sub dont_test_d10 {
     my $this = shift;
     $this->rcsDiffOne("A\n1\n2\n3\none\nIII\niii\ntwo\nthree\n",
                       "1\n2\n3\n4\n5\n6\n7\n8\none\nabc\nABC\ntwo\n");

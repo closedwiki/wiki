@@ -192,8 +192,6 @@ sub checkUserPasswd {
 sub addUserToTWikiUsersTopic {
     my ( $this, $wikiName, $remoteUser ) = @_;
     my $today = &TWiki::formatTime(time(), "\$day \$mon \$year", "gmtime");
-#  use Data::Dumper;
-#  die Dumper(\@_);
     my $topicName = $TWiki::wikiUsersTopicname;
     my( $meta, $text ) =
       $this->store()->readTopic( $TWiki::mainWebname, $topicName, undef, 0 );
@@ -205,8 +203,8 @@ sub addUserToTWikiUsersTopic {
     # add name alphabetically to list
     foreach( split( /\n/, $text) ) {
         $line = $_;
-	# TODO: I18N fix here once basic auth problem with 8-bit user names is
-	# solved
+        # TODO: I18N fix here once basic auth problem with 8-bit user names is
+        # solved
         $isList = ( $line =~ /^\t\*\s[A-Z][a-zA-Z0-9]*\s\-/go );
         if( ( $status == "0" ) && ( $isList ) ) {
             $status = "1";
@@ -262,7 +260,7 @@ sub getEmail {
         return;
     }
 
-    if ($wikiName eq "TWikiGuest") {
+    if ($wikiName eq $TWiki::defaultWikiName) {
         return;
     }
 
@@ -358,8 +356,7 @@ sub initializeRemoteUser {
 
     my $remoteUser = $theRemoteUser || $TWiki::defaultUserName;
     $remoteUser =~ s/$TWiki::securityFilter//go;
-    $remoteUser =~ /(.*)/;
-    $remoteUser = $1;  # untaint variable
+    $remoteUser = TWiki::Sandbox::untaintUnchecked( $remoteUser );
 
     my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
 
@@ -436,7 +433,7 @@ sub _cacheUserToWikiTranslations {
     } else {
         # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
         # for .htpasswd authenticated sites ignore user list, but map only guest to TWikiGuest
-        @list = ( "\t* TWikiGuest - guest - " ); # CODE_SMELL on localization
+        @list = ( "\t* $TWiki::defaultWikiName - $TWiki::defaultUserName - " ); # CODE_SMELL on localization
     }
 
     # Get all entries with two '-' characters on same line, i.e.

@@ -962,7 +962,7 @@ sub getRenderedVersion {
         $line =~ s/^(\#)($TWiki::regex{wikiWordRegex})/ '<a name="' . $this->makeAnchorName( $2 ) . '"><\/a>'/geo;
 
         # enclose in white space for the regex that follow
-        $line =~ s/(.*)/\n$1\n/;
+        $line = "\n$line\n";
 
         # Emphasizing
         $line =~ s/([\s\(])==([^\s]+?|[^\s].*?[^\s])==([\s\,\.\;\:\!\?\)])/$1 . $this->_fixedFontText( $2, 1 ) . $3/ge;

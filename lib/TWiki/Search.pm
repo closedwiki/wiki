@@ -20,16 +20,6 @@
 # - Latest version at http://twiki.org/
 # - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
 # - Customize variables in TWiki.cfg when installing TWiki.
-#
-# 20000501 Kevin Kinnell  : Many many many changes, best view is to
-#                           run a diff.
-# 20000605 Kevin Kinnell  : Bug hunting.  Fixed to allow web colors
-#                           spec'd as "word" instead of hex only.
-#                           Found a lovely bug that screwed up the
-#                           search limits because Perl (as we all know
-#                           but may forget) doesn't clear the $n match
-#                           params if a match fails... *^&$#!!!
-# PTh 03 Nov 2000: Performance improvements
 
 =begin twiki
 
@@ -40,7 +30,9 @@ This module implements all the search functionality.
 =cut
 
 package TWiki::Search;
+
 use strict;
+use TWiki::Sandbox;
 
 # 'Use locale' for internationalisation of Perl sorting and searching - 
 # main locale settings are done in TWiki::setupLocale
@@ -200,8 +192,8 @@ sub getTextPattern
     my( $theText, $thePattern ) = @_;
 
     $thePattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
-    $thePattern =~ /(.*)/;     # untaint
-    $thePattern = $1;
+    $thePattern = TWiki::Sandbox::untaintUnchecked( $thePattern );
+
     my $OK = 0;
     eval {
        $OK = ( $theText =~ s/$thePattern/$1/is );
@@ -688,8 +680,7 @@ sub searchWeb
     # Loop through webs
     foreach my $thisWebName ( @webList ) {
         $thisWebName =~ s/$TWiki::securityFilter//go;
-        $thisWebName =~ /(.*)/;         # FIXME: untaint using webname regex
-        $thisWebName = $1;  # untaint variable
+        $thisWebName = TWiki::Sandbox::untaintUnchecked( $thisWebName );
 
         next unless $this->store()->webExists( $thisWebName );  # can't process what ain't thar
 

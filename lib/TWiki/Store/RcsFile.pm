@@ -33,6 +33,7 @@ use strict;
 use File::Copy;
 use File::Spec;
 use Time::Local;	# Added for revDate2EpSecs
+use TWiki::Sandbox;
 
 # ======================
 =pod
@@ -537,7 +538,7 @@ sub _makeFileName
    if( ! $extension ) {
       $extension = "";
    }
- 
+
    my $file = "";
    my $extra = "";
    my $web = $self->{"web"};
@@ -569,12 +570,8 @@ sub _makeFileName
       $file = "$dataDir/$web$extra/$topic$extension";
    }
 
-   # FIXME: Dangerous, need to make sure that parameters are not tainted
    # Shouldn't really need to untaint here - done to be sure
-   $file =~ /(.*)/;
-   $file = $1; # untaint
-   
-   return $file;
+   return TWiki::Sandbox::untaintUnchecked( $file );
 }
 
 # =========================
@@ -608,12 +605,8 @@ sub _makeFileDir
       $dir = "$pubDir/$web/$topic$suffix";
    }
 
-   # FIXME: Dangerous, need to make sure that parameters are not tainted
    # Shouldn't really need to untaint here - done to be sure
-   $dir =~ /(.*)/;
-   $dir = $1; # untaint
-   
-   return $dir;
+   return TWiki::Sandbox::untaintUnchecked( $dir );
 }
 
 # ======================
@@ -621,12 +614,10 @@ sub _makePubWebDir
 {
     my( $self ) = @_;
 
-    # FIXME: Dangerous, need to make sure that parameters are not tainted
     my $dir = $self->{pubDir} . "/" . $self->{web};
-    $dir =~ /(.*)/;
-    $dir = $1; # untaint
 
-    return $dir;
+    # FIXME: Dangerous, need to make sure that parameters are not tainted
+    return TWiki::Sandbox::untaintUnchecked( $dir );
 }
 
 sub _mkTmpFilename

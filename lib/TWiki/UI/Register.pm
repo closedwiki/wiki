@@ -370,8 +370,6 @@ sub register {
 
     $data{debug} = 1;
 
-    # a WikiName is safe, you get an insecure dependency without
-    # untaint. (Oct 2004)
     $data{WikiName} = TWiki::Sandbox::untaintUnchecked($data{WikiName});
 
     _validateRegistration( $session, \%data, $query, $topic );

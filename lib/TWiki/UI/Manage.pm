@@ -28,6 +28,7 @@ use strict;
 use TWiki;
 use TWiki::UI;
 use TWiki::User;
+use TWiki::Sandbox;
 use Error qw( :try );
 use TWiki::UI::OopsException;
 
@@ -163,20 +164,14 @@ sub createWeb {
     TWiki::UI::checkAccess( $session, $webName, $topicName,
                             "manage", $wikiUserName );
 
-    if( $newWeb =~ /^_[a-zA-Z0-9_]+$/ ) {
-        # valid template web name, untaint
-        $newWeb =~ /(.*)/;
-        $newWeb = $1;
-    } elsif( TWiki::isValidWebName( $newWeb ) ) {
-        # valid web name, untaint
-        $newWeb =~ /(.*)/;
-        $newWeb = $1;
-    } elsif( $newWeb ) {
-        throw TWiki::UI::OopsException( "", "", $oopsTmpl,
-                                        _template("msg_web_name") );
-    } else {
-        throw TWiki::UI::OopsException( "", "", $oopsTmpl,
-                                        _template("msg_web_missing") );
+    unless( $newWeb ) {
+        throw TWiki::UI::OopsException
+          ( "", "", $oopsTmpl, _template("msg_web_missing") );
+    }
+
+    unless ( TWiki::isValidWebName( $newWeb, 1 )) {
+        throw TWiki::UI::OopsException
+          ( "", "", $oopsTmpl, _template( "msg_web_name" ));
     }
 
     if( $session->{store}->topicExists( $newWeb, $TWiki::mainTopicname ) ) {
@@ -185,8 +180,7 @@ sub createWeb {
     }
 
     $baseWeb =~ s/$TWiki::securityFilter//go;
-    $baseWeb =~ /(.*)/;
-    $baseWeb = $1;
+    $baseWeb = TWiki::Sandbox::untaintUnchecked( $baseWeb );
 
     unless( $session->{store}->topicExists( $baseWeb, $TWiki::mainTopicname ) ) {
         throw TWiki::UI::OopsException( "", "", $oopsTmpl,
@@ -271,8 +265,7 @@ sub _copyWebTopics
     }
     foreach my $topic ( @topicList ) {
         $topic =~ s/$TWiki::securityFilter//go;
-        $topic =~ /(.*)/;
-        $topic = $1;
+        $topic = TWiki::Sandbox::untaintUnchecked( $topic );
         $err = $session->{store}->copyTopicBetweenWebs( $theBaseWeb,
                                                     $topic, $theNewWeb );
         return( $err ) if( $err );

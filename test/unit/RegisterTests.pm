@@ -1,4 +1,4 @@
-package TestRegister;
+package RegisterTests;
 
 use TestCaseStdOutCapturer;
 use base qw(Test::Unit::TestCase);
@@ -94,7 +94,7 @@ sub register {
                                        'register'
                                       ]
                          });
-    my $session = initialise($query, "guest");
+    my $session = initialise($query, $TWiki::defaultUserName);
     TWiki::UI::Register::register(session=>$session,
                                       sendActivationCode=>1,
                                       tempUserDir=>$tempUserDir);
@@ -122,7 +122,7 @@ sub verify {
                                       ]
                          });
 
-    my $session = initialise($query, "guest");
+    my $session = initialise($query, $TWiki::defaultUserName);
 
     TWiki::UI::Register::verifyEmailAddress(
                                             session => $session,
@@ -150,7 +150,7 @@ sub finish {
                                       'verify'
                                      ]
                         });
-    my $session = initialise($query, "guest");
+    my $session = initialise($query, $TWiki::defaultUserName);
     try {
         TWiki::UI::Register::finish (
                                      session => $session,
@@ -265,7 +265,7 @@ sub test_resetPasswordNoPassword {
                          {
                           '.path_info' => '/'.$peopleWeb.'/WebHome',
                           'LoginName' => [
-                                          'TWikiGuest'
+                                          $TWiki::defaultWikiName
                                          ],
                           'TopicName' => [
                                           'ResetPassword'
@@ -432,7 +432,7 @@ Test User - $testUserWikiName - $userEmail
    * Password: mypassword
 EOM
 
-    my $session = initialise(new CGI(""), "guest");
+    my $session = initialise(new CGI(""), $TWiki::defaultUserName);
     $self->assert_equals( TWiki::UI::Register::_buildConfirmationEmail ($session, \%data,
                                                                         "%FIRSTLASTNAME% - %WIKINAME% - %EMAILADDRESS%\n\n%FORMDATA%",0), $expected);  
     
@@ -465,14 +465,14 @@ sub test_getUserByEitherLoginOrWikiName {
     my $session = initialise($query, 'guest');
 
     {
-        my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, "guest");
-        $self->assert_equals($w, "TWikiGuest");
-        $self->assert_equals($l, "guest");
+        my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, $TWiki::defaultUserName);
+        $self->assert_equals($w, $TWiki::defaultWikiName);
+        $self->assert_equals($l, $TWiki::defaultUserName);
     }
     {
-        my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, "TWikiGuest");
-        $self->assert_equals($w, "TWikiGuest");
-        $self->assert_equals($l, "guest");
+        my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, $TWiki::defaultWikiName);
+        $self->assert_equals($w, $TWiki::defaultWikiName);
+        $self->assert_equals($l, $TWiki::defaultUserName);
     }
     {
         my ($w, $l) = TWiki::UI::Register::_getUserByEitherLoginOrWikiName($session, "notfound");

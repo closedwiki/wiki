@@ -15,25 +15,16 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-=begin twiki
-
----+ TWiki:: Module
-
-This module handles Plugins loading, initialization and execution
-
-=cut
-
-package TWiki::Plugins;
-
 use strict;
 use TWiki;
 use TWiki::Sandbox;
 
-use vars qw ( $VERSION $SESSION );
+# Reference information for a single plugin
+package TWiki::Plugin;
 
-$VERSION = '1.026';
+use vars qw( @registrableHandlers );
 
-my @registrableHandlers =
+@registrableHandlers =
   (                                # VERSION:
    'earlyInitPlugin',              # 1.020
    'initPlugin',                   # 1.000
@@ -60,6 +51,168 @@ my @registrableHandlers =
    'renderWikiWordHandler',        # 1.023
   );
 
+sub new {
+    my ( $class, $session, $name ) = @_;
+    my $this = bless( {}, $class );
+
+    $name = TWiki::Sandbox::untaintUnchecked( $name );
+    $this->{name} = $name;
+    $this->{disabled} = 0;
+
+    unless ( $name =~ m/^[A-Za-z0-9_]+Plugin$/ ) {
+        push( @{$this->{errors}}, "$name - invalid name for plugin" );
+        $this->{disabled} = 1;
+    }
+
+    $this->{session} = $session;
+
+    return $this;
+}
+
+sub store { my $this = shift; return $this->{session}->{store}; }
+sub prefs { my $this = shift; return $this->{session}->{prefs}; }
+
+# Load and verify a plugin, invoking any early registration
+# handlers. Return the user resulting from the user handler call.
+sub load {
+    my ( $this ) = @_;
+
+    return if $this->{disabled};
+
+    # look for the plugin installation web (needed for attached files)
+    # in the order:
+    #   1 fully specified web.plugin
+    #   2 TWiki.plugin
+    #   3 Plugins.plugin
+    #   4 thisweb.plugin
+
+    my $web;
+    if ( $this->store()->topicExists( $TWiki::twikiWebname, $this->{name} ) ) {
+        # found plugin in TWiki web
+        $web = $TWiki::twikiWebname;
+    } elsif ( $this->store()->topicExists( "Plugins", $this->{name} ) ) {
+        # found plugin in Plugins web (compatibility, deprecated)
+        $web = "Plugins";
+    } elsif ( $this->store()->topicExists( $this->{session}->{webName},
+                                           $this->{name} ) ) {
+        # found plugin in current web
+        $web = $this->{session}->{webName};
+    } else {
+        # not found
+        push( @{$this->{errors}}, "Plugins: couldn't register $this->{name}, no plugin topic" );
+        $this->{web} = "(Not Found)";
+        $this->{disabled} = 1;
+        return undef;
+    }
+
+    $this->{web} = $web;
+
+    my $p = 'TWiki::Plugins::'.$this->{name};
+    #use Benchmark qw(:all :hireswallclock);
+    #my $begin = new Benchmark;
+    eval "use $p;";
+    if ($@) {
+        push( @{$this->{errors}}, "Plugin \"$p\" could not be loaded.  Errors were:\n----\n$@----" );
+        $this->{disabled} = 1;
+        return undef;
+    }
+
+    my $user;
+    my $sub = $p . '::earlyInitPlugin';
+    if( defined( &$sub ) ) {
+        # Set the session for this call stack
+        local $TWiki::Plugins::SESSION = $this->{session};
+        # Note that the earlyInitPlugin method is _never called_. Not sure why
+        # it exists at all!
+        $sub = $p. '::initializeUserHandler';
+        no strict 'refs';
+        $user = &$sub( $this->{session}->{remoteUser},
+                       $this->{session}->{url},
+                       $this->{session}->{pathInfo} );
+        use strict 'refs';
+    }
+    #print STDERR "Compile $p: ".timestr(timediff(new Benchmark, $begin))."\n";
+
+    return $user;
+}
+
+# invoke plugin initialisation and register handlers.
+sub registerHandlers {
+    my ( $this, $plugins ) = @_;
+
+    return if $this->{disabled};
+
+    my $p = "TWiki::Plugins::" . $this->{name};
+    my $sub = $p . "::initPlugin";
+    if( ! defined( &$sub ) ) {
+        push( @{$this->{errors}}, "$sub is not defined");
+        $this->{disabled} = 1;
+        return;
+    }
+
+    $this->prefs()->getPrefsFromTopic( $this->{web}, $this->{name},
+                                       uc( $this->{name} ) . "_");
+
+    # Set the session for this call stack
+    local $TWiki::Plugins::SESSION = $this->{session};
+
+    no strict 'refs';
+    my $status = &$sub( $TWiki::Plugins::SESSION->{topicName},
+                        $TWiki::Plugins::SESSION->{webName},
+                        $TWiki::Plugins::SESSION->{userName},
+                        $this->{web} );
+    use strict 'refs';
+
+    unless( $status ) {
+        push( @{$this->{errors}}, "$p\::initPlugin did not return true ($status)" );
+        $this->{disabled} = 1;
+        return;
+    }
+
+    foreach my $h ( @registrableHandlers ) {
+        my $sub = $p.'::'.$h;
+        push( @{$plugins->{registeredHandlers}{$h}}, $sub )
+          if( defined( &$sub ));
+    }
+}
+
+sub getVersion {
+    my $this = shift;
+
+    no strict 'refs';
+    return ${"TWiki::Plugins::$this->{name}::VERSION"};
+    use strict 'refs';
+}
+
+sub getDescription {
+    my $this = shift;
+
+    return "" if $this->{disabled};
+
+    unless( $this->{description} ) {
+        my $pref = uc( $this->{name} ) . "_SHORTDESCRIPTION";
+        $this->{description} = $this->prefs()->getPreferencesValue( $pref );
+    }
+
+    return "\t\* $this->{web}.$this->{name}: $this->{description}\n";
+}
+
+=pod
+
+---+ TWiki::Plugins Module
+
+This module defines the singleton object that handles Plugins
+loading, initialization and execution
+
+=cut
+
+package TWiki::Plugins;
+
+use vars qw ( $VERSION $SESSION $inited );
+
+$VERSION = '1.026';
+$inited = 0;
+
 my %onlyOnceHandlers =
   ( initializeUserHandler          => 1,
     registrationHandler            => 1,
@@ -71,14 +224,12 @@ my %onlyOnceHandlers =
     renderWikiWordHandler          => 1,
   );
 
-sub users { my $this = shift; return $this->{session}->{users}; }
-sub store { my $this = shift; return $this->{session}->{store}; }
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
-
 =pod
 
 ---++ sub new( $session )
-Construct new singleton plugins engine object
+Construct new singleton plugins engine object. The object is a contained for
+a list of plugins and a set of handlers registered by each plugin. The plugins
+and the handlers are carefully ordered.
 
 =cut
 
@@ -89,12 +240,24 @@ sub new {
 
     $this->{session} = $session;
 
+    unless( $inited ) {
+        TWiki::registerTagHandler( "PLUGINDESCRIPTIONS",
+                                   \&_handlePLUGINDESCRIPTIONS );
+        TWiki::registerTagHandler( "ACTIVATEDPLUGINS",
+                                   \&_handleACTIVATEDPLUGINS );
+        TWiki::registerTagHandler( "FAILEDPLUGINS",
+                                   \&_handleFAILEDPLUGINS );
+        $inited = 1;
+    }
+
     return $this;
 }
 
+sub prefs { my $this = shift; return $this->{session}->{prefs}; }
+
 =pod
 
----+ earlyInit()
+---+ load()
 Find all active plugins, and invoke the early initialisation.
 Has to be done _after_ prefs are read.
 
@@ -105,193 +268,114 @@ If disabled is set, no plugin handlers will be called.
 
 =cut
 
-sub earlyInit {
+sub load {
     my ( $this, $disabled ) = @_;
 
     my %disabledPlugins;
 
+    # SMELL: this module should not rely on the environment. This
+    # should be handled somewhere else. TWiki.pm?
     if( $ENV{'REDIRECT_STATUS'} && $ENV{'REDIRECT_STATUS'} eq '401' ) {
         # bail out if authentication failed
         return "";
     }
 
-    # Get INSTALLEDPLUGINS and DISABLEDPLUGINS variables
-    my $plugin = $this->prefs()->getPreferencesValue( "INSTALLEDPLUGINS" ) || "";
-    $plugin =~ s/[\n\t\s\r]+/ /go;
-    my @setInstPlugins = grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
-    $plugin = $this->prefs()->getPreferencesValue( "DISABLEDPLUGINS" ) || "";
-	foreach my $p (split( /,?\s+/ , $plugin)) {
-        if ( $p =~ /^.+Plugin$/ ) {
-            $p =~ s/^.*\.(.*)$/$1/;
-            $this->{disabledPlugins}{$p} = 1 if ( $p );
-        }
-	}
+    my $p;
+    my %lookup;
 
-    my @discoveredPlugins = _discoverPluginPerlModules();
-    my $p = "";
-    foreach $plugin ( @setInstPlugins ) {
-        $p = $plugin;
-        $p =~ s/^.*\.(.*)$/$1/o; # cut web
-        if( $p && !$this->{disabledPlugins}{$p} ) {
-            push( @{$this->{instPlugins}}, $plugin );
-        }
-    }
-    # append discovered plugin modules to installed plugin list
-    push( @{$this->{instPlugins}}, @discoveredPlugins );
-
-    # enable only specific plugins, for test and benchmarking
     my $query = $this->{session}->{cgiQuery};
+
+    my $debugEnablePlugins;
+    my $session = $this->{session};
+
     if ( $query ) {
-        my $debugEnablePlugins = $query->param( 'debugenableplugins' );
-        @{$this->{instPlugins}} = split( /[\, ]+/, $debugEnablePlugins )
-          if( $debugEnablePlugins );
+        $debugEnablePlugins = $query->param( 'debugenableplugins' );
+    }
+
+    if ( defined( $debugEnablePlugins )) {
+        # enable only specific plugins, for test and benchmarking
+        foreach $p ( grep { /^[A-Za-z0-9_]+Plugin$/ }
+                     split( /[,\s]+/, $debugEnablePlugins )) {
+            $p =~ s/\.([^.]+)$/$1/;
+            unless( $lookup{$p} ) {
+                push( @{$this->{plugins}}, $lookup{$p} =
+                      new TWiki::Plugin( $session, $p ) );
+            }
+        }
+    } else {
+        # user-requested plugins
+        my $installed = $this->prefs()->getPreferencesValue( "INSTALLEDPLUGINS" ) || "";
+        foreach $p ( grep { /^[A-Za-z0-9_]+Plugin$/ }
+                     split( /[,\s]+/ , $installed )) {
+            $p =~ s/\.([^.]+)$/$1/;
+            unless( $lookup{$p} ) {
+                push( @{$this->{plugins}}, $lookup{$p} =
+                      new TWiki::Plugin( $session, $p ) );
+            }
+        }
+
+        # implicitly requested plugins
+        foreach $p ( grep { /^[A-Za-z0-9_]+Plugin$/ }
+                     split( /[,\s]+/ ,_discoverPluginPerlModules()) ) {
+            unless( $lookup{$p} ) {
+                push( @{$this->{plugins}}, $lookup{$p} =
+                      new TWiki::Plugin( $session, $p ) );
+            }
+        }
+
+        my $disabled = $this->prefs()->getPreferencesValue( "DISABLEDPLUGINS" ) || "";
+        foreach $p ( grep { /^[A-Za-z0-9_]+Plugin$/ }
+                     split( /[,\s]+/ , $disabled )) {
+            if ( $p =~ /^.+Plugin$/ ) {
+                $p =~ s/\.([^.]+)$/$1/;
+                push( @{$this->{errors}}, "Disabled in DISABLEDPLUGINS" );
+                $lookup{$p}->{disabled} = 1 if $lookup{$p};
+            }
+        }
     }
 
     my $user;
-    return $user if( $disabled );
-
-    my %reg = ();
-    foreach my $plugin ( @{$this->{instPlugins}} ) {
-        my $p = $plugin;
-        $p =~ s/^.*\.(.*)$/$1/o; # cut web
-        unless( $this->{disabledPlugins}{$p} || $reg{$p} ) {
-            $user = $this->_earlyRegister( $p );
-            $reg{$p} = 1;
+    foreach my $p ( @{$this->{plugins}} ) {
+        if ( $disabled ) {
+            # all plugins are disabled
+            push( @{$this->{errors}}, "all plugins are disabled" );
+            $p->{disabled} = 1;
+        } else {
+            $user = $p->load();
         }
     }
 
     return $user;
+}
+
+sub _discoverPluginPerlModules {
+    my $libDir = TWiki::getTWikiLibDir();
+    my @modules = ();
+    if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
+        @modules = map{ s/\.pm$//i; $_ }
+                   sort
+                   grep /^[A-Za-z0-9_]+Plugin\.pm$/, readdir DIR;
+        closedir( DIR );
+    }
+    return join(",", @modules);
 }
 
 =pod
 
----++ sub lateInit($disabled)
+---++ sub enable()
 
-Initialisation that is done is done after the user is known.
-If $disabled is set no handlers will be called.
+Initialisation that is done after the user is known.
 
 =cut
 
-sub lateInit {
-    my ( $this, $disabled ) = @_;
-
-    return if $disabled;
-
-    my $p = "";
-    my $plugin = "";
-    foreach $plugin ( @{$this->{instPlugins}} ) {
-        $p = $plugin;
-        $p =~ s/^.*\.(.*)$/$1/o; # cut web
-        unless( $this->{disabledPlugins}{$p} ) {
-            $this->_lateRegister( $p );
+sub enable {
+    my $this = shift;
+    foreach my $plugin ( @{$this->{plugins}} ) {
+        $plugin->registerHandlers( $this );
+        # Report initialisation errors
+        if ( $plugin->{errors} ) {
+            $this->{session}->writeWarning( join( "\n", @{$plugin->{errors}} ));
         }
-    }
-}
-
-# Load and verify a plugin, invoking any early registration
-# handlers
-sub _earlyRegister {
-    my ( $this, $plugin ) = @_;
-
-    # look for the plugin installation web (needed for attached files)
-    # in the order:
-    #   1 fully specified web.plugin
-    #   2 TWiki.plugin
-    #   3 Plugins.plugin
-    #   4 thisweb.plugin
-
-    if( $this->{installWeb}{$plugin} ) {
-        # Plugin is already registered
-        return undef;
-    }
-
-    if ( $plugin =~ m/^[A-Za-z0-9_]+Plugin$/ ) {
-        $plugin = TWiki::Sandbox::untaintUnchecked($plugin);
-    } else {
-        $this->_initialisationError("$plugin - invalid name for plugin");
-        return undef;
-    }
-
-    my $web;
-    if ( $this->store()->topicExists( $TWiki::twikiWebname, $plugin ) ) {
-        # found plugin in TWiki web
-        $web = $TWiki::twikiWebname;
-    } elsif ( $this->store()->topicExists( "Plugins", $plugin ) ) {
-        # found plugin in Plugins web (compatibility, deprecated)
-        $web = "Plugins";
-    } elsif ( $this->store()->topicExists( $this->{session}->{webName},
-                                           $plugin ) ) {
-        # found plugin in current web
-        $web = $this->{session}->{webName};
-    } else {
-        # not found
-        $this->_initialisationError( "Plugins: couldn't register $plugin, no plugin topic" );
-        $this->{installWeb}{$plugin} = "(Not Found)";
-        return;
-    }
-
-    $this->{installWeb}{$plugin} = $web;
-
-    my $p = 'TWiki::Plugins::'.$plugin;
-    #use Benchmark qw(:all :hireswallclock);
-    #my $begin = new Benchmark;
-    eval "use $p;";
-    if ($@) {
-        $this->_initialisationError("Plugin \"$plugin\" could not be loaded.  Errors were:\n----\n$@----");
-        return undef;
-    }
-
-    my $user;
-    my $sub = $p . '::earlyInitPlugin';
-    if( defined( &$sub ) ) {
-        local $SESSION = $this->{session};
-        # Note that the earlyInitPlugin method is _never called_. Not sure why
-        # it exists at all!
-        $sub = $p. '::initializeUserHandler';
-        no strict 'refs';
-        $user = &$sub( $this->{session}->{remoteUser},
-                       $this->{session}->{url},
-                       $this->{session}->{pathInfo} );
-        use strict 'refs';
-    }
-    #print STDERR "Compile $plugin: ".timestr(timediff(new Benchmark, $begin))."\n";
-
-    return $user;
-}
-
-# invoke plugin initialisation handlers, and register all
-# handlers.
-sub _lateRegister {
-    my ( $this, $plugin ) = @_;
-
-    my $p = "TWiki::Plugins::" . $plugin;
-    my $sub = $p . "::initPlugin";
-    if( ! defined( &$sub ) ) {
-        $this->_initialisationError("$sub is not defined");
-        return undef;
-    }
-
-    $this->prefs()->getPrefsFromTopic( $this->{installWeb}{$plugin}, $plugin,
-                                       uc( $plugin ) . "_");
-
-    local $SESSION = $this->{session};
-
-    no strict 'refs';
-    my $status = &$sub( $this->{session}->{topicName},
-                        $this->{session}->{webName},
-                        $this->{session}->{userName},
-                        $this->{installWeb}{$plugin} );
-    use strict 'refs';
-
-    if( $status ) {
-        foreach my $h ( @registrableHandlers ) {
-            $sub = $p.'::'.$h;
-            push( @{$this->{registeredHandlers}{$h}}, $sub )
-              if( defined( &$sub ));
-        }
-        push( @{$this->{activePlugins}}, $plugin );
-    } else {
-        $this->_initialisationError("$p\::initPlugin did not return true ($status)");
     }
 }
 
@@ -310,40 +394,20 @@ sub getPluginVersion {
 
     return $VERSION unless $thePlugin;
 
-    foreach my $plugin ( @{$this->{activePlugins}} ) {
-        if( $plugin eq $thePlugin ) {
-            no strict 'refs';
-            return ${"TWiki::Plugins::${plugin}::VERSION"};
-            use strict 'refs';
+    foreach my $plugin ( @{$this->{plugins}} ) {
+        if( $plugin->{name} eq $thePlugin ) {
+            last if ( $plugin->{disabled} );
+            return $plugin->getVersion();
         }
     }
     return 0;
 }
 
-sub _discoverPluginPerlModules {
-    my $libDir = TWiki::getTWikiLibDir();
-    my @plugins = ();
-    my @modules = ();
-    if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
-        @modules = map{ s/\.pm$//i; $_ }
-                   sort
-                   grep /.+Plugin\.pm$/i, readdir DIR;
-        push( @plugins, @modules );
-        closedir( DIR );
-    }
-    return @plugins;
-}
-
-sub _initialisationError {
-   my( $this, $error ) = @_;
-   $this->{initialisationErrors} .= $error."\n";
-   $this->{session}->writeWarning( $error );
-}
-
+# apply named handler
 sub _applyHandlers {
-    my( $this, $handlerName ) = @_;
-
-    return undef if( $TWiki::disableAllPlugins );
+    # must be shifted to clear parameter vector
+    my $this = shift;
+    my $handlerName = shift;
 
     my $status;
     foreach my $handler ( @{$this->{registeredHandlers}{$handlerName}} ) {
@@ -361,55 +425,54 @@ sub _applyHandlers {
 }
 
 # %FAILEDPLUGINS reports reasons why plugins failed to load
+# note this is invoked with the session as the first parameter
 sub _handleFAILEDPLUGINS {
-    my $this = shift;
+    my $this = shift->{plugins};
     my $text;
 
     $text .= "---++ Plugins defined\n";
 
-    foreach my $plugin (@{$this->{instPlugins}}) {
-        $text .= "\t* $plugin\n";
+    foreach my $plugin ( @{$this->{plugins}} ) {
+        $text .= "\t* <nop>$plugin->{name}";
+        if ( $plugin->{disabled} && $plugin->{errors}) {
+            $text .= " DISABLED\n---+++ Errors\n<verbatim>\n" .
+              join( "\n", @{$plugin->{errors}} ) . "\n</verbatim>";
+        }
+        $text .= "\n";
     }
 
     $text.="\n\n";
 
-    foreach my $handler (@registrableHandlers) {
+    foreach my $handler (@TWiki::Plugin::registrableHandlers) {
         $text .= "| $handler |";
-        $text .= "| $handler | ";
         if ( defined( $this->{registeredHandlers}{$handler} ) ) {
             $text .= join "<br />", @{$this->{registeredHandlers}{$handler}};
         }
         $text .= " |\n";
     }
 
-    my $err = $this->{initialisationErrors};
-    $err = "None" unless $err;
-    $text .= "<br />\n---++ Errors\n<verbatim>\n$err\n</verbatim>\n";
-
     return $text;
 }
 
+# note this is invoked with the session as the first parameter
 sub _handlePLUGINDESCRIPTIONS {
-    my $this = shift;
+    my $this = shift->{plugins};
     my $text = "";
-    my $line = "";
-    my $pref = "";
-    foreach my $plugin ( @{$this->{activePlugins}} ) {
-        $pref = uc( $plugin ) . "_SHORTDESCRIPTION";
-        $line = $this->prefs()->getPreferencesValue( $pref );
-        if( $line ) {
-            $text .= "\t\* $this->{installWeb}{$plugin}.$plugin: $line\n"
-        }
+    foreach my $plugin ( @{$this->{plugins}} ) {
+        $text .= $plugin->getDescription();
     }
 
     return $text;
 }
 
+# note this is invoked with the session as the first parameter
 sub _handleACTIVATEDPLUGINS {
-    my $this = shift;
+    my $this = shift->{plugins};
     my $text = "";
-    foreach my $plugin ( @{$this->{activePlugins}} ) {
-	  $text .= "$this->{installWeb}{$plugin}.$plugin, ";
+    foreach my $plugin ( @{$this->{plugins}} ) {
+        unless( $plugin->{disabled} ) {
+            $text .= "$plugin->{web}.$plugin->{name}, ";
+        }
     }
     $text =~ s/\,\s*$//o;
     return $text;
@@ -458,9 +521,6 @@ sub commonTagsHandler {
     #my( $text, $topic, $theWeb ) = @_;
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     $this->_applyHandlers( 'commonTagsHandler', @_ );
-    $_[0] =~ s/%PLUGINDESCRIPTIONS%/$this->_handlePLUGINDESCRIPTIONS()/geo;
-    $_[0] =~ s/%ACTIVATEDPLUGINS%/$this->_handleACTIVATEDPLUGINS()/geo;
-    $_[0] =~ s/%FAILEDPLUGINS%/$this->_handleFAILEDPLUGINS()/geo;
 }
 
 =pod
@@ -733,21 +793,11 @@ sub setSessionValueHandler {
 | Parameter: =$possibleValues= | the values defined as options for form field, if any |
 | Return: =$text=  | HTML text that renders this field. If false, form rendering continues by considering the built-in types. |
 
-<pre>
-   if ( is_type1($type) ) {
-      $ret = compute_formating_for_type1();
-   } elsif ( is_type2($type) ) {
-      $ret = compute_formating_for_type2();
-   } ...
-   clean_up_if_necessary($ret);
-   return $ret;
-</pre>
-
-Note that a common application would be to generate formatting of the 
-field involving generation of javascript. Such usually also requires 
-the insertion of some common javascript into the page header. Unfortunately, 
-there is currently no mechanism to pass that script to where the header of 
-the page is visible. Consequentially, the common javascript will have to
+Note that a common application would be to generate formatting of the
+field involving generation of javascript. Such usually also requires
+the insertion of some common javascript into the page header. Unfortunately,
+there is currently no mechanism to pass that script to where the header of
+the page is visible. Consequentially, the common javascript may have to
 be emitted as part of the field formatting and might be duplicated many
 times throughout the page.
 
@@ -763,7 +813,7 @@ sub renderFormFieldForEditHandler {
 
 ---++ sub renderWikiWordHandler ()
 
-Called by TWiki::internalLink to change how a WikiWord is rendered
+Change how a WikiWord is rendered
 
 Originated from the TWiki:Plugins.SpacedWikiWordPlugin hack
 
@@ -774,6 +824,5 @@ sub renderWikiWordHandler {
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki::Plugins=HASH/;
     return $this->_applyHandlers( 'renderWikiWordHandler', @_ );
 }
-
 
 1;

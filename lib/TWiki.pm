@@ -43,7 +43,8 @@ require 5.005;		# For regex objects and internationalisation
 
 # TWiki config variables from TWiki.cfg. These should be regarded as constants.
 use vars qw(
-            $defaultUserName $wikiHomeUrl $defaultUrlHost
+            $defaultUserName $defaultWikiName
+            $wikiHomeUrl $defaultUrlHost
             $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir $logDir
             $siteWebTopicName $wikiToolName $securityFilter $uploadFilter
             $debugFilename $warningFilename $htpasswdFilename
@@ -71,11 +72,10 @@ use vars qw(
 
 # Other constants
 use vars qw(
-            $localeRegexes $siteLocale $siteCharsetOverride 
+            $localeRegexes $siteLocale $siteCharsetOverride
             $upperNational $lowerNational
             @isoMonth @weekDay $wikiversion
-            $TranslationToken $twikiLibDir $formatVersion
-            @publicWebList
+            $TranslationToken $twikiLibDir
             %regex
             %staticInternalTags
             %dynamicInternalTags
@@ -83,10 +83,10 @@ use vars qw(
             $langAlphabetic
            );
 
-# The singleton "twiki" object instance and exporter bits
-use vars qw( $T );
-
 $wikiversion = '12 Dec 2004 $Rev$';
+
+# SMELL: should this be part of the config?
+$defaultWikiName = "TWikiGuest";
 
 # (new variables must be declared in "use vars qw(..)" above)
 @isoMonth = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
@@ -95,12 +95,6 @@ $wikiversion = '12 Dec 2004 $Rev$';
 # Token character that must not occur in any normal text - converted
 # to a flag character if it ever does occur (very unlikely)
 $TranslationToken= "\0";	# Null not allowed in charsets used with TWiki
-
-# The following are also initialized in initialize, here for cases where
-# initialize not called.
-@publicWebList = ();
-
-$formatVersion = "1.0";
 
 # STATIC locale setup - If $useLocale is set, this function parses
 # $siteLocale from TWiki.cfg and passes it to the POSIX::setlocale
@@ -451,7 +445,10 @@ Return value: ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir )
 
 STATIC Constructs a new singleton session instance.
 
-DEPRECATED maintained for script compatibility
+DEPRECATED maintained for script compatibility. Note that if a plugin
+uses this method and then calls a Func method, the Func method will use
+the session object in place when the plugin handler was invoked, and
+_will not_ re-initialise twiki.
 
 =cut
 
@@ -459,6 +456,9 @@ sub initialize {
     my ( $pathInfo, $theRemoteUser, $topic, $theUrl, $theQuery ) = @_;
 
     my $twiki = new TWiki( $pathInfo, $theRemoteUser, $topic, $theUrl, $theQuery );
+
+    # Attempt to force the new session into the plugins context. This may not work.
+    $TWiki::Plugins::SESSION = $twiki;
 
     return ( $twiki->{topicName}, $twiki->{webName}, $twiki->{scriptUrlPath},
              $twiki->{userName}, $dataDir );
@@ -733,12 +733,16 @@ sub isValidAbbrev {
 
 ---++ isValidWebName (  $name  )
 
-STATIC Check for a valid web name
+STATIC Check for a valid web name. If $system is true, then
+system web names are considered valid (names startingn with _)
+otherwise only user web names are valid
 
 =cut
 
 sub isValidWebName {
     my $name = shift || "";
+    my $sys = shift;
+    return 1 if ( $sys && $name =~ m/^$regex{defaultWebNameRegex}$/o );
     return ( $name =~ m/^$regex{webNameRegex}$/o )
 }
 
@@ -1120,8 +1124,7 @@ Apply a pattern on included text to extract a subset
 sub applyPatternToIncludedText {
     my( $theText, $thePattern ) = @_;
     $thePattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/g;  # escape some special chars
-    $thePattern =~ /(.*)/;     # untaint
-    $thePattern = $1;
+    $thePattern = TWiki::Sandbox::untaintUnchecked( $thePattern );
     $theText = "" unless( $theText =~ s/$thePattern/$1/is );
     return $theText;
 }
@@ -1313,8 +1316,8 @@ sub _handleINCLUDE {
     }
 
     # set include web/filenames and current web/filenames
-    $this->{SESSION}{INCLUDINGWEB} = $theWeb;
-    $this->{SESSION}{INCLUDINGTOPIC} = $theTopic;
+    $this->{SESSION_TAGS}{INCLUDINGWEB} = $theWeb;
+    $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $theTopic;
     if( $fileName =~ s/\/([^\/]*)\/([^\/]*)\.txt$/$1/ ) {
         # identified "/Web/TopicName.txt" filename, e.g. a Wiki topic
         # so save the current web and topic name
@@ -1502,15 +1505,15 @@ sub formatTime  {
     }
 
     $value = $formatString;
-    $value =~ s/\$sec[o]?[n]?[d]?[s]?/sprintf("%.2u",$sec)/geoi;
-    $value =~ s/\$min[u]?[t]?[e]?[s]?/sprintf("%.2u",$min)/geoi;
-    $value =~ s/\$hou[r]?[s]?/sprintf("%.2u",$hour)/geoi;
+    $value =~ s/\$seco?n?d?s?/sprintf("%.2u",$sec)/geoi;
+    $value =~ s/\$minu?t?e?s?/sprintf("%.2u",$min)/geoi;
+    $value =~ s/\$hour?s?/sprintf("%.2u",$hour)/geoi;
     $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
     my @weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
     $value =~ s/\$wday/$weekDay[$wday]/geoi;
-    $value =~ s/\$mon[t]?[h]?/$isoMonth[$mon]/goi;
+    $value =~ s/\$mont?h?/$isoMonth[$mon]/goi;
     $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
-    $value =~ s/\$yea[r]?/sprintf("%.4u",$year+1900)/geoi;
+    $value =~ s/\$year?/sprintf("%.4u",$year+1900)/geoi;
     $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
 
 #TODO: how do we get the different timezone strings (and when we add usertime, then what?)
@@ -1731,18 +1734,18 @@ sub getPublicWebList {
     my $this = shift;
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
 
-    if( ! @publicWebList ) {
+    if( ! @{$this->{publicWebList}} ) {
         my @list = $this->{store}->getAllWebs();
         my $item = "";
         my $hidden = "";
         foreach $item ( @list ) {
             $hidden = $this->{prefs}->getPreferencesValue( "NOSEARCHALL", $item );
             if( ( $item eq $this->{webName}  ) || ( ( ! $hidden ) && ( $item =~ /^[^\.\_]/ ) ) ) {
-                push( @publicWebList, $item );
+                push( @{$this->{publicWebList}}, $item );
             }
         }
     }
-    return @publicWebList;
+    return @{$this->{publicWebList}};
 }
 
 =pod
@@ -2043,14 +2046,15 @@ sub _expandAllTags {
     my $text = shift; # reference
     my ( $topic, $web ) = @_;
 
-    my $memTopic = $this->{SESSION}{TOPIC};
-    my $memWeb = $this->{SESSION}{WEB};
-    my $memEurl = $this->{SESSION}{EDITURL};
+    # push current context
+    my $memTopic = $this->{SESSION_TAGS}{TOPIC};
+    my $memWeb   = $this->{SESSION_TAGS}{WEB};
+    my $memEurl  = $this->{SESSION_TAGS}{EDITURL};
 
-    $this->{SESSION}{TOPIC} = $topic;
-    $this->{SESSION}{WEB} = $web;
+    $this->{SESSION_TAGS}{TOPIC}   = $topic;
+    $this->{SESSION_TAGS}{WEB}     = $web;
     # Make Edit URL unique - fix for RefreshEditPage.
-    $this->{SESSION}{EDITURL} =
+    $this->{SESSION_TAGS}{EDITURL} =
       "$dispScriptUrlPath/edit$scriptSuffix/$web/$topic\?t=" . time();
 
     # SMELL: why is this done every time, and not statically during
@@ -2071,9 +2075,10 @@ sub _expandAllTags {
     # course applies to _all_ tags and not just search.
     $$text = $this->_processTags( $$text, 16, "", @_ );
 
-    $this->{SESSION}{TOPIC} = $memTopic;
-    $this->{SESSION}{WEB} = $memWeb;
-    $this->{SESSION}{EDITURL} = $memEurl;
+    # restore previous context
+    $this->{SESSION_TAGS}{TOPIC}   = $memTopic;
+    $this->{SESSION_TAGS}{WEB}     = $memWeb;
+    $this->{SESSION_TAGS}{EDITURL} = $memEurl;
 }
 
 # Process TWiki %TAGS{}% by parsing the input tokenised into
@@ -2175,10 +2180,8 @@ sub _expandTag {
 
     my $res;
 
-    if ( defined( $this->{PREFS}{$tag} )) {
-        $res = $this->{PREFS}{$tag};
-    } elsif ( defined( $this->{SESSION}{$tag} )) {
-        $res = $this->{SESSION}{$tag};
+    if ( defined( $this->{SESSION_TAGS}{$tag} )) {
+        $res = $this->{SESSION_TAGS}{$tag};
     } elsif ( defined( $staticInternalTags{$tag} )) {
         $res = $staticInternalTags{$tag};
     } elsif ( defined( $dynamicInternalTags{$tag} )) {
@@ -2188,6 +2191,21 @@ sub _expandTag {
     }
 
     return ( defined( $res ), $res );
+}
+
+=pod
+
+---++ registerTagHandler( $fnref )
+
+STATIC Add a tag handler to the function tag handlers.
+| $tag | name of the tag e.g. MYTAG |
+| $fnref | Function to execute. Will be passed ($session, \%params, $web, $topic )
+
+=cut
+
+sub registerTagHandler {
+    my ( $tag, $fnref ) = @_;
+    $TWiki::dynamicInternalTags{$tag} = \&$fnref;
 }
 
 =pod
@@ -2218,10 +2236,10 @@ sub handleCommonTags {
     # Escape rendering: Change " !%VARIABLE%" to " %<nop>VARIABLE%", for final " %VARIABLE%" output
     $text =~ s/(\s)\!\%([A-Z])/$1%<nop>$2/g;
 
-    my $memW = $this->{SESSION}{INCLUDINGWEB};
-    my $memT = $this->{SESSION}{INCLUDINGTOPIC};
-    $this->{SESSION}{INCLUDINGWEB} = $theWeb;
-    $this->{SESSION}{INCLUDINGTOPIC} = $theTopic;
+    my $memW = $this->{SESSION_TAGS}{INCLUDINGWEB};
+    my $memT = $this->{SESSION_TAGS}{INCLUDINGTOPIC};
+    $this->{SESSION_TAGS}{INCLUDINGWEB} = $theWeb;
+    $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $theTopic;
 
     $this->_expandAllTags( \$text, $theTopic, $theWeb,
                         \@verbatim, $theProcessedTopics );
@@ -2233,8 +2251,8 @@ sub handleCommonTags {
     $this->_expandAllTags( \$text, $theTopic, $theWeb,
                         \@verbatim, $theProcessedTopics );
 
-    $this->{SESSION}{INCLUDINGWEB} = $memW;
-    $this->{SESSION}{INCLUDINGTOPIC} = $memT;
+    $this->{SESSION_TAGS}{INCLUDINGWEB} = $memW;
+    $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $memT;
 
     # "Special plugin tag" TOC hack
     $text =~ s/%TOC(?:{(.*?)})?%/$this->_TOC($text, $theTopic, $theWeb, $1)/ge;
@@ -2305,9 +2323,7 @@ sub new {
     $this->{url} = $url;
     $this->{pathInfo} = $pathInfo;
 
-    # Initialise per-this vars here rather than at start of module,
-    # so compatible with modPerl
-    @publicWebList = ();
+    @{$this->{publicWebList}} = ();
 
 	if ( # (-e $TWiki::htpasswdFilename ) && #<<< maybe
 		( $TWiki::htpasswdFormatFamily eq "htpasswd" ) ) {
@@ -2319,6 +2335,8 @@ sub new {
 	}
 
     # Make %ENV safer, preventing hijack of the search path
+    # SMELL: can this be done in a BEGIN block? Or is the environment
+    # set per-query?
     if( $safeEnvPath ) {
         $ENV{'PATH'} = $safeEnvPath;
     }
@@ -2331,28 +2349,26 @@ sub new {
     # initialize lib directory early because of later 'cd's
     getTWikiLibDir();
 
-    # initialize access control
     $this->{security} = new TWiki::Access( $this );
     die "ASSERT $this security from ".join(",",caller)."\n" unless $this->{security};
 
-    # initialize $webName and $topicName from URL
-    $this->{topicName} = "";
-    $this->{webName}   = "";
+    my $web = "";
     if( $topic ) {
-        if(( $topic =~ /^$regex{linkProtocolPattern}\:\/\//o ) && ( $this->{cgiQuery} ) ) {
+        if( $topic =~ /^$regex{linkProtocolPattern}\:\/\//o &&
+            $this->{cgiQuery} ) {
             # redirect to URI
             print $this->redirect( undef, $topic );
-            return; # should never return here
+            return;
         } elsif( $topic =~ /(.*)[\.\/](.*)/ ) {
             # is "bin/script?topic=Webname.SomeTopic"
-            $this->{webName}   = $1 || "";
-            $this->{topicName} = $2 || "";
-            # jump to WebHome if ""bin/script?topic=Webname."
-            $this->{topicName} = $mainTopicname if( $this->{webName} && ( ! $this->{topicName} ) );
-        } else {
-            # assume "bin/script/Webname?topic=SomeTopic"
-            $this->{topicName} = $topic;
+            $web   = $1 || "";
+            $topic = $2 || "";
+            # jump to WebHome if "bin/script?topic=Webname."
+            $topic = $mainTopicname if( $web && ! $topic );
         }
+        # otherwise assume "bin/script/Webname?topic=SomeTopic"
+    } else {
+        $topic = "";
     }
 
     # Clean up PATH_INFO problems, e.g.  Support.CobaltRaqInstall.  A valid
@@ -2364,36 +2380,39 @@ sub new {
     # Get the web and topic names from PATH_INFO
     if( $pathInfo =~ /\/(.*)[\.\/](.*)/ ) {
         # is "bin/script/Webname/SomeTopic" or "bin/script/Webname/"
-        $this->{webName}   = $1 || "" if( ! $this->{webName} );
-        $this->{topicName} = $2 || "" if( ! $this->{topicName} );
+        $web   = $1 || "" unless $web;
+        $topic = $2 || "" unless $topic;
     } elsif( $pathInfo =~ /\/(.*)/ ) {
         # is "bin/script/Webname" or "bin/script/"
-        $this->{webName}   = $1 || "" if( ! $this->{webName} );
+        $web   = $1 || "" unless $web;
     }
-    ( $this->{topicName} =~ /\.\./ ) && ( $this->{topicName} = $this->{mainTopicname} );
+
+    if ( $topic =~ /\.\./ ) {
+        $topic = $this->{mainTopicname};
+    }
 
     # Refuse to work with character sets that allow TWiki syntax
     # to be recognised within multi-byte characters.  Only allow 'oops'
     # page to be displayed (redirect causes this code to be re-executed).
-    if ( _invalidSiteCharset() and $url !~ m!$scriptUrlPath/oops! ) {  
+    if ( _invalidSiteCharset() and $url !~ m!$scriptUrlPath/oops! ) {
         $this->writeWarning( "Cannot use this multi-byte encoding ('$siteCharset') as site character encoding" );
         $this->writeWarning( "Please set a different character encoding in the \$siteLocale setting in TWiki.cfg." );
-        $url = $this->getOopsUrl( $this->{webName}, $this->{topicName}, "oopsbadcharset" );
+        $url = $this->getOopsUrl( $web, $topic, "oopsbadcharset" );
         print $this->redirect( undef, $url );
         return;
     }
+
+    $topic =~ s/$securityFilter//go;
+    $topic = $mainTopicname unless $topic;
+    $this->{topicName} = $topic;
+    $web   =~ s/$securityFilter//go;
+    $web = $mainWebname unless $web;
+    $this->{webName} = $web;
 
     # Convert UTF-8 web and topic name from URL into site charset 
     # if necessary - no effect if URL is not in UTF-8
     $this->_convertUtf8URLtoSiteCharset();
 
-    # Filter out dangerous or unwanted characters
-    $this->{topicName} =~ s/$securityFilter//go;
-    $this->{topicName} =~ /(.*)/;
-    $this->{topicName} = $1 || $mainTopicname;  # untaint variable
-    $this->{webName}   =~ s/$securityFilter//go;
-    $this->{webName}   =~ /(.*)/;
-    $this->{webName}   = $1 || $mainWebname;  # untaint variable
     $this->{scriptUrlPath} = $scriptUrlPath;
 
     # initialize $urlHost and $scriptUrlPath 
@@ -2415,27 +2434,29 @@ sub new {
     $this->{prefs} = new TWiki::Prefs( $this );
     die "ASSERT $this prefs from ".join(",",caller)."\n" unless $this->{prefs};
 
-    my $user = $this->{plugins}->earlyInit( $disableAllPlugins );
+    my $user = $this->{plugins}->load( $disableAllPlugins );
     unless( $user ) {
         $user = $this->{users}->initializeRemoteUser( $remoteUser );
     }
+
+    # cache user information in the session object
     $this->{userName} = $user;
     # i.e. "Main.JonDoa"
     $this->{wikiUserName} = $this->{users}->userToWikiName( $user );
 
     # Static session variables that can be expanded in topics when they
-    # are enclosed int %% signs
-    $this->{SESSION}{USERNAME}       = $this->{userName};
-    $this->{SESSION}{WIKINAME}       =
+    # are enclosed int % signs
+    $this->{SESSION_TAGS}{USERNAME}       = $this->{userName};
+    $this->{SESSION_TAGS}{WIKINAME}       =
       $this->{users}->userToWikiName( $this->{userName}, 1 );  # i.e. "JonDoe";
-    $this->{SESSION}{WIKIUSERNAME}   = $this->{wikiUserName};
-    $this->{SESSION}{BASEWEB}        = $this->{webName};
-    $this->{SESSION}{BASETOPIC}      = $this->{topicName};
-    $this->{SESSION}{INCLUDINGTOPIC} = $this->{topicName};
-    $this->{SESSION}{INCLUDINGWEB}   = $this->{webName};
-    $this->{SESSION}{ATTACHURL}      = "$this->{urlHost}%ATTACHURLPATH%";
-    $this->{SESSION}{PUBURL}         = $this->{urlHost}.$pubUrlPath;
-    $this->{SESSION}{SCRIPTURL}      = $this->{urlHost}.$dispScriptUrlPath;
+    $this->{SESSION_TAGS}{WIKIUSERNAME}   = $this->{wikiUserName};
+    $this->{SESSION_TAGS}{BASEWEB}        = $this->{webName};
+    $this->{SESSION_TAGS}{BASETOPIC}      = $this->{topicName};
+    $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $this->{topicName};
+    $this->{SESSION_TAGS}{INCLUDINGWEB}   = $this->{webName};
+    $this->{SESSION_TAGS}{ATTACHURL}      = "$this->{urlHost}%ATTACHURLPATH%";
+    $this->{SESSION_TAGS}{PUBURL}         = $this->{urlHost}.$pubUrlPath;
+    $this->{SESSION_TAGS}{SCRIPTURL}      = $this->{urlHost}.$dispScriptUrlPath;
 
     # initialize user preferences
     $this->{prefs}->initializeUser( $this->{wikiUserName}, $this->{topicName} );
@@ -2444,12 +2465,12 @@ sub new {
     die "ASSERT $this renderer from ".join(",",caller)."\n" unless $this->{renderer};
 
     # Finish plugin initialization - register handlers
-    $this->{plugins}->lateInit( $disableAllPlugins );
+    $this->{plugins}->enable();
 
     # Assumes all preferences values are set by now, which may well be false!
-    # It would be better to get the Prefs module to maintain this
-    # hash cache.
-    $this->{prefs}->loadHash( \%{$this->{PREFS}} );
+    # populate the session hash with prefs values. These always override
+    # default values of these tags, which is really a bad idea.
+    $this->{prefs}->loadHash( \%{$this->{SESSION_TAGS}} );
 
     return $this;
 }

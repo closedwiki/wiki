@@ -55,6 +55,10 @@ use strict;
 
 use Error qw(:try);
 
+use vars qw( $formatVersion );
+
+$formatVersion = "1.0";
+
 =pod
 
 ---++ sub new ()
@@ -329,7 +333,7 @@ sub addTOPICINFO {
        version => "1.$rev",
        date    => $time,
        author  => $user,
-       format  => $TWiki::formatVersion
+       format  => $formatVersion
       );
     $self->put( "TOPICINFO", @args );
 }

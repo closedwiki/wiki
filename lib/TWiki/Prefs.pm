@@ -72,7 +72,7 @@ is the topic to read user-level preferences from (Generally
 sub initializeUser {
     my( $this, $wikiname, $topic ) = @_;
 
-    $wikiname = "Main.TWikiGuest" unless $wikiname;
+    $wikiname = "$TWiki::mainWebname.$TWiki::defaultWikiName" unless $wikiname;
 
     if( $wikiname =~ /^(.*)\.(.*)$/ ) {
         my $webPrefs = $this->{WEBS}{$this->{WEBNAME}};
