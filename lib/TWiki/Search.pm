@@ -358,7 +358,7 @@ sub searchWeb
             foreach( @topicList ) {
                 $tempVal = $_;
                 my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal );
-                my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta, 1 );
+                my( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta, 1 );
                 $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
                 $topicRevNum{ $tempVal } = $revnum;
@@ -377,6 +377,35 @@ sub searchWeb
                              map { [ $topicRevUser{$_}, $_ ] }
                              @topicList;
     	    }
+
+        } elsif( $theOrder =~ m/^formfield\((.*)\)$/ ) {
+            # sort by TWikiForm field
+            my $sortfield = $1;
+            my %fieldVals= ();
+            # first we need to build the hashes for fields
+            foreach( @topicList ) {
+                $tempVal = $_;
+                my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal );
+                my( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta, 1 );
+                $topicRevUser{ $tempVal } = &TWiki::userToWikiName( $revuser );
+                $topicRevDate{ $tempVal } = $revdate;
+                $topicRevNum{ $tempVal } = $revnum;
+                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $tempVal, $thisWebName );
+                $fieldVals{ $tempVal } = getMetaFormField( $meta, $sortfield );
+            }
+ 
+            # sort by field, Schwartzian Transform
+            if( $revSort ) {
+                @topicList = map { $_->[1] }
+                sort {$b->[0] cmp $a->[0] }
+                map { [ $fieldVals{$_}, $_ ] }
+                @topicList;
+            } else {
+                @topicList = map { $_->[1] }
+                sort {$a->[0] cmp $b->[0] }
+                map { [ $fieldVals{$_}, $_ ] }
+                @topicList;
+            }
 
         } else {
             # sort by filename, Schwartzian Transform
@@ -463,14 +492,18 @@ sub searchWeb
                 $tempVal =~ s/([^\n])$/$1\n/gos;       # cut last trailing new line
                 $tempVal =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
                 $tempVal =~ s/\$web/$thisWebName/gos;
-                $tempVal =~ s/\$topic/$topic/gos;
+                $tempVal =~ s/\$topic[^\w]/$topic/gos;
                 $tempVal =~ s/\$locked/$locked/gos;
                 $tempVal =~ s/\$date/$revDate/gos;
                 $tempVal =~ s/\$isodate/&TWiki::revDate2ISO($revDate)/geos;
                 $tempVal =~ s/\$rev/1.$revNum/gos;
                 $tempVal =~ s/\$wikiusername/$revUser/gos;
                 $tempVal =~ s/\$username/&TWiki::wikiToUserName($revUser)/geos;
-
+# FIXME: Next to fix relative links before expanding full text:
+#                if( $tempVal =~ m/\$topictext/ ) {
+#                    ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic ) unless $text;
+#                    $tempVal =~ s/\$topictext/$text/gos;
+#                }
             } else {
                 $tempVal = $repeatText;
             }

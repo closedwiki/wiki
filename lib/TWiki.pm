@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "12 Jan 2002";
+$wikiversion      = "16 Feb 2002";
 
 # ===========================
 # read the configuration part
@@ -186,6 +186,7 @@ sub initialize
             $topicName = $theTopic;
         }
     }
+
     if( $thePathInfo =~ /\/(.*)\/(.*)/ ) {
         # is "bin/script/Webname/SomeTopic" or "bin/script/Webname/"
         $webName   = $1 || "" if( ! $webName );
