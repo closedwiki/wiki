@@ -24,7 +24,6 @@ function toggleShowHide( e )
 [[http://validator.w3.org/check/referer][XHTML Validator]]
 
 %INCLUDE{CreateNewTestCaseForm}%
-<form>
 
 <img src="%PUBURL%/TWiki/TWikiDocGraphics/recentchanges.gif" /> [[%SCRIPTURL%/changes%SCRIPTSUFFIX%/%WEB%/ Changes]]<br/>
 <img src="%PUBURL%/TWiki/TWikiDocGraphics/home.gif" /> [[%HOMETOPIC%][%WEB%]] &middot; [[WebTopicList][Topics]]<br/>
