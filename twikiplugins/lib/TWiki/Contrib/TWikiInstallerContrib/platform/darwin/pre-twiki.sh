@@ -1,5 +1,6 @@
 #!/bin/sh
 # pre-twiki.sh
+mkdir cgi-bin/
 cp downloads/releases/TWiki20040901.tar.gz install_twiki.cgi cgi-bin/
 chmod +x cgi-bin/install_twiki.cgi
 
