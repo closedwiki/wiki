@@ -27,7 +27,10 @@ sub fetchDistributionFile {
 	my ( $file, $distribution ) = @_;
 	$file =~ s!^twiki/!!;
 	my $fileUrl = $config{'serverUrl'}. "/" . $distribution . "/" . $file;
-	my $ans = $config{'saveFilename'};
+	my $webTopicBodge = $config{'saveTopic'};
+	$webTopicBodge =~ s!\.!/!;
+	my $attachmentPath = TWiki::Func::getPubDir()."/".$webTopicBodge."/".$config{'saveTopicAttachmentName'};
+	my $ans = $attachmentPath;
 	unless (mirror($fileUrl, $config{'saveFilename'})) {
 		TWiki::Func::writeWarning("Couldn't get $distribution:$file\n");
 		$ans = "Couldn't download";
