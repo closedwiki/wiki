@@ -1,5 +1,7 @@
 #!/usr/bin/perl -w
 
+require 5.008;
+
 use strict;
 
 use Test::Unit::Debug qw(debug_pkgs);

@@ -155,7 +155,7 @@ sub view {
           . "<h1>TWiki Installation Error</h1>\n"
             . "Template file view.tmpl not found or template directory \n"
               . "$TWiki::cfg{TemplateDir} not found.<p />\n"
-                . "Check the \$templateDir variable in TWiki.cfg.\n"
+                . "Check the configuration setting for TemplateDir\n"
                   . "</body></html>\n";
         $session->writeCompletePage( $mess );
         return;
@@ -312,10 +312,9 @@ sub viewfile {
     # (.doc, .xls... to .html) and show the html file.
     # Convert only if html file does not yet exist
     # for now, show the original document:
-
-    my $pubUrlPath = $TWiki::cfg{PubUrlPath};
+;
     my $host = $session->{urlHost};
-    $session->redirect( "$host$pubUrlPath/$webName/$topic/$fileName" );
+    $session->redirect( "$host$TWiki::cfg{PubUrlPath}/$webName/$topic/$fileName" );
 }
 
 sub _suffixToMimeType {

@@ -1,5 +1,7 @@
 # Smoke tests for TWiki::Store
 
+require 5.008;
+
 use strict;
 
 package StoreTests;
@@ -14,6 +16,10 @@ BEGIN {
 use TWiki;
 use TWiki::Meta;
 use Error qw( :try );
+use CGI;
+use TWiki::UI::Save;
+use TWiki::UI::OopsException;
+
 
 my $zanyweb = "ZanyTestZeebleWeb";
 
@@ -24,12 +30,20 @@ sub new {
 
 my $twiki;
 
+my $saveWF;
+my $saveLF;
+
 # Set up the test fixture
 sub set_up {
+    my $this = shift;
     mkdir "$TWiki::cfg{DataDir}/$zanyweb";
     chmod 0777, "$TWiki::cfg{DataDir}/$zanyweb";
     mkdir "$TWiki::cfg{PubDir}/$zanyweb";
     chmod 0777, "$TWiki::cfg{PubDir}/$zanyweb";
+    $saveWF = $TWiki::cfg{WarningFileName};
+    $TWiki::cfg{WarningFileName} = "/tmp/junk";
+    $saveLF = $TWiki::cfg{LogFileName};
+    $TWiki::cfg{LogFileName} = "/tmp/junk";
 
     my $web = $zanyweb;
     my $topic = "";
@@ -38,6 +52,8 @@ sub set_up {
     my $theUrl = "/save/$web/$topic";
 
     $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl );
+
+    $this->assert($TWiki::cfg{StoreImpl});
 
     # Make sure we have a TestUser1 and TestUser1 topic
     unless( $twiki->{store}->topicExists($TWiki::cfg{UsersWebName}, "TestUser1")) {
@@ -51,10 +67,12 @@ sub set_up {
 }
 
 sub tear_down {
-    `rm -rf $TWiki::cfg{DataDir}/$zanyweb`;
+    `rm -fr $TWiki::cfg{DataDir}/$zanyweb`;
     die "Could not clean fixture $?" if $!;
     `rm -rf $TWiki::cfg{PubDir}/$zanyweb`;
     die "Could not clean fixture $?" if $!;
+    $TWiki::cfg{WarningFileName} = $saveWF;
+    $TWiki::cfg{LogFileName} = $saveLF;
 }
 
 sub test_notopic {
@@ -218,10 +236,6 @@ sub test_rename() {
     $this->assert_num_equals($revTopShouldBe, $newRevTop );
 }
 
-use CGI;
-use TWiki::UI::Save;
-use TWiki::UI::OopsException;
-
 sub test_releaselocksonsave {
     my $this = shift;
     my $web = $zanyweb;
@@ -288,8 +302,8 @@ sub test_releaselocksonsave {
     my $text =  `cat $TWiki::cfg{DataDir}/$web/$topic.txt`;
     $this->assert_matches(qr/%META:TOPICINFO{author="TestUser2"/, $text);
     $this->assert_matches(qr/version="1.3"/, $text);
-    $this->assert_matches(qr/<del> Changed <\/del><ins> Sausage <\/ins>/, $text);
-    $this->assert_matches(qr/<del> Lines <\/del><ins> Chips <\/ins>/, $text);
+    $this->assert_matches(qr/<del>Changed<\/del><ins>Sausage<\/ins>/, $text);
+    $this->assert_matches(qr/<del>Lines<\/del><ins>Chips<\/ins>/, $text);
 
 }
 

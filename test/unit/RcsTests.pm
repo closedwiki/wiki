@@ -1,6 +1,7 @@
 # Tests for TWiki::Store::RcsLite and TWiki::Store::RcsWrap
 # JohnTalintyre
 # Ported to Test::Unit by CrawfordCurrie
+require 5.008;
 use strict;
 
 package RcsTests;
@@ -32,12 +33,19 @@ my $rTopic = "RcsLiteRTest";
 my $wTopic = "RcsLiteWTest";
 my $attachment = "it.doc";
 my $twiki;
+my $saveWF;
 
 sub set_up {
     my $this = shift;
     $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl );
+    $saveWF = $TWiki::cfg{WarningFileName};
+    $TWiki::cfg{WarningFileName} = "/tmp/junk";
     die unless $twiki;
     die unless $twiki->{prefs};
+}
+
+sub tear_down {
+    $TWiki::cfg{WarningFileName} = $saveWF;
 }
 
 # Get rid a topic and its attachments completely
@@ -47,8 +55,8 @@ sub mug {
     my $web = $self->{web};
     my $topic = $self->{topic};
 
-    my $rcsDirFile = "$TWiki::cfg{DataDir}/$web/RCS/$topic,v";
-    my @files = ( $self->{file}, $self->{rcsFile}, $rcsDirFile );
+    my $rcsFile = "$TWiki::cfg{DataDir}/$web/RCS/$topic,v";
+    my @files = ( $self->{file}, $self->{rcsFile}, $rcsFile );
     unlink( @files );
     $self->init();
     $self->{"head"} = 0;

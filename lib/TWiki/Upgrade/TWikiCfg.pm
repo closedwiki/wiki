@@ -160,7 +160,7 @@ sub upgradeConfig {
     $newf .= old2new($statsTopViews, "10",  "\$cfg{Stats][TopViews}" );
     $newf .= old2new($statsTopContrib, "10",  "\$cfg{Stats}{TopContrib}" );
     $newf .= old2new($numberOfRevisions, "3",  "\$cfg{NumberOfRevisions}" );
-    $newf .= old2new($editLockTime, "3600",  "\$cfg{EditLockTime}" );
+    $newf .= old2new($editLockTime, "",  "\$cfg{ReplaceIfEditedAgainWithin}" );
     $newf .= old2new($superAdminGroup, "TWikiAdminGroup",  "\$cfg{SuperAdminGroup}" );
     $newf .= old2new($doGetScriptUrlFromCgi, "0",  "\$cfg{GetScriptUrlFromCgi}" );
     $newf .= old2new($doRemovePortNumber, "0",  "\$cfg{RemovePortNumber}" );

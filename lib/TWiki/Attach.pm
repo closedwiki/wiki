@@ -14,16 +14,12 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-# Notes:
-# - Latest version at http://twiki.org/
-# - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
-# - Customize variables in TWiki.cfg when installing TWiki.
 
 =begin twiki
 
----+ TWiki::Attach Module
+---+ package TWiki::Attach
 
-This package contains routines for dealing with attachments to topics.
+A singleton object for dealing with attachments to topics.
 
 =cut
 

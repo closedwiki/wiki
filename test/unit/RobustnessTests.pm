@@ -1,4 +1,5 @@
 # Copyright (C) 2004 Florian Weimer
+require 5.008;
 use strict;
 
 package RobustnessTests;
@@ -128,11 +129,6 @@ sub test_buildCommandLine {
 
 sub test_execute {
     my $this = shift;
-    if ( $TWiki::cfg{OS} eq "UNIX" ) {
-        $this->assert_str_equals( "'", $TWiki::cfg{CmdQuote} );
-    } else {
-        $this->assert_str_equals( '"', $TWiki::cfg{CmdQuote} );
-    }
     $this->assert_deep_equals([" 1 2 "],
                               [$twiki->{sandbox}->readFromProcessArray('echo',
                                                            ' %A%  %B% ',

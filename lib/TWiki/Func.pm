@@ -44,6 +44,7 @@ package TWiki::Func;
 
 use strict;
 use Error qw( :try );
+use Assert;
 
 # =========================
 =pod
@@ -468,7 +469,7 @@ sub getTwikiWebname
 
 ---+++ getDefaultUserName( ) ==> $loginName
 
-| Description:         | Get default user name as defined in TWiki.cfg =$defaultUserName= |
+| Description:         | Get default user name as defined in the configuration as =DefaultUserLogin= |
 | Return: =$loginName= | Default user name, e.g. ="guest"= |
 | Since:               | TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
@@ -732,7 +733,8 @@ sub readTopicText
     } catch TWiki::AccessControlException with {
         $text = $TWiki::Plugins::SESSION->getOopsUrl
           ($web, $topic, "oopsaccessdenied" );
-    }
+    };
+
     return $text;
 }
 

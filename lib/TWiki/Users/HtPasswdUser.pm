@@ -14,14 +14,6 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-# Notes:
-# - Latest version at http://twiki.org/
-# - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
-# - Customize variables in TWiki.cfg when installing TWiki.
-# - Optionally change TWiki.pm for custom extensions of rendering rules.
-# - Upgrading TWiki is easy as long as you do not customize TWiki.pm.
-# - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
-#
 
 =begin twiki
 

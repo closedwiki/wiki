@@ -14,16 +14,10 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-# Notes:
-# - Latest version at http://twiki.org/
-# - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
-# - Customize variables in TWiki.cfg when installing TWiki.
-# - Optionally change TWiki.pm for custom extensions of rendering rules.
-# - Upgrading TWiki is easy as long as you do not customize TWiki.pm.
-# - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
+
 =begin twiki
 
----+ TWiki::Store Module
+---+ package TWiki::Store
 
 This module hosts the generic storage backend. This module should be the
 only module, anywhere, that knows that meta-data is stored interleaved
@@ -91,7 +85,8 @@ sub _getTopicHandler {
 
     $attachment = "" if( ! $attachment );
 
-    my $handlerName = "TWiki::Store::$TWiki::cfg{storeImpl}";
+    ASSERT($TWiki::cfg{StoreImpl});
+    my $handlerName = "TWiki::Store::$TWiki::cfg{StoreImpl}";
 
     return $this->{IMPL}->new( $this->{session}, $web, $topic,
                                $attachment );
@@ -849,7 +844,9 @@ sub _noHandlersSave {
         my $mtime1 = $topicHandler->getTimestamp();
         my $mtime2 = time();
 
-        if( abs( $mtime2 - $mtime1 ) < $TWiki::editLockTime ) {
+        if( abs( $mtime2 - $mtime1 ) <
+            $TWiki::cfg{ReplaceIfEditedAgainWithin} ) {
+
             my( $date, $revuser ) =
               $this->getRevisionInfo( $web, $topic, $currentRev,
                                undef, $topicHandler );
@@ -1325,7 +1322,6 @@ sub getTopicNames {
 
     $web = "" unless( defined $web );
 
-    # get list of all topics by scanning $dataDir
     opendir DIR, "$TWiki::cfg{DataDir}/$web" ;
     my @topicList = sort grep { s/\.txt$// } readdir( DIR );
     closedir( DIR );
@@ -1340,7 +1336,6 @@ sub getTopicNames {
 sub _getSubWebs {
     my( $this, $web ) = @_ ;
 
-    # get list of all subwebs by scanning $dataDir
     opendir DIR, "$TWiki::cfg{DataDir}/$web" ;
     my @tmpList = readdir( DIR );
     closedir( DIR );
@@ -1702,7 +1697,7 @@ sub searchInWebContent {
     my $program = "";
     # FIXME: For Cygwin grep, do something about -E and -F switches
     # - best to strip off any switches after first space in
-    # $egrepCmd etc and apply those as argument 1.
+    # EgrepCmd etc and apply those as argument 1.
     if( $type eq "regex" ) {
         # SMELL: this should be specific to the store implementation
         $program = $TWiki::cfg{EgrepCmd};

@@ -130,7 +130,7 @@ BEGIN {
     $cfg{NotifyTopicName} ||= $notifyTopicname;
     $cfg{SitePrefsTopicName} ||= $wikiPrefsTopicname;
     $cfg{WebPrefsTopicName} ||= $webPrefsTopicname;
-    $cfg{Stats}{Topicname} ||= $statisticsTopicname;
+    $cfg{Stats}{TopicName} ||= $statisticsTopicname;
     $cfg{Stats}{TopViews} ||= $statsTopViews;
     $cfg{Stats}{TopContrib} ||= $statsTopContrib;
     $cfg{NumberOfRevisions} ||= $numberOfRevisions;
@@ -179,85 +179,8 @@ BEGIN {
 
 
 # use strict;		# Recommended for mod_perl, enable for Perl 5.6.1 only
-			# Doesn't work well here, due to 'do "TWiki.cfg"'
+# Doesn't work well here, due to 'do "TWiki.cfg"'
 # use diagnostics;	# Debug only
-
-
-&main();
-
-
-sub checkBasicModules {
-    # Check whether basic CGI modules exist (some broken installations of
-    # Perl don't have this, even though they are standard modules), and warn user
-    my @basicMods = @_;
-
-    my $modMissing = 0;
-    my $mod;
-    foreach $mod (@basicMods) {
-        eval "use $mod";
-        if ($@) {
-            unless ($modMissing) {
-                print "Content-type: text/html\n\n";
-                print "<html><head><title>Perl Module(s) missing</title></head>\n";
-                print "<body>\n";
-                print "<h1>Perl Module(s) missing</h1>\n";
-            }
-            $modMissing = 1;
-            print "<p><b><font color=\"red\">Warning:</font></b> ";
-            print "Essential module <b>$mod</b> not installed - please check your Perl\n";
-            print "installation, including the setting of <b>\@INC</b>, and re-install Perl if necessary.</p>\n";
-        }
-    }
-    # If any critical modules missing, display @INC and give up 
-    if ($modMissing) {
-        print "<p><b>\@INC setting:</b><br /><tt> ";
-        print join "<br />\n", @INC;
-        print "</tt></p>\n";
-        print "</body>\n</html>\n";
-        exit;
-    }
-}
-
-sub LEFT {
-    my $text = join(" ",@_);
-    print "<tr valign='top'><th align='right'>$text";
-    print ":" if $text;
-    print "</th>\n";
-}
-
-sub LOWLEFT {
-    my $text = join(" ",@_);
-    print "<tr valign='top'><td align='right'>$text";
-    print ":" if $text;
-    print "</td>\n";
-}
-
-sub RIGHT {
-    print "<td>",join(" ",@_),"</td></tr>\n";
-}
-
-sub BOTH {
-    my $text = join(" ",@_);
-    print "<td valign='top' colspan='2'><b>$text</b></th></tr>\n";
-}
-
-sub BIGHEAD {
-    print BOTH("<hr><h3>",join(" ",@_),"</h3>");
-}
-
-sub NOTE {
-    return "<br /><font color='green'><b> Note: </font></b> ".join(" ",@_);
-}
-
-sub WARN {
-    return "<br /><font color='orange'><b> Warning:</b></font> ".join(" ",@_);
-}
-
-sub ERROR {
-    return "<br /><font color='red'><b> Error: </b></font> ".join(" ",@_);
-}
-
-sub main {
 
 my $perlverRequired = 5.00503;		# Oldest supported version of Perl
 my $perlverRequiredString = '5.005_03';
@@ -274,41 +197,71 @@ my $modPerlVersionRecommended = '1.99_12';
 
 my $rcsverRequired = 5.7;
 
-my @basicMods = qw( CGI CGI::Carp );	# Required for testenv to work
+# Required for testenv to work
+my %basicMods =
+  (
+   'CGI'       => "basic TWiki",
+   'CGI::Carp' => "basic TWiki"
+  );
 
-my @requiredMods = ( 			# Required for TWiki
-    	@basicMods,  
-	'File::Copy',
-	'File::Spec',
-	'FileHandle',
-    ); 
+my %requiredMods =
+  (
+   'File::Copy' => 'basic TWiki',
+   'File::Spec' => 'basic TWiki',
+   'FileHandle' => 'basic TWiki',
+  );
 
 # Required on non-Unix platforms (mainly Windows)
-my @requiredModsNonUnix = ( 
-	'Digest::SHA1', 	# For register script
-	'MIME::Base64', 	# For register script
-	'Net::SMTP',		# For registration emails and mailnotify
-   );
+my %requiredModsNonUnix =
+  (
+   'Digest::SHA1' => "register script",
+   'MIME::Base64' => "register script",
+   'Net::SMTP'    => "registration emails and mailnotify",
+  );
 
 # Optional modules on all platforms
-my @optionalMods = ( 
-	'Algorithm::Diff', 	# For RcsLite (CPAN)
-	'MIME::Base64', 	# For HTTP Authentication to proxies (CPAN)
-	'POSIX', 		# For I18N (core module)
-	'Encode', 		# For I18N conversions (core module in Perl 5.8)
-	'Unicode::MapUTF8', 	# For I18N conversions (CPAN)
-	'Unicode::Map', 	# For I18N conversions (CPAN)
-	'Unicode::Map8', 	# For I18N conversions (CPAN)
-	'Jcode', 		# For I18N conversions (CPAN)
-	'Digest::MD5',		# For MD5 encoded passwords in HtPasswdUser.pm
-   );
-
+my %optionalMods =
+  (
+   'MIME::Base64'     => "HTTP Authentication to proxies (CPAN)",
+   'POSIX'            => "I18N (core module) and Security",
+   'Digest::MD5'      => "MD5 encoded passwords",
+   'Encode'           => "I18N conversions (core module in Perl 5.8)",
+   'Unicode::MapUTF8' => "I18N conversions (CPAN)",
+   'Unicode::Map'     => "I18N conversions (CPAN)",
+   'Unicode::Map8'    => "I18N conversions (CPAN)",
+   'Jcode'            => "I18N conversions (CPAN)",
+  );
 
 $| = 1;                  # no buffering - FIXME: mod_perl issue?
 
+# Check whether basic CGI modules exist (some broken installations of
+# Perl don't have this, even though they are standard modules), and warn user
+my $modMissing = 0;
+my $mod;
+foreach $mod (keys %basicMods) {
+    eval "use $mod";
+    if ($@) {
+        unless ($modMissing) {
+            print "Content-type: text/html\n\n";
+            print "<html><head><title>Perl Module(s) missing</title></head>\n";
+            print "<body>\n";
+            print "<h1>Perl Module(s) missing</h1>\n";
+        }
+        $modMissing = 1;
+        print "<p><b><font color=\"red\">Warning:</font></b> ";
+        print "Essential module <b>$mod</b> not installed - please check your Perl\n";
+        print "installation, including the setting of <b>\@INC</b>, and re-install Perl if necessary.</p>\n";
+    }
+}
 
-# Check for modules required by this script
-&checkBasicModules( @basicMods );
+# If any critical modules missing, display @INC and give up 
+if ($modMissing) {
+    print "<p><b>\@INC setting:</b><br /><tt> ";
+    print join "<br />\n", @INC;
+    print "</tt></p>\n";
+    print "</body>\n</html>\n";
+    exit;
+}
 
 # Load CGI modules (run-time, after checking they are accessible)
 require CGI;
@@ -317,32 +270,27 @@ import CGI::Carp qw( fatalsToBrowser );
 
 my $query = new CGI;
 
-
-print "Content-type: text/html\n\n";
-print <<EOM;
-<html>
-<head><title>Test TWiki environment</title></head>
-<body>
-<h1>Test the environment for TWiki</h1>
-Please read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationGuide">TWikiInstallationGuide</a> for more information on TWiki installation.
-If your TWiki site is working, the front page should be <a href="view">right here</a>.
-EOM
+print $query->header(),
+  $query->start_html("Test TWiki environment"),
+  $query->h1("Test the environment for TWiki"),
+  "Please read the <a href='http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationGuide'>TWikiInstallationGuide</a> for more information on TWiki installation.
+If your TWiki site is working, the front page should be <a href='view'>right here</a>.";
 
 # TWiki.cfg was read earlier, in BEGIN block.
 # Check for broken TWiki.cfg and report any Perl error(s)
 if ($brokenTWikiCfg) {
     $brokenTWikiCfgError =~ s!\n!<br />\n!sg; 	# Format properly
-    print "<h3>Configuration error</h3>\n";
+    print $query->h3("Configuration error");
     print "<b><font color=\"red\">WARNING:</font></b> ";
     print "TWiki.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) relate to TWiki.cfg and should help locate the problem.<p />\n";
     print "$brokenTWikiCfgError\n";
-    
+
     # EARLY EXIT
-    print "</body></html>";
+    print $query->end_html();
     exit;
 }
 
-print "<table>\n";
+print $query->start_table();
 BIGHEAD("Environment variables");
 my $key;
 for $key ( sort keys %ENV ) {
@@ -488,12 +436,6 @@ $CGI::Carp::WRAP = $CGI::Carp::WRAP = 0;	# Avoid warnings...
 # Add to list of required modules if non-Unix, or MacOS X (detected by
 # Perl as 'Darwin') - $cfg{DetailedOS} is set in TWiki.cfg.
 $cfg{DetailedOS} ||= $cfg{DetailedOS};
-if ( defined $cfg{DetailedOS} and ($cfg{DetailedOS} =~ /darwin/i or $cfg{OS} ne 'UNIX') ) {
-    push @requiredMods,  @requiredModsNonUnix;
-} else {
-#these are optional on Unix
-    push @optionalMods,  @requiredModsNonUnix;
-}
 
 # Check that the TWiki.pm module can be found
 LEFT("TWiki module in \@INC path");
@@ -519,16 +461,25 @@ if ($twikiFound) {
     }
 }
 
+if ( defined $cfg{DetailedOS} and ($cfg{DetailedOS} =~ /darwin/i or $cfg{OS} ne 'UNIX') ) {
+    map { $requiredMods{$_} = $requiredModsNonUnix{$_} }
+      keys %requiredModsNonUnix;
+} else {
+    # these are optional on Unix
+    map { $optionalMods{$_} = $requiredModsNonUnix{$_} }
+      keys %requiredModsNonUnix;
+}
 
 # Check that each of the required Perl modules can be loaded, and
 # print its version number.
 BOTH("Required Perl modules");
 $n = "";
-foreach $mod (@requiredMods) {
+foreach $mod (keys %requiredMods) {
     eval "use $mod";
     if ($@) {
         LOWLEFT($mod);
-        RIGHT(ERROR("not installed"));
+        RIGHT(ERROR("not installed. Required for ",
+                    $requiredMods{$mod}));
     } else {
         my $mod_version;
         $mod_version = ${"${mod}::VERSION"};
@@ -557,12 +508,12 @@ foreach $mod (@requiredMods) {
 # print its version number.
 BOTH("Optional Perl modules");
 $n = "";
-foreach $mod (@optionalMods) {
+foreach $mod (keys %optionalMods) {
     eval "use $mod";
     LOWLEFT($mod);
     if ($@) {
-        RIGHT(WARN("not installed - check TWiki documentation to see",
-                   "if your configuration needs this module."));
+        RIGHT(WARN("not installed. May be required for",
+                   $optionalMods{$mod}));
     } else {
         my $mod_version = $ {"$ {mod}::VERSION"};
         RIGHT($mod_version);
@@ -571,7 +522,6 @@ foreach $mod (@optionalMods) {
 
 # All module checks done, OK to enable fatalsToBrowser
 import CGI::Carp qw( fatalsToBrowser );
-
 
 # PATH_INFO 
 LEFT("PATH_INFO<a name=\"PATH_INFO\">");
@@ -669,23 +619,6 @@ if( not $val ) {			# REQUEST_URI not set by IIS
 }
 RIGHT($n);
 
-sub checkdir {
-    my( $id, $dir, $descr, $file, $perms ) = @_;
-    LEFT("$id");
-    my $n = $dir;
-    if( $descr ) {
-        $n .= NOTE( $descr );
-    }
-    if( defined $file && !-e "$dir/$file" ) {
-        $n .= ERROR("Directory does not exist or file <tt>$file</tt> does not exist in this directory.");
-    } elsif( $perms =~ /w/ && ! testFileIsWritable( "$dir/testenv.test" ) ) {
-        $n .= ERROR("The directory must exist and be writable by the <b>$usr</b> user.");
-    } elsif( $perms !~ /w/ && testFileIsWritable( "$dir/testenv.test" ) ) {
-        $n .= WARN("Security issue: The directory should not be writable by the <b>$usr</b> user.");
-    }
-    RIGHT($n);
-}
-
 LEFT("PubUrlPath");
 RIGHT($cfg{PubUrlPath},
   NOTE("This must be the URL of the public directory.",
@@ -718,12 +651,10 @@ $logFile = $cfg{DebugFileName};
 checkdir( "DebugFileName",
           $logFile, undef, undef, "w" );
 
-$val = $cfg{MailProgram};
-$val =~ s/([^\s]*).*/$1/g;
-# Don't warn on Windows, as Net::SMTP is normally used
-
 LEFT("MailProgram");
 $n = $cfg{MailProgram};
+$val = $cfg{MailProgram};
+$val =~ s/\s.*$/$1/g;
 if( $cfg{OS} ne 'WINDOWS' && ! ( -e $val ) ) {
     $n .= WARN("Mail program <tt>$val</tt> not found. Check the path.");
 } elsif( $cfg{OS} ne 'WINDOWS' ) {
@@ -837,10 +768,6 @@ checkGnuVersion( $cfg{EgrepCmd}, "egrep", "used for regular expression searches"
 # Check that GNU fgrep is found in PATH
 checkGnuVersion( $cfg{FgrepCmd}, "fgrep", "used for non-regular expression searches" );
 
-# Check that GNU ls is found in PATH 
-# FIXME: GNU not really necessary - do a check that any version found in PATH.
-# checkGnuVersion( $lsCmd, "ls", "used to list files in TWiki versions earlier than 01 Sep 2004" );
-
 # Check that GNU diff is found in PATH
 checkGnuVersion( "diff", "diff", "used by RCS to compare files" );
 
@@ -854,7 +781,6 @@ if( $cfg{OS} eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
     # FIXME: Advice in this section should be reviewed and tested by people
     # using ActivePerl
     my $perl5shell = $ENV{'PERL5SHELL'} || '';
-    print "</td></tr>\n";
     LEFT("PERL5SHELL");
     $n = $perl5shell.
     NOTE("This environment variable is used by ActiveState and other",
@@ -952,14 +878,14 @@ if ( $showLocales ) {		# Only if TWiki.pm found
         $cfg{SiteCharsetOverride} = '';
     }
 
-    LEFT("\$siteCharset");
-    $n = $siteCharset.
-      NOTE("This value is derived from the site-wide locale setting.",
-         "It may have been overridden by SiteCharsetOverride (currently '",
-         $cfg{SiteCharsetOverride},
-         "'). It is used in TWiki's HTML pages and HTTP headers,",
-         "so it must be acceptable to web browsers even if it is different",
-         "to the locale-derived setting (e.g. 'euc-jp' instead of 'eucjp')");
+    LEFT("SiteCharsetOverride");
+    $n = $cfg{SiteCharsetOverride}.
+      NOTE("This only needs to be set if the calculated charset",
+           "<b>$siteCharset</b>, which is derived from the site-wide",
+           "locale setting, is wrong. This setting is used in HTML pages",
+           "and HTTP headers, so it must be acceptable to web browsers",
+           "even if it is different to the locale-derived setting",
+           "(e.g. 'euc-jp' instead of 'eucjp')");
 
     # Warn against UTF-8 for now
     if ( $siteCharset eq 'utf-8' ) {
@@ -1002,7 +928,7 @@ if ( $showLocales ) {		# Only if TWiki.pm found
          "broken, to allow use of internationalised WikiWords.  You should\n",
          "configure <b>UseLocale</b> to 1, and set a reasonable\n",
          "<b>SiteLocale</b>, since this enables correct setting of the\n",
-         "<b>\$siteCharset</b> for use by web browsers. Don't change this\n",
+         "site charset for use by web browsers. Don't change this\n",
          "setting unless your locales are not working for whatever reason\n");
     RIGHT($n);
 
@@ -1055,20 +981,16 @@ if ( $showLocales ) {		# Only if TWiki.pm found
     }
 }
 
-print "</table>\n";
+print $query->end_table();
 
-print "<h1>Complete list of configuration parameters</h1>";
-print explode(\%cfg);
+print $query->hr(),
+  $query->h1("Complete list of configuration parameters"),
+  explode(\%cfg);
 
-print <<EOM;
-</body>
-</html>
-EOM
-exit;
+print $query->end_html();
 
-}
+# End of code
 
-# =========================
 sub testFileIsWritable
 {
     my( $name ) = @_;
@@ -1081,7 +1003,6 @@ sub testFileIsWritable
     return $identical;
 }
 
-# =========================
 sub readTestFile
 {
     my( $name ) = @_;
@@ -1094,7 +1015,6 @@ sub readTestFile
     return $data;
 }
 
-# =========================
 sub writeTestFile
 {
     my( $name, $text ) = @_;
@@ -1104,7 +1024,6 @@ sub writeTestFile
     }
 }
 
-# =========================
 sub deleteTestFile
 {
     my( $name ) = @_;
@@ -1147,15 +1066,83 @@ sub checkGnuVersion {
     }
 }
 
+sub checkdir {
+    my( $id, $dir, $descr, $file, $perms ) = @_;
+    LEFT("$id");
+    my $n = $dir;
+    if( $descr ) {
+        $n .= NOTE( $descr );
+    }
+    if( defined $file && !-e "$dir/$file" ) {
+        $n .= ERROR("Directory does not exist or file <tt>$file</tt> does not exist in this directory.");
+    } elsif( $perms =~ /w/ && ! testFileIsWritable( "$dir/testenv.test" ) ) {
+        $n .= ERROR("The directory must exist and be writable by the <b>$usr</b> user.");
+    } elsif( $perms !~ /w/ && testFileIsWritable( "$dir/testenv.test" ) ) {
+        $n .= WARN("Security issue: The directory should not be writable by the <b>$usr</b> user.");
+    }
+    RIGHT($n);
+}
+
+# left column, highlit
+sub LEFT {
+    my $text = join(" ",@_);
+    print "<tr valign='top'><th align='right'>$text";
+    print ":" if $text;
+    print "</th>\n";
+}
+
+# left column, not highlit
+sub LOWLEFT {
+    my $text = join(" ",@_);
+    print "<tr valign='top'><td align='right'>$text";
+    print ":" if $text;
+    print "</td>\n";
+}
+
+# right column
+sub RIGHT {
+    my $text = join(" ",@_);
+    $text =~ s/^<br \/>//;
+    print "<td>$text</td></tr>\n";
+}
+
+# one column
+sub BOTH {
+    my $text = join(" ",@_);
+    print "<th align='left' valign='top' colspan='2'>$text</th></tr>\n";
+}
+
+# both columns used to show a heading
+sub BIGHEAD {
+    print BOTH("<hr><h3>",join(" ",@_),"</h3>");
+}
+
+# a note
+sub NOTE {
+    return "<br /><font color='green'><b> Note: </font></b> ".join(" ",@_);
+}
+
+# a warning
+sub WARN {
+    return "<br /><font color='orange'><b> Warning:</b></font> ".join(" ",@_);
+}
+
+# an error
+sub ERROR {
+    return "<br /><font color='red'><b> Error: </b></font> ".join(" ",@_);
+}
+
+# expand a hash into a human-readable table. used to show all
+# cfg vars
 sub explode {
-    my $has = shift;
+    my $hash = shift;
     my $tab = "";
-    foreach $n ( sort keys %$has ) {
-        $tab .= "<tr valign='top'><td align='left'>$n =</td>\n";
-        if( ref($has->{$n}) =~ /^HASH/) {
-            $tab .= "<td valign='top'>{".explode($has->{$n})."}</td>\n";
+    foreach $n ( sort keys %$hash ) {
+        $tab .= "<tr valign='top'><th align='left'>$n</th>\n";
+        if( ref($hash->{$n}) =~ /^HASH/) {
+            $tab .= "<td valign='top'>{".explode($hash->{$n})."}</td>\n";
         } else {
-            $tab .= "<td>$has->{$n}</td>\n";
+            $tab .= "<td><tt>$hash->{$n}</tt></td>\n";
         }
         $tab .= "</tr>";
     }

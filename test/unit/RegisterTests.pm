@@ -1,3 +1,5 @@
+require 5.008;
+
 package RegisterTests;
 
 # Tests not implemented:
@@ -38,9 +40,7 @@ my $temporaryWeb = "Temporary";
 my $peopleWeb = "Main";
 my $mainweb = "$peopleWeb";
 my $tempUserDir;
-my $saveHtpasswd;
 my $twikiUsersFile;
-my $saveTWikiUsers;
 
 $TWiki::User::password = "foo";
 
@@ -50,40 +50,46 @@ sub new {
     return $self;
 }
 
-my $dataDir;
-my $pubDir;
+my $myDataDir;
+my $myPubDir;
+my $saveDD;
+my $savePD;
+my $saveHP;
 
 sub set_up {
     my $self = shift;
     my $here = `pwd`;
     $here =~ s/\s//g;;
-    $dataDir = "$here/tmpRegisterTestData";
-    $pubDir =  "$here/tmpRegisterTestPub";
+    $myDataDir = "$here/tmpRegisterTestData";
+    $myPubDir =  "$here/tmpRegisterTestPub";
 
-    $TWiki::cfg{DataDir} = $dataDir;
-    $TWiki::cfg{PubDir} = $pubDir;
-    $TWiki::cfg{HtpasswdFilename} = "$dataDir/htpasswd";
+    # SMELL: should be a better way to do this. Copy deeply?
+    $saveDD = $TWiki::cfg{DataDir};
+    $savePD = $TWiki::cfg{PubDir};
+    $saveHP = $TWiki::cfg{HtpasswdFileName};
 
-    $tempUserDir = "$TWiki::cfg{DataDir}";
-    $saveHtpasswd = $tempUserDir.'/rcsr$$'; # not saved as '.htpasswd' to minimise onlookers interest.
-    $saveTWikiUsers = $tempUserDir.'/rcsrUsers$$';
+    $TWiki::cfg{DataDir} = $myDataDir;
+    $TWiki::cfg{PubDir} = $myPubDir;
+    $TWiki::cfg{HtpasswdFileName} = "$myDataDir/htpasswd";
+
+    $tempUserDir = $TWiki::cfg{DataDir};
 
     $SIG{__DIE__} = sub { confess $_[0] };
 
-    mkdir $dataDir;
-    chmod 0777, $dataDir;
+    mkdir $myDataDir;
+    chmod 0777, $myDataDir;
 
-    mkdir "$dataDir/$temporaryWeb";
-    chmod 0777, "$dataDir/$temporaryWeb";
+    mkdir "$myDataDir/$temporaryWeb";
+    chmod 0777, "$myDataDir/$temporaryWeb";
 
-    mkdir "$dataDir/$TWiki::cfg{UsersWebName}";
-    chmod 0777, "$dataDir/$TWiki::cfg{UsersWebName}";
+    mkdir "$myDataDir/$TWiki::cfg{UsersWebName}";
+    chmod 0777, "$myDataDir/$TWiki::cfg{UsersWebName}";
 
-    mkdir $pubDir;
-    chmod 0777, $pubDir;
+    mkdir $myPubDir;
+    chmod 0777, $myPubDir;
 
-    mkdir "$pubDir/$temporaryWeb";
-    chmod 0777, "$pubDir/$temporaryWeb";
+    mkdir "$myPubDir/$temporaryWeb";
+    chmod 0777, "$myPubDir/$temporaryWeb";
 
     $Error::Debug = 1;
     $TWiki::UI::Register::unitTestMode = 1;
@@ -94,7 +100,10 @@ sub set_up {
 
 sub tear_down {
     # clean up after test
-    `rm -rf $dataDir $pubDir`;
+    `rm -rf $myDataDir $myPubDir`;
+    $TWiki::cfg{DataDir} = $saveDD;
+    $TWiki::cfg{PubDir} = $savePD;
+    $TWiki::cfg{HtpasswdFileName} = $saveHP;
 }
 
 sub initialise {
@@ -405,7 +414,7 @@ sub test_resetPasswordNoPassword {
                                       ]
                          });
 
-    unlink $TWiki::cfg{HtpasswdFilename};
+    unlink $TWiki::cfg{HtpasswdFileName};
 
     my $session = initialise($query, $guestLoginName);
     try {

@@ -396,7 +396,6 @@ sub diff {
     my $revInfo1 = "";
     my $revInfo2 = "";
     my $isMultipleDiff = 0;
-    my $scriptUrlPath = $session->{scriptUrlPath};
     my( $before, $difftmpl, $after);
     my $topicExists;
 
@@ -495,11 +494,11 @@ sub diff {
     }
     
     while( $i > 0 ) {
-        $revisions .= " | <a href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\">$i</a>";
+        $revisions .= " | <a href=\"$session->{scriptUrlPath}/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\">$i</a>";
         if( $i != 1 ) {
             if( $i == $breakRev ) {
                 # Now obsolete because of 'More' link
-                # $revisions = "$revisions | <a href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=$maxrev\">&gt;...</a>";
+                # $revisions = "$revisions | <a href=\"$session->{scriptUrlPath}/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=$maxrev\">&gt;...</a>";
                 $i = 1;
                 
             } else {
@@ -507,7 +506,7 @@ sub diff {
                     $revisions .= " | &gt;";
                 } else {
                     $j = $i - 1;
-                    $revisions .= " | <a href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=$j\">&gt;</a>";
+                    $revisions .= " | <a href=\"$session->{scriptUrlPath}/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=$j\">&gt;</a>";
                 }
             }
         }

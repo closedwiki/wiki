@@ -167,7 +167,7 @@ sub bulkRegister {
 
     my %settings = ();
     $settings{doOverwriteTopics} = $query->param('OverwriteHomeTopics') || 0;
-    $settings{doUseHtPasswd} = $TWiki::htpasswdFormatFamily eq "htpasswd";
+    $settings{doUseHtPasswd} = $TWiki::cfg{HtpasswdFormatFamily} eq "htpasswd";
     $settings{doEmailUserDetails} = $query->param('EmailUsersWithDetails') || 0;
 
     unless( $unitTestMode || $session->{user}->isAdmin() ) {

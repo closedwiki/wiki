@@ -53,7 +53,7 @@ sub oops_cgi {
           . "<h1>TWiki Installation Error</h1>\n"
             . "Template file $tmplName.tmpl not found or template directory \n"
               . "$TWiki::cfg{TemplateDir} not found.<p />\n"
-                . "Check the \$templateDir variable in TWiki.cfg.\n"
+                . "Check the configuration setting for TemplateDir.\n"
                   . "</body></html>\n";
     } else {
         my $param = $query->param( 'param1' ) || "";

@@ -1,5 +1,6 @@
 # Smoke tests for TWiki::Meta
 
+require 5.008;
 use strict;
 
 package MetaTests;

@@ -1,4 +1,5 @@
 # Copyright (C) 2004 Crawford Currie
+require 5.008;
 package PrefsTests;
 
 use base qw(Test::Unit::TestCase);
@@ -25,6 +26,7 @@ my $topic = "TestPrefsTopic";
 my $user = "TestUser1";
 my $thePathInfo = "/$web/$topic";
 my $theUrl = "/save/$web/$topic";
+my %safe;;
 
 sub _set {
     my ( $this, $web, $topic, $pref, $val ) = @_;
@@ -38,6 +40,7 @@ sub _set {
         undef $/;
         $text = <F>;
         close F;
+        $safe{"$web.$topic"} = $text unless defined $safe{"$web.$topic"};
         $text =~ s/^\s+\* Set $pref =.*$//mg;
     }
 
@@ -49,7 +52,7 @@ sub _set {
 
 sub _setTWikiPref {
    my ( $this, $pref, $val ) = @_;
-   $this->_set($TWiki::cfg{SystemWebname}, $TWiki::cfg{SitePrefsTopicName}, $pref, $val);
+   $this->_set($TWiki::cfg{SystemWebName}, $TWiki::cfg{SitePrefsTopicName}, $pref, $val);
 }
 
 sub _setWebPref {
@@ -75,7 +78,7 @@ sub set_up {
     $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl );
 
     # back up TWiki.TWikiPreferences
-    my $prefs = "$TWiki::cfg{DataDir}/$TWiki::cfg{SystemWebname}/$TWiki::cfg{SitePrefsTopicName}.txt";
+    my $prefs = "$TWiki::cfg{DataDir}/$TWiki::cfg{SystemWebName}/$TWiki::cfg{SitePrefsTopicName}.txt";
     die "Cannot run test - cannot write $prefs" unless ( -w $prefs );
     $this->{TWIKIPREFS} = $prefs;
     $this->{TWIKIPREFSBACKUP} = "$prefs.bak";
@@ -107,6 +110,16 @@ sub tear_down {
     die "Could not clean fixture $?" if $!;
     `rm -rf $TWiki::cfg{PubDir}/$web`;
     die "Could not clean fixture $?" if $!;
+
+    foreach my $t ( keys %safe ) {
+        $t =~ /^(.*)\.(.*)$/;
+        my ($w, $p) = ( $1, $2 );
+        if( -e "$TWiki::cfg{DataDir}/$w/$p.txt" ) {
+            open(F, ">$TWiki::cfg{DataDir}/$w/$p.txt") || die "Failed to restore $TWiki::cfg{DataDir}/$w/$p.txt";
+            print F $safe{$t};
+            close F;
+        }
+    }
 }
 
 sub test_system {

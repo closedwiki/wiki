@@ -306,15 +306,18 @@ Return value: $remoteUser
 Acts as a filter for $remoteUser.  If set, $remoteUser is filtered for
 insecure characters and untainted.
 
-If $doRememberRemoteUser and $remoteUser are both set in TWiki.cfg, it
-also caches $remoteUser as belonging to the IP address of the current request.
+If not user is passed, the remote user defaults to $cfg{DefaultUserLogin}
+(usually 'guest').
 
-If $doRememberRemoteUser is set and $remoteUser is not, then it sets
-$remoteUser to the last authenticated user to make a request with the
-current request's IP address, or $defaultUserName if no cached name
-is available.
+If we got here via an authentication status failure, then the remote user
+is set to blank, effectively signalling an illegal access.
 
-If neither are set, then it sets $remoteUser to $defaultUserName.
+If $cfg{RememberUserIPAddress} is set, it looks up the IP address of
+the requestor and tries to map it to a username. If the lookup fails,
+but a remote user name was passed in (which will happen if the CGI
+query contains remote_user()) then it caches the mapping from IP addess to
+user. If no remote user name was passed in, the user defaults to
+$cfg{DefaultUserLogin}.
 
 SMELL: the association of a user with an IP address is a high
 risk strategy that can fail in the following environments:
@@ -340,12 +343,14 @@ sub initializeRemoteUser {
         $remoteAddr = "";
     }
 
-    if( ( ! $TWiki::cfg{RememberUserIPAddress} ) || ( ! $remoteAddr ) ) {
+    if( ! $TWiki::cfg{RememberUserIPAddress} || ! $remoteAddr ) {
         # do not remember IP address
         return $remoteUser;
     }
 
-    my $text = $this->store()->readFile( $TWiki::cfg{RemoteUserFileName} );
+    my $text =
+      $this->store()->readFile( $TWiki::cfg{RemoteUserFileName} );
+
     # Assume no I18N characters in userids, as for email addresses
     # FIXME: Needs fixing for IPv6?
     my %AddrToName = map { split( /\|/, $_ ) }

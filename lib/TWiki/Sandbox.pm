@@ -30,8 +30,6 @@ use Error qw( :try );
 # output goes only to web server error log - otherwise it might give
 # useful debugging information to someone developing an exploit.
 
-# TODO: Get rid of $cmdQuote in TWiki.cfg and TWiki.pm
-
 sub _writeDebug {
     my $this = shift;
     $this->{session}->writeDebug($_[0]);
@@ -40,16 +38,16 @@ sub _writeDebug {
 
 =pod
 
----++ new( $session, $OS, $detailedOS )
+---++ new( $session, $os, $realOS )
 
-Construct a new sandbox suitable for $OS, setting
-flags for platform features that help.  $detailedOS distinguishes
+Construct a new sandbox suitable for $os, setting
+flags for platform features that help.  $realOS distinguishes
 Perl variants on platforms such as Windows.
 
 =cut
 
 sub new {
-    my ( $class, $session, $OS, $detailedOS ) = @_;
+    my ( $class, $session, $os, $realOS ) = @_;
     my $this = bless( {}, $class );
 
     ASSERT(ref($session) eq "TWiki") if DEBUG;
@@ -58,12 +56,12 @@ sub new {
     $this->{REAL_SAFE_PIPE_OPEN} = 0;           # supports "open FH, '-|"
     $this->{EMULATED_SAFE_PIPE_OPEN} = 0;       # emulate open from pipe
 
-    if ( $OS eq "UNIX" or 
-        ($OS eq "WINDOWS" and $detailedOS eq "cygwin"  ) ) {
+    if ( $os eq "UNIX" or 
+        ($os eq "WINDOWS" and $realOS eq "cygwin"  ) ) {
         # Real safe pipes on Unix/Linux/Cygwin, for Perl 5.005+
         $this->{REAL_SAFE_PIPE_OPEN} = 1;
 
-    } elsif ( $OS eq "WINDOWS" ) {
+    } elsif ( $os eq "WINDOWS" ) {
         # Emulated safe pipes on ActivePerl 5.8 or higher 
         my $isActivePerl = eval 'Win32::BuildNumber !~ /Win32/';
         if ( $isActivePerl and $] >= 5.008 ) {
@@ -84,7 +82,7 @@ sub new {
     ##$this->_writeDebug("safe setting = $this->{SAFE}");
 
     # Shell quoting - shell used only on non-safe platforms
-    if ($OS eq "UNIX" or ($OS eq "WINDOWS" and $detailedOS eq "cygwin"  ) ) {
+    if ($os eq "UNIX" or ($os eq "WINDOWS" and $realOS eq "cygwin"  ) ) {
         $this->{CMDQUOTE} = '\'';
     } else {
         $this->{CMDQUOTE} = '\"';
@@ -468,9 +466,9 @@ sub readFromProcess {
     } else {
         # FIXME: Should be able to do similarly safe pipe open in 5.6 or
         # earlier, see perlipc(1)
-        my $cmdQuote = $this->{CMDQUOTE}; 
+        my $cmdQuote = $this->{CMDQUOTE};
 
-        my $cmd = shift( @args ) . " $TWiki::cfg{CmdQuote}";
+        my $cmd = shift( @args ) . " $cmdQuote";
         $cmd .= join( "$cmdQuote $cmdQuote", @args ) .  $cmdQuote;
         $cmd .= " 2>&1" if( $TWiki::cfg{OS} eq "UNIX" );
         $data = `$cmd`;

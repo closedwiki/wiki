@@ -318,10 +318,6 @@ BEGIN {
     do "TWiki.cfg";
     eval 'do "LocalSite.cfg"';
 
-    unless( defined $TWiki::cfg{CmdQuote} ) {
-        $TWiki::cfg{CmdQuote} = ( $TWiki::cfg{OS} eq "WINDOWS" ) ? '"' : "'";
-    }
-
     if( $TWiki::cfg{UseLocale} ) {
         eval 'require locale; import locale ();';
     }
@@ -368,7 +364,6 @@ BEGIN {
     ASSERT( defined $TWiki::cfg{DetailedOS} );
     ASSERT( defined $TWiki::cfg{DisableAllPlugins} );
     ASSERT( defined $TWiki::cfg{DisplayTimeValues} );
-    ASSERT( defined $TWiki::cfg{CmdQuote} );
     ASSERT( defined $TWiki::cfg{EgrepCmd} );
     ASSERT( defined $TWiki::cfg{FgrepCmd} );
     ASSERT( defined $TWiki::cfg{ForceUnsafeRegexes} );
@@ -381,6 +376,7 @@ BEGIN {
     ASSERT( defined $TWiki::cfg{Stats} );
     ASSERT( defined $TWiki::cfg{Log} );
     ASSERT( defined $TWiki::cfg{RCS} );
+    ASSERT( defined $TWiki::cfg{ReplaceIfEditedAgainWithin} );
 
     $TWiki::cfg{DispScriptUrlPath} = $TWiki::cfg{ScriptUrlPath}
       unless defined( $TWiki::cfg{DispScriptUrlPath} );

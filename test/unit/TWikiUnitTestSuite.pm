@@ -1,3 +1,5 @@
+require 5.008;
+
 package TWikiUnitTestsSuite;
 
 use base qw(Test::Unit::TestSuite);
@@ -8,7 +10,7 @@ sub name { 'TWikiUnitTests' };
 
 sub include_tests {
     opendir(DIR, ".") || die "Failed to open .";
-    return grep( /Tests\.pm$/, readdir(DIR));
+    return grep( /Tests\.pm$/, sort readdir(DIR));
 };
 
 1;

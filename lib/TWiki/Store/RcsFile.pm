@@ -68,14 +68,13 @@ sub init {
     # If attachment - make sure file and history directories exist
     if( $self->{attachment} ) {
         # Make sure directory for rcs history file exists
-        my $rcsDir = $self->_makeFileDir( 1, ",v" );
         # SMELL: surely this should be PubDir??
         my $tempPath = $TWiki::cfg{DataDir} . "/" . $self->{web};
         if( ! -e $tempPath ) {
             umask( 0 );
             mkdir( $tempPath, $TWiki::cfg{RCS}{dirPermission} );
         }
-        $tempPath = $rcsDir;
+        $tempPath = $self->_makeFileDir( 1, ",v" );
         if( ! -e $tempPath ) {
             umask( 0 );
             mkdir( $tempPath, $TWiki::cfg{RCS}{dirPermission} );
@@ -448,30 +447,28 @@ sub _makeFileName {
    my $web = $self->{web};
    my $topic = $self->{topic};
    my $attachment = $self->{attachment};
-   my $dataDir = $TWiki::cfg{DataDir};
-   my $pubDir  = $TWiki::cfg{PubDir};
 
    if( $extension eq ".lock" ) {
-      $file = "$dataDir/$web/$topic$extension";
+      $file = "$TWiki::cfg{DataDir}/$web/$topic$extension";
 
    } elsif( $attachment ) {
-      if ( $extension eq ",v" && $TWiki::cfg{RCS}{useSubDir} && -d "$dataDir/$web/RCS" ) {
+      if ( $extension eq ",v" && $TWiki::cfg{RCS}{useSubDir} && -d "$TWiki::cfg{DataDir}/$web/RCS" ) {
          $extra = "/RCS";
       }
 
-      $file = "$pubDir/$web/$topic$extra/$attachment$extension";
+      $file = "$TWiki::cfg{PubDir}/$web/$topic$extra/$attachment$extension";
    } else {
       if( ! $extension ) {
          $extension = ".txt";
       } else {
          if( $extension eq ",v" ) {
             $extension = ".txt$extension";
-            if( $TWiki::cfg{RCS}{useSubDir} && -d "$dataDir/$web/RCS" ) {
+            if( $TWiki::cfg{RCS}{useSubDir} && -d "$TWiki::cfg{DataDir}/$web/RCS" ) {
                $extra = "/RCS";
             }
          }
       }
-      $file = "$dataDir/$web$extra/$topic$extension";
+      $file = "$TWiki::cfg{DataDir}/$web$extra/$topic$extension";
    }
 
    # Shouldn't really need to untaint here - done to be sure
@@ -486,25 +483,22 @@ sub _makeFileDir {
 
    $extension = "" if( ! $extension );
 
-   my $dataDir = $TWiki::cfg{DataDir};
-   my $pubDir  = $TWiki::cfg{PubDir};
-
    my $web = $self->{web};
    my $topic = $self->{topic};
 
    my $dir = "";
    if( ! $attachment ) {
-      if( $extension eq ",v" && $TWiki::cfg{RCS}{useSubDir} && -d "$dataDir/$web/RCS" ) {
-         $dir = "$dataDir/$web/RCS";
+      if( $extension eq ",v" && $TWiki::cfg{RCS}{useSubDir} && -d "$TWiki::cfg{DataDir}/$web/RCS" ) {
+         $dir = "$TWiki::cfg{DataDir}/$web/RCS";
       } else {
-         $dir = "$dataDir/$web";
+         $dir = "$TWiki::cfg{DataDir}/$web";
       }
    } else {
       my $suffix = "";
-      if ( $extension eq ",v" && $TWiki::cfg{RCS}{useSubDir} && -d "$dataDir/$web/RCS" ) {
+      if ( $extension eq ",v" && $TWiki::cfg{RCS}{useSubDir} && -d "$TWiki::cfg{DataDir}/$web/RCS" ) {
          $suffix = "/RCS";
       }
-      $dir = "$pubDir/$web/$topic$suffix";
+      $dir = "$TWiki::cfg{PubDir}/$web/$topic$suffix";
    }
 
    # Shouldn't really need to untaint here - done to be sure
