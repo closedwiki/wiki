@@ -1,11 +1,6 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"rename"}%
-%TMPL:P{"htmldoctype"}%
-<head>
- <title>%TMPL:P{"titleaction"}%%TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>
- <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
- <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
- <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+
+%TMPL:DEF{"script"}%
  <script language="JavaScript">
  <!--HIDE
   function launchWindow( theWeb, theTopic ) {
@@ -27,11 +22,18 @@
  }
  //STOP HIDING-->
  </script>
-</head>
-<body bgcolor="#ffffff">
-#PageTop
+ %TMPL:END%
+
+%TMPL:DEF{"bodystart"}%
+<body id="renamepage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+
+%TMPL:DEF{"rename"}%
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+
 <form method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-%TMPL:P{"simpleheader"}%
+%TMPL:P{"topbar"}%
 ---+ %TMPL:P{"webaction"}% <code>%TOPIC%</code>
 
 | |  *Web:* | *&nbsp;Topic:* |
@@ -60,7 +62,6 @@ __Note:__
 
 %TMPL:P{"hidden"}%
 %TMPL:P{"standardfooter"}%
-#PageBottom
 </form>
-</body>
-</html>%TMPL:END%
+%TMPL:P{"bodyend"}%
+%TMPL:END%
