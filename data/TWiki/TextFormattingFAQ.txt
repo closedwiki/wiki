@@ -1,0 +1,193 @@
+*Text Formatting FAQ*
+
+This topic has answers to frequently asked questions about text formatting. TextFormattingRules has more on formatting rules in general. It also has links to HTML documentation.
+
+	* <A HREF="#sepa">Q:</A> How do I make a separator?
+	* <A HREF="#head">Q:</A> How do I create a title or a heading?
+	* <A HREF="#brac">Q:</A> Text enclosed in angle brackets like &lt;filename&gt; is not displayed. How can I show it as it is?
+	* <A HREF="#ques">Q:</A> Some words (like WinAPI) have an unwanted question mark at the end. How can I prevent that?
+	* <A HREF="#fixe">Q:</A> How can I write fixed font text?
+	* <A HREF="#wrap">Q:</A> Text I enter gets wrapped around. How can I keep the formatting as it is?
+	* <A HREF="#tabl">Q:</A> How do I create tables?
+	* <A HREF="#imag">Q:</A> Can I include images and pictures?
+	* <A HREF="#colo">Q:</A> Can I write colored text?
+
+-----
+<A NAME="sepa">Q:</A>
+*How do I make a separator?*
+
+You can make a horizontal separator by writing 4 or more dashes at the beginning of a line.
+
+-----
+<A NAME="head">Q:</A>
+*How do I create a title or a heading?*
+
+The most simple way is to enclose it in '*' Asterisk characters or '_' Underscore charcters. 
+
+*This is an example header enclosed in Asterisk characters*
+
+_This is an example header enclosed in Underscore characters_
+
+You could use also HTML tags for headings, e.g. <code>&lt;H4&gt;This is an HTML heading&lt;/H4&gt;</code> will show up as:
+
+<H4>This is an HTML heading</H4>
+
+-----
+<A NAME="brac">Q:</A>
+*Text enclosed in angle brackets like &lt;filename&gt; is not displayed. How can I show it as it is?*
+
+TWiki interprets text as HTML. The '&lt;' and '&gt;' characters are used to define HTML commands. Any valid text within angle brackets gets interpreted by the browser as an HTML command. Invalid text is ignored, that's why it doesn't show up.
+
+There are two work arounds if you want to display angle brackets:
+
+	* Do an escape sequence in HTML:
+		* Write <code>&amp;lt;</code> instead of <code>&lt;</code>
+		* Write <code>&amp;gt;</code> instead of <code>&gt;</code>
+		* Example: Write <code>(a &amp;gt; 0)</code> instead of <code>(a &gt; 0)</code>
+	* Replace angle brackets with curly brackets.
+		* Example: Write <code>{is-writable}</code> instead of <code>&lt;is-writable&gt;</code>
+
+-----
+<A NAME="ques">Q:</A>
+*Some words (like WinAPI) have an unwanted question mark at the end. How can I prevent that?*
+
+A question mark after a word is a link to a not yet existing topic. For example, WinAPI is a valid WikiTopic name in WikiNotation, but the actual topic _WinAPI_ does not exist.
+
+If you do not intend to create a topic for a valid TWiki topic name, you can prevent it being linked by putting an HTML tag in front of it. I usually use &lt;NOP&gt;. This is a non existing HTML tag, so a browser just ignores it.
+
+	* Example text: <br> <code><nop>WinAPI as it is, &lt;NOP&gt;WinAPI with preceeding NOP.</code>
+	* Example output: <br> WinAPI as it is, <NOP>WinAPI with preceeding NOP.
+
+-----
+<A NAME="fixe">Q:</A>
+*How can I write fixed font text?*
+
+Enclose text in &lt;CODE&gt; and &lt;/CODE&gt; HTML tags.
+
+	* Example text: <br> <code>Proportional text, &lt;CODE&gt; fixed font text, &lt;/CODE&gt; proportional again.</code>
+	* Example output: <br> Proportional text, <CODE> fixed font text, </CODE> proportional again.
+
+Alternatively you could also use preformatted text, see next question for details.
+
+-----
+<A NAME="wrap">Q:</A>
+*Text I enter gets wrapped around. How can I keep the formatting as it is?*
+
+TWiki interprets text as HTML. It is possible to use preformatted text to work around this. Use the preformatted HTML tags to keep the new line of text as it is. Do so by enclosing the text with &lt;PRE&gt; and &lt;/PRE&gt; tags, e.g.
+<pre>
+This text will keep its format as it is:
+&lt;PRE&gt;
+  Unit	  Price	Qty  Cost
+  -------  ------  ---  ------
+  aaa		 12.00	 3	36.00
+&lt;/PRE&gt;
+</pre>
+
+It is recommended to use preformatting for tables and source code.
+
+-----
+<A NAME="tabl">Q:</A>
+*How do I create tables?*
+
+There are two possibilities:
+	1 Use preformatted text with &lt;PRE&gt; tags.
+	2 Use HTML tables with &lt;TABLE&gt;, &lt;TR&gt;, &lt;TD&gt; tags.
+
+*_1. Use preformatted text with &lt;PRE&gt; tags_*
+
+See <A HREF="#wrap">Q:</A> Text I enter gets wrapped around. How can I keep the formatting as it is?
+
+*_2. Use HTML tables with &lt;TABLE&gt;, &lt;TR&gt;, &lt;TD&gt; tags_*
+
+This is a manual process using HTML commands. Here is an example. If you enter this:
+
+<pre>
+&lt;TABLE BORDER=1&gt;
+  &lt;TR&gt;
+	 &lt;TH&gt; Head A  &lt;/TH&gt; &lt;TH&gt; Head B  &lt;/TH&gt;
+  &lt;/TR&gt;&lt;TR&gt;
+	 &lt;TD&gt; Cell A2 &lt;/TD&gt; &lt;TD&gt; Cell B2 &lt;/TD&gt;
+  &lt;/TR&gt;&lt;TR&gt;
+	 &lt;TD&gt; Cell A3 &lt;/TD&gt; &lt;TD&gt; Cell B3 &lt;/TD&gt;
+  &lt;/TR&gt;
+&lt;/TABLE&gt;
+</pre>
+
+It is displayed as a table like this:
+
+<TABLE BORDER=1>
+  <TR>
+	 <TH> Head A  </TH> <TH> Head B  </TH>
+  </TR><TR>
+	 <TD> Cell A2 </TD> <TD> Cell B2 </TD>
+  </TR><TR>
+	 <TD> Cell A3 </TD> <TD> Cell B3 </TD>
+  </TR>
+</TABLE>
+
+You can copy the example from &lt;TABLE&gt; to &lt;/TABLE&gt; and change it to your needs.
+
+More information about HTML tables can be found at http://www.htmlhelp.com/reference/wilbur/table/table.html
+
+-----
+<A NAME="imag">Q:</A>
+*Can I include images and pictures?*
+
+Yes, this is possible. The easiest way of including images is to attach a GIF or JPG file to a topic and then to include it with text =%<nop>ATTACHURL%/myImage.gif= . FileAttachment has more.
+
+There are actually two ways of including inline images.
+
+*_1. Using URL ending in .gif, .jpg, .jpeg_*
+
+This is a simple and automatic way of including inline images. Simply write the URL of the image file, this will create the inline image for you. *Note:* The images must be accessible as a URL.
+
+	* Example text: <br> <code> TWiki <nop>%PUBURL%/wikiHome.gif logo.</code>
+	* Example output: <br> TWiki %PUBURL%/wikiHome.gif logo.
+
+*_2. Using &lt;IMG&gt; tag_*
+
+This is a manual process where you have more control over the rendering of the image. Use the &lt;IMG&gt; tag of HTML to include JPEG and GIF files. *Note:* The display of the topic is faster if you include the WIDTH and HEIGHT parameters that have the actual image size. http://www.htmlhelp.com/reference/wilbur/special/img.html has more on inline images.
+
+	* Example text: <br> <code>TWiki &lt;IMG SRC="../../../pub/wikiHome.gif" WIDTH=46 HEIGHT=50&gt; logo.</code>
+	* Example output: <br> TWiki <IMG SRC="../../../pub/wikiHome.gif" WIDTH=46 HEIGHT=50> logo.
+
+-----
+<A NAME="colo">Q:</A>
+*Can I write colored text?*
+
+Place text you would like to specify a color inside &lt;FONT COLOR="colorCode"&gt; and &lt;/FONT&gt; tags. 
+
+"colorCode" is the hexadecimal RGB color code. The color is composed
+by specifying the red, green and blue components of the color in
+hexadecimal notation. For example, to specify white, the red, green and blue components are 255, 255, 255, so you would use "#FFFFFF". Common color codes are:
+
+<TABLE>
+<TR BGCOLOR="#E0E0E0">
+  <TD><FONT COLOR="#000000"> *Black:* </FONT></TD><TD>"#000000" </TD>
+  <TD><FONT COLOR="#008000"> *Green:* </FONT></TD><TD>"#008000" </TD> 
+  <TD><FONT COLOR="#C0C0C0"> *Silver:* </FONT></TD><TD>"#C0C0C0" </TD>
+  <TD><FONT COLOR="#00FF00"> *Lime:* </FONT></TD><TD>"#00FF00" </TD>
+</TR><TR BGCOLOR="#C0C0C0">
+  <TD><FONT COLOR="#808080"> *Gray:* </FONT></TD><TD>"#808080" </TD>
+  <TD><FONT COLOR="#808000"> *Olive:* </FONT></TD><TD>"#808000" </TD>
+  <TD><FONT COLOR="#FFFFFF"> *White:* </FONT></TD><TD>"#FFFFFF" </TD>
+  <TD><FONT COLOR="#FFFF00"> *Yellow:* </FONT></TD><TD>"#FFFF00" </TD>
+</TR><TR BGCOLOR="#E0E0E0">
+  <TD><FONT COLOR="#800000"> *Maroon:* </FONT></TD><TD>"#800000" </TD>
+  <TD><FONT COLOR="#000080"> *Navy:* </FONT></TD><TD>"#000080" </TD>
+  <TD><FONT COLOR="#FF0000"> *Red:* </FONT></TD><TD>"#FF0000" </TD>
+  <TD><FONT COLOR="#0000FF"> *Blue:* </FONT></TD><TD>"#0000FF" </TD>
+</TR><TR BGCOLOR="#C0C0C0">
+  <TD><FONT COLOR="#800080"> *Purple:* </FONT></TD><TD>"#800080" </TD>
+  <TD><FONT COLOR="#008080"> *Teal:* </FONT></TD><TD>"#008080" </TD>
+  <TD><FONT COLOR="#FF00FF"> *Fuchsia:* </FONT></TD><TD>"#FF00FF"</TD>
+  <TD><FONT COLOR="#00FFFF"> *Aqua:* </FONT></TD><TD>"#00FFFF" </TD>
+</TR>
+</TABLE>
+
+	* Example text: <br> <code> &lt;FONT COLOR="#FF0000"&gt; Red color &lt;/FONT&gt; draws attention. </code>
+	* Example output: <br> <FONT COLOR="#FF0000"> Red color </FONT> draws attention.
+
+-----
+
+-- Main.PeterThoeny - 26 Oct 1998
