@@ -6,15 +6,15 @@ __Preferences:__
 
 	* List of %WIKITOOLNAME% webs: (the first line of a topic; to add a web see TWikiDocumentation and TWikiWebsTable)
 		* Set WIKIWEBLIST = <a href="%WIKIHOMEURL%">%WIKITOOLNAME%</a> . {
-			 <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%MAINWEB%/WebHome">Main</a> 
-		  | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/WebHome">TWiki</a> 
-		  | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Know/WebHome">Know</a> 
-		  | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Test/WebHome">Test</a> 
+			 <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%MAINWEB%/%HOMETOPIC%">Main</a> 
+		  | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/%HOMETOPIC%">TWiki</a> 
+		  | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Know/%HOMETOPIC%">Know</a> 
+		  | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Test/%HOMETOPIC%">Test</a> 
 		  }
 
 	* List of topics of a web: (the second line of a topic, is overwritten by web preferences)
 		* Set WEBTOPICLIST = %WEB% . {
-				<a href="WebHome">Home</a> 
+				<a href="%HOMETOPIC%">Home</a> 
 			 | <a href="WebChanges">Changes</a>
 			 | <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&amp;regex=on&amp;search=.*">Index</A>
 			 | <a href="WebSearch">Search</a>
@@ -63,7 +63,7 @@ __Preferences:__
 	* Users or groups allowed to change this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
 		* Set ALLOWTOPICCHANGE = 
 
-	* Site-level preferences that are *not* allowed to be overridden by WebPreferences and user preferences:
+	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
 		* Set FINALPREFERENCES = WIKIWEBMASTER, PREVIEWBGIMAGE
 
 __Notes:__

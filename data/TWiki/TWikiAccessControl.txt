@@ -40,14 +40,14 @@ __Access Control per %WIKITOOLNAME% Web__
 
 You can define some restrictions of who is allowed to make changes and attach files to topics or create new topics in a %WIKITOOLNAME% web.
 
-Define one or both of these variable in the WebPreferences topic:
+Define one or both of these variable in the %WEBPREFSTOPIC% topic:
 	* Set <nop>DENYWEBCHANGE = &lt; list of users and groups &gt;
 	* Set <nop>ALLOWWEBCHANGE = &lt; list of users and groups &gt;
 
 The same rules apply like the one for Access Control for Individual Topics; with these additions:
-	* DENYTOPICCHANGE (in topic) overrides DENYWEBCHANGE (in <nop>WebPreferences)
-	* ALLOWTOPICCHANGE (in topic) overrides ALLOWWEBCHANGE (in <nop>WebPreferences)
+	* DENYTOPICCHANGE (in topic) overrides DENYWEBCHANGE (in <nop>%WEBPREFSTOPIC%)
+	* ALLOWTOPICCHANGE (in topic) overrides ALLOWWEBCHANGE (in <nop>%WEBPREFSTOPIC%)
 
-__Related topics:__ TWikiPreferences, WebPreferences (in every web), %MAINWEB%.TWikiAdminGroup, %MAINWEB%.TWikiGroups
+__Related topics:__ %WIKIPREFSTOPIC%, %WEBPREFSTOPIC% (in every web), %MAINWEB%.TWikiAdminGroup, %MAINWEB%.TWikiGroups
 
 -- Main.PeterThoeny - 28 Oct 2000 <br>
