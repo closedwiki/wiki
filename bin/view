@@ -152,6 +152,10 @@ sub main
     if( $viewRaw ) {
 	my $vtext = "<form><textarea readonly=\"readonly\" wrap=\"virtual\" rows=\"%EDITBOXHEIGHT%\" cols=\"%EDITBOXWIDTH%\">";
 	$vtext = &TWiki::handleCommonTags( $vtext, $topic );
+        $text =~ s/&/&amp\;/go;
+        $text =~ s/</&lt\;/go;
+        $text =~ s/>/&gt\;/go;
+        $text =~ s/\t/   /go;
 	$text = "$vtext$text</textarea></form>";
 	if( $viewRaw !~ /debug/i ) {
 	    $text =~ s/%META[\:A-Z]*{[^\}]*}%[\n\r]*//gos;
