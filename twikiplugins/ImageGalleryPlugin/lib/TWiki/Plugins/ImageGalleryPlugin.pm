@@ -1,9 +1,9 @@
 #! perl -w
-use strict; #TODO: check for problems with -w and strict
+use strict;
 #
 # TWiki WikiClone ($wikiversion has version info)
 #
-# Copyright (C) 2002-2003 Will Norris. All Rights Reserved. (wbniv@saneasylumstudios.com)
+# Copyright (C) 2002-2005 Will Norris. All Rights Reserved. (wbniv@saneasylumstudios.com)
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,8 +22,7 @@ use strict; #TODO: check for problems with -w and strict
 # =========================
 package TWiki::Plugins::ImageGalleryPlugin;
 
-use Data::Dumper;
-use Carp;
+use Data::Dumper qw( Dumper );
 
 # =========================
 use vars qw(
@@ -31,7 +30,7 @@ use vars qw(
         $IMAGE_MAGICK $CONVERT $IDENTIFY $CONVERT_OPTIONS 
     );
 
-$VERSION = '1.1';
+$VERSION = '1.11';
 
 # =========================
 sub initPlugin
@@ -51,7 +50,7 @@ sub initPlugin
     $CONVERT_OPTIONS = TWiki::Func::getPreferencesValue('IMAGEGALLERYPLUGIN_CONVERT_OPTIONS');
 
     # Get plugin debug flag
-    $debug = &TWiki::Func::getPreferencesFlag( "IMAGEGALLERYPLUGIN_DEBUG" );
+    $debug = &TWiki::Func::getPreferencesFlag( "IMAGEGALLERYPLUGIN_DEBUG" ) || 0;
 
     if ( $debug ) {
 	   &TWiki::Func::writeDebug( "image_magick=[$IMAGE_MAGICK]" );
@@ -79,17 +78,17 @@ sub handleImageGallery
     my( $attributes ) = @_;
 
     my $settings = {
-       size => scalar &TWiki::extractNameValuePair( $attributes, "size" ) || 'medium',
-       topic => scalar &TWiki::extractNameValuePair( $attributes, "topic" ) || $topic,
-       web => scalar &TWiki::extractNameValuePair( $attributes, "web" ) || $web,
-       columns => scalar &TWiki::extractNameValuePair( $attributes, "columns" ) || '0',
-       rowstart => scalar &TWiki::extractNameValuePair( $attributes, "rowstart" ) || '',
-       rowinside => scalar &TWiki::extractNameValuePair( $attributes, "rowinside" ) || '',
-       rowend => scalar &TWiki::extractNameValuePair( $attributes, "rowend" ) || '',
-       rowinsideempty => scalar &TWiki::extractNameValuePair( $attributes, "rowinsideempty" ) || '',
-       rowendempty => scalar &TWiki::extractNameValuePair( $attributes, "rowendempty" ) || '',
-       options => scalar &TWiki::extractNameValuePair( $attributes, "options" ) || $CONVERT_OPTIONS,
-       format => scalar &TWiki::extractNameValuePair( $attributes, "format")
+       size => scalar &TWiki::Func::extractNameValuePair( $attributes, "size" ) || 'medium',
+       topic => scalar &TWiki::Func::extractNameValuePair( $attributes, "topic" ) || $topic,
+       web => scalar &TWiki::Func::extractNameValuePair( $attributes, "web" ) || $web,
+       columns => scalar &TWiki::Func::extractNameValuePair( $attributes, "columns" ) || '0',
+       rowstart => scalar &TWiki::Func::extractNameValuePair( $attributes, "rowstart" ) || '',
+       rowinside => scalar &TWiki::Func::extractNameValuePair( $attributes, "rowinside" ) || '',
+       rowend => scalar &TWiki::Func::extractNameValuePair( $attributes, "rowend" ) || '',
+       rowinsideempty => scalar &TWiki::Func::extractNameValuePair( $attributes, "rowinsideempty" ) || '',
+       rowendempty => scalar &TWiki::Func::extractNameValuePair( $attributes, "rowendempty" ) || '',
+       options => scalar &TWiki::Func::extractNameValuePair( $attributes, "options" ) || $CONVERT_OPTIONS,
+       format => scalar &TWiki::Func::extractNameValuePair( $attributes, "format")
     	|| q(<span class="imgGallery"><a href="$imageurl"><img src="$thumburl" title="$sizeK: $comment"/></a></span>$n),
     };
        $settings->{resize} = TWiki::Func::getPreferencesValue( uc "IMAGEGALLERYPLUGIN_$settings->{size}" ) || $settings->{size};
@@ -154,6 +153,7 @@ sub _updateThumb {
    my $resize = $settings->{resize};
    my $options = $settings->{options};
    
+   TWiki::Func::writeDebug( "thumb=[$thumb] fn=[$fn]" ) if $debug;
    unless ( ( -M $thumb ) && ( -M $fn > -M $thumb ) )
 	{   # only update the thumbnail if (1) it doesn't exist or (2) the thumbnail is older than the source image
 	    my $thumbDir = &TWiki::Func::getPubDir() . "/$web/$topic/thumbs";
@@ -161,8 +161,11 @@ sub _updateThumb {
 	    $thumbDir .= "/$resize";
 	    mkdir $thumbDir unless -d $thumbDir;
 
-	    &TWiki::Func::writeDebug( "- running CONVERT" ) if $debug;
-	    system( qq{$CONVERT -sample $resize $options  "$fn" "$thumb"} );
+	    my $cmdThumbnail = qq{$CONVERT -sample $resize $options  "$fn" "$thumb"};
+	    TWiki::Func::writeDebug( "settings: " . Dumper( $settings ) ) if $debug;
+
+	    &TWiki::Func::writeDebug( "- running CONVERT [$CONVERT] [$cmdThumbnail] - options=[$options]" ) if $debug;
+	    system( $cmdThumbnail );
 	}
 }
 
@@ -232,25 +235,23 @@ sub _replaceVars
 sub _formatTime
 {
     my ( $time, $format ) = @_;
+    $format ||= '$day $mon $year - $hour:$min';		# Default format, e.g. "31 Dec 2002 - 19:30"
     my $value = "";
-    my( $sec, $min, $hour, $day, $mon, $year ) = localtime( $time );
 
-    if( $format && $format ne '' ) {
-        $value = $format;
-        $value =~ s/\$sec[o]?[n]?[d]?[s]?/sprintf("%.2u",$sec)/geoi;
-        $value =~ s/\$min[u]?[t]?[e]?[s]?/sprintf("%.2u",$min)/geoi;
-        $value =~ s/\$hou[r]?[s]?/sprintf("%.2u",$hour)/geoi;
-        $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
-        $value =~ s/\$mon[t]?[h]?/($TWiki::ISOMONTH)[$mon]/goi;
-        $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
-        $value =~ s/\$yea[r]?/sprintf("%.4u",$year+1900)/geoi;
-        $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
-    }else{
-	# Default format, e.g. "31 Dec 2002 - 19:30"
-	my( $tmon ) = ($TWiki::ISOMONTH)[$mon];
-	$year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
-	$value = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $day, $year, $hour, $min );
-    }
+    my( $sec, $min, $hour, $day, $mon, $year ) = localtime( $time );
+    $year = sprintf( "%.4u", $year + 1900 );
+    use constant ISOMONTH => qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+    my $tmon = (ISOMONTH)[$mon];
+
+    $value = $format;
+    $value =~ s/\$sec[o]?[n]?[d]?[s]?/sprintf("%.2u",$sec)/geoi;
+    $value =~ s/\$min[u]?[t]?[e]?[s]?/sprintf("%.2u",$min)/geoi;
+    $value =~ s/\$hou[r]?[s]?/sprintf("%.2u",$hour)/geoi;
+    $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
+    $value =~ s/\$mon[t]?[h]?/$tmon/goi;
+    $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
+    $value =~ s/\$yea[r]?/$year/goi;
+    $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
 
     return $value;
 }
