@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999329987" format="1.0" version="1.30"}%
+%META:TOPICINFO{author="MikeMannix" date="999395967" format="1.0" version="1.31"}%
 <table><tr><td>
 Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about it, download it, and try it out for yourself.</td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
@@ -25,6 +25,7 @@ Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management t
 		* TextFormattingRules: The full power of TWiki syntax on a page
 		* TWikiVariables: Use simple text strings to place copy, graphics, menus, lots more
 		* FileAttachments: Upload files to any topic, for display or distribution
+		* WebChangesNotify: A optional email alert tells you when web pages are changed
 		* HandlingTopics: Rename, move, delete pages
 
 ---+++ Webmaster Reference
