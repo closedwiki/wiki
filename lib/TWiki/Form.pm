@@ -254,6 +254,13 @@ sub renderForEdit
             $value =~ s/</&lt\;/go;
             $value =~ s/>/&gt\;/go;
             $value = "<input type=\"text\" name=\"$name\" size=\"$size\" value=\"$value\" />";
+        } elsif( $type eq "label" ) {
+            my $escaped = $value;
+            $escaped =~ s/"/&#34/go; # Make sure double quote don't kill us
+            $escaped =~ s/&/&amp\;/go;
+            $escaped =~ s/</&lt\;/go;
+            $escaped =~ s/>/&gt\;/go;
+            $value = "<input type=\"hidden\" name=\"$name\" value=\"$escaped\" />$value";
         } elsif( $type eq "textarea" ) {
             my $cols = 40;
             my $rows = 5;
