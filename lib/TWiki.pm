@@ -963,7 +963,7 @@ Get email list from WebNotify page - this now handles entries of the form:
    * GroupName
 The 'UserName' format (i.e. no Main webname) is supported in any web, but
 is not recommended since this may make future data conversions more
-complicated, especially if used outside the Main web.  %MAINWEB% is OK
+complicated, especially if used outside the Main web.  %<nop>MAINWEB% is OK
 instead of 'Main'.  The user's email address(es) are fetched from their
 user topic (home page) as long as they are listed in the '* Email:
 fred@example.com' format.  Nested groups are supported.
@@ -1973,11 +1973,11 @@ sub handleIncludeUrl
 ---++ handleIncludeFile( $includeCommandAttribs, $topic, $web, \@verbatimBuffer, @processedTopics )
 Return value: $includedText
 
-Processes a specific instance %INCLUDE{...}% syntax.  Returns the text to be
+Processes a specific instance %<nop>INCLUDE{...}% syntax.  Returns the text to be
 inserted in place of the INCLUDE command.  $topic and $web should be for the
 immediate parent topic in the include hierarchy. @verbatimBuffer is the request-
 global buffer for storing removed verbatim blocks, and @processedTopics is a
-list of topics already %INCLUDE%'ed -- these are not allowed to be included
+list of topics already %<nop>INCLUDE%'ed -- these are not allowed to be included
 again to prevent infinte recursive inclusion.
 
 =cut to implementation
@@ -2276,20 +2276,20 @@ sub showError
 
 ---++ handleToc( $text, $topic, $web, $tocAttributes )
 Parameters:
-   $text          : the text of the current topic
-   $topic         : the topic we are in
-   $web           : the web we are in
-   $tocAttributes : "Topic" [web="Web"] [depth="N"]
+   * $text          : the text of the current topic
+   * $topic         : the topic we are in
+   * $web           : the web we are in
+   * $tocAttributes : "Topic" [web="Web"] [depth="N"]
 Return value: $tableOfContents
 
 Andrea Sterbini 22-08-00 / PTh 28 Feb 2001
 
-Handles %TOC{...}% syntax.  Creates a table of contents using TWiki bulleted
+Handles %<nop>TOC{...}% syntax.  Creates a table of contents using TWiki bulleted
 list markup, linked to the section headings of a topic. A section heading is
 entered in one of the following forms:
    * $headingPatternSp : \t++... spaces section heading
    * $headingPatternDa : ---++... dashes section heading
-   * $headingPatternHt : <h[1-6]> HTML section heading </h[1-6]>
+   * $headingPatternHt : &lt;h[1-6]> HTML section heading &lt;/h[1-6]>
 
 =cut to implementation
 
@@ -2676,7 +2676,7 @@ sub handleIcon
 ---++ handleInternalTags( $text, $topic, $web )
 
 Modifies $text in-place, replacing variables internal to TWiki with their
-values.  Some example variables: %TOPIC%, %SCRIPTURL%, %WIKINAME%, etc.
+values.  Some example variables: %<nop>TOPIC%, %<nop>SCRIPTURL%, %<nop>WIKINAME%, etc.
 
 =cut to implementation
 
@@ -2757,7 +2757,7 @@ sub handleInternalTags
 ---++ takeOutVerbatim( $text, \@verbatimBuffer )
 Return value: $textWithoutVerbatim
 
-Searches through $text and extracts <verbatim> blocks, appending each
+Searches through $text and extracts &lt;verbatim> blocks, appending each
 onto the end of the @verbatimBuffer array and replacing it with a token
 string which is not affected by TWiki rendering.  The text after these
 substitutions is returned.
@@ -2770,9 +2770,9 @@ this use is something like this:
    $renderedText = performSomeRendering($textToRender);
    $resultText = putBackVerbatim($renderedText, "pre", @verbatimBlocks);
 
-Note that some changes are made to verbatim blocks here: < and > are replaced
-by their HTML entities &lt; and &gt;, and the actual <verbatim> tags are
-replaced with <pre> tags so that the text is rendered truly "verbatim" by
+Note that some changes are made to verbatim blocks here: &lt; and > are replaced
+by their HTML entities &lt; and &gt;, and the actual &lt;verbatim> tags are
+replaced with &lt;pre> tags so that the text is rendered truly "verbatim" by
 a browser.  If this is not desired pass "verbatim" as the second parameter of
 putBackVerbatim instead of "pre".
 
@@ -2860,7 +2860,7 @@ sub putBackVerbatim
 ---++ handleCommonTags( $text, $topic, $web, @processedTopics )
 Return value: $handledText
 
-Processes %VARIABLE%, %TOC%, and %INCLUDE% syntax; also includes
+Processes %<nop>VARIABLE%, %<nop>TOC%, and %<nop>INCLUDE% syntax; also includes
 "commonTagsHandler" plugin hook.  If processing an included topic,
 @processedTopics should be a list of topics already included, or in
 the process of being included.
@@ -3307,7 +3307,7 @@ sub fixedFontText
 }
 
 # =========================
-# Build an HTML <Hn> element with suitable anchor for linking from %TOC%
+# Build an HTML &lt;Hn> element with suitable anchor for linking from %<nop>TOC%
 =pod
 
 ---++ sub makeAnchorHeading (  $theText, $theLevel  )
