@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044751568" format="1.0" version="1.63"}%
+%META:TOPICINFO{author="PeterThoeny" date="1048314917" format="1.0" version="1.64"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -377,7 +377,7 @@ __Note:__ There are some more useful variables defined in the TWikiPreferences l
 	* You can add your own Preference Variables for us across an entire site or a single web, using the standard [[#SettingPrefs][Preferences syntax]]. Whatever you include in your Variable will be expanded on display, exactly as if it had been entered directly. You can place formatted text, page links, image paths.
 
 <blockquote style="background-color:#ffffff">
-*Example: Create a custom logo variable the %WEB% web* <br />
+*Example: Create a custom logo variable the <nop>%WEB% web* <br />
 	* To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, define the Variable on the web's WebPreferences page, and upload a logo file, ex: =mylogo.gif=. You can upload by [[FileAttachment][attaching the file]] to WebPreferences, or, to avoid clutter, to any other topic in the same web, ex: =LogoTopic=:
 		* ==<nop>Set MYLOGO = %<nop>PUBURL%/<nop>TWiki/LogoTopic/mylogo.gif== 
 </blockquote>

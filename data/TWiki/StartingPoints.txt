@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044093987" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1048314751" format="1.0" version="1.4"}%
 Welcome to %WIKITOOLNAME%. This page assumes that you are a new user to %WIKITOOLNAME%, and that you've never heard of Wiki before. Here are the most important pages you should know about to get you up to speed on what Wiki is, and how to use it. Follow any of the links below that interest you and use your browser's back button to return to this page if you need to. 
 
 	* WelcomeGuest: A brief intro for first-time visitors
 	* *[[TWikiTutorial]]*: A compact, 20-minute TWiki primer
 	* %HOMETOPIC%: Entry point for this TWiki web.
 	* TWikiSite: Explains what a TWiki site is
-	* WebChanges: Newest topic changes in the %WEB% web
+	* WebChanges: Newest topic changes in the <nop>%WEB% web
 	* TWikiFAQ: Common questions about TWiki use
 
 	* TWikiTopics: Customize, rename, move, or delete TWiki topics
