@@ -84,7 +84,7 @@ use vars qw(
         $viewableAttachmentCount $noviewableAttachmentCount
         $superAdminGroup $doSuperAdminGroup
         $cgiQuery @publicWebList
-        $formatVersion $OS
+        $formatVersion $OS $script
         $readTopicPermissionFailed
 	$pageMode
     );
@@ -504,6 +504,15 @@ sub writeHeader
     # Just write a basic content-type header for text/html
     writeHeaderFull( $query, 'basic', 'text/html', 0);
 }
+
+# =========================
+# Javascript that will be added to (some) template(s)
+sub addScript
+{
+    my( $extraScript ) = @_;
+    $script .= "\n$extraScript";
+}
+
 
 # =========================
 # writeHeaderFull: full header setup for Edit page; will be used
