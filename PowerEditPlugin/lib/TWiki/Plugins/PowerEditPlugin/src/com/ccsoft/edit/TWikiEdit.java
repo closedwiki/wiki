@@ -1,4 +1,4 @@
-// Copyright (C) Crawford Currie 2001 - All rights reserved
+// Copyright (C) Crawford Currie 2001,2002,2003,2004 - All rights reserved
 // It is hereby granted that this software can be used, copied, 
 // modified, and distributed without fee provided that this 
 // copyright notice appears in all copies.
@@ -52,9 +52,7 @@ public class TWikiEdit extends Applet implements Application {
 
     /** Containing frame */
     static Frame frame = null;
-    /** Editing area */
-    static Editor editor;
-
+    private Editor editor = null;
     String text, controlsText;
 
     /** Implements Application to provide the containing Frame */
@@ -65,43 +63,82 @@ public class TWikiEdit extends Applet implements Application {
             return frame;
     }
 
-    /** Get a field in the form */
-    private String getFieldValue(JSObject form, String field) {
-	JSObject member = (JSObject)form.getMember(field);
-	String val = (String)member.getMember("value");
-	if (val != null) {
-	    StringBuffer s = new StringBuffer();
-	    for (int i = 0; i < val.length(); i++) {
-		if (val.charAt(i) != '\r')
-		    s.append(val.charAt(i));
-	    }
-	    val = s.toString();
-	}
-	return val;
+    private static final String truncated(String s) {
+	if (s == null)
+	    return "null";
+	if (s.length() > 40)
+	    return s.substring(0, 37) + "...";
+	return s;
     }
 
-    private void getLargeParameters() {
-	text = controlsText = null;
+    /**
+     * implementation of three-tier strategy for recovering parameters;
+     * First tries to interpret parameter as a Javascript expression,
+     * then as a URL, finally assumes it is the actual value.
+     */
+    private String getLargeParameter(String param) {
+	String pval = getParameter(param);
+	System.out.println("PARAM " + param + " = " + pval);
+	// First try and interpret it as a javascript expression
+	Object obj;
 	try {
 	    JSObject jsWin = JSObject.getWindow(this);
-	    JSObject doc = (JSObject)jsWin.getMember("document");
-	    JSObject form = (JSObject)doc.getMember("main");
-	    text = getFieldValue(form, "text");
-	    controlsText = getFieldValue(form, "controls");
+	    try {
+		obj = jsWin.eval(pval);
+		String val = (String)obj;
+		if (val != null)
+		    return val;
+		else
+		    // Have to do this because otherwise compiler doesn't
+		    // see JSException thrown by eval and doesn't compile!10h
+		    throw new JSException();
+	    } catch (ClassCastException cce) {
+		System.out.println(param + ": Error interpreting '" +
+				   truncated(pval) +
+				   "' as a String");
+	    } catch (SecurityException se) {
+		System.out.println(
+		    param +
+		    ": Security exception when trying to talk to JavaScript");
+	    } catch (JSException jse) {
+		System.out.println(param + ": Error interpreting '" + 
+				   truncated(pval) +
+				   "' as Javascript: " +
+				   jse.getMessage());
+	    }
 	} catch (NoClassDefFoundError ncfe) {
-	    System.out.println("JavaScript not available; trying applet parameters");
-	    text = getParameter("text");
-	    // XMLTokeniser.decode()
-	    controlsText = getParameter("controls");
+	    System.out.println(param + ": JavaScript not available");
 	}
+	// Try and interpret it as a URL instead
+	try {
+	    URL url = new URL(pval);
+	    Reader r = new InputStreamReader(url.openStream());
+	    int ch;
+	    StringBuffer txt = new StringBuffer(1000);
+	    while ((ch = r.read()) != -1) {
+		txt.append((char)ch);
+	    }
+	    return txt.toString();
+	} catch (MalformedURLException mue) {
+	    System.out.println(param + ": '" + truncated(pval) +
+			       "' is not a valid URL");
+	} catch (IOException ioe) {
+	    System.out.println(param + ": IO exception reading from URL - " +
+			       ioe.getMessage());
+	}
+	// Give up; the text is just the value of the parameter
+	return pval;
     }
 
     /** Implements Applet initialisation */
     public synchronized void init() {
-
-	getLargeParameters();
+	text = getLargeParameter("text");
+	controlsText = getLargeParameter("controls");
 	
 	String uf = getParameter("useframe");
+	if (uf == null) {
+	    System.out.println("Warning; no useframe parameter");
+	}
         boolean framed = (uf != null && uf.equals("yes"));
 	Container container;
 
@@ -120,9 +157,11 @@ public class TWikiEdit extends Applet implements Application {
 	    container = this;
 	}
 
+	Editor.setApplication(this);
+
 	if (editor == null) {
 	    try {
-		editor = new Editor(controlsText, container, this);
+		editor = new Editor(controlsText, container, 0);
 	    } catch (IOException ioe) {
 		ioe.printStackTrace();
 		throw new Error("Failed during startup; stack trace should have been printed");
@@ -132,14 +171,13 @@ public class TWikiEdit extends Applet implements Application {
 	int r = Integer.parseInt(getParameter("editboxheight"));
 	int c = Integer.parseInt(getParameter("editboxwidth"));
 
-	// Attach the editor to this application and reset the text
-	editor.reset(this, text, r, c);
-	
+	// reset the text
+	editor.reset(text, r, c);
+
 	if (framed) {
 	    frame.pack();
 	    frame.setSize(10 * r, 10 * c);
 	    frame.show();
-
         }
     }
 

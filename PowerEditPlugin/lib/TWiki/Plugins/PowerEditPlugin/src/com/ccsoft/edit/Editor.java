@@ -28,14 +28,34 @@ class Editor {
     /** Listener for control actions */
     ActionListener actionListener;
 
+    /** Singleton application instance reference */
+    private static Application app;
+
+    /** Get the singleton Application instance */
+    public static Application getApplication() {
+	return app;
+    }
+
+    public static void setApplication(Application a) {
+	app = a;
+    }
+
+    public void addProcessListener(DisplayArea.ProcessListener prl) {
+	displayArea.addProcessListener(prl);
+    }
+
     /**
      * Once an editor has been created it must be reset to give
      * it text and application
      */
-    Editor(String controlsText, Container container, Application app)
+    public Editor(String controlsText, Container container, int daopts)
 	throws IOException {
+
+	if (app == null)
+	    throw new Error("ASSERT");
+
 	// create the HTML display area
-	displayArea = new DisplayArea();
+	displayArea = new DisplayArea(daopts);
 
 	// listener to get the text area reformatted when the container
 	// is resized. Inner classes?
@@ -67,7 +87,7 @@ class Editor {
 	return textArea.getText();
     }
 
-    public void reset(Application app, String text, int r, int c) {
+    public void reset(String text, int r, int c) {
 	textArea.reset(app, text, r, c);
     }
 

@@ -15,8 +15,8 @@ class DIR extends ColumnarList {
     }
 
     private class Bullet extends Word {
-	Bullet() {
-	    super("   ");
+	Bullet(int pos) {
+	    super("   ", pos);
 	}
 
 	public String toHTML(String indent) {
@@ -26,9 +26,9 @@ class DIR extends ColumnarList {
 
     public void tag(XMLTokeniser t) {
 	if (t.string.equals("li")) {
-	    BulletList row = new BulletList();
+	    BulletList row = new BulletList(t);
 	    add(row);
-	    row.add(new Bullet());
+	    row.add(new Bullet(t.markerTag));
 	    row.add(new LI(t), t);
 	} else
 	    super.tag(t);

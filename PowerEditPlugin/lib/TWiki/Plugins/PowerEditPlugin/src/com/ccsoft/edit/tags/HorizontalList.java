@@ -17,8 +17,6 @@ import com.ccsoft.edit.FontContext;
  * and table rows
  */
 abstract class HorizontalList extends ContainerTag {
-    protected HorizontalList() {
-    }
 
     protected HorizontalList(XMLTokeniser t) {
 	super(t);
@@ -72,5 +70,22 @@ abstract class HorizontalList extends ContainerTag {
 	    h = Math.max(h, b.preferredHeight(fc));
 	}
 	return h;
+    }
+
+    /** Default behaviour; not normally used */
+    public void layout(Area area, FontContext fc) {
+	height = 0;
+	Area l = new Area(0, 0, 0, area.ascent);
+	int i = 0;
+	Enumeration e = contents.elements();
+	while (e.hasMoreElements()) {
+	    Block b = (Block)e.nextElement();
+	    b.layout(l, fc);
+	    l.x += b.width;
+	    height = Math.max(height, b.height);
+	}
+	x = area.x;
+	y = area.y;
+	width = l.x;
     }
 }

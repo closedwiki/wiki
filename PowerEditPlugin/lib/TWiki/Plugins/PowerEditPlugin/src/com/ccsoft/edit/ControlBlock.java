@@ -24,7 +24,9 @@ import com.ccsoft.edit.tags.XMLTokeniser;
 class ControlBlock extends Vector {
     Hashtable quickLook = new Hashtable();
 
-    void parse(XMLTokeniser st, String terminator) throws IOException {
+    void parse(XMLTokeniser st, String terminator)
+	throws IOException {
+
 	while (st.nextToken() == XMLTokeniser.TAG) {
 	    if (st.string.equals(terminator))
 		return;
@@ -37,7 +39,8 @@ class ControlBlock extends Vector {
 		    throw new IOException("No name= in <map>");
 		if (def == null)
 		    throw new IOException("No action= in <map>");
-		ControlDefinition cd = new ControlDefinition(name, def, tip);
+		ControlDefinition cd = new ControlDefinition(
+		    name, def, tip);
 		addElement(cd);
 		quickLook.put(cd.getKey(), cd);
 	    }

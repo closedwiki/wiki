@@ -10,7 +10,9 @@ import java.io.*;
 import java.util.Stack;
 import java.util.Vector;
 import com.ccsoft.edit.tags.BODY;
+import com.ccsoft.edit.tags.EntityExpandingReader;
 import com.ccsoft.edit.tags.XMLTokeniser;
+import uk.co.cdot.SuperString;
 
 /**
  * Display area that partners a TextComponent to display the contained
@@ -22,33 +24,44 @@ import com.ccsoft.edit.tags.XMLTokeniser;
  * (or the text changes) the virtual markup is parsed to generate a block
  * structure. Third, the block structure is painted on demand.
  */
-class DisplayArea extends Canvas implements TextListener {
+class DisplayArea extends Canvas implements TextListener, MouseListener {
     /** Partner textarea */
-    TextComponent textArea;
+    private TextComponent textArea;
     /** Block structure of the page */
-    BODY page;
+    private BODY page;
     /** Thread used to ensure parsing doesn't prevent editing */
-    Thread parseThread = null;
+    private Thread parseThread = null;
 
-    public static boolean forcedExit = false;
-    public static boolean tml_default = true;;
+    public static final int FORCE_EXIT = 1;
+    public static final int HTML_ONLY  = 2;
+    private int options;
 
-
-    DisplayArea() {
+    DisplayArea(int opts) {
 	setBackground(Color.lightGray);
 	page = null;
+	addMouseListener(this);
+	options = opts;
+    }
+
+    interface ProcessListener {
+	void setText(String text);
+    }
+    private ProcessListener processListener = null;
+    public void addProcessListener(ProcessListener ear) {
+	processListener = ear;
     }
 
     private Thread tmlParseThread = null;
 
     private class ParseThread extends Thread {
-	private String text;
+	private SuperString text;
 	private boolean isTML;
+	private TextArea intermediate;
 
-	ParseThread(String t, boolean tml) {
+	ParseThread(String t, boolean htmlOnly) {
 	    setDaemon(true);
-	    text = t;
-	    isTML = tml;
+	    text = new SuperString(t);
+	    isTML = !htmlOnly;
 	}
 
 	public void run() {
@@ -56,17 +69,22 @@ class DisplayArea extends Canvas implements TextListener {
 		if (isTML) {
 		    //System.out.println("TML->HTML....");
 		    text = TMLParser.toHTML(text);
+		    if (processListener != null)
+			processListener.setText(text.toString());
 		}
 		if (Thread.currentThread().interrupted())
 		    return;
 		//System.out.println("Parse HTML....");
-		Reader reader = new StringReader(text);
-		XMLTokeniser htmlt = new XMLTokeniser(reader, text.length());
+		XMLTokeniser htmlt = new XMLTokeniser(
+		    new EntityExpandingReader(text.reader()),
+		    text.length());
 		BODY page = new BODY(htmlt);
 		if (Thread.currentThread().interrupted())
 		    return;
 		//System.out.println("Layout....");
 		setPage(page);
+		if (processListener != null)
+		    processListener.setText(page.toString());
 	    } catch (Interruption ie) {
 	    } catch (IOException ioe) {
 		throw new Error("ASSERT");
@@ -88,7 +106,7 @@ class DisplayArea extends Canvas implements TextListener {
 
     /**
      * Set the text in the text area to be the given TML text
-     * @param tml if false, will not preprocess text through
+     * @param html if true, will not preprocess text through
      * the TML parser but assume it is HTML. Used for testing.
      */
     public void setText(String text) {
@@ -102,7 +120,7 @@ class DisplayArea extends Canvas implements TextListener {
 	    }
 	}
 	// will invoke setPage when it's finished
-	parseThread = new ParseThread(text, tml_default);
+	parseThread = new ParseThread(text, (options & HTML_ONLY) != 0);
 	parseThread.start();
     }
 
@@ -122,7 +140,9 @@ class DisplayArea extends Canvas implements TextListener {
 	Dimension ps = p.getSize();
 	int width = ps.width - p.getVScrollbarWidth() - 4;
 	if (page != null) {
+	    int pos = p.getVAdjustable().getValue();
 	    setSize(ps.width, page.height + 100);
+	    p.getVAdjustable().setValue(pos);
 	    invalidate();
 	}
     }
@@ -157,11 +177,26 @@ class DisplayArea extends Canvas implements TextListener {
 	    return;
 	validate();
 	page.paint(g, 0, 0, new FontContext(this));
-	if (forcedExit) {
+	if ((options & FORCE_EXIT) != 0) {
 	    Component p = this;
 	    while (!(p instanceof Frame))
 		p = p.getParent();
 	    ((Frame)p).dispose();
 	}
+    }
+
+    public void mouseClicked(MouseEvent me) {
+	if (page != null) {
+	    int ht = page.hitTest(me.getX(), me.getY(), 0, 0, new FontContext(this));
+	    System.out.println("Line " + ht);
+	}
+    }
+    public void mousePressed(MouseEvent me) {
+    }
+    public void mouseReleased(MouseEvent me) {
+    }
+    public void mouseEntered(MouseEvent me) {
+    }
+    public void mouseExited(MouseEvent me) {
     }
 }

@@ -26,7 +26,9 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-class IntPair implements Serializable {
+import uk.co.cdot.SuperString;
+
+class IntPair {
   public int first, second;
 }
 
@@ -1331,6 +1333,8 @@ public class RE extends REToken {
       return new CharIndexedCharArray((char[]) input,index);
     else if (input instanceof StringBuffer)
       return new CharIndexedStringBuffer((StringBuffer) input,index);
+    else if (input instanceof SuperString)
+      return new CharIndexedSuperString((SuperString) input,index);
     else if (input instanceof InputStream)
       return new CharIndexedInputStream((InputStream) input,index);
     else if (input instanceof Reader)

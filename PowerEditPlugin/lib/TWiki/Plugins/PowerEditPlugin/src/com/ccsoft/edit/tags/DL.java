@@ -27,7 +27,7 @@ class DL extends ColumnarList {
 	for (int i = 0; i < contents.size(); i++) {
 	    Block b = (Block)contents.elementAt(i);
 	    if (lastb != null && (b instanceof DD) && (lastb instanceof DT)) {
-		CascadedList newB = new CascadedList();
+		CascadedList newB = new CascadedList(t);
 		newB.add(lastb);
 		newB.add(b);
 		i--;

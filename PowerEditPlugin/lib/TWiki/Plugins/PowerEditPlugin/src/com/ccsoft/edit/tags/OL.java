@@ -15,8 +15,8 @@ public class OL extends ColumnarList {
     }
 
     private class Ordinal extends Word {
-	Ordinal(int i) {
-	    super(i + " ");
+	Ordinal(int i, int pos) {
+	    super(i + " ", pos);
 	}
 
 	public String toHTML(String indent) {
@@ -26,9 +26,9 @@ public class OL extends ColumnarList {
 
     public void tag(XMLTokeniser t) {
 	if (t.string.equals("li")) {
-	    BulletList row = new BulletList();
+	    BulletList row = new BulletList(t);
 	    add(row);
-	    row.add(new Ordinal(contents.size()));
+	    row.add(new Ordinal(contents.size(), t.markerTag));
 	    row.add(new LI(t), t);
 	} else
 	    super.tag(t);

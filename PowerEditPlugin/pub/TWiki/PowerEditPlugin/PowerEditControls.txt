@@ -1,4 +1,3 @@
-<verbatim>
 <!-- Controls description for PowerEditPlugin -->
 <macros>
 	<map name="action" action="/home/%&lt;nop&gt;ACTION{who=&quot;&quot; due=&quot;&quot;}% " />
@@ -45,6 +44,4 @@
 	<map name="Red" action="/cut/ %RED% /paste/ %ENDCOLOR%" tip="Make selection red" />
 	<map name="Green" action="/cut/ %GREEN% /paste/ %ENDCOLOR%" tip="Make selection green" />
 	<map name="Blue" action="/cut/ %GREEN% /paste/ %ENDCOLOR%" tip="Make selection blue" />
-	<map name="http://localhost/twiki/pub/TWiki/SmiliesPlugin/smile.gif" action="/action/" tip="Insert Action" />
 </bottom>
-</verbatim>

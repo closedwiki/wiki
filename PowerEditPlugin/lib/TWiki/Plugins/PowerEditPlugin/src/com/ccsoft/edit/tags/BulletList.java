@@ -11,7 +11,8 @@ import com.ccsoft.edit.Block;
  * only and have no HTML representation.
  */
 class BulletList extends AlignedList {
-    public BulletList() {
+    public BulletList(XMLTokeniser t) {
+	super(t);
     }
 
     public String toHTML(String indent) {

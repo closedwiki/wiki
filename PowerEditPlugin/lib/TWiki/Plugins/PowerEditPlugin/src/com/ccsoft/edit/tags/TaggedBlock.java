@@ -12,13 +12,8 @@ abstract class TaggedBlock extends Block {
     TagAttributes attrs = null;
     boolean preformatted;
 
-    protected TaggedBlock() {
-	tag = "";
-	attrs = null;
-	preformatted = false;
-    }
-
     protected TaggedBlock(XMLTokeniser t) {
+	super(t.markerTag);
 	tag = t.string;
 	attrs = t.attrs;
 	preformatted = t.isPreformatted;
@@ -48,7 +43,7 @@ abstract class TaggedBlock extends Block {
 	    case XMLTokeniser.EOF:
 		return;
 	    case XMLTokeniser.WORD:
-		word(t.string);
+		word(t);
 		break;
 	    case XMLTokeniser.TAG:
 		if (t.string.equals("/" + getTag())) {
@@ -62,7 +57,7 @@ abstract class TaggedBlock extends Block {
 	}
     }
 
-    public abstract void word(String w);
+    public abstract void word(XMLTokeniser t);
     public abstract void tag(XMLTokeniser t);
 
     public String toString() {

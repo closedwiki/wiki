@@ -44,11 +44,11 @@ class BR extends TaggedBlock {
     public void paint(Graphics g, int ox, int oy, FontContext fc) {
     }
 
-    public void word(String w) {
+    public void tag(XMLTokeniser t) {
 	throw new Error("ASSERT");
     }
 
-    public void tag(XMLTokeniser t) {
+    public void word(XMLTokeniser t) {
 	throw new Error("ASSERT");
     }
 }

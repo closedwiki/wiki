@@ -20,4 +20,12 @@ public final class JSObject extends Hashtable {
     public static void setWindow(JSObject w) {
 	window = w;
     }
+
+    public Object eval(String m) {
+	int i = m.indexOf('.');
+	if (i < 0)
+	    return getMember(m);
+	else
+	    return ((JSObject)getMember(m.substring(0, i))).eval(m.substring(i+1));
+    }
 }

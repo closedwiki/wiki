@@ -73,7 +73,7 @@ public class FontContext {
     FontContext(Component c) {
 	comp = c;
 	stack = new Stack();
-	stack.push(new FontData("Dialog",
+	stack.push(new FontData("Arial",
 				3,
 				Color.black,
 				Font.PLAIN));
