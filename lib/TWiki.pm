@@ -64,7 +64,7 @@ use vars qw(
         $defaultUserName $userName $wikiUserName 
         $wikiHomeUrl $defaultUrlHost $urlHost
         $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir
-        $wikiToolName $securityFilter
+        $wikiToolName $securityFilter $uploadFilter
         $debugFilename $htpasswdFilename 
         $logFilename $remoteUserFilename $wikiUsersTopicname 
         $userListFilename %userToWikiList
@@ -107,7 +107,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "18 Mar 2001";
+$wikiversion      = "25 Mar 2001";
 
 # ===========================
 # read the configuration part
@@ -400,7 +400,6 @@ sub revDate2EpSecs {
     #my $mon = $mon2num{$monstr};
 
     return timegm(0, $min, $hr, $day, $mon2num{$mon}, $year - 1900);
-
 }
 
 # =========================
@@ -646,10 +645,10 @@ sub handleTime
             $value =~ s/\$min[a-z]*/sprintf("%.2u",$min)/geoi;
             $value =~ s/\$hou[a-z]*/sprintf("%.2u",$hour)/geoi;
             $value =~ s/\$day[a-z]*/sprintf("%.2u",$day)/geoi;
-            $value =~ s/\$mon[a-z]*/$isoMonth[$mon]/goi;
-            $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
             $value =~ s/\$yea[a-z]*/sprintf("%.4u",$year+1900)/geoi;
             $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
+            $value =~ s/\$mon[a-z]*/$isoMonth[$mon]/goi;
+            $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
         } elsif( $theZone eq "servertime" ) {
             my( $sec, $min, $hour, $day, $mon, $year) = localtime( $time );
             $value = $format;
@@ -657,10 +656,10 @@ sub handleTime
             $value =~ s/\$min[a-z]*/sprintf("%.2u",$min)/geoi;
             $value =~ s/\$hou[a-z]*/sprintf("%.2u",$hour)/geoi;
             $value =~ s/\$day[a-z]*/sprintf("%.2u",$day)/geoi;
-            $value =~ s/\$mon[a-z]*/$isoMonth[$mon]/goi;
-            $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
             $value =~ s/\$yea[a-z]*/sprintf("%.4u",$year+1900)/geoi;
             $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
+            $value =~ s/\$mon[a-z]*/$isoMonth[$mon]/goi;
+            $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
         }
     } else {
         if( $theZone eq "gmtime" ) {
