@@ -2,7 +2,6 @@
 use strict;
 use diagnostics;
 
-
 package TWiki::Contrib::DistributionContrib::DistributionFetcher;
 my %config = %TWiki::Contrib::DistributionContrib::Config::config;
 use LWP::Simple;
