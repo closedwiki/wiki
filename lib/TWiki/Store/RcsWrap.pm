@@ -241,17 +241,16 @@ sub getRevisionInfo {
             FILENAME => $self->{rcsFile} );
        $rcsError = "Error with $cmd, output: $rcsOut" if( $exit );
        if( ! $rcsError ) {
-            $rcsOut =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/;
-            $date = $1 || "";
-            $user = $2 || "";
-            $comment = $3 || "";
-            $date = TWiki::Time::parseTime( $date );
-            if( $rcsOut =~ /revision 1.([0-9]*)/ ) {
-                $rev = $1;
-            } else {
-                $rev = 1;
+            if( $rcsOut =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/ ) {
+                $date = $1 || "";
+                $user = $2 || "";
+                $comment = $3 || "";
+                $date = TWiki::Time::parseTime( $date );
+                if( $rcsOut =~ /revision 1.([0-9]*)/ ) {
+                    $rev = $1;
+                }
             }
-            $rcsError = "Rev missing from revision file $self->{rcsFile}" unless( $rev );
+            $rcsError = "Rev info missing from revision file $self->{rcsFile}" unless( $rev );
        }
     } else {
        $rcsError = "Revision file $self->{rcsFile} is missing";

@@ -175,8 +175,13 @@ sub _rexeq {
     $a =~ s/([\[\]\(\)\\\?\*\+\.\/\^\$])/\\$1/g;
     $a =~ s/\@DATE/[0-3]\\d [JFMASOND][aepuco][nbrylgptvc] [12][09]\\d\\d/g;
     $a =~ s/\@TIME/[012]\\d:[0-5]\\d/g;
-    $a =~ s/\@WIKINAME/[A-Z]+[a-z]+[A-Z]+[a-z]+/g;
+    my $wikiword = "[A-Z]+[a-z]+[A-Z]+[a-z]+";
+    $a =~ s/\@WIKIWORD/$wikiword/og;
+    my $satWord = "<a class=\"twikiLink\".*?\">$wikiword</a>";
+    my $unsatWord = "<span class=\"twikiNewLink\".*?><font color=\"#\\w+\">$wikiword</font><a href=\".*?\" rel='nofollow'><sup>\\?</sup></a></span>";
+    $a =~ s/\@WIKINAME/($satWord|$unsatWord)/og;
     $a =~ s/!REX(\d+)!/$res[$1]/g;
+    $a =~ s!/!\/!g;
 
     return $b =~ /^$a$/;
 }
