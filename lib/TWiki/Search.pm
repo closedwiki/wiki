@@ -778,6 +778,22 @@ sub searchWeb
               next;
           }
 
+          # Special handling for format="..."
+          if( $theFormat ) {
+              unless( $text ) {
+                  ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
+                  $text =~ s/%WEB%/$thisWebName/gos;
+                  $text =~ s/%TOPIC%/$topic/gos;
+              }
+              if( $doExpandVars ) {
+                  if( $topic eq $TWiki::topicName ) {
+                      # primitive way to prevent recursion
+                      $text =~ s/%SEARCH/%<nop>SEARCH/g;
+                  }
+                  $text = &TWiki::handleCommonTags( $text, $topic, $thisWebName );
+              }
+          }
+
           my @multipleHitLines = ();
           if( $doMultiple ) {
               my $pattern = $tokens[$#tokens]; # last token in an AND search
@@ -925,18 +941,6 @@ sub searchWeb
 
             } elsif( $theFormat ) {
                 # free format, added PTh 10 Oct 2001
-                if( ! $text ) {
-                    ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
-                    $text =~ s/%WEB%/$thisWebName/gos;
-                    $text =~ s/%TOPIC%/$topic/gos;
-                }
-                if( $doExpandVars ) {
-                    if( $topic eq $TWiki::topicName ) {
-                        # primitive way to prevent recursion
-                        $text =~ s/%SEARCH/%<nop>SEARCH/g;
-                    }
-                    $text = &TWiki::handleCommonTags( $text, $topic, $thisWebName );
-                }
                 $tempVal =~ s/\$summary/&TWiki::makeTopicSummary( $text, $topic, $thisWebName )/geos;
                 $tempVal =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
                 $tempVal =~ s/\$formname/_getMetaFormName( $meta )/geos;
