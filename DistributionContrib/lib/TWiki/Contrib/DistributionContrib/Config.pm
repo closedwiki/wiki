@@ -1,12 +1,16 @@
 #! perl -w
 use strict;
 package TWiki::Contrib::DistributionContrib::Config;
+require Exporter;
+our @ISA = qw(Exporter);
 
-use vars qw($serverUrl $saveTopic $saveFilename);
+our @EXPORT=qw(%config);
 
-my $serverUrl = "http://twikitreleasetracker.mrjc.com";
-my $saveTopic = "TWiki.DistributionContrib";
-my $saveFilename = "remoteFileSavedLocally";
+%TWiki::Contrib::DistributionContrib::Config::config = (
+ serverUrl => "http://twikitreleasetracker.mrjc.com",
+ saveTopic => "TWiki.DistributionContrib",
+ saveFilename => "remoteFileSavedLocally"
+);
 
 1;
 
