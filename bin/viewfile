@@ -54,9 +54,9 @@ sub main
         my $fileContent = TWiki::Store::readAttachmentVersion( $webName, $topic, $fileName, $rev ); 
         if( $fileContent ) {
 	    if ( $fileName =~ /\.txt$/ ) {
-	       print "Content-type: text/plain\n\n";
+	       print $query->header( -type=>'text/plain' );
 	    } else {
-	       print "Content-type: application\n\n";
+	       print $query->header( -type=>'application' );
 	    }
 	    print "$fileContent";
 	    return;
