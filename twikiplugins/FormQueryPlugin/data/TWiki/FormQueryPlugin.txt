@@ -304,6 +304,8 @@ The =tasknotify= script should be invoked by a cron job (or equivalent). Note th
 ---
 #SettingsAnchor
 ---++ <nop>%TOPIC% Settings
+One line description, shown in the TWiki.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = Provides query capabilities across a database defined using forms and embedded tables in TWiki topics. 
 Set to 1 to enable internal consistency checks and other debug states.
 	* Set DEBUG = 0
 Set to 0 if you do not want to use the =Storable= module even if it is installed. The plugin is _much_ faster if =Storable= is installed and enabled.
