@@ -1124,14 +1124,12 @@ sub getMetaFormField
         $name = $params[0] || "";
         $break = $params[1] || 1;
     }
-    my $title = "";
     my $value = "";
     my @fields = $theMeta->find( "FIELD" );
     foreach my $field ( @fields ) {
-        $title = $field->{"title"};
         $value = $field->{"value"};
         $value =~ s/^\s*(.*?)\s*$/$1/go;
-        if( $title eq $name ) {
+        if( $name =~ /^($field->{"name"}|$field->{"title"})$/ ) {
             $value = breakName( $value, $break );
             return $value;
         }
