@@ -1,0 +1,194 @@
+<font color="red" size="+2">Authorization Failed</font>
+
+Did you type in your WikiName and password correctly?
+
+To edit pages on this %WIKITOOLNAME% Collaborative Web, you must have a registered user name and password. <br> __Note:__ You can also login anonymously as user *TWikiGuest* with password *guest*
+
+To register as a new user, simply fill out this form:
+
+<!-- IMPORTANT NOTE if you want to customize this form: You can delete or add new input variables in this form. Use the topic TWikiRegistrationPub in case this installation is on a public server (just copy the content over to the TWikiRegistration topic). The name="" parameter of the input tags must start with: "Twk0..." (if this is an optional entry), "Twk1..." (if this is a required entry). This will ensure that the fields are processed correctly. -->
+
+<form action="%SCRIPTURL%/register" method="post">
+<table border="1">
+<tr>
+  <td align="right"> First & last name: </td>
+  <td><input type="text" name="Twk1Name" size="40" value="" onBlur="var sIn = this.value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); var ch2 = ''; if( (ch=='à')||(ch=='á')||(ch=='â')||(ch=='ã')||(ch=='å') ) { ch = 'a'; } if( (ch=='è')||(ch=='é')||(ch=='ê') ) { ch = 'e'; } if( ch=='ç') { ch = 'c'; } if( ch=='ó') { ch = 'o'; } if( ch=='ä') { ch = 'a'; ch2 = 'e'; } if( ch=='ö') { ch = 'o'; ch2 = 'e'; } if( ch=='ü') { ch = 'u'; ch2 = 'e'; } if( ch=='Ä') { ch = 'A'; ch2 = 'e'; } if( ch=='Ö') { ch = 'O'; ch2 = 'e'; } if( ch=='Ü') { ch = 'U'; ch2 = 'e'; } if( ch=='ß') { ch = 's'; ch2 = 's'; } if( ((ch>='a')&&(ch<='z')) || ((ch>='A')&&(ch<='Z')) ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } sOut+=ch; if( ch2!='') { sOut+=ch2; } } else { if( ch==' ' ) { chgUpper = true; } } } this.form.Twk1WikiName.value=sOut;" > =<font color="red">**</font>= </td>
+</tr><tr>
+  <td align="right"> Your WikiName: </td>
+  <td><input type="text" name="Twk1WikiName" size="40" value="" > =<font color="red">**</font>= </td>
+</tr><tr>
+  <td align="right"> Email address: </td>
+  <td><input type="text" name="Twk1Email" size="40" value="" > =<font color="red">**</font>= </td>
+</tr><tr>
+  <td align="right"> Your password: </td>
+  <td><input type="password" name="Twk1Password" size="40" value="" > =<font color="red">**</font>= </td>
+</tr><tr>
+  <td align="right"> Retype password: </td>
+  <td><input type="password" name="Twk1Confirm" size="40" value="" > =<font color="red">**</font>= </td>
+</tr><tr>
+  <td align="right"> Company name: </td>
+  <td><input type="text" name="Twk0CompanyName" size="40" value="" ></td>
+</tr><tr>
+  <td align="right"> Company URL: <br> (or department URL) &nbsp; </td>
+  <td><input type="text" name="Twk0CompanyURL" size="40" onBlur="if(this.value=='http://') { this.value='' }" onFocus="if(this.value=='') { this.value='http://' }"></td>
+</tr><tr>
+  <td align="right"> Country: </td>
+  <td>
+  <select name="Twk1Country" size="1">
+  <option selected value="">Select...</option>
+  <option>USA</option>
+  <option>Albania</option>
+  <option>Algeria</option>
+  <option>Angola</option>
+  <option>Argentina</option>
+  <option>Armenia</option>
+  <option>Aruba</option>
+  <option>Australia</option>
+  <option>Austria</option>
+  <option>Azerbaijan</option>
+  <option>Bahrain</option>
+  <option>Bangladesh</option>
+  <option>Belgium</option>
+  <option>Belize</option>
+  <option>Benin</option>
+  <option>Bolivia</option>
+  <option>Bosnia and Hercegovina</option>
+  <option>Brazil</option>
+  <option>Bulgaria</option>
+  <option>Burundi</option>
+  <option>Cambodia</option>
+  <option>Cameroon</option>
+  <option>Canada</option>
+  <option>Central African Republic</option>
+  <option>Chile</option>
+  <option>China</option>
+  <option>Colombia</option>
+  <option>Congo</option>
+  <option>Costa Rica</option>
+  <option>Croatia</option>
+  <option>Cyprus</option>
+  <option>Czech Republic</option>
+  <option>Denmark</option>
+  <option>Ecuador</option>
+  <option>Egypt</option>
+  <option>El Salvador</option>
+  <option>Estonia</option>
+  <option>Ethiopia</option>
+  <option>Fiji</option>
+  <option>Finland</option>
+  <option>France</option>
+  <option>Georgia</option>
+  <option>Germany</option>
+  <option>Gibraltar</option>
+  <option>Greece</option>
+  <option>Guam</option>
+  <option>Guatemala</option>
+  <option>Haiti</option>
+  <option>Hong Kong</option>
+  <option>Hungary</option>
+  <option>Iceland</option>
+  <option>India</option>
+  <option>Indonesia</option>
+  <option>Iran</option>
+  <option>Iraq</option>
+  <option>Ireland</option>
+  <option>Israel</option>
+  <option>Italy</option>
+  <option>Japan</option>
+  <option>Jordan</option>
+  <option>Kazakstan</option>
+  <option>Kenya</option>
+  <option>Korea</option>
+  <option>Kuwait</option>
+  <option>Kyrgyz Rebublic</option>
+  <option>Laos</option>
+  <option>Latvia</option>
+  <option>Lebanon</option>
+  <option>Liberia</option>
+  <option>Liechtenstein</option>
+  <option>Lithuania</option>
+  <option>Luxembourg</option>
+  <option>Libya</option>
+  <option>Macao</option>
+  <option>Macedonia</option>
+  <option>Malaysia</option>
+  <option>Malawi</option>
+  <option>Malta</option>
+  <option>Mexico</option>
+  <option>Monaco</option>
+  <option>Morocco</option>
+  <option>Mozambique</option>
+  <option>Namibia</option>
+  <option>Nepal</option>
+  <option>Netherlands</option>
+  <option>New Zealand</option>
+  <option>Nicaragua</option>
+  <option>Nigeria</option>
+  <option>Norway</option>
+  <option>Oman</option>
+  <option>Pakistan</option>
+  <option>Panama</option>
+  <option>Paraguay</option>
+  <option>Peru</option>
+  <option>Philippines</option>
+  <option>Poland</option>
+  <option>Portugal</option>
+  <option>Romania</option>
+  <option>Russia</option>
+  <option>Saudi Arabia</option>
+  <option>Senegal</option>
+  <option>Singapore</option>
+  <option>Slovakia</option>
+  <option>Slovenia</option>
+  <option>South Africa</option>
+  <option>Spain</option>
+  <option>Sri Lanka</option>
+  <option>Suriname</option>
+  <option>Sweden</option>
+  <option>Switzerland</option>
+  <option>Syria</option>
+  <option>Taiwan</option>
+  <option>Tanzania</option>
+  <option>Thailand</option>
+  <option>Tajikistan</option>
+  <option>Tunisia</option>
+  <option>Turkey</option>
+  <option>Turkmenistan</option>
+  <option>Uganda</option>
+  <option>Ukraine</option>
+  <option>United Arab Emirates</option>
+  <option>United Kingdom</option>
+  <option>Uruguay</option>
+  <option>USA</option>
+  <option>Uzbekistan</option>
+  <option>Vatican City</option>
+  <option>Venezuela</option>
+  <option>Vietnam</option>
+  <option>Yemen</option>
+  <option>Yugoslavia</option>
+  <option>Zaire</option>
+  <option>Zambia</option>
+  <option>Zimbabwe</option>
+  <option value="Other Country">Other Country</option>
+  </select> =<font color="red">**</font>=
+  </td>
+</tr><tr>
+  <td valign="top" align="right"> Comments : <br> (optional) &nbsp; </td>
+  <td><textarea name="Twk0Comment" wrap="virtual" rows="4" cols="38"></textarea></td>
+</tr><tr>
+  <td valign="top" align="right"> &nbsp; <input type="hidden" name="TopicName" value="%TOPIC%"></td>
+  <td> <input type="submit" value=" Submit "> &nbsp;&nbsp; (Fields marked =<Font color="red">**</font>= are required) </td>
+</tr>
+</table>
+</form>
+
+__Submitting the form will automatically:__ 
+	* Create an account for you, so that you can start editing pages using your WikiName.
+	* Create your personal TWiki topic using your WikiName as topic name, and add the data you submitted to the topic.
+	* Add your name to the list of users in the TWikiUsers topic.
+	* Send you a confirmation of your registration by email.
+
+
+Once registered you can login using your WikiName and password.
+
+If you have any questions about registration, send an email to <A href="mailto:%WIKIWEBMASTER%?subject=%TOPIC% Question">%WIKIWEBMASTER%</A>.
