@@ -68,7 +68,7 @@ sub renderMetaData
         $footer = "|  $footer  |||||||";
     }
     
-    TWiki::writeDebug( "Attach: $header$metaText$footer" );
+    #TWiki::writeDebug( "Attach: $header$metaText$footer" );
     
     my $text = "";
     if( $attachmentCount ) {
