@@ -711,12 +711,39 @@ sub setSessionValueHandler
     return &applyHandlers;
 }
 
-# =========================
+# ========================
 =pod
 
----++ sub renderFormFieldForEditHandler ()
+---++ sub renderFormFieldForEditHandler ( $name, $type, $size, $value, $attributes, $possibleValues )
 
-Not yet documented.
+| Description:       | This handler is called by Form.renderForEdit, before built-in types are considered. It generates the HTML text rendering this form field, or false, if the rendering should be done by the built-in type handlers. |
+| Parameter: =$name= | name of form field |
+| Parameter: =$type= | type of form field |
+| Parameter: =$size= | size of form field |
+| Parameter: =$value= | value held in the form field |
+| Parameter: =$attributes= | attributes of form field  |
+| Parameter: =$possibleValues= | the values defined as options for form field, if any |
+| Return: =$text=  | HTML text that renders this field. If false, form rendering continues by considering the built-in types. |
+
+Typical usage is in the style of Form.renderForEdit:
+
+<pre>
+   if ( is_type1($type) ) {
+      $ret = compute_formating_for_type1();
+   } elsif ( is_type2($type) ) {
+      $ret = compute_formating_for_type2();
+   } ...
+   clean_up_if_necessary($ret);
+   return $ret;
+</pre>
+
+Note that a common application would be to generate formatting of the 
+field involving generation of javascript. Such usually also requires 
+the insertion of some common javascript into the page header. Unfortunately, 
+there is currently no mechanism to pass that script to where the header of 
+the page is visible. Consequentially, the common javascript will have to
+be emitted as part of the field formatting and might be duplicated many
+times throughout the page.
 
 =cut
 
