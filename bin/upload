@@ -61,6 +61,9 @@ sub updateAttachment
     my $lcFileName = lc $fileName;
     my $fileIcon = filenameToIcon( $fileName );
 
+    # prevent links for $filePath, i.e. "\some\File with WikiName.txt"
+    $filePath =~ s/([\(\-\*\s]+)([A-Z]+)/$1\%NOP\%$2/go;
+
     my $result = $atTableBefore;
     my $found = 0;
 

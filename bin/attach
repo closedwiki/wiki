@@ -40,6 +40,7 @@ sub getAttachAttr
             if( ! $filePath ) { $filePath = ""; }
             $filePath =~ s/<TwkData value="(.*)">//go;
             if( $1 ) { $filePath = $1; } else { $filePath = ""; }
+            $filePath =~ s/\%NOP\%//goi;   # delete placeholder that prevents WikiLinks
             ( $before, $fileSize,    $after ) = split( /<(?:\/)*TwkFileSize>/, $set );
             if( ! $fileSize ) { $fileSize = "0"; }
             ( $before, $fileDate,    $after ) = split( /<(?:\/)*TwkFileDate>/, $set );
