@@ -1,21 +1,50 @@
 %TMPL:INCLUDE{"renamebase"}%
+
+
+
 %TMPL:DEF{"titleaction"}%(delete) %TMPL:END%
+
+
+
 %TMPL:DEF{"webaction"}%Delete%TMPL:END%
+
+
+
 %TMPL:DEF{"newtopic"}%<input name="newtopic" value="%NEW_TOPIC%" size="36" />%TMPL:END%
+
+
+
 %TMPL:DEF{"newweb"}%<select name="newweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%NEW_WEB%" separator=" "}%</select>%TMPL:END%
-%TMPL:DEF{"notes"}%
-<br />
-<input type="checkbox" name="nonwikiword" %NONWIKIWORDFLAG% />
-Allow non <nop>WikiWord for deleted topic name. <br />
-__Note:__ In case this topic already exists in the Trash web you can
-specify a different name, e.g. <nop>%NEW_TOPIC%1234.%TMPL:END%
+
+
+
+%TMPL:DEF{"namehelp"}%
+In case this topic already exists in the Trash web you can specify a different name, e.g. <nop>%NEW_TOPIC%1234.
+%TMPL:END%
+
+
+
+%TMPL:DEF{"movewebhelp"}%Deleted topics will be moved to the Trash web%TMPL:END%
+
+
+
 %TMPL:DEF{"hidden"}% 
 <script type="text/javascript">
 <!-- hide
 checkAll(false)
 // stop hiding -->
 </script> %TMPL:END%
-%TMPL:DEF{"topicaction"}%
- <input type="submit" value="Delete" />
- %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
+<table>
+<tr>
+<td class="twikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>
+<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Delete" /></td>
+<td class="twikiAddCol"></td>
+</tr></table></div>%TMPL:END%
+
+
+
 %TMPL:P{"rename"}%

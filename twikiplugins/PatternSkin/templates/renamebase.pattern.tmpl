@@ -1,67 +1,95 @@
 %TMPL:INCLUDE{"twiki"}%
 
+
+
 %TMPL:DEF{"script"}%
- <script language="JavaScript">
- <!--HIDE
-  function launchWindow( theWeb, theTopic ) {
-    win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-    if( win ) {
-      win.focus();
-    }
-    return false;
- }
- function checkAll( theCheck )
- {
-   // find button element index
-   var j = 0;
-   for( var i = 0; i < document.rename.length; i++ ) {
-     if( document.rename.elements[i].name.match( "RENAME" ) ) {
-       document.rename.elements[i].checked = theCheck;
-     }
-   }
- }
- //STOP HIDING-->
- </script>
- %TMPL:END%
+<script type="text/javascript">
+<!--HIDE
+	function initPage() { }
+	function launchWindow( theWeb, theTopic ) {
+		win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+		if( win ) {
+			win.focus();
+		}
+		return false;
+	}
+	function checkAll( theCheck ) {
+		// find button element index
+		var j = 0;
+		for( var i = 0; i < document.rename.length; i++ ) {
+			if( document.rename.elements[i].name.match( "RENAME" ) ) {
+				document.rename.elements[i].checked = theCheck;
+			}
+		}
+	}
+//STOP HIDING-->
+</script>%TMPL:END%
+
+
 
 %TMPL:DEF{"bodystart"}%
-<body id="renamepage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+<body class="twikiNoViewPage twikiRenamePage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+
+
+
+%TMPL:DEF{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">Allow non <nop>WikiWord for the new topic name</label>%TMPL:END%
+
+
+
+%TMPL:DEF{"content"}%
+<form method="post" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+---+ %TMPL:P{"webaction"}% %TOPIC%
+<div class="twikiVersatileTable">
+<table>
+<tr>
+<th>Change from:</th>
+<td class="twikiOldCol"><b><nop>%WEB%.%TOPIC%</b></td>
+<td class="twikiOldCol twikiHelpCol"></td>
+</tr>
+<tr>
+<th>To web:</th>
+<td class="twikiMainCol">%TMPL:P{"newweb"}%</td>
+<td class="twikiMainCol twikiHelpCol">%TMPL:P{"movewebhelp"}%</td>
+</tr>
+<tr>
+<th>Topic name:</th>
+<td class="twikiMainCol">%TMPL:P{"newtopic"}%</td>
+<td class="twikiMainCol twikiHelpCol">%TMPL:P{"namehelp"}%</td>
+</tr>
+<tr>
+<th></th>
+<td class="twikiMainCol">%TMPL:P{"allownonwikiword"}%</td>
+<td class="twikiMainCol twikiHelpCol"></td>
+</tr>
+</table>
+</div>
+
+<div class="twikiSearchResults"><div class="twikiSearchResultsHeader">Change links in topics that refer to %TOPIC% in the <nop>%WEB% Web:</div>%RESEARCH{ "%TOPIC%" web="%WEB%" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%</div>
+
+<div class="twikiSearchResults"><div class="twikiSearchResultsHeader">Change links in topics that refer to [[%WEB%.%TOPIC%]] in any Web:</div>%RESEARCH{ "%WEB%\.%TOPIC%" web="all" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%</div>
+<div class="twikiTopicActionSecondary">
+<table>
+<tr>
+<td><input type="button" class="twikiButton" value="Select all" onclick="checkAll(true);" /><input type="button" class="twikiButton" value="Clear all" onclick="checkAll(false);" /> checkboxes of referenced topics</td>
+</tr></table></div>
+<div class="twikiHelp">
+*Note:*
+   * Get help on
+     <a target="ManagingTopics" onclick="return launchWindow('%TWIKIWEB%','ManagingTopics')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingTopics">Renaming and moving topics</a>.
+   * Select the Trash Web to delete the topic.
+   * The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)
+</div>
+%TMPL:P{"topicaction"}%
+%TMPL:P{"hidden"}%
+</form>
+%TMPL:END%
+
+
 
 %TMPL:DEF{"rename"}%
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%
-
-<form method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-%TMPL:P{"topbar"}%
----+ %TMPL:P{"webaction"}% <code>%TOPIC%</code>
-
-| |  *Web:* | *&nbsp;Topic:* |
-|  *From:* |    <nop>%WEB%. | &nbsp;%TOPIC% |
-|  *To:* |  %TMPL:P{"newweb"}%. | %TMPL:P{"newtopic"}% |
-%TMPL:P{"notes"}%
-
----++ Change links in topics that refer to <nop>%TOPIC% in the <nop>%WEB% Web:
-
-%RESEARCH{ "%TOPIC%" web="%WEB%" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
-
----++ Change links in topics that refer to <nop>%WEB%.<nop>%TOPIC% in any Web:
-
-%RESEARCH{ "%WEB%\.%TOPIC%" web="all" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
-
-<input type="button" value="Set" onClick="checkAll(true);" />
-<input type="button" value="Clear" onClick="checkAll(false);" /> checkboxes of all referenced topics
-
-__Note:__
-   * Get help on
-     <a target="ManagingTopics" onClick="return launchWindow('%TWIKIWEB%','ManagingTopics')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingTopics">Renaming and moving topics</a>.
-   * Select the Trash Web to delete the topic.
-   * The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)
-
- %TMPL:P{"topicaction"}%
-
-%TMPL:P{"hidden"}%
-%TMPL:P{"standardfooter"}%
-</form>
+%TMPL:P{"main"}%
 %TMPL:P{"bodyend"}%
 %TMPL:END%

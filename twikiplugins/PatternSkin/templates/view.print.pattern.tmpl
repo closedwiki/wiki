@@ -1,0 +1,42 @@
+%TMPL:INCLUDE{"twiki.pattern"}%
+
+
+
+%TMPL:DEF{"bodystart"}%<body class="twikiViewPage twikiPrintPage">%TMPL:END%
+
+
+
+%TMPL:DEF{"form"}%%META{"form"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"attachments"}%%META{"attachments"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%</div></div>%TMPL:P{"bottombar"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"topicinfo"}%<div class="twikiTopicInfo"><span class="twikiRevInfo twikiGrayText">Revision: %REVINFO%</span></div>%TMPL:END%
+
+
+
+%TMPL:DEF{"content"}%<div class="twikiTopic">
+%TEXT%</div>
+%TMPL:P{"form"}%%TMPL:P{"attachments"}%
+%TMPL:P{"topicinfo"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"standardfooter"}%
+<div class="twikiTopicFooter"><span class="twikiLeft"><span class="twikiHomePath">[[%WEB%.WebHome][%WEB%]] %META{"parent" nowebhome="on" prefix=" <span class='sep'>&gt;</span> " suffix=""}% <span class='sep'>&gt;</span> <nop>%TOPIC% </span></span></div>%TMPL:END%
+
+
+
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%

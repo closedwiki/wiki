@@ -1,12 +1,9 @@
 %TMPL:INCLUDE{"twiki"}%
 
-%TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
-%TMPL:DEF{"titlehelp"}% %TMPL:END%
-%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
-%TMPL:DEF{"topicaction"}% <input type="submit" value=" &nbsp; Preview Changes &nbsp; " />
-  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
+
+
 %TMPL:DEF{"script"}%
-<script language="JavaScript">
+<script type="text/javascript">
 <!--HIDE
 ns4 = (document.layers)? true:false;
 ie4 = (document.all)? true:false;
@@ -64,51 +61,66 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
   return false;
 }
 //STOP HIDING-->
-</script>
-%TMPL:END%
+</script> %TMPL:END%
+
+
 
 %TMPL:DEF{"bodystart"}%
-<body id="editpage" onload="initForm()"><a name="PageTop"></a>%TMPL:END%
+<body class="twikiNoViewPage twikiEditPage" onload="initForm()"><a name="PageTop"></a>%TMPL:END%
 
-%TMPL:DEF{"main"}%
-<form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%TMPL:P{"topbar"}%
-<textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea><br />
+
+
+%TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
+
+
+
+%TMPL:DEF{"titlehelp"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+
+
+
+%TMPL:DEF{"simpleheader"}%
+---+ <nop>%TOPIC% (edit)
+%BR%%TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
+<div class="twikiTopicActionHelp twikiGrayText">
+<a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">Access keys</a>: C = Cancel, K = Checkpoint, Q = Quiet Save, S = Save, P = Preview</div><div class="twikiTopicActionSecondary">
+<input type="checkbox" class="twikiCheckbox" name="unlock" id="releaselock" %RELEASEEDITLOCKCHECKBOX% /><label for="releaselock">Release edit lock</label>&nbsp;&nbsp;<a target="UnlockTopic" onclick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a><br />
+   <input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">Minor changes, don't notify</label>&nbsp;&nbsp;<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>
+</div>
+<table>
+<tr>
+<td class="twikiCancelCol"><a id="cancel" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" accesskey="c">Cancel</a></td>
+<td class="twikiSubmitCol">
+	<input type="submit" class="twikiSubmit twikiSecondary" name="action" id="checkpoint" value="Checkpoint" /><label accesskey="k" for="checkpoint"></label>
+	<input type="submit" class="twikiSubmit twikiSecondary" name="action" id="quietsave" value="QuietSave" /><label accesskey="q" for="quietsave"></label>
+	<input type="submit" class="twikiSubmit" name="action" id="save" value="Save" /><label accesskey="s" for="save"></label></td>
+<td class="twikiAddCol"><input type="submit" class="twikiSubmit twikiTertiary" name="action" id="preview" value="Preview" /><label accesskey="p" for="preview"></label></td>
+</tr>
+</table>
+</div>
+%TMPL:END%
+
+
+
+%TMPL:DEF{"content"}%
+%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><label for="topic" class="twikiGrayText">See below for help in editing this page.</label><textarea id="topic" name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" onkeydown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-<input type="hidden" name="cmd" value="%CMD%" />     
-See below for help in editing this page.
-<table border="0" cellpadding="2" cellspacing="0">
- <tr>
-  <td><b>-- <nop>%WIKIUSERNAME% - %DATE%</b></td>
-  <td> &nbsp;&nbsp; <code>&lt;==</code> Your signature for easy copy and paste (triple click to select)</td>
- </tr><tr>
-  <td><b>-- %INITIALS%</b></td>
-  <td> &nbsp;&nbsp; <code>&lt;==</code> Your initials, for signing small comments
-  (<a target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle','#SignAndDate')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle#SignAndDate">help</a>)</td>
- </tr>
-</table>
+<input type="hidden" name="cmd" value="%CMD%" /><div></div>
+<div class="twikiSig">
+<label for="sig" class="twikiGrayText">Your signature for easy copy and paste: </label><input name="sig" type="text" readonly="readonly" id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div>
 %FORMFIELDS%
- %TMPL:P{"topicaction"}%
-%TMPL:P{"standardfooter"}%
-<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#EEEEEE">
- <tr>
-  <td>
-<font color="#333333" size="-1">
-%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%
-</font>
-  </td>
- </tr>
-</table>
-<table width="100%" border="0" cellpadding="5" cellspacing="0">
- <tr>
-  <td>
-   %WEBCOPYRIGHT%
-  </td>
- </tr>
-</table>
-</form>
-%TMPL:END%
+%TMPL:P{"topicaction"}%
+</form></div><div class="twikiHelp">
+%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%</div>%TMPL:END%
+
 
 
 %TMPL:P{"htmldoctype"}%

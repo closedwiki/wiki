@@ -1,40 +1,40 @@
 %TMPL:INCLUDE{"twiki"}%
-
-%TMPL:DEF{"titleaction"}% (%REVTITLE2% vs. %REVTITLE1%) %TMPL:END%
-
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-#PageTop
-<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+%TMPL:INCLUDE{"search"}%
 %TMPL:DEF{"titleaction"}%(%REVTITLE2% vs. %REVTITLE1%) %TMPL:END%
-%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
-%TMPL:P{"standardheader"}%
-</form>
-%REPEAT%<table width="100%" border="3" cellpadding="0" cellspacing="0">
-  <tr bgcolor="%WEBBGCOLOR%">
-    <td width="99%">
-      &nbsp;<tt><b>&lt;&lt;O&gt;&gt;</b></tt>&nbsp; Difference Topic
+
+
+
+%TMPL:DEF{"bodystart"}%<body class="twikiNoViewPage twikiDiffPage"><a name="PageTop"></a>%TMPL:END%
+
+
+
+%TMPL:DEF{"repeatedsearchblock"}%%REPEAT%<div class="twikiSearchResults"><div class="twikiSearchResultsHeader">&nbsp;<tt><b>&lt;&lt;O&gt;&gt;</b></tt>&nbsp; Difference Topic
       <b><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">%TOPIC%</a></b>
-      (<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=%REVTITLE1%">%REVTITLE1%</a> - %REVINFO1%)
-    </td>
-  </tr>
-</table>
-%TEXT%
-<br clear="all" />%REPEAT%
-%TMPL:DEF{"topicaction"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">View</a>
+      (<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=%REVTITLE1%">%REVTITLE1%</a> - %REVINFO1%)</div>
+%TEXT%</div>%REPEAT%%TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">View topic</a>
  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a> %REVISIONS%
- %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%">More</a> %TMPL:END%
-%TMPL:P{"standardfooter"}%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr>
-  <td valign="top">
-    Revision %REVTITLE2% - %REVINFO2%<br />
-    Revision %REVTITLE1% - %REVINFO1%
-  </td>
-  <td width="40%" valign="top">
-   %WEBCOPYRIGHT%
-  </td>
- </tr>
-</table>
-%TMPL:P{"bodyend"}%
+ %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%">More</a>
+</div>%TMPL:END%
+
+
+
+%TMPL:DEF{"searchbody"}%%TMPL:P{"repeatedsearchblock"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
+%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
+
+
+
+%TMPL:DEF{"content"}%%TMPL:P{"searchbody"}%%TMPL:P{"topicaction"}%%TMPL:P{"topicinfo"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"topicinfo"}%<div class="twikiTopicInfo"><span class="twikiRevInfo twikiGrayText">Revision %REVTITLE2% - %REVINFO2%<br />
+Revision %REVTITLE1% - %REVINFO1%</span></div>%TMPL:END%
