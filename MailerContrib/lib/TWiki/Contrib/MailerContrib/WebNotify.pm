@@ -85,8 +85,8 @@ sub writeWebNotify {
 =begin text
 
 ---+++ sub getSubscriber($name, $noAdd)
-| $name | Name of subscriber (wikiname with no web or email address) |
-| $noAdd | If false or undef, a new subscriber will be created for this name |
+| =$name= | Name of subscriber (wikiname with no web or email address) |
+| =$noAdd= | If false or undef, a new subscriber will be created for this name |
 Get a subscriber from the list of subscribers, and return a reference
 to the Subscriber object. If $noAdd is true, and the subscriber is not
 found, undef will be returned. Otherwise a new Subscriber object will
@@ -122,9 +122,9 @@ sub getSubscribers {
 =begin text
 
 ---+++ sub subscribe($name, $topics, $depth)
-| $name | Name of subscriber (wikiname with no web or email address) |
-| $topics | wildcard expression giving topics to subscribe to |
-| $depth | Child depth to scan (default 0) |
+| =$name= | Name of subscriber (wikiname with no web or email address) |
+| =$topics= | wildcard expression giving topics to subscribe to |
+| =$depth= | Child depth to scan (default 0) |
 Add a subscription, adding the subscriber if necessary.
 
 =cut
@@ -160,10 +160,10 @@ sub toString {
 =begin text
 
 ---+++ sub processChange($change, $db, $changeSet, $seenSet)
-| $change | ref of a TWiki::Contrib::Mailer::Change |
-| $db | TWiki::Contrib::MailerContrib::UpData database of parent references |
-| $changeSet | ref of a hash mapping emails to sets of changes |
-| $seenSet | ref of a hash recording indices of topics already seen |
+| =$change= | ref of a TWiki::Contrib::Mailer::Change |
+| =$db= | TWiki::Contrib::MailerContrib::UpData database of parent references |
+| =$changeSet= | ref of a hash mapping emails to sets of changes |
+| =$seenSet= | ref of a hash recording indices of topics already seen |
 Find all subscribers that are interested in the given change, and
 add their email expansions to the changeset with pointers to the
 change. Only the most recent change listed in the .changes file is

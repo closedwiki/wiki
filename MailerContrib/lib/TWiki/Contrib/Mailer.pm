@@ -65,15 +65,9 @@ sub mailNotify {
     $webstr = '*' unless ( $webstr );
     $webstr =~ s/\*/\.\*/g;
 
-    # No point, since we have to do a full initialise anyway
     TWiki::basicInitialize();
 
-    # SMELL: without a full initialise I get an error when trying to
-    # list all webs!! Shouldn't be needed.
-#    my ( $topic, $webName, $dummy, $userName, $dataDir) =
-#      TWiki::initialize( "/TWiki", "nobody" );
-
-    # SMELL: have to getAllWebs, becuase only API only returns public
+    # SMELL: have to getAllWebs, because getPublicWebList only returns public
     # webs.
     foreach my $web ( grep( /$webstr/o, TWiki::Store::getAllWebs() )) {
         _processWeb( $web );

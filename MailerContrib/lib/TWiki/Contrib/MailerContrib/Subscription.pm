@@ -34,8 +34,8 @@ package TWiki::Contrib::MailerContrib::Subscription;
 =begin text
 
 ---+++ sub new($pages, $childDepth)
-| $pages | Wildcarded expression matching subscribed pages |
-| $childDepth | Depth of children of $topic to notify changes for. Defaults to 0 |
+| =$pages= | Wildcarded expression matching subscribed pages |
+| =$childDepth= | Depth of children of $topic to notify changes for. Defaults to 0 |
 Create a new subscription.
 
 =cut
@@ -76,9 +76,9 @@ sub toString {
 =begin text
 
 ---+++ sub matches($topic, $db, $depth) -> boolean
-| $topic | Topic object we are checking |
-| $db | Database of parent names |
-| $depth | If non-zero, check if the parent of the given topic matches as well. undef = 0. |
+| =$topic= | Topic object we are checking |
+| =$db= | TWiki::Contrib::MailerContrib::UpData database of parent names |
+| =$depth= | If non-zero, check if the parent of the given topic matches as well. undef = 0. |
 Check if we match this topic. Recurses up the parenthood tree seeing if
 this is a child of a parent that matches within the depth range.
 

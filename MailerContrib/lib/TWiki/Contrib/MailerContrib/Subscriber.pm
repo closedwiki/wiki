@@ -34,7 +34,7 @@ package TWiki::Contrib::MailerContrib::Subscriber;
 =begin text
 
 ---+++ sub new($name)
-| $name | Wikiname, with no web, or email address. of user targeted for notification |
+| =$name= | Wikiname, with no web, or email address, of user targeted for notification |
 Create a new user.
 
 =cut
@@ -44,6 +44,7 @@ sub new {
     my $this = bless( {}, $class );
 
     $this->{name} = $name;
+    # SMELL: emailAddrRegex is not ifficially published
     my $EMRE = TWiki::Func::getRegularExpression('emailAddrRegex');
     if ( $name =~ /^$EMRE$/o ) {
         $this->{emails} = [ $name ];
@@ -74,8 +75,8 @@ sub getEmailAddresses {
 
 =begin text
 
----+++ sub subscribe($subs) -> void
-| $subs | Subscription object |
+---+++ sub subscribe($subs)
+| =$subs= | Subscription object |
 Add a new subscription to this subscriber object.
 The subscription will always be added, even if there is
 a wildcard overlap with an existing subscription.
@@ -90,8 +91,8 @@ sub subscribe {
 
 =begin text
 
----+++ sub unsubscribe($subs)
-| $subs | Subscription object |
+---+++ sub unsubscribe($topic)
+| =$topic= | Topic name |
 Remove all subscription records where the subscribed topics lexically
 match the given topic. Wildcards are _not_ used.
 
@@ -114,8 +115,8 @@ sub unsubscribe {
 =begin text
 
 ---+++ sub isSubscribedTo($topic) -> boolean
-| $topic | Topic object we are checking |
-| $db | Database of parents |
+| =$topic= | Topic object we are checking |
+| =$db= | TWiki::Contrib::MailerContrib::UpData database of parents |
 Check if we have a subscription to the given topic.
 
 =cut
