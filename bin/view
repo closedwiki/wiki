@@ -24,8 +24,10 @@ use wiki;
 
 $query= new CGI;
 
-# open(STDERR,'>&STDOUT'); # redirect error to browser
-print "Content-type: text/html\n\n<html><body>";
+##### for debug only: Remove next 2 comments (but redirect does not work)
+#open(STDERR,'>&STDOUT'); # redirect error to browser
+#$| = 1;                  # no buffering
+print "Content-type: text/html\n\n";
 
 &main();
 

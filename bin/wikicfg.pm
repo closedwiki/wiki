@@ -93,6 +93,8 @@ $dataDir          = "$wikiDir/bin/data";
 $pubDir           = "$wikiDir/pub";
 #                   Pathname of debug file :
 $debugFilename    = "$wikiDir/bin/debug.txt";
+#                   Pathname of user name/password file for authentication :
+$htpasswdFilename = "$dataDir/.htpasswd";
 #                   Pathname of log file :
 $logFilename      = "$dataDir/log%DATE%.txt";
 #                   Pathname of users topic, used to translate Intranet name to Wiki name :
@@ -108,24 +110,27 @@ $notifyTopicname    = "WebNotify";
 
 # flag variables that could change:
 # ==================================================================
-#                   Remove port number from URL. "0", "1", default "0"
+# values are "0" for no, or "1" for yes
+#                   Remove port number from URL. Default "0"
 $doRemovePortNumber = "0";
-#                   Log topic views to $logFilename. "0", "1", default "0"
+#                   Log topic views to $logFilename. Default "0"
 $doLogTopicView     = "0";
-#                   Log topic saves to $logFilename. "0", "1", default "0"
+#                   Log topic saves to $logFilename. Default "0"
 $doLogTopicEdit     = "0";
-#                   Log topic saves to $logFilename. "0", "1", default "1"
+#                   Log topic saves to $logFilename. Default "1"
 $doLogTopicSave     = "1";
-#                   Log view attach to $logFilename. "0", "1", default "0"
+#                   Log view attach to $logFilename. Default "0"
 $doLogTopicAttach   = "0";
-#                   Log file upload to $logFilename. "0", "1", default "1"
+#                   Log file upload to $logFilename. Default "1"
 $doLogTopicUpload   = "1";
-#                   Log topic rdiffs to $logFilename. "0", "1", default "0"
+#                   Log topic rdiffs to $logFilename. Default "0"
 $doLogTopicRdiff    = "0";
-#                   Log view changes to $logFilename. "0", "1", default "0"
+#                   Log view changes to $logFilename. Default "0"
 $doLogTopicChanges  = "0";
-#                   Log view changes to $logFilename. "0", "1", default "0"
+#                   Log view changes to $logFilename. Default "0"
 $doLogTopicSearch   = "0";
+#                   Log user registration to $logFilename. Default "1"
+$doLogRegistration  = "1";
 
 
 # =========================

@@ -56,7 +56,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> Name of wiki tool, is <b>TWikibeta</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WIKIVERSION%</CODE> </td>
-  <td> Wiki tool version, is <b>22 Jul 1999</b> </td>
+  <td> Wiki tool version, is <b>03 Aug 1999</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>USERNAME%</CODE> </td>
   <td> Your login username, is <b>guest</b> </td>
@@ -71,7 +71,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> The current topic name, is <b>TWikiDocumentation</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>DATE%</CODE> </td>
-  <td> Todays date, is <b>23 Jul 1999</b> </td>
+  <td> Todays date, is <b>03 Aug 1999</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>INCLUDE:"file.ext"%</CODE> </td>
   <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: <CODE><b>%<nop>INCLUDE:"../Know/TopicName.txt"%</b></CODE> </td>
@@ -247,6 +247,7 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 <LI> Now add <CODE>Alias</CODE> for <CODE>/twiki/pub</CODE> and <CODE>ScriptAlias</CODE> for <CODE>/twiki/bin</CODE> to <CODE>/etc/httpd/conf/srm-conf</CODE> .
 <LI> Restart Apache by <CODE>/etc/rc.d/rc5.d/S85httpd restart</CODE> .
 <LI> Test if the <CODE>twiki/bin</CODE> directory is cgi-enabled: Enter the URL of that directory into your browser (http://your.domain.com/twiki/bin). It is not set correctly as cgi-bin in case you get something like <CODE>"Index of /twiki/bin"</CODE> . It is OK if you get a message like <CODE>"Forbidden. You don't have permission to access /twiki/bin/ on this server."</CODE> .
+<LI> If you want to authenticate users you need to edit the <CODE>.htaccess</CODE> file in the <CODE>twiki/bin</CODE> directory. Consult the HTTP server documentation.
 <LI> Make sure PERL and the PERL CGI library is installed on your system. Default location of PERL executable is <CODE>/usr/bin/perl</CODE> . In case PERL is installed in a different location, the first line of all perl scripts in the <CODE>twiki/bin</CODE> directory need to be changed (alternatively you can create a symbolic link from <CODE>/usr/bin/perl</CODE> ).
 <LI> To be able to edit the perl scripts and .tmpl files it is necessary to <CODE>chown</CODE> and <CODE>chgrp -R twiki</CODE> so all the files have the owner you want.
 <LI> The scripts execute as <CODE>nobody</CODE> . Set the file permission of all Perl scripts in the <CODE>twiki/bin</CODE> directory as executable to <CODE>-rw-r-xr-x</CODE> .
@@ -281,7 +282,7 @@ directory <CODE>twiki/bin</CODE> :
 <pre>
 drwxr-xr-x   5 twiki    t5            512 Nov 11 02:52 .
 drwxr-xr-x   5 twiki    t5            512 Nov  6 02:57 ..
-drwxr-xr-x   6 twiki    t5            512 Nov  6 03:13 data
+drwxrwxrwx   6 twiki    t5            512 Nov  6 03:13 data
 drwxr-xr-x   6 twiki    t5            512 Nov  4 20:34 templates
 -rw-r--r--   1 twiki    t5            430 Oct 21 18:51 .htaccess
 -rwxrwxrwx   1 twiki    t5           3752 Mar 27 02:21 attach
@@ -289,10 +290,10 @@ drwxr-xr-x   6 twiki    t5            512 Nov  4 20:34 templates
 -rw-rw-rw-   1 twiki    t5           1091 Nov  6 04:15 debug.txt
 -rwxrwxrwx   1 twiki    t5           1244 Mar 27 02:21 delete
 -rw-r-xr-x   1 twiki    t5           2589 Nov  6 03:05 edit
--rw-r--r--   1 twiki    t5           1097 Oct 21 18:51 error401.html
 -rwxr-xr-x   1 twiki    t5           4614 Oct 21 18:52 mailnotify
 -rw-r-xr-x   1 twiki    t5           1353 Oct 23 20:19 oops
 -rw-r-xr-x   1 twiki    t5           2043 Nov  6 03:05 preview
+-rw-r-xr-x   1 twiki    t5           6249 Aug  3 04:34 register
 -rw-r-xr-x   1 twiki    t5           6890 Nov 11 03:06 rdiff
 -rw-r-xr-x   1 twiki    t5           1819 Nov  6 03:06 save
 -rwxr-xr-x   1 twiki    t5           3174 Oct 21 18:51 search
@@ -321,9 +322,15 @@ drwxr-xr-x   2 twiki    t5            512 Nov  4 20:35 Main
 -rw-r--r--   1 twiki    t5            218 Oct 23 20:06 noweb.tmpl
 -rw-r--r--   1 twiki    t5            279 Oct 23 20:29 oops.tmpl
 -rw-r--r--   1 twiki    t5            833 Mar 27 02:03 oopsdel.tmpl
+-rw-r--r--   1 twiki    t5           1331 Oct 23 20:29 oopslocked.tmpl
+-rw-r--r--   1 twiki    t5           1026 Aug 03 08:21 oopsregexist.tmpl
+-rw-r--r--   1 twiki    t5            935 Aug 03 08:23 oopsregpasswd.tmpl
+-rw-r--r--   1 twiki    t5            924 Aug 03 08:26 oopsregrequ.tmpl
+-rw-r--r--   1 twiki    t5            931 Aug 03 08:29 oopsregwiki.tmpl
 -rw-r--r--   1 twiki    t5            868 Mar 27 02:03 oopsupload.tmpl
 -rw-r--r--   1 twiki    t5           2010 Nov  6 03:01 preview.tmpl
 -rw-r--r--   1 twiki    t5           1501 Nov 12 22:56 rdiff.tmpl
+-rw-r--r--   1 twiki    t5            263 Aug  3 02:44 register.tmpl
 -rw-r--r--   1 twiki    t5           1548 Oct 23 21:10 search.tmpl
 -rw-r--r--   1 twiki    t5           1541 Oct 26 21:07 view.tmpl
 </pre>
@@ -354,6 +361,7 @@ drwxrwxrwx   6 twiki    t5            512 Nov 19 01:01 .
 drwxr-xr-x   5 twiki    t5            512 Nov 11 02:52 ..
 drwxrwxrwx   2 twiki    t5           9216 Nov 13 13:55 Know
 drwxrwxrwx   2 twiki    t5           4608 Nov 15 21:42 Main
+-rw-r--r--   1 nobody   65535          53 Aug 03 08:31 .htpasswd
 -rw-r--r--   1 nobody   65535        4153 Nov 19 01:01 log199810.txt
 -rw-r--r--   1 nobody   65535        7189 Nov 19 01:01 log199811.txt
 -rw-r--r--   1 twiki    t5           2356 Oct 22 00:56 webcopyright.inc

@@ -38,13 +38,13 @@ use vars qw(
 	$revDiffCmd $revDelRevCmd $revDelRepCmd $headCmd $rmFileCmd 
 	$doRemovePortNumber $doLogTopicView $doLogTopicEdit $doLogTopicSave
 	$doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
-	$doLogTopicChanges $doLogTopicSearch
+	$doLogTopicChanges $doLogTopicSearch $doLogRegistration
 	@isoMonth $TranslationToken $code @code $depth $scriptUrl );
 
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "22 Jul 1999";
+$wikiversion      = "03 Aug 1999";
 
 @isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 
@@ -154,14 +154,18 @@ sub sendEmail
 # =========================
 sub getEmailNotifyList
 {
-    my( $web ) = @_;
+    my( $web, $topicname ) = @_;
 
+    if ( ! $topicname )
+    {
+        $topicname = $notifyTopicname;
+    }
     my $list = "";
     my $line = "";
-    my $fileName = "$dataDir/$web/$notifyTopicname.txt";
+    my $fileName = "$dataDir/$web/$topicname.txt";
     if ( -e $fileName )
     {
-        my $result = `grep '\* *.*[-:<].* *\@' $dataDir/$web/$notifyTopicname.txt`;
+        my $result = `grep '\* *.*[-:<].* *\@' $fileName`;
         foreach $line ( split( /\n/, $result))
         {
             $line =~ s/\s/ /go;
@@ -183,13 +187,13 @@ sub userToWikiName
     my @foo = split( " ", $result );
     if ( ( $foo[1] ) && ( isWikiName( $foo[1] ) ) )
     {
-        $loginUser = "$mainWebname.$foo[1]";
+        return "$mainWebname.$foo[1]";
     }
     if ( ( $foo[2] ) && ( isWikiName( $foo[2] ) ) )
     {
-        $loginUser = "$mainWebname.$foo[2]";
+        return "$mainWebname.$foo[2]";
     }
-    return "$loginUser";
+    return "$mainWebname.$loginUser";
 }
 
 # =========================

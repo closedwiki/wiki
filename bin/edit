@@ -201,14 +201,7 @@ sub main
         my $foo = &wiki::getLocaldate();
         $text =~ s/%DATE%/$foo/go;
         $foo = &wiki::userToWikiName($userName);
-        if( &wiki::isWikiName( $foo))
-        {
-            $text =~ s/%USERNAME%/$foo/go;
-        }
-        else
-        {
-            $text =~ s/%USERNAME%/Main.{yourWikiName}/go;
-        }
+        $text =~ s/%USERNAME%/$foo/go;
     }
 
     if( icat ne "" )
