@@ -35,12 +35,14 @@ Plugins should *only* use functions published in this module. If you use
 functions in other TWiki libraries you might impose a security hole and 
 you will likely need to change your Plugin when you upgrade TWiki.
 
+Functions listing an "Introduced" field refer to the VERSION number of 
+the TWiki::Plugins module.
+
 =cut
 
 package TWiki::Func;
 
 use strict;
-
 
 # =========================
 =pod
@@ -963,17 +965,16 @@ sub writeDebug
 # =========================
 =pod
 
----++ Functions - I18N related
+---++ Functions: I18N related
 
----+++ getRegularExpression( $regexName )
+---+++ getRegularExpression( $regexName ) ==> $pattern
 
-| Description: | Retrieves a TWiki predefined regular expression. |
-| Parameter: =$regexName= | Name of the regular expression to retrieve.  See notes below. |
-| Return: | String or precompiled regular expression matching as described below. |
+| Description: | Retrieves a TWiki predefined regular expression |
+| Parameter: =$regexName= | Name of the regular expression to retrieve.  See notes below |
+| Return: | String or precompiled regular expression matching as described below |
+| Introduced: | VERSION 1.020 (Feb 2004) |
 
-__Notes:__
-
-TWiki internally precompiles several regular expressions to represent various string entities
+__Notes:__ TWiki internally precompiles several regular expressions to represent various string entities
 in an I18N-compatible manner.  Plugins are encouraged to use these in matching where appropriate.
 The following are guaranteed to be present; others may exist, but their use is unsupported and
 they may be removed in future TWiki versions.  Those which are marked "CC" are for use within

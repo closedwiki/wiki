@@ -33,7 +33,7 @@ use vars qw(
 	$VERSION
     );
 
-$VERSION = '1.010';
+$VERSION = '1.020';
 
 @registrableHandlers = (           #                                         VERSION:
         'earlyInitPlugin',         # ( )                                     1.020
