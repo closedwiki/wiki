@@ -134,9 +134,9 @@ sub new {
 	die "$manifest missing";
   my $line;
   while ($line = <PF>) {
-	if ( $line =~ /^(\S+)(\s+\S.*)?$/o ) {
+	if ( $line =~ /^(\S+)(\s+(\S.*))?\s*$/o ) {
 	  push(@{$this->{files}},
-		   { name => $1, description => ($2 || "") });
+		   { name => $1, description => ($3 || "") });
 	}
   }
   close(PF);
@@ -354,7 +354,7 @@ sub filter {
   my $line;	
   while ($line = <IF>) {
 	$line =~ s/%\$(\w+)%/&_expand($this,$1)/geo;
-	print OF "$line\n" unless ($this->{-n});
+	print OF $line unless ($this->{-n});
   }
   close(IF);
   close(OF) unless ($this->{-n});
@@ -390,9 +390,12 @@ sub target_release {
 				"$tmpdir/".$this->{data_twiki_plugin}.".txt");
   my $plugin = $this->{project};
   $this->cd($tmpdir);
+  $this->cp("$tmpdir/".$this->{data_twiki_plugin}.".txt",
+			"$basedir/$plugin.txt");
   $this->sys_action("zip -r $plugin.zip *");
   $this->sys_action("mv $tmpdir/$plugin.zip $basedir/$plugin.zip");
   print "Release ZIP is $basedir/$plugin.zip\n";
+  print "Release TOPIC is $basedir/$plugin.txt\n";
   $this->sys_action("rm -rf $tmpdir");;
 }
 
