@@ -25,6 +25,25 @@ use strict;
 
 &main();
 
+sub changeSpecialChars
+{
+    my( $text ) = @_;
+    
+    $text =~ s/&/%_A_%/go;
+    $text =~ s/\"/%_Q_%/go;
+    $text =~ s/>/%_G_%/go;
+    $text =~ s/</%_L_%/go;
+    # PTh 10 Apr 2001: Fix for Codev.OperaBrowserDoublesEndOfLines
+    $text =~ s/\r\r\n/%_N_%/go;
+    # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
+    $text =~ s/\r\n/%_N_%/go;
+    $text =~ s/\n\r/%_N_%/go;
+    $text =~ s/\r/%_N_%/go;
+    $text =~ s/\n/%_N_%/go;
+    
+    return $text;
+}
+
 
 sub main
 {
@@ -68,7 +87,9 @@ sub main
         &TWiki::writeHeader( $query );
         $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         $tmpl = &TWiki::getRenderedVersion( $tmpl );
-        $tmpl =~ s/%TEXT%/$query->param( 'text' )/goe;
+        my $text = $query->param( 'text' );
+        $text = changeSpecialChars( $text );
+        $tmpl =~ s/%TEXT%/$text/go;
 
         my $listForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$webName" );
 	my @forms = split( /,\s*/, $listForms );	    
@@ -93,6 +114,8 @@ sub main
         my $parent = $query->param( 'parent' ) || "";
         $tmpl =~ s/%PARENT%/$parent/go;
     
+        $tmpl =~ s|</*nop/*>||goi;
+        
         print $tmpl;
         return;
     }
@@ -166,18 +189,8 @@ sub main
     $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
     $tmpl = &TWiki::getRenderedVersion( $tmpl );
     $tmpl =~ s/%TEXT%/$ptext/go;
-
-    $text =~ s/&/%_A_%/go;
-    $text =~ s/\"/%_Q_%/go;
-    $text =~ s/>/%_G_%/go;
-    $text =~ s/</%_L_%/go;
-    # PTh 10 Apr 2001: Fix for Codev.OperaBrowserDoublesEndOfLines
-    $text =~ s/\r\r\n/%_N_%/go;
-    # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
-    $text =~ s/\r\n/%_N_%/go;
-    $text =~ s/\n\r/%_N_%/go;
-    $text =~ s/\r/%_N_%/go;
-    $text =~ s/\n/%_N_%/go;
+    
+    $text = changeSpecialChars( $text );
 
     $tmpl =~ s/%HIDDENTEXT%/$text/go;
     $tmpl =~ s/%FORMFIELDS%/$formFields/go;
