@@ -180,7 +180,7 @@ print <<EOM;
 <head><title>Test TWiki environment</title></head>
 <body>
 <h1>Test the environment for TWiki</h1>
-Please read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationNotes">TWikiInstallationNotes</a> for more information on TWiki installation.
+Please read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationGuide">TWikiInstallationGuide</a> for more information on TWiki installation.
 EOM
 
 # TWiki.cfg was read earlier, in BEGIN block.
