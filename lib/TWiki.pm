@@ -1656,7 +1656,8 @@ sub _handleSEARCH {
     $params->{search} = $params->{_DEFAULT} if( $params->{_DEFAULT} );
     $params->{type} = $this->{prefs}->getPreferencesValue( "SEARCHVARDEFAULTTYPE" ) unless( $params->{type} );
 
-    return $this->{search}->searchWeb( %$params );
+    my $s = $this->{search}->searchWeb( %$params );
+    return $s;
 }
 
 # Format an error for inline inclusion in HTML

@@ -1030,9 +1030,10 @@ sub searchWeb {
     }
 
     return undef if ( defined $callback );
+    return $searchResult if $inline;
+    
     $searchResult = $this->{session}->handleCommonTags( $searchResult, $topic );
     $searchResult = $this->renderer()->getRenderedVersion( $searchResult );
-#    $searchResult =~ s|</*nop/*>||goi;   # remove <nop> tag
     return $searchResult;
 }
 
