@@ -77,6 +77,12 @@ The CSS classes that !PatternSkin uses are documented in PatternSkinCss.
 
 See: PatternSkinCustomization
 
+---++ Further reading
+
+   * PatternSkinCustomization - Practical information on how to change the looks of !PatternSkin
+   * PatternSkinCss - A reference to used CSS classes
+   * TWiki:Plugins/PatternSkinDev - Development page, bug reports, solutions from users
+
 ---++ Skin Info
 
 |  Description: | Provides a CSS based default look and feel for TWiki - flexible and W3C-compliant |
@@ -86,6 +92,7 @@ See: PatternSkinCustomization
 |  Skin Version: | 08 Aug 2004 (v1.000) |
 |  Download&nbsp;<nop>PatternSkin: | [[%ATTACHURL%/PatternSkin.zip][PatternSkin.zip]]<br /> *Note:* the CSS files in this topic may be more recent than the version in the zip file | 
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  14 Aug 2004: | v.1.0.3 - Update to attach template, css fix to edit template |
 |  14 Aug 2004: | v.1.0.2 - Fixes print template, table paddings in topics, minor changes to style.css |
 |  13 Aug 2004: | v.1.0.1 - Updated /data/TWiki/WebLeftBarPersonalTemplate and style.css |
 |  08 Aug 2004: | Initial version (v1.000) |
@@ -95,7 +102,7 @@ See: PatternSkinCustomization
 
 __Related topic:__ %TWIKIWEB%.TWikiSkins, TWiki:TWiki/TWikiSkinBrowser
 
--- TWiki:Main/ArthurClemens - 13 Aug 2004
+-- TWiki:Main/ArthurClemens - 15 Aug 2004
 
 %META:FILEATTACHMENT{name="layout.css" attr="" comment="Layout" date="1091016527" path="layout.css" size="1961" user="guest" version="1.1"}%
 %META:FILEATTACHMENT{name="style.css" attr="" comment="Style" date="1091277544" path="style.css" size="23415" user="guest" version="1.2"}%
