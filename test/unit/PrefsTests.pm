@@ -87,11 +87,11 @@ sub set_up {
     mkdir "$TWiki::cfg{DataDir}/$web";
     `cp $TWiki::cfg{DataDir}/_default/*.txt* $TWiki::cfg{DataDir}/$web`;
 
-    mkdir "$TWiki::cfg{PubDir}/$web";
-    chmod 0777, "$TWiki::cfg{DataDir}/$web";
-    chmod 0777, "$TWiki::cfg{PubDir}/$web";
+    mkdir "$TWiki::cfg{PubDir}/$web" || die "Can't create fixture $!";
+    chmod 0777, "$TWiki::cfg{DataDir}/$web" || die "Can't create fixture $!";;
+    chmod 0777, "$TWiki::cfg{PubDir}/$web" || die "Can't create fixture $!";
     open(F, ">$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/TestUser1.txt") ||
-      die "Cant create user";
+      die "Cant create user $!";
     print F "silly user page!!!";
     close(F);
 }
