@@ -1,0 +1,14 @@
+#! /usr/bin/perl -w
+
+use strict;
+use diagnostics;
+
+use TWiki::Contrib::BuildContrib::TWikiCLI;
+
+=pod
+
+twikicli extension install DistributionContrib
+
+=cut 
+
+print TWiki::Contrib::BuildContrib::TWikiCLI::dispatch(@ARGV);
