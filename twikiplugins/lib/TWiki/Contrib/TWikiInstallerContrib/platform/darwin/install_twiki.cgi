@@ -13,7 +13,6 @@
 #		(external dependencies like imagemagick and latex, not other perl modules as those will be handled automatically)
 #    * run rcslock
 #    * find proper instructions for locking/unlocking/updating the rcs files (?, for a proper topic update)
-#    * descriptions for extensions 
 #    * ???
 # TODO: (long term)
 #    * compare/contrast with MS-'s installer
@@ -33,9 +32,11 @@
 my $account;
 
 BEGIN {
-    chomp( $account = 'twiki' || `whoami` );
-    unshift @INC, "/Users/$account/Sites/cgi-bin/lib/CPAN/lib/site_perl/5.8.4";
-    unshift @INC, "/Users/$account/Sites/cgi-bin/lib/CPAN/lib/site_perl/5.8.4/darwin-thread-multi-2level";
+    use Cwd qw( cwd getcwd );
+    use Config;
+    $account = [ split( '/', getcwd() ) ]->[-3];   # format: /Users/(account)/Sites/cgi-bin/...
+    my $localLibBase = getcwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
+    unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
     # TODO: use setlib.cfg (is that which one it is?  along with some patch mc and i were working on)
 }
 use strict;
@@ -77,7 +78,7 @@ sub catalogue
 		title => $_->{description}->[0],
 	    };
 	    $aAttr->{href} = $_->{homepage}->[0] if $_->{homepage}->[0];
-	    $text .= qq{<input type="checkbox" name="$_->{name}->[0]" value="$_->{name}->[0]" $checked/> } . 
+	    $text .= qq{<input type="checkbox" name="$p->{type}" value="$_->{name}->[0]" $checked/> } . 
 		$p->{cgi}->a( $aAttr, $_->{name}->[0] ) . "<br/>";
 	}
     }
@@ -765,7 +766,6 @@ $CPAN::Config = {
 1;
 __END__
 
-
 	# TODO: turn off warning for referencing undefined elements (still true?)
 	$text .= checkbox_group( -name => $p->{type},
 				 -values => [ map { $_->{name}->[0] } @{$xmlCatalogue->{$p->{type}}} ],
@@ -773,15 +773,6 @@ __END__
 				     $_->{name}->[0] => 
 					 $p->{cgi}->a( { href => $_->{homepage}->[0], target => '_new', title => $_->{description}->[0] }, $_->{name}->[0] )
 				     } @{$xmlCatalogue->{$p->{type}}} },
-#				 -labels => { map { $_->{name}->[0], qq(<a href="">$_->{name}->[0]</a>) } @{$xmlCatalogue->{$p->{type}}} },
-#				 -labels => { map { 
-#				     $_->{name}->[0], $p->{cgi}->a( { href => $_->{homepage}->[0], title => $_->{description}->[0] }, $_->{name}->[0] ) 
-#				     } @{$xmlCatalogue->{$p->{type}}} },
-###				 -labels => { map { $p->{cgi}->a( { href => $_->{homepage}->[0], title => $_->{description}->[0] }, $_->{name}->[0] ) } },
-#					      @{$xmlCatalogue->{$p->{type}}} },
-##					      map { qq{<a href="$_->{homepage}->[0]" title="$_->{description}->[0]" >$_->{name}->[0]</a>} } 
-#					      map {  }
-#					      @{$xmlCatalogue->{$p->{type}}} ],
 				 -defaults => [ $p->{cgi}->param( $p->{type} ) ],
 				 -cols => 5,
 #				 -linebreak => 'true',
