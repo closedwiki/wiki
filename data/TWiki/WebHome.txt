@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044094183" format="1.0" version="1.78"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071558360" format="1.0" version="1.79"}%
 <table><tr><td valign="top">
-*Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either on an intranet or on the Internet.
+*Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
 This is the place to learn about TWiki features, find where to download it, and try it out for yourself...
 </td><td width="25">&nbsp;</td><td width="200" align="center" valign="top">
@@ -49,14 +49,14 @@ _Documentation for TWiki users._
 %PLUGINDESCRIPTIONS%
 </blockquote>
 
-	* %T% *ADMINS:* In less than an hour, you can read through and customize the [[#UsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. See also other enhancement pages: 
-		* TWikiAdminCookBook: Some tips that can be applied *before installation*
-		* InstantEnhancements: Simple tips (using just browser, no install needed) and quick (max couple of minutes).
-
 #ReferenceManual
 ---++ TWiki Reference Manual
 
 _Documentation for webmasters, system administrators, project managers, team leaders, and all other users of the TWiki advanced online collaboration platform._
+
+	* %T% *ADMINS:* In less than an hour, you can read through and customize the [[#UsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. See also other enhancement pages: 
+		* TWikiAdminCookBook: Some tips that can be applied *before installation*
+		* InstantEnhancements: Simple tips (using just browser, no install needed) and quick (max couple of minutes).
 
 	* *[[TWikiDocumentation]]*: All manual sections in one file...
 		1. [[TWiki System Requirements]]
@@ -95,6 +95,7 @@ _Documentation for webmasters, system administrators, project managers, team lea
 %INCLUDE{"%TWIKIWEB%.SiteMap"}%
 
 	* TWiki<sup>TM</sup> is a trademark of PeterThoeny
+		* __Note__: Twiki (with a lower case "w") is a robot character in the _Buck Rogers<sup>TM</sup> in the 25th Century_ TV series. TWiki (with an upper case "W") is not affiliated with the Dillie Family Trust, the registered trademark owner of the _Buck Rogers_ name
 	* TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
 	* This site is running TWiki version *%WIKIVERSION%*
 	* Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]] <br />
