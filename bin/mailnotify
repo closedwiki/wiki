@@ -92,6 +92,8 @@ sub processWeb
 	@bar = split( /\t/);
 	$foo = $text;
 	if( ( ! %exclude ) || ( ! $exclude{ $bar[0] } ) ) {
+            next unless TWiki::Store::topicExists( $webName, $bar[0] );
+
 	    if( ! $currLastmodify ) {
 	        # newest entry
 	        $time = &TWiki::formatGmTime( $prevLastmodify );
