@@ -73,7 +73,7 @@ if ( $function eq "delete" ) {
 
   my $wikiUserName = TWiki::userToWikiName( $user );
   fail("Web $web does not exist")  unless TWiki::UI::webExists( $web, $topic );
-  fail("Mirror") if TWiki::UI::isMirror( $webName, $topic );
+  fail("Mirror") if TWiki::UI::isMirror( $web, $topic );
   fail("Access to $web/$topic denied") unless
 	TWiki::UI::isAccessPermitted( $web, $topic,
 								  "change", $wikiUserName );
@@ -107,6 +107,21 @@ if ( $function eq "delete" ) {
   my $err = _lockTopic( $web, $topic, $user );
   fail( $err) if ( $err );
 
+  # Get the old attachment comment, if there is one
+  # CODE_SMELL: this is jumping through hoops! updateAttachment
+  # already reads the old text in order to extract the meta-data,
+  # but it throws away the comment and replaces it with what we
+  # pass in here. If we pass nothing, then it leaves a null comment.
+  # It would be _much_ better to rearchitect the way updateAttachment
+  # works, but that's not an option for a plugin.
+  my $comment = "";
+  if ($path =~ m/^.*[\/\\](.*?)[\/\\](.*?)[\/\\](.*?)$/o) {
+	my ( $oweb, $otopic, $ofile ) = ( $1, $2, $3 );
+	my ( $meta, $text ) = TWiki::Store::readTopic( $oweb, $otopic );
+	my %attachment = $meta->findOne( "FILEATTACHMENT", $ofile );
+	$comment = $attachment{"comment"} || "";
+  }
+
   my @error =
 	TWiki::UI::Upload::updateAttachment( $web,
 										 $topic,
@@ -117,7 +132,7 @@ if ( $function eq "delete" ) {
 										 $safe,     # localfile
 										 $att,      # attName
 										 0,         # hideFile
-										 "Updated by $user using WebDAV" );
+										 $comment );
 
   TWiki::Store::lockTopicNew( $web, $topic, 1 );
 

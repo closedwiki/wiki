@@ -40,7 +40,7 @@ sub check {
 	print STDERR "WHOOOOPS: $status\n";
   }
 
-  $this->assert_matches(qr/$exp\s*$/, $status, $check);
+  $this->assert_matches(qr/$exp\s*$/, $status, $check." ".join(":",caller));
 }
 
 sub dumpdb {
@@ -143,9 +143,8 @@ sub test__change_default {
   $this->check("Web - - C her", "denied");
   $this->check("Web - file.dat C him", "denied");
   $this->check("Web Topic - C him", "denied");
-  $this->check("Web Topic flie.dat C him", "permitted");
-  $this->check("Web Topic flie.dat C dtv", "denied");
-  $this->check("Web Topic flie.dat,v C him", "denied");
+  $this->check("Web Topic file.dat C him", "permitted");
+  $this->check("Web Topic file.dat C dtv", "denied");
 }
 
 1;

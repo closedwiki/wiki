@@ -40,32 +40,53 @@ sub new {
 
 # Refresh permissions everywhere in a twiki installation. Call from cron.
 sub recache {
-  my $this = shift;
+  my ( $this, $web, $topic ) = @_;
+  if ( !$web ) {
+	my @webs = TWiki::Store::getAllWebs();
 
-  my @webs = TWiki::Store::getAllWebs();
-
-  foreach my $web ( @webs ) {
-    $this->_processWeb( $web );
+	foreach my $web ( @webs ) {
+	  $this->_processWeb( $web, undef );
+	}
+  } else {
+	$this->_processWeb( $web, $topic );
   }
 }
 
 # Extract and store permissions settings in a single web
+# We should really clean out old entries for this web before we
+# start, but because the keys are topic specific and not web
+# specific this is tricky and would be slow. However the memory
+# leakage that results from _not_ doing it is so small that it's
+# really not worth bothering about.
 sub _processWeb {
-  my ( $this, $web ) = @_;
+  my ( $this, $web, $topic ) = @_;
+  my $npr = 0;
 
-  my @topics = TWiki::Func::getTopicList( $web );
-
-  foreach my $topic ( @topics ) {
+  if ( $topic ) {
     $this->_processTopic( $web, $topic );
+	$npr++;
+  } else {
+	my $cmd = "$TWiki::egrepCmd ";
+	$cmd .= $TWiki::cmdQuote;
+	$cmd .= "\* Set (ALLOW|DENY)(TOPIC|WEB)(VIEW|CHANGE)";
+	$cmd .= $TWiki::cmdQuote;
+	my @topics = split( /\n/, `$cmd $TWiki::dataDir/$web/*.txt` );
+	foreach my $topic ( @topics ) {
+	  if ( $topic =~ /^.*[\/\\](.*?)\.txt:/o ) {
+		$this->_processTopic( $web, $1 );
+		$npr++;
+	  }
+	}
   }
+  print "Processed $npr topics from $web\n";
 }
 
 # Extract and store permissions settings in a single topic
 sub _processTopic {
   my ( $this, $web, $topic ) = @_;
 
-    my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
-    $this->processText( $web, $topic, $text );
+  my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
+  $this->processText( $web, $topic, $text );
 }
 
 # Process TWiki text from a topic to extract permissions info
