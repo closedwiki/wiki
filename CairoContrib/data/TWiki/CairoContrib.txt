@@ -25,8 +25,10 @@ If you find that this module doesn't enable the plugin you are interested in, bu
 |  Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
 |  License: | GPL |
 |  Dependencies: | %$DEPENDENCIES% |
+|  Version: | %$VERSION% |
 |  Change History: | |
-|  14/08/04 | Separated out from SharedCode module |
+|  1.01 | Fix to expandVariablesOnTopicCreation; out of step with TWiki.pm |
+|  1.00 | Separated out from SharedCode module |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 

@@ -4,7 +4,7 @@ use strict;
 
 use vars qw( $VERSION );
 
-$VERSION = 1.00;
+$VERSION = 1.01;
 
 =begin text
 
@@ -60,7 +60,7 @@ sub TWiki::expandVariablesOnTopicCreation {
   $theText =~ s/%USERNAME%/$theUser/go;                     # "jdoe"
   $theText =~ s/%WIKINAME%/$theWikiName/go;                 # "JonDoe"
   $theText =~ s/%WIKIUSERNAME%/$theWikiUserName/go;         # "Main.JonDoe"
-  $theText =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/geo;  # expand URL parameters
+  $theText =~ s/%URLPARAM{(.*?)}%/&TWiki::handleUrlParam($1)/geo;  # expand URL parameters
   $theText =~ s/%NOP{.*?}%//gos;  # Remove filler: Use it to remove access control at time of
   $theText =~ s/%NOP%//go;        # topic instantiation or to prevent search from hitting a template
 
