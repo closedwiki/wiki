@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1023947640" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1079856240" format="1.0" version="1.6"}%
 ---+ Empty TWiki Plugin
 
 This is an empty plugin you can use as a template to build your own %TWIKIWEB%.TWikiPlugins. This plugin does nothing, but is ready to be used.
@@ -11,16 +11,17 @@ To create your own plugin:
 
 ---++ Syntax Rules
 
-(describe the syntax)
+(none)
 
----++ <nop>%TOPIC% Global Settings
+---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = This plugin does nothing, but can be used as a template for your own plugins.
 
-	* Your own settings, for example:
+	* Your own setting, i.e.:
 		* Set EXAMPLE = got it!
 
 	* Debug plugin: (See output in =data/debug.txt=)
@@ -28,33 +29,24 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 ---++ Plugin Installation Instructions
 
-(This plugin is preinstalled, you do not need to install it.)
-
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
-
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* Test if the plugin is correctly installed:
-		* (describe tests here)
+	* This plugin is preinstalled, you do not need to install it.
 
 ---++ Plugin Info
 
-|  Plugin Author: | %TWIKIWEB%.AndreaSterbini, %TWIKIWEB%.PeterThoeny |
-|  Plugin Version: | 14 Jul 2001 (V1.000) |
-|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
+|  Plugin Version: | 21 Mar 2003 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  21 Mar 2004: | Added afterSaveHandler |
 |  14 Jul 2001: | Changed to plug&amp;play |
 |  27 Feb 2001: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
-|  Perl Version: | 5.005 |
+|  Perl Version: | 5.0 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
 
--- %TWIKIWEB%.AndreaSterbini - 27 Feb 2001 <br /> 
--- %TWIKIWEB%.PeterThoeny - 14 Jul 2001
+-- TWiki:Main.AndreaSterbini - 27 Feb 2001 %BR% 
+-- TWiki:Main.PeterThoeny - 21 Mar 2004
