@@ -109,7 +109,6 @@ sub main
 	# parent setting
 	my $theParent = $query->param( 'topicparent' ) || "";
 	if( $theParent ) {
-	    $tmpl =~ s/%TOPICPARENT%/$theParent/go;
 	    $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
 	}
         
@@ -119,7 +118,7 @@ sub main
 	   $meta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
 	}
 
-        &TWiki::Form::fieldVars2Meta( $webName, $query, $meta ) if( ! $noForm );
+        &TWiki::Form::fieldVars2Meta( $webName, $query, $meta );
     }
 
 
