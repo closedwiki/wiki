@@ -75,18 +75,16 @@ function launchWindow( theWeb, theTopic ) {
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 <input type="hidden" name="cmd" value="%CMD%" />     
 <br />
-Don't forget - if you change something, do it in 
-<a target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">GoodStyle</a>
-and follow the
-<a target="TextFormattingRules" onClick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">TextFormattingRules</a>.
+See below for help in editing this page.
 <br /> <b>-- <nop>%WIKIUSERNAME% - %DATE%</b> &nbsp;&nbsp;<code>&lt;==</code> 
-This is your signature for easy copy & paste operation
+This is your signature for easy copy and paste 
 <br /> %FORMFIELDS%
 %TMPL:DEF{"topicaction"}% <input type="submit" value=" &nbsp; Preview Changes &nbsp; " />
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
 %TMPL:P{"standardfooter"}%
----+++ Formatting Help
-%INCLUDE{"%TWIKIWEB%.WikiSyntax"}%
+<font color="#333333" size="-1">
+<a name="FormattingHelp"></a>%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%
+</font>
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td width="50%" valign="top">
