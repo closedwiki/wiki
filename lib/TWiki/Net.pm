@@ -1,8 +1,8 @@
+# Module of TWiki Collaboration Platform, http://TWiki.org/
 #
-# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
+# Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
 #
-# Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
-#
+# For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2

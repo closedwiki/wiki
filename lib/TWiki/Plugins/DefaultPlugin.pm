@@ -1,8 +1,7 @@
+# Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# TWiki WikiClone ($wikiversion has version info)
-#
-# Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
+# Copyright (C) 2000-2003 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

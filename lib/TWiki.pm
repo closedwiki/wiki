@@ -1,11 +1,13 @@
+# Main Module of TWiki Collaboration Platform, http://TWiki.org/
+# ($wikiversion has version info)
 #
-# TWiki WikiClone ($wikiversion has version info)
+# Copyright (C) 1999-2003 Peter Thoeny, peter@thoeny.com
 #
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
 # Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
-# Copyright (C) 1999-2001 Peter Thoeny, Peter@Thoeny.com
 #
+# For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
