@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1039591800" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1055971140" format="1.0" version="1.12"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -131,10 +131,13 @@ When viewing a topic the ==Raw Text== link can be clicked to show the text of a 
 
 Meta Data is rendered with the %<nop>META% variable. This is mostly used in the =view=, =preview= and =edit= scripts.
 
+__Note:__ Rendering meta data is currently not supported in topic text. As a workaround, use FormattedSearch on the current topic only to render form fields.
+
 Current support covers:
 
 | *Variable usage:*	| *Comment:*  |
 | =%<nop>META{"form"}%= | Show form data, see TWikiForms. |
+| =%<nop>META{"formfield"}%= | Show form field value. Parameter: ==name="field_name"==. Example:%BR% =%<nop>META{ "formfield" name="TopicClassification" }%= |
 | =%<nop>META{"attachments"}%= | Show attachments, except for hidden ones. Options: <br > \
 	 ==all="on"==: Show all attachments, including hidden ones. |
 | =%<nop>META{"moved"}%= | Details of any topic moves. |
