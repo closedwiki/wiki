@@ -23,7 +23,7 @@ BEGIN {
 	}
 
 	$Common::downloadDir =
-	    "/home/mrjc/twikiplugindev/twikiplugins/shared/tools/download/";
+	    "/home/mrjc/twikireleasetracker.mrjc.com/download/";
 }
 
 1;
