@@ -24,6 +24,7 @@
 #
 # 20000917 - NicholasLee : Split file/storage related functions from wiki.pm
 # 200105   - JohnTalintyre : AttachmentsUnderRevisionControl & meta data in topics
+# 200106   - JohnTalintyre : Added Form capability (replaces Category tables)
 
 package TWiki::Store;
 
@@ -239,22 +240,20 @@ sub moveAttachment
     }
 
     # Remove file attachment from old topic
-    my( $text, @meta ) = readWebTopicNew( $oldWeb, $oldTopic );
-    my @ident = ( "name" => $theAttachment );
-    my $oldargsr;
-    ( $oldargsr, @meta ) = metaExtract( "FILEATTACHMENT", \@ident, "remove", @meta );
-    my @oldargs = @$oldargsr;
-    $error .= saveNew( $oldWeb, $oldTopic, $text, \@meta, "", "", "", "doUnlock", "dont notify", "" ); 
+    my( $meta, $text ) = readTopic( $oldWeb, $oldTopic );
+    my %fileAttachment = $meta->findOne( "FILEATTACHMENT", $theAttachment );
+    $meta->remove( "FILEATTACHMENT", $theAttachment );
+    $error .= saveNew( $oldWeb, $oldTopic, $text, $meta, "", "", "", "doUnlock", "dont notify", "" ); 
     
     # Remove lock file
     lockTopicNew( $oldWeb, $oldTopic, 1 );
     
     # Add file attachment to new topic
-    ( $text, @meta ) = readWebTopicNew( $newWeb, $newTopic );
+    ( $meta, $text ) = readTopic( $newWeb, $newTopic );
 
-    @meta = metaUpdate( "FILEATTACHMENT", \@oldargs, "name", @meta );    
+    $meta->put( "FILEATTACHMENT", %fileAttachment );    
     
-    $error .= saveNew( $newWeb, $newTopic, $text, \@meta, "", "", "", "doUnlock", "dont notify", "" ); 
+    $error .= saveNew( $newWeb, $newTopic, $text, $meta, "", "", "", "doUnlock", "dont notify", "" ); 
     # Remove lock file
     lockTopicNew( $newWeb, $newTopic, 1 );
     
@@ -345,12 +344,12 @@ sub renameTopic
          "to"   => "$newWeb.$newTopic",
          "date" => "$time",
          "by"   => "$user" );
-      my( $text, @meta ) = readWebTopicNew( $newWeb, $newTopic );
-      @meta = metaUpdate( "TOPICMOVED", \@args, "", @meta );
+      my( $meta, $text ) = readTopic( $newWeb, $newTopic );
+      $meta->put( "TOPICMOVED", @args );
       if( ( $oldWeb ne $newWeb ) && $doChangeRefTo ) {
          $text = changeRefTo( $text, $oldWeb, $oldTopic );
       }
-      saveNew( $newWeb, $newTopic, $text, \@meta, "", "", "", "unlock" );
+      saveNew( $newWeb, $newTopic, $text, $meta, "", "", "", "unlock" );
    }
 
    # Rename the attachment directory if there is one
@@ -376,21 +375,20 @@ sub renameTopic
 
 # =========================
 # Read a specific version of a topic
-# view:	    $text= &TWiki::Store::readVersion( $topic, "1.$rev" );
-sub readVersion
+# view:	    $text= &TWiki::Store::readTopicVersion( $topic, "1.$rev" );
+sub readTopicVersion
 {
     my( $theWeb, $theTopic, $theRev ) = @_;
     my $text = _readVersionNoMeta( $theWeb, $theTopic, $theRev );
-    my @meta = ();
+    my $meta = "";
    
-    ( $text, @meta ) = _extractMetaData( $theWeb, $text );
+    ( $meta, $text ) = _extractMetaData( $theWeb, $text );
         
-    return( $text, @meta );
+    return( $meta, $text );
 }
 
 # =========================
 # Read a specific version of a topic
-# view:     $text= &TWiki::Store::readVersion( $topic, "1.$rev" );
 sub _readVersionNoMeta
 {
     my( $theWeb, $theTopic, $theRev ) = @_;
@@ -613,120 +611,7 @@ sub topicIsLockedBy
 }
 
 
-# ============================
-# Remove all meta information of a given type
-sub metaRemove
-{
-    my( $metaDataType, @meta ) = @_;
-    
-    @meta = grep( !/^%META:$metaDataType\{/, @meta );
-    return sort @meta;
-}
 
-
-# ============================
-# Replace all of a meta data item
-# e.g. 
-# @args = ( "author" => "JohnTalintyre" );
-# metaUpdate( "FILEATTACHMENT", \@args, "name", @meta);
-# If ! $identifierKey then existing entry for this tag replaced i.e. for single entry macro such as META:TOPIC
-sub metaUpdate
-{
-    my( $metaDataType, $args, $identifierKey, @meta ) = @_;
-    
-    my @argsList = @$args;
-    my $identifier = "";
-    
-    my $metaDataArgs = "";
-    my $sep = "";
-    while( @argsList ) {
-       my $key = shift @argsList;
-       my $value = shift @argsList;
-       if ( $identifierKey && $identifierKey eq $key ) {
-           $identifier = "$key=\"$value\"";
-       }
-       $metaDataArgs .= "$sep$key=\"$value\"";
-       $sep = " ";
-    }
-    
-    @meta = grep( !/^%META:$metaDataType\{(.*\s)?$identifier/, @meta );
-
-    push @meta, "%META:$metaDataType\{$metaDataArgs}%";
-    return sort @meta;
-}
-
-# ==========================
-sub metaExtract
-{
-    my( $metaDataType, $identifierr, $doRemove, @meta ) = @_;
-    
-    my $identifier = "";
-    
-    if( $identifierr ) {
-        my @identifierL = @$identifierr;
-    
-        my $key = shift @identifierL;
-        my $value = shift @identifierL;
-        
-        $identifier = "$key=\"$value\"";
-    }
-
-    my @extract = grep( /^%META:$metaDataType\{.*$identifier/, @meta );
-    my $variable = "";
-    my @args = ();
-    
-    if( @extract ) {
-        $variable = shift @extract;
-        $variable =~ /%META:$metaDataType\{([^}]*)}%/;
-        @args = keyValue2list( $1 );
-        if( $doRemove ) {
-            @meta = grep( !/^%META:$metaDataType\{.*$identifier/, @meta );
-        }
-    }
-    
-    return( \@args, @meta );
-}
-
-# ============================
-# Replace only those attributes supplied
-# This has all the capabilities of metaUpdate and could replace it, but is more complex.
-sub metaUpdatePartial
-{
-    my( $metaDataType, $args, $identifierKey, @meta ) = @_;
-    
-    my $identifier = "";
-    
-    my @match = grep( /^%META:$metaDataType\{$identifier/, @meta );
-    my $oldItem = "";
-    if( @match ) {
-       $oldItem = shift @match;
-       $oldItem =~ /%META:$metaDataType\{([^}]*)}/;
-       $oldItem = $1;
-    }
-    
-    my @oldArgs = keyValue2list( $oldItem );
-    my %newArgs = @$args;
-    
-    my $metaDataArgs = "";
-    my $sep = "";
-    while( @oldArgs ) {
-       my $key = shift @oldArgs;
-       my $value = shift @oldArgs;
-       if( exists $newArgs{$key} ) {
-          $value = $newArgs{$key};
-       }
-       if ( $identifierKey && $identifierKey eq $key ) {
-           $identifier = "$key=\"$value\"";
-       }
-       $metaDataArgs .= "$sep$key=\"$value\"";
-       $sep = " ";
-    }
-    
-    @meta = grep( !/^%META:$metaDataType\{(.*\s)?$identifier/, @meta );
-
-    push @meta, "%META:$metaDataType\{$metaDataArgs}%";
-    return sort @meta;
-}
 
 # ======================
 sub keyValue2list
@@ -736,8 +621,7 @@ sub keyValue2list
     my @res = ();
     
     # Format of data is name="value" name1="value1" [...]
-    while( $args ) {
-        $args =~ s/\s*([^=]+)=\"([^"]*)\"//o;
+    while( $args =~ s/\s*([^=]+)=\"([^"]*)\"//o ) {
         push @res, $1;
         push @res, $2;
     }
@@ -749,7 +633,7 @@ sub keyValue2list
 # ========================
 sub metaAddTopicData
 {
-    my( $web, $topic, $rev, @meta ) = @_;
+    my( $web, $topic, $rev, $meta ) = @_;
     
     my $time = time();
     my $user = $TWiki::userName;
@@ -758,34 +642,52 @@ sub metaAddTopicData
        "version" => "$rev",
        "date"    => "$time",
        "author"  => "$user",
-       "format"  => "1.0beta2" ); # FIXME put correct format version here
-    @meta = metaUpdate( "TOPICINFO", \@args, "", @meta );
-    
-    return @meta;
+       "format"  => $TWiki::formatVersion );
+    $meta->put( "TOPICINFO", @args );
 }
 
+
+# =========================
+sub savePreview
+{
+    my( $theWeb, $theTopic, $theText ) = @_;
+    my $fileName = getFileName( $theWeb, $theTopic, "", ".tmp" );    
+    saveFile( $fileName, $theText );   
+}
+
+# =========================
+sub readRemovePreview
+{
+    my( $theWeb, $theTopic ) = @_;
+    my $fileName = getFileName( $theWeb, $theTopic, "", ".tmp" );
+    my $text = readFile( $fileName );
+    unlink( $fileName );
+    return $text;
+}
 
 # =========================
 sub saveTopicNew
 {
     my( $web, $topic, $text, $metaData, $saveCmd, $doUnlock, $dontNotify, $dontLogSave ) = @_;
     my $attachment = "";
-    saveNew( $web, $topic, $text, $metaData, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify );
+    my $meta = TWiki::Meta->new();
+    $meta->readArray( @$metaData );
+    saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify );
 }
 
 # =========================
 sub saveTopic
 {
-    my( $topic, $text, $saveCmd, $doUnlock, $dontNotify, $dontLogSave ) = @_;
-#   my( $topic, $text, $saveCmd, $doNotLogChanges, $doUnlock ) = @_;
+    my( $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave ) = @_;
     my $attachment = "";
-    save( $TWiki::webName, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify );
+    saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify );
 }
 
 # =========================
 sub saveAttachment
 {
-    my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $theTmpFilename ) = @_;
+    my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $theTmpFilename,
+        $forceDate) = @_;
 
     # before save, create directories if they don't exist
     my $tempPath = getFileDir( $web, "", $attachment );
@@ -807,7 +709,7 @@ sub saveAttachment
     
     # Update RCS
     my $error = save($web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, 
-		     $dontNotify, $theComment );
+		     $dontNotify, $theComment, $forceDate );
     return $error;
 }
 
@@ -827,20 +729,20 @@ sub isBinary
 
 sub save
 {
-    my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment ) = @_;
+    my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate ) = @_;
     
     # FIXME get rid of this routine
     
-    my @meta = ();
+    my $meta = TWiki::Meta->new();
     
-    return saveNew( $web, $topic, $text, \@meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment );
+    return saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate );
 }
 
 
 # ========================
 sub _saveWithMeta
 {
-    my( $web, $topic, $text, $attachment, $doUnlock, $nextRev, @meta ) = @_;
+    my( $web, $topic, $text, $attachment, $doUnlock, $nextRev, $meta ) = @_;
     
     if( ! $attachment ) {
         my $name = getFileName( $web, $topic, $attachment );
@@ -849,9 +751,8 @@ sub _saveWithMeta
             $nextRev = "1.1";
         }
 
-        @meta = metaAddTopicData(  $web, $topic, $nextRev, @meta );
-        my $metaText = join "\n", @meta;
-        $text = "$metaText\n$text";
+        metaAddTopicData(  $web, $topic, $nextRev, $meta );
+        $text = $meta->write( $text );
     
 	# save file
 	saveFile( $name, $text );
@@ -860,7 +761,7 @@ sub _saveWithMeta
        lockTopicNew( $web, $topic, $doUnlock );
     }
 
-    return( $text, @meta );
+    return $text;
 }
 
 
@@ -869,13 +770,12 @@ sub _saveWithMeta
 # return non-null string if there is an (RCS) error.
 sub saveNew
 {
-    my( $web, $topic, $text, $metaData, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment ) = @_;
+    my( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate ) = @_;
     my $name = getFileName( $web, $topic, $attachment );
     my $dir  = getFileDir( $web, $topic, $attachment, "" );
     my $time = time();
     my $tmp = "";
     my $rcsError = "";
-    my @meta = @$metaData;
     
     my $currentRev = getRevisionNumberX( $web, $topic );
     my $nextRev    = "";
@@ -938,7 +838,7 @@ sub saveNew
         }
 
         if( $saveCmd ne "repRev" ) {
-            ( $text, @meta ) = _saveWithMeta( $web, $topic, $text, $attachment, $doUnlock, $nextRev, @meta );
+            $text = _saveWithMeta( $web, $topic, $text, $attachment, $doUnlock, $nextRev, $meta );
 
             # If attachment and RCS file doesn't exist, initialise things
             if( $attachment ) {
@@ -974,7 +874,11 @@ sub saveNew
                }
             }
 
-            $tmp= $TWiki::revCiCmd;
+            $tmp = $TWiki::revCiCmd;
+            if( $forceDate ) {
+                $tmp = $TWiki::revCiDateCmd;
+                $tmp =~ s/%DATE%/$forceDate/o;
+            }
             $tmp =~ s/%USERNAME%/$TWiki::userName/;
             $tmp =~ s/%FILENAME%/$name/;
             $tmp =~ s/%COMMENT%/$theComment/;
@@ -994,12 +898,6 @@ sub saveNew
                   _traceExec( $cmd, $out );
                   # Assume it worked, as not sure how to trap failure
                   $tmp= $TWiki::revCiCmd;
-                  $tmp =~ s/%USERNAME%/$TWiki::userName/;
-                  $tmp =~ s/%FILENAME%/$name/;
-                  $tmp =~ s/%COMMENT%/$theComment/;
-                  $tmp =~ /(.*)/;
-                  $tmp = $1;       # safe, so untaint variable
-                  $tmp .= " 2>&1 1>$TWiki::nullDev";
                   $rcsError = `$tmp`; # capture stderr  (S.Knutson)
                   _traceExec( $tmp, $rcsError );
                   $rcsError = "";
@@ -1037,7 +935,7 @@ sub saveNew
         # fix topic by replacing last revision
         
         $nextRev = $currentRev;
-        ( $text, @meta ) = _saveWithMeta( $web, $topic, $text, $attachment, $doUnlock, $nextRev, @meta );
+        $text = _saveWithMeta( $web, $topic, $text, $attachment, $doUnlock, $nextRev, $meta );
 
         # update repository with same userName and date, but do not update .changes
         my $rev = getRevisionNumber( $web, $topic, $attachment );
@@ -1274,25 +1172,20 @@ sub topicExists
 # Note there is no "1." prefix to this data
 sub getRevisionInfoFromMeta
 {
-    my( $web, $topic, $metar, $changeToIsoDate ) = @_;
+    my( $web, $topic, $meta, $changeToIsoDate ) = @_;
     
     my( $date, $author, $rev );
+    my %topicinfo = ();
     
-    my @meta = ();
-    if( $metar ) {
-       @meta = @$metar;
+    if( $meta ) {
+        %topicinfo = $meta->findOne( "TOPICINFO" );
     }
-    
-    my @metainfo = grep( /^%META:TOPICINFO/, @meta );
-    if( @metainfo ) {
+        
+    if( %topicinfo ) {
        # Stored as meta data in topic for faster access
-       my $topicinfo = shift @metainfo;
-       $topicinfo =~ /%META:TOPICINFO{([^}]*)}/;
-       my $args   = $1;
-       my $tmp = TWiki::extractNameValuePair( $args, "date" );
-       $date = TWiki::formatGmTime( $tmp ); # FIXME should format be here or with user?
-       $author = TWiki::extractNameValuePair( $args, "author" );
-       $tmp = TWiki::extractNameValuePair( $args, "version" );
+       $date = TWiki::formatGmTime( $topicinfo{"date"} ); # FIXME deal with changeToIsoDate
+       $author = $topicinfo{"author"};
+       my $tmp = $topicinfo{"version"};
        $tmp =~ /1\.(.*)/o;
        $rev = $1;
     } else {
@@ -1312,19 +1205,19 @@ sub convert2metaFormat
 {
     my( $web, $text ) = @_;
     
-    my @meta = ();
+    my $meta = TWiki::Meta->new();
+    $text = $meta->read( $text );
      
     if ( $text =~ /<!--TWikiAttachment-->/ ) {
-       ( $text, @meta ) = TWiki::Attach::migrateToFileAttachmentMacro( $text );
+       $text = TWiki::Attach::migrateToFileAttachmentMacro( $meta, $text );
     }
     
     if ( $text =~ /<!--TWikiCat-->/ ) {
-       ( $text, @meta ) = TWiki::Form::upgradeCategoryTable( $web, $text, @meta );    
+       $text = TWiki::Form::upgradeCategoryTable( $web, $meta, $text );    
     }
     
-    return( $text, @meta );
+    return( $meta, $text );
 }
-
 
 # =========================
 # Expect meta data at top of file, but willing to accept it anywhere
@@ -1333,40 +1226,35 @@ sub _extractMetaData
 {
     my( $web, $fulltext ) = @_;
     
-    my $text = "";
-    my @meta = ();
-    
-    foreach( split( /\n/, $fulltext ) ) {
-        if( /^%META:/ ) {
-            push @meta, $_;    
-        } else {
-            $text .= "$_\n";
-        }
-    }
+    my $meta = TWiki::Meta->new();
+    my $text = $meta->read( $fulltext );
+
     
     # If there is no meta data then convert
-    if( $#meta == -1 ) {
-        ($text, @meta ) = convert2metaFormat( $web, $text );
+    if( ! $meta->count( "TOPICINFO" ) ) {
+        ( $meta, $text ) = convert2metaFormat( $web, $text );
     } else {
-        my $fieldP;
-        ( $fieldP, @meta ) = metaExtract( "TOPICINFO", "", "", @meta );
-        my @fields = @$fieldP;
-        my %fld = @fields;
-        if( $fld{"format"} eq "1.0beta" ) {
+        my %topicinfo = $meta->findOne( "TOPICINFO" );
+        if( $topicinfo{"format"} eq "1.0beta" ) {
             if( $text =~ /<!--TWikiCat-->/ ) {
-               ( $text, @meta ) = TWiki::Form::upgradeCategoryTable( $web, $text, @meta );
+               $text = TWiki::Form::upgradeCategoryTable( $web, $meta, $text );
             }
         }
     }
     
-    return( $text, @meta );
+    return( $meta, $text );
 }
 
 # =========================
 sub readTopic
 {
-    my( $theName ) = @_;
-    return &readWebTopic( $TWiki::webName, $theName );
+    my( $theWeb, $theTopic ) = @_;
+    
+    my $fullText = readTopicRaw( $theWeb, $theTopic );
+    
+    my ( $meta, $text ) = _extractMetaData( $theWeb, $fullText );
+    
+    return( $meta, $text );
 }
 
 # =========================
@@ -1379,26 +1267,20 @@ sub readWebTopic
 }
 
 # =========================
+# Optional version in format 1.x
 sub readTopicRaw
 {
-    my( $theWeb, $theName ) = @_;
-    my $text = &readFile( "$TWiki::dataDir/$theWeb/$theName.txt" );
+    my( $theWeb, $theTopic, $theVersion ) = @_;
+    my $text = "";
+    if( ! $theVersion ) {
+        $text = &readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt" );
+    } else {
+        $text = _readVersionNoMeta( $theWeb, $theTopic, $theVersion);
+    }
     
     return $text;
 }
 
-# FIXME replace readWebTopic
-sub readWebTopicNew
-{
-    my( $theWeb, $theName ) = @_;
-    my $text = &readFile( "$TWiki::dataDir/$theWeb/$theName.txt" );
-    
-    my @meta = ();
-    
-    ($text, @meta) = _extractMetaData( $theWeb, $text );
-    
-    return( $text, @meta );
-}
 
 # =========================
 sub readTemplateTopic
@@ -1413,7 +1295,7 @@ sub readTemplateTopic
     if( topicExists( $TWiki::webName, $theTopicName ) ) {
         $web = $TWiki::webName;
     }
-    return readWebTopicNew( $web, $theTopicName );
+    return readTopic( $web, $theTopicName );
 }
 
 # =========================
@@ -1486,7 +1368,7 @@ sub readTemplate
         my $txt = &readFile( $tmplFile );
         
         $txt =~ s/%HEADER{([^}]*)}%/&TWiki::handleHeader( $1, $theTopic, $theSkin )/geo;
-        $txt =~ s/%FOOTER(:[A-Z]*)?%/&TWiki::handleFooter( $1, $theTopic, $theSkin )/geo;
+        $txt =~ s/%(}?)FOOTER({?)%/&TWiki::handleFooter( $2, $1, $theTopic, $theSkin )/geo;
         $txt =~ s/%SEP%/&TWiki::handleSep( $theTopic, $theSkin )/geo;
 
         return $txt;
