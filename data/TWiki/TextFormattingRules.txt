@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1090657293" format="1.0" version="1.46"}%
+%META:TOPICINFO{author="PeterThoeny" date="1091357500" format="1.0" version="1.47"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---# TWiki Text Formatting
@@ -301,7 +301,7 @@ class CatAnimal {
 <tr bgcolor="#ffffff">
 <td valign="top">
  *<nop>WikiWord Links:* %BR%
- <nop>CapitalizedWordsStuckTogether (or WikiWords) will produce a link automatically. %BR% __Note:__ In case you want to link to a topic in a different %WIKITOOLNAME% web write =Webname.TopicName=.
+ <nop>CapitalizedWordsStuckTogether (or WikiWords) will produce a link automatically. %BR% __Note:__ In case you want to link to a topic in a different %WIKITOOLNAME% web write =Otherweb.TopicName=. (The link label is the the name of the web in case the is <nop>%HOMETOPIC%, else it is the topic name)
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -459,6 +459,7 @@ You can use just about any HTML tag without a problem - however, there are a few
 		* Do not span a tag over more then one line
 		* Remove all empty lines. TWiki inserts =&lt;p /&gt;= paragraph tags on empty lines, which causes problems if done between tags that do not allow paragraph tags, like for example between table tags.
 
+
 ---+++ TWiki HTML Rendering
 
 	* TWiki converts shorthand notation to XHTML 1.0 for display. To copy a fully marked-up page, simply view source in your browser and save the contents.
@@ -471,7 +472,7 @@ You can use just about any HTML tag without a problem - however, there are a few
 
 You can use <nop>JavaScript for your TWiki applications. Since TWiki rendering might interfere with <nop>JavaScript code you need to escape it with HTML comments and =&lt;pre&gt;= tags:
 <verbatim>
-<script language="JavaScript">
+<script type="text/javascript">
 <!-- Hide JavaScript and <pre> escape TWiki rendering
 ... put your JavaScript code here...
 // Stop hiding and stop </pre> escaping TWiki rendering -->
@@ -546,5 +547,5 @@ TWiki formatting rules are fairly simple to use and quick to type. However, ther
 		* *A:* The ='&'= character has a special meaning in HTML, it starts a so called character entity, i.e. ='&amp;copy;'= is the =&copy;= copyright character. You need to escape ='&amp;'= to see it as it is, so write ='&amp;amp;'= instead of ='&amp;'=. <br /> Example: Type ='This &amp;amp; that'= to get ='This &amp; that'=.
 
 -- TWiki:Main.MikeMannix - 02 Dec 2001 <br />
--- TWiki:Main.PeterThoeny - 25 Apr 2004
+-- TWiki:Main.PeterThoeny - 01 Aug 2004
 
