@@ -35,6 +35,7 @@ use Common;
 
 use Cwd;
 my $runDir = cwd();
+IndexDistributions::setRunDir($runDir);
 
 # Declare our build package
 package TWikiReleaseTrackerPluginBuild;

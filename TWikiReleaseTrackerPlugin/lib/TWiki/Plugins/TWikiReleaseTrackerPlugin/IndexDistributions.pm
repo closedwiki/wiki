@@ -69,6 +69,7 @@ sub digestForFile {
 #---------------------------------------------------
 # TWiki-specifics
 #---------------------------------------------------
+my $runDir;
 
 sub includeInResults {
 	my ($relativePath) = @_;
@@ -114,7 +115,7 @@ sub indexBetaReleases {
 	FileDigest::saveIndex( $Common::md5IndexDir . "/betas.md5" );
 }
 
-subindexPlugins {
+sub indexPlugins {
 	FileDigest::emptyIndexes();
 	chdir($runDir) || die "Can't cd into $runDir - $!";
 	my $dir = $Common::downloadDir;
@@ -160,5 +161,8 @@ sub ensureInstallationDir {
 	}
 }
 
+sub setRunDir {
+	($runDir) = @_;
+}
 
 1;
