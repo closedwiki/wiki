@@ -291,7 +291,9 @@ sub initialize
 
     # initialize user name and user to WikiName list
     userToWikiListInit();
-    $userName = TWiki::Plugins::initializeUserHandler( $theRemoteUser, $theUrl, $thePathInfo );  # e.g. "jdoe"
+    # FIXME: Restored old spec for Beijing release since Codev.InitializeUserHandlerBroken
+    #$userName = TWiki::Plugins::initializeUserHandler( $theRemoteUser, $theUrl, $thePathInfo );  # e.g. "jdoe"
+    $userName = TWiki::Plugins::initializeUser( $theRemoteUser, $theUrl, $thePathInfo );  # e.g. "jdoe"
     $wikiName     = userToWikiName( $userName, 1 );      # i.e. "JonDoe"
     $wikiUserName = userToWikiName( $userName );         # i.e. "Main.JonDoe"
 

@@ -22,7 +22,6 @@
 # Each plugin is a package that may contain these functions:        VERSION:
 #
 #   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
 #   registrationHandler     ( $web, $wikiName, $loginName )         1.010
 #   commonTagsHandler       ( $text, $topic, $web )                 1.000
 #   startRenderingHandler   ( $text, $web )                         1.000
@@ -79,19 +78,6 @@ sub initPlugin
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
-}
-
-# =========================
-sub DISABLE_initializeUserHandler
-{
-### my ( $loginName, $url, $pathInfo ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::initializeUserHandler( $_[0], $_[1] )" ) if $debug;
-
-    # Allows a plugin to set the username based on cookies. Called by TWiki::initialize.
-    # Return the user name, or "guest" if not logged in.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
 }
 
 # =========================

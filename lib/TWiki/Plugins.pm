@@ -33,7 +33,6 @@ $VERSION = '1.010';
 
 @registrableHandlers = (           #                                         VERSION:
         'initPlugin',              # ( $topic, $web, $user, $installWeb )    1.000
-        'initializeUserHandler',   # ( $loginName, $url, $pathInfo )         1.010
         'registrationHandler',     # ( $web, $wikiName, $loginName )         1.010
         'commonTagsHandler',       # ( $text, $topic, $web )                 1.000
         'startRenderingHandler',   # ( $text, $web )                         1.000
@@ -49,8 +48,7 @@ $VERSION = '1.010';
         'setSessionValueHandler'   # ( $key, $value )                        1.010
     );
     
-%onlyOnceHandlers = ( 'initializeUserHandler'   => 1,
-                      'registrationHandler'     => 1,
+%onlyOnceHandlers = ( 'registrationHandler'     => 1,
                       'writeHeaderHandler'      => 1,
                       'redirectCgiQueryHandler' => 1,
                       'getSessionValueHandler'  => 1,
@@ -243,20 +241,45 @@ sub handleActivatedPlugins
 }
 
 # =========================
-sub initializeUserHandler
+# This could be better integrated with the other auto discovery for plugins
+sub initializeUser
 {
-    # Called by TWiki::initialize
-#   my( $theLoginName, $theUrl, $thePathInfo ) = @_;
+#   my( $theRemoteUser, $theUrl,  $thePathInfo ) = @_;
+    my $user;
+    my $p = "TWiki::Plugins::SessionPlugin";
+    my $sub = $p.'::initializeUserHandler';
 
-    unshift @_, ( 'initializeUserHandler' );
-    my $user = &applyHandlers;
-
+    my $libDir = &TWiki::getTWikiLibDir();
+    if(  -e "$libDir/TWiki/Plugins/SessionPlugin.pm" ) {
+        eval "use $p;";
+        if( defined( &$sub ) ) {
+            $user = &$sub( @_ );
+        }
+    }
     if( ! defined( $user ) ) {
         $user = &TWiki::initializeRemoteUser( $_[0] );
     }
-
+    
     return $user;
 }
+
+# FIXME: For Beijing release, restored above initializeUser function and
+# comment out initializeUserHandler since Codev.InitializeUserHandlerBroken
+# =========================
+#sub initializeUserHandler
+#{
+#    # Called by TWiki::initialize
+##   my( $theLoginName, $theUrl, $thePathInfo ) = @_;
+#
+#    unshift @_, ( 'initializeUserHandler' );
+#    my $user = &applyHandlers;
+#
+#    if( ! defined( $user ) ) {
+#        $user = &TWiki::initializeRemoteUser( $_[0] );
+#    }
+#
+#    return $user;
+#}
 
 # =========================
 sub registrationHandler
