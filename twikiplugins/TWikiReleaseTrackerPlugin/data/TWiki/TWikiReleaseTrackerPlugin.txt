@@ -63,9 +63,10 @@ All parameters can be sourced from one of three places:
 | to | (see "from") | , - this says match against all distributions |
 | indexTopic | topic containing the md5 files | defaults to the plugin page |
 | debug | on, off, 2 | off |
-| statusFilter | "FSCS, FSCD, FDCS, FDCD, all" (Filename Same/Different, Content Same/Different) | all |
-| *Mode = file* | (Currently non-functional) ||
+| statusFilter | "FSCS, FSCD, FSCM, FDCS, FDCD, all" (Filename Same/Different, Content Same/Matches (other dist)/Different) | all |
+| *Mode = file* |  ||
 | file | filename to compare | - |
+| *Mode = dumpIndex* | - | - |
 
 ---++ Limitations
 | *Issue* | *Future Plan* | *Impact* |

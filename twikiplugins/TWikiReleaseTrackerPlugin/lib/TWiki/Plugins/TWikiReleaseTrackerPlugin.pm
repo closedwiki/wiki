@@ -49,6 +49,7 @@ sub commonTagsHandler {
 	writeDebug("commonTagsHandler( $_[2].$_[1] )");
 	$_[0] =~ s/%DIFFWIKI{(.*?)}%/&handleDiffWiki($1)/ge;
 	$_[0] =~ s/%DIFFWIKIINDEX{(.*?)}%/&handleShowIndex($1)/ge;
+	$_[0] =~ s/%WIKIVERSIONASDISTNAME{(.*?)}%/&handleConvertWikiVersion($1)/ge;
 }
 
 sub getParam {
@@ -137,6 +138,12 @@ sub handleDiffWiki {
 			@distributions );
 	}
 	return $ans;
+}
+
+sub handleConvertWikiVersion {
+   my ($wikiVersion) = @_;
+   use TWikiReleaseNames;
+   return TWiki::ReleaseNames::wikiVersionToDistributionName($wikiVersion);
 }
 
 sub formatList {
@@ -464,8 +471,8 @@ sub listFiles {
 		my $numberOfFilenameMatches = $#allDistributionsForFilename + 1;
 
 		$debugInfo .=
-"|*$relativeFile = $digest<BR> comparedDistribution='$comparedDistribution', location='$distributionLocation', absoluteFile='$absoluteFile'  "
-		  . "<BR>Distributions: "
+"|*$relativeFile = $digest<BR> from='$comparedDistribution', location='$distributionLocation', absoluteFile='$absoluteFile'  "
+		  . "<BR>To: "
 		  . join( ", <nop>", @distributions )
 		  . "<BR>All distributions where filename occurred: ("
 		  . $numberOfFilenameMatches
