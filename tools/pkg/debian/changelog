@@ -1,0 +1,99 @@
+twiki (20030201-4) unstable; urgency=high
+
+  * added .htaccess to conffile (Closes: #217406)
+  * fixed up doc-base file (Closes: #215395)
+  * moved change of index.html from postinst to rules (Closes: #215397)
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 16 Nov 2003 00:00:01 -1000
+
+twiki (20030201-3) unstable; urgency=low
+
+  * fixed up index.html path in postinst (Closes: #211166)
+  * added softlinks in /var/lib/twiki to re-produce upstream filesystem
+    - (Closes: #210898)
+  * set .mailnotify timestamp on example universe install 
+    - part of #211237 suggestion
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 1 Oct 2003 00:00:01 -1000
+
+twiki (20030201-2) unstable; urgency=low
+
+  * applied some patches from upstream 
+    - Codev.AlternateWebPrefsBug: Incorrect init of alternate web 
+      preferences (Closes: #194783)
+    - Support.TWikiWebCantBeProtected: removed special case for TWiki
+      and Main Webs (Closes: #202314)
+    - unsafe grep options fixed upstream  (Closes: #152515)
+  * upstream release fixed META suffix macro (Closes: #152516)
+  * I'm fixing the bugs, don't need to orphan (Closes: #186428)
+  * should have closed this last time: new release of TWiki, apache-ssl
+    (Closes: #194356)
+  * apache-ssl works (from previous release) (Closes: #169433)
+  * added debconf note about Registration and creation of apache users
+   - (Closes: #171429, #152497, #163344)
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 14 Sep 2003 00:00:01 -1000
+
+twiki (20030201-1) unstable; urgency=low
+
+  * Changed Maintainership - Mark W. Eichin has no time 
+  * upgrade to 01Feb2003 release (Bejing) (Closes: #192718)
+  * removed the use of twikidat user for now, 
+    - it causes problems with uploads of attachments and topic edits 
+    - (Closes: #163514, #165340, #171441, #153430)
+  * removed the Alias /twiki line in apache.conf
+    - (Closes: #151187, #190409)
+  * fixed postrm script (Closes: #171421)
+  * added TWikiOnDebian to README.Debian (Closes: #171468)
+  * changed the path to grep
+    - (Closes: #177047)
+  * removed perl-suid dependancy for the moment (Closes: #149319)
+  * added dependency for apache2 | apache | apache-ssl (Closes: #171426)
+  * switched to gettext for the debconf templates (Closes: #199999)  
+  * added french translation of the debconf templates (Closes: #200575)
+  * seems to fix apt-get --purge remove twiki (Closes: #183917)
+  * this has been resolved upstream (Closes: #151188)
+  * this has been resolved upstream (Closes: #153168)
+  * this has been resolved upstream 
+    - http://www.twiki.org/cgi-bin/view/Codev/FormRenderForEdit 
+    - (Closes: #152766)
+  * seems to be working now with perl 5.8.0 (Closes: #169791)
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 27 Aug 2003 00:00:01 -1000
+
+twiki (20011201-2.1) unstable; urgency=low
+ 
+  * Non-maintainer upload
+  * Fix FTBFS problem. (Closes: #163514)
+    - do not chown to twiki user, because it will break the building process
+  * debian/control:
+    - change Build-Depends to Build-Depends-Indep
+    - update standards version
+  * debian/copyright:
+    - remove (s) from Author's line
+  * debian/rules:
+    - chmod the files, to make it lintian clear. Afaik 655 doesn't make sense.
+    - don't install license.txt this violate to policy
+
+ -- Thorsten Sauter <tsauter@debian.org>  Fri, 18 Jul 2003 10:11:12 +0000
+
+twiki (20011201-2) unstable; urgency=low
+
+  * One step at a time - getting the trivial ones out of the way...
+  * debian/postrm: ignore status of dpkg-statoverride --remove, in case
+    we've been run twice (Closes: #151105)
+  * debian/postinst: create /var/lib/twiki/data/.htpasswd if we have to
+    (Closes: #151186, #148805) Don't let apacheconfig hang (since there's
+    no way to mix apacheconfig and debconf) but lacking a sane perl debconf
+    example, just cheat and force apacheconfig without restarting the server.
+  * debian/control: bump wwwconfig-common dependency to a version that
+    includes it apache-include-postrm.sh.
+
+ -- Mark W. Eichin <eichin@thok.org>  Mon, 22 Jul 2002 00:34:51 -0400
+
+twiki (20011201-1) unstable; urgency=low
+
+  * Initial Release. (Closes: #68712, #79667)
+
+ -- Mark W. Eichin <eichin@thok.org>  Sun, 20 Jan 2002 10:31:23 -0500
+

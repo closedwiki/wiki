@@ -1,0 +1,169 @@
+#! /bin/sh
+# postinst script for twiki
+#
+# see: dh_installdeb(1)
+
+# not www-data.  remember to sync with rules.
+TWIKI_OWNER=www-data
+
+set -e
+# Source debconf library.
+. /usr/share/debconf/confmodule
+
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see /usr/share/doc/packaging-manual/
+#
+# quoting from the policy:
+#     Any necessary prompting should almost always be confined to the
+#     post-installation script, and should be protected with a conditional
+#     so that unnecessary prompting doesn't happen if a package's
+#     installation fails and the `postinst' is called with `abort-upgrade',
+#     `abort-remove' or `abort-deconfigure'.
+
+
+db_get twiki/samplefiles
+if [ "$RET" = true ]; then
+    if [ ! -e /var/lib/twiki/data/Main/WebHome.txt ]; then
+	# only extract if they say so and there's no home there
+	# and even then, fail on overwrite so we don't stomp.
+	tar -zxk -C / -f /usr/share/doc/twiki/twiki-data.tar.gz
+	# clean up the .mailnotify timestamps.
+	webs="Know Main Sandbox TWiki Trash _default";
+	for web in $webs; do
+		date +%s > /var/lib/twiki/data/$web/.mailnotify
+	done
+    fi
+    if [ ! -e /var/www/twiki/pub/wikiHome.gif ]; then
+	tar -zxk -C / -f /usr/share/doc/twiki/twiki-pub.tar.gz
+    fi
+fi
+
+db_get twiki/defaultUrlHost
+# be more robust later:
+perl -pi~ -e '$U=q{'"$RET"'}; s/^(\$defaultUrlHost\s*=\s*").*(";\n)$/$1$U$2/;' /etc/twiki/TWiki.cfg
+perl -pi~ -e '$U=q{'"$RET"'}; s{http://your.domain.com}{$U}g;' /etc/twiki/apache.conf
+#perl -pi~ -e '$U=q{'"$RET"'}; s{^(Redirect\s+/twiki/index.html\s+).*(cgi-bin/twiki/view\n)$}{$1$U$2};' /etc/twiki/apache.conf
+
+db_get twiki/wikiwebmaster
+# do rcs checkout first?
+perl -pi~ -e '$U=q{'"$RET"'}; s/^(\s*\*\s*Set\s*WIKIWEBMASTER\s*=\s*).*(\r\n)$/$1$U$2/;' /var/lib/twiki/data/TWiki/TWikiPreferences.txt
+
+
+
+# prevent further confusion: done with debconfig
+
+# regrettably, this doesn't actually permit us to do further I/O.
+# Rewrite this in perl, if we ever find a non-kerberos example of how
+# to do so.
+
+db_stop
+
+case "$1" in
+    configure)
+#	P=/usr/lib/cgi-bin/twiki
+#	for i in attach changes edit geturl installpasswd mailnotify oops passwd preview rdiff register rename save search statistics testenv upload view viewfile; do
+#	    if ! dpkg-statoverride --list $P/$i >/dev/null; then
+#		dpkg-statoverride --update --add $TWIKI_OWNER www-data 4555 $P/$i
+#	    fi
+#	done
+
+	servers="apache apache-ssl apache2"
+	for server in $servers; do 
+	    . /usr/share/wwwconfig-common/apache-run.get
+	    includefile=/etc/twiki/apache.conf
+	    . /usr/share/wwwconfig-common/apache-include_all.sh
+	    if [ "$status" = "uncomment" -o "$status" = "include" ] ; then
+		restart="$server $restart"
+	    fi
+	done
+# 	if egrep '^twikidat$' /etc/cgiwrap.allow 2>&1 >/dev/null ; then
+# 	    : # already there
+# 	else
+# 	    # eek! this is a conffile of cgiwrap, so don't do that?
+# 	    echo twikidat >> /etc/cgiwrap.allow
+# 	fi
+
+
+        if test -s /etc/apache/httpd.conf
+        then
+           if grep '^LoadModule.*mod_actions\.so' /etc/apache/httpd.conf 2>&1 >/dev/null
+           then
+	       # we're ok
+	       :
+	   else
+	       echo "twiki needs mod_action loaded,  doing DSO scan..."
+	       if [ -x /usr/sbin/apacheconfig ]; then
+		   (echo y; echo n) | /usr/sbin/apacheconfig --force-modules
+		   echo "Restart apache yourself for now..."
+	       fi
+	   fi
+	fi
+	. /usr/share/wwwconfig-common/restart.sh
+	# create initial htpasswd, if needed
+	#mmmm whats the equivalent in apache2?
+	if [ -e /usr/bin/htpasswd ]; then
+		if [ -e /usr/lib/twiki/data ]; then	
+			#if the user has installed without initial universe then we can't do this
+			if [ ! -r /var/lib/twiki/data/.htpasswd ]; then
+			    touch /var/lib/twiki/data/.htpasswd
+		       	    htpasswd -b /var/lib/twiki/data/.htpasswd TWikiGuest guest
+			    chown $TWIKI_OWNER.www-data /var/lib/twiki/data/.htpasswd
+			    chmod og=rw /var/lib/twiki/data/.htpasswd
+			fi
+		fi
+	fi
+
+	if [ ! -e /usr/share/perl5/TWiki.cfg ]; then
+		ln -s /etc/twiki/TWiki.cfg /usr/share/perl5/TWiki.cfg 
+	fi
+
+	if [ ! -e /usr/lib/cgi-bin/twiki/.htaccess.old ]; then
+		#remove the old .htaccess file (from 2003-4 its a conffile in /etc/twiki)
+		mv /usr/lib/cgi-bin/twiki/.htaccess /usr/lib/cgi-bin/twiki/.htaccess.old
+	fi
+	if [ ! -e /usr/lib/cgi-bin/twiki/.htaccess ]; then
+		ln -s /etc/twiki/.htaccess /usr/lib/cgi-bin/twiki/.htaccess
+	fi
+
+	#add softlinks to make adding plugings easier ()
+	if [ ! -e /var/lib/twiki/lib ]; then
+		ln -s /usr/share/perl5 /var/lib/twiki/lib
+	fi
+	if [ ! -e /var/lib/twiki/pub ]; then
+		ln -s /var/www/twiki/pub /var/lib/twiki/pub
+	fi
+	if [ ! -e /var/lib/twiki/bin ]; then
+		ln -s /usr/lib/cgi-bin/twiki/ /var/lib/twiki/bin
+	fi
+	if [ ! -e /var/lib/twiki/log ]; then
+		ln -s /var/log/twiki /var/lib/twiki/log
+	fi
+
+	chown -R $TWIKI_OWNER.www-data /var/log/twiki
+	chmod -R og=rw /var/log/twiki
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0
