@@ -32,6 +32,7 @@ Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management t
 			1 TWikiVariables
 			1 TWikiNotificationOfChanges 
 			1 TWikiCategoryTable 
+			1 TWikiPlugins
 			1 TWikiAdministration tells you how to rename or delete a topic or web.
 
 <FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
