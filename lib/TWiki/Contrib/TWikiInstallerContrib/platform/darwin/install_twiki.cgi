@@ -79,8 +79,8 @@ BEGIN {
 \$cfg{MimeTypesFileName}  = "\$cfg{DataDir}/mime.types";
 
 # Mac-specific
-\$cfg{EgrepCmd}         = '/usr/bin/egrep';
-\$cfg{FgrepCmd}         = '/usr/bin/fgrep';
+\$cfg{RCS}{EgrepCmd}         = '/usr/bin/egrep';
+\$cfg{RCS}{FgrepCmd}         = '/usr/bin/fgrep';
 };
 }
 use strict;
