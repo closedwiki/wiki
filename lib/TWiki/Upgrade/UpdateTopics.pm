@@ -65,6 +65,7 @@ sub UpdateTopics
     print "Output:\n";
     print "\tFor each file that has no versioning information a _v_ will be printed\n";
     print "\tFor each file that has no changes from the previous release a _c_ will be printed\n";
+    print "\tFor each file that has no changes made in your existing release, a _u_ will be printed\n";
     print "\tFor each file that has changes and a patch is generated a _p_ will be printed\n";
     print "\tFor each file that is new in the NewReleaseDataDir a _+_ will be printed\n";
     print "\t When the script has attempted to patch the $NewReleaseDataDir, 
@@ -263,6 +264,7 @@ sub getRLog
 	{
             my $diff = doDiffToHead( $workingFilename, $highestCommonRevision );
 
+	    $diff = removeVersionChangeDiff($diff);
             patchFile( $filename, $destinationFilename, $diff );
 
             print "\npatching $newFilename from $filename ($highestCommonRevision)" if ($debug);
@@ -272,10 +274,10 @@ sub getRLog
         } elsif ($highestCommonRevision eq "head" ) {
 	    # This uses the existing file rather than the new one, in case they manually
 	    # changed the exisiting one without using RCS.
-            print "\nhighest revision also final revision in oldTopic (using existing Version)" if ($debug);
-            print "c" if (!$debug);
-            copy( $filename, $destinationFilename);
-            copy( $filename.",v", $destinationFilename.",v");
+            print "\nhighest common revision is final revision in oldTopic (using new Version)" if ($debug);
+            print "u" if (!$debug);
+            copy( $newFilename, $destinationFilename);
+            copy( $newFilename.",v", $destinationFilename.",v");
         } else {
             #no common versions - this might be a user created file, 
             #or a manual attempt at creating a topic off twiki.org?raw=on
@@ -441,4 +443,28 @@ sub getRevision
     return $content;
 }
 
+# $diff is assumed to contain the diff between two similar TWiki topics
+# TWiki topics should, as a rule, differ in the first line with respect to
+# their version number.   This routine gets rid of that component of the diff.
+# It could be more rigorous (like testing if the 1c1 change relates to %META).
+# The diff is assumed not to contain the preamble.
+
+sub removeVersionChangeDiff
+{
+    my ($diff) = @_;
+
+    my @diff = split( /\n/, $diff);
+
+    if ($diff[0] eq '1c1')
+    {
+	splice(@diff, 0, 4);
+    }
+
+    $diff = join "\n", @diff;
+
+#    print "rVCD returning: \n$diff\n";
+
+    return $diff;
+}
+    
 1;
