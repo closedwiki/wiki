@@ -64,7 +64,7 @@ use vars qw(
         $defaultUserName $userName $wikiUserName 
         $wikiHomeUrl $defaultUrlHost $urlHost
         $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir
-        $wikiToolName $securityFilter $uploadFilter
+        $siteWebTopicName $wikiToolName $securityFilter $uploadFilter
         $debugFilename $warningFilename $htpasswdFilename
         $logFilename $remoteUserFilename $wikiUsersTopicname
         $userListFilename %userToWikiList
@@ -87,6 +87,7 @@ use vars qw(
         $debugUserTime $debugSystemTime
         $viewableAttachmentCount $noviewableAttachmentCount
 	$superAdminGroup $doSuperAdminGroup
+        $cgiQuery @publicWebList
     );
 
 
@@ -106,7 +107,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "27 Mar 2001";
+$wikiversion      = "07 Jun 2001";
 
 # ===========================
 # read the configuration part
@@ -128,6 +129,9 @@ use TWiki::Plugins;   # plugins handler  #AS
 { my $count = 0;
   %mon2num = map { $_ => $count++ } @isoMonth; }
 
+$cgiQuery = 0;
+@publicWebList = ();
+
 # Header patterns based on '+++'. The '###' are reserved for numbered headers
 $headerPatternDa = '^---+(\++|\#+)\s+(.+)\s*$';       # '---++ Header', '---## Header'
 $headerPatternSp = '^\t(\++|\#+)\s+(.+)\s*$';         # '   ++ Header', '   + Header'
@@ -140,12 +144,13 @@ $debugSystemTime = 0;
 # =========================
 sub initialize
 {
-    my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query ) = @_;
+    my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $theQuery ) = @_;
     
     ##writeDebug( "\n---------------------------------" );
     
     $TWiki::Attach::noFooter = 0;
     $TWiki::Attach::showAttr = 0;
+    $cgiQuery = $theQuery;
 
     # Make %ENV safer for CGI
     if( $safeEnvPath ) {
@@ -219,7 +224,7 @@ sub initialize
     if ($newTopicFontColor eq "") { $newTopicFontColor="#0000FF"; }
 
 #AS
-    if (!$disableAllPlugins) {
+    if( !$disableAllPlugins ) {
 	&TWiki::Plugins::initialize( $topicName, $webName, $userName );
     }
 #/AS
@@ -236,6 +241,13 @@ sub writeHeader
     # Can change to save cookie if required
 }
 
+# =========================
+sub getCgiQuery
+{
+    return $cgiQuery;
+}
+
+# =========================
 sub redirect
 {
     my( $query, $url ) = @_;
@@ -390,6 +402,31 @@ sub userToWikiName
     } else {
        return "$mainWebname.$loginUser";
     }
+}
+
+# =========================
+sub readOnlyMirrorWeb
+{
+    my( $theWeb ) = @_;
+
+    my @mirrorInfo = ( "", "", "", "" );
+    if( $siteWebTopicName ) {
+        my $mirrorSiteName = &TWiki::Prefs::getPreferencesValue( "MIRRORSITENAME", $theWeb );
+        if( $mirrorSiteName && $mirrorSiteName ne $siteWebTopicName ) {
+            my $mirrorViewURL  = &TWiki::Prefs::getPreferencesValue( "MIRRORVIEWURL", $theWeb );
+            my $mirrorLink = &TWiki::Store::readTemplate( "mirrorlink" );
+            $mirrorLink =~ s/%MIRRORSITENAME%/$mirrorSiteName/go;
+            $mirrorLink =~ s/%MIRRORVIEWURL%/$mirrorViewURL/go;
+            $mirrorLink =~ s/\s*$//go;
+            my $mirrorNote = &TWiki::Store::readTemplate( "mirrornote" );
+            $mirrorNote =~ s/%MIRRORSITENAME%/$mirrorSiteName/go;
+            $mirrorNote =~ s/%MIRRORVIEWURL%/$mirrorViewURL/go;
+            $mirrorNote = getRenderedVersion( $mirrorNote, $theWeb );
+            $mirrorNote =~ s/\s*$//go;
+            @mirrorInfo = ( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote );
+        }
+    }
+    return @mirrorInfo;
 }
 
 # =========================
@@ -791,6 +828,7 @@ sub handleToc
     my $i = 0;
     my $tabs = "";
     my $anchor = "";
+    my $highest = 99;
     foreach $line ( @list ) {
         if( $line =~ /^.*<[pP][rR][eE]>.*$/ ) {
             $insidePre = 1;
@@ -820,21 +858,105 @@ sub handleToc
                 $anchor = makeAnchorName( $line );
             }
             if( ( $line ) && ( $level <= $depth ) ) {
+                $highest = $level if( $level < $highest );
                 $tabs = "";
                 for( $i=0 ; $i<$level ; $i++ ) {
                     $tabs = "\t$tabs";
                 }
+                # Remove *bold* and _italic_ formatting
+                $line =~ s/(^|[\s\(])\*([^\s]+?|[^\s].*?[^\s])\*($|[\s\,\.\;\:\!\?\)])/$1$2$3/go;
+                $line =~ s/(^|[\s\(])_+([^\s]+?|[^\s].*?[^\s])_+($|[\s\,\.\;\:\!\?\)])/$1$2$3/go;
+                # Prevent WikiLinks
+                $line =~ s/\[\[.*\]\[(.*?)\]\]/$1/go;  # '[[...][...]]'
+                $line =~ s/\[\[(.*?)\]\]/$1/geo;       # '[[...]]'
+                $line =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$3/go;  # 'Web.TopicName'
+                $line =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;  # 'TopicName'
+                $line =~ s/([\*\s][\-\*\s]*)([A-Z]{3,})/$1<nop>$2/go;  # 'TLA'
+                # create linked bullet item
                 $line = "$tabs* <a href=\"$scriptUrlPath/view$scriptSuffix/$webPath/$topicname#$anchor\">$line</a>";
                 $result .= "\n$line";
             }
         }
     }
     if( $result ) {
+        if( $highest > 1 ) {
+            # left shift TOC
+            $highest--;
+            $result =~ s/^\t{$highest}//gm;
+        }
         return $result;
 
     } else {
         return showError("TOC: No TOC in \"$web.$topicname\"");
     }
+}
+
+# =========================
+sub getPublicWebList
+{
+    # FIXME: Should this go elsewhere?
+    # (Not in Store because Store should not be dependent on Prefs.)
+
+    if( ! @publicWebList ) {
+        # build public web list, e.g. exclude hidden webs, but include current web
+        my @list = &TWiki::Store::getAllWebs( "" );
+        my $item = "";
+        my $hidden = "";
+        foreach $item ( @list ) {
+            $hidden = &TWiki::Prefs::getPreferencesValue( "NOSEARCHALL", $item );
+            if( ( $item eq $TWiki::webName  ) || ( ! $hidden ) ) {
+                push( @publicWebList, $item );
+            }
+        }
+    }
+    return @publicWebList;
+}
+
+# =========================
+sub handleWebAndTopicList
+{
+    my( $theAttr, $isWeb ) = @_;
+
+    my $format = extractNameValuePair( $theAttr );
+    $format = extractNameValuePair( $theAttr, "format" ) if( ! $format );
+    $format = "   * "   if( ! $format );
+    $format .= '$name' if( ! ( $format =~ /\$name/ ) );
+    my $web = extractNameValuePair( $theAttr, "web" ) || "";
+
+    my @list = ();
+    if( $isWeb ) {
+        @list = getPublicWebList();
+    } else {
+        $web = $webName if( ! $web );
+        my $hidden = &TWiki::Prefs::getPreferencesValue( "NOSEARCHALL", $web );
+        if( ( $web eq $TWiki::webName  ) || ( ! $hidden ) ) {
+            @list = &TWiki::Store::getTopicNames( $web );
+        }
+    }
+    my $text = "";
+    my $item = "";
+    my $line = "";
+    foreach $item ( @list ) {
+        $line = $format;
+        $line =~ s/\$web/$web/goi;
+        $line =~ s/\$name/$item/goi;
+        $text .= "$line\n";
+    }
+    return $text;
+}
+
+# =========================
+sub handleUrlParam
+{
+    my( $theParam ) = @_;
+
+    $theParam = extractNameValuePair( $theParam );
+    my $value = "";
+    if( $cgiQuery ) {
+        $value = $cgiQuery->param( $theParam ) || "";
+    }
+
+    return $value;
 }
 
 # =========================
@@ -873,6 +995,8 @@ sub handleInternalTags
     $_[0] =~ s/%WEB%/$_[2]/go;
     $_[0] =~ s/%BASEWEB%/$webName/go;
     $_[0] =~ s/%INCLUDINGWEB%/$includingWebName/go;
+    $_[0] =~ s/%TOPICLIST{(.*?)}%/&handleWebAndTopicList($1,'0')/geo;
+    $_[0] =~ s/%WEBLIST{(.*?)}%/&handleWebAndTopicList($1,'1')/geo;
     $_[0] =~ s/%WIKIHOMEURL%/$wikiHomeUrl/go;
     $_[0] =~ s/%SCRIPTURL%/$urlHost$scriptUrlPath/go;
     $_[0] =~ s/%SCRIPTURLPATH%/$scriptUrlPath/go;
@@ -881,6 +1005,7 @@ sub handleInternalTags
     $_[0] =~ s/%PUBURLPATH%/$pubUrlPath/go;
     $_[0] =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$_[2]\/$_[1]/go;
     $_[0] =~ s/%ATTACHURLPATH%/$pubUrlPath\/$_[2]\/$_[1]/go;
+    $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/geo;
     $_[0] =~ s/%DATE%/&getLocaldate()/geo; # depreciated
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/geo;
     $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/geo;
@@ -1072,15 +1197,47 @@ sub fixedFontText
 }
 
 # =========================
+sub makeAnchorHeading
+{
+    my( $theText, $theLevel ) = @_;
+
+    # - Need to build '<nop><h1><a name="atext"> text </a></h1>'
+    #   type markup.
+    # - Initial '<nop>' is needed to prevent subsequent matches.
+    # - Need to make sure that <a> tags are not nested, i.e. in
+    #   case heading has a WikiName that gets linked
+
+    my $text = $theText;
+    my $anchorName = &makeAnchorName( $text );
+    my $hasAnchor = 0;  # text contains potential anchor
+    $hasAnchor = 1 if( $text =~ m/<a /i );
+    $hasAnchor = 1 if( $text =~ m/\[\[/ );
+
+    $hasAnchor = 1 if( $text =~ m/(^|[\*\s][\-\*\s]*)([A-Z]{3,})/ );
+    $hasAnchor = 1 if( $text =~ m/(^|[\*\s][\(\-\*\s]*)([A-Z]+[a-z]*)\.([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ );
+    $hasAnchor = 1 if( $text =~ m/(^|[\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ );
+    if( $hasAnchor ) {
+        # FIXME: '<h1><a name="atext"></a></h1> WikiName' has an
+        #        empty <a> tag, which is not HTML conform
+        $text = "<nop><h$theLevel><a name =\"$anchorName\"> </a> $theText <\/h$theLevel>";
+    } else {
+        $text = "<nop><h$theLevel><a name =\"$anchorName\"> $theText <\/a><\/h$theLevel>";
+    }
+
+    return $text;
+}
+
+# =========================
 sub makeAnchorName
 {
     my( $theName ) = @_;
     my $anchorName = $theName;
 
-    $anchorName =~ s/^\s*\#?//o;          # no leading space nor '#'
-    $anchorName =~ s/\s*$//o;             # no trailing space
+    $anchorName =~ s/^[\s\#\_]*//o;       # no leading space nor '#', '_'
+    $anchorName =~ s/[\s\_]*$//o;         # no trailing space, nor '_'
+    $anchorName =~ s/<\w[^>]*>//goi;      # remove HTML tags
     $anchorName =~ s/[^a-zA-Z0-9]/_/go;   # only allowed chars
-    $anchorName =~ s/__+/_/go;            # remove excessive _
+    $anchorName =~ s/__+/_/go;            # remove excessive '_'
     $anchorName =~ s/^(.{32})(.*)$/$1/o;  # limit to 32 chars
 
     return $anchorName;
@@ -1287,13 +1444,12 @@ sub getRenderedVersion
             s/$TranslationToken/&/go;
 
 # Headings
-            # '<h6>...</h6>' HTML rule (to prepend anchor)
-            s/$headerPatternHt/"<a name =\"" . &makeAnchorName($2) . "\"><h$1> $2 <\/h$1><\/h$1>"/geoi;
+            # '<h6>...</h6>' HTML rule
+            s/$headerPatternHt/&makeAnchorHeading($2,$1)/geoi;
             # '\t+++++++' rule
-            s/$headerPatternSp/"<a name =\"" . &makeAnchorName( $2 ) . "\"><h" . (length $1) . "> $2 <\/h" . (length $1) ."><\/a>"/geo;
+            s/$headerPatternSp/&makeAnchorHeading($2,(length($1)))/geo;
             # '----+++++++' rule
-            s/$headerPatternDa/"<a name =\"" . &makeAnchorName( $2 ) . "\"><h" . (length $1) . "> $2 <\/h" . (length $1) ."><\/a>"/geo;
-
+            s/$headerPatternDa/&makeAnchorHeading($2,(length($1)))/geo;
 
 # Horizontal rule
             s/^---+/<HR>/o;
