@@ -8,7 +8,7 @@ twiki-$(PLATFORM).tar.bz2 :
 	tar -r $(TAR_EXCLUDE) --exclude "downloads/*/*.zip" -f twiki-$(PLATFORM).tar bin/* cpan/*.pl cpan/MIRROR/TWIKI downloads 
 	bzip2 twiki-$(PLATFORM).tar
 
-distro : twiki-cpan plugins contrib addons release twiki-$(PLATFORM).tar.bz2 
+distro : twiki-cpan plugins contribs addons release twiki-$(PLATFORM).tar.bz2 
 
 minicpan :
 	cd cpan ; ./mirror-cpan.pl
@@ -23,9 +23,9 @@ plugins :
 	bin/download-twiki-plugins.pl 
 	bin/zip2tgz.pl downloads/plugins/*.zip
 
-contrib :
+contribs :
 	bin/download-twiki-contribs.pl 
-	bin/zip2tgz.pl downloads/contrib/*.zip
+	bin/zip2tgz.pl downloads/contribs/*.zip
 
 addons :
 	bin/download-twiki-addons.pl 
