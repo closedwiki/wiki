@@ -824,8 +824,9 @@ Generate and print to STDOUT a rough guess at the MANIFEST listing
 sub target_manifest {
     my $this = shift;
     print "Here's a rough guess at your MANIFEST list (from $basedir)\n";
+    my $extensionName = `basename $basedir`;
     chdir("$basedir") || die "can't cd to $basedir - $!";
-    print `find . -type f | grep -v CVS | egrep -v '~$'`;
+    print `find . -type f | grep -v CVS | egrep -v '~$' | egrep `;
     print "\n";
     print "Save this as $basedir/MANIFEST and check it manually!\n";
 }
