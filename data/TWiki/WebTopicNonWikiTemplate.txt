@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1036922880" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1041743550" format="1.0" version="1.5"}%
 ---++ NOTE: This Wiki topic does not exist
 
 <font size="+1" color="FF0000">WARNING:</font>
@@ -7,7 +7,7 @@
 ---+++ If you intended to do a full text search:
 
 <blockquote>
-<form name="search" action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
+<form name="search" action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%URLENCODE{"%WEB%"}%/">
 Use the <a href="WebSearch">Search</a> link on top of this page, or do a simple <br>
 <input type="text" name="search" size="32" value="%TOPIC%">
 <input type="submit" value="Search">

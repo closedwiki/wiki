@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018764180" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1041743441" format="1.0" version="1.2"}%
 ---+ Web Site Tools
 %STARTINCLUDE%
-<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/SearchResult">
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%URLENCODE{"%INCLUDINGWEB%"}%/SearchResult">
 	* <input type="text" name="search" size="32" /> <input type="submit" value="Search" /> &nbsp;&nbsp; (More options in [[%INCLUDINGWEB%.WebSearch][WebSearch]])
 	* [[%INCLUDINGWEB%.WebChanges][WebChanges]]: Display recent changes to the %INCLUDINGWEB% web
 	* [[%INCLUDINGWEB%.WebIndex][WebIndex]]: List all %INCLUDINGWEB% topics in alphabetical order. See also the faster [[%INCLUDINGWEB%.WebTopicList][WebTopicList]]
