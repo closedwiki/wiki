@@ -220,9 +220,9 @@ sub edit {
     my $formText = &TWiki::Form::renderForEdit( $webName, $topic, $form, $meta, $query, $newFormForTopic, @fieldDefs );
     $tmpl =~ s/%FORMFIELDS%/$formText/go;
   } elsif( $saveCmd ne "repRev" && TWiki::Prefs::getPreferencesValue( "WEBFORMS", $webName )) {
-    $form = '<p align="right">'
+    $form = '<p align="right"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder"><tr><td align="right">'
       . &TWiki::Form::chooseFormButton( "Add form" )
-        . '</p>';
+        . '</td></tr></table></p>';
     $tmpl =~ s/%FORMFIELDS%/$form/go;
   } else {
     $tmpl =~ s/%FORMFIELDS%//go;

@@ -278,7 +278,7 @@ sub chooseFormButton
 {
     my( $text ) = @_;
     
-    return "<input type=\"submit\" name=\"submitChangeForm\" value=\" &nbsp; $text &nbsp; \" class=\"twikiSubmit twikiChangeFormButton\" />";
+    return "<input type=\"submit\" name=\"submitChangeForm\" value=\"$text\" class=\"twikiChangeFormButton twikiSubmit \" />";
 }
 
 
