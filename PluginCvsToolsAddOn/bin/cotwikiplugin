@@ -9,6 +9,6 @@ then
    exit 1
 fi
 
-cd ~/www/twiki/stage
+cd $TWIKISTAGE || echo "\$TWIKISTAGE not set - did you run from dir containing SETTINGS?"
 
 cvs -z3 co twikiplugins/$MODULE
