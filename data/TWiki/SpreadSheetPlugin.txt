@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1085466879" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="PeterThoeny" date="1090054171" format="1.0" version="1.10"}%
 ---+!! TWiki Spreadsheet Plugin
 
 This Plugin adds speadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
@@ -411,7 +411,7 @@ Conventions for Syntax:
 ---+++ SUM( list ) -- sum of a list or range of cells
 	* Syntax: ==$SUM( list )==
 	* Example: To sum up column 5 excluding the title row, write ==%<nop>CALC{"$SUM(R2:C5..R$ROW(-1):C5)"}%== in the last row; or simply ==%<nop>CALC{"$SUM($ABOVE())"}%==
-	* Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncPRODUCT][$PRODUCT()]]=, =[[#FuncSUMPRODUCT][$SUMPRODUCT()]]=
+	* Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncPRODUCT][$PRODUCT()]]=, =[[#FuncSUMPRODUCT][$SUMPRODUCT()]]=, =[[#FuncWORKINGDAYS][$WORKINGDAYS()]]=
 
 #FuncSUMDAYS
 ---+++ SUMDAYS( list ) -- sum the days in a list or range of cells
@@ -445,7 +445,7 @@ Conventions for Syntax:
 	* Serialized date is seconds since the Epoch, e.g. midnight, 01 Jan 1970. Current time is taken if the date string is empty. Supported date formats: =31 Dec 2009=; =31 Dec 2009 GMT=; =31 Dec 09=; =31-Dec-2009=; =31/Dec/2009=; =2009/12/31=; =2009-12-31=; =2009/12/31=; =2009/12/31 23:59=; =2009/12/31 - 23:59=; =2009-12-31-23-59=; =2009/12/31 - 23:59:59=; =2009.12.31.23.59.59=. Date is assumed to be server time; add =GMT= to indicate Greenwich time zone
 	* Syntax: ==$TIME( _text_ )==
 	* Example: ==%<nop>CALC{"$TIME(2003/10/14 GMT)"}%== returns ==1066089600==
-	* Related: =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=
+	* Related: =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=, =[[#FuncWORKINGDAYS][$WORKINGDAYS()]]=
 
 #FuncTIMEADD
 ---+++ TIMEADD( serial, value, unit ) -- add a value to a serialized date
@@ -460,7 +460,7 @@ Conventions for Syntax:
 	* The unit is seconds if not specified; unit can be specified as in =$TIMEADD()=. Note: An approximation is used for month and year calculations. Use =$FORMAT()= or =$INT()= to format real numbers
 	* Syntax: ==$TIMEDIFF( serial_1, serial_2, _unit_ )==
 	* Example: ==%<nop>CALC{"$TIMEDIFF($TIME(), $EVAL($TIME()+90), minute)"}%== returns ==1.5==
-	* Related: =[[#FuncFORMAT][$FORMAT()]]=, =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTODAY][$TODAY()]]=
+	* Related: =[[#FuncFORMAT][$FORMAT()]]=, =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTODAY][$TODAY()]]=, =[[#FuncWORKINGDAYS][$WORKINGDAYS()]]=
 
 #FuncTODAY
 ---+++ TODAY( ) -- serialized date of today at midnight GMT
@@ -490,6 +490,13 @@ Conventions for Syntax:
 	* Example: ==%<nop>CALC{"$VALUE(<nop>PrjNotebook1234)"}%== returns ==1234==
 	* Example: ==%<nop>CALC{"$VALUE(Total: -12.5)"}%== returns ==-12.5==
 	* Related: =[[#FuncEVAL][$EVAL()]]=, =[[#FuncINT][$INT()]]=
+
+#FuncWORKINGDAYS
+---+++ WORKINGDAYS( serial_1, serial_2 ) -- working days between two serialized dates
+	* Working days are Monday through Friday (sorry, Israel!)
+	* Syntax: ==$WORKINGDAYS( serial_1, serial_2 )==
+	* Example: ==%<nop>CALC{"$WORKINGDAYS($TIME(2004/07/15), $TIME(2004/08/03))"}%== returns ==13==
+	* Related: =[[#FuncSUMDAYS][$SUMDAYS()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=
 
 ---++ Bug Tracking Example
 
@@ -549,8 +556,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 24 May 2004 |
+|  Plugin Version: | 17 Jul 2004 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  17 Jul 2004: | Added $WORKINGDAYS(), contributed by TWiki:Main/CrawfordCurrie |
 |  24 May 2004: | Refactored documentation (no code changes) |
 |  03 Apr 2004: | Added $ABS(), $LISTIF(); fixed $VALUE() to remove leading zeros; changed $FIND() and $SEARCH() to return 0 instead of empty string if no match |
 |  21 Mar 2004: | Added $LISTITEM(); fixed call to unofficial function |
@@ -584,6 +592,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/PeterThoeny - 24 May 2004
-`
+-- TWiki:Main/PeterThoeny - 17 Jul 2004
 
