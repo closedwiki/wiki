@@ -36,6 +36,8 @@
 #   afterEditHandler        ( $text, $topic, $web )                 1.010
 #   beforeSaveHandler       ( $text, $topic, $web )                 1.010
 #   afterSaveHandler        ( $text, $topic, $web, $errors )        1.020
+#   beforeAttachmentSaveHandler( $attrHashRef, $topic, $web )       1.023
+#   afterAttachmentSaveHandler( $attrHashRef, $topic, $web )        1.023
 #   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
 #   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
 #   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
@@ -102,7 +104,7 @@ sub DISABLE_initializeUserHandler
 
     TWiki::Func::writeDebug( "- ${pluginName}::initializeUserHandler( $_[0], $_[1] )" ) if $debug;
 
-    # Allows a plugin to set the username based on cookies. Called by TWiki::initialize.
+    # Allows a plugin to set the username based on cookies.
     # Return the user name, or "guest" if not logged in.
     # New hook in TWiki::Plugins $VERSION = '1.010'
 
@@ -247,7 +249,7 @@ sub DISABLE_beforeSaveHandler
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
 
-    # This handler is called by TWiki::Store::saveTopic just before the save action.
+    # This handler is called just before the save action.
     # New hook in TWiki::Plugins $VERSION = '1.010'
 
 }
@@ -259,10 +261,33 @@ sub DISABLE_afterSaveHandler
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
 
-    # This handler is called by TWiki::Store::saveTopic just after the save action.
+    # This handler is called just after the save action.
     # New hook in TWiki::Plugins $VERSION = '1.020'
 
 }
+
+# =========================
+sub DISABLE_beforeAttachmentSaveHandler
+{
+###   my( $attrHashRef, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+    TWiki::Func::writeDebug( "- ${pluginName}::beforeAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
+
+    # This handler is called by TWiki::Store::saveAttachment just before the save action.
+    # New hook in TWiki::Plugins $VERSION = '1.023'
+
+}
+
+# =========================
+sub DISABLE_afterAttachmentSaveHandler
+{
+###   my( $attrHashRef, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+    TWiki::Func::writeDebug( "- ${pluginName}::afterAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
+
+    # This handler is called by TWiki::Store::saveAttachment just after the save action.
+    # New hook in TWiki::Plugins $VERSION = '1.023'
+
+}
+
 
 # =========================
 sub DISABLE_writeHeaderHandler
