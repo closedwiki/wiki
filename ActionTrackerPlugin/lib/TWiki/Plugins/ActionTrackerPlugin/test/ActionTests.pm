@@ -255,8 +255,8 @@ sub testVerticalOrient {
   my $fmt = new ActionTrackerPlugin::Format("|Who|Due|", "|\$who|\$due|", "rows");
   my $s = $fmt->formatHTMLTable([$action], "name", 0);
   
-  $s =~ s/<table border=\"1\">//ios;
-  $s =~ s/<\/table>//ios;
+  $s =~ s/<table border=\"1\">//;
+  $s =~ s/<\/table>//;
   $s =~ s/\n//g;
   $this->assert_str_equals("<a name=\"AcTion0\"></a><tr><th bgcolor=\"orange\">Who</th><td>Main.JohnDoe</td></tr><tr><th bgcolor=\"orange\">Due</th><td>Sun, 2 Jun 2002</td></tr>", $s);
 }
@@ -305,14 +305,11 @@ sub testHTMLFormattingOpen {
   
   $fmt = new ActionTrackerPlugin::Format("", "| \$edit |", "");
   $s = $fmt->formatHTMLTable([$action], "href", 0);
-  my $url= "%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic\\?skin=action&action=AcTion0&t=";
-  $s =~ s/\n//g;
-  my $r = ($s =~ s/<td> <a href="$url\d+">edit<\/a> <\/td>//);
-  $this->assert($r, $s." is not ".$url);
+  my $url= "%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0&t={*\\d+*}";
+  $s = $this->assert_html_matches("<td><a href=\"$url\">edit</a></td>", $s);
   $fmt = new ActionTrackerPlugin::Format("", "| \$edit |", "");
   $s = $fmt->formatHTMLTable([$action], "href", 1);
-  $r = ($s =~ s/<td>\s*<a href="$url\d+" onClick="return editWindow\('$url\d+'\)">edit<\/a>\s*<\/td>//);
-  $this->assert($r, $s );
+  $s = $this->assert_html_matches("<td><a href=\"$url\" onclick=\"return editWindow\('$url'\)\">edit</a></td>", $s);
   
   $fmt = new ActionTrackerPlugin::Format("", "| \$web.\$topic |", "");
   $s = $fmt->formatHTMLTable([$action], "href", 0);
@@ -592,16 +589,16 @@ sub testFormatForEditHidden {
   my $fmt = new ActionTrackerPlugin::Format( "|Who|", "|\$who|", "cols","","");
   my $s = $action->formatForEdit($fmt);
   # only the who field should be a text; the rest should be hiddens
-  $s =~ s/<INPUT TYPE=\"hidden\" NAME=\"state\" VALUE=\"open\">//io;
-  $s =~ s/<INPUT TYPE=\"hidden\" NAME=\"creator\" VALUE=\"Main\.Creator\">//o;
-  $s =~ s/<INPUT TYPE=\"hidden\" NAME=\"notify\" VALUE=\"Main\.Notifyee\">//o;
-  $s =~ s/<INPUT TYPE=\"hidden\" NAME=\"closer\" VALUE=\"Main\.Closer\">//o;
-  $s =~ s/<INPUT TYPE=\"hidden\" NAME=\"due\" VALUE=\"Sun, 4 May 2003\">//o;
-  $s =~ s/<INPUT TYPE=\"hidden\" NAME=\"closed\" VALUE=\"Fri, 2 May 2003\">//o;
-  $s =~ s/<INPUT TYPE=\"hidden\" NAME=\"created\" VALUE=\"Sat, 3 May 2003\">//o;
-  $s =~ s/<INPUT TYPE=\"hidden\" NAME=\"uid\" VALUE=\"UID\">//o;
-  $this->assert_does_not_match(qr/NAME=\"text\"/i, $s);
-  $this->assert_does_not_match(qr/TYPE=\"hidden\"/i, $s);
+  $s = $this->assert_html_matches("<input type=\"hidden\" name=\"state\" value=\"open\"/>", $s);
+  $s = $this->assert_html_matches("<input type=\"hidden\" name=\"creator\" value=\"Main\.Creator\"/>", $s);
+  $s = $this->assert_html_matches("<input type=\"hidden\" name=\"notify\" value=\"Main\.Notifyee\"/>", $s);
+  $s = $this->assert_html_matches("<input type=\"hidden\" name=\"closer\" value=\"Main\.Closer\"/>", $s);
+  $s = $this->assert_html_matches("<input type=\"hidden\" name=\"due\" value=\"Sun, 4 May 2003\"/>", $s);
+  $s = $this->assert_html_matches("<input type=\"hidden\" name=\"closed\" value=\"Fri, 2 May 2003\"/>", $s);
+  $s = $this->assert_html_matches("<input type=\"hidden\" name=\"created\" value=\"Sat, 3 May 2003\"/>", $s);
+  $s = $this->assert_html_matches("<input type=\"hidden\" name=\"uid\" value=\"UID\"", $s);
+  $this->assert_does_not_match(qr/name=\"text\"/, $s);
+  $this->assert_does_not_match(qr/type=\"hidden\"/, $s);
 }
 
 sub testFormatForEdit {
@@ -638,7 +635,7 @@ sub testFormatForEdit {
       $s = $this->assert_html_matches("<td><input type=\"text\" name=\"$n\" value=\"{*.*?*}\" size=\"{*.*?*}\"/></td>", $s);
     }
   }
-  $s = $this->assert_html_matches("<td><SELECT NAME=\"state\" SIZE=\"1\"><OPTION NAME=\"open\" SELECTED>open<\/OPTION><OPTION NAME=\"closed\">closed<\/OPTION><\/SELECT><\/td>", $s);
+  $s = $this->assert_html_matches("<td><select name=\"state\" size=\"1\"><option value=\"open\" selected>open<\/option><option value=\"closed\">closed<\/option><\/select><\/td>", $s);
   $s = $this->assert_html_matches("<table border=\"1\">", $s);
   $s =~ s/<tr( bgcolor=\"orange\")?>//gom;
  $s = $this->assert_html_matches("<tr valign=\"top\">", $s);
@@ -651,7 +648,7 @@ sub testFormatForEdit {
   ActionTrackerPlugin::Action::forceTime("31 May 2002");
   $fmt = new ActionTrackerPlugin::Format( "|Due|", "|\$due|", "","");
   $s = $action->formatForEdit($fmt);
-  $s =~ /VALUE=\"(.*?)\"/;
+  $s =~ /value=\"(.*?)\"/;
   $this->assert_str_equals($1, "Fri, 4 May 2001");
 }
 
@@ -665,15 +662,14 @@ sub testExtendStates {
 									"state=\"5 years\"", "Text");
   my $fmt = new ActionTrackerPlugin::Format( "|State|", "|\$state|", "","");
   $s = $action->formatForEdit($fmt);
-  $s =~ s/\n/ /g;
-  $s =~ s/<OPTION NAME=\"life\">life<\/OPTION>//i;
-  $s =~ s/<OPTION NAME=\"5 years\" SELECTED>5 years<\/OPTION>//i;
-  $s =~ s/<OPTION NAME=\"community service\">community service<\/OPTION>//i;
-  $s =~ s/<SELECT NAME=\"state\" SIZE=\"17\">\s*<\/SELECT>//i;
+  $s = $this->assert_html_matches("<option value=\"life\">life<\/option>", $s);
+  $s = $this->assert_html_matches("<option value=\"5 years\" selected>5 years<\/option>", $s);
+  $s = $this->assert_html_matches("<option value=\"community service\">community service<\/option>", $s);
+  $s = $this->assert_html_matches("<select name=\"state\" size=\"17\"><\/select>", $s);
   $s =~ s/<\/?table.*?>//gio;
   $s =~ s/<\/?tr.*?>//gio;
   $s =~ s/<\/?t[hd].*?>//gio;
-  $s =~ s/<INPUT TYPE=\"hidden\".*?>//gio;
+  $s =~ s/<input type=\"hidden\".*?\/>//gio;
   $s =~ s/\s+//go;
   $this->assert_str_equals("State", $s);
   ActionTrackerPlugin::Action::unextendTypes();

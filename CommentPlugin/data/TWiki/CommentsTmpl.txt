@@ -142,7 +142,7 @@ TWiki table that collects results from a poll on plugin usage
 <table valign="middle">
  <tr>
   <td align=right>Number of sites?</td>
-  <td align=left><input %DISABLED% type="text" name="sites" size="3" value="1"></td>
+  <td align=left><input %DISABLED% type="text" name="sites" size="3" value="1" /></td>
   <td align=right>Plugin hacked?</td>
   <td align=left>
    <select %DISABLED% name="pluginhacked">
@@ -158,7 +158,7 @@ TWiki table that collects results from a poll on plugin usage
    </select>
   </td>
   <td align=right>Remarks</td>
-  <td align=left><input %DISABLED% type="text" name="remarks" size="30" value=""></td>
+  <td align=left><input %DISABLED% type="text" name="remarks" size="30" value="" /></td>
   <td>
    <input %DISABLED% type="submit" value="Yes, I use it" />
   </td>

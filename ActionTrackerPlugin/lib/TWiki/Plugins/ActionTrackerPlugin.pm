@@ -75,7 +75,7 @@ sub commonTagsHandler {
             $calendarIncludes = "";
         } else {
             $calendarIncludes =
-"<LINK TYPE=\"text/css\" rel=\"stylesheet\" href=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar-%ACTIONTRACKERPLUGIN_CAL_STYLE%.css\" />
+"<link type=\"text/css\" rel=\"stylesheet\" href=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar-%ACTIONTRACKERPLUGIN_CAL_STYLE%.css\" />
  <base href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%\" />
 <script type=\"text/javascript\" src=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar.js\"></script>
 <script type=\"text/javascript\" src=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/lang/calendar-%ACTIONTRACKERPLUGIN_CAL_LANG%.js\"></script>
@@ -284,11 +284,11 @@ sub beforeEditHandler {
       # the POST is done. All the various solutions I've found on the
       # web do something like "wait x seconds" before closing the
       # subwindow, but this seems very risky.
-      #$submitScript = "ONCLICK=\"document.form.submit();window.close();return true\"";
+      #$submitScript = "onclick=\"document.form.submit();window.close();return true\"";
     }
   }
   if ( $useNewWindow ) {
-    $cancelScript = "ONCLICK=\"window.close();\"";
+    $cancelScript = "onclick=\"window.close();\"";
   }
 
   $tmpl =~ s/%CANCELSCRIPT%/$cancelScript/go;
