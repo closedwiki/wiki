@@ -89,7 +89,7 @@ sub  getTwikiWebname {
 }
 
 sub  getScriptUrlPath {
-  return "$BaseFixture::pwd/../../../../../bin";
+  return "http://twiki/";
 }
 
 sub  getScriptUrl {
@@ -97,8 +97,17 @@ sub  getScriptUrl {
   return "http://twiki/$s.cgi/$w/$t";
 }
 
+sub  getOopsUrl {
+  my ($w,$t,$s) = @_;
+  return "http://twiki/oops/$w/$t/$s";
+}
+
 sub  getPubDir {
   return "$BaseFixture::pwd/../../../../../pub";
+}
+
+sub  getPubUrlPath {
+  return "http://pub";
 }
 
 sub getMainWebname {

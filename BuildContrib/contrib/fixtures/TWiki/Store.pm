@@ -13,6 +13,8 @@ use strict;
 
 package TWiki::Store;
 
+use vars qw( %templateVars );
+
 use BaseFixture;
 use TWiki::Contrib::CairoContrib;
 
@@ -29,7 +31,7 @@ sub readTemplateFile {
     # search first in twiki/templates/Web dir
     # for file script(.skin).tmpl
     my $tmplDir = BaseFixture::getTemplatesDir();
-    if( ( ! $tmplFile ) && ( opendir( DIR, $tmplDir ) ) ) {
+    if( opendir( DIR, $tmplDir ) ) {
         my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
         closedir DIR;
         $tmplFile = "$theName.$theSkin.tmpl";
@@ -56,6 +58,27 @@ sub readTemplate {
   my( $theName, $theSkin ) = @_;
 
   return TWiki::Contrib::CairoContrib::readTemplate($theName, $theSkin);
+}
+
+sub getAllWebs {
+    return BaseFixture::webList();
+}
+
+sub handleTmplP
+{
+    # Print template variable, called by %TMPL:P{"$theVar"}%
+    my( $theVar ) = @_;
+
+    my $val = "";
+    if( ( %templateVars ) && ( exists $templateVars{ $theVar } ) ) {
+        $val = $templateVars{ $theVar };
+        $val =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/&handleTmplP($1)/geo;  # recursion
+    }
+    if( ( $theVar eq "sep" ) && ( ! $val ) ) {
+        # set separator explicitely if not set
+        $val = " | ";
+    }
+    return $val;
 }
 
 1;

@@ -19,6 +19,9 @@ use strict;
 
 package TWiki;
 
+sub basicInitialize() {
+}
+
 sub initialize {
   my ( $path, $remuser, $topic, $url, $query ) = @_;
   # initialize $webName and $topicName
@@ -99,4 +102,94 @@ sub formatTime
 
     return $value;
 }
+
+sub isWebName {
+    my $name = shift;
+
+    return grep $name, TWiki::Store::getAllWebs();
+}
+
+sub handleTmplP
+{
+    my( $theParam ) = @_;
+
+    $theParam =~ s/"//g;
+    my $value = &TWiki::Store::handleTmplP( $theParam );
+    return $value;
+}
+
+sub extractNameValuePair
+{
+    my( $str, $name ) = @_;
+
+    my $value = "";
+    return $value unless( $str );
+
+    if( $name ) {
+        # format is: %VAR{ ... name = "value" }%
+        if( $str =~ /(^|[^\S])$name\s*=\s*\"([^\"]*)\"/ ) {
+            $value = $2 if defined $2;  # distinguish between "" and "0"
+        }
+
+    } else {
+        # test if format: { "value" ... }
+        if( $str =~ /(^|\=\s*\"[^\"]*\")\s*\"(.*?)\"\s*(\w+\s*=\s*\"|$)/ ) {
+            # is: %VAR{ "value" }%
+            # or: %VAR{ "value" param="etc" ... }%
+            # or: %VAR{ ... = "..." "value" ... }%
+            # Note: "value" may contain embedded double quotes
+            $value = $2 if defined $2;  # distinguish between "" and "0";
+
+        } elsif( ( $str =~ /^\s*\w+\s*=\s*\"([^\"]*)/ ) && ( $1 ) ) {
+            # is: %VAR{ name = "value" }%
+            # do nothing, is not a standalone var
+
+        } else {
+            # format is: %VAR{ value }%
+            $value = $str;
+        }
+    }
+
+    return $value;
+}
+
+sub handleUrlParam
+{
+    my( $theArgs ) = @_;
+    my $cgiQuery = $BaseFixture::query;
+
+    my $param     = extractNameValuePair( $theArgs );
+    my $newLine   = extractNameValuePair( $theArgs, "newline" ) || "";
+    my $encode    = extractNameValuePair( $theArgs, "encode" ) || "";
+    my $multiple  = extractNameValuePair( $theArgs, "multiple" ) || "";
+    my $separator = extractNameValuePair( $theArgs, "separator" ) || "\n";
+    my $value = "";
+    if( $cgiQuery ) {
+        if( $multiple ) {
+            my @valueArray = $cgiQuery->param( $param );
+            if( @valueArray ) {
+                unless( $multiple =~ m/^on$/i ) {
+                    my $item = "";
+                    @valueArray = map {
+                        $item = $_;
+                        $_ = $multiple;
+                        $_ .= $item unless( s/\$item/$item/go );
+                        $_
+                    } @valueArray;
+                }
+                $value = join ( $separator, @valueArray );
+            }
+        } else {
+            $value = $cgiQuery->param( $param );
+            $value = "" unless( defined $value );
+        }
+    }
+    $value =~ s/\r?\n/$newLine/go if( $newLine );
+    $value = handleUrlEncode( $value, 0, $encode ) if( $encode );
+    unless( $value ) {
+        $value = extractNameValuePair( $theArgs, "default" ) || "";
+    }
+    return $value;
+}
+
 1;

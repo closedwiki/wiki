@@ -18,6 +18,7 @@ BEGIN {
     }
     # Add the TWiki lib dir to the include path to get Algorithm::Diff
     unshift @INC, "lib";
+    eval 'use TWiki::Plugins;';
 }
 
 # Satisfy dependencies on modules, by checking:
@@ -34,6 +35,9 @@ sub satisfy {
     my $msg = "";
     my $ok = 1;
     my $result = 1;
+    my $trig = eval $dep->{trigger};
+
+    return 1 unless ( $trig );
 
     print "##########################################################\n";
     print "Checking dependency on $dep->{name}....\n";
@@ -41,7 +45,8 @@ sub satisfy {
         # Try to 'use' the perl module
         eval "use $dep->{name}";
         if( $@ ) {
-            $msg .= $@;
+            $msg = $@;
+            $msg =~ s/ in .*$/\n/s;
             $ok = 0;
         } else {
             # OK, it was loaded. See if a version constraint is specified
@@ -112,7 +117,7 @@ sub getzip {
         return 1 if ( $ans =~ /^y/i );
 
         unless ( unlink( $zip )) {
-            warn("Could not remove old $zip\n");
+            print STDERR "Could not remove old $zip\n";
             return 0;
         }
     }
@@ -147,7 +152,7 @@ sub getzip {
             }
         }
     }
-    warn( "Could not download $zip: $step $!" );
+    print STDERR "Could not download $zip: $step $!";
     return 0;
 }
 
@@ -162,7 +167,7 @@ sub download {
     unless ( $@ ) {
         my $zip = new Archive::Zip( $zip );
         unless ( $zip ) {
-            warn("Could not open downloaded file $zip\n");
+            print STDERR "Could not open downloaded file $zip\n";
             return 0;
         }
 
@@ -171,17 +176,17 @@ sub download {
             my $err = $zip->extractMember( $file );
             my $fn = $file->fileName();
             if ( $err ) {
-                warn( "Failed to extract $fn from zip file $zip. Archive may be corrupt.\n" );
+                print STDERR "Failed to extract $fn from zip file $zip. Archive may be corrupt.\n";
                 return 0;
             } else {
                 print "\t$fn\n";
             }
         }
     } else {
-        warn( "Archive::Zip is not installed; trying unzip\n" );
+        print STDERR "Archive::Zip is not installed; trying unzip\n";
         print `unzip $zip`;
         if ( $! ) {
-            warn( "Unzip failed: $!\n" );
+            print STDERR "Unzip failed: $!\n";
             return 0;
         }
     }
@@ -189,7 +194,7 @@ sub download {
     if( -e "${packname}_installer.pl" ) {
         print `perl ${packname}_installer.pl install`;
         if ( $? ) {
-            warn( "Installation of $packname failed\n" );
+            print STDERR "Installation of $packname failed\n";
             return 0;
         }
     }
@@ -204,24 +209,24 @@ sub download {
 sub checkin {
     my $file = shift;
 
-    warn "I can't automatically update the revision history for\n$file. ";
-    "Please ";
+    print STDERR "I can't automatically update the revision history for\n";
+    print STDERR "$file.\nPlease ";
     if ( $file =~ /^data/ ) {
-        warn "edit the topic in TWiki and Save without changing it";
+        print STDERR "edit the topic in TWiki and Save without changing it";
     } elsif( $file =~ /^pub/ ) {
-        warn "upload the file in TWiki";
+        print STDERR "upload the file in TWiki";
     }
-    warn " to update the history.\n";
+    print STDERR " to update the history.\n";
 }
 
 # Print a useful message
 sub usage {
-    warn "Usage:\t%$MODULE%_installer [-a] install\n";
-    warn "\t%$MODULE%_installer uninstall\n";
-    warn "Install or uninstall %$MODULE%. Default is to install. Should be run\n";
-    warn "from the top level of your TWiki installation.\n";
-    warn "Options:\n";
-    warn "\t-a Don't prompt for confirmations\n";
+    print STDERR "Usage:\t%$MODULE%_installer [-a] install\n";
+    print STDERR "\t%$MODULE%_installer uninstall\n";
+    print STDERR "Install or uninstall %$MODULE%. Default is to install. Should be run\n";
+    print STDERR "from the top level of your TWiki installation.\n";
+    print STDERR "Options:\n";
+    print STDERR "\t-a Don't prompt for confirmations\n";
 }
 
 unshift( @INC, "lib" );
@@ -256,9 +261,10 @@ print "\t  the script again later\n";
 my @manifest = ( %$MANIFEST% );
 
 if( $install ) {
+    %$PREINSTALL%;
     unless ( $noconfirm ) {
         print "Hit <Enter> to proceed with installation\n";
-        <STDIN>;
+          <STDIN>;
     }
     my $unsatisfied = 0;
     foreach my $dep ( ( %$DEPENDENCIES% ) ) {
@@ -282,12 +288,13 @@ if( $install ) {
     print "\n### %$MODULE% installed";
     print " with $unsatisfied unsatisfied dependencies" if ( $unsatisfied );
     print " ###\n";
+    %$POSTINSTALL%;
 } else {
     my $file;
     my @dead;
     foreach $file ( @manifest ) {
         if( -e $file ) {
-           push( @dead, $file );
+            push( @dead, $file );
         }
     }
     unless ( $#dead > 1 ) {
@@ -301,11 +308,13 @@ if( $install ) {
         print "Please answer yes or no\n";
     }
     if( $reply =~ /^y/i ) {
+        %$PREUNINSTALL%;
         foreach $file ( @manifest ) {
             if( -e $file ) {
                 unlink( $file );
             }
         }
+        %$POSTUNINSTALL%;
     }
     print "### %$MODULE% uninstalled ###\n";
 }
