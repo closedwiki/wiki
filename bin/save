@@ -27,13 +27,12 @@ use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use TWiki;
 
-
-$query= new CGI;
-
 &main();
 
 sub main
 {
+    my $query = new CGI;
+
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );

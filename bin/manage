@@ -29,44 +29,44 @@ use TWiki;
 
 use strict;
 
-use vars qw( $query );
-
 &main();
 
 #=========================
 sub main
 {
-    $query= new CGI;
+    my $query = new CGI;
     my $action = $query->param( 'action' ) || "";
 
     if( $action eq "createweb" ) {
-        createWeb();
+        createWeb( $query );
 
     # } elsif( $action eq "othercommand" ) {
 
     } elsif( $action ) {
-        oopsRedirectMsg( "", "", "", "msg_unrecognized_action", $action );
+        oopsRedirectMsg( $query, "", "", "", "msg_unrecognized_action", $action );
     } else {
-        oopsRedirectMsg( "", "", "", "msg_missing_action" );
+        oopsRedirectMsg( $query, "", "", "", "msg_missing_action" );
     }
 }
 
 #=========================
 sub oopsRedirectMsg
 {
-    my( $theWeb, $theTopic, $theOopsTmpl, $theTmplVar, $theMsg2, $theMsg3, $theMsg4 ) = @_;
+    my( $theQuery, $theWeb, $theTopic, $theOopsTmpl, $theTmplVar, $theMsg2, $theMsg3, $theMsg4 ) = @_;
 
     $theWeb = $TWiki::mainWebname unless( $theWeb );
     $theTopic = $TWiki::mainTopicname unless( $theTopic );
     $theOopsTmpl = "oopsmanage" unless( $theOopsTmpl );
     my $url = &TWiki::getOopsUrl( $theWeb, $theTopic, $theOopsTmpl,
                                   "%TMPL:P{\"$theTmplVar\"}%", $theMsg2, $theMsg3, $theMsg4 );
-    TWiki::redirect( $query, $url );
+    TWiki::redirect( $theQuery, $url );
 }
 
 #=========================
 sub createWeb
 {
+    my( $query ) = @_;
+
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
@@ -105,15 +105,15 @@ sub createWeb
         $newWeb =~ /(.*)/;
         $newWeb = $1;
     } elsif( $newWeb ) {
-        oopsRedirectMsg( "", "", $oopsTmpl, "msg_web_name" );
+        oopsRedirectMsg( $query, "", "", $oopsTmpl, "msg_web_name" );
         return;
     } else {
-        oopsRedirectMsg( "", "", $oopsTmpl, "msg_web_missing" );
+        oopsRedirectMsg( $query, "", "", $oopsTmpl, "msg_web_missing" );
         return;
     }
 
     if( TWiki::Store::topicExists( $newWeb, $TWiki::mainTopicname ) ) {
-        oopsRedirectMsg( "", "", $oopsTmpl, "msg_web_exist", $newWeb );
+        oopsRedirectMsg( $query, "", "", $oopsTmpl, "msg_web_exist", $newWeb );
         return;
     }
 
@@ -122,26 +122,26 @@ sub createWeb
     $baseWeb = $1;
 
     unless( TWiki::Store::topicExists( $baseWeb, $TWiki::mainTopicname ) ) {
-        oopsRedirectMsg( "", "", $oopsTmpl, "msg_base_web", $baseWeb );
+        oopsRedirectMsg( $query, "", "", $oopsTmpl, "msg_base_web", $baseWeb );
         return;
     }
 
     unless( $webBgColor =~ /\#[0-9a-f]{6}/i ) {
-        oopsRedirectMsg( "", "", $oopsTmpl, "msg_web_color" );
+        oopsRedirectMsg( $query, "", "", $oopsTmpl, "msg_web_color" );
         return;
     }
 
     # create the empty web
     my $err = createEmptyWeb( $newWeb );
     if( $err ) {
-        oopsRedirectMsg( "", "", $oopsTmpl, "msg_web_create", $err );
+        oopsRedirectMsg( $query, "", "", $oopsTmpl, "msg_web_create", $err );
         return;
     }
 
     # copy needed topics from base web
     $err = copyWebTopics( $baseWeb, $newWeb );
     if( $err ) {
-        oopsRedirectMsg( $newWeb, "", $oopsTmpl, "msg_web_copy_topics", $err );
+        oopsRedirectMsg( $query, $newWeb, "", $oopsTmpl, "msg_web_copy_topics", $err );
         return;
     }
 
@@ -149,13 +149,13 @@ sub createWeb
     $err = patchWebPreferences( $newWeb, $TWiki::webPrefsTopicname, $webBgColor, 
                                 $siteMapWhat, $siteMapUseTo, $noSearchAll );
     if( $err ) {
-        oopsRedirectMsg( $newWeb, $TWiki::webPrefsTopicname, $oopsTmpl, "msg_patch_webpreferences", $err );
+        oopsRedirectMsg( $query, $newWeb, $TWiki::webPrefsTopicname, $oopsTmpl, "msg_patch_webpreferences", $err );
         return;
     }
 
     # everything OK, redirect to last message
     $newTopic = $TWiki::mainTopicname unless( $newTopic );
-    oopsRedirectMsg( $newWeb, $newTopic, $oopsTmpl, "msg_create_web_ok" );
+    oopsRedirectMsg( $query, $newWeb, $newTopic, $oopsTmpl, "msg_create_web_ok" );
     return;
 }
 

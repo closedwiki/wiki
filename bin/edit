@@ -33,10 +33,6 @@ use TWiki;
 
 use strict;
 
-use vars qw( $query );
-
-$query = new CGI;
-
 &main();
 
 # Uncomment the body of either routine to enable debugging
@@ -54,6 +50,8 @@ sub writeDebugTimes
 
 sub main
 {
+    my $query = new CGI;
+
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' ) || "";

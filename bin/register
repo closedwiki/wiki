@@ -36,12 +36,12 @@ if( $TWiki::OS eq "WINDOWS" ) {
     import Digest::SHA1 qw( sha1 );
 }
 
-$query = new CGI;
-
 &main();
 
 sub main
 {
+    my $query = new CGI;
+
     # get all parameters from the form
     my @paramNames = $query->param();
     my @formDataName = ();
