@@ -1420,7 +1420,8 @@ sub handleUrlParam
     $theParam = extractNameValuePair( $theParam );
     my $value = "";
     if( $cgiQuery ) {
-        $value = $cgiQuery->param( $theParam ) || "";
+        $value = $cgiQuery->param( $theParam );
+        $value = "" unless( defined $value );
     }
 
     return $value;
