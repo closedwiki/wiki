@@ -12,8 +12,10 @@ __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
 		* Set EDITBOXHEIGHT = 17
 	* Default state of the __link__ check box in the attach file page:
 		* Set ATTACHLINKBOX = 
+	* Optionally write protect your home page: (set it to your %TWIKIWEB%.WikiName)
+		* Set ALLOWTOPICCHANGE =
 
 __Related topics__
 	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.
 	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
-	* TWikiUsers has a list of other %WIKITOOLNAME% users.
+	* %WIKIUSERSTOPIC% has a list of other %WIKITOOLNAME% users.
