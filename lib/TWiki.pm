@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "20 Nov 2001";
+$wikiversion      = "22 Nov 2001";
 
 # ===========================
 # read the configuration part
@@ -1349,6 +1349,8 @@ sub handleMetaTags
     $text =~ s/%META{\s*"attachments"\s*(.*)}%/&TWiki::Attach::renderMetaData( $theWeb, $theTopic, $meta, $1 )/goe;
     $text =~ s/%META{\s*"moved"\s*}%/&renderMoved( $theWeb, $theTopic, $meta )/goe;
     $text =~ s/%META{\s*"parent"\s*(.*)}%/&renderParent( $theWeb, $theTopic, $meta, $1 )/goe;
+
+    $text = &TWiki::handleCommonTags( $text, $theTopic );
         
     return $text;
 }
