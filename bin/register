@@ -190,10 +190,14 @@ sub main
         }
         $text = "$before$after";
 
-        # expand limited set of variables (keep it in sync with the edit script)
+        # expand limited set of variables
+        # NOTE: Keep it in sync with the edit script (FIXME: Put in function)
         my $today = &TWiki::getGmDate();
+        my $userName = $remoteUser || $wikiName;
         $text =~ s/%DATE%/$today/go;
-        $text =~ s/%WIKIUSERNAME%/$webName.$wikiName/go;
+        $text =~ s/%USERNAME%/$userName/go;               # "jdoe"
+        $text =~ s/%WIKINAME%/$wikiName/go;               # "JonDoe"
+        $text =~ s/%WIKIUSERNAME%/$webName.$wikiName/go;  # "Main.JonDoe"
         $text =~ s/%URLPARAM{(.*?)}%/TWiki::handleUrlParam($1)/geo;  # expand URL parameters
         $text =~ s/%NOP{.*?}%//gos;  # Remove filler: Use it to remove access control at time of
         $text =~ s/%NOP%//go;        # topic instantiation or to prevent search from hitting a template

@@ -157,10 +157,14 @@ sub main
             $formTemplate = $args{"name"};
         }
 
-        # expand limited set of variables (keep it in sync with the register script)
+        # expand limited set of variables
+        # NOTE: Keep it in sync with the register script (FIXME: Put in function)
         my $today = &TWiki::getGmDate();
+        my $wikiName = TWiki::userToWikiName( $userName, 1 );
         $text =~ s/%DATE%/$today/go;
-        $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
+        $text =~ s/%USERNAME%/$userName/go;          # "jdoe"
+        $text =~ s/%WIKINAME%/$wikiName/go;          # "JonDoe"
+        $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;  # "Main.JonDoe"
         $text =~ s/%URLPARAM{(.*?)}%/TWiki::handleUrlParam($1)/geo;  # expand URL parameters
         $text =~ s/%NOP{.*?}%//gos;  # Remove filler: Use it to remove access control at time of
         $text =~ s/%NOP%//go;        # topic instantiation or to prevent search from hitting a template
