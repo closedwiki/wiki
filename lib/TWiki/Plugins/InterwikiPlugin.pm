@@ -52,10 +52,11 @@ BEGIN {
 
 # Regexes for the Site:page format InterWiki reference - updated to support
 # 8-bit characters in both parts - see Codev.InternationalisationEnhancements
-# TODO: Need to update the Plugins API to support export of regexes and regex components
 $prefixPattern  = '(^|[\s\-\*\(])';
-$sitePattern    = "([${TWiki::regex{upperAlpha}}][${TWiki::regex{mixedAlphaNum}}]+)";
-$pagePattern    = "([${TWiki::regex{mixedAlphaNum}}_\/][${TWiki::regex{mixedAlphaNum}}" . '\+\_\.\,\;\:\!\?\/\%\#-]+?)';
+my $upperAlpha = TWiki::Func::getRegularExpression("upperAlpha");
+my $mixedAlphaNum = TWiki::Func::getRegularExpression("mixedAlphaNum");
+$sitePattern    = "([${upperAlpha}][${mixedAlphaNum}]+)";
+$pagePattern    = "([${mixedAlphaNum}_\/][${mixedAlphaNum}" . '\+\_\.\,\;\:\!\?\/\%\#-]+?)';
 $postfixPattern = '(?=[\s\.\,\;\:\!\?\)]*(\s|$))';
 
 # =========================
