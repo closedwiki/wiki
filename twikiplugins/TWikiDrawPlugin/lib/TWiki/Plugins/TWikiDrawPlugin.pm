@@ -56,7 +56,7 @@ sub handleDrawing {
 	$img .= " usemap=\"#$mapname\"";
 	my $map = TWiki::Func::readFile($mapFile);
     # Unashamed hack to handle Web.TopicName links
-    $map =~ s/href=\"((\w+)\.)?(\w+)\"/&_processHref($2,$3,$web)/ge;
+    $map =~ s/href=\"((\w+)\.)?(\w+)(#\w+)?\"/&_processHref($2,$3,$4,$web)/ge;
 	$map = TWiki::Func::expandCommonVariables( $map, $topic );
 	$map =~ s/%MAPNAME%/$mapname/g;
 	$map =~ s/%TWIKIDRAW%/$editUrl/g;
@@ -82,10 +82,12 @@ sub handleDrawing {
 }
 
 sub _processHref {
-    my ( $web, $topic, $defweb ) = @_;
+    my ( $web, $topic, $anchor, $defweb ) = @_;
 
     $web = $defweb unless ( $web );
-    return "href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"";
+    $anchor = "" unless $anchor;
+
+    return "href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic$anchor\"";
 }
 
 sub commonTagsHandler
