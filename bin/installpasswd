@@ -19,6 +19,7 @@
 # http://www.gnu.ai.mit.edu/copyleft/gpl.html
 #
 # 26-5-01 Password installation (only by the $superAdminGroup)
+# 15-12-2003 moved requesting a passwd reset from passwd (as it is also htpasswd specific)
 #
 
 #WARNING: this script only works when using htpasswd files.
@@ -27,11 +28,23 @@
 #I n s t a l l
 #
 #</form>
-#<form name="passwd" action="/%SCRIPTURLPATH%/passwd%SCRIPTSUFFIX%/%WEB%/">
+#<form name="passwd" action="/%SCRIPTURLPATH%/installpasswd%SCRIPTSUFFIX%/%WEB%/">
 #Username:EncryptedPW <input type="text" name="encryptedpassword" value="" size="16" /> <br />
 #<input type="submit" name="passwd" />
-#<input type="hidden" name="install" value="on" />
+#<input type="hidden" name="installPasswd" value="on" />
 #</form>
+#
+#
+#R e s e t
+#
+#<form name="passwd" action="/%SCRIPTURLPATH%/installpasswd%SCRIPTSUFFIX%/%WEB%/">
+#Username     <input type="text" name="username" value="" size="16" /> <br />
+#New password <input type="password" name="password" size="16" />
+#retype New password <input type="password" name="passwordA" size="16" />
+#<input type="hidden" name="installPasswd" value="requestReset" />
+#<input type="submit" name="passwd" />
+#
+#
  
 BEGIN {
     # Set default current working directory
@@ -55,7 +68,6 @@ $query= new CGI;
  
 sub main
 {
-    # get all parameters from the form
     my $wikiName = $query->param( 'username' );
 
     #initialize
@@ -72,6 +84,67 @@ sub main
     my $theRemoteUser = $query->remote_user();
     my ( $dummy1, $dummy2, $dummy3, $userName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $topicName, $theUrl, $query );
+
+    my $action = $query->param("installPasswd");
+
+    if ( $action eq "on" ) {
+        installEncryptedPasswd ($webName, $topic, $userName);
+    } 
+   if ( $action eq "requestReset" ) {
+        showEncryptedPasswd ($webName, $topic);
+    } else {
+       $url = &TWiki::getOopsUrl( $webName, $topic, "oopswrongpassword");
+       TWiki::redirect( $query, $url );
+    }
+}
+
+#==============================================
+# ($webName, $topic)
+sub showEncryptedPasswd
+{
+    my  ($webName, $topic) = @_;
+
+    # get all parameters from the form
+    my $wikiName = $query->param( 'username' );
+    my $passwordA = $query->param( 'password' );
+    my $passwordB = $query->param( 'passwordA' );
+
+    my $url = "";
+
+    # check if required fields are filled in
+    if( ! $wikiName || ! $passwordA ) {
+        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregrequ", );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+ 
+    # check if user entry exists
+    if(  ( $wikiName )  && (! TWiki::User::UserPasswordExists( $wikiName ) ) ) {
+        # PTh 20 Jun 2000: changed to getOopsUrl
+        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnotwikiuser", $wikiName );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+
+    # check if passwords are identical
+    if( $passwordA ne $passwordB ) {
+        $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregpasswd" );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+
+    my $theCryptPassword = &TWiki::User::HtPasswdUser::_htpasswdGeneratePasswd( $wikiName,  $passwordA );
+
+    # and finally display the reset password page
+    $url = &TWiki::getOopsUrl( $webName, $wikiName, "oopsresetpasswd", $wikiName.":".$theCryptPassword );
+    TWiki::redirect( $query, $url );
+}
+
+#==============================================
+sub installEncryptedPasswd
+{
+    my  ($webName, $topic, $userName) = @_;
+
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
     if( ! &TWiki::Access::userIsInGroup( $wikiUserName, $TWiki::superAdminGroup ) ) {
