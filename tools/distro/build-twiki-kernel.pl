@@ -23,11 +23,14 @@ use Getopt::Long;
 use Pod::Usage;
 use LWP::UserAgent::TWiki::TWikiGuest;
 
+sub mychomp { chomp $_[0]; $_[0] }
+
 my $Config = {
 # 
     tempdir => '.',
     outputdir => '.',
     # change to out|file
+    outfile => ("TWikiKernel-" . mychomp(`head -n 1 branch` || 'MAIN') . "-" . mychomp(`date +'%Y%m%d.%H%M%S'`)),
     agent => "TWikiKernel Builder/v0.6",
 # 
     verbose => 0,
@@ -37,13 +40,13 @@ my $Config = {
 };
 
 my $result = GetOptions( $Config,
-			'localcache=s', 'tempdir=s', 'outputdir=s',
+			'localcache=s', 'tempdir=s', 'outputdir=s', 'outfile=s',
 # miscellaneous/generic options
 			'agent=s', 'help', 'man', 'debug', 'verbose|v',
 			);
 pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
-print Dumper( $Config ) if $Config->{verbose};
+print STDERR Dumper( $Config ) if $Config->{debug};
 	 
 # TODO: use Getopt to process these (learn how to do this), er, maybe not?
 map { checkdirs( $Config->{$_} = rel2abs( $Config->{$_} ) ) } qw( tempdir outputdir );
@@ -131,7 +134,7 @@ foreach my $doc qw( TWikiDocumentation TWikiHistory )
     my $destDoc = "$Config->{localcache}/${doc}.html";
     # TODO: issue: doesn't mirror the css or bullet image; however, page will display properly if connected to the internet (and thus, twiki.org); page still displays *legibly* if not connected ( no pretty styles, tho :( )
     $ua->mirror( "http://twiki.org/cgi-bin/view/TWiki/$doc", $destDoc ) or warn "$doc: $!";
-    cp( $destDoc, "$installBase/${doc}.html" ) or die "$destDoc: $!";
+    cp( $destDoc, "$installBase/${doc}.html" ) or warn "$destDoc: $!";
 }
 
 
@@ -154,10 +157,7 @@ if ( $Config->{verbose} ) { print scalar File::Find::Rule->file->in( $installBas
 
 ################################################################################
 # create TWikiKernel distribution file
-chomp( my $now = `date +'%Y%m%d.%H%M%S'` );
-chomp( my $branch = `head -n 1 branch` || 'MAIN' );
-my $newFile = "TWikiKernel-$branch-$now";
-my $newDistro = "$Config->{outputdir}/$newFile";
+my $newDistro = "$Config->{outputdir}/$Config->{outfile}";
 execute( "cd $Config->{tempdir} ; tar czf ${newDistro}.tar.gz twiki" ) or die $!;	# .tar.gz goes *here* because *z* is here
 print "${newDistro}.tar.gz\n";			# print name of generated file; other tools later in the chain use it
 
