@@ -220,9 +220,11 @@ sub edit {
     my $formText = &TWiki::Form::renderForEdit( $webName, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldDefs );
     $tmpl =~ s/%FORMFIELDS%/$formText/go;
   } elsif( $saveCmd ne "repRev" && TWiki::Prefs::getPreferencesValue( "WEBFORMS", $webName )) {
-    $form = '<p align="right"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder"><tr><td align="right">'
+	# follows a hybrid html monster to let the 'choose form button' align at
+	# the right of the page in all browsers
+    $form = '<div style="text-align:right;"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder"><tr><td align="right">'
       . &TWiki::Form::chooseFormButton( "Add form" )
-        . '</td></tr></table></p>';
+        . '</td></tr></table></div>';
     $tmpl =~ s/%FORMFIELDS%/$form/go;
   } else {
     $tmpl =~ s/%FORMFIELDS%//go;
