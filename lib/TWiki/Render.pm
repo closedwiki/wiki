@@ -1413,16 +1413,16 @@ Obtain and render revision info for a topic.
 =cut
 
 sub renderRevisionInfo {
-    my( $this, $web, $topic, $rev, $format ) = @_;
+    my( $this, $web, $topic, $requestedRev, $format ) = @_;
 
-    if( $rev ) {
-        $rev = $this->store()->cleanUpRevID( $rev );
+    if( $requestedRev ) {
+        $requestedRev = $this->store()->cleanUpRevID( $requestedRev );
     }
 
-    my( $meta, $text ) = $this->store()->readTopic( undef, $web, $topic, $rev );
+    my( $meta, $text ) = $this->store()->readTopic( undef, $web, $topic, $requestedRev );
 
     my( $date, $user, $rev, $comment ) =
-      $meta->getRevisionInfo( $web, $topic, $rev );
+      $meta->getRevisionInfo( $web, $topic, $requestedRev );
 
     my $wun = "";
     my $wn = "";
