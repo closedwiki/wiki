@@ -133,6 +133,10 @@ sub outsidePREHandler
     # This is an old JosWiki render option combined with the new Web.LinkName notation
     # (Uncomment for JosWiki compatibility)
 #   $_[0] =~ s/(^|\s|\()\%([a-zA-Z0-9]+)\.(.*?[^\s])\%(\s|\)|$)/&TWiki::internalLink($2,$3,$3,$1,1)/geo;
+
+    # Use <link>....</link> links
+    # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)
+#   $_[0] =~ s/<link>(.*?)<\/link>/&TWiki::internalLink("",$web,$1,$1,"",1)/geo;
 }
 
 # =========================
