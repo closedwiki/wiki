@@ -118,7 +118,9 @@ sub _compareExpectedWithActual {
                                     $actual->[$i], $i + 1 );
     }
 
-    die $errors if $errors;
+    if ( $errors ) {
+        die $errors;
+    }
 }
 
 sub _compareResults {
@@ -214,10 +216,11 @@ sub endRenderingHandler {
     # SMELL@ really only want to call this only once, on the body text.
     # The only way to see if it's the bloody template is to test
     # if it contains %TEXT%. Which is an utter, utter hack.
-    if ( $q->param( "test" ) eq "compare" && $0 !~ /%TEXT%) {
+    if ( $q->param( "test" ) eq "compare" && $_[0] !~ /%TEXT%/ ) {
         my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
         _compareExpectedWithActual( _parse( $text, "expected" ),
                                     _parse( $_[0], "actual" ));
+        $_[0] = "ALL TESTS PASSED";
     }
 }
 
