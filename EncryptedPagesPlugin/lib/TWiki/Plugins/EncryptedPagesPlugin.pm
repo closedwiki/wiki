@@ -70,12 +70,7 @@ sub initPlugin
 
     $prefixPattern  = '%ENCRYPTEDPAGE{';
     $postfixPattern = '}%';
-    $replacementText = <<EOT;
-<APPLET CODE = "uk.org.ellery.twiki.TwikiEncrypt.class"  ARCHIVE = "%PUBURL%/%TWIKIWEB%/TwikiEncrypt.jar,%TWIKIURL%/%WEB%/Crypt.jar"  WIDTH = 400 HEIGHT = 200>
-<PARAM NAME ="ATTACHURL" VALUE="%ATTACHURL%">
-<PARAM NAME="KEY" VALUE="--!!--">
-</APPLET>
-EOT
+    $replacementText = getPreferencesValue( "ENCRYPTEDPAGESPLUGIN_APPLET_INVOCATION");
 
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::EncryptedPagesPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
