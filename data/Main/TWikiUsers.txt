@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1059250253" format="1.0" version="1.16"}%
+%META:TOPICINFO{author="PeterThoeny" date="1068113280" format="1.0" version="1.17"}%
 *List of %WIKITOOLNAME% users*
 
 Please take the time and add yourself to the list. To do that fill out the form in %TWIKIWEB%.TWikiRegistration. This will create an account for you which allows you to edit topics. 
@@ -38,6 +38,6 @@ Please take the time and add yourself to the list. To do that fill out the form 
 
 [[#A][A]] [[#B][B]] [[#C][C]] [[#D][D]] [[#E][E]] [[#F][F]] [[#G][G]] [[#H][H]] [[#I][I]] [[#J][J]] [[#K][K]] [[#L][L]] [[#M][M]] [[#N][N]] [[#O][O]] [[#P][P]] [[#Q][Q]] [[#R][R]] [[#S][S]] [[#T][T]] [[#U][U]] [[#V][V]] [[#W][W]] [[#X][X]] [[#Y][Y]] [[#Z][Z]]
 
-__Note:__ Do not edit this topic to add a user, use %TWIKIWEB%.TWikiRegistration instead.
+	* Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
 __Related topics:__ OfficeLocations, TWikiGroups
