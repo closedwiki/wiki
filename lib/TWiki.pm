@@ -48,7 +48,7 @@ use vars qw(
         $webName $topicName $includingWebName $includingTopicName
         $defaultUserName $userName $wikiName $wikiUserName
         $wikiHomeUrl $defaultUrlHost $urlHost
-        $scriptUrlPath $pubUrlPath
+        $scriptUrlPath $pubUrlPath $viewScript
         $pubDir $templateDir $dataDir $twikiLibDir
         $siteWebTopicName $wikiToolName $securityFilter $uploadFilter
         $debugFilename $warningFilename $htpasswdFilename
@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "22 Nov 2001";
+$wikiversion      = "23 Nov 2001";
 
 # ===========================
 # read the configuration part
@@ -126,6 +126,7 @@ use Cwd;
 $TranslationToken= "\263";
 $cgiQuery = 0;
 @publicWebList = ();
+$viewScript = "view";
 
 # Header patterns based on '+++'. The '###' are reserved for numbered headers
 $headerPatternDa = '^---+(\++|\#+)\s+(.+)\s*$';       # '---++ Header', '---## Header'
@@ -223,6 +224,8 @@ sub initialize
     # some remaining init
     $code="";
     @code= ();
+    $viewScript = "view";
+    $viewScript = "viewauth" if( $ENV{'SCRIPT_NAME'} =~ /^.*\/viewauth$/ );  # Needed for TOC
 
     # Add background color and font color (AlWilliams - 18 Sep 2000)
     # PTh: Moved from interalLink to initialize ('cause of performance)
@@ -1122,7 +1125,7 @@ sub handleToc
                 $line =~ s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;  # 'TopicName'
                 $line =~ s/([\s\(])([A-Z]{3,})/$1<nop>$2/go;  # 'TLA'
                 # create linked bullet item
-                $line = "$tabs* <a href=\"$scriptUrlPath/view$scriptSuffix/$webPath/$topicname#$anchor\">$line</a>";
+                $line = "$tabs* <a href=\"$scriptUrlPath/$viewScript$scriptSuffix/$webPath/$topicname#$anchor\">$line</a>";
                 $result .= "\n$line";
             }
         }
