@@ -290,7 +290,7 @@ sub renderForEdit
             foreach my $item ( @fieldInfo ) {
                 my $flag = "";
                 my $expandedItem = &TWiki::handleCommonTags( $item, $topic );
-                if( $value =~ /(^|,\s*)$item(,|$)/ ) {
+                if( $value =~ /(^|,\s*)\Q$item\E(,|$)/ ) {
                     $flag = ' checked="checked"';
                 }
                 $val .= "\n<td><input type=\"checkbox\" name=\"$name$item\"$flag />$expandedItem &nbsp;&nbsp;</td>";
