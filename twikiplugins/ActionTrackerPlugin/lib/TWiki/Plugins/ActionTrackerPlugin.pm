@@ -24,14 +24,15 @@ use TWiki::Func;
 use TWiki::Plugins::ActionTrackerPlugin::Attrs;
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
-use TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
+use TWiki::Plugins::ActionTrackerPlugin::Format;
+require TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
 
 # =========================
 use vars qw(
 	    $web $topic $user $installWeb $VERSION
 	    $allActions $useNewWindow $debug $javaScriptIncluded
 	    $pluginInitialized $perlTimeParseDateFound $pluginName
-	    $format
+	    $defaultFormat
 	   );
 
 $VERSION = '1.000';
@@ -52,8 +53,22 @@ sub initPlugin {
   }
 
   # Get plugin debug flag
-  $debug = &TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_DEBUG" ) || 0;
+  $debug = &TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_DEBUG" ) ||
+    0;
   $useNewWindow = &TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_USENEWWINDOW" ) || 0;
+
+  # Colour for warning of late actions
+  $ActionTrackerPlugin::Format::latecol = 
+    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_LATECOL" ) ||
+      "yellow";
+  # Colour for an unparseable date
+  $ActionTrackerPlugin::Format::badcol =
+    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_BADDATECOL" ) ||
+      "red";
+  # Colour for table header rows
+  $ActionTrackerPlugin::Format::hdrcol =
+    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_HEADERCOL" ) ||
+      "FFCC66";
 
   my $hdr =
     TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEHEADER" );
@@ -61,10 +76,17 @@ sub initPlugin {
     TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEFORMAT" );
   my $textform =
     TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TEXTFORMAT" );
+  my $orient =
+    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEORIENT" );
   my $changes =
     TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_NOTIFYCHANGES" );
+  $defaultFormat =
+    new ActionTrackerPlugin::Format( $hdr, $bdy, $textform, $changes, $orient );
 
-  $format = Format->new( $hdr, $bdy, $textform, $changes );
+  my $extras =
+    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EXTRAS" );
+
+  $types = ActionTrackerPlugin::Action::extendTypes( $extras ) if ( $extras );
 
   &TWiki::Func::writeDebug( "- TWiki::Plugins::ActionTrackerPlugin::initPlugin($web.$topic) is OK" ) if $debug;
   $pluginInitialized = 0;
@@ -104,21 +126,21 @@ sub commonTagsHandler {
       if ( $pre =~ /\S/o ) {
 	if ( $actionSet ) {
 	  $text .= embedJS() .
-	    $actionSet->formatAsHTML( "name", $format, $useNewWindow ) . "\n";
+	    $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow ) . "\n";
 	  $actionSet = undef;
 	}
 	$text .= $pre;
       }
 
       $descr =~ s/%ACTION{(.*)}%/%<nop>ACTION{$1}%/go;
-      my $action = Action->new( $_[2], $_[1], $actionNumber++, $attrs, $descr );
-      $actionSet = ActionSet->new() unless ( $actionSet );
+      my $action = new ActionTrackerPlugin::Action( $_[2], $_[1], $actionNumber++, $attrs, $descr );
+      $actionSet = new ActionTrackerPlugin::ActionSet() unless ( $actionSet );
       $actionSet->add( $action );
 
     } else {
       if ( $actionSet ) {
 	$text .= embedJS() .
-	  $actionSet->formatAsHTML( "name", $format, $useNewWindow ) . "\n";
+	  $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow ) . "\n";
 	$actionSet = undef;
       }
       $text .= "$line\n";
@@ -126,7 +148,7 @@ sub commonTagsHandler {
   }
   if ( $actionSet ) {
     $text .= embedJS() .
-      $actionSet->formatAsHTML( "name", $format,$useNewWindow );
+      $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow );
   }
   $_[0] = $text;
   $_[0] =~ s/%ACTIONSEARCH{(.*)?}%/&handleActionSearch($web, $1)/geo;
@@ -164,8 +186,6 @@ sub beforeEditHandler {
   $tmpl = TWiki::Func::expandCommonVariables( $tmpl, $topic, $web );
   $tmpl = TWiki::Func::renderText( $tmpl, $web );
 
-  # This is the place to do Thomas' form stuff
-
   # The 'command' parameter is used to signal to the afterEditHandler and
   # the beforeSaveHandler that they have to handle the fields of the
   # edit differently
@@ -194,31 +214,25 @@ sub beforeEditHandler {
       $text .= "$line\n";
     }
   }
-  TWiki::writeDebug("Cleaned up $text");
+
   # Find the action
   my $uid = $query->param( "action" );
   my ( $action, $pretext, $posttext ) =
-    Action::findActionByUID( $webName, $topic, $text, $uid );
+    ActionTrackerPlugin::Action::findActionByUID( $webName, $topic, $text, $uid );
 
   $fields .= $query->hidden( -name=>'pretext', -value=>$pretext );
   $fields .= $query->hidden( -name=>'posttext', -value=>$posttext );
 
   $tmpl =~ s/%UID%/$uid/go;
   
-  # Clean up the text so it's nice for editing.
-  $text = $action->{text};
-  $text =~ s/\s*&lt;p ?\/?&gt;/\n\n/go;
-  $text =~ s/\s*&lt;br ?\/?&gt;/\n/go;
-  $text =~ s/\n\t/\n   /go;
-  
   my $useNewWindow =
-    &TWiki::Func::getPreferencesFlag( "${pluginName}_USENEWWINDOW" );
+    &TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_USENEWWINDOW" );
   
   my $submitCmd = "Preview";
   my $submitScript = "";
   my $cancelScript = "";
 
-  if ( TWiki::Prefs::getPreferencesFlag( "${pluginName}_NOPREVIEW" )) {
+  if ( TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_NOPREVIEW" )) {
     $submitCmd = "Save";
     if ( $useNewWindow ) {
       # I'd like to do this, but not sure how. Like this, the ONSUBMIT
@@ -237,33 +251,30 @@ sub beforeEditHandler {
   $submitCmd = lcfirst( $submitCmd );
   $tmpl =~ s/%SUBMITCOMMAND%/$submitCmd/go;
   
-  my $who = $action->{who};
-  $tmpl =~ s/%WHO%/$who/go;
-  
-  my $due = $action->dueString();
-  $tmpl =~ s/%DUE%/$due/go;
-  
-  my $state = $action->{state};
-  
-  my $openselect = ( $state eq "open" ) ? "SELECTED" : "";
-  $tmpl =~ s/%OPENSELECT%/$openselect/go;
-  
-  my $closedselect = ( $state eq "closed" ) ? "SELECTED" : "";
-  $tmpl =~ s/%CLOSEDSELECT%/$closedselect/go;
-  
-  my $an = $action->{UID};
-  $tmpl =~ s/%ACTION_NUMBER%/$an/go;
-  
+  my $hdrs =
+    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITHEADER" );
+  my $body =
+    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITFORMAT" );
+  my $vert =
+    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITORIENT" );
+
+  my $fmt = new ActionTrackerPlugin::Format( $hdrs, $body, "", "", $vert );
+  my $editable = $fmt->formatForEdit( $action );
+  $tmpl =~ s/%EDITFIELDS%/$editable/o;
+
   my $ebh =
-    TWiki::Func::getPreferencesValue( "${pluginName}_EDITBOXHEIGHT" ) ||
+    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITBOXHEIGHT" ) ||
       TWiki::Func::getPreferencesValue( 'EDITBOXHEIGHT' );
   $tmpl =~ s/%EBH%/$ebh/go;
   
   my $ebw =
-    TWiki::Func::getPreferencesValue( "${pluginName}_EDITBOXWIDTH" ) ||
+    TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITBOXWIDTH" ) ||
       TWiki::Func::getPreferencesValue( 'EDITBOXWIDTH' );
   $tmpl =~ s/%EBW%/$ebw/go;
-  
+  $text = $action->{text};
+  $text =~ s/^\t/   /gos;
+  $text =~ s/<br( \/)?>/\n/gios;
+  $text =~ s/<p( \/)?>/\n\n/gios;
   $tmpl =~ s/%TEXT%/$text/go;
   $tmpl =~ s/%HIDDENFIELDS%/$fields/go;
 
@@ -284,15 +295,8 @@ sub afterEditHandler {
   my $query = TWiki::Func::getCgiQuery();
   return unless ( $query->param( 'closeactioneditor' ));
 
-  # get the edited text and combine with pre- and post-text
-  my $who = $query->param( "who" ) || "undef";
-  my $due = $query->param( "due" ) || "undef";
-  my $state = $query->param( "state" ) || "open";
-  my $desc = $query->param( "text" ) || "No description";
-  $desc =~ s/\r?\n\r?\n/ <p \/>/sgo;
-  $desc =~ s/\r?\n/ <br \/>/sgo;
-
   my $pretext = $query->param( 'pretext' ) || "";
+  my $posttext = $query->param( 'posttext' ) || "";
 
   # count the previous actions so we get the right action number
   my $an = 0;
@@ -301,15 +305,13 @@ sub afterEditHandler {
     $an++;
   }
 
-  # Note: we do NOT add the UID here; that gets done when we add
-  # missing attributes. If we added it here, we would risk getting
-  # the wrong action number sequence.
-  my $attrs = "who=\"$who\" due=\"$due\" state=\"$state\"";
-  my $action = Action->new( $_[2], $_[1], $an, $attrs, $desc );
+  my $action =
+    ActionTrackerPlugin::Action::createFromQuery( $_[2], $_[1], $an, $query );
+
   $action->populateMissingFields();
 
-  my $posttext = $query->param( 'posttext' ) || "";
-  my $text = $pretext . $action->toString() . "\n" . $posttext; 
+  my $text = $action->toString();
+  $text = "$pretext$text\n$posttext"; 
 
   # take the opportunity to fill in the missing fields in actions
   _addMissingAttributes( $text, $_[1], $_[2] );
@@ -319,7 +321,7 @@ sub afterEditHandler {
 
 # This handler is called by TWiki::Store::saveTopic just before
 # the save action. The text passed is the raw text of the topic, so it
-# containes meta-data.
+# contains meta-data.
 # New hook in TWiki::Plugins $VERSION = '1.010'
 sub beforeSaveHandler {
 ### my ( $text, $topic, $web ) = @_;
@@ -367,7 +369,7 @@ sub _addMissingAttributes {
 # PRIVATE populate missing fields on an action
 sub _populateFields {
   my ( $web, $topic, $attrs, $text ) = @_;
-  my $action = Action->new( $web, $topic, $actionNumber++, $attrs, $text );
+  my $action = new ActionTrackerPlugin::Action( $web, $topic, $actionNumber++, $attrs, $text );
   $action->populateMissingFields();
   return $action->toString();
 }
@@ -377,22 +379,37 @@ sub _populateFields {
 sub handleActionSearch {
   my ( $web, $expr ) = @_;
 
-  my $attrs = ActionTrackerPlugin::Attrs->new( $expr );
-  my $actions = ActionSet::allActionsInWebs( $web, $attrs );
-
-  # by default actions will be sorted by due date
-  $actions->sort( $attrs->get( "sort" ));
-
+  my $attrs = new ActionTrackerPlugin::Attrs( $expr );
   # use default format unless overridden
-  my $fmt = $format;
-  my $fmts = $attrs->get( "format" );
-  if ( defined( $fmts )) {
-    my $hdrs = $attrs->get( "header" );
-    $hdrs = $fmt unless defined( $hdr );
-    $fmt = Format->new( $hdrs, $fmts, $fmts );
+  my $fmt;
+  my $fmts = $attrs->remove( "format" );
+  my $hdrs = $attrs->remove( "header" );
+  my $orient = $attrs->remove( "orient" );
+  if ( defined( $fmts ) || defined( $hdrs ) || defined( $orient )) {
+    if ( !defined( $fmts ) ) {
+      # header not defined; use default
+      $fmts = $defaultFormat->getFields();
+    }
+    if ( !defined( $hdrs ) ) {
+      # header not defined; use default
+      $hdrs = $defaultFormat->getHeaders();
+    }
+    if ( !defined( $orient )) {
+      $orient = $defaultFormat->getOrientation();
+    }
+    $fmt = new ActionTrackerPlugin::Format( $hdrs, $fmts, $fmts, $orient );
+  } else {
+    $fmt = $defaultFormat;
   }
 
-  return embedJS() . $actions->formatAsHTML( "href", $fmt, $useNewWindow );
+  my $sort = $attrs->remove( "sort" );
+
+  my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs( $web, $attrs );
+
+  # by default actions will be sorted by due date
+  $actions->sort( $sort );
+
+  return embedJS() . $actions->formatAsHTML( $fmt, "href", $useNewWindow );
 }
 
 # =========================
@@ -456,9 +473,13 @@ function editWindow(url) {
 sub handleActionNotify {
   my ( $web, $expr ) = @_;
 
-  my $text = ActionNotify::doNotifications( $web, $expr, 1 );
+  use TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
+  my $text = ActionTrackerPlugin::ActionNotify::doNotifications( $web, $expr, 1 );
 
-  return $text;
+  $text =~ s/<html>/<\/pre>/gos;
+  $text =~ s/<\/html>/<pre>/gos;
+  $text =~ s/<\/?body>//gos;
+  return "<!-- from an --> <pre>$text</pre> <!-- end from an -->";
 }
 
 

@@ -12,6 +12,7 @@
     $pwd = `pwd`;
     chop($pwd);
     purge();
+    TWiki::testinit();
     setPreferencesValue("WIKITOOLNAME","mailsender");
     setPreferencesValue("WIKIWEBMASTER","wikiwebmaster");
     setPreferencesValue("SCRIPTSUFFIX",".cgi");
@@ -27,10 +28,14 @@
   sub loadPreferencesFor {
     my $plugin = shift;
     my $ucw = uc($plugin);
-    open PF,"<".TWiki::TestMaker::pwd()."/../../../../../data/TWiki/$plugin.txt";
+    my $pwd = `pwd`;
+    chop($pwd);
+    my ($p,$f,$l) = caller(1);
+    print STDERR "Prefs from $pwd/../../../../../data/TWiki/$plugin.txt\n";
+    open PF,"<$pwd/../../../../../data/TWiki/$plugin.txt";
     while (<PF>) {
       if ($_ =~ /^\s+\* Set (\w+) = ([^\r\n]+)/o) {
-	$prefs{"${ucw}_$1"} = $2;_
+	$prefs{"${ucw}_$1"} = $2;
       }
     }
     close PF;

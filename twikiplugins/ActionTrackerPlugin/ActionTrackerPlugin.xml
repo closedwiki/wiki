@@ -24,8 +24,7 @@
         <include name="${plugin.lib}/*.pm"/>
         <include name="${plugin.data}*.txt"/>
         <include name="bin/actionnotify"/>
-        <include name="templates/actionnotify.tmpl"/>
-        <include name="templates/edit.action.tmpl"/>
+        <include name="templates/*.tmpl"/>
         <include name="${test.zip}"/>
     </patternset>
 

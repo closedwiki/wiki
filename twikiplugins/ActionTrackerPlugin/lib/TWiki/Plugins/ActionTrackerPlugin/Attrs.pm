@@ -23,38 +23,46 @@ use integer;
   # Parse a standard attribute string containing name=value pairs. The
   # value may be a word or a quoted string (no escapes!)
   sub new {
-    my ($class, $string) = @_;
+    my ( $class, $string ) = @_;
     my $this = {};
 
-    if (defined($string)) {
+    if ( defined( $string ) ) {
       # name="value" pairs
-      while ($string =~ s/([a-z]\w+)\s*=\s*\"([^\"]*)\"//io) {
+      while ( $string =~ s/([a-z]\w+)\s*=\s*\"([^\"]*)\"//io ) {
         $this->{$1} = $2;
       }
       # name=value pairs
-      while ($string =~ s/([a-z]\w+)\s*=\s*([^\s,\}]*)//io) {
+      while ( $string =~ s/([a-z]\w+)\s*=\s*([^\s,\}]*)//io ) {
         $this->{$1} = $2;
       }
       # simple name with no value (boolean)
-      while ($string =~ s/([a-z]\w+)\b//o) {
+      while ( $string =~ s/([a-z]\w+)\b//o ) {
         $this->{$1} = "on";
       }
     }
-    return bless $this, $class;
+    return bless( $this, $class );
   }
 
   # PUBLIC Get an attr value; return undef if not set
   sub get {
-    my ($this, $attr) = @_;
+    my ( $this, $attr ) = @_;
     return $this->{$attr};
   }
 
   # PUBLIC Set an attr value; return previous value
   sub set {
-    my ($this, $attr, $val) = @_;
+    my ( $this, $attr, $val ) = @_;
     my $oval = $this->get($attr);
     $this->{$attr} = $val;
     return $oval;
+  }
+
+  # PUBLIC remove an attr value, return old value
+  sub remove {
+    my ( $this, $attr ) = @_;
+    my $val = $this->{$attr};
+    delete( $this->{$attr} );
+    return $val;
   }
 
   sub toString {

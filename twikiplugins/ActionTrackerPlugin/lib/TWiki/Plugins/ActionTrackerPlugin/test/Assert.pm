@@ -11,10 +11,20 @@ use integer;
   }
 
   sub assert {
-    my ($file,$line,$test,$mess) = @_;
-    $mess = "" unless $mess;
-    die "Assert at $file line $line failed: $mess" unless $test;
-    print "Passed line $line\n" if ( $debug );
+    my ($test,$mess) = @_;
+    
+    if (!$test) {
+      $mess = "" unless $mess;
+      my ($p,$f,$l);
+      my $i = 0;
+      while (($p, $f, $l) = caller($i++)) {
+	last if ($f =~ /^\(eval/);
+	$mess .= "\n$f: $l";
+      }
+      #print STDERR "FAILURE Assert failed: $mess\n";
+      die "Assert failed: $mess\ndied";
+    }
+    #print "Passed $mess\n" if ($debug);
   }
 
   # escape regular expression chars in string
@@ -51,99 +61,102 @@ use integer;
   }
 
   sub _assertMismatch {
-    my ($file,$line,$cond,$saw,$exp) = @_;
-
-    if ($cond) {
-      print "Passed line $line\n" if ( $debug );
-      return 1;
-    }
+    my ($pass,$saw,$exp) = @_;
 
     # Would like to do this by extracting subexpressions from the re and
     # matching them, and keep adding subexpressions until there's
     # a match, but it's too complicated. Just rely on a visual match
     # (after all, this *is* for saw, and shouldn't fail often!)
 
-    # find the first mismatched character
-    my $i = 0;
-    while ($i < length($saw) && $i < length($exp)) {
-      my $sawCh = substr($saw, $i, 1);
-      my $expCh = substr($exp, $i, 1);
-      if ($sawCh ne $expCh) {
-	my $beforeSaw = substr($saw, 0, $i);
-	if (length($beforeSaw) > 30) {
-	  $beforeSaw = "....".substr($beforeSaw,length($beforeSaw)-30);
-	}
+    my $beforeSaw = $saw;
+    my $afterSaw = "";
+    my $beforeExp = $exp;
+    my $afterExp = "";
 
-	my $afterSaw = substr($saw, $i, length($saw));
-	if (length($afterSaw) > 30) {
-	  $afterSaw = substr($afterSaw, 0, 30) . "....";
+    if (!$pass) {
+      # find the first mismatched character
+      $pass = 1;
+      my $i = 0;
+      while ($i < length($saw) && $i < length($exp)) {
+	my $sawCh = substr($saw, $i, 1);
+	my $expCh = substr($exp, $i, 1);
+	if ($sawCh ne $expCh) {
+	  $beforeSaw = substr($saw, 0, $i);
+	  if (length($beforeSaw) > 30) {
+	    $beforeSaw = "....".substr($beforeSaw,length($beforeSaw)-30);
+	  }
+	  
+	  $afterSaw = substr($saw, $i, length($saw));
+	  if (length($afterSaw) > 30) {
+	    $afterSaw = substr($afterSaw, 0, 30) . "....";
+	  }
+	  
+	  $beforeExp = substr($exp, 0, $i);
+	  if (length($beforeExp) > 30) {
+	    $beforeExp = "....".substr($beforeExp,length($beforeExp)-30);
+	  }
+	  
+	  $afterExp = substr($exp, $i, length($exp));
+	  if (length($afterExp) > 30) {
+	    $afterExp = substr($afterExp, 0, 30) . "....";
+	  }
+	  $pass = 0;
+	  last;
 	}
-
-	my $beforeExp = substr($exp, 0, $i);
-	if (length($beforeExp) > 30) {
-	  $beforeExp = "....".substr($beforeExp,length($beforeExp)-30);
-	}
-
-	my $afterExp = substr($exp, $i, length($exp));
-	if (length($afterExp) > 30) {
-	  $afterExp = substr($afterExp, 0, 30) . "....";
-	}
-	assert($file, $line, 0,
-	       "\nsaw      \"$beforeSaw***** HERE->$afterSaw\"".
-	       "\nexpected \"$beforeExp***** HERE->$afterExp\"");
+	$i++;
       }
-      $i++;
     }
-    return 1;
+    assert($pass,
+	   "\nsaw      \"$beforeSaw***** HERE->$afterSaw\"".
+	   "\nexpected \"$beforeExp***** HERE->$afterExp\"");
   }
 
   sub sContains {
-    my ($file,$line,$test,$expected) = @_;
+    my ($test,$expected) = @_;
     my $re = unregex($expected);
     my $pass = $test =~ m/$re/s ? 1 : 0;
-    assert($file,$line, $pass,
-	   "\nsaw      \"$test\"\nsContains\"$expected\"" );
-    return 1;
+    assert($pass,
+	   "\nsaw      \"$test\"\nsContains\"$expected\"");
   }
   
   sub sEquals {
-    my ($file,$line,$test,$expected) = @_;
+    my ($test,$expected) = @_;
+    if ($expected eq "") {
+      assert($test eq "", "saw \"$test\" expected \"\"");
+    }
     my $re = unregex($expected);
     my $pass = $test =~ m/^$re$/s ? 1 : 0;
-    _assertMismatch($file,$line, $test, $expected);
-    return 1;
+    _assertMismatch($pass, $test, $expected);
   }
 
   sub htmlContains {
-    my ($file,$line,$test,$expected) = @_;
+    my ($test,$expected) = @_;
     my $re = unhtml($expected);
 
     my $pass = $test =~ m/$re/s ? 1 : 0;
-    assert($file,$line, $pass,
+    assert($pass,
 	   "\n$test\n*********failed htmlContains\n$expected");
-    return 1;
   }
   
   sub htmlEquals {
-    my ($file,$line,$test,$expected) = @_;
+    my ($test,$expected) = @_;
     my $re = unhtml($expected);
 
     my $pass = ($test =~ m/^$re$/s ? 1 : 0);
-    _assertMismatch($file,$line, $pass, $test, $expected);
-    return 1;
+    _assertMismatch($pass, $test, $expected);
   }
 
   sub equals {
-    my ($file,$line,$test,$expected) = @_;
+    my ($test,$expected) = @_;
     my $pass = ($test == $expected);
-    assert($file,$line, $pass, "saw $test expected $expected");
+    assert($pass, "saw $test expected $expected");
   }
 
   sub fileContains {
-    my ($file,$line, $fn, $expected) = @_;
+    my ($fn, $expected) = @_;
 
     undef $/; # set to read to EOF
-    assert($file,$line, open(IN_FILE, "<$fn"), "open $fn");
+    assert(open(IN_FILE, "<$fn"), "open $fn");
     my $text = "";
     my $l;
     while ($l = <IN_FILE>) {
@@ -151,7 +164,31 @@ use integer;
     }
     close(IN_FILE);
 
-    sContains($file,$line, $text, $expected);
+    sContains($text, $expected);
+  }
+
+  sub runTests {
+    my $pkg = shift;
+    print STDERR "Running tests in $pkg\n";
+    $pkg .= "::";
+    my $fn = "${pkg}setUp";
+    if (defined(&{$fn})) {
+      eval "&$fn()";
+    }
+    my $cnt = 0;
+    foreach $fn ( eval "sort keys %$pkg" ) {
+      if ($fn =~ /^test/) {
+	print STDERR "\t...$fn\n";
+	$fn = "$pkg$fn";
+	die $@ unless defined( eval "&$fn()" );
+	$cnt++;
+      }
+    }
+    $fn = "${pkg}tearDown";
+    if (defined(&{$fn})) {
+      eval "&$fn()";
+    }
+    print STDERR "$cnt tests run from $pkg\n";
   }
 }
 

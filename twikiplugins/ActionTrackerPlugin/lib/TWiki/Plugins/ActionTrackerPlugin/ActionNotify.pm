@@ -24,7 +24,7 @@ use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
 
 # This module contains the functionality of the bin/actionnotify script
-{ package ActionNotify;
+{ package ActionTrackerPlugin::ActionNotify;
 
   my $vcLogCmd;
 
@@ -49,17 +49,19 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub doNotifications {
     my ( $webName, $expr, $debugMailer ) = @_;
     
-    my $attrs = ActionTrackerPlugin::Attrs->new( $expr );
+    my $attrs = new ActionTrackerPlugin::Attrs( $expr );
     my $hdr =
       TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEHEADER" );
     my $bdy =
       TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEFORMAT" );
+    my $vert =
+      TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_TABLEVERTICAL" );
     my $textform =
       TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TEXTFORMAT" );
     my $changes =
       TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_NOTIFYCHANGES" );
 
-    my $format = Format->new( $hdr, $bdy, $textform, $changes );
+    my $format = new ActionTrackerPlugin::Format( $hdr, $bdy, $textform, $changes, $vert );
     $vcLogCmd =
       TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_LOGCMD" );
 
@@ -72,37 +74,37 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     # Okay, we have tables of all the actions and a partial set of the
     # people who can be notified.
     my %notifications = ();
-    my $date = "";
-    if ( defined $attrs->get( "changedsince" ) ) {
-      $date = $attrs->get( "changedsince" );
+    my %people = ();
+
+    my $date = $attrs->remove( "changedsince" );
+    if ( defined( $date )) {
       # need to get rid of formatting done in actionnotify perl script
       $date =~ s/[, ]+/ /go; 
       $date = _getRelativeDate( $date );
       _findChangesInWebs( $webs, $date, $format, \%notifications );
-    }
-
-    # Get all the actions that match the search
-    my $actions = ActionSet::allActionsInWebs( $webs, $attrs );
-
-    # Obtain a set of all the unique individuals who have
-    # actions or changes
-    my $people = $actions->getActionees();
-    foreach my $key ( keys %notifications ) {
-      if ( defined ( $notifications{$key} ) ) {
-	$people->{$key} = 1;
+      foreach my $key ( keys %notifications ) {
+	if ( defined ( $notifications{$key} ) ) {
+	  $people{$key} = 1;
+	}
       }
+    }
+    my $actions;
+    if ( scalar( keys %$attrs ) > 0 ) {
+      # Get all the actions that match the search
+      $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs( $webs, $attrs );
+      $actions->getActionees( \%people );
     }
 
     # Now cycle over the list of people and find their sets of actions
     # or changes
     my $mainweb = TWiki::Func::getMainWebname();
-    foreach my $key ( keys %$people ) {
+    foreach my $key ( keys %people ) {
       if ( defined( $key ) ) {
 	my $compare_key = $key;
 	$key =~ s/\s//go;
 	$key =~ s/$mainweb\.//go;
 	my $mailaddr = _getMailAddress( $key, $notify );
-	my $message;
+
 	if ( !defined( $mailaddr ) ) {
 	  TWiki::Func::writeWarning( "No mail address found for $key" );
 	  if ( $debugMailer ) {
@@ -111,28 +113,34 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	  next;
 	}
 	
-	my $subact = $actions->search("who=\"$key\"");
-	$subact->sort();
-	my $actionsString = $subact->formatAsString( $format ) || "";
-	my $actionsHTML = $subact->formatAsHTML( "href", $format, 0 ) || "";
+	my $actionsString = "";
+	my $actionsHTML = "";
+	if ( $actions ) {
+	  my $subact = $actions->search("who=\"$key\"");
+	  $subact->sort();
+	  $actionsString = $subact->formatAsString( $format ) || "";
+	  $actionsHTML = $subact->formatAsHTML( $format, "href", 0 ) || "";
+	}
+
 	my $changesString = $notifications{$compare_key}{text} || "";
 	my $changesHTML = $notifications{$compare_key}{html} || "";
 
 	my $message = _composeActionsMail($actionsString, $actionsHTML,
 					  $changesString, $changesHTML,
 					  $date, $mailaddr, $format );
-      
 	if ( $debugMailer ) {
-	  $message =~ s/</&lt;/go;
 	  $result .= $message;
 	} else {
 	  my $error = TWiki::Net::sendEmail( $message );
-	  print STDERR $error if defined( $error );
+	  if ( defined( $error )) {
+	    $error = "ActionTrackerPlugin:ActionNotify: $error";
+	    TWiki::Func::writeWarning( $error );
+	  }
 	}
       }
     }
 
-    return "<pre>$result</pre>" if ( $debugMailer );
+    return $result;
   }
   
   # PRIVATE Process all known webs to get the list of notifiable people
@@ -157,7 +165,8 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my( $web, $notify ) = @_;
     
     if( ! TWiki::Func::webExists( $web ) ) {
-      print STDERR "* ERROR: TWiki actionnotify did not find web $web\n";
+      my $error = "ActionTrackerPlugin:ActionNotify: did not find web $web";
+      TWiki::Func::writeWarning( $error );
       return;
     }
     
@@ -263,6 +272,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       $text =~ s/%ACTIONS%.*?%END%//gso;
     }
 
+    $since = "" unless ( $since );
     $text =~ s/%SINCE%/$since/go;
     if ( $changesString ne "" ) {
       $text =~ s/%CHANGES_AS_STRING%/$changesString/go;
@@ -288,7 +298,8 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # this functionality.
   sub _getRevAtDate {
     my ( $theWeb, $theTopic, $date ) = @_;
-    my $fname = "$TWiki::dataDir\/$theWeb\/$theTopic.txt";
+    my $dataDir = TWiki::Func::getDataDir();
+    my $fname = "$dataDir\/$theWeb\/$theTopic.txt";
     my $tmp = $vcLogCmd;
     $tmp =~ s/%DATE%/$date/o;
     $tmp =~ s/%FILENAME%/$fname/o;
@@ -326,19 +337,19 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     $oldrev =~ s/\d+\.(\d+)/$1/o;
 
     my $text = TWiki::Func::readTopicText( $theWeb, $theTopic, $oldrev, 1 );
-    my $oldActions = ActionSet->new();
+    my $oldActions = new ActionTrackerPlugin::ActionSet();
     my $actionNumber = 0;
     while ( $text =~ s/%ACTION{([^%]*)}%([^\n\r]+)//so ) {
-      my $action = Action->new( $theWeb, $theTopic, $actionNumber++, $1, $2 );
+      my $action = new ActionTrackerPlugin::Action( $theWeb, $theTopic, $actionNumber++, $1, $2 );
       $oldActions->add( $action );
     }
 
     # Recover the current action set.
     $text = TWiki::Func::readTopicText( $theWeb, $theTopic, undef, 1 );
-    my $currentActions = ActionSet->new();
+    my $currentActions = new ActionTrackerPlugin::ActionSet();
     $actionNumber = 0;
     while ( $text =~ s/%ACTION{([^%]*)}%([^\n\r]+)//so ) {
-      my $action = Action->new( $theWeb, $theTopic, $actionNumber++, $1, $2 );
+      my $action = new ActionTrackerPlugin::Action( $theWeb, $theTopic, $actionNumber++, $1, $2 );
       $currentActions->add( $action );
     }
     
@@ -353,7 +364,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # given web, since the given date.
   sub _findChangesInWeb {
     my ( $theWeb, $theDate, $format, $notifications ) = @_;
-    my $actions = ActionSet->new();
+    my $actions = new ActionTrackerPlugin::ActionSet();
     my $dd = TWiki::Func::getDataDir() || "..";
     
     # Known problem; if there's only one file in the web matching
@@ -363,16 +374,12 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     # isn't very useful in TWiki.
     # Also assumed: the output of the egrepCmd must be of the form
     # file.txt: ...matched text...
-    chdir( "$dd/$theWeb" );
-    my $grep = `${TWiki::egrepCmd} ${TWiki::cmdQuote}%ACTION\\{.*\\}%${TWiki::cmdQuote} *.txt`;
-    if ( $? ne 0 ) {
-      print STDERR "grep $dd/$theWeb/*.txt failed";
-    }
+    my $grep = `${TWiki::egrepCmd} ${TWiki::cmdQuote}%ACTION\\{.*\\}%${TWiki::cmdQuote} $dd/$theWeb/*.txt`;
 
     my $number = 0;
     my %processed;
     
-    while ( $grep =~ s/^([^\.\n]+)\.txt:.*%ACTION{([^\}]*)}%//m ) {
+    while ( $grep =~ s/^.*\/([^\/\.\n]+)\.txt:.*%ACTION{([^\}]*)}%//m ) {
       my $topic = $1;
       if ( !$processed{$topic} ) {
 	_findChangesInTopic( $theWeb, $topic, $theDate, $format,
