@@ -30,18 +30,18 @@ __USAGE__
 
 
 $|++;
-use Cwd qw( getcwd );
+use Cwd qw( cwd );
 use Data::Dumper qw( Dumper );
 
 ## warning: unknown files below the =local= dir are deleted!
 $Config = {
     cpan => {
 	remote => "http://www.cpan.org/",
-	local => getcwd() . "/MIRROR/MINICPAN/",
+	local => cwd() . "/MIRROR/MINICPAN/",
     },
     twiki => {
-	remote => "file:" . getcwd() . "/MIRROR/MINICPAN/",
-	local => getcwd() . "/MIRROR/TWIKI/",
+	remote => "file:" . cwd() . "/MIRROR/MINICPAN/",
+	local => cwd() . "/MIRROR/TWIKI/",
     },
 };
 
