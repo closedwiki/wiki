@@ -123,7 +123,7 @@ __HTML__
     }
     print releasesCatalogue({ list => [ @releases ], title => 'TWiki Kernel', type => 'twiki', cgi => $q });
 
-    print catalogue({ dir => "tmp/install/downloads/contribs/", xml => "contrib.xml", title => "Contrib", type => "contrib", cgi => $q });
+    print catalogue({ dir => "tmp/install/downloads/contribs/", xml => "contribs.xml", title => "Contribs", type => "contrib", cgi => $q });
     print catalogue({ dir => "tmp/install/downloads/plugins/", xml => "plugins.xml", title => "Plugins", type => "plugin", cgi => $q });
     print catalogue({ dir => "tmp/install/downloads/addons/", xml => "addons.xml", title => "AddOns", type => "addon", cgi => $q });
 #    print catalogue({ dir => "tmp/install/downloads/skins/", xml => "skins.xml", title => "Skins", type => "skin", cgi => $q });
@@ -252,7 +252,7 @@ execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt,v $dest/data/TWiki/TWikiR
 # install contrib
 
 print "<h2>Contrib</h2>\n";
-my $xmlContrib = $xs->XMLin( "tmp/install/downloads/contribs/contrib.xml", ForceArray => [ 'contrib' ] ) or warn "No contrib catalogue: $!";
+my $xmlContrib = $xs->XMLin( "tmp/install/downloads/contribs/contribs.xml", ForceArray => [ 'contrib' ] ) or warn "No contribs catalogue: $!";
 my %hContrib = map { $_->{name}, $_ } @{$xmlContrib->{contrib}};
 foreach my $contribID ( $q->param('contrib') )
 {
