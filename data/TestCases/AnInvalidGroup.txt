@@ -1,0 +1,6 @@
+%META:TOPICINFO{author="guest" date="1101115552" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="TestCaseAllowTopicView"}%
+
+	* Set GROUP = 
+
+-- Main.TWikiGuest - 22 Nov 2004
