@@ -2161,6 +2161,9 @@ sub getRenderedVersion
 # Make internal links
             # '[[Web.odd wiki word#anchor][display text]]' link:
             s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&specificLink("",$theWeb,$theTopic,$2,$1)/geo;
+            # RD 25 Mar 02: Codev.EasierExternalLinking
+            # '[[URL#anchor display text]]' link:
+            s/\[\[([a-z]+\:\S+)\s+(.*?)\]\]/&specificLink("",$theWeb,$theTopic,$2,$1)/geo;
             # '[[Web.odd wiki word#anchor]]' link:
             s/\[\[([^\]]+)\]\]/&specificLink("",$theWeb,$theTopic,$1,$1)/geo;
 
