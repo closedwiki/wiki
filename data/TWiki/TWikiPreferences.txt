@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1030052940" format="1.0" version="1.39"}%
+%META:TOPICINFO{author="PeterThoeny" date="1030259166" format="1.0" version="1.40"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %MAINWEB%.%USERNAME%). 
@@ -198,7 +198,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set NEWTOPICFONTCOLOR = #0000FF
 
 	* %TWIKIWEB%.PreviewBackground image:
-		* Set PREVIEWBGIMAGE = %PUBURLPATH%/%TWIKIWEB%/PreviewBackground/previewbg.gif
+		* Set PREVIEWBGIMAGE = %PUBURLPATH%/%TWIKIWEB%/PreviewBackground/preview2bg.gif
 
 
 ---++ Access Control Settings
