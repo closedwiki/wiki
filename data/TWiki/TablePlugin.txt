@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1051945822" format="1.0" version="1.17"}%
+%META:TOPICINFO{author="PeterThoeny" date="1053833520" format="1.0" version="1.18"}%
 ---+ Table Plugin
 
 Gives extra control of table display:
@@ -48,23 +48,25 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =TABLEATTRIBUTES= preferences setting, or on line before the table using =%<nop>TABLE{...}%=:
 
 | *Argument* | *Comment* | *Example* |
-| =sort=	  | Set table sorting =on= or =off= | =sort="on"= |
-| =initsort= | Column to sort initially (1 to number of columns) | =initsort="2"= |
-| =initdirection= | Initial sorting direction for =initsort=, set to  =up= or =down= | =initdirection="up"= |
+| =sort=	  | Set table sorting ="on"= or ="off"= | =sort="on"= |
+| =initsort= | Column to sort initially (="1"= to number of columns) | =initsort="2"= |
+| =initdirection= | Initial sorting direction for =initsort=, set to  ="up"= or ="down"= | =initdirection="up"= |
 | =headerbg= | Header cell background colour. Choose one of the %TWIKIWEB%.StandardColors | =headerbg="#99CCCC"= |
 | =headercolor= | Header cell text colour | =headercolor="#0000CC"= |
 | =databg=	| Data cell background colour, a comma separated list. Specify ="none"= for no colour, that is to use the colour/background of the page the table is on. | =databg="#C8CB8F, #DBDDB5"= |
 | =datacolor= | Data cell text colour, a comma separated list | =datacolor="#0000CC, #000000"= |
 | =tableborder= | Table border width (pixels) | =tableborder="2"= |
+| =tableframe= | Table frame, set to ="void"= (no sides), ="above"= (the top side only), ="below"= (the bottom side only), ="hsides"= (the top and bottom sides only), ="lhs"= (the left-hand side only), ="rhs"= (the right-hand side only), ="vsides"= (the right and left sides only), ="box"= (all four sides), ="border"= (all four sides); default ="void"= | =tableframe="hsides"= |
+| =tablerules= | Table rules, set to ="none"= (no rules), ="groups"= (rules will appear between row groups and column groups only), ="rows"= (rules will appear between rows only), ="cols"= (rules will appear between columns only), ="all"= (rules will appear between all rows and columns); default ="none"= | =tablerules="rows"= |		  
 | =cellpadding= | Cell padding (pixels) | =cellpadding="0"= |
 | =cellspacing= | Cell spacing (pixels) | =cellspacing="3"= |
-| =valign= | Vertical alignment of cells, set to =top=, =middle=, =bottom= or =baseline= | =valign="top"= |
-| =headeralign= | Header cell alignment, set to =left=, =center=, =right= or =justify=. Overrides individual cell settings | =headeralign="left"= |
-| =dataalign= | Data cell alignment, set to =left=, =center=, =right= or =justify=. Overrides individual cell settings | =dataalign="center"= |
+| =valign= | Vertical alignment of cells, set to ="top"=, ="middle"=, ="bottom"= or ="baseline"= | =valign="top"= |
+| =headeralign= | Header cell alignment, one value for all columns, or a comma separated list for different alignment of individual columns. Set to ="left"=, ="center"=, ="right"= or ="justify"=. Overrides individual cell settings | =headeralign="left, right"= |
+| =dataalign= | Data cell alignment, one value for all columns, or a comma separated list for different alignment of individual columns. Set to ="left"=, ="center"=, ="right"= or ="justify"=. Overrides individual cell settings | =dataalign="center"= |
 | =tablewidth= | Table width: Percentage of window width, or absolute pixel value. Default is unspecified | =tablewidth="100%"= |
 | =columnwidths= | Column widths: Comma delimited list of column widths, percentage or absolute pixel value. Default is unspecified | =columnwidths="80%, 20%"= |
-| =headerrows= | Number of header rows to exclude from sort; default 1 | =headerrows="1"= |
-| =footerrows= | Number of footer rows to exclude from sort; default 0 | =footerrows="1"= |
+| =headerrows= | Number of header rows to exclude from sort; default ="1"= | =headerrows="1"= |
+| =footerrows= | Number of footer rows to exclude from sort; default ="0"= | =footerrows="1"= |
 
 The =%<nop>TABLE{...}%= settings override =TABLEATTRIBUTES= preferences settings, which override the =TABLEATTRIBUTES= Plugin settings. 
 
@@ -102,10 +104,11 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 ---++ Plugin Info
 
 |  Plugin Author: | %TWIKIWEB%.JohnTalintyre, %TWIKIWEB%.PeterThoeny |
-|  Plugin Version: | 17 Dec 2002 |
+|  Plugin Version: | 24 May 2003 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  24 May 2003: | PTh: New =&#124;^&#124;= rule for multi row span (TWiki:Main/WalterMundt); added tableframe and tablerules (TWiki:Main/JohannesMartin); ignore columnwidths for multi column span; validate headerrows and footerrows (TWiki:Main/DarrylGreen) |
 |  17 Dec 2002: | PTh: Removed individual table Plugin settings; added TABLEATTRIBUTES Plugins setting and TABLEATTRIBUTES preferences setting |
-|  15 Dec 2002: | PTh: Added headerrows and footerrows params (TWiki:Main/WoutMertens); added tablewidth and columnwidths params (TWiki:Main/ThorstenSommermann) |
+|  15 Dec 2002: | PTh: Added headerrows and footerrows params (TWiki:Main/DarrylGreen, TWiki:Main/WoutMertens); added tablewidth and columnwidths params (TWiki:Main/ThorstenSommermann) |
 |  09 Dec 2002: | PTh: Added headercolor and datacolor parameters |
 |  05 Jun 2002: | PTh: Added "none" value to databg parameter (suggested by TWiki:Main/TaitCyrus); fixed sorting by stripping HTML tags, removing links and making sort ignore case (suggested by TWiki:Main/ShawnBradford) |
 |  13 Mar 2002: | PTh: Added TWiki:Main/ShawnBradford 's initsort and initdirection |
@@ -124,7 +127,7 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.StandardColors
 
 -- %TWIKIWEB%.JohnTalintyre - 07 Oct 2001 <br />
--- %TWIKIWEB%.PeterThoeny - 17 Dec 2002 <br />
+-- %TWIKIWEB%.PeterThoeny - 24 May 2003 <br />
 %META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1005707580" path="C:\Data\Temp\up.gif" size="876" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1005707591" path="C:\Data\Temp\down.gif" size="869" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1005707607" path="C:\Data\Temp\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
