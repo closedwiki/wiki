@@ -1,9 +1,8 @@
-%META:TOPICINFO{author="PeterThoeny" date="1006317493" format="1.0" version="1.52"}%
-<font size="+3"> *TWiki History: The Dev Timeline* </font>
-
+%META:TOPICINFO{author="MikeMannix" date="1007362357" format="1.0" version="1.53"}%
+<H1>Appendix C: TWiki Development Timeline</H1>
 %TOC%
 
----++ Work-in-progress
+---++ 01-Dec-2001 Release (Athens)
 
 	* *25 Oct 2001* - PeterThoeny
 		* Added FormattedSearch to =%<nop>SEARCH{}%= variable for database like reporting.
@@ -261,4 +260,8 @@ The typical TWiki development flow...
 	* TWiki:Codev/TWikiPlannedFeatures: accepted for future development
 	* TWiki:Codev/FeatureToDo: prioritized to up-next dev status
 	* TWiki:Codev/FeatureUnderConstruction: currently in development
+	* TWiki:Codev/FeatureDone: completed and implemented
+	* TWiki:Codev/DocRequest: request for documentation
+	* TWiki:Codev/DocsToDo: feature documentation pending
+	* TWiki:Codev/FeatureDocumented: documented feature
 	* TWikiDocumentation: reference manual for the latest TWiki
