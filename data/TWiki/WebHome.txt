@@ -1,6 +1,7 @@
+%META:TOPICINFO{author="PeterThoeny" date="995354194" format="1.0beta2" version="1.13"}%
 <table><tr><td>
 Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about the tool.</td><td>
-<a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
+<a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
 </td><td>
 <b>The TWiki <sup>TM</sup> home is <br> at http://TWiki.org/ </b>
 </td></tr>
@@ -35,16 +36,16 @@ Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management t
 			1 TWikiPlugins
 			1 TWikiAdministration tells you how to rename or delete a topic or web.
 
-<FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
 	* WebSearch: Full text search of the %WIKITOOLNAME%.%WEB% web.
-	* <INPUT type="text" name="search" size="32"> <INPUT type="submit" value="Search"> &nbsp;&nbsp; (More options in WebSearch)
-	* WebChanges: Find out recent changes of the %WIKITOOLNAME%.%WEB% web.
+	* <input type="text" name="search" size="32" /> <input type="submit" value="Search" /> &nbsp;&nbsp; (More options in WebSearch)
+	* WebChanges: Find out recent modifications to the %WIKITOOLNAME%.%WEB% web.
 	* WebIndex: Display all %WIKITOOLNAME%.%WEB% topics in alphabetical order.
 	* %NOTIFYTOPIC%: Subscribe to be automatically notified when something changes in the %WIKITOOLNAME%.%WEB% web.
 	* %STATISTICSTOPIC%: View access statistics of the %WIKITOOLNAME%.%WEB% web.
 	* %WEBPREFSTOPIC%: Preferences of the %WIKITOOLNAME%.%WEB% web.
 	* %WIKIPREFSTOPIC%: %WIKITOOLNAME% site-level preferences .
-</FORM>
+</form>
 
 *Notes:*
 	* You are currently in the %WIKITOOLNAME%.%WEB% web. The color code for this web is a light orange background, so you know where you are.
