@@ -487,6 +487,7 @@ sub makeTopicSummary
     $htext =~ s/%WEB%/$theWeb/go;      # resolve web
     $htext =~ s/%TOPIC%/$theTopic/go;  # resolve topic
     $htext =~ s/%WIKITOOLNAME%/$wikiToolName/go; # resolve TWiki tool name
+    $htext =~ s/%META:.*?%//go;        # Remove meta data variables
     $htext =~ s/[\%\[\]\*\|=_]/ /go;   # remove Wiki formatting chars & defuse %VARS%
     $htext =~ s/\-\-\-+\+*/ /go;       # remove heading formatting
     $htext =~ s/\s+[\+\-]*/ /go;       # remove newlines and special chars
@@ -627,12 +628,13 @@ sub handleSearchWeb
     my $attrBookview      = extractNameValuePair( $attributes, "bookview" );
     my $attrRenameview    = extractNameValuePair( $attributes, "renameview" );
     my $attrShowlock      = extractNameValuePair( $attributes, "showlock" );
+    my $attrNoEmpty       = extractNameValuePair( $attributes, "noempty" );
 
     return &TWiki::Search::searchWeb( "1", $attrWeb, $searchVal, $attrScope,
        $attrOrder, $attrRegex, $attrLimit, $attrReverse,
        $attrCasesensitive, $attrNosummary, $attrNosearch,
        $attrNoheader, $attrNototal, $attrBookview, $attrRenameview,
-       $attrShowlock
+       $attrShowlock, $attrNoEmpty
     );
 }
 
@@ -938,8 +940,8 @@ sub renderMetaData
     
     my $text = "$attachmentText\n$movedText";
     
-    my $text = getRenderedVersion( $text, $web );
-    my $text = handleCommonTags( $text, $topic, $web );
+    $text = getRenderedVersion( $text, $web );
+    $text = handleCommonTags( $text, $topic, $web );
     
     return $text;
 }
@@ -982,7 +984,7 @@ sub emitTR {
     $theRow =~ s/(\|\|+)/$TranslationToken . length($1) . "\|"/geo;  # calc COLSPAN
     foreach( split( /\|/, $theRow ) ) {
         $attr = "";
-        s/$TranslationToken([0-9]+)//o;
+        s/$TranslationToken([0-9]+)//; # No o flag for mod-perl compatibility
         $attr = " colspan=\"$1\"" if $1 && $1 > 0;
         s/^\s$/ &nbsp; /o;
         /^(\s*).*?(\s*)$/;
