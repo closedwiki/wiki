@@ -32,11 +32,11 @@ use TWiki::UI;
 #TODO: this needs to be exposed to plugins and whoever might want to over-ride the rendering of diffs
 #Hash, indexed by diffType (+,-,c,u,l.....)
 #contains {colour, CssClassName}
-my %diffColours = ( "+" => [ "#ccccff", "TWikiDiffAddedMarker"],
-                    "-" => [ "#ff9999", "TWikiDiffDeletedMarker"],
-                    "c" => [ "#99ff99", "TWikiDiffChangedText"],
-                    "u" => [ "#ffffff", "TWikiDiffUnchangedText"],
-                    "l" => [ "#eeeeee", "TWikiDiffLineNumberHeader"] );
+my %diffColours = ( "+" => [ "#ccccff", "twikiDiffAddedMarker"],
+                    "-" => [ "#ff9999", "twikiDiffDeletedMarker"],
+                    "c" => [ "#99ff99", "twikiDiffChangedText"],
+                    "u" => [ "#ffffff", "twikiDiffUnchangedText"],
+                    "l" => [ "#eeeeee", "twikiDiffLineNumberHeader"] );
 
 #SVEN - new design.
 #main gets the info (NO MAJOR CHANGES NEEDED)
@@ -203,35 +203,35 @@ sub _renderSequential
 
 #note: I have made the colspan 9 to make sure that it spans all columns (thought there are only 2 now)
   if ( $diffType eq "-") {
-    $result .= qq(<tr><td bgcolor="#FFD7D7" class="TWikiDiffDeletedHeader" colspan ="9"><b> Deleted: </b>\n</td></tr>\n);
+    $result .= qq(<tr><td bgcolor="#FFD7D7" class="twikiDiffDeletedHeader" colspan ="9"><b> Deleted: </b>\n</td></tr>\n);
     $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top" width="1%">&lt;<br />&lt;</td>\n);
-    $result .= qq(<td class="TWikiDiffDeletedText">\n);
+    $result .= qq(<td class="twikiDiffDeletedText">\n);
     $result .= _renderCellData( $left, $topic );
     $result .= qq(\n</td></tr>\n);
   } elsif ( $diffType eq "+") {
-    $result .= qq(<tr><td bgcolor="#D0FFD0" class="TWikiDiffAddedHeader" colspan ="9"><b> Added:   </b>\n</td></tr>\n);
+    $result .= qq(<tr><td bgcolor="#D0FFD0" class="twikiDiffAddedHeader" colspan ="9"><b> Added:   </b>\n</td></tr>\n);
     $result .= qq(<tr><td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top" width="1%">&gt;<br />&gt;</td>\n);
-    $result .= qq(<td class="TWikiDiffAddedText">\n);
+    $result .= qq(<td class="twikiDiffAddedText">\n);
     $result .= _renderCellData( $right, $topic );
     $result .= qq(\n</td></tr>\n);
   } elsif ( $diffType eq "u") {
     $result .= qq(<tr><td valign="top" bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" width="1%"><br /></td>\n);
-    $result .= qq(<td class="TWikiDiffUnchangedText">\n);
+    $result .= qq(<td class="twikiDiffUnchangedText">\n);
     $result .= _renderCellData( $right, $topic );
     $result .= qq(\n</td></tr>\n);
   } elsif ( $diffType eq "c") {
-    $result .= qq(<tr><td bgcolor="#D0FFD0" class="TWikiDiffChangedHeader" colspan ="9"><b> Changed: </b></td></tr>\n);
+    $result .= qq(<tr><td bgcolor="#D0FFD0" class="twikiDiffChangedHeader" colspan ="9"><b> Changed: </b></td></tr>\n);
     $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top" width="1%">&lt;<br />&lt;</td>\n);
-    $result .= qq(<td class="TWikiDiffDeletedText">\n);
+    $result .= qq(<td class="twikiDiffDeletedText">\n);
     $result .= _renderCellData( $left, $topic );
     $result .= qq(\n</td></tr>\n);
     $result .= qq(<tr><td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top" width="1%">&gt;<br />&gt;</td>\n);
-    $result .= qq(<td class="TWikiDiffAddedText">\n);
+    $result .= qq(<td class="twikiDiffAddedText">\n);
     $result .= _renderCellData( $right, $topic );
     $result .= qq(\n</td></tr>\n);
   } elsif ( $diffType eq "l") {
     if (( $left ne "" ) && ($right ne "" )) {
-      $result .= qq(<tr bgcolor="$diffColours{"l"}[0]" class="TWikiDiffLineNumberHeader"><th align="left" colspan="9">Line: $left to $right</th></tr>\n);
+      $result .= qq(<tr bgcolor="$diffColours{"l"}[0]" class="twikiDiffLineNumberHeader"><th align="left" colspan="9">Line: $left to $right</th></tr>\n);
     }
   }
 
@@ -267,7 +267,7 @@ sub _renderRevisionDiff
 	}
 	my $diffArray_ref = \@diffArray;
 
-    my $result = "<table class=\"TWikiDiffTable\" width=\"100%\" cellspacing=\"0\">\n";
+    my $result = "<table class=\"twikiDiffTable\" width=\"100%\" cellspacing=\"0\">\n";
     my $data = "";
     my $diff_ref = undef;
     for my $next_ref ( @$diffArray_ref ) {
