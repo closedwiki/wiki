@@ -20,6 +20,6 @@ use lib ( '../lib' );
 use TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
 
 my $attrs = join( ',', @ARGV );
-ActionTrackerPlugin::ActionNotify::actionNotify( $attrs );
+TWiki::Plugins::ActionTrackerPlugin::ActionNotify::actionNotify( $attrs );
 
 1;

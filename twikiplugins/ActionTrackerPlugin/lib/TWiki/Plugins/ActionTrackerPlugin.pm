@@ -32,7 +32,7 @@ use vars qw(
 	    $pluginName $defaultFormat $calendarIncludes
 	   );
 
-$VERSION = 2.012;
+$VERSION = 2.013;
 $initialised = 0;
 $pluginName = "ActionTrackerPlugin";
 $installWeb = "TWiki";
@@ -375,90 +375,100 @@ sub afterEditHandler {
 
 # Process the actions and add UIDs and other missing attributes
 sub beforeSaveHandler {
-### my ( $text, $topic, $web ) = @_;
+    ### my ( $text, $topic, $web ) = @_;
 
     if ( !$initialised ) {
         return unless _lazyInit();
     }
 
-  my $query = TWiki::Func::getCgiQuery();
-  return unless ( $query ); # Fix from GarethEdwards 13 Jun 2003
+    my $query = TWiki::Func::getCgiQuery();
+    return unless ( $query ); # Fix from GarethEdwards 13 Jun 2003
 
-  if ( $query->param( 'closeactioneditor' )) {
-    # this is a save from the action editor
-    # Strip pre and post metadata from the text
-    my $topic = $_[1];
-    my $web = $_[2];
-    my $premeta = "";
-    my $postmeta = "";
-    my $inpost = 0;
-    my $text = "";
-    foreach my $line ( split( /\r?\n/, $_[0] ) ) {
-      if( $line =~ /^(%META:[^{]+{[^}]*}%)/ ) {
-	if ( $inpost) {
-	  $postmeta .= "$1\n";
-	} else {
-	  $premeta .= "$1\n";
-	}
-      } else {
-	$text .= "$line\n";
-	$inpost = 1;
-      }
+    if ( $query->param( 'closeactioneditor' )) {
+        # this is a save from the action editor
+        # Strip pre and post metadata from the text
+        my $topic = $_[1];
+        my $web = $_[2];
+        my $premeta = "";
+        my $postmeta = "";
+        my $inpost = 0;
+        my $text = "";
+        foreach my $line ( split( /\r?\n/, $_[0] ) ) {
+            if( $line =~ /^%META:[^{]+{[^}]*}%/ ) {
+                if ( $inpost) {
+                    $postmeta .= "$line\n";
+                } else {
+                    $premeta .= "$line\n";
+                }
+            } else {
+                $text .= "$line\n";
+                $inpost = 1;
+            }
+        }
+        # compose the text
+        afterEditHandler( $text, $topic, $web );
+        # reattach the metadata
+        $_[0] = $premeta . $text . $postmeta;
+    } else {
+        # take the opportunity to fill in the missing fields in actions
+        _addMissingAttributes( $_[0], $_[1], $_[2] );
     }
-    # compose the text
-    afterEditHandler( $text, $topic, $web );
-    # reattach the metadata
-    $_[0] = $premeta . $text . $postmeta;
-  } else {
-    # take the opportunity to fill in the missing fields in actions
-    _addMissingAttributes( $_[0], $_[1], $_[2] );
-  }
 }
 
 # PRIVATE Add missing attributes to all actions that don't have them
 sub _addMissingAttributes {
-  #my ( $text, $topic, $web ) = @_;
-  my $text = "";
-  my $descr;
-  my $attrs;
-  my $gathering;
-  my $processAction = 0;
-  my $an = 0;
+    #my ( $text, $topic, $web ) = @_;
+    my $text = "";
+    my $descr;
+    my $attrs;
+    my $gathering;
+    my $processAction = 0;
+    my $an = 0;
+    my %seenUID;
 
-  # FORMAT DEPENDANT ACTION SCAN
-  foreach my $line ( split( /\r?\n/, $_[0] )) {
-    if ( $gathering ) {
-      if ( $line =~ m/^$gathering\b.*/ ) {
-	$gathering = undef;
-	$processAction = 1;
-      } else {
-	$descr .= "$line\n";
-	next;
-      }
-    } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)$/o ) {
-      $text .= $1;
-      $attrs = $2;
-      $descr = $3;
-      if ( $descr =~ m/\s*\<\<(\w+)\s*(.*)$/o ) {
-          $descr = $2;
-	  $gathering = $1;
-	  next;
-      }
-      $processAction = 1;
-    } else {
-      $text .= "$line\n";
-    }
+    # FORMAT DEPENDANT ACTION SCAN
+    foreach my $line ( split( /\r?\n/, $_[0] )) {
+        if ( $gathering ) {
+            if ( $line =~ m/^$gathering\b.*/ ) {
+                $gathering = undef;
+                $processAction = 1;
+            } else {
+                $descr .= "$line\n";
+                next;
+            }
+        } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)$/o ) {
+            $text .= $1;
+            $attrs = $2;
+            $descr = $3;
+            if ( $descr =~ m/\s*\<\<(\w+)\s*(.*)$/o ) {
+                $descr = $2;
+                $gathering = $1;
+                next;
+            }
+            $processAction = 1;
+        } else {
+            $text .= "$line\n";
+        }
 
-    if ( $processAction ) {
-      my $action = new TWiki::Plugins::ActionTrackerPlugin::Action( $web, $topic,
-						    $an, $attrs, $descr );
-      $action->populateMissingFields();
-      $text .= $action->toString() . "\n";
-      $an++;
-      $processAction = 0;
+        if ( $processAction ) {
+            my $action = new TWiki::Plugins::ActionTrackerPlugin::Action
+              ( $web, $topic, $an, $attrs, $descr );
+            $action->populateMissingFields();
+            if ( $seenUID{$action->{uid}} ) {
+                # This can happen if there has been a careless
+                # cut and paste. In this case, the first instance
+                # of the action gets the old UID. This may banjax
+                # change notification, but it's better than the
+                # alternative!
+                $action->{uid} = $action->getNewUID();
+            }
+            $seenUID{$action->{uid}} = 1;
+            $text .= $action->toString() . "\n";
+            $an++;
+            $processAction = 0;
+        }
     }
-  }
-  $_[0] = $text;
+    $_[0] = $text;
 }
 
 # Prefs handling
