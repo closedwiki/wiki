@@ -28,6 +28,8 @@
 
 package TWiki::Store;
 
+my $disableMeta = 0; #FIXME temporary
+
 use File::Copy;
 
 use strict;
@@ -36,6 +38,19 @@ use strict;
 ##        $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
 ##        $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd
 ##);
+
+# ===========================
+sub _traceExec
+{
+   my( $cmd, $result ) = @_;
+   
+   TWiki::writeDebug( "Store exec: $cmd -> $result" );
+}
+
+sub writeDebug
+{
+   TWiki::writeDebug( "Store: $_[0]" );
+}
 
 
 # =========================
@@ -61,6 +76,9 @@ sub getFileName
       $attachment = "";
    }
    
+   if( ! $extension ) {
+      $extension = "";
+   }
  
    # FIXME this is too messy and $extension should be replaced with type e.g. DATA,
    # HISTORY, LOCK etc
@@ -169,7 +187,7 @@ sub erase
    }
    
    # Delete any attachment history
-   my $attDir = getFileDir( $web, $topic, 1, ",v" );
+   $attDir = getFileDir( $web, $topic, 1, ",v" );
    if ( -e $attDir ) {
        opendir( DIR, $attDir );
        my @attachments = readdir( DIR );
@@ -243,7 +261,6 @@ sub moveAttachment
     
     # Add file attachment to new topic
     $text = readWebTopic( $newWeb, $newTopic );
-    my $hideFile = "";
     # FIXME doesn't deal with delete flag
     my $hideFile = $fileAttr;
     # FIXME concentrate TWikiAttachment code in one place
@@ -273,7 +290,7 @@ sub renameTopic
    
    my $error = "";
 
-   #!!!check lock
+   #FIXME check lock - responsibility of caller?
    
    # Change data file
    my $from = getFileName( $oldWeb, $oldTopic );
@@ -282,17 +299,30 @@ sub renameTopic
        $error .= "data file move failed.  ";
    }
 
-   # Remove lock file
-   lockTopicNew( $oldWeb, $oldTopic, 1 );
-   
    # Change data file history
-   if( ! move(
-     getFileName( $oldWeb, $oldTopic, "", ",v" ),
-     getFileName( $newWeb, $newTopic, "", ",v" )
-   ) ) {
-      $error .= "history file move failed.  ";
+   my $oldHistory = getFileName( $oldWeb, $oldTopic, "", ",v" );
+   if( -e $oldHistory ) {
+       if( ! move(
+         $oldHistory,
+         getFileName( $newWeb, $newTopic, "", ",v" )
+       ) ) {
+          $error .= "history file move failed.  ";
+       }
    }
    
+   if( ! $error ) {
+      my $time = time();
+      my $user = &TWiki::getWikiUserTopic();
+      my @args = (
+         "from" => "$oldWeb.$oldTopic",
+         "to"   => "$newWeb.$newTopic",
+         "date" => "$time",
+         "by"   => "$user" );
+      my( $text, @meta ) = readWebTopicNew( $newWeb, $newTopic );
+      @meta = metaUpdate( "TOPICMOVED", \@args, "", @meta );
+      saveNew( $newWeb, $newTopic, $text, \@meta, "", "", "", "unlock" );
+   }
+
    # Rename the attachment directory if there is one
    my $oldAttachDir = getFileDir( $oldWeb, $oldTopic, 1, "");
    my $newAttachDir = getFileDir( $newWeb, $newTopic, 1, "");
@@ -308,6 +338,9 @@ sub renameTopic
       writeLog( "rename", "$oldWeb.$oldTopic", "moved to $newWeb.$newTopic" );
    }
    
+   # Remove old lock file
+   lockTopicNew( $oldWeb, $oldTopic, 1 );
+   
    return $error;
 }
 
@@ -317,14 +350,30 @@ sub renameTopic
 # view:	    $text= &TWiki::Store::readVersion( $topic, "1.$rev" );
 sub readVersion
 {
-    my( $theTopic, $theRev ) = @_;
+    my( $theWeb, $theTopic, $theRev ) = @_;
+    my $text = _readVersionNoMeta( $theWeb, $theTopic, $theRev );
+    my @meta = ();
+   
+    ($text, @meta) = _extractMetaData( $text );
+        
+    return( $text, @meta );
+}
+
+# =========================
+# Read a specific version of a topic
+# view:     $text= &TWiki::Store::readVersion( $topic, "1.$rev" );
+sub _readVersionNoMeta
+{
+    my( $theWeb, $theTopic, $theRev ) = @_;
     my $tmp= $TWiki::revCoCmd;
-    my $fileName = "$TWiki::dataDir/$TWiki::webName/$theTopic.txt";
+    my $fileName = "$TWiki::dataDir/$theWeb/$theTopic.txt";
     $tmp =~ s/%FILENAME%/$fileName/;
     $tmp =~ s/%REVISION%/$theRev/;
     $tmp =~ /(.*)/;
     $tmp = $1;       # now safe, so untaint variable
-    return `$tmp`;
+    my $text = `$tmp`;
+
+    return $text;
 }
 
 # =========================
@@ -416,12 +465,14 @@ sub getRevisionDiff
 
     my $tmp= "";
     if ( $rev1 eq "1.1" && $rev2 eq "1.1" ) {
-        my $text = readVersion($topic, 1.1);    # bug fix 19 Feb 1999
+        my( $text, @meta ) = readVersion($topic, 1.1);    # bug fix 19 Feb 1999
+        $text = TWiki::renderMetaData( $TWiki::webName, $topic, \@meta );
         $tmp = "1a1\n";
         foreach( split( /\n/, $text ) ) {
            $tmp = "$tmp> $_\n";
         }
     } else {
+        # FIXME - this will not look very good as meta data not rendered
         $tmp= $TWiki::revDiffCmd;
         $tmp =~ s/%REVISION1%/$rev1/;
         $tmp =~ s/%REVISION2%/$rev2/;
@@ -474,10 +525,10 @@ sub getRevisionInfoNew
     my $rcsFile = getFileName( $theWebName, $theTopic, $attachment, ",v" );
     $tmp =~ s/%FILENAME%/$rcsFile/;
     # FIXME - do elsewhere for rlog call.
-    TWiki::writeDebug( "Store: revInfo; rcsfile = $rcsFile" );
-    TWiki::writeDebug( "Store: revcmd = $tmp" );
     if ( -e $rcsFile ) {
+       my $cmd = $tmp;
        $tmp = `$tmp`;
+       _traceExec( $cmd, $tmp );
     } else {
        $tmp = "";
     }
@@ -485,12 +536,22 @@ sub getRevisionInfoNew
     my $date = $1;
     my $user = $2;
     my $comment = $3;
-    ## TWiki::writeDebug( "Store: rlog output = \n$tmp\n  ########################### comment=$comment" );
     $tmp =~ /revision 1.([0-9]*)/;
     my $rev = $1;
+    writeDebug( "rev = $rev" );
+    
+    return _tidyRevInfo( $theWebName, $theTopic, $date, $user, $rev, $comment, $changeToIsoDate );
+}
+
+sub _tidyRevInfo
+{
+    my( $web, $topic, $date, $user, $rev, $comment, $changeToIsoDate ) = @_;
+    
     if( ! $user ) {
+        writeDebug( "no user" );
         # repository file is missing or corrupt, use file timestamp
         $user = $TWiki::defaultUserName;
+        my $fileName = getFileName( $web, $topic );
         $date = (stat "$fileName")[9] || 600000000;
         my @arr = gmtime( $date );
         # format to RCS date "2000.12.31.23.59.59"
@@ -500,7 +561,7 @@ sub getRevisionInfoNew
     }
     if( $changeToIsoDate ) {
         # change date to ISO format
-        $tmp = $date;
+        my $tmp = $date;
         # try "2000.12.31.23.59.59" format
         $tmp =~ /(.*?)\.(.*?)\.(.*?)\.(.*?)\.(.*?)\.[0-9]/;
         if( $5 ) {
@@ -512,8 +573,9 @@ sub getRevisionInfoNew
                 $date = "$3 $TWiki::isoMonth[$2-1] $1 - $4";
             }
         }
-    }
-    return ( $date, $user, $rev, $comment );
+    }  
+    
+    return( $date, $user, $rev, $comment );
 }
 
 
@@ -543,6 +605,140 @@ sub topicIsLockedBy
     return( "", 0 );
 }
 
+
+# ============================
+# Replace all of a meta data item
+# e.g. 
+# @args = ( "author" => "JohnTalintyre" );
+# metaUpdate( "FILEATTACHMENT", \@args, "name", @meta);
+# If ! $identifierKey then existing entry for this tag replaced i.e. for single entry macro such as META:TOPIC
+sub metaUpdate
+{
+    my( $metaDataType, $args, $identifierKey, @meta ) = @_;
+    
+    my @argsList = @$args;
+    my $identifier = "";
+    
+    if( $disableMeta ) {
+       return;
+    }
+    
+    my $metaDataArgs = "";
+    my $sep = "";
+    while( @argsList ) {
+       my $key = shift @argsList;
+       my $value = shift @argsList;
+       if ( $identifierKey && $identifierKey eq $key ) {
+           $identifier = "$key=\"$value\"";
+       }
+       $metaDataArgs .= "$sep$key=\"$value\"";
+       $sep = " ";
+    }
+    
+    @meta = grep( !/^%META:$metaDataType\{$identifier/, @meta );
+
+    push @meta, "%META:$metaDataType\{$metaDataArgs}%";
+    return sort @meta;
+}
+
+# ============================
+# Replace only those attributes supplied
+# e.g. 
+# @args = ( "author" => "JohnTalintyre" );
+# metaUpdate( "FILEATTACHMENT", \@args, "name", @meta);
+# If ! $identifierKey then existing entry for this tag replaced i.e. for single entry macro such as META:TOPIC
+# FIXME should this replace metaUpdate?
+sub metaUpdatePartial
+{
+    my( $metaDataType, $args, $identifierKey, @meta ) = @_;
+    
+    my $identifier = "";
+    
+    if( $disableMeta ) {
+       return;
+    }
+    
+    my @match = grep( /^%META:$metaDataType\{$identifier/, @meta );
+    my $oldItem = "";
+    if( @match ) {
+       $oldItem = shift @match;
+       $oldItem =~ /%META:$metaDataType\{([^}]*)}/;
+       $oldItem = $1;
+    }
+    
+    my @oldArgs = keyValue2list( $oldItem );
+    my %newArgs = @$args;
+    
+    my $metaDataArgs = "";
+    my $sep = "";
+    while( @oldArgs ) {
+       my $key = shift @oldArgs;
+       my $value = shift @oldArgs;
+       if( exists $newArgs{$key} ) {
+          $value = $newArgs{$key};
+       }
+       if ( $identifierKey && $identifierKey eq $key ) {
+           $identifier = "$key=\"$value\"";
+       }
+       $metaDataArgs .= "$sep$key=\"$value\"";
+       $sep = " ";
+    }
+    
+    @meta = grep( !/^%META:$metaDataType\{$identifier/, @meta );
+
+    push @meta, "%META:$metaDataType\{$metaDataArgs}%";
+    return sort @meta;
+}
+
+# ======================
+sub keyValue2list
+{
+    my( $args ) = @_;
+    
+    my @items = split /\s/, $args;
+    
+    my @res = ();
+    
+    foreach my $item ( @items ) {
+        $item =~ /(.*)="([^"]*)"/;
+        push @res, $1;
+        push @res, $2;
+    }
+    
+    return @res;
+}
+
+
+
+# ========================
+sub metaAddTopicData
+{
+    my( $web, $topic, $rev, @meta ) = @_;
+    
+    my $time = time();
+    my $user = $TWiki::userName;
+    
+    # FIXME parent info is incorrect
+    
+    my @args = (
+       "parent" => $web,
+       "version" => "$rev",
+       "date"    => "$time",
+       "author"  => "$user",
+       "format"  => "1.0beta" );
+    @meta = metaUpdate( "TOPICINFO", \@args, "", @meta );
+    
+    return @meta;
+}
+
+
+# =========================
+sub saveTopicNew
+{
+    my( $web, $topic, $text, $metaData, $saveCmd, $doUnlock, $dontNotify, $dontLogSave ) = @_;
+    my $attachment = "";
+    saveNew( $web, $topic, $text, $metaData, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify );
+}
 
 # =========================
 sub saveTopic
@@ -598,16 +794,63 @@ sub isBinary
 }
 
 
-# =========================
-# return non-null string if there is an (RCS) error.
 sub save
 {
     my( $web, $topic, $text, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment ) = @_;
+    
+    # FIXME get rid of this routine
+    
+    my @meta = ();
+    
+    return saveNew( $web, $topic, $text, \@meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment );
+}
+
+
+# ========================
+sub _saveWithMeta
+{
+    my( $web, $topic, $text, $attachment, $doUnlock, $nextRev, @meta ) = @_;
+    
+    if( ! $attachment ) {
+        my $name = getFileName( $web, $topic, $attachment );
+        
+        if( ! $nextRev ) {
+            $nextRev = "1.1";
+        }
+
+        @meta = metaAddTopicData(  $web, $topic, $nextRev, @meta );
+        my $metaText = join "\n", @meta;
+        $text = "$metaText\n$text";
+    
+	# save file
+	saveFile( $name, $text );
+
+	# reset lock time, this is to prevent contention in case of a long edit session
+       lockTopicNew( $web, $topic, $doUnlock );
+    }
+
+    return( $text, @meta );
+}
+
+
+
+# =========================
+# return non-null string if there is an (RCS) error.
+sub saveNew
+{
+    my( $web, $topic, $text, $metaData, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment ) = @_;
     my $name = getFileName( $web, $topic, $attachment );
     my $dir  = getFileDir( $web, $topic, $attachment, "" );
     my $time = time();
     my $tmp = "";
     my $rcsError = "";
+    my @meta = @$metaData;
+    
+    my $currentRev = getRevisionNumberX( $web, $topic );
+    my $nextRev    = "";
+    if( ! $currentRev ) {
+        $nextRev = "1.1";
+    }
 
     if( $attachment ) {
        $dontLogSave = 1; # FIXME
@@ -641,34 +884,35 @@ sub save
             $mtime1 = $tmp10;
         }
 
-        if( ! $attachment ) {
-            # save file
-            ##&TWiki::writeDebug( "save: web: $web, name: $name, topic: $topic" );
-            saveFile( $name, $text );
-
-            # reset lock time, this is to prevent contention in case of a long edit session
-           lockTopicNew( $web, $topic, $doUnlock );
-        }
-
         # time stamp of existing file within one hour of old one?
         my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp8,$tmp9,
             $tmp10,$tmp11,$tmp12,$tmp13 ) = stat $name;
         $mtime2 = $tmp10;
         if( abs( $mtime2 - $mtime1 ) < $TWiki::editLockTime ) {
-            my $rev = getRevisionNumberNew( $web, $topic, $attachment );
+            my $rev = getRevisionNumberX( $web, $topic, $attachment );
             my( $date, $user ) = getRevisionInfoNew( $topic, $rev, "", $web, $attachment );
             # same user?
-            if( ( $TWiki::doKeepRevIfEditLock ) && ( $user eq $TWiki::userName ) ) {
+            if( ( $TWiki::doKeepRevIfEditLock ) && ( $user eq $TWiki::userName ) && $rev ) {
                 # replace last repository entry
                 $saveCmd = "repRev";
-                #!!!
                 if( $attachment ) {
-                   $saveCmd = "";
+                   $saveCmd = ""; # FIXME - correct?
                 }
             }
         }
+        
+        if( ! $nextRev ) {
+            # FIXME what if content hasn't changed?
+            writeDebug( "currentRev = $currentRev" );
+            $currentRev =~ /1\.([0-9]+)/;
+            my $num = $1;
+            $num++;
+            $nextRev = "1.$num";
+        }
 
         if( $saveCmd ne "repRev" ) {
+            ( $text, @meta ) = _saveWithMeta( $web, $topic, $text, $attachment, $doUnlock, $nextRev, @meta );
+
             # If attachment and RCS file doesn't exist, initialise
             if( $attachment ) {
                # Make sure directory for rcs history file exists
@@ -693,9 +937,8 @@ sub save
                   }
                   $tmp =~ /(.*)/;
                   $tmp = "$1 2>&1 1>$TWiki::nullDev";       # safe, so untaint variable
-                  ##&TWiki::writeDebug( "save: Init RCS file, $tmp" );
                   $rcsError = `$tmp`;
-                  TWiki::writeDebug( "Store::save initci $tmp\n   res = $rcsError");
+                  _traceExec( $tmp, $rcsError );
                   if( $rcsError ) { # oops, stderr was not empty, return error
                      $rcsError = "$tmp\n$rcsError";
                      return $rcsError;
@@ -717,12 +960,8 @@ sub save
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
             $tmp .= " 2>&1 1>$TWiki::nullDev";
-            TWiki::writeDebug( "Store: ci to rcs; $tmp" );
-            if( -e $name ) {
-               TWiki::writeDebug( "Store: source file $name exists" );
-            }
             $rcsError = `$tmp`; # capture stderr  (S.Knutson)
-            TWiki::writeDebug( "Store: rcsError post ci = $rcsError" );
+            _traceExec( $tmp, $rcsError );
             $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
             if( $rcsError ) { # oops, stderr was not empty, return error
                 $rcsError = "$tmp\n$rcsError";
@@ -755,10 +994,9 @@ sub save
     #### Replace Revision Save
     if( $saveCmd eq "repRev" ) {
         # fix topic by replacing last revision
-
-        # save file
-        saveFile( $name, $text );
-        lockTopic( $topic, $doUnlock );
+        
+        $nextRev = $currentRev;
+        ( $text, @meta ) = _saveWithMeta( $web, $topic, $text, $attachment, $doUnlock, $nextRev, @meta );
 
         # update repository with same userName and date, but do not update .changes
         my $rev = getRevisionNumberNew( $web, $topic, $attachment );
@@ -856,8 +1094,9 @@ sub save
         $tmp =~ s/%REVISION%/$rev/go;
         $tmp =~ s/%FILENAME%/$name $rcsFile/go;
         $tmp =~ /(.*)/;
-        $tmp = $1;       # safe, so untaint variable
-        $rcsError = `$tmp 2>&1 1>$TWiki::nullDev`; # capture stderr  (S.Knutson)
+        $tmp = "$1 2>&1 1>$TWiki::nullDev";       # safe, so untaint variable
+        $rcsError = `$tmp`; # capture stderr  (S.Knutson)
+        _traceExec( $tmp, $rcsError );
         $rcsError =~ s/^Warning\: missing newline.*//os; # forget warning
         if( $rcsError ) {   # oops, stderr was not empty, return error
             $rcsError = "$tmp\n$rcsError";
@@ -866,11 +1105,11 @@ sub save
 
         # restore last topic from repository
         $rev = getRevisionNumber( $topic );
-        $tmp = readVersion( $topic, $rev );
+        $tmp = _readVersionNoMeta( $topic, $rev );
         saveFile( $name, $tmp );
         lockTopic( $topic, $doUnlock );
 
-        # delete entry in .changes : To Do !
+        # delete entry in .changes : FIXME
 
         if( $TWiki::doLogTopicSave ) {
             # write log entry
@@ -909,6 +1148,7 @@ sub writeLog
 sub saveFile
 {
     my( $name, $text ) = @_;
+    
     open( FILE, ">$name" ) or warn "Can't create file $name\n";
     print FILE $text;
     close( FILE);
@@ -982,18 +1222,108 @@ sub topicExists
     return -e "$TWiki::dataDir/$theWeb/$theName.txt";
 }
 
+# FIXME - wrong
+sub getRevisionInfoFromMeta
+{
+    my( $web, $topic, $metar, $changeToIsoDate ) = @_;
+    
+    my( $date, $author, $rev );
+    
+    my @meta = @$metar;
+    
+    my @metainfo = grep( /^%META:TOPICINFO/, @meta );
+    if( @metainfo ) {
+       # Stored as meta data in topic for faster access
+       my $topicinfo = shift @metainfo;
+       $topicinfo =~ /%META:TOPICINFO{([^}]*)}/;
+       my $args   = $1;
+       my $tmp = TWiki::extractNameValuePair( $args, "date" );
+       $date = TWiki::formatGmTime( $tmp ); # FIXME should format be here or with user?
+       $author = TWiki::extractNameValuePair( $args, "author" );
+       $tmp = TWiki::extractNameValuePair( $args, "version" );
+       $tmp =~ /1\.(.*)/o;
+       $rev = $1;
+    } else {
+       # Get data from RCS
+       ( $date, $author, $rev ) = getRevisionInfoNew( $topic, "", 1, $web );
+       ( $date, $author, $rev ) = _tidyRevInfo( $web, $topic, $date, $author, $rev, "", $changeToIsoDate );
+    }
+    
+    writeDebug( "rev = $rev" );
+    
+    return( $date, $author, $rev );
+}
+
+
+# =========================
+sub convert2metaFormat
+{
+    my( $text ) = @_;
+    
+    my @meta = ();
+     
+    if ( $text =~ /<!--TWikiAttachment-->/ ) {
+       ( $text, @meta ) = TWiki::Attach::migrateToFileAttachmentMacro( $text );
+    }
+
+    
+    return( $text, @meta );
+}
+
+
+# =========================
+# Expect meta data at top of file, but willing to accept it anywhere
+# If we have an old file format without meta data, then convert
+sub _extractMetaData
+{
+    my( $fulltext ) = @_;
+    
+    my $text = "";
+    my @meta = ();
+    
+    foreach( split( /\n/, $fulltext ) ) {
+        if( /^%META:/ ) {
+            push @meta, $_;    
+        } else {
+            $text .= "$_\n";
+        }
+    }
+    
+    # If there is no meta data then convert
+    if( $#meta == -1 ) {
+        ($text, @meta ) = convert2metaFormat( $text );
+    }
+    
+    return( $text, @meta );
+}
+
 # =========================
 sub readTopic
 {
     my( $theName ) = @_;
-    return &readFile( "$TWiki::dataDir/$TWiki::webName/$theName.txt" );
+    return &readWebTopic( $TWiki::webName, $theName );
 }
 
 # =========================
 sub readWebTopic
 {
     my( $theWeb, $theName ) = @_;
-    return &readFile( "$TWiki::dataDir/$theWeb/$theName.txt" );
+    my $text = &readFile( "$TWiki::dataDir/$theWeb/$theName.txt" );
+    
+    return $text;
+}
+
+# FIXME replace readWebTopic
+sub readWebTopicNew
+{
+    my( $theWeb, $theName ) = @_;
+    my $text = &readFile( "$TWiki::dataDir/$theWeb/$theName.txt" );
+    
+    my @meta = ();
+    
+    ($text, @meta) = _extractMetaData( $text );
+    
+    return( $text, @meta );
 }
 
 # =========================
