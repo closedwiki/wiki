@@ -282,7 +282,7 @@ if ($detailedOS eq 'cygwin') {
         $perlverMsg = $perlver . ", build " . Win32::BuildNumber();
     } else {
 	# Could be SiePerl or some other Win32 port of Perl
-	$perltype = 'SiePerl/Other Win32 Perl';
+	$perltype = 'SiePerl or other Windows Perl';
     }
 } else {
     $perltype = 'generic';
