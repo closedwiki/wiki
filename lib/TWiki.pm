@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "18 Jun 2003";
+$wikiversion      = "01 Jul 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1800,6 +1800,16 @@ sub handleSpacedTopic
 }
 
 # =========================
+sub handleIcon
+{
+    my( $theParam ) = @_;
+
+    $theParam = extractNameValuePair( $theParam );
+    my $value = &TWiki::Attach::filenameToIcon( "file.$theParam" );
+    return $value;
+}
+
+# =========================
 sub handleInternalTags
 {
     # modify arguments directly, i.e. call by reference
@@ -1842,6 +1852,7 @@ sub handleInternalTags
     $_[0] =~ s/%PUBURLPATH%/$pubUrlPath/g;
     $_[0] =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$_[2]\/$_[1]/g;
     $_[0] =~ s/%ATTACHURLPATH%/$pubUrlPath\/$_[2]\/$_[1]/g;
+    $_[0] =~ s/%ICON{(.*?)}%/&handleIcon($1)/geo;
     $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/ge;
     $_[0] =~ s/%URLENCODE{(.*?)}%/&handleUrlEncode($1,1)/ge;
     $_[0] =~ s/%INTURLENCODE{(.*?)}%/&handleUrlEncode($1,1)/ge;
