@@ -886,7 +886,7 @@ sub handleIncludeUrl
 # =========================
 sub handleIncludeFile
 {
-    my( $theAttributes, $theTopic, $theWeb, @theProcessedTopics ) = @_;
+    my( $theAttributes, $theTopic, $theWeb, $verbatim, @theProcessedTopics ) = @_;
     my $incfile = extractNameValuePair( $theAttributes );
     my $pattern = extractNameValuePair( $theAttributes, "pattern" );
 
@@ -957,6 +957,8 @@ sub handleIncludeFile
     }
 
     # handle all preferences and internal tags (for speed: call by reference)
+    $text = takeOutVerbatim( $text, $verbatim );
+    
     &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
     
@@ -1378,10 +1380,10 @@ sub handleInternalTags
 # =========================
 sub takeOutVerbatim
 {
-    my( $intext ) = @_;
+    my( $intext, $verbatim ) = @_;
     
     if( $intext !~ /<verbatim>/oi ) {
-        return( $intext, () );
+        return( $intext );
     }
     
     # Exclude text inside verbatim from variable substitution
@@ -1389,8 +1391,7 @@ sub takeOutVerbatim
     my $tmp = "";
     my $outtext = "";
     my $nesting = 0;
-    my $verbatimCount = 0;
-    my @verbatim = ();
+    my $verbatimCount = $#{$verbatim} + 1;
     
     foreach( split( /\n/, $intext ) ) {
         if( /^\s*<verbatim>\s*$/oi ) {
@@ -1403,7 +1404,7 @@ sub takeOutVerbatim
         } elsif( m|^\s*</verbatim>\s*$|oi ) {
             $nesting--;
             if( ! $nesting ) {
-                $verbatim[$verbatimCount++] = $tmp;
+                $verbatim->[$verbatimCount++] = $tmp;
                 next;
             }
         }
@@ -1415,7 +1416,7 @@ sub takeOutVerbatim
         }
     }
        
-    return ( $outtext, @verbatim );
+    return $outtext;
 }
 
 # =========================
@@ -1438,20 +1439,9 @@ sub putBackVerbatim
 }
 
 
-# =========================
-sub handleCommonTags
-{
-    my( $intext, $theTopic, $theWeb, @theProcessedTopics ) = @_;
-    
-    my( $outtext, @verbatim ) = takeOutVerbatim( $intext );
-    
-    $outtext = handleCommonTagsCore( $outtext, $theTopic, $theWeb, @theProcessedTopics );
-    
-    return putBackVerbatim( $outtext, "verbatim", @verbatim );
-}
 
 # =========================
-sub handleCommonTagsCore
+sub handleCommonTags
 {
     my( $text, $theTopic, $theWeb, @theProcessedTopics ) = @_;
 
@@ -1459,6 +1449,9 @@ sub handleCommonTagsCore
     if( !$theWeb ) {
         $theWeb = $webName;
     }
+    
+    my @verbatim = ();
+    $text = takeOutVerbatim( $text, \@verbatim );
 
     # handle all preferences and internal tags (for speed: call by reference)
     $includingWebName = $theWeb;
@@ -1467,7 +1460,7 @@ sub handleCommonTagsCore
     handleInternalTags( $text, $theTopic, $theWeb );
 
     # recursively process multiple embeded %INCLUDE% statements and prefs
-    $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $theTopic, $theWeb, @theProcessedTopics )/geo;
+    $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $theTopic, $theWeb, \@verbatim, @theProcessedTopics )/geo;
 
     # Wiki Plugin Hook
     &TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb );
@@ -1478,6 +1471,10 @@ sub handleCommonTagsCore
 
     $text =~ s/%TOC{([^}]*)}%/&handleToc($text,$theTopic,$theWeb,$1)/geo;
     $text =~ s/%TOC%/&handleToc($text,$theTopic,$theWeb,"")/geo;
+    
+    # Ideally would put back in getRenderedVersion rather than here which would save removing
+    # it again!  But this would mean altering many scripts to pass back verbatim
+    $text = putBackVerbatim( $text, "verbatim", @verbatim );
 
     return $text;
 }
@@ -1945,7 +1942,7 @@ sub isWikiName
 sub getRenderedVersion
 {
     my( $text, $theWeb, $meta ) = @_;
-    my( $head, $result, $extraLines, $insidePRE, $insideVERBATIM, $insideTABLE, $noAutoLink );
+    my( $head, $result, $extraLines, $insidePRE, $insideTABLE, $noAutoLink );
 
     return "" unless $text;  # nothing to do
 
@@ -1961,7 +1958,6 @@ sub getRenderedVersion
     $head = "";
     $result = "";
     $insidePRE = 0;
-    $insideVERBATIM = 0;  # PTh 31 Jan 2001: Added Codev.VerbatimModeForSourceCodes
     $insideTABLE = 0;
     $noAutoLink = 0;      # PTh 02 Feb 2001: Added Codev.DisableWikiWordLinks
     $isList = 0;
@@ -1979,8 +1975,8 @@ sub getRenderedVersion
         $text = $bodyTag . $bodyText;
     }
     
-    my @verbatim;
-    ( $text, @verbatim ) = takeOutVerbatim( $text );
+    my @verbatim = ();
+    $text = takeOutVerbatim( $text, \@verbatim );
 
     # Wiki Plugin Hook
     &TWiki::Plugins::startRenderingHandler( $text, $theWeb, $meta );
@@ -1990,31 +1986,16 @@ sub getRenderedVersion
         # change state:
         m|<pre>|i  && ( $insidePRE = 1 );
         m|</pre>|i && ( $insidePRE = 0 );
-        if( m|<verbatim>|i ) {
-            s|<verbatim>|<pre>|goi;
-            $insideVERBATIM = 1;
-        }
-        if( m|</verbatim>|i ) {
-            s|</verbatim>|</pre>|goi;
-            $insideVERBATIM = 0;
-        }
         m|<noautolink>|i   && ( $noAutoLink = 1 );
         m|</noautolink>|i  && ( $noAutoLink = 0 );
 
-        if( $insidePRE || $insideVERBATIM ) {
-            # inside <PRE> or <VERBATIM>
+        if( $insidePRE ) {
+            # inside <PRE>
 
             # close list tags if any
             if( @listTypes ) {
                 $result .= &emitList( "", "", 0 );
                 $isList = 0;
-            }
-
-            if( $insideVERBATIM ) {
-                s/\&/&amp;/go;
-                s/\</&lt;/go;
-                s/\>/&gt;/go;
-                s/\&lt;pre\&gt;/<pre>/go;  # fix escaped <pre>
             }
 
 # Wiki Plugin Hook
@@ -2144,7 +2125,7 @@ sub getRenderedVersion
         $result .= "</table>\n";
     }
     $result .= &emitList( "", "", 0 );
-    if( $insidePRE || $insideVERBATIM ) {
+    if( $insidePRE ) {
         $result .= "</pre>\n";
     }
 
