@@ -1,34 +1,47 @@
-%META:TOPICINFO{author="MikeMannix" date="999260330" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="MikeMannix" date="999580216" format="1.0" version="1.13"}%
 %TOC%
 %STARTINCLUDE%
 
 ---## TWiki Access Control
 
+_Restricting read and write access to topics and webs, by users and groups_
+
+---+++ Overview
+
 %WIKITOOLNAME% allows you to define restrictions of who is allowed to view a %WIKITOOLNAME% web, make changes to topics or attach files.
 
 *IMPORTANT NOTE:* Think twice before restricting read or write access to a web or a topic, because an open system where everybody can contribute is the essence of the %TWIKIWEB%.WikiCulture. Experience shows that unrestricted write access works very well because:
-	* There is enough peer pressure to post only conform content.
-	* Content does not get lost because topics are under revision control.
-	* A topic revision can be undone by a member of the %MAINWEB%.TWikiAdminGroup in case needed.
-
+	* Peer influence is enough to ensure that only relevant content is posted.
+	* Peer editing - edit anything on a page - keeps topics focussed.
+	* All content is preserved under revision control.
+		* Edits can be undone by the %MAINWEB%.TWikiAdminGroup (the default administrators group; see [[#ManagingGroups][Managing Groups]]).
+		* Editing and refactoring (condensing a long topic) is encouraged (there's a safety net).
 
 ---+++ Users and Groups
 
 Access control is based on users and groups.
 
-__Users__ are defined by the user topics in the %MAINWEB% web, i.e. %MAINWEB%.TWikiGuest
-	* Users can be authenticated using basic authentication or SSL. <A href="TWikiDocumentation#installation">Installation Notes</A> has more.
+---++++ Managing Users
 
-__Groups__ are defined by group topics in the %MAINWEB% web, i.e. %MAINWEB%.TWikiAdminGroup
-	* A group topic name must end in *...Group*
+A user is created by with the <nop>TWikiRegistration form. The process generates a topic in the %MAINWEB% web in the new user's WikiName. The default visitor name is %MAINWEB%.TWikiGuest.
+	* Users can be authenticated using Basic Authentication or SSL. [[TWikiDocumentation#TWikiAuthentication][TWiki Authentication]] has more.
+
+#ManagingGroups
+---++++ Managing Groups
+
+Groups are defined by group topics in the %MAINWEB% web, like the %MAINWEB%.TWikiAdminGroup.
+	* A group topic name must end in *_Group*
 	* The group topic should define these two variables:
+<blockquote style="background-color:#f0f0f0">
 		* Set <nop>GROUP = &lt; list of users and groups &gt;
 		* Set <nop>ALLOWTOPICCHANGE = &lt; list of users and groups &gt;
-	* GROUP defines the members of the group; it is a comma delimited list of users and other groups. Example: <br> =&nbsp; &nbsp; * Set <nop>GROUP = %MAINWEB%.<nop>SomeUser, %MAINWEB%.<nop>OtherUser, %MAINWEB%.<nop>SomeOtherGroup=
+</blockquote>
+	* GROUP defines the members of the group; it is a comma delimited list of users and other groups. Example: <br> ==&nbsp; &nbsp; * Set <nop>GROUP = %MAINWEB%.<nop>SomeUser, %MAINWEB%.<nop>OtherUser, %MAINWEB%.<nop>SomeOtherGroup==
 	* ALLOWTOPICCHANGE defines who is allowed to change the group topic; it is a comma delimited list of users and groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic, i.e. <br> =&nbsp; &nbsp; * Set <nop>ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup= <br> for the <nop>TWikiAdminGroup topic. (This is to prevent users not in the group from editing the topic and gaining unauthorized membership to the group.)
 
+---+++ Restricting Write Access
 
----+++ Write Access Restriction by Topic
+---++++ Deny Editing by Topic
 
 You can define restrictions of who is allowed to make changes to a topic or attach files to it.
 
@@ -42,7 +55,7 @@ ALLOWTOPICCHANGE defines users or groups that *are* allowed to make changes to t
 
 DENYTOPICCHANGE is evaluated before ALLOWTOPICCHANGE. Access is denied if the authenticated person is in the DENYTOPICCHANGE list, or not in the ALLOWTOPICCHANGE list. Access is granted in case DENYTOPICCHANGE and ALLOWTOPICCHANGE is not defined.
 
----+++ Write Access Restriction by Web
+---++++ Deny Editing by Web
 
 You can define restrictions of who is allowed to make changes to a %WIKITOOLNAME% web. This includes creating new topics, changing topics or attaching files.
 
@@ -54,7 +67,11 @@ The same rules apply like the one for Access Control for Individual Topics; with
 	* DENYTOPICCHANGE (in topic) overrides DENYWEBCHANGE (in <nop>%WEBPREFSTOPIC%)
 	* ALLOWTOPICCHANGE (in topic) overrides ALLOWWEBCHANGE (in <nop>%WEBPREFSTOPIC%)
 
----+++ Rename Access Restriction by Topic
+---+++ Restricting Rename Access
+
+
+
+---++++ Deny Renaming by Topic
 
 You can define restrictions of who is allowed to rename a topic.  Note that users need this permission in addition to the CHANGE permission in order to rename a topic.  They also need CHANGE access to change references in referring topics.
 
@@ -68,7 +85,7 @@ ALLOWTOPICRENAME defines users or groups that *are* allowed to rename the topic.
 
 DENYTOPICRENAME is evaluated before ALLOWTOPICRENAME. Access is denied if the authenticated person is in the DENYTOPICRENAME list, or not in the ALLOWTOPICRENAME list. Access is granted in case DENYTOPICRENAME and ALLOWTOPICRENAME is not defined.
 
----+++ Rename Access Restriction by Web
+---++++ Deny Renaming by Web
 
 You can define restrictions of who is allowed to do renames for a %WIKITOOLNAME% web.
 
@@ -80,7 +97,7 @@ The same rules apply like the one for Access Control for Individual Topics; with
 	* DENYTOPICRENAME (in topic) overrides DENYWEBRENAME (in <nop>%WEBPREFSTOPIC%)
 	* ALLOWTOPICRENAME (in topic) overrides ALLOWWEBRENAME (in <nop>%WEBPREFSTOPIC%)
 
----+++ Read Access Restriction by Web
+---+++ Restricting Read Access
 
 You can define restrictions of who is allowed to view a %WIKITOOLNAME% web.
 
@@ -88,28 +105,31 @@ Define one or both of these variable in the %WEBPREFSTOPIC% topic:
 	* Set <nop>DENYWEBVIEW = &lt; list of users and groups &gt;
 	* Set <nop>ALLOWWEBVIEW = &lt; list of users and groups &gt;
 
----+++ Read Restriction Known Issues
+---++++ Known Issues
 
 	* The view restriction is not suitable for very sensitive content since there is a way to circumvent the read access restriction.
-	* Read access restriction only works if the view script is authenticated, that means that users need to log on also just to read topics. <a href="TWikiDocumentation#installation">TWiki Installation</a> has more on basic authentication based on the =.htaccess= file.
+	* Read access restriction only works if the view script is authenticated, that means that users need to log on also just to read topics. [[TWikiDocumentation#TWikiInstallationGuide][TWiki Installation Guide]] has more on Basic Authentication based on the ==.htaccess== file.
+
+---+++++ Selective Unrestricted Web Access
+
 	* There is a workaround if you prefer to have unrestricted access to view topics located in normal webs, and to authenticate users only for webs where view restriction is enabled:
-		* Leave the =view= script non authenticated in the =.htaccess= file.
-		* Enable the =$doRememberRemoteUser= flag in =wikicfg.pm= as described in <a href="TWikiDocumentation#authentication">TWiki Authentication</a>. %WIKITOOLNAME% will now remember the IP address of an authenticated user.
-		* Copy the =view= script to =viewauth= (or better, create a symbolic link)
-		* Add =viewauth= to the list of authenticated scripts in the .htaccess file.
+		* Leave the ==view== script non-authenticated in the =.htaccess= file.
+		* Enable the ==$doRememberRemoteUser== flag in ==lib/wikicfg.pm== as described in [[TWikiDocumentation#TWikiUserAuthentication][User Authentication]]. %WIKITOOLNAME% will now remember the IP address of an authenticated user.
+		* Copy the ==view== script to ==viewauth== (or better, create a symbolic link)
+		* Add ==viewauth== to the list of authenticated scripts in the .htaccess file.
 		* When a user accesses a web where you enabled view restriction, %WIKITOOLNAME% will redirect from the =view= script to the =viewauth= script once (this happens only if the user has never edited a topic). Doing so will ask for authentication. The =viewauth= script shows the requested topic if the user could log on and if the user is authorized to see that web.
-	* If you enable view restriction for a web, it is recommended to restrict search "all webs" from searching this web. Enable this restriction with the =NOSEARCHALL= variable in its WebPreferences, like:
+	* If you enable view restriction for a web, it is recommended to restrict search "all webs" from searching this web. Enable this restriction with the ==NOSEARCHALL== variable in its WebPreferences, like:
 		* Set <nop>NOSEARCHALL = on
-	* It is not recommended to restrict view access to individual topics since all content is searchable __within__ a web.
+	* It is not recommended to restrict view access to individual topics since all content is searchable _within_ a web.
 
 ---+++ The <nop>SuperAdminGroup
 
-The above schema can lock completely a topic in case of a typing error of the ALLOWTOPICCHANGE setting (see [[http://www.twiki.org/cgi-bin/view/Codev/UnchangeableTopicBug][UnchangeableTopicBug]]). To avoid this:
-	* set the =$superAdminGroup= variable in =TWiki.cfg= to the name of a group of users that are always allowed to edit/view topics. E.g.:
-<pre>
+The above schema can lock completely a topic in case of a typing error of the ALLOWTOPICCHANGE setting (see [[TWiki:Codev/UnchangeableTopicBug][UnchangeableTopicBug]] for more detail). To avoid this:
+	* Set the ==$superAdminGroup== variable in ==lib/TWiki.cfg== to the name of a group of users that are always allowed to edit/view topics.
+<verbatim>
 $superAdminGroup = "TWikiAdminGroup";
-</pre>
-	* the default setting is not to have superusers
+</verbatim>
+	* The default setting is not to have superusers.
 
 -- PeterThoeny - 16 Mar 2001 <br>
 -- AndreaSterbini - 11 Apr 2001 <br> 
