@@ -1,4 +1,5 @@
-%WIKITOOLNAME% is a Wiki Wiki clone and has its root in JOS Wiki.
+%META:TOPICINFO{author="PeterThoeny" date="1043310212" format="1.0" version="1.5"}%
+TWiki is a Wiki Wiki clone and has its root in JOS Wiki.
 
 	* TWiki's home is at http://TWiki.org/
 	* TWiki takes a lot of ideas from <A HREF="http://c2.com/~ward/">Ward Cunningham</A>'s remarkable <A HREF="http://c2.com/cgi/wiki?WikiWikiWeb"> Wiki Wiki Web</A> invention. 
