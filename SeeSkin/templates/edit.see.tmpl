@@ -37,8 +37,6 @@ function launchWindow( theWeb, theTopic ) {
 </head>
 <body bgcolor="%WEBBGCOLOR%" onLoad="initForm()">
 #PageTop<div id="header">%TMPL:P{"masthead"}%</div>
-<div id="wrapper">
- <div id="content">
 <form name="main" action="%SCRIPTURLPATH%/savemulti%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
@@ -51,7 +49,6 @@ and follow the
 <a target="TextFormattingRules" onClick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">TextFormattingRules</a>.
 <br /> <strong>-- <nop>%WIKIUSERNAME% - %DATE%</strong> &nbsp;&nbsp;<code>&lt;==</code> 
 This is your signature for easy copy &amp; paste operation
-</div> <!-- end #content -->
 %TMPL:P{"plainfooter"}%
 %FORMFIELDS%
 </form>
@@ -59,7 +56,6 @@ This is your signature for easy copy &amp; paste operation
  <div id="footer">
    %WEBCOPYRIGHT%
  </div>
-</div> <!-- end #wrapper --> 
 #PageBottom
 </body>
 </html>
