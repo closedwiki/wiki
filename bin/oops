@@ -42,11 +42,12 @@ sub main
     my $tmplData = &TWiki::Store::readTemplate( $tmplName );
     if( ! $tmplData ) {
         TWiki::writeHeader( $query );
-        print "<html><body>";
-        print "<h1>TWiki Installation Error</h1>";
-        print "Template directory $TWiki::templateDir not found.<p>";
-        print "Check the \$templateDir variable in TWiki.cfg.";
-        print "</body></html>";
+        print "<html><body>\n"
+            . "<h1>TWiki Installation Error</h1>\n"
+            . "Template file $tmplName.tmpl not found or template directory \n"
+            . "$TWiki::templateDir not found.<p>\n"
+            . "Check the \$templateDir variable in TWiki.cfg.\n"
+            . "</body></html>\n";
         return;
     }
 
