@@ -39,11 +39,9 @@ sub main
     my $tmpl= "";
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-	$tmpl= &TWiki::Store::readTemplate( "noweb" );
-	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-	TWiki::writeHeader( $query );
-	print $tmpl;
-	return;
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
+        TWiki::redirect( $query, $url );
+        return;
     }
 
     my $fileName = $query->param( 'filename' );

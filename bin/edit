@@ -57,10 +57,8 @@ sub main
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-        TWiki::writeHeader( $query );
-	$tmpl= &TWiki::Store::readTemplate( "noweb" );
-	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-	print $tmpl;
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
+        TWiki::redirect( $query, $url );
         return;
     }
 

@@ -71,39 +71,35 @@ sub main
     my $wikiUserName = &TWiki::userToWikiName( $userName );
     my $revdate = "";
     my $revuser = "";
-    
     my $viewRaw = $query->param( "raw" ) || "";
+    my $unlock  = $query->param( "unlock" ) || "";
+    my $skin    = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
 
-    if( ! &TWiki::Store::webExists( $webName ) ) {
-        $tmpl= &TWiki::Store::readTemplate( "noweb" );
-        $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+    # get view template, standard view or a view with a different skin
+    $tmpl = &TWiki::Store::readTemplate( "view", $skin );
+    if( ! $tmpl ) {
         TWiki::writeHeader( $query );
-        print $tmpl;
+        print "<html><body>\n"
+            . "<h1>TWiki Installation Error</h1>\n"
+            . "Template file view.tmpl not found or template directory \n"
+            . "$TWiki::templateDir not found.<p>\n"
+            . "Check the \$templateDir variable in TWiki.cfg.\n"
+            . "</body></html>\n";
         return;
     }
+    writeDebugTimes( "view - readTemplate" );
 
-    my $unlock = $query->param( "unlock" ) || "";
+    if( ! &TWiki::Store::webExists( $webName ) ) {
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
+        TWiki::redirect( $query, $url );
+        return;
+    }
+    writeDebugTimes( "view - webExists" );
+
     if( $unlock eq "on" ) {
         # unlock topic, user cancelled out of edit
         &TWiki::Store::lockTopic( $topic, "on" );
     }
-
-    writeDebugTimes( "view - webExists" );
-
-    # get view template, standard view or a view with a different skin
-    my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
-    $tmpl = &TWiki::Store::readTemplate( "view", $skin );
-    if( ! $tmpl ) {
-        TWiki::writeHeader( $query );
-        print "<html><body>";
-        print "<h1>TWiki Installation Error</h1>";
-        print "Template directory $TWiki::templateDir not found.<p>";
-        print "Check the \$templateDir variable in TWiki.cfg.";
-        print "</body></html>";
-        return;
-    }
-
-    writeDebugTimes( "view - readTemplate" );
 
     # Most recent topic read in even if earlier topic requested - makes code simpler and performance impact should be minimal
     my $topicExists = &TWiki::Store::topicExists( $webName, $topic );

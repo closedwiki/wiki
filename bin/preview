@@ -42,11 +42,9 @@ sub main
     my $meta = "";
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-	$tmpl= &TWiki::Store::readTemplate( "noweb" );
-	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-        &TWiki::writeHeader( $query );
-	print $tmpl;
-	return;
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
+        TWiki::redirect( $query, $url );
+        return;
     }
 
     my( $mirrorSiteName, $mirrorViewURL ) = &TWiki::readOnlyMirrorWeb( $webName );

@@ -43,10 +43,9 @@ sub main
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-	$tmpl= &TWiki::Store::readTemplate( "noweb" );
-	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-	print $tmpl;
-	return;
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
+        TWiki::redirect( $query, $url );
+        return;
     }
 
     my( $mirrorSiteName, $mirrorViewURL ) = &TWiki::readOnlyMirrorWeb( $webName );

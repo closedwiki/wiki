@@ -26,7 +26,6 @@ use lib ( '../lib' );
 use TWiki;
 
 $query= new CGI;
-TWiki::writeHeader( $query );
 
 &main();
 
@@ -43,9 +42,8 @@ sub main
     $dummy2 = "";  # to suppress warning
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-        my $tmpl= &TWiki::Store::readTemplate( "noweb" );
-        $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-        print $tmpl;
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
+        TWiki::redirect( $query, $url );
         return;
     }
 
@@ -64,6 +62,7 @@ sub main
     my $before = "";
     my $after = "";
     ( $before, $text, $after) = split( /%REPEAT%/, $text );
+    &TWiki::writeHeader( $query );
     print $before;
 
     foreach( reverse split( /\n/, $changes ) ) {

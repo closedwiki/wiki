@@ -1,6 +1,6 @@
 <HTML>
 <HEAD>
-  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (Web doesn't exist)</TITLE>
+  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (oops, web doesn't exist)</TITLE>
   <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX">
 </HEAD>
 <BODY bgcolor="#ffffff">
@@ -10,7 +10,7 @@
       <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
     </TD>
     <TD>
-      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (web doesn't exist)</FONT>
+      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (oops, web doesn't exist)</FONT>
     </TD>
   </TR>
   <TR BGCOLOR="%WEBBGCOLOR%">
@@ -19,14 +19,16 @@
     </TD>
   </TR>
 </TABLE>
-<H1>Chosen topic does not exist</H1>
-Please go back in your browser and change to a Web that does exist <p>
+---+ The "%WEB%" web does not exist
+Please chose only webs that do exist. Contact %WIKIWEBMASTER% if you need a new web for your group.
+<p>
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR BGCOLOR="%WEBBGCOLOR%">
     <TD valign="top">
-      Topic <B>%TOPIC%</B> . { }
+      Topic <B>%TOPIC%</B> . {
+        [[%MAINWEB%.%HOMETOPIC%][OK]]
+      }
     </TD>
   </TR>
 </TABLE>
 </BODY>
-

@@ -80,6 +80,7 @@ sub main
     if ( ! $justChangeRefs ) {
        if( ! checkPermissions( $oldWeb, $oldTopic, $wikiUserName ) ) {
           # FIXME below error indicated by true return
+           # FIXME: This produces Internal Server Error if oldWeb does not exist
            return;
        }
        
@@ -329,8 +330,9 @@ sub checkExist
    
    # Does old WEB exist?
    if( ! &TWiki::Store::webExists( $oldWeb ) ) {
+      # FIXME: Below code needs also getRenderedVersion. Better to use redirect instead. 
       TWiki::writeHeader( $query ); 
-      $tmpl = &TWiki::Store::readTemplate( "noweb" );
+      $tmpl = &TWiki::Store::readTemplate( "oopsnoweb" );
       $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic );
       print $tmpl;
       $ret = "problem";
@@ -339,7 +341,7 @@ sub checkExist
    # Does new WEB exist?
    if( ! &TWiki::Store::webExists( $newWeb ) ) {
       TWiki::writeHeader( $query );
-      $tmpl= &TWiki::Store::readTemplate( "noweb" );
+      $tmpl= &TWiki::Store::readTemplate( "oopsnoweb" );
       $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
       print $tmpl;
       $ret = "problem";

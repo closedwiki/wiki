@@ -23,8 +23,6 @@ use TWiki;
 
 $query= new CGI;
 
-TWiki::writeHeader( $query );
-
 &main();
 
 # =========================
@@ -133,10 +131,9 @@ sub main
     my $isMultipleDiff = 0;
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-	$tmpl= &TWiki::Store::readTemplate( "noweb" );
-	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-	print $tmpl;
-	return;
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
+        TWiki::redirect( $query, $url );
+        return;
     }
 
     # get view template, standard view or a view with a different skin
@@ -174,6 +171,7 @@ sub main
     $before = &TWiki::handleCommonTags( $before, $topic );
     $before = &TWiki::getRenderedVersion( $before );
     $before =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
+    &TWiki::writeHeader( $query );
     print $before;
 
     # do one or more diffs

@@ -33,7 +33,6 @@ use strict;
 sub main
 {
     my $query = new CGI;
-    TWiki::writeHeader( $query );
     
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
@@ -44,9 +43,8 @@ sub main
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
     
     if( ! &TWiki::Store::webExists( $webName ) ) {
-        my $tmpl= &TWiki::Store::readTemplate( "noweb" );
-        $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-        print $tmpl;
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
+        TWiki::redirect( $query, $url );
         return;
     }
 
@@ -92,6 +90,7 @@ sub main
     my $showlock      = $query->param( "showlock" ) || "";
     my $noempty       = $query->param( "noempty" ) || "";
 
+    &TWiki::writeHeader( $query );
     &TWiki::Search::searchWeb( "0",
         $websStr, $search, $scope, $order, $regex,
         $limit, $revSort, $caseSensitive, $nosummary,
