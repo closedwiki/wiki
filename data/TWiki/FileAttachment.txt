@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1073892847" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1084053156" format="1.0" version="1.13"}%
 %TOC%
 %STARTINCLUDE%
 ---# File Attachments
@@ -25,6 +25,7 @@ File Attachments can be used to create powerful customized groupware solutions, 
 ---++ Uploading Files
 
 	* Click on the ==Attach== link at the bottom of the page. The =Attach= screen lets you browse for a file, add a comment, and upload it. The uploaded file will show up in the [[#FileAttachmentTable][File Attachment table]].
+		* __NOTE:__ The topic must already exist. It is a two step process if you want to attach a file to a non-existing topic; first create the topic, then add the file attachment.
 		* Any type of file can be uploaded. Some files that might pose a security risk are renamed, ex: =*.php= files are renamed to =*.php.txt= so that no one can place code that would be read in a .php file. 
 		* The previous upload path is retained for convenience. In case you make some changes to the local file and want to upload it, again you can copy the previous upload path into the Local file field.
 		* TWiki can limit the file size. This is defined by the =%<nop>ATTACHFILESIZELIMIT%= variable of the TWikiPreferences, currently set at %ATTACHFILESIZELIMIT% KB.
@@ -162,5 +163,6 @@ _Help text ..._
 	* Unlike topics, attachments are not locked during editing. As a workaround, you can change the comment to indicate an attachment file is being worked on - the comment on the specific version isn't lost, it's there when you list all versions of the attachment.
 
 %STOPINCLUDE%
+
 %META:FILEATTACHMENT{name="Sample.txt" attr="" comment="Just a sample" date="964294620" path="C:\DATA\Sample.txt" size="30" user="thoeny" version=""}%
 %META:FILEATTACHMENT{name="Smile.gif" attr="" comment="Smiley face" date="964294680" path="C:\DATA\Smile.gif" size="94" user="thoeny" version=""}%

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079506500" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="PeterThoeny" date="1084053269" format="1.0" version="1.14"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
@@ -140,6 +140,32 @@ Here is an example. Let's search for all topics that contain the word "culture" 
 
 %SEARCH{ "\.*" scope="topic" regex="on" nosearch="on" nototal="on" order="modified" reverse="on"  format="| [[$topic]] | $wikiusername  | $date |" limit="7" }%
 
+---+++ Search with conditional output
+
+A regular expression search is flexible, but there are limitations. For example, you cannot show all topics that are up to exactly one week old, or create a report that shows all records with invalid form fields or fields within a certain range, etc. You need some additional logic to format output based on a condition:
+	1. Specify a search which returns more hits then you need
+	1. For each search hit apply a spreadsheet formula to determine if the hit is needed
+	1. If needed, format and output the result
+	1. Else supress the search hit
+
+This requires the TWiki:Plugins.SpreadSheetPlugin. The following example shows all topics that are up to exactly one week old.
+
+*Write this:*
+
+=%<nop>CALC{$SET(weekold, $TIMEADD($TIME(), -7, day))}%= %BR%
+=%<nop>SEARCH{ "." scope="topic" regex="on" nosearch="on" nototal="on" order="modified" reverse="on" format="$percntCALC{$IF($TIME($date) &lt; $GET(weekold), &lt;nop&gt;, | [<nop>[$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%=
+
+	* The first line sets the =weekold= variable to the serialized date of exactly one week ago
+	* The SEARCH has a deferred CALC. The =$percnt= makes sure that the CALC gets executed once for each search hit
+	* The CALC compares the date of the topic with the =weekold= date
+	* If topic is older, a =&lt;nop&gt;= is returned, which gets removed at the end of the TWiki rendering process
+	* Otherwise, the search hit is formatted and returned
+
+*To get this:*
+
+%CALC{$SET(weekold, $TIMEADD($TIME(), -7, day))}%
+%SEARCH{ "." scope="topic" regex="on" nosearch="on" nototal="on" order="modified" reverse="on" format="$percntCALC{$IF($TIME($date) < $GET(weekold), <nop>, | [[$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%
+
 ---+++ Embedding search forms to return a formatted result
 
 Use an HTML form and an embedded formatted search on the same topic. You can link them together with an =%<nop>URLPARAM{"..."}%= variable. Example:
@@ -167,3 +193,4 @@ Result:
 %SEARCH{ search="%URLPARAM{"q"}%" format="	* $web.$topic: %BR% $summary" nosearch="on" }%
 
 -- TWiki:Main.PeterThoeny - 16 Mar 2004
+
