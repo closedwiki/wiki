@@ -5,8 +5,7 @@
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
 # Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
-# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
-# TakeFive Software Inc.
+# Copyright (C) 1999-2000 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,16 +33,29 @@ sub main
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
-    ( $topic, $webName) = 
+    ( $topic, $webName, $dummy, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
-    my $text = "", $tmp = "", $atext = "", $before = "", $after = "";
+    $dummy = "";  # to suppress warning
+    my $text = "";
+    my $tmp = "";
+    my $atext = "";
+    my $before = "";
+    my $after = "";
+    my $wikiUserName = &wiki::userToWikiName( $userName );
 
     if( ! &wiki::webExists( $webName ) ) {
 	$tmpl= &wiki::readTemplate( "noweb" );
 	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
 	print $tmpl;
 	return;
+    }
+
+    # check access permission
+    if( ! &wiki::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
+        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
+        print $query->redirect( $url );
+        return;
     }
 
     my $unlock = $query->param( "unlock" ) || "";

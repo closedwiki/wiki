@@ -2,8 +2,7 @@
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
-# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
-# TakeFive Software Inc.
+# Copyright (C) 1999 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -359,6 +358,23 @@ sub main
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
     $dummy = "";  # to suppress warning
 
+    my $wikiUserName = &wiki::userToWikiName( $userName );
+
+    if( ! &wiki::webExists( $webName ) ) {
+        $tmpl= &wiki::readTemplate( "noweb" );
+        $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+        print "Content-type: text/html\n\n";
+        print $tmpl;
+        return;
+    }
+
+    # check access permission
+    if( ! &wiki::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
+        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
+        print $query->redirect( $url );
+        return;
+    }
+
     my $filePath = $query->param( 'filepath' ) || "";
     my $fileName = $query->param( 'filename' ) || "";
     my $tmpFilename = $query->tmpFileName( $filePath ) || "";
@@ -395,8 +411,6 @@ sub main
 
     # save uploaded file
     my $newFile = "$tempPath/$fileName";
-    ## link( $tmpFilename, $newFile );      # fails, don't know why
-#    `$wiki::cpCmd $tmpFilename $newFile`;   # ==> use shell cp
     copy($tmpFilename, $newFile) or warn "copy($tmpFilename, $newFile) failed: $!";
     umask( 0027 );
     chmod( 0644, $newFile );

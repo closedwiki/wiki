@@ -2,8 +2,7 @@
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
-# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
-# TakeFive Software Inc.
+# Copyright (C) 1999-2000 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,7 +22,6 @@ $query = new CGI;
 
 #open(STDERR,'>&STDOUT'); # redirect error to browser
 $| = 1;                  # no buffering
-print "Content-type: text/html\n\n";
 
 &main();
 
@@ -67,15 +65,28 @@ sub main
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
-    ( $topic, $webName ) = 
+    ( $topic, $webName, $dummy, $userName ) = 
         &wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+    $dummy = "";  # to suppress warning
 
-    my $tmpl="", $text="", $atext="", $fileName="";
+    my $tmpl = "";
+    my $text = "";
+    my $atext = "";
+    my $fileName = "";
+    my $wikiUserName = &wiki::userToWikiName( $userName );
 
     if( ! &wiki::webExists( $webName ) ) {
         $tmpl= &wiki::readTemplate( "noweb" );
         $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+        print "Content-type: text/html\n\n";
         print $tmpl;
+        return;
+    }
+
+    # check access permission
+    if( ! &wiki::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
+        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
+        print $query->redirect( $url );
         return;
     }
 
@@ -117,6 +128,7 @@ sub main
     }
     $tmpl =~ s/%FILEPATH%/$filePath/go;
     $tmpl =~ s/%FILECOMMENT%/$fileComment/go;
+    print "Content-type: text/html\n\n";
     print $tmpl;
 }
 

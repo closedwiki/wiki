@@ -5,8 +5,7 @@
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
 # Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
-# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
-# TakeFive Software Inc.
+# Copyright (C) 1999-2000 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -148,10 +147,19 @@ sub main
     my $saveCmd = $query->param( 'cmd' ) || "";
     my $breakLock = $query->param( 'breaklock' ) || "";
     my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
-    my $tmpl="", $tcat="", $icat="", $text="";
-    my $before="", $atext="", $ctext="", $after="";
-    my $catname="", $catmod="", $catvalue="";
+    my $tmpl = "";
+    my $tcat = "";
+    my $icat = "";
+    my $text = "";
+    my $before = "";
+    my $atext = "";
+    my $ctext = "";
+    my $after = "";
+    my $catname = "";
+    my $catmod = "";
+    my $catvalue = "";
     my $extra = "";
+    my $wikiUserName = &wiki::userToWikiName( $userName );
 
     if( ! &wiki::webExists( $webName ) ) {
         print "Content-type: text/html\n\n";
@@ -165,6 +173,16 @@ sub main
         # do not allow non-wikinames, redirect to view topic
         print $query->redirect( &wiki::getViewUrl( $webName, $topic ) );
 	return;
+    }
+
+    # check access permission
+    if( &wiki::topicExists( $webName, $topic ) ) {
+	$text = &wiki::readTopic( $topic );
+    }
+    if( ! &wiki::checkAccessPermission( "change", $wikiUserName, $text, $topic, $webName ) ) {
+        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
+        print $query->redirect( $url );
+        return;
     }
 
     my( $lockUser, $lockTime ) = &wiki::topicIsLocked( $topic );
@@ -186,16 +204,13 @@ sub main
 
     $tmpl= &wiki::readTemplate( "edit", $topic );
     $icat= &wiki::readTemplate( "twikicatitems" );
-    if( &wiki::topicExists( $webName, $topic ) ) {
-	$text= &wiki::readTopic($topic);
-    } else {
+    if( ! &wiki::topicExists( $webName, $topic ) ) {
         $text= &wiki::readTemplate( "notedited" );
         $extra = "(not exist)";
 
         my $foo = &wiki::getLocaldate();
         $text =~ s/%DATE%/$foo/go;
-        $foo = &wiki::userToWikiName( $userName );
-        $text =~ s/%USERNAME%/$foo/go;
+        $text =~ s/%USERNAME%/$wikiUserName/go;
     }
 
     if( $icat ) {

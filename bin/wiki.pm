@@ -86,7 +86,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "04 Oct 2000";
+$wikiversion      = "22 Oct 2000";
 
 # ===========================
 # read the configuration part
@@ -99,6 +99,10 @@ do "wikiprefs.pm";
 # ===========================
 # read the search engine part
 do "wikisearch.pm";
+
+# ===========================
+# read the access control part
+do "wikiaccess.pm";
 
 # ===========================
 # read the rcs related functions
@@ -120,6 +124,9 @@ sub initialize
     # Make %ENV safer for CGI
     $ENV{'PATH'} = '/bin:/usr/bin';
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
+
+    # initialize access control
+    initializeAccess();
 
     # initialize user name and user to WikiName list
     $userName = initializeRemoteUser( $theRemoteUser );
@@ -610,6 +617,7 @@ sub makeTopicSummary
     # called by search, mailnotify & changes after calling readFileHead
 
     my $htext = $theText;
+    $htext =~ s/<[^>]*>//go;         # remove all HTML tags
     $htext =~ s/%INCLUDE[^%]*%/ /go; # remove server side includes
     $htext =~ s/%SEARCH[^%]*%/ /go;  # remove inline search
     $htext =~ s/%DRAWING[^%]*%/ /go; # remove TWikiDraw drawing
@@ -857,6 +865,9 @@ sub handleCommonTags
 
     # Wiki extended rules
     $text = extendHandleCommonTags( $text, $topic, $theWeb );
+    # handle tags again because of extend
+    &wiki::handlePreferencesTags( $text );
+    handleInternalTags( $text, $topic, $theWeb );
 
     return $text;
 }
@@ -987,8 +998,9 @@ sub getRenderedVersion
             s@(^|[\-\*\s])((http|ftp|gopher|news|https)\:(\S+[^\s\.,!\?;:]))@&externalLink($1,$2)@geo;
 
 # Entities
-            s/&(\w+?)\;/$TranslationToken$1\;/go;
-            s/&/&amp;/go;
+            s/&(\w+?)\;/$TranslationToken$1\;/go;      # "&abc;"
+            s/&(\#[0-9]+)\;/$TranslationToken$1\;/go;  # "&#123;"
+            s/&/&amp;/go;                              # escape standalone "&"
             s/$TranslationToken/&/go;
             
             s/^----*/<HR>/o;
