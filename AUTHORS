@@ -13,54 +13,55 @@ A TWiki contributor is defined as a person who has contributed::
 
 This document identifies these people as authors of TWiki.
 
-   * Adam Theo http://twiki.org/cgi-bin/view/Main/AdamTheo
-   * Adrian Lynch http://twiki.org/cgi-bin/view/Main/AdrianLynch
-   * Al Williams http://twiki.org/cgi-bin/view/Main/AlWilliams
-   * Andrea Sterbini http://twiki.org/cgi-bin/view/Main/AndreaSterbini
-   * Antonio Bellezza http://twiki.org/cgi-bin/view/Main/AntonioBellezza
-   * Arthur Clemens http://twiki.org/cgi-bin/view/Main/ArthurClemens
-   * Carl Patten http://twiki.org/cgi-bin/view/Main/CarlPatten
-   * Caylan Larson http://twiki.org/cgi-bin/view/Main/CaylanLarson
-   * Christophe Vermeulen http://twiki.org/cgi-bin/view/Main/ChristopheVermeulen
-   * Claus Brunzema http://twiki.org/cgi-bin/view/Main/ClausBrunzema
-   * Colas Nahaboo http://twiki.org/cgi-bin/view/Main/ColasNahaboo
-   * Corey Fruitman http://twiki.org/cgi-bin/view/Main/CoreyFruitman
-   * Crawford Currie http://c-dot.co.uk
-   * Cris Bailiff http://twiki.org/cgi-bin/view/Main/CrisBailiff
-   * Dan Boitnott http://twiki.org/cgi-bin/view/Main/DanBoitnott
-   * Dave Harris drh@bhresearch.co.uk
-   * David Warman http://twiki.org/cgi-bin/view/Main/DavidWarman
-   * Frank Smith http://twiki.org/cgi-bin/view/Main/FrankSmith
-   * Grant Bowman http://twiki.org/cgi-bin/view/Main/GrantBow
-   * Harold Gottschalk http://twiki.org/cgi-bin/view/Main/HaroldGottschalk
-   * John Talintyre http://twiki.org/cgi-bin/view/Main/JohnTalintyre
-   * Kevin Kinnell http://twiki.org/cgi-bin/view/Main/KevinKinnell
-   * Kim Covil http://twiki.org/cgi-bin/view/Main/KimCovil
-   * Klaus Wriessnegger http://twiki.org/cgi-bin/view/Main/KlausWriessnegger
-   * Manpreet Singh http://twiki.org/cgi-bin/view/Main/ManpreetSingh
+   * [[TWiki:Main.AdamTheo][Adam Theo]]
+   * [[TWiki:Main.AdrianLynch][Adrian Lynch]]
+   * [[TWiki:Main.AlWilliams][Al Williams]]
+   * [[TWiki:Main.AndreaSterbini][Andrea Sterbini]]
+   * [[TWiki:Main.AntonioBellezza][Antonio Bellezza]]
+   * [[TWiki:Main.ArthurClemens][Arthur Clemens]]
+   * [[TWiki:Main.CarlPatten][Carl Patten]]
+   * [[TWiki:Main.CaylanLarson][Caylan Larson]]
+   * [[TWiki:Main.ChristopheVermeulen][Christophe Vermeulen]]
+   * [[TWiki:Main.ClausBrunzema][Claus Brunzema]]
+   * [[TWiki:Main.ColasNahaboo][Colas Nahaboo]]
+   * [[TWiki:Main.CoreyFruitman][Corey Fruitman]]
+   * [[http://c-dot.co.uk][Crawford Currie]]
+   * [[TWiki:Main.CrisBailiff][Cris Bailiff]]
+   * [[TWiki:Main.DanBoitnott][Dan Boitnott]]
+   * [[drh@bhresearch.co.uk][Dave Harris]]
+   * [[TWiki:Main.DavidWarman][David Warman]]
+   * [[TWiki:Main.FrankSmith][Frank Smith]]
+   * [[TWiki:Main.GrantBow][Grant Bowman]]
+   * [[TWiki:Main.HaroldGottschalk][Harold Gottschalk]]
+   * [[TWiki:Main.JohnTalintyre][John Talintyre]]
+   * [[TWiki:Main.KevinKinnell][Kevin Kinnell]]
+   * [[TWiki:Main.KimCovil][Kim Covil]]
+   * [[TWiki:Main.KlausWriessnegger][Klaus Wriessnegger]]
+   * [[TWiki:Main.ManpreetSingh][Manpreet Singh]]
+   * [[ TWiki:Main.MarioFrasca][Mario Frasca]]
    * Markus Peter - !SPiN !GmbH (warpi@spin.de)
-   * Martin Cleaver http://www.cleaver.org
-   * Martin Gregory http://twiki.org/cgi-bin/view/Main/MartinGregory
-   * Martin Raabe http://twiki.org/cgi-bin/view/Main/MartinRaabe
-   * MS http://twiki.org/cgi-bin/view/Main/MichaelSparks
-   * Mike Mannix http://twiki.org/cgi-bin/view/Main/MikeMannix
-   * Neil !McCurdy  http://twiki.org/cgi-bin/view/Main/NeilMcCurdy
-   * Nicholas Lee http://twiki.org/cgi-bin/view/Main/NicholasLee
-   * Niels Koldso http://twiki.org/cgi-bin/view/Main/NielsKoldso
-   * Pauline Cheung http://twiki.org/cgi-bin/view/Main/PaulineCheung
-   * Pavel Goran http://twiki.org/cgi-bin/view/Main/PavelGoran
-   * Peter Fokkinga http://twiki.org/cgi-bin/view/Main/PeterFokkinga
-   * Peter Thoeny http://twiki.org/cgi-bin/view/Main/PeterThoeny
-   * Randy Kramer http://twiki.org/cgi-bin/view/Main/RandyKramer
-   * Richard Donkin http://twiki.org/cgi-bin/view/Main/RichardDonkin
-   * Raymond Lutz http://twiki.org/cgi-bin/view/Main/RaymondLutz
-   * Ryan Freebern http://twiki.org/cgi-bin/view/Main/RyanFreebern
-   * Sam Hasler http://twiki.org/cgi-bin/view/Main/SamHasler
-   * Stanley Knutson http://twiki.org/cgi-bin/view/Main/StanleyKnutson
-   * Sue Blake http://twiki.org/cgi-bin/view/Main/SueBlake
-   * Sven Dowideit http://twiki.org/cgi-bin/view/Main/SvenDowideit
-   * Ted Pavlic http://twiki.org/cgi-bin/view/Main/TedPavlic
-   * Thomas Weigert http://twiki.org/cgi-bin/view/Main/ThomasWeigert
-   * Vito Miliano http://twiki.org/cgi-bin/view/Main/VitoMiliano
-   * Walter Mundt http://twiki.org/cgi-bin/view/Main/WalterMundt
-   * Will Norris http://twiki.org/cgi-bin/view/Main/WillNorris
+   * [[http://www.cleaver.org][Martin Cleaver]]
+   * [[TWiki:Main.MartinGregory][Martin Gregory]]
+   * [[TWiki:Main.MartinRaabe][Martin Raabe]]
+   * [[Main.MichaelSparks][MS TWiki]]
+   * [[TWiki:Main.MikeMannix][Mike Mannix]]
+   * [[ TWiki:Main.NeilMcCurdy][Neil McCurdy]]
+   * [[TWiki:Main.NicholasLee][Nicholas Lee]]
+   * [[TWiki:Main.NielsKoldso][Niels Koldso]]
+   * [[TWiki:Main.PaulineCheung][Pauline Cheung]]
+   * [[TWiki:Main.PavelGoran][Pavel Goran]]
+   * [[TWiki:Main.PeterFokkinga][Peter Fokkinga]]
+   * [[TWiki:Main.PeterThoeny][Peter Thoeny]]
+   * [[TWiki:Main.RandyKramer][Randy Kramer]]
+   * [[TWiki:Main.RichardDonkin][Richard Donkin]]
+   * [[TWiki:Main.RaymondLutz][Raymond Lutz]]
+   * [[TWiki:Main.RyanFreebern][Ryan Freebern]]
+   * [[TWiki:Main.SamHasler][Sam Hasler]]
+   * [[TWiki:Main.StanleyKnutson][Stanley Knutson]]
+   * [[TWiki:Main.SueBlake][Sue Blake]]
+   * [[TWiki:Main.SvenDowideit][Sven Dowideit]]
+   * [[TWiki:Main.TedPavlic][Ted Pavlic]]
+   * [[TWiki:Main.ThomasWeigert][Thomas Weigert]]
+   * [[TWiki:Main.VitoMiliano][Vito Miliano]]
+   * [[TWiki:Main.WalterMundt][Walter Mundt]]
+   * [[TWiki:Main.WillNorris][Will Norris]]
