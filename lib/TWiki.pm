@@ -124,9 +124,9 @@ use TWiki::Search;    # search engine
 use TWiki::Access;    # access control
 use TWiki::Store;     # file I/O and rcs related functions
 use TWiki::Attach;    # file attachment functions
+use TWiki::Form;      # forms for topics
 use TWiki::Plugins;   # plugins handler  #AS
 use TWiki::Net;       # SMTP, get URL
-use TWiki::Classification; # category handling functions
 
 # ===========================
 # variables: (new variables must be declared in "use vars qw(..)" above)
@@ -758,9 +758,7 @@ sub handleIncludeFile
     &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
     
-    # FIXME ??? Should attachments and other meta data be included?
-    my $metaText = renderMetaData( $theWeb, $theTopic, \@meta, "noMove" );
-    $text .= $metaText;
+    # FIXME What about attachments?
 
     # recursively process multiple embeded %INCLUDE% statements and prefs
     $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $theTopic, $theWeb, @theProcessedTopics )/geo;
@@ -835,7 +833,7 @@ sub handleSearchWeb
        $attrOrder, $attrRegex, $attrLimit, $attrReverse,
        $attrCasesensitive, $attrNosummary, $attrNosearch,
        $attrNoheader, $attrNototal, $attrBookview, $attrRenameview,
-       $attrShowlock, $attrNoEmpty
+       $attrShowlock, $attrNoEmpty, ""
     );
 }
 
@@ -1246,6 +1244,18 @@ sub handleCommonTags
     return $text;
 }
 
+# =========================
+sub handleMetaTags
+{
+    my( $theWeb, $theTopic, $text, $metar ) = @_;
+    
+    $text =~ s/%META{\s*"form"\s*}%/&renderFormData( $theWeb, $theTopic, $metar )/goe;
+    $text =~ s/%META{\s*"attachments"\s*}%/&TWiki::Attach::renderMetaData( $theWeb, $theTopic, $metar )/goe;
+    $text =~ s/%META{\s*"moved"\s*}%/&renderMoved( $theWeb, $theTopic, $metar )/goe;
+        
+    return $text;
+}
+
 # ========================
 sub renderMoved
 {
@@ -1282,60 +1292,46 @@ sub renderMoved
         $text = "<p><i><nop>$to moved from <nop>$from on $date by %MAINWEB%.$by </i>$putBack</p>";
     }
     
+    $text = handleCommonTags( $text, $topic, $web );
+    $text = getRenderedVersion( $text, $web );
+
+    
     return $text;
 }
 
 
 # =========================
-sub renderClassificationData
+sub renderFormData
 {
     my( $web, $topic, $metaP ) = @_;
 
     my @meta = @$metaP;
     
-    my $metaText = "";
+    my $metaText = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>";
     
     foreach my $metaItem ( @meta ) {
-       if( $metaItem =~ /(%META:CLASSIFICATION\{)([^\}]*)(}%)/ ) {
+       if( $metaItem =~ /(%META:FORM\{)([^\}]*)(}%)/ ) {
            my $args = $2;
            my $name = extractNameValuePair( $args, "name" );
-           $metaText .= "| *[[$name]]*  ||\n";
+           $metaText .= "<th colspan=\"2\" align=\"center\" bgcolor=\"#99CCCC\"> $name </th></tr>\n";
        }
     }
     
     foreach my $metaItem( @meta ) {
-       if( $metaItem =~ /(%META:CATEGORY\{)([^\}]*)(}%)/ ) {
+       if( $metaItem =~ /(%META:FIELD\{)([^\}]*)(}%)/ ) {
            my $args = $2;
-           my $name  = extractNameValuePair( $args, "name" );
-           my $value = extractNameValuePair( $args, "value" );
-           $metaText .= "|  *[[$name]]*  |  $value  |\n";
+           my $title  = extractNameValuePair( $args, "title" );
+           my $value = extractNameValuePair($args,  "value" );
+
+           $metaText .= "<tr><th bgcolor=\"#99CCCC\" align=\"right\"> $title:</th><td align=\"left\"> $value </td></tr>\n";
        }
     }
     
+    $metaText .= "</table>\n";
+
+    $metaText = getRenderedVersion( $metaText, $web );
+    
     return $metaText;
-}
-
-
-# =========================
-sub renderMetaData
-{
-    my( $web, $topic, $meta, $dontRenderMoved ) = @_;
-
-    my $attachmentText = TWiki::Attach::renderMetaData( $web, $topic, $meta );
-    
-    my $classificationText = renderClassificationData( $web, $topic, $meta );
-
-    my $movedText = "";
-    if( ! $dontRenderMoved ) {
-        $movedText = renderMoved( $web, $topic, $meta );
-    }
-    
-    my $text = "\n$attachmentText\n$classificationText\n$movedText";
-    
-    $text = handleCommonTags( $text, $topic, $web );
-    $text = getRenderedVersion( $text, $web );
-    
-    return $text;
 }
 
 
