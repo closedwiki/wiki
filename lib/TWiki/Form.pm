@@ -436,7 +436,7 @@ sub changeForm
     my $listForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$theWeb" );
     $listForms =~ s/^\s*//go;
     $listForms =~ s/\s*$//go;
-    my @forms = split( /,\s*/, $listForms );            
+    my @forms = split( /\s*,\s*/, $listForms );
     unshift @forms, "";
     my( $metat, $tmp ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
     my $formName = $theQuery->param( 'formtemplate' ) || "";
@@ -579,7 +579,7 @@ sub upgradeCategoryTable
         my $listForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" );
         $listForms =~ s/^\s*//go;
         $listForms =~ s/\s*$//go;
-        my @formTemplates = split( /,\s*/, $listForms );            
+        my @formTemplates = split( /\s*,\s*/, $listForms );
         my $defaultFormTemplate = "";
         $defaultFormTemplate = $formTemplates[0] if ( @formTemplates );
         
