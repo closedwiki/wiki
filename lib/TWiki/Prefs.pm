@@ -22,6 +22,7 @@
 # - Files wiki[a-z]+.pm are included by wiki.pm
 # - Upgrading TWiki is easy as long as you only customize wikicfg.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
+use strict;
 
 =begin twiki
 
@@ -32,23 +33,187 @@ topics and implements routines to access those preferences.
 
 =cut
 
-package TWiki::Prefs;
+$TWiki::Prefs::finalPrefsName = "FINALPREFERENCES";
 
-use strict;
-
-use vars qw(
-    $globalPrefs %webPrefs $requestPrefs $requestWeb
-    $finalPrefsName
-);
-
-$finalPrefsName = "FINALPREFERENCES";
+package TWiki::Prefs::TopicPrefs;
 
 =pod
 
----++ Prefs object
+---++ TopicPrefs Object
 
-This defines an object used internally by the functions in this module to hold
-a web's preferences.
+This Prefs-internal class is used to cache preferences read in from a single
+topic.  It is available via 'use TWiki::Prefs', but not via
+'use TWiki::Prefs::TopicPrefs'.
+
+---+++ sub new( $web, $topic )
+
+Reads preferences from the specified topic into a new TopicPrefs object.
+
+=cut
+
+sub new
+{
+    my ($class, $theWeb, $theTopic) = @_;
+    my $self = {};
+    bless $self, $class;
+
+    $self->{web} = $theWeb;
+    $self->{topic} = $theTopic;
+
+    $self->readPrefs();
+
+    return $self;
+}
+
+=pod
+
+---+++ sub readPrefs()
+
+Rereads preferences from the topic, updating the TopicPrefs object.
+
+=cut
+
+sub readPrefs
+{
+    my $self = shift;
+    
+    my $theWeb = $self->{web};
+    my $theTopic = $self->{topic};
+    
+    $self->{prefsHash} = {};
+    $self->{prefsKeys} = [];
+    $self->{prefsVals} = [];
+
+    my( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic, 1 );
+    $text =~ s/\r/\n/g;
+    $text =~ s/\n+/\n/g;
+
+    my $key = "";
+    my $value ="";
+    my $isKey = 0;
+    foreach( split( /\n/, $text ) ) {
+        if( /^\t+\*\sSet\s([a-zA-Z0-9_]*)\s\=\s*(.*)/ ) {
+            if( $isKey ) {
+                $self->insertPrefsValue( $key, $value );
+            }
+            $key = $1;
+            $value = defined $2 ? $2 : "";
+            $isKey = 1;
+        } elsif ( $isKey ) {
+            if( ( /^\t+/ ) && ( ! /^\t+\*/ ) ) {
+                # follow up line, extending value
+                $value .= "\n$_";
+            } else {
+                $self->insertPrefsValue( $key, $value );
+                $isKey = 0;
+            }
+        }
+    }
+    if( $isKey ) {
+        $self->insertPrefsValue( $key, $value );
+    }
+    
+    my %form = $meta->findOne( "FORM" );
+    if( %form ) {
+        my @fields = $meta->find( "FIELD" );
+        foreach my $field ( @fields ) {
+            $key = $field->{"name"};
+            $value = $field->{"value"};
+            my $attributes = $field->{"attributes"};
+            if( $attributes && $attributes =~ /[S]/o ) {
+                $self->insertPrefsValue( $key, $value );
+            }
+        }
+    }
+}
+
+=pod
+
+---+++ sub insertPrefsValue( $key, $value )
+
+Adds a key-value pair to the TopicPrefs object.
+
+=cut
+
+sub insertPrefsValue {
+    my ( $self, $theKey, $theValue ) = @_;
+
+    return if exists $self->{finalHash}{$theKey}; # key is final, may not be overridden
+
+    $theValue =~ s/\t/ /g;                 # replace TAB by space
+    $theValue =~ s/([^\\])\\n/$1\n/g;      # replace \n by new line
+    $theValue =~ s/([^\\])\\\\n/$1\\n/g;   # replace \\n by \n
+    $theValue =~ s/`//g;                   # filter out dangerous chars
+
+    if (exists $self->{prefsHash}{$theKey}) {
+	# key exists, need to deal with existing preference
+	my $valueRef = $self->{prefsHash}{$theKey};
+	if ($theKey eq $TWiki::Prefs::finalPrefsName) {
+	    $$valueRef .= ", $theValue"; # merge final preferences lists
+	} else {
+	    $$valueRef = $theValue; # simply replace all other values
+	}
+    } else {
+	# new preference setting, no previous value
+	my $newIndex = scalar @{ $self->{prefsKeys} };
+	$self->{prefsKeys}[$newIndex] = $theKey;
+	$self->{prefsVals}[$newIndex] = $theValue;
+	$self->{prefsHash}{$theKey} = \$self->{prefsVals}[$newIndex];
+    }
+}
+
+=pod
+
+---+++ sub getTopicPrefs()
+
+Returns a list  =( \@keys, \@values )= listing the preference settings in the
+current topic.  Changing entries in the =@values= array will change cached
+preference settings.  Changing entries in the =@keys= array will result in
+unspecified behavior -- don't do that.
+
+=cut
+
+sub getTopicPrefs
+{
+    my $self = shift;
+    return ($self->{prefsKeys}, $self->{prefsVals}) if wantarray;
+    return [$self->{prefsKeys}, $self->{prefsVals}]; # return array ref in scalar context
+}
+
+
+# =============================================================================
+package TWiki::Prefs::PrefsCache;
+
+use vars qw( %topicCache );
+
+=pod
+
+---++ PrefsCache Package Functions
+
+The PrefsCache package holds a cache of topics that have been read in, using
+the TopicPrefs class.  These functions manage that cache.
+
+---+++ sub clearCache()
+
+This non-member function clears cached topic preferences, forcing all settings
+to be reread.
+
+---+++ sub invalidateCache( $web, $topic )
+
+This non-member function invalidates the cache on a particular topic.
+
+=cut
+
+sub clearCache { undef %topicCache; }
+sub invalidateCache { delete $topicCache{$_[0]}{$_[1]}; }
+
+=pod
+
+---++ PrefsCache Object
+
+This defines an object used internally by the functions in TWiki::Prefs to hold
+preferences.  This object handles the cascading of preferences from site, to
+web, to topic/user.
 
 ---+++ sub new( $type, $parent, @target )
 
@@ -94,7 +259,7 @@ sub new
 	    $self->{user} = $theTarget[1];
 	}
 
-	$self->readPrefs();	
+	$self->loadPrefs( 1 );
     }
 
     return $self;
@@ -102,16 +267,18 @@ sub new
 
 =pod
 
----+++ sub readPrefs()
+---+++ sub loadPrefs( $allowCache )
 
-Requests for Prefs object to read preferences, refreshing its values in case
-they had changed.
+Requests for Prefs object to load preferences from its defining topics,
+re-cascading the overrides.  If =$allowCache= is set, the topic cache will be
+used to load preferences when applicable.  Topics that must be read will be
+placed in the cache regardless of the setting of $allowCache.
 
 =cut
 
-sub readPrefs
+sub loadPrefs
 {
-    my ($self) = @_;
+    my ($self, $allowCache) = @_;
     
     $self->{prefsKeys} = [];
     $self->{prefsVals} = [];
@@ -120,28 +287,83 @@ sub readPrefs
 
     $self->inheritPrefs($self->{parent}) if defined $self->{parent};
     
-    if (exists($self->{web})) {
+    if ($self->{type} eq "global") {
+	# global prefs
+        $self->loadPrefsFromTopic($TWiki::twikiWebname, $TWiki::wikiPrefsTopicname, "", $allowCache);
+        $self->loadPrefsFromTopic($TWiki::mainWebname, $TWiki::wikiPrefsTopicname, "", $allowCache);
+
+    } elsif ($self->{type} eq "web") {
 	# web prefs
-	$self->readPrefsFromTopic( $self->{web}, $TWiki::webPrefsTopicname);
-    } elsif (exists($self->{topic})) {
+	$self->loadPrefsFromTopic( $self->{web}, $TWiki::webPrefsTopicname, "", $allowCache);
+
+    } elsif ($self->{type} eq "request") {
 	# request prefs - read topic and user
 	my $parent = $self->{parent};
 	my $topicPrefsSetting = $parent->getPreferenceFlag("READTOPICPREFS");
 	my $topicPrefsOverride = $parent->getPreferenceFlag("TOPICOVERRIDESUSER");
 	if ($topicPrefsSetting && !$topicPrefsOverride) {
 	    # topic prefs overridden by user prefs
-	    $self->readPrefsFromTopic( $parent->{web}, $self->{topic} );
+	    $self->loadPrefsFromTopic( $parent->{web}, $self->{topic}, "", $allowCache);
 	}
-	$self->readPrefsFromTopic( $TWiki::mainWebname, $self->{user} );   # user-level prefs
+	$self->loadPrefsFromTopic( $TWiki::mainWebname, $self->{user}, "", $allowCache );
 	if ($topicPrefsSetting && $topicPrefsOverride) {
 	    # topic prefs override user prefs
-	    $self->readPrefsFromTopic( $parent->{web}, $self->{topic} );
+	    $self->loadPrefsFromTopic( $parent->{web}, $self->{topic}, "", $allowCache );
+	}
+    }
+}
+
+=pod
+
+---+++ sub loadPrefsFromTopic( $web, $topic, $keyPrefix, $allowCache )
+
+Loads preferences from a topic.  If =$allowCache= is set then cached
+settings are used where available.  All settings loaded are prefixed
+with =$keyPrefix=.
+
+=cut
+
+sub loadPrefsFromTopic
+{
+    my ($self, $theWeb, $theTopic, $theKeyPrefix, $allowCache) = @_;
+
+    my $topicPrefs;
+    
+    if ($allowCache && exists( $topicCache{$theWeb}{$theTopic} )) {
+	$topicPrefs = $topicCache{$theWeb}{$theTopic};
+    } else {
+	$topicPrefs = TWiki::Prefs::TopicPrefs->new($theWeb, $theTopic);
+    }
+
+    my ($topicKeys, $topicVals) = $topicPrefs->getTopicPrefs();
+    
+    $theKeyPrefix = "" unless defined $theKeyPrefix;
+    for ( my $i = 0; $i < @$topicVals; $i++) {
+	$self->_insertPreference($theKeyPrefix . $topicKeys->[$i], $topicVals->[$i]);
+    }
+}
+
+# Private function to insert a value into a PrefsCache object
+sub _insertPreference
+{
+    my ($self, $theKey, $theValue) = @_;
+    
+    if (exists $self->{prefsHash}{$theKey}) {
+	# key exists, need to deal with existing preference
+	my $valueRef = $self->{prefsHash}{$theKey};
+	if ($theKey eq $TWiki::Prefs::finalPrefsName) {
+	    $$valueRef .= ", $theValue"; # merge final preferences lists
+	} else {
+	    $$valueRef = $theValue; # simply replace all other values
 	}
     } else {
-	# global prefs
-        $self->readPrefsFromTopic( $TWiki::twikiWebname, $TWiki::wikiPrefsTopicname);
-        $self->readPrefsFromTopic( $TWiki::mainWebname, $TWiki::wikiPrefsTopicname);
+	# new preference setting, no previous value
+	my $newIndex = scalar @{ $self->{prefsKeys} };
+	$self->{prefsKeys}[$newIndex] = $theKey;
+	$self->{prefsVals}[$newIndex] = $theValue;
+	$self->{prefsHash}{$theKey} = \$self->{prefsVals}[$newIndex];
     }
+    
 }
 
 =pod
@@ -162,104 +384,6 @@ sub inheritPrefs
     
     for (my $i = 0; $i < @{ $self->{prefsKeys} }; $i++) {
 	$self->{prefsHash}{$self->{prefsKeys}[$i]} = \$self->{prefsVals}[$i];
-    }
-}
-
-=pod
-
----+++ sub readPrefsFromTopic( $theWeb, $theTopic, $theKeyPrefix )
-
-Reads preferences out of the specified topic and stores them in the Prefs
-object.  If the optional =$theKeyPrefix= parameter is specified, then this
-is prepended to all keys read from the topic.
-
-=cut
-
-sub readPrefsFromTopic
-{
-    my ($self, $theWeb, $theTopic, $theKeyPrefix) = @_;
-
-    my( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic, 1 );
-    $text =~ s/\r/\n/g;
-    $text =~ s/\n+/\n/g;
-
-    my $keyPrefix = $theKeyPrefix || "";
-    my $key = "";
-    my $value ="";
-    my $isKey = 0;
-    foreach( split( /\n/, $text ) ) {
-        if( /^\t+\*\sSet\s([a-zA-Z0-9_]*)\s\=\s*(.*)/ ) {
-            if( $isKey ) {
-                $self->insertPrefsValue( $key, $value );
-            }
-            $key = "$keyPrefix$1";
-            $value = defined $2 ? $2 : "";
-            $isKey = 1;
-        } elsif ( $isKey ) {
-            if( ( /^\t+/ ) && ( ! /^\t+\*/ ) ) {
-                # follow up line, extending value
-                $value .= "\n$_";
-            } else {
-                $self->insertPrefsValue( $key, $value );
-                $isKey = 0;
-            }
-        }
-    }
-    if( $isKey ) {
-        $self->insertPrefsValue( $key, $value );
-    }
-    
-    my %form = $meta->findOne( "FORM" );
-    if( %form ) {
-        my @fields = $meta->find( "FIELD" );
-        foreach my $field ( @fields ) {
-            $key = $field->{"name"};
-            $value = $field->{"value"};
-            my $attributes = $field->{"attributes"};
-            if( $attributes && $attributes =~ /[S]/o ) {
-                $self->insertPrefsValue( $key, $value );
-            }
-        }
-    }
-
-    my @finalPrefsKeys = split( /[\,\s]+/, getPreferencesValue( $finalPrefsName ) );
-    for my $finalPref (@finalPrefsKeys) {
-	$self->{finalHash}{$finalPref} = 1;
-    }
-}
-
-=pod
-
----+++ sub insertPrefsValue( $key, $value )
-
-Adds a key-value pair to the Prefs object.
-
-=cut
-
-sub insertPrefsValue {
-    my ( $self, $theKey, $theValue ) = @_;
-
-    return if exists $self->{finalHash}{$theKey}; # key is final, may not be overridden
-
-    $theValue =~ s/\t/ /g;                 # replace TAB by space
-    $theValue =~ s/([^\\])\\n/$1\n/g;      # replace \n by new line
-    $theValue =~ s/([^\\])\\\\n/$1\\n/g;   # replace \\n by \n
-    $theValue =~ s/`//g;                   # filter out dangerous chars
-
-    if (exists $self->{prefsHash}{$theKey}) {
-	# key exists, need to deal with existing preference
-	my $valueRef = $self->{prefsHash}{$theKey};
-	if ($theKey eq $finalPrefsName) {
-	    $$valueRef .= ", $theValue"; # merge final preferences lists
-	} else {
-	    $$valueRef = $theValue; # simply replace all other values
-	}
-    } else {
-	# new preference setting, no previous value
-	my $newIndex = scalar @{ $self->{prefsKeys} };
-	$self->{prefsKeys}[$newIndex] = $theKey;
-	$self->{prefsVals}[$newIndex] = $theValue;
-	$self->{prefsHash}{$theKey} = \$self->{prefsVals}[$newIndex];
     }
 }
 
@@ -333,11 +457,20 @@ sub getPreferenceFlag
 }
 
 # =============================================================================
+package TWiki::Prefs;
+
+use vars qw(
+    $globalPrefs %webPrefs $requestPrefs $requestWeb
+    $finalPrefsName
+);
+
+
 =pod
 
----++ Non-member functions
+---++ TWiki::Prefs package
 
-The below functions are designed to be used without reference to a Prefs object.
+This is the external interface to the Prefs module, and is how the rest of the
+TWiki code accesses preferences.
 
 ---+++ sub initializePrefs( $webName )
 
@@ -350,19 +483,22 @@ $webName::WebPreferences.
 sub initializePrefs
 {
     my( $theWebName ) = @_;
+    
+    TWiki::Prefs::PrefsCache::clearCache(); # for mod_perl compatibility
 
     $requestWeb = $theWebName;
-    $globalPrefs = TWiki::Prefs->new("global");
-    $webPrefs{$requestWeb} = TWiki::Prefs->new("web", $globalPrefs, $requestWeb);
-    $requestPrefs = TWiki::Prefs->new("copy", $webPrefs{$requestWeb});
+    $globalPrefs = TWiki::Prefs::PrefsCache->new("global");
+    $webPrefs{$requestWeb} = TWiki::Prefs::PrefsCache->new("web", $globalPrefs, $requestWeb);
+    $requestPrefs = TWiki::Prefs::PrefsCache->new("copy", $webPrefs{$requestWeb});
 
     return;
 }
 
 # =========================
+
 =pod
 
----++ sub initializeUserPrefs( $userPrefsTopic )
+---+++ sub initializeUserPrefs( $userPrefsTopic )
 
 Called after user is known (potentially by Plugin), this function reads
 preferences from the user's personal topic.  The parameter is the topic to read
@@ -377,7 +513,7 @@ sub initializeUserPrefs
     $theWikiUserName = "Main.TWikiGuest" unless $theWikiUserName;
 
     if( $theWikiUserName =~ /^(.*)\.(.*)$/ ) {
-	$requestPrefs = TWiki::Prefs->new("request", $webPrefs{$requestWeb}, $TWiki::topicName, $2);
+	$requestPrefs = TWiki::Prefs::PrefsCache->new("request", $webPrefs{$requestWeb}, $TWiki::topicName, $2);
     }
 
     return;
@@ -385,9 +521,10 @@ sub initializeUserPrefs
 
 
 # =========================
+
 =pod
 
----+++ sub getPrefsFromTopic (  $theWeb, $theTopic, $theKeyPrefix  )
+---+++ sub getPrefsFromTopic (  $web, $topic, $keyPrefix  )
 
 Reads preferences from the topic at =$theWeb.$theTopic=, prefixes them with
 =$theKeyPrefix= if one is provided, and adds them to the preference cache.
@@ -396,10 +533,12 @@ Reads preferences from the topic at =$theWeb.$theTopic=, prefixes them with
 
 sub getPrefsFromTopic
 {
-    $requestPrefs->readPrefsFromTopic(@_);
+    my ($web, $topic, $keyPrefix) = @_;
+    $requestPrefs->loadPrefsFromTopic($web, $topic, $keyPrefix, 1);
 }
 
 # =========================
+
 =pod
 
 ---+++ sub updateSetFromForm (  $meta, $text  )
@@ -445,11 +584,12 @@ sub updateSetFromForm
 }
 
 # =========================
+
 =pod
 
 ---+++ sub handlePreferencesTags ( $text )
 
-Replaces %PREF% and %VAR{"pref"}% syntax in $text, modifying that parameter in-place.
+Replaces %PREF% and %<nop>VAR{"pref"}% syntax in $text, modifying that parameter in-place.
 
 =cut
 
@@ -469,7 +609,7 @@ sub handlePreferencesTags
 
 ---+++ sub prvGetWebVariable( $attributeString )
 
-Returns the value for a %VAR{"foo" web="bar"}% syntax, given the stuff inside the {}'s.
+Returns the value for a %<nop>VAR{"foo" web="bar"}% syntax, given the stuff inside the {}'s.
 
 =cut
 
@@ -487,6 +627,7 @@ sub prvGetWebVariable
 }
 
 # =========================
+
 =pod
 
 ---+++ sub getPreferencesValue (  $theKey, $theWeb  )
@@ -511,7 +652,7 @@ sub getPreferencesValue
 
     if ($theWeb) {
 	if (!exists $webPrefs{$theWeb}) {
-	    $webPrefs{$theWeb} = TWiki::Prefs->new("web", $globalPrefs, $theWeb);
+	    $webPrefs{$theWeb} = TWiki::Prefs::PrefsCache->new("web", $globalPrefs, $theWeb);
 	}
 	return $webPrefs{$theWeb}->getPreferenceValue($theKey);
     } else {
@@ -523,6 +664,7 @@ sub getPreferencesValue
 }
 
 # =========================
+
 =pod
 
 ---+++ sub getPreferencesFlag (  $theKey, $theWeb  )
