@@ -2324,21 +2324,21 @@ sub new {
     $T = $this;
 
     $this->{sandbox} = new TWiki::Sandbox( $this, $TWiki::OS );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{sandbox};
 
     $this->{net} = new TWiki::Net( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{net};
     my %ss = @storeSettings;
     $this->{store} = new TWiki::Store( $this, $storeTopicImpl, \%ss );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{store};
     $this->{search} = new TWiki::Search( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{search};
     $this->{templates} = new TWiki::Templates( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{templates};
     $this->{attach} = new TWiki::Attach( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{attach};
     $this->{form} = new TWiki::Form( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{form};
 
     $this->{cgiQuery} = $theQuery;
 
@@ -2349,14 +2349,12 @@ sub new {
 	if ( # (-e $TWiki::htpasswdFilename ) && #<<< maybe
 		( $TWiki::htpasswdFormatFamily eq "htpasswd" ) ) {
         $this->{users} = new TWiki::User( $this, "HtPasswdUser" );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
 #	} elseif ($TWiki::htpasswdFormatFamily eq "something?") {
 #        $this->{users} = new TWiki::User( $this, "SomethingUser" );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
 	} else {
         $this->{users} = new TWiki::User( $this, "NoPasswdUser" );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
 	}
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{users};
 
     # Make %ENV safer, preventing hijack of the search path
     if( $safeEnvPath ) {
@@ -2369,14 +2367,13 @@ sub new {
 
     # initialize access control
     $this->{security} = new TWiki::Access( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{security};
 
     # initialize $webName and $topicName from URL
     $this->{topicName} = "";
     $this->{webName}   = "";
     if( $theTopic ) {
         if(( $theTopic =~ /^$regex{linkProtocolPattern}\:\/\//o ) && ( $this->{cgiQuery} ) ) {
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
             # redirect to URI
             print $this->{cgiQuery}->redirect( $theTopic );
             return; # should never return here
@@ -2386,7 +2383,6 @@ sub new {
             $this->{topicName} = $2 || "";
             # jump to WebHome if ""bin/script?topic=Webname."
             $this->{topicName} = $mainTopicname if( $this->{webName} && ( ! $this->{topicName} ) );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
         } else {
             # assume "bin/script/Webname?topic=SomeTopic"
             $this->{topicName} = $theTopic;
@@ -2409,7 +2405,6 @@ sub new {
         $this->{webName}   = $1 || "" if( ! $this->{webName} );
     }
     ( $this->{topicName} =~ /\.\./ ) && ( $this->{topicName} = $this->{mainTopicname} );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
 
     # Refuse to work with character sets that allow TWiki syntax
     # to be recognised within multi-byte characters.  Only allow 'oops'
@@ -2418,7 +2413,6 @@ sub new {
         $this->writeWarning( "Cannot use this multi-byte encoding ('$siteCharset') as site character encoding" );
         $this->writeWarning( "Please set a different character encoding in the \$siteLocale setting in TWiki.cfg." );
         my $url = $this->getOopsUrl( $this->{webName}, $this->{topicName}, "oopsbadcharset" );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
         print $this->{cgiQuery}->redirect( $url );
         return;
     }
@@ -2463,7 +2457,6 @@ sub new {
                                        $theRemoteUser, $theUrl, $thePathInfo );
     }
     $this->{wikiUserName} = $this->{users}->userToWikiName( $this->{userName} );         # i.e. "Main.JonDoe"
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
 
     $this->{SESSION}{USERNAME} = $this->{userName};
     $this->{SESSION}{WIKINAME} = $this->{users}->userToWikiName( $this->{userName}, 1 );      # i.e. "JonDoe";
@@ -2479,15 +2472,13 @@ sub new {
 
     # initialize preferences, second part for user level
     $this->{prefs}->initializeUser( $this->{wikiUserName}, $this->{topicName} );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
 
     $this->{renderer} = new TWiki::Render( $this );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this->{renderer};
 
     if( !$disableAllPlugins ) {
         # Normal plugin initialization - userName is known and preferences available
         TWiki::Plugins::initialize2( $this->{topicName}, $this->{webName}, $this->{userName} );
-    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
     }
 
     # Assumes all preferences values are set by now, which may well be false!
