@@ -2808,6 +2808,22 @@ sub handleIntUrlEncode
 
 =pod
 
+---++ sub handleScriptName ( )
+
+Not yet documented.
+
+=cut
+
+sub handleScriptName
+{
+    my $value = $ENV{'SCRIPT_URL'} || ""; # e.g. '/cgi-bin/view.cgi/TWiki/WebHome'
+    $value =~ s|^$dispScriptUrlPath/?||;  # cut URL path to get 'view.cgi/TWiki/WebHome'
+    $value =~ s|/.*||;                    # cut extended path to get 'view.cgi'
+    return $value;
+}
+
+=pod
+
 ---++ sub handleEnvVariable (  $theVar  )
 
 Not yet documented.
@@ -2954,6 +2970,7 @@ sub handleInternalTags
     $_[0] =~ s/%WIKIHOMEURL%/$wikiHomeUrl/g;
     $_[0] =~ s/%SCRIPTURL%/$urlHost$dispScriptUrlPath/g;
     $_[0] =~ s/%SCRIPTURLPATH%/$dispScriptUrlPath/g;
+    $_[0] =~ s/%SCRIPTNAME%/&handleScriptName()/ge;
     $_[0] =~ s/%SCRIPTSUFFIX%/$scriptSuffix/g;
     $_[0] =~ s/%PUBURL%/$urlHost$pubUrlPath/g;
     $_[0] =~ s/%PUBURLPATH%/$pubUrlPath/g;
