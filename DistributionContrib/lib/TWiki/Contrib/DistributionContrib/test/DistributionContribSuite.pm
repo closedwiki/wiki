@@ -1,3 +1,10 @@
+package DistributionContribTester;
+use base qw(Test::Unit::TestCase);
+
+sub test_ok {
+    1;
+}
+
 sub test {
  use Test::Unit::TestRunner;
 
@@ -5,4 +12,4 @@ sub test {
  $testrunner->start('TWikiReleaseNamesTester');
 }
 
-test();
+1;
