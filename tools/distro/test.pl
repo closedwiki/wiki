@@ -21,13 +21,14 @@ my $Config = {
     testweb => 'GameDev',
 # BUILD OPTIONS
 	platform => $^O,				# only darwin and sourceforge atm
-	twikiplugins => '/Users/wbniv/twiki/twikiplugins',
+	twikiplugins => '../twikiplugins',
 	twikisync => 0,					# download latest versions of plugins, addons, etc from twiki.org	
 # INSTALL OPTIONS
 	# TODO: change to use a URI (?)
 	install_account => 'twiki',
 	install_host => 'localhost',
 	install_dir => '~/Sites',
+	installurl = 'localhost/~twiki',
 # HELP OPTIONS
 	agent => basename( $0 ),
 	verbose => 0,
@@ -47,13 +48,14 @@ my $result = GetOptions( $Config,
 pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 
-$Config->{plugin} ||= [ qw( PerlDocPlugin 
+$Config->{plugin} ||= [ qw( PerlDocPlugin CommentPlugin
 		    FindElsewherePlugin InterwikiPlugin SpreadSheetPlugin TablePlugin TocPlugin 
 		    SpacedWikiWordPlugin ChartPlugin 
 		    TWikiReleaseTrackerPlugin
-		   	) ];	#+ ActionTrackerPlugin BeautifierPlugin CalendarPlugin CommentPlugin SpacedWikiWordPlugin
+		   	) ];	#+ ActionTrackerPlugin BeautifierPlugin CalendarPlugin
 $Config->{contrib} ||= [ qw( DistributionContrib ) ];	#+ AttrsContrib DBCacheContrib JSCalendarContrib TWikiShellContrib
 $Config->{addon} ||= [ qw( GetAWebAddOn ) ];		#+ PluginBenchmarkAddOn
+die "twikiplugins doesn't exist" unless -d $Config->{twikiplugins};
 $Config->{_installer}->{dir} = "$Config->{twikiplugins}/lib/TWiki/Contrib/TWikiInstallerContrib/";
 $Config->{_installer}->{TWikiReleases} = "$Config->{_installer}->{dir}/downloads/releases/";
 print Dumper( $Config ) if $Config->{debug};
@@ -82,7 +84,7 @@ print Dumper( $comparisonResults ) if $Config->{debug};
 my $textTopicReport = MakeComparisonTestsResultsReport({ %$Config, results => $comparisonResults });
 print Dumper( $textTopicReport ) if $Config->{debug};
 # post the results to the wiki
-PostComparisonTestsResultsReport({ %$Config, text => $textTopicReport });
+PostComparisonTestsResultsReport({ %$Config, text => $textTopicReport, topic => "$Config->{testweb}.$Config->{testweb}ComparisonsReport" });
 $Config->{isInstalled} = 1;
 
 END {
@@ -103,14 +105,14 @@ sub PostComparisonTestsResultsReport
 	my $parms = shift;
 	print STDERR "PostComparisonTestsResultsReport: ", Dumper( $parms ) if $parms->{debug};
 	my $text = $parms->{text} or die "no text?";
-	die "no testweb" unless $parms->{testweb};
+	die "no testweb?" unless $parms->{testweb};
+	die "no topic?" unless $parms->{topic};
 
 	my $agent = "TWikiInstaller: " . basename( $0 ) . ' [post comparison results]';
 	my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;
 	$mech->cgibin( "http://$parms->{install_host}/~$parms->{install_account}/cgi-bin/twiki" );
 
-	my $topic = "$parms->{testweb}ComparisonsReport";
-	$mech->edit( "TWiki.$topic" );
+	$mech->edit( $parms->{topic} );
  
 	$mech->field( text => $text );
 	$mech->click_button( value => 'Save' );
@@ -256,10 +258,10 @@ sub PushRemoteTWikiInstall
     logSystem( qq{scp $testweb $parms->{install_account}\@$parms->{install_host}:$parms->{install_dir}} );
     logSystem( qq{ssh $parms->{install_account}\@$parms->{install_host} "cd $parms->{install_dir}; mkdir -p webs/local; mv $testweb_basename webs/local/"} );
     # run the install program ( pre-twiki.sh, install_twiki.cgi (with install options), post-twiki.pl )
-	my $twiki_config = extensions2uri({ plugin => $Config->{plugin}, addon => $Config->{addon}, contrib => $Config->{contrib} });
+	my $twiki_config = extensions2uri({ plugin => $parms->{plugin}, addon => $parms->{addon}, contrib => $parms->{contrib} });
 #	warn "no (install) config" unless $parms->{install};
 	print "twiki_config = [$twiki_config]\n" if $parms->{debug};
-    logSystem( qq{ssh $parms->{install_account}\@$parms->{install_host} "cd $parms->{install_dir}; tar xjf twiki-${platform}.tar.bz2; time ./pre-twiki.sh; time curl 'http://$parms->{install_host}/~$parms->{install_account}/cgi-bin/install_twiki.cgi?${twiki_config};twiki=${kernel};install=install;localweb=$testweb_basename' -o 'TWikiInstallationReport.html'; ./post-twiki.pl"} );
+    logSystem( qq{ssh $parms->{install_account}\@$parms->{install_host} "cd $parms->{install_dir}; tar xjf twiki-${platform}.tar.bz2; time ./pre-twiki.sh; time curl --silent --show-error 'http://$parms->{install_host}/~$parms->{install_account}/cgi-bin/install_twiki.cgi?${twiki_config};twiki=${kernel};install=install;localweb=$testweb_basename' -o 'TWikiInstallationReport.html'; ./post-twiki.pl"} );
 }
 
 ################################################################################
