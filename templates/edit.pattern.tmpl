@@ -121,12 +121,11 @@ alert("theWeb = " + theWeb);
 
 
 %TMPL:DEF{"content"}%
-<form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%TMPL:P{"simpleheader"}%<textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onkeydown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
+%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%;" onkeydown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-<input type="hidden" name="cmd" value="%CMD%" />     
-See below for help in editing this page.
+<input type="hidden" name="cmd" value="%CMD%" /><span class="twikiGrayText">    
+See below for help in editing this page.</span>
 <table border="0" cellpadding="2" cellspacing="0">
  <tr>
   <td><span class="twikiSig"><b>-- <nop>%WIKIUSERNAME% - %DATE%</b></span></td>
@@ -135,7 +134,7 @@ See below for help in editing this page.
 </table>
 %FORMFIELDS%
 %TMPL:P{"topicaction"}%
-</form><div class="twikiHelp">
+</form></div><div class="twikiHelp">
 %INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%</div>%TMPL:END%
 
 
