@@ -45,8 +45,8 @@
 #     3.$templateDir/$name.$topic.tmpl 
 #     4.$templateDir/$name.tmpl 
 #	    
-#    $name is the name of the script, for example view . The current TWiki version 
-#    uses steps 2 and 4.
+#    $name is the name of the script, e.g. ``view''. The current
+#    TWiki version uses steps 2 and 4.
 #
 #    See http://twiki.sourceforge.net/cgi-bin/view/Codev/UniqueTopicTemplates
 #    for further details    

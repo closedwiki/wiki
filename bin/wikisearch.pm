@@ -25,6 +25,12 @@
 #
 # 20000501 Kevin Kinnell  : Many many many changes, best view is to
 #                           run a diff.
+# 20000605 Kevin Kinnell  : Bug hunting.  Fixed to allow web colors
+#                           spec'd as "word" instead of hex only.
+#                           Found a lovely bug that screwed up the
+#                           search limits because Perl (as we all know
+#                           but may forget) doesn't clear the $n match
+#                           params if a match fails... *^&$#!!!
 
 # =========================
 sub searchWikiWeb
@@ -36,10 +42,20 @@ sub searchWikiWeb
 
     ## 0501 kk : vvv new option to limit results
     # process the result limit here, this is the 'global' limit for
-    # all webs in a mult-web search
-    $theLimit =~ /(^\d+$)/o;  # only digits, all else is the same as
-    $theLimit = $1;           # an empty string.  "+10" won't work.
-                              # if there's anything but a digit, zap!
+    # all webs in a multi-web search
+
+    ## #############
+    ## 0605 kk : vvv This code broke due to changes in the wiki.pm
+    ##               file; it used to rely on the value of $1 being
+    ##               a null string if there was no match.  What a pity
+    ##               Perl doesn't do The Right Thing, but whatever--it's
+    ##               fixed now.
+    if ($theLimit =~ /(^\d+$)/o) { # only digits, all else is the same as
+	$theLimit = $1;            # an empty string.  "+10" won't work.
+    } else {                       # if there's anything but a digit, zap!
+	$theLimit = "";
+    }
+    ## #############
 
     my $searchResult = ""; 
     my $topic = $wiki::mainTopicname;
@@ -81,7 +97,7 @@ sub searchWikiWeb
         # list into full paths instead of just file names, filter out
         # any non-directories, strip the path back off, and sort
         # whatever was left after all that (which should be merely a
-        # list of directories names.)
+        # list of directory's names.)
 
     } else {
 
@@ -95,7 +111,8 @@ sub searchWikiWeb
 
     my $tempVal = "";
     my $tmpl = readTemplate( "search" );
-    my( $tmplHead, $tmplSearch, $tmplTable, $tmplNumber, $tmplTail ) = split( /%SPLIT%/, $tmpl );
+    my( $tmplHead, $tmplSearch,
+	$tmplTable, $tmplNumber, $tmplTail ) = split( /%SPLIT%/, $tmpl );
     $tmplHead = handleCommonTags( $tmplHead, $topic );
     $tmplSearch = handleCommonTags( $tmplSearch, $topic );
     $tmplNumber = handleCommonTags( $tmplNumber, $topic );
@@ -157,20 +174,22 @@ sub searchWikiWeb
 
         next unless webExists($thisWebName);  # can't process what ain't thar
 
-        # get this web's webcolor property, as a default
-        my $thisWebBGColor = getPrefsValue( "WEBBGCOLOR" ) || "\#FFFFFF";
+        # make white the default
+        my $thisWebBGColor = getPrefsValue( "WEBBGCOLOR" ) || "\#FF00FF";
 
         # this sucks, but it works for now -- brittle overkill
         # read the prefs topic for this web to get web specific settings.
 
+        ## #############
+        ## 0605 kk : vvv Made the match code more forgiving.
         # get $thisWebName 's color
 	my $bar = &readWebTopic( $thisWebName, $webPrefsTopicname);
-        $bar =~ /(\s+\*\ Set\ WEBBGCOLOR\s[=]\s)(\#[0-9a-fA-F]{6})/o;
+        $bar =~ /(WEBBGCOLOR\s*\=\s*)(\S+)/o;
 
         $thisWebBGColor = $2 ;
 
         # make sure we can report this web on an 'all' search
-        my $tf = ($bar =~ /(\s+\*\ Set\ NOSEARCHALL\s[=])(\s)(on)/o);
+        my $tf = ( $bar =~ /(NOSEARCHALL\s*\=\s*)([Oo][Nn])/o );
 
         next if $searchAllFlag and $tf; # DON'T filter out unless it's
                                         # part of an 'all' search.
@@ -348,3 +367,4 @@ sub searchWikiWeb
     }
     return $searchResult;
 }
+
