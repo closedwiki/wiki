@@ -66,6 +66,8 @@ sub _processWeb {
     $this->_processTopic( $web, $topic );
 	$npr++;
   } else {
+	# I tried doing this using grep instead of reading each topic, but
+	# it didn't make a vast difference.
 	my $cmd = "$TWiki::egrepCmd ";
 	$cmd .= $TWiki::cmdQuote;
 	$cmd .= "\* Set (ALLOW|DENY)(TOPIC|WEB)(VIEW|CHANGE)";
