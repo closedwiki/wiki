@@ -68,7 +68,7 @@ sub initPlugin
     $debug = &TWiki::Func::getPreferencesFlag( "EMPTYPLUGIN_DEBUG" );
 
     # Plugin correctly initialized
-    &TWiki::Func::writeDebug( "- EmptyPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
+    &TWiki::Func::writeDebug( "- TWiki::Plugins::EmptyPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
 }
 
@@ -77,7 +77,7 @@ sub DISABLE_commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-    &TWiki::Func::writeDebug( "- EmptyPlugin::commonTagsHandler( $web.$topic )" ) if $debug;
+    &TWiki::Func::writeDebug( "- EmptyPlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
     # This is the place to define customized tags and variables
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
@@ -92,7 +92,7 @@ sub DISABLE_startRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
 
-    &TWiki::Func::writeDebug( "- EmptyPlugin::startRenderingHandler( $web.$topic )" ) if $debug;
+    &TWiki::Func::writeDebug( "- EmptyPlugin::startRenderingHandler( $_[1].$topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion just before the line loop
 
