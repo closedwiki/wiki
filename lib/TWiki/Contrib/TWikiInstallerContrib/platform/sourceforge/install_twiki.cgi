@@ -365,6 +365,7 @@ foreach my $web ( @webs )
 
     if ( -d 'data' ) { execute( "cp -rpv data $dest" ); execute( "rm -rf data" ); }
     if ( -d 'pub' ) { execute( "cp -rpv pub $tmp/twiki" ); execute( "rm -rf pub" ); }
+    if ( -d 'templates' ) { execute( "cp -rpv templates $dest" ); execute( "rm -rf templates" ); }	# untested
 }
 
 chdir( "../.." ) or warn $!;
@@ -424,7 +425,7 @@ sub execute {
 sub eraseBundledPlugins
 { # (remove plugins that ship with twiki)
     # TODO: fix errors when removing DefaultPlugin
-    foreach my $plugin qw( CommentPlugin EditTablePlugin EmptyPlugin InterwikiPlugin RenderListPlugin SlideShowPlugin SmiliesPlugin SpreadSheetPlugin TablePlugin )
+    foreach my $plugin ( qw( CommentPlugin EditTablePlugin EmptyPlugin InterwikiPlugin RenderListPlugin SlideShowPlugin SmiliesPlugin SpreadSheetPlugin TablePlugin ) )
     {
 	erasePlugin( $plugin );
     }
@@ -445,6 +446,8 @@ sub erasePlugin
 #    rm -r twiki/pub/TWiki/${plugin}
 
 }
+
+__END__
 
 use CPAN;
 
