@@ -134,7 +134,7 @@ sub main
     }
 
     # check valid email address
-    if( $emailAddress !~ $TWiki::emailAddrRegex ) {
+    if( $emailAddress !~ $TWiki::regex{emailAddrRegex} ) {
         $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregemail" );
         TWiki::redirect( $query, $url );
         return;

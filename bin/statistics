@@ -273,9 +273,9 @@ sub collectLogData
     my %statUploads;
 
     # Imported regex objects, supporting I18N
-    my $webNameRegex = $TWiki::webNameRegex;
-    my $wikiWordRegex = $TWiki::wikiWordRegex;
-    my $abbrevRegex = $TWiki::abbrevRegex;
+    my $webNameRegex = $TWiki::regex{webNameRegex};
+    my $wikiWordRegex = $TWiki::regex{wikiWordRegex};
+    my $abbrevRegex = $TWiki::regex{abbrevRegex};
 
     # Script regexes
     my $intranetUserRegex = qr/[a-z0-9]+/;	# FIXME: should centralise this

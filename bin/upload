@@ -414,7 +414,7 @@ sub main
 	$fileName = $pathza[$#pathza];
 
 	# Delete unwanted characters from filename, with I18N
-	my $nonAlphaNum = "[^${TWiki::mixedAlphaNum}" . '\._-]+';
+	my $nonAlphaNum = "[^$TWiki::regex{mixedAlphaNum}" . '\._-]+';
         $fileName =~ s/${nonAlphaNum}//go;
         $fileName =~ s/$TWiki::uploadFilter/$1\.txt/goi;  # apply security filter
 
