@@ -26,7 +26,8 @@ package TWiki::Plugins::CalendarPlugin;
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION
 	    $libsLoaded $libsError $defaultsInitialized %defaults );
-$VERSION   = '1.015';  #pf# Added back support for preview showing unsaved events; Two loop fixes from DanielRohde
+$VERSION   = '1.016';  #dab# Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0
+#$VERSION   = '1.015';  #pf# Added back support for preview showing unsaved events; Two loop fixes from DanielRohde
 #$VERSION   = '1.014';  #nk# Added support for start and end dates in weekly repeaters
 #$VERSION   = '1.013';  #mrjc# Added support for multiple sources in topic=
 #$VERSION   = '1.012';  #PTh# Added missing doc of gmtoffset parameter (was deleted in 1.011)
@@ -334,19 +335,20 @@ sub handleCalendar
     my @days = ();
     my ($descr, $d, $dd, $mm, $yy, $text) =
        ('',     '', '',  '',  '',  ''   );
-    our %months = (  Jan=>1, Feb=>2, Mar=>3, Apr=>4,  May=>5,  Jun=>6,
+    my %months = (  Jan=>1, Feb=>2, Mar=>3, Apr=>4,  May=>5,  Jun=>6,
 		    Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12);
-	our %wdays = ( Sun=>7, Mon=>1, Tue=>2, Wed=>3, Thu=>4, Fri=>5, Sat=>6);
-    our $days_rx = '[0-9]?[0-9]';
-    our $months_rx = join ('|', keys %months);
-    our $wdays_rx = join ('|', keys %wdays);
-    our $years_rx = '[12][0-9][0-9][0-9]';
-    our $date_rx = "($days_rx)\\s+($months_rx)";
-    our $monthly_rx = "([1-6])\\s+($wdays_rx)";
-    our $full_date_rx = "$date_rx\\s+($years_rx)";
-    our $weekly_rx = "E\\s+($wdays_rx)";
-    our $periodic_rx = "E([0-9]+)\\s+$full_date_rx";
-    our $numdaymon_rx = "([0-9L])\\s+($wdays_rx)\\s+($months_rx)";
+    my %wdays = ( Sun=>7, Mon=>1, Tue=>2, Wed=>3, Thu=>4, Fri=>5, Sat=>6);
+    my $days_rx = '[0-9]?[0-9]';
+    my $months_rx = join ('|', keys %months);
+    my $wdays_rx = join ('|', keys %wdays);
+    my $years_rx = '[12][0-9][0-9][0-9]';
+    my $date_rx = "($days_rx)\\s+($months_rx)";
+    my $monthly_rx = "([1-6])\\s+($wdays_rx)";
+    my $full_date_rx = "$date_rx\\s+($years_rx)";
+    my $anniversary_date_rx = "A\\s+$date_rx\\s+($years_rx)";
+    my $weekly_rx = "E\\s+($wdays_rx)";
+    my $periodic_rx = "E([0-9]+)\\s+$full_date_rx";
+    my $numdaymon_rx = "([0-9L])\\s+($wdays_rx)\\s+($months_rx)";
     $text = getTopicText($theTopic, $theWeb, $refText, %options);
 
     # recursively expand includes
@@ -405,6 +407,26 @@ sub handleCalendar
         ($dd, $mm, $yy, $xs, $xcstr, $descr) = split( /\|/, $d);
         if ($yy == $y && $months{$mm} == $m) {
             &highlightDay( $cal, $dd, $descr, %options);
+        }
+    }
+    # collect all anniversary dates
+    @days = fetchDays( "$anniversary_date_rx", \@bullets );
+    foreach $d (@days) {
+        ($dd, $mm, $yy, $xs, $xcstr, $descr) = split( /\|/, $d);
+        if ($yy <= $y && $months{$mm} == $m) {
+
+	    # Annotate anniversaries with the number of years since
+	    # the original occurence. Do not annotate the first
+	    # occurence (i.e., someone's birth date looks like "X's
+	    # Birthday", not "X's Birthday (0)", but for subsequent
+	    # years it will look like "X's Birthday (3)", meaning that
+	    # they are 3 years old.
+
+            my $elapsed = $y - $yy;
+	    my $elapsed_indicator = ($elapsed > 0) 
+		? " ($elapsed)"
+		: "";
+            &highlightDay( $cal, $dd, $descr . $elapsed_indicator, %options);
         }
     }
     # then collect all dates without year

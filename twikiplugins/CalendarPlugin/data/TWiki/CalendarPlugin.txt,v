@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
-locks; strict;
+locks
+	apache:1.5; strict;
 comment	@# @;
 
+
+1.5
+date	2005.03.12.05.39.18;	author DavidBright;	state Exp;
+branches;
+next	1.4;
 
 1.4
 date	2005.01.28.19.14.11;	author alaster;	state Exp;
@@ -31,12 +37,13 @@ desc
 @
 
 
-1.4
+1.5
 log
-@none@
+@none
+@
 text
-@%META:TOPICINFO{author="alaster" date="1106939651" format="1.0" version="1.4"}%
----++!! Calendar Plugin (version 1.014)
+@%META:TOPICINFO{author="DavidBright" date="1110605958" format="1.0" version="1.5"}%
+---++!! Calendar Plugin (version 1.016)
 
 The <nop>CalendarPlugin handles the tag *%<nop>CALENDAR%* that inserts a monthly calendar in the page. Multiple topics can be specified as the source of the events, and these can be in any web.
 
@@ -53,7 +60,7 @@ NB. This Plugin does not, and has never, observed topic permissions.
 <tr><td>
 A list of Events is just a bullet list like this:
 	* 2 Feb - Andrea's birthday
-	* 7 Mar - Nicoletta's birthday
+	* A 7 Mar 1966 - Nicoletta's birthday
 	* 29 May 1996 - Maria Teresa is born!
 	* 29 Sep 1998 - Davide is born!
 
@@ -72,7 +79,7 @@ A list of Events is just a bullet list like this:
 <td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
 <td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
 <td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">1&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">2 <br> Andrea's birthday&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">2 <br /> Andrea's birthday&nbsp;</td>
 </tr>
 <TR>
 <td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">3&nbsp;</td>
@@ -141,7 +148,7 @@ A list of Events is just a bullet list like this:
 <td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">4&nbsp;</td>
 <td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">5&nbsp;</td>
 <td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">6&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">7 <br> Nicoletta's birthday&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">7 <br /> Nicoletta's birthday (36)&nbsp;</td>
 <td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">8&nbsp;</td>
 <td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">9&nbsp;</td>
 </tr>
@@ -205,13 +212,13 @@ A list of Events is just a bullet list like this:
 | ==month="+mm"== or =="-mm"== | relative month | Current month |
 | ==gmtoffset="+/-hh"== | Timezone expressed as number of hours offset from GMT | Server timezone |
 | ==topic="TopicName"==  | Topic containig events | The topic containing the tag |
-| ==topic="Web.TopicName1, Web.TopicName2"==  | Topics containig events | The topics containing the tags |
+| ==topic="Web.TopicName1, <nop>Web.TopicName2"==  | Topics containig events | The topics containing the tags |
 | ==web="Webname"==		| Web containing the event topic | The current web |
 | ==lang="language"==	 | Language: First few characters of "English", "Français", "Deutsch", "Español", "Português", "Nederlands", "Italiano", "Norsk", "Svenska", "Dansk", "suomi", "Magyar", "Polski | "English" |
 | ==daynames="Mon&brvbar;Tue&brvbar;..."== | Custom day names | "Monday&brvbar;Tuesday&brvbar;Wednesday&brvbar;Thursday&brvbar;<br />Friday&brvbar;Saturday&brvbar;Sunday" |
 | ==header="..."==	 | Text at the top of the calendar; use ==$m== for current month, ==$y== for year | Current month and year |
 | ==weekstartsonmonday="1"== or =="0"== | Flag to start week on Monday | "0" (Sunday) |
-| ==showdatenumbers="0"== | Show day numbers 1...31 in date cells | "1" |
+| ==showdatenumbers="0"== | Show day numbers 1...31 in date cells. Note that ==showdatenumbers=1== means that ==HTML::CalendarMonthSimple== will add the date numbers to the cells. If ==showdatenumbers=0==, then the plugin adds the date numbers. The result of this is that a calendar will *always* show the date numbers. | "0" |
 | ==showweekdayheaders="1"== | Show the weekday headers | "0" |
 | ==weekdayheadersbig="0"== | If enabled, show weekday headers in bold cell headings | "1" |
 | ==cellalignment="left"== | Horizontal cell alignment of day cells: "left", "center", "right", "justify", "char" | "center" |
@@ -247,13 +254,14 @@ Events are defined by bullets with the following syntax:
 | *Yearly*: | ==&nbsp;&nbsp; * dd MMM - description== | 05 Jun - Every 5th of June |
 |^| ==&nbsp;&nbsp; * w DDD MMM - description== | 2 Tue Mar - Every 2nd Tuesday of March |
 |^| ==&nbsp;&nbsp; * L DDD MMM - description== | L Mon May - The last Monday of May |
+|^| ==&nbsp;&nbsp; * A dd MMM yyyy - description== | A 20 Jul 1969 - First moon landing%BR%This style will mark anniversaries of an event that occurred on the given date. The description will have " (x)" appended to it, where "x" indicates how many years since the occurence of the first date. The first date is not annotated. |
 | *Monthly*: | ==&nbsp;&nbsp; * w DDD - description== | 1 Fri - Every 1st Friday of the month |
 |^| ==&nbsp;&nbsp; * dd - description== | 14 - The 14th of every month |
 | *Weekly*: | ==&nbsp;&nbsp; * E DDD - description== | E Wed - Every Wednesday |
-| ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - description== | E Wed 27 Jan 2005 - Every Wednesday Starting 27 Jan 2005|
+| ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - description== | E Wed 27 Jan 2005 - Every Wednesday Starting 27 Jan 2005 |
 | ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - dd MMM yyyy - description== | E Wed 1 Jan 2005 - 27 Jan 2005 - Every Wednesday from 1 Jan 2005 through 27 Jan 2005 (inclusive) |
 | *Periodic*: | <nobr> ==&nbsp;&nbsp; * En dd MMM yyyy - description== </nobr> | E3 02 Dec 2002 - Every three days starting 02 Dec 2002 |
-| *Exception*: | Above syntax, followed by:<br /> =={ dd MMM yyyy, dd MMM yyyy - dd MMM yyyy }== | 1 Fri X { 01 Dec 2002, 06 Dec 2002 - 14 Dec 2002 } - Every first Friday except on the 01 Dec 2002 and between 06 Dec 2002 and 14 Dec 2002 |
+| *Exception*: | Insert the following between the above syntax and the description:<br /> ==X { dd MMM yyyy, dd MMM yyyy - dd MMM yyyy }== | 1 Fri X { 01 Dec 2002, 06 Dec 2002 - 14 Dec 2002 } - Every first Friday except on the 01 Dec 2002 and between 06 Dec 2002 and 14 Dec 2002 |
 
 If an event falls in the selected month then the corresponding day is (by default):
 	* highlighted (font size +2)
@@ -268,11 +276,17 @@ I.e. ==format== is:
 ---++ Default settings
 	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = This plugin shows a monthly calendar with highlighted events
-	* How the cell content is formatted
+	* How the cell content is formatted 
 <verbatim>
-		* Set FORMAT = $old <br /> $description
+		* Set FORMAT = $old<br /><small>$description</small>
 </verbatim>
-	* __Note:__ You can add settings of any of the recognized attributes (in upper case like SHOWWEEKDAYHEADERS)
+	* __Note:__ You can add settings of any of the recognized attributes (in upper case like SHOWWEEKDAYHEADERS). Examples are shown below:
+		* Set CELLALIGNMENT = center
+		* Set VCELLALIGNMENT = center
+		* #Set WIDTH = 100%
+		* #Set GMTOFFSET = +10
+		* #Set SHOWWEEKDAYHEADERS = 0
+		* #Set WEEKSTARTSONMONDAY = 0
 
 ---++ Plugin Installation Instructions
 
@@ -282,8 +296,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	* The Plugin uses the ==HTML::CalendarMonthSimple== and ==Date::Calc== CPAN packages (see http://www.cpan.org)
 		* Install ==Date::Calc==
 		* Install ==HTML::CalendarMonthSimple==
-		* Change line 197 of <nop>CalendarMonthSimple.pm as follows to avoid an annoying log message:<br />
-		  =if ($self->year == $todayyear && $self->month == $todaymonth &lt;font color="red"&gt;&& defined $thisday&lt;/font&gt; && $thisday == $todaydate)=
+		* To avoid an annoying log message, change line 272 of <nop>CalendarMonthSimple.pm v1.25 by adding the section marked in %RED% RED %ENDCOLOR% :<br />
+		  <verbatim>if ($self->year = = $todayyear && $self->month = = $todaymonth %RED% && defined $thisday %ENDCOLOR% && $thisday = = $todaydate)</verbatim>
+			* For earlier or later versions where the line number may be different, search for =todayyear=. It currently (v1.22-v1.25) only appears twice: once to declare and set it, once to use it. On the line that uses it, add the =%RED%&& defined $thisday%ENDCOLOR%= as shown above. -- TWiki:Main.AngusRogerson - 16 Aug 2004
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
@@ -296,8 +311,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/AndreaSterbini |
-|  Plugin Version: | V1.012 (15 Jan 2004) |
+|  Plugin Version: | V1.016 (11 Mar 2005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.016: | TWiki:Main/DavidBright: Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0 |
+|  V1.015: | TWiki:Main.PatriceFournier: Added back support for preview showing unsaved events; Two loop fixes from TWiki:Main.DanielRohde |
 |  V1.014: | TWiki:Main.NathanKerr: Added start and end date support for weekly repeaters |
 |  V1.013: | TWiki:Main.MartinCleaver: Added multiple topic=web.topic parameters |
 |  V1.012: | TWiki:Main/PeterThoeny: Added missing doc of gmtoffset parameter (was deleted in V1.011) |
@@ -322,10 +339,70 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main/AndreaSterbini - 27 Feb 2001 <br />
--- TWiki:Main/PeterThoeny - 15 Jan 2004
+-- TWiki:Main/PeterThoeny - 15 Jan 2004 <br />
+-- TWiki:Main.NathanKerr - 28 Jan 2005 <br />
+-- TWiki:Main/DavidBright - 11 Mar 2005 <br />
 
+%META:FILEATTACHMENT{name="exclam.gif" attr="" comment="Image of exclamation point" date="1073090410" path="exclam.gif" size="79" user="PeterThoeny" version="1.1"}%
+@
+
+
+1.4
+log
+@none
+@
+text
+@d1 2
+a2 2
+%META:TOPICINFO{author="alaster" date="1106939651" format="1.0" version="1.4"}%
+---++!! Calendar Plugin (version 1.014)
+d19 1
+a19 1
+	* 7 Mar - Nicoletta's birthday
+d38 1
+a38 1
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">2 <br> Andrea's birthday&nbsp;</td>
+d107 1
+a107 1
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">7 <br> Nicoletta's birthday&nbsp;</td>
+d171 1
+a171 1
+| ==topic="Web.TopicName1, Web.TopicName2"==  | Topics containig events | The topics containing the tags |
+d177 1
+a177 1
+| ==showdatenumbers="0"== | Show day numbers 1...31 in date cells | "1" |
+d213 1
+d217 1
+a217 1
+| ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - description== | E Wed 27 Jan 2005 - Every Wednesday Starting 27 Jan 2005|
+d220 1
+a220 1
+| *Exception*: | Above syntax, followed by:<br /> =={ dd MMM yyyy, dd MMM yyyy - dd MMM yyyy }== | 1 Fri X { 01 Dec 2002, 06 Dec 2002 - 14 Dec 2002 } - Every first Friday except on the 01 Dec 2002 and between 06 Dec 2002 and 14 Dec 2002 |
+d235 1
+a235 1
+	* How the cell content is formatted
+d237 1
+a237 1
+		* Set FORMAT = $old <br /> $description
+d239 7
+a245 1
+	* __Note:__ You can add settings of any of the recognized attributes (in upper case like SHOWWEEKDAYHEADERS)
+d255 3
+a257 2
+		* Change line 197 of <nop>CalendarMonthSimple.pm as follows to avoid an annoying log message:<br />
+		  =if ($self->year == $todayyear && $self->month == $todaymonth &lt;font color="red"&gt;&& defined $thisday&lt;/font&gt; && $thisday == $todaydate)=
+d270 1
+a270 1
+|  Plugin Version: | V1.012 (15 Jan 2004) |
+d272 2
+d298 3
+a300 1
+-- TWiki:Main/PeterThoeny - 15 Jan 2004
+d302 1
+a302 1
 %META:FILEATTACHMENT{name="exclam.gif" attr="h" comment="Image of exclamation point" date="1073090410" path="exclam.gif" size="79" user="PeterThoeny" version="1.1"}%
 @
+
 
 1.3
 log
@@ -617,6 +694,7 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 -- TWiki:Main/PeterThoeny - 15 Jan 2004
 @
 
+
 1.2
 log
 @none
@@ -630,6 +708,7 @@ a167 2
 | ==gmtoffset="+/-hh"== | Timezone expressed as number of
  hours offset from GMT | Server timezone |
 @
+
 
 1.1
 log
