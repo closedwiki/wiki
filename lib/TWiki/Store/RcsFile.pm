@@ -79,12 +79,12 @@ sub init {
         # Make sure directory for rcs history file exists
         my $rcsDir = $self->_makeFileDir( 1, ",v" );
         my $tempPath = $self->{dataDir} . "/" . $self->{web};
-        if( ! -e "$tempPath" ) {
+        if( ! -e $tempPath ) {
             umask( 0 );
             mkdir( $tempPath, $self->{dirPermission} );
         }
         $tempPath = $rcsDir;
-        if( ! -e "$tempPath" ) {
+        if( ! -e $tempPath ) {
             umask( 0 );
             mkdir( $tempPath, $self->{dirPermission} );
         }
@@ -437,16 +437,36 @@ Set a twiki lock on the topic
 sub setLock
 {
     my( $self, $lock, $userName ) = @_;
-    
+
     $userName = $self->{session}->{userName} if( ! $userName );
 
     my $lockFilename = $self->_makeFileName( ".lock" );
     if( $lock ) {
         my $lockTime = time();
-        $self->_saveFile( $lockFilename, "$userName\n$lockTime" );    
+        $self->_saveFile( $lockFilename, "$userName\n$lockTime" );
     } else {
-        unlink "$lockFilename";    
+        unlink "$lockFilename";
     }
+}
+
+=pod
+
+---++ sub isLocked( $self )
+
+See if a twiki lock exists. Return the lock user and lock time if it does.
+
+=cut to implementation
+
+sub isLocked
+{
+    my( $self ) = @_;
+
+    my $lockFilename = $self->_makeFileName( ".lock" );
+    if ( -e $lockFilename ) {
+        my $t = $self->{session}->{store}->readFile( $lockFilename );
+        return split( /\s+/, $t, 2 );
+    }
+    return ( undef, undef );
 }
 
 # =========================
@@ -456,12 +476,12 @@ sub _saveAttachment
 
     # before save, create directories if they don't exist
     my $tempPath = $self->_makePubWebDir();
-    if( ! -e "$tempPath" ) {
+    if( ! -e $tempPath ) {
         umask( 0 );
         mkdir( $tempPath, $self->{dirPermission} );
     }
     $tempPath = $self->_makeFileDir( 1 );
-    if( ! -e "$tempPath" ) {
+    if( ! -e $tempPath ) {
         umask( 0 );
         mkdir( $tempPath, 0775 );
     }

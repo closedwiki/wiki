@@ -243,7 +243,7 @@ sub addUserToTWikiUsersTopic {
         $result .= "$line\n";
     }
     $this->store()->saveTopic( $TWiki::mainWebname, $topicName,
-                               $result, $meta, { unlock => 1 } );
+                               $result, $meta );
     return $topicName;
 }
 

@@ -427,7 +427,6 @@ sub searchWeb {
     my $theScope =      $params{scope} || "";
     my $theSearchVal =  $params{search} || $emptySearch;
     my $theSeparator =  $params{separator};
-    my $doShowLock =    $params{showlock} || "";
     my $theTemplate =   $params{template} || "";
     my $theTopic =      $params{topic} || "";
     my $theType =       $params{type} || "";
@@ -731,16 +730,6 @@ sub searchWeb {
             my $allowView = $topicInfo->{$topic}->{allowView};
             next unless $allowView;
 
-            my $locked = "";
-            if( $doShowLock ) {
-                my ( $l ) =
-                  $this->store()->topicIsLockedBy( $web, $topic );
-                if( $l ) {
-                    $revUser = $this->users()->userToWikiName( $l );
-                    $locked = "(LOCKED)";
-                }
-            }
-
             my ( $meta, $text );
 
             # Special handling for format="..."
@@ -779,7 +768,6 @@ sub searchWeb {
                     $out =~ s/\$web/$web/gos;
                     $out =~ s/\$topic\(([^\)]*)\)/breakName( $topic, $1 )/geos;
                     $out =~ s/\$topic/$topic/gos;
-                    $out =~ s/\$locked/$locked/gos;
                     $out =~ s/\$date/$revDate/gos;
                     $out =~ s/\$isodate/&revDate2ISO($revDate)/geos;
                     $out =~ s/\$rev/$revNum/gos;
@@ -805,7 +793,7 @@ sub searchWeb {
                 }
                 $out =~ s/%WEB%/$web/go;
                 $out =~ s/%TOPICNAME%/$topic/go;
-                $out =~ s/%LOCKED%/$locked/o;
+                $out =~ s/%LOCKED%//o;
                 $out =~ s/%TIME%/$revDate/o;
                 my $revNumText;
                 if( $revNum > 1 ) {

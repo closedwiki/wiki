@@ -670,28 +670,14 @@ sub getRevisionInfo
 
 ---+++ checkTopicEditLock( $web, $topic ) ==> ( $oopsUrl, $loginName, $unlockTime )
 
-| Description:                                    | Check if topic has an edit lock by a user |
-| Parameter: =$web=                               | Web name, e.g. ="Main"=, or empty |
-| Parameter: =$topic=                             | Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"= |
-| Return: =( $oopsUrl, $loginName, $unlockTime )= | The =$oopsUrl= for calling redirectCgiQuery(), user's =$loginName=, and estimated =$unlockTime= in minutes. The =$oopsUrl= and =$loginName= is empty if topic has no edit lock. |
-| Since:                                          | TWiki::Plugins::VERSION 1.010 (31 Dec 2002) |
+*DOES NOTHING* - deprecated by ReleaseEditLocksOnSave since
+TWiki::Plugins::VERSION 1.026
 
 =cut
 # -------------------------
 sub checkTopicEditLock
 {
-    my( $web, $topic ) = @_;
-    my( $loginName, $lockTime ) =
-      $TWiki::Plugins::SESSION->{store}->topicIsLockedBy( $web, $topic );
-    my $oopsUrl = "";
-    if( $loginName ) {
-        use integer;
-        $lockTime = ( $lockTime / 60 ) + 1;           # convert to minutes
-        my $editLockTime = $TWiki::editLockTime / 60; # max lock time
-        my $wikiUser = TWiki::Func::userToWikiName( $loginName );
-        $oopsUrl = &TWiki::Func::getOopsUrl( $web, $topic, "oopslocked", $wikiUser, $editLockTime, $lockTime );
-    }
-    return( $oopsUrl, $loginName, $lockTime );
+    return( "", "", 0 );
 }
 
 # =========================
@@ -699,23 +685,13 @@ sub checkTopicEditLock
 
 ---+++ setTopicEditLock( $web, $topic, $lock ) ==> $oopsUrl
 
-| Description:        | Lock topic for editing, or unlock when done |
-| Parameter: =$web=   | Web name, e.g. ="Main"=, or empty |
-| Parameter: =$topic= | Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"= |
-| Parameter: =$lock=  | Set to =1= to lock topic, =0= to unlock |
-| Return: =$oopsUrl=  | Empty string if OK; the =$oopsUrl= for calling redirectCgiQuery() in case lock is already taken when trying to lock topic |
-| Since:              | TWiki::Plugins::VERSION 1.010 (31 Dec 2002) |
+*DOES NOTHING* - deprecated by ReleaseEditLocksOnSave since
+TWiki::Plugins::VERSION 1.026
 
 =cut
 # -------------------------
 sub setTopicEditLock
 {
-    my( $web, $topic, $lock ) = @_;
-    if( $lock ) {
-        my( $oopsUrl ) = checkTopicEditLock( $web, $topic );
-        return $oopsUrl if( $oopsUrl );
-    }
-    $TWiki::Plugins::SESSION->{store}->lockTopic( $web, $topic, ! $lock );    # reverse $lock parameter is correct!
     return "";
 }
 
@@ -766,11 +742,6 @@ sub readTopicText
 | Since:                           | TWiki::Plugins::VERSION 1.010 (31 Dec 2002) |
 
    * Example: <br />
-     =my $oopsUrl = TWiki::Func::setTopicEditLock( $web, $topic, 1 );= <br />
-     =if( $oopsUrl ) {= <br />
-     =&nbsp;   TWiki::Func::redirectCgiQuery( $query, $oopsUrl );   # assuming valid query= <br />
-     =&nbsp;   return;= <br />
-     =}= <br />
      =my $text = TWiki::Func::readTopicText( $web, $topic );        # read topic text= <br />
      =# check for oops URL in case of error:= <br />
      =if( $text =~ /^http.*?\/oops/ ) {= <br />
@@ -782,13 +753,9 @@ sub readTopicText
      =# do meta data manipulation like:= <br />
      =$text =~ s/(META\:FIELD.*?name\=\"TopicClassification\".*?value\=\")[^\"]*/$1BugResolved/;= <br />
      =$oopsUrl = TWiki::Func::saveTopicText( $web, $topic, $text ); # save topic text= <br />
-     =TWiki::Func::setTopicEditLock( $web, $topic, 0 );             # unlock topic= <br />
-     =if( $oopsUrl ) {= <br />
-     =&nbsp;   TWiki::Func::redirectCgiQuery( $query, $oopsUrl );= <br />
-     =&nbsp;   return;= <br />
-     =}=
 
 =cut
+
 # -------------------------
 sub saveTopicText
 {

@@ -54,6 +54,7 @@ package TWiki::Meta;
 use strict;
 use Error qw(:try);
 use Assert;
+use TWiki::Merge;
 
 use vars qw( $formatVersion );
 
@@ -382,6 +383,52 @@ sub updateSets {
                 $value =~ s/\n/\\\n/o;
                 # SMELL: Worry about verbatim?  Multi-lines?
                 $$rtext =~ s/^(\t+\*\sSet\s$key\s\=\s*).*$/$1$value/gm;
+            }
+        }
+    }
+}
+
+=pod
+
+---++ sub merge( $otherMeta )
+
+Merge the data in the other meta block.
+   * File attachments that only appear in one set are preserved.
+   * Form fields that only appear in one set are preserved.
+   * Form field values that are different in each set are text-merged
+   * We don't merge for field attributes or title
+   * Topic info is not touched
+
+=cut
+
+sub merge {
+    my ( $this, $other ) = @_;
+
+    require TWiki::Merge;
+    import TWiki::Merge;
+
+    my $data = $other->{FIELD};
+    if( $data ) {
+        foreach my $otherD ( @$data ) {
+            my $thisD = $this->findOne( "FIELD", $otherD->{name} );
+            if ( $thisD && $thisD->{value} ne $otherD->{value} ) {
+                my $merged = TWiki::Merge::merge( $otherD->{value},
+                                                  $thisD->{value},
+                                                  qr/(\s+)/ );
+                # SMELL: we don't merge attributes or title
+                $thisD->{value} = $merged;
+            } elsif ( !$thisD ) {
+                $this->put("FIELD", %$otherD );
+            }
+        }
+    }
+
+    $data = $other->{FILEATTACHMENT};
+    if( $data ) {
+        foreach my $otherD ( @$data ) {
+            my $thisD = $this->findOne( "FILEATTACHMENT", $otherD->{name} );
+            if ( !$thisD ) {
+                $this->put("FILEATTACHMENT", %$otherD );
             }
         }
     }

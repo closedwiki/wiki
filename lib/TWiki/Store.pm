@@ -221,24 +221,32 @@ sub moveAttachment {
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
     ASSERT(defined($user)) if DEBUG;
 
+    $this->lockTopic( $user, $oldWeb, $oldTopic );
+
     my $wName = $this->users()->userToWikiName( $user );
     # Remove file attachment from old topic
     my $topicHandler = $this->_getTopicHandler( $oldWeb, $oldTopic, $theAttachment );
     my $error = $topicHandler->moveMe( $newWeb, $newTopic );
 
-    return $error if( $error );
+    if( $error ) {
+        $this->unlockTopic( $user, $oldWeb, $oldTopic );
+        $this->unlockTopic( $user, $newWeb, $newTopic );
+        return $error;
+    }
 
     my( $meta, $text ) = $this->readTopic( $wName, $oldWeb, $oldTopic, 1 );
     my %fileAttachment =
       $meta->findOne( "FILEATTACHMENT", $theAttachment );
     $meta->remove( "FILEATTACHMENT", $theAttachment );
-    $error .= $this->_noHandlersSave( $user, $oldWeb, $oldTopic,
-                                      $text, $meta,
-                                      { notify => 0 } );
-    # Remove lock
-    $this->lockTopic( $oldWeb, $oldTopic, 1 );
+    $error = $this->_noHandlersSave( $user, $oldWeb, $oldTopic,
+                                     $text, $meta,
+                                     { notify => 0 } );
 
-    return $error if( $error );
+    $this->unlockTopic( $user, $oldWeb, $oldTopic );
+    if( $error ) {
+        $this->unlockTopic( $user, $newWeb, $newTopic );
+        return $error;
+    }
 
     # Add file attachment to new topic
     ( $meta, $text ) = $this->readTopic( $wName, $newWeb, $newTopic, 1 );
@@ -248,17 +256,17 @@ sub moveAttachment {
     $fileAttachment{"movedwhen"} = time();
     $meta->put( "FILEATTACHMENT", %fileAttachment );
 
-    $error .= $this->_noHandlersSave( $user, $newWeb, $newTopic, $text,
+    $error = $this->_noHandlersSave( $user, $newWeb, $newTopic, $text,
                                       $meta, { notify => 0,
                                                comment => "moved" } );
 
-    # Remove lock file.
-    $this->lockTopic( $newWeb, $newTopic, 1 );
+    $this->unlockTopic( $user, $newWeb, $newTopic );
 
     return $error if( $error );
 
     $this->{session}->writeLog( "move", "$oldWeb.$oldTopic",
                      "Attachment $theAttachment moved to $newWeb.$newTopic" );
+
 
     return $error;
 }
@@ -394,6 +402,9 @@ sub renameTopic {
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
     ASSERT(defined($user)) if DEBUG;
 
+    # will block
+    $this->lockTopic( $user, $oldWeb, $oldTopic );
+
     my $topicHandler = $this->_getTopicHandler( $oldWeb, $oldTopic, "" );
     my $error = $topicHandler->moveMe( $newWeb, $newTopic );
     my $wName = $this->users()->userToWikiName( $user );
@@ -416,13 +427,12 @@ sub renameTopic {
                                 { comment => "renamed" } );
     }
 
+    $this->unlockTopic( $user, $oldWeb, $oldTopic );
+
     # Log rename
     if( $TWiki::doLogRename ) {
         $this->{session}->writeLog( "rename", "$oldWeb.$oldTopic", "moved to $newWeb.$newTopic $error" );
     }
-
-    # Remove old lock file
-    $topicHandler->setLock( "" );
 
     return $error;
 }
@@ -431,9 +441,13 @@ sub renameTopic {
 
 ---++ sub updateReferringPages (  $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs  ) -> ( count of lock failures, result text)
 
-Update pages that refer to a page that is being renamed/moved.
+Update pages that refer to a page that is being renamed/moved. Return the
+number of updates that failed due to active locks and a message.
 
-SMELL: duplicates rendering parser code!
+SMELL: This breaks the encapsulation of the Render function quite horribly.
+It should really be done by asking the Renderer to render the topic with
+a bunch of simplified handlers plugged in, and just one handler (the
+handler for TWiki links) provided to change the link name.
 
 =cut
 
@@ -441,85 +455,82 @@ sub updateReferringPages {
     my ( $this, $oldWeb, $oldTopic, $user, $newWeb, $newTopic, @refs ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
 
-    my $lockFailure = 0;
-
     my $result = "";
     my $preTopic = '^|\W';		# Start of line or non-alphanumeric
     my $postTopic = '$|\W';	# End of line or non-alphanumeric
     my $spacedTopic = TWiki::searchableTopic( $oldTopic );
     my $wikiUserName = $this->users()->userToWikiName( $user );
+    my $lockFailures = 0;
 
     while ( @refs ) {
         my $type = shift @refs;
         my $item = shift @refs;
         my( $itemWeb, $itemTopic ) = $this->{session}->normalizeWebTopicName( "", $item );
-        if ( $this->topicIsLockedBy( $itemWeb, $itemTopic ) ) {
-            $lockFailure = 1;
-        } else {
-            my $resultText = "";
-            $result .= ":$item: , "; 
-            #open each file, replace $topic with $newTopic
-            if ( $this->topicExists($itemWeb, $itemTopic) ) { 
-                my $scantext =
-                  $this->readTopicRaw( $wikiUserName, $itemWeb, $itemTopic,
-                                       undef, 0 );
-                if( ! $this->security()->checkAccessPermission( "change",
-                                                              $wikiUserName,
-                                                              $scantext,
-                                                              $itemWeb,
-                                                              $itemTopic ) ) {
-                    # This shouldn't happen, as search will not return, but
-                    # check to be on the safe side
-                    $this->{session}->writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
+        my $resultText = "";
+        $result .= ":$item: , "; 
+        #open each file, replace $topic with $newTopic
+        if ( $this->topicExists($itemWeb, $itemTopic) ) {
+            $this->lockTopic( $user, $itemWeb, $itemTopic );
+            my $scantext =
+              $this->readTopicRaw( $wikiUserName, $itemWeb, $itemTopic,
+                                   undef, 0 );
+            if( ! $this->security()->checkAccessPermission( "change",
+                                                            $wikiUserName,
+                                                            $scantext,
+                                                            $itemWeb,
+                                                            $itemTopic ) ) {
+                # This shouldn't happen, as search will not return, but
+                # check to be on the safe side
+                $this->{session}->writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
+                $this->unlockTopic( $user, $itemWeb, $itemTopic );
+                next;
+            }
+            my $insidePRE = 0;
+            my $insideVERBATIM = 0;
+            my $noAutoLink = 0;
+            foreach( split( /\n/, $scantext ) ) {
+                if( /^%META:TOPIC(INFO|MOVED)/ ) {
+                    $resultText .= "$_\n";
                     next;
                 }
-                my $insidePRE = 0;
-                my $insideVERBATIM = 0;
-                my $noAutoLink = 0;
-                foreach( split( /\n/, $scantext ) ) {
-                    if( /^%META:TOPIC(INFO|MOVED)/ ) {
-                        $resultText .= "$_\n";
-                        next;
-                    }
-                    # FIXME This code is in far too many places - also in Search.pm and Store.pm
-                    m|<pre>|i  && ( $insidePRE = 1 );
-                    m|</pre>|i && ( $insidePRE = 0 );
-                    if( m|<verbatim>|i ) {
-                        $insideVERBATIM = 1;
-                    }
-                    if( m|</verbatim>|i ) {
-                        $insideVERBATIM = 0;
-                    }
-                    m|<noautolink>|i   && ( $noAutoLink = 1 );
-                    m|</noautolink>|i  && ( $noAutoLink = 0 );
-
-                    if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
-                        if( $type eq "global" ) {
-                            my $insertWeb = ($itemWeb eq $newWeb) ? "" : "$newWeb.";
-                            s/($preTopic)\Q$oldWeb.$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
-                        } else {
-                            # Only replace bare topic (i.e. not preceeded by web) if web of referring
-                            # topic is in original Web of topic that's being moved
-                            if( $oldWeb eq $itemWeb ) {
-                                my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
-                                s/($preTopic)\Q$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
-                                s/\[\[($spacedTopic)\]\]/[[$newTopic][$1]]/gi;
-                            }
+                # FIXME This code is in far too many places - also in Search.pm and Store.pm
+                m|<pre>|i  && ( $insidePRE = 1 );
+                m|</pre>|i && ( $insidePRE = 0 );
+                if( m|<verbatim>|i ) {
+                    $insideVERBATIM = 1;
+                }
+                if( m|</verbatim>|i ) {
+                    $insideVERBATIM = 0;
+                }
+                m|<noautolink>|i   && ( $noAutoLink = 1 );
+                m|</noautolink>|i  && ( $noAutoLink = 0 );
+                if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
+                    if( $type eq "global" ) {
+                        my $insertWeb = ($itemWeb eq $newWeb) ? "" : "$newWeb.";
+                        s/($preTopic)\Q$oldWeb.$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
+                    } else {
+                        # Only replace bare topic (i.e. not preceeded by web) if web of referring
+                        # topic is in original Web of topic that's being moved
+                        if( $oldWeb eq $itemWeb ) {
+                            my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
+                            s/($preTopic)\Q$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
+                            s/\[\[($spacedTopic)\]\]/[[$newTopic][$1]]/gi;
                         }
                     }
-                    $resultText .= "$_\n";
                 }
-                my $meta = $this->extractMetaData( $itemWeb, $itemTopic,
-                                                   \$resultText );
-                $this->saveTopic( $user, $itemWeb, $itemTopic,
-                                  $resultText, $meta,
-                                  { unlock => 1, dontnotify => 1 } );
-            } else {
-                $result .= ";$item does not exist;";
+                $resultText .= "$_\n";
             }
+            my $meta = $this->extractMetaData( $itemWeb, $itemTopic,
+                                               \$resultText );
+            $this->saveTopic( $user, $itemWeb, $itemTopic,
+                              $resultText, $meta,
+                              { unlock => 1, dontnotify => 1 } );
+            $this->unlockTopic( $user, $itemWeb, $itemTopic );
+        } else {
+            $result .= ";$item does not exist;";
         }
     }
-    return ( $lockFailure, $result );
+    return $result;
 }
 
 
@@ -553,7 +564,6 @@ WORKS FOR ATTACHMENTS AS WELL AS TOPICS
 sub getRevisionNumber {
     my( $this, $theWebName, $theTopic, $attachment ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-    ASSERT(defined($attachment)) if DEBUG;
 
     $attachment = "" unless $attachment;
 
@@ -607,7 +617,6 @@ sub getRevisionDiff {
 sub getRevisionInfo {
     my( $this, $theWebName, $theTopic, $theRev, $attachment, $topicHandler ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-    ASSERT(defined($attachment)) if DEBUG;
 
     $theRev = 0 unless( $theRev );
 
@@ -619,42 +628,6 @@ sub getRevisionInfo {
       $topicHandler->getRevisionInfo( $theRev );
 
     return ( $date, $user, $rev, $comment );
-}
-
-=pod
-
----++ sub topicIsLockedBy (  $theWeb, $theTopic  )
-
-| returns  ( $lockUser, $lockTime ) | ( "", 0 ) if not locked |
-
-=cut
-
-sub topicIsLockedBy {
-    my( $this, $theWeb, $theTopic ) = @_;
-    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-
-    # pragmatic approach: Warn user if somebody else pressed the
-    # edit link within a time limit e.g. 1 hour
-
-    ( $theWeb, $theTopic ) =
-      $this->{session}->normalizeWebTopicName( $theWeb, $theTopic );
-
-    my $lockFilename = "$TWiki::dataDir/$theWeb/$theTopic.lock";
-    if( ( -e "$lockFilename" ) && ( $TWiki::editLockTime > 0 ) ) {
-        my $tmp = $this->readFile( $lockFilename );
-        my( $lockUser, $lockTime ) = split( /\n/, $tmp );
-        if( $lockUser ne $this->{session}->{userName} ) {
-            # time stamp of lock within editLockTime of current time?
-            my $systemTime = time();
-            # calculate remaining lock time in seconds
-            $lockTime = $lockTime + $TWiki::editLockTime - $systemTime;
-            if( $lockTime > 0 ) {
-                # must warn user that it is locked
-                return( $lockUser, $lockTime );
-            }
-        }
-    }
-    return( "", 0 );
 }
 
 # STATIC Build a hash by parsing name=value comma separated pairs
@@ -750,7 +723,7 @@ sub saveAttachment {
     ASSERT(defined($opts)) if DEBUG;
     my $action;
 
-    $this->lockTopic( $web, $topic, 0 );
+    $this->lockTopic( $user, $web, $topic );
 
     # update topic
     my( $meta, $text ) = $this->readTopic( $user, $web, $topic, undef, 1 );
@@ -803,7 +776,8 @@ sub saveAttachment {
     my $error = $this->saveTopic( $user, $web, $topic, $text,
                                   $meta, { unlock => 1 } );
 
-    $this->lockTopic( $web, $topic, 1 );
+    $this->unlockTopic( $user, $web, $topic );
+
     unless( $error || $opts->{dontlog} ) {
         $this->{session}->writeLog( $action, "$web.$topic", $attachment );
     }
@@ -822,8 +796,7 @@ sub _noHandlersSave {
 
     my $nextRev = $currentRev + 1;
 
-    if( $TWiki::doKeepRevIfEditLock && $currentRev &&
-        !$options->{forcenewrevision} ) {
+    if( $currentRev && !$options->{forcenewrevision} ) {
         # See if we want to replace the existing top revision
         my $mtime1 = $topicHandler->getTimestamp();
         my $mtime2 = time();
@@ -845,11 +818,15 @@ sub _noHandlersSave {
     # RCS requires a newline for the last line,
     $text =~ s/([^\n\r])$/$1\n/os;
 
-    my $dataError =
-      $topicHandler->addRevision( $text, $options->{comment}, $userName );
-    return $dataError if( $dataError );
+    # will block
+    $this->lockTopic( $userName, $web, $topic );
 
-    $topicHandler->setLock( ! $options->{unlock} );
+    my $error =
+      $topicHandler->addRevision( $text, $options->{comment}, $userName );
+
+    $this->unlockTopic( $userName, $web, $topic );
+
+    return $error if( $error );
 
     if( ! $options->{dontnotify} ) {
         # update .changes
@@ -896,6 +873,8 @@ to a normal save or not.
 sub repRev {
     my( $this, $userName, $web, $topic, $text, $meta, $options ) = @_;
 
+    $this->lockTopic( $userName, $web, $topic );
+
     # FIXME why should date be the same if same user replacing with
     # editLockTime?
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
@@ -913,11 +892,12 @@ sub repRev {
                          { forcedate => $epochSec, forceuser => $user } );
     $text = _writeMeta( $meta, $text );
 
-    my $dataError =
+    my $error =
       $topicHandler->replaceRevision( $text, $options->{comment},
                                       $user, $epochSec );
-    return $dataError if( $dataError );
-    $topicHandler->setLock( ! $options->{unlock} );
+    return $error if( $error );
+
+    $this->unlockTopic( $userName, $web, $topic );
 
     if( ( $TWiki::doLogTopicSave ) && ! ( $options->{dontlog} ) ) {
         # write log entry
@@ -950,17 +930,20 @@ simply promote the previous revision up to the head.
 sub delRev {
     my( $this, $userName, $web, $topic ) = @_;
 
+    $this->lockTopic( $userName, $web, $topic );
+
     my $rev = $this->getRevisionNumber( $web, $topic );
     if( $rev <= 1 ) {
         return "can't delete initial revision";
     }
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
-    my $dataError = $topicHandler->deleteRevision();
-    return $dataError if( $dataError );
+    my $error = $topicHandler->deleteRevision();
+    return $error if( $error );
 
     # restore last topic from repository
     $topicHandler->restoreLatestRevision();
-    $topicHandler->setLock( 0 );
+
+    $this->unlockTopic( $userName, $web, $topic );
 
     # TODO: delete entry in .changes
 
@@ -1001,59 +984,58 @@ sub saveFile {
 
 =pod
 
----++ sub lockTopic (  $theWeb, $theTopic, $doUnlock  )
+---++ sub lockTopic( $web, $topic )
 
-Get a lock on the given topic.
+Grab a topic lock on the given topic. A topic lock will cause other
+processes that also try to claim a lock to block. A lock has a
+maximum lifetime of 2 minutes, so operations on a locked topic
+must be completed within that time. You cannot rely on the
+lock timeout clearing the lock, though; that should always
+be done by calling unlockTopic.
 
 =cut
 
 sub lockTopic {
-    my( $this, $theWeb, $theTopic, $doUnlock ) = @_;
+    my ( $this, $locker, $web, $topic ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-    ASSERT(defined($doUnlock)) if DEBUG;
+    ASSERT($locker && $web && $topic) if DEBUG;
 
-    ( $theWeb, $theTopic ) = $this->{session}->normalizeWebTopicName( $theWeb, $theTopic );
+    my $topicHandler = $this->_getTopicHandler( $web, $topic );
 
-    my $topicHandler = $this->_getTopicHandler( $theWeb, $theTopic );
-    $topicHandler->setLock( ! $doUnlock );
+    while ( 1 ) {
+        my ( $user, $time ) = $topicHandler->isLocked();
+        last if ( !$user || $user eq $locker );
+        TWiki::writeWarning( "Lock on $web.$topic for $locker denied" );
+        # see how old the lock is. If it's older than 2 minutes,
+        # break it anyway. Locks are atomic, and should never be
+        # held that long, by _any_ process.
+        if ( time() - $time > 2 * 60 ) {
+            $this->{session}->writeWarning
+              ( "$locker broke $user's lock on $web.$topic" );
+            $topicHandler->setLock( 0 );
+            last;
+        }
+        # wait a couple of seconds before trying again
+        sleep(2);
+    }
+
+    $topicHandler->setLock( 1, $locker );
 }
 
 =pod
 
----++ sub removeObsoleteTopicLocks (  $web  )
-
-Clean all obsolete .lock files in a web.
-This should be called regularly, best from a cron job
-(called from mailnotify). Only required for file database
-implementations of Store.
+---++ sub unlockTopic( $user, $web, $topic )
+Release the topic lock on the given topic. A topic lock will cause other
+processes that also try to claim a lock to block. It is important to
+release a topic lock after a guard section is complete.
 
 =cut
 
-sub removeObsoleteTopicLocks {
-    my( $this, $web ) = @_;
-    ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
-    ASSERT(defined($web)) if DEBUG;
+sub unlockTopic {
+    my ( $this, $user, $web, $topic ) = @_;
 
-    my $webDir = "$TWiki::dataDir/$web";
-    opendir( DIR, "$webDir" );
-    my @fileList = grep /\.lock$/, readdir DIR;
-    closedir DIR;
-    my $file = "";
-    my $pathFile = "";
-    my $lockUser = "";
-    my $lockTime = 0;
-    my $systemTime = time();
-    foreach $file ( @fileList ) {
-        $pathFile = TWiki::Sandbox::untaintUnchecked( "$webDir/$file" );
-        ( $lockUser, $lockTime ) = split( /\n/, $this->readFile( "$pathFile" ) );
-        $lockTime = 0 unless( $lockTime );
-
-        # time stamp of lock over one hour of current time?
-        if( abs( $systemTime - $lockTime ) > $TWiki::editLockTime ) {
-            # obsolete, so delete file
-            unlink "$pathFile";
-        }
-    }
+    my $topicHandler = $this->_getTopicHandler( $web, $topic );
+    $topicHandler->setLock( 0, $user );
 }
 
 =pod
@@ -1409,6 +1391,7 @@ sub _writeKeyValue {
 # Write all the key=value pairs for the types listed
 sub _writeTypes {
     my( $meta, @types ) = @_;
+    ASSERT(ref($meta) eq "TWiki::Meta");
 
     my $text = "";
 

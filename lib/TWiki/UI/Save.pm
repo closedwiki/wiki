@@ -34,6 +34,7 @@ use TWiki::UI;
 use TWiki::UI::Preview;
 use Error qw( :try );
 use TWiki::UI::OopsException;
+use TWiki::Merge;
 
 # Private - do not call outside this module!
 # Returns 1 if caller should redirect to view when done
@@ -49,7 +50,6 @@ sub _save {
     TWiki::UI::checkWebExists( $session, $webName, $topic );
 
     my $topicExists  = $session->{store}->topicExists( $webName, $topic );
-
     # Prevent saving existing topic?
     my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
     if( $onlyNewTopic && $topicExists ) {
@@ -74,7 +74,7 @@ sub _save {
     TWiki::UI::checkAccess( $session, $webName, $topic,
                             "change", $wikiUserName );
 
-    my $saveCmd = $query->param( "cmd" );
+    my $saveCmd = $query->param( "cmd" ) || 0;
     if ( $saveCmd ) {
          # check permission for undocumented cmd=... parameter
         TWiki::UI::checkAdmin( $session, $webName, $topic, $wikiUserName );
@@ -98,42 +98,46 @@ sub _save {
         return 0;
     }
 
-    my( $meta, $text );
+    my ( $newText, $newMeta );   # new topic info being saved
+    my ( $currText, $currMeta ); # current head (if any)
+    my $originalrev; # rev edit started on
 
     # A template was requested; read it, and expand URLPARAMs within the
     # template using our CGI record
     my $templatetopic = $query->param( "templatetopic");
     if ($templatetopic) {
-        ($meta, $text) =
+        ( $newMeta, $newText ) =
           $session->{store}->readTopic( $wikiUserName, $webName,
                                         $templatetopic, undef, 0 );
-        $text = $session->expandVariablesOnTopicCreation( $text );
+        $newText = $session->expandVariablesOnTopicCreation( $newText );
+        # topic creation, make sure there is no original rev
+        $originalrev = 0;
     } else {
-        $text = $query->param( "text" );
+        $originalrev = $query->param( "originalrev" );
+        $newText = $query->param( "text" );
     }
 	
-    if( ! ( defined $text ) ) {
+    if( ! ( defined $newText ) ) {
         throw TWiki::UI::OopsException( $webName, $topic, "save" );
-    } elsif( ! $text ) {
+    } elsif( ! $newText ) {
         # empty topic not allowed
         throw TWiki::UI::OopsException( $webName, $topic, "empty" );
     }
 
-    $text = TWiki::decodeSpecialChars( $text );
-    $text =~ s/ {3}/\t/go;
+    $newText = TWiki::decodeSpecialChars( $newText );
+    $newText =~ s/ {3}/\t/go;
 
     my $saveOpts = {};
-    $saveOpts->{unlock} = 1 if $query->param( "unlock" );
     $saveOpts->{dontnotify} = 1 if $query->param( "dontnotify" );
     $saveOpts->{forcenewrevision} = 1 if $query->param( "forcenewrevision" );
 
     if( $saveCmd eq "repRev" ) {
-        $text =~ s/%__(.)__%/%_$1_%/go;
-        $meta = $session->{store}->extractMetaData( $webName, $topic, \$text );
+        $newText =~ s/%__(.)__%/%_$1_%/go;
+        $newMeta = $session->{store}->extractMetaData( $webName, $topic, \$newText );
         # replace top revision with this text
         my $error =
           $session->{store}->repRev( $userName, $webName, $topic,
-                                     $text, $meta, $saveOpts );
+                                     $newText, $newMeta, $saveOpts );
         if( $error ) {
             throw TWiki::UI::OopsException( $webName, $topic,
                                             "saveerr", $error );
@@ -142,33 +146,44 @@ sub _save {
         return 1;
     }
 
-    my $tmp;
-    # read meta (if not already read when reading template)
-    ( $meta, $tmp ) =
-      $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 ) unless $meta;
+    if ( ! $templatetopic ) {
+        ( $currMeta, $currText ) =
+          $session->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 1 );
+        $newMeta = new TWiki::Meta( $session, $webName, $topic );
+    }
 
     my $theParent = $query->param( 'topicparent' ) || "";
 
     # parent setting
     if( $theParent eq "none" ) {
-        $meta->remove( "TOPICPARENT" );
+        $newMeta->remove( "TOPICPARENT" );
     } elsif( $theParent ) {
-        $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+        $newMeta->put( "TOPICPARENT", ( "name" => $theParent ) );
     }
 
     my $formTemplate = $query->param( "formtemplate" );
     if( $formTemplate ) {
-        $meta->remove( "FORM" );
-        $meta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
+        $newMeta->remove( "FORM" );
+        $newMeta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
     }
 
     # Expand field variables, unless this new page is templated
-    $session->{form}->fieldVars2Meta( $webName, $query, $meta ) unless $templatetopic;
-    $meta->updateSets( \$text );
+    $session->{form}->fieldVars2Meta( $webName, $query, $newMeta ) unless $templatetopic;
+    $newMeta->updateSets( \$newText );
+
+    # assumes rev numbers start at 1
+    if ( $originalrev ) {
+        my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
+
+        if ( $rev ne $originalrev ) {
+            $newText = TWiki::Merge::merge( $currText, $newText, /(\r?\n)/ );
+            $newMeta->merge( $currMeta );
+        }
+    }
 
     my $error =
       $session->{store}->saveTopic( $userName, $webName, $topic,
-                                    $text, $meta, $saveOpts );
+                                    $newText, $newMeta, $saveOpts );
 
     if( $error ) {
         throw TWiki::UI::OopsException( $webName, $topic, "saveerr", $error );
@@ -181,14 +196,21 @@ sub _save {
 
 ---++ save( )
 Command handler for save command. Some parameters are passed in CGI:
+| =cmd= | DEPRECATED optionally delRev or repRev, which trigger those actions. |
+| =dontnotify= | if defined, suppress change notification |
+| =submitChangeForm= | |
+| =topicparent= | |
+| =formtemplate= | if defined, use the named template for the form |
 | =action= | savemulti overrides, everything else is passed on the normal =save= |
 action values are:
-| =save= | save, unlock topic, return to view, dontnotify is OFF |
-| =quietsave= | save, unlock topic,  return to view, dontnotify is ON |
+| =save= | save, return to view, dontnotify is OFF |
+| =quietsave= | save, return to view, dontnotify is ON |
 | =checkpoint= | save and continue editing, dontnotify is ON |
-| =cancel= | exit without save, unlock topic, return to view (does _not_ undo Checkpoint saves) |
+| =cancel= | exit without save, return to view (does _not_ undo Checkpoint saves) |
 | =preview= | preview edit text; same as before |
-This function can replace "save" eventually.
+
+=cmd= has been deprecated in favour of =action=. It will be deleted at
+some point.
 
 =cut
 
@@ -205,7 +227,6 @@ sub save {
     my $saveaction = lc($query->param( 'action' ));
     if ( $saveaction eq "checkpoint" ) {
         $query->param( -name=>"dontnotify", -value=>"checked" );
-        $query->param( -name=>"unlock", -value=>'0' );
         my $editURL = $session->getScriptUrl( $webName, $topic, "edit" );
         my $randompart = randomURL();
         $redirecturl = "$editURL|$randompart";
@@ -213,14 +234,15 @@ sub save {
         $query->param( -name=>"dontnotify", -value=>"checked" );
     } elsif ( $saveaction eq "cancel" ) {
         my $viewURL = $session->getScriptUrl( $webName, $topic, "view" );
-        $session->redirect( "$viewURL?unlock=on" );
+        $session->redirect( $viewURL );
         return;
     } elsif( $saveaction eq "preview" ) {
         TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );
         return;
+    } elsif( $saveaction =~ /^(del|rep)Rev$/ ) {
+        $query->param( -name => "cmd", -value => $saveaction );
     }
 
-    # save called by preview
     if ( _save( $session )) {
         $session->redirect( $redirecturl );
     }

@@ -49,9 +49,6 @@ sub preview {
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
 
-    # reset lock time, this is to prevent contention in case of a long edit session
-    $session->{store}->lockTopic( $webName, $topic );
-
     # Is user looking to change the form used?  Sits oddly in preview, but 
     # to avoid Javascript and pick up text on edit page it has to be in preview.
     if( $changeform ) {

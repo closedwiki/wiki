@@ -117,12 +117,13 @@ sub run {
 
     $Error::Debug = 1 if DEBUG; # comment out in production
 
-    try {
-        eval "use $class";
-        if( $@ ) {
-            die "$class compile failed: $@";
-        }
-        my $m = "$class"."::$method";
+    eval "use $class";
+    if( $@ ) {
+        die "$class compile failed: $@";
+    }
+    my $m = "$class"."::$method";
+    try
+    {
         no strict 'refs';
         &$m( $session );
         use strict 'refs';
@@ -137,7 +138,7 @@ sub run {
         my $e = shift;
         print "Content-type: text/plain\n\n";
         print $e->stringify();
-    }
+    };
 }
 
 =pod twiki

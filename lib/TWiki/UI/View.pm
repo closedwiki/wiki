@@ -40,7 +40,6 @@ Generate a complete HTML page that represents the viewed topics.
 The view is controlled by CGI parameters as follows:
 | =rev= | topic revision to view |
 | =raw= | don't format body text if set |
-| =unlock= | remove any topic locks if set |
 | =skin= | name of skin to use |
 | =contenttype= | |
 
@@ -53,7 +52,6 @@ sub view {
     my $topicName = $session->{topicName};
 
     my $viewRaw = $query->param( "raw" ) || "";
-    my $unlock  = $query->param( "unlock" ) || "";
     my $contentType = $query->param( "contenttype" );
 
     my $text = "";
@@ -70,11 +68,6 @@ sub view {
     # Set page generation mode to RSS if using an RSS skin
     if( $skin =~ /^rss/ ) {
         $session->{renderer}->setRenderMode( 'rss' );
-    }
-
-    if( $unlock eq "on" ) {
-        # unlock topic, user cancelled out of edit
-        $session->{store}->lockTopic( $webName, $topicName, "on" );
     }
 
     my $rev = $session->{store}->cleanUpRevID( $query->param( "rev" ));

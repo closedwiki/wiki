@@ -39,8 +39,7 @@ use TWiki::UI::OopsException;
 
 ---++ edit( $webName, $topic, $userName, $query )
 Edit handler. Most parameters are in the CGI query:
-| =cmd= | |
-| =breaklock= | if defined, breaks any pre-existing lock before edit |
+| =cmd= | Undocumented save command, passed on to save script |
 | =onlywikiname= | if defined, requires a wiki name for the topic name if this is a new topic |
 | =onlynewtopic= | if defined, and the topic exists, then moans |
 | =formtemplate= | name of the form for the topic; will replace existing form |
@@ -59,7 +58,7 @@ sub edit {
     my $topic = $session->{topicName};
     my $userName = $session->{userName};
 
-    my $saveCmd = $query->param( 'cmd' ) || "";
+    my $saveCmd = $query->param( 'cmd' );
     my $breakLock = $query->param( 'breaklock' ) || "";
     my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
     my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
@@ -117,20 +116,6 @@ sub edit {
         TWiki::UI::checkAdmin( $session, $webName, $topic, $wikiUserName );
     }
 
-    # Check for locks
-    my( $lockUser, $lockTime ) =
-      $session->{store}->topicIsLockedBy( $webName, $topic );
-    if( ( ! $breakLock ) && ( $lockUser ) ) {
-        # warn user that other person is editing this topic
-        $lockUser = $session->{users}->userToWikiName( $lockUser );
-        use integer;
-        $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
-        my $editLock = $TWiki::editLockTime / 60;
-        throw TWiki::UI::OopsException( $webName, $topic, "locked",
-                                        $lockUser, $editLock, $lockTime );
-    }
-    $session->{store}->lockTopic( $webName, $topic );
-
     my $templateWeb = $webName;
 
     # Get edit template, standard or a different skin
@@ -160,6 +145,15 @@ sub edit {
         }
 
         $text = $session->expandVariablesOnTopicCreation( $text, $userName );
+    }
+
+    # Insert the rev number we are editing. This will be boolean false if
+    # this is a new topic.
+    if( $topicExists ) {
+        my ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
+        $tmpl =~ s/%ORIGINALREV%/$orgRev/g;
+    } else {
+        $tmpl =~ s/%ORIGINALREV%/0/g;
     }
 
     # parent setting
@@ -193,7 +187,7 @@ sub edit {
         }
     }
 
-    if( $saveCmd eq "repRev" ) {
+    if( $saveCmd ) {
         $text = $session->{store}->readTopicRaw( $wikiUserName, $webName, $topic,
                                              undef, 0 );
     }
@@ -203,26 +197,25 @@ sub edit {
     $text =~ s/>/&gt\;/go;
     $text =~ s/\t/   /go;
 
-    $session->{plugins}->beforeEditHandler( $text, $topic, $webName ) unless( $saveCmd eq "repRev" );
+    $session->{plugins}->beforeEditHandler( $text, $topic, $webName ) unless( $saveCmd );
 
     if( $TWiki::doLogTopicEdit ) {
         # write log entry
         $session->writeLog( "edit", "$webName.$topic", $extra );
     }
 
-    if( $saveCmd ) {
-        $tmpl =~ s/\(edit\)/\(edit cmd=$saveCmd\)/go;
-    }
+    $tmpl =~ s/\(edit\)/\(edit cmd=$saveCmd\)/go if $saveCmd;
+
     $tmpl =~ s/%CMD%/$saveCmd/go;
     $tmpl = $session->handleCommonTags( $tmpl, $topic );
-    $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd eq "repRev" );
+    $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
 
     # Don't want to render form fields, so this after getRenderedVersion
     my %formMeta = $meta->findOne( "FORM" );
     my $form = "";
     $form = $formMeta{"name"} if( %formMeta );
-    if( $form && $saveCmd ne "repRev" ) {
+    if( $form && !$saveCmd ) {
         my @fieldDefs = $session->{form}->getFormDef( $templateWeb, $form );
 
         if( ! @fieldDefs ) {
@@ -230,7 +223,7 @@ sub edit {
         }
         my $formText = $session->{form}->renderForEdit( $webName, $topic, $form, $meta, $getValuesFromFormTopic, @fieldDefs );
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
-    } elsif( $saveCmd ne "repRev" && $session->{prefs}->getPreferencesValue( "WEBFORMS", $webName )) {
+    } elsif( !$saveCmd && $session->{prefs}->getPreferencesValue( "WEBFORMS", $webName )) {
         # follows a hybrid html monster to let the 'choose form button' align at
         # the right of the page in all browsers
         $form = '<div style="text-align:right;"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder"><tr><td align="right">'

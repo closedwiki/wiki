@@ -467,8 +467,7 @@ sub _processWeb {
 
         $session->{store}->saveTopic( $userName, $webName, $statsTopic,
                                       $text, $meta,
-                                      { unlock => 1,
-                                        dontnotify => 1,
+                                      { dontnotify => 1,
                                         dontlog => 1 } );
 
         _printMsg( "  - Topic $statsTopic updated", $session );

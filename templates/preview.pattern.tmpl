@@ -48,7 +48,7 @@ function launchWindow( theWeb, theTopic ) {
 </tr>
 <tr class="twikiTopicActionSecondary">
 <td class="twikiCancelCol"></td>
-<td class="twikiSubmitCol"><div class="twikiSubmitOptions"><input type="checkbox" class="twikiCheckbox" name="unlock" id="releaselock" %RELEASEEDITLOCKCHECKBOX% /><label for="releaselock">Release edit lock</label>&nbsp;&nbsp;<a target="UnlockTopic" onclick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a><br />
+<td class="twikiSubmitCol"><div class="twikiSubmitOptions">
    <input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">Minor changes, don't notify</label>&nbsp;&nbsp;<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a></div></td>
 <td class="twikiAddCol"></td>
 </tr>
@@ -79,6 +79,7 @@ function launchWindow( theWeb, theTopic ) {
 %META{"attachments"}%
 </div>
 <form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<input type="hidden" name="originalrev" value="%URLPARAM{"originalrev"}%" />
 <input type="hidden" name="text" value="%HIDDENTEXT%" />
 <input type="hidden" name="cmd" value="%CMD%" />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />

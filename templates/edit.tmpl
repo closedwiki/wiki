@@ -65,9 +65,6 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 &nbsp; &nbsp;
 </td><td valign="top">
 &nbsp; &nbsp;
-<input type="checkbox" name="unlock" %RELEASEEDITLOCKCHECKBOX% /> Release edit lock
-<font size="-1">(<a target="UnlockTopic" onclick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a>)</font> <br />
-&nbsp; &nbsp;
 <input type="checkbox" name="dontnotify" %DONTNOTIFYCHECKBOX% /> Minor changes, don't notify
 <font size="-1">(<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>)</font>
 <font color="#333333" size="-1">
@@ -91,6 +88,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 <form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"simpleheader"}%
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onkeydown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
+<input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 <input type="hidden" name="cmd" value="%CMD%" />

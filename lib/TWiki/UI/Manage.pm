@@ -354,12 +354,6 @@ sub rename {
   }
 
     if( ! $justChangeRefs ) {
-        if( ! _getLocks( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock, $skin ) ) {
-            return;
-        }
-    }
-
-    if( ! $justChangeRefs ) {
         if( $theAttachment ) {
             my $moveError = 
               $session->{store}->moveAttachment( $oldWeb, $oldTopic,
@@ -396,15 +390,11 @@ sub rename {
     if( ! $theAttachment ) {
         my @refs = _getReferringTopicsListFromURL( $session, $oldWeb, $oldTopic, $newWeb, $newTopic );
 
-        my $problems;
-        ( $lockFailure, $problems ) = 
+        my $problems =
           $session->{store}->updateReferringPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
     }
     my $new_url = "";
-    if( $lockFailure ) {
-        _moreRefsToChange( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $skin );
-        return;
-    } elsif ( "$newWeb" eq "Trash" && "$oldWeb" ne "Trash" ) {
+    if ( $newWeb eq "Trash" && $oldWeb ne "Trash" ) {
         if( $theAttachment ) {
             # go back to old topic after deleting an attachment
             $new_url = $session->getScriptUrl( $oldWeb, $oldTopic, "view" );
@@ -477,64 +467,6 @@ sub _getReferringTopicsListFromURL {
     return @result;
 }
 
-# Return 1 if can't get lock, otherwise 0
-sub _getLocks {
-    my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock, $skin ) = @_;
-
-    my( $oldLockUser, $oldLockTime, $newLockUser, $newLockTime );
-    my $query = $session->{cgiQuery};
-
-    if( ! $breakLock ) {
-        # Check for lock - at present the lock can't be broken
-        ( $oldLockUser, $oldLockTime ) =
-          $session->{store}->topicIsLockedBy( $oldWeb, $oldTopic );
-        if( $oldLockUser ) {
-            $oldLockUser = $session->{users}->userToWikiName( $oldLockUser );
-            use integer;
-            $oldLockTime = ( $oldLockTime / 60 ) + 1; # convert to minutes
-        }
-
-        if( $theAttachment ) {
-            ( $newLockUser, $newLockTime ) =
-              $session->{store}->topicIsLockedBy( $newWeb, $newTopic );
-            if( $newLockUser ) {
-                $newLockUser = $session->{users}->userToWikiName( $newLockUser );
-                use integer;
-                $newLockTime = ( $newLockTime / 60 ) + 1; # convert to minutes
-                my $editLock = $TWiki::editLockTime / 60;
-            }
-        }
-    }
-
-    if( $oldLockUser || $newLockUser ) {
-        my $tmpl = $session->{templates}->readTemplate( "oopslockedrename", $skin );
-        my $editLock = $TWiki::editLockTime / 60;
-        if( $oldLockUser ) {
-            $tmpl =~ s/%OLD_LOCK%/Source topic $oldWeb.$oldTopic is locked by $oldLockUser, lock expires in $oldLockTime minutes.<br \/>/go;
-        } else {
-            $tmpl =~ s/%OLD_LOCK%//go;
-        }
-        if( $newLockUser ) {
-            $tmpl =~ s/%NEW_LOCK%/Destination topic $newWeb.$newTopic is locked by $newLockUser, lock expires in $newLockTime minutes.<br \/>/go;
-        } else {
-            $tmpl =~ s/%NEW_LOCK%//go;
-        }
-        $tmpl =~ s/%NEW_WEB%/$newWeb/go;
-        $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
-        $tmpl =~ s/%ATTACHMENT%/$theAttachment/go;
-        $tmpl = $session->handleCommonTags( $tmpl, $oldTopic, $oldWeb );
-        $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $oldWeb );
-        $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-        # SMELL: this is a redirect!
-        $session->writeCompletePage( $tmpl );
-        return 0;
-    } else {
-        $session->{store}->lockTopic( $oldWeb, $oldTopic );
-    }
-
-    return 1;
-}
-
 # Display screen so user can decide on new web and topic.
 sub _newTopicScreen {
     my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
@@ -578,20 +510,6 @@ sub _setVars {
     $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
     $tmpl =~ s/%NONWIKIWORDFLAG%/$nonWikiWordFlag/go;
     return $tmpl;
-}
-
-sub _moreRefsToChange {
-    my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $skin ) = @_;
-    my $query = $session->{cgiQuery};
-
-    my $tmpl = $session->{templates}->readTemplate( "renamerefs", $skin );
-    $tmpl = _setVars( $tmpl, $oldTopic, $newWeb, $newTopic );
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
-    $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
-    $tmpl = $session->handleCommonTags( $tmpl, $oldTopic, $oldWeb );
-    $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-
-    $session->writeCompletePage( $tmpl );
 }
 
 1;
