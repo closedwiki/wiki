@@ -169,7 +169,7 @@ text $tblhdr".
 	   action("AcTion2","Main.ActorThree",undef,"Sun, 11 Mar 2001","The *world* is flat","closed").
 	   action("AcTion3","Main.ActorFour",$ActionTrackerPlugin::Format::latecol,"Sun, 11 Mar 2001","_Late_ the late great *date*","open").
 	   action("AcTion4","Main.ActorFiveVeryLongNameBecauseItsATest",$ActionTrackerPlugin::Format::latecol,"Wed, 13 Feb 2002","This is an action with a lot of associated text to test<br />   * the VingPazingPoodleFactor,<br />   * Tony Blair is a brick.<br />   * Who should really be built<br />   * Into a very high wall.","open").
-	   action("AcTion5","Main.ActorSix",$ActionTrackerPlugin::Format::badcol,"BAD DATE FORMAT see Plugins.ActionTrackerPlugin#DateFormats","Bad date","open")."</table>
+	   action("AcTion5","Main.ActorSix",$ActionTrackerPlugin::Format::badcol,"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb.ActionTrackerPlugin#DateFormats","Bad date","open")."</table>
 break the table here $tblhdr".
 	   action("AcTion6","Main.ActorSeven",$ActionTrackerPlugin::Format::latecol,"Tue, 1 Jan 2002","Create the mailer, %USERNAME%","open")."</table>
 
@@ -226,11 +226,11 @@ sub testBeforeEditHandler {
   $this->assert_matches($re, $text); $text =~ s/$re//;
   $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"creator\" (?i)VALUE(?-i)=\"\">/o;
   $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"closed\" (?i)VALUE(?-i)=\"BAD DATE FORMAT see Plugins\.ActionTrackerPlugin\#DateFormats\">/o;
+  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"closed\" (?i)VALUE(?-i)=\"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb\.ActionTrackerPlugin\#DateFormats\">/;
   $this->assert_matches($re, $text); $text =~ s/$re//;
   $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"closer\" (?i)VALUE(?-i)=\"\">/o;
   $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"created\" (?i)VALUE(?-i)=\"BAD DATE FORMAT see Plugins\.ActionTrackerPlugin\#DateFormats\">/o;
+  $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"created\" (?i)VALUE(?-i)=\"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb\.ActionTrackerPlugin\#DateFormats\">/;
   $this->assert_matches($re, $text); $text =~ s/$re//;
   $re = qr/<(?i)INPUT TYPE(?-i)=\"hidden\" (?i)NAME(?-i)=\"uid\" (?i)VALUE(?-i)=\"\">/o;
   $this->assert_matches($re, $text); $text =~ s/$re//;

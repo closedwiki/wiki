@@ -400,7 +400,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	$stime =~ s/(\w+)\s+(\w+)\s+(\w+)\s+([^\s]+)\s+(\w+).*/$1, $3 $2 $5/o;
       }
     } else {
-      $stime = "BAD DATE FORMAT see %TWIKIWEB%.ActionTrackerPlugin#DateFormats";
+      $stime = "BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb.ActionTrackerPlugin#DateFormats";
     }
     return $stime;
   }
@@ -449,9 +449,11 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     foreach my $name ( split( /\s*,\s*/, $val )) {
       my $who = _canonicalName( $name );
       $who =~ s/\./\\./go;
-      if ( $this->{$vbl} =~ m/$who,\s*/ || $this->{$vbl} =~ m/$who$/) {
-	return 1;
-      }
+	  my $r;
+	  eval {
+		$r = ( $this->{$vbl} =~ m/$who,\s*/ || $this->{$vbl} =~ m/$who$/);
+	  };
+	  return 1 if ( $r );
     }
     return 0;
   }
@@ -509,25 +511,27 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       my $attrType = getBaseType( $attrName );
       my $class = ref( $this );
       if ( defined( &{$class."::_matchField_$attrName"} ) ) {
-	# function match
-	my $fn = "_matchField_$attrName";
-	if ( !$this->$fn( $attrVal )) {
-	  return 0;
-	}
+		# function match
+		my $fn = "_matchField_$attrName";
+		if ( !$this->$fn( $attrVal )) {
+		  return 0;
+		}
       } elsif ( defined( $attrType ) &&
-		defined( &{$class."::_matchType_$attrType"} ) ) {
-	my $fn = "_matchType_$attrType";
-	if ( !$this->$fn( $attrName, $attrVal )) {
-	  return 0;
-	}
+				defined( &{$class."::_matchType_$attrType"} ) ) {
+		my $fn = "_matchType_$attrType";
+		if ( !$this->$fn( $attrName, $attrVal )) {
+		  return 0;
+		}
       } elsif ( defined( $attrVal ) &&
-		defined( $this->{$attrName} ) ) {
-	# re match
-	if ( $this->{$attrName} !~ m/$attrVal/ ) {
-	  return 0;
-	}
+				defined( $this->{$attrName} ) ) {
+		# re match
+		my $r;
+		eval {
+		  $r = ( $this->{$attrName} !~ m/$attrVal/ );
+		};
+		return 0 if ( $r );
       } else {
-	return 0;
+		return 0;
       }
     }
     return 1;
