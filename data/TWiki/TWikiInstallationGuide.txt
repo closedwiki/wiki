@@ -1,11 +1,16 @@
-%META:TOPICINFO{author="PeterThoeny" date="1032624201" format="1.0" version="1.48"}%
+%META:TOPICINFO{author="PeterThoeny" date="1041124980" format="1.0" version="1.49"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
 
 _Installation instructions for the TWiki 01-Dec-2001 production release. Update notes for the new RCS configuration are marked_ __Dataframework__.
 
-These installation steps are based on the Apache Web server on Linux. TWiki runs on other Web servers and Unix systems, and should be fine with any OS and server that meet the [[TWikiImplementationNotes][system requirements]]. Documentation for other platforms is currently limited. For Windows, check TWiki:Codev/TWikiOnWindows. Search the TWiki:Codev web for other intallation notes.
+These installation steps are based on the *Apache* web server on *Linux*. TWiki runs on other web servers and Unix systems, and should be fine with any web server and OS that meet the [[TWikiImplementationNotes][system requirements]]. Documentation for other platforms is somewhat limited:
+
+	* For Unix or Linux, check TWiki:Codev/TWikiOnUnix and TWiki:Codev/TWikiOnLinux.
+	* For Windows, check the WindowsInstallCookbook. 
+	* For <nop>MacOS X, check TWiki:Codev/TWikiOnMacOSX. 
+	* For other platforms, see TWiki:Codev/TWikiOn, and search the TWiki:Codev and TWiki:Support webs for other installation notes.
 
 #StandardInstallation
 ---++ Standard Installation
@@ -14,7 +19,7 @@ Request and download the TWiki 01-Dec-2001 distribution in Unix ZIP format from 
 
 ---+++ Step 1: Create &amp; Configure the Directories
 
-%X% *NOTE:* _If you don't have access to your Web server configuration files - for example, if you're installing on an ISP-hosted account - use the [[#StepOneB][alternative Step 1]] instead._
+%X% *NOTE:* _If you don't have access to your Web server configuration files - for example, if you're installing on an ISP-hosted account, or you don't have administrator privileges on your intranet server - use the [[#StepOneB][alternative Step 1]] instead._
 
 	* Create directory =/home/httpd/twiki= and [[http://www.info-zip.org/pub/infozip/UnZip.html][unzip]] the TWiki distribution into this directory.
 	* The =twiki/bin= directory of TWiki must be set as a cgi-bin directory. Add =/home/httpd/twiki/bin= to file =/etc/httpd/httpd.conf= with only =ExecCGI= option.
@@ -56,7 +61,7 @@ Request and download the TWiki 01-Dec-2001 distribution in Unix ZIP format from 
 #StepOneB		  
 ---++++ Step 1 for Non-Root Accounts
 
-To install TWiki on a system where you don't have server administrator privileges, for example, on a hosted Web account: 
+To install TWiki on a system where you don't have Unix/Linux root (administrator) privileges, for example, on a hosted Web account or an intranet server administered by someone else: 
 
 	* Download and unzip TWiki on your local PC
 	* Using the table below, create a directory structure on your host server
@@ -70,6 +75,17 @@ To install TWiki on a system where you don't have server administrator privilege
 | =twiki/data= | topic data | dir secure from public access | =/home/smith/twiki/data= |
 | =twiki/templates= | web templates | dir secure from public access | =/home/smith/twiki/templates= |
 </blockquote>
+
+If you are not able to create the =twiki/lib= directory at the same level as the =twiki/bin= directory (e.g. because CGI =bin= directories can't be under your home directory and you don't have root access), you can create this directory elsewhere and edit the =setlib.cfg= file in the =bin= directory:
+
+<pre>
+	 # -------------- Change these settings if required
+
+	 $twikiLibPath = <font color="red">'/some/other/path/lib'</font>;	# Path to lib directory containing TWiki.pm
+
+</pre>
+
+You can also edit =$localPerlLibPath= in the =setlib.cfg= file if you are not root and need to install additional CPAN modules, but can't update the main Perl installation files on the server.  Just set this variable to the full pathname to your local lib directory, typically under your home directory. 
 
 #StepTwo
 ---+++ Step 2: Set File Permissions
@@ -89,7 +105,7 @@ To install TWiki on a system where you don't have server administrator privilege
 <blockquote style="background-color:#F5F5F5">
 <pre>
 cd twiki/data
-perl -pi -e 's/nobody:/www-data:/' */*,v
+perl -pi~ -e 's/nobody:/www-data:/' */*,v
 </pre>
 </blockquote>
 
@@ -97,17 +113,26 @@ perl -pi -e 's/nobody:/www-data:/' */*,v
 
 	* Edit the file =twiki/lib/TWiki.cfg=, setting the variables to your needs.
 		* Set the file extension in the =$scriptSuffix= variable to =cgi= or =pl= if required.
-		* RCS - revision control system to store revsion of topics and attachments.  You can use RCS executables or a version of RCS written in Perl, note that as the time of writing (Apr 2002) the Perl version has not been widely tested, so if you want to put up a live site the RCS executables are recommended. (Dateframework - prior version of TWiki only support the RCS executables and do not have the config setting =$storeTopicImpl=)
-			* Set <code>$storeTopicImpl = "RcsLite";</code> for the Perl based RCS 
-			* Set <code>$storeTopicImpl = "RcsWrap";</code> for the RCS execuatbles and make sure RCS is installed. Set =$rcsDir= in =twiki/lib/TWiki.cfg= to mach the location of your RCS binaries. You can check this by issuing the comand =rcs= at the prompt, it should result in something like ="rcs: no input file"=.
-	* *Security issue:* Directories =twiki/data= , =twiki/templates= and all its subdirectories should be set so that they are __not__ visible as a URL. (Alternatively, move the directories to a place where they are not visible, and change the variables in =twiki/lib/TWiki.cfg= accordingly)
+		* RCS - revision control system to store revision of topics and attachments.  You can use RCS executables or a version of RCS written in Perl, note that as the time of writing (Apr 2002) the Perl version has not been widely tested, so if you want to put up a live site the RCS executables are recommended. 
+			* Set <code>$storeTopicImpl = "RcsWrap";</code> for the RCS executables and make sure RCS is installed. Set =$rcsDir= in =twiki/lib/TWiki.cfg= to match the location of your RCS binaries. You can check this by issuing the command =rcs= at the prompt, it should result in something like ="rcs: no input file"=.  
+				* Check that you have GNU =diff=, by typing =diff -v= - an error indicates you have a non-GNU diff, so install the GNU =diffutils= package and make sure that =diff= is on the PATH used by TWiki (see =$safeEnvPath= in the =TWiki.cfg= file).
+			* Set <code>$storeTopicImpl = "RcsLite";</code> for the Perl based RCS
+	* *Security issue:* Directories =twiki/data= , =twiki/templates= and all their subdirectories should be set so that they are __not__ visible through URLs. (Alternatively, move the directories to a place where they are not visible, and change the variables in =twiki/lib/TWiki.cfg= accordingly)
 	* Test your settings by running the =testenv= script from your browser: =http://yourdomain.com/twiki/bin/testenv=. Check if your =twiki/lib/TWiki.cfg= configuration file settings are correct.
 
----+++ Step 4: Finish Up from Your Browser
+
+---+++ Step 4: Configure Site-Wide Email Preferences
+
+	* From your web browser, edit the TWikiPreferences topic in the TWiki:%TWIKIWEB% web to set the =WIKIWEBMASTER= email address, and other email settings required for registration and WebChangesAlert to work:
+		* =WIKIWEBMASTER= should be set to the email address of the TWiki administrator
+		* =SMTPMAILHOST= is typically set on Windows or other non-Unix/Linux systems, where =sendmail= or similar is not available.  When this is set and the Perl module ==Net::SMTP== is installed, TWiki will connect to this SMTP server (e.g. =mail.yourdomain.com=) to send email for user registration and WebChangesAlerts.  If you do have a sendmail-type program, leave =SMTPMAILHOST= unset so that the external sendmail program is used instead (defined by ==$mailProgram== in ==TWiki.cfg==).
+		* =SMTPSENDERHOST= is optional, and set to the domain name sending the email (e.g. =twiki.yourdomain.com=). For use where the SMTP server requires that you identify the TWiki server sending mail. If not set, ==Net::SMTP== will guess it for you. 
+	* You may want to set up other TWikiPreferences later on.
+
+---+++ Step 5: Finish Up from Your Browser
 
 	* Point your Web browser at =http://yourdomain.com/twiki/bin/view= and start TWiki-ing away!
 		* %T% Or, point to =http://yourdomain.com/twiki/= to get the pre-TWiki =index.html= page, with a link to the =view= script. Customize this page if you want a public intro screen with a login link, instead of immediately calling up the .htaccess login dialog by going directly to =view=.
-	* Edit the TWikiPreferences topic in the TWiki:%TWIKIWEB% web to set the =WIKIWEBMASTER= email address, and other preferences.
 	* Edit the WebPreferences topic in each web, if necessary: set individual =WEBCOPYRIGHT= messages, and other preferences.
 	* Enable email notification of topic changes, TWikiSiteTools has more. 
 	* Edit the WebNotify topic in all webs and add the users you want to notify.
@@ -120,6 +145,7 @@ That's it for the standard virgin installation of TWiki. Read on for server-leve
 
 With your new TWiki installation up and running, you can manage most aspects of your site from the browser interface. Only a few functions require access to the server file system, via Telnet or FTP. You can make these server-level changes during installation, and at any time afterwards.
 
+#AuthenticationOfUsers
 ---+++ Enabling Authentication of Users
 
 	* If TWiki is installed on a non-authenticated server - not using SSL - and you'd like to authenticate users:
@@ -132,7 +158,9 @@ With your new TWiki installation up and running, you can manage most aspects of 
 				* *This applies only if you have root access:* on hosted accounts, you shouldn't have this problem - otherwise, email tech support.
 			* %X% *NOTE:* In the TWiki distribution package, the =twiki/data/.htpasswd.txt= file contains several TWiki core team user accounts and a guest user account. You probably want to remove those accounts by deleting the entries in =.htpasswd=. Do not remove the guest user if you want to allow guest logins.
 		1. *Copy* the TWikiRegistrationPub topic to TWikiRegistration, overwriting old version of <nop>TWikiRegistration. Do that by either editing the topics in the%TWIKIWEB% web, or by renaming the =.txt= and =.txt,v= files in the =twiki/data/%TWIKIWEB%= directory.
-			* %T% *HINT:* You can customize the registration form by deleting or adding input tags. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are processed correctly.
+	* Customization:
+		* You can customize the registration form by deleting or adding input tags. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are carried over into the user home page correctly.
+		* You can customize the default user home page in NewUserTemplate.
 	* Register yourself in the TWikiRegistration topic.
 		* %X% *NOTE:* When a user registers, a new line with the username and encrypted password is added to the =data/.htpasswd= file. The =.htpasswd= file that comes with the TWiki installation includes user accounts for TWiki core team members that are used for testing on TWiki.org. You can edit the file and delete those lines.
 	* Create a new topic to check if authentication works.
@@ -166,9 +194,9 @@ Optionally, you can also:
 
 ---++ TWiki File System Info
 
-See [[AppendixFileSystem][Appendix A: TWiki File System]] for an installed system snapshot and descriptions of all files in the TWiki 01-Dec-2001 distribution.
+See [[AppendixFileSystem][Appendix A: TWiki File System]] for an installed system snapshot and descriptions of all files in the TWiki 01-Sep-2001 distribution.
 
--- PeterThoeny - 13 Sep 2001 <br />
--- Main.MikeMannix - 16 May 2002
+-- PeterThoeny - 28 Dec 2002 <br />
+-- Main.MikeMannix - 16 May 2002	
 %STOPINCLUDE%
 %META:TOPICMOVED{by="MikeMannix" date="999319650" from="TWiki.TWikiInstallationNotes" to="TWiki.TWikiInstallationGuide"}%
