@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1061399080" format="1.0" version="1.52"}%
+%META:TOPICINFO{author="PeterThoeny" date="1061622904" format="1.0" version="1.53"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -26,8 +26,8 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set NOAUTOLINK = 
 		* __Note:__ Use the =[<nop>[...][...]]= syntax to link topics in case you disabled <nop>WikiWord linking. The =&lt;noautolink&gt; ... &lt;/noautolink&gt;= syntax can be used to prevents links within a block of text.
 
-	* Warn if =%<nop>INCLUDE{}%= of other topic fails (if set to =on=); silently fail (if empty); can be overwritten by web preferences:
-		* Set INCLUDEWARNING = 
+	* Warn if =%<nop>INCLUDE{}%= of topic fails: Fail silently (if empty or =off=); output "Warning: Can't INCLUDE <nop>Topic, topic not found" (if set to =on=); else, output specific text (use =$topic= for topic). You can override this setting by web preferences and by a =warn="..."= parameter in =%<nop>INCLUDE{}%= :
+		* Set INCLUDEWARNING = %RED% __Note:__ %ENDCOLOR% Included topic [[$topic]] does not exist yet
 
 
 ---++ User Settings
