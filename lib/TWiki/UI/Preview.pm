@@ -18,6 +18,7 @@ package TWiki::UI::Preview;
 use strict;
 use TWiki;
 use TWiki::UI;
+use TWiki::Form;
 use TWiki::Templates;
 
 sub preview {
@@ -82,7 +83,7 @@ sub preview {
     }
 
     # get the edited text and combine text, form and attachments for preview
-    &TWiki::Form::fieldVars2Meta( $webName, $query, $meta );
+    TWiki::Form::fieldVars2Meta( $webName, $query, $meta );
     $text = $textparam;
     if( ! $text ) {
       # empty topic not allowed

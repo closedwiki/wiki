@@ -608,7 +608,9 @@ sub getWebVariable {
         TWiki::handleInternalTags( $attrWeb, $requestWeb, "dummy" );
     }
 
-    return getPreferencesValue( $key, $attrWeb);
+    my $val = getPreferencesValue( $key, $attrWeb) || "";
+
+    return $val;
 }
 
 =pod

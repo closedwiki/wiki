@@ -883,16 +883,20 @@ sub getRenderedVersion
         s/^>(.*?)$/> <cite> $1 <\/cite><br \/>/g;
 
         # locate isolated < and > and translate to entities
-        s/<!--/$TWiki::TranslationToken!--/g;  # Protect isolated <!-- and -->
-        s/-->/--$TWiki::TranslationToken/g;
-        # escape out matched <> pairs
-        s/<(\S.*?)>/$TWiki::TranslationToken$1$TWiki::TranslationToken/go;
-        # entitify lone < and >
+        s/<!--/{$TWiki::TranslationToken!--/g;  # Protect isolated <!-- and -->
+        s/-->/--}$TWiki::TranslationToken/g;
+        # SMELL: this next expression is a frightful hack, to handle the
+        # case where simple HTML tags (i.e. without values) are embedded
+        # in the values provided to other tags. The only way to do this
+        # correctly (i.e. handle HTML tags with values as well) is to
+        # parse the HTML (bleagh!)
+        s/<([a-z]+(\s+\/)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/i;
+        s/<(\S.*?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
+        # entitify lone < and >, praying that we haven't screwed up :-(
         s/</&lt\;/g;
         s/>/&gt\;/g;
-        s/$TWiki::TranslationToken(\S.*?)$TWiki::TranslationToken/<$1>/go;
-        s/--$TWiki::TranslationToken/-->/go;
-        s/$TWiki::TranslationToken!--/<!--/go;
+        s/{$TWiki::TranslationToken/</go;
+        s/}$TWiki::TranslationToken/>/go;
 
         # standard URI
         s/(^|[\-\*\s\(])($TWiki::regex{linkProtocolPattern}\:([^\s\<\>\"]+[^\s\.\,\!\?\;\:\)\<]))/&_externalLink($1,$2)/geo;
