@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="995164458" format="1.0beta2" version="1.27"}%
+%META:TOPICINFO{author="PeterThoeny" date="995873452" format="1.0beta2" version="1.28"}%
 ---## TWiki Variables
 
 ---+++ Predefined Variables
@@ -50,6 +50,12 @@
   <td> =%<nop>WIKIUSERNAME%= </td>
   <td> Your %<nop>WIKINAME% including the %MAINWEB% web name. Usefull for signatures. Is <b>%WIKIUSERNAME%</b> </td>
 </tr><tr>
+  <td> =%<nop>MAINWEB%= </td>
+  <td> The Main web containing %MAINWEB%.%WIKIUSERSTOPIC%, %MAINWEB%.OfficeLocations and %MAINWEB%.TWikiGroups. Is <b>%MAINWEB%</b> </td>
+</tr><tr>
+  <td> =%<nop>TWIKIWEB%= </td>
+  <td> The web containing all documentation and configuration of %WIKITOOLNAME%. Is <b>%TWIKIWEB%</b> </td>
+</tr><tr>
   <td> =%<nop>WEB%= </td>
   <td> The current web, is <b>%WEB%</b> </td>
 </tr><tr>
@@ -58,6 +64,21 @@
 </tr><tr>
   <td> =%<nop>INCLUDINGWEB%= </td>
   <td> The web name of the topic that includes the current topic. Same as =%<nop>WEB%= in case there is no include. </td>
+</tr><tr>
+  <td> =%<nop>HOMETOPIC%= </td>
+  <td> The home topic in each web. Is <b>[[%HOMETOPIC%]]</b> </td>
+</tr><tr>
+  <td> =%<nop>NOTIFYTOPIC%= </td>
+  <td> The notify topic in each web. Is <b>[[%NOTIFYTOPIC%]]</b> </td>
+</tr><tr>
+  <td> =%<nop>WIKIUSERSTOPIC%= </td>
+  <td> The index topic of all registered users. Is <b>%WIKIUSERSTOPIC%</b> </td>
+</tr><tr>
+  <td> =%<nop>WEBPREFSTOPIC%= </td>
+  <td> The web preferences topic. Is <b>%WEBPREFSTOPIC%</b> </td>
+</tr><tr>
+  <td> =%<nop>STATISTICSTOPIC%= </td>
+  <td> The web statistics topic. Is <b>%STATISTICSTOPIC%</b> </td>
 </tr><tr>
   <td> =%<nop>TOPIC%= </td>
   <td> The current topic name, is <b>%TOPIC%</b> </td>
@@ -278,4 +299,4 @@ __Notes:__
 	* Additional preferences variables can be defined on all three level as needed. Example:
 		* =<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif=
 
--- PeterThoeny - 14 Jul 2001 <br>
+-- PeterThoeny - 23 Jul 2001 <br>
