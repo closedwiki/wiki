@@ -95,7 +95,7 @@ sub main
     # check if user entry already exists
     if(  ( $wikiName ) 
       && (  ( &TWiki::Store::topicExists( $webName,  $wikiName ) )
-         || ( TWiki::User::htpasswdExistUser( $wikiName ) ) 
+         || ( TWiki::User::UserPasswordExists( $wikiName ) ) 
          ) ) {
         # PTh 20 Jun 2000: changed to getOopsUrl
         $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregexist", $wikiName );
@@ -143,7 +143,7 @@ sub main
 
     # generate user entry and add to .htpasswd file
     if( ! $remoteUser ) {
-        TWiki::User::htpasswdAddUser( TWiki::User::htpasswdGeneratePasswd( $wikiName, $passwordA ) );
+        TWiki::User::AddUserPassword($wikiName, $passwordA );
     }
 
     # send email confirmation

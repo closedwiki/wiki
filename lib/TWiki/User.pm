@@ -28,12 +28,12 @@ package TWiki::User;
 #use File::Copy;
 #use Time::Local;
 
-if( $TWiki::OS eq "WINDOWS" ) {
-    require MIME::Base64;
-    import MIME::Base64 qw( encode_base64 );
-    require Digest::SHA1;
-    import Digest::SHA1 qw( sha1 );
-}
+#if( $TWiki::OS eq "WINDOWS" ) {
+#    require MIME::Base64;
+#    import MIME::Base64 qw( encode_base64 );
+#    require Digest::SHA1;
+#    import Digest::SHA1 qw( sha1 );
+#}
 
 
 use strict;
@@ -52,6 +52,16 @@ BEGIN {
 # template variable hash: (built from %TMPL:DEF{"key"}% ... %TMPL:END%)
 use vars qw( %templateVars ); # init in TWiki.pm so okay for modPerl
 
+#use $userTopicImpl = "HtPasswdUser";
+
+# ===========================
+# TODO: why / what is this (docco it)
+sub initialize
+{
+    %templateVars = ();
+    eval "use TWiki::User::HtPasswdUser";
+}
+
 # ===========================
 # Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
 sub _traceExec
@@ -63,115 +73,61 @@ sub _traceExec
 # ===========================
 sub writeDebug
 {
-   TWiki::writeDebug( "User: $_[0]" );
+   #TWiki::writeDebug( "User: $_[0]" );
 }
 
-
-#========================= 
-sub htpasswdReadPasswd
+sub _getUserHandler
 {
-    my ( $user ) = @_;
- 
-    if( ! $user ) {
-        return "";
-    }
- 
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
-    if( $text =~ /$user\:(\S+)/ ) {
-        return $1;
-    }
-    return "";
+   my( $web, $topic, $attachment ) = @_;
+
+   $attachment = "" if( ! $attachment );
+
+   my $handlerName = "TWiki::User::HtPasswdUser";
+
+   my $handler = $handlerName->new( );
+   return $handler;
 }
- 
+
 #========================= 
-sub htpasswdExistUser
+# what if the login name is not the same as the twikiname??
+# $user == TWikiName..
+sub UserPasswordExists
 {
     my ( $user ) = @_;
 
-    if( ! $user ) {
-        return "";
-    }
+    my $handler = _getUserHandler();
 
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
-    if( $text =~ /^${user}:/gm ) {	# mod_perl: don't use /o
-        return "1";
-    }
-    return "";
+    return $handler->UserPasswordExists($user);
 }
  
 #========================= 
+# params: username, oldpassword (unencrypted), newpassword (unencrypted)
 # TODO: needs to fail if it doesw not succed due to file permissions
-sub htpasswdUpdateUser
+sub UpdateUserPassword
 {
-    my ( $oldUserEntry, $newUserEntry ) = @_;
- 
-    # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
-    # simply add name to file, but this is a security issue
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
-    # escape + sign; SHA-passwords can have + signs
-    $oldUserEntry =~ s/\+/\\\+/g;
-    $text =~ s/$oldUserEntry/$newUserEntry/;
-    &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
+    my ( $user, $oldUserPassword, $newUserPassword ) = @_;
+
+    my $handler = _getUserHandler();
+    return $handler->UpdateUserPassword($user, $oldUserPassword, $newUserPassword);
 }
 
-sub htpasswdAddUser
+#========================= 
+# params: username, newpassword (unencrypted)
+sub AddUserPassword
 {
-    my ( $userEntry ) = @_;
+    my ( $user, $newUserPassword ) = @_;
 
-    # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
-    # simply add name to file, but this is a security issue
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
-    ##TWiki::writeDebug "User entry is :$userEntry: before newline";
-    $text .= "$userEntry\n";
-    &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
+    my $handler = _getUserHandler();
+    return $handler->AddUserPassword($user, $newUserPassword);
 }
 
 # =========================
-sub htpasswdCheckPasswd
+sub CheckUserPasswd
 {
-    my ( $old, $oldcrypt ) = @_;
-    my $pwd ;
+    my ( $user, $password ) = @_;
 
-    # check for Windows
-    if ( $TWiki::OS eq "WINDOWS" ) {
-        $pwd = '{SHA}' . MIME::Base64::encode_base64( Digest::SHA1::sha1( $old ) );
-        # strip whitespace at end of line
-        $pwd =~ /(.*)$/ ;
-        $pwd = $1;
-
-    } else {
-        my $salt = substr( $oldcrypt, 0, 2 );
-        $pwd = crypt( $old, $salt );
-    }
-
-    # OK
-    if( $pwd eq $oldcrypt ) {
-        return "1";
-    }
-    # NO
-    return "";
-}
- 
- 
-# =========================
-sub htpasswdGeneratePasswd
-{
-    my ( $user, $passwd ) = @_;
-    # by David Levy, Internet Channel, 1997
-    # found at http://world.inch.com/Scripts/htpasswd.pl.html
-
-    # check for Windows and use SHA1 digest instead of crypt()
-    if( $TWiki::OS eq "WINDOWS" ) {
-        my $pwd = $user . ':{SHA}' . MIME::Base64::encode_base64( Digest::SHA1::sha1( $passwd ) ); 
-        chomp $pwd;
-        return $pwd
-    }
-    srand( $$|time );
-    my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
-    my $salt = $saltchars[ int( rand( $#saltchars+1 ) ) ];
-    $salt .= $saltchars[ int( rand( $#saltchars+1 ) ) ];
-    my $passwdcrypt = crypt( $passwd, $salt );
-    return "$user\:$passwdcrypt";
+    my $handler = _getUserHandler();
+    return $handler->CheckUserPasswd($user, $password);
 }
  
 # =========================

@@ -160,7 +160,7 @@ use TWiki::Form;      # forms for topics
 use TWiki::Func;      # official TWiki functions for plugins
 use TWiki::Plugins;   # plugins handler  #AS
 use TWiki::Net;       # SMTP, get URL
-
+use TWiki::User;
 
 
 # ===========================
@@ -277,6 +277,8 @@ sub initialize
     # Initialise vars here rather than at start of module, so compatible with modPerl
     @publicWebList = ();
     &TWiki::Store::initialize();
+
+    &TWiki::User::initialize();
 
     # Make %ENV safer for CGI
     if( $safeEnvPath ) {
