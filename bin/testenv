@@ -22,21 +22,20 @@
 
 package TWiki;
 
-# Set library paths in @INC, at compile time
+use vars qw( $useLocale $setlibAvail );
+
+# Set library paths in @INC, read TWiki.cfg and set locale, at compile time
 BEGIN { 
     # Try to use setlib.cfg, use default path if missing
     if ( -r './setlib.cfg' ) {
 	require './setlib.cfg'; 
+	$setlibAvail = 1;
     } else {
 	unshift @INC, '../lib';
+	$setlibAvail = 0;
     }
-}
 
-use vars qw( $useLocale $setlibAvail );
-
-# ===========================
-# Read the configuration file at compile time in order to set locale
-BEGIN {
+    # Read the configuration file now in order to set locale
     do "TWiki.cfg";		# Includes OS detection
 
     # Do a dynamic 'use locale' for this script
@@ -51,8 +50,6 @@ BEGIN {
 			# Doesn't work well here, due to 'do "TWiki.cfg"'
 # use diagnostics;	# Debug only
 
-
-$setlibAvail = -r './setlib.cfg'; 
 
 
 &main();
@@ -98,7 +95,7 @@ my $perlverRequired = 5.00503;		# Oldest supported version of Perl
 my $perlverRequiredString = '5.005_03';
 my $perlverRecommended = '5.6.1';
 my $ActivePerlRecommendedBuild = 631;	# Fixes PERL5SHELL bugs
-my $cgiModVerRecommended = 2.93;	# CGI.pm version, on some platforms
+my $cgiModVerRecommended = 2.90;	# CGI.pm version, on some platforms
 
 my $rcsverRequired = 5.7;
 
