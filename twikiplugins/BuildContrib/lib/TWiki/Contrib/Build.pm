@@ -47,7 +47,8 @@ Note: if you override any of these targets it is generally wise to call the SUPE
 ---+++ Standard directory structure
 The standard module directory structure mirrors the TWiki installation directory structure, so each file in the development directory structure is in the place it will be in in the actual installation. From the root, these are the key files:
 | MANIFEST | required - list of files and descriptions to include in release zip. Each file is given by the full path to the file relative to the build TWiki installation directory. Wildcards may NOT be used. |
-| DEPENDENCIES | optional list of dependencies on other modules and descriptions. Dependencies should be expressed as "name,version,type,description" where name is the name of the module, version is the version constraint (e.g. ">1.5"), type is its type (CPAN, perl, C etc) and description is a short description of the module and where to get it. Perl modules also referenced in the dependencies list in the stub topic should be listed using their perl package name (e.g. TWiki::Contrib::MyContrib) and use the type 'perl'. The instructions should describe where to get the module. |
+| DEPENDENCIES | optional list of dependencies on other modules and descriptions. See below |
+| PREINSTALL, POSTINSTALL, PREUNINSTALL, POSTUNINSTALL | these optional files _may_ contain Perl fragments that must execute at the given stage of the process. The script fragments will be inserted into the generated installer script. Read contrib/TEMPLATE_installer.pl to see how they fit in. |
 | lib/TWiki/Plugins/ | this is where your <plugin name>.pm file goes for plugins |
 | lib/TWiki/Plugins/<plugin name>/ | directory containing sub-modules used by your plugin, and your build.pl script. |
 | lib/TWiki/Contrib/ | this is where your <contrib name>.pm file goes for contribs |
@@ -57,14 +58,27 @@ The standard module directory structure mirrors the TWiki installation directory
 | templates/ | as you expect to see in installation |
 | templates/<skin name>/ | this is where templates for your skin go |
 | contrib/ | this is where non-TWiki, non-web-accessible files associated with a Contrib or plugin go |
+---+++ Dependencies
+The DEPENDENCIES file contains a list of lines, each of which is a comma-separated tuple
+<verbatim>
+name, version, type, description
+</verbatim>
+where
+   * name is the name of the module,
+   * version is the version constraint (e.g. ">1.5"),
+   * type is its type (CPAN, perl, C etc) and
+   * description is a short description of the module and where to get it.
+Perl modules also referenced in the dependencies list in the stub topic should be listed using their perl package name (e.g. TWiki::Contrib::MyContrib) and use the type 'perl'.
+A dependency may optionally be preceded by a condition that limits the cases where the dependency applies. The condition is give on a line that contains <code>ONLYIF ( _condition_ )</code>, where _condition_ is a Perl conditional. This is most useful for enabling dependencies only for certain versions of TWiki. For example,
+<verbatim>
+TWiki::Contrib::Attrs,>=1.000,perl,Required. Download from TWiki:Plugins/AttrsContrib and install.
+ONLYIF ($TWiki::Plugins::VERSION < 1.025)
+TWiki::Plugins::CairoContrib, >=1.000, perl, Optional, only required if the plugin is to be run with versions of TWiki before Cairo. Available from the TWiki:Plugins/CairoContrib repository.
+</verbatim>
+Thus <nop>CairoContrib is only a dependency if the installation is being done on a TWiki version before Cairo. The ONLYIF only applies to the next dependency in the file.
+
 ---+++ Token expansion
-The build supports limited token expansion in =.txt= files. It expands the following tokens by default when the release target is built.
-| =%$<nop>MANIFEST%= | Expands to a TWiki table of MANIFEST contents |
-| =%$<nop>DEPENDENCIES%= | Expands to a comma-separated list of dependencies |
-| =%$<nop>DATE%= | Expands to today's date |
-| =%$<nop>VERSION%= | Expands to the VERSION number set in the plugin/contrib main .pm topic |
-| =%$<nop>POD%= | Expands POD text in all =.pm= files in the MANIFEST. Pod is generated for each module in the order of the MANIFEST. |
-| =%$<nop>STUB%= | Expands to the name of the package stub for this module |
+The build supports limited token expansion in =.txt= files. See the documentation on the =filter= method for more detail.
 ---+++ Methods
 
 =cut
@@ -77,7 +91,7 @@ use POSIX;
 use diagnostics;
 use vars qw( $VERSION $basedir $twiki_home $buildpldir $libpath );
 
-$VERSION = 1.002;
+$VERSION = 1.003;
 
 BEGIN {
     use File::Spec;
@@ -183,16 +197,23 @@ sub new {
     close(PF);
 
     my $deps = "$basedir/DEPENDENCIES";
+    my $condition = "";
     if (-f $deps) {
         open(PF, "<$deps") ||
           die "$deps open failed";
         while ($line = <PF>) {
-            if ($line =~ m/^(\w+)\s+(\w*)\s*(.*)$/o) {
+            if ($line =~ /^ONLYIF\s*(\(.*\))\s*$/) {
+                $condition = $1;
+            } elsif ($line =~ m/^(\w+)\s+(\w*)\s*(.*)$/o) {
                 push(@{$this->{dependencies}},
-                     { name=>$1, type=>$2, version=>"", description=>$3 });
+                     { name=>$1, type=>$2, version=>"",
+                       description=>$3, trigger=>$condition});
+                $condition="";
             } elsif ($line =~ m/^([^,]+),([^,]*),\s*(\w*)\s*,\s*(.+)$/o) {
                 push(@{$this->{dependencies}},
-                     { name=>$1, version=>$2, type=>$3, description=>$4 });
+                     { name=>$1, version=>$2, type=>$3, description=>$4,
+                       trigger=>$condition });
+                $condition="";
             } elsif ($line !~ /^\s*$/ && $line !~ /^\s*#/) {
                 warn "WARNING: LINE $line IN $basedir/DEPENDENCIES IGNORED\n";
             }
@@ -216,7 +237,7 @@ sub new {
             $text = $1;
             while ($text =~ s/package=>['"](.*?)['"],constraint=>['"](.*?)['"]//) {
                 my ($name,$ver,$found) = ($1,$2,0);
-                if ($name !~ /^TWiki::(Plugins|Contrib)$/) {
+                if ($name !~ /^TWiki::(Plugins|Contrib|AddOn)$/) {
                     foreach my $dep (@{$this->{dependencies}}) {
                         if ($dep->{name} eq $name) {
                             $dep->{version} = $ver;
@@ -226,7 +247,8 @@ sub new {
                     }
                     unless ($found || $name eq "TWiki::Plugins") {
                         push(@{$this->{dependencies}},
-                             { name=>$name, version=>$ver, type=>'perl', description=>$name });
+                             { name=>$name, version=>$ver, type=>'perl',
+                               description=>$name, trigger=>"" });
                     }
                 }
             }
@@ -270,6 +292,20 @@ sub new {
     }
     $this->{VERSION} = $version;
     $this->{DATE} = POSIX::strftime("%T %d %B %Y", localtime);
+
+    undef $/;
+    foreach my $stage ( "PREINSTALL", "POSTINSTALL", "PREUNINSTALL", "POSTUNINSTALL" ) {
+        $this->{$stage} = "# No $stage script";
+        my $file = "$basedir/$stage";
+        if (-f $file) {
+            open(PF, "<$file") ||
+              die "$file open failed";
+            $this->{$stage} = <PF>;
+        }
+    }
+    $/ = "\n";
+
+    $this->{MODULE} = $this->{project};
 
     return bless( $this, $class );
 }
@@ -445,13 +481,19 @@ sub target_test {
 =begin text
 
 ---++++ filter
-Expands tokens in a documentation topic.Four tokens are supported:
+Expands tokens. The following tokens are supported:
    * %$MANIFEST% - TWiki table of files in MANIFEST
    * %$DEPENDENCIES% - list of dependencies from DEPENDENCIES
    * %$VERSION% version from $VERSION in main .pm
    * %$DATE% - local date
    * %$POD% - expands to the POD documentation for the package, excluding test modules.
+   * %$PREINSTALL% - inserts script from PREINSTALL (alongside MANIFEST etc)
+   * %$POSTINSTALL% - inserts script from POSTINSTALL (alongside MANIFEST etc)
+   * %$PREUNINSTALL% - inserts script from PREUNINSTALL (alongside MANIFEST etc)
+   * %$POSTUNINSTALL% - inserts script from POSTINSTALL (alongside MANIFEST etc)
 Three spaces is automatically translated to tab.
+
+The filter is used in the generation of documentation topics and the installer
 =cut
 
 sub filter {
@@ -805,7 +847,9 @@ sub target_installer {
         $descr =~ s/\$/\\\$/g;
         $descr =~ s/\@/\\\@/g;
         $descr =~ s/\%/\\\%/g;
-        push(@sats, "{ name=>\"$dep->{name}\", type=>\"$dep->{type}\",version=>\"$dep->{version}\",description=>\"$descr\" }");
+        my $trig = $dep->{trigger};
+        $trig = 1 unless ( $trig );
+        push(@sats, "{ name=>\"$dep->{name}\", type=>\"$dep->{type}\",version=>\"$dep->{version}\",description=>\"$descr\", trigger=>$trig }");
     }
     my $satisfies = join("\n,", @sats);
 
@@ -818,21 +862,18 @@ sub target_installer {
     if ($this->{-v} || $this->{-n}) {
         print "Generating installer in $installScript\n";
     }
-    my $is = "";
-    open(IS, "<$template") or die "Could not open $template";
-    while (<IS>) {
-        $is .= $_;
-    }
-    close(IS);
-    $is =~ s/%\$MODULE%/$this->{project}/g;
-    $is =~ s/%\$DEPENDENCIES%/$satisfies/g;
-    $is =~ s/%\$MANIFEST%/$mantable/g;
 
-    unless ($this->{-n}) {
-        open(IS, ">$installScript") or die "Could not open $installScript";
-        print IS $is;
-        close(IS);
-    }
+    # override the default filter expansions
+    my $t1 = $this->{DEPENDENCIES};
+    $this->{DEPENDENCIES} = $satisfies;
+    my $t2 = $this->{MANIFEST};
+    $this->{MANIFEST} = $mantable;
+
+    $this->filter( $template, $installScript );
+
+    $this->{DEPENDENCIES} = $t1;
+    $this->{MANIFEST} = $t2;
+
     $this->prot("a+rx,u+w", $installScript);
 }
 
