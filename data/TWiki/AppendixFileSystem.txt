@@ -1,31 +1,30 @@
-%META:TOPICINFO{author="MikeMannix" date="1000549064" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="MikeMannix" date="1021531492" format="1.0" version="1.8"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
 #FileSystem
----# Appendix A: TWiki File System
+---# Appendix A: TWiki Filesystem
 
-_Annotated listings of files included in the 01-Sep-2001 TWiki distribution_
+_Annotated directory and file listings, for the 01-Dec-2001 TWiki production release._
 
----++ Overview
-
-This Appendix contains directory and file listings, and individual file descriptions, for the full 01-Sep-2001 TWiki distribution package.
+---++ Who and What is This Good For?
+Interested __Users__ and __Site Administrators__ can find out in simple terms what each part of TWiki actually does. Adventurous _Adminstrators_ with server access to files (eg: FTP) can also figure out where to look to make minor modifications, like changing hardcode text or color. __Software Developers__ can get an at-a-glance overview of TWiki code architecture.
 
 ---++ Directory Structure
 
-You can rename the root TWiki directory - =twiki= - to whatever you like by changing it in the =twiki.cfg= configuration file. However, to keep the current installation and future upgrades simple, you should leave the subdirectory structure intact:
+You can rename the root TWiki directory - ==twiki== - to whatever you like by changing it in the ==TWiki.cfg== configuration file. However, to keep the current installation and future upgrades simple, you should leave the five main subdirectories intact:
 
 | *Directory:*		  | *Files:*		 | *Used for:* |
 | =twiki=			  |  [[#TWikiFiles][list]]  | Start-up info |
 | =twiki/bin=		 |  [[#BinFiles][list]]  | Perl scripts  |
-| =twiki/lib=		 |  [[#LibFiles][list]]  | Configuration file, main library, Perl system modules, Plugins |
-| =twiki/pub=		 |  [[#PubFiles][list]]  | Public files (e.g. images) and FileAttachments and their RCS histories |
-| =twiki/data=		|  [[#DataFiles][list]]  | Topic text (page content) and RCS histories |
+| =twiki/lib=		 |  [[#LibFiles][list]]  | Configuration file, main library, Perl system modules, Plugins directory |
+| =twiki/pub=		 |  [[#PubFiles][list]]  | Public files (eg: images) and FileAttachments and their RCS histories |
+| =twiki/data=		|  [[#DataFiles][list]]  | Individual topics (page content) and their RCS histories |
 | =twiki/templates= |  [[#TemplatesFiles][list]]  | HTML templates, used by TWiki scripts |
 
 ---++ File Descriptions
 
-A rundown of the individual files included in the current 01-Sep-2001 distribution, organized by TWiki root directories.
+A rundown of the individual files included in the current 01-Dec-2001 distribution, organized by TWiki root directories.
 
 #TWikiFiles
 ---+++ Files in <code>twiki</code>
@@ -33,11 +32,11 @@ A rundown of the individual files included in the current 01-Sep-2001 distributi
 Application info and the current reference documentation. _Full file list:_
 
 | *File:*		 | *Used for:* |
-| =index.html= | A page with a link to first launch TWiki after install |
+| =index.html= | Links to launch TWiki after install and for files in this directory |
 | =license.txt=		  | GNU General Public License and TWiki-specific info |
 | =readme.txt=		  | General TWiki start-up info with relevant URLs |
 | =TWikiDocumentation.html=			 | All documentation packaged as a single page |
-| =TWikiHistory.html=		  | TWiki development timeline |
+| =TWikiHistory.html=		  | TWiki development timeline: versions, features, developers |
 
 #BinFiles
 ---+++ Files in <code>twiki/bin</code>
@@ -46,24 +45,24 @@ Perl CGI scripts. _Full file list:_
 
 | *File:*		 | *Used for:* |
 | =.htaccess.txt= | Authentication. Rename to .htaccess and customize if used |
-| =attach=		  | Script that shows the attach file page (FileAttachment) |
-| =edit=			 | Script to edit a topic |
-| =geturl=		  | Script to fetch URL data |
-| =installpasswd= | Script to install new password by admin |
+| =attach=		  | Shows the attach file page (FileAttachment) |
+| =edit=			 | Edit a topic |
+| =geturl=		  | Fetch URL data |
+| =installpasswd= | Install new password by admin |
 | =mailnotify=	 | Script called by cron job to notify users of changes |
-| =oops=			 | Script that shows an OK or oops dialog |
-| =passwd=		  | Script to reset and change password |
-| =preview=		 | Script to preview topic after edit |
-| =rdiff=			| Script to see differences of topics |
-| =register=		| Script to register new users |
-| =rename=		  | Script to rename/move topics and move attachments |
-| =save=			 | Script that saves a topic, called by preview |
-| =search=		  | Script that displays search results |
-| =statistics=	 | Script to create statistics topic |
-| =testenv=		 | Script to test CGI environment variables |
-| =upload=		  | Script that does file upload (FileAttachment) |
-| =view=			 | Script to view a topic ( *the* script ) |
-| =viewfile=		| Script to view a file attachment |
+| =oops=			 | Shows an OK or oops dialog |
+| =passwd=		  | Reset and change password |
+| =preview=		 | Preview topic after edit |
+| =rdiff=			| See differences of topics |
+| =register=		| Register new users |
+| =rename=		  | Rename/move topics and move attachments |
+| =save=			 | Saves a topic, called by preview |
+| =search=		  | Displays search results |
+| =statistics=	 | Create statistics topic |
+| =testenv=		 | Test CGI environment variables |
+| =upload=		  | Does file upload (FileAttachment) |
+| =view=			 | View a topic ( *the* script ) |
+| =viewfile=		| View a file attachment |
 
 #LibFiles
 ---+++ Files under <code>twiki/lib</code>
@@ -71,7 +70,7 @@ Perl CGI scripts. _Full file list:_
 The new =lib/TWiki/Plugins= directories contain configuration, library and function files, and TWikiPlugins. _Full file list:_
 
 | *File:*			  | *Used for:* |
-| =TWiki.cfg=	  | For configuration, used by =TWiki.pm= |
+| =TWiki.cfg=	  | Main configuration, used by =TWiki.pm= |
 | =TWiki.pm=		| Main TWiki library |
 | =TWiki/Access.pm=	| Access control |
 | =TWiki/Attach.pm=	| Attachment handling |
@@ -83,6 +82,9 @@ The new =lib/TWiki/Plugins= directories contain configuration, library and funct
 | =TWiki/Prefs.pm=	 | Preferences handling |
 | =TWiki/Search.pm=	| Search engine, used by wiki.pm |
 | =TWiki/Store.pm=	 | Back-end storage, =*.txt= text file and =*.txt,v= RCS repository file handling |
+| =TWiki/Store/RcsFile.pm= | Generic file handling code, a class |
+| =TWiki/Store/RcsWrap.pm= | Wrappers around RCS executables, a class that inherits from RcsFile |
+| =TWiki/Store/RcsLite.pm= | A Perl RCS implemention, a class that inherits from RcsFile |
 | =TWiki/Plugins/DefaultPlugin.pm= | Handles some legacy rules |
 | =TWiki/Plugins/EmptyPlugin.pm=	| Empty plugin, use to create your own |
 | =TWiki/Plugins/InterwikiPlugin.pm= | Use aliases as links for predefined URLs |
@@ -90,7 +92,7 @@ The new =lib/TWiki/Plugins= directories contain configuration, library and funct
 #PubFiles
 ---+++ Files under <code>twiki/pub</code>
 
-The =pub= directory stores data-related files, including images used by TWiki and FileAttachments. Attachments are stored in sub-directories created with the related topic name. _Partial file list:_
+The =pub= directory stores topic-related files, including images used by TWiki and FileAttachments. Attachments are stored in subdirectories created with the related topic name. You can also upload files directly for and link manually (but not through ==Attach==) _Partial file list:_
 
 | *File:*			| *Used for:* |
 | =favicon.ico= | ICO file |
@@ -105,27 +107,27 @@ The =pub= directory stores data-related files, including images used by TWiki an
 | =icn/bat.gif= | GIF file |
 | =icn/bmp.gif= | GIF file |
 |  *...*  |  *...*  |
-| =TWiki/FileAttachment/Sample.txt= | TEXT file |
-| =TWiki/FileAttachment/Smile.gif= | GIF file |
-| =TWiki/PreviewBackground/blankltgraybg.gif= | GIF file |
-| =TWiki/PreviewBackground/blankwhitebg.gif= | GIF file |
-| =TWiki/PreviewBackground/previewbg.gif= | GIF file |
-| =TWiki/WabiSabi/wabisabi.gif= | GIF file |
-| =Know/IncorrectDllVersionW32PTH10DLL/W32PTH10.DLL= | DLL file |
+| =TWiki/FileAttachment/Sample.txt= | TEXT file: sample |
+| =TWiki/FileAttachment/Smile.gif= | GIF image: sample|
+| =TWiki/PreviewBackground/blankltgraybg.gif= | GIF image |
+| =TWiki/PreviewBackground/blankwhitebg.gif= | GIF image |
+| =TWiki/PreviewBackground/previewbg.gif= | GIF image: Preview view background |
+| =TWiki/WabiSabi/wabisabi.gif= | GIF image: illustration |
+| =Know/IncorrectDllVersionW32PTH10DLL/W32PTH10.DLL= | DLL file: sample |
 
 #DataFiles
 ---+++ Files under <code>twiki/data</code>
 
-TWiki page data stored as individual text files. Each active web has its own subdirectory. The TWiki distribution includes four start-up webs - =Main=, =TWiki=, =Know=, =Test= - with documentation and demo content, a =Trash= web, and a =_default= directory containing all topics required to start a new web. _Partial file list:_ 
+TWiki topics: data stored as individual text files and rendered by TWiki for display as regular Web pages. Each active web has its own subdirectory. The TWiki distribution includes four start-up webs - ==Main==, ==TWiki==, ==Know==, ==Test== - with documentation and demo content, a ==Trash== web for browser-based, recoverable topic deletion, and a ==_default== directory containing core topic set required to start a new web. _Partial file list:_ 
 
 | *File:*			| *Used for:* |
-| =.htpasswd= | Basic Authentication (htaccess) password file |
-| =debug.txt= | Program messages useful for debugging |
+| =.htpasswd= | Basic Authentication (htaccess) users file with username and encrypted password pairs |
+| =debug.txt= | Program-generated messages useful for debugging |
 | =mime.types= | Recognized file formats |
 | =warning.txt= | Diagnostic messages for identifying problems |
-| _default directory can be copied to empty directory when creating new Webs ||
-| =_default/.changes= | Web-level record of topic changes |
-| =_default/.mailnotify= | Web-level timstamp of last e-mail notification |
+| _default directory can be copied to empty directory when creating new webs ||
+| =_default/.changes= | Per web record of topic changes |
+| =_default/.mailnotify= | Per web timstamp of most recent email notification |
 | =_default/WebChanges.txt= | Display most recent topic changes in web|
 | =_default/WebChanges.txt,v= | Revisions history (RCS) |
 | =_default/WebHome.txt= | Default web home page |
@@ -134,9 +136,9 @@ TWiki page data stored as individual text files. Each active web has its own sub
 | =_default/WebIndex.txt,v= | Revisions history (RCS) |
 | =_default/WebNotify.txt= | Subscribe/unsubscribe to web changes email alert |
 | =_default/WebNotify.txt,v= | Revisions history (RCS) |
-| =_default/WebPreferences.txt= | Web-level preference settings |
+| =_default/WebPreferences.txt= | Per web Preference Settings |
 | =_default/WebPreferences.txt,v= | Revisions history (RCS) |
-| =_default/WebSearch.txt= | Web-level search options |
+| =_default/WebSearch.txt= | Per web search options |
 | =_default/WebSearch.txt,v= | Revisions history (RCS) |
 | =_default/WebStatistics.txt= | Generates web usage statistics |
 | =_default/WebStatistics.txt,v= | Revisions history (RCS) |
@@ -145,15 +147,15 @@ TWiki page data stored as individual text files. Each active web has its own sub
 #TemplatesFiles
 ---+++ Files in <code>twiki/templates</code>
 
-Templates used to control appearance of all rendered pages. _Full file list:_
+Templates used to control appearance of topics rendered as Web pages. _Full file list:_
 
 | *File:*			| *Used for:* |
-| =attach.tmpl= | Attach file control screen |
-| =attachagain.tmpl= | Control screen |
-| =attachnew.tmpl= | Control screen |
+| =attach.tmpl= | =Attach= (FileAttachments) control screen |
+| =attachagain.tmpl= | Attachment control screen |
+| =attachnew.tmpl= | Attachment control screen |
 | =changeform.tmpl= | Control screen |
-| =changes.tmpl= | Displays WebChanges list of recently changed topics |
-| =edit.iejs.tmpl= | Edit window with IE specific <nop>JavaScript |
+| =changes.tmpl= | Displays WebChanges links list of recently changed topics |
+| =edit.iejs.tmpl= | Edit window with IE-specific <nop>JavaScript |
 | =edit.tmpl= | Main edit window |
 | =mailnotify.tmpl= | Email notification |
 | =moveattachment.tmpl= | Control screen |
@@ -189,25 +191,26 @@ Templates used to control appearance of all rendered pages. _Full file list:_
 | =oopsupload.tmpl= | Error message |
 | =oopswrongpassword.tmpl= | Error message |
 | =preview.tmpl= | Preview Changes screen |
-| =rdiff.tmpl= | Displays text changes before &amp; after (Diffs) |
-| =register.tmpl= | Registration page |
+| =rdiff.tmpl= | Displays text changes before &amp; after =Diffs= |
+| =register.tmpl= | User registration page |
 | =registernotify.tmpl= | Registration notification |
-| =rename.tmpl= | Doing a new topic rename, user chooses web &amp; topic |
+| =rename.tmpl= | =Rename/move= control screen (choose web &amp; new topic tile |
 | =renamebase.tmpl= | Used by other rename templates |
 | =renameconfirm.tmpl= | Confirms a pre-specified rename, ex: undoing a rename |
-| =renamerefs.tmpl= | Rename done, but some references not changed (topics were  locked) |
+| =renamerefs.tmpl= | Display if rename done, but some references not changed (topics were locked) |
 | =search.tmpl= | Search screen |
 | =searchbookview.tmpl= | Search results with full topic content |
 | =searchmeta.tmpl= | Search screen |
 | =searchrenameview.tmpl= | Used by =rename= to list references to topic being renamed |
-| =twiki.tmpl= | Base template definitions used by other templates |
-| =view.plain.tmpl= | Printable topic view with reduced header/footer |
-| =view.print.tmpl= | Topic view without header/footer |
-| =view.tmpl= | Main topic view |
+| =twiki.tmpl= | Master template: definitions are used by other templates |
+| =view.plain.tmpl= | Printable topic view with simplified header/footer |
+| =view.print.tmpl= | Printable topic view with no header/footer |
+| =view.tmpl= | Main topic view - the standard regular Web page |
 
 ---++ TWiki File System Snapshot
 
-The following partial directory listings from a Linux installation show typical file permissions and ownership. This is provided for general debugging use only and isn't an exact representation of the current distribution.
+The following partial directory listings from a Linux installation show typical file permissions and ownership. This is provided for general debugging use only and isn't an exact representation of the current distribution. 
+	* %T% __On an ISP installation...__ The user and group - =twiki twiki= - will probably be your domain or login name, eg: =yourdomain yourdomain= and can't be changed; same for =nobody nobody= files further down. Also, in the ==bin== directory, scripts need a ==.cgi== (sometimes ==.pl==) extension._
 
 Directory =twiki/bin=:
 
@@ -320,6 +323,8 @@ drwxrwxr-x	 2 nobody nobody  4096 Sep  9 02:45 _default
 
 Partial file list for =twiki/data/Main=:
 
+	* %T% _Included files come with their RCS versions histories ==.txt,v==. If you don't need the changes history of each one, you can delete them and save a lot of space. New RCS files will be created automatically, only when a topic is next edited._
+
 <pre>
 drwxrwxrwx	2 nobody  nobody  4096 Aug 19 04:15 .
 drwxrwxrwx	6 nobody  nobody  4096 Aug  3 01:09 ..
@@ -368,6 +373,8 @@ drwxrwxrwx	6 nobody  nobody  4096 Aug  3 01:21 ..
 -rw-rw-r--	1 twiki	twiki	 152 Mar  9  1999 doc.gif
 </pre>
 
--- Main.MikeMannix - 14 Sep 2001 <br />
 -- Main.PeterThoeny - 14 Sep 2001 <br />
+-- Main.MikeMannix - 16 May 2002
+
+%STOPINCLUDE%
 %META:TOPICMOVED{by="MikeMannix" date="1000524678" from="TWiki.DocsATWikiFileSystem" to="TWiki.AppendixFileSystem"}%
