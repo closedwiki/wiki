@@ -24,7 +24,7 @@ use lib ( '.' );
 use lib ( '../lib' );
 use TWiki;
 
-$query= new CGI;
+use strict;
 
 ##### for debug only: Remove next 2 comments (but redirect does not work)
 #open(STDERR,'>&STDOUT'); # redirect error to browser
@@ -35,11 +35,20 @@ $query= new CGI;
 sub writeDebug
 {
     my( $text ) = @_;
-    TWiki::writeDebug( $text );
+    #TWiki::writeDebug( $text );
+}
+
+sub writeDebugTimes
+{
+    my( $text ) = @_;
+    
+    #TWiki::writeDebugTimes( $text );
 }
 
 sub main
 {
+    my $query= new CGI;
+
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
@@ -47,7 +56,7 @@ sub main
 
     my $doShowAttachmentAttr = $query->param( 'showAttr' );
 
-    ( $topic, $webName, $scriptUrlPath, $userName ) = 
+    my( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $tmpl = "";
