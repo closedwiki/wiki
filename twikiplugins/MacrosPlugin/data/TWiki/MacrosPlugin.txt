@@ -51,12 +51,13 @@ One line description, shown in the TWiki.TextFormattingRules topic:
 
 ---+ Plugin Installation Instructions
 __Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required.
-	* Make sure all the required dependencies listed in the table below are resolved:
-	%$DEPENDENCIES%
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 %$MANIFEST%
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
+	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
+	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
+	%$DEPENDENCIES%
 ---+ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |

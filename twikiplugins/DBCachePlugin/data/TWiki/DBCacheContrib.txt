@@ -60,11 +60,14 @@ Clients use the DBCache by defining a subclass of the =TWiki::Contrib::DBCache= 
 	* Name of the perl package
 		* Set STUB = %$STUB%
 ---+ Installation Instructions
-	* Make sure you have the perl module =Time::ParseDate= installed in your perl include path. To check this you can add the following line:<br><code>'Time::ParseDate'</code><br>to the testenv script in twiki/bin, in the @requiredMods list. The plugin will be significantly faster if you also have the =Storable= module installed. Both of these modules are available from www.cpan.org
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 %$MANIFEST%
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. If you are short of disc space you can delete all the files under lib/TWiki/Plugins/FormQueryPlugin/test without breaking the plugin.
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
+	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
+	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
+	%$DEPENDENCIES%
+
 ---+ Contrib Info
 |  Author: | TWiki:Main/CrawfordCurrie |
 |  Copyright &copy;: | This code is based on an original development of Motorola Inc. and is protected by the following copyrights: <br>Copyright @copy 2002-2003 Motorola Inc. All Rights Reserved. <br>Portions copyright &copy; 2004. Crawford Currie http://www.c-dot.co.uk |

@@ -132,7 +132,7 @@ The format is used to define the rows in the body of the table:
 
 =format="| $topic | $Summary |"=
 
-Any fields in the form in the topic can be output by putting a $ sign before the name of the field. The two special fields =$topic= and =$form= are available for outputting the name of the topic and the type of the form (The =$topic= field also works for embedded tables, where it is set to the name of the containing topic). You can also refer to fields in related topics using the syntax <code>$field.field</code> where $field is the name of the relation and =field= is a field in the related topic; for example, <code>format="|$Child_of.topic|"</code>.
+Any fields in the form in the topic can be output by putting a $ sign before the name of the field. The two special fields =$topic= and =$form= are available for outputting the name of the topic and the type of the form. You can also refer to fields in related topics using the syntax <code>$field.field</code> where $field is the name of the relation and =field= is a field in the related topic; for example, <code>format="|$Child_of.topic|"</code>.
 
 #SummingFields
 It is also possible to expand the contents of tables embedded in the topic, in two ways:
@@ -256,9 +256,9 @@ An empty =search= matches all entries, so =AttQuery= will now be set to the resu
 </pre>
 Now we can generate a table of these using =SHOWQUERY=:
 <pre>
-%<nop>SHOWQUERY{query=Bigatts header="|*Topic*|*Name*|*Size*|" format="|$topic.topic|$name|$size|"}%
+%<nop>SHOWQUERY{query=Bigatts header="|*Topic*|*Name*|*Size*|" format="|$_up.topic|$name|$size|"}%
 </pre>
-Note that we have to refer to =$topic.topic= to get the name of the topic because each attachment entry contains a _reference_ to the topic's Map, but not the topic's name.
+Note that we have to refer to =$_up.topic= to get the name of the topic because each attachment entry contains a _reference_ to the parent topic's Map ( =_up= ), but not the topic's name. See the schema in TWiki::Plugins/DBCacheContrib for a list of available fields in each table in the database.
 
 To extract the total size of the big attachments we can:
 <pre>
@@ -336,12 +336,13 @@ Just about any formatting can be included on the LHS of the map; for example, yo
 ---
 ---++ Plugin Installation Instructions
 __Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required.
-	* Make sure all the required dependencies listed in the table below are resolved:
-	%$DEPENDENCIES%
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
 %$MANIFEST%
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
+	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
+	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
+	%$DEPENDENCIES%
 	* The variable %<nop>FORMQUERYPLUGIN_ENABLE% must be set either globally or in the web where you want to use it.
 		* Set ENABLE = 1
 	* By default the plugin is enabled globally (on all webs). This may have an unwelcome performance impact, as the plugin may create a cache of topics in a web where it is not intended to be used. To enable the plugin for selected webs only, comment out the previous line (put a # in front of the word 'Set') and put the following line (without the #) into the WebPreferences topic of the web you want to enable it on:
