@@ -435,15 +435,12 @@ sub setupLocale {
 	# and HTTP headers
 	$siteLocale =~ m/\.([a-z0-9_-]+)$/i;
 	$siteCharset = $1 if defined $1;
-	# writeDebug "Charset is $siteCharset based on locale";
 
 	# Override charset if locale setting not usable with Perl
 	# conversion modules
 	$siteCharset = $siteCharsetOverride || $siteCharset;
-	# writeDebug "Charset is now $siteCharset after any override by \$siteCharsetOverride";
 
-	# Extract the language - use to disable plural processing if
-	# non-English
+	# Extract the default site language 
 	$siteLocale =~ m/^([a-z]+)_/i;
 	$siteLang = $1 if defined $1;
 
@@ -452,14 +449,10 @@ sub setupLocale {
 
 	# Load POSIX for i18n support 
 	require POSIX;
-	import POSIX qw( locale_h LC_CTYPE LC_COLLATE );
-
-	##my $old_locale = setlocale(LC_CTYPE);
-	##writeDebug "Old locale was $old_locale";
+	import POSIX qw( locale_h LC_CTYPE );
 
 	# Set new locale
 	my $locale = setlocale(&LC_CTYPE, $siteLocale);
-	setlocale(&LC_COLLATE, $siteLocale);
 	##writeDebug "New locale is $locale";
     }
 }
@@ -594,9 +587,8 @@ sub convertUtf8URLtoSiteCharset {
 
 	# Convert into ISO-8859-1 if it is the site charset
 	if ( $siteCharset =~ /^iso-?8859-?1$/i ) {
-	    # FIXME: Use 'unpack' if on Perl 5.6 or higher (Unicode aware)
-	    # - should be more efficient? See
-	    # http://search.cpan.org/src/EHOOD/MHonArc-2.6.8/lib/MHonArc/CharEnt.pm
+	    # FIXME: Use 'unpack' to convert into real Unicode characters
+	    # if on Perl 5.6 or higher (Unicode aware)
 
 	    # ISO-8859-1 maps onto first 256 codepoints of Unicode
 	    # (conversion from 'perldoc perluniintro')
@@ -604,7 +596,8 @@ sub convertUtf8URLtoSiteCharset {
 				 chr( ord($1) << 6 & 0xC0 | ord($2) & 0x3F )
 				 /egx;
 	} elsif ( $siteCharset =~ /^utf-?8$/i ) {
-	    writeDebug "UTF-8 not yet supported as site charset...";
+	    writeWarning "UTF-8 not yet supported as site charset - TWiki is likely to have problems";
+	    writeDebug "UTF-8 not yet supported as site charset - TWiki is likely to have problems";
 	    writeDebug "No conversion needed from UTF-8 to $siteCharset";
 	} else {
 	    # Convert from UTF-8 into some other site charset
@@ -644,10 +637,10 @@ sub convertUtf8URLtoSiteCharset {
     } else {
 	# Non-ASCII and non-UTF-8 - assume in site character set, 
 	# no conversion required
+	$urlCharEncoding = 'Native';
 	$charEncoding = $siteCharset;
     }
-    ##writeDebug "URL character encoding was: $urlCharEncoding";
-    writeDebug "Final web and topic are $webName $topicName ($siteCharset)";
+    writeDebug "Final web and topic are $webName $topicName ($urlCharEncoding URL -> $siteCharset)";
 
     return ($webName, $topicName);
 }
@@ -2009,6 +2002,8 @@ sub handleUrlParam
 
 # =========================
 # Encode to URL parameter or HTML entity
+# TODO: For non-ISO-8859-1 $siteCharset, need to convert to Unicode 
+# for use in entity or to UTF-8 before URL encoding.
 sub handleUrlEncode
 {
     my( $theArgs, $doExtract ) = @_;
@@ -2021,7 +2016,7 @@ sub handleUrlEncode
     }
     if( $type =~ /^entit(y|ies)$/i ) {
         # HTML entity encoding
-        # FIXME: Does this affect I18N?
+	# TODO: Encode to Unicode first
         $text =~ s/\"/\&\#034;/g;
         $text =~ s/\%/\&\#037;/g;
         $text =~ s/\*/\&\#042;/g;
@@ -2034,6 +2029,7 @@ sub handleUrlEncode
         $text =~ s/\|/\&\#124;/g;
     } else {
         # URL encoding
+	# TODO: Encode to UTF-8 first
         $text =~ s/[\n\r]/\%3Cbr\%20\%3E/g;
         $text =~ s/\s+/\%20/g;
         $text =~ s/\"/\%22/g;
