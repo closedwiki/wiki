@@ -3,7 +3,7 @@ data=data
 templates=templates
 pub=pub
 bin=bin
-out=../SeeSkin-`date +%Y-%b-%d`.zip
+out=../../zips/SeeSkin-`date +%Y-%b-%d`.zip
 
 list="$data/Plugins/SeeSkin.txt \
 	$templates/*.see.tmpl \
