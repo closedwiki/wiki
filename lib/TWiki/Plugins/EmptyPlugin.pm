@@ -111,13 +111,13 @@ sub initPlugin {
     #   * Set EXAMPLE = ...
     $exampleCfgVar = TWiki::Func::getPreferencesValue( "\U$pluginName\E_EXAMPLE" );
     # There is also an equivalent:
-    # $exampleCfgVar = TWiki::Func::getPluginPreferencesValue( "EXAMPLE" );
+    # $exampleCfgVar = TWiki::Func::getPluginPreferencesValue( 'EXAMPLE' );
     # that may _only_ be called from the main plugin package.
 
-    $exampleCfgVar ||= "default"; # make sure it has a value
+    $exampleCfgVar ||= 'default'; # make sure it has a value
 
     # register the _EXAMPLETAG function to handle %EXAMPLETAG{...}%
-    TWiki::Func::registerTagHandler( "EXAMPLETAG", \&_EXAMPLETAG );
+    TWiki::Func::registerTagHandler( 'EXAMPLETAG', \&_EXAMPLETAG );
 
     # Plugin correctly initialized
     return 1;
@@ -137,9 +137,9 @@ sub _EXAMPLETAG {
     # $theWeb   - name of the web in the query
     # Return: the result of processing the tag
 
-    # For example, %EXAMPLETAG{"hamburger" sideorder="onions"}%
-    # $params->{_DEFAULT} will be "hamburger"
-    # $params->{sideorder} will be "onions"
+    # For example, %EXAMPLETAG{'hamburger' sideorder="onions"}%
+    # $params->{_DEFAULT} will be 'hamburger'
+    # $params->{sideorder} will be 'onions'
 }
 
 =cut
@@ -158,7 +158,7 @@ See SessionPlugin for an example of usage.
 =cut
 
 sub DISABLE_earlyInitPlugin {
-    die "Should never be called";
+    die 'Should never be called';
     return 1;
 }
 
@@ -288,17 +288,17 @@ sub DISABLE_afterCommonTagsHandler {
 Handler called immediately before TWiki syntax structures (such as lists) are
 processed, but after all variables have been expanded. Use this handler to process special syntax only recognised by your plugin.
 
-Placeholders are text strings constructed using the tag name and a sequence number e.g. "pre1", "verbatim6", "head1" etc. Placeholders are inserted into the text inside &lt;!--!marker!--&gt; characters so the text will contain &lt;!--!pre1!--&gt; for placeholder pre1.
+Placeholders are text strings constructed using the tag name and a sequence number e.g. 'pre1', "verbatim6", "head1" etc. Placeholders are inserted into the text inside &lt;!--!marker!--&gt; characters so the text will contain &lt;!--!pre1!--&gt; for placeholder pre1.
 
 Each removed block is represented by the block text and the parameters passed to the tag (usually empty) e.g. for
 <verbatim>
-<pre class="slobadob">
+<pre class='slobadob'>
 XYZ
 </pre>
 the map will contain:
 <pre>
-$removed->{"pre1"}{text}:   XYZ
-$removed->{"pre1"}{params}: class="slobadob"
+$removed->{'pre1'}{text}:   XYZ
+$removed->{'pre1'}{params}: class="slobadob"
 </pre>
 Iterating over blocks for a single tag is easy. For example, to prepend a line number to every line of every pre block you might use this code:
 <verbatim>

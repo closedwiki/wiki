@@ -45,7 +45,7 @@ sub new {
     my $this = bless( {}, $class );
 
     $this->{web} = $web;
-    $this->{text} = "";
+    $this->{text} = '';
     $this->{session} = $session;
 
     if( $session->{store}->topicExists( $web,

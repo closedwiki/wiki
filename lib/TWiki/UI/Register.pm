@@ -126,16 +126,16 @@ invoked via the =TWiki::UI::run= method.
 sub passwd_cgi {
     my $session = shift;
 
-    my $action = $session->{cgiQuery}->param("action");
+    my $action = $session->{cgiQuery}->param('action');
 
-    if( $action eq "changePassword" ) {
+    if( $action eq 'changePassword' ) {
         changePassword( $session );
-    } elsif ( $action eq "resetPassword" ) {
+    } elsif ( $action eq 'resetPassword' ) {
         resetPassword( $session );
     } else {
         throw TWiki::UI::OopsException( $session->{webName},
                                         $session->{topicName},
-                                        "manage");
+                                        'manage');
     }
 }
 
@@ -188,11 +188,11 @@ sub bulkRegister {
 
     my %settings = ();
     $settings{doOverwriteTopics} = $query->param('OverwriteHomeTopics') || 0;
-    $settings{doUseHtPasswd} = $TWiki::cfg{HtpasswdFormatFamily} eq "htpasswd";
+    $settings{doUseHtPasswd} = $TWiki::cfg{HtpasswdFormatFamily} eq 'htpasswd';
     $settings{doEmailUserDetails} = $query->param('EmailUsersWithDetails') || 0;
 
     unless( $unitTestMode || $session->{user}->isAdmin() ) {
-        throw TWiki::UI::OopsException( $web, $topic, "accessgroup",
+        throw TWiki::UI::OopsException( $web, $topic, 'accessgroup',
                                         "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
     }
 
@@ -206,7 +206,7 @@ sub bulkRegister {
     #    my @fieldNames = @{$fieldNamesArrayRef};
 
     my $registrationsMade = 0;
-    my $log = "---+Report for Bulk Register\n\n%TOC%\n";
+    my $log = "---+ Report for Bulk Register\n\n%TOC%\n";
 
     #-- Process each row, generate a log as we go
 
@@ -215,7 +215,7 @@ sub bulkRegister {
 
         my ($userTopic, $uLog) = _registerSingleBulkUser($session, $row, %settings );
         $log .= "\n---++ ". $row->{WikiName}."\n";
-        $log .= "$b Added to users' topic ".$userTopic.":\n".join("\n$indent",split /\n/, "$uLog")."\n";	
+        $log .= "$b Added to users' topic ".$userTopic.":\n".join("\n$indent",split /\n/, $uLog)."\n";	
         $registrationsMade++; # SMELL - no detection for failure
     }
 
@@ -223,16 +223,16 @@ sub bulkRegister {
     $log .= "registrationsMade: $registrationsMade";
 
     my $logWeb;
-    my $logTopic =  $query->param('LogTopic') || $topic."Result";
-    ( $logWeb, $logTopic ) = $session->normalizeWebTopicName( "", $logTopic );
+    my $logTopic =  $query->param('LogTopic') || $topic.'Result';
+    ( $logWeb, $logTopic ) = $session->normalizeWebTopicName( '', $logTopic );
 
     #-- Save the LogFile as designated, link back to the source topic 
 
-    $meta->put( "TOPICPARENT", { name => "$web.$topic" } );
+    $meta->put( 'TOPICPARENT', { name => $web.'.'.$topic } );
 
     my $err = $session->{store}->saveTopic($user, $logWeb, $logTopic, $log, $meta );
 
-    $session->redirect($session->getScriptUrl($web, $logTopic, "view"));
+    $session->redirect($session->getScriptUrl($web, $logTopic, 'view'));
 }
 
 #    Process a single user, parameters passed as a hash
@@ -247,10 +247,10 @@ sub bulkRegister {
 # are quite expensive when doing 300 in succession!
 sub _registerSingleBulkUser {
     my ($session, $row, %settings) = @_;
-    $row || throw Error::Simple("row not set");
-    my @fieldNames = @{$settings{fieldNames} || throw Error::Simple( "No fieldNames" )};
-    my $doUseHtPasswd = defined $settings{doUseHtPasswd} || throw Error::Simple( "No doHtPasswd" );
-    my $doOverwriteTopics = defined $settings{doOverwriteTopics} || throw Error::Simple( "No doOverwriteTopics" );
+    $row || throw Error::Simple('row not set');
+    my @fieldNames = @{$settings{fieldNames} || throw Error::Simple( 'No fieldNames' )};
+    my $doUseHtPasswd = defined $settings{doUseHtPasswd} || throw Error::Simple( 'No doHtPasswd' );
+    my $doOverwriteTopics = defined $settings{doOverwriteTopics} || throw Error::Simple( 'No doOverwriteTopics' );
     my $log;
     #-- call to the registrationHandler (to amend fields) should really happen in here.
 
@@ -264,7 +264,7 @@ sub _registerSingleBulkUser {
     # NB. LoginName is OPTIONAL
     my @requiredFields = qw(WikiName FirstName LastName);
     if (_missingElements($settings{fieldNames}, \@requiredFields)) {
-        throw Error::Simple( join(" ", @{$settings{fieldNames}})." does not contain \nthe full set of ".join(" ", @requiredFields) );
+        throw Error::Simple( join(' ', @{$settings{fieldNames}})." does not contain \nthe full set of ".join(' ', @requiredFields) );
     }
 
     #-- Generation of the page is done from the {form} subhash, so align the two
@@ -280,11 +280,11 @@ sub _registerSingleBulkUser {
         #TODO: need a path for if it doesn't succeed.
     }
 
-    $session->writeLog("bulkregister", $row->{webName}.'.'.$row->{WikiName},
+    $session->writeLog('bulkregister', $row->{webName}.'.'.$row->{WikiName},
                          $row->{Email}, $row->{WikiName} );
 
     if( $doOverwriteTopics or !$session->{store}->topicExists( $row->{webName}, $row->{WikiName} ) ) {
-        $log .= _newUserFromTemplate($session,"NewUserTemplate", $row);
+        $log .= _newUserFromTemplate($session,'NewUserTemplate', $row);
     } else {
         $log .= "$b Not writing topic ".$row->{WikiName}."\n";
 	}
@@ -297,7 +297,7 @@ sub _registerSingleBulkUser {
 						   $session->{user} );
 
     if ($TWiki::doEmailUserDetails) {
-        # _sendEmail(session=>$session, \%data, template => "registernotifybulk"); # If you want it, write it.
+        # _sendEmail(session=>$session, \%data, template => 'registernotifybulk'); # If you want it, write it.
         $log .= "$b Password email disabled\n";
     }
     return ($userTopic, $log);
@@ -366,8 +366,8 @@ sub register {
 
 #   1 generates a activation password
 #   2 calls UnregisteredUser::putRegDetailsByCode(activation password)
-#   3 sends them a "registerconfirm" email.
-#   4 redirects browser to "regconfirm"
+#   3 sends them a 'registerconfirm' email.
+#   4 redirects browser to 'regconfirm'
 sub _requireVerification {
     my ($session, $tmpUserDir) = @_;
 
@@ -384,13 +384,13 @@ sub _requireVerification {
     UnregisteredUser::setDir($tmpUserDir);
     UnregisteredUser::_putRegDetailsByCode( \%data );
 
-    $session->writeLog( "regstart", "$data{webName}.$data{WikiName}",
+    $session->writeLog( 'regstart', "$data{webName}.$data{WikiName}",
 			$data{Email}, $data{WikiName} );
 
-    _sendEmail( session=>$session, template => "registerconfirm", %data );
+    _sendEmail( session=>$session, template => 'registerconfirm', %data );
 
     throw TWiki::UI::OopsException( $data{webName}, $topic,
-                                    "regconfirm", $data{Email} );
+                                    'regconfirm', $data{Email} );
 }
 
 =pod
@@ -405,7 +405,7 @@ point intended to be called from TWiki::UI::run
    3 removes any existing password
    3 generates new password
    4 sends it to them
-   5 redirects browser to "resetpasswd"
+   5 redirects browser to 'resetpasswd'
 
 =cut
 
@@ -423,7 +423,7 @@ sub resetPassword {
     if ($#userNames > 0) {
         # Only admin is able to reset more than one password.
         unless( $session->{user}->isAdmin()) {
-            throw TWiki::UI::OopsException( $web, $topic, "accessgroup",
+            throw TWiki::UI::OopsException( $web, $topic, 'accessgroup',
                                         "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
         }
     } else {
@@ -437,7 +437,7 @@ sub resetPassword {
     unless( $#userNames ) {
         my $user = $session->{users}->findUser( $userNames[0] );
         throw TWiki::UI::OopsException( undef, $user->wikiName(),
-                                        "resetpasswd",
+                                        'resetpasswd',
                                         $message, $user->login() );
     }
 }
@@ -449,19 +449,19 @@ sub _resetUsersPassword {
     unless( $user ) {
         # couldn't work out who they are, its neither loginName nor
         # wikiName.
-        throw TWiki::UI::OopsException( undef, undef, "notwikiuser" );
+        throw TWiki::UI::OopsException( undef, undef, 'notwikiuser' );
     }
     my @em = $user->emails();
     my $email = $em[0];
     unless ($email) {
         throw TWiki::UI::OopsException
-          ( undef, $user->wikiName(), "regemail",
+          ( undef, $user->wikiName(), 'regemail',
             "Can't get an email address for " . $user->stringify());
     }
 
-    my $message = "";
+    my $message = '';
     unless( $user->passwordExists() ) {
-        $email = "ResetPassword created new htpasswd entry for ".
+        $email = 'ResetPassword created new htpasswd entry for '.
           $user->stringify()." as it was missing in .htpasswd";
     }
 
@@ -473,10 +473,10 @@ sub _resetUsersPassword {
                 Email => $email,
                 PasswordA => $password,
                 Introduction => $introduction,
-                template => "mailresetpassword"
+                template => 'mailresetpassword'
               );
 
-    $session->writeLog("resetpasswd", $user->login(), $user->wikiName(), $email);
+    $session->writeLog('resetpasswd', $user->login(), $user->wikiName(), $email);
     return $message;
 }
 
@@ -489,9 +489,9 @@ are passed in CGI parameters.
 
    1 Checks required fields have values
    2 get wikiName and userName from getUserByEitherLoginOrWikiName(username)
-   3 check passwords match each other, and that the password is correct, otherwise "wrongpassword"
+   3 check passwords match each other, and that the password is correct, otherwise 'wrongpassword'
    4 TWiki::User::updateUserPassword
-   5 "oopschangepasswd"
+   5 'oopschangepasswd'
 
 The NoPasswdUser case is not handled
 
@@ -511,19 +511,19 @@ sub changePassword {
 
     # check if required fields are filled in
     if( ! $username || ! $passwordA ) {
-        throw TWiki::UI::OopsException( $webName, $topic, "regrequ" );
+        throw TWiki::UI::OopsException( $webName, $topic, 'regrequ' );
     }
 
     my $user = $session->{users}->findUser( $username );
 
     unless ($user) {
-        throw TWiki::UI::OopsException( $webName, $topic, "notwikiuser",
+        throw TWiki::UI::OopsException( $webName, $topic, 'notwikiuser',
                                         $username );
     }
 
     # check if passwords are identical
     if( $passwordA ne $passwordB ) {
-        throw TWiki::UI::OopsException( $webName, $topic, "regpasswd" );
+        throw TWiki::UI::OopsException( $webName, $topic, 'regpasswd' );
     }
 
     # c h a n g e
@@ -531,21 +531,21 @@ sub changePassword {
 
     # check if required fields are filled in
     if( ! $oldpassword ) {
-        throw TWiki::UI::OopsException( $webName, $topic, "regrequ" );
+        throw TWiki::UI::OopsException( $webName, $topic, 'regrequ' );
     }
 
     unless( $user->checkPassword( $oldpassword )) {
-        throw TWiki::UI::OopsException( $webName, $topic, "wrongpassword");
+        throw TWiki::UI::OopsException( $webName, $topic, 'wrongpassword');
     }
 
     # OK - password may be changed
     $user->changePassword( $passwordA );
 
-    $session->writeLog("changepasswd", $user->stringify());
+    $session->writeLog('changepasswd', $user->stringify());
     #recording the email would be nice
 
     # OK - password changed
-    throw TWiki::UI::OopsException( $webName, $topic, "changepasswd" );
+    throw TWiki::UI::OopsException( $webName, $topic, 'changepasswd' );
 }
 
 =pod
@@ -556,7 +556,7 @@ This is called: on receipt of the activation password -> RegisterCgiScript -> he
    1 calls UnregisteredUser::reloadUserContext(activation password)
    2 throws oops if appropriate
    3 calls emailRegistrationConfirmations
-   4 still calls "oopssendmailerr" if a problem, but this is not done uniformly
+   4 still calls 'oopssendmailerr' if a problem, but this is not done uniformly
 
 =cut
 
@@ -574,7 +574,7 @@ sub verifyEmailAddress {
     my $topic = $session->{topicName};
     my $web = $session->{webName};
 
-#    $this->{session}->writeLog("verifyuser", $loginName, "$userName");
+#    $this->{session}->writeLog('verifyuser', $loginName, "$userName");
 
     _emailRegistrationConfirmations( $session, \%data );
 }
@@ -590,7 +590,7 @@ Presently this is called in RegisterCgiScript directly after a call to verify. T
    5 calls the misnamed RegistrationHandler to set cookies
    6 calls addUserToTWikiUsersTopic
    7 writes the logEntry (if wanted :/)
-   8 redirects browser to "oopsregthanks"
+   8 redirects browser to 'oopsregthanks'
 
 reloads the context by code
 these two are separate in here to ease the implementation of administrator approval 
@@ -616,17 +616,17 @@ sub finish {
 
     # create user topic if it does not exist
     #    unless( TWiki::Store::topicExists( $TWiki::cfg{UsersWebName}, $data{WikiName} ) ) {
-    my $log = _newUserFromTemplate($session, "NewUserTemplate", \%data);
+    my $log = _newUserFromTemplate($session, 'NewUserTemplate', \%data);
 
     #  }
 
     # SMELL - needs generalising to password delegate - what does it mean if you register when Basicauth is not used?
-    if ( $TWiki::cfg{HtpasswdFormatFamily} eq "htpasswd" ) {
+    if ( $TWiki::cfg{HtpasswdFormatFamily} eq 'htpasswd' ) {
         my $success = _addUserToPasswordSystem( session=>$session, %data );
         # SMELL - error condition? surely need a way to flag an error?
         unless ( $success ) {
             throw TWiki::UI::OopsException( $data{webName}, $topic,
-                                            "regerr" );
+                                            'regerr' );
         }
     }
 
@@ -648,14 +648,14 @@ sub finish {
 
     # write log entry
     if ($TWiki::cfg{Log}{register}) {
-        $session->writeLog( "register", "$data{webName}.$data{WikiName}",
+        $session->writeLog( 'register', "$data{webName}.$data{WikiName}",
                          $data{Email}, $data{WikiName} );
     }
     
 
     # and finally display thank you page
     throw TWiki::UI::OopsException( $data{webName}, $data{WikiName},
-                                    "regthanks", $data{Email} );
+                                    'regthanks', $data{Email} );
 }
 
 #Given a template and a hash, creates a new topic for a user
@@ -682,7 +682,7 @@ sub _newUserFromTemplate {
 #Writes the registration details passed as a hash to either BulletFields or FormFields
 #on the user's topic.
 #
-#Returns "BulletFields" or "FormFields" depending on what it chose.
+#Returns 'BulletFields' or 'FormFields' depending on what it chose.
 sub _writeRegistrationDetailsToTopic {
     my ($session, $dataRef, $meta, $text) = @_;
     my %data = %$dataRef;
@@ -694,12 +694,12 @@ sub _writeRegistrationDetailsToTopic {
 
     my $log;
     my $addText;
-    if ($meta->get("FORM")) {
+    if ($meta->get('FORM')) {
         ( $meta, $addText ) = _getRegFormAsTopicForm( $meta, \%data );
-        $log = "Using Form Fields";
+        $log = 'Using Form Fields';
     } else {
         $addText = _getRegFormAsTopicContent( \%data );
-        $log = "Using Bullet Fields";
+        $log = 'Using Bullet Fields';
     }
     $text = $before . $addText . $after;
 
@@ -709,7 +709,7 @@ sub _writeRegistrationDetailsToTopic {
       $session->expandVariablesOnTopicCreation( $text, $user, $data{WikiName},
                                              "$data{webName}.$data{WikiName}" );
 
-    $meta->put( "TOPICPARENT", { "name" => $TWiki::cfg{UsersTopicName}} );
+    $meta->put( 'TOPICPARENT', { 'name' => $TWiki::cfg{UsersTopicName}} );
 
     $session->{store}->saveTopic($user, $data{webName}, $data{WikiName}, $text, $meta );
     return $log;
@@ -736,7 +736,7 @@ sub _getRegFormAsTopicForm {
 # not by the order of the template form definition. Hence they are arguably in the wrong order.
 sub _getKeyValuePairsAsTopicForm {
     my ($meta, @fieldArray)     = @_;   # SMELL - why is this an array? surely a hash is better?
-    my $leftoverText = "";
+    my $leftoverText = '';
     foreach my $fd (@fieldArray) {
         my $name  = $fd->{name};
         my $value = $fd->{value};
@@ -745,18 +745,18 @@ sub _getKeyValuePairsAsTopicForm {
         
         #### SMELL I want to write:
         #     if (field is on form) {
-        #	$meta->put("FIELD",
-        # { "name" => $name, "value" => $value, "title" =>$title});
+        #	$meta->put('FIELD',
+        # { 'name' => $name, 'value' => $value, 'title' =>$title});
         #     } else {
         # accumulate it in $leftoverText
         #     }
         #### but SMELL instead we write this ugliness
         # not least because although I can see a key with a value, I can't distinguish those one without one.
         # from no key at all.
-        if ( $name eq "Comment" ) {
+        if ( $name eq 'Comment' ) {
             $leftoverText .= "\t* $name: $value\n"; #SMELL - tab not 3 spaces
         } else {
-            $meta->put( "FIELD",
+            $meta->put( 'FIELD',
                         { name => $name, value => $value, title => $title } );
         }
         #### end workaround SMELL
@@ -781,19 +781,19 @@ sub _getRegFormAsTopicContent {
 }
 
 #Sends to both the WIKIWEBMASTER and the USER notice of the registration
-#emails both the admin "registernotifyadmin" and the user "registernotify", 
+#emails both the admin 'registernotifyadmin' and the user 'registernotify', 
 #in separate emails so they both get targeted information (and no password to the admin).
 sub _emailRegistrationConfirmations {
     my ( $session, $dataHashRef ) = @_;
     my %data = %$dataHashRef;
 
-    my $skin = $session->{cgiQuery}->param("skin") || $session->{prefs}->getPreferencesValue("SKIN");
+    my $skin = $session->{cgiQuery}->param('skin') || $session->{prefs}->getPreferencesValue('SKIN');
     my $email;
 
     $email =
       _buildConfirmationEmail( $session,
                               \%data,
-                              $session->{templates}->readTemplate( "registernotify", $skin ),
+                              $session->{templates}->readTemplate( 'registernotify', $skin ),
                               $TWiki::cfg{HidePasswdInRegistration}
                              );
 
@@ -802,7 +802,7 @@ sub _emailRegistrationConfirmations {
 
     # SMELL: This needs to log to tell the admin.
     throw TWiki::UI::OopsException( $data{webName}, $data{WikiName},
-                                    "sendmailerr", $err )
+                                    'sendmailerr', $err )
       if ( $err && ! $unitTestMode );
 
     # Furthermore it would be better if it returned
@@ -811,12 +811,12 @@ sub _emailRegistrationConfirmations {
     $email =
       _buildConfirmationEmail( $session,
                               \%data,
-                              $session->{templates}->readTemplate( "registernotifyadmin", $skin ),
+                              $session->{templates}->readTemplate( 'registernotifyadmin', $skin ),
                               1 );
 
     $err = $session->{net}->sendEmail($email);
     throw TWiki::UI::OopsException( $data{webName}, $data{WikiName},
-                                    "sendmailerr", $err )
+                                    'sendmailerr', $err )
       if ( $err && ! $unitTestMode );
 }
 
@@ -833,14 +833,14 @@ sub _buildConfirmationEmail {
     foreach my $fd ( @{ $data{form} } ) {
         my $name  = $fd->{name};
         my $value = $fd->{value};
-        if ( ( $name eq "Password" ) && ($hidePassword) ) {
+        if ( ( $name eq 'Password' ) && ($hidePassword) ) {
             $value = "*******";
         }
-        if ( $name ne "Confirm" ) {
+        if ( $name ne 'Confirm' ) {
             $before .= "   * $name\: $value\n";
         }
     }
-    $templateText = "$before$after";
+    $templateText = $before.$after;
     $templateText = $session->handleCommonTags
       ( $templateText, $data{webName}, $data{WikiName} );
     $templateText =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois
@@ -858,18 +858,18 @@ sub _validateRegistration {
 
     unless ( $data{form} && ( $#{ $data{form} } > 1 ) ) {
         throw TWiki::UI::OopsException( $data{webName}, $topic,
-                                        "regrequ", $data{WikiName} );
+                                        'regrequ', $data{WikiName} );
     }
 
     if ($session->{store}->topicExists( $data{webName}, $data{WikiName} )) {
         throw TWiki::UI::OopsException( $data{webName}, $topic,
-                                        "regexist", $data{WikiName} );
+                                        'regexist', $data{WikiName} );
     }
 
     my $user = $session->{users}->findUser( $data{LoginName}, undef, 1 );
     if ( $user && $user->passwordExists() ) {
         throw TWiki::UI::OopsException( $data{webName}, $topic,
-                                        "regexist", $data{LoginName} );
+                                        'regexist', $data{LoginName} );
     }
 
     # check if required fields are filled in
@@ -877,28 +877,28 @@ sub _validateRegistration {
         if ( ( $fd->{required} ) && ( !$fd->{value} ) ) {
             # TODO - add all fields that are missing their values
             throw TWiki::UI::OopsException( $data{webName}, $topic,
-                                            "regrequ" );
+                                            'regrequ' );
         }
     }
 
     # check if WikiName is a WikiName
     if ( !TWiki::isValidWikiWord( $data{WikiName} ) ) {
         throw TWiki::UI::OopsException( $data{webName}, $topic,
-                                        "regwiki" );
+                                        'regwiki' );
     }
 
     if (exists $data{PasswordA}) {
         # check if passwords are identical
         if ( $data{passwordA} ne $data{passwordB} ) {
             throw TWiki::UI::OopsException( $data{webName}, $topic,
-                                            "regpasswd" );
+                                            'regpasswd' );
         }
     }
 
     # check valid email address
     if ( $data{Email} !~ $TWiki::regex{emailAddrRegex} ) {
         throw TWiki::UI::OopsException( $data{webName}, $topic,
-                                        "regemail" );
+                                        'regemail' );
     }
 }
 
@@ -922,14 +922,14 @@ sub _addUserToPasswordSystem {
 
     my $success;
     if ($p{CryptPassword})  {
-        throw Error::Simple( "No API to install crypted password" );
+        throw Error::Simple( 'No API to install crypted password' );
         #	$success = $session->{users}->installCryptedPassword($p{LoginName},
         #						   $p{CryptPassword});
     } else {
         my $password = $p{Password};
         unless ($password) {
             $password = TWiki::User::randomPassword();
-            $session->writeWarning("No password specified for ".$p{LoginName}." - using random=".$password);
+            $session->writeWarning('No password specified for '.$p{LoginName}." - using random=".$password);
         }
         $success = $user->addPassword( $password );
     }
@@ -959,7 +959,7 @@ sub _sendEmail {
     if ($senderr) {
         $session->writeWarning("Couldn't send message:\n\n$text\n\n - $senderr");
         throw TWiki::UI::OopsException( undef, $p{WikiName},
-                                        "sendmailerr", $senderr )
+                                        'sendmailerr', $senderr )
           unless $unitTestMode;
     }
 }
@@ -1065,7 +1065,7 @@ sub reloadUserContext {
 
     my $verificationFilename = _verificationCodeFilename($code);
     unless (-f $verificationFilename){
-        throw TWiki::UI::OopsException( undef, undef, "regcode",
+        throw TWiki::UI::OopsException( undef, undef, 'regcode',
 					"$code has no file '$verificationFilename'");
     }
 
@@ -1073,12 +1073,12 @@ sub reloadUserContext {
     $error = _validateUserContext($code);
 
     if ($error) {
-      throw TWiki::UI::OopsException( undef, undef, "regcode",
+      throw TWiki::UI::OopsException( undef, undef, 'regcode',
 				    "Problem with verification code: $error");
     }
 
     #   $data{debug} = 1;
-    #    ::dumpIfDebug(\%data, "reload check");
+    #    ::dumpIfDebug(\%data, 'reload check');
 
     return %data;
 }
@@ -1093,13 +1093,13 @@ sub _validateUserContext {
     my ($code) = @_;
     my ($name) = $code =~ /^([^.]+)\./;
     my %data   = %{ _getRegDetailsByCode($code) };    #SMELL - expensive?
-    return "Invalid activation code" unless $code eq $data{VerificationCode};
-    return "Name in activation code does not match"
+    return 'Invalid activation code' unless $code eq $data{VerificationCode};
+    return 'Name in activation code does not match'
       unless $name eq $data{WikiName};
     return;
 }
 
-#SMELL: "Context"?
+#SMELL: 'Context'?
 sub deleteUserContext {
     my ($code) = @_;
     my ($name) = $code =~ /^([^.]+)\./;
@@ -1140,18 +1140,18 @@ sub populateEntries {
             $name               = $3;
             $formData{name}  = $name;
             $formData{value} = $value;
-            if ( $name eq "Password" ) {
+            if ( $name eq 'Password' ) {
                 #TODO: get rid of this; move to removals and generalise.
                 $data{passwordA} = $value;
-            } elsif ( $name eq "Confirm" ) {
+            } elsif ( $name eq 'Confirm' ) {
                 $data{passwordB} = $value;
             }
-            #  $name eq "Password"
-            #  $name eq "Confirm"
+            #  $name eq 'Password'
+            #  $name eq 'Confirm'
 
             push @orderedFields, {%formData}
-              unless (($name eq "WikiName") or 
-                      ($name eq "Confirm")
+              unless (($name eq 'WikiName') or 
+                      ($name eq 'Confirm')
                      );    # (1) omitted because they can't change it, and (2) is a duplicate
             $data{$name} = $value;
         }
@@ -1173,8 +1173,6 @@ sub deleteKey {
     #-- We delete only the field in the {form} array - this makes the original value still there should 
     #-- we want it
     #-- i.e. it must still be available via $row->{$key} even though $row-{form}[] does not contain it
-#    warn "BEFORE:". Dumper(\@_);
-#    warn "Deleting $key from ".Dumper($row);
     my @formArray = @{$row->{form}};
 
     foreach my $index (0..$#formArray) {
@@ -1189,13 +1187,12 @@ sub deleteKey {
 
         # delete would this leave an undef entry in the form array, which translates as a ":" when output as bullet fields.
     }		  
-    #warn "AFTER:". Dumper($row);
     return $row;  
 };
 
 sub register {
     my ($session, $row, $meta, $text) = @_;
-    my $log = "";
+    my $log = '';
     throw Error::Simple( "No row! " .Dumper($row)) unless $row;
 
     if ($row->{Photo}) {
@@ -1213,13 +1210,13 @@ sub register {
             $log .= "%X% No such dir ".$row->{Photo};
         }
     } else {
-        $log .= "No photo";
+        $log .= 'No photo';
     }
     
-    $row = deleteKey($row, "Photo");
-    $row = deleteKey($row, "WikiName");
-    $row = deleteKey($row, "LoginName");
-    $row = deleteKey($row, "Password");
+    $row = deleteKey($row, 'Photo');
+    $row = deleteKey($row, 'WikiName');
+    $row = deleteKey($row, 'LoginName');
+    $row = deleteKey($row, 'Password');
 
     return ($row, $meta, $text, $log);
 }
@@ -1242,24 +1239,24 @@ sub addPhotoToTopic {
 
     foreach my $fileName (@fileNames) {
         my $error =
-          $session->{store}->saveAttachment( $p{web}, $p{topic}, "", "",
+          $session->{store}->saveAttachment( $p{web}, $p{topic}, '', '',
                                         $fileName, 0, 1,
-                                        1, "", $dirName."/".$fileName );
+                                        1, '', $dirName."/".$fileName );
 
         throw Error::Simple( $error ) if $error;
 
         my @stats = stat $fileName;
 
-        $meta->put( "FILEATTACHMENT",
+        $meta->put( 'FILEATTACHMENT',
                     {
                      name    => $fileName,
-                     version => "", # WHERE DOES $fileVersion COME FROM?
+                     version => '', # WHERE DOES $fileVersion COME FROM?
                      path    => $p{photo},
                      size    => $stats[7],
                      date    => $stats[9],
                      user    => "$p{user}",
-                     comment => "",
-                     attr    => "",
+                     comment => '',
+                     attr    => '',
                     } );
     }
     # $session->{store}->saveTopic($p{web}, $p{user}, $text, $meta );
@@ -1274,6 +1271,6 @@ sub addPhotoToTopic {
 #(00:03:04) merlyn: stop inventing your own
 #(00:03:10) MRJC: ok, how to simply mass set a bunch of keys?
 #(00:03:12) merlyn: eventually, you'll end up wanting IF and WHILE
-#(00:03:14) pjcj: $text =~ s|%INTRODUCTION%|$p{Introduction}//""|geo in bleadperl, or use TemplateToolkit
+#(00:03:14) pjcj: $text =~ s|%INTRODUCTION%|$p{Introduction}//''|geo in bleadperl, or use TemplateToolkit
 
 1;

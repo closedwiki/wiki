@@ -76,11 +76,11 @@ sub initPlugin {
 
     # Get plugin preferences from InterwikiPlugin topic
     $suppressTooltip =
-      TWiki::Func::getPreferencesFlag( "INTERWIKIPLUGIN_SUPPRESSTOOLTIP" );
+      TWiki::Func::getPreferencesFlag( 'INTERWIKIPLUGIN_SUPPRESSTOOLTIP' );
 
     my $interTopic =
-      TWiki::Func::getPreferencesValue( "INTERWIKIPLUGIN_RULESTOPIC" )
-          || "InterWikis";
+      TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_RULESTOPIC' )
+          || 'InterWikis';
     ( $interWeb, $interTopic ) =
       TWiki::Func::normalizeWebTopicName( $interWeb, $interTopic );
     if( $interTopic =~ s/^(.*)\.// ) {
@@ -89,7 +89,7 @@ sub initPlugin {
 
     my $text = TWiki::Func::readTopicText( $interWeb, $interTopic, undef, 1 );
 
-    # "| alias | URL | ..." table and extract into "alias", "URL" list
+    # '| alias | URL | ...' table and extract into 'alias', "URL" list
     $text =~ s/^\|\s*$sitePattern\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|.*$/_map($1,$2,$3)/mego;
 
     $sitePattern = "(" . join( "|", keys %interSiteTable ) . ")";
@@ -99,10 +99,10 @@ sub initPlugin {
 sub _map {
     my( $site, $url, $help ) = @_;
     if( $site ) {
-        $interSiteTable{$site}{url} = $url || "";
-        $interSiteTable{$site}{help} = $help || "";
+        $interSiteTable{$site}{url} = $url || '';
+        $interSiteTable{$site}{help} = $help || '';
     }
-    return "";
+    return '';
 }
 
 sub preRenderingHandler {
@@ -115,16 +115,16 @@ sub preRenderingHandler {
 sub _link {
     my( $prefix, $site, $page, $postfix ) = @_;
 
-    $prefix ||= "";
-    $site ||= "";
-    $page ||= "";
-    $postfix ||= "";
+    $prefix ||= '';
+    $site ||= '';
+    $page ||= '';
+    $postfix ||= '';
 
     my $text;
     if( defined( $interSiteTable{$site} ) ) {
         my $url = $interSiteTable{$site}{url};
         my $help = $interSiteTable{$site}{help};
-        my $title = "";
+        my $title = '';
 
         unless( $suppressTooltip ) {
             $help =~ s/<nop>/&nbsp;/goi;
@@ -136,7 +136,7 @@ sub _link {
         if( $url =~ s/\$page/$page/go ) {
             $text = $url;
         } else {
-            $text = "$url$page";
+            $text = $url.$page;
         }
         if( $postfix ) {
             $text = "$prefix$text][";

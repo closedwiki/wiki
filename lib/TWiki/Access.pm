@@ -43,22 +43,13 @@ database.
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
     $this->{session} = $session;
 
     %{$this->{GROUPS}} = ();
 
     return $this;
 }
-
-sub users { my $this = shift; return $this->{session}->{users}; }
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
-sub store { my $this = shift; return $this->{session}->{store}; }
-sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
-sub security { my $this = shift; return $this->{session}->{security}; }
-sub templates { my $this = shift; return $this->{session}->{templates}; }
-sub renderer { my $this = shift; return $this->{session}->{renderer}; }
-sub search { my $this = shift; return $this->{session}->{search}; }
 
 =pod
 
@@ -71,17 +62,18 @@ Are there any security restrictions for this Web
 
 sub permissionsSet {
     my( $this, $web ) = @_;
-    ASSERT(ref($this) eq "TWiki::Access") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Access') if DEBUG;
 
     my $permSet = 0;
 
     my @types = qw/ALLOW DENY/;
     my @actions = qw/CHANGE VIEW RENAME/;
+    my $prefs = $this->{session}->{prefs};
 
   OUT: foreach my $type ( @types ) {
         foreach my $action ( @actions ) {
-            my $pref = $type . "WEB" . $action;
-            my $prefValue = $this->prefs()->getPreferencesValue( $pref, $web ) || "";
+            my $pref = $type . 'WEB' . $action;
+            my $prefValue = $prefs->getPreferencesValue( $pref, $web ) || '';
             if( $prefValue =~ /\S/ ) {
                 $permSet = 1;
                 last OUT;
@@ -111,11 +103,11 @@ sub getReason {
 
 ---++ ObjectMethod checkAccessPermission( $action, $user, $text, $topic, $web ) -> $boolean
 Check if user is allowed to access topic
-   * =$action=  - "VIEW", "CHANGE", "CREATE", etc.
+   * =$action=  - 'VIEW', 'CHANGE', 'CREATE', etc.
    * =$user=    - User object
-   * =$text=    - If empty: Read "$theWebName.$theTopicName" to check permissions
-   * =$topic=   - Topic name to check, e.g. "SomeTopic"
-   * =$web=     - Web, e.g. "Know"
+   * =$text=    - If empty: Read '$theWebName.$theTopicName' to check permissions
+   * =$topic=   - Topic name to check, e.g. 'SomeTopic'
+   * =$web=     - Web, e.g. 'Know'
 If the check fails, the reason can be recoveered using getReason
 
 =cut
@@ -123,8 +115,10 @@ If the check fails, the reason can be recoveered using getReason
 sub checkAccessPermission {
     my( $this, $theAccessType, $user,
         $theTopicText, $theTopicName, $theWebName ) = @_;
-    ASSERT(ref($this) eq "TWiki::Access") if DEBUG;
-    ASSERT(ref($user) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Access') if DEBUG;
+    ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
+    my $prefs = $this->{session}->{prefs};
+    my $store = $this->{session}->{store};
 
     undef $this->{failure};
 
@@ -138,9 +132,9 @@ sub checkAccessPermission {
 
     if( ! $theTopicText ) {
         # text not supplied as parameter, so read topic. The
-        # read is "Raw" just to hint to store that we want the
+        # read is 'Raw' just to hint to store that we want the
         # data _fast_.
-        $theTopicText = $this->store()->readTopicRaw( undef, $theWebName,
+        $theTopicText = $store->readTopicRaw( undef, $theWebName,
                                                       $theTopicName,
                                                       undef );
     }
@@ -155,7 +149,7 @@ sub checkAccessPermission {
             my ( $how, $set ) = ( $1, $2 );
             # Note: an empty value is a valid value!
             if( defined( $set )) {
-                if( $how eq "DENYTOPIC" ) {
+                if( $how eq 'DENYTOPIC' ) {
                     $denyText = $set;
                 } else {
                     $allowText = $set;
@@ -164,12 +158,12 @@ sub checkAccessPermission {
         }
     }
 
-    my $control = "topic";
+    my $control = 'topic';
     # DENYTOPIC overrides DENYWEB, even if it is empty
     unless( defined( $denyText )) {
-        $control = "web";
+        $control = 'web';
         $denyText =
-          $this->prefs()->getPreferencesValue( "DENYWEB$theAccessType", $theWebName );
+          $prefs->getPreferencesValue( "DENYWEB$theAccessType", $theWebName );
     }
 
     if( defined( $denyText )) {
@@ -181,18 +175,18 @@ sub checkAccessPermission {
 
     if( defined( $allowText ) ) {
         unless( $user->isInList( $allowText )) {
-            $this->{failure} = "topic is not allowed";
+            $this->{failure} = 'topic is not allowed';
             return 0;
         }
     } else {
         # ALLOWTOPIC overrides ALLOWWEB, even if it is empty
         $allowText =
-          $this->prefs()->getPreferencesValue( "ALLOWWEB$theAccessType",
+          $prefs->getPreferencesValue( "ALLOWWEB$theAccessType",
                                              $theWebName );
 
         if( defined( $allowText ) && $allowText =~ /\S/ ) {
             unless( $user->isInList( $allowText )) {
-                $this->{failure} = "web is not allowed";
+                $this->{failure} = 'web is not allowed';
                 return 0;
             }
         }

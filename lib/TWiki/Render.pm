@@ -57,7 +57,7 @@ Creates a new renderer with initial state from preference values
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
 
     # Do a dynamic 'use locale' for this module
     if( $TWiki::cfg{UseLocale} ) {
@@ -69,32 +69,26 @@ sub new {
     $this->{NOAUTOLINK} = 0;
     $this->{MODE} = 'html';		# Default is to render as HTML
     $this->{NEWTOPICBGCOLOR} =
-      $session->{prefs}->getPreferencesValue("NEWTOPICBGCOLOR")
-        || "#FFFFCE";
+      $session->{prefs}->getPreferencesValue('NEWTOPICBGCOLOR')
+        || '#FFFFCE';
     $this->{NEWTOPICFONTCOLOR} =
-      $session->{prefs}->getPreferencesValue("NEWTOPICFONTCOLOR")
-        || "#0000FF";
+      $session->{prefs}->getPreferencesValue('NEWTOPICFONTCOLOR')
+        || '#0000FF';
     $this->{NEWLINKSYMBOL} =
-      $session->{prefs}->getPreferencesValue("NEWTOPICLINKSYMBOL")
-        || "<sup>?</sup>";
+      $session->{prefs}->getPreferencesValue('NEWTOPICLINKSYMBOL')
+        || '<sup>?</sup>';
     # tooltip init
     $this->{LINKTOOLTIPINFO} =
-      $session->{prefs}->getPreferencesValue("LINKTOOLTIPINFO")
-        || "";
+      $session->{prefs}->getPreferencesValue('LINKTOOLTIPINFO')
+        || '';
     $this->{LINKTOOLTIPINFO} = '$username - $date - r$rev: $summary'
       if( $this->{LINKTOOLTIPINFO} =~ /^on$/ );
     $this->{NOAUTOLINK} =
-      $session->{prefs}->getPreferencesValue("NOAUTOLINK")
+      $session->{prefs}->getPreferencesValue('NOAUTOLINK')
         || 0;
 
     return $this;
 }
-
-sub users { my $this = shift; return $this->{session}->{users}; }
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
-sub store { my $this = shift; return $this->{session}->{store}; }
-sub attach { my $this = shift; return $this->{session}->{attach}; }
-sub plugins { my $this = shift; return $this->{session}->{plugins}; }
 
 sub _renderParent {
     my( $this, $web, $topic, $meta, $args ) = @_;
@@ -106,19 +100,20 @@ sub _renderParent {
     }
     my $dontRecurse = $ah->{dontrecurse} || 0;
     my $noWebHome =   $ah->{nowebhome} || 0;
-    my $prefix =      $ah->{prefix} || "";
-    my $suffix =      $ah->{suffix} || "";
-    my $usesep =      $ah->{separator} || " &gt; ";
+    my $prefix =      $ah->{prefix} || '';
+    my $suffix =      $ah->{suffix} || '';
+    my $usesep =      $ah->{separator} || ' &gt; ';
 
     my %visited;
-    $visited{"$web.$topic"} = 1;
+    $visited{$web.'.'.$topic} = 1;
 
-    my $sep = "";
+    my $sep = '';
     my $pWeb = $web;
     my $pTopic;
-    my $text = "";
-    my $parentMeta = $meta->get( "TOPICPARENT" );
+    my $text = '';
+    my $parentMeta = $meta->get( 'TOPICPARENT' );
     my $parent;
+    my $store = $this->{session}->{store};
 
     $parent = $parentMeta->{name} if $parentMeta;
 
@@ -127,19 +122,19 @@ sub _renderParent {
     while( $parent ) {
         ( $pWeb, $pTopic ) =
           $this->{session}->normalizeWebTopicName( $pWeb, $parent );
-        $parent = "$pWeb.$pTopic";
+        $parent = $pWeb.'.'.$pTopic;
         last if( $noWebHome &&
                  ( $pTopic eq $TWiki::cfg{HomeTopicName} ) ||
                  $dontRecurse ||
                  $visited{$parent} );
         $visited{$parent} = 1;
         unshift( @stack, "[[$parent][$pTopic]]" );
-        $parent = $this->store()->getTopicParent( $pWeb, $pTopic );
+        $parent = $store->getTopicParent( $pWeb, $pTopic );
     }
     $text = join( $usesep, @stack );
 
     if( $text) {
-        $text = "$prefix$text" if ( $prefix );
+        $text = $prefix.$text if ( $prefix );
         $text .= $suffix if ( $suffix );
     }
 
@@ -148,8 +143,8 @@ sub _renderParent {
 
 sub _renderMoved {
     my( $this, $web, $topic, $meta ) = @_;
-    my $text = "";
-    my $moved = $meta->get( "TOPICMOVED" );
+    my $text = '';
+    my $moved = $meta->get( 'TOPICMOVED' );
 
     if( $moved ) {
         my( $fromWeb, $fromTopic ) =
@@ -157,25 +152,27 @@ sub _renderMoved {
         my( $toWeb, $toTopic ) =
           $this->{session}->normalizeWebTopicName( $web, $moved->{to} );
         my $by = $moved->{by};
-        my $u = $this->users()->findUser( $by );
+        my $u = $this->{session}->{users}->findUser( $by );
         $by = $u->webDotWikiName() if $u;
-        my $date = TWiki::Time::formatTime( $moved->{date}, "", "gmtime" );
+        my $date = TWiki::Time::formatTime( $moved->{date}, '', 'gmtime' );
 
         # Only allow put back if current web and topic match stored information
-        my $putBack = "";
+        my $putBack = '';
         if( $web eq $toWeb && $topic eq $toTopic ) {
-            $putBack  = " - <a title=\"Click to move topic back to previous location, with option to change references.\"";
-            $putBack .= " href=\"".$this->{session}->getScriptUrl($web, $topic, 'rename')."?newweb=$fromWeb&newtopic=$fromTopic&";
-            $putBack .= "confirm=on\" $TWiki::cfg{NoFollow}>put it back</a>";
+            $putBack  = ' - <a title="Click to move topic back to previous location, with option to change references."';
+            $putBack .= ' href="'.$this->{session}->getScriptUrl($web, $topic, 'rename').'?newweb='.$fromWeb.'&newtopic='.$fromTopic.'&';
+            $putBack .= 'confirm=on" '.$TWiki::cfg{NoFollow}.
+              '>put it back</a>';
         }
-        $text = "<i><nop>$toWeb.<nop>$toTopic moved from <nop>$fromWeb.<nop>$fromTopic on $date by $by </i>$putBack";
+        $text = "<i><nop>$toWeb.<nop>$toTopic moved from <nop>$fromWeb".
+          ".<nop>$fromTopic on $date by $by </i>$putBack";
     }
     return $text;
 }
 
 sub _renderFormField {
     my( $this, $meta, $args ) = @_;
-    my $text = "";
+    my $text = '';
     if( $args ) {
         my $attrs = new TWiki::Attrs( $args );
         my $name = $attrs->{name};
@@ -186,18 +183,17 @@ sub _renderFormField {
 
 sub _renderFormData {
     my( $this, $web, $topic, $meta ) = @_;
-    my $metaText = "";
-    my $form = $meta->get( "FORM" );
+    my $metaText = '';
+    my $form = $meta->get( 'FORM' );
 
     if( $form ) {
         my $name = $form->{name};
-        $metaText = "<div class=\"twikiForm\">\n";
-        $metaText .= "<p></p>\n"; # prefix empty line
-        $metaText .= "|*[[$name]]*||\n"; # table header
-        my @fields = $meta->find( "FIELD" );
+        $metaText = '<div class="twikiForm"><p></p>';
+        $metaText .= "\n|*[[$name]]*||\n"; # table header
+        my @fields = $meta->find( 'FIELD' );
         foreach my $field ( @fields ) {
-            my $title = $field->{"title"};
-            my $value = $field->{"value"};
+            my $title = $field->{title};
+            my $value = $field->{value};
             $value =~ s/\n/<br \/>/g;      # undo expansion
             $metaText .= "|  $title:|$value  |\n";
         }
@@ -250,29 +246,30 @@ sub _addListItem {
 sub _emitTR {
     my ( $this, $thePre, $theRow, $insideTABLE ) = @_;
 
-    my $text = "";
-    my $attr = "";
+    my $text = '';
+    my $attr = '';
     my $l1 = 0;
     my $l2 = 0;
     if( $insideTABLE ) {
-        $text = "$thePre<tr>";
+        $text = $thePre.'<tr>';
     } else {
-        $text = "$thePre<table border=\"1\" cellspacing=\"0\" cellpadding=\"1\"> <tr>";
+        $text = $thePre.
+          '<table border="1" cellspacing="0" cellpadding="1"><tr>';
     }
     $theRow =~ s/\t/   /g;  # change tabs to space
     $theRow =~ s/\s*$//;    # remove trailing spaces
-    $theRow =~ s/(\|\|+)/$TWiki::TranslationToken . length($1) . "\|"/ge;  # calc COLSPAN
-
+    $theRow =~ s/(\|\|+)/$TWiki::TranslationToken.length($1).'|'/ge;  # calc COLSPAN
     foreach( split( /\|/, $theRow ) ) {
-        $attr = "";
+        $attr = '';
         # Avoid matching single columns
         if ( s/$TWiki::TranslationToken([0-9]+)//o ) { 
-            $attr = " colspan=\"$1\"" ;
+            $attr = ' colspan="'.$1.'"';
+
         }
         s/^\s+$/ &nbsp; /;
         /^(\s*).*?(\s*)$/;
-        $l1 = length( $1 || "" );
-        $l2 = length( $2 || "" );
+        $l1 = length( $1 || '' );
+        $l2 = length( $2 || '' );
         if( $l1 >= 2 ) {
             if( $l2 <= 1 ) {
                 $attr .= ' align="right"';
@@ -286,19 +283,19 @@ sub _emitTR {
             $text .= "<td$attr> $_ </td>";
         }
     }
-    $text .= "</tr>";
+    $text .= '</tr>';
     return $text;
 }
 
 sub _fixedFontText {
     my( $this, $theText, $theDoBold ) = @_;
-    # preserve white space, so replace it by "&nbsp; " patterns
+    # preserve white space, so replace it by '&nbsp; ' patterns
     $theText =~ s/\t/   /g;
-    $theText =~ s|((?:[\s]{2})+)([^\s])|'&nbsp; ' x (length($1) / 2) . "$2"|eg;
+    $theText =~ s|((?:[\s]{2})+)([^\s])|'&nbsp; ' x (length($1) / 2) . $2|eg;
     if( $theDoBold ) {
-        return "<code><b>$theText</b></code>";
+        return '<code><b>'.$theText.'</b></code>';
     } else {
-        return "<code>$theText</code>";
+        return '<code>'.$theText.'</code>';
     }
 }
 
@@ -306,7 +303,7 @@ sub _fixedFontText {
 sub _makeAnchorHeading {
     my( $this, $theHeading, $theLevel ) = @_;
 
-    # - Build '<nop><h1><a name="atext"></a> heading </h1>' markup
+    # - Build '<nop><h1><a name='atext'></a> heading </h1>' markup
     # - Initial '<nop>' is needed to prevent subsequent matches.
     # - filter out $TWiki::regex{headerPatternNoTOC} ( '!!' and '%NOTOC%' )
     # CODE_SMELL: Empty anchor tags seem not to be allowed, but validators and browsers tolerate them
@@ -336,7 +333,7 @@ Build a valid HTML anchor name
 
 sub makeAnchorName {
     my( $this, $anchorName, $compatibilityMode ) = @_;
-    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
 
     if ( ! $compatibilityMode && $anchorName =~ /^$TWiki::regex{anchorRegex}$/ ) {
 	# accept, already valid -- just remove leading #
@@ -373,32 +370,32 @@ sub makeAnchorName {
     return $anchorName;
 }
 
-# Returns =title="..."= tooltip info in case LINKTOOLTIPINFO perferences variable is set. 
+# Returns =title='...'= tooltip info in case LINKTOOLTIPINFO perferences variable is set. 
 # Warning: Slower performance if enabled.
 sub _linkToolTipInfo {
     my( $this, $theWeb, $theTopic ) = @_;
-    return "" unless( $this->{LINKTOOLTIPINFO} );
-    return "" if( $this->{LINKTOOLTIPINFO} =~ /^off$/i );
+    return '' unless( $this->{LINKTOOLTIPINFO} );
+    return '' if( $this->{LINKTOOLTIPINFO} =~ /^off$/i );
 
     # FIXME: This is slow, it can be improved by caching topic rev info and summary
-    my( $date, $user, $rev ) =
-      $this->store()->getRevisionInfo( $theWeb, $theTopic );
+    my $store = $this->{session}->{store};
+    my( $date, $user, $rev ) = $store->getRevisionInfo( $theWeb, $theTopic );
     my $text = $this->{LINKTOOLTIPINFO};
     $text =~ s/\$web/<nop>$theWeb/g;
     $text =~ s/\$topic/<nop>$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
     $text =~ s/\$date/TWiki::Time::formatTime( $date )/ge;
-    $text =~ s/\$username/<nop>$user/g;                                     # "jsmith"
-    $text =~ s/\$wikiname/"<nop>" . $user->wikiName()/ge;  # "JohnSmith"
-    $text =~ s/\$wikiusername/"<nop>" . $user->webDotWikiName()/ge; # "Main.JohnSmith"
+    $text =~ s/\$username/<nop>$user/g;                                     # 'jsmith'
+    $text =~ s/\$wikiname/'<nop>' . $user->wikiName()/ge;  # 'JohnSmith'
+    $text =~ s/\$wikiusername/'<nop>' . $user->webDotWikiName()/ge; # 'Main.JohnSmith'
     if( $text =~ /\$summary/ ) {
-        my $summary = $this->store()->readTopicRaw
+        my $summary = $store->readTopicRaw
           ( undef, $theWeb, $theTopic, undef );
         $summary = $this->makeTopicSummary( $summary, $theTopic, $theWeb );
         $summary =~ s/[\"\']/<nop>/g;       # remove quotes (not allowed in title attribute)
         $text =~ s/\$summary/$summary/g;
     }
-    return " title=\"$text\"";
+    return ' title="'.$text.'"';
 }
 
 =pod
@@ -423,7 +420,7 @@ SMELL: why is this available to Func?
 
 sub internalLink {
     my( $this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb ) = @_;
-    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
     # SMELL - shouldn't it be callable by TWiki::Func as well?
 
     # Get rid of leading/trailing spaces in topic name
@@ -445,13 +442,14 @@ sub internalLink {
 # TODO: this should be overridable by plugins.
 sub _renderWikiWord {
     my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb) = @_;
-    my $topicExists = $this->store()->topicExists( $theWeb, $theTopic );
+    my $store = $this->{session}->{store};
+    my $topicExists = $store->topicExists( $theWeb, $theTopic );
 
     unless( $topicExists ) {
         # topic not found - try to singularise
         my $singular = TWiki::Plurals::singularForm($theWeb, $theTopic);
         if( $singular ) {
-            $topicExists = $this->store()->topicExists( $theWeb, $singular );
+            $topicExists = $store->topicExists( $theWeb, $singular );
             $theTopic = $singular if $topicExists;
         }
     }
@@ -465,7 +463,7 @@ sub _renderWikiWord {
                                           $theLinkText, $theAnchor);
     }
     if( $doKeepWeb ) {
-        return "$theWeb.$theLinkText";
+        return $theWeb.'.'.$theLinkText;
     }
 
     return $theLinkText;
@@ -477,14 +475,14 @@ sub _renderExistingWikiWord {
 
     if( $theAnchor ) {
         my $anchor = $this->makeAnchorName( $theAnchor );
-        $ans = "<a class=\"twikiAnchorLink\" href=\"".
-	      $this->{session}->getScriptUrl($theWeb, $theTopic, 'view').
-            "\#$anchor\""
+        $ans = '<a class="twikiAnchorLink" href="'.
+	      $this->{session}->getScriptUrl($theWeb, $theTopic, 'view')
+            . "#$anchor\""
               .  $this->_linkToolTipInfo( $theWeb, $theTopic )
-                .  ">$theLinkText</a>";
+                . ">$theLinkText</a>";
     } else {
-        $ans = "<a class=\"twikiLink\" href=\""
-	      .	$this->{session}->getScriptUrl($theWeb, $theTopic, 'view') ."\""
+        $ans = '<a class="twikiLink" href="'
+	      .	$this->{session}->getScriptUrl($theWeb, $theTopic, 'view') .'"'
             .  $this->_linkToolTipInfo( $theWeb, $theTopic )
               .  ">$theLinkText</a>";
     }
@@ -495,11 +493,16 @@ sub _renderNonExistingWikiWord {
     my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor) = @_;
     my $ans;
 
-    $ans .= "<span class=\"twikiNewLink\" style='background : $this->{NEWTOPICBGCOLOR};'>"
+    $ans .= '<span class="twikiNewLink" style=\'background : '.
+      $this->{NEWTOPICBGCOLOR}.';\'>'
       .  "<font color=\"$this->{NEWTOPICFONTCOLOR}\">$theLinkText</font>"
-        .  "<a href=\"".
-          $this->{session}->getScriptUrl($theWeb, $theTopic, 'edit')."?topicparent="
-            .$this->{session}->{webName}.".".$this->{session}->{topicName}."\" $TWiki::cfg{NoFollow}>$this->{NEWLINKSYMBOL}</a></span>";
+        .  '<a href="'.
+          $this->{session}->getScriptUrl($theWeb, $theTopic, 'edit').
+            '?topicparent='
+              .$this->{session}->{webName}.".".
+                $this->{session}->{topicName}.'" '.
+                  $TWiki::cfg{NoFollow}.'>'.
+                    $this->{NEWLINKSYMBOL}.'</a></span>';
     return $ans;
 }
 
@@ -512,7 +515,7 @@ sub _getWeb {
     $theLink =~ s/^($TWiki::regex{webNameRegex}|$TWiki::regex{defaultWebNameRegex})\.//;
     my $web = $1;
 
-    (my $baz = "foo") =~ s/foo//;       # reset $1, defensive coding
+    (my $baz = 'foo') =~ s/foo//;       # reset $1, defensive coding
     # SMELL - is that really necessary?
     return ($web, $theLink);
 }
@@ -536,14 +539,14 @@ sub _handleWikiWord {
     if( defined( $anchor )) {
         ASSERT(($anchor =~ m/\#.*/)) if DEBUG; # must include a hash.
     } else {
-        $anchor = "" ;
+        $anchor = '' ;
     }
 
     if ( defined( $anchor ) ) {
         # 'Web.TopicName#anchor' or 'Web.ABBREV#anchor' link
-        $text = "$topic$anchor";
+        $text = $topic.$anchor;
     } else {
-        $anchor = "";
+        $anchor = '';
 
         # 'Web.TopicName' or 'Web.ABBREV' link:
         if ( $topic eq $TWiki::cfg{HomeTopicName} &&
@@ -555,11 +558,11 @@ sub _handleWikiWord {
     }
 
     # Allow spacing out, etc
-    $text = $this->plugins()->renderWikiWordHandler( $text ) || $text;
+    $text = $this->{session}->{plugins}->renderWikiWordHandler( $text ) || $text;
 
     # =$doKeepWeb= boolean: true to keep web prefix (for non existing Web.TOPIC)
     # SMELL: Why set keepWeb when the topic is an abbreviation?
-    # NO IDEA, and it doesn't work anyway; it adds "TWiki." in front
+    # NO IDEA, and it doesn't work anyway; it adds 'TWiki.' in front
     # of every TWiki.CAPITALISED TWiki.WORD
     #$keepWeb = ( $topic =~ /^$TWiki::regex{abbrevRegex}$/o );
 
@@ -596,7 +599,7 @@ sub _handleSquareBracketedLink {
     # FIXME and NOTE: Had '-' as valid anchor character, removed
     # $theLink =~ s/(\#[a-zA-Z_0-9\-]*$)//;
     $theLink =~ s/($TWiki::regex{anchorRegex}$)//;
-    my $anchor = $1 || "";
+    my $anchor = $1 || '';
 
     # Get the topic name
     my $topic = $theLink || $theTopic;  # remaining is topic
@@ -640,8 +643,8 @@ sub _protocolLink {
 
             $theText =~ s/([\s\(])([$TWiki::regex{upperAlpha}])/$1<nop>$2/go;
         }
-#	  die $theText unless ($theText eq "GNU" || $theText eq "Run Test" || $theText eq "XHTML Validator");
-       return "<a href=\"$theLink\" target=\"_top\">$theText</a>";
+#	  die $theText unless ($theText eq 'GNU' || $theText eq 'Run Test' || $theText eq 'XHTML Validator');
+       return '<a href="'.$theLink.'" target="_top">'.$theText.'</a>';
 }
 
 sub _externalLink {
@@ -649,7 +652,7 @@ sub _externalLink {
     if( $url =~ /\.(gif|jpg|jpeg|png)$/i ) {
         my $filename = $url;
         $filename =~ s@.*/([^/]*)@$1@go;
-        return "$pre<img src=\"$url\" alt=\"$filename\" />";
+        return '$pre<img src="'.$url.'" alt="'.$filename.'" />';
     }
 
     return "$pre<a href=\"$url\" target=\"_top\">$url</a>";
@@ -692,14 +695,15 @@ used in TWiki::handleIcon
 
 sub filenameToIcon {
     my( $this, $fileName ) = @_;
-    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
 
     my @bits = ( split( /\./, $fileName ) );
     my $fileExt = lc $bits[$#bits];
 
-    my $iconDir = "$TWiki::cfg{PubDir}/icn";
-    my $iconUrl = "$TWiki::cfg{PubUrlPath}/icn";
-    my $iconList = $this->store()->readFile( "$iconDir/_filetypes.txt" );
+    my $iconDir = $TWiki::cfg{PubDir}.'/icn';
+    my $iconUrl = $TWiki::cfg{PubUrlPath}.'/icn';
+    my $store = $this->{session}->{store};
+    my $iconList = $store->readFile( $iconDir.'/_filetypes.txt' );
     foreach( split( /\n/, $iconList ) ) {
         @bits = ( split( / / ) );
 	if( $bits[0] eq $fileExt ) {
@@ -719,7 +723,7 @@ Returns the fully rendered expansion of a %FORMFIELD{}% tag.
 
 sub renderFormField {
     my ( $this, $params, $topic, $web ) = @_;
-    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
 
     my $formField = $params->{_DEFAULT};
     my $formTopic = $params->{topic};
@@ -732,9 +736,9 @@ sub renderFormField {
         # SMELL: it's not clear what this does; the implication
         # is that it does something that violates TWiki tag syntax,
         # so I've had to comment it out....
-        # return "" if ( $args =~ m/format\s*=/o);
+        # return '' if ( $args =~ m/format\s*=/o);
         # Otherwise default to value
-        $format = "\$value";
+        $format = '$value';
     }
 
     my $formWeb;
@@ -742,8 +746,8 @@ sub renderFormField {
         if ($topic =~ /^([^.]+)\.([^.]+)/o) {
             ( $formWeb, $topic ) = ( $1, $2 );
         } else {
-            # SMELL: Undocumented feature, "web" parameter
-            $formWeb = $params->{"web"};
+            # SMELL: Undocumented feature, 'web' parameter
+            $formWeb = $params->{web};
         }
         $formWeb = $web unless $formWeb;
     } else {
@@ -751,24 +755,25 @@ sub renderFormField {
         $formTopic = $topic;
     }
 
-    my $meta = $this->{ffCache}{"$formWeb.$formTopic"};
+    my $meta = $this->{ffCache}{$formWeb.'.'.$formTopic};
+    my $store = $this->{session}->{store};
     unless ( $meta ) {
         my $dummyText;
         ( $meta, $dummyText ) =
-          $this->store()->readTopic( $this->{session}->{user}, $formWeb, $formTopic, undef );
-        $this->{ffCache}{"$formWeb.$formTopic"} = $meta;
+          $store->readTopic( $this->{session}->{user}, $formWeb, $formTopic, undef );
+        $this->{ffCache}{$formWeb.'.'.$formTopic} = $meta;
     }
 
-    my $text = "";
+    my $text = '';
     my $found = 0;
     if ( $meta ) {
-        my @fields = $meta->find( "FIELD" );
+        my @fields = $meta->find( 'FIELD' );
         foreach my $field ( @fields ) {
-            my $title = $field->{"title"};
-            my $name = $field->{"name"};
+            my $title = $field->{title};
+            my $name = $field->{name};
             if( $title eq $formField || $name eq $formField ) {
                 $found = 1;
-                my $value = $field->{"value"};
+                my $value = $field->{value};
                 if (length $value) {
                     $text = $format;
                     $text =~ s/\$value/$value/go;
@@ -784,7 +789,7 @@ sub renderFormField {
         $text = $altText;
     }
 
-    return "" unless $text;
+    return '' unless $text;
 
     return $this->getRenderedVersion( $text, $web, $topic );
 }
@@ -799,16 +804,16 @@ The main rendering function.
 
 sub getRenderedVersion {
     my( $this, $text, $theWeb, $theTopic ) = @_;
-    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
     my( $head, $result, $insideNoAutoLink );
 
-    return "" unless $text;  # nothing to do
+    return '' unless $text;  # nothing to do
 
     $theTopic ||= $this->{session}->{topicName};
     $theWeb ||= $this->{session}->{webName};
 
-    $head = "";
-    $result = "";
+    $head = '';
+    $result = '';
     $insideNoAutoLink = 0;
 
     @{$this->{LIST}} = ();
@@ -824,44 +829,44 @@ sub getRenderedVersion {
     my $removed = {};    # Map of placeholders to tag parameters and text
 
     $text =~ s/(\s*<!DOCTYPE.*?>\s*)//is;
-    my $doctype = $1 || "";
+    my $doctype = $1 || '';
 
-    $text = $this->takeOutBlocks( $text, "verbatim", $removed );
-    $text = $this->takeOutBlocks( $text, "head", $removed );
+    $text = $this->takeOutBlocks( $text, 'verbatim', $removed );
+    $text = $this->takeOutBlocks( $text, 'head', $removed );
 
     # DEPRECATED startRenderingHandler before PRE removed
     # SMELL: could parse more efficiently if this wasn't
     # here.
-    $this->plugins()->startRenderingHandler( $text, $theWeb, $theTopic );
+    $this->{session}->{plugins}->startRenderingHandler( $text, $theWeb, $theTopic );
 
-    $text = $this->takeOutBlocks( $text, "pre", $removed );
+    $text = $this->takeOutBlocks( $text, 'pre', $removed );
 
-    $this->plugins()->preRenderingHandler( $text, $removed );
+    $this->{session}->{plugins}->preRenderingHandler( $text, $removed );
 
-    if( $this->plugins()->haveHandlerFor( 'insidePREHandler' )) {
+    if( $this->{session}->{plugins}->haveHandlerFor( 'insidePREHandler' )) {
         foreach my $region ( sort keys %$removed ) {
             next unless ( $region =~ /^pre\d+$/i );
             my @lines = split( /\n/, $removed->{$region}{text} );
-            my $result = "";
+            my $result = '';
             while ( scalar( @lines )) {
                 my $line = shift( @lines );
-                $this->plugins()->insidePREHandler( $line );
+                $this->{session}->{plugins}->insidePREHandler( $line );
                 if ( $line =~ /\n/ ) {
                     unshift( @lines, split( /\n/, $line ));
                     next;
                 }
-                $result .= "$line\n";
+                $result .= $line."\n";
             }
             $removed->{$region}{text} = $result;
         }
     }
 
-    $text =~ s/\\\n//gs;  # Join lines ending in "\"
+    $text =~ s/\\\n//gs;  # Join lines ending in '\'
 
-    if( $this->plugins()->haveHandlerFor( 'outsidePREHandler' )) {
+    if( $this->{session}->{plugins}->haveHandlerFor( 'outsidePREHandler' )) {
         # DEPRECATED - this is the one call preventing
         # effective optimisation of the TWiki ML processing loop,
-        # as it exposes the concept of a "line loop" to plugins,
+        # as it exposes the concept of a 'line loop' to plugins,
         # but HTML is not a line-oriented language (though TML is).
         # But without it, a lot of processing could be moved
         # outside the line loop.
@@ -869,7 +874,7 @@ sub getRenderedVersion {
         my @result = ();
         while ( scalar( @lines ) ) {
             my $line = shift( @lines );
-            $this->plugins()->outsidePREHandler( $line );
+            $this->{session}->{plugins}->outsidePREHandler( $line );
             if ( $line =~ /\n/ ) {
                 unshift( @lines, split( /\n/, $line ));
                 next;
@@ -880,8 +885,8 @@ sub getRenderedVersion {
         $text = join("\n", @result );
     }
 
-    # Escape rendering: Change " !AnyWord" to " <nop>AnyWord",
-    # for final " AnyWord" output
+    # Escape rendering: Change ' !AnyWord' to ' <nop>AnyWord',
+    # for final ' AnyWord' output
     $text =~ s/(^|[\s\(])\!(?=[\w\*\=])/$1<nop>/gm;
 
     # Blockquoted email (indented with '> ')
@@ -939,7 +944,7 @@ sub getRenderedVersion {
             $line =~ s/^(\s*)\|(.*)/$this->_emitTR($1,$2,$insideTABLE)/e;
             $insideTABLE = 1;
         } elsif( $insideTABLE ) {
-            push( @result, "</table>" );
+            push( @result, '</table>' );
             $insideTABLE = 0;
         }
 
@@ -954,27 +959,27 @@ sub getRenderedVersion {
             $isList = 1;
             if ( $line =~ s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> /o ) {
                 # Definition list
-                $this->_addListItem( \@result, "dl", "dd", $1, "" );
+                $this->_addListItem( \@result, 'dl', 'dd', $1, '' );
             }
             elsif ( $line =~ s/^((\t|   )+)(\S+?):\s/<dt> $3<\/dt><dd> /o ) {
                 # Definition list
-                $this->_addListItem( \@result, "dl", "dd", $1, "" );
+                $this->_addListItem( \@result, 'dl', 'dd', $1, '' );
             }
             elsif ( $line =~ s/^((\t|   )+)\* /<li> /o ) {
                 # Unnumbered list
-                $this->_addListItem( \@result, "ul", "li", $1, "" );
+                $this->_addListItem( \@result, 'ul', 'li', $1, '' );
             }
             elsif ( $line =~ m/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/ ) {
                 # Numbered list
                 my $ot = $3;
                 $ot =~ s/^(.).*/$1/;
                 if( $ot !~ /^\d$/ ) {
-                    $ot = " type=\"$ot\"";
+                    $ot = ' type="'.$ot.'"';
                 } else {
-                    $ot = "";
+                    $ot = '';
                 }
                 $line =~ s/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/<li$ot> /;
-                $this->_addListItem( \@result, "ol", "li", $1, $ot );
+                $this->_addListItem( \@result, 'ol', 'li', $1, $ot );
             }
             else {
                 $isList = 0;
@@ -983,7 +988,7 @@ sub getRenderedVersion {
 
         # Finish the list
         if( ! $isList ) {
-            $this->_addListItem( \@result, "", "", "" );
+            $this->_addListItem( \@result, '', '', '' );
             $isList = 0;
         }
 
@@ -991,9 +996,9 @@ sub getRenderedVersion {
     }
 
     if( $insideTABLE ) {
-        push( @result, "</table>" );
+        push( @result, '</table>' );
     }
-    $this->_addListItem( \@result, "", "", "" );
+    $this->_addListItem( \@result, '', '', '' );
 
     $text = join("\n", @result );
 
@@ -1021,40 +1026,40 @@ sub getRenderedVersion {
     $text =~ s/(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . $this->_mailtoLink( $2, $3, $4 )/gem;
 
     # Handle [[][] and [[]] links
-    # Escape rendering: Change " ![[..." to " [<nop>[...", for final unrendered " [[..." output
+    # Escape rendering: Change ' ![[...' to ' [<nop>[...', for final unrendered ' [[...' output
     $text =~ s/(^|\s)\!\[\[/$1\[<nop>\[/gm;
     # Spaced-out Wiki words with alternative link text
     # i.e. [[$1][$3]]
     $text =~ s/\[\[([^\]]+)\](\[([^\]]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$3,$1)/ge;
 
-    $text = $this->takeOutBlocks( $text, "noautolink", $removed );
+    $text = $this->takeOutBlocks( $text, 'noautolink', $removed );
     unless( $this->{NOAUTOLINK} ) {
 
         # do normal WikiWord link if not disabled by <noautolink> or
         # NOAUTOLINK preferences variable
         # Handle WikiWords 
-        # " WebName.TopicName#anchor" or (WebName.TopicName#anchor) -> currentWeb, explicit web, topic, anchor
+        # ' WebName.TopicName#anchor' or (WebName.TopicName#anchor) -> currentWeb, explicit web, topic, anchor
         $text =~ s/(^|[\s\(])(($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$1.$this->_handleWikiWord($theWeb,$3,$4,$5)/geom;
     }
-    $this->putBackBlocks( $text, $removed, "noautolink" );
+    $this->putBackBlocks( $text, $removed, 'noautolink' );
     $text =~ s/<\/?noautolink>//gi;
 
-    $this->putBackBlocks( $text, $removed, "pre" );
+    $this->putBackBlocks( $text, $removed, 'pre' );
 
     # DEPRECATED plugins hook after PRE re-inserted
-    $this->plugins()->endRenderingHandler( $text );
+    $this->{session}->{plugins}->endRenderingHandler( $text );
 
     # replace verbatim with pre in the final output
     $this->putBackBlocks( $text, $removed,
-                          "verbatim", "pre", \&verbatimCallBack );
+                          'verbatim', 'pre', \&verbatimCallBack );
 
     $text =~ s|\n?<nop>\n$||o; # clean up clutch
 
-    $this->putBackBlocks( $text, $removed, "head" );
+    $this->putBackBlocks( $text, $removed, 'head' );
 
-    $text = "$doctype$text";
+    $text = $doctype.$text;
 
-    $this->plugins()->postRenderingHandler( $text );
+    $this->{session}->{plugins}->postRenderingHandler( $text );
 
     return $text;
 }
@@ -1070,7 +1075,7 @@ sub _handleMailto {
         return $this->_mailtoLinkFull( $1, $2, $3, $5 );
     } else {
         # format not matched
-        return "::mailto:$text::";
+        return '::mailto:'.$text.'::';
     }
 }
 
@@ -1113,7 +1118,7 @@ Used to render %META{}% tags in templates for non-active views
 
 sub renderMetaTags {
     my( $this, $theWeb, $theTopic, $text, $meta, $isTopRev, $noexpand ) = @_;
-    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
 
     if ( $noexpand ) {
         $text =~ s/%META{[^}]*}%//go;
@@ -1122,8 +1127,7 @@ sub renderMetaTags {
 
     $text =~ s/%META{\s*"form"\s*}%/$this->_renderFormData( $theWeb, $theTopic, $meta )/ge;    #this renders META:FORM and META:FIELD
     $text =~ s/%META{\s*"formfield"\s*(.*?)}%/$this->_renderFormField( $meta, $1 )/ge;                 #TODO: what does this do? (is this the old forms system, and so can be deleted)
-    $text =~ s/%META{\s*"attachments"\s*(.*)}%/$this->attach()->renderMetaData( $theWeb,
-                                                $theTopic, $meta, $1, $isTopRev )/ge;                                       #renders attachment tables
+    $text =~ s/%META{\s*"attachments"\s*(.*)}%/$this->{session}->{attach}->renderMetaData( $theWeb, $theTopic, $meta, $1, $isTopRev )/ge;                                       #renders attachment tables
     $text =~ s/%META{\s*"moved"\s*}%/$this->_renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
     $text =~ s/%META{\s*"parent"\s*(.*)}%/$this->_renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information
 
@@ -1150,8 +1154,8 @@ $opts:
 
 sub TML2PlainText {
     my( $this, $text, $web, $topic, $opts ) = @_;
-    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
-    $opts ||= "";
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    $opts ||= '';
 
     $text =~ s/\r//g;  # SMELL, what about OS10?
     $text =~ s/%META:[A-Z].*?}%//g;  # remove meta data SMELL
@@ -1211,7 +1215,7 @@ sub protectPlainText {
     # encoding (&#nnn;) is identical for first 256 characters. 
     # I18N TODO: Convert to Unicode from any site character set.
     if( $this->{MODE} eq 'rss' and $TWiki::siteCharset =~ /^iso-?8859-?1$/i ) {
-        $text =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
+        $text =~ s/([\x7f-\xff])/"\&\#" . unpack( 'C', $1 ) .';'/ge;
     }
 
     # prevent text from getting rendered in inline search and link tool
@@ -1235,8 +1239,8 @@ to that length.
 
 sub makeTopicSummary {
     my( $this, $theText, $theTopic, $theWeb, $theFlags ) = @_;
-    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
-    $theFlags ||= "";
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    $theFlags ||= '';
     # called by search, mailnotify & changes after calling readFile
 
     my $htext = $this->TML2PlainText( $theText, $theWeb, $theTopic, $theFlags);
@@ -1301,13 +1305,13 @@ Parameters to the open tag are recorded.
 
 sub takeOutBlocks {
     my( $this, $intext, $tag, $map ) = @_;
-    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
 
     return $intext unless ( $intext =~ m/<$tag>/ );
 
     my $open = qr/^\s*<$tag(\s[^>]+)?>(.*)$/i;
     my $close = qr/^\s*<\/$tag>(.*)$/i;
-    my $out = "";
+    my $out = '';
     my $depth = 0;
     my $scoop;
     my $tagParams;
@@ -1316,7 +1320,7 @@ sub takeOutBlocks {
     foreach my $line ( split/\r?\n/, $intext ) {
         if ( $line =~ m/$open/ ) {
             unless ( $depth++ ) {
-                $scoop = $2 || "";
+                $scoop = $2 || '';
                 next;
             }
             $tagParams = $1;
@@ -1324,17 +1328,18 @@ sub takeOutBlocks {
         if ( $depth && $line =~ m/$close/ ) {
             my $rest = $1;
             unless ( --$depth ) {
-                my $placeholder = "$tag$n";
+                my $placeholder = $tag.$n;
                 $map->{$placeholder}{params} = $tagParams;
                 $map->{$placeholder}{text} = $scoop;
-                $line = "<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->$rest";
+                $line = '<!--'.$TWiki::TranslationToken.$placeholder.
+                  $TWiki::TranslationToken.'-->'.$rest;
                 $n++;
             }
         }
         if ( $depth ) {
-            $scoop .= "$line\n";
+            $scoop .= $line."\n";
         } else {
-            $out .= "$line\n";
+            $out .= $line."\n";
         }
     }
 
@@ -1343,10 +1348,11 @@ sub takeOutBlocks {
         # while ( $depth-- ) {
         #     $scoop .= "</$tag>\n";
         # }
-        my $placeholder = "$tag$n";
+        my $placeholder = $tag.$n;
         $map->{$placeholder}{params} = $tagParams;
         $map->{$placeholder}{text} = $scoop;
-        $out .= "<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->\n";
+        $out .= '<!--'.$TWiki::TranslationToken.$placeholder.
+          $TWiki::TranslationToken."-->\n";
     }
 
     return $out;
@@ -1370,9 +1376,9 @@ re-insertion.
 
 Parameters to the outermost cut block are replaced into the open tag,
 even if that tag is changed. This allows things like
-&lt;verbatim class="">
+&lt;verbatim class=''>
 to be mapped to
-&lt;pre class="">
+&lt;pre class=''>
 
 Cool, eh what? Jolly good show.
 
@@ -1380,13 +1386,13 @@ Cool, eh what? Jolly good show.
 
 sub putBackBlocks {
     my( $this, $text, $map, $tag, $newtag, $callback ) = @_;
-    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
 
     $newtag ||= $tag;
     my @k = keys %$map;
     foreach my $placeholder ( @k ) {
         if( $placeholder =~ /^$tag\d+$/ ) {
-            my $params = $map->{$placeholder}{params} || "";
+            my $params = $map->{$placeholder}{params} || '';
             my $val = $map->{$placeholder}{text};
             $val = &$callback( $val ) if ( defined( $callback ));
             $_[1] =~ s|<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->|<$newtag$params>\n$val</$newtag>|;
@@ -1419,21 +1425,22 @@ Obtain and render revision info for a topic.
 
 sub renderRevisionInfo {
     my( $this, $web, $topic, $rev, $format ) = @_;
+    my $store = $this->{session}->{store};
 
     if( $rev ) {
-        $rev = $this->store()->cleanUpRevID( $rev );
+        $rev = $store->cleanUpRevID( $rev );
     }
 
     my( $meta, $text ) =
-      $this->store()->readTopic( undef, $web, $topic, $rev );
+      $store->readTopic( undef, $web, $topic, $rev );
 
     my( $date, $user, $comment );
     ( $date, $user, $rev, $comment ) =
       $meta->getRevisionInfo( $web, $topic, $rev );
 
-    my $wun = "";
-    my $wn = "";
-    my $un = "";
+    my $wun = '';
+    my $wn = '';
+    my $un = '';
     if( $user ) {
         $wun = $user->webDotWikiName();
         $wn = $user->wikiName();
@@ -1475,25 +1482,26 @@ In plain, lines are truncated to 70 characters. Differences are shown using + an
 
 sub summariseChanges {
     my( $this, $user, $web, $topic, $orev, $nrev, $tml ) = @_;
-    my $summary = "";
+    my $summary = '';
+    my $store = $this->{session}->{store};
 
     my( $nmeta, $ntext ) =
-      $this->store()->readTopic( $user, $web, $topic, $nrev );
+      $store->readTopic( $user, $web, $topic, $nrev );
 
     if( $nrev > 1 && $orev ne $nrev ) {
         # there was a prior version. Diff it.
-        $ntext = $this->TML2PlainText( $ntext, $web, $topic, "nonop" );
+        $ntext = $this->TML2PlainText( $ntext, $web, $topic, 'nonop' );
 
         my( $ometa, $otext ) =
-          $this->store()->readTopic( $user, $web, $topic, $orev );
-        $otext = $this->TML2PlainText( $otext, $web, $topic, "nonop" );
+          $store->readTopic( $user, $web, $topic, $orev );
+        $otext = $this->TML2PlainText( $otext, $web, $topic, 'nonop' );
 
         my $blocks = TWiki::Merge::simpleMerge( $otext, $ntext, qr/[\r\n]+/ );
         # sort through, keeping one line of context either side of a change
         my @revised;
         my $getnext = 0;
-        my $prev = "";
-        my $ellipsis = $tml ? "&hellip;" : "...";
+        my $prev = '';
+        my $ellipsis = $tml ? '&hellip;' : '...';
         my $trunc = $tml ? $TMLTRUNC : $PLAINTRUNC;
         while ( scalar @$blocks && scalar( @revised ) < $SUMMARYLINES ) {
             my $block = shift( @$blocks );
@@ -1509,20 +1517,20 @@ sub summariseChanges {
                 $block .= $ellipsis if $trim;
                 push( @revised, $block );
                 $getnext = 1;
-                $prev = "";
+                $prev = '';
             } else {
                 if( $getnext ) {
                     $block .= $ellipsis if $trim;
                     push( @revised, $block );
                     $getnext = 0;
-                    $prev = "";
+                    $prev = '';
                 } else {
                     $prev = $block;
                 }
             }
         }
         if( $tml ) {
-            $summary = join("<br />", @revised );
+            $summary = join('<br />', @revised );
         } else {
             $summary = join("\n", @revised );
         }

@@ -47,19 +47,19 @@ sub changes {
 
     my $skin = $session->getSkin();
 
-    my $text = $session->{templates}->readTemplate( "changes", $skin );
+    my $text = $session->{templates}->readTemplate( 'changes', $skin );
 
     $text = $session->handleCommonTags( $text, $webName, $topic );
     $text = $session->{renderer}->getRenderedVersion( $text, $webName, $topic );
-    $text =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
+    $text =~ s/\%META{.*?}\%//go;  # remove %META{'parent'}%
 
     my( $page, $eachChange, $after) = split( /%REPEAT%/, $text );
 
-    my $changeData = $session->{store}->readMetaData( $webName, "changes" );
+    my $changeData = $session->{store}->readMetaData( $webName, 'changes' );
     my @changes = split( /\r?\n/, $changeData );
     unless( $query->param( 'minor' )) {
         @changes = grep { !/\tminor$/ } @changes;
-        $page .= "<b>Note:</b> This page is showing major changes only. To see all changes <a href='".$query->url() . "/$webName?minor=1' $TWiki::cfg{NoFollow}>click here</a>";
+        $page .= '<b>Note:</b> This page is showing major changes only. To see all changes <a href="'.$query->url() . "/$webName?minor=1\" $TWiki::cfg{NoFollow}>click here</a>";
     }
     my %done = ();
     foreach my $change ( reverse @changes ) {
@@ -68,7 +68,7 @@ sub changes {
             next unless $session->{store}->topicExists( $webName, $changedTopic );
             my $thisChange = $eachChange;
             $thisChange =~ s/%TOPICNAME%/$changedTopic/go;
-            my $wikiuser = "";
+            my $wikiuser = '';
             my $u = $session->{users}->findUser( $login );
             $wikiuser = $u->webDotWikiName() if $u;
             $thisChange =~ s/%AUTHOR%/$wikiuser/go;
@@ -76,7 +76,7 @@ sub changes {
             $rev = 1 unless $rev;
             my $srev = $rev;
             if( $rev == 1 ) {
-                $srev = "<span class=\"twikiNew\">NEW</span>";
+                $srev = '<span class="twikiNew">NEW</span>';
             }
             $thisChange =~ s/%TIME%/$time/go;
             $thisChange =~ s/%REVISION%/$rev/go;
@@ -95,7 +95,7 @@ sub changes {
     }
     if( $TWiki::cfg{Log}{changes} ) {
         # write log entry
-        $session->writeLog( "changes", $webName, "" );
+        $session->writeLog( 'changes', $webName, '' );
     }
     $page .= $after;
 

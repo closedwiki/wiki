@@ -70,7 +70,7 @@ $TWiki::cfg{UsersWebName} web.
 
 sub new {
     my( $class, $session, $name, $wikiname ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
     ASSERT($name) if DEBUG;
     ASSERT($wikiname) if DEBUG;
 
@@ -79,14 +79,11 @@ sub new {
 
     $this->{login} = $name;
     my( $web, $topic ) =
-      $session->normalizeWebTopicName( "", $wikiname );
+      $session->normalizeWebTopicName( '', $wikiname );
     $this->{web} = $web;
     $this->{wikiname} = $topic;
     return $this;
 }
-
-sub store { my $this = shift; return $this->{session}->{store}; }
-sub users { my $this = shift; return $this->{session}->{users}; }
 
 =pod
 
@@ -98,7 +95,7 @@ Return the wikiname of the user (without the web!)
 
 sub wikiName {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
     return $this->{wikiname};
 }
 
@@ -112,7 +109,7 @@ Return the fully qualified wikiname of the user
 
 sub webDotWikiName {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
     return "$this->{web}.$this->{wikiname}";
 }
 
@@ -126,7 +123,7 @@ Return the login name of the user
 
 sub login {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
     return $this->{login};
 }
 
@@ -140,7 +137,7 @@ Return the registration web of the user
 
 sub web {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
     return $this->{web};
 }
 
@@ -154,8 +151,8 @@ Test is this is the same user as another user object
 
 sub equals {
     my( $this, $other ) = @_;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
-    ASSERT(ref($other) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT(ref($other) eq 'TWiki::User') if DEBUG;
 
     return ( $this->{login} eq $other->{login} );
 }
@@ -170,7 +167,7 @@ Generate a string representation of this object, suitable for debugging
 
 sub stringify {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
     return "$this->{login}/$this->{web}.$this->{wikiname}";
 }
@@ -180,15 +177,15 @@ sub stringify {
 ---++ ObjectMethod passwordExists( ) -> $boolean
 
 Checks to see if there is an entry in the password system
-Return "1" if true, "" if not
+Return '1' if true, '' if not
 
 =cut
 
 sub passwordExists {
     my $this  = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
-    my $passwordHandler = $this->users()->_getPasswordHandler();
+    my $passwordHandler = $this->{session}->{users}->_getPasswordHandler();
     return $passwordHandler->UserPasswordExists($this->{login});
 }
 
@@ -200,7 +197,7 @@ used to check the user's password
 
 =$password= unencrypted password
 
-=$success= "1" if success
+=$success= '1' if success
 
 TODO: need to improve the error mechanism so TWikiAdmins know what failed
 
@@ -208,9 +205,9 @@ TODO: need to improve the error mechanism so TWikiAdmins know what failed
 
 sub checkPassword {
     my ( $this, $password ) = @_;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
-    my $passwordHandler = $this->users()->_getPasswordHandler();
+    my $passwordHandler = $this->{session}->{users}->_getPasswordHandler();
     return $passwordHandler->CheckUserPasswd($this->{login}, $password);
 }
 
@@ -227,9 +224,9 @@ Returns true if success
 # SMELL - should this not also delete the user topic?
 sub removePassword {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
-    my $passwordHandler = $this->users()->_getPasswordHandler();
+    my $passwordHandler = $this->{session}->{users}->_getPasswordHandler();
     return $passwordHandler->RemoveUser($this->{login});
 }
 
@@ -240,16 +237,16 @@ sub removePassword {
 used to change the user's password
 =$oldUserPassword= unencrypted password
 =$newUserPassword= unencrypted password
-"1" if success
+'1' if success
 
 =cut
 
 # TODO: need to improve the error mechanism so TWikiAdmins know what failed |
 sub changePassword {
     my ( $this, $oldUserPassword, $newUserPassword ) = @_;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
-    my $passwordHandler = $this->users()->_getPasswordHandler();
+    my $passwordHandler = $this->{session}->{users}->_getPasswordHandler();
     return $passwordHandler->UpdateUserPassword($this->{login}, $oldUserPassword, $newUserPassword);
 }
 
@@ -258,16 +255,16 @@ sub changePassword {
 ---++ ObjectMethod addPassword( $newPassword ) -> $boolean
 creates a password entry
 =$newUserPassword= unencrypted password
-"1" if success
+'1' if success
 TODO: need to improve the error mechanism so TWikiAdmins know what failed
 
 =cut
 
 sub addPassword {
     my ( $this, $newUserPassword ) = @_;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
-    my $passwordHandler = $this->users()->_getPasswordHandler();
+    my $passwordHandler = $this->{session}->{users}->_getPasswordHandler();
     return $passwordHandler->AddUserPassword($this->{login}, $newUserPassword);
 }
 
@@ -281,7 +278,7 @@ Reset the users password, returning the new generated password.
 
 sub resetPassword {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
     my $password = randomPassword();
 
@@ -309,7 +306,7 @@ return the addresses of everyone in the group.
 
 sub emails {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
     unless( defined $this->{emails} ) {
         if ( $this->isGroup() ) {
@@ -327,12 +324,12 @@ sub emails {
 
 sub _getEmailsFromUserTopic {
     my $this = shift;
+    my $store = $this->{session}->{store};
 
     my ($meta, $text) =
-      $this->store()->readTopic( undef,
-                                 $this->{web}, $this->{wikiname}, undef );
+      $store->readTopic( undef, $this->{web}, $this->{wikiname}, undef );
     my @fieldValues;
-    my $entry = $meta->get("FIELD", "Email");
+    my $entry = $meta->get('FIELD', 'Email');
     if ($entry) {
         push(@fieldValues, $entry->{value});
     } else {
@@ -355,10 +352,10 @@ True if the user is an admin (is a member of the $TWiki::cfg{SuperAdminGroup})
 
 sub isAdmin {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
-    my $sag = $this->users()->findUser( $TWiki::cfg{SuperAdminGroup} );
-    ASSERT(ref($sag) eq "TWiki::User") if DEBUG;
+    my $sag = $this->{session}->{users}->findUser( $TWiki::cfg{SuperAdminGroup} );
+    ASSERT(ref($sag) eq 'TWiki::User') if DEBUG;
     return $this->isInList( $sag->groupMembers());
 }
 
@@ -372,7 +369,7 @@ Get a list of user objects for the groups a user is in
 
 sub getGroups {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
     return @{$this->{groups}};
 }
@@ -387,11 +384,11 @@ Return true we are in the list of user objects passed.
 
 sub isInList {
     my( $this, $userlist ) = @_;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
     unless( ref( $userlist )) {
         # string parameter
-        $userlist = $this->users()->expandUserList( $userlist );
+        $userlist = $this->{session}->{users}->expandUserList( $userlist );
     }
     my $user;
     foreach $user ( @$userlist ) {
@@ -417,7 +414,7 @@ Test if this is a group user or not
 
 sub isGroup {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
 
     return $this->wikiName() =~ /Group$/;
 }
@@ -433,19 +430,20 @@ called on groups.
 
 sub groupMembers {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
     ASSERT( $this->isGroup()) if DEBUG;
+    my $store = $this->{session}->{store};
 
     unless( defined $this->{members} ) {
         my $text =
-          $this->store()->readTopicRaw( undef,
-                                        $this->{web}, $this->{wikiname},
-                                        undef );
+          $store->readTopicRaw( undef,
+                                $this->{web}, $this->{wikiname},
+                                undef );
         foreach( split( /\n/, $text ) ) {
             if( /^\s+\*\sSet\sGROUP\s*\=\s*(.+)$/ ) {
                 # Note: if there are multiple GROUP assignments in the
                 # topic, the last will be taken.
-                $this->{members} = $this->users()->expandUserList( $1 );
+                $this->{members} = $this->{session}->{users}->expandUserList( $1 );
             }
         }
         # backlink the user to the group

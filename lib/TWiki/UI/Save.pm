@@ -57,40 +57,40 @@ sub _save {
 
     my $topicExists  = $session->{store}->topicExists( $webName, $topic );
     # Prevent saving existing topic?
-    my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
+    my $onlyNewTopic = $query->param( 'onlynewtopic' ) || '';
     if( $onlyNewTopic && $topicExists ) {
         # Topic exists and user requested oops if it exists
-        throw TWiki::UI::OopsException( $webName, $topic, "createnewtopic" );
+        throw TWiki::UI::OopsException( $webName, $topic, 'createnewtopic' );
     }
 
     # prevent non-Wiki names?
-    my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
+    my $onlyWikiName = $query->param( 'onlywikiname' ) || '';
     if( ( $onlyWikiName )
         && ( ! $topicExists )
         && ( ! TWiki::isValidTopicName( $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         # SMELL: this should be an oops, shouldn't it?
-        $session->redirect( $session->getScriptUrl( $webName, $topic, "view" ) );
+        $session->redirect( $session->getScriptUrl( $webName, $topic, 'view' ) );
         return 0;
     }
 
     my $user = $session->{user};
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            "change", $user );
+                            'change', $user );
 
-    my $saveCmd = $query->param( "cmd" ) || 0;
+    my $saveCmd = $query->param( 'cmd' ) || 0;
     if ( $saveCmd && ! $session->{user}->isAdmin()) {
-        throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
+        throw TWiki::UI::OopsException( $webName, $topic, 'accessgroup',
                                         "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
     }
 
-    if( $saveCmd eq "delRev" ) {
+    if( $saveCmd eq 'delRev' ) {
         # delete top revision
         my $error =
           $session->{store}->delRev( $user, $webName, $topic );
         if( $error ) {
             throw TWiki::UI::OopsException( $webName, $topic,
-                                            "saveerr", $error );
+                                            'saveerr', $error );
         }
 
         return 1;
@@ -108,7 +108,7 @@ sub _save {
 
     # A template was requested; read it, and expand URLPARAMs within the
     # template using our CGI record
-    my $templatetopic = $query->param( "templatetopic");
+    my $templatetopic = $query->param( 'templatetopic');
     if ($templatetopic) {
         ( $newMeta, $newText ) =
           $session->{store}->readTopic( $session->{user}, $webName,
@@ -117,20 +117,20 @@ sub _save {
         # topic creation, make sure there is no original rev
         $originalrev = 0;
     } else {
-        $originalrev = $query->param( "originalrev" );
-        $newText = $query->param( "text" );
+        $originalrev = $query->param( 'originalrev' );
+        $newText = $query->param( 'text' );
     }
 
     my $saveOpts = {};
-    $saveOpts->{minor} = 1 if $query->param( "dontnotify" );
+    $saveOpts->{minor} = 1 if $query->param( 'dontnotify' );
     # note: always force a new rev if the topic is empty, in case this
     # is a mistake.
     $saveOpts->{forcenewrevision} = 1
-      if( $query->param( "forcenewrevision" ) || !$newText );
+      if( $query->param( 'forcenewrevision' ) || !$newText );
 
     $newText = TWiki::decodeSpecialChars( $newText );
 
-    if( $saveCmd eq "repRev" ) {
+    if( $saveCmd eq 'repRev' ) {
         $newText =~ s/%__(.)__%/%_$1_%/go;
         $newMeta = $session->{store}->extractMetaData( $webName, $topic, \$newText );
         # replace top revision with this text, trying to make it look as
@@ -141,7 +141,7 @@ sub _save {
                                      $newText, $newMeta, $saveOpts );
         if( $error ) {
             throw TWiki::UI::OopsException( $webName, $topic,
-                                            "saveerr", $error );
+                                            'saveerr', $error );
         }
 
         return 1;
@@ -154,19 +154,19 @@ sub _save {
         $newMeta->copyFrom( $currMeta );
     }
 
-    my $theParent = $query->param( 'topicparent' ) || "";
+    my $theParent = $query->param( 'topicparent' ) || '';
 
     # parent setting
-    if( $theParent eq "none" ) {
-        $newMeta->remove( "TOPICPARENT" );
+    if( $theParent eq 'none' ) {
+        $newMeta->remove( 'TOPICPARENT' );
     } elsif( $theParent ) {
-        $newMeta->put( "TOPICPARENT", { "name" => $theParent } );
+        $newMeta->put( 'TOPICPARENT', { 'name' => $theParent } );
     }
 
-    my $formTemplate = $query->param( "formtemplate" );
+    my $formTemplate = $query->param( 'formtemplate' );
     if( $formTemplate ) {
-        $newMeta->remove( "FORM" );
-        $newMeta->put( "FORM", { name => $formTemplate } ) if( $formTemplate ne "none" );
+        $newMeta->remove( 'FORM' );
+        $newMeta->put( 'FORM', { name => $formTemplate } ) if( $formTemplate ne 'none' );
     }
 
     # Expand field variables.
@@ -181,7 +181,7 @@ sub _save {
             $newText = TWiki::Merge::insDelMerge( $currText, $newText, "\\r?\\n" );
             $newMeta->merge( $currMeta );
             $newText .= "\n\nMERGED " . $author->stringify() .
-              " and " . $user->stringify() . " original $originalrev current $rev\n";
+              ' and ' . $user->stringify() . " original $originalrev current $rev\n";
         }
     }
 
@@ -190,7 +190,7 @@ sub _save {
                                     $newText, $newMeta, $saveOpts );
 
     if( $error ) {
-        throw TWiki::UI::OopsException( $webName, $topic, "saveerr", $error );
+        throw TWiki::UI::OopsException( $webName, $topic, 'saveerr', $error );
     }
 
     return 1;
@@ -233,25 +233,25 @@ sub save {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
 
-    my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), "view" );
+    my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), 'view' );
 
     my $saveaction = lc($query->param( 'action' ));
-    if ( $saveaction eq "checkpoint" ) {
-        $query->param( -name=>"dontnotify", -value=>"checked" );
-        my $editURL = $session->getScriptUrl( $webName, $topic, "edit" );
+    if ( $saveaction eq 'checkpoint' ) {
+        $query->param( -name=>'dontnotify', -value=>'checked' );
+        my $editURL = $session->getScriptUrl( $webName, $topic, 'edit' );
         my $randompart = randomURL();
         $redirecturl = "$editURL|$randompart";
-    } elsif ( $saveaction eq "quietsave" ) {
-        $query->param( -name=>"dontnotify", -value=>"checked" );
-    } elsif ( $saveaction eq "cancel" ) {
-        my $viewURL = $session->getScriptUrl( $webName, $topic, "view" );
+    } elsif ( $saveaction eq 'quietsave' ) {
+        $query->param( -name=>'dontnotify', -value=>'checked' );
+    } elsif ( $saveaction eq 'cancel' ) {
+        my $viewURL = $session->getScriptUrl( $webName, $topic, 'view' );
         $session->redirect( $viewURL );
         return;
-    } elsif( $saveaction eq "preview" ) {
+    } elsif( $saveaction eq 'preview' ) {
         TWiki::UI::Preview::preview( $session );
         return;
     } elsif( $saveaction =~ /^(del|rep)Rev$/ ) {
-        $query->param( -name => "cmd", -value => $saveaction );
+        $query->param( -name => 'cmd', -value => $saveaction );
     }
 
     if ( _save( $session )) {

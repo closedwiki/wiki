@@ -73,7 +73,7 @@ use vars qw( @registrableHandlers %deprecated );
 
 sub new {
     my ( $class, $session, $name ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
     my $this = bless( {}, $class );
 
     $name = TWiki::Sandbox::untaintUnchecked( $name );
@@ -90,14 +90,11 @@ sub new {
     return $this;
 }
 
-sub store { my $this = shift; return $this->{session}->{store}; }
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
-
 # Load and verify a plugin, invoking any early registration
 # handlers. Return the user resulting from the user handler call.
 sub load {
     my ( $this ) = @_;
-    ASSERT(ref($this) eq "TWiki::Plugin") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Plugin') if DEBUG;
 
     return if $this->{disabled};
 
@@ -108,14 +105,15 @@ sub load {
     #   3 Plugins.plugin
     #   4 thisweb.plugin
 
+    my $store = $this->{session}->{store};
     my $web;
-    if ( $this->store()->topicExists( $TWiki::cfg{SystemWebName}, $this->{name} ) ) {
+    if ( $store->topicExists( $TWiki::cfg{SystemWebName}, $this->{name} ) ) {
         # found plugin in TWiki web
         $web = $TWiki::cfg{SystemWebName};
-    } elsif ( $this->store()->topicExists( "Plugins", $this->{name} ) ) {
+    } elsif ( $store->topicExists( 'Plugins', $this->{name} ) ) {
         # found plugin in Plugins web (compatibility, deprecated)
-        $web = "Plugins";
-    } elsif ( $this->store()->topicExists( $this->{session}->{webName},
+        $web = 'Plugins';
+    } elsif ( $store->topicExists( $this->{session}->{webName},
                                            $this->{name} ) ) {
         # found plugin in current web
         $web = $this->{session}->{webName};
@@ -161,11 +159,11 @@ sub load {
 # invoke plugin initialisation and register handlers.
 sub registerHandlers {
     my ( $this, $plugins ) = @_;
-    ASSERT(ref($this) eq "TWiki::Plugin") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Plugin') if DEBUG;
 
     return if $this->{disabled};
 
-    my $p = "TWiki::Plugins::" . $this->{name};
+    my $p = 'TWiki::Plugins::' . $this->{name};
     my $sub = $p . "::initPlugin";
     if( ! defined( &$sub ) ) {
         push( @{$this->{errors}}, "$sub is not defined");
@@ -173,11 +171,9 @@ sub registerHandlers {
         return;
     }
 
-    $this->prefs()->getPrefsFromTopic( $this->{web}, $this->{name},
-                                       uc( $this->{name} ) . "_");
-
-    # Set the session for this call stack
-    local $TWiki::Plugins::SESSION = $this->{session};
+    my $prefs = $this->{session}->{prefs};
+    $prefs->getPrefsFromTopic( $this->{web}, $this->{name},
+                                       uc( $this->{name} ) . '_');
 
     no strict 'refs';
     my $status = &$sub( $TWiki::Plugins::SESSION->{topicName},
@@ -208,7 +204,7 @@ sub registerHandlers {
 # SMELL: may die if the plugin doesn't compile
 sub getVersion {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::Plugin") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Plugin') if DEBUG;
 
     no strict 'refs';
     return ${"TWiki::Plugins::$this->{name}::VERSION"};
@@ -218,13 +214,14 @@ sub getVersion {
 # Get the description string for the given plugin
 sub getDescription {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::Plugin") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Plugin') if DEBUG;
 
-    return "" if $this->{disabled};
+    return '' if $this->{disabled};
 
     unless( $this->{description} ) {
-        my $pref = uc( $this->{name} ) . "_SHORTDESCRIPTION";
-        $this->{description} = $this->prefs()->getPreferencesValue( $pref );
+        my $pref = uc( $this->{name} ) . '_SHORTDESCRIPTION';
+        my $prefs = $this->{session}->{prefs};
+        $this->{description} = $prefs->getPreferencesValue( $pref );
     }
 
     return "\t\* $this->{web}.$this->{name}: $this->{description}\n";

@@ -48,20 +48,20 @@ sub preRenderingHandler {
 sub _handleRenderList {
     my ( $theAttr, $thePre, $theList ) = @_;
 
-    my $focus = TWiki::Func::extractNameValuePair( $theAttr, "focus" );
-    my $depth = TWiki::Func::extractNameValuePair( $theAttr, "depth" );
-    my $theme = TWiki::Func::extractNameValuePair( $theAttr, "theme" ) ||
+    my $focus = TWiki::Func::extractNameValuePair( $theAttr, 'focus' );
+    my $depth = TWiki::Func::extractNameValuePair( $theAttr, 'depth' );
+    my $theme = TWiki::Func::extractNameValuePair( $theAttr, 'theme' ) ||
                 TWiki::Func::extractNameValuePair( $theAttr );
     $theme = "RENDERLISTPLUGIN_\U$theme\E_THEME";
     $theme = TWiki::Func::getPreferencesValue( $theme ) ||
-      "unrecognized theme type";
+      'unrecognized theme type';
     my ( $type, $params ) = split( /, */, $theme, 2 );
     $type = lc( $type );
 
-    if( $type eq "tree" || $type eq "icon" ) {
+    if( $type eq 'tree' || $type eq 'icon' ) {
         return $thePre . _renderIconList( $type, $params, $focus, $depth, $theList );
     } else {
-        return "$thePre$theList";
+        return $thePre.$theList;
     }
 }
 
@@ -71,8 +71,8 @@ sub _renderIconList {
     $theText =~ s/^[\n\r]*//os;
     my @tree = ();
     my $level = 0;
-    my $type = "";
-    my $text = "";
+    my $type = '';
+    my $text = '';
     my $focusIndex = -1;
     foreach( split ( /[\n\r]+/, $theText ) ) {
         m/^(\t+)(.) *(.*)/;
@@ -99,10 +99,10 @@ sub _renderIconList {
         $nref->{'text'} = $text;
 
         # remove uncles and siblings below current node
-        $level = $nref->{'level'};
+        $level = $nref->{level};
         for( my $i = 0; $i < scalar( @after ); $i++ ) {
-            if( ( $after[$i]->{'level'} < $level )
-             || ( $after[$i]->{'level'} <= $level &&  $after[$i]->{'type'} ne " " ) ) {
+            if( ( $after[$i]->{level} < $level )
+             || ( $after[$i]->{level} <= $level &&  $after[$i]->{type} ne " " ) ) {
                 splice( @after, $i );
                 last;
             }
@@ -128,7 +128,7 @@ sub _renderIconList {
         $depth = 0;
     }
     if( $theFocus ) {
-        if( $theDepth eq "" ) {
+        if( $theDepth eq '' ) {
             $depth = $focusIndex + 3;
         } else {
             $depth += $focusIndex + 1;
@@ -164,7 +164,7 @@ sub _renderIconList {
     $iconImg = "$attachUrl/home.gif"    unless( $iconImg );
     $iconImg = fixImageTag( $iconImg, $width, $height );
 
-    $text = "";
+    $text = '';
     my $start = 0;
     $start = 1 unless( $showLead );
     my @listIcon = ();
@@ -175,13 +175,13 @@ sub _renderIconList {
             if( $l == $level - 1 ) {
                 $listIcon[$l] = $iconSp;
                 for( my $x = $i + 1; $x < scalar( @tree ); $x++ ) {
-                   last if( $tree[$x]->{'level'} < $level );
-                   if( $tree[$x]->{'level'} <= $level && $tree[$x]->{'type'} ne " " ) {
+                   last if( $tree[$x]->{level} < $level );
+                   if( $tree[$x]->{level} <= $level && $tree[$x]->{'type'} ne " " ) {
                        $listIcon[$l] = $iconI;
                        last;
                    }
                 }
-                if( $tree[$i]->{'type'} eq " " ) {
+                if( $tree[$i]->{type} eq " " ) {
                    $text .= "<td valign=\"top\">$listIcon[$l]</td>\n";
                 } elsif( $listIcon[$l] eq $iconSp ) {
                    $text .= "<td valign=\"top\">$iconL</td>\n";
@@ -192,9 +192,9 @@ sub _renderIconList {
                 $text .= "<td valign=\"top\">$listIcon[$l]</td>\n";
             }
         }
-        if( $theType eq "icon" ) {
+        if( $theType eq 'icon' ) {
             # icon theme type
-            if( $tree[$i]->{'type'} eq " " ) {
+            if( $tree[$i]->{type} eq " " ) {
                 # continuation line
                 $text .= "<td valign=\"top\">$iconSp</td>\n";
             } elsif( $tree[$i]->{'text'} =~ /^\s*(<b>)?\s*icon:([^\s]+)\s*(.*)/ ) {
@@ -207,7 +207,7 @@ sub _renderIconList {
                 # default icon
                 $text .= "<td valign=\"top\">$iconImg</td>\n";
             }
-            $text .= "<td valign=\"top\"><nobr>&nbsp; $tree[$i]->{'text'} </nobr></td>\n";
+            $text .= "<td valign=\"top\"><nobr>&nbsp; $tree[$i]->{text} </nobr></td>\n";
 
         } else {
             # tree theme type
@@ -217,9 +217,9 @@ sub _renderIconList {
                 $tree[$i]->{'text'} = "$1 $3" if( $1 );
                 my $icon = fixImageTag( "$attachUrl/$2.gif", $width, $height );
                 $text .= "<td valign=\"top\">$icon</td>\n";
-                $text .= "<td valign=\"top\"><nobr>&nbsp; $tree[$i]->{'text'} </nobr></td>\n";
+                $text .= "<td valign=\"top\"><nobr>&nbsp; $tree[$i]->{text} </nobr></td>\n";
             } else {
-                $text .= "<td valign=\"top\"><nobr> $tree[$i]->{'text'} </nobr></td>\n";
+                $text .= "<td valign=\"top\"><nobr> $tree[$i]->{text} </nobr></td>\n";
             }
         }
         $text .= '</tr></table>' . "\n";

@@ -49,18 +49,10 @@ Constructor
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
     $this->{session} = $session;
     return $this;
 }
-
-sub users { my $this = shift; return $this->{session}->{users}; }
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
-sub store { my $this = shift; return $this->{session}->{store}; }
-sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
-sub security { my $this = shift; return $this->{session}->{security}; }
-sub templates { my $this = shift; return $this->{session}->{templates}; }
-sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 =pod
 
@@ -78,16 +70,16 @@ view, using templates for the header, footer and each row.
 
 sub renderMetaData {
     my( $this, $web, $topic, $meta, $attrs, $isTopTopicRev ) = @_;
-    ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Attach') if DEBUG;
 
     $attrs = new TWiki::Attrs( $attrs );
     my $showAll = $attrs->{all};
-    my $showAttr = $showAll ? "h" : "";
-	my $a = ( $showAttr ) ? ":A" : "";
+    my $showAttr = $showAll ? 'h' : '';
+	my $a = ( $showAttr ) ? ':A' : '';
 
-	my @attachments = $meta->find( "FILEATTACHMENT" );
+	my @attachments = $meta->find( 'FILEATTACHMENT' );
 
-	my $rows = "";
+	my $rows = '';
 	my $row = $this->_getTemplate("ATTACH:files:row$a");
     foreach my $attachment ( @attachments ) {
         my $attrAttr = $attachment->{attr};
@@ -100,9 +92,9 @@ sub renderMetaData {
         }
     }
 
-    my $text = "";
+    my $text = '';
 
-    if( $showAll || $rows ne "" ) {
+    if( $showAll || $rows ne '' ) {
         my $header = $this->_getTemplate("ATTACH:files:header$a");
         my $footer = $this->_getTemplate("ATTACH:files:footer$a");
 
@@ -115,11 +107,11 @@ sub renderMetaData {
 # if not already defined.
 sub _getTemplate {
     my ( $this, $template ) = @_;
+    my $templates = $this->{session}->{templates};
+    $templates->readTemplate('attachtables') unless
+        $templates->haveTemplate( $template );
 
-    $this->templates()->readTemplate("attachtables") unless
-        $this->templates()->haveTemplate( $template );
-
-    return $this->templates()->expandTemplate( $template );
+    return $templates->expandTemplate( $template );
 }
 
 =pod
@@ -135,21 +127,22 @@ Generate a version history table for a single attachment
 
 sub formatVersions {
     my( $this, $web, $topic, %attrs ) = @_;
-    ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Attach') if DEBUG;
 
+    my $store = $this->{session}->{store};
     my $latestRev =
-      $this->store()->getRevisionNumber( $web, $topic, $attrs{name} );
+      $store->getRevisionNumber( $web, $topic, $attrs{name} );
 
-    my $header = $this->_getTemplate("ATTACH:versions:header");
-    my $footer = $this->_getTemplate("ATTACH:versions:footer");
-    my $row    = $this->_getTemplate("ATTACH:versions:row");
+    my $header = $this->_getTemplate('ATTACH:versions:header');
+    my $footer = $this->_getTemplate('ATTACH:versions:footer');
+    my $row    = $this->_getTemplate('ATTACH:versions:row');
 
-    my $rows ="";
+    my $rows ='';
 
     for( my $rev = $latestRev; $rev >= 1; $rev-- ) {
         # SMELL: should get revision info from meta
         my( $date, $user, $minorRev, $comment ) =
-          $this->store()->getRevisionInfo( $web, $topic, $rev, $attrs{name} );
+          $store->getRevisionInfo( $web, $topic, $rev, $attrs{name} );
         $user = $user->webDotWikiName() if( $user );
 
         $rows .= $this->_formatRow( $web, $topic,
@@ -190,14 +183,14 @@ sub _expandAttrs {
     my ( $this, $attr, $web, $topic, $info, $topRev ) = @_;
     my $file = $info->{name};
 
-    if ( $attr eq "REV" ) {
+    if ( $attr eq 'REV' ) {
         return $info->{version};
     }
-    elsif ( $attr eq "ICON" ) {
-        my $fileIcon = $this->renderer()->filenameToIcon( $file );
+    elsif ( $attr eq 'ICON' ) {
+        my $fileIcon = $this->{session}->{renderer}->filenameToIcon( $file );
         return $fileIcon;
     }
-    elsif ( $attr eq "URL" ) {
+    elsif ( $attr eq 'URL' ) {
         my $url;
 
         if ( $topRev ) {
@@ -213,12 +206,12 @@ sub _expandAttrs {
         }
         return $url;
     }
-    elsif ( $attr eq "SIZE" ) {
+    elsif ( $attr eq 'SIZE' ) {
         my $attrSize = $info->{size};
         $attrSize = 100 if( $attrSize < 100 );
         return sprintf( "%1.1f&nbsp;K", $attrSize / 1024 );
     }
-    elsif ( $attr eq "COMMENT" ) {
+    elsif ( $attr eq 'COMMENT' ) {
         my $comment = $info->{comment};
         if ( $comment) {
             $comment =~ s/\|/&#124;/g;
@@ -227,16 +220,16 @@ sub _expandAttrs {
         }
         return $comment;
     }
-    elsif ( $attr eq "ATTRS" ) {
+    elsif ( $attr eq 'ATTRS' ) {
         return $info->{attr} or "&nbsp;";
     }
-    elsif ( $attr eq "FILE" ) {
+    elsif ( $attr eq 'FILE' ) {
         return $file;
     }
-    elsif ( $attr eq "DATE" ) {
+    elsif ( $attr eq 'DATE' ) {
         return TWiki::Time::formatTime( $info->{date} );
     }
-    elsif ( $attr eq "USER" ) {
+    elsif ( $attr eq 'USER' ) {
         return $info->{user};
     }
     else {
@@ -260,14 +253,16 @@ Build a link to the attachment, suitable for insertion in the topic.
 
 sub getAttachmentLink {
     my ( $this, $user, $web, $topic, $attName, $meta ) = @_;
-    ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Attach') if DEBUG;
 
-    my $att = $meta->get( "FILEATTACHMENT", $attName );
+    my $att = $meta->get( 'FILEATTACHMENT', $attName );
     my $fileComment = $att->{comment};
     $fileComment = $attName unless ( $fileComment );
 
-    my $fileLink = "";
-    my $imgSize = "";
+    my $fileLink = '';
+    my $imgSize = '';
+    my $prefs = $this->{session}->{prefs};
+    my $store = $this->{session}->{store};
 
     if( $attName =~ /\.(gif|jpg|jpeg|png)$/i ) {
         # inline image
@@ -278,18 +273,18 @@ sub getAttachmentLink {
         # downloaded. When you upload an image to TWiki and checkmark
         # the link checkbox, TWiki will generate the width and height
         # img parameters, speeding up the page rendering.
-        my $stream =  $this->store()->getAttachmentStream( $user, $web, $topic, $attName );
+        my $stream =  $store->getAttachmentStream( $user, $web, $topic, $attName );
         my( $nx, $ny ) = &_imgsize( $stream, $attName );
 
         if( ( $nx > 0 ) && ( $ny > 0 ) ) {
             $imgSize = "width=\"$nx\" height=\"$ny\" ";
         }
-        $fileLink = $this->prefs()->getPreferencesValue( "ATTACHEDIMAGEFORMAT" )
+        $fileLink = $prefs->getPreferencesValue( 'ATTACHEDIMAGEFORMAT' )
           || '   * $comment: <br />'
             . ' <img src="%ATTACHURLPATH%/$name" alt="$name" $size />';
     } else {
         # normal attached file
-        $fileLink = $this->prefs()->getPreferencesValue( "ATTACHEDFILELINKFORMAT" )
+        $fileLink = $prefs->getPreferencesValue( 'ATTACHEDFILELINKFORMAT' )
           || '   * [[%ATTACHURL%/$name][$name]]: $comment';
     }
 
@@ -321,7 +316,7 @@ sub _imgsize {
         my $s;
         return ( 0, 0 ) unless ( read( $file, $s, 4 ) == 4 );
         seek( $file, 0, 0 );
-        if ( $s eq "GIF8" ) {
+        if ( $s eq 'GIF8' ) {
             #  GIF 47 49 46 38
             ( $x, $y ) = _gifsize( $file );
         } else {
@@ -359,7 +354,7 @@ sub _OLDgifsize {
         read( $GIF, $type, 6 )       &&
         $type =~ /GIF8[7,9]a/        &&
         read( $GIF, $s, 4 ) == 4     ) {
-        ( $a, $b, $c, $d ) = unpack( "C"x4, $s );
+        ( $a, $b, $c, $d ) = unpack( 'C'x4, $s );
         return( $b<<8|$a, $d<<8|$c );
     }
     return( 0, 0 );
@@ -375,7 +370,7 @@ sub _gif_blockskip {
     while( 1 ) {
         if( eof( $GIF ) ) {
             #warn "Invalid/Corrupted GIF (at EOF in GIF $type)\n";
-            return "";
+            return '';
         }
         read( $GIF, $s, 1 );             # Block size
         last if ord( $s ) == 0;          # Block terminator
@@ -413,7 +408,7 @@ sub _NEWgifsize {
             return( $x, $y );
         }
         read( $GIF, $s, 1 );
-        ( $e ) = unpack( "C", $s );
+        ( $e ) = unpack( 'C', $s );
         if( $e == 0x2c ) {           # Image Descriptor (GIF87a, GIF89a 20.c.i)
             if( read( $GIF, $s, 8 ) != 8 ) {
                 #warn "Invalid/Corrupted GIF (missing image header?)\n";
@@ -424,21 +419,21 @@ sub _NEWgifsize {
             $y = $d<<8|$c;
             return( $x, $y );
         }
-        if( $type eq "GIF89a" ) {
+        if( $type eq 'GIF89a' ) {
             if( $e == 0x21 ) {         # Extension Introducer (GIF89a 23.c.i)
                 read( $GIF, $s, 1 );
-                ( $e ) = unpack( "C", $s );
+                ( $e ) = unpack( 'C', $s );
                 if( $e == 0xF9 ) {       # Graphic Control Extension (GIF89a 23.c.ii)
                     read( $GIF, $dummy, 6 );        # Skip it
                     next FINDIMAGE;       # Look again for Image Descriptor
                 } elsif( $e == 0xFE ) {  # Comment Extension (GIF89a 24.c.ii)
-                    &_gif_blockskip( $GIF, 0, "Comment" );
+                    &_gif_blockskip( $GIF, 0, 'Comment' );
                     next FINDIMAGE;       # Look again for Image Descriptor
                 } elsif( $e == 0x01 ) {  # Plain Text Label (GIF89a 25.c.ii)
-                    &_gif_blockskip( $GIF, 12, "text data" );
+                    &_gif_blockskip( $GIF, 12, 'text data' );
                     next FINDIMAGE;       # Look again for Image Descriptor
                 } elsif( $e == 0xFF ) {  # Application Extension Label (GIF89a 26.c.ii)
-                    &_gif_blockskip( $GIF, 11, "application data" );
+                    &_gif_blockskip( $GIF, 11, 'application data' );
                     next FINDIMAGE;       # Look again for Image Descriptor
                 } else {
                     #printf STDERR "Invalid/Corrupted GIF (Unknown extension %#x)\n", $e;
@@ -483,13 +478,13 @@ sub _jpegsize {
             if( ( ord( $ch ) >= 0xC0 ) && ( ord( $ch ) <= 0xC3 ) ) {
                 return( 0, 0 ) unless read( $JPEG, $dummy, 3 );
                 return( 0, 0 ) unless read( $JPEG, $s, 4 );
-                ( $a, $b, $c, $d ) = unpack( "C"x4, $s );
+                ( $a, $b, $c, $d ) = unpack( 'C'x4, $s );
                 return( $c<<8|$d, $a<<8|$b );
             } else {
                 # We **MUST** skip variables, since FF's within variable
                 # names are NOT valid JPEG markers
                 return( 0, 0 ) unless read( $JPEG, $s, 2 );
-                ( $c1, $c2 ) = unpack( "C"x2, $s );
+                ( $c1, $c2 ) = unpack( 'C'x2, $s );
                 $length = $c1<<8|$c2;
                 last if( !defined( $length ) || $length < 2 );
                 read( $JPEG, $dummy, $length-2 );
@@ -503,16 +498,16 @@ sub _jpegsize {
 #  source: http://www.la-grange.net/2000/05/04-png.html
 sub _pngsize {
     my ($PNG) = @_;
-    my ($head) = "";
+    my ($head) = '';
     my($a, $b, $c, $d, $e, $f, $g, $h)=0;
     if( defined($PNG)                              &&
        read( $PNG, $head, 8 ) == 8                 &&
        $head eq "\x89\x50\x4e\x47\x0d\x0a\x1a\x0a" &&
        read($PNG, $head, 4) == 4                   &&
        read($PNG, $head, 4) == 4                   &&
-       $head eq "IHDR"                             &&
+       $head eq 'IHDR'                             &&
        read($PNG, $head, 8) == 8 ){
-        ($a,$b,$c,$d,$e,$f,$g,$h)=unpack("C"x8,$head);
+        ($a,$b,$c,$d,$e,$f,$g,$h)=unpack('C'x8,$head);
         return ($a<<24|$b<<16|$c<<8|$d, $e<<24|$f<<16|$g<<8|$h);
     }
     return (0,0);
@@ -522,43 +517,43 @@ sub _pngsize {
 #format.
 sub _getOldAttachAttr {
     my( $this, $atext ) = @_;
-    my $fileName="";
-	my $filePath="";
-	my $fileSize="";
-	my $fileDate="";
-	my $fileUser="";
-	my $fileComment="";
-    my $before="";
-	my $item="";
-	my $after="";
+    my $fileName='';
+	my $filePath='';
+	my $fileSize='';
+	my $fileDate='';
+	my $fileUser='';
+	my $fileComment='';
+    my $before='';
+	my $item='';
+	my $after='';
 
     ( $before, $fileName, $after ) = split( /<(?:\/)*TwkFileName>/, $atext );
-    if( ! $fileName ) { $fileName = ""; }
+    if( ! $fileName ) { $fileName = ''; }
     if( $fileName ) {
         ( $before, $filePath,    $after ) = split( /<(?:\/)*TwkFilePath>/, $atext );
-        if( ! $filePath ) { $filePath = ""; }
+        if( ! $filePath ) { $filePath = ''; }
         $filePath =~ s/<TwkData value="(.*)">//go;
-        if( $1 ) { $filePath = $1; } else { $filePath = ""; }
+        if( $1 ) { $filePath = $1; } else { $filePath = ''; }
         $filePath =~ s/\%NOP\%//goi;   # delete placeholder that prevents WikiLinks
         ( $before, $fileSize,    $after ) = split( /<(?:\/)*TwkFileSize>/, $atext );
-        if( ! $fileSize ) { $fileSize = "0"; }
+        if( ! $fileSize ) { $fileSize = '0'; }
         ( $before, $fileDate,    $after ) = split( /<(?:\/)*TwkFileDate>/, $atext );
         if( ! $fileDate ) { 
-            $fileDate = "";
+            $fileDate = '';
         } else {
             $fileDate =~ s/&nbsp;/ /go;
             $fileDate = TWiki::Time::parseTime( $fileDate );
         }
         ( $before, $fileUser,    $after ) = split( /<(?:\/)*TwkFileUser>/, $atext );
         if( ! $fileUser ) { 
-            $fileUser = ""; 
+            $fileUser = ''; 
         } else {
-            my $u = $this->users()->findUser( $fileUser );
+            my $u = $this->{session}->{users}->findUser( $fileUser );
             $fileUser = $u->login() if $u;
         }
         $fileUser =~ s/ //go;
         ( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $atext );
-        if( ! $fileComment ) { $fileComment = ""; }
+        if( ! $fileComment ) { $fileComment = ''; }
     }
 
     return ( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
@@ -574,43 +569,43 @@ Migrate old HTML format
 
 sub migrateToFileAttachmentMacro {
     my ( $this, $meta, $text ) = @_;
-    ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
-    ASSERT(ref($meta) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Attach') if DEBUG;
+    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
 
     my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
-    $text = $before || "";
+    $text = $before || '';
     $text .= $after if( $after );
-    $atext  = "" if( ! $atext  );
+    $atext  = '' if( ! $atext  );
 
     if( $atext =~ /<TwkNextItem>/ ) {
-        my $line = "";
+        my $line = '';
         foreach $line ( split( /<TwkNextItem>/, $atext ) ) {
             my( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) =
               $this->_getOldAttachAttr( $line );
 
             if( $fileName ) {
-                $meta->put( "FILEATTACHMENT",
+                $meta->put( 'FILEATTACHMENT',
                             {
                              name    => $fileName,
-                             version => "",
+                             version => '',
                              path    => $filePath,
                              size    => $fileSize,
                              date    => $fileDate,
                              user    => $fileUser,
                              comment => $fileComment,
-                             attr    => ""
+                             attr    => ''
                             });
             }
         }
     } else {
         # Format of macro that came before META:ATTACHMENT
-        my $line = "";
+        my $line = '';
         foreach $line ( split( /\n/, $atext ) ) {
             if( $line =~ /%FILEATTACHMENT{\s"([^"]*)"([^}]*)}%/ ) {
                 my $name = $1;
                 my $values = new TWiki::Attrs( $2 );
                 $values->{name} = $name;
-                $meta->put( "FILEATTACHMENT", $values );
+                $meta->put( 'FILEATTACHMENT', $values );
             }
         }
     }
@@ -628,17 +623,17 @@ CODE_SMELL: Is this really necessary? upgradeFrom1v0beta?
 
 sub upgradeFrom1v0beta {
     my( $this, $meta ) = @_;
-    ASSERT(ref($this) eq "TWiki::Attach") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Attach') if DEBUG;
 
-    my @attach = $meta->find( "FILEATTACHMENT" );
+    my @attach = $meta->find( 'FILEATTACHMENT' );
     foreach my $att ( @attach ) {
-        my $date = $att->{"date"};
+        my $date = $att->{date};
         if( $date =~ /-/ ) {
             $date =~ s/&nbsp;/ /go;
             $date = TWiki::Time::parseTime( $date );
         }
-        $att->{"date"} = $date;
-        my $u = $this->users()->findUser( $att->{user} );
+        $att->{date} = $date;
+        my $u = $this->{session}->{users}->findUser( $att->{user} );
         $att->{user} = $u->login() if $u;
     }
 }

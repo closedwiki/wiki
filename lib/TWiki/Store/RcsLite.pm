@@ -107,7 +107,7 @@ use FileHandle;
 use Assert;
 use TWiki::Time;
 
-#$self->{session}->writeDebug("Diff version $Algorithm::Diff::VERSION\n");
+#$this->{session}->writeDebug("Diff version $Algorithm::Diff::VERSION\n");
 
 my $DIFF_DEBUG = 0;
 my $DIFFEND_DEBUG = 0;
@@ -115,32 +115,32 @@ my $DIFFEND_DEBUG = 0;
 # implements RcsFile
 sub new {
     my( $class, $session, $web, $topic, $attachment, $settings ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
-    my $self =
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    my $this =
       bless( new TWiki::Store::RcsFile( $session, $web, $topic, $attachment, $settings ),
              $class );
-    $self->{head} = 0;
-    $self->{access} = "";
-    $self->{symbols} = "";
-    $self->{comment} = "";
-    $self->{description} = "";
-    $self->init();
-    return $self;
+    $this->{head} = 0;
+    $this->{access} = '';
+    $this->{symbols} = '';
+    $this->{comment} = '';
+    $this->{description} = '';
+    $this->init();
+    return $this;
 }
 
 sub _readTo {
     my( $file, $char ) = @_;
-    my $buf = "";
+    my $buf = '';
     my $ch;
     my $space = 0;
-    my $string = "";
-    my $state = "";
+    my $string = '';
+    my $state = '';
     while( read( $file, $ch, 1 ) ) {
        if( $ch eq "@" ) {
           if( $state eq "@" ) {
-             $state = "e";
+             $state = 'e';
              next;
-          } elsif( $state eq "e" ) {
+          } elsif( $state eq 'e' ) {
              $state = "@";
              $string .= "@";
              next;
@@ -149,8 +149,8 @@ sub _readTo {
              next;
           }
        } else {
-          if( $state eq "e" ) {
-             $state = "";
+          if( $state eq 'e' ) {
+             $state = '';
              if( $char eq "@" ) {
                 last;
              }
@@ -167,7 +167,7 @@ sub _readTo {
               next;
           } else {
               $space = 1;
-              $ch = " ";
+              $ch = ' ';
           }
        } else {
           $space = 0;
@@ -183,40 +183,40 @@ sub _readTo {
 # ======================
 # Called by routines that must make sure RCS file has been read in
 sub _ensureProcessed {
-    my( $self ) = @_;
-    if( ! $self->{where} ) {
-        $self->_process();
+    my( $this ) = @_;
+    if( ! $this->{where} ) {
+        $this->_process();
     }
 }
 
 # ======================
 # Read in the whole RCS file
 sub _process {
-    my( $self ) = @_;
-    my $rcsFile = TWiki::Sandbox::normalizeFileName( $self->{rcsFile} );
+    my( $this ) = @_;
+    my $rcsFile = TWiki::Sandbox::normalizeFileName( $this->{rcsFile} );
     if( ! -e $rcsFile ) {
-        $self->{where} = "nofile";
+        $this->{where} = 'nofile';
         return;
     }
     my $fh = new FileHandle;
     if( ! $fh->open( $rcsFile ) ) {
-        $self->{session}->writeWarning( "Couldn't open file $rcsFile" );
-        $self->{where} = "nofile";
+        $this->{session}->writeWarning( "Couldn't open file $rcsFile" );
+        $this->{where} = 'nofile';
         return;
     }
     my $where = "admin.head";
     binmode( $fh );
-    my $lastWhere = "";
+    my $lastWhere = '';
     my $going = 1;
     my $term = ";";
-    my $string = "";
-    my $num = "";
-    my $headNum = "";
+    my $string = '';
+    my $num = '';
+    my $headNum = '';
     my @date = ();
     my @author = ();
     my @log = ();
     my @text = ();
-    my $dnum = "";
+    my $dnum = '';
     while( $going ) {
        ($_, $string) = _readTo( $fh, $term );
        last if( ! $_ );
@@ -225,23 +225,23 @@ sub _process {
        #print "\"$where -- $_\"\n";
        if( $where eq "admin.head" ) {
           if( /^head\s+([0-9]+)\.([0-9]+);$/o ) {
-             die( "Only support start of version being 1" ) if( $1 ne "1" );
+             die( 'Only support start of version being 1' ) if( $1 ne '1' );
              $headNum = $2;
-             $where = "admin.access"; # Don't support branch
+             $where = 'admin.access'; # Don't support branch
           } else {
              last;
           }
        } elsif( $where eq "admin.access" ) {
           if( /^access\s*(.*);$/o ) {
-             $where = "admin.symbols";
-             $self->{access} = $1;
+             $where = 'admin.symbols';
+             $this->{access} = $1;
           } else {
              last;
           }
        } elsif( $where eq "admin.symbols" ) {
           if( /^symbols(.*);$/o ) {
              $where = "admin.locks";
-             $self->{symbols} = $1;
+             $this->{symbols} = $1;
           } else {
              last;
           }
@@ -258,11 +258,11 @@ sub _process {
        } elsif( $where eq "admin.postStrict" &&
                 /^comment\s.*$/o ) {
              $where = "admin.postComment";
-             $self->{comment} = $string;
+             $this->{comment} = $string;
        } elsif( ( $where eq "admin.postStrict" || $where eq "admin.postComment" )  &&
                 /^expand\s/o ) {
              $where = "admin.postExpand";
-             $self->{expand} = $string;
+             $this->{expand} = $string;
        } elsif( $where eq "admin.postStrict" || $where eq "admin.postComment" || 
                 $where eq "admin.postExpand" || $where eq "delta.date") {
           if( /^([0-9]+)\.([0-9]+)\s+date\s+(\d\d(\d\d)?(\.\d\d){5}?);$/o ) {
@@ -274,15 +274,15 @@ sub _process {
           if( /^author\s+(.*);$/o ) {
              $author[$num] = $1;
              if( $num == 1 ) {
-                $where = "desc";
+                $where = 'desc';
                 $term = "@";
              } else {
                 $where = "delta.date";
              }
           }
-       } elsif( $where eq "desc" ) {
+       } elsif( $where eq 'desc' ) {
           if( /desc\s*$/o ) {
-             $self->{description} = $string;
+             $this->{description} = $string;
              $where = "deltatext.log";
           }
        } elsif( $where eq "deltatext.log" ) {
@@ -296,20 +296,20 @@ sub _process {
              $where = "deltatext.log";
              $text[$dnum] = $string;
              if( $dnum == 1 ) {
-                $where = "done";
+                $where = 'done';
                 last;
              }
           }
        }
     }
     
-    $self->{head} = $headNum;
-    $self->{author} = \@author;
-    $self->{date} = \@date;   #TODO: i hitnk i need to make this into epochSecs
-    $self->{log} = \@log;
-    $self->{delta} = \@text;
-    $self->{status} = $dnum;
-    $self->{where} = $where;
+    $this->{head} = $headNum;
+    $this->{author} = \@author;
+    $this->{date} = \@date;   #TODO: i hitnk i need to make this into epochSecs
+    $this->{log} = \@log;
+    $this->{delta} = \@text;
+    $this->{status} = $dnum;
+    $this->{where} = $where;
     
     close( $fh );
 }
@@ -324,22 +324,22 @@ sub _formatString {
 # ======================
 # Write content of the RCS file
 sub _write {
-    my( $self, $file ) = @_;
+    my( $this, $file ) = @_;
     
     # admin
-    print $file "head\t1." . $self->numRevisions() . ";\n";
-    print $file "access" . $self->{access} . ";\n";
-    print $file "symbols" . $self->{symbols} . ";\n";
+    print $file "head\t1." . $this->numRevisions() . ";\n";
+    print $file 'access' . $this->{access} . ";\n";
+    print $file 'symbols' . $this->{symbols} . ";\n";
     print $file "locks; strict;\n";
-    printf $file "comment\t%s;\n", ( _formatString( $self->_comment() ) );
-    printf $file "expand\t@%s@;\n", ( $self->{expand} ) if ( $self->{expand} );
+    printf $file "comment\t%s;\n", ( _formatString( $this->_comment() ) );
+    printf $file "expand\t@%s@;\n", ( $this->{expand} ) if ( $this->{expand} );
     
     print $file "\n";
     
     # delta
-    for( my $i=$self->numRevisions(); $i>0; $i--) {
+    for( my $i=$this->numRevisions(); $i>0; $i--) {
        printf $file "\n1.%d\ndate\t%s;\tauthor %s;\tstate Exp;\nbranches;\n", 
-              ($i, TWiki::Store::RcsFile::_epochToRcsDateTime( ${$self->{date}}[$i] ), $self->_author($i) );
+              ($i, TWiki::Store::RcsFile::_epochToRcsDateTime( ${$this->{date}}[$i] ), $this->_author($i) );
        if( $i == 1 ) {
            print $file "next\t;\n";
        } else {
@@ -347,43 +347,43 @@ sub _write {
        }
     }
     
-    printf $file "\n\ndesc\n%s\n\n", ( _formatString( $self->_description() ) );
+    printf $file "\n\ndesc\n%s\n\n", ( _formatString( $this->_description() ) );
     
-    for( my $i=$self->numRevisions(); $i>0; $i--) {
+    for( my $i=$this->numRevisions(); $i>0; $i--) {
        printf $file "\n1.$i\nlog\n%s\ntext\n%s\n",
-              ( _formatString( $self->_log($i) ), _formatString( $self->_delta($i) ) );
+              ( _formatString( $this->_log($i) ), _formatString( $this->_delta($i) ) );
     }
 }
 
 # implements RcsFile
 sub initBinary {
-   my( $self ) = @_;
+   my( $this ) = @_;
    # Nothing to be done but note for re-writing
-   $self->{expand} = "b";
+   $this->{expand} = 'b';
    # FIXME: unless we have to not do diffs for binary files
    return undef;
 }
 
 # implements RcsFile
 sub initText {
-   my( $self ) = @_;
+   my( $this ) = @_;
    # Nothing to be done but note for re-writing
-   $self->{expand} = "";
+   $this->{expand} = '';
    return undef;
 }
 
 # implements RcsFile
 sub numRevisions {
-    my( $self ) = @_;
-    $self->_ensureProcessed();
-    return $self->{head};
+    my( $this ) = @_;
+    $this->_ensureProcessed();
+    return $this->{head};
 }
 
 # Get the revision date in epoch seconds (secs since 1970)
 sub _date {
-    my( $self, $version ) = @_;
-    $self->_ensureProcessed();
-    my $date = ${$self->{date}}[$version];
+    my( $this, $version ) = @_;
+    $this->_ensureProcessed();
+    my $date = ${$this->{date}}[$version];
     if( $date ) {
 #        $date = TWiki::Time::parseTime($date);
     } else {
@@ -394,120 +394,120 @@ sub _date {
 
 # Get description
 sub _description {
-    my( $self ) = @_;
-    $self->_ensureProcessed();
-    return $self->{description};
+    my( $this ) = @_;
+    $this->_ensureProcessed();
+    return $this->{description};
 }
 
 # Get comment
 sub _comment {
-    my( $self ) = @_;
-    $self->_ensureProcessed();
-    return $self->{comment};
+    my( $this ) = @_;
+    $this->_ensureProcessed();
+    return $this->{comment};
 }
 
 # Get author
 sub _author {
-    my( $self, $version ) = @_;
-    $self->_ensureProcessed();
-    return ${$self->{author}}[$version];
+    my( $this, $version ) = @_;
+    $this->_ensureProcessed();
+    return ${$this->{author}}[$version];
 }
 
 # Get log
 sub _log {
-    my( $self, $version ) = @_;
-    $self->_ensureProcessed();
-    return ${$self->{log}}[$version];
+    my( $this, $version ) = @_;
+    $this->_ensureProcessed();
+    return ${$this->{log}}[$version];
 }
 
 # get delta to rev
 sub _delta {
-    my( $self, $version ) = @_;
-    $self->_ensureProcessed();
-    return ${$self->{delta}}[$version];
+    my( $this, $version ) = @_;
+    $this->_ensureProcessed();
+    return ${$this->{delta}}[$version];
 }
 
 # implements RcsFile
 sub addRevision {
-    my( $self, $text, $log, $author, $date ) = @_;
-    $self->_ensureProcessed();
+    my( $this, $text, $log, $author, $date ) = @_;
+    $this->_ensureProcessed();
 
-    $self->_save( $self->{file}, \$text );
-    $text = $self->_readFile( $self->{file} ) if( $self->{attachment} );
-    my $head = $self->numRevisions();
+    $this->_save( $this->{file}, \$text );
+    $text = $this->_readFile( $this->{file} ) if( $this->{attachment} );
+    my $head = $this->numRevisions();
     if( $head ) {
-        my $delta = _diffText( \$text, \$self->_delta($head), "", 0 );
-        ${$self->{delta}}[$head] = $delta;
+        my $delta = _diffText( \$text, \$this->_delta($head), '', 0 );
+        ${$this->{delta}}[$head] = $delta;
     }
     $head++;
-    ${$self->{delta}}[$head] = $text;
-    $self->{head} = $head;
-    ${$self->{log}}[$head] = $log;
-    ${$self->{author}}[$head] = $author;
+    ${$this->{delta}}[$head] = $text;
+    $this->{head} = $head;
+    ${$this->{log}}[$head] = $log;
+    ${$this->{author}}[$head] = $author;
     $date = time() unless( $date );
 
-    ${$self->{date}}[$head] = $date;
+    ${$this->{date}}[$head] = $date;
 
-    return $self->_writeMe();
+    return $this->_writeMe();
 }
 
 sub _writeMe {
-    my( $self ) = @_;
-    my $dataError = "";
+    my( $this ) = @_;
+    my $dataError = '';
     my $out = new FileHandle;
 
     # FIXME move permission to config or similar
-    chmod( 0644, $self->{rcsFile} );
-    if( ! $out->open( "> " . TWiki::Sandbox::normalizeFileName( $self->{rcsFile} ))) {
-       $dataError = "Problem opening " . $self->{rcsFile} . " for writing";
+    chmod( 0644, $this->{rcsFile} );
+    if( ! $out->open( "> " . TWiki::Sandbox::normalizeFileName( $this->{rcsFile} ))) {
+       $dataError = 'Problem opening ' . $this->{rcsFile} . " for writing";
     } else {
        binmode( $out );
-       $self->_write( $out );
+       $this->_write( $out );
        close( $out );
     }
-    chmod( 0444, $self->{rcsFile} ); # FIXME as above
+    chmod( 0444, $this->{rcsFile} ); # FIXME as above
     return $dataError;    
 }
 
 # implements RcsFile
 sub replaceRevision {
-    my( $self, $text, $comment, $user, $date ) = @_;
-    $self->_ensureProcessed();
-    $self->_delLastRevision();
-    return $self->addRevision( $text, $comment, $user, $date );
+    my( $this, $text, $comment, $user, $date ) = @_;
+    $this->_ensureProcessed();
+    $this->_delLastRevision();
+    return $this->addRevision( $text, $comment, $user, $date );
 }
 
 # implements RcsFile
 sub deleteRevision {
-    my( $self ) = @_;
-    $self->_ensureProcessed();
-    return undef if( $self->numRevisions() <= 1 );
-    $self->_delLastRevision();
-    return $self->_writeMe();
+    my( $this ) = @_;
+    $this->_ensureProcessed();
+    return undef if( $this->numRevisions() <= 1 );
+    $this->_delLastRevision();
+    return $this->_writeMe();
 }
 
 sub _delLastRevision {
-    my( $self ) = @_;
-    my $numRevisions = $self->numRevisions();
+    my( $this ) = @_;
+    my $numRevisions = $this->numRevisions();
     if( $numRevisions > 1 ) {
         # Need to recover text for last revision
-        my $lastText = $self->getRevision( $numRevisions - 1 );
+        my $lastText = $this->getRevision( $numRevisions - 1 );
         $numRevisions--;
-        $self->{delta}->[$numRevisions] = $lastText;
+        $this->{delta}->[$numRevisions] = $lastText;
     } else {
         $numRevisions--;
     }
-    $self->{head} = $numRevisions;
+    $this->{head} = $numRevisions;
 }
 
 
 # implements RcsFile
 # SMELL: so why does this read the rcs file, re-create each of the 2 revisions and then diff them? isn't the delta in the rcs file good enough? (until you want context?)
 sub revisionDiff {
-    my( $self, $rev1, $rev2, $contextLines ) = @_;
-    $self->_ensureProcessed();
-    my $text1 = $self->getRevision( $rev1 );
-    my $text2 = $self->getRevision( $rev2 );
+    my( $this, $rev1, $rev2, $contextLines ) = @_;
+    $this->_ensureProcessed();
+    my $text1 = $this->getRevision( $rev1 );
+    my $text2 = $this->getRevision( $rev2 );
 	
     my @lNew = _mySplit( \$text1 );
     my @lOld = _mySplit( \$text2 );
@@ -520,37 +520,37 @@ sub revisionDiff {
 		@$ele[2] =~ s/\n//go;
 		push @list, $ele;
 	}
-	return ("", \@list);	
+	return ('', \@list);	
 }
 
 # implements RcsFile
 sub getRevision {
-    my( $self, $version ) = @_;
-    $self->_ensureProcessed();
-    my $head = $self->numRevisions();
+    my( $this, $version ) = @_;
+    $this->_ensureProcessed();
+    my $head = $this->numRevisions();
     if( $version == $head ) {
-        return $self->_delta( $version );
+        return $this->_delta( $version );
     } else {
-        my $headText = $self->_delta( $head );
+        my $headText = $this->_delta( $head );
         my @text = _mySplit( \$headText, 1 );
-        return $self->_patchN( \@text, $head-1, $version );
+        return $this->_patchN( \@text, $head-1, $version );
     }
 }
 
 # implements RcsFile
 sub getRevisionInfo {
-    my( $self, $version ) = @_;
-    $self->_ensureProcessed();
-    $version = $self->numRevisions() if( ! $version );
+    my( $this, $version ) = @_;
+    $this->_ensureProcessed();
+    $version = $this->numRevisions() if( ! $version );
 
 	#TODO: need to add a where $revision is not number, find out what rev number the tag refers to
 
     my @result;
 
-    if( $self->{where} && $self->{where} ne "nofile" ) {
-        @result = ( "", $version, $self->_date( $version ), $self->author( $version ), $self->_comment() );
+    if( $this->{where} && $this->{where} ne 'nofile' ) {
+        @result = ( '', $version, $this->_date( $version ), $this->author( $version ), $this->_comment() );
     } else {
-        @result = $self->_getRevisionInfoDefault();
+        @result = $this->_getRevisionInfoDefault();
     }
 
     return @result;
@@ -567,9 +567,9 @@ sub _patch {
    my( $text, $delta ) = @_;
    my $adj = 0;
    my $pos = 0;
-   my $last = "";
+   my $last = '';
    my $d;
-   my $extra = "";
+   my $extra = '';
    my $max = $#$delta;
    while( $pos <= $max ) {
        $d = $delta->[$pos];
@@ -578,12 +578,12 @@ sub _patch {
           $extra = $4;
           my $offset = $2;
           my $length = $3;
-          if( $last eq "d" ) {
+          if( $last eq 'd' ) {
              my $start = $offset + $adj - 1;
              my @removed = splice( @$text, $start, $length );
              $adj -= $length;
              $pos++;
-          } elsif( $last eq "a" ) {
+          } elsif( $last eq 'a' ) {
              my @toAdd = @$delta[$pos+1..$pos+$length];
              if( $extra ) {
                  if( @toAdd ) {
@@ -597,22 +597,22 @@ sub _patch {
              $pos += $length + 1;
           }
        } else {
-          warn( "wrong! - should be \"[ad]<num> <num>\" and was: \"" . $d . "\"\n\n" ); #FIXME remove die
+          #warn( 'wrong! - should be \'[ad]<num> <num>\" and was: \"" . $d . "\"\n\n" ); #FIXME remove die
           return;
        }
    }
 }
 
 sub _patchN {
-    my( $self, $text, $version, $target ) = @_;
+    my( $this, $text, $version, $target ) = @_;
 
-    my $deltaText= $self->_delta( $version );
+    my $deltaText= $this->_delta( $version );
     my @delta = _mySplit( \$deltaText );
     _patch( $text, \@delta );
     if( $version <= $target ) {
-        return join( "", @$text );
+        return join( '', @$text );
     } else {
-        return $self->_patchN( $text, $version-1, $target );
+        return $this->_patchN( $text, $version-1, $target );
     }
 }
 
@@ -620,7 +620,7 @@ sub _patchN {
 sub _mySplit {
     my( $text, $addEntries ) = @_;
 
-    my $ending = "";
+    my $ending = '';
     if( $$text =~ /(\n+)$/o ) {
         $ending = $1;
     }
@@ -683,7 +683,7 @@ sub _diffEnd {
    my( $posNew, $countNew ) = _lastNoEmptyItem( $new );
    my( $posOld, $countOld ) = _lastNoEmptyItem( $old );
 
-   return "" if( $countNew == $countOld );
+   return '' if( $countNew == $countOld );
 
    if( $DIFFEND_DEBUG ) {
      print( "countOld, countNew, posOld, posNew, lastOld, lastNew, lenOld: " .
@@ -720,10 +720,10 @@ sub _diff {
     my @patch = ();
     my @del = ();
     my @ins = ();
-    my $out = "";
+    my $out = '';
     my $start = 0;
     my $start1;
-    my $chunkSign = "";
+    my $chunkSign = '';
     my $count = 0;
     my $numChunks = @$diffs;
     my $last = 0;
@@ -731,27 +731,27 @@ sub _diff {
     foreach my $chunk ( @$diffs ) {
        $count++;
        print "[\n" if( $DIFF_DEBUG );
-       $chunkSign = "";
+       $chunkSign = '';
        my @lines = ();
        foreach my $line ( @$chunk ) {
            my( $sign, $pos, $what ) = @$line;
            print "$sign $pos \"$what\"\n" if( $DIFF_DEBUG );
-           if( $chunkSign ne $sign && $chunkSign ne "") {
-               if( $chunkSign eq "-" && $type eq "diff" ) {
+           if( $chunkSign ne $sign && $chunkSign ne '') {
+               if( $chunkSign eq '-' && $type eq 'diff' ) {
                   # Might be change of lines
                   my $chunkLength = @$chunk;
                   my $linesSoFar = @lines;
                   if( $chunkLength == 2 * $linesSoFar ) {
-                     $chunkSign = "c";
+                     $chunkSign = 'c';
                      $start1 = $pos;
                   }
                }
-               $adj += _addChunk( $chunkSign, \$out, \@lines, $start, $adj, $type, $start1, $last ) if( $chunkSign ne "c" );
+               $adj += _addChunk( $chunkSign, \$out, \@lines, $start, $adj, $type, $start1, $last ) if( $chunkSign ne 'c' );
            }
            if( ! @lines ) {
                $start = $pos;
            }
-           $chunkSign = $sign if( $chunkSign ne "c" );
+           $chunkSign = $sign if( $chunkSign ne 'c' );
            push @lines, ( $what );
        }
 
@@ -774,7 +774,7 @@ sub _diff {
                }
            }
            for( my $i=0; $i<$endings-$has; $i++ ) {
-               push @lines, ("");
+               push @lines, ('');
            }
        }
        $adj += _addChunk( $chunkSign, \$out, \@lines, $start, $adj, $type, $start1, $last, $lengthNew );
@@ -789,7 +789,7 @@ sub _diff {
 sub _range {
    my( $start, $end ) = @_;
    if( $start == $end ) {
-      return "$start";
+      return $start;
    } else {
       return "$start,$end";
    }
@@ -805,36 +805,36 @@ sub _addChunk {
        print "addChunk chunkSign=$chunkSign start=$start adj=$adj type=$type start1=$start1 " .
              "last=$last newLines=$newLines nLines=$nLines\n" if( $DIFF_DEBUG );
        $$out .= "\n" if( $$out && $$out !~ /\n$/o );
-       if( $chunkSign eq "c" ) {
+       if( $chunkSign eq 'c' ) {
           $$out .= _range( $start+1, $start+$nLines/2 );
-          $$out .= "c";
+          $$out .= 'c';
           $$out .= _range( $start1+1, $start1+$nLines/2 );
           $$out .= "\n";
-          $$out .= "< " . join( "< ", @$lines[0..$nLines/2-1] );
+          $$out .= '< ' . join( '< ', @$lines[0..$nLines/2-1] );
           $$out .= "\n" if( $lines->[$nLines/2-1] !~ /\n$/o );
           $$out .= "---\n";
-          $$out .= "> " . join( "> ", @$lines[$nLines/2..$nLines-1] );
+          $$out .= '> ' . join( '> ', @$lines[$nLines/2..$nLines-1] );
           $nLines = 0;
-       } elsif( $chunkSign eq "+" ) {
-          if( $type eq "diff" ) {
-              $$out .= $start-$adj . "a";
+       } elsif( $chunkSign eq '+' ) {
+          if( $type eq 'diff' ) {
+              $$out .= $start-$adj . 'a';
               $$out .= _range( $start+1, $start+$nLines ) . "\n";
-              $$out .= "> " . join( "> ", @$lines );
+              $$out .= '> ' . join( '> ', @$lines );
           } else {
-              $$out .= "a";
+              $$out .= 'a';
               $$out .= $start-$adj;
               $$out .= " $nLines\n";
-              $$out .= join( "", @$lines );
+              $$out .= join( '', @$lines );
           }
        } else {
           print "Start nLines newLines: $start $nLines $newLines\n" if( $DIFF_DEBUG );
-          if( $type eq "diff" ) {
+          if( $type eq 'diff' ) {
               $$out .= _range( $start+1, $start+$nLines );
-              $$out .= "d";
+              $$out .= 'd';
               $$out .= $start + $adj . "\n";
-              $$out .= "< " . join( "< ", @$lines );
+              $$out .= '< ' . join( '< ', @$lines );
           } else {
-              $$out .= "d";
+              $$out .= 'd';
               $$out .= $start+1;
               $$out .= " $nLines";
               $$out .= "\n" if( $last );

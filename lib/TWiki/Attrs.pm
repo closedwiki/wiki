@@ -26,7 +26,7 @@
 
 ---+ package TWiki::Attrs
 Class of attribute sets, designed for parsing and storing attribute values
-from a TWiki tag e.g. =%TAG{fred="bad" "sad" joe="mad"}%=
+from a TWiki tag e.g. =%TAG{fred='bad' "sad" joe="mad"}%=
 
 An attribute set is a map containing an entry for each parameter. The
 default parameter (unnamed quoted string) is named <code>_<nop>DEFAULT</code> in the map.
@@ -39,7 +39,7 @@ As well as standard TWiki syntax (parameter values double-quoted)
 it also parses single-quoted values, unquoted spaceless
 values, spaces around the =, and commas as well as spaces separating values,
 though none of these alternatives is advertised in documentation and
-the extended syntax can be turned off by passing the "strict" parameter
+the extended syntax can be turned off by passing the 'strict' parameter
 to =new=.
 
 This class replaces the old TWiki::extractNameValuePair and
@@ -52,8 +52,8 @@ package TWiki::Attrs;
 use strict;
 use Assert;
 
-my $ERRORKEY = "_ERROR";
-my $DEFAULTKEY = "_DEFAULT";
+my $ERRORKEY = '_ERROR';
+my $DEFAULTKEY = '_DEFAULT';
 
 =pod
 
@@ -160,7 +160,7 @@ Return false if attribute set is not empty.
 sub isEmpty {
   my $this = shift;
 
-  ASSERT( ref( $this ) eq "TWiki::Attrs" ) if DEBUG;
+  ASSERT( ref( $this ) eq 'TWiki::Attrs' ) if DEBUG;
 
   return !scalar(%$this);
 }
@@ -176,7 +176,7 @@ Remove an attr value from the map, return old value. After a call to
 
 sub remove {
   my ( $this, $attr ) = @_;
-  ASSERT( ref( $this ) eq "TWiki::Attrs" ) if DEBUG;
+  ASSERT( ref( $this ) eq 'TWiki::Attrs' ) if DEBUG;
   my $val = $this->{$attr};
   delete( $this->{$attr} ) if ( exists $this->{$attr} );
   return $val;
@@ -193,18 +193,18 @@ syntax observed (no {} brackets, though).
 
 sub stringify {
   my $this = shift;
-  ASSERT( ref( $this ) eq "TWiki::Attrs" ) if DEBUG;
+  ASSERT( ref( $this ) eq 'TWiki::Attrs' ) if DEBUG;
   my $key;
   my @ss;
   foreach $key ( sort keys %$this ) {
 	if ( $key ne $ERRORKEY ) {
-	  my $es = ( $key eq $DEFAULTKEY ) ? "" : "$key=";
+	  my $es = ( $key eq $DEFAULTKEY ) ? '' : $key.'=';
 	  my $val = $this->{$key};
       $val =~ s/"/\\"/g;
-      push( @ss, "$es\"$val\"" );
+      push( @ss, $es.'"'.$val.'"' );
 	}
   }
-  return join( " ", @ss );
+  return join( ' ', @ss );
 }
 
 
@@ -226,14 +226,14 @@ then call extractValue( "def" ), it will return "ghi".
 sub extractValue {
     my( $str, $name ) = @_;
 
-    my $value = "";
+    my $value = '';
     return $value unless( $str );
     $str =~ s/\\\"/\\\0/g;  # escape \"
 
     if( $name ) {
         # format is: %VAR{ ... name = "value" }%
         if( $str =~ /(^|[^\S])$name\s*=\s*\"([^\"]*)\"/ ) {
-            $value = $2 if defined $2;  # distinguish between "" and "0"
+            $value = $2 if defined $2;  # distinguish between '' and "0"
         }
 
     } else {
@@ -243,7 +243,7 @@ sub extractValue {
             # or: %VAR{ "value" param="etc" ... }%
             # or: %VAR{ ... = "..." "value" ... }%
             # Note: "value" may contain embedded double quotes
-            $value = $2 if defined $2;  # distinguish between "" and "0";
+            $value = $2 if defined $2;  # distinguish between '' and "0";
 
         } elsif( ( $str =~ /^\s*\w+\s*=\s*\"([^\"]*)/ ) && ( $1 ) ) {
             # is: %VAR{ name = "value" }%

@@ -66,32 +66,32 @@ sub edit {
     my $topic = $session->{topicName};
     my $user = $session->{user};
 
-    my $saveCmd = $query->param( 'cmd' ) || "";
-    my $breakLock = $query->param( 'breaklock' ) || "";
-    my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
-    my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
-    my $formTemplate  = $query->param( "formtemplate" ) || "";
-    my $templateTopic = $query->param( "templatetopic" ) || "";
+    my $saveCmd = $query->param( 'cmd' ) || '';
+    my $breakLock = $query->param( 'breaklock' ) || '';
+    my $onlyWikiName = $query->param( 'onlywikiname' ) || '';
+    my $onlyNewTopic = $query->param( 'onlynewtopic' ) || '';
+    my $formTemplate  = $query->param( 'formtemplate' ) || '';
+    my $templateTopic = $query->param( 'templatetopic' ) || '';
     # apptype is undocumented legacy
     my $cgiAppType = $query->param( 'contenttype' ) ||
       $query->param( 'apptype' ) || "text/html";
     my $skin = $session->getSkin();
-    my $theParent = $query->param( 'topicparent' ) || "";
+    my $theParent = $query->param( 'topicparent' ) || '';
     my $ptext = $query->param( 'text' );
 
     TWiki::UI::checkWebExists( $session, $webName, $topic );
     TWiki::UI::checkMirror( $session, $webName, $topic );
 
-    my $tmpl = "";
-    my $text = "";
-    my $meta = "";
-    my $extra = "";
+    my $tmpl = '';
+    my $text = '';
+    my $meta = '';
+    my $extra = '';
     my $topicExists  = $session->{store}->topicExists( $webName, $topic );
 
     # Prevent editing existing topic?
     if( $onlyNewTopic && $topicExists ) {
         # Topic exists and user requested oops if it exists
-        throw TWiki::UI::OopsException( $webName, $topic, "createnewtopic" );
+        throw TWiki::UI::OopsException( $webName, $topic, 'createnewtopic' );
     }
 
     # prevent non-Wiki names?
@@ -100,7 +100,7 @@ sub edit {
         && ( ! TWiki::isValidTopicName( $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         # SMELL: this should be an oops, shouldn't it?
-        $session->redirect( $session->getScriptUrl( $webName, $topic, "view" ));
+        $session->redirect( $session->getScriptUrl( $webName, $topic, 'view' ));
         return;
     }
 
@@ -112,19 +112,19 @@ sub edit {
 
     # If you want to edit, you have to be able to view and change.
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            "view", $session->{user} );
+                            'view', $session->{user} );
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            "change", $session->{user} );
+                            'change', $session->{user} );
 
     if( $saveCmd && ! $session->{user}->isAdmin()) {
-        throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
+        throw TWiki::UI::OopsException( $webName, $topic, 'accessgroup',
                                         "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
     }
 
     my $templateWeb = $webName;
 
     # Get edit template, standard or a different skin
-    $tmpl = $session->{templates}->readTemplate( "edit", $skin );
+    $tmpl = $session->{templates}->readTemplate( 'edit', $skin );
     unless( $topicExists ) {
         if( $templateTopic ) {
             ( $templateWeb, $templateTopic ) =
@@ -135,14 +135,14 @@ sub edit {
                                         $templateTopic, undef );
         }
         unless( $text ) {
-            ( $meta, $text ) = TWiki::UI::readTemplateTopic( $session, "WebTopicEditTemplate" );
+            ( $meta, $text ) = TWiki::UI::readTemplateTopic( $session, 'WebTopicEditTemplate' );
         }
         $extra = "(not exist)";
 
         # If present, instantiate form
         if( ! $formTemplate ) {
-            my $form = $meta->get( "FORM" );
-            $formTemplate = $form->{"name"} if $form;
+            my $form = $meta->get( 'FORM' );
+            $formTemplate = $form->{name} if $form;
         }
 
         $text = $session->expandVariablesOnTopicCreation( $text, $user );
@@ -158,16 +158,16 @@ sub edit {
     }
 
     # parent setting
-    if( $theParent eq "none" ) {
-        $meta->remove( "TOPICPARENT" );
+    if( $theParent eq 'none' ) {
+        $meta->remove( 'TOPICPARENT' );
     } elsif( $theParent ) {
         my $parentWeb;
         ($parentWeb, $theParent) =
           $session->normalizeWebTopicName( $theParent );
         if( $parentWeb ne $webName ) {
-            $theParent = "$parentWeb.$theParent";
+            $theParent = $parentWeb.'.'.$theParent;
         }
-        $meta->put( "TOPICPARENT", { name => $theParent } );
+        $meta->put( 'TOPICPARENT', { name => $theParent } );
     }
     $tmpl =~ s/%TOPICPARENT%/$theParent/;
 
@@ -175,11 +175,11 @@ sub edit {
     # or indirectly from webtopictemplate parameter.
     my $oldargsr;
     if( $formTemplate ) {
-        $meta->remove( "FORM" );
-        if( $formTemplate ne "none" ) {
-            $meta->put( "FORM", { name => $formTemplate } );
+        $meta->remove( 'FORM' );
+        if( $formTemplate ne 'none' ) {
+            $meta->put( 'FORM', { name => $formTemplate } );
         } else {
-            $meta->remove( "FORM" );
+            $meta->remove( 'FORM' );
         }
         $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
         if( defined $ptext ) {
@@ -200,7 +200,7 @@ sub edit {
 
     if( $TWiki::cfg{Log}{edit} ) {
         # write log entry
-        $session->writeLog( "edit", "$webName.$topic", $extra );
+        $session->writeLog( 'edit', $webName.'.'.$topic, $extra );
     }
 
     $tmpl =~ s/\(edit\)/\(edit cmd=$saveCmd\)/go if $saveCmd;
@@ -211,9 +211,9 @@ sub edit {
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
 
     # Don't want to render form fields, so this after getRenderedVersion
-    my $formMeta = $meta->get( "FORM" );
-    my $form = "";
-    $form = $formMeta->{"name"} if( $formMeta );
+    my $formMeta = $meta->get( 'FORM' );
+    my $form = '';
+    $form = $formMeta->{name} if( $formMeta );
     if( $form && !$saveCmd ) {
         my @fieldDefs;
         my $formText;
@@ -221,16 +221,16 @@ sub edit {
         # get form data values from the form topic.
         my $getValuesFromFormTopic = ( $formTemplate && !$ptext );
         $session->{form}->fieldVars2Meta( $webName,  $session->{cgiQuery}, $meta,
-                               "override" );
+                               'override' );
         $formText = $session->{form}->renderForEdit
           ( $webName, $topic, $templateWeb, $form, $meta,
             $getValuesFromFormTopic );
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
-    } elsif( !$saveCmd && $session->{prefs}->getPreferencesValue( "WEBFORMS", $webName )) {
+    } elsif( !$saveCmd && $session->{prefs}->getPreferencesValue( 'WEBFORMS', $webName )) {
         # follows a hybrid html monster to let the 'choose form button' align at
         # the right of the page in all browsers
         $form = '<div style="text-align:right;"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder"><tr><td align="right">'
-          . TWiki::Form::chooseFormButton( "Add form" )
+          . TWiki::Form::chooseFormButton( 'Add form' )
             . '</td></tr></table></div>';
         $tmpl =~ s/%FORMFIELDS%/$form/go;
     } else {

@@ -44,18 +44,10 @@ Constructor
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
     $this->{session} = $session;
     return $this;
 }
-
-sub users { my $this = shift; return $this->{session}->{users}; }
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
-sub store { my $this = shift; return $this->{session}->{store}; }
-sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
-sub security { my $this = shift; return $this->{session}->{security}; }
-sub templates { my $this = shift; return $this->{session}->{templates}; }
-sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 # Get definition from supplied topic text
 # Returns array of arrays
@@ -65,6 +57,7 @@ sub _parseFormDefinition
 {
     my( $this, $text ) = @_;
 
+    my $store = $this->{session}->{store};
     my @fields = ();
     my $inBlock = 0;
     $text =~ s/\\\r?\n//go; # remove trailing '\' and join continuation lines
@@ -83,16 +76,16 @@ sub _parseFormDefinition
                     my $name = _cleanField( $title );
                     $type = lc $type;
                     $attributes =~ s/\s*//go;
-                    $attributes = "" if( ! $attributes );
+                    $attributes = '' if( ! $attributes );
                     $type =~ s/^\s*//go;
                     $type =~ s/\s*$//go;
-                    $type = "text" if( ! $type );
+                    $type = 'text' if( ! $type );
                     $size = _cleanField( $size );
                     if( ! $size ) {
-                        if( $type eq "text" ) {
+                        if( $type eq 'text' ) {
                             $size = 20;
-                        } elsif( $type eq "textarea" ) {
-                            $size = "40x5";
+                        } elsif( $type eq 'textarea' ) {
+                            $size = '40x5';
                         } else {
                             $size = 1;
                         }
@@ -102,7 +95,9 @@ sub _parseFormDefinition
                     $vals =~ s/\s*$//go;
                     $vals =~ s/"//go; # " would break parsing of META variables
                     if( $vals eq '$users' ) {
-                       $vals = $TWiki::cfg{UsersWebName} . "." . join( ", ${TWiki::cfg{UsersWebName}}.", ( $this->store()->getTopicNames( $TWiki::cfg{UsersWebName} ) ) );
+                       $vals = $TWiki::cfg{UsersWebName} . '.' .
+                         join( ", ${TWiki::cfg{UsersWebName}}.",
+                               ( $store->getTopicNames( $TWiki::cfg{UsersWebName} ) ) );
                     }
                     $tooltip =~ s/^\s*//go;
                     $tooltip =~ s/\s*$//go;
@@ -120,7 +115,7 @@ sub _parseFormDefinition
 
 sub _cleanField {
    my( $text ) = @_;
-   $text = "" if( ! $text );
+   $text = '' if( ! $text );
    # TODO: make this dependent on a 'character set includes non-alpha'
    # setting in TWiki.cfg - and do same in Render.pm re 8859 test.
    # I18N: don't get rid of non-ASCII characters
@@ -178,22 +173,23 @@ May throw TWiki::UI::OopsException
 
 sub getFormDef {
     my( $this, $webName, $form ) = @_;
-    ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
 
     ( $webName, $form ) =
       $this->{session}->normalizeWebTopicName( $webName, $form );
 
     my @fieldDefs = ();
+    my $store = $this->{session}->{store};
 
     # Read topic that defines the form
-    if( $this->store()->topicExists( $webName, $form ) ) {
+    if( $store->topicExists( $webName, $form ) ) {
         my( $meta, $text ) =
-          $this->store()->readTopic( $this->{session}->{user}, $webName, $form, undef );
+          $store->readTopic( $this->{session}->{user}, $webName, $form, undef );
         @fieldDefs = $this->_parseFormDefinition( $text );
     } else {
         throw TWiki::UI::OopsException( $this->{session}->{webName},
                                         $this->{session}->{topicName},
-                                        "noformdef", $webName, $form);
+                                        'noformdef', $webName, $form);
     }
 
     my @fieldsInfo = ();
@@ -207,12 +203,12 @@ sub getFormDef {
            @posValues = split( /,\s*/, $posValuesS );
         }
 
-        if( ( ! @posValues ) && $this->store()->topicExists( $webName, $name ) ) {
+        if( ( ! @posValues ) && $store->topicExists( $webName, $name ) ) {
             my( $meta, $text ) =
-              $this->store()->readTopic( $this->{session}->{user}, $webName, $name, undef );
+              $store->readTopic( $this->{session}->{user}, $webName, $name, undef );
             @posValues = getPossibleFieldValues( $text );
             if( ! $type ) {
-                $type = "select";  #FIXME keep?
+                $type = 'select';  #FIXME keep?
             }
         } else {
             # FIXME no list matters for some types
@@ -225,44 +221,47 @@ sub getFormDef {
 
 sub _link {
     my( $this, $web, $name, $tooltip, $heading, $align, $span, $extra ) = @_;
-    
+
     $name =~ s/[\[\]]//go;
-    
-    my $cell = "td";
-    my $attr = "";
+
+    my $cell = 'td';
+    my $attr = '';
     if( $heading ) {
-       $cell = "th";
+       $cell = 'th';
        $attr = ' bgcolor="#99CCCC"';
     }
-    
+
     if( !$align ) {
-       $align = "";
+       $align = '';
     } else {
-       $align = " align=\"$align\"";
-    }
-    
-    if( $span ) {
-       $span = " colspan=\"$span\"";
-    } else {
-       $span = "";
-    }
-    
-    my $link = "$name";
-    
-    if( $this->store()->topicExists( $web, $name ) ) {
-        ( $web, $name ) = $this->{session}->normalizeWebTopicName( $web, $name );
-        if( ! $tooltip ) {
-            $tooltip = "Click to see details in separate window";
-        }
-        $link =  "<a target=\"$name\" " .
-                 "onclick=\"return launchWindow('$web','$name')\" " .
-                 "title=\"$tooltip\" " .
-                 "href=\"".$this->{session}->{scriptUrlPath}."/view$TWiki::cfg{ScriptSuffix}/$web/$name\" $TWiki::cfg{NoFollow}>$name</a>";
-    } elsif ( $tooltip ) {
-        $link = "<span title=\"$tooltip\">$name</span>";
+       $align = ' align="'.$align.'"';
     }
 
-    my $html = "<$cell$attr$span$align>$link $extra</$cell>";
+    if( $span ) {
+       $span = ' colspan="'.$span.'"';
+    } else {
+       $span = '';
+    }
+
+    my $link = $name;
+
+    my $store = $this->{session}->{store};
+    if( $store->topicExists( $web, $name ) ) {
+        ( $web, $name ) = $this->{session}->normalizeWebTopicName( $web, $name );
+        if( ! $tooltip ) {
+            $tooltip = 'Click to see details in separate window';
+        }
+        $link = '<a target="'.$name.'" ' .
+          'onclick="return launchWindow('."'$web','$name')\" " .
+            'title="'.$tooltip.'" ' .
+              'href="'.$this->{session}->getScriptUrlPath($web, $name, 'view').
+                  "\" $TWiki::cfg{NoFollow}>$name</a>";
+    } elsif ( $tooltip ) {
+        $link = '<span title="'.$tooltip.'">'.$name.'</span>';
+    }
+
+    my $html =
+      '<'.$cell.$attr.$span.$align.'>'.$link.' '.$extra.'</'.$cell.'>';
     return $html;
 }
 
@@ -276,8 +275,9 @@ Not yet documented.
 
 sub chooseFormButton {
     my( $text ) = @_;
-    
-    return "<input type=\"submit\" name=\"submitChangeForm\" value=\"$text\" class=\"twikiChangeFormButton twikiSubmit \" />";
+
+    return '<input type="submit" name="submitChangeForm" value="'.$text.
+      '" class="twikiChangeFormButton twikiSubmit " />';
 }
 
 
@@ -294,15 +294,17 @@ e.g. FIXME could do with some of this being in template
 
 sub renderForEdit {
     my( $this, $web, $topic, $formWeb, $form, $meta, $getValuesFromFormTopic ) = @_;
-    ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
 
-    my $chooseForm = "";
-    if( $this->prefs()->getPreferencesValue( "WEBFORMS", "$web" ) ) {
-        $chooseForm = chooseFormButton( "Replace form..." );
+    my $chooseForm = '';
+    my $prefs = $this->{session}->{prefs};
+    if( $prefs->getPreferencesValue( 'WEBFORMS', $web ) ) {
+        $chooseForm = chooseFormButton( 'Replace form...' );
     }
 
-    my $text = "<div class=\"twikiForm twikiEditForm\"><table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
-               $this->_link( $web, $form, "", "h", "", 2, $chooseForm ) . "</tr>\n";
+    my $text = '<div class="twikiForm twikiEditForm"><table border="1" '.
+      'cellspacing="0" cellpadding="0"><tr>' .
+        $this->_link( $web, $form, '', 'h', '', 2, $chooseForm ) . '</tr>';
 
     my @fieldsInfo = $this->getFormDef( $formWeb, $form );
     foreach my $c ( @fieldsInfo ) {
@@ -315,11 +317,11 @@ sub renderForEdit {
         my $tooltip = shift @fieldInfo;
         my $attributes = shift @fieldInfo;
 
-        my $field = $meta->get( "FIELD", $fieldName );
-        my $value = $field->{"value"};
+        my $field = $meta->get( 'FIELD', $fieldName );
+        my $value = $field->{value};
         if( ! defined( $value ) && $attributes =~ /S/ ) {
             # Allow initialisation based on a preference
-            $value = $this->prefs()->getPreferencesValue($fieldName);
+            $value = $prefs->getPreferencesValue($fieldName);
         }
         if( !defined( $value ) && $type !~ /^checkbox/ &&
             $getValuesFromFormTopic ) {
@@ -330,21 +332,23 @@ sub renderForEdit {
                                                              $web, $topic );
             }
         }
-        $value = "" unless defined $value;  # allow "0" values
-        my $extra = "";
+        $value = '' unless defined $value;  # allow 0 values
+        my $extra = '';
 
         $tooltip = TWiki::entityEncode( $tooltip );
 
         my $output = $this->{session}->{plugins}->renderFormFieldForEditHandler( $name, $type, $size, $value, $attributes, \@fieldInfo );
         if( $output ) {
             $value = $output;
-        } elsif( $type eq "text" ) {
+        } elsif( $type eq 'text' ) {
             $value = TWiki::entityEncode( $value );
-            $value = "<input class=\"twikiEditFormTextField\" type=\"text\" name=\"$name\" size=\"$size\" value=\"$value\" />";
-        } elsif( $type eq "label" ) {
+            $value = '<input class="twikiEditFormTextField" type="text" '.
+              'name="'.$name.'" size="'.$size.'" value="'.$value.'" />';
+        } elsif( $type eq 'label' ) {
             my $escaped = TWiki::entityEncode( $value );
-            $value = "<input class=\"twikiEditFormLabelField\" type=\"hidden\" name=\"$name\" value=\"$escaped\" />$value";
-        } elsif( $type eq "textarea" ) {
+            $value = '<input class="twikiEditFormLabelField" type="hidden" '.
+              'name="'.$name.'" value="'.$escaped.'" />'.$value;
+        } elsif( $type eq 'textarea' ) {
             my $cols = 40;
             my $rows = 5;
             if( $size =~ /([0-9]+)x([0-9]+)/ ) {
@@ -352,55 +356,66 @@ sub renderForEdit {
                $rows = $2;
             }
             $value = TWiki::entityEncode( $value );
-            $value = "<textarea class=\"twikiEditFormTextAreaField\" cols=\"$cols\" rows=\"$rows\" name=\"$name\">$value</textarea>";
-        } elsif( $type eq "select" ) {
-            my $val = "";
-            my $matched = "";
-            my $defaultMarker = "%DEFAULTOPTION%";
+            $value = '<textarea class="twikiEditFormTextAreaField" '.
+              'cols="'.$cols.'" rows="'.$rows.'" name="'.$name.'">'.
+                $value.'</textarea>';
+        } elsif( $type eq 'select' ) {
+            my $val = '';
+            my $matched = '';
+            my $defaultMarker = '%DEFAULTOPTION%';
             foreach my $item ( @fieldInfo ) {
                 my $selected = $defaultMarker;
                 if( $item eq $value ) {
                    $selected = ' selected="selected"';
                    $matched = $item;
                 }
-                $defaultMarker = "";
+                $defaultMarker = '';
                 $item =~ s/<nop/&lt\;nop/go;
-                $val .= "   <option$selected>$item</option>";
+                $val .= '   <option'.$selected.'>'.$item.'</option>';
             }
             if( ! $matched ) {
                $val =~ s/%DEFAULTOPTION%/ selected="selected"/go;
             } else {
                $val =~ s/%DEFAULTOPTION%//go;
             }
-            $value = "<select name=\"$name\" size=\"$size\">$val</select>";
+            $value = '<select name="'.$name.'" size="'.$size.'">'.
+              $val.'</select>';
         } elsif( $type =~ "^checkbox" ) {
-            if( $type eq "checkbox+buttons" ) {
+            if( $type eq 'checkbox+buttons' ) {
                 my $boxes = $#fieldInfo + 1;
-                $extra = "<br />\n<input class=\"twikiEditFormCheckboxButton twikiCheckbox\" type=\"button\" value=\" Set \" onclick=\"checkAll(this, 2, $boxes, true)\" />&nbsp;\n" .
-                         "<input class=\"twikiEditFormCheckboxButton twikiCheckbox\" type=\"button\" value=\"Clear\" onclick=\"checkAll(this, 1, $boxes, false)\" />\n";
+                $extra = '<br /><input class="twikiEditFormCheckboxButton '.
+                  'twikiCheckbox" type="button" value=" Set " '.
+                    'onclick="checkAll(this, 2, $boxes, true)" />&nbsp;' .
+                      '<input class="twikiEditFormCheckboxButton '.
+                        'twikiCheckbox" type="button" value="Clear" '.
+                          'onclick="checkAll(this, 1, '.$boxes.
+                            ', false)" />';
             }
 
-            my $val ="<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
+            my $val ='<table cellspacing="0" cellpadding="0"><tr>';
             my $lines = 0;
             foreach my $item ( @fieldInfo ) {
-                my $flag = "";
+                my $flag = '';
                 my $expandedItem = $this->{session}->handleCommonTags
                   ( $item, $web, $topic );
                 if( $value =~ /(^|,\s*)\Q$item\E(,|$)/ ) {
                     $flag = ' checked="checked"';
                 }
-                $val .= "\n<td><input class=\"twikiEditFormCheckboxField\" type=\"checkbox\" name=\"$name$item\"$flag />$expandedItem &nbsp;&nbsp;</td>";
+                $val .= '<td><input class="twikiEditFormCheckboxField" '.
+                  'type="checkbox" name="'.
+                    $name.$item.'"'.$flag.' />'.$expandedItem.
+                      ' &nbsp;&nbsp;</td>';
                 if( $size > 0 && ($lines % $size == $size - 1 ) ) {
-                   $val .= "\n</tr><tr>";
+                    $val .= '</tr><tr>';
                 }
                 $lines++;
             }
-            $val =~ s/\n<\/tr><tr>$//;
-            $value = "$val\n</tr></table>\n";
-        } elsif( $type eq "radio" ) {
-            my $val = "<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
-            my $matched = "";
-            my $defaultMarker = "%DEFAULTOPTION%";
+            $val =~ s/<\/tr><tr>$//;
+            $value = $val.'</tr></table>';
+        } elsif( $type eq 'radio' ) {
+            my $val = '<table cellspacing="0" cellpadding="0"><tr>';
+            my $matched = '';
+            my $defaultMarker = '%DEFAULTOPTION%';
             my $lines = 0;
             foreach my $item ( @fieldInfo ) {
                 my $selected = $defaultMarker;
@@ -410,7 +425,7 @@ sub renderForEdit {
                    $selected = ' checked="checked"';
                    $matched = $item;
                 }
-                $defaultMarker = "";
+                $defaultMarker = '';
                 $val .= "\n<td><input class=\"twikiEditFormRadioField twikiRadioButton\" type=\"radio\" name=\"$name\" value=\"$item\" $selected />$expandedItem &nbsp;&nbsp;</td>";
                 if( $size > 0 && ($lines % $size == $size - 1 ) ) {
                    $val .= "\n</tr><tr>";
@@ -431,7 +446,7 @@ sub renderForEdit {
             $value = TWiki::entityEncode( $value );
             $value = "<input class=\"twikiEditFormError\" type=\"text\" name=\"$name\" size=\"80\" value=\"$value\" />";
         }
-        $text .= "   <tr> " . $this->_link( $web, $title, $tooltip, "h", "right", "", $extra ) . "<td align=\"left\"> $value </td> </tr>\n";
+        $text .= '<tr>' . $this->_link( $web, $title, $tooltip, 'h', 'right', '', $extra ) . "<td align=\"left\"> $value </td> </tr>\n";
     }
     $text .= "</table></div>\n";
     
@@ -453,17 +468,17 @@ May throw TWiki::UI::OopsException
 
 sub fieldVars2Meta {
     my( $this, $webName, $query, $meta, $justOverride ) = @_;
-    ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
-    ASSERT(ref($meta) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
+    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
 
-    $meta->remove( "FIELD" ) if( ! $justOverride );
+    $meta->remove( 'FIELD' ) if( ! $justOverride );
 
     #$this->{session}->writeDebug( "Form::fieldVars2Meta " . $query->query_string );
 
     my @fieldsInfo = ();
-    my $form = $meta->get( "FORM" );
+    my $form = $meta->get( 'FORM' );
     if( $form ) {
-        @fieldsInfo = $this->getFormDef( $webName, $form->{"name"} );
+        @fieldsInfo = $this->getFormDef( $webName, $form->{name} );
     }
 
    foreach my $fieldInfop ( @fieldsInfo ) {
@@ -476,20 +491,20 @@ sub fieldVars2Meta {
        my $attributes = shift @fieldInfo;
        my $value     = $query->param( $fieldName );
 
-       my $cvalue    = "";
+       my $cvalue    = '';
 
        if( ! $value && $type =~ "^checkbox" ) {
           foreach my $name ( @fieldInfo ) {
              my $cleanName = $name;
              $cleanName =~ s/<nop>//g;
-             $cvalue = $query->param( "$fieldName" . "$cleanName" );
+             $cvalue = $query->param( $fieldName . $cleanName );
              if( defined( $cvalue ) ) {
                  if( ! $value ) {
-                     $value = "";
+                     $value = '';
                  } else {
-                     $value .= ", " if( $cvalue );
+                     $value .= ', ' if( $cvalue );
                  }
-                 $value .= "$name" if( $cvalue );
+                 $value .= $name if( $cvalue );
              }
           }
        }
@@ -499,7 +514,7 @@ sub fieldVars2Meta {
        }
 
        # Have title and name stored so that topic can be viewed without reading in form definition
-       $value = "" if( ! defined( $value ) && ! $justOverride );
+       $value = '' if( ! defined( $value ) && ! $justOverride );
        if( defined( $value ) ) {
            my $args =
              {
@@ -508,7 +523,7 @@ sub fieldVars2Meta {
               value => $value,
               attributes => $attributes,
              };
-           $meta->put( "FIELD", $args );
+           $meta->put( 'FIELD', $args );
        }
    }
 
@@ -527,15 +542,15 @@ Not yet documented.
 
 sub getFieldParams {
     my( $meta ) = @_;
-    ASSERT(ref($meta) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
 
-    my $params = "";
+    my $params = '';
 
-    my @fields = $meta->find( "FIELD" );
+    my @fields = $meta->find( 'FIELD' );
     foreach my $field ( @fields ) {
        my $args = $2;
-       my $name  = $field->{"name"};
-       my $value = $field->{"value"};
+       my $name  = $field->{name};
+       my $value = $field->{value};
        #$this->{session}->writeDebug( "Form::getFieldParams " . $name . ", " . $value );
        $value = TWiki::decodeSpecialChars( $value );
        $value =~ s/&/&amp\;/go;
@@ -559,41 +574,44 @@ Called by script to change the form for a topic
 
 sub changeForm {
     my( $this, $theWeb, $theTopic ) = @_;
-    ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
 
-    my $tmpl = $this->templates()->readTemplate( "changeform" );
+    my $tmpl = $this->{session}->{templates}->readTemplate( 'changeform' );
     $tmpl = $this->{session}->handleCommonTags( $tmpl, $theWeb, $theTopic );
-    $tmpl = $this->renderer()->getRenderedVersion( $tmpl, $theWeb, $theTopic );
+    $tmpl = $this->{session}->{renderer}->getRenderedVersion( $tmpl, $theWeb, $theTopic );
     my $q = $this->{session}->{cgiQuery};
     my $text = $q->param( 'text' );
     $text = TWiki::encodeSpecialChars( $text );
     $tmpl =~ s/%TEXT%/$text/go;
 
-    my $listForms = $this->prefs()->getPreferencesValue( "WEBFORMS", "$theWeb" );
+    my $prefs = $this->{session}->{prefs};
+    my $listForms = $prefs->getPreferencesValue( 'WEBFORMS', $theWeb );
     $listForms =~ s/^\s*//go;
     $listForms =~ s/\s*$//go;
     my @forms = split( /\s*,\s*/, $listForms );
-    unshift @forms, "";
+    unshift @forms, '';
+    my $store = $this->{session}->{store};
     my( $metat, $tmp ) =
-      $this->store()->readTopic( $this->{session}->{user}, $theWeb, $theTopic, undef );
-    my $formName = $q->param( 'formtemplate' ) || "";
+      $store->readTopic( $this->{session}->{user}, $theWeb, $theTopic, undef );
+    my $formName = $q->param( 'formtemplate' ) || '';
     if( ! $formName ) {
-        my $form = $metat->get( "FORM" );
-        $formName = $form->{"name"} if $form;
+        my $form = $metat->get( 'FORM' );
+        $formName = $form->{name} if $form;
     }
-    $formName = "" if( !$formName || $formName eq "none" );
+    $formName = '' if( !$formName || $formName eq 'none' );
 
-    my $formList = "";
+    my $formList = '';
     foreach my $form ( @forms ) {
-       my $selected = ( $form eq $formName ) ? 'checked="checked"' : "";
-       $formList .= "\n<br />" if( $formList );
-       my $show = $form ? $form : "&lt;none&gt;";
-       my $value = $form ? $form : "none";
-       $formList .= "<input type=\"radio\" name=\"formtemplate\" value=\"$value\" $selected />&nbsp;$show";
+       my $selected = ( $form eq $formName ) ? 'checked="checked"' : '';
+       $formList .= '<br />' if( $formList );
+       my $show = $form ? $form : '&lt;none&gt;';
+       my $value = $form ? $form : 'none';
+       $formList .= '<input type="radio" name="formtemplate" value="'.
+         $value.'" '.$selected.' />&nbsp;'.$show;
     }
     $tmpl =~ s/%FORMLIST%/$formList/go;
 
-    my $parent = $q->param( 'topicparent' ) || "";
+    my $parent = $q->param( 'topicparent' ) || '';
     $tmpl =~ s/%TOPICPARENT%/$parent/go;
 
     $tmpl =~ s|</*nop/*>||goi;
@@ -604,25 +622,25 @@ sub changeForm {
 #Upgrade old style category table item
 sub _upgradeCategoryItem {
     my ( $catitems, $ctext ) = @_;
-    my $catname = "";
-    my $scatname = "";
-    my $catmodifier = "";
-    my $catvalue = "";
+    my $catname = '';
+    my $scatname = '';
+    my $catmodifier = '';
+    my $catvalue = '';
     my @cmd = split( /\|/, $catitems );
-    my $src = "";
+    my $src = '';
     my $len = @cmd;
-    if( $len < "2" ) {
+    if( $len < '2' ) {
         # FIXME
         return ( $catname, $catmodifier, $catvalue )
     }
-    my $svalue = "";
+    my $svalue = '';
 
     my $i;
     my $itemsPerLine;
 
     # check for CategoryName=CategoryValue parameter
-    my $paramCmd = "";
-    my $cvalue = ""; # was$query->param( $cmd[1] );
+    my $paramCmd = '';
+    my $cvalue = ''; # was$query->param( $cmd[1] );
     if( $cvalue ) {
         $src = "<!---->$cvalue<!---->";
     } elsif( $ctext ) {
@@ -634,7 +652,7 @@ sub _upgradeCategoryItem {
         }
     }
 
-    if( $cmd[0] eq "select" || $cmd[0] eq "radio") {
+    if( $cmd[0] eq 'select' || $cmd[0] eq 'radio') {
         $catname = $cmd[1];
         $scatname = $catname;
         #$scatname =~ s/[^a-zA-Z0-9]//g;
@@ -643,15 +661,15 @@ sub _upgradeCategoryItem {
             my $value = $cmd[$i];
             my $svalue = $value;
             if( $src =~ /$value/ ) {
-               $catvalue = "$svalue";
+               $catvalue = $svalue;
             }
         }
 
-    } elsif( $cmd[0] eq "checkbox" ) {
+    } elsif( $cmd[0] eq 'checkbox' ) {
         $catname = $cmd[1];
         $scatname = $catname;
         #$scatname =~ s/[^a-zA-Z0-9]//g;
-        if( $cmd[2] eq "true" || $cmd[2] eq "1" ) {
+        if( $cmd[2] eq 'true' || $cmd[2] eq '1' ) {
             $i = $len - 4;
             $catmodifier = 1;
         }
@@ -668,7 +686,7 @@ sub _upgradeCategoryItem {
             }
         }
 
-    } elsif( $cmd[0] eq "text" ) {
+    } elsif( $cmd[0] eq 'text' ) {
         $catname = $cmd[1];
         $scatname = $catname;
         #$scatname =~ s/[^a-zA-Z0-9]//g;
@@ -676,7 +694,7 @@ sub _upgradeCategoryItem {
         if( $1 ) {
             $src = $1;
         } else {
-            $src = "";
+            $src = '';
         }
         $catvalue = $src;
     }
@@ -696,20 +714,20 @@ May throw TWiki::UI::OopsException
 
 sub upgradeCategoryTable {
     my( $this, $web, $topic, $meta, $text ) = @_;
-    ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
 
-    my $icat = $this->templates()->readTemplate( "twikicatitems" );
+    my $icat = $this->{session}->{templates}->readTemplate( 'twikicatitems' );
 
     if( $icat ) {
         my @items = ();
         # extract category section and build category form elements
         my( $before, $ctext, $after) = split( /<!--TWikiCat-->/, $text );
         # cut TWikiCat part
-        $text = $before || "";
+        $text = $before || '';
         $text .= $after if( $after );
-        $ctext = "" if( ! $ctext );
+        $ctext = '' if( ! $ctext );
 
-        my $ttext = "";
+        my $ttext = '';
         foreach( split( /\n/, $icat ) ) {
             my( $catname, $catmod, $catvalue ) = _upgradeCategoryItem( $_, $ctext );
             #$this->{session}->writeDebug( "Form: name, mod, value: $catname, $catmod, $catvalue" );
@@ -717,11 +735,12 @@ sub upgradeCategoryTable {
                 push @items, ( [$catname, $catmod, $catvalue] );
             }
         }
-        my $listForms = $this->prefs()->getPreferencesValue( "WEBFORMS", "$web" );
+        my $prefs = $this->{session}->{prefs};
+        my $listForms = $prefs->getPreferencesValue( 'WEBFORMS', $web );
         $listForms =~ s/^\s*//go;
         $listForms =~ s/\s*$//go;
         my @formTemplates = split( /\s*,\s*/, $listForms );
-        my $defaultFormTemplate = "";
+        my $defaultFormTemplate = '';
         $defaultFormTemplate = $formTemplates[0] if ( @formTemplates );
 
         if( ! $defaultFormTemplate ) {
@@ -730,8 +749,8 @@ sub upgradeCategoryTable {
             foreach my $oldCat ( @items ) {
                 my $name = $oldCat->[0];
                 my $value = $oldCat->[2];
-                $meta->put( "FORM", { name => "" } );
-                $meta->put( "FIELD",
+                $meta->put( 'FORM', { name => '' } );
+                $meta->put( 'FIELD',
                             { name => $name,
                               title => $name,
                               value => $value
@@ -741,13 +760,13 @@ sub upgradeCategoryTable {
         }
 
         my @fieldsInfo = $this->getFormDef( $web, $defaultFormTemplate );
-        $meta->put( "FORM", { name => $defaultFormTemplate } );
+        $meta->put( 'FORM', { name => $defaultFormTemplate } );
 
         foreach my $catInfop ( @fieldsInfo ) {
            my @catInfo = @$catInfop;
            my $fieldName = shift @catInfo;
            my $title = shift @catInfo;
-           my $value = "";
+           my $value = '';
            foreach my $oldCatP ( @items ) {
                my @oldCat = @$oldCatP;
                if( _cleanField( $oldCat[0] ) eq $fieldName ) {
@@ -755,7 +774,7 @@ sub upgradeCategoryTable {
                   last;
                }
            }
-           $meta->put( "FIELD",
+           $meta->put( 'FIELD',
                      {
                       name => $fieldName,
                       title => $title,

@@ -66,11 +66,11 @@ sub mailNotify {
     $webstr =~ s/\*/\.\*/g;
 
     my $twiki =
-      new TWiki( "", $TWiki::cfg{DefaultUserLogin}, "", "" );
+      new TWiki( '', $TWiki::cfg{DefaultUserLogin}, '', '' );
 
-    my $report = "";
+    my $report = '';
     foreach my $web ( grep( /$webstr/o,
-                            $twiki->{store}->getListOfWebs( "user ") )) {
+                            $twiki->{store}->getListOfWebs( 'user ') )) {
         $report .= _processWeb( $twiki, $web );
     }
     return $report;
@@ -82,14 +82,14 @@ sub _processWeb {
 
     if( ! $twiki->{store}->webExists( $web ) ) {
         print STDERR "**** ERROR mailnotifier cannot find web $web\n";
-        return "";
+        return '';
     }
 
     print "Processing $web\n" if $verbose;
 
     # Read the webnotify and load subscriptions
     my $wn = new TWiki::Contrib::MailerContrib::WebNotify( $twiki, $web );
-    my $report = "";
+    my $report = '';
     if ( $wn->isEmpty() ) {
         print "\t$web has no subscribers\n" if $verbose;
     } else {
@@ -106,8 +106,8 @@ sub _processChanges {
 
     my $wroot =  $TWiki::cfg{DataDir} . "/$web";
     my $timeOfLastNotify =
-      $twiki->{store}->readMetaData( $web, "mailnotify" ) || 0;
-    my $timeOfLastChange = "";
+      $twiki->{store}->readMetaData( $web, 'mailnotify' ) || 0;
+    my $timeOfLastChange = '';
 
     if ( $verbose ) {
         print "\tLast notification was at " .
@@ -124,11 +124,11 @@ sub _processChanges {
     # email in %changeset.
     my %seenset;
 
-    my $changes = $twiki->{store}->readMetaData( $web, "changes" );
+    my $changes = $twiki->{store}->readMetaData( $web, 'changes' );
 
     unless ( $changes ) {
         print "No changes\n" if ( $verbose );
-        return "";
+        return '';
     }
 
     foreach my $line ( reverse split( /\n/, $changes ) ) {
@@ -164,7 +164,7 @@ sub _processChanges {
 
     # Only update the memory topic if mails were sent
     if ( $sendmail ) {
-        $twiki->{store}->saveMetaData( $web, "mailnotify", $timeOfLastChange );
+        $twiki->{store}->saveMetaData( $web, 'mailnotify', $timeOfLastChange );
     }
     return $report;
 }
@@ -172,11 +172,11 @@ sub _processChanges {
 # PRIVATE generate and send an email for each user
 sub _generateEmails {
     my ( $twiki, $web, $changeset, $lastTime ) = @_;
-    my $report = "";
+    my $report = '';
 
-    my $skin = $twiki->{prefs}->getPreferencesValue( "SKIN" );
-    my $template = $twiki->{templates}->readTemplate( "changes", $skin );
-    my $from = $twiki->{prefs}->getPreferencesValue("WIKIWEBMASTER");
+    my $skin = $twiki->{prefs}->getPreferencesValue( 'SKIN' );
+    my $template = $twiki->{templates}->readTemplate( 'changes', $skin );
+    my $from = $twiki->{prefs}->getPreferencesValue('WIKIWEBMASTER');
     my $homeTopic = $TWiki::cfg{HomeTopicName};
 
     $template = $twiki->handleCommonTags( $template, $web, $homeTopic );
@@ -194,13 +194,13 @@ sub _generateEmails {
     $after = $twiki->{renderer}->getRenderedVersion( $after, $web,
                                                      $homeTopic );
 
-    my $mailtmpl = $twiki->{templates}->readTemplate( "mailnotify", $skin );
+    my $mailtmpl = $twiki->{templates}->readTemplate( 'mailnotify', $skin );
 
     my $sentMails = 0;
 
     foreach my $email ( keys %{$changeset} ) {
-        my $html = "";
-        my $plain = "";
+        my $html = '';
+        my $plain = '';
 
         foreach my $change (sort { $a->{TOPIC} cmp $b->{TOPIC} }
                             @{$changeset->{$email}} ) {
@@ -220,7 +220,7 @@ sub _generateEmails {
         $mail =~ s/%LASTDATE%/$lastTime/geo;
         $mail = $twiki->handleCommonTags( $mail, $web, $homeTopic );
 
-        my $url = "%SCRIPTURLPATH%";
+        my $url = '%SCRIPTURLPATH%';
         $url = $twiki->handleCommonTags( $url, $web, $homeTopic );
 
         # Inherited from mailnotify
@@ -232,7 +232,7 @@ sub _generateEmails {
         # remove <nop> and <noautolink> tags
         $mail =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
-        my $error = "";
+        my $error = '';
         if ( $sendmail ) {
             $error = $twiki->{net}->sendEmail( $mail, 5 );
         } else {

@@ -69,8 +69,8 @@ Generate a summary string
 =cut
 
 sub stringify {
-    my $self = shift;
-    return "AccessControlException: Access to $self->{-mode} $self->{-web}.$self->{-topic} for $self->{-user} is denied. $self->{-reason}";
+    my $this = shift;
+    return "AccessControlException: Access to $this->{-mode} $this->{-web}.$this->{-topic} for $this->{-user} is denied. $this->{-reason}";
 }
 
 1;

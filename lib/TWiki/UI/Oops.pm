@@ -55,25 +55,25 @@ sub oops_cgi {
     my $web = $session->{webName};
     my $query = $session->{cgiQuery};
 
-    my $tmplName = $query->param( 'template' ) || "oops";
+    my $tmplName = $query->param( 'template' ) || 'oops';
     my $skin = $session->getSkin();
 
     my $tmplData = $session->{templates}->readTemplate( $tmplName, $skin );
     if( ! $tmplData ) {
-        $tmplData = "<html><body>\n"
-          . "<h1>TWiki Installation Error</h1>\n"
-            . "Template file $tmplName.tmpl not found or template directory \n"
-              . "$TWiki::cfg{TemplateDir} not found.<p />\n"
-                . "Check the configuration setting for TemplateDir.\n"
-                  . "</body></html>\n";
+        $tmplData = '<html><body>'
+          . '<h1>TWiki Installation Error</h1>Template file'
+            . $tmplName.'.tmpl not found or template directory '
+              . "$TWiki::cfg{TemplateDir} not found.<p />"
+                . 'Check the configuration setting for TemplateDir.'
+                  . '</body></html>';
     } else {
-        my $param = $query->param( 'param1' ) || "";
+        my $param = $query->param( 'param1' ) || '';
         $tmplData =~ s/%PARAM1%/$param/go;
-        $param = $query->param( 'param2' ) || "";
+        $param = $query->param( 'param2' ) || '';
         $tmplData =~ s/%PARAM2%/$param/go;
-        $param = $query->param( 'param3' ) || "";
+        $param = $query->param( 'param3' ) || '';
         $tmplData =~ s/%PARAM3%/$param/go;
-        $param = $query->param( 'param4' ) || "";
+        $param = $query->param( 'param4' ) || '';
         $tmplData =~ s/%PARAM4%/$param/go;
 
         $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );

@@ -38,11 +38,11 @@ TWiki internal methods must be replaced by calls via the
 $SESSION object in this package, or via the Func package.
 For example, the call:
 
-my $pref = TWiki::getPreferencesValue("URGH");
+my $pref = TWiki::getPreferencesValue('URGH');
 
 should be replaced with
 
-my $pref = TWiki::Func::getPreferencesValue("URGH");
+my $pref = TWiki::Func::getPreferencesValue('URGH');
 
 and the call
 
@@ -127,23 +127,21 @@ sub new {
 
     my $this = bless( {}, $class );
 
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
     $this->{session} = $session;
 
     unless( $inited ) {
-        TWiki::registerTagHandler( "PLUGINDESCRIPTIONS",
+        TWiki::registerTagHandler( 'PLUGINDESCRIPTIONS',
                                    \&_handlePLUGINDESCRIPTIONS );
-        TWiki::registerTagHandler( "ACTIVATEDPLUGINS",
+        TWiki::registerTagHandler( 'ACTIVATEDPLUGINS',
                                    \&_handleACTIVATEDPLUGINS );
-        TWiki::registerTagHandler( "FAILEDPLUGINS",
+        TWiki::registerTagHandler( 'FAILEDPLUGINS',
                                    \&_handleFAILEDPLUGINS );
         $inited = 1;
     }
 
     return $this;
 }
-
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
 
 =pod
 
@@ -161,7 +159,7 @@ If disabled is set, no plugin handlers will be called.
 
 sub load {
     my ( $this, $disabled ) = @_;
-    ASSERT(ref($this) eq "TWiki::Plugins") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Plugins') if DEBUG;
 
     my %disabledPlugins;
 
@@ -169,7 +167,7 @@ sub load {
     # should be handled somewhere else. TWiki.pm?
     if( $ENV{'REDIRECT_STATUS'} && $ENV{'REDIRECT_STATUS'} eq '401' ) {
         # bail out if authentication failed
-        return "";
+        return '';
     }
 
     my $p;
@@ -196,7 +194,8 @@ sub load {
         }
     } else {
         # user-requested plugins
-        my $installed = $this->prefs()->getPreferencesValue( "INSTALLEDPLUGINS" ) || "";
+        my $prefs = $this->{session}->{prefs};
+        my $installed = $prefs->getPreferencesValue( 'INSTALLEDPLUGINS' ) || '';
         foreach $p ( grep { /^[A-Za-z0-9_]+Plugin$/ }
                      split( /[,\s]+/ , $installed )) {
             $p =~ s/\.([^.]+)$/$1/;
@@ -215,12 +214,12 @@ sub load {
             }
         }
 
-        my $disabled = $this->prefs()->getPreferencesValue( "DISABLEDPLUGINS" ) || "";
+        my $disabled = $prefs->getPreferencesValue( 'DISABLEDPLUGINS' ) || '';
         foreach $p ( grep { /^[A-Za-z0-9_]+Plugin$/ }
                      split( /[,\s]+/ , $disabled )) {
             if ( $p =~ /^.+Plugin$/ ) {
                 $p =~ s/\.([^.]+)$/$1/;
-                push( @{$this->{errors}}, "Disabled in DISABLEDPLUGINS" );
+                push( @{$this->{errors}}, 'Disabled in DISABLEDPLUGINS' );
                 $lookup{$p}->{disabled} = 1 if $lookup{$p};
             }
         }
@@ -230,7 +229,7 @@ sub load {
     foreach my $p ( @{$this->{plugins}} ) {
         if ( $disabled ) {
             # all plugins are disabled
-            push( @{$this->{errors}}, "all plugins are disabled" );
+            push( @{$this->{errors}}, 'all plugins are disabled' );
             $p->{disabled} = 1;
         } else {
             $user = $p->load();
@@ -266,7 +265,10 @@ Initialisation that is done after the user is known.
 
 sub enable {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::Plugins") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Plugins') if DEBUG;
+
+    # Set the session for this call stack
+    local $TWiki::Plugins::SESSION = $this->{session};
 
     foreach my $plugin ( @{$this->{plugins}} ) {
         $plugin->registerHandlers( $this );
@@ -289,7 +291,7 @@ be found or is not active, 0 is returned.
 
 sub getPluginVersion {
     my ( $this, $thePlugin ) = @_;
-    ASSERT(ref($this) eq "TWiki::Plugins") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Plugins') if DEBUG;
 
     return $VERSION unless $thePlugin;
 
@@ -306,7 +308,7 @@ sub getPluginVersion {
 sub _applyHandlers {
     # must be shifted to clear parameter vector
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::Plugins") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Plugins') if DEBUG;
     my $handlerName = shift;
 
     my $status;
@@ -373,7 +375,7 @@ sub _handleFAILEDPLUGINS {
 # note this is invoked with the session as the first parameter
 sub _handlePLUGINDESCRIPTIONS {
     my $this = shift->{plugins};
-    my $text = "";
+    my $text = '';
     foreach my $plugin ( @{$this->{plugins}} ) {
         $text .= $plugin->getDescription();
     }
@@ -384,7 +386,7 @@ sub _handlePLUGINDESCRIPTIONS {
 # note this is invoked with the session as the first parameter
 sub _handleACTIVATEDPLUGINS {
     my $this = shift->{plugins};
-    my $text = "";
+    my $text = '';
     foreach my $plugin ( @{$this->{plugins}} ) {
         unless( $plugin->{disabled} ) {
             $text .= "$plugin->{web}.$plugin->{name}, ";
@@ -404,7 +406,7 @@ Called by the register script
 
 sub registrationHandler {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::Plugins") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Plugins') if DEBUG;
     #my( $web, $wikiName, $loginName ) = @_;
     $this->_applyHandlers( 'registrationHandler', @_ );
 }
@@ -458,17 +460,17 @@ sub afterCommonTagsHandler {
    * =$text= - the text, with the head, verbatim and pre blocks replaced with placeholders
    * =\%removed= - reference to a hash that maps the placeholders to the removed blocks.
 
-Placeholders are text strings constructed using the tag name and a sequence number e.g. "pre1", "verbatim6", "head1" etc. Placeholders are inserted into the text inside \1 characters so the text will contain \1_pre1\1 for placeholder pre1.
+Placeholders are text strings constructed using the tag name and a sequence number e.g. 'pre1', "verbatim6", "head1" etc. Placeholders are inserted into the text inside \1 characters so the text will contain \1_pre1\1 for placeholder pre1.
 
 Each removed block is represented by the block text and the parameters passed to the tag (usually empty) e.g. for
 <verbatim>
-<pre class="slobadob">
+<pre class='slobadob'>
 XYZ
 </pre>
 the map will contain:
 <pre>
-$removed->{"pre1"}{text}:   XYZ
-$removed->{"pre1"}{params}: class="slobadob"
+$removed->{'pre1'}{text}:   XYZ
+$removed->{'pre1'}{params}: class="slobadob"
 </pre>
 
 Iterating over blocks for a single tag is easy. For example, to prepend a line number to every line of a pre block you might use this code:
@@ -633,7 +635,7 @@ Keys in $attrHashRef:
 | attachment  | Name of the attachment |
 | tmpFilename | Name of the local file that stores the upload |
 | comment     | Comment to be associated with the upload |
-| user        | Login name of the person submitting the attachment, e.g. "jsmith" |
+| user        | Login name of the person submitting the attachment, e.g. 'jsmith' |
 
 Note: All keys should be used read-only, except for comment which can be modified.
 
@@ -641,7 +643,7 @@ Example usage:
 
 <pre>
    my( $attrHashRef, $topic, $web ) = @_;
-   $$attrHashRef{"comment"} .= " (NOTE: Extracted from blah.tar.gz)";
+   $$attrHashRef{'comment'} .= " (NOTE: Extracted from blah.tar.gz)";
 </pre>
 
 =cut
@@ -668,7 +670,7 @@ Keys in $attrHashRef:
 | attachment  | Name of the attachment |
 | tmpFilename | Name of the local file that stores the upload |
 | comment     | Comment to be associated with the upload |
-| user        | Login name of the person submitting the attachment, e.g. "jsmith" |
+| user        | Login name of the person submitting the attachment, e.g. 'jsmith' |
 
 Note: All keys should be used read-only.
 

@@ -26,7 +26,7 @@ use TWiki::Func;
 #
 # To use this plugin, you will have to:
 # 1 Have HTML::Diff installed
-# 2 Create an empty topic in the "TWiki" web of your test installation,
+# 2 Create an empty topic in the 'TWiki' web of your test installation,
 #   called TestFixturePlugin.txt
 #
 # DO NOT USE THIS PLUGIN IN A USER INSTALLATION. IT IS DESIGNED FOR
@@ -87,7 +87,7 @@ sub _parse {
 # use HTML::Diff to compare the expected and actual contents
 sub _compareExpectedWithActual {
     my ( $expected, $actual, $topic, $web ) = @_;
-    my $errors = "";
+    my $errors = '';
 
     unless( $#$actual == $#$expected ) {
         my $mess = "Numbers of actual ($#$actual) and expected ($#$expected) blocks don't match<table width=\"100%\"><th>Expected</th><th>Actual</th></tr>";
@@ -110,7 +110,7 @@ sub _compareExpectedWithActual {
         if ( $e->{options} =~ /\bagain\b/ ) {
             my $prev = $expected->[$i-1];
             $et = $prev->{text};
-            # inherit the text so that the next "again" will see the
+            # inherit the text so that the next 'again' will see the
             # previous text
             $e->{text} = $et;
         }
@@ -135,7 +135,7 @@ sub _tidy {
 sub _compareResults {
     my ( $expected, $actual, $group, $opts ) = @_;
 
-    my $result = "";
+    my $result = '';
     my $diffs = HTML::Diff::html_word_diff( $expected, $actual );
     my $failed = 0;
     my $rex = ( $opts =~ /\brex\b/ );
@@ -161,7 +161,7 @@ sub _compareResults {
             $failed = 1;
         }
     }
-    return $failed ? "<table border=1><tr><th>Expected $opts</th><th>Actual</th></tr>$result</table>" : "";
+    return $failed ? "<table border=1><tr><th>Expected $opts</th><th>Actual</th></tr>$result</table>" : '';
 }
 
 sub _rexeq {
@@ -189,7 +189,7 @@ sub _rexeq {
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
-    TWiki::Func::registerTagHandler("STRICTTAG", \&_STRICTTAG);
+    TWiki::Func::registerTagHandler('STRICTTAG', \&_STRICTTAG);
 
     return 1;
 }
@@ -233,13 +233,13 @@ sub insidePREHandler {
 sub postRenderingHandler {
     my $q = TWiki::Func::getCgiQuery();
     my $t;
-    $t = $q->param( "test" ) if ( $q );
-    $t = "" unless $t;
+    $t = $q->param( 'test' ) if ( $q );
+    $t = '' unless $t;
 
-    if ( $t eq "compare" && $_[0] =~ /<!--\s*actual\s*-->/ ) {
+    if ( $t eq 'compare' && $_[0] =~ /<!--\s*actual\s*-->/ ) {
         my ( $meta, $expected ) = TWiki::Func::readTopic( $web, $topic );
-        my $res = _compareExpectedWithActual( _parse( $expected, "expected" ),
-                                              _parse( $_[0], "actual" ),
+        my $res = _compareExpectedWithActual( _parse( $expected, 'expected' ),
+                                              _parse( $_[0], 'actual' ),
                                               $topic, $web);
         if ( $res ) {
             $res = "<font color=\"red\">TESTS FAILED</font><p />$res";

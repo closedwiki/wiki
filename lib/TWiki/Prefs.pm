@@ -53,7 +53,7 @@ user is initialised using =initializeUser=.
 sub new {
     my( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
     $this->{session} = $session;
 
     my $web = $session->{webName};
@@ -86,7 +86,7 @@ read topic prefs if required.
 
 sub initializeUser {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
 
     my $web = $this->{session}->{webName};
     my $topic = $this->{session}->{topicName};
@@ -95,9 +95,9 @@ sub initializeUser {
     my $req = new TWiki::Prefs::PrefsCache($this->{session}, $this->{WEB} );
 
     my $topicPrefsSetting =
-      $this->getPreferencesFlag( "READTOPICPREFS", $web );
+      $this->getPreferencesFlag( 'READTOPICPREFS', $web );
     my $topicPrefsOverride =
-      $this->getPreferencesFlag( "TOPICOVERRIDESUSER", $web );
+      $this->getPreferencesFlag( 'TOPICOVERRIDESUSER', $web );
 
     if( $topicPrefsSetting && !$topicPrefsOverride ) {
         # topic prefs overridden by user prefs
@@ -128,10 +128,10 @@ subject to finalisation, and may be overridden by =getSessionValueHandler=.
 
 sub getPrefsFromTopic {
     my( $this, $web, $topic, $keyPrefix ) = @_;
-    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
     $this->{REQUEST}->setKeyPrefix( $keyPrefix ) if $keyPrefix;
     $this->{REQUEST}->loadPrefsFromTopic( $web, $topic );
-    $this->{REQUEST}->setKeyPrefix( "" ) if $keyPrefix;
+    $this->{REQUEST}->setKeyPrefix( '' ) if $keyPrefix;
 }
 
 =pod
@@ -144,7 +144,7 @@ hash, in order to accelerate substitutions.
 
 sub loadHash {
     my ( $this, $hash ) = @_;
-    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
 
     foreach my $set qw( REQUEST WEB GLOBAL ) {
         foreach my $key ( keys %{$this->{$set}->{prefs}} ) {
@@ -157,9 +157,9 @@ sub loadHash {
 }
 
 # PACKAGE PRIVATE
-# Returns 1 if the =$prefValue= is "on", and 0 otherwise.  "On" means set to
-# something with a true Perl-truth-value, with the special cases that "off" and
-# "no" are forced to false.  (Both of the latter are case-insensitive.)  Note
+# Returns 1 if the =$prefValue= is 'on', and 0 otherwise.  'On' means set to
+# something with a true Perl-truth-value, with the special cases that 'off' and
+# 'no' are forced to false.  (Both of the latter are case-insensitive.)  Note
 # also that leading and trailing whitespace on =$prefValue= will be stripped
 # prior to this conversion.
 
@@ -191,7 +191,7 @@ Always returns a string value, never undef.
 
 sub getPreferencesValue {
     my( $this, $key, $web ) = @_;
-    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
 
     my $val = $this->{session}->{plugins}->getSessionValueHandler( $key );
     return $val if defined( $val );
@@ -221,7 +221,7 @@ sub getPreferencesValue {
         $val = $this->{GLOBAL}->{prefs}{$key};
     }
 
-    return $val || "";
+    return $val || '';
 }
 
 =pod
@@ -230,9 +230,9 @@ sub getPreferencesValue {
 
 Returns the preference =$key= from =$web= as a flag.  See
 =getPreferencesValue= for the semantics of the parameters.
-Returns 1 if the pref value is "on", and 0 otherwise.  "On" means set to
-something with a true Perl-truth-value, with the special cases that "off" and
-"no" are forced to false.  (Both of the latter are case-insensitive.)  Note
+Returns 1 if the pref value is 'on', and 0 otherwise.  'On' means set to
+something with a true Perl-truth-value, with the special cases that 'off' and
+'no' are forced to false.  (Both of the latter are case-insensitive.)  Note
 also that leading and trailing whitespace on the pref value will be stripped
 prior to this conversion.
 
@@ -240,7 +240,7 @@ prior to this conversion.
 
 sub getPreferencesFlag {
     my( $this, $key, $web ) = @_;
-    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
 
     my $value = $this->getPreferencesValue( $key, $web );
     return _flag( $value );
@@ -267,7 +267,7 @@ will always return zero for these, rather than 'undef'.</strong>
 
 sub getPreferencesNumber {
     my( $this, $key, $web ) = @_;
-    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
 
     my $value = $this->getPreferencesValue( $key, $web );
 
@@ -285,8 +285,8 @@ sub getPreferencesNumber {
 
 #sub stringify {
 #    my $this = shift;
-#    ASSERT(ref($this) eq "TWiki::Prefs") if DEBUG;
-#    my $res = "";
+#    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
+#    my $res = '';
 #
 #    foreach my $set qw( REQUEST WEB GLOBAL ) {
 #        foreach my $key ( keys %{$this->{$set}->{prefs}} ) {

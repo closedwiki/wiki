@@ -37,20 +37,20 @@ sub preview {
     my $user = $session->{user};
 
     my $skin = $session->getSkin();
-    my $changeform = $query->param( 'submitChangeForm' ) || "";
-    my $dontNotify = $query->param( "dontnotify" ) || "";
-    my $saveCmd = $query->param( "cmd" ) || "";
-    my $theParent = $query->param( 'topicparent' ) || "";
-    my $formTemplate = $query->param( "formtemplate" );
-    my $textparam = $query->param( "text" );
+    my $changeform = $query->param( 'submitChangeForm' ) || '';
+    my $dontNotify = $query->param( 'dontnotify' ) || '';
+    my $saveCmd = $query->param( 'cmd' ) || '';
+    my $theParent = $query->param( 'topicparent' ) || '';
+    my $formTemplate = $query->param( 'formtemplate' );
+    my $textparam = $query->param( 'text' );
 
     TWiki::UI::checkWebExists( $session, $webName, $topic );
 
-    my $tmpl = "";
-    my $text = "";
-    my $ptext = "";
-    my $meta = "";
-    my $formFields = "";
+    my $tmpl = '';
+    my $text = '';
+    my $ptext = '';
+    my $meta = '';
+    my $formFields = '';
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
 
@@ -62,36 +62,36 @@ sub preview {
     }
 
     # get view template, standard view or a view with a different skin
-    $tmpl = $session->{templates}->readTemplate( "preview", $skin );
+    $tmpl = $session->{templates}->readTemplate( 'preview', $skin );
     $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
-    my $forceNewRevision = $query->param( "forcenewrevision" ) && 'checked="checked"' || '';
+    my $forceNewRevision = $query->param( 'forcenewrevision' ) && 'checked="checked"' || '';
     $tmpl =~ s/%FORCENEWREVISIONCHECKBOX%/$forceNewRevision/go;
     if( $saveCmd ) {
         unless( $user->isAdmin()) {
-            throw TWiki::UI::OopsException( $webName, $topic, "accessgroup",
+            throw TWiki::UI::OopsException( $webName, $topic, 'accessgroup',
                                         "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
         }
         $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
 
-    if( $saveCmd ne "repRev" ) {
-        my $dummy = "";
+    if( $saveCmd ne 'repRev' ) {
+        my $dummy = '';
         ( $meta, $dummy ) =
           $session->{store}->readTopic( $user, $webName, $topic, undef );
 
         # parent setting
-        if( $theParent eq "none" ) {
-            $meta->remove( "TOPICPARENT" );
+        if( $theParent eq 'none' ) {
+            $meta->remove( 'TOPICPARENT' );
         } elsif( $theParent ) {
-            $meta->put( "TOPICPARENT", { "name" => $theParent } );
+            $meta->put( 'TOPICPARENT', { 'name' => $theParent } );
         }
         $tmpl =~ s/%TOPICPARENT%/$theParent/go;
 
         if( $formTemplate ) {
-            $meta->remove( "FORM" );
-            $meta->put( "FORM", { name => $formTemplate } )
-              if( $formTemplate ne "none" );
+            $meta->remove( 'FORM' );
+            $meta->put( 'FORM', { name => $formTemplate } )
+              if( $formTemplate ne 'none' );
             $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
         } else {
             $tmpl =~ s/%FORMTEMPLATE%//go;
@@ -102,17 +102,17 @@ sub preview {
         $text = $textparam;
         unless ( defined $text ) {
             # empty topic not allowed
-            throw TWiki::UI::OopsException( $webName, $topic, "empty" );
+            throw TWiki::UI::OopsException( $webName, $topic, 'empty' );
         }
         #AS added hook for plugins that want to do heavy stuff
         $session->{plugins}->afterEditHandler( $text, $topic, $webName );
         $ptext = $text;
 
-        if( $meta->count( "FORM" ) ) {
+        if( $meta->count( 'FORM' ) ) {
             $formFields = &TWiki::Form::getFieldParams( $meta );
         }
     } else {
-        # undocumented "repRev" mode
+        # undocumented 'repRev' mode
         $text = $textparam; # text to save
         $ptext = $text;
         $meta = $session->{store}->extractMetaData( $webName, $topic, \$ptext );
@@ -124,7 +124,7 @@ sub preview {
     # done by getRenderedVersion with an override for the wikiword
     # handling.
     my $verbatim = {};
-    $ptext = $session->{renderer}->takeOutBlocks( $ptext, "verbatim",
+    $ptext = $session->{renderer}->takeOutBlocks( $ptext, 'verbatim',
                                                   $verbatim );
     $meta->updateSets( \$ptext );
     $ptext = $session->handleCommonTags( $ptext, $webName, $topic );
@@ -138,7 +138,7 @@ sub preview {
     $ptext =~ s/(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))/$1onclick="location.href='$oopsUrl\?template=oopspreview'"/goi;
 
     $session->{renderer}->putBackBlocks( $ptext, $verbatim,
-                                         "verbatim", "pre",
+                                         'verbatim', 'pre',
                                          \&TWiki::Render::verbatimCallBack );
 
     $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0, 0 );

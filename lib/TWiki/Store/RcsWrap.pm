@@ -48,50 +48,50 @@ use Assert;
 # implements RcsFile
 sub new {
     my( $class, $session, $web, $topic, $attachment ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
-    my $self =
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    my $this =
       bless(new TWiki::Store::RcsFile( $session, $web, $topic, $attachment ),
             $class );
-    $self->init();
-    return $self;
+    $this->init();
+    return $this;
 }
 
 # implements RcsFile
 sub initBinary {
-    my( $self ) = @_;
+    my( $this ) = @_;
 
-    $self->{binary} = 1;
+    $this->{binary} = 1;
 
     my ( $rcsOutput, $exit ) =
-      $self->{session}->{sandbox}->readFromProcess
+      $this->{session}->{sandbox}->readFromProcess
         ( $TWiki::cfg{RCS}{initBinaryCmd},
-          FILENAME => $self->{file} );
+          FILENAME => $this->{file} );
     if( $exit && $rcsOutput ) {
         $rcsOutput = "$TWiki::cfg{RCS}{initBinaryCmd}\n$rcsOutput";
-    } elsif( ! -e $self->{rcsFile} ) {
+    } elsif( ! -e $this->{rcsFile} ) {
         # Sometimes (on Windows?) rcs file not formed, so check for it
         $rcsOutput =
-          "$TWiki::cfg{RCS}{initBinaryCmd}\nFailed to create history file $self->{rcsFile}";
+          "$TWiki::cfg{RCS}{initBinaryCmd}\nFailed to create history file $this->{rcsFile}";
     }
     return $rcsOutput;
 }
 
 # implements RcsFile
 sub initText {
-    my( $self ) = @_;
+    my( $this ) = @_;
 
-    $self->{binary} = 0;
+    $this->{binary} = 0;
 
     my ( $rcsOutput, $exit ) =
-      $self->{session}->{sandbox}->readFromProcess
+      $this->{session}->{sandbox}->readFromProcess
         ( $TWiki::cfg{RCS}{initTextCmd},
-          FILENAME => $self->{file} );
+          FILENAME => $this->{file} );
     if( $exit && $rcsOutput ) {
         $rcsOutput = "$TWiki::cfg{RCS}{initTextCmd}\n$rcsOutput";
-    } elsif( ! -e $self->{rcsFile} ) {
+    } elsif( ! -e $this->{rcsFile} ) {
         # Sometimes (on Windows?) rcs file not formed, so check for it
         $rcsOutput =
-          "$TWiki::cfg{RCS}{initTextCmd}\nFailed to create history file $self->{rcsFile}";
+          "$TWiki::cfg{RCS}{initTextCmd}\nFailed to create history file $this->{rcsFile}";
     }
     return $rcsOutput;
 }
@@ -99,69 +99,69 @@ sub initText {
 # implements RcsFile
 # $date is ignored
 sub addRevision {
-    my( $self, $text, $comment, $user, $date ) = @_;
-    my $error = $self->_lock();
+    my( $this, $text, $comment, $user, $date ) = @_;
+    my $error = $this->_lock();
     return $error if $error;
-    $error = $self->_save( $self->{file}, \$text );
+    $error = $this->_save( $this->{file}, \$text );
     return $error if $error;
-    return $self->_ci( $comment, $user );
+    return $this->_ci( $comment, $user );
 }
 
 # implements RcsFile
 sub replaceRevision {
-    my( $self, $text, $comment, $user, $date ) = @_;
+    my( $this, $text, $comment, $user, $date ) = @_;
 
-    my $rev = $self->numRevisions();
+    my $rev = $this->numRevisions();
 
     # update repository with same userName and date
     if( $rev == 1 ) {
         # initial revision, so delete repository file and start again
-        unlink $self->{rcsFile};
+        unlink $this->{rcsFile};
     } else {
-        $self->_deleteRevision( $rev );
+        $this->_deleteRevision( $rev );
     }
-    $self->_saveFile( $self->{file}, $text );
-	$date = TWiki::Time::formatTime( $date , "\$rcs", "gmtime");
+    $this->_saveFile( $this->{file}, $text );
+	$date = TWiki::Time::formatTime( $date , '\$rcs', 'gmtime');
 
-    my $error = $self->_lock();
+    my $error = $this->_lock();
     return $error if $error;
 
-    my ($rcsOut, $exit) = $self->{session}->{sandbox}->readFromProcess
+    my ($rcsOut, $exit) = $this->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{ciDateCmd},
         DATE => $date,
         USERNAME => $user,
-        FILENAME => $self->{file} );
+        FILENAME => $this->{file} );
     if( $exit ) {
         $rcsOut = "$TWiki::cfg{RCS}{ciDateCmd}\n$rcsOut";
         return $rcsOut;
     }
-    chmod( 0644, $self->{file} );
+    chmod( 0644, $this->{file} );
 
     return undef;
 }
 
 # implements RcsFile
 sub deleteRevision {
-    my( $self ) = @_;
-    my $rev = $self->numRevisions();
+    my( $this ) = @_;
+    my $rev = $this->numRevisions();
     return undef if( $rev == 1 );
-    return $self->_deleteRevision( $rev );
+    return $this->_deleteRevision( $rev );
 }
 
 sub _deleteRevision {
-    my( $self, $rev ) = @_;
+    my( $this, $rev ) = @_;
 
     # delete latest revision (unlock (may not be needed), delete revision)
-    $self->{session}->{sandbox}->readFromProcess
+    $this->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{unlockCmd},
-        FILENAME => $self->{file} );
+        FILENAME => $this->{file} );
 
-    chmod( 0644, $self->{file} );
+    chmod( 0644, $this->{file} );
 
-    my ($rcsOut, $exit) = $self->{session}->{sandbox}->readFromProcess
+    my ($rcsOut, $exit) = $this->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{delRevCmd},
         REVISION => "1.$rev",
-        FILENAME => $self->{file} );
+        FILENAME => $this->{file} );
     if( $exit ) {
         $rcsOut = "$TWiki::cfg{RCS}{delRevCmd}\n$rcsOut";
         return $rcsOut;
@@ -170,35 +170,35 @@ sub _deleteRevision {
 
 # implements RcsFile
 sub getRevision {
-    my( $self, $version ) = @_;
+    my( $this, $version ) = @_;
 
-    my $tmpfile = "";
-    my $tmpRevFile = "";
+    my $tmpfile = '';
+    my $tmpRevFile = '';
     my $coCmd = $TWiki::cfg{RCS}{coCmd};
-    my $file = $self->{file};
-    if( $TWiki::cfg{OS} eq "WINDOWS" ) {
+    my $file = $this->{file};
+    if( $TWiki::cfg{OS} eq 'WINDOWS' ) {
         # Need to take temporary copy of topic, check it out to file,
         # then read that
         # Need to put RCS into binary mode to avoid extra \r appearing and
         # read from binmode file rather than stdout to avoid early file
         # read termination
-        $tmpfile = $self->_mkTmpFilename();
+        $tmpfile = $this->_mkTmpFilename();
         $tmpRevFile = "$tmpfile,v";
-        copy( $self->{rcsFile}, $tmpRevFile );
+        copy( $this->{rcsFile}, $tmpRevFile );
         my ($tmp) =
-          $self->{session}->{sandbox}->readFromProcess
+          $this->{session}->{sandbox}->readFromProcess
             ( $TWiki::cfg{RCS}{tmpBinaryCmd},
               FILENAME => $tmpRevFile );
         $file = $tmpfile;
         $coCmd =~ s/-p%REVISION%/-r%REVISION%/;
     }
-    my ($text) = $self->{session}->{sandbox}->readFromProcess
+    my ($text) = $this->{session}->{sandbox}->readFromProcess
       ( $coCmd,
         REVISION => "1.$version",
         FILENAME => $file );
 
     if( $tmpfile ) {
-        $text = $self->_readFile( $tmpfile );
+        $text = $this->_readFile( $tmpfile );
         # SMELL: Is untainting really necessary here?
         unlink TWiki::Sandbox::untaintUnchecked( $tmpfile );
         unlink TWiki::Sandbox::untaintUnchecked( $tmpRevFile );
@@ -208,16 +208,16 @@ sub getRevision {
 }
 
 sub numRevisions {
-    my( $self ) = @_;
+    my( $this ) = @_;
 
-    if( ! -e $self->{rcsFile} ) {
+    if( ! -e $this->{rcsFile} ) {
        return 0;
     }
 
     my ($rcsOutput) =
-      $self->{session}->{sandbox}->readFromProcess
+      $this->{session}->{sandbox}->readFromProcess
         ( $TWiki::cfg{RCS}{histCmd},
-          FILENAME => $self->{rcsFile} );
+          FILENAME => $this->{rcsFile} );
     if( $rcsOutput =~ /head:\s+\d+\.(\d+)\n/ ) {
         return $1;
     } else {
@@ -228,62 +228,62 @@ sub numRevisions {
 
 # implements RcsFile
 sub getRevisionInfo {
-    my( $self, $version ) = @_;
+    my( $this, $version ) = @_;
 
-    my $rcsError = "";
+    my $rcsError = '';
     my( $dummy, $rev, $date, $user, $comment );
-    if ( -e $self->{rcsFile} ) {
-        $version = $self->numRevisions() unless $version;
+    if ( -e $this->{rcsFile} ) {
+        $version = $this->numRevisions() unless $version;
         my $cmd = $TWiki::cfg{RCS}{infoCmd};
-        my ( $rcsOut, $exit ) = $self->{session}->{sandbox}->readFromProcess
+        my ( $rcsOut, $exit ) = $this->{session}->{sandbox}->readFromProcess
           ( $cmd,
             REVISION => "1.$version",
-            FILENAME => $self->{rcsFile} );
+            FILENAME => $this->{rcsFile} );
        $rcsError = "Error with $cmd, output: $rcsOut" if( $exit );
        if( ! $rcsError ) {
             if( $rcsOut =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/ ) {
-                $date = $1 || "";
-                $user = $2 || "";
-                $comment = $3 || "";
+                $date = $1 || '';
+                $user = $2 || '';
+                $comment = $3 || '';
                 $date = TWiki::Time::parseTime( $date );
                 if( $rcsOut =~ /revision 1.([0-9]*)/ ) {
                     $rev = $1;
                 }
             }
-            $rcsError = "Rev info missing from revision file $self->{rcsFile}" unless( $rev );
+            $rcsError = "Rev info missing from revision file $this->{rcsFile}" unless( $rev );
        }
     } else {
-       $rcsError = "Revision file $self->{rcsFile} is missing";
+       $rcsError = "Revision file $this->{rcsFile} is missing";
     }
 
     ( $dummy, $rev, $date, $user, $comment ) =
-      $self->_getRevisionInfoDefault() if( $rcsError );
+      $this->_getRevisionInfoDefault() if( $rcsError );
 
     return( $rcsError, $rev, $date, $user, $comment );
 }
 
 # implements RcsFile
 sub revisionDiff {
-    my( $self, $rev1, $rev2, $contextLines ) = @_;
+    my( $this, $rev1, $rev2, $contextLines ) = @_;
     
-    my $error = "";
+    my $error = '';
 
-    my $tmp = "";
+    my $tmp = '';
     my $exit;
-    if ( $rev1 eq "1" && $rev2 eq "1" ) {
-        my $text = $self->getRevision(1);
+    if ( $rev1 eq '1' && $rev2 eq '1' ) {
+        my $text = $this->getRevision(1);
         $tmp = "1a1\n";
         foreach( split( /\n/, $text ) ) {
            $tmp = "$tmp> $_\n";
         }
     } else {
-        $contextLines = "" unless defined($contextLines);
+        $contextLines = '' unless defined($contextLines);
         ( $tmp, $exit ) =
-          $self->{session}->{sandbox}->readFromProcess
+          $this->{session}->{sandbox}->readFromProcess
             ( $TWiki::cfg{RCS}{diffCmd},
               REVISION1 => "1.$rev1",
               REVISION2 => "1.$rev2",
-              FILENAME => $self->{rcsFile},
+              FILENAME => $this->{rcsFile},
               CONTEXT => $contextLines );
         $error = "Error $exit when running $TWiki::cfg{RCS}{diffCmd}";
     }
@@ -306,48 +306,48 @@ sub revisionDiff {
 sub parseRevisionDiff {
     my( $text ) = @_;
 
-    my ( $diffFormat ) = "normal"; #or rcs, unified...
+    my ( $diffFormat ) = 'normal'; #or rcs, unified...
     my ( @diffArray ) = ();
 
-    $diffFormat = "unified" if ( $text =~ /^---/ );
+    $diffFormat = 'unified' if ( $text =~ /^---/ );
 
     $text =~ s/\r//go;  # cut CR
 
     my $lineNumber=1;
-    if ( $diffFormat eq "unified" ) {
+    if ( $diffFormat eq 'unified' ) {
         foreach( split( /\n/, $text ) ) {
 	    if ( $lineNumber > 3 ) {   #skip the first 2 lines (filenames)
  	   	    if ( /@@ [-+]([0-9]+)([,0-9]+)? [-+]([0-9]+)(,[0-9]+)? @@/ ) {
 	    	        #line number
-		        push @diffArray, ["l", $1, $3];
+		        push @diffArray, ['l', $1, $3];
 		    } elsif ( /^\-/ ) {
 		        s/^\-//go;
-		        push @diffArray, ["-", $_, ""];
+		        push @diffArray, ['-', $_, ''];
 		    } elsif ( /^\+/ ) {
 		        s/^\+//go;
-		        push @diffArray, ["+", "", $_];
+		        push @diffArray, ['+', '', $_];
 		    } else {
 	  		s/^ (.*)$/$1/go;
-			push @diffArray, ["u", $_, $_];
+			push @diffArray, ['u', $_, $_];
 		    }
 	    }
 	    $lineNumber = $lineNumber + 1;
        	 }
     } else {
-        #"normal" rcsdiff output 
+        #'normal' rcsdiff output 
         foreach( split( /\n/, $text ) ) {
     	    if ( /^([0-9]+)[0-9\,]*([acd])([0-9]+)/ ) {
     	        #line number
-	        push @diffArray, ["l", $1, $3];
+	        push @diffArray, ['l', $1, $3];
 	    } elsif ( /^</ ) {
 	        s/^< //go;
-	            push @diffArray, ["-", $_, ""];
+	            push @diffArray, ['-', $_, ''];
 	    } elsif ( /^>/ ) {
 	        s/^> //go;
-	            push @diffArray, ["+", "", $_];
+	            push @diffArray, ['+', '', $_];
 	    } else {
 	        #empty lines and the --- selerator in the diff
-	        #push @diffArray, ["u", "$_", $_];
+	        #push @diffArray, ['u', $_, $_];
 	    }
         }
     }
@@ -355,13 +355,13 @@ sub parseRevisionDiff {
 }
 
 sub _ci {
-    my( $self, $comment, $user ) = @_;
+    my( $this, $comment, $user ) = @_;
 
-    $comment = "none" unless( $comment );
-    my ($rcsOutput, $exit) = $self->{session}->{sandbox}->readFromProcess
+    $comment = 'none' unless( $comment );
+    my ($rcsOutput, $exit) = $this->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{ciCmd},
         USERNAME => $user,
-        FILENAME => $self->{file},
+        FILENAME => $this->{file},
         COMMENT => $comment );
 
     if( $exit && $rcsOutput ) {
@@ -371,25 +371,25 @@ sub _ci {
     # A ci -u leaves the file unwriteable, so fix that. We are still
     # rather mean with the permissions, but at least the webserver user
     # can write!
-    chmod( 0644, $self->{file} );
+    chmod( 0644, $this->{file} );
 
     return $rcsOutput;
 }
 
 sub _lock {
-    my $self = shift;
+    my $this = shift;
 
-    return undef unless -e $self->{rcsFile};
+    return undef unless -e $this->{rcsFile};
 
     # Try and get a lock on the file
-    my ($rcsOutput, $exit) = $self->{session}->{sandbox}->readFromProcess
-      ( $TWiki::cfg{RCS}{lockCmd}, FILENAME => $self->{file} );
+    my ($rcsOutput, $exit) = $this->{session}->{sandbox}->readFromProcess
+      ( $TWiki::cfg{RCS}{lockCmd}, FILENAME => $this->{file} );
 
     if( $exit && $rcsOutput ) {
         $rcsOutput = "$TWiki::cfg{RCS}{lockCmd}\n$rcsOutput";
         return $rcsOutput;
     }
-    chmod( 0644, $self->{file} );
+    chmod( 0644, $this->{file} );
 
     return undef;
 }

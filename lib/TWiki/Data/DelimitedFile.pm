@@ -30,7 +30,7 @@ sub read {
     my $filename = $settings{filename};
     my $content = $settings{content};
     my $delimiter = $settings{delimiter} || "\t";
-    my $rowstart = $settings{rowstart} || "";
+    my $rowstart = $settings{rowstart} || '';
     my $rowend = $settings{rowend} || "\n";
     my %data;
     
@@ -68,13 +68,13 @@ sub read {
         # print Dumper(\@fieldValues);
         
         foreach my $colNumber (0..$#fieldNames) { #use a counter as incr thru headers
-            my $value = $fieldValues[$colNumber] || "";
+            my $value = $fieldValues[$colNumber] || '';
             my $field = $fieldNames[$colNumber];
             
             $value =~ s/\s+$//;
             $value =~ s/\"//g; #Excel sometimes puts in quotes
             #      print "'$field ($colNumber)'='$value'\n";
-            if ($field ne "") {
+            if ($field ne '') {
                 $data{$rowNumber}{$field} = $value;
             }
         }
@@ -92,7 +92,7 @@ sub save {
     my (%settings) = @_;
     my $filename = $settings{filename} || throw Error::Simple( "Save: filename parameter is mandatory" );
     my $delimiter = $settings{delimiter} || "\t";
-    my $rowstart = $settings{rowstart} || "";
+    my $rowstart = $settings{rowstart} || '';
     my $rowend = $settings{rowend} || "\n";
     my %data = %{$settings{data} || throw Error::Simple( "Save: data parameter is mandatory" )};
     my @fieldNames = @{$settings{fieldNames} || throw Error::Simple( "Save: fieldNames parameter is mandatory" )};
@@ -104,13 +104,13 @@ sub save {
     foreach my $row (keys %data) {
         print "r=$row\n";
         print Dumper($data{$row});
-        print $fh "$rowstart";
+        print $fh $rowstart;
         foreach my $field (@fieldNames) {
-            my $value = $data{$row}{$field} || "";
+            my $value = $data{$row}{$field} || '';
             print $fh $value;
             print $fh $delimiter; # SMELL I know this adds an extra delimiter. I don't care.
         }
-        print $fh "$rowend";
+        print $fh $rowend;
     }
     close $fh;
 }

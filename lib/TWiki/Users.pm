@@ -44,7 +44,7 @@ Construct the user management object
 
 sub new {
     my ( $class, $session, $impl ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
     my $this = bless( {}, $class );
 
     # Do a dynamic 'use locale' for this module
@@ -69,35 +69,28 @@ sub new {
     return $this;
 }
 
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
-sub store { my $this = shift; return $this->{session}->{store}; }
-sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
-sub security { my $this = shift; return $this->{session}->{security}; }
-sub templates { my $this = shift; return $this->{session}->{templates}; }
-sub renderer { my $this = shift; return $this->{session}->{renderer}; }
-
 # get a list of groups defined in this TWiki 
 sub _getListOfGroups {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::Users") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
 
     my @list;
-    $this->search()->searchWeb
+    $this->{session}->{search}->searchWeb
       (
        _callback     => \&_collateGroups,
        _cbdata       => \@list,
        inline        => 1,
        search        => "Set GROUP =",
-       web           => "all",
+       web           => 'all',
        topic         => "*Group",
-       type          => "regex",
-       nosummary     => "on",
-       nosearch      => "on",
-       noheader      => "on",
-       nototal       => "on",
-       noempty       => "on",
+       type          => 'regex',
+       nosummary     => 'on',
+       nosearch      => 'on',
+       noheader      => 'on',
+       nototal       => 'on',
+       noempty       => 'on',
        format	     => "\$web.\$topic",
-       separator     => "",
+       separator     => '',
       );
 
     return @list;
@@ -114,7 +107,7 @@ sub _collateGroups {
 # list of user names. Used by User.pm
 sub expandUserList {
     my( $this, $theItems, $expand ) = @_;
-    ASSERT(ref($this) eq "TWiki::Users") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
 
     # comma delimited list of users or groups
     # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
@@ -152,7 +145,7 @@ If =$nocreate= is false, and no =$wikiname= is given, then the
 
 sub findUser {
     my( $this, $name, $wikiname, $dontCreate ) = @_;
-    ASSERT(ref($this) eq "TWiki::Users") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
     ASSERT($name) if DEBUG;
     my $object;
 
@@ -177,7 +170,7 @@ sub findUser {
     # if no wikiname is given, try and recover it from
     # TWikiUsers
     unless( $wikiname ) {
-        $wikiname = $this->{U2W}{$name};
+        $wikiname = $this->_lookupLoginName( $name );
     }
 
     if( !$wikiname &&
@@ -186,7 +179,7 @@ sub findUser {
         $t = "$TWiki::cfg{UsersWebName}.$t" unless $1;
         # not in TWiki users as a login name; see if it is
         # a WikiName
-        my $lUser = $this->{W2U}{$t};
+        my $lUser = $this->_lookupWikiName( $t );
         if( $lUser ) {
             # it's a wikiname
             $name = $lUser;
@@ -224,7 +217,7 @@ sub _createUser {
 # Get the password implementation
 sub _getPasswordHandler {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::Users") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
 
     unless( $this->{passwordHandler} ) {
         $this->{passwordHandler} = $this->{IMPL}->new( $this->{session} );
@@ -245,20 +238,21 @@ Register.pm, or manually outside TWiki.
 sub addUserToTWikiUsersTopic {
     my ( $this, $user, $me ) = @_;
 
-    ASSERT(ref($this) eq "TWiki::Users") if DEBUG;
-    ASSERT(ref($user) eq "TWiki::User") if DEBUG;
-    ASSERT(ref($me) eq "TWiki::User") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
+    ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
+    ASSERT(ref($me) eq 'TWiki::User') if DEBUG;
 
+    my $store = $this->{session}->{store};
     my( $meta, $text ) =
-      $this->store()->readTopic( undef, $TWiki::cfg{UsersWebName},
+      $store->readTopic( undef, $TWiki::cfg{UsersWebName},
                                  $TWiki::cfg{UsersTopicName}, undef );
-    my $result = "";
+    my $result = '';
     my $entry = "\t* ";
     $entry .= $user->web()."."
       unless $user->web() eq $TWiki::cfg{UsersWebName};
     $entry .= $user->wikiName()." - ";
     $entry .= $user->login() . " - " if $user->login();
-    my $today = TWiki::Time::formatTime(time(), "\$day \$mon \$year", "gmtime");
+    my $today = TWiki::Time::formatTime(time(), '$day $mon $year', 'gmtime');
 
     # add to the cache
     $this->{U2W}{$user->login()} = $user->{web} . "." , $user->wikiName();
@@ -283,7 +277,7 @@ sub addUserToTWikiUsersTopic {
                 # don't adjust if unchanged
                 return $TWiki::cfg{UsersTopicName} if( $entry eq $line );
                 $result .= "$entry\n";
-                $entry = "";
+                $entry = '';
                 # don't add existing user entry twice
                 next if $isit;
             }
@@ -295,7 +289,7 @@ sub addUserToTWikiUsersTopic {
         # brand new file - add to end
         $result .= "$entry$today\n";
     }
-    $this->store()->saveTopic( $me, $TWiki::cfg{UsersWebName},
+    $store->saveTopic( $me, $TWiki::cfg{UsersWebName},
                                $TWiki::cfg{UsersTopicName},
                                $result, $meta );
 
@@ -308,7 +302,7 @@ sub addUserToTWikiUsersTopic {
 # via TWiki's .htpasswd mechanism.
 sub _cacheTWikiUsersTopic {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::Users") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
 
     return if $this->{CACHED};
     $this->{CACHED} = 1;
@@ -316,8 +310,9 @@ sub _cacheTWikiUsersTopic {
     %{$this->{U2W}} = ();
     %{$this->{W2U}} = ();
     my @list = ();
+    my $store = $this->{session}->{store};
     if( $TWiki::cfg{MapUserToWikiName} ) {
-        my $text = $this->store()->readTopicRaw( undef, $TWiki::cfg{UsersWebName},
+        my $text = $store->readTopicRaw( undef, $TWiki::cfg{UsersWebName},
                                                  $TWiki::cfg{UsersTopicName},
                                                  undef );
         @list = split( /\n/, $text );
@@ -337,8 +332,8 @@ sub _cacheTWikiUsersTopic {
             $wUser = $2;	# WikiName
             $lUser = $3;	# userid
             $lUser =~ s/$TWiki::cfg{NameFilter}//go;	# FIXME: Should filter in for security...
-            $this->{U2W}{$lUser} = "$web.$wUser";
-            $this->{W2U}{"$web.$wUser"} = $lUser;
+            $this->{U2W}{$lUser} = $web.'.'.$wUser;
+            $this->{W2U}{$web.'.'.$wUser} = $lUser;
         }
     }
 }
@@ -382,11 +377,11 @@ sub initializeRemoteUser {
     $remoteUser =~ s/$TWiki::cfg{NameFilter}//go;
     $remoteUser = TWiki::Sandbox::untaintUnchecked( $remoteUser );
 
-    my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
+    my $remoteAddr = $ENV{'REMOTE_ADDR'} || '';
 
     if( $ENV{'REDIRECT_STATUS'} && $ENV{'REDIRECT_STATUS'} eq '401' ) {
         # bail out if authentication failed
-        $remoteAddr = "";
+        $remoteAddr = '';
     }
 
     if( ! $TWiki::cfg{RememberUserIPAddress} || ! $remoteAddr ) {
@@ -394,8 +389,9 @@ sub initializeRemoteUser {
         return $remoteUser;
     }
 
+    my $store = $this->{session}->{store};
     my $text =
-      $this->store()->readFile( $TWiki::cfg{RemoteUserFileName} );
+      $store->readFile( $TWiki::cfg{RemoteUserFileName} );
 
     # Assume no I18N characters in userids, as for email addresses
     # FIXME: Needs fixing for IPv6?
@@ -403,7 +399,7 @@ sub initializeRemoteUser {
       grep { /^[0-9\.]+\|[A-Za-z0-9]+\|$/ }
         split( /\n/, $text );
 
-    my $rememberedUser = "";
+    my $rememberedUser = '';
     if( exists( $AddrToName{ $remoteAddr } ) ) {
         $rememberedUser = $AddrToName{ $remoteAddr };
     }
@@ -421,7 +417,7 @@ sub initializeRemoteUser {
                     $text .= "$usrAddr|$usrName|\n";
                 }
             }
-            $this->store()->saveFile( $TWiki::cfg{RemoteUserFileName}, $text );
+            $store->saveFile( $TWiki::cfg{RemoteUserFileName}, $text );
         }
     } else {
         # get user name from AddrToName table
@@ -433,7 +429,7 @@ sub initializeRemoteUser {
 
 # Translates username (e.g. jsmith) to Web.WikiName
 # (e.g. Main.JaneSmith) by lookup in TWikiUsers.
-sub __lookupLoginName {
+sub _lookupLoginName {
     my( $this, $loginUser ) = @_;
 
     return undef unless $loginUser;
@@ -446,7 +442,7 @@ sub __lookupLoginName {
 
 # Translates Web.WikiName (e.g. Main.JaneSmith) to
 # username (e.g. jsmith) to by lookup in TWikiUsers.
-sub __lookupWikiName {
+sub _lookupWikiName {
     my( $this, $wikiName ) = @_;
 
     return undef unless $wikiName;

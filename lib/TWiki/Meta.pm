@@ -24,7 +24,7 @@
 Meta-data handling.
 
 A meta-data object is a hash of different types of meta-data (keyed on
-the type, such as "FIELD" and "TOPICINFO").
+the type, such as 'FIELD' and 'TOPICINFO').
 
 Each entry in the hash is an array, where each entry in the array
 contains another hash of the key=value pairs, corresponding to a
@@ -63,24 +63,21 @@ Construct a new, empty Meta collection.
 
 sub new {
     my ( $class, $session, $web, $topic ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
-    my $self = bless( {}, $class );
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    my $this = bless( {}, $class );
 
     # Note: internal fields must be prepended with _. All other
     # fields will be assumed to be meta-data.
-    $self->{_session} = $session;
+    $this->{_session} = $session;
 
     ASSERT($web) if DEBUG;
     ASSERT($topic) if DEBUG;
 
-    $self->{_web} = $web;
-    $self->{_topic} = $topic;
+    $this->{_web} = $web;
+    $this->{_topic} = $topic;
 
-    return $self;
+    return $this;
 }
-
-sub store { my $this = shift; return $this->{_session}->{store}; }
-sub users { my $this = shift; return $this->{_session}->{users}; }
 
 =pod
 
@@ -94,19 +91,19 @@ represented.
 =cut
 
 sub put {
-    my( $self, $type, $args ) = @_;
-    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
+    my( $this, $type, $args ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
 
-    my $data = $self->{$type};
+    my $data = $this->{$type};
     my $key = _key( $type );
 
     if( $data ) {
         if( $key ) {
-            my $found = "";
+            my $found = '';
             my $keyName = $args->{$key};
             my @data = @$data;
             unless( $keyName ) {
-                $self->{_session}->writeWarning( "Meta: Required $key parameter is missing for META:$type" );
+                $this->{_session}->writeWarning( "Meta: Required $key parameter is missing for META:$type" );
                 return;
             }
             for( my $i = 0; $i < scalar( @$data ); $i++ ) {
@@ -124,17 +121,17 @@ sub put {
         }
     } else {
         my @data = ( $args );
-        $self->{$type} = \@data;
+        $this->{$type} = \@data;
     }
 }
 
 # ===========================
-# Give the key field for a type, "" if no key
+# Give the key field for a type, '' if no key
 
 sub _key {
     my $type = shift;
 
-    return "name" if( $type eq "FIELD" || $type eq "FILEATTACHMENT" );
+    return 'name' if( $type eq 'FIELD' || $type eq 'FILEATTACHMENT' );
 
     return undef;
 }
@@ -153,10 +150,10 @@ The result is a reference to the hash for the item.
 =cut
 
 sub get {
-    my( $self, $type, $keyValue ) = @_;
-    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
+    my( $this, $type, $keyValue ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
 
-    my $data = $self->{$type};
+    my $data = $this->{$type};
     my $key = _key( $type );
 
     if( $data ) {
@@ -185,10 +182,10 @@ if there are no entries.
 =cut
 
 sub find {
-    my( $self, $type ) = @_;
-    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
+    my( $this, $type ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
 
-    my $itemsr = $self->{$type};
+    my $itemsr = $this->{$type};
     my @items = ();
 
     if( $itemsr ) {
@@ -211,27 +208,27 @@ With a $type and a $key it will remove only the specific item.
 =cut
 
 sub remove {
-    my( $self, $type, $keyValue ) = @_;
-    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
+    my( $this, $type, $keyValue ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
 
     my %args = ();
-    my $key = "";
+    my $key = '';
     $key = _key( $type ) if( $type );
 
     if( $keyValue && $key ) {
-       my $data = $self->{$type};
+       my $data = $this->{$type};
        my @newData = ();
        foreach my $item ( @$data ) {
            if( $item->{$key} ne $keyValue ) {
                push @newData, $item;
            }
        }
-       $self->{$type} = \@newData;
+       $this->{$type} = \@newData;
     } elsif( $type ) {
-       delete $self->{$type};
+       delete $this->{$type};
     } else {
-       $self = {};
-       bless $self;
+       $this = {};
+       bless $this;
     }
 }
 
@@ -252,17 +249,17 @@ SMELL: this is a shallow copy
 =cut
 
 sub copyFrom {
-    my( $self, $otherMeta, $type ) = @_;
-    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
-    ASSERT(ref($otherMeta) eq "TWiki::Meta") if DEBUG;
+    my( $this, $otherMeta, $type ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
+    ASSERT(ref($otherMeta) eq 'TWiki::Meta') if DEBUG;
 
     if( $type ) {
         my $data = $otherMeta->{$type};
-        $self->{$type} = $data if $data;
+        $this->{$type} = $data if $data;
     } else {
         foreach my $k ( keys %$otherMeta ) {
             unless( $k =~ /^_/ ) {
-                $self->copyFrom( $otherMeta, $k );
+                $this->copyFrom( $otherMeta, $k );
             }
         }
     }
@@ -277,9 +274,9 @@ Return the number of entries of the given type that are in this meta set
 =cut
 
 sub count {
-    my( $self, $type ) = @_;
-    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
-    my $data = $self->{$type};
+    my( $this, $type ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
+    my $data = $this->{$type};
 
     return scalar @$data if( defined( $data ));
 
@@ -300,20 +297,20 @@ Add TOPICINFO type data to the object, as specified by the parameters.
 =cut
 
 sub addTOPICINFO {
-    my( $self, $web, $topic, $rev, $time, $user ) = @_;
-    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
+    my( $this, $web, $topic, $rev, $time, $user ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
 
     $time ||= time();
-    $user ||= $self->{_session}->{user};
+    $user ||= $this->{_session}->{user};
 
     $rev = 1 unless $rev;
 
-    $self->put( "TOPICINFO",
+    $this->put( 'TOPICINFO',
                 {
                  # compatibility; older versions of the code use
                  # RCS rev numbers save with them so old code can
                  # read these topics
-                 version => "1.$rev",
+                 version => '1.$rev',
                  date    => $time,
                  author  => $user->wikiName(),
                  format  => $formatVersion
@@ -334,22 +331,23 @@ $rev is an integer revision number.
 =cut
 
 sub getRevisionInfo {
-    my $self = shift;
-    ASSERT(ref($self) eq "TWiki::Meta") if DEBUG;
+    my $this = shift;
+    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
 
-    my $topicinfo = $self->get( "TOPICINFO" );
+    my $topicinfo = $this->get( 'TOPICINFO' );
 
     my( $date, $author, $rev, $comment );
     if( $topicinfo ) {
-       $date = $topicinfo->{"date"} ;
-       $author = $self->users()->findUser($topicinfo->{"author"});
-       $rev = $topicinfo->{"version"};
-       $rev =~ s/^\d+\.//;
-       $comment = "";
+        $date = $topicinfo->{date} ;
+        $author = $this->{_session}->{users}->findUser($topicinfo->{author});
+        $rev = $topicinfo->{version};
+        $rev =~ s/^\d+\.//;
+        $comment = '';
     } else {
-       # Get data from Store
-       ( $date, $author, $rev, $comment ) =
-         $self->store()->getRevisionInfo( $self->{_web}, $self->{_topic}, 0 );
+        # Get data from Store
+        my $store = $this->{_session}->{store};
+        ( $date, $author, $rev, $comment ) =
+          $store->getRevisionInfo( $this->{_web}, $this->{_topic}, 0 );
     }
 
     return( $date, $author, $rev, $comment );
@@ -359,7 +357,7 @@ sub getRevisionInfo {
 
 ---++ ObjectMethod updateSets( \$text )
 
-If there are any settings "Set SETTING = value" in =$text= for a setting
+If there are any settings 'Set SETTING = value' in =$text= for a setting
 that is set in form metadata in =$meta=, these are changed so that the
 value in the =$text= setting is the same as the one set in the =$meta= form.
 
@@ -367,15 +365,15 @@ value in the =$text= setting is the same as the one set in the =$meta= form.
 
 sub updateSets {
     my( $this, $rtext ) = @_;
-    ASSERT(ref($this) eq "TWiki::Meta") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
 
-    my $form = $this->get( "FORM" );
+    my $form = $this->get( 'FORM' );
     if( $form ) {
-        my @fields = $this->find( "FIELD" );
+        my @fields = $this->find( 'FIELD' );
         foreach my $field ( @fields ) {
-            my $key = $field->{"name"};
-            my $value = $field->{"value"};
-            my $attributes = $field->{"attributes"};
+            my $key = $field->{name};
+            my $value = $field->{value};
+            my $attributes = $field->{attributes};
             if( $attributes && $attributes =~ /[S]/o ) {
                 $value =~ s/\n/\\\n/o;
                 # SMELL: Worry about verbatim?  Multi-lines?
@@ -404,7 +402,7 @@ sub merge {
     my $data = $other->{FIELD};
     if( $data ) {
         foreach my $otherD ( @$data ) {
-            my $thisD = $this->get( "FIELD", $otherD->{name} );
+            my $thisD = $this->get( 'FIELD', $otherD->{name} );
             if ( $thisD && $thisD->{value} ne $otherD->{value} ) {
                 my $merged = TWiki::Merge::insDelMerge( $otherD->{value},
                                                         $thisD->{value},
@@ -412,7 +410,7 @@ sub merge {
                 # SMELL: we don't merge attributes or title
                 $thisD->{value} = $merged;
             } elsif ( !$thisD ) {
-                $this->put("FIELD", $otherD );
+                $this->put('FIELD', $otherD );
             }
         }
     }
@@ -420,9 +418,9 @@ sub merge {
     $data = $other->{FILEATTACHMENT};
     if( $data ) {
         foreach my $otherD ( @$data ) {
-            my $thisD = $this->get( "FILEATTACHMENT", $otherD->{name} );
+            my $thisD = $this->get( 'FILEATTACHMENT', $otherD->{name} );
             if ( !$thisD ) {
-                $this->put("FILEATTACHMENT", $otherD );
+                $this->put('FILEATTACHMENT', $otherD );
             }
         }
     }

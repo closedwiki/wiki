@@ -64,7 +64,7 @@ Constructor. Creates a new template database object.
 
 sub new {
     my ( $class, $session ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
     my $this = bless( {}, $class );
     $this->{session} = $session;
 
@@ -72,14 +72,6 @@ sub new {
 
     return $this;
 }
-
-sub users { my $this = shift; return $this->{session}->{users}; }
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
-sub store { my $this = shift; return $this->{session}->{store}; }
-sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
-sub security { my $this = shift; return $this->{session}->{security}; }
-sub templates { my $this = shift; return $this->{session}->{templates}; }
-sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 =pod
 
@@ -91,7 +83,7 @@ Return true if the template exists and is loaded into the cache
 
 sub haveTemplate {
     my ( $this, $template ) = @_;
-    ASSERT(ref($this) eq "TWiki::Templates") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Templates') if DEBUG;
 
     return exists( $this->{VARS}{ $template } );
 }
@@ -116,7 +108,7 @@ to do this in the MacrosPlugin.
 
 sub expandTemplate {
     my( $this, $theParam ) = @_;
-    ASSERT(ref($this) eq "TWiki::Templates") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Templates') if DEBUG;
 
     my $attrs = new TWiki::Attrs( $theParam );
     my $value = $this->_tmplP( $attrs->{_DEFAULT} );
@@ -128,15 +120,15 @@ sub expandTemplate {
 # If $theVar is the name of a previously defined template, returns the text of
 # that template after recursive expansion of any TMPL:P tags it contains.
 sub _tmplP {
-    # Print template variable, called by %TMPL:P{"$theVar"}%
+    # Print template variable, called by %TMPL:P{$theVar}%
     my( $this, $theVar ) = @_;
 
-    my $val = "";
+    my $val = '';
     if( exists($this->{VARS}{ $theVar } )) {
         $val = $this->{VARS}{ $theVar };
         $val =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/$this->_tmplP($1)/geo;  # recursion
     }
-    if( ( $theVar eq "sep" ) && ( ! $val ) ) {
+    if( ( $theVar eq 'sep' ) && ( ! $val ) ) {
         # set separator explicitly if not set
         $val = " | ";
     }
@@ -160,7 +152,7 @@ Reads a template, constructing a candidate name for the template thus
      TWiki::cfg{SystemWebName}.
    * If no skin is specified, topic is ${Topic}Template.
 In the event that the read fails (template not found, access permissions fail)
-returns the empty string "".
+returns the empty string ''.
 
 skin, web and topic names are forced to an upper-case first character
 when composing user topic names.
@@ -173,7 +165,7 @@ list of loaded templates, overwriting any previous definition.
 
 sub readTemplate {
     my( $this, $theName, $theSkin, $theWeb ) = @_;
-    ASSERT(ref($this) eq "TWiki::Templates") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Templates') if DEBUG;
 
     if( ! defined($theSkin) ) {
         $theSkin = $this->{session}->getSkin();
@@ -195,27 +187,27 @@ sub readTemplate {
         return $text;
     }
 
-    my $result = "";
-    my $key  = "";
-    my $val  = "";
-    my $delim = "";
+    my $result = '';
+    my $key  = '';
+    my $val  = '';
+    my $delim = '';
     foreach( split( /(%TMPL\:)/, $text ) ) {
         if( /^(%TMPL\:)$/ ) {
             $delim = $1;
         } elsif( ( /^DEF{[\s\"]*(.*?)[\"\s]*}%[\n\r]*(.*)/s ) && ( $1 ) ) {
-            # handle %TMPL:DEF{"key"}%
+            # handle %TMPL:DEF{key}%
             if( $key ) {
                 $this->{VARS}{ $key } = $val;
             }
             $key = $1;
-            $val = $2 || "";
+            $val = $2 || '';
 
         } elsif( /^END%[\n\r]*(.*)/s ) {
             # handle %TMPL:END%
             $this->{VARS}{ $key } = $val;
-            $key = "";
-            $val = "";
-            $result .= $1 || "";
+            $key = '';
+            $val = '';
+            $result .= $1 || '';
 
         } elsif( $key ) {
             $val    .= "$delim$_";
@@ -231,17 +223,17 @@ sub readTemplate {
     return $result;
 }
 
-# STATIC: Return value: raw template text, or "" if read fails
+# STATIC: Return value: raw template text, or '' if read fails
 sub _readTemplateFile {
     my( $this, $theName, $theSkin, $theWeb ) = @_;
-    $theSkin = "" unless $theSkin; # prevent 'uninitialized value' warnings
+    $theSkin = '' unless $theSkin; # prevent 'uninitialized value' warnings
 
     $theName =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
     $theName =~ s/\.+/\./g;                      # Filter out ".." from filename
     $theSkin =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
     $theSkin =~ s/\.+/\./g;                      # Filter out ".." from filename
 
-    my $tmplFile = "";
+    my $tmplFile = '';
 
     # search first in twiki/templates/Web dir
     # for file script(.skin).tmpl
@@ -254,7 +246,7 @@ sub _readTemplateFile {
         if( ! grep { /^$tmplFile$/ } @filelist ) {
             $tmplFile = "$theName.tmpl";
             if( ! grep { /^$tmplFile$/ } @filelist ) {
-                $tmplFile = "";
+                $tmplFile = '';
             }
         }
         if( $tmplFile ) {
@@ -271,7 +263,7 @@ sub _readTemplateFile {
         if( ! grep { /^$tmplFile$/ } @filelist ) {
             $tmplFile = "$theName.tmpl";
             if( ! grep { /^$tmplFile$/ } @filelist ) {
-                $tmplFile = "";
+                $tmplFile = '';
             }
         }
         if( $tmplFile ) {
@@ -279,16 +271,17 @@ sub _readTemplateFile {
         }
     }
 
+    my $store = $this->{session}->{store};
     # read the template file
     if( $tmplFile && -e $tmplFile ) {
-        return $this->store()->readFile( $tmplFile );
+        return $store->readFile( $tmplFile );
     }
 
     # See if it is a user topic. Search first in current web
     # twiki web. Note that neither web nor topic may be variables
     # when used in a template name.
-    if ( $theSkin ne "" ) {
-        $theSkin = ucfirst( $theSkin ) . "Skin";
+    if ( $theSkin ne '' ) {
+        $theSkin = ucfirst( $theSkin ) . 'Skin';
     }
 
     my $theTopic;
@@ -298,23 +291,23 @@ sub _readTemplateFile {
         $theTopic = ucfirst( $2 );
     } else {
         $theWeb = $this->{session}->{webName};
-        $theTopic = $theSkin . ucfirst( $theName ) . "Template";
-        if ( !$this->store()->topicExists( $theWeb, $theTopic )) {
+        $theTopic = $theSkin . ucfirst( $theName ) . 'Template';
+        if ( !$store->topicExists( $theWeb, $theTopic )) {
             $theWeb = $TWiki::cfg{SystemWebName};
         }
     }
 
-    if ( $this->store()->topicExists( $theWeb, $theTopic ) &&
-         $this->security()->checkAccessPermission( "view",
+    if ( $store->topicExists( $theWeb, $theTopic ) &&
+         $this->{session}->{security}->checkAccessPermission( 'view',
                                                    $this->{session}->{user},
-                                                   "",
+                                                   '',
                                                    $theTopic, $theWeb )) {
         my ( $meta, $text ) =
-          $this->store()->readTopic( undef, $theWeb, $theTopic, undef );
+          $store->readTopic( undef, $theWeb, $theTopic, undef );
         return $text;
     }
 
-    return "";
+    return '';
 }
 
 1;

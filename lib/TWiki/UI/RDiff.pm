@@ -43,11 +43,11 @@ use TWiki::UI::OopsException;
 #TODO: this needs to be exposed to plugins and whoever might want to over-ride the rendering of diffs
 #Hash, indexed by diffType (+,-,c,u,l.....)
 #contains {colour, CssClassName}
-my %diffColours = ( "+" => [ "#ccccff", "twikiDiffAddedMarker"],
-                    "-" => [ "#ff9999", "twikiDiffDeletedMarker"],
-                    "c" => [ "#99ff99", "twikiDiffChangedText"],
-                    "u" => [ "#ffffff", "twikiDiffUnchangedText"],
-                    "l" => [ "#eeeeee", "twikiDiffLineNumberHeader"] );
+my %diffColours = ( '+' => [ '#ccccff', 'twikiDiffAddedMarker'],
+                    '-' => [ '#ff9999', 'twikiDiffDeletedMarker'],
+                    'c' => [ '#99ff99', 'twikiDiffChangedText'],
+                    'u' => [ '#ffffff', 'twikiDiffUnchangedText'],
+                    'l' => [ '#eeeeee', 'twikiDiffLineNumberHeader'] );
 
 #SVEN - new design.
 #main gets the info (NO MAJOR CHANGES NEEDED)
@@ -71,7 +71,7 @@ my %diffColours = ( "+" => [ "#ccccff", "twikiDiffAddedMarker"],
 #| TODO: | need to fix unmatched <p>, <div> and.... |
 sub _renderCellData {
     my( $session, $data, $web, $topic ) = @_;
-    if (( $data ) && ( $data ne "" )) {
+    if (( $data ) && ( $data ne '' )) {
         #improve meta-data diff's - Main.PeterKlausner
         if( $data =~ /%META/ ) {
             $data =~ s(^%META:TOPICPARENT.*="([^"]+).*$)
@@ -90,11 +90,11 @@ sub _renderCellData {
             my $i = 0;
             if( $bTable > $eTable ) {
                 for( $i = $eTable; $i < $bTable; $i++ ) {
-                    $data .= "</table>";
+                    $data .= '</table>';
                 }
             } elsif( $bTable < $eTable ) {
                 for( $i = $bTable; $i < $eTable; $i++ ) {
-                    $data = "\n<table>$data";
+                    $data = "\n<table>".$data;
                 }
             } elsif( ( $bTable == 0 ) && ( $eTable == 0 ) ) {
                 $data = "\n<table>$data\n</table>";
@@ -115,29 +115,47 @@ sub _renderCellData {
 sub _renderSideBySide
 {
     my ( $session, $web, $topic, $diffType, $left, $right ) = @_;
-    my $result = "";
+    my $result = '';
 
     $left = _renderCellData( $session, $left, $web, $topic );
     $right = _renderCellData( $session, $right, $web, $topic );
 
-    if ( $diffType eq "-") {
-        $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top">$left&nbsp;</td>);
-        $result .= qq(<td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$right&nbsp;</td></tr>\n);
+    if ( $diffType eq '-') {
+        $result .= '<tr><td bgcolor="'.$diffColours{'-'}[0].
+          '" class="'.$diffColours{'-'}[1].
+            '" valign="top">'.$left.'&nbsp;</td>';
+        $result .= '<td bgcolor="'.$diffColours{u}[0].
+          '" class="'.$diffColours{u}[1].
+            '" valign="top">'.$right.'&nbsp;</td></tr>';
     } elsif ( $diffType eq "+") {
-        $result .= qq(<tr><td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$left&nbsp;</td>);
-        $result .= qq(<td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top">$right&nbsp;</td></tr>\n);
+        $result .= '<tr><td bgcolor="'.$diffColours{u}[0].
+          '" class="'.$diffColours{u}[1].
+            '" valign="top">'.$left.'&nbsp;</td>';
+        $result .= '<td bgcolor="'.$diffColours{"+"}[0].
+          '" class="'.$diffColours{"+"}[1].
+            '" valign="top">'.$right.'&nbsp;</td></tr>';
     } elsif ( $diffType eq "u") {
-        $result .= qq(<tr><td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$left&nbsp;</td>);
-        $result .= qq(<td bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" valign="top">$right&nbsp;</td></tr>\n);
+        $result .= '<tr><td bgcolor="'.$diffColours{u}[0].
+          '" class="'.$diffColours{u}[1].
+            '" valign="top">'.$left.'&nbsp;</td>';
+        $result .= '<td bgcolor="'.$diffColours{u}[0].
+          '" class="'.$diffColours{u}[1].
+            '" valign="top">'.$right.'&nbsp;</td></tr>';
     } elsif ( $diffType eq "c") {
-        $result .= qq(<tr><td bgcolor="$diffColours{"c"}[0]" class="$diffColours{"c"}[1]" valign="top">$left&nbsp;</td>);
-        $result .= qq(<td bgcolor="$diffColours{"c"}[0]" class="$diffColours{"c"}[1]" valign="top">$right&nbsp;</td></tr>\n);
+        $result .= '<tr><td bgcolor="'.$diffColours{c}[0].
+          '" class="'.$diffColours{c}[1].
+            '" valign="top">'.$left.'&nbsp;</td>';
+        $result .= '<td bgcolor="'.$diffColours{c}[0].
+          '" class="'.$diffColours{c}[1].
+            '" valign="top">'.$right.'&nbsp;</td></tr>';
     } elsif ( $diffType eq "l") {
-        if (( $left ne "" ) && ($right ne "" )) {
-            $result .= qq(<tr bgcolor="$diffColours{"l"}[0]" class="$diffColours{"l"}[1]"><th align="center">Line: $left</th><th align="center">Line: $right</th></tr>\n);
+        if (( $left ne '' ) && ($right ne '' )) {
+            $result .= '<tr bgcolor="'.$diffColours{l}[0].
+              '" class="'.$diffColours{l}[1].
+                '"><th align="center">Line: '.$left.
+                  '</th><th align="center">Line: '.$right.'</th></tr>';
         }
     }
-    
     return $result;
 }
 
@@ -150,7 +168,7 @@ sub _renderSideBySide
 sub _renderDebug
 {
     my ( $diffType, $left, $right ) = @_;
-    my $result = "";
+    my $result = '';
 
     #de-html-ize
     $left =~ s/</&lt;/go;
@@ -158,9 +176,9 @@ sub _renderDebug
     $left =~ s/>/&gt;/go;
     $right =~ s/>/&gt;/go;
 
-    $result = "<hr>type: $diffType\n";
-    $result .= "<div style=\"border: 1px dotted;\">$left</div>\n";
-    $result .= "<div style=\"border: 1px dotted;\">$right</div>\n";
+    $result = '<hr>type: '.$diffType."\n";
+    $result .= '<div style="border: 1px dotted;">'.$left.'</div>';
+    $result .= '<div style="border: 1px dotted;">'.$right.'</div>';
 
     return $result;
 }
@@ -175,39 +193,51 @@ sub _renderDebug
 sub _renderSequential
 {
     my ( $session, $web, $topic, $diffType, $left, $right ) = @_;
-    my $result = "";
+    my $result = '';
 
     #note: I have made the colspan 9 to make sure that it spans all columns (thought there are only 2 now)
-    if ( $diffType eq "-") {
-        $result .= qq(<tr><td bgcolor="#FFD7D7" class="twikiDiffDeletedHeader" colspan ="9"><b> Deleted: </b>\n</td></tr>\n);
-        $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top" width="1%">&lt;<br />&lt;</td>\n);
-        $result .= qq(<td class="twikiDiffDeletedText">\n);
+    if ( $diffType eq '-') {
+        $result .= '<tr><td bgcolor="#FFD7D7" class="twikiDiffDeletedHeader" colspan ="9"><b> Deleted: </b></td></tr>';
+        $result .= '<tr><td bgcolor="'.$diffColours{"-"}[0].
+          '" class="'.$diffColours{"-"}[1].
+            '" valign="top" width="1%">&lt;<br />&lt;</td>';
+        $result .= '<td class="twikiDiffDeletedText">';
         $result .= _renderCellData( $session, $left, $web, $topic );
-        $result .= qq(\n</td></tr>\n);
-    } elsif ( $diffType eq "+") {
-        $result .= qq(<tr><td bgcolor="#D0FFD0" class="twikiDiffAddedHeader" colspan ="9"><b> Added:   </b>\n</td></tr>\n);
-        $result .= qq(<tr><td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top" width="1%">&gt;<br />&gt;</td>\n);
-        $result .= qq(<td class="twikiDiffAddedText">\n);
+        $result .= '</td></tr>';
+    } elsif ( $diffType eq '+') {
+        $result .= '<tr><td bgcolor="#D0FFD0" class="twikiDiffAddedHeader" colspan ="9"><b> Added:   </b></td></tr>';
+        $result .= '<tr><td bgcolor="'.$diffColours{"+"}[0].
+          '" class="'.$diffColours{"+"}[1].
+            '" valign="top" width="1%">&gt;<br />&gt;</td>';
+        $result .= '<td class="twikiDiffAddedText">';
         $result .= _renderCellData( $session, $right, $web, $topic );
-        $result .= qq(\n</td></tr>\n);
-    } elsif ( $diffType eq "u") {
-        $result .= qq(<tr><td valign="top" bgcolor="$diffColours{"u"}[0]" class="$diffColours{"u"}[1]" width="1%"><br /></td>\n);
-        $result .= qq(<td class="twikiDiffUnchangedText">\n);
+        $result .= '</td></tr>';
+    } elsif ( $diffType eq 'u') {
+        $result .= '<tr><td valign="top" bgcolor="'.$diffColours{u}[0].
+          '" class="'.$diffColours{u}[1].
+            '" width="1%"><br /></td>';
+        $result .= '<td class="twikiDiffUnchangedText">';
         $result .= _renderCellData( $session, $right, $web, $topic );
-        $result .= qq(\n</td></tr>\n);
-    } elsif ( $diffType eq "c") {
-        $result .= qq(<tr><td bgcolor="#D0FFD0" class="twikiDiffChangedHeader" colspan ="9"><b> Changed: </b></td></tr>\n);
-        $result .= qq(<tr><td bgcolor="$diffColours{"-"}[0]" class="$diffColours{"-"}[1]" valign="top" width="1%">&lt;<br />&lt;</td>\n);
-        $result .= qq(<td class="twikiDiffDeletedText">\n);
+        $result .= '</td></tr>';
+    } elsif ( $diffType eq 'c') {
+        $result .= '<tr><td bgcolor="#D0FFD0" class="twikiDiffChangedHeader" colspan ="9"><b> Changed: </b></td></tr>';
+        $result .= '<tr><td bgcolor="'.$diffColours{"-"}[0].
+          '" class="'.$diffColours{"-"}[1].
+            '" valign="top" width="1%">&lt;<br />&lt;</td>';
+        $result .= '<td class="twikiDiffDeletedText">';
         $result .= _renderCellData( $session, $left, $web, $topic );
-        $result .= qq(\n</td></tr>\n);
-        $result .= qq(<tr><td bgcolor="$diffColours{"+"}[0]" class="$diffColours{"+"}[1]" valign="top" width="1%">&gt;<br />&gt;</td>\n);
-        $result .= qq(<td class="twikiDiffAddedText">\n);
+        $result .= '</td></tr>';
+        $result .= '<tr><td bgcolor="'.$diffColours{"+"}[0].
+          '" class="'.$diffColours{"+"}[1].
+            '" valign="top" width="1%">&gt;<br />&gt;</td>';
+        $result .= '<td class="twikiDiffAddedText">';
         $result .= _renderCellData( $session, $right, $web, $topic );
-        $result .= qq(\n</td></tr>\n);
-    } elsif ( $diffType eq "l") {
-        if (( $left ne "" ) && ($right ne "" )) {
-            $result .= qq(<tr bgcolor="$diffColours{"l"}[0]" class="twikiDiffLineNumberHeader"><th align="left" colspan="9">Line: $left to $right</th></tr>\n);
+        $result .= '</td></tr>';
+    } elsif ( $diffType eq 'l') {
+        if (( $left ne '' ) && ($right ne '' )) {
+            $result .= '<tr bgcolor="'.$diffColours{"l"}[0].
+              '" class="twikiDiffLineNumberHeader"><th align="left" colspan="9">Line: '.
+                "$left to $right</th></tr>";
         }
     }
 
@@ -238,43 +268,43 @@ sub _renderRevisionDiff
 	}
 	my $diffArray_ref = \@diffArray;
 
-    my $result = "<table class=\"twikiDiffTable\" width=\"100%\" cellspacing=\"0\">\n";
-    my $data = "";
+    my $result = '<table class="twikiDiffTable" width="100%" cellspacing="0">';
+    my $data = '';
     my $diff_ref = undef;
     for my $next_ref ( @$diffArray_ref ) {
-    	if (( @$next_ref[0] eq "l" ) && ( @$next_ref[1] eq 0 ) && (@$next_ref[2] eq 0)) {
+    	if (( @$next_ref[0] eq 'l' ) && ( @$next_ref[1] eq 0 ) && (@$next_ref[2] eq 0)) {
 	    next;
 		}
 		if (! $diff_ref ) {
 		   $diff_ref = $next_ref;
 		   next;
 		}
-		if (( @$diff_ref[0] eq "-" ) && ( @$next_ref[0] eq "+" )) {
-		    $diff_ref = ["c", @$diff_ref[1], @$next_ref[2]];
+		if (( @$diff_ref[0] eq '-' ) && ( @$next_ref[0] eq '+' )) {
+		    $diff_ref = ['c', @$diff_ref[1], @$next_ref[2]];
     	        $next_ref = undef;
 		}
-		if ( $renderStyle eq "sequential" ) {
+		if ( $renderStyle eq 'sequential' ) {
 		    $result .= _renderSequential ( $session, $web, $topic, @$diff_ref );
-		} elsif ( $renderStyle eq "sidebyside" ) {
-    		    $result .= "<tr><td width=\"50%\"></td><td width=\"50%\"></td></tr>\n";
+		} elsif ( $renderStyle eq 'sidebyside' ) {
+    		    $result .= '<tr><td width="50%"></td><td width="50%"></td></tr>';
 		    $result .= _renderSideBySide ( $session, $web, $topic, @$diff_ref );
-		} elsif ( $renderStyle eq "debug" ) {
+		} elsif ( $renderStyle eq 'debug' ) {
 		    $result .= _renderDebug ( @$diff_ref );
 		}
 		$diff_ref = $next_ref;
 	}
 #don't forget the last one ;)
    if ( $diff_ref ) {
-	if ( $renderStyle eq "sequential" ) {
+	if ( $renderStyle eq 'sequential' ) {
 	    $result .= _renderSequential ( $session, $web, $topic, @$diff_ref );
-	} elsif ( $renderStyle eq "sidebyside" ) {
-    	    $result .= "<tr><td width=\"50%\"></td><td width=\"50%\"></td></tr>\n";
+	} elsif ( $renderStyle eq 'sidebyside' ) {
+    	    $result .= '<tr><td width="50%"></td><td width="50%"></td></tr>';
 	    $result .= _renderSideBySide ( $session, $web, $topic, @$diff_ref );
-	} elsif ( $renderStyle eq "debug" ) {
+	} elsif ( $renderStyle eq 'debug' ) {
 	    $result .= _renderDebug ( @$diff_ref );
 	}
     }
-    return "$result\n<\/table>";
+    return $result."\n<\/table>";
 }
 
 =pod
@@ -307,34 +337,34 @@ sub diff {
     my $topic = $session->{topicName};
 
     my $renderStyle = $query->param('render');
-    $renderStyle = $session->{prefs}->getPreferencesValue( "DIFFRENDERSTYLE" ) unless ( $renderStyle );
+    $renderStyle = $session->{prefs}->getPreferencesValue( 'DIFFRENDERSTYLE' ) unless ( $renderStyle );
     my $diffType = $query->param('type');
     my $contextLines = $query->param('context');
-    $contextLines = $session->{prefs}->getPreferencesValue( "DIFFCONTEXTLINES" ) unless ( $contextLines );
+    $contextLines = $session->{prefs}->getPreferencesValue( 'DIFFCONTEXTLINES' ) unless ( $contextLines );
     my $skin = $session->getSkin();
-    my $rev1 = $query->param( "rev1" );
-    my $rev2 = $query->param( "rev2" );
+    my $rev1 = $query->param( 'rev1' );
+    my $rev2 = $query->param( 'rev2' );
 
-    $renderStyle = "sequential" if ( ! $renderStyle );
-    $diffType = "diff" if ( ! $diffType );
+    $renderStyle = 'sequential' if ( ! $renderStyle );
+    $diffType = 'diff' if ( ! $diffType );
     $contextLines = 3 unless ( defined $contextLines );
 
     TWiki::UI::checkWebExists( $session, $webName, $topic );
 
-    my $tmpl = "";
-    my $diff = "";
+    my $tmpl = '';
+    my $diff = '';
     my $maxrev= 1;
     my $i = $maxrev;
     my $j = $maxrev;
-    my $revTitle1 = "";
-    my $revTitle2 = "";
-    my $revInfo = "";
+    my $revTitle1 = '';
+    my $revTitle2 = '';
+    my $revInfo = '';
     my $isMultipleDiff = 0;
     my( $before, $difftmpl, $after, $tail);
     my $topicExists;
 
-    $tmpl = $session->{templates}->readTemplate( "rdiff", $skin );
-    $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
+    $tmpl = $session->{templates}->readTemplate( 'rdiff', $skin );
+    $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{'parent'}%
 
     ( $before, $difftmpl, $after, $tail) = split( /%REPEAT%/, $tmpl);
 
@@ -350,7 +380,7 @@ sub diff {
         $rev2 = $session->{store}->cleanUpRevID( $rev2 );
         if( $rev2 < 1 )       { $rev2 = 1; }
         if( $rev2 > $maxrev ) { $rev2 = $maxrev; }
-        if ( $diffType eq "last" ) {
+        if ( $diffType eq 'last' ) {
             $rev1 = $maxrev;
             $rev2 = $maxrev-1;
         }
@@ -363,7 +393,7 @@ sub diff {
         $rev2 = 1;
     }
 
-    # format "before" part
+    # format 'before' part
     $before =~ s/%REVTITLE1%/$revTitle1/go;
     $before =~ s/%REVTITLE2%/$revTitle2/go;
     $before = $session->handleCommonTags( $before, $webName, $topic );
@@ -376,8 +406,8 @@ sub diff {
     if( $topicExists ) {
         my $r1 = $rev1;
         my $r2 = $rev2;
-        my $rInfo = "";
-        if (( $diffType eq "history" ) && ( $r1 > $r2 + 1)) {
+        my $rInfo = '';
+        if (( $diffType eq 'history' ) && ( $r1 > $r2 + 1)) {
             $r2 = $r1 - 1;
             $isMultipleDiff = 1;
         }
@@ -402,7 +432,7 @@ sub diff {
             $r1 = $r1 - 1;
             $r2 = $r2 - 1;
             if( $r2 < 1 ) { $r2 = 1; }
-        } while( ( $diffType eq "history") && (( $r1 > $rev2 ) || ( $r1 == 1 )) );
+        } while( ( $diffType eq 'history') && (( $r1 > $rev2 ) || ( $r1 == 1 )) );
 
     } else {
         $diff = $difftmpl;
@@ -415,13 +445,13 @@ sub diff {
 
     if( $TWiki::cfg{Log}{rdiff} ) {
         # write log entry
-        $session->writeLog( "rdiff", "$webName.$topic", "$rev1 $rev2" );
+        $session->writeLog( 'rdiff', $webName.'.'.$topic, "$rev1 $rev2" );
     }
 
-    # format "after" part
+    # format 'after' part
     $i = $maxrev;
     $j = $maxrev;
-    my $revisions = "";
+    my $revisions = '';
     my $breakRev = 0;
     if( ( $TWiki::cfg{NumberOfRevisions} > 0 ) && ( $TWiki::cfg{NumberOfRevisions} < $maxrev ) ) {
         $breakRev = $maxrev - $TWiki::cfg{NumberOfRevisions} + 1;
@@ -434,7 +464,7 @@ sub diff {
                 $i = 1;
             } else {
                 if( ( $i == $rev1 ) && ( !$isMultipleDiff ) ) {
-                    $revisions .= " | &gt;";
+                    $revisions .= ' | &gt;';
                 } else {
                     $j = $i - 1;
                     $revisions .= " | <a href=\"$session->{scriptUrlPath}/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=$j\" $TWiki::cfg{NoFollow}>&gt;</a>";
@@ -445,10 +475,12 @@ sub diff {
     }
 
     $i = $rev1;
-    my $tailResult = "";
-    my $revTitle   = "";
+    my $tailResult = '';
+    my $revTitle   = '';
     while( $i >= $rev2) {
-        $revTitle = "<a href=\"$session->{scriptUrlPath}/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\" $TWiki::cfg{NoFollow}>$i</a>";
+        $revTitle = '<a href="'.$session->{scriptUrlPath}.
+          '/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev='.$i.'" '.
+            "$TWiki::cfg{NoFollow}>$i</a>";
         $revInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $i, undef );
         $tailResult .= $tail;
         $tailResult =~ s/%REVTITLE%/$revTitle/go;

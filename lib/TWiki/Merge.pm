@@ -67,7 +67,7 @@ sub insDelMerge {
                                         \@out,
                                         \@a,
                                         \@b );
-    return join( "", @out);
+    return join( '', @out);
 }
 
 sub _acceptA {

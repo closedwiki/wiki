@@ -28,10 +28,10 @@ sub save {
     my $url;
 
     my $wikiUserName = TWiki::Func::getWikiUserName();
-    if( ! TWiki::Func::checkAccessPermission( "change", $wikiUserName, "",
+    if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '',
 											  $topic, $web ) ) {
         # user has no permission to change the topic
-        $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsaccesschange" );
+        $url = TWiki::Func::getOopsUrl( $web, $topic, 'oopsaccesschange' );
     } else {
         $inSave = 1;
 
@@ -55,16 +55,16 @@ sub prompt {
     #my ( $previewing, $text, $web, $topic ) = @_;
 
     my $defaultType = 
-      TWiki::Func::getPreferencesValue("COMMENTPLUGIN_DEFAULT_TYPE") ||
-          "below";
+      TWiki::Func::getPreferencesValue('COMMENTPLUGIN_DEFAULT_TYPE') ||
+          'below';
 
-    my $message = "";
+    my $message = '';
     # Is commenting disabled?
-    my $disable = "";
+    my $disable = '';
     if ( $_[0] ) {
         # We are in Preview mode
         $message  = "(Edit - Preview)";
-        $disable = "disabled";
+        $disable = 'disabled';
     }
 
     my $idx = 0;
@@ -79,9 +79,9 @@ sub _handleInput {
     $attributes =~ s/^{(.*)}$/$1/o if ( $attributes );
     my $attrs = new TWiki::Attrs( $attributes, 1 );
     my $type =
-      $attrs->remove( "type" ) || $attrs->remove( "mode" ) || $defaultType;
-    my $silent = $attrs->remove( "nonotify" );
-    my $location = $attrs->remove( "location" );
+      $attrs->remove( 'type' ) || $attrs->remove( 'mode' ) || $defaultType;
+    my $silent = $attrs->remove( 'nonotify' );
+    my $location = $attrs->remove( 'location' );
 
     # clean off whitespace
     $type =~ m/(\S*)/o;
@@ -99,7 +99,7 @@ sub _handleInput {
     # see if this comment is targeted at a different topic, and
     # change the url if it is.
     my $anchor = undef;
-    my $target = $attrs->remove( "target" );
+    my $target = $attrs->remove( 'target' );
     if ( $target ) {
         # extract web and anchor
         if ( $target =~ s/^(\w+)\.//o ) {
@@ -108,55 +108,55 @@ sub _handleInput {
         if ( $target =~ s/(#\w+)$//o ) {
             $anchor = $1;
         }
-        if ( $target ne "" ) {
+        if ( $target ne '' ) {
             $topic = $target;
         }
     }
 
-    my $url = "";
-    if ( $disable eq "" ) {
+    my $url = '';
+    if ( $disable eq '' ) {
         # invoke viewauth so we get authentication. When viewauth is run,
         # the 'save' method in here will be invoked as the commenTagsHandler
-        # is run as flagged by the "comment_action" parameter.
-        $url = TWiki::Func::getScriptUrl( $web, $topic, "viewauth" );
+        # is run as flagged by the 'comment_action' parameter.
+        $url = TWiki::Func::getScriptUrl( $web, $topic, 'viewauth' );
     }
 
-    my $noform = $attrs->remove("noform") || "";
+    my $noform = $attrs->remove('noform') || '';
 
     if ( $input !~ m/^%RED%/o ) {
         $input =~ s/%DISABLED%/$disable/go;
         $input =~ s/%MESSAGE%/$message/g;
         my $n = $$pidx + 0;
 
-        unless ($noform eq "on") {
-            $input = "<form name=\"${disable}$type$n\" " .
-              "action=\"$disable$url\" method=\"${disable}post\">$input";
+        unless ($noform eq 'on') {
+            $input = '<form name="'.$disable.$type.$n.'" ' .
+              'action="'.$disable.$url.'" method="post">'.$input;
         }
-        if ( $disable eq "" ) {
-            $input .= "<input name=\"comment_action\" " .
-              "type=\"hidden\" value=\"save\" />";
-            $input .= "<input name=\"comment_type\" " .
-              "type=\"hidden\" value=\"$type\" />";
+        if ( $disable eq '' ) {
+            $input .= '<input name="comment_action" ' .
+              'type="hidden" value="save" />';
+            $input .= '<input name="comment_type" ' .
+              'type="hidden" value="'.$type.'" />';
             # remember to unlock the page
-            $input .= "<input name=\"unlock\" " .
-              "type=\"hidden\" value=\"1\" />";
+            $input .= '<input name="unlock" ' .
+              'type="hidden" value="1" />';
             if( defined( $silent )) {
-                $input .= "<input name=\"comment_quietly\" " .
-                  "type=\"hidden\" value=\"1\" />";
+                $input .= '<input name="comment_quietly" ' .
+                  'type="hidden" value="1" />';
             }
             if ( $location ) {
-                $input .= "<input name=\"comment_location\" " .
-                  "type=\"hidden\" value=\"$location\" />";
+                $input .= '<input name="comment_location" ' .
+                  'type="hidden" value="'.$location.'" />';
             } elsif ( $anchor ) {
-                $input .= "<input name=\"comment_anchor\" " .
-                  "type=\"hidden\" value=\"$anchor\" />";
+                $input .= '<input name="comment_anchor" ' .
+                  'type="hidden" value="'.$anchor.'" />';
             } else {
-                $input .= "<input name=\"comment_index\" " .
-                  "type=\"hidden\" value=\"$$pidx\" />";
+                $input .= '<input name="comment_index" ' .
+                  'type="hidden" value="'.$$pidx.'" />';
             }
         }
-        unless ($noform eq "on") {
-            $input .= "</form>";
+        unless ($noform eq 'on') {
+            $input .= '</form>';
         }
     }
     $$pidx++;
@@ -169,8 +169,8 @@ sub _getTemplate {
 
     # Get the templates.
     my $templateFile =
-      TWiki::Func::getPreferencesValue("COMMENTPLUGIN_TEMPLATES") ||
-          "comments";
+      TWiki::Func::getPreferencesValue('COMMENTPLUGIN_TEMPLATES') ||
+          'comments';
 
     my $templates =
       TWiki::Func::loadTemplate( $templateFile );
@@ -182,7 +182,7 @@ sub _getTemplate {
 
     my $t = TWiki::Func::expandTemplate( $name );
     return "%RED%No such template def %<nop>TMPL:DEF{$name}%%ENDCOLOR%"
-      unless ( defined($t) && $t ne "" );
+      unless ( defined($t) && $t ne '' );
 
     return $t;
 }
@@ -212,17 +212,17 @@ sub _buildNewTopic {
 
     # Expand the template
     $output =~ s/%POS:(.*?)%//go;
-    my $position = $1 || "AFTER";
+    my $position = $1 || 'AFTER';
 
     # Expand common variables in the template, but don't expand other
     # tags.
     $output = TWiki::Func::expandVariablesOnTopicCreation($output);
 
     my $bloody_hell = TWiki::Func::readTopicText( $web, $topic, undef, 1 );
-    my $premeta = "";
-    my $postmeta = "";
+    my $premeta = '';
+    my $postmeta = '';
     my $inpost = 0;
-    my $text = "";
+    my $text = '';
     foreach my $line ( split( /\n/, $bloody_hell )) {
         if( $line =~ /^(%META:[^{]+{[^}]*}%)/ ) {
             if ( $inpost) {
@@ -236,9 +236,9 @@ sub _buildNewTopic {
         }
     }
 
-    if ( $position eq "TOP" ) {
-        $text = "$output$text";
-    } elsif ( $position eq "BOTTOM" ) {
+    if ( $position eq 'TOP' ) {
+        $text = $output.$text;
+    } elsif ( $position eq 'BOTTOM' ) {
         # Awkward newlines here, to avoid running into meta-data.
         # This should _not_ be a problem.
         $text =~ s/[\r\n]+$//;
@@ -247,14 +247,14 @@ sub _buildNewTopic {
         $text .= "\n" unless $text =~ m/\n$/s;
     } else {
         if ( $location ) {
-            if ( $position eq "BEFORE" ) {
+            if ( $position eq 'BEFORE' ) {
                 $text =~ s/($location)/$output$1/m;
             } else { # AFTER
                 $text =~ s/($location)/$1$output/m;
             }
         } elsif ( $anchor ) {
             # position relative to anchor
-            if ( $position eq "BEFORE" ) {
+            if ( $position eq 'BEFORE' ) {
                 $output =~ s/\n$//;
                 $text =~ s/^($anchor)\b/$output\n$1/m;
             } else { # AFTER
@@ -281,8 +281,8 @@ sub _nth {
     my ( $tag, $pidx, $position, $index, $output ) = @_;
 
     if ( $$pidx == $index) {
-        if ( $position eq "BEFORE" ) {
-            $tag = "$output$tag";
+        if ( $position eq 'BEFORE' ) {
+            $tag = $output.$tag;
         } else { # AFTER
             $tag .= $output;
         }

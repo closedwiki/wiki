@@ -81,7 +81,7 @@ sub search {
     # Linux (Slackware 2.0.33) with Apache 1.2.  That being the case,
     # we need to parse them out here.
 
-#    my @webs          = $query->param( "web" ) || ( $webName ); #doesn't work
+#    my @webs          = $query->param( 'web' ) || ( $webName ); #doesn't work
 
     # Note for those unused to Perlishness:
     # -------------------------------------
@@ -103,41 +103,41 @@ sub search {
     # need to unescape URL-encoded data since we use the raw query_string
     # suggested by JeromeBouvattier
     $attrWeb =~ tr/+/ /;       # pluses become spaces
-    $attrWeb =~ s/%([0-9a-fA-F]{2})/pack("c",hex($1))/ge;  # %20 becomes space
+    $attrWeb =~ s/%([0-9a-fA-F]{2})/pack('c',hex($1))/ge;  # %20 becomes space
 
     $session->writePageHeader();
 
-    # SMELL: what's all the "scalar" crud, below?
+    # SMELL: what's all the 'scalar' crud, below?
     $session->{search}->searchWeb(
         _callback       => \&_contentCallback,
         _cbdata         => undef,
         inline          => 0,
-        "search"        => scalar $query->param( "search" ),
-        "web"           => $attrWeb,
-        "topic"         => scalar $query->param( "topic" ),
-        "excludetopic"  => scalar $query->param( "excludetopic" ),
-        "scope"         => scalar $query->param( "scope" ),
-        "order"         => scalar $query->param( "order" ),
-        "type"          => scalar $query->param( "type" ) ||
-                             $session->{prefs}->getPreferencesValue( "SEARCHDEFAULTTTYPE" ),
-        "regex"         => scalar $query->param( "regex" ),
-        "limit"         => scalar $query->param( "limit" ),
-        "reverse"       => scalar $query->param( "reverse" ),
-        "casesensitive" => scalar $query->param( "casesensitive" ),
-        "nosummary"     => scalar $query->param( "nosummary" ),
-        "nosearch"      => scalar $query->param( "nosearch" ),
-        "noheader"      => scalar $query->param( "noheader" ),
-        "nototal"       => scalar $query->param( "nototal" ),
-        "bookview"      => scalar $query->param( "bookview" ),
-        "renameview"    => scalar $query->param( "renameview" ),
-        "showlock"      => scalar $query->param( "showlock" ),
-        "expandvariables" => scalar $query->param( "expandvariables" ),
-        "noempty"       => scalar $query->param( "noempty" ),
-        "template"      => scalar $query->param( "template" ),
-        "header"        => scalar $query->param( "header" ),
-        "format"        => scalar $query->param( "format" ),
-        "multiple"      => scalar $query->param( "multiple" ),
-        "separator"     => scalar $query->param( "separator" ),
+        'search'        => scalar $query->param( 'search' ),
+        'web'           => $attrWeb,
+        'topic'         => scalar $query->param( 'topic' ),
+        'excludetopic'  => scalar $query->param( 'excludetopic' ),
+        'scope'         => scalar $query->param( 'scope' ),
+        'order'         => scalar $query->param( 'order' ),
+        'type'          => scalar $query->param( 'type' ) ||
+                             $session->{prefs}->getPreferencesValue( 'SEARCHDEFAULTTTYPE' ),
+        'regex'         => scalar $query->param( 'regex' ),
+        'limit'         => scalar $query->param( 'limit' ),
+        'reverse'       => scalar $query->param( 'reverse' ),
+        'casesensitive' => scalar $query->param( 'casesensitive' ),
+        'nosummary'     => scalar $query->param( 'nosummary' ),
+        'nosearch'      => scalar $query->param( 'nosearch' ),
+        'noheader'      => scalar $query->param( 'noheader' ),
+        'nototal'       => scalar $query->param( 'nototal' ),
+        'bookview'      => scalar $query->param( 'bookview' ),
+        'renameview'    => scalar $query->param( 'renameview' ),
+        'showlock'      => scalar $query->param( 'showlock' ),
+        'expandvariables' => scalar $query->param( 'expandvariables' ),
+        'noempty'       => scalar $query->param( 'noempty' ),
+        'template'      => scalar $query->param( 'template' ),
+        'header'        => scalar $query->param( 'header' ),
+        'format'        => scalar $query->param( 'format' ),
+        'multiple'      => scalar $query->param( 'multiple' ),
+        'separator'     => scalar $query->param( 'separator' ),
     );
 }
 

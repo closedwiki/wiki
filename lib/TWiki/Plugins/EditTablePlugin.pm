@@ -51,7 +51,7 @@ sub initPlugin {
     }
 
     # Get plugin debug flag
-    $debug = &TWiki::Func::getPreferencesFlag( "EDITTABLEPLUGIN_DEBUG" );
+    $debug = &TWiki::Func::getPreferencesFlag( 'EDITTABLEPLUGIN_DEBUG' );
 
     $prefsInitialized = 0;
     $renderingWeb = $web;
@@ -71,31 +71,31 @@ sub initPlugin {
 sub extractParams {
     my( $theArgs, $theHashRef ) = @_;
 
-    my $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "header" );
-    $$theHashRef{"header"} = $tmp if( $tmp );
+    my $tmp = &TWiki::Func::extractNameValuePair( $theArgs, 'header' );
+    $$theHashRef{'header'} = $tmp if( $tmp );
 
-    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "footer" );
-    $$theHashRef{"footer"} = $tmp if( $tmp );
+    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, 'footer' );
+    $$theHashRef{'footer'} = $tmp if( $tmp );
 
-    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "headerislabel" );
-    $$theHashRef{"headerislabel"} = $tmp if( $tmp );
+    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, 'headerislabel' );
+    $$theHashRef{'headerislabel'} = $tmp if( $tmp );
 
-    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "format" );
+    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, 'format' );
     $tmp =~ s/^\s*\|*\s*//o;
     $tmp =~ s/\s*\|*\s*$//o;
-    $$theHashRef{"format"} = $tmp if( $tmp );
+    $$theHashRef{'format'} = $tmp if( $tmp );
 
-    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "changerows" );
-    $$theHashRef{"changerows"} = $tmp if( $tmp );
+    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, 'changerows' );
+    $$theHashRef{'changerows'} = $tmp if( $tmp );
 
-    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "quietsave" );
-    $$theHashRef{"quietsave"} = $tmp if( $tmp );
+    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, 'quietsave' );
+    $$theHashRef{'quietsave'} = $tmp if( $tmp );
 
-    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "helptopic" );
-    $$theHashRef{"helptopic"} = $tmp if( $tmp );
+    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, 'helptopic' );
+    $$theHashRef{'helptopic'} = $tmp if( $tmp );
 
-    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "editbutton" );
-    $$theHashRef{"editbutton"} = $tmp if( $tmp );
+    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, 'editbutton' );
+    $$theHashRef{'editbutton'} = $tmp if( $tmp );
 
     return;
 }
@@ -124,24 +124,24 @@ sub commonTagsHandler {
     return unless $_[0] =~ /%EDIT(TABLE|CELL){(.*)}%/os;
 
     unless( $prefsInitialized ) {
-        $prefCHANGEROWS           = &TWiki::Func::getPreferencesValue("CHANGEROWS") ||
-                    &TWiki::Func::getPreferencesValue("EDITTABLEPLUGIN_CHANGEROWS") || "on";
-        $prefQUIETSAVE            = &TWiki::Func::getPreferencesValue("QUIETSAVE") ||
-                    &TWiki::Func::getPreferencesValue("EDITTABLEPLUGIN_QUIETSAVE") || "on";
-        $prefEDITBUTTON           = &TWiki::Func::getPreferencesValue("EDITBUTTON") ||
-                    &TWiki::Func::getPreferencesValue("EDITTABLEPLUGIN_EDITBUTTON") || "Edit table";
-        $prefJSCALENDARDATEFORMAT = &TWiki::Func::getPreferencesValue("JSCALENDARDATEFORMAT") ||
-                    &TWiki::Func::getPreferencesValue("EDITTABLEPLUGIN_JSCALENDARDATEFORMAT") || "%Y/%m/%d";
-        $prefJSCALENDARLANGUAGE   = &TWiki::Func::getPreferencesValue("JSCALENDARLANGUAGE") ||
-                    &TWiki::Func::getPreferencesValue("EDITTABLEPLUGIN_JSCALENDARLANGUAGE") || "en";
-        $prefJSCALENDAROPTIONS    = &TWiki::Func::getPreferencesValue("JSCALENDAROPTIONS") ||
-                    &TWiki::Func::getPreferencesValue("EDITTABLEPLUGIN_JSCALENDAROPTIONS") || "";
+        $prefCHANGEROWS           = &TWiki::Func::getPreferencesValue('CHANGEROWS') ||
+                    &TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_CHANGEROWS') || 'on';
+        $prefQUIETSAVE            = &TWiki::Func::getPreferencesValue('QUIETSAVE') ||
+                    &TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_QUIETSAVE') || 'on';
+        $prefEDITBUTTON           = &TWiki::Func::getPreferencesValue('EDITBUTTON') ||
+                    &TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_EDITBUTTON') || 'Edit table';
+        $prefJSCALENDARDATEFORMAT = &TWiki::Func::getPreferencesValue('JSCALENDARDATEFORMAT') ||
+                    &TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_JSCALENDARDATEFORMAT') || "%Y/%m/%d";
+        $prefJSCALENDARLANGUAGE   = &TWiki::Func::getPreferencesValue('JSCALENDARLANGUAGE') ||
+                    &TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_JSCALENDARLANGUAGE') || 'en';
+        $prefJSCALENDAROPTIONS    = &TWiki::Func::getPreferencesValue('JSCALENDAROPTIONS') ||
+                    &TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_JSCALENDAROPTIONS') || '';
         $prefsInitialized = 1;
     }
 
     my $theWeb = $_[2];
     my $theTopic = $_[1];
-    my $result = "";
+    my $result = '';
     my $tableNr = 0;
     my $rowNr = 0;
     my $enableForm = 0;
@@ -157,16 +157,16 @@ sub commonTagsHandler {
 
             my $cgiTableNr = $query->param( 'ettablenr' ) || 0;
             $cgiRows = $query->param( 'etrows' ) || -1;
-            if( ( $cgiTableNr == $tableNr ) && ( "$theWeb.$theTopic" eq "$web.$topic" ) ) {
+            if( ( $cgiTableNr == $tableNr ) && ( $theWeb.'.'.$theTopic eq "$web.$topic" ) ) {
 
                if( $query->param( 'etsave' ) ) {
                    # [Save table] button pressed
-                   doSaveTable( $theWeb, $theTopic, $tableNr, "" );   # never return
+                   doSaveTable( $theWeb, $theTopic, $tableNr, '' );   # never return
                    return; # in case browser does not redirect
 
                } elsif( $query->param( 'etqsave' ) ) {
                    # [Quiet save] button pressed
-                   doSaveTable( $theWeb, $theTopic, $tableNr, "on" );   # never return
+                   doSaveTable( $theWeb, $theTopic, $tableNr, 'on' );   # never return
                    return; # in case browser does not redirect
 
                } elsif( $query->param( 'etcancel' ) ) {
@@ -213,7 +213,7 @@ sub commonTagsHandler {
                 if( ( $doEdit ) && ( $cgiRows >= 0 ) && ( $rowNr < $cgiRows ) ) {
                     while( $rowNr < $cgiRows ) {
                         $rowNr++;
-                        $result .= handleTableRow( $theSp, "", $tableNr, $cgiRows, $rowNr, $doEdit, 0 ) . "\n";
+                        $result .= handleTableRow( $theSp, '', $tableNr, $cgiRows, $rowNr, $doEdit, 0 ) . "\n";
                     }
                 }
                 $result .= handleTableEnd( $theWeb, $rowNr, $doEdit );
@@ -227,13 +227,13 @@ sub commonTagsHandler {
                     $result .= handleTableStart( $theWeb, $theTopic, $tableNr, $doEdit );
                     $rowNr = 0;
                     if( $doEdit ) {
-                       if( $params{"header"} ) {
+                       if( $params{'header'} ) {
                            $rowNr++;
-                           $result .= handleTableRow( $preSp, "", $tableNr, $cgiRows, $rowNr, $doEdit, 0 ) . "\n";
+                           $result .= handleTableRow( $preSp, '', $tableNr, $cgiRows, $rowNr, $doEdit, 0 ) . "\n";
                         }
                         do {
                             $rowNr++;
-                            $result .= handleTableRow( $preSp, "", $tableNr, $cgiRows, $rowNr, $doEdit, 0 ) . "\n";
+                            $result .= handleTableRow( $preSp, '', $tableNr, $cgiRows, $rowNr, $doEdit, 0 ) . "\n";
                         } while( $rowNr < $cgiRows );
                     }
                     $result .= handleTableEnd( $theWeb, $rowNr, $doEdit );
@@ -303,19 +303,19 @@ sub parseFormat {
 sub handleEditTableTag {
     my( $theWeb, $theTopic, $thePreSpace, $theArgs ) = @_;
 
-    $preSp = $thePreSpace || "";
+    $preSp = $thePreSpace || '';
     %params = (
-        "header"        => "",
-        "footer"        => "",
-        "headerislabel" => "1",
-        "format"        => "",
-        "changerows"    => $prefCHANGEROWS,
-        "quietsave"     => $prefQUIETSAVE,
-        "helptopic"     => "",
-        "editbutton"    => "",
+        'header'        => '',
+        'footer'        => '',
+        'headerislabel' => "1",
+        'format'        => '',
+        'changerows'    => $prefCHANGEROWS,
+        'quietsave'     => $prefQUIETSAVE,
+        'helptopic'     => '',
+        'editbutton'    => '',
     );
 
-    my $iTopic = &TWiki::Func::extractNameValuePair( $theArgs, "include" );
+    my $iTopic = &TWiki::Func::extractNameValuePair( $theArgs, 'include' );
     if( $iTopic ) {
        # include topic to read definitions
        if( $iTopic =~ /^([^\.]+)\.(.*)$/o ) {
@@ -326,7 +326,7 @@ sub handleEditTableTag {
        $text =~ /%EDITTABLE{(.*)}%/os;
        if( $1 ) {
            my $args = $1;
-           if( "$theWeb.$iTopic" ne "$web.$topic" ) {
+           if( $theWeb ne $web || $iTopic ne $topic ) {
                # expand common vars, unless oneself to prevent recursion
                $args = &TWiki::Func::expandCommonVariables( $1, $iTopic, $theWeb );
            }
@@ -336,18 +336,18 @@ sub handleEditTableTag {
 
     extractParams( $theArgs, \%params );
 
-    $params{"header"} = "" if( $params{"header"} =~ /^(off|no)$/oi );
-    $params{"header"} =~ s/^\s*\|//o;
-    $params{"header"} =~ s/\|\s*$//o;
-    $params{"headerislabel"} = "" if( $params{"headerislabel"} =~ /^(off|no)$/oi );
-    $params{"footer"} = "" if( $params{"footer"} =~ /^(off|no)$/oi );
-    $params{"footer"} =~ s/^\s*\|//o;
-    $params{"footer"} =~ s/\|\s*$//o;
-    $params{"changerows"} = "" if( $params{"changerows"} =~ /^(off|no)$/oi );
-    $params{"quietsave"}  = "" if( $params{"quietsave"}  =~ /^(off|no)$/oi );
+    $params{'header'} = '' if( $params{header} =~ /^(off|no)$/oi );
+    $params{'header'} =~ s/^\s*\|//o;
+    $params{'header'} =~ s/\|\s*$//o;
+    $params{'headerislabel'} = '' if( $params{headerislabel} =~ /^(off|no)$/oi );
+    $params{'footer'} = '' if( $params{footer} =~ /^(off|no)$/oi );
+    $params{'footer'} =~ s/^\s*\|//o;
+    $params{'footer'} =~ s/\|\s*$//o;
+    $params{'changerows'} = '' if( $params{changerows} =~ /^(off|no)$/oi );
+    $params{'quietsave'}  = '' if( $params{quietsave}  =~ /^(off|no)$/oi );
 
-    @format = parseFormat( $params{"format"}, $theTopic, $theWeb, 0 );
-    @formatExpanded = parseFormat( $params{"format"}, $theTopic, $theWeb, 1 );
+    @format = parseFormat( $params{format}, $theTopic, $theWeb, 0 );
+    @formatExpanded = parseFormat( $params{format}, $theTopic, $theWeb, 1 );
     $nrCols = @format;
 
     # FIXME: No handling yet of footer
@@ -358,8 +358,8 @@ sub handleEditTableTag {
 sub handleTableStart {
     my( $theWeb, $theTopic, $theTableNr, $doEdit ) = @_;
 
-    my $viewUrl = &TWiki::Func::getScriptUrl( $theWeb, $theTopic, "viewauth" ) . "\#edittable$theTableNr";
-    my $text = "";
+    my $viewUrl = &TWiki::Func::getScriptUrl( $theWeb, $theTopic, 'viewauth' ) . "\#edittable$theTableNr";
+    my $text = '';
     if( $doEdit ) {
         my $dir = $mishooHome;
         $text .= "$preSp<script type=\"text/javascript\" src=\"$dir/calendar.js\"></script>\n";
@@ -382,23 +382,23 @@ sub handleTableEnd {
     if( $doEdit ) {
         # Edit mode
         $text .= "$preSp<input type=\"submit\" name=\"etsave\"   value=\"Save table\" />\n";
-        if( $params{"quietsave"} ) {
+        if( $params{'quietsave'} ) {
             $text .= "$preSp<input type=\"submit\" name=\"etqsave\"  value=\"Quiet save\" />\n";
         }
-        if( $params{"changerows"} ) {
+        if( $params{'changerows'} ) {
             $text .= "$preSp<input type=\"submit\" name=\"etaddrow\" value=\"Add row\" />\n";
             $text .= "$preSp<input type=\"submit\" name=\"etdelrow\" value=\"Delete last row\" />\n"
-              unless( $params{"changerows"} =~ /^add$/oi );
+              unless( $params{'changerows'} =~ /^add$/oi );
         }
         $text .= "$preSp<input type=\"submit\" name=\"etcancel\" value=\"Cancel\" />\n";
 
-        if( $params{"helptopic"} ) {
+        if( $params{'helptopic'} ) {
             # read help topic and show below the table
-            if( $params{"helptopic"} =~ /^([^\.]+)\.(.*)$/o ) {
+            if( $params{'helptopic'} =~ /^([^\.]+)\.(.*)$/o ) {
                 $theWeb = $1;
-                $params{"helptopic"} = $2;
+                $params{'helptopic'} = $2;
             }
-            my $helpText = &TWiki::Func::readTopicText( $theWeb, $params{"helptopic"} );
+            my $helpText = &TWiki::Func::readTopicText( $theWeb, $params{'helptopic'} );
                         #Strip out the meta data so it won't be displayed.
             $helpText =~ s/%META:[A-Za-z0-9]+{.*?}%//g;
             if( $helpText ) {
@@ -410,11 +410,11 @@ sub handleTableEnd {
 
     } else {
         # View mode
-        if( $params{"editbutton"} eq "hide" ) {
+        if( $params{editbutton} eq "hide" ) {
             # do nothing, button assumed to be in a cell
         } else {
             # Add edit button to end of table
-            $text .= "$preSp" . viewEditCell( "editbutton, 1, $params{'editbutton'}" );
+            $text .= $preSp . viewEditCell( "editbutton, 1, $params{'editbutton'}" );
         }
     }
     $text .= "$preSp</form>\n";
@@ -424,23 +424,23 @@ sub handleTableEnd {
 
 sub parseEditCellFormat {
     $_[1] = &TWiki::Func::extractNameValuePair( $_[0] );
-    return "";
+    return '';
 }
 
 sub viewEditCell {
     my ( $theAttr ) = @_;
     $theAttr = &TWiki::Func::extractNameValuePair( $theAttr );
-    return "" unless( $theAttr =~ /^editbutton/ );
+    return '' unless( $theAttr =~ /^editbutton/ );
 
-    $params{"editbutton"} = "hide" unless( $params{"editbutton"} ); # Hide below table edit button
+    $params{editbutton} = 'hide' unless( $params{editbutton} ); # Hide below table edit button
 
     my @bits  = split( /,\s*/, $theAttr );
-    my $value = "";  $value = $bits[2] if( @bits > 2);
-    my $img   = "";  $img   = $bits[3] if( @bits > 3);
+    my $value = '';  $value = $bits[2] if( @bits > 2);
+    my $img   = '';  $img   = $bits[3] if( @bits > 3);
 
     unless( $value ) {
         $value = $prefEDITBUTTON;
-        $img = "";
+        $img = '';
         if( $value =~ s/(.+),\s*(.+)/$1/o ) {
             $img = $2;
             $img =~ s|%ATTACHURL%|%PUBURL%/$installWeb/EditTablePlugin|o;
@@ -457,7 +457,7 @@ sub viewEditCell {
 
 sub saveEditCellFormat {
     my ( $theFormat, $theName ) = @_;
-    return "" unless( $theFormat );
+    return '' unless( $theFormat );
     $theName =~ s/cell/format/;
     return "<input type=\"hidden\" name=\"$theName\" value=\"$theFormat\" />";
 }
@@ -465,15 +465,15 @@ sub saveEditCellFormat {
 sub inputElement {
     my ( $theTableNr, $theRowNr, $theCol, $theName, $theValue ) = @_;
 
-    my $text = "";
+    my $text = '';
     my $i = @format - 1;
     $i = $theCol if( $theCol < $i );
     my @bits = split( /,\s*/, $format[$i] );
     my @bitsExpanded = split( /,\s*/, $formatExpanded[$i] );
 
-    my $cellFormat = "";
+    my $cellFormat = '';
     $theValue =~ s/\s*%EDITCELL{(.*?)}%/&parseEditCellFormat( $1, $cellFormat )/eo;
-    $theValue = "" if( $theValue eq " " );
+    $theValue = '' if( $theValue eq ' ' );
     if( $cellFormat ) {
         my @aFormat = parseFormat( $cellFormat, $theTopic, $theWeb, 0);
         @bits = split( /,\s*/, $aFormat[0] );
@@ -481,26 +481,26 @@ sub inputElement {
         @bitsExpanded = split( /,\s*/, $aFormat[0] );
     }
 
-    my $type = "text";
+    my $type = 'text';
     $type = $bits[0] if @bits > 0;
     # a table header is considered a label if read only header flag set
-    $type = "label" if( ( $params{"headerislabel"} ) && ( $theValue =~ /^\s*\*.*\*\s*$/ ) );
-    $type = "label" if( $type eq "editbutton" );  # Hide [Edit table] button
+    $type = 'label' if( ( $params{'headerislabel'} ) && ( $theValue =~ /^\s*\*.*\*\s*$/ ) );
+    $type = 'label' if( $type eq 'editbutton' );  # Hide [Edit table] button
     my $size = 0;
     $size = $bits[1] if @bits > 1;
-    my $val  = "";
-    my $valExpanded = "";
-    my $sel  = "";
-    my $style = "";
+    my $val  = '';
+    my $valExpanded = '';
+    my $sel  = '';
+    my $style = '';
     $style = " style='background:#e8e8e8'" if ($theRowNr % 2);
-    if( $type eq "select" ) {
+    if( $type eq 'select' ) {
         my $expandedValue = &TWiki::Func::expandCommonVariables( $theValue, $theTopic, $theWeb );
         $size = 1 if $size < 1;
         $text = "<select$style name=\"$theName\" size=\"$size\">";
         $i = 2;
         while( $i < @bits ) {
-            $val  = $bits[$i] || "";
-            $valExpanded  = $bitsExpanded[$i] || "";
+            $val  = $bits[$i] || '';
+            $valExpanded  = $bitsExpanded[$i] || '';
             if( $valExpanded eq $expandedValue ) {
                 $text .= " <option selected=\"selected\">$val</option>";
             } else {
@@ -511,12 +511,12 @@ sub inputElement {
         $text .= " </select>";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
-    } elsif( $type eq "row" ) {
+    } elsif( $type eq 'row' ) {
         $size = $size + $theRowNr;
         $text = "$size<input type=\"hidden\" name=\"$theName\" value=\"$size\" />";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
-    } elsif( $type eq "label" ) {
+    } elsif( $type eq 'label' ) {
         # show label text as is, and add a hidden field with value
         my $isHeader = 0;
         $isHeader = 1 if( $theValue =~ s/^\s*\*(.*)\*\s*$/$1/o );
@@ -536,26 +536,26 @@ sub inputElement {
         }
         my $cell = $table->getCell( $theTableNr, $theRowNr - 1, $theCol );
         $theValue = $cell if( defined $cell );  # original value from file
-        $theValue = $encodeStart . encodeValue( $theValue ) . $encodeEnd unless( $theValue eq "" );
+        $theValue = $encodeStart . encodeValue( $theValue ) . $encodeEnd unless( $theValue eq '' );
         $theValue = "\*$theValue\*" if( $isHeader );
         $text .= "<input$style type=\"hidden\" name=\"$theName\" value=\"$theValue\" />";
         $text = "\*$text\*" if( $isHeader );
 
-    } elsif( $type eq "textarea" ) {
+    } elsif( $type eq 'textarea' ) {
         my ($rows, $cols) = split( /x/, $size );
         $rows = 3 if $rows < 1;
         $cols = 30 if $cols < 1;
 
-        $theValue = $encodeStart . encodeValue( $theValue ) . $encodeEnd unless( $theValue eq "" );
+        $theValue = $encodeStart . encodeValue( $theValue ) . $encodeEnd unless( $theValue eq '' );
         $text .= "<textarea$style rows=\"$rows\" cols=\"$cols\" name=\"$theName\">$theValue</textarea>";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
-    } elsif( $type eq "date" ) {
-        my $ifFormat = "";
+    } elsif( $type eq 'date' ) {
+        my $ifFormat = '';
         $ifFormat = $bits[3] if( @bits > 3 );
         $ifFormat = $ifFormat || $prefJSCALENDARDATEFORMAT;
         $size = 10 if $size < 1;
-        $theValue = $encodeStart . encodeValue( $theValue ) . $encodeEnd unless( $theValue eq "" );
+        $theValue = $encodeStart . encodeValue( $theValue ) . $encodeEnd unless( $theValue eq '' );
         $text .= "<input type=\"text\" name=\"$theName\" id=\"id$theName\" size=\"$size\" value=\"$theValue\" />";
         $text .= saveEditCellFormat( $cellFormat, $theName );
         $text .= "<button type=\"reset\" id=\"trigger$theName\">...</button>";
@@ -568,9 +568,9 @@ sub inputElement {
 
         $query->{'jscalendar'} = 1;
 
-    } else { #  if( $type eq "text")
+    } else { #  if( $type eq 'text')
         $size = 16 if $size < 1;
-        $theValue = $encodeStart . encodeValue( $theValue ) . $encodeEnd unless( $theValue eq "" );
+        $theValue = $encodeStart . encodeValue( $theValue ) . $encodeEnd unless( $theValue eq '' );
         $text = "<input$style type=\"text\" name=\"$theName\" size=\"$size\" value=\"$theValue\"/>";
         $text .= saveEditCellFormat( $cellFormat, $theName );
     }
@@ -580,7 +580,7 @@ sub inputElement {
 sub handleTableRow {
     my ( $thePre, $theRow, $theTableNr, $theRowMax, $theRowNr, $doEdit, $doSave ) = @_;
 
-    $thePre = "" unless( defined( $thePre ) );
+    $thePre = '' unless( defined( $thePre ) );
     my $text = "$thePre\|";
 
     if( $doEdit ) {
@@ -588,9 +588,9 @@ sub handleTableRow {
         @cells = split( /\|/, $theRow );
         my $tmp = @cells;
         $nrCols = $tmp if( $tmp > $nrCols );  # expand number of cols
-        my $val = "";
-        my $cellFormat = "";
-        my $cell = "";
+        my $val = '';
+        my $cellFormat = '';
+        my $cell = '';
         my $cellDefined = 0;
         my $col = 0;
         while( $col < $nrCols ) {
@@ -611,18 +611,18 @@ sub handleTableRow {
                 $cell =~ s/^\s//o;
                 $cell =~ s/\s$//o;
             } else {
-                $cell = "";
+                $cell = '';
             }
-            if( ( $theRowNr <= 1 ) && ( $params{"header"} ) ) {
+            if( ( $theRowNr <= 1 ) && ( $params{'header'} ) ) {
                 unless( $cell ) {
-                    if( $params{"header"} =~ /^on$/i ) {
+                    if( $params{'header'} =~ /^on$/i ) {
                         if( ( @format >= $col ) && ( $format[$col-1] =~ /(.*?)\,/ ) ) {
                             $cell = $1;
                         }
-                        $cell = "text" unless $cell;
+                        $cell = 'text' unless $cell;
                         $cell = "*$cell*";
                     } else {
-                        my @hCells = split( /\|/, $params{"header"} );
+                        my @hCells = split( /\|/, $params{'header'} );
                         $cell = $hCells[$col-1] if( @hCells >= $col );
                         $cell = "*text*" unless $cell;
                     }
@@ -636,18 +636,18 @@ sub handleTableRow {
                 if( ( ! $cellDefined ) && ( @format >= $col )
                  && ( $format[$col-1] =~ /^\s*(.*?)\,\s*(.*?)\,\s*(.*?)\s*$/ ) ) {
                      # default value of "| text, 20, a, b, c |" cell is "a, b, c"
-                     # default value of "| select, 1, a, b, c |" cell is "a"
+                     # default value of '| select, 1, a, b, c |' cell is "a"
                      $val = $1;  # type
                      $cell = $3;
-                     $cell = "" unless( defined $cell && $cell ne "" ); # Proper handling of "0"
-                     $cell =~ s/\,.*$//o if( $val eq "select" || $val eq "date" );
+                     $cell = '' unless( defined $cell && $cell ne '' ); # Proper handling of '0'
+                     $cell =~ s/\,.*$//o if( $val eq 'select' || $val eq 'date' );
                 }
                 $text .= inputElement( $theTableNr, $theRowNr, $col-1, "etcell${theRowNr}x$col", $cell ) . " \|";
             }
         }
     } else {
         $theRow =~ s/%EDITCELL{(.*?)}%/viewEditCell($1)/geo;
-        $text .= "$theRow";
+        $text .= $theRow;
     }
     return $text;
 }
@@ -664,7 +664,7 @@ sub doSaveTable {
     my $rowNr = 0;
     my $insideTable = 0;
     my $doSave = 0;
-    my $result = "";
+    my $result = '';
     # appended stuff is a hack to handle EDITTABLE correctly if at end
     foreach( split( /\r?\n/, "$text\n<nop>\n" ) ) {
         if( /%EDITTABLE{(.*)}%/o ) {
@@ -689,7 +689,7 @@ sub doSaveTable {
                 if( $rowNr < $cgiRows ) {
                     while( $rowNr < $cgiRows ) {
                         $rowNr++;
-                        $result .= handleTableRow( $preSp, "", $tableNr, $cgiRows, $rowNr, 1, 1 ) . "\n";
+                        $result .= handleTableRow( $preSp, '', $tableNr, $cgiRows, $rowNr, 1, 1 ) . "\n";
                     }
                 }
                 $doSave = 0;
@@ -699,13 +699,13 @@ sub doSaveTable {
                 if( $doSave ) {
                     # empty %EDITTABLE%, so create a default table
                     $rowNr = 0;
-                    if( $params{"header"} ) {
+                    if( $params{'header'} ) {
                         $rowNr++;
-                        $result .= handleTableRow( $preSp, "", $tableNr, $cgiRows, $rowNr,1 , 1 ) . "\n";
+                        $result .= handleTableRow( $preSp, '', $tableNr, $cgiRows, $rowNr,1 , 1 ) . "\n";
                     }
                     while( $rowNr < $cgiRows ) {
                         $rowNr++;
-                        $result .= handleTableRow( $preSp, "", $tableNr, $cgiRows, $rowNr, 1, 1 ) . "\n";
+                        $result .= handleTableRow( $preSp, '', $tableNr, $cgiRows, $rowNr, 1, 1 ) . "\n";
                     }
                 }
                 $doSave = 0;
@@ -716,11 +716,11 @@ sub doSaveTable {
     }
     $result =~ s|\n<nop>\n$||o; # clean up hack that handles EDITTABLE correctly if at end
 
-    my $error = &TWiki::Func::saveTopicText( $theWeb, $theTopic, $result, "", $quiet );
+    my $error = &TWiki::Func::saveTopicText( $theWeb, $theTopic, $result, '', $quiet );
     TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 0 );  # unlock Topic
     my $url = &TWiki::Func::getViewUrl( $theWeb, $theTopic );
     if( $error ) {
-        $url = &TWiki::Func::getOopsUrl( $theWeb, $theTopic, "oopssaveerr", $error );
+        $url = &TWiki::Func::getOopsUrl( $theWeb, $theTopic, 'oopssaveerr', $error );
     }
     &TWiki::Func::redirectCgiQuery( $query, $url );
 }
@@ -741,9 +741,9 @@ sub doEnableEdit {
     &TWiki::Func::writeDebug( "- EditTablePlugin::doEnableEdit( $theWeb, $theTopic )" ) if $debug;
 
     my $wikiUserName = &TWiki::Func::getWikiUserName();
-    if( ! &TWiki::Func::checkAccessPermission( "change", $wikiUserName, "", $theTopic, $theWeb ) ) {
+    if( ! &TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '', $theTopic, $theWeb ) ) {
         # user has not permission to change the topic
-        my $url = &TWiki::Func::getOopsUrl( $theWeb, $theTopic, "oopsaccesschange" );
+        my $url = &TWiki::Func::getOopsUrl( $theWeb, $theTopic, 'oopsaccesschange' );
         &TWiki::Func::redirectCgiQuery( $query, $url );
         return 0;
     }
@@ -787,10 +787,10 @@ sub _parseOutTables {
     my @tableMatrix;            # Currently parsed table.
 
     my $inEditTable = 0;        # Flag to keep track if in an EDITTABLE table
-    my $result = "";
+    my $result = '';
     my $insidePRE = 0;
     my $insideTABLE = 0;
-    my $line = "";
+    my $line = '';
     my @row = ();
 
     $topic =~ s/\r//go;

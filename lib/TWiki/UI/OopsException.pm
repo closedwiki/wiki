@@ -62,8 +62,8 @@ sub new {
 =cut
 
 sub stringify {
-    my $self = shift;
-    return "$self->{-text}:\n" . $self->stacktrace();
+    my $this = shift;
+    return $this->{-text}.":\n" . $this->stacktrace();
 }
 
 1;

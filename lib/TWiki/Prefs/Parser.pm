@@ -39,7 +39,7 @@ package TWiki::Prefs::Parser;
 
 use Assert;
 
-my $formPrefPrefix = "FORM_";
+my $formPrefPrefix = 'FORM_';
 
 =pod
 
@@ -63,10 +63,10 @@ Parse settings from text and add them to the preferences in $prefs
 =cut
 
 sub parseText {
-    my( $self, $text, $prefs ) = @_;
+    my( $this, $text, $prefs ) = @_;
 
-    my $key = "";
-    my $value ="";
+    my $key = '';
+    my $value ='';
     my $isKey = 0;
     foreach my $line ( split( /\r?\n/, $text ) ) {
         if( $line =~ /^(\t|   )+\*\sSet\s(\w+)\s\=\s*(.*)$/ ) {
@@ -74,7 +74,7 @@ sub parseText {
                 $prefs->insertPrefsValue( $key, $value );
             }
             $key = $2;
-            $value = (defined $3) ? $3 : "";
+            $value = (defined $3) ? $3 : '';
             $isKey = 1;
         } elsif( $isKey ) {
             if( $line =~ /^\s+/ && $line !~ /^(\t|   )+\*/ ) {
@@ -98,25 +98,25 @@ sub parseText {
 Traverses through all FIELD attributes of the meta object, creating one setting
 named with $formPrefPrefix . $fieldTitle for each.  If the
 field's attribute list includes a 'S', it also creates an entry named with the
-field "name", which is a cleaned-up, space-removed version of the title.
+field 'name', which is a cleaned-up, space-removed version of the title.
 
 Settings are added to the $prefs passed.
 
 =cut
 
 sub parseMeta {
-    my( $self, $meta, $prefs ) = @_;
+    my( $this, $meta, $prefs ) = @_;
 
-    if( $meta->get( "FORM" ) ) {
-        my @fields = $meta->find( "FIELD" );
+    if( $meta->get( 'FORM' ) ) {
+        my @fields = $meta->find( 'FIELD' );
         foreach my $field( @fields ) {
-            my $title = $field->{"title"};
+            my $title = $field->{title};
             my $prefixedTitle = $formPrefPrefix . $title;
-            my $value = $field->{"value"};
+            my $value = $field->{value};
             $prefs->insertPrefsValue( $prefixedTitle, $value );
-            my $attributes = $field->{"attributes"};
+            my $attributes = $field->{attributes};
             if( $attributes && $attributes =~ /[S]/o ) {
-                my $name = $field->{"name"};
+                my $name = $field->{name};
                 $prefs->insertPrefsValue( $name, $value );
             }
         }

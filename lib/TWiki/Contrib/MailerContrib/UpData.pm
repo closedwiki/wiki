@@ -56,9 +56,9 @@ sub getParent {
     if ( ! defined( $this->{parent}{$topic} )) {
         my( $meta, $text ) =
           $this->{session}->{store}->readTopic( undef, $this->{web}, $topic );
-        my $parent = $meta->get("TOPICPARENT");
+        my $parent = $meta->get('TOPICPARENT');
         $this->{parent}{$topic} = $parent->{name} if $parent;
-        $this->{parent}{$topic} ||= "";
+        $this->{parent}{$topic} ||= '';
     }
 
     return $this->{parent}{$topic};

@@ -52,70 +52,70 @@ sub new
 {
    my( $proto ) = @_;
    my $class = ref($proto) || $proto;
-   my $self = {};
-   bless( $self, $class );
-#   $self->_init();
-#   $self->{head} = 0;
-   return $self;
+   my $this = {};
+   bless( $this, $class );
+#   $this->_init();
+#   $this->{head} = 0;
+   return $this;
 }
 
 #| Description: | checks to see if there is a $user in the password system |
 #| Parameter: =$user= | the username we are looking for  |
-#| Return: =$passwordExists= | "" as there is no password in NoPasswdUser (this allows the registration script (and others) register new users) |
+#| Return: =$passwordExists= | '' as there is no password in NoPasswdUser (this allows the registration script (and others) register new users) |
 sub UserPasswordExists
 {
-    my ( $self, $user ) = @_;
+    my ( $this, $user ) = @_;
 
-    return "";
+    return '';
 }
  
 #| Description: | used to change the user's password |
 #| Parameter: =$user= | the username we are replacing  |
 #| Parameter: =$oldUserPassword= | unencrypted password |
 #| Parameter: =$newUserPassword= | unencrypted password |
-#| Return: =$success= | "1" always |
+#| Return: =$success= | '1' always |
 # TODO: needs to fail if it doesw not succed due to file permissions
 sub UpdateUserPassword
 {
-    my ( $self, $user, $oldUserPassword, $newUserPassword ) = @_;
+    my ( $this, $user, $oldUserPassword, $newUserPassword ) = @_;
 
-    return "1";
+    return '1';
 }
 
 #| Description: | creates a new user & password entry |
 #| Parameter: =$user= | the username we are replacing  |
 #| Parameter: =$newUserPassword= | unencrypted password |
-#| Return: =$success= | "1" if success |
+#| Return: =$success= | '1' if success |
 #| TODO: | not sure if this should be true / false |
 sub AddUserPassword
 {
-    my ( $self, $user, $newUserPassword ) = @_;
+    my ( $this, $user, $newUserPassword ) = @_;
     my $userEntry = $user.":". _htpasswdGeneratePasswd( $user, $newUserPassword , 0);
 
-	return "1";
+	return '1';
 }
 
 #| Description: | used to remove the user from the password system |
 #| Parameter: =$user= | the username we are replacing  |
-#| Return: =$success= | "1" if success |
+#| Return: =$success= | '1' if success |
 #i'm a wimp - comment out the password entry
 sub RemoveUser
 {
-    my ( $self, $user ) = @_;
+    my ( $this, $user ) = @_;
 
-    return "1";
+    return '1';
 }
 
 #| Description: | used to check the user's password |
 #| Parameter: =$user= | the username we are replacing  |
 #| Parameter: =$password= | unencrypted password |
-#| Return: =$success= | "1" if success |
+#| Return: =$success= | '1' if success |
 sub CheckUserPasswd
 {
-    my ( $self, $user, $password ) = @_;
+    my ( $this, $user, $password ) = @_;
 
     # OK
-    return "1";
+    return '1';
 }
  
 1;

@@ -55,37 +55,37 @@ sub attach {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
 
-    my $fileName = $query->param( 'filename' ) || "";
+    my $fileName = $query->param( 'filename' ) || '';
     my $skin = $session->getSkin();
 
     TWiki::UI::checkWebExists( $session, $webName, $topic );
 
-    my $tmpl = "";
-    my $text = "";
-    my $meta = "";
-    my $atext = "";
-    my $fileUser = "";
-    my $isHideChecked = "";
+    my $tmpl = '';
+    my $text = '';
+    my $meta = '';
+    my $atext = '';
+    my $fileUser = '';
+    my $isHideChecked = '';
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
 
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            "change", $session->{user} );
+                            'change', $session->{user} );
     TWiki::UI::checkTopicExists( $session, $webName, $topic,
-                                 "upload files to" );
+                                 'upload files to' );
 
     ( $meta, $text ) =
       $session->{store}->readTopic( $session->{user}, $webName, $topic, undef );
-    my $args = $meta->get( "FILEATTACHMENT", $fileName );
+    my $args = $meta->get( 'FILEATTACHMENT', $fileName );
     $args = {
              name => $fileName,
-             attr => "",
-             path => "",
-             comment => ""
+             attr => '',
+             path => '',
+             comment => ''
             } unless( $args );
 
     if ( $args->{attr} =~ /h/o ) {
-        $isHideChecked = "checked";
+        $isHideChecked = 'checked';
     }
 
     # SMELL: why log attach before post is called?
@@ -93,16 +93,16 @@ sub attach {
     # Attach is a read function, only has potential for a change
     if( $TWiki::cfg{Log}{attach} ) {
         # write log entry
-        $session->writeLog( "attach", "$webName.$topic", $fileName );
+        $session->writeLog( 'attach', $webName.'.'.$topic, $fileName );
     }
 
-    my $fileWikiUser = "";
+    my $fileWikiUser = '';
     if( $fileName ) {
-        $tmpl = $session->{templates}->readTemplate( "attachagain", $skin );
-        my $u = $session->{users}->findUser( $args->{"user"} );
+        $tmpl = $session->{templates}->readTemplate( 'attachagain', $skin );
+        my $u = $session->{users}->findUser( $args->{user} );
         $fileWikiUser = $u->webDotWikiName() if $u;
     } else {
-        $tmpl = $session->{templates}->readTemplate( "attachnew", $skin );
+        $tmpl = $session->{templates}->readTemplate( 'attachnew', $skin );
     }
     if ( $fileName ) {
         # must come after templates have been read
@@ -115,8 +115,8 @@ sub attach {
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
     $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
     $tmpl =~ s/%FILENAME%/$fileName/go;
-    $tmpl =~ s/%FILEPATH%/$args->{"path"}/go;
-    $tmpl =~ s/%FILECOMMENT%/$args->{"comment"}/go;
+    $tmpl =~ s/%FILEPATH%/$args->{path}/go;
+    $tmpl =~ s/%FILECOMMENT%/$args->{comment}/go;
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
     $session->writeCompletePage( $tmpl );
@@ -148,37 +148,37 @@ sub upload {
     my $topic = $session->{topicName};
     my $user = $session->{user};
 
-    my $hideFile = $query->param( 'hidefile' ) || "";
-    my $fileComment = $query->param( 'filecomment' ) || "";
-    my $createLink = $query->param( 'createlink' ) || "";
+    my $hideFile = $query->param( 'hidefile' ) || '';
+    my $fileComment = $query->param( 'filecomment' ) || '';
+    my $createLink = $query->param( 'createlink' ) || '';
     my $doPropsOnly = $query->param( 'changeproperties' );
-    my $filePath = $query->param( 'filepath' ) || "";
-    my $fileName = $query->param( 'filename' ) || "";
+    my $filePath = $query->param( 'filepath' ) || '';
+    my $fileName = $query->param( 'filename' ) || '';
     if ( $filePath && ! $fileName ) {
         $filePath =~ m|([^/\\]*$)|;
         $fileName = $1;
     }
 
     my $stream;
-    $stream = $query->upload( "filepath" ) unless ( $doPropsOnly );
+    $stream = $query->upload( 'filepath' ) unless ( $doPropsOnly );
 
     $fileComment =~ s/\s+/ /go;
     $fileComment =~ s/^\s*//o;
     $fileComment =~ s/\s*$//o;
 
-    close $filePath if( $TWiki::cfg{OS} eq "WINDOWS");
+    close $filePath if( $TWiki::cfg{OS} eq 'WINDOWS');
 
     TWiki::UI::checkWebExists( $session, $webName, $topic );
     TWiki::UI::checkMirror( $session, $webName, $topic );
     TWiki::UI::checkAccess( $session, $webName, $topic,
-                            "change", $user );
+                            'change', $user );
     TWiki::UI::checkTopicExists( $session, $webName, $topic,
-                                 "attach files to" );
+                                 'attach files to' );
 
     my ( $fileSize, $fileDate, $tmpFileName );
 
     unless( $doPropsOnly ) {
-        # cut path from filepath name (Windows "\" and Unix "/" format)
+        # cut path from filepath name (Windows '\' and Unix "/" format)
         my @pathz = ( split( /\\/, $filePath ) );
         my $filetemp = $pathz[$#pathz];
         my @pathza = ( split( '/', $filetemp ) );
@@ -201,17 +201,17 @@ sub upload {
 
         if( ! $fileSize ) {
             throw TWiki::UI::OopsException( $webName, $topic,
-                             "upload",
+                             'upload',
                              "ERROR $webName.$topic File missing or zero size",
                              $fileName );
         }
 
-        my $maxSize = $session->{prefs}->getPreferencesValue( "ATTACHFILESIZELIMIT" );
+        my $maxSize = $session->{prefs}->getPreferencesValue( 'ATTACHFILESIZELIMIT' );
         $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
 
         if( $maxSize && $fileSize > $maxSize * 1024 ) {
             throw TWiki::UI::OopsException( $webName, $topic,
-                             "uploadlimit", $fileName, $maxSize );
+                             'uploadlimit', $fileName, $maxSize );
         }
     }
 
@@ -229,15 +229,15 @@ sub upload {
                                     } );
 
     if( $error ) {
-        throw TWiki::UI::OopsException( $webName, $topic, "saveerr",
+        throw TWiki::UI::OopsException( $webName, $topic, 'saveerr',
                                         "Save error $error" );
     }
 
-    $session->redirect( $session->getScriptUrl( $webName, $topic, "view" ) );
+    $session->redirect( $session->getScriptUrl( $webName, $topic, 'view' ) );
     my $message = ( $doPropsOnly ) ?
-      "properties changed" : "$fileName uploaded";
+      'properties changed' : "$fileName uploaded";
 
-    print( "OK $message\n" );
+    print 'OK ',$message,"\n";
 }
 
 1;

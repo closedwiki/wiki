@@ -33,11 +33,11 @@ sub initPlugin {
 
     # Get plugin preferences
     $smiliesFormat =
-      TWiki::Func::getPreferencesValue( "SMILIESPLUGIN_FORMAT" ) 
+      TWiki::Func::getPreferencesValue( 'SMILIESPLUGIN_FORMAT' ) 
           || '<img src="$url" alt="$tooltip" title="$tooltip" border="0" />';
 
     $topic =
-      TWiki::Func::getPreferencesValue( "SMILIESPLUGIN_TOPIC" ) 
+      TWiki::Func::getPreferencesValue( 'SMILIESPLUGIN_TOPIC' ) 
           || "$installWeb.SmiliesPlugin";
 
     $web = $installWeb;
@@ -47,7 +47,7 @@ sub initPlugin {
     }
 
     $allPattern = "(";
-    foreach( split( /\n/, TWiki::Func::readTopicText( $web, $topic ) ) ) {
+    foreach( split( /\n/, TWiki::Func::readTopicText( $web, $topic, undef, 1 ) ) ) {
         # smilie       url            emotion
         if( m/^\s*\|\s*<nop>(?:\&nbsp\;)?([^\s|]+)\s*\|\s*%ATTACHURL%\/([^\s]+)\s*\|\s*"([^"|]+)"\s*\|\s*$/o ) {
             $allPattern .= "\Q$1\E|";
@@ -81,7 +81,7 @@ sub _renderSmily {
 
     return $thePre unless $theSmily;
 
-    my $text = "$thePre$smiliesFormat";
+    my $text = $thePre.$smiliesFormat;
     $text =~ s/\$emoticon/$theSmily/go;
     $text =~ s/\$tooltip/$smiliesEmotions{$theSmily}/go;
     $text =~ s/\$url/$smiliesPubUrl\/$smiliesUrls{$theSmily}/go;

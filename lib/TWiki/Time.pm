@@ -38,11 +38,11 @@ use TWiki;
 use vars qw( @ISOMONTH @WEEKDAY %MON2NUM );
 
 @ISOMONTH =
-  ( "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
+  ( 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' );
 
 @WEEKDAY =
-  ( "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" );
+  ( 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' );
 
 %MON2NUM =
   (
@@ -136,7 +136,7 @@ sub parseTime {
 ---++ StaticMethod formatTime ($epochSeconds, $formatString, $outputTimeZone) -> $value
    * =$epochSeconds= epochSecs GMT
    * =$formatString= twiki time date format
-   * =$outputTimeZone= timezone to display ("gmtime" or "servertime", default "gmtime")
+   * =$outputTimeZone= timezone to display ('gmtime' or 'servertime', default "gmtime")
 =$formatString= supports:
    | $seconds | secs |
    | $minutes | mins |
@@ -159,13 +159,12 @@ sub formatTime  {
     my $value = $epochSeconds;
 
     # use default TWiki format "31 Dec 1999 - 23:59" unless specified
-    $formatString = "\$day \$month \$year - \$hour:\$min"
-      unless( $formatString );
+    $formatString = '$day $month $year - $hour:$min' unless( $formatString );
     $outputTimeZone = $TWiki::cfg{DisplayTimeValues}
       unless( $outputTimeZone );
 
     my( $sec, $min, $hour, $day, $mon, $year, $wday);
-    if( $outputTimeZone eq "servertime" ) {
+    if( $outputTimeZone eq 'servertime' ) {
         ( $sec, $min, $hour, $day, $mon, $year, $wday ) =
           localtime( $epochSeconds );
     } else {
@@ -176,39 +175,39 @@ sub formatTime  {
     #standard twiki date time formats
     if( $formatString =~ /rcs/i ) {
         # RCS format, example: "2001/12/31 23:59:59"
-        $formatString = "\$year/\$mo/\$day \$hour:\$min:\$sec";
+        $formatString = '$year/$mo/$day $hour:$min:$sec';
     } elsif ( $formatString =~ /http|email/i ) {
         # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 EST"
  	    # - based on RFC 2616/1123 and HTTP::Date; also used
         # by TWiki::Net for Date header in emails.
-        $formatString = "\$wday, \$day \$month \$year \$hour:\$min:\$sec \$tz";
+        $formatString = '$wday, $day $month $year $hour:$min:$sec $tz';
     } elsif ( $formatString =~ /iso/i ) {
         # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
         # e.g. "2002-12-31T19:30Z"
-        $formatString = "\$year-\$mo-\$dayT\$hour:\$min";
-        if( $outputTimeZone eq "gmtime" ) {
-            $formatString = $formatString."Z";
+        $formatString = '$year-$mo-$dayT$hour:$min';
+        if( $outputTimeZone eq 'gmtime' ) {
+            $formatString = $formatString.'Z';
         } else {
             #TODO:            $formatString = $formatString.  # TZD  = time zone designator (Z or +hh:mm or -hh:mm) 
         }
     }
 
     $value = $formatString;
-    $value =~ s/\$seco?n?d?s?/sprintf("%.2u",$sec)/gei;
-    $value =~ s/\$minu?t?e?s?/sprintf("%.2u",$min)/gei;
-    $value =~ s/\$hour?s?/sprintf("%.2u",$hour)/gei;
-    $value =~ s/\$day/sprintf("%.2u",$day)/gei;
+    $value =~ s/\$seco?n?d?s?/sprintf('%.2u',$sec)/gei;
+    $value =~ s/\$minu?t?e?s?/sprintf('%.2u',$min)/gei;
+    $value =~ s/\$hour?s?/sprintf('%.2u',$hour)/gei;
+    $value =~ s/\$day/sprintf('%.2u',$day)/gei;
     $value =~ s/\$wday/$WEEKDAY[$wday]/gi;
     $value =~ s/\$dow/$wday/gi;
     $value =~ s/\$week/_weekNumber($day,$mon,$year,$wday)/egi;
     $value =~ s/\$mont?h?/$ISOMONTH[$mon]/gi;
-    $value =~ s/\$mo/sprintf("%.2u",$mon+1)/gei;
-    $value =~ s/\$year?/sprintf("%.4u",$year+1900)/gei;
-    $value =~ s/\$ye/sprintf("%.2u",$year%100)/gei;
+    $value =~ s/\$mo/sprintf('%.2u',$mon+1)/gei;
+    $value =~ s/\$year?/sprintf('%.4u',$year+1900)/gei;
+    $value =~ s/\$ye/sprintf('%.2u',$year%100)/gei;
 
     # SMELL: how do we get the different timezone strings (and when
     # we add usertime, then what?)
-    my $tz_str = ( $outputTimeZone eq "servertime" ) ? "Local" : "GMT";
+    my $tz_str = ( $outputTimeZone eq 'servertime' ) ? 'Local' : 'GMT';
     $value =~ s/\$tz/$tz_str/geoi;
 
     return $value;
@@ -221,7 +220,7 @@ sub _weekNumber {
     my $nextThursday = timegm(0, 0, 0, $day, $mon, $year) +
       (3 - ($wday + 6) % 7) * 24 * 60 * 60; # nearest thursday
     my $firstFourth = timegm(0, 0, 0, 4, 0, $year); # january, 4th
-    return sprintf("%.0f", ($nextThursday - $firstFourth) / ( 7 * 86400 )) + 1;
+    return sprintf('%.0f', ($nextThursday - $firstFourth) / ( 7 * 86400 )) + 1;
 }
 
 1;

@@ -56,34 +56,34 @@ Constructor. There is one object per stored file.
 
 sub new {
     my( $class, $session, $web, $topic, $attachment ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
-    my $self = bless( {}, $class );
-    $self->{session} = $session;
-    $self->{web} = $web;
-    $self->{topic} = $topic;
-    $self->{attachment} = $attachment || "";
-    $self->{file} = $self->_makeFileName();
-    $self->{rcsFile} = $self->_makeFileName( ",v" );
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    my $this = bless( {}, $class );
+    $this->{session} = $session;
+    $this->{web} = $web;
+    $this->{topic} = $topic;
+    $this->{attachment} = $attachment || '';
+    $this->{file} = $this->_makeFileName();
+    $this->{rcsFile} = $this->_makeFileName( ",v" );
 
-    return $self;
+    return $this;
 }
 
 # Used in subclasses for late initialisation during object creation
 # (after the object is blessed into the subclass)
 sub init {
-    my $self = shift;
+    my $this = shift;
 
     # If attachment - make sure file and history directories exist
-    if( $self->{attachment} ) {
+    if( $this->{attachment} ) {
         # Make sure directory for rcs history file exists
         # SMELL: surely this should be PubDir??
-        my $tempPath = $TWiki::cfg{DataDir} . "/" . $self->{web};
+        my $tempPath = $TWiki::cfg{DataDir} . "/" . $this->{web};
         unless( -e $tempPath ) {
             umask( 0 );
             mkdir( $tempPath,
                    $TWiki::cfg{RCS}{dirPermission} );
         }
-        $tempPath = $self->_makeFileDir( 1, ",v" );
+        $tempPath = $this->_makeFileDir( 1, ",v" );
         unless( -e $tempPath ) {
             umask( 0 );
             mkdir( $tempPath,
@@ -91,21 +91,21 @@ sub init {
         }
     }
 
-    unless( -e $self->{rcsFile} ) {
-        if( $self->{attachment} &&
-            !$self->isAsciiDefault() ) {
-            $self->initBinary();
+    unless( -e $this->{rcsFile} ) {
+        if( $this->{attachment} &&
+            !$this->isAsciiDefault() ) {
+            $this->initBinary();
         } else {
-            $self->initText();
+            $this->initText();
         }
     }
 }
 
 # Pseudo revision information - used when there is no revision file
 sub _getRevisionInfoDefault {
-    my( $self ) = @_;
-    my $fileDate = $self->getTimestamp();
-    return ( "", 1, $fileDate, $TWiki::cfg{DefaultUserLogin},
+    my( $this ) = @_;
+    my $fileDate = $this->getTimestamp();
+    return ( '', 1, $fileDate, $TWiki::cfg{DefaultUserLogin},
              "Default revision information - no revision file" );
 }
 
@@ -119,11 +119,11 @@ Returns 0 if no file, otherwise epoch seconds
 =cut
 
 sub getTimestamp {
-    my( $self ) = @_;
+    my( $this ) = @_;
     my $date = 0;
-    if( -e $self->{file} ) {
+    if( -e $this->{file} ) {
         # Why big number if fail?
-        $date = (stat $self->{file})[9] || 600000000;
+        $date = (stat $this->{file})[9] || 600000000;
     }
     return $date;
 }
@@ -139,12 +139,12 @@ Return an error message or undef.
 =cut
 
 sub restoreLatestRevision {
-    my( $self ) = @_;
+    my( $this ) = @_;
 
-    my $rev = $self->numRevisions();
-    my $text = $self->getRevision( $rev );
+    my $rev = $this->numRevisions();
+    my $text = $this->getRevision( $rev );
 
-    return $self->_saveFile( $self->{file}, $text );
+    return $this->_saveFile( $this->{file}, $text );
 }
 
 =pod
@@ -158,13 +158,13 @@ Return error message or undef.
 =cut
 
 sub moveMe {
-    my( $self, $newWeb, $newTopic, $attachment ) = @_;
+    my( $this, $newWeb, $newTopic, $attachment ) = @_;
 
-    if( $self->{attachment} ) {
-        return $self->_moveAttachment( $newWeb, $newTopic,
-                                       $self->{attachment} );
+    if( $this->{attachment} ) {
+        return $this->_moveAttachment( $newWeb, $newTopic,
+                                       $this->{attachment} );
     } else {
-        return $self->_moveTopic( $newWeb, $newTopic );
+        return $this->_moveTopic( $newWeb, $newTopic );
     }
 }
 
@@ -172,21 +172,21 @@ sub moveMe {
 #
 # Return error message or undef
 sub _moveTopic {
-   my( $self, $newWeb, $newTopic ) = @_;
+   my( $this, $newWeb, $newTopic ) = @_;
 
-   my $oldWeb = $self->{web};
-   my $oldTopic = $self->{topic};
+   my $oldWeb = $this->{web};
+   my $oldTopic = $this->{topic};
 
    # Change data file
-   my $new = new TWiki::Store::RcsFile( $self->{session},
-                                        $newWeb, $newTopic, "" );
-   unless( move( $self->{file}, $new->{file} ) ) {
+   my $new = new TWiki::Store::RcsFile( $this->{session},
+                                        $newWeb, $newTopic, '' );
+   unless( move( $this->{file}, $new->{file} ) ) {
        return "data file move failed.";
    }
 
    # Change data file history
-   if( -e $self->{rcsFile} ) {
-       unless( move( $self->{rcsFile}, $new->{rcsFile} )) {
+   if( -e $this->{rcsFile} ) {
+       unless( move( $this->{rcsFile}, $new->{rcsFile} )) {
            return "history file move failed.";
        }
    }
@@ -201,14 +201,14 @@ sub _moveTopic {
    }
 
    # Rename the attachment directory if there is one
-   my $oldAttachDir = $self->_makeFileDir( 1, "" );
-   my $newAttachDir = $new->_makeFileDir( 1, "");
+   my $oldAttachDir = $this->_makeFileDir( 1, '' );
+   my $newAttachDir = $new->_makeFileDir( 1, '');
    if( -e $oldAttachDir ) {
        unless( move(
                     $oldAttachDir,
                     $newAttachDir
                    ) ) {
-           return "attach move failed";
+           return 'attach move failed';
        }
    }
 
@@ -221,16 +221,16 @@ sub _moveTopic {
 # do lock on the topics.
 # Return error message or undef.
 sub _moveAttachment {
-    my( $self, $newWeb, $newTopic ) = @_;
+    my( $this, $newWeb, $newTopic ) = @_;
 
-    my $oldWeb = $self->{web};
-    my $oldTopic = $self->{topic};
-    my $attachment = $self->{attachment};
+    my $oldWeb = $this->{web};
+    my $oldTopic = $this->{topic};
+    my $attachment = $this->{attachment};
 
     my $what = "$oldWeb.$oldTopic.$attachment -> $newWeb.$newTopic";
 
     # FIXME might want to delete old directories if empty
-    my $new = TWiki::Store::RcsFile->new( $self->{session}, $newWeb,
+    my $new = TWiki::Store::RcsFile->new( $this->{session}, $newWeb,
                                           $newTopic, $attachment );
 
     # before save, create directories if they don't exist
@@ -248,7 +248,7 @@ sub _moveAttachment {
     }
 
     # Move attachment
-    my $oldAttachment = $self->{file};
+    my $oldAttachment = $this->{file};
     my $newAttachment = $new->{file};
     unless( move(
                  $oldAttachment,
@@ -267,7 +267,7 @@ sub _moveAttachment {
     }
 
     # Move attachment history
-    my $oldAttachmentRcs = $self->{rcsFile};
+    my $oldAttachmentRcs = $this->{rcsFile};
     my $newAttachmentRcs = $new->{rcsFile};
     if( -e $oldAttachmentRcs ) {
         unless( move(
@@ -300,12 +300,12 @@ Check if this file type is known to be an ascii type file.
 =cut
 
 sub isAsciiDefault {
-   my( $self ) = @_;
+   my( $this ) = @_;
 
-   if( $self->{attachment} =~ /$TWiki::cfg{RCS}{asciiFileSuffixes}/ ) {
-      return "ascii";
+   if( $this->{attachment} =~ /$TWiki::cfg{RCS}{asciiFileSuffixes}/ ) {
+      return 'ascii';
    } else {
-      return "";
+      return '';
    }
 }
 
@@ -321,16 +321,16 @@ Return an error message on failure.
 =cut
 
 sub setLock {
-    my( $self, $lock, $user ) = @_;
+    my( $this, $lock, $user ) = @_;
 
-    $user = $self->{session}->{user} unless $user;
+    $user = $this->{session}->{user} unless $user;
 
-    my $lockFilename = $self->_makeFileName( ".lock" );
+    my $lockFilename = $this->_makeFileName( ".lock" );
     if( $lock ) {
         my $lockTime = time();
-        return $self->_saveFile( $lockFilename, "$user\n$lockTime" );
+        return $this->_saveFile( $lockFilename, "$user\n$lockTime" );
     } else {
-        unlink "$lockFilename"
+        unlink $lockFilename
           or return "Failed to delete $lockFilename: $!";
     }
     return undef;
@@ -345,28 +345,28 @@ See if a twiki lock exists. Return the lock user and lock time if it does.
 =cut
 
 sub isLocked {
-    my( $self ) = @_;
+    my( $this ) = @_;
 
-    my $lockFilename = $self->_makeFileName( ".lock" );
+    my $lockFilename = $this->_makeFileName( ".lock" );
     if ( -e $lockFilename ) {
-        my $t = $self->{session}->{store}->readFile( $lockFilename );
+        my $t = $this->{session}->{store}->readFile( $lockFilename );
         return split( /\s+/, $t, 2 );
     }
     return ( undef, undef );
 }
 
 sub _saveAttachment {
-    my( $self, $theTmpFilename ) = @_;
+    my( $this, $theTmpFilename ) = @_;
 
     # before save, create directories if they don't exist
-    my $tempPath = $self->_makePubWebDir();
+    my $tempPath = $this->_makePubWebDir();
     if( ! -e $tempPath ) {
         umask( 0 );
         mkdir( $tempPath,
                $TWiki::cfg{RCS}{dirPermission} )
           or return "mkdir failed: $!";
     }
-    $tempPath = $self->_makeFileDir( 1 );
+    $tempPath = $this->_makeFileDir( 1 );
     if( ! -e $tempPath ) {
         umask( 0 );
         mkdir( $tempPath, 0775 )
@@ -376,7 +376,7 @@ sub _saveAttachment {
     # FIXME share with move - part of init?
 
     # save uploaded file
-    my $newFile = $self->{file};
+    my $newFile = $this->{file};
     copy($theTmpFilename, $newFile)
       or return "copy($theTmpFilename, $newFile) failed: $!";
 
@@ -384,11 +384,11 @@ sub _saveAttachment {
     umask( 002 );
     chmod( 0644, $newFile ); # FIXME config permission for new attachment
 
-    return "";
+    return '';
 }
 
 sub _saveFile {
-    my( $self, $name, $text ) = @_;
+    my( $this, $name, $text ) = @_;
 
     umask( 002 );
     open( FILE, ">$name" )
@@ -405,27 +405,27 @@ sub _saveFile {
 # Deal differently with topics and attachments
 # text is a reference for efficiency
 sub _save {
-    my( $self, $filename, $text ) = @_;
+    my( $this, $filename, $text ) = @_;
 
-    if( $self->{attachment} ) {
+    if( $this->{attachment} ) {
         my $tmpFilename = $$text;
-        return $self->_saveAttachment( $tmpFilename );
+        return $this->_saveAttachment( $tmpFilename );
     } else {
-        return $self->_saveFile( $filename, $$text );
+        return $this->_saveFile( $filename, $$text );
     }
 }
 
 sub _readFile {
-    my( $self, $name ) = @_;
-    my $data = "";
+    my( $this, $name ) = @_;
+    my $data = '';
     undef $/; # set to read to EOF
     open( IN_FILE, "<$name" )
-      or return "";
+      or return '';
     binmode IN_FILE;
     $data = <IN_FILE>;
     $/ = "\n";
     close( IN_FILE );
-    $data = "" unless $data; # no undefined
+    $data = '' unless $data; # no undefined
     return $data;
 }
 
@@ -439,15 +439,15 @@ sub _readFile {
 #    blank         - attachment file
 #    ,v            - attachment history file
 sub _makeFileName {
-    my( $self, $extension ) = @_;
+    my( $this, $extension ) = @_;
 
-    $extension ||= "";
+    $extension ||= '';
 
-    my $file = "";
-    my $extra = "";
-    my $web = $self->{web};
-    my $topic = $self->{topic};
-    my $attachment = $self->{attachment};
+    my $file = '';
+    my $extra = '';
+    my $web = $this->{web};
+    my $topic = $this->{topic};
+    my $attachment = $this->{attachment};
 
     if( $extension eq ".lock" ) {
         $file = "$TWiki::cfg{DataDir}/$web/$topic$extension";
@@ -480,14 +480,14 @@ sub _makeFileName {
 #    Leave topic blank if you want the web directory rather than the topic directory
 #    should simply this with _makeFileName
 sub _makeFileDir {
-    my( $self, $attachment, $extension) = @_;
+    my( $this, $attachment, $extension) = @_;
 
-    $extension = "" if( ! $extension );
+    $extension = '' if( ! $extension );
 
-    my $web = $self->{web};
-    my $topic = $self->{topic};
+    my $web = $this->{web};
+    my $topic = $this->{topic};
 
-    my $dir = "";
+    my $dir = '';
     if( ! $attachment ) {
         if( $extension eq ",v" && $TWiki::cfg{RCS}{useSubDir} &&
             -d "$TWiki::cfg{DataDir}/$web/RCS" ) {
@@ -496,7 +496,7 @@ sub _makeFileDir {
             $dir = "$TWiki::cfg{DataDir}/$web";
         }
     } else {
-        my $suffix = "";
+        my $suffix = '';
         if ( $extension eq ",v" && $TWiki::cfg{RCS}{useSubDir} &&
              -d "$TWiki::cfg{DataDir}/$web/RCS" ) {
             $suffix = "/RCS";
@@ -508,16 +508,16 @@ sub _makeFileDir {
 }
 
 sub _makePubWebDir {
-    my( $self ) = @_;
+    my( $this ) = @_;
 
-    my $dir = $TWiki::cfg{PubDir} . "/" . $self->{web};
+    my $dir = $TWiki::cfg{PubDir} . "/" . $this->{web};
 
     return TWiki::Sandbox::untaintUnchecked( $dir );
 }
 
 sub _mkTmpFilename {
     my $tmpdir = File::Spec->tmpdir();
-    my $file = _mktemp( "twikiAttachmentXXXXXX", $tmpdir );
+    my $file = _mktemp( 'twikiAttachmentXXXXXX', $tmpdir );
     return File::Spec->catfile($tmpdir, $file);
 }
 
@@ -538,7 +538,7 @@ sub _mktemp {
     }
 
     @letters =
-      split(//,"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+      split(//,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
     $keepgen = 1;
 
@@ -549,7 +549,7 @@ sub _mktemp {
 
         undef $template;
 
-        $template = pack "a" x @template, @template;
+        $template = pack 'a' x @template, @template;
 
         $template = $template . $ext if ($ext);
 
@@ -619,7 +619,7 @@ Initialise a binary file.
 
 Must be provided by subclasses.
 
-Returns "" if okay, otherwise an error string.
+Returns '' if okay, otherwise an error string.
 
 *Virtual method* - must be implemented by subclasses
 
@@ -633,7 +633,7 @@ Initialise a text file.
 
 Must be provided by subclasses.
 
-Returns "" if okay, otherwise an error string.
+Returns '' if okay, otherwise an error string.
 
 *Virtual method* - must be implemented by subclasses
 

@@ -33,7 +33,7 @@ use TWiki::Time;
 
 sub new {
     my ( $class, $session ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
     my $this = bless( {}, $class );
 
     $this->{session} = $session;
@@ -43,14 +43,6 @@ sub new {
 
     return $this;
 }
-
-sub users { my $this = shift; return $this->{session}->{users}; }
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
-sub store { my $this = shift; return $this->{session}->{store}; }
-sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
-sub security { my $this = shift; return $this->{session}->{security}; }
-sub templates { my $this = shift; return $this->{session}->{templates}; }
-sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 =pod
 
@@ -62,7 +54,7 @@ Get the text at the other end of a URL
 
 sub getUrl {
     my ( $this, $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader ) = @_;
-    ASSERT(ref($this) eq "TWiki::Net") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Net') if DEBUG;
 
     # Run-time use of Socket module when needed
     require Socket;
@@ -86,8 +78,9 @@ sub getUrl {
         $req .= "Authorization: Basic $base64";
     }
 
-    my $proxyHost = $this->prefs()->getPreferencesValue("PROXYHOST");
-    my $proxyPort = $this->prefs()->getPreferencesValue("PROXYPORT");
+    my $prefs = $this->{session}->{prefs};
+    my $proxyHost = $prefs->getPreferencesValue('PROXYHOST');
+    my $proxyPort = $prefs->getPreferencesValue('PROXYPORT');
     if($proxyHost && $proxyPort) {
         $req = "GET http://$theHost:$thePort$theUrl HTTP/1.0\r\n";
         $theHost = $proxyHost;
@@ -133,7 +126,7 @@ sub sendEmail {
     # $theText Format: "Date: ...\nFrom: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody..."
 
     my( $this, $theText, $retries ) = @_;
-    ASSERT(ref($this) eq "TWiki::Net") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Net') if DEBUG;
     $retries = 1 unless $retries;
 
     # Put in a Date header, mainly for Qmail
@@ -143,8 +136,9 @@ sub sendEmail {
     # Check if Net::SMTP is available
     unless( $this->{MAILINITIALIZED} ) {
         $this->{MAILINITIALIZED} = 1;
-        $this->{MAIL_HOST}  = $this->prefs()->getPreferencesValue( "SMTPMAILHOST" );
-        $this->{HELLO_HOST} = $this->prefs()->getPreferencesValue( "SMTPSENDERHOST" );
+        my $prefs = $this->{session}->{prefs};
+        $this->{MAIL_HOST}  = $prefs->getPreferencesValue( 'SMTPMAILHOST' );
+        $this->{HELLO_HOST} = $prefs->getPreferencesValue( 'SMTPSENDERHOST' );
         if( $this->{MAIL_HOST} ) {
             eval {	# May fail if Net::SMTP not installed
                 $this->{USENETSMTP} = require Net::SMTP;
@@ -152,7 +146,7 @@ sub sendEmail {
         }
     }
 
-    my $from = "";
+    my $from = '';
     my @to = ();
     if( $this->{USENETSMTP} ) {
         my ( $header, $body ) = split( "\n\n", $theText, 2 );
@@ -174,7 +168,7 @@ sub sendEmail {
 
         # extract @to from 'To:', 'CC:', 'BCC:'
         @arr = grep( /^To: /i, @headerlines );
-        my $tmp = "";
+        my $tmp = '';
         if( scalar( @arr ) ) {
             $tmp = $arr[0];
             $tmp =~ s/^To:\s*//io;
@@ -205,7 +199,7 @@ sub sendEmail {
         $theText = "$header\n\n$body";   # rebuild message
     }
 
-    my $errors = "";
+    my $errors = '';
     my $back_off = 1; # seconds, doubles on each retry
     while ( $retries ) {
         my $error;
@@ -245,7 +239,7 @@ sub _sendEmailBySendmail {
     if( open( MAIL, "|-" ) || exec "$TWiki::cfg{MailProgram}" ) {
         print MAIL $theText;
         close( MAIL );
-        return "";
+        return '';
     }
     return "ERROR: Can't send mail using TWiki::cfg{MailProgram}";
 }
@@ -268,7 +262,7 @@ sub _sendEmailByNetSMTP {
     } else {
         $smtp = Net::SMTP->new( $this->{MAIL_HOST} );
     }
-    my $status = "";
+    my $status = '';
     if ($smtp) {
         {
             $smtp->mail( $from ) or last;
@@ -276,7 +270,7 @@ sub _sendEmailByNetSMTP {
             $smtp->data( $data ) or last;
             $smtp->dataend() or last;
         }
-        $status = ($smtp->ok() ? "" : "ERROR: Can't send mail using Net::SMTP. " . $smtp->message );
+        $status = ($smtp->ok() ? '' : "ERROR: Can't send mail using Net::SMTP. " . $smtp->message );
         $smtp->quit();
     } else {
         $status = "ERROR: Can't send mail using Net::SMTP (can't connect to '$this->{MAIL_HOST}')";

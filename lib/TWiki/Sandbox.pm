@@ -54,7 +54,7 @@ sub new {
     my ( $class, $session, $os, $realOS ) = @_;
     my $this = bless( {}, $class );
 
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
     ASSERT( defined $os ) if DEBUG;
     ASSERT( defined $realOS ) if DEBUG;
 
@@ -63,12 +63,12 @@ sub new {
     $this->{REAL_SAFE_PIPE_OPEN} = 0;           # supports "open FH, '-|"
     $this->{EMULATED_SAFE_PIPE_OPEN} = 0;       # emulate open from pipe
 
-    if ( $os eq "UNIX" or 
-        ($os eq "WINDOWS" and $realOS eq "cygwin"  ) ) {
+    if ( $os eq 'UNIX' or 
+        ($os eq 'WINDOWS' and $realOS eq 'cygwin'  ) ) {
         # Real safe pipes on Unix/Linux/Cygwin, for Perl 5.005+
         $this->{REAL_SAFE_PIPE_OPEN} = 1;
 
-    } elsif ( $os eq "WINDOWS" ) {
+    } elsif ( $os eq 'WINDOWS' ) {
         # Emulated safe pipes on ActivePerl 5.8 or higher 
         my $isActivePerl = eval 'Win32::BuildNumber !~ /Win32/';
         if ( $isActivePerl and $] >= 5.008 ) {
@@ -89,7 +89,7 @@ sub new {
     ##$this->{session}->writeDebug("safe setting = $this->{SAFE}");
 
     # Shell quoting - shell used only on non-safe platforms
-    if ($os eq "UNIX" or ($os eq "WINDOWS" and $realOS eq "cygwin"  ) ) {
+    if ($os eq 'UNIX' or ($os eq 'WINDOWS' and $realOS eq 'cygwin'  ) ) {
         $this->{CMDQUOTE} = '\'';
     } else {
         $this->{CMDQUOTE} = '\"';
@@ -138,7 +138,7 @@ metacharacters and even control characters.
 
 sub normalizeFileName {
     my ($string, $dotdot) = @_;
-    return "" unless $string;
+    return '' unless $string;
     my $absolute = $string =~ /^\//;
     my @result;
     for my $component (split /\//, $string) {
@@ -193,7 +193,7 @@ single character flag.  Permitted flags are
 
 sub buildCommandLine {
     my ($this, $template, %params) = @_;
-    ASSERT(ref($this) eq "TWiki::Sandbox") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Sandbox') if DEBUG;
     my @arguments;
 
     for my $tmplarg (split /\s+/, $template) {
@@ -293,7 +293,7 @@ ensures that the shell does not interpret any of the passed arguments.
 
 sub readFromProcessArray {
     my ($this, $path, $template, %params) = @_;
-    ASSERT(ref($this) eq "TWiki::Sandbox") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Sandbox') if DEBUG;
 
     my $data;                          # Output
     my $processFileHandle;             # Holds filehandle to read from process
@@ -305,7 +305,7 @@ sub readFromProcessArray {
     #$this->{session}->writeDebug("args = @args");
 
     if ( $this->{REAL_SAFE_PIPE_OPEN} ) {
-        #$this->{session}->writeDebug("Got to safe pipes section");
+        #$this->{session}->writeDebug('Got to safe pipes section');
         # Real safe pipes, open from process directly - works
         # for most Unix/Linux Perl platforms and on Cygwin.  Based on
         # perlipc(1).
@@ -326,12 +326,12 @@ sub readFromProcessArray {
             # Child - run the command, stdout to pipe
             exec $path, @args
               or throw Error::Simple( "exec of $path with args @args failed: $!" );
-            die "cannot happen";
+            die 'cannot happen';
             exit 127;
         }
 
     } elsif ( $this->{EMULATED_SAFE_PIPE_OPEN} ) {
-        #$this->{session}->writeDebug("Got to emulated pipes section");
+        #$this->{session}->writeDebug('Got to emulated pipes section');
 
         # FIXME: not working yet for ActivePerl on Windows
         # Safe pipe emulation mostly on Windows platforms
@@ -353,7 +353,7 @@ sub readFromProcessArray {
             # Child - run the command, stdout to pipe
             exec $path, @args
                 or throw Error::Simple( "exec of $path with args @args failed: $!" );
-            die "should never happen";
+            die 'should never happen';
             exit 127;
         }
 
@@ -403,7 +403,7 @@ sub _openSafePipeFromProcess {
         #$this->{session}->writeDebug("Parent, pid = $pid");
         # Parent
         close $childFileHandle or die;
-        #$this->{session}->writeDebug("fileno of parent handle is " . fileno($parentFileHandle));
+        #$this->{session}->writeDebug('fileno of parent handle is ' . fileno($parentFileHandle));
         return ($pid, $parentFileHandle);
     } else {
         # Child
@@ -411,9 +411,9 @@ sub _openSafePipeFromProcess {
         close $parentFileHandle or die;
         # FIXME: standard output to pipe disappears - hard to work out
         # what's happening
-        #$this->{session}->writeDebug("fileno of stdout handle is " . fileno(STDOUT));
-        #$this->{session}->writeDebug("fileno of stderr handle is " . fileno(STDERR));
-        #$this->{session}->writeDebug("fileno of child handle is " . fileno($childFileHandle));
+        #$this->{session}->writeDebug('fileno of stdout handle is ' . fileno(STDOUT));
+        #$this->{session}->writeDebug('fileno of stderr handle is ' . fileno(STDERR));
+        #$this->{session}->writeDebug('fileno of child handle is ' . fileno($childFileHandle));
         # Tried this from readFromProcess routine - doesn't work either ...
         # use POSIX;
         # POSIX::close 2;
@@ -421,10 +421,10 @@ sub _openSafePipeFromProcess {
 
         close STDOUT;
         open(STDOUT, ">&=" . fileno($childFileHandle)) or die;
-        #$this->{session}->writeDebug("fileno of stdout handle is now " . fileno(STDOUT));
+        #$this->{session}->writeDebug('fileno of stdout handle is now ' . fileno(STDOUT));
         close STDERR;
         open(STDERR, ">&=" . fileno($childFileHandle)) or die;
-        #$this->{session}->writeDebug("fileno of stderr handle is now " . fileno(STDERR));
+        #$this->{session}->writeDebug('fileno of stderr handle is now ' . fileno(STDERR));
         return ($pid, $parentFileHandle);
     }
 }
@@ -444,7 +444,7 @@ error is redirected to standard input.
 # FIXME: need to upgrade as per the Array variant
 sub readFromProcess {
     my ($this, $template, %params) = @_;
-    ASSERT(ref($this) eq "TWiki::Sandbox") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Sandbox') if DEBUG;
 
     my @args = $this->buildCommandLine( $template, %params );
     my $data;
@@ -476,12 +476,12 @@ sub readFromProcess {
 
         my $cmd = shift( @args ) . " $cmdQuote";
         $cmd .= join( "$cmdQuote $cmdQuote", @args ) .  $cmdQuote;
-        $cmd .= " 2>&1" if( $TWiki::cfg{OS} eq "UNIX" );
+        $cmd .= ' 2>&1' if( $TWiki::cfg{OS} eq 'UNIX' );
         $data = `$cmd`;
         $exit = ( $? >> 8 );
     }
     if( $this->{TRACE} ) {
-        print STDERR join( " ", @args ), " -($exit)-> $data\n";
+        print STDERR join( ' ', @args ), " -($exit)-> $data\n";
     }
     return ( $data, $exit );
 }

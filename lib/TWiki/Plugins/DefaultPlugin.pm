@@ -50,10 +50,10 @@ sub initPlugin {
     }
 
     # Get plugin preferences
-    $doOldInclude = TWiki::Func::getPluginPreferencesFlag( "OLDINCLUDE" ) || "";
+    $doOldInclude = TWiki::Func::getPluginPreferencesFlag( 'OLDINCLUDE' ) || '';
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
+    $debug = TWiki::Func::getPluginPreferencesFlag( 'DEBUG' );
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -71,8 +71,8 @@ sub commonTagsHandler {
     # Old INCLUDE syntax
     if( $doOldInclude ) {
         # allow two level includes
-        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/$TWiki::Plugins::SESSION->_INCLUDE( new TWiki::Attrs( $1 ), $_[1], $_[2], "" )/geo;
-        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/$TWiki::Plugins::SESSION->_INCLUDE( new TWiki::Attrs( $1 ), $_[1], $_[2], "" )/geo;
+        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/$TWiki::Plugins::SESSION->_INCLUDE( new TWiki::Attrs( $1 ), $_[1], $_[2], '' )/geo;
+        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/$TWiki::Plugins::SESSION->_INCLUDE( new TWiki::Attrs( $1 ), $_[1], $_[2], '' )/geo;
     }
 
     ######################
@@ -81,7 +81,7 @@ sub commonTagsHandler {
     # Required for migration purposes
     my $pubUrlPath = TWiki::Func::getPubUrlPath();
     my $attfexpr = TWiki::nativeUrlEncode( "$pubUrlPath/$_[2]/$_[1]" );
-    my $fnRE =  TWiki::Func::getRegularExpression( "filenameRegex" );
+    my $fnRE =  TWiki::Func::getRegularExpression( 'filenameRegex' );
     $_[0] =~ s!$attfexpr/($fnRE)!"$attfexpr/".&TWiki::nativeUrlEncode($1)!ge;
 }
 
@@ -105,11 +105,11 @@ sub DISABLE_outsidePREHandler {
     # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)
     #$_[0] =~ s/(^|\s|\()\%([^\s].*?[^\s]):([^\s].*?[^\s])\%/$1.$TWiki::Plugins::SESSION->_handleWikiWord($web,$2,$3)/geo;
 
-    # Use "forced" non-WikiName links (i.e. %Linkname%)
+    # Use 'forced' non-WikiName links (i.e. %Linkname%)
     # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)
     #$_[0] =~ s/(^|\s|\()\%([^\s].*?[^\s])\%/$1.$TWiki::Plugins::SESSION->_handleWikiWord($web,$web,$2)/geo;
 
-    # Use "forced" non-WikiName links (i.e. %Web.Linkname%)
+    # Use 'forced' non-WikiName links (i.e. %Web.Linkname%)
     # This is an old JosWiki render option combined with the new Web.LinkName notation
     # (Uncomment for JosWiki compatibility)
     #$_[0] =~ s/(^|\s|\()\%([a-zA-Z0-9]+)\.(.*?[^\s])\%(\s|\)|$)/$1.$TWiki::Plugins::SESSION->_handleWikiWord($web,$2,$3)/geo;

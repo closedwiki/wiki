@@ -45,7 +45,7 @@ Create a new user.
 
 sub new {
     my ( $class, $session, $name ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
     my $this = bless( {}, $class );
 
     $this->{session} = $session;
@@ -64,7 +64,7 @@ subscription
 
 sub getEmailAddresses {
     my $this = shift;
-    ASSERT(ref($this) eq "TWiki::Contrib::MailerContrib::Subscriber") if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Contrib::MailerContrib::Subscriber') if DEBUG;
 
     unless ( defined( $this->{emails} )) {
         if ( $this->{name} =~ /^$TWiki::regex{emailAddrRegex}/o ) {
@@ -170,7 +170,7 @@ Return a string representation of this object, in Web<nop>Notify format.
 
 sub stringify {
     my $this = shift;
-    my $subs = join( " ",
+    my $subs = join( ' ',
                      map { $_->stringify(); }
                      @{$this->{subscriptions}} );
     my $unsubs = join( " - ",

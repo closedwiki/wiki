@@ -57,27 +57,19 @@ BEGIN {
 
 sub new {
     my( $class, $session ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
-    my $self = bless( {}, $class );
-    $self->{session} = $session;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    my $this = bless( {}, $class );
+    $this->{session} = $session;
 
-    return $self;
+    return $this;
 }
-
-sub users { my $this = shift; return $this->{session}->{users}; }
-sub prefs { my $this = shift; return $this->{session}->{prefs}; }
-sub store { my $this = shift; return $this->{session}->{store}; }
-sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
-sub security { my $this = shift; return $this->{session}->{security}; }
-sub templates { my $this = shift; return $this->{session}->{templates}; }
-sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 #| Description: | (private) implementation method that generates an encrypted password |
 #| Parameter: =$user= | userName |
 #| Parameter: =$passwd= | unencypted password |
 #| Parameter: =$useOldSalt= | if $useOldSalt == 1 then we are attempting to match $passwd an existing one 
 #otherwise, we are just creating a new use encrypted passwd |
-#| Return: =$value= | returns "" on failure, an encrypted password otherwise |
+#| Return: =$value= | returns '' on failure, an encrypted password otherwise |
 sub htpasswdGeneratePasswd
 {
     my ( $this, $user, $passwd , $useOldSalt ) = @_;
@@ -125,34 +117,36 @@ sub htpasswdGeneratePasswd
 
 #| Description: | gets the encrypted password from the htpasswd / htdigest file |
 #| Parameter: =$user= | UserName |
-#| Return: =$encryptedPassword= | "" if there is none, the encrypted password otherwise |
+#| Return: =$encryptedPassword= | '' if there is none, the encrypted password otherwise |
 sub htpasswdReadPasswd
 {
     my ( $this, $user ) = @_;
 
     if( ! $user ) {
-        return "";
+        return '';
     }
 
-    my $text = $this->store()->readFile( $TWiki::cfg{HtpasswdFileName} );
+    my $store = $this->{session}->{store};
+    my $text = $store->readFile( $TWiki::cfg{HtpasswdFileName} );
     if( $text =~ /$user\:(\S+)/ ) {
         return $1;
     }
-    return "";
+    return '';
 }
  
 #| Description: | checks to see if there is a $user in the password system |
 #| Parameter: =$user= | the username we are looking for  |
-#| Return: =$passwordExists= | "1" if true, "" if not |
+#| Return: =$passwordExists= | '1' if true, '' if not |
 sub UserPasswordExists
 {
-    my ( $self, $user ) = @_;
+    my ( $this, $user ) = @_;
 
     if( ! $user ) {
-        return "";
+        return '';
     }
 
-    my $text = $self->store()->readFile( $TWiki::cfg{HtpasswdFileName} );
+    my $store = $this->{session}->{store};
+    my $text = $store->readFile( $TWiki::cfg{HtpasswdFileName} );
     if( $text =~ /^${user}:/gm ) {	# mod_perl: don't use /o
         return 1;
     }
@@ -163,24 +157,25 @@ sub UserPasswordExists
 #| Parameter: =$user= | the username we are replacing  |
 #| Parameter: =$oldUserPassword= | unencrypted password |
 #| Parameter: =$newUserPassword= | unencrypted password |
-#| Return: =$success= | "1" if success |
+#| Return: =$success= | '1' if success |
 # TODO: needs to fail if it doesw not succed due to file permissions
 sub UpdateUserPassword
 {
-    my ( $self, $user, $oldUserPassword, $newUserPassword ) = @_;
+    my ( $this, $user, $oldUserPassword, $newUserPassword ) = @_;
 
     my $oldUserEntry = htpasswdGeneratePasswd( $user, $oldUserPassword , 1);
     my $newUserEntry = htpasswdGeneratePasswd( $user, $newUserPassword , 0);
  
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = $self->store()->readFile( $TWiki::cfg{HtpasswdFileName} );
+    my $store = $this->{session}->{store};
+    my $text = $store->readFile( $TWiki::cfg{HtpasswdFileName} );
     # escape + sign; SHA-passwords can have + signs
     $oldUserEntry =~ s/\+/\\\+/g;
     $text =~ s/$user:$oldUserEntry/$user:$newUserEntry/;
-    $self->store()->saveFile( $TWiki::cfg{HtpasswdFileName}, $text );
+    $store->saveFile( $TWiki::cfg{HtpasswdFileName}, $text );
 
-    return "1";
+    return '1';
 }
 
 #| Description: |  |
@@ -192,69 +187,71 @@ sub UpdateUserPassword
 #| Note: | used by the htpasswd specific installpasswd & script  |
 sub htpasswdUpdateUser
 {
-    my ( $self, $oldEncryptedUserPassword, $newEncryptedUserPassword ) = @_;
+    my ( $this, $oldEncryptedUserPassword, $newEncryptedUserPassword ) = @_;
 
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = $self->store()->readFile( $TWiki::cfg{HtpasswdFileName} );
+    my $store = $this->{session}->{store};
+    my $text = $store->readFile( $TWiki::cfg{HtpasswdFileName} );
     # escape + sign; SHA-passwords can have + signs
     $oldEncryptedUserPassword =~ s/\+/\\\+/g;
     $text =~ s/$oldEncryptedUserPassword/$newEncryptedUserPassword/;
-    $self->store()->saveFile( $TWiki::cfg{HtpasswdFileName}, $text );
+    $store->saveFile( $TWiki::cfg{HtpasswdFileName}, $text );
 
-    return "1";
+    return '1';
 }
 
 #| Description: | creates a new user & password entry |
 #| Parameter: =$user= | the username we are replacing  |
 #| Parameter: =$newUserPassword= | unencrypted password |
-#| Return: =$success= | "1" if success |
+#| Return: =$success= | '1' if success |
 #| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 sub AddUserPassword
 {
-    my ( $self, $user, $newUserPassword ) = @_;
+    my ( $this, $user, $newUserPassword ) = @_;
     my $userEntry = $user.":". htpasswdGeneratePasswd( $user, $newUserPassword , 0);
 
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = $self->store()->readFile( $TWiki::cfg{HtpasswdFileName} );
-    ##$self->{session}->writeDebug "User entry is :$userEntry: before newline";
+    my $store = $this->{session}->{store};
+    my $text = $store->readFile( $TWiki::cfg{HtpasswdFileName} );
+    ##$this->{session}->writeDebug "User entry is :$userEntry: before newline";
     $text .= "$userEntry\n";
-    $self->store()->saveFile( $TWiki::cfg{HtpasswdFileName}, $text );
+    $store->saveFile( $TWiki::cfg{HtpasswdFileName}, $text );
 
-	return "1";
+	return '1';
 }
 
 #| Description: | used to remove the user from the password system |
 #| Parameter: =$user= | the username we are replacing  |
-#| Return: =$success= | "1" if success |
+#| Return: =$success= | '1' if success |
 #| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 sub RemoveUser
 {
-    my ( $self, $user ) = @_;
-    my $userEntry = $user.":".$self->htpasswdReadPasswd( $user );
+    my ( $this, $user ) = @_;
+    my $userEntry = $user.":".$this->htpasswdReadPasswd( $user );
 
-    return $self->htpasswdUpdateUser( $userEntry, "");
+    return $this->htpasswdUpdateUser( $userEntry, '');
 }
 
 #| Description: | used to check the user's password |
 #| Parameter: =$user= | the username we are replacing  |
 #| Parameter: =$password= | unencrypted password |
-#| Return: =$success= | "1" if success |
+#| Return: =$success= | '1' if success |
 #| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 sub CheckUserPasswd
 {
-    my ( $self, $user, $password ) = @_;
-    my $currentEncryptedPasswordEntry = $self->htpasswdReadPasswd( $user );
+    my ( $this, $user, $password ) = @_;
+    my $currentEncryptedPasswordEntry = $this->htpasswdReadPasswd( $user );
 
     my $encryptedPassword = htpasswdGeneratePasswd($user, $password , 1);
 
     # OK
     if( $encryptedPassword eq $currentEncryptedPasswordEntry ) {
-        return "1";
+        return '1';
     }
     # NO
-    return "";
+    return '';
 }
  
 1;

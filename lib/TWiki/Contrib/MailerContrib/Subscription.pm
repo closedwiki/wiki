@@ -64,7 +64,7 @@ Return a string representation of this object, in Web<nop>Notify format.
 sub stringify {
     my $this = shift;
 
-    my $record = $this->{topics} . "";
+    my $record = $this->{topics} . '';
     # convert RE back to wildcard
     $record =~ s/\.\*\?/\*/;
     $record .= " ($this->{depth})" if ( $this->{depth} );

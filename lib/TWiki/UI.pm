@@ -77,25 +77,25 @@ sub run {
         # use Benchmark qw(:all :hireswallclock);
         # use vars qw( $begin );
         # BEGIN{$begin=new Benchmark;}
-        # END{print STDERR "Total ".timestr(timediff(new Benchmark,$begin))."\n";}
+        # END{print STDERR 'Total '.timestr(timediff(new Benchmark,$begin))."\n";}
         #
         # and uncomment the following lines and the lines at ****:
         # my $bm = $query->param( 'benchmark' );
         # if ( $bm ) {
         #     eval 'use Data::Dumper;';
-        #     open(OF, ">$bm") || throw Error::Simple( "Store failed" );
+        #     open(OF, ">$bm") || throw Error::Simple( 'Store failed' );
         #     print OF Dumper(\$query, $pathInfo, $user, $url);
         #     close(OF);
         # }
     } else {
         # script is called by cron job or user
-        $query = new CGI( "" );
+        $query = new CGI( '' );
         $scripted = 1;
         # Interactive script name
-        $user = "guest";
-        $url = "";
-        $topic = "";
-        $pathInfo = "";
+        $user = 'guest';
+        $url = '';
+        $topic = '';
+        $pathInfo = '';
         foreach my $arg ( @ARGV ) {
             if ( $arg =~ /^-user=(.*)$/o ) {
                 $user = $1;
@@ -133,7 +133,7 @@ sub run {
         &$method( $session );
     } catch TWiki::AccessControlException with {
         my $e = shift;
-        # Had an access control violation. See if there is an "auth" version
+        # Had an access control violation. See if there is an 'auth' version
         # of this script, may be a result of not being logged in.
         my $url;
         my $script = $ENV{'SCRIPT_FILENAME'};
@@ -142,7 +142,7 @@ sub run {
         my $scriptName = $2;
         $script .= "$scriptPath${scriptName}auth$TWiki::cfg{ScriptSuffix}";
         if( ! $query->remote_user() && -e $script ) {
-            $url = $ENV{"REQUEST_URI"};
+            $url = $ENV{REQUEST_URI};
             if( $url && $url =~ s/\/$scriptName/\/${scriptName}auth/ ) {
                 # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
                 $url = "$session->{urlHost}$url";
@@ -172,7 +172,7 @@ sub run {
             $session->redirect( $url );
         } else {
             $url = $session->getOopsUrl( $e->{-web}, $e->{-topic},
-                                         "oopsaccessdenied",
+                                         'oopsaccessdenied',
                                          $e->{-mode}, $e->{-reason} );
         }
         $session->redirect( $url );
@@ -200,13 +200,13 @@ Check if the web exists. If it doesn't, will throw an oops exception.
 
 sub checkWebExists {
     my ( $session, $webName, $topic ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
 
     unless ( $session->{store}->webExists( $webName ) ) {
         throw
           TWiki::UI::OopsException( $webName,
                                     $topic,
-                                    "noweb",
+                                    'noweb',
                                     "ERROR $webName.$topic web does not exist" );
     }
 }
@@ -215,16 +215,16 @@ sub checkWebExists {
 
 ---++ StaticMethod topicExists( $session, $web, $topic, $op ) => boolean
 Check if the given topic exists, throwing an OopsException
-if it doesn't. $op is %PARAM1% in the "oopsnotopic" template.
+if it doesn't. $op is %PARAM1% in the 'oopsnotopic' template.
 
 =cut
 
 sub checkTopicExists {
     my ( $session, $webName, $topic, $op ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
 
     unless( $session->{store}->topicExists( $webName, $topic )) {
-        throw TWiki::UI::OopsException( $webName, $topic, "notopic", $op );
+        throw TWiki::UI::OopsException( $webName, $topic, 'notopic', $op );
     }
 }
 
@@ -238,7 +238,7 @@ if it is.
 
 sub checkMirror {
     my ( $session, $webName, $topic ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
 
     my( $mirrorSiteName, $mirrorViewURL ) =
       $session->readOnlyMirrorWeb( $webName );
@@ -246,7 +246,7 @@ sub checkMirror {
     return unless ( $mirrorSiteName );
 
     throw TWiki::UI::OopsException( $webName, $topic,
-                                    "mirror",
+                                    'mirror',
                                     $mirrorSiteName,
                                     $mirrorViewURL );
 }
@@ -261,12 +261,12 @@ web.topic is permissible, throwing a TWiki::UI::OopsException if not.
 
 sub checkAccess {
     my ( $session, $web, $topic, $mode, $user ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
 
-    unless( $session->{security}->checkAccessPermission( $mode, $user, "",
+    unless( $session->{security}->checkAccessPermission( $mode, $user, '',
                                                          $topic, $web )) {
         throw TWiki::UI::OopsException( $web, $topic,
-                                        "accessdenied",
+                                        'accessdenied',
                                         $mode,
                                         $session->{security}->getReason());
     }
@@ -283,7 +283,7 @@ web.
 
 sub readTemplateTopic {
     my( $session, $theTopicName ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
 
     $theTopicName =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
 

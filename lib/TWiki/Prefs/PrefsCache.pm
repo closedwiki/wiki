@@ -48,25 +48,25 @@ Creates a new Prefs object.
 
 sub new {
     my( $class, $session, $parent ) = @_;
-    ASSERT(ref($session) eq "TWiki") if DEBUG;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
 
-    my $self = bless( {}, $class );
-    $self->{session} = $session;
-    $self->{keyPrefix} = "";
+    my $this = bless( {}, $class );
+    $this->{session} = $session;
+    $this->{keyPrefix} = '';
 
     # initialise the final prefs from the parent, so they don't get
     # overwritten when loading prefs at this level. The final hash
     # will be rewritten when the prefs have been loaded.
     if( $parent ) {
-        ASSERT(ref($parent) eq "TWiki::Prefs::PrefsCache") if DEBUG;
-        $self->{final} = $parent->{final};
-        $self->{prefs}{FINALPREFERENCES} =
-          join(",", keys( %{$self->{final}} ));
+        ASSERT(ref($parent) eq 'TWiki::Prefs::PrefsCache') if DEBUG;
+        $this->{final} = $parent->{final};
+        $this->{prefs}{FINALPREFERENCES} =
+          join(",", keys( %{$this->{final}} ));
     } else {
-        $self->{final} = ();
+        $this->{final} = ();
     }
 
-    return $self;
+    return $this;
 }
 
 =pod
@@ -74,29 +74,29 @@ sub new {
 ---++ ObjectMethod loadPrefsFromTopic( $web, $topic )
 
 Loads preferences from a topic. All settings loaded are prefixed
-with the key prefix set in setKeyPrefix (default "").
+with the key prefix set in setKeyPrefix (default '').
 
 =cut
 
 sub loadPrefsFromTopic {
-    my( $self, $theWeb, $theTopic ) = @_;
-    ASSERT(ref($self) eq "TWiki::Prefs::PrefsCache") if DEBUG;
+    my( $this, $theWeb, $theTopic ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Prefs::PrefsCache') if DEBUG;
 
-    my $session = $self->{session};
+    my $session = $this->{session};
     if( $session->{store}->topicExists( $theWeb, $theTopic )) {
         my( $meta, $text ) =
           $session->{store}->readTopic( undef,
                                          $theWeb, $theTopic,
                                          undef );
         my $parser = new TWiki::Prefs::Parser();
-        $parser->parseText( $text, $self );
-        $parser->parseMeta( $meta, $self );
+        $parser->parseText( $text, $this );
+        $parser->parseMeta( $meta, $this );
     }
 
-    my $finalPrefs = $self->{prefs}{FINALPREFERENCES};
+    my $finalPrefs = $this->{prefs}{FINALPREFERENCES};
     if ( defined( $finalPrefs )) {
         my @finalPrefsList = split /[\s,]+/, $finalPrefs;
-        $self->{final} = { map { $_ => 1 } @finalPrefsList };
+        $this->{final} = { map { $_ => 1 } @finalPrefsList };
     }
 }
 
@@ -129,30 +129,30 @@ be finalised until after the whole topic has been read.
 =cut
 
 sub insertPrefsValue {
-    my( $self, $theKey, $theValue ) = @_;
+    my( $this, $theKey, $theValue ) = @_;
 
-    $theKey = $self->{keyPrefix} . $theKey;
+    $theKey = $this->{keyPrefix} . $theKey;
 
     # key is final, may not be overridden
-    return if exists $self->{final}{$theKey};
+    return if exists $this->{final}{$theKey};
 
     $theValue =~ s/\t/ /g;                 # replace TAB by space
     $theValue =~ s/([^\\])\\n/$1\n/g;      # replace \n by new line
     $theValue =~ s/([^\\])\\\\n/$1\\n/g;   # replace \\n by \n
     $theValue =~ s/`//g;                   # filter out dangerous chars
 
-    if ( defined( $self->{prefs}{$theKey} ) &&
-         $theKey eq "FINALPREFERENCES" ) {
+    if ( defined( $this->{prefs}{$theKey} ) &&
+         $theKey eq 'FINALPREFERENCES' ) {
         # merge final preferences lists
-        $self->{prefs}{$theKey} .= ",$theValue";
+        $this->{prefs}{$theKey} .= ",$theValue";
     } else {
-        $self->{prefs}{$theKey} = $theValue;
+        $this->{prefs}{$theKey} = $theValue;
     }
 }
 
 #sub stringify {
 #    my $this = shift;
-#    my $res = "";
+#    my $res = '';
 #
 #    foreach my $key ( keys %{$this->{prefs}} ) {
 #        $res .= "$key => $this->{prefs}{$key}\n";

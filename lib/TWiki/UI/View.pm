@@ -64,13 +64,13 @@ sub view {
     my $webName = $session->{webName};
     my $topicName = $session->{topicName};
 
-    my $viewRaw = $query->param( "raw" ) || "";
-    my $contentType = $query->param( "contenttype" );
+    my $viewRaw = $query->param( 'raw' ) || '';
+    my $contentType = $query->param( 'contenttype' );
 
     my $showRev = 1;
-    my $extra = "";
-    my $revdate = "";
-    my $revuser = "";
+    my $extra = '';
+    my $revdate = '';
+    my $revuser = '';
 
     TWiki::UI::checkWebExists( $session, $webName, $topicName );
 
@@ -81,7 +81,7 @@ sub view {
         $session->{renderer}->setRenderMode( 'rss' );
     }
 
-    my $rev = $session->{store}->cleanUpRevID( $query->param( "rev" ));
+    my $rev = $session->{store}->cleanUpRevID( $query->param( 'rev' ));
 
     my $topicExists =
       $session->{store}->topicExists( $webName, $topicName );
@@ -112,7 +112,7 @@ sub view {
 
             ( $revdate, $revuser ) = $meta->getRevisionInfo();
             $revdate = TWiki::Time::formatTime( $revdate );
-            $extra .= "r$rev";
+            $extra .= 'r'.$rev;
         } else {
             # viewing the most recent rev
             ( $text, $meta ) = ( $currText, $currMeta );
@@ -121,17 +121,17 @@ sub view {
         $rev = 1;
         if( TWiki::isValidTopicName( $topicName )) {
             ( $currMeta, $currText ) =
-              TWiki::UI::readTemplateTopic( $session, "WebTopicViewTemplate" );
+              TWiki::UI::readTemplateTopic( $session, 'WebTopicViewTemplate' );
         } else {
             ( $currMeta, $currText ) =
-              TWiki::UI::readTemplateTopic( $session, "WebTopicNonWikiTemplate" );
+              TWiki::UI::readTemplateTopic( $session, 'WebTopicNonWikiTemplate' );
         }
         ( $text, $meta ) = ( $currText, $currMeta );
-        $extra .= " (not exist)";
+        $extra .= ' (not exist)';
     }
 
     if( $viewRaw ) {
-        $extra .= " raw=$viewRaw";
+        $extra .= ' raw='.$viewRaw;
         if( $viewRaw =~ /debug/i ) {
             $text = $session->{store}->getDebugText( $meta, $text );
         }
@@ -141,16 +141,16 @@ sub view {
         # which shows the topic as plain text; useful for those who want
         # to download plain text for the topic.
         # SMELL: this is not documented anywhere that I can find, and the
-        # poor slob who creates "texture_skin" is going to get a hell of
+        # poor slob who creates 'texture_skin' is going to get a hell of
         # a shock! This should be done with "raw=text", not with a skin.
         if( $skin !~ /^text/ ) {
-            my $vtext = "<form><textarea readonly=\"readonly\" " .
-              "wrap=\"virtual\" rows=\"\%EDITBOXHEIGHT%\" " .
-               "style=\"\%EDITBOXSTYLE%\" " .
-                "cols=\"\%EDITBOXWIDTH%\">";
+            my $vtext = '<form><textarea readonly="readonly" ' .
+              'wrap="virtual" rows="%EDITBOXHEIGHT%" ' .
+                'style="%EDITBOXSTYLE%" ' .
+                  'cols="%EDITBOXWIDTH%">';
             $vtext = $session->handleCommonTags( $vtext, $webName, $topicName );
             $text = TWiki::entityEncode( $text );
-            $text = "$vtext$text</textarea></form>";
+            $text = $vtext.$text.'</textarea></form>';
         }
     } else {
         $text = $session->handleCommonTags( $text, $webName, $topicName );
@@ -161,18 +161,17 @@ sub view {
 
     if( $TWiki::cfg{Log}{view} ) {
         # write log entry
-        $session->writeLog( "view", "$webName.$topicName", $extra );
+        $session->writeLog( 'view', $webName.'.'.$topicName, $extra );
     }
 
     # get view template, standard view or a view with a different skin
-    my $tmpl = $session->{templates}->readTemplate( "view", $skin );
+    my $tmpl = $session->{templates}->readTemplate( 'view', $skin );
     if( ! $tmpl ) {
-        my $mess = "<html><body>\n"
-          . "<h1>TWiki Installation Error</h1>\n"
-            . "Template file view.tmpl not found or template directory \n"
-              . "$TWiki::cfg{TemplateDir} not found.<p />\n"
-                . "Check the configuration setting for TemplateDir\n"
-                  . "</body></html>\n";
+        my $mess = '<html><body><h1>TWiki Installation Error</h1>'.
+          'Template file view.tmpl not found or template directory'.
+            $TWiki::cfg{TemplateDir}.' not found.<p />'.
+              'Check the configuration setting for TemplateDir'.
+                '</body></html>';
         $session->writeCompletePage( $mess );
         return;
     }
@@ -192,7 +191,7 @@ sub view {
             # allow view to be indexed
             $indexableView = 1;
         } else {
-            $text = "";
+            $text = '';
         }
         $tmpl =~ s/%REVTITLE%//go;
     } elsif( $rev < $showRev ) {
@@ -213,7 +212,7 @@ sub view {
         # suffixes '?t=NNNN' to ensure that every Edit link is unique,
         # fixing
         # Codev.RefreshEditPage bug relating to caching of Edit page.
-        $tmpl =~ s!%EDITTOPIC%!<a href=\"%EDITURL%\" $TWiki::cfg{NoFollow}><b>$editAction</b></a>!go;
+        $tmpl =~ s!%EDITTOPIC%!<a href="%EDITURL%" $TWiki::cfg{NoFollow}><b>$editAction</b></a>!go;
 
         # FIXME: Implement ColasNahaboo's suggested %EDITLINK% along
         # same lines, within handleCommonTags
@@ -232,65 +231,81 @@ sub view {
     my $revsToShow = $TWiki::cfg{NumberOfRevisions} + 1;
     $revsToShow = $showRev if $showRev < $revsToShow;
     my $doingRev = $showRev;
-    my @revs;
+    my $revs;
     while( $revsToShow > 0 ) {
         $revsToShow--;
         if( $doingRev == $rev) {
-            push( @revs, "r$rev");
+            $revs .= ' r'.$rev;
         } else {
-            push( @revs, "<a href=\"".
-                  $session->getScriptUrl( $webName, $topicName, "view" ) .
-                  "?rev=$doingRev\" $TWiki::cfg{NoFollow}>r$doingRev</a>");
+            $revs .= ' <a href="'.
+              $session->getScriptUrl( $webName, $topicName, 'view' ) .
+                "?rev=$doingRev\" $TWiki::cfg{NoFollow}>r$doingRev</a>";
         }
         if ($doingRev-$rev >= $TWiki::cfg{NumberOfRevisions}) {
             # we started too far away, need to jump closer to $rev
             use integer;
             $doingRev = $rev + $revsToShow / 2;
             $doingRev = $revsToShow if $revsToShow > $doingRev;
-            push( @revs, "|" );
+            $revs .= ' |';
             next;
         }
         if( $revsToShow ) {
-            push( @revs, "<a href=\"".
-                  $session->getScriptUrl( $webName, $topicName, "rdiff").
-                  "?rev1=$doingRev&amp;rev2=".($doingRev-1)."\" $TWiki::cfg{NoFollow}>&gt;</a>");
+            $revs .= ' <a href="'.
+              $session->getScriptUrl( $webName, $topicName, 'rdiff' ).
+                '?rev1='.$doingRev.'&amp;rev2='.($doingRev-1).
+                  "\" $TWiki::cfg{NoFollow}>&gt;</a>";
         }
         $doingRev--;
     }
-    my $revisions = join(" ", @revs);
-
-    $tmpl =~ s/%REVISIONS%/$revisions/go;
-
+    $tmpl =~ s/%REVISIONS%/$revs/go;
     $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;
 
-    $tmpl = $session->{renderer}->renderMetaTags
-      ( $webName, $topicName, $tmpl, $meta, ( $rev == $showRev ), $viewRaw );
-
-    $tmpl = $session->handleCommonTags( $tmpl, $webName, $topicName );
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topicName );
-
-    $tmpl =~ s/%TEXT%/$text/go;
-    $tmpl =~ s/%MAXREV%/$showRev/go;
-    $tmpl =~ s/%CURRREV%/$rev/go;
-    $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
-
-    # Write header based on "contenttype" parameter, used to produce
-    # MIME types like text/plain or text/xml, e.g. for RSS feeds.
+    $tmpl =~ m/^(.*)%TEXT%(.*$)/s;
+    my $start = $1;
+    my $end = $2;
+    my $strip = 0;
     if( $contentType ) {
-        if( $skin =~ /^rss/ ) {
-            $tmpl =~ s/<img [^>]*>//g;  # remove image tags
-            $tmpl =~ s/<a [^>]*>//g;    # remove anchor tags
-            $tmpl =~ s/<\/a>//g;        # remove anchor tags
-        }
+        $strip = ( $skin =~ /^rss/ );
     } elsif( $skin =~ /^rss/ ) {
-        $tmpl =~ s/<img [^>]*>//g;  # remove image tags
-        $tmpl =~ s/<a [^>]*>//g;    # remove anchor tags
-        $tmpl =~ s/<\/a>//g;        # remove anchor tags
         $contentType = 'text/xml';
+        $strip = 1;
     } else {
         $contentType = 'text/html'
     }
-    $session->writeCompletePage( $tmpl );
+    $session->{SESSION_TAGS}{MAXREV} = $showRev;
+    $session->{SESSION_TAGS}{CURRREV} = $rev;
+
+    $session->writePageHeader( undef, undef, $contentType, 0 );
+
+    # output in three chunks in case the text takes a long time to render.
+    # the client can keep busy fetching the stylesheet, if it's smart.
+    _bungOut($session, $webName, $topicName, $start, $meta, $rev, $showRev, $viewRaw, $strip);
+
+    _bungOut($session, $webName, $topicName, $text, $meta, $rev, $showRev, $viewRaw, $strip);
+
+    _bungOut($session, $webName, $topicName, $end, $meta, $rev, $showRev, $viewRaw, $strip);
+}
+
+sub _bungOut {
+    my ($session, $webName, $topicName, $text, $meta, $rev, $showRev, $viewRaw, $strip) = @_;
+    my $renderer = $session->{renderer};
+
+    $text = $renderer->renderMetaTags
+      ( $webName, $topicName, $text, $meta, ( $rev == $showRev ), $viewRaw );
+
+    $text = $session->handleCommonTags( $text, $webName, $topicName );
+    $text = $renderer->getRenderedVersion( $text, $webName, $topicName );
+
+    $text =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
+
+    # Write header based on 'contenttype' parameter, used to produce
+    # MIME types like text/plain or text/xml, e.g. for RSS feeds.
+    if( $strip ) {
+        $text =~ s/<img [^>]*>//g;  # remove image tags
+        $text =~ s/<a [^>]*>//g;    # remove anchor tags
+        $text =~ s/<\/a>//g;        # remove anchor tags
+    }
+    print $text;
 }
 
 =pod
@@ -328,8 +343,8 @@ sub viewfile {
         if( $fileContent ) {
             my $mimeType = _suffixToMimeType( $session, $fileName );
             print $query->header( -type => $mimeType,
-                                  -Content_Disposition => "inline;filename=$fileName");
-            print "$fileContent";
+                                  -Content_Disposition => 'inline;filename='.$fileName);
+            print $fileContent;
             return;
         } else {
             # If no file content we'll try and show pub content, should there be a warning FIXME
@@ -342,7 +357,8 @@ sub viewfile {
     # for now, show the original document:
 ;
     my $host = $session->{urlHost};
-    $session->redirect( "$host$TWiki::cfg{PubUrlPath}/$webName/$topic/$fileName" );
+    $session->redirect( $host.$TWiki::cfg{PubUrlPath}.
+                        "/$webName/$topic/$fileName" );
 }
 
 sub _suffixToMimeType {
@@ -352,7 +368,7 @@ sub _suffixToMimeType {
     if( $theFilename =~ /\.(.+)$/ ) {
         my $suffix = $1;
         my @types = grep{ s/^\s*([^\s]+).*?\s$suffix\s.*$/$1/i }
-          map{ "$_ " }
+          map{ $_.' ' }
             split( /[\n\r]/, $session->{store}->readFile( $TWiki::cfg{MimeTypesFileName} ) );
         $mimeType = $types[0] if( @types );
     }

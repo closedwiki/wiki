@@ -74,8 +74,8 @@ record is a reflection of both changes.
 
 sub merge {
     my( $this, $other ) = @_;
-    ASSERT(ref($this) eq "TWiki::Contrib::MailerContrib::Change" );
-    ASSERT(ref($other) eq "TWiki::Contrib::MailerContrib::Change" );
+    ASSERT(ref($this) eq 'TWiki::Contrib::MailerContrib::Change' );
+    ASSERT(ref($other) eq 'TWiki::Contrib::MailerContrib::Change' );
 
     if( $other->{CURR_REV} > $this->{CURR_REV} ) {
         $this->{CURR_REV} = $other->{CURR_REV};
@@ -113,7 +113,7 @@ sub expandHTML {
     $html =~ s/%AUTHOR%/$this->{AUTHOR}/geo;
     my $tim =  TWiki::Time::formatTime( $this->{TIME} );
     $html =~ s/%TIME%/$tim/go;
-    my $frev = "";
+    my $frev = '';
     if( $this->{CURR_REV} ) {
         if( $this->{CURR_REV} > 1 ) {
             $frev = "r$this->{BASE_REV}-&gt;r$this->{CURR_REV}";
@@ -154,7 +154,7 @@ sub expandPlain {
       $this->{SESSION}->getScriptUrl
         ( URI::Escape::uri_escape( $web ),
           URI::Escape::uri_escape( $this->{TOPIC}),
-          "view" );
+          'view' );
     my $tim =  TWiki::Time::formatTime( $this->{TIME} );
     my $expansion = "- ".$this->{TOPIC}." (".$this->{AUTHOR}.", $tim) r";
     $expansion .= $this->{BASE_REV}."->r".$this->{CURR_REV};
