@@ -23,3 +23,31 @@ with a simple way to build new groupware applications.
 
 The GPLed TWiki software and over 100 Plugins can be 
 downloaded from the TWiki.org web site, http://TWiki.org/.
+
+
+TWiki Development
+-----------------
+
+The place to collaborate on further TWiki development is at
+http://TWiki.org/cgi-bin/view/Codev/. ReadmeFirst tells you 
+how to collaborate. Subscribe in WebNotify to stay up to 
+date on latest development issues.
+
+
+Deployment
+----------
+
+A side note in case you intend to use TWiki on your Intranet:
+TWiki is successfully deployed as a collaboration tool and
+dynamic Intranet tool at many major companies. You need to 
+consider some important points to reach that goal. Do not 
+underestimate the initial effort it takes to get a 
+collaboration tool accepted within the company. Support from 
+upper management is a must. A company with a culture that 
+encourages information sharing is much more likely to succeed 
+than one where information hoarding is the norm. There is 
+also an initial catch 22 problem if you intend to use it as a 
+knowledge base: "Why should I use the tool, there is so 
+little information in it". An incentive program to reward 
+contributions, and a dedicated knowledge engineer can help in 
+the initial phase of deployment.
