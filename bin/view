@@ -197,6 +197,7 @@ sub main
 
     if( $mirrorSiteName ) {
         # disable edit and attach
+	# FIXME: won't work with non-default skins, see %EDITURL%
         $tmpl =~ s/%EDITTOPIC%/$mirrorLink | <strike>Edit<\/strike>/o;
         $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/oi;
         if( $topicExists ) {
@@ -209,23 +210,25 @@ sub main
 
     } elsif( $rev < $maxrev ) {
         # disable edit of previous revisions - FIXME consider change to use two templates
+	# FIXME: won't work with non-default skins, see %EDITURL%
         $tmpl =~ s/%EDITTOPIC%/<strike>Edit<\/strike>/o;
         $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/oi;
         $tmpl =~ s|<a [^>]*?>Rename/move<\/a>|<strike>Rename/move<\/strike>|oi;
         $tmpl =~ s/%REVTITLE%/\(r1.$rev\)/go;
         $tmpl =~ s/%REVARG%/&rev=1.$rev/go;
     } else {
-	# RD: time string on Edit URL - fix for RefreshEditPage
+	# Remove the NOINDEX meta tag (for robots) from both Edit and 
+	# Create pages
+	$tmpl =~ s/<meta name="robots"[^>]*>//goi;
+	my $editAction = $topicExists ? 'Edit' : 'Create';
+
+	# Make Edit URL unique for every edit - fix for RefreshEditPage,
+	# also creates new %EDITURL% variable for use in non-default skins.
+	# Special case for 'view' to handle %EDITTOPIC% and Edit vs. Create.
 	my $timestring = time();	# Time in seconds since 1970
-        if( $topicExists ) {
-	    $tmpl =~ s!%EDITTOPIC%!<a href=\"$scriptUrlPath/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?t=$timestring\"><b>Edit</b></a>!go;
-            # remove the NOINDEX meta tag
-            $tmpl =~ s/<meta name="robots"[^>]*>//goi;
-        } else {
-	    # FIXME: If we remove the NOINDEX tag from Create-mode view,
-	    # we can simplify this code.
-            $tmpl =~ s!%EDITTOPIC%!<a href=\"$scriptUrlPath/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?t=$timestring\"><b>Create</b></a>!go;
-        }
+	$tmpl =~ s!%EDITTOPIC%!<a href=\"%EDITURL%\"><b>$editAction</b></a>!go;
+	$tmpl =~ s!%EDITURL%!$scriptUrlPath/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?t=$timestring!go;
+
         $tmpl =~ s/%REVTITLE%//go;
         $tmpl =~ s/%REVARG%//go;
     }
