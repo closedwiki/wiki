@@ -208,7 +208,7 @@ sub main
         # PTh 20 Jun 2000: changed to getOopsUrl
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopslocked",
             $lockUser, $editLock, $lockTime );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
 	return;
     }
     &TWiki::Store::lockTopic( $topic );

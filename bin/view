@@ -155,13 +155,13 @@ sub main
             } else {
                 $url = "$TWiki::urlHost$scriptUrlPath/$viewauthFile/$webName/$topic";
             }
-            print $query->redirect( $url );
+            TWiki::redirect( $query, $url );
             return;
         }
     }
     if( ! $viewAccessOK ) {
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessview" );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
 

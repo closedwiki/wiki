@@ -298,7 +298,7 @@ sub checkPermissions
     if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $ret, $oldTopic, $oldWeb ) ) {
        # user has not permission to change the topic
        my $url = &TWiki::getOopsUrl( $oldWeb, $oldTopic, "oopsaccesschange" );
-       print $query->redirect( $url );
+       TWiki::redirect( $query, $url );
        $ret = "";
     }
     
