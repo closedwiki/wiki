@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="guest" date="1087282212" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="WebLeftBar"}%
+|Note: this is a rough draft by Main.MattWilkie who is *not* the PatternSkin author. It is intended to give bleeding edge developers something to work with. The skin author Main.ArthurClemens will change things a great deal by the time the skin is released.|
+
+-- Main.MattWilkie - 15 Jun 2004
+----
+This is a placeholder topic, it will be replaced by TWiki:Plugins.PatternSkin.
+
+To get going with the development version of this skin:
+
+	1 grab latest version from CVS
+	2 edit %WIKIPREFSTOPIC% and add a new var: =Set SEP = &lt;li&gt;=
+	3 set your active skin to =pattern= in the prefs topic of your choice
+
