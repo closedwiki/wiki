@@ -2,14 +2,43 @@ If you are coming from a version earlier than the 01 May 2000 production release
 
 | UNDER CONSTRUCTION |
 
-These are the steps you need to perform to upgrade the 01 May 2000 version to the current Beta version:
+These are the steps you need to perform to upgrade the 01 May 2000 version to the current Beta version: [ We assume <pre>export TWIKIROOT=/some/dir/</pre>
 
-	* Create a TWiki directory below the data directory.
+	* Unpack the beta zip file into some working directory:
 <pre>
+  mkdir -p ~/tmp/
+  cd ~/tmp
+  unzip ~/TWiki20000818beta.zip
+</pre>
+
+	* Merge and changes in your current wikicfg.pm into the new =wikicfg.pm=.  We suggest using =diff -c= to compared the two files if you have made heavy changes to the file:
+<pre>
+	diff -c wikicfg.pm $TWIKIROOT/bin/wikicfg.pm | less
+</pre>
+
+	* Create and populate the TWiki directory below the data directory.
+<pre>
+  cd $TWIKIROOT/data/
+  mkdir TWiki
+  cp ~/tmp/data/TWiki/* TWiki/
 </pre>
 
 	* Delete the following files in your TWiki.Main installation:
 		* =BillClinton= , =GoodStyle= , =RegularExpression= , =TextFormattingFAQ= , =TextFormattingRules= , =TWikiAdministration= , =TWikiCategoryTable= , =TWikiDocumentation= , =TWikiEnhancementRequests= , =TWikiHistory= , =TWikiImplementationNotes= , =TWikiInstallationNotes= , =TWikiNotificationOfChanges= , =TWikiPlannedFeatures= , =TWikiPreferences= , =TWikiUpgradeTo01May2000= , =TWikiUsernameVsLoginUsername= , =TWikiVariables= , =TWikiWeb= , =WelcomeGuest= , =WikiName= , =WikiNotation= , =WikiTopic= , =WikiWikiClones=
+
+<pre>
+  cd $TWIKIROOT/data/Main
+  rm -f BillClinton* GoodStyle* RegularExpression* TextFormattingFAQ* \
+		TextFormattingRules* TWikiAdministration=* TWikiCategoryTable*  \
+		TWikiDocumentation* TWikiEnhancementRequests* TWikiHistory* \
+		TWikiImplementationNotes TWikiInstallationNotes* TWikiNotificationOfChanges* \
+		TWikiPlannedFeatures* TWikiPreferences* TWikiUpgradeTo01May2000*  \
+		TWikiUsernameVsLoginUsername* TWikiVariables* TWikiWeb* WelcomeGuest* \
+		WikiName* WikiNotation* WikiTopic* WikiWikiClones*
+</pre>
+
+
+
 	* In all your webs, change references to topics that moved to the TWiki.TWiki web:
 		* Change topics: =TWikiUsers= , =WebNotify= , =WebHome=
 		* With links to: =TWikiPreferences= , =TWikiVariables= , =TWikiUsers= , =TWikiWebsTable= , =WelcomeGuest=
