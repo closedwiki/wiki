@@ -294,8 +294,8 @@ sub writeHeaderFull
     my $expireHours = 24;
     my $expireSeconds = $expireHours * 60 * 60;
 
-    # Set content length to enable HTTP/1.1 persistent connections 
-    # (aka HTTP keepalive), and other headers to ensure edit page is 
+    # Set content length, to enable HTTP/1.1 persistent connections 
+    # (aka HTTP keepalive), and cache control headers, to ensure edit page is 
     # cached until required expiry time.
     print $query->header(-content_type => $contentType,
 			 -content_length => $contentLength,
@@ -575,6 +575,19 @@ sub getTWikiLibDir
 }
 
 # =========================
+# Get date in '1 Jan 2002' format, in GMT as for other dates
+sub getGmDate
+{
+    my( $sec, $min, $hour, $mday, $mon, $year) = gmtime(time());
+    $year = sprintf("%.4u", $year + 1900);  # Y2K fix
+    my( $tmon) = $isoMonth[$mon];
+    my $date = sprintf("%.2u ${tmon} %.2u", $mday, $year);
+    return $date;
+}
+
+# =========================
+# Get date in '1 Jan 2002' format, in local timezone of server
+# (used for %DATE%)
 sub getLocaldate
 {
     my( $sec, $min, $hour, $mday, $mon, $year) = localtime(time());
@@ -1407,7 +1420,7 @@ sub handleInternalTags
     $_[0] =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$_[2]\/$_[1]/go;
     $_[0] =~ s/%ATTACHURLPATH%/$pubUrlPath\/$_[2]\/$_[1]/go;
     $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/geo;
-    $_[0] =~ s/%DATE%/&getLocaldate()/geo; # depreciated
+    $_[0] =~ s/%DATE%/&getLocaldate()/geo; # deprecated
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/geo;
     $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/geo;
     $_[0] =~ s/%SERVERTIME%/&handleTime("","servertime")/geo;

@@ -132,7 +132,7 @@ sub main
             $formTemplate = $args{"name"};
         }
 
-        my $foo = &TWiki::getLocaldate();
+        my $foo = &TWiki::getGmDate();
         $text =~ s/%DATE%/$foo/go;
         $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
         $text =~ s/%NOP%//go;  # Remove filler (there to prevent search from hitting a template)

@@ -231,7 +231,7 @@ sub htpasswdAddUser
 sub addUserToTWikiUsersTopic
 {
     my ( $wikiName, $remoteUser ) = @_;
-    my $today = &TWiki::getLocaldate();
+    my $today = &TWiki::getGmDate();
     my $topicName = $TWiki::wikiUsersTopicname;
     my( $meta, $text )  = &TWiki::Store::readTopic( $TWiki::mainWebname, $topicName );
     my $result = "";
