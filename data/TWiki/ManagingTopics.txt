@@ -1,8 +1,10 @@
-%META:TOPICINFO{author="JohnTalintyre" date="999105045" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="MikeMannix" date="999178132" format="1.0" version="1.4"}%
 %META:TOPICPARENT{name="WebHome"}%
+%TOC%
+%STARTINCLUDE%
 ---## Rename/move/delete a topic
 
-Select rename/move when viewing a topic to change its name, [[DeleteTopic][Delete it]] or [[MoveTopic][Move it]]
+Select rename/move when viewing a topic to change its name, delete it or move it
 
 	1 Select target Web if other than existing Web
 	2 Fill in new name - defaults to current name
