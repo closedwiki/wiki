@@ -61,12 +61,17 @@ sub getFileName
       $attachment = "";
    }
    
+ 
+   # FIXME this is too messy and $extension should be replaced with type e.g. DATA,
+   # HISTORY, LOCK etc
    my $file = "";
    if( ! $attachment ) {
       if( ! $extension ) {
          $extension = ".txt";
       } else {
-         $extension = ".txt$extension";
+         if( $extension eq ",v" ) {
+            $extension = ".txt$extension";
+         }
       }
       $file = "$TWiki::dataDir/$web/$topic$extension";
 
