@@ -36,6 +36,8 @@ use vars qw(
 
 $VERSION = '1.025'; # TWiki production release 01 Aug 2004
 
+$initialisationErrors = "";
+
 @registrableHandlers = (                 #                                      VERSION:
         'earlyInitPlugin',               # ( )                                   1.020
         'initPlugin',                    # ( $topic, $web, $user, $installWeb )  1.000
@@ -424,7 +426,9 @@ sub handleFailedPlugins
       $text .= " |\n";
    }
 
-   $text .= "<br />\n---++ Errors\n<br />\n<verbatim>\n$initialisationErrors\n</verbatim>\n";
+   my $err = $initialisationErrors;
+   $err = "None" unless $err;
+   $text .= "<br />\n---++ Errors\n<verbatim>\n$err\n</verbatim>\n";
 
    return $text;
 }
