@@ -1,3 +1,5 @@
+%META:TOPICINFO{author="PeterThoeny" date="997250351" format="1.0beta2" version="1.7"}%
+%META:TOPICPARENT{name="WebHome"}%
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/">
 	* <b>Simple search</b>:
 	<table border="0" cellspacing="0" cellpadding="0"><tr><td>
