@@ -4,20 +4,20 @@ It is easy to collaborate, just type your text. You don't need to know HTML at a
 
 The Collaborative Work Area is a bunch of related links that are editable through your web browser. 
 
-The TWiki web has the following types of __internal links:__
+The %WIKITOOLNAME% web has the following types of __internal links:__
 
 	* GoodStyle is a WikiWord that links to the <nop>GoodStyle topic located in the current %WIKITOOLNAME% web. 
 	* NotExistingYet is a topic waiting to be written. You could create that topic by clicking on the question mark. (Do not create that topic, you would wreck this example!)
 
 __External links:__
 
-	* <code>http://...</code>, <code>https://...</code>, <code>ftp://...</code> and <code>mailto:...@...</code> are linked automatically. 
-	* Email addresses like <code> name@domain.com </code> are linked automatically.
+	* =http://...=, =https://...=, =ftp://...= and =mailto:...@...= are linked automatically. 
+	* Email addresses like =name@domain.com= are linked automatically.
 
 *EDITING*
 
 	* <NOP>CapitalizedWordsStuckTogether (or WikiWords) will produce a link automatically. In case you want to link to a topic in a different %WIKITOOLNAME% web write =Web.TopicName=, i.e. write =Know.ReadmeFirst= to link to Know.ReadmeFirst located in the Know web.
-	* You can create a forced internal link by enclosing words in double square brackets, i.e. write =[<nop>[text formatting FAQ]]= to get [[text formatting FAQ]] that links to topic TextFormattingFAQ. Text within the brackets may contain optional spaces; the topic name is formed by capitalizing the initial letter and by removing the spaces. You can also refer to a different web, i.e. =[<nop>[Main.TWiki users]]= points to Main.TWikiUsers in the Main web. 
+	* You can create a forced internal link by enclosing words in double square brackets, i.e. write =[<nop>[text formatting FAQ]]= to get [[text formatting FAQ]] that links to topic TextFormattingFAQ. Text within the brackets may contain optional spaces; the topic name is formed by capitalizing the initial letter and by removing the spaces. You can also refer to a different web, i.e. =[<nop>[%MAINWEB%.TWiki users]]= points to %MAINWEB%.TWikiUsers in the %MAINWEB% web. 
 	* Blank lines will create new paragraphs. 
 	* Words get *bold* by enclosing them in <b>*</b> asterisks
 	* Words get _italic_ by enclosing them in <b>_</b> underscores
@@ -53,5 +53,5 @@ Variables are names that are enclosed in percent signs; they get expanded on the
 	* =%<nop>WEB%= : The current web, is <b>%WEB%</b> .
 	* =%<nop>TOPIC%= : The current topic name, is <b>%TOPIC%</b> .
 	* =%<nop>ATTACHURL%= : The attachment URL of the current topic. Example usage: If you attach a file to a topic you can refer to it as =<b>%<nop>ATTACHURL%/image.gif</b>= to show the URL of the file or the image in your text.
-	* =%<nop>INCLUDE{"SomeTopic"}%= : Server side include, includes another topic. The current %WIKITOOLNAME% web is the default web. Example: =<b>%<nop>INCLUDE{"TWiki.TWikiWebsTable"}%</b>= </td>
+	* =%<nop>INCLUDE{"SomeTopic"}%= : Server side include, includes another topic. The current %WIKITOOLNAME% web is the default web. Example: =<b>%<nop>INCLUDE{"%TWIKIWEB%.TWikiWebsTable"}%</b>= </td>
 	* There are many more variables, see TWikiVariables.
