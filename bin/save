@@ -37,15 +37,9 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic, $webName, $dummy, $userName ) = 
-	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+    $dummy = "";  # to suppress warning	
 
-    $dummy = "";  # to suppress warning
-    my $text = "";
-    my @meta = ();
-    my $tmp = "";
-    my $atext = "";
-    my $before = "";
-    my $after = "";
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
