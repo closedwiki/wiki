@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="995873452" format="1.0beta2" version="1.28"}%
+%META:TOPICINFO{author="JohnTalintyre" date="997197916" format="1.0beta2" version="1.29"}%
 ---## TWiki Variables
 
 ---+++ Predefined Variables
@@ -106,13 +106,19 @@
 	 <br> =%<nop>TOPICLIST{" &lt;option&gt;$name&lt;/option&gt;"}%= creates an option list (for drop down menus). </td>
 </tr><tr>
   <td> =%<nop>WEBLIST{"format"}%= </td>
-  <td> Web index, e.g. list of all webs. Hidden webs are excluded, e.g. webs with a =NOSEARCHALL=on= preference variable. The ="format"= defines the format of one web item. The =$name= variable gets expanded to the name of the web.
+  <td> Web index, e.g. list of all webs. Hidden webs are excluded, e.g. webs with a =NOSEARCHALL=on= preference variable. The ="format"= defines the format of one web item. The =$name= variable gets expanded to the name of the web, =$qname= gets expanded to double quoted name, =$marker= to =marker= where web matches =selection=.
 	 Parameters are format, separator and web:
 	 | *Parameter:* | *Description:* | *Default:* |
 	 | ="format"= | Format of one line, may include =$name= variable | ="$name"= |
 	 | =format="format"= | (Alternative to above) | ="$name"= |
 	 | =separator=", "= | line separator | ="\n"= (new line) |
-	 Example: <br> =%<nop>WEBLIST{"	* [<nop>[$name.%HOMETOPIC%]]"}%= creates a bullet list of all webs. </td>
+	 | =webs="public"=	| comma sep list of Web, public expands to all non-hidden | ="public"= |
+	 | =marker="selected"= | Text for =$marker= where item matches =selection=, otherwise equals =""= | ="selected"= |
+	 | =selection= | Current value e.g. current for current Web, =section="%<nop>WEB%" |
+	 Examples: <br> =%<nop>WEBLIST{"	* [<nop>[$name.%HOMETOPIC%]]"}%= creates a bullet list of all webs.
+<br />
+=%<nop>WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}%= Dropdown of all public Webs + Trash Web, current Web highlighted.
+</td>
 </tr><tr>
   <td> =%<nop>GMTIME%= </td>
   <td> GM time, is <b>%GMTIME%</b> </td>
@@ -287,6 +293,23 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
   <td> __(any topic)__ </td>
   <td> List of users and groups who are *allowed* to change the current topic. (More in TWikiAccessControl) </td>
 </tr><tr>
+  <td> =%<nop>DENYWEBRENAME%= </td>
+  <td> __WL__ </td>
+  <td> List of users and groups who are *not allowed* to rename topics in the %WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
+</tr><tr>
+  <td> =%<nop>ALLOWWEBRENAME%= </td>
+  <td> __WL__ </td>
+  <td> List of users and groups who are *allowed* to rename topics in the %WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
+</tr><tr>
+  <td> =%<nop>DENYTOPICRENAME%= </td>
+  <td> __(any topic)__ </td>
+  <td> List of users and groups who are *not allowed* to rename the current topic. (More in TWikiAccessControl) </td>
+</tr><tr>
+  <td> =%<nop>ALLOWTOPICRENAME%= </td>
+  <td> __(any topic)__ </td>
+  <td> List of users and groups who are *allowed* to rename the current topic. (More in TWikiAccessControl) </td>
+</tr><tr>
+
   <td> =%<nop>FINALPREFERENCES%= </td>
   <td> __SL__ , __WL__ </td>
   <td> List of preferences that are not allowed to be overridden by next level preferences</td>
