@@ -155,6 +155,7 @@ If installed correctly, you should see a =%COMMENT= edit box below here.
 |  Plugin Author: | v1.0 TWiki:Main.DavidWeller v2.0 TWiki:Main.PeterMasiar v3.0 TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 | Change History: <!-- Most recent first --> ||
+| 25 Feb 2005 | 3.009 Added Olivier Berger's fix for anchors and Jacob Eisinger's fix for variable expansion |
 | 16 Oct 2004 | 3.008 Added the =noform= attribute to Comment - TWiki:Main.MartinCleaver |
 | 12 Oct 2004 | 3.007 Disabled comment boxes in rdiff pane. |
 | 6 Oct 2004 | 3.006 Fixed action template, which was expanded incorrectly. Upped default comment box to 70 chars default width. |
